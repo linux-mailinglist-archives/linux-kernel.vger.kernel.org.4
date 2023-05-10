@@ -2,97 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7EA36FE560
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:48:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 077DB6FE56A
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:49:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236150AbjEJUsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:48:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39554 "EHLO
+        id S236700AbjEJUtU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:49:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235806AbjEJUsh (ORCPT
+        with ESMTP id S230520AbjEJUtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:48:37 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E34FE49
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:48:36 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-3062c1e7df8so5181109f8f.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:48:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683751715; x=1686343715;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=n43MwqLS4K8T9pwUq7KF8hTU9/BSLcrxuagPObgT5dc=;
-        b=Zpaqr/tx2vr019x7yN8DEGaVe53Uguq6ThlFfv3VAugkJZF+DKBWNwCUBgXBztsMWb
-         9Tdx/1DbfpV4H8yoeYBXiTIKjuXtna/GOtzRcemwuuib3SYkyXeYYXZn48Bu5zMRUcK6
-         YCukDQs4FCtOiScJExmHWsDWxzMMfsEM0Egqgtbzqa8PU9BiAlTVSe1xh+3bNOswNCeW
-         yM3w44bvNPMYadf+qHXakuvMwM8o0txNdh+zOayTPTQcJB9fSWLkjcVWMoFm6vVBRjQM
-         BQqJl1yZVWAkm/pLwerdMRH3ES7pRz34DOCoHh1YvjdEoVrLBPTn/PwXWSZkQsAzHP1q
-         lgag==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683751715; x=1686343715;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n43MwqLS4K8T9pwUq7KF8hTU9/BSLcrxuagPObgT5dc=;
-        b=HbeQk4+sRPW0G8Ryy0sQOd7OCPQSmzdY3eAsJpWMxm92GbqX074SUVmYRwt/Nzoa8V
-         3IspsKDJrjepVMwgmag1C1pABw1/Be86nSP5mn9QfHCIf3dDyZJJWeHr0Qx90rF+PPNW
-         /SDSjYv+bVobERkSLSxuQW6WyBex7TED0ppAl05sJTzOmeGKqTNqKtnm/3BKNcEnlMtq
-         /qZg5ibG2nulu0LRwSrH5ZTXIwB3hkwOB15MX/ba7MZMS5LU5/ycUUXsxaGoLW+e6Yl8
-         hCe8jDz9TWhNEFJHiMpwday2UhVNed8If7jREavUYzfqT1IK/kc0hqk6iwCfVy8MrZO2
-         LCEQ==
-X-Gm-Message-State: AC+VfDych44R2JvOW/7Db1udpOSBS/do0JEZQYc0rjF8DkOrDvBje7Fj
-        /EI9L2MXwGqGSjr9p9HuKIZ7wdvHkMEIuRG1QbM=
-X-Google-Smtp-Source: ACHHUZ6CRx6Wu/qo+p9j4JXZ3exYYnSNhA4Py1yqyalSBYL9a5fs8/gIegXSo3KRHlvl/X7X6wYOu0Dl2ja+mNZhAz4=
-X-Received: by 2002:a5d:4004:0:b0:2c5:3cd2:b8e with SMTP id
- n4-20020a5d4004000000b002c53cd20b8emr13087692wrp.1.1683751714462; Wed, 10 May
- 2023 13:48:34 -0700 (PDT)
+        Wed, 10 May 2023 16:49:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2912BE62;
+        Wed, 10 May 2023 13:49:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AEC6561380;
+        Wed, 10 May 2023 20:49:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5F82C433EF;
+        Wed, 10 May 2023 20:49:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683751757;
+        bh=sm5QAcd0taaclIH56EabPTS7FFL37JY5nKCmhFvm5pE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=NsGp/Ck3h+O1cVsRbjpAUj0G/fUSo56FJzkXEZAgP9/lNUdZAcfoC6s0V7MYLIFt2
+         0xWBhEiNNrrT1umiTd+MqbqfUmtmufproi+j5/3t+Mvz4vptSfGEGe0+wiHLtDwOHW
+         LSi3NyGTDlPYQWguSmlDu/qu+AU9KYDqfOsyJrfyF5KX0WD/d4xK8ybFNDUEhwukLO
+         R9MgcriM9WyO5c0kia9pn883x0XQIuyUfpp5uwmD8ioOTHwmx12C6iFWjK/pE/raan
+         dpR2CDG5KALeZh4bAbwCTfufqtjy8AeuasMUbRIxT4jXncpHZ07inJMn6xcfeyDaR5
+         eNeNM4xC/QHvQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Sasha Levin <sashal@kernel.org>,
+        ludovic.desroches@microchip.com, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com,
+        linux-arm-kernel@lists.infradead.org, linux-gpio@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 1/9] pinctrl: at91: use devm_kasprintf() to avoid potential leaks (part 2)
+Date:   Wed, 10 May 2023 16:48:57 -0400
+Message-Id: <20230510204905.104628-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230509223036.3007500-1-azeemshaikh38@gmail.com> <CAHk-=wg7pwWiF4eWVTfFYkfAk_5YDHkmkgZ04cgXkNUO_9pR3A@mail.gmail.com>
-In-Reply-To: <CAHk-=wg7pwWiF4eWVTfFYkfAk_5YDHkmkgZ04cgXkNUO_9pR3A@mail.gmail.com>
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-Date:   Wed, 10 May 2023 16:48:23 -0400
-Message-ID: <CADmuW3VngW3ineOjUNLYQT1UXsW-s46HjLKx0H3JyexKMtUhQA@mail.gmail.com>
-Subject: Re: kernfs: Prefer strscpy over strlcpy calls
-To:     Linus Torvalds <torvalds@linuxfoundation.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejun Heo <tj@kernel.org>, security@kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Absolutely not.
->
-> This makes the whole exercise pointless.
->
-> The reason to use strscpy() is to *avoid* doing the strlen() on the
-> source, and limit things to the limited size.
->
-> If you need to do the strlen(), then use strlcpy(). It's a broken
-> interface, but creating this kind of horror wrapper that does the same
-> thing as strlcpy() is worse than just using the regular version.
->
-> So the strscpy() conversion should *only* be done if the caller
-> doesn't care about the difference in return values (or done *together*
-> with changing the caller to use the nicer strscpy() return value).
->
-> It's also worth noting that 'strscpy()' not only returns a negative
-> error value when the string doesn't fit - it will also possibly do the
-> copy one word at a time, and may write extra zeroes at the end of the
-> destination (all within the given size, of course).
->
-> So strscpy() is _different_ from strlcpy(), and the conversion should
-> not be done unless those differences are ok.
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Thanks Linus, that helps clarify a lot. I traced the usage of these
-functions across the kernel and plan to do direct replacement only
-where it's safe (see thread here:
-https://lore.kernel.org/all/CADmuW3XiYpGK7BessXJWjGnnxZti_3mawDSX7QPawsfmATxCng@mail.gmail.com/).
-Let me know if that works for you.
+[ Upstream commit f494c1913cbb34b9e2078b7b045c87c1ca6df791 ]
+
+Use devm_kasprintf() instead of kasprintf() to avoid any potential
+leaks. At the moment drivers have no remove functionality hence
+there is no need for fixes tag.
+
+While at it, switch to use devm_kasprintf_strarray().
+
+Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Reviewed-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Tested-by: Claudiu Beznea <claudiu.beznea@microchip.com>
+Link: https://lore.kernel.org/r/20230215134242.37618-2-andriy.shevchenko@linux.intel.com
+Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/pinctrl/pinctrl-at91.c | 23 +++++++++++++++++------
+ 1 file changed, 17 insertions(+), 6 deletions(-)
+
+diff --git a/drivers/pinctrl/pinctrl-at91.c b/drivers/pinctrl/pinctrl-at91.c
+index 735c501e7a06c..9fa68ca4a412d 100644
+--- a/drivers/pinctrl/pinctrl-at91.c
++++ b/drivers/pinctrl/pinctrl-at91.c
+@@ -18,6 +18,7 @@
+ #include <linux/pm.h>
+ #include <linux/seq_file.h>
+ #include <linux/slab.h>
++#include <linux/string_helpers.h>
+ 
+ /* Since we request GPIOs from ourself */
+ #include <linux/pinctrl/consumer.h>
+@@ -1371,6 +1372,7 @@ static int at91_pinctrl_probe_dt(struct platform_device *pdev,
+ 
+ static int at91_pinctrl_probe(struct platform_device *pdev)
+ {
++	struct device *dev = &pdev->dev;
+ 	struct at91_pinctrl *info;
+ 	struct pinctrl_pin_desc *pdesc;
+ 	int ret, i, j, k;
+@@ -1394,9 +1396,19 @@ static int at91_pinctrl_probe(struct platform_device *pdev)
+ 		return -ENOMEM;
+ 
+ 	for (i = 0, k = 0; i < gpio_banks; i++) {
++		char **names;
++
++		names = devm_kasprintf_strarray(dev, "pio", MAX_NB_GPIO_PER_BANK);
++		if (!names)
++			return -ENOMEM;
++
+ 		for (j = 0; j < MAX_NB_GPIO_PER_BANK; j++, k++) {
++			char *name = names[j];
++
++			strreplace(name, '-', i + 'A');
++
+ 			pdesc->number = k;
+-			pdesc->name = kasprintf(GFP_KERNEL, "pio%c%d", i + 'A', j);
++			pdesc->name = name;
+ 			pdesc++;
+ 		}
+ 	}
+@@ -1797,7 +1809,8 @@ static const struct of_device_id at91_gpio_of_match[] = {
+ 
+ static int at91_gpio_probe(struct platform_device *pdev)
+ {
+-	struct device_node *np = pdev->dev.of_node;
++	struct device *dev = &pdev->dev;
++	struct device_node *np = dev->of_node;
+ 	struct at91_gpio_chip *at91_chip = NULL;
+ 	struct gpio_chip *chip;
+ 	struct pinctrl_gpio_range *range;
+@@ -1866,16 +1879,14 @@ static int at91_gpio_probe(struct platform_device *pdev)
+ 			chip->ngpio = ngpio;
+ 	}
+ 
+-	names = devm_kcalloc(&pdev->dev, chip->ngpio, sizeof(char *),
+-			     GFP_KERNEL);
+-
++	names = devm_kasprintf_strarray(dev, "pio", chip->ngpio);
+ 	if (!names) {
+ 		ret = -ENOMEM;
+ 		goto clk_enable_err;
+ 	}
+ 
+ 	for (i = 0; i < chip->ngpio; i++)
+-		names[i] = devm_kasprintf(&pdev->dev, GFP_KERNEL, "pio%c%d", alias_idx + 'A', i);
++		strreplace(names[i], '-', alias_idx + 'A');
+ 
+ 	chip->names = (const char *const *)names;
+ 
+-- 
+2.39.2
+
