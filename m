@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C63666FD62A
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 07:26:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC68B6FD62F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 07:27:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235765AbjEJF0x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 01:26:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37494 "EHLO
+        id S235881AbjEJF1X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 01:27:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235502AbjEJF0o (ORCPT
+        with ESMTP id S235806AbjEJF1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 01:26:44 -0400
+        Wed, 10 May 2023 01:27:17 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623E62717;
-        Tue,  9 May 2023 22:26:43 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34A5PGu8031849;
-        Wed, 10 May 2023 05:26:29 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8892B5B97;
+        Tue,  9 May 2023 22:27:07 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34A5K1cA012210;
+        Wed, 10 May 2023 05:26:53 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=bqSZIJVOXTsS04m4LGY46Jr3ZXdMzAf5b/MEq+LA/wQ=;
- b=eGKGEsd/vaqt1eYhrBIP+I1Ung2K3bOzAq20kvn8443mHBjR8m3MZkpJLsaxFu3zI+am
- ttJj0sY+lIAQlEbW3Dx5/3TwFyGGrQwivIq1CkZC3rmRkDhqqqIUpRAXcBgjRasGeydq
- vL0SjQS+o+SZKv4kvS42dLdnM9s3jg2hf7gzMZaz4g12I5mmGJk3x1w9BElg/eoX2QL8
- zV3jUBBEFYZ32jnnwyrnl+WPeffP0BIMTm1DAEIKNZMc4Vpnal5CBEfGqNWMaQlymQ9I
- AgAhRYyPWJlfr8eku2ypR0M1HsQ/1ZmlY1UGTd3hRcXmFAeYwwpcII3w4MzWdtHZ7Ye1 yQ== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qfysdrgmu-1
+ bh=OBzrTfBelqa+eLXS81DpdWcoyw7ODaoD9+6BGPsVYvk=;
+ b=G84UxILIdTtkVNIzJVNhY3JV9+sT0oFEOaRv65IlE4cIpEBjI0DHriORgTigD/6Z4Xyp
+ TE6LozaV/PVLdS94YkHPasHuqk4Col+dI0GorbsLZwhI3WdE5XzKcUZ7S9ecrOMgitQd
+ ob2TVRNFPyoilmdF/7kln4oKVLNUFfh90OJAj08opPHino21YcrbPMDCZT5nRAiDKdlf
+ MKWLNTDvYu/fVoj6XhB3EQQr50lnMiTEdqDwOYefETK9P/ohBWxQ8dXOiEHOkVxaQZ6Q
+ KO+7KxdNUv/f1fVmKOTap2urGMFfQ/pwVQ6aYOgPP9PPHNAPCsoXiJl2bJBXZ3ZlIC/7 mg== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qfr509h1e-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 05:26:29 +0000
+        Wed, 10 May 2023 05:26:52 +0000
 Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34A5QSsm022903
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34A5QpSG010311
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 05:26:28 GMT
+        Wed, 10 May 2023 05:26:51 GMT
 Received: from stor-berry.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Tue, 9 May 2023 22:26:28 -0700
+ 15.2.986.42; Tue, 9 May 2023 22:26:50 -0700
 From:   "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
 To:     <quic_asutoshd@quicinc.com>, <quic_cang@quicinc.com>,
         <bvanassche@acm.org>, <mani@kernel.org>,
@@ -49,12 +49,17 @@ CC:     <linux-scsi@vger.kernel.org>,
         "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
         Alim Akhtar <alim.akhtar@samsung.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Alice Chao <alice.chao@mediatek.com>,
         Arthur Simchaev <Arthur.Simchaev@wdc.com>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 5/7] ufs: mcq: Added ufshcd_mcq_abort()
-Date:   Tue, 9 May 2023 22:24:26 -0700
-Message-ID: <057f168184b4937cf11fa18c4e094773048e35d9.1683688693.git.quic_nguyenb@quicinc.com>
+        "open list" <linux-kernel@vger.kernel.org>,
+        "open list:UNIVERSAL FLASH STORAGE HOST CONTROLLER DRIVER..." 
+        <linux-arm-msm@vger.kernel.org>
+Subject: [PATCH v3 6/7] ufs: mcq: Use ufshcd_mcq_poll_cqe_lock() in mcq mode
+Date:   Tue, 9 May 2023 22:24:27 -0700
+Message-ID: <0dfd125ec058aae179119672da46e297c4a3e35e.1683688693.git.quic_nguyenb@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1683688692.git.quic_nguyenb@quicinc.com>
 References: <cover.1683688692.git.quic_nguyenb@quicinc.com>
@@ -65,16 +70,17 @@ X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
  nasanex01a.na.qualcomm.com (10.52.223.231)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: SDT4GPLaPSf8JPOWBM_rnMQsRjBHvz5D
-X-Proofpoint-ORIG-GUID: SDT4GPLaPSf8JPOWBM_rnMQsRjBHvz5D
+X-Proofpoint-GUID: 0MamCw7altpvIM7JCjnrdUgYMMnSRDQL
+X-Proofpoint-ORIG-GUID: 0MamCw7altpvIM7JCjnrdUgYMMnSRDQL
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-10_02,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- phishscore=0 malwarescore=0 suspectscore=0 spamscore=0 clxscore=1015
- mlxlogscore=999 impostorscore=0 adultscore=0 priorityscore=1501
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305100042
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 mlxscore=0 mlxlogscore=999 bulkscore=0
+ lowpriorityscore=0 malwarescore=0 clxscore=1011 impostorscore=0
+ adultscore=0 phishscore=0 suspectscore=0 classifier=spam adjust=0
+ reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305100042
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -85,144 +91,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add ufshcd_mcq_abort() to support ufs abort in mcq mode.
+In preparation for adding mcq error handler support, update the mcq
+code to use the ufshcd_mcq_poll_cqe_lock() in interrupt context
+instead of using ufshcd_mcq_poll_cqe_nolock(). This is to keep
+synchronization between mcq interrupt and error handler contexts
+because both need to access the mcq hardware in separate contexts.
 
 Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
 ---
- drivers/ufs/core/ufs-mcq.c     | 60 ++++++++++++++++++++++++++++++++++++++++++
- drivers/ufs/core/ufshcd-priv.h |  5 +++-
- drivers/ufs/core/ufshcd.c      | 13 ++++++---
- 3 files changed, 73 insertions(+), 5 deletions(-)
+ drivers/ufs/core/ufs-mcq.c     | 6 +++---
+ drivers/ufs/core/ufshcd-priv.h | 2 --
+ drivers/ufs/core/ufshcd.c      | 2 +-
+ drivers/ufs/host/ufs-qcom.c    | 2 +-
+ include/ufs/ufshcd.h           | 2 +-
+ 5 files changed, 6 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
-index cba537c5..8a5385c 100644
+index 8a5385c..138e174 100644
 --- a/drivers/ufs/core/ufs-mcq.c
 +++ b/drivers/ufs/core/ufs-mcq.c
-@@ -599,3 +599,63 @@ static bool ufshcd_mcq_sqe_search(struct ufs_hba *hba,
- 	mutex_unlock(&hwq->sq_mutex);
- 	return ret;
+@@ -284,8 +284,8 @@ static void ufshcd_mcq_process_cqe(struct ufs_hba *hba,
+ 	ufshcd_compl_one_cqe(hba, tag, cqe);
  }
-+
-+/**
-+ * ufshcd_mcq_abort - Abort the command in MCQ.
-+ * @cmd - The command to be aborted.
-+ *
-+ * Returns SUCCESS or FAILED error codes
-+ */
-+int ufshcd_mcq_abort(struct scsi_cmnd *cmd)
-+{
-+	struct Scsi_Host *host = cmd->device->host;
-+	struct ufs_hba *hba = shost_priv(host);
-+	int tag = scsi_cmd_to_rq(cmd)->tag;
-+	struct ufshcd_lrb *lrbp = &hba->lrb[tag];
-+	struct ufs_hw_queue *hwq;
-+	int err = FAILED;
-+
-+	if (!ufshcd_cmd_inflight(lrbp->cmd)) {
-+		dev_err(hba->dev,
-+			"%s: skip abort. cmd at tag %d already completed.\n",
-+			__func__, tag);
-+		goto out;
-+	}
-+
-+	/* Skip task abort in case previous aborts failed and report failure */
-+	if (lrbp->req_abort_skip) {
-+		dev_err(hba->dev, "%s: skip abort. tag %d failed earlier\n",
-+			__func__, tag);
-+		goto out;
-+	}
-+
-+	hwq = ufshcd_mcq_req_to_hwq(hba, scsi_cmd_to_rq(cmd));
-+
-+	if (ufshcd_mcq_sqe_search(hba, hwq, tag)) {
-+		/*
-+		 * Failure. The command should not be "stuck" in SQ for
-+		 * a long time which resulted in command being aborted.
-+		 */
-+		dev_err(hba->dev, "%s: cmd found in sq. hwq=%d, tag=%d\n",
-+			__func__, hwq->id, tag);
-+		goto out;
-+	}
-+
-+	/*
-+	 * The command is not in the submission queue, and it is not
-+	 * in the completion queue either. Query the device to see if
-+	 * the command is being processed in the device.
-+	 */
-+	if (ufshcd_try_to_abort_task(hba, tag)) {
-+		dev_err(hba->dev, "%s: device abort failed %d\n", __func__, err);
-+		lrbp->req_abort_skip = true;
-+		goto out;
-+	}
-+
-+	err = SUCCESS;
-+	if (ufshcd_cmd_inflight(lrbp->cmd))
-+		ufshcd_release_scsi_cmd(hba, lrbp);
-+
-+out:
-+	return err;
-+}
+ 
+-unsigned long ufshcd_mcq_poll_cqe_nolock(struct ufs_hba *hba,
+-					 struct ufs_hw_queue *hwq)
++static unsigned long ufshcd_mcq_poll_cqe_nolock(struct ufs_hba *hba,
++						struct ufs_hw_queue *hwq)
+ {
+ 	unsigned long completed_reqs = 0;
+ 
+@@ -301,7 +301,6 @@ unsigned long ufshcd_mcq_poll_cqe_nolock(struct ufs_hba *hba,
+ 
+ 	return completed_reqs;
+ }
+-EXPORT_SYMBOL_GPL(ufshcd_mcq_poll_cqe_nolock);
+ 
+ unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_hba *hba,
+ 				       struct ufs_hw_queue *hwq)
+@@ -314,6 +313,7 @@ unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_hba *hba,
+ 
+ 	return completed_reqs;
+ }
++EXPORT_SYMBOL_GPL(ufshcd_mcq_poll_cqe_lock);
+ 
+ void ufshcd_mcq_make_queues_operational(struct ufs_hba *hba)
+ {
 diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-priv.h
-index 7d2104d..0c034d9 100644
+index 0c034d9..b73245e 100644
 --- a/drivers/ufs/core/ufshcd-priv.h
 +++ b/drivers/ufs/core/ufshcd-priv.h
-@@ -79,7 +79,10 @@ unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_hba *hba,
- 				       struct ufs_hw_queue *hwq);
- bool ufshcd_cmd_inflight(struct scsi_cmnd *cmd);
- int ufshcd_mcq_sq_cleanup(struct ufs_hba *hba, int task_tag, int *result);
--
-+int ufshcd_mcq_abort(struct scsi_cmnd *cmd);
-+int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag);
-+void ufshcd_release_scsi_cmd(struct ufs_hba *hba,
-+			     struct ufshcd_lrb *lrbp);
- #define UFSHCD_MCQ_IO_QUEUE_OFFSET	1
- #define SD_ASCII_STD true
- #define SD_RAW false
+@@ -71,8 +71,6 @@ void ufshcd_mcq_config_mac(struct ufs_hba *hba, u32 max_active_cmds);
+ void ufshcd_mcq_select_mcq_mode(struct ufs_hba *hba);
+ u32 ufshcd_mcq_read_cqis(struct ufs_hba *hba, int i);
+ void ufshcd_mcq_write_cqis(struct ufs_hba *hba, u32 val, int i);
+-unsigned long ufshcd_mcq_poll_cqe_nolock(struct ufs_hba *hba,
+-					 struct ufs_hw_queue *hwq);
+ struct ufs_hw_queue *ufshcd_mcq_req_to_hwq(struct ufs_hba *hba,
+ 					   struct request *req);
+ unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_hba *hba,
 diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 834b13ae..64dc2b2 100644
+index 64dc2b2..5e3029ed 100644
 --- a/drivers/ufs/core/ufshcd.c
 +++ b/drivers/ufs/core/ufshcd.c
-@@ -300,7 +300,6 @@ static int ufshcd_setup_hba_vreg(struct ufs_hba *hba, bool on);
- static int ufshcd_setup_vreg(struct ufs_hba *hba, bool on);
- static inline int ufshcd_config_vreg_hpm(struct ufs_hba *hba,
- 					 struct ufs_vreg *vreg);
--static int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag);
- static void ufshcd_wb_toggle_buf_flush_during_h8(struct ufs_hba *hba,
- 						 bool enable);
- static void ufshcd_hba_vreg_set_lpm(struct ufs_hba *hba);
-@@ -5457,8 +5456,8 @@ static irqreturn_t ufshcd_uic_cmd_compl(struct ufs_hba *hba, u32 intr_status)
- }
+@@ -6811,7 +6811,7 @@ static irqreturn_t ufshcd_handle_mcq_cq_events(struct ufs_hba *hba)
+ 			ufshcd_mcq_write_cqis(hba, events, i);
  
- /* Release the resources allocated for processing a SCSI command. */
--static void ufshcd_release_scsi_cmd(struct ufs_hba *hba,
--				    struct ufshcd_lrb *lrbp)
-+void ufshcd_release_scsi_cmd(struct ufs_hba *hba,
-+			     struct ufshcd_lrb *lrbp)
- {
- 	struct scsi_cmnd *cmd = lrbp->cmd;
- 
-@@ -7396,7 +7395,7 @@ static void ufshcd_set_req_abort_skip(struct ufs_hba *hba, unsigned long bitmap)
-  *
-  * Returns zero on success, non-zero on failure
-  */
--static int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag)
-+int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag)
- {
- 	struct ufshcd_lrb *lrbp = &hba->lrb[tag];
- 	int err = 0;
-@@ -7556,6 +7555,12 @@ static int ufshcd_abort(struct scsi_cmnd *cmd)
- 		goto release;
+ 		if (events & UFSHCD_MCQ_CQIS_TAIL_ENT_PUSH_STS)
+-			ufshcd_mcq_poll_cqe_nolock(hba, hwq);
++			ufshcd_mcq_poll_cqe_lock(hba, hwq);
  	}
  
-+	if (is_mcq_enabled(hba)) {
-+		/* MCQ mode. Branch off to handle abort for mcq mode */
-+		err = ufshcd_mcq_abort(cmd);
-+		goto release;
-+	}
-+
- 	/* Skip task abort in case previous aborts failed and report failure */
- 	if (lrbp->req_abort_skip) {
- 		dev_err(hba->dev, "%s: skipping abort\n", __func__);
+ 	return IRQ_HANDLED;
+diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+index 82d02e7..57f5674 100644
+--- a/drivers/ufs/host/ufs-qcom.c
++++ b/drivers/ufs/host/ufs-qcom.c
+@@ -1556,7 +1556,7 @@ static irqreturn_t ufs_qcom_mcq_esi_handler(int irq, void *__hba)
+ 	struct ufs_hw_queue *hwq = &hba->uhq[id];
+ 
+ 	ufshcd_mcq_write_cqis(hba, 0x1, id);
+-	ufshcd_mcq_poll_cqe_nolock(hba, hwq);
++	ufshcd_mcq_poll_cqe_lock(hba, hwq);
+ 
+ 	return IRQ_HANDLED;
+ }
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index 12518c9..a6781b0 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -1244,7 +1244,7 @@ void ufshcd_update_evt_hist(struct ufs_hba *hba, u32 id, u32 val);
+ void ufshcd_hba_stop(struct ufs_hba *hba);
+ void ufshcd_schedule_eh_work(struct ufs_hba *hba);
+ void ufshcd_mcq_write_cqis(struct ufs_hba *hba, u32 val, int i);
+-unsigned long ufshcd_mcq_poll_cqe_nolock(struct ufs_hba *hba,
++unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_hba *hba,
+ 					 struct ufs_hw_queue *hwq);
+ void ufshcd_mcq_enable_esi(struct ufs_hba *hba);
+ void ufshcd_mcq_config_esi(struct ufs_hba *hba, struct msi_msg *msg);
 -- 
 2.7.4
 
