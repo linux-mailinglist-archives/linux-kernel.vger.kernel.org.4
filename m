@@ -2,145 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07D6E6FD990
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:35:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53CC26FD992
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:36:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236742AbjEJIfv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 04:35:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47018 "EHLO
+        id S236607AbjEJIg2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 04:36:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236565AbjEJIfJ (ORCPT
+        with ESMTP id S236215AbjEJIgC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 04:35:09 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45CE47D95
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 01:34:45 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-9619095f479so1103748766b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 01:34:45 -0700 (PDT)
+        Wed, 10 May 2023 04:36:02 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644167EDC
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 01:35:04 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-250252e4113so4442416a91.0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 01:35:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1683707681; x=1686299681;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=d/oSM3NDo7yCUuuUmfzMkN8De2E+eLR51o10BvRa8Cg=;
-        b=iO5VscEjOdvzjd/aAllbGT8Mmj/rT0DclWpe6PYn6QbI3AuBaBPMeeBf2RxZxjKjBx
-         wWjdGt3MyWDWWsatOGNuatv0rvxdT0xotxx6eh4vBxwPosrp8R38lzl0auTwSbD9Yp+5
-         VlHh2nn4wFqs5bsUrz2BC+oKWmvdcdeqmQLUq9njJnDyEWhPo1ZAg9pwyHP5EpnVPkWR
-         lS0057sYBJiUd68K7pj4L+hCw2YXbJflqFqM+l2ZzCYovzw2ndcPVVcxnG3N1n7SetHe
-         +G+NOJHK2F6kCVMO7ISq8Vb7SxspuLxzBUcvk5wTkFEiBQ4I/LtHrHoJybPjlKdFBVf1
-         RB9w==
+        d=bytedance.com; s=google; t=1683707701; x=1686299701;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=B+pxvGwx4qB2jHtPFwxz+r1x0GCU+Pru3QTkQf29r70=;
+        b=XS4lXvC8vT8nuNkAPeVfxGO6MExeVGMlRdfuS1WsmFBoO9YOIkIy3P47jFVVbltmFA
+         XEQTbQ4Z2KX6LnkdjTiv52RO8aSkyYW60JN1sT9m/DVCIBXCRuiZVgIVEYsK16tkDh2a
+         J1S8GxrQ/zGBGJEULn/ByH+kY2byciWSyADTPu6XvO3jUC96V9uGqKTO+fteZZE6Sgzm
+         MrrhoUI9ngx0C7mrBDOP43CtCqn/2vtQg2JRBEt0CUWLefphHHjf8xyd/PbFgjsZeapB
+         XvdxREPMKu+/9NNeM0phepmBcD5pQliENE0Fzy6ttrttM/qYvHC60kCYebUSUDitPbw7
+         4qMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683707681; x=1686299681;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=d/oSM3NDo7yCUuuUmfzMkN8De2E+eLR51o10BvRa8Cg=;
-        b=HfoX4kzKT/xXkyCodBKDCLn9JEPxb4/21zR9MeyD38lBRi2NbanGcxWskQ/IUJB2ti
-         RioH4lvXupFPEITjoYu3IMTLJYmMqvNMyBwpelNZQDPyANwG5yQNtbSFkadt3mK0xgX7
-         jXFz8yndTwjvyfSShJKBCBQcoQBBxjzB8Y/JCJ5tW0Pir5rUM9TtUicWSmVIrUwbiGNh
-         th5Op0LOEzMxc8BYlem+713qjLkE574GubgkBx/AzL7SL2+GO7dOUa5Z8n244Knfz1ky
-         BwexPqs2q3RH7cV04SynnQ6WxJPNmAunizSeLz4FG6TCdlc0ZTxALpf02RKXXwis9xZV
-         zf3A==
-X-Gm-Message-State: AC+VfDydQtx8Q6Ss0JS2ToH3MqSoNo8wZqBUljxEHZz/GE7hgju6jfoP
-        jhRmSvQBwQsHyoROM5Wx8sovsQ==
-X-Google-Smtp-Source: ACHHUZ4PrLt6E4LujoxA4KMX4/KwC76+UUiP2JWThIIqR1/5kBjKDAPctDKTxoXKI7tW7uFvUGSxaw==
-X-Received: by 2002:a17:907:928b:b0:966:2123:e0c3 with SMTP id bw11-20020a170907928b00b009662123e0c3mr10553473ejc.15.1683707680984;
-        Wed, 10 May 2023 01:34:40 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id jy17-20020a170907763100b00969dc13d0b1sm2063951ejc.43.2023.05.10.01.34.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 01:34:40 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Wed, 10 May 2023 10:34:39 +0200
-Message-Id: <CSIGK60CQSD8.1Q4SOANJRMASF@otso>
-Cc:     "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Konrad Dybcio" <konrad.dybcio@somainline.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: pm7250b: make SID configurable
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Dmitry Baryshkov" <dmitry.baryshkov@linaro.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>
-X-Mailer: aerc 0.15.1
-References: <20230407-pm7250b-sid-v1-0-fc648478cc25@fairphone.com>
- <20230407-pm7250b-sid-v1-2-fc648478cc25@fairphone.com>
- <f52524da-719b-790f-ad2c-0c3f313d9fe9@linaro.org>
- <CSIE9TYTQUHL.3E769C2Y4RAAO@otso>
- <c9eea8ec-b289-334c-9c0b-7c992184a265@linaro.org>
- <CAA8EJpoSpytSTm=y7oPD_SC+0-bd735KEczR1JgMc7RuMZ+A+g@mail.gmail.com>
-In-Reply-To: <CAA8EJpoSpytSTm=y7oPD_SC+0-bd735KEczR1JgMc7RuMZ+A+g@mail.gmail.com>
+        d=1e100.net; s=20221208; t=1683707701; x=1686299701;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B+pxvGwx4qB2jHtPFwxz+r1x0GCU+Pru3QTkQf29r70=;
+        b=X9vYP0MMXDUxA2thQqRKtrQySZWOwMaXnQVK8bZ76u9x4TUNGYO3Nmcoh+SwA+IDUZ
+         ZXqAnjvYxnduX3zTP7LnAgUfP0IuWFNDMilyChya6q4IQZN0iQ4l2Xlj8hA9l8xvqIv8
+         Xmm5yecRpMHflHtk27uhQG7IbRd7o8XMkEeewPFS1Gy8i7CbbZhE0G/M76detSut7syM
+         UUaoGLGFSrZP1gZZtdURPDDIBQJWoiybRV5cjqIC2aM4QUgEZcHA/zfqugMYhep/JHN6
+         O7F+IVInl3Ax9D1xR8njNsFWzXartu0gowtawjnVM01cXfT6Eevgo/erBWdjyTbjP9Os
+         7aBA==
+X-Gm-Message-State: AC+VfDwfRQXCPQ29P0ysHupNoBz7c9pF9aaay8OA2M7egkhzPid4vhxI
+        E6dla6p7tNeB06epiV5wrVbFoQ==
+X-Google-Smtp-Source: ACHHUZ7Js4PlJACQk+/Y/i9mBlXF47YXo4soyTcy1gKN++6nq0pF3Oz+/oikTAcIHZp9qv+jDovExA==
+X-Received: by 2002:a17:90b:148d:b0:23f:b609:e707 with SMTP id js13-20020a17090b148d00b0023fb609e707mr17649802pjb.2.1683707700896;
+        Wed, 10 May 2023 01:35:00 -0700 (PDT)
+Received: from C02G87K0MD6R.bytedance.net ([139.177.225.247])
+        by smtp.gmail.com with ESMTPSA id m2-20020a17090a668200b002504a1a5d1asm7588359pjj.29.2023.05.10.01.34.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 01:35:00 -0700 (PDT)
+From:   Hao Jia <jiahao.os@bytedance.com>
+To:     mingo@redhat.com, peterz@infradead.org, mingo@kernel.org,
+        juri.lelli@redhat.com, vincent.guittot@linaro.org,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        mgorman@techsingularity.net
+Cc:     linux-kernel@vger.kernel.org, Hao Jia <jiahao.os@bytedance.com>
+Subject: [PATCH v2 0/2] Fix two warnings about rq clock
+Date:   Wed, 10 May 2023 16:34:48 +0800
+Message-Id: <20230510083450.62334-1-jiahao.os@bytedance.com>
+X-Mailer: git-send-email 2.37.0 (Apple Git-136)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed May 10, 2023 at 10:07 AM CEST, Dmitry Baryshkov wrote:
-> On Wed, 10 May 2023 at 09:55, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
-> >
-> > On 10/05/2023 08:47, Luca Weiss wrote:
-> > > Hi Krzysztof,
-> > >
-> > > On Fri Apr 7, 2023 at 10:27 AM CEST, Krzysztof Kozlowski wrote:
-> > >> On 07/04/2023 09:45, Luca Weiss wrote:
-> > >>> Like other Qualcomm PMICs the PM7250B can be used on different addr=
-esses
-> > >>> on the SPMI bus. Use similar defines like the PMK8350 to make this
-> > >>> possible.
-> > >>>
-> > >>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> > >>> ---
-> > >>>  arch/arm64/boot/dts/qcom/pm7250b.dtsi | 23 ++++++++++++++++-------
-> > >>>  1 file changed, 16 insertions(+), 7 deletions(-)
-> > >>>
-> > >>> diff --git a/arch/arm64/boot/dts/qcom/pm7250b.dtsi b/arch/arm64/boo=
-t/dts/qcom/pm7250b.dtsi
-> > >>> index daa6f1d30efa..eeb476edc79a 100644
-> > >>> --- a/arch/arm64/boot/dts/qcom/pm7250b.dtsi
-> > >>> +++ b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
-> > >>> @@ -7,6 +7,15 @@
-> > >>>  #include <dt-bindings/interrupt-controller/irq.h>
-> > >>>  #include <dt-bindings/spmi/spmi.h>
-> > >>>
-> > >>> +/* This PMIC can be configured to be at different SIDs */
-> > >>> +#ifndef PM7250B_SID
-> > >>> +   #define PM7250B_SID 2
-> > >>
-> > >> Drop indentation, although anyway I am against this. Please don't br=
-ing
-> > >> new patterns of this at least till we settle previous discussion.
-> > >>
-> > >> https://lore.kernel.org/linux-arm-msm/46658cbb-fff5-e98b-fdad-88fa68=
-3a9c75@linaro.org/
-> > >
-> > > What's the outcome of the discussion? For this PMIC it's totally enou=
-gh
-> > > to have the SID configurable like in this patch, I don't think this P=
-MIC
-> > > will be included twice in a board - at least I'm not aware of such a
-> > > configuration.
-> >
-> > We did not reach consensus and I still disagree with complex macros or
-> > macros depending on order of inclusion.
->
-> I still think we should find a way to parametrise PMIC dtsi, however I
-> agree with Krzysztof that complex CPP is not a way to go.
+These two patches fix two warnings about rq clock
 
-What about the macro already used in-tree and proposed with this patch?
-I wouldn't say this is a "complex macro" since it's just a single number
-being replaced in a few places.
+Patch1 fixes the warning of using the old rq clock caused by
+missing update rq clock.
 
-Could we get this in now, and if we find a new & better way in the
-future we can adjust all the dtsi upstream?
+Patch2 fixes the warning that the rq clock was updated multiple
+times while holding the rq lock.
+
+v1->v2:
+    - Vincent Guittot suggested using rq_clock_start_loop_update()
+      to prevent multiple calls to update_rq_clock() in unthrottle_cfs_rq()
+      instead of removing update_rq_clock() from unthrottle_cfs_rq()
+      and updating the rq clock before unthrottle_cfs_rq() for patch2.
+
+[v1] https://lore.kernel.org/all/20230410081206.23441-1-jiahao.os@bytedance.com
+
+Hao Jia (2):
+  sched/core: Fixed missing rq clock update before calling
+    set_rq_offline()
+  sched/core: Avoid double calling update_rq_clock()
+
+ kernel/sched/core.c     |  7 ++++---
+ kernel/sched/fair.c     | 16 ++++++++++++++++
+ kernel/sched/sched.h    | 21 +++++++++++++++++++++
+ kernel/sched/topology.c | 10 ++++++----
+ 4 files changed, 47 insertions(+), 7 deletions(-)
+
+-- 
+2.37.0
+
