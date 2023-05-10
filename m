@@ -2,162 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 160C56FDE08
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:45:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1A26FDE0D
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:46:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237014AbjEJMpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 08:45:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43078 "EHLO
+        id S236925AbjEJMqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 08:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236955AbjEJMph (ORCPT
+        with ESMTP id S235768AbjEJMqD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 08:45:37 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F26A1B8;
-        Wed, 10 May 2023 05:45:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1683722736; x=1715258736;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Ft2xF1mBOJy5jrUDL8wm0sluvoXUoK2p6NXMOoc4iMo=;
-  b=GzkmkZvhslrFnbV5UhLt5piKbwHZF3NQhfVEuhgo3aqTb/MIoo3xzZqI
-   RkXIpevue4tf1BUAY+/SstjCt3HC3otRezemdvp+xVj0X86gawQmI8/O3
-   xHqQzDKTf+6xA/9MDDg2oy26tDmln6miKIsbpsNRcsW9Myg34RukOkorc
-   wYqZZUm7wf0L9R0GE4wlcO6u+HVx1JcSpr/kwuBlliai6R8Qz5GLE6J7H
-   LZzlii6511IRyy1+eVLP0HYMtGKz0mm0fjSMvDATwuYP4PbZprVEZFpNq
-   VYMnDzY8jlhJDE8q/dW/RyJ/pmJ5NX1xrvcI+KUwWlfb3mLG101mlGWYx
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.99,264,1677567600"; 
-   d="asc'?scan'208";a="214647202"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 10 May 2023 05:45:31 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Wed, 10 May 2023 05:45:31 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Wed, 10 May 2023 05:45:29 -0700
-Date:   Wed, 10 May 2023 13:45:09 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Anup Patel <apatel@ventanamicro.com>
-CC:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Atish Patra <atishp@atishpatra.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        Anup Patel <anup@brainfault.org>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <iommu@lists.linux.dev>
-Subject: Re: [PATCH v3 01/11] RISC-V: Add riscv_fw_parent_hartid() function
-Message-ID: <20230510-squealing-pruning-2c94b85785b0@wendy>
-References: <20230508142842.854564-1-apatel@ventanamicro.com>
- <20230508142842.854564-2-apatel@ventanamicro.com>
+        Wed, 10 May 2023 08:46:03 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DE42116
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 05:46:01 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-953343581a4so1111568266b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 05:46:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683722760; x=1686314760;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4+GAXgKKqLnJrZPTG1dBuVZu539BZ2VsxFnQSgAU5CU=;
+        b=BYx6Cfdzz3EhDB4qUMFWjkjugUsbbEOYVB+6e9+oHXHsePBAOiGIBZfkglBtnmYwZy
+         JG4QbKk0fZSV8i4rnb+VmCJSBlqXDZiGEqEFOkt5rrhbMWPGuLJOzswRX9IIj0u/FRpx
+         aUi3xBXUfBGb1qfxd+teP3TKaMgEXjr3JYd3NcYCFqJnGympnU8eduU4n64S1aEe6AK+
+         BGjuay3kK/DeJWwLjzso2Gl/cS5PUbGcq80meZIPUooh0bR8msETdrSG7/SpUMMJl8DB
+         g2C718dTIvgpKQpAyXMURry3f3AiJlTRZF9DlXSxNpEHzlTJGfPbOX3oWoz5lVOzkPQO
+         aayA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683722760; x=1686314760;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4+GAXgKKqLnJrZPTG1dBuVZu539BZ2VsxFnQSgAU5CU=;
+        b=O4dXvaVxz3AGrhpMqft0meZFZFSKJSrDp3XNAY4wGBOHRedaq/1T+xRC/T5ak5hvxG
+         8POKbKP9gB/0Ph1XjJ1VQHneCzGz4s5+PELaLppFJPJ0FBh798zdWElOPC9f3oNW3vnl
+         H2SNQ8Ef9GXNgbVaXmYTkQuMFWKxL0kno3pRHNpf+SZL3gbe9XY6sGxK7Z40GGJM2tPd
+         uIDnc6gttmS4Lj+sCzwgbFygYFErySKg9H1cadDC5KuTUYhzijAY/d1lh580hc1Qwih2
+         LX7+0Wpfo3xAgGFKJDg0nFygDXlEyuGz6cJFw6qCNrwuZIob01gg1vC2ANMT1VZixhvm
+         pLag==
+X-Gm-Message-State: AC+VfDxhdco4M3IW3VdjW6TpSNdUY5pFiOwbJZRSVYFaDSCCUjDauduA
+        7hepnkZtG7S/izDl2TuAD6rLyQ==
+X-Google-Smtp-Source: ACHHUZ7GaUKUCqtCApScxrhvWbhNQxQqNb8+624SHR+r6CSp3SP/aW4XVqD1cmULgpBP4VQEU29jpw==
+X-Received: by 2002:a17:907:5c6:b0:939:e870:2b37 with SMTP id wg6-20020a17090705c600b00939e8702b37mr15414063ejb.70.1683722760139;
+        Wed, 10 May 2023 05:46:00 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:c175:a0f9:6928:8c9d? ([2a02:810d:15c0:828:c175:a0f9:6928:8c9d])
+        by smtp.gmail.com with ESMTPSA id mm10-20020a170906cc4a00b00960005e09a3sm2677528ejb.61.2023.05.10.05.45.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 05:45:59 -0700 (PDT)
+Message-ID: <b5c48154-134a-11fc-c2ce-47c1579a3de6@linaro.org>
+Date:   Wed, 10 May 2023 14:45:58 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="7J+wqfSckLJsTGge"
-Content-Disposition: inline
-In-Reply-To: <20230508142842.854564-2-apatel@ventanamicro.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: document AL02-C2 board based
+ on IPQ9574 family
+Content-Language: en-US
+To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
+        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
+        quic_anusha@quicinc.com, quic_poovendh@quicinc.com
+References: <20230510104359.16678-1-quic_devipriy@quicinc.com>
+ <20230510104359.16678-2-quic_devipriy@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230510104359.16678-2-quic_devipriy@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---7J+wqfSckLJsTGge
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 10/05/2023 12:43, Devi Priya wrote:
+> Document AL02-C2 (Reference Design Platform 418) board based on IPQ9574
+> family of SoCs.
+> 
+> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
 
-On Mon, May 08, 2023 at 07:58:32PM +0530, Anup Patel wrote:
-> We add common riscv_fw_parent_hartid() which help device drivers
-> to get parent hartid of the INTC (i.e. local interrupt controller)
-> fwnode. Currently, this new function only supports device tree
-> but it can be extended to support ACPI as well.
->=20
-> Signed-off-by: Anup Patel <apatel@ventanamicro.com>
-> ---
->  arch/riscv/include/asm/processor.h |  3 +++
->  arch/riscv/kernel/cpu.c            | 12 ++++++++++++
->  2 files changed, 15 insertions(+)
->=20
-> diff --git a/arch/riscv/include/asm/processor.h b/arch/riscv/include/asm/=
-processor.h
-> index 94a0590c6971..6fb8bbec8459 100644
-> --- a/arch/riscv/include/asm/processor.h
-> +++ b/arch/riscv/include/asm/processor.h
-> @@ -77,6 +77,9 @@ struct device_node;
->  int riscv_of_processor_hartid(struct device_node *node, unsigned long *h=
-artid);
->  int riscv_of_parent_hartid(struct device_node *node, unsigned long *hart=
-id);
-> =20
-> +struct fwnode_handle;
-> +int riscv_fw_parent_hartid(struct fwnode_handle *node, unsigned long *ha=
-rtid);
-> +
->  extern void riscv_fill_hwcap(void);
->  extern int arch_dup_task_struct(struct task_struct *dst, struct task_str=
-uct *src);
-> =20
-> diff --git a/arch/riscv/kernel/cpu.c b/arch/riscv/kernel/cpu.c
-> index 5de6fb703cc2..1adbe48b2b58 100644
-> --- a/arch/riscv/kernel/cpu.c
-> +++ b/arch/riscv/kernel/cpu.c
-> @@ -73,6 +73,18 @@ int riscv_of_parent_hartid(struct device_node *node, u=
-nsigned long *hartid)
->  	return -1;
->  }
-> =20
-> +/* Find hart ID of the CPU fwnode under which given fwnode falls. */
-> +int riscv_fw_parent_hartid(struct fwnode_handle *node, unsigned long *ha=
-rtid)
-> +{
-> +	/*
-> +	 * Currently, this function only supports DT but it can be
-> +	 * extended to support ACPI as well.
-> +	 */
 
-Statement of the obvious here, no?
-Although, it seems a little odd to read this comment & the corresponding
-statement in the commit message, when the series appears to have been
-based on the ACPI?
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Perhaps by the time v4 comes around, ACPI support will have been merged
-& that'll be moot.
+Best regards,
+Krzysztof
 
-> +	if (!is_of_node(node))
-> +		return -EINVAL;
-> +	return riscv_of_parent_hartid(to_of_node(node), hartid);
-
-nit: blank line before the return here please.
-
-Thanks,
-Conor.
-
---7J+wqfSckLJsTGge
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFuR1QAKCRB4tDGHoIJi
-0i56AP9FXRjPPY/ysx3+btPbR/gOm42Ygf+JSC4zYeMmWzv56AEAloGa6J6cwoJk
-U1ibc9oqpOeFavnGuNNDRsxCfer39AE=
-=fBPY
------END PGP SIGNATURE-----
-
---7J+wqfSckLJsTGge--
