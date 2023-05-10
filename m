@@ -2,151 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D5486FDB48
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:05:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D70CA6FDB4D
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235768AbjEJKFZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 06:05:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
+        id S236290AbjEJKGA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 06:06:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229755AbjEJKFX (ORCPT
+        with ESMTP id S236273AbjEJKFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 06:05:23 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A992659D
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:04:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683713076;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mxi0tssM/MIAC/Us8XUva2O6e9fov44nkm6fQlyWJnA=;
-        b=B9/ZWLkKgz8obRLJxxxZ0rp8JeLEK257gW5Ud205VBuCK5jqHgB4sTfLB/TDfhchJ3rJ4H
-        XvNeWJLfHA/0ksUFerQYo/fE4viEm40FEOECzBhjsj+ExAPAGW1cSg2Fbv8VD63Y+7r07J
-        q+q04s0oJAgs7sUlctfaaycQaDc+mFI=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-231-eBu-xCx_Mn2ftR4odSHhQQ-1; Wed, 10 May 2023 06:04:35 -0400
-X-MC-Unique: eBu-xCx_Mn2ftR4odSHhQQ-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-965f0c4ae32so548027466b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:04:35 -0700 (PDT)
+        Wed, 10 May 2023 06:05:53 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0A2C65BF
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:05:45 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bd875398dso10675092a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:05:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683713144; x=1686305144;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9jKt286KS5/9lbpQtTUhslsELt909PREUjMgX9aHY/0=;
+        b=ZJhtXTPDbi/qNTFrKEFjdK9wa0NbOmtBAiFmWdwJ4+yB3TAgtsXreIz9C46zJUANnG
+         PtFcuzYgiVVMd4ddD1fo1k2dRnj9JFFmOtgOfXVAy4v9BSQv5lUtMKXXLslhQOyZc54H
+         HMW6/35OjPJV0RtysX0CY14uDchv7N6IOyuVSZM4HEZB24p00Kb9MSyqp0ymQNdgJYf7
+         d/aS4vabah+cej+ReS8uFrUnZwVyNibT5Vk7bt6kTpMMi/aB2Ea4irCb+NoAGzYi+As+
+         YRsE9vFoTTExz5OfkBuqw0FBKBS4/QiHWOonL6z/eH9ClxZLFBvNjfepmzEuuL6LZfzm
+         W77g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683713074; x=1686305074;
+        d=1e100.net; s=20221208; t=1683713144; x=1686305144;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mxi0tssM/MIAC/Us8XUva2O6e9fov44nkm6fQlyWJnA=;
-        b=X8KtbxWiOW8h/BBfUinPEgBroVBjyeI58ZdD3TZZUWYffFIuQb3TD92QHMRIfhJysT
-         HKh4cE64JKB/stU/HYv5PmK7Ez8ngSNioBrPFPBzditcDGNjQq/725nKMS58CcqLOYvG
-         uWzAaUTphSF8AijvWNh2GNH0dbNAfAr60Tjeo65KKbF3hG+A8vBOXxkWPvuE9LVyxSwF
-         yeSLO3oXASHVkPblMerfpqguNE9kEl+9WEScjuP2s+1Axbp49YdharUD+jXRyQSKAMIj
-         E7JV4ZYluraOxme3do9DUYX/NMV3tIkmMBi+0I+yvhHIsCkMWp6DmUFTU8QU00TD+fA9
-         ixbg==
-X-Gm-Message-State: AC+VfDxCX9TdSDJFg7NpwFEDS39A5kSa6jgTM0Oyarx+il8a4dk3jY+F
-        62R3FsAlDFbyNQyxJ6e/16e3NeZFWgICX6iNteAi4Y40+fRYbgPhy0hOYfEKtRVP5RgKqcJiZVk
-        58PqDXT6tUhFU19J8wwXbsPo7
-X-Received: by 2002:a17:906:dc93:b0:94f:a292:20cc with SMTP id cs19-20020a170906dc9300b0094fa29220ccmr15643198ejc.41.1683713074310;
-        Wed, 10 May 2023 03:04:34 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6g3VLlchZ4NQ4dVKKV7VFeDXbAdsULvGoTQhQBYH7wgUiWDxOc+E6cOLAsZqVz3BCBbS6/Sw==
-X-Received: by 2002:a17:906:dc93:b0:94f:a292:20cc with SMTP id cs19-20020a170906dc9300b0094fa29220ccmr15643186ejc.41.1683713074026;
-        Wed, 10 May 2023 03:04:34 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id de25-20020a1709069bd900b0096664376ec9sm2486973ejc.55.2023.05.10.03.04.33
+        bh=9jKt286KS5/9lbpQtTUhslsELt909PREUjMgX9aHY/0=;
+        b=EfE+YE3Omez/NYDewrL0T4MESA32uEa52sbiRKJYpPf3OO0rNiwistNV7Nlmjtx+s1
+         AOla+8ShcLj+kJ4h+3nUT0IW/HxQDPKPGlc8/VV126meiHktQxSen9teHygTRimVMquu
+         9vj/Vv9THEFkMdWyj8FMSntxu/JU2OIuAIm1VSwbEZLAQ4pHqj4u/fiA9+Xq/mglz86P
+         RKIIsmosWx9rU5ofmzwencwRo861b4JIQjTaIYsxZjLiwHhWBxFpy85HGSM6VuY2RMor
+         lEBp9Ev+BK9QUPw9rgBW/j7oWsb+qp5hjFagxXNWWwRxwb7tTd/J1ENUA4UYHisNOXO8
+         WPhQ==
+X-Gm-Message-State: AC+VfDy3CS2HNvgoJnYc+HFSLWyKN3ng846xWDAj4UvD+97F1BTc1hV2
+        yFe4LB0DF4TBU2fuXci6IjjoOqphkzh9q74CV7A=
+X-Google-Smtp-Source: ACHHUZ6SJaggu0T0c984P/D1GIbEYGJVgoI0k1sVocoNl6b/3/Uew6h6W3G9uDRyFOra5RgbUVd/5A==
+X-Received: by 2002:a50:fb92:0:b0:50b:d270:6b6f with SMTP id e18-20020a50fb92000000b0050bd2706b6fmr15433060edq.4.1683713144236;
+        Wed, 10 May 2023 03:05:44 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:c175:a0f9:6928:8c9d? ([2a02:810d:15c0:828:c175:a0f9:6928:8c9d])
+        by smtp.gmail.com with ESMTPSA id w17-20020aa7d291000000b0050c524253dasm1767577edq.20.2023.05.10.03.05.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 03:04:33 -0700 (PDT)
-Message-ID: <c7aa9034-59f8-11aa-7170-86c0db012dda@redhat.com>
-Date:   Wed, 10 May 2023 12:04:32 +0200
+        Wed, 10 May 2023 03:05:43 -0700 (PDT)
+Message-ID: <9040e9bb-a16c-0186-edba-da986350340c@linaro.org>
+Date:   Wed, 10 May 2023 12:05:42 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [REGRESSION] wifi: brcmfmac: add firmware vendor info in driver
- info
-Content-Language: en-US, nl
-To:     Felix <nimrod4garoa@gmail.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Hante Meuleman <hante.meuleman@broadcom.com>
-Cc:     regressions@lists.linux.dev,
-        Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-wireless@vger.kernel.org,
-        brcm80211-dev-list.pdl@broadcom.com,
-        SHA-cyfmac-dev-list@infineon.com
-References: <4ef3f252ff530cbfa336f5a0d80710020fc5cb1e.camel@gmail.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <4ef3f252ff530cbfa336f5a0d80710020fc5cb1e.camel@gmail.com>
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: pm7250b: make SID configurable
+Content-Language: en-US
+To:     Luca Weiss <luca.weiss@fairphone.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230407-pm7250b-sid-v1-0-fc648478cc25@fairphone.com>
+ <20230407-pm7250b-sid-v1-2-fc648478cc25@fairphone.com>
+ <f52524da-719b-790f-ad2c-0c3f313d9fe9@linaro.org>
+ <CSIE9TYTQUHL.3E769C2Y4RAAO@otso>
+ <c9eea8ec-b289-334c-9c0b-7c992184a265@linaro.org>
+ <CAA8EJpoSpytSTm=y7oPD_SC+0-bd735KEczR1JgMc7RuMZ+A+g@mail.gmail.com>
+ <CSIGK60CQSD8.1Q4SOANJRMASF@otso>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CSIGK60CQSD8.1Q4SOANJRMASF@otso>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Felix,
-
-On 5/10/23 10:25, Felix wrote:
-> Changes made by the mentioned commit lead to Oops when waking up after
-> suspend to RAM.
+On 10/05/2023 10:34, Luca Weiss wrote:
+> On Wed May 10, 2023 at 10:07 AM CEST, Dmitry Baryshkov wrote:
+>> On Wed, 10 May 2023 at 09:55, Krzysztof Kozlowski
+>> <krzysztof.kozlowski@linaro.org> wrote:
+>>>
+>>> On 10/05/2023 08:47, Luca Weiss wrote:
+>>>> Hi Krzysztof,
+>>>>
+>>>> On Fri Apr 7, 2023 at 10:27 AM CEST, Krzysztof Kozlowski wrote:
+>>>>> On 07/04/2023 09:45, Luca Weiss wrote:
+>>>>>> Like other Qualcomm PMICs the PM7250B can be used on different addresses
+>>>>>> on the SPMI bus. Use similar defines like the PMK8350 to make this
+>>>>>> possible.
+>>>>>>
+>>>>>> Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+>>>>>> ---
+>>>>>>  arch/arm64/boot/dts/qcom/pm7250b.dtsi | 23 ++++++++++++++++-------
+>>>>>>  1 file changed, 16 insertions(+), 7 deletions(-)
+>>>>>>
+>>>>>> diff --git a/arch/arm64/boot/dts/qcom/pm7250b.dtsi b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
+>>>>>> index daa6f1d30efa..eeb476edc79a 100644
+>>>>>> --- a/arch/arm64/boot/dts/qcom/pm7250b.dtsi
+>>>>>> +++ b/arch/arm64/boot/dts/qcom/pm7250b.dtsi
+>>>>>> @@ -7,6 +7,15 @@
+>>>>>>  #include <dt-bindings/interrupt-controller/irq.h>
+>>>>>>  #include <dt-bindings/spmi/spmi.h>
+>>>>>>
+>>>>>> +/* This PMIC can be configured to be at different SIDs */
+>>>>>> +#ifndef PM7250B_SID
+>>>>>> +   #define PM7250B_SID 2
+>>>>>
+>>>>> Drop indentation, although anyway I am against this. Please don't bring
+>>>>> new patterns of this at least till we settle previous discussion.
+>>>>>
+>>>>> https://lore.kernel.org/linux-arm-msm/46658cbb-fff5-e98b-fdad-88fa683a9c75@linaro.org/
+>>>>
+>>>> What's the outcome of the discussion? For this PMIC it's totally enough
+>>>> to have the SID configurable like in this patch, I don't think this PMIC
+>>>> will be included twice in a board - at least I'm not aware of such a
+>>>> configuration.
+>>>
+>>> We did not reach consensus and I still disagree with complex macros or
+>>> macros depending on order of inclusion.
+>>
+>> I still think we should find a way to parametrise PMIC dtsi, however I
+>> agree with Krzysztof that complex CPP is not a way to go.
 > 
-> When waking up a Dell XPS 13 9350 with BCM4350 wifi card after suspend
-> to RAM, the kernel hangs with a NULL pointer dereference and Oops. The
-> issues was introduced by commit
-> da6d9c8ecd00e20218461007948f2b0a8e7fa242 and only happens when the
-> brcmfmac module is loaded. This issue is the reason we could not
-> upgrade to newer kernels than the 6.1 series on the affected machine.
-> 
-> 
-> Details:
-> 
-> On a Dell XPS 13 9350 laptop with Broadcom BCM4350 wifi card (according
-> to lspci), every kernel starting with 6.2 hangs when waking up after
-> suspend to RAM. The issue persisted as of May 2nd (last tested commit
-> was 348551ddaf311c76b01cdcbaf61b6fef06a49144). Passing the debug and
-> no_console_suspend parameters to the kernel show that a NULL pointer
-> dereference and an Oops happen at wakeup. Please find the kernel
-> messages readable on the screen at this point attached
-> (kernel_log_after_suspend.txt).
-> 
-> A bisection was successful and produced the first bad commit
-> [da6d9c8ecd00e20218461007948f2b0a8e7fa242] wifi: brcmfmac: add firmware
-> vendor info in driver info
-> I've attached the bisection log as well (bisect.txt).
-> 
-> Suspend to RAM works on this machine on newer kernels once the brcmfmac
-> module is unloaded.
-> 
-> Distribution: Arch Linux
-> Architecture: x86_64
-> Device: Dell XPS 13 9350 with BCM4350 wifi card
-> Kernel config used at compilation (created using the Arch Linux default
-> config and make olddefconfig):
-> https://gist.githubusercontent.com/maclomhair/e33fa7eece8f8c77e5a88c4eede2f523/raw/429dfb022498c026225865dbb3ab2f75d5030a54/config
-> Dmesg output after boot:
-> https://gist.githubusercontent.com/maclomhair/47c75fa759d93800e7fb5e937fabef3e/raw/10750996a1ea9dcb3fa14d9b94e11fedd3abf280/dmesg
-> 
-> #regzbot introduced da6d9c8ecd00e20218461007948f2b0a8e7fa242
+> What about the macro already used in-tree and proposed with this patch?
+> I wouldn't say this is a "complex macro" since it's just a single number
+> being replaced in a few places.
 
-Thank you for reporting this and thank you for bisecting it too!
+Are you talking about the macro to which I responded: "or macros
+depending on order of inclusion." or something else?
 
-As a result of your excellent bug report I've been able to write
-a fix for this. I'm confident enough in the fix that I've submitted
-it upstream right away.
-
-But it would still be good if you can test the fix and let us know
-if it fixes this issue for you. You should have received a copy
-of the patch when I submitted it upstream.
-
-Regards,
-
-Hans
-
-
-
+Best regards,
+Krzysztof
 
