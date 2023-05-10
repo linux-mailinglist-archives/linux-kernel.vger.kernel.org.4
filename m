@@ -2,83 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE776FDB5E
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:12:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1196FDB62
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:13:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236405AbjEJKMJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 06:12:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35358 "EHLO
+        id S236430AbjEJKM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 06:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjEJKMH (ORCPT
+        with ESMTP id S236041AbjEJKM5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 06:12:07 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521001BE7
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:12:06 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-9659e9bbff5so1272179066b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:12:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683713525; x=1686305525;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8W9wj6II5GTrEem7luB1BRmjIURt5RdoLBLDnnuSaBY=;
-        b=oUOYhwB4kUwcFIrS3FG81XCuZ/NcBiGJ+OUZEGUl7TCsABhBzAx8XiZDuiSpX00e33
-         YH68zgczYjIS7C4nG9aDhS5tokGMTABPQE9BzD41s168vBrBjW8WKHI9Cn8m2FxPkpVs
-         nUVE9wRIhFrpTaFF3mtKLj1Uc5Cpb3Y6+yqBHa6p693u4qYZq+dmwJJRrYZmMqs5uYhs
-         kNElXVoaD4n/xDZIkiPv5K5UUWLv3+ACqsvADtfrJJn12d9TYoVfxyKwkAFGmfqNGKm5
-         71ut/Ru25HT23ufPo0Lry7u9e4/X7nHxq8Nz7XzowsjXj+WqqXNicri1I6MFvLDZaagk
-         xjnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683713525; x=1686305525;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8W9wj6II5GTrEem7luB1BRmjIURt5RdoLBLDnnuSaBY=;
-        b=EhiAdJBNcaeJDoOXlqk6HprGxvtv57SMvUUeJOoGkNVo+3++CeGD/T3f5YpWWkF7Z0
-         C27fQd87+kOMFCDEWLEdEkWBdJ/zvthksIUdH15GjNv9IFqgVuMpFZIh7ftBJDQ+nmUK
-         Jv2EalFqkNCo7aAhPdi3Rl70JG3sIif83UURx6zdMCJlG7Jhoya5g3/FdXuOqdjGFZu2
-         Pi59yxENaHmqmmw5Ustsv/piuMkqCx34hG8om9sVxEOepE3E1fvZOZXUC8WQlqTFd9w8
-         sioi+7+2xXXj6xxjCst4yDuDw0mi353ss11fQiCccIwWSIK/bJNftD2S94WhRAepkxel
-         qSsQ==
-X-Gm-Message-State: AC+VfDxv7l1HYr6aZw+uU+qo6yFCxPLgAgHjn7MIPin7Yc3wxFuW8SVK
-        /Eiy4EN55aDuj9R7QGV3TeNhY3JZk7rZiSuxqFo=
-X-Google-Smtp-Source: ACHHUZ7QAKmL0TacRIZKfIWUdEdjTRxMsMME+brBGTKG2TxMOHIiq7GsjlRzMgperJDfC2U8Whz63Q==
-X-Received: by 2002:a17:907:3d92:b0:969:fc68:fa9a with SMTP id he18-20020a1709073d9200b00969fc68fa9amr4689159ejc.40.1683713524736;
-        Wed, 10 May 2023 03:12:04 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c175:a0f9:6928:8c9d? ([2a02:810d:15c0:828:c175:a0f9:6928:8c9d])
-        by smtp.gmail.com with ESMTPSA id mh25-20020a170906eb9900b00882f9130eafsm2435335ejb.26.2023.05.10.03.12.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 03:12:04 -0700 (PDT)
-Message-ID: <8f21f892-de54-9bc7-d4b9-f36aaa6b4a7c@linaro.org>
-Date:   Wed, 10 May 2023 12:12:02 +0200
+        Wed, 10 May 2023 06:12:57 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2251F1FD8;
+        Wed, 10 May 2023 03:12:54 -0700 (PDT)
+Received: from theinternet.molgen.mpg.de (theinternet.molgen.mpg.de [141.14.31.7])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: buczek)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 3E9C061DFA903;
+        Wed, 10 May 2023 12:12:51 +0200 (CEST)
+Subject: Re: [PATCH 0/5] HID: manually unregister leds on device removal to
+ prevent UAFs
+To:     Pietro Borrello <borrello@diag.uniroma1.it>,
+        Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Hanno Zulla <kontakt@hanno.de>,
+        Carlo Caione <carlo@endlessm.com>, Pavel Machek <pavel@ucw.cz>,
+        Lee Jones <lee@kernel.org>,
+        Roderick Colenbrander <roderick.colenbrander@sony.com>,
+        Sven Eckelmann <sven@narfation.org>
+Cc:     linux-leds@vger.kernel.org,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiri Kosina <jkosina@suse.cz>,
+        Roderick Colenbrander <roderick@gaikai.com>
+References: <20230125-hid-unregister-leds-v1-0-9a5192dcef16@diag.uniroma1.it>
+From:   Donald Buczek <buczek@molgen.mpg.de>
+Message-ID: <288ed0da-8903-7dda-eb4e-f17037031e68@molgen.mpg.de>
+Date:   Wed, 10 May 2023 12:12:50 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:68.0) Gecko/20100101
+ Thunderbird/68.12.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 2/5] dt-bindings: clocks: atmel,at91rm9200-pmc: convert
- to yaml
+In-Reply-To: <20230125-hid-unregister-leds-v1-0-9a5192dcef16@diag.uniroma1.it>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Claudiu.Beznea@microchip.com, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, Nicolas.Ferre@microchip.com,
-        alexandre.belloni@bootlin.com
-Cc:     linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230509052757.539274-1-claudiu.beznea@microchip.com>
- <20230509052757.539274-3-claudiu.beznea@microchip.com>
- <e463eb68-3ea0-5230-76fd-4a2ee66bf397@linaro.org>
- <773d0d90-29c7-b1bd-bd16-898b435eafb6@microchip.com>
- <b3c7db03-6614-47d9-a9e0-a8e51c836d86@linaro.org>
- <a4d934c6-ec28-50d0-b9bb-9b11fee7ebb6@microchip.com>
- <1c2aa022-348a-8ac2-1a26-eedf57aadb77@linaro.org>
- <71a1e8de-932d-09a1-efeb-af459fee9423@microchip.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <71a1e8de-932d-09a1-efeb-af459fee9423@microchip.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-7.5 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,92 +58,207 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/2023 10:31, Claudiu.Beznea@microchip.com wrote:
-> On 10.05.2023 10:58, Krzysztof Kozlowski wrote:
->> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>
->> On 10/05/2023 09:14, Claudiu.Beznea@microchip.com wrote:
->>> On 10.05.2023 10:06, Krzysztof Kozlowski wrote:
->>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>>>
->>>> On 10/05/2023 09:00, Claudiu.Beznea@microchip.com wrote:
->>>>> On 09.05.2023 09:25, Krzysztof Kozlowski wrote:
->>>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
->>>>>>
->>>>>> On 09/05/2023 07:27, Claudiu Beznea wrote:
->>>>>>> Convert Atmel PMC documentation to yaml. Along with it clock names
->>>>>>> were adapted according to the current available device trees as
->>>>>>> different controller versions accept different clocks (some of them
->>>>>>> have 3 clocks as input, some has 2 clocks as inputs and some with 2
->>>>>>> input clocks uses different clock names).
->>>>>>>
->>>>>>
->>>>>> Thank you for your patch. There is something to discuss/improve.
->>>>>>
->>>>>>> +title: Atmel Power Management Controller (PMC)
->>>>>>> +
->>>>>>> +maintainers:
->>>>>>> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
->>>>>>> +
->>>>>>> +description:
->>>>>>> +  The power management controller optimizes power consumption by controlling all
->>>>>>> +  system and user peripheral clocks. The PMC enables/disables the clock inputs
->>>>>>> +  to many of the peripherals and to the processor.
->>>>>>> +
->>>>>>> +properties:
->>>>>>> +  compatible:
->>>>>>> +    oneOf:
->>>>>>> +      - items:
->>>>>>> +          - enum:
->>>>>>> +              - atmel,at91sam9g15-pmc
->>>>>>> +              - atmel,at91sam9g20-pmc
->>>>>>> +              - atmel,at91sam9g25-pmc
->>>>>>> +              - atmel,at91sam9g35-pmc
->>>>>>> +              - atmel,at91sam9x25-pmc
->>>>>>> +              - atmel,at91sam9x35-pmc
->>>>>>> +          - enum:
->>>>>>> +              - atmel,at91sam9260-pmc
->>>>>>> +              - atmel,at91sam9x5-pmc
->>>>>>
->>>>>> I missed it last time - why you have two enums? We never talked about
->>>>>> this. It's usually wrong... are you sure this is real hardware:
->>>>>> atmel,at91sam9g20-pmc, atmel,at91sam9260-pmc
->>>>>> ?
->>>>>
->>>>> I have 2 enums because there are some hardware covered by:
->>>>> "vendor-name,hardware-v1-pmc", "syscon" and some covered by:
->>>>> "vendor-name,hardware-v2-pmc", "vendor-name,hardware-v1-pmc", "syscon".
->>>>
->>>> The enum does not say this. At all.
->>>>
->>>> So again, answer, do not ignore:
->>>> is this valid setup:
->>>> atmel,at91sam9g20-pmc, atmel,at91sam9260-pmc
->>>> ?
->>>
->>> Not w/o syscon. This is valid:
->>
->> Syscon is not important here, but indeed I missed it.
->>
->>>
->>> compatible = "atmel,at91sam9g20-pmc", "atmel,at91sam9260-pmc", "syscon";
->>>
->>> available in arch/arm/boot/dts/at91sam9g20.dtsi +45
->>
->> Nice, so my random choice was actually correct. Ok, so another:
->>
->> atmel,at91sam9g15-pmc, atmel,at91sam9260-pmc, syscon
->>
->> Is it valid hardware?
+Is this series in a queue somewhere? Seems rather important and I don't find progress.
+
+Also, should be cc: stable@vger.kernel.org , right?
+
+CVE-2023-25012
+
+Best
+
+  Donald
+
+On 1/26/23 1:24 AM, Pietro Borrello wrote:
+> I noticed a recurring pattern is present in multiple hid devices in the
+> Linux tree, where the LED controller of a device schedules a work_struct
+> to interact with the hardware.
+> The work_struct is embedded in the device structure and thus, is freed
+> at device removal.
 > 
-> This one, no. So, I guess, the wrong here is that there could be
-> combinations that are not for actual hardware and yet considered valid by
-> changes in this patch?
+> The issue is that a LED worker may be scheduled by a timer concurrently
+> with device removal, causing the work_struct to be accessed after having
+> been freed.
+> I was able to trigger the issue in hid-bigbenff.c and hid-asus.c 
+> where the work_structs may be scheduled by the LED controller
+> while the device is disconnecting, triggering use-after-frees.
+> I can attach the reproducer, but it's very simple USB configuration, 
+> using the /dev/raw-gadget interface with some more USB interactions 
+> to manage LEDs configuration and pass checks in asus_kbd_init() 
+> and asus_kbd_get_functions() in case of hid-asus.c.
+> I triggered the issue by connecting a device and immediately 
+> disconnecting it, so that the remove function runs before the LED one
+> which remains pending.
+> 
+> More drivers have the same pattern (hid-lg-g15.c, hid-playstation.c,
+> hid-sony.c) but I wasn't able to properly pass the right descriptors
+> to trigger the led configurations needed to trigger the workers.
+> Some other drivers manually unregister at removal (hid-corsair.c,
+> hid-gt683r.c, hid-lenovo.c) since they do not use the managed
+> interface, which is safe, to my understanding.
+> Also, a similar pattern is present with callbacks which schedule
+> a worker originating from input_ff_create_memless() (e.g.,
+> in hid-bigbenff.c) but in these cases, I wasn't able to trigger
+> the race condition with the event handling to schedule the worker
+> during device removal. However, I have no experience with the USB
+> protocol and I'm not able to say that they cannot be triggered.
+> 
+> I am currently wondering if this is due to some emulation of the
+> /dev/raw-gadget interface or if it's effectively an issue with how each
+> device manages resource removal.
+> But I wonder why syzkaller didn't find any crash while fuzzing the
+> interface with upstream-usb.config, as they seem pretty
+> straightforward to trigger.
+> Configuring the kernel with CONFIG_DEBUG_OBJECTS, it emits
+> a warning in debug_check_no_obj_freed, which makes it clear that
+> device removal is freeing resources in use.
+> KASAN detects them as use-after-free.
+> 
+> I am attaching multiple patches for all the drivers I suspect the bug
+> is present.
+> The proposed patches unregister the LED controllers before removing the
+> device itself.
+> 
+> I attach the (partial for brevity) ODEBUG dumps:
+> 
+> ```hid-bigbenff.c
+> [   37.803135][ T1170] usb 1-1: USB disconnect, device number 2
+> [   37.827979][ T1170] ODEBUG: free active (active state 0) object
+> type: work_struct hint: bigben_worker+0x0/0x860
+> [   37.829634][ T1170] WARNING: CPU: 0 PID: 1170 at
+> lib/debugobjects.c:505 debug_check_no_obj_freed+0x43a/0x630
+> [   37.830904][ T1170] Modules linked in:
+> [   37.831413][ T1170] CPU: 0 PID: 1170 Comm: kworker/0:3 Not tainted
+> 6.1.0-rc4-dirty #43
+> [   37.832465][ T1170] Hardware name: QEMU Standard PC (i440FX + PIIX,
+> 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+> [   37.833751][ T1170] Workqueue: usb_hub_wq hub_event
+> [   37.834409][ T1170] RIP: 0010:debug_check_no_obj_freed+0x43a/0x630
+> [   37.835218][ T1170] Code: 48 89 ef e8 28 82 58 ff 49 8b 14 24 4c 8b
+> 45 00 48 c7 c7 40 5f 09 87 48 c7 c6 60 5b 09 87 89 d9 4d 89 f9 31 c0
+> e8 46 25 ef fe <0f> 0b 4c 8b 64 24 20 48 ba 00 00 00 00 00 fc ff df ff
+> 05 4f 7c 17
+> [   37.837667][ T1170] RSP: 0018:ffffc900006fee60 EFLAGS: 00010246
+> [   37.838503][ T1170] RAX: 0d2d19ffcded3d00 RBX: 0000000000000000
+> RCX: ffff888117fc9b00
+> [   37.839519][ T1170] RDX: 0000000000000000 RSI: 0000000000000000
+> RDI: 0000000000000000
+> [   37.840570][ T1170] RBP: ffffffff86e88380 R08: ffffffff8130793b
+> R09: fffff520000dfd85
+> [   37.841618][ T1170] R10: fffff520000dfd85 R11: 0000000000000000
+> R12: ffffffff87095fb8
+> [   37.842649][ T1170] R13: ffff888117770ad8 R14: ffff888117770acc
+> R15: ffffffff852b7420
+> [   37.843728][ T1170] FS:  0000000000000000(0000)
+> GS:ffff8881f6600000(0000) knlGS:0000000000000000
+> [   37.844877][ T1170] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   37.845749][ T1170] CR2: 00007f992eaab380 CR3: 000000011834b000
+> CR4: 00000000001006f0
+> [   37.846794][ T1170] Call Trace:
+> [   37.847245][ T1170]  <TASK>
+> [   37.847643][ T1170]  slab_free_freelist_hook+0x89/0x160
+> [   37.848409][ T1170]  ? devres_release_all+0x262/0x350
+> [   37.849156][ T1170]  __kmem_cache_free+0x71/0x110
+> [   37.849829][ T1170]  devres_release_all+0x262/0x350
+> [   37.850478][ T1170]  ? devres_release+0x90/0x90
+> [   37.851118][ T1170]  device_release_driver_internal+0x5e5/0x8a0
+> [   37.851944][ T1170]  bus_remove_device+0x2ea/0x400
+> [   37.852611][ T1170]  device_del+0x64f/0xb40
+> [   37.853212][ T1170]  ? kill_device+0x150/0x150
+> [   37.853831][ T1170]  ? print_irqtrace_events+0x1f0/0x1f0
+> [   37.854564][ T1170]  hid_destroy_device+0x66/0x100
+> [   37.855226][ T1170]  usbhid_disconnect+0x9a/0xc0
+> [   37.855887][ T1170]  usb_unbind_interface+0x1e1/0x890
+> ```
+> 
+> ``` hid-asus.c
+> [   77.409878][ T1169] usb 1-1: USB disconnect, device number 2
+> [   77.423606][ T1169] ODEBUG: free active (active state 0) object
+> type: work_struct hint: asus_kbd_backlight_work+0x0/0x2c0
+> [   77.425222][ T1169] WARNING: CPU: 0 PID: 1169 at
+> lib/debugobjects.c:505 debug_check_no_obj_freed+0x43a/0x630
+> [   77.426599][ T1169] Modules linked in:
+> [   77.427322][ T1169] CPU: 0 PID: 1169 Comm: kworker/0:3 Not tainted
+> 6.1.0-rc4-dirty #43
+> [   77.428404][ T1169] Hardware name: QEMU Standard PC (i440FX + PIIX,
+> 1996), BIOS 1.13.0-1ubuntu1.1 04/01/2014
+> [   77.429644][ T1169] Workqueue: usb_hub_wq hub_event
+> [   77.430296][ T1169] RIP: 0010:debug_check_no_obj_freed+0x43a/0x630
+> [   77.431142][ T1169] Code: 48 89 ef e8 28 82 58 ff 49 8b 14 24 4c 8b
+> 45 00 48 c7 c7 40 5f 09 87 48 c7 c6 60 5b 09 87 89 d9 4d 89 f9 31 c0
+> e8 46 25 ef fe <0f> 0b 4c 8b 64 24 20 48 ba 00 00 00 00 00 fc ff df ff
+> 05 4f 7c 17
+> [   77.433691][ T1169] RSP: 0018:ffffc9000069ee60 EFLAGS: 00010246
+> [   77.434470][ T1169] RAX: b85d2b40c12d7600 RBX: 0000000000000000
+> RCX: ffff888117a78000
+> [   77.435507][ T1169] RDX: 0000000000000000 RSI: 0000000080000000
+> RDI: 0000000000000000
+> [   77.436521][ T1169] RBP: ffffffff86e88380 R08: ffffffff8130793b
+> R09: ffffed103ecc4ed6
+> [   77.437582][ T1169] R10: ffffed103ecc4ed6 R11: 0000000000000000
+> R12: ffffffff87095fb8
+> [   77.438593][ T1169] R13: ffff88810e348fe0 R14: ffff88810e348fd4
+> R15: ffffffff852b5780
+> [   77.439667][ T1169] FS:  0000000000000000(0000)
+> GS:ffff8881f6600000(0000) knlGS:0000000000000000
+> [   77.440842][ T1169] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   77.441688][ T1169] CR2: 00007ffc05495ff0 CR3: 000000010cdf0000
+> CR4: 00000000001006f0
+> [   77.442720][ T1169] Call Trace:
+> [   77.443167][ T1169]  <TASK>
+> [   77.443555][ T1169]  slab_free_freelist_hook+0x89/0x160
+> [   77.444302][ T1169]  ? devres_release_all+0x262/0x350
+> [   77.444990][ T1169]  __kmem_cache_free+0x71/0x110
+> [   77.445638][ T1169]  devres_release_all+0x262/0x350
+> [   77.446309][ T1169]  ? devres_release+0x90/0x90
+> [   77.446978][ T1169]  device_release_driver_internal+0x5e5/0x8a0
+> [   77.447748][ T1169]  bus_remove_device+0x2ea/0x400
+> [   77.448421][ T1169]  device_del+0x64f/0xb40
+> [   77.448976][ T1169]  ? kill_device+0x150/0x150
+> [   77.449577][ T1169]  ? print_irqtrace_events+0x1f0/0x1f0
+> [   77.450307][ T1169]  hid_destroy_device+0x66/0x100
+> [   77.450938][ T1169]  usbhid_disconnect+0x9a/0xc0
+> ```
+> 
+> To: Jiri Kosina <jikos@kernel.org>
+> To: Benjamin Tissoires <benjamin.tissoires@redhat.com>
+> To: Hanno Zulla <kontakt@hanno.de>
+> To: Carlo Caione <carlo@endlessm.com>
+> To: Pavel Machek <pavel@ucw.cz>
+> To: Lee Jones <lee@kernel.org>
+> To: Roderick Colenbrander <roderick.colenbrander@sony.com>
+> To: Sven Eckelmann <sven@narfation.org>
+> Cc: linux-leds@vger.kernel.org
+> Cc: Cristiano Giuffrida <c.giuffrida@vu.nl>
+> Cc: "Bos, H.J." <h.j.bos@vu.nl>
+> Cc: Jakob Koschel <jkl820.git@gmail.com>
+> Cc: linux-input@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: Jiri Kosina <jkosina@suse.cz>
+> Cc: Roderick Colenbrander <roderick@gaikai.com>
+> Signed-off-by: Pietro Borrello <borrello@diag.uniroma1.it>
+> 
+> ---
+> Pietro Borrello (5):
+>       HID: bigben_remove: manually unregister leds
+>       HID: asus_remove: manually unregister led
+>       HID: dualsense_remove: manually unregister leds
+>       HID: dualshock4_remove: manually unregister leds
+>       HID: sony_remove: manually unregister leds
+> 
+>  drivers/hid/hid-asus.c        | 1 +
+>  drivers/hid/hid-bigbenff.c    | 5 +++++
+>  drivers/hid/hid-playstation.c | 8 ++++++++
+>  drivers/hid/hid-sony.c        | 8 ++++++++
+>  4 files changed, 22 insertions(+)
+> ---
+> base-commit: 2241ab53cbb5cdb08a6b2d4688feb13971058f65
+> change-id: 20230125-hid-unregister-leds-4cbf67099e1d
+> 
+> Best regards,
+> 
 
-I just don't understand why you have two enums. This is not a pattern
-which is allowed anywhere. It might appear but only as exception or mistake.
 
-
-Best regards,
-Krzysztof
-
+-- 
+Donald Buczek
+buczek@molgen.mpg.de
+Tel: +49 30 8413 1433
