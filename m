@@ -2,261 +2,572 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9496FE15A
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 17:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A72C6FE160
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 17:15:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237675AbjEJPNy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 11:13:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42272 "EHLO
+        id S237681AbjEJPPZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 11:15:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237331AbjEJPNw (ORCPT
+        with ESMTP id S237200AbjEJPPX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 11:13:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C04C12D;
-        Wed, 10 May 2023 08:13:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9901063E9D;
-        Wed, 10 May 2023 15:13:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C7EEC433A7;
-        Wed, 10 May 2023 15:13:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683731630;
-        bh=NsUez6lCPf4Opv5NBogdc6gmG3Uz9HxYcWrz0hdK29I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=J+T54obTEEcVHFd8GT9KxUXVIQL6/2Yqo2weXUcMfJ/hvCQzb8NJ11veeIWdIgXK1
-         AMni8SxTFs0lZ8OYCkgACI56aZZ8t5o/DSDSJvmZYUoAnAXLUFAQJY2/oh0POkuqrI
-         CppuqWXSxWsbXPKnccYT2gJ0w0WavsaNnI2eNVefhQza1AuHhBsKHUbmCdMV7xeuhM
-         oYHOP4Xlk/btnR6ZStzsSbT5DcyDFTBEQSzmPMRxYi2qZLehhOq91SpW9oXD1PCxf0
-         RO9xd+uiG7V6yhAZFyY6IOO9vnSiFz2WGiuG9Fiy2W9Wso7AecAxmMXbubjDzx+g6R
-         vUTRqkmaywFFQ==
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-4f139de8cefso40552434e87.0;
-        Wed, 10 May 2023 08:13:49 -0700 (PDT)
-X-Gm-Message-State: AC+VfDwsxw5yqAHClR6Da+mSUCZDM1PaIKh5UjTti0Dl3Uy+yQwDU55J
-        P2WeFK+1GhmmxYRn+I4Iu2xifDN7n5s/okuy1K4=
-X-Google-Smtp-Source: ACHHUZ4Pe4QYAM14SpK7XsiGCy8mQg79XtB/HFIunwJg6UUYwKl5MtzvLvHjyCMTHopWe7Wl2D3p5IUn1opYGDYmxL0=
-X-Received: by 2002:ac2:41d4:0:b0:4d8:51e7:9f23 with SMTP id
- d20-20020ac241d4000000b004d851e79f23mr1845229lfi.34.1683731627953; Wed, 10
- May 2023 08:13:47 -0700 (PDT)
+        Wed, 10 May 2023 11:15:23 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE94D12D
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 08:15:20 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-965e4be7541so1173610666b.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 08:15:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683731719; x=1686323719;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VGXdIveFo6NFzQNGj4p0XmFYX+94sHoPBFprI9+cAls=;
+        b=Bom7hNWMrwfppN3+ubu83Nh081bZX46oEONmXz8QSrEozuv2ngpORxZZgnLr5KMk2s
+         U8naNVdG9E7W8BlMfTuiSwz/6/A691wwcmVBEAPn24fagKk5r/3X2ToZZ55/PrBL+EGk
+         eKmY96NKl9tWIdBUuxccGLbK7/FKwFlxFn1xMa5BQUNV2IlV7xMb+LL2B3s8CZyWhO/K
+         j8249ZLrdjuyQ+DVvlFDnVchTbT+EtqaVXgbN95wYNinwfptSKg579zYvzQEfPe2qiUZ
+         ct+uNCNTd/rw1OeSBgtKTn7Cj6s99lYJS6xFzQvByucfiDmowicI2OkVNuBRywopczWW
+         mapQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683731719; x=1686323719;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VGXdIveFo6NFzQNGj4p0XmFYX+94sHoPBFprI9+cAls=;
+        b=gFqdrliHzzEOXgygg7Anth1vBPEKoZvxktMl0kidcG517syxZq3pgkx7QlSo4FHTza
+         Xie7HJNzUiiEQzBLvwMtMH28nXmAkAATAaGKBa0qsIZB3Gz5jKw8fiznzpQzY5WqpGqb
+         aPm69TVv8BT8hg1emBi5BZtA2wYlkrdGTViwIihvd6mjQruMlnQE2KSwMLutSBNgFc0j
+         hXacPLDczij3hH4nioJHSZekFHTZOe6dzmHEQU0aQAZqDtS3aNudp542ynHRFPGbikEQ
+         aiHE8iCJ00GwzGxb2uW0w1Y2fHm+KlFxQQcPLbKVggYnU/XahZaCjQ2ZPOiRQjpXm+nb
+         9Rew==
+X-Gm-Message-State: AC+VfDwBdZ6STkhYx/G3hR/YTXksNIfAWJVUh6oSIF8MMtpC84Cy0ctU
+        t9gpVhZzH9I37jBYy8o0WHYkVByoE5o/wj/0SXXmJg==
+X-Google-Smtp-Source: ACHHUZ6fUBYDXrPtXEgLDq9dwgV9g4tZIupRN5Dyc11hBPBSNIoFZZ0qils0BEShEoseuKCZV9fxn+N/ws5V4+T3CL0=
+X-Received: by 2002:a17:907:7e9e:b0:96a:41ed:e3fa with SMTP id
+ qb30-20020a1709077e9e00b0096a41ede3famr939033ejc.22.1683731718776; Wed, 10
+ May 2023 08:15:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230426195853.633233-1-anisse@astier.eu>
-In-Reply-To: <20230426195853.633233-1-anisse@astier.eu>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Wed, 10 May 2023 17:13:36 +0200
-X-Gmail-Original-Message-ID: <CAMj1kXE2-76KZDxpHBPcZgbB8vGDmLEbiRGmw_5o-rsNzT9oQw@mail.gmail.com>
-Message-ID: <CAMj1kXE2-76KZDxpHBPcZgbB8vGDmLEbiRGmw_5o-rsNzT9oQw@mail.gmail.com>
-Subject: Re: [PATCH] efivarfs: expose used and total size
-To:     Anisse Astier <anisse@astier.eu>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Christian Brauner <brauner@kernel.org>
-Cc:     linux-efi@vger.kernel.org, Johan Hovold <johan+linaro@kernel.org>,
-        Darren Hart <dvhart@infradead.org>,
-        Andy Shevchenko <andy@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, Jeremy Kerr <jk@ozlabs.org>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Anisse Astier <an.astier@criteo.com>
+References: <20230505173012.881083-1-etienne.carriere@linaro.org>
+ <20230505173012.881083-3-etienne.carriere@linaro.org> <CAFA6WYN4yjjedmsS4nAgR5L7OOTRAcKs7STW0YjCC7XsdfYzkA@mail.gmail.com>
+In-Reply-To: <CAFA6WYN4yjjedmsS4nAgR5L7OOTRAcKs7STW0YjCC7XsdfYzkA@mail.gmail.com>
+From:   Etienne Carriere <etienne.carriere@linaro.org>
+Date:   Wed, 10 May 2023 17:15:07 +0200
+Message-ID: <CAN5uoS8eSfeu-BaV5dhbB15q_iGjcd9BKDpp_hEBaBdb4_qbAg@mail.gmail.com>
+Subject: Re: [PATCH v6 3/4] tee: optee: support tracking system threads
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        op-tee@lists.trustedfirmware.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Apr 2023 at 21:59, Anisse Astier <anisse@astier.eu> wrote:
+On Wed, 10 May 2023 at 12:08, Sumit Garg <sumit.garg@linaro.org> wrote:
 >
-> From: Anisse Astier <an.astier@criteo.com>
+> On Fri, 5 May 2023 at 23:01, Etienne Carriere
+> <etienne.carriere@linaro.org> wrote:
+> >
+> > From: Jens Wiklander <jens.wiklander@linaro.org>
+> >
+> > Adds support in the OP-TEE driver to keep track of reserved system
+> > threads. The optee_cq_*() functions are updated to handle this if
+> > enabled. The SMC ABI part of the driver enables this tracking, but the
+> > FF-A ABI part does not.
 >
-> When writing variables, one might get errors with no other message on
-> why it fails.
->
-> Being able to see how much is used by EFI variables helps analyzing such
-> issues.
->
-> Since this is not a conventionnal filesystem, block size is
-> intentionnally set to 1 instead of PAGE_SIZE.
->
-> x86 quirks of reserved size are taken into account and available and
-> free size can be different, further helping debugging space issues.
->
+> OP-TEE system threads sound like a core feature towards OP-TEE. If we
+> enable it only for SMC ABI then it is likely to break kernel drivers
+> who migrate to FFA ABI. Also, looking from implementation point of
+> view it shouldn't be that hard to enable it for FFA ABI too.
 
-I have no objections to this, but I'm not much of a user space/ VFS
-person, so adding some other folks that can chime in if they want.
+It is not mandatory all TEE ABIs support this feature.
+Caller driver can still use SMC/OP-TEE transport without this support
+yet with some limitation of course.
 
-The point of this patch is that user space can query this information
-using statvfs(), right?
+>
+> >
+> > Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+> > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> > ---
+> > No change since v5
+> >
+> > Changes since v4:
+> > - New change that supersedes implementation proposed in PATCH v4
+> >   (tee: system invocation"). Thanks to Jens implementation we don't need
+> >   the new OP-TEE services that my previous patch versions introduced to
+> >   monitor system threads entry. Now, Linux optee SMC ABI driver gets TEE
+> >   provisioned thread contexts count once and monitors thread entries in
+> >   OP-TEE on that basis and the system thread capability of the related
+> >   tee session. By the way, I dropped the WARN_ONCE() call I suggested
+> >   on tee thread exhaustion as it does not provides useful information.
+> > ---
+> >  drivers/tee/optee/call.c          | 128 +++++++++++++++++++++++++++---
+> >  drivers/tee/optee/ffa_abi.c       |  10 +--
+> >  drivers/tee/optee/optee_private.h |  13 ++-
+> >  drivers/tee/optee/smc_abi.c       |  24 ++++--
+> >  4 files changed, 154 insertions(+), 21 deletions(-)
+> >
+> > diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
+> > index dba5339b61ae..c2d484201f79 100644
+> > --- a/drivers/tee/optee/call.c
+> > +++ b/drivers/tee/optee/call.c
+> > @@ -39,9 +39,26 @@ struct optee_shm_arg_entry {
+> >         DECLARE_BITMAP(map, MAX_ARG_COUNT_PER_ENTRY);
+> >  };
+> >
+> > +void optee_cq_init(struct optee_call_queue *cq, int thread_count)
+> > +{
+> > +       mutex_init(&cq->mutex);
+> > +       INIT_LIST_HEAD(&cq->normal_waiters);
+> > +       INIT_LIST_HEAD(&cq->sys_waiters);
+> > +       /*
+> > +        * If cq->total_thread_count is 0 then we're not trying to keep
+> > +        * track of how many free threads we have, instead we're relying on
+> > +        * the secure world to tell us when we're out of thread and have to
+> > +        * wait for another thread to become available.
+> > +        */
+> > +       cq->total_thread_count = thread_count;
+> > +       cq->free_normal_thread_count = thread_count;
+> > +}
+> > +
+> >  void optee_cq_wait_init(struct optee_call_queue *cq,
+> > -                       struct optee_call_waiter *w)
+> > +                       struct optee_call_waiter *w, bool sys_thread)
+>
+> Introduction of system_thread property should be part of patch #1.
+
+Patch 1 prepared for TEE system thread support.
+This patch implements it for the SMC ABI.
+This split looked easier from a patch review perspective.
 
 
+>
+> >  {
+> > +       bool need_wait = false;
+> > +
+> >         /*
+> >          * We're preparing to make a call to secure world. In case we can't
+> >          * allocate a thread in secure world we'll end up waiting in
+> > @@ -53,15 +70,40 @@ void optee_cq_wait_init(struct optee_call_queue *cq,
+> >         mutex_lock(&cq->mutex);
+> >
+> >         /*
+> > -        * We add ourselves to the queue, but we don't wait. This
+> > -        * guarantees that we don't lose a completion if secure world
+> > -        * returns busy and another thread just exited and try to complete
+> > -        * someone.
+> > +        * We add ourselves to a queue, but we don't wait. This guarantees
+> > +        * that we don't lose a completion if secure world returns busy and
+> > +        * another thread just exited and try to complete someone.
+> >          */
+> >         init_completion(&w->c);
+> > -       list_add_tail(&w->list_node, &cq->waiters);
+> > +       w->sys_thread = sys_thread;
+> > +       if (sys_thread) {
+> > +               list_add_tail(&w->list_node, &cq->sys_waiters);
+> > +       } else {
+> > +               list_add_tail(&w->list_node, &cq->normal_waiters);
+> > +               if (cq->total_thread_count) {
+> > +                       /*
+> > +                        * Claim a normal thread if one is available, else
+> > +                        * we'll need to wait for a normal thread to be
+> > +                        * released.
+> > +                        */
+> > +                       if (cq->free_normal_thread_count > 0)
+> > +                               cq->free_normal_thread_count--;
+> > +                       else
+> > +                               need_wait = true;
+> > +               }
+> > +       }
+> >
+> >         mutex_unlock(&cq->mutex);
+> > +
+> > +       while (need_wait) {
+> > +               optee_cq_wait_for_completion(cq, w);
+> > +               mutex_lock(&cq->mutex);
+> > +               if (cq->free_normal_thread_count > 0) {
+> > +                       cq->free_normal_thread_count--;
+> > +                       need_wait = false;
+> > +               }
+> > +               mutex_unlock(&cq->mutex);
+> > +       }
+> >  }
+> >
+> >  void optee_cq_wait_for_completion(struct optee_call_queue *cq,
+> > @@ -74,7 +116,10 @@ void optee_cq_wait_for_completion(struct optee_call_queue *cq,
+> >         /* Move to end of list to get out of the way for other waiters */
+> >         list_del(&w->list_node);
+> >         reinit_completion(&w->c);
+> > -       list_add_tail(&w->list_node, &cq->waiters);
+> > +       if (w->sys_thread)
+> > +               list_add_tail(&w->list_node, &cq->sys_waiters);
+> > +       else
+> > +               list_add_tail(&w->list_node, &cq->normal_waiters);
+> >
+> >         mutex_unlock(&cq->mutex);
+> >  }
+> > @@ -83,10 +128,19 @@ static void optee_cq_complete_one(struct optee_call_queue *cq)
+> >  {
+> >         struct optee_call_waiter *w;
+> >
+> > -       list_for_each_entry(w, &cq->waiters, list_node) {
+> > +       list_for_each_entry(w, &cq->sys_waiters, list_node) {
+> >                 if (!completion_done(&w->c)) {
+> >                         complete(&w->c);
+> > -                       break;
+> > +                       return;
+> > +               }
+> > +       }
+> > +
+> > +       if (!cq->total_thread_count || cq->free_normal_thread_count > 0) {
+> > +               list_for_each_entry(w, &cq->normal_waiters, list_node) {
+> > +                       if (!completion_done(&w->c)) {
+> > +                               complete(&w->c);
+> > +                               break;
+> > +                       }
+> >                 }
+> >         }
+> >  }
+> > @@ -104,6 +158,9 @@ void optee_cq_wait_final(struct optee_call_queue *cq,
+> >         /* Get out of the list */
+> >         list_del(&w->list_node);
+> >
+> > +       if (!w->sys_thread)
+> > +               cq->free_normal_thread_count++; /* Release a normal thread */
+> > +
+> >         /* Wake up one eventual waiting task */
+> >         optee_cq_complete_one(cq);
+> >
+> > @@ -119,6 +176,36 @@ void optee_cq_wait_final(struct optee_call_queue *cq,
+> >         mutex_unlock(&cq->mutex);
+> >  }
+> >
+> > +bool optee_cq_inc_sys_thread_count(struct optee_call_queue *cq)
+> > +{
+> > +       bool rc = false;
+> > +
+> > +       mutex_lock(&cq->mutex);
+> > +
+> > +       /* Leave at least 1 normal (non-system) thread */
+>
+> IMO, this might be counter productive. As most kernel drivers open a
+> session during driver probe which are only released in the driver
+> release method.
 
-> Signed-off-by: Anisse Astier <an.astier@criteo.com>
-> ---
-> Notes:
-> Patch isn't split per subsystem intentionally, for better understanding
-> of intent; split could be trivial in a later version.
+It is always the case?
+
+> If the kernel driver is built-in then the session is
+> never released. Now with system threads we would reserve an OP-TEE
+> thread for that kernel driver as well which will never be available to
+> regular user-space clients.
+
+That is not true. No driver currently requests their TEE thread to be
+a system thread.
+Only SCMI does because it needs to by construction.
+
+
+> So I would rather suggest we only allow a
+> single system thread to be reserved as a starting point which is
+> relevant to this critical SCMI service. We can also make this upper
+> bound for system threads configurable with default value as 1 if
+> needed.
+
+Reserving one or more system threads depends on the number of thread
+context provisioned by the TEE.
+Note that the implementation proposed here prevents Linux kernel from
+exhausting TEE threads so user space always has at least a TEE thread
+context left available.
+
+Note that an OP-TEE thread is not bound to a TEE session but rather
+bound to a yielded call to OP-TEE.
+
+
 >
-> I'm not sure whether statfs(2) should return an error if the efi request
-> fails; I think it could be ignored with maybe a WARN_ONCE; which would
-> be close to the current behaviour.
+> > +       if (cq->res_sys_thread_count + 1 < cq->total_thread_count) {
+> > +               cq->free_normal_thread_count--;
+> > +               cq->res_sys_thread_count++;
+> > +               rc = true;
+> > +       }
+> > +
+> > +       mutex_unlock(&cq->mutex);
+> > +
+> > +       return rc;
+> > +}
+> > +
+> > +void optee_cq_dec_sys_thread_count(struct optee_call_queue *cq)
+> > +{
+> > +       mutex_lock(&cq->mutex);
+> > +       if (cq->res_sys_thread_count > 0) {
+> > +               cq->res_sys_thread_count--;
+> > +               cq->free_normal_thread_count++;
+> > +               /* If there's someone waiting, let it resume */
+> > +               optee_cq_complete_one(cq);
+> > +       }
+> > +       mutex_unlock(&cq->mutex);
+> > +}
+> > +
+> >  /* Requires the filpstate mutex to be held */
+> >  static struct optee_session *find_session(struct optee_context_data *ctxdata,
+> >                                           u32 session_id)
+> > @@ -361,6 +448,27 @@ int optee_open_session(struct tee_context *ctx,
+> >         return rc;
+> >  }
+> >
+> > +int optee_system_session(struct tee_context *ctx, u32 session)
+> > +{
+> > +       struct optee_context_data *ctxdata = ctx->data;
+> > +       struct optee *optee = tee_get_drvdata(ctx->teedev);
+> > +       struct optee_session *sess;
+> > +       int rc = -EINVAL;
+> > +
+> > +       mutex_lock(&ctxdata->mutex);
+> > +
+> > +       sess = find_session(ctxdata, session);
+> > +       if (sess && !sess->use_sys_thread &&
+> > +           optee_cq_inc_sys_thread_count(&optee->call_queue)) {
+> > +               rc = 0;
+> > +               sess->use_sys_thread = true;
+> > +       }
+> > +
+> > +       mutex_unlock(&ctxdata->mutex);
+> > +
+> > +       return rc;
+> > +}
+> > +
+> >  int optee_close_session_helper(struct tee_context *ctx, u32 session,
+> >                                bool system_thread)
+> >  {
+> > @@ -378,6 +486,8 @@ int optee_close_session_helper(struct tee_context *ctx, u32 session,
+> >         msg_arg->session = session;
+> >         optee->ops->do_call_with_arg(ctx, shm, offs, system_thread);
+> >
+> > +       if (system_thread)
+> > +               optee_cq_dec_sys_thread_count(&optee->call_queue);
+> >         optee_free_msg_arg(ctx, entry, offs);
+> >
+> >         return 0;
+> > diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
+> > index 52cec9d06041..0c9055691343 100644
+> > --- a/drivers/tee/optee/ffa_abi.c
+> > +++ b/drivers/tee/optee/ffa_abi.c
+> > @@ -528,7 +528,8 @@ static void optee_handle_ffa_rpc(struct tee_context *ctx, struct optee *optee,
+> >
+> >  static int optee_ffa_yielding_call(struct tee_context *ctx,
+> >                                    struct ffa_send_direct_data *data,
+> > -                                  struct optee_msg_arg *rpc_arg)
+> > +                                  struct optee_msg_arg *rpc_arg,
+> > +                                  bool system_thread)
+> >  {
+> >         struct optee *optee = tee_get_drvdata(ctx->teedev);
+> >         struct ffa_device *ffa_dev = optee->ffa.ffa_dev;
+> > @@ -541,7 +542,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
+> >         int rc;
+> >
+> >         /* Initialize waiter */
+> > -       optee_cq_wait_init(&optee->call_queue, &w);
+> > +       optee_cq_wait_init(&optee->call_queue, &w, system_thread);
+> >         while (true) {
+> >                 rc = msg_ops->sync_send_receive(ffa_dev, data);
+> >                 if (rc)
+> > @@ -643,7 +644,7 @@ static int optee_ffa_do_call_with_arg(struct tee_context *ctx,
+> >         if (IS_ERR(rpc_arg))
+> >                 return PTR_ERR(rpc_arg);
+> >
+> > -       return optee_ffa_yielding_call(ctx, &data, rpc_arg);
+> > +       return optee_ffa_yielding_call(ctx, &data, rpc_arg, system_thread);
+> >  }
 >
-> Regards,
+> Introduction of system_thread property should be part of patch #1.
+
+See my answer above.
+
 >
-> Anisse
+> >
+> >  /*
+> > @@ -851,8 +852,7 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
+> >         if (rc)
+> >                 goto err_unreg_supp_teedev;
+> >         mutex_init(&optee->ffa.mutex);
+> > -       mutex_init(&optee->call_queue.mutex);
+> > -       INIT_LIST_HEAD(&optee->call_queue.waiters);
+> > +       optee_cq_init(&optee->call_queue, 0);
 >
-> ---
->  arch/x86/platform/efi/quirks.c |  8 ++++++++
->  drivers/firmware/efi/efi.c     |  1 +
->  drivers/firmware/efi/vars.c    | 12 ++++++++++++
->  fs/efivarfs/super.c            | 26 +++++++++++++++++++++++++-
->  include/linux/efi.h            | 10 ++++++++++
->  5 files changed, 56 insertions(+), 1 deletion(-)
+> This looks like some refactoring going on which should be part of a
+> separate patch to ease the review process.
+
+I'll see how to handle your request.
+
 >
-> diff --git a/arch/x86/platform/efi/quirks.c b/arch/x86/platform/efi/quirks.c
-> index b0b848d6933a..587fa51230e2 100644
-> --- a/arch/x86/platform/efi/quirks.c
-> +++ b/arch/x86/platform/efi/quirks.c
-> @@ -114,6 +114,14 @@ void efi_delete_dummy_variable(void)
->                                      EFI_VARIABLE_RUNTIME_ACCESS, 0, NULL);
->  }
+> >         optee_supp_init(&optee->supp);
+> >         optee_shm_arg_cache_init(optee, arg_cache_flags);
+> >         ffa_dev_set_drvdata(ffa_dev, optee);
+> > diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
+> > index 3da7960ab34a..6e0863a70843 100644
+> > --- a/drivers/tee/optee/optee_private.h
+> > +++ b/drivers/tee/optee/optee_private.h
+> > @@ -43,12 +43,17 @@ typedef void (optee_invoke_fn)(unsigned long, unsigned long, unsigned long,
+> >  struct optee_call_waiter {
+> >         struct list_head list_node;
+> >         struct completion c;
+> > +       bool sys_thread;
+> >  };
+> >
+> >  struct optee_call_queue {
+> >         /* Serializes access to this struct */
+> >         struct mutex mutex;
+> > -       struct list_head waiters;
+> > +       struct list_head normal_waiters;
+> > +       struct list_head sys_waiters;
+> > +       int total_thread_count;
+> > +       int free_normal_thread_count;
+> > +       int res_sys_thread_count;
+> >  };
+> >
+> >  struct optee_notif {
+> > @@ -254,6 +259,7 @@ int optee_supp_send(struct tee_context *ctx, u32 ret, u32 num_params,
+> >  int optee_open_session(struct tee_context *ctx,
+> >                        struct tee_ioctl_open_session_arg *arg,
+> >                        struct tee_param *param);
+> > +int optee_system_session(struct tee_context *ctx, u32 session);
+> >  int optee_close_session_helper(struct tee_context *ctx, u32 session,
+> >                                bool system_thread);
+> >  int optee_close_session(struct tee_context *ctx, u32 session);
+> > @@ -303,8 +309,11 @@ static inline void optee_to_msg_param_value(struct optee_msg_param *mp,
+> >         mp->u.value.c = p->u.value.c;
+> >  }
+> >
+> > +void optee_cq_init(struct optee_call_queue *cq, int thread_count);
+> > +bool optee_cq_inc_sys_thread_count(struct optee_call_queue *cq);
+> > +void optee_cq_dec_sys_thread_count(struct optee_call_queue *cq);
+> >  void optee_cq_wait_init(struct optee_call_queue *cq,
+> > -                       struct optee_call_waiter *w);
+> > +                       struct optee_call_waiter *w, bool sys_thread);
+> >  void optee_cq_wait_for_completion(struct optee_call_queue *cq,
+> >                                   struct optee_call_waiter *w);
+> >  void optee_cq_wait_final(struct optee_call_queue *cq,
+> > diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+> > index 56ebbb96ac97..2819674fd555 100644
+> > --- a/drivers/tee/optee/smc_abi.c
+> > +++ b/drivers/tee/optee/smc_abi.c
+> > @@ -281,9 +281,10 @@ static int optee_to_msg_param(struct optee *optee,
+> >  static void optee_enable_shm_cache(struct optee *optee)
+> >  {
+> >         struct optee_call_waiter w;
+> > +       bool system_thread = false;
 >
-> +u64 efi_reserved_space(void)
-> +{
-> +       if (efi_no_storage_paranoia)
-> +               return 0;
-> +       return EFI_MIN_RESERVE;
-> +}
-> +EXPORT_SYMBOL_GPL(efi_reserved_space);
-> +
->  /*
->   * In the nonblocking case we do not attempt to perform garbage
->   * collection if we do not have enough free space. Rather, we do the
-> diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
-> index abeff7dc0b58..d0dfa007bffc 100644
-> --- a/drivers/firmware/efi/efi.c
-> +++ b/drivers/firmware/efi/efi.c
-> @@ -211,6 +211,7 @@ static int generic_ops_register(void)
->         generic_ops.get_variable = efi.get_variable;
->         generic_ops.get_next_variable = efi.get_next_variable;
->         generic_ops.query_variable_store = efi_query_variable_store;
-> +       generic_ops.query_variable_info = efi.query_variable_info;
+> This variable is redundant.
+
+Using a variable here makes it more clear which argument is passed to
+optee_cq_wait_init().
+Calling optee_cq_wait_init(&optee->call_queue, &w, false); is less readable.
+
 >
->         if (efi_rt_services_supported(EFI_RT_SUPPORTED_SET_VARIABLE)) {
->                 generic_ops.set_variable = efi.set_variable;
-> diff --git a/drivers/firmware/efi/vars.c b/drivers/firmware/efi/vars.c
-> index bd75b87f5fc1..c5382d5c3073 100644
-> --- a/drivers/firmware/efi/vars.c
-> +++ b/drivers/firmware/efi/vars.c
-> @@ -245,3 +245,15 @@ efi_status_t efivar_set_variable(efi_char16_t *name, efi_guid_t *vendor,
->         return status;
->  }
->  EXPORT_SYMBOL_NS_GPL(efivar_set_variable, EFIVAR);
-> +
-> +efi_status_t efivar_query_variable_info(u32 attr,
-> +                                       u64 *storage_space,
-> +                                       u64 *remaining_space,
-> +                                       u64 *max_variable_size)
-> +{
-> +       if (!__efivars->ops->query_variable_info)
-> +               return EFI_UNSUPPORTED;
-> +       return __efivars->ops->query_variable_info(attr, storage_space,
-> +                       remaining_space, max_variable_size);
-> +}
-> +EXPORT_SYMBOL_NS_GPL(efivar_query_variable_info, EFIVAR);
-> diff --git a/fs/efivarfs/super.c b/fs/efivarfs/super.c
-> index 482d612b716b..064bfc0243c9 100644
-> --- a/fs/efivarfs/super.c
-> +++ b/fs/efivarfs/super.c
-> @@ -13,6 +13,7 @@
->  #include <linux/ucs2_string.h>
->  #include <linux/slab.h>
->  #include <linux/magic.h>
-> +#include <linux/statfs.h>
+> >
+> >         /* We need to retry until secure world isn't busy. */
+> > -       optee_cq_wait_init(&optee->call_queue, &w);
+> > +       optee_cq_wait_init(&optee->call_queue, &w, system_thread);
+> >         while (true) {
+> >                 struct arm_smccc_res res;
+> >
+> > @@ -306,9 +307,10 @@ static void optee_enable_shm_cache(struct optee *optee)
+> >  static void __optee_disable_shm_cache(struct optee *optee, bool is_mapped)
+> >  {
+> >         struct optee_call_waiter w;
+> > +       bool system_thread = false;
+> >
 >
->  #include "internal.h"
+> This variable is redundant.
+
+Ditto
+
 >
-> @@ -23,8 +24,31 @@ static void efivarfs_evict_inode(struct inode *inode)
->         clear_inode(inode);
->  }
+> >         /* We need to retry until secure world isn't busy. */
+> > -       optee_cq_wait_init(&optee->call_queue, &w);
+> > +       optee_cq_wait_init(&optee->call_queue, &w, system_thread);
+> >         while (true) {
+> >                 union {
+> >                         struct arm_smccc_res smccc;
+> > @@ -927,7 +929,7 @@ static int optee_smc_do_call_with_arg(struct tee_context *ctx,
+> >                 reg_pair_from_64(&param.a1, &param.a2, parg);
+> >         }
+> >         /* Initialize waiter */
+> > -       optee_cq_wait_init(&optee->call_queue, &w);
+> > +       optee_cq_wait_init(&optee->call_queue, &w, system_thread);
+> >         while (true) {
+> >                 struct arm_smccc_res res;
+> >
+> > @@ -1209,6 +1211,7 @@ static const struct tee_driver_ops optee_clnt_ops = {
+> >         .release = optee_release,
+> >         .open_session = optee_open_session,
+> >         .close_session = optee_close_session,
+> > +       .system_session = optee_system_session,
+> >         .invoke_func = optee_invoke_func,
+> >         .cancel_req = optee_cancel_req,
+> >         .shm_register = optee_shm_register,
+> > @@ -1356,6 +1359,16 @@ static bool optee_msg_exchange_capabilities(optee_invoke_fn *invoke_fn,
+> >         return true;
+> >  }
+> >
+> > +static unsigned int optee_msg_get_thread_count(optee_invoke_fn *invoke_fn)
+> > +{
+> > +       struct arm_smccc_res res;
+> > +
+> > +       invoke_fn(OPTEE_SMC_GET_THREAD_COUNT, 0, 0, 0, 0, 0, 0, 0, &res);
+> > +       if (res.a0)
+> > +               return 0;
+> > +       return res.a1;
+> > +}
+> > +
+> >  static struct tee_shm_pool *
+> >  optee_config_shm_memremap(optee_invoke_fn *invoke_fn, void **memremaped_shm)
+> >  {
+> > @@ -1609,6 +1622,7 @@ static int optee_probe(struct platform_device *pdev)
+> >         struct optee *optee = NULL;
+> >         void *memremaped_shm = NULL;
+> >         unsigned int rpc_param_count;
+> > +       unsigned int thread_count;
+> >         struct tee_device *teedev;
+> >         struct tee_context *ctx;
+> >         u32 max_notif_value;
+> > @@ -1636,6 +1650,7 @@ static int optee_probe(struct platform_device *pdev)
+> >                 return -EINVAL;
+> >         }
+> >
+> > +       thread_count = optee_msg_get_thread_count(invoke_fn);
+> >         if (!optee_msg_exchange_capabilities(invoke_fn, &sec_caps,
+> >                                              &max_notif_value,
+> >                                              &rpc_param_count)) {
+> > @@ -1725,8 +1740,7 @@ static int optee_probe(struct platform_device *pdev)
+> >         if (rc)
+> >                 goto err_unreg_supp_teedev;
+> >
+> > -       mutex_init(&optee->call_queue.mutex);
+> > -       INIT_LIST_HEAD(&optee->call_queue.waiters);
+> > +       optee_cq_init(&optee->call_queue, thread_count);
 >
-> +static int efivarfs_statfs(struct dentry *dentry, struct kstatfs *buf)
-> +{
-> +       u64 storage_space, remaining_space, max_variable_size;
-> +       efi_status_t status;
-> +       const u32 attr = (EFI_VARIABLE_NON_VOLATILE | EFI_VARIABLE_BOOTSERVICE_ACCESS |
-> +        EFI_VARIABLE_RUNTIME_ACCESS);
-> +
-> +       buf->f_type = dentry->d_sb->s_magic;
-> +       buf->f_bsize = 1;
-> +       buf->f_namelen = NAME_MAX;
-> +
-> +       status = efivar_query_variable_info(attr, &storage_space, &remaining_space,
-> +                                           &max_variable_size);
-> +       if (status != EFI_SUCCESS)
-> +               return efi_status_to_err(status);
-> +       buf->f_blocks = storage_space;
-> +       buf->f_bfree = remaining_space;
-> +       if (remaining_space > efi_reserved_space())
-> +               buf->f_bavail = remaining_space - efi_reserved_space();
-> +       else
-> +               buf->f_bavail = 0;
-> +       return 0;
-> +}
->  static const struct super_operations efivarfs_ops = {
-> -       .statfs = simple_statfs,
-> +       .statfs = efivarfs_statfs,
->         .drop_inode = generic_delete_inode,
->         .evict_inode = efivarfs_evict_inode,
->  };
-> diff --git a/include/linux/efi.h b/include/linux/efi.h
-> index 7aa62c92185f..d2b686191870 100644
-> --- a/include/linux/efi.h
-> +++ b/include/linux/efi.h
-> @@ -703,6 +703,7 @@ static inline void efi_enter_virtual_mode (void) {}
->  extern efi_status_t efi_query_variable_store(u32 attributes,
->                                              unsigned long size,
->                                              bool nonblocking);
-> +extern u64 efi_reserved_space(void);
->  #else
+> Again, this looks like some refactoring going on which should be part
+> of a separate patch to ease the review process.
+
+I get your point.
+Thanks again for the feedback.
+
+Br,
+etienne
+
 >
->  static inline efi_status_t efi_query_variable_store(u32 attributes,
-> @@ -711,6 +712,10 @@ static inline efi_status_t efi_query_variable_store(u32 attributes,
->  {
->         return EFI_SUCCESS;
->  }
-> +static inline u64 efi_reserved_space(void)
-> +{
-> +       return 0;
-> +}
->  #endif
->  extern void __iomem *efi_lookup_mapped_addr(u64 phys_addr);
+> -Sumit
 >
-> @@ -1042,6 +1047,7 @@ struct efivar_operations {
->         efi_set_variable_t *set_variable;
->         efi_set_variable_t *set_variable_nonblocking;
->         efi_query_variable_store_t *query_variable_store;
-> +       efi_query_variable_info_t *query_variable_info;
->  };
->
->  struct efivars {
-> @@ -1087,6 +1093,10 @@ efi_status_t efivar_set_variable_locked(efi_char16_t *name, efi_guid_t *vendor,
->  efi_status_t efivar_set_variable(efi_char16_t *name, efi_guid_t *vendor,
->                                  u32 attr, unsigned long data_size, void *data);
->
-> +efi_status_t efivar_query_variable_info(u32 attr, u64 *storage_space,
-> +                                       u64 *remaining_space,
-> +                                       u64 *max_variable_size);
-> +
->  #if IS_ENABLED(CONFIG_EFI_CAPSULE_LOADER)
->  extern bool efi_capsule_pending(int *reset_type);
->
-> --
-> 2.34.1
->
+> >         optee_supp_init(&optee->supp);
+> >         optee->smc.memremaped_shm = memremaped_shm;
+> >         optee->pool = pool;
+> > --
+> > 2.25.1
+> >
