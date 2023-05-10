@@ -2,168 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EAC76FD9EB
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:50:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F0006FD9EF
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:50:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236767AbjEJIu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 04:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39428 "EHLO
+        id S236778AbjEJIus (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 04:50:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235899AbjEJIuX (ORCPT
+        with ESMTP id S236774AbjEJIuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 04:50:23 -0400
-Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FCE10C0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 01:50:21 -0700 (PDT)
-Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
-        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20230510085020epoutp048771002cb7c6498d50e1e50e9f6a6f16~dvBHIi8TV2618026180epoutp04b
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 08:50:20 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20230510085020epoutp048771002cb7c6498d50e1e50e9f6a6f16~dvBHIi8TV2618026180epoutp04b
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1683708620;
-        bh=2uIhNIvaUDqD62d3MZOJy319yIzbYqTLMuJPQ32qIts=;
-        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
-        b=HI58pAC3T92fLBNh14/TrCp6S4sYxewN8NaQ5IjE1qp9pRn8N1+ywN3qcn55q6IMh
-         qt9P/uVbTOlqgcxAtCO1s1jq4DiK3zKnPG9nk34PpvAzXD4Pp7QWzoFp0lxWBGHhsl
-         rxb5Xjo3dCPxplkaCmRi2SIuEHPmikRoQhX6deOw=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20230510085019epcas2p2a3e50c925ac64ea08544707ad1f82bc2~dvBGjVMiL2936129361epcas2p2G;
-        Wed, 10 May 2023 08:50:19 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.100]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4QGTHv0bMRz4x9Pv; Wed, 10 May
-        2023 08:50:19 +0000 (GMT)
-X-AuditID: b6c32a47-c29ff70000002007-32-645b5acac020
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        E0.95.08199.ACA5B546; Wed, 10 May 2023 17:50:19 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v2 03/14] block: bio-integrity: cleanup bio_integrity_prep
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     Jinyoung CHOI <j-young.choi@samsung.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "kbusch@kernel.org" <kbusch@kernel.org>, "hch@lst.de" <hch@lst.de>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "johannes.thumshirn@wdc.com" <johannes.thumshirn@wdc.com>,
-        "kch@nvidia.com" <kch@nvidia.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p1>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230510085018epcms2p5a3830e37b13e9a6799298050abdc77dc@epcms2p5>
-Date:   Wed, 10 May 2023 17:50:18 +0900
-X-CMS-MailID: 20230510085018epcms2p5a3830e37b13e9a6799298050abdc77dc
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrGJsWRmVeSWpSXmKPExsWy7bCmqe7pqOgUg9tZFqvv9rNZvDykabFy
-        9VEmi97+rWwWi25sY7L423WPyWLSoWuMFk+vzmKy2HtL2+LyrjlsFsuP/2OyWPf6PYvF7x9z
-        2Bx4Pc7f28jisXmFlsfls6Uem1Z1snlMWHSA0WP3zQY2j97md2weH5/eYvHo27KK0ePzJjmP
-        9gPdTAHcUdk2GamJKalFCql5yfkpmXnptkrewfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6Z
-        OUDXKymUJeaUAoUCEouLlfTtbIryS0tSFTLyi0tslVILUnIKzAv0ihNzi0vz0vXyUkusDA0M
-        jEyBChOyMz4tWc1ecJKv4uqxGywNjA+4uxg5OCQETCSOXGPtYuTkEBLYwSixcbIkSJhXQFDi
-        7w5hEFNYwEuiYZ4SRIWSxLk1sxghwgYSt3rNQcJsAnoSP5fMYOti5OIQEdjJIvH9/lFGkISE
-        AK/EjPanLBC2tMT25VvBejkF/CRaH1tChDUkfizrZYawRSVurn7LDmO/PzYfaoyIROu9s1A1
-        ghIPfu6GiktKHDr0lQ3ij3yJDQcCIcI1Em+XH4Aq0Ze41rER7AJeAV+Jh+dWsIHYLAKqEhvX
-        bIK6zEWie8kqsPHMAvIS29/OYQYZySygKbF+lz7EdGWJI7dYICr4JDoO/2WH+a9h42+s7B3z
-        njBBtKpJLGoyggjLSHw9PJ99AqPSLEQYz0KydhbC2gWMzKsYxVILinPTU4uNCozhkZqcn7uJ
-        EZyAtdx3MM54+0HvECMTB+MhRgkOZiURXu/QqBQh3pTEyqrUovz4otKc1OJDjKZAD09klhJN
-        zgfmgLySeEMTSwMTMzNDcyNTA3MlcV5p25PJQgLpiSWp2ampBalFMH1MHJxSDUw8915FzQjf
-        ZZTvqPxt/t75hjks68/o/pVYu31L13cbgRMp+8pzHxUfMPI78oVlMcP8fWfzZswJmV3fvEws
-        QbYuo9DifrBhpZUTyxfbqbLhZ9p75vv+qF6pcj/CTHixxd2O2dZ+ivs3B3hrb0tkmexWkFw3
-        e42SmOJjr86QyrMX926s2xezmePTkdpck4NSawW5/n3a0FVb+Wc+80yF9Sa8krUz2jnYBU5z
-        M0Q/zhM0M1kyifU/B895sQDOuq8eZp36LWdWG8tZm00K0ZgbIMgQoMAlsV3pXkGQ1H9/lcf7
-        KkpO2Mu+4S/wUDhuqZA68/GB3QK5j9ScNPRYKz75pjszHCtYpm6bzyfzqvWlEktxRqKhFnNR
-        cSIAP0C7YEkEAAA=
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684
-References: <20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p1>
-        <CGME20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p5>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        Wed, 10 May 2023 04:50:46 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2040.outbound.protection.outlook.com [40.107.220.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB6410C0;
+        Wed, 10 May 2023 01:50:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kplq1uJIJf0Hw/IQcKY5si35LqF5lIhLrXtNwXPR8GZ89Z9SzcCcHQwgfsIiYQh5lz+JgO3tlo9Y8VsrloZQFN+ob2yDhClVZWCmLmP2Gq+LWBlRzlMKNP33j2kaHPQYf1n+mIIi529Pri2zxoo/vpiYe37RrGZ2ToH8HYiTMPdXRTUW4VdiUxgnR26O5Ho9a7UPv+5CD2wDBEBKGH6FdCj3WDHkNq0V6Zo8aXGP7INjrYV+EUjX5LxNX7Jux4E8pZpE3EN3up4ykbLc0O+sJcZG1o82Cj/ZeviDgNwZzfUxsrkxkbbv3qeRrtC6rbJz1Htt4O3uEmgpPD16AOn2iQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oT4+n2FqgD9yiqL9BzSJvUsxwslmJXjIfEkb4sEPvwE=;
+ b=RYvrttuRvpikj9/YGztKi/+ZyHAqn/RDewTLyb1i7jhL8t8cLs1Z55/K895e0ygjWlPsTEGgLr2ehAweUwu4S8o05iNOWs4Ho1SGmsnxofZT0DGzMpI3b9LLuD+xuKtx/UdRqUa/XWGOuRd7tnI++tvtjVy23igjCf8FW0giFp5oIGu8x1Rk8x1nvxGGCkARjEGHUc59d4xK63lUpzRk91cQz1moboKQVmTLTNnfcIswINWFozxTrvzPEVCYuCmttm9QYPOgiA21CKvZaXMCmmX6tCUuN/68J+QD10aDpKlly4ad384EsoxxT8LdaeBT3rWpS4z1zdN6+kxqIs9ndg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=davemloft.net smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oT4+n2FqgD9yiqL9BzSJvUsxwslmJXjIfEkb4sEPvwE=;
+ b=yQ4rGSj2UDpPklaUbO0fJDTng6BE1GOKAmkygBdoykkpaQctMKrYHDLBWr4nrfnR8HCxnJYkK2RpaGGUYp9k3ymL5L9BEjAsoP7DnmGgWsr2Tj7aDjomk3G/dQo+gyNvv7ld7BWIarek3Sk5Bg+MNWJ8YgiQ/iuVEpQWzbfYNmI=
+Received: from DS7PR05CA0103.namprd05.prod.outlook.com (2603:10b6:8:56::18) by
+ SA1PR12MB8700.namprd12.prod.outlook.com (2603:10b6:806:388::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Wed, 10 May
+ 2023 08:50:38 +0000
+Received: from DM6NAM11FT059.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:8:56:cafe::f1) by DS7PR05CA0103.outlook.office365.com
+ (2603:10b6:8:56::18) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.20 via Frontend
+ Transport; Wed, 10 May 2023 08:50:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ DM6NAM11FT059.mail.protection.outlook.com (10.13.172.92) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6387.19 via Frontend Transport; Wed, 10 May 2023 08:50:37 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Wed, 10 May
+ 2023 03:50:36 -0500
+Received: from xhdsneeli40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Wed, 10 May 2023 03:50:31 -0500
+From:   Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     <linux@armlinux.org.uk>, <michal.simek@amd.com>,
+        <radhey.shyam.pandey@amd.com>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <anirudha.sarangi@amd.com>,
+        <harini.katakam@amd.com>, <sarath.babu.naidu.gaddam@amd.com>,
+        <git@amd.com>
+Subject: [PATCH net-next V3 0/3] net: axienet: Introduce dmaengine 
+Date:   Wed, 10 May 2023 14:20:28 +0530
+Message-ID: <20230510085031.1116327-1-sarath.babu.naidu.gaddam@amd.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT059:EE_|SA1PR12MB8700:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5b56dbd5-5ba2-4de5-acdb-08db5133a06a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: OcLztLACFonEZRPEPpI7tkk6TFwj2K8tYy1t39gPcw3956lSrTqDCaKwD2ygTWFCpzTZymjrPIeYEGKU+rRZyQNuOY0xD2jxuDZIya4d8RZ+bdTab1l8p3+EYhSSZJijwlwweGIthDG1xrGy5FZt9GK+AvA9CODxOj9B1v9hH05g0+DDODXsUHWNdSc0ByDkY9JYNOw/oLa6Hin024pfZ5Z6N81MaFOX7ltrG3TZr7vqqXTXW+toP9pwf+Za3y3k1luD+GP7IGbFFJtSkV1vAcLGJS9jjYIlnBuGLwMCR5tttZw2VvR9xkVdd0o/NkLfRXlmC2+2GL90Ct3Tlyjaj7g1VQX8Qw4RvRxoNL57SyfHueoC8TJCbP6Sb1oQfTkuF2h+K5TF9xbYyZQ5WcsVImMvPEOB8Tamc3nRhpJZOpe8sAA9YOVxTdP1XfvU6o3M+iezlwd1AckyxNJ0avT3me7raBCfwEybLSlU2G/kdaRtwbGm7IjXHVj7RZ8ysGO2k2L5mMnIO+WQA2IMm7bWG3BV8ifw5bX1iwrabsnLBQTUbQCKZjrIKrbaBa0l0n1VtrAm0pBTzEOmu8IqDuit6sKup9fPc6J2NWF7VfWtj+afz7oYyhoWQc6QntEHmcTmNjqmzTk7RTC2DvUlUgAKGL1A7AYFM+Nsaq70DB6m6Tz6jJEdV0/R3KOWejRqOCEcTog1jFkSVbR6N6cA+g9Zw4ayoRMBmzmtMbRlL/dvo1bfqaE4kXZtAp0Yvg9AVVkJKavTbVrIgRI4HErQPgF68dcyjdY4hy4kMUayNTEU9PICZIA6F0zA67vBFp+SYYAq
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(396003)(346002)(136003)(451199021)(46966006)(36840700001)(40470700004)(478600001)(36860700001)(83380400001)(54906003)(110136005)(86362001)(70206006)(70586007)(82310400005)(426003)(356005)(336012)(4326008)(81166007)(316002)(47076005)(2616005)(6666004)(966005)(7416002)(8676002)(40480700001)(8936002)(36756003)(41300700001)(82740400003)(2906002)(66899021)(5660300002)(103116003)(4743002)(26005)(40460700003)(186003)(1076003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 08:50:37.8803
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5b56dbd5-5ba2-4de5-acdb-08db5133a06a
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT059.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB8700
+X-Spam-Status: No, score=1.9 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a problem occurs in the process of creating an integrity payload, the
-status of bio is always BLK_STS_RESOURCE.
+The axiethernet driver can use the dmaengine framework to communicate
+with the xilinx DMAengine driver(AXIDMA, MCDMA). The inspiration behind
+this dmaengine adoption is to reuse the in-kernel xilinx dma engine
+driver[1] and remove redundant dma programming sequence[2] from the
+ethernet driver. This simplifies the ethernet driver and also makes
+it generic to be hooked to any complaint dma IP i.e AXIDMA, MCDMA
+without any modification.
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Martin K. Petersen <martin.petersen@oracle.com>
+The dmaengine framework was extended for metadata API support during
+the axidma RFC[3] discussion. However, it still needs further enhancements
+to make it well suited for ethernet usecases.
 
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
----
- block/bio-integrity.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+Backward compatibility support:
+To support backward compatibility, we are planning to use below approach,
+1) Use "dmas" property as an optional for now to differentiate
+   dmaengine based ethernet Driver or built-in dma ethernet driver.
+   Will move this property to required property some time later.
+2) after some time, will introduce a new compatible string to support
+   the dmaengine method, This new compatible name will use different
+   APIs for init and data transfer.
 
-diff --git a/block/bio-integrity.c b/block/bio-integrity.c
-index 20444ec447cb..c49deed67bb2 100644
---- a/block/bio-integrity.c
-+++ b/block/bio-integrity.c
-@@ -245,7 +245,6 @@ bool bio_integrity_prep(struct bio *bio)
- 	unsigned int len, nr_pages;
- 	unsigned int bytes, offset, i;
- 	unsigned int intervals;
--	blk_status_t status;
- 
- 	if (!bi)
- 		return true;
-@@ -274,7 +273,6 @@ bool bio_integrity_prep(struct bio *bio)
- 	/* Allocate kernel buffer for protection data */
- 	len = intervals * bi->tuple_size;
- 	buf = kmalloc(len, GFP_NOIO);
--	status = BLK_STS_RESOURCE;
- 	if (unlikely(buf == NULL)) {
- 		printk(KERN_ERR "could not allocate integrity buffer\n");
- 		goto err_end_io;
-@@ -289,7 +287,6 @@ bool bio_integrity_prep(struct bio *bio)
- 	if (IS_ERR(bip)) {
- 		printk(KERN_ERR "could not allocate data integrity bioset\n");
- 		kfree(buf);
--		status = BLK_STS_RESOURCE;
- 		goto err_end_io;
- 	}
- 
-@@ -313,7 +310,6 @@ bool bio_integrity_prep(struct bio *bio)
- 		if (bio_integrity_add_page(bio, virt_to_page(buf),
- 					   bytes, offset) < bytes) {
- 			printk(KERN_ERR "could not attach integrity payload\n");
--			status = BLK_STS_RESOURCE;
- 			goto err_end_io;
- 		}
- 
-@@ -332,10 +328,9 @@ bool bio_integrity_prep(struct bio *bio)
- 	return true;
- 
- err_end_io:
--	bio->bi_status = status;
-+	bio->bi_status = BLK_STS_RESOURCE;
- 	bio_endio(bio);
- 	return false;
--
- }
- EXPORT_SYMBOL(bio_integrity_prep);
- 
+Comments, suggestions, thoughts to implement remaining functional features
+are very welcome!
+
+[1]: https://github.com/torvalds/linux/blob/master/drivers/dma/xilinx/xilinx_dma.c
+[2]: https://github.com/torvalds/linux/blob/master/drivers/net/ethernet/xilinx/xilinx_axienet_main.c#L238
+[3]: http://lkml.iu.edu/hypermail/linux/kernel/1804.0/00367.html
+
+Changes in V3:
+1) Moved RFC to PATCH.
+2) Removed ethtool get/set coalesce, will be added later.
+3) Added backward comapatible support.
+4) Split the dmaengine support patch of V2 into two patches(2/3 and 3/3).
+https://lore.kernel.org/all/20220920055703.13246-4-sarath.babu.naidu.gaddam@amd.com/
+
+Changes in V2:
+1) Add ethtool get/set coalesce and DMA reset using DMAengine framework.
+2) Add performance numbers.
+3) Remove .txt and change the name of file to xlnx,axiethernet.yaml.
+4) Fix DT check warning(Fix DT check warning('device_type' does not match
+   any of the regexes:'pinctrl-[0-9]+' From schema: Documentation/
+   devicetree/bindings/net/xilinx_axienet.yaml).
+
+Radhey Shyam Pandey (1):
+  dt-bindings: net: xilinx_axienet: Introduce dmaengine binding support
+
+Sarath Babu Naidu Gaddam (2):
+  net: axienet: Preparatory changes for dmaengine support
+  net: axienet: Introduce dmaengine support
+
+ .../bindings/net/xlnx,axi-ethernet.yaml       |  12 +
+ drivers/net/ethernet/xilinx/xilinx_axienet.h  |   8 +
+ .../net/ethernet/xilinx/xilinx_axienet_main.c | 636 ++++++++++++++----
+ 3 files changed, 533 insertions(+), 123 deletions(-)
+
 -- 
-2.34.1
+2.25.1
+
