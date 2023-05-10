@@ -2,99 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D29D76FE1C1
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 17:45:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B16476FE1C6
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 17:46:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237177AbjEJPpW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 11:45:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
+        id S237202AbjEJPqc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 11:46:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232691AbjEJPpU (ORCPT
+        with ESMTP id S232691AbjEJPqa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 11:45:20 -0400
-Received: from out03.mta.xmission.com (out03.mta.xmission.com [166.70.13.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC89A94
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 08:45:18 -0700 (PDT)
-Received: from in02.mta.xmission.com ([166.70.13.52]:38472)
-        by out03.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1pwm0C-009f3m-Tj; Wed, 10 May 2023 09:45:16 -0600
-Received: from ip68-110-29-46.om.om.cox.net ([68.110.29.46]:51364 helo=email.froward.int.ebiederm.org.xmission.com)
-        by in02.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.93)
-        (envelope-from <ebiederm@xmission.com>)
-        id 1pwm0B-006uPF-RI; Wed, 10 May 2023 09:45:16 -0600
-From:   "Eric W. Biederman" <ebiederm@xmission.com>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-Cc:     Luis Chamberlain <mcgrof@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>, chenhuacai@kernel.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230509104127.1997562-1-chenhuacai@loongson.cn>
-Date:   Wed, 10 May 2023 10:44:43 -0500
-In-Reply-To: <20230509104127.1997562-1-chenhuacai@loongson.cn> (Huacai Chen's
-        message of "Tue, 9 May 2023 18:41:27 +0800")
-Message-ID: <87ild0w5qs.fsf@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 10 May 2023 11:46:30 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D4E94
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 08:46:26 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-644d9bf05b7so3404804b3a.3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 08:46:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683733585; x=1686325585;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=60FTt8+2LY+CnNwBz+xa3hAAp3IK5SiedfIPHAxt3HQ=;
+        b=VhvNowEZakRKX6Xi+zRemXKqD4GK5rlbiABmxigOFqoLdYKdTronYnTkK9UUeQBA36
+         BvPo1xiqnhT7eS15YQGAihiDiZz7ez3kIYlR0xSFjPYSXVY27cFm3XGdoGDLpVQ+YLRq
+         nO9bpNOvZ6n6roCMD2yMVwe89oMszASteKsNaermxYuLyjQK2ni+BxJ+dOEI+K2P1mQF
+         9LhYlklRm9FzFhn2W0WYOYL0/EBzurAXBnixpVOEpNynmks9djcfwSjxqly9VC+1tITY
+         Z32cr+oFSueI5vHo2XI9jYh470gyhT7VZKjG/234O6Wb4rXD/3dNXXimpCg0heb3pqDg
+         YZNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683733585; x=1686325585;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=60FTt8+2LY+CnNwBz+xa3hAAp3IK5SiedfIPHAxt3HQ=;
+        b=aXT2yq7yZ/mh0rtLBt0HMjOx8OWqEtV0Dmf51kcVPNqxVkNJu5qIbzF4lgQFfwyhky
+         YARlBoSxteaTACIZU71UT5viCxi9lbMylR3BhURiMUUcfKNnC16njHIxQhA3Rh/BwXz6
+         48iEWcQVOlE2+0rNZMMNCx5mgBGpkCtqHDp3B1VH9QXjYSAQYedZQ5OgfZz1KMzyKsf/
+         1qSCgzmvj7bE4t3kbZ7r5xCfJys1D/78y/gBVb9pN4QklQi6rvIO+zY+x28V25wJaCrL
+         yR+fuJGsfccv0O4cNBl+kZs7SV+LyafF6lnhUicgt/IgPjoe5NBUoqacAcOIDkWV1A6T
+         0VBQ==
+X-Gm-Message-State: AC+VfDxPsV2GREfz2HsQ50QJL1vAlpI/XD2a0VVflZ0/OIsz3xzIouSY
+        jTaOqunw2uLcJtPN6oE7jf8lhs1a1/hm8Il3cx/8vQ==
+X-Google-Smtp-Source: ACHHUZ4vSroKUQ0I9R7My9Co8APqQAVgO725Inqch9oYd3Lasoxp8c6AfcYXhCLDsxpj3bnj55fYCCDHaapYxCKK0VA=
+X-Received: by 2002:a05:6a20:841c:b0:100:52f4:986b with SMTP id
+ c28-20020a056a20841c00b0010052f4986bmr13823648pzd.58.1683733585491; Wed, 10
+ May 2023 08:46:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1pwm0B-006uPF-RI;;;mid=<87ild0w5qs.fsf@email.froward.int.ebiederm.org>;;;hst=in02.mta.xmission.com;;;ip=68.110.29.46;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX1/6Az45sWJkYuh4JpbrMsGatRFJzZ3Jt1c=
-X-SA-Exim-Connect-IP: 68.110.29.46
-X-SA-Exim-Mail-From: ebiederm@xmission.com
+References: <20230509030611.521807993@linuxfoundation.org> <863a112f-f4a4-d580-9687-f6214d555939@linaro.org>
+ <2023051035-monitor-sandy-2a5b@gregkh>
+In-Reply-To: <2023051035-monitor-sandy-2a5b@gregkh>
+From:   =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
+Date:   Wed, 10 May 2023 09:46:14 -0600
+Message-ID: <CAEUSe79AViqsHimbYbFjkKAxcvROGhFKA2yKVuC3aP1Gm=jc1w@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/370] 5.15.111-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
-X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: ;Huacai Chen <chenhuacai@loongson.cn>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 482 ms - load_scoreonly_sql: 0.05 (0.0%),
-        signal_user_changed: 9 (1.9%), b_tie_ro: 8 (1.6%), parse: 1.16 (0.2%),
-        extract_message_metadata: 17 (3.6%), get_uri_detail_list: 1.36 (0.3%),
-        tests_pri_-2000: 18 (3.7%), tests_pri_-1000: 2.4 (0.5%),
-        tests_pri_-950: 1.19 (0.2%), tests_pri_-900: 1.00 (0.2%),
-        tests_pri_-200: 0.82 (0.2%), tests_pri_-100: 3.3 (0.7%),
-        tests_pri_-90: 131 (27.2%), check_bayes: 119 (24.7%), b_tokenize: 4.7
-        (1.0%), b_tok_get_all: 6 (1.2%), b_comp_prob: 1.61 (0.3%),
-        b_tok_touch_all: 104 (21.5%), b_finish: 0.97 (0.2%), tests_pri_0: 190
-        (39.5%), check_dkim_signature: 0.72 (0.1%), check_dkim_adsp: 4.6
-        (1.0%), poll_dns_idle: 85 (17.7%), tests_pri_10: 2.3 (0.5%),
-        tests_pri_500: 99 (20.6%), rewrite_mail: 0.00 (0.0%)
-Subject: Re: [PATCH RFC] kthread: Unify kernel_thread() and user_mode_thread()
-X-SA-Exim-Version: 4.2.1 (built Sat, 08 Feb 2020 21:53:50 +0000)
-X-SA-Exim-Scanned: Yes (on in02.mta.xmission.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Huacai Chen <chenhuacai@loongson.cn> writes:
+Hello!
 
-> Commit 343f4c49f2438d8 ("kthread: Don't allocate kthread_struct for init
-> and umh") introduces a new function user_mode_thread() for init and umh.
-> But the name is a bit confusing because init and umh are indeed kernel
-> threads at creation time, the real difference is "they will become user
-> processes".
+On Wed, 10 May 2023 at 01:43, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> On Tue, May 09, 2023 at 09:12:33AM -0600, Daniel D=C3=ADaz wrote:
+> > Hello!
+> >
+> > On 08/05/23 21:26, Greg Kroah-Hartman wrote:
+> > > This is the start of the stable review cycle for the 5.15.111 release=
+.
+> > > There are 370 patches in this series, all will be posted as a respons=
+e
+> > > to this one.  If anyone has any issues with these being applied, plea=
+se
+> > > let me know.
+> > >
+> > > Responses should be made by Thu, 11 May 2023 03:05:05 +0000.
+> > > Anything received after that time might be too late.
+> > >
+> > > The whole patch series can be found in one patch at:
+> > >     https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.15.111-rc2.gz
+> > > or in the git tree and branch at:
+> > >     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.15.y
+> > > and the diffstat can be found below.
+> > >
+> > > thanks,
+> > >
+> > > greg k-h
+> >
+> > New warnings are introduced for Arm, PowerPC, RISC-V:
+> >
+> >   /builds/linux/kernel/sched/debug.c: In function 'print_cfs_group_stat=
+s':
+> >   /builds/linux/kernel/sched/debug.c:465:41: warning: unused variable '=
+stats' [-Wunused-variable]
+> >                   struct sched_statistics *stats =3D  __schedstats_from=
+_se(se);
+> >                                            ^~~~~
+>
+> Odd, and this isn't on other kernels too?
 
-No they are not "kernel threads" at creation time.  At creation time
-init and umh are threads running in the kernel.
+Only on 5.15, not on the 6.x RC's. I'll share more info after my
+bisection is done.
 
-It is a very important distinction and you are loosing it.
+Greetings!
 
-Because they don't have a kthread_struct such tasks in the kernel
-are not allowed to depend on anything that is ``kthread''.
-
-Having this a separate function highlights the distinction.
-Highlighting should hopefully cause people to ask why there is a
-distinction, and what is going on.
-
-> So let's unify the kernel_thread() and user_mode_thread() to
-> kernel_thread() again, and add a new 'user' parameter for init and
-> umh
-
-Now that is confusing.
-
-Eric
+Daniel D=C3=ADaz
+daniel.diaz@linaro.org
