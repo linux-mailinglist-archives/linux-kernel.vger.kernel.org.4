@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDE8A6FE5B1
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:53:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EFB76FE5BE
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:53:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237212AbjEJUwW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:52:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42640 "EHLO
+        id S237241AbjEJUw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237074AbjEJUvn (ORCPT
+        with ESMTP id S237161AbjEJUvu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:51:43 -0400
+        Wed, 10 May 2023 16:51:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EEB7AA5;
-        Wed, 10 May 2023 13:51:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAAF96EA7;
+        Wed, 10 May 2023 13:51:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1371D6498F;
-        Wed, 10 May 2023 20:50:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64E8EC4339E;
-        Wed, 10 May 2023 20:50:37 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 732CC64A3C;
+        Wed, 10 May 2023 20:50:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1460C433EF;
+        Wed, 10 May 2023 20:50:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683751837;
-        bh=kSat0sJ/N0+p8ggDTwS2c1Cf9r4fIShQhZT+PG8AXTs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RTPxHymw8Qv2hQpcMUieMEjEA3vemtXTb9bReVITu2pxbSrx1m+XGntiFOsPBBUp6
-         +uc9IbiYXyPTj35Rhyo2GZ3tAQ0gs42ui8ZtToPrdHAPcMny5GEpzq+QZdKQqT24ys
-         osBE9NPY8rrHTcYH9gz6nvz7WFwMgNmEFHPnvISLAUdGA3n3mlkvxu/86q3H00ukGe
-         uwFLsh49RRbml3Qs8upgzafw4LhxEULNecLRow//hye701ruyxX6rkxPHNFXRi1C5m
-         FFgbI/K4h84NlwgpsewAQw65ICVuDmJ5FYU0JDAh0QC6Qtfvn8d/Ya84J/kJO8Csux
-         uCr1l0EGGPC8A==
+        s=k20201202; t=1683751853;
+        bh=6sGfIeAH+EYa3fOLxgPHH2fMnwBuBPM3BpmYiynwUQo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=MPvG94GTN3Afp7t1kVqNgLhbmbSkLv83HLnmbHhSbqs0phTUmpXMVWaolIAs3ADSX
+         RJ2C3MDJ2I31Z+ovgotv/M64LiIAJj24zruCbKB7sIqB5soJIfnP3LZiuQMH8cb8B9
+         CIDaiTxkWHj9K9diDsnnyZYYKPtkAwwnWl0iR5iAftdUc0DIH9JpYOps8lAn6vv//K
+         iQlAUZmtszRgvJJMih26MlfvCmAA7nTK8UljTXcq5Eu12QThehbbE0JqYMU6F7/4km
+         aIwilI8t1q8aSOEr2Q90LwMOTEtHmCH/FoETxEVqX+xY7K0belBIqgKddkyKcgeyz/
+         FmA1LiMju4lHQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Qiang Ning <qning0106@126.com>, Lee Jones <lee@kernel.org>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 5.4 2/2] mfd: dln2: Fix memory leak in dln2_probe()
-Date:   Wed, 10 May 2023 16:50:26 -0400
-Message-Id: <20230510205026.105079-2-sashal@kernel.org>
+Cc:     Alain Volmat <avolmat@me.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>,
+        kishon@kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-phy@lists.infradead.org
+Subject: [PATCH AUTOSEL 4.19 1/2] phy: st: miphy28lp: use _poll_timeout functions for waits
+Date:   Wed, 10 May 2023 16:50:36 -0400
+Message-Id: <20230510205037.105115-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230510205026.105079-1-sashal@kernel.org>
-References: <20230510205026.105079-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -56,36 +57,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Qiang Ning <qning0106@126.com>
+From: Alain Volmat <avolmat@me.com>
 
-[ Upstream commit 96da8f148396329ba769246cb8ceaa35f1ddfc48 ]
+[ Upstream commit e3be4dd2c8d8aabfd2c3127d0e2e5754d3ae82d6 ]
 
-When dln2_setup_rx_urbs() in dln2_probe() fails, error out_free forgets
-to call usb_put_dev() to decrease the refcount of dln2->usb_dev.
+This commit introduces _poll_timeout functions usage instead of
+wait loops waiting for a status bit.
 
-Fix this by adding usb_put_dev() in the error handling code of
-dln2_probe().
-
-Signed-off-by: Qiang Ning <qning0106@126.com>
-Signed-off-by: Lee Jones <lee@kernel.org>
-Link: https://lore.kernel.org/r/20230330024353.4503-1-qning0106@126.com
+Signed-off-by: Alain Volmat <avolmat@me.com>
+Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
+Link: https://lore.kernel.org/r/20230210224309.98452-1-avolmat@me.com
+Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/dln2.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/phy/st/phy-miphy28lp.c | 42 ++++++++--------------------------
+ 1 file changed, 10 insertions(+), 32 deletions(-)
 
-diff --git a/drivers/mfd/dln2.c b/drivers/mfd/dln2.c
-index 707f4287ab4a0..80952237e4b43 100644
---- a/drivers/mfd/dln2.c
-+++ b/drivers/mfd/dln2.c
-@@ -797,6 +797,7 @@ static int dln2_probe(struct usb_interface *interface,
- 	dln2_stop_rx_urbs(dln2);
+diff --git a/drivers/phy/st/phy-miphy28lp.c b/drivers/phy/st/phy-miphy28lp.c
+index 213e2e15339c4..fe23432e5b1a6 100644
+--- a/drivers/phy/st/phy-miphy28lp.c
++++ b/drivers/phy/st/phy-miphy28lp.c
+@@ -13,6 +13,7 @@
  
- out_free:
-+	usb_put_dev(dln2->usb_dev);
- 	dln2_free(dln2);
+ #include <linux/platform_device.h>
+ #include <linux/io.h>
++#include <linux/iopoll.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+@@ -488,19 +489,11 @@ static inline void miphy28lp_pcie_config_gen(struct miphy28lp_phy *miphy_phy)
  
- 	return ret;
+ static inline int miphy28lp_wait_compensation(struct miphy28lp_phy *miphy_phy)
+ {
+-	unsigned long finish = jiffies + 5 * HZ;
+ 	u8 val;
+ 
+ 	/* Waiting for Compensation to complete */
+-	do {
+-		val = readb_relaxed(miphy_phy->base + MIPHY_COMP_FSM_6);
+-
+-		if (time_after_eq(jiffies, finish))
+-			return -EBUSY;
+-		cpu_relax();
+-	} while (!(val & COMP_DONE));
+-
+-	return 0;
++	return readb_relaxed_poll_timeout(miphy_phy->base + MIPHY_COMP_FSM_6,
++					  val, val & COMP_DONE, 1, 5 * USEC_PER_SEC);
+ }
+ 
+ 
+@@ -809,7 +802,6 @@ static inline void miphy28lp_configure_usb3(struct miphy28lp_phy *miphy_phy)
+ 
+ static inline int miphy_is_ready(struct miphy28lp_phy *miphy_phy)
+ {
+-	unsigned long finish = jiffies + 5 * HZ;
+ 	u8 mask = HFC_PLL | HFC_RDY;
+ 	u8 val;
+ 
+@@ -820,21 +812,14 @@ static inline int miphy_is_ready(struct miphy28lp_phy *miphy_phy)
+ 	if (miphy_phy->type == PHY_TYPE_SATA)
+ 		mask |= PHY_RDY;
+ 
+-	do {
+-		val = readb_relaxed(miphy_phy->base + MIPHY_STATUS_1);
+-		if ((val & mask) != mask)
+-			cpu_relax();
+-		else
+-			return 0;
+-	} while (!time_after_eq(jiffies, finish));
+-
+-	return -EBUSY;
++	return readb_relaxed_poll_timeout(miphy_phy->base + MIPHY_STATUS_1,
++					  val, (val & mask) == mask, 1,
++					  5 * USEC_PER_SEC);
+ }
+ 
+ static int miphy_osc_is_ready(struct miphy28lp_phy *miphy_phy)
+ {
+ 	struct miphy28lp_dev *miphy_dev = miphy_phy->phydev;
+-	unsigned long finish = jiffies + 5 * HZ;
+ 	u32 val;
+ 
+ 	if (!miphy_phy->osc_rdy)
+@@ -843,17 +828,10 @@ static int miphy_osc_is_ready(struct miphy28lp_phy *miphy_phy)
+ 	if (!miphy_phy->syscfg_reg[SYSCFG_STATUS])
+ 		return -EINVAL;
+ 
+-	do {
+-		regmap_read(miphy_dev->regmap,
+-				miphy_phy->syscfg_reg[SYSCFG_STATUS], &val);
+-
+-		if ((val & MIPHY_OSC_RDY) != MIPHY_OSC_RDY)
+-			cpu_relax();
+-		else
+-			return 0;
+-	} while (!time_after_eq(jiffies, finish));
+-
+-	return -EBUSY;
++	return regmap_read_poll_timeout(miphy_dev->regmap,
++					miphy_phy->syscfg_reg[SYSCFG_STATUS],
++					val, val & MIPHY_OSC_RDY, 1,
++					5 * USEC_PER_SEC);
+ }
+ 
+ static int miphy28lp_get_resource_byname(struct device_node *child,
 -- 
 2.39.2
 
