@@ -2,209 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D71ED6FDFF9
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:22:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE3BC6FE006
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:23:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237401AbjEJOWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 10:22:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53778 "EHLO
+        id S237435AbjEJOXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 10:23:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbjEJOWn (ORCPT
+        with ESMTP id S237427AbjEJOXa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 10:22:43 -0400
-Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3FF3AA9;
-        Wed, 10 May 2023 07:22:41 -0700 (PDT)
-Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34AARLSF003420;
-        Wed, 10 May 2023 16:22:14 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=selector1;
- bh=KPcKF2alaU6EYzoeowQfXYviPM8+Cm+PPF8ke7qvULk=;
- b=SyfyPZu99HLkHkofrMkgRvJ8/xYUS88mq/rUbBsDn9xQVfl+UjqGWjCyF92jdeQlS38N
- ILOeBc7PqajfXASKmM2YgidBKbfwFMtbw/YuEws/PneqKGDGMDLTo6H+INjnwx1h6GYX
- YOmsa486K+C8rzuctkiLcxq/II0Fw0UL72S7Z1W9yPk61z/agGsG72XHhjl4MIXbWeee
- f/IA2Xq2iP3Q5otupIk1PA9opC6Q6+ADRM+ZoXgPL1/4/bFO96k5cp7OSR+R4cE7a2Oj
- aiojbOM3QqBM05qaJPWxjbLkEsfd/zsp9ksix5lIxmqhOqT+MuA9Jj++ktizTV6LSRpq HA== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qg9hf9bkg-1
+        Wed, 10 May 2023 10:23:30 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 198514214
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:23:28 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34ADxGXC003956;
+        Wed, 10 May 2023 09:23:03 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=uey+YIleiDDyypUbzSZNSiS9ZzZLsk6K8v25sAR5S7E=;
+ b=ov+kCysgyEF5Bzphz/KuH1fhHIO/jKykKmDk3zAmsUhirVvVaXAQAK5R8RPQRewcg7pq
+ riEaQtfoVQN1hjbXfiYjFB1ZredhW5nL4A34XRLQpVZRdzF0w23HDHqfLYGTJMnFOUrr
+ ynCfZ3681mGvJpnKjQzf6dnoPBnJy/B/OSVUqnh4hPU5GwCI4geE7Ou+vy7k2gvohPAx
+ pVyl0kqtoIYMlYYL6TOau4Z+adOycUsmkDm0clU9keBDMeIvVDVEsOUO4ILrzEP+ti5k
+ pGmhH0NdQYZY/9Pif0N5ZXUjGsyURA2LSfnGMP99BGIGRcJaOQKugOJ6aZTXOpIIGFeM mA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3qf7nb23xp-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 16:22:14 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A3937100038;
-        Wed, 10 May 2023 16:22:12 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 919192248CE;
-        Wed, 10 May 2023 16:22:12 +0200 (CEST)
-Received: from [10.48.1.0] (10.48.1.0) by SHFDAG1NODE3.st.com (10.75.129.71)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 10 May
- 2023 16:22:12 +0200
-Message-ID: <7884b0d8-199c-4415-4113-ddce4b640508@foss.st.com>
-Date:   Wed, 10 May 2023 16:22:11 +0200
+        Wed, 10 May 2023 09:23:03 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Wed, 10 May
+ 2023 09:23:00 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Wed, 10 May 2023 09:23:00 -0500
+Received: from lon-bigdaddy.ad.cirrus.com (unknown [198.61.64.169])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 8ABAA11D4;
+        Wed, 10 May 2023 14:23:00 +0000 (UTC)
+From:   Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+To:     Takashi Iwai <tiwai@suse.com>, Jaroslav Kysela <perex@perex.cz>
+CC:     <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <linux-kernel@vger.kernel.org>,
+        Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+Subject: [PATCH] ALSA: hda/realtek: Add quirk for HP EliteBook G10 laptops
+Date:   Wed, 10 May 2023 15:22:27 +0100
+Message-ID: <20230510142227.32945-1-vitalyr@opensource.cirrus.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] dt-bindings: rcc: stm32: Fix STM32MP13 include file
-To:     Rob Herring <robh@kernel.org>, <gabriel.fernandez@foss.st.com>
-CC:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        <gabriel.fernandez@st.com>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        Loic PALLARDY <loic.pallardy@st.com>
-References: <20230407201526.1.I417093ddcea282be479f10a37147d1935a9050b7@changeid>
- <20230412151404.GA2372294-robh@kernel.org>
-Content-Language: en-US
-From:   Patrick DELAUNAY <patrick.delaunay@foss.st.com>
-In-Reply-To: <20230412151404.GA2372294-robh@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.48.1.0]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE3.st.com
- (10.75.129.71)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
-X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: QZXuf4eiwk5pFhTFxjyw56lYNa-lsZ8U
+X-Proofpoint-GUID: QZXuf4eiwk5pFhTFxjyw56lYNa-lsZ8U
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Add support for HP EliteBook 835/845/845W/865 G10 laptops
+with CS35L41 amplifiers on I2C/SPI bus connected to Realtek codec.
 
-On 4/12/23 17:14, Rob Herring wrote:
-> On Fri, Apr 07, 2023 at 08:15:33PM +0200, Patrick Delaunay wrote:
->> Minor cosmetic change, aligned with files in U-Boot:
->> - change obsolete SPDX id : GPL-2.0+
->> - use correct address gabriel.fernandez@foss.st.com
->> - remove extra space
-> Make the subject reflect the purpose: 'Sync with u-boot copy'
+Signed-off-by: Vitaly Rodionov <vitalyr@opensource.cirrus.com>
+---
+ sound/pci/hda/patch_realtek.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index 172ffc2c332b..9e509356790f 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -9458,7 +9458,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x103c, 0x8aa3, "HP ProBook 450 G9 (MB 8AA1)", ALC236_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8aa8, "HP EliteBook 640 G9 (MB 8AA6)", ALC236_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8aab, "HP EliteBook 650 G9 (MB 8AA9)", ALC236_FIXUP_HP_GPIO_LED),
+-	 SND_PCI_QUIRK(0x103c, 0x8abb, "HP ZBook Firefly 14 G9", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8abb, "HP ZBook Firefly 14 G9", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8ad1, "HP EliteBook 840 14 inch G9 Notebook PC", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8ad2, "HP EliteBook 860 16 inch G9 Notebook PC", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b42, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+@@ -9469,8 +9469,13 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x103c, 0x8b47, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b5d, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x103c, 0x8b5e, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
++	SND_PCI_QUIRK(0x103c, 0x8b63, "HP Elite Dragonfly 13.5 inch G4", ALC245_FIXUP_CS35L41_SPI_4_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b65, "HP ProBook 455 15.6 inch G10 Notebook PC", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x103c, 0x8b66, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
++	SND_PCI_QUIRK(0x103c, 0x8b70, "HP EliteBook 835 G10", ALC287_FIXUP_CS35L41_I2C_2),
++	SND_PCI_QUIRK(0x103c, 0x8b72, "HP EliteBook 845 G10", ALC287_FIXUP_CS35L41_I2C_2),
++	SND_PCI_QUIRK(0x103c, 0x8b74, "HP EliteBook 845W G10", ALC287_FIXUP_CS35L41_I2C_2),
++	SND_PCI_QUIRK(0x103c, 0x8b77, "HP ElieBook 865 G10", ALC287_FIXUP_CS35L41_I2C_2),
+ 	SND_PCI_QUIRK(0x103c, 0x8b7a, "HP", ALC236_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b7d, "HP", ALC236_FIXUP_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b87, "HP", ALC236_FIXUP_HP_GPIO_LED),
+@@ -9481,6 +9486,7 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x103c, 0x8b92, "HP", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x103c, 0x8b96, "HP", ALC236_FIXUP_HP_MUTE_LED_MICMUTE_VREF),
+ 	SND_PCI_QUIRK(0x103c, 0x8bf0, "HP", ALC236_FIXUP_HP_GPIO_LED),
++	SND_PCI_QUIRK(0x103c, 0x8c26, "HP HP EliteBook 800G11", ALC245_FIXUP_CS35L41_SPI_2_HP_GPIO_LED),
+ 	SND_PCI_QUIRK(0x1043, 0x103e, "ASUS X540SA", ALC256_FIXUP_ASUS_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x103f, "ASUS TX300", ALC282_FIXUP_ASUS_TX300),
+ 	SND_PCI_QUIRK(0x1043, 0x106d, "Asus K53BE", ALC269_FIXUP_LIMIT_INT_MIC_BOOST),
+-- 
+2.34.1
 
-Ok
-
-
->
->> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
->> ---
->>
->>   include/dt-bindings/clock/stm32mp13-clks.h   | 6 +++---
->>   include/dt-bindings/reset/stm32mp13-resets.h | 4 ++--
->>   2 files changed, 5 insertions(+), 5 deletions(-)
->>
->> diff --git a/include/dt-bindings/clock/stm32mp13-clks.h b/include/dt-bindings/clock/stm32mp13-clks.h
->> index 02befd25edce..da4cb7567430 100644
->> --- a/include/dt-bindings/clock/stm32mp13-clks.h
->> +++ b/include/dt-bindings/clock/stm32mp13-clks.h
->> @@ -1,7 +1,7 @@
->> -/* SPDX-License-Identifier: GPL-2.0+ or BSD-3-Clause */
->> +/* SPDX-License-Identifier: GPL-2.0-or-later or BSD-3-Clause */
->>   /*
->>    * Copyright (C) STMicroelectronics 2020 - All Rights Reserved
->> - * Author: Gabriel Fernandez <gabriel.fernandez@st.com> for STMicroelectronics.
->> + * Author: Gabriel Fernandez <gabriel.fernandez@foss.st.com> for STMicroelectronics.
->>    */
->>   
->>   #ifndef _DT_BINDINGS_STM32MP13_CLKS_H_
->> @@ -64,7 +64,7 @@
->>   #define CK_MCO1		38
->>   #define CK_MCO2		39
->>   
->> -/*  IP clocks */
->> +/* IP clocks */
->>   #define SYSCFG		40
->>   #define VREF		41
->>   #define DTS		42
->> diff --git a/include/dt-bindings/reset/stm32mp13-resets.h b/include/dt-bindings/reset/stm32mp13-resets.h
->> index 934864e90da6..1b83a01de8f0 100644
->> --- a/include/dt-bindings/reset/stm32mp13-resets.h
->> +++ b/include/dt-bindings/reset/stm32mp13-resets.h
->> @@ -1,7 +1,7 @@
->> -/* SPDX-License-Identifier: GPL-2.0 or BSD-3-Clause */
->> +/* SPDX-License-Identifier: GPL-2.0-or-later or BSD-3-Clause */
-> Really, the Linux copy came first, so you should use its license. Your
-> company's lawyers are good with GPLv3 and then v4?
-
-
-We have a long debate on the licenses, and particular for device tree,
-
-and as conclusion we are using for STM32MP SoCs:
-
-- For code (in Linux kernel driver) => GPL-2.0-only
-
-- For device tree and binding .h files; the dual licenses => 
-GPL-2.0-or-later OR BSD-3-Clause
-
-
-It is because the modifications in device tree files and binding file s 
-can be applied on
-
-other SW with using any licenses:
-
-    - GPL2 (Linux /u-Boot)
-
-    - BSD (TF-A/OP-TEE)
-
-    - GPL3/GPL4 license (any other SW component)
-
-
-Just indicate GPL-2.0-or-later in the device tree or binding files won't 
-contaminate
-
-all the projects with GPL3/GPL4 license if it only use this DT, or 
-binding files.
-
-
-NB: it is already the case for other files used by STM32MP SoC, for 
-example :
-
-./include/dt-bindings/pinctrl/stm32-pinfunc.h:
-     /* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause) */
-
-
-and we have no reason to use a different license for the 2 files for 
-STM32MP13 RCC binding:
-
-   include/dt-bindings/reset/stm32mp13-resets.h
-   include/dt-bindings/clock/stm32mp13-clks.h
-
-This patch corrects a mistake in the initial commit for RCC binding 
-up-streamed
-
-by Gabriel in parallel in U-Boot and Linux repositories; this 
-inconsistency in the license
-
-was corrected only when the same patch was pushed in U-Boot.
-
-
-PS: using the GPL2-only is not a issue for U-Boot but perhaps for other 
-user of device tree in other components,
-       So if it is a blocking issue for Linux I can change it to 
-"GPL-2.0-only" in Linux and U-Boot
-
-
-Patrick
-
->
->>   /*
->>    * Copyright (C) STMicroelectronics 2018 - All Rights Reserved
->> - * Author: Gabriel Fernandez <gabriel.fernandez@st.com> for STMicroelectronics.
->> + * Author: Gabriel Fernandez <gabriel.fernandez@foss.st.com> for STMicroelectronics.
->>    */
->>   
->>   #ifndef _DT_BINDINGS_STM32MP13_RESET_H_
->> -- 
->> 2.25.1
->>
