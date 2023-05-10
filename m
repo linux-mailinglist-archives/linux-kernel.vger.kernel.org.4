@@ -2,98 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50DA06FE429
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 20:44:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E4EA6FE430
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 20:46:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjEJSoL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 14:44:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41214 "EHLO
+        id S231486AbjEJSqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 14:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjEJSoI (ORCPT
+        with ESMTP id S229447AbjEJSqG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 14:44:08 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C368D8F;
-        Wed, 10 May 2023 11:44:07 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-965ddb2093bso1056368966b.2;
-        Wed, 10 May 2023 11:44:07 -0700 (PDT)
+        Wed, 10 May 2023 14:46:06 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17ED5E4A;
+        Wed, 10 May 2023 11:46:03 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-643990c5319so5423419b3a.2;
+        Wed, 10 May 2023 11:46:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683744246; x=1686336246;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wPS2VOYPj9tvhVnf11tmZgqUIiOL0oJR1EZsgcJxV5Y=;
-        b=BrXkYLveWgEDMLIx+hk2YsTKuck1qBJH2+cVNfTxpVbGMw3PO3P9v2ilSoAs2esdyU
-         R+C/jPQPrldO9hwRMTtrYIVggF+Jqn3303ZhYxN+zGIo8OuNGoY7+s8Cf4XHdPcMU+RA
-         FaycWzcf+Y4cls7Z43lP3FRp2gN0yadZlXTq7uGzsDVCMX1ffGmSq83ewYF6TfZHMTTh
-         yJ1GxVV//IT97eW5fvylBXOgnQDycwvpQG5jCUXW4wnB0Tyx5wVe1nWhj+qa56qUHJT+
-         sE/0qaicg19IXMYEEqMvy0o1a5Z4x1dXCIxi6OkBqgYyRollUbHzJ/3JBTrQrNQUbqc/
-         8H/A==
+        d=gmail.com; s=20221208; t=1683744362; x=1686336362;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5fuvzbzfAPaWz0F0qnb+ng0M3t+DRDPEy+SEvx5Zlpw=;
+        b=WaX/lA3Y5RC6vqi8Gstz4xLqZDGmFXeG7a3rgiWsDu5hUwAToAZzkqoYMo1FT7KjnA
+         ARUu3pTtOMc7WAoU2YOH9cnEDLX7dlPp5Fk+vl639nloA3cqkDUb96asyf9ZQw15ihXz
+         nIf9q2YeVZUyrcSMtyeAkgoRbV+oLyls91sRKUg2xusZZZ3Ihxuq/x0/E/g2898K6qQY
+         NY2fYU0eav3eoftoQ/+ak267O1ldNVnrMhtexIpFA1GoP5llXOIGlF9JxtpQi2ToH3Sb
+         zXx6m0I8PgYy7bI06tjMymfporVo62Z/NoPWgDzh1wszI52lSrupgJLtKhGceUulCGBv
+         Mj0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683744246; x=1686336246;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683744362; x=1686336362;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wPS2VOYPj9tvhVnf11tmZgqUIiOL0oJR1EZsgcJxV5Y=;
-        b=DKkVJcPpYMYQ19+w90UtzniMYlc8Q5qZX+1iK+nxw5ILKROUTf3d/YVtoeMQZXwUjW
-         aGzenv943VbQ2uTJeT9e/eeAXa/HMKLdRlQLbs2yutj6HYkCgCg0Dn4CLppn0oZQ+oSX
-         GZhrI+xAHDGEbzv51CUlzQzX1AhL+fyWiQ4zFVVvdj2ThHG4HKkjhaC/EHm5fOasMpjP
-         /RjN3Mgd/AvvKHOw8fCWc7XFAUY7CuewrPGc8sgy0+JP/p2GnOKWORLIT5ZmJ4q58Qbv
-         DwlD5eYt8gDqykhp7rOWyG12O4RDaO7nwvjLuhkUkKBi9Fyuej/IXiEKbF6k9TKh86yU
-         j/AA==
-X-Gm-Message-State: AC+VfDyAFrls+NTR16DduJtB6XS0W8ORinxhcTIqRQ6UqEAn/fFqamqk
-        aEim0m4FkTlNbDBqRHOMlBc=
-X-Google-Smtp-Source: ACHHUZ4hCWeeIeHV2i78urTzM1T1DLqwN/c7QodoCeW4ajn/Fdkro9dtvrwr4zJg5A9dC5Mm+S7kRA==
-X-Received: by 2002:a17:907:25c3:b0:961:b0:3dff with SMTP id ae3-20020a17090725c300b0096100b03dffmr15898231ejc.14.1683744246050;
-        Wed, 10 May 2023 11:44:06 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id h21-20020aa7c615000000b0050bcaedc299sm2151054edq.33.2023.05.10.11.44.04
+        bh=5fuvzbzfAPaWz0F0qnb+ng0M3t+DRDPEy+SEvx5Zlpw=;
+        b=UoLxfsrl7keY7Y8M8rv+RYcFU/QWgIEu5qr1gpAmnry9n/50dC3JYz3fDbuOzEpJzX
+         kvE6UfiHHXphUXOrzIVR8pRHMyJmQi2CD+kX6ljgch8dlid51FpZDqtbxzISlbEBziFU
+         Ce3aBmjeEgpsa3UgiQePQ5y4rdZp3NBHBpcRuOMYLaVY/B6XBZFpIwdm+nH5p+h7vqnK
+         sXsMmxF4dKKQE3UnSiJ5jlJACFmCR8S1U6qbDQbn+rR16+fbxuEs0DmwB2q08usxrNGA
+         ht0Eawm4M6PIsd+MUH//u0SPFhYgSlekhGsQ9paq24q27vkHkYZHUdkHoH2arRyzwfTH
+         Ozgg==
+X-Gm-Message-State: AC+VfDyKfgwFW7pZj/9B+z4thFGtsaKbCSWezHnyQlGNGEiblfHuIGiR
+        W0RzrOiTDgXKEd46Dss1VWY=
+X-Google-Smtp-Source: ACHHUZ5d5WqcqsbpOW8d9gvlIIZZNzXUY94wx3QLBecJ3Q5deydid7nrQYlsF19asRDnaQT3WKzIjA==
+X-Received: by 2002:a17:902:ce86:b0:1ad:c1c2:7d14 with SMTP id f6-20020a170902ce8600b001adc1c27d14mr224531plg.46.1683744362257;
+        Wed, 10 May 2023 11:46:02 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id i3-20020a17090332c300b001ac4d3d3f72sm4130469plr.296.2023.05.10.11.46.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 11:44:05 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Maxime Ripard <mripard@kernel.org>,
+        Wed, 10 May 2023 11:46:01 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 10 May 2023 08:46:00 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+Cc:     dri-devel@lists.freedesktop.org, cgroups@vger.kernel.org,
+        intel-xe@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Zefan Li <lizefan.x@bytedance.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
         David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Roman Beranek <me@crly.cz>
-Cc:     Frank Oltmanns <frank@oltmanns.dev>,
-        Icenowy Zheng <icenowy@aosc.io>, Ondrej Jirman <megi@xff.cz>,
-        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] ARM: dts: sunxi: rename tcon's clock output
-Date:   Wed, 10 May 2023 20:44:03 +0200
-Message-ID: <4830298.31r3eYUQgx@jernej-laptop>
-In-Reply-To: <20230505052110.67514-3-me@crly.cz>
-References: <20230505052110.67514-1-me@crly.cz> <20230505052110.67514-3-me@crly.cz>
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+Subject: Re: [RFC PATCH 0/4] Add support for DRM cgroup memory accounting.
+Message-ID: <ZFvmaGNo0buQEUi1@slm.duckdns.org>
+References: <20230503083500.645848-1-maarten.lankhorst@linux.intel.com>
+ <ZFVeI2DKQXddKDNl@slm.duckdns.org>
+ <4d6fbce3-a676-f648-7a09-6f6dcc4bdb46@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4d6fbce3-a676-f648-7a09-6f6dcc4bdb46@linux.intel.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 05. maj 2023 ob 07:21:08 CEST je Roman Beranek napisal(a):
-> While the rate of TCON0's DCLK matches dotclock for parallel and LVDS
-> outputs, this doesn't hold for DSI. According manuals from Allwinner,
-> DCLK is an abbreviation of Data Clock, not dotclock, so go with that
-> instead.
+Hello,
+
+On Wed, May 10, 2023 at 04:59:01PM +0200, Maarten Lankhorst wrote:
+> The misc controller is not granular enough. A single computer may have any number of
+> graphics cards, some of them with multiple regions of vram inside a single card.
+
+Extending the misc controller to support dynamic keys shouldn't be that
+difficult.
+
+...
+> In the next version, I will move all the code for handling the resource limit to
+> TTM's eviction layer, because otherwise it cannot handle the resource limit correctly.
 > 
-> Signed-off-by: Roman Beranek <me@crly.cz>
+> The effect of moving the code to TTM, is that it will make the code even more generic
+> for drivers that have vram and use TTM. When using TTM, you only have to describe your
+> VRAM, update some fields in the TTM manager and (un)register your device with the
+> cgroup handler on (un)load. It's quite trivial to add vram accounting to amdgpu and
+> nouveau. [2]
+> 
+> If you want to add a knob for scheduling weight for a process, it makes sense to
+> also add resource usage as a knob, otherwise the effect of that knob is very
+> limited. So even for Tvrtko's original proposed usecase, it would make sense.
 
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+It does make sense but unlike Tvrtko's scheduling weights what's being
+proposed doesn't seem to encapsulate GPU memory resource in a generic enough
+manner at least to my untrained eyes. ie. w/ drm.weight, I don't need any
+specific knoweldge of how a specific GPU operates to say "this guy should
+get 2x processing power over that guy". This more or less holds for other
+major resources including CPU, memory and IO. What you're proposing seems a
+lot more tied to hardware details and users would have to know a lot more
+about how memory is configured on that particular GPU.
 
-Best regards,
-Jernej
+Now, if this is inherent to how all, or at least most, GPUs operate, sure,
+but otherwise let's start small in terms of interface and not take up space
+which should be for something universal. If this turns out to be the way,
+expanding to take up the generic interface space isn't difficult.
 
+I don't know GPU space so please educate me where I'm wrong.
 
+Thanks.
+
+-- 
+tejun
