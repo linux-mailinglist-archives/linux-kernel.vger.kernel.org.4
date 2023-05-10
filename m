@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B356FE595
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:51:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B637F6FE59A
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:51:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237034AbjEJUvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41736 "EHLO
+        id S236843AbjEJUvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:51:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236915AbjEJUu5 (ORCPT
+        with ESMTP id S236972AbjEJUvL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:50:57 -0400
+        Wed, 10 May 2023 16:51:11 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42821998;
-        Wed, 10 May 2023 13:50:23 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C5439010;
+        Wed, 10 May 2023 13:50:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2CC6464A36;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9FD1964A48;
         Wed, 10 May 2023 20:50:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FEF9C433D2;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D9CA4C4339E;
         Wed, 10 May 2023 20:50:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683751801;
-        bh=2D64oLm2SWw4kW5p6P/UQQvw/Y6FYEg/jfD5h3DAZhA=;
+        s=k20201202; t=1683751802;
+        bh=zllB5VXpd+eWpeBlgpDYyxAKvxEVFy7Vku8yr9o/fNA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SQGuzezfL7d+ME9a7yzf6dkMlTDKrnq1HV/VG7wcs1ljaqdDAZSkBg3OnGNMrC6VA
-         SVM4hEGP9kSVj/4lISP2YDYNmbDFP0H7EDy8b1BMH1VbzAt1ANelza0JO9DnY4lGpd
-         gwacZUUGUiAxPYyTasnE/Xodnenrgi1n/Ospx60AkvXwu9EnSv9PedvrtlKFNnK1aK
-         vp+GrJJGyVWvQBewUZyCne85h4SoqNRsJLhBlOyVo8nMJui4WdH5rI2FcAxL6aJrjQ
-         4R+BTTBcelAj6b1gXJpCUmYtthgzphIrl6JGNfZs4H0SJRLEjAsFH+Z66HB2BCkflD
-         ELgSREEGp5e7w==
+        b=qY59tETHe8EKiit/C1w7zEt84/5UpPuS3K6z/Rk63kZKUMt1s3HFlp+wbmlfTd4Tg
+         O4n6SkhMyB+CsIxevr2Kd1Zw1a/dvsBdkuEce3n6UXydFAWt1yjByI4Gqkoa75+rQU
+         ESCOfubJnyvDUb5lgRoKhXFSPBegYMuUi9VHRs5DkNZa1ER4IFY6O6cNCONIgFZXop
+         uT4lq0VYJwjwEAclIXaoPYKT9laWE1ckUJsjfGe5+OQ1yRxjRcIPZjGkxomRfhU2+O
+         CrseAuKAS2LxbQa2xKWPzz7OU9HYTyPdMuoLkYkDpAntluooiD2dvxCX+y4tS3vHi8
+         rarM2xa/lKLhQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Alain Volmat <avolmat@me.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Vinod Koul <vkoul@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        kishon@kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-phy@lists.infradead.org
-Subject: [PATCH AUTOSEL 6.1 2/8] phy: st: miphy28lp: use _poll_timeout functions for waits
-Date:   Wed, 10 May 2023 16:49:43 -0400
-Message-Id: <20230510204950.104873-2-sashal@kernel.org>
+        agross@kernel.org, andersson@kernel.org,
+        yung-chuan.liao@linux.intel.com, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 6.1 3/8] soundwire: qcom: gracefully handle too many ports in DT
+Date:   Wed, 10 May 2023 16:49:44 -0400
+Message-Id: <20230510204950.104873-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230510204950.104873-1-sashal@kernel.org>
 References: <20230510204950.104873-1-sashal@kernel.org>
@@ -59,111 +61,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alain Volmat <avolmat@me.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[ Upstream commit e3be4dd2c8d8aabfd2c3127d0e2e5754d3ae82d6 ]
+[ Upstream commit 2367e0ecb498764e95cfda691ff0828f7d25f9a4 ]
 
-This commit introduces _poll_timeout functions usage instead of
-wait loops waiting for a status bit.
+There are two issues related to the number of ports coming from
+Devicetree when exceeding in total QCOM_SDW_MAX_PORTS.  Both lead to
+incorrect memory accesses:
+1. With DTS having too big value of input or output ports, the driver,
+   when copying port parameters from local/stack arrays into 'pconfig'
+   array in 'struct qcom_swrm_ctrl', will iterate over their sizes.
 
-Signed-off-by: Alain Volmat <avolmat@me.com>
-Reviewed-by: Patrice Chotard <patrice.chotard@foss.st.com>
-Link: https://lore.kernel.org/r/20230210224309.98452-1-avolmat@me.com
+2. If DTS also has too many parameters for these ports (e.g.
+   qcom,ports-sinterval-low), the driver will overflow buffers on the
+   stack when reading these properties from DTS.
+
+Add a sanity check so incorrect DTS will not cause kernel memory
+corruption.
+
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Link: https://lore.kernel.org/r/20230222144412.237832-2-krzysztof.kozlowski@linaro.org
 Signed-off-by: Vinod Koul <vkoul@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/phy/st/phy-miphy28lp.c | 42 ++++++++--------------------------
- 1 file changed, 10 insertions(+), 32 deletions(-)
+ drivers/soundwire/qcom.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/phy/st/phy-miphy28lp.c b/drivers/phy/st/phy-miphy28lp.c
-index 068160a34f5cc..e30305b77f0d1 100644
---- a/drivers/phy/st/phy-miphy28lp.c
-+++ b/drivers/phy/st/phy-miphy28lp.c
-@@ -9,6 +9,7 @@
+diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+index cee2b22231410..c535da166ca1d 100644
+--- a/drivers/soundwire/qcom.c
++++ b/drivers/soundwire/qcom.c
+@@ -1209,6 +1209,9 @@ static int qcom_swrm_get_port_config(struct qcom_swrm_ctrl *ctrl)
+ 	ctrl->num_dout_ports = val;
  
- #include <linux/platform_device.h>
- #include <linux/io.h>
-+#include <linux/iopoll.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/of.h>
-@@ -484,19 +485,11 @@ static inline void miphy28lp_pcie_config_gen(struct miphy28lp_phy *miphy_phy)
- 
- static inline int miphy28lp_wait_compensation(struct miphy28lp_phy *miphy_phy)
- {
--	unsigned long finish = jiffies + 5 * HZ;
- 	u8 val;
- 
- 	/* Waiting for Compensation to complete */
--	do {
--		val = readb_relaxed(miphy_phy->base + MIPHY_COMP_FSM_6);
--
--		if (time_after_eq(jiffies, finish))
--			return -EBUSY;
--		cpu_relax();
--	} while (!(val & COMP_DONE));
--
--	return 0;
-+	return readb_relaxed_poll_timeout(miphy_phy->base + MIPHY_COMP_FSM_6,
-+					  val, val & COMP_DONE, 1, 5 * USEC_PER_SEC);
- }
- 
- 
-@@ -805,7 +798,6 @@ static inline void miphy28lp_configure_usb3(struct miphy28lp_phy *miphy_phy)
- 
- static inline int miphy_is_ready(struct miphy28lp_phy *miphy_phy)
- {
--	unsigned long finish = jiffies + 5 * HZ;
- 	u8 mask = HFC_PLL | HFC_RDY;
- 	u8 val;
- 
-@@ -816,21 +808,14 @@ static inline int miphy_is_ready(struct miphy28lp_phy *miphy_phy)
- 	if (miphy_phy->type == PHY_TYPE_SATA)
- 		mask |= PHY_RDY;
- 
--	do {
--		val = readb_relaxed(miphy_phy->base + MIPHY_STATUS_1);
--		if ((val & mask) != mask)
--			cpu_relax();
--		else
--			return 0;
--	} while (!time_after_eq(jiffies, finish));
--
--	return -EBUSY;
-+	return readb_relaxed_poll_timeout(miphy_phy->base + MIPHY_STATUS_1,
-+					  val, (val & mask) == mask, 1,
-+					  5 * USEC_PER_SEC);
- }
- 
- static int miphy_osc_is_ready(struct miphy28lp_phy *miphy_phy)
- {
- 	struct miphy28lp_dev *miphy_dev = miphy_phy->phydev;
--	unsigned long finish = jiffies + 5 * HZ;
- 	u32 val;
- 
- 	if (!miphy_phy->osc_rdy)
-@@ -839,17 +824,10 @@ static int miphy_osc_is_ready(struct miphy28lp_phy *miphy_phy)
- 	if (!miphy_phy->syscfg_reg[SYSCFG_STATUS])
- 		return -EINVAL;
- 
--	do {
--		regmap_read(miphy_dev->regmap,
--				miphy_phy->syscfg_reg[SYSCFG_STATUS], &val);
--
--		if ((val & MIPHY_OSC_RDY) != MIPHY_OSC_RDY)
--			cpu_relax();
--		else
--			return 0;
--	} while (!time_after_eq(jiffies, finish));
--
--	return -EBUSY;
-+	return regmap_read_poll_timeout(miphy_dev->regmap,
-+					miphy_phy->syscfg_reg[SYSCFG_STATUS],
-+					val, val & MIPHY_OSC_RDY, 1,
-+					5 * USEC_PER_SEC);
- }
- 
- static int miphy28lp_get_resource_byname(struct device_node *child,
+ 	nports = ctrl->num_dout_ports + ctrl->num_din_ports;
++	if (nports > QCOM_SDW_MAX_PORTS)
++		return -EINVAL;
++
+ 	/* Valid port numbers are from 1-14, so mask out port 0 explicitly */
+ 	set_bit(0, &ctrl->dout_port_mask);
+ 	set_bit(0, &ctrl->din_port_mask);
 -- 
 2.39.2
 
