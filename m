@@ -2,81 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 663DE6FD893
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:51:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E21AA6FD897
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:51:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236281AbjEJHvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 03:51:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42560 "EHLO
+        id S236300AbjEJHvd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 03:51:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235883AbjEJHvI (ORCPT
+        with ESMTP id S236223AbjEJHv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 03:51:08 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8920CD
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:51:04 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-94a342f7c4cso1215194866b.0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:51:04 -0700 (PDT)
+        Wed, 10 May 2023 03:51:29 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33041FD7;
+        Wed, 10 May 2023 00:51:26 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id a640c23a62f3a-965cc5170bdso990342366b.2;
+        Wed, 10 May 2023 00:51:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683705063; x=1686297063;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iW7mIjsbeTQgdo4bUMRJvZS21aehBrTgArVIcYbQGoM=;
-        b=GXpSk4Fy8gpUVPJnIaKxcZC/u9hWbLTYWvWqlDbTyPJPbFs+Ye8DazCVFswRLh9//O
-         XfcpfcIyIqT80xWgGEZ6CneWja769c72qEJQBaSr5UyzZzb0csNnQPoVr9A71nQOh+B/
-         vuVOU782ZXln4eWYhEzuVrd5bwsvuPcPuIZVkdtjyRhuWlg7nK+F6CEr2mcZF1lzZ99t
-         FUPHwWI+/AEwDvOtRq8dYsHFhRsBf8vUa9AuXYaeAP3s7iE087Xfc8/Kwdd9ecmIrqM5
-         LiwAKP3bIQ37GPDupGZwYj83utKlxueZgHHgi3wF4szHq5zw5aI7WLcbmjc4Nat/oNlf
-         0uMA==
+        d=gmail.com; s=20221208; t=1683705085; x=1686297085;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4uA7jc9Vw5Ix6vqrunAFgCIKFiZvoEgrPuoVqTgb1PQ=;
+        b=ZYK5miUprEUK2vN6aa5uHlomKH0I/OboeUIVm24i2S0HV/7DTG8k1q8B2VjLfQAz/F
+         RJ2lpMQY6kQxwiAy+7AWW7CjwYdFn65Qr0UsDkdIhkaCsgzTbTBXfZr50Z0o4DH+OPpt
+         WbGrzw1kAQh94zkA1IbyikXWTjLjATiGr1DBxo0k3eN5qffL6QwuPV6++YJjALm2QaU+
+         kEhCVzcQKsJNbRyCTqkUtvrAmtO70laJLmdV/M250X/WDKk7NPBV8K5yCJi5VtKvEDZt
+         SV5SPWzsni3g5lokErGKI3moxjuIYneGRMuEuPQzgYAmR8olZkDqzbNClyVNcUd9FDNv
+         2gIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683705063; x=1686297063;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=iW7mIjsbeTQgdo4bUMRJvZS21aehBrTgArVIcYbQGoM=;
-        b=SpthREGkwogRm9mHP7P92xxROT4mg0dUL6DRQE6MBSbdUEsbd8a9hkm2EAwU4PIIAN
-         Q4OYap/9emAmNEwCou7I4Kxv1okqgZBAxoUJT0AuQs7BJWOc+jnS/RQ3u1EKMW/ng/Hk
-         yRQFfvMuKuYbUvdXDNuE65uclkgIyBMtdKyYruHEWDDLvEUOxaI3o8OGGVZ7+vDsqo5V
-         OyrRz5KQk0WnkYKOWwgnWadgKNqStd1wEss3Af8smEC5pruZZDCoKFe3dNefJu9WA2oL
-         kJBJa8I+RDBGbSOS4iXwUpZqX4omQ9gN7YTK9kSeBg3l3gJ+D3x4cKoAPr+i8+oY3czz
-         +35A==
-X-Gm-Message-State: AC+VfDxcapUYoejAnfUFPC640LazJHES8sD9ibSeRYcqseaHG5Yb0jQC
-        rvuiV4SfzQT6p/yvCEx4Va6TkA==
-X-Google-Smtp-Source: ACHHUZ7nbBgYEcv+qxcIJPx7vRKcuVTcXzNbXan5YR4QkBuj6NlqgkqEsNt58tGSuzwTXu6/V9z9Qg==
-X-Received: by 2002:a17:907:2d9f:b0:969:e55f:cca2 with SMTP id gt31-20020a1709072d9f00b00969e55fcca2mr5883240ejc.38.1683705063246;
-        Wed, 10 May 2023 00:51:03 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c175:a0f9:6928:8c9d? ([2a02:810d:15c0:828:c175:a0f9:6928:8c9d])
-        by smtp.gmail.com with ESMTPSA id gv28-20020a1709072bdc00b00965cfc209d5sm2353400ejc.8.2023.05.10.00.51.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 00:51:02 -0700 (PDT)
-Message-ID: <7b8c22e3-75c1-8803-fb32-097d12fbde78@linaro.org>
-Date:   Wed, 10 May 2023 09:51:01 +0200
+        d=1e100.net; s=20221208; t=1683705085; x=1686297085;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4uA7jc9Vw5Ix6vqrunAFgCIKFiZvoEgrPuoVqTgb1PQ=;
+        b=jFGUSmgDAZ13COhhwoCJYH++2Lsp0hgWblNj5PnNjtdlZJzt0A2HeBvg4KnGN2IDgo
+         14PNkd1N7OQR6Vst0bIuwUzJQ8Aic474D7e/Mi0YlvFyTrFOQnLdPVNl+qqYVdH0dwMV
+         PJsZLM2jRqtaSIURdItm+nagU2NmYahEe2bm0ruHZu56AbxfAOxNXBhZkUJu+d928/xS
+         e1eHnazlFg2bg/vyUfoimbtSR/mky5yra9VulZW16Q7CNzNQOoIc64uIW51Ez4YU87BN
+         QBpDo1da06fy7WglRdg9eWsMPa6tpjR09G5+XEvhOFutOE/t5zajYdorQgrnkQh8CI5a
+         UocQ==
+X-Gm-Message-State: AC+VfDx8Vamy7EoixI1R25qbxmeMH77QNnFYJGHusys0i0EDi7FLELQt
+        cb90PrgiTPBX4IJOYYlB/seSoKTGtd/HPuKosUw=
+X-Google-Smtp-Source: ACHHUZ5ls2CuE62J7QEcALQ3YsLNq4iisKEzR2EZL9facu9nh742G81gJGIhm8zFi76MuXDwS94dSmou2hXmRaj3Fdw=
+X-Received: by 2002:a17:906:dac1:b0:961:8fcd:53cc with SMTP id
+ xi1-20020a170906dac100b009618fcd53ccmr13241080ejb.42.1683705085149; Wed, 10
+ May 2023 00:51:25 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] ASoC: dt-bindings: Add adi,ssm3515 amp schema
-Content-Language: en-US
-To:     =?UTF-8?Q?Martin_Povi=c5=a1er?= <povik+lin@cutebit.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        =?UTF-8?Q?Nuno_S=c3=a1?= <nuno.sa@analog.com>
-Cc:     asahi@lists.linux.dev, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230509163828.86003-1-povik+lin@cutebit.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230509163828.86003-1-povik+lin@cutebit.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230509084007.24373-1-lukas.bulwahn@gmail.com> <0A466BA5-BB85-4254-9D1C-7E6B077E7725@zytor.com>
+In-Reply-To: <0A466BA5-BB85-4254-9D1C-7E6B077E7725@zytor.com>
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Date:   Wed, 10 May 2023 09:51:14 +0200
+Message-ID: <CAKXUXMwo-oH=kYYtNjgWbQK-Yrb-NkxB+LjraOGQoKbA22Zwwg@mail.gmail.com>
+Subject: Re: [PATCH] x86: make config X86_FEATURE_NAMES visible with EXPERT
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,42 +71,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/05/2023 18:38, Martin Povišer wrote:
-> Add a DT schema for the SSM3515 amp by Analog Devices. It's a simple
-> mono amplifier with digital input.
-> 
-> Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
+On Wed, May 10, 2023 at 3:07=E2=80=AFAM H. Peter Anvin <hpa@zytor.com> wrot=
+e:
+>
+> On May 9, 2023 1:40:07 AM PDT, Lukas Bulwahn <lukas.bulwahn@gmail.com> wr=
+ote:
+> >Commit 6a108a14fa35 ("kconfig: rename CONFIG_EMBEDDED to CONFIG_EXPERT")
+> >introduces CONFIG_EXPERT to carry the previous intent of CONFIG_EMBEDDED
+> >and just gives that intent a much better name. That has been clearly a g=
+ood
+> >and long overdue renaming, and it is clearly an improvement to the kerne=
+l
+> >build configuration that has shown to help managing the kernel build
+> >configuration in the last decade.
+> >
+> >However, rather than bravely and radically just deleting CONFIG_EMBEDDED=
+,
+> >this commit gives CONFIG_EMBEDDED a new intended semantics, but keeps it
+> >open for future contributors to implement that intended semantics:
+> >
+> >    A new CONFIG_EMBEDDED option is added that automatically selects
+> >    CONFIG_EXPERT when enabled and can be used in the future to isolate
+> >    options that should only be considered for embedded systems (RISC
+> >    architectures, SLOB, etc).
+> >
+> >Since then, this CONFIG_EMBEDDED implicitly had two purposes:
+> >
+> >  - It can make even more options visible beyond what CONFIG_EXPERT make=
+s
+> >    visible. In other words, it may introduce another level of enabling =
+the
+> >    visibility of configuration options: always visible, visible with
+> >    CONFIG_EXPERT and visible with CONFIG_EMBEDDED.
+> >
+> >  - Set certain default values of some configurations differently,
+> >    following the assumption that configuring a kernel build for an
+> >    embedded system generally starts with a different set of default val=
+ues
+> >    compared to kernel builds for all other kind of systems.
+> >
+> >Considering the first purpose, at the point in time where CONFIG_EMBEDDE=
+D
+> >was renamed to CONFIG_EXPERT, CONFIG_EXPERT already made 130 more option=
+s
+> >become visible throughout all different menus for the kernel configurati=
+on.
+> >Over the last decade, this has gradually increased, so that currently, w=
+ith
+> >CONFIG_EXPERT, roughly 170 more options become visible throughout all
+> >different menus for the kernel configuration. In comparison, currently w=
+ith
+> >CONFIG_EMBEDDED enabled, just seven more options are visible, one in x86=
+,
+> >one in arm, and five for the ChipIdea Highspeed Dual Role Controller.
+> >
+> >As the numbers suggest, these two levels of enabling the visibility of e=
+ven
+> >more configuration options---beyond what CONFIG_EXPERT enables---never
+> >evolved to a good solution in the last decade. In other words, this
+> >additional level of visibility of configuration option with CONFIG_EMBED=
+DED
+> >compared to CONFIG_EXPERT has since its introduction never become really
+> >valuable. It requires quite some investigation to actually understand wh=
+at
+> >is additionally visible and it does not differ significantly in complexi=
+ty
+> >compared to just enabling CONFIG_EXPERT. This CONFIG_EMBEDDED---or any
+> >other config to show more detailed options beyond CONFIG_EXPERT---is
+> >unlikely to be valuable unless somebody puts significant effort in
+> >identifying how such visibility options can be properly split and creati=
+ng
+> >clear criteria, when some config option is visible with CONFIG_EXPERT an=
+d
+> >when some config option is visible only with some further option enabled
+> >beyond CONFIG_EXPERT, such as CONFIG_EMBEDDED attempted to do. For now, =
+it
+> >is much more reasonable to simply make those additional seven options th=
+at
+> >are visible with CONFIG_EMBEDDED visible with CONFIG_EXPERT, and then
+> >remove CONFIG_EMBEDDED. If anyone spends significant effort in structuri=
+ng
+> >the visibility of config options, they may re-introduce suitable new
+> >config options simply as they see fit.
+> >
+> >Make the config X86_FEATURE_NAMES visible when CONFIG_EXPERT is enabled.
+> >
+> >Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> >Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+> >Acked-by: Arnd Bergmann <arnd@arndb.de>
+> >---
+> > arch/x86/Kconfig | 2 +-
+> > 1 file changed, 1 insertion(+), 1 deletion(-)
+> >
+> >diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> >index ce460d6b4e25..595f6696281c 100644
+> >--- a/arch/x86/Kconfig
+> >+++ b/arch/x86/Kconfig
+> >@@ -442,7 +442,7 @@ config SMP
+> >         If you don't know what to do here, say N.
+> >
+> > config X86_FEATURE_NAMES
+> >-      bool "Processor feature human-readable names" if EMBEDDED
+> >+      bool "Processor feature human-readable names" if EXPERT
+> >       default y
+> >       help
+> >         This option compiles in a table of x86 feature bits and corresp=
+onding
+>
+> You know it used to be named that, and it was changed exactly because it =
+was a terrible name, right?
 
+Yes, I do (commit 6a108a14fa35 ("kconfig: rename CONFIG_EMBEDDED to
+CONFIG_EXPERT")); and keeping CONFIG_EMBEDDED after that renaming was
+not the best idea in retrospect.
 
-> +  reg:
-> +    maxItems: 1
-> +
-> +  adi,ana-gain:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [0, 1, 2, 3]
-> +    description: |
-> +      The value to be set in the ANA_GAIN register field on the codec. This determines
-> +      the full voltage span of the codec's analog output.
-> +
-> +      To quote the datasheet on the available options:
-> +
-> +        00: 8.4 V Full-Scale Gain Mapping
-> +        01: 12.6 V Full-Scale Gain Mapping
-> +        10: 14 V Full-Scale Gain Mapping
-> +        11: 15 V Full-Scale Gain Mapping
-> +
-> +  '#sound-dai-cells':
-> +    const: 0
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - adi,ana-gain
-> +
-> +additionalProperties: true
-
-uinevaluatedProperties: false instead, so users can have name-prefix.
-
-Best regards,
-Krzysztof
-
+Lukas
