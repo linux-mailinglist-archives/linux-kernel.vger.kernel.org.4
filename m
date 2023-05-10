@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C776FE5C9
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:53:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 38AC16FE5D1
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:53:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237260AbjEJUxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:53:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42448 "EHLO
+        id S236915AbjEJUxg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:53:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236940AbjEJUwa (ORCPT
+        with ESMTP id S237056AbjEJUwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:52:30 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD8FC2691
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:51:53 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-52c219bf675so4144463a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:51:53 -0700 (PDT)
+        Wed, 10 May 2023 16:52:41 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47AA93CF
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:52:03 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9a7766d1f2so9330135276.3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:52:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683751882; x=1686343882;
+        d=google.com; s=20221208; t=1683751887; x=1686343887;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ydbIuDbfoHmFVfOIEtd0qpW93a6R3EVtBtLPsHyXDc=;
-        b=e4JtwHGiJHq7PmJTlD5WKq6S+5A77DPe5iCNOUZU56syCxRB7l63NwGg/OLGtwFgsQ
-         Qe+cP/9GKpMkvMOZGwyN2gGyWlpjcUVr86r5vqBlxoCMoPGsbdrTxk0ta8EHe5GNvfm/
-         IS/VuzvPd2qCMHdRQVR6/o1XRjslR4/Fkwi/yad75djwGWxySp6RJcIpxEMBs+C38Erj
-         yYtgPUkLI3X+dLe5LYkq0uJlJmTtdtBoTj2X49Fyk7XEopSvSou6aP/QtG52tPJmlHMk
-         hgQCARC94lLNFrqC+4GUoFkhyXIV/v6egX+ji/fUdxp9XdvOVjwvMD4HWE1D5Lc79YSO
-         fapg==
+        bh=Crl7UEul6Dcfq8QDpXhaI9Eed6TzM1uxfD1qvdE3PPQ=;
+        b=E34iKIHbcw2iwAefkui6Y8fb8t4HLsOQjNqt1book/JiKc5MTJgfjTRLyefr2cQ5Tl
+         ttxCxp801cxl+gipPupYLagjsf9cbJi+iujzmWCnorMJI/TqEFnHwO9qxkgkGpt8hOqh
+         /6N+osvQn3gDLvcqOrZhZCyASDH4oP30isSwbDcvXYFxg/tcc3S6sQmkMTLTm2nrl2pw
+         gPXVwqKrkdzby3WLUXuFz7nJKDgVC29y7MqRLTuO0Zoy3QXctrcHxQOicB/jM3nGgix5
+         pYOESBEWT/Isgxy0bnA5DVDmFRQCtPV301ZOAI+DwBAAqT6Kvrg2cgYImPalkXd+OqCj
+         a+Bw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683751882; x=1686343882;
+        d=1e100.net; s=20221208; t=1683751887; x=1686343887;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4ydbIuDbfoHmFVfOIEtd0qpW93a6R3EVtBtLPsHyXDc=;
-        b=MMmds02keKbtZEZrgfqmxiYROnGmGIvKrLe/bmZXDTZ2VO8DfzEAiW1+67BygBLzVs
-         pJtq4PA3Phx3ORnoBDH3kJsScT50wFlhYlTQH1CvwDdsNcegakRKJ27xca3ODGk+CGCf
-         fMGziWue5tb51rtdzT9eiO/2xeXHpKDbGHZctb+kFVIGCUKv3WAu1cE2QVLc0M8v9Aq2
-         Ds6s7NvCS+H2rF8lIJ6zSjzvkxeh0/TnAkHNYOsxME057+PFDxSBNHB7yVokMAaF2eiI
-         hwrrPwwp4mPhrDNv6C5SYN8sy+T7cfRhafpVU6DfTbIWRocQsvOY1IUAnthSrBLaxF5b
-         B6LA==
-X-Gm-Message-State: AC+VfDwjZU9OVNBK6+H+Qj3NOietsg5gH2eh8PFJt6u8YV++0v3mzk/K
-        Lz6GAXmfJ6K/9X188+nvL6F6HiW93C2o
-X-Google-Smtp-Source: ACHHUZ4HRYFo0bOiYit1iSwb44uTaVEh4vg5c7cvnwD/wJk/qgd4VNNQyfgezrl2XUut9xvdytYOkOhY6bxY
+        bh=Crl7UEul6Dcfq8QDpXhaI9Eed6TzM1uxfD1qvdE3PPQ=;
+        b=JQ7SaBKdWyvHA95D5z4GjMiYkrVYlnejH0VsVKTBKIA689pcjEKbJSk1igFDr28RgP
+         Urb9sp9Vp6tdYobsUjyxs89rWOPHCxsTbF4HBwsIDEQ3wryiiu9jlCTcOU0IjyQSPdvq
+         A7SzMW2QnzifLqBszmh1M9qyleehFVvgONRxxVRTgI+KeNcdIAICbEAk82gcOgW9QHd0
+         DGO9KKA4U/N/HB/aEioankWjlRcGC35z/RACztggJk9B5kAp81r6af2vLBoM/92rqqmB
+         LWvomHxgjjiZM7Bf4daENcCPz+qrW8cTEzJcsbLoKep8vu8XwcfodMYmeIY5+/9l2QYp
+         6WvQ==
+X-Gm-Message-State: AC+VfDyuFceLPAbG2qHzWJx+TiIr8/VShjQFzluSuQgOuMLO+56c3jSj
+        B1aiyNz6bXYvlX9j9uZRdayZNrS4u8eK
+X-Google-Smtp-Source: ACHHUZ4n5rJoXtfVajxuWSLClEHWykNb92Fd743Dp9YuFoPRQCTDyrHk2ujH4WRb/j3lWIKrm3A+zT3yunih
 X-Received: from mshavit.ntc.corp.google.com ([2401:fa00:95:20c:2b1f:8d06:7923:f154])
- (user=mshavit job=sendgmr) by 2002:a63:80c8:0:b0:52c:bf5b:69ee with SMTP id
- j191-20020a6380c8000000b0052cbf5b69eemr4642357pgd.4.1683751882168; Wed, 10
- May 2023 13:51:22 -0700 (PDT)
-Date:   Thu, 11 May 2023 04:50:51 +0800
+ (user=mshavit job=sendgmr) by 2002:a25:328e:0:b0:ba0:f92f:84e7 with SMTP id
+ y136-20020a25328e000000b00ba0f92f84e7mr11905705yby.7.1683751887458; Wed, 10
+ May 2023 13:51:27 -0700 (PDT)
+Date:   Thu, 11 May 2023 04:50:52 +0800
 In-Reply-To: <20230510205054.2667898-1-mshavit@google.com>
 Mime-Version: 1.0
 References: <20230510205054.2667898-1-mshavit@google.com>
 X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
-Message-ID: <20230510205054.2667898-5-mshavit@google.com>
-Subject: [PATCH v1 4/5] iommu/arm-smmu-v3: Keep track of attached ssids
+Message-ID: <20230510205054.2667898-6-mshavit@google.com>
+Subject: [PATCH v1 5/5] iommu/arm-smmu-v3: Implement set_dev_pasid
 From:   Michael Shavit <mshavit@google.com>
 To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
         Joerg Roedel <joro@8bytes.org>
@@ -71,362 +71,270 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The arm-smmu-v3 driver keeps track of all masters that a domain is
-attached so that it can re-write their STEs when the domain's ASID is
-upated by SVA. This tracking is also used to invalidate ATCs on all
-masters that a domain is attached.
-
-This change introduces a new data structures to track all the CD entries
-that a domain is attached to. This change is a pre-requisite to allow
-domain attachment on non 0 SSIDs.
+This change enables the use of the iommu_attach_dev_pasid API for
+UNMANAGED domains. The primary use-case is to allow in-kernel users of
+the iommu API to manage domains with PASID. This change also allows for
+future support of pasid in the DMA api.
 
 Signed-off-by: Michael Shavit <mshavit@google.com>
 ---
- .../iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c   | 31 ++++---
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c   | 90 ++++++++++++-------
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h   | 17 ++--
- 3 files changed, 89 insertions(+), 49 deletions(-)
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c | 165 +++++++++++++++++---
+ drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h |   1 +
+ 2 files changed, 147 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-index a721461b355c6..2eb066c0f3f99 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-@@ -53,7 +53,7 @@ arm_smmu_share_asid(struct mm_struct *mm, u16 asid)
- 	struct arm_smmu_ctx_desc *cd;
- 	struct arm_smmu_device *smmu;
- 	struct arm_smmu_domain *smmu_domain;
--	struct arm_smmu_master *master;
-+	struct arm_smmu_attached_domain *attached_domain;
- 
- 	cd = xa_load(&arm_smmu_asid_xa, asid);
- 	if (!cd)
-@@ -85,11 +85,11 @@ arm_smmu_share_asid(struct mm_struct *mm, u16 asid)
- 	 * be some overlap between use of both ASIDs, until we invalidate the
- 	 * TLB.
- 	 */
--	spin_lock_irqsave(&smmu_domain->devices_lock, flags);
--	list_for_each_entry(master, &smmu_domain->devices, domain_head) {
--		arm_smmu_write_ctx_desc(master, 0, cd);
-+	spin_lock_irqsave(&smmu_domain->attached_domains_lock, flags);
-+	list_for_each_entry(attached_domain, &smmu_domain->attached_domains, domain_head) {
-+		arm_smmu_write_ctx_desc(attached_domain->master, attached_domain->ssid, cd);
- 	}
--	spin_unlock_irqrestore(&smmu_domain->devices_lock, flags);
-+	spin_unlock_irqrestore(&smmu_domain->attached_domains_lock, flags);
- 
- 	/* Invalidate TLB entries previously associated with that context */
- 	arm_smmu_tlb_inv_asid(smmu, asid);
-@@ -213,14 +213,14 @@ static void arm_smmu_mm_invalidate_range(struct mmu_notifier *mn,
- 	if (!(smmu_domain->smmu->features & ARM_SMMU_FEAT_BTM))
- 		arm_smmu_tlb_inv_range_asid(start, size, smmu_mn->cd->asid,
- 					    PAGE_SIZE, false, smmu_domain);
--	arm_smmu_atc_inv_domain(smmu_domain, mm->pasid, start, size);
-+	arm_smmu_atc_inv_domain_ssid(smmu_domain, mm->pasid, start, size);
- }
- 
- static void arm_smmu_mm_release(struct mmu_notifier *mn, struct mm_struct *mm)
- {
- 	struct arm_smmu_mmu_notifier *smmu_mn = mn_to_smmu(mn);
- 	struct arm_smmu_domain *smmu_domain = smmu_mn->domain;
--	struct arm_smmu_master *master;
-+	struct arm_smmu_attached_domain *attached_domain;
- 	unsigned long flags;
- 
- 	mutex_lock(&sva_lock);
-@@ -233,14 +233,19 @@ static void arm_smmu_mm_release(struct mmu_notifier *mn, struct mm_struct *mm)
- 	 * DMA may still be running. Keep the cd valid to avoid C_BAD_CD events,
- 	 * but disable translation.
- 	 */
--	spin_lock_irqsave(&smmu_domain->devices_lock, flags);
--	list_for_each_entry(master, &smmu_domain->devices, domain_head) {
--		arm_smmu_write_ctx_desc(master, mm->pasid, &quiet_cd);
-+	spin_lock_irqsave(&smmu_domain->attached_domains_lock, flags);
-+	list_for_each_entry(attached_domain, &smmu_domain->attached_domains, domain_head) {
-+		/*
-+		 * SVA domains piggyback on the attached_domain with SSID 0.
-+		 */
-+		if (attached_domain->ssid == 0)
-+			arm_smmu_write_ctx_desc(attached_domain->master,
-+						mm->pasid, &quiet_cd);
- 	}
--	spin_unlock_irqrestore(&smmu_domain->devices_lock, flags);
-+	spin_unlock_irqrestore(&smmu_domain->attached_domains_lock, flags);
- 
- 	arm_smmu_tlb_inv_asid(smmu_domain->smmu, smmu_mn->cd->asid);
--	arm_smmu_atc_inv_domain(smmu_domain, mm->pasid, 0, 0);
-+	arm_smmu_atc_inv_domain_ssid(smmu_domain, mm->pasid, 0, 0);
- 
- 	smmu_mn->cleared = true;
- 	mutex_unlock(&sva_lock);
-@@ -329,7 +334,7 @@ static void arm_smmu_mmu_notifier_put(struct arm_smmu_master *master,
- 	 */
- 	if (!smmu_mn->cleared) {
- 		arm_smmu_tlb_inv_asid(smmu_domain->smmu, cd->asid);
--		arm_smmu_atc_inv_domain(smmu_domain, mm->pasid, 0, 0);
-+		arm_smmu_atc_inv_domain_ssid(smmu_domain, mm->pasid, 0, 0);
- 	}
- 
- 	/* Frees smmu_mn */
 diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index 47dda287a4736..81f49a86c1266 100644
+index 81f49a86c1266..468a7a30ffe7b 100644
 --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
 +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -1703,7 +1703,16 @@ static irqreturn_t arm_smmu_combined_irq_handler(int irq, void *dev)
+@@ -2353,6 +2353,11 @@ static int arm_smmu_enable_pasid(struct arm_smmu_master *master)
+ 	return 0;
  }
  
- static void
--arm_smmu_atc_inv_to_cmd(int ssid, unsigned long iova, size_t size,
-+arm_smmu_atc_inv_cmd_set_ssid(int ssid, struct arm_smmu_cmdq_ent *cmd)
++static bool arm_smmu_master_has_pasid_domains(struct arm_smmu_master *master)
 +{
-+	*cmd = (struct arm_smmu_cmdq_ent) {
-+		.substream_valid	= !!ssid,
-+		.atc.ssid		= ssid,
-+	};
++	return master->nr_attached_pasid_domains > 0;
 +}
 +
-+static void
-+arm_smmu_atc_inv_to_cmd(unsigned long iova, size_t size,
- 			struct arm_smmu_cmdq_ent *cmd)
+ static void arm_smmu_disable_pasid(struct arm_smmu_master *master)
  {
- 	size_t log2_span;
-@@ -1728,8 +1737,8 @@ arm_smmu_atc_inv_to_cmd(int ssid, unsigned long iova, size_t size,
- 	 */
- 	*cmd = (struct arm_smmu_cmdq_ent) {
- 		.opcode			= CMDQ_OP_ATC_INV,
--		.substream_valid	= !!ssid,
--		.atc.ssid		= ssid,
-+		.substream_valid	= false,
-+		.atc.ssid		= 0,
- 	};
- 
- 	if (!size) {
-@@ -1775,8 +1784,7 @@ static int arm_smmu_atc_inv_master(struct arm_smmu_master *master)
- 	struct arm_smmu_cmdq_ent cmd;
- 	struct arm_smmu_cmdq_batch cmds;
- 
--	arm_smmu_atc_inv_to_cmd(0, 0, 0, &cmd);
--
-+	arm_smmu_atc_inv_to_cmd(0, 0, &cmd);
- 	cmds.num = 0;
- 	for (i = 0; i < master->num_streams; i++) {
- 		cmd.atc.sid = master->streams[i].id;
-@@ -1786,13 +1794,21 @@ static int arm_smmu_atc_inv_master(struct arm_smmu_master *master)
- 	return arm_smmu_cmdq_batch_submit(master->smmu, &cmds);
+ 	struct pci_dev *pdev;
+@@ -2396,6 +2401,33 @@ static void arm_smmu_detach_dev(struct arm_smmu_master *master)
+ 	arm_smmu_install_ste_for_dev(master);
  }
  
--int arm_smmu_atc_inv_domain(struct arm_smmu_domain *smmu_domain, int ssid,
--			    unsigned long iova, size_t size)
 +/*
-+ * If ssid is 0, the domain is invalidated on all SSIDs that it is attached to.
-+ * Otherwise, the domain is specifically invalidated on the provided SSID only.
-+ * This second functionality is provided specifically for SVA which wants to
-+ * invalidate domains on SSIDs that aren't recorded in the master's
-+ * attached_domains list.
++ * Once attached for the first time, a domain can no longer be attached to any
++ * master with a distinct upstream SMMU.
 + */
-+int arm_smmu_atc_inv_domain_ssid(struct arm_smmu_domain *smmu_domain, int ssid,
-+				 unsigned long iova, size_t size)
++static int arm_smmu_prepare_domain_for_smmu(struct device *dev,
++					    struct arm_smmu_device *smmu,
++					    struct arm_smmu_domain *smmu_domain)
++{
++	int ret = 0;
++
++	mutex_lock(&smmu_domain->init_mutex);
++	if (!smmu_domain->smmu) {
++		smmu_domain->smmu = smmu;
++		ret = arm_smmu_domain_finalise(&smmu_domain->domain);
++		if (ret) {
++			smmu_domain->smmu = NULL;
++			goto out_unlock;
++		}
++	} else if (smmu_domain->smmu != smmu) {
++		ret = -EINVAL;
++		goto out_unlock;
++	}
++out_unlock:
++	mutex_unlock(&smmu_domain->init_mutex);
++	return ret;
++}
++
+ static int arm_smmu_attach_dev(struct iommu_domain *domain, struct device *dev)
  {
- 	int i;
- 	unsigned long flags;
- 	struct arm_smmu_cmdq_ent cmd;
- 	struct arm_smmu_master *master;
+ 	int ret = 0;
+@@ -2411,6 +2443,10 @@ static int arm_smmu_attach_dev(struct iommu_domain *domain, struct device *dev)
+ 	master = dev_iommu_priv_get(dev);
+ 	smmu = master->smmu;
+ 
++	ret = arm_smmu_prepare_domain_for_smmu(dev, smmu, smmu_domain);
++	if (ret)
++		return ret;
++
+ 	/*
+ 	 * Checking that SVA is disabled ensures that this device isn't bound to
+ 	 * any mm, and can be safely detached from its old domain. Bonds cannot
+@@ -2421,22 +2457,18 @@ static int arm_smmu_attach_dev(struct iommu_domain *domain, struct device *dev)
+ 		return -EBUSY;
+ 	}
+ 
+-	arm_smmu_detach_dev(master);
+-
+-	mutex_lock(&smmu_domain->init_mutex);
+-
+-	if (!smmu_domain->smmu) {
+-		smmu_domain->smmu = smmu;
+-		ret = arm_smmu_domain_finalise(domain);
+-		if (ret) {
+-			smmu_domain->smmu = NULL;
+-			goto out_unlock;
+-		}
+-	} else if (smmu_domain->smmu != smmu) {
+-		ret = -EINVAL;
+-		goto out_unlock;
++	/*
++	 * Attaching a bypass or stage 2 domain would break any domains attached
++	 * with pasid. Attaching an S1 domain should be feasible but requires
++	 * more complicated logic to handle.
++	 */
++	if (arm_smmu_master_has_pasid_domains(master)) {
++		dev_err(dev, "cannot attach - domain attached with pasid\n");
++		return -EBUSY;
+ 	}
+ 
++	arm_smmu_detach_dev(master);
++
+ 	/*
+ 	 * Note that this will end up calling arm_smmu_sync_cd() before
+ 	 * the master has been added to the devices list for this domain.
+@@ -2446,7 +2478,7 @@ static int arm_smmu_attach_dev(struct iommu_domain *domain, struct device *dev)
+ 		master->has_stage1 = true;
+ 		ret = arm_smmu_write_ctx_desc(master, 0, &smmu_domain->cd);
+ 		if (ret)
+-			goto out_unlock;
++			return ret;
+ 	} else if (smmu_domain->stage == ARM_SMMU_DOMAIN_S2 ||
+ 		   smmu_domain->stage == ARM_SMMU_DOMAIN_NESTED) {
+ 		master->s2_cfg = &smmu_domain->s2_cfg;
+@@ -2473,11 +2505,74 @@ static int arm_smmu_attach_dev(struct iommu_domain *domain, struct device *dev)
+ 
+ 	arm_smmu_enable_ats(master, smmu_domain);
+ 
+-out_unlock:
+-	mutex_unlock(&smmu_domain->init_mutex);
+ 	return ret;
+ }
+ 
++static int arm_smmu_set_dev_pasid(struct iommu_domain *domain,
++				  struct device *dev, ioasid_t pasid)
++{
++	int ret = 0;
++	unsigned long flags;
++	struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
++	struct arm_smmu_device *smmu;
++	struct arm_smmu_domain *smmu_domain = to_smmu_domain(domain);
 +	struct arm_smmu_attached_domain *attached_domain;
- 	struct arm_smmu_cmdq_batch cmds;
++	struct arm_smmu_master *master;
++
++	if (!fwspec)
++		return -ENOENT;
++
++	master = dev_iommu_priv_get(dev);
++	smmu = master->smmu;
++
++	ret = arm_smmu_prepare_domain_for_smmu(dev, smmu, smmu_domain);
++	if (ret)
++		return ret;
++
++	if (pasid == 0) {
++		dev_err(dev, "pasid 0 is reserved for the device's primary domain\n");
++		return -ENODEV;
++	}
++
++	if (smmu_domain->stage != ARM_SMMU_DOMAIN_S1) {
++		dev_err(dev, "set_dev_pasid only supports stage 1 domains\n");
++		return -EINVAL;
++	}
++
++	if (!master->has_stage1 || master->s2_cfg)
++		return -EBUSY;
++
++	attached_domain = kzalloc(sizeof(*attached_domain), GFP_KERNEL);
++	if (!attached_domain)
++		return -ENOMEM;
++
++	attached_domain->master = master;
++	attached_domain->domain = smmu_domain;
++	attached_domain->ssid = pasid;
++
++	master->nr_attached_pasid_domains += 1;
++	/*
++	 * arm_smmu_share_asid may update the cd's asid value and write the
++	 * ctx_desc for every attached_domains in the list. There's a potential
++	 * race here regardless of whether we first the write the ctx_desc or
++	 * first insert into the domain's list. Grabbing the asic_lock prevents
++	 * SVA from changing the cd's ASID while the cd is being attached.
++	 */
++	mutex_lock(&arm_smmu_asid_lock);
++	ret = arm_smmu_write_ctx_desc(master, pasid, &smmu_domain->cd);
++	if (ret) {
++		mutex_unlock(&arm_smmu_asid_lock);
++		kfree(attached_domain);
++	}
++
++	spin_lock_irqsave(&smmu_domain->attached_domains_lock, flags);
++	list_add(&attached_domain->domain_head, &smmu_domain->attached_domains);
++	spin_unlock_irqrestore(&smmu_domain->attached_domains_lock, flags);
++	mutex_unlock(&arm_smmu_asid_lock);
++
++	return 0;
++}
++
+ static int arm_smmu_map_pages(struct iommu_domain *domain, unsigned long iova,
+ 			      phys_addr_t paddr, size_t pgsize, size_t pgcount,
+ 			      int prot, gfp_t gfp, size_t *mapped)
+@@ -2723,6 +2818,15 @@ static void arm_smmu_release_device(struct device *dev)
  
- 	if (!(smmu_domain->smmu->features & ARM_SMMU_FEAT_ATS))
-@@ -1815,25 +1831,35 @@ int arm_smmu_atc_inv_domain(struct arm_smmu_domain *smmu_domain, int ssid,
- 	if (!atomic_read(&smmu_domain->nr_ats_masters))
- 		return 0;
+ 	if (WARN_ON(arm_smmu_master_sva_enabled(master)))
+ 		iopf_queue_remove_device(master->smmu->evtq.iopf, dev);
++	if (WARN_ON(master->nr_attached_pasid_domains != 0)) {
++		/*
++		 * TODO: Do we need to handle this case?
++		 * This requires a mechanism to obtain all the pasid domains
++		 * that this master is attached to so that we can clean up the
++		 * domain's attached_domain list.
++		 */
++	}
++
+ 	arm_smmu_detach_dev(master);
+ 	arm_smmu_free_cd_tables(master);
+ 	arm_smmu_disable_pasid(master);
+@@ -2858,12 +2962,34 @@ static int arm_smmu_def_domain_type(struct device *dev)
+ static void arm_smmu_remove_dev_pasid(struct device *dev, ioasid_t pasid)
+ {
+ 	struct iommu_domain *domain;
++	struct arm_smmu_master *master = dev_iommu_priv_get(dev);
++	struct arm_smmu_domain *smmu_domain;
++	struct arm_smmu_attached_domain *attached_domain;
++	unsigned long flags;
  
--	arm_smmu_atc_inv_to_cmd(ssid, iova, size, &cmd);
-+	arm_smmu_atc_inv_to_cmd(iova, size, &cmd);
-+	if (ssid != 0)
-+		arm_smmu_atc_inv_cmd_set_ssid(ssid, &cmd);
+-	domain = iommu_get_domain_for_dev_pasid(dev, pasid, IOMMU_DOMAIN_SVA);
++	if (!master || pasid == 0)
++		return;
++
++	domain = iommu_get_domain_for_dev_pasid(dev, pasid, 0);
+ 	if (WARN_ON(IS_ERR(domain)) || !domain)
+ 		return;
++	if (domain->type == IOMMU_DOMAIN_SVA)
++		return arm_smmu_sva_remove_dev_pasid(domain, dev, pasid);
  
- 	cmds.num = 0;
- 
--	spin_lock_irqsave(&smmu_domain->devices_lock, flags);
--	list_for_each_entry(master, &smmu_domain->devices, domain_head) {
+-	arm_smmu_sva_remove_dev_pasid(domain, dev, pasid);
++	smmu_domain = to_smmu_domain(domain);
++	mutex_lock(&arm_smmu_asid_lock);
 +	spin_lock_irqsave(&smmu_domain->attached_domains_lock, flags);
 +	list_for_each_entry(attached_domain, &smmu_domain->attached_domains, domain_head) {
-+		master = attached_domain->master;
- 		if (!master->ats_enabled)
- 			continue;
--
-+		if (ssid == 0)
-+			arm_smmu_atc_inv_cmd_set_ssid(attached_domain->ssid, &cmd);
- 		for (i = 0; i < master->num_streams; i++) {
- 			cmd.atc.sid = master->streams[i].id;
- 			arm_smmu_cmdq_batch_add(smmu_domain->smmu, &cmds, &cmd);
- 		}
- 	}
--	spin_unlock_irqrestore(&smmu_domain->devices_lock, flags);
++		if (attached_domain->master != master ||
++		    attached_domain->ssid != pasid)
++			continue;
++		list_del(&attached_domain->domain_head);
++		break;
++	}
 +	spin_unlock_irqrestore(&smmu_domain->attached_domains_lock, flags);
- 
- 	return arm_smmu_cmdq_batch_submit(smmu_domain->smmu, &cmds);
++	arm_smmu_write_ctx_desc(master, pasid, NULL);
++	master->nr_attached_pasid_domains -= 1;
++	mutex_unlock(&arm_smmu_asid_lock);
  }
  
-+int arm_smmu_atc_inv_domain(struct arm_smmu_domain *smmu_domain,
-+			    unsigned long iova, size_t size)
-+{
-+	return arm_smmu_atc_inv_domain_ssid(smmu_domain, 0, iova, size);
-+}
-+
- /* IO_PGTABLE API */
- static void arm_smmu_tlb_inv_context(void *cookie)
- {
-@@ -1855,7 +1881,7 @@ static void arm_smmu_tlb_inv_context(void *cookie)
- 		cmd.tlbi.vmid	= smmu_domain->s2_cfg.vmid;
- 		arm_smmu_cmdq_issue_cmd_with_sync(smmu, &cmd);
- 	}
--	arm_smmu_atc_inv_domain(smmu_domain, 0, 0, 0);
-+	arm_smmu_atc_inv_domain(smmu_domain, 0, 0);
- }
- 
- static void __arm_smmu_tlb_inv_range(struct arm_smmu_cmdq_ent *cmd,
-@@ -1943,7 +1969,7 @@ static void arm_smmu_tlb_inv_range_domain(unsigned long iova, size_t size,
- 	 * Unfortunately, this can't be leaf-only since we may have
- 	 * zapped an entire table.
- 	 */
--	arm_smmu_atc_inv_domain(smmu_domain, 0, iova, size);
-+	arm_smmu_atc_inv_domain(smmu_domain, iova, size);
- }
- 
- void arm_smmu_tlb_inv_range_asid(unsigned long iova, size_t size, int asid,
-@@ -2023,8 +2049,8 @@ static struct iommu_domain *arm_smmu_domain_alloc(unsigned type)
- 		return NULL;
- 
- 	mutex_init(&smmu_domain->init_mutex);
--	INIT_LIST_HEAD(&smmu_domain->devices);
--	spin_lock_init(&smmu_domain->devices_lock);
-+	INIT_LIST_HEAD(&smmu_domain->attached_domains);
-+	spin_lock_init(&smmu_domain->attached_domains_lock);
- 	INIT_LIST_HEAD(&smmu_domain->mmu_notifiers);
- 
- 	return &smmu_domain->domain;
-@@ -2259,12 +2285,12 @@ static bool arm_smmu_ats_supported(struct arm_smmu_master *master)
- 	return dev_is_pci(dev) && pci_ats_supported(to_pci_dev(dev));
- }
- 
--static void arm_smmu_enable_ats(struct arm_smmu_master *master)
-+static void arm_smmu_enable_ats(struct arm_smmu_master *master,
-+				struct arm_smmu_domain *smmu_domain)
- {
- 	size_t stu;
- 	struct pci_dev *pdev;
- 	struct arm_smmu_device *smmu = master->smmu;
--	struct arm_smmu_domain *smmu_domain = master->domain;
- 
- 	/* Don't enable ATS at the endpoint if it's not enabled in the STE */
- 	if (!master->ats_enabled)
-@@ -2280,10 +2306,9 @@ static void arm_smmu_enable_ats(struct arm_smmu_master *master)
- 		dev_err(master->dev, "Failed to enable ATS (STU %zu)\n", stu);
- }
- 
--static void arm_smmu_disable_ats(struct arm_smmu_master *master)
-+static void arm_smmu_disable_ats(struct arm_smmu_master *master,
-+				 struct arm_smmu_domain *smmu_domain)
- {
--	struct arm_smmu_domain *smmu_domain = master->domain;
--
- 	if (!master->ats_enabled)
- 		return;
- 
-@@ -2347,20 +2372,21 @@ static void arm_smmu_disable_pasid(struct arm_smmu_master *master)
- static void arm_smmu_detach_dev(struct arm_smmu_master *master)
- {
- 	unsigned long flags;
--	struct arm_smmu_domain *smmu_domain = master->domain;
-+	struct arm_smmu_domain *smmu_domain = master->attached_domain.domain;
- 
- 	if (!smmu_domain)
- 		return;
- 
--	arm_smmu_disable_ats(master);
-+	arm_smmu_disable_ats(master, smmu_domain);
- 
--	spin_lock_irqsave(&smmu_domain->devices_lock, flags);
--	list_del(&master->domain_head);
--	spin_unlock_irqrestore(&smmu_domain->devices_lock, flags);
-+	spin_lock_irqsave(&smmu_domain->attached_domains_lock, flags);
-+	list_del(&master->attached_domain.domain_head);
-+	spin_unlock_irqrestore(&smmu_domain->attached_domains_lock, flags);
- 
- 	master->ats_enabled = false;
- 	master->s2_cfg = NULL;
- 	master->has_stage1 = false;
-+	master->attached_domain.domain = NULL;
- 	/*
- 	 * Note that this will end up calling arm_smmu_sync_cd() even though
- 	 * we're about to destroy the entire STE anyways. This is ok because
-@@ -2436,14 +2462,16 @@ static int arm_smmu_attach_dev(struct iommu_domain *domain, struct device *dev)
- 	if (smmu_domain->stage != ARM_SMMU_DOMAIN_BYPASS)
- 		master->ats_enabled = arm_smmu_ats_supported(master);
- 
--	master->domain = smmu_domain;
-+	master->attached_domain.master = master;
-+	master->attached_domain.domain = smmu_domain;
-+	master->attached_domain.ssid = 0;
- 	arm_smmu_install_ste_for_dev(master);
- 
--	spin_lock_irqsave(&smmu_domain->devices_lock, flags);
--	list_add(&master->domain_head, &smmu_domain->devices);
--	spin_unlock_irqrestore(&smmu_domain->devices_lock, flags);
-+	spin_lock_irqsave(&smmu_domain->attached_domains_lock, flags);
-+	list_add(&master->attached_domain.domain_head, &smmu_domain->attached_domains);
-+	spin_unlock_irqrestore(&smmu_domain->attached_domains_lock, flags);
- 
--	arm_smmu_enable_ats(master);
-+	arm_smmu_enable_ats(master, smmu_domain);
- 
- out_unlock:
- 	mutex_unlock(&smmu_domain->init_mutex);
+ static struct iommu_ops arm_smmu_ops = {
+@@ -2883,6 +3009,7 @@ static struct iommu_ops arm_smmu_ops = {
+ 	.owner			= THIS_MODULE,
+ 	.default_domain_ops = &(const struct iommu_domain_ops) {
+ 		.attach_dev		= arm_smmu_attach_dev,
++		.set_dev_pasid		= arm_smmu_set_dev_pasid,
+ 		.map_pages		= arm_smmu_map_pages,
+ 		.unmap_pages		= arm_smmu_unmap_pages,
+ 		.flush_iotlb_all	= arm_smmu_flush_iotlb_all,
 diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-index d715794572b13..35700534a0b4a 100644
+index 35700534a0b4a..9ef63ea381f4b 100644
 --- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
 +++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.h
-@@ -681,11 +681,18 @@ struct arm_smmu_stream {
- 	struct rb_node			node;
+@@ -705,6 +705,7 @@ struct arm_smmu_master {
+ 	bool				iopf_enabled;
+ 	struct list_head		bonds;
+ 	unsigned int			ssid_bits;
++	unsigned int			nr_attached_pasid_domains;
  };
  
-+struct arm_smmu_attached_domain {
-+	struct list_head domain_head;
-+	struct arm_smmu_master *master;
-+	int ssid;
-+	struct arm_smmu_domain *domain;
-+};
-+
- /* SMMU private data for each master */
- struct arm_smmu_master {
- 	struct arm_smmu_device		*smmu;
- 	struct device			*dev;
--	struct arm_smmu_domain		*domain;
-+	struct arm_smmu_attached_domain	attached_domain;
- 	struct list_head		domain_head;
- 	struct arm_smmu_stream		*streams;
- 	struct arm_smmu_s1_cfg		s1_cfg;
-@@ -724,8 +731,8 @@ struct arm_smmu_domain {
- 
- 	struct iommu_domain			domain;
- 
--	struct list_head			devices;
--	spinlock_t				devices_lock;
-+	struct list_head			attached_domains;
-+	spinlock_t				attached_domains_lock;
- 
- 	struct list_head			mmu_notifiers;
- };
-@@ -746,8 +753,8 @@ void arm_smmu_tlb_inv_range_asid(unsigned long iova, size_t size, int asid,
- 				 size_t granule, bool leaf,
- 				 struct arm_smmu_domain *smmu_domain);
- bool arm_smmu_free_asid(struct arm_smmu_ctx_desc *cd);
--int arm_smmu_atc_inv_domain(struct arm_smmu_domain *smmu_domain, int ssid,
--			    unsigned long iova, size_t size);
-+int arm_smmu_atc_inv_domain_ssid(struct arm_smmu_domain *smmu_domain, int ssid,
-+				 unsigned long iova, size_t size);
- 
- #ifdef CONFIG_ARM_SMMU_V3_SVA
- bool arm_smmu_sva_supported(struct arm_smmu_device *smmu);
+ /* SMMU private data for an IOMMU domain */
 -- 
 2.40.1.521.gf1e218fcd8-goog
 
