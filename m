@@ -2,95 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F1A26FDE0D
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:46:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A1BFA6FDE10
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:47:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236925AbjEJMqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 08:46:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43430 "EHLO
+        id S237047AbjEJMr2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 08:47:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235768AbjEJMqD (ORCPT
+        with ESMTP id S236568AbjEJMrZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 08:46:03 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DE42116
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 05:46:01 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-953343581a4so1111568266b.3
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 05:46:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683722760; x=1686314760;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4+GAXgKKqLnJrZPTG1dBuVZu539BZ2VsxFnQSgAU5CU=;
-        b=BYx6Cfdzz3EhDB4qUMFWjkjugUsbbEOYVB+6e9+oHXHsePBAOiGIBZfkglBtnmYwZy
-         JG4QbKk0fZSV8i4rnb+VmCJSBlqXDZiGEqEFOkt5rrhbMWPGuLJOzswRX9IIj0u/FRpx
-         aUi3xBXUfBGb1qfxd+teP3TKaMgEXjr3JYd3NcYCFqJnGympnU8eduU4n64S1aEe6AK+
-         BGjuay3kK/DeJWwLjzso2Gl/cS5PUbGcq80meZIPUooh0bR8msETdrSG7/SpUMMJl8DB
-         g2C718dTIvgpKQpAyXMURry3f3AiJlTRZF9DlXSxNpEHzlTJGfPbOX3oWoz5lVOzkPQO
-         aayA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683722760; x=1686314760;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4+GAXgKKqLnJrZPTG1dBuVZu539BZ2VsxFnQSgAU5CU=;
-        b=O4dXvaVxz3AGrhpMqft0meZFZFSKJSrDp3XNAY4wGBOHRedaq/1T+xRC/T5ak5hvxG
-         8POKbKP9gB/0Ph1XjJ1VQHneCzGz4s5+PELaLppFJPJ0FBh798zdWElOPC9f3oNW3vnl
-         H2SNQ8Ef9GXNgbVaXmYTkQuMFWKxL0kno3pRHNpf+SZL3gbe9XY6sGxK7Z40GGJM2tPd
-         uIDnc6gttmS4Lj+sCzwgbFygYFErySKg9H1cadDC5KuTUYhzijAY/d1lh580hc1Qwih2
-         LX7+0Wpfo3xAgGFKJDg0nFygDXlEyuGz6cJFw6qCNrwuZIob01gg1vC2ANMT1VZixhvm
-         pLag==
-X-Gm-Message-State: AC+VfDxhdco4M3IW3VdjW6TpSNdUY5pFiOwbJZRSVYFaDSCCUjDauduA
-        7hepnkZtG7S/izDl2TuAD6rLyQ==
-X-Google-Smtp-Source: ACHHUZ7GaUKUCqtCApScxrhvWbhNQxQqNb8+624SHR+r6CSp3SP/aW4XVqD1cmULgpBP4VQEU29jpw==
-X-Received: by 2002:a17:907:5c6:b0:939:e870:2b37 with SMTP id wg6-20020a17090705c600b00939e8702b37mr15414063ejb.70.1683722760139;
-        Wed, 10 May 2023 05:46:00 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c175:a0f9:6928:8c9d? ([2a02:810d:15c0:828:c175:a0f9:6928:8c9d])
-        by smtp.gmail.com with ESMTPSA id mm10-20020a170906cc4a00b00960005e09a3sm2677528ejb.61.2023.05.10.05.45.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 05:45:59 -0700 (PDT)
-Message-ID: <b5c48154-134a-11fc-c2ce-47c1579a3de6@linaro.org>
-Date:   Wed, 10 May 2023 14:45:58 +0200
+        Wed, 10 May 2023 08:47:25 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED18530D4
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 05:47:22 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230510124718euoutp01adb9b841b40d25446e6984a5cbb2a090~dyQBRxo0V2200022000euoutp01T
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 12:47:18 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230510124718euoutp01adb9b841b40d25446e6984a5cbb2a090~dyQBRxo0V2200022000euoutp01T
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1683722838;
+        bh=yQDc+kOAIE1uNanTmn5CeXJvT/CwzXTmmHedSea//Uo=;
+        h=From:To:CC:Subject:Date:References:From;
+        b=eSTTAIB5kqSTxT7v04TOlT9/xsxst1tv+Zi9ULD1W4cDKkc5rRqKBLyPWthD1tFiD
+         slzLujoKXLZUa07o8YsahdzNly59EeOw2FEkF6n6+0hbsXPhdLPapFbew5f4iaxiN8
+         vASZmJHQNNUtI58sm/4s1iphHe3PNAe4jLvnm4FA=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+        20230510124718eucas1p27dbb62ec37e4b792da0792086e25ad44~dyQBEgi381889318893eucas1p2X;
+        Wed, 10 May 2023 12:47:18 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges3new.samsung.com (EUCPMTA) with SMTP id D4.B0.37758.6529B546; Wed, 10
+        May 2023 13:47:18 +0100 (BST)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230510124718eucas1p2c11356c0628b9acb44c1174fd45fa4b7~dyQAzGl210656906569eucas1p2H;
+        Wed, 10 May 2023 12:47:18 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230510124718eusmtrp1a9a5b4d229ef743b661ca6312ca141ea~dyQAyhyG11062210622eusmtrp1N;
+        Wed, 10 May 2023 12:47:18 +0000 (GMT)
+X-AuditID: cbfec7f5-815ff7000002937e-a5-645b9256a229
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 27.0E.10549.6529B546; Wed, 10
+        May 2023 13:47:18 +0100 (BST)
+Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
+        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+        20230510124718eusmtip1828a062b2bf069822ad464c0bb21f720~dyQAoRHU41816218162eusmtip1u;
+        Wed, 10 May 2023 12:47:18 +0000 (GMT)
+Received: from localhost (106.110.32.140) by CAMSVWEXC02.scsc.local
+        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
+        Wed, 10 May 2023 13:47:17 +0100
+From:   Pankaj Raghav <p.raghav@samsung.com>
+To:     <willy@infradead.org>, <akpm@linux-foundation.org>
+CC:     <linux-mm@kvack.org>, <mcgrof@kernel.org>, <gost.dev@samsung.com>,
+        <hch@lst.de>, <linux-kernel@vger.kernel.org>,
+        <linux-fsdevel@vger.kernel.org>,
+        Pankaj Raghav <p.raghav@samsung.com>
+Subject: [PATCH] filemap: remove page_endio()
+Date:   Wed, 10 May 2023 14:47:16 +0200
+Message-ID: <20230510124716.73655-1-p.raghav@samsung.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 1/2] dt-bindings: arm: qcom: document AL02-C2 board based
- on IPQ9574 family
-Content-Language: en-US
-To:     Devi Priya <quic_devipriy@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_sjaganat@quicinc.com,
-        quic_kathirav@quicinc.com, quic_arajkuma@quicinc.com,
-        quic_anusha@quicinc.com, quic_poovendh@quicinc.com
-References: <20230510104359.16678-1-quic_devipriy@quicinc.com>
- <20230510104359.16678-2-quic_devipriy@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230510104359.16678-2-quic_devipriy@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [106.110.32.140]
+X-ClientProxiedBy: CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348) To
+        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprOKsWRmVeSWpSXmKPExsWy7djPc7phk6JTDP4cU7WYs34Nm8XK1UeZ
+        LPbsPclicXnXHDaLe2v+s1rcmPCU0eL3jzlsDuwem1doeWxa1cnmsenTJHaPEzN+s3jsvtnA
+        5vF5k1wAWxSXTUpqTmZZapG+XQJXxqPJ55kLXvBXzHrSxtLA+Jeni5GTQ0LARKKh9zNbFyMX
+        h5DACkaJ9gdH2SGcL4wSs98sY4JwPjNKdMzYzQjTsvzoP6jEckaJvu/H2OCq5s99DpXZwigx
+        ceJR1i5GDg42AS2Jxk52kG4RATOJjQ+OMILUMAvsAxp75SIzSEJYQFdi5c8mVhCbRUBV4s7P
+        XywgNq+ApUTLknawORIC8hKLH0hAhAUlTs58AlbCDBRu3jqbGcKWkDj44gUzxKVKEg2bz7BA
+        2LUSe5sPgP0mIXCHQ+Jt30tWiISLxJNrk5ggbGGJV8e3sEPYMhKnJ/dANVdLPL3xmxmiuYVR
+        on/nejaIg6wl+s7kQNQ4Stxo+wh1J5/EjbeCEPfwSUzaNp0ZIswr0dEmBFGtJrH63huWCYzK
+        s5B8MwvJN7OQfLOAkXkVo3hqaXFuemqxcV5quV5xYm5xaV66XnJ+7iZGYNo5/e/41x2MK159
+        1DvEyMTBeIhRgoNZSYTXOzQqRYg3JbGyKrUoP76oNCe1+BCjNAeLkjivtu3JZCGB9MSS1OzU
+        1ILUIpgsEwenVAOT3+MWRrsrXfmSMd82T1vw+NTWH08ZVCsS5Y1+ajWyb/tXVFjs0Mh2SfvJ
+        JiXvkG9Cr7V42KWYRBR+HlnLFBEvr1fN/r8xwz3I2Uqi5IlO1LcC/nDJ/X8eTMnS/MMR+G7P
+        /dtTbVurKlzWfnevXiaXW3dm+YU/Olbz310VSk5yaHyinl38/H4qD2+bsgafUpDRzmrJXxrT
+        H/DEKmhnRJy28XtlyPA98M73HZKnDH9Ne/XKpEcwYdXJBcty13P80zXufiOQtDFK+kngrdge
+        13V6tRkHS1Y38loHWR1qKvXkrF8rLOwfcZBx+zfDmA62Y8YxWos8/60XKVNYPCHaof1vq4xh
+        lZTU1705j5t2K7EUZyQaajEXFScCAH8a3AaqAwAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrGIsWRmVeSWpSXmKPExsVy+t/xu7phk6JTDH5eF7aYs34Nm8XK1UeZ
+        LPbsPclicXnXHDaLe2v+s1rcmPCU0eL3jzlsDuwem1doeWxa1cnmsenTJHaPEzN+s3jsvtnA
+        5vF5k1wAW5SeTVF+aUmqQkZ+cYmtUrShhZGeoaWFnpGJpZ6hsXmslZGpkr6dTUpqTmZZapG+
+        XYJexqPJ55kLXvBXzHrSxtLA+Jeni5GTQ0LARGL50X9MXYxcHEICSxklZnWtYoRIyEhs/HKV
+        FcIWlvhzrYuti5EDqOgjo8Q+IYj6LYwSB55OYASJswloSTR2soOUiwiYSWx8cIQRpIZZYB+j
+        RMeVi8wgCWEBXYmVP5vAZrIIqErc+fmLBcTmFbCUaFnSzgoyR0JAXmLxAwmIsKDEyZlPwEqY
+        gcLNW2czQ9gSEgdfvGCGOE1JomHzGRYIu1ai89VptgmMQrOQtM9C0j4LSfsCRuZVjCKppcW5
+        6bnFhnrFibnFpXnpesn5uZsYgRG27djPzTsY5736qHeIkYmD8RCjBAezkgivd2hUihBvSmJl
+        VWpRfnxRaU5q8SFGU6B3JjJLiSbnA2M8ryTe0MzA1NDEzNLA1NLMWEmc17OgI1FIID2xJDU7
+        NbUgtQimj4mDU6qBqXJ25HWjyReSav9GXDrYat24Mrdy2RUNls0HmyXnrDN59OFyyfYcb4v5
+        Mtf+7u9ftu1sQ5/ceqa7sWmX14mIntSTLjjHKrORuyzhkOR20bTvQW7/L2+V1Ki+dtTaaLfG
+        aRvmK4LpE1TXl5grbXl/rMgsJZBrg6jdMtbajCALg69FsZMEzvsfUpPV1C5xbH3UnHHmwYdz
+        N/bN0Vjuz35f56zAqis7Nqxfp2hfHJQgHNrzOIovimuvmojkrLbYFRFCXFdCPjNGSDHtXuff
+        OvuDIfPtDT6TTp7TaH3/Zm7T6w8GLPyOL3bmhx5dtGaB0G8Jne0xKl51RV/3rv0VqLDi1Rq/
+        JZzsen0X0mb8sa3ap8RSnJFoqMVcVJwIAD8TcA45AwAA
+X-CMS-MailID: 20230510124718eucas1p2c11356c0628b9acb44c1174fd45fa4b7
+X-Msg-Generator: CA
+X-RootMTR: 20230510124718eucas1p2c11356c0628b9acb44c1174fd45fa4b7
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230510124718eucas1p2c11356c0628b9acb44c1174fd45fa4b7
+References: <CGME20230510124718eucas1p2c11356c0628b9acb44c1174fd45fa4b7@eucas1p2.samsung.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/2023 12:43, Devi Priya wrote:
-> Document AL02-C2 (Reference Design Platform 418) board based on IPQ9574
-> family of SoCs.
-> 
-> Signed-off-by: Devi Priya <quic_devipriy@quicinc.com>
+page_endio() is not used anymore. Remove it.
 
+Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
+---
+This is a leftover patch from [1]. As ZRAM page_endio usage has been
+removed, this patch can be merged safely.
+[1]https://lore.kernel.org/linux-fsdevel/20230411122920.30134-1-p.raghav@samsung.com/
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ include/linux/pagemap.h |  2 --
+ mm/filemap.c            | 30 ------------------------------
+ 2 files changed, 32 deletions(-)
 
-Best regards,
-Krzysztof
+diff --git a/include/linux/pagemap.h b/include/linux/pagemap.h
+index a56308a9d1a4..c1ae5ebc375f 100644
+--- a/include/linux/pagemap.h
++++ b/include/linux/pagemap.h
+@@ -1078,8 +1078,6 @@ int filemap_migrate_folio(struct address_space *mapping, struct folio *dst,
+ #else
+ #define filemap_migrate_folio NULL
+ #endif
+-void page_endio(struct page *page, bool is_write, int err);
+-
+ void folio_end_private_2(struct folio *folio);
+ void folio_wait_private_2(struct folio *folio);
+ int folio_wait_private_2_killable(struct folio *folio);
+diff --git a/mm/filemap.c b/mm/filemap.c
+index 2d3d70c64dfd..570bc8c3db87 100644
+--- a/mm/filemap.c
++++ b/mm/filemap.c
+@@ -1628,36 +1628,6 @@ void folio_end_writeback(struct folio *folio)
+ }
+ EXPORT_SYMBOL(folio_end_writeback);
+ 
+-/*
+- * After completing I/O on a page, call this routine to update the page
+- * flags appropriately
+- */
+-void page_endio(struct page *page, bool is_write, int err)
+-{
+-	struct folio *folio = page_folio(page);
+-
+-	if (!is_write) {
+-		if (!err) {
+-			folio_mark_uptodate(folio);
+-		} else {
+-			folio_clear_uptodate(folio);
+-			folio_set_error(folio);
+-		}
+-		folio_unlock(folio);
+-	} else {
+-		if (err) {
+-			struct address_space *mapping;
+-
+-			folio_set_error(folio);
+-			mapping = folio_mapping(folio);
+-			if (mapping)
+-				mapping_set_error(mapping, err);
+-		}
+-		folio_end_writeback(folio);
+-	}
+-}
+-EXPORT_SYMBOL_GPL(page_endio);
+-
+ /**
+  * __folio_lock - Get a lock on the folio, assuming we need to sleep to get it.
+  * @folio: The folio to lock
+-- 
+2.39.2
 
