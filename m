@@ -2,107 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3C0B6FE3B3
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 20:15:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D07C6FE3F7
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 20:20:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235833AbjEJSPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 14:15:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51346 "EHLO
+        id S236486AbjEJSUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 14:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjEJSPR (ORCPT
+        with ESMTP id S231468AbjEJSUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 14:15:17 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 540285FCB;
-        Wed, 10 May 2023 11:15:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683742516; x=1715278516;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=tRRcKEJybIKi6JSwS3z5FwNCds3NlR66blTEjXfOaBI=;
-  b=TZAiOhzI1WOJtnpj/lgESUm/8z14x2Ukek2Qc49bTO/fq8Yto0UOJrDh
-   LJv95YcPaiyxRJkiaw4rz4DgA1R5mGDGy8N8izqruosoxa9h/I6HNxlkP
-   YQ/BEIFP4ei9J5LN6RI/F+9nEpEAVcqjn52UFbb+/GqyOcDCLXqgxDow0
-   hYDN1ux+/p02wnHjb8wnvvYRnV4dJERSCLj+Fs8E/c03gp8g2IPzL+03m
-   J9WEj0Ms9BiWTN8Qbujsg+fX9Pl1linsXg2lRWO8XtGXapFBxMRQE7WJV
-   HsSo6bJJvJ6euQm3fEYtzlrP9rzMbDQs3KvrifIoEemImbJ6Y5JurdXUA
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="436608149"
-X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
-   d="scan'208";a="436608149"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 11:15:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="768993899"
-X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
-   d="scan'208";a="768993899"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga004.fm.intel.com with ESMTP; 10 May 2023 11:15:15 -0700
-Date:   Wed, 10 May 2023 11:18:15 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tip-commits@vger.kernel.org,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Len Brown <len.brown@intel.com>, Borislav Petkov <bp@suse.de>,
-        x86@kernel.org
-Subject: Re: [tip: perf/core] x86/cpu: Add helper function to get the type of
- the current hybrid CPU
-Message-ID: <20230510181815.GA18418@ranerica-svr.sc.intel.com>
-References: <1618237865-33448-3-git-send-email-kan.liang@linux.intel.com>
- <161891560955.29796.10811256921836669612.tip-bot2@tip-bot2>
- <55343361-d991-c157-4a88-843947aa45ff@intel.com>
+        Wed, 10 May 2023 14:20:00 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8ED9EE2
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 11:18:45 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64115eef620so52172547b3a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 11:18:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683742721; x=1686334721;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AxNNeUlKb2mEb7+tC4au3XdhlwF/tDkvv1YeFKn3c7Y=;
+        b=n5a6hSvCr1y5VjAamauHZ709dncmRtqSN7cvPA59jqOLcEr4HmcNQQVZOcrcj9PaAk
+         c7ixJ6QXq1PTiEvH3P8NgZ0juhIPoX4oV24jULi20FAaqAmaw01jFUcX/Vu6FnO6gwgc
+         BeJRZ8XCoRYpzSFJF7Ssu/O8OZH0X7isU8oXVm6piyQEAwE1luoxSqHxO179fIERp4bR
+         sFGC/vD2O31U9RyAILJWRumIBiqs+2ME95LCU0EsqopxhKlrLF61/fTnZ0CfFOu7CXOc
+         +cC15Dmr4i3kDITU1i+ARZ0SHKTGjJaqFx0PVAQU8ks0GKJVSI+QPmkoo2ujJwLJ8Jpe
+         CbWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683742721; x=1686334721;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AxNNeUlKb2mEb7+tC4au3XdhlwF/tDkvv1YeFKn3c7Y=;
+        b=DaUl3Uaw0Sx1k8HK6snDue1fG0FCI6g+SLU0EOiIIUlOzamP87+N3FHUtClBpmRIzj
+         iF8FKOa56mdxFybhIWM5Po2X+ZcD9UPaS8GxxzayoTGRcR6c5vDYInTbF0wPIeb22PLt
+         Hsz8l9Lz8fO2WtFEsu4P9MCZUBkiCmBB1UO6AwtAMahOfNtLVTDO9hwi6Hc1nYlvt8R/
+         zjPUoZkFI5az1zLkzdFTpMQd3tIGZFqC6IvyVKPs1Ttp3DlxjZmi+n06EDQjCdivyWEK
+         G6sF/fE1gY8hPDJ0CHRAcb8uIl/6K0O5mQ3jwwZbBfA4eeF/1VBh+VxnDoAm1ahAjILD
+         VisQ==
+X-Gm-Message-State: AC+VfDyMUIFXjJeKx7GvfItsAdon+sO6izbHQ5pcLk0Flp1nWEVVlMsy
+        xgeQ0C4/vNDQZpeW6G4D6Tc=
+X-Google-Smtp-Source: ACHHUZ6BrfuP6JLTyFBueEHrabOYi57cQU9R21n/k1mzM3ac7v2HhCAKCATDnCtBraemNnBQyw79Lw==
+X-Received: by 2002:a17:902:b195:b0:1a0:76e8:a4d with SMTP id s21-20020a170902b19500b001a076e80a4dmr21127802plr.14.1683742720606;
+        Wed, 10 May 2023 11:18:40 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id l8-20020a170903244800b001ac2c3e54adsm4105512pls.118.2023.05.10.11.18.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 11:18:40 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 10 May 2023 08:18:39 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     jiangshanlai@gmail.com, peterz@infradead.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: Re: [PATCH 3/6] workqueue: Move worker_set/clr_flags() upwards
+Message-ID: <ZFvf_1i82w2Czi9t@slm.duckdns.org>
+References: <20230510030752.542340-1-tj@kernel.org>
+ <20230510030752.542340-4-tj@kernel.org>
+ <CAHk-=wiu5vwNeiDbwueHtpnTp1Be7r3_ssG07Qsv2N=V9K454Q@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <55343361-d991-c157-4a88-843947aa45ff@intel.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wiu5vwNeiDbwueHtpnTp1Be7r3_ssG07Qsv2N=V9K454Q@mail.gmail.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 09:42:36AM -0700, Dave Hansen wrote:
-> On 4/20/21 03:46, tip-bot2 for Ricardo Neri wrote:
-> > +#define X86_HYBRID_CPU_TYPE_ID_SHIFT	24
-> > +
-> > +/**
-> > + * get_this_hybrid_cpu_type() - Get the type of this hybrid CPU
-> > + *
-> > + * Returns the CPU type [31:24] (i.e., Atom or Core) of a CPU in
-> > + * a hybrid processor. If the processor is not hybrid, returns 0.
-> > + */
-> > +u8 get_this_hybrid_cpu_type(void)
-> > +{
-> > +	if (!cpu_feature_enabled(X86_FEATURE_HYBRID_CPU))
-> > +		return 0;
-> > +
-> > +	return cpuid_eax(0x0000001a) >> X86_HYBRID_CPU_TYPE_ID_SHIFT;
-> > +}
+On Wed, May 10, 2023 at 09:30:55AM -0500, Linus Torvalds wrote:
+> On Tue, May 9, 2023 at 10:08 PM Tejun Heo <tj@kernel.org> wrote:
+> >
+> > They're gonna be used wq_worker_stopping(). Move them upwards.
 > 
-> Hi Folks,
-
-Hi Dave,
-
+> I got points deducted in fifth grade for using "gonna" instead of
+> "going to". Here I am, 40+ years later, and I still feel it.
 > 
-> Sorry to dredge up an old thread.  But, where does this information
-> about "If the processor is not hybrid, returns 0." come from?
+> Please use "going to". And add the missing "in" while at it.
 > 
-> What is there to keep cpuid_eax(0x0000001a) from having 0x0 in those
-> bits?  Seems to me like 0 is theoretically a valid hybrid CPU type.  Right?
+>              Linus "scarred for life" Torvalds
 
-My reasoning was that according to the Intel SDM the only valid values were
-0x20 and 0x40. 0 was meant to be an invalid value.
+Aye, Aye, imma update.
 
-I read the SDM again. It seems that cpuid_eax(0x0000001a) already returns
-0 when the leaf does not exist.
+Thanks.
 
-Probably the check for X86_FEATURE_HYBRID_CPU is not needed.
-
-Still, callers need to check for a valid value, IMO.
+-- 
+tejun
