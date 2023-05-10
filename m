@@ -2,115 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C43EF6FE2FF
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 19:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D4856FE300
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 19:06:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236193AbjEJRGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 13:06:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49586 "EHLO
+        id S236348AbjEJRGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 13:06:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbjEJRGO (ORCPT
+        with ESMTP id S235962AbjEJRGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 13:06:14 -0400
-Received: from out-36.mta1.migadu.com (out-36.mta1.migadu.com [95.215.58.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E14546A48
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 10:05:48 -0700 (PDT)
-Date:   Wed, 10 May 2023 13:05:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1683738323;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=GrulpR8Jk8I1VJ30mEIHHG5A641qEbjUevYoLi6mykE=;
-        b=DIxk6gubmoIPUhJI3CwRDaDBI4vIDPMGHBpQtHtiUqVSuxYr5bbiQdzZMy2ZZU3cVBJMdI
-        IC1b/F/DGqqYl8Fbri2cWdLlc6smYbGmVJUMoL/Bnn7DEes2eCxzJZskaHzwfFriagEpr1
-        eIJJnqehmpcZh0H95qv2vPnyu2EY9Xs=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Coly Li <colyli@suse.de>
-Subject: Re: [PATCH 2/2] bcache: Convert to lock_cmp_fn
-Message-ID: <ZFvO0QfTUZyTXd4s@moria.home.lan>
-References: <20230509195847.1745548-1-kent.overstreet@linux.dev>
- <20230509195847.1745548-2-kent.overstreet@linux.dev>
- <20230510130151.GL4253@hirez.programming.kicks-ass.net>
+        Wed, 10 May 2023 13:06:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3676A19B3;
+        Wed, 10 May 2023 10:06:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 951BE60ABF;
+        Wed, 10 May 2023 17:06:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 011A0C433EF;
+        Wed, 10 May 2023 17:06:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683738361;
+        bh=O7xPHBuKYymEq9QfOs6J9G+s+CD0IysaluF7gPmpAC4=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=V3nPTiCB4dDVf7BsmRK9iPZ7hzc1NgVp38NjNBnWOPpPWSq6c8oa4Ax81kxbPxuS9
+         W98Bfmfp/l3aX1LQjcfxky1I4PYL86a7XStT7EypbWA795sCIfCrcWWg7HO+bXwr7W
+         cS7PP2F2feKsa5q7aL7hXINkIF2Cd83YqjaonI3k5aO6jksfy0In/PdAvn/GrvIPIt
+         Fo80GtIq5W2NYATKLJriKIBqfZzdk4JHVfMZ2+WS7DRRRDNOslszuTCdkC8GKctPY8
+         j9iK+fe3Bjc6Z32/lEEeEhnhDIb1I6IFYSkZJ2C9X3Tsp745SGlvfgTa0OC6z11iwr
+         suoYr3c5Wjksg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 8656ACE126E; Wed, 10 May 2023 10:06:00 -0700 (PDT)
+Date:   Wed, 10 May 2023 10:06:00 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     rcu@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        rostedt@goodmis.org
+Subject: [PATCH rcu 0/4] Callback-offloading updates for v6.5
+Message-ID: <9c5fae22-e25e-4548-b6e9-117495b29e62@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230510130151.GL4253@hirez.programming.kicks-ass.net>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 03:01:51PM +0200, Peter Zijlstra wrote:
-> On Tue, May 09, 2023 at 03:58:47PM -0400, Kent Overstreet wrote:
-> > Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-> > Cc: Coly Li <colyli@suse.de>
-> > ---
-> >  drivers/md/bcache/btree.c | 23 ++++++++++++++++++++++-
-> >  drivers/md/bcache/btree.h |  4 ++--
-> >  2 files changed, 24 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/md/bcache/btree.c b/drivers/md/bcache/btree.c
-> > index 147c493a98..569f48958b 100644
-> > --- a/drivers/md/bcache/btree.c
-> > +++ b/drivers/md/bcache/btree.c
-> > @@ -559,6 +559,27 @@ static void mca_data_alloc(struct btree *b, struct bkey *k, gfp_t gfp)
-> >  	}
-> >  }
-> >  
-> > +#define cmp_int(l, r)		((l > r) - (l < r))
-> > +
-> > +#ifdef CONFIG_PROVE_LOCKING
-> > +static int btree_lock_cmp_fn(const struct lockdep_map *_a,
-> > +			     const struct lockdep_map *_b)
-> > +{
-> > +	const struct btree *a = container_of(_a, struct btree, lock.dep_map);
-> > +	const struct btree *b = container_of(_b, struct btree, lock.dep_map);
-> > +
-> > +	return -cmp_int(a->level, b->level) ?: bkey_cmp(&a->key, &b->key);
-> > +}
-> > +
-> > +static void btree_lock_print_fn(const struct lockdep_map *map)
-> > +{
-> > +	const struct btree *b = container_of(map, struct btree, lock.dep_map);
-> > +
-> > +	printk(KERN_CONT " l=%u %llu:%llu", b->level,
-> > +	       KEY_INODE(&b->key), KEY_OFFSET(&b->key));
-> > +}
-> > +#endif
-> > +
-> >  static struct btree *mca_bucket_alloc(struct cache_set *c,
-> >  				      struct bkey *k, gfp_t gfp)
-> >  {
-> > @@ -572,7 +593,7 @@ static struct btree *mca_bucket_alloc(struct cache_set *c,
-> >  		return NULL;
-> >  
-> >  	init_rwsem(&b->lock);
-> > -	lockdep_set_novalidate_class(&b->lock);
-> > +	lock_set_cmp_fn(&b->lock, btree_lock_cmp_fn, btree_lock_print_fn);
-> >  	mutex_init(&b->write_lock);
-> >  	lockdep_set_novalidate_class(&b->write_lock);
-> 
-> I can't help but notice you've got yet another novalidate_class usage
-> here. What does it take to get rid of that?
+Hello!
 
-this is a tricky one, because the correct lock ordering refers to
-particular locks of different types; we take b->lock before
-b->write_lock, for a given btree node.
+This series provides some nocb callback-offloading updates:
 
-And like b->lock, b->write_lock can be held simultaneously for multiple
-nodes, with the same ordering that btree_lock_cmp_fn() defines.
+1.	rcu/nocb: Protect lazy shrinker against concurrent
+	(de-)offloading, courtesy of Frederic Weisbecker.
 
-Conceptually we'd need a lock_cmp_fn that can compare locks of different
-types...
+2.	rcu/nocb: Fix shrinker race against callback enqueuer, courtesy
+	of Frederic Weisbecker.
 
-This patchset might be almost enough to do that, I'll give it a bit more
-thought.
+3.	rcu/nocb: Recheck lazy callbacks under the ->nocb_lock from
+	shrinker, courtesy of Frederic Weisbecker.
+
+4.	rcu/nocb: Make shrinker to iterate only NOCB CPUs, courtesy of
+	Frederic Weisbecker.
+
+						Thanx, Paul
+
+------------------------------------------------------------------------
+
+ b/kernel/rcu/tree_nocb.h |   25 ++++++++++++++++++++++++-
+ kernel/rcu/tree_nocb.h   |   33 ++++++++++++++++++++++++++-------
+ 2 files changed, 50 insertions(+), 8 deletions(-)
