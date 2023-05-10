@@ -2,53 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F17F96FE4BC
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:01:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D4506FE4C9
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229825AbjEJUB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:01:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40518 "EHLO
+        id S231486AbjEJUFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjEJUBX (ORCPT
+        with ESMTP id S229461AbjEJUFN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:01:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FED83C0D
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:01:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DC72962EB9
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 20:01:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4E5FC433D2;
-        Wed, 10 May 2023 20:01:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683748881;
-        bh=Id9taxsP+MRJIkexnLUvkZQ0UnMehHLrjhjdzSpNcvU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=aa+xtLo7pT0SICiA96xQy4I56D4Q84OEzN7RooA/cSj2p5FmuezQkEwhOqWbXeqZ6
-         Ybdv9D/2v6MbaBTT+FS3CrogpYGyRLd6hMutyVr61bWzNagGf3q1+E6m3DkyBf4TvK
-         OO9Ulh1Rb0fwhNv/T/OnDyIb6hRsFGoxsDWyyhjXWo9h8O40H7EKMEFsSIo7n37PHh
-         7nru1maSpEjp6ol220pcLqj5K2uxaZslIn8Y6A6vwpI+iRwiS2G/jCxRpDObNqvIUt
-         2uqWFNBp6GoHYR1vq9JiV/xlvsHmWeV8X332wZ45DoM186f7AJSJViWI0RS18wMh44
-         osqyLAVIvzuWQ==
-Date:   Wed, 10 May 2023 22:01:17 +0200
-From:   Simon Horman <horms@kernel.org>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] virtio: Add missing documentation for structure fields
-Message-ID: <ZFv4DfUcipQAII5R@kernel.org>
-References: <20230510-virtio-kdoc-v1-1-d2b1824a9a2b@kernel.org>
- <20230510120332-mutt-send-email-mst@kernel.org>
+        Wed, 10 May 2023 16:05:13 -0400
+Received: from mail-pj1-f48.google.com (mail-pj1-f48.google.com [209.85.216.48])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CB294214;
+        Wed, 10 May 2023 13:05:12 -0700 (PDT)
+Received: by mail-pj1-f48.google.com with SMTP id 98e67ed59e1d1-24e16918323so5382559a91.2;
+        Wed, 10 May 2023 13:05:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683749112; x=1686341112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JI4LwvKM5+Xgz5dAdUGOizqLHGpbVCwyYyAwDCTs06o=;
+        b=EvUa/2utcvV6rrtuDHS74jULqEE+jjMDZL8E6Ntk3RFGfBYDt+UdWL+TMY9bUjzMmX
+         0We7dBJ+xPjERs6ZPl1MCOtPzHqt3L/aldrw28jM1M1GsMWeR2Dz1cHC6g6fxRYy9J4r
+         S2orml43XVJhXkguOhgObyioVJEj7b9bWJlo60i7VTAo1HDzlwhYqr8jV/JOAEHje54b
+         /v04CrjpA9livkNiPIeFzKvZNkcfamSZoWKpwMBN7NawzEvjiv9A474TQ+pRYu0JIAKJ
+         hhgtIA0YadiEv9nDC9Huw5uLlZj3ukvr9Dlf7SGDMTS3BoST6YnBx6A51Xz+gFV0YUEE
+         nf8w==
+X-Gm-Message-State: AC+VfDylo3tkel8zVFzDqRCQMhibuTz5DA21tYu7tTxMCxKGfQXZSbbr
+        m7gdLazxe9UNwu7BV10pTjA=
+X-Google-Smtp-Source: ACHHUZ4/47itR7Tir8ZXsdlJexoDaX4FouunjoYVgeF7nl41ZKWG77ZNE4zjJqvJyyjBGuxpJH3uHA==
+X-Received: by 2002:a17:90a:4a0a:b0:250:6730:a364 with SMTP id e10-20020a17090a4a0a00b002506730a364mr13803643pjh.3.1683749111922;
+        Wed, 10 May 2023 13:05:11 -0700 (PDT)
+Received: from ?IPV6:2001:4958:15a0:30:7dec:e5e7:f25d:e7e9? ([2001:4958:15a0:30:7dec:e5e7:f25d:e7e9])
+        by smtp.gmail.com with ESMTPSA id j8-20020a17090a318800b00246f9725ffcsm274358pjb.33.2023.05.10.13.05.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 13:05:11 -0700 (PDT)
+Message-ID: <60542301-e77f-ad26-e249-29d42f446d74@acm.org>
+Date:   Wed, 10 May 2023 13:05:10 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230510120332-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.1
+Subject: Re: [PATCH v2] ufs: poll pmc until another pa request is completed
+Content-Language: en-US
+To:     Kiwoong Kim <kwmad.kim@samsung.com>, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
+        avri.altman@wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, beanhuo@micron.com,
+        adrian.hunter@intel.com, sc.suh@samsung.com, hy50.seo@samsung.com,
+        sh425.lee@samsung.com, bhoon95.kim@samsung.com,
+        kwangwon.min@samsung.com, junwoo80.lee@samsung.com
+References: <CGME20230425012857epcas2p45eaa3f5f87de424bbf951b22653b3e70@epcas2p4.samsung.com>
+ <1682385635-43601-1-git-send-email-kwmad.kim@samsung.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <1682385635-43601-1-git-send-email-kwmad.kim@samsung.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -57,51 +69,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 12:04:21PM -0400, Michael S. Tsirkin wrote:
-> On Wed, May 10, 2023 at 02:23:12PM +0200, Simon Horman wrote:
-> > Add missing documentation for the vqs_list_lock field of struct virtio_device,
-> > and the validate field of struct virtio_driver.
-> > 
-> > ./scripts/kernel-doc says:
-> > 
-> >  .../virtio.h:131: warning: Function parameter or member 'vqs_list_lock' not described in 'virtio_device'
-> >  .../virtio.h:192: warning: Function parameter or member 'validate' not described in 'virtio_driver'
-> >  2 warnings as Errors
-> > 
-> > No functional changes intended.
-> > 
-> > Signed-off-by: Simon Horman <horms@kernel.org>
-> > ---
-> >  include/linux/virtio.h | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/include/linux/virtio.h b/include/linux/virtio.h
-> > index b93238db94e3..0b2b82ee3220 100644
-> > --- a/include/linux/virtio.h
-> > +++ b/include/linux/virtio.h
-> > @@ -103,6 +103,7 @@ int virtqueue_resize(struct virtqueue *vq, u32 num,
-> >   * @config_enabled: configuration change reporting enabled
-> >   * @config_change_pending: configuration change reported while disabled
-> >   * @config_lock: protects configuration change reporting
-> > + * @vqs_list_lock: protects @vqs.
-> >   * @dev: underlying device.
-> >   * @id: the device type identification (used to match it with a driver).
-> >   * @config: the configuration ops for this device.
-> > @@ -160,6 +161,7 @@ size_t virtio_max_dma_size(const struct virtio_device *vdev);
-> >   * @feature_table_size: number of entries in the feature table array.
-> >   * @feature_table_legacy: same as feature_table but when working in legacy mode.
-> >   * @feature_table_size_legacy: number of entries in feature table legacy array.
-> > + * @validate: the function to call to vaidate features at probe time.
-> 
-> typo
-> 
-> and this is called before probe actually not at probe time
+On 4/24/23 18:20, Kiwoong Kim wrote:
+> @@ -4138,6 +4141,61 @@ int ufshcd_dme_get_attr(struct ufs_hba *hba, u32 attr_sel,
+>   }
+>   EXPORT_SYMBOL_GPL(ufshcd_dme_get_attr);
+>   
+> +static int __ufshcd_poll_uic_pwr(struct ufs_hba *hba, struct uic_command *cmd,
+> +		struct completion *cnf)
 
-Thanks, how about the following?
+What does the name "cnf" mean? To me it seems to be a weird name for a 
+completion function pointer.
 
-* @validate: the function to call to validate features
+> +{
+> +	unsigned long flags;
+> +	int ret;
+> +	ktime_t timeout;
+> +	u32 mode = cmd->argument3;
 
-> >   * @probe: the function to call when a device is found.  Returns 0 or -errno.
-> >   * @scan: optional function to call after successful probe; intended
-> >   *    for virtio-scsi to invoke a scan.
-> 
+Is my understanding correct that __ufshcd_send_uic_cmd() does not modify 
+cmd->argument3? If so, why does this function copy cmd->argument3 and 
+re-assign cmd->argument3?
+
+> +	timeout = ktime_add_ms(ktime_get(), UIC_PA_RDY_TIMEOUT);
+
+"deadline" is probably a better name for this variable than "timeout". 
+Additionally, please consider using jiffies since I think that the 
+accuracy of the jiffies counter is sufficient in this context.
+
+> +	do {
+> +		spin_lock_irqsave(hba->host->host_lock, flags);
+> +		hba->active_uic_cmd = NULL;
+
+Is my understanding correct that it is guaranteed that 
+hba->active_uic_cmd is NULL here? If so, what is the purpose of the 
+above statement?
+
+> +		ret = __ufshcd_send_uic_cmd(hba, cmd, true);
+> +		spin_unlock_irqrestore(hba->host->host_lock, flags);
+> +		if (ret) {
+> +			dev_err(hba->dev,
+> +				"pwr ctrl cmd 0x%x with mode 0x%x uic error %d\n",
+> +				cmd->command, cmd->argument3, ret);
+> +			goto out;
+> +		}
+> +
+> +		/* This value is heuristic */
+> +		if (!wait_for_completion_timeout(&cmd->done,
+> +		    msecs_to_jiffies(5))) {
+
+Please align msecs_to_jiffies(5) with the first argument ("&cmd->done").
+
+> +			ret = -ETIMEDOUT;
+> +			dev_err(hba->dev,
+> +				"pwr ctrl cmd 0x%x with mode 0x%x timeout\n",
+> +				cmd->command, cmd->argument3);
+> +			if (cmd->cmd_active)
+> +				goto out;
+> +
+> +			dev_info(hba->dev, "%s: pwr ctrl cmd has already been completed\n", __func__);
+> +		}
+> +
+> +		/* retry for only busy cases */
+
+Please fix the word order in the above comment (for only -> only for)
+
+Thanks,
+
+Bart.
