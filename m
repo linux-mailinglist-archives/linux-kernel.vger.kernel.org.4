@@ -2,99 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0DA6FD656
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 07:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9076FD65C
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 07:48:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235972AbjEJFrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 01:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48252 "EHLO
+        id S235982AbjEJFsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 01:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbjEJFrx (ORCPT
+        with ESMTP id S235983AbjEJFsF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 01:47:53 -0400
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B6323ABA;
-        Tue,  9 May 2023 22:47:52 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-9659e9bbff5so1227579566b.1;
-        Tue, 09 May 2023 22:47:52 -0700 (PDT)
+        Wed, 10 May 2023 01:48:05 -0400
+Received: from mail-ot1-x32a.google.com (mail-ot1-x32a.google.com [IPv6:2607:f8b0:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79DE03C0E
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 22:48:03 -0700 (PDT)
+Received: by mail-ot1-x32a.google.com with SMTP id 46e09a7af769-6ab0bad2587so1820716a34.3
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 22:48:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1683697682; x=1686289682;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aLoXxmvmI+TNDBhJrgne+NmasMw88TAHwNMgEXRV8rI=;
+        b=cdGX27W3aTaVuF1lXqNU3dXFL5s/Mxv+Moz1oLv1bQd1dEC9mDTi2x1P2N71gBko7J
+         2+zczCTSBLiri2fJqfSyyz5RHx46ktfWmUOXnHuyj5Cn4nTnemxRsBPtCWjjZawCjJGN
+         78Z4MCWQKxZMpusPRAJQCksQy1Dfq+cU/sE+LDbzedpxxiDwbqNmgut9N0xguAbrwjC6
+         i26od8SWAexY2jtV7kg0NYHScaH2lXuJWt2XqxC61phsOtpGEOKp0RycWSufEb7ci05D
+         XrgVIiuCTq2cXFJRCtMevAMjlG69+8PadWF6hGIxq7j2gai3jXAqXDEXXYFo0g1p+Z4b
+         ehIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683697671; x=1686289671;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sg0FkSVvrjlyggw4C3h0xdz7n3dXd4oy5mZxYMDijT0=;
-        b=lixYvLaLGQTRVWGn3heWXGsbKpZC9c/QMQHMebo6JQ/QUrOQaiTSzsiGACN516bBk7
-         g3hP9Yc6z0208N/CBVpFHLkihXjvhvxeD72xDI0ERHMZfo8M3ggIbylYFY86UDEPPdJ+
-         2dOeoD4KdW8nsR1dDXCuJHb39yOzumw8FHYg001t4rL0h4Z6uGxHytjbtpRXuuI8M6h7
-         hpM4oKXMzuYIG+/Rz620ZWjstBnEg4Arrxf0Tu3dGq8Gav4g6Ql7MbyNRZW7cukl4W3Y
-         04y5u6l7N16CuyoaM9Rlm5yZDnsx6uXACO6zQTxvPSQ9HBqYBl9Pu6Y+sbn4OV6gjQg3
-         +q8w==
-X-Gm-Message-State: AC+VfDwZTT/CohvZNcSgKhQ/gUG/KJ7UD3EZh8Knnojtizsm9eRU4Eul
-        NfZ7TCfh9pOURCRLo71P7Go=
-X-Google-Smtp-Source: ACHHUZ5h2mn/D2OP/eltk2czCD55FmQUa5PyiY/W/Kk9ERcEWCZWCuXABlynT8JMCgY0PPz38Ty4Pw==
-X-Received: by 2002:a17:907:62aa:b0:94f:62a2:d1ab with SMTP id nd42-20020a17090762aa00b0094f62a2d1abmr15410946ejc.63.1683697670652;
-        Tue, 09 May 2023 22:47:50 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::aaaa:59? ([2a0b:e7c0:0:107::aaaa:59])
-        by smtp.gmail.com with ESMTPSA id la26-20020a170906ad9a00b00967a18df1easm2214299ejb.117.2023.05.09.22.47.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 22:47:50 -0700 (PDT)
-Message-ID: <f03cd481-c5ee-2561-ea0a-b1ce5d039631@kernel.org>
-Date:   Wed, 10 May 2023 07:47:48 +0200
+        d=1e100.net; s=20221208; t=1683697682; x=1686289682;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aLoXxmvmI+TNDBhJrgne+NmasMw88TAHwNMgEXRV8rI=;
+        b=ixDfIttD/bl/NuJVHsW8g2VlNSfLGgVxrNP8gxq+v25vp67lRKHWKeai/H1nbcc9oW
+         8hbkpC86D6OhCw6uDFTEcep6LLwp1V6mvOcEMNJoo80X1TAM1v/uuNvMNlV+ieNNKgNG
+         iWrLVcwo770rWp2UjhIzYZvvTsdaaTlohsgSem65h/FUx9nfQ9sPhK12KPt8cL2rlGdb
+         piSVElFzuCiH8tf+Ibdlk/QOnxr9LbbMlYTqx2hMZkZhqezwd3p0qv+h/EAtcV66KguP
+         Uspw1UP04f/XU+0ehuObYe+gILyrBVS0t5JaXK49o5MZTgEwmxAui9sxNtZTNW3oC0IE
+         k7kg==
+X-Gm-Message-State: AC+VfDwYEiX1UHvlp1XhvpRsZmDkvDamB4zt2TMjdzaW6YmxhLDQJWVk
+        hRzn1WosSzkjPESq1EPxWfyR/Q==
+X-Google-Smtp-Source: ACHHUZ4YI0Ows+2qLCE5z9Sy2RLUd1OHJeod9NGdxiAb7Ex5AAbigEasnBSuYpWAru1W0u5cnRfMdw==
+X-Received: by 2002:a9d:730d:0:b0:6ab:b20:18a5 with SMTP id e13-20020a9d730d000000b006ab0b2018a5mr2569954otk.26.1683697682642;
+        Tue, 09 May 2023 22:48:02 -0700 (PDT)
+Received: from sunil-laptop ([106.51.188.76])
+        by smtp.gmail.com with ESMTPSA id p25-20020a9d76d9000000b0068bd922a244sm603978otl.20.2023.05.09.22.47.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 22:48:02 -0700 (PDT)
+Date:   Wed, 10 May 2023 11:17:49 +0530
+From:   Sunil V L <sunilvl@ventanamicro.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-acpi@vger.kernel.org,
+        linux-crypto@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        llvm@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Weili Qian <qianweili@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Marc Zyngier <maz@kernel.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>
+Subject: Re: [PATCH V5 03/21] crypto: hisilicon/qm: Fix to enable build with
+ RISC-V clang
+Message-ID: <ZFswBePAtF/ror5G@sunil-laptop>
+References: <20230508115237.216337-1-sunilvl@ventanamicro.com>
+ <20230508115237.216337-4-sunilvl@ventanamicro.com>
+ <ZFmtSReX9/WR5CkK@gondor.apana.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3 1/6] serial: 8250: Change dl_read/write to handle value
- as u32
-Content-Language: en-US
-To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-serial@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Niklas Schnelle <schnelle@linux.ibm.com>
-References: <20230509113924.19540-1-ilpo.jarvinen@linux.intel.com>
- <20230509113924.19540-2-ilpo.jarvinen@linux.intel.com>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <20230509113924.19540-2-ilpo.jarvinen@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZFmtSReX9/WR5CkK@gondor.apana.org.au>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09. 05. 23, 13:39, Ilpo Järvinen wrote:
-> Divisor latch read/write functions currently handle the value is int.
-
-*as* int?
-
-> As the value is related to HW context, u32 makes much more sense than a
-> signed type.
+On Tue, May 09, 2023 at 10:17:45AM +0800, Herbert Xu wrote:
+> On Mon, May 08, 2023 at 05:22:19PM +0530, Sunil V L wrote:
+> > With CONFIG_ACPI enabled for RISC-V, this driver gets enabled in
+> > allmodconfig build. However, build fails with clang and below
+> > error is seen.
+> > 
+> > drivers/crypto/hisilicon/qm.c:627:10: error: invalid output constraint '+Q' in asm
+> >                        "+Q" (*((char __iomem *)fun_base))
+> >                        ^
+> > This is expected error with clang due to the way it is designed.
+> > 
+> > To fix this issue, move arm64 assembly code under #if.
+> > 
+> > Link: https://github.com/ClangBuiltLinux/linux/issues/999
+> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> > [sunilvl@ventanamicro.com: Moved tmp0 and tmp1 into the #if]
+> > Signed-off-by: Sunil V L <sunilvl@ventanamicro.com>
+> > ---
+> >  drivers/crypto/hisilicon/qm.c | 13 +++++++------
+> >  1 file changed, 7 insertions(+), 6 deletions(-)
+> > 
+> > diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
+> > index ad0c042b5e66..2eaeaac2e246 100644
+> > --- a/drivers/crypto/hisilicon/qm.c
+> > +++ b/drivers/crypto/hisilicon/qm.c
+> > @@ -610,13 +610,9 @@ EXPORT_SYMBOL_GPL(hisi_qm_wait_mb_ready);
+> >  static void qm_mb_write(struct hisi_qm *qm, const void *src)
+> >  {
+> >  	void __iomem *fun_base = qm->io_base + QM_MB_CMD_SEND_BASE;
+> > -	unsigned long tmp0 = 0, tmp1 = 0;
+> >  
+> > -	if (!IS_ENABLED(CONFIG_ARM64)) {
+> > -		memcpy_toio(fun_base, src, 16);
+> > -		dma_wmb();
+> > -		return;
+> > -	}
 > 
-> While at it, name the parameters in the callback signature.
-...
-> --- a/drivers/tty/serial/8250/8250_port.c
-> +++ b/drivers/tty/serial/8250/8250_port.c
-...
-> @@ -847,7 +847,7 @@ static void disable_rsa(struct uart_8250_port *up)
->   static int size_fifo(struct uart_8250_port *up)
->   {
->   	unsigned char old_fcr, old_mcr, old_lcr;
-> -	unsigned short old_dl;
-> +	unsigned int old_dl;
+> Please leave this bit as it stands.
+> 
+> > +#if IS_ENABLED(CONFIG_ARM64)
+> > +	unsigned long tmp0 = 0, tmp1 = 0;
+> >  
+> >  	asm volatile("ldp %0, %1, %3\n"
+> >  		     "stp %0, %1, %2\n"
+> > @@ -626,6 +622,11 @@ static void qm_mb_write(struct hisi_qm *qm, const void *src)
+> >  		       "+Q" (*((char __iomem *)fun_base))
+> >  		     : "Q" (*((char *)src))
+> >  		     : "memory");
+> 
+> And simply add the ifdef around the assembly.
+> 
+Sure, Herbert.
 
-I am missing the context, but why not u32 here?
-
-thanks,
--- 
-js
-suse labs
-
+Thanks!
+Sunil
