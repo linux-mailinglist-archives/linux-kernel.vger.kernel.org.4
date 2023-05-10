@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BFAA6FDC64
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 45B146FDC65
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236732AbjEJLOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 07:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39602 "EHLO
+        id S236814AbjEJLOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 07:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236726AbjEJLNz (ORCPT
+        with ESMTP id S236366AbjEJLN7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 07:13:55 -0400
+        Wed, 10 May 2023 07:13:59 -0400
 Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27155449C
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 04:13:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0507296
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 04:13:52 -0700 (PDT)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 793D15FD25;
-        Wed, 10 May 2023 14:13:46 +0300 (MSK)
+        by mx.sberdevices.ru (Postfix) with ESMTP id 7164C5FD26;
+        Wed, 10 May 2023 14:13:50 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1683717226;
-        bh=t19ScH83QlOV2MoLDXmhWB2urLyNhAs8wD4po+eanN4=;
+        s=mail; t=1683717230;
+        bh=ts8L8EufclojNwHjAYYqvEX+8MMKKOVoJ4Q4/8XgsZE=;
         h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=AtGeo1BpEMLlVbwYhweKX4DFHWzRug4w9xBqGr0l6LmSNocnqgfq02B2X28xNAxtj
-         J6CugNMTQyz8Mt+DSueaXl7HFXeIISOyaz4GY62G4Runx2t0biadIXT2S3e+l+0/mi
-         TMaUfEPzTZ20jrIZzY9+ANVCkTWRs0lSqYITD6fSEE5/xzoN4znMZijXHUM9CIOCZK
-         VejqI5PFJ3JhENwm8MkqClJKDk+gaP/nptOGr3AsxNEhVmLEfwVb5ObM4TQKzUhR6S
-         bb3liHAXo4xIlHeWumfIwXs73qFKIRw9IdEITf8eUxBXefNYc52WHsuR0/RvV5vNyu
-         jncobylzRLf/Q==
+        b=FI2zCxOb2+Ryxs5ppqJ8RDmPTBvmnIHgEfBED9UWdnuuxkmqg/5zJ0x3kiT/iIepi
+         feDEVUzoV4KjjYKv9e0QqF6VQ/3tSYA3pXi25zhRpRV7Gi6GbSi3AuynJvtHcoIzAr
+         Xctd09ihAryVOsxeI5bWJaLrzmBoAly2y8l6VhcY1QlhWoZSp5zGjqNqdkCKu+Nr/X
+         wN1FcQ4XXhXwp6u9dPJf0k0Ukd56RYPdmdG17ygcHEaMcVNYZy6Dqx5Ywu/DEv7Qmj
+         3sE6NXLWFFOE4NZy0S1IeIy7Ulsa66M+XhHg1ZTLfpXyTqt4ZnGw94uz4YHjUoBQ+h
+         u4QnJfenUr3bw==
 Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
         by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 10 May 2023 14:13:46 +0300 (MSK)
+        Wed, 10 May 2023 14:13:50 +0300 (MSK)
 From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
 To:     Liang Yang <liang.yang@amlogic.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -40,16 +40,16 @@ To:     Liang Yang <liang.yang@amlogic.com>,
         Kevin Hilman <khilman@baylibre.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yixun Lan <yixun.lan@amlogic.com>
+        Yixun Lan <yixun.lan@amlogic.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>
 CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
         Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
         <linux-mtd@lists.infradead.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 4/6] mtd: rawnand: meson: check buffer length
-Date:   Wed, 10 May 2023 14:08:32 +0300
-Message-ID: <20230510110835.26115-5-AVKrasnov@sberdevices.ru>
+Subject: [PATCH v3 5/6] mtd: rawnand: meson: remove unneeded bitwise OR with zeroes
+Date:   Wed, 10 May 2023 14:08:33 +0300
+Message-ID: <20230510110835.26115-6-AVKrasnov@sberdevices.ru>
 X-Mailer: git-send-email 2.35.0
 In-Reply-To: <20230510110835.26115-1-AVKrasnov@sberdevices.ru>
 References: <20230510110835.26115-1-AVKrasnov@sberdevices.ru>
@@ -76,94 +76,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This NAND controller has limited buffer length, so check it before
-command execution to avoid length trim. Also check MTD write size on
-chip attach.
+Both operations have no effect.
 
 Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
 ---
- drivers/mtd/nand/raw/meson_nand.c | 22 +++++++++++++++++++---
- 1 file changed, 19 insertions(+), 3 deletions(-)
+ drivers/mtd/nand/raw/meson_nand.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
-index 331377a2c5dc..ed7ec1bfd07e 100644
+index ed7ec1bfd07e..bc99a098f3ca 100644
 --- a/drivers/mtd/nand/raw/meson_nand.c
 +++ b/drivers/mtd/nand/raw/meson_nand.c
-@@ -111,6 +111,8 @@
- #define NFC_USER_BYTES		2
- #define NFC_OOB_PER_ECC(nand)	((nand)->ecc.bytes + NFC_USER_BYTES)
+@@ -630,12 +630,12 @@ static int meson_nfc_rw_cmd_prepare_and_execute(struct nand_chip *nand,
+ 	cmd0 = in ? NAND_CMD_READ0 : NAND_CMD_SEQIN;
+ 	nfc->cmdfifo.rw.cmd0 = cs | NFC_CMD_CLE | cmd0;
  
-+#define NFC_CMD_RAW_LEN		GENMASK(13, 0)
-+
- struct meson_nfc_nand_chip {
- 	struct list_head node;
- 	struct nand_chip nand;
-@@ -284,7 +286,7 @@ static void meson_nfc_cmd_access(struct nand_chip *nand, int raw, bool dir,
- 
- 	if (raw) {
- 		len = mtd->writesize + mtd->oobsize;
--		cmd = (len & GENMASK(13, 0)) | scrambler | DMA_DIR(dir);
-+		cmd = len | scrambler | DMA_DIR(dir);
- 		writel(cmd, nfc->reg_base + NFC_REG_CMD);
- 		return;
+-	addrs[0] = cs | NFC_CMD_ALE | 0;
++	addrs[0] = cs | NFC_CMD_ALE;
+ 	if (mtd->writesize <= 512) {
+ 		cmd_num--;
+ 		row_start = 1;
+ 	} else {
+-		addrs[1] = cs | NFC_CMD_ALE | 0;
++		addrs[1] = cs | NFC_CMD_ALE;
+ 		row_start = 2;
  	}
-@@ -562,6 +564,9 @@ static int meson_nfc_read_buf(struct nand_chip *nand, u8 *buf, int len)
- 	u32 cmd;
- 	u8 *info;
- 
-+	if (len > NFC_CMD_RAW_LEN)
-+		return -EINVAL;
-+
- 	info = kzalloc(PER_INFO_BYTE, GFP_KERNEL);
- 	if (!info)
- 		return -ENOMEM;
-@@ -571,7 +576,7 @@ static int meson_nfc_read_buf(struct nand_chip *nand, u8 *buf, int len)
- 	if (ret)
- 		goto out;
- 
--	cmd = NFC_CMD_N2M | (len & GENMASK(13, 0));
-+	cmd = NFC_CMD_N2M | len;
- 	writel(cmd, nfc->reg_base + NFC_REG_CMD);
- 
- 	meson_nfc_drain_cmd(nfc);
-@@ -590,12 +595,15 @@ static int meson_nfc_write_buf(struct nand_chip *nand, u8 *buf, int len)
- 	int ret = 0;
- 	u32 cmd;
- 
-+	if (len > NFC_CMD_RAW_LEN)
-+		return -EINVAL;
-+
- 	ret = meson_nfc_dma_buffer_setup(nand, buf, len, NULL,
- 					 0, DMA_TO_DEVICE);
- 	if (ret)
- 		return ret;
- 
--	cmd = NFC_CMD_M2N | (len & GENMASK(13, 0));
-+	cmd = NFC_CMD_M2N | len;
- 	writel(cmd, nfc->reg_base + NFC_REG_CMD);
- 
- 	meson_nfc_drain_cmd(nfc);
-@@ -1328,6 +1336,7 @@ static int meson_nand_attach_chip(struct nand_chip *nand)
- 	struct meson_nfc_nand_chip *meson_chip = to_meson_nand(nand);
- 	struct mtd_info *mtd = nand_to_mtd(nand);
- 	int nsectors = mtd->writesize / 1024;
-+	int raw_writesize;
- 	int ret;
- 
- 	if (!mtd->name) {
-@@ -1339,6 +1348,13 @@ static int meson_nand_attach_chip(struct nand_chip *nand)
- 			return -ENOMEM;
- 	}
- 
-+	raw_writesize = mtd->writesize + mtd->oobsize;
-+	if (raw_writesize > NFC_CMD_RAW_LEN) {
-+		dev_err(nfc->dev, "too big write size in raw mode: %d > %ld\n",
-+			raw_writesize, NFC_CMD_RAW_LEN);
-+		return -EINVAL;
-+	}
-+
- 	if (nand->bbt_options & NAND_BBT_USE_FLASH)
- 		nand->bbt_options |= NAND_BBT_NO_OOB;
  
 -- 
 2.35.0
