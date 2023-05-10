@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDDDD6FE318
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 19:13:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5134B6FE315
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 19:12:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236561AbjEJRNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 13:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55374 "EHLO
+        id S236479AbjEJRMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 13:12:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236463AbjEJRMr (ORCPT
+        with ESMTP id S230440AbjEJRMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 10 May 2023 13:12:47 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDEC59DC;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBB5E55AD;
         Wed, 10 May 2023 10:12:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 624F864A1E;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6BA9664A32;
         Wed, 10 May 2023 17:12:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAF9AC4339B;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7D3EC433A0;
         Wed, 10 May 2023 17:12:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1683738760;
-        bh=saXyRll4Zw4vg43jUmEewj8gg8IbkmOvjG1EQyV1h6U=;
+        bh=KDLz2XZ/U61uBOSzISq5Lmmyrsw5rPfsdBYT/yaU1gs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YHcWSkl+PVtvsaUD5Ps2nW7yAfDPz8LQohddulwDylOGULyOLjOqd0hsrcXSk9dWZ
-         6MbVg3dKSfFxtQ/y3rOEWBXllgu4jTeAK4zCCVWps1zwkzE2gWT+DP09AdDjwF7jcI
-         kd+oHlMRMlfCOzlLExc2ehHwqSmbKuGfxTqocpq9A6azNdcCxJwCSX/tUiRLl0l8Iz
-         U8iQu0ydDRfVgWgusc6VBfJO017N+eKZLsrKxjmt4LjXO3A4J4fW/VekRODtlhWxba
-         86PWMHO2smh0fHJ/lb4qK5ZyhesYx3HtNDazjn43J2cHgzVsWnLpmrsYRbCCSvXls1
-         nzQ6hLAu/JG8w==
+        b=kH2H8Nwzm84ddIvkA4D8C9Uo9xeEuzeudQxT16AV+LHp7D+4rWV9ORCvdVjzzlIxD
+         4EAU3MzApfhHoow7hEvlePyhVbv0OeLcrO1TjT6C1DltuNBxUd0WVjNJTw6ZY9j97F
+         hVTOfKJlqD99jV+gmzDgvUJN7LS8MdBpRnBBKPBrUp2GuaO53Eb6x91TnzdSVsPGck
+         4DbVhhmHJoHnPr4yO562ldfMcPuFT2xGTmdEk35s3HnbeKo94MUcfsrZ6jbkxbqAxE
+         Rbui9GV7ISb8wviqseT/2pMpBAzF8VYZnx2ebknwWjz3Wj4x3GUueqzhnFY1Kv6j5r
+         yBjaPgNySlVUw==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 5AE88CE127A; Wed, 10 May 2023 10:12:40 -0700 (PDT)
+        id 5D937CE127D; Wed, 10 May 2023 10:12:40 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
         rostedt@goodmis.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Joel Fernandes <joel@joelfernandes.org>,
         "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 3/6] rcu/rcuscale: Move rcu_scale_*() after kfree_scale_cleanup()
-Date:   Wed, 10 May 2023 10:12:35 -0700
-Message-Id: <20230510171238.2189921-3-paulmck@kernel.org>
+Subject: [PATCH rcu 4/6] rcu/rcuscale: Stop kfree_scale_thread thread(s) after unloading rcuscale
+Date:   Wed, 10 May 2023 10:12:36 -0700
+Message-Id: <20230510171238.2189921-4-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <7ffd4a5d-61e9-4b4c-a312-a85bcde08c39@paulmck-laptop>
 References: <7ffd4a5d-61e9-4b4c-a312-a85bcde08c39@paulmck-laptop>
@@ -59,236 +61,73 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 
-This code-movement-only commit moves the rcu_scale_cleanup() and
-rcu_scale_shutdown() functions to follow kfree_scale_cleanup().
-This is code movement is in preparation for a bug-fix patch that invokes
-kfree_scale_cleanup() from rcu_scale_cleanup().
+Running the 'kfree_rcu_test' test case [1] results in a splat [2].
+The root cause is the kfree_scale_thread thread(s) continue running
+after unloading the rcuscale module.  This commit fixes that isue by
+invoking kfree_scale_cleanup() from rcu_scale_cleanup() when removing
+the rcuscale module.
 
+[1] modprobe rcuscale kfree_rcu_test=1
+    // After some time
+    rmmod rcuscale
+    rmmod torture
+
+[2] BUG: unable to handle page fault for address: ffffffffc0601a87
+    #PF: supervisor instruction fetch in kernel mode
+    #PF: error_code(0x0010) - not-present page
+    PGD 11de4f067 P4D 11de4f067 PUD 11de51067 PMD 112f4d067 PTE 0
+    Oops: 0010 [#1] PREEMPT SMP NOPTI
+    CPU: 1 PID: 1798 Comm: kfree_scale_thr Not tainted 6.3.0-rc1-rcu+ #1
+    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015
+    RIP: 0010:0xffffffffc0601a87
+    Code: Unable to access opcode bytes at 0xffffffffc0601a5d.
+    RSP: 0018:ffffb25bc2e57e18 EFLAGS: 00010297
+    RAX: 0000000000000000 RBX: ffffffffc061f0b6 RCX: 0000000000000000
+    RDX: 0000000000000000 RSI: ffffffff962fd0de RDI: ffffffff962fd0de
+    RBP: ffffb25bc2e57ea8 R08: 0000000000000000 R09: 0000000000000000
+    R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000000
+    R13: 0000000000000000 R14: 000000000000000a R15: 00000000001c1dbe
+    FS:  0000000000000000(0000) GS:ffff921fa2200000(0000) knlGS:0000000000000000
+    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+    CR2: ffffffffc0601a5d CR3: 000000011de4c006 CR4: 0000000000370ee0
+    DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+    DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+    Call Trace:
+     <TASK>
+     ? kvfree_call_rcu+0xf0/0x3a0
+     ? kthread+0xf3/0x120
+     ? kthread_complete_and_exit+0x20/0x20
+     ? ret_from_fork+0x1f/0x30
+     </TASK>
+    Modules linked in: rfkill sunrpc ... [last unloaded: torture]
+    CR2: ffffffffc0601a87
+    ---[ end trace 0000000000000000 ]---
+
+Fixes: e6e78b004fa7 ("rcuperf: Add kfree_rcu() performance Tests")
+Reviewed-by: Davidlohr Bueso <dave@stgolabs.net>
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- kernel/rcu/rcuscale.c | 194 +++++++++++++++++++++---------------------
- 1 file changed, 97 insertions(+), 97 deletions(-)
+ kernel/rcu/rcuscale.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
-index e82ec9f9a5d8..7e8965b0827a 100644
+index 7e8965b0827a..d1221731c7cf 100644
 --- a/kernel/rcu/rcuscale.c
 +++ b/kernel/rcu/rcuscale.c
-@@ -522,89 +522,6 @@ rcu_scale_print_module_parms(struct rcu_scale_ops *cur_ops, const char *tag)
- 		 scale_type, tag, nrealreaders, nrealwriters, verbose, shutdown);
- }
+@@ -797,6 +797,11 @@ rcu_scale_cleanup(void)
+ 	if (gp_exp && gp_async)
+ 		SCALEOUT_ERRSTRING("No expedited async GPs, so went with async!");
  
--static void
--rcu_scale_cleanup(void)
--{
--	int i;
--	int j;
--	int ngps = 0;
--	u64 *wdp;
--	u64 *wdpp;
--
--	/*
--	 * Would like warning at start, but everything is expedited
--	 * during the mid-boot phase, so have to wait till the end.
--	 */
--	if (rcu_gp_is_expedited() && !rcu_gp_is_normal() && !gp_exp)
--		SCALEOUT_ERRSTRING("All grace periods expedited, no normal ones to measure!");
--	if (rcu_gp_is_normal() && gp_exp)
--		SCALEOUT_ERRSTRING("All grace periods normal, no expedited ones to measure!");
--	if (gp_exp && gp_async)
--		SCALEOUT_ERRSTRING("No expedited async GPs, so went with async!");
--
--	if (torture_cleanup_begin())
--		return;
--	if (!cur_ops) {
--		torture_cleanup_end();
--		return;
--	}
--
--	if (reader_tasks) {
--		for (i = 0; i < nrealreaders; i++)
--			torture_stop_kthread(rcu_scale_reader,
--					     reader_tasks[i]);
--		kfree(reader_tasks);
--	}
--
--	if (writer_tasks) {
--		for (i = 0; i < nrealwriters; i++) {
--			torture_stop_kthread(rcu_scale_writer,
--					     writer_tasks[i]);
--			if (!writer_n_durations)
--				continue;
--			j = writer_n_durations[i];
--			pr_alert("%s%s writer %d gps: %d\n",
--				 scale_type, SCALE_FLAG, i, j);
--			ngps += j;
--		}
--		pr_alert("%s%s start: %llu end: %llu duration: %llu gps: %d batches: %ld\n",
--			 scale_type, SCALE_FLAG,
--			 t_rcu_scale_writer_started, t_rcu_scale_writer_finished,
--			 t_rcu_scale_writer_finished -
--			 t_rcu_scale_writer_started,
--			 ngps,
--			 rcuscale_seq_diff(b_rcu_gp_test_finished,
--					   b_rcu_gp_test_started));
--		for (i = 0; i < nrealwriters; i++) {
--			if (!writer_durations)
--				break;
--			if (!writer_n_durations)
--				continue;
--			wdpp = writer_durations[i];
--			if (!wdpp)
--				continue;
--			for (j = 0; j < writer_n_durations[i]; j++) {
--				wdp = &wdpp[j];
--				pr_alert("%s%s %4d writer-duration: %5d %llu\n",
--					scale_type, SCALE_FLAG,
--					i, j, *wdp);
--				if (j % 100 == 0)
--					schedule_timeout_uninterruptible(1);
--			}
--			kfree(writer_durations[i]);
--		}
--		kfree(writer_tasks);
--		kfree(writer_durations);
--		kfree(writer_n_durations);
--	}
--
--	/* Do torture-type-specific cleanup operations.  */
--	if (cur_ops->cleanup != NULL)
--		cur_ops->cleanup();
--
--	torture_cleanup_end();
--}
--
- /*
-  * Return the number if non-negative.  If -1, the number of CPUs.
-  * If less than -1, that much less than the number of CPUs, but
-@@ -624,20 +541,6 @@ static int compute_real(int n)
- 	return nr;
- }
- 
--/*
-- * RCU scalability shutdown kthread.  Just waits to be awakened, then shuts
-- * down system.
-- */
--static int
--rcu_scale_shutdown(void *arg)
--{
--	wait_event_idle(shutdown_wq, atomic_read(&n_rcu_scale_writer_finished) >= nrealwriters);
--	smp_mb(); /* Wake before output. */
--	rcu_scale_cleanup();
--	kernel_power_off();
--	return -EINVAL;
--}
--
- /*
-  * kfree_rcu() scalability tests: Start a kfree_rcu() loop on all CPUs for number
-  * of iterations and measure total time and number of GP for all iterations to complete.
-@@ -874,6 +777,103 @@ kfree_scale_init(void)
- 	return firsterr;
- }
- 
-+static void
-+rcu_scale_cleanup(void)
-+{
-+	int i;
-+	int j;
-+	int ngps = 0;
-+	u64 *wdp;
-+	u64 *wdpp;
-+
-+	/*
-+	 * Would like warning at start, but everything is expedited
-+	 * during the mid-boot phase, so have to wait till the end.
-+	 */
-+	if (rcu_gp_is_expedited() && !rcu_gp_is_normal() && !gp_exp)
-+		SCALEOUT_ERRSTRING("All grace periods expedited, no normal ones to measure!");
-+	if (rcu_gp_is_normal() && gp_exp)
-+		SCALEOUT_ERRSTRING("All grace periods normal, no expedited ones to measure!");
-+	if (gp_exp && gp_async)
-+		SCALEOUT_ERRSTRING("No expedited async GPs, so went with async!");
-+
-+	if (torture_cleanup_begin())
-+		return;
-+	if (!cur_ops) {
-+		torture_cleanup_end();
++	if (kfree_rcu_test) {
++		kfree_scale_cleanup();
 +		return;
 +	}
 +
-+	if (reader_tasks) {
-+		for (i = 0; i < nrealreaders; i++)
-+			torture_stop_kthread(rcu_scale_reader,
-+					     reader_tasks[i]);
-+		kfree(reader_tasks);
-+	}
-+
-+	if (writer_tasks) {
-+		for (i = 0; i < nrealwriters; i++) {
-+			torture_stop_kthread(rcu_scale_writer,
-+					     writer_tasks[i]);
-+			if (!writer_n_durations)
-+				continue;
-+			j = writer_n_durations[i];
-+			pr_alert("%s%s writer %d gps: %d\n",
-+				 scale_type, SCALE_FLAG, i, j);
-+			ngps += j;
-+		}
-+		pr_alert("%s%s start: %llu end: %llu duration: %llu gps: %d batches: %ld\n",
-+			 scale_type, SCALE_FLAG,
-+			 t_rcu_scale_writer_started, t_rcu_scale_writer_finished,
-+			 t_rcu_scale_writer_finished -
-+			 t_rcu_scale_writer_started,
-+			 ngps,
-+			 rcuscale_seq_diff(b_rcu_gp_test_finished,
-+					   b_rcu_gp_test_started));
-+		for (i = 0; i < nrealwriters; i++) {
-+			if (!writer_durations)
-+				break;
-+			if (!writer_n_durations)
-+				continue;
-+			wdpp = writer_durations[i];
-+			if (!wdpp)
-+				continue;
-+			for (j = 0; j < writer_n_durations[i]; j++) {
-+				wdp = &wdpp[j];
-+				pr_alert("%s%s %4d writer-duration: %5d %llu\n",
-+					scale_type, SCALE_FLAG,
-+					i, j, *wdp);
-+				if (j % 100 == 0)
-+					schedule_timeout_uninterruptible(1);
-+			}
-+			kfree(writer_durations[i]);
-+		}
-+		kfree(writer_tasks);
-+		kfree(writer_durations);
-+		kfree(writer_n_durations);
-+	}
-+
-+	/* Do torture-type-specific cleanup operations.  */
-+	if (cur_ops->cleanup != NULL)
-+		cur_ops->cleanup();
-+
-+	torture_cleanup_end();
-+}
-+
-+/*
-+ * RCU scalability shutdown kthread.  Just waits to be awakened, then shuts
-+ * down system.
-+ */
-+static int
-+rcu_scale_shutdown(void *arg)
-+{
-+	wait_event_idle(shutdown_wq, atomic_read(&n_rcu_scale_writer_finished) >= nrealwriters);
-+	smp_mb(); /* Wake before output. */
-+	rcu_scale_cleanup();
-+	kernel_power_off();
-+	return -EINVAL;
-+}
-+
- static int __init
- rcu_scale_init(void)
- {
+ 	if (torture_cleanup_begin())
+ 		return;
+ 	if (!cur_ops) {
 -- 
 2.40.1
 
