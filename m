@@ -2,308 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4477D6FD697
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 08:11:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B896FD6A3
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 08:19:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229595AbjEJGLk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 02:11:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57604 "EHLO
+        id S235850AbjEJGS6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 02:18:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbjEJGLi (ORCPT
+        with ESMTP id S235609AbjEJGSx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 02:11:38 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF209195
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 23:11:34 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1aad55244b7so52109115ad.2
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 23:11:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1683699094; x=1686291094;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vx0UmPiglxMBycN8p78aITZtdcFTRru0fYxYXq+j1cE=;
-        b=fcgifp2zw/Gegdr5FvAbRDbAp0tmxTchx+/eA/Wy9E8eRmA/NBtx58jxefDu9Ya5TH
-         F3O5wY3AtCcG6R7i5nNQ+/bW6nGu76pxmEnV46lTl3q/EWYSCHSEIZTExV5yqZTt3rh1
-         QLqUQ7obM00S5II8+1gmjinCGePCq3juH60BWi26ECtAuQ3UweDnmbBn83dY1SWSuTDF
-         Qnf7ptsn0rM75J80a+52lmH2yskaNlhY292ccYIx4lmSmU27s5g6lwKYbxKBey+Xq9/y
-         dRZjDTAe/1itAX7BhqCvuiV6EWBL3MIXjZKxNbww9qxkqrCgUtjKOFev+PZEtHmm/35I
-         +3FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683699094; x=1686291094;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vx0UmPiglxMBycN8p78aITZtdcFTRru0fYxYXq+j1cE=;
-        b=QxCj6IrXrkHXGSPsfDIApGNXGei8m8L4AqCLv6XlmyQsWIAbEK4xGdaaG2cNa7AjdE
-         8Q0cPwzESa3qPQvRLXSAad3y9mNQG0rQGVrha/ME5Mr2zkiEVEI/ELeLeRPXCHrB2EVc
-         YkC6aB8pW8GqPd1Hnd4VHT+tYNZLPdUawyNfYY+kCkogv+B8nMBMKZk9g303OMdv4RB6
-         sWLyRT7hE/oTr8yKMdggPgB6Tzv6jRAtbd5zxgwk1k1nqu0VXdGge9TwpJbU0zXvbhFr
-         IoqtLjMY5ADVasLjt6NPLLnjDxPw2ymHIXpHwiPq5n3I1ajYXRRv+c+aegwVpDuAPvuf
-         ODdw==
-X-Gm-Message-State: AC+VfDwZ/tNqOkmz3nim/0LH5L6Tdmixf5Ss+wzJ54Jwg5CNWiPZeIm6
-        niJvIFuvkdgfdz3CoSsGFagVDg==
-X-Google-Smtp-Source: ACHHUZ5iVcElk2cXd3OtYV7Z3xTYwHOT3YAAuCTv7qM94caK3lAekZCLwZlAEKUBgPsPx0AN1CQZKQ==
-X-Received: by 2002:a17:902:f683:b0:1ac:8148:8c40 with SMTP id l3-20020a170902f68300b001ac81488c40mr11127867plg.53.1683699094081;
-        Tue, 09 May 2023 23:11:34 -0700 (PDT)
-Received: from GL4FX4PXWL.bytedance.net ([139.177.225.232])
-        by smtp.gmail.com with ESMTPSA id j2-20020a170902da8200b001ab19724f64sm2814159plx.38.2023.05.09.23.11.31
-        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 09 May 2023 23:11:33 -0700 (PDT)
-From:   Peng Zhang <zhangpeng.00@bytedance.com>
-To:     Liam.Howlett@oracle.com
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
-        Peng Zhang <zhangpeng.00@bytedance.com>
-Subject: [PATCH 2/2] maple_tree: Drop mtree_alloc_{range,rrange}() and related functions.
-Date:   Wed, 10 May 2023 14:10:49 +0800
-Message-Id: <20230510061049.53977-2-zhangpeng.00@bytedance.com>
-X-Mailer: git-send-email 2.37.0 (Apple Git-136)
-In-Reply-To: <20230510061049.53977-1-zhangpeng.00@bytedance.com>
-References: <20230510061049.53977-1-zhangpeng.00@bytedance.com>
+        Wed, 10 May 2023 02:18:53 -0400
+Received: from out-3.mta1.migadu.com (out-3.mta1.migadu.com [95.215.58.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 973DF2723
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 23:18:51 -0700 (PDT)
+Date:   Wed, 10 May 2023 02:18:45 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683699529;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=55Q8X6t02662mXQC8+LwTPOHKnb3j6o+rlHjx+N49Hg=;
+        b=mLR/oq1oA26vtjEchErKnUDqmPN/zAImxyvJCM190/MgRMWxACL21IkwwDIIHANTb5MyGI
+        eAZCVOVSeEGXkHMgEUGClnRcpt57PHHrZFosb2W1ZpoA1M3hKKmPirWTOte064phHcWjmO
+        nmPp4HM7hyukvVDlP4nm4bsTyjg8fq4=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Jan Kara <jack@suse.cz>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        "Darrick J . Wong" <djwong@kernel.org>, dhowells@redhat.com
+Subject: Re: [PATCH 06/32] sched: Add task_struct->faults_disabled_mapping
+Message-ID: <ZFs3RYgdCeKjxYCw@moria.home.lan>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-7-kent.overstreet@linux.dev>
+ <20230510010737.heniyuxazlprrbd6@quack3>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230510010737.heniyuxazlprrbd6@quack3>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop mtree_alloc_{range,rrange}(), mas_alloc() and mas_fill_gap().
-mtree_alloc_{range,rrange}() currently have no users and can be easily
-implemented with mas_empty_area{_rev}(). mas_alloc() and mas_fill_gap()
-are just their internal functions, drop them together.
+On Wed, May 10, 2023 at 03:07:37AM +0200, Jan Kara wrote:
+> On Tue 09-05-23 12:56:31, Kent Overstreet wrote:
+> > From: Kent Overstreet <kent.overstreet@gmail.com>
+> > 
+> > This is used by bcachefs to fix a page cache coherency issue with
+> > O_DIRECT writes.
+> > 
+> > Also relevant: mapping->invalidate_lock, see below.
+> > 
+> > O_DIRECT writes (and other filesystem operations that modify file data
+> > while bypassing the page cache) need to shoot down ranges of the page
+> > cache - and additionally, need locking to prevent those pages from
+> > pulled back in.
+> > 
+> > But O_DIRECT writes invoke the page fault handler (via get_user_pages),
+> > and the page fault handler will need to take that same lock - this is a
+> > classic recursive deadlock if userspace has mmaped the file they're DIO
+> > writing to and uses those pages for the buffer to write from, and it's a
+> > lock ordering deadlock in general.
+> > 
+> > Thus we need a way to signal from the dio code to the page fault handler
+> > when we already are holding the pagecache add lock on an address space -
+> > this patch just adds a member to task_struct for this purpose. For now
+> > only bcachefs is implementing this locking, though it may be moved out
+> > of bcachefs and made available to other filesystems in the future.
+> 
+> It would be nice to have at least a link to the code that's actually using
+> the field you are adding.
 
-Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
----
- include/linux/maple_tree.h |   7 --
- lib/maple_tree.c           | 177 -------------------------------------
- 2 files changed, 184 deletions(-)
+Bit of a trick to link to a _later_ patch in the series from a commit
+message, but...
 
-diff --git a/include/linux/maple_tree.h b/include/linux/maple_tree.h
-index 542b09118a09f..3dd6edccf83af 100644
---- a/include/linux/maple_tree.h
-+++ b/include/linux/maple_tree.h
-@@ -306,13 +306,6 @@ int mtree_insert(struct maple_tree *mt, unsigned long index,
- 		void *entry, gfp_t gfp);
- int mtree_insert_range(struct maple_tree *mt, unsigned long first,
- 		unsigned long last, void *entry, gfp_t gfp);
--int mtree_alloc_range(struct maple_tree *mt, unsigned long *startp,
--		void *entry, unsigned long size, unsigned long min,
--		unsigned long max, gfp_t gfp);
--int mtree_alloc_rrange(struct maple_tree *mt, unsigned long *startp,
--		void *entry, unsigned long size, unsigned long min,
--		unsigned long max, gfp_t gfp);
--
- int mtree_store_range(struct maple_tree *mt, unsigned long first,
- 		      unsigned long last, void *entry, gfp_t gfp);
- int mtree_store(struct maple_tree *mt, unsigned long index,
-diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index b37065a6f570d..49dfe81dfa1b6 100644
---- a/lib/maple_tree.c
-+++ b/lib/maple_tree.c
-@@ -5120,46 +5120,6 @@ static inline void mas_awalk(struct ma_state *mas, unsigned long size)
- 	}
- }
- 
--/*
-- * mas_fill_gap() - Fill a located gap with @entry.
-- * @mas: The maple state
-- * @entry: The value to store
-- * @slot: The offset into the node to store the @entry
-- * @size: The size of the entry
-- * @index: The start location
-- */
--static inline void mas_fill_gap(struct ma_state *mas, void *entry,
--		unsigned char slot, unsigned long size, unsigned long *index)
--{
--	MA_WR_STATE(wr_mas, mas, entry);
--	unsigned char pslot = mte_parent_slot(mas->node);
--	struct maple_enode *mn = mas->node;
--	unsigned long *pivots;
--	enum maple_type ptype;
--	/*
--	 * mas->index is the start address for the search
--	 *  which may no longer be needed.
--	 * mas->last is the end address for the search
--	 */
--
--	*index = mas->index;
--	mas->last = mas->index + size - 1;
--
--	/*
--	 * It is possible that using mas->max and mas->min to correctly
--	 * calculate the index and last will cause an issue in the gap
--	 * calculation, so fix the ma_state here
--	 */
--	mas_ascend(mas);
--	ptype = mte_node_type(mas->node);
--	pivots = ma_pivots(mas_mn(mas), ptype);
--	mas->max = mas_safe_pivot(mas, pivots, pslot, ptype);
--	mas->min = mas_safe_min(mas, pivots, pslot);
--	mas->node = mn;
--	mas->offset = slot;
--	mas_wr_store_entry(&wr_mas);
--}
--
- /*
-  * mas_sparse_area() - Internal function.  Return upper or lower limit when
-  * searching for a gap in an empty tree.
-@@ -5307,74 +5267,6 @@ int mas_empty_area_rev(struct ma_state *mas, unsigned long min,
- }
- EXPORT_SYMBOL_GPL(mas_empty_area_rev);
- 
--static inline int mas_alloc(struct ma_state *mas, void *entry,
--		unsigned long size, unsigned long *index)
--{
--	unsigned long min;
--
--	mas_start(mas);
--	if (mas_is_none(mas) || mas_is_ptr(mas)) {
--		mas_root_expand(mas, entry);
--		if (mas_is_err(mas))
--			return xa_err(mas->node);
--
--		if (!mas->index)
--			return mas_pivot(mas, 0);
--		return mas_pivot(mas, 1);
--	}
--
--	/* Must be walking a tree. */
--	mas_awalk(mas, size);
--	if (mas_is_err(mas))
--		return xa_err(mas->node);
--
--	if (mas->offset == MAPLE_NODE_SLOTS)
--		goto no_gap;
--
--	/*
--	 * At this point, mas->node points to the right node and we have an
--	 * offset that has a sufficient gap.
--	 */
--	min = mas->min;
--	if (mas->offset)
--		min = mas_pivot(mas, mas->offset - 1) + 1;
--
--	if (mas_is_err(mas))
--		return xa_err(mas->node);
--
--	if (mas->index < min)
--		mas->index = min;
--
--	mas_fill_gap(mas, entry, mas->offset, size, index);
--	return 0;
--
--no_gap:
--	return -EBUSY;
--}
--
--static inline int mas_rev_alloc(struct ma_state *mas, unsigned long min,
--				unsigned long max, void *entry,
--				unsigned long size, unsigned long *index)
--{
--	int ret = 0;
--
--	ret = mas_empty_area_rev(mas, min, max, size);
--	if (ret)
--		return ret;
--
--	if (mas_is_err(mas))
--		return xa_err(mas->node);
--
--	if (mas->offset == MAPLE_NODE_SLOTS)
--		goto no_gap;
--
--	mas_fill_gap(mas, entry, mas->offset, size, index);
--	return 0;
--
--no_gap:
--	return -EBUSY;
--}
--
- /*
-  * mte_dead_leaves() - Mark all leaves of a node as dead.
-  * @mas: The maple state
-@@ -6481,75 +6373,6 @@ int mtree_insert(struct maple_tree *mt, unsigned long index, void *entry,
- }
- EXPORT_SYMBOL(mtree_insert);
- 
--int mtree_alloc_range(struct maple_tree *mt, unsigned long *startp,
--		void *entry, unsigned long size, unsigned long min,
--		unsigned long max, gfp_t gfp)
--{
--	int ret = 0;
--
--	MA_STATE(mas, mt, min, min);
--	if (!mt_is_alloc(mt))
--		return -EINVAL;
--
--	if (WARN_ON_ONCE(mt_is_reserved(entry)))
--		return -EINVAL;
--
--	if (min > max)
--		return -EINVAL;
--
--	if (max < size)
--		return -EINVAL;
--
--	if (!size)
--		return -EINVAL;
--
--	mtree_lock(mt);
--retry:
--	mas.offset = 0;
--	mas.index = min;
--	mas.last = max - size + 1;
--	ret = mas_alloc(&mas, entry, size, startp);
--	if (mas_nomem(&mas, gfp))
--		goto retry;
--
--	mtree_unlock(mt);
--	return ret;
--}
--EXPORT_SYMBOL(mtree_alloc_range);
--
--int mtree_alloc_rrange(struct maple_tree *mt, unsigned long *startp,
--		void *entry, unsigned long size, unsigned long min,
--		unsigned long max, gfp_t gfp)
--{
--	int ret = 0;
--
--	MA_STATE(mas, mt, min, max - size + 1);
--	if (!mt_is_alloc(mt))
--		return -EINVAL;
--
--	if (WARN_ON_ONCE(mt_is_reserved(entry)))
--		return -EINVAL;
--
--	if (min > max)
--		return -EINVAL;
--
--	if (max < size - 1)
--		return -EINVAL;
--
--	if (!size)
--		return -EINVAL;
--
--	mtree_lock(mt);
--retry:
--	ret = mas_rev_alloc(&mas, min, max, entry, size, startp);
--	if (mas_nomem(&mas, gfp))
--		goto retry;
--
--	mtree_unlock(mt);
--	return ret;
--}
--EXPORT_SYMBOL(mtree_alloc_rrange);
--
- /**
-  * mtree_erase() - Find an index and erase the entire range.
-  * @mt: The maple tree
--- 
-2.20.1
+https://evilpiepirate.org/git/bcachefs.git/tree/fs/bcachefs/fs-io.c#n975
+https://evilpiepirate.org/git/bcachefs.git/tree/fs/bcachefs/fs-io.c#n2454
 
+> Also I think we were already through this discussion [1] and we ended up
+> agreeing that your scheme actually solves only the AA deadlock but a
+> malicious userspace can easily create AB BA deadlock by running direct IO
+> to file A using mapped file B as a buffer *and* direct IO to file B using
+> mapped file A as a buffer.
+
+No, that's definitely handled (and you can see it in the code I linked),
+and I wrote a torture test for fstests as well.
+
+David Howells was also just running into a strange locking situation with
+iov_iters and recursive gups - I don't recall all the details, but it
+sounded like this might be a solution for that. David, did you have
+thoughts on that?
