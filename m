@@ -2,110 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76B816FE531
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:37:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2559B6FE544
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:38:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236405AbjEJUhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59714 "EHLO
+        id S236531AbjEJUi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjEJUhg (ORCPT
+        with ESMTP id S236451AbjEJUiZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:37:36 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D207D5FD3;
-        Wed, 10 May 2023 13:37:35 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-965cc5170bdso1130373566b.2;
-        Wed, 10 May 2023 13:37:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683751054; x=1686343054;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JKLe9GckdTdkHZtguF0iXQBcbGXhHOajSjz8g7ZeM5M=;
-        b=QQtE9RRCn/jkT69Hp2nltequONP9L6uyHnHEb4BbIfTZ89GoUPebECrUkGQyXfG2HC
-         Zl0OSskrONHPqwhZ/+PGqWLCFX3eyunxhUPhs3pfuvnXmjDLXkPmxZRbkUqp0bdo7jOq
-         qxnsQzjSirvkbiMLe3ND+RY/z13EuaPkJb8Q3H9OrWerC6L/kdwfZKp4dc22IxUOxoCr
-         0ahmPx0F1BIBU7bQYunSEVFUfJV3f8AlhLi/Y7uMB7Yq4jUQZ1OItltgWrm+3/23Vpkf
-         XzRKFO6AvNbc8pLTdRPwhMdY3tPr/VucXF1Q5XxrgAhvGXU0SEnAAKUBCP2YTaqhD83j
-         Sebg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683751054; x=1686343054;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JKLe9GckdTdkHZtguF0iXQBcbGXhHOajSjz8g7ZeM5M=;
-        b=OvIwFnMmUy4xuc8uBLtgOeP5d1BAwKGnbfDLQU9xgYvj3tyaP6hVVBzDp+0mngJcq9
-         F8VKwVdgedsJu50Wm6sbxqNgq9kduhqBpxMIwbfWo23Pnul9QT3Myh7lQ1GEs5xFoMxt
-         uVQvMyiBOeGKBc+zxotJAhrUCqEmPtOV4JRT27oM7x790e55RPmKp7LQ97Lmtj5sVkQU
-         KxQp+IVMHVNCemoibDck6tCmlgdoqAecRTxx7kGFoGsaQqvAS7j4kpZXfvB5irBO7zVr
-         c9UJ9WAoKBbSbwQSW8pY1YRu+LOThi3PyPmHROQVTSHYYFRfPbYP3DBYMSPMZ5b85MVg
-         RCYA==
-X-Gm-Message-State: AC+VfDxB/l00hz3sS/qfNOcSspS+685RY7AcKXs9ZeBx8qGUqLrsBaPg
-        psWwA8UrrPvtsdIvngmbIKI=
-X-Google-Smtp-Source: ACHHUZ6EWi21RhWVFtn1nPxL+PWBZG0fvKPOx6+ELIllnIghvcwehy9Wf1jiMQ0PAowgDcnZAE0Chw==
-X-Received: by 2002:a17:907:97d2:b0:968:1102:1fb7 with SMTP id js18-20020a17090797d200b0096811021fb7mr10543863ejc.6.1683751054155;
-        Wed, 10 May 2023 13:37:34 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id u15-20020aa7db8f000000b0050bc863d32asm2215712edt.27.2023.05.10.13.37.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 13:37:33 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     samuel@sholland.org, wens@csie.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, andre.przywara@arm.com,
-        Ludwig Kormann <ludwig.kormann@ict42.de>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 2/2] arm: dts: sunxi: Add ICnova A20 ADB4006 board
-Date:   Wed, 10 May 2023 22:37:32 +0200
-Message-ID: <3231392.aeNJFYEL58@jernej-laptop>
-In-Reply-To: <20230510111528.2155582-3-ludwig.kormann@ict42.de>
-References: <20230510111528.2155582-1-ludwig.kormann@ict42.de>
- <20230510111528.2155582-3-ludwig.kormann@ict42.de>
+        Wed, 10 May 2023 16:38:25 -0400
+Received: from out-20.mta0.migadu.com (out-20.mta0.migadu.com [91.218.175.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 362CE6184
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:38:20 -0700 (PDT)
+Date:   Wed, 10 May 2023 16:38:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683751099;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=2Fntx7MeicDCqrqkDflloXBJRcdF7P6Ni3sDbF9MNgY=;
+        b=sgO/UEIER2ve69V7tr81qDruo0+4xB0qMuqeM/8cdeT0yaaX6I/u4iRttuOzcQCIkedk7A
+        R06RISg+MM0T5Pweyj+u2fbyUVH8fL50g+G1V7Ab/ISM3Pqn248qKrUvNY6tC1cpnhkhwp
+        hgvyOqVblL24TSKV1xAEptkKxoz3d6s=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH 03/32] locking/lockdep: lockdep_set_no_check_recursion()
+Message-ID: <ZFwAtwIrKyJ9GJ/U@moria.home.lan>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-4-kent.overstreet@linux.dev>
+ <20230509193147.GC2148518@hirez.programming.kicks-ass.net>
+ <ZFqqsyDpatgb77Vh@moria.home.lan>
+ <20230510085905.GJ4253@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230510085905.GJ4253@hirez.programming.kicks-ass.net>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sreda, 10. maj 2023 ob 13:15:28 CEST je Ludwig Kormann napisal(a):
-> Add board support for ICnova A20 SomPi compute module on
-> ICnova ADB4006 development board.
->=20
-> Specification:
-> SoM
-> - Processor: Allwinner A20 Cortex-A7 Dual Core at 1GHz
-> - 512MB DDR3 RAM
-> - Fast Ethernet (Phy: Realtek RTL8201CP)
-> ADB4006
-> - I2C
-> - 2x USB 2.0
-> - 1x Fast Ethernet port
-> - 1x SATA
-> - 2x buttons (PWRON, Boot)
-> - 2x LEDS
-> - serial console
-> - HDMI
-> - =B5SD-Card slot
-> - Audio Line-In / Line-Out
-> - GPIO pinheaders
->=20
-> https://wiki.in-circuit.de/index.php5?title=3DICnova_ADB4006
-> https://wiki.in-circuit.de/index.php5?title=3DICnova_A20_SODIMM
->=20
-> Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-> Signed-off-by: Ludwig Kormann <ludwig.kormann@ict42.de>
+On Wed, May 10, 2023 at 10:59:05AM +0200, Peter Zijlstra wrote:
+> On Tue, May 09, 2023 at 04:18:59PM -0400, Kent Overstreet wrote:
+> > On Tue, May 09, 2023 at 09:31:47PM +0200, Peter Zijlstra wrote:
+> > > On Tue, May 09, 2023 at 12:56:28PM -0400, Kent Overstreet wrote:
+> > > > This adds a method to tell lockdep not to check lock ordering within a
+> > > > lock class - but to still check lock ordering w.r.t. other lock types.
+> > > > 
+> > > > This is for bcachefs, where for btree node locks we have our own
+> > > > deadlock avoidance strategy w.r.t. other btree node locks (cycle
+> > > > detection), but we still want lockdep to check lock ordering w.r.t.
+> > > > other lock types.
+> > > > 
+> > > 
+> > > ISTR you had a much nicer version of this where you gave a custom order
+> > > function -- what happend to that?
+> > 
+> > Actually, I spoke too soon; this patch and the other series with the
+> > comparison function solve different problems.
+> > 
+> > For bcachefs btree node locks, we don't have a defined lock ordering at
+> > all - we do full runtime cycle detection, so we don't want lockdep
+> > checking for self deadlock because we're handling that but we _do_ want
+> > lockdep checking lock ordering of btree node locks w.r.t. other locks in
+> > the system.
+> 
+> Have you read the ww_mutex code? If not, please do so, it does similar
+> things.
+> 
+> The way it gets around the self-nesting check is by using the nest_lock
+> annotation, the acquire context itself also has a dep_map for this
+> purpose.
 
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+This might work.
 
-Best regards,
-Jernej
-
-
+I was confused for a good bit when reading tho code to figure out how
+it works - nest_lock seems to be a pretty bad name, it's really not a
+lock. acquire_ctx?
