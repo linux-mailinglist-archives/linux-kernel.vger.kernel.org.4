@@ -2,138 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0066FE2CB
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 18:52:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DA066FE2D0
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 18:56:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235987AbjEJQwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 12:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
+        id S231313AbjEJQ4l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 12:56:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjEJQwS (ORCPT
+        with ESMTP id S229487AbjEJQ4k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 12:52:18 -0400
-Received: from mx07-00178001.pphosted.com (mx07-00178001.pphosted.com [185.132.182.106])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C66F186BA;
-        Wed, 10 May 2023 09:51:56 -0700 (PDT)
-Received: from pps.filterd (m0241204.ppops.net [127.0.0.1])
-        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34AEqUK7015023;
-        Wed, 10 May 2023 18:51:46 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=selector1;
- bh=lcLDqN2ZYdjWNqrxhC5sckV20z6BNR4pxtCqiw/kpbM=;
- b=dk7NmF2csO2LTk2mHy7Br/xGu8EiQaurF2rizF6rPIpxYTni524o2o+M+9HIWjRv6DeJ
- EJh290xBpdLFpzNf+W9kDzUkCxkn2dlBqu6S9m99Vbo2F7oYB4/QORFtq7yZYsKQG3KV
- 2iaqmWV4Ji0gKsu/mv5X+E1gBz/x6Q1auhuFs6oLdguo+SJT7Yz3k4zzKCC8MEY7aEbg
- slH4iaFooMmkh7JDnh6EjbtJaAgydx9fb9H8t3G4O4Af7Zm8Jf5HQrahngMTC/vz0xK/
- 44KZK54YPfB/h/aAcmYjwCwvxUcRGnOtW15leLGZtn0aT7f0Q5GMuBeKiXhO0sioubhp 6A== 
-Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
-        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qg90pjfhf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 18:51:45 +0200
-Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
-        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id 2FA4710002A;
-        Wed, 10 May 2023 18:51:45 +0200 (CEST)
-Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
-        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 22AD122D185;
-        Wed, 10 May 2023 18:51:45 +0200 (CEST)
-Received: from localhost (10.48.1.0) by SHFDAG1NODE3.st.com (10.75.129.71)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 10 May
- 2023 18:51:44 +0200
-From:   Patrick Delaunay <patrick.delaunay@foss.st.com>
-To:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     <gabriel.fernandez@st.com>, <gabriel.fernandez@foss.st.com>,
-        "Patrick Delaunay" <patrick.delaunay@foss.st.com>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-stm32@st-md-mailman.stormreply.com>
-Subject: [PATCH v2] dt-bindings: rcc: stm32: Sync with u-boot copy for STM32MP13 SoC
-Date:   Wed, 10 May 2023 18:51:40 +0200
-Message-ID: <20230510184305.v2.1.I417093ddcea282be479f10a37147d1935a9050b7@changeid>
-X-Mailer: git-send-email 2.25.1
+        Wed, 10 May 2023 12:56:40 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A04180
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 09:56:38 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f42d937d61so17509205e9.3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 09:56:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683737797; x=1686329797;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=8Gc42bzaewvbzuVY4XS1BAUy3IQI/qYsbZWzsf3GfP0=;
+        b=cVqT1ib9QJ9/kzKSOTrNRKUbrjFXsGdqeYhc+sl3GIaaiQoSSiWjaiKpzzyY7nVDul
+         b7EiokHUG3Gt+0er8OBdwhd9EfIySBdyvkXcbFe07PpYc17OSHvGFkksgsmZpa8sdxre
+         jNADZnOp0yzjwZqfnJrO9mWcPtNlUdF51ebwYeeury3NNZqR8Zp87b8Y9ixIJMPq2TJN
+         0xdVoNAvjTK59i8wYlIDb2FZoKUII5pTdx5egOrA4n4SQ4I/EcTP189nw1o3FYYGkbwj
+         eaHvBihLqCUKVZBGXFPokDC8Hvrm91tXUoANiG7GRwYINzuFxC0KjDzZ2X063f4rwrjx
+         oEew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683737797; x=1686329797;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8Gc42bzaewvbzuVY4XS1BAUy3IQI/qYsbZWzsf3GfP0=;
+        b=JsBTxgidPsNRu9CUilC2O7eoil8akvuVhI6HypGc7J6UQ5iICl5uQmUsivE2QeEsXI
+         hXvK4t2A8A7VC+nfCyqzDnsOljsnh8ROD2FXwytLGJOq0bm3hR2Rol89fzmkcNUYDu8h
+         P/ee6STGk73zApYOdRchl+OGeN6ZC5dEwg3HM6dFgQ0Xi7M6BIbgnfwLh9sA4//mDBVt
+         RuWkT0dfbYES0UsnfbcPMPRSt+Kxlbno5lKdyEoBrFQQlBJVY+uXZDorDCVsv+9dRIVb
+         QeXq28wyCfMN3PXRBJkXGO/iplGgugOv6A9/3OGTc3dSS66eWHBYqDdxST+iJR6pBYoY
+         tMUQ==
+X-Gm-Message-State: AC+VfDwfYxDdAMTg1uDZSzUUp+SQR3RIOgYhMEA5yJBnujhAxhHK2yRx
+        2T6x66yyczAhlDGtKovkBC+VSQ==
+X-Google-Smtp-Source: ACHHUZ6qVCedZJaUlxkTnZAmvQ1PaaZpHadEIgUXazjoLAIMDpp9IpqCHyYK3Ho/Q75x73mF1RUMGA==
+X-Received: by 2002:adf:ecc4:0:b0:306:2c5b:9da6 with SMTP id s4-20020adfecc4000000b003062c5b9da6mr13711866wro.56.1683737797002;
+        Wed, 10 May 2023 09:56:37 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id o2-20020a5d62c2000000b003062c609115sm17818387wrv.21.2023.05.10.09.56.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 09:56:35 -0700 (PDT)
+Date:   Wed, 10 May 2023 19:56:29 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     Yogesh Hegde <yogi.kernel@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/4] staging: rtl8192e: Rename tmpRegA and TempCCk
+Message-ID: <290473de-5946-49d4-9309-6bebf7cc9873@kili.mountain>
+References: <cover.1683730854.git.yogi.kernel@gmail.com>
+ <c9c67f832db3a776c04f26e0afb083ae3ba99c07.1683730854.git.yogi.kernel@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.48.1.0]
-X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE3.st.com
- (10.75.129.71)
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c9c67f832db3a776c04f26e0afb083ae3ba99c07.1683730854.git.yogi.kernel@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Minor cosmetic change, aligned with files in U-Boot:
-- change obsolete SPDX id : GPL-2.0+ and use the same license
-  GPL-2.0-only for the 2 files
-- use correct mail address gabriel.fernandez@foss.st.com
-- remove extra space
+On Wed, May 10, 2023 at 08:39:07PM +0530, Yogesh Hegde wrote:
+> @@ -680,17 +680,17 @@ static void _rtl92e_dm_tx_power_tracking_cb_thermal(struct net_device *dev)
+>  		return;
+>  	}
+>  
+> -	tmpRegA = rtl92e_get_rf_reg(dev, RF90_PATH_A, 0x12, 0x078);
+> -	if (tmpRegA < 3 || tmpRegA > 13)
+> +	tmp_reg = rtl92e_get_rf_reg(dev, RF90_PATH_A, 0x12, 0x078);
+> +	if (tmp_reg < 3 || tmp_reg > 13)
+>  		return;
+> -	if (tmpRegA >= 12)
+> -		tmpRegA = 12;
+> +	if (tmp_reg >= 12)
+> +		tmp_reg = 12;
 
-Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
----
+Not related to your patch (which is fine) but this if statement can be
+deleted.
 
-Changes in v2:
-- Change title "Fix STM32MP13 include file"
-- Use the same license for the 2 files GPL-2.0-only as recommended
-  to avoid check-patch issue on next
+>  	priv->thermal_meter[0] = ThermalMeterVal;
+>  	priv->thermal_meter[1] = ThermalMeterVal;
+>  
+> -	if (priv->thermal_meter[0] >= (u8)tmpRegA) {
+> +	if (priv->thermal_meter[0] >= (u8)tmp_reg) {
 
- include/dt-bindings/clock/stm32mp13-clks.h   | 6 +++---
- include/dt-bindings/reset/stm32mp13-resets.h | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
+And casting tmp_reg to u8 is nonsense so that casting can be deleted too.
+2 separate patches:
+patch 1: delete unecessary if statement
+patch 2: delete unecessary casting
 
-diff --git a/include/dt-bindings/clock/stm32mp13-clks.h b/include/dt-bindings/clock/stm32mp13-clks.h
-index 02befd25edce..0bd7b54c65ff 100644
---- a/include/dt-bindings/clock/stm32mp13-clks.h
-+++ b/include/dt-bindings/clock/stm32mp13-clks.h
-@@ -1,7 +1,7 @@
--/* SPDX-License-Identifier: GPL-2.0+ or BSD-3-Clause */
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-3-Clause */
- /*
-  * Copyright (C) STMicroelectronics 2020 - All Rights Reserved
-- * Author: Gabriel Fernandez <gabriel.fernandez@st.com> for STMicroelectronics.
-+ * Author: Gabriel Fernandez <gabriel.fernandez@foss.st.com> for STMicroelectronics.
-  */
- 
- #ifndef _DT_BINDINGS_STM32MP13_CLKS_H_
-@@ -64,7 +64,7 @@
- #define CK_MCO1		38
- #define CK_MCO2		39
- 
--/*  IP clocks */
-+/* IP clocks */
- #define SYSCFG		40
- #define VREF		41
- #define DTS		42
-diff --git a/include/dt-bindings/reset/stm32mp13-resets.h b/include/dt-bindings/reset/stm32mp13-resets.h
-index 934864e90da6..ecb37c7ddde1 100644
---- a/include/dt-bindings/reset/stm32mp13-resets.h
-+++ b/include/dt-bindings/reset/stm32mp13-resets.h
-@@ -1,7 +1,7 @@
--/* SPDX-License-Identifier: GPL-2.0 or BSD-3-Clause */
-+/* SPDX-License-Identifier: GPL-2.0-only OR BSD-3-Clause */
- /*
-  * Copyright (C) STMicroelectronics 2018 - All Rights Reserved
-- * Author: Gabriel Fernandez <gabriel.fernandez@st.com> for STMicroelectronics.
-+ * Author: Gabriel Fernandez <gabriel.fernandez@foss.st.com> for STMicroelectronics.
-  */
- 
- #ifndef _DT_BINDINGS_STM32MP13_RESET_H_
--- 
-2.25.1
+regards,
+dan carpenter
 
