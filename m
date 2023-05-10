@@ -2,305 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9B46FDAC2
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:30:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A24DB6FDACA
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:31:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236711AbjEJJaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 05:30:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43756 "EHLO
+        id S236694AbjEJJbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 05:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235731AbjEJJaI (ORCPT
+        with ESMTP id S235609AbjEJJbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 05:30:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE033A9D
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 02:30:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 18CA96315B
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 09:30:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82820C433D2;
-        Wed, 10 May 2023 09:30:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683711005;
-        bh=dJfehcE0kgEjFIIypQ1MeCfLml/7htEHGgEVOwaVWuk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JoHETf7Ss/WuVW6Gr1C23/qUuA+dTimmT38gaKfgpqkUm6h2YaYR2zW292Jn8FmtU
-         SXTt7+TIj6kC9hN80NsdTcgS/ZBeYyW8z1VbzjWsZvVzPYv1PMvSe4gpm+vM97yYAM
-         v6+DTj9m8TLF14Bg5fLdv741/+E3XMh+P6JTWMli6nrleMkTVpaYVtB0bRVeD1xYHJ
-         ANdKacgOG56v0zBl5Ihz00FDetvzUupqtUUjPAZYpLYyO/L8y6mJjtaqvyP1aVzwfE
-         CeWPwxoaV5sfs1kymzLpjO1sAJKogXGS/6VXJXvgIHRMkBnpqzOuifBlJzM8dlLwz3
-         7ZFYwo9U8nsSg==
-Message-ID: <05bbc1ea-1be8-ec0e-9e6e-3601629d4b18@kernel.org>
-Date:   Wed, 10 May 2023 12:30:00 +0300
+        Wed, 10 May 2023 05:31:50 -0400
+Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC7910F5;
+        Wed, 10 May 2023 02:31:48 -0700 (PDT)
+Received: by mail-lf1-x131.google.com with SMTP id 2adb3069b0e04-4f22908a082so4791684e87.1;
+        Wed, 10 May 2023 02:31:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683711107; x=1686303107;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uHkiT6Uiynl0Lruythe0Uk6VgeBS4SqWbF3W79uTkOQ=;
+        b=XBkSADTR4TScrcB27eBtMX/nsX8ZEZDE/tSEpJp9ibkEuX1/v8nVP7uCIUvpSrolMY
+         wvKD5HLh3L/64IzOnN0/CSiLBPT5zqYR2xOVhQhadzlnfWj+VYKs5MIFhGgVqaOy6USZ
+         CMNg/UupDl+9Q5uvhQ3Cbo80n9zDZ8BJqSXW60SaQ8HD20mLa/YaZKRtpsaIdevWUCcp
+         xjJUUO2R/vc+sqU256M0tFZiG1guQgz8Wn+4OQAJG4AwUwP+CkILhrvVjuvBCIfzLReF
+         DfC4mF2r1N65Jk/YJ8RWQS9wf+nCysqBEyfUk+WRhmM0mUmWUHtnvVSKHrJlAPvDCIjj
+         Rcow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683711107; x=1686303107;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uHkiT6Uiynl0Lruythe0Uk6VgeBS4SqWbF3W79uTkOQ=;
+        b=GQ8E+iCKoCMwpLYkK9YzPKs/aEfIEH8m6IfRumiB2srOpzhLBheEh4ZHULHSnULGW7
+         bxniAc25ySWIfnxp2xKkf6GkfNGfU1ujkxaqiIY93NkelIA3joTtvvDM6NcPtLy1KerB
+         FLmgKPx9+6SUOsoUGhgkZ6VLToPNksyOPwGeHuI/rVsM5Czp7qNH2wYzUkGmVwzEAZ4N
+         mcZPDaPh8QJ8djwDDoINSfHJ3QKzzSo0k021ExlMnQzzQkFfN6zDBg604aR17CMxW/ca
+         Jz9bWk25LlkDeRR5j5xJ5Eux3ZQbDM0pTkTrxdoV/ZBv3opFnkK9n3hD6ELULMJCbbnH
+         D3Vg==
+X-Gm-Message-State: AC+VfDxeHvIWDLZU7XB1L1vt19Us2/lVIRvjCEyLyGIDkIGk4ZDl4cqz
+        nNQgzHaxAFqEwtNZtnARLZYVU1WT4vg=
+X-Google-Smtp-Source: ACHHUZ7Gr1dzdpi5ADr+OqFL1vY/Srp+tgQIV00ug9sEtf+f3XhebE+tndbF72z8KvuaD5cdNdyoUw==
+X-Received: by 2002:ac2:4c8a:0:b0:4dd:af29:92c1 with SMTP id d10-20020ac24c8a000000b004ddaf2992c1mr1391092lfl.44.1683711106673;
+        Wed, 10 May 2023 02:31:46 -0700 (PDT)
+Received: from [192.168.1.103] ([31.173.86.195])
+        by smtp.gmail.com with ESMTPSA id v15-20020a056512096f00b004b55ddeb7e3sm667654lft.309.2023.05.10.02.31.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 02:31:46 -0700 (PDT)
+Subject: Re: [PATCH v3 2/2] usb: gadget: udc: Handle gadget_connect failure
+ during bind operation
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        Jiantao Zhang <water.zhangjiantao@huawei.com>,
+        Badhri Jagan Sridharan <badhri@google.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
+        quic_jackp@quicinc.com
+References: <20230510075252.31023-1-quic_kriskura@quicinc.com>
+ <20230510075252.31023-3-quic_kriskura@quicinc.com>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <cb8c326c-b2b4-2fe8-cdfc-f78908b1d1bd@gmail.com>
+Date:   Wed, 10 May 2023 12:31:44 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] phy: cadence: Sierra: Add single link SGMII register
- configuration
+In-Reply-To: <20230510075252.31023-3-quic_kriskura@quicinc.com>
+Content-Type: text/plain; charset=utf-8
 Content-Language: en-US
-To:     Marcin Wierzbicki <mawierzb@cisco.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Swapnil Jakhade <sjakhade@cadence.com>,
-        linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     xe-linux-external@cisco.com, danielwa@cisco.com, olicht@cisco.com,
-        Bartosz Wawrzyniak <bwawrzyn@cisco.com>
-References: <20230508160142.2489365-1-mawierzb@cisco.com>
-From:   Roger Quadros <rogerq@kernel.org>
-In-Reply-To: <20230508160142.2489365-1-mawierzb@cisco.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-10.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        UPPERCASE_50_75 autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hello!
 
-On 08/05/2023 19:01, Marcin Wierzbicki wrote:
-> Add single link SGMII register configuration for no SSC for
-> cdns,sierra-phy-t0 compatibility string.
-> The configuration is based on Sierra Programmer's Guide and
-> validated in Cisco CrayAR SoC.
+On 5/10/23 10:52 AM, Krishna Kurapati wrote:
+
+> In the event, gadget_connect call (which invokes pullup) fails,
+> propagate the error to udc bind operation which inturn sends the
+> error to configfs. The userspace can then retry enumeartion if
+> it chooses to.
 > 
-> Co-developed-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
-> Signed-off-by: Bartosz Wawrzyniak <bwawrzyn@cisco.com>
-> Signed-off-by: Marcin Wierzbicki <mawierzb@cisco.com>
-> Change-Id: Id4c093a1bbf409f3176736b5326854a1396391c1
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> Acked-by: Alan Stern <stern@rowland.harvard.edu>
 > ---
-
-What changed in v2?
-
->  drivers/phy/cadence/phy-cadence-sierra.c | 103 +++++++++++++++++++++++
->  1 file changed, 103 insertions(+)
+> changes in v3: Rebase on top of usb-next
 > 
-> diff --git a/drivers/phy/cadence/phy-cadence-sierra.c b/drivers/phy/cadence/phy-cadence-sierra.c
-> index 13fcd3a65fe9..6c3870a6b236 100644
-> --- a/drivers/phy/cadence/phy-cadence-sierra.c
-> +++ b/drivers/phy/cadence/phy-cadence-sierra.c
-> @@ -30,28 +30,40 @@
->  #define SIERRA_COMMON_CDB_OFFSET			0x0
->  #define SIERRA_MACRO_ID_REG				0x0
->  #define SIERRA_CMN_PLLLC_GEN_PREG			0x42
-> +#define SIERRA_CMN_PLLLC_FBDIV_INT_MODE0_PREG		0x43
-> +#define SIERRA_CMN_PLLLC_DCOCAL_CTRL_PREG		0x45
-> +#define SIERRA_CMN_PLLLC_INIT_PREG			0x46
-> +#define SIERRA_CMN_PLLLC_ITERTMR_PREG			0x47
->  #define SIERRA_CMN_PLLLC_MODE_PREG			0x48
->  #define SIERRA_CMN_PLLLC_LF_COEFF_MODE1_PREG		0x49
->  #define SIERRA_CMN_PLLLC_LF_COEFF_MODE0_PREG		0x4A
->  #define SIERRA_CMN_PLLLC_LOCK_CNTSTART_PREG		0x4B
-> +#define SIERRA_CMN_PLLLC_LOCKSEARCH_PREG		0x4C
->  #define SIERRA_CMN_PLLLC_CLK1_PREG			0x4D
-> +#define SIERRA_CMN_PLLLC_CLK0_PREG			0x4E
->  #define SIERRA_CMN_PLLLC_BWCAL_MODE1_PREG		0x4F
->  #define SIERRA_CMN_PLLLC_BWCAL_MODE0_PREG		0x50
->  #define SIERRA_CMN_PLLLC_DSMCORR_PREG			0x51
->  #define SIERRA_CMN_PLLLC_SS_PREG			0x52
->  #define SIERRA_CMN_PLLLC_SS_AMP_STEP_SIZE_PREG		0x53
->  #define SIERRA_CMN_PLLLC_SSTWOPT_PREG			0x54
-> +#define SIERRA_CMN_PLLCSM_PLLEN_TMR_PREG		0x5D
-> +#define SIERRA_CMN_PLLCSM_PLLPRE_TMR_PREG		0x5E
->  #define SIERRA_CMN_PLLLC_SS_TIME_STEPSIZE_MODE_PREG	0x62
->  #define SIERRA_CMN_PLLLC_LOCK_DELAY_CTRL_PREG		0x63
-> +#define SIERRA_SDOSCCAL_CLK_CNT_PREG			0x6E
->  #define SIERRA_CMN_REFRCV_PREG				0x98
-> +#define SIERRA_CMN_RESCAL_CTRLA_PREG			0xA0
->  #define SIERRA_CMN_REFRCV1_PREG				0xB8
->  #define SIERRA_CMN_PLLLC1_GEN_PREG			0xC2
->  #define SIERRA_CMN_PLLLC1_FBDIV_INT_PREG		0xC3
-> +#define SIERRA_CMN_PLLLC1_DCOCAL_CTRL_PREG		0xC5
->  #define SIERRA_CMN_PLLLC1_LF_COEFF_MODE0_PREG		0xCA
->  #define SIERRA_CMN_PLLLC1_CLK0_PREG			0xCE
->  #define SIERRA_CMN_PLLLC1_BWCAL_MODE0_PREG		0xD0
->  #define SIERRA_CMN_PLLLC1_SS_TIME_STEPSIZE_MODE_PREG	0xE2
+>  drivers/usb/gadget/udc/core.c | 21 +++++++++++++++++----
+>  1 file changed, 17 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
+> index 4641153e9706..69041cca5d24 100644
+> --- a/drivers/usb/gadget/udc/core.c
+> +++ b/drivers/usb/gadget/udc/core.c
+> @@ -1122,12 +1122,16 @@ EXPORT_SYMBOL_GPL(usb_gadget_set_state);
+>  /* ------------------------------------------------------------------------- */
 >  
+>  /* Acquire connect_lock before calling this function. */
+> -static void usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
+> +static int usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
+>  {
+> +	int ret;
 > +
+>  	if (udc->vbus && udc->started)
+> -		usb_gadget_connect_locked(udc->gadget);
+> +		ret = usb_gadget_connect_locked(udc->gadget);
 
-unnecessary new line
+   Why not just:
 
->  #define SIERRA_LANE_CDB_OFFSET(ln, block_offset, reg_offset)	\
->  				((0x4000 << (block_offset)) + \
->  				 (((ln) << 9) << (reg_offset)))
-> @@ -86,6 +98,7 @@
->  #define SIERRA_DFE_BIASTRIM_PREG			0x04C
->  #define SIERRA_DRVCTRL_ATTEN_PREG			0x06A
->  #define SIERRA_DRVCTRL_BOOST_PREG			0x06F
-> +#define SIERRA_LANE_TX_RECEIVER_DETECT_PREG		0x071
->  #define SIERRA_TX_RCVDET_OVRD_PREG			0x072
->  #define SIERRA_CLKPATHCTRL_TMR_PREG			0x081
->  #define SIERRA_RX_CREQ_FLTR_A_MODE3_PREG		0x085
-> @@ -101,6 +114,8 @@
->  #define SIERRA_CREQ_SPARE_PREG				0x096
->  #define SIERRA_CREQ_EQ_OPEN_EYE_THRESH_PREG		0x097
->  #define SIERRA_CTLELUT_CTRL_PREG			0x098
-> +#define SIERRA_DEQ_BLK_TAU_CTRL1_PREG			0x0AC
-> +#define SIERRA_DEQ_BLK_TAU_CTRL4_PREG			0x0AF
->  #define SIERRA_DFE_ECMP_RATESEL_PREG			0x0C0
->  #define SIERRA_DFE_SMP_RATESEL_PREG			0x0C1
->  #define SIERRA_DEQ_PHALIGN_CTRL				0x0C4
-> @@ -129,6 +144,9 @@
->  #define SIERRA_DEQ_GLUT14				0x0F6
->  #define SIERRA_DEQ_GLUT15				0x0F7
->  #define SIERRA_DEQ_GLUT16				0x0F8
-> +#define SIERRA_POSTPRECUR_EN_CEPH_CTRL_PREG		0x0F9
-> +#define SIERRA_TAU_EN_CEPH2TO0_PREG			0x0FB
-> +#define SIERRA_TAU_EN_CEPH5TO3_PREG			0x0FC
->  #define SIERRA_DEQ_ALUT0				0x108
->  #define SIERRA_DEQ_ALUT1				0x109
->  #define SIERRA_DEQ_ALUT2				0x10A
-> @@ -143,6 +161,7 @@
->  #define SIERRA_DEQ_ALUT11				0x113
->  #define SIERRA_DEQ_ALUT12				0x114
->  #define SIERRA_DEQ_ALUT13				0x115
-> +#define SIERRA_OEPH_EN_CTRL_PREG			0x124
->  #define SIERRA_DEQ_DFETAP_CTRL_PREG			0x128
->  #define SIERRA_DEQ_DFETAP0				0x129
->  #define SIERRA_DEQ_DFETAP1				0x12B
-> @@ -157,6 +176,7 @@
->  #define SIERRA_DEQ_TAU_CTRL2_PREG			0x151
->  #define SIERRA_DEQ_TAU_CTRL3_PREG			0x152
->  #define SIERRA_DEQ_OPENEYE_CTRL_PREG			0x158
-> +#define SIERRA_DEQ_CONCUR_EPIOFFSET_MODE_PREG		0x159
->  #define SIERRA_DEQ_PICTRL_PREG				0x161
->  #define SIERRA_CPICAL_TMRVAL_MODE1_PREG			0x170
->  #define SIERRA_CPICAL_TMRVAL_MODE0_PREG			0x171
-> @@ -165,6 +185,7 @@
->  #define SIERRA_CPI_RESBIAS_BIN_PREG			0x17E
->  #define SIERRA_CPI_TRIM_PREG				0x17F
->  #define SIERRA_CPICAL_RES_STARTCODE_MODE23_PREG		0x183
-> +#define SIERRA_CPICAL_RES_STARTCODE_MODE01_PREG		0x184
->  #define SIERRA_EPI_CTRL_PREG				0x187
->  #define SIERRA_LFPSDET_SUPPORT_PREG			0x188
->  #define SIERRA_LFPSFILT_NS_PREG				0x18A
-> @@ -176,6 +197,7 @@
->  #define SIERRA_RXBUFFER_CTLECTRL_PREG			0x19E
->  #define SIERRA_RXBUFFER_RCDFECTRL_PREG			0x19F
->  #define SIERRA_RXBUFFER_DFECTRL_PREG			0x1A0
-> +#define SIERRA_LN_SPARE_REG_PREG			0x1B0
->  #define SIERRA_DEQ_TAU_CTRL1_FAST_MAINT_PREG		0x14F
->  #define SIERRA_DEQ_TAU_CTRL1_SLOW_MAINT_PREG		0x150
+	return usb_gadget_connect_locked(udc->gadget)
+
+>  	else
+> -		usb_gadget_disconnect_locked(udc->gadget);
+> +		ret = usb_gadget_disconnect_locked(udc->gadget);
+
+   Likewise here?
+
+> +
+> +	return ret;
+>  }
 >  
-> @@ -2401,6 +2423,77 @@ static struct cdns_sierra_vals usb_100_ext_ssc_ln_vals = {
->  	.num_regs = ARRAY_SIZE(cdns_usb_ln_regs_ext_ssc),
->  };
->  
-> +/* SGMII PHY common configuration */
-> +static const struct cdns_reg_pairs sgmii_cmn_regs[] = {
-> +	{0x0180, SIERRA_SDOSCCAL_CLK_CNT_PREG},
-> +	{0x6000, SIERRA_CMN_REFRCV_PREG},
-> +	{0x0031, SIERRA_CMN_RESCAL_CTRLA_PREG},
-> +	{0x001C, SIERRA_CMN_PLLLC_FBDIV_INT_MODE0_PREG},
-> +	{0x2106, SIERRA_CMN_PLLLC_LF_COEFF_MODE0_PREG},
-> +	{0x0000, SIERRA_CMN_PLLLC_LOCKSEARCH_PREG},
-> +	{0x8103, SIERRA_CMN_PLLLC_CLK0_PREG},
-> +	{0x0000, SIERRA_CMN_PLLLC_BWCAL_MODE0_PREG},
-> +	{0x0027, SIERRA_CMN_PLLCSM_PLLEN_TMR_PREG},
-> +	{0x0062, SIERRA_CMN_PLLCSM_PLLPRE_TMR_PREG},
-> +	{0x0800, SIERRA_CMN_PLLLC_SS_TIME_STEPSIZE_MODE_PREG},
-> +	{0x0000, SIERRA_CMN_PLLLC_INIT_PREG},
-> +	{0x0000, SIERRA_CMN_PLLLC_ITERTMR_PREG},
-> +	{0x0020, SIERRA_CMN_PLLLC_LOCK_CNTSTART_PREG},
-> +	{0x0013, SIERRA_CMN_PLLLC_DCOCAL_CTRL_PREG},
-> +	{0x0013, SIERRA_CMN_PLLLC1_DCOCAL_CTRL_PREG},
-> +};
-> +
-> +static struct cdns_sierra_vals sgmii_cmn_vals = {
+>  /**
+[...]
 
-Could you please rename this to sgmii_pma_cmn_vals as there are
-2 types of cmn_vals.
-
-> +	.reg_pairs = sgmii_cmn_regs,
-> +	.num_regs = ARRAY_SIZE(sgmii_cmn_regs),
-> +};
-> +
-> +/* SGMII PHY lane configuration */
-> +static const struct cdns_reg_pairs sgmii_ln_regs[] = {
-> +	{0x691E, SIERRA_DET_STANDEC_D_PREG},
-> +	{0x0FFE, SIERRA_PSC_RX_A0_PREG},
-> +	{0x0104, SIERRA_PLLCTRL_FBDIV_MODE01_PREG},
-> +	{0x0013, SIERRA_PLLCTRL_SUBRATE_PREG},
-> +	{0x0106, SIERRA_PLLCTRL_GEN_D_PREG},
-> +	{0x5234, SIERRA_PLLCTRL_CPGAIN_MODE_PREG},
-> +	{0x0000, SIERRA_DRVCTRL_ATTEN_PREG},
-> +	{0x00AB, SIERRA_RX_CREQ_FLTR_A_MODE0_PREG},
-> +	{0x3C0E, SIERRA_CREQ_CCLKDET_MODE01_PREG},
-> +	{0x3220, SIERRA_CREQ_FSMCLK_SEL_PREG},
-> +	{0x0000, SIERRA_CREQ_EQ_CTRL_PREG},
-> +	{0x6320, SIERRA_DEQ_CONCUR_EPIOFFSET_MODE_PREG},
-> +	{0x0000, SIERRA_CPI_OUTBUF_RATESEL_PREG},
-> +	{0x15A2, SIERRA_LN_SPARE_REG_PREG},
-> +	{0x7900, SIERRA_DEQ_BLK_TAU_CTRL1_PREG},
-> +	{0x2202, SIERRA_DEQ_BLK_TAU_CTRL4_PREG},
-> +	{0x2206, SIERRA_DEQ_TAU_CTRL2_PREG},
-> +	{0x0005, SIERRA_LANE_TX_RECEIVER_DETECT_PREG},
-> +	{0x8001, SIERRA_CREQ_SPARE_PREG},
-> +	{0x0000, SIERRA_DEQ_CONCUR_CTRL1_PREG},
-> +	{0xD004, SIERRA_DEQ_CONCUR_CTRL2_PREG},
-> +	{0x0101, SIERRA_DEQ_GLUT9},
-> +	{0x0101, SIERRA_DEQ_GLUT10},
-> +	{0x0101, SIERRA_DEQ_GLUT11},
-> +	{0x0101, SIERRA_DEQ_GLUT12},
-> +	{0x0000, SIERRA_DEQ_GLUT13},
-> +	{0x0000, SIERRA_DEQ_GLUT16},
-> +	{0x0000, SIERRA_POSTPRECUR_EN_CEPH_CTRL_PREG},
-> +	{0x0000, SIERRA_TAU_EN_CEPH2TO0_PREG},
-> +	{0x0003, SIERRA_TAU_EN_CEPH5TO3_PREG},
-> +	{0x0101, SIERRA_DEQ_ALUT8},
-> +	{0x0101, SIERRA_DEQ_ALUT9},
-> +	{0x0100, SIERRA_DEQ_ALUT10},
-> +	{0x0000, SIERRA_OEPH_EN_CTRL_PREG},
-> +	{0x5425, SIERRA_DEQ_OPENEYE_CTRL_PREG},
-> +	{0x7458, SIERRA_CPICAL_RES_STARTCODE_MODE23_PREG},
-> +	{0x321F, SIERRA_CPICAL_RES_STARTCODE_MODE01_PREG},
-> +};
-> +
-> +static struct cdns_sierra_vals sgmii_ln_vals = {
-
-Could you please rename this to sgmii_pma_ln_vals as there are
-2 types of pma_ln_vals
-
-> +	.reg_pairs = sgmii_ln_regs,
-> +	.num_regs = ARRAY_SIZE(sgmii_ln_regs),
-> +};
-> +
->  static const struct cdns_sierra_data cdns_map_sierra = {
->  	.id_value = SIERRA_MACRO_ID,
->  	.block_offset_shift = 0x2,
-> @@ -2461,6 +2554,11 @@ static const struct cdns_sierra_data cdns_map_sierra = {
->  				[INTERNAL_SSC] = &qsgmii_100_no_ssc_plllc1_cmn_vals,
->  			},
->  		},
-> +		[TYPE_SGMII] = {
-> +			[TYPE_NONE] = {
-> +				[NO_SSC] = &sgmii_cmn_vals,
-> +			},
-> +		},
->  	},
->  	.pma_ln_vals = {
->  		[TYPE_PCIE] = {
-> @@ -2499,6 +2597,11 @@ static const struct cdns_sierra_data cdns_map_sierra = {
->  				[INTERNAL_SSC] = &qsgmii_100_no_ssc_plllc1_ln_vals,
->  			},
->  		},
-> +		[TYPE_SGMII] = {
-> +			[TYPE_NONE] = {
-> +				[NO_SSC] = &sgmii_ln_vals,
-> +			},
-> +		},
->  	},
->  };
->  
-
--- 
-cheers,
--roger
+MBR, Sergey
