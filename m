@@ -2,158 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F06F6FDB76
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:16:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E78116FDB7C
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:19:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236073AbjEJKQc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 06:16:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
+        id S236509AbjEJKTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 06:19:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjEJKQ2 (ORCPT
+        with ESMTP id S229500AbjEJKTT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 06:16:28 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C91D11BE7
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:16:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D24864860
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 10:16:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBBCCC433EF;
-        Wed, 10 May 2023 10:16:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683713786;
-        bh=ZSbZgAoMh5LnKeTr6TYqbQqHTrrmga9LBiMNaVOVVKM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Yqcy2PtThYGb4x7qcBy1q02y2LyCP2zZIkqTCIuvP1FmbDNJREdVmNwlS6LfXO745
-         +2v5i16x8L5Q/INe+tElDmUpG2delFKOGXOoljfN5x2Za+sOcXccHElvqb/cV56HMc
-         negVOx81D9h5P50hbPnjxAA3Cmm3ktKPexbI9yaIBYqVH1j2ZWmdPwLz/5l6SrMA/P
-         f89V4L85KDo/jYwbQkgxjv5Pjz6sLY0G00G1SnSrlUyA3mtpWNOfTQErBnVO/vKZ3g
-         LqMu/HpPhEh1TgzFgElrtZEopTKfy/mAlyW5zuKxHOX9dccAPOvVXYngJ+UF6EGR3i
-         qjUsLUC7NaZHw==
-Date:   Wed, 10 May 2023 12:16:22 +0200
-From:   Frederic Weisbecker <frederic@kernel.org>
-To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Arjan van de Ven <arjan@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@surriel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>
-Subject: Re: [PATCH v6 15/21] timer: Add get next timer interrupt
- functionality for remote CPUs
-Message-ID: <ZFtu9l35Tg89NAiZ@localhost.localdomain>
-References: <20230510072817.116056-1-anna-maria@linutronix.de>
- <20230510072817.116056-16-anna-maria@linutronix.de>
+        Wed, 10 May 2023 06:19:19 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D886199A;
+        Wed, 10 May 2023 03:19:18 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 41be03b00d2f7-52c6504974dso6366221a12.2;
+        Wed, 10 May 2023 03:19:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683713958; x=1686305958;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6TzFaeCtsMyNHK5TeH92zz3hB8ciuzOv3glPd5m6k7I=;
+        b=eNSMyA+YCxWztneHcmukaT6xLcQ5dhXTjeJ22Z4Xi9+ur68aJtIRfqtcCJ//xaoRwY
+         1eLdkqWNRgI50/CW131HJI7Q2VbMxOHANI9AplmX3a0L9ULkG5pq3RCah0piqw4x49TX
+         Cx28bKfGFVRUU0f35kS0UH4jd9k8wbT5ZCY5JZEs66GfrVLp2OAByBne4AjCxZ+TaO7i
+         4wiW19mEF4pw6Q7dQfUqy4+TAbMEkb7/2dbeIwVrhSeD87HcF5j4DYWmu0Cjvk9hU/by
+         G150n2etnUnAoLmlPWZbhU/Q8aEjIZciXVUPN42e0wVp0aqzIHQAHL7pkbylJXD6zIY+
+         Lrow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683713958; x=1686305958;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6TzFaeCtsMyNHK5TeH92zz3hB8ciuzOv3glPd5m6k7I=;
+        b=KTB/zKxP3gwOWcWn0A6/NhttU7G8o59hKGgXjSgRrFYWx0LGaCkoeUaHj8F/IYzQ7T
+         MMrTEyS46hzy+ZJ7xfpoaJyz7QwKee5P09hGz4x+48xisq8/8DOUlZPT+8Fgf7ovbcVw
+         UFG7d7Js2/3TzKfc2X1gkw2UPRF/xpLV2n436srNegnI5J0kRDvxlpLkuOk1rKyCIjEp
+         pTB38nphUJLHMxwb9hBQbsx75GM1UFiTinp57lDz9vnVh3ydBpCm5Kpou1KblYwA0aBF
+         czFk+qUu5x1oCJgiDnIofFOhkzq8GOCeWccsRQjyjNOwiJMFleC8wdk+jxQgeWIp3qnY
+         LAEQ==
+X-Gm-Message-State: AC+VfDyZDlxi2eM/IdPpyEFSyJR0AE3GsoI98AzeqFYflgkO0Yq12sid
+        Az54rs1TBbetKWGDDyxwo24=
+X-Google-Smtp-Source: ACHHUZ6tDzveM5eOKzKrGk213LFBmv5V4FVEwtFB/+ed+zvaz7MwM+K1L7Xavv4Vhy/NAiw+g+hCmA==
+X-Received: by 2002:a17:903:185:b0:1a1:e237:5f0 with SMTP id z5-20020a170903018500b001a1e23705f0mr22428195plg.58.1683713957671;
+        Wed, 10 May 2023 03:19:17 -0700 (PDT)
+Received: from localhost.localdomain ([221.226.144.218])
+        by smtp.gmail.com with ESMTPSA id p16-20020a170902e75000b001aadd0d7364sm3393419plf.83.2023.05.10.03.19.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 03:19:17 -0700 (PDT)
+From:   Song Shuai <suagrfillet@gmail.com>
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, rostedt@goodmis.org, mhiramat@kernel.org,
+        mark.rutland@arm.com, guoren@kernel.org, suagrfillet@gmail.com,
+        jszhang@kernel.org, e.shatokhin@yadro.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org
+Subject: [PATCH V9 0/4] riscv: Optimize function trace
+Date:   Wed, 10 May 2023 18:18:53 +0800
+Message-Id: <20230510101857.2953955-1-suagrfillet@gmail.com>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230510072817.116056-16-anna-maria@linutronix.de>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Wed, May 10, 2023 at 09:28:11AM +0200, Anna-Maria Behnsen a �crit :
-> +/**
-> + * fetch_next_timer_interrupt_remote
-> + * @basej:	base time jiffies
-> + * @basem:	base time clock monotonic
-> + * @tevt:	Pointer to the storage for the expiry values
-> + * @cpu:	Remote CPU
-> + *
-> + * Stores the next pending local and global timer expiry values in the
-> + * struct pointed to by @tevt. If a queue is empty the corresponding
-> + * field is set to KTIME_MAX. If local event expires before global
-> + * event, global event is set to KTIME_MAX as well.
-> + *
-> + * Caller needs to make sure timer base locks are held (use
-> + * timer_lock_remote_bases() for this purpose). Caller must make sure
-> + * interrupts are reopened, if required.
-> + */
-> +void fetch_next_timer_interrupt_remote(unsigned long basej, u64 basem,
-> +				       struct timer_events *tevt,
-> +				       unsigned int cpu)
-> +{
-> +	struct timer_base *base_local, *base_global;
-> +
-> +	/* Preset local / global events */
-> +	tevt->local = tevt->global = KTIME_MAX;
-> +
-> +	base_local = per_cpu_ptr(&timer_bases[BASE_LOCAL], cpu);
-> +	base_global = per_cpu_ptr(&timer_bases[BASE_GLOBAL], cpu);
-> +
-> +	lockdep_assert_held(&base_local->lock);
-> +	lockdep_assert_held(&base_global->lock);
-> +
-> +	fetch_next_timer_interrupt(base_local, base_global, basej, basem, tevt);
-> +
-> +	raw_spin_unlock(&base_global->lock);
-> +	raw_spin_unlock(&base_local->lock);
+Changes in v9:
 
-Oh so that makes:
+1. add Acked-by from Björn Töpel in patch 1
 
-LOCK(baseL)
-LOCK(baseG)
-LOCK(tmc)
-UNLOCK(baseG)
-UNLOCK(baseL)
-UNLOCK(tmc)
+2. rebase patch2/patch3 on Linux v6.4-rc1
 
-I guess you can keep the bases locks locked until the end of
-tmigr_handle_remote_cpu(). After all that's what get_next_timer_interrupt()
-does. I'm not sure the above early release of bases locks will bring much
-in case of contention...
+  - patch 2: to make the `SAVE_ABI_REGS` configurable, revert the
+    modification of mcount-dyn.S from commit (45b32b946a97 "riscv:
+entry: Consolidate general regs saving/restoring")
 
-Then a timer_unlock_remote_bases() would restore symmetry.
+  - patch 3: to pass the trace_selftest, add the implement of
+    `ftrace_stub_direct_tramp` from commit (fee86a4ed536 "ftrace:
+selftest: remove broken trace_direct_tramp") ; and fixup the context
+conflict in Kconfig 
 
-> +/**
-> + * timer_lock_remote_bases - lock timer bases of cpu
-> + * @cpu:	Remote CPU
-> + *
-> + * Locks the remote timer bases.
-> + *
-> + * Returns false if cpu is offline, otherwise true is returned.
-> + */
-> +bool timer_lock_remote_bases(unsigned int cpu)
-> +{
-> +	struct timer_base *base_local, *base_global;
-> +
-> +	/*
-> +	 * Pretend that there is no timer pending if the cpu is offline.
-> +	 * Possible pending timers will be migrated later to an active cpu.
-> +	 */
-> +	if (cpu_is_offline(cpu))
-> +		return false;
+You can directly try it with:
 
-This value is never checked and the caller assumes the bases are
-always locked upon calling this (more on this on the big patch).
+https://github.com/sugarfillet/linux/tree/6.4-rc1-rv-ftrace-v9
 
-Thanks.
 
-> +
-> +	base_local = per_cpu_ptr(&timer_bases[BASE_LOCAL], cpu);
-> +	base_global = per_cpu_ptr(&timer_bases[BASE_GLOBAL], cpu);
-> +
-> +	raw_spin_lock_irq(&base_local->lock);
-> +	raw_spin_lock_nested(&base_global->lock, SINGLE_DEPTH_NESTING);
-> +
-> +	return true;
-> +}
+This series optimizes function trace. The first 3 independent 
+patches has been picked in the V7 version of this series, the
+subsequent version continues the following 4 patches:
+
+select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY [1] (patch 1)
+==========================================================
+
+In RISC-V, -fpatchable-function-entry option is used to support
+dynamic ftrace in this commit afc76b8b8011 ("riscv: Using
+PATCHABLE_FUNCTION_ENTRY instead of MCOUNT"). So recordmcount
+don't have to be called to create the __mcount_loc section before
+the vmlinux linking.
+
+Here selects FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY to tell
+Makefile not to run recordmcount.
+
+Make function graph use ftrace directly [2] (patch 2)
+======================================================== 
+
+In RISC-V architecture, when we enable the ftrace_graph tracer on some
+functions, the function tracings on other functions will suffer extra
+graph tracing work. In essence, graph_ops isn't limited by its func_hash
+due to the global ftrace_graph_[regs]_call label. That should be
+corrected.
+
+What inspires me is the commit 0c0593b45c9b ("x86/ftrace: Make function
+graph use ftrace directly") that uses graph_ops::func function to
+install return_hooker and makes the function called against its
+func_hash.
+
+Add WITH_DIRECT_CALLS support [3] (patch 3, 4)
+==============================================
+
+This series adds DYNAMIC_FTRACE_WITH_DIRECT_CALLS support for RISC-V.
+SAMPLE_FTRACE_DIRECT and SAMPLE_FTRACE_DIRECT_MULTI are also included
+here as the samples for testing DIRECT_CALLS related interface.
+
+First, select the DYNAMIC_FTRACE_WITH_DIRECT_CALLS to provide 
+register_ftrace_direct[_multi] interfaces allowing user to register 
+the customed trampoline (direct_caller) as the mcount for one or 
+more target functions. And modify_ftrace_direct[_multi] are also 
+provided for modify direct_caller.
+
+At the same time, the samples in ./samples/ftrace/ can be built
+as kerenl module for testing these interfaces with SAMPLE_FTRACE_DIRECT
+and SAMPLE_FTRACE_DIRECT_MULTI selected.
+
+Second, to make the direct_caller and the other ftrace hooks
+(eg. function/fgraph tracer, k[ret]probes) co-exist, a temporary
+register
+are nominated to store the address of direct_caller in
+ftrace_regs_caller.
+After the setting of the address direct_caller by direct_ops->func and
+the RESTORE_REGS in ftrace_regs_caller, direct_caller will be jumped to
+by the `jr` inst.
+
+The series's old changes related these patches
+==========================================
+
+Changes in v8:
+https://lore.kernel.org/linux-riscv/20230324033342.3177979-1-suagrfillet@gmail.com/
+ - Fix incorrect address values in the 4nd patch 
+ - Rebased on v6.3-rc2
+
+Changes in v7:
+https://lore.kernel.org/linux-riscv/20230112090603.1295340-1-guoren@kernel.org/
+ - Fixup RESTORE_ABI_REGS by remove PT_T0(sp) overwrite.
+ - Add FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY [1]
+ - Fixup kconfig with HAVE_SAMPLE_FTRACE_DIRECT &
+   HAVE_SAMPLE_FTRACE_DIRECT_MULTI
+
+Changes in v6:
+https://lore.kernel.org/linux-riscv/20230107133549.4192639-1-guoren@kernel.org/
+ - Replace 8 with MCOUNT_INSN_SIZE
+ - Replace "REG_L a1, PT_RA(sp)" with "mv a1, ra"
+ - Add Evgenii Shatokhin comment
+
+Changes in v5:
+https://lore.kernel.org/linux-riscv/20221208091244.203407-1-guoren@kernel.org/
+ - Sort Kconfig entries in alphabetical order.
+
+Changes in v4:
+https://lore.kernel.org/linux-riscv/20221129033230.255947-1-guoren@kernel.org/
+ - Include [3] for maintenance. [Song Shuai]
+
+Changes in V3:
+https://lore.kernel.org/linux-riscv/20221123153950.2911981-1-guoren@kernel.org/
+ - Include [2] for maintenance. [Song Shuai]
+
+[1]: https://lore.kernel.org/linux-riscv/CAAYs2=j3Eak9vU6xbAw0zPuoh00rh8v5C2U3fePkokZFibWs2g@mail.gmail.com/T/#t
+[2]: https://lore.kernel.org/lkml/20221120084230.910152-1-suagrfillet@gmail.com/
+[3]: https://lore.kernel.org/linux-riscv/20221123142025.1504030-1-suagrfillet@gmail.com/ 
+
+Song Shuai (4):
+  riscv: select FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+  riscv: ftrace: Add ftrace_graph_func
+  riscv: ftrace: Add DYNAMIC_FTRACE_WITH_DIRECT_CALLS support
+  samples: ftrace: Add riscv support for SAMPLE_FTRACE_DIRECT[_MULTI]
+
+ arch/riscv/Kconfig                          |   4 +
+ arch/riscv/include/asm/ftrace.h             |  19 ++-
+ arch/riscv/kernel/ftrace.c                  |  30 ++--
+ arch/riscv/kernel/mcount-dyn.S              | 176 +++++++++++++++++---
+ samples/ftrace/ftrace-direct-modify.c       |  33 ++++
+ samples/ftrace/ftrace-direct-multi-modify.c |  39 +++++
+ samples/ftrace/ftrace-direct-multi.c        |  23 +++
+ samples/ftrace/ftrace-direct-too.c          |  26 +++
+ samples/ftrace/ftrace-direct.c              |  22 +++
+ 9 files changed, 328 insertions(+), 44 deletions(-)
+
+-- 
+2.20.1
 
