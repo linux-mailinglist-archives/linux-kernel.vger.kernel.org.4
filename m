@@ -2,117 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A4096FD55E
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 06:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E1E6FD565
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 06:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235644AbjEJEut (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 00:50:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48156 "EHLO
+        id S235679AbjEJEvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 00:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230023AbjEJEu1 (ORCPT
+        with ESMTP id S235642AbjEJEvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 00:50:27 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCE984218;
-        Tue,  9 May 2023 21:50:24 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64115eef620so47461639b3a.1;
-        Tue, 09 May 2023 21:50:24 -0700 (PDT)
+        Wed, 10 May 2023 00:51:24 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C743B4486
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 21:51:21 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-55c939fb24dso62468227b3.2
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 21:51:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683694224; x=1686286224;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fjvF0okmkO6bRnSuK5692kJbO2O9eLlNpM3QSK5raGA=;
-        b=Z1VR9OCE3JfLqABa9qplnc18A4vve7+jhk6ZZRLyvX6nhH9TgzGWcOxVy2KE7+RHDB
-         IFxpICz2YqFTIB2mJjq85MD/6FtCgvLnmn+b9wuUFGQeMIYOIiKFy/2xFG/3ci6lE8YM
-         QF5EgixnPPNKrvU2yg+LnC/NA+bUCaoPOh5z5uiWfRlKDs1yOuP6CcLvf+fsdNvS+mbH
-         bhsZ7TejvQW/8HDTCyKr1J9YjPmJ9EksOiMyNScXdyanLpRxgiRXLs0gyuD0iJ6MbEPH
-         SDHMIOMRt6SXRoyg72j5Blo4wnwFrxaLFxVmKEuY6ac1HW9hvIp/fNKR53cWHf3TyqvH
-         FvdA==
+        d=google.com; s=20221208; t=1683694281; x=1686286281;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=b7UlqbgxG6/xaVRAtCCqUssmJjUq670TXTguXR1OYLA=;
+        b=5cXf/P6BxU1x2jWAw1XE7lRFR5Hz1XREgrw/VEMhvVcJnXcjM36N/6ukWbrtQrBqKA
+         zSa2Sv7JIhhIHw0jqecJCQ0I3KFtNtFTtcWEm3Dd1ej1SIUJwcKbmfe+obSPbeDZo8gC
+         6xQBKG42nA4UxjHlH/bbWapoijTCEdQ0FWMFygpKibtGLht3vBtUJrxtZLXSikEjAohO
+         9Mt4H98I/XZmLwWtASWfmWRRB+ep6DPhrFoxb6sbiSMAPWqCSJ6PoFgtTXczonMbB8CK
+         fEydvLzJU1eBlheYQjHQZRb6dlhSRwpD8khHEgpaWJ2Nq+jcZ1v9u6pbHABwaFooYDMC
+         SQUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683694224; x=1686286224;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fjvF0okmkO6bRnSuK5692kJbO2O9eLlNpM3QSK5raGA=;
-        b=CO7iLwnqmyVfI+Jc4H185r/V6Y2R5nsEEt666SovnMjzBDWS5M1UCw68RHVoaMgDuC
-         jwvVSCcQB0Iy0j8Kuak4b7rkHzI5zAO5JEl080y30vYBcJbDaWKQV+G5FcsTXgtxE3sJ
-         78fOjAwkX5ybKtR67fX9TaiFFw9Xl+TSrMupW/Vt9xGfxCaZT3MVC8pPwoIxMkbfYcv0
-         /Lbtyxi/WBT0VWFkM2XDPLHeKpDGWyH9SX7lORLW6Fm8NGYuXrk04d0rmNRIKs3pMK1l
-         9KG5ux3hLD+UEQdSpzwpmkKKbHUj8WyGgZzTNOP+w5udJoAJrXYalkGUhQoD9SGO/LpP
-         vxUA==
-X-Gm-Message-State: AC+VfDy7lSKrqeYIGsNc2vYrmW5q6+3dxVRgOSu1czDVmgX6KWZ97p3s
-        tRrQCMwRmgnAR/LtTrxZSNY=
-X-Google-Smtp-Source: ACHHUZ5GguK/UatlKScuuJ1FXRgLeUPfVlIBVrcz7ePqO0X62Qzo3Wnjdr2zlHi5SgqKj6owWZ3pSA==
-X-Received: by 2002:a17:90a:feb:b0:24e:463c:c4a7 with SMTP id 98-20020a17090a0feb00b0024e463cc4a7mr24450607pjz.15.1683694224295;
-        Tue, 09 May 2023 21:50:24 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-2.three.co.id. [116.206.28.2])
-        by smtp.gmail.com with ESMTPSA id ot5-20020a17090b3b4500b002508d73f4e8sm4404727pjb.57.2023.05.09.21.50.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 May 2023 21:50:23 -0700 (PDT)
-Message-ID: <acf162e6-3dc2-6976-bceb-fa82b5e7b2c2@gmail.com>
-Date:   Wed, 10 May 2023 11:49:49 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     Linux Regressions <regressions@lists.linux.dev>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        d=1e100.net; s=20221208; t=1683694281; x=1686286281;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b7UlqbgxG6/xaVRAtCCqUssmJjUq670TXTguXR1OYLA=;
+        b=DetIlqQpNbVJrXksITSjiQuJNmqYUFJjfGQw+7XP6HxaMv79Ha//NRgp0vr4pPUur1
+         1s3KSTnBQt18V40CGG6GNMC7cQRhti+GGW2Dk4Cf6YEkCFtKp4vFUg+VQavwNiJPSpct
+         Ru341QOqmtdl60mwYm1JgJuRSr8KBXMXFcnQJc0efq4PJxEwYJGQTGownh/Q7MveH1UV
+         Rc0CGjG92UwPOtAnMxn04R+DxDEZlT8lOg3MutYzzVyLi/VcuPiHirmNYzwUfo6FtetG
+         EbLh5YCt7ex15HZ2mwlFc+QdEC3U7a0OVQhmm8NO2HteCe1+HMZDwPcqZAPqDWUFEDeW
+         pxvQ==
+X-Gm-Message-State: AC+VfDw3sIJSC3m4C5D6HPo7pYcvpQekAYjx+kq6FVIW3xhBcYQ5f8el
+        kl3rblhquLmMkbqUBDG6s0XW5g==
+X-Google-Smtp-Source: ACHHUZ4qY6ip5x2yFLoBtebXka29+LgP7DYegkav9AGhNOLhqnLW12B3RwfHAHhI/1xbUzIiGo2rmQ==
+X-Received: by 2002:a0d:f347:0:b0:556:1065:e6a8 with SMTP id c68-20020a0df347000000b005561065e6a8mr19687163ywf.2.1683694280881;
+        Tue, 09 May 2023 21:51:20 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id x186-20020a81a0c3000000b0054eff15530asm3831597ywg.90.2023.05.09.21.51.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 21:51:20 -0700 (PDT)
+Date:   Tue, 9 May 2023 21:51:16 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
         "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Linux Intel LAN Drivers <intel-wired-lan@lists.osuosl.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: e1000e - slow receive / rx - i219-LM (Alder Lake)
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 07/23] mips: update_mmu_cache() can replace __update_tlb()
+In-Reply-To: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
+Message-ID: <e7e6758b-d952-c96f-37b0-814cc3a22bc6@google.com>
+References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Don't make update_mmu_cache() a wrapper around __update_tlb(): call it
+directly, and use the ptep (or pmdp) provided by the caller, instead of
+re-calling pte_offset_map() - which would raise a question of whether a
+pte_unmap() is needed to balance it.
 
-I noticed a regression report on bugzilla [1]. As many developers don't
-take a look on it, I decided to forward it by email. To reach the
-reporter, though, you need to log in to bugzilla.
+Check whether the "ptep" provided by the caller is actually the pmdp,
+instead of testing pmd_huge(): or test pmd_huge() too and warn if it
+disagrees?  This is "hazardous" territory: needs review and testing.
 
-Quoting from the report:
->  Scott Silverman 2023-03-03 17:55:10 UTC > When running kernels 5.15 and newer, poor rx speeds are observed on Alder Lake i219-LM (8086:1A1C) on a Dell Precision 3260 Compact.
-> 
-> To Reproduce:
-> Using iperf3 from the system under test:
-> `iperf3 -c <server on local LAN> -R`
-> 
-> Under kernels 5.7-5.14 (inclusive) performance is near line rate, ~990 Mbps.
-> From kernels 5.15 through 6.2 performance is approximately 10-20 Mbps.
-> 
-> Also of note, the issue doesn't present with servers over the internet (i.e. higher latency links). Over a link with a latency of approximately 20ms I was able to achieve about 600Mbps.
-> 
-> Interesting workaround, on affected kernels (5.15+) I am able to resolve the issue if an additional device is installed into the systems PCIe slot (tested with an Intel i210 NIC (not connected to LAN) and an Nvidia Quadro P620 GPU).
+Signed-off-by: Hugh Dickins <hughd@google.com>
+---
+ arch/mips/include/asm/pgtable.h | 15 +++------------
+ arch/mips/mm/tlb-r3k.c          |  5 +++--
+ arch/mips/mm/tlb-r4k.c          |  9 +++------
+ 3 files changed, 9 insertions(+), 20 deletions(-)
 
-See bugzilla for details.
-
-To the reporter: It had been great if you also test the latest mainline
-(6.4-rc1) to see if this regression has been already fixed.
-
-Anyway, I'm adding this to regzbot:
-
-#regzbot introduced: v5.14..v5.15 https://bugzilla.kernel.org/show_bug.cgi?id=217120
-#regzbot title: e1000e performance drop (slow receive/rx) on i219-LM (Alder Lake)
-
-Thanks.
-
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217120
-
+diff --git a/arch/mips/include/asm/pgtable.h b/arch/mips/include/asm/pgtable.h
+index 574fa14ac8b2..9175dfab08d5 100644
+--- a/arch/mips/include/asm/pgtable.h
++++ b/arch/mips/include/asm/pgtable.h
+@@ -565,15 +565,8 @@ static inline pte_t pte_swp_clear_exclusive(pte_t pte)
+ }
+ #endif
+ 
+-extern void __update_tlb(struct vm_area_struct *vma, unsigned long address,
+-	pte_t pte);
+-
+-static inline void update_mmu_cache(struct vm_area_struct *vma,
+-	unsigned long address, pte_t *ptep)
+-{
+-	pte_t pte = *ptep;
+-	__update_tlb(vma, address, pte);
+-}
++extern void update_mmu_cache(struct vm_area_struct *vma,
++	unsigned long address, pte_t *ptep);
+ 
+ #define	__HAVE_ARCH_UPDATE_MMU_TLB
+ #define update_mmu_tlb	update_mmu_cache
+@@ -581,9 +574,7 @@ static inline void update_mmu_cache(struct vm_area_struct *vma,
+ static inline void update_mmu_cache_pmd(struct vm_area_struct *vma,
+ 	unsigned long address, pmd_t *pmdp)
+ {
+-	pte_t pte = *(pte_t *)pmdp;
+-
+-	__update_tlb(vma, address, pte);
++	update_mmu_cache(vma, address, (pte_t *)pmdp);
+ }
+ 
+ /*
+diff --git a/arch/mips/mm/tlb-r3k.c b/arch/mips/mm/tlb-r3k.c
+index 53dfa2b9316b..e5722cd8dd6d 100644
+--- a/arch/mips/mm/tlb-r3k.c
++++ b/arch/mips/mm/tlb-r3k.c
+@@ -176,7 +176,8 @@ void local_flush_tlb_page(struct vm_area_struct *vma, unsigned long page)
+ 	}
+ }
+ 
+-void __update_tlb(struct vm_area_struct *vma, unsigned long address, pte_t pte)
++void update_mmu_cache(struct vm_area_struct *vma,
++		      unsigned long address, pte_t *ptep)
+ {
+ 	unsigned long asid_mask = cpu_asid_mask(&current_cpu_data);
+ 	unsigned long flags;
+@@ -203,7 +204,7 @@ void __update_tlb(struct vm_area_struct *vma, unsigned long address, pte_t pte)
+ 	BARRIER;
+ 	tlb_probe();
+ 	idx = read_c0_index();
+-	write_c0_entrylo0(pte_val(pte));
++	write_c0_entrylo0(pte_val(*ptep));
+ 	write_c0_entryhi(address | pid);
+ 	if (idx < 0) {					/* BARRIER */
+ 		tlb_write_random();
+diff --git a/arch/mips/mm/tlb-r4k.c b/arch/mips/mm/tlb-r4k.c
+index 1b939abbe4ca..c96725d17cab 100644
+--- a/arch/mips/mm/tlb-r4k.c
++++ b/arch/mips/mm/tlb-r4k.c
+@@ -290,14 +290,14 @@ void local_flush_tlb_one(unsigned long page)
+  * updates the TLB with the new pte(s), and another which also checks
+  * for the R4k "end of page" hardware bug and does the needy.
+  */
+-void __update_tlb(struct vm_area_struct * vma, unsigned long address, pte_t pte)
++void update_mmu_cache(struct vm_area_struct *vma,
++		      unsigned long address, pte_t *ptep)
+ {
+ 	unsigned long flags;
+ 	pgd_t *pgdp;
+ 	p4d_t *p4dp;
+ 	pud_t *pudp;
+ 	pmd_t *pmdp;
+-	pte_t *ptep;
+ 	int idx, pid;
+ 
+ 	/*
+@@ -326,10 +326,9 @@ void __update_tlb(struct vm_area_struct * vma, unsigned long address, pte_t pte)
+ 	idx = read_c0_index();
+ #ifdef CONFIG_MIPS_HUGE_TLB_SUPPORT
+ 	/* this could be a huge page  */
+-	if (pmd_huge(*pmdp)) {
++	if (ptep == (pte_t *)pmdp) {
+ 		unsigned long lo;
+ 		write_c0_pagemask(PM_HUGE_MASK);
+-		ptep = (pte_t *)pmdp;
+ 		lo = pte_to_entrylo(pte_val(*ptep));
+ 		write_c0_entrylo0(lo);
+ 		write_c0_entrylo1(lo + (HPAGE_SIZE >> 7));
+@@ -344,8 +343,6 @@ void __update_tlb(struct vm_area_struct * vma, unsigned long address, pte_t pte)
+ 	} else
+ #endif
+ 	{
+-		ptep = pte_offset_map(pmdp, address);
+-
+ #if defined(CONFIG_PHYS_ADDR_T_64BIT) && defined(CONFIG_CPU_MIPS32)
+ #ifdef CONFIG_XPA
+ 		write_c0_entrylo0(pte_to_entrylo(ptep->pte_high));
 -- 
-An old man doll... just what I always wanted! - Clara
+2.35.3
+
