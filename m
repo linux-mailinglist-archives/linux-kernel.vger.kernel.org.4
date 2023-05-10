@@ -2,167 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37B6F6FD36C
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 03:07:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A600A6FD36E
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 03:08:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbjEJBHq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 21:07:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48102 "EHLO
+        id S235045AbjEJBIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 21:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjEJBHn (ORCPT
+        with ESMTP id S234520AbjEJBIQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 21:07:43 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8228E46B7;
-        Tue,  9 May 2023 18:07:40 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2D33021B82;
-        Wed, 10 May 2023 01:07:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1683680859; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KDOIbYCc8cEVMo43jDWz1q3omhbKLsZ5bmHLW9Q3nx0=;
-        b=KmfsshDJwbLSI9cQhJej3WeTjpKKdwn/WDh8CVfdB1s7174IS5BgrWvujONqgpG8GL4ZOC
-        yry0mnSO/Z3LYH6RZla3Lo/Nbiw/q5jeTbO2R1U2rsUsSUAXxLZ8ulMPM0yYjOzbGHT6xG
-        GoQlrWw52E/pYd/iAK+o6rXO21lF9Ks=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1683680859;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KDOIbYCc8cEVMo43jDWz1q3omhbKLsZ5bmHLW9Q3nx0=;
-        b=lhGqPBcFXZod3cdJf8lThYcIRHii/80QYIW+AUgflS4q86KK+kz0naRXucwEwl0lcStpKR
-        Td9br/xgIgxz9XCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id F1D0113416;
-        Wed, 10 May 2023 01:07:38 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 66AEO1ruWmTVMwAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 10 May 2023 01:07:38 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 490FDA0745; Wed, 10 May 2023 03:07:37 +0200 (CEST)
-Date:   Wed, 10 May 2023 03:07:37 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Jan Kara <jack@suse.cz>, "Darrick J . Wong" <djwong@kernel.org>
-Subject: Re: [PATCH 06/32] sched: Add task_struct->faults_disabled_mapping
-Message-ID: <20230510010737.heniyuxazlprrbd6@quack3>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-7-kent.overstreet@linux.dev>
+        Tue, 9 May 2023 21:08:16 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8A5E49C1;
+        Tue,  9 May 2023 18:08:13 -0700 (PDT)
+Received: from [127.0.0.1] ([73.231.166.163])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 34A17fsp1731854
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Tue, 9 May 2023 18:07:42 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 34A17fsp1731854
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2023040901; t=1683680863;
+        bh=jhDLoIM7dHdYgcyfud1uL2JJD5Oew+jXsTMBNuzR3AE=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=Ii52SNMvSq477fqw2TQHlbh3Y1fT1pknMIoJLzYPHJ+cF4zd7lUCMNqByda5YevD/
+         fn7zDUnlgRaeybBm9s1ZiU0k47Vzq8BkV63vBNkYIzwOdPaJd0neecYr01E+l2XNGo
+         /m61uzeVgxVKAZ2u+2xgvcvvejGPQNomluFIMdjrSvqLAVf25e4nvd3mjtTEk5VPp2
+         Kurtk7BoegbK5zWPSRlSZAFhKMyZPW9Qsc09fxLPuY6o4EvJWHXMEioglnjGijbyrZ
+         FcVIh+WdfZshGBvelb6AVCdDHm9EN+vc/CZyWXSrybKuEHy5hBC4uLpV5AppSiH7Mb
+         ULCDi10ZWtC3Q==
+Date:   Tue, 09 May 2023 18:07:40 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+CC:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86: make config X86_FEATURE_NAMES visible with EXPERT
+User-Agent: K-9 Mail for Android
+In-Reply-To: <20230509084007.24373-1-lukas.bulwahn@gmail.com>
+References: <20230509084007.24373-1-lukas.bulwahn@gmail.com>
+Message-ID: <0A466BA5-BB85-4254-9D1C-7E6B077E7725@zytor.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230509165657.1735798-7-kent.overstreet@linux.dev>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 09-05-23 12:56:31, Kent Overstreet wrote:
-> From: Kent Overstreet <kent.overstreet@gmail.com>
-> 
-> This is used by bcachefs to fix a page cache coherency issue with
-> O_DIRECT writes.
-> 
-> Also relevant: mapping->invalidate_lock, see below.
-> 
-> O_DIRECT writes (and other filesystem operations that modify file data
-> while bypassing the page cache) need to shoot down ranges of the page
-> cache - and additionally, need locking to prevent those pages from
-> pulled back in.
-> 
-> But O_DIRECT writes invoke the page fault handler (via get_user_pages),
-> and the page fault handler will need to take that same lock - this is a
-> classic recursive deadlock if userspace has mmaped the file they're DIO
-> writing to and uses those pages for the buffer to write from, and it's a
-> lock ordering deadlock in general.
-> 
-> Thus we need a way to signal from the dio code to the page fault handler
-> when we already are holding the pagecache add lock on an address space -
-> this patch just adds a member to task_struct for this purpose. For now
-> only bcachefs is implementing this locking, though it may be moved out
-> of bcachefs and made available to other filesystems in the future.
+On May 9, 2023 1:40:07 AM PDT, Lukas Bulwahn <lukas=2Ebulwahn@gmail=2Ecom> =
+wrote:
+>Commit 6a108a14fa35 ("kconfig: rename CONFIG_EMBEDDED to CONFIG_EXPERT")
+>introduces CONFIG_EXPERT to carry the previous intent of CONFIG_EMBEDDED
+>and just gives that intent a much better name=2E That has been clearly a =
+good
+>and long overdue renaming, and it is clearly an improvement to the kernel
+>build configuration that has shown to help managing the kernel build
+>configuration in the last decade=2E
+>
+>However, rather than bravely and radically just deleting CONFIG_EMBEDDED,
+>this commit gives CONFIG_EMBEDDED a new intended semantics, but keeps it
+>open for future contributors to implement that intended semantics:
+>
+>    A new CONFIG_EMBEDDED option is added that automatically selects
+>    CONFIG_EXPERT when enabled and can be used in the future to isolate
+>    options that should only be considered for embedded systems (RISC
+>    architectures, SLOB, etc)=2E
+>
+>Since then, this CONFIG_EMBEDDED implicitly had two purposes:
+>
+>  - It can make even more options visible beyond what CONFIG_EXPERT makes
+>    visible=2E In other words, it may introduce another level of enabling=
+ the
+>    visibility of configuration options: always visible, visible with
+>    CONFIG_EXPERT and visible with CONFIG_EMBEDDED=2E
+>
+>  - Set certain default values of some configurations differently,
+>    following the assumption that configuring a kernel build for an
+>    embedded system generally starts with a different set of default valu=
+es
+>    compared to kernel builds for all other kind of systems=2E
+>
+>Considering the first purpose, at the point in time where CONFIG_EMBEDDED
+>was renamed to CONFIG_EXPERT, CONFIG_EXPERT already made 130 more options
+>become visible throughout all different menus for the kernel configuratio=
+n=2E
+>Over the last decade, this has gradually increased, so that currently, wi=
+th
+>CONFIG_EXPERT, roughly 170 more options become visible throughout all
+>different menus for the kernel configuration=2E In comparison, currently =
+with
+>CONFIG_EMBEDDED enabled, just seven more options are visible, one in x86,
+>one in arm, and five for the ChipIdea Highspeed Dual Role Controller=2E
+>
+>As the numbers suggest, these two levels of enabling the visibility of ev=
+en
+>more configuration options---beyond what CONFIG_EXPERT enables---never
+>evolved to a good solution in the last decade=2E In other words, this
+>additional level of visibility of configuration option with CONFIG_EMBEDD=
+ED
+>compared to CONFIG_EXPERT has since its introduction never become really
+>valuable=2E It requires quite some investigation to actually understand w=
+hat
+>is additionally visible and it does not differ significantly in complexit=
+y
+>compared to just enabling CONFIG_EXPERT=2E This CONFIG_EMBEDDED---or any
+>other config to show more detailed options beyond CONFIG_EXPERT---is
+>unlikely to be valuable unless somebody puts significant effort in
+>identifying how such visibility options can be properly split and creatin=
+g
+>clear criteria, when some config option is visible with CONFIG_EXPERT and
+>when some config option is visible only with some further option enabled
+>beyond CONFIG_EXPERT, such as CONFIG_EMBEDDED attempted to do=2E For now,=
+ it
+>is much more reasonable to simply make those additional seven options tha=
+t
+>are visible with CONFIG_EMBEDDED visible with CONFIG_EXPERT, and then
+>remove CONFIG_EMBEDDED=2E If anyone spends significant effort in structur=
+ing
+>the visibility of config options, they may re-introduce suitable new
+>config options simply as they see fit=2E
+>
+>Make the config X86_FEATURE_NAMES visible when CONFIG_EXPERT is enabled=
+=2E
+>
+>Signed-off-by: Lukas Bulwahn <lukas=2Ebulwahn@gmail=2Ecom>
+>Reviewed-by: Masahiro Yamada <masahiroy@kernel=2Eorg>
+>Acked-by: Arnd Bergmann <arnd@arndb=2Ede>
+>---
+> arch/x86/Kconfig | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+>index ce460d6b4e25=2E=2E595f6696281c 100644
+>--- a/arch/x86/Kconfig
+>+++ b/arch/x86/Kconfig
+>@@ -442,7 +442,7 @@ config SMP
+> 	  If you don't know what to do here, say N=2E
+>=20
+> config X86_FEATURE_NAMES
+>-	bool "Processor feature human-readable names" if EMBEDDED
+>+	bool "Processor feature human-readable names" if EXPERT
+> 	default y
+> 	help
+> 	  This option compiles in a table of x86 feature bits and corresponding
 
-It would be nice to have at least a link to the code that's actually using
-the field you are adding.
-
-Also I think we were already through this discussion [1] and we ended up
-agreeing that your scheme actually solves only the AA deadlock but a
-malicious userspace can easily create AB BA deadlock by running direct IO
-to file A using mapped file B as a buffer *and* direct IO to file B using
-mapped file A as a buffer.
-
-[1] https://lore.kernel.org/all/20191218124052.GB19387@quack2.suse.cz
-
-> ---------------------------------
-> 
-> The closest current VFS equivalent is mapping->invalidate_lock, which
-> comes from XFS. However, it's not used by direct IO.  Instead, direct IO
-> paths shoot down the page cache twice - before starting the IO and at
-> the end, and they're still technically racy w.r.t. page cache coherency.
-> 
-> This is a more complete approach: in the future we might consider
-> replacing mapping->invalidate_lock with the bcachefs code.
-
-Yes, and this is because we never provided 100% consistent buffered VS
-direct IO behavior on the same file exactly because we never found the
-complexity worth the usefulness...
-
-								Honza
-
-> 
-> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
-> Cc: Jan Kara <jack@suse.cz>
-> Cc: Darrick J. Wong <djwong@kernel.org>
-> Cc: linux-fsdevel@vger.kernel.org
-> ---
->  include/linux/sched.h | 1 +
->  init/init_task.c      | 1 +
->  2 files changed, 2 insertions(+)
-> 
-> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> index 63d242164b..f2a56f64f7 100644
-> --- a/include/linux/sched.h
-> +++ b/include/linux/sched.h
-> @@ -869,6 +869,7 @@ struct task_struct {
->  
->  	struct mm_struct		*mm;
->  	struct mm_struct		*active_mm;
-> +	struct address_space		*faults_disabled_mapping;
->  
->  	int				exit_state;
->  	int				exit_code;
-> diff --git a/init/init_task.c b/init/init_task.c
-> index ff6c4b9bfe..f703116e05 100644
-> --- a/init/init_task.c
-> +++ b/init/init_task.c
-> @@ -85,6 +85,7 @@ struct task_struct init_task
->  	.nr_cpus_allowed= NR_CPUS,
->  	.mm		= NULL,
->  	.active_mm	= &init_mm,
-> +	.faults_disabled_mapping = NULL,
->  	.restart_block	= {
->  		.fn = do_no_restart_syscall,
->  	},
-> -- 
-> 2.40.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+You know it used to be named that, and it was changed exactly because it w=
+as a terrible name, right?
