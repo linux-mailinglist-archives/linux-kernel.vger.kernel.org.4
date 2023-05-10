@@ -2,299 +2,407 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86E256FD981
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6624E6FD985
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:35:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236657AbjEJIdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 04:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46598 "EHLO
+        id S236420AbjEJIfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 04:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236136AbjEJIdd (ORCPT
+        with ESMTP id S236593AbjEJIeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 04:33:33 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563B73A98;
-        Wed, 10 May 2023 01:32:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683707559; x=1715243559;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=Zt3Xjklu96TrqmRv4Waovk0XQkK4uNLi7C8DbknCiCU=;
-  b=lkWiesqHF197Y+2xdIDagFSFF3yh9WnhdM8qTjpx1r08IORmb7neE+Z3
-   0f+8LArS0AJqMMbH+nvO6IEEGwgUUE2WQbUhdstI0JcPnA6G8CQykegTi
-   o6qsIem+8t+Xzv3E6eLzewvE54HU3xJSJet6PNkPd9yQCYZ01icOrs7KI
-   aRru4NjR0wVZ8qBZZl+xRbzqm4wCmeFgRF9tjT8QEXmPGrDRk+jtRETQO
-   iHHSFxD9NdjntG2dGZQxt/PjV4Roo2cyExc8M/ZH5XQWO/ZXXwzVitgEq
-   Nwc77LqhFcQzIYEVb2dxkh7T0Zx/6xZJuN5jNZQAmLDlJXz1KeAYT8+0W
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="330523722"
-X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
-   d="scan'208";a="330523722"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 01:32:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="676765690"
-X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
-   d="scan'208";a="676765690"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.61.254])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 01:32:07 -0700
-Message-ID: <09511964-dea6-f078-b24c-fef6b05f5b79@intel.com>
-Date:   Wed, 10 May 2023 11:32:02 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [PATCH 3/4] perf tools: Add printing perf_event_attr->type symbol
- in perf_event_attr__fprintf()
-Content-Language: en-US
-To:     Yang Jihong <yangjihong1@huawei.com>, peterz@infradead.org,
-        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
-        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-        namhyung@kernel.org, irogers@google.com, anshuman.khandual@arm.com,
-        jesussanp@google.com, linux-perf-users@vger.kernel.org,
+        Wed, 10 May 2023 04:34:31 -0400
+Received: from IND01-BMX-obe.outbound.protection.outlook.com (mail-bmxind01on2047.outbound.protection.outlook.com [40.107.239.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4755C83E4;
+        Wed, 10 May 2023 01:33:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LIi86ohA4wF0xUk/+83HhkECQsGs242kyINmoRCWM32rUK9N667vq4fS/Wu5UAFbHqmVejj3bQukUB7lDveJC9MZ4D60MNk+9WRD7zPaKz127wcGtVjx3tkUCkRSKYCHLnWbvowhTxJiFyS9cqNY2R+ddHDImzheXQc953Qzpu5WI/QWAzhZhJDFhctOdsYJpijWJiPAhecBdon1b4Vg4q112nMZqMFFjCqBhkwF6SLoWIL80eYtaCL5E854Nhx/7Ia9qQfXcChgpGjxCaVdlttLToV+cshx8WLdU6/sdxWpRmOwA+V2mZYWlbC1GVtuqM5ESyHFA/eSF86JNzKkcQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4jIP1yYZ3aqeWCeWupCDK1t9ahKQeoLmStiiARgvXC8=;
+ b=C6rwk1Rfkmi7rzEPBMRanbNJcYk1UaACSlPt+i7ON+F9vyDI+pdJXqsaJzZ5+1kqdgOC+0AgRNSLrpHnkJ/1GvBtpX0yaPTwa2n+aB1Sdy72nDe63aKKpF+WgPZNZXM1wMnSVS75EhaQr6svcTpwC3XwFE0WW2BNYtp9U9jltg7zIIsX7YR87aIPXVjfqulVe2e8KY36f8TB0D1bU80o/MCw9JwwuG2mdKF+ueoLDQluHSddY8Z2Yc1esYbaLhTTFhbfUl9RCMJsrOZFId90H5uXMnnRS/7/zJCGTRra0tkFhtprUVB6eeYdqfMBLJrdZ/de83Sw6ree6aVPLtIH2A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=siliconsignals.io; dmarc=pass action=none
+ header.from=siliconsignals.io; dkim=pass header.d=siliconsignals.io; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siliconsignals.io;
+Received: from BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM (2603:1096:b01:b::15)
+ by PNXPR01MB7204.INDPRD01.PROD.OUTLOOK.COM (2603:1096:c01:a0::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Wed, 10 May
+ 2023 08:32:53 +0000
+Received: from BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::a54e:e611:b89d:7470]) by BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM
+ ([fe80::a54e:e611:b89d:7470%3]) with mapi id 15.20.6363.033; Wed, 10 May 2023
+ 08:32:53 +0000
+From:   Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
+To:     krzysztof.kozlowski@linaro.org
+Cc:     Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230419122912.73746-1-yangjihong1@huawei.com>
- <20230419122912.73746-4-yangjihong1@huawei.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20230419122912.73746-4-yangjihong1@huawei.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Subject: [PATCH v3 1/3] arm64: dts: Add device tree for the Emtop SOM IMX8MM
+Date:   Wed, 10 May 2023 14:02:29 +0530
+Message-Id: <20230510083231.3692247-1-himanshu.bhavani@siliconsignals.io>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ClientProxiedBy: PN3PR01CA0174.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:de::15) To BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:b01:b::15)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BM1PR01MB4899:EE_|PNXPR01MB7204:EE_
+X-MS-Office365-Filtering-Correlation-Id: 63151062-8c93-48d8-5f19-08db5131259d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SdDEavIlt9Rbg/fBUyu5mVrdDj8ZJYV7HYUgHbm/Te6LFvfUs2fMfkQPszGcdDR9viybfamtTDdfu17C8K+7jgMK1Et3oAsNSP0g+6prwVQbBNdhy6pILOMdOhN5JI/ENXjP5T8II48e7fCz7QRQWvMonjqxG9sD2s6Oo2+1bcS6W8M4WwbWoA2oYBucRV/VgKoNqWM5XSJZiFYMNs0EQg3+IWDUy2L///83BJ6NafKN6eaEaD3STzCe2/NoEFlIqZVpY4MJ+f66/Yd/nmsEkhri3YMdu4DWSmnJBJ9ruKrW6PIJAzMWZ/3e9aXkUSIe0TW4bI1zGMpQWO6zc0qb6mXgWw/Aw5/CdxX+aynd6PyXXAeajeHVtKa3b/jjCJ/n0nLnrbrE0IMfIPAVB2y0WiaDzuGpX8eNBEylIDHZiD1+3Ias6pRVGpCJ4sHYHU0chg+AXCibCMF+F6QerhDxq8NpNIZNBiQkNl533z9o9lBKFx6AhpFHoFkv2IeTIUeO4Xacuy5JZPa5u28qBrO6QIK3o9V3vMjI4sZy0BWN/aPAgwpZUg9XBVnXjIWwGATq+H8Oq2kxZPsoVfiEaFxpry4PRuVUyN+hcUQOZMv6o72sQ8UYFg+BhbwPiJrWDJKdcCEUr6N4oPBgDW8kNaQCag==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230028)(376002)(366004)(136003)(39840400004)(396003)(346002)(451199021)(66946007)(66476007)(66556008)(83380400001)(2616005)(86362001)(38100700002)(38350700002)(54906003)(52116002)(6486002)(6666004)(186003)(6512007)(6506007)(36756003)(1076003)(478600001)(26005)(2906002)(316002)(4326008)(6916009)(8936002)(8676002)(5660300002)(7416002)(44832011)(41300700001)(32563001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zQ+Rzwa4kM8+nJDtoa7HdEbkiU824SNFwzmwZ6kn6OCLlKSGRyyPLNYe6XBo?=
+ =?us-ascii?Q?NZaG6voUnivLb7EiOmaZJiXe8Sz8AT9koJwH3MJ4Gk0MJVLJjdFaogN2TESC?=
+ =?us-ascii?Q?xMUZrQwXy1UeSx/sMa2Cf7oGmb/336ZqvLWB73OjG0P1WJTVvrArmpwzogdG?=
+ =?us-ascii?Q?4oRrXjHUyl3/j163QpJroDOgPC3ja0ZraGIPtHeq52T//xLjW5WW/DLn2MYt?=
+ =?us-ascii?Q?RBnn9j0bLexeKYj/C/52HKqmcWrZFled5E6u/w4Q7WGwMwz5ROUIUEYLAIoc?=
+ =?us-ascii?Q?ZQAIuH9G72NP5VcyIwGCrcgLeoFBo8//qrwk9afzCHeuIT/vbdX6brdYoMaF?=
+ =?us-ascii?Q?Nvqfc/7t3Eys5BYzSPo+Ui+3rXZsQ+jz78zM3/puLWvRt1tUj9Lb4styldVi?=
+ =?us-ascii?Q?kEWNgamsN5sZfuGalVPKFWC+ax3yCOeSqB6S+FDwmyEEJ0zw6uwn4/HvjVBu?=
+ =?us-ascii?Q?tuJZV8RXH5G2XM8DhXog5dDQSz/+9vkmlK4ZACrdFlGah24c4pge2EWBCfa7?=
+ =?us-ascii?Q?U7AQvm0EBOctFfcDguC5Pl/q9s2shsSPB4NP3OQvsaotYfRLv4hV4fRriPXx?=
+ =?us-ascii?Q?2Gq9Eb0QCkdWFALm+Jj9L1hUTJeOgmW/bXQwbRdM+VhblD5rYfnBEcIt+bqB?=
+ =?us-ascii?Q?CgwqE1QkQlmbdBBKKqGSYTJOcoS4W9rGv5Mwl34oPpbzNKS9utsgZYOsyRNF?=
+ =?us-ascii?Q?ha30DEBvyOXQYGIrFqP1RCcwk8DIe8EYkV9mnexcyU6armLd+JCzU7Q/wC1S?=
+ =?us-ascii?Q?5IaRn4TGS55h+uXjp7RZvxn7NJ7tGfvW812pCh09xsfBsllIqGt/AyqJlAqt?=
+ =?us-ascii?Q?08/yAV9+QWA0HrbvWIeQvpsiR8UQdwIqMvhaLkE9plsw3FkGkq9fuRrfmV0f?=
+ =?us-ascii?Q?E8FIKCaL6sHOFDDpKEpfPzJBIdLIMcpUIxFhN9UeKA3kNcNkiZMyRjAAj5ZQ?=
+ =?us-ascii?Q?Fk5312o7Xyqf3lY+t+R7BxdJwBpF6Ttmg8hVQhWlnsOMVsEdUvLx7t2wCSOA?=
+ =?us-ascii?Q?GQu0F2CgWq7dmQcEB069TVvR407nMNaE8p6qZJx9gI3YBiHrDtx5WA5SWvPi?=
+ =?us-ascii?Q?MiOhLk7fZv/Md7ctLP1z3Nih/ytKUzKc9RefpLQ6S+au2YVgwKUBCe1HmKRA?=
+ =?us-ascii?Q?qV5LR4Vz3eyjuYfhi5NuP6j+/JSLhweb/Wxe//0tjjjo++AbekgfUGRtEPZI?=
+ =?us-ascii?Q?gRGhkU/svbihNKv5rqBDdQHYf/OMnW00MhEVmLWwzHs3g2lsabytKowjy4QC?=
+ =?us-ascii?Q?N1IvTnuX7nrpl99eemHfdWYu+8J2oRspe+zhNZQlVkMWY4UyBuNGAhH6oyqn?=
+ =?us-ascii?Q?u/5NMvJt4iI+u9iQO0//Iik2kuC/LDrDdEKfscuLOx3uO2ceYZf8IvSLmBFh?=
+ =?us-ascii?Q?1lCBNYC+1F3S3nrfiTpBRX3YWU19jjZOEHcIfsBgAHxPVA8u3TDnwr1X3irR?=
+ =?us-ascii?Q?DCYnx+zR8oADwfH/NALORRi3FnTakQhhgUlkd9KaXD7+sBj2lmdOC8C6Pd4v?=
+ =?us-ascii?Q?igzFHhOn7zcEeXofsXgU7vCJPY6noxsc6fCGJ1say9T0Csf8hf1/TMhL5Brh?=
+ =?us-ascii?Q?NcpR2uGJdroAjibCW6ZN3j/tBNA97eHXGxbrogGr3No4XwRX2MsyjA3cx4aI?=
+ =?us-ascii?Q?YG5+8oJGjaE4UNVMR9XxcC0=3D?=
+X-OriginatorOrg: siliconsignals.io
+X-MS-Exchange-CrossTenant-Network-Message-Id: 63151062-8c93-48d8-5f19-08db5131259d
+X-MS-Exchange-CrossTenant-AuthSource: BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 08:32:53.0856
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 7ec5089e-a433-4bd1-a638-82ee62e21d37
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: +UYlGlUcVQJNaZp1jXA7lKmh6CHdn0cmxahVqKyADmyaZpu3ird/LAYL4gWyXHy6idoLPS9LOKWSMocget+TfS1aTuHSbM1mNcTQbdwjad6dIAPb670KPdYxWf450XPt
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PNXPR01MB7204
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19/04/23 15:29, Yang Jihong wrote:
-> When printing perf_event_attr, always display attr->type and its symbol
-> to improve the readability of debugging information.
-> 
-> Before:
-> 
->   # perf --debug verbose=2 record -e cycles,cpu-clock,sched:sched_switch,branch-load-misses,r101 -C 0 true
->   <SNIP>
->   ------------------------------------------------------------
->   perf_event_attr:
->     size                             136
->     { sample_period, sample_freq }   4000
->     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
->     read_format                      ID
->     disabled                         1
->     inherit                          1
->     freq                             1
->     sample_id_all                    1
->     exclude_guest                    1
->   ------------------------------------------------------------
->   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
->   ------------------------------------------------------------
->   perf_event_attr:
->     type                             1
->     size                             136
->     { sample_period, sample_freq }   4000
->     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
->     read_format                      ID
->     disabled                         1
->     inherit                          1
->     freq                             1
->     sample_id_all                    1
->     exclude_guest                    1
->   ------------------------------------------------------------
->   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 7
->   ------------------------------------------------------------
->   perf_event_attr:
->     type                             2
->     size                             136
->     config                           0x131
->     { sample_period, sample_freq }   1
->     sample_type                      IP|TID|TIME|CPU|PERIOD|RAW|IDENTIFIER
->     read_format                      ID
->     disabled                         1
->     inherit                          1
->     sample_id_all                    1
->     exclude_guest                    1
->   ------------------------------------------------------------
->   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 8
->   ------------------------------------------------------------
->   perf_event_attr:
->     type                             3
->     size                             136
->     config                           0x10005
->     { sample_period, sample_freq }   4000
->     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
->     read_format                      ID
->     disabled                         1
->     inherit                          1
->     freq                             1
->     sample_id_all                    1
->     exclude_guest                    1
->   ------------------------------------------------------------
->   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 10
->   ------------------------------------------------------------
->   perf_event_attr:
->     type                             4
->     size                             136
->     config                           0x101
->     { sample_period, sample_freq }   4000
->     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
->     read_format                      ID
->     disabled                         1
->     inherit                          1
->     freq                             1
->     sample_id_all                    1
->     exclude_guest                    1
->   ------------------------------------------------------------
->   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 11
->   <SNIP>
-> 
-> After:
-> 
->   # perf --debug verbose=2 record -e cycles,cpu-clock,sched:sched_switch,branch-load-misses,r101 -C 0 true
->   <SNIP>
->   ------------------------------------------------------------
->   perf_event_attr:
->     type                             0 (PERF_TYPE_HARDWARE)
->     size                             136
->     { sample_period, sample_freq }   4000
->     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
->     read_format                      ID
->     disabled                         1
->     inherit                          1
->     freq                             1
->     sample_id_all                    1
->     exclude_guest                    1
->   ------------------------------------------------------------
->   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
->   ------------------------------------------------------------
->   perf_event_attr:
->     type                             1 (PERF_TYPE_SOFTWARE)
->     size                             136
->     { sample_period, sample_freq }   4000
->     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
->     read_format                      ID
->     disabled                         1
->     inherit                          1
->     freq                             1
->     sample_id_all                    1
->     exclude_guest                    1
->   ------------------------------------------------------------
->   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 7
->   ------------------------------------------------------------
->   perf_event_attr:
->     type                             2 (PERF_TYPE_TRACEPOINT)
->     size                             136
->     config                           0x131
->     { sample_period, sample_freq }   1
->     sample_type                      IP|TID|TIME|CPU|PERIOD|RAW|IDENTIFIER
->     read_format                      ID
->     disabled                         1
->     inherit                          1
->     sample_id_all                    1
->     exclude_guest                    1
->   ------------------------------------------------------------
->   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 8
->   ------------------------------------------------------------
->   perf_event_attr:
->     type                             3 (PERF_TYPE_HW_CACHE)
->     size                             136
->     config                           0x10005
->     { sample_period, sample_freq }   4000
->     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
->     read_format                      ID
->     disabled                         1
->     inherit                          1
->     freq                             1
->     sample_id_all                    1
->     exclude_guest                    1
->   ------------------------------------------------------------
->   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 10
->   ------------------------------------------------------------
->   perf_event_attr:
->     type                             4 (PERF_TYPE_RAW)
->     size                             136
->     config                           0x101
->     { sample_period, sample_freq }   4000
->     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
->     read_format                      ID
->     disabled                         1
->     inherit                          1
->     freq                             1
->     sample_id_all                    1
->     exclude_guest                    1
->   ------------------------------------------------------------
->   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 11
->   <SNIP>
-> 
-> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
-> ---
->  tools/perf/util/perf_event_attr_fprintf.c | 24 ++++++++++++++++++++++-
->  1 file changed, 23 insertions(+), 1 deletion(-)
-> 
-> diff --git a/tools/perf/util/perf_event_attr_fprintf.c b/tools/perf/util/perf_event_attr_fprintf.c
-> index 433029c6afc5..d9d70126d505 100644
-> --- a/tools/perf/util/perf_event_attr_fprintf.c
-> +++ b/tools/perf/util/perf_event_attr_fprintf.c
-> @@ -71,6 +71,27 @@ static void __p_read_format(char *buf, size_t size, u64 value)
->  	__p_bits(buf, size, value, bits);
->  }
->  
-> +static void __p_type_id(char *buf, size_t size, u64 value)
-> +{
-> +	/* sync with enum perf_type_id in perf_event.h */
-> +	switch (value) {
-> +#define PRINT_ENUM_PERF_TYPE_ID_CASE(x)					\
-> +	case x:								\
-> +		snprintf(buf, size, "%"PRIu64" (%s)", value, #x);	\
-> +		return;
-> +	PRINT_ENUM_PERF_TYPE_ID_CASE(PERF_TYPE_HARDWARE)
-> +	PRINT_ENUM_PERF_TYPE_ID_CASE(PERF_TYPE_SOFTWARE)
-> +	PRINT_ENUM_PERF_TYPE_ID_CASE(PERF_TYPE_TRACEPOINT)
-> +	PRINT_ENUM_PERF_TYPE_ID_CASE(PERF_TYPE_HW_CACHE)
-> +	PRINT_ENUM_PERF_TYPE_ID_CASE(PERF_TYPE_RAW)
-> +	PRINT_ENUM_PERF_TYPE_ID_CASE(PERF_TYPE_BREAKPOINT)
-> +#undef PRINT_ENUM_PERF_TYPE_ID_CASE
+Add a device tree file describing the Emtop SOM IMX8MM
 
-These are ABI constants so maybe simpler:
+Signed-off-by: Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>
+---
+ arch/arm64/boot/dts/freescale/Makefile        |   1 +
+ .../arm64/boot/dts/freescale/imx8mm-emtop.dts | 261 ++++++++++++++++++
+ 2 files changed, 262 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx8mm-emtop.dts
 
-	const char *fixed_types[] = {"HARDWARE", "SOFTWARE", "TRACEPOINT",
-				     "HW_CACHE", "RAW", "BREAKPOINT"};
-
-	if (value < ARRAY_SIZE(fixed_types)) {
-		snprintf(buf, size, "%"PRIu64" (PERF_TYPE_%s)",
-			 value, fixed_types[value]);
-	} else {
-		snprintf(buf, size, "%"PRIu64, value);
-	}
-
-> +	default:
-> +		snprintf(buf, size, "%"PRIu64, value);
-> +		return;
-> +	}
-> +}
-> +
->  #define BUF_SIZE		1024
->  
->  #define p_hex(val)		snprintf(buf, BUF_SIZE, "%#"PRIx64, (uint64_t)(val))
-> @@ -79,6 +100,7 @@ static void __p_read_format(char *buf, size_t size, u64 value)
->  #define p_sample_type(val)	__p_sample_type(buf, BUF_SIZE, val)
->  #define p_branch_sample_type(val) __p_branch_sample_type(buf, BUF_SIZE, val)
->  #define p_read_format(val)	__p_read_format(buf, BUF_SIZE, val)
-> +#define p_type_id(val)		__p_type_id(buf, BUF_SIZE, val)
->  
->  #define PRINT_ATTRn(_n, _f, _p, _a)			\
->  do {							\
-> @@ -96,7 +118,7 @@ int perf_event_attr__fprintf(FILE *fp, struct perf_event_attr *attr,
->  	char buf[BUF_SIZE];
->  	int ret = 0;
->  
-> -	PRINT_ATTRf(type, p_unsigned);
-> +	PRINT_ATTRn("type", type, p_type_id, true);
->  	PRINT_ATTRf(size, p_unsigned);
->  	PRINT_ATTRf(config, p_hex);
->  	PRINT_ATTRn("{ sample_period, sample_freq }", sample_period, p_unsigned, false);
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index 198fff3731ae..36590515fbc1 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -54,6 +54,7 @@ dtb-$(CONFIG_ARCH_MXC) += imx8mm-beacon-kit.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-data-modul-edm-sbc.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-ddr4-evk.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-emcon-avari.dtb
++dtb-$(CONFIG_ARCH_MXC) += imx8mm-emtop.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-evk.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-icore-mx8mm-ctouch2.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-icore-mx8mm-edimm2.2.dtb
+diff --git a/arch/arm64/boot/dts/freescale/imx8mm-emtop.dts b/arch/arm64/boot/dts/freescale/imx8mm-emtop.dts
+new file mode 100644
+index 000000000000..461e1ef5dcb4
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx8mm-emtop.dts
+@@ -0,0 +1,261 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright 2023 Emtop
++ */
++
++/dts-v1/;
++
++#include <dt-bindings/gpio/gpio.h>
++#include <dt-bindings/leds/common.h>
++#include <dt-bindings/usb/pd.h>
++
++#include "imx8mm.dtsi"
++
++/ {
++	model = "Emtop SOM i.MX8MM";
++	compatible = "emtop,imx8mm-emtop", "fsl,imx8mm";
++
++	chosen {
++		stdout-path = &uart2;
++	};
++
++	leds {
++		compatible = "gpio-leds";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_gpio_led>;
++
++		led-0 {
++			function = LED_FUNCTION_POWER;
++			gpios = <&gpio3 16 GPIO_ACTIVE_HIGH>;
++			linux,default-trigger = "heartbeat";
++		};
++	};
++};
++
++&A53_0 {
++	cpu-supply = <&buck2>;
++};
++
++&A53_1 {
++	cpu-supply = <&buck2>;
++};
++
++&A53_2 {
++	cpu-supply = <&buck2>;
++};
++
++&A53_3 {
++	cpu-supply = <&buck2>;
++};
++
++&uart2 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_uart2>;
++	status = "okay";
++};
++
++&usdhc3 {
++	pinctrl-names = "default", "state_100mhz", "state_200mhz";
++	pinctrl-0 = <&pinctrl_usdhc3>;
++	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
++	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
++	bus-width = <8>;
++	non-removable;
++	status = "okay";
++};
++
++&wdog1 {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_wdog>;
++	fsl,ext-reset-output;
++	status = "okay";
++};
++
++&i2c1 {
++	clock-frequency = <400000>;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_i2c1>;
++	status = "okay";
++
++	pmic@25 {
++		compatible = "nxp,pca9450c";
++		reg = <0x25>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_pmic>;
++		interrupt-parent = <&gpio1>;
++		interrupts = <3 IRQ_TYPE_EDGE_RISING>;
++
++		regulators {
++			buck1: BUCK1 {
++				regulator-name = "BUCK1";
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <1000000>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <3125>;
++			};
++
++			buck2: BUCK2 {
++				regulator-name = "BUCK2";
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <900000>;
++				regulator-boot-on;
++				regulator-always-on;
++				regulator-ramp-delay = <3125>;
++			};
++
++			buck3: BUCK3 {
++				regulator-name = "BUCK3";
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <1000000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			buck4: BUCK4 {
++				regulator-name = "BUCK4";
++				regulator-min-microvolt = <3000000>;
++				regulator-max-microvolt = <3600000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			buck5: BUCK5 {
++				regulator-name = "BUCK5";
++				regulator-min-microvolt = <1650000>;
++				regulator-max-microvolt = <1950000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			buck6: BUCK6 {
++				regulator-name = "BUCK6";
++				regulator-min-microvolt = <1100000>;
++				regulator-max-microvolt = <1200000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo1: LDO1 {
++				regulator-name = "LDO1";
++				regulator-min-microvolt = <1650000>;
++				regulator-max-microvolt = <1950000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo2: LDO2 {
++				regulator-name = "LDO2";
++				regulator-min-microvolt = <800000>;
++				regulator-max-microvolt = <945000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo3: LDO3 {
++				regulator-name = "LDO3";
++				regulator-min-microvolt = <1710000>;
++				regulator-max-microvolt = <1890000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo4: LDO4 {
++				regulator-name = "LDO4";
++				regulator-min-microvolt = <810000>;
++				regulator-max-microvolt = <945000>;
++				regulator-boot-on;
++				regulator-always-on;
++			};
++
++			ldo5: LDO5 {
++				regulator-name = "LDO5";
++				regulator-min-microvolt = <1650000>;
++				regulator-max-microvolt = <3600000>;
++			};
++		};
++	};
++};
++
++&iomuxc {
++	pinctrl_gpio_led: gpioledgrp {
++		fsl,pins = <
++			MX8MM_IOMUXC_NAND_READY_B_GPIO3_IO16			0x19
++			MX8MM_IOMUXC_SAI3_RXC_GPIO4_IO29			0x19
++		>;
++	};
++
++	pinctrl_i2c1: i2c1grp {
++		fsl,pins = <
++			MX8MM_IOMUXC_I2C1_SCL_I2C1_SCL				0x400001c3
++			MX8MM_IOMUXC_I2C1_SDA_I2C1_SDA				0x400001c3
++		>;
++	};
++
++	pinctrl_pmic: pmicirq {
++		fsl,pins = <
++			MX8MM_IOMUXC_GPIO1_IO03_GPIO1_IO3			0x41
++		>;
++	};
++
++	pinctrl_uart2: uart2grp {
++		fsl,pins = <
++			MX8MM_IOMUXC_UART2_RXD_UART2_DCE_RX			0x140
++			MX8MM_IOMUXC_UART2_TXD_UART2_DCE_TX			0x140
++		>;
++	};
++
++	pinctrl_usdhc3: usdhc3grp {
++		fsl,pins = <
++			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK			0x190
++			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD			0x1d0
++			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0			0x1d0
++			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1			0x1d0
++			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2			0x1d0
++			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3			0x1d0
++			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4			0x1d0
++			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5			0x1d0
++			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6			0x1d0
++			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7			0x1d0
++			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE			0x190
++		>;
++	};
++
++	pinctrl_usdhc3_100mhz: usdhc3-100mhzgrp {
++		fsl,pins = <
++			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK			0x194
++			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD			0x1d4
++			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0			0x1d4
++			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1			0x1d4
++			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2			0x1d4
++			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3			0x1d4
++			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4			0x1d4
++			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5			0x1d4
++			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6			0x1d4
++			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7			0x1d4
++			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE			0x194
++		>;
++	};
++
++	pinctrl_usdhc3_200mhz: usdhc3-200mhzgrp {
++		fsl,pins = <
++			MX8MM_IOMUXC_NAND_WE_B_USDHC3_CLK			0x196
++			MX8MM_IOMUXC_NAND_WP_B_USDHC3_CMD			0x1d6
++			MX8MM_IOMUXC_NAND_DATA04_USDHC3_DATA0			0x1d6
++			MX8MM_IOMUXC_NAND_DATA05_USDHC3_DATA1			0x1d6
++			MX8MM_IOMUXC_NAND_DATA06_USDHC3_DATA2			0x1d6
++			MX8MM_IOMUXC_NAND_DATA07_USDHC3_DATA3			0x1d6
++			MX8MM_IOMUXC_NAND_RE_B_USDHC3_DATA4			0x1d6
++			MX8MM_IOMUXC_NAND_CE2_B_USDHC3_DATA5			0x1d6
++			MX8MM_IOMUXC_NAND_CE3_B_USDHC3_DATA6			0x1d6
++			MX8MM_IOMUXC_NAND_CLE_USDHC3_DATA7			0x1d6
++			MX8MM_IOMUXC_NAND_CE1_B_USDHC3_STROBE			0x196
++		>;
++	};
++
++	pinctrl_wdog: wdoggrp {
++		fsl,pins = <
++			MX8MM_IOMUXC_GPIO1_IO02_WDOG1_WDOG_B			0xc6
++		>;
++	};
++};
+-- 
+2.25.1
 
