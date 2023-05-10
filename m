@@ -2,166 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 022466FE0AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:43:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B568E6FE0A5
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:43:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237591AbjEJOnl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 10:43:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
+        id S237555AbjEJOnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 10:43:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237589AbjEJOnf (ORCPT
+        with ESMTP id S237258AbjEJOnX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 10:43:35 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755B159EB
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:43:31 -0700 (PDT)
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com [209.85.218.69])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 6573C3F486
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 14:43:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1683729807;
-        bh=VsRr4UycG64Ad7Wwitdyuus/KJ2GRNbGK68qU7i6U64=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=pNcxgBXPFFodaeYlu/o2D06g8I4U1cFk935AI5+DBzamPez+oJXnjt7T0PNM5448A
-         xjHFUWScYj/5EzuCjDilxYpQBx7drPoIm7NhZP1e3iFaYO/wO68QnkRo8jM2bGSn5U
-         sq2Af2W2KRvy8DmYOSglmdGXVy5uynLY/+rdUGU6ErVZQhQndINeYjXByZHOsTV51e
-         cSavG4n0B0LL7TtkAGKt1GQv36vZtNgh43D4DgjP8BzeCR/L05xN2nxFziMfdu9wdL
-         5A4kNy41+1iYDmGl02GHr5lpPR5cY9/us4gAT2OPrRQ5HzPkt3gOcaY30grtcwxZfM
-         zCJaW69tRRjew==
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-965f0c4ae32so579892066b.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:43:27 -0700 (PDT)
+        Wed, 10 May 2023 10:43:23 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEA58E51;
+        Wed, 10 May 2023 07:43:21 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so69531953a12.1;
+        Wed, 10 May 2023 07:43:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683729800; x=1686321800;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6hV3wpq0G9wCRSZdx/DdZ2PROV9kmk2slGRLRteDA5w=;
+        b=G9bVTcj1pWNQLAWnaqugWkF4YORPIxKseaQjcYAaMSeX2/MqYY7rcfz22FOVpCQ1+n
+         Kk0fqjYbnX66zfk1t0TyNz0PMw/YjOTOinHBOz+HegLnL40wLQ+khhbCvtjBWgt0LkKa
+         q76bLgHdvVUap/aHGPPtxeFqILlsQ/doTeBdAu9QCWoMeSRfh6WL07HVwyAlmS1B/skA
+         EkYHTFm+Ygcd0RMXSyIKfY3Xf+1jnz67tl8dzouNDzh8u9P2RFCTE40ZhH236guScxxc
+         fm21XmneVv3P8tdp/dbjp5MM9Fe1SVUgW7Ca51NQzKEFvHIFlt3TX8qbLlDqd2hz+PFy
+         tywg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683729804; x=1686321804;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VsRr4UycG64Ad7Wwitdyuus/KJ2GRNbGK68qU7i6U64=;
-        b=LBDpzciRrPbmpYj5PCZFN6fF7dqVyHIP4tSi7t27Uk8QdV1mCW0ZenQHqEB+nzA3LV
-         IcXj5U3zUQEmb9AQtmKgnZ1t4sYoThDZGtYa+1lmOcxT5UT5dzUtqU5hzUyfqUWDyhpl
-         //IIFa6AaYtfOouMAlmYYL0zDngzxjzWdmHEevv1xgg719pEMdlYUTdPWclEadssQaYk
-         73+CQHUaav32blLsoio6FyMehJqqvOL8kBQg6dx6+1GNBoJQMEuxF8Ifw72JKZZeB0UZ
-         zalIXz9dRkTpH9nT5swsFRmJFgYv4af2eGGwzGl0oVAZw4PAwwpyN5zYPJTqF+h+2E47
-         nKRQ==
-X-Gm-Message-State: AC+VfDxrWP3NIu1NJ1Pf0Lb1P1ajsQHdHXPl1QbbImcOx0gRo6yKLsvR
-        Eh6U8/QQ81EA25WLJe90rJEAHF5nVbFPiIsf3P27wUfLP/k5p4eyDrdxXLrpmiWLeAvxYpF0gIu
-        SxModCSHwkHr2NlniIukpSyX0QmelHnG2bRx9C/qivg==
-X-Received: by 2002:a17:907:94cf:b0:8b8:c06e:52d8 with SMTP id dn15-20020a17090794cf00b008b8c06e52d8mr18552876ejc.36.1683729804689;
-        Wed, 10 May 2023 07:43:24 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4p3WcCR9YYlvqH5FEUdsaxVk8iHhVqAwORD/x5tdhZuSVIvkPty0YtMpelRGfmwuLtWDzKFw==
-X-Received: by 2002:a17:907:94cf:b0:8b8:c06e:52d8 with SMTP id dn15-20020a17090794cf00b008b8c06e52d8mr18552853ejc.36.1683729804415;
-        Wed, 10 May 2023 07:43:24 -0700 (PDT)
-Received: from amikhalitsyn.. (ip5f5bf3d5.dynamic.kabel-deutschland.de. [95.91.243.213])
-        by smtp.gmail.com with ESMTPSA id ci18-20020a170907267200b009659ecdf29fsm2753044ejc.1.2023.05.10.07.43.23
+        d=1e100.net; s=20221208; t=1683729800; x=1686321800;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6hV3wpq0G9wCRSZdx/DdZ2PROV9kmk2slGRLRteDA5w=;
+        b=KGd3vWm4g2+AbIQlyNc2TZMzLQxoHqCk4tDnaKRkBnx0Ejz3AU4d/ky5Fc1L26du44
+         ClGbFq/h1xvQ0+Q5ffbDpS/2yXRfzHqGKZt3RlHDeVk3EHzVV5oGzm9mCahoAgAAXfQt
+         J+un7mTZ+BTM29RNcL9M9MteN50jRm7pG89cLKNEwZ7hS9sV748i0ZrhU81rer04jWD3
+         5rsXDGs7uo1aO++TZzj2t9f5ECTfS/MEy9SI3Uq3DV/rRyGPz/IsnhJPZ/MUaV6wdX7L
+         GamaZX44B0UrS9oQJxkpH3PEoN1azemaz6EYhjw7cPwfba3VDm+vH04OzQvQ0E8zMav6
+         GbZQ==
+X-Gm-Message-State: AC+VfDwhD+QIaTulERxrM0XCi9dFEryOfBhC3u18pOmENgHnRGqbB86o
+        iX6Gf0A5UH14YPDOGatu/3U=
+X-Google-Smtp-Source: ACHHUZ6m7CK42mQO2T8kd4XGundaYWXII/u55zQo3uh+SzdrNIrTpeuWBv7+02zKXP687ms302r9xQ==
+X-Received: by 2002:a17:907:25c3:b0:966:399e:a5a5 with SMTP id ae3-20020a17090725c300b00966399ea5a5mr9695095ejc.35.1683729800169;
+        Wed, 10 May 2023 07:43:20 -0700 (PDT)
+Received: from orome (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id p3-20020a170906140300b0095850aef138sm2712576ejc.6.2023.05.10.07.43.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 07:43:23 -0700 (PDT)
-From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-To:     nhorman@tuxdriver.com
-Cc:     davem@davemloft.net,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Christian Brauner <brauner@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>, linux-sctp@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v2] sctp: add bpf_bypass_getsockopt proto callback
-Date:   Wed, 10 May 2023 16:42:58 +0200
-Message-Id: <20230510144258.1343471-1-aleksandr.mikhalitsyn@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 10 May 2023 07:43:19 -0700 (PDT)
+Date:   Wed, 10 May 2023 16:43:18 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Peter De Schrijver <pdeschrijver@nvidia.com>
+Cc:     stefank@nvidia.com, jonathanh@nvidia.com, jassisinghbrar@gmail.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
+Subject: Re: [PATCH v3 0/6] firmware: tegra: Add MRQ support for Tegra264.
+Message-ID: <ZFuthhVUN9x5Ul5H@orome>
+References: <20230510142248.183629-1-pdeschrijver@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="IEJ6DYV1KbmUKb89"
+Content-Disposition: inline
+In-Reply-To: <20230510142248.183629-1-pdeschrijver@nvidia.com>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bpf_bypass_getsockopt proto callback and filter out
-SCTP_SOCKOPT_PEELOFF and SCTP_SOCKOPT_PEELOFF_FLAGS socket options
-from running eBPF hook on them.
 
-These options do fd_install(), and if BPF_CGROUP_RUN_PROG_GETSOCKOPT
-hook returns an error after success of the original handler
-sctp_getsockopt(...), userspace will receive an error from getsockopt
-syscall and will be not aware that fd was successfully installed into fdtable.
+--IEJ6DYV1KbmUKb89
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This patch was born as a result of discussion around a new SCM_PIDFD interface:
-https://lore.kernel.org/all/20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com/
+On Wed, May 10, 2023 at 05:22:42PM +0300, Peter De Schrijver wrote:
+> In Tegra264 the carveouts (GSCs) used to communicate between BPMP and
+> CPU-NS may reside in DRAM. The location will be signalled using reserved
+> memory node in DT. Additionally some minor updates to the HSP driver are
+> done to support the new chip.
 
-Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Neil Horman <nhorman@tuxdriver.com>
-Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc: Xin Long <lucien.xin@gmail.com>
-Cc: linux-sctp@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Suggested-by: Stanislav Fomichev <sdf@google.com>
-Acked-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
----
- net/sctp/socket.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+I was still reviewing v2 when you sent this out. Obviously none of those
+comments have now been addressed, so we'll need v4. Generally, try to
+give people a bit more time to review patches before sending new
+versions even if you've got early feedback from the various bots. You
+can of course already integrate fixes for issues pointed out, but there
+is no need to rush one version after the other at this point in the
+review cycle.
 
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index cda8c2874691..fed6057beb60 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -8281,6 +8281,29 @@ static int sctp_getsockopt(struct sock *sk, int level, int optname,
- 	return retval;
- }
- 
-+static bool sctp_bpf_bypass_getsockopt(int level, int optname)
-+{
-+	/*
-+	 * These options do fd_install(), and if BPF_CGROUP_RUN_PROG_GETSOCKOPT
-+	 * hook returns an error after success of the original handler
-+	 * sctp_getsockopt(...), userspace will receive an error from getsockopt
-+	 * syscall and will be not aware that fd was successfully installed into fdtable.
-+	 *
-+	 * Let's prevent bpf cgroup hook from running on them.
-+	 */
-+	if (level == SOL_SCTP) {
-+		switch (optname) {
-+		case SCTP_SOCKOPT_PEELOFF:
-+		case SCTP_SOCKOPT_PEELOFF_FLAGS:
-+			return true;
-+		default:
-+			return false;
-+		}
-+	}
-+
-+	return false;
-+}
-+
- static int sctp_hash(struct sock *sk)
- {
- 	/* STUB */
-@@ -9650,6 +9673,7 @@ struct proto sctp_prot = {
- 	.shutdown    =	sctp_shutdown,
- 	.setsockopt  =	sctp_setsockopt,
- 	.getsockopt  =	sctp_getsockopt,
-+	.bpf_bypass_getsockopt	= sctp_bpf_bypass_getsockopt,
- 	.sendmsg     =	sctp_sendmsg,
- 	.recvmsg     =	sctp_recvmsg,
- 	.bind        =	sctp_bind,
-@@ -9705,6 +9729,7 @@ struct proto sctpv6_prot = {
- 	.shutdown	= sctp_shutdown,
- 	.setsockopt	= sctp_setsockopt,
- 	.getsockopt	= sctp_getsockopt,
-+	.bpf_bypass_getsockopt	= sctp_bpf_bypass_getsockopt,
- 	.sendmsg	= sctp_sendmsg,
- 	.recvmsg	= sctp_recvmsg,
- 	.bind		= sctp_bind,
--- 
-2.34.1
+Thierry
 
+--IEJ6DYV1KbmUKb89
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmRbrYYACgkQ3SOs138+
+s6EFCw/6A5N4Xb9K0Gos9YvwfXHEOAd8hMmqMuped7QrmRL8CQVriQCPmLz4kNql
+cKJKQ3jgszXISSHLtXY84GA6Nf+WUTxzP+H8cqoTsVeMyEuXjz8RD5MSn/SdwRGO
+s3LMjoAfTfSlsVRKLU+7uLxGslX08kiibnSrXJP+xrM6g9v0rfDT4KSsXENahjge
+EhI8L1r0k7HOcvpVPCHG0cWeQDQcvEgMTuonHQy6YnZR0XRuozZiOE3CG6vjtCY4
+beT/pvjTVG384JziwtHqVTDI/YijDdml6KpvivouTjPcshoUYc7lDapt/hMWFkb1
+wjsMVJ7YTyRtHM+51Au+OQZzWhDCv709FI4ix+L2Fb0bRVZNAQ/pwPoQyL/yNain
+0wHU32ag9gnIFZxCh+ClEe+PGq428FlpgI+BBZkhCWGs8fn7dmpgU0HdOtwSnUAC
+N/M5STkfcrx7nc04658sEt7IY+fBbdCP6URQ2/oeXhewYPIOax3704ns2p1jnDD3
+XVZK7qQuQtFNr00qOSjPDnGzQVBFo8XmfrmxenYWEtsQbZM7WD6yYg3Dth/2dyol
+UoHWvmgFJsvzBbOoPMHDozHyb8DV7n1rQ5suYWAqk9evmhDZ1CdCfnAV+KNJuREx
+Yu8k4hJOcrPnAmEVcYjdjjk0+Lsxz+whWmMH7fUWmp6w9/u5zzU=
+=5MKS
+-----END PGP SIGNATURE-----
+
+--IEJ6DYV1KbmUKb89--
