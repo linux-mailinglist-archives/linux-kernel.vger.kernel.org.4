@@ -2,45 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03F0A6FE57A
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC56E6FE579
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236801AbjEJUte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39982 "EHLO
+        id S236818AbjEJUtf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:49:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236704AbjEJUtV (ORCPT
+        with ESMTP id S236718AbjEJUtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:49:21 -0400
+        Wed, 10 May 2023 16:49:22 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78E97E66;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA89BE49;
         Wed, 10 May 2023 13:49:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 038D76404E;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 61FDB60FE1;
         Wed, 10 May 2023 20:49:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4972DC4339B;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5C1AC433EF;
         Wed, 10 May 2023 20:49:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1683751759;
-        bh=k65eIBNbWGgq8kPNcDAf+4jUBJl/3bdgi6/uQvDQIZU=;
+        bh=u0ete4/L9qEG1j1eaFaM6cfkD+hUhRBYlzGermRhDww=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AN5drMAmjlL/Y2bPL5dZACzK6H4zkxETj1RJyG9NBQMZ1/l6YqPRgTPOCc52Dxb3J
-         k3Lk9FStKOIigBOrugYhvZkiOjHZd1APWkSoM7DXF5N9okoIh4tTCeP9GoKpmmffkM
-         3gvAtC9M4hq/0sX1WBr8F/KKqS17YAy2DQtr/bvsC2umz4mxdicQzn4pJx5mc7zsqJ
-         yW+xSSuvJXjW73UheWW13Tjunr+g8piFonOwXX0cMln2QM6DFqihalqxH/uyQXgGrQ
-         C5MSsWiJX8ZQvIVoeB8yQeyxppy45Lx87ym85Jn5O5ZDzNUFgi5Vdm73y0odTJB0to
-         /+cB/ZmMZi6+g==
+        b=MDkhbp9G5yLjrMOqUDewZNES3LZd+3bbVtJ0WT38j387H8kPhs6+E2QRlsMiGQ1Cn
+         JpGzpNTyQxzaHRsiE2X5roCpW0vTSfHzmy8Ot2GzCPk7SAzwk+j5zSegLBvVblKGzp
+         /QJYt9m/RDiVRtDmFF+rTngNZZr/il+g0RuJpytLjUQcZCzQVnnJou7tdGpxFJ4Dau
+         PvFu9TajZFh+/aqQjDofjRC9c3Sk0oLFhsBxK9EY7VMDrp9VEfU0OyyjnvBXYilSi/
+         xH7Pm0+aS2GUt1iJCBcqgTQq1Hi9lieNT2hVx1JAYT654xPkAooyj/gbMm90hEJite
+         2oqeoytZUJ68A==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Lee Jones <lee@kernel.org>, Sasha Levin <sashal@kernel.org>,
-        andy@kernel.org
-Subject: [PATCH AUTOSEL 6.3 6/9] mfd: intel_soc_pmic_chtwc: Add Lenovo Yoga Book X90F to intel_cht_wc_models
-Date:   Wed, 10 May 2023 16:49:02 -0400
-Message-Id: <20230510204905.104628-6-sashal@kernel.org>
+Cc:     Qiang Ning <qning0106@126.com>, Lee Jones <lee@kernel.org>,
+        Sasha Levin <sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.3 7/9] mfd: dln2: Fix memory leak in dln2_probe()
+Date:   Wed, 10 May 2023 16:49:03 -0400
+Message-Id: <20230510204905.104628-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230510204905.104628-1-sashal@kernel.org>
 References: <20230510204905.104628-1-sashal@kernel.org>
@@ -58,57 +56,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hans de Goede <hdegoede@redhat.com>
+From: Qiang Ning <qning0106@126.com>
 
-[ Upstream commit ded99b89d25fd73a1d7bd910378e0339fd9d4c4a ]
+[ Upstream commit 96da8f148396329ba769246cb8ceaa35f1ddfc48 ]
 
-The Android Lenovo Yoga Book X90F / X90L uses the same charger / fuelgauge
-setup as the already supported Windows Lenovo Yoga Book X91F/L, add
-a DMI match for this to intel_cht_wc_models with driver_data
-set to INTEL_CHT_WC_LENOVO_YOGABOOK1.
+When dln2_setup_rx_urbs() in dln2_probe() fails, error out_free forgets
+to call usb_put_dev() to decrease the refcount of dln2->usb_dev.
 
-When the quirk for the X91F/L was initially added it was written to
-also apply to the X90F/L but this does not work because the Android
-version of the Yoga Book uses completely different DMI strings.
-Also adjust the X91F/L quirk to reflect that it only applies to
-the X91F/L models.
+Fix this by adding usb_put_dev() in the error handling code of
+dln2_probe().
 
-Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
+Signed-off-by: Qiang Ning <qning0106@126.com>
 Signed-off-by: Lee Jones <lee@kernel.org>
-Link: https://lore.kernel.org/r/20230301095402.28582-1-hdegoede@redhat.com
+Link: https://lore.kernel.org/r/20230330024353.4503-1-qning0106@126.com
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/mfd/intel_soc_pmic_chtwc.c | 14 +++++++++++---
- 1 file changed, 11 insertions(+), 3 deletions(-)
+ drivers/mfd/dln2.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/mfd/intel_soc_pmic_chtwc.c b/drivers/mfd/intel_soc_pmic_chtwc.c
-index d53dae2554906..871776d511e31 100644
---- a/drivers/mfd/intel_soc_pmic_chtwc.c
-+++ b/drivers/mfd/intel_soc_pmic_chtwc.c
-@@ -159,11 +159,19 @@ static const struct dmi_system_id cht_wc_model_dmi_ids[] = {
- 			DMI_MATCH(DMI_PRODUCT_NAME, "Mipad2"),
- 		},
- 	}, {
--		/* Lenovo Yoga Book X90F / X91F / X91L */
-+		/* Lenovo Yoga Book X90F / X90L */
- 		.driver_data = (void *)(long)INTEL_CHT_WC_LENOVO_YOGABOOK1,
- 		.matches = {
--			/* Non exact match to match all versions */
--			DMI_MATCH(DMI_PRODUCT_NAME, "Lenovo YB1-X9"),
-+			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "Intel Corporation"),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_NAME, "CHERRYVIEW D1 PLATFORM"),
-+			DMI_EXACT_MATCH(DMI_PRODUCT_VERSION, "YETI-11"),
-+		},
-+	}, {
-+		/* Lenovo Yoga Book X91F / X91L */
-+		.driver_data = (void *)(long)INTEL_CHT_WC_LENOVO_YOGABOOK1,
-+		.matches = {
-+			/* Non exact match to match F + L versions */
-+			DMI_MATCH(DMI_PRODUCT_NAME, "Lenovo YB1-X91"),
- 		},
- 	}, {
- 		/* Lenovo Yoga Tab 3 Pro YT3-X90F */
+diff --git a/drivers/mfd/dln2.c b/drivers/mfd/dln2.c
+index 6cd0b0c752d6e..c3149729cec2e 100644
+--- a/drivers/mfd/dln2.c
++++ b/drivers/mfd/dln2.c
+@@ -827,6 +827,7 @@ static int dln2_probe(struct usb_interface *interface,
+ 	dln2_stop_rx_urbs(dln2);
+ 
+ out_free:
++	usb_put_dev(dln2->usb_dev);
+ 	dln2_free(dln2);
+ 
+ 	return ret;
 -- 
 2.39.2
 
