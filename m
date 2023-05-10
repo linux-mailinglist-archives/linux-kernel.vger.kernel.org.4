@@ -2,147 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2D196FD8A9
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:54:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6386F6FD8A6
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236207AbjEJHyA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 03:54:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45560 "EHLO
+        id S236431AbjEJHxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 03:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236436AbjEJHxx (ORCPT
+        with ESMTP id S236415AbjEJHx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 03:53:53 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 273CE44AB;
-        Wed, 10 May 2023 00:53:42 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34A7RIAU017497;
-        Wed, 10 May 2023 07:53:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding : content-type; s=qcppdkim1;
- bh=TWfriI1GPViFPiF9QfSprwUBp0trQtulsgwwLsgPKAY=;
- b=n7hg07RMT84PZJYqqr75XTzL6R+Z6hBLafurv+LOMfZEEgf6aqEVSNbbVWhAQRdA3z2z
- HeY9Cg6NEYQIXR8zU0o9ht/rK5Pr3p2ijTSiishDkyvJToeA7FrWNhUQsysuN/6Vk/3i
- ejjBMZVX2yyy8l8iHNOEdHuxgSVnDxWi7OXooDiFkkWmTLWk2irBakhTSKfD2IWOjCww
- r053Alomxh8cpW+HRASXWLHXQQJ3OxrGMJMlIM7uwhPoFckwfH6FY/gEk8GU+ixT3eT3
- uLWlm+hOccRJE7swJ8SUC67hs9kLWwiRwjMjWI91+kksq7Gd3M7MJ2hs6ubpqj2GPbbz 7g== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qfrut9mwc-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 07:53:19 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34A7rHQd015468
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 07:53:17 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 10 May 2023 00:53:14 -0700
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Jiantao Zhang" <water.zhangjiantao@huawei.com>,
-        Badhri Jagan Sridharan <badhri@google.com>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [PATCH v3 2/2] usb: gadget: udc: Handle gadget_connect failure during bind operation
-Date:   Wed, 10 May 2023 13:22:52 +0530
-Message-ID: <20230510075252.31023-3-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230510075252.31023-1-quic_kriskura@quicinc.com>
-References: <20230510075252.31023-1-quic_kriskura@quicinc.com>
+        Wed, 10 May 2023 03:53:26 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E55DCD
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:53:24 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so66291797a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:53:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683705203; x=1686297203;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=d2ao5xRhAW1VmJRMoMN5yofC1btln79yFSHVXnmazOY=;
+        b=vQGYGz+JKKoj0pR444Cmz8AfoMVXi+aedZH2f5tXSguiA5jLuZHv5InQd7y7msUxqw
+         pkkJJE6gXJYKt3xeKyoiUBmQvOVIt/HUyqJK4cnTR7Id3n+8LS4ug1j2erzjuP9g8Kh7
+         Eoq0Tft3rA++bEWy+Rtz7bxVQVt1xTHayNjawaewlwTNzI1icW0GLHqDTennWLI/5hGQ
+         oSLhjz56TdQwhAAFq3M5lmlIt2UfjO5/yaBsdZKxjDIgB5geJ5gMagket7Sh7Z13d1wl
+         JBTh44UnmDwdwNH+K8GYQiHxYZxRIcEiZG3AAbRMeTFcfULLRrbHkinEPAVuOoirq+md
+         aNMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683705203; x=1686297203;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=d2ao5xRhAW1VmJRMoMN5yofC1btln79yFSHVXnmazOY=;
+        b=Q+OjdMdfNb28WUW5IBY+4mV1zs3VrnV0YWq/7Pl8mEFdzyBlLcPSzeJQLDZ68viRjo
+         seur1gxWzEW+sQzeABrvfpcKb1jw0nuC6AwxhKIrchd/VlyT63oqvqtYGmzbY0yz+OZR
+         ZvRmy6Qj/fhPdurHTX2KFe4ySVe5bskmy4hWyaYJR9O3gWmMcRfjGvOAYVuPKDFzrEFu
+         rKX98RdqipRfEbkhbPhRBXgvZcKmyZaAf1PY7CjxcZFzuJ3ziprgZZrIyd3+e3HM/XQF
+         CHEixaydWVln7OkshAdOxJ8Kc9WObHogdPWjIsebSbId06xPilGgVY++xiQbLDC7cNv+
+         md3g==
+X-Gm-Message-State: AC+VfDwvDuwFWIYeeRlUIrvNQ3FKmCGJSf+bgSjs/+932liA8Np6+K1T
+        3Lcd5WfpopJaO+ksZeJaR+0CGg==
+X-Google-Smtp-Source: ACHHUZ7GAZREa4gfDODnMUUUqHW0zX13ApjtIjVoMWTiodkH906xmeobt1vPe7yZEyTTrjV8b+utxg==
+X-Received: by 2002:aa7:cb11:0:b0:504:a3ec:eacc with SMTP id s17-20020aa7cb11000000b00504a3eceaccmr14214029edt.4.1683705203156;
+        Wed, 10 May 2023 00:53:23 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:c175:a0f9:6928:8c9d? ([2a02:810d:15c0:828:c175:a0f9:6928:8c9d])
+        by smtp.gmail.com with ESMTPSA id w15-20020a50fa8f000000b0050d89daaa70sm1591780edr.2.2023.05.10.00.53.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 00:53:22 -0700 (PDT)
+Message-ID: <4d1b7563-046c-e62d-6849-5c539575717d@linaro.org>
+Date:   Wed, 10 May 2023 09:53:21 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: pwcW3T6yZNhZ2L6Peo3B0s5wVvZ-m0Em
-X-Proofpoint-ORIG-GUID: pwcW3T6yZNhZ2L6Peo3B0s5wVvZ-m0Em
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- priorityscore=1501 impostorscore=0 suspectscore=0 phishscore=0 bulkscore=0
- clxscore=1015 adultscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305100061
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 9/9] ASoC: dt-bindings: mediatek,mt8188-afe: add audio
+ properties
+Content-Language: en-US
+To:     Trevor Wu <trevor.wu@mediatek.com>, broonie@kernel.org,
+        lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com
+Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230510035526.18137-1-trevor.wu@mediatek.com>
+ <20230510035526.18137-10-trevor.wu@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230510035526.18137-10-trevor.wu@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the event, gadget_connect call (which invokes pullup) fails,
-propagate the error to udc bind operation which inturn sends the
-error to configfs. The userspace can then retry enumeartion if
-it chooses to.
+On 10/05/2023 05:55, Trevor Wu wrote:
+> Add apll1_d4 to clocks for switching the parent of top_a1sys_hp
+> dynamically and add property "mediatek,infracfg" for bus protection.
+> 
+> Because no mt8188 upstream dts exists, the change won't break anything.
+> In addition, apll2_d4, apll12_div4, top_a2sys and top_aud_iec are also
+> included in clocks, because these clocks are possibly used in the future.
+> 
+> Signed-off-by: Trevor Wu <trevor.wu@mediatek.com>
+> ---
 
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
-Acked-by: Alan Stern <stern@rowland.harvard.edu>
----
-changes in v3: Rebase on top of usb-next
 
- drivers/usb/gadget/udc/core.c | 21 +++++++++++++++++----
- 1 file changed, 17 insertions(+), 4 deletions(-)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-diff --git a/drivers/usb/gadget/udc/core.c b/drivers/usb/gadget/udc/core.c
-index 4641153e9706..69041cca5d24 100644
---- a/drivers/usb/gadget/udc/core.c
-+++ b/drivers/usb/gadget/udc/core.c
-@@ -1122,12 +1122,16 @@ EXPORT_SYMBOL_GPL(usb_gadget_set_state);
- /* ------------------------------------------------------------------------- */
- 
- /* Acquire connect_lock before calling this function. */
--static void usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
-+static int usb_udc_connect_control_locked(struct usb_udc *udc) __must_hold(&udc->connect_lock)
- {
-+	int ret;
-+
- 	if (udc->vbus && udc->started)
--		usb_gadget_connect_locked(udc->gadget);
-+		ret = usb_gadget_connect_locked(udc->gadget);
- 	else
--		usb_gadget_disconnect_locked(udc->gadget);
-+		ret = usb_gadget_disconnect_locked(udc->gadget);
-+
-+	return ret;
- }
- 
- /**
-@@ -1583,12 +1587,21 @@ static int gadget_bind_driver(struct device *dev)
- 		goto err_start;
- 	}
- 	usb_gadget_enable_async_callbacks(udc);
--	usb_udc_connect_control_locked(udc);
-+	ret = usb_udc_connect_control_locked(udc);
-+	if (ret)
-+		goto err_connect_control;
-+
- 	mutex_unlock(&udc->connect_lock);
- 
- 	kobject_uevent(&udc->dev.kobj, KOBJ_CHANGE);
- 	return 0;
- 
-+ err_connect_control:
-+	usb_gadget_disable_async_callbacks(udc);
-+	if (gadget->irq)
-+		synchronize_irq(gadget->irq);
-+	usb_gadget_udc_stop_locked(udc);
-+
-  err_start:
- 	driver->unbind(udc->gadget);
- 
--- 
-2.40.0
+Best regards,
+Krzysztof
 
