@@ -2,171 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01BF36FD848
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:34:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F11F6FD853
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:35:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236281AbjEJHeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 03:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53148 "EHLO
+        id S236130AbjEJHfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 03:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236172AbjEJHdq (ORCPT
+        with ESMTP id S236494AbjEJHei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 03:33:46 -0400
-Received: from mail-io1-xd46.google.com (mail-io1-xd46.google.com [IPv6:2607:f8b0:4864:20::d46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B4F6A72
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:33:12 -0700 (PDT)
-Received: by mail-io1-xd46.google.com with SMTP id ca18e2360f4ac-76c5c78bc24so214140939f.2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:33:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683703879; x=1686295879;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=C4a8KkWz9dRbpQYxxpyag0gphM+cBkqC1Ynk92aCjLc=;
-        b=aEROI9tWy2Bpr2HZGZfzed86tW5JvbbnrQHR81IhKHfAs0+VyTWNM/A/dMcoUgw/1/
-         YqNyO7p3KqT4po+GHJAI4mNxDVNY1wYXivyjVq9Fdbh/57a6TdKEmNigXx0sDNdUDMwd
-         3R5jsMUot63iX57xMPZgxIrn5hNDcV2KelOUxXvKXXMN8IGBozWLhofxGcl2QtR8OeAw
-         wqDIlq7kN4ufdO3jd7XFicfzi/Yz5gOKKUXKwiaIZYod8KhNdCdm/POV02SfLbK2ad/B
-         g4nsY1K2PRKi+NOjsmlSQ4gpIHRc/Osc0iFxhJHINlUzWJFvlYsNEqt4r09cCs5vEDL0
-         e9Hw==
-X-Gm-Message-State: AC+VfDymBpHTqRWcxqzTs6s8zyr74WYnb6PNQ/pSp1l3befjxjwzr6l4
-        1uW1USUwlUnp9T48lFEaJl0fRiwyh86iWMdZOVDIoRA0Epdw
-X-Google-Smtp-Source: ACHHUZ4WQqffs93R8HeMOCc4Zmn/P+d7xYLncyiFDdkPWJ5HeuWPIkK6smLQTRaifp3h9yVSsEiOQRy3oXIVbSiC9h2+kMGuOsDj
-MIME-Version: 1.0
-X-Received: by 2002:a5e:a703:0:b0:766:3ffc:b5de with SMTP id
- b3-20020a5ea703000000b007663ffcb5demr8021731iod.3.1683703879174; Wed, 10 May
- 2023 00:31:19 -0700 (PDT)
-Date:   Wed, 10 May 2023 00:31:19 -0700
-In-Reply-To: <000000000000f1a9d205f909f327@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a018e405fb51db75@google.com>
-Subject: Re: [syzbot] [ext4?] possible deadlock in quotactl_fd
-From:   syzbot <syzbot+cdcd444e4d3a256ada13@syzkaller.appspotmail.com>
-To:     adilger.kernel@dilger.ca, brauner@kernel.org, jack@suse.com,
-        jack@suse.cz, linux-ext4@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 10 May 2023 03:34:38 -0400
+Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B15B3AB1;
+        Wed, 10 May 2023 00:34:05 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
+        t=1683704028; bh=KX7K3tWMwUSNfSD7Emzei/zBhnBTyUmdhpZWoZTlsNs=;
+        h=Subject:From:In-Reply-To:Date:Cc:References:To;
+        b=iSEYaO2/qOoYodN2VM4otWvMXPzcr3UM/htHE9RgNKppQDz60o5VRIVkolATnAH1s
+         /Qi1j/leD7dRVRPPLQrC3rdHAG1tT38xg/DIkBoPeB0hH3NOC5xDpP5Y5jbfy3vbo8
+         9VFLOc+HJ0uuEGg/PEr8hkwnPgtQ70Dd11SItWy8=
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH] ASoC: dt-bindings: Adjust #sound-dai-cells on TI's
+ single-DAI codecs
+From:   =?utf-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>
+In-Reply-To: <A8647EF5-566A-4B99-9020-772810CB2BF7@cutebit.org>
+Date:   Wed, 10 May 2023 09:33:47 +0200
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, Andrew Davis <afd@ti.com>,
+        Shi Fu <shifu0704@thundersoft.com>,
+        Shenghao Ding <shenghao-ding@ti.com>, kevin-lu@ti.com,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <F12DE31C-E167-47F0-BAE0-C09538C5C3C8@cutebit.org>
+References: <20230509153412.62847-1-povik+lin@cutebit.org>
+ <baf338a7-1e63-4842-32a1-8f63f850bd2d@linaro.org>
+ <A8647EF5-566A-4B99-9020-772810CB2BF7@cutebit.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
 
-HEAD commit:    1dc3731daf1f Merge tag 'for-6.4-rc1-tag' of git://git.kern..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=13ef9566280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=8bc832f563d8bf38
-dashboard link: https://syzkaller.appspot.com/bug?extid=cdcd444e4d3a256ada13
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=12cc2a92280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10dc5fa6280000
+> On 10. 5. 2023, at 9:30, Martin Povi=C5=A1er <povik+lin@cutebit.org> =
+wrote:
+>=20
+>> On 10. 5. 2023, at 9:17, Krzysztof Kozlowski =
+<krzysztof.kozlowski@linaro.org> wrote:
+>>=20
+>> On 09/05/2023 17:34, Martin Povi=C5=A1er wrote:
+>>> A bunch of TI's codecs have binding schemas which force =
+#sound-dai-cells
+>>> to one despite those codecs only having a single DAI. Allow for =
+bindings
+>>> with zero DAI cells and deprecate the former non-zero value.
+>>>=20
+>>> Signed-off-by: Martin Povi=C5=A1er <povik+lin@cutebit.org>
+>>> ---
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/c41d6364878c/disk-1dc3731d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/ed2d9614f1c1/vmlinux-1dc3731d.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/903dc319e88d/bzImage-1dc3731d.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/46ea6ec4210f/mount_0.gz
+>>>  '#sound-dai-cells':
+>>> -    const: 1
+>>> +    # The codec has a single DAI, the #sound-dai-cells=3D<1>; case =
+is left in for backward
+>>> +    # compatibility but is deprecated.
+>>> +    enum: [0, 1]
+>>=20
+>> Does it? I see playback and capture.
+>=20
+> I think so. Playback and capture are not separate DAIs.
+>=20
+> Martin
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+cdcd444e4d3a256ada13@syzkaller.appspotmail.com
+I double checked, I am pretty sure. There=E2=80=99s a single =
+snd_soc_dai_driver,
+which becomes a single DAI.
 
-======================================================
-WARNING: possible circular locking dependency detected
-6.4.0-rc1-syzkaller-00011-g1dc3731daf1f #0 Not tainted
-------------------------------------------------------
-syz-executor197/5038 is trying to acquire lock:
-ffff88802b6260e0 (&type->s_umount_key#32){++++}-{3:3}, at: __do_sys_quotactl_fd+0x27e/0x3f0 fs/quota/quota.c:999
+Martin
 
-but task is already holding lock:
-ffff88802b626460 (sb_writers#4){.+.+}-{0:0}, at: __do_sys_quotactl_fd+0xd3/0x3f0 fs/quota/quota.c:990
+>=20
+>>=20
+>> Best regards,
+>> Krzysztof
+>=20
+>=20
 
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #1 (sb_writers#4){.+.+}-{0:0}:
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write include/linux/fs.h:1494 [inline]
-       sb_start_write include/linux/fs.h:1569 [inline]
-       write_mmp_block+0xc4/0x820 fs/ext4/mmp.c:50
-       ext4_multi_mount_protect+0x50d/0xac0 fs/ext4/mmp.c:347
-       __ext4_remount fs/ext4/super.c:6578 [inline]
-       ext4_reconfigure+0x242b/0x2b60 fs/ext4/super.c:6677
-       reconfigure_super+0x40c/0xa30 fs/super.c:956
-       vfs_fsconfig_locked fs/fsopen.c:254 [inline]
-       __do_sys_fsconfig+0xa5e/0xc50 fs/fsopen.c:439
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
--> #0 (&type->s_umount_key#32){++++}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3108 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3227 [inline]
-       validate_chain kernel/locking/lockdep.c:3842 [inline]
-       __lock_acquire+0x2f21/0x5df0 kernel/locking/lockdep.c:5074
-       lock_acquire kernel/locking/lockdep.c:5691 [inline]
-       lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5656
-       down_read+0x3d/0x50 kernel/locking/rwsem.c:1520
-       __do_sys_quotactl_fd+0x27e/0x3f0 fs/quota/quota.c:999
-       do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-       do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-       entry_SYSCALL_64_after_hwframe+0x63/0xcd
-
-other info that might help us debug this:
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  rlock(sb_writers#4);
-                               lock(&type->s_umount_key#32);
-                               lock(sb_writers#4);
-  rlock(&type->s_umount_key#32);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor197/5038:
- #0: ffff88802b626460 (sb_writers#4){.+.+}-{0:0}, at: __do_sys_quotactl_fd+0xd3/0x3f0 fs/quota/quota.c:990
-
-stack backtrace:
-CPU: 1 PID: 5038 Comm: syz-executor197 Not tainted 6.4.0-rc1-syzkaller-00011-g1dc3731daf1f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- check_noncircular+0x25f/0x2e0 kernel/locking/lockdep.c:2188
- check_prev_add kernel/locking/lockdep.c:3108 [inline]
- check_prevs_add kernel/locking/lockdep.c:3227 [inline]
- validate_chain kernel/locking/lockdep.c:3842 [inline]
- __lock_acquire+0x2f21/0x5df0 kernel/locking/lockdep.c:5074
- lock_acquire kernel/locking/lockdep.c:5691 [inline]
- lock_acquire+0x1b1/0x520 kernel/locking/lockdep.c:5656
- down_read+0x3d/0x50 kernel/locking/rwsem.c:1520
- __do_sys_quotactl_fd+0x27e/0x3f0 fs/quota/quota.c:999
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fc4ee1d7359
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 41 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fc4ee1832f8 EFLAGS: 00000246 ORIG_RAX: 00000000000001bb
-RAX: ffffffffffffffda RBX: 00007fc4ee25b7a0 RCX: 00007fc4ee1d7359
-RDX: 00000000ffffffff RSI: ffffffff80000802 RDI: 0000000000000003
-RBP: 00007fc4ee22858c R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 7272655f61746164
-R13: 6974797a616c6f6e R14: 0030656c69662f2e R15: 00007fc4ee25b7a8
- </TASK>
-
-
----
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
