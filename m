@@ -2,46 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0BF56FD3D8
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 04:27:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FB606FD3D5
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 04:27:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235121AbjEJC11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 22:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44038 "EHLO
+        id S230316AbjEJC1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 22:27:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjEJC1Z (ORCPT
+        with ESMTP id S229524AbjEJC1D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 22:27:25 -0400
-X-Greylist: delayed 121 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 09 May 2023 19:27:22 PDT
-Received: from mx5.didiglobal.com (mx5.didiglobal.com [111.202.70.122])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id A478F44AB
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 19:27:22 -0700 (PDT)
-Received: from mail.didiglobal.com (unknown [10.79.64.19])
-        by mx5.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id 86CE2B0017A40;
-        Wed, 10 May 2023 10:25:18 +0800 (CST)
-Received: from localhost (10.79.71.101) by ZJY01-ACTMBX-06.didichuxing.com
- (10.79.64.19) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 10 May
- 2023 10:25:18 +0800
-X-MD-Sfrom: houweitao@didiglobal.com
-X-MD-SrcIP: 10.79.64.19
-From:   houweitao <houweitao@didiglobal.com>
-To:     <akpm@linux-foudation.org>, <houweitao@didiglobal.com>,
-        <xupengfei@nfschina.com>, <brauner@kernel.org>,
-        <dchinner@redhat.com>
-CC:     <linux-fsdevel@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <royliyueyi@didiglobal.com>
-Subject: [PATCH] fs: hfsplus: fix uninit-value bug in hfsplus_listxattr
-Date:   Wed, 10 May 2023 10:25:15 +0800
-Message-ID: <20230510022515.9368-1-houweitao@didiglobal.com>
-X-Mailer: git-send-email 2.17.1
+        Tue, 9 May 2023 22:27:03 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A177BE72;
+        Tue,  9 May 2023 19:27:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E440638BB;
+        Wed, 10 May 2023 02:27:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5CDFC433D2;
+        Wed, 10 May 2023 02:26:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683685620;
+        bh=cN0Zpp3nHcYA73LBWkAJJmQrp5R/ZueRrOEoHH93crM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=AH4HBOXQ4c+QTwsy5Y4zsYIv19Q+xSPT0PKhTBTMtf3h3PPP9aq17NdyydL0rWU26
+         HF/BFdbhbayZ3XUNDZWfYAwCVDBgYRP2tc+6UUUz0VRs1C15TSRIK6d9D/7eA9qEU8
+         6rR0NdvH9z49wQa315z/xKDYkctlC1bP0kPdTUcnMF7arKdknTsrnfID+sx/JxlAwT
+         cnIB+8puquAWZTRerX//0yJuI8yji27y3DfyiMoA8alAER76soB4PqUVs/lZdt/dDd
+         uoyFwQyO/UqZaESqXRJaF1e9TJEhzdoT+OGnj1H3FuX30Bhp3kohpxQjuvFCrrpJsa
+         72KQaPjUp0VGA==
+Date:   Tue, 9 May 2023 19:26:58 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        David Miller <davem@davemloft.net>,
+        Networking <netdev@vger.kernel.org>,
+        Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>,
+        Jeff Kirsher <jeffrey.t.kirsher@intel.com>,
+        Bjorn Andersson <andersson@kernel.org>
+Subject: Re: linux-next: build failure after merge of the mmc tree
+Message-ID: <20230509192658.56cfb27b@kernel.org>
+In-Reply-To: <20230510111833.17810885@canb.auug.org.au>
+References: <20230510111833.17810885@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.79.71.101]
-X-ClientProxiedBy: ZJY03-PUBMBX-01.didichuxing.com (10.79.71.12) To
- ZJY01-ACTMBX-06.didichuxing.com (10.79.64.19)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,43 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-BUG: KMSAN: uninit-value in strncmp+0x11e/0x180 lib/string.c:307
- strncmp+0x11e/0x180 lib/string.c:307
- is_known_namespace fs/hfsplus/xattr.c:45 [inline]
- name_len fs/hfsplus/xattr.c:397 [inline]
- hfsplus_listxattr+0xe61/0x1aa0 fs/hfsplus/xattr.c:746
- vfs_listxattr fs/xattr.c:473 [inline]
- listxattr+0x700/0x780 fs/xattr.c:820
- path_listxattr fs/xattr.c:844 [inline]
- __do_sys_llistxattr fs/xattr.c:862 [inline]
- __se_sys_llistxattr fs/xattr.c:859 [inline]
- __ia32_sys_llistxattr+0x171/0x300 fs/xattr.c:859
- do_syscall_32_irqs_on arch/x86/entry/common.c:112 [inline]
- __do_fast_syscall_32+0xa2/0x100 arch/x86/entry/common.c:178
- do_fast_syscall_32+0x37/0x80 arch/x86/entry/common.c:203
- do_SYSENTER_32+0x1f/0x30 arch/x86/entry/common.c:246
- entry_SYSENTER_compat_after_hwframe+0x70/0x82
+On Wed, 10 May 2023 11:18:33 +1000 Stephen Rothwell wrote:
+> Hi all,
+> 
+> After merging the mmc tree, today's linux-next build (x86_64 allmodconfig)
+> failed like this:
+> 
+> error: the following would cause module name conflict:
+>   drivers/soc/qcom/ice.ko
+>   drivers/net/ethernet/intel/ice/ice.ko
+> 
+> Exposed by commit
+> 
+>   31dd43d5032a ("mmc: sdhci-msm: Switch to the new ICE API")
+> 
+> I have used the mmc tree from next-20230509 for today.
 
-Reported-by: syzbot <syzbot+92ef9ee419803871020e@syzkaller.appspotmail.com>
-Link: https://syzkaller.appspot.com/bug?extid=92ef9ee419803871020e
-Signed-off-by: houweitao <houweitao@didiglobal.com>
----
- fs/hfsplus/xattr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Looks like the driver itself came from:
 
-diff --git a/fs/hfsplus/xattr.c b/fs/hfsplus/xattr.c
-index 58021e73c00b..f7f9d0889df3 100644
---- a/fs/hfsplus/xattr.c
-+++ b/fs/hfsplus/xattr.c
-@@ -698,7 +698,7 @@ ssize_t hfsplus_listxattr(struct dentry *dentry, char *buffer, size_t size)
- 		return err;
- 	}
- 
--	strbuf = kmalloc(NLS_MAX_CHARSET_SIZE * HFSPLUS_ATTR_MAX_STRLEN +
-+	strbuf = kzalloc(NLS_MAX_CHARSET_SIZE * HFSPLUS_ATTR_MAX_STRLEN +
- 			XATTR_MAC_OSX_PREFIX_LEN + 1, GFP_KERNEL);
- 	if (!strbuf) {
- 		res = -ENOMEM;
--- 
-2.17.1
+commit 2afbf43a4aec6e31dac7835e65d52c867f2be400
+Author: Abel Vesa <abel.vesa@linaro.org>
+Date:   Fri Apr 7 13:50:26 2023 +0300
 
+    soc: qcom: Make the Qualcomm UFS/SDCC ICE a dedicated driver
+
+? The Intel Ethernet driver is 5 years old:
+
+commit 837f08fdecbe4b2ffc7725624342e73b886665a8
+Author: Anirudh Venkataramanan <anirudh.venkataramanan@intel.com>
+Date:   Tue Mar 20 07:58:05 2018 -0700
+
+    ice: Add basic driver framework for Intel(R) E800 Series
+
+so AFAIU the MMC driver needs a new name?
