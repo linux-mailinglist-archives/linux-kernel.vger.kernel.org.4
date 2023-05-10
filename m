@@ -2,124 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37FF36FD4F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 06:08:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED0CB6FD4F2
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 06:08:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235721AbjEJEIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 00:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35060 "EHLO
+        id S235289AbjEJEID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 00:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235595AbjEJEH5 (ORCPT
+        with ESMTP id S229483AbjEJEHv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 00:07:57 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2702D54
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 21:07:54 -0700 (PDT)
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230510040749epoutp03171c00846a520cdbff537341e1caed2a~drKcJxMiK0529705297epoutp031
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 04:07:49 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230510040749epoutp03171c00846a520cdbff537341e1caed2a~drKcJxMiK0529705297epoutp031
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1683691669;
-        bh=UumBYReH9u2V3iGM9ig8NQZ/6q2oZ2kA9hAqWn1Mpl4=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=NZjF4kpPQW1+ywBYjrtqdRLHrMq2QZMPsvy3xuk0Ulo2IHE86XMyy3Fq2UN4CKdp3
-         KHCiogqICS+Tli4GDx5PaU97x0n8PqC8g+/60AQq84rk1/x++GlLy+6r26TtagEhUG
-         40aTLkbjG5drEPCSSbBXMjETpBPZ8UVs/ZNPhItU=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20230510040748epcas2p18c8f826989ade5337058ad3a98356202~drKbwzH0k3235132351epcas2p1U;
-        Wed, 10 May 2023 04:07:48 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.101]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4QGM1v6Q0Qz4x9Py; Wed, 10 May
-        2023 04:07:47 +0000 (GMT)
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        64.3C.22936.3981B546; Wed, 10 May 2023 13:07:47 +0900 (KST)
-Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
-        epcas2p3.samsung.com (KnoxPortal) with ESMTPA id
-        20230510040747epcas2p3de1b7fdbc5b4d63ee0c28545670d9ddd~drKanTGaO2542125421epcas2p34;
-        Wed, 10 May 2023 04:07:47 +0000 (GMT)
-Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
-        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230510040747epsmtrp27152583174a4570a35bcc6ed0b5811b0~drKamjkeL2960929609epsmtrp2O;
-        Wed, 10 May 2023 04:07:47 +0000 (GMT)
-X-AuditID: b6c32a48-6d3fa70000005998-f7-645b1893fd66
-Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
-        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
-        C8.A0.28392.3981B546; Wed, 10 May 2023 13:07:47 +0900 (KST)
-Received: from [10.229.8.168] (unknown [10.229.8.168]) by
-        epsmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230510040747epsmtip1d411c89f18fe471c1e30bf645ae34f6f~drKaVzS7u1624316243epsmtip1R;
-        Wed, 10 May 2023 04:07:47 +0000 (GMT)
-Message-ID: <0ef75bd7-e7e6-a806-2c3f-35c7312c391d@samsung.com>
-Date:   Wed, 10 May 2023 13:05:21 +0900
+        Wed, 10 May 2023 00:07:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 321A5268A
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 21:07:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683691622;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=gUMwiiMo+uImtVa1NMnxeZGa2c1vgyzXNYzjiq0BCYA=;
+        b=SWY0uqYmeRQGzWUhqi4VtQYgJeFTPxD1sgBa4CqdFJJD/iKFZ29oiXTnHGwg5zTZh21tLf
+        ityJXvJNnesxoOB3uqS8uRsZLJX6G76SPCflNBPeiNSXqUxUI3bLhfpEXKeC+8flYY/ttR
+        8Hup7HVnv0nHe5zveLoQKGAGopDBOpU=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-79-Yp6Rftc2NN--iDDc1gJ9dQ-1; Wed, 10 May 2023 00:07:00 -0400
+X-MC-Unique: Yp6Rftc2NN--iDDc1gJ9dQ-1
+Received: by mail-ej1-f72.google.com with SMTP id a640c23a62f3a-965cd056598so746275566b.0
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 21:07:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683691620; x=1686283620;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gUMwiiMo+uImtVa1NMnxeZGa2c1vgyzXNYzjiq0BCYA=;
+        b=CNDgFZdmqrw2gegfMNdta/VZ/PmFowqlfSeJyvz/N3hneHvyavXsQJxPVXrazXPqod
+         XgjLGT8pXYieVCTrCRdWVl0f8NHvODRFV2BCzUcUKjAl0FQ5GhtHv9gO3/PHLhFn9zUD
+         l7500rZtwDl6HN5F9Q34BYPmp2IKq5qjsniQFl4Ec2P23/GKTs8fFANe12B7vUHOBWCL
+         mKdiJiUsiUICieh/zJYazrT4ntS6hEiSS2EoRU3WplVpYeYDnEiBnIibrr+KrxMTlhxe
+         WNbYdrTsx5Rh+gWN2OB8BO+/fjZB2gnvJmppt1tRDAoPv+XTToMghN3KhtWW0J3oTFlB
+         RHHg==
+X-Gm-Message-State: AC+VfDyxkNA2nH5ZxzPlpVx3vN5EFMXrcr2QOKNF5/XGZ0GAfTtCpg/j
+        XIZSQpNLU6F+J0WH1kve2/SplcbXUm7pvy4BLgoAeMRRw/LJkgYfv/AUbWuWwlQdFSdlhaR+OJC
+        9PoiDEguOzGfGqwsJGKTdg21v
+X-Received: by 2002:a17:906:974b:b0:957:943e:7416 with SMTP id o11-20020a170906974b00b00957943e7416mr16092527ejy.15.1683691619889;
+        Tue, 09 May 2023 21:06:59 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4ASWwnTtQgH66opLJjp20JjkoXCAaF1TMqwqlbANYYaPhCUcoC3US8+hYl0Ip1aqx4KRzvaA==
+X-Received: by 2002:a17:906:974b:b0:957:943e:7416 with SMTP id o11-20020a170906974b00b00957943e7416mr16092513ejy.15.1683691619610;
+        Tue, 09 May 2023 21:06:59 -0700 (PDT)
+Received: from redhat.com ([176.119.195.36])
+        by smtp.gmail.com with ESMTPSA id hx8-20020a170906846800b00965e839f56bsm2088336ejc.182.2023.05.09.21.06.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 09 May 2023 21:06:59 -0700 (PDT)
+Date:   Wed, 10 May 2023 00:06:54 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        zhenwei pi <pizhenwei@bytedance.com>,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, Joerg Roedel <jroedel@suse.de>
+Subject: Re: [PATCH] virtio_ring: use u32 for virtio_max_dma_size
+Message-ID: <20230510000603-mutt-send-email-mst@kernel.org>
+References: <20230510025437.377807-1-pizhenwei@bytedance.com>
+ <1683689214.9647853-1-xuanzhuo@linux.alibaba.com>
+ <20230509233907-mutt-send-email-mst@kernel.org>
+ <CACGkMEujVhZrU2Wa3=-6DAgK5x8suC9EDxMxt5nN3Y1-LAVcUA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
-        Thunderbird/102.10.0
-Subject: Re: [PATCH v3 3/3] spi: s3c64xx: support interrupt based pio mode
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>,
-        =?UTF-8?Q?=c5=81ukasz_Stelmach?= <l.stelmach@samsung.com>
-Content-Language: en-US
-From:   Jaewon Kim <jaewon02.kim@samsung.com>
-In-Reply-To: <d8fa2d7b-6604-1fad-6b0b-19d7e551a1d2@samsung.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrJJsWRmVeSWpSXmKPExsWy7bCmqe5kiegUgykfDC0ezNvGZrH4x3Mm
-        i6kPn7BZXN6vbbH39VZ2i5uHVjBabHp8jdXi8q45bBYzzu9jsmj8eJPdYu2Ru+wO3B7Xl3xi
-        9ti0qpPN4861PWwem5fUe/RtWcXo8XmTXABbVLZNRmpiSmqRQmpecn5KZl66rZJ3cLxzvKmZ
-        gaGuoaWFuZJCXmJuqq2Si0+ArltmDtB1SgpliTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSC
-        lJwC8wK94sTc4tK8dL281BIrQwMDI1OgwoTsjN3z3zMV/BevODQnr4HxnnAXIyeHhICJxK+3
-        C1hBbCGBHYwSk46UdTFyAdmfGCUOrj7BBpH4zCixd54fTMPSw+eZIOK7GCWWXfKAaHjNKLH0
-        YyMzSIJXwE5i0eO/jCA2i4CqxPV7f9gh4oISJ2c+YQGxRQWiJRbvmwJmCwt4SfzZ3QQ2VETg
-        AqPE8wYzEJtZ4B2jRMcSKQhbXOLWk/lgNWwC2hLf1y8Gu5pTwF7iwc1b7BA18hLNW2czgxwk
-        IbCFQ2LxryPMEFe7SFxZf4IFwhaWeHV8CzuELSXx+d1eNgg7W6J9+h9WCLtC4uKG2VBxY4lZ
-        z9qBnuEAWqApsX6XPogpIaAsceQWC8RaPomOw3/ZIcK8Eh1tQhCNahL3p56DGiIDDNqVTBAl
-        HhJT9pVOYFSchRQms5D8OAvJL7MQ1i5gZFnFKJZaUJybnlpsVGACj+fk/NxNjOA0q+Wxg3H2
-        2w96hxiZOBgPMUpwMCuJ8HqHRqUI8aYkVlalFuXHF5XmpBYfYjQFxsxEZinR5Hxgos8riTc0
-        sTQwMTMzNDcyNTBXEuf92KGcIiSQnliSmp2aWpBaBNPHxMEp1cAUpt9bsqoumm/bxWb/PweW
-        lW5TLc1NY/DQXJTps31D2tazTb+zZxaWHLsrzbhc9x/r/VdO5z/eXSZgee/ptIZlO3u3PN64
-        Q2fy/KKwkG3GD01W5srudml1WpokVFClvjf7S1QFw/7k7yE1gqsvpt9SeKHqs/DakZ7HnZ+5
-        /2f4qy61DPpV1yyul7Frn/ybjsvijulHCm/cEMlfl7DugdLJ1YySsjFrdCdPifaz3ByaGRjh
-        9kn5wYozMareNzali7w7elZnbm3eNcb+p1vsDLw+pV100a5nnqyTxcD6evXDY00nN9/ZUn52
-        TYbZnnOT/hT9YHlnaL1cIsQm9Ez59vq9H6Z7qm9zy2Tb9Knut1KgEktxRqKhFnNRcSIAF5bj
-        gDwEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprAIsWRmVeSWpSXmKPExsWy7bCSnO5kiegUgz8nRC0ezNvGZrH4x3Mm
-        i6kPn7BZXN6vbbH39VZ2i5uHVjBabHp8jdXi8q45bBYzzu9jsmj8eJPdYu2Ru+wO3B7Xl3xi
-        9ti0qpPN4861PWwem5fUe/RtWcXo8XmTXABbFJdNSmpOZllqkb5dAlfG7vnvmQr+i1ccmpPX
-        wHhPuIuRk0NCwERi6eHzTF2MXBxCAjsYJZq7nrFAJGQklj/rY4OwhSXutxxhhSh6ySix7fFL
-        ZpAEr4CdxKLHfxlBbBYBVYnr9/6wQ8QFJU7OfAI2SFQgWuLG8m9MILawgJfEn91NYNtEBC4x
-        SpzZeAfMYRZ4xyhxa90yNogVfxglXv99BtbCLCAucevJfDCbTUBb4vv6xawgNqeAvcSDm7fY
-        IWrMJLq2djFC2PISzVtnM09gFJqF5JJZSEbNQtIyC0nLAkaWVYySqQXFuem5xYYFRnmp5XrF
-        ibnFpXnpesn5uZsYwZGmpbWDcc+qD3qHGJk4GA8xSnAwK4nweodGpQjxpiRWVqUW5ccXleak
-        Fh9ilOZgURLnvdB1Ml5IID2xJDU7NbUgtQgmy8TBKdXAdObzwZjQadGf3+rLPM30kPuov+1o
-        p9Uv2ZK3ZhUVobvZv7F+23hHpejF4cLHOSyP0q6xXqtc9eF5+8eDL76IybP2H+Ob0dMm8j1+
-        jeV7ked6Eqlsr/b9rWjnFd160mVCDWN/i8/BnCUfE6YrSP8ULP9+pX2xGPefpDCpvWGz9/2L
-        3nFKbWmI+6kL+nsvv33PvTvWdK/0olqdswqqZVfFJrD/tHrydtaH4jvpHO8+HOH/qpYypV/c
-        +9u8X6senP1+Opat97C2bXbVQ8ujL98+lfnuvWkOh33Dv2vqtvOfiXBJXD+RUpzubWwSfvmS
-        kfHkjOuLGdLetT+V+XFoG/PvHqebnrHz88QWLOPZ3Xxs5lMlluKMREMt5qLiRACLl5ZjIwMA
-        AA==
-X-CMS-MailID: 20230510040747epcas2p3de1b7fdbc5b4d63ee0c28545670d9ddd
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230502065025epcas2p34507ffad60b32e091ff0efeced9bc12f
-References: <20230502062813.112434-1-jaewon02.kim@samsung.com>
-        <CGME20230502065025epcas2p34507ffad60b32e091ff0efeced9bc12f@epcas2p3.samsung.com>
-        <20230502062813.112434-4-jaewon02.kim@samsung.com>
-        <d8fa2d7b-6604-1fad-6b0b-19d7e551a1d2@samsung.com>
-X-Spam-Status: No, score=-4.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+In-Reply-To: <CACGkMEujVhZrU2Wa3=-6DAgK5x8suC9EDxMxt5nN3Y1-LAVcUA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -127,87 +84,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Marek
+On Wed, May 10, 2023 at 12:04:50PM +0800, Jason Wang wrote:
+> On Wed, May 10, 2023 at 11:44 AM Michael S. Tsirkin <mst@redhat.com> wrote:
+> >
+> > On Wed, May 10, 2023 at 11:26:54AM +0800, Xuan Zhuo wrote:
+> > > On Wed, 10 May 2023 10:54:37 +0800, zhenwei pi <pizhenwei@bytedance.com> wrote:
+> > > > Both split ring and packed ring use 32bits to describe the length of
+> > > > a descriptor: see struct vring_desc and struct vring_packed_desc.
+> > > > This means the max segment size supported by virtio is U32_MAX.
+> > > >
+> > > > An example of virtio_max_dma_size in virtio_blk.c:
+> > > >   u32 v, max_size;
+> > > >
+> > > >   max_size = virtio_max_dma_size(vdev);  -> implicit convert
+> > > >   err = virtio_cread_feature(vdev, VIRTIO_BLK_F_SIZE_MAX,
+> > > >                              struct virtio_blk_config, size_max, &v);
+> > > >   max_size = min(max_size, v);
+> > > >
+> > > > There is a risk during implicit convert here, once virtio_max_dma_size
+> > > > returns 4G, max_size becomes 0.
+> > > >
+> > > > Fixes: e6d6dd6c875e ("virtio: Introduce virtio_max_dma_size()")
+> > > > Cc: Joerg Roedel <jroedel@suse.de>
+> > > > Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
+> > > > ---
+> > > >  drivers/virtio/virtio_ring.c | 12 ++++++++----
+> > > >  include/linux/virtio.h       |  2 +-
+> > > >  2 files changed, 9 insertions(+), 5 deletions(-)
+> > > >
+> > > > diff --git a/drivers/virtio/virtio_ring.c b/drivers/virtio/virtio_ring.c
+> > > > index c5310eaf8b46..55cfecf030a1 100644
+> > > > --- a/drivers/virtio/virtio_ring.c
+> > > > +++ b/drivers/virtio/virtio_ring.c
+> > > > @@ -289,12 +289,16 @@ static bool vring_use_dma_api(const struct virtio_device *vdev)
+> > > >     return false;
+> > > >  }
+> > > >
+> > > > -size_t virtio_max_dma_size(const struct virtio_device *vdev)
+> > > > +u32 virtio_max_dma_size(const struct virtio_device *vdev)
+> > >
+> > >
+> > > LGTM
+> > >
+> > > But, should we change the parameter to vq, then use the dma_dev?
+> > >
+> > > @Jason
+> > >
+> > > Thanks.
+> > >
+> >
+> >
+> > that would be an unrelated rework.
+> 
+> Probably, but I think it's better to be done on top otherwise we may forget.
+> 
+> Thanks
 
+Just to make things clear I'm merging fixes for this
+release but cleanups belong in the next one.
 
-On 23. 5. 9. 22:03, Marek Szyprowski wrote:
-> On 02.05.2023 08:28, Jaewon Kim wrote:
->> Support interrupt based pio mode to optimize cpu usage.
->> When transmitting data size is larget than 32 bytes, operates with
->> interrupt based pio mode.
->>
->> By using the FIFORDY INT, an interrupt can be triggered when
->> the desired size of data has been received. Using this, we can support
->> interrupt based pio mode.
->>
->> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
-> This patch landed recently in linux-next as commit 1ee806718d5e ("spi:
-> s3c64xx: support interrupt based pio mode"). Unfortunately it breaks
-> ethernet chip operation on Exynos3250 based Artik5 Development board. I
-> see the flood of the following messages:
->
-> [   36.097739] ax88796c spi0.0: I/O Error: rx-1 tx-0 rx-f tx-p len-496
-> dma-1 res-(-5)
-> [   36.100877] ax88796c spi0.0: RX residue: 248
-> [   36.101383] ax88796c spi0.0: SPI transfer failed: -5
-> [   36.101939] spi_master spi0: failed to transfer one message from queue
-> [   36.102439] ax88796c spi0.0: axspi_read_rxq() failed: ret = -5
-> [   36.107830] s3c64xx-spi 13920000.spi: Failed to get RX DMA channel
-> [   36.148875] ax88796c spi0.0: I/O Error: rx-0 tx-1 rx-p tx-f len-4
-> dma-0 res-(-5)
-> [   36.149517] ax88796c spi0.0: SPI transfer failed: -5
-> [   36.150053] spi_master spi0: failed to transfer one message from queue
-> [   36.150562] ax88796c spi0.0: axspi_read_reg() failed: ret = -5
-> [   36.152175] s3c64xx-spi 13920000.spi: Failed to get RX DMA channel
-> [   36.191651] ax88796c spi0.0: I/O Error: rx-0 tx-1 rx-p tx-f len-4
-> dma-0 res-(-5)
-> [   36.192268] ax88796c spi0.0: SPI transfer failed: -5
->
-> ...
->
-> I didn't analyze the details, but imho it looks like some kind of
-> mishandling of the corner case or switching between PIO and DMA mode. I
-> will check the details later.
->
->
-> Best regards
-
-
-Thanks for testing the various cases.
-
-The problem occurred when DMA mode and IRQ mode were enabled at the same 
-time.
-
-
-In the above case, BUS_WIDTH register invaded.
-
-Because, target length 496 were written to RX_RDY_LVL, but it exceeded 
-6-bits.
-
-Could you test with below code??? If the problem is solved, I will send 
-a fix patch as soon as possible.
-
------------------------------
-
-diff --git a/drivers/spi/spi-s3c64xx.c b/drivers/spi/spi-s3c64xx.c
-index 238db29fc93b..a72e11e965c3 100644
---- a/drivers/spi/spi-s3c64xx.c
-+++ b/drivers/spi/spi-s3c64xx.c
-@@ -782,7 +782,7 @@ static int s3c64xx_spi_transfer_one(struct 
-spi_master *master,
-
-         do {
-                 /* transfer size is greater than 32, change to IRQ mode */
--               if (xfer->len > S3C64XX_SPI_POLLING_SIZE)
-+               if (!use_dma && (xfer->len > S3C64XX_SPI_POLLING_SIZE))
-                         use_irq = true;
-
-                 if (use_irq) {
-
------------------------------
-
-
-Best regards
-
-Jaewon Kim
+> >
+> > > >  {
+> > > > -   size_t max_segment_size = SIZE_MAX;
+> > > > +   u32 max_segment_size = U32_MAX;
+> > > >
+> > > > -   if (vring_use_dma_api(vdev))
+> > > > -           max_segment_size = dma_max_mapping_size(vdev->dev.parent);
+> > > > +   if (vring_use_dma_api(vdev)) {
+> > > > +           size_t max_dma_size = dma_max_mapping_size(vdev->dev.parent);
+> > > > +
+> > > > +           if (max_dma_size < max_segment_size)
+> > > > +                   max_segment_size = max_dma_size;
+> > > > +   }
+> > > >
+> > > >     return max_segment_size;
+> > > >  }
+> > > > diff --git a/include/linux/virtio.h b/include/linux/virtio.h
+> > > > index b93238db94e3..1a605f408329 100644
+> > > > --- a/include/linux/virtio.h
+> > > > +++ b/include/linux/virtio.h
+> > > > @@ -147,7 +147,7 @@ int virtio_device_restore(struct virtio_device *dev);
+> > > >  #endif
+> > > >  void virtio_reset_device(struct virtio_device *dev);
+> > > >
+> > > > -size_t virtio_max_dma_size(const struct virtio_device *vdev);
+> > > > +u32 virtio_max_dma_size(const struct virtio_device *vdev);
+> > > >
+> > > >  #define virtio_device_for_each_vq(vdev, vq) \
+> > > >     list_for_each_entry(vq, &vdev->vqs, list)
+> > > > --
+> > > > 2.20.1
+> > > >
+> >
 
