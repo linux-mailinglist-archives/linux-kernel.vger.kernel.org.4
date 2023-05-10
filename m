@@ -2,59 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1DA96FDF0F
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:49:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21A096FDF1A
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:49:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237248AbjEJNt2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 09:49:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51950 "EHLO
+        id S237232AbjEJNtk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 09:49:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237262AbjEJNtS (ORCPT
+        with ESMTP id S237266AbjEJNtT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 09:49:18 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 124A426A3;
-        Wed, 10 May 2023 06:49:11 -0700 (PDT)
-Date:   Wed, 10 May 2023 13:49:09 -0000
+        Wed, 10 May 2023 09:49:19 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7022E5FE9;
+        Wed, 10 May 2023 06:49:12 -0700 (PDT)
+Date:   Wed, 10 May 2023 13:49:10 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683726549;
+        s=2020; t=1683726551;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uaBMDeAOqEtMsjfmbiAxy4lKR2OqnajE5Ae9sex7JRk=;
-        b=NRoFR3Yjj9esQtEabWcLvhUJZHrKbO9YmVM/diNCpLTYRJElj0/0Gk7B90WPQADIrhBKEY
-        ZgpjlycgKVnQTDjqG5K+OguquoDdFRXMWj6dfqxItgdfIweYnujfwDlhWvKebAHjoStBbP
-        QM+udsBTg9pWG1KlmHmwdO6Cc4RGRdKNJXaWHlhVFZW39BO2r6ziD3zwpso9BwVTE/Z0V1
-        cnJbk3k6JZ/CJUXVLbspGa/jdWschofy0K6q/fm0Xkr0bpE8k5zz6eHywu84FM24Pq6U57
-        fC2jB88t7Fc2R63ysnIziEI7RjAvUc2XC5VyOVZJPftNJ1O9KJoKBiXfQvFGlQ==
+        bh=sHJS/7EoNzb+6ZuL9sAOr94pTTj6EYKfBFQrZhf/VNM=;
+        b=iVN3X91VSPuCjWJO2SZd5Xy8TOoQllZ5oRTxeJ8kcEbg+GcEfBYWWWgY5ZAuAg8ar1P9Fg
+        QLElCT0EEHI+9UdQkC+siE2BXmvoR7H/0BHlzOUB8Sn4G2L599fSUszXyiPmtunVOANYYX
+        psAqO3wTQTZgHsGSixT+/E7075KjjtHiyqwMKfk0+JxJiQkf3Ii+whsO2Fea2Cd2A0WaPO
+        trxlS8kcwcEZMqgxiUAb02TpuTXiKWR4tA/5Gj0SDHzQjxPneaypcTdYDdSbzdZafu4tru
+        aGYlzNdbrcRHd0vjEWnf6XTiPl4iFb2EmrL9MoBc5E0V/qvm1xbmDlceuCIf1w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683726549;
+        s=2020e; t=1683726551;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=uaBMDeAOqEtMsjfmbiAxy4lKR2OqnajE5Ae9sex7JRk=;
-        b=WG5b8F82wbUxxfC4aAd8Rhw3yQH2ruZDxOyjyPmCQaulULYMVFpIC2RPtj8UTYoBr+2TQ+
-        u6WfsURrhmR1ElCg==
-From:   "tip-bot2 for Tim C Chen" <tip-bot2@linutronix.de>
+        bh=sHJS/7EoNzb+6ZuL9sAOr94pTTj6EYKfBFQrZhf/VNM=;
+        b=U+7eppPQt8Vgv5TrJorYxO1goYPSh/HRPFxXhjPMJkoYxt3FUpsctTZ4OLLXXkULtEu/2R
+        FaZK/KH0Gi2iqxAw==
+From:   "tip-bot2 for Ricardo Neri" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/core] sched/topology: Propagate SMT flags when removing
- degenerate domain
-Cc:     Tim Chen <tim.c.chen@linux.intel.com>,
+Subject: [tip: sched/core] x86/sched/itmt: Give all SMT siblings of a core the
+ same priority
+Cc:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: =?utf-8?q?=3C73cf0959eafa53c02e7ef6bf805d751d9190e55d=2E16831?=
- =?utf-8?q?56492=2Egit=2Etim=2Ec=2Echen=40linux=2Eintel=2Ecom=3E?=
-References: =?utf-8?q?=3C73cf0959eafa53c02e7ef6bf805d751d9190e55d=2E168315?=
- =?utf-8?q?6492=2Egit=2Etim=2Ec=2Echen=40linux=2Eintel=2Ecom=3E?=
+        Len Brown <len.brown@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230406203148.19182-12-ricardo.neri-calderon@linux.intel.com>
+References: <20230406203148.19182-12-ricardo.neri-calderon@linux.intel.com>
 MIME-Version: 1.0
-Message-ID: <168372654916.404.6677242284447941021.tip-bot2@tip-bot2>
+Message-ID: <168372655068.404.6128574669002418339.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -71,45 +70,67 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the sched/core branch of tip:
 
-Commit-ID:     bf2dc42d6beb890c995b8b09f881ef1b37259107
-Gitweb:        https://git.kernel.org/tip/bf2dc42d6beb890c995b8b09f881ef1b37259107
-Author:        Tim C Chen <tim.c.chen@linux.intel.com>
-AuthorDate:    Thu, 04 May 2023 09:09:51 -07:00
+Commit-ID:     046a5a95c3b0425cfe79e43021d8ee90c1c4f8c9
+Gitweb:        https://git.kernel.org/tip/046a5a95c3b0425cfe79e43021d8ee90c1c4f8c9
+Author:        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+AuthorDate:    Thu, 06 Apr 2023 13:31:47 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 08 May 2023 10:58:39 +02:00
+CommitterDate: Mon, 08 May 2023 10:58:38 +02:00
 
-sched/topology: Propagate SMT flags when removing degenerate domain
+x86/sched/itmt: Give all SMT siblings of a core the same priority
 
-When a degenerate cluster domain for core with SMT CPUs is removed,
-the SD_SHARE_CPUCAPACITY flag in the local child sched group was not
-propagated to the new parent.  We need this flag to properly determine
-whether the local sched group is SMT.  Set the flag in the local
-child sched group of the new parent sched domain.
+X86 does not have the SD_ASYM_PACKING flag in the SMT domain. The scheduler
+knows how to handle SMT and non-SMT cores of different priority. There is
+no reason for SMT siblings of a core to have different priorities.
 
-Signed-off-by: Tim Chen <tim.c.chen@linux.intel.com>
+Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Link: https://lkml.kernel.org/r/73cf0959eafa53c02e7ef6bf805d751d9190e55d.1683156492.git.tim.c.chen@linux.intel.com
+Reviewed-by: Len Brown <len.brown@intel.com>
+Tested-by: Zhang Rui <rui.zhang@intel.com>
+Link: https://lore.kernel.org/r/20230406203148.19182-12-ricardo.neri-calderon@linux.intel.com
 ---
- kernel/sched/topology.c | 7 ++++++-
- 1 file changed, 6 insertions(+), 1 deletion(-)
+ arch/x86/kernel/itmt.c | 23 +++++------------------
+ 1 file changed, 5 insertions(+), 18 deletions(-)
 
-diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
-index 6682535..ca44722 100644
---- a/kernel/sched/topology.c
-+++ b/kernel/sched/topology.c
-@@ -719,8 +719,13 @@ cpu_attach_domain(struct sched_domain *sd, struct root_domain *rd, int cpu)
+diff --git a/arch/x86/kernel/itmt.c b/arch/x86/kernel/itmt.c
+index 670eb08..ee4fe8c 100644
+--- a/arch/x86/kernel/itmt.c
++++ b/arch/x86/kernel/itmt.c
+@@ -165,32 +165,19 @@ int arch_asym_cpu_priority(int cpu)
  
- 		if (sd_parent_degenerate(tmp, parent)) {
- 			tmp->parent = parent->parent;
--			if (parent->parent)
-+
-+			if (parent->parent) {
- 				parent->parent->child = tmp;
-+				if (tmp->flags & SD_SHARE_CPUCAPACITY)
-+					parent->parent->groups->flags |= SD_SHARE_CPUCAPACITY;
-+			}
-+
- 			/*
- 			 * Transfer SD_PREFER_SIBLING down in case of a
- 			 * degenerate parent; the spans match for this
+ /**
+  * sched_set_itmt_core_prio() - Set CPU priority based on ITMT
+- * @prio:	Priority of cpu core
+- * @core_cpu:	The cpu number associated with the core
++ * @prio:	Priority of @cpu
++ * @cpu:	The CPU number
+  *
+  * The pstate driver will find out the max boost frequency
+  * and call this function to set a priority proportional
+- * to the max boost frequency. CPU with higher boost
++ * to the max boost frequency. CPUs with higher boost
+  * frequency will receive higher priority.
+  *
+  * No need to rebuild sched domain after updating
+  * the CPU priorities. The sched domains have no
+  * dependency on CPU priorities.
+  */
+-void sched_set_itmt_core_prio(int prio, int core_cpu)
++void sched_set_itmt_core_prio(int prio, int cpu)
+ {
+-	int cpu, i = 1;
+-
+-	for_each_cpu(cpu, topology_sibling_cpumask(core_cpu)) {
+-		int smt_prio;
+-
+-		/*
+-		 * Ensure that the siblings are moved to the end
+-		 * of the priority chain and only used when
+-		 * all other high priority cpus are out of capacity.
+-		 */
+-		smt_prio = prio * smp_num_siblings / (i * i);
+-		per_cpu(sched_core_priority, cpu) = smt_prio;
+-		i++;
+-	}
++	per_cpu(sched_core_priority, cpu) = prio;
+ }
