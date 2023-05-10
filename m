@@ -2,201 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 105606FE55D
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:45:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9226FE557
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:45:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236703AbjEJUpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36104 "EHLO
+        id S236618AbjEJUpQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:45:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236700AbjEJUph (ORCPT
+        with ESMTP id S231562AbjEJUpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:45:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2A6CE7D
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:44:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683751493;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iqNS8slh9zXI/94Esn441HFeCruKUo14umEn384fGFo=;
-        b=ietRfEzt3tz0rAOfBYUYvhH5Y85uqLut8R2ekBIuPpig1CisMfwyp3Xk/mRc8GT9hk42r0
-        gWjqvK8EuOokV9kKm9hTD9ynOmSQuz2DiLkt79qrqs6kS1Dt5A1a3fMqKS89cgM+oh9PpI
-        OhNw02BUFBhXWev5vbCbiKC8jzbVlX4=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-661-Mx7YOkUCMo67Shvv7qDpKQ-1; Wed, 10 May 2023 16:44:52 -0400
-X-MC-Unique: Mx7YOkUCMo67Shvv7qDpKQ-1
-Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7578369dff3so1434986185a.0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:44:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683751492; x=1686343492;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=iqNS8slh9zXI/94Esn441HFeCruKUo14umEn384fGFo=;
-        b=Y9M3dMEe8ge+TBtrOIPmUe/qjHgppreR2vXfEb9SwP1Abm5aP3J/nJat2F1P2zfXkV
-         iWuxHz4BTWKsyhW+EXTs1H9aLOfeZhuV7CszWJL5+TgdB4IWR57CzeAa1LavnSnkhN0h
-         wxn9PzM13epb7PX/kD8f1jbFrs3uHyIn3kaxUF5Kbti/lo8WLytK0zrJ1pTmWsVJxnt6
-         JSK6wKoZ2EKlnyHwvLXX7jzuoBq7BW+ES//oI7AJTbFwIyLpL/5VHrEMyKfNXBijdCM7
-         214J1Rg0N5yHViTW5x8dOLlyhj2BnAdqNeRvMCvRX9L3hToiJEiJbwiiDS9Wy/hTgKHM
-         WBLw==
-X-Gm-Message-State: AC+VfDxm9luu3B6mruOXLIoiwBFHqD7qoHd6UNroqmmkzuvYAlqnpf21
-        fHNr0E2wyqO31MpyVrGH+D3IRofNKOUd43JGDmfIa7fiZMdLZk9HV0BhrF+xMblqh7V5bWyhag4
-        beXT6dOEUb+vIuMYRvPfi7MYc
-X-Received: by 2002:a05:622a:253:b0:3ef:57f8:8433 with SMTP id c19-20020a05622a025300b003ef57f88433mr37348670qtx.4.1683751491805;
-        Wed, 10 May 2023 13:44:51 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4+G4qBvDdJGQ+o0g+gtirEs6XX2CqYLLt4A22HkQ5V7jNrQtyZS1mgqIyW4hWoTwmGiJW//w==
-X-Received: by 2002:a05:622a:253:b0:3ef:57f8:8433 with SMTP id c19-20020a05622a025300b003ef57f88433mr37348653qtx.4.1683751491524;
-        Wed, 10 May 2023 13:44:51 -0700 (PDT)
-Received: from thinkpad-p1.localdomain (cpe00fc8d79db03-cm00fc8d79db00.cpe.net.fido.ca. [72.137.118.218])
-        by smtp.gmail.com with ESMTPSA id fy26-20020a05622a5a1a00b003f0af201a2dsm1668558qtb.81.2023.05.10.13.44.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 13:44:51 -0700 (PDT)
-Message-ID: <b49e241d3ea8c679b81134e22c908ca64aeca18c.camel@redhat.com>
-Subject: Re: [PATCH v4 1/3] cacheinfo: Add arch specific early level
- initializer
-From:   Radu Rendec <rrendec@redhat.com>
-To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Pierre Gondois <Pierre.Gondois@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Date:   Wed, 10 May 2023 16:44:49 -0400
-In-Reply-To: <20230510191207.GA18514@ranerica-svr.sc.intel.com>
-References: <20230412185759.755408-1-rrendec@redhat.com>
-         <20230412185759.755408-2-rrendec@redhat.com>
-         <20230510191207.GA18514@ranerica-svr.sc.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Wed, 10 May 2023 16:45:13 -0400
+Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2122.outbound.protection.outlook.com [40.107.255.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F351718
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:45:12 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Xs439CFsXzsTFOIfB4roC5tTb3tt9BSLsCjkXLQQ20G6e0AW2cS96eWeulywyWcexunnaRonp+7Uz6+qOg+xnxta8bR26fVTLQzRw/wLZXau9xEKjYenle+sWglheKJ8uKTV8xD+xdwMan7SIMYvdXB1N/5yuRemWJEGwGrqH4uWdwaCgu3vz1Wgt0Hr3v5OlRK/0SS46PfObQt1MJtkFvIUM7wKfyC2GgPOqANk78UlJy81IQAqEALbYQV94mrG7cYu6EiZ4qvFtphGdHBgfy8QYzm6r7qI8xHExDs0o8YHiGFbURNwq/OKKJz3PGMLIChDNUBi5oisJ51HS21xCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Yy/8gBqBx6ggr9bu5sN9/4QXexOuOjBY8JjbGQErNJ0=;
+ b=FBJSrMr8OyipEt2aUAoamnRTFijxCy9fHDAPUCwucFntVU+LvzofMY87zYkDoKLO+/vFwM0AHZePDGsrnDsgZ6Zpo/028umrF8Y1qggt6SgwgmczihpnPG3/iDgvFOKKcSQMxm5HuSKEc51N1pFfmoLtQ9+zy7M5MlDxlueJUBtXqLCNKFMZcrALmXngdB4adGQfvgByW5/tZFMpBM0q5ydlB4a244SW07jwQXMvUyMKTgNwLT/3pRO0BNtdAJ/KXoo5XexT43MtgRxvwUidqJIRDxkEjW0HMJoTjrIIbl/WBG7dFBurbipsFFp+M2j49cefvEzn1T4usQ+b+ybFnA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Yy/8gBqBx6ggr9bu5sN9/4QXexOuOjBY8JjbGQErNJ0=;
+ b=SbadI4xsPZTUSF3Zs/K5F1nBDrX9aT514QHlfdR/lYWXIvxeQArShw994ToABl/h3rDk9nHJhcEI24HDUaSVI3v612iLMjpebqrimJC35MyXBT6wP7KYtCp9Mq4W2k5b5B8lfOox2+jCoTww+b/Gb/CzPxgrfsJj2n8KsR3dDDPjvc2SqvYm5cV2LcsHtxIbrlT8sWKjkFqwgVqVUrs4s9z5CSzavmwEFk0oghMVv1hZADvBZq76ROvHnURigRNWhc23Jca2HmyOvPDMPo4XdKwBfl+QAZcuaqwgRBKtKcLy6O9PhkHBBTkWg6xz98QMZ5QIvemN/LKMi2Xr1Nbmtg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by TYZPR06MB6468.apcprd06.prod.outlook.com (2603:1096:400:459::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Wed, 10 May
+ 2023 20:45:08 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965%3]) with mapi id 15.20.6363.033; Wed, 10 May 2023
+ 20:45:08 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>
+Cc:     Jisheng Zhang <jszhang@kernel.org>, Icenowy Zheng <uwu@icenowy.me>,
+        Wei Fu <wefu@redhat.com>, Yangtao Li <frank.li@vivo.com>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/5] riscv: Add the T-HEAD SoC family Kconfig option
+Date:   Thu, 11 May 2023 04:44:52 +0800
+Message-Id: <20230510204456.57202-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0055.apcprd02.prod.outlook.com
+ (2603:1096:4:1f5::16) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TYZPR06MB6468:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3186cd59-af25-444a-885c-08db5197707c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: vs12hl+5cFp1njyw6FUquG+rphiTdh4WunP+Bbds9vSqUQljz22kTLT1y7NYHKGPkI9zmHrEVrF71M8zZ8etEK6s/RZlHyxpMkxlagQCLu0RgXWn0INH4ER7HQq8a6CFigdakjuSNKKvIKLioezsF9t2OxQ/lY0/25n92S69KQf+MY3ax9jKqDKTSiro0/WM9AXuRW4y6uSBCoDK5gDj5KafX6e16ydqvD4LmpAqo/8niW5Sc+WgLw0nmcgE9gb+PEL/zhp9uSiQmfIb5WJooFvMw2FsNFea1HA+RdOMssQXm6X1Jx331Bndor2n7cyzm+K3Q2DbXfNXMHexITVU/oIUWGkaqbJ56VW9MzRRDZbeKh9y+U7sYxmCh+gqWhQB+Twe0hl2t+FH/BcxXPhAie6ovkAfGL/cLZzsK7dpDz8WH3opPTKM1DrVhDdWSkgs+H2d40dXoTtq/RthyyokwJ48i58RAGBYoiBrsql8bWDgOa2hJJNKf2FiRbAHbE8lNc5tzu806J2/pNWHQNlBWPe+hEX4P23ovie376cssAAopQqLvq5uNWuntRuwZSdM7sxXnfqwAdsZL10dIkOujsV2il3Xb8VLkZDmB77D84ZvUdDJOyRvwUKyk8oq9XEn
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(396003)(366004)(346002)(136003)(451199021)(6486002)(6666004)(316002)(66556008)(66946007)(478600001)(52116002)(4326008)(26005)(66476007)(6506007)(6512007)(54906003)(110136005)(1076003)(186003)(2906002)(38350700002)(41300700001)(36756003)(86362001)(8936002)(8676002)(4744005)(5660300002)(38100700002)(2616005);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZVOKM2qb18HQcfvyXAKUjSTPF1xWl8uxQVCphPyacPztMZY3iW3cZyGXLj5f?=
+ =?us-ascii?Q?BCdaFd4WsULfrE+whShKKs8neydK5p3QzAl/0p/AC9DrTwvaDIio+kOr0H1k?=
+ =?us-ascii?Q?EJ4mD6esjbV5awIFLNYcEh/8yvYIxAsyJiHbiV6Xi/Bam0/UlkJZqhEAsTd0?=
+ =?us-ascii?Q?YCXPN8WNvbDrGT+qT4yS/mSJM8kG9sAdZVeRafr5wTPOEPLumcD5NDhTTWum?=
+ =?us-ascii?Q?Sj4NFYvmnOr1ZVCvdkiF7Lu61WtdWtikGsv+TKBWsGEDC5CSkmj/BBIU0oMP?=
+ =?us-ascii?Q?qvqZN6/sIMxYV5PKB4RTFOVzZR5AyCLGTUhCWX6Aqlcq3EyD1ibudpTw0ilY?=
+ =?us-ascii?Q?clQpllyigoJmtgLVwd+BsL6ngT/Bcv0GRfTo/xsStDCvMfon3HYiGo+4k9qc?=
+ =?us-ascii?Q?7P4dv8gk7y1IB5vivzHNJ4OyQrQRFLfulRd0STeMukS95WmgIMmjhMk5t2pZ?=
+ =?us-ascii?Q?ZZZbAVJF1tkxE7qEaoS6e+39Emo0MSQOd8F3Q1azinYHL5PjOePhrX1LjreF?=
+ =?us-ascii?Q?Usu656mR8MFqn6gi3z3+p8rHBs5EJdr5GIlBs9ecLa8dkGXnCN1Orm8ZRPo3?=
+ =?us-ascii?Q?RXTV7peB7FSKMNyevyoLmiDM3FmOAwYdcOtgz73xTSB/x/hGatrim88Gz4t4?=
+ =?us-ascii?Q?JwQxlF6J1I1/1v0ziuUI5RED5Ory+youjyW2rDry9Zk+Ij7Fy5Kbn7fHW+v0?=
+ =?us-ascii?Q?VlzW+ZI3qErzfHO2IIrULn4r32UbPtVcDErSqpFFqP2Nw9dpH2PeZe1LoNf2?=
+ =?us-ascii?Q?PXGoVW2uB6mvQh0W/Xt1jg0P1KrkvfyBwmkB3XoZuvXqMalxYHQ9EmagHC3n?=
+ =?us-ascii?Q?J/H92DpJvRUKOiUYEKIjs9h+qcz+QZZeTmd7XjL96zSsc+VtTqMRP95PcJVz?=
+ =?us-ascii?Q?gUtIg0l53xC5Kz8NN1D8+L64ZULvLOeL1KnSCepQHZnRJAqMESdX2pl4VfEb?=
+ =?us-ascii?Q?YPo5vbvus2+IoRvSYOJY8HLsG0rlugqQ7eolaFlT1hABCuIThrrpaSvp51zd?=
+ =?us-ascii?Q?qzs8NpSVH2sIx0NAjLkT2KBgFIvqp4LL1ha5+scHIsrbXNvJ8xJwQJN8Xfu5?=
+ =?us-ascii?Q?SIXKC6crqdFGjgCqbMPmKlP4/X5tpB+37XNEXINNwFLl7mfMlRcymj5mxwtf?=
+ =?us-ascii?Q?ke14W2NzVcHc6LHEt4moMsPIux+MeZG5e620jETJ8GX8gIDI4BVuknBdl/Bj?=
+ =?us-ascii?Q?23B8YNvc8qhzNcmX1apgJ2P7enpSP1cGQmGx+dFZvJPJFodgLVuacACWBhcO?=
+ =?us-ascii?Q?Vqx72lRCkazbNqsBAD+UmfOTyIwAmNmUACJXkoDfZ5kgg1uM1vxzViBxBH1V?=
+ =?us-ascii?Q?p+0ohxwLgYNAZdtog+95QfsdqkrxSZNSS0fSofgISZrKrgvGQQ+/T8XSunOe?=
+ =?us-ascii?Q?Kp89px26kcRnCWkzo8CJppnFkCu3eHWW6CXquL2cdywhDyQ/TEihTkkz41hR?=
+ =?us-ascii?Q?NJre+yFCKSo9DSMXGNrguQytVVzK8mMqiKiIh2FKjYwMtBtEoHIxEzSg/jfJ?=
+ =?us-ascii?Q?A8evIoheiS7cbO5o/EjGdl5ZWrSWmfiD4Y07/Cdq6rvnfParFdNpdyodlbmM?=
+ =?us-ascii?Q?pYf25J9rb2djAk9yTl+SdFqozkKyfHwMImHUE/ab?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3186cd59-af25-444a-885c-08db5197707c
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 20:45:07.6910
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: d1/jTYI62nBs64l4zEIahXf3Fb2yopmOPUGWIaj/zD+rs4iq+w4KpdI7H1TTEumeW/3QOcuuT4qhWxbPDHyePQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6468
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-05-10 at 12:12 -0700, Ricardo Neri wrote:
-> On Wed, Apr 12, 2023 at 02:57:57PM -0400, Radu Rendec wrote:
-> > This patch gives architecture specific code the ability to initialize
-> > the cache level and allocate cacheinfo memory early, when cache level
-> > initialization runs on the primary CPU for all possible CPUs.
-[cut]
-> > -int detect_cache_attributes(unsigned int cpu)
-> > +static inline int init_level_allocate_ci(unsigned int cpu)
-> > =C2=A0{
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0int ret;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0unsigned int early_leaves =
-=3D cache_leaves(cpu);
-> > =C2=A0
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/* Since early initiali=
-zation/allocation of the cacheinfo is allowed
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * via fetch_cache_info=
-() and this also gets called as CPU hotplug
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * callbacks via cachei=
-nfo_cpu_online, the init/alloc can be skipped
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * as it will happen on=
-ly once (the cacheinfo memory is never freed).
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Just populate the cachein=
-fo.
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Just populate the cachein=
-fo. However, if the cacheinfo has been
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * allocated early through t=
-he arch-specific early_cache_level() call,
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * there is a chance the inf=
-o is wrong (this can happen on arm64). In
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * that case, call init_cach=
-e_level() anyway to give the arch-specific
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * code a chance to make thi=
-ngs right.
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (per_cpu_cacheinfo(cpu))
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0goto populate_leaves;
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (per_cpu_cacheinfo(cpu) &=
-& !ci_cacheinfo(cpu)->early_ci_levels)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0return 0;
-> > =C2=A0
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (init_cache_level(cp=
-u) || !cache_leaves(cpu))
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0return -ENOENT;
-> > =C2=A0
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ret =3D allocate_cache_info(=
-cpu);
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Now that we have properly=
- initialized the cache level info, make
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * sure we don't try to do t=
-hat again the next time we are called
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * (e.g. as CPU hotplug call=
-backs).
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ci_cacheinfo(cpu)->early_ci_=
-levels =3D false;
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0if (cache_leaves(cpu) <=3D e=
-arly_leaves)
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0return 0;
-> > +
->=20
-> I had posted a patchset[1] for x86 that initializes
-> ci_cacheinfo(cpu)->num_leaves during SMP boot.
->=20
-> This means that early_leaves and a late cache_leaves() are equal but
-> per_cpu_cacheinfo(cpu) is never allocated. Currently, x86 does not use
-> fetch_cache_info().
->=20
-> I think that we should check here that per_cpu_cacheinfo() has been alloc=
-ated to
-> take care of the case in which early and late cache leaves remain the sam=
-e:
->=20
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (cache_leaves(cpu) <=3D early_le=
-aves)
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (cache_leaves(cpu) <=3D early_le=
-aves && per_cpu_cacheinfo(cpu))
->=20
-> Otherwise, in v6.4-rc1 + [1] I observe a NULL pointer dereference from
-> last_level_cache_is_valid().
->=20
-> I can post a patch with this fix if it makes sense.
->=20
-> [1]. https://lore.kernel.org/all/20230424001956.21434-3-ricardo.neri-cald=
-eron@linux.intel.com/
+From: Jisheng Zhang <jszhang@kernel.org>
 
-Hi Ricardo,
+The first SoC in the T-HEAD series is light(a.k.a th1520), containing
+quad T-HEAD C910 cores.
 
-Thanks for bringing this to my attention. I need to run some tests on
-x86 (I did all that work/testing on arm64) and wrap my head around it.
+Cc: Icenowy Zheng <uwu@icenowy.me>
+Cc: Wei Fu <wefu@redhat.com>
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ arch/riscv/Kconfig.socs | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-While I don't see any problem with the fix you're proposing, I'm afraid
-it may circle back to the other problem I tried to fix initially. Have
-you tested this on an RT kernel by any chance?
-
-I'm thinking that if we end up in init_level_allocate_ci() without the
-cacheinfo memory having been allocated earlier, we're up for a "BUG"
-splat on RT kernels.
-
-If early_leaves has the right value at that point, the cacheinfo memory
-should be allocated early (on the primary CPU), so perhaps there's a
-different problem somewhere else.
-
-I'll get back to you as soon as I look at this in more detail but I
-just wanted to give you a quick heads-up.
-
-Regards,
-Radu
+diff --git a/arch/riscv/Kconfig.socs b/arch/riscv/Kconfig.socs
+index 1cf69f958f10..ce10a38dff37 100644
+--- a/arch/riscv/Kconfig.socs
++++ b/arch/riscv/Kconfig.socs
+@@ -41,6 +41,12 @@ config ARCH_SUNXI
+ 	  This enables support for Allwinner sun20i platform hardware,
+ 	  including boards based on the D1 and D1s SoCs.
+ 
++config ARCH_THEAD
++	bool "T-HEAD RISC-V SoCs"
++	select ERRATA_THEAD
++	help
++	  This enables support for the RISC-V based T-HEAD SoCs.
++
+ config ARCH_VIRT
+ 	def_bool SOC_VIRT
+ 
+-- 
+2.34.1
 
