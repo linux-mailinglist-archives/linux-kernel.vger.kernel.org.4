@@ -2,90 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11EC06FE33B
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 19:26:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DC6D6FE33D
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 19:28:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236449AbjEJR0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 13:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
+        id S231175AbjEJR2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 13:28:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232796AbjEJR0q (ORCPT
+        with ESMTP id S235768AbjEJR2E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 13:26:46 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F68AE3
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 10:26:45 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bc37e1525so14291323a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 10:26:44 -0700 (PDT)
+        Wed, 10 May 2023 13:28:04 -0400
+Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 354AF26AA;
+        Wed, 10 May 2023 10:28:02 -0700 (PDT)
+Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1ab13da70a3so73109385ad.1;
+        Wed, 10 May 2023 10:28:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683739603; x=1686331603;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HJL+JhQmxU9qA5lMrvGM05IUnqGL3GZgrHCNTgjj3t0=;
-        b=v3awAP8GUD/ZDAJvrp2L+Znr7TDIkUCt5LWmzipwChCwH7m0oNy7iOV/XqpkYIvXC/
-         BaMLy1q5d30O1WltT+xWOddJUdKCZ77bVEh+iIGcn7clk+Pr7J34ZR9C6HjlOh0M8PQN
-         +KtV3eWjkMhmHGFj3VzXyHLN12k3kTd0Xp27WmEQMgAvOXZx8+M07tdd09LAcdq9S5gw
-         Op6AeU8UYav4jAMxNbO8sejmCm826l+LN+yd8U18+i4+BXzX9kJ4pN6hmGxz+2JMRPVy
-         lnOmcSZWW/LN0u/yOT1Hm6pCFNYc9LVNZeLjV+RSIjZHbsGsFCzBdebHdWJa6cCrS655
-         E2wA==
+        d=gmail.com; s=20221208; t=1683739681; x=1686331681;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=14SzeB2Vs1W83Y2m7j9/1bFYAIAlXQOw2zKIeSsOFhI=;
+        b=gCRz4BqjH9pr6rwQQnegssBrq+NVmWXOyPdlPDSWAO1fygieli77caq04l3ko+fRsY
+         cFkrgyUtl5bZbcMD714N2rkMKnssMTPdUhiocjxt+zD33fEoPoks+QZkVVzn8vhcKQZR
+         rhZIWLRQ+jCBXEtuKmPPqmcbAv/OjzS/atpSXDZrGE5yWs4aOwCeR1LMShiCBiuzWk8T
+         MqExPAsUIMK7VKJtmIkeqwjeL/VRXi4VyyKmsOBgzGepAqqy7bh20RVrXoLc0QOIFksq
+         Jco099twCxKnnuxirTtloXWeUONWr46e5muncbk8sGktwURFrhECoEeBmt6V/juIrpX3
+         0jKg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683739603; x=1686331603;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HJL+JhQmxU9qA5lMrvGM05IUnqGL3GZgrHCNTgjj3t0=;
-        b=Xlm0N+cGAdNYW4TGRG0KR++8vxUDehMyxhe4Ff2hGY/BHsD8sQIq4ukl6lwoPW5n3a
-         niFNURI9NLGx2VMhN5nBgUaQNgSo+tTIg/0MbkIKc7Lyu1g6RzoPrbUZS7S03LRlyepd
-         /apTcvQnJbSa68aomHgb6e3GtFphjvPj6AZA5Py91ffIv/WIPHaS00pRn5RNiz3zkFuw
-         cP6Ns+kewe/X93FUBo6ph1k5t+jhN3KRzCw53yb5U9KwTZTbk3ONDXrvkOQSbbG92DGj
-         8LU1QT1DhwqTGi9ux9QDawwkVnzb5ZChyegpq1LFzjHNyY2VSqZAb7zur2EvWjghmTAY
-         oxKg==
-X-Gm-Message-State: AC+VfDy5U+XCvLuf8TkBxN1W+QRcD3+LlP4HTCKTj+7PmcTtAxPMWfLg
-        bmv7bZQdbyrIRpCoqaGRhyTNBB++DWdXXVdEP4mjCQ==
-X-Google-Smtp-Source: ACHHUZ64G94ODQQyPBdm7IGyu9kHzcE0JVQFyt0rwKkromaOxP7k8Aq6aDDkSvekpiO3NFhe4DF5fY89lBIyRxbDjfw=
-X-Received: by 2002:aa7:cf95:0:b0:50b:c4f0:c200 with SMTP id
- z21-20020aa7cf95000000b0050bc4f0c200mr15479402edx.41.1683739603390; Wed, 10
- May 2023 10:26:43 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683739681; x=1686331681;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=14SzeB2Vs1W83Y2m7j9/1bFYAIAlXQOw2zKIeSsOFhI=;
+        b=Zbx5LZJQAVM2zIMNx/pUYDk+l5S9YIDMm3LCmH9AhEsxSN8FYEiqJeQtyCGVKXXtl2
+         db6WVnsYL7i4741ApTLDaDKGslxgRzJEt/8XZVu+b457IltLqWMm908wHTV7J5c3MmDj
+         78fCCoa1P6jPPeQDbPsDPEvFqTI1spxFzGmLtC1Ci4ooHIvK3F+GAym3766IuPdpTA63
+         TIDAgneK0izvixsCW+XVOrCQExVQSw0Zt/DWBVo2xBb80lXZqiMoXzjZOZNpJ1P9xVj/
+         FitMRjEDyuVAp8EhsBFpfzwtZj05EEuFtS2lJEI7quGvWilx5f0bUMyFVSnGYfTQONxG
+         Ls5w==
+X-Gm-Message-State: AC+VfDxQ3rBMFF5UqODWGm/rOct9HHt4CGlxx8Kmc7tvqN1l8ey58dan
+        veb3vKyFfsUp+520h01P8AQ=
+X-Google-Smtp-Source: ACHHUZ4R5h18ZyJbvVBpOVpl3OCG3fgMMwCyr3XVNv+VxKMCaKwGOQ5egsUGDqJxOoG2lYBAZMCPeg==
+X-Received: by 2002:a17:903:294c:b0:1ab:1b8:8a5f with SMTP id li12-20020a170903294c00b001ab01b88a5fmr18386100plb.33.1683739681391;
+        Wed, 10 May 2023 10:28:01 -0700 (PDT)
+Received: from krava ([2001:4958:15a0:30:84fc:2d48:aeac:9034])
+        by smtp.gmail.com with ESMTPSA id jb4-20020a170903258400b001a04ff0e2eesm4071002plb.58.2023.05.10.10.28.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 10:28:01 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Wed, 10 May 2023 10:27:59 -0700
+To:     Yonghong Song <yhs@meta.com>
+Cc:     Ze Gao <zegao2021@gmail.com>, Song Liu <song@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ze Gao <zegao@tencent.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH] bpf: reject blacklisted symbols in kprobe_multi to avoid
+ recursive trap
+Message-ID: <ZFvUH+p0ebcgnwEg@krava>
+References: <20230510122045.2259-1-zegao@tencent.com>
+ <6308b8e0-8a54-e574-a312-0a97cfbf810c@meta.com>
 MIME-Version: 1.0
-References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
- <ZD1oevE8iHsi66T2@google.com> <658018f9-581c-7786-795a-85227c712be0@redhat.com>
- <ZD12htq6dWg0tg2e@google.com> <1ed06a62-05a1-ebe6-7ac4-5b35ba272d13@redhat.com>
- <ZD2bBB00eKP6F8kz@google.com> <9efef45f-e9f4-18d1-0120-f0fc0961761c@redhat.com>
- <ZD86E23gyzF6Q7AF@google.com> <5869f50f-0858-ab0c-9049-4345abcf5641@redhat.com>
- <ZEM5Zq8oo+xnApW9@google.com>
-In-Reply-To: <ZEM5Zq8oo+xnApW9@google.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Wed, 10 May 2023 10:26:32 -0700
-Message-ID: <CAGtprH_+bF4VZg2ps6CM8vjJVvShsvSGAvaLfTedts4cKqhSUw@mail.gmail.com>
-Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
- KVM: mm: fd-based approach for supporting KVM)
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        tabba@google.com, Michael Roth <michael.roth@amd.com>,
-        wei.w.wang@intel.com, Mike Rapoport <rppt@kernel.org>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        Christian Brauner <brauner@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6308b8e0-8a54-e574-a312-0a97cfbf810c@meta.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,63 +86,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 21, 2023 at 6:33=E2=80=AFPM Sean Christopherson <seanjc@google.=
-com> wrote:
->
-> ...
-> cold.  I poked around a bit to see how we could avoid reinventing all of =
-that
-> infrastructure for fd-only memory, and the best idea I could come up with=
- is
-> basically a rehash of Kirill's very original "KVM protected memory" RFC[3=
-], i.e.
-> allow "mapping" fd-only memory, but ensure that memory is never actually =
-present
-> from hardware's perspective.
->
+On Wed, May 10, 2023 at 07:13:58AM -0700, Yonghong Song wrote:
+> 
+> 
+> On 5/10/23 5:20 AM, Ze Gao wrote:
+> > BPF_LINK_TYPE_KPROBE_MULTI attaches kprobe programs through fprobe,
+> > however it does not takes those kprobe blacklisted into consideration,
+> > which likely introduce recursive traps and blows up stacks.
+> > 
+> > this patch adds simple check and remove those are in kprobe_blacklist
+> > from one fprobe during bpf_kprobe_multi_link_attach. And also
+> > check_kprobe_address_safe is open for more future checks.
+> > 
+> > note that ftrace provides recursion detection mechanism, but for kprobe
+> > only, we can directly reject those cases early without turning to ftrace.
+> > 
+> > Signed-off-by: Ze Gao <zegao@tencent.com>
+> > ---
+> >   kernel/trace/bpf_trace.c | 37 +++++++++++++++++++++++++++++++++++++
+> >   1 file changed, 37 insertions(+)
+> > 
+> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > index 9a050e36dc6c..44c68bc06bbd 100644
+> > --- a/kernel/trace/bpf_trace.c
+> > +++ b/kernel/trace/bpf_trace.c
+> > @@ -2764,6 +2764,37 @@ static int get_modules_for_addrs(struct module ***mods, unsigned long *addrs, u3
+> >   	return arr.mods_cnt;
+> >   }
+> > +static inline int check_kprobe_address_safe(unsigned long addr)
+> > +{
+> > +	if (within_kprobe_blacklist(addr))
+> > +		return -EINVAL;
+> > +	else
+> > +		return 0;
+> > +}
+> > +
+> > +static int check_bpf_kprobe_addrs_safe(unsigned long *addrs, int num)
+> > +{
+> > +	int i, cnt;
+> > +	char symname[KSYM_NAME_LEN];
+> > +
+> > +	for (i = 0; i < num; ++i) {
+> > +		if (check_kprobe_address_safe((unsigned long)addrs[i])) {
+> > +			lookup_symbol_name(addrs[i], symname);
+> > +			pr_warn("bpf_kprobe: %s at %lx is blacklisted\n", symname, addrs[i]);
+> 
+> So user request cannot be fulfilled and a warning is issued and some
+> of user requests are discarded and the rest is proceeded. Does not
+> sound a good idea.
+> 
+> Maybe we should do filtering in user space, e.g., in libbpf, check
+> /sys/kernel/debug/kprobes/blacklist and return error
+> earlier? bpftrace/libbpf-tools/bcc-tools all do filtering before
+> requesting kprobe in the kernel.
 
-I am most likely missing a lot of context here and possibly venturing
-into an infeasible/already shot down direction here. But I would still
-like to get this discussed here before we move on.
+also fprobe uses ftrace drectly without paths in kprobe, so I wonder
+some of the kprobe blacklisted functions are actually safe
 
-I am wondering if it would make sense to implement
-restricted_mem/guest_mem file to expose both private and shared memory
-regions, inline with Kirill's original proposal now that the file
-implementation is controlled by KVM.
+jirka
 
-Thinking from userspace perspective:
-1) Userspace creates guest mem files and is able to mmap them but all
-accesses to these files result into faults as no memory is allowed to
-be mapped into userspace VMM pagetables.
-2) Userspace registers mmaped HVA ranges with KVM with additional
-KVM_MEM_PRIVATE flag
-3) Userspace converts memory attributes and this memory conversion
-allows userspace to access shared ranges of the file because those are
-allowed to be faulted in from guest_mem. Shared to private conversion
-unmaps the file ranges from userspace VMM pagetables.
-4) Granularity of userspace pagetable mappings for shared ranges will
-have to be dictated by KVM guest_mem file implementation.
-
-Caveat here is that once private pages are mapped into userspace view.
-
-Benefits here:
-1) Userspace view remains consistent while still being able to use HVA rang=
-es
-2) It would be possible to use HVA based APIs from userspace to do
-things like binding.
-3) Double allocation wouldn't be a concern since hva ranges and gpa
-ranges possibly map to the same HPA ranges.
-
->
-> Code is available here if folks want to take a look before any kind of fo=
-rmal
-> posting:
->
->         https://github.com/sean-jc/linux.git x86/kvm_gmem_solo
->
-> [1] https://lore.kernel.org/all/ff5c5b97-acdf-9745-ebe5-c6609dd6322e@goog=
-le.com
-> [2] https://lore.kernel.org/all/20230418-anfallen-irdisch-6993a61be10b@br=
-auner
-> [3] https://lore.kernel.org/linux-mm/20200522125214.31348-1-kirill.shutem=
-ov@linux.intel.com
+> 
+> > +			/* mark blacklisted symbol for remove */
+> > +			addrs[i] = 0;
+> > +		}
+> > +	}
+> > +
+> > +	/* remove blacklisted symbol from addrs */
+> > +	for (i = 0, cnt = 0; i < num; ++i) {
+> > +		if (addrs[i])
+> > +			addrs[cnt++]  = addrs[i];
+> > +	}
+> > +
+> > +	return cnt;
+> > +}
+> > +
+> >   int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *prog)
+> >   {
+> >   	struct bpf_kprobe_multi_link *link = NULL;
+> > @@ -2859,6 +2890,12 @@ int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct bpf_prog *pr
+> >   	else
+> >   		link->fp.entry_handler = kprobe_multi_link_handler;
+> > +	cnt = check_bpf_kprobe_addrs_safe(addrs, cnt);
+> > +	if (!cnt) {
+> > +		err = -EINVAL;
+> > +		goto error;
+> > +	}
+> > +
+> >   	link->addrs = addrs;
+> >   	link->cookies = cookies;
+> >   	link->cnt = cnt;
