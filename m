@@ -2,152 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 485426FD3B5
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 04:00:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 465B96FD3BB
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 04:02:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234520AbjEJCAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 22:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35342 "EHLO
+        id S234743AbjEJCCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 22:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjEJCAJ (ORCPT
+        with ESMTP id S229734AbjEJCCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 22:00:09 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD93E74
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 19:00:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683684008; x=1715220008;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=B9ArjFq88tRK/W8TdAMdDGRhtdgpeucVRoEz9w5Qd0I=;
-  b=D8Xk1bBJBBvZDCZx0Imr1KxAs1jZM1qRwp3Y20EuIB2kwgsnlH4Uu/X4
-   OyKQszTj4/I7GzIlkHyY6+CefZWfvCbMNYfT2iX9fgR7Otzdka9avJk/2
-   MFBVHx1yrzn59XcMq53nZyHI9dpekrmNnNHLL5KsvNa4jF8mjrkvRuRKO
-   Vvd4CWTTM5pMVlJKSDJuSzsOrSyG7i7pkRV5zizzTCyRRebBGf6QlOXup
-   UcQbu1tnl3aZZ+CzM9snFmLMkaqXc8MJX0iLVKSpnfFLHmAFCvXoIpwpM
-   AOlAJfNA0RmDE4d7FSEYjtGr7W3zBYmE+ijPvThVjaZtJS8QRucuG0ktp
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="378200130"
-X-IronPort-AV: E=Sophos;i="5.99,263,1677571200"; 
-   d="scan'208";a="378200130"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 May 2023 19:00:08 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="873410089"
-X-IronPort-AV: E=Sophos;i="5.99,263,1677571200"; 
-   d="scan'208";a="873410089"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 09 May 2023 19:00:06 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pwZ7d-0002mX-2X;
-        Wed, 10 May 2023 02:00:05 +0000
-Date:   Wed, 10 May 2023 09:59:31 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Subject: [paulmck-rcu:dev.2023.05.08c 15/67]
- drivers/infiniband/sw/rxe/rxe_verbs.c:1359:21: error: macro "kfree_rcu"
- requires 2 arguments, but only 1 given
-Message-ID: <202305100912.lreD3oLd-lkp@intel.com>
+        Tue, 9 May 2023 22:02:33 -0400
+Received: from out30-130.freemail.mail.aliyun.com (out30-130.freemail.mail.aliyun.com [115.124.30.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12CE63ABA;
+        Tue,  9 May 2023 19:02:30 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R891e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=guwen@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0ViDXbKF_1683684146;
+Received: from 30.221.130.59(mailfrom:guwen@linux.alibaba.com fp:SMTPD_---0ViDXbKF_1683684146)
+          by smtp.aliyun-inc.com;
+          Wed, 10 May 2023 10:02:27 +0800
+Message-ID: <1297b2c6-00c2-adc9-3abe-af12471e2838@linux.alibaba.com>
+Date:   Wed, 10 May 2023 10:02:26 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [RFC PATCH net-next v5 0/9] net/smc: Introduce SMC-D-based OS
+ internal communication acceleration
+From:   Wen Gu <guwen@linux.alibaba.com>
+To:     kgraul@linux.ibm.com, wenjia@linux.ibm.com, jaka@linux.ibm.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Alexandra Winter <wintera@linux.ibm.com>
+References: <1682252271-2544-1-git-send-email-guwen@linux.alibaba.com>
+In-Reply-To: <1682252271-2544-1-git-send-email-guwen@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.1 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,NUMERIC_HTTP_ADDR,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git dev.2023.05.08c
-head:   b7c6d563fb2aa29acb91fd8665380979bb8d131d
-commit: df2d6f48c0dc148ea5dc86d3264ac27bd908b1e5 [15/67] rcu/kvfree: Eliminate k[v]free_rcu() single argument macro
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230510/202305100912.lreD3oLd-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/commit/?id=df2d6f48c0dc148ea5dc86d3264ac27bd908b1e5
-        git remote add paulmck-rcu https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git
-        git fetch --no-tags paulmck-rcu dev.2023.05.08c
-        git checkout df2d6f48c0dc148ea5dc86d3264ac27bd908b1e5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash
+Hi Wenjia & Jan:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305100912.lreD3oLd-lkp@intel.com/
+Does this version work fine on your platform?
 
-Note: the paulmck-rcu/dev.2023.05.08c HEAD b7c6d563fb2aa29acb91fd8665380979bb8d131d builds fine.
-      It only hurts bisectability.
-
-All errors (new ones prefixed by >>):
-
-   drivers/infiniband/sw/rxe/rxe_verbs.c: In function 'rxe_dereg_mr':
->> drivers/infiniband/sw/rxe/rxe_verbs.c:1359:21: error: macro "kfree_rcu" requires 2 arguments, but only 1 given
-    1359 |         kfree_rcu(mr);
-         |                     ^
-   In file included from include/linux/rculist.h:11,
-                    from include/linux/pid.h:5,
-                    from include/linux/sched.h:14,
-                    from include/linux/ratelimit.h:6,
-                    from include/linux/dev_printk.h:16,
-                    from include/linux/device.h:15,
-                    from include/linux/dma-mapping.h:7,
-                    from drivers/infiniband/sw/rxe/rxe_verbs.c:7:
-   include/linux/rcupdate.h:961: note: macro "kfree_rcu" defined here
-     961 | #define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
-         | 
->> drivers/infiniband/sw/rxe/rxe_verbs.c:1359:9: error: 'kfree_rcu' undeclared (first use in this function); did you mean 'kfree_skb'?
-    1359 |         kfree_rcu(mr);
-         |         ^~~~~~~~~
-         |         kfree_skb
-   drivers/infiniband/sw/rxe/rxe_verbs.c:1359:9: note: each undeclared identifier is reported only once for each function it appears in
+And any comments on this version? :)
 
 
-vim +/kfree_rcu +1359 drivers/infiniband/sw/rxe/rxe_verbs.c
+Best regards,
+Wen Gu
 
-8700e3e7c4857d Moni Shoua  2016-06-16  1342  
-5bf944f24129cb Bob Pearson 2023-03-03  1343  static int rxe_dereg_mr(struct ib_mr *ibmr, struct ib_udata *udata)
-5bf944f24129cb Bob Pearson 2023-03-03  1344  {
-5bf944f24129cb Bob Pearson 2023-03-03  1345  	struct rxe_mr *mr = to_rmr(ibmr);
-5bf944f24129cb Bob Pearson 2023-03-03  1346  	int err, cleanup_err;
-5bf944f24129cb Bob Pearson 2023-03-03  1347  
-5bf944f24129cb Bob Pearson 2023-03-03  1348  	/* See IBA 10.6.7.2.6 */
-5bf944f24129cb Bob Pearson 2023-03-03  1349  	if (atomic_read(&mr->num_mw) > 0) {
-5bf944f24129cb Bob Pearson 2023-03-03  1350  		err = -EINVAL;
-5bf944f24129cb Bob Pearson 2023-03-03  1351  		rxe_dbg_mr(mr, "mr has mw's bound");
-5bf944f24129cb Bob Pearson 2023-03-03  1352  		goto err_out;
-5bf944f24129cb Bob Pearson 2023-03-03  1353  	}
-5bf944f24129cb Bob Pearson 2023-03-03  1354  
-5bf944f24129cb Bob Pearson 2023-03-03  1355  	cleanup_err = rxe_cleanup(mr);
-5bf944f24129cb Bob Pearson 2023-03-03  1356  	if (cleanup_err)
-5bf944f24129cb Bob Pearson 2023-03-03  1357  		rxe_err_mr(mr, "cleanup failed, err = %d", cleanup_err);
-5bf944f24129cb Bob Pearson 2023-03-03  1358  
-5bf944f24129cb Bob Pearson 2023-03-03 @1359  	kfree_rcu(mr);
-5bf944f24129cb Bob Pearson 2023-03-03  1360  	return 0;
-5bf944f24129cb Bob Pearson 2023-03-03  1361  
-5bf944f24129cb Bob Pearson 2023-03-03  1362  err_out:
-5bf944f24129cb Bob Pearson 2023-03-03  1363  	rxe_err_mr(mr, "returned err = %d", err);
-5bf944f24129cb Bob Pearson 2023-03-03  1364  	return err;
-5bf944f24129cb Bob Pearson 2023-03-03  1365  }
-5bf944f24129cb Bob Pearson 2023-03-03  1366  
 
-:::::: The code at line 1359 was first introduced by commit
-:::::: 5bf944f24129cbc4b5828348bdce2db94ca9fbd6 RDMA/rxe: Add error messages
+On 2023/4/23 20:17, Wen Gu wrote:
 
-:::::: TO: Bob Pearson <rpearsonhpe@gmail.com>
-:::::: CC: Jason Gunthorpe <jgg@nvidia.com>
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> Hi, all
+> 
+> # Background
+> 
+> The background and previous discussion can be referred from [1]~[3].
+> 
+> We found SMC-D can be used to accelerate OS internal communication, such as
+> loopback or between two containers within the same OS instance. So this patch
+> set provides a kind of SMC-D dummy device (we call it the SMC-D loopback device)
+> to emulate an ISM device, so that SMC-D can also be used on architectures
+> other than s390. The SMC-D loopback device are designed as a system global
+> device, visible to all containers.
+> 
+> # Design
+> 
+> This patch set basically follows the design of the previous version.
+> 
+> Patch #1/9 ~ #3/9 attempt to decouple ISM-related structures from the SMC-D
+> generalized code and extract some helpers to make SMC-D protocol compatible
+> with devices other than s390 ISM device.
+> 
+> Patch #4/9 introduces a kind of loopback device, which is defined as SMC-Dv2
+> device and designed to provide communication between SMC sockets on the same
+> OS instance.
+> 
+>   +-------------------------------------------+
+>   |  +--------------+       +--------------+  |
+>   |  | SMC socket A |       | SMC socket B |  |
+>   |  +--------------+       +--------------+  |
+>   |       ^                         ^         |
+>   |       |    +----------------+   |         |
+>   |       |    |   SMC stack    |   |         |
+>   |       +--->| +------------+ |<--|         |
+>   |            | |   dummy    | |             |
+>   |            | |   device   | |             |
+>   |            +-+------------+-+             |
+>   |                   OS                      |
+>   +-------------------------------------------+
+> 
+> Patch #5/9 ~ #8/9 expand SMC-D protocol interface (smcd_ops) for scenarios where
+> SMC-D is used to communicate within VM (loopback here) or between VMs on the same
+> host (based on virtio-ism device, see [4]). What these scenarios have in common
+> is that the local sndbuf and peer RMB can be mapped to same physical memory region,
+> so the data copy between the local sndbuf and peer RMB can be omitted. Performance
+> improvement brought by this extension can be found in # Benchmark Test.
+> 
+>   +----------+                     +----------+
+>   | socket A |                     | socket B |
+>   +----------+                     +----------+
+>         |                               ^
+>         |         +---------+           |
+>    regard as      |         | ----------|
+>    local sndbuf   |  B's    |     regard as
+>         |         |  RMB    |     local RMB
+>         |-------> |         |
+>                   +---------+
+> 
+> Patch #9/9 realizes the support of loopback device for the above-mentioned expanded
+> SMC-D protocol interface.
+> 
+> # Benchmark Test
+> 
+>   * Test environments:
+>        - VM with Intel Xeon Platinum 8 core 2.50GHz, 16 GiB mem.
+>        - SMC sndbuf/RMB size 1MB.
+> 
+>   * Test object:
+>        - TCP lo: run on TCP loopback.
+>        - domain: run on UNIX domain.
+>        - SMC lo: run on SMC loopback device with patch #1/9 ~ #4/9.
+>        - SMC lo-nocpy: run on SMC loopback device with patch #1/9 ~ #9/9.
+> 
+> 1. ipc-benchmark (see [5])
+> 
+>   - ./<foo> -c 1000000 -s 100
+> 
+>                      TCP-lo              domain              SMC-lo          SMC-lo-nocpy
+> Message
+> rate (msg/s)         79025      115736(+46.45%)    146760(+85.71%)       149800(+89.56%)
+> 
+> 2. sockperf
+> 
+>   - serv: <smc_run> taskset -c <cpu> sockperf sr --tcp
+>   - clnt: <smc_run> taskset -c <cpu> sockperf { tp | pp } --tcp --msg-size={ 64000 for tp | 14 for pp } -i 127.0.0.1 -t 30
+> 
+>                      TCP-lo                  SMC-lo             SMC-lo-nocpy
+> Bandwidth(MBps)   4822.388        4940.918(+2.56%)         8086.67(+67.69%)
+> Latency(us)          6.298          3.352(-46.78%)            3.35(-46.81%)
+> 
+> 3. iperf3
+> 
+>   - serv: <smc_run> taskset -c <cpu> iperf3 -s
+>   - clnt: <smc_run> taskset -c <cpu> iperf3 -c 127.0.0.1 -t 15
+> 
+>                      TCP-lo                  SMC-lo             SMC-lo-nocpy
+> Bitrate(Gb/s)         40.7            40.5(-0.49%)            72.4(+77.89%)
+> 
+> 4. nginx/wrk
+> 
+>   - serv: <smc_run> nginx
+>   - clnt: <smc_run> wrk -t 8 -c 500 -d 30 http://127.0.0.1:80
+> 
+>                      TCP-lo                  SMC-lo             SMC-lo-nocpy
+> Requests/s       155994.57      214544.79(+37.53%)       215538.55(+38.17%)
+> 
+> 
+> v5->v4
+>   1. The loopback device generates SEID in the same way as the ISM devices when coexisting
+>      with ISM devices and uses a default fixed SEID in other cases.
+>   2. Ensure each DMB token of the same loopback device is unique.
+>   3. Fixe a crash caused by setting smcd_ops->signal_event interface to NULL.
+>   4. Fixe a compilation warning complained by kernel test rebot.
+> 
+> v4->v3
+>   1. Rebase to the latest net-next;
+>   2. Introduce SEID helper. SMC-D loopback will return SMCD_DEFAULT_V2_SEID. And if it
+>      coexist with ISM device, the SEID of ISM device will overwrite SMCD_DEFAULT_V2_SEID
+>      as smc_ism_v2_system_eid.
+>   3. Won't remove dmb_node from hashtable until no sndbuf attaching to it.
+> 
+>   Something postponed in this version
+>   1. Hierarchy perference of SMC-D devices when loopback and ISM devices coexist, which
+>      will be determinated after comparing the performance of loopback and ISM.
+> 
+> v3->v2
+>   1. Adapt new generalized interface provided by [2];
+>   2. Select loopback device through SMC-D v2 protocol;
+>   3. Split the loopback-related implementation and generic implementation into different
+>      patches more reasonably.
+> 
+> v1->v2
+>   1. Fix some build WARNINGs complained by kernel test rebot
+>      Reported-by: kernel test robot <lkp@intel.com>
+>   2. Add iperf3 test data.
+> 
+> 
+> [1] https://lore.kernel.org/netdev/1671506505-104676-1-git-send-email-guwen@linux.alibaba.com/
+> [2] https://lore.kernel.org/netdev/1676477905-88043-1-git-send-email-guwen@linux.alibaba.com/
+> [3] https://lore.kernel.org/netdev/1679887699-54797-1-git-send-email-guwen@linux.alibaba.com/
+> [4] https://lore.kernel.org/all/20230209033056.96657-1-xuanzhuo@linux.alibaba.com/
+> [5] https://github.com/goldsborough/ipc-bench
+> 
+> 
+> 
+> Wen Gu (9):
+>    net/smc: Decouple ism_dev from SMC-D device dump
+>    net/smc: Decouple ism_dev from SMC-D DMB registration
+>    net/smc: Extract v2 check helper from SMC-D device registration
+>    net/smc: Introduce SMC-D loopback device
+>    net/smc: Introduce an interface for getting DMB attribute
+>    net/smc: Introudce interfaces for DMB attach and detach
+>    net/smc: Avoid data copy from sndbuf to peer RMB in SMC-D
+>    net/smc: Modify cursor update logic when using mappable DMB
+>    net/smc: Add interface implementation of loopback device
+> 
+>   drivers/s390/net/ism_drv.c |   5 +-
+>   include/net/smc.h          |  18 +-
+>   net/smc/Makefile           |   2 +-
+>   net/smc/af_smc.c           |  26 ++-
+>   net/smc/smc_cdc.c          |  59 ++++--
+>   net/smc/smc_cdc.h          |   1 +
+>   net/smc/smc_core.c         |  70 ++++++-
+>   net/smc/smc_core.h         |   1 +
+>   net/smc/smc_ism.c          |  79 ++++++--
+>   net/smc/smc_ism.h          |   6 +
+>   net/smc/smc_loopback.c     | 491 +++++++++++++++++++++++++++++++++++++++++++++
+>   net/smc/smc_loopback.h     |  56 ++++++
+>   12 files changed, 777 insertions(+), 37 deletions(-)
+>   create mode 100644 net/smc/smc_loopback.c
+>   create mode 100644 net/smc/smc_loopback.h
+> 
