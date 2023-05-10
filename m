@@ -2,123 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 466F86FE0CC
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:51:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA566FE0CF
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:51:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237341AbjEJOvA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 10:51:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53630 "EHLO
+        id S237355AbjEJOvH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 10:51:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237176AbjEJOu5 (ORCPT
+        with ESMTP id S237281AbjEJOvE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 10:50:57 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0241BD6;
-        Wed, 10 May 2023 07:50:56 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34ADswei016231;
-        Wed, 10 May 2023 14:50:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=2wwVnk5uXEvsHS6E6k3z7kwxwfFjYsn0/KoCYekK6d0=;
- b=dV1gjrCW7DdpDtkU3wN16zqkQXMuH0kpdMbCwTednmVp2KYxmNWJOVYrGP1mdCO9nV5c
- IAwbUxMUGNVIRNHISn1pSI/KhqaSgD20a44gsBUUn8TFD8OUak++5Hi1VSrKvJY8F8u1
- waRJ2i2FJ0FuCiFXwZ6yzHnqx1b7/C2STcVo57xO3Fh4TRloFyclXJqjlKQ0PJM/3Mjy
- diws6xkTOucGVYBB8CwumH6f6OFEWOqAkSXaSg7/bRWKI2On/UeP+Vin8Tg7WeBaYE2E
- soItOwtwR9Pwqex4fRCXbqDjcQXvMuLaVkCUcHIIkY4tRflkIuq8KM7BW5ZmQHhd2+c2 Dw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qfrutad78-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 14:50:46 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34AEojkq007183
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 14:50:45 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 10 May
- 2023 07:50:44 -0700
-Message-ID: <a3e030d7-d7f8-80d9-6026-f994cc362d55@quicinc.com>
-Date:   Wed, 10 May 2023 08:50:43 -0600
+        Wed, 10 May 2023 10:51:04 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D372729D
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:51:03 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-965a68abfd4so1379143966b.2
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:51:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683730261; x=1686322261;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=634QqYCO4e6YYkg9HogXcpMtMk+Nqei671dupMxD3uU=;
+        b=CpQE9gcU+nOsxso1W8WnW0sBuBszcV5bm98RKhg3mQCCf8eXyc1+M76/bUNrX25MV1
+         mjGgjoZTxLCRLZpAcfxGDlG09OjkVFfMol0RuQDpQ+Vp8xfepP78up43AQf0dcSclvlh
+         GZUIiB7z6nN2khwM7CX99SSDulayzIfoJrg9KuwnykbzZhjxMUnu8bvlzlZLAGM5Jgv4
+         AOK1Hy4hWfgUg0gl8PivfB1Ppx6naSp3dR00UIoNLHptCJVF2MrDvRMf8KPC9bq+aeiT
+         pbqaw7h5G4bWYzyuVSyXhGe6yJQZ7LVucbo0VWwcOM/ftnJfg59X7pgDQvaFhQD20kuJ
+         Huaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683730261; x=1686322261;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=634QqYCO4e6YYkg9HogXcpMtMk+Nqei671dupMxD3uU=;
+        b=LonyBkEN+iJCVEmrEL05/MsKOL3o5YxHxpnA3Qy/22BZmMnntGYhJZ99SQ0uCLYIaF
+         3ry4/R7ebIFfTvBLcWHQ/AWw/5mYQ3bct6oeJJRlbm9/loSeQYTObwtKFEjMT7Qci4c8
+         OXyTVqFUtRNZWgT6CyUxeR0O5KAEp7HVPs7JrRj0MQtL2aHHHz3wxXyXOgY7bZKlcAiI
+         6fo3a2pNnWdPeF2ajoUl557YqsgVq6qhNLUAv8XHLEf99icZGLMpfZv3FbUQAg5EGuxA
+         4sw0pR1EvsI4OWyx+oZ1KvFBedaWGkcHUl0NtAuFGqqdN0BbkoK6MVcM+eC0hU2ozUzg
+         WANQ==
+X-Gm-Message-State: AC+VfDzZ0jOE2bSDWC+Nyz+VOuDtK8Tarnvp02jeex0uS8aCunCkj705
+        sXfApnBGZWnq6RmG/VoKOvgNWw==
+X-Google-Smtp-Source: ACHHUZ57l5b3kNlo9y2XGG6tHhsx/v2ViJ/oCrgPAj474IZCIVQl7t5hfSOajPXOPXUzUmyQERnmkA==
+X-Received: by 2002:a17:907:3686:b0:94a:56ec:7f12 with SMTP id bi6-20020a170907368600b0094a56ec7f12mr16731180ejc.30.1683730261473;
+        Wed, 10 May 2023 07:51:01 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:c175:a0f9:6928:8c9d? ([2a02:810d:15c0:828:c175:a0f9:6928:8c9d])
+        by smtp.gmail.com with ESMTPSA id l19-20020a170906939300b0094e7d196aa4sm2709662ejx.160.2023.05.10.07.51.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 07:51:00 -0700 (PDT)
+Message-ID: <ec0a3553-2c11-301e-d838-f0bc70353b17@linaro.org>
+Date:   Wed, 10 May 2023 16:50:59 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH] bus: mhi: host: Skip MHI reset if device is in RDDM
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 5/5] dt-bindings: net: ftgmac100: convert to yaml
+ version from txt
 Content-Language: en-US
-To:     Qiang Yu <quic_qianyu@quicinc.com>, <mani@kernel.org>
-CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_cang@quicinc.com>,
-        <quic_mrana@quicinc.com>
-References: <1683698675-33315-1-git-send-email-quic_qianyu@quicinc.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <1683698675-33315-1-git-send-email-quic_qianyu@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Ivan Mikhaylov <fr0st61te@gmail.com>,
+        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+References: <20230509143504.30382-1-fr0st61te@gmail.com>
+ <20230509143504.30382-6-fr0st61te@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230509143504.30382-6-fr0st61te@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: HB2Q4VXueCAhB48kbhfvKuJ4hbNKHjxa
-X-Proofpoint-ORIG-GUID: HB2Q4VXueCAhB48kbhfvKuJ4hbNKHjxa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- priorityscore=1501 impostorscore=0 suspectscore=0 phishscore=0 bulkscore=0
- clxscore=1011 adultscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305100119
 X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/10/2023 12:04 AM, Qiang Yu wrote:
-> In RDDM EE, device can not process MHI reset
-> issued by host. In case of MHI power off, host
-> is issuing MHI reset and polls for it to get
-> cleared until it times out. Since this timeout
-> can not be avoided in case of RDDM, skip the
-> MHI reset in this scenarios.
+On 09/05/2023 16:35, Ivan Mikhaylov wrote:
+> Signed-off-by: Ivan Mikhaylov <fr0st61te@gmail.com>
 
-Looks like you only use ~45 columns of 75 possible.  Feels a little odd. 
-  Any particular reason for that?
+Need some commit msg.
 
-Fixes tag?
 
-> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
 > ---
->   drivers/bus/mhi/host/pm.c | 5 +++++
->   1 file changed, 5 insertions(+)
+>  .../bindings/net/faraday,ftgmac100.yaml       | 110 ++++++++++++++++++
+
+Missing actual conversion (removal).
+
+>  1 file changed, 110 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/faraday,ftgmac100.yaml
 > 
-> diff --git a/drivers/bus/mhi/host/pm.c b/drivers/bus/mhi/host/pm.c
-> index 0834590..8a4362d 100644
-> --- a/drivers/bus/mhi/host/pm.c
-> +++ b/drivers/bus/mhi/host/pm.c
-> @@ -470,6 +470,10 @@ static void mhi_pm_disable_transition(struct mhi_controller *mhi_cntrl)
->   
->   	/* Trigger MHI RESET so that the device will not access host memory */
->   	if (!MHI_PM_IN_FATAL_STATE(mhi_cntrl->pm_state)) {
-> +		/* Skip MHI RESET if in RDDM state */
-> +		if (mhi_cntrl->rddm_image && mhi_get_exec_env(mhi_cntrl) == MHI_EE_RDDM)
-> +			goto skip_mhi_reset;
+> diff --git a/Documentation/devicetree/bindings/net/faraday,ftgmac100.yaml b/Documentation/devicetree/bindings/net/faraday,ftgmac100.yaml
+> new file mode 100644
+> index 000000000000..98cd142f74bb
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/faraday,ftgmac100.yaml
+> @@ -0,0 +1,110 @@
+> +# SPDX-License-Identifier: GPL-2.0
+
+Dual-license, unless you copied some chunks of old binding... but was
+there old binding?
+
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/faraday,ftgmac100.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
->   		dev_dbg(dev, "Triggering MHI Reset in device\n");
->   		mhi_set_mhi_state(mhi_cntrl, MHI_STATE_RESET);
->   
-> @@ -495,6 +499,7 @@ static void mhi_pm_disable_transition(struct mhi_controller *mhi_cntrl)
->   		}
->   	}
->   
-> +skip_mhi_reset:
->   	dev_dbg(dev,
->   		 "Waiting for all pending event ring processing to complete\n");
->   	mhi_event = mhi_cntrl->mhi_event;
+> +title: Faraday Technology FTGMAC100 gigabit ethernet controller
+> +
+> +allOf:
+> +  - $ref: "ethernet-controller.yaml#"
+
+Drop quotes.
+
+
+> +
+> +maintainers:
+> +  - Po-Yu Chuang <ratbert@faraday-tech.com>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - const: faraday,ftgmac100
+> +      - items:
+> +          - enum:
+> +              - aspeed,ast2400-mac
+> +              - aspeed,ast2500-mac
+> +              - aspeed,ast2600-mac
+> +          - const: faraday,ftgmac100
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    description: |
+> +      In accordance with the generic clock bindings.
+
+Drop this part. Obvious.
+
+>  Must describe the MAC
+> +      IP clock, and optionally an RMII RCLK gate for the AST2500/AST2600. The
+> +      required MAC clock must be the first cell.
+
+The cells depend on clock provider. Do you mean something else?
+
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  clock-names:
+> +    items:
+> +      - enum:
+> +          - MACCLK
+> +          - RCLK
+
+This does not allow two clocks... List all the items and add minItems: 1.
+
+
+> +
+> +  phy-mode:
+> +    enum:
+> +      - rgmii
+> +      - rmii
+> +
+> +  phy-handle: true
+> +
+> +  use-ncsi:
+> +    description: |
+
+Do not need '|' unless you need to preserve formatting.
+
+I will stop review, because it depends whether this is true conversion
+or new binding.
+
+Best regards,
+Krzysztof
 
