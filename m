@@ -2,78 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AAD86FD411
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 05:12:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC136FD418
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 05:18:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229721AbjEJDMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 23:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54704 "EHLO
+        id S235456AbjEJDSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 23:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235511AbjEJDMO (ORCPT
+        with ESMTP id S235296AbjEJDR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 23:12:14 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D221435B3
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 20:12:12 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 2E7BE3200681;
-        Tue,  9 May 2023 23:12:10 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute5.internal (MEProxy); Tue, 09 May 2023 23:12:10 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sakamocchi.jp;
-         h=cc:cc:content-transfer-encoding:content-type:date:date:from
-        :from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1683688329; x=1683774729; bh=FW
-        q0bO+HBMIGxKbDQUC/QIXBRYZ2XFe4HmtHpRUs/II=; b=Bh59Hc2K8PysbgyxI0
-        EvRTNZFIlWk0w2oN/TclV1IvNDcaPy92XeTSPgAdezs/Tvj89eKSRH/lML4eZzct
-        t2lo+YPy82NVF2xz29ihjPpfYeb9kdEdtReFTluWTQ91fVTO05cRi61FT49XhlGc
-        lqvgyXUTUHQtO01JuPk+4Q48sZiclo5hicCEaMQ2Fn9fZNzRD4o52jpAcR1l5h1v
-        gMcroEKzXk3NJyS96X3G2s9nrg2QRKzHW3F9hNWaM0Xdfzs2fut4XkIKuh12IBkF
-        bh8bJiTLAERbzAZI5bNrFR3SP+9zviOvTS83J0QKvDKMQWaOrvVOpKGoLDt7Fzwh
-        CY/w==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683688329; x=1683774729; bh=FWq0bO+HBMIGx
-        KbDQUC/QIXBRYZ2XFe4HmtHpRUs/II=; b=GGDUaaceGUMTD8NLXmAy7ETWPcAat
-        GZyorV3TjVQ1LNRsZhfHxmg+l+1/EJ082WgGBYKlCvweaJRA+TkC1bx2DIWtE0xT
-        aeqRc7PLUh0Beh6yHwuFXVJ2bOWzcR+WMkW+ja16La1fJsTd/WhXPMiK3+U9Pajy
-        KWQuVM6zVD4bczknLUDwLD2MNCbHNwKBuVhfJYHq9AAkh14URaWVeFKe9S4YNDIW
-        sb0g5sspjVIuE6xP9DbpMOgYJCxw0zPtfthKea4YYTaIntTDeW+P4dqY6oxy7WnZ
-        NAzdtDpO9vrv9ZZUP2GSa0XTcAbfqiO6ZTm/zT/y3KjUK3ukm7r6gB1Hw==
-X-ME-Sender: <xms:iQtbZF485CbWby7MxS4AdtcSXrs7l09bpatA-inX2cGiq1u0Tc7xIQ>
-    <xme:iQtbZC5ECBDpZqD0O5UEDSsgujVBNne0eVgfaoyTNkH5iJrBfI9hnlU3YhShMPEZx
-    QmD2pnHNzWlOaDJb0A>
-X-ME-Received: <xmr:iQtbZMezjvbDC9KhkmZmaLQWULHnh3KVKTphPlEgOS45k_eBSkn9pbcZC9JhxZeu9SMvuxM-SburY8JfjcNkCa1RprBHpHFnS3PSJTAfdxd3>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeegvddgieekucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucenucfjughrpefhvfevufffkffoggfgsedtkeertd
-    ertddtnecuhfhrohhmpefvrghkrghshhhiucfurghkrghmohhtohcuoehoqdhtrghkrghs
-    hhhisehsrghkrghmohgttghhihdrjhhpqeenucggtffrrghtthgvrhhnpeeggfehleehje
-    eileehveefkefhtdeffedtfeeghfekffetudevjeegkeevhfdvueenucffohhmrghinhep
-    khgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrg
-    hilhhfrhhomhepohdqthgrkhgrshhhihesshgrkhgrmhhotggthhhirdhjph
-X-ME-Proxy: <xmx:iQtbZOLBnsJC_5YWjDxOgj7w4kcxugo_hPanmenvYKyfUAJbn0_eeQ>
-    <xmx:iQtbZJJdZXQrryqVpAYzfOPSmCGAHWkjxzf_7Rw8palr4k_IJqswZA>
-    <xmx:iQtbZHyfuADd7_x5WNhmtY2eXDV5IWqkNiziCVg00th616XsbsWEHA>
-    <xmx:iQtbZHhn4y8v8-c5JCAfc85BLe-prDb7cLUdrOhp9zBR9VlX0FWXvw>
-Feedback-ID: ie8e14432:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 9 May 2023 23:12:08 -0400 (EDT)
-From:   Takashi Sakamoto <o-takashi@sakamocchi.jp>
-To:     linux1394-devel@lists.sourceforge.net, linux-kernel@vger.kernel.org
-Cc:     Dan Carpenter <error27@gmail.com>
-Subject: [PATCH] firewire: net: fix unexpected release of object for asynchronous request packet
-Date:   Wed, 10 May 2023 12:12:05 +0900
-Message-Id: <20230510031205.782032-1-o-takashi@sakamocchi.jp>
-X-Mailer: git-send-email 2.37.2
+        Tue, 9 May 2023 23:17:59 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E21DC35A5
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 20:17:57 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id a1e0cc1a2514c-77cfcc93ddcso1871466241.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 20:17:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=igel-co-jp.20221208.gappssmtp.com; s=20221208; t=1683688677; x=1686280677;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lPxJiRGkaCrn61lCOnrl7xgEJG8gAowFtHGu2LMXyKg=;
+        b=fvSZ7Uu0Yo4716kIlMSj10DQLtSY/mCjwhWjV7STIzlQV6M9etuqQ39oQO6TKm3Fy5
+         sPIXbIzLF/0jzyTyl1YbyjeBJ6Gao5M9PL3fP6OtlcibcYz4m7i5JMWMMsdJXYn9YEn5
+         HQBQyAH7eWtqDFhz70M1RGTfv9F4zVuoI5FJN3AVmlOoZs/mVhOLGYaOEaEKXA5A5IZM
+         lwy1tyow6sUkrQy5J+lJJ2Lh4boU8RA0I8dDwfbZ7yS5PACr/CptSnOv6FewdywsixS3
+         Ux8Fo4M1gaZE0xZU2NLXH6KB+opJP9Jf6rW8keUKfjtfj647AqyFNXtMN72RsV8mRZzO
+         iFaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683688677; x=1686280677;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lPxJiRGkaCrn61lCOnrl7xgEJG8gAowFtHGu2LMXyKg=;
+        b=BOURRdn+20kh86johCyQOywUhQWxubq11mJtFuix1xZg8eW0i7kJunO57KpOW+O0Rv
+         Bgmzh3Qtf8cpSYChRz2mUb4ys1p1ufZI6HXmwe0SrP04xsaW4SVMizYFzrcbSl7LqIs6
+         tJnQgy2QQ9+r2dv/u1BAGlNHP2Fz96jxVAaWJB010vtqc6ul2K/IycdFn9vtvs8AXD/g
+         95oXSQ++WELnIYDhPZNkN4djgOUCuH91F1AuG4Aax9+zAb7mPG10JYu8eAT18fd57Cc3
+         QkSznsRHgn8OQ3EGgoUo6D3/HL7CRJTGVqxp72QeNmKWpkOPSE/J4r2YQQEuXF5mBWW9
+         Hqtw==
+X-Gm-Message-State: AC+VfDytddKibabt5kaWoVaNoWQlXbu91eeF5+eTtWgiagt5Y7ge9Iad
+        U4Q7gFJKr3yK6f+6lOpB7GkZ2WTKkWCIGGwe6cp7Qg==
+X-Google-Smtp-Source: ACHHUZ6xRHYh9tp8qJeVLAvA9SxdlbWiYG1PastkFcumGwMdVr0Z1VGpa6akEoQNEF3m31DxYs8ZL2Z8UjNJ8c5Q7mY=
+X-Received: by 2002:a67:ad04:0:b0:42c:37fe:b810 with SMTP id
+ t4-20020a67ad04000000b0042c37feb810mr6271392vsl.21.1683688676985; Tue, 09 May
+ 2023 20:17:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+References: <20230427104428.862643-1-mie@igel.co.jp> <20230427104428.862643-4-mie@igel.co.jp>
+ <CACGkMEsjH8fA2r=0CacK8WK_sUTAcTK7SQ_VwkJpa1rSgDP0dg@mail.gmail.com>
+In-Reply-To: <CACGkMEsjH8fA2r=0CacK8WK_sUTAcTK7SQ_VwkJpa1rSgDP0dg@mail.gmail.com>
+From:   Shunsuke Mie <mie@igel.co.jp>
+Date:   Wed, 10 May 2023 12:17:46 +0900
+Message-ID: <CANXvt5r7eha_xnExsdS_4yMW8xTJxVzYhMVrXyQkGQe-_ZURBg@mail.gmail.com>
+Subject: Re: [RFC PATCH v2 3/3] PCI: endpoint: Add EP function driver to
+ provide virtio-console functionality
+To:     Jason Wang <jasowang@redhat.com>
+Cc:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>, Frank Li <Frank.Li@nxp.com>,
+        Jon Mason <jdmason@kudzu.us>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Ren Zhijie <renzhijie2@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        virtualization@lists.linux-foundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,57 +80,211 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The lifetime of object for asynchronous request packet is now maintained
-by reference counting, while current implementation of firewire-net
-releases the passed object in the handler.
+Hi Json,
+2023=E5=B9=B45=E6=9C=888=E6=97=A5(=E6=9C=88) 13:03 Jason Wang <jasowang@red=
+hat.com>:
+>
+> On Thu, Apr 27, 2023 at 6:44=E2=80=AFPM Shunsuke Mie <mie@igel.co.jp> wro=
+te:
+> >
+> > Add a new PCIe endpoint function driver that works as a pci virtio-cons=
+ole
+> > device. The console connect to endpoint side console. It enables to
+> > communicate PCIe host and endpoint.
+> >
+> > Architecture is following:
+> >
+> >  =E2=94=8C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90         =E2=94=8C=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=AC=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=90
+> >  =E2=94=82virtioe     =E2=94=82         =E2=94=82                      =
+=E2=94=82virtio      =E2=94=82
+> >  =E2=94=82console drv =E2=94=82         =E2=94=9C=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=90      =E2=94=82console drv =
+=E2=94=82
+> >  =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4         =E2=94=82=
+(virtio console=E2=94=82      =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=A4
+> >  =E2=94=82 virtio bus =E2=94=82         =E2=94=82 device)       =E2=94=
+=82=E2=97=84=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=96=BA=E2=94=82 virtio b=
+us =E2=94=82
+> >  =E2=94=9C=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4         =E2=94=9C=
+---------------=E2=94=A4      =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=A4
+> >  =E2=94=82            =E2=94=82         =E2=94=82 pci ep virtio =E2=94=
+=82                   =E2=94=82
+> >  =E2=94=82  pci bus   =E2=94=82         =E2=94=82  console drv  =E2=94=
+=82                   =E2=94=82
+> >  =E2=94=82            =E2=94=82  pcie   =E2=94=9C=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=A4                   =E2=94=
+=82
+> >  =E2=94=82            =E2=94=82 =E2=97=84=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=96=BA =E2=94=82  pci ep Bus   =E2=94=82                 =
+  =E2=94=82
+> >  =E2=94=94=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=98         =E2=94=94=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=B4=E2=94=
+=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=
+=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=94=80=E2=
+=94=80=E2=94=80=E2=94=98
+> >    PCIe Root              PCIe Endpoint
+> >
+>
+> I think it might only works for peer devices like:
+>
+> net, console or vsock.
+Could you tell me what "peer devices" means?
 
-This commit fixes the bug.
+> So there're many choices here, I'd like to know what's the reason for
+> you to implement a mediation.
+>
+> An alternative is to implement a dedicated net, console and vsock
+> driver for vringh (CAIF somehow works like this). This would have
+> better performance.
+Does it mean that the driver also functions as a network driver directly?
+>
+>
+> > This driver has two roles. The first is as a PCIe endpoint virtio conso=
+le
+> > function, which is implemented using the PCIe endpoint framework and PC=
+Ie
+> > EP virtio helpers. The second is as a virtual virtio console device
+> > connected to the virtio bus on PCIe endpoint Linux.
+> >
+> > Communication between the two is achieved by copying the virtqueue data
+> > between PCIe root and endpoint, respectively.
+> >
+> > This is a simple implementation and does not include features of
+> > virtio-console such as MULTIPORT, EMERG_WRITE, etc. As a result, each
+> > virtio console driver only displays /dev/hvc0.
+> >
+> > As an example of usage, by setting getty to /dev/hvc0, it is possible t=
+o
+> > login to another host.
+> >
+> > Signed-off-by: Shunsuke Mie <mie@igel.co.jp>
+> > ---
+> > Changes from v2:
+> > - Change to use copy functions between kiovs of pci-epf-virtio.
+> >
+> >  drivers/pci/endpoint/functions/Kconfig        |  12 +
+> >  drivers/pci/endpoint/functions/Makefile       |   1 +
+> >  drivers/pci/endpoint/functions/pci-epf-vcon.c | 596 ++++++++++++++++++
+> >  3 files changed, 609 insertions(+)
+> >  create mode 100644 drivers/pci/endpoint/functions/pci-epf-vcon.c
+> >
+> > diff --git a/drivers/pci/endpoint/functions/Kconfig b/drivers/pci/endpo=
+int/functions/Kconfig
+> > index fa1a6a569a8f..9ce2698b67e1 100644
+> > --- a/drivers/pci/endpoint/functions/Kconfig
+> > +++ b/drivers/pci/endpoint/functions/Kconfig
+> > @@ -44,3 +44,15 @@ config PCI_EPF_VIRTIO
+> >         select VHOST_RING_IOMEM
+> >         help
+> >           Helpers to implement PCI virtio Endpoint function
+> > +
+> > +config PCI_EPF_VCON
+> > +       tristate "PCI Endpoint virito-console driver"
+> > +       depends on PCI_ENDPOINT
+> > +       select VHOST_RING
+> > +       select PCI_EPF_VIRTIO
+> > +       help
+> > +         PCIe Endpoint virtio-console function implementatino. This mo=
+dule
+> > +         enables to show the virtio-console as pci device to PCIe host=
+ side, and
+> > +         another virtual virtio-console device registers to endpoint s=
+ystem.
+> > +         Those devices are connected virtually and can communicate eac=
+h other.
+> > +
+> > diff --git a/drivers/pci/endpoint/functions/Makefile b/drivers/pci/endp=
+oint/functions/Makefile
+> > index a96f127ce900..b4056689ce33 100644
+> > --- a/drivers/pci/endpoint/functions/Makefile
+> > +++ b/drivers/pci/endpoint/functions/Makefile
+> > @@ -7,3 +7,4 @@ obj-$(CONFIG_PCI_EPF_TEST)              +=3D pci-epf-te=
+st.o
+> >  obj-$(CONFIG_PCI_EPF_NTB)              +=3D pci-epf-ntb.o
+> >  obj-$(CONFIG_PCI_EPF_VNTB)             +=3D pci-epf-vntb.o
+> >  obj-$(CONFIG_PCI_EPF_VIRTIO)           +=3D pci-epf-virtio.o
+> > +obj-$(CONFIG_PCI_EPF_VCON)             +=3D pci-epf-vcon.o
+> > diff --git a/drivers/pci/endpoint/functions/pci-epf-vcon.c b/drivers/pc=
+i/endpoint/functions/pci-epf-vcon.c
+> > new file mode 100644
+> > index 000000000000..31f4247cd10f
+> > --- /dev/null
+> > +++ b/drivers/pci/endpoint/functions/pci-epf-vcon.c
+> > @@ -0,0 +1,596 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * PCI Endpoint function driver to impliment virtio-console device
+> > + * functionality.
+> > + */
+> > +#include <linux/pci-epf.h>
+> > +#include <linux/virtio_ids.h>
+> > +#include <linux/virtio_pci.h>
+> > +#include <linux/virtio_console.h>
+> > +#include <linux/virtio_ring.h>
+> > +
+> > +#include "pci-epf-virtio.h"
+> > +
+> > +static int virtio_queue_size =3D 0x100;
+> > +module_param(virtio_queue_size, int, 0444);
+> > +MODULE_PARM_DESC(virtio_queue_size, "A length of virtqueue");
+> > +
+> > +struct epf_vcon {
+> > +       /* To access virtqueues on remote host */
+> > +       struct epf_virtio evio;
+> > +       struct vringh_kiov *rdev_iovs;
+> > +
+> > +       /* To register a local virtio bus */
+> > +       struct virtio_device vdev;
+> > +
+> > +       /* To access virtqueus of local host driver */
+> > +       struct vringh *vdev_vrhs;
+> > +       struct vringh_kiov *vdev_iovs;
+> > +       struct virtqueue **vdev_vqs;
+> > +
+> > +       /* For transportation and notification */
+> > +       struct workqueue_struct *task_wq;
+> > +       struct work_struct raise_irq_work, rx_work, tx_work;
+> > +
+> > +       /* To retain virtio features. It is commonly used local and rem=
+ote. */
+> > +       u64 features;
+> > +
+> > +       /* To show a status whether this driver is ready and the remote=
+ is connected */
+> > +       bool connected;
+> > +};
+> > +
+> > +enum {
+> > +       VCON_VIRTQUEUE_RX,
+> > +       VCON_VIRTQUEUE_TX,
+> > +       // Should be end of enum
+> > +       VCON_VIRTQUEUE_NUM
+> > +};
+>
+> It would be better if we can split the console specific thing out,
+> then it allows us to do ethernet and vsock in the future.
+I'm planning to implement each virtio device in a separate file.
+https://lwn.net/Articles/922124/
 
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://lore.kernel.org/lkml/Y%2Fymx6WZIAlrtjLc@workstation/
-Fixes: 13a55d6bb15f ("firewire: core: use kref structure to maintain lifetime of data for fw_request structure")
-Signed-off-by: Takashi Sakamoto <o-takashi@sakamocchi.jp>
----
- drivers/firewire/net.c | 21 +++++++++++----------
- 1 file changed, 11 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/firewire/net.c b/drivers/firewire/net.c
-index af22be84034b..538bd677c254 100644
---- a/drivers/firewire/net.c
-+++ b/drivers/firewire/net.c
-@@ -706,21 +706,22 @@ static void fwnet_receive_packet(struct fw_card *card, struct fw_request *r,
- 	int rcode;
- 
- 	if (destination == IEEE1394_ALL_NODES) {
--		kfree(r);
--
--		return;
--	}
--
--	if (offset != dev->handler.offset)
-+		// Although the response to the broadcast packet is not necessarily required, the
-+		// fw_send_response() function should still be called to maintain the reference
-+		// counting of the object. In the case, the call of function just releases the
-+		// object as a result to decrease the reference counting.
-+		rcode = RCODE_COMPLETE;
-+	} else if (offset != dev->handler.offset) {
- 		rcode = RCODE_ADDRESS_ERROR;
--	else if (tcode != TCODE_WRITE_BLOCK_REQUEST)
-+	} else if (tcode != TCODE_WRITE_BLOCK_REQUEST) {
- 		rcode = RCODE_TYPE_ERROR;
--	else if (fwnet_incoming_packet(dev, payload, length,
--				       source, generation, false) != 0) {
-+	} else if (fwnet_incoming_packet(dev, payload, length,
-+					 source, generation, false) != 0) {
- 		dev_err(&dev->netdev->dev, "incoming packet failure\n");
- 		rcode = RCODE_CONFLICT_ERROR;
--	} else
-+	} else {
- 		rcode = RCODE_COMPLETE;
-+	}
- 
- 	fw_send_response(card, r, rcode);
- }
--- 
-2.37.2
 
+> Thanks
+>
+Best regards,
+Shunsuke
