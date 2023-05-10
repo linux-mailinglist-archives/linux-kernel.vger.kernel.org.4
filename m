@@ -2,64 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E4E6FDB99
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 042AD6FDB9F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:29:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236605AbjEJKYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 06:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43902 "EHLO
+        id S236635AbjEJK3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 06:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236499AbjEJKYW (ORCPT
+        with ESMTP id S236533AbjEJK3l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 06:24:22 -0400
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 400092D7E
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:24:21 -0700 (PDT)
-Received: by mail-ua1-x933.google.com with SMTP id a1e0cc1a2514c-76ee8f09692so2368560241.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 03:24:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683714260; x=1686306260;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=x7fqRHvgnRvB5mh9CqhIQkHQtj78V1mjTrY+n0K4wyM=;
-        b=H3ZAqCri6LjaN5x36ti1pRjQk5EnhBXVodTDpqXpjq9B9H3jJ1zIjjviz/Zt6KVvUx
-         4ExsZwVU4QLl9VbqNJsOsKsKDW6N3AyCV/vynQDapHKL1XjD/ell+Vu9GBXgTNHK9/jv
-         E/S2eZl6iPVL9ZRIgbg3DNorTArQ9Z5Noquq85dbehdqtjIyTifsKwaPeTiLdH0QsWSi
-         ayxE2P9iu5AyeAfZLAffCW04bKauTbwG6UR5YPZZYQFQg4ANaVCZUxYzs6XLY9iyBmp5
-         SIrRP6llIKdkNt0y8nxpYHgaoH/t5xS5ju3sHpVn94GV0nbhsdjWbaRzCkF/nHDOVKC1
-         U06w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683714260; x=1686306260;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=x7fqRHvgnRvB5mh9CqhIQkHQtj78V1mjTrY+n0K4wyM=;
-        b=chMyCXtNun6QB9rDH8HiZmAKY05yK0OTxFd/kZGT56EgGy6OnYsooIjhldlIWx39yQ
-         eLS84r/GS2iLHp4cZvS6c4Jf7SaWHHFXo1Z2zXAaBvoMn22YXDg/svgwbibuCHLZpWaK
-         vBJid07xPOdLmFIqYsZR/VZ9OaBgHy2tyc+Xt0Gt40M6mk8CH0zj84Om64ccmjtP+V6i
-         kvr43CM294hCIsX8ifJCb0gFi3aN9JA0t86PSt+R+ZgF1Es9nA7Ln1iVYSGB+Gh0tc1K
-         IEwVAmuMRoZmtkFq1afC7S/CP5KZQ6bXWY9ZXqWLwgE5r6F9ASBxPZ/safqgkCmc0WYs
-         FIrA==
-X-Gm-Message-State: AC+VfDzRRN5x0nY5hl4RVQsWBHOV+z4U/qkba5mtYF9c+p2DlUmVGM+l
-        S0N6a+yL9FxnBnhAbdNJClklbcqASqrBjxlB4tZQvQ==
-X-Google-Smtp-Source: ACHHUZ5IaRFRz709QDQCQuGIQdmAmCBNQHnaBbFFxnKsy2JE8rNTtcqDWC0Y+zspWRYlHB2CiK3dgoG8Uc0s6adZb00=
-X-Received: by 2002:a05:6102:a32:b0:430:7548:c049 with SMTP id
- 18-20020a0561020a3200b004307548c049mr5502855vsb.7.1683714260420; Wed, 10 May
- 2023 03:24:20 -0700 (PDT)
+        Wed, 10 May 2023 06:29:41 -0400
+Received: from phobos.denx.de (phobos.denx.de [85.214.62.61])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E6F3582;
+        Wed, 10 May 2023 03:29:40 -0700 (PDT)
+Received: from [127.0.0.1] (p578adb1c.dip0.t-ipconnect.de [87.138.219.28])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits))
+        (No client certificate requested)
+        (Authenticated sender: marex@denx.de)
+        by phobos.denx.de (Postfix) with ESMTPSA id 1CE4A846B6;
+        Wed, 10 May 2023 12:29:38 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=denx.de;
+        s=phobos-20191101; t=1683714578;
+        bh=R1m1mR/Dho8oLQpQRXJtga5P52rmazCagd9Sof4muII=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kVCNbeQg1T58bukb36yrFqqUtuKH/5e/gqQXkfagmRy4z5qtiCzlgqvX5T9wry3jq
+         bWsniRCc2Pt3/oIPNoSq4fH64Wozc77sp5H/3EqBLiMi7W1Lh4n6nKyFQFkU76Xzx/
+         84pxAy8NgP6KZlJDIc/c+8ou/YsQWNhv8Lp3vnPgNwNrJvscd8L33Uqg3w7jsj7C71
+         u2JAX67jmtClB8ygwB1bB3oJFiL+KF0Um5DuVrGy8thZmgh2Pwpi2YNt71zmOsaXOo
+         rDdeybKpO2lzinRki0xc5qhrko7FuY/YLL+2wBe7NfhirO22TMtluJT6kp4R8Jxotu
+         xtdxJ+4v5br7w==
+Message-ID: <b917dd8a-489a-82b4-fd64-81029db594c6@denx.de>
+Date:   Wed, 10 May 2023 12:29:37 +0200
 MIME-Version: 1.0
-References: <20230505184318.1355446-1-etienne.carriere@linaro.org>
-In-Reply-To: <20230505184318.1355446-1-etienne.carriere@linaro.org>
-From:   Sumit Garg <sumit.garg@linaro.org>
-Date:   Wed, 10 May 2023 15:54:09 +0530
-Message-ID: <CAFA6WYOfFm9R2GynH0bN7hQ4t81T3hkJX5JurCUDG8oOU-RZ4w@mail.gmail.com>
-Subject: Re: [PATCH] char: tpm: ftpm_tee: use kernel login identifier
-To:     Etienne Carriere <etienne.carriere@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 2/3] dt-bindings: arm: fsl: Enumerate Emtop SOM
+To:     Himanshu Bhavani <himanshu.bhavani@siliconsignals.io>,
+        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Fabio Estevam <festevam@denx.de>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Stefan Wahren <stefan.wahren@i2se.com>,
+        Jesse Taube <mr.bossman075@gmail.com>,
+        Li Yang <leoyang.li@nxp.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230510083311.3692416-1-himanshu.bhavani@siliconsignals.io>
+ <f848adde-895e-18d5-0e9a-a29de24ae861@denx.de>
+ <BM1PR01MB4899814FFE961006E01E71D09A779@BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM>
+Content-Language: en-US
+From:   Marek Vasut <marex@denx.de>
+In-Reply-To: <BM1PR01MB4899814FFE961006E01E71D09A779@BM1PR01MB4899.INDPRD01.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Virus-Scanned: clamav-milter 0.103.8 at phobos.denx.de
+X-Virus-Status: Clean
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -68,41 +70,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Etienne,
+On 5/10/23 11:13, Himanshu Bhavani wrote:
+> Hi Marek Vasut
 
-On Sat, 6 May 2023 at 00:14, Etienne Carriere
-<etienne.carriere@linaro.org> wrote:
->
-> Changes fTPM TEE driver to open the TEE session with REE kernel login
-> identifier rather than public login. This is needed in case fTPM service
-> it denied to user land application and restricted to kernel operating
-> system services only.
+Hi,
 
-This is a valid restriction to avoid any unintended use of fTPM by
-user-space. But has the corresponding patch landed in fTPM TA which
-would enforce this restriction?
+> Yes, it is SOM-IMX8MMLPD4.
 
--Sumit
-
->
-> Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> ---
->  drivers/char/tpm/tpm_ftpm_tee.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
-> index 528f35b14fb6..6d32e260af43 100644
-> --- a/drivers/char/tpm/tpm_ftpm_tee.c
-> +++ b/drivers/char/tpm/tpm_ftpm_tee.c
-> @@ -241,7 +241,7 @@ static int ftpm_tee_probe(struct device *dev)
->         /* Open a session with fTPM TA */
->         memset(&sess_arg, 0, sizeof(sess_arg));
->         export_uuid(sess_arg.uuid, &ftpm_ta_uuid);
-> -       sess_arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
-> +       sess_arg.clnt_login = TEE_IOCTL_LOGIN_REE_KERNEL;
->         sess_arg.num_params = 0;
->
->         rc = tee_client_open_session(pvt_data->ctx, &sess_arg, NULL);
-> --
-> 2.25.1
->
+In that case, have a look at e.g. this "dh,imx8mp" system. That's also a 
+SoM and a carrier board (PDK3). Notice the structure, where both carrier 
+board compatible and SoM compatible and imx8mp compatible are listed in 
+the DT. I suspect you want to reproduce the same -- include both SoM and 
+carrier board compatible string.
