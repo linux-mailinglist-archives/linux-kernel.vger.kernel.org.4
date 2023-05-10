@@ -2,164 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA8E6FE4D5
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:11:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF76D6FE4D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236092AbjEJULb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:11:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
+        id S236228AbjEJUMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236154AbjEJUL2 (ORCPT
+        with ESMTP id S236161AbjEJUMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:11:28 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7909D59CA;
-        Wed, 10 May 2023 13:11:26 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-75771dd7242so249559685a.1;
-        Wed, 10 May 2023 13:11:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683749485; x=1686341485;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DX6xfM+tgjnrZohY3AHnsDjOHFn31AfRA9AFGJzcssU=;
-        b=qIEuaBEAG910FWeZUW6fjZGGuqPORIz0qsUK2jOZKqYn+xvlv/tphXBC+vl8TSYlvJ
-         7dHyPAcdWJWXnn52pz8QLk9+fJj3MZy3+R5eK5jnqhOxE2UvHU3D49Q56vJgyKH8xhYe
-         5s6+H2aDKh6tq/7JLQPn1pddQ9J6Eggx0Vjw48/s/mxD0/RJYgsmjJn+hUBS2f5kT2bB
-         Ywzk1MuOKxvKIlUO9sPFAxQCJs8xEixGbzQ56iACz9uihhdm4qKEpIdQrFw7RXttRfc4
-         JETJF5fpLHuDAwFgxCkvtyWvhvwquhSwvSTpYSKnoU5QdQbtvBHDCdc0jM+KdGWSjYG3
-         znYA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683749485; x=1686341485;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DX6xfM+tgjnrZohY3AHnsDjOHFn31AfRA9AFGJzcssU=;
-        b=Pk3e8z11gMVuqe68BTTDBjcwI6WkNojNWGwepGRDUt/Qxl/246fHKb0+ErUFYJMvjT
-         vn8UjwKphRXsGtaEJoxMKX4B2vC/TWXrIZCIEykCb836KDgUsTzTNO35Si/OJNpWNXc+
-         dLQPbeZpghVOQ75l/q6kJlSs9aGVMQ6NM2nczxXe7c20OEp9w34GsSBb9JmfFpoZ+SJF
-         vdRQ3dCiezE1wDXRPPrXMjJzB34LMRB7dnEOFOvG69rvDWyzz0mhecxTQEI+dKEruG7b
-         3N/6a0lk47SnOHuMmMwppMToGlA6K09LmU2Y4tOguZrScNe3O/qe25rARQla91bxF6BA
-         kU2A==
-X-Gm-Message-State: AC+VfDzp31aESG7sFkd/rDu08MJDkRRGkq/yRnDIHZMswnKWOdNPjEwf
-        BZm59MhVSy5Q3JbQXyCJWw==
-X-Google-Smtp-Source: ACHHUZ7ovXfUg5FlhQiZKO42A2N09WOqM43bDib3z1sJr6bzJoGR6eSLyGevxj9gvgLkv//ofyi+/A==
-X-Received: by 2002:ac8:7d4f:0:b0:3f3:9502:6152 with SMTP id h15-20020ac87d4f000000b003f395026152mr14936577qtb.49.1683749485484;
-        Wed, 10 May 2023 13:11:25 -0700 (PDT)
-Received: from C02FL77VMD6R.googleapis.com ([2600:1700:d860:12b0:c0d6:9de9:187f:dba])
-        by smtp.gmail.com with ESMTPSA id n18-20020ae9c312000000b0074e003c55f0sm4197678qkg.102.2023.05.10.13.11.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 13:11:24 -0700 (PDT)
-Date:   Wed, 10 May 2023 13:11:19 -0700
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Vlad Buslov <vladbu@mellanox.com>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
-Subject: Re: [PATCH net 6/6] net/sched: qdisc_destroy() old ingress and
- clsact Qdiscs before grafting
-Message-ID: <ZFv6Z7hssZ9snNAw@C02FL77VMD6R.googleapis.com>
-References: <cover.1683326865.git.peilin.ye@bytedance.com>
- <e6c4681dd9205d702ae2e6124e20c6210520e76e.1683326865.git.peilin.ye@bytedance.com>
- <20230508183324.020f3ec7@kernel.org>
+        Wed, 10 May 2023 16:12:12 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DF3AE57;
+        Wed, 10 May 2023 13:12:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:MIME-Version:
+        Message-Id:Date:Subject:Cc:To:From:Content-Type:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-To:Resent-Cc:
+        Resent-Message-ID:In-Reply-To:References;
+        bh=yt/SgfNHFPPKEqm/TapniQmvPSvHMYvIL3rCl5jRo8o=; t=1683749530; x=1684959130; 
+        b=QyhS8AmudU31KYoDjcf8Cx+FwyDo54EYwwzu3/8I+Wq2ZN/DVsQ+S0/A6wSWNU+QqkYeLda2skO
+        NNXeyjwzhH6Soh3gr8jmbfPmd3i7dkJR+qg/zoIA4oHkplUv8Ru5s719HShCBPpJo0EmRtVN489v4
+        Ia1bvvi6cVbWGS+qgBAcALUIQm0f+Nholj9MWl9Mu7uWr+Odo8MQX6xN8oZ2jB6Xh47SSrgssDITL
+        /Rj+OEcBjCqt5DPlCF64lp4adWBZkLnwqh++11HsJxwJ3wK0b+drqWt99bogf01dzMc+S+ju2yDtM
+        4abvGNzQ/LOKa6IYWLTyyY4cFhr9/Fv4ASZQ==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1pwqAS-005aH5-1n;
+        Wed, 10 May 2023 22:12:08 +0200
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-wireless@vger.kernel.org, Tejun Heo <tj@kernel.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>
+Subject: [RFC PATCH v2 0/3] wifi locking simplification
+Date:   Wed, 10 May 2023 22:12:02 +0200
+Message-Id: <20230510201205.308542-1-johannes@sipsolutions.net>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230508183324.020f3ec7@kernel.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 06:33:24PM -0700, Jakub Kicinski wrote:
-> Great analysis, thanks for squashing this bug.
+The rationale etc. didn't change in v2, so see
+https://lore.kernel.org/r/20230510160428.175409-1-johannes@sipsolutions.net
 
-Thanks, happy to help!
+In v2 I dropped the workqueue locking patch and consequently
+made new wiphy_work and wiphy_delayed_work things.
 
-> Have you considered creating a fix more localized to the miniq
-> implementation? It seems that having per-device miniq pointers is
-> incompatible with using reference counted objects. So miniq is
-> a more natural place to solve the problem. Otherwise workarounds
-> in the core keep piling up (here qdisc_graft()).
->
-> Can we replace the rcu_assign_pointer in (3rd) with a cmpxchg()?
-> If active qdisc is neither a1 nor a2 we should leave the dev state
-> alone.
+I kept the pause/resume for the workqueue because not that I
+had it, it seemed simpler than keeping track of "should it be
+paused" in a separate bool variable to not queue the work when
+it shouldn't be ...
 
-Yes, I have tried fixing this in mini_qdisc_pair_swap(), but I am afraid
-it is hard:
+Still just serves to illustrate things, I didn't really test it.
 
-(3rd) is called from ->destroy(), so currently it uses RCU_INIT_POINTER()
-to set dev->miniq_ingress to NULL.  It will need a logic like:
+johannes
 
-  I am A.  Set dev->miniq_ingress to NULL, if and only if it is a1 or a2,
-  and do it atomically.
-
-We need more than a cmpxchg() to implement this "set NULL iff a1 or a2".
-Additionally:
-
-On Fri,  5 May 2023 17:16:10 -0700 Peilin Ye wrote:
->   Thread 1 creates ingress Qdisc A (containing mini Qdisc a1 and a2), then
->   adds a flower filter X to A.
-> 
->   Thread 2 creates another ingress Qdisc B (containing mini Qdisc b1 and
->   b2) to replace A, then adds a flower filter Y to B.
-> 
->  Thread 1               A's refcnt   Thread 2
->   RTM_NEWQDISC (A, RTNL-locked)
->    qdisc_create(A)               1
->    qdisc_graft(A)                9
-> 
->   RTM_NEWTFILTER (X, RTNL-lockless)
->    __tcf_qdisc_find(A)          10
->    tcf_chain0_head_change(A)
->    mini_qdisc_pair_swap(A) (1st)
->             |
->             |                         RTM_NEWQDISC (B, RTNL-locked)
->            RCU                   2     qdisc_graft(B)
->             |                    1     notify_and_destroy(A)
->             |
->    tcf_block_release(A)          0    RTM_NEWTFILTER (Y, RTNL-lockless)
->    qdisc_destroy(A)                    tcf_chain0_head_change(B)
->    tcf_chain0_head_change_cb_del(A)    mini_qdisc_pair_swap(B) (2nd)
->    mini_qdisc_pair_swap(A) (3rd)                |
->            ...                                 ...
-
-Looking at the code, I think there is no guarantee that (1st) cannot
-happen after (2nd), although unlikely?  Can RTNL-lockless RTM_NEWTFILTER
-handlers get preempted?
-
-If (1st) happens later than (2nd), we will need to make (1st) no-op, by
-detecting that we are the "old" Qdisc.  I am not sure there is any
-(clean) way to do it.  I even thought about:
-
-  (1) Get the containing Qdisc of "miniqp" we are working on, "qdisc";
-  (2) Test if "qdisc == qdisc->dev_queue->qdisc_sleeping".  If false, it
-      means we are the "old" Qdisc (have been replaced), and should do
-      nothing.
-
-However, for clsact Qdiscs I don't know if "miniqp" is the ingress or
-egress one, so I can't container_of() during step (1) ...
-
-Eventually I created [5,6/6].  It is a workaround indeed, in the sense
-that it changes sch_api.c to avoid a mini Qdisc issue.  However I think it
-makes the code correct in a relatively understandable way, without slowing
-down mini_qdisc_pair_swap() or sch_handle_*gress().
-
-Thanks,
-Peilin Ye
 
