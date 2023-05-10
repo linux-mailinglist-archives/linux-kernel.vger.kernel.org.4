@@ -2,143 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 148536FE528
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:32:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BA0F76FE52A
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:33:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjEJUcX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56744 "EHLO
+        id S231163AbjEJUdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:33:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236531AbjEJUcS (ORCPT
+        with ESMTP id S229745AbjEJUdt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:32:18 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C757D97;
-        Wed, 10 May 2023 13:32:07 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34AKRTbY005331;
-        Wed, 10 May 2023 20:31:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=0pyAYYii88PNocNO2ga6rvzdS7SSDdvLuzat7AJ/Eoo=;
- b=gHrBE/DjWZ159+Pa7hwpFDVUEoZqnAYO+Tvo6uIp9+E2C3wUt3r6DK3/ymPPJytGuhCk
- YO5J7Eijl1CEFVs6a3TKYleeRp1usCjrbyLA/3wJAb1u06XYDRv/xrTbqT4wyH62tJqq
- pmKcqAtif+HsQd4j/OqjORUfKJAPiikGht39fSOj49X0KG0XjY/sKwsSv4quOPd3s5f8
- vwBt7Spah2UckW+HVc1u9gFD2K2SbPiUendgWMYPOEwExVbqDegXzRbMsCkxeSGfDRyF
- 577e+WMvyB43ZFACAIT+iKN8QGAz18YOrx7X6mKm/Jb7c30QlhJVwSIDuCT9/BOQKwJY Rw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qgdd9rpe4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 20:31:58 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34AKVMZB010765
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 20:31:22 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 10 May 2023 13:31:21 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <quic_jesszhan@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v1 2/2] drm/msm/dp: add mutex to protect internal_hpd against race condition between different threads
-Date:   Wed, 10 May 2023 13:31:05 -0700
-Message-ID: <1683750665-8764-3-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1683750665-8764-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1683750665-8764-1-git-send-email-quic_khsieh@quicinc.com>
+        Wed, 10 May 2023 16:33:49 -0400
+Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2085.outbound.protection.outlook.com [40.107.20.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5109D4ED3;
+        Wed, 10 May 2023 13:33:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WGVE4uamoHCMiLRGuM0tSV70kWIZKxSszj8znX5Ze60tx3TCPrL1YE0Igp+Cu/wBT46eynkDEHt/sdn8uDblbfIuxGWFOYRJqwTCIBgo13fgHiwlRiFbnHyRXOBA47mwY+jggrbnvE/s2YSnY+iTt4MukDTxupK9pCOF659nEZvG8vI0gHePBou4b8InctMJxqlJ6wM0tQwhCUDgS686wyK6zbKb9W4tirmfdhTw+1qXq/T97wfWZNBRBI+gKpk5yemE0Xjp4tmpnndsk/CqaZhu2IVYaJRFk+1iZ4xFZhR+0gkXNZpZJ7FhVdZq976QCiZ3sz/T9YgIuDaF8HlLgA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UArRzrLtYhAwJBxof5odgeplXhAfKOBD4VW90ibkiuE=;
+ b=ksgE4cwKKakjS86UEAxEH/pUCCbkMWhH7hsPR2RRnxNuUCOTL6eWiefEyaKBhofZca7XKShB2yh9dH/rgpxFkvCPjgEL7a7ijYdmS8ioIOvhZgrO8EG6UytBpNEL4fj/HEIiQX5dmvj4owVwprLcYzLfuiv/PJyE8rHNvhJXBE7CKBP9fudzQ4JIn8t8P5w508dz3oJzVeI1gqQtGEKNIoZB49BPUqsURNtANLpeef1NSiYb8j7a0Rg26ORlYwxi9WYQQS2w+9E36J4DiCLkmS16f0IhuysUvVcYJpnR69WePy4U/FakqXQo+I1GVwy2hEiIkQ9KzTLyrPha+hsPIg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UArRzrLtYhAwJBxof5odgeplXhAfKOBD4VW90ibkiuE=;
+ b=rZ20jrgqMQCVuazqPnav9G2X9ZXrg7cSMIAf1mfcUzFwo3cvUh4m+x+N0kpLpgFSmGuU3uibp/aIm5Su0iZ7WdukP8Npvj/EXEnYqiKcR1cFZ9oD3MYcwlfSP+7pBkovQQVDWEr9AIeRdJVX6DkiKSYUo0qql2WPkvctnAjbF5A=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
+ by AM8PR04MB7348.eurprd04.prod.outlook.com (2603:10a6:20b:1db::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Wed, 10 May
+ 2023 20:33:37 +0000
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::245a:9272:b30a:a21c]) by AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::245a:9272:b30a:a21c%3]) with mapi id 15.20.6363.033; Wed, 10 May 2023
+ 20:33:37 +0000
+Date:   Wed, 10 May 2023 23:33:33 +0300
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>
+Subject: Re: [PATCH net v1] net: mscc: ocelot: fix stat counter register
+ values
+Message-ID: <20230510203333.473u4sxwbnkwv6kj@skbuf>
+References: <20230510044851.2015263-1-colin.foster@in-advantage.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230510044851.2015263-1-colin.foster@in-advantage.com>
+X-ClientProxiedBy: AM8P191CA0017.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21a::22) To AM0PR04MB6452.eurprd04.prod.outlook.com
+ (2603:10a6:208:16d::21)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: hgXO2gphRERLgHvcLi_l65kXXkJENZr_
-X-Proofpoint-ORIG-GUID: hgXO2gphRERLgHvcLi_l65kXXkJENZr_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=999 mlxscore=0 adultscore=0 clxscore=1015 malwarescore=0
- priorityscore=1501 phishscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305100167
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|AM8PR04MB7348:EE_
+X-MS-Office365-Filtering-Correlation-Id: be7897cc-1c83-4ddb-37b9-08db5195d4e1
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qZrm/a/znRJEhJrh686h9qwv5Fa8D1JQNkrg4cJ3uuL7yG6D79ARiMEEZ9dVfXdHNloFB4ZBFtpkm0ox1YHVogHv+ksBxFjqNAWEmY3ffZpv4IjpDiXuQHIrhvuSGu87jnaBKHWf+4GdEO5pKzj27+yWOGB3UpTALszPucew7V7y5tIFhbQqILCUQ3ZJKQpngbLNzMVPKkfvAYAj8/VA5USl3bLZ1m5QDtUXlaQrlbgEiznHq40R/Gxbc9sF9DvYrMfHbBpkq9RN8/7+1z4JiouUaFKf89ZKeHDMiiARb3ZTxwnlD7GetTUD5Rx36DlnPXGrbNPePfp/KhHOjzEn6xjMpOfuEY1OuwqjIFn/vqs1q3LKWa0Rbtgm91yE56129mw+vNfHmxZwXjz5v+IdhqStDgl2KKqL8u6b9AcnilWRJ2tP2NCfQJR0wDMess6k4sE46zYPN9qGtPGfKtg/P2i1HX+YAVRUVsW8KrrOxudCs9hQJyf699CJ5DF3GqCQyXVWOF9sfOSnoGavUPJrmDsbY4lHuD7vLf461uBc4OuWXzSgaEFGuUBTDjS0U+tv
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(346002)(39860400002)(376002)(136003)(396003)(366004)(451199021)(86362001)(54906003)(316002)(66476007)(66946007)(66556008)(4326008)(6916009)(478600001)(6486002)(33716001)(41300700001)(4744005)(44832011)(8676002)(5660300002)(8936002)(2906002)(38100700002)(6506007)(186003)(1076003)(6512007)(9686003)(26005)(83380400001)(6666004);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YH78ePjivoqawQSDr4Utljish/3HaW09xtzShWaVJeGiKJV9e2lSY/B1KiuO?=
+ =?us-ascii?Q?TjGzx8iWPtLDYk7pQpmeftL86W7f4eCvqteSvkTuo5lp2EJ4/H9n7yPUZbQy?=
+ =?us-ascii?Q?unZq/WAswupk3I7huKsKrrCq9dGKQbPdrwnCPSq8atJ0nmPFkCSEApPx+7EF?=
+ =?us-ascii?Q?zihCge0hblRhcHLmBrVgj0fj/k0C7ufs8wbltBVrSaVcntXpv33wlKDV5YV6?=
+ =?us-ascii?Q?qS38tsaXhTxLicm7UhbgVQGvog9rXaXTkpzahsVlHiTGthHA31a0XlXY++wt?=
+ =?us-ascii?Q?oxG8ACXe7fuWAve77vSCi0XLI4wcB+SytlZ4IojtLmm4TGjCW/Mue65k3hRt?=
+ =?us-ascii?Q?2r/x2lBPyoSS8EmfTQxQd77PDmSqK2r/mXzg18p84baaXsHHj4yBwuNzAkDS?=
+ =?us-ascii?Q?aOu8nCI8Pi/EXq/7A3rD/N54LanTGaK3YREK6uq6HvJbLNRvIH3FxRw8cR2e?=
+ =?us-ascii?Q?3m0qg1Eld92DqNB882qesU069OV4rWtb+7rIDOv/IGobMUJ+xmzd3pHf57rT?=
+ =?us-ascii?Q?b2M9oAs3MrjYJe3yH3X+CP3X5vuoBJovl5ujOs2xieMDVqTbjdhiIEZQNbHv?=
+ =?us-ascii?Q?z0t+VgV6QpTc/vDgT3aSJRpENpe9AFOyPN4ki4AoVR1ok//JZkjHPmE5PRSn?=
+ =?us-ascii?Q?PEgyrpdUNYkwbrtzYHvQaM/bsgaM+UiBPRLZIyyIfqVluY2xOsiC3v2WH25B?=
+ =?us-ascii?Q?5mMqrC7oKILGumhE2Glm7cin4tU5adXHbvU0iCcyO0pYEb8NYcOVr6ZbhToh?=
+ =?us-ascii?Q?TTtHibHMCM2F3itCwHROG5Qur/ylLrF+tDykfiMer2hbiM0APKCQykUnGdAz?=
+ =?us-ascii?Q?QGhlacDs/8mIHEKH88t0woCuQ27kU33g6fg8qBWeslRNJJAEiI4NExadJ4DS?=
+ =?us-ascii?Q?LLYXE3AiIkFg4G68WSNL1kETKsJwJHeFdMUM6jCL8zmniH9IM1g0EurPEDe6?=
+ =?us-ascii?Q?WKcq/G6iIOPHuwpTOkhZ9nv+iyeN/UqA7zA6rCS2ShsBRq9M1YYfBQNUV96e?=
+ =?us-ascii?Q?IJxJ1L5KJp9gYQvRAOwPIQ87yw+Oj9KRh+yCJ8qEau807HfRtKv8CRAh04Sj?=
+ =?us-ascii?Q?b1HE4ByRBHfNzxocVMAFBPzBRLQg5qXaenAhqpVEPq4VxzMA+9VLLnLufqS9?=
+ =?us-ascii?Q?LfjWnLlnt/x1eMHjaNNV4U1KlMva9tCEldgdZqw8wbpw2sdPcL058C00Up1k?=
+ =?us-ascii?Q?X0BPphBirKgjX7EqjYxQ7gnqXRpjBqbre2vH05v88Fvz7yKthFafmy0RUDAF?=
+ =?us-ascii?Q?m+9hoJdkU/1uq/aqDVG2tqC+f+sppkymBS+wM6zSkCLbYRX8PckWMV55plkg?=
+ =?us-ascii?Q?SIF8rcA2wVjputHa4DsJRSVjOyxZO+e4s6CSToyoJ+RHrJHpi30YXsDLdHq4?=
+ =?us-ascii?Q?ln7+hVw5N3BPtg73u40MYZOIukz6amTESzDnrlHd2KL+N/4Ix5A6Wezfbxd1?=
+ =?us-ascii?Q?4buJgkGpqUTFcwzc19FbeyRbSYCs482sS4oZ0+2ArJPwvfQp3IjlYueVU2ps?=
+ =?us-ascii?Q?KYD434QWu5HT0++fGonDBf7zvm2NDRzzp7iZ7Y9zRmM1RkFzQhoQIhkoe9zM?=
+ =?us-ascii?Q?mqO7ZGKWoz7zuER2ct7BzPvXDFvCL8gMN12iD/DjklxNCe/JP2hRXCpj6tWv?=
+ =?us-ascii?Q?Yw=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: be7897cc-1c83-4ddb-37b9-08db5195d4e1
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 20:33:36.8948
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: V6zyArzfX9ED8cg9cVzFhAYBexjoLbDii6EPycJW+c84BsZozICR/MffLrOe7EOPkHxXtARBFHa9aqKLjTiAEw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7348
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Intrenal_hpd is referenced by event thread but set by drm bridge callback
-context. Add mutex to protect internal_hpd to avoid conflicts between
-threads.
+On Tue, May 09, 2023 at 09:48:51PM -0700, Colin Foster wrote:
+> Commit d4c367650704 ("net: mscc: ocelot: keep ocelot_stat_layout by reg
+> address, not offset") organized the stats counters for Ocelot chips, namely
+> the VSC7512 and VSC7514. A few of the counter offsets were incorrect, and
+> were caught by this warning:
+> 
+> WARNING: CPU: 0 PID: 24 at drivers/net/ethernet/mscc/ocelot_stats.c:909
+> ocelot_stats_init+0x1fc/0x2d8
+> reg 0x5000078 had address 0x220 but reg 0x5000079 has address 0x214,
+> bulking broken!
+> 
+> Fix these register offsets.
+> 
+> Fixes: d4c367650704 ("net: mscc: ocelot: keep ocelot_stat_layout by reg address, not offset")
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> ---
 
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
----
- drivers/gpu/drm/msm/dp/dp_display.c | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
 
-diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-index 71aa944..b59ea7a 100644
---- a/drivers/gpu/drm/msm/dp/dp_display.c
-+++ b/drivers/gpu/drm/msm/dp/dp_display.c
-@@ -1792,11 +1792,13 @@ void dp_bridge_hpd_enable(struct drm_bridge *bridge)
- 
- 	dp = container_of(dp_display, struct dp_display_private, dp_display);
- 
-+	mutex_lock(&dp->event_mutex);
- 	dp_display->internal_hpd = true;
- 	dp_catalog_hpd_config_intr(dp->catalog,
- 				DP_DP_HPD_PLUG_INT_MASK |
- 				DP_DP_HPD_UNPLUG_INT_MASK,
- 				true);
-+	mutex_unlock(&dp->event_mutex);
- }
- 
- void dp_bridge_hpd_disable(struct drm_bridge *bridge)
-@@ -1807,11 +1809,13 @@ void dp_bridge_hpd_disable(struct drm_bridge *bridge)
- 
- 	dp = container_of(dp_display, struct dp_display_private, dp_display);
- 
-+	mutex_lock(&dp->event_mutex);
- 	dp_catalog_hpd_config_intr(dp->catalog,
- 				DP_DP_HPD_PLUG_INT_MASK |
- 				DP_DP_HPD_UNPLUG_INT_MASK,
- 				false);
- 	dp_display->internal_hpd = false;
-+	mutex_unlock(&dp->event_mutex);
- }
- 
- void dp_bridge_hpd_notify(struct drm_bridge *bridge,
-@@ -1822,8 +1826,12 @@ void dp_bridge_hpd_notify(struct drm_bridge *bridge,
- 	struct dp_display_private *dp = container_of(dp_display, struct dp_display_private, dp_display);
- 
- 	/* Without next_bridge interrupts are handled by the DP core directly */
--	if (dp_display->internal_hpd)
-+	mutex_lock(&dp->event_mutex);
-+	if (dp_display->internal_hpd) {
-+		mutex_unlock(&dp->event_mutex);
- 		return;
-+	}
-+	mutex_unlock(&dp->event_mutex);
- 
- 	if (!dp->core_initialized) {
- 		drm_dbg_dp(dp->drm_dev, "not initialized\n");
--- 
-The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-a Linux Foundation Collaborative Project
-
+Thanks!
