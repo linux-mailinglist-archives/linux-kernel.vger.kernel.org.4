@@ -2,135 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E00E06FDA6B
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:09:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 884A26FDA78
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:12:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236013AbjEJJJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 05:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59766 "EHLO
+        id S236659AbjEJJM1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 05:12:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbjEJJJd (ORCPT
+        with ESMTP id S231486AbjEJJM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 05:09:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8172680;
-        Wed, 10 May 2023 02:09:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3FD0963C0C;
-        Wed, 10 May 2023 09:09:32 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC33FC433D2;
-        Wed, 10 May 2023 09:09:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1683709771;
-        bh=KiZ9HhKi7e5LOaQ8JOhQa49uYKDhg7WjbVUL1RyfsAY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qogPLJJLGaUCBdTRB+m5ht87RrOgOb52k9AbJUjskQqQGFnYhgyGygbjT55eGfQQo
-         n6rNvOviYJa9EN/R2OAnch6dU6TsEi9gdyoe15z4G1xd5bLQqtY9rWqWaemPY/DICh
-         d1gEeI7WGQGqzKpqhXrLEyBY/Xs9xqCRrmP7u+F0=
-Date:   Wed, 10 May 2023 11:09:29 +0200
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Rudi Heitbaum <rudi@heitbaum.com>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        ntfs3@lists.linux.dev, almaz.alexandrovich@paragon-software.com
-Subject: Re: [PATCH 6.3 000/694] 6.3.2-rc2 review
-Message-ID: <2023051048-plus-mountable-6280@gregkh>
-References: <20230509030705.399628514@linuxfoundation.org>
- <20230509080658.GA152864@d6921c044a31>
- <20230509131032.GA8@9ed91d9f7b3c>
- <2023050913-spearhead-angrily-fc58@gregkh>
- <20230509145806.GA8@df3c0d7ae0b0>
- <2023051025-plug-willow-e278@gregkh>
- <CAG9oJsnr55Atybm4nOQAFjXQ_TeqVG+Nz_8zqMT3ansdnEpGBQ@mail.gmail.com>
+        Wed, 10 May 2023 05:12:26 -0400
+Received: from mail-sh.amlogic.com (mail-sh.amlogic.com [58.32.228.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F6CB30CF;
+        Wed, 10 May 2023 02:11:35 -0700 (PDT)
+Received: from droid01-cd.amlogic.com (10.98.11.200) by mail-sh.amlogic.com
+ (10.18.11.5) with Microsoft SMTP Server id 15.1.2507.13; Wed, 10 May 2023
+ 17:11:25 +0800
+From:   Xianwei Zhao <xianwei.zhao@amlogic.com>
+To:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-amlogic@lists.infradead.org>, <devicetree@vger.kernel.org>
+CC:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Xianwei Zhao <xianwei.zhao@amlogic.com>
+Subject: [PATCH V4] arm64: dts: add support for C3 based Amlogic AW409
+Date:   Wed, 10 May 2023 17:11:29 +0800
+Message-ID: <20230510091129.151669-1-xianwei.zhao@amlogic.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG9oJsnr55Atybm4nOQAFjXQ_TeqVG+Nz_8zqMT3ansdnEpGBQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.98.11.200]
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 06:29:23PM +1000, Rudi Heitbaum wrote:
-> On Wed, 10 May 2023 at 17:25, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > On Tue, May 09, 2023 at 02:58:06PM +0000, Rudi Heitbaum wrote:
-> > > On Tue, May 09, 2023 at 03:56:42PM +0200, Greg Kroah-Hartman wrote:
-> > > > On Tue, May 09, 2023 at 01:10:32PM +0000, Rudi Heitbaum wrote:
-> > > > > On Tue, May 09, 2023 at 08:06:58AM +0000, Rudi Heitbaum wrote:
-> > > > > > On Tue, May 09, 2023 at 05:26:44AM +0200, Greg Kroah-Hartman wrote:
-> > > > > > > This is the start of the stable review cycle for the 6.3.2 release.
-> > > > > > > There are 694 patches in this series, all will be posted as a response
-> > > > > > > to this one.  If anyone has any issues with these being applied, please
-> > > > > > > let me know.
-> > > > > > >
-> > > > > > > Responses should be made by Thu, 11 May 2023 03:05:05 +0000.
-> > > > > > > Anything received after that time might be too late.
-> > > > > >
-> > > > > > Hi Greg,
-> > > > > >
-> > > > > > 6.3.2-rc2 tested.
-> > > > >
-> > > > > Hi Greg,
-> > > > >
-> > > > > Further testing and have seen ntfs3: NULL pointer dereference with ntfs_lookup errors
-> > > > > with 6.3.2-rc2 (I have not seen this error before.) No other errors in the logs.
-> > > >
-> > > > Can you reproduce this without the extern, gpl-violation module loaded?
-> > > >
-> > > > thanks,
-> > > >
-> > > > greg k-h
-> > >
-> > > Hi Greg,
-> > >
-> > > I dropped the bcm_sta and recompiled and commented out the i915.guc=3
-> > > and was able to reproduce.
-> > >
-> > > [   84.745080] BUG: kernel NULL pointer dereference, address: 0000000000000020
-> > > [   84.746239] #PF: supervisor read access in kernel mode
-> > > [   84.747599] #PF: error_code(0x0000) - not-present page
-> > > [   84.748929] PGD 0 P4D 0
-> > > [   84.750240] Oops: 0000 [#1] SMP NOPTI
-> > > [   84.751575] CPU: 2 PID: 3176 Comm: .NET ThreadPool Not tainted 6.3.2-rc2 #1
-> > > [   84.752998] Hardware name: Intel(R) Client Systems NUC12WSKi7/NUC12WSBi7, BIOS WSADL357.0085.2022.0718.1739 07/18/2022
-> > > [   84.754474] RIP: 0010:ntfs_lookup+0x76/0xe0 [ntfs3]
-> >
-> > And do you get this same crash on ntfs3 on 6.4-rc1?  Is this a new
-> > regression, or does it also show up on 6.3.1?
-> 
-> Tested with 6.3.1 during the day today. No errors, and had been
-> running 6.3.1 with no issue. Retested with 6.3.2-rc2 and problem
-> immediately evident. So yes - I believe a regression.
-> 
-> I have built and am now testing 6.4.0-rc1 this evening - no errors so far.
-> 
-> [    0.000000] Linux version 6.4.0-rc1 (docker@1ccd349e2545)
-> (x86_64-libreelec-linux-gnu-gcc-13.1.0 (GCC) 13.1.0, GNU ld (GNU
-> Binutils) 2.40) #1 SMP Wed May 10 07:51:37 UTC 2023
-> 
-> > And ntfs, ick, why?  And .NET?  What a combination...
-> 
-> Joys of media players. Test device gets to test exfat, ntfs3, .NET,
-> and throw in a compile host/GHA runner to put it through paces.
+Amlogic C3 is an advanced edge AI processor designed for smart IP camera
+applications.
 
-Yeah, this should work.  Thanks for verifying this works on other
-releases.  Any chance you can do 'git bisect' to track down the
-offending commit?  In looking things over, I don't see anything
-obvious...
+Add basic support for the C3 based Amlogic AW409 board, which describes
+the following components: CPU, GIC, IRQ, Timer, UART. It's capable of
+booting up into the serial console.
 
-thanks,
+Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+---
+Link: https://lore.kernel.org/all/20230407102704.1055152-1-kelvin.zhang@amlogic.com
+Link: https://lore.kernel.org/all/20230307222651.2106615-2-martin.blumenstingl@googlemail.com
 
-greg k-h
+V3 -> V4: Move Link under the --- before the changelog.
+V2 -> V3: Remove '256m' from filename;
+          Keep alphabetical order of Makefile.
+V1 -> V2: Remove new arch, and use ARCH_MESON;
+          Modify node name, and delete superfluous blank line.
+---
+ arch/arm64/boot/dts/amlogic/Makefile          |  1 +
+ .../dts/amlogic/amlogic-c3-c302x-aw409.dts    | 29 +++++++
+ arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi   | 86 +++++++++++++++++++
+ 3 files changed, 116 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-c3-c302x-aw409.dts
+ create mode 100644 arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi
+
+diff --git a/arch/arm64/boot/dts/amlogic/Makefile b/arch/arm64/boot/dts/amlogic/Makefile
+index cd1c5b04890a..6f61798a109f 100644
+--- a/arch/arm64/boot/dts/amlogic/Makefile
++++ b/arch/arm64/boot/dts/amlogic/Makefile
+@@ -1,4 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
++dtb-$(CONFIG_ARCH_MESON) += amlogic-c3-c302x-aw409.dtb
+ dtb-$(CONFIG_ARCH_MESON) += meson-a1-ad401.dtb
+ dtb-$(CONFIG_ARCH_MESON) += meson-axg-jethome-jethub-j100.dtb
+ dtb-$(CONFIG_ARCH_MESON) += meson-axg-jethome-jethub-j110-rev-2.dtb
+diff --git a/arch/arm64/boot/dts/amlogic/amlogic-c3-c302x-aw409.dts b/arch/arm64/boot/dts/amlogic/amlogic-c3-c302x-aw409.dts
+new file mode 100644
+index 000000000000..edce8850b338
+--- /dev/null
++++ b/arch/arm64/boot/dts/amlogic/amlogic-c3-c302x-aw409.dts
+@@ -0,0 +1,29 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
++ */
++
++/dts-v1/;
++
++#include "amlogic-c3.dtsi"
++
++/ {
++	model = "Amlogic C302 aw409 Development Board";
++	compatible = "amlogic,aw409", "amlogic,c3";
++	interrupt-parent = <&gic>;
++	#address-cells = <2>;
++	#size-cells = <2>;
++
++	aliases {
++		serial0 = &uart_b;
++	};
++
++	memory@0 {
++		device_type = "memory";
++		reg = <0x0 0x0 0x0 0x10000000>;
++	};
++};
++
++&uart_b {
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi b/arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi
+new file mode 100644
+index 000000000000..93b335aef605
+--- /dev/null
++++ b/arch/arm64/boot/dts/amlogic/amlogic-c3.dtsi
+@@ -0,0 +1,86 @@
++// SPDX-License-Identifier: (GPL-2.0+ OR MIT)
++/*
++ * Copyright (c) 2021 Amlogic, Inc. All rights reserved.
++ */
++
++#include <dt-bindings/interrupt-controller/irq.h>
++#include <dt-bindings/interrupt-controller/arm-gic.h>
++#include <dt-bindings/gpio/gpio.h>
++
++/ {
++	cpus {
++		#address-cells = <2>;
++		#size-cells = <0>;
++
++		cpu0: cpu@0 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a35";
++			reg = <0x0 0x0>;
++			enable-method = "psci";
++		};
++
++		cpu1: cpu@1 {
++			device_type = "cpu";
++			compatible = "arm,cortex-a35";
++			reg = <0x0 0x1>;
++			enable-method = "psci";
++		};
++	};
++
++	timer {
++		compatible = "arm,armv8-timer";
++		interrupts = <GIC_PPI 13 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 14 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 11 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>,
++			     <GIC_PPI 10 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_LOW)>;
++	};
++
++	psci {
++		compatible = "arm,psci-1.0";
++		method = "smc";
++	};
++
++	xtal: xtal-clk {
++		compatible = "fixed-clock";
++		clock-frequency = <24000000>;
++		clock-output-names = "xtal";
++		#clock-cells = <0>;
++	};
++
++	soc {
++		compatible = "simple-bus";
++		#address-cells = <2>;
++		#size-cells = <2>;
++		ranges;
++
++		gic: interrupt-controller@fff01000 {
++			compatible = "arm,gic-400";
++			#interrupt-cells = <3>;
++			#address-cells = <0>;
++			interrupt-controller;
++			reg = <0x0 0xfff01000 0 0x1000>,
++			      <0x0 0xfff02000 0 0x2000>,
++			      <0x0 0xfff04000 0 0x2000>,
++			      <0x0 0xfff06000 0 0x2000>;
++			interrupts = <GIC_PPI 9 (GIC_CPU_MASK_SIMPLE(4) | IRQ_TYPE_LEVEL_HIGH)>;
++		};
++
++		apb4: bus@fe000000 {
++			compatible = "simple-bus";
++			reg = <0x0 0xfe000000 0x0 0x480000>;
++			#address-cells = <2>;
++			#size-cells = <2>;
++			ranges = <0x0 0x0 0x0 0xfe000000 0x0 0x480000>;
++
++			uart_b: serial@7a000 {
++				compatible = "amlogic,meson-g12a-uart";
++				reg = <0x0 0x7a000 0x0 0x18>;
++				interrupts = <GIC_SPI 169 IRQ_TYPE_EDGE_RISING>;
++				status = "disabled";
++				clocks = <&xtal>, <&xtal>, <&xtal>;
++				clock-names = "xtal", "pclk", "baud";
++			};
++
++		};
++	};
++};
+
+base-commit: ae68fb187b59bc8645974320808ab2d7c41b1833
+-- 
+2.37.1
+
