@@ -2,54 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85F7B6FE2F2
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 19:03:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 982D56FE2F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 19:03:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236225AbjEJRDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 13:03:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45488 "EHLO
+        id S236184AbjEJRDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 13:03:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236142AbjEJRDJ (ORCPT
+        with ESMTP id S236102AbjEJRDF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 13:03:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E32340DC;
-        Wed, 10 May 2023 10:02:44 -0700 (PDT)
+        Wed, 10 May 2023 13:03:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22FCB358C;
+        Wed, 10 May 2023 10:02:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 328FA63F42;
-        Wed, 10 May 2023 17:02:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96B8CC433EF;
-        Wed, 10 May 2023 17:02:43 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B1D1B63F38;
+        Wed, 10 May 2023 17:02:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22C5DC433EF;
+        Wed, 10 May 2023 17:02:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683738163;
-        bh=VXlyCdDwVi1FMedvB2vqwj5QtYQEukG0P+JwjZR1bkQ=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Yr24vjNQzy6y8a/ZgmUM5NN3QAqR/LXTihrlNgOixMFI6pRC8zy4Ek2uH7mOqBefT
-         8isdsQBXjpBZKQqsCIpG0ZTAXSLWhqJrqtQc9lZCerlA1kwklNQdqEmc7sE9AZ/ADy
-         goPpxzLUwrVs/O/lDrKh2hb3XAgJvJGUcuHGHQoF8c+buS99nR++ztzVGEn7rDFbsa
-         icxbWRTxlcCrgCca7jMC+zJ2c6SD7oh4t0IM+gLeASifW4MXkQomuBNN4qNGwk0cOk
-         exusTeFR3M+Hzd627FgujhUZm+HtlE0I/bGytX+7QynTNZVakgEpGw7NK8M4vOQVkO
-         FuzP2oPzcTV4Q==
+        s=k20201202; t=1683738156;
+        bh=a3+oVFXC7npzGJ9ceo4yz5ZhJen4rRawc2jMdc6sqas=;
+        h=Date:From:To:Cc:Subject:Reply-To:From;
+        b=AoTRYa2Mddp1oeGbUYnUBhwGnT/DrSA0nWEPkx8f2dYgWRXeattR5QMZBMraJraIF
+         pxed8Y2J5zn66APLP7bmdHYInB8JTdvnbJ2PVCbKPGTWhK3lkAFe1YvWQAnIAwgvuy
+         hQeXgVZXUJPOqanh3+yCzOfpvu40eWgZvn2+wUfyVPJbBvRDCkrq3tsbbrbZ33Y82D
+         pOzXnT1FVK06ha/or46zdlfn59LcbOfZNRWkaJMWwWoASZUFhMds7vuJiPMWNr50Pv
+         WO6MvOCFYaC6UPonsGGt+2xb3DPcKcgl9h7Vca26AyQocRs8q4EH0vhtHn3Tad269m
+         njQHKZskwOyYA==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 4C16ECE126E; Wed, 10 May 2023 10:02:43 -0700 (PDT)
+        id C0984CE126E; Wed, 10 May 2023 10:02:35 -0700 (PDT)
+Date:   Wed, 10 May 2023 10:02:35 -0700
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        rostedt@goodmis.org, "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>
-Subject: [PATCH rcu 1/8] rcu/kvfree: Eliminate k[v]free_rcu() single argument macro
-Date:   Wed, 10 May 2023 10:02:35 -0700
-Message-Id: <20230510170242.2187714-1-paulmck@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <1c01c38f-3783-44d7-8c11-7416cd5b849c@paulmck-laptop>
-References: <1c01c38f-3783-44d7-8c11-7416cd5b849c@paulmck-laptop>
+        rostedt@goodmis.org
+Subject: [PATCH rcu 0/8] kvfree_rcu() changes for v6.5
+Message-ID: <1c01c38f-3783-44d7-8c11-7416cd5b849c@paulmck-laptop>
+Reply-To: paulmck@kernel.org
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,88 +55,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+Hello!
 
-The kvfree_rcu() and kfree_rcu() APIs are hazardous in that if you forget
-the second argument, it works, but might sleep.  This sleeping can be a
-correctness bug from atomic contexts, and even in non-atomic contexts it
-might introduce unacceptable latencies.  This commit therefore removes the
-single-argument kvfree_rcu() and kfree_rcu() macros.  Code that would have
-previously used these single-argument kvfree_rcu() and kfree_rcu() macros
-should instead use kvfree_rcu_mightsleep() or kfree_rcu_mightsleep().
+This series contains updates for kvfree_rcu(), perhaps most notably
+the removal of single-argument k{,v}free_rcu() in favor of the new-ish
+k{,v}free_rcu_mightsleep().
 
-[ paulmck: Apply Joel Fernandes feedback. ]
+1.	rcu/kvfree: Eliminate k[v]free_rcu() single argument macro,
+	courtesy of "Uladzislau Rezki (Sony)".
 
-Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
-Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
----
- include/linux/rcupdate.h | 29 ++++++++---------------------
- 1 file changed, 8 insertions(+), 21 deletions(-)
+2.	rcu/kvfree: Add debug to check grace periods.
 
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index dcd2cf1e8326..744869ef930a 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -957,9 +957,8 @@ static inline notrace void rcu_read_unlock_sched_notrace(void)
- 
- /**
-  * kfree_rcu() - kfree an object after a grace period.
-- * @ptr: pointer to kfree for both single- and double-argument invocations.
-- * @rhf: the name of the struct rcu_head within the type of @ptr,
-- *       but only for double-argument invocations.
-+ * @ptr: pointer to kfree for double-argument invocations.
-+ * @rhf: the name of the struct rcu_head within the type of @ptr.
-  *
-  * Many rcu callbacks functions just call kfree() on the base structure.
-  * These functions are trivial, but their size adds up, and furthermore
-@@ -984,26 +983,18 @@ static inline notrace void rcu_read_unlock_sched_notrace(void)
-  * The BUILD_BUG_ON check must not involve any function calls, hence the
-  * checks are done in macros here.
-  */
--#define kfree_rcu(ptr, rhf...) kvfree_rcu(ptr, ## rhf)
-+#define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
-+#define kvfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
- 
- /**
-- * kvfree_rcu() - kvfree an object after a grace period.
-- *
-- * This macro consists of one or two arguments and it is
-- * based on whether an object is head-less or not. If it
-- * has a head then a semantic stays the same as it used
-- * to be before:
-- *
-- *     kvfree_rcu(ptr, rhf);
-- *
-- * where @ptr is a pointer to kvfree(), @rhf is the name
-- * of the rcu_head structure within the type of @ptr.
-+ * kfree_rcu_mightsleep() - kfree an object after a grace period.
-+ * @ptr: pointer to kfree for single-argument invocations.
-  *
-  * When it comes to head-less variant, only one argument
-  * is passed and that is just a pointer which has to be
-  * freed after a grace period. Therefore the semantic is
-  *
-- *     kvfree_rcu(ptr);
-+ *     kfree_rcu_mightsleep(ptr);
-  *
-  * where @ptr is the pointer to be freed by kvfree().
-  *
-@@ -1012,13 +1003,9 @@ static inline notrace void rcu_read_unlock_sched_notrace(void)
-  * annotation. Otherwise, please switch and embed the
-  * rcu_head structure within the type of @ptr.
-  */
--#define kvfree_rcu(...) KVFREE_GET_MACRO(__VA_ARGS__,		\
--	kvfree_rcu_arg_2, kvfree_rcu_arg_1)(__VA_ARGS__)
--
-+#define kfree_rcu_mightsleep(ptr) kvfree_rcu_arg_1(ptr)
- #define kvfree_rcu_mightsleep(ptr) kvfree_rcu_arg_1(ptr)
--#define kfree_rcu_mightsleep(ptr) kvfree_rcu_mightsleep(ptr)
- 
--#define KVFREE_GET_MACRO(_1, _2, NAME, ...) NAME
- #define kvfree_rcu_arg_2(ptr, rhf)					\
- do {									\
- 	typeof (ptr) ___p = (ptr);					\
--- 
-2.40.1
+3.	rcu/kvfree: Add debug check for GP complete for kfree_rcu_cpu
+	list, courtesy of "Uladzislau Rezki (Sony)".
 
+4.	rcu/kvfree: Invoke debug_rcu_bhead_unqueue() after checking
+	bnode->gp_snap, courtesy of Zqiang.
+
+5.	rcu/kvfree: Use consistent krcp when growing kfree_rcu() page
+	cache, courtesy of Zqiang.
+
+6.	rcu/kvfree: Do not run a page work if a cache is disabled,
+	courtesy of "Uladzislau Rezki (Sony)".
+
+7.	rcu/kvfree: Make fill page cache start from krcp->nr_bkv_objs,
+	courtesy of Zqiang.
+
+8.	rcu/kvfree: Make drain_page_cache() take early return if cache
+	is disabled, courtesy of Zqiang.
+
+						Thanx, Paul
+
+------------------------------------------------------------------------
+
+ b/include/linux/rcupdate.h |   29 ++++++++---------------------
+ b/kernel/rcu/tree.c        |   37 +++++++++++++++++++------------------
+ kernel/rcu/tree.c          |   21 +++++++++++++++++----
+ 3 files changed, 44 insertions(+), 43 deletions(-)
