@@ -2,308 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D45DF6FDB81
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:20:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 064646FDB85
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 12:22:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236581AbjEJKUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 06:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40194 "EHLO
+        id S234032AbjEJKW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 06:22:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236555AbjEJKTm (ORCPT
+        with ESMTP id S236106AbjEJKWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 06:19:42 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B4AD7D8C;
-        Wed, 10 May 2023 03:19:33 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-643990c5319so4972196b3a.2;
-        Wed, 10 May 2023 03:19:33 -0700 (PDT)
+        Wed, 10 May 2023 06:22:22 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2099.outbound.protection.outlook.com [40.107.223.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55B3B2D7F;
+        Wed, 10 May 2023 03:22:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=W7160LIunxIAnYozDpkeBgiUX8YMsMO25Ic42gSHc1OQfSS1g4Cj4zEIin8uZfM3J1Ice9DjTRqT2+8kI+AnaGb+21hDe9M5uqfX+uw7EYWte4mfavyzId+ziW4RCiCn895Qy0k9AQ4CqvFZ1okVAQWyRE3UzB5HDRd4Lq4meIJWZNl74tGTM14DLXZp6eQo615wyA2c/qmSm+YASFoWxviJk9WS+6/Oo8lQPir34zba5CH11qm35ps0AgiEhTgy6Tp0GVYwZ4vW/e9zssNITTzOQzNMQEZLyiiqEgrphqgWnjes/DAMV3rkBv0FeWeCNJ6mextxxPWeEVwnDcmfOA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=g8KkAXlsXpCiuuX2tZH/quvnq0c6xiG3XVhyoWJ+fd0=;
+ b=D34A2ICrQ/L1YovgH9mvA4IoCGtFDUTwvH2Ac8YqGWEpA1KXB/wD46w/4uYJoRgDXp4Jxl35f8EryHKxdZHiR4ZB4datOtrXgHxdmkU6tplHWFMytG7eNCa1jBLFlm5+clQ4kmUroKfLcc3diYoUvcxPYJKVp/F94Vv9Fn3gmDWvcfNKvFOFzTYLiL3uoFeYBX4jkdBI5RU7KXhOI7bGxbgZ0hrQiKHllMj6lvVG31eTzcyqkPwH64o9yd4rkwp+KRpHYpIogrhKPD27QNe+Vcb3DbSobEbepqGvt9riQ3Zz1Lfg6ON2DD8iKMIK+3and7gZ22nBAUM3py6M7r+r4w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683713973; x=1686305973;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N85teQqBhV1VEodsjY4znoRaG/yAfuSF6nM7iLcKOvw=;
-        b=JBQ0T3lwKLhK0PsZBb1kYBcphNzpqyyl3v8068U4Z25lbu7323vNcfTbAT08d7SanU
-         bIcbzIgLfJZAfqyswNxbuXkFGvvji93jpJPKad8THrO7Y8/yKBV+sN6MQNAqHUCmsK0E
-         bNO02zLALN25h9l8gRv6obdQayaRZZ5ZdZlaNPrhBCB+t2kzo9TaJNzrKMV1ZNgE5KPV
-         c3V8HbeSB3KldLQcjhTN1zty3I9nNAphJR9M6QAKpYnMaY1RDEPnpU9kCZHQkb+ezb7K
-         4OOHTo++3s5vtGe9yVzy8qxpwdH/3c1bP/DOT2nykZbsZWtMhyupmlaQNOnPh2cyhwFg
-         rv5w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683713973; x=1686305973;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N85teQqBhV1VEodsjY4znoRaG/yAfuSF6nM7iLcKOvw=;
-        b=QVxyjf2VW8w12Yt/eNqBJ0VIONFRrRkfKLsSSJP0EWH+KoPPp93ChTA7BoZ9TkOGWy
-         +IxDymbubcsQ4z7Da9APXoVg/kITDZPpYDQCDAUd/d9HKhWCfX4drBkFlD5T+JlB7wGs
-         bZWTILZ9D/g7BFiLD9zq2f4XLO2HwMY0I8UUu0tnMJZPio2lB+zgiNWK50KNq4fWVj4G
-         jSWc2HQ0zmlnvFp9fCTiZJE6uka3RYxkZNCWGPNhDEQsOnU5XxUJp4iTLHbI//e83mTb
-         dObntgrlyKZYGbqoPAyBGW4CEgERs+A4eJo4nCYUfX1dPdnmzV+GLv6qxNF13JjrHlFy
-         RBvA==
-X-Gm-Message-State: AC+VfDzLfZoyUccDfTDmlc1fchoNWvbYzCRYel9pSj5kCDnvAwM5kjBe
-        dM7glIR6p9JVxljX/NRNhDk=
-X-Google-Smtp-Source: ACHHUZ7ouKicZ4wLt/MnsmnsBoVE14eP6rLtmejMscIL9AyW1mkG3ZDMWpeBQvuKcoKshQv78XBC3w==
-X-Received: by 2002:a17:902:e752:b0:1ac:7072:cfc with SMTP id p18-20020a170902e75200b001ac70720cfcmr13862334plf.16.1683713972979;
-        Wed, 10 May 2023 03:19:32 -0700 (PDT)
-Received: from localhost.localdomain ([221.226.144.218])
-        by smtp.gmail.com with ESMTPSA id p16-20020a170902e75000b001aadd0d7364sm3393419plf.83.2023.05.10.03.19.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 03:19:32 -0700 (PDT)
-From:   Song Shuai <suagrfillet@gmail.com>
-To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, rostedt@goodmis.org, mhiramat@kernel.org,
-        mark.rutland@arm.com, guoren@kernel.org, suagrfillet@gmail.com,
-        jszhang@kernel.org, e.shatokhin@yadro.com
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Subject: [PATCH V9 4/4] samples: ftrace: Add riscv support for SAMPLE_FTRACE_DIRECT[_MULTI]
-Date:   Wed, 10 May 2023 18:18:57 +0800
-Message-Id: <20230510101857.2953955-5-suagrfillet@gmail.com>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20230510101857.2953955-1-suagrfillet@gmail.com>
-References: <20230510101857.2953955-1-suagrfillet@gmail.com>
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=g8KkAXlsXpCiuuX2tZH/quvnq0c6xiG3XVhyoWJ+fd0=;
+ b=ZVIsezHOMZ9bBt+PYEKiHx843bc2+jDI2UIBmWAEY3B7lgawLzvVl5T58+JepldGaw9+NXVa49+qLQRWcWk+3KL9ORGDDf/5hI/3MzqOznCcmmuTdGddyjfsA3QSd95IuPei17bdBk8oRt3LB5JGcqqI/ff8mdYhPyuPNSj39ew=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by MW5PR13MB5629.namprd13.prod.outlook.com (2603:10b6:303:195::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.20; Wed, 10 May
+ 2023 10:22:18 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Wed, 10 May 2023
+ 10:22:18 +0000
+Date:   Wed, 10 May 2023 12:22:11 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Yan Wang <rk.code@outlook.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk
+Subject: Re: [PATCH v3] net: mdiobus: Add a function to deassert reset
+Message-ID: <ZFtwU1svXhZ/xrnJ@corigine.com>
+References: <KL1PR01MB5448A33A549CDAD7D68945B9E6779@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <KL1PR01MB5448A33A549CDAD7D68945B9E6779@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+X-ClientProxiedBy: AS4P195CA0045.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:20b:65a::18) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MW5PR13MB5629:EE_
+X-MS-Office365-Filtering-Correlation-Id: 095af2d9-b877-48f2-0901-08db51406e83
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: i297iyZcJ6sJXd46mvPGG9J+DXYtkgqL2yP3MLpOV04AdJDoi9Q7xS0jQJVVO+pXxSN66/lREISX2LA0czQSschwq381cIYTmX2v8+AdpTsdayW13siGVqurglq/DdQd60UiDzhxCK6BhpaLZwBWnKNeACdF1fwNlftP81Wf+U5mQUHPvPgHxHNfxl3B17wbIPxmqbf+rif2/ghhKrDPsx0maMObAZH6bk/unK1gDkJaJfACwbvzGJiHpgMWdlhULrHGG0VBC4A1MGAqyOmkjBycMSgiAHkxeFJVJ4kOUtyLemHCQo2Z/Ke22l6PRAtKnPTZsBhIeug67ah8t2pkSl0G5WyCX9bpRN6PjYORkCwmxX0nq5itO8LsV5GBzrr6kdDkBWtQslI6KJm4vsh1g3uKMZ4S5RPpiqdZPLf9/grixa5rqCQvBgPsVZ7XY14oRRo9h6I0a4WpJK7cWOSI9a+HJzOkx8WKpbDB3Ph/XFvKw7npjoHJ0a5CiKX7xoP/SnIM55ZRroEWbfoUa4MR3DUZyLnp0wLyyt/jvpd7pu8=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(39840400004)(396003)(376002)(346002)(366004)(451199021)(478600001)(6506007)(6512007)(44832011)(7416002)(316002)(41300700001)(66946007)(4326008)(6916009)(66476007)(66556008)(83380400001)(966005)(38100700002)(6486002)(2616005)(86362001)(8676002)(6666004)(8936002)(45080400002)(2906002)(36756003)(186003)(5660300002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?4tuqAH0T5gM6LK09fgbqsOShmobuq7TdvC3WwhiWnB+aeqHMODd0xWTg2r7v?=
+ =?us-ascii?Q?7fWqnZTNjcGwFR1VHZwfe0u/MQOvS/08RXyyML4OzH1v6vgvGk/SutFC5H7u?=
+ =?us-ascii?Q?sXuWcoDet9nerZ5vByh8hq3fOT51onMrpBA0VbC2xJXmnQp0BvjINcrzzWQs?=
+ =?us-ascii?Q?s6yU2ovDA5yl6fEB7FJIIVqpU96B/pyEvmetcUzZsTmsImsu2rWjFiquGcAj?=
+ =?us-ascii?Q?Olhtsw9yEgkBraGFVhoBBzeb4Iy5G3rKWD6cBaL7qAD1tyEyNumxUYFLDVp2?=
+ =?us-ascii?Q?8JwMrUv+XesPfylgSakkmzmS1EeAQ/GA2ZQMRTtKXq/4cXNPAFwACQIx66ty?=
+ =?us-ascii?Q?s5xGyYE5Jce2iQAELVbbBbXZfmVCCwNg9o9GNoCJB8jrR5Ka6AXvHK6pgYUS?=
+ =?us-ascii?Q?E06Fi/LnHe7j6SX/RgqXDRCUTZ+FZPoWDZEgzAA6ToLk/NkgaLFAyQ0k+aP/?=
+ =?us-ascii?Q?/hhVLz7ErGkugNjg2OzjVY4u9PafAO1DOR7N1GqKAWO/WKNK5S7hoJj8hnDd?=
+ =?us-ascii?Q?QAzEk0kojPYEkx/BQIj8CC7+Jbi58qnmEq50BBd4egE86daCDIzioCZOEnux?=
+ =?us-ascii?Q?0KSkniJWR+vBd1ZhaefC59gipSUIY+c92HZvbasSI2LpKFOO5jqhar+Cik8E?=
+ =?us-ascii?Q?0Hcfv42EVdTUNj+4H7AJ0Jm4BCHdoMw+4PruPpY6sF6APGZRIzujrjiT211v?=
+ =?us-ascii?Q?pLG/q7/S/TeQco6EdJe27r1guCdF7DYzD0PpwIW9qpxPZJx8suLsFeuD7699?=
+ =?us-ascii?Q?RbvdYmvzsOP1tZphiZpTIxT0bwgB991ndZfJk2RcS+CzOR/10xrOyXknKKvk?=
+ =?us-ascii?Q?CVRTTAGL7l+4vfD//buMFqbhKZ6Jphj8854G7w6rfzonmL5LsgmDeqwztobd?=
+ =?us-ascii?Q?4xT9vBy2lQFBhC32s44bHWlmapWtFf8ibRqu8n3Wak9Oi7SUOCnm8aW29zrN?=
+ =?us-ascii?Q?jo/0H+fJ7/8i36J04gEEq3FWgLx0tgkRwHKQZduXXThPzswaWdPkoOTpd/GE?=
+ =?us-ascii?Q?1EJ09KESW3Q0Dxt0gPn9+5i/gdcdMViP14F0xvYOljSeBUCXrNW2jE3OWWBU?=
+ =?us-ascii?Q?TZSizNIK8GlE6RvPi4zvqSP1znCfj2DYZjY5UOBXXGtYDyr1QSyoad4jTujn?=
+ =?us-ascii?Q?JzIb+OlWe3XppPVZp6d85Y0N8xnsPrmUx8DesSQ9C70vuCxheZxxJGVD+3lI?=
+ =?us-ascii?Q?mNsG9Uz+fwGwyMW16iQcSOQhSUNuqhfdrmAdGWX3teKK0QhRH+7IZu/MnLTG?=
+ =?us-ascii?Q?1wIkKSV3IwIAg4t+gIqpZt98H5SO5gWvrwkKlAaZk0LitRz+d47rQg9Fso4h?=
+ =?us-ascii?Q?Q3e50qVR+tME2dLP+joRMWp9oT67xLt0mZiBujiaDm7uLkSNLs1n5lMoc0qB?=
+ =?us-ascii?Q?RcfLcuPAIkeffxU99DiLxx8Zd0vxUw6f2Sz7oUBeA0s8IenG/sD2gqbRgJ+q?=
+ =?us-ascii?Q?drlxuAWC573nwfCNJQgo/BEOBloulNOcn3GdQuHom8Ir6Y8jtzXol1IxRdcW?=
+ =?us-ascii?Q?w7GGyk6SaYDY0jOtQJJ3ig0ytOdU5O59/eMYlTrtmWAu35Gs0jiyg+LzKPGr?=
+ =?us-ascii?Q?DACF/wa6S8gmFqldexrlJHl7VEpWeOj2e0aX3zd5KvkumHsAt97vlJ9DmKIL?=
+ =?us-ascii?Q?afvKeiX2BXZ2XVPg6rlK5TPUgF8SUfuYBslV7xvQGsj8YeEuk0XYuUD6Q2un?=
+ =?us-ascii?Q?Zk2WuA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 095af2d9-b877-48f2-0901-08db51406e83
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 10:22:17.8556
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: chM+Okh51OpzWy8goEwzsmRKzHP3DobXociyzwBExV+Nj7xWwE4/Pb1pP7QAtAYJPkvOlUPAEpZlDgsu9wvC8IJ9VUjI/bDHN2ifmBymM1I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR13MB5629
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-select HAVE_SAMPLE_FTRACE_DIRECT and HAVE_SAMPLE_FTRACE_DIRECT_MULTI
-for ARCH_RV64I in arch/riscv/Kconfig. And add riscv asm code for
-the ftrace-direct*.c files in samples/ftrace/.
+On Wed, May 10, 2023 at 04:15:22PM +0800, Yan Wang wrote:
+> It is possible to mount multiple sub-devices on the mido bus.
+> The hardware power-on does not necessarily reset these devices.
+> The device may be in an uncertain state, causing the device's ID
+> to not be scanned.
+> 
+> So, before adding a reset to the scan, make sure the device is in
+> normal working mode.
+> 
+> I found that the subsequent drive registers the reset pin into the
+> structure of the sub-device to prevent conflicts, so release the
+> reset pin.
+> 
+> Signed-off-by: Yan Wang <rk.code@outlook.com>
+> ---
+> v3:
+>   - fixed commit message
+> v2: https://lore.kernel.org/all/KL1PR01MB54482416A8BE0D80EA27223CE6779@KL1PR01MB5448.apcprd01.prod.exchangelabs.com/
+>   - fixed commit message
+>   - Using gpiod_ replace gpio_
+> v1: https://lore.kernel.org/all/KL1PR01MB5448631F2D6F71021602117FE6769@KL1PR01MB5448.apcprd01.prod.exchangelabs.com/
+>   - Incorrect description of commit message.
+>   - The gpio-api too old
+> ---
+>  drivers/net/mdio/fwnode_mdio.c | 16 ++++++++++++++++
+>  1 file changed, 16 insertions(+)
+> 
+> diff --git a/drivers/net/mdio/fwnode_mdio.c b/drivers/net/mdio/fwnode_mdio.c
+> index 1183ef5e203e..6695848b8ef2 100644
+> --- a/drivers/net/mdio/fwnode_mdio.c
+> +++ b/drivers/net/mdio/fwnode_mdio.c
+> @@ -57,6 +57,20 @@ fwnode_find_mii_timestamper(struct fwnode_handle *fwnode)
+>  	return register_mii_timestamper(arg.np, arg.args[0]);
+>  }
+>  
+> +static void fwnode_mdiobus_pre_enable_phy(struct fwnode_handle *fwnode)
+> +{
+> +	struct gpio_desc *reset;
+> +
+> +	reset = fwnode_gpiod_get_index(fwnode, "reset", 0, GPIOD_OUT_HIGH, NULL);
 
-Link: https://lore.kernel.org/linux-riscv/c68bac83-5c88-80b1-bac9-e1fd4ea8f07e@yadro.com/T/#ma13012560331c66b051b580b3ab4a04ba44455ec
-Tested-by: Evgenii Shatokhin <e.shatokhin@yadro.com>
-Signed-off-by: Song Shuai <suagrfillet@gmail.com>
-Tested-by: Guo Ren <guoren@kernel.org>
-Signed-off-by: Guo Ren <guoren@kernel.org>
----
- arch/riscv/Kconfig                          |  2 ++
- samples/ftrace/ftrace-direct-modify.c       | 33 +++++++++++++++++
- samples/ftrace/ftrace-direct-multi-modify.c | 39 +++++++++++++++++++++
- samples/ftrace/ftrace-direct-multi.c        | 23 ++++++++++++
- samples/ftrace/ftrace-direct-too.c          | 26 ++++++++++++++
- samples/ftrace/ftrace-direct.c              | 22 ++++++++++++
- 6 files changed, 145 insertions(+)
+Hi Yan,
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index fdf0b219a02c..cb94ef086f0c 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -121,6 +121,8 @@ config RISCV
- 	select HAVE_POSIX_CPU_TIMERS_TASK_WORK
- 	select HAVE_REGS_AND_STACK_ACCESS_API
- 	select HAVE_RSEQ
-+	select HAVE_SAMPLE_FTRACE_DIRECT
-+	select HAVE_SAMPLE_FTRACE_DIRECT_MULTI
- 	select HAVE_STACKPROTECTOR
- 	select HAVE_SYSCALL_TRACEPOINTS
- 	select IRQ_DOMAIN
-diff --git a/samples/ftrace/ftrace-direct-modify.c b/samples/ftrace/ftrace-direct-modify.c
-index 06d889149012..b355e6994c5c 100644
---- a/samples/ftrace/ftrace-direct-modify.c
-+++ b/samples/ftrace/ftrace-direct-modify.c
-@@ -22,6 +22,39 @@ extern void my_tramp2(void *);
- 
- static unsigned long my_ip = (unsigned long)schedule;
- 
-+#ifdef CONFIG_RISCV
-+
-+asm ("	.pushsection    .text, \"ax\", @progbits\n"
-+"	.type		my_tramp1, @function\n"
-+"	.globl		my_tramp1\n"
-+"   my_tramp1:\n"
-+"	addi sp,sp,-16\n"
-+"	sd   t0,0(sp)\n"
-+"	sd   ra,8(sp)\n"
-+"	call my_direct_func1\n"
-+"	ld   t0,0(sp)\n"
-+"	ld   ra,8(sp)\n"
-+"	addi sp,sp,16\n"
-+"	jr t0\n"
-+"	.size		my_tramp1, .-my_tramp1\n"
-+
-+"	.type		my_tramp2, @function\n"
-+"	.globl		my_tramp2\n"
-+"   my_tramp2:\n"
-+"	addi sp,sp,-16\n"
-+"	sd   t0,0(sp)\n"
-+"	sd   ra,8(sp)\n"
-+"	call my_direct_func2\n"
-+"	ld   t0,0(sp)\n"
-+"	ld   ra,8(sp)\n"
-+"	addi sp,sp,16\n"
-+"	jr t0\n"
-+"	.size		my_tramp2, .-my_tramp2\n"
-+"	.popsection\n"
-+);
-+
-+#endif /* CONFIG_RISCV */
-+
- #ifdef CONFIG_X86_64
- 
- #include <asm/ibt.h>
-diff --git a/samples/ftrace/ftrace-direct-multi-modify.c b/samples/ftrace/ftrace-direct-multi-modify.c
-index 62f6b681999e..6a4ee86d1f70 100644
---- a/samples/ftrace/ftrace-direct-multi-modify.c
-+++ b/samples/ftrace/ftrace-direct-multi-modify.c
-@@ -20,6 +20,45 @@ void my_direct_func2(unsigned long ip)
- extern void my_tramp1(void *);
- extern void my_tramp2(void *);
- 
-+#ifdef CONFIG_RISCV
-+
-+asm ("	.pushsection    .text, \"ax\", @progbits\n"
-+"	.type		my_tramp1, @function\n"
-+"	.globl		my_tramp1\n"
-+"   my_tramp1:\n"
-+"       addi sp,sp,-24\n"
-+"       sd   a0,0(sp)\n"
-+"       sd   t0,8(sp)\n"
-+"       sd   ra,16(sp)\n"
-+"       mv   a0,t0\n"
-+"       call my_direct_func1\n"
-+"       ld   a0,0(sp)\n"
-+"       ld   t0,8(sp)\n"
-+"       ld   ra,16(sp)\n"
-+"       addi sp,sp,24\n"
-+"	jr t0\n"
-+"	.size		my_tramp1, .-my_tramp1\n"
-+
-+"	.type		my_tramp2, @function\n"
-+"	.globl		my_tramp2\n"
-+"   my_tramp2:\n"
-+"       addi sp,sp,-24\n"
-+"       sd   a0,0(sp)\n"
-+"       sd   t0,8(sp)\n"
-+"       sd   ra,16(sp)\n"
-+"       mv   a0,t0\n"
-+"       call my_direct_func2\n"
-+"       ld   a0,0(sp)\n"
-+"       ld   t0,8(sp)\n"
-+"       ld   ra,16(sp)\n"
-+"       addi sp,sp,24\n"
-+"	jr t0\n"
-+"	.size		my_tramp2, .-my_tramp2\n"
-+"	.popsection\n"
-+);
-+
-+#endif /* CONFIG_RISCV */
-+
- #ifdef CONFIG_X86_64
- 
- #include <asm/ibt.h>
-diff --git a/samples/ftrace/ftrace-direct-multi.c b/samples/ftrace/ftrace-direct-multi.c
-index 5482cf616b43..e00a33b7d3c2 100644
---- a/samples/ftrace/ftrace-direct-multi.c
-+++ b/samples/ftrace/ftrace-direct-multi.c
-@@ -15,6 +15,29 @@ void my_direct_func(unsigned long ip)
- 
- extern void my_tramp(void *);
- 
-+#ifdef CONFIG_RISCV
-+
-+asm ("       .pushsection    .text, \"ax\", @progbits\n"
-+"       .type           my_tramp, @function\n"
-+"       .globl          my_tramp\n"
-+"   my_tramp:\n"
-+"       addi sp,sp,-24\n"
-+"       sd   a0,0(sp)\n"
-+"       sd   t0,8(sp)\n"
-+"       sd   ra,16(sp)\n"
-+"       mv   a0,t0\n"
-+"       call my_direct_func\n"
-+"       ld   a0,0(sp)\n"
-+"       ld   t0,8(sp)\n"
-+"       ld   ra,16(sp)\n"
-+"       addi sp,sp,24\n"
-+"       jr t0\n"
-+"       .size           my_tramp, .-my_tramp\n"
-+"       .popsection\n"
-+);
-+
-+#endif /* CONFIG_RISCV */
-+
- #ifdef CONFIG_X86_64
- 
- #include <asm/ibt.h>
-diff --git a/samples/ftrace/ftrace-direct-too.c b/samples/ftrace/ftrace-direct-too.c
-index a05bc2cc2261..af0b90c4d6d5 100644
---- a/samples/ftrace/ftrace-direct-too.c
-+++ b/samples/ftrace/ftrace-direct-too.c
-@@ -17,6 +17,32 @@ void my_direct_func(struct vm_area_struct *vma,
- 
- extern void my_tramp(void *);
- 
-+#ifdef CONFIG_RISCV
-+
-+asm ("       .pushsection    .text, \"ax\", @progbits\n"
-+"       .type           my_tramp, @function\n"
-+"       .globl          my_tramp\n"
-+"   my_tramp:\n"
-+"       addi sp,sp,-40\n"
-+"       sd   a0,0(sp)\n"
-+"       sd   a1,8(sp)\n"
-+"       sd   a2,16(sp)\n"
-+"       sd   t0,24(sp)\n"
-+"       sd   ra,32(sp)\n"
-+"       call my_direct_func\n"
-+"       ld   a0,0(sp)\n"
-+"       ld   a1,8(sp)\n"
-+"       ld   a2,16(sp)\n"
-+"       ld   t0,24(sp)\n"
-+"       ld   ra,32(sp)\n"
-+"       addi sp,sp,40\n"
-+"       jr t0\n"
-+"       .size           my_tramp, .-my_tramp\n"
-+"       .popsection\n"
-+);
-+
-+#endif /* CONFIG_RISCV */
-+
- #ifdef CONFIG_X86_64
- 
- #include <asm/ibt.h>
-diff --git a/samples/ftrace/ftrace-direct.c b/samples/ftrace/ftrace-direct.c
-index 06879bbd3399..47977e262291 100644
---- a/samples/ftrace/ftrace-direct.c
-+++ b/samples/ftrace/ftrace-direct.c
-@@ -14,6 +14,28 @@ void my_direct_func(struct task_struct *p)
- 
- extern void my_tramp(void *);
- 
-+#ifdef CONFIG_RISCV
-+
-+asm ("       .pushsection    .text, \"ax\", @progbits\n"
-+"       .type           my_tramp, @function\n"
-+"       .globl          my_tramp\n"
-+"   my_tramp:\n"
-+"       addi sp,sp,-24\n"
-+"       sd   a0,0(sp)\n"
-+"       sd   t0,8(sp)\n"
-+"       sd   ra,16(sp)\n"
-+"       call my_direct_func\n"
-+"       ld   a0,0(sp)\n"
-+"       ld   t0,8(sp)\n"
-+"       ld   ra,16(sp)\n"
-+"       addi sp,sp,24\n"
-+"       jr t0\n"
-+"       .size           my_tramp, .-my_tramp\n"
-+"       .popsection\n"
-+);
-+
-+#endif /* CONFIG_RISCV */
-+
- #ifdef CONFIG_X86_64
- 
- #include <asm/ibt.h>
--- 
-2.20.1
+As this calls fwnode_gpiod_get_index()
+do you need to include linux/gpio/consumer.h ?
 
+> +	if (IS_ERR(reset) && PTR_ERR(reset) != -EPROBE_DEFER)
+> +		return;
+> +
+> +	usleep_range(100, 200);
+> +	gpiod_set_value_cansleep(reset, 0);
+> +	/*Release the reset pin,it needs to be registered with the PHY.*/
+> +	gpiod_put(reset);
+> +}
+> +
+
+...
