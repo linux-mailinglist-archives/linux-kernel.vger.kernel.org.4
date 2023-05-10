@@ -2,98 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BC256FDD06
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 843686FDD0A
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:43:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236925AbjEJLmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 07:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35810 "EHLO
+        id S236979AbjEJLnh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 07:43:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236623AbjEJLm2 (ORCPT
+        with ESMTP id S236623AbjEJLnc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 07:42:28 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11A5D2D68;
-        Wed, 10 May 2023 04:41:54 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 0ECEE1C0E50; Wed, 10 May 2023 13:41:34 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1683718894;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AdN8t02fmRh9vkqJqVA59w45T3a05/sMi3HibvKFFa8=;
-        b=kIpZKNAk2P1inmFqA6lGpH23mXEVzcB+NIABIWn2Yh4ZiuVvzWt2DnIMp1i7EpHTklsCow
-        l0GWi18+Ukv9KO9ApmbLUCpi7xywua/pDTwzThClQwK0EPcydKWY0TUupfGnppGiFMUeh4
-        HJwgySBwmbUJYV1z9ck8NwGRxSrYRbU=
-Date:   Wed, 10 May 2023 13:41:33 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Donald Buczek <buczek@molgen.mpg.de>
-Cc:     Pietro Borrello <borrello@diag.uniroma1.it>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Hanno Zulla <kontakt@hanno.de>,
-        Carlo Caione <carlo@endlessm.com>, Lee Jones <lee@kernel.org>,
-        Roderick Colenbrander <roderick.colenbrander@sony.com>,
-        Sven Eckelmann <sven@narfation.org>,
-        linux-leds@vger.kernel.org,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiri Kosina <jkosina@suse.cz>,
-        Roderick Colenbrander <roderick@gaikai.com>
-Subject: Re: [PATCH 0/5] HID: manually unregister leds on device removal to
- prevent UAFs
-Message-ID: <ZFuC7VEMJzdBulg/@duo.ucw.cz>
-References: <20230125-hid-unregister-leds-v1-0-9a5192dcef16@diag.uniroma1.it>
- <288ed0da-8903-7dda-eb4e-f17037031e68@molgen.mpg.de>
+        Wed, 10 May 2023 07:43:32 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B39F4FE;
+        Wed, 10 May 2023 04:43:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683719010; x=1715255010;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=MSj618sbErzIYmOGI7vjCs5DAq9sbq+ULbuXkoSQgsk=;
+  b=YyB6LTBjw4bBiuRjmDfZ2TFDUuB/yY2ARv7ER7dA0CtB/Hu4WezOq671
+   fW5dU0GJQnTGB9F1lS4pJk97JJSJ6xUzQQxL6VMkmR2RU12GuIXLNGWoM
+   ZCYXKwdy+EOTJS4ONJc7bvec4z714b2dPQ9+TSaRDkGFOeoeGi+Fd/aAl
+   m24j0U3ZUw6rtf0s4oZ8Q0ssRbHfU3rlw7nGYKoAuCYPkTeLP41fa/oUf
+   ldlJ7Yl3pIgEUcUpkwaNQY1n+SudWjuJncd1R9er29vIvCm9fjjMAPjo+
+   7TkYUVaJxKKINjwvPvMB8nDtPgJf4aIJNGXmuOHFvoaEeMBoWqBzvtdGF
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="329812487"
+X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
+   d="scan'208";a="329812487"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 04:43:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="1029188655"
+X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
+   d="scan'208";a="1029188655"
+Received: from sschutze-mobl.ger.corp.intel.com ([10.251.218.236])
+  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 04:43:28 -0700
+Date:   Wed, 10 May 2023 14:43:25 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Lukasz Majczak <lma@semihalf.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>, upstream@semihalf.com,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] serial: core: enable FIFO after resume
+In-Reply-To: <20230405111559.110220-3-lma@semihalf.com>
+Message-ID: <2b3f5b4e-c75e-5c20-bb86-c5628e7e91a7@linux.intel.com>
+References: <20230405111559.110220-1-lma@semihalf.com> <20230405111559.110220-3-lma@semihalf.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="oLZX/WVIO2dMMT7L"
-Content-Disposition: inline
-In-Reply-To: <288ed0da-8903-7dda-eb4e-f17037031e68@molgen.mpg.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 5 Apr 2023, Lukasz Majczak wrote:
 
---oLZX/WVIO2dMMT7L
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> The "serial/8250: Use fifo in 8250 console driver" commit
 
-On Wed 2023-05-10 12:12:50, Donald Buczek wrote:
-> Is this series in a queue somewhere? Seems rather important and I don't f=
-ind progress.
->=20
-> Also, should be cc: stable@vger.kernel.org , right?
->=20
-> CVE-2023-25012
+Use canonical formatting when referring to commit:
 
-It has Fixes, stable will pick it up.
+commit 12char_SHA1 ("shortlog")
 
-And yes, "crafted USB device" can do a bad stuff. Severity is not too
-high.
+> has revealed an issue of not re-enabling FIFO after resume.
+> The problematic path is inside uart_resume_port() function.
+> First, when the console device is re-enabled,
+> a call to uport->ops->set_termios() internally initializes FIFO
+> (in serial8250_do_set_termios()), although further code
 
-BR,
-									Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
+I'd drop "First," and start with "When" and change "although" to "then"
 
---oLZX/WVIO2dMMT7L
-Content-Type: application/pgp-signature; name="signature.asc"
+> disables it by issuing ops->startup() (pointer to serial8250_do_startup,
+> internally calling serial8250_clear_fifos()).
+> There is even a comment saying "Clear the FIFO buffers and disable them.
+> (they will be reenabled in set_termios())", but in this scenario,
+> set_termios() has been called already and FIFO remains disabled.
 
------BEGIN PGP SIGNATURE-----
+Also, you should reflow the text to 72 chars per line.
 
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZFuC7QAKCRAw5/Bqldv6
-8o4SAJ0XWyKFkKk54eQqqwQ/pknUOC9fgwCghvzorskvXsprzjSdqwvvm/Zr/B4=
-=RYtg
------END PGP SIGNATURE-----
+> This patch address the issue by reversing the order - first checks
+> if tty port is suspended and performs actions accordingly
+> (e.g. call to ops->startup()), then tries to re-enable
+> the console device after suspend (and call to uport->ops->set_termios()).
+> 
+> Signed-off-by: Lukasz Majczak <lma@semihalf.com>
+> Cc: <stable@vger.kernel.org> # 6.1+
+> ---
+>  drivers/tty/serial/serial_core.c | 54 ++++++++++++++++----------------
+>  1 file changed, 27 insertions(+), 27 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+> index 394a05c09d87..57a153adba3a 100644
+> --- a/drivers/tty/serial/serial_core.c
+> +++ b/drivers/tty/serial/serial_core.c
+> @@ -2406,33 +2406,6 @@ int uart_resume_port(struct uart_driver *drv, struct uart_port *uport)
+>  	put_device(tty_dev);
+>  	uport->suspended = 0;
+>  
+> -	/*
+> -	 * Re-enable the console device after suspending.
+> -	 */
+> -	if (uart_console(uport)) {
+> -		/*
+> -		 * First try to use the console cflag setting.
+> -		 */
+> -		memset(&termios, 0, sizeof(struct ktermios));
+> -		termios.c_cflag = uport->cons->cflag;
+> -		termios.c_ispeed = uport->cons->ispeed;
+> -		termios.c_ospeed = uport->cons->ospeed;
+> -
+> -		/*
+> -		 * If that's unset, use the tty termios setting.
+> -		 */
+> -		if (port->tty && termios.c_cflag == 0)
+> -			termios = port->tty->termios;
+> -
+> -		if (console_suspend_enabled)
+> -			uart_change_pm(state, UART_PM_STATE_ON);
+> -		uport->ops->set_termios(uport, &termios, NULL);
+> -		if (!console_suspend_enabled && uport->ops->start_rx)
+> -			uport->ops->start_rx(uport);
+> -		if (console_suspend_enabled)
+> -			console_start(uport->cons);
+> -	}
+> -
+>  	if (tty_port_suspended(port)) {
+>  		const struct uart_ops *ops = uport->ops;
+>  		int ret;
+> @@ -2471,6 +2444,33 @@ int uart_resume_port(struct uart_driver *drv, struct uart_port *uport)
+>  		tty_port_set_suspended(port, false);
+>  	}
+>  
+> +	/*
+> +	 * Re-enable the console device after suspending.
+> +	 */
+> +	if (uart_console(uport)) {
+> +		/*
+> +		 * First try to use the console cflag setting.
+> +		 */
+> +		memset(&termios, 0, sizeof(struct ktermios));
+> +		termios.c_cflag = uport->cons->cflag;
+> +		termios.c_ispeed = uport->cons->ispeed;
+> +		termios.c_ospeed = uport->cons->ospeed;
+> +
+> +		/*
+> +		 * If that's unset, use the tty termios setting.
+> +		 */
+> +		if (port->tty && termios.c_cflag == 0)
+> +			termios = port->tty->termios;
+> +
+> +		if (console_suspend_enabled)
+> +			uart_change_pm(state, UART_PM_STATE_ON);
+> +		uport->ops->set_termios(uport, &termios, NULL);
+> +		if (!console_suspend_enabled && uport->ops->start_rx)
+> +			uport->ops->start_rx(uport);
+> +		if (console_suspend_enabled)
+> +			console_start(uport->cons);
+> +	}
+> +
+>  	mutex_unlock(&port->mutex);
+>  
+>  	return 0;
+> 
 
---oLZX/WVIO2dMMT7L--
+To me it looks the whole function is too messed up to fix anything this 
+easily. I'd start with splitting the two large ifs block so that the 
+ordering makes sense:
+
+- set_termios / uart_change_line_settings is called only once
+- rx and tx is started only after set_termios
+- failure path (the one doing uart_shutdown) logic is reverse + gotoed
+
+
+-- 
+ i.
+
