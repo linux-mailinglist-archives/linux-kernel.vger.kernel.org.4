@@ -2,141 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DA2E6FDAF6
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:42:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4F126FDAFB
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234032AbjEJJm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 05:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49930 "EHLO
+        id S234959AbjEJJnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 05:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjEJJm1 (ORCPT
+        with ESMTP id S229500AbjEJJn3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 05:42:27 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2104.outbound.protection.outlook.com [40.107.92.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9295D469B;
-        Wed, 10 May 2023 02:42:26 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=boyi01OTOBb1UuVfSd7rjba3EKhJtFBk60NocdsWENOA96JEGYjDqf/F/WY1ZJwYukfTWQlmIa+v+kiB7DOLIdjtWch4UvHlmvy59H9ppRl0G53vviAt2ftUYfeiJKvsf8t2e1J95DvlFDIDOvZGn3ZR1Cq9ILv9STuh34DFXEgEzDWIb4XV6Qm/MF13DjNFMnoXY2PEmgYuc++ohx6F35ZsT1GnrIh5GnMJp0HIUqy/HV4aGyBFj4A+nQPccSa5NXuPjpk/AC9wEgP/jbzfKPvmHJ2qrrdPZ86FkBgg9xEIHQyjv1vMyox+NS32pjuwwlqME+N2KmcXB6Ljp/RzPQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9SnRtIk25akYcBD4ABFC5gCWdL+GrMUFhogG4KpVu7g=;
- b=SdC25PzEdvdMRfa8LKlnw8ZMzG0EsnoGYjVv4cQn46R1XHuVxpzNR3QPlAv1k0m5V1WmV+XEDxGS7Xr6eMEXSHFFR+TV9bGYvLHFinnUaOY8LeuaQeWQE8mL0ii/rTvpaPSgbUrVUakW9m04U4NblneCvyX66nibcZJ6+mN364AeUFMHMx7BleDvYRHXbwcBHI9cDqrgbzAeONe1Hvzt93kzPT8FoDsezZmB6umawMQ9G9M0aBAKYrWYjQJ+9pj32BBcz4UV8d7vGowtwGKVlkiUYGtGqQEOxnIYLzynbQ79kHcZ+YwStonwUTBhWKz8jjTEQMR1ndQX2w2dfRlBnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9SnRtIk25akYcBD4ABFC5gCWdL+GrMUFhogG4KpVu7g=;
- b=p9oPpyTJOEzpdk84UHzx2RIuvq41urruxMRpA8WHcU88KV542M6Ygvx2Wju/aqHrvEl7STZmwGWXWcrNYGBAna3zWT9kr0/c1PVLSnUC8WoiKOUQV+G4YQlYcDMQTGckyoqfpoIueziTnDZR2phKhFqUpjvM1oLin7sMv3hZfUg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SA1PR13MB5417.namprd13.prod.outlook.com (2603:10b6:806:230::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Wed, 10 May
- 2023 09:42:24 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Wed, 10 May 2023
- 09:42:23 +0000
-Date:   Wed, 10 May 2023 11:42:15 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>
-Subject: Re: [PATCH net v1] net: mscc: ocelot: fix stat counter register
- values
-Message-ID: <ZFtm91360rfOtBR1@corigine.com>
-References: <20230510044851.2015263-1-colin.foster@in-advantage.com>
+        Wed, 10 May 2023 05:43:29 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6AA3A88
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 02:43:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683711808; x=1715247808;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vneA6Bzg5q3YdvaBP1cqZUP2nVUoSSSgg5zP6JZKWOo=;
+  b=G5IPJZNvxnYzb0ROGiUgpQPbZFidmo7lnvA9zMGL02tTCXkMlYEQRMyI
+   qq75y7gBVuWsrsSiKLdRDg2v5XhFwW4mPVWwJ8flsK98ieDxJZ5MCEOmn
+   5tegqtygrZH43/StviWw2Rk7OK6ZhrCg9Gyg00Z5Tj8AvKk50G7R7knok
+   PdszrlH576Xf990kZrqWsZ78TbwZ+7y2c2XZmVwtJpi4jYavdxZ9YzVTy
+   g8ru16gpzumGIg7ng8T10xuThFC1d/bXEAwY2S+KtVfrFXiEpmuoTOvmu
+   LzAKsnWaGYreiUOPTWqH/hEwVNR2kdhtX4TuM54ovTQ8isc3pFfN8sWOU
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="329793435"
+X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
+   d="scan'208";a="329793435"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 02:43:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="843444436"
+X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
+   d="scan'208";a="843444436"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 10 May 2023 02:43:24 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pwgM0-000374-08;
+        Wed, 10 May 2023 09:43:24 +0000
+Date:   Wed, 10 May 2023 17:42:27 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ivan Orlov <ivan.orlov0322@gmail.com>, perex@perex.cz,
+        tiwai@suse.com, oswald.buddenhagen@gmx.de, axboe@kernel.dk,
+        42.hyeyoo@gmail.com, surenb@google.com
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Ivan Orlov <ivan.orlov0322@gmail.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        skhan@linuxfoundation.org, himadrispandya@gmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH] ALSA: PCM: Fix codestyle issues in pcm_native.c
+Message-ID: <202305101732.PILWtd0A-lkp@intel.com>
+References: <20230510072726.435247-1-ivan.orlov0322@gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230510044851.2015263-1-colin.foster@in-advantage.com>
-X-ClientProxiedBy: AM0PR08CA0010.eurprd08.prod.outlook.com
- (2603:10a6:208:d2::23) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA1PR13MB5417:EE_
-X-MS-Office365-Filtering-Correlation-Id: b11e4abf-c1e5-49f9-453b-08db513adb8e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iOinf2O58ihQHdUeSkfCeGlYuf9rqcd4/DSxBEsUxtUmiTMtEowWnuU7f1nwJhdYLVdsssOdzmemP4d0KqNXbCtePkOvGCZJvZdU8fprJXxcmu99DZ/z4vVrTz4XZdQ/E+xU45jrD04W8V07fhMm8Trysgib7a/vtIfk5kyU873mVMsS3EztI25A032kMYHW9nmEuKQjoIBpyFQj3SH4UBdqRyhSKLf7uspPFh8SKtR86gHQtEYIxYJc3sKsvQPnaaTmAyKP6mcDyHZmTS/g+txyfprvW0x5p2Bgr4oy1Qx+n5uuATvS8l6x9L9lQsb6/PhC570DdiGvCwO8obgfcGOWsiUlVizxOs6FsKcFUOqrTsFP24CqrNEVG+7gj8uM9c5PjPRLD2/zICss6vetOZazsVkSMRlljN5gHUwbXN7uSRYCwU6y9+W2sH3sEA78Dji8m2ydojjEFUYqViHdD00eGdUzq/ruZk6MBaekRg4+fP42uoqI+rHYVVPGCZB3eB95+3IAc9Ku6laH0bLhcLM85kUAMWQr20qJmA4nrf66vz59Xh4925UsPLyno+Nx
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(39840400004)(136003)(366004)(376002)(451199021)(6916009)(83380400001)(66476007)(54906003)(41300700001)(4326008)(8676002)(36756003)(38100700002)(8936002)(6512007)(6506007)(6486002)(478600001)(66946007)(2616005)(66556008)(5660300002)(7416002)(86362001)(44832011)(2906002)(186003)(316002)(4744005)(6666004);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HL+YpOn7gmY4IGtd7onk+MyiGwnrh0Oe9SnSVp0DQyts/vwXoU2M5f3Mv/Lu?=
- =?us-ascii?Q?p6WXJpMKTUVl01+il13dUfeNJAMFHoNNUdOSlYqu6CPJvzZzH7YyGbNTyWwz?=
- =?us-ascii?Q?6JHKYRwfa2T8KdC+s1PiiYzdVTiJ5KHf7yGp+9HIQY2J7h3363sTQ1zBDOF2?=
- =?us-ascii?Q?XJGPqloHNa6aWZJwB667lf8UxFJYJls6THgq/j24Z4lNm5TrUbQH7onl7IVj?=
- =?us-ascii?Q?9t6z8nXvjIl55FTQV7P2YtIeJz+/d7oszQKkPJfkIk17TJ0ofFjI8FpUUiPP?=
- =?us-ascii?Q?ndv1QdcaKwsMMkpvPar2ZmtH7DGYqN3DWt0HnGLXpw4oLfWY89y/xs8gR0sv?=
- =?us-ascii?Q?8mVP9mpv55VMPEk6YM+ir9Qn9abWdUAWoBmLe6bWJ9tRsgFV1anAzUV1jQHt?=
- =?us-ascii?Q?2ZeOv/HiRfzl3W8DlK5fhQj6tU+feB9V1rZLiNSSDmFY5gAloqnvOmNPfXAD?=
- =?us-ascii?Q?gBssmFqg02vuUh7Wh7EEoMuefbvWqNF0cf8fTSaeS6Fob5BWBBo9/z54muH4?=
- =?us-ascii?Q?z/epALpLW+1zYFXOtcJ3TSiOzbSdMjrDmESOxltZjVzU7O1Mn29tZLkqRYEL?=
- =?us-ascii?Q?Os+pDdZTlXN+eTRuWBULP8aZBNrpbXvSxH9DI4zdK7pCGZO40o3gM0BWcnEg?=
- =?us-ascii?Q?gZLLkr5I3p55QFO9WOjoyeCeCBy9KmmIiUsLPjdq5USqIomzoSltHNl16KcR?=
- =?us-ascii?Q?OQ2dAnkbf6sHt8I7bMXcxojCxPx+6u0AF5d1tEZFV1aIeCX1HzmtJG07o3tE?=
- =?us-ascii?Q?JxO6lf32yxGAh1r1MnDOLspwhz0p6QSlYw3kZIjzaj2IAetVv4qHob+ZzUY5?=
- =?us-ascii?Q?NSO3bpqcnURtT0+e+XO3OoNF88cOydFkr1o9ejI8CrZHuVb3QU4CXXrt3Z99?=
- =?us-ascii?Q?pLX8Z2Sn3EXj9YcU7HJqL5lgF0qZQzcYupYK4dg99UCdu05jriQBvZH4k+Vs?=
- =?us-ascii?Q?CNzEZPS1he2ErD8EUy/VyopADkJVD9Qmu5ba9wtj7ePABca0t/LuM+wexmZ8?=
- =?us-ascii?Q?XPosTkCqZTlPy4k/t0H+egxJlSFhzlcZ3x/gqI4uEf0oBjlVzHeb7p5pyTv3?=
- =?us-ascii?Q?fvlBgb+nUuSqQR93LroqMoSk0FGXitxtMTTavDHMpKSPmNH2O2V13PRqzqzT?=
- =?us-ascii?Q?pCGSoKwougfsTXS5mDcLIqOx7+lY3gXWI1dMnNPSWyliAqWjtI1ZnMzaG5Xc?=
- =?us-ascii?Q?VETEEtuX6jPQ460+J07LY29eb2xbjEcBlS+k2JKr+iS0IwqxXGFBZCstxuB2?=
- =?us-ascii?Q?P7B9tLrDt1XD78r0nDT6/LVcHGnXz5DEePm5ki9QjLbQ3tzMvr69PbzOLf0s?=
- =?us-ascii?Q?rJH5k1diI+4w4Db/Bmjo3g7WipdJMSBTtug6ZJtSqgQsJD5U5fkkQL5E+zAi?=
- =?us-ascii?Q?CNFXPVn842x9BzUwnG1zQbsAHB02sZ86YUAwRbpN/G5Qmx9ne+o6W5ivaheB?=
- =?us-ascii?Q?8OS2ua+ZVnI0xLcAbEWSg6xfGafbhxJlFpQRHnvUcBg+tiGOqZ3rTR9snjON?=
- =?us-ascii?Q?9LHd+oFDRDUanSK2W6fKO1ecFPXiKC2RQSgZ0Kyi3lq1AP47k5e8NceoRMyi?=
- =?us-ascii?Q?lq1IGVa7HivQsxGOlMWPbXuRLalvnJ2fn2RREakuJ/4lwF81TPFt3BoQBb2y?=
- =?us-ascii?Q?5zmsw9v+qDyv8H1Se5tqVhtiJ71OyMc2noouEd2mV4NcklEzj20DhyKNPu7W?=
- =?us-ascii?Q?fng5nA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b11e4abf-c1e5-49f9-453b-08db513adb8e
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 09:42:23.8544
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4oqCmsbP+g19yLcNOlJ8k7jiMEOf/Bh10wHhYFHU0u0hDuTaSoR/zfZdNLPAujMrWqOoiUBI+TGhF1k5WUZIZyIiNuZpn9liY0SL1c7Elos=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR13MB5417
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230510072726.435247-1-ivan.orlov0322@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 09:48:51PM -0700, Colin Foster wrote:
-> Commit d4c367650704 ("net: mscc: ocelot: keep ocelot_stat_layout by reg
-> address, not offset") organized the stats counters for Ocelot chips, namely
-> the VSC7512 and VSC7514. A few of the counter offsets were incorrect, and
-> were caught by this warning:
-> 
-> WARNING: CPU: 0 PID: 24 at drivers/net/ethernet/mscc/ocelot_stats.c:909
-> ocelot_stats_init+0x1fc/0x2d8
-> reg 0x5000078 had address 0x220 but reg 0x5000079 has address 0x214,
-> bulking broken!
-> 
-> Fix these register offsets.
-> 
-> Fixes: d4c367650704 ("net: mscc: ocelot: keep ocelot_stat_layout by reg address, not offset")
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+Hi Ivan,
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on tiwai-sound/for-next]
+[also build test WARNING on tiwai-sound/for-linus linus/master v6.4-rc1 next-20230510]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Ivan-Orlov/ALSA-PCM-Fix-codestyle-issues-in-pcm_native-c/20230510-152814
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/tiwai/sound.git for-next
+patch link:    https://lore.kernel.org/r/20230510072726.435247-1-ivan.orlov0322%40gmail.com
+patch subject: [PATCH] ALSA: PCM: Fix codestyle issues in pcm_native.c
+config: csky-randconfig-r004-20230509 (https://download.01.org/0day-ci/archive/20230510/202305101732.PILWtd0A-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6099cbeae29e29487828a858f8b0e866bec90ab1
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ivan-Orlov/ALSA-PCM-Fix-codestyle-issues-in-pcm_native-c/20230510-152814
+        git checkout 6099cbeae29e29487828a858f8b0e866bec90ab1
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=csky olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=csky SHELL=/bin/bash sound/core/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305101732.PILWtd0A-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   sound/core/pcm_native.c: In function 'snd_pcm_hw_params_choose':
+>> sound/core/pcm_native.c:660:94: warning: suggest braces around empty body in an 'if' statement [-Wempty-body]
+     660 |                         trace_hw_mask_param(pcm, *v, 0, &old_mask, hw_param_mask(params, *v));
+         |                                                                                              ^
+
+
+vim +/if +660 sound/core/pcm_native.c
+
+   607	
+   608	/**
+   609	 * snd_pcm_hw_params_choose - choose a configuration defined by @params
+   610	 * @pcm: PCM instance
+   611	 * @params: the hw_params instance
+   612	 *
+   613	 * Choose one configuration from configuration space defined by @params.
+   614	 * The configuration chosen is that obtained fixing in this order:
+   615	 * first access, first format, first subformat, min channels,
+   616	 * min rate, min period time, max buffer size, min tick time
+   617	 *
+   618	 * Return: Zero if successful, or a negative error code on failure.
+   619	 */
+   620	static int snd_pcm_hw_params_choose(struct snd_pcm_substream *pcm,
+   621					    struct snd_pcm_hw_params *params)
+   622	{
+   623		static const int vars[] = {
+   624			SNDRV_PCM_HW_PARAM_ACCESS,
+   625			SNDRV_PCM_HW_PARAM_FORMAT,
+   626			SNDRV_PCM_HW_PARAM_SUBFORMAT,
+   627			SNDRV_PCM_HW_PARAM_CHANNELS,
+   628			SNDRV_PCM_HW_PARAM_RATE,
+   629			SNDRV_PCM_HW_PARAM_PERIOD_TIME,
+   630			SNDRV_PCM_HW_PARAM_BUFFER_SIZE,
+   631			SNDRV_PCM_HW_PARAM_TICK_TIME,
+   632			-1
+   633		};
+   634		const int *v;
+   635		struct snd_mask old_mask __maybe_unused;
+   636		struct snd_interval old_interval __maybe_unused;
+   637		int changed;
+   638	
+   639		for (v = vars; *v != -1; v++) {
+   640			/* Keep old parameter to trace. */
+   641			if (trace_hw_mask_param_enabled()) {
+   642				if (hw_is_mask(*v))
+   643					old_mask = *hw_param_mask(params, *v);
+   644			}
+   645			if (trace_hw_interval_param_enabled()) {
+   646				if (hw_is_interval(*v))
+   647					old_interval = *hw_param_interval(params, *v);
+   648			}
+   649			if (*v != SNDRV_PCM_HW_PARAM_BUFFER_SIZE)
+   650				changed = snd_pcm_hw_param_first(pcm, params, *v, NULL);
+   651			else
+   652				changed = snd_pcm_hw_param_last(pcm, params, *v, NULL);
+   653			if (changed < 0)
+   654				return changed;
+   655			if (changed == 0)
+   656				continue;
+   657	
+   658			/* Trace the changed parameter. */
+   659			if (hw_is_mask(*v))
+ > 660				trace_hw_mask_param(pcm, *v, 0, &old_mask, hw_param_mask(params, *v));
+   661			if (hw_is_interval(*v)) {
+   662				trace_hw_interval_param(pcm, *v, 0, &old_interval,
+   663							hw_param_interval(params, *v));
+   664			}
+   665		}
+   666	
+   667		return 0;
+   668	}
+   669	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
