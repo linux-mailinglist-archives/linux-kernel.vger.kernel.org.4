@@ -2,312 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 975026FD3F5
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 04:56:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BEE36FD3FC
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 05:03:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbjEJC4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 22:56:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50338 "EHLO
+        id S234911AbjEJDDb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 9 May 2023 23:03:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjEJC4w (ORCPT
+        with ESMTP id S229524AbjEJDD2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 22:56:52 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB4DE50;
-        Tue,  9 May 2023 19:56:49 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34A2nom7012962;
-        Wed, 10 May 2023 02:56:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=5PaovbFPkUXu9CXh3RS3wff+n3ZPxaT3fURnkyi9IY0=;
- b=LawoLhj4FIG5lHwPFCgHRc0RpRMrzZfw8495xpRlNQ7uDcRQoAVaaikMcXDXxBZOGrdM
- DjdeDuZ7BpsquvTt8/q7aH2YNpNIpUMsLoaCLCbyZqZY1ju84NzCmlj8L4Tean2vnT5N
- WlM5OvuHW2AATXRw0kjPQ8h7f8kJLOEesBQ5nbQo3DGcKIw74QtEIxlQJ0zNhHRrsJIS
- TU00WclhnvS8lP4+P4IMglnWvodGU8GUPpu6pynmkAjg+1jI3siIfUNJajjHCmcROxWl
- sJEQ5IYMO/XXgUv58nVIIc1tQvcjXTMwqoDGrA/37vGNo2zLj9q7Gsdp2U4vp6fNHRxc Aw== 
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qfyx089a3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 02:56:30 +0000
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34A2uSl4011686
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 02:56:28 GMT
-Received: from [10.233.17.245] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Tue, 9 May 2023
- 19:56:22 -0700
-Message-ID: <c815d436-85aa-be07-e224-4d5d042c847d@quicinc.com>
-Date:   Wed, 10 May 2023 10:56:20 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v4 1/3] Coresight: Add coresight dummy driver
-To:     Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Leo Yan <leo.yan@linaro.org>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jonathan Corbet <corbet@lwn.net>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Jinlong Mao <quic_jinlmao@quicinc.com>,
-        "Yuanfang Zhang" <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        <linux-doc@vger.kernel.org>
-References: <20230505092422.32217-1-quic_hazha@quicinc.com>
- <20230505092422.32217-2-quic_hazha@quicinc.com>
- <2b02fc8e-4234-30d2-a8dc-3847c574655f@arm.com>
+        Tue, 9 May 2023 23:03:28 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2050.outbound.protection.outlook.com [40.107.113.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E9941724
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 20:03:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fqjtr6zldgCrdynjVX5itxkIGo/j4zQcGpe8EaJwD8JzD9urM6JqkBC+Au3zunGgxonRa3stpAq2LI7BFRvUsuGMLHkbGwMzzaxw7kbA+DD7NlxhSjwqYZuP7s977vPYHWc77B3ju7HYtDpMXu78rOoPt6iew0CTleRlCsBHunTDkNEhTciQRuiVvNaKWjMdAyZzzxU7oF6BTVWYJLa0n2lmOGU+lw0jtYStkjxyzYgQLR0MqtyHneBp0c7ScGMjmhm0lT8/0+IjvPi4GQC8Ln3SmeIIrlVq/AU4PWvrmf9lq0Exc+skbjwDJNmEzLSfY71UKvTffS6wngs3YVx6Hw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fu81tCfqX1IVHeOs5RwHZ9fDM68Kv2FeokDdIPKMNvA=;
+ b=FcxHXrl+O/zqCg0Uz3O32t5bWl/Q9ivQ9ETDVKU3JRjatKsKSjhLAXAMkMC5MNBvpnpNrMvtbNUHI0qaIsHNmFFeU7L2QnX4fFGejWHJkwlW/J599NGb3FKE9cFT558FZByKR8v1FqxObBOyQba5eTiYBd7JTWfR28Iih5sCeNnFlfdaZLbsX4ec3qURDIGoX42dCHk8ttxYixj3YYNQvr1uIKiiaJ4Dbmyzi3vynsI7XMdum6hto1ndUUmxSxhwOYjo+x0RsQEaH83DFoO5G3N6Ry3pSPs4t+r3+ItQz4WW9wUQkqBtT262EjHNXqAEYmxx89Y8QfW4NEHQS1mXAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nec.com; dmarc=pass action=none header.from=nec.com; dkim=pass
+ header.d=nec.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nec.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fu81tCfqX1IVHeOs5RwHZ9fDM68Kv2FeokDdIPKMNvA=;
+ b=fiUW3C7RMU1lB1NNWFBQdDAKfPEuq5InwGyd5Ygy51Dw4xakfwLlt0XDNFz3v7YDJLeOHyAZ3Szgq7SkfvFEgraIFWyMOyR3KoArf6JQCvTuR+gykYe2E/+pS7m/gemgur7YtddKFqEncfYbQW+uTgLV9Jkcxh/YBZ2MmpwXR3k=
+Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com (2603:1096:400:13c::10)
+ by TY3PR01MB11796.jpnprd01.prod.outlook.com (2603:1096:400:370::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.19; Wed, 10 May
+ 2023 03:03:21 +0000
+Received: from TYWPR01MB8591.jpnprd01.prod.outlook.com
+ ([fe80::15c9:309c:d898:c0f5]) by TYWPR01MB8591.jpnprd01.prod.outlook.com
+ ([fe80::15c9:309c:d898:c0f5%3]) with mapi id 15.20.6363.033; Wed, 10 May 2023
+ 03:03:21 +0000
+From:   =?utf-8?B?SE9SSUdVQ0hJIE5BT1lBKOWggOWPo+OAgOebtOS5nyk=?= 
+        <naoya.horiguchi@nec.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 1/2] mm: memory_failure: move memory_failure_attr_group
+ under MEMORY_FAILURE
+Thread-Topic: [PATCH 1/2] mm: memory_failure: move memory_failure_attr_group
+ under MEMORY_FAILURE
+Thread-Index: AQHZgZ+jOPb53B42WEmli8dwXIs48a9S1LKA
+Date:   Wed, 10 May 2023 03:03:21 +0000
+Message-ID: <20230510030319.GA30737@hori.linux.bs1.fc.nec.co.jp>
+References: <20230508114128.37081-1-wangkefeng.wang@huawei.com>
+In-Reply-To: <20230508114128.37081-1-wangkefeng.wang@huawei.com>
+Accept-Language: ja-JP, en-US
 Content-Language: en-US
-From:   Hao Zhang <quic_hazha@quicinc.com>
-In-Reply-To: <2b02fc8e-4234-30d2-a8dc-3847c574655f@arm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: JEKF4hXVbz_dGz9ovZAGZz4xEbbzYHRT
-X-Proofpoint-GUID: JEKF4hXVbz_dGz9ovZAGZz4xEbbzYHRT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-09_16,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
- priorityscore=1501 malwarescore=0 phishscore=0 mlxlogscore=999
- clxscore=1015 impostorscore=0 suspectscore=0 spamscore=0 bulkscore=0
- lowpriorityscore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305100020
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nec.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: TYWPR01MB8591:EE_|TY3PR01MB11796:EE_
+x-ms-office365-filtering-correlation-id: 1b9c68c4-6a56-47b8-f274-08db51031cf3
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: HMEGuEhduZc/NDvIobO3FWYJXTsLfx45frCbYC1f2UpsAn/57vBGAEE1VUVu5LV2hrQulKAgLFIHj4oOtGDzeZa7LsS4kxWoFAgiI8ThROdey5bz69VJlvVaZZJ0ybCD0GvqLCR8dEFs9a4BAVx+OSFNlpE3dgO6mccKZbbn/6QbMk5/X4yIH6kdR4DWn6a2ugoZ7ciqdx5hNWO9ER2R/RhjGQvbT555D0YI0Pd5NdXY05MJc7usWX49Oa4DMwGAitXSNuc02CYd/golvkIOQdoaxl2VPf9u4rr2on1rjEci7r+b7JYpG147dYlQcSlXZ0HQ9QhOQlZln9ABjXSDUJrVo8r8WUu470Z3PiafvOqqpd7s/7RShmPfOPBBZcHK03OFY7XGtIsNFmY7Bl/c8fziapA4ow8t/Bj931leaQz6Q0pBsusLyFzewaf88obEC2JJOfexDSURJZhkfBueOjEfJ0lFPHQFnMLFu1gr2Y2ez5a2zGI/1fb7Bx3molBoYJTTSaQlvCLt7djRp5y+Ihxo76uCZ5sdpfUcfYnBKz7YUoXmjDYT1veDSODMc9YVSjYT/poquOOw7IOWsY4/vE9edeqiln2RcUIu8FHEfp5jSxefbQWoTcaXmJSnu6KM
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYWPR01MB8591.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(136003)(39860400002)(366004)(346002)(451199021)(122000001)(33656002)(41300700001)(2906002)(558084003)(26005)(186003)(1076003)(6506007)(9686003)(6512007)(5660300002)(71200400001)(38100700002)(38070700005)(82960400001)(8936002)(8676002)(54906003)(85182001)(478600001)(83380400001)(6486002)(86362001)(66476007)(66556008)(64756008)(66446008)(76116006)(66946007)(6916009)(316002)(4326008);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?clhnYXhSanFvZFBNZElxK3ZPZ1J4K2VwRHBwSEFkcHJTNmZEeVc0QUVXVUdV?=
+ =?utf-8?B?R0FKK294dSt5cmV5Zkc5RVM1VUZJdUQ1SUc4bFFDUENmNWYxbVhhUnc2NzFL?=
+ =?utf-8?B?bS9xYUVTdkQ2U2lnT0JFa0UxN1QzQzBnUGszdU0rMTNUa3AyQ3owWTduS3hP?=
+ =?utf-8?B?dnAxdkpiSW12WWlnL20yT0lybjltenYzNWhReVF4enp0b3JtOWdCdmVpUHBD?=
+ =?utf-8?B?NzJPMVdjS2VnVzJFbTJ3b2FtMzI1TE5JaGVETC9RdHo1ZXAvWDBGQ01lUkFh?=
+ =?utf-8?B?U1E0YW94Y2gwdUt0L0oxQkNZSmlzc0ZoS0poQUI5eitzS3VxT3A3WlJvL3VN?=
+ =?utf-8?B?Z3FZU2xNcDZZdEN2VFJwbWVhTWorWE9sb3A2bmh0a04vN0kxN2xDREJ0Q1p1?=
+ =?utf-8?B?SmU1SmV2NE53QzhXSFIvWXJaOTZzdlN6eHlVUFVZSG9Zam5Qak1YN044eHMr?=
+ =?utf-8?B?NG5XRDlZL3c2VlZ5ZDhZWXFpN1g1MmZ4cVNkRGpkVk90cGFnbUtqaCt6WW40?=
+ =?utf-8?B?cEU4SmZLbFdEemZTdytmRDdKcVZST3daNVdXb2pVWFdITFFOanpFcEZqNGg0?=
+ =?utf-8?B?d0orSTJHRm9JYXJkTm82dlBtS0V4aVRLU0gyMmlVM2VKdTRqeVlnOG9WRFJ6?=
+ =?utf-8?B?QXFaREMrUTRRQ3JpbFAzVkZTYUxPNUlrM3RUb29Xc0w0SlJjNHB0WWdvRE1E?=
+ =?utf-8?B?NHlxeTJqR0tXOUswUlBFQjVzZ2dTSGdYN0w3WmNHZzJFeWRaMlN4eG40aWZD?=
+ =?utf-8?B?Y2FTdlNUSlUzOHNtZElKNXAvZGpQUW1zTEJNOHFWeUhNVnVHWmhWOW5odVMv?=
+ =?utf-8?B?eTN0TWFvanZ2M0RETFVIUW5rSkRXUnk5S2xIS0ptYlBtWUlUUXhqSEZUM24z?=
+ =?utf-8?B?eGFGQVZHUzhQWmhPTjFKU0hMN01ReHArNUZLSlMxREVad0dxdThTZVVhUFlN?=
+ =?utf-8?B?dklkM21kVHByVnI4d2N2T0VHUTJqYXZSenlHZGF5L3phRU5IeEVWMnI3L1pz?=
+ =?utf-8?B?MzhoT2ZDNlhZQVZyUS9zK3BhVEgrNmtLdE4rdG5tbW5KbG5XU2NJWTBwMmsv?=
+ =?utf-8?B?ZUhWaGNkNjcwc1lEdDBvUC90K2VraG9uNFBoN2k1QXYrVlZWdG8zWkJHNGha?=
+ =?utf-8?B?Um9kam8zb21DVjF1bnJUcGhMYkR1SVE4U01RaUFPK3laM3dyL3d6Q09tN1cw?=
+ =?utf-8?B?Njl1ZTRDTGduMkxBNW9DQ2tsOGV2NDRyNkRvaHA4R3NGc3ljQkZ6RGw3L0Vh?=
+ =?utf-8?B?SzlRd0pJNEhPTnFGYWdRSE9qSVhqdGxyV1E5enlHK0MwcDdWa1RabmVXZHlO?=
+ =?utf-8?B?QjhrVTJjMDFWbUJ6TGh3Z2kxYUtIbnUzN3k2RW5EQlVleUNyY3I1UGlZYnp0?=
+ =?utf-8?B?Y2lrYy9HRmZFV1R5Rlg4S3VvMUQ4Q1VWeC9JendVTEdUSTFJdTRVVWRZS1h4?=
+ =?utf-8?B?OUN4dkhiZVB3Wlo5OHozQWxWald6NHd1eWZEcVJNY0lwa3A0eUNUUnRHd3dm?=
+ =?utf-8?B?cExqd2FPcWFpTkxrRVc0cDVBbWUxOGRrakl2bmdTR1krVGhNYkNYSjRpQngz?=
+ =?utf-8?B?czBrUzZ5QUFwWUJ2VitlMDRXbExqTWhNcXA0NTFIODd1WUhIYXlWU0cxellU?=
+ =?utf-8?B?K0M0OWJyWUVoVExTYmxkdGw3TndNZ250TEdiaWExWmdlVWZMK0dnWHZjekx6?=
+ =?utf-8?B?eVRnc0UxWjg5eHpzT1U3dkR5b1oxMmJXcy90UTFEcUpXWHJxRkJPOVBhT0NI?=
+ =?utf-8?B?OEF6NEgxZ2JQM29ZcE5SOWVqa1dnRXd2N3lpTnRpOGhaTmJOL2pkWWdyZFBM?=
+ =?utf-8?B?ZmJhclh4MTR0ZTNZLzhxUmpidVhJOXhjZElNM2xrTDhxWmNiRUl1WkdjZVdZ?=
+ =?utf-8?B?QWhkUmtueVRzWmhQZ0V3bTZjYjBPWHRQWTBrVDRWUk14amdhQjI1dmlmRUE1?=
+ =?utf-8?B?QWZ0aW1VWGVONm9SSkk5NVB1QW1OcnZVenZtdE1hNVV6YWtqcVAvM1BHcmFV?=
+ =?utf-8?B?OWlmVHZhNUxMTTlaWjRJdzVwNTd1bE94UDVIQmJzNXRRMFhXbUZFU09UTVlF?=
+ =?utf-8?B?U3pSUnYwS1BvbERKa0pVZzdNRW9sc3M2ZndHSXBXdXhBMFRUS3VoV3hiWFB6?=
+ =?utf-8?B?ZmZ3YTJGS1FXK2tsbXBDSjM5dnY5U0V5NDZtNndGVElBdUZWa2Q5UTVFeUdn?=
+ =?utf-8?B?N0E9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <FB3D308AE181044EAF64E0AAE7D1A427@jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: nec.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: TYWPR01MB8591.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b9c68c4-6a56-47b8-f274-08db51031cf3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 May 2023 03:03:21.5043
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: e67df547-9d0d-4f4d-9161-51c6ed1f7d11
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: wompNrdPgza+qR0cSFS09vnsoVXPxbUYMDjWjbAPn6Z0OCFwB0UV+BCvRrCy5Go5y523zKaaEy7ay0lKBIiIBA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY3PR01MB11796
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Suzuki,
-
-On 5/5/2023 5:57 PM, Suzuki K Poulose wrote:
-> On 05/05/2023 10:24, Hao Zhang wrote:
->> Some Coresight devices that kernel don't have permission to access or
->> configure. So there need driver to register dummy devices as Coresight
->> devices. It may also be used to define components that may not have
->> any programming interfaces (e.g, static links), so that paths can be
->> established in the driver. Provide Coresight API for dummy device
->> operations, such as enabling and disabling dummy devices. Build the
->> Coresight path for dummy sink or dummy source for debugging.
->>
->> Signed-off-by: Hao Zhang <quic_hazha@quicinc.com>
->> ---
->>   drivers/hwtracing/coresight/Kconfig           |  11 ++
->>   drivers/hwtracing/coresight/Makefile          |   1 +
->>   drivers/hwtracing/coresight/coresight-dummy.c | 171 ++++++++++++++++++
->>   include/linux/coresight.h                     |   1 +
->>   4 files changed, 184 insertions(+)
->>   create mode 100644 drivers/hwtracing/coresight/coresight-dummy.c
->>
->> diff --git a/drivers/hwtracing/coresight/Kconfig 
->> b/drivers/hwtracing/coresight/Kconfig
->> index 2b5bbfffbc4f..06f0a7594169 100644
->> --- a/drivers/hwtracing/coresight/Kconfig
->> +++ b/drivers/hwtracing/coresight/Kconfig
->> @@ -236,4 +236,15 @@ config CORESIGHT_TPDA
->>         To compile this driver as a module, choose M here: the module 
->> will be
->>         called coresight-tpda.
->> +
->> +config CORESIGHT_DUMMY
->> +    tristate "Dummy driver support"
->> +    help
->> +      Enables support for dummy driver. Dummy driver can be used for
->> +      CoreSight sources/sinks that are owned and configured by some
->> +      other subsystem and use Linux drivers to configure rest of trace
->> +      path > +
->> +      To compile this driver as a module, choose M here: the module 
->> will be
->> +      called coresight-dummy.
->>   endif
->> diff --git a/drivers/hwtracing/coresight/Makefile 
->> b/drivers/hwtracing/coresight/Makefile
->> index 33bcc3f7b8ae..995d3b2c76df 100644
->> --- a/drivers/hwtracing/coresight/Makefile
->> +++ b/drivers/hwtracing/coresight/Makefile
->> @@ -30,3 +30,4 @@ obj-$(CONFIG_CORESIGHT_TPDA) += coresight-tpda.o
->>   coresight-cti-y := coresight-cti-core.o    coresight-cti-platform.o \
->>              coresight-cti-sysfs.o
->>   obj-$(CONFIG_ULTRASOC_SMB) += ultrasoc-smb.o
->> +obj-$(CONFIG_CORESIGHT_DUMMY) += coresight-dummy.o
->> diff --git a/drivers/hwtracing/coresight/coresight-dummy.c 
->> b/drivers/hwtracing/coresight/coresight-dummy.c
->> new file mode 100644
->> index 000000000000..ee9881ff4754
->> --- /dev/null
->> +++ b/drivers/hwtracing/coresight/coresight-dummy.c
->> @@ -0,0 +1,171 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights 
->> reserved.
->> + */
->> +
->> +#include <linux/kernel.h>
->> +#include <linux/module.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/coresight.h>
->> +#include <linux/of.h>
->> +#include <linux/pm_runtime.h>
-> 
-> Please follow the alphabetical order for the header files ^
-> 
-Sure, I will update this in the next patch series.
-
->> +
->> +#include "coresight-priv.h"
->> +
->> +struct dummy_drvdata {
->> +    struct device            *dev;
-> 
-> nit: We don't need this really. And that completely removes the need for
-> drvdata too. See below.
-> 
->> +    struct coresight_device        *csdev;
->> +};
->> +
->> +DEFINE_CORESIGHT_DEVLIST(source_devs, "dummy_source");
->> +DEFINE_CORESIGHT_DEVLIST(sink_devs, "dummy_sink");
->> +
->> +static int dummy_source_enable(struct coresight_device *csdev,
->> +                   struct perf_event *event, u32 mode)
->> +{
->> +    struct dummy_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
->> +
->> +    dev_dbg(drvdata->dev, "Dummy source enabled\n");
-> 
->      dev_dbg(csdev->dev.parent, ..");
-> 
-> Similarly for all instances below.
-> 
->> +
->> +    return 0;
->> +}
->> +
->> +static void dummy_source_disable(struct coresight_device *csdev,
->> +                 struct perf_event *event)
->> +{
->> +    struct dummy_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
->> +
->> +    dev_dbg(drvdata->dev, "Dummy source disabled\n");
->> +}
->> +
->> +static int dummy_sink_enable(struct coresight_device *csdev, u32 mode,
->> +                void *data)
->> +{
->> +    struct dummy_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
->> +
->> +    dev_dbg(drvdata->dev, "Dummy sink enabled\n");
->> +
->> +    return 0;
->> +}
->> +
->> +static int dummy_sink_disable(struct coresight_device *csdev)
->> +{
->> +    struct dummy_drvdata *drvdata = dev_get_drvdata(csdev->dev.parent);
->> +
->> +    dev_dbg(drvdata->dev, "Dummy sink disabled\n");
->> +
->> +    return 0;
->> +}
->> +
->> +static const struct coresight_ops_source dummy_source_ops = {
->> +    .enable    = dummy_source_enable,
->> +    .disable = dummy_source_disable,
->> +};
->> +
->> +static const struct coresight_ops dummy_source_cs_ops = {
->> +    .source_ops = &dummy_source_ops,
->> +};
->> +
->> +static const struct coresight_ops_sink dummy_sink_ops = {
->> +    .enable    = dummy_sink_enable,
->> +    .disable = dummy_sink_disable,
->> +};
->> +
->> +static const struct coresight_ops dummy_sink_cs_ops = {
->> +    .sink_ops = &dummy_sink_ops,
->> +};
->> +
->> +static int dummy_probe(struct platform_device *pdev)
->> +{
->> +    struct device *dev = &pdev->dev;
->> +    struct device_node *node = dev->of_node;
->> +    struct coresight_platform_data *pdata;
->> +    struct dummy_drvdata *drvdata;
->> +    struct coresight_desc desc = { 0 };
->> +
->> +    if (of_device_is_compatible(node, "arm,coresight-dummy-source")) {
->> +
->> +        desc.name = coresight_alloc_device_name(&source_devs, dev);
->> +        if (!desc.name)
->> +            return -ENOMEM;
->> +
->> +        desc.type = CORESIGHT_DEV_TYPE_SOURCE;
->> +        desc.subtype.source_subtype =
->> +                    CORESIGHT_DEV_SUBTYPE_SOURCE_OTHERS;
->> +        desc.ops = &dummy_source_cs_ops;
->> +    } else if (of_device_is_compatible(node, 
->> "arm,coresight-dummy-sink")) {
->> +        desc.name = coresight_alloc_device_name(&sink_devs, dev);
->> +        if (!desc.name)
->> +            return -ENOMEM;
->> +
->> +        desc.type = CORESIGHT_DEV_TYPE_SINK;
->> +        desc.subtype.sink_subtype = CORESIGHT_DEV_SUBTYPE_SINK_DUMMY;
->> +        desc.ops = &dummy_sink_cs_ops;
->> +    } else {
->> +        dev_err(dev, "Device type not set\n");
->> +        return -EINVAL;
->> +    }
->> +
->> +    pdata = coresight_get_platform_data(dev);
->> +    if (IS_ERR(pdata))
->> +        return PTR_ERR(pdata);
->> +    pdev->dev.platform_data = pdata;
->> +
->> +    drvdata = devm_kzalloc(dev, sizeof(*drvdata), GFP_KERNEL);
->> +    if (!drvdata)
->> +        return -ENOMEM; > +
->> +    drvdata->dev = &pdev->dev;
->> +    platform_set_drvdata(pdev, drvdata);
-> 
-> As above, you may remove the drvdata entirely.
-> 
-For some dummy sources, it's needed to allocate traceid for them in 
-kernel driver, so this struct would be useful for that case.
-
-I will remove it now and upstream it in the further.
-
-Thanks,
-Hao
-
-> Otherwise looks good to me
-> 
-> Suzuki
-> 
+T24gTW9uLCBNYXkgMDgsIDIwMjMgYXQgMDc6NDE6MjdQTSArMDgwMCwgS2VmZW5nIFdhbmcgd3Jv
+dGU6DQo+IFRoZSBtZW1vcnlfZmFpbHVyZV9hdHRyX2dyb3VwIGlzIG9ubHkgY2FsbGVkIGlmIE1F
+TU9SWV9GQUlMVVJFDQo+IGVuYWJsZWQsIG1vdmUgaXQgdW5kZXIgdGhpcyBjb25maWd1cmF0aW9u
+Lg0KPiANCj4gU2lnbmVkLW9mZi1ieTogS2VmZW5nIFdhbmcgPHdhbmdrZWZlbmcud2FuZ0BodWF3
+ZWkuY29tPg0KDQpBY2tlZC1ieTogTmFveWEgSG9yaWd1Y2hpIDxuYW95YS5ob3JpZ3VjaGlAbmVj
+LmNvbT4=
