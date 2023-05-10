@@ -2,96 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D07C6FE3F7
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 20:20:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17E6B6FE404
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 20:22:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236486AbjEJSUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 14:20:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
+        id S236082AbjEJSWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 14:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231468AbjEJSUA (ORCPT
+        with ESMTP id S236062AbjEJSWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 14:20:00 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA8ED9EE2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 11:18:45 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64115eef620so52172547b3a.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 11:18:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683742721; x=1686334721;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AxNNeUlKb2mEb7+tC4au3XdhlwF/tDkvv1YeFKn3c7Y=;
-        b=n5a6hSvCr1y5VjAamauHZ709dncmRtqSN7cvPA59jqOLcEr4HmcNQQVZOcrcj9PaAk
-         c7ixJ6QXq1PTiEvH3P8NgZ0juhIPoX4oV24jULi20FAaqAmaw01jFUcX/Vu6FnO6gwgc
-         BeJRZ8XCoRYpzSFJF7Ssu/O8OZH0X7isU8oXVm6piyQEAwE1luoxSqHxO179fIERp4bR
-         sFGC/vD2O31U9RyAILJWRumIBiqs+2ME95LCU0EsqopxhKlrLF61/fTnZ0CfFOu7CXOc
-         +cC15Dmr4i3kDITU1i+ARZ0SHKTGjJaqFx0PVAQU8ks0GKJVSI+QPmkoo2ujJwLJ8Jpe
-         CbWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683742721; x=1686334721;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AxNNeUlKb2mEb7+tC4au3XdhlwF/tDkvv1YeFKn3c7Y=;
-        b=DaUl3Uaw0Sx1k8HK6snDue1fG0FCI6g+SLU0EOiIIUlOzamP87+N3FHUtClBpmRIzj
-         iF8FKOa56mdxFybhIWM5Po2X+ZcD9UPaS8GxxzayoTGRcR6c5vDYInTbF0wPIeb22PLt
-         Hsz8l9Lz8fO2WtFEsu4P9MCZUBkiCmBB1UO6AwtAMahOfNtLVTDO9hwi6Hc1nYlvt8R/
-         zjPUoZkFI5az1zLkzdFTpMQd3tIGZFqC6IvyVKPs1Ttp3DlxjZmi+n06EDQjCdivyWEK
-         G6sF/fE1gY8hPDJ0CHRAcb8uIl/6K0O5mQ3jwwZbBfA4eeF/1VBh+VxnDoAm1ahAjILD
-         VisQ==
-X-Gm-Message-State: AC+VfDyMUIFXjJeKx7GvfItsAdon+sO6izbHQ5pcLk0Flp1nWEVVlMsy
-        xgeQ0C4/vNDQZpeW6G4D6Tc=
-X-Google-Smtp-Source: ACHHUZ6BrfuP6JLTyFBueEHrabOYi57cQU9R21n/k1mzM3ac7v2HhCAKCATDnCtBraemNnBQyw79Lw==
-X-Received: by 2002:a17:902:b195:b0:1a0:76e8:a4d with SMTP id s21-20020a170902b19500b001a076e80a4dmr21127802plr.14.1683742720606;
-        Wed, 10 May 2023 11:18:40 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id l8-20020a170903244800b001ac2c3e54adsm4105512pls.118.2023.05.10.11.18.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 11:18:40 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 10 May 2023 08:18:39 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     jiangshanlai@gmail.com, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 3/6] workqueue: Move worker_set/clr_flags() upwards
-Message-ID: <ZFvf_1i82w2Czi9t@slm.duckdns.org>
-References: <20230510030752.542340-1-tj@kernel.org>
- <20230510030752.542340-4-tj@kernel.org>
- <CAHk-=wiu5vwNeiDbwueHtpnTp1Be7r3_ssG07Qsv2N=V9K454Q@mail.gmail.com>
+        Wed, 10 May 2023 14:22:39 -0400
+Received: from 189.cn (ptr.189.cn [183.61.185.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35412868D;
+        Wed, 10 May 2023 11:22:10 -0700 (PDT)
+HMM_SOURCE_IP: 10.64.8.31:41422.1440474362
+HMM_ATTACHE_NUM: 0000
+HMM_SOURCE_TYPE: SMTP
+Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
+        by 189.cn (HERMES) with SMTP id 60D1C1001EA;
+        Thu, 11 May 2023 02:20:32 +0800 (CST)
+Received: from  ([114.242.206.180])
+        by gateway-151646-dep-85667d6c59-lhcrq with ESMTP id 2e0243989df1455fa5a7afdcf2c485d3 for tzimmermann@suse.de;
+        Thu, 11 May 2023 02:20:34 CST
+X-Transaction-ID: 2e0243989df1455fa5a7afdcf2c485d3
+X-Real-From: 15330273260@189.cn
+X-Receive-IP: 114.242.206.180
+X-MEDUSA-Status: 0
+Sender: 15330273260@189.cn
+Message-ID: <0e13efbf-9a48-6e70-fdf3-8290f28c6dc7@189.cn>
+Date:   Thu, 11 May 2023 02:20:31 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 1/6] fbdev/matrox: Remove trailing whitespaces
+To:     Thomas Zimmermann <tzimmermann@suse.de>, deller@gmx.de,
+        geert@linux-m68k.org, javierm@redhat.com, daniel@ffwll.ch,
+        vgupta@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
+        davem@davemloft.net, James.Bottomley@HansenPartnership.com,
+        arnd@arndb.de, sam@ravnborg.org
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-parisc@vger.kernel.org
+References: <20230510110557.14343-1-tzimmermann@suse.de>
+ <20230510110557.14343-2-tzimmermann@suse.de>
+Content-Language: en-US
+From:   Sui Jingfeng <15330273260@189.cn>
+In-Reply-To: <20230510110557.14343-2-tzimmermann@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wiu5vwNeiDbwueHtpnTp1Be7r3_ssG07Qsv2N=V9K454Q@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 09:30:55AM -0500, Linus Torvalds wrote:
-> On Tue, May 9, 2023 at 10:08 PM Tejun Heo <tj@kernel.org> wrote:
-> >
-> > They're gonna be used wq_worker_stopping(). Move them upwards.
-> 
-> I got points deducted in fifth grade for using "gonna" instead of
-> "going to". Here I am, 40+ years later, and I still feel it.
-> 
-> Please use "going to". And add the missing "in" while at it.
-> 
->              Linus "scarred for life" Torvalds
+Hi, Thomas
 
-Aye, Aye, imma update.
 
-Thanks.
+I love your patch, yet something to improve:
 
--- 
-tejun
+
+On 2023/5/10 19:05, Thomas Zimmermann wrote:
+> Fix coding style. No functional changes.
+>
+> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
+> Reviewed-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> Tested-by: Sui Jingfeng <suijingfeng@loongson.cn>
+> ---
+>   drivers/video/fbdev/matrox/matroxfb_accel.c | 6 +++---
+>   drivers/video/fbdev/matrox/matroxfb_base.h  | 4 ++--
+>   2 files changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/video/fbdev/matrox/matroxfb_accel.c b/drivers/video/fbdev/matrox/matroxfb_accel.c
+> index 9cb0685feddd..ce51227798a1 100644
+> --- a/drivers/video/fbdev/matrox/matroxfb_accel.c
+> +++ b/drivers/video/fbdev/matrox/matroxfb_accel.c
+> @@ -88,7 +88,7 @@
+>   
+>   static inline void matrox_cfb4_pal(u_int32_t* pal) {
+>   	unsigned int i;
+> -	
+> +
+>   	for (i = 0; i < 16; i++) {
+>   		pal[i] = i * 0x11111111U;
+>   	}
+> @@ -96,7 +96,7 @@ static inline void matrox_cfb4_pal(u_int32_t* pal) {
+>   
+>   static inline void matrox_cfb8_pal(u_int32_t* pal) {
+>   	unsigned int i;
+> -	
+> +
+>   	for (i = 0; i < 16; i++) {
+>   		pal[i] = i * 0x01010101U;
+>   	}
+> @@ -482,7 +482,7 @@ static void matroxfb_1bpp_imageblit(struct matrox_fb_info *minfo, u_int32_t fgx,
+>   			/* Tell... well, why bother... */
+>   			while (height--) {
+>   				size_t i;
+> -				
+> +
+>   				for (i = 0; i < step; i += 4) {
+>   					/* Hope that there are at least three readable bytes beyond the end of bitmap */
+>   					fb_writel(get_unaligned((u_int32_t*)(chardata + i)),mmio.vaddr);
+> diff --git a/drivers/video/fbdev/matrox/matroxfb_base.h b/drivers/video/fbdev/matrox/matroxfb_base.h
+> index 958be6805f87..c93c69bbcd57 100644
+> --- a/drivers/video/fbdev/matrox/matroxfb_base.h
+> +++ b/drivers/video/fbdev/matrox/matroxfb_base.h
+> @@ -301,9 +301,9 @@ struct matrox_altout {
+>   	int		(*verifymode)(void* altout_dev, u_int32_t mode);
+>   	int		(*getqueryctrl)(void* altout_dev,
+>   					struct v4l2_queryctrl* ctrl);
+
+Noticed that there are plenty of coding style problems in matroxfb_base.h,
+
+why you only fix a few of them?   Take this two line as an example, 
+shouldn't
+
+they be fixed also as following?
+
+
+  	int		(*verifymode)(void *altout_dev, u_int32_t mode);
+  	int		(*getqueryctrl)(void *altout_dev,
+  					struct v4l2_queryctrl *ctrl);
+
+
+> -	int		(*getctrl)(void* altout_dev,
+> +	int		(*getctrl)(void *altout_dev,
+>   				   struct v4l2_control* ctrl);
+> -	int		(*setctrl)(void* altout_dev,
+> +	int		(*setctrl)(void *altout_dev,
+>   				   struct v4l2_control* ctrl);
+>   };
+>   
