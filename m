@@ -2,141 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA0F76FE52A
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:33:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E206FE52E
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbjEJUdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:33:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58176 "EHLO
+        id S236282AbjEJUgU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:36:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjEJUdt (ORCPT
+        with ESMTP id S235982AbjEJUgS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:33:49 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2085.outbound.protection.outlook.com [40.107.20.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5109D4ED3;
-        Wed, 10 May 2023 13:33:40 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WGVE4uamoHCMiLRGuM0tSV70kWIZKxSszj8znX5Ze60tx3TCPrL1YE0Igp+Cu/wBT46eynkDEHt/sdn8uDblbfIuxGWFOYRJqwTCIBgo13fgHiwlRiFbnHyRXOBA47mwY+jggrbnvE/s2YSnY+iTt4MukDTxupK9pCOF659nEZvG8vI0gHePBou4b8InctMJxqlJ6wM0tQwhCUDgS686wyK6zbKb9W4tirmfdhTw+1qXq/T97wfWZNBRBI+gKpk5yemE0Xjp4tmpnndsk/CqaZhu2IVYaJRFk+1iZ4xFZhR+0gkXNZpZJ7FhVdZq976QCiZ3sz/T9YgIuDaF8HlLgA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=UArRzrLtYhAwJBxof5odgeplXhAfKOBD4VW90ibkiuE=;
- b=ksgE4cwKKakjS86UEAxEH/pUCCbkMWhH7hsPR2RRnxNuUCOTL6eWiefEyaKBhofZca7XKShB2yh9dH/rgpxFkvCPjgEL7a7ijYdmS8ioIOvhZgrO8EG6UytBpNEL4fj/HEIiQX5dmvj4owVwprLcYzLfuiv/PJyE8rHNvhJXBE7CKBP9fudzQ4JIn8t8P5w508dz3oJzVeI1gqQtGEKNIoZB49BPUqsURNtANLpeef1NSiYb8j7a0Rg26ORlYwxi9WYQQS2w+9E36J4DiCLkmS16f0IhuysUvVcYJpnR69WePy4U/FakqXQo+I1GVwy2hEiIkQ9KzTLyrPha+hsPIg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=UArRzrLtYhAwJBxof5odgeplXhAfKOBD4VW90ibkiuE=;
- b=rZ20jrgqMQCVuazqPnav9G2X9ZXrg7cSMIAf1mfcUzFwo3cvUh4m+x+N0kpLpgFSmGuU3uibp/aIm5Su0iZ7WdukP8Npvj/EXEnYqiKcR1cFZ9oD3MYcwlfSP+7pBkovQQVDWEr9AIeRdJVX6DkiKSYUo0qql2WPkvctnAjbF5A=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
- by AM8PR04MB7348.eurprd04.prod.outlook.com (2603:10a6:20b:1db::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Wed, 10 May
- 2023 20:33:37 +0000
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::245a:9272:b30a:a21c]) by AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::245a:9272:b30a:a21c%3]) with mapi id 15.20.6363.033; Wed, 10 May 2023
- 20:33:37 +0000
-Date:   Wed, 10 May 2023 23:33:33 +0300
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     Colin Foster <colin.foster@in-advantage.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        UNGLinuxDriver@microchip.com,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>
-Subject: Re: [PATCH net v1] net: mscc: ocelot: fix stat counter register
- values
-Message-ID: <20230510203333.473u4sxwbnkwv6kj@skbuf>
-References: <20230510044851.2015263-1-colin.foster@in-advantage.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230510044851.2015263-1-colin.foster@in-advantage.com>
-X-ClientProxiedBy: AM8P191CA0017.EURP191.PROD.OUTLOOK.COM
- (2603:10a6:20b:21a::22) To AM0PR04MB6452.eurprd04.prod.outlook.com
- (2603:10a6:208:16d::21)
+        Wed, 10 May 2023 16:36:18 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015D14C16;
+        Wed, 10 May 2023 13:36:16 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4ecb137af7eso8744925e87.2;
+        Wed, 10 May 2023 13:36:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683750975; x=1686342975;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PTuiC0ua1kIyWi3iheh/3XF1H10GgI50sRM4ZeY/JDg=;
+        b=EtKP6OM3eAtq9L7LIAH4ZD/qwUKVCv5RUrIRvLK65LqgYDQJ6DIMmcbScvI2ybkfR9
+         18LS2Nw6eltSEzL0eos7uwew0qWPitrbQXlkjWZl904zhOl/df/DIPQIttpiz9i3ZTnt
+         m7f5lUnwmvpGSmFUq0zZExX6Vd4fVH/u78WB1mN8bT4RjYxPfUkGatD5Wvg+4XKPvmdk
+         GRLqI86DTahAPl4Vzs3OUAV2gimPQHpT8ICd/K0gXkTJBRtyzrthi0FMgfO6s/oTK7zz
+         LkgGpvSv2YNiXM2Wm2HWrgDzBpZ9eL3iqTC5xwsELAU+lLW2ilBzua/Y/jSMNxWXpAAc
+         VqbA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683750975; x=1686342975;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PTuiC0ua1kIyWi3iheh/3XF1H10GgI50sRM4ZeY/JDg=;
+        b=Qt07KTOBAGuy5nb0+tjY3ExYGE1CgdFG2TGaW84Sik0hIpO5q4Qmkzz8WzMehlUqhA
+         VBsLhOmv9NJpA+MOa5uwg7clPna2vfjubl/7X6742tAKG1dWiC8YmxzAVzBRuNw2MVJI
+         P+ub5ChNlJ79QJRzNLOm4F8sd5EXSQjsNeDQLHlIFH4dc67134Fk5jTBPBDXyMc1QBm8
+         Qm6bcwvPHliRXRlWvT3lg05PGP3DKMG2ALTYl/BGV/C0P62poRJsqzYc2ahNIcBwjBB/
+         5Zbjh5l6mWtaJMU5dStr5v3hGjNQ+OyDPRgtl5FrCCjDZMULKTC2WSd5l02X4o7ztjbQ
+         4Yjg==
+X-Gm-Message-State: AC+VfDxFjgtgFgCdM+ktwRaMcaTPSv7u3hfZCzcpw6f4//SnOjgVcMDC
+        4FabcQFhRVx5WBi2357jTDPnw7PhdLhViNfhq4A=
+X-Google-Smtp-Source: ACHHUZ6XwOgg2hOQrhsiKgXYmI4nlnr6sziZ4fx8HXWKtAVY1Ab24dU/Ti/UlzfzD1I/LMXTVTjEbTw8wNk4pP3FDwE=
+X-Received: by 2002:a2e:9c18:0:b0:2ad:bedc:995b with SMTP id
+ s24-20020a2e9c18000000b002adbedc995bmr218134lji.16.1683750975077; Wed, 10 May
+ 2023 13:36:15 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|AM8PR04MB7348:EE_
-X-MS-Office365-Filtering-Correlation-Id: be7897cc-1c83-4ddb-37b9-08db5195d4e1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qZrm/a/znRJEhJrh686h9qwv5Fa8D1JQNkrg4cJ3uuL7yG6D79ARiMEEZ9dVfXdHNloFB4ZBFtpkm0ox1YHVogHv+ksBxFjqNAWEmY3ffZpv4IjpDiXuQHIrhvuSGu87jnaBKHWf+4GdEO5pKzj27+yWOGB3UpTALszPucew7V7y5tIFhbQqILCUQ3ZJKQpngbLNzMVPKkfvAYAj8/VA5USl3bLZ1m5QDtUXlaQrlbgEiznHq40R/Gxbc9sF9DvYrMfHbBpkq9RN8/7+1z4JiouUaFKf89ZKeHDMiiARb3ZTxwnlD7GetTUD5Rx36DlnPXGrbNPePfp/KhHOjzEn6xjMpOfuEY1OuwqjIFn/vqs1q3LKWa0Rbtgm91yE56129mw+vNfHmxZwXjz5v+IdhqStDgl2KKqL8u6b9AcnilWRJ2tP2NCfQJR0wDMess6k4sE46zYPN9qGtPGfKtg/P2i1HX+YAVRUVsW8KrrOxudCs9hQJyf699CJ5DF3GqCQyXVWOF9sfOSnoGavUPJrmDsbY4lHuD7vLf461uBc4OuWXzSgaEFGuUBTDjS0U+tv
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(346002)(39860400002)(376002)(136003)(396003)(366004)(451199021)(86362001)(54906003)(316002)(66476007)(66946007)(66556008)(4326008)(6916009)(478600001)(6486002)(33716001)(41300700001)(4744005)(44832011)(8676002)(5660300002)(8936002)(2906002)(38100700002)(6506007)(186003)(1076003)(6512007)(9686003)(26005)(83380400001)(6666004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?YH78ePjivoqawQSDr4Utljish/3HaW09xtzShWaVJeGiKJV9e2lSY/B1KiuO?=
- =?us-ascii?Q?TjGzx8iWPtLDYk7pQpmeftL86W7f4eCvqteSvkTuo5lp2EJ4/H9n7yPUZbQy?=
- =?us-ascii?Q?unZq/WAswupk3I7huKsKrrCq9dGKQbPdrwnCPSq8atJ0nmPFkCSEApPx+7EF?=
- =?us-ascii?Q?zihCge0hblRhcHLmBrVgj0fj/k0C7ufs8wbltBVrSaVcntXpv33wlKDV5YV6?=
- =?us-ascii?Q?qS38tsaXhTxLicm7UhbgVQGvog9rXaXTkpzahsVlHiTGthHA31a0XlXY++wt?=
- =?us-ascii?Q?oxG8ACXe7fuWAve77vSCi0XLI4wcB+SytlZ4IojtLmm4TGjCW/Mue65k3hRt?=
- =?us-ascii?Q?2r/x2lBPyoSS8EmfTQxQd77PDmSqK2r/mXzg18p84baaXsHHj4yBwuNzAkDS?=
- =?us-ascii?Q?aOu8nCI8Pi/EXq/7A3rD/N54LanTGaK3YREK6uq6HvJbLNRvIH3FxRw8cR2e?=
- =?us-ascii?Q?3m0qg1Eld92DqNB882qesU069OV4rWtb+7rIDOv/IGobMUJ+xmzd3pHf57rT?=
- =?us-ascii?Q?b2M9oAs3MrjYJe3yH3X+CP3X5vuoBJovl5ujOs2xieMDVqTbjdhiIEZQNbHv?=
- =?us-ascii?Q?z0t+VgV6QpTc/vDgT3aSJRpENpe9AFOyPN4ki4AoVR1ok//JZkjHPmE5PRSn?=
- =?us-ascii?Q?PEgyrpdUNYkwbrtzYHvQaM/bsgaM+UiBPRLZIyyIfqVluY2xOsiC3v2WH25B?=
- =?us-ascii?Q?5mMqrC7oKILGumhE2Glm7cin4tU5adXHbvU0iCcyO0pYEb8NYcOVr6ZbhToh?=
- =?us-ascii?Q?TTtHibHMCM2F3itCwHROG5Qur/ylLrF+tDykfiMer2hbiM0APKCQykUnGdAz?=
- =?us-ascii?Q?QGhlacDs/8mIHEKH88t0woCuQ27kU33g6fg8qBWeslRNJJAEiI4NExadJ4DS?=
- =?us-ascii?Q?LLYXE3AiIkFg4G68WSNL1kETKsJwJHeFdMUM6jCL8zmniH9IM1g0EurPEDe6?=
- =?us-ascii?Q?WKcq/G6iIOPHuwpTOkhZ9nv+iyeN/UqA7zA6rCS2ShsBRq9M1YYfBQNUV96e?=
- =?us-ascii?Q?IJxJ1L5KJp9gYQvRAOwPIQ87yw+Oj9KRh+yCJ8qEau807HfRtKv8CRAh04Sj?=
- =?us-ascii?Q?b1HE4ByRBHfNzxocVMAFBPzBRLQg5qXaenAhqpVEPq4VxzMA+9VLLnLufqS9?=
- =?us-ascii?Q?LfjWnLlnt/x1eMHjaNNV4U1KlMva9tCEldgdZqw8wbpw2sdPcL058C00Up1k?=
- =?us-ascii?Q?X0BPphBirKgjX7EqjYxQ7gnqXRpjBqbre2vH05v88Fvz7yKthFafmy0RUDAF?=
- =?us-ascii?Q?m+9hoJdkU/1uq/aqDVG2tqC+f+sppkymBS+wM6zSkCLbYRX8PckWMV55plkg?=
- =?us-ascii?Q?SIF8rcA2wVjputHa4DsJRSVjOyxZO+e4s6CSToyoJ+RHrJHpi30YXsDLdHq4?=
- =?us-ascii?Q?ln7+hVw5N3BPtg73u40MYZOIukz6amTESzDnrlHd2KL+N/4Ix5A6Wezfbxd1?=
- =?us-ascii?Q?4buJgkGpqUTFcwzc19FbeyRbSYCs482sS4oZ0+2ArJPwvfQp3IjlYueVU2ps?=
- =?us-ascii?Q?KYD434QWu5HT0++fGonDBf7zvm2NDRzzp7iZ7Y9zRmM1RkFzQhoQIhkoe9zM?=
- =?us-ascii?Q?mqO7ZGKWoz7zuER2ct7BzPvXDFvCL8gMN12iD/DjklxNCe/JP2hRXCpj6tWv?=
- =?us-ascii?Q?Yw=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: be7897cc-1c83-4ddb-37b9-08db5195d4e1
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 20:33:36.8948
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: V6zyArzfX9ED8cg9cVzFhAYBexjoLbDii6EPycJW+c84BsZozICR/MffLrOe7EOPkHxXtARBFHa9aqKLjTiAEw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7348
+References: <20230505220043.39036-1-jorge.lopez2@hp.com> <20230505220043.39036-8-jorge.lopez2@hp.com>
+ <882cc771-7fdb-5ba6-b4ae-36e7d3ad920@linux.intel.com>
+In-Reply-To: <882cc771-7fdb-5ba6-b4ae-36e7d3ad920@linux.intel.com>
+From:   Jorge Lopez <jorgealtxwork@gmail.com>
+Date:   Wed, 10 May 2023 15:35:46 -0500
+Message-ID: <CAOOmCE8ZS8uzt8UCeSCkxCeL+x4Wkqsyx0v6yOK8dkSbFpTDLQ@mail.gmail.com>
+Subject: Re: [PATCH v12 07/13] HP BIOSCFG driver - string-attributes
+To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thomas@t-8ch.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 09:48:51PM -0700, Colin Foster wrote:
-> Commit d4c367650704 ("net: mscc: ocelot: keep ocelot_stat_layout by reg
-> address, not offset") organized the stats counters for Ocelot chips, namely
-> the VSC7512 and VSC7514. A few of the counter offsets were incorrect, and
-> were caught by this warning:
-> 
-> WARNING: CPU: 0 PID: 24 at drivers/net/ethernet/mscc/ocelot_stats.c:909
-> ocelot_stats_init+0x1fc/0x2d8
-> reg 0x5000078 had address 0x220 but reg 0x5000079 has address 0x214,
-> bulking broken!
-> 
-> Fix these register offsets.
-> 
-> Fixes: d4c367650704 ("net: mscc: ocelot: keep ocelot_stat_layout by reg address, not offset")
-> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
-> ---
+On Tue, May 9, 2023 at 8:18=E2=80=AFAM Ilpo J=C3=A4rvinen
+<ilpo.jarvinen@linux.intel.com> wrote:
+>
+> On Fri, 5 May 2023, Jorge Lopez wrote:
+>
+> > HP BIOS Configuration driver purpose is to provide a driver supporting
+> > the latest sysfs class firmware attributes framework allowing the user
+> > to change BIOS settings and security solutions on HP Inc.=E2=80=99s com=
+mercial
+> > notebooks.
+> >
+> > Many features of HP Commercial notebooks can be managed using Windows
+> > Management Instrumentation (WMI). WMI is an implementation of Web-Based
+> > Enterprise Management (WBEM) that provides a standards-based interface
+> > for changing and monitoring system settings. HP BIOSCFG driver provides
+> > a native Linux solution and the exposed features facilitates the
+> > migration to Linux environments.
+> >
+> > The Linux security features to be provided in hp-bioscfg driver enables
+> > managing the BIOS settings and security solutions via sysfs, a virtual
+> > filesystem that can be used by user-mode applications. The new
+> > documentation cover HP-specific firmware sysfs attributes such Secure
+> > Platform Management and Sure Start. Each section provides security
+> > feature description and identifies sysfs directories and files exposed
+> > by the driver.
+> >
+> > Many HP Commercial notebooks include a feature called Secure Platform
+> > Management (SPM), which replaces older password-based BIOS settings
+> > management with public key cryptography. PC secure product management
+> > begins when a target system is provisioned with cryptographic keys
+> > that are used to ensure the integrity of communications between system
+> > management utilities and the BIOS.
+> >
+> > HP Commercial notebooks have several BIOS settings that control its
+> > behaviour and capabilities, many of which are related to security.
+> > To prevent unauthorized changes to these settings, the system can
+> > be configured to use a cryptographic signature-based authorization
+> > string that the BIOS will use to verify authorization to modify the
+> > setting.
+> >
+> > Linux Security components are under development and not published yet.
+> > The only linux component is the driver (hp bioscfg) at this time.
+> > Other published security components are under Windows.
+> >
+> > Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
+> >
+> > ---
+> > Based on the latest platform-drivers-x86.git/for-next
+> > ---
+> >  .../x86/hp/hp-bioscfg/string-attributes.c     | 415 ++++++++++++++++++
+> >  1 file changed, 415 insertions(+)
+> >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/string-attribute=
+s.c
+> >
+> > diff --git a/drivers/platform/x86/hp/hp-bioscfg/string-attributes.c b/d=
+rivers/platform/x86/hp/hp-bioscfg/string-attributes.c
+> > new file mode 100644
+> > index 000000000000..d74ecc973703
+> > --- /dev/null
 
-Reviewed-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+<snip>
 
-Thanks!
+> > +static void update_string_value(int instance_id, char *attr_value)
+> > +{
+> > +     struct string_data *string_data =3D &bioscfg_drv.string_data[inst=
+ance_id];
+> > +
+> > +     /* Write settings to BIOS */
+> > +     strscpy(string_data->current_value,
+> > +             attr_value,
+> > +             sizeof(string_data->current_value));
+>
+> Use less lines.
+
+Done!
+>
+> > +}
+> > +
+> > +ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name_language_code, string);
+> > +static struct kobj_attribute string_display_langcode =3D
+> > +     __ATTR_RO(display_name_language_code);
+> > +
+> > +ATTRIBUTE_S_COMMON_PROPERTY_SHOW(display_name, string);
+> > +static struct kobj_attribute string_display_name =3D
+> > +     __ATTR_RO(display_name);
+> > +
+> > +ATTRIBUTE_PROPERTY_STORE(current_value, string);
+> > +static struct kobj_attribute string_current_val =3D
+> > +     __ATTR_RW_MODE(current_value, 0644);
+> > +
+> > +ATTRIBUTE_N_PROPERTY_SHOW(min_length, string);
+> > +static struct kobj_attribute string_min_length =3D
+> > +     __ATTR_RO(min_length);
+> > +
+> > +ATTRIBUTE_N_PROPERTY_SHOW(max_length, string);
+> > +static struct kobj_attribute string_max_length =3D
+> > +     __ATTR_RO(max_length);
+> > +
+> > +static ssize_t type_show(struct kobject *kobj, struct kobj_attribute *=
+attr,
+> > +                      char *buf)
+> > +{
+> > +     return sysfs_emit(buf, "string\n");
+> > +}
+> > +
+> > +static struct kobj_attribute string_type =3D
+> > +     __ATTR_RO(type);
+> > +
+> > +static struct attribute *string_attrs[] =3D {
+> > +     &string_display_langcode.attr,
+> > +     &string_display_name.attr,
+> > +     &string_current_val.attr,
+> > +     &string_min_length.attr,
+> > +     &string_max_length.attr,
+> > +     &string_type.attr,
+> > +     NULL,
+> > +};
+> > +
+> > +static const struct attribute_group string_attr_group =3D {
+> > +     .attrs =3D string_attrs,
+> > +};
+> > +
+> > +int alloc_string_data(void)
+> > +{
+> > +     bioscfg_drv.string_instances_count =3D get_instance_count(HP_WMI_=
+BIOS_STRING_GUID);
+> > +     bioscfg_drv.string_data =3D kcalloc(bioscfg_drv.string_instances_=
+count,
+> > +                                       sizeof(struct string_data), GFP=
+_KERNEL);
+>
+> sizeof(*bioscfg_drv.string_data) ?
+
+Done!
+
+>
+> > +     if (!bioscfg_drv.string_data) {
+> > +             bioscfg_drv.string_instances_count =3D 0;
+> > +             return -ENOMEM;
+> > +     }
+> > +     return 0;
+> > +}
+
+<snip>
+
+> > +
