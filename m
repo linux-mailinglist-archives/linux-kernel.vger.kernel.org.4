@@ -2,165 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBF856FD8DE
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:05:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A136FD97F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:33:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236532AbjEJIFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 04:05:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54434 "EHLO
+        id S236086AbjEJIdW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 04:33:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236015AbjEJIFg (ORCPT
+        with ESMTP id S236707AbjEJIcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 04:05:36 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A281BC0;
-        Wed, 10 May 2023 01:05:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A344A63B91;
-        Wed, 10 May 2023 08:05:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 297C9C433D2;
-        Wed, 10 May 2023 08:05:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683705933;
-        bh=zAtZ70naQXiiJhGVd2X1W6n4PKQ2vnqsXMKHc0aV1PA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=GKKyKA42JDR90NrVwF45MXcGgM8C6GYVbd/ltDYA/rLLcBwYNSCbdLqKOuL4Qv314
-         Yo6DDlidCG0a1SPvpzZsBcUehYoRPa3WieWEvZThD6u0fCFrwCfQS+fMuIecCE/uGv
-         SfVwCx2PN2BEPQKl+WtrEp/EK8e+nXKHI/FoypIUxXVgMW6rTi1H3bLdZPwbsnDjMF
-         h0N+iroiEEfh405dmPAS7IwJ+fXvlV7efHo6FqGBkOnM15XKW/uDjBGxt+cOX+FVft
-         7aPEamaz4tLDKZqOKCD6AK0Wd5vPbpuTa3AtTwS5ehEcaUXbnZhujH7246TqNeIyzx
-         PD+sQsUMMsjmg==
-Date:   Wed, 10 May 2023 09:05:27 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
-        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>
-Subject: Re: mainline build failure due to cf21f328fcaf ("media: nxp: Add
- i.MX8 ISI driver")
-Message-ID: <20230510090527.25e26127@sal.lan>
-In-Reply-To: <CAHk-=wgzU8_dGn0Yg+DyX7ammTkDUCyEJ4C=NvnHRhxKWC7Wpw@mail.gmail.com>
-References: <ZElaVmxDsOkZj2DK@debian>
-        <51cff63a-3a04-acf5-8264-bb19b0bee8a3@leemhuis.info>
-        <CAHk-=wgzU8_dGn0Yg+DyX7ammTkDUCyEJ4C=NvnHRhxKWC7Wpw@mail.gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Wed, 10 May 2023 04:32:46 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8A77ABF;
+        Wed, 10 May 2023 01:32:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683707531; x=1715243531;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   in-reply-to:mime-version;
+  bh=eLXpH1i4++EOPbF6fw/mszRAU0iyGL0LeP+uLLqhOxM=;
+  b=ZL1vzgtLzABhpZSpXmYkWb8hpltRSvsc/6ZFgZppQWPAMiIFdU317eGo
+   02oqE3Leacseu+YDW57ep6WEGbyhnj6OAOMlM5ngblil+qyckYsqjlG52
+   TvylpKVotlKJCC1eCQoeyg68dB8vu2QiLvNJzDAt9b2FoSFzVJMXSHBiE
+   0x53K+t6E66t5uZC/VQ/Lb5grnNyVZU3P6Xsd5rvjczPfdgEDq5AJklyD
+   bNv0H4eT81xWm438U3NBf7bR23sGIYejf3U/8SxkaoPFyGJBMl3CB1fJF
+   4rFwDBf9CNmgWY6ajZjWoeGqnrfH4pww2YGuNPYJdf8oNB3n0vGmWAku0
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="334624351"
+X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
+   d="scan'208";a="334624351"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 01:31:21 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="764206139"
+X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
+   d="scan'208";a="764206139"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by fmsmga008.fm.intel.com with ESMTP; 10 May 2023 01:31:21 -0700
+Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 10 May 2023 01:31:21 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Wed, 10 May 2023 01:31:21 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.41) by
+ edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Wed, 10 May 2023 01:31:21 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BSEbbFkBGCraYSaSnJeuVPh+3mr5tWU4Tk8bsSPjtMImNtcTM8H48+f8bgzRc3IIPuQXGQXdKl6C6VOfleKH/D3WpSzRlYHyJRfZw6obWxnqxlYXOmYVWWczSL26G5YuRcmYACBzWk621tifqlU+phtEzvCF7PZmpBDlORfu/K0TYieHH3romJbqtpnwvWPFOfNaxq3oTJe14CHHzsL1m/bMi5dGBZH0Z7XW5Mol57sQwgoXRhnR16ULK/ttU0x/V6J5jLymhErJ1sE18oMilbmHXeJAbpGWFvlMiv88h38JxWVbxEWOv50eaj7uYwChl3sMefWEHKs9mie9q1uVBQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=XyHN1w3i+YCwJV+Yg2y2P29pvcJylrmvS5VdcYaL2Ek=;
+ b=K3zamikqfxQ5mBsIPH7yC9PTbjtOsEsDcbWQR4ZrST8aXZ8JwK/hjpYT9lSN0bEfZsXwq7eMucR3O8M5usT+CUOVSpfBaayodF8hCaPFN++5THCJGaTvh3MIK5CYiT++RIfp4pQX6oXu96HWxUW+wvZVlV9kuoush5yVHD9wHeuP5kXnUru190WkdCed6EmisqvDRy/MVKuAgZgcHsR6ShWQcsPihJDc3yrwHE4AumWCyZhQhxBmEBs7dk/fnOk/Gavu/hqO/LXjPTmXEkVGm7Jw7HJCgztRHpY5Jbm+se7g97ikKXSscwGv9MZMP64IbsedB/k1LkqxmEsaMWdG2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
+ CO1PR11MB5091.namprd11.prod.outlook.com (2603:10b6:303:6c::11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6387.18; Wed, 10 May 2023 08:31:19 +0000
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::a670:49f5:d602:e2e4]) by DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::a670:49f5:d602:e2e4%6]) with mapi id 15.20.6363.032; Wed, 10 May 2023
+ 08:31:19 +0000
+Date:   Wed, 10 May 2023 16:06:16 +0800
+From:   Yan Zhao <yan.y.zhao@intel.com>
+To:     Chao Gao <chao.gao@intel.com>
+CC:     <kvm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <pbonzini@redhat.com>, <seanjc@google.com>
+Subject: Re: [PATCH v2 1/6] KVM: x86/mmu: add a new mmu zap helper to
+ indicate memtype changes
+Message-ID: <ZFtQeLNuXP6tDMne@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <20230509134825.1523-1-yan.y.zhao@intel.com>
+ <20230509135006.1604-1-yan.y.zhao@intel.com>
+ <ZFsr9TynkA/CyPgg@chao-email>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <ZFsr9TynkA/CyPgg@chao-email>
+X-ClientProxiedBy: SG2PR04CA0184.apcprd04.prod.outlook.com
+ (2603:1096:4:14::22) To DS7PR11MB5966.namprd11.prod.outlook.com
+ (2603:10b6:8:71::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|CO1PR11MB5091:EE_
+X-MS-Office365-Filtering-Correlation-Id: bcb34b4f-7121-4c88-df63-08db5130edaa
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9yRREnszeceM4z97fI+IRukFYpPfVdeLfk2dKVBOywsUKh+xrQ60PUCZxJYGqVuhWQ3iR3+LEoAyGKqiEYxR3hOm88WDE+MqiqdID3b2wcsJdIJQyhC5IyqA76D5AG1iqFWlluBI3ZtconBcnoMjMG+0muIT+aS6RmuSCw0MoekV19iqGiw1V+5DSKK4kAgBLu3BxBXeS/CdWUHsjDvxoEzxm2Zy263514KE411wVHWHFX9av26UV+XodZ/IlmYgzNVea5CB3uezdTeSSQSJT1a7bb8Ae3zEzz9XgzeDLVp9Gij7xFoymlEQ34QfhqRJMJTF7w6djFCgH+DRyojQxdQij8AbinvO+OKRyM1zc4CmjeEdOeh+t9mjzwcB90xrOgyypqutNbgf6ej6IuszvcOHZyFVCkN6Aob3wxaUmPXPgcrnpfGxKGQwAdBrVB3kiDfyNRbVGQSycLOt1EmesY+LyYBnJfbsZRTJ33Q5aQVrlYn7V6gM1K9L45JQQ9nCh1I7LtJM9DoC4ELw0RRqwQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(136003)(346002)(39860400002)(376002)(366004)(396003)(451199021)(186003)(6512007)(6506007)(26005)(84970400001)(3450700001)(2906002)(6486002)(5660300002)(66946007)(66556008)(4326008)(66476007)(6862004)(8676002)(478600001)(8936002)(82960400001)(6666004)(41300700001)(38100700002)(6636002)(86362001)(83380400001)(316002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1DdEl9Qw/XyJEwvUXtSXSq7kXqGPIuvzVWyBu6fx47GWg1CPQn4MVtIeKdwy?=
+ =?us-ascii?Q?H8tujLu8vQgJj8aF/4HkwDhHn4BNm1H7swj8JXl09lBFkTSNz0o+3ymCRbWG?=
+ =?us-ascii?Q?wrT3BPpB8yqZo3wNyfF7Ewq5/0XqgpSDKUZeUNs1wrFw6B4vcXytrpApIu4I?=
+ =?us-ascii?Q?IbHBNkaSQfozhPmrzyXs8zUxjbYw51H9YuOpZSQVxU68RcUJFRtZ/4x1xjMJ?=
+ =?us-ascii?Q?V5ZgnxbhxRsnwVqP99dIwloLWsjpyCB4uFTlx/3oA6KttMP21YWTcf8VIjF4?=
+ =?us-ascii?Q?xKwNKbvNQHtEtFX6bZg2H4hj7AV51ujEfOdEnvZ43r+HysD+2jKHQr2W88Cm?=
+ =?us-ascii?Q?NFvjRuw4WUKtvw6Ym2A0sd3XFQMe+TE7D+Qn0WM+65xIJO8+vb/37thGz85P?=
+ =?us-ascii?Q?O+WwN8ykELXZ3hITY4p4BkCMIYIxljAOIwJyDW0YGFrnfD5XNLQF+R4R+SZ9?=
+ =?us-ascii?Q?m7lrvsaUDxq7sKHK3fnJuDIY3JPLl6jTMJRFa2aMVG3WyfqSs8MsUqBIG1ut?=
+ =?us-ascii?Q?fJCsrO3DGR5Ul2dIb0iWubEYqWQRcluK2FlkpR7bm8pIEh9kMYetaJ/4v5Xg?=
+ =?us-ascii?Q?lcTvEy9tftJIDyxOoonEMjLjIouJTj4sxvYbTcQA9+4dR6QL7c7tF6oeTghf?=
+ =?us-ascii?Q?1OllyQj/5ZBf//7tuhr59oUauLQikdP5s60InGMyjoaM6L57fjAhi1rOtppt?=
+ =?us-ascii?Q?bliwT8ExmbgivARclg1UsmzyFoSPyrULSG5lVGPFTlj/AbTWLdMulN3AIxNI?=
+ =?us-ascii?Q?wAcRmOnKKAd2FDUHj4LnI7sLSgbggJ3SCX+cutzAzvzuQBh2QGVc3z+9/jBQ?=
+ =?us-ascii?Q?/w3QtVUtdI1DQdAlKYsrQeRTLE1uhGv9vJQ5H7EPmqhGT0PeKCic4vCv9onK?=
+ =?us-ascii?Q?bFLjMNSTVbVoEnLUmH+5RDThdwsqrxLHFY9fq+gE10ZqA1yW7C/lXb4po3Hn?=
+ =?us-ascii?Q?PlIzR/mK+Eud+VZ2via+wlS06XOrSoz1kCVASUmJk4+zSlaOWTTBaWxVE+oi?=
+ =?us-ascii?Q?t3PD2sQyWRsq+IYJpa3SxwwKvaDxZBJezqH0HiCsnKhh3aeuNOYzsxmzzMru?=
+ =?us-ascii?Q?doA6eks09AohUR5goPYSjAOtQBMzSLXjyeAWARvA7m71hD8MfjyyWD+XnW4i?=
+ =?us-ascii?Q?Y3MyW/1xF3/hQLBCB402wHQ1fTgE11DZw3M7xJ60g36P6O04tHCKySmb0F6u?=
+ =?us-ascii?Q?4zGGRxW1if3WsHwPgZhl2OCZkB/0/G+/8c4phjmS2JVuzLBCmqanKAHPEh5R?=
+ =?us-ascii?Q?Knj1h5QCkAybhcTyfcT6Legyhx9BNOvKrcr31OPnKnYvAYku0UVPi3SGb36p?=
+ =?us-ascii?Q?WTq4zI1WEM7toqU7zAAsZJMOu5CuRdiMv2nj/dg2ev2KZv4ZtgWhVUT2TF4B?=
+ =?us-ascii?Q?1acS0sY+T0RLAXP4m0b3Zm3KSxs83AntndW+Lr53H34pyDmK+0rQcnRBhw0G?=
+ =?us-ascii?Q?haKsAn1OYI1dDAchs2LttEcY4PaSI9EE4ta98ToYqZhAKP0XTSWGKF6DJkz1?=
+ =?us-ascii?Q?j3UP673+hbwseCfSV0MBzBw3jhjD+hTbfAdbLLQin7NRQO9FdmGq3Q3S3GPV?=
+ =?us-ascii?Q?YQgre/ik9ORSEha95fsFX2rzzNpbCBW69FIValGT?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: bcb34b4f-7121-4c88-df63-08db5130edaa
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 08:31:19.2803
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: pMOApVDFdKCCQ0xfYxr/fVlPVSmKCb7Kh6zUsCOInvxZO1Az3wVpt8qqJ/oWB9iShR8otHUEXBxS2hz+D57fmQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB5091
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
-
-Em Mon, 8 May 2023 09:27:28 -0700
-Linus Torvalds <torvalds@linux-foundation.org> escreveu:
-
-> On Mon, May 8, 2023 at 3:55=E2=80=AFAM Linux regression tracking #adding
-> (Thorsten Leemhuis) <regressions@leemhuis.info> wrote:
+On Wed, May 10, 2023 at 01:30:29PM +0800, Chao Gao wrote:
+> On Tue, May 09, 2023 at 09:50:06PM +0800, Yan Zhao wrote:
+> >Add a helper to indicate that the kvm_zap_gfn_range() request is to update
+> >memory type.
 > >
-> > Thanks for the report. The fixes (see the mail from Laurent) apparently
-> > are still not mainlined (or am I missing something?), so let me add this
-> > report to the tracking to ensure this is not forgotten: =20
->=20
-> Gaah. I was intending to apply the patch directly before rc1, but then
-> I forgot about this issue.
->=20
-> Mauro: I'm currently really *really* fed up with the media tree. This
-> exact same thing happened last merge window, where the media tree
-> caused pointless build errors, and it took way too long to get the
-> fixes the proper ways.
->=20
-> If something doesn't even build, it should damn well be fixed ASAP.
->=20
-> Last release it was imx290.c and PM support being disabled, and I had
-> to apply the fix manually because it continued to not come in the
-> proper way.
->=20
-> See commit 7b50567bdcad ("media: i2c: imx290: fix conditional function
-> defintions").
->=20
-> But also see commit b928db940448 ("media: i2c: imx290: fix conditional
-> function definitions"), which you *did* commit, but note this on that
-> commit:
->=20
->     AuthorDate: Tue Feb 7 17:13
->     CommitDate: Sat Mar 18 08:44
->=20
-> so it took you a MONTH AND A HALF to react to a build failure.
->=20
-> And see this:
->=20
->     git name-rev b928db940448
->     b928db940448 tags/v6.4-rc1~161^2~458
->=20
-> ie that build fix that you finally committed came in *AFTER* the 6.3
-> release, even though the bug it fixes was introduced in the 6.3 merge
-> window:
->=20
->     git name-rev 02852c01f654
->     02852c01f654 tags/v6.3-rc1~72^2~2^2~193
->=20
-> and now we're in the *EXACT*SAME* situation, with me applying a build
-> fix directly, because you couldn't get it fixed in a timely manner.
+> >Then the zap can be avoided in cases:
+> >1. TDP is not enabled.
+> >2. EPT is not enabled.
+> >
+> >This is because only memory type of EPT leaf entries are subjected to
+> >change when noncoherent DMA/guest CR0.CD/guest MTRR settings change.
+> >
+> >Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
+> >---
+> > arch/x86/kvm/mmu.h     |  1 +
+> > arch/x86/kvm/mmu/mmu.c | 16 ++++++++++++++++
+> > 2 files changed, 17 insertions(+)
+> >
+> >diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
+> >index 92d5a1924fc1..a04577afbc71 100644
+> >--- a/arch/x86/kvm/mmu.h
+> >+++ b/arch/x86/kvm/mmu.h
+> >@@ -236,6 +236,7 @@ static inline u8 permission_fault(struct kvm_vcpu *vcpu, struct kvm_mmu *mmu,
+> > }
+> > 
+> > void kvm_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end);
+> >+void kvm_zap_gfn_for_memtype(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end);
+> > 
+> > int kvm_arch_write_log_dirty(struct kvm_vcpu *vcpu);
+> > 
+> >diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
+> >index c8961f45e3b1..2706754794d1 100644
+> >--- a/arch/x86/kvm/mmu/mmu.c
+> >+++ b/arch/x86/kvm/mmu/mmu.c
+> >@@ -6272,6 +6272,22 @@ static bool kvm_rmap_zap_gfn_range(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_e
+> > 	return flush;
+> > }
+> > 
+> >+/*
+> >+ * Invalidate (zap) TDP SPTEs that cover GFNs from gfn_start and up to gfn_end
+> >+ * (not including it) for reason of memory type being updated.
+> >+ */
+> >+void kvm_zap_gfn_for_memtype(struct kvm *kvm, gfn_t gfn_start, gfn_t gfn_end)
+> >+{
+> >+	/* Currently only memory type of EPT leaf entries are affected by
+> >+	 * guest CR0.CD and guest MTRR.
+> >+	 * So skip invalidation (zap) in other cases
+> >+	 */
+> >+	if (!shadow_memtype_mask)
+> 
+> Do you need to check kvm_arch_has_noncoherent_dma()? if yes, maybe just extract
+> the first if() statement and its associated comment from kvm_tdp_page_fault()?
+>
+This kvm_zap_gfn_for_memtype() helper will be called in
+kvm_arch_unregister_noncoherent_dma() as well when noncoherent_dma_count
+goes from 1 to 0.
+So, checking kvm_arch_has_noncoherent_dma() is not desired.
 
-Sorry for the mess. I'll work to improve the process to avoid this
-to happen again.
+> >+		return;
+> >+
+> >+	kvm_zap_gfn_range(kvm, gpa_to_gfn(0), gpa_to_gfn(~0ULL));
+> 
+> This should be:
+> 
+> 	kvm_zap_gfn_range(kvm, start, end);
+>
+Oops. sorry about this mistake. Will fix it in next version.
 
-FYI, in order to reduce build issues, we have a Jenkins instance
-doing builds with gcc and CLANG at the media stage tree, before we even mer=
-ge
-them at the main media development tree. They run with allyesconfig for
-x86_64 arch, with W=3D1:
-
-	https://builder.linuxtv.org/job/media_stage_clang/
-	https://builder.linuxtv.org/job/media_stage_gcc/
-
-And another CI job testing bisect breakages as I receive pull requests,
-applying patch per patch and using both allyesconfig and allmodconfig,
-also on x86_64 arch with W=3D1:
-
-	https://builder.linuxtv.org/job/patchwork/
-
-The rule is to not merge stuff on media tree if any of those jobs
-fail. I also fast-forward merging patches whose subject states that
-the build has failed.
-
-In order to help with that, on normal situation, I usually take one week
-to merge stuff from media_stage into media_tree, doing rebases at
-media_stage if needed to avoid git bisect build breakages at media_tree
-(which is from where I send my update PRs to you).
-
-Unfortunately, currently we don't have resources to do multiple randconfig
-on Jenkins, as the build machines on the server are very slow. Yet, I'll
-add CONFIG_PM disabled to the test set, as it seems to be a recurrent source
-of troubles those days. I'll also try to identify a couple of other=20
-randconfigs that would help to catch earlier problems like that.
-If some other problematic Kconfig variables comes to your mind, please
-feel free to suggest them for us to add to the CI automation.
-
--
-
-In the specific case of this fixup patch, I didn't identify it as a build
-issue, so it followed the usual workflow. We have a huge number of patches
-for media, and it usually takes some time to handle all of them. This one
-just followed the normal flow, as it didn't break Jenkins builds nor the
-subject mentioned anything about build breakage.
-
-Regards,
-Mauro
+> >+}
+> >+
+> > /*
+> >  * Invalidate (zap) SPTEs that cover GFNs from gfn_start and up to gfn_end
+> >  * (not including it)
+> >-- 
+> >2.17.1
+> >
