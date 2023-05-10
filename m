@@ -2,154 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B166FDDE2
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:35:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A96AF6FDDF1
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:38:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237048AbjEJMfJ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 10 May 2023 08:35:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
+        id S236808AbjEJMi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 08:38:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237044AbjEJMet (ORCPT
+        with ESMTP id S236306AbjEJMi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 08:34:49 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 333A47EE6;
-        Wed, 10 May 2023 05:34:48 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-559e2051d05so103544817b3.3;
-        Wed, 10 May 2023 05:34:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683722087; x=1686314087;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kGY/0htSfGIvsVgPn7bx+ykp3agguIOsAu0irnl44Xg=;
-        b=b3fqZuX/o+l+JPHZU/oNUSUIQokf+iQ2h3VQEGv3wrlo+2YoF6yE+8nEDaj7BWOhnd
-         cwTS69SgVDeoXoeZLP/jbDPVB+WNcBOU+WONdfvVcZXsyu12BwDxZwkGinMDzrYLzX4n
-         NxshY0P63163cpZuhl1EgjowDnHhEQHxbQzsuA5AJy/k9eClGFPpRn9BHMoqLvbD54IL
-         9nvcvALf4lKWFcLg5QExmogZZCDYmR+OWMJWLQr1NraLVdDS3suQGv4dlKqnVdGx5Ic2
-         qBHxGYEU0t6NHbpqnH08RrwyMYuQ9mYYX/HPaFgOFQWVwDT5gqNDZ/jLozQf0Cox+Ald
-         lTOA==
-X-Gm-Message-State: AC+VfDxNs7/QlEEhfPMQYEq6TlXAz88Pa31bBT0oi5sGf5iI+xpRMfvV
-        wvVZEsRqePzxl3RxtASaIrucPFmJoPnirA==
-X-Google-Smtp-Source: ACHHUZ4IgCsZzVyln8keZ1hl6teCvscT6HCafQroCO5qDcfhcANm4gjeIOVoxSMTBZodjSK9mGXFJw==
-X-Received: by 2002:a25:50c1:0:b0:ba1:b7e4:e0dd with SMTP id e184-20020a2550c1000000b00ba1b7e4e0ddmr18447949ybb.56.1683722087169;
-        Wed, 10 May 2023 05:34:47 -0700 (PDT)
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com. [209.85.128.175])
-        by smtp.gmail.com with ESMTPSA id b2-20020a251b02000000b00b7767ca7485sm3742166ybb.34.2023.05.10.05.34.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 05:34:45 -0700 (PDT)
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-559de1d36a9so103567617b3.1;
-        Wed, 10 May 2023 05:34:45 -0700 (PDT)
-X-Received: by 2002:a0d:ead7:0:b0:55a:ae08:163f with SMTP id
- t206-20020a0dead7000000b0055aae08163fmr22367018ywe.32.1683722085095; Wed, 10
- May 2023 05:34:45 -0700 (PDT)
+        Wed, 10 May 2023 08:38:27 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A06C1B8;
+        Wed, 10 May 2023 05:38:26 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34ACc1uf053969;
+        Wed, 10 May 2023 07:38:01 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683722281;
+        bh=zFq4KccH35g8kznXC9T1SM+QYksc0Pr00h0voWgt8fg=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=Ix62POBJSVlTFGSj7fmyNcZ6bzFxXGxWNG+KS937YnA9Px6Cviw2/Z9SPejSD/iJ/
+         2MAvrI9yc6CYeRI/noa3Pv/TdglLOY90w5Cvq1zGJv9i6qzolrRWN11V3KXahsNPmY
+         BmBzOe9iSoYEq6kblbz7dBzlTZs8ItRlwBF+X5FI=
+Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34ACc1JR073481
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 10 May 2023 07:38:01 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 10
+ May 2023 07:38:01 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Wed, 10 May 2023 07:38:01 -0500
+Received: from [10.249.138.110] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34ACbvKl081301;
+        Wed, 10 May 2023 07:37:58 -0500
+Message-ID: <f7fe6a12-3988-16e9-272e-a88ff0d7d0c1@ti.com>
+Date:   Wed, 10 May 2023 18:07:56 +0530
 MIME-Version: 1.0
-References: <20230510110557.14343-1-tzimmermann@suse.de> <20230510110557.14343-6-tzimmermann@suse.de>
-In-Reply-To: <20230510110557.14343-6-tzimmermann@suse.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 10 May 2023 14:34:33 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVV-MQV3C_o6JxPj23h3zo0kMmsn9ZEWJxsrzr6YpKmyg@mail.gmail.com>
-Message-ID: <CAMuHMdVV-MQV3C_o6JxPj23h3zo0kMmsn9ZEWJxsrzr6YpKmyg@mail.gmail.com>
-Subject: Re: [PATCH v6 5/6] fbdev: Move framebuffer I/O helpers into <asm/fb.h>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-Cc:     deller@gmx.de, javierm@redhat.com, daniel@ffwll.ch,
-        vgupta@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
-        davem@davemloft.net, James.Bottomley@hansenpartnership.com,
-        arnd@arndb.de, sam@ravnborg.org, suijingfeng@loongson.cn,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-parisc@vger.kernel.org
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+CC:     <andrew@lunn.ch>, <linux@armlinux.org.uk>, <davem@davemloft.net>,
+        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH net v2] net: phy: dp83867: add w/a for packet errors seen
+ with short cables
+To:     Heiner Kallweit <hkallweit1@gmail.com>
+References: <20230509052124.611875-1-s-vadapalli@ti.com>
+ <7a53f0d3-3e9a-4024-6b19-72ad9c19ab97@gmail.com>
+ <bb7d6644-38b9-c807-6ef2-45a9d5acefe9@ti.com>
+ <973341c8-a8b1-840d-6e6b-d8a73aa7a946@gmail.com>
+Content-Language: en-US
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <973341c8-a8b1-840d-6e6b-d8a73aa7a946@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thomas,
 
-On Wed, May 10, 2023 at 1:06 PM Thomas Zimmermann <tzimmermann@suse.de> wrote:
-> Implement framebuffer I/O helpers, such as fb_read*() and fb_write*(),
-> in the architecture's <asm/fb.h> header file or the generic one.
->
-> The common case has been the use of regular I/O functions, such as
-> __raw_readb() or memset_io(). A few architectures used plain system-
-> memory reads and writes. Sparc used helpers for its SBus.
->
-> The architectures that used special cases provide the same code in
-> their __raw_*() I/O helpers. So the patch replaces this code with the
-> __raw_*() functions and moves it to <asm-generic/fb.h> for all
-> architectures.
->
-> v6:
->         * fix fb_readq()/fb_writeq() on 64-bit mips (kernel test robot)
-> v5:
->         * include <linux/io.h> in <asm-generic/fb>; fix s390 build
-> v4:
->         * ia64, loongarch, sparc64: add fb_mem*() to arch headers
->           to keep current semantics (Arnd)
-> v3:
->         * implement all architectures with generic helpers
->         * support reordering and native byte order (Geert, Arnd)
->
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Tested-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
->
-> add mips fb_q()
 
-> --- a/arch/mips/include/asm/fb.h
-> +++ b/arch/mips/include/asm/fb.h
-> @@ -12,6 +12,28 @@ static inline void fb_pgprotect(struct file *file, struct vm_area_struct *vma,
->  }
->  #define fb_pgprotect fb_pgprotect
->
-> +/*
-> + * MIPS doesn't define __raw_ I/O macros, so the helpers
-> + * in <asm-generic/fb.h> don't generate fb_readq() and
-> + * fb_write(). We have to provide them here.
+On 09-05-2023 16:10, Heiner Kallweit wrote:
+> On 09.05.2023 12:27, Siddharth Vadapalli wrote:
+>>
+>>
+>> On 09/05/23 14:29, Heiner Kallweit wrote:
+>>> On 09.05.2023 07:21, Siddharth Vadapalli wrote:
+>>>> From: Grygorii Strashko <grygorii.strashko@ti.com>
+>>>>
+>>>> Introduce the W/A for packet errors seen with short cables (<1m) between
+>>>> two DP83867 PHYs.
+>>>>
+>>>> The W/A recommended by DM requires FFE Equalizer Configuration tuning by
+>>>> writing value 0x0E81 to DSP_FFE_CFG register (0x012C), surrounded by hard
+>>>> and soft resets as follows:
+>>>>
+>>>> write_reg(0x001F, 0x8000); //hard reset
+>>>> write_reg(DSP_FFE_CFG, 0x0E81);
+>>>> write_reg(0x001F, 0x4000); //soft reset
+>>>>
+>>>> Since  DP83867 PHY DM says "Changing this register to 0x0E81, will not
+>>>> affect Long Cable performance.", enable the W/A by default.
+>>>>
+>>>> Fixes: 2a10154abcb7 ("net: phy: dp83867: Add TI dp83867 phy")
+>>>> Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
+>>>> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+>>>> ---
+>>>>
+>>>> V1 patch at:
+>>>> https://lore.kernel.org/r/20230508070019.356548-1-s-vadapalli@ti.com
+>>>>
+>>>> Changes since v1 patch:
+>>>> - Wrap the line invoking phy_write_mmd(), limiting it to 80 characters.
+>>>> - Replace 0X0E81 with 0x0e81 in the call to phy_write_mmd().
+>>>> - Replace 0X012C with 0x012c in the new define for DP83867_DSP_FFE_CFG.
+>>>>
+>>>> RFC patch at:
+>>>> https://lore.kernel.org/r/20230425054429.3956535-2-s-vadapalli@ti.com/
+>>>>
+>>>> Changes since RFC patch:
+>>>> - Change patch subject to PATCH net.
+>>>> - Add Fixes tag.
+>>>> - Check return value of phy_write_mmd().
+>>>>
+>>>>  drivers/net/phy/dp83867.c | 18 +++++++++++++++++-
+>>>>  1 file changed, 17 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/net/phy/dp83867.c b/drivers/net/phy/dp83867.c
+>>>> index d75f526a20a4..bbdcc595715d 100644
+>>>> --- a/drivers/net/phy/dp83867.c
+>>>> +++ b/drivers/net/phy/dp83867.c
+>>>> @@ -44,6 +44,7 @@
+>>>>  #define DP83867_STRAP_STS1	0x006E
+>>>>  #define DP83867_STRAP_STS2	0x006f
+>>>>  #define DP83867_RGMIIDCTL	0x0086
+>>>> +#define DP83867_DSP_FFE_CFG	0x012c
+>>>>  #define DP83867_RXFCFG		0x0134
+>>>>  #define DP83867_RXFPMD1	0x0136
+>>>>  #define DP83867_RXFPMD2	0x0137
+>>>> @@ -941,8 +942,23 @@ static int dp83867_phy_reset(struct phy_device *phydev)
+>>>>  
+>>>>  	usleep_range(10, 20);
+>>>>  
+>>>> -	return phy_modify(phydev, MII_DP83867_PHYCTRL,
+>>>> +	err = phy_modify(phydev, MII_DP83867_PHYCTRL,
+>>>>  			 DP83867_PHYCR_FORCE_LINK_GOOD, 0);
+>>>> +	if (err < 0)
+>>>> +		return err;
+>>>> +
+>>>
+>>> Would be good to add a comment here explaining what this magic write does.
+>>
+>> Sure. Is the following comment acceptable?
+>>
+>> "Configure the DSP Feedforward Equalizer Configuration register to improve short
+>> cable (< 1 meter) performance. This will not affect long cable performance."
+>>
+> Sounds good. Important is just that the magic value write is explained, so that
+> readers of the source code don't have to scroll through the commit history.
 
-MIPS does not include <asm-generic/io.h>,  nor define its own
-__raw_readq() and __raw_writeq()...
+Thank you for letting me know. I will post the v3 patch with the comment.
 
-> + *
-> + * TODO: Convert MIPS to generic I/O. The helpers below can
-> + *       then be removed.
-> + */
-> +#ifdef CONFIG_64BIT
-> +static inline u64 fb_readq(const volatile void __iomem *addr)
-> +{
-> +       return __raw_readq(addr);
-
-... so how can this call work?
-
-> +}
-> +#define fb_readq fb_readq
-> +
-> +static inline void fb_writeq(u64 b, volatile void __iomem *addr)
-> +{
-> +       __raw_writeq(b, addr);
-> +}
-> +#define fb_writeq fb_writeq
-> +#endif
-> +
->  #include <asm-generic/fb.h>
-
-Gr{oetje,eeting}s,
-
-                        Geert
+> 
+>>>
+>>>> +	err = phy_write_mmd(phydev, DP83867_DEVADDR, DP83867_DSP_FFE_CFG,
+>>>> +			    0x0e81);
+>>>> +	if (err < 0)
+>>>> +		return err;
+>>>> +
+>>>> +	err = phy_write(phydev, DP83867_CTRL, DP83867_SW_RESTART);
+>>>> +	if (err < 0)
+>>>> +		return err;
+>>>> +
+>>>> +	usleep_range(10, 20);
+>>>> +
+>>>> +	return 0;
+>>>>  }
+>>>>  
+>>>>  static void dp83867_link_change_notify(struct phy_device *phydev)
+>>>
+>>
+> 
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Regards,
+Siddharth.
