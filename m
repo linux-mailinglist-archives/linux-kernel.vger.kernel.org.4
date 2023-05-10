@@ -2,177 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9B8A6FE493
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 21:46:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 597296FE49C
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 21:50:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236017AbjEJTqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 15:46:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35378 "EHLO
+        id S236284AbjEJTuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 15:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229732AbjEJTqX (ORCPT
+        with ESMTP id S230061AbjEJTum (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 15:46:23 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5753596;
-        Wed, 10 May 2023 12:46:21 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bc4b88998so13625476a12.3;
-        Wed, 10 May 2023 12:46:21 -0700 (PDT)
+        Wed, 10 May 2023 15:50:42 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23A03C3E
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 12:50:39 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id 98e67ed59e1d1-250252e4113so4992366a91.0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 12:50:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683747980; x=1686339980;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B1Ax+C4uVpShkrhGJuWjnQ32NyLaUTtPNx+vaWWWtRo=;
-        b=qKtDqwcdFt3Z+xjetBlVll3ql6lmXwZ3cZaMEO7+qOH50NSVWdMVREhDc20U80fTyz
-         +wMBDiofE9h/RnnjIf9E90ZqTvCkVtp1jkOJf8JL8V5cczXOrC0GgO4YlnC2uhten5D2
-         3F9dHcFhisygtrTq9+dHqR6szwodWTBmEm/mjMF/N0RPmlVWPhmEB2Uz7DGlg5DTaH70
-         8qPZduFC19NIF56VzusFy83xPpZQkwD2P0IoL3s7q7NbA4tpj7Jlp8eCjzZDcZxs2RBI
-         lHKsqpAJHl6BnA5EDqjY35rF3GBBb3PO0gi2DaloEZAJjLZCHQsBM1/UCD+wN1S7PrPi
-         PN/w==
+        d=chromium.org; s=google; t=1683748239; x=1686340239;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RzJXq5M126VXCpiLaXhWPXp33e8DOHU0imjBBTS6ocY=;
+        b=UYPeCm9xk2F+UqFzo7t2g252TthUcu3MmFve6bnrGKluC0KPQdbx+R96WtCPlOzvP/
+         GuwquTTUWnmNSWWBlWU7CiHXyhNZ3FvMvvbZiaUU6GddxjxTW4Hp7rQKk0S1eLZq5tyl
+         3NSD3wRK/T9jfmIbLeJkVJQhKWt+8t/pPHfQ4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683747980; x=1686339980;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=B1Ax+C4uVpShkrhGJuWjnQ32NyLaUTtPNx+vaWWWtRo=;
-        b=W1OMCe8aJ2dLu2fSggnFSYYSCCtbD/NHbH9RjcaJTNMha31R4iaQRBPh5UKpAHXZTW
-         w0WRNikFVFkR3gcWRDM5MXMtmUd8u40Pz1SOFuWPHoHOnuPC1MJ26CQqI6pz6jsZP23B
-         e6GqIcsMn9Xnt+cYibdF71u4mPh7zR8tKiFuNXrDtIylLVqBoHhSqMmL4FvB8ckDuECg
-         rlK+UkOnqnrkjBDazeB/7KtqtYmG3U02FWnmXe33aLRwGq6DJmN45O1FURWg1WqZfCwv
-         /egQRIOrd7RwU7KcbCulL3sw0I/GBTiouq8AZX0df+pjokZQQkb8kuSR6FDz0+NbYO8A
-         N2hg==
-X-Gm-Message-State: AC+VfDzLFFXn1ge66CaVobK9aMJAg6fJ2Jz5iJsb2rNlaJCcq3lHKfsa
-        wJyncu4TYOG0E+odpKgGqtG9ceQMRknI7YVn73M=
-X-Google-Smtp-Source: ACHHUZ71b7omNvOYvmXMlT5h+vZxL1cQOXXwSCWfa8NRKmoq3Ab93DsePztpxij0ZcDDi+9V49IW6SYFiysEQeq+vz0=
-X-Received: by 2002:a05:6402:203:b0:506:a561:b0a9 with SMTP id
- t3-20020a056402020300b00506a561b0a9mr15705456edv.14.1683747979721; Wed, 10
- May 2023 12:46:19 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683748239; x=1686340239;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RzJXq5M126VXCpiLaXhWPXp33e8DOHU0imjBBTS6ocY=;
+        b=gQA3ntv5VoYcsNa3GsbS8EHQNpgKGcyctmomOPo1VvpTNB4hdZjcxs7+k0Vh+CWXNh
+         W6VtkCX/viKPwjxLfhbjO8eReF5cv5kXmIWBCe3wtIT62QijN9jB9/9X909UAdj94SmD
+         W0sk5MlIwRnX0FDGROyB9ClpEw5RsQNbQTzLGjIN2PChdYhcAwqld9pmHeiFRFxfX/k4
+         ge4GlARJ+By5N3ChRno2t9QHSNSIPMGvHYt6kLJ3+/xOIPTF7QdHGwzWTrD38jPOKb45
+         f7O3s6VMcBOiiyL7sr+NZg2lV2FTqJyVqCzvQVn5+miMbR/joC+BWQO8PE19jSHnrFJi
+         0kNw==
+X-Gm-Message-State: AC+VfDyucbBztd27w55B3erpQbAT2suY3xPhW1GXaUssWnFJuzySY/yV
+        fz/Ux2OTV5dCk4ZFjGoqrE89cg==
+X-Google-Smtp-Source: ACHHUZ4hSLTRdAWmIJbXpDVFtmGq/SMTG5NAr/KdpxYfUUkv2hBQi11Hb8rjTqCQj4EVVAL1KHNGtQ==
+X-Received: by 2002:a17:90a:4618:b0:250:6bd9:cf6 with SMTP id w24-20020a17090a461800b002506bd90cf6mr13900854pjg.15.1683748239244;
+        Wed, 10 May 2023 12:50:39 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:17a2:4d38:332d:67a0])
+        by smtp.gmail.com with ESMTPSA id 3-20020a630a03000000b0051b930b2b49sm3579202pgk.72.2023.05.10.12.50.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 12:50:38 -0700 (PDT)
+Date:   Wed, 10 May 2023 12:50:36 -0700
+From:   Brian Norris <briannorris@chromium.org>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, Amitkumar Karwar <amitkarwar@gmail.com>,
+        Ganapathi Bhat <ganapathi017@gmail.com>,
+        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
+        Xinming Hu <huxinming820@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        Pin-yen Lin <treapking@chromium.org>
+Subject: Re: [PATCH 02/13] wifi: mwifiex: Use default @max_active for
+ workqueues
+Message-ID: <ZFv1jM2PErlNUNsm@google.com>
+References: <20230509015032.3768622-1-tj@kernel.org>
+ <20230509015032.3768622-3-tj@kernel.org>
+ <ZFvd8zcPq4ijSszM@google.com>
+ <ZFvfYK-u8suHjPFw@slm.duckdns.org>
+ <ZFvpJb9Dh0FCkLQA@google.com>
+ <ZFvuOK_dpGTE4UVS@slm.duckdns.org>
 MIME-Version: 1.0
-References: <20230509153912.515218-1-vincenzopalazzodev@gmail.com>
- <20230509211902.GA1270901@bhelgaas> <CAMdYzYp6=mYSoUHN3TEXVSMbRt1HpRm0X_4RMez09V0XzQewaw@mail.gmail.com>
- <CSIJZYWBC38N.2M99O6W1PLR4B@vincent-arch>
-In-Reply-To: <CSIJZYWBC38N.2M99O6W1PLR4B@vincent-arch>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Wed, 10 May 2023 15:46:06 -0400
-Message-ID: <CAMdYzYrPNwq7OC-_9PE18coO-y_NZuu9bAj4XX1r8q8Gy_EofA@mail.gmail.com>
-Subject: Re: [PATCH v1] drivers: pci: introduce configurable delay for
- Rockchip PCIe bus scan
-To:     Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org,
-        robh@kernel.org, heiko@sntech.de, kw@linux.com,
-        shawn.lin@rock-chips.com, linux-kernel@vger.kernel.org,
-        lgirdwood@gmail.com, linux-rockchip@lists.infradead.org,
-        broonie@kernel.org, bhelgaas@google.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        lpieralisi@kernel.org, linux-arm-kernel@lists.infradead.org,
-        Dan Johansen <strit@manjaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZFvuOK_dpGTE4UVS@slm.duckdns.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 7:16=E2=80=AFAM Vincenzo Palazzo
-<vincenzopalazzodev@gmail.com> wrote:
->
-> > On Tue, May 9, 2023 at 5:19=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.or=
-g> wrote:
-> > >
-> > > Hi Vincenzo,
-> > >
-> > > Thanks for raising this issue.  Let's see what we can do to address
-> > > it.
-> > >
-> > > On Tue, May 09, 2023 at 05:39:12PM +0200, Vincenzo Palazzo wrote:
-> > > > Add a configurable delay to the Rockchip PCIe driver to address
-> > > > crashes that occur on some old devices, such as the Pine64 RockPro6=
-4.
-> > > >
-> > > > This issue is affecting the ARM community, but there is no
-> > > > upstream solution for it yet.
-> > >
-> > > It sounds like this happens with several endpoints, right?  And I
-> > > assume the endpoints work fine in other non-Rockchip systems?  If
-> > > that's the case, my guess is the problem is with the Rockchip host
-> > > controller and how it's initialized, not with the endpoints.
-> > >
-> > > The only delays and timeouts I see in the driver now are in
-> > > rockchip_pcie_host_init_port(), where it waits for link training to
-> > > complete.  I assume the link training did completely successfully
-> > > since you don't mention either a gen1 or gen2 timeout (although the
-> > > gen2 message is a dev_dbg() that normally wouldn't go to the console)=
-.
-> > >
-> > > I don't know that the spec contains a retrain timeout value.  Several
-> > > other drivers use 1 second, while rockchip uses 500ms (for example,
-> > > see LINK_RETRAIN_TIMEOUT and LINK_UP_TIMEOUT).
-> > >
-> > > I think we need to understand the issue better before adding a DT
-> > > property and a module parameter.  Those are hard for users to deal
-> > > with.  If we can figure out a value that works for everybody, it woul=
-d
-> > > be better to just hard-code it in the driver and use that all the
-> > > time.
-> >
-> > Good Evening,
-> >
-> > The main issue with the rk3399 is the PCIe controller is buggy and
-> > triggers a SoC panic when certain error conditions occur that should
-> > be handled gracefully. One of those conditions is when an endpoint
-> > requests an access to wait and retry later. Many years ago we ran that
-> > issue to ground and with Robin Murphy's help we found that while it's
-> > possible to gracefully handle that condition it required hijacking the
-> > entire arm64 error handling routine. Not exactly scalable for just one
-> > SoC. The configurable waits allow us to program reasonable times for
-> > 90% of the endpoints that come up in the normal amount of time, while
-> > being able to adjust it for the other 10% that do not. Some require
-> > multiple seconds before they return without error. Part of the reason
-> > we don't want to hardcode the wait time is because the probe isn't
-> > handled asynchronously, so the kernel appears to hang while waiting
-> > for the timeout.
->
-> Yeah, I smell a hardware bug in my code. I hate waiting in this way insid=
-e
-> the code, so it's usually wrong when you need to do something like that.
+On Wed, May 10, 2023 at 09:19:20AM -1000, Tejun Heo wrote:
+> On Wed, May 10, 2023 at 11:57:41AM -0700, Brian Norris wrote:
+> > (1) much better (nearly the same as 4.19) if we add WQ_SYSFS and pin the
+> > work queue to one CPU (doesn't really matter which CPU, as long as it's
+> > not the one loaded with IRQ(?) work)
+> > 
+> > (2) moderately better if we pin the CPU frequency (e.g., "performance"
+> > cpufreq governor instead of "schedutil")
+> > 
+> > (3) moderately better (not quite as good as (2)) if we switch a
+> > kthread_worker and don't pin anything.
+> 
+> Hmm... so it's not just workqueue.
 
-Correct, it's the unfortunate way of arm64 development. Almost none of
-the SoCs implement all of their hardware in a completely specification
-compliant way.
+Right. And not just cpufreq either.
 
->
-> During my research, I also found this patch (https://bugzilla.redhat.com/=
-show_bug.cgi?id=3D2134177)
-> that provides a fix in another possibly cleaner way.
->
-> But I don't understand the reasoning behind it, so maybe I
-> haven't spent enough time thinking about it.
+> > We tried (2) because we saw a lot more CPU migration on kernel 5.15
+> > (work moves across all 4 CPUs throughout the run; on kernel 4.19 it
+> > mostly switched between 2 CPUs).
+> 
+> Workqueue can contribute to this but it seems more likely that scheduling
+> changes are also part of the story.
 
-That is a completely different issue, unrelated to the PCI crash.
+Yeah, that's one theory. And in that vein, that's one reason we might
+consider switching to a kthread_worker anyway, even if that doesn't
+solve all the regression -- because schedutil relies on per-entity load
+calculations to make decisions, and workqueues don't help the scheduler
+understand that load when spread across N CPUs (workers). A dedicated
+kthread would better represent our workload to the scheduler.
 
->
-> > I'm curious if it's been tested with this series on top:
-> > https://lore.kernel.org/linux-arm-kernel/20230418074700.1083505-8-rick.=
-wertenbroek@gmail.com/T/
-> > I'm particularly curious if
-> > [v5,04/11] PCI: rockchip: Add poll and timeout to wait for PHY PLLs to =
-be locked
-> > makes a difference in the behavior. Please test this and see if it
-> > improves the timeouts you need for the endpoints you're testing
-> > against.
->
-> Mh, I can try to cherry-pick the commit and test it in my own test enviro=
-nment. Currently, I haven't been
-> able to test it due to a lack of hardware, but I'm seeking a way to obtai=
-n one.
-> Luckily, I have someone on the Manjaro arm team who can help me test it,
-> so I'll try to do that.
->
-> Cheers!
->
-> Vincent.
+(Threaded NAPI -- mwifiex doesn't support NAPI -- takes a similar
+approach, as it has its own thread per NAPI context.)
+
+> > We tried (3) suspecting some kind of EAS issue (instead of distributing
+> > our workload onto 4 different kworkers, our work (and therefore our load
+> > calculation) is mostly confined to a single kernel thread). But it still
+> > seems like our issues are more than "just" EAS / cpufreq issues, since
+> > (2) and (3) aren't as good as (1).
+> > 
+> > NB: there weren't many relevant mwifiex or MTK-SDIO changes in this
+> > range.
+> > 
+> > So we're still investigating a few other areas, but it does seem like
+> > "locality" (in some sense of the word) is relevant. We'd probably be
+> > open to testing any patches you have, although it's likely we'd have the
+> > easiest time if we can port those to 5.15. We're constantly working on
+> > getting good upstream support for Chromebook chips, but ARM SoC reality
+> > is that it still varies a lot as to how much works upstream on any given
+> > system.
+> 
+> I should be able to post the patchset later today or tomorrow. It comes with
+> sysfs knobs to control affinity scopes and strictness, so hopefully you
+> should be able to find the configuration that works without too much
+> difficulty.
+
+Great!
+
+Brian
