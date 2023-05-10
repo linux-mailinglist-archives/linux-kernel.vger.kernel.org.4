@@ -2,41 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 050576FD828
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:29:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D64836FD829
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:29:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236062AbjEJH3L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 03:29:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52742 "EHLO
+        id S236013AbjEJH3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 03:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235902AbjEJH2z (ORCPT
+        with ESMTP id S235899AbjEJH2z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 10 May 2023 03:28:55 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE07E7ABF
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:28:38 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C46D7D90
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:28:39 -0700 (PDT)
 From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683703717;
+        s=2020; t=1683703718;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ypjjo6K+ZjX/gE7dPsSFsIuC37ELchmIlQCCnVAGgp8=;
-        b=AZgOvS8o2/I6ef73VDPLLedAE04KQCERCWRx57+Qq12U2DNtp3JBH68p28ucBoooUtyHkC
-        0WIkq7ePGQ8ZeLGivNKdHV16tlQDtR1BAtWPCbfu3wbm9RmCiBSSsQM1swY62dVY5oU9L2
-        4QlsV5oN3SD5Jg/c3ABY968azlsTv4dk9/u/eMrL/InOR6TeEnXUtxL9CUZYiBrcKBxqwR
-        FaQFS0c04XD00SBcG5zIUf3wJ2UhTFVZKtL+smq02AKE2ISeh8b7d4weeQZ5pvtgpRM3Oz
-        J63arhhI61zXxGlgf1tf6JmHc5IQUwjMxsJbhwMDcOVP9gDLAO9DWpoEfdRlMg==
+        bh=zI+0rerNf99sxfZIFO3XWHcHmkxmJchxL7sCWUUXfOI=;
+        b=cubjBPJ6w7yZsWbNwTtfJiVIkOdWjbLVzWAKrA/CxiHY70vdb82ccK7VPJmgc6J45GXpsz
+        ZJUISZremxccjGXa1MMQ4ENiQf7QWVjG5cNnEXe6L/d0Z449yW9FUQI9ybiP4C1G3+X/Bm
+        +C6ZVcBJSJgPo0Hzfo4PjRCeJxvnPF9cKAhpaAadBuVdaPgk5KaUabADlIP12zVpCHDWlk
+        C91vPCWTyeuPG+5TaTripFMz0lSTIQdzsW5NqYmh/ooXydaKTI3HUYaKHdQPheY0ZfHJv9
+        CHrjLcKjpqzFez8aqrfxhOsHUqxAfotmgSAnoI2UExZt8ABPy2rUfyFSpPphCg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683703717;
+        s=2020e; t=1683703718;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ypjjo6K+ZjX/gE7dPsSFsIuC37ELchmIlQCCnVAGgp8=;
-        b=UapTFIp4zMIufwrsE4Vj0V0MTB6rsOocC4NfL+/mCZMHsa52cVBZJ/vfYoSEqfvDfCIf2a
-        7ZIXGQGM1kUlU+Dw==
+        bh=zI+0rerNf99sxfZIFO3XWHcHmkxmJchxL7sCWUUXfOI=;
+        b=qHDgQCtXSdmZ/zO2kHapQ/1F28a/IGTGVsZppPRHxB8YM8kzsBMjT8rjWlmBWcEGf/QhkV
+        lzfB0lb6SBMx95DA==
 To:     linux-kernel@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         John Stultz <jstultz@google.com>,
@@ -54,9 +54,9 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
         Anna-Maria Behnsen <anna-maria@linutronix.de>,
         Frederic Weisbecker <frederic@kernel.org>
-Subject: [PATCH v6 03/21] timer: Add comment to get_next_timer_interrupt() description
-Date:   Wed, 10 May 2023 09:27:59 +0200
-Message-Id: <20230510072817.116056-4-anna-maria@linutronix.de>
+Subject: [PATCH v6 04/21] timer: Move store of next event into __next_timer_interrupt()
+Date:   Wed, 10 May 2023 09:28:00 +0200
+Message-Id: <20230510072817.116056-5-anna-maria@linutronix.de>
 In-Reply-To: <20230510072817.116056-1-anna-maria@linutronix.de>
 References: <20230510072817.116056-1-anna-maria@linutronix.de>
 MIME-Version: 1.0
@@ -71,38 +71,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-get_next_timer_interrupt() does more than simply getting the next timer
-interrupt. The timer bases are forwarded and also marked as idle whenever
-possible.
+Both call sites of __next_timer_interrupt() store return value directly in
+base->next_expiry. Move the store into __next_timer_interrupt() and to make
+its purpose more clear, rename function to next_expiry_recalc().
 
-To get not confused, add a comment to function description.
+No functional change.
 
 Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
 Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
 ---
-v6: s/handling/marking
+v6: Fix typos in commit message and drop not required return as suggested
+    by Peter Zijlstra)
 
-v5: New patch, which adds only a comment to get_next_timer_interrupt()
-instead of changing the function name
+v4: rename function as suggested by Frederic Weisbecker
 ---
- kernel/time/timer.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ kernel/time/timer.c | 11 ++++++-----
+ 1 file changed, 6 insertions(+), 5 deletions(-)
 
 diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 6e251e3cf659..0699fd14d00a 100644
+index 0699fd14d00a..59f2e15733ab 100644
 --- a/kernel/time/timer.c
 +++ b/kernel/time/timer.c
-@@ -1912,6 +1912,10 @@ static u64 cmp_next_hrtimer_event(u64 basem, u64 expires)
-  * @basej:	base time jiffies
-  * @basem:	base time clock monotonic
-  *
-+ * If required, base->clk is forwarded and base is also marked as
-+ * idle. Idle marking of timer bases is allowed only to be done by CPU
-+ * itself.
+@@ -1800,8 +1800,10 @@ static int next_pending_bucket(struct timer_base *base, unsigned offset,
+ /*
+  * Search the first expiring timer in the various clock levels. Caller must
+  * hold base->lock.
 + *
-  * Returns the tick aligned clock monotonic time of the next pending
-  * timer or KTIME_MAX if no timer is pending.
++ * Store next expiry time in base->next_expiry.
   */
+-static unsigned long __next_timer_interrupt(struct timer_base *base)
++static void next_expiry_recalc(struct timer_base *base)
+ {
+ 	unsigned long clk, next, adj;
+ 	unsigned lvl, offset = 0;
+@@ -1867,10 +1869,9 @@ static unsigned long __next_timer_interrupt(struct timer_base *base)
+ 		clk += adj;
+ 	}
+ 
++	base->next_expiry = next;
+ 	base->next_expiry_recalc = false;
+ 	base->timers_pending = !(next == base->clk + NEXT_TIMER_MAX_DELTA);
+-
+-	return next;
+ }
+ 
+ #ifdef CONFIG_NO_HZ_COMMON
+@@ -1934,7 +1935,7 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
+ 
+ 	raw_spin_lock(&base->lock);
+ 	if (base->next_expiry_recalc)
+-		base->next_expiry = __next_timer_interrupt(base);
++		next_expiry_recalc(base);
+ 	nextevt = base->next_expiry;
+ 
+ 	/*
+@@ -2017,7 +2018,7 @@ static inline void __run_timers(struct timer_base *base)
+ 		WARN_ON_ONCE(!levels && !base->next_expiry_recalc
+ 			     && base->timers_pending);
+ 		base->clk++;
+-		base->next_expiry = __next_timer_interrupt(base);
++		next_expiry_recalc(base);
+ 
+ 		while (levels--)
+ 			expire_timers(base, heads + levels);
 -- 
 2.30.2
 
