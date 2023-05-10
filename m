@@ -2,219 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 15B3F6FD53C
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 06:46:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 911596FD53B
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 06:46:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235555AbjEJEqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 00:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
+        id S229561AbjEJEqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 00:46:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235456AbjEJEqF (ORCPT
+        with ESMTP id S230014AbjEJEqE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 00:46:05 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33BB4480
+        Wed, 10 May 2023 00:46:04 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 423724201
         for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 21:46:02 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6439b410679so4296520b3a.0
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-55a5a830238so62370247b3.3
         for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 21:46:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1683693962; x=1686285962;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ofB28UJkMdjbKgicTFJuyXfhP+N1OadXwaIb6BnaMTc=;
-        b=c8IYXtdt/nvXPx3aeJJh+iQIuvYlBMqHn28lPL8dwwKzPPUree4mbogv16cwKHCZA/
-         2KlwhwtNtJ/sOAj9NMMk4nrRtBS+Gj2xlpZYMsGP2F7hUHnyP7Wl/ODFFnjG3C7YtbMU
-         mGCaclhyso80BrQZ3ChT4C2IhfUK4reiuD8T6r1xdMgWCOonQtRHVBWNFTfmxd/nkAyx
-         9pYROnnyFfFqpXKEvFChx9kW6Mv3xGhI78p9oT0Dz/KBN2f/syi2V0pNZNHywY4hlOoT
-         yXYhwYnZuTq/CGlG6+zY6qoV9PuZa2eEmNARbqRIwsfJQjYbQxW/3GXfBm4dbKFMorZz
-         5Uvw==
+        d=google.com; s=20221208; t=1683693961; x=1686285961;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Y3cIigX+Nl9tLTZ0FqCTIXHUTdUKJPmRsHmBn2kODQ=;
+        b=X3r36dHHiJLgvp7jU0d4K3JzjfQ3mFZ409XlDfQRUNXPcZqJbsAuZzM3s3dqfqjzC7
+         8KZfl7/K1d5O90p8GZrKYknrba26nw1LDXST+K7c2aBIUL4D4zJxqgAKfbG2qxu2Yo5u
+         /0/dJOnRitUjxODeANtGQgBQxAoaXYK9cmTYbd/KEH4Bma0mqugbvo9G65UfkX3CZvm4
+         /qVdLnQuXbtkydB1O0CAPyBH6Uxg3CoJyNGPZLXWNXdI0kdPUkxDZks6+sU3ASKIjHEF
+         kaGykgOemp+4zkq4W/ysBBuFcBH4LTuAgjoNUoWbJlUwxz7uYcWBFSnWP85ZFQDgSIRR
+         fYQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683693962; x=1686285962;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ofB28UJkMdjbKgicTFJuyXfhP+N1OadXwaIb6BnaMTc=;
-        b=XLfpceCSAnug02+S7SuFip1Dik8wP++vUf5D2fVABWglGrJhBX8geLj7sIbABjSSp4
-         f/9WJD8M/NDX/QvKqhPn0IOlSDmYbiJRcADFDYteyojGDufuTUNa7GAu0Pf+0IO1TlzV
-         fFs5S7XH+R802cR789gFztas+QWrWmebpiqMt2y5mPk6dM1DXKhcAt06STZTssJoQIGz
-         HjuBAtxu7jjyTxe2mhsM9Mz5FhyWmQLlRbPIs5bqe4dG6FP4p6jQhogw6adfobjLIaRL
-         GuHHiH+x7sKeQCOT3WdTjIS2VdoEdHmdUG4ZyOJFVYNikZOlR861QIG9gM/iIZqyE1fr
-         db3A==
-X-Gm-Message-State: AC+VfDyF4vxyqbmDCYAiSlKmhPGhqfYd/JqFSBJfvyCx9HTYwKMT+aMd
-        PxRqGqbhCMWJaibTjJJ0Ivf6Sg==
-X-Google-Smtp-Source: ACHHUZ5thq7haMb94Aftq6by7PVgqXFot+62KXDs1YkuFqVoYOSeojgqeUskjGrAVEZlOo3/EAZ7ew==
-X-Received: by 2002:a05:6a21:6d8a:b0:101:282c:2b with SMTP id wl10-20020a056a216d8a00b00101282c002bmr6552938pzb.32.1683693961867;
+        d=1e100.net; s=20221208; t=1683693961; x=1686285961;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2Y3cIigX+Nl9tLTZ0FqCTIXHUTdUKJPmRsHmBn2kODQ=;
+        b=Qoq+QGHPMcB9Dh6NuQUVrGBh04sPghoH+N738Y8mHGjEqZtvvXdDXEu3lBf0t9jqD0
+         FQGL9ypX4n34ANaatpBdko82SFz0LAI3AUU23lFvzfX8GFDJJX5hHfDbNNytI9ACLNcv
+         HiW7N+3dhcVppikGd36tIZjN+BzuqQpUAMyKAkpdYeHmvgNs/ffKhqThVs+2vxeZp1j8
+         jfqya0aHJydIqfvilz6bPFwIPBX+aTPtQrxoG4nGTwqVZzKJ1irszZXP3y+3lMWg4AK7
+         xzP5Vbi4GZsghQvLKIXiP/OkDoHY/fKvg0MfMquAWPwAsQqsKJ2JFa2vOdfOCMgF69DA
+         rQtQ==
+X-Gm-Message-State: AC+VfDzcpY6M3Ie7h2gz/pFLSq/XPYrSqti48KTaU/Ax2nKUrTumjRkN
+        twfdkfTAKZ/R1MPTwOq92nopag==
+X-Google-Smtp-Source: ACHHUZ7XGWNGIkPY+5hFXQ4Kt5/NxLbXPMIaWsRvM1j0AuAelIXLbwAPwZwsOjvzazAJBFrFLzpKOA==
+X-Received: by 2002:a0d:e242:0:b0:52e:f109:ba7a with SMTP id l63-20020a0de242000000b0052ef109ba7amr17438159ywe.51.1683693961209;
         Tue, 09 May 2023 21:46:01 -0700 (PDT)
-Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
-        by smtp.gmail.com with ESMTPSA id e5-20020aa78c45000000b00640defda6d2sm2555461pfd.207.2023.05.09.21.46.00
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id s126-20020a815e84000000b0054c0c9e4043sm3833116ywb.95.2023.05.09.21.45.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 21:46:01 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.92.3)
-        (envelope-from <david@fromorbit.com>)
-        id 1pwbi9-00DUH0-Sc; Wed, 10 May 2023 14:45:57 +1000
-Date:   Wed, 10 May 2023 14:45:57 +1000
-From:   Dave Chinner <david@fromorbit.com>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org, Dave Chinner <dchinner@redhat.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH 22/32] vfs: inode cache conversion to hash-bl
-Message-ID: <20230510044557.GF2651828@dread.disaster.area>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-23-kent.overstreet@linux.dev>
+        Tue, 09 May 2023 21:46:00 -0700 (PDT)
+Date:   Tue, 9 May 2023 21:45:57 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Andrew Morton <akpm@linux-foundation.org>
+cc:     Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: [PATCH 03/23] arm64/hugetlb: pte_alloc_huge() pte_offset_huge()
+In-Reply-To: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
+Message-ID: <dda2885-929b-c278-14e-5f447e9eec52@google.com>
+References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230509165657.1735798-23-kent.overstreet@linux.dev>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 12:56:47PM -0400, Kent Overstreet wrote:
-> From: Dave Chinner <dchinner@redhat.com>
-> 
-> Because scalability of the global inode_hash_lock really, really
-> sucks.
-> 
-> 32-way concurrent create on a couple of different filesystems
-> before:
-> 
-> -   52.13%     0.04%  [kernel]            [k] ext4_create
->    - 52.09% ext4_create
->       - 41.03% __ext4_new_inode
->          - 29.92% insert_inode_locked
->             - 25.35% _raw_spin_lock
->                - do_raw_spin_lock
->                   - 24.97% __pv_queued_spin_lock_slowpath
-> 
-> -   72.33%     0.02%  [kernel]            [k] do_filp_open
->    - 72.31% do_filp_open
->       - 72.28% path_openat
->          - 57.03% bch2_create
->             - 56.46% __bch2_create
->                - 40.43% inode_insert5
->                   - 36.07% _raw_spin_lock
->                      - do_raw_spin_lock
->                           35.86% __pv_queued_spin_lock_slowpath
->                     4.02% find_inode
-> 
-> Convert the inode hash table to a RCU-aware hash-bl table just like
-> the dentry cache. Note that we need to store a pointer to the
-> hlist_bl_head the inode has been added to in the inode so that when
-> it comes to unhash the inode we know what list to lock. We need to
-> do this because the hash value that is used to hash the inode is
-> generated from the inode itself - filesystems can provide this
-> themselves so we have to either store the hash or the head pointer
-> in the inode to be able to find the right list head for removal...
-> 
-> Same workload after:
-> 
-> Signed-off-by: Dave Chinner <dchinner@redhat.com>
-> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: linux-fsdevel@vger.kernel.org
-> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
+pte_alloc_map() expects to be followed by pte_unmap(), but hugetlb omits
+that: to keep balance in future, use the recently added pte_alloc_huge()
+instead; with pte_offset_huge() a better name for pte_offset_kernel().
 
-I have been maintaining this patchset uptodate in my own local trees
-and the code in this patch looks the same. The commit message above,
-however, has been mangled. The full commit message should be:
-
-vfs: inode cache conversion to hash-bl
-
-Because scalability of the global inode_hash_lock really, really
-sucks and prevents me from doing scalability characterisation and
-analysis of bcachefs algorithms.
-
-Profiles of a 32-way concurrent create of 51.2m inodes with fsmark
-on a couple of different filesystems on a 5.10 kernel:
-
--   52.13%     0.04%  [kernel]            [k] ext4_create
-   - 52.09% ext4_create
-      - 41.03% __ext4_new_inode
-         - 29.92% insert_inode_locked
-            - 25.35% _raw_spin_lock
-               - do_raw_spin_lock
-                  - 24.97% __pv_queued_spin_lock_slowpath
-
-
--   72.33%     0.02%  [kernel]            [k] do_filp_open
-   - 72.31% do_filp_open
-      - 72.28% path_openat
-         - 57.03% bch2_create
-            - 56.46% __bch2_create
-               - 40.43% inode_insert5
-                  - 36.07% _raw_spin_lock
-                     - do_raw_spin_lock
-                          35.86% __pv_queued_spin_lock_slowpath
-                    4.02% find_inode
-
-btrfs was tested but it is limited by internal lock contention at
->=2 threads on this workload, so never hammers the inode cache lock
-hard enough for this change to matter to it's performance.
-
-However, both bcachefs and ext4 demonstrate poor scaling at >=8
-threads on concurrent lookup or create workloads.
-
-Hence convert the inode hash table to a RCU-aware hash-bl table just
-like the dentry cache. Note that we need to store a pointer to the
-hlist_bl_head the inode has been added to in the inode so that when
-it comes to unhash the inode we know what list to lock. We need to
-do this because, unlike the dentry cache, the hash value that is
-used to hash the inode is not generated from the inode itself. i.e.
-filesystems can provide this themselves so we have to either store
-the hashval or the hlist head pointer in the inode to be able to
-find the right list head for removal...
-
-Concurrent create with variying thread count (files/s):
-
-                ext4                    bcachefs
-threads         vanilla  patched        vanilla patched
-2               117k     112k            80k     85k
-4               185k     190k           133k    145k
-8               303k     346k           185k    255k
-16              389k     465k           190k    420k
-32              360k     437k           142k    481k
-
-CPU usage for both bcachefs and ext4 at 16 and 32 threads has been
-halved on the patched kernel, while performance has increased
-marginally on ext4 and massively on bcachefs. Internal filesystem
-algorithms now limit performance on these workloads, not the global
-inode_hash_lock.
-
-Profile of the workloads on the patched kernels:
-
--   35.94%     0.07%  [kernel]                  [k] ext4_create
-   - 35.87% ext4_create
-      - 20.45% __ext4_new_inode
-...
-           3.36% insert_inode_locked
-
-   - 78.43% do_filp_open
-      - 78.36% path_openat
-         - 53.95% bch2_create
-            - 47.99% __bch2_create
-....
-              - 7.57% inode_insert5
-                    6.94% find_inode
-
-Spinlock contention is largely gone from the inode hash operations
-and the filesystems are limited by contention in their internal
-algorithms.
-
-Signed-off-by: Dave Chinner <dchinner@redhat.com>
+Signed-off-by: Hugh Dickins <hughd@google.com>
 ---
+ arch/arm64/mm/hugetlbpage.c | 11 ++---------
+ 1 file changed, 2 insertions(+), 9 deletions(-)
 
-Other than that, the diffstat is the same and I don't see any obvious
-differences in the code comapred to what I've been running locally.
-
--Dave.
+diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
+index 95364e8bdc19..21716c940682 100644
+--- a/arch/arm64/mm/hugetlbpage.c
++++ b/arch/arm64/mm/hugetlbpage.c
+@@ -307,14 +307,7 @@ pte_t *huge_pte_alloc(struct mm_struct *mm, struct vm_area_struct *vma,
+ 			return NULL;
+ 
+ 		WARN_ON(addr & (sz - 1));
+-		/*
+-		 * Note that if this code were ever ported to the
+-		 * 32-bit arm platform then it will cause trouble in
+-		 * the case where CONFIG_HIGHPTE is set, since there
+-		 * will be no pte_unmap() to correspond with this
+-		 * pte_alloc_map().
+-		 */
+-		ptep = pte_alloc_map(mm, pmdp, addr);
++		ptep = pte_alloc_huge(mm, pmdp, addr);
+ 	} else if (sz == PMD_SIZE) {
+ 		if (want_pmd_share(vma, addr) && pud_none(READ_ONCE(*pudp)))
+ 			ptep = huge_pmd_share(mm, vma, addr, pudp);
+@@ -366,7 +359,7 @@ pte_t *huge_pte_offset(struct mm_struct *mm,
+ 		return (pte_t *)pmdp;
+ 
+ 	if (sz == CONT_PTE_SIZE)
+-		return pte_offset_kernel(pmdp, (addr & CONT_PTE_MASK));
++		return pte_offset_huge(pmdp, (addr & CONT_PTE_MASK));
+ 
+ 	return NULL;
+ }
 -- 
-Dave Chinner
-david@fromorbit.com
+2.35.3
+
