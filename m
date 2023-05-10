@@ -2,149 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 159176FE5ED
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 23:03:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 499AF6FE5EC
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 23:02:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236019AbjEJVDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 17:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58424 "EHLO
+        id S237071AbjEJVCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 17:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235987AbjEJVDJ (ORCPT
+        with ESMTP id S236634AbjEJVCD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 17:03:09 -0400
-Received: from mslow1.mail.gandi.net (mslow1.mail.gandi.net [IPv6:2001:4b98:dc4:8::240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED911E5D
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 14:03:06 -0700 (PDT)
-Received: from relay5-d.mail.gandi.net (unknown [IPv6:2001:4b98:dc4:8::225])
-        by mslow1.mail.gandi.net (Postfix) with ESMTP id 4E246CB671
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 20:55:23 +0000 (UTC)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7CA491C0007;
-        Wed, 10 May 2023 20:54:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1683752042;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fmQCtxST+exa6SSBpml6OW3Btx1Cfsjd48HbCNm2+V4=;
-        b=oMbduGZOJaO60CrrGnZd2qWJpEeKrdfvEJnYftup7CnEMeL0yJwnE9SCzQscq6zGq8JRlL
-        8FpjeM3BjB8kXtuind6T6pXq3BYAntOsCfVabbjyYi1PF1+RjQ6Xzn+RxQhjWz5PJK8mnu
-        6Ed9Rgn8hFr5Of1C55jkXbUMXTCdSkSwLhr9exNDr6A/VTXaa3qMU2wl6GoY000zQIARyq
-        vjRPInrJphwZFaqXGt6ebiiXaZqccH9eNRI60QUdSSMfGcEafuaKo1ZYBqyO3ZO7N5/ORF
-        +7ImQWA/1vPBvXsZei+BVlHCeLfJzdWI7nCR5T8Vv0r/XaznMJs0kLyqSCDPmQ==
-Date:   Wed, 10 May 2023 22:53:59 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yixun Lan <yixun.lan@amlogic.com>, oxffffaa@gmail.com,
-        kernel@sberdevices.ru, linux-mtd@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 6/6] mtd: rawnand: meson: rename node for chip select
-Message-ID: <20230510225359.061c2df6@xps-13>
-In-Reply-To: <CAFBinCAbTuNGEG13f71F8vhN3yGce+kkYJ7PHMpZbh8DzSapJg@mail.gmail.com>
-References: <20230510110835.26115-1-AVKrasnov@sberdevices.ru>
-        <20230510110835.26115-7-AVKrasnov@sberdevices.ru>
-        <CAFBinCAbTuNGEG13f71F8vhN3yGce+kkYJ7PHMpZbh8DzSapJg@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 10 May 2023 17:02:03 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209D410E2;
+        Wed, 10 May 2023 14:01:52 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2ac88d9edf3so73426861fa.0;
+        Wed, 10 May 2023 14:01:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683752510; x=1686344510;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Schew7/1f6L1gKiDAa1E4oOxjUrtaVYHdw6xtsV4v+0=;
+        b=kUXtX/zBnGRfU5FP8VpCvwgHddlFiFcMLFSAZMuekeQG1a9e0zwWsSIj9x2W3ev4Wk
+         Z0WTtkoZPsjc5Qs/Zw3Sp3ecHk8FvLRTiE1K8xNUoT1edzzqtHPHI2X+c49VHBnFrhhi
+         Z7HSwY8tUesYJHYc86fYBy0nZP4PSQ0d13dO9SObEoDS60eeKa0RsJRDycl0rAWeS+tB
+         lgfkDTFt09P8sa6D1M0i18SeAESqb/Y4exuxlIkxSfGhoVQGQymNa2mO8pvBWr8lkInm
+         vGmwlWc/gs5g41uJwOJSrbYm0SD0dXr94L55u+gydXL9qwjp2eoCV56OJrTdtSOA28cO
+         6KqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683752510; x=1686344510;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Schew7/1f6L1gKiDAa1E4oOxjUrtaVYHdw6xtsV4v+0=;
+        b=j0dqnh1McqG2jmEEB++xQ8pSCMh+RjtcnzdtmrnW7NVAB42TqHuT/HorwY/yIj+PfH
+         FPgIqb66BV8Yuzlv5Twz3Qi6RRTMr0JZJu3nNMfq4k8Bm/yuIlDblXuo/jkqQ+Lb5UsR
+         qqGBjwrveGymBCheXbdgJg9TTxxDr8m1ks1DWl9+ZVHatNQ2M6cIBRSY6xHPN2WvOUJJ
+         JoonzTCy2tw/mLRBl5dft1O1E24LSAEp3yI+04Ej7SE+KpmjQtDsr5gEx5a8n7FXcx41
+         L36XR+9GxuGhOtuXRqiVm4g7yp3RI3LZ9aFU7flSZN0MzoENdi28q21QKE8YkbZOrZTj
+         VKsg==
+X-Gm-Message-State: AC+VfDxQiy9lUYYyhC3WCPMFOckTnMF3lwdgVicPFHi1IzuRwi78J1ec
+        OYM0xvvluvHN0oZBQWN1fTLJnrP2gSySjg==
+X-Google-Smtp-Source: ACHHUZ7HN36RSXe1y/LhN2y7JSVz5OGcyYIMQaUDQczYtNLp41YDSovvtoyFOkx79Si5DjsLAjjNqg==
+X-Received: by 2002:a17:907:98d:b0:94e:cf72:8147 with SMTP id bf13-20020a170907098d00b0094ecf728147mr17485950ejc.48.1683752074142;
+        Wed, 10 May 2023 13:54:34 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id h9-20020a170906584900b0094e597f0e4dsm3059489ejs.121.2023.05.10.13.54.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 13:54:33 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
+        linux-sunxi@lists.linux.dev, linux-clk@vger.kernel.org,
+        kernel-janitors <kernel-janitors@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: Re: Situation of CONFIG_CLK_SUNXI_PRCM_SUN9I
+Date:   Wed, 10 May 2023 22:54:32 +0200
+Message-ID: <10272596.nUPlyArG6x@jernej-laptop>
+In-Reply-To: <CAKXUXMy3_krgwHMS6TaDZhBePkaHTHigntwBD0WFxMJ=DtgWYA@mail.gmail.com>
+References: <CAKXUXMy3_krgwHMS6TaDZhBePkaHTHigntwBD0WFxMJ=DtgWYA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin & Arseniy,
+Hi Lukas,
 
-martin.blumenstingl@googlemail.com wrote on Wed, 10 May 2023 22:40:37
-+0200:
+Dne sreda, 10. maj 2023 ob 07:38:04 CEST je Lukas Bulwahn napisal(a):
+> Dear Maxime,
+> 
 
-> Hello Arseniy,
->=20
-> On Wed, May 10, 2023 at 1:13=E2=80=AFPM Arseniy Krasnov
-> <AVKrasnov@sberdevices.ru> wrote:
-> >
-> > This renames node with values for chip select from "reg" to "cs". It is
-> > needed because when OTP access is enabled on the attached storage, MTD
-> > subsystem registers this storage in the NVMEM subsystem. NVMEM in turn
-> > tries to use "reg" node in its own manner, supposes that it has another
-> > layout. All of this leads to device initialization failure. =20
-> In general: if we change the device-tree interface (in this case:
-> replacing a "reg" with a "cs" property) the dt-bindings have to be
-> updated as well.
+I don't see Maxime in recipients...
 
-True, and I would add, bindings should not be broken.
+> with commit 49c726d55c1b ("clk: sunxi: Add Kconfig options"), you
+> introduce various build configurations for Legacy clock support for
+> Allwinner SoCs. Among them, you introduce the config
+> CLK_SUNXI_PRCM_SUN9I in drivers/clk/sunxi/Kconfig, but this config is
+> not used anywhere in the kernel tree.
+> 
+> Can we just delete this config CLK_SUNXI_PRCM_SUN9I again, as it is
+> not needed, or did you simply miss to adjust the Makefile for this
+> option to be effective?
 
-> Documentation/devicetree/bindings/mtd/nand-controller.yaml and
-> Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml show
-> that the chip select of a NAND chip is specified with a "reg"
-> property.
+I think this is the best approach. If it wasn't used by now, it can only make 
+further mess in distro configs if introduced.
 
-All NAND controller binding expect the chip-select to be in the
-'reg' property, very much like a spi device would use reg to store the
-cs as well: the reg property tells you how you address the device.
+Best regards,
+Jernej
 
-I also fully agree with Martin's comments below. Changing reg is likely
-a wrong approach :)
-
-> Also the code has to be backwards compatible with old .dtbs.
->=20
-> > Example:
-> >
-> > [...] nvmem mtd0-user-otp: nvmem: invalid reg on /soc/bus@ffe00000/...
-> > [...] mtd mtd0: Failed to register OTP NVMEM device
-> > [...] meson-nand ffe07800.nfc: failed to register MTD device: -22
-> > [...] meson-nand ffe07800.nfc: failed to init NAND chips
-> > [...] meson-nand: probe of ffe07800.nfc failed with error -22 =20
-> This is odd - can you please share your definition of the &nfc node?
->=20
-> &nfc {
->       nand_chip0: nand@0 {
->         reg =3D <0>;
->       };
-> };
->=20
-> This should result in nand_set_flash_node() being called with
-> &nand_chip0 (if it's called with &nfc then something is buggy in our
-> driver).
-> If there's no child nodes within &nand_chip0 then why would the
-> MTD-to-NVMEM code think that it has to parse something?
-> If you do have child nodes and those are partitions, then make sure
-> that the structure is correct (see the extra "partitions" node inside
-> which all partitions are nested):
-> &nand_chip0 {
->     partitions {
->         compatible =3D "fixed-partitions";
->         #address-cells =3D <1>;
->         #size-cells =3D <1>;
->=20
->         partition@0 {
->             label =3D "u-boot";
->             reg =3D <0x0000000 0x4000>;
->             read-only;
->         };
->     };
-> };
->=20
->=20
-> Best regards,,
-> Martin
+> 
+> I will gladly send a patch, once you could give me a quick pointer.
+> 
+> 
+> Best regards,
+> 
+> Lukas
+> 
+> Note: This is a resent email (see original email:
+> https://lore.kernel.org/all/CAKXUXMzqCktKz7vGN4_QAp4n1SeP0-YHL19evmVSfseZOem
+> d5g@mail.gmail.com/); now hopefully with an email address for Maxime that
+> reaches Maxime.
 
 
-Thanks,
-Miqu=C3=A8l
+
+
