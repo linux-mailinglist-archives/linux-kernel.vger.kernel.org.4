@@ -2,117 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A72D46FE4EF
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:18:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C9216FE4F1
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:19:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236244AbjEJUSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49134 "EHLO
+        id S236051AbjEJUTw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:19:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236051AbjEJUSj (ORCPT
+        with ESMTP id S236042AbjEJUTn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:18:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E57C344B0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:18:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8211A63F9A
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 20:18:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6DD53C4339B;
-        Wed, 10 May 2023 20:18:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683749917;
-        bh=P8yyqVepAWX+m1BQJQjKe4Mv/4+ifST6MckJVlaGOdA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DUIJa7ApzzBTrhaQ9hB5kmorGJ8vmhsZUFZ3Ct2nwHxTX1bWnFu6Tk3otU3T/CqTU
-         CL1YWEMYTsV9ChYjApfckj8HjPdUMWHzhmJSVVH+4gs9HD56o/ls5D4f2UkRAVWWi4
-         XTCUc2qqQVDGFXL0EFx62lYenkHtElpUtjT1knMbRuK7Pd4ctMsbRJYLNZ+T5y5HKL
-         A4mU6VsCPPMoFFhD5AVlq9c8SVfm02mouTYgo7ROtsdOHklpCcIE8SOJd/h5dt9pAU
-         xGtVGjqsvVagMEAGgCmJvmomJpO2pZ8aG7tfPialyrzVovkZTBVw2tyjM0jScbQA89
-         ir7lpHIZlD1kA==
-Date:   Wed, 10 May 2023 22:18:33 +0200
-From:   Simon Horman <horms@kernel.org>
-To:     "Michael S. Tsirkin" <mst@redhat.com>
-Cc:     Jason Wang <jasowang@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] virtio: Add missing documentation for structure fields
-Message-ID: <ZFv8GSdpg1sgVqxy@kernel.org>
-References: <20230510-virtio-kdoc-v1-1-d2b1824a9a2b@kernel.org>
- <20230510120332-mutt-send-email-mst@kernel.org>
- <ZFv4DfUcipQAII5R@kernel.org>
- <20230510161442-mutt-send-email-mst@kernel.org>
+        Wed, 10 May 2023 16:19:43 -0400
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [IPv6:2a01:37:1000::53df:5f64:0])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301DC30D4;
+        Wed, 10 May 2023 13:19:41 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout1.hostsharing.net (Postfix) with ESMTPS id ABF55300000B8;
+        Wed, 10 May 2023 22:19:37 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id 9EF091AAC62; Wed, 10 May 2023 22:19:37 +0200 (CEST)
+Date:   Wed, 10 May 2023 22:19:37 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>, oohall@gmail.com,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Fontenot Nathan <Nathan.Fontenot@amd.com>
+Subject: Re: [PATCH 1/2] PCI: pciehp: Add support for OS-First Hotplug and
+ AER/DPC
+Message-ID: <20230510201937.GA11550@wunner.de>
+References: <20221101000719.36828-1-Smita.KoralahalliChannabasappa@amd.com>
+ <20221101000719.36828-2-Smita.KoralahalliChannabasappa@amd.com>
+ <20221104101536.GA11363@wunner.de>
+ <fba22d6b-c225-4b44-674b-2c62306135ed@amd.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230510161442-mutt-send-email-mst@kernel.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <fba22d6b-c225-4b44-674b-2c62306135ed@amd.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 04:14:53PM -0400, Michael S. Tsirkin wrote:
-> On Wed, May 10, 2023 at 10:01:17PM +0200, Simon Horman wrote:
-> > On Wed, May 10, 2023 at 12:04:21PM -0400, Michael S. Tsirkin wrote:
-> > > On Wed, May 10, 2023 at 02:23:12PM +0200, Simon Horman wrote:
-> > > > Add missing documentation for the vqs_list_lock field of struct virtio_device,
-> > > > and the validate field of struct virtio_driver.
-> > > > 
-> > > > ./scripts/kernel-doc says:
-> > > > 
-> > > >  .../virtio.h:131: warning: Function parameter or member 'vqs_list_lock' not described in 'virtio_device'
-> > > >  .../virtio.h:192: warning: Function parameter or member 'validate' not described in 'virtio_driver'
-> > > >  2 warnings as Errors
-> > > > 
-> > > > No functional changes intended.
-> > > > 
-> > > > Signed-off-by: Simon Horman <horms@kernel.org>
-> > > > ---
-> > > >  include/linux/virtio.h | 2 ++
-> > > >  1 file changed, 2 insertions(+)
-> > > > 
-> > > > diff --git a/include/linux/virtio.h b/include/linux/virtio.h
-> > > > index b93238db94e3..0b2b82ee3220 100644
-> > > > --- a/include/linux/virtio.h
-> > > > +++ b/include/linux/virtio.h
-> > > > @@ -103,6 +103,7 @@ int virtqueue_resize(struct virtqueue *vq, u32 num,
-> > > >   * @config_enabled: configuration change reporting enabled
-> > > >   * @config_change_pending: configuration change reported while disabled
-> > > >   * @config_lock: protects configuration change reporting
-> > > > + * @vqs_list_lock: protects @vqs.
-> > > >   * @dev: underlying device.
-> > > >   * @id: the device type identification (used to match it with a driver).
-> > > >   * @config: the configuration ops for this device.
-> > > > @@ -160,6 +161,7 @@ size_t virtio_max_dma_size(const struct virtio_device *vdev);
-> > > >   * @feature_table_size: number of entries in the feature table array.
-> > > >   * @feature_table_legacy: same as feature_table but when working in legacy mode.
-> > > >   * @feature_table_size_legacy: number of entries in feature table legacy array.
-> > > > + * @validate: the function to call to vaidate features at probe time.
-> > > 
-> > > typo
-> > > 
-> > > and this is called before probe actually not at probe time
+On Tue, Feb 14, 2023 at 01:33:54AM -0800, Smita Koralahalli wrote:
+> On 11/4/2022 3:15 AM, Lukas Wunner wrote:
+> > On Tue, Nov 01, 2022 at 12:07:18AM +0000, Smita Koralahalli wrote:
+> > > The implementation is as follows: On an async remove a DPC is triggered as
+> > > a side-effect along with an MSI to the OS. Determine it's an async remove
+> > > by checking for DPC Trigger Status in DPC Status Register and Surprise
+> > > Down Error Status in AER Uncorrected Error Status to be non-zero. If true,
+> > > treat the DPC event as a side-effect of async remove, clear the error
+> > > status registers and continue with hot-plug tear down routines. If not,
+> > > follow the existing routine to handle AER/DPC errors.
 > > 
-> > Thanks, how about the following?
+> > Instead of having the OS recognize and filter Surprise Down events,
+> > it would also be possible to simply set the Surprise Down bit in the
+> > Uncorrectable Error Mask Register.  This could be constrained to
+> > Downstream Ports capable of surprise removal, i.e. those where the
+> > is_hotplug_bridge in struct pci_dev is set.  And that check and the
+> > register change could be performed in pci_dpc_init().
 > > 
-> > * @validate: the function to call to validate features
-> 
-> ... and config space
+> > Have you considered such an alternative approach?  If you have, what
+> > was the reason to prefer the more complex solution you're proposing?
+[...]
+> Second thing, is masking Surprise Down bit has no impact on logging errors
+> in AER registers.
 
-Ok, so:
+Why do you think so?  PCIe r6.0.1 sec 7.8.4.3 says:
 
-* @validate: the function to call to validate features and config spaces
+   "A masked error [...] is not recorded or reported in the Header Log,
+    TLP Prefix Log, or First Error Pointer, and is not reported to the
+    PCI Express Root Complex by this Function."
 
-> > > >   * @probe: the function to call when a device is found.  Returns 0 or -errno.
-> > > >   * @scan: optional function to call after successful probe; intended
-> > > >   *    for virtio-scsi to invoke a scan.
-> > > 
-> 
+So if you set the Surprise Down Error Mask bit on hotplug ports
+capable of surprise removal, there should be no logging and thus
+no logs to clear.
+
+
+> So, I think that approach probably will not resolve the issue of clearing
+> the logs in AER registers and complicate things while differentiating true
+> errors vs surprise down events. Please correct me if I'm wrong!!
+
+I disagree, I think it's worth a try.  Below please find a patch which
+sets the Surprise Down Error mask bit.  Could you test if this fixes
+the issue for you?
+
+
+> And setting this bit at initialization might not trigger true DPC events..
+
+I think we cannot discern whether a Surprise Down Error is caused by
+surprise removal or is a true error.  We must assume the former on
+surprise-capable hotplug ports.
+
+Thanks,
+
+Lukas
+
+-- >8 --
+
+From: Lukas Wunner <lukas@wunner.de>
+Subject: [PATCH] PCI: pciehp: Disable Surprise Down Error reporting
+
+On hotplug ports capable of surprise removal, Surprise Down Errors are
+expected and no reason for AER or DPC to spring into action.  Although
+a Surprise Down event might be caused by an error, software cannot
+discern that from regular surprise removal.
+
+Any well-behaved BIOS should mask such errors, but Smita reports a case
+where hot-removing an Intel NVMe SSD [8086:0a54] from an AMD Root Port
+[1022:14ab] results in irritating AER log messages and a delay of more
+than 1 second caused by DPC handling:
+
+  pcieport 0000:00:01.4: DPC: containment event, status:0x1f01 source:0x0000
+  pcieport 0000:00:01.4: DPC: unmasked uncorrectable error detected
+  pcieport 0000:00:01.4: PCIe Bus Error: severity=Uncorrected (Fatal), type=Transaction Layer, (Receiver ID)
+  pcieport 0000:00:01.4:   device [1022:14ab] error status/mask=00000020/04004000
+  pcieport 0000:00:01.4:    [ 5] SDES (First)
+  nvme nvme2: frozen state error detected, reset controller
+  pcieport 0000:00:01.4: DPC: Data Link Layer Link Active not set in 1000 msec
+  pcieport 0000:00:01.4: AER: subordinate device reset failed
+  pcieport 0000:00:01.4: AER: device recovery failed
+  pcieport 0000:00:01.4: pciehp: Slot(16): Link Down
+  nvme2n1: detected capacity change from 1953525168 to 0
+  pci 0000:04:00.0: Removing from iommu group 49
+
+Avoid by masking Surprise Down Errors on hotplug ports capable of
+surprise removal.
+
+Mask them even if AER or DPC is handled by firmware because if hotplug
+control was granted to the operating system, it owns hotplug and thus
+Surprise Down events.  So firmware has no business reporting or reacting
+to them.
+
+Reported-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Link: https://lore.kernel.org/all/20221101000719.36828-2-Smita.KoralahalliChannabasappa@amd.com/
+Signed-off-by: Lukas Wunner <lukas@wunner.de>
+---
+ drivers/pci/hotplug/pciehp_hpc.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/drivers/pci/hotplug/pciehp_hpc.c b/drivers/pci/hotplug/pciehp_hpc.c
+index f8c70115b691..2a206dbd76b6 100644
+--- a/drivers/pci/hotplug/pciehp_hpc.c
++++ b/drivers/pci/hotplug/pciehp_hpc.c
+@@ -985,6 +985,7 @@ struct controller *pcie_init(struct pcie_device *dev)
+ {
+ 	struct controller *ctrl;
+ 	u32 slot_cap, slot_cap2, link_cap;
++	u16 aer_cap;
+ 	u8 poweron;
+ 	struct pci_dev *pdev = dev->port;
+ 	struct pci_bus *subordinate = pdev->subordinate;
+@@ -1030,6 +1031,15 @@ struct controller *pcie_init(struct pcie_device *dev)
+ 	if (dmi_first_match(inband_presence_disabled_dmi_table))
+ 		ctrl->inband_presence_disabled = 1;
+ 
++	/*
++	 * Surprise Down Errors are par for the course on Hot-Plug Surprise
++	 * capable ports, so disable reporting in case BIOS left it enabled.
++	 */
++	aer_cap = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_ERR);
++	if (aer_cap && slot_cap & PCI_EXP_SLTCAP_HPS)
++		pcie_capability_set_dword(pdev, aer_cap + PCI_ERR_UNCOR_MASK,
++					  PCI_ERR_UNC_SURPDN);
++
+ 	/* Check if Data Link Layer Link Active Reporting is implemented */
+ 	pcie_capability_read_dword(pdev, PCI_EXP_LNKCAP, &link_cap);
+ 
+-- 
+2.39.2
+
