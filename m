@@ -2,166 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB316FE17E
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 17:23:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7623D6FE183
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 17:24:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237403AbjEJPXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 11:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48652 "EHLO
+        id S237493AbjEJPYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 11:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236355AbjEJPXj (ORCPT
+        with ESMTP id S236355AbjEJPYD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 11:23:39 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15F7D2D68
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 08:23:38 -0700 (PDT)
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com [209.85.208.71])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 8BEAD3F4DF
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 15:23:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1683732215;
-        bh=nxt1AjdlyoqIrH6J1U3hreWGYLSAQKMD95fnrL6guHQ=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=B5sXuyt6jCKCE+C8ZAVQOrkULm7yQwZZmMQ6CW+MzIi+VCrKoOC5f/nukYvOYUlTE
-         fyGn+oW83YmYfqPMg2GGtpX3574Nshg4BlPoJil9Zpdw6Nm1iq+o/Pnwi2Qghh9VJ5
-         FuF2iWARi5rjcMA22oogunngkj3dnPcjI+zjIa+guXn5BObj5ePk+UXT3FwcSW1WPJ
-         VE/v/0DbKj0DFCZY10cvjIeB11pALHpokY10Ib7S5+rBUeJnUhVPpzhm9klHAwDqp0
-         qAAAthSyN5XhCaTWAJMoe3xAihVbl+PTbeuJgHv8Lc8s4UN5MrOP9Hc+6PoEdfvED+
-         ARbTReTIA+9Sg==
-Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-50bcc3ee913so6840296a12.2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 08:23:35 -0700 (PDT)
+        Wed, 10 May 2023 11:24:03 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D052718
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 08:23:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683732200;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iQz0FmqJ0fhhQVp092YrUUlwTUhSHWlf9UDAQ/T7kzA=;
+        b=ik8ESORAgyBVZDpyLxhJY3PK7uCOvT0siu1pWv7LUwXSO0jgfSexOWLkENCvkWMl4NFUFg
+        pu3YVAERnJnsSjvt02odRlUvUcCE9ChhZd+Fd6cxqZ9LS+SGpmVaq2FlgEddwg/PxiyJ3N
+        RE+tA7IzKn/dcwNYsJ+PAvHf2UroflE=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-344-k7AK5bR7OHmUq-OIB9a_XQ-1; Wed, 10 May 2023 11:23:19 -0400
+X-MC-Unique: k7AK5bR7OHmUq-OIB9a_XQ-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-30479b764f9so2634892f8f.0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 08:23:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683732213; x=1686324213;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nxt1AjdlyoqIrH6J1U3hreWGYLSAQKMD95fnrL6guHQ=;
-        b=TiF2OdSRkb79Ss24j2dfRD177HnnTK+mL8RwgH950XbkujSsRLDdgxwRVgg8G49McS
-         mKx4j4aIvfN26IXjR6YaSDoivqGjc1ESbibuNVjijuYNscBc0GCgOzaVtZZcywofj1xh
-         gxkujkw80saj+tmtJkx4ga01fc2W14QZyT9Ak5J81NJDxJ3xH1mm2jr7Id0kYWSw30me
-         J0pJRNpu+OCysk6AeSJosORBX/XZh7J1iOUt/Uzk0P6WiWhCKB6W5vIkhZMVi2+Rp3+x
-         92llzmQIlyskpC20Lb8XGnMSdpnxO/NM93mASkLIOVSDttHRhRjVU17+Mv0gqo1FmsGN
-         xmVQ==
-X-Gm-Message-State: AC+VfDzgPM2ScQ4Cna9yOxPRkQmV+MiScAwnuuoQiWcUvRwiVue8JGDg
-        t2gRtc5fgSbd7TgeWiAACita5kdYsSLFsXFKd6pLpfoNN3rutjM4bXYM8VXpwL2rfMfLxB0chnm
-        jHYuZaI2I+aLOu9fOkawClicTOoAUU71FvhfHANOquSUCPWYVOg==
-X-Received: by 2002:a17:907:6295:b0:94e:cbfb:5fab with SMTP id nd21-20020a170907629500b0094ecbfb5fabmr16778387ejc.75.1683732213535;
-        Wed, 10 May 2023 08:23:33 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7wVCdAKwUlJ8V9lcgbWEAiwFeSNH6AK2FonknQiPTYHWcs8YvzVYyw9uHkDEkxON4bz52OSg==
-X-Received: by 2002:a17:907:6295:b0:94e:cbfb:5fab with SMTP id nd21-20020a170907629500b0094ecbfb5fabmr16778362ejc.75.1683732213215;
-        Wed, 10 May 2023 08:23:33 -0700 (PDT)
-Received: from amikhalitsyn.. (ip5f5bf3d5.dynamic.kabel-deutschland.de. [95.91.243.213])
-        by smtp.gmail.com with ESMTPSA id kn3-20020a1709079b0300b0096a27dbb5b2sm902755ejc.209.2023.05.10.08.23.32
+        d=1e100.net; s=20221208; t=1683732198; x=1686324198;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iQz0FmqJ0fhhQVp092YrUUlwTUhSHWlf9UDAQ/T7kzA=;
+        b=ckFeLPSJP9/6RqUXdTJR6UbOWYNN9osqIWfAltEizQI0cpbIBKJ5PY5tg9PRF3tGXy
+         fv0p/dIKGbhtaUZtqR/r3iK3E1gGOlxacW0h2fvEMQBhnzCmr9iAf7sEOldsXDQbaJUY
+         wGjuH3FzBti3NI4kbILq1D72b+R/DjXv0HqbxfjO/nmFBLhjZT6XjSDA1AJCqAmlpeiY
+         l0aaWEAJzoqufoq8KpXI7vvsJoGCnlL8aVp3/lbozNOoBnRnw6/5OCvtFRvSJcESjLL/
+         UP9c88TYrqbrqexPXG2tmWdek1aUTpkb5fS+BtnndDNTErtuB0geaCd+onsLSviFiDqy
+         J9dw==
+X-Gm-Message-State: AC+VfDze5MQNeAvDBJbZ+xHpscb9K5d/PHxfh15nik4/fZh89N8xbnmj
+        ywT6CTBdk/Ok5jvH0J+x6CCwsCoPanp6E7aZoedDq/LY0UuXJVD87Vx8DsnY/cbFRCl92CmkT69
+        4HNjA9B900otEu0zglPKXe6Tj
+X-Received: by 2002:a5d:668c:0:b0:2fe:2775:6067 with SMTP id l12-20020a5d668c000000b002fe27756067mr13070919wru.28.1683732198397;
+        Wed, 10 May 2023 08:23:18 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5OVnaJRiAA0cQBb92KuhDH69k4SVMEoaKebUn/GNPF4wmy0jKK0SNfVankDjgdH6JTuuX5bw==
+X-Received: by 2002:a5d:668c:0:b0:2fe:2775:6067 with SMTP id l12-20020a5d668c000000b002fe27756067mr13070898wru.28.1683732198056;
+        Wed, 10 May 2023 08:23:18 -0700 (PDT)
+Received: from sgarzare-redhat ([217.171.72.110])
+        by smtp.gmail.com with ESMTPSA id c17-20020adffb11000000b003075428aad5sm17481409wrr.29.2023.05.10.08.23.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 08:23:32 -0700 (PDT)
-From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-To:     davem@davemloft.net
-Cc:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Christian Brauner <brauner@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: [PATCH net-next] net: core: add SOL_SOCKET filter for bpf getsockopt hook
-Date:   Wed, 10 May 2023 17:22:16 +0200
-Message-Id: <20230510152216.1392682-1-aleksandr.mikhalitsyn@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        Wed, 10 May 2023 08:23:17 -0700 (PDT)
+Date:   Wed, 10 May 2023 17:23:14 +0200
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Zhuang Shengen <zhuangshengen@huawei.com>
+Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        arei.gonglei@huawei.com, longpeng2@huawei.com,
+        jianjay.zhou@huawei.com
+Subject: Re: [PATCH] vsock: bugfix port residue in server
+Message-ID: <ftuh7vhoxdxbymg6u3wlkfhlfoufupeqampqxc2ktqrpxndow3@dkpufdnuwlln>
+References: <20230510142502.2293109-1-zhuangshengen@huawei.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230510142502.2293109-1-zhuangshengen@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We have per struct proto ->bpf_bypass_getsockopt callback
-to filter out bpf socket cgroup getsockopt hook from being called.
+Hi,
+thanks for the patch, the change LGTM, but I have the following
+suggestions:
 
-It seems worthwhile to add analogical helper for SOL_SOCKET
-level socket options. First user will be SO_PEERPIDFD.
+Please avoid "bugfix" in the subject, "fix" should be enough:
+https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#describe-your-changes
 
-This patch was born as a result of discussion around a new SCM_PIDFD interface:
-https://lore.kernel.org/all/20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com/
+Anyway, I suggest to change the subject in
+"vsock: avoid to close connected socket after the timeout"
 
-Cc: Alexei Starovoitov <ast@kernel.org>
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Cc: bpf@vger.kernel.org
-Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
----
- include/linux/bpf-cgroup.h | 8 +++++---
- include/net/sock.h         | 1 +
- net/core/sock.c            | 5 +++++
- 3 files changed, 11 insertions(+), 3 deletions(-)
+On Wed, May 10, 2023 at 10:25:02PM +0800, Zhuang Shengen wrote:
+>When client and server establish a connection through vsock,
+>the client send a request to the server to initiate the connection,
+>then start a timer to wait for the server's response. When the server's
+>RESPONSE message arrives, the timer also times out and exits. The
+>server's RESPONSE message is processed first, and the connection is
+>established. However, the client's timer also times out, the original
+>processing logic of the client is to directly set the state of this vsock
+>to CLOSE and return ETIMEDOUT, User will release the port. It will not
 
-diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-index 57e9e109257e..97d8a49b35bf 100644
---- a/include/linux/bpf-cgroup.h
-+++ b/include/linux/bpf-cgroup.h
-@@ -387,10 +387,12 @@ static inline bool cgroup_bpf_sock_enabled(struct sock *sk,
- 	int __ret = retval;						       \
- 	if (cgroup_bpf_enabled(CGROUP_GETSOCKOPT) &&			       \
- 	    cgroup_bpf_sock_enabled(sock, CGROUP_GETSOCKOPT))		       \
--		if (!(sock)->sk_prot->bpf_bypass_getsockopt ||		       \
--		    !INDIRECT_CALL_INET_1((sock)->sk_prot->bpf_bypass_getsockopt, \
-+		if (((level != SOL_SOCKET) ||				       \
-+		     !sock_bpf_bypass_getsockopt(level, optname)) &&	       \
-+		    (!(sock)->sk_prot->bpf_bypass_getsockopt ||		       \
-+		     !INDIRECT_CALL_INET_1((sock)->sk_prot->bpf_bypass_getsockopt, \
- 					tcp_bpf_bypass_getsockopt,	       \
--					level, optname))		       \
-+					level, optname)))		       \
- 			__ret = __cgroup_bpf_run_filter_getsockopt(	       \
- 				sock, level, optname, optval, optlen,	       \
- 				max_optlen, retval);			       \
-diff --git a/include/net/sock.h b/include/net/sock.h
-index 8b7ed7167243..530d6d22f42d 100644
---- a/include/net/sock.h
-+++ b/include/net/sock.h
-@@ -1847,6 +1847,7 @@ int sk_getsockopt(struct sock *sk, int level, int optname,
- 		  sockptr_t optval, sockptr_t optlen);
- int sock_getsockopt(struct socket *sock, int level, int op,
- 		    char __user *optval, int __user *optlen);
-+bool sock_bpf_bypass_getsockopt(int level, int optname);
- int sock_gettstamp(struct socket *sock, void __user *userstamp,
- 		   bool timeval, bool time32);
- struct sk_buff *sock_alloc_send_pskb(struct sock *sk, unsigned long header_len,
-diff --git a/net/core/sock.c b/net/core/sock.c
-index 5440e67bcfe3..194a423eb6e5 100644
---- a/net/core/sock.c
-+++ b/net/core/sock.c
-@@ -1963,6 +1963,11 @@ int sock_getsockopt(struct socket *sock, int level, int optname,
- 			     USER_SOCKPTR(optlen));
- }
- 
-+bool sock_bpf_bypass_getsockopt(int level, int optname)
-+{
-+	return false;
-+}
-+
- /*
-  * Initialize an sk_lock.
-  *
--- 
-2.34.1
+What to you mean with "User" here?
+
+>notify the server when the port is released, causing the server port remain
+>
+
+Can we remove this blank line?
+
+>when client's vsock_connect timeout，it should check sk state is
+
+The remote peer can't trust the other peer, indeed it will receive an
+error after sending the first message and it will remove the connection,
+right?
+
+>ESTABLISHED or not. if sk state is ESTABLISHED, it means the connection
+>is established, the client should not set the sk state to CLOSE
+>
+>Note: I encountered this issue on kernel-4.18, which can be fixed by
+>this patch. Then I checked the latest code in the community
+>and found similar issue.
+>
+
+In order to backport it to the stable kernels, we should add a Fixes tag:
+https://www.kernel.org/doc/html/v4.17/process/submitting-patches.html#describe-your-changes
+
+Thanks,
+Stefano
+
+>Signed-off-by: Zhuang Shengen <zhuangshengen@huawei.com>
+>---
+> net/vmw_vsock/af_vsock.c | 2 +-
+> 1 file changed, 1 insertion(+), 1 deletion(-)
+>
+>diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>index 413407bb646c..efb8a0937a13 100644
+>--- a/net/vmw_vsock/af_vsock.c
+>+++ b/net/vmw_vsock/af_vsock.c
+>@@ -1462,7 +1462,7 @@ static int vsock_connect(struct socket *sock, struct sockaddr *addr,
+> 			vsock_transport_cancel_pkt(vsk);
+> 			vsock_remove_connected(vsk);
+> 			goto out_wait;
+>-		} else if (timeout == 0) {
+>+		} else if ((sk->sk_state != TCP_ESTABLISHED) && (timeout == 0)) {
+> 			err = -ETIMEDOUT;
+> 			sk->sk_state = TCP_CLOSE;
+> 			sock->state = SS_UNCONNECTED;
+>-- 
+>2.27.0
+>
 
