@@ -2,70 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B5B6FE338
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 19:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11EC06FE33B
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 19:26:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236640AbjEJRZx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 13:25:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35464 "EHLO
+        id S236449AbjEJR0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 13:26:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236589AbjEJRZp (ORCPT
+        with ESMTP id S232796AbjEJR0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 13:25:45 -0400
-Received: from mailbackend.panix.com (mailbackend.panix.com [166.84.1.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C974755AD
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 10:25:44 -0700 (PDT)
-Received: from mail.panix.com (localhost [127.0.0.1])
-        by mailbackend.panix.com (Postfix) with ESMTPA id 4QGhkb2WxKz3qxt;
-        Wed, 10 May 2023 13:25:43 -0400 (EDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=panix.com; s=panix;
-        t=1683739543; bh=3vzeVieXm2xf9+VzU0gVvFLlV+/iwQu/sK9Jt9RTw+4=;
-        h=In-Reply-To:References:Date:Subject:From:To:Cc;
-        b=EFng2gh94Y/9VT3NuRSMb7JJtBFESmkbWDHvkTjaRKkO77PfNTvMFtWX9OtexDduv
-         lcMqaXgV4xe3CIoVIsyLzp1PjK5nbu1yoxlTqi4k/KD00vevyGdsS+mgqmT7EIxyhe
-         Ck+x7JXvutMi2ZrO4dvEPbKg9yH8MVr05JEoZ5iQ=
-X-Panix-Received: from 166.84.1.2
-        (SquirrelMail authenticated user pa@panix.com)
-        by mail.panix.com with HTTP;
-        Wed, 10 May 2023 13:25:43 -0400
-Message-ID: <1f2a1e8ee99fc9f0a89ad47d112728c9.squirrel@mail.panix.com>
-In-Reply-To: <2f4370b6-8426-400a-8be1-36a48dadccad@suse.de>
-References: <20230420155705.21463-1-pa@panix.com>
-    <2f4370b6-8426-400a-8be1-36a48dadccad@suse.de>
-Date:   Wed, 10 May 2023 13:25:43 -0400
-Subject: Re: [PATCH v3] firmware/sysfb: Fix VESA format selection
-From:   "Pierre Asselin" <pa@panix.com>
-To:     "Thomas Zimmermann" <tzimmermann@suse.de>
-Cc:     "Pierre Asselin" <pa@panix.com>, dri-devel@lists.freedesktop.org,
-        "Daniel Vetter" <daniel.vetter@ffwll.ch>,
-        "Javier Martinez Canillas" <javierm@redhat.com>,
-        linux-kernel@vger.kernel.org,
-        "Hans de Goede" <hdegoede@redhat.com>,
-        "Ard Biesheuvel" <ardb@kernel.org>
-User-Agent: SquirrelMail/1.4.23-p1
+        Wed, 10 May 2023 13:26:46 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F68AE3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 10:26:45 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bc37e1525so14291323a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 10:26:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683739603; x=1686331603;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HJL+JhQmxU9qA5lMrvGM05IUnqGL3GZgrHCNTgjj3t0=;
+        b=v3awAP8GUD/ZDAJvrp2L+Znr7TDIkUCt5LWmzipwChCwH7m0oNy7iOV/XqpkYIvXC/
+         BaMLy1q5d30O1WltT+xWOddJUdKCZ77bVEh+iIGcn7clk+Pr7J34ZR9C6HjlOh0M8PQN
+         +KtV3eWjkMhmHGFj3VzXyHLN12k3kTd0Xp27WmEQMgAvOXZx8+M07tdd09LAcdq9S5gw
+         Op6AeU8UYav4jAMxNbO8sejmCm826l+LN+yd8U18+i4+BXzX9kJ4pN6hmGxz+2JMRPVy
+         lnOmcSZWW/LN0u/yOT1Hm6pCFNYc9LVNZeLjV+RSIjZHbsGsFCzBdebHdWJa6cCrS655
+         E2wA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683739603; x=1686331603;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HJL+JhQmxU9qA5lMrvGM05IUnqGL3GZgrHCNTgjj3t0=;
+        b=Xlm0N+cGAdNYW4TGRG0KR++8vxUDehMyxhe4Ff2hGY/BHsD8sQIq4ukl6lwoPW5n3a
+         niFNURI9NLGx2VMhN5nBgUaQNgSo+tTIg/0MbkIKc7Lyu1g6RzoPrbUZS7S03LRlyepd
+         /apTcvQnJbSa68aomHgb6e3GtFphjvPj6AZA5Py91ffIv/WIPHaS00pRn5RNiz3zkFuw
+         cP6Ns+kewe/X93FUBo6ph1k5t+jhN3KRzCw53yb5U9KwTZTbk3ONDXrvkOQSbbG92DGj
+         8LU1QT1DhwqTGi9ux9QDawwkVnzb5ZChyegpq1LFzjHNyY2VSqZAb7zur2EvWjghmTAY
+         oxKg==
+X-Gm-Message-State: AC+VfDy5U+XCvLuf8TkBxN1W+QRcD3+LlP4HTCKTj+7PmcTtAxPMWfLg
+        bmv7bZQdbyrIRpCoqaGRhyTNBB++DWdXXVdEP4mjCQ==
+X-Google-Smtp-Source: ACHHUZ64G94ODQQyPBdm7IGyu9kHzcE0JVQFyt0rwKkromaOxP7k8Aq6aDDkSvekpiO3NFhe4DF5fY89lBIyRxbDjfw=
+X-Received: by 2002:aa7:cf95:0:b0:50b:c4f0:c200 with SMTP id
+ z21-20020aa7cf95000000b0050bc4f0c200mr15479402edx.41.1683739603390; Wed, 10
+ May 2023 10:26:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain;charset=iso-8859-1
-Content-Transfer-Encoding: 8bit
-X-Priority: 3 (Normal)
-Importance: Normal
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20221202061347.1070246-1-chao.p.peng@linux.intel.com>
+ <ZD1oevE8iHsi66T2@google.com> <658018f9-581c-7786-795a-85227c712be0@redhat.com>
+ <ZD12htq6dWg0tg2e@google.com> <1ed06a62-05a1-ebe6-7ac4-5b35ba272d13@redhat.com>
+ <ZD2bBB00eKP6F8kz@google.com> <9efef45f-e9f4-18d1-0120-f0fc0961761c@redhat.com>
+ <ZD86E23gyzF6Q7AF@google.com> <5869f50f-0858-ab0c-9049-4345abcf5641@redhat.com>
+ <ZEM5Zq8oo+xnApW9@google.com>
+In-Reply-To: <ZEM5Zq8oo+xnApW9@google.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Wed, 10 May 2023 10:26:32 -0700
+Message-ID: <CAGtprH_+bF4VZg2ps6CM8vjJVvShsvSGAvaLfTedts4cKqhSUw@mail.gmail.com>
+Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
+ KVM: mm: fd-based approach for supporting KVM)
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        tabba@google.com, Michael Roth <michael.roth@amd.com>,
+        wei.w.wang@intel.com, Mike Rapoport <rppt@kernel.org>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thomas Zimmerman <tzimmermann@suse.de> writes:
+On Fri, Apr 21, 2023 at 6:33=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
 >
-> I found this casting mess even more unreadable. I went back to v2, fixed
-> the style issues and committed the patch as v4 (still under your name).
+> ...
+> cold.  I poked around a bit to see how we could avoid reinventing all of =
+that
+> infrastructure for fd-only memory, and the best idea I could come up with=
+ is
+> basically a rehash of Kirill's very original "KVM protected memory" RFC[3=
+], i.e.
+> allow "mapping" fd-only memory, but ensure that memory is never actually =
+present
+> from hardware's perspective.
 >
-> https://cgit.freedesktop.org/drm/drm-tip/commit?id=1b617bc93178912fa36f87a957c15d1f1708c299
 
-Will this patch make it into Linux 6.4 ?
+I am most likely missing a lot of context here and possibly venturing
+into an infeasible/already shot down direction here. But I would still
+like to get this discussed here before we move on.
 
---PA
+I am wondering if it would make sense to implement
+restricted_mem/guest_mem file to expose both private and shared memory
+regions, inline with Kirill's original proposal now that the file
+implementation is controlled by KVM.
 
+Thinking from userspace perspective:
+1) Userspace creates guest mem files and is able to mmap them but all
+accesses to these files result into faults as no memory is allowed to
+be mapped into userspace VMM pagetables.
+2) Userspace registers mmaped HVA ranges with KVM with additional
+KVM_MEM_PRIVATE flag
+3) Userspace converts memory attributes and this memory conversion
+allows userspace to access shared ranges of the file because those are
+allowed to be faulted in from guest_mem. Shared to private conversion
+unmaps the file ranges from userspace VMM pagetables.
+4) Granularity of userspace pagetable mappings for shared ranges will
+have to be dictated by KVM guest_mem file implementation.
+
+Caveat here is that once private pages are mapped into userspace view.
+
+Benefits here:
+1) Userspace view remains consistent while still being able to use HVA rang=
+es
+2) It would be possible to use HVA based APIs from userspace to do
+things like binding.
+3) Double allocation wouldn't be a concern since hva ranges and gpa
+ranges possibly map to the same HPA ranges.
+
+>
+> Code is available here if folks want to take a look before any kind of fo=
+rmal
+> posting:
+>
+>         https://github.com/sean-jc/linux.git x86/kvm_gmem_solo
+>
+> [1] https://lore.kernel.org/all/ff5c5b97-acdf-9745-ebe5-c6609dd6322e@goog=
+le.com
+> [2] https://lore.kernel.org/all/20230418-anfallen-irdisch-6993a61be10b@br=
+auner
+> [3] https://lore.kernel.org/linux-mm/20200522125214.31348-1-kirill.shutem=
+ov@linux.intel.com
