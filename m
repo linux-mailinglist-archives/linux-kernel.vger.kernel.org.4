@@ -2,271 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D266FE83C
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 01:55:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FD3D6FE83A
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 01:55:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236963AbjEJXzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 19:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51324 "EHLO
+        id S236654AbjEJXzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 19:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjEJXzL (ORCPT
+        with ESMTP id S229482AbjEJXzI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 19:55:11 -0400
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 323CE30D1;
-        Wed, 10 May 2023 16:55:10 -0700 (PDT)
-Received: from pps.filterd (m0109333.ppops.net [127.0.0.1])
-        by mx0a-00082601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34AHqITA022410;
-        Wed, 10 May 2023 16:54:24 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=message-id : date :
- subject : from : to : cc : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=s2048-2021-q4;
- bh=CHFK+HHdIkINolpjdjOvyqghmFJUHGE7cISCQ/xt1Ik=;
- b=T30+Adc6bz+cI0ieEMJIqdCwPReon33UzZ77VEQ8BFLWyUmaNFsSFwS7WuxCyE/hVyv6
- tNVjAkwCbf/k87Pue6ZI9wuKrRDtPY1OBrh62f5ya6JYmh024tzX8HduSdP54sN7GyzE
- rDvFdxVpM7giiM96tgfF1hyOgOqBD0k/hS4k2sd2xSe8gwCpW7WwXe5gVR40CUhCtAHm
- Pw8d5Lao8YKhyylcg3kz1MeVym6ktJHRt3goHLr0b0+RS8qohmwlun6DOPz9hQWwBZm+
- L6h1umMfKA7HiVHu/x4Z3qBLsS8PTuc8C3Me0pArZXNLCE5MU3CumSCUCO5+zNJh/Ush Bw== 
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2172.outbound.protection.outlook.com [104.47.59.172])
-        by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 3qgeqjayw9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 16:54:23 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hQMKf6fr46NQxPspcAY830EMkeOmaT6Sj9p1s35W/0jJmq2loN1votyOUaJJDAUaINcX2EFVMWQQJ/1Y4UPo2FZSormGfj4iEhepl4RdrPUNy62Qj0B8ssG6Wzb0ewTTrIE0ww02B++SinmUO1gNSoKN2uoEM5RsmwUwAFocvnjfFkj6bJrsz+eylk7fCsNGEENKGVvBSi62WP9M/6IOZB2O3+ZwsjmHTp9O6YOWAkrKmPbrbCPfjVybRYGEcX1DugYP9QexI7qHGgiKDG7U22/mecQ6QS6tFpTMJK1SIE27dhnyIfEbEVMzLeOlR+H9+GH0CkZ90QuI8SN759p3rw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=CHFK+HHdIkINolpjdjOvyqghmFJUHGE7cISCQ/xt1Ik=;
- b=GTrh6aE/lEiyTrZ8MXT08u983UL/1N5wL5YhQrWH/kLlg64EibQmL9jMSX5fjQCeGpL6WQ60HqnvvSIu58xVXtBNXlgRRddN6IXTfNTftiMwU1J79oSTX+lqrsFxp9SEljWAUcKz5/BR2kpiG38hF5Bfq/Y3UtV5ek/Jm1zNSoJyfqVwv+tQ4EPhaoKHgiMUPOZRbkhpCmt9JIN0u62BZ7RtW/0OhAhAtgv2xV2xP/ajsbTW+aAv9JWNxp4ifIxEBAmIM/QjV3Krri/RL53f2Rz5ZId7kwdjmu7hcVfLNJkjuwxSbX7jZCx55x3S/P7O+oYmt2pQMkQ0V98hX+v1iw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com (2603:10b6:805:d::27)
- by BLAPR15MB3924.namprd15.prod.outlook.com (2603:10b6:208:27c::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.20; Wed, 10 May
- 2023 23:54:16 +0000
-Received: from SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::589f:9230:518:7f53]) by SN6PR1501MB2064.namprd15.prod.outlook.com
- ([fe80::589f:9230:518:7f53%6]) with mapi id 15.20.6363.032; Wed, 10 May 2023
- 23:54:15 +0000
-Message-ID: <89159b33-3be4-487b-7647-0cbbd20c233d@meta.com>
-Date:   Wed, 10 May 2023 16:54:12 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH] bpf: reject blacklisted symbols in kprobe_multi to avoid
- recursive trap
-Content-Language: en-US
-From:   Yonghong Song <yhs@meta.com>
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Ze Gao <zegao2021@gmail.com>, Song Liu <song@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Ze Gao <zegao@tencent.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-References: <20230510122045.2259-1-zegao@tencent.com>
- <6308b8e0-8a54-e574-a312-0a97cfbf810c@meta.com> <ZFvUH+p0ebcgnwEg@krava>
- <1195c4bd-ef54-2f1d-b079-2a11af42c62f@meta.com>
-In-Reply-To: <1195c4bd-ef54-2f1d-b079-2a11af42c62f@meta.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SJ0PR13CA0068.namprd13.prod.outlook.com
- (2603:10b6:a03:2c4::13) To SN6PR1501MB2064.namprd15.prod.outlook.com
- (2603:10b6:805:d::27)
+        Wed, 10 May 2023 19:55:08 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FAAE30D3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 16:55:06 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2ad819ab8a9so55519221fa.0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 16:55:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1683762905; x=1686354905;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JRRc5cm+lCLNt6NOuK+2g/udHPs4KH+MR08zITk0G8k=;
+        b=GcZWgxYpW7D7TQ25NGRi8UVNcYFhDxTezpuQz2+jDUN3kgPcpuhHcQ86bH015UyjH8
+         WE3BIIrs63T84n9kHPnLnt//L/bH0qHE77RFh40FBoahN3MaCWcVl5lmm5EU44sA6Omb
+         yznQlBDdLXTLW6T/DkCjG+gQ5ibfPTlyGRh5Q=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683762905; x=1686354905;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JRRc5cm+lCLNt6NOuK+2g/udHPs4KH+MR08zITk0G8k=;
+        b=InanlIoWXRKdR/yAwW+ivlYIlKrvYwC8as1rxUQ/5/G6plSdqo+NfgX1uVt7Fyj22K
+         X6MBCRlXQeam3EK8Ec35hRlka+NYyZ1R0/lahv3DT8V0knR8GG1MRqQOD04BcrnA+oRZ
+         jIPsjPk9z30oLKXVWtq1nS4L2entZnfrMhzxofXbKg8gO595dbvUv26Y9gR4cqEjcS1R
+         EE26oNpHki6bLOHAHKy0X+v+3VeyoLtdhrZTRMmsliwweoLPqERHu8gBCEsrANiipKby
+         ozDLuB+JTLBafJWC4wd2q/QB5xMlnkL7KgUP29f+5YF28oto3GhuwSZpf7EKgKo1fExM
+         kRhw==
+X-Gm-Message-State: AC+VfDzAHgzMzWskkOEq7JTMca5HpaNSQ8cXGAz0XACtoXki47LXWHHm
+        +4NTzSWt+EY0zTHKe9pKZpbgsyC5ZwQmZjXv/gVpGQ==
+X-Google-Smtp-Source: ACHHUZ5iG+hjc6hPNOrzZ6MpilUrmK/xoSTR9Gpwz3JcxwOsCgl2+ZGXH4pujnW/iMjOt8Ju9di/kAYkG/rM61cEpnE=
+X-Received: by 2002:a2e:80d1:0:b0:2ad:bedc:9961 with SMTP id
+ r17-20020a2e80d1000000b002adbedc9961mr343846ljg.24.1683762904897; Wed, 10 May
+ 2023 16:55:04 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 10 May 2023 16:55:04 -0700
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SN6PR1501MB2064:EE_|BLAPR15MB3924:EE_
-X-MS-Office365-Filtering-Correlation-Id: 63a14f94-3172-432d-5f8a-08db51b1dcae
-X-FB-Source: Internal
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: WJaJwjn1jnhrikmMVgniVXcFmZfzSdIvHoCus9HiUP1uyGKfYwKtDtvBK6MI3H52u1mVSx8Emm13yTodvZAQ9qIb1OopCNp4SLTagOhSbXzfvKqoivzqdJTod5dbk6jCMp1mzfZjA9C574KrYqUoGzb35D68MBl8YOnk2aZwqYofmwh+vt7MeXueYyhdLlXTZ3MYdNyjlMX24M6GV8w1k4XTQJW9HvRGaWZk56ooYXZAEFkxgb1h1r5HTpNi/F5F61Gi75Egkclt72FV+hpQRF1YaSSNTdXo09MBCz2i5GdeZHPkk+hKYRn1+gqpD1bgrt+xdcoVuDR5NXoXT1BFFc8lyah/7Uq6H85iRQM3DtFfaYFRisVXxA/D7Q2RMjkS3EaRePrQmua0bGm2jq4Yhgmok2gwZv8hdFt/G1xwxGx4+92WSXOtxW+Sg23KPuwr43Khpl+h8kZRybU6MCHe9U7b7teUz3RWte0K+r+5ZetP0Lk/+1rygLLbYugl5fOwzh+CNX+lXh9Z+wwvg5PdLY3kK8V/s3Q2xXzm5dMEpZtbIxi4uaXBArDpV2q8+Y6Tijd8jbxacYjdvY82dHv7JLA8/ELufqXjgMKcnDE4W664FL702lM4NMka5Az44CiIOuXoiHp5sbvUbqvyh8msSw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN6PR1501MB2064.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(376002)(136003)(366004)(39860400002)(451199021)(86362001)(38100700002)(36756003)(31696002)(31686004)(8676002)(8936002)(7416002)(6486002)(478600001)(5660300002)(6512007)(6506007)(186003)(2616005)(2906002)(83380400001)(41300700001)(66946007)(316002)(53546011)(66476007)(66556008)(54906003)(4326008)(6916009)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QmIzRDBLdGZISC9xS3JITTZCTTczZXoyZnFQYVJ3RHdxRDU2N2ZOR21JaTJP?=
- =?utf-8?B?Yjhta08rMFhtaVlJbFg1NlV1UmhjZWxxSk9kcVBuc2lmWXRETHRIMGpLN2E4?=
- =?utf-8?B?aUk4WkxvdDVpK1VpQUQySXlpUDdZWDJFVnJjUGx5Q0pRd3VjMEZhUUpLZGgv?=
- =?utf-8?B?RU51SHc1L0o0V2YxS0JXb2lWUlZpNGF4YVJrbWNWcFNNRnYwdW9OT2JGR01U?=
- =?utf-8?B?aWo0QlhhUStzcGpWdmlMaTFXNURjNTNockVTeHdUQXQ2aG1hVk81M0ZuZERy?=
- =?utf-8?B?aFVtUjZjUG9UTlpjbW5DZS9rYkcvYlphUkROWXllSEJIOHZEemJldDlsLzhC?=
- =?utf-8?B?WE1veWdEY2F3OU1FaC80eTRxcDFPK3FFZ1U1cFdYTER4VVdDc0YzaU1ZZFB4?=
- =?utf-8?B?ZGhRM1RPUHNyeFp5bm11bko1YzFidk53U1hUTVNNaEIvL0JET0l0Yk5vYUUz?=
- =?utf-8?B?SU5pMTJRVmlaQ1VTWXBIUTZVUE9OdzY5Z2ZpZXA3RGwvTmxIT3FxSFZmTXp6?=
- =?utf-8?B?UzRlcUhFSTNuOWJFZ2F3Wm9JYkZhNWtSMDBXTHMxd1pDTUhVTEx5MHhRamNj?=
- =?utf-8?B?SStzK3hIRE5jQXYvSklxNkc0SW15YWxtMzM4cC9mV25JYWx0bFJCdWFSMTNQ?=
- =?utf-8?B?ZHN2MmZVSy9BRGJCUzBHdC81a2hJSjZZU0J3VzgrSmp6VjBpNTRkYkNNY0sy?=
- =?utf-8?B?VlBRUlVrVEZGOWF6cEd4K3JpNU1ZRFpKbnFDMkVpeTAyUjR2NXFTa1NZUkx4?=
- =?utf-8?B?M3ZzcWhoT3ZoTDI4VzYvcWw2OWhjdzNZR2VnZVQvcVdCdTBRRm5TdU9iTU9r?=
- =?utf-8?B?WXNyQVZDZUwvaHl2dWI2b0NDb282L3pyTFBFMjNnWWpLZ3FCSHduSnMvR3pu?=
- =?utf-8?B?Q1Y4RzRhOWwyRkRsejBzQ0VOZGtkK0RBZDFrSkZOa0hyekRYSURMWktqTUtV?=
- =?utf-8?B?d1dlb1J0M2ZSTTRicnVYa2tSMjd5aS9VRDhxWm8vL1NRVUtGRFg3dmFCYUNC?=
- =?utf-8?B?aU9RUmVPaEJJSnpFOXVVYzVlWk0wNWcrNUtjZ0NFdHZPS3FFZ0Y1SGFwWWUr?=
- =?utf-8?B?UUxUcExHd0RKdnBhaEQxcnFZM3FvZERwQ2d5T2d5ZHQrN2pjZ2JHazV5L01Q?=
- =?utf-8?B?OHBNT2FXWjlHQkYrVjdYajF6dzY3d1dSanR0eW15aElOcDRaS1dlM2lkT1RW?=
- =?utf-8?B?U2xEWEQrTmttQS9EMGtKKy95SlNoRjIwdGpFa1oydVFoaHhzUnhCUmdZbnhO?=
- =?utf-8?B?RXJ3aTB0MFNWYWNRQ1hlUXVSRkpKbzZuelFlQmsxUDBEdEZiMWdBVE9Samxp?=
- =?utf-8?B?SzBQN2F3WDJuV3BDT0dFVFFNbUEvL2hwWFdvRjhuZjVVUVRSeDVoN05BRHph?=
- =?utf-8?B?cmNYbUFydVk0RURYWkVnYW9QRERDeXRTa2pSU29tTW1CQXo2VWRPYTYwQW5T?=
- =?utf-8?B?bDEvYzE2Z0ZzNW9zR2owNTlYeEt3STY1ZktpQS9XZmo1UlgzVnlGT1lXYlNP?=
- =?utf-8?B?L1NzWnRDbXlIZkhNa0wzYmJtaE1VNS9pZTZ5M0ZlRk5BYXAzK0h2OTNaYXoy?=
- =?utf-8?B?MXFEOUdvaGRYd1lwWFVkeUdDQUx0MEFWWlVsRG1reXA1WU9uUEVkZVd2eWtt?=
- =?utf-8?B?eVBUeVIwR0N4M2EwRUN1RTJpa0NqK1FteTFtRDZ1bE0zRy9qU0MzVTIzQ3pN?=
- =?utf-8?B?dWEyNWl5TldEUmh4T25rTzZCMjl6Vi9xZXUvblI1R1gvazVyOG54b240RDhZ?=
- =?utf-8?B?bTFjdXd6emFpbzVtQUtROHorQ2t5NFh3VktCV1ZwV1NSQkZ3NzhMYXVvK1lC?=
- =?utf-8?B?OU80dDlyNWFNOUlTclJ0Qk5STTU2dDNKajFtL1o5M0dqdUs2eXE4aEpaY2Va?=
- =?utf-8?B?QUZ5QzJ1VW1Qc3ZJV1pRVjRrYWRuRkVsWXVJTFdraWhKQVlWZUdRMnorNXRC?=
- =?utf-8?B?Y2o5R2EvOEVEbU5WN2kvU2tyeXhGbTFqYWNwWUN3c2FMUE4rbXlwQ1RjWWx3?=
- =?utf-8?B?QkU3bnk2K2g3bTNqc2NvMFBWNzFRM0s0MXd1cWxlaUM3RURUWC90OCtMRFFG?=
- =?utf-8?B?bFpDRUFKYUhab0xoTk9BdmdHSWZ0MU1BT1NNYW10cjM4enhtT1RmdmlZQUxa?=
- =?utf-8?B?bTA3Z3dDM0FTTGg1dDJ0ZmtYSjNUZ2UyVDR1OEdjOXBLR2p1b1F0MmhFNklU?=
- =?utf-8?B?QVE9PQ==?=
-X-OriginatorOrg: meta.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63a14f94-3172-432d-5f8a-08db51b1dcae
-X-MS-Exchange-CrossTenant-AuthSource: SN6PR1501MB2064.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 23:54:15.8290
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: bzJ0gRecLSlcod35iKhyhivZ7tw+AtsvGPO1bOZmMGQ8jbkqR/NAI+piT2600SG8
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR15MB3924
-X-Proofpoint-ORIG-GUID: oZtrdEr3YgHwqbt5e17M1pgr8XUgNsF2
-X-Proofpoint-GUID: oZtrdEr3YgHwqbt5e17M1pgr8XUgNsF2
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1683750665-8764-2-git-send-email-quic_khsieh@quicinc.com>
+References: <1683750665-8764-1-git-send-email-quic_khsieh@quicinc.com> <1683750665-8764-2-git-send-email-quic_khsieh@quicinc.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 10 May 2023 16:55:04 -0700
+Message-ID: <CAE-0n53ywhgFhJXA9krBo-Ds6ezM0K8n6w0xnVZj+sTJ4qt9cA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] drm/msm/dp: enable HDP plugin/unplugged interrupts
+ to hpd_enable/disable
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@gmail.com, andersson@kernel.org, daniel@ffwll.ch,
+        dianders@chromium.org, dmitry.baryshkov@linaro.org,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, vkoul@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
+        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Quoting Kuogee Hsieh (2023-05-10 13:31:04)
+> The internal_hpd flag was introduced to handle external DP HPD derived from GPIO
+> pinmuxed into DP controller.
 
+Was it? It looks more like it was done to differentiate between eDP and
+DP, because internal_hpd is set only if DRM_BRIDGE_OP_HPD is set on the
+bridge and we only set the bridge op if the connector type is DP. The
+assumption looks like if you have DP connector_type, you have the gpio
+pinmuxed for "dp_hot" mode, which isn't exactly true. We don't treat
+that gpio as an irq either, because it isn't. Instead the gpio is muxed
+to the mdss inside the SoC and then that generates an mdss interrupt
+that's combined with non-HPD things like "video ready".
 
-On 5/10/23 1:20 PM, Yonghong Song wrote:
-> 
-> 
-> On 5/10/23 10:27 AM, Jiri Olsa wrote:
->> On Wed, May 10, 2023 at 07:13:58AM -0700, Yonghong Song wrote:
->>>
->>>
->>> On 5/10/23 5:20 AM, Ze Gao wrote:
->>>> BPF_LINK_TYPE_KPROBE_MULTI attaches kprobe programs through fprobe,
->>>> however it does not takes those kprobe blacklisted into consideration,
->>>> which likely introduce recursive traps and blows up stacks.
->>>>
->>>> this patch adds simple check and remove those are in kprobe_blacklist
->>>> from one fprobe during bpf_kprobe_multi_link_attach. And also
->>>> check_kprobe_address_safe is open for more future checks.
->>>>
->>>> note that ftrace provides recursion detection mechanism, but for kprobe
->>>> only, we can directly reject those cases early without turning to 
->>>> ftrace.
->>>>
->>>> Signed-off-by: Ze Gao <zegao@tencent.com>
->>>> ---
->>>>    kernel/trace/bpf_trace.c | 37 +++++++++++++++++++++++++++++++++++++
->>>>    1 file changed, 37 insertions(+)
->>>>
->>>> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
->>>> index 9a050e36dc6c..44c68bc06bbd 100644
->>>> --- a/kernel/trace/bpf_trace.c
->>>> +++ b/kernel/trace/bpf_trace.c
->>>> @@ -2764,6 +2764,37 @@ static int get_modules_for_addrs(struct 
->>>> module ***mods, unsigned long *addrs, u3
->>>>        return arr.mods_cnt;
->>>>    }
->>>> +static inline int check_kprobe_address_safe(unsigned long addr)
->>>> +{
->>>> +    if (within_kprobe_blacklist(addr))
->>>> +        return -EINVAL;
->>>> +    else
->>>> +        return 0;
->>>> +}
->>>> +
->>>> +static int check_bpf_kprobe_addrs_safe(unsigned long *addrs, int num)
->>>> +{
->>>> +    int i, cnt;
->>>> +    char symname[KSYM_NAME_LEN];
->>>> +
->>>> +    for (i = 0; i < num; ++i) {
->>>> +        if (check_kprobe_address_safe((unsigned long)addrs[i])) {
->>>> +            lookup_symbol_name(addrs[i], symname);
->>>> +            pr_warn("bpf_kprobe: %s at %lx is blacklisted\n", 
->>>> symname, addrs[i]);
->>>
->>> So user request cannot be fulfilled and a warning is issued and some
->>> of user requests are discarded and the rest is proceeded. Does not
->>> sound a good idea.
->>>
->>> Maybe we should do filtering in user space, e.g., in libbpf, check
->>> /sys/kernel/debug/kprobes/blacklist and return error
->>> earlier? bpftrace/libbpf-tools/bcc-tools all do filtering before
->>> requesting kprobe in the kernel.
->>
->> also fprobe uses ftrace drectly without paths in kprobe, so I wonder
->> some of the kprobe blacklisted functions are actually safe
-> 
-> Could you give a pointer about 'some of the kprobe blacklisted
-> functions are actually safe'?
+If that all follows, then I don't quite understand why we're setting
+internal_hpd to false at all at runtime. It should be set to true at
+some point, but ideally that point is during probe.
 
-Thanks Jiri for answering my question. it is not clear whether
-kprobe blacklist == fprobe blacklist, probably not.
+> HPD plug/unplug interrupts cannot be enabled until
+> internal_hpd flag is set to true.
+> At both bootup and resume time, the DP driver will enable external DP
+> plugin interrupts and handle plugin interrupt accordingly. Unfortunately
+> dp_bridge_hpd_enable() bridge ops function was called to set internal_hpd
+> flag to true later than where DP driver expected during bootup time.
+>
+> This causes external DP plugin event to not get detected and display stays blank.
+> Move enabling HDP plugin/unplugged interrupts to dp_bridge_hpd_enable()/disable() to
+> set internal_hpd to true along with enabling HPD plugin/unplugged interrupts
+> simultaneously to avoid timing issue during bootup and resume.
+>
+> Fixes: cd198caddea7 ("drm/msm/dp: Rely on hpd_enable/disable callbacks")
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/dp/dp_display.c | 27 ++++++++++++++-------------
+>  1 file changed, 14 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 3e13acdf..71aa944 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -1801,15 +1788,29 @@ void dp_bridge_hpd_enable(struct drm_bridge *bridge)
+>  {
+>         struct msm_dp_bridge *dp_bridge = to_dp_bridge(bridge);
+>         struct msm_dp *dp_display = dp_bridge->dp_display;
+> +       struct dp_display_private *dp;
+> +
+> +       dp = container_of(dp_display, struct dp_display_private, dp_display);
+>
+>         dp_display->internal_hpd = true;
 
-You mentioned:
-   note that ftrace provides recursion detection mechanism,
-   but for kprobe only
-Maybe the right choice is to improve ftrace to provide recursion
-detection mechanism for fprobe as well?
-
-> 
->>
->> jirka
->>
->>>
->>>> +            /* mark blacklisted symbol for remove */
->>>> +            addrs[i] = 0;
->>>> +        }
->>>> +    }
->>>> +
->>>> +    /* remove blacklisted symbol from addrs */
->>>> +    for (i = 0, cnt = 0; i < num; ++i) {
->>>> +        if (addrs[i])
->>>> +            addrs[cnt++]  = addrs[i];
->>>> +    }
->>>> +
->>>> +    return cnt;
->>>> +}
->>>> +
->>>>    int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, 
->>>> struct bpf_prog *prog)
->>>>    {
->>>>        struct bpf_kprobe_multi_link *link = NULL;
->>>> @@ -2859,6 +2890,12 @@ int bpf_kprobe_multi_link_attach(const union 
->>>> bpf_attr *attr, struct bpf_prog *pr
->>>>        else
->>>>            link->fp.entry_handler = kprobe_multi_link_handler;
->>>> +    cnt = check_bpf_kprobe_addrs_safe(addrs, cnt);
->>>> +    if (!cnt) {
->>>> +        err = -EINVAL;
->>>> +        goto error;
->>>> +    }
->>>> +
->>>>        link->addrs = addrs;
->>>>        link->cookies = cookies;
->>>>        link->cnt = cnt;
+Can we set internal_hpd to true during probe when we see that the hpd
+pinmux exists? Or do any of these bits toggle in the irq status register
+when the gpio isn't muxed to "dp_hot" or the controller is for eDP and
+it doesn't have any gpio connection internally? I'm wondering if we can
+get by with simply enabling the "dp_hot" pin interrupts
+(plug/unplug/replug/irq_hpd) unconditionally and not worrying about them
+if eDP is there (because the pin doesn't exist inside the SoC), or if DP
+HPD is being signalled out of band through type-c framework.
