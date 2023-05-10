@@ -2,213 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69A3A6FE606
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 23:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A29566FE6DB
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 00:06:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236629AbjEJVPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 17:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36528 "EHLO
+        id S236208AbjEJWGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 18:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235547AbjEJVPd (ORCPT
+        with ESMTP id S229536AbjEJWGn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 17:15:33 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358C7E53;
-        Wed, 10 May 2023 14:15:29 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id 2adb3069b0e04-4f004cc54f4so8773682e87.3;
-        Wed, 10 May 2023 14:15:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683753327; x=1686345327;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=d/rus91C04tG29B/ScEf5OKsFh39zkI9m79US8PQUjY=;
-        b=kxU9hqWiGsb6rsgN4sv51cSToVaLDE6+6IgBcxEr62a3B/BMVcBuiVluCaqLMEHwlG
-         BFAM6qG3wuW1WyQ9uhU3Tdd53L3Ny1BPh1yKrKNzyzy8RxWQ22VZ7PSM6LoWJpm1AZzc
-         Gyz+SUfMIhvpvLa+0Uh8jC7FufEwGCFBTw5gycr4IMXnHXhUd4AIUgQ+RoJMT/FlP5IT
-         WoWNoGlUwUETI35+lXLleEM5h+cVoS8tBcsRlEokqWNGiZm6/sGhBDotop8q6jf708MS
-         CiRGnJhbBvnwsfTVHmoW7ZS2yKNMc04seGozJqJkCFhSx3CWaeYjags32ka57rBHgUWV
-         R85w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683753327; x=1686345327;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=d/rus91C04tG29B/ScEf5OKsFh39zkI9m79US8PQUjY=;
-        b=DTsGBndQNgWbXxY/JAfmgWaZ1iJ+RF8CxLvdCSF482xT7DiaKr7Kl4LZXdwQ2oiSx2
-         mAPRSoZxHLPpXOxIK4EH7l7xVIpejIQ+8aOcTlMAqIKzaBgjTHfrMjhvcRcLqk74znHU
-         43mIfN9U7ApzSmS8YInEk7oFSpxMk6n2N3M2A7E/uvIcnooRVBeCjy2gKFFkLVUiv0mG
-         0e+iOednETVeAeuOWXWA3KRU18ptpXvyJFH5ZTjfz6JhEVAzmGqtn2Z4jIuQazrX8fV3
-         EfKRlhWv2HSmyhbH25P3pahMNjY+c/HTelD6JC+homZ5G6mdrwGgK+6wrBMred9NCHdM
-         CfLg==
-X-Gm-Message-State: AC+VfDzk9AtPHzUgkB6d4PKsV2kZXV+dlVbwvhFsGOXdkuggiSHES2Ak
-        d17TfCT8/PvRL6UBLZWnxGo=
-X-Google-Smtp-Source: ACHHUZ7mTLdh7Av90znwfta5PHJDraIwi2lq/a1/0UxCzBCWfwDKpJ8dEBq126g+Wle4n2oXjPdsAg==
-X-Received: by 2002:ac2:5d67:0:b0:4ef:ed49:fcc2 with SMTP id h7-20020ac25d67000000b004efed49fcc2mr1937613lft.26.1683753327073;
-        Wed, 10 May 2023 14:15:27 -0700 (PDT)
-Received: from [100.119.7.139] (95-31-186-150.broadband.corbina.ru. [95.31.186.150])
-        by smtp.gmail.com with ESMTPSA id k12-20020a2ea28c000000b002ab4c9c1514sm2167665lja.41.2023.05.10.14.15.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 14:15:26 -0700 (PDT)
-Message-ID: <c16f87f8182bdb0a0fe89014e56a32758248baeb.camel@gmail.com>
-Subject: Re: [PATCH v2 5/5] dt-bindings: net: ftgmac100: convert to yaml
- version from txt
-From:   Ivan Mikhaylov <fr0st61te@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
-Date:   Thu, 11 May 2023 00:15:24 +0000
-In-Reply-To: <ec0a3553-2c11-301e-d838-f0bc70353b17@linaro.org>
-References: <20230509143504.30382-1-fr0st61te@gmail.com>
-         <20230509143504.30382-6-fr0st61te@gmail.com>
-         <ec0a3553-2c11-301e-d838-f0bc70353b17@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        Wed, 10 May 2023 18:06:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D9A0E5B;
+        Wed, 10 May 2023 15:06:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B4B0636BC;
+        Wed, 10 May 2023 22:06:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71E50C433D2;
+        Wed, 10 May 2023 22:06:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683756401;
+        bh=1bDzh6ersOGJxndFvMhrxZnGrOK+34QUS3Ly6iZ4gk4=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=sYyVUBEPapnvu/0Xegq9d7+1bb7lPbJhI8bdEd4srxvx9w45LIAa0NdwhjGadgeJT
+         1g9D/CmE/CAFuvp4rqI/GvPgMukEvMBAhEFmJkFAJZqWKW+Fzq7tyYs6xdsO0ENkeE
+         W9zvGVpohwt8IfPK5tiSj1SDoZC6fWnYsuHki1kQftb+p48E3HainY5OGj+PHZGxBJ
+         v7ONaJShZK+xrUywCftVp1g/Ky3kDwZM/LC/YC33lWdg0PhdjWzn1snsQujtB0pDUV
+         theFABnmlOfi3zGQQexwodkBszjw2zD7qaBcw+t1e+k72qEYpO90E0dg1DgzpUL21f
+         QimqqcmQDFDEA==
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.48.1 
-MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Date:   Thu, 11 May 2023 01:06:38 +0300
+Message-Id: <CSIXTV2FQIYD.19JPFRH4D22Y1@suppilovahvero>
+Cc:     "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        "Jason Gunthorpe" <jgg@ziepe.ca>,
+        "Jerry Snitselaar" <jsnitsel@redhat.com>
+Subject: Re: [PATCH v2 0/2] Fix TPM 1.2 resume
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Vlastimil Babka" <vbabka@suse.cz>,
+        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+X-Mailer: aerc 0.14.0
+References: <20230502011558.10743-1-jarkko@kernel.org>
+ <6b03aaf5-2017-a0c9-9c84-c8ee2aa4ba0e@suse.cz>
+In-Reply-To: <6b03aaf5-2017-a0c9-9c84-c8ee2aa4ba0e@suse.cz>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-05-10 at 16:50 +0200, Krzysztof Kozlowski wrote:
-> On 09/05/2023 16:35, Ivan Mikhaylov wrote:
-> > Signed-off-by: Ivan Mikhaylov <fr0st61te@gmail.com>
->=20
-> Need some commit msg.
->=20
->=20
-> > ---
-> > =C2=A0.../bindings/net/faraday,ftgmac100.yaml=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 | 110
-> > ++++++++++++++++++
->=20
-> Missing actual conversion (removal).
->=20
-> > =C2=A01 file changed, 110 insertions(+)
-> > =C2=A0create mode 100644
-> > Documentation/devicetree/bindings/net/faraday,ftgmac100.yaml
-> >=20
-> > diff --git
-> > a/Documentation/devicetree/bindings/net/faraday,ftgmac100.yaml
-> > b/Documentation/devicetree/bindings/net/faraday,ftgmac100.yaml
-> > new file mode 100644
-> > index 000000000000..98cd142f74bb
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/net/faraday,ftgmac100.yaml
-> > @@ -0,0 +1,110 @@
-> > +# SPDX-License-Identifier: GPL-2.0
->=20
-> Dual-license, unless you copied some chunks of old binding... but was
-> there old binding?
+On Tue May 2, 2023 at 10:37 AM EEST, Vlastimil Babka wrote:
+> On 5/2/23 03:15, Jarkko Sakkinen wrote:
+> > During TPM 1.2 resume, the first PCR read operation used inside
+> > tpm1_do_selftest() fails. Fix the bugs preventing resume from working.
+>
+> Thanks for fixing this, unfortunately I can no longer test the fix as I'v=
+e
+> got a new laptop since when I was hitting the bug on the older one.
 
-Krzysztof, I copied a lot from old one ftgmac100.txt.
+I don't think these fixed make things worse, and I could reproduce
+the bug locally, so I'll put them to my PR :-)
 
->=20
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/net/faraday,ftgmac100.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Faraday Technology FTGMAC100 gigabit ethernet controller
-> > +
-> > +allOf:
-> > +=C2=A0 - $ref: "ethernet-controller.yaml#"
->=20
-> Drop quotes.
->=20
->=20
-> > +
-> > +maintainers:
-> > +=C2=A0 - Po-Yu Chuang <ratbert@faraday-tech.com>
-> > +
-> > +properties:
-> > +=C2=A0 compatible:
-> > +=C2=A0=C2=A0=C2=A0 oneOf:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: faraday,ftgmac100
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - items:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - enum:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 - aspeed,ast2400-mac
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 - aspeed,ast2500-mac
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 - aspeed,ast2600-mac
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - const: farada=
-y,ftgmac100
-> > +
-> > +=C2=A0 reg:
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > +
-> > +=C2=A0 interrupts:
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 1
-> > +
-> > +=C2=A0 clocks:
-> > +=C2=A0=C2=A0=C2=A0 description: |
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 In accordance with the generic clock bi=
-ndings.
->=20
-> Drop this part. Obvious.
->=20
-> > =C2=A0Must describe the MAC
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 IP clock, and optionally an RMII RCLK g=
-ate for the
-> > AST2500/AST2600. The
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 required MAC clock must be the first ce=
-ll.
->=20
-> The cells depend on clock provider. Do you mean something else?
-
-It's exactly from ftgmac100.txt, this section without any changes, I
-didn't add anything new in the sentence.
-
->=20
-> > +=C2=A0=C2=A0=C2=A0 minItems: 1
-> > +=C2=A0=C2=A0=C2=A0 maxItems: 2
-> > +
-> > +=C2=A0 clock-names:
-> > +=C2=A0=C2=A0=C2=A0 items:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - enum:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - MACCLK
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - RCLK
->=20
-> This does not allow two clocks... List all the items and add
-> minItems: 1.
->=20
->=20
-> > +
-> > +=C2=A0 phy-mode:
-> > +=C2=A0=C2=A0=C2=A0 enum:
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - rgmii
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 - rmii
-> > +
-> > +=C2=A0 phy-handle: true
-> > +
-> > +=C2=A0 use-ncsi:
-> > +=C2=A0=C2=A0=C2=A0 description: |
->=20
-> Do not need '|' unless you need to preserve formatting.
->=20
-> I will stop review, because it depends whether this is true
-> conversion
-> or new binding.
->=20
-
-I've tried to convert it from ftgmac100.txt, everything is same in it
-except mac-address-increment option with explanation for which purpose
-it there, need I divide conversion from that option or is it fine in
-one?
-
-Thanks.
+BR, Jarkko
