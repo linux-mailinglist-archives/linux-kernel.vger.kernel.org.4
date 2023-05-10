@@ -2,18 +2,18 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF69A6FD834
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:30:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66CC86FD833
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:30:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236089AbjEJHaP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 03:30:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52736 "EHLO
+        id S229500AbjEJHaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 03:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235899AbjEJH3Z (ORCPT
+        with ESMTP id S236169AbjEJH3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 03:29:25 -0400
+        Wed, 10 May 2023 03:29:24 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90B17DA2
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A55DC7AAE
         for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:28:56 -0700 (PDT)
 From:   Anna-Maria Behnsen <anna-maria@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
@@ -22,21 +22,21 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=r6aAJpUsFbdAiX81BLzrgrPjSrKyBdcLGR/988cXOog=;
-        b=U1qzWtaP5VaA4c5Gn3/d+vMWtAIE2AX1garui7ElQZ8mI6xApNDhg0v611ZwnMYNh5D3v4
-        UsjTyLh56EkntJ4CEAWU+m7KTtya2+VCNnJqTaCKngMl6qhMAlAOPh3PGPDUVexKqk+iTz
-        VTXAZfd1VywJiTR71X1+lt4sJPt7WirNHVd0EWXTEWy8atbZrnhmCgAe+eo18wPFucGIuR
-        Pq7ZfboLAUFbaBR4phGessx06Ncy3vCPzdGkpEYS6f4PmQYY6urHn6QT5vb97JNhdaz9K8
-        5ERezJV00k7iKP1YaHxxBcTqqze0tHJebbyLGTfcIS/o9mBQ9YcOM3cWDy7alA==
+        bh=toZ3+ufortFTTBI6OBlc3a3bWizxyvQL3TeTeVCWUqU=;
+        b=qIHWKKp13BuB5LLP+b3nH9cvL7WsTQri9sKQQxbzdWL7gJ9xyAoL7RQVK+O16ia7yvlFrH
+        GhmcXtN6BfIxoHtlbYnRDqp6pv1DJ3Nb+fmjVVpAx+RvczP0NkmLARwwoTZ9NRebghiVN2
+        kr2VjaNe9hTSdbidc28DGRHQVSPXZ0lzZCvjZclhooB3vv/jR6DQZFWDPE0IXRuf2ByRSi
+        W2f0eBTSc4y4oA9vrz4I7w7Yr7e/xxbnYqdqsWlp5itW6X+8hdf8+S5Lp1Br1W7U5yFlO3
+        FWYhfi5D9MDBgFrdn08r1jsVqao1Uc1/QpJuDjaqXP+FZDNpxl58EblVBZmxhQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
         s=2020e; t=1683703723;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=r6aAJpUsFbdAiX81BLzrgrPjSrKyBdcLGR/988cXOog=;
-        b=c12yqfObzDwTr7vt8H+HUPGAbrRoXeMKVlBS0TvGTsnKcHGnTX5RdvI70jZJ+VTLgIfvAz
-        dFml2vEGj0HBAJCA==
+        bh=toZ3+ufortFTTBI6OBlc3a3bWizxyvQL3TeTeVCWUqU=;
+        b=L+HzQVAIQZoqFGtaEIy0zf2tD3d6+8qucaK3Wc7zaEb/C8kMCL1v2Klg2KG9h5FbnuBvJ2
+        Ch45aRW4Wl1m3lCw==
 To:     linux-kernel@vger.kernel.org
 Cc:     Peter Zijlstra <peterz@infradead.org>,
         John Stultz <jstultz@google.com>,
@@ -53,11 +53,10 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Lukasz Luba <lukasz.luba@arm.com>,
         "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
         Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Richard Cochran <richardcochran@gmail.com>,
         Frederic Weisbecker <frederic@kernel.org>
-Subject: [PATCH v6 13/21] timer: Retrieve next expiry of pinned/non-pinned timers separately
-Date:   Wed, 10 May 2023 09:28:09 +0200
-Message-Id: <20230510072817.116056-14-anna-maria@linutronix.de>
+Subject: [PATCH v6 14/21] timer: Split out "get next timer interrupt" functionality
+Date:   Wed, 10 May 2023 09:28:10 +0200
+Message-Id: <20230510072817.116056-15-anna-maria@linutronix.de>
 In-Reply-To: <20230510072817.116056-1-anna-maria@linutronix.de>
 References: <20230510072817.116056-1-anna-maria@linutronix.de>
 MIME-Version: 1.0
@@ -72,105 +71,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For the conversion of the NOHZ timer placement to a pull at expiry time
-model it's required to have separate expiry times for the pinned and the
-non-pinned (movable) timers. Therefore struct timer_events is introduced.
+The functionality for getting the next timer interrupt in
+get_next_timer_interrupt() is split into a separate function
+fetch_next_timer_interrupt() to be usable by other call sites.
 
-No functional change
+This is preparatory work for the conversion of the NOHZ timer
+placement to a pull at expiry time model. No functional change.
 
-Originally-by: Richard Cochran (linutronix GmbH) <richardcochran@gmail.com>
 Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
 Reviewed-by: Frederic Weisbecker <frederic@kernel.org>
 ---
- kernel/time/timer.c | 45 ++++++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 40 insertions(+), 5 deletions(-)
+v6: s/splitted/split
+v5: Update commit message
+v4: Fix typo in comment
+---
+ kernel/time/timer.c | 91 +++++++++++++++++++++++++--------------------
+ 1 file changed, 50 insertions(+), 41 deletions(-)
 
 diff --git a/kernel/time/timer.c b/kernel/time/timer.c
-index 010c8877fa85..e4b50760da3f 100644
+index e4b50760da3f..4bb6c168d106 100644
 --- a/kernel/time/timer.c
 +++ b/kernel/time/timer.c
-@@ -221,6 +221,11 @@ struct timer_base {
+@@ -1973,6 +1973,46 @@ static unsigned long next_timer_interrupt(struct timer_base *base)
+ 	return base->next_expiry;
+ }
  
- static DEFINE_PER_CPU(struct timer_base, timer_bases[NR_BASES]);
- 
-+struct timer_events {
-+	u64	local;
-+	u64	global;
-+};
++static unsigned long fetch_next_timer_interrupt(struct timer_base *base_local,
++						struct timer_base *base_global,
++						unsigned long basej, u64 basem,
++						struct timer_events *tevt)
++{
++	unsigned long nextevt_local, nextevt_global;
++	bool local_first;
 +
- #ifdef CONFIG_NO_HZ_COMMON
- 
- static DEFINE_STATIC_KEY_FALSE(timers_nohz_active);
-@@ -1997,17 +2002,17 @@ static void forward_base_clk(struct timer_base *base, unsigned long nextevt,
-  */
- u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
- {
-+	struct timer_events tevt = { .local = KTIME_MAX, .global = KTIME_MAX };
++	nextevt_local = next_timer_interrupt(base_local);
++	nextevt_global = next_timer_interrupt(base_global);
++
++	/*
++	 * Check whether the local event is expiring before or at the same
++	 * time as the global event.
++	 *
++	 * Note, that nextevt_global and nextevt_local might be based on
++	 * different base->clk values. So it's not guaranteed that
++	 * comparing with empty bases results in a correct local_first.
++	 */
++	if (base_local->timers_pending && base_global->timers_pending)
++		local_first = time_before_eq(nextevt_local, nextevt_global);
++	else
++		local_first = base_local->timers_pending;
++
++	/*
++	 * Update tevt->* values:
++	 *
++	 * If the local queue expires first, then the global event can
++	 * be ignored. If the global queue is empty, nothing to do
++	 * either.
++	 */
++	if (!local_first && base_global->timers_pending)
++		tevt->global = basem + (u64)(nextevt_global - basej) * TICK_NSEC;
++
++	if (base_local->timers_pending)
++		tevt->local = basem + (u64)(nextevt_local - basej) * TICK_NSEC;
++
++	return local_first ? nextevt_local : nextevt_global;
++}
++
+ /*
+  * Forward base clock is done only when @basej is past base->clk, otherwise
+  * base-clk might be rewind.
+@@ -2005,7 +2045,7 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
+ 	struct timer_events tevt = { .local = KTIME_MAX, .global = KTIME_MAX };
  	unsigned long nextevt, nextevt_local, nextevt_global;
  	struct timer_base *base_local, *base_global;
- 	bool local_first, is_idle;
--	u64 expires = KTIME_MAX;
+-	bool local_first, is_idle;
++	bool is_idle;
  
  	/*
  	 * Pretend that there is no timer pending if the cpu is offline.
- 	 * Possible pending timers will be migrated later to an active cpu.
- 	 */
- 	if (cpu_is_offline(smp_processor_id()))
--		return expires;
-+		return tevt.local;
+@@ -2020,8 +2060,11 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
+ 	raw_spin_lock(&base_local->lock);
+ 	raw_spin_lock_nested(&base_global->lock, SINGLE_DEPTH_NESTING);
  
- 	base_local = this_cpu_ptr(&timer_bases[BASE_LOCAL]);
- 	base_global = this_cpu_ptr(&timer_bases[BASE_GLOBAL]);
-@@ -2052,16 +2057,46 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
+-	nextevt_local = next_timer_interrupt(base_local);
+-	nextevt_global = next_timer_interrupt(base_global);
++	nextevt = fetch_next_timer_interrupt(base_local, base_global,
++					     basej, basem, &tevt);
++
++	nextevt_local = base_local->next_expiry;
++	nextevt_global = base_global->next_expiry;
+ 
+ 	/*
+ 	 * We have a fresh next event. Check whether we can forward the
+@@ -2030,21 +2073,6 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
+ 	forward_base_clk(base_local, nextevt_local, basej);
+ 	forward_base_clk(base_global, nextevt_global, basej);
+ 
+-	/*
+-	 * Check whether the local event is expiring before or at the same
+-	 * time as the global event.
+-	 *
+-	 * Note, that nextevt_global and nextevt_local might be based on
+-	 * different base->clk values. So it's not guaranteed that
+-	 * comparing with empty bases results in a correct local_first.
+-	 */
+-	if (base_local->timers_pending && base_global->timers_pending)
+-		local_first = time_before_eq(nextevt_local, nextevt_global);
+-	else
+-		local_first = base_local->timers_pending;
+-
+-	nextevt = local_first ? nextevt_local : nextevt_global;
+-
+ 	/*
+ 	 * Bases are idle if the next event is more than a tick away. Also
+ 	 * the tick is stopped so any added timer must forward the base clk
+@@ -2057,6 +2085,9 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
  	/* We need to mark both bases in sync */
  	base_local->is_idle = base_global->is_idle = is_idle;
  
--	if (base_local->timers_pending || base_global->timers_pending) {
-+	/*
-+	 * If the bases are not marked idle, i.e one of the events is at
-+	 * max. one tick away, then the CPU can't go into a NOHZ idle
-+	 * sleep. Use the earlier event of both and store it in the local
-+	 * expiry value. The next global event is irrelevant in this case
-+	 * and can be left as KTIME_MAX. CPU will wakeup on time.
-+	 */
-+	if (!is_idle) {
- 		/* If we missed a tick already, force 0 delta */
++	raw_spin_unlock(&base_global->lock);
++	raw_spin_unlock(&base_local->lock);
++
+ 	/*
+ 	 * If the bases are not marked idle, i.e one of the events is at
+ 	 * max. one tick away, then the CPU can't go into a NOHZ idle
+@@ -2069,31 +2100,9 @@ u64 get_next_timer_interrupt(unsigned long basej, u64 basem)
  		if (time_before(nextevt, basej))
  			nextevt = basej;
--		expires = basem + (u64)(nextevt - basej) * TICK_NSEC;
-+		tevt.local = basem + (u64)(nextevt - basej) * TICK_NSEC;
-+		goto unlock;
+ 		tevt.local = basem + (u64)(nextevt - basej) * TICK_NSEC;
+-		goto unlock;
++		tevt.global = KTIME_MAX;
  	}
-+
-+	/*
-+	 * If the bases are marked idle, i.e. the next event on both the
-+	 * local and the global queue are farther away than a tick,
-+	 * evaluate both bases. No need to check whether one of the bases
-+	 * has an already expired timer as this is caught by the !is_idle
-+	 * condition above.
-+	 */
-+	if (base_local->timers_pending)
-+		tevt.local = basem + (u64)(nextevt_local - basej) * TICK_NSEC;
-+
-+	/*
-+	 * If the local queue expires first, then the global event can be
-+	 * ignored. The CPU wakes up before that. If the global queue is
-+	 * empty, nothing to do either.
-+	 */
-+	if (!local_first && base_global->timers_pending)
-+		tevt.global = basem + (u64)(nextevt_global - basej) * TICK_NSEC;
-+
-+unlock:
- 	raw_spin_unlock(&base_global->lock);
- 	raw_spin_unlock(&base_local->lock);
  
--	return cmp_next_hrtimer_event(basem, expires);
-+	tevt.local = min_t(u64, tevt.local, tevt.global);
-+
-+	return cmp_next_hrtimer_event(basem, tevt.local);
- }
+-	/*
+-	 * If the bases are marked idle, i.e. the next event on both the
+-	 * local and the global queue are farther away than a tick,
+-	 * evaluate both bases. No need to check whether one of the bases
+-	 * has an already expired timer as this is caught by the !is_idle
+-	 * condition above.
+-	 */
+-	if (base_local->timers_pending)
+-		tevt.local = basem + (u64)(nextevt_local - basej) * TICK_NSEC;
+-
+-	/*
+-	 * If the local queue expires first, then the global event can be
+-	 * ignored. The CPU wakes up before that. If the global queue is
+-	 * empty, nothing to do either.
+-	 */
+-	if (!local_first && base_global->timers_pending)
+-		tevt.global = basem + (u64)(nextevt_global - basej) * TICK_NSEC;
+-
+-unlock:
+-	raw_spin_unlock(&base_global->lock);
+-	raw_spin_unlock(&base_local->lock);
+-
+ 	tevt.local = min_t(u64, tevt.local, tevt.global);
  
- /**
+ 	return cmp_next_hrtimer_event(basem, tevt.local);
 -- 
 2.30.2
 
