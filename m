@@ -2,95 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8907C6FE356
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 19:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AAC16FE357
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 19:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230112AbjEJRkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 13:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41706 "EHLO
+        id S235631AbjEJRkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 13:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235631AbjEJRjp (ORCPT
+        with ESMTP id S235768AbjEJRjx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 13:39:45 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788AB468E;
-        Wed, 10 May 2023 10:39:44 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f4449fa085so10520425e9.0;
-        Wed, 10 May 2023 10:39:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683740383; x=1686332383;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=KqxPzDXgXdJ+A/E42EU+WNg4JndxRLg1TSWxQty68Dw=;
-        b=Va5ePUCsUNIPz0ClUeX/F4iuYUSLsuIcytSFzpqYA1xqPz/cuBBP+udw6cGfExC1jb
-         s1dlw85OBNBXY78WqAco608YLMCywZ6xzpa4r+79M89ACwvNrkXVYlrY2kM8HvVpf/ZK
-         r4bLnAinTjjc/DMmdd8q2xTICQV3CuFOuqUkra7mPn9WllyZTXPhjVpRzWF2DtutWKYi
-         4Sq66nW+gcHHogulxQnMCY09Q/XX/4sBcEzrgzpOX2s+VZAlqIeJCFqIw+zNhCmPgFgo
-         +2xm+12Xv6uMXyUPnUszpwn/HZzLdjxZOWp3P2skwZ+nWbU71fcHO3JEPVl0qZu42AdI
-         SvJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683740383; x=1686332383;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KqxPzDXgXdJ+A/E42EU+WNg4JndxRLg1TSWxQty68Dw=;
-        b=Y5VcAC/7TeBVMShFmQdJsNuVwVCIaKIZNdrLNZpsz9jhO1vvo127ma0SG0XOT0KbB5
-         n7B/hqkNW71V8ThEhNkHCxyIAY75WYOcgvEL3XQwkyeb0qofJyLEh8+9gHH6huH+Af8+
-         PkBaUpexPvLoQJ0guXTVBYW4SVBWkZmWyNcE0+BUY+WVvI5eytSVJ1Ha60ytQ2RrXl9T
-         BgQlUPdUoklrmgtRBYGkiiiTtYYlFtICRfZPkL9tl7mN28fPdWEuTShP2UEyFPQRkA+v
-         ZHrIvlUPJZ7Gn9O3Fdg8P96U1p9EAVr8RQYSW+ihBUfQ9DwTCQyQAq6lq8uEV9LRmF4o
-         DOAQ==
-X-Gm-Message-State: AC+VfDzxUzLqFl/+GwZzLHvaI0jng8XdfxWA+LObD0UZpOx5TXcvyBdE
-        /Na7f+STz1VN4x1ZmCi3B7s=
-X-Google-Smtp-Source: ACHHUZ4nRspDgDYA0xiP8LjY0SQAypftYEtCae8akp2CgHsYDiy/co1nMyb1nNjWf3ZBb/BpPkeNCQ==
-X-Received: by 2002:a05:600c:2904:b0:3f4:2c21:b52c with SMTP id i4-20020a05600c290400b003f42c21b52cmr4692823wmd.39.1683740382828;
-        Wed, 10 May 2023 10:39:42 -0700 (PDT)
-Received: from ?IPv6:2a02:168:6806:0:7251:37be:dc31:d566? ([2a02:168:6806:0:7251:37be:dc31:d566])
-        by smtp.gmail.com with ESMTPSA id l11-20020adfe58b000000b002f22c44e974sm17941316wrm.102.2023.05.10.10.39.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 10:39:42 -0700 (PDT)
-Message-ID: <0d3c3938dbd255e21f40884408076fd24222211a.camel@gmail.com>
-Subject: Re: [PATCH v1] usb: xhci: plat: remove error log for failure to get
- usb-phy
-From:   Klaus Kudielka <klaus.kudielka@gmail.com>
-To:     Stanley Chang <stanley_chang@realtek.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Mathias Nyman <mathias.nyman@intel.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 10 May 2023 19:39:41 +0200
-In-Reply-To: <20230510075129.28047-1-stanley_chang@realtek.com>
-References: <20230510075129.28047-1-stanley_chang@realtek.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+        Wed, 10 May 2023 13:39:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63A03ABA;
+        Wed, 10 May 2023 10:39:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4FC2F649C9;
+        Wed, 10 May 2023 17:39:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E89CC433D2;
+        Wed, 10 May 2023 17:39:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683740391;
+        bh=L3QJRNGmXorOk4+D2bi74+pF6hHWPHZgyaNTHM83eTM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Fohov/Oh2SFwh26blqbfeQghhlrVcSiPP2cTXcjuw4PkIe9o3mhAHaVEYKOzqFaDE
+         X/6TV/42xXKoYE4KIS45fxySEnjXu6uQnXdL2ndjy6ZGKSrQqhD7hX1uray/pn4NgA
+         vcPJG6/Dgcog8bbstNS6NnKR/FXgrp9jqhgY16QG44BkmL+H4zW0srEjY37mLGnHso
+         UmQvpXGrKeGSHK+jgD+GpwvFlsihOup2O+vMnTHHVuw8KJDE4DQsyeKdeipqftNdbm
+         2KFSf/fqGXSr69S9Y3PsZowDSO+ct62qFZkPwf16fK8ySv3pcaUaY/IOuXexhZJohl
+         8LEKaBBG5236Q==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id F2543403B5; Wed, 10 May 2023 14:39:48 -0300 (-03)
+Date:   Wed, 10 May 2023 14:39:48 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     James Clark <james.clark@arm.com>,
+        linux-perf-users@vger.kernel.org,
+        John Garry <john.g.garry@oracle.com>,
+        Will Deacon <will@kernel.org>,
+        Mike Leach <mike.leach@linaro.org>,
+        Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] perf: arm64: Fix build with refcount checking
+Message-ID: <ZFvW5A6C9ZD+bVBU@kernel.org>
+References: <20230504160845.2065510-1-james.clark@arm.com>
+ <CAP-5=fX+PB9_UVPxwpHwcesupu_8f2c8bp5KOHrG9WAFH4VBpw@mail.gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fX+PB9_UVPxwpHwcesupu_8f2c8bp5KOHrG9WAFH4VBpw@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2023-05-10 at 15:51 +0800, Stanley Chang wrote:
-> Remove this log to avoid non-error conditions.
-> If CONFIG_USB_PHY is disabled, the following error message appears:
-> [=C2=A0=C2=A0=C2=A0 0.231609] xhci-hcd f10f0000.usb3: xhci_plat_probe get=
- usb3phy fail (ret=3D-6)
-> [=C2=A0=C2=A0=C2=A0 0.239716] xhci-hcd f10f8000.usb3: xhci_plat_probe get=
- usb3phy fail (ret=3D-6)
-> In this case, devm_usb_get_phy_by_phandle is declared static inline
-> and returns -ENXIO.
->=20
-> It is easy to pinpoint the failure to get the usb-phy using the debug
-> log in drivers/usb/phy/phy.c. Therefore, it can be removed.
->=20
-> Signed-off-by: Stanley Chang <stanley_chang@realtek.com>
+Em Thu, May 04, 2023 at 09:28:21AM -0700, Ian Rogers escreveu:
+> On Thu, May 4, 2023 at 9:09 AM James Clark <james.clark@arm.com> wrote:
+> >
+> > With EXTRA_CFLAGS=-DREFCNT_CHECKING=1 and build-test, some unwrapped
+> > map accesses appear. Wrap it in the new accessor to fix the error:
+> >
+> >   error: 'struct perf_cpu_map' has no member named 'map'
+> >
+> > Signed-off-by: James Clark <james.clark@arm.com>
+> 
+> Thanks James and sorry for the breakage!
+> Acked-by: Ian Rogers <irogers@google.com>
 
-Thanks, the false positives are now gone for those without CONFIG_USB_PHY.
+Thanks, applied.
 
-Tested-by: Klaus Kudielka <klaus.kudielka@gmail.com>
+- Arnaldo
 
+ 
+> Ian
+> 
+> > ---
+> >  tools/perf/arch/arm64/util/header.c | 4 ++--
+> >  tools/perf/arch/arm64/util/pmu.c    | 2 +-
+> >  2 files changed, 3 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/tools/perf/arch/arm64/util/header.c b/tools/perf/arch/arm64/util/header.c
+> > index d730666ab95d..80b9f6287fe2 100644
+> > --- a/tools/perf/arch/arm64/util/header.c
+> > +++ b/tools/perf/arch/arm64/util/header.c
+> > @@ -29,8 +29,8 @@ static int _get_cpuid(char *buf, size_t sz, struct perf_cpu_map *cpus)
+> >                 char path[PATH_MAX];
+> >                 FILE *file;
+> >
+> > -               scnprintf(path, PATH_MAX, "%s/devices/system/cpu/cpu%d"MIDR,
+> > -                               sysfs, cpus->map[cpu]);
+> > +               scnprintf(path, PATH_MAX, "%s/devices/system/cpu/cpu%d" MIDR,
+> > +                         sysfs, RC_CHK_ACCESS(cpus)->map[cpu].cpu);
+> >
+> >                 file = fopen(path, "r");
+> >                 if (!file) {
+> > diff --git a/tools/perf/arch/arm64/util/pmu.c b/tools/perf/arch/arm64/util/pmu.c
+> > index fa143acb4c8d..ef1ed645097c 100644
+> > --- a/tools/perf/arch/arm64/util/pmu.c
+> > +++ b/tools/perf/arch/arm64/util/pmu.c
+> > @@ -18,7 +18,7 @@ static struct perf_pmu *pmu__find_core_pmu(void)
+> >                  * The cpumap should cover all CPUs. Otherwise, some CPUs may
+> >                  * not support some events or have different event IDs.
+> >                  */
+> > -               if (pmu->cpus->nr != cpu__max_cpu().cpu)
+> > +               if (RC_CHK_ACCESS(pmu->cpus)->nr != cpu__max_cpu().cpu)
+> >                         return NULL;
+> >
+> >                 return pmu;
+> > --
+> > 2.34.1
+> >
+
+-- 
+
+- Arnaldo
