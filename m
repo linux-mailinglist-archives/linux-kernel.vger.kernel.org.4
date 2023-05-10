@@ -2,201 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB57E6FDFEA
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:20:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D71ED6FDFF9
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:22:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237185AbjEJOUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 10:20:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52232 "EHLO
+        id S237401AbjEJOWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 10:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237304AbjEJOUH (ORCPT
+        with ESMTP id S229867AbjEJOWn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 10:20:07 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EC7430E9;
-        Wed, 10 May 2023 07:20:06 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 25EE31F88B;
-        Wed, 10 May 2023 14:20:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683728405; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QBY1CUl18lOJ0pZbAna3bD8AqADxhu2MjNLI56Dsrlc=;
-        b=pWOeXk20/Qv6MW5EA8PX0Uj7HRZS1+AvxB+XbEgbczz1d3AlH76ZW8S5nfTE6SZoi5SL9f
-        TOxBK4QaPKOoh1wav0M6Zi5mVrR0uPEz+HTGJEYq2OoQyqOvPOf9m/mfs0SfSxJWAJzN6V
-        +tUCgBdKmsl6m0X6C8o+u2HpkSq/rig=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683728405;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=QBY1CUl18lOJ0pZbAna3bD8AqADxhu2MjNLI56Dsrlc=;
-        b=ZpzoYOEcm4w7HPmZfTHM0vLDWB5hVjE3SPq5CCOcYFNeLV/EdG6W41T8ffZax+VXqSn8E6
-        5Bx1nhO8FP7T7lAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7A037138E5;
-        Wed, 10 May 2023 14:20:04 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id eR2KHBSoW2TsLAAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Wed, 10 May 2023 14:20:04 +0000
-Message-ID: <487ff03b-d753-972f-7a06-a1d5efda917d@suse.de>
-Date:   Wed, 10 May 2023 16:20:03 +0200
+        Wed, 10 May 2023 10:22:43 -0400
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A3FF3AA9;
+        Wed, 10 May 2023 07:22:41 -0700 (PDT)
+Received: from pps.filterd (m0046661.ppops.net [127.0.0.1])
+        by mx07-00178001.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34AARLSF003420;
+        Wed, 10 May 2023 16:22:14 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=selector1;
+ bh=KPcKF2alaU6EYzoeowQfXYviPM8+Cm+PPF8ke7qvULk=;
+ b=SyfyPZu99HLkHkofrMkgRvJ8/xYUS88mq/rUbBsDn9xQVfl+UjqGWjCyF92jdeQlS38N
+ ILOeBc7PqajfXASKmM2YgidBKbfwFMtbw/YuEws/PneqKGDGMDLTo6H+INjnwx1h6GYX
+ YOmsa486K+C8rzuctkiLcxq/II0Fw0UL72S7Z1W9yPk61z/agGsG72XHhjl4MIXbWeee
+ f/IA2Xq2iP3Q5otupIk1PA9opC6Q6+ADRM+ZoXgPL1/4/bFO96k5cp7OSR+R4cE7a2Oj
+ aiojbOM3QqBM05qaJPWxjbLkEsfd/zsp9ksix5lIxmqhOqT+MuA9Jj++ktizTV6LSRpq HA== 
+Received: from beta.dmz-eu.st.com (beta.dmz-eu.st.com [164.129.1.35])
+        by mx07-00178001.pphosted.com (PPS) with ESMTPS id 3qg9hf9bkg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 May 2023 16:22:14 +0200
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+        by beta.dmz-eu.st.com (STMicroelectronics) with ESMTP id A3937100038;
+        Wed, 10 May 2023 16:22:12 +0200 (CEST)
+Received: from Webmail-eu.st.com (shfdag1node3.st.com [10.75.129.71])
+        by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 919192248CE;
+        Wed, 10 May 2023 16:22:12 +0200 (CEST)
+Received: from [10.48.1.0] (10.48.1.0) by SHFDAG1NODE3.st.com (10.75.129.71)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Wed, 10 May
+ 2023 16:22:12 +0200
+Message-ID: <7884b0d8-199c-4415-4113-ddce4b640508@foss.st.com>
+Date:   Wed, 10 May 2023 16:22:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v6 5/6] fbdev: Move framebuffer I/O helpers into
- <asm/fb.h>
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] dt-bindings: rcc: stm32: Fix STM32MP13 include file
+To:     Rob Herring <robh@kernel.org>, <gabriel.fernandez@foss.st.com>
+CC:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        <gabriel.fernandez@st.com>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        Loic PALLARDY <loic.pallardy@st.com>
+References: <20230407201526.1.I417093ddcea282be479f10a37147d1935a9050b7@changeid>
+ <20230412151404.GA2372294-robh@kernel.org>
 Content-Language: en-US
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     deller@gmx.de, javierm@redhat.com, daniel@ffwll.ch,
-        vgupta@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
-        davem@davemloft.net, James.Bottomley@hansenpartnership.com,
-        arnd@arndb.de, sam@ravnborg.org, suijingfeng@loongson.cn,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-parisc@vger.kernel.org
-References: <20230510110557.14343-1-tzimmermann@suse.de>
- <20230510110557.14343-6-tzimmermann@suse.de>
- <CAMuHMdVV-MQV3C_o6JxPj23h3zo0kMmsn9ZEWJxsrzr6YpKmyg@mail.gmail.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <CAMuHMdVV-MQV3C_o6JxPj23h3zo0kMmsn9ZEWJxsrzr6YpKmyg@mail.gmail.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------3cdaEmcUeI0SbzHd3kEA0OwP"
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+From:   Patrick DELAUNAY <patrick.delaunay@foss.st.com>
+In-Reply-To: <20230412151404.GA2372294-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.48.1.0]
+X-ClientProxiedBy: SHFCAS1NODE1.st.com (10.75.129.72) To SHFDAG1NODE3.st.com
+ (10.75.129.71)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
+X-Spam-Status: No, score=-6.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------3cdaEmcUeI0SbzHd3kEA0OwP
-Content-Type: multipart/mixed; boundary="------------4ynAak94t4CmV8rDWgNLeyOO";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: deller@gmx.de, javierm@redhat.com, daniel@ffwll.ch, vgupta@kernel.org,
- chenhuacai@kernel.org, kernel@xen0n.name, davem@davemloft.net,
- James.Bottomley@hansenpartnership.com, arnd@arndb.de, sam@ravnborg.org,
- suijingfeng@loongson.cn, linux-fbdev@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
- linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org
-Message-ID: <487ff03b-d753-972f-7a06-a1d5efda917d@suse.de>
-Subject: Re: [PATCH v6 5/6] fbdev: Move framebuffer I/O helpers into
- <asm/fb.h>
-References: <20230510110557.14343-1-tzimmermann@suse.de>
- <20230510110557.14343-6-tzimmermann@suse.de>
- <CAMuHMdVV-MQV3C_o6JxPj23h3zo0kMmsn9ZEWJxsrzr6YpKmyg@mail.gmail.com>
-In-Reply-To: <CAMuHMdVV-MQV3C_o6JxPj23h3zo0kMmsn9ZEWJxsrzr6YpKmyg@mail.gmail.com>
+Hi,
 
---------------4ynAak94t4CmV8rDWgNLeyOO
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+On 4/12/23 17:14, Rob Herring wrote:
+> On Fri, Apr 07, 2023 at 08:15:33PM +0200, Patrick Delaunay wrote:
+>> Minor cosmetic change, aligned with files in U-Boot:
+>> - change obsolete SPDX id : GPL-2.0+
+>> - use correct address gabriel.fernandez@foss.st.com
+>> - remove extra space
+> Make the subject reflect the purpose: 'Sync with u-boot copy'
 
-SGkgR2VlcnQNCg0KQW0gMTAuMDUuMjMgdW0gMTQ6MzQgc2NocmllYiBHZWVydCBVeXR0ZXJo
-b2V2ZW46DQo+IEhpIFRob21hcywNCj4gDQo+IE9uIFdlZCwgTWF5IDEwLCAyMDIzIGF0IDE6
-MDbigK9QTSBUaG9tYXMgWmltbWVybWFubiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4gd3JvdGU6
-DQo+PiBJbXBsZW1lbnQgZnJhbWVidWZmZXIgSS9PIGhlbHBlcnMsIHN1Y2ggYXMgZmJfcmVh
-ZCooKSBhbmQgZmJfd3JpdGUqKCksDQo+PiBpbiB0aGUgYXJjaGl0ZWN0dXJlJ3MgPGFzbS9m
-Yi5oPiBoZWFkZXIgZmlsZSBvciB0aGUgZ2VuZXJpYyBvbmUuDQo+Pg0KPj4gVGhlIGNvbW1v
-biBjYXNlIGhhcyBiZWVuIHRoZSB1c2Ugb2YgcmVndWxhciBJL08gZnVuY3Rpb25zLCBzdWNo
-IGFzDQo+PiBfX3Jhd19yZWFkYigpIG9yIG1lbXNldF9pbygpLiBBIGZldyBhcmNoaXRlY3R1
-cmVzIHVzZWQgcGxhaW4gc3lzdGVtLQ0KPj4gbWVtb3J5IHJlYWRzIGFuZCB3cml0ZXMuIFNw
-YXJjIHVzZWQgaGVscGVycyBmb3IgaXRzIFNCdXMuDQo+Pg0KPj4gVGhlIGFyY2hpdGVjdHVy
-ZXMgdGhhdCB1c2VkIHNwZWNpYWwgY2FzZXMgcHJvdmlkZSB0aGUgc2FtZSBjb2RlIGluDQo+
-PiB0aGVpciBfX3Jhd18qKCkgSS9PIGhlbHBlcnMuIFNvIHRoZSBwYXRjaCByZXBsYWNlcyB0
-aGlzIGNvZGUgd2l0aCB0aGUNCj4+IF9fcmF3XyooKSBmdW5jdGlvbnMgYW5kIG1vdmVzIGl0
-IHRvIDxhc20tZ2VuZXJpYy9mYi5oPiBmb3IgYWxsDQo+PiBhcmNoaXRlY3R1cmVzLg0KPj4N
-Cj4+IHY2Og0KPj4gICAgICAgICAgKiBmaXggZmJfcmVhZHEoKS9mYl93cml0ZXEoKSBvbiA2
-NC1iaXQgbWlwcyAoa2VybmVsIHRlc3Qgcm9ib3QpDQo+PiB2NToNCj4+ICAgICAgICAgICog
-aW5jbHVkZSA8bGludXgvaW8uaD4gaW4gPGFzbS1nZW5lcmljL2ZiPjsgZml4IHMzOTAgYnVp
-bGQNCj4+IHY0Og0KPj4gICAgICAgICAgKiBpYTY0LCBsb29uZ2FyY2gsIHNwYXJjNjQ6IGFk
-ZCBmYl9tZW0qKCkgdG8gYXJjaCBoZWFkZXJzDQo+PiAgICAgICAgICAgIHRvIGtlZXAgY3Vy
-cmVudCBzZW1hbnRpY3MgKEFybmQpDQo+PiB2MzoNCj4+ICAgICAgICAgICogaW1wbGVtZW50
-IGFsbCBhcmNoaXRlY3R1cmVzIHdpdGggZ2VuZXJpYyBoZWxwZXJzDQo+PiAgICAgICAgICAq
-IHN1cHBvcnQgcmVvcmRlcmluZyBhbmQgbmF0aXZlIGJ5dGUgb3JkZXIgKEdlZXJ0LCBBcm5k
-KQ0KPj4NCj4+IFNpZ25lZC1vZmYtYnk6IFRob21hcyBaaW1tZXJtYW5uIDx0emltbWVybWFu
-bkBzdXNlLmRlPg0KPj4gVGVzdGVkLWJ5OiBTdWkgSmluZ2ZlbmcgPHN1aWppbmdmZW5nQGxv
-b25nc29uLmNuPg0KPj4gUmV2aWV3ZWQtYnk6IEFybmQgQmVyZ21hbm4gPGFybmRAYXJuZGIu
-ZGU+DQo+Pg0KPj4gYWRkIG1pcHMgZmJfcSgpDQoNCk9vcHMsIGxlZnQtb3ZlciBmb20gc3F1
-YXNoaW5nIHBhdGNoZXMuDQoNCj4gDQo+PiAtLS0gYS9hcmNoL21pcHMvaW5jbHVkZS9hc20v
-ZmIuaA0KPj4gKysrIGIvYXJjaC9taXBzL2luY2x1ZGUvYXNtL2ZiLmgNCj4+IEBAIC0xMiw2
-ICsxMiwyOCBAQCBzdGF0aWMgaW5saW5lIHZvaWQgZmJfcGdwcm90ZWN0KHN0cnVjdCBmaWxl
-ICpmaWxlLCBzdHJ1Y3Qgdm1fYXJlYV9zdHJ1Y3QgKnZtYSwNCj4+ICAgfQ0KPj4gICAjZGVm
-aW5lIGZiX3BncHJvdGVjdCBmYl9wZ3Byb3RlY3QNCj4+DQo+PiArLyoNCj4+ICsgKiBNSVBT
-IGRvZXNuJ3QgZGVmaW5lIF9fcmF3XyBJL08gbWFjcm9zLCBzbyB0aGUgaGVscGVycw0KPj4g
-KyAqIGluIDxhc20tZ2VuZXJpYy9mYi5oPiBkb24ndCBnZW5lcmF0ZSBmYl9yZWFkcSgpIGFu
-ZA0KPj4gKyAqIGZiX3dyaXRlKCkuIFdlIGhhdmUgdG8gcHJvdmlkZSB0aGVtIGhlcmUuDQo+
-IA0KPiBNSVBTIGRvZXMgbm90IGluY2x1ZGUgPGFzbS1nZW5lcmljL2lvLmg+LCAgbm9yIGRl
-ZmluZSBpdHMgb3duDQoNCkkga25vdywgdGhhdCdzIHdoeSB0aGUgVE9ETyBzYXlzIHRvIGNv
-bnZlcnQgaXQgdG8gZ2VuZXJpYyBJL08uDQoNCj4gX19yYXdfcmVhZHEoKSBhbmQgX19yYXdf
-d3JpdGVxKCkuLi4NCg0KSXQgZG9lc24ndCBkZWZpbmUgdGhvc2UgbWFjcm9zLCBidXQgaXQg
-Z2VuZXJhdGVzIGZ1bmN0aW9uIGNhbGxzIG9mIHRoZSANCnNhbWUgbmFtZXMuIEZvbGxvdyB0
-aGUgbWFjcm9zIGF0DQoNCiANCmh0dHBzOi8vZWxpeGlyLmJvb3RsaW4uY29tL2xpbnV4L2xh
-dGVzdC9zb3VyY2UvYXJjaC9taXBzL2luY2x1ZGUvYXNtL2lvLmgjTDM1Nw0KDQpJdCBleHBh
-bmRzIHRvIGEgdmFyaWV0eSBvZiBoZWxwZXJzLCBpbmNsdWRpbmcgX19yYXdfKigpLg0KDQo+
-IA0KPj4gKyAqDQo+PiArICogVE9ETzogQ29udmVydCBNSVBTIHRvIGdlbmVyaWMgSS9PLiBU
-aGUgaGVscGVycyBiZWxvdyBjYW4NCj4+ICsgKiAgICAgICB0aGVuIGJlIHJlbW92ZWQuDQo+
-PiArICovDQo+PiArI2lmZGVmIENPTkZJR182NEJJVA0KPj4gK3N0YXRpYyBpbmxpbmUgdTY0
-IGZiX3JlYWRxKGNvbnN0IHZvbGF0aWxlIHZvaWQgX19pb21lbSAqYWRkcikNCj4+ICt7DQo+
-PiArICAgICAgIHJldHVybiBfX3Jhd19yZWFkcShhZGRyKTsNCj4gDQo+IC4uLiBzbyBob3cg
-Y2FuIHRoaXMgY2FsbCB3b3JrPw0KDQpPbiA2NC1iaXQgYnVpbGRzLCB0aGVyZSdzIF9fcmF3
-X3JlYWRxKCkgYW5kIF9fcmF3X3dyaXRlcSgpLg0KDQpBdCBmaXJzdCwgSSB0cmllZCB0byBk
-byB0aGUgcmlnaHQgdGhpbmcgYW5kIGNvbnZlcnQgTUlQUyB0byB3b3JrIHdpdGggDQo8YXNt
-LWdlbmVyaWMvaW8uaD4uIEJ1dCB0aGF0IGNyZWF0ZWQgYSB0b24gb2YgZm9sbG93LXVwIGVy
-cm9ycyBpbiBvdGhlciANCmhlYWRlcnMuIFNvIGZvciBub3csIGl0J3MgYmV0dGVyIHRvIGhh
-bmRsZSB0aGlzIHByb2JsZW0gaW4gYXNtL2ZiLmguDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFz
-DQoNCj4gDQo+PiArfQ0KPj4gKyNkZWZpbmUgZmJfcmVhZHEgZmJfcmVhZHENCj4+ICsNCj4+
-ICtzdGF0aWMgaW5saW5lIHZvaWQgZmJfd3JpdGVxKHU2NCBiLCB2b2xhdGlsZSB2b2lkIF9f
-aW9tZW0gKmFkZHIpDQo+PiArew0KPj4gKyAgICAgICBfX3Jhd193cml0ZXEoYiwgYWRkcik7
-DQo+PiArfQ0KPj4gKyNkZWZpbmUgZmJfd3JpdGVxIGZiX3dyaXRlcQ0KPj4gKyNlbmRpZg0K
-Pj4gKw0KPj4gICAjaW5jbHVkZSA8YXNtLWdlbmVyaWMvZmIuaD4NCj4gDQo+IEdye29ldGpl
-LGVldGluZ31zLA0KPiANCj4gICAgICAgICAgICAgICAgICAgICAgICAgIEdlZXJ0DQo+IA0K
-DQotLSANClRob21hcyBaaW1tZXJtYW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpT
-VVNFIFNvZnR3YXJlIFNvbHV0aW9ucyBHZXJtYW55IEdtYkgNCkZyYW5rZW5zdHJhc3NlIDE0
-NiwgOTA0NjEgTnVlcm5iZXJnLCBHZXJtYW55DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcgTXll
-cnMsIEFuZHJldyBNY0RvbmFsZCwgQm91ZGllbiBNb2VybWFuDQpIUkIgMzY4MDkgKEFHIE51
-ZXJuYmVyZykNCg==
 
---------------4ynAak94t4CmV8rDWgNLeyOO--
+Ok
 
---------------3cdaEmcUeI0SbzHd3kEA0OwP
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
 
------BEGIN PGP SIGNATURE-----
+>
+>> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+>> ---
+>>
+>>   include/dt-bindings/clock/stm32mp13-clks.h   | 6 +++---
+>>   include/dt-bindings/reset/stm32mp13-resets.h | 4 ++--
+>>   2 files changed, 5 insertions(+), 5 deletions(-)
+>>
+>> diff --git a/include/dt-bindings/clock/stm32mp13-clks.h b/include/dt-bindings/clock/stm32mp13-clks.h
+>> index 02befd25edce..da4cb7567430 100644
+>> --- a/include/dt-bindings/clock/stm32mp13-clks.h
+>> +++ b/include/dt-bindings/clock/stm32mp13-clks.h
+>> @@ -1,7 +1,7 @@
+>> -/* SPDX-License-Identifier: GPL-2.0+ or BSD-3-Clause */
+>> +/* SPDX-License-Identifier: GPL-2.0-or-later or BSD-3-Clause */
+>>   /*
+>>    * Copyright (C) STMicroelectronics 2020 - All Rights Reserved
+>> - * Author: Gabriel Fernandez <gabriel.fernandez@st.com> for STMicroelectronics.
+>> + * Author: Gabriel Fernandez <gabriel.fernandez@foss.st.com> for STMicroelectronics.
+>>    */
+>>   
+>>   #ifndef _DT_BINDINGS_STM32MP13_CLKS_H_
+>> @@ -64,7 +64,7 @@
+>>   #define CK_MCO1		38
+>>   #define CK_MCO2		39
+>>   
+>> -/*  IP clocks */
+>> +/* IP clocks */
+>>   #define SYSCFG		40
+>>   #define VREF		41
+>>   #define DTS		42
+>> diff --git a/include/dt-bindings/reset/stm32mp13-resets.h b/include/dt-bindings/reset/stm32mp13-resets.h
+>> index 934864e90da6..1b83a01de8f0 100644
+>> --- a/include/dt-bindings/reset/stm32mp13-resets.h
+>> +++ b/include/dt-bindings/reset/stm32mp13-resets.h
+>> @@ -1,7 +1,7 @@
+>> -/* SPDX-License-Identifier: GPL-2.0 or BSD-3-Clause */
+>> +/* SPDX-License-Identifier: GPL-2.0-or-later or BSD-3-Clause */
+> Really, the Linux copy came first, so you should use its license. Your
+> company's lawyers are good with GPLv3 and then v4?
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRbqBMFAwAAAAAACgkQlh/E3EQov+Dd
-DRAAkhV2ZyqjE7iKkXuOBZoy+Ujc5OxulmPDdE2aPcVS/psjd5OY+6pjLTYnIMhKMvZCIrQDEVhn
-YxlGj17+BzP0tSRmDMfsmMx5Vei/zp7yNKlvYLWw3w3tGGNp7N1ZblNoR9naemFHurOXveEacmIA
-CLwT8vXxomxTK9+ybBHrOh/bD0tON1lu+YJSimXveIU8R5fofFcBkCm3l/JyyRAySW3dSr6bx49n
-/OElo1cX7voHDisVHZTX7Iqu0pvu34xF4rMpzsWnKhqCIoGGaXFG9ewu14sVW+9c9OS5a2ndqlU+
-X5yLonPNOre0CO3fUL28HT9pAi+rI+K6x96mVdhUoHGlHii7hQsWToTgF3x4QACdlJtHMeGficNC
-HtYGlZWfcUmm10wgdSdd0aIzThaAdgwgIKulgP49E+JQ4fx2aMKXAVEwav4UKU7xEimLXZg9oNFZ
-j/kVeToiUuZtQpGV4+280bfPhkLiUKRD//MX23Y28Wjr938JcSkOAz47v6LjETtmZDIJMJpdVNe7
-+XZajXWUEiIBOQ9x6vevUZNFVhgjZxuSbH9gezySYEKmPJrSNzDY+j3wfdo9vLluOG0B3skvCRuk
-KsAVMbAWyKqWyQCX9nKMPs1PT0eMq0tC/NWfBNY3FCIfghuhVM7NcmCplZhgqf0B47kJyHMQwQ2S
-+K0=
-=Hh8E
------END PGP SIGNATURE-----
 
---------------3cdaEmcUeI0SbzHd3kEA0OwP--
+We have a long debate on the licenses, and particular for device tree,
+
+and as conclusion we are using for STM32MP SoCs:
+
+- For code (in Linux kernel driver) => GPL-2.0-only
+
+- For device tree and binding .h files; the dual licenses => 
+GPL-2.0-or-later OR BSD-3-Clause
+
+
+It is because the modifications in device tree files and binding file s 
+can be applied on
+
+other SW with using any licenses:
+
+    - GPL2 (Linux /u-Boot)
+
+    - BSD (TF-A/OP-TEE)
+
+    - GPL3/GPL4 license (any other SW component)
+
+
+Just indicate GPL-2.0-or-later in the device tree or binding files won't 
+contaminate
+
+all the projects with GPL3/GPL4 license if it only use this DT, or 
+binding files.
+
+
+NB: it is already the case for other files used by STM32MP SoC, for 
+example :
+
+./include/dt-bindings/pinctrl/stm32-pinfunc.h:
+     /* SPDX-License-Identifier: (GPL-2.0+ OR BSD-3-Clause) */
+
+
+and we have no reason to use a different license for the 2 files for 
+STM32MP13 RCC binding:
+
+   include/dt-bindings/reset/stm32mp13-resets.h
+   include/dt-bindings/clock/stm32mp13-clks.h
+
+This patch corrects a mistake in the initial commit for RCC binding 
+up-streamed
+
+by Gabriel in parallel in U-Boot and Linux repositories; this 
+inconsistency in the license
+
+was corrected only when the same patch was pushed in U-Boot.
+
+
+PS: using the GPL2-only is not a issue for U-Boot but perhaps for other 
+user of device tree in other components,
+       So if it is a blocking issue for Linux I can change it to 
+"GPL-2.0-only" in Linux and U-Boot
+
+
+Patrick
+
+>
+>>   /*
+>>    * Copyright (C) STMicroelectronics 2018 - All Rights Reserved
+>> - * Author: Gabriel Fernandez <gabriel.fernandez@st.com> for STMicroelectronics.
+>> + * Author: Gabriel Fernandez <gabriel.fernandez@foss.st.com> for STMicroelectronics.
+>>    */
+>>   
+>>   #ifndef _DT_BINDINGS_STM32MP13_RESET_H_
+>> -- 
+>> 2.25.1
+>>
