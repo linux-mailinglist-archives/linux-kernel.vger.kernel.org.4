@@ -2,70 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAEB6FD64C
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 07:41:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1510F6FD64D
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 07:42:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235904AbjEJFlL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 01:41:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45494 "EHLO
+        id S235935AbjEJFmk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 01:42:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235873AbjEJFlH (ORCPT
+        with ESMTP id S230072AbjEJFmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 01:41:07 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80F9B2729;
-        Tue,  9 May 2023 22:41:00 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50b8d2eed3dso10396645a12.0;
-        Tue, 09 May 2023 22:41:00 -0700 (PDT)
+        Wed, 10 May 2023 01:42:38 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E02330DD
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 22:42:37 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bc5197d33so12657060a12.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 22:42:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683697259; x=1686289259;
+        d=linuxfoundation.org; s=google; t=1683697356; x=1686289356;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=S0TOZqVZCmU3qht+tB0NKfPhexCOFDcSX69LsbtA6KE=;
-        b=i1koqZrstKqgNMiiJbwGFTgImnTzEEjYTUpDbJIpxyLRJi8JhEyDSZPif143pwZ4pk
-         Xp004b1ESph+dD2hFxscs2axiZHWI1Qh9QdFIbLZSkq5nOSnFZjQbSlAVoOc+2moqsfS
-         k2KDhERxh8kgL2yOgDiaK9nOkyYMk8J+WfZrjZ02oOe70Re18OHshxuUIpM7bDdOnJXC
-         6CkaiNDRzxsQCa9Bbe1n7veGAsewzfi5/LM/qOaZq2pcg8N+o5dirjFZ50yChkjDtD1J
-         urEz53R3FAbTzLg+Ni+lcRrsX7DUqeYMfUVNU0jlmAMhqG3ChSEjhbCSWTty5qzQVMMo
-         LykQ==
+        bh=5Vufql6/ecz2yZXzMpZRiarcSXO1qn2RCsrk7qDujkI=;
+        b=btoNBuCKMHSLgqnNYWYzxkh+LbfZ0VY2ZIoiWvfsaehbd46EtcrjtttICe/PCnWV6i
+         YpsS1BO2afwKs3Dx9BacN+1aVx8TcnxrDZxTDihxKUBn+cbrcTQwIf5dG/OKcmXXeIdI
+         NtKCmCYxQx16B97a9p8r8R1uCylCOaBPCEN70=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683697259; x=1686289259;
+        d=1e100.net; s=20221208; t=1683697356; x=1686289356;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=S0TOZqVZCmU3qht+tB0NKfPhexCOFDcSX69LsbtA6KE=;
-        b=MkyAOWXZHF9VuHuX1iyYUU8kT0WfFCBeRYkcnkiFB07vKwIMMGmyhIapN7JeAo0n/l
-         ii/VaMpEwCJSF3mp+BxgqMJ7UMpOS+yVXFZuYYKWYlE+k8NmKp3+ipUvECuq5LErX5B6
-         FjENc7IKnqunBreHVHHOCxZTGViKDgQJ8bhxG9f5itp/D/fwJJXK6ahJychkxzvO2oKl
-         pBupe+K7phID2g3cXBcFmYk2S6ix1TVQy7FZwFdsAUohp3i/7bBoxnlhlpT5iRFd4tMw
-         X6TM652uLrKkM2bphnxm0vbGZCXkXEQN8XE9bUyCAwMq86N11KLnvINGZbn0qv0+M4qj
-         m+9w==
-X-Gm-Message-State: AC+VfDyXVLzcr3G9rPVAb6j4A5sfyNjUkyIEBxiZwpP8lq+To+knNJ/b
-        1kETipxQXpuIoJqPJLM07rMpOtf4L0mRj2Da+nY=
-X-Google-Smtp-Source: ACHHUZ6wHLIoOT7ozikyRiJNHvf5T2+cCkXiiaWiU4DPZmfEUnVuxApD/WHdkBAvuy074Pcq9iXJm8gxh+5xg4rZlzc=
-X-Received: by 2002:a17:907:a0c:b0:962:582d:89c8 with SMTP id
- bb12-20020a1709070a0c00b00962582d89c8mr14755282ejc.45.1683697258658; Tue, 09
- May 2023 22:40:58 -0700 (PDT)
+        bh=5Vufql6/ecz2yZXzMpZRiarcSXO1qn2RCsrk7qDujkI=;
+        b=XWeIbmbA8KbB/+miKfU7LhHXjUc9XsJtnj3xvHHg2ahgKNjd98y0WrmyWLn9FMBdSl
+         KMXYaOY/dHSXrCyrRM69BSv29vKXSF1RaQEyYhJV1Tg41y6JQ/C0RzgVIfsZyKgdoWiC
+         IFKaCJmnPxHqk0UexzX02/963q+2Cwnn+3o8xnRkmwKthOZ+ZrDKHP1LJr6lua1bZ4ou
+         jeHn/JJP7FGFfDnfaBn1xNwTBZ3ldFcSqRB61xrV14QxeUX6l5fin5wPxWaz2l51+lRb
+         fYXiHv+IOU5a26B0u/wzHxNPGgmMYtoijrDj9Ta7DXe9LBvdo6agFOsL/T1mGpkEVR2u
+         QqPQ==
+X-Gm-Message-State: AC+VfDyf5lj46dP0pbt8bq/w2bQyIO/tK3PwQDWtHbU6kTRk5CNYp41R
+        VutmHimXAznHLftafhUwrFoPMmVsBDtMTeVKcfOv0g==
+X-Google-Smtp-Source: ACHHUZ4Sl/EGPAruGrTNQGlh7bapY2nnzGPQKNTX/n09ov+bzUuKW0uJZPE9Pw+Jl5eeLuFgFafcag==
+X-Received: by 2002:a17:907:980a:b0:968:2bb1:f39d with SMTP id ji10-20020a170907980a00b009682bb1f39dmr7880034ejc.36.1683697356051;
+        Tue, 09 May 2023 22:42:36 -0700 (PDT)
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com. [209.85.218.53])
+        by smtp.gmail.com with ESMTPSA id kn3-20020a1709079b0300b0096a27dbb5b2sm319873ejc.209.2023.05.09.22.42.31
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 May 2023 22:42:33 -0700 (PDT)
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-9659e9bbff5so1226922166b.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 22:42:31 -0700 (PDT)
+X-Received: by 2002:a17:907:da4:b0:966:4d99:b0aa with SMTP id
+ go36-20020a1709070da400b009664d99b0aamr10366313ejc.59.1683697351492; Tue, 09
+ May 2023 22:42:31 -0700 (PDT)
 MIME-Version: 1.0
-References: <CAKXUXMzfKq_J9nKHGyr5P5rvUETY4B-fxoQD4sO+NYjFOfVtZA@mail.gmail.com>
- <8a86ba08-cde4-97a4-d7e2-dc340609381c@huaweicloud.com>
-In-Reply-To: <8a86ba08-cde4-97a4-d7e2-dc340609381c@huaweicloud.com>
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Wed, 10 May 2023 07:40:47 +0200
-Message-ID: <CAKXUXMzA8GfJaWmdaszhrTtjMy5987oZ8AaBcoT6hNVvgCiZ-w@mail.gmail.com>
-Subject: Re: Situation of CONFIG_BLK_WBT_MQ after commit b11d31ae01e6
- ("blk-wbt: remove unnecessary check in wbt_enable_default()")
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "yukuai (C)" <yukuai3@huawei.com>
+References: <20230509223036.3007500-1-azeemshaikh38@gmail.com>
+In-Reply-To: <20230509223036.3007500-1-azeemshaikh38@gmail.com>
+From:   Linus Torvalds <torvalds@linuxfoundation.org>
+Date:   Wed, 10 May 2023 00:42:14 -0500
+X-Gmail-Original-Message-ID: <CAHk-=wg7pwWiF4eWVTfFYkfAk_5YDHkmkgZ04cgXkNUO_9pR3A@mail.gmail.com>
+Message-ID: <CAHk-=wg7pwWiF4eWVTfFYkfAk_5YDHkmkgZ04cgXkNUO_9pR3A@mail.gmail.com>
+Subject: Re: kernfs: Prefer strscpy over strlcpy calls
+To:     Azeem Shaikh <azeemshaikh38@gmail.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejun Heo <tj@kernel.org>, security@kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,53 +77,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 5:24=E2=80=AFAM Yu Kuai <yukuai1@huaweicloud.com> w=
-rote:
+On Tue, May 9, 2023 at 5:30=E2=80=AFPM Azeem Shaikh <azeemshaikh38@gmail.co=
+m> wrote:
 >
-> Hi,
->
-> =E5=9C=A8 2023/05/08 12:37, Lukas Bulwahn =E5=86=99=E9=81=93:
-> > Dear Yu Kuai, dear Christoph, dear Jens,
-> >
-> >
-> > The commit b11d31ae01e6 ("blk-wbt: remove unnecessary check in
-> > wbt_enable_default()") removes the only reference to the config
-> > BLK_WBT_MQ in the kernel tree.
-> >
-> > The commit comes with the statement "If CONFIG_BLK_WBT_MQ is disabled,
-> > wbt_init() won't do anything.". The statement "If CONFIG_BLK_WBT is
-> > disabled, wbt_init() won't do anything." (note: CONFIG_BLK_WBT vs.
-> > CONFIG_BLK_WBT_MQ) is certainly true, but I do not see that "If
-> > CONFIG_BLK_WBT_MQ is disabled, wbt_init() won't do anything.", but I
-> > believe it would simply do what wbt_init() does with CONFIG_BLK_WBT
-> > being enabled.
-> >
-> > Now, it seems that with this commit applied, the intended switch of
-> > the config BLK_WBT_MQ is gone, and the config really now has no effect
-> > at all.
-> >
-> > So, I am a bit puzzled:
-> >
-> > 1. Either the config BLK_WBT_MQ does have an effect somewhere, but one
-> > cannot find its reference with 'git grep -i "BLK_WBT_MQ" .' --- so, my
-> > investigation is just incomplete or wrong, or
-> >
-> > 2. We really do not need this further build config BLK_WBT_MQ beyond
-> > the other configs already there --- then this config should just be
-> > removed, or
-> >
-> > 3. the commit unintentionally broke the purpose of the config
-> > BLK_WBT_MQ --- then this commit above should be reverted.
->
-> Thanks for the report, it's the above case and it's my mistake.
-> I will fix this.
->
+> +/* strscpy_mock_strlcpy - imitates strlcpy API but uses strscpy undernea=
+th. */
+> +static size_t strscpy_mock_strlcpy(char *dest, const char *src, size_t c=
+ount)
+> +{
+> +       strscpy(dest, src, count);
+> +       return strlen(src);
 
-Kuai, thanks for letting me know. Feel free to add a "Reported-by:
-Lukas Bulwahn <lukas.bulwahn@gmail.com>" tag, and to include in the
-list of recipients when you send out the fix to the mailing list.
+Absolutely not.
 
-I am glad to see that my investigation of kernel code is finding some
-issues that we can fix.
+This makes the whole exercise pointless.
 
-Lukas
+The reason to use strscpy() is to *avoid* doing the strlen() on the
+source, and limit things to the limited size.
+
+If you need to do the strlen(), then use strlcpy(). It's a broken
+interface, but creating this kind of horror wrapper that does the same
+thing as strlcpy() is worse than just using the regular version.
+
+So the strscpy() conversion should *only* be done if the caller
+doesn't care about the difference in return values (or done *together*
+with changing the caller to use the nicer strscpy() return value).
+
+It's also worth noting that 'strscpy()' not only returns a negative
+error value when the string doesn't fit - it will also possibly do the
+copy one word at a time, and may write extra zeroes at the end of the
+destination (all within the given size, of course).
+
+So strscpy() is _different_ from strlcpy(), and the conversion should
+not be done unless those differences are ok.
+
+               Linus
