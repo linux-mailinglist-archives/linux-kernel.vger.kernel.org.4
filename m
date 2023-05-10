@@ -2,234 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76D5D6FDA74
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:12:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 646766FDA7C
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:14:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236404AbjEJJMB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 05:12:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
+        id S236680AbjEJJOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 05:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231486AbjEJJL6 (ORCPT
+        with ESMTP id S231486AbjEJJOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 05:11:58 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2100.outbound.protection.outlook.com [40.107.244.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87C4A269E;
-        Wed, 10 May 2023 02:11:56 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=i36aruiiqPfw05NRR7H+SdV6Tgw2AS+K9EDRVX4TF15RoEYoY2+9quy7lwPmABe+hQmqZTu9J1htxsmKH8jUPqnDxZ6b8Nc7tlOX9QIXsiiAX5jg8puNAbVd08j4cKcj9lSShhOorhHXw+Ya59AvpAtLArdojIscaEwiUVFSpeXx2bsL6fgKv1Y2IhKg0MyxhbVlQh8TjwKl78P++b8KAM+7PtABI1IVQ5sHSnq/WC1ekGkDimhx4UbkbLJQnDSB+QO9MO3Az9CVrjfo4gKyuqOvwdXa11rgjhMHRzQ2KZnKc9Nv/ijOpIYNeIdqL+aZSprOhUPl45oeaZSSZwbGZw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bVTkDFqxXsDQ0LNgbGO/H8QFDGG2cXswbqI3l/RPq6g=;
- b=e3mzC5WkWp0Pkwpqo5Lu6zrZh8xRm28eBrQABVVLQGa77/UW6GHWtxbytNsc9HUbupA7ereJmxLXY30eUe0hB95cs/WMZIjCqjGPu1QybxrE8YLX1ndprAGAU7N6M4bsvsjaV9tJ13Cm5jtz69SBGfqf29+z7USGPGpJEAYpLMEk/qpdqN235vXw7yz0uO6QDrFZVo4bZ8xypV5CoK1X78nlFyD7WYAzBvpp4nwgCLZ2+w7R8Eq3BJ55PA1m9WUpNsK90ujcBGGaDJSxBJwpLGjZa1XLo09ztZJG8s6AB/Z3O3v0dryVXjbSnL+lvJXdfQ2VINWMaP0BfCSc+0eIUg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bVTkDFqxXsDQ0LNgbGO/H8QFDGG2cXswbqI3l/RPq6g=;
- b=QnAUhM36zxmWC6lj04BZmO7s4mnDbYVe+1FRUAp4QNriaaxWjfhMiwq0s+dCPzOO+sEc4kPVXAGbe+G7Yy8I7AFD8bLIPPs3n0AWEcyKGAKJ6DBX2rw9LzCO3Bnk79CZ4Ld4wWVBN3wVx9qUAbqy1Uk4hTt5wYSSEuzHOiWPZIs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CH0PR13MB5236.namprd13.prod.outlook.com (2603:10b6:610:f4::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Wed, 10 May
- 2023 09:11:53 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Wed, 10 May 2023
- 09:11:52 +0000
-Date:   Wed, 10 May 2023 11:11:44 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Shenwei Wang <shenwei.wang@nxp.com>
-Cc:     Wei Fang <wei.fang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        imx@lists.linux.dev
-Subject: Re: [PATCH net 1/1] net: fec: using the standard return codes when
- xdp xmit errors
-Message-ID: <ZFtf0Pu0yTzH/pLm@corigine.com>
-References: <20230509193845.1090040-1-shenwei.wang@nxp.com>
+        Wed, 10 May 2023 05:14:00 -0400
+Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3772D30CF;
+        Wed, 10 May 2023 02:13:59 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id 88CB45C02DD;
+        Wed, 10 May 2023 05:13:56 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute3.internal (MEProxy); Wed, 10 May 2023 05:13:56 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1683710036; x=1683796436; bh=ii
+        ADo2HcVVP7FI0vsjXgBbOVG3uyaHWjU7aM/iZfF6g=; b=fQ0pc45lup697IbFq5
+        7VfBPUM54DU4ba+Je2Aw+5Rl872ZxULr52/WGOoXdFFpAl8AZXFGoH38GIf7UnN1
+        BxUKsq+wYdfRRLiNjpkpcPnWiMXgP4+F52tztVHZalAlnnWLQq61doK+VRkDZ58a
+        q+k8ePiWGuKJz59iCuZm6VOz10qggDNyYwM5r86dsRfMgsHoB76MdyiedlCX3ePm
+        HET49vPIajwacbIxAd8puh6GNMimHkCoMavggq02i8PhM1pNtHMFYa18JpXwMP3K
+        PO/GlhCRyfWQ6a5gU8TjzqafJH2tp0/Yt2Awc83wL9auOBgpvy3ixvCVdFbdIAwQ
+        JJfw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1683710036; x=1683796436; bh=iiADo2HcVVP7F
+        I0vsjXgBbOVG3uyaHWjU7aM/iZfF6g=; b=P7rchaHWU3Ofd9cQJ+ipo5Su4l+CW
+        l2GrrIG3tC11y4REJsbZEDvHafr6jSH/OpUW6rcB3TpKbRORc4Wcvg7WkSVFRJIr
+        ctq4UH4neT2ulzTHFIomba4ThhMVVjjpZ1Ah5QhR72YfIixWffPWWmU0M6gVlBtS
+        qItRsQFQctqMuNdeIvkGnlzJkf8C36JtwlDzUFG694bBMWB+kJ7AX/hoJo5lRvxX
+        eSJpnrpLcP4s8hgqETMAvMEmzquITy+cJ1WCjC83dBgKv8IBWK65HsYuctgDujtc
+        R+2CTMi9gwSwEIGCWWAMkbOleBNRYq56KGVWl51esed5I6CGFenUaOQbQ==
+X-ME-Sender: <xms:VGBbZOeeGHuqwg4M43TOeGtpFogjbBb8sZzKUoR41L19cOSn8MRQYA>
+    <xme:VGBbZINOKZ8bRXL3mha9OfYn7k8zTobuXbjBu4i7HSOOpHnFlJ2uxIgp3QVdoIPLc
+    hfffBWP5VEsSw>
+X-ME-Received: <xmr:VGBbZPh3RNOUf2wT-uWzowDiMuxBECwWEEhdJpIG8rgOICewMaGyZkq0D_Q>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeeghedguddtucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgeehue
+    ehgfdtledutdelkeefgeejteegieekheefudeiffdvudeffeelvedttddvnecuffhomhgr
+    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:VGBbZL9Qc2UYbJrMatkR8vQJq6yx3cgLD5XnycSnDh0_gbPEAPyBqA>
+    <xmx:VGBbZKu__Brm1JfvmxyKQkFtwoDaHS0meLCSDWeIzU_mNoH1qt0X2Q>
+    <xmx:VGBbZCHaWw7OWpAogx0n74wfVa0LFO6ar8_tdUBxb4UozwqWD7IX_w>
+    <xmx:VGBbZB-2XtfxDMh4O77ZCGL36Rv32ruLiqOfeX6nG1pSKdUCNgFugw>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 10 May 2023 05:13:55 -0400 (EDT)
+Date:   Wed, 10 May 2023 11:13:51 +0200
+From:   Greg KH <greg@kroah.com>
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "abelvesa@kernel.org" <abelvesa@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] clk: imx: imx93: introduce clk_bypassed module parameter
+Message-ID: <2023051027-wages-feminine-cb5d@gregkh>
+References: <20230504085506.504474-1-peng.fan@oss.nxp.com>
+ <2023050410-rejoin-vocation-8560@gregkh>
+ <DU0PR04MB9417FE67ABF9A2B1EE4DEBA088779@DU0PR04MB9417.eurprd04.prod.outlook.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230509193845.1090040-1-shenwei.wang@nxp.com>
-X-ClientProxiedBy: AS4P250CA0025.EURP250.PROD.OUTLOOK.COM
- (2603:10a6:20b:5e3::15) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH0PR13MB5236:EE_
-X-MS-Office365-Filtering-Correlation-Id: 72fbc566-9444-4de8-a03a-08db513697a0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: rsOnFLEp98Ti/ZCswk2yRe55dkt00cb+VkMhcXdQ+dR020+CjtqNi2Q2jkBBPSMyy15hHl3V/h6Crm8M2Rlmj9kOMtm4XHO44GwKfG/u6TxVbakc+wd9AUh7MBEyC+phWlIv/xQQLwF8RjYsxvkwdV97YFIob3nUZVQV7BkU7UfL+SMytgFqv/FnUtZZupbi8hyIM9drSxjhV18Fm/cbDjU43W+F22AMq0xhAIqrrcYmbu967osIKULN3lkzZ05HixFAaAOxaPu1mQFsC1y/xsaAn2kG/SB1iixJduzmaMna2k6oKQt29Azy9kPA7SJ5qib99ZHH2QIUHw4wt/guTxSAEXCUCH5bhTP1gMzZ3wrzdINZZQz7M9NLIfku1T0jrR0yUJo9g5Qb+TRwDwerc/QNEJH8LWdQ/L8cS+Bow07TN9aQI8FfM5WaWupyFIeyJajjdFxVO4IhGCAhRRp8rhr6fY7tOLctdYr4wpV4//vM1KLee6x1kuRJ96Bt4OTG6s26ZgIIjVZnaLGTzmxvhoMhRoIW6mJWEg1c8foouUPEx+bbCWSe4opHimZkArNu
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(39840400004)(376002)(346002)(136003)(451199021)(2616005)(2906002)(83380400001)(186003)(4326008)(6512007)(316002)(66476007)(66946007)(6916009)(41300700001)(6666004)(66556008)(54906003)(478600001)(7416002)(5660300002)(6506007)(8676002)(6486002)(8936002)(44832011)(38100700002)(86362001)(36756003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2wRVVfu+RsmDWZVbz39tj2fqI4h6iatJhtsd7/Uzmm4nOeZr6rayOG53rqfM?=
- =?us-ascii?Q?IwgtV1e5UKHwavWZBqNnzCh7xtWC9u6OhIwGcbU/wwntKzq9Zd8Yg/CeSS3j?=
- =?us-ascii?Q?oQy07lPI2j7BMyh+LMCor/2l4bCddnLP6JtdDr28pu1uqq7N4IkC1JIQbd4+?=
- =?us-ascii?Q?l4pSFYw8hLyl53pwtnuMDEe9Kam5tpZZ8kGf1TtthzKbbiY0efg0nizYgaff?=
- =?us-ascii?Q?vKKNHMNzfPhmQCZSnoEdKTXKsMjLdERoKKgb8aQ6Qd4N+wYR7yVkjsMvlQfi?=
- =?us-ascii?Q?F3ovweAM1HdxTbloVQT5XgkTULOihi3bLDLdRxIEtiCPJ/cXcS0ZNL5AZ2LF?=
- =?us-ascii?Q?e+v44gdfkyzIGp9cIBVBPEp/9noEAyUWEODTuyOkzcx9PrfWh8UnDRBeXDgC?=
- =?us-ascii?Q?92g+nM/X+vuSbfMeyk1pVs6n2RSQ9zAplEaXmANS9xaHFDYRcgxXtclRFqU1?=
- =?us-ascii?Q?jUb3x/Lz/I8pxU3hiHFGNdITG4pUkVoCMpgXbJySnCeGgSFWVgd3rELk5Z7B?=
- =?us-ascii?Q?s3rjgQXElvjfDH9LvjZdmmU7+5TVZxEF9UqKkDN1pT6qpgSoqfMuLCxSFU3J?=
- =?us-ascii?Q?U5jx4NrO0bMo3zdoWx/ChOwRmcDl8nMotRk2Eu8ajfHVEdchr7KQ3I0e31li?=
- =?us-ascii?Q?peaKdS7FHLMjpJZKEYTuInaTML92ixLv/1rKu7zbdBtqZcfxyW+CeOBYxHdK?=
- =?us-ascii?Q?27GUl+es0Ty4FSPyzs8fehusJUC+ur7/XsEopNq6CILFMfgg44l46jazpR+C?=
- =?us-ascii?Q?xhXbKORknn804k+uy/Mr2Q/c4xoJ3zp5cE8Mc4U5XIqWM3WKqnfeLg62ACrM?=
- =?us-ascii?Q?aBrozfEHW4VfgkZ+opTDXRnyWdnOPJ8jkkETeJk4EJpm6g75fLS24h9auafs?=
- =?us-ascii?Q?PCfVcI7/8/ywTu164BfY1SXssyTZSB3nX7W6ESm+V0IjfDnnKsSVFNAeDW9W?=
- =?us-ascii?Q?n0LiunOvbBC4lhGSdfbh1EkdtjkqeF8g7Hi5wPyEJ789HXSr1FM26u7u539u?=
- =?us-ascii?Q?2FMzMqTeGK7o17Wls9Ihu2wZEHVeLDZnDmTCMXu8bgoNzDBmEf9awBBXUah+?=
- =?us-ascii?Q?+MdyGUHMKbSzAXH3wcjOgKGVwxGhLchTsXuj0CqOWyxXbzr1ODh44DLc6NfO?=
- =?us-ascii?Q?a5xKk6iz8k19ht1SZjAT/GyYxbpj+GT+36oSO2Uo5zsASVLJ9y8TwSOpWRyw?=
- =?us-ascii?Q?XupvA7VrjmgF5wo4MGHM1VyGeSiPnE2nzYjzSfyV333s/TbOGSnyIqGxut68?=
- =?us-ascii?Q?DKALCQKmmWTaJ2cEMsP024W0s8ZtBsjZBFNoL0wY715QtINrDm1eJkU+X4kE?=
- =?us-ascii?Q?KTfabhutAKjALXlDWgzC9ic5z3MdrZGy6YQ+2IXJMc7/LuzAyJTFxQvEZXbq?=
- =?us-ascii?Q?ZZ6X8EXA4B9YG3w2DVwfQ/xDbQL8p6oECZZVMaxyTAiU02pFYxYqZHuuO0Np?=
- =?us-ascii?Q?+iZjxxpM+tp4Q4hW0fmXfi/ByBa/JhVXhvwEg1R1z0xMKRT8hYwfrXh83cs3?=
- =?us-ascii?Q?3Mdppuj5d5TrO/bw4BIFZywZYxuw0aFiMDnvc/3ugh2chvbbD2DYgfxKDjAF?=
- =?us-ascii?Q?/SWECETHIbt2JrkVIk3FOzwCgEaoXDWSz5vIfnCQwokd71SlOY9U//3Vyv3K?=
- =?us-ascii?Q?6s5Mp7nPg4CaLScCJxzj86YtyYs/rh2e3C6tSXokuZvGukz+INc9AyEJfuyi?=
- =?us-ascii?Q?yngCYQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 72fbc566-9444-4de8-a03a-08db513697a0
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 09:11:51.9965
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zCWby20zMcqAv5nLB/PWFIwmdh+zWzE8SoeBWVKfaJvwdD7Iv/LcpbWQlp/zXd8LQyXYiOPjxqSUYx2Dcy7uu2ZV1tiE2DbaSyx2V+iXA1E=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR13MB5236
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <DU0PR04MB9417FE67ABF9A2B1EE4DEBA088779@DU0PR04MB9417.eurprd04.prod.outlook.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 02:38:45PM -0500, Shenwei Wang wrote:
-> The existing logic did not properly handle unsuccessful xdp xmit frames,
-> this patch revises the logic to return standard error codes (-EBUSY or
-> -ENOMEM) on unsuccessful transmit.
-
-Hi Shenwei,
-
-I'm not sure that changing the calling convention is the fix here.
-The caller seems to get it right both before and after this part
-of this patch change. So this seems to be a cleanup rather than a fix.
-
-> Start the xmit of the frame immediately right after configuring the
-> tx descriptors.
-
-This is the money part of this change. I think it warrants more
-explanation.
-
-If there are two changes to be made, they probably belong in two
-patches.
-
+On Wed, May 10, 2023 at 07:49:20AM +0000, Peng Fan wrote:
 > 
-> Fixes: e8a17397180f ("net: fec: correct the counting of XDP sent frames")
-
-I think this tag should be:
-
-Fixes: 26312c685ae0 ("net: fec: correct the counting of XDP sent frames")
-
-> Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
-> ---
->  drivers/net/ethernet/freescale/fec_main.c | 25 ++++++++++++++---------
->  1 file changed, 15 insertions(+), 10 deletions(-)
+> > Subject: Re: [PATCH] clk: imx: imx93: introduce clk_bypassed module
+> > parameter
+> > 
+> > On Thu, May 04, 2023 at 04:55:06PM +0800, Peng Fan (OSS) wrote:
+> > > From: Peng Fan <peng.fan@nxp.com>
+> > >
+> > > With the clk names specified in clk_bypassed module parameter, give
+> > > user an option to bypass the clk from managing them by Linux kernel.
+> > 
+> > As I said on another email, no, please do not add new module parameters
+> > for drivers, this is not the 1990s
 > 
-> diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-> index 42ec6ca3bf03..438fc1c3aea2 100644
-> --- a/drivers/net/ethernet/freescale/fec_main.c
-> +++ b/drivers/net/ethernet/freescale/fec_main.c
-> @@ -3798,8 +3798,7 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
->  	entries_free = fec_enet_get_free_txdesc_num(txq);
->  	if (entries_free < MAX_SKB_FRAGS + 1) {
->  		netdev_err(fep->netdev, "NOT enough BD for SG!\n");
-> -		xdp_return_frame(frame);
-> -		return NETDEV_TX_BUSY;
-> +		return -EBUSY;
->  	}
->  
->  	/* Fill in a Tx ring entry */
-> @@ -3813,7 +3812,7 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
->  	dma_addr = dma_map_single(&fep->pdev->dev, frame->data,
->  				  frame->len, DMA_TO_DEVICE);
->  	if (dma_mapping_error(&fep->pdev->dev, dma_addr))
-> -		return FEC_ENET_XDP_CONSUMED;
-> +		return -ENOMEM;
->  
->  	status |= (BD_ENET_TX_INTR | BD_ENET_TX_LAST);
->  	if (fep->bufdesc_ex)
-> @@ -3835,6 +3834,11 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
->  	index = fec_enet_get_bd_index(last_bdp, &txq->bd);
->  	txq->tx_skbuff[index] = NULL;
->  
-> +	/* Make sure the updates to rest of the descriptor are performed before
-> +	 * transferring ownership.
-> +	 */
-> +	wmb();
-> +
->  	/* Send it on its way.  Tell FEC it's ready, interrupt when done,
->  	 * it's the last BD of the frame, and to put the CRC on the end.
->  	 */
-> @@ -3844,8 +3848,15 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
->  	/* If this was the last BD in the ring, start at the beginning again. */
->  	bdp = fec_enet_get_nextdesc(last_bdp, &txq->bd);
->  
-> +	/* Make sure the update to bdp and tx_skbuff are performed before
-> +	 * txq->bd.cur.
-> +	 */
-> +	wmb();
->  	txq->bd.cur = bdp;
->  
-> +	/* Trigger transmission start */
-> +	writel(0, txq->bd.reg_desc_active);
-> +
->  	return 0;
->  }
->  
-> @@ -3869,17 +3880,11 @@ static int fec_enet_xdp_xmit(struct net_device *dev,
->  	__netif_tx_lock(nq, cpu);
->  
->  	for (i = 0; i < num_frames; i++) {
-> -		if (fec_enet_txq_xmit_frame(fep, txq, frames[i]) != 0)
-> +		if (fec_enet_txq_xmit_frame(fep, txq, frames[i]) < 0)
->  			break;
->  		sent_frames++;
->  	}
->  
-> -	/* Make sure the update to bdp and tx_skbuff are performed. */
-> -	wmb();
-> -
-> -	/* Trigger transmission start */
-> -	writel(0, txq->bd.reg_desc_active);
-> -
->  	__netif_tx_unlock(nq);
->  
->  	return sent_frames;
-> -- 
-> 2.34.1
+> After a search of the list,
+> https://lore.kernel.org/all/?q=module_param
 > 
-> 
+> I still see many drivers are adding module_param.
+
+And they should not be doing so as it is almost always not a good idea
+(note, some subsystems, like sound, do require it, as that's the api
+they use, so this is not a blanket statement.)
+
+> Is this is strict ban that new platform driver should not add
+> module_param?
+
+You need to really really really justify, and document in the changelog
+text, why all of the other methods of configuring a platform driver will
+not work in order to have it considered.
+
+thanks,
+
+greg k-h
