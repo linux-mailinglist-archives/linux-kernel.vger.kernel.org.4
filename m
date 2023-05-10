@@ -2,65 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90DB06FDB1E
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A43656FDB27
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:55:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235893AbjEJJyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 05:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53980 "EHLO
+        id S235524AbjEJJzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 05:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236523AbjEJJxb (ORCPT
+        with ESMTP id S235731AbjEJJy5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 05:53:31 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4E759C3;
-        Wed, 10 May 2023 02:53:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683712408; x=1715248408;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vvkolml/HN19Sg1F836qmjywFOfBzb5v/yoO63FWOBE=;
-  b=JDDdTlECIXzwa7WJF8Bg2sCKhdmDfszGbx4NrV29PRgjuU+CNfF7Ud84
-   hKt5laqyNRaT9leCsXzbbjZZh8D8vCkcIkr2eVIg+zQR5QxNuo4l2rB3N
-   k1I2lKwXYUA9r5fD7EYuQfhRfmRFudMSn7o1I6vLB7usNZ/J246838TvA
-   w5XojvlUL/8rRoTE6Fk9fNYNEKyl/JlQljUf76xdgzGb31KYR/QzYcURI
-   oAP2PYJRhHFQdgQafwkZ9gayi7jLq8kwd9WF6TmY14mh69t7fDvpjd7/t
-   hST72Sr6g2K4paeK2mI3441Tro6FojlfOw32mOWlLRMmWcBOEW/g6stj5
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="413469508"
-X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
-   d="scan'208";a="413469508"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 02:53:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10705"; a="729884460"
-X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
-   d="scan'208";a="729884460"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga008.jf.intel.com with ESMTP; 10 May 2023 02:53:25 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pwgVg-00037S-0c;
-        Wed, 10 May 2023 09:53:24 +0000
-Date:   Wed, 10 May 2023 17:52:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Yan Wang <rk.code@outlook.com>, andrew@lunn.ch,
-        hkallweit1@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@armlinux.org.uk
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Yan Wang <rk.code@outlook.com>
-Subject: Re: [PATCH v3] net: mdiobus: Add a function to deassert reset
-Message-ID: <202305101702.4xW6vT72-lkp@intel.com>
-References: <KL1PR01MB5448A33A549CDAD7D68945B9E6779@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+        Wed, 10 May 2023 05:54:57 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62D26659D
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 02:54:55 -0700 (PDT)
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com [209.85.208.72])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 3767A3F4D8
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 09:54:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1683712493;
+        bh=BJjlqCchOr90XV+R3svQiAsGeT9XzzKbGjpyD2zoyFc=;
+        h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+         Content-Type:In-Reply-To;
+        b=JHW6RbT8wyO9AyICmokp61qma3cgSO9umMnEXV979h14EDJxHg3/zSZGME8mJg715
+         0PQJ5wSuyg6XfXa19NR8QAnhdMXyp3/X/MQMQr2MyQ2sYrkIg4F6yr/75kBS4qMQj4
+         4JVr6dAv4imeUNP1+SXQYiKysDQMFyvQxEOyVfSvgN7e7tmecDb+idFyTc5L4io7JC
+         H0HYn4x1Vgo/lfEzHIHtqoDg6u9gAjP8+ze40TLCtyZC/rpijG1Ou9gPw3gkyUYwwh
+         BSlUM9hTN5/N2TAJB3nMrmZ8zJYYJuA5BnPRCS9md1wHskiEmNPZivUH26VlHoPLCk
+         loC3TN12fDEGQ==
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-50bffc723c5so6643083a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 02:54:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683712492; x=1686304492;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BJjlqCchOr90XV+R3svQiAsGeT9XzzKbGjpyD2zoyFc=;
+        b=IMs2wRskWqlQbXGhpgNHZLvympqOrcFC7+nnZt6sTJui51BL6Hr3jfLcUpKznb5jdy
+         QNntgwYKa1ruRCgdKeIg/NdVokHyrQcssGEQZqgDXckvBk+qyT2CTrb+4yUWUmwIR4Wx
+         pIszptobb3Ipq6VgUVgy7WlHMbLby2s8Dx3gbSAw9lJSQRP7T0WZhe3VbZRo4eufDkfS
+         rGyE8cpJI0ZLmzNt00DlPmpxsZgd1VcynG6/F/fAIpy3IyZbgXghNPSY59dQzaCoWkiT
+         mIESAEXrZhRHb4gDkYAEmqEUMk8SW9UnYjmWXLL6TdY3Jh+FXrvD9ELjSGmVu0Fehe0J
+         qBxA==
+X-Gm-Message-State: AC+VfDxPb6PmMXtPfH9IiWzEVPJmghqdZGK/hCsHewFrl799cHwaGBq8
+        TsndzU3aDIYeXDU1i0FP7ogYsQN0dHL+AdFKP1VSg3EH1ocF2vLW5RH8W4/1V+Y3zyNVVS3Ipya
+        hqGNcszaWd4BhbjLLM5EjZe+alkjLs5Qkr3E2V858Vw==
+X-Received: by 2002:aa7:c7da:0:b0:50b:5211:446f with SMTP id o26-20020aa7c7da000000b0050b5211446fmr12079080eds.6.1683712492448;
+        Wed, 10 May 2023 02:54:52 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7GQB/rM1QJ7LE5/OGTXBSHHyF39/goNARW0LlJbqBeKAPskBIKo5vw5B66r6VL5CnOY8Gr2g==
+X-Received: by 2002:aa7:c7da:0:b0:50b:5211:446f with SMTP id o26-20020aa7c7da000000b0050b5211446fmr12079060eds.6.1683712492125;
+        Wed, 10 May 2023 02:54:52 -0700 (PDT)
+Received: from localhost (host-82-55-56-52.retail.telecomitalia.it. [82.55.56.52])
+        by smtp.gmail.com with ESMTPSA id r16-20020aa7cfd0000000b0050bd245d39esm1744797edy.6.2023.05.10.02.54.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 02:54:51 -0700 (PDT)
+Date:   Wed, 10 May 2023 11:54:51 +0200
+From:   Andrea Righi <andrea.righi@canonical.com>
+To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Salvatore Bonaccorso <carnil@debian.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH] timers/nohz: introduce nohz_full_aggressive
+Message-ID: <ZFtp67nW5op5q/0x@righiandr-XPS-13-7390>
+References: <20230507090700.18470-1-andrea.righi@canonical.com>
+ <20230507100852.54a354ca@rorschach.local.home>
+ <ZFe1IY+TdzSC0RLZ@righiandr-XPS-13-7390>
+ <2161b8c0-b08c-7bf7-4c99-3bb89ca44ad8@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <KL1PR01MB5448A33A549CDAD7D68945B9E6779@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+In-Reply-To: <2161b8c0-b08c-7bf7-4c99-3bb89ca44ad8@linutronix.de>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,139 +93,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yan,
+On Wed, May 10, 2023 at 11:03:07AM +0200, Anna-Maria Behnsen wrote:
+> On Sun, 7 May 2023, Andrea Righi wrote:
+> 
+> > On Sun, May 07, 2023 at 10:08:52AM -0400, Steven Rostedt wrote:
+> > > 
+> > > [ Added Anna-Maria who is doing some timer work as well ]
+> > > 
+> > > On Sun,  7 May 2023 11:07:00 +0200
+> > > Andrea Righi <andrea.righi@canonical.com> wrote:
+> > > 
+> > > Now, I think what is really happening here is that you are somewhat
+> > > simulating the results that Anna-Maria has indirectly. That is, you
+> > > just prevent an idle CPU from waking up to handle interrupts when not
+> > > needed.
+> > > 
+> > > Anna-Maria,
+> > > 
+> > > Do you have some patches that Andrea could test with?
+> > > 
+> > > Thanks,
+> > > 
+> > > -- Steve
+> > 
+> > Thanks for looking at this (and I'm happy to help Anna-Maria with any
+> > test).
+> 
+> I posted v6 of the queue - but forgot to add you to cc list. Here is the
+> current version:
+> 
+>   https://lore.kernel.org/lkml/20230510072817.116056-1-anna-maria@linutronix.de/
+> 
+> I have to mention, that there is still the issue with the fair scheduler
+> which wakes up the CPU where the process_timeout() timer was enqueued,
+> because it assumes that context is still cache hot.
+> 
+> Thanks,
+> 
+> 	Anna-Maria
 
-kernel test robot noticed the following build errors:
+OK, will take a look, thanks!
 
-[auto build test ERROR on net-next/main]
-[also build test ERROR on net/main linus/master v6.4-rc1 next-20230510]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Yan-Wang/net-mdiobus-Add-a-function-to-deassert-reset/20230510-161736
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/KL1PR01MB5448A33A549CDAD7D68945B9E6779%40KL1PR01MB5448.apcprd01.prod.exchangelabs.com
-patch subject: [PATCH v3] net: mdiobus: Add a function to deassert reset
-config: hexagon-randconfig-r045-20230509 (https://download.01.org/0day-ci/archive/20230510/202305101702.4xW6vT72-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/f7ded94d887d1020adb4813c2b1025142288e882
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Yan-Wang/net-mdiobus-Add-a-function-to-deassert-reset/20230510-161736
-        git checkout f7ded94d887d1020adb4813c2b1025142288e882
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/net/mdio/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305101702.4xW6vT72-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/net/mdio/fwnode_mdio.c:10:
-   In file included from include/linux/fwnode_mdio.h:9:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/net/mdio/fwnode_mdio.c:10:
-   In file included from include/linux/fwnode_mdio.h:9:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/net/mdio/fwnode_mdio.c:10:
-   In file included from include/linux/fwnode_mdio.h:9:
-   In file included from include/linux/phy.h:16:
-   In file included from include/linux/ethtool.h:18:
-   In file included from include/linux/if_ether.h:19:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/net/mdio/fwnode_mdio.c:64:10: error: call to undeclared function 'fwnode_gpiod_get_index'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           reset = fwnode_gpiod_get_index(fwnode, "reset", 0, GPIOD_OUT_HIGH, NULL);
-                   ^
->> drivers/net/mdio/fwnode_mdio.c:64:53: error: use of undeclared identifier 'GPIOD_OUT_HIGH'
-           reset = fwnode_gpiod_get_index(fwnode, "reset", 0, GPIOD_OUT_HIGH, NULL);
-                                                              ^
->> drivers/net/mdio/fwnode_mdio.c:69:2: error: call to undeclared function 'gpiod_set_value_cansleep'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           gpiod_set_value_cansleep(reset, 0);
-           ^
->> drivers/net/mdio/fwnode_mdio.c:71:2: error: call to undeclared function 'gpiod_put'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           gpiod_put(reset);
-           ^
-   6 warnings and 4 errors generated.
-
-
-vim +/fwnode_gpiod_get_index +64 drivers/net/mdio/fwnode_mdio.c
-
-    59	
-    60	static void fwnode_mdiobus_pre_enable_phy(struct fwnode_handle *fwnode)
-    61	{
-    62		struct gpio_desc *reset;
-    63	
-  > 64		reset = fwnode_gpiod_get_index(fwnode, "reset", 0, GPIOD_OUT_HIGH, NULL);
-    65		if (IS_ERR(reset) && PTR_ERR(reset) != -EPROBE_DEFER)
-    66			return;
-    67	
-    68		usleep_range(100, 200);
-  > 69		gpiod_set_value_cansleep(reset, 0);
-    70		/*Release the reset pin,it needs to be registered with the PHY.*/
-  > 71		gpiod_put(reset);
-    72	}
-    73	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+-Andrea
