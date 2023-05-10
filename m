@@ -2,115 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D14056FDE7C
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:26:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E29996FDE7E
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:27:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236982AbjEJN0j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 09:26:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32856 "EHLO
+        id S237053AbjEJN1v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 09:27:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237090AbjEJN0b (ORCPT
+        with ESMTP id S232226AbjEJN1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 09:26:31 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB01900E;
-        Wed, 10 May 2023 06:26:14 -0700 (PDT)
-Date:   Wed, 10 May 2023 13:26:11 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683725172;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UVknTNt976+E+pdbpfYQXjSnp9XJ60CYSW5lA/PZPHM=;
-        b=cLDXYrkpHLmSM/skeWKoU11K/+DdhDzAusCKxSaZLyWK+8rmpt0m6+yquIX9eANZDWgJjM
-        vhrjLf0YcSu/k3lFSm9/zlujC3LkEwymTv5105T+s3ZBLgV2FlpPoaVy3Xdqg7bpAU1vgd
-        kONDcnRoZIaeX9Qy8xnNpZ9EPMHxdWclP0tWo+piEvRpJLKc9sGTBEpYi1iNKyElfiWXih
-        ZLHslBxLZ+42+z0DKOsxwMVODosPz075rzlIzPipdxbU4ThoKNq+czdu+Rkltzijc6D7tG
-        /ocUbiL7Fn+bP3dHN1ReXsPPkjzg8SV3C+aLLs2cVN8tF0GtCSHFFQj2hrBxaw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683725172;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UVknTNt976+E+pdbpfYQXjSnp9XJ60CYSW5lA/PZPHM=;
-        b=RCyDWHA7HXCrvYKuRRrsFNqHDqPoLMqlGuBnPWXexleJpTnv7HJeHZTLt5WGvZ7ZJG+9bH
-        WdUsqI8BJds+UjBw==
-From:   "tip-bot2 for Randy Dunlap" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: sched/urgent] sched: fix cid_lock kernel-doc warnings
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230428031111.322-1-rdunlap@infradead.org>
-References: <20230428031111.322-1-rdunlap@infradead.org>
+        Wed, 10 May 2023 09:27:50 -0400
+Received: from andre.telenet-ops.be (andre.telenet-ops.be [IPv6:2a02:1800:120:4::f00:15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E33561B2
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 06:27:30 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed30:cc75:d8ef:4074:8af9])
+        by andre.telenet-ops.be with bizsmtp
+        id v1TS2900R3l7qvk011TSVa; Wed, 10 May 2023 15:27:28 +0200
+Received: from rox.of.borg ([192.168.97.57])
+        by ramsan.of.borg with esmtp (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pwjqg-001nF6-HV;
+        Wed, 10 May 2023 15:27:26 +0200
+Received: from geert by rox.of.borg with local (Exim 4.95)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1pwjqo-00F6wY-8K;
+        Wed, 10 May 2023 15:27:26 +0200
+From:   Geert Uytterhoeven <geert+renesas@glider.be>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Anup Patel <anup@brainfault.org>
+Cc:     devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] dt-bindings: timer: sifive,clint: Clean up compatible value section
+Date:   Wed, 10 May 2023 15:27:24 +0200
+Message-Id: <40ff1fc7f5220db7d527c57ac4bad16c3945ae08.1683725179.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Message-ID: <168372517178.404.13654987530273728202.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the sched/urgent branch of tip:
+Replace the sentences in the description listing some supported variants
+by comments on the individual compatible values, to ease future
+maintenance.  While at it, restore alphabetical sort order.
 
-Commit-ID:     0019a2d4b7e37a983d133d42b707b8a3018ae6f4
-Gitweb:        https://git.kernel.org/tip/0019a2d4b7e37a983d133d42b707b8a3018ae6f4
-Author:        Randy Dunlap <rdunlap@infradead.org>
-AuthorDate:    Thu, 27 Apr 2023 20:11:11 -07:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 08 May 2023 10:58:28 +02:00
-
-sched: fix cid_lock kernel-doc warnings
-
-Fix kernel-doc warnings for cid_lock and use_cid_lock.
-These comments are not in kernel-doc format.
-
-kernel/sched/core.c:11496: warning: Cannot understand  * @cid_lock: Guarantee forward-progress of cid allocation.
- on line 11496 - I thought it was a doc line
-kernel/sched/core.c:11505: warning: Cannot understand  * @use_cid_lock: Select cid allocation behavior: lock-free vs spinlock.
- on line 11505 - I thought it was a doc line
-
-Fixes: 223baf9d17f2 ("sched: Fix performance regression introduced by mm_cid")
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20230428031111.322-1-rdunlap@infradead.org
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- kernel/sched/core.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ .../bindings/timer/sifive,clint.yaml          | 21 +++++++------------
+ 1 file changed, 8 insertions(+), 13 deletions(-)
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 944c3ae..a68d127 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -11492,7 +11492,7 @@ void call_trace_sched_update_nr_running(struct rq *rq, int count)
+diff --git a/Documentation/devicetree/bindings/timer/sifive,clint.yaml b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
+index 94bef9424df1bc6a..34a81510678134eb 100644
+--- a/Documentation/devicetree/bindings/timer/sifive,clint.yaml
++++ b/Documentation/devicetree/bindings/timer/sifive,clint.yaml
+@@ -29,11 +29,11 @@ properties:
+     oneOf:
+       - items:
+           - enum:
+-              - sifive,fu540-c000-clint
+-              - starfive,jh7100-clint
+-              - starfive,jh7110-clint
+-              - canaan,k210-clint
+-          - const: sifive,clint0
++              - canaan,k210-clint       # Canaan Kendryte K210
++              - sifive,fu540-c000-clint # SiFive FU540
++              - starfive,jh7100-clint   # StarFive JH7100
++              - starfive,jh7110-clint   # StarFive JH7110
++          - const: sifive,clint0        # SiFive CLINT v0 IP block
+       - items:
+           - enum:
+               - allwinner,sun20i-d1-clint
+@@ -45,14 +45,9 @@ properties:
+         description: For the QEMU virt machine only
  
- #ifdef CONFIG_SCHED_MM_CID
+     description:
+-      Should be "<vendor>,<chip>-clint" and "sifive,clint<version>".
+-      Supported compatible strings are -
+-      "sifive,fu540-c000-clint" for the SiFive CLINT v0 as integrated
+-      onto the SiFive FU540 chip, "canaan,k210-clint" for the SiFive
+-      CLINT v0 as integrated onto the Canaan Kendryte K210 chip, and
+-      "sifive,clint0" for the SiFive CLINT v0 IP block with no chip
+-      integration tweaks.
+-      Please refer to sifive-blocks-ip-versioning.txt for details
++      Should be "<vendor>,<chip>-clint", followed by "sifive,clint<version>"
++      when compatible with a SiFive CLINT.  Please refer to
++      sifive-blocks-ip-versioning.txt for details regarding the latter.
  
--/**
-+/*
-  * @cid_lock: Guarantee forward-progress of cid allocation.
-  *
-  * Concurrency ID allocation within a bitmap is mostly lock-free. The cid_lock
-@@ -11501,7 +11501,7 @@ void call_trace_sched_update_nr_running(struct rq *rq, int count)
-  */
- DEFINE_RAW_SPINLOCK(cid_lock);
- 
--/**
-+/*
-  * @use_cid_lock: Select cid allocation behavior: lock-free vs spinlock.
-  *
-  * When @use_cid_lock is 0, the cid allocation is lock-free. When contention is
+   reg:
+     maxItems: 1
+-- 
+2.34.1
+
