@@ -2,209 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C8E06FD9D3
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:45:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 27BE86FD9D7
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:45:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236693AbjEJIpN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 04:45:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34218 "EHLO
+        id S236751AbjEJIpg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 04:45:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236793AbjEJIpB (ORCPT
+        with ESMTP id S236704AbjEJIp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 04:45:01 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E819912B;
-        Wed, 10 May 2023 01:45:00 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id 98e67ed59e1d1-24df161f84bso4932674a91.3;
-        Wed, 10 May 2023 01:45:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683708300; x=1686300300;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xXEwn3jyGzbB6xYz7UmYCgugQ0Sv8yWibVgQQnQcvCg=;
-        b=EwivrME5ItdF9HZICNz/8xqVqiW+sSK88CRqvpfhdTcKBbYMX0XgaQIhYZenmJDMFM
-         YywlTFNk4hdbTdjOn/oeEePMuMX1ah/lhs1eqVOa9kiF37VWr3hUqMqbkNYkqVwKp2ub
-         HTvz6Cu8UY01XTqUnmvgksYtz7Q9U10HRlPycwU7b6ad43neEpI7+wuhyBFasL+uUWA5
-         NH2kM+n0gvA00GibwxzWTWeghn+TStnVYjX/eyPmbNvymaTIhgFv54Bj4EqV4t2vOLWt
-         AfoP0839s4dfZnuccoBEAf2xyDOw2QVH1914xv/1KF+JZ6pxHzMW37sChgAdUPCHL6EN
-         kzNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683708300; x=1686300300;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xXEwn3jyGzbB6xYz7UmYCgugQ0Sv8yWibVgQQnQcvCg=;
-        b=C/7J7QKfqUD0Batp4aA0R3Qfb8buZPSwn0NtlLxKhggtJGuwARKQyLklkWIhBxdmRA
-         ZtaFpzoUgpJR9r+jHnHnScWLMHy5VmzWC8Ati93Sgh9a4V6vbRizZDs9ZltlDwgRclQF
-         yJq+1Y7ujmExhb3f59WYfKfudwJYuCSy0x5dIBDcGt2MvvnakrWUen6LR0iyZ8Wzmfvf
-         uVXOwiwGtxc/CiATCgeN0NEZMfPe9fUVwK/bKc3wS9iiWwL3TvTCMsYkXx0/GHR7ojzu
-         T0xEMfAo2ApdGnjdMmpoDKo3UQefsytUVVLdx3hXhruNZRsSF+EGkGBt9pJeOA0wFNr4
-         mJ9A==
-X-Gm-Message-State: AC+VfDySsdEOm4kaTiwC6ZI41GZZ1EEdGE404h+AIgL++vgmSi6qfsc8
-        XIvTrTOaKcbwUcebbuuRHmDQ3DUhK+0aE0jn7sw=
-X-Google-Smtp-Source: ACHHUZ7cb8rT49XrD2BTwj4Dqb4Av57nsKqjAj79b7XQJ9wrgPMYVRPwOi9s/ri55BOm5r3DyzlScBTqp3AXU4+c93o=
-X-Received: by 2002:a17:90a:c004:b0:247:3e0a:71cd with SMTP id
- p4-20020a17090ac00400b002473e0a71cdmr16976883pjt.6.1683708300294; Wed, 10 May
- 2023 01:45:00 -0700 (PDT)
+        Wed, 10 May 2023 04:45:29 -0400
+Received: from m1564.mail.126.com (m1564.mail.126.com [220.181.15.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9E95B5249
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 01:45:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
+        s=s110527; h=Date:From:Subject:Content-Type:MIME-Version:
+        Message-ID; bh=kOyEDWk57TdYxDBFfXvMb0JP6cL+/oS3enSOTsyePTk=; b=c
+        Xzmzq200usQdbHHJqn7OqqeiIphyrgMnsLDvT1bjFky9XGLgoOodzuXO48Ww4gig
+        P7JtNZeM0YfvAwadEQUm4MwilMt9DJFo+YQaxvITGxd9JlYSlWCCoRzZeb0fF/jS
+        K527+wf3szSiOi7jcUAemPiwsToGjv/2y7HvBD0ljI=
+Received: from wangyouwan$126.com ( [103.163.180.46] ) by
+ ajax-webmail-wmsvr64 (Coremail) ; Wed, 10 May 2023 16:45:19 +0800 (CST)
+X-Originating-IP: [103.163.180.46]
+Date:   Wed, 10 May 2023 16:45:19 +0800 (CST)
+From:   wangyouwan <wangyouwan@126.com>
+To:     "Xinglong Yang" <xinglong.yang@cixtech.com>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: =?UTF-8?Q?Re:=E5=9B=9E=E5=A4=8D:_Re:=E5=9B=9E=E5=A4=8D:_[P?=
+ =?UTF-8?Q?ATCH]_cpufreq:_cr?= =?UTF-8?Q?eate_cooling_device_based_on_ACPI?=
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20230109(dcb5de15)
+ Copyright (c) 2002-2023 www.mailtech.cn 126com
+In-Reply-To: <PUZPR06MB5498536FCB73BD6D5BD928ECF0779@PUZPR06MB5498.apcprd06.prod.outlook.com>
+References: <20230428070314.225560-1-wangyouwan@126.com>
+ <PUZPR06MB5498319D81B4BC7F18412FC0F0719@PUZPR06MB5498.apcprd06.prod.outlook.com>
+ <205f534.5815.18804b3dd08.Coremail.wangyouwan@126.com>
+ <PUZPR06MB5498536FCB73BD6D5BD928ECF0779@PUZPR06MB5498.apcprd06.prod.outlook.com>
+X-NTES-SC: AL_QuyTAfubt0sq7yaabOlS/T1E/LZbI7jC0pRmlcYUXM0QuiLqxwcORnBBJmb84PslSD/bNq3GDxeKUFF2KBh8
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-References: <20230508055740.635256-1-victor.liu@nxp.com> <20230508055740.635256-6-victor.liu@nxp.com>
- <2ef8da6c-a16b-4396-1456-9a4d75ca5200@denx.de>
-In-Reply-To: <2ef8da6c-a16b-4396-1456-9a4d75ca5200@denx.de>
-From:   Ying Liu <gnuiyl@gmail.com>
-Date:   Wed, 10 May 2023 16:44:48 +0800
-Message-ID: <CAOcKUNXzyjK+xUp2an69ExsLhWDi8gZt0suZM88jrCc2M_BqNg@mail.gmail.com>
-Subject: Re: [PATCH v5 5/6] drm: lcdif: Add multiple encoders and first
- bridges support
-To:     Marek Vasut <marex@denx.de>
-Cc:     Liu Ying <victor.liu@nxp.com>, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, conor+dt@kernel.org,
-        alexander.stein@ew.tq-group.com, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, krzysztof.kozlowski@linaro.org,
-        robh+dt@kernel.org, linux-imx@nxp.com,
-        krzysztof.kozlowski+dt@linaro.org, kernel@pengutronix.de,
-        LW@karo-electronics.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <4ed89b6b.6517.18804d6178f.Coremail.wangyouwan@126.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: QMqowADHjkSfWVtkhCIaAA--.49740W
+X-CM-SenderInfo: 5zdqw5prxzt0a6rslhhfrp/1tbiHgJrFWIxqYnqAwABs5
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 9, 2023 at 10:14=E2=80=AFAM Marek Vasut <marex@denx.de> wrote:
->
-> On 5/8/23 07:57, Liu Ying wrote:
-> > The single LCDIF embedded in i.MX93 SoC may drive multiple displays
-> > simultaneously.  Look at LCDIF output port's remote port parents to
-> > find all enabled first bridges.  Add an encoder for each found bridge
-> > and attach the bridge to the encoder.  This is a preparation for
-> > adding i.MX93 LCDIF support.
-> >
-> > Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > Acked-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> > ---
-> > v4->v5:
-> > * Rebase upon v6.4-rc1 and resolve a trivial conflict.
-> > * Add Alexander's A-b and T-b tags.
-> >
-> > v3->v4:
-> > * Improve warning message when ignoring invalid LCDIF OF endpoint ids.
-> >    (Alexander)
-> >
-> > v2->v3:
-> > * No change.
-> >
-> > v1->v2:
-> > * Split from patch 2/2 in v1. (Marek, Alexander)
-> > * Drop '!remote ||' from lcdif_attach_bridge(). (Lothar)
-> > * Drop unneeded 'bridges' member from lcdif_drm_private structure.
-> >
-> >   drivers/gpu/drm/mxsfb/lcdif_drv.c | 68 +++++++++++++++++++++++++++---=
--
-> >   drivers/gpu/drm/mxsfb/lcdif_drv.h |  4 +-
-> >   drivers/gpu/drm/mxsfb/lcdif_kms.c | 21 ++--------
-> >   3 files changed, 66 insertions(+), 27 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/mxsfb/lcdif_drv.c b/drivers/gpu/drm/mxsfb/=
-lcdif_drv.c
-> > index e816f87828fb..cf27b63b1899 100644
-> > --- a/drivers/gpu/drm/mxsfb/lcdif_drv.c
-> > +++ b/drivers/gpu/drm/mxsfb/lcdif_drv.c
-> > @@ -9,13 +9,16 @@
-> >   #include <linux/dma-mapping.h>
-> >   #include <linux/io.h>
-> >   #include <linux/module.h>
-> > +#include <linux/of.h>
-> >   #include <linux/of_device.h>
-> > +#include <linux/of_graph.h>
-> >   #include <linux/platform_device.h>
-> >   #include <linux/pm_runtime.h>
-> >
-> >   #include <drm/drm_atomic_helper.h>
-> >   #include <drm/drm_bridge.h>
-> >   #include <drm/drm_drv.h>
-> > +#include <drm/drm_encoder.h>
-> >   #include <drm/drm_fbdev_dma.h>
-> >   #include <drm/drm_gem_dma_helper.h>
-> >   #include <drm/drm_gem_framebuffer_helper.h>
-> > @@ -38,19 +41,68 @@ static const struct drm_mode_config_helper_funcs lc=
-dif_mode_config_helpers =3D {
-> >       .atomic_commit_tail =3D drm_atomic_helper_commit_tail_rpm,
-> >   };
-> >
-> > +static const struct drm_encoder_funcs lcdif_encoder_funcs =3D {
-> > +     .destroy =3D drm_encoder_cleanup,
-> > +};
-> > +
-> >   static int lcdif_attach_bridge(struct lcdif_drm_private *lcdif)
-> >   {
-> > -     struct drm_device *drm =3D lcdif->drm;
-> > +     struct device *dev =3D lcdif->drm->dev;
-> > +     struct device_node *ep;
-> >       struct drm_bridge *bridge;
-> >       int ret;
-> >
-> > -     bridge =3D devm_drm_of_get_bridge(drm->dev, drm->dev->of_node, 0,=
- 0);
-> > -     if (IS_ERR(bridge))
-> > -             return PTR_ERR(bridge);
-> > -
-> > -     ret =3D drm_bridge_attach(&lcdif->encoder, bridge, NULL, 0);
-> > -     if (ret)
-> > -             return dev_err_probe(drm->dev, ret, "Failed to attach bri=
-dge\n");
-> > +     for_each_endpoint_of_node(dev->of_node, ep) {
-> > +             struct device_node *remote;
-> > +             struct of_endpoint of_ep;
-> > +             struct drm_encoder *encoder;
-> > +
-> > +             remote =3D of_graph_get_remote_port_parent(ep);
-> > +             if (!of_device_is_available(remote)) {
-> > +                     of_node_put(remote);
-> > +                     continue;
-> > +             }
-> > +             of_node_put(remote);
-> > +
-> > +             ret =3D of_graph_parse_endpoint(ep, &of_ep);
-> > +             if (ret < 0) {
-> > +                     dev_err(dev, "Failed to parse endpoint %pOF\n", e=
-p);
-> > +                     of_node_put(ep);
-> > +                     return ret;
-> > +             }
-> > +
-> > +             if (of_ep.id >=3D MAX_DISPLAYS) {
->
-> Can we make the maximum number of displays, or really bridge, specific
-> to IP instance instead (1 for mx8mp, 3 for mx93) ? If so, then I think
-> we need to track a list of bridges in some linked list or some such
-> dynamic structure, which would allow us to get rid of MAX_DISPLAYS macro.
-
-I don't think we need to track bridges, since bridges can be found
-through connector's encoder, like  lcdif_crtc_atomic_check() does
-in patch 4/6.  Instead, MAX_DISPLAYS and the encoder member
-in struct lcdif_drm_private can be dropped if we call devm_kzalloc()
-to allocate encoders in this function.
-
->
-> > +                     dev_warn(dev, "ingoring invalid endpoint id %u\n"=
-, of_ep.id);
->
-> s@ingoring@ignoring@
-
-Right.  But the endpoint id check is not mandatory and is better
-to be dropped together with MAX_DISPLAYS.  I mean the driver
-doesn't have to validate the endpoint id set in device tree.
-
-Regards,
-Liu Ying
-
->
-> [...]
+Cgp0aGFua3MsaSB0cnkKCgoKQXQgMjAyMy0wNS0xMCAxNjoyNjoxNCwgIlhpbmdsb25nIFlhbmci
+IDx4aW5nbG9uZy55YW5nQGNpeHRlY2guY29tPiB3cm90ZToKCgoKIFAge21hcmdpbi10b3A6MDtt
+YXJnaW4tYm90dG9tOjA7fSAKCgoKCklmIHlvdSB1c2UgQUNQSSBmaXJ3YXJlLCB3aHkgeW91IHJl
+Z2lzdGVyIGNwdSBhcyBjb29saW5nIGRldmljZXMgZGV2aWNlIGluwqBjcHVmcmVxX29ubGluZQog
+ZnVuY3Rpb24/CgoKCgoKCgpXaGVuCiB0aGUga2VybmVsIHVzZSBBQ1BJIGZpcm13YXJlLCBDUFVz
+IHdpbGwgYmUgcmVnaXN0ZWQgYXMgY29vbGluZyBkZXZpY2VzIGR1cmluZyB0aGUgY3B1IGluaXRp
+YWxpemF0aW9uLMKgcGxlYXNlIHJlZnMgdG8gdGhlIGZpbGUgInByb2Nlc3Nvcl9kcml2ZXIuYyIK
+CgoKCgoKClRoYXQgaXMgbm90IG5lZWRlZCB0byByZWdpc3RlciBpdCBhZ2Fpbi7CoMKgCgoKCuWP
+keS7tuS6ujogd2FuZ3lvdXdhbiA8d2FuZ3lvdXdhbkAxMjYuY29tPgoK5Y+R6YCB5pe26Ze0OiAy
+MDIz5bm0NeaciDEw5pelIDE2OjA3CgrmlLbku7bkuro6IFhpbmdsb25nIFlhbmcgPHhpbmdsb25n
+LnlhbmdAY2l4dGVjaC5jb20+CgrkuLvpopg6IFJlOuWbnuWkjTogW1BBVENIXSBjcHVmcmVxOiBj
+cmVhdGUgY29vbGluZyBkZXZpY2UgYmFzZWQgb24gQUNQSQoKwqAKCgoKCkVYVEVSTkFMIEVNQUlM
+CgoKCnllcyDvvIwgSSdtIHVzaW5nIHRoZSA1LjQga2VybmVsLCBhbmQgdGhlICJzY3BpLWNwdWZy
+ZXEiIGZ1bmN0aW9uIGlzIHVzZWQgaW4gdGhlIHNjcGlfY2xvY2tzX3Byb2JlX2FjcGkgZnVuY3Rp
+b24uCgoKCgoKCgpBdCAyMDIzLTA1LTA4IDE1OjEyOjUxLCAiWGluZ2xvbmcgWWFuZyIgPHhpbmds
+b25nLnlhbmdAY2l4dGVjaC5jb20+IHdyb3RlOgoKPkRvZXMgdGhpcyBwYXRjaCBuZWVkIHRvIGJl
+IHBhY2thZ2VkIHdpdGggb3RoZXIgcGF0Y2hlcz8KCj5XaGV0aGVyIHRoZSBmdW5jdGlvbiBjcHVm
+cmVxX2Nvb2xpbmdfcmVnaXN0ZXIgaXMgZGVjbGFyZWQgaW4gY3B1ZnJlcS5jPwoKPgoKPi0tLS0t
+6YKu5Lu25Y6f5Lu2LS0tLS0KCj7lj5Hku7bkuro6IHdhbmd5b3V3YW5AMTI2LmNvbSA8d2FuZ3lv
+dXdhbkAxMjYuY29tPgoKPuWPkemAgeaXtumXtDogMjAyM+W5tDTmnIgyOOaXpSAxNTowMwoKPuaU
+tuS7tuS6ujogcmFmYWVsQGtlcm5lbC5vcmc7IHZpcmVzaC5rdW1hckBsaW5hcm8ub3JnCgo+5oqE
+6YCBOiBsaW51eC1wbUB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5v
+cmc7IHlvdXdhbiBXYW5nIDx3YW5neW91d2FuQDEyNi5jb20+Cgo+5Li76aKYOiBbUEFUQ0hdIGNw
+dWZyZXE6IGNyZWF0ZSBjb29saW5nIGRldmljZSBiYXNlZCBvbiBBQ1BJCgo+Cgo+RVhURVJOQUwg
+RU1BSUwKCj4KCj5Gcm9tOiB5b3V3YW4gV2FuZyA8d2FuZ3lvdXdhbkAxMjYuY29tPgoKPgoKPldo
+ZW4gdXNpbmcgdGhlICJzY3BpX2NwdWZyZXEiIGRyaXZlciwgYW4gZXJyb3IKCj5vY2N1cnM6Y3B1
+ZnJlcV9jb29saW5nOiBPRiBub2RlIG5vdCBhdmFpbGFibGUgZm9yIGNwdSouCgo+VGhlIGN1cnJl
+bnQgY29tcHV0ZXIgbW90aGVyYm9hcmQgaXMgdXNpbmcgQUNQSSBmaXJtd2FyZS4KCj5HbyB0byBz
+ZWUgdGhhdCB0aGUgZXJyb3IgaXMgY2F1c2VkIGJ5IGNhbGxpbmcgdGhlICJvZl9jcHVmcmVxX2Nv
+b2xpbmdfcmVnaXN0ZXIiIGludGVyZmFjZS4KCj5jb21tZW50OmNyZWF0ZSBjcHVmcmVxIGNvb2xp
+bmcgZGV2aWNlIGJhc2VkIG9uIERULgoKPgoKPlNpZ25lZC1vZmYtYnk6IHlvdXdhbiBXYW5nIDx3
+YW5neW91d2FuQDEyNi5jb20+Cgo+LS0tCgo+IGRyaXZlcnMvY3B1ZnJlcS9jcHVmcmVxLmMgfCA3
+ICsrKysrKy0KCj4gMSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKSwgMSBkZWxldGlvbigt
+KQoKPgoKPmRpZmYgLS1naXQgYS9kcml2ZXJzL2NwdWZyZXEvY3B1ZnJlcS5jIGIvZHJpdmVycy9j
+cHVmcmVxL2NwdWZyZXEuYyBpbmRleCA2YjUyZWJlNWE4OTAuLjM0MThjNjg5NTlkNSAxMDA2NDQK
+Cj4tLS0gYS9kcml2ZXJzL2NwdWZyZXEvY3B1ZnJlcS5jCgo+KysrIGIvZHJpdmVycy9jcHVmcmVx
+L2NwdWZyZXEuYwoKPkBAIC0xNTI4LDggKzE1MjgsMTMgQEAgc3RhdGljIGludCBjcHVmcmVxX29u
+bGluZSh1bnNpZ25lZCBpbnQgY3B1KQoKPsKgwqDCoMKgwqDCoMKgIGlmIChjcHVmcmVxX2RyaXZl
+ci0+cmVhZHkpCgo+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNwdWZyZXFfZHJpdmVy
+LT5yZWFkeShwb2xpY3kpOwoKPgoKPi3CoMKgwqDCoMKgwqAgaWYgKGNwdWZyZXFfdGhlcm1hbF9j
+b250cm9sX2VuYWJsZWQoY3B1ZnJlcV9kcml2ZXIpKQoKPivCoMKgwqDCoMKgwqAgaWYgKGNwdWZy
+ZXFfdGhlcm1hbF9jb250cm9sX2VuYWJsZWQoY3B1ZnJlcV9kcml2ZXIpKSB7ICNpZmRlZgoKPitD
+T05GSUdfQUNQSQoKPivCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHBvbGljeS0+Y2RldiA9
+IGNwdWZyZXFfY29vbGluZ19yZWdpc3Rlcihwb2xpY3kpOyAjZWxzZQoKPsKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCBwb2xpY3ktPmNkZXYgPSBvZl9jcHVmcmVxX2Nvb2xpbmdfcmVnaXN0
+ZXIocG9saWN5KTsKCj4rI2VuZGlmCgo+K8KgwqDCoMKgwqDCoCB9Cgo+Cgo+wqDCoMKgwqDCoMKg
+wqAgcHJfZGVidWcoImluaXRpYWxpemF0aW9uIGNvbXBsZXRlXG4iKTsKCj4KCj4tLQoKPjIuMjUu
+MQoKPgoKPgoKPgoKPlRoaXMgZW1haWwgKGluY2x1ZGluZyBpdHMgYXR0YWNobWVudHMpIGlzIGlu
+dGVuZGVkIG9ubHkgZm9yIHRoZSBwZXJzb24gb3IgZW50aXR5IHRvIHdoaWNoIGl0IGlzIGFkZHJl
+c3NlZCBhbmQgbWF5IGNvbnRhaW4gaW5mb3JtYXRpb24gdGhhdCBpcyBwcml2aWxlZ2VkLCBjb25m
+aWRlbnRpYWwgb3Igb3RoZXJ3aXNlIHByb3RlY3RlZCBmcm9tIGRpc2Nsb3N1cmUuIFVuYXV0aG9y
+aXplZCB1c2UsIGRpc3NlbWluYXRpb24sIGRpc3RyaWJ1dGlvbiBvcgogY29weWluZyBvZiB0aGlz
+IGVtYWlsIG9yIHRoZSBpbmZvcm1hdGlvbiBoZXJlaW4gb3IgdGFraW5nIGFueSBhY3Rpb24gaW4g
+cmVsaWFuY2Ugb24gdGhlIGNvbnRlbnRzIG9mIHRoaXMgZW1haWwgb3IgdGhlIGluZm9ybWF0aW9u
+IGhlcmVpbiwgYnkgYW55b25lIG90aGVyIHRoYW4gdGhlIGludGVuZGVkIHJlY2lwaWVudCwgb3Ig
+YW4gZW1wbG95ZWUgb3IgYWdlbnQgcmVzcG9uc2libGUgZm9yIGRlbGl2ZXJpbmcgdGhlIG1lc3Nh
+Z2UgdG8gdGhlIGludGVuZGVkCiByZWNpcGllbnQsIGlzIHN0cmljdGx5IHByb2hpYml0ZWQuIElm
+IHlvdSBhcmUgbm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQsIHBsZWFzZSBkbyBub3QgcmVhZCwg
+Y29weSwgdXNlIG9yIGRpc2Nsb3NlIGFueSBwYXJ0IG9mIHRoaXMgZS1tYWlsIHRvIG90aGVycy4g
+UGxlYXNlIG5vdGlmeSB0aGUgc2VuZGVyIGltbWVkaWF0ZWx5IGFuZCBwZXJtYW5lbnRseSBkZWxl
+dGUgdGhpcyBlLW1haWwgYW5kIGFueSBhdHRhY2htZW50cyBpZiB5b3UgcmVjZWl2ZWQKIGl0IGlu
+IGVycm9yLiBJbnRlcm5ldCBjb21tdW5pY2F0aW9ucyBjYW5ub3QgYmUgZ3VhcmFudGVlZCB0byBi
+ZSB0aW1lbHksIHNlY3VyZSwgZXJyb3ItZnJlZSBvciB2aXJ1cy1mcmVlLiBUaGUgc2VuZGVyIGRv
+ZXMgbm90IGFjY2VwdCBsaWFiaWxpdHkgZm9yIGFueSBlcnJvcnMgb3Igb21pc3Npb25zLgoKCgoK
+CgoKClRoaXMgZW1haWwgKGluY2x1ZGluZyBpdHMgYXR0YWNobWVudHMpIGlzIGludGVuZGVkIG9u
+bHkgZm9yIHRoZSBwZXJzb24gb3IgZW50aXR5IHRvIHdoaWNoIGl0IGlzIGFkZHJlc3NlZCBhbmQg
+bWF5IGNvbnRhaW4gaW5mb3JtYXRpb24gdGhhdCBpcyBwcml2aWxlZ2VkLCBjb25maWRlbnRpYWwg
+b3Igb3RoZXJ3aXNlIHByb3RlY3RlZCBmcm9tIGRpc2Nsb3N1cmUuIFVuYXV0aG9yaXplZCB1c2Us
+IGRpc3NlbWluYXRpb24sCiBkaXN0cmlidXRpb24gb3IgY29weWluZyBvZiB0aGlzIGVtYWlsIG9y
+IHRoZSBpbmZvcm1hdGlvbiBoZXJlaW4gb3IgdGFraW5nIGFueSBhY3Rpb24gaW4gcmVsaWFuY2Ug
+b24gdGhlIGNvbnRlbnRzIG9mIHRoaXMgZW1haWwgb3IgdGhlIGluZm9ybWF0aW9uIGhlcmVpbiwg
+YnkgYW55b25lIG90aGVyIHRoYW4gdGhlIGludGVuZGVkIHJlY2lwaWVudCwgb3IgYW4gZW1wbG95
+ZWUgb3IgYWdlbnQgcmVzcG9uc2libGUgZm9yIGRlbGl2ZXJpbmcgdGhlIG1lc3NhZ2UKIHRvIHRo
+ZSBpbnRlbmRlZCByZWNpcGllbnQsIGlzIHN0cmljdGx5IHByb2hpYml0ZWQuIElmIHlvdSBhcmUg
+bm90IHRoZSBpbnRlbmRlZCByZWNpcGllbnQsIHBsZWFzZSBkbyBub3QgcmVhZCwgY29weSwgdXNl
+IG9yIGRpc2Nsb3NlIGFueSBwYXJ0IG9mIHRoaXMgZS1tYWlsIHRvIG90aGVycy4gUGxlYXNlIG5v
+dGlmeSB0aGUgc2VuZGVyIGltbWVkaWF0ZWx5IGFuZCBwZXJtYW5lbnRseSBkZWxldGUgdGhpcyBl
+LW1haWwgYW5kIGFueSBhdHRhY2htZW50cwogaWYgeW91IHJlY2VpdmVkIGl0IGluIGVycm9yLiBJ
+bnRlcm5ldCBjb21tdW5pY2F0aW9ucyBjYW5ub3QgYmUgZ3VhcmFudGVlZCB0byBiZSB0aW1lbHks
+IHNlY3VyZSwgZXJyb3ItZnJlZSBvciB2aXJ1cy1mcmVlLiBUaGUgc2VuZGVyIGRvZXMgbm90IGFj
+Y2VwdCBsaWFiaWxpdHkgZm9yIGFueSBlcnJvcnMgb3Igb21pc3Npb25zLgoKCg==
