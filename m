@@ -2,48 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80E866FE2D9
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 18:58:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C372C6FE2D8
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 18:58:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236088AbjEJQ6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 12:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39830 "EHLO
+        id S236101AbjEJQ6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 12:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236042AbjEJQ6g (ORCPT
+        with ESMTP id S236036AbjEJQ6g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 10 May 2023 12:58:36 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00B67DF;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A0EA0;
         Wed, 10 May 2023 09:58:34 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8C4D963F3B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9186863F40;
         Wed, 10 May 2023 16:58:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB841C4339B;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1742C433D2;
         Wed, 10 May 2023 16:58:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1683737914;
-        bh=DvqudYdWdeAAC6Fv9v/alqS+NZUrTSGbZqd+38O62+I=;
+        bh=lQMcRttOrnsmeuCGpfDl3MfHTsoNHuhuIBx3bHzbYGs=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QbxQMV2lIShPlKpUOibNRU79u56DsG+OcHqVlC5JEv3Nj/5G/sif5bPc20LyOSxTx
-         iFyGnsNO5VKyL26ZhdhvptqHTR718DbH0DUxgbw6/0ECzpuBgbmCgyQEoHhDvLbEFJ
-         pgcX/PxCGB3uTc3K8SdOUA/Bu3N9Vwr95FaBcPrLRGt0Qh/9OFPzDqs9qNGxiVWxVK
-         omaJ8XPmRAPmWpQ5kNPvXsLtZWu18v74M3sFJYFTjtbsw9lXnpMGbPG12j2HFL2kW0
-         Ea/VhYsq+yZrFoh1sexh0ZOKx4DawQEhYUpZxp0CR2DaUHxm9/fRU5lX+imgz7FWR9
-         541j+E34bcF7A==
+        b=arJy9OLkowmfnbg7ezlR1oAzrgv3Gvd39Xj86Spc7DcLNl2FnMkaD+uPlspX0KAne
+         laMlsxdoHplNCpx+nhiBjQk/hXj/1mHa674d04JdOismzbcGwK1E6zQj3hNLfZwKMr
+         aMtFQfO59H5+C6S66KeE3CwSpzR088PCSSQZeEFFLh6zm/28HJ7WRM0kKjzCmIsT1r
+         h6aPmIi/9LWY55genLWYgtynRSQLkgaGDrc3my86jYSLGGQvwbzg+y0uKzcIi5f5r/
+         1BLqoWek4dw4j1nsp0NPfptlMpTaSgW5k4PD6Da7FZ2SPZed5JSoOqx0ylp/9oxKBq
+         3plhQ4BeJAtrg==
 Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 8B0F2CE126D; Wed, 10 May 2023 09:58:33 -0700 (PDT)
+        id 8D68ECE1279; Wed, 10 May 2023 09:58:33 -0700 (PDT)
 From:   "Paul E. McKenney" <paulmck@kernel.org>
 To:     rcu@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        rostedt@goodmis.org, Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-Subject: [PATCH rcu 2/8] rcu: Remove RCU_NONIDLE()
-Date:   Wed, 10 May 2023 09:58:26 -0700
-Message-Id: <20230510165832.2187453-2-paulmck@kernel.org>
+        rostedt@goodmis.org, "Paul E. McKenney" <paulmck@kernel.org>
+Subject: [PATCH rcu 3/8] rcu: Check callback-invocation time limit for rcuc kthreads
+Date:   Wed, 10 May 2023 09:58:27 -0700
+Message-Id: <20230510165832.2187453-3-paulmck@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <cb50897b-1153-4958-8132-f0366667b3a4@paulmck-laptop>
 References: <cb50897b-1153-4958-8132-f0366667b3a4@paulmck-laptop>
@@ -59,116 +56,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Peter Zijlstra <peterz@infradead.org>
+Currently, a callback-invocation time limit is enforced only for
+callbacks invoked from the softirq environment, the rationale being
+that when callbacks are instead invoked from rcuc and rcuoc kthreads,
+these callbacks cannot be holding up other softirq vectors.
 
-Since there are now exactly _zero_ users of RCU_NONIDLE(), make it go
-away before someone else decides to (ab)use it.
+Which is in fact true.  However, if an rcuc kthread spends too much time
+invoking callbacks, it can delay quiescent-state reports from its CPU,
+which can also be a problem.
 
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Acked-by: Mark Rutland <mark.rutland@arm.com>
-Acked-by: Frederic Weisbecker <frederic@kernel.org>
+This commit therefore applies the callback-invocation time limit to
+callback invocation from the rcuc kthreads as well as from softirq.
+
 Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
 ---
- .../RCU/Design/Requirements/Requirements.rst  | 36 +------------------
- Documentation/RCU/whatisRCU.rst               |  1 -
- include/linux/rcupdate.h                      | 25 -------------
- 3 files changed, 1 insertion(+), 61 deletions(-)
+ kernel/rcu/tree.c | 28 +++++++++++++++++++---------
+ 1 file changed, 19 insertions(+), 9 deletions(-)
 
-diff --git a/Documentation/RCU/Design/Requirements/Requirements.rst b/Documentation/RCU/Design/Requirements/Requirements.rst
-index 49387d823619..77155b51d4c2 100644
---- a/Documentation/RCU/Design/Requirements/Requirements.rst
-+++ b/Documentation/RCU/Design/Requirements/Requirements.rst
-@@ -2071,41 +2071,7 @@ call.
+diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+index f52ff7241041..9a5c160186d1 100644
+--- a/kernel/rcu/tree.c
++++ b/kernel/rcu/tree.c
+@@ -2046,6 +2046,13 @@ rcu_check_quiescent_state(struct rcu_data *rdp)
+ 	rcu_report_qs_rdp(rdp);
+ }
  
- Because RCU avoids interrupting idle CPUs, it is illegal to execute an
- RCU read-side critical section on an idle CPU. (Kernels built with
--``CONFIG_PROVE_RCU=y`` will splat if you try it.) The RCU_NONIDLE()
--macro and ``_rcuidle`` event tracing is provided to work around this
--restriction. In addition, rcu_is_watching() may be used to test
--whether or not it is currently legal to run RCU read-side critical
--sections on this CPU. I learned of the need for diagnostics on the one
--hand and RCU_NONIDLE() on the other while inspecting idle-loop code.
--Steven Rostedt supplied ``_rcuidle`` event tracing, which is used quite
--heavily in the idle loop. However, there are some restrictions on the
--code placed within RCU_NONIDLE():
--
--#. Blocking is prohibited. In practice, this is not a serious
--   restriction given that idle tasks are prohibited from blocking to
--   begin with.
--#. Although nesting RCU_NONIDLE() is permitted, they cannot nest
--   indefinitely deeply. However, given that they can be nested on the
--   order of a million deep, even on 32-bit systems, this should not be a
--   serious restriction. This nesting limit would probably be reached
--   long after the compiler OOMed or the stack overflowed.
--#. Any code path that enters RCU_NONIDLE() must sequence out of that
--   same RCU_NONIDLE(). For example, the following is grossly
--   illegal:
--
--      ::
--
--	  1     RCU_NONIDLE({
--	  2       do_something();
--	  3       goto bad_idea;  /* BUG!!! */
--	  4       do_something_else();});
--	  5   bad_idea:
--
--
--   It is just as illegal to transfer control into the middle of
--   RCU_NONIDLE()'s argument. Yes, in theory, you could transfer in
--   as long as you also transferred out, but in practice you could also
--   expect to get sharply worded review comments.
-+``CONFIG_PROVE_RCU=y`` will splat if you try it.) 
- 
- It is similarly socially unacceptable to interrupt an ``nohz_full`` CPU
- running in userspace. RCU must therefore track ``nohz_full`` userspace
-diff --git a/Documentation/RCU/whatisRCU.rst b/Documentation/RCU/whatisRCU.rst
-index 8eddef28d3a1..e488c8e557a9 100644
---- a/Documentation/RCU/whatisRCU.rst
-+++ b/Documentation/RCU/whatisRCU.rst
-@@ -1117,7 +1117,6 @@ All: lockdep-checked RCU utility APIs::
- 
- 	RCU_LOCKDEP_WARN
- 	rcu_sleep_check
--	RCU_NONIDLE
- 
- All: Unchecked RCU-protected pointer access::
- 
-diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
-index dcd2cf1e8326..aae31a3e28dd 100644
---- a/include/linux/rcupdate.h
-+++ b/include/linux/rcupdate.h
-@@ -156,31 +156,6 @@ static inline int rcu_nocb_cpu_deoffload(int cpu) { return 0; }
- static inline void rcu_nocb_flush_deferred_wakeup(void) { }
- #endif /* #else #ifdef CONFIG_RCU_NOCB_CPU */
- 
--/**
-- * RCU_NONIDLE - Indicate idle-loop code that needs RCU readers
-- * @a: Code that RCU needs to pay attention to.
-- *
-- * RCU read-side critical sections are forbidden in the inner idle loop,
-- * that is, between the ct_idle_enter() and the ct_idle_exit() -- RCU
-- * will happily ignore any such read-side critical sections.  However,
-- * things like powertop need tracepoints in the inner idle loop.
-- *
-- * This macro provides the way out:  RCU_NONIDLE(do_something_with_RCU())
-- * will tell RCU that it needs to pay attention, invoke its argument
-- * (in this example, calling the do_something_with_RCU() function),
-- * and then tell RCU to go back to ignoring this CPU.  It is permissible
-- * to nest RCU_NONIDLE() wrappers, but not indefinitely (but the limit is
-- * on the order of a million or so, even on 32-bit systems).  It is
-- * not legal to block within RCU_NONIDLE(), nor is it permissible to
-- * transfer control either into or out of RCU_NONIDLE()'s statement.
-- */
--#define RCU_NONIDLE(a) \
--	do { \
--		ct_irq_enter_irqson(); \
--		do { a; } while (0); \
--		ct_irq_exit_irqson(); \
--	} while (0)
--
++/* Return true if callback-invocation time limit exceeded. */
++static bool rcu_do_batch_check_time(long count, long tlimit)
++{
++	// Invoke local_clock() only once per 32 consecutive callbacks.
++	return unlikely(tlimit) && !likely(count & 31) && local_clock() >= tlimit;
++}
++
  /*
-  * Note a quasi-voluntary context switch for RCU-tasks's benefit.
-  * This is a macro rather than an inline function to avoid #include hell.
+  * Invoke any RCU callbacks that have made it to the end of their grace
+  * period.  Throttle as specified by rdp->blimit.
+@@ -2082,7 +2089,8 @@ static void rcu_do_batch(struct rcu_data *rdp)
+ 	div = READ_ONCE(rcu_divisor);
+ 	div = div < 0 ? 7 : div > sizeof(long) * 8 - 2 ? sizeof(long) * 8 - 2 : div;
+ 	bl = max(rdp->blimit, pending >> div);
+-	if (in_serving_softirq() && unlikely(bl > 100)) {
++	if ((in_serving_softirq() || rdp->rcu_cpu_kthread_status == RCU_KTHREAD_RUNNING) &&
++	    unlikely(bl > 100)) {
+ 		long rrn = READ_ONCE(rcu_resched_ns);
+ 
+ 		rrn = rrn < NSEC_PER_MSEC ? NSEC_PER_MSEC : rrn > NSEC_PER_SEC ? NSEC_PER_SEC : rrn;
+@@ -2126,21 +2134,23 @@ static void rcu_do_batch(struct rcu_data *rdp)
+ 			 * Make sure we don't spend too much time here and deprive other
+ 			 * softirq vectors of CPU cycles.
+ 			 */
+-			if (unlikely(tlimit)) {
+-				/* only call local_clock() every 32 callbacks */
+-				if (likely((count & 31) || local_clock() < tlimit))
+-					continue;
+-				/* Exceeded the time limit, so leave. */
++			if (rcu_do_batch_check_time(count, tlimit))
+ 				break;
+-			}
+ 		} else {
+-			// In rcuoc context, so no worries about depriving
+-			// other softirq vectors of CPU cycles.
++			// In rcuc/rcuoc context, so no worries about
++			// depriving other softirq vectors of CPU cycles.
+ 			local_bh_enable();
+ 			lockdep_assert_irqs_enabled();
+ 			cond_resched_tasks_rcu_qs();
+ 			lockdep_assert_irqs_enabled();
+ 			local_bh_disable();
++			// But rcuc kthreads can delay quiescent-state
++			// reporting, so check time limits for them.
++			if (rdp->rcu_cpu_kthread_status == RCU_KTHREAD_RUNNING &&
++			    rcu_do_batch_check_time(count, tlimit)) {
++				rdp->rcu_cpu_has_work = 1;
++				break;
++			}
+ 		}
+ 	}
+ 
 -- 
 2.40.1
 
