@@ -2,117 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93A426FD7DC
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:08:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B78D96FD7DD
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:09:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229661AbjEJHIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 03:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39934 "EHLO
+        id S236416AbjEJHJb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 03:09:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236235AbjEJHIp (ORCPT
+        with ESMTP id S236424AbjEJHJV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 03:08:45 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050BF421D
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:08:43 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so66133085a12.0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 00:08:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683702521; x=1686294521;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eS3uKPsHcGZIkIwsTVqRC2UstZ20/qzhnJE4KmhckrU=;
-        b=mFvIMsraSpSLac8c2tS5ssp1cJyaxzreWmrSM5dgoDZ2KLfxsrTzpo0m0GX8ob3x3r
-         a36SpBDjTgDS73b4J8appqeHn3S+cpHOFNRFthKUpW6Wur7qLZy6HjRhjJr6U14Ozz3b
-         CK/J0N42wvsZkrFds3y7x+wQTqNR+Uw/0yKLk3rUDXRT5qqDGHkHjLzcsUfjOffg2ZWp
-         CNWW/W3UslpyAXVQNka5yxtt0Pqg7g26hKp97yAR+/jbLqZrTLFZFj2fnxao0mknJJXb
-         Z5fov0AUVpH1cZ+ZFGl2/LrR36hzk9xBgy6atvO5YaHH79rwccDXIgYzEzBb3r2vhEpA
-         B95Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683702521; x=1686294521;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eS3uKPsHcGZIkIwsTVqRC2UstZ20/qzhnJE4KmhckrU=;
-        b=HKawaIete4uy3iZdSB2512AS/ht3vEJegzPJSK5NkNbbr9BYxnRzl+NXJtdCa0iF6M
-         /Ovb+nidOCrnc14swmAJlWY9xPmx2lbK3AJ62X3l7+5ivndeXNW2CUsY1/cpEJ1A0QbF
-         0v4RMi03qxnMh2uV32cTEvgURF/VszPvHnmzh2RJ7hdei/vey8GksBB3uBmb0hElXunZ
-         U19Wo7Is25r7tkllP31K+ICUj2VuZemckb1jdaHInfkSn+T1EYp0fQuLWCQ1PgU07Ek1
-         mVmYGO6kcPIIRUhvDMpEcvG/YvNMGR4VY040rcCp2LjXvbQf8DlVQcUXwNyTNhk9adgl
-         cNVQ==
-X-Gm-Message-State: AC+VfDz7vRcZxCZeAks4d5kTK0D7irpzWiP/5iYfMMRGpsfuN+Xp4nt6
-        hmouixVlWY1uBsEwxofrrmUI7w==
-X-Google-Smtp-Source: ACHHUZ4+6ytKlhUVP5y89FeW6sU98CuIgCUYoFhX3AKqeJ+z+TpD9k2DS2crnv8ssBOurHYlauHY1Q==
-X-Received: by 2002:a17:907:d0e:b0:94a:57d1:5539 with SMTP id gn14-20020a1709070d0e00b0094a57d15539mr15154034ejc.5.1683702521312;
-        Wed, 10 May 2023 00:08:41 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c175:a0f9:6928:8c9d? ([2a02:810d:15c0:828:c175:a0f9:6928:8c9d])
-        by smtp.gmail.com with ESMTPSA id w10-20020a170907270a00b00965e9a23f2bsm2263354ejk.134.2023.05.10.00.08.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 00:08:40 -0700 (PDT)
-Message-ID: <6a36a4ad-6d46-4e4e-1724-ed27513a72ef@linaro.org>
-Date:   Wed, 10 May 2023 09:08:39 +0200
+        Wed, 10 May 2023 03:09:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B3355B9;
+        Wed, 10 May 2023 00:09:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A0D362D6E;
+        Wed, 10 May 2023 07:09:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D514C433D2;
+        Wed, 10 May 2023 07:09:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683702553;
+        bh=+clB4KgowCdBV0mrjLZYn4tmrVpCL43g49dGwUiETu4=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=NHPuozW3dvsESE/msZt0irjjsu/dRADQ1xYQSJhylIncQnOybYMKXulAUagHRx9Ji
+         ET5SSGdHhQYzxHr8YrjVSMzEoqIcOhLalVoNaz2SOf8FJ0IntrSZTwdQ7s/rJwMlw1
+         jngEZWbe9zJAbezg/bFvX6IJAmIUC+J4iJI6CRHWBRI4Oci7P6Mo9MFniuIMsxcERZ
+         tC9Kd4HZwZ/Yi3+VfdCKq6qJjelMpjrIc4uENdoX7XJHeuRgHU7y+InHSkuJnTnyOQ
+         4JUyZvgfcq8Rv7BGR1emIpGw1xT0tYi3Q2K+1RF/D88jnO/5cZq2Gh/ePugcJ2n8u8
+         gCc5Er1UP6EMQ==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Song Shuai <suagrfillet@gmail.com>, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, rostedt@goodmis.org,
+        mhiramat@kernel.org, mark.rutland@arm.com, guoren@kernel.org,
+        e.shatokhin@yadro.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org,
+        Song Shuai <suagrfillet@gmail.com>
+Subject: Re: [PATCH V8 1/4] riscv: select
+ FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY
+In-Reply-To: <20230324033342.3177979-2-suagrfillet@gmail.com>
+References: <20230324033342.3177979-1-suagrfillet@gmail.com>
+ <20230324033342.3177979-2-suagrfillet@gmail.com>
+Date:   Wed, 10 May 2023 09:09:10 +0200
+Message-ID: <87a5ycfysp.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/3] dt-bindings: phy: cadence-torrent: Add latency
- properties
-Content-Language: en-US
-To:     Bjorn Helgaas <helgaas@kernel.org>,
-        Christian Gmeiner <christian.gmeiner@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Dominic Rath <rath@ibv-augsburg.de>,
-        krzysztof.kozlowski+dt@linaro.org, tjoseph@cadence.com,
-        bhelgaas@google.com, lpieralisi@kernel.org, nm@ti.com,
-        vigneshr@ti.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        bahle@ibv-augsburg.de
-References: <20230509215700.GA1277746@bhelgaas>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230509215700.GA1277746@bhelgaas>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/05/2023 23:57, Bjorn Helgaas wrote:
-> On Tue, May 09, 2023 at 05:31:19PM +0200, Christian Gmeiner wrote:
->>> On Thu, Apr 27, 2023 at 07:50:30AM +0200, Dominic Rath wrote:
->>>> From: Alexander Bahle <bahle@ibv-augsburg.de>
->>>>
->>>> Add "tx-phy-latency-ps" and "rx-phy-latency-ps" DT bindings for
->>>> setting the PCIe PHY latencies.
->>>> The properties expect a list of uint32 PHY latencies in picoseconds for
->>>> every supported speed starting at PCIe Gen1, e.g.:
->>>>
->>>>   tx-phy-latency-ps = <100000 200000>; /* Gen1: 100ns, Gen2: 200ns */
->>>>   rx-phy-latency-ps = <150000 250000>; /* Gen1: 150ns, Gen2: 250ns */
->>>
->>> Are these things that could/should be described in a more generic
->>> place?  They don't look necessarily Cadence-specific.
->>
->> As there is currently no generic binding, would you like to see a new
->> yaml binding
->> added (Documentation/devicetree/bindings/phy/phy.yaml) that contains just the
->> two phy properties?
-> 
-> The whole thing is more a question for Rob.
+Song Shuai <suagrfillet@gmail.com> writes:
 
-For which you might wait a bit currently.
+> In RISC-V, -fpatchable-function-entry option is used to support
+> dynamic ftrace in this commit afc76b8b8011 ("riscv: Using
+> PATCHABLE_FUNCTION_ENTRY instead of MCOUNT"). So recordmcount
+> don't have to be called to create the __mcount_loc section before
+> the vmlinux linking.
+>
+> Here selects FTRACE_MCOUNT_USE_PATCHABLE_FUNCTION_ENTRY to tell
+> Makefile not to run recordmcount.
+>
+> Link: https://lore.kernel.org/linux-riscv/CAAYs2=3Dj3Eak9vU6xbAw0zPuoh00r=
+h8v5C2U3fePkokZFibWs2g@mail.gmail.com/T/#t
+> Link: https://lore.kernel.org/linux-riscv/Y4jtfrJt+%2FQ5nMOz@spud/
+> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+> Tested-by: Guo Ren <guoren@kernel.org>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
 
-If the question is only about location of the properties - device schema
-or something generic - then for now you can keep it here. Moving to
-generic schema is always easy later.
-
-Better to have proper names for properties.
-
-Best regards,
-Krzysztof
-
+Acked-by: Bj=C3=B6rn T=C3=B6pel <bjorn@rivosinc.com>
