@@ -2,190 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 531E66FE5A7
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:52:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B3486FE58F
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:51:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237178AbjEJUwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
+        id S236962AbjEJUvK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236961AbjEJUve (ORCPT
+        with ESMTP id S236987AbjEJUur (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:51:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D1EE9EDC;
-        Wed, 10 May 2023 13:51:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AE0D63FF5;
-        Wed, 10 May 2023 20:50:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81EFDC4339B;
-        Wed, 10 May 2023 20:50:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683751807;
-        bh=NmeAihU+l9US5FZym48z2oc5TV/w6wDH93dkXnSsAy8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xp3vGro2kOVtbOP/WkV71B3oFjx8IWJcYwul401wAK0ZVv/ZX4s/Z5h0mJwuabfoB
-         OiOQiwcS+FAKkETZytdopicOtMnWL6OjsG1yJR5JgP9h7UGv+98RZri2WGtohz1tRo
-         rg9nNAeAPEN6HXXSRSaflSlJsMfEKttT2rTFU5oxlbqXIsaGfZsWwsYtVLQnyINwQ9
-         ezB3XoOUxsHZSsYBz07auotRisjwR3fYHzcYZfSi5Q+FIFNzVnx7pvcsH5MTWqmq/s
-         LAtTbeQghldP9CXqEsTnATIOC8xnO3CqIT2wVMYxNp4mhpF6gc8dJ1hhWwpGkxphDb
-         7CQdnjm0h20+Q==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Jeroen Roovers <jer@xs4all.nl>, Helge Deller <deller@gmx.de>,
-        Sasha Levin <sashal@kernel.org>, linux-parisc@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 8/8] parisc: Replace regular spinlock with spin_trylock on panic path
-Date:   Wed, 10 May 2023 16:49:49 -0400
-Message-Id: <20230510204950.104873-8-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230510204950.104873-1-sashal@kernel.org>
-References: <20230510204950.104873-1-sashal@kernel.org>
+        Wed, 10 May 2023 16:50:47 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D34D83E4
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:50:11 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2ac8ee9cf7aso65516451fa.2
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:50:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1683751802; x=1686343802;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rnjqrzqIodiFNqMDPXZNC+11o/o41P+KUMMoI8hij5U=;
+        b=ONTU4AGc46YXcLPvKFxfLMjZ73LFxl77hOlaYGkBmsMjdG53mDTkPgH5jOrjAvf5uU
+         gXJwiy+NDuvb+EQtWktY3t9VcGDT84tMQt+rhPF2yyaUjvPSs0fKRlEfDWyWZSFT4Art
+         uOP5Rh5xrzu1xUcnNDKghKqzSWQyeMKJ3bIzQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683751802; x=1686343802;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rnjqrzqIodiFNqMDPXZNC+11o/o41P+KUMMoI8hij5U=;
+        b=Z24cl38hpuBhXO06lW+LZz5U0RsQTwV/yayJ/nISQ7y2GONVeRy8cfrY4qoRY0ClVm
+         PnbgAVkM0QKDqBYp9w4A0v+J1XVlxwa2evbsqFCiqjSy59xUEhxpFweSgSFXx9jlj5i5
+         i6QqbwKJ39DpZxhnF1B+pTjsARK0X4gENnLMcAcrPWyNXjdAueAbW7LaH77suJLdsNrW
+         8UaxsJyDzvZCH0vyA6v2cmuH0Sfni0u6GdJtf3cAAeqa3/+vpFOA+9OisYr0mwnA7st4
+         g0wZgd4mG1uzEk34ZJwA2L3FqklG61gVI11YjFUPV0sPyV0VJdhh7fNqNG6J9GYlRxDH
+         AJLg==
+X-Gm-Message-State: AC+VfDybWjWcYuMKTqOAeFkLXgyuS468w02wskfC8d993zwvhG/KguVV
+        FbZqLxwDt8w8LAaN8KenUMOTJ0LELoVMOvfKXWoNTQ==
+X-Google-Smtp-Source: ACHHUZ6cKxRXP99aAnlmA3Yw1hxh80xqit1DBbDzIfBZrVqjp352ZMiZT0+kEya9yGVCWu8BTplRq3Hlp1nZE7OGCYI=
+X-Received: by 2002:a2e:9d97:0:b0:2ac:d51f:2d60 with SMTP id
+ c23-20020a2e9d97000000b002acd51f2d60mr2509104ljj.33.1683751802338; Wed, 10
+ May 2023 13:50:02 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 10 May 2023 13:50:01 -0700
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZFv9aKZlZbfK1cVr@google.com>
+References: <20230505232417.1377393-1-swboyd@chromium.org> <ZFWZ785FRHDii/+5@google.com>
+ <CAE-0n521MhmdWjEb0-xwnPLQz07bMCGyXokZ3L87azYcw6_C_Q@mail.gmail.com> <ZFv9aKZlZbfK1cVr@google.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 10 May 2023 13:50:01 -0700
+Message-ID: <CAE-0n52bv1-VaQikOV6hdFmuRyPBX6YV7MT=2+xrpReJecrgbQ@mail.gmail.com>
+Subject: Re: [PATCH] HID: google: Don't use devm for hid_hw_stop()
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Jiri Kosina <jikos@kernel.org>,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        linux-input@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+Quoting Dmitry Torokhov (2023-05-10 13:24:08)
+> On Wed, May 10, 2023 at 11:51:31AM -0700, Stephen Boyd wrote:
+> > Quoting Dmitry Torokhov (2023-05-05 17:06:07)
+> > > On Fri, May 05, 2023 at 04:24:16PM -0700, Stephen Boyd wrote:
+> > > >
+> > > ...
+> > > > Unfortunately, the hid google hammer driver hand rolls a devm function
+> > > > to call hid_hw_stop() when the driver is unbound and implements an
+> > > > hid_driver::remove() function. The driver core doesn't call the devm
+> > > > release functions until _after_ the bus unbinds the driver, so the order
+> > > > of operations is like this:
+> > >
+> > > Excellent analysis, but the problem is not limited to the hammer driver
+> > > (potentially) and shalt be dealt with appropriately, at the HID bus
+> > > level.
+> >
+> > Thanks. I thought of the bus level approach as well, but I was trying to
+> > keep the fix isolated to the driver that had the problem. I'd like to
+> > get the fix into the stable kernel, as this fixes a regression
+> > introduced by commit d950db3f80a8 ("HID: google: switch to devm when
+> > registering keyboard backlight LED") in v5.18.
+> >
+> > Is the bus level approach going to be acceptable as a stable backport?
+>
+> Sure, why not given the kind of stuff flowing into stable kernels. At
+> least this would be fixing real issue that can be triggered with a real
+> device.
 
-[ Upstream commit 829632dae8321787525ee37dc4828bbe6edafdae ]
+Hmm, ok. I was worried it would be too much "new code" vs. fixing
+something.
 
-The panic notifiers' callbacks execute in an atomic context, with
-interrupts/preemption disabled, and all CPUs not running the panic
-function are off, so it's very dangerous to wait on a regular
-spinlock, there's a risk of deadlock.
+> >
+> > This got me thinking that maybe both of these approaches are wrong.
+> > Maybe the call to hid_close_report() should be removed from
+> > hid_device_remove() instead.
+> >
+> > The device is being removed from the bus when hid_device_remove() is
+> > called, but it hasn't been released yet. Other devices like the hidinput
+> > device are referencing the hdev device because they set the hdev as
+> > their parent. Basically, child devices are still bound to some sort of
+> > driver or subsystem when the parent hdev is unbound from its driver,
+> > leading to a state where the child drivers could still access the hdev
+> > while it is being destroyed. If we remove the hid_close_report() call
+> > from this function it will eventually be called by hid_device_release()
+> > when the last reference to the device is dropped, i.e. when the child
+> > devices all get destroyed. In the case of hid-google-hammer, that would
+> > be when hid_hw_stop() is called from the devm release function by driver
+> > core.
+> >
+> > The benefit of this approach is that we don't allocate a devres group
+> > for all the hid devices when only two drivers need it. The possible
+> > downside is that we keep the report around while the device exists but
+> > has no driver bound to it.
+> >
+> > Here's a totally untested patch for that.
+> >
+> > ---8<----
+> > diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
+> > index 22623eb4f72f..93905e200cae 100644
+> > --- a/drivers/hid/hid-core.c
+> > +++ b/drivers/hid/hid-core.c
+> > @@ -1211,8 +1211,8 @@ int hid_open_report(struct hid_device *device)
+> >               hid_parser_reserved
+> >       };
+> >
+> > -     if (WARN_ON(device->status & HID_STAT_PARSED))
+> > -             return -EBUSY;
+> > +     if (device->status & HID_STAT_PARSED)
+> > +             hid_close_report(device);
+> >
+> >       start = device->dev_rdesc;
+> >       if (WARN_ON(!start))
+> > @@ -2662,7 +2662,6 @@ static void hid_device_remove(struct device *dev)
+> >                       hdrv->remove(hdev);
+> >               else /* default remove */
+> >                       hid_hw_stop(hdev);
+> > -             hid_close_report(hdev);
+> >               hdev->driver = NULL;
+> >       }
+>
+> This will probably work, but it I consider this still being fragile as
+> at some point we might want to add some more unwinding, and we'll run
+> into this issue again. I would feel much safer if the order of release
+> followed (inversely) order of allocations more closely.
+>
 
-Refactor the panic notifier of parisc/power driver to make use
-of spin_trylock - for that, we've added a second version of the
-soft-power function. Also, some comments were reorganized and
-trailing white spaces, useless header inclusion and blank lines
-were removed.
-
-Cc: "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>
-Cc: Jeroen Roovers <jer@xs4all.nl>
-Acked-by: Helge Deller <deller@gmx.de> # parisc
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-Signed-off-by: Helge Deller <deller@gmx.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/parisc/include/asm/pdc.h |  1 +
- arch/parisc/kernel/firmware.c | 27 +++++++++++++++++++++++----
- drivers/parisc/power.c        | 16 ++++++++++------
- 3 files changed, 34 insertions(+), 10 deletions(-)
-
-diff --git a/arch/parisc/include/asm/pdc.h b/arch/parisc/include/asm/pdc.h
-index fcbcf9a96c111..77622558bf651 100644
---- a/arch/parisc/include/asm/pdc.h
-+++ b/arch/parisc/include/asm/pdc.h
-@@ -80,6 +80,7 @@ int pdc_do_firm_test_reset(unsigned long ftc_bitmap);
- int pdc_do_reset(void);
- int pdc_soft_power_info(unsigned long *power_reg);
- int pdc_soft_power_button(int sw_control);
-+int pdc_soft_power_button_panic(int sw_control);
- void pdc_io_reset(void);
- void pdc_io_reset_devices(void);
- int pdc_iodc_getc(void);
-diff --git a/arch/parisc/kernel/firmware.c b/arch/parisc/kernel/firmware.c
-index bd325f2b5349e..3e051a973e9b2 100644
---- a/arch/parisc/kernel/firmware.c
-+++ b/arch/parisc/kernel/firmware.c
-@@ -1232,15 +1232,18 @@ int __init pdc_soft_power_info(unsigned long *power_reg)
- }
- 
- /*
-- * pdc_soft_power_button - Control the soft power button behaviour
-- * @sw_control: 0 for hardware control, 1 for software control 
-+ * pdc_soft_power_button{_panic} - Control the soft power button behaviour
-+ * @sw_control: 0 for hardware control, 1 for software control
-  *
-  *
-  * This PDC function places the soft power button under software or
-  * hardware control.
-- * Under software control the OS may control to when to allow to shut 
-- * down the system. Under hardware control pressing the power button 
-+ * Under software control the OS may control to when to allow to shut
-+ * down the system. Under hardware control pressing the power button
-  * powers off the system immediately.
-+ *
-+ * The _panic version relies on spin_trylock to prevent deadlock
-+ * on panic path.
-  */
- int pdc_soft_power_button(int sw_control)
- {
-@@ -1254,6 +1257,22 @@ int pdc_soft_power_button(int sw_control)
- 	return retval;
- }
- 
-+int pdc_soft_power_button_panic(int sw_control)
-+{
-+	int retval;
-+	unsigned long flags;
-+
-+	if (!spin_trylock_irqsave(&pdc_lock, flags)) {
-+		pr_emerg("Couldn't enable soft power button\n");
-+		return -EBUSY; /* ignored by the panic notifier */
-+	}
-+
-+	retval = mem_pdc_call(PDC_SOFT_POWER, PDC_SOFT_POWER_ENABLE, __pa(pdc_result), sw_control);
-+	spin_unlock_irqrestore(&pdc_lock, flags);
-+
-+	return retval;
-+}
-+
- /*
-  * pdc_io_reset - Hack to avoid overlapping range registers of Bridges devices.
-  * Primarily a problem on T600 (which parisc-linux doesn't support) but
-diff --git a/drivers/parisc/power.c b/drivers/parisc/power.c
-index 456776bd8ee66..6f5e5f0230d39 100644
---- a/drivers/parisc/power.c
-+++ b/drivers/parisc/power.c
-@@ -37,7 +37,6 @@
- #include <linux/module.h>
- #include <linux/init.h>
- #include <linux/kernel.h>
--#include <linux/notifier.h>
- #include <linux/panic_notifier.h>
- #include <linux/reboot.h>
- #include <linux/sched/signal.h>
-@@ -175,16 +174,21 @@ static void powerfail_interrupt(int code, void *x)
- 
- 
- 
--/* parisc_panic_event() is called by the panic handler.
-- * As soon as a panic occurs, our tasklets above will not be
-- * executed any longer. This function then re-enables the 
-- * soft-power switch and allows the user to switch off the system
-+/*
-+ * parisc_panic_event() is called by the panic handler.
-+ *
-+ * As soon as a panic occurs, our tasklets above will not
-+ * be executed any longer. This function then re-enables
-+ * the soft-power switch and allows the user to switch off
-+ * the system. We rely in pdc_soft_power_button_panic()
-+ * since this version spin_trylocks (instead of regular
-+ * spinlock), preventing deadlocks on panic path.
-  */
- static int parisc_panic_event(struct notifier_block *this,
- 		unsigned long event, void *ptr)
- {
- 	/* re-enable the soft-power switch */
--	pdc_soft_power_button(0);
-+	pdc_soft_power_button_panic(0);
- 	return NOTIFY_DONE;
- }
- 
--- 
-2.39.2
-
+Sorry, I'm not following here. How is it fragile? Are you saying that if
+we want to add devm calls into the bus layer itself the order of release
+won't be inverse of allocation/creation?
