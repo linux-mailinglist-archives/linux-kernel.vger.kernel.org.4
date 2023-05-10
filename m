@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F6126FE558
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:45:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AF8F6FE55A
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:45:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229586AbjEJUpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36158 "EHLO
+        id S236671AbjEJUpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236450AbjEJUpQ (ORCPT
+        with ESMTP id S236650AbjEJUpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:45:16 -0400
+        Wed, 10 May 2023 16:45:17 -0400
 Received: from APC01-PSA-obe.outbound.protection.outlook.com (mail-psaapc01on2122.outbound.protection.outlook.com [40.107.255.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1A755FE7;
-        Wed, 10 May 2023 13:45:13 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39093198E;
+        Wed, 10 May 2023 13:45:16 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C5ljG+92SEmLVobvlJCzP2Cw78C9GisS6a+j9efTNynvgOp++zkHcX+BgfjzAa3EPOQIZxp/p7yMqavbe/BqrzxAdZcqguCrWHq9KhZMOKxrUhGmqjlHBSHK/6g9LHF5QZPYGAVeZbAj2ihipd2LB80+uSCULIBmfzdYiOEEK94Y1OZib+DGfhaj7rXZBWcQTg9Z67hzxTd9skJg7LH4v3nrdfeXU25CJnZtcQ2QYnbgCN2diU8Z2E2E/xeyE0Z71u9rhhtQ1rRVjZJgfbvjPYjzyPBFdfyPrt1yUAUjumnYcLcmWQaLqHYskoF4cJHrXJja/x3s/Sd0L/j2irbJFg==
+ b=fc/2JBxBEOdii6kBF2NpbstL4hCf/611r9fSo/wYzZahS2uTlU2d6Llb+l6LPdxXh8FQWz7e+10WkB7j4WhoieJ/XAaYPCufGmczQbxNfiFlI6Ve3ZIvKkR/1TLkr+l27JXhgqIiI5JzxiY55JdpeLWhWplwT4fxVRkO+c7mE8tS1dW+fbslMUsNp7YoOkrcHXWmB5rrWfCsECBZgpaGj7AV2ZGgr9Tr3qXgf0kLpsHgjtm42fVum2guAnCkIjjO4H+ydiUa+jA2vD1ReEgXl/U6vc8cf+F17NfxI9uWWzXWsS070a1zNSAB6whIZTZgJl/8cXGHjhXsonKK8PxMlw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=B2SlBv+ZS2kQ9A4sGjuXooFgp/rSAHT0FWImd8GrtxU=;
- b=lVF1AjtuLkPMcs6iNwXcaqP33M951Znkmtuvewb6rk8Se7wWQFHowka9uu+A3U4EbDtC1omy+CZ4Rr7DlFpA8hSWERK+1gyTP2QTvIyK7ideDW5UH6ydoW3gs4SUmsR/RZl2HgLo5t7RYHJ7gA5x/St+mH2kWr6+99gm9MvC115Y9KuUNxKYZRqVccdedCsYUxfh4bbyukqJ+nPRZouBL5UJ8J64LugLA6tdV45yslsOex/37ruWvr0Z6A4EGu287z9ivbww9lNlxTb++yWzb+VVonKBBdwBpyHdI3yHoaTlKXQrXyAKgAuekttUTSggAlmnFwHsxH5noUmAzku8DQ==
+ bh=wDfkaBo6LjMIW33WCTKeSvbdpXYFdxQLPDeCzZFB8fU=;
+ b=JXP2VtgOCh/KRxMdt3Z/YR+OH5U4rIve7bGqEutkPUz1Ok230QsJIk51A/9oUiJWd+0gL4bHgiMw3yKRNINoRouRHE3m9obe1DD9tuZ/7Sb4Ne4Nol1+gz7M9WlJkuxikSksA7SWffhRfMhSFGnFXiuKlgFjpRIkjN4fRH4sKAH4gqvxL/ELePbxCQ5OQT6ZZdFFgBPbYBRjYEZlOYM1TnE1ObMO60QROaBwTqoFCPVyk87sDlMaVRWxHz8IPLt32U2EC60Is1I0t3DVFwLpEI/oNkKVP3i3pnq4UjKclZfGwOhNI79EmmvSQk0P4fRPHhBEbz00bHvwpvNuwnwL2A==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
  dkim=pass header.d=vivo.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=B2SlBv+ZS2kQ9A4sGjuXooFgp/rSAHT0FWImd8GrtxU=;
- b=KOk/qpA7HgA24FqKxqi9YBURzjTVRvUFWI9Dj6gMXqPVR2Wug4yl4n5m83wxuqWtG9jtelQ/LHLGcSeQEW0ilBFLPSL/RC+0NNmmRN4haRjsTMfoTstMZu5tix5Hah8yVpd3wFviWQOyhK6iXoMbCiZ68mi+ix4LsCWQQtfWxeK/qB6AkhMHZsBDmUsaIp38dz/PEmAP+XWjCBZzyJeA6yKnt13drgS47nO67IFrMgAul0tRvoDUegbPPmir0slLMtlsFBdRYsxnsK6kkmPZAfsTFp2wflVnlpKCQnnoFdVR8jKU077yNIL5DJaoNh/FBW/3OOABf+9zhPGEXvQObg==
+ bh=wDfkaBo6LjMIW33WCTKeSvbdpXYFdxQLPDeCzZFB8fU=;
+ b=aSZiIWSDJnYvgmJ6TzxoRN4A5mhQBGWamXlVL+Vcdwd5wLTvmKFj9qvi1SKCFNR50jRfJGjDrnD5s2g+xxV1xxQ2PndoQdITLFfQgMlkmtXKTPfkLW+yHuKWN3M3l41XHgVpHAMag4HESocEsRHsvwY4xXUVKRjnoJ6+ZGVL5rNcG+mqZ0LMJzu85qp9GbnSEZceDz6b7Po5VegR/jM0VaYLH/atfmxQF/hICr71X08w83apWuNvtHAwE566QzIFUD4lPH3O097l8PfxG+sGMdTeb50z/n3ddNX2mVj5/HUfa25q+TZuINU3/1hfIgvrhahhCdPJYp6cuitNQPHvmA==
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=vivo.com;
 Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
  by TYZPR06MB6468.apcprd06.prod.outlook.com (2603:1096:400:459::5) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Wed, 10 May
- 2023 20:45:11 +0000
+ 2023 20:45:14 +0000
 Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
  ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
  ([fe80::76d6:4828:7e80:2965%3]) with mapi id 15.20.6363.033; Wed, 10 May 2023
- 20:45:11 +0000
+ 20:45:14 +0000
 From:   Yangtao Li <frank.li@vivo.com>
-To:     Jisheng Zhang <jszhang@kernel.org>, Wei Fu <wefu@redhat.com>,
-        Yangtao Li <frank.li@vivo.com>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     Icenowy Zheng <uwu@icenowy.me>, linux-riscv@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/5] riscv: dts: add initial T-HEAD light SoC device tree
-Date:   Thu, 11 May 2023 04:44:53 +0800
-Message-Id: <20230510204456.57202-2-frank.li@vivo.com>
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jisheng Zhang <jszhang@kernel.org>, Wei Fu <wefu@redhat.com>,
+        Yangtao Li <frank.li@vivo.com>
+Cc:     Icenowy Zheng <uwu@icenowy.me>, devicetree@vger.kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 3/5] riscv: dts: thead: add sipeed Lichee Pi 4A board device tree
+Date:   Thu, 11 May 2023 04:44:54 +0800
+Message-Id: <20230510204456.57202-3-frank.li@vivo.com>
 X-Mailer: git-send-email 2.39.0
 In-Reply-To: <20230510204456.57202-1-frank.li@vivo.com>
 References: <20230510204456.57202-1-frank.li@vivo.com>
@@ -65,50 +65,50 @@ X-ClientProxiedBy: SI1PR02CA0055.apcprd02.prod.outlook.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|TYZPR06MB6468:EE_
-X-MS-Office365-Filtering-Correlation-Id: 174ef5b2-f341-4b35-2baa-08db519772c2
+X-MS-Office365-Filtering-Correlation-Id: b727f876-a141-4e82-a79c-08db519774e1
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hhGPLavaV3jC3xAPSofosZppsIqlZjyRrO36m/WSqMoZlSfPFxvyU4RCx23ZL9cp2IIQSM7Qudwk6lsyUV7EWDEdxOQ9g/XGVDLhq4xTckerls03ta3P5bXxgrYTXrgiHKn4pbv+wS+3IXF7J6AVhEHaNUOVWvdWB3HYunywQQZApEMraMDLORoGSjHytigNvkEiEgSp7qd5t4cyvAZyzFGGrV1UJmqOCIBlG1VmiZnLVXsEmt6gw8W0DsXWHB/o7a32MMLXSF+M9ur+STor6BNNsjIPN1+n/pRsrLs9AijB0YhZhNK8Gq/8lG1Iy+pUS8co+Fme8bBi/o28lYnesZrmIgRMixyq4TsqazfztQvG+jv9UzwDpMpCs7OS5gDQdd/KHVAusYKKfxdcRJ2Pbxlpk1ZQ0tPIxT5BdJZ9H28FdwviRgox9Jw+8Xb7g1wMFr+5QdueUDRRLBEURWsWkt1GVG2V20vo2aZdTtXL2lKcjLblRvrmO7/CjI1Td2HPur7IqmVBJEkON6rXAjNcQawnNMNWy/g80MjYfAR2VjH+38rY47E2iPjSCsxeLVeUh8ag9uG5t2i6fhV+Po8c5yUkzI3V0EKNWm6qxp3dkfEnlMWynctAMqn/+6Hvko0m
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(396003)(366004)(346002)(136003)(451199021)(6486002)(6666004)(316002)(83380400001)(66556008)(66946007)(478600001)(52116002)(4326008)(26005)(66476007)(6506007)(6512007)(110136005)(1076003)(186003)(2906002)(38350700002)(41300700001)(36756003)(86362001)(8936002)(8676002)(30864003)(7416002)(5660300002)(38100700002)(2616005);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: qbYLZ/Hfzx5SoMfxC+rdK8j6dnqjZuT+4eB+45jc0mgu50Wq591e98me7SOCoq6XZxlasO4XI6/wjmD9S9Zw5z8dWkGyumy+b5nnuqMu1i+/QrRqYa7Swjnt5tLQBwikRvF1TrwHj6SGyAtNvJY0QqmFTAdU4NyPzjIDipp/dwU8wzx3i14Hr+vM0yzP7OZQ2WQwK7gkl5mGdJpIlttLPwJ3qxFc0jDGVToLp+/NH9K+zGWnzKmREyncMyRsre8KM1Yd/w3LijxbowirJfF4tRDcBFYTHw/czIs0V7W5wFWYTaJvAQYSwn/PTwuKaBQsGAqVuo0b9Xc6FED86f4BwnIy5gwW+VpwR/xPiu92Xe92WOXfPJaDtv+5UdatOPk62UKuVt7ZTSZVWcNhdRNhiWMoh7Pz6KtNkH+GFQqIaR8dgiz+eL8E5BtDDkJJonYybpVAP+foW4MsJksxQWD0yQLcPmrbbK81tLGxt697Il/mDWP2ihUlWY7eCuKFted4k7MKqON6KHcWrN/tufdIkHPnXwMypzmVrULyR/Iy4N5svGuzME/0u9fgwATVifHPOTY4wHPi0JTfEWrzLjhsBVHRdoW3301deSLMYlDU/CEi5Dg0L2c/dTCskqURUd+N
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(396003)(366004)(346002)(136003)(451199021)(7049001)(6486002)(6666004)(316002)(83380400001)(66556008)(66946007)(478600001)(52116002)(4326008)(26005)(66476007)(6506007)(6512007)(110136005)(1076003)(186003)(2906002)(38350700002)(41300700001)(36756003)(86362001)(8936002)(8676002)(7416002)(5660300002)(38100700002)(2616005);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Zk1hu51/Uzj2L+3iq0BAoWmKN27MVAUvD7duW1S97WNRJpPlUlV3B2lFzAic?=
- =?us-ascii?Q?Y4l+SG1/p1crJsaKmFz/iEKmZMklVu34bXQJKSRGH+pR7sWq9tX8b08lnFMP?=
- =?us-ascii?Q?bTLKzAkm3QGiR43ASF0sl0dhuvB3VvXA4dKQ0LdoZbDy5UiADF4M2A3Nsltd?=
- =?us-ascii?Q?J5IHtp8irE7Wt/tBTF6UCnkQAPjENAi6M5aJDtR55iY3Riz1jp0QzpU2u4hB?=
- =?us-ascii?Q?y8hQDHuF7GDhgkWRJniMxNFTHeY2rI9wPu2b8Et7qlsbNq1i+VoU8zRlmFjj?=
- =?us-ascii?Q?s7JAVB001DtIjfzgQwBulBgofModNsocZOezzwSeCNPZsiAQG6gioi4GYiP7?=
- =?us-ascii?Q?H5kzEVWMCPCOB3UlU0rzILBY9G12bkGWTs6NbXjz6k7JAFHGkeehK1UoO1I6?=
- =?us-ascii?Q?i6x/W45AINspjquVNsd1X3Iz4PGJpYsSJ3ladqoWkTYQrgXyVUBEPCGrADmK?=
- =?us-ascii?Q?E7uA56Nbvkzf5zojC6650ROOmP8dvhsf+jPUslZ3GbHy3z/HJe4v3BAenjpw?=
- =?us-ascii?Q?8vmp51vmRF9V+8oQWxuoFgccUFcDqjcaZK6BNgfcrG4CyCav08ZRnmWOm5C6?=
- =?us-ascii?Q?izCthPFxJyVavok1x5K9frxcUQcrySp3Cy7JUkUcDwIG0Agi/gC6QbTIU8Rg?=
- =?us-ascii?Q?bACswJVhsYyM5Kg66pAjIPKykU3vdiUcrM3XV9aN6JjNHz9A9ixaa71F/4bc?=
- =?us-ascii?Q?ymxR211o5g+9X+fBKg9B5p4MqsFn1vbE/ZDysQ4P31Wp61uPAMxx0YJEDdJ2?=
- =?us-ascii?Q?4AS61nXm2AcT84k2l1nJhvZBYdznNlSxP1uP3C1/l8rmBatwFlvBnRsvJF7b?=
- =?us-ascii?Q?D7piquIaffNZD4iAfa3rPDSScGiDQpR+bGv7VQ7YI1PbGG/8j1vGztetMHMw?=
- =?us-ascii?Q?5IZPj4B6NbnnS1HMHW87iFEFXkel1xrFxOAyrVHT3hsOwW2VGgb1uQ8kWIvj?=
- =?us-ascii?Q?T/k64JvNwR1PuqlnskZxZg1Nvykrp+geq8iB+qWbFkJRI5N2aBZHQ9zlWgrW?=
- =?us-ascii?Q?O0WLF83p/C1LzGCi+zmuG/uZUT6HtTybyNUhNeoenUJfedxfItrszvq8LRhS?=
- =?us-ascii?Q?2my4BXoedP8ODGhATi18Wafpqzf9Cyx4IcK7q6cK149WrEYPxfTen/njTfZ3?=
- =?us-ascii?Q?aFWedtGHUAmfR6GkIgkSdPtzrQ69yZf7NSHaiNO7LW7dWR/uI3YOoHk7oGvE?=
- =?us-ascii?Q?i29yvM6iPiA45/jYpPM0gN80H/E+fgGlkzqU6B7iAALL2bdp894xH1eWpCaq?=
- =?us-ascii?Q?t2Zb4TO/egRHyxnck6sPCmbLL/Pb0BpNpEncPWwaKGbdyC5oIv2WmxvOOawv?=
- =?us-ascii?Q?NvoSYaCazZScJv+UL1pJl/b8X7cRoLoqzo0YgRwiQjW+72SqutWDMn/Ela3g?=
- =?us-ascii?Q?gt6A92qFrpvds3BEckCegAOQEOOh3e5gCu30lRA+Gp7DiaO38NJ/oHJtaCpr?=
- =?us-ascii?Q?5jgVVWy4Rnw/OstU0pPeEaxw/eDOmoxrxN2ovKEm2hRsGefbXbMKRIGNSvHV?=
- =?us-ascii?Q?Q3LOjZ0KnvSb3KobN1S08t/Ht9m2dbJ3lQCT+CHBlzQLFWksr9UrTAzkdm7p?=
- =?us-ascii?Q?a2srp6/6vvvSJSDrQyeZ9BV+aNUa+dgpeJO+sFQC?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?bRM0sJ5Xp71vVayi3kO2fR2WJ5eMfnIwKbvlKd9stC7GVrInn88oE6DdCEjP?=
+ =?us-ascii?Q?O84Xwl+sH+N6B8eK4Y9xcElGUhrv7dSld3O99f7cg8w70//LI0M+sB1HoNea?=
+ =?us-ascii?Q?CGZQ24xlGPH0p9X0LWgAAsvM+Y0yJn7YepS1IF9pHnxbgW62M/xY7FD4bKxU?=
+ =?us-ascii?Q?qmNvrWBbxVIJOH/2UQe+E6Ns/bmSLQlIOGQ9jNm1QF9/PUyBMQHT21XybkSM?=
+ =?us-ascii?Q?S/6gVi6osdaMEoLpH3EKUmOIBGtDeZZLdp6ra4SbxoFfDiW6caBLVxfJx/On?=
+ =?us-ascii?Q?um+6aneNPvCzZlDi+XfRI8Bjvow5MPxzdogcV4VY0t8sq9PxAJIG4PXl+4xj?=
+ =?us-ascii?Q?PY6AGLHShxCnjsLNrbybISJ0+/mv+NMKIpJjM7glEuL6PKqRRGmH3lVAggP2?=
+ =?us-ascii?Q?B3K9tba6YFmJ3GmdXgZfttRWJ95MEA2y4bQ+cgi/IMUIC1xLSWPbZ7gYqiHt?=
+ =?us-ascii?Q?voue4AdnFrAwvlpmhwZAyCQjjqsM/lMu1AEh/55w8BI4RBOjxMvXb1X1oNgy?=
+ =?us-ascii?Q?Gzg6c32Fgf4BwtUWtFYchcbrscmpI0KHgJZimvToyZHkZOr3KdcQBR2oC9Lz?=
+ =?us-ascii?Q?ocCwKbpvRphMSxHJ+uprph7i4V2PDmmqYeNiHQ/NJ2up0igltlFgY5wd1ENW?=
+ =?us-ascii?Q?HMYKKzRCpxgZ8dNi8NNPUfsJO1sEj3zeKJCksxZ2F9xZRyDBkCmlUhm+dYBL?=
+ =?us-ascii?Q?l8N03tbEg4+bWduCR3eptdwMhnc42bmLk+hkHXinu28DokevKcUAzU8JVo5r?=
+ =?us-ascii?Q?QmqNz2gTVsFGm3rTJX/uzz3ouWjYlOaz4u9DZfPSdURZqZnHcFz4eEj9LWGU?=
+ =?us-ascii?Q?f0SWsy4ECHUN3sIPey8DfKqsYuuG43liRq1xpVwyx/wIBYlrC5sCzOy3bBuz?=
+ =?us-ascii?Q?8976Iv4BAeX+HUHeLgKkE0cxFzZx87Ypcf2WYQJRQGWKQGGsl+KU5We30trW?=
+ =?us-ascii?Q?NQC0fHBpanUXZhsoJeFfLqIV0vNwRLMJqJNmMTMrFcAJTXhsZ8/dbLtqcRsB?=
+ =?us-ascii?Q?0fSXj/nr8jG58O6kwwLmIWANDK13PbZ7ADrcMPzO0sAfYJFdHc3Du2kAaLWA?=
+ =?us-ascii?Q?QJ5HsFgW5dZ8zjOO8DvQ7synFmLxEY/qsqT+GwESBvKZlxs8s8hOTN5VgVFF?=
+ =?us-ascii?Q?W0VzMu1KgplQmCQbQBnXoz0YCDvLMR4xHk9FkVe3kL8Yw/ALvS2l16ss6Kr2?=
+ =?us-ascii?Q?ACAoiN5kT47B8f1hgAxXgneWAdaTljj4KtgO/ZL2oZUk1Kc06iwOSJUpJZ41?=
+ =?us-ascii?Q?m+rPLb0QiCpXzt8p4nN985To/4QoGkYIMJLotOcjQU5YSXKizpDv78vEt3ar?=
+ =?us-ascii?Q?C4ZSnckeRf/B1MKJcgTBKWw/h7/RFVRym3BuUeZEu3RqWC7tupLrwQ/igTum?=
+ =?us-ascii?Q?NyBQGjD3p8DALEdV0FRNhikftbVxUCnLlxB5NR4ZP2irLkFQ/0UW9tCWvEqx?=
+ =?us-ascii?Q?Lb4hcUJ5oZa5DnLn52k49BZmEdE+7DOG9B/twy2iMnfhm4ku0OJQw3I48cc6?=
+ =?us-ascii?Q?+NiFaa+JyH1TSIfyEYqAq+ajHrHPjKnbC5+vOjgc0ne1UKWYcFbLY/G+AWMt?=
+ =?us-ascii?Q?uWW4PrmAyXuTBxhpVmUS5V7iDL3AJD3P9tN6wBeU?=
 X-OriginatorOrg: vivo.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 174ef5b2-f341-4b35-2baa-08db519772c2
+X-MS-Exchange-CrossTenant-Network-Message-Id: b727f876-a141-4e82-a79c-08db519774e1
 X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 20:45:11.1710
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 20:45:14.6807
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WhbV2ucJouECzCp1UVLhSzBZRxsCBSpvn47x9C11DGwoQVuic6xB1pLsSqv+lOVwux2iZqLZWctjXHizu5c/Dw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: qK0W0rH9B1tAQCquY8fkyiKPM0txB43NvVfZi+i30kygiSR7L98dDRoKhmBb/v3Oza6nz2FVD9Ba+OvHpgd0+A==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR06MB6468
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -122,8 +122,13 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Jisheng Zhang <jszhang@kernel.org>
 
-Add initial device tree for the TH1520 RISC-V SoC by
-T-HEAD.
+Sipeed's Lichee Pi 4A development board uses Lichee Module 4A core
+module which is powered by T-HEAD's light(a.k.a TH1520) SoC. Add
+minimal device tree files for the core module and the development
+board.
+
+Support basic uart/gpio/dmac drivers, so supports booting to a basic
+shell.
 
 Cc: Icenowy Zheng <uwu@icenowy.me>
 Cc: Wei Fu <wefu@redhat.com>
@@ -131,510 +136,119 @@ Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
 Signed-off-by: Yangtao Li <frank.li@vivo.com>
 ---
 v2:
--remove reset-sample
--convert to use thead,c900-plic
--add pvt node
--add thermal-zones
- arch/riscv/boot/dts/thead/th1520.dtsi | 491 ++++++++++++++++++++++++++
- 1 file changed, 491 insertions(+)
- create mode 100644 arch/riscv/boot/dts/thead/th1520.dtsi
+-cleanup `light`
+ arch/riscv/boot/dts/Makefile                  |  1 +
+ arch/riscv/boot/dts/thead/Makefile            |  2 +
+ .../dts/thead/th1520-lichee-module-4a.dtsi    | 39 +++++++++++++++++++
+ .../boot/dts/thead/th1520-lichee-pi-4a.dts    | 33 ++++++++++++++++
+ 4 files changed, 75 insertions(+)
+ create mode 100644 arch/riscv/boot/dts/thead/Makefile
+ create mode 100644 arch/riscv/boot/dts/thead/th1520-lichee-module-4a.dtsi
+ create mode 100644 arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts
 
-diff --git a/arch/riscv/boot/dts/thead/th1520.dtsi b/arch/riscv/boot/dts/thead/th1520.dtsi
+diff --git a/arch/riscv/boot/dts/Makefile b/arch/riscv/boot/dts/Makefile
+index f0d9f89054f8..1e884868ccba 100644
+--- a/arch/riscv/boot/dts/Makefile
++++ b/arch/riscv/boot/dts/Makefile
+@@ -2,6 +2,7 @@
+ subdir-y += allwinner
+ subdir-y += sifive
+ subdir-y += starfive
++subdir-y += thead
+ subdir-y += canaan
+ subdir-y += microchip
+ subdir-y += renesas
+diff --git a/arch/riscv/boot/dts/thead/Makefile b/arch/riscv/boot/dts/thead/Makefile
 new file mode 100644
-index 000000000000..d1d94098b6bf
+index 000000000000..e311fc9a5939
 --- /dev/null
-+++ b/arch/riscv/boot/dts/thead/th1520.dtsi
-@@ -0,0 +1,491 @@
++++ b/arch/riscv/boot/dts/thead/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0
++dtb-$(CONFIG_ARCH_THEAD) += th1520-lichee-pi-4a.dtb
+diff --git a/arch/riscv/boot/dts/thead/th1520-lichee-module-4a.dtsi b/arch/riscv/boot/dts/thead/th1520-lichee-module-4a.dtsi
+new file mode 100644
+index 000000000000..bc5f8677d546
+--- /dev/null
++++ b/arch/riscv/boot/dts/thead/th1520-lichee-module-4a.dtsi
+@@ -0,0 +1,39 @@
 +// SPDX-License-Identifier: GPL-2.0
 +/*
-+ * Copyright (C) 2021 Alibaba Group Holding Limited.
 + * Copyright (C) 2023 Jisheng Zhang <jszhang@kernel.org>
 + * Copyright (C) 2023 Yangtao Li <frank.li@vivo.com>
 + */
 +
-+#include <dt-bindings/interrupt-controller/irq.h>
++/dts-v1/;
++
++#include "th1520.dtsi"
 +
 +/ {
-+	compatible = "thead,th1520";
-+	#address-cells = <2>;
-+	#size-cells = <2>;
++	model = "Sipeed Lichee Module 4A";
++	compatible = "sipeed,lichee-module-4a", "thead,th1520";
 +
-+	cpus: cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+		timebase-frequency = <3000000>;
++	memory@0 {
++		device_type = "memory";
++		reg = <0x0 0x00000000 0x2 0x00000000>;
++	};
++};
 +
-+		c910_0: cpu@0 {
-+			compatible = "thead,c910", "riscv";
-+			device_type = "cpu";
-+			riscv,isa = "rv64imafdc";
-+			reg = <0>;
-+			i-cache-block-size = <64>;
-+			i-cache-size = <65536>;
-+			i-cache-sets = <512>;
-+			d-cache-block-size = <64>;
-+			d-cache-size = <65536>;
-+			d-cache-sets = <512>;
-+			next-level-cache = <&l2_cache>;
-+			mmu-type = "riscv,sv39";
++&osc {
++	clock-frequency = <24000000>;
++};
 +
-+			cpu0_intc: interrupt-controller {
-+				compatible = "riscv,cpu-intc";
-+				interrupt-controller;
-+				#interrupt-cells = <1>;
-+			};
-+		};
++&osc_32k {
++	clock-frequency = <32768>;
++};
 +
-+		c910_1: cpu@1 {
-+			compatible = "thead,c910", "riscv";
-+			device_type = "cpu";
-+			riscv,isa = "rv64imafdc";
-+			reg = <1>;
-+			i-cache-block-size = <64>;
-+			i-cache-size = <65536>;
-+			i-cache-sets = <512>;
-+			d-cache-block-size = <64>;
-+			d-cache-size = <65536>;
-+			d-cache-sets = <512>;
-+			next-level-cache = <&l2_cache>;
-+			mmu-type = "riscv,sv39";
++&apb_clk {
++	clock-frequency = <62500000>;
++};
 +
-+			cpu1_intc: interrupt-controller {
-+				compatible = "riscv,cpu-intc";
-+				interrupt-controller;
-+				#interrupt-cells = <1>;
-+			};
-+		};
++&uart_sclk {
++	clock-frequency = <100000000>;
++};
 +
-+		c910_2: cpu@2 {
-+			compatible = "thead,c910", "riscv";
-+			device_type = "cpu";
-+			riscv,isa = "rv64imafdc";
-+			reg = <2>;
-+			i-cache-block-size = <64>;
-+			i-cache-size = <65536>;
-+			i-cache-sets = <512>;
-+			d-cache-block-size = <64>;
-+			d-cache-size = <65536>;
-+			d-cache-sets = <512>;
-+			next-level-cache = <&l2_cache>;
-+			mmu-type = "riscv,sv39";
++&dmac0 {
++	status = "okay";
++};
+diff --git a/arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts b/arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts
+new file mode 100644
+index 000000000000..86d677175feb
+--- /dev/null
++++ b/arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts
+@@ -0,0 +1,33 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Copyright (C) 2023 Jisheng Zhang <jszhang@kernel.org>
++ * Copyright (C) 2023 Yangtao Li <frank.li@vivo.com>
++ */
 +
-+			cpu2_intc: interrupt-controller {
-+				compatible = "riscv,cpu-intc";
-+				interrupt-controller;
-+				#interrupt-cells = <1>;
-+			};
-+		};
++#include "th1520-lichee-module-4a.dtsi"
 +
-+		c910_3: cpu@3 {
-+			compatible = "thead,c910", "riscv";
-+			device_type = "cpu";
-+			riscv,isa = "rv64imafdc";
-+			reg = <3>;
-+			i-cache-block-size = <64>;
-+			i-cache-size = <65536>;
-+			i-cache-sets = <512>;
-+			d-cache-block-size = <64>;
-+			d-cache-size = <65536>;
-+			d-cache-sets = <512>;
-+			next-level-cache = <&l2_cache>;
-+			mmu-type = "riscv,sv39";
++/ {
++	model = "Sipeed Lichee Pi 4A";
++	compatible = "sipeed,lichee-pi-4a", "sipeed,lichee-module-4a", "thead,th1520";
 +
-+			cpu3_intc: interrupt-controller {
-+				compatible = "riscv,cpu-intc";
-+				interrupt-controller;
-+				#interrupt-cells = <1>;
-+			};
-+		};
-+
-+		cpu-map {
-+			cluster0 {
-+				core0 {
-+					cpu = <&c910_0>;
-+				};
-+
-+				core1 {
-+					cpu = <&c910_1>;
-+				};
-+
-+				core2 {
-+					cpu = <&c910_2>;
-+				};
-+
-+				core3 {
-+					cpu = <&c910_3>;
-+				};
-+			};
-+		};
-+
-+		l2_cache: l2-cache {
-+			compatible = "cache";
-+			cache-block-size = <64>;
-+			cache-level = <2>;
-+			cache-size = <1048576>;
-+			cache-sets = <1024>;
-+			cache-unified;
-+		};
++	aliases {
++		gpio0 = &gpio0;
++		gpio1 = &gpio1;
++		gpio2 = &gpio2;
++		gpio3 = &gpio3;
++		serial0 = &uart0;
++		serial1 = &uart1;
++		serial2 = &uart2;
++		serial3 = &uart3;
++		serial4 = &uart4;
++		serial5 = &uart5;
 +	};
 +
-+	osc: oscillator {
-+		compatible = "fixed-clock";
-+		clock-output-names = "osc_24m";
-+		#clock-cells = <0>;
++	chosen {
++		stdout-path = "serial0:115200n8";
 +	};
++};
 +
-+	osc_32k: 32k-oscillator {
-+		compatible = "fixed-clock";
-+		clock-output-names = "osc_32k";
-+		#clock-cells = <0>;
-+	};
-+
-+	apb_clk: apb-clk-clock {
-+		compatible = "fixed-clock";
-+		clock-output-names = "apb_clk";
-+		#clock-cells = <0>;
-+	};
-+
-+	uart_sclk: uart-sclk-clock {
-+		compatible = "fixed-clock";
-+		clock-output-names = "uart_sclk";
-+		#clock-cells = <0>;
-+	};
-+
-+	pvt_clk: pvt-clock {
-+		compatible = "fixed-clock";
-+		clock-frequency = <73728000>;
-+		clock-output-names = "pvt_clk";
-+		#clock-cells = <0>;
-+	};
-+
-+	soc {
-+		compatible = "simple-bus";
-+		interrupt-parent = <&plic>;
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges;
-+
-+		plic: interrupt-controller@ffd8000000 {
-+			compatible = "thead,c900-plic";
-+			reg = <0xff 0xd8000000 0x0 0x01000000>;
-+			interrupts-extended = <&cpu0_intc 11>, <&cpu0_intc 9>,
-+					      <&cpu1_intc 11>, <&cpu1_intc 9>,
-+					      <&cpu2_intc 11>, <&cpu2_intc 9>,
-+					      <&cpu3_intc 11>, <&cpu3_intc 9>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+			riscv,ndev = <240>;
-+
-+		};
-+
-+		clint: timer@ffdc000000 {
-+			compatible = "thead,c900-clint";
-+			reg = <0xff 0xdc000000 0x0 0x00010000>;
-+			interrupts-extended = <&cpu0_intc 3>, <&cpu0_intc 7>,
-+					      <&cpu1_intc 3>, <&cpu1_intc 7>,
-+					      <&cpu2_intc 3>, <&cpu2_intc 7>,
-+					      <&cpu3_intc 3>, <&cpu3_intc 7>;
-+		};
-+
-+		uart0: serial@ffe7014000 {
-+			compatible = "snps,dw-apb-uart";
-+			reg = <0xff 0xe7014000 0x0 0x4000>;
-+			interrupts = <36 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&uart_sclk>;
-+			clock-names = "baudclk";
-+			reg-shift = <2>;
-+			reg-io-width = <4>;
-+			status = "disabled";
-+		};
-+
-+		uart1: serial@ffe7f00000 {
-+			compatible = "snps,dw-apb-uart";
-+			reg = <0xff 0xe7f00000 0x0 0x4000>;
-+			interrupts = <37 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&uart_sclk>;
-+			clock-names = "baudclk";
-+			reg-shift = <2>;
-+			reg-io-width = <4>;
-+			status = "disabled";
-+		};
-+
-+		uart3: serial@ffe7f04000 {
-+			compatible = "snps,dw-apb-uart";
-+			reg = <0xff 0xe7f04000 0x0 0x4000>;
-+			interrupts = <39 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&uart_sclk>;
-+			clock-names = "baudclk";
-+			reg-shift = <2>;
-+			reg-io-width = <4>;
-+			status = "disabled";
-+		};
-+
-+		gpio2: gpio@ffe7f34000 {
-+			compatible = "snps,dw-apb-gpio";
-+			reg = <0xff 0xe7f34000 0x0 0x1000>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			portc: gpio-controller@0 {
-+				compatible = "snps,dw-apb-gpio-port";
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				ngpios = <32>;
-+				reg = <0>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+				interrupts = <58 IRQ_TYPE_LEVEL_HIGH>;
-+			};
-+		};
-+
-+		gpio3: gpio@ffe7f38000 {
-+			compatible = "snps,dw-apb-gpio";
-+			reg = <0xff 0xe7f38000 0x0 0x1000>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			portd: gpio-controller@0 {
-+				compatible = "snps,dw-apb-gpio-port";
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				ngpios = <32>;
-+				reg = <0>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+				interrupts = <59 IRQ_TYPE_LEVEL_HIGH>;
-+			};
-+		};
-+
-+		gpio0: gpio@ffec005000 {
-+			compatible = "snps,dw-apb-gpio";
-+			reg = <0xff 0xec005000 0x0 0x1000>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			porta: gpio-controller@0 {
-+				compatible = "snps,dw-apb-gpio-port";
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				ngpios = <32>;
-+				reg = <0>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+				interrupts = <56 IRQ_TYPE_LEVEL_HIGH>;
-+			};
-+		};
-+
-+		gpio1: gpio@ffec006000 {
-+			compatible = "snps,dw-apb-gpio";
-+			reg = <0xff 0xec006000 0x0 0x1000>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			portb: gpio-controller@0 {
-+				compatible = "snps,dw-apb-gpio-port";
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				ngpios = <32>;
-+				reg = <0>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+				interrupts = <57 IRQ_TYPE_LEVEL_HIGH>;
-+			};
-+		};
-+
-+		uart2: serial@ffec010000 {
-+			compatible = "snps,dw-apb-uart";
-+			reg = <0xff 0xec010000 0x0 0x4000>;
-+			interrupts = <38 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&uart_sclk>;
-+			clock-names = "baudclk";
-+			reg-shift = <2>;
-+			reg-io-width = <4>;
-+			status = "disabled";
-+		};
-+
-+		dmac0: dma-controller@ffefc00000 {
-+			compatible = "snps,axi-dma-1.01a";
-+			reg = <0xff 0xefc00000 0x0 0x1000>;
-+			interrupts = <27 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&apb_clk>, <&apb_clk>;
-+			clock-names = "core-clk", "cfgr-clk";
-+			#dma-cells = <1>;
-+			dma-channels = <4>;
-+			snps,block-size = <65536 65536 65536 65536>;
-+			snps,priority = <0 1 2 3>;
-+			snps,dma-masters = <1>;
-+			snps,data-width = <4>;
-+			snps,axi-max-burst-len = <16>;
-+			status = "disabled";
-+		};
-+
-+		timer0: timer@ffefc32000 {
-+			compatible = "snps,dw-apb-timer";
-+			reg = <0xff 0xefc32000 0x0 0x14>;
-+			clocks = <&apb_clk>;
-+			clock-names = "timer";
-+			interrupts = <16 IRQ_TYPE_LEVEL_HIGH>;
-+			status = "disabled";
-+		};
-+
-+		timer1: timer@ffefc32014 {
-+			compatible = "snps,dw-apb-timer";
-+			reg = <0xff 0xefc32014 0x0 0x14>;
-+			clocks = <&apb_clk>;
-+			clock-names = "timer";
-+			interrupts = <17 IRQ_TYPE_LEVEL_HIGH>;
-+			status = "disabled";
-+		};
-+
-+		timer2: timer@ffefc32028 {
-+			compatible = "snps,dw-apb-timer";
-+			reg = <0xff 0xefc32028 0x0 0x14>;
-+			clocks = <&apb_clk>;
-+			clock-names = "timer";
-+			interrupts = <18 IRQ_TYPE_LEVEL_HIGH>;
-+			status = "disabled";
-+		};
-+
-+		timer3: timer@ffefc3203c {
-+			compatible = "snps,dw-apb-timer";
-+			reg = <0xff 0xefc3203c 0x0 0x14>;
-+			clocks = <&apb_clk>;
-+			clock-names = "timer";
-+			interrupts = <19 IRQ_TYPE_LEVEL_HIGH>;
-+			status = "disabled";
-+		};
-+
-+		uart4: serial@fff7f08000 {
-+			compatible = "snps,dw-apb-uart";
-+			reg = <0xff 0xf7f08000 0x0 0x4000>;
-+			interrupts = <40 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&uart_sclk>;
-+			clock-names = "baudclk";
-+			reg-shift = <2>;
-+			reg-io-width = <4>;
-+			status = "disabled";
-+		};
-+
-+		uart5: serial@fff7f0c000 {
-+			compatible = "snps,dw-apb-uart";
-+			reg = <0xff 0xf7f0c000 0x0 0x4000>;
-+			interrupts = <41 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&uart_sclk>;
-+			clock-names = "baudclk";
-+			reg-shift = <2>;
-+			reg-io-width = <4>;
-+			status = "disabled";
-+		};
-+
-+		timer4: timer@ffffc33000 {
-+			compatible = "snps,dw-apb-timer";
-+			reg = <0xff 0xffc33000 0x0 0x14>;
-+			clocks = <&apb_clk>;
-+			clock-names = "timer";
-+			interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
-+			status = "disabled";
-+		};
-+
-+		timer5: timer@ffffc33014 {
-+			compatible = "snps,dw-apb-timer";
-+			reg = <0xff 0xffc33014 0x0 0x14>;
-+			clocks = <&apb_clk>;
-+			clock-names = "timer";
-+			interrupts = <21 IRQ_TYPE_LEVEL_HIGH>;
-+			status = "disabled";
-+		};
-+
-+		timer6: timer@ffffc33028 {
-+			compatible = "snps,dw-apb-timer";
-+			reg = <0xff 0xffc33028 0x0 0x14>;
-+			clocks = <&apb_clk>;
-+			clock-names = "timer";
-+			interrupts = <22 IRQ_TYPE_LEVEL_HIGH>;
-+			status = "disabled";
-+		};
-+
-+		timer7: timer@ffffc3303c {
-+			compatible = "snps,dw-apb-timer";
-+			reg = <0xff 0xffc3303c 0x0 0x14>;
-+			clocks = <&apb_clk>;
-+			clock-names = "timer";
-+			interrupts = <23 IRQ_TYPE_LEVEL_HIGH>;
-+			status = "disabled";
-+		};
-+
-+		ao_gpio0: gpio@fffff41000 {
-+			compatible = "snps,dw-apb-gpio";
-+			reg = <0xff 0xfff41000 0x0 0x1000>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			porte: gpio-controller@0 {
-+				compatible = "snps,dw-apb-gpio-port";
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				ngpios = <32>;
-+				reg = <0>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+				interrupts = <76 IRQ_TYPE_LEVEL_HIGH>;
-+			};
-+		};
-+
-+		pvt: pvt@fffff4e000 {
-+			compatible = "moortec,mr75203";
-+			reg = <0xff 0xfff4e000 0x0 0x80>,
-+			      <0xff 0xfff4e080 0x0 0x100>,
-+			      <0xff 0xfff4e180 0x0 0x680>,
-+			      <0xff 0xfff4e800 0x0 0x600>;
-+			reg-names = "common", "ts", "pd", "vm";
-+			clocks = <&pvt_clk>;
-+			/* TODO: add reset */
-+			#thermal-sensor-cells = <1>;
-+			status = "disabled";
-+		};
-+
-+		ao_gpio1: gpio@fffff52000 {
-+			compatible = "snps,dw-apb-gpio";
-+			reg = <0xff 0xfff52000 0x0 0x1000>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+
-+			portf: gpio-controller@0 {
-+				compatible = "snps,dw-apb-gpio-port";
-+				gpio-controller;
-+				#gpio-cells = <2>;
-+				ngpios = <32>;
-+				reg = <0>;
-+				interrupt-controller;
-+				#interrupt-cells = <2>;
-+				interrupts = <55 IRQ_TYPE_LEVEL_HIGH>;
-+			};
-+		};
-+	};
-+
-+	thermal-zones {
-+		cpu-thermal {
-+			polling-delay-passive = <250>;
-+			polling-delay = <2000>;
-+			thermal-sensors = <&pvt 0>;
-+
-+			trips {
-+				trip0 {
-+					temperature = <85000>;
-+					hysteresis = <2000>;
-+					type = "passive";
-+				};
-+
-+				trip1 {
-+					temperature = <110000>;
-+					hysteresis = <2000>;
-+					type = "critical";
-+				};
-+			};
-+		};
-+	};
++&uart0 {
++	status = "okay";
 +};
 -- 
 2.34.1
