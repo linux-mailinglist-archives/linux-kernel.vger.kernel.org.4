@@ -2,74 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE466FE082
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEA9E6FE084
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:40:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237435AbjEJOkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 10:40:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43434 "EHLO
+        id S237457AbjEJOkJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 10:40:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237117AbjEJOj6 (ORCPT
+        with ESMTP id S237117AbjEJOkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 10:39:58 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6CEB268E;
-        Wed, 10 May 2023 07:39:57 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-19288cce249so5529121fac.0;
-        Wed, 10 May 2023 07:39:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683729597; x=1686321597;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fk9eUG3U91hgmCg1FDe/Uo4ursc9HcJP8f9e+bw6f08=;
-        b=hWmtYYeyl6nRGXKgze90Q4gRzbsa+Kdn9hDEGFvIihz4xDElSdRP7BAhs7xib2OaPg
-         bUj062RwMs0INiSlMhO5qb7hhff4fL5vdqAuVDlMjRQeqqk74xJUWficiKqJVIjENfQf
-         79+EJYEJVVUGspDM2S2iqbpnVeHu3vNHn2eOLKgAw3kfMupRi2hLSUVXwo0fR4i2uwdT
-         0QVpxw3ikPUBxmcPzYtWOOipzQJ84cb0gOAyZTT7XI8wq6jk+JxJgUtk+0CHQyY75TpF
-         DfTG/9+fi7M4FCc7OdNi/xuLW9yPVwxBf2+dST2A2uu6RrY5Q7lgS74ju9Dl9d8RLIWa
-         w+Pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683729597; x=1686321597;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fk9eUG3U91hgmCg1FDe/Uo4ursc9HcJP8f9e+bw6f08=;
-        b=eCXIEuaVT1ojSxJazh7l46lGLUTL7OR8Lk0R3HEn6oioLDiHry45dodiouN/wzzi6b
-         y6TqskXZrv0OL1/WU1vuadohZ160ZOTJG8aNJLwDa7Suvlsmo5uLHYBoJnPVFebFJy/c
-         aGBBozkXUCAgwTzQc1+5kICRyqtfGRaVURI/iPjL4+1qOfirnztwVkZZP5xvY85gvtLO
-         MIoDPr7qtLVpuVfmNrYa81BLIMApEYcvx+aTgNgZgpuofny+DPN0DqfYatW/1N/5I5nD
-         VXq81VCQivuZxnjoyW/hiQXYj5JE35Ji9hnGETUZ8oCVOI6US5ydEad5Llly4DvoYgfb
-         w5xw==
-X-Gm-Message-State: AC+VfDxHb6iyj1+LozXCA2WToi3zlu7/zCAiEhAWn/4i2qt+NQlCQWee
-        3e+JwZF0rUlWB9yqCmnNkYs=
-X-Google-Smtp-Source: ACHHUZ5pF+M++RxLzw+et8XA4BnqeGBSkMIpGL9wjTOHn5jtyuulDOVKMxiKgQKK2qIlAwKnMk2PgA==
-X-Received: by 2002:a05:6870:9544:b0:192:85fb:3a33 with SMTP id v4-20020a056870954400b0019285fb3a33mr6652658oal.2.1683729597002;
-        Wed, 10 May 2023 07:39:57 -0700 (PDT)
-Received: from t14s.localdomain ([177.92.48.137])
-        by smtp.gmail.com with ESMTPSA id n3-20020a056870034300b00176d49bb898sm6973892oaf.44.2023.05.10.07.39.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 07:39:56 -0700 (PDT)
-Received: by t14s.localdomain (Postfix, from userid 1000)
-        id 70AEA616D93; Wed, 10 May 2023 11:39:54 -0300 (-03)
-Date:   Wed, 10 May 2023 11:39:54 -0300
-From:   Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     nhorman@tuxdriver.com, davem@davemloft.net,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Christian Brauner <brauner@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Xin Long <lucien.xin@gmail.com>, linux-sctp@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next] sctp: add bpf_bypass_getsockopt proto callback
-Message-ID: <ZFusunmfAaQVmBE2@t14s.localdomain>
-References: <20230510131527.1244929-1-aleksandr.mikhalitsyn@canonical.com>
+        Wed, 10 May 2023 10:40:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AD1359E5;
+        Wed, 10 May 2023 07:40:05 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D188D64997;
+        Wed, 10 May 2023 14:40:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C90D3C43443;
+        Wed, 10 May 2023 14:40:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1683729604;
+        bh=TjKlhOtDBWY6sVSqTa1AaoJ81i3ojA2DvjPkKpAO41c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ERlwxIN00t6/qzz559l67HTA8LJkeDZi3xxEfyPEXUWbRGMqZgmznIPUkuBuntLPV
+         e1p0sE2gUk0AsrvC3MWLaSqRrcNHw/QU4woMV+onoaIIlC1fHets7J0j4baEa8AFmD
+         wDf6sV+YW/pTWpZQIPl3609uG38qONAq+gE7QKOQ=
+Date:   Wed, 10 May 2023 23:39:57 +0900
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Yixuan Jiang <yixuanjiang@google.com>
+Cc:     tiwai@suse.com, lgirdwood@gmail.com, broonie@kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        Takashi Iwai <tiwai@suse.de>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
+        Bard Liao <yung-chuan.liao@linux.intel.com>,
+        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH] ASoC: soc-pcm: Fix and cleanup DPCM locking
+Message-ID: <2023051045-ransack-lullaby-a127@gregkh>
+References: <20230504092142.4190069-1-yixuanjiang@google.com>
+ <2023050644-dwarf-shabby-d44d@gregkh>
+ <CAGJzVQGxDHa83uV0w4Q35UaGpwNhLpKzcZ5y_qsfd4ELDi+OnA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230510131527.1244929-1-aleksandr.mikhalitsyn@canonical.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAGJzVQGxDHa83uV0w4Q35UaGpwNhLpKzcZ5y_qsfd4ELDi+OnA@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,29 +60,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 03:15:27PM +0200, Alexander Mikhalitsyn wrote:
-> Add bpf_bypass_getsockopt proto callback and filter out
-> SCTP_SOCKOPT_PEELOFF and SCTP_SOCKOPT_PEELOFF_FLAGS socket options
-> from running eBPF hook on them.
+On Wed, May 10, 2023 at 07:59:49PM +0800, Yixuan Jiang wrote:
+> Greg KH <greg@kroah.com> 於 2023年5月6日 週六 下午1:56寫道：
+> >
+> > On Thu, May 04, 2023 at 05:21:42PM +0800, yixuanjiang wrote:
+> > > From: Takashi Iwai <tiwai@suse.de>
+> > >
+> > > The existing locking for DPCM has several issues
+> > > a) a confusing mix of card->mutex and card->pcm_mutex.
+> > > b) a dpcm_lock spinlock added inconsistently and on paths that could
+> > > be recursively taken. The use of irqsave/irqrestore was also overkill.
+> > >
+> > > The suggested model is:
+> > >
+> > > 1) The pcm_mutex is the top-most protection of BE links in the FE. The
+> > > pcm_mutex is applied always on either the top PCM callbacks or the
+> > > external call from DAPM, not taken in the internal functions.
+> > >
+> > > 2) the FE stream lock is taken in higher levels before invoking
+> > > dpcm_be_dai_trigger()
+> > >
+> > > 3) when adding and deleting a BE, both the pcm_mutex and FE stream
+> > > lock are taken.
+> > >
+> > > Signed-off-by: Takashi Iwai <tiwai@suse.de>
+> > > [clarification of commit message by plbossart]
+> > > Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+> > > Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
+> > > Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
+> > > Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
+> > > Link: https://lore.kernel.org/r/20211207173745.15850-4-pierre-louis.bossart@linux.intel.com
+> > > Cc: stable@vger.kernel.org # 5.15.x
+> > > Signed-off-by: Mark Brown <broonie@kernel.org>
+> > > ---
+> >
+> > What is the git commit id of this patch in Linus's tree?
+> >
+> > thanks,
+> >
+> > greg k-h
 > 
-> These options do fd_install(), and if BPF_CGROUP_RUN_PROG_GETSOCKOPT
-> hook returns an error after success of the original handler
-> sctp_getsockopt(...), userspace will receive an error from getsockopt
-> syscall and will be not aware that fd was successfully installed into fdtable.
+> Hi Greg,
+> For this patch I think it is [3/6] b7898396f4bbe160f546d0c5e9fa17cca9a7d153
 > 
-> This patch was born as a result of discussion around a new SCM_PIDFD interface:
-> https://lore.kernel.org/all/20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com/
+> >From https://lore.kernel.org/all/163953384515.1515253.13641477106348913835.b4-ty@kernel.org/
+> Seems there are total 6 patches.
+> 
+> [1/6] ASoC: soc-pcm: use GFP_ATOMIC for dpcm structure
+>       commit: d8a9c6e1f6766a16cf02b4e99a629f3c5512c183
+> [2/6] ASoC: soc-pcm: align BE 'atomicity' with that of the FE
+>       commit: bbf7d3b1c4f40eb02dd1dffb500ba00b0bff0303
+> [3/6] ASoC: soc-pcm: Fix and cleanup DPCM locking
+>       commit: b7898396f4bbe160f546d0c5e9fa17cca9a7d153
+> [4/6] ASoC: soc-pcm: serialize BE triggers
+>       commit: b2ae80663008a7662febe7d13f14ea1b2eb0cd51
+> [5/6] ASoC: soc-pcm: test refcount before triggering
+>       commit: 848aedfdc6ba25ad5652797db9266007773e44dd
+> [6/6] ASoC: soc-pcm: fix BE handling of PAUSE_RELEASE
+>       commit: 3aa1e96a2b95e2ece198f8dd01e96818971b84df
+> 
+> These 6 patches could directly cherry-pick to in 5.15 without conflict.
 
-I read some of the emails in there but I don't get why the fd leak is
-special here. I mean, I get that it leaks, but masking the error
-return like this can lead to several other problems in the application
-as well.
+Then please submit them for stable inclusion after you have tested that
+they all work properly.  But first, what bug is actually needed to be
+fixed here?  What is not working that this patch series fixes?
 
-For example, SCTP_SOCKOPT_CONNECTX3 will trigger a connect(). If it
-failed, and the hook returns success, the user app will at least log a
-wrong "connection successful".
+thanks,
 
-If the hook can't be responsible for cleaning up before returning a
-different value, then maybe we want to extend the list of sockopts in
-here. AFAICT these would be the 3 most critical sockopts.
-
+greg k-h
