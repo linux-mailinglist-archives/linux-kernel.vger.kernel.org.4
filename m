@@ -2,102 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD2506FD815
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:22:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15EE66FD816
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 09:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236481AbjEJHWa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 10 May 2023 03:22:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49424 "EHLO
+        id S236499AbjEJHWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 03:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236106AbjEJHW2 (ORCPT
+        with ESMTP id S236495AbjEJHWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 03:22:28 -0400
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 512411FFE;
-        Wed, 10 May 2023 00:22:27 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-559e2051d05so99580817b3.3;
-        Wed, 10 May 2023 00:22:27 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683703346; x=1686295346;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gmWJGjObZlpSH7bj175xkXQpLYD079UT8mAA0+fHxwg=;
-        b=ARLE56yNrUrqkKZtHeQowvjdwTW1JpAjGEhrAP6UvqQfAwmM2j8HX9rnq6IwmG1Qez
-         gnP5gCjWtGXiWzT9GuWEFWblX8nFSblRDspgBaAs5KWQMeNQUrElN211Ul2cZEbwO4Vc
-         eR9pLc1xErLJe/yTstLJJzOITqk2vYIc1Z4pS23YuEDR12nhkyO8F/nmvw0xyrW3ZlTT
-         7qswi81/v5D+ClLVD+4d2SrH8os28tNK3wHH8sF3PpTRih1g3ALupGELQl5Gb8ElPw6y
-         oAzSwElArWfk3m4cbUwoL1i0s3DJj3Sneo86JOlYKRMcGJh6nRM+89vgFwN7xo3+KRYp
-         cUsQ==
-X-Gm-Message-State: AC+VfDzAbXQROVLZLP9FK0hWoaaJZxuvN5sNAwN2uZRp6/sg5db5R8C9
-        b2uO8fNPOyBgboiUkTxetNhXVi5+Nj6V7g==
-X-Google-Smtp-Source: ACHHUZ47gAO+JBNowDSgjhLfKoTgickdfiVQRH3uAUaWAIZrrTUpqLjnJmRLRszooJOPB0wCGkAVDQ==
-X-Received: by 2002:a0d:df56:0:b0:546:cbe:df90 with SMTP id i83-20020a0ddf56000000b005460cbedf90mr20400617ywe.30.1683703346240;
-        Wed, 10 May 2023 00:22:26 -0700 (PDT)
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com. [209.85.128.169])
-        by smtp.gmail.com with ESMTPSA id q66-20020a0dce45000000b0054f03d75882sm3919603ywd.71.2023.05.10.00.22.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 00:22:25 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-55a10577911so99710367b3.0;
-        Wed, 10 May 2023 00:22:25 -0700 (PDT)
-X-Received: by 2002:a81:9e4f:0:b0:54f:b6af:ac15 with SMTP id
- n15-20020a819e4f000000b0054fb6afac15mr19714426ywj.51.1683703345052; Wed, 10
- May 2023 00:22:25 -0700 (PDT)
+        Wed, 10 May 2023 03:22:36 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF60C26BF;
+        Wed, 10 May 2023 00:22:33 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.55])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4QGRK96qjgzpWKT;
+        Wed, 10 May 2023 15:21:17 +0800 (CST)
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Wed, 10 May 2023 15:22:30 +0800
+Subject: Re: [PATCH 0/4] perf tools: Add printing perf_event_attr `config` and
+ `id` symbol in perf_event_attr__fprintf()
+To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
+        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
+        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
+        <adrian.hunter@intel.com>, <anshuman.khandual@arm.com>,
+        <jesussanp@google.com>, <linux-perf-users@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230419122912.73746-1-yangjihong1@huawei.com>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <4f1e2c1f-8bfc-49a7-2989-55a55057e725@huawei.com>
+Date:   Wed, 10 May 2023 15:22:30 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-References: <20230510065819.3987-1-wsa+renesas@sang-engineering.com> <20230510065819.3987-2-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20230510065819.3987-2-wsa+renesas@sang-engineering.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Wed, 10 May 2023 09:22:13 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVvKcRhNsSNP_Y=b3L_y7jyXaOErKmqXgr-r_2TTMn6aA@mail.gmail.com>
-Message-ID: <CAMuHMdVvKcRhNsSNP_Y=b3L_y7jyXaOErKmqXgr-r_2TTMn6aA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] dt-bindings: PCI: rcar-pci-host: add optional regulators
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc:     linux-renesas-soc@vger.kernel.org,
-        Marek Vasut <marek.vasut+renesas@gmail.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20230419122912.73746-1-yangjihong1@huawei.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 8:59 AM Wolfram Sang
-<wsa+renesas@sang-engineering.com> wrote:
-> Support regulators found on the e.g. KingFisher board for miniPCIe and
-> add a 12v regulator while we are here.
->
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
-> ---
->
-> Changes since RFC:
-> * added 12V supply for completeness
-> * use PCIe slot in the example instead of miniPCIe because that is what
->   the Koelsch board offers (just without the regulators ;))
+Hello,
 
-Same for e.g. Salvator-XS.
+PING.
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Thanks,
+Yang.
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+On 2023/4/19 20:29, Yang Jihong wrote:
+> Add printing perf_event_attr `config` and `id` symbol to improve the readability of debugging information.
+> 
+> Before:
+> 
+>    # perf --debug verbose=2 record -e cycles,cpu-clock,sched:sched_switch,branch-load-misses,r101 -C 0 true
+>    <SNIP>
+>    ------------------------------------------------------------
+>    perf_event_attr:
+>      size                             136
+>      { sample_period, sample_freq }   4000
+>      sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>      read_format                      ID
+>      disabled                         1
+>      inherit                          1
+>      freq                             1
+>      sample_id_all                    1
+>      exclude_guest                    1
+>    ------------------------------------------------------------
+>    sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
+>    ------------------------------------------------------------
+>    perf_event_attr:
+>      type                             1
+>      size                             136
+>      { sample_period, sample_freq }   4000
+>      sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>      read_format                      ID
+>      disabled                         1
+>      inherit                          1
+>      freq                             1
+>      sample_id_all                    1
+>      exclude_guest                    1
+>    ------------------------------------------------------------
+>    sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 7
+>    ------------------------------------------------------------
+>    perf_event_attr:
+>      type                             2
+>      size                             136
+>      config                           0x131
+>      { sample_period, sample_freq }   1
+>      sample_type                      IP|TID|TIME|CPU|PERIOD|RAW|IDENTIFIER
+>      read_format                      ID
+>      disabled                         1
+>      inherit                          1
+>      sample_id_all                    1
+>      exclude_guest                    1
+>    ------------------------------------------------------------
+>    sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 8
+>    ------------------------------------------------------------
+>    perf_event_attr:
+>      type                             3
+>      size                             136
+>      config                           0x10005
+>      { sample_period, sample_freq }   4000
+>      sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>      read_format                      ID
+>      disabled                         1
+>      inherit                          1
+>      freq                             1
+>      sample_id_all                    1
+>      exclude_guest                    1
+>    ------------------------------------------------------------
+>    sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 10
+>    ------------------------------------------------------------
+>    perf_event_attr:
+>      type                             4
+>      size                             136
+>      config                           0x101
+>      { sample_period, sample_freq }   4000
+>      sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>      read_format                      ID
+>      disabled                         1
+>      inherit                          1
+>      freq                             1
+>      sample_id_all                    1
+>      exclude_guest                    1
+>    ------------------------------------------------------------
+>    sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 11
+>    <SNIP>
+> 
+> After:
+> 
+>    # perf --debug verbose=2 record -e cycles,cpu-clock,sched:sched_switch,branch-load-misses,r101 -C 0 true
+>    <SNIP>
+>    ------------------------------------------------------------
+>    perf_event_attr:
+>      type                             0 (PERF_TYPE_HARDWARE)
+>      size                             136
+>      config                           0 (PERF_COUNT_HW_CPU_CYCLES)
+>      { sample_period, sample_freq }   4000
+>      sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>      read_format                      ID
+>      disabled                         1
+>      inherit                          1
+>      freq                             1
+>      sample_id_all                    1
+>      exclude_guest                    1
+>    ------------------------------------------------------------
+>    sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
+>    ------------------------------------------------------------
+>    perf_event_attr:
+>      type                             1 (PERF_TYPE_SOFTWARE)
+>      size                             136
+>      config                           0 (PERF_COUNT_SW_CPU_CLOCK)
+>      { sample_period, sample_freq }   4000
+>      sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>      read_format                      ID
+>      disabled                         1
+>      inherit                          1
+>      freq                             1
+>      sample_id_all                    1
+>      exclude_guest                    1
+>    ------------------------------------------------------------
+>    sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 7
+>    ------------------------------------------------------------
+>    perf_event_attr:
+>      type                             2 (PERF_TYPE_TRACEPOINT)
+>      size                             136
+>      config                           0x131 (sched:sched_switch)
+>      { sample_period, sample_freq }   1
+>      sample_type                      IP|TID|TIME|CPU|PERIOD|RAW|IDENTIFIER
+>      read_format                      ID
+>      disabled                         1
+>      inherit                          1
+>      sample_id_all                    1
+>      exclude_guest                    1
+>    ------------------------------------------------------------
+>    sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 8
+>    ------------------------------------------------------------
+>    perf_event_attr:
+>      type                             3 (PERF_TYPE_HW_CACHE)
+>      size                             136
+>      config                           0x10005 (PERF_COUNT_HW_CACHE_RESULT_MISS | PERF_COUNT_HW_CACHE_OP_READ | PERF_COUNT_HW_CACHE_BPU)
+>      { sample_period, sample_freq }   4000
+>      sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>      read_format                      ID
+>      disabled                         1
+>      inherit                          1
+>      freq                             1
+>      sample_id_all                    1
+>      exclude_guest                    1
+>    ------------------------------------------------------------
+>    sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 10
+>    ------------------------------------------------------------
+>    perf_event_attr:
+>      type                             4 (PERF_TYPE_RAW)
+>      size                             136
+>      config                           0x101
+>      { sample_period, sample_freq }   4000
+>      sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>      read_format                      ID
+>      disabled                         1
+>      inherit                          1
+>      freq                             1
+>      sample_id_all                    1
+>      exclude_guest                    1
+>    ------------------------------------------------------------
+>    sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 11
+>    <SNIP>
+> 
+> Yang Jihong (4):
+>    perf trace-event-info: Add tracepoint_id_to_name() helper
+>    perf tools: Extend PRINT_ATTRf to support printing of members with a
+>      value of 0
+>    perf tools: Add printing perf_event_attr->type symbol in
+>      perf_event_attr__fprintf()
+>    perf tools: Add printing perf_event_attr->config symbol in
+>      perf_event_attr__fprintf()
+> 
+>   tools/perf/util/perf_event_attr_fprintf.c | 169 ++++++++++++++++++++--
+>   tools/perf/util/trace-event-info.c        |  13 ++
+>   tools/perf/util/trace-event.h             |   6 +
+>   3 files changed, 179 insertions(+), 9 deletions(-)
+> 
