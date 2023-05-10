@@ -2,133 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABED56FE2E8
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 19:01:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C54D16FE2F0
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 19:02:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235378AbjEJRBY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 13:01:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42990 "EHLO
+        id S235426AbjEJRCv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 13:02:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236122AbjEJRBL (ORCPT
+        with ESMTP id S232032AbjEJRCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 13:01:11 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B835588
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 10:00:54 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-333866a265fso42884575ab.3
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 10:00:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683738053; x=1686330053;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oBtF7LYkXSUt83SUWJ9QjemTqyVA/iZGdvboiNmRLKo=;
-        b=A+R7ioq0e74ZvC0NZ/Z7xGTuJG2Um8qhEGCM7Yx/wgrYSnsf353gWtHqFoThC9KRtz
-         Z42CTDGdljcZXtww9Su9lbBYEPVrO+LdhoP/FPgP9+5UcL8lKMjE2ZHpMa/gkmcwBIFY
-         GZiMb3Wdisz+9RzjXnvLQZBO5HG5Q4tZx0ca3ecPL2IQrVhYg1NSzADYmvCp/VZHLO4a
-         8uqIKS0oXHj++3PgwXtyM7W2aXMk1uAQ2MsBedUgPQ3ymx2PQTpX0zDSL424EiROh/ap
-         FgLDvZOCl3FAgr1VL43ll+L8Fk72JMowJiGc7hEVd9WE8Z/ldJHu3Clhl53HOzVyN9y3
-         /axA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683738053; x=1686330053;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=oBtF7LYkXSUt83SUWJ9QjemTqyVA/iZGdvboiNmRLKo=;
-        b=UOokev/Ud8OFe4p2dB97zeq2UuWvJHpN6uVC+84cDeN9X47/JCis7CkqoiDgw+AAkc
-         0y/T+6j1546NjsPqPIK15fX24d1tsatLQZtPxe3/OqfX6QfGIg4ovtl974RlagfMV7n7
-         0gm+lQdFxF4idLyUpaO142/3ZlYCeFJZMsZZmAMb9vu9aDmMQONQt16F96WzYovn0j6Y
-         4PhLibceDqAAzwmbkoTF0hxm19v4l8sOHfYczeiIeZMnf81GRz9DGUEQqtY9ILjPEwkx
-         iZ9bA3OSnfPZIhFQkYr7V2HLJdbplyJuuX4QwjCL2tcc1MLOWi1FowjxyWESdfV9QNnf
-         ggHQ==
-X-Gm-Message-State: AC+VfDypyXetLzHyDWOUUw6uryTU6Qh/LzqxukliWf2azIHW5ebOSSAN
-        2L7OPMqIE0w4SYL08HQ992X1Hv9ChzxzP4+0+1ETYw==
-X-Google-Smtp-Source: ACHHUZ5N9CS3CqU4NU1sy+urJFNG0b8bx2si2jJT7pLVYWpiBuXIOYmwNDCAOsTy75ZvINZV52K8ENNUmr4PnELimYw=
-X-Received: by 2002:a92:d245:0:b0:330:f7b3:ea4 with SMTP id
- v5-20020a92d245000000b00330f7b30ea4mr13478553ilg.2.1683738053613; Wed, 10 May
- 2023 10:00:53 -0700 (PDT)
+        Wed, 10 May 2023 13:02:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78748A244;
+        Wed, 10 May 2023 10:02:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EA29863F32;
+        Wed, 10 May 2023 17:02:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B0CEC433EF;
+        Wed, 10 May 2023 17:02:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683738129;
+        bh=lotOX4b7zrwUZyultRVZKebXpnW0zUfr/QizPj7LoDc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DA1HfDlqPzbwUs7qeCL2ZApnhrOk+VviUystpCSedzJh4elZ18Fh0eTfZtXkplioH
+         1AYC6h8AawtSTXHcJjUapzPAZhS7RUHJgq8PXBkWYypS2AxGJU8QmAljnTfyZNBGTH
+         wFOgSv/kze540CrHr3gz+UPlrArdjJpCGSAvhFTYAhrqJ/Fxly0H7/1/UHIFThpi9F
+         6fMH88N9Dwn7/P+1sAdNsv6/+Kgdvl0Qgnw06B4+cbWt6+vydnIpPZah/EnJykhuqV
+         NwiHBaC0iXqaX14GB7a6gPPxxtSugqvQ+VnzeG+w81nB6sh5bXOQQYf1sbvGVa7fOS
+         W4I3tbMsE6B1g==
+Date:   Wed, 10 May 2023 18:02:03 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Patrick Delaunay <patrick.delaunay@foss.st.com>
+Cc:     Alexandre TORGUE <alexandre.torgue@foss.st.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        gabriel.fernandez@st.com, gabriel.fernandez@foss.st.com,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com
+Subject: Re: [PATCH v2] dt-bindings: rcc: stm32: Sync with u-boot copy for
+ STM32MP13 SoC
+Message-ID: <20230510-cornball-compacter-39e57a5c1906@spud>
+References: <20230510184305.v2.1.I417093ddcea282be479f10a37147d1935a9050b7@changeid>
 MIME-Version: 1.0
-References: <20230509030611.521807993@linuxfoundation.org> <863a112f-f4a4-d580-9687-f6214d555939@linaro.org>
- <2023051035-monitor-sandy-2a5b@gregkh> <CAEUSe79AViqsHimbYbFjkKAxcvROGhFKA2yKVuC3aP1Gm=jc1w@mail.gmail.com>
-In-Reply-To: <CAEUSe79AViqsHimbYbFjkKAxcvROGhFKA2yKVuC3aP1Gm=jc1w@mail.gmail.com>
-From:   =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
-Date:   Wed, 10 May 2023 11:00:42 -0600
-Message-ID: <CAEUSe7_ZBW_hPUZYeKkZ6zuckeqYb+O46GdgGx0wE6T0=c5wZg@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/370] 5.15.111-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        laoar.shao@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="k4ry2CHnyg+ELMZR"
+Content-Disposition: inline
+In-Reply-To: <20230510184305.v2.1.I417093ddcea282be479f10a37147d1935a9050b7@changeid>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
 
-On Wed, 10 May 2023 at 09:46, Daniel D=C3=ADaz <daniel.diaz@linaro.org> wro=
-te:
-> Hello!
->
-> On Wed, 10 May 2023 at 01:43, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> > On Tue, May 09, 2023 at 09:12:33AM -0600, Daniel D=C3=ADaz wrote:
-> > > Hello!
-> > >
-> > > On 08/05/23 21:26, Greg Kroah-Hartman wrote:
-> > > > This is the start of the stable review cycle for the 5.15.111 relea=
-se.
-> > > > There are 370 patches in this series, all will be posted as a respo=
-nse
-> > > > to this one.  If anyone has any issues with these being applied, pl=
-ease
-> > > > let me know.
-> > > >
-> > > > Responses should be made by Thu, 11 May 2023 03:05:05 +0000.
-> > > > Anything received after that time might be too late.
-> > > >
-> > > > The whole patch series can be found in one patch at:
-> > > >     https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patc=
-h-5.15.111-rc2.gz
-> > > > or in the git tree and branch at:
-> > > >     git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stab=
-le-rc.git linux-5.15.y
-> > > > and the diffstat can be found below.
-> > > >
-> > > > thanks,
-> > > >
-> > > > greg k-h
-> > >
-> > > New warnings are introduced for Arm, PowerPC, RISC-V:
-> > >
-> > >   /builds/linux/kernel/sched/debug.c: In function 'print_cfs_group_st=
-ats':
-> > >   /builds/linux/kernel/sched/debug.c:465:41: warning: unused variable=
- 'stats' [-Wunused-variable]
-> > >                   struct sched_statistics *stats =3D  __schedstats_fr=
-om_se(se);
-> > >                                            ^~~~~
-> >
-> > Odd, and this isn't on other kernels too?
->
-> Only on 5.15, not on the 6.x RC's. I'll share more info after my
-> bisection is done.
+--k4ry2CHnyg+ELMZR
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Bisection leads to:
+On Wed, May 10, 2023 at 06:51:40PM +0200, Patrick Delaunay wrote:
+> Minor cosmetic change, aligned with files in U-Boot:
+> - change obsolete SPDX id : GPL-2.0+ and use the same license
+>   GPL-2.0-only for the 2 files
+> - use correct mail address gabriel.fernandez@foss.st.com
+> - remove extra space
 
-  sched: Make struct sched_statistics independent of fair sched class
+Rob's comments on v1 were about $subject, which you've fixed, although
+the second prefix is a bit odd (I assume since you're changing clock and
+reset headers) and about the change in license to "or-later" for the
+resets header, which you've changed too, so...
+>=20
+> Signed-off-by: Patrick Delaunay <patrick.delaunay@foss.st.com>
+> ---
+>=20
+> Changes in v2:
+> - Change title "Fix STM32MP13 include file"
+> - Use the same license for the 2 files GPL-2.0-only as recommended
+>   to avoid check-patch issue on next
+>=20
+>  include/dt-bindings/clock/stm32mp13-clks.h   | 6 +++---
+>  include/dt-bindings/reset/stm32mp13-resets.h | 4 ++--
+>  2 files changed, 5 insertions(+), 5 deletions(-)
+>=20
+> diff --git a/include/dt-bindings/clock/stm32mp13-clks.h b/include/dt-bind=
+ings/clock/stm32mp13-clks.h
+> index 02befd25edce..0bd7b54c65ff 100644
+> --- a/include/dt-bindings/clock/stm32mp13-clks.h
+> +++ b/include/dt-bindings/clock/stm32mp13-clks.h
+> @@ -1,7 +1,7 @@
+> -/* SPDX-License-Identifier: GPL-2.0+ or BSD-3-Clause */
+> +/* SPDX-License-Identifier: GPL-2.0-only OR BSD-3-Clause */
 
-Reverting makes the warning disappear.
+=2E..since Gabriel does appear to be the only author of this file:
 
-Greetings!
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
+
+Thanks,
+Conor.
+
+--k4ry2CHnyg+ELMZR
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFvOCwAKCRB4tDGHoIJi
+0nzKAP9Q3RQ8cCCJ0u7zvdfKzBAtWVV74cClqrvrHvOX/dPoCgEA8ZSZ26rKzZ58
+mifcHLYL8KXB19Ms7tHVYatW5g/hgQw=
+=E1Wj
+-----END PGP SIGNATURE-----
+
+--k4ry2CHnyg+ELMZR--
