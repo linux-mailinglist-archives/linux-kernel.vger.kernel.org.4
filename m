@@ -2,67 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C68B86FE719
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 00:14:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B993A6FE71D
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 00:17:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236527AbjEJWOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 18:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36572 "EHLO
+        id S230316AbjEJWRA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 18:17:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229825AbjEJWOY (ORCPT
+        with ESMTP id S229447AbjEJWQz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 18:14:24 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BE972B7;
-        Wed, 10 May 2023 15:14:11 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f00d41df22so43668088e87.1;
-        Wed, 10 May 2023 15:14:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683756849; x=1686348849;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F12xtUUbHfnnIPOcV6kMlGj3VIf41Mi5l3K4OiMlRYE=;
-        b=adGfu62pua9jfHtulZjBTNr37OcBgkpkp9PpMc0Uw8KhqvMS5dQiaE0ufS4ObFfZx6
-         vZav3Vexft6IWm7qXaulrJFyZKDoH0c0SQ9wSo3UDia90JKJ13NogFQyJncoz49YKvSn
-         ha3eTzoe0ttL4En5CZbBIDKnvPBsRiSb8c/V8eIwXthhtKhb2vPT12X6aNHr8VggNYBe
-         pL/cvCXv+epo+m6IH9irobcG9yslbnNBhzqKsCYK8ON6r5eFIx9PT2jYy1Oo5W7ry/gn
-         bz55J79U8gWrojppaO0u577h6lHllFvIxULq2iJ53X7UyhurSkgx4yaVEbQ8VcGZRJFx
-         Z5lA==
+        Wed, 10 May 2023 18:16:55 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA4B8E5C
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 15:16:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683756970;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=SkG4EaZe3hpWVMFWNfO4hTm8XFwFkMwWIhkUJz2vGwI=;
+        b=BDtqA86aZm1vLVD0kKAODYuPLgy3349rUvKhYjcndevdhsYqWjJ1dVM1sd09+b4jWv6Af8
+        egUMXIT2MpCVMEAm8pMRC2K3j2oN3QMFTCIgRh0Ri8mpLoQ2R/liwjF19+7Q6sAFYfA7Mg
+        HldhLVZRmrcae+gCeKr7Ktb9MqmbsJw=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-578-eoshAts8MWqyOnLE4EihOg-1; Wed, 10 May 2023 18:16:08 -0400
+X-MC-Unique: eoshAts8MWqyOnLE4EihOg-1
+Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-3940f92da76so1494983b6e.2
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 15:16:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683756849; x=1686348849;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F12xtUUbHfnnIPOcV6kMlGj3VIf41Mi5l3K4OiMlRYE=;
-        b=kOy/e8ooJhR9bOxV5hzk3u1PkiRtse02le0Plg/jQwJJQen8PH2vQFBltYUYmLZDRz
-         fFLbM8qDRz/cznVUM2DBMXd80/R8/GMLWeriySV1sTDDgQPs9kBWxnHG8DkFmT7jlfGJ
-         J6bmjhL298haJM74Y+rUp5bSXHIpLNfN6n6uvWgxnSt45eCH5kNcgcFGBtW8ZKknwuNh
-         o9p/c6V1WgYVLr6j5+NOAHFjGcX/vuNyMVbDFu5N6iP+LQPOT4h9oNDhj7he0K+HJjBZ
-         LhoAhrg2N1CyDgW9IgBabQ5z3gplrylGpswV0RA498wfX9nVKd7k13/hvr1WrHqQXFtI
-         RrkQ==
-X-Gm-Message-State: AC+VfDyWR44Y3StflJPerfWkL9Ov4UWIOjThn9JptY7Jqbe/+Ltx0UDk
-        WOmk+NiJijr0AIPZm2vab0h7Tb7ydyo5Jaep6RWc1jgA
-X-Google-Smtp-Source: ACHHUZ6yap2uHAjTn0ge4LVO4wQlRyrseuOWr4icmdg/eT2743XxvrxZt2KzjZbuhO4+HSBB0GQoz9HBok78VplGW5s=
-X-Received: by 2002:a05:6512:3990:b0:4ef:ef1d:a987 with SMTP id
- j16-20020a056512399000b004efef1da987mr2211186lfu.25.1683756849396; Wed, 10
- May 2023 15:14:09 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683756968; x=1686348968;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SkG4EaZe3hpWVMFWNfO4hTm8XFwFkMwWIhkUJz2vGwI=;
+        b=T9yMeRd7fPOIgErMkgN3qSQ49m7XZNQlpx8VH098lSWfeYzETV41168pv9yC+m4iA0
+         94FwYjd39IWKpnnuglAosD+9lXMdwOzyvUHj1dvCRw4D4WegS+w/AK2vODEiWVk3kIl5
+         pjRfO5pa6zHUcMP35rYqAKXvwedi0C9ukmqthY18snq4vOLoSz9bYwA19zQmZmN7c2l9
+         omvgIBl/SaOYDWmDMX/LB+5gtA30LHISOP+stfcarqGYQmbHrrcd4htoj8VH+X1B3Chi
+         F0G929SFXNP8Q7wDj+lJi1GtO3F1/ht0+rkagWXPMiGrWcriJd7KPQx978Com+IKLoHS
+         GqFg==
+X-Gm-Message-State: AC+VfDwnGoysb2TZDNhQYPMqpRKrm+WhfrgUQAwAtioNBxAPhdOLQIo2
+        /YRmsOzGSwJDJE8UNOX2hxVhOVGz/THiDA+4xZzWPiCLRfCRfTLrLMydQS6cnZ87RxiOfLjS4l6
+        oVZPOtyX3oO0zUWmusPo+7xk/
+X-Received: by 2002:a05:6808:288b:b0:38c:6d8:b785 with SMTP id eu11-20020a056808288b00b0038c06d8b785mr3614514oib.29.1683756967929;
+        Wed, 10 May 2023 15:16:07 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4VvgT9ApYuGNOIVHm1Zh3tTAt2EtQntVinH+K8bMB/Y+lC+YVO/ghUBkrmF//G+EEqhjIM7Q==
+X-Received: by 2002:a05:6808:288b:b0:38c:6d8:b785 with SMTP id eu11-20020a056808288b00b0038c06d8b785mr3614499oib.29.1683756967674;
+        Wed, 10 May 2023 15:16:07 -0700 (PDT)
+Received: from localhost.localdomain ([2804:1b3:a803:3602:abec:117:3c19:43b8])
+        by smtp.gmail.com with ESMTPSA id q11-20020a0568080a8b00b0038e4c6fb8e0sm2573691oij.58.2023.05.10.15.16.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 15:16:05 -0700 (PDT)
+From:   Leonardo Bras <leobras@redhat.com>
+To:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Leonardo Bras <leobras@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Juergen Gross <jgross@suse.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Yury Norov <yury.norov@gmail.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Nadav Amit <namit@vmware.com>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Subject: [RFC PATCH v2 1/1] trace,smp: Add tracepoints around remotelly called functions
+Date:   Wed, 10 May 2023 19:15:14 -0300
+Message-Id: <20230510221513.93297-1-leobras@redhat.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230505220043.39036-1-jorge.lopez2@hp.com> <20230505220043.39036-12-jorge.lopez2@hp.com>
- <ef445e78-5751-bd8f-44ce-d9beaebaac6@linux.intel.com>
-In-Reply-To: <ef445e78-5751-bd8f-44ce-d9beaebaac6@linux.intel.com>
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-Date:   Wed, 10 May 2023 17:13:40 -0500
-Message-ID: <CAOOmCE_dRivApf46KO1Cq-vHGsHVXNVCqbqF2NV4Y6SVpYx6hA@mail.gmail.com>
-Subject: Re: [PATCH v12 11/13] HP BIOSCFG driver - surestart-attributes
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas@t-8ch.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,247 +88,240 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 9, 2023 at 8:57=E2=80=AFAM Ilpo J=C3=A4rvinen
-<ilpo.jarvinen@linux.intel.com> wrote:
->
-> On Fri, 5 May 2023, Jorge Lopez wrote:
->
-> > HP BIOS Configuration driver purpose is to provide a driver supporting
-> > the latest sysfs class firmware attributes framework allowing the user
-> > to change BIOS settings and security solutions on HP Inc.=E2=80=99s com=
-mercial
-> > notebooks.
-> >
-> > Many features of HP Commercial notebooks can be managed using Windows
-> > Management Instrumentation (WMI). WMI is an implementation of Web-Based
-> > Enterprise Management (WBEM) that provides a standards-based interface
-> > for changing and monitoring system settings. HP BIOSCFG driver provides
-> > a native Linux solution and the exposed features facilitates the
-> > migration to Linux environments.
-> >
-> > The Linux security features to be provided in hp-bioscfg driver enables
-> > managing the BIOS settings and security solutions via sysfs, a virtual
-> > filesystem that can be used by user-mode applications. The new
-> > documentation cover HP-specific firmware sysfs attributes such Secure
-> > Platform Management and Sure Start. Each section provides security
-> > feature description and identifies sysfs directories and files exposed
-> > by the driver.
-> >
-> > Many HP Commercial notebooks include a feature called Secure Platform
-> > Management (SPM), which replaces older password-based BIOS settings
-> > management with public key cryptography. PC secure product management
-> > begins when a target system is provisioned with cryptographic keys
-> > that are used to ensure the integrity of communications between system
-> > management utilities and the BIOS.
-> >
-> > HP Commercial notebooks have several BIOS settings that control its
-> > behaviour and capabilities, many of which are related to security.
-> > To prevent unauthorized changes to these settings, the system can
-> > be configured to use a cryptographic signature-based authorization
-> > string that the BIOS will use to verify authorization to modify the
-> > setting.
-> >
-> > Linux Security components are under development and not published yet.
-> > The only linux component is the driver (hp bioscfg) at this time.
-> > Other published security components are under Windows.
-> >
-> > Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
-> >
-> > ---
-> > Based on the latest platform-drivers-x86.git/for-next
-> > ---
-> >  .../x86/hp/hp-bioscfg/surestart-attributes.c  | 133 ++++++++++++++++++
-> >  1 file changed, 133 insertions(+)
-> >  create mode 100644 drivers/platform/x86/hp/hp-bioscfg/surestart-attrib=
-utes.c
-> >
-> > diff --git a/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c =
-b/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
-> > new file mode 100644
-> > index 000000000000..b627c324f6a6
-> > --- /dev/null
-> > +++ b/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
-> > @@ -0,0 +1,133 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Functions corresponding to sure start object type attributes under
-> > + * BIOS for use with hp-bioscfg driver
-> > + *
-> > + *  Copyright (c) 2022 HP Development Company, L.P.
-> > + */
-> > +
-> > +#include "bioscfg.h"
-> > +#include <linux/types.h>
-> > +
-> > +/* Maximum number of log entries supported when log entry size is 16
-> > + * bytes.  This value is calculated by dividing 4096 (page size) by
-> > + * log entry size.
-> > + */
-> > +#define LOG_MAX_ENTRIES              254
-> > +
-> > +/*
-> > + * Current Log entry size.  This value size will change in the
-> > + * future. The driver reads a total of 128 bytes for each log entry
-> > + * provided by BIOS but only the first 16 bytes are used/read.
-> > + */
-> > +#define LOG_ENTRY_SIZE               16
-> > +
-> > +/*
-> > + * audit_log_entry_count_show - Reports the number of
-> > + *                           existing audit log entries available
-> > + *                           to be read
-> > + */
-> > +static ssize_t audit_log_entry_count_show(struct kobject *kobj,
-> > +                                       struct kobj_attribute *attr, ch=
-ar *buf)
-> > +{
-> > +     int ret;
-> > +     u32 count =3D 0;
-> > +
-> > +     ret =3D hp_wmi_perform_query(HPWMI_SURESTART_GET_LOG_COUNT,
-> > +                                HPWMI_SURESTART,
-> > +                                &count, 1, sizeof(count));
-> > +
->
-> Extra newline.
-Done!
->
-> > +     if (ret < 0)
-> > +             return ret;
-> > +
-> > +     return sysfs_emit(buf, "%d,%d,%d\n", count, LOG_ENTRY_SIZE,
-> > +                       LOG_MAX_ENTRIES);
->
-> Why 3 values instead of 1?
-This version of BIOS only returns the number of audit log events available.
-The other two values are the current log entry size which today is
-hardcoded.  This will change in future when BIOS returns the log entry
-size.
->
-> > +}
-> > +
-> > +/*
-> > + * audit_log_entries_show() - Return all entries found in log file
-> > + */
-> > +static ssize_t audit_log_entries_show(struct kobject *kobj,
-> > +                                   struct kobj_attribute *attr, char *=
-buf)
-> > +{
-> > +     int ret;
-> > +     int i;
-> > +     u32 count =3D 0;
-> > +     u8 audit_log_buffer[128];
-> > +
-> > +     // Get the number of event logs
-> > +     ret =3D hp_wmi_perform_query(HPWMI_SURESTART_GET_LOG_COUNT,
-> > +                                HPWMI_SURESTART,
-> > +                                &count, 1, sizeof(count));
-> > +
->
-> Extra newline.
-Done!
->
-> > +     if (ret < 0)
-> > +             return ret;
-> > +
-> > +     /*
-> > +      * The show() api will not work if the audit logs ever go
-> > +      *  beyond 4KB
->
-> Extra space.
-Done!
->
-> > +      */
-> > +     if (count * LOG_ENTRY_SIZE > PAGE_SIZE)
-> > +             return -EIO;
-> > +
-> > +     /*
-> > +      * We are guaranteed the buffer is 4KB so today all the event
-> > +      * logs will fit
-> > +      */
-> > +     for (i =3D 0; i < count; i++) {
-> > +             audit_log_buffer[0] =3D (i + 1);
->
-> Extra parenthesis.
-Done!
->
-> > +
-> > +             /*
-> > +              * read audit log entry at a time. 'buf' input value
-> > +              * provides  the audit log entry to be read.  On
->
-> Extra spaces.
-Done!
->
-> > +              * input, Byte 0 =3D Audit Log entry number from
-> > +              * beginning (1..254)
-> > +              * Entry number 1 is the newest entry whereas the
-> > +              * highest entry number (number of entries) is the
-> > +              * oldest entry.
-> > +              */
-> > +             ret =3D hp_wmi_perform_query(HPWMI_SURESTART_GET_LOG,
-> > +                                        HPWMI_SURESTART,
-> > +                                        audit_log_buffer, 1, 128);
-> > +
-> > +             if (ret >=3D 0 && (LOG_ENTRY_SIZE * i) < PAGE_SIZE) {
->
-> Can the second condition ever fail?
->
-Only in the event BIOS data is corrupted.
+When running RT workloads in isolated CPUs, many cases of deadline misses
+are caused by remote CPU requests such as smp_call_function*().
 
-> > +                     memcpy(buf, audit_log_buffer, LOG_ENTRY_SIZE);
-> > +                     buf +=3D LOG_ENTRY_SIZE;
-> > +             } else {
-> > +                     /*
-> > +                      * Encountered a failure while reading
-> > +                      * individual logs. Only a partial list of
-> > +                      * audit log will be returned.
-> > +                      */
-> > +                     count =3D i + 1;
-> > +                     break;
-> > +             }
->
-> Reverse order, do error handling with break first.
-Done!
->
-> Why not return i * LOG_ENTRY_SIZE directly (or at the end), no need to
-> tweak count?
+For those cases, having the names of those functions running around the
+deadline miss moment could help (a lot) finding a target for the next
+improvements.
 
-Done!
->
-> > +     }
-> > +
-> > +     return count * LOG_ENTRY_SIZE;
-> > +}
-> > +
-> > +static struct kobj_attribute sure_start_audit_log_entry_count =3D __AT=
-TR_RO(audit_log_entry_count);
-> > +static struct kobj_attribute sure_start_audit_log_entries =3D __ATTR_R=
-O(audit_log_entries);
-> > +
-> > +static struct attribute *sure_start_attrs[] =3D {
-> > +     &sure_start_audit_log_entry_count.attr,
-> > +     &sure_start_audit_log_entries.attr,
-> > +     NULL,
-> > +};
-> > +
-> > +static const struct attribute_group sure_start_attr_group =3D {
-> > +     .attrs =3D sure_start_attrs,
-> > +};
-> > +
-> > +void exit_sure_start_attributes(void)
-> > +{
-> > +     sysfs_remove_group(bioscfg_drv.sure_start_attr_kobj,
-> > +                        &sure_start_attr_group);
-> > +}
-> > +
-> > +int populate_sure_start_data(struct kobject *attr_name_kobj)
-> > +{
-> > +     bioscfg_drv.sure_start_attr_kobj =3D attr_name_kobj;
-> > +     return sysfs_create_group(attr_name_kobj, &sure_start_attr_group)=
-;
-> > +}
-> >
->
-> --
->  i.
+Add tracepoints for acquiring the function name & csd before entry and
+after returning from the remote-cpu requested function.
+
+Also, add tracepoints on the remote cpus requesting them.
+
+Signed-off-by: Leonardo Bras <leobras@redhat.com>
+---
+
+Changes since RFCv1:
+- Implemented trace_csd_queue_cpu() as suggested by Valentin Schneider
+- Using EVENT_CLASS in order to avoid duplication
+- Introduced new helper: csd_do_func()
+- Name change from smp_call_function_* to csd_function_*
+- Rebased on top of torvalds/master
+
+ include/trace/events/smp.h | 72 ++++++++++++++++++++++++++++++++++++++
+ kernel/smp.c               | 41 +++++++++++++---------
+ 2 files changed, 96 insertions(+), 17 deletions(-)
+ create mode 100644 include/trace/events/smp.h
+
+diff --git a/include/trace/events/smp.h b/include/trace/events/smp.h
+new file mode 100644
+index 000000000000..5fd75399d3f1
+--- /dev/null
++++ b/include/trace/events/smp.h
+@@ -0,0 +1,72 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#undef TRACE_SYSTEM
++#define TRACE_SYSTEM smp
++
++#if !defined(_TRACE_SMP_H) || defined(TRACE_HEADER_MULTI_READ)
++#define _TRACE_SMP_H
++
++#include <linux/tracepoint.h>
++
++TRACE_EVENT(csd_queue_cpu,
++
++	TP_PROTO(const unsigned int cpu,
++		 unsigned long callsite,
++		 smp_call_func_t func,
++		 call_single_data_t *csd),
++
++	TP_ARGS(cpu, callsite, func, csd),
++
++	TP_STRUCT__entry(
++		__field(unsigned int, cpu)
++		__field(void *, callsite)
++		__field(void *, func)
++		__field(void *, csd)
++	),
++
++	TP_fast_assign(
++		__entry->cpu = cpu;
++		__entry->callsite = (void *)callsite;
++		__entry->func = func;
++		__entry->csd  = csd;
++	),
++
++	TP_printk("cpu=%u callsite=%pS func=%pS csd=%p",
++		  __entry->cpu, __entry->callsite, __entry->func, __entry->csd)
++);
++
++/*
++ * Tracepoints for a function which is called as an effect of smp_call_function.*
++ */
++DECLARE_EVENT_CLASS(csd_function,
++
++	TP_PROTO(smp_call_func_t func, call_single_data_t *csd),
++
++	TP_ARGS(func, csd),
++
++	TP_STRUCT__entry(
++		__field(void *,	func)
++		__field(void *,	csd)
++	),
++
++	TP_fast_assign(
++		__entry->func	= func;
++		__entry->csd	= csd;
++	),
++
++	TP_printk("function %ps, csd = %p", __entry->func, __entry->csd)
++);
++
++DEFINE_EVENT(csd_function, csd_function_entry,
++	TP_PROTO(smp_call_func_t func, call_single_data_t *csd),
++	TP_ARGS(func, csd),
++);
++
++DEFINE_EVENT(csd_function, csd_function_exit,
++	TP_PROTO(smp_call_func_t func, call_single_data_t *csd),
++	TP_ARGS(func, csd),
++);
++
++#endif /* _TRACE_SMP_H */
++
++/* This part must be outside protection */
++#include <trace/define_trace.h>
+diff --git a/kernel/smp.c b/kernel/smp.c
+index ab3e5dad6cfe..a34aa2b92050 100644
+--- a/kernel/smp.c
++++ b/kernel/smp.c
+@@ -27,6 +27,9 @@
+ #include <linux/jump_label.h>
+ 
+ #include <trace/events/ipi.h>
++#define CREATE_TRACE_POINTS
++#include <trace/events/smp.h>
++#undef CREATE_TRACE_POINTS
+ 
+ #include "smpboot.h"
+ #include "sched/smp.h"
+@@ -121,6 +124,14 @@ send_call_function_ipi_mask(struct cpumask *mask)
+ 	arch_send_call_function_ipi_mask(mask);
+ }
+ 
++static __always_inline void
++csd_do_func(smp_call_func_t func, void *info, call_single_data_t *csd)
++{
++	trace_csd_function_entry(func, csd);
++	func(info);
++	trace_csd_function_exit(func, csd);
++}
++
+ #ifdef CONFIG_CSD_LOCK_WAIT_DEBUG
+ 
+ static DEFINE_STATIC_KEY_MAYBE(CONFIG_CSD_LOCK_WAIT_DEBUG_DEFAULT, csdlock_debug_enabled);
+@@ -329,7 +340,7 @@ void __smp_call_single_queue(int cpu, struct llist_node *node)
+ 	 * even if we haven't sent the smp_call IPI yet (e.g. the stopper
+ 	 * executes migration_cpu_stop() on the remote CPU).
+ 	 */
+-	if (trace_ipi_send_cpu_enabled()) {
++	if (trace_csd_queue_cpu_enabled()) {
+ 		call_single_data_t *csd;
+ 		smp_call_func_t func;
+ 
+@@ -337,7 +348,7 @@ void __smp_call_single_queue(int cpu, struct llist_node *node)
+ 		func = CSD_TYPE(csd) == CSD_TYPE_TTWU ?
+ 			sched_ttwu_pending : csd->func;
+ 
+-		trace_ipi_send_cpu(cpu, _RET_IP_, func);
++		trace_csd_queue_cpu(cpu, _RET_IP_, func);
+ 	}
+ 
+ 	/*
+@@ -375,7 +386,7 @@ static int generic_exec_single(int cpu, struct __call_single_data *csd)
+ 		csd_lock_record(csd);
+ 		csd_unlock(csd);
+ 		local_irq_save(flags);
+-		func(info);
++		csd_do_func(func, info, csd);
+ 		csd_lock_record(NULL);
+ 		local_irq_restore(flags);
+ 		return 0;
+@@ -477,7 +488,7 @@ static void __flush_smp_call_function_queue(bool warn_cpu_offline)
+ 			}
+ 
+ 			csd_lock_record(csd);
+-			func(info);
++			csd_do_func(func, info, csd);
+ 			csd_unlock(csd);
+ 			csd_lock_record(NULL);
+ 		} else {
+@@ -508,7 +519,7 @@ static void __flush_smp_call_function_queue(bool warn_cpu_offline)
+ 
+ 				csd_lock_record(csd);
+ 				csd_unlock(csd);
+-				func(info);
++				csd_do_func(func, info, csd);
+ 				csd_lock_record(NULL);
+ 			} else if (type == CSD_TYPE_IRQ_WORK) {
+ 				irq_work_single(csd);
+@@ -522,8 +533,10 @@ static void __flush_smp_call_function_queue(bool warn_cpu_offline)
+ 	/*
+ 	 * Third; only CSD_TYPE_TTWU is left, issue those.
+ 	 */
+-	if (entry)
+-		sched_ttwu_pending(entry);
++	if (entry) {
++		csd = llist_entry(entry, typeof(*csd), node.llist);
++		csd_do_func(sched_ttwu_pending, entry, csd);
++	}
+ }
+ 
+ 
+@@ -728,7 +741,7 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
+ 	int cpu, last_cpu, this_cpu = smp_processor_id();
+ 	struct call_function_data *cfd;
+ 	bool wait = scf_flags & SCF_WAIT;
+-	int nr_cpus = 0, nr_queued = 0;
++	int nr_cpus = 0;
+ 	bool run_remote = false;
+ 	bool run_local = false;
+ 
+@@ -786,21 +799,15 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
+ 			csd->node.src = smp_processor_id();
+ 			csd->node.dst = cpu;
+ #endif
++			trace_csd_queue_cpu(cpu, _RET_IP_, func, csd);
++
+ 			if (llist_add(&csd->node.llist, &per_cpu(call_single_queue, cpu))) {
+ 				__cpumask_set_cpu(cpu, cfd->cpumask_ipi);
+ 				nr_cpus++;
+ 				last_cpu = cpu;
+ 			}
+-			nr_queued++;
+ 		}
+ 
+-		/*
+-		 * Trace each smp_function_call_*() as an IPI, actual IPIs
+-		 * will be traced with func==generic_smp_call_function_single_ipi().
+-		 */
+-		if (nr_queued)
+-			trace_ipi_send_cpumask(cfd->cpumask, _RET_IP_, func);
+-
+ 		/*
+ 		 * Choose the most efficient way to send an IPI. Note that the
+ 		 * number of CPUs might be zero due to concurrent changes to the
+@@ -816,7 +823,7 @@ static void smp_call_function_many_cond(const struct cpumask *mask,
+ 		unsigned long flags;
+ 
+ 		local_irq_save(flags);
+-		func(info);
++		csd_do_func(func, info, csd);
+ 		local_irq_restore(flags);
+ 	}
+ 
+-- 
+2.40.1
+
