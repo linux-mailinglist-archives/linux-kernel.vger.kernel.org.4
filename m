@@ -2,149 +2,306 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EC3A6FE1E0
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 17:50:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8DF06FE1E3
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 17:52:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237365AbjEJPuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 11:50:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59492 "EHLO
+        id S237436AbjEJPwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 11:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237567AbjEJPuO (ORCPT
+        with ESMTP id S237177AbjEJPwP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 11:50:14 -0400
-Received: from mail-oa1-x35.google.com (mail-oa1-x35.google.com [IPv6:2001:4860:4864:20::35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8C9040DC
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 08:50:11 -0700 (PDT)
-Received: by mail-oa1-x35.google.com with SMTP id 586e51a60fabf-18f4a6d2822so45154804fac.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 08:50:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bitbyteword.org; s=google; t=1683733811; x=1686325811;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SU3otW2nBsPVZDVrYul47MshS8jNhHnlT40CUudsga0=;
-        b=nnvKwV0PJ0qt8jo4FYFtGeEo3cYvGbS+5LyAGjOZ6ev7pPjrhSZgC5Fe0eg5nPNpT7
-         oa2vcQ21Kpcbmwm7gXIg2lC5cldu5obWDY5ZOtw0Hpvz5WUumQd0BIafvbIjzUDRRPv3
-         JDSPlYIadVVwvGt4wC4RMwUThxa6Bv/r82NF5LumgxXX0UgOyAJBR7wW/zCMTB5E5p4U
-         v2+nQXlrYolZC/ieOPYoAZN6K9YwKYo4W4zadwrz+4z1VKTQaPVDWyPRumsPgYa9T8t+
-         ss7psm/kyavev1Q7TfDBSZ+UjURhvYQACSct0QgprplouBsBNL5/pTWFixY8wUloNbol
-         JnHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683733811; x=1686325811;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SU3otW2nBsPVZDVrYul47MshS8jNhHnlT40CUudsga0=;
-        b=f6IKs96gXbxwh1fz5ZrRvNwpYtv0dOEz87wjEOqwIyDTdiz+OzufHGfaCw/rrkRMPZ
-         Q5Q/JykofiOmVbxcaNC+EZep9DsOjx5GWzqtNlYb0RwRMOe6BxlEcnNTYYNDsvj04MjS
-         Ty4Q/qhwBWf8VcDo/fJuy8Yte2AnBxbfOZcD2BZG5t7IlB5ZQJGkKEblCIrp5KkQMky3
-         dlVGMLtR12b7g1HlEl7lF0UMId13O01q16abe12M3tk00B0ELPJ/7TkZAuzTJ3obXKTs
-         ATwmObZwMMtpr2i8lpg/fbumTGm1Njwpab9+ySBTgiQpEdopB1yZt0pH8gjyJE7TaByr
-         IdCQ==
-X-Gm-Message-State: AC+VfDx7Jfz2683S6X52YD9meRnmlMDmpkRpD09jm/lQBVacYt5Pwk06
-        8mg0VScAbkfcZSHTRE9y98P4tfrQLh1aKH3ALl6D0A==
-X-Google-Smtp-Source: ACHHUZ5lT3UppJIuDlKShbqgbtPnge05+c6BxG/OevxBZCHJl3nmekRKwX4qR2nA9ty64aOpRcVMkMnEupFXP5bwhx0=
-X-Received: by 2002:a05:6830:6:b0:6a7:bced:411e with SMTP id
- c6-20020a056830000600b006a7bced411emr3308415otp.3.1683733811250; Wed, 10 May
- 2023 08:50:11 -0700 (PDT)
+        Wed, 10 May 2023 11:52:15 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1B371BCF;
+        Wed, 10 May 2023 08:52:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683733931; x=1715269931;
+  h=message-id:date:mime-version:subject:from:to:references:
+   in-reply-to:content-transfer-encoding;
+  bh=zFgrOcmDSS9zNwzZGl0l0+zqDgvB+lANnaZH3a8LQMM=;
+  b=nxsroYqOE8O4ANeaoL619+jhOXInqKknPWeQ1TrGCAXf/HTmJ0kw1cYQ
+   TrvPomtISEIxImY3z2dZFvc1tNaaJ7HXibbkLLbRgUI/hdzz/KdX2BZ9Z
+   aYst0UUXZaNNtFznEVg57L1f5aXqTpFEOR+2KvMQAd+10NOnvxS0Ly5bQ
+   SV8tBvQuWTg1HpKoZBO15r9WUg9UmHAxBSvZegrF07eLcacNZxhSuNN47
+   N8Pvzirdx4VfDS7OJ7+qgdEqmqq1ppFsARXE++zjsQve88Dc0uikO8nT9
+   ZpMgQZ9awm44NfgJOU/6l1e46pwAEnAkPTj5rfKkPbsZ41qv3wf8sDATU
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="334714291"
+X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
+   d="scan'208";a="334714291"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 08:52:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="768955152"
+X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
+   d="scan'208";a="768955152"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.61.254])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 08:52:01 -0700
+Message-ID: <5267232a-05a4-393b-b68e-da6a4f46d5e8@intel.com>
+Date:   Wed, 10 May 2023 18:51:55 +0300
 MIME-Version: 1.0
-References: <20230508160829.2756405-1-vineeth@bitbyteword.org>
- <20230509132534.09098acc@luca64> <CAO7JXPhrqKWfsp860rRmEenxARi8U2gNMGsOn4m+aKporWwBcg@mail.gmail.com>
- <20230509224829.2fb547fd@nowhere> <20230509225417.61d36733@nowhere>
- <CAO7JXPhk5qbz9kmiu9WuXS+gXCt9+X8pP2c37hd9ChByLmXYjA@mail.gmail.com> <20230510090735.68f62cd4@nowhere>
-In-Reply-To: <20230510090735.68f62cd4@nowhere>
-From:   Vineeth Remanan Pillai <vineeth@bitbyteword.org>
-Date:   Wed, 10 May 2023 11:50:00 -0400
-Message-ID: <CAO7JXPg03f2YnrmzoGjfHEZZcoN55cU7uVukMw31Bw3x6nnaMw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] sched/deadline: accurate reclaim bandwidth for GRUB
-To:     luca abeni <luca.abeni@santannapisa.it>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH 3/4] perf tools: Add printing perf_event_attr->type symbol
+ in perf_event_attr__fprintf()
+Content-Language: en-US
+From:   Adrian Hunter <adrian.hunter@intel.com>
+To:     Yang Jihong <yangjihong1@huawei.com>, peterz@infradead.org,
+        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, irogers@google.com, anshuman.khandual@arm.com,
+        jesussanp@google.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230419122912.73746-1-yangjihong1@huawei.com>
+ <20230419122912.73746-4-yangjihong1@huawei.com>
+ <09511964-dea6-f078-b24c-fef6b05f5b79@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <09511964-dea6-f078-b24c-fef6b05f5b79@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luca,
+On 10/05/23 11:32, Adrian Hunter wrote:
+> On 19/04/23 15:29, Yang Jihong wrote:
+>> When printing perf_event_attr, always display attr->type and its symbol
+>> to improve the readability of debugging information.
+>>
+>> Before:
+>>
+>>   # perf --debug verbose=2 record -e cycles,cpu-clock,sched:sched_switch,branch-load-misses,r101 -C 0 true
+>>   <SNIP>
+>>   ------------------------------------------------------------
+>>   perf_event_attr:
+>>     size                             136
+>>     { sample_period, sample_freq }   4000
+>>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>>     read_format                      ID
+>>     disabled                         1
+>>     inherit                          1
+>>     freq                             1
+>>     sample_id_all                    1
+>>     exclude_guest                    1
+>>   ------------------------------------------------------------
+>>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
+>>   ------------------------------------------------------------
+>>   perf_event_attr:
+>>     type                             1
+>>     size                             136
+>>     { sample_period, sample_freq }   4000
+>>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>>     read_format                      ID
+>>     disabled                         1
+>>     inherit                          1
+>>     freq                             1
+>>     sample_id_all                    1
+>>     exclude_guest                    1
+>>   ------------------------------------------------------------
+>>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 7
+>>   ------------------------------------------------------------
+>>   perf_event_attr:
+>>     type                             2
+>>     size                             136
+>>     config                           0x131
+>>     { sample_period, sample_freq }   1
+>>     sample_type                      IP|TID|TIME|CPU|PERIOD|RAW|IDENTIFIER
+>>     read_format                      ID
+>>     disabled                         1
+>>     inherit                          1
+>>     sample_id_all                    1
+>>     exclude_guest                    1
+>>   ------------------------------------------------------------
+>>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 8
+>>   ------------------------------------------------------------
+>>   perf_event_attr:
+>>     type                             3
+>>     size                             136
+>>     config                           0x10005
+>>     { sample_period, sample_freq }   4000
+>>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>>     read_format                      ID
+>>     disabled                         1
+>>     inherit                          1
+>>     freq                             1
+>>     sample_id_all                    1
+>>     exclude_guest                    1
+>>   ------------------------------------------------------------
+>>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 10
+>>   ------------------------------------------------------------
+>>   perf_event_attr:
+>>     type                             4
+>>     size                             136
+>>     config                           0x101
+>>     { sample_period, sample_freq }   4000
+>>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>>     read_format                      ID
+>>     disabled                         1
+>>     inherit                          1
+>>     freq                             1
+>>     sample_id_all                    1
+>>     exclude_guest                    1
+>>   ------------------------------------------------------------
+>>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 11
+>>   <SNIP>
+>>
+>> After:
+>>
+>>   # perf --debug verbose=2 record -e cycles,cpu-clock,sched:sched_switch,branch-load-misses,r101 -C 0 true
+>>   <SNIP>
+>>   ------------------------------------------------------------
+>>   perf_event_attr:
+>>     type                             0 (PERF_TYPE_HARDWARE)
+>>     size                             136
+>>     { sample_period, sample_freq }   4000
+>>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>>     read_format                      ID
+>>     disabled                         1
+>>     inherit                          1
+>>     freq                             1
+>>     sample_id_all                    1
+>>     exclude_guest                    1
+>>   ------------------------------------------------------------
+>>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
+>>   ------------------------------------------------------------
+>>   perf_event_attr:
+>>     type                             1 (PERF_TYPE_SOFTWARE)
+>>     size                             136
+>>     { sample_period, sample_freq }   4000
+>>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>>     read_format                      ID
+>>     disabled                         1
+>>     inherit                          1
+>>     freq                             1
+>>     sample_id_all                    1
+>>     exclude_guest                    1
+>>   ------------------------------------------------------------
+>>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 7
+>>   ------------------------------------------------------------
+>>   perf_event_attr:
+>>     type                             2 (PERF_TYPE_TRACEPOINT)
+>>     size                             136
+>>     config                           0x131
+>>     { sample_period, sample_freq }   1
+>>     sample_type                      IP|TID|TIME|CPU|PERIOD|RAW|IDENTIFIER
+>>     read_format                      ID
+>>     disabled                         1
+>>     inherit                          1
+>>     sample_id_all                    1
+>>     exclude_guest                    1
+>>   ------------------------------------------------------------
+>>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 8
+>>   ------------------------------------------------------------
+>>   perf_event_attr:
+>>     type                             3 (PERF_TYPE_HW_CACHE)
+>>     size                             136
+>>     config                           0x10005
+>>     { sample_period, sample_freq }   4000
+>>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>>     read_format                      ID
+>>     disabled                         1
+>>     inherit                          1
+>>     freq                             1
+>>     sample_id_all                    1
+>>     exclude_guest                    1
+>>   ------------------------------------------------------------
+>>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 10
+>>   ------------------------------------------------------------
+>>   perf_event_attr:
+>>     type                             4 (PERF_TYPE_RAW)
+>>     size                             136
+>>     config                           0x101
+>>     { sample_period, sample_freq }   4000
+>>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>>     read_format                      ID
+>>     disabled                         1
+>>     inherit                          1
+>>     freq                             1
+>>     sample_id_all                    1
+>>     exclude_guest                    1
+>>   ------------------------------------------------------------
+>>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 11
+>>   <SNIP>
+>>
+>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+>> ---
+>>  tools/perf/util/perf_event_attr_fprintf.c | 24 ++++++++++++++++++++++-
+>>  1 file changed, 23 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/tools/perf/util/perf_event_attr_fprintf.c b/tools/perf/util/perf_event_attr_fprintf.c
+>> index 433029c6afc5..d9d70126d505 100644
+>> --- a/tools/perf/util/perf_event_attr_fprintf.c
+>> +++ b/tools/perf/util/perf_event_attr_fprintf.c
+>> @@ -71,6 +71,27 @@ static void __p_read_format(char *buf, size_t size, u64 value)
+>>  	__p_bits(buf, size, value, bits);
+>>  }
+>>  
+>> +static void __p_type_id(char *buf, size_t size, u64 value)
+>> +{
+>> +	/* sync with enum perf_type_id in perf_event.h */
+>> +	switch (value) {
+>> +#define PRINT_ENUM_PERF_TYPE_ID_CASE(x)					\
+>> +	case x:								\
+>> +		snprintf(buf, size, "%"PRIu64" (%s)", value, #x);	\
+>> +		return;
+>> +	PRINT_ENUM_PERF_TYPE_ID_CASE(PERF_TYPE_HARDWARE)
+>> +	PRINT_ENUM_PERF_TYPE_ID_CASE(PERF_TYPE_SOFTWARE)
+>> +	PRINT_ENUM_PERF_TYPE_ID_CASE(PERF_TYPE_TRACEPOINT)
+>> +	PRINT_ENUM_PERF_TYPE_ID_CASE(PERF_TYPE_HW_CACHE)
+>> +	PRINT_ENUM_PERF_TYPE_ID_CASE(PERF_TYPE_RAW)
+>> +	PRINT_ENUM_PERF_TYPE_ID_CASE(PERF_TYPE_BREAKPOINT)
+>> +#undef PRINT_ENUM_PERF_TYPE_ID_CASE
+> 
+> These are ABI constants so maybe simpler:
+> 
+> 	const char *fixed_types[] = {"HARDWARE", "SOFTWARE", "TRACEPOINT",
+> 				     "HW_CACHE", "RAW", "BREAKPOINT"};
+> 
+> 	if (value < ARRAY_SIZE(fixed_types)) {
+> 		snprintf(buf, size, "%"PRIu64" (PERF_TYPE_%s)",
+> 			 value, fixed_types[value]);
+> 	} else {
+> 		snprintf(buf, size, "%"PRIu64, value);
+> 	}
 
-On Wed, May 10, 2023 at 3:07=E2=80=AFAM luca abeni <luca.abeni@santannapisa=
-.it> wrote:
->
-> > I was thinking more about this and was doing some more digging into
-> > this. I was also wrong about min{}. Giving it some more thought, I
-> > think (U/Umax) is indeed the only equation we need and it will take
-> > care of caping the reclaiming at Umax.
->
-> Uhm... I am not sure about this: for 1 single task on 1 CPU, yes,
-> u/Umax does the right thing. But when there are multiple tasks on the
-> CPU, I think it can cause issues (because every task ends up trying to
-> execute for Umax).
->
-Ah ok, I understand now. I was going with the single CPU equation of
-U/Umax where this would not have been an issue as U(running_bw) takes
-care of the adjustment and does not allow a single task to use whole
-of Umax. I read the SMP GRUB paper you shared and see that it uses
-u_i/Umax and that might cause issues as you mentioned.
+Although it is really the repeated snprintf that seems unnecessary
+so maybe use a switch but just to get the stringified name.
 
-> The "max{}" comes from the original multi-processor GRUB algorithm:
-> https://arxiv.org/pdf/1512.01984.pdf (see Equation (13) - in that
-> equation, the part we call u_extra is included in Uinact[p])
->
-Thanks for sharing. I read the paper and got an overall idea an
-background of existing implementation.
+> 
+>> +	default:
+>> +		snprintf(buf, size, "%"PRIu64, value);
+>> +		return;
+>> +	}
+>> +}
+>> +
+>>  #define BUF_SIZE		1024
+>>  
+>>  #define p_hex(val)		snprintf(buf, BUF_SIZE, "%#"PRIx64, (uint64_t)(val))
+>> @@ -79,6 +100,7 @@ static void __p_read_format(char *buf, size_t size, u64 value)
+>>  #define p_sample_type(val)	__p_sample_type(buf, BUF_SIZE, val)
+>>  #define p_branch_sample_type(val) __p_branch_sample_type(buf, BUF_SIZE, val)
+>>  #define p_read_format(val)	__p_read_format(buf, BUF_SIZE, val)
+>> +#define p_type_id(val)		__p_type_id(buf, BUF_SIZE, val)
+>>  
+>>  #define PRINT_ATTRn(_n, _f, _p, _a)			\
+>>  do {							\
+>> @@ -96,7 +118,7 @@ int perf_event_attr__fprintf(FILE *fp, struct perf_event_attr *attr,
+>>  	char buf[BUF_SIZE];
+>>  	int ret = 0;
+>>  
+>> -	PRINT_ATTRf(type, p_unsigned);
+>> +	PRINT_ATTRn("type", type, p_type_id, true);
+>>  	PRINT_ATTRf(size, p_unsigned);
+>>  	PRINT_ATTRf(config, p_hex);
+>>  	PRINT_ATTRn("{ sample_period, sample_freq }", sample_period, p_unsigned, false);
+> 
 
-> the "1 - u_inact - u_extra" part is needed to make sure that the
-> real-time guarantees are not broken by the reclaiming mechanism... But
-> it can end up with a task trying to consume too much time on a single
-> CPU, hence the "u/Umax" term in the "max{}" is needed to make sure that
-> a task will not consume more than Umax of a CPU.
->
-> Now, if we have one single task on a CPU u/Umax will always be larger
-> than the other term... But when we have multiple tasks the other term
-> is needed too.
->
-Understood, thanks for explaining.
-
-> (BTW, when considering multiple tasks on multiple CPUs, another
-> potential problem is given by u_extra... Now that I remember all the
-> details, u_extra is not "Umax - this_bw" - this is true when we consider
-> only one CPU, but is is "Umax - sum(u_i)/m" (where "sum(u_i)" is the
-> sum of the bandwidths of all the SCHED_DEADLINE tasks in the root
-> domain, and "m" is the number of CPUs in the root domain)... So, the
-> reclaimable CPU time is distributed uniformly on all the CPUs and this
-> could create some issues. But let's see what happens after the div64
-> fix and the SCHED_FLAG_RECLAIM fix)
->
-This makes sense. This also means that we wouldn't be able to replace
-"Uextra + Uinact" with "Umax - running_bw" and I was seeing problems
-with SMP testing. So I shall revert to "Uextra + Uinact" in v2. And I
-think the potential issue with Uextra would be avoided by the check
-for Uextra + Uinact > Umax to make sure that we don't reclaim more
-than Umax for a single cpu.
-
-I have tested the patch with SMP using the stressor mentioned in the
-commit message and running cyclicdeadline in parallel. The results
-are similar to upstream and GRUB able to reclaim upto Umax now.
-
-I shall send the v2 soon after a bit more testing.. Thanks a lot for
-all the valuable inputs and detailed explanation :-)
-
-Thanks,
-Vineeth
