@@ -2,232 +2,802 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 674966FDE5D
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 238816FDE60
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:20:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236949AbjEJNUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 09:20:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57070 "EHLO
+        id S236672AbjEJNUL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 09:20:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236672AbjEJNUD (ORCPT
+        with ESMTP id S236644AbjEJNUH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 09:20:03 -0400
-X-Greylist: delayed 62 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 10 May 2023 06:20:02 PDT
-Received: from esa6.hc3370-68.iphmx.com (esa6.hc3370-68.iphmx.com [216.71.155.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30A716A45
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 06:20:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1683724802;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=d6T+Tuh6mf1YUW2xjnx5OE3o+Oh5Pa7D0V2T78Yr87M=;
-  b=h/H94xnSIArOLWM7n2c2tQNRkjQujEOZz052TLm6+RyICi8d5ODOK8IX
-   nvDfSe+iH7zSc5yLsbqG0YU8yUKs/4C3anQrO/ZZar7fnooyxhg9H2Syo
-   vmgMgQQAVtCM9jPW6R6ZnlkLrlo45JQfNvWahRMTgU75TJoRsgagAWnmp
-   8=;
-X-IronPort-RemoteIP: 104.47.66.42
-X-IronPort-MID: 107856255
-X-IronPort-Reputation: None
-X-IronPort-Listener: OutboundMail
-X-IronPort-SenderGroup: RELAY_O365
-X-IronPort-MailFlowPolicy: $RELAYED
-IronPort-Data: A9a23:B0N98a5pw2ho95ygeQ3rsAxRtM7HchMFZxGqfqrLsTDasY5as4F+v
- mdNUGqFPauKMGamL9p2aNyy9R8PvcLTnYNkHQA++Ho3Hi5G8cbLO4+Ufxz6V8+wwm8vb2o8t
- plDNYOQRCwQZiWBzvt4GuG59RGQ7YnRGvynTraCYnsrLeNdYH9JoQp5nOIkiZJfj9G8Agec0
- fv/uMSaM1K+s9JOGjt8B5mr9VU+7ZwehBtC5gZlPa0S5AeH/5UoJMl3yZ+ZfiOQrrZ8RoZWd
- 86bpJml82XQ+QsaC9/Nut4XpWVTH9Y+lSDX4pZnc/DKbipq/0Te4Y5iXBYoUm9Fii3hojxE4
- I4lWapc6+seFvakdOw1C3G0GszlVEFM0OevzXOX6aR/w6BaGpdFLjoH4EweZOUlFuhL7W5m2
- u1IEQEtTzu/oLiV/Om1S+hJlMN9BZy+VG8fkikIITDxK98DGMqGZpqQoNhS0XE3m9xEGuvYa
- 4wBcz1zYR/cYhpJfFAKFJY5m+TujX76G9FagAvN+exrvC6NkkotitABM/KMEjCObd9SkUuC4
- HrP4kzyAw0ANczZwj2Amp6prraXwnOmBthPSdVU8NZDhXGU9k80ISERC0G3heKlsnaVWIxmf
- hl8Fi0G6PJaGFaQZsH0QRC8iHKJuA5aV9c4O/Yn5ACVz+zR/gWZC3IGQzNpZ9kvtctwTjsvv
- neH2d3gBDpitLmUYX2Y/7aQ6zi1PEA9L2gEbDMERA0Fy9/9oY0yh1TESdMLOKq2gMGwBSvxy
- j+HhCw/nKkIy8oK0ayh+hbAmT3EjoDAUgU16x7/XW+/6A59b4/jYJangXDA7etJLK6aQ0OHs
- XxCnNKRhMgVF46ljyiETOgSFa2q5vCedjvRnTZHG5gn6iSF4XmudoMV/So4Ikp1Wu4YfiX3a
- UvfoitV5ZlOLD6karJxb4utCsMsi6/6GrzNUvHSc8oLYZVrcgKD1D9haFTW3G33lkUo16YlN
- v+zac+wBnYXEoxjzSGqXKEZ0Lk21mYyyH27bYvnxh6j3JKAa3OPD7QIKl2DaqY+9qzsiB7Y+
- tBQPpGixBBWUem4aS7SmaYcN10FLngTAZHwttxZcfOFLgN6GWYnTfjLztsJco99moxRl+HV7
- jSzXVJexFPjhHrBbwKQZRhLcqzmR414slo0ODxqMVvA5pQ4SYOm7aNacoRte7AirbZn1aQsE
- 6NDfNicCPNSTDiB4y4acZT2sI1lclKsmB6KOC2mJjM4evaMWjD0xzMtRSO3nAFmM8Z9nZtuy
- 1F8/ms3maY+ejk=
-IronPort-HdrOrdr: A9a23:Xh1pDaqItgmgeVxyHrM/uxQaV5r2eYIsimQD101hICG9E/bo9P
- xG+c5x6faaslsssR0b9exoQZPwPU80lqQU3WByB9mftVLdyQmVxehZhOOJ/9SKIUzDH4Bmup
- uIeZIObeEZKjBB/KGKhnjAYq4d6ejC04ShheLT1B5WPHtXgtlbnnxE4tjyKDwTeOF/baBJaa
- Z0TfA32AadRQ==
-X-Talos-CUID: =?us-ascii?q?9a23=3AcftW0Wt+t25H4fTTM36aTeX+6IsKYy3k/VfxCHO?=
- =?us-ascii?q?fU0VVE7OUSHqC//1Nxp8=3D?=
-X-Talos-MUID: 9a23:MoHdgghs+nCp6G9uxkZwcsMpHcJE5JSNL2kxlssct+2fKRRIEDTDtWHi
-X-IronPort-AV: E=Sophos;i="5.99,264,1677560400"; 
-   d="scan'208";a="107856255"
-Received: from mail-mw2nam12lp2042.outbound.protection.outlook.com (HELO NAM12-MW2-obe.outbound.protection.outlook.com) ([104.47.66.42])
-  by ob1.hc3370-68.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 May 2023 09:18:28 -0400
+        Wed, 10 May 2023 09:20:07 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC4A26A45;
+        Wed, 10 May 2023 06:20:04 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34A7HZAY029627;
+        Wed, 10 May 2023 06:19:21 -0700
+Received: from nam11-dm6-obe.outbound.protection.outlook.com (mail-dm6nam11lp2173.outbound.protection.outlook.com [104.47.57.173])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3qg6ges888-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 May 2023 06:19:21 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gvufFj74cSLjxbYMwyKQzfZJLoE1L6PzeoHXT6Z2g5ar2GJjUWLEh3Nz7GbLyNrZh4VNRWJlRtyIYi8Rsrb4plRIehJYMms0/cRaktWsm9PhzLjqUMKIsdAhqXovo1rucKm2ESiCAZkM01LZ3Sfp9gF2CGN8vylXDFO3l8c13jjoWgbhwgAg5lLWNB9uQqyT2Td2RvkIMMwsV+izEV3KadHPy2W0TM/csY9Ivbuf1ihWLdJoC1iRMFxIdo9wtXdXBp5aAqW+QDG3zxD5DpsgTvDDBzLRFIuHEhApWMWTjEbTAYHHfvPFu+L7HDe7co5vFtfAiMp5FdXv2KG9GXdLZA==
+ b=f0xk4gvg/NzFaRhGcMU/vqZvVuZRyOaGKKuo2i1iLYGDwUzALODG/VsWFZVL5T+sgdeWIIbSfclM7PkCvo5QNDVG3T68pmY4XL/GNFlfDb3BgxfXYyXmKPYOqSrwDjKMcftvj896sP7Wv6mD+LG934XQRy/87wqH4E4WsRqbNuzdClmeRS/H3FE1ti2pVuidU8HGdGaNzAQT3YrrPE0nMuEQkbKN4GIEr3N1IlodRdRIqxHq8qYjEaijGvIpgpIeDvez7UdDjkma1SUQIMmEfcCiZdfHb7qs+qb2afXXEPWt1K/fKmCaqs6+LBqIul8kEpNGJKjWaLgEJGosNaMCUg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+ZnS5NaggzoCNK5demEo22gikIQ7cEJq4HpTn2tUjfo=;
- b=dKzmmU/YDPQsUufDv07F91q9TAcZhbOfOM+gT8x9VEVyJwDRp269QTcV6mhXgLyBrPggkiyNCsA+17LIsg6lcGKnX5SRXfcMc5urQg+InNG4xoeAU7eKDuO7GHfjAn9PHAXcudvtU9uIkb3NYAuwcj1m6KL9bC7cR+OK6VntRaCxZZmsH5lRLsbFCa2kvwDVnSqsdvWwVoBlaBWmmbMHOuEv16g8CO9g3/ZtnHnqnYLmuxJReB68AgbOC6qUkssZWMk21XYhUH6/VWG4+Mkgv67bDDwnTriC9ymfO9QS7wZI3RhxNxUD7ZxeL8gC0W+kf1PnwyLvmLjjFe09N4cRWg==
+ bh=zxSPP93oU4VbAjQLUy7ZWXTMKxUuwFMURO1KHCmED9k=;
+ b=eJWm3vWCutb2lDTl1YjxMCy8zFSoEq+qx1uniYBUtAoFnOr1wxGUatOimPstM3ox4aWLojIYr/YO8v/Mh84ycnZP9tr3qAKPZ5xPlCKv+iaW1FeCg9h+1wjDbcBDhXpnhlDaUSorrnO1sx079kmx1eGid0paWXygkD66TwVWbmX3jIBVAygDayK1R9Kv8d0VV+mVFZ1xCuiNaTU5uUP9SOuZAOKPb2A9zncWgXwUyIoSXnuu2RLsuyNHBCgm8Wdh/afock7j5NeQhQPvv3FMrGvUXxtJCNCg6xDrAUF5AopEKB6jrGj3+gGQLS0NgR+TtwumOkYLRzTVdJdonx1NZA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
- dkim=pass header.d=citrix.com; arc=none
+ smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
+ dkim=pass header.d=marvell.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
+ d=marvell.onmicrosoft.com; s=selector1-marvell-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+ZnS5NaggzoCNK5demEo22gikIQ7cEJq4HpTn2tUjfo=;
- b=mgLixnknTMmDJ2nCYV1zY0sGBG2/moRF9qggxIINLRf/Pc5LOh1/F2pOUfXLb2d+ZMe0YibM/eizvMnRrcXE5GkAfKrN0ELp2pTjqHiqCBVDoLrGAEsHe5KEoz+Jt39v8gWLuG8RixUnAN3gZgAnq2RR+9EPygtSddYVXWTWU0g=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=citrix.com;
-Received: from SJ0PR03MB6423.namprd03.prod.outlook.com (2603:10b6:a03:38d::21)
- by PH8PR03MB7247.namprd03.prod.outlook.com (2603:10b6:510:23a::13) with
+ bh=zxSPP93oU4VbAjQLUy7ZWXTMKxUuwFMURO1KHCmED9k=;
+ b=BiduCqMi5yMJkN1lNRvFAFXbGx29258L7O3/o+/DW4w7mJ4U5XhgwYqqqF8mv4wc8T0lHIh8AweXxk2Vg3l37BJMCuNRc4o89cvge6qVwJ0lnZ/69M9PoI5ajaephJOAyaZ6jgPPFeqzhr411QdYuQxfnK0quBpkhA9CWXITXyY=
+Received: from CO1PR18MB4666.namprd18.prod.outlook.com (2603:10b6:303:e5::24)
+ by DM6PR18MB2780.namprd18.prod.outlook.com (2603:10b6:5:170::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Wed, 10 May
- 2023 13:18:22 +0000
-Received: from SJ0PR03MB6423.namprd03.prod.outlook.com
- ([fe80::b0b8:8f54:2603:54ec]) by SJ0PR03MB6423.namprd03.prod.outlook.com
- ([fe80::b0b8:8f54:2603:54ec%4]) with mapi id 15.20.6363.032; Wed, 10 May 2023
- 13:18:21 +0000
-Date:   Wed, 10 May 2023 15:18:14 +0200
-From:   Roger Pau =?utf-8?B?TW9ubsOp?= <roger.pau@citrix.com>
-To:     Pavel Machek <pavel@denx.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>, seanga2@gmail.com,
-        stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/610] 6.1.28-rc2 review
-Message-ID: <ZFuZllSJguONF2p0@Air-de-Roger>
-References: <20230509030653.039732630@linuxfoundation.org>
- <ZFuEoWJL1TRmEuMM@duo.ucw.cz>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZFuEoWJL1TRmEuMM@duo.ucw.cz>
-X-ClientProxiedBy: LO4P265CA0090.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2bc::11) To SJ0PR03MB6423.namprd03.prod.outlook.com
- (2603:10b6:a03:38d::21)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Wed, 10 May
+ 2023 13:19:16 +0000
+Received: from CO1PR18MB4666.namprd18.prod.outlook.com
+ ([fe80::ead5:44bc:52e0:bf88]) by CO1PR18MB4666.namprd18.prod.outlook.com
+ ([fe80::ead5:44bc:52e0:bf88%6]) with mapi id 15.20.6387.020; Wed, 10 May 2023
+ 13:19:16 +0000
+From:   Subbaraya Sundeep Bhatta <sbhatta@marvell.com>
+To:     Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>
+CC:     "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "michal.simek@amd.com" <michal.simek@amd.com>,
+        "radhey.shyam.pandey@amd.com" <radhey.shyam.pandey@amd.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "anirudha.sarangi@amd.com" <anirudha.sarangi@amd.com>,
+        "harini.katakam@amd.com" <harini.katakam@amd.com>,
+        "git@amd.com" <git@amd.com>
+Subject: RE: [EXT] [PATCH net-next V3 2/3] net: axienet: Preparatory changes
+ for dmaengine support
+Thread-Topic: [EXT] [PATCH net-next V3 2/3] net: axienet: Preparatory changes
+ for dmaengine support
+Thread-Index: AQHZgysB22htPOJtQECwJGr0qajW8q9Te9hA
+Date:   Wed, 10 May 2023 13:19:15 +0000
+Message-ID: <CO1PR18MB46661C2F9D7D2882C937DD01A1779@CO1PR18MB4666.namprd18.prod.outlook.com>
+References: <20230510085031.1116327-1-sarath.babu.naidu.gaddam@amd.com>
+ <20230510085031.1116327-3-sarath.babu.naidu.gaddam@amd.com>
+In-Reply-To: <20230510085031.1116327-3-sarath.babu.naidu.gaddam@amd.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-dg-rorf: true
+x-dg-ref: =?us-ascii?Q?PG1ldGE+PGF0IG5tPSJib2R5LnR4dCIgcD0iYzpcdXNlcnNcc2JoYXR0YVxh?=
+ =?us-ascii?Q?cHBkYXRhXHJvYW1pbmdcMDlkODQ5YjYtMzJkMy00YTQwLTg1ZWUtNmI4NGJh?=
+ =?us-ascii?Q?MjllMzViXG1zZ3NcbXNnLTQwOGE0YmM5LWVmMzUtMTFlZC05YzVjLWJjZjE3?=
+ =?us-ascii?Q?MTIxOGI3YVxhbWUtdGVzdFw0MDhhNGJjYS1lZjM1LTExZWQtOWM1Yy1iY2Yx?=
+ =?us-ascii?Q?NzEyMThiN2Fib2R5LnR4dCIgc3o9IjE4NTExIiB0PSIxMzMyODE5ODM1MzAz?=
+ =?us-ascii?Q?ODY4MjkiIGg9IlNNZEFZa1VndDFZelhsVTcyczNWN2o0TGtnTT0iIGlkPSIi?=
+ =?us-ascii?Q?IGJsPSIwIiBibz0iMSIgY2k9ImNBQUFBRVJIVTFSU1JVRk5DZ1VBQUdZTkFB?=
+ =?us-ascii?Q?Q054VWtEUW9QWkFma2xsblBrUDFnQitTV1djK1EvV0FFVkFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFIQUFBQUQyREFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFFQUFRRUJBQUFBYjNidXl3Q0FBUUFBQUFBQUFBQUFBSjRBQUFCaEFHUUFa?=
+ =?us-ascii?Q?QUJ5QUdVQWN3QnpBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUVBQUFBQUFBQUFBZ0FBQUFBQW5nQUFBR01BZFFCekFIUUFid0J0QUY4QWNB?=
+ =?us-ascii?Q?QmxBSElBY3dCdkFHNEFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFBQ0FB?=
+ =?us-ascii?Q?QUFBQUNlQUFBQVl3QjFBSE1BZEFCdkFHMEFYd0J3QUdnQWJ3QnVBR1VBYmdC?=
+ =?us-ascii?Q?MUFHMEFZZ0JsQUhJQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFKNEFBQUJqQUhV?=
+ =?us-ascii?Q?QWN3QjBBRzhBYlFCZkFITUFjd0J1QUY4QVpBQmhBSE1BYUFCZkFIWUFNQUF5?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+x-dg-refone: =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBRUFBQUFBQUFBQUFnQUFBQUFBbmdBQUFH?=
+ =?us-ascii?Q?TUFkUUJ6QUhRQWJ3QnRBRjhBY3dCekFHNEFYd0JyQUdVQWVRQjNBRzhBY2dC?=
+ =?us-ascii?Q?a0FITUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQVFBQUFBQUFBQUFDQUFBQUFBQ2VBQUFBWXdCMUFITUFkQUJ2QUcw?=
+ =?us-ascii?Q?QVh3QnpBSE1BYmdCZkFHNEFid0JrQUdVQWJBQnBBRzBBYVFCMEFHVUFjZ0Jm?=
+ =?us-ascii?Q?QUhZQU1BQXlBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUJBQUFBQUFB?=
+ =?us-ascii?Q?QUFBSUFBQUFBQUo0QUFBQmpBSFVBY3dCMEFHOEFiUUJmQUhNQWN3QnVBRjhB?=
+ =?us-ascii?Q?Y3dCd0FHRUFZd0JsQUY4QWRnQXdBRElBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFFQUFBQUFBQUFBQWdBQUFBQUFuZ0FB?=
+ =?us-ascii?Q?QUdRQWJBQndBRjhBY3dCckFIa0FjQUJsQUY4QVl3Qm9BR0VBZEFCZkFHMEFa?=
+ =?us-ascii?Q?UUJ6QUhNQVlRQm5BR1VBWHdCMkFEQUFNZ0FBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBUUFBQUFBQUFBQUNBQUFBQUFDZUFBQUFaQUJzQUhBQVh3QnpB?=
+ =?us-ascii?Q?R3dBWVFCakFHc0FYd0JqQUdnQVlRQjBBRjhBYlFCbEFITUFjd0JoQUdjQVpR?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+x-dg-reftwo: =?us-ascii?Q?QUFBQUFBQUFBQUFBQkFBQUFBQUFBQUFJQUFBQUFBSjRBQUFCa0FHd0FjQUJm?=
+ =?us-ascii?Q?QUhRQVpRQmhBRzBBY3dCZkFHOEFiZ0JsQUdRQWNnQnBBSFlBWlFCZkFHWUFh?=
+ =?us-ascii?Q?UUJzQUdVQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUVB?=
+ =?us-ascii?Q?QUFBQUFBQUFBZ0FBQUFBQW5nQUFBR1VBYlFCaEFHa0FiQUJmQUdFQVpBQmtB?=
+ =?us-ascii?Q?SElBWlFCekFITUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBRXdBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFBQ0FBQUFB?=
+ =?us-ascii?Q?QUNlQUFBQWJRQmhBSElBZGdCbEFHd0FYd0J3QUhJQWJ3QnFBR1VBWXdCMEFG?=
+ =?us-ascii?Q?OEFiZ0JoQUcwQVpRQnpBRjhBY2dCbEFITUFkQUJ5QUdrQVl3QjBBR1VBWkFC?=
+ =?us-ascii?Q?ZkFHRUFiQUJ2QUc0QVpRQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFKNEFBQUJ0QUdFQWNn?=
+ =?us-ascii?Q?QjJBR1VBYkFCZkFIQUFjZ0J2QUdvQVpRQmpBSFFBWHdCdUFHRUFiUUJsQUhN?=
+ =?us-ascii?Q?QVh3QnlBR1VBY3dCMEFISUFhUUJqQUhRQVpRQmtBRjhBYUFCbEFIZ0FZd0J2?=
+ =?us-ascii?Q?QUdRQVpRQnpBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?RUFBQUFBQUFBQUFnQUFBQUFBbmdBQUFHMEFZUUJ5QUhZQVpRQnNBR3dBWHdC?=
+ =?us-ascii?Q?aEFISUFiUUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQVFBQUFBQUFBQUFDQUFB?=
+ =?us-ascii?Q?QUFBQ2VBQUFBYlFCaEFISUFkZ0JsQUd3QWJBQmZBSEFBY2dCdkFHb0FaUUJq?=
+ =?us-ascii?Q?QUhRQVh3QmpBRzhBWkFCbEFITUFBQUFBQUFB?=
+x-dg-refthree: =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUJBQUFBQUFBQUFB?=
+ =?us-ascii?Q?SUFBQUFBQUo0QUFBQnRBR0VBY2dCMkFHVUFiQUJzQUY4QWNBQnlBRzhBYWdC?=
+ =?us-ascii?Q?bEFHTUFkQUJmQUdNQWJ3QmtBR1VBY3dCZkFHUUFhUUJqQUhRQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFFQUFBQUFBQUFBQWdBQUFBQUFuZ0FBQUcw?=
+ =?us-ascii?Q?QVlRQnlBSFlBWlFCc0FHd0FYd0J3QUhJQWJ3QnFBR1VBWXdCMEFGOEFiZ0Jo?=
+ =?us-ascii?Q?QUcwQVpRQnpBRjhBWXdCdkFHNEFaZ0JwQUdRQVpRQnVBSFFBYVFCaEFHd0FY?=
+ =?us-ascii?Q?d0J0QUdFQWNnQjJBR1VBYkFCc0FGOEFZUUJ1QUdRQVh3QnRBR2tBY0FBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBUUFBQUFBQUFBQUNBQUFBQUFDZUFBQUFiUUJoQUhJQWRnQmxBR3dB?=
+ =?us-ascii?Q?YkFCZkFIQUFjZ0J2QUdvQVpRQmpBSFFBWHdCdUFHRUFiUUJsQUhNQVh3QnlB?=
+ =?us-ascii?Q?R1VBY3dCMEFISUFhUUJqQUhRQVpRQmtBRjhBYlFCaEFISUFkZ0JsQUd3QWJB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQkFBQUFBQUFB?=
+ =?us-ascii?Q?QUFJQUFBQUFBSjRBQUFCdEFHRUFjZ0IyQUdVQWJBQnNBRjhBY0FCeUFHOEFh?=
+ =?us-ascii?Q?Z0JsQUdNQWRBQmZBRzRBWVFCdEFHVUFjd0JmQUhJQVpRQnpBSFFBY2dCcEFH?=
+ =?us-ascii?Q?TUFkQUJsQUdRQVh3QnRBR0VBY2dCMkFHVUFiQUJzQUY4QWJ3QnlBRjhBWVFC?=
+ =?us-ascii?Q?eUFHMEFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUVBQUFBQUFBQUFBZ0FBQUFBQW5nQUFB?=
+ =?us-ascii?Q?RzBBWVFCeUFIWUFaUUJzQUd3QVh3QjBBR1VBY2dCdEFHa0FiZ0IxQUhNQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+ =?us-ascii?Q?QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFB?=
+x-dg-reffour: QUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFRQUFBQUFBQUFBQ0FBQUFBQUNlQUFBQWJRQmhBSElBZGdCbEFHd0FiQUJmQUhjQWJ3QnlBR1FBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFBQUFCQUFBQUFBQUFBQUlBQUFBQUFBPT0iLz48L21ldGE+
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CO1PR18MB4666:EE_|DM6PR18MB2780:EE_
+x-ms-office365-filtering-correlation-id: ee8bf4ea-8523-4e8d-6158-08db51592781
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: S4uWbQlDYfGIA4CC62YS1fogvmv8kA4qa+62O4kI1E6yRXdan3ONcEaz5jFbLz/wLQ4Mq+E7gO0o/e4P8GPpPZeepVSjLcHCxrRB04fv6Pt5gSPVGeo6lIvasKxG6BAjHP2UK/ZP3jaBF9FuvlfQv6dJwxheZRyiFgVcrgZimVNlsdoI/xbJY3GG2Q4df3JeH0YLU2ob/0SmfO8lK0HyC03kbW66fKE1qzGBYg4No5FIlWr4HoQLf8kFAVNRBmlM8dtn+urZ4vIPAqXRLgGf1+hqT8ISRP+oKWdAWPBUe/bw5/knAk9yyFmYAgbHAWhgXo9rT8+tMShTmi5QhzDj4nZjzLbtnvj2fDLTYJ1OEtbrymDZpE1rAuoXoA2iBborFuX+gxs0ZKFooXWNIAX4vwKFdnl3iboh+onqzii43BOWUlkTDZasVPnsii4JLEdA2vCACwIhF1+IbFnEzZmA0hMt7/doIhg75E1ImsroMwksCzooPBduiOcxxIlLdJmsbgVu1Os/Xkih0R84XCOc7sy3NsDe1hJ0rpFVoTi2PWqYPccyksjCHee1weLUvVCe5OMwMRgsAzGsQhomy5FX9u7hYqK9HB+p8MmKuk7RTaHAWxFFmmOJylq99VvJy1C8
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR18MB4666.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(366004)(396003)(376002)(346002)(136003)(451199021)(86362001)(66446008)(33656002)(64756008)(316002)(54906003)(76116006)(66556008)(7696005)(478600001)(66476007)(66946007)(4326008)(110136005)(55016003)(5660300002)(8676002)(52536014)(7416002)(8936002)(41300700001)(2906002)(30864003)(71200400001)(186003)(38070700005)(122000001)(38100700002)(9686003)(6506007)(83380400001)(579004);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?WrKj3LEZk6omR+KoAcBU42aRm51PBx1yBD9xd3zapJKpFcJMtFBi5Jsith9s?=
+ =?us-ascii?Q?ef4rD17bUq+mABXM3zLkrr4nK/uKB16kA+6r0qCZbdCrtRaLRCQIFUdDMMA1?=
+ =?us-ascii?Q?dlJbjuKCN+zpI+03LA6gtAAF6uMjXnCSSKmWZ034fqNY5AUhCn2NHxTuNAct?=
+ =?us-ascii?Q?Eyc3mWJrN4FskW00SS/POz4rKF5x3DEJeWeKNZEms0WApN/rYEHKyQuzyYZo?=
+ =?us-ascii?Q?O/P2ePuiSB2MxpiMOkpPT/MmRCHj1p0Smkri1Q//N1+NoLZ/ut8jsftKRUAW?=
+ =?us-ascii?Q?WCHo9CmO+T2Ae7WCEcFghky1j/O3qoSK2gV901IYdt1bFvfnkSmBVmq/xMzX?=
+ =?us-ascii?Q?ybLzAE7/WxG2RjL0Pt1MVskY/p8y3SEU72sDbGkPo8Jx0HyO63o/I3bLoaEK?=
+ =?us-ascii?Q?xzzcm7krXo5BOb0gQwqdcGNZIRiryxuDPXPUpKkvPXJ29LCg4LhmCydf7MqH?=
+ =?us-ascii?Q?iTnjGtvh7yyjbQKE0LhKe7+GR2CIQpATMXwandPMowqmnciLKwWbzxLiDJDT?=
+ =?us-ascii?Q?Z9JaOx5n5q/3i22a2AaYdpWMsm2Gi2oNxWPAwwDmL3bTPDv9PUCCiGro/jyx?=
+ =?us-ascii?Q?L0zRV3zmojgFjlff4c37k24EoYLPUL3qAcmNVpn22EMTP+ZrziBDGIES8ads?=
+ =?us-ascii?Q?0kW1plSX8rEUCYy+Nwinj4yQyRasqOE5iGLhmLrD7VAuC3Gp3s64ztLBvn0j?=
+ =?us-ascii?Q?FBujEhR+pBAwY9t4Zv2FWlB6fJ0+jmPgZu44r8MoOUS2HFCVgJceKRLlaBuZ?=
+ =?us-ascii?Q?B1riWXWb4K6eqMgifsd23oORFXG3EhANIg7ymzUXyZkL6esjM2t4DXlTorcA?=
+ =?us-ascii?Q?vLKopX1HXgD5K15dUnvgQFR4mz9j9jPwewRq13Ul/f8rN+LTtVwHMjNDjSsf?=
+ =?us-ascii?Q?BQJxHg0Ydw8dMYOlpWouQ5rfkw9mkjtWvSkKp777QZx9gI16qy3Mo7u5HvfU?=
+ =?us-ascii?Q?Db4+SdKF9jT8Rzl4WH6WQgEwjhmyZuVW18aELcXslUa9IuJH19+cZHpLiEho?=
+ =?us-ascii?Q?CD4rrSgqb0tZq8ySSPF82HTD7ZeU5gGC+3214bzYI26mTdYVdfjxWMehLrz/?=
+ =?us-ascii?Q?LV1aX7s73EorrQuqop51ze5ZJ68TNCDK/Db4u720FVwCcy/wcyhIWLJYFsQV?=
+ =?us-ascii?Q?0KgohnOFEpCSDu5DZyrVTKc2Ga3RgiJ24HIMUjbLCd95jlNbFUDAiPUCmugQ?=
+ =?us-ascii?Q?ZOEm0f+BRLpoGeIoHIIHN+VVJneEQDe1QavFRVcR7ajzzGYkDVvZKd5YRdIT?=
+ =?us-ascii?Q?PpSxZCmsmCzZ7v3OpKqjWO8tdSQ1z4NM01O/EyC4HfI0LnVsCng91BGfIfk7?=
+ =?us-ascii?Q?HUPGOpp6moh0YmT60GzRwyJeCqzoRAoyWSu9FeSt1suR10pTLxiE2k1XSjxi?=
+ =?us-ascii?Q?ckQ4YUvL6r59HuBqVESN2wtgqFd7u+bPFr+y6N0vv+vWf2xj4Ougdsci3tGp?=
+ =?us-ascii?Q?ACUYhSPKEuKqFepZL6JfCTj5TptCtONlK23wtj0iegiLzAayleJkYqwfumwa?=
+ =?us-ascii?Q?4V4EmtX8aOGY/lpiubWRYaAGq5OslKpbY0q+BAaRbKmeUiZ+yO9nljLAxg?=
+ =?us-ascii?Q?=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ0PR03MB6423:EE_|PH8PR03MB7247:EE_
-X-MS-Office365-Filtering-Correlation-Id: dcd1ccff-c426-4bbd-8931-08db515906c3
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sgyTSMH42f3rz2jmzpBLYdpanB9nTw0DTWI5RkJW0NzfmPxqkpv90CLiR9EHM42jXQVdf9ZWgH7bphmpDZX+aKi90fp2VgK3Od66du3H4enqjfVNyZ3qe4NGGWN6k3nggRPK3VeBSFDSCFax0oBO/48Y4z4Z8/YU2GAIIN4oLd2MLshwLChONkfPo2JSnQU/rQNu4Bc/ApgKLw6qkFP35S5ZhsSswuCSwksqlLcvLNMB66eC+K2LfJ7dA3oXCmMX6oekqy0wVCBVFc0Zwws1OC9fez66GDRyBJVnvGf1AH49m47V7mR9c2Th48dGk9oS1yUz9ulilyAzIHlNEHBpqJWkeQVVewg10ua7rCRPV2YsYHoHXVW4VOSTnLvlktBQrGB4BefBnKVYCe12sCTWHoq/QYMZlG+KKEzZHEGYA3iH5l3EFuY8NevDJ7aEPv7DIKLFJnT0mH5WY1pv92Qk2jztJqXxH1LK0vgPqG2QoYrbvX2YsWyYB08ANgPeHPJnPyqyhZwapyidzigGS9WXWObmKUXxhSxUkf3GX7oE/ZmpB/SBj8UaKqR2EWPKGKpc
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ0PR03MB6423.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(136003)(376002)(396003)(39860400002)(346002)(366004)(451199021)(186003)(2906002)(38100700002)(85182001)(86362001)(33716001)(82960400001)(5660300002)(8936002)(8676002)(7416002)(66946007)(66556008)(66476007)(4326008)(6916009)(6666004)(41300700001)(6486002)(478600001)(316002)(6506007)(6512007)(9686003)(26005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NlFpWC9LdHNIa0VCRHNNRGNmckw1cEQ4TFVkMGthR0lXYUdEZGpiZk5DZFUx?=
- =?utf-8?B?R0JWL09Ca2RzMUYxYjhwN3ZBSkdEVHA5cXJPejdjcW85UnpUZXZWbThnczBE?=
- =?utf-8?B?ZTN1aDM5KzY5WG94SzRUOWJTNEpyZmVFUXdYRFhGYVFydFRxN3N6VHdIM2h3?=
- =?utf-8?B?bnpSRWZkOEdvRTlqNFZwQWkxN09uemFtanZlM2VPNUwybDhJeTFkMzdHcmVH?=
- =?utf-8?B?Mis3cmRKRHNMVjFvMEY3SUJqY0F6MUlSbWtERDBJd3hOSEhYVXRzQmkxUDdp?=
- =?utf-8?B?VE8vVXlwV2JxTWQyS3hia0pSa1NkUTlaaU5PYmp3bTNZbGlrdFFnbzBCQmQr?=
- =?utf-8?B?UC9MMDJNenA1K1pLeGdjMGx1R3VYdmNjbmE2R0pOVDJ6YVdzMWc2U0lYRVho?=
- =?utf-8?B?Tmg5S2FQVWgvY2RBVTVvNm1HQml6Wld0SWg2R09qeDg0MHc4VlRWNTloQXpr?=
- =?utf-8?B?NTRCN1g0S1hOdElNQ2UvY3ZXZG5uSGozTkVBRm9aclRtWHVYUkdWYUlMRVNI?=
- =?utf-8?B?WHJVYW5IQ2tzMVBocEZDdDh0NHo3TCs3dkVmSXhzN1ppMnlJU2ZXeGp1M1dT?=
- =?utf-8?B?S3h4Uk5XaVQyMGpsK3Z2d0tsaWVWVEdROEsxTHJmN3B0L0twNG1WNUszZHVm?=
- =?utf-8?B?ekZnZ2dmWjhPZ0RCTkhGTFJWemxTd2ZpekhDbXV5bjdkZnJFNjR5bGxFVXQ5?=
- =?utf-8?B?MWRnNldIL0lpWnpEemlITGFYMmpxYWJzNlRaeE1SSHdMSGhOTTYxTWFtTHFx?=
- =?utf-8?B?YVZoRDQxUTM0dzVSWlFTbHR2Y0FkNlZCUXRsV3dja2hnSy9xbU9JZDB4dzFQ?=
- =?utf-8?B?aWdlZGZhTnhaVW9QQU14Y09Rc1RHREZrOXhFRUpJcG5qVzFST0M1WFBLUU4v?=
- =?utf-8?B?aE1oUXRkRE1XYit3ZEEwZUMyZ3JXMUdsY29nRS9ldURadzJXaHdkQnViSWZp?=
- =?utf-8?B?UkNNaEtOWU1KM3B6cmY4Tnh4NmtaVHZsU3FINkx4cVRKSlZHZHY2bVFoakxj?=
- =?utf-8?B?WExEUFBmZ3ozNndpbC8vQVhRWENBMGxnRFBjUEgvZmVGNUJSRDA5THNlMHky?=
- =?utf-8?B?ek9mZk1hTFMvVTdCWWZxajJ4SGNJRDhuVGRsMXJyemI2Y3Vvd0RhNjJKTG5z?=
- =?utf-8?B?VXVneXIrKzJaekVEZ2NqbHR0VExHTVdpbE5ERzdEUStBaFcxRmtPMXdlaDRp?=
- =?utf-8?B?VTUzL01haUprOTVoUTcyUmo2NDNwVzh6TXNTUGJjaFpUYkZZNmpsd1hLdVVE?=
- =?utf-8?B?Y2hRRUt6c2xvWW9jMGFPOTBhN0NZVlZKWld5ZVEyQVFieUhtVVJzZDlLK3pm?=
- =?utf-8?B?ZHdDTm0yU0ZOZDM1VFhYNHVrc0xyd3NmN1p2MXdQTWpEU1NqRGVqTnhnTGJW?=
- =?utf-8?B?ejhDaUtVZ3B6Q09qMGE1TjZIZ2Z1SDErRXN4ejhwUWVqNjJTVDRDRU5GS2hR?=
- =?utf-8?B?eS9lTlV1NE5Odi9nc1RkOGRCb0FxYWhMN3EycXFHZ1Zyb2hNRGNWdXdHNWQ0?=
- =?utf-8?B?bGNJY2ZLbjAxUlUyclZQNDVKSWtoZzJ0WUFGZ0dKWkszS1ZxM1NIWlU0KzRX?=
- =?utf-8?B?ZVZSS09SVTRtbXVmTWRDenM0aFZFU3VLTVk5MDNEUEZWZE9PcnhXNEZPNG1h?=
- =?utf-8?B?YUptNi9hMWZFWDl0Q1BWbGl4TXF5a29xdDdSYjJLSDBtK0dVdWJlMnVLWjJ2?=
- =?utf-8?B?NXU5ZXIxUnlUdjJRcitkZk9PbEUwK2RTQndlcFh0b2s2dVRrMTZrTHRhSFE2?=
- =?utf-8?B?OVJ0NXZXWHh6aXZNSHRFSmhkZXpOeUJjdHJiWDFQd1kzTmhnTHl3L3ZMTTVR?=
- =?utf-8?B?b2pJOURjUEhCZ2RkS2dtaS80WkRmM0lVSHZpeFMvMi9UdWFJK2RzSExVU2NU?=
- =?utf-8?B?cGFhSU80bW10b2hya0FRVXZxdnZyTThPQ2xqWU1jdkZWdFJVbnRkTlpua1RY?=
- =?utf-8?B?RXh3QzlabUlaeHBaQXhtc2o5WEhwWHZIU3Vaak5hVG1JZGNBQ05OWklDckx5?=
- =?utf-8?B?SE05N1h4U2d3VXRSRURZVlVKNHRISEZWSCtsQjMzYTV1aVVid1JxR2JCbjlj?=
- =?utf-8?B?UW5NbHJpeEszUGFkbHVLZUJEQWNWS0todGpkMEkwaytHOStkWlY4L3hyQW1k?=
- =?utf-8?Q?P3kJb0+P0OWc+qGTrEByQUKHS?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?VEZVNm5hSzV2Tk9tcjBRSzg2VEZjTWFtRzRPOGJtdFVud0xnVUFMR3NCTEwx?=
- =?utf-8?B?NXBmMFpWNmsyZGdYZ1J2Tnd5ZWNlVHo4SVU4SDlQa1BPTG5hWHVGMlhlWHlT?=
- =?utf-8?B?U1lOUllUQXUxK2djTkhCMjZIZnJBbmJyQk5IaG84aGsxRGFuNGFWZUY2ZzJ1?=
- =?utf-8?B?M1k2RGtCN3g2ZThrVkd2VldWSUZhcE5kdmY4NVdybHc0NTF1WUVTSlRtOXpX?=
- =?utf-8?B?VnUyRmtPTjhYUXh6NmVNU2NoM3FmZXVyK0VKWWlCOUtySmlpdGgzeFQ2WVNa?=
- =?utf-8?B?NkNiS2pPTk13OG96MDI5eWd4UVFMM0M3U0daRTFxZEtmaTdqczNWdUVWQWoz?=
- =?utf-8?B?WFlqYzBOaWVUcEU5S0c2emNzS2RQcTQ1VEhITTkrUzNTQ1Irbkt3QjZxMEg2?=
- =?utf-8?B?TDIxbzk3R2QrUE1UMlNZcjVyTXJFSmFnM2JxV3poTFFKdk0zMVkrYldXcWha?=
- =?utf-8?B?MHdzc1FqejVRbDFtaUl3MlVUTEtaS2tVSWFWNEZ4cERJRU1teGVqb3hTNUF2?=
- =?utf-8?B?TFVSZy9aSzdlVFRDeHhWYm9ObW1nSFd6cnVOWlhPdG1qYmRyWXRrbHJ0cWxl?=
- =?utf-8?B?cTRLTi9PbDBMQ1M5dUoxWmhtVUVXWmZFLzhEWENWak9hWGkxU1BJWXVTaTZo?=
- =?utf-8?B?SkFIN3dpa2J4VjBKNlMyS0t6cDl2ODB1R0RqUlZraWhpSUkvRVhtUTcyYkxS?=
- =?utf-8?B?emQ4M0o0T0ZROFlPTTUrTUgxS05CSHgwYkFWcTN3MktIMENPYkR0dVlMbkQ1?=
- =?utf-8?B?TU5FK1BmN2dVamJlSUdveTdVbW1wZ3VNTldldjluRGlhbERGVzd4VUpsRzBk?=
- =?utf-8?B?UUhrN0h1THR2RS9KdUZSc2ZaVC9hT3NFS3p0OHlPV0NmRkRhaisvdmxwaXhi?=
- =?utf-8?B?UU1uVSsrRi9hVTdrZk1iYllWRTd5UVRDLzQyWkRzamlUc1VNSzlPNnMvWlNs?=
- =?utf-8?B?Q0xNZ2x5Tk5jd0lLcUozVWZUdTVoTFhoeFR4ZnhoUjNuVDhXKytUOUdnSlRz?=
- =?utf-8?B?dklocjNRVGRVZTZQM0VyM28zbDdYdDRMbjQ2ZUU2ZFQyaXQ4NGVNc0RXdUF0?=
- =?utf-8?B?QUg2QmMyOUxKVDB4N3pKZkgwb2pZb3pDOEtSUW5DWTZLY3RrSWMvOWQ3T0hH?=
- =?utf-8?B?SEl3NXR6Rmx2NjlIRnBydklhUElQdTJrV3lZUWw3dk9URUFRWHdZUGI5S0ln?=
- =?utf-8?B?T2psdmlEVUhoazNIMHFRUEc4ZkdlaWMvNWVFSU41NmVqSXhJckQ2QmhSRnNU?=
- =?utf-8?B?bG9RWnIrc1lGOHEybDJ3RDB3VHE1Um1hTk1jakVMdmkwTFpEQW0rUG51WUhO?=
- =?utf-8?B?Q0IrcFFoRU9MZk9XL3c4ODM4MGdDSnlzOUJkSm5SSmljTlp2ZU45TE9rU0pw?=
- =?utf-8?B?d0I5cTZvYkFMalhWMHZJVVFXdEhPMzdGTDV6Z05aVUdkUGFTQ3BJV3pPVUlK?=
- =?utf-8?B?bmU5NUhXL0tYYzgxM1hDeTA5b3VESTdIa09TUGIvYzA1Snh2cnBGWUxWU0Fj?=
- =?utf-8?B?UWhuc25WSnNONVVKb2luVmJoWmNvcjBFZGNjSjJ4OEdYODVoTW04WDdEb1U3?=
- =?utf-8?Q?boQ4Huv0bUwzPyZ8WtnyOLEU8eeP4coBDRBO4xs6qhNYt9?=
-X-OriginatorOrg: citrix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: dcd1ccff-c426-4bbd-8931-08db515906c3
-X-MS-Exchange-CrossTenant-AuthSource: SJ0PR03MB6423.namprd03.prod.outlook.com
+X-OriginatorOrg: marvell.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 13:18:21.5372
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR18MB4666.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ee8bf4ea-8523-4e8d-6158-08db51592781
+X-MS-Exchange-CrossTenant-originalarrivaltime: 10 May 2023 13:19:15.9535
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: sSJfxiCjeDhGsqhqrleQ3kvFsct1iu9WsG6jxSVtBzagF7bUHTvuUfhXxSy2JZ0PMppFgYUVshs/tGxQG5SHIQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR03MB7247
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: gRBcO5dU5TV3bRewhUTwKZh4kos6MmOOcwc854Vn07RYIhctFABMornU3X0Zpi2MApIE3HKlNBYdTn2SkZN1UQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR18MB2780
+X-Proofpoint-GUID: djHzTRs20-xYVTF1boHaIndXLt4btx38
+X-Proofpoint-ORIG-GUID: djHzTRs20-xYVTF1boHaIndXLt4btx38
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 01:48:49PM +0200, Pavel Machek wrote:
-> Hi!
-> 
-> > This is the start of the stable review cycle for the 6.1.28 release.
-> > There are 610 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> 
-> 
-> > Sean Anderson <seanga2@gmail.com>
-> >     net: sunhme: Fix uninitialized return code
-> 
-> This one is wrong for stable. err is still initialzied to 0, which is
-> wrong thing to do. Mainline is ok, but fix does not work for 6.1.
-> 
-> > Roger Pau Monne <roger.pau@citrix.com>
-> >     ACPI: processor: Fix evaluating _PDC method when running as Xen dom0
-> 
-> If the condition can be handled (and code has "return false"), it
-> should use WARN, not BUG.
+Hi,
 
-Feel free to send a followup fix.
+>-----Original Message-----
+>From: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
+>Sent: Wednesday, May 10, 2023 2:21 PM
+>To: davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+>pabeni@redhat.com; robh+dt@kernel.org; krzysztof.kozlowski+dt@linaro.org
+>Cc: linux@armlinux.org.uk; michal.simek@amd.com;
+>radhey.shyam.pandey@amd.com; netdev@vger.kernel.org;
+>devicetree@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+>kernel@vger.kernel.org; anirudha.sarangi@amd.com;
+>harini.katakam@amd.com; sarath.babu.naidu.gaddam@amd.com;
+>git@amd.com
+>Subject: [PATCH net-next V3 2/3] net: axienet: Preparatory changes for
+>dmaengine support
+>
+>The axiethernet driver has in-built dma programming. The aim is to remove
+>axiethernet axidma programming  after some time and instead use the
+>dmaengine framework to communicate with existing xilinx DMAengine
+>controller(xilinx_dma) driver.
+>
+>Keep the axidma programming code under AXIENET_USE_DMA check so that
+>dmaengine changes can be added later.
+>
+>Perform minor code reordering to minimize conditional AXIENET_USE_DMA
+>checks and there is no functional change.
+>
+>It uses "dmas" property to identify whether it should use a dmaengine fram=
+ework
+>or axiethernet axidma programming.
+>
+>Signed-off-by: Sarath Babu Naidu Gaddam
+><sarath.babu.naidu.gaddam@amd.com>
+>---
+>Changes in V3:
+>1) New Patch.
+>---
+> drivers/net/ethernet/xilinx/xilinx_axienet.h  |   2 +
+> .../net/ethernet/xilinx/xilinx_axienet_main.c | 317 +++++++++++-------
+> 2 files changed, 192 insertions(+), 127 deletions(-)
+>
+>diff --git a/drivers/net/ethernet/xilinx/xilinx_axienet.h
+>b/drivers/net/ethernet/xilinx/xilinx_axienet.h
+>index 575ff9de8985..10917d997d27 100644
+>--- a/drivers/net/ethernet/xilinx/xilinx_axienet.h
+>+++ b/drivers/net/ethernet/xilinx/xilinx_axienet.h
+>@@ -435,6 +435,7 @@ struct axidma_bd {
+>  * @coalesce_usec_rx:	IRQ coalesce delay for RX
+>  * @coalesce_count_tx:	Store the irq coalesce on TX side.
+>  * @coalesce_usec_tx:	IRQ coalesce delay for TX
+>+ * @has_dmas:	flag to check dmaengine framework usage.
+>  */
+> struct axienet_local {
+> 	struct net_device *ndev;
+>@@ -499,6 +500,7 @@ struct axienet_local {
+> 	u32 coalesce_usec_rx;
+> 	u32 coalesce_count_tx;
+> 	u32 coalesce_usec_tx;
+>+	u8  has_dmas;
 
-Such dummy handler getting caller is a sign of an error elsewhere:
-someone playing with Kconfig logic or trying to add _PDC / Xen support
-to a different architecture, so I think it's fine to BUG in that
-case.
+Hardware always has dma. You are just switching to dmaengine software frame=
+work.
+use_dmaengine might be the correct name.
 
-Thanks, Roger.
+> };
+>
+> /**
+>diff --git a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+>b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+>index 3e310b55bce2..8678fc09245a 100644
+>--- a/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+>+++ b/drivers/net/ethernet/xilinx/xilinx_axienet_main.c
+>@@ -54,6 +54,8 @@
+>
+> #define AXIENET_REGS_N		40
+>
+>+#define AXIENET_USE_DMA(lp) ((lp)->has_dmas)
+>+
+IMO lp->has_dmas is already simple enough and no need of a macro.
+Up to you to remove or keep it.
+
+Thanks,
+Sundeep
+
+> /* Match table for of_platform binding */  static const struct of_device_=
+id
+>axienet_of_match[] =3D {
+> 	{ .compatible =3D "xlnx,axi-ethernet-1.00.a", }, @@ -588,10 +590,6 @@
+>static int axienet_device_reset(struct net_device *ndev)
+> 	struct axienet_local *lp =3D netdev_priv(ndev);
+> 	int ret;
+>
+>-	ret =3D __axienet_device_reset(lp);
+>-	if (ret)
+>-		return ret;
+>-
+> 	lp->max_frm_size =3D XAE_MAX_VLAN_FRAME_SIZE;
+> 	lp->options |=3D XAE_OPTION_VLAN;
+> 	lp->options &=3D (~XAE_OPTION_JUMBO);
+>@@ -605,11 +603,17 @@ static int axienet_device_reset(struct net_device
+>*ndev)
+> 			lp->options |=3D XAE_OPTION_JUMBO;
+> 	}
+>
+>-	ret =3D axienet_dma_bd_init(ndev);
+>-	if (ret) {
+>-		netdev_err(ndev, "%s: descriptor allocation failed\n",
+>-			   __func__);
+>-		return ret;
+>+	if (!AXIENET_USE_DMA(lp)) {
+>+		ret =3D __axienet_device_reset(lp);
+>+		if (ret)
+>+			return ret;
+>+
+>+		ret =3D axienet_dma_bd_init(ndev);
+>+		if (ret) {
+>+			netdev_err(ndev, "%s: descriptor allocation failed\n",
+>+				   __func__);
+>+			return ret;
+>+		}
+> 	}
+>
+> 	axienet_status =3D axienet_ior(lp, XAE_RCW1_OFFSET); @@ -775,7 +779,7
+>@@ static int axienet_tx_poll(struct napi_struct *napi, int budget)  }
+>
+> /**
+>- * axienet_start_xmit - Starts the transmission.
+>+ * axienet_start_xmit_legacy - Starts the transmission.
+>  * @skb:	sk_buff pointer that contains data to be Txed.
+>  * @ndev:	Pointer to net_device structure.
+>  *
+>@@ -788,7 +792,7 @@ static int axienet_tx_poll(struct napi_struct *napi, i=
+nt
+>budget)
+>  * it populates AXI Stream Control fields with appropriate values.
+>  */
+> static netdev_tx_t
+>-axienet_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+>+axienet_start_xmit_legacy(struct sk_buff *skb, struct net_device *ndev)
+> {
+> 	u32 ii;
+> 	u32 num_frag;
+>@@ -890,6 +894,27 @@ axienet_start_xmit(struct sk_buff *skb, struct
+>net_device *ndev)
+> 	return NETDEV_TX_OK;
+> }
+>
+>+/**
+>+ * axienet_start_xmit - Starts the transmission.
+>+ * @skb:        sk_buff pointer that contains data to be Txed.
+>+ * @ndev:       Pointer to net_device structure.
+>+ *
+>+ * Return: NETDEV_TX_OK, on success
+>+ *          NETDEV_TX_BUSY, if any of the descriptors are not free
+>+ *
+>+ * This function is invoked from upper layers to initiate transmission
+>+*/ static netdev_tx_t axienet_start_xmit(struct sk_buff *skb, struct
+>+net_device *ndev) {
+>+	struct axienet_local *lp =3D netdev_priv(ndev);
+>+
+>+	if (!AXIENET_USE_DMA(lp))
+>+		return axienet_start_xmit_legacy(skb, ndev);
+>+	else
+>+		return NETDEV_TX_BUSY;
+>+}
+>+
+> /**
+>  * axienet_rx_poll - Triggered by RX ISR to complete the BD processing.
+>  * @napi:	Pointer to NAPI structure.
+>@@ -1124,41 +1149,22 @@ static irqreturn_t axienet_eth_irq(int irq, void
+>*_ndev)  static void axienet_dma_err_handler(struct work_struct *work);
+>
+> /**
+>- * axienet_open - Driver open routine.
+>- * @ndev:	Pointer to net_device structure
+>+ * axienet_init_legacy_dma - init the dma legacy code.
+>+ * @ndev:       Pointer to net_device structure
+>  *
+>  * Return: 0, on success.
+>- *	    non-zero error value on failure
+>+ *          non-zero error value on failure
+>+ *
+>+ * This is the dma  initialization code. It also allocates interrupt
+>+ * service routines, enables the interrupt lines and ISR handling.
+>  *
+>- * This is the driver open routine. It calls phylink_start to start the
+>- * PHY device.
+>- * It also allocates interrupt service routines, enables the interrupt li=
+nes
+>- * and ISR handling. Axi Ethernet core is reset through Axi DMA core. Buf=
+fer
+>- * descriptors are initialized.
+>  */
+>-static int axienet_open(struct net_device *ndev)
+>+
+>+static inline int axienet_init_legacy_dma(struct net_device *ndev)
+> {
+> 	int ret;
+> 	struct axienet_local *lp =3D netdev_priv(ndev);
+>
+>-	dev_dbg(&ndev->dev, "axienet_open()\n");
+>-
+>-	/* When we do an Axi Ethernet reset, it resets the complete core
+>-	 * including the MDIO. MDIO must be disabled before resetting.
+>-	 * Hold MDIO bus lock to avoid MDIO accesses during the reset.
+>-	 */
+>-	axienet_lock_mii(lp);
+>-	ret =3D axienet_device_reset(ndev);
+>-	axienet_unlock_mii(lp);
+>-
+>-	ret =3D phylink_of_phy_connect(lp->phylink, lp->dev->of_node, 0);
+>-	if (ret) {
+>-		dev_err(lp->dev, "phylink_of_phy_connect() failed: %d\n", ret);
+>-		return ret;
+>-	}
+>-
+>-	phylink_start(lp->phylink);
+>-
+> 	/* Enable worker thread for Axi DMA error handling */
+> 	INIT_WORK(&lp->dma_err_task, axienet_dma_err_handler);
+>
+>@@ -1192,13 +1198,62 @@ static int axienet_open(struct net_device *ndev)
+> err_tx_irq:
+> 	napi_disable(&lp->napi_tx);
+> 	napi_disable(&lp->napi_rx);
+>-	phylink_stop(lp->phylink);
+>-	phylink_disconnect_phy(lp->phylink);
+> 	cancel_work_sync(&lp->dma_err_task);
+> 	dev_err(lp->dev, "request_irq() failed\n");
+> 	return ret;
+> }
+>
+>+/**
+>+ * axienet_open - Driver open routine.
+>+ * @ndev:	Pointer to net_device structure
+>+ *
+>+ * Return: 0, on success.
+>+ *	    non-zero error value on failure
+>+ *
+>+ * This is the driver open routine. It calls phylink_start to start the
+>+ * PHY device.
+>+ * It also allocates interrupt service routines, enables the interrupt
+>+lines
+>+ * and ISR handling. Axi Ethernet core is reset through Axi DMA core.
+>+Buffer
+>+ * descriptors are initialized.
+>+ */
+>+static int axienet_open(struct net_device *ndev) {
+>+	int ret;
+>+	struct axienet_local *lp =3D netdev_priv(ndev);
+>+
+>+	dev_dbg(&ndev->dev, "%s\n", __func__);
+>+
+>+	/* When we do an Axi Ethernet reset, it resets the complete core
+>+	 * including the MDIO. MDIO must be disabled before resetting.
+>+	 * Hold MDIO bus lock to avoid MDIO accesses during the reset.
+>+	 */
+>+	axienet_lock_mii(lp);
+>+	ret =3D axienet_device_reset(ndev);
+>+	axienet_unlock_mii(lp);
+>+
+>+	ret =3D phylink_of_phy_connect(lp->phylink, lp->dev->of_node, 0);
+>+	if (ret) {
+>+		dev_err(lp->dev, "phylink_of_phy_connect() failed: %d\n", ret);
+>+		return ret;
+>+	}
+>+
+>+	phylink_start(lp->phylink);
+>+
+>+	if (!AXIENET_USE_DMA(lp)) {
+>+		ret =3D axienet_init_legacy_dma(ndev);
+>+		if (ret)
+>+			goto error_code;
+>+	}
+>+
+>+	return 0;
+>+
+>+error_code:
+>+	phylink_stop(lp->phylink);
+>+	phylink_disconnect_phy(lp->phylink);
+>+
+>+	return ret;
+>+}
+>+
+> /**
+>  * axienet_stop - Driver stop routine.
+>  * @ndev:	Pointer to net_device structure
+>@@ -1215,8 +1270,10 @@ static int axienet_stop(struct net_device *ndev)
+>
+> 	dev_dbg(&ndev->dev, "axienet_close()\n");
+>
+>-	napi_disable(&lp->napi_tx);
+>-	napi_disable(&lp->napi_rx);
+>+	if (!AXIENET_USE_DMA(lp)) {
+>+		napi_disable(&lp->napi_tx);
+>+		napi_disable(&lp->napi_rx);
+>+	}
+>
+> 	phylink_stop(lp->phylink);
+> 	phylink_disconnect_phy(lp->phylink);
+>@@ -1224,18 +1281,18 @@ static int axienet_stop(struct net_device *ndev)
+> 	axienet_setoptions(ndev, lp->options &
+> 			   ~(XAE_OPTION_TXEN | XAE_OPTION_RXEN));
+>
+>-	axienet_dma_stop(lp);
+>+	if (!AXIENET_USE_DMA(lp)) {
+>+		axienet_dma_stop(lp);
+>+		cancel_work_sync(&lp->dma_err_task);
+>+		free_irq(lp->tx_irq, ndev);
+>+		free_irq(lp->rx_irq, ndev);
+>+		axienet_dma_bd_release(ndev);
+>+	}
+>
+> 	axienet_iow(lp, XAE_IE_OFFSET, 0);
+>
+>-	cancel_work_sync(&lp->dma_err_task);
+>-
+> 	if (lp->eth_irq > 0)
+> 		free_irq(lp->eth_irq, ndev);
+>-	free_irq(lp->tx_irq, ndev);
+>-	free_irq(lp->rx_irq, ndev);
+>-
+>-	axienet_dma_bd_release(ndev);
+> 	return 0;
+> }
+>
+>@@ -1411,14 +1468,16 @@ static void axienet_ethtools_get_regs(struct
+>net_device *ndev,
+> 	data[29] =3D axienet_ior(lp, XAE_FMI_OFFSET);
+> 	data[30] =3D axienet_ior(lp, XAE_AF0_OFFSET);
+> 	data[31] =3D axienet_ior(lp, XAE_AF1_OFFSET);
+>-	data[32] =3D axienet_dma_in32(lp, XAXIDMA_TX_CR_OFFSET);
+>-	data[33] =3D axienet_dma_in32(lp, XAXIDMA_TX_SR_OFFSET);
+>-	data[34] =3D axienet_dma_in32(lp, XAXIDMA_TX_CDESC_OFFSET);
+>-	data[35] =3D axienet_dma_in32(lp, XAXIDMA_TX_TDESC_OFFSET);
+>-	data[36] =3D axienet_dma_in32(lp, XAXIDMA_RX_CR_OFFSET);
+>-	data[37] =3D axienet_dma_in32(lp, XAXIDMA_RX_SR_OFFSET);
+>-	data[38] =3D axienet_dma_in32(lp, XAXIDMA_RX_CDESC_OFFSET);
+>-	data[39] =3D axienet_dma_in32(lp, XAXIDMA_RX_TDESC_OFFSET);
+>+	if (!AXIENET_USE_DMA(lp)) {
+>+		data[32] =3D axienet_dma_in32(lp, XAXIDMA_TX_CR_OFFSET);
+>+		data[33] =3D axienet_dma_in32(lp, XAXIDMA_TX_SR_OFFSET);
+>+		data[34] =3D axienet_dma_in32(lp, XAXIDMA_TX_CDESC_OFFSET);
+>+		data[35] =3D axienet_dma_in32(lp, XAXIDMA_TX_TDESC_OFFSET);
+>+		data[36] =3D axienet_dma_in32(lp, XAXIDMA_RX_CR_OFFSET);
+>+		data[37] =3D axienet_dma_in32(lp, XAXIDMA_RX_SR_OFFSET);
+>+		data[38] =3D axienet_dma_in32(lp, XAXIDMA_RX_CDESC_OFFSET);
+>+		data[39] =3D axienet_dma_in32(lp, XAXIDMA_RX_TDESC_OFFSET);
+>+	}
+> }
+>
+> static void
+>@@ -1878,9 +1937,6 @@ static int axienet_probe(struct platform_device *pde=
+v)
+> 	u64_stats_init(&lp->rx_stat_sync);
+> 	u64_stats_init(&lp->tx_stat_sync);
+>
+>-	netif_napi_add(ndev, &lp->napi_rx, axienet_rx_poll);
+>-	netif_napi_add(ndev, &lp->napi_tx, axienet_tx_poll);
+>-
+> 	lp->axi_clk =3D devm_clk_get_optional(&pdev->dev, "s_axi_lite_clk");
+> 	if (!lp->axi_clk) {
+> 		/* For backward compatibility, if named AXI clock is not present,
+>@@ -2006,75 +2062,80 @@ static int axienet_probe(struct platform_device
+>*pdev)
+> 		goto cleanup_clk;
+> 	}
+>
+>-	/* Find the DMA node, map the DMA registers, and decode the DMA IRQs
+>*/
+>-	np =3D of_parse_phandle(pdev->dev.of_node, "axistream-connected", 0);
+>-	if (np) {
+>-		struct resource dmares;
+>+	if (!of_find_property(pdev->dev.of_node, "dmas", NULL)) {
+>+		/* Find the DMA node, map the DMA registers, and decode the
+>DMA IRQs */
+>+		np =3D of_parse_phandle(pdev->dev.of_node, "axistream-
+>connected", 0);
+>
+>-		ret =3D of_address_to_resource(np, 0, &dmares);
+>-		if (ret) {
+>-			dev_err(&pdev->dev,
+>-				"unable to get DMA resource\n");
+>+		if (np) {
+>+			struct resource dmares;
+>+
+>+			ret =3D of_address_to_resource(np, 0, &dmares);
+>+			if (ret) {
+>+				dev_err(&pdev->dev,
+>+					"unable to get DMA resource\n");
+>+				of_node_put(np);
+>+				goto cleanup_clk;
+>+			}
+>+			lp->dma_regs =3D devm_ioremap_resource(&pdev->dev,
+>+							     &dmares);
+>+			lp->rx_irq =3D irq_of_parse_and_map(np, 1);
+>+			lp->tx_irq =3D irq_of_parse_and_map(np, 0);
+> 			of_node_put(np);
+>+			lp->eth_irq =3D platform_get_irq_optional(pdev, 0);
+>+		} else {
+>+			/* Check for these resources directly on the Ethernet
+>node. */
+>+			lp->dma_regs =3D
+>devm_platform_get_and_ioremap_resource(pdev, 1, NULL);
+>+			lp->rx_irq =3D platform_get_irq(pdev, 1);
+>+			lp->tx_irq =3D platform_get_irq(pdev, 0);
+>+			lp->eth_irq =3D platform_get_irq_optional(pdev, 2);
+>+		}
+>+		if (IS_ERR(lp->dma_regs)) {
+>+			dev_err(&pdev->dev, "could not map DMA regs\n");
+>+			ret =3D PTR_ERR(lp->dma_regs);
+>+			goto cleanup_clk;
+>+		}
+>+		if (lp->rx_irq <=3D 0 || lp->tx_irq <=3D 0) {
+>+			dev_err(&pdev->dev, "could not determine irqs\n");
+>+			ret =3D -ENOMEM;
+> 			goto cleanup_clk;
+> 		}
+>-		lp->dma_regs =3D devm_ioremap_resource(&pdev->dev,
+>-						     &dmares);
+>-		lp->rx_irq =3D irq_of_parse_and_map(np, 1);
+>-		lp->tx_irq =3D irq_of_parse_and_map(np, 0);
+>-		of_node_put(np);
+>-		lp->eth_irq =3D platform_get_irq_optional(pdev, 0);
+>-	} else {
+>-		/* Check for these resources directly on the Ethernet node. */
+>-		lp->dma_regs =3D
+>devm_platform_get_and_ioremap_resource(pdev, 1, NULL);
+>-		lp->rx_irq =3D platform_get_irq(pdev, 1);
+>-		lp->tx_irq =3D platform_get_irq(pdev, 0);
+>-		lp->eth_irq =3D platform_get_irq_optional(pdev, 2);
+>-	}
+>-	if (IS_ERR(lp->dma_regs)) {
+>-		dev_err(&pdev->dev, "could not map DMA regs\n");
+>-		ret =3D PTR_ERR(lp->dma_regs);
+>-		goto cleanup_clk;
+>-	}
+>-	if ((lp->rx_irq <=3D 0) || (lp->tx_irq <=3D 0)) {
+>-		dev_err(&pdev->dev, "could not determine irqs\n");
+>-		ret =3D -ENOMEM;
+>-		goto cleanup_clk;
+>-	}
+>
+>-	/* Autodetect the need for 64-bit DMA pointers.
+>-	 * When the IP is configured for a bus width bigger than 32 bits,
+>-	 * writing the MSB registers is mandatory, even if they are all 0.
+>-	 * We can detect this case by writing all 1's to one such register
+>-	 * and see if that sticks: when the IP is configured for 32 bits
+>-	 * only, those registers are RES0.
+>-	 * Those MSB registers were introduced in IP v7.1, which we check first.
+>-	 */
+>-	if ((axienet_ior(lp, XAE_ID_OFFSET) >> 24) >=3D 0x9) {
+>-		void __iomem *desc =3D lp->dma_regs +
+>XAXIDMA_TX_CDESC_OFFSET + 4;
+>-
+>-		iowrite32(0x0, desc);
+>-		if (ioread32(desc) =3D=3D 0) {	/* sanity check */
+>-			iowrite32(0xffffffff, desc);
+>-			if (ioread32(desc) > 0) {
+>-				lp->features |=3D XAE_FEATURE_DMA_64BIT;
+>-				addr_width =3D 64;
+>-				dev_info(&pdev->dev,
+>-					 "autodetected 64-bit DMA range\n");
+>-			}
+>+		/* Autodetect the need for 64-bit DMA pointers.
+>+		 * When the IP is configured for a bus width bigger than 32 bits,
+>+		 * writing the MSB registers is mandatory, even if they are all 0.
+>+		 * We can detect this case by writing all 1's to one such register
+>+		 * and see if that sticks: when the IP is configured for 32 bits
+>+		 * only, those registers are RES0.
+>+		 * Those MSB registers were introduced in IP v7.1, which we
+>check first.
+>+		 */
+>+		if ((axienet_ior(lp, XAE_ID_OFFSET) >> 24) >=3D 0x9) {
+>+			void __iomem *desc =3D lp->dma_regs +
+>XAXIDMA_TX_CDESC_OFFSET + 4;
+>+
+> 			iowrite32(0x0, desc);
+>+			if (ioread32(desc) =3D=3D 0) {	/* sanity check */
+>+				iowrite32(0xffffffff, desc);
+>+				if (ioread32(desc) > 0) {
+>+					lp->features |=3D
+>XAE_FEATURE_DMA_64BIT;
+>+					addr_width =3D 64;
+>+					dev_info(&pdev->dev,
+>+						 "autodetected 64-bit DMA
+>range\n");
+>+				}
+>+				iowrite32(0x0, desc);
+>+			}
+>+		}
+>+		if (!IS_ENABLED(CONFIG_64BIT) && lp->features &
+>XAE_FEATURE_DMA_64BIT) {
+>+			dev_err(&pdev->dev, "64-bit addressable DMA is not
+>compatible with 32-bit archecture\n");
+>+			ret =3D -EINVAL;
+>+			goto cleanup_clk;
+> 		}
+>-	}
+>-	if (!IS_ENABLED(CONFIG_64BIT) && lp->features &
+>XAE_FEATURE_DMA_64BIT) {
+>-		dev_err(&pdev->dev, "64-bit addressable DMA is not compatible
+>with 32-bit archecture\n");
+>-		ret =3D -EINVAL;
+>-		goto cleanup_clk;
+>-	}
+>
+>-	ret =3D dma_set_mask_and_coherent(&pdev->dev,
+>DMA_BIT_MASK(addr_width));
+>-	if (ret) {
+>-		dev_err(&pdev->dev, "No suitable DMA available\n");
+>-		goto cleanup_clk;
+>+		ret =3D dma_set_mask_and_coherent(&pdev->dev,
+>DMA_BIT_MASK(addr_width));
+>+		if (ret) {
+>+			dev_err(&pdev->dev, "No suitable DMA available\n");
+>+			goto cleanup_clk;
+>+		}
+>+		netif_napi_add(ndev, &lp->napi_rx, axienet_rx_poll);
+>+		netif_napi_add(ndev, &lp->napi_tx, axienet_tx_poll);
+> 	}
+>
+> 	/* Check for Ethernet core IRQ (optional) */ @@ -2092,14 +2153,16 @@
+>static int axienet_probe(struct platform_device *pdev)
+> 	}
+>
+> 	lp->coalesce_count_rx =3D XAXIDMA_DFT_RX_THRESHOLD;
+>-	lp->coalesce_usec_rx =3D XAXIDMA_DFT_RX_USEC;
+> 	lp->coalesce_count_tx =3D XAXIDMA_DFT_TX_THRESHOLD;
+>-	lp->coalesce_usec_tx =3D XAXIDMA_DFT_TX_USEC;
+>
+>-	/* Reset core now that clocks are enabled, prior to accessing MDIO */
+>-	ret =3D __axienet_device_reset(lp);
+>-	if (ret)
+>-		goto cleanup_clk;
+>+	if (!AXIENET_USE_DMA(lp)) {
+>+		lp->coalesce_usec_rx =3D XAXIDMA_DFT_RX_USEC;
+>+		lp->coalesce_usec_tx =3D XAXIDMA_DFT_TX_USEC;
+>+		/* Reset core now that clocks are enabled, prior to accessing
+>MDIO */
+>+		ret =3D __axienet_device_reset(lp);
+>+		if (ret)
+>+			goto cleanup_clk;
+>+	}
+>
+> 	ret =3D axienet_mdio_setup(lp);
+> 	if (ret)
+>--
+>2.25.1
+>
+
