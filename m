@@ -2,178 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 550046FE056
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:32:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FD96FE058
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:33:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237492AbjEJOcL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 10:32:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36422 "EHLO
+        id S237481AbjEJOdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 10:33:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237457AbjEJOcI (ORCPT
+        with ESMTP id S237144AbjEJOdL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 10:32:08 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFD2659D4
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:32:06 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1a516fb6523so68612525ad.3
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:32:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683729126; x=1686321126;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NDPoO9iS4YMdxTYw/7S57ZbKNNVUGyiS2mNuYLdO99Q=;
-        b=WVOQZQj/jIEeoLxcpBmdx2rS3teY4rZ5OcD/qBDLQdUd/szQ3BOq2Qmx+FMS0GjWFu
-         b5w5sES/fpll4EmbKNsz9KEY6JFIf9cTz4IH9vjBJp5LMwYK93Bnvw1oFDsCeBLWSFtx
-         vaC8yJkbMthAbDhM0JuQDFGbDqjduMx/rBUPRODtb8DFdrYky8S3w6Pk26QErLGiPn2E
-         YMwAEIFW67muE+9mNAOCHcoax/0DaGTEYFul9mNEq0J/9OFPyLgkfirLlqx+Gmsbka+G
-         x+ir9BM4j8Jm4FqAZWPNnonNiTc54pKMtcIsjqwu/T8q653CsCOZd5JcTGxFiFDb2LvB
-         cnrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683729126; x=1686321126;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NDPoO9iS4YMdxTYw/7S57ZbKNNVUGyiS2mNuYLdO99Q=;
-        b=PAHF/7/O8/OgnVxyFc2NvB5IieblkRUTQrvNEVA4vGZDuhlA/v0jIVrZpiUrZHR0Yg
-         gJBNcjIxUhn/BJ2TRIqbBuSkdDNG4PJZwDFpUc0AFL1gNyuReiUwJc3A0G9zTtHe7sKC
-         xE95z55SE5fCQoOAuG4ia94+YmjoqPb7urw9NluKtIn3rSUnRLM6SAzvG0BFO0Sv+S/S
-         CbYfElHJzIFz/hyQQb6hl++7jI0LYT7rVfUOrevMbHU8etwleqZU6k/k5Vkjw5I/H2L4
-         5XPb712Vj2EZhP6VvLfvlMrG8AmIhf92+FeAy6Bbg7TPFcSZuyhrVU2P8NryO4pEqC5C
-         zegA==
-X-Gm-Message-State: AC+VfDz2tlqXsBFxHCHGy+UwQbfU7M7ZwYXSbwWt8cz2xNBkkhHdYYQU
-        PDSY8DQEW9c2MqEJWwIV9IhtubhGUciLAf81yLOb3A==
-X-Google-Smtp-Source: ACHHUZ6bpmGB1LJLUBKPjVe2AFdOvxthT3r8P2+tSxk4Sig/VgtKri4YqrLDhzXGEweblHOTvaxSctXPtlAIFgBJx5Q=
-X-Received: by 2002:a17:90b:1d87:b0:24d:fb82:71ab with SMTP id
- pf7-20020a17090b1d8700b0024dfb8271abmr18213899pjb.26.1683729126170; Wed, 10
- May 2023 07:32:06 -0700 (PDT)
+        Wed, 10 May 2023 10:33:11 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FE57DE
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 07:33:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=2fv+XSaz2klf5yi1nMJnm9s4azEAUlzVE9S/K7jdU4s=; b=qxm/PKZYn1ZNCxawWzA0ewtB7J
+        sedgrnoLcdTW5qldlxY4W0YpRfYrXaJFYZayXqPMtlrd94rCiomseTG3y2hQrf+vrPH2fz+lY+DIB
+        IR5ssm3o2c2W4drIB8BwOwu1Nd+bSA62waLUqM3WUhCPNXV/0pUUlN/OUkY1kfI3axXrUuY3QrZgy
+        4+3nfQaWs6bE3+jh53no8luZxzKr/OxRIlqgNdS2Q3tQpioqnTZ/sgQb2l9ovRS3kR2Kduufo7j32
+        roKRLztG+rFH0slEJWS1Mif0IpDUReKQ7tIJv/eY9kHYEfIPKADNwRuy1OvgAIHXp3lJx0+FSYaqB
+        Ni/Rw5Ug==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pwks2-00GMHz-F6; Wed, 10 May 2023 14:32:46 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id A3B6B3000D5;
+        Wed, 10 May 2023 16:32:44 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7A7DC202EECBF; Wed, 10 May 2023 16:32:44 +0200 (CEST)
+Date:   Wed, 10 May 2023 16:32:44 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Hao Jia <jiahao.os@bytedance.com>
+Cc:     mingo@redhat.com, mingo@kernel.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com,
+        mgorman@techsingularity.net, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] sched/core: Avoid double calling update_rq_clock()
+Message-ID: <20230510143244.GM4253@hirez.programming.kicks-ass.net>
+References: <20230510083450.62334-1-jiahao.os@bytedance.com>
+ <20230510083450.62334-3-jiahao.os@bytedance.com>
 MIME-Version: 1.0
-References: <20230510131527.1244929-1-aleksandr.mikhalitsyn@canonical.com>
-In-Reply-To: <20230510131527.1244929-1-aleksandr.mikhalitsyn@canonical.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Wed, 10 May 2023 07:31:55 -0700
-Message-ID: <CAKH8qBuzWHoEiABvTgM2qnx5Av127VMHnncGtU5EZq+ffT9eGg@mail.gmail.com>
-Subject: Re: [PATCH net-next] sctp: add bpf_bypass_getsockopt proto callback
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     nhorman@tuxdriver.com, davem@davemloft.net,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Christian Brauner <brauner@kernel.org>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>, linux-sctp@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230510083450.62334-3-jiahao.os@bytedance.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 6:15=E2=80=AFAM Alexander Mikhalitsyn
-<aleksandr.mikhalitsyn@canonical.com> wrote:
->
-> Add bpf_bypass_getsockopt proto callback and filter out
-> SCTP_SOCKOPT_PEELOFF and SCTP_SOCKOPT_PEELOFF_FLAGS socket options
-> from running eBPF hook on them.
->
-> These options do fd_install(), and if BPF_CGROUP_RUN_PROG_GETSOCKOPT
-> hook returns an error after success of the original handler
-> sctp_getsockopt(...), userspace will receive an error from getsockopt
-> syscall and will be not aware that fd was successfully installed into fdt=
-able.
->
-> This patch was born as a result of discussion around a new SCM_PIDFD inte=
-rface:
-> https://lore.kernel.org/all/20230413133355.350571-3-aleksandr.mikhalitsyn=
-@canonical.com/
->
-> Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Stanislav Fomichev <sdf@google.com>
-> Cc: Neil Horman <nhorman@tuxdriver.com>
-> Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-> Cc: Xin Long <lucien.xin@gmail.com>
-> Cc: linux-sctp@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com=
->
+On Wed, May 10, 2023 at 04:34:50PM +0800, Hao Jia wrote:
+> There are some double rq clock update warnings are triggered.
+> ------------[ cut here ]------------
+> rq->clock_update_flags & RQCF_UPDATED
+> WARNING: CPU: 17 PID: 138 at kernel/sched/core.c:741
+> update_rq_clock+0xaf/0x180
+> Call Trace:
+>  <TASK>
+>  __balance_push_cpu_stop+0x146/0x180
+>  ? migration_cpu_stop+0x2a0/0x2a0
+>  cpu_stopper_thread+0xa3/0x140
+>  smpboot_thread_fn+0x14f/0x210
+>  ? sort_range+0x20/0x20
+>  kthread+0xe6/0x110
+>  ? kthread_complete_and_exit+0x20/0x20
+>  ret_from_fork+0x1f/0x30
+> 
+> ------------[ cut here ]------------
+> rq->clock_update_flags & RQCF_UPDATED
+> WARNING: CPU: 54 PID: 0 at kernel/sched/core.c:741
+> update_rq_clock+0xaf/0x180
+> Call Trace:
+>  <TASK>
+>  unthrottle_cfs_rq+0x4b/0x300
+>  __cfsb_csd_unthrottle+0xe0/0x100
+>  __flush_smp_call_function_queue+0xaf/0x1d0
+>  flush_smp_call_function_queue+0x49/0x90
+>  do_idle+0x17c/0x270
+>  cpu_startup_entry+0x19/0x20
+>  start_secondary+0xfa/0x120
+>  secondary_startup_64_no_verify+0xce/0xdb
+> 
+> ------------[ cut here ]------------
+> rq->clock_update_flags & RQCF_UPDATED
+> WARNING: CPU: 0 PID: 3323 at kernel/sched/core.c:741
+> update_rq_clock+0xaf/0x180
+> Call Trace:
+>  <TASK>
+>  unthrottle_cfs_rq+0x4b/0x300
+>  rq_offline_fair+0x89/0x90
+>  set_rq_offline.part.118+0x28/0x60
+>  rq_attach_root+0xc4/0xd0
+>  cpu_attach_domain+0x3dc/0x7f0
+>  partition_sched_domains_locked+0x2a5/0x3c0
+>  rebuild_sched_domains_locked+0x477/0x830
+>  rebuild_sched_domains+0x1b/0x30
+>  cpuset_hotplug_workfn+0x2ca/0xc90
+>  ? balance_push+0x56/0xf0
+>  ? _raw_spin_unlock+0x15/0x30
+>  ? finish_task_switch+0x98/0x2f0
+>  ? __switch_to+0x291/0x410
+>  ? __schedule+0x65e/0x1310
+>  process_one_work+0x1bc/0x3d0
+>  worker_thread+0x4c/0x380
+>  ? preempt_count_add+0x92/0xa0
+>  ? rescuer_thread+0x310/0x310
+>  kthread+0xe6/0x110
+>  ? kthread_complete_and_exit+0x20/0x20
+>  ret_from_fork+0x1f/0x30
+> 
+> For the __balance_push_cpu_stop() case, we remove update_rq_clock() from
+> the __migrate_task() function to avoid double updating the rq clock.
+> And in order to avoid missing rq clock update, add update_rq_clock()
+> call before migration_cpu_stop() calls __migrate_task().
+> 
+> For the unthrottle_cfs_rq() case, we use rq_clock_start_loop_update() to
+> prevent multiple calls to update_rq_clock() in unthrottle_cfs_rq().
+> 
+> Note that the rq clock has been updated before the set_rq_offline()
+> function runs, so we don't need to call update_rq_clock() in
+> unthrottle_offline_cfs_rqs().
 
-Acked-by: Stanislav Fomichev <sdf@google.com>
+This reads like 3 separate issues -- in which case this ought to be 3
+separate patches.
 
-with a small nit below
 
-> ---
->  net/sctp/socket.c | 25 +++++++++++++++++++++++++
->  1 file changed, 25 insertions(+)
->
-> diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-> index cda8c2874691..a9a0ababea90 100644
-> --- a/net/sctp/socket.c
-> +++ b/net/sctp/socket.c
-> @@ -8281,6 +8281,29 @@ static int sctp_getsockopt(struct sock *sk, int le=
-vel, int optname,
->         return retval;
+> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
+> index ec7b3e0a2b20..9c712f29e5a4 100644
+> --- a/kernel/sched/sched.h
+> +++ b/kernel/sched/sched.h
+> @@ -1536,6 +1536,27 @@ static inline void rq_clock_skip_update(struct rq *rq)
+>  	rq->clock_update_flags |= RQCF_REQ_SKIP;
 >  }
->
-
-[...]
-
-> +bool sctp_bpf_bypass_getsockopt(int level, int optname)
-
-static bool ... ? You're not making it indirect-callable, so seems
-fine to keep private to this compilation unit?
-
+>  
+> +/*
+> + * During cpu offlining and rq wide unthrottling, we can trigger
+> + * an update_rq_clock() for several cfs and rt runqueues (Typically
+> + * when using list_for_each_entry_*)
+> + * rq_clock_start_loop_update() can be called after updating the clock
+> + * once and before iterating over the list to prevent multiple update.
+> + * After the iterative traversal, we need to call rq_clock_stop_loop_update()
+> + * to restore rq->clock_update_flags.
+         ^^^^^^^
+> + */
+> +static inline void rq_clock_start_loop_update(struct rq *rq)
 > +{
-> +       /*
-> +        * These options do fd_install(), and if BPF_CGROUP_RUN_PROG_GETS=
-OCKOPT
-> +        * hook returns an error after success of the original handler
-> +        * sctp_getsockopt(...), userspace will receive an error from get=
-sockopt
-> +        * syscall and will be not aware that fd was successfully install=
-ed into fdtable.
-> +        *
-> +        * Let's prevent bpf cgroup hook from running on them.
-> +        */
-> +       if (level =3D=3D SOL_SCTP) {
-> +               switch (optname) {
-> +               case SCTP_SOCKOPT_PEELOFF:
-> +               case SCTP_SOCKOPT_PEELOFF_FLAGS:
-> +                       return true;
-> +               default:
-> +                       return false;
-> +               }
-> +       }
-> +
-> +       return false;
+> +	lockdep_assert_rq_held(rq);
+> +	rq->clock_update_flags |= RQCF_ACT_SKIP;
 > +}
 > +
->  static int sctp_hash(struct sock *sk)
->  {
->         /* STUB */
-> @@ -9650,6 +9673,7 @@ struct proto sctp_prot =3D {
->         .shutdown    =3D  sctp_shutdown,
->         .setsockopt  =3D  sctp_setsockopt,
->         .getsockopt  =3D  sctp_getsockopt,
-> +       .bpf_bypass_getsockopt  =3D sctp_bpf_bypass_getsockopt,
->         .sendmsg     =3D  sctp_sendmsg,
->         .recvmsg     =3D  sctp_recvmsg,
->         .bind        =3D  sctp_bind,
-> @@ -9705,6 +9729,7 @@ struct proto sctpv6_prot =3D {
->         .shutdown       =3D sctp_shutdown,
->         .setsockopt     =3D sctp_setsockopt,
->         .getsockopt     =3D sctp_getsockopt,
-> +       .bpf_bypass_getsockopt  =3D sctp_bpf_bypass_getsockopt,
->         .sendmsg        =3D sctp_sendmsg,
->         .recvmsg        =3D sctp_recvmsg,
->         .bind           =3D sctp_bind,
-> --
-> 2.34.1
->
+> +static inline void rq_clock_stop_loop_update(struct rq *rq)
+> +{
+> +	lockdep_assert_rq_held(rq);
+> +	rq->clock_update_flags &= ~RQCF_ACT_SKIP;
+> +}
+
+This does not restore the flag, it clears the flag.
