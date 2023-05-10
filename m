@@ -2,214 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91EAC6FE684
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 23:58:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D77B86FE688
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 23:59:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236019AbjEJV6W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 17:58:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53230 "EHLO
+        id S236150AbjEJV7x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 17:59:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjEJV6R (ORCPT
+        with ESMTP id S230316AbjEJV7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 17:58:17 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87091E60
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 14:58:16 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id 98e67ed59e1d1-24e3a0aa408so6896523a91.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 14:58:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683755896; x=1686347896;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3wULuI7vE90rEZGHqkXAEPCnr2L7cEtAQhbPdWNS9Q4=;
-        b=w10BsZzNmpOZcByEOTWbcUf2Aks20U0Hwts/18pOJ/l3rUl5DLetI32fHjJuvE5Kz0
-         bLbzzj7LzBwAVlYyXOjARD+KlA7mS9YQ75tv2DL3udb/yBdNrKtsm/zzQkKqXoj3UEAy
-         oZYaI3GFcReaP09yRocM5sa5qOyfvw//XHyugOkEajzScXXuENYwsZsdPpctw5stAIPI
-         G40UT7FLiTvMPjBkJkncb51qorp7/tpHhR6C0mwxvTb7WMuy+3uzV1ZTHOauI55HIvFt
-         dJPe/+49q0TiLv//78njFyiO3ksKWHmSGNDs+WOOSTy2lLiDv+8YNB48Xbfj9Vh32A7b
-         AB8Q==
+        Wed, 10 May 2023 17:59:50 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8618610FF
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 14:59:49 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-760718e6878so1141814239f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 14:59:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683755896; x=1686347896;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3wULuI7vE90rEZGHqkXAEPCnr2L7cEtAQhbPdWNS9Q4=;
-        b=gWALavLbNaxFgZ9sA52Th9yHAs/rDOI2vzY6OAYetCJnn5lqAPy8D5mcgxTlGabHCv
-         9QUwXofUrqrYUYWyjGUPxNd/nFOqGUI1JaHR7GaZ+jEIfT9wQswWhbaf6onjHlvS/bO0
-         36oRG1JivQeADFfnOzdkkoktPQbxpujopcdJpCViWux0vaBMeHpObAxvtG8FYHuTSAiQ
-         gbh7FGkGjUAI1izvYF4qJSa/4eVLgTtjs2QGJRpC8G23u6PDUMik9axdqQzx8I+9s1h7
-         EJf8nZ8nt3gzSIMWsMjKohiiNzIaeXMoHb3tBuCJuEJ4TKqTFQqQ8BJ5S5cUl41Rb/Jy
-         xusQ==
-X-Gm-Message-State: AC+VfDze+oN2W99JCKL8MMSNi/VNGaeGgNnuHYPLmTVuhn6YVIVMWDKz
-        OwzeVGNEuqjdycH6rwz1TKBCBvVySZQhHWgMiufTBA==
-X-Google-Smtp-Source: ACHHUZ6HKvxannQHa1uGj6p3nB11KdAuhdA0umN1tSOxdif9EQqPJy+EMDVNufLFBYZg0F/5EZzs2fnp/mlJYaF0H+s=
-X-Received: by 2002:a17:90b:3142:b0:246:f8d7:3083 with SMTP id
- ip2-20020a17090b314200b00246f8d73083mr18757743pjb.16.1683755895931; Wed, 10
- May 2023 14:58:15 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683755989; x=1686347989;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xjllICd3LQIMP/gta6LsmZizuNSUq+Z9Txu8r2Eu7/c=;
+        b=JEiFoEgJ4YOhqiLWkfGUpCF2dhbdYnhjPxy64yzssnhqfbYaQBO+s2SrA48ZWkgQVE
+         ogzIYEW8fB7ip27aPsyK/PHOuab6afm9nJoBNQt8k6oqxU2fnGIm51ELZ/+xA/Ehkk5X
+         y4I8rHzf2bMCpfTUEnKKp0Ua6QSs6jylvI2U/PJSjKgn/XN2xcIVEcC1Xr/+4WUei/k/
+         u60CQ0frPFcPmH6dLroWF9Mz7Re8tapQGQhTEwrYj/A6mbPQ5EnWwXqE9kh0OwYRPL4h
+         CI/8cRf6JSolpFd6kfxMR/BtGc0YHqhlmHgkslo8r1Zkkj5QWzgWLnN20G4s1cl/M/zx
+         k+kQ==
+X-Gm-Message-State: AC+VfDwKSg5IKLxdNF5aYif9o2OAVvhnrpb2A3RJ31UlUYUiwr7YGBMQ
+        PIOM6uzA1d3Vex5Wd6T5Rr5j/8n6z5ry68cwt65b0dx6eaYC
+X-Google-Smtp-Source: ACHHUZ4Tlf9yInWtJSWzOY5LQEm1B9HNNpfKXMRdZpzR3mazFAPq/l3UdS4ttb0lSmmO33WpYrmE//7sGJJMm/9hDRi5aZatLYI0
 MIME-Version: 1.0
-References: <20230510152216.1392682-1-aleksandr.mikhalitsyn@canonical.com>
- <CAKH8qBuAoobsVP2Q5KN06fZ2NM3_aMwT7Y2OoKwS4Cf=cv3ZGg@mail.gmail.com> <CAEivzxc3hzqMROfCgshD6qW3=NErpF6LWXFGjoBhPNNzEZ3kDg@mail.gmail.com>
-In-Reply-To: <CAEivzxc3hzqMROfCgshD6qW3=NErpF6LWXFGjoBhPNNzEZ3kDg@mail.gmail.com>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Wed, 10 May 2023 14:58:04 -0700
-Message-ID: <CAKH8qBvp3iNPHrus3NpgwN1JCkSxzTTi3G3WoAR2LKwX1-QzhQ@mail.gmail.com>
-Subject: Re: [PATCH net-next] net: core: add SOL_SOCKET filter for bpf
- getsockopt hook
-To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     davem@davemloft.net, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Christian Brauner <brauner@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org
+X-Received: by 2002:a02:b054:0:b0:40f:ae69:a144 with SMTP id
+ q20-20020a02b054000000b0040fae69a144mr4093051jah.5.1683755988887; Wed, 10 May
+ 2023 14:59:48 -0700 (PDT)
+Date:   Wed, 10 May 2023 14:59:48 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000009b5b5705fb5dfda0@google.com>
+Subject: [syzbot] [ext4?] WARNING in __ext4fs_dirhash
+From:   syzbot <syzbot+344aaa8697ebd232bfc8@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 2:41=E2=80=AFPM Aleksandr Mikhalitsyn
-<aleksandr.mikhalitsyn@canonical.com> wrote:
->
-> On Wed, May 10, 2023 at 11:31=E2=80=AFPM Stanislav Fomichev <sdf@google.c=
-om> wrote:
-> >
-> > On Wed, May 10, 2023 at 8:23=E2=80=AFAM Alexander Mikhalitsyn
-> > <aleksandr.mikhalitsyn@canonical.com> wrote:
-> > >
-> > > We have per struct proto ->bpf_bypass_getsockopt callback
-> > > to filter out bpf socket cgroup getsockopt hook from being called.
-> > >
-> > > It seems worthwhile to add analogical helper for SOL_SOCKET
-> > > level socket options. First user will be SO_PEERPIDFD.
-> > >
-> > > This patch was born as a result of discussion around a new SCM_PIDFD =
-interface:
-> > > https://lore.kernel.org/all/20230413133355.350571-3-aleksandr.mikhali=
-tsyn@canonical.com/
-> > >
-> > > Cc: Alexei Starovoitov <ast@kernel.org>
-> > > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > > Cc: Christian Brauner <brauner@kernel.org>
-> > > Cc: Stanislav Fomichev <sdf@google.com>
-> > > Cc: "David S. Miller" <davem@davemloft.net>
-> > > Cc: Eric Dumazet <edumazet@google.com>
-> > > Cc: Jakub Kicinski <kuba@kernel.org>
-> > > Cc: Paolo Abeni <pabeni@redhat.com>
-> > > Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-> > > Cc: linux-kernel@vger.kernel.org
-> > > Cc: netdev@vger.kernel.org
-> > > Cc: bpf@vger.kernel.org
-> > > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical=
-.com>
-> > > ---
-> > >  include/linux/bpf-cgroup.h | 8 +++++---
-> > >  include/net/sock.h         | 1 +
-> > >  net/core/sock.c            | 5 +++++
-> > >  3 files changed, 11 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-> > > index 57e9e109257e..97d8a49b35bf 100644
-> > > --- a/include/linux/bpf-cgroup.h
-> > > +++ b/include/linux/bpf-cgroup.h
-> > > @@ -387,10 +387,12 @@ static inline bool cgroup_bpf_sock_enabled(stru=
-ct sock *sk,
-> > >         int __ret =3D retval;                                        =
-            \
-> > >         if (cgroup_bpf_enabled(CGROUP_GETSOCKOPT) &&                 =
-          \
-> > >             cgroup_bpf_sock_enabled(sock, CGROUP_GETSOCKOPT))        =
-          \
-> > > -               if (!(sock)->sk_prot->bpf_bypass_getsockopt ||       =
-          \
-> > > -                   !INDIRECT_CALL_INET_1((sock)->sk_prot->bpf_bypass=
-_getsockopt, \
-> > > +               if (((level !=3D SOL_SOCKET) ||                      =
-            \
-> > > +                    !sock_bpf_bypass_getsockopt(level, optname)) && =
-          \
-> > > +                   (!(sock)->sk_prot->bpf_bypass_getsockopt ||      =
-          \
-> >
-> > Any reason we are not putting this into bpf_bypass_getsockopt for
-> > af_unix struct proto? SO_PEERPIDFD seems relevant only for af_unix?
->
-> Yes, that should work perfectly well. The reason why I'm going this
-> way is that we are
-> declaring all SOL_SOCKET-level options in the net/core/sock.c which is
-> not specific to any address family.
-> It seems reasonable to have a way to filter out getsockopt for these
-> options too.
->
-> But I'm not insisting on that way.
+Hello,
 
-Yeah, let's move it into af_unix struct proto for now. That should
-avoid adding extra conditionals for a few places that care about
-performance (tcp zerocopy fastpath).
-If we'd ever need to filter out generic SOL_SOCKET level options that
-apply for all sockets, we might put (and copy-paste) them in the
-respective {tcp,udp,unix,etc}_bpf_bypass_getsockopt.
+syzbot found the following issue on:
 
-> Kind regards,
-> Alex
->
-> >
-> > > +                    !INDIRECT_CALL_INET_1((sock)->sk_prot->bpf_bypas=
-s_getsockopt, \
-> > >                                         tcp_bpf_bypass_getsockopt,   =
-          \
-> > > -                                       level, optname))             =
-          \
-> > > +                                       level, optname)))            =
-          \
-> > >                         __ret =3D __cgroup_bpf_run_filter_getsockopt(=
-            \
-> > >                                 sock, level, optname, optval, optlen,=
-          \
-> > >                                 max_optlen, retval);                 =
-          \
-> > > diff --git a/include/net/sock.h b/include/net/sock.h
-> > > index 8b7ed7167243..530d6d22f42d 100644
-> > > --- a/include/net/sock.h
-> > > +++ b/include/net/sock.h
-> > > @@ -1847,6 +1847,7 @@ int sk_getsockopt(struct sock *sk, int level, i=
-nt optname,
-> > >                   sockptr_t optval, sockptr_t optlen);
-> > >  int sock_getsockopt(struct socket *sock, int level, int op,
-> > >                     char __user *optval, int __user *optlen);
-> > > +bool sock_bpf_bypass_getsockopt(int level, int optname);
-> > >  int sock_gettstamp(struct socket *sock, void __user *userstamp,
-> > >                    bool timeval, bool time32);
-> > >  struct sk_buff *sock_alloc_send_pskb(struct sock *sk, unsigned long =
-header_len,
-> > > diff --git a/net/core/sock.c b/net/core/sock.c
-> > > index 5440e67bcfe3..194a423eb6e5 100644
-> > > --- a/net/core/sock.c
-> > > +++ b/net/core/sock.c
-> > > @@ -1963,6 +1963,11 @@ int sock_getsockopt(struct socket *sock, int l=
-evel, int optname,
-> > >                              USER_SOCKPTR(optlen));
-> > >  }
-> > >
-> > > +bool sock_bpf_bypass_getsockopt(int level, int optname)
-> > > +{
-> > > +       return false;
-> > > +}
-> > > +
-> > >  /*
-> > >   * Initialize an sk_lock.
-> > >   *
-> > > --
-> > > 2.34.1
-> > >
+HEAD commit:    578215f3e21c Add linux-next specific files for 20230510
+git tree:       linux-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=10a11e34280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=bb5a64fc61c29c5f
+dashboard link: https://syzkaller.appspot.com/bug?extid=344aaa8697ebd232bfc8
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/61ae2512b5cb/disk-578215f3.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/e16190a5b183/vmlinux-578215f3.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/04000a0b9ddf/bzImage-578215f3.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+344aaa8697ebd232bfc8@syzkaller.appspotmail.com
+
+EXT4-fs warning (device loop1): __ext4fs_dirhash:281: invalid/unsupported hash tree version 135
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 16903 at fs/ext4/hash.c:284 __ext4fs_dirhash+0xa34/0xb40 fs/ext4/hash.c:281
+Modules linked in:
+CPU: 1 PID: 16903 Comm: syz-executor.1 Not tainted 6.4.0-rc1-next-20230510-syzkaller #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+RIP: 0010:__ext4fs_dirhash+0xa34/0xb40 fs/ext4/hash.c:284
+Code: 00 0f 85 16 01 00 00 48 8b 04 24 41 89 d8 48 c7 c1 60 d2 62 8a ba 19 01 00 00 48 c7 c6 80 d3 62 8a 48 8b 78 28 e8 9c 7a 12 00 <0f> 0b 41 bc ea ff ff ff e9 2a fd ff ff e8 aa 94 5a ff 8b 9c 24 88
+RSP: 0018:ffffc9000438f768 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: 0000000000000087 RCX: ffffc90016a21000
+RDX: 0000000000040000 RSI: ffffffff823bfd38 RDI: 0000000000000005
+RBP: 0000000000000001 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000000000001 R12: 000000005948191c
+R13: 0000000000000001 R14: dffffc0000000000 R15: ffff88802825c0c4
+FS:  00007f06285fe700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffaa49ad988 CR3: 000000007b715000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ ext4fs_dirhash+0x13e/0x2e0 fs/ext4/hash.c:323
+ htree_dirblock_to_tree+0x81e/0xc90 fs/ext4/namei.c:1122
+ ext4_htree_fill_tree+0x327/0xc40 fs/ext4/namei.c:1217
+ ext4_dx_readdir fs/ext4/dir.c:597 [inline]
+ ext4_readdir+0x1d18/0x35f0 fs/ext4/dir.c:142
+ iterate_dir+0x56e/0x6f0 fs/readdir.c:65
+ __do_sys_getdents64 fs/readdir.c:369 [inline]
+ __se_sys_getdents64 fs/readdir.c:354 [inline]
+ __x64_sys_getdents64+0x13e/0x2c0 fs/readdir.c:354
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f0629a8c169
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f06285fe168 EFLAGS: 00000246 ORIG_RAX: 00000000000000d9
+RAX: ffffffffffffffda RBX: 00007f0629bac050 RCX: 00007f0629a8c169
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000008
+RBP: 00007f0629ae7ca1 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc126daaaf R14: 00007f06285fe300 R15: 0000000000022000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
