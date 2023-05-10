@@ -2,70 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4286FE480
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 21:29:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 736666FE481
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 21:30:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236218AbjEJT27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 15:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59648 "EHLO
+        id S236253AbjEJTa1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 15:30:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjEJT25 (ORCPT
+        with ESMTP id S235833AbjEJTaZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 15:28:57 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 036B66A4B;
-        Wed, 10 May 2023 12:28:57 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1ab01bf474aso58807065ad.1;
-        Wed, 10 May 2023 12:28:56 -0700 (PDT)
+        Wed, 10 May 2023 15:30:25 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E836865A0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 12:30:24 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-643a6f993a7so4487840b3a.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 12:30:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683746936; x=1686338936;
+        d=gmail.com; s=20221208; t=1683747024; x=1686339024;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=St8Hsth3yEssLy+3L8DNZSzYbP8LaSjJkmswj6bNhNY=;
-        b=jmprtQ6vpXwG0djM6z+KYh5xl8h/Ac8X1jiJLHIWobiFbjifXXm2vyi3dzLL8l8FCU
-         gMtCj9s2LzKLXPphcW+x0sL3jIRVsCybxzXG73KULcUwKpMnjBJTZDQEtfxWRGVnJLCN
-         5My6mKN9k8Syy7gNptWZg2RQMKupWGbxmFd3k6myHjpkphei3w3WCmBlOSLyHS0Em8Kl
-         RQW1rKBEN+MMEXR3IJABsWyW8nMvdZElwXOIix/q0IPG628wL9CFeCsWHHrZ6/JbNM76
-         TPVMHtbLqST4NDstlWGNC2LD8EMAVl3xpGpm083kfa2mHDjwN5tOix+zZukkW2rSfBW5
-         1x0Q==
+        bh=lDQeDrUgQr9ns4tR7WjjBfCsJgY0JHbmPWw81YSldjI=;
+        b=dntUFt1jUz1mLR9xeX6JZKi6rXqV2nwLbcaew1g+FoL4kYUf4bMS/MoQWW91p4gmul
+         786l7hOVlSiBOTc/qk1mbG9lyW4JgYjkQ6xrQiHpEap8KxW+uTUKFCiCWzZWo36/T6IP
+         nQAoAjTkSt4v6aL2IPYvkUsjwHbwAOGudPub1gymJ+bPvN1McaSN9yKbo+QfNBG5s4Yb
+         Izsz+Ul50ba7SvgZvla+k4Z5HZHcpI0vsZs9E5/H+8oFobsv6GjG1rGOYULb7XXcbe6i
+         TeeGAEKAb/nS+MUOEv7/uFhQvnXJgvwjA5KzUOxaZus8xey05ub70HYdYxklSdDLJpeP
+         DB/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683746936; x=1686338936;
+        d=1e100.net; s=20221208; t=1683747024; x=1686339024;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=St8Hsth3yEssLy+3L8DNZSzYbP8LaSjJkmswj6bNhNY=;
-        b=RYd6/s3lGMjzeEFME9IwL+EHk45sQaNodqDuicGvcDnpXAnQxmxMkf2FF9+692y/Wz
-         7GMZkaPKMQI+RzlDlCUc692CAm4WQig4VkZur6UBsdJNeLYTwxwVndp88rjvMCLfSpNw
-         GbzNXfm42mgVWN+OX9yLKQGcQQultUTx/SxlbWoPxL8Ni7BhqBH8LAcTYYDcC3nFSgzb
-         dwDWutaAFzuWIHblfZzDn5tq8eudN6a/H6LieiBmLbminiKiInNJHqF5eVhIppfF3aT7
-         xavFOFYevxIpnx5GTLIjue14a3e8voBtvjPy4T+vM8xH4kNJfFQ4ekXyq79NEFqkVOSY
-         9+6A==
-X-Gm-Message-State: AC+VfDzfNmkdlVYgvx3Lqnz0SI3uQCXESG5h49CS8JePAE/72JYnsdmj
-        bVocfkN5fdPVyTgDz0sbLpM=
-X-Google-Smtp-Source: ACHHUZ45Vb34sEQWoilNdNFya7MELHannGfHXzwWNj9+lbiu9vgdbORva+tXb7Ric3zyI/9AUWDN/w==
-X-Received: by 2002:a17:902:c402:b0:1ac:b259:87ea with SMTP id k2-20020a170902c40200b001acb25987eamr4196664plk.0.1683746936214;
-        Wed, 10 May 2023 12:28:56 -0700 (PDT)
+        bh=lDQeDrUgQr9ns4tR7WjjBfCsJgY0JHbmPWw81YSldjI=;
+        b=ULvHaXFyJ/r+jYdaSH8XZ1Auj/7CuAWIpprlOFaQ8ys1uYmwVKNkKnQuKOdzzaKmSu
+         Zbldidw+sKboihWm6/BSwfhcz2LqMnLDIlN9asm94h0qqDF9JdJlgobeeFw7tBzl05I7
+         DrrosSmkJ/QtjVvXmYf/ZGtC+B29dqBo6GI+yK/uIcF9bA64LFoYC4AxnHGvrkfHSJuG
+         3LlW807/vQr42WxzpfVHteI4qEA9VfqFcohWplLxoDQqs7EwlMMs48leCPlh0bEjteDD
+         +ps4Z1IRix797Il69SeFa88RAC5jyIshjXPKfZrEZiEtU8wS9lpbODK52umUtkBbTmcu
+         ozRg==
+X-Gm-Message-State: AC+VfDzX18kykdxTPBl7YVuULi04fzmdAcNwE3eEkiUdOflroAJ3QLqv
+        vavnk/+8XCPBwOuUrTe1wSBV98nzHnQ=
+X-Google-Smtp-Source: ACHHUZ4TiIJ6Qo+UJlvURSn60GARm76V0j7Jf8YA9TNQZ/NvveIFkVA7+cDSeUlGdE01ihmqg2+uiA==
+X-Received: by 2002:a05:6a20:3d01:b0:100:c3ad:79b4 with SMTP id y1-20020a056a203d0100b00100c3ad79b4mr13168746pzi.32.1683747024211;
+        Wed, 10 May 2023 12:30:24 -0700 (PDT)
 Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id x5-20020a170902b40500b0019a6cce2060sm4156156plr.57.2023.05.10.12.28.55
+        by smtp.gmail.com with ESMTPSA id y21-20020a63ce15000000b0051ba9d772f9sm3581921pgf.59.2023.05.10.12.30.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 12:28:55 -0700 (PDT)
+        Wed, 10 May 2023 12:30:23 -0700 (PDT)
 Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 10 May 2023 09:28:54 -1000
+Date:   Wed, 10 May 2023 09:30:22 -1000
 From:   Tejun Heo <tj@kernel.org>
-To:     Johannes Berg <johannes@sipsolutions.net>
-Cc:     linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+To:     Anna-Maria Behnsen <anna-maria@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Eric Dumazet <edumazet@google.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Arjan van de Ven <arjan@infradead.org>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <fweisbec@gmail.com>,
+        Rik van Riel <riel@surriel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Giovanni Gherdovich <ggherdovich@suse.cz>,
+        Lukasz Luba <lukasz.luba@arm.com>,
+        "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
         Lai Jiangshan <jiangshanlai@gmail.com>
-Subject: Re: [RFC PATCH 2/4] workqueue: support holding a mutex for each work
-Message-ID: <ZFvwdro1T4lnLDrs@slm.duckdns.org>
-References: <20230510160428.175409-1-johannes@sipsolutions.net>
- <20230510175846.cc21c84b0e6b.I9d3df459c43a78530d9c2046724bb45626402d5f@changeid>
- <ZFvjoUtg2ax11UlC@slm.duckdns.org>
- <0c44265eae421eff49e19be3ebfe20d1fb5e6f9a.camel@sipsolutions.net>
+Subject: Re: [PATCH v6 08/21] workqueue: Use global variant for add_timer()
+Message-ID: <ZFvwziQbEKxcAb9G@slm.duckdns.org>
+References: <20230510072817.116056-1-anna-maria@linutronix.de>
+ <20230510072817.116056-9-anna-maria@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0c44265eae421eff49e19be3ebfe20d1fb5e6f9a.camel@sipsolutions.net>
+In-Reply-To: <20230510072817.116056-9-anna-maria@linutronix.de>
 X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
@@ -77,35 +89,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Wed, May 10, 2023 at 09:16:09PM +0200, Johannes Berg wrote:
-> Yeah I thought you'd say that :)
-
-Sorry about being so predictable. :)
-
-> It isn't difficult, the issue is just that in the case I'm envisioning,
-> you can't just call wiphy_lock() since that would attempt to pause the
-> workqueue, which can't work from on the workqueue itself. So you need
-> wiphy_lock_from_work()/wiphy_unlock_from_work() or remember to use the
-> mutex directly there, which all seemed more error-prone and harder to
-> maintain.
+On Wed, May 10, 2023 at 09:28:04AM +0200, Anna-Maria Behnsen wrote:
+> The implementation of the NOHZ pull at expiry model will change the timer
+> bases per CPU. Timers, that have to expire on a specific CPU, require the
+> TIMER_PINNED flag. If the CPU doesn't matter, the TIMER_PINNED flag must be
+> dropped. This is required for call sites which use the timer alternately as
+> pinned and not pinned timer like workqueues do.
 > 
-> But anyway I could easily implement _both_ of these in cfg80211
-> directly, with just a linked list of works and a single struct
-> work_struct to execute things on the list, with the right locking. That
-> might be easier overall, just at the expense of more churn while
-> converting, but that's not even necessarily _bad_, it would really
-> guarantee that we can tell immediately the work is properly done...
+> Therefore use add_timer_global() to make sure TIMER_PINNED flag is dropped.
 > 
-> I'll play with that idea some, I guess. Would you still want the
-> pause/resume patch anyway, even if I end up not using it then?
+> Signed-off-by: Anna-Maria Behnsen <anna-maria@linutronix.de>
+> Cc: Tejun Heo <tj@kernel.org>
+> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
 
-I think it's something inherently useful (along with the ability to do the
-same thing to a work time - ie. cancel and inhibit a work item to be
-queued0); however, it's probably not a good idea to merge without an in-tree
-user. Would you mind posting a fixed patch nonetheless for future reference
-if it's not too much hassle?
+Acked-by: Tejun Heo <tj@kernel.org>
+
+Please feel free to route the patch as you see fit.
 
 Thanks.
 
