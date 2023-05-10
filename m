@@ -2,35 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B146FDC65
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:14:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4E3E6FDC67
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 13:14:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236814AbjEJLOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 07:14:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39552 "EHLO
+        id S236573AbjEJLOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 07:14:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236366AbjEJLN7 (ORCPT
+        with ESMTP id S236792AbjEJLOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 07:13:59 -0400
+        Wed, 10 May 2023 07:14:07 -0400
 Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0507296
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 04:13:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 324BC2106
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 04:13:56 -0700 (PDT)
 Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 7164C5FD26;
-        Wed, 10 May 2023 14:13:50 +0300 (MSK)
+        by mx.sberdevices.ru (Postfix) with ESMTP id 121B25FD27;
+        Wed, 10 May 2023 14:13:54 +0300 (MSK)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1683717230;
-        bh=ts8L8EufclojNwHjAYYqvEX+8MMKKOVoJ4Q4/8XgsZE=;
+        s=mail; t=1683717234;
+        bh=wpnQqYLiMeJcmuuKybbquqxEgUyT5kRAw1QOCUfaxQQ=;
         h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=FI2zCxOb2+Ryxs5ppqJ8RDmPTBvmnIHgEfBED9UWdnuuxkmqg/5zJ0x3kiT/iIepi
-         feDEVUzoV4KjjYKv9e0QqF6VQ/3tSYA3pXi25zhRpRV7Gi6GbSi3AuynJvtHcoIzAr
-         Xctd09ihAryVOsxeI5bWJaLrzmBoAly2y8l6VhcY1QlhWoZSp5zGjqNqdkCKu+Nr/X
-         wN1FcQ4XXhXwp6u9dPJf0k0Ukd56RYPdmdG17ygcHEaMcVNYZy6Dqx5Ywu/DEv7Qmj
-         3sE6NXLWFFOE4NZy0S1IeIy7Ulsa66M+XhHg1ZTLfpXyTqt4ZnGw94uz4YHjUoBQ+h
-         u4QnJfenUr3bw==
+        b=DeN/8RDVdwKnRQM6hFMX9b456raaqf05mrqn7EAbZJuZ5ZEjutNZSOn4Zsjh1qYNE
+         jlK1ZGFVg1dMDcBPbo1Y33YF+NgCYEb51gnGFFsUDRjZs9jedT+75tJOY1gjPP5aEo
+         DAHNp45k+TYuCBkikcyqRJ+heJZxmGgLy+y2V62SqRtc7bzyxJ2FmIHSodxMq2rfaP
+         yVJiJxbwEgVqb9n7BmPFBDgUmveJTWHylZYJTpL+fBnTAF5+yEG5wytGyAVtzcDCSV
+         rc3OF9ijrJHyqnOGcxhxqI/nWeQwEHXsXyBE9jmqBz2Hxhmim0LkH4r941b1lPBphK
+         qFrbsBVRBEerA==
 Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
         by mx.sberdevices.ru (Postfix) with ESMTP;
-        Wed, 10 May 2023 14:13:50 +0300 (MSK)
+        Wed, 10 May 2023 14:13:54 +0300 (MSK)
 From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
 To:     Liang Yang <liang.yang@amlogic.com>,
         Miquel Raynal <miquel.raynal@bootlin.com>,
@@ -40,16 +40,16 @@ To:     Liang Yang <liang.yang@amlogic.com>,
         Kevin Hilman <khilman@baylibre.com>,
         Jerome Brunet <jbrunet@baylibre.com>,
         Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Yixun Lan <yixun.lan@amlogic.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yixun Lan <yixun.lan@amlogic.com>
 CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
         Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
         <linux-mtd@lists.infradead.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3 5/6] mtd: rawnand: meson: remove unneeded bitwise OR with zeroes
-Date:   Wed, 10 May 2023 14:08:33 +0300
-Message-ID: <20230510110835.26115-6-AVKrasnov@sberdevices.ru>
+Subject: [PATCH v3 6/6] mtd: rawnand: meson: rename node for chip select
+Date:   Wed, 10 May 2023 14:08:34 +0300
+Message-ID: <20230510110835.26115-7-AVKrasnov@sberdevices.ru>
 X-Mailer: git-send-email 2.35.0
 In-Reply-To: <20230510110835.26115-1-AVKrasnov@sberdevices.ru>
 References: <20230510110835.26115-1-AVKrasnov@sberdevices.ru>
@@ -76,7 +76,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Both operations have no effect.
+This renames node with values for chip select from "reg" to "cs". It is
+needed because when OTP access is enabled on the attached storage, MTD
+subsystem registers this storage in the NVMEM subsystem. NVMEM in turn
+tries to use "reg" node in its own manner, supposes that it has another
+layout. All of this leads to device initialization failure.
+
+Example:
+
+[...] nvmem mtd0-user-otp: nvmem: invalid reg on /soc/bus@ffe00000/...
+[...] mtd mtd0: Failed to register OTP NVMEM device
+[...] meson-nand ffe07800.nfc: failed to register MTD device: -22
+[...] meson-nand ffe07800.nfc: failed to init NAND chips
+[...] meson-nand: probe of ffe07800.nfc failed with error -22
 
 Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
 ---
@@ -84,24 +96,27 @@ Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
  1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
-index ed7ec1bfd07e..bc99a098f3ca 100644
+index bc99a098f3ca..28371919a6c5 100644
 --- a/drivers/mtd/nand/raw/meson_nand.c
 +++ b/drivers/mtd/nand/raw/meson_nand.c
-@@ -630,12 +630,12 @@ static int meson_nfc_rw_cmd_prepare_and_execute(struct nand_chip *nand,
- 	cmd0 = in ? NAND_CMD_READ0 : NAND_CMD_SEQIN;
- 	nfc->cmdfifo.rw.cmd0 = cs | NFC_CMD_CLE | cmd0;
+@@ -1419,7 +1419,7 @@ meson_nfc_nand_chip_init(struct device *dev,
+ 	int ret, i;
+ 	u32 tmp, nsels;
  
--	addrs[0] = cs | NFC_CMD_ALE | 0;
-+	addrs[0] = cs | NFC_CMD_ALE;
- 	if (mtd->writesize <= 512) {
- 		cmd_num--;
- 		row_start = 1;
- 	} else {
--		addrs[1] = cs | NFC_CMD_ALE | 0;
-+		addrs[1] = cs | NFC_CMD_ALE;
- 		row_start = 2;
- 	}
+-	nsels = of_property_count_elems_of_size(np, "reg", sizeof(u32));
++	nsels = of_property_count_elems_of_size(np, "cs", sizeof(u32));
+ 	if (!nsels || nsels > MAX_CE_NUM) {
+ 		dev_err(dev, "invalid register property size\n");
+ 		return -EINVAL;
+@@ -1433,7 +1433,7 @@ meson_nfc_nand_chip_init(struct device *dev,
+ 	meson_chip->nsels = nsels;
  
+ 	for (i = 0; i < nsels; i++) {
+-		ret = of_property_read_u32_index(np, "reg", i, &tmp);
++		ret = of_property_read_u32_index(np, "cs", i, &tmp);
+ 		if (ret) {
+ 			dev_err(dev, "could not retrieve register property: %d\n",
+ 				ret);
 -- 
 2.35.0
 
