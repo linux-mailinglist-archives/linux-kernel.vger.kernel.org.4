@@ -2,157 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 575156FE471
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 21:19:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C3836FE46E
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 21:17:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236116AbjEJTTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 15:19:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56860 "EHLO
+        id S236162AbjEJTRe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 15:17:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjEJTTX (ORCPT
+        with ESMTP id S229458AbjEJTRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 15:19:23 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB78F5255;
-        Wed, 10 May 2023 12:19:22 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6439e6f5a33so4431114b3a.2;
-        Wed, 10 May 2023 12:19:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683746362; x=1686338362;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vdKoW9P2jhBRnfmfNK6oFRBXOmfqdpLVW/L7FZNRlBQ=;
-        b=RPF5HXOjB1S+X34THeUgO74GhOevm4XKHWyln3kcxR64HMWwEYRMAiv1yihOGbxoOY
-         V68pDwIC6StEtl85K2ZEvsrtryxcSaTDq5fB5gSK849T/Y7nrVESXimWoInf04t8SqQD
-         ugZEhVj6IAhE+5df0H8ElTx8vUhoxXLjstdOUdEU7cauKmrKgeTbrivxOxCsPsEfBubs
-         x+FOeiipp2XiYXuLQYlRkHnh4BBDzK6Vu/WgbUE7LcLq3l+nGqvR9k51fhCDko5r2jXB
-         eismONkkFymXXp6+VZy7E5uNPwWetYXO+8CJH1GRfWeAjDlA2QpJqHAFcJKfMR3E+tPf
-         4NGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683746362; x=1686338362;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vdKoW9P2jhBRnfmfNK6oFRBXOmfqdpLVW/L7FZNRlBQ=;
-        b=EXUAkhoqi4SJ62AAhcKaKGnhCJn2dwP/sl8mxIkiaPAvCxc8xMaFLJQqMC912l9V5I
-         Xsx7XOdYzDdLFZu2NWJMmDtMjaOq2OanC20IhznRy4SUN+89O5vuvz411qp5dSWpfrrP
-         IqaD0B4SbjjSFiE+SP3Jp9sB5253VkNHfhhTNygXP+mkDvEtqC90uJ87BfvsKnC3HBUq
-         kJ9QGZuM47H0lWTXtRJBl9v9beOPfll9v05rjSltnCOmPJEnQ46C/MtEaGK2UD+H/cMP
-         o11pqTuhCR/WN50H054ehBKGNOOeIJitYlVuizlvgjqAqQaTkvJQyLFpFKv45Fu6UiSX
-         h80A==
-X-Gm-Message-State: AC+VfDy5WZo2gr1VLfwDWNyY3GrhRu4p6LGV6dpWDFcyzE5K4UC8EP4r
-        vNhUu5Kn1AuQe26d7x5SU5o=
-X-Google-Smtp-Source: ACHHUZ4dbVM57Fb+/Mp2jiw4JmUznHlGsRzKlTeN0YuWMzJY71pwMBbkE3WhK4cDOE37L/6/O0B3Iw==
-X-Received: by 2002:a05:6a00:248d:b0:63a:8f4c:8be1 with SMTP id c13-20020a056a00248d00b0063a8f4c8be1mr27949390pfv.10.1683746362066;
-        Wed, 10 May 2023 12:19:22 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id n22-20020aa79056000000b0063d24fcc2b7sm3918870pfo.1.2023.05.10.12.19.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 12:19:21 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Wed, 10 May 2023 09:19:20 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     jiangshanlai@gmail.com, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, Amitkumar Karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        Pin-yen Lin <treapking@chromium.org>
-Subject: Re: [PATCH 02/13] wifi: mwifiex: Use default @max_active for
- workqueues
-Message-ID: <ZFvuOK_dpGTE4UVS@slm.duckdns.org>
-References: <20230509015032.3768622-1-tj@kernel.org>
- <20230509015032.3768622-3-tj@kernel.org>
- <ZFvd8zcPq4ijSszM@google.com>
- <ZFvfYK-u8suHjPFw@slm.duckdns.org>
- <ZFvpJb9Dh0FCkLQA@google.com>
+        Wed, 10 May 2023 15:17:32 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E4485255
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 12:17:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683746251; x=1715282251;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=75dGGtHMQ8FdwfGHnsegDYBoFOE0eghlGa3Ibvz1Xa8=;
+  b=V1mZHeT5fzfIsnIGE0CfZ0Cq0gBzlU5I6ypl6U8sJdUAeXXdEj48mkfH
+   Tss7YBL5X+Mk0uvqUUO3/AmK1rD98y5Qduzhes5Ubt3qVPBXeyh0+/T1Q
+   puuAmDeQvJi7IFt8ISFKbgWj96pRECs/QTaSx4EEkf6JpEn0vgoPRZLOb
+   PZLskcTPJwTtPrXVXNlELVr47Uh8w4kiLQ3vPbVJ4Ya8cKqjX75DiWAC1
+   U4QPnDf4WBdR0jmQq+dQl/rjCywUh15ZghL/+pzialFMZMsbXWJekyBFt
+   k5sB9cdwZW9iRSGKMDDj7llOyH/ctt/nyJJmFdbNQQTlqcn8KtGZCBtaI
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="349134518"
+X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
+   d="scan'208";a="349134518"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 12:17:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="945812897"
+X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
+   d="scan'208";a="945812897"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga006.fm.intel.com with ESMTP; 10 May 2023 12:17:30 -0700
+Date:   Wed, 10 May 2023 12:20:29 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     x86@kernel.org
+Cc:     Andreas Herrmann <aherrmann@suse.com>,
+        Chen Yu <yu.c.chen@intel.com>, Len Brown <len.brown@intel.com>,
+        Pu Wen <puwen@hygon.cn>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] x86/cacheinfo: Set the number of leaves per CPU
+Message-ID: <20230510192029.GB18514@ranerica-svr.sc.intel.com>
+References: <20230424001956.21434-1-ricardo.neri-calderon@linux.intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZFvpJb9Dh0FCkLQA@google.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230424001956.21434-1-ricardo.neri-calderon@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-On Wed, May 10, 2023 at 11:57:41AM -0700, Brian Norris wrote:
-> Test case: iperf TCP RX (i.e., hits "MWIFIEX_RX_WORK_QUEUE" a lot) at
-> some of the higher (VHT 80 MHz) data rates.
+On Sun, Apr 23, 2023 at 05:19:54PM -0700, Ricardo Neri wrote:
+> Hi,
 > 
-> Hardware: Mediatek MT8173 2xA53 (little) + 2xA72 (big) CPU
-> (I'm not familiar with its cache details)
-> +
-> Marvell SD8897 SDIO WiFi (mwifiex_sdio)
-
-Yeah, we had multiple of similar cases on, what I think are, similar
-configurations, which is why I'm working on improving workqueue locality.
-
-> We're looking at a major regression from our 4.19 kernel to a 5.15
-> kernel (yeah, that's downstream reality). So far, we've found that
-> performance is:
-
-That's curious. 4.19 is old but I scanned the history and there's nothing
-which can cause that kind of perf regression for unbound workqueues between
-4.19 and 5.15.
-
-> (1) much better (nearly the same as 4.19) if we add WQ_SYSFS and pin the
-> work queue to one CPU (doesn't really matter which CPU, as long as it's
-> not the one loaded with IRQ(?) work)
+> This v2 of now a patchset to set the number of cache leaves independently
+> for each CPU. v1 can be found here [1].
 > 
-> (2) moderately better if we pin the CPU frequency (e.g., "performance"
-> cpufreq governor instead of "schedutil")
+> These are the changes since v2:
+>   * Dave Hansen, suggested to use the existing per-CPU ci_cpu_cacheinfo
+>     variable. Now the global variable num_cache_leaves became useless.
+>   * While here, I noticed that init_cache_level() also became useless:
+>     x86 does not need ci_cpu_cacheinfo::num_levels.
 > 
-> (3) moderately better (not quite as good as (2)) if we switch a
-> kthread_worker and don't pin anything.
+> These patches apply cleanly on top of the master branch of the tip tree.
 
-Hmm... so it's not just workqueue.
+FYI, I see a NULL pointer dereference when I apply this patchset on top of
+v6.4-rc1. I started a discussion here[1].
 
-> We tried (2) because we saw a lot more CPU migration on kernel 5.15
-> (work moves across all 4 CPUs throughout the run; on kernel 4.19 it
-> mostly switched between 2 CPUs).
-
-Workqueue can contribute to this but it seems more likely that scheduling
-changes are also part of the story.
-
-> We tried (3) suspecting some kind of EAS issue (instead of distributing
-> our workload onto 4 different kworkers, our work (and therefore our load
-> calculation) is mostly confined to a single kernel thread). But it still
-> seems like our issues are more than "just" EAS / cpufreq issues, since
-> (2) and (3) aren't as good as (1).
-> 
-> NB: there weren't many relevant mwifiex or MTK-SDIO changes in this
-> range.
-> 
-> So we're still investigating a few other areas, but it does seem like
-> "locality" (in some sense of the word) is relevant. We'd probably be
-> open to testing any patches you have, although it's likely we'd have the
-> easiest time if we can port those to 5.15. We're constantly working on
-> getting good upstream support for Chromebook chips, but ARM SoC reality
-> is that it still varies a lot as to how much works upstream on any given
-> system.
-
-I should be able to post the patchset later today or tomorrow. It comes with
-sysfs knobs to control affinity scopes and strictness, so hopefully you
-should be able to find the configuration that works without too much
-difficulty.
-
-Thanks.
-
--- 
-tejun
+[1]. https://lore.kernel.org/all/20230510191207.GA18514@ranerica-svr.sc.intel.com/
