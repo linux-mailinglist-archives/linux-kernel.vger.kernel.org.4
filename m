@@ -2,58 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD6D86FDE75
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:26:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 121136FDE76
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 15:26:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237016AbjEJNZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 09:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60574 "EHLO
+        id S237050AbjEJN0B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 09:26:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236652AbjEJNZ5 (ORCPT
+        with ESMTP id S236568AbjEJNZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 10 May 2023 09:25:57 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C775BAE;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 779C65BAC;
         Wed, 10 May 2023 06:25:55 -0700 (PDT)
 Date:   Wed, 10 May 2023 13:25:52 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683725152;
+        s=2020; t=1683725153;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9M+nf6U/P/tUi5DBkLwJC4aUssS4FE6HYCt3SW4Jmd8=;
-        b=Bas0f/6u5hhtyYakWKF11FdpYb+JIqlbHy0mYSqaMZBN+v0uoTVXbjsxojji0IKF99UBwI
-        TZdJvw8HTyMjfQxJztens8gjbp+GiiEcDfxT8JFD/gytyv6Van7Xc0XAqpzrbDnG9UOn6q
-        UcjS1ytBEpg+DG+NQqojbzZuPv/GEnFwxfXSyhtCmP0C/xGzXk1vM/qUECn5qGv7kpKHfI
-        2PwcSTHvdvd7YcnknMO28l34E5q7bOeLuIt4UzCTPi+a+YFVlukaAdZRAT9duUzaB8aokD
-        v+xmfPRbvxWxrIh+4NtlZ18tMUPH29YwcEdq38HbfduBYO3vxKbaFttenC3xxQ==
+        bh=h1ya3nX+Ys2msmlSi+coH03InJp1/N7yftwS6LeddTI=;
+        b=py/sAHplJfeVTfLjX9TXYO19hcL9n6EyafFGXUvmRBETral5GHvtiu/E2gTmkbxe1xFKL8
+        9A5r2pqKEp0+QdpBDWpEIKPLfJqQNlaq1kqqJGbSZlw9iPft0C/Pk6rXR2Asd5lFQeJ1CT
+        OmBiOFsX+yekua0YcwJUYkMdpdy39gOBeqDYIojbo0B+l2Y1T7YCdUJo9SvSeIiCj29Neh
+        rZwe5mMcaY+fo465H6DdqKsBdhD9dzfZ7+tVXZQhBWLoPa7HbKdbGHPLoZ4gkHkgW9lDPf
+        ctGRxbZnLALJYsBZXx8obCvbUjfox0+2VgFBaRhyFQtte5OpttXSwLmMk4aZug==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683725152;
+        s=2020e; t=1683725153;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9M+nf6U/P/tUi5DBkLwJC4aUssS4FE6HYCt3SW4Jmd8=;
-        b=arfrKUKunBDqCYqAvI4ZAwZb3s+HPhVN9XvULsPvu3ABnDWTrtQ8BSQMjA7SQxSwjjTs/8
-        Rj5iPWYO9WYnBgDg==
-From:   "tip-bot2 for John Stultz" <tip-bot2@linutronix.de>
+        bh=h1ya3nX+Ys2msmlSi+coH03InJp1/N7yftwS6LeddTI=;
+        b=3DANIp1beaGSrudp+8Ir0VTCfRhm7AOcspqne0on4AMPwRCAbwRjEXWyXSGkOdTKmjnHWY
+        MCac9ArqjuBI5YDg==
+From:   "tip-bot2 for Namhyung Kim" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/urgent] locking/rwsem: Add __always_inline annotation
- to __down_read_common() and inlined callers
-Cc:     Tim Murray <timmurray@google.com>,
-        John Stultz <jstultz@google.com>,
+Subject: [tip: perf/urgent] perf/x86: Fix missing sample size update on AMD BRS
+Cc:     Namhyung Kim <namhyung@kernel.org>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Waiman Long <longman@redhat.com>, stable@vger.kernel.org,
-        x86@kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230503023351.2832796-1-jstultz@google.com>
-References: <20230503023351.2832796-1-jstultz@google.com>
+        stable@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230427030527.580841-1-namhyung@kernel.org>
+References: <20230427030527.580841-1-namhyung@kernel.org>
 MIME-Version: 1.0
-Message-ID: <168372515216.404.11878802112685684036.tip-bot2@tip-bot2>
+Message-ID: <168372515291.404.10094366236022202082.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,70 +66,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the locking/urgent branch of tip:
+The following commit has been merged into the perf/urgent branch of tip:
 
-Commit-ID:     92cc5d00a431e96e5a49c0b97e5ad4fa7536bd4b
-Gitweb:        https://git.kernel.org/tip/92cc5d00a431e96e5a49c0b97e5ad4fa7536bd4b
-Author:        John Stultz <jstultz@google.com>
-AuthorDate:    Wed, 03 May 2023 02:33:51 
+Commit-ID:     90befef5a9e820ccccc33181ec14c015980300cc
+Gitweb:        https://git.kernel.org/tip/90befef5a9e820ccccc33181ec14c015980300cc
+Author:        Namhyung Kim <namhyung@kernel.org>
+AuthorDate:    Wed, 26 Apr 2023 20:05:27 -07:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Mon, 08 May 2023 10:58:24 +02:00
+CommitterDate: Mon, 08 May 2023 10:58:26 +02:00
 
-locking/rwsem: Add __always_inline annotation to __down_read_common() and inlined callers
+perf/x86: Fix missing sample size update on AMD BRS
 
-Apparently despite it being marked inline, the compiler
-may not inline __down_read_common() which makes it difficult
-to identify the cause of lock contention, as the blocked
-function in traceevents will always be listed as
-__down_read_common().
+It missed to convert a PERF_SAMPLE_BRANCH_STACK user to call the new
+perf_sample_save_brstack() helper in order to update the dyn_size.
+This affects AMD Zen3 machines with the branch-brs event.
 
-So this patch adds __always_inline annotation to the common
-function (as well as the inlined helper callers) to force it to
-be inlined so the blocking function will be listed (via Wchan)
-in traceevents.
-
-Fixes: c995e638ccbb ("locking/rwsem: Fold __down_{read,write}*()")
-Reported-by: Tim Murray <timmurray@google.com>
-Signed-off-by: John Stultz <jstultz@google.com>
+Fixes: eb55b455ef9c ("perf/core: Add perf_sample_save_brstack() helper")
+Signed-off-by: Namhyung Kim <namhyung@kernel.org>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Waiman Long <longman@redhat.com>
 Cc: stable@vger.kernel.org
-Link: https://lkml.kernel.org/r/20230503023351.2832796-1-jstultz@google.com
+Link: https://lkml.kernel.org/r/20230427030527.580841-1-namhyung@kernel.org
 ---
- kernel/locking/rwsem.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+ arch/x86/events/core.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-index acb5a50..9eabd58 100644
---- a/kernel/locking/rwsem.c
-+++ b/kernel/locking/rwsem.c
-@@ -1240,7 +1240,7 @@ static struct rw_semaphore *rwsem_downgrade_wake(struct rw_semaphore *sem)
- /*
-  * lock for reading
-  */
--static inline int __down_read_common(struct rw_semaphore *sem, int state)
-+static __always_inline int __down_read_common(struct rw_semaphore *sem, int state)
- {
- 	int ret = 0;
- 	long count;
-@@ -1258,17 +1258,17 @@ out:
- 	return ret;
- }
+diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+index d096b04..9d24870 100644
+--- a/arch/x86/events/core.c
++++ b/arch/x86/events/core.c
+@@ -1703,10 +1703,8 @@ int x86_pmu_handle_irq(struct pt_regs *regs)
  
--static inline void __down_read(struct rw_semaphore *sem)
-+static __always_inline void __down_read(struct rw_semaphore *sem)
- {
- 	__down_read_common(sem, TASK_UNINTERRUPTIBLE);
- }
+ 		perf_sample_data_init(&data, 0, event->hw.last_period);
  
--static inline int __down_read_interruptible(struct rw_semaphore *sem)
-+static __always_inline int __down_read_interruptible(struct rw_semaphore *sem)
- {
- 	return __down_read_common(sem, TASK_INTERRUPTIBLE);
- }
+-		if (has_branch_stack(event)) {
+-			data.br_stack = &cpuc->lbr_stack;
+-			data.sample_flags |= PERF_SAMPLE_BRANCH_STACK;
+-		}
++		if (has_branch_stack(event))
++			perf_sample_save_brstack(&data, event, &cpuc->lbr_stack);
  
--static inline int __down_read_killable(struct rw_semaphore *sem)
-+static __always_inline int __down_read_killable(struct rw_semaphore *sem)
- {
- 	return __down_read_common(sem, TASK_KILLABLE);
- }
+ 		if (perf_event_overflow(event, &data, regs))
+ 			x86_pmu_stop(event, 0);
