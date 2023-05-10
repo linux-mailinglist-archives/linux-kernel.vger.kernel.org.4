@@ -2,107 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 528586FE55F
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:48:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7EA36FE560
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 22:48:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232879AbjEJUsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 16:48:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39016 "EHLO
+        id S236150AbjEJUsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 16:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjEJUsC (ORCPT
+        with ESMTP id S235806AbjEJUsh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 16:48:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2100C10FA;
-        Wed, 10 May 2023 13:48:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DCFC64043;
-        Wed, 10 May 2023 20:48:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8B46C433D2;
-        Wed, 10 May 2023 20:47:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683751680;
-        bh=p1v9BgVQxNA6CFzcqYCk9q5zJL82xRDoaqm5OkM6CLg=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=jWrc2Fp4/sCVBp6UHKhYlkrY8SgsyIV1wgvS1fT/r2/D0jxYgQ0LsGjy8CTO+dRSV
-         MeUtgW5MbckP8PH4JKRXRc2HjkiksoEE+2fvebpIt2/1WRl8MWeoLKYXwK2XbGJ8eq
-         h3Vd9/7EDn8otCnP42jgnCokGb7J0bGy4j4y7UzVVQliiTs67fxCcRGNhGh/BNxwuv
-         jj7lz8nAhxCjQ7EwG34CFIavsuOrEysWMXjda8d/QAscgTcZ7z6olL/VpTZgyK8CNG
-         oMqpOAQC2uHVa5owxMaThE5Yj2W2Ph8LeLMN4Ksy4njspZ996Tb4XTOdzB6x2YbGQ+
-         1jzhTYmToHSdA==
-Date:   Wed, 10 May 2023 15:47:58 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
-        linux-pci@vger.kernel.org, robh@kernel.org, heiko@sntech.de,
-        kw@linux.com, shawn.lin@rock-chips.com,
-        linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
-        linux-rockchip@lists.infradead.org, broonie@kernel.org,
-        bhelgaas@google.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        lpieralisi@kernel.org, linux-arm-kernel@lists.infradead.org,
-        Dan Johansen <strit@manjaro.org>
-Subject: Re: [PATCH v1] drivers: pci: introduce configurable delay for
- Rockchip PCIe bus scan
-Message-ID: <ZFwC/seTfSoaLn0v@bhelgaas>
+        Wed, 10 May 2023 16:48:37 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E34FE49
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:48:36 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-3062c1e7df8so5181109f8f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 13:48:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683751715; x=1686343715;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=n43MwqLS4K8T9pwUq7KF8hTU9/BSLcrxuagPObgT5dc=;
+        b=Zpaqr/tx2vr019x7yN8DEGaVe53Uguq6ThlFfv3VAugkJZF+DKBWNwCUBgXBztsMWb
+         9Tdx/1DbfpV4H8yoeYBXiTIKjuXtna/GOtzRcemwuuib3SYkyXeYYXZn48Bu5zMRUcK6
+         YCukDQs4FCtOiScJExmHWsDWxzMMfsEM0Egqgtbzqa8PU9BiAlTVSe1xh+3bNOswNCeW
+         yM3w44bvNPMYadf+qHXakuvMwM8o0txNdh+zOayTPTQcJB9fSWLkjcVWMoFm6vVBRjQM
+         BQqJl1yZVWAkm/pLwerdMRH3ES7pRz34DOCoHh1YvjdEoVrLBPTn/PwXWSZkQsAzHP1q
+         lgag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683751715; x=1686343715;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n43MwqLS4K8T9pwUq7KF8hTU9/BSLcrxuagPObgT5dc=;
+        b=HbeQk4+sRPW0G8Ryy0sQOd7OCPQSmzdY3eAsJpWMxm92GbqX074SUVmYRwt/Nzoa8V
+         3IspsKDJrjepVMwgmag1C1pABw1/Be86nSP5mn9QfHCIf3dDyZJJWeHr0Qx90rF+PPNW
+         /SDSjYv+bVobERkSLSxuQW6WyBex7TED0ppAl05sJTzOmeGKqTNqKtnm/3BKNcEnlMtq
+         /qZg5ibG2nulu0LRwSrH5ZTXIwB3hkwOB15MX/ba7MZMS5LU5/ycUUXsxaGoLW+e6Yl8
+         hCe8jDz9TWhNEFJHiMpwday2UhVNed8If7jREavUYzfqT1IK/kc0hqk6iwCfVy8MrZO2
+         LCEQ==
+X-Gm-Message-State: AC+VfDych44R2JvOW/7Db1udpOSBS/do0JEZQYc0rjF8DkOrDvBje7Fj
+        /EI9L2MXwGqGSjr9p9HuKIZ7wdvHkMEIuRG1QbM=
+X-Google-Smtp-Source: ACHHUZ6CRx6Wu/qo+p9j4JXZ3exYYnSNhA4Py1yqyalSBYL9a5fs8/gIegXSo3KRHlvl/X7X6wYOu0Dl2ja+mNZhAz4=
+X-Received: by 2002:a5d:4004:0:b0:2c5:3cd2:b8e with SMTP id
+ n4-20020a5d4004000000b002c53cd20b8emr13087692wrp.1.1683751714462; Wed, 10 May
+ 2023 13:48:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMdYzYp6=mYSoUHN3TEXVSMbRt1HpRm0X_4RMez09V0XzQewaw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230509223036.3007500-1-azeemshaikh38@gmail.com> <CAHk-=wg7pwWiF4eWVTfFYkfAk_5YDHkmkgZ04cgXkNUO_9pR3A@mail.gmail.com>
+In-Reply-To: <CAHk-=wg7pwWiF4eWVTfFYkfAk_5YDHkmkgZ04cgXkNUO_9pR3A@mail.gmail.com>
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+Date:   Wed, 10 May 2023 16:48:23 -0400
+Message-ID: <CADmuW3VngW3ineOjUNLYQT1UXsW-s46HjLKx0H3JyexKMtUhQA@mail.gmail.com>
+Subject: Re: kernfs: Prefer strscpy over strlcpy calls
+To:     Linus Torvalds <torvalds@linuxfoundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejun Heo <tj@kernel.org>, security@kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 08:11:29PM -0400, Peter Geis wrote:
-> On Tue, May 9, 2023 at 5:19 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> > On Tue, May 09, 2023 at 05:39:12PM +0200, Vincenzo Palazzo wrote:
-> > > Add a configurable delay to the Rockchip PCIe driver to address
-> > > crashes that occur on some old devices, such as the Pine64 RockPro64.
-> > >
-> > > This issue is affecting the ARM community, but there is no
-> > > upstream solution for it yet.
-> >
-> > It sounds like this happens with several endpoints, right?  And I
-> > assume the endpoints work fine in other non-Rockchip systems?  If
-> > that's the case, my guess is the problem is with the Rockchip host
-> > controller and how it's initialized, not with the endpoints.
-> > ...
+> Absolutely not.
+>
+> This makes the whole exercise pointless.
+>
+> The reason to use strscpy() is to *avoid* doing the strlen() on the
+> source, and limit things to the limited size.
+>
+> If you need to do the strlen(), then use strlcpy(). It's a broken
+> interface, but creating this kind of horror wrapper that does the same
+> thing as strlcpy() is worse than just using the regular version.
+>
+> So the strscpy() conversion should *only* be done if the caller
+> doesn't care about the difference in return values (or done *together*
+> with changing the caller to use the nicer strscpy() return value).
+>
+> It's also worth noting that 'strscpy()' not only returns a negative
+> error value when the string doesn't fit - it will also possibly do the
+> copy one word at a time, and may write extra zeroes at the end of the
+> destination (all within the given size, of course).
+>
+> So strscpy() is _different_ from strlcpy(), and the conversion should
+> not be done unless those differences are ok.
 
-> The main issue with the rk3399 is the PCIe controller is buggy and
-> triggers a SoC panic when certain error conditions occur that should
-> be handled gracefully. One of those conditions is when an endpoint
-> requests an access to wait and retry later.
-
-I assume this refers to a Completion with Request Retry Status (RRS)?
-
-> Many years ago we ran that issue to ground and with Robin Murphy's
-> help we found that while it's possible to gracefully handle that
-> condition it required hijacking the entire arm64 error handling
-> routine. Not exactly scalable for just one SoC.
-
-Do you have a pointer to that discussion?  The URL might save
-repeating the whole exercise and could be useful for the commit log
-when we try to resolve this.
-
-> The configurable waits allow us to program reasonable times for
-> 90% of the endpoints that come up in the normal amount of time, while
-> being able to adjust it for the other 10% that do not. Some require
-> multiple seconds before they return without error. Part of the reason
-> we don't want to hardcode the wait time is because the probe isn't
-> handled asynchronously, so the kernel appears to hang while waiting
-> for the timeout.
-
-Is there some way for users to figure out that they would need this
-property?  Or is it just "if your kernel panics on boot, try
-adding or increasing "bus-scan-delay-ms" in your DT?
-
-Bjorn
+Thanks Linus, that helps clarify a lot. I traced the usage of these
+functions across the kernel and plan to do direct replacement only
+where it's safe (see thread here:
+https://lore.kernel.org/all/CADmuW3XiYpGK7BessXJWjGnnxZti_3mawDSX7QPawsfmATxCng@mail.gmail.com/).
+Let me know if that works for you.
