@@ -2,66 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B0836FE814
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 01:24:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D4536FE820
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 01:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236921AbjEJXX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 19:23:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44096 "EHLO
+        id S236946AbjEJXay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 19:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236495AbjEJXXy (ORCPT
+        with ESMTP id S230472AbjEJXaw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 19:23:54 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08F48E45
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 16:23:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683761033; x=1715297033;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=owMYhO0s+rr/YtNogvkkYbl04vO/j6AuZPt0IqqsS30=;
-  b=jaD18d923SlYHOzSFEz1QLnweMCiE9OKvUYAqC1p2kUBOZFG0rCsyJOu
-   DISZI7CBuzTrUqr0S9HQOEHEjchGyuI7Pb64XZZXa/Hjgwacv3tSBcoF7
-   qA7++DFxQqnEGAp3YaUICh1lFY8XpiEV8C5EY8R4z1YOamr1qLaVECIvr
-   ylwlnwHPblbsf2PvUGeZ4LmL08Fje9LH3w6/UGVTR8kgIb7/549yyGgVK
-   i3sMPZ1x6C+5SqxcRlQfGeHt1/8dxGzE3O3I+tHe6EYbUAPir1Ya151P0
-   lu3DMbAWSgomI3NjXDLS2tqgkeQnUCUKOj3rCyz0atB5mZqmKuNv7nrY2
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="353428232"
-X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
-   d="scan'208";a="353428232"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 16:23:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="699481227"
-X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
-   d="scan'208";a="699481227"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 10 May 2023 16:23:49 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pwt9w-0003ea-2Q;
-        Wed, 10 May 2023 23:23:48 +0000
-Date:   Thu, 11 May 2023 07:23:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Michael Shavit <mshavit@google.com>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>
-Cc:     oe-kbuild-all@lists.linux.dev, Michael Shavit <mshavit@google.com>,
-        jean-philippe@linaro.org, nicolinc@nvidia.com, jgg@nvidia.com,
-        baolu.lu@linux.intel.com, linux-arm-kernel@lists.infradead.org,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 4/5] iommu/arm-smmu-v3: Keep track of attached ssids
-Message-ID: <202305110736.wdeuqPAi-lkp@intel.com>
-References: <20230510205054.2667898-5-mshavit@google.com>
+        Wed, 10 May 2023 19:30:52 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3BF52693;
+        Wed, 10 May 2023 16:30:50 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34AND972000752;
+        Wed, 10 May 2023 23:30:40 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=7WDGO1bd4jzyFHOcFubfjRxmEOxwHUYGzdTE8qwNHVc=;
+ b=m3Awv65oMaH6mo2w8CV3admiZdcOjcOyuWme5W8XS+bBcSP35zYCfn4XRhorDHfVjsEO
+ 3k8yklVWFIfKgnQQ0I06enRT3b7KdVzYZE/uUXTSY8C7GA+1gex8sc5+ws/bQixmx6Lz
+ YO/vIpQrZiF0jfBbNS/uvw5FzTMloFPkh4QcTYDFWrNfWfU3Pxl5YfJ+BUSDZb+EEwF6
+ 49UtXvGmWuiNcK3C972wmpICEMlVfQh/6KClOew6z5XRVsWCyboIe1F7PlJIHYacobPc
+ MN+z13p6BgwA/vk2VJga+BfnGIJzH+vrmwbDxQeczOTbGxYetdMQcjw+YwYN1n5PXc78 LA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qg5mpsxca-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 May 2023 23:30:40 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34ANUdSC003058
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 10 May 2023 23:30:39 GMT
+Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 10 May
+ 2023 16:30:38 -0700
+Message-ID: <9d405506-3083-3827-990b-ff2151bf6024@quicinc.com>
+Date:   Wed, 10 May 2023 16:30:38 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230510205054.2667898-5-mshavit@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.2
+Subject: Re: [PATCH v1 2/2] drm/msm/dp: add mutex to protect internal_hpd
+ against race condition between different threads
+Content-Language: en-US
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Stephen Boyd <swboyd@chromium.org>, <agross@kernel.org>,
+        <airlied@gmail.com>, <andersson@kernel.org>, <daniel@ffwll.ch>,
+        <dianders@chromium.org>, <dmitry.baryshkov@linaro.org>,
+        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
+        <sean@poorly.run>, <vkoul@kernel.org>
+CC:     <quic_jesszhan@quicinc.com>, <quic_sbillaka@quicinc.com>,
+        <marijn.suijten@somainline.org>, <freedreno@lists.freedesktop.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <1683750665-8764-1-git-send-email-quic_khsieh@quicinc.com>
+ <1683750665-8764-3-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n532y=ARQ_+urEA_b3zUn+gKTu1fgK_siHNt3CpbLB9PZg@mail.gmail.com>
+ <74ae5514-2b04-9363-902e-cb4d7cbe1128@quicinc.com>
+ <6721cc2c-6988-948c-65d6-f50edb925ded@quicinc.com>
+From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
+In-Reply-To: <6721cc2c-6988-948c-65d6-f50edb925ded@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: y6hM4sdyexagpy1sdVrL5qAcZG5QEkOo
+X-Proofpoint-GUID: y6hM4sdyexagpy1sdVrL5qAcZG5QEkOo
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 phishscore=0 mlxlogscore=673 clxscore=1015
+ suspectscore=0 malwarescore=0 mlxscore=0 adultscore=0 lowpriorityscore=0
+ impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305100193
+X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,56 +90,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
+Hi Stephen
 
-kernel test robot noticed the following build warnings:
+On 5/10/2023 4:19 PM, Kuogee Hsieh wrote:
+> internal_hpd is referenced at both plug and unplug handle.
+> 
+> The majority purpose of  mutext is try to serialize internal_hpd between 
+> dp_bridge_hpd_disable() and either plug or unplug handle.
+> 
+> 
+> On 5/10/2023 4:11 PM, Abhinav Kumar wrote:
+>>
+>>
+>> On 5/10/2023 3:46 PM, Stephen Boyd wrote:
+>>> Quoting Kuogee Hsieh (2023-05-10 13:31:05)
+>>>> Intrenal_hpd is referenced by event thread but set by drm bridge 
+>>>> callback
+>>>> context. Add mutex to protect internal_hpd to avoid conflicts between
+>>>> threads.
+>>>>
+>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>>>> ---
+>>>
+>>> This patch looks completely unnecessary. How can dp_bridge_hpd_enable()
+>>> be called at the same time that dp_bridge_hpd_disable() is called or
+>>> dp_bridge_hpd_notify() is called? Isn't there locking or ordering at a
+>>> higher layer?
+>>
+>> Ack. We can drop this patch because we are protected by 
+>> bridge->hpd_mutex in drm_bridge_hpd_enable() / drm_bridge_hpd_disable 
+>> () and drm_bridge_hpd_notify().
 
-[auto build test WARNING on v6.4-rc1]
-[also build test WARNING on linus/master next-20230510]
-[cannot apply to joro-iommu/next arm-perf/for-next/perf]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Michael-Shavit/iommu-arm-smmu-v3-Move-cdtable-to-arm_smmu_master/20230511-045514
-base:   ac9a78681b921877518763ba0e89202254349d1b
-patch link:    https://lore.kernel.org/r/20230510205054.2667898-5-mshavit%40google.com
-patch subject: [PATCH v1 4/5] iommu/arm-smmu-v3: Keep track of attached ssids
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230511/202305110736.wdeuqPAi-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/2172fed7450d1bb8518b86b2b7113a1e42b4d456
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Michael-Shavit/iommu-arm-smmu-v3-Move-cdtable-to-arm_smmu_master/20230511-045514
-        git checkout 2172fed7450d1bb8518b86b2b7113a1e42b4d456
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/iommu/arm/arm-smmu-v3/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305110736.wdeuqPAi-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c:1857:5: warning: no previous prototype for 'arm_smmu_atc_inv_domain' [-Wmissing-prototypes]
-    1857 | int arm_smmu_atc_inv_domain(struct arm_smmu_domain *smmu_domain,
-         |     ^~~~~~~~~~~~~~~~~~~~~~~
-
-
-vim +/arm_smmu_atc_inv_domain +1857 drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-
-  1856	
-> 1857	int arm_smmu_atc_inv_domain(struct arm_smmu_domain *smmu_domain,
-  1858				    unsigned long iova, size_t size)
-  1859	{
-  1860		return arm_smmu_atc_inv_domain_ssid(smmu_domain, 0, iova, size);
-  1861	}
-  1862	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+I understood now, so what kuogee is referring to is that this 
+event_mutex protection is to not protect those 3 calls from each other 
+(since they are already protected as we saw above) but because 
+dp_hpd_plug_handle/dp_hpd_unplug_handle still uses 
+dp_display.internal_hpd to re-enable the hot-plug interrupt, this is 
+making sure that flow is protected as well.
