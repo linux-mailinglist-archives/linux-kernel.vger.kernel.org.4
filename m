@@ -2,162 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29AB76FDA9E
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:21:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E21406FDAB7
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:27:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236921AbjEJJVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 05:21:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37632 "EHLO
+        id S236671AbjEJJ1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 05:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236825AbjEJJV2 (ORCPT
+        with ESMTP id S236107AbjEJJ1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 05:21:28 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2044.outbound.protection.outlook.com [40.107.20.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BD153AB6;
-        Wed, 10 May 2023 02:21:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Pf7efIkCfQeiIB33VzR53n8GcN7kfDvVYHuyDOVrwoXC4s2epnnBEfHrePgiDrAFEL3+LDif/IDgIEFaMnEvw+L2fffTJJ+DHgO88Pl1WJ6WeLa0SYkcT1WsKwuut4tUUIGq1zO7BX9vhh7BOukjNyOsDcTuqGlqi/igdgBvy+lMBrv0AQZo3aIXX+UpXSXywbLuuamXv1BhPrT6cxXdah2ce/H0RXwtywWEJk+xWQOHexLLg9b7Vm4SHR2+a7u5VgV9CChl9tktoujkjxMJJPeVeSc8QNPPbHlXioct9050s4Ien7XqwFDCAbJEPjc8O58osZ8W5XWtWTN5mVB75Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/+8OTKynV/Lw2CW+oOPo/MREJ3R42EIFCrnmzBOnXnk=;
- b=fCGlsCINA0EXfNrfZJUOLPoHts73Ohb+0Y3SlPTkRChcNH0dYYBWSXUXQwS7TdPZZ6XZYiGHzhDQq3xMKfdMopNyy6UxMPREt9GfUoX8NNhaMQnaFVKON8/wfmpN4fYAh/dFVK01mgrTwUreNe6GMcKvkzh1JFM3wU3xCgG+oWv3pIetcfq+qsTKc4soD8ltQ9YLwx3ScK8ZlIIC3cenkb+KQXE3HeGUsfqhe6bgZFQW7dD3Qcf3Zzok0UIHrFr13pjK4ZyO3q8NzWBFepoH3oP2OgH3IbLO1ur/x75aH4vHcsi5aNOMcAyavQ/yxEBwSOOn1WLYbAU2lfRYgKqPQw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/+8OTKynV/Lw2CW+oOPo/MREJ3R42EIFCrnmzBOnXnk=;
- b=PQda/cddOFYo6167yRLl5EupM5mHrcibhkN8JHqXnIK4ZB84w+hOAguX1zYhQS+fH6tlfzj12by9cxYSrg2BKF1GYOX73CQ2/ksJOU9VDRBC7me1IGEXynFuF3isGwaojnhowS9M7uvjvfawUNazdU3xZVuwwLIYx47n/+mIQWc=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
- by VI1PR04MB7005.eurprd04.prod.outlook.com (2603:10a6:803:136::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Wed, 10 May
- 2023 09:21:08 +0000
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::60e3:2297:61f1:4d1d]) by AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::60e3:2297:61f1:4d1d%4]) with mapi id 15.20.6363.033; Wed, 10 May 2023
- 09:21:07 +0000
-From:   Liu Ying <victor.liu@nxp.com>
-To:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     marex@denx.de, stefan@agner.ch, airlied@gmail.com, daniel@ffwll.ch,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        krzysztof.kozlowski@linaro.org, LW@karo-electronics.de,
-        alexander.stein@ew.tq-group.com
-Subject: [PATCH v6 6/6] drm: lcdif: Add i.MX93 LCDIF compatible string
-Date:   Wed, 10 May 2023 17:24:50 +0800
-Message-Id: <20230510092450.4024730-7-victor.liu@nxp.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230510092450.4024730-1-victor.liu@nxp.com>
-References: <20230510092450.4024730-1-victor.liu@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SI2PR01CA0027.apcprd01.prod.exchangelabs.com
- (2603:1096:4:192::7) To AM7PR04MB7046.eurprd04.prod.outlook.com
- (2603:10a6:20b:113::22)
+        Wed, 10 May 2023 05:27:34 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DD63A8D
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 02:27:32 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50b37f3e664so12439695a12.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 02:27:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1683710851; x=1686302851;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JBKGh73QpqEYJqax38l5dJYavyHBNPUc6IQPM+Q4Z0I=;
+        b=iPH+ouFoA5GOEgnT5bLA6aVtT6mZ8/JMWvWbyo7xN+jXlp6nS10XYkdja8PCRH+3HD
+         j90pzE45kJTfAuCLCDQvuFmSszJC11Pigyyzs+BntJUG7/t1lUZfGegsNzHlxg4JJcLw
+         B1x9uQrKunyqkx0KF7YCBrwlyAdaNBFW9yPsVVw7O3UxvB9WyqWuDpiYhqxKHKSmvWoe
+         Rr0G+TAqbG2pGAPndeufdxCeF02J0zrWO8vCZN8AmxAVUdqcHt065YS+u1s7rB07fZ4f
+         Oi63pSAk1bFSVleunPCl+RM9T+N676GJgE5aTCKjpWEolxVwuxtL6jdQWDlA+cvUmepM
+         a/Bg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683710851; x=1686302851;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JBKGh73QpqEYJqax38l5dJYavyHBNPUc6IQPM+Q4Z0I=;
+        b=keqZjnjtTmnNdzH6Ld+MzJY0AZZGKVEZ/2O0ILb/JKf9gVI5kqD2hItWY371jrgtXn
+         9K8aKL8SfjHf1iPBLGcFRo2dpypEGSmAb8Hz4Ht5fvArKO6ws9YCezeuJv/drwJDYoHA
+         kbZIO1EMXU+HLPHAlzD7YOm223Yy00j68r4LEn6Np5pI+I1ghH9Iq4WDs2Mt9WvrB+yB
+         JyHTB9xJXa+LYAT2uIdaul2qLF1TPEwAnPW1H1bozWb5YqwfFRHB75/Suv7WgzDaEpL5
+         ReHuc4hjPxIBhjwViG6xTztl94WfKeDHnrrH8F4slilNKfAHdUeAYSjcepG5PN8Xwc9A
+         pkew==
+X-Gm-Message-State: AC+VfDws2X/o+ZVuUB81ytUhPh72BzpYBR3ITglSSTjy+5qgoGTUfPJT
+        /9z+YmtvIybPiA49/p1XG/AC1A==
+X-Google-Smtp-Source: ACHHUZ7Oh9r0VM9/gCBR55+JfnCFHJfLxLYN7lIg6ZiAX7201e+P7Q1p/vq5LK4BKmJ3n6Y7z+jEaQ==
+X-Received: by 2002:aa7:cd0b:0:b0:506:7386:88d7 with SMTP id b11-20020aa7cd0b000000b00506738688d7mr11915481edw.11.1683710850965;
+        Wed, 10 May 2023 02:27:30 -0700 (PDT)
+Received: from [172.16.240.113] (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id d16-20020a056402001000b0050bd47f9073sm1691639edu.39.2023.05.10.02.27.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 02:27:30 -0700 (PDT)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+Date:   Wed, 10 May 2023 11:27:21 +0200
+Subject: [PATCH] Bluetooth: btqca: make sure to handle byte order for
+ soc_id
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|VI1PR04MB7005:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1d45a33e-b014-4102-93eb-08db5137e2df
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: mpu3P8v+ma8ZJn1atC4WFjwoDVY4a/F2YOKrLGUG65Y2pNSIw0dwvsmocB+RsX11A5lvy4HDZzrdMF48WiwPSrHYvXE/4VnEKJsIWX1vbKtsgjwrAhg/hN/Gv1QQEeUyWnKuMZfM8uqKRRd8Vxw9qeQeYc89U/UDKm4t88q9hrrcOfBy8ZYwRY00vTMZftB/kuMVJ2FUBJpVB0XVmUhwniyKNPuzmVJNlSi+hNW/99qcTGuB9EUeIuWf2bs395AqgZoN02C6CNQ41x3/GFFl33R/ZkOaVUwQ8Q2yY7AXVq4QAoVvl/WjjKaxYRmNhZlDApAqv2+MnErMhc2njBZRPwmhyx5ZyZpR7FF4iQk6un4jgbGUzhWekHnWIYOO+kSm8CEeJ1XKR/SX5kDVJ0owwSAZuCgevqrdok1+EG037nAaZ9HrPpVP0gckZ4YaXxdHjdQ+XOf93rdeyl308nEsFobHPoWzM090zhVrLtzSg3hKr4KnU7xnvKP6A0Dne0MOeSH2NvzrttcgJU79YbmfE1L3dwOjMV5kzneaVdcgEaBK11A5qlMJfhr4TFDZm3o4jNZKqNakRnPMk005a8WWB+PUWmI8Ws9Fiw58hWEYngRm6vp9JPEqUA2VO1bnoZzO
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(39860400002)(346002)(366004)(376002)(136003)(451199021)(86362001)(316002)(52116002)(6486002)(66556008)(6666004)(66946007)(66476007)(41300700001)(4326008)(5660300002)(8936002)(8676002)(7416002)(478600001)(186003)(6512007)(1076003)(38100700002)(6506007)(38350700002)(26005)(2906002)(2616005)(83380400001)(36756003);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gc48jROz1qddYmjRHbupozctCbUoU1kEKkcuSxG7zG7bVQJXGPNY0dE//Z4k?=
- =?us-ascii?Q?78nD6S3HOlLkwM67jahCC5es2FVQfKAR95Wk7GXOR73P/myYpZDbYXgB2tCv?=
- =?us-ascii?Q?vbaJeb0XXeddxl4ES28dgjf1JyfR5mkpG+Zp8YDCcoLBxEsm+yBLu8mkuUjM?=
- =?us-ascii?Q?ktivZRxTJqybz6cOqmAH6Q84ZaowKdCyVVNUIm7IR2Aa05VkLtWLjcicPE1Q?=
- =?us-ascii?Q?sgCN8PfIX6WbXys1JS5KrWJTc1o5ag+N+uJskX/SJHdPAIEAE1Sn3ORkfiGX?=
- =?us-ascii?Q?r4Lsym4nlewoPkEVWWHabukvuvBkY8qY/I4KyEKVpqLbZ9LbVNJls7HrTj80?=
- =?us-ascii?Q?LioiTPy6liIsveQSvlgFEZ5Pu1jjG0Diacv52LZzdIofj203+a6m67Ju59xG?=
- =?us-ascii?Q?H5pbLAnEGgnj126jCxyw9jv1oNOxYrfGrgSF1YK1ifPSMnrRwRZXTpuWJ0EV?=
- =?us-ascii?Q?7/2pvxPjsGxxDU9TSATRmCvRHqim7oQYxq8ZPyag5T7COEKcZK8zFekul3FI?=
- =?us-ascii?Q?uXl3A7svG5khdscclUDNrOJp0qNeD9+DEnh2zVrO6ANM1kPVdA3wppILHp+t?=
- =?us-ascii?Q?fJGGicdWGPHzMz6hjTz8A6X4XnQ7ABGDI++YrtyZP96LLVx64OxANPHRV7TC?=
- =?us-ascii?Q?rAba7fOEzXnT9GSPZUvSSYDOl183SDiOeiPAhXfxvsyTH6bP/seAS6PmIvaO?=
- =?us-ascii?Q?ywVVKcNNoZkddr7vt5Y06zIIJNNcv350m86HYG+vg7w2lEAgIKz1r/Rov5kw?=
- =?us-ascii?Q?Cah41GiP0fouLEA7Glc7JHfOhX9TolfKSjRdzJRoK6c3DhYm407bRh2NLXht?=
- =?us-ascii?Q?/apsQJ/3uv9WBB8svObqT7Ty6m9+UnE8yimHe1zL52uFtl3LEiWSCIDIC0P4?=
- =?us-ascii?Q?LYLlXxhffDl/iGvbnKqEOJuSsYTxGOKRf+sbiC2szVVLlgJC03Eo0sYmooUn?=
- =?us-ascii?Q?tpz8sr/MIFKzYlO7dvxlvaNO/SY/Fn9NgK/euFTmm2hw71sArjmnyqYcrxrz?=
- =?us-ascii?Q?maAd6hzA5fPU3KvSUitW2USbBdhVAYFRaR1wtj+C1uWFoe9CALaUhVWMZYgH?=
- =?us-ascii?Q?9pBZ1d00c/fZVp8hX3D47qPoq5kRWnGAgQHCC9Oht13T+szj0xyJJqMWl4zT?=
- =?us-ascii?Q?xnRu7H7HrD8DWmwkPgEyDYN1wFcZ8CTzCKN7oqXpM2JJyLftpDjIWZdty1OG?=
- =?us-ascii?Q?lYNCB8A7znnyiei/53o1tvb2ZaIYdQUjRooRCekRC+d2B+S6qGTTw0WUxDgy?=
- =?us-ascii?Q?9zCi7GuvSNHVwJOh5qvzy+Jma7DjzKtLlCTpM9y51YtxCjGAORDOMGtpgmr4?=
- =?us-ascii?Q?ZiCCPCg+4niAIfSStgvdzFS/gqQeDLN76lG292kqDoFAYQ2SCv63i+fdtpyi?=
- =?us-ascii?Q?mA0egTVofk/uHqamw/T41k20wKsT1sKpMw1gRIFyR53vtFNGWy+vvl6//Xbu?=
- =?us-ascii?Q?ow0kD12gNYYbrmA5seToyt4L/48ZrM1QCREipp89PDtvr1vDVuQkLeOs3UUs?=
- =?us-ascii?Q?nWg17gtxCNRAiqCQ2oPK7OQpxnMqr1tA56dRIlXfaywjEfVOX0JoZf6JZpcf?=
- =?us-ascii?Q?dMh7WmjQ1z7wV2oFN4+z+YzTLqhvBKFJbE8TgTQh?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1d45a33e-b014-4102-93eb-08db5137e2df
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 09:21:07.7466
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: c1s4FXarLc/1muTcXKOLF3CYYb5iSxum8I59eruWGEovsIW0sxf5ncVbNizEkvOeWL67TOWpK7Dwn5dVRwThEQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB7005
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230510-btqca-byte-order-v1-1-82e6a371c5aa@fairphone.com>
+X-B4-Tracking: v=1; b=H4sIAHhjW2QC/x2Nyw7CIBAAf6XZs9tAq43xV4wHoItsYgAXfDRN/
+ 13qcZKZzAqFhKnApVtB6M2FU2ygDx24YOKdkOfGMKhhVCet0NanM2iXSphkJkGayGil9NlrBy2
+ zphBaMdGFPfT5iFM/9gt+OKN9vKimVMNuZiHP3//8etu2H8inI1WMAAAA
+To:     Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Venkata Lakshmi Narayana Gubba <gubbaven@codeaurora.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Johan Hedberg <johan.hedberg@intel.com>,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Simon Horman <simon.horman@corigine.com>,
+        Luca Weiss <luca.weiss@fairphone.com>
+X-Mailer: b4 0.12.2
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With all previous preparations done to make it possible for the
-single LCDIF embedded in i.MX93 SoC to drive multiple displays
-simultaneously, add i.MX93 LCDIF compatible string as the last
-step of adding i.MX93 LCDIF support.
+The field soc_id in struct qca_btsoc_version is __le32 so we need to
+convert it to host byteorder before using.
 
-Tested-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Reviewed-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-Reviewed-by: Marek Vasut <marex@denx.de>
-Signed-off-by: Liu Ying <victor.liu@nxp.com>
+Reported-by: Simon Horman <simon.horman@corigine.com>
+Fixes: 059924fdf6c1 ("Bluetooth: btqca: Use NVM files based on SoC ID for WCN3991")
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
 ---
-v5->v6:
-* Add Marek's R-b tag.
+ drivers/bluetooth/btqca.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v4->v5:
-* Add Alexander's T-b tag.
+diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
+index fd0941fe8608..e7e58a956d15 100644
+--- a/drivers/bluetooth/btqca.c
++++ b/drivers/bluetooth/btqca.c
+@@ -637,7 +637,7 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
+ 		snprintf(config.fwname, sizeof(config.fwname),
+ 			 "qca/%s", firmware_name);
+ 	else if (qca_is_wcn399x(soc_type)) {
+-		if (ver.soc_id == QCA_WCN3991_SOC_ID) {
++		if (le32_to_cpu(ver.soc_id) == QCA_WCN3991_SOC_ID) {
+ 			snprintf(config.fwname, sizeof(config.fwname),
+ 				 "qca/crnv%02xu.bin", rom_ver);
+ 		} else {
 
-v3->v4:
-* Add Alexander's R-b tag.
+---
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+change-id: 20230510-btqca-byte-order-e6ea10018f1c
 
-v2->v3:
-* Fix a trivial typo in commit message.
-
-v1->v2:
-* Split from patch 2/2 in v1. (Marek, Alexander)
-
- drivers/gpu/drm/mxsfb/lcdif_drv.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/gpu/drm/mxsfb/lcdif_drv.c b/drivers/gpu/drm/mxsfb/lcdif_drv.c
-index dc85498b81cd..c9d8cbb21407 100644
---- a/drivers/gpu/drm/mxsfb/lcdif_drv.c
-+++ b/drivers/gpu/drm/mxsfb/lcdif_drv.c
-@@ -251,6 +251,7 @@ static const struct drm_driver lcdif_driver = {
- 
- static const struct of_device_id lcdif_dt_ids[] = {
- 	{ .compatible = "fsl,imx8mp-lcdif" },
-+	{ .compatible = "fsl,imx93-lcdif" },
- 	{ /* sentinel */ }
- };
- MODULE_DEVICE_TABLE(of, lcdif_dt_ids);
+Best regards,
 -- 
-2.37.1
+Luca Weiss <luca.weiss@fairphone.com>
 
