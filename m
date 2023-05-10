@@ -2,140 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AA546FD90D
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:16:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FAFB6FD90E
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:16:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236188AbjEJIQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 04:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34678 "EHLO
+        id S236468AbjEJIQx convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 10 May 2023 04:16:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236207AbjEJIQl (ORCPT
+        with ESMTP id S236247AbjEJIQq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 04:16:41 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2070a.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eab::70a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C825448D;
-        Wed, 10 May 2023 01:16:33 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XZVPOTRmyIJwzhaSmLmiHg+/0kNmp+hThWZkzriZ48ImKqZoNukBiqsVOCqm8B86gqDoHpw6nrXTehCODNGzYpzXIBxzttST0RxC+y3fJ1OXbsHw0vZB7irjYC3/Tk5Ga3axpFyoer8bQTvePbCMSLj8jEo4zeZV/Ke3dli3pUaAR9EkZfgvzFJ6sOsgv52kd+NKMaLz7IZSnLit0t3VBf1GXMH+d3yQirOKvExIk3EVcyFwNWQNYRRb4DF4lunVK0s9nJjkaPyKpr6vIk4N9ylBqs7E53Zz1f9C4ffiZUFLkSJPGMNt1YqgMCmKpN+jnjObY4fDZ5mNxAB35GhleQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RIIHqsVlfQNbdl7fuWWFHc1kHH7SEpf3b3rMhHXM9X4=;
- b=aGNjAOrHWMTN5I0uR2ZTa56FnXTYUv5g4bM4e9K4oQXTLHG0ZLiulgs/CfPrrJCJ6cnv7vzzjObtqShc47FC7UCxQGRb5g1m03XdA5yzZLnndyrOTMhGveAdrpCfVD0elAGcu464Xk5V5uAnPCP+5c+4bZto+h3U0hMv0L7DR1b4to55SK8MvFz8T7T92JxvzXwhaGRQcqNrgk8++SqxbrMpa9bjO7u0cRaZYq+Ht6aF46RKX53ycvZcyVJ2Nd/YWCS1iWzkSs0BhOX48F9FONVFlqBWNzd99iJb2yB9ZNk97qIOcyONI17jSm7LiQIH5Ghp+oa9Q4jsAZKGF/8lLg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RIIHqsVlfQNbdl7fuWWFHc1kHH7SEpf3b3rMhHXM9X4=;
- b=cIMglCJKxkdPA1ryzjRSt1cOLJJES6IwJjX2BAc3SjUCrMOK/u+MgI3/STN0xzn6ee8T74NHaDR2gejzH54HHrF5JSHmgyL0dYfedSFvq/LdPg8LcCydfFcCkjnegz0BSmZDeML0fvDXPpZRuSAwofXuFJzduLO2wVgsFp4c2Ps=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by DM6PR13MB3690.namprd13.prod.outlook.com (2603:10b6:5:24e::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Wed, 10 May
- 2023 08:16:29 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Wed, 10 May 2023
- 08:16:29 +0000
-Date:   Wed, 10 May 2023 10:16:23 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Jesse Brandeburg <jesse.brandeburg@intel.com>
-Cc:     Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
-        kuba@kernel.org, pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v1 2/2] net: remove __skb_frag_set_page()
-Message-ID: <ZFtS1zfi+zrI0KJu@corigine.com>
-References: <20230509114634.21079-1-linyunsheng@huawei.com>
- <2345b39d-366d-cd37-1026-2663679b4bed@intel.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2345b39d-366d-cd37-1026-2663679b4bed@intel.com>
-X-ClientProxiedBy: AM8P189CA0002.EURP189.PROD.OUTLOOK.COM
- (2603:10a6:20b:218::7) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Wed, 10 May 2023 04:16:46 -0400
+Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632E810D8
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 01:16:41 -0700 (PDT)
+Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-44fdac26696so2163161e0c.3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 01:16:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683706600; x=1686298600;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=omCxiKh+FukCh4+vKAQHMDyFO8gvRPCEh1lBDqgPZGY=;
+        b=fVHsAvScxpZeGZWxNzsM6gZGdgRfuhPktJI2MA2pe2doScRG77YUZyFbnf0p6CqEw+
+         nEIdVMGyISPQXjxdGmWnU+L9+l1YMsq5sJHzpfelgfgrGL9Id3DRVOcsAxZmXP3D6II3
+         DRebDVr7t/t8iF2rSG05H7atszmHEVfuJ+t6pQBSuoXB70qXQeAtkXcCnT2yjAkI7jdU
+         D/TWZmSzAWOMuVzhMrP+JJXJ+Jh8yiUltDT9YkuFbXODwKIokfOVF4uvpQmJWNcUUMuj
+         yZ9P9LegsKrGUWOYXyS2iOouvb/LrHJLmHBDf8SkfuxhOJlIvvTJH4n+apiOafMK7W0r
+         pDUw==
+X-Gm-Message-State: AC+VfDw22LMJ8rcbRjQBdypVlujCHyu3sg3Ibst2yPgu7L2/8wZF/X2j
+        s3R3eHgHL/dDN9jJWuDaJPxu7NwoEFbvVvzJgvI=
+X-Google-Smtp-Source: ACHHUZ4P/QSFbB6kLVNsz+Fuy8k1Sc6pmjQ8ieixMS7OV8VcNKxhzltj1u4k/1j1boRc/FznC+p4Wu91e3zs6y8Fas4=
+X-Received: by 2002:a1f:bd0d:0:b0:44f:d2e3:1097 with SMTP id
+ n13-20020a1fbd0d000000b0044fd2e31097mr5308498vkf.7.1683706600294; Wed, 10 May
+ 2023 01:16:40 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM6PR13MB3690:EE_
-X-MS-Office365-Filtering-Correlation-Id: fc394d39-fe3e-4ef5-aadd-08db512edb50
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: xwrkkjLScgFA7q0cW8lyinVQ/7asSXKeYgk4VCuaONx/DLG4VkrkxTPQ9PT1Jluocw4QpV5eWxRimPQOSEnGDw/QU9gDdrqG5Hq1C8utJzmJ6nRef9gnP0JH+b4k5evV7+dqCZpI2mgs4/bNQGgTMCI6DZ4vJsRBDAZKWsofW0ieJCkKuXaDiE+9Auq3Fx5Y0i1xarZEMP3ZT5LUaz7FCeQ8UKm6skKE5HPkBs22fFNSOvhHFwkimcViFUc1IAQrNbxr21MjbaK24d2QDcc6Fcfp4sHzIFBAjyCi6lxP31YcKbksUYJIDfpEkQWwaZDO5amsrda2/FnE1IRYqNKYG17iTAnGpbse1Q2/9M91wF3yc6/ZuUr40C/ilCUqyqOD9p0m1zj0chz1aT080Xqo8coRyI+1QF/E8LuOzLjtSyCPxXwbVI/Fe52kIoah5BTeUq3l/Ub2MFoeKwVAO+sTCn6OVeYrxIMA4OFEZRyk/Wdq7gK5+ykCGmnILk6xuqcCSDCs1dU3nB7u9Ydu0DYZp6REYRG32MlM7WODDcmBJtULJLGJfamcUQsfypLmjdS/aHPHexK5jir8BEpo1tsu6k4lm8X4MxES8SJ+arUdb8U=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(136003)(366004)(39840400004)(396003)(451199021)(36756003)(478600001)(6486002)(2616005)(41300700001)(38100700002)(6512007)(6506007)(53546011)(66476007)(66946007)(86362001)(66556008)(4326008)(6666004)(5660300002)(44832011)(316002)(6916009)(8936002)(8676002)(186003)(2906002)(4744005)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?MfSqrxfudzIGmGzgI707EBNjuEh+5s40EsVFvFysvjJAg5m1vx2n0ZBiX8ho?=
- =?us-ascii?Q?NsMDfS3ooa2lshcphg5eHcy0jM16+mnOZvsYdlswcf8hI25wNKUtr9iJqM3w?=
- =?us-ascii?Q?XY3szAByRPN+QZ2ZVgb5foUPSRy5zmQSP99YxTdA8hIUFE4c8qOui96OCVXn?=
- =?us-ascii?Q?9gAW8xTgG5XseUx6qPx3sV+IAbkXqntlIp6pqNddi+ZhrovBad7rmofopDqP?=
- =?us-ascii?Q?0a7unAztGXgsAHK+7DeYqpRgCW4EPRaSyRgzd67orrms5tfzNIhkjNBjKrxo?=
- =?us-ascii?Q?x7G2x5+XGmWhRksgbOTgtb34FoXjszqwy3E+hnE0F0OneYqHOCtKsYtj9twQ?=
- =?us-ascii?Q?UPdEibOLDCpKsWUyN5weLTNNCFvvzHkG8Pb2iCGB4ogkYGQqXLYfbd3JeOZc?=
- =?us-ascii?Q?NrMYbpa/FvD+sqXmTZdQpO5DgC6l1j/i1ub2jQ6QVLPsXsIXz+n7pn5u7RCc?=
- =?us-ascii?Q?dVHlaFrGvc4wsosS2Bw/wvlM7jF59GWRoy9LxA36XuVozdv2qJBGBq+7flpt?=
- =?us-ascii?Q?dvndIZipRIWCe1FRGEPnYaUWtm1D2zP5Yj/7sBxSFx24D35zSuYPDKnwAsxp?=
- =?us-ascii?Q?HasSu4zhgOsk8mJHAn+MAy104mE0b77T5SLxtAwz+t9mprbZwqSV7VllzrYj?=
- =?us-ascii?Q?HIt843QpWi/fDBSt0dJwNSvt2HbSMt/FwRw2oop4YsCesjp7gFmXqf8voGjB?=
- =?us-ascii?Q?FQKsR3Gw81xeQ4uvlG9S2ssM+Z8WqonYTNrmGpUQwDaNabujvyy4YQDirgpr?=
- =?us-ascii?Q?xrWfKBgT2IVViAns4bms0a78oSBb97IMekZxY0AJZoOqNMpihsseROTbols5?=
- =?us-ascii?Q?HgpcU6XZZKDBO3flle/P2Zm2sBucpuqP8PqWukEgW/lliGoKY4Qm+6WKVk0l?=
- =?us-ascii?Q?ES58ImeEqY+wqEqS0vz+YKKREuDA39CW9iBZgbNPPr2owr2YvFsxJW++mo7H?=
- =?us-ascii?Q?Vd3QpPSsrPwIfnPc++kZ51d9s2g6anVVyqWaBSckOop8TjK5+mWvAZE8NB0w?=
- =?us-ascii?Q?npSLtj8RM8NwFr76xXSEzegaPRrtaPKegk6hs1t403DBiYe5PyuVyyz0aw9/?=
- =?us-ascii?Q?l2emVBTcM5hbHdu8SxQI56M5B0HecwHYMLVs0GH6p6Lye0uDSmne3VbILQGd?=
- =?us-ascii?Q?nVLC8tQE0he3whE+Fc8A1TafIbAJOLii9k41pI0EMxL7cuoZlKwgwN7AM9Xs?=
- =?us-ascii?Q?RRFHGJu01+uCU641okfGSPGh87KSc1TtH4SXiGi+uFRY5bIJKVPSdxUHfHu5?=
- =?us-ascii?Q?9DCtW4nnXt546OwtwBkmii5g14ZARj38xsnGRaQCfTmGG0q4xCSK7DZ1M9f1?=
- =?us-ascii?Q?6tRMJdBM2Lse+Jdx7gUoiizq5qUics/k8S/byOw0ft/inyzsLw9T2adzD+qK?=
- =?us-ascii?Q?KlqTblz9oBPq+FLeCzBlTJ7Ds7HmlijnJnjPgceFtZaKutRqbw0XFwahIEWx?=
- =?us-ascii?Q?zsiFMu2RpdoDevVF6rA/OUO6QprTbs0Ow/JbSUyxKYeCODgzYCHW34Tbg03s?=
- =?us-ascii?Q?h0mGAXRhObAZcUpdO9iBE3fp42oYUCUjXmcpLBc4DUL+HR3fTR6LZA2IfAdB?=
- =?us-ascii?Q?7SEpGc9tcjsYwfECx1gtwWzRV4i1T9r1Nu+llD7ZSyiSRkeB6Y3QXQoYN/oH?=
- =?us-ascii?Q?aqiwmeULXZcbLlunxpILLlusiVPG0IhotcsVV/QcCfscVK19hC1IGvdHztrY?=
- =?us-ascii?Q?Mw3Gag=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fc394d39-fe3e-4ef5-aadd-08db512edb50
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 08:16:29.4597
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: SMj3gigSWn7Egd0NtYUOdOTxPi8J/D7q7ZQ9I+sJdtxl7KarBD7N0yPBVyj2hKPtsuHeoAIuZ7LcNZdTD55KrQcVtepktg+NVX7D/S0409k=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB3690
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230425181827.219128101@linutronix.de> <20230425183312.932345089@linutronix.de>
+ <ZFUXrCZtWyNG3Esi@lothringen> <87zg6i2xn3.ffs@tglx> <87v8h62vwp.ffs@tglx>
+ <878rdy32ri.ffs@tglx> <87v8h126p2.ffs@tglx> <875y911xeg.ffs@tglx> <87ednpyyeo.ffs@tglx>
+In-Reply-To: <87ednpyyeo.ffs@tglx>
+From:   Andrey Vagin <avagin@openvz.org>
+Date:   Wed, 10 May 2023 01:16:26 -0700
+Message-ID: <CANaxB-wV9iUT6=Y9nZCWbJhiscMrnAQh4fUXs7Tb8pr=-HwSYQ@mail.gmail.com>
+Subject: Re: [RFD] posix-timers: CRIU woes
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
+        Pavel Emelyanov <xemul@openvz.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 04:49:46PM -0700, Jesse Brandeburg wrote:
-> On 5/9/2023 4:46 AM, Yunsheng Lin wrote:
-> > The remaining users calling __skb_frag_set_page() with
-> > page being NULL seems to be doing defensive programming,
-> > as shinfo->nr_frags is already decremented, so remove
-> > them.
-> > 
-> > Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
-> > ---
-> > RFC: remove a local variable as pointed out by Simon.
-> 
-> Makes sense.
-> 
-> Reviewed-by: Jesse Brandeburg <jesse.brandeburg@intel.com>
-> 
-> CC: Simon
+On Tue, May 9, 2023 at 2:42 PM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> Hi!
+>
+> This is a summary of several mails so that the CRIU people have the full
+> picture.
+>
+> A recent syzbot report made me look at the timer ID management, which
+> was modified 7 years ago to accomodate CRIU:
+>
+>     5ed67f05f66c ("posix timers: Allocate timer id per process (v2)")
+>
+> and introduced that reported issue along with a bogus loop termination
+> problem. See
+>
+>     https://lore.kernel.org/lkml/000000000000a3723305f9d98fc3@google.com/
+>     https://lore.kernel.org/lkml/20230425183312.932345089@linutronix.de
+>
+> for details.
+>
+> The intent to make the timer IDs per process is definitely correct, but
+> the implementation is beyond suboptimal. I really regret that I did not
+> catch this back then when picking those changes up.
+>
+> The way it works is that each process keeps a 'next_timer_id' which it
+> uses to allocate the next timer. That allows CRIU to reconstruct timers
+> with the same ID by walking the ID space via
+>
+>   do {
+>      timer_create(&timer, ...., &id);
+>      if (id == original_id)
+>         goto success;
+>      timer_delete(&timer);
+>   } while (idspace_not_exhausted());
+>
+> That works by some definition of works, but it is problematic in two ways:
+>
+>  1) As the timer ID space is up to INT_MAX, a process which creates and
+>     deletes timers frequently, can easily move up close to the INT_MAX
+>     id space over time.
+>
+>     If such a process is checkpointed and restored, then the above loop
+>     will run for at least an hour to restore a single timer.
+>
+>     And no, this is not only a hypothetical issue. There are legitimate
+>     scenarios where threads are created and the control thread arms a
+>     posix CPU timer on them. Such threads can be torn down on a regular
+>     base due to thread pool consolidations. As CRIU does not happen
+>     every 5 minutes it's not completely unlikely that such a process
+>     surives quite some time on a particular host and thereby approaches
+>     the ID space limit.
+>
+>     Sure we can restrict the ID space to a way smaller number so the
+>     search wraps around earlier, but what's a sensible limit?
+>
+>     Though restricting the ID space has its own issue vs. backwards
+>     compability. A process which created a timer on an older kernel with
+>     an ID larger than the newer kernels ID limit cannot longer be
+>     restored on that newer kernel.
+>
+>     Aside of that it does not solve the other problem this created:
+>
+>  2) That change created an user space ABI, which means that the kernel
+>     side has to stick with this next ID search mechanism forever.
+>
+>     That prevents to get rid of that global lock and hash table by
+>     sticking an xarray into task::signal which makes a lot of sense in
+>     terms of cache locality and gets rid of the extra timer list
+>     management in task::signal. Making this change would be very useful
+>     to address some other issues in the posix-timer code without
+>     creating yet more duct tape horrors.
+>
+>     Such a change obviously has to aim for a dense ID space to keep the
+>     memory overhead low, but that breaks existing CRIU userspace because
+>     dense ID space and next ID search does not fit together.
+>
+>     Next ID search is obviously creating non-recoverable holes in the
+>     case that timers are deleted afterwards.
+>
+>     A dense ID space approach can create holes too, but they are
+>     recoverable and well within the resource limits, because the process
+>     has to be able to create enough timers in the first place in order
+>     to release those in the middle.
+>
+>     With the next ID search brute force recovery is not possible on a
+>     kernel with dense ID as there is no way to create all intermediate
+>     timers first before reaching the one at the far end due to resource
+>     limits.
+>
+> So because of that half thought out user space ABI we are now up the
+> regression creek without a paddle, unless CRIU can accomodate to a
+> different restore mechanism to lift this restriction from the kernel.
+>
+> Thoughts?
 
-Thanks Yunsheng and Jessee,
+Hi Thomas,
 
-this looks good to me.
+If you give us a new API to create timers with specified id-s, we will
+figure out how to live with it. It isn't good to ask users to update
+CRIU to work on new kernels, but here are reasons and event improvements
+for CRIU, so I think it's worth it.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+As for API, we can use one bit of sigevent.sigev_notify to request a
+timer with a specified id.
 
+Thanks,
+Andrei
