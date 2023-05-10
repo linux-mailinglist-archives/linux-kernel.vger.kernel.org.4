@@ -2,144 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17E6B6FE404
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 20:22:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1C5D6FE40A
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 20:33:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236082AbjEJSWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 14:22:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56582 "EHLO
+        id S230331AbjEJSdT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 14:33:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236062AbjEJSWj (ORCPT
+        with ESMTP id S229673AbjEJSdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 14:22:39 -0400
-Received: from 189.cn (ptr.189.cn [183.61.185.102])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35412868D;
-        Wed, 10 May 2023 11:22:10 -0700 (PDT)
-HMM_SOURCE_IP: 10.64.8.31:41422.1440474362
-HMM_ATTACHE_NUM: 0000
-HMM_SOURCE_TYPE: SMTP
-Received: from clientip-114.242.206.180 (unknown [10.64.8.31])
-        by 189.cn (HERMES) with SMTP id 60D1C1001EA;
-        Thu, 11 May 2023 02:20:32 +0800 (CST)
-Received: from  ([114.242.206.180])
-        by gateway-151646-dep-85667d6c59-lhcrq with ESMTP id 2e0243989df1455fa5a7afdcf2c485d3 for tzimmermann@suse.de;
-        Thu, 11 May 2023 02:20:34 CST
-X-Transaction-ID: 2e0243989df1455fa5a7afdcf2c485d3
-X-Real-From: 15330273260@189.cn
-X-Receive-IP: 114.242.206.180
-X-MEDUSA-Status: 0
-Sender: 15330273260@189.cn
-Message-ID: <0e13efbf-9a48-6e70-fdf3-8290f28c6dc7@189.cn>
-Date:   Thu, 11 May 2023 02:20:31 +0800
+        Wed, 10 May 2023 14:33:17 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04BB73AA6;
+        Wed, 10 May 2023 11:33:17 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1ab05018381so70950095ad.2;
+        Wed, 10 May 2023 11:33:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683743596; x=1686335596;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JrIXb3rILUjqnvJI4HytLruR+ZhwlVR0U+ngyl13d/M=;
+        b=hjuAvVrfpmL/H0H10iA1qoTncoA35hxR+aek7S4OaTcoBf+bQ0sPb1SWBzecuMm1zQ
+         df9dCHBFHhmDcgh/fj69sgMiehVUlVxQNdQV1ZNcChrEE9wXxP4BdqvIkP06Hsl7g+YT
+         BHlQ7qUotnLF83loZP6JqyCC0+ITvyVamdy2klMSllNuH31Nf9vGk/EhHwX6AM3Oh8+5
+         ot7OO61i+aPkmXTEFo9CbE74M8UzeIB/gDIu8YQGQ9KGjaEWlU45EDchn0G/qUmzH1Aa
+         JnXaGcBFJjuaj2fMeKlPC+3K4mm7b2MUh2QDunxbUcvIMZy8R9IEfbdrp3uhyXBabBxU
+         5cXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683743596; x=1686335596;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JrIXb3rILUjqnvJI4HytLruR+ZhwlVR0U+ngyl13d/M=;
+        b=gC93uD+3m63P3v2K1x3E0ZYukDV3ewYiOjKHIyuuEefhvfHqvIaGVx+xa2wbdGua9I
+         XG1AlKz5WDytQ6AvuK7vg2IjRUzudPR23DLbFgUh4v0M7zxvV6XyW1dEuO3i7L9cI+m5
+         NRAd9OXkVejkvkgWqdvj8PlkwKm58faFqtzByNeLk2YUu0SdvTFPm27PRuBbsGZDcdGZ
+         2zuYSsJi9eGqlh98oJ6sFduZVOlKHayLXONm67dSkDZqyx5qb7ulUhZfnrhWBrDUc5IW
+         O+ujinul0s9FJPlplBsjibCR8boxJEw32JdNHP+xiSsHRT5dAyp7u3ZzHxBtbDmExB24
+         8fWg==
+X-Gm-Message-State: AC+VfDxFphO/HSd4vLJkBD+rOPMcy9RjTrz8FyTXrHyplVqEs7Jag1tI
+        7mrw0yMxMZXdXZN/jPAgjIg=
+X-Google-Smtp-Source: ACHHUZ55UWFs88Sxg3YPoJJpSg4xVTGAaV1kZdUoQ43YkICgd72FxTV5FyoNPnRFiH+w+E2AGHIuhg==
+X-Received: by 2002:a17:903:24e:b0:1ac:3b6f:c141 with SMTP id j14-20020a170903024e00b001ac3b6fc141mr22362262plh.11.1683743596265;
+        Wed, 10 May 2023 11:33:16 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id bh3-20020a170902a98300b00192aa53a7d5sm4155350plb.8.2023.05.10.11.33.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 11:33:15 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Wed, 10 May 2023 08:33:14 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Johannes Berg <johannes@sipsolutions.net>
+Cc:     linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Johannes Berg <johannes.berg@intel.com>
+Subject: Re: [RFC PATCH 1/4] workqueue: support pausing ordered workqueues
+Message-ID: <ZFvjahvVPqWH0XBR@slm.duckdns.org>
+References: <20230510160428.175409-1-johannes@sipsolutions.net>
+ <20230510175846.85cb30389c22.Ia49f779e11c2814294ea7f8bb29f825fb840be51@changeid>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6 1/6] fbdev/matrox: Remove trailing whitespaces
-To:     Thomas Zimmermann <tzimmermann@suse.de>, deller@gmx.de,
-        geert@linux-m68k.org, javierm@redhat.com, daniel@ffwll.ch,
-        vgupta@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
-        davem@davemloft.net, James.Bottomley@HansenPartnership.com,
-        arnd@arndb.de, sam@ravnborg.org
-Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-parisc@vger.kernel.org
-References: <20230510110557.14343-1-tzimmermann@suse.de>
- <20230510110557.14343-2-tzimmermann@suse.de>
-Content-Language: en-US
-From:   Sui Jingfeng <15330273260@189.cn>
-In-Reply-To: <20230510110557.14343-2-tzimmermann@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FROM_LOCAL_DIGITS,
-        FROM_LOCAL_HEX,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230510175846.85cb30389c22.Ia49f779e11c2814294ea7f8bb29f825fb840be51@changeid>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Thomas
+Hello,
 
+This looks great to me in general.
 
-I love your patch, yet something to improve:
+On Wed, May 10, 2023 at 06:04:25PM +0200, Johannes Berg wrote:
+> diff --git a/kernel/workqueue.c b/kernel/workqueue.c
+> index b8b541caed48..418d99ff8325 100644
+> --- a/kernel/workqueue.c
+> +++ b/kernel/workqueue.c
+> @@ -3863,10 +3863,16 @@ static void pwq_adjust_max_active(struct pool_workqueue *pwq)
+>  	struct workqueue_struct *wq = pwq->wq;
+>  	bool freezable = wq->flags & WQ_FREEZABLE;
+>  	unsigned long flags;
+> +	int new_max_active;
+>  
+> -	/* for @wq->saved_max_active */
+> +	/* for @wq->saved_max_active and @wq->flags */
+>  	lockdep_assert_held(&wq->mutex);
+>  
+> +	if (wq->flags & __WQ_PAUSED)
+> +		new_max_active = 0;
+> +	else
+> +		new_max_active = wq->saved_max_active;
 
+Nothing is using new_max_active and I think we can probably combine this
+with the freezing test.
 
-On 2023/5/10 19:05, Thomas Zimmermann wrote:
-> Fix coding style. No functional changes.
->
-> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
-> Reviewed-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> Tested-by: Sui Jingfeng <suijingfeng@loongson.cn>
-> ---
->   drivers/video/fbdev/matrox/matroxfb_accel.c | 6 +++---
->   drivers/video/fbdev/matrox/matroxfb_base.h  | 4 ++--
->   2 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/video/fbdev/matrox/matroxfb_accel.c b/drivers/video/fbdev/matrox/matroxfb_accel.c
-> index 9cb0685feddd..ce51227798a1 100644
-> --- a/drivers/video/fbdev/matrox/matroxfb_accel.c
-> +++ b/drivers/video/fbdev/matrox/matroxfb_accel.c
-> @@ -88,7 +88,7 @@
->   
->   static inline void matrox_cfb4_pal(u_int32_t* pal) {
->   	unsigned int i;
-> -	
+> +void __workqueue_pause_resume(struct workqueue_struct *wq, bool pause)
+> +{
+> +	struct pool_workqueue *pwq;
 > +
->   	for (i = 0; i < 16; i++) {
->   		pal[i] = i * 0x11111111U;
->   	}
-> @@ -96,7 +96,7 @@ static inline void matrox_cfb4_pal(u_int32_t* pal) {
->   
->   static inline void matrox_cfb8_pal(u_int32_t* pal) {
->   	unsigned int i;
-> -	
+> +	mutex_lock(&wq->mutex);
+> +	if (pause)
+> +		wq->flags |= __WQ_PAUSED;
+> +	else
+> +		wq->flags &= ~__WQ_PAUSED;
 > +
->   	for (i = 0; i < 16; i++) {
->   		pal[i] = i * 0x01010101U;
->   	}
-> @@ -482,7 +482,7 @@ static void matroxfb_1bpp_imageblit(struct matrox_fb_info *minfo, u_int32_t fgx,
->   			/* Tell... well, why bother... */
->   			while (height--) {
->   				size_t i;
-> -				
+> +	for_each_pwq(pwq, wq)
+> +		pwq_adjust_max_active(pwq);
+> +	mutex_unlock(&wq->mutex);
 > +
->   				for (i = 0; i < step; i += 4) {
->   					/* Hope that there are at least three readable bytes beyond the end of bitmap */
->   					fb_writel(get_unaligned((u_int32_t*)(chardata + i)),mmio.vaddr);
-> diff --git a/drivers/video/fbdev/matrox/matroxfb_base.h b/drivers/video/fbdev/matrox/matroxfb_base.h
-> index 958be6805f87..c93c69bbcd57 100644
-> --- a/drivers/video/fbdev/matrox/matroxfb_base.h
-> +++ b/drivers/video/fbdev/matrox/matroxfb_base.h
-> @@ -301,9 +301,9 @@ struct matrox_altout {
->   	int		(*verifymode)(void* altout_dev, u_int32_t mode);
->   	int		(*getqueryctrl)(void* altout_dev,
->   					struct v4l2_queryctrl* ctrl);
+> +	if (pause)
+> +		flush_workqueue(wq);
+> +}
+> +EXPORT_SYMBOL_GPL(__workqueue_pause_resume);
 
-Noticed that there are plenty of coding style problems in matroxfb_base.h,
+I'd just make pause and resume separate functions. The sharing ratio doesn't
+seem that high.
 
-why you only fix a few of them?   Take this two line as an example, 
-shouldn't
+Thanks.
 
-they be fixed also as following?
-
-
-  	int		(*verifymode)(void *altout_dev, u_int32_t mode);
-  	int		(*getqueryctrl)(void *altout_dev,
-  					struct v4l2_queryctrl *ctrl);
-
-
-> -	int		(*getctrl)(void* altout_dev,
-> +	int		(*getctrl)(void *altout_dev,
->   				   struct v4l2_control* ctrl);
-> -	int		(*setctrl)(void* altout_dev,
-> +	int		(*setctrl)(void *altout_dev,
->   				   struct v4l2_control* ctrl);
->   };
->   
+-- 
+tejun
