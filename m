@@ -2,113 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E21406FDAB7
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:27:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69A126FDAB9
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 11:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236671AbjEJJ1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 05:27:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42208 "EHLO
+        id S236762AbjEJJ2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 05:28:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236107AbjEJJ1e (ORCPT
+        with ESMTP id S236096AbjEJJ16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 05:27:34 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74DD63A8D
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 02:27:32 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50b37f3e664so12439695a12.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 02:27:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1683710851; x=1686302851;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=JBKGh73QpqEYJqax38l5dJYavyHBNPUc6IQPM+Q4Z0I=;
-        b=iPH+ouFoA5GOEgnT5bLA6aVtT6mZ8/JMWvWbyo7xN+jXlp6nS10XYkdja8PCRH+3HD
-         j90pzE45kJTfAuCLCDQvuFmSszJC11Pigyyzs+BntJUG7/t1lUZfGegsNzHlxg4JJcLw
-         B1x9uQrKunyqkx0KF7YCBrwlyAdaNBFW9yPsVVw7O3UxvB9WyqWuDpiYhqxKHKSmvWoe
-         Rr0G+TAqbG2pGAPndeufdxCeF02J0zrWO8vCZN8AmxAVUdqcHt065YS+u1s7rB07fZ4f
-         Oi63pSAk1bFSVleunPCl+RM9T+N676GJgE5aTCKjpWEolxVwuxtL6jdQWDlA+cvUmepM
-         a/Bg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683710851; x=1686302851;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JBKGh73QpqEYJqax38l5dJYavyHBNPUc6IQPM+Q4Z0I=;
-        b=keqZjnjtTmnNdzH6Ld+MzJY0AZZGKVEZ/2O0ILb/JKf9gVI5kqD2hItWY371jrgtXn
-         9K8aKL8SfjHf1iPBLGcFRo2dpypEGSmAb8Hz4Ht5fvArKO6ws9YCezeuJv/drwJDYoHA
-         kbZIO1EMXU+HLPHAlzD7YOm223Yy00j68r4LEn6Np5pI+I1ghH9Iq4WDs2Mt9WvrB+yB
-         JyHTB9xJXa+LYAT2uIdaul2qLF1TPEwAnPW1H1bozWb5YqwfFRHB75/Suv7WgzDaEpL5
-         ReHuc4hjPxIBhjwViG6xTztl94WfKeDHnrrH8F4slilNKfAHdUeAYSjcepG5PN8Xwc9A
-         pkew==
-X-Gm-Message-State: AC+VfDws2X/o+ZVuUB81ytUhPh72BzpYBR3ITglSSTjy+5qgoGTUfPJT
-        /9z+YmtvIybPiA49/p1XG/AC1A==
-X-Google-Smtp-Source: ACHHUZ7Oh9r0VM9/gCBR55+JfnCFHJfLxLYN7lIg6ZiAX7201e+P7Q1p/vq5LK4BKmJ3n6Y7z+jEaQ==
-X-Received: by 2002:aa7:cd0b:0:b0:506:7386:88d7 with SMTP id b11-20020aa7cd0b000000b00506738688d7mr11915481edw.11.1683710850965;
-        Wed, 10 May 2023 02:27:30 -0700 (PDT)
-Received: from [172.16.240.113] (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id d16-20020a056402001000b0050bd47f9073sm1691639edu.39.2023.05.10.02.27.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 02:27:30 -0700 (PDT)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-Date:   Wed, 10 May 2023 11:27:21 +0200
-Subject: [PATCH] Bluetooth: btqca: make sure to handle byte order for
- soc_id
+        Wed, 10 May 2023 05:27:58 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860483A9D;
+        Wed, 10 May 2023 02:27:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=BObtCJ4EJyZaxZjmZMNxGSQfxnidWfZ74BSgGFC7kEA=; b=YR95V6SLWDl835/OD8lyxUGpMR
+        i0mQy3Mo0dDrwXa/DTmjy3J2H1G8JGWKmB8Cf9bxkpBHzjId4jx0wQp8G1czXCEp7cBSsCZrYeJFH
+        IdL5x8fBkaR/1+Hx6uo5fYVr+luwyML3Dz+5esf2V0aFzx2WdDCFz3LSS5fMQDlfIbLKYSDAq9Nzy
+        TxN7ju2HOaM9DozK+Ft/+tc08vcRwtmtxA9sSMDqzda2CztcxDpRPt+37uvw5E3LHsyX7MWIUv0YU
+        jxDYpaUzOy05d5WEzlSgPag8fvyR2cqVae0b4Vr+YYIxFMozn2Upqjdxhg2uU5FLE1f+0iFj/Yx2n
+        BBNjoGRQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pwg6Y-00G8zE-Va; Wed, 10 May 2023 09:27:27 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 07DED3000D5;
+        Wed, 10 May 2023 11:27:23 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D4A6820B04BA9; Wed, 10 May 2023 11:27:23 +0200 (CEST)
+Date:   Wed, 10 May 2023 11:27:23 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Youling Tang <tangyouling@loongson.cn>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jason Baron <jbaron@akamai.com>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Zhangjin Wu <falcon@tinylab.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
+Subject: Re: [PATCH v2] LoongArch: Add jump-label implementation
+Message-ID: <20230510092723.GK4253@hirez.programming.kicks-ass.net>
+References: <1683710206-23905-1-git-send-email-tangyouling@loongson.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230510-btqca-byte-order-v1-1-82e6a371c5aa@fairphone.com>
-X-B4-Tracking: v=1; b=H4sIAHhjW2QC/x2Nyw7CIBAAf6XZs9tAq43xV4wHoItsYgAXfDRN/
- 13qcZKZzAqFhKnApVtB6M2FU2ygDx24YOKdkOfGMKhhVCet0NanM2iXSphkJkGayGil9NlrBy2
- zphBaMdGFPfT5iFM/9gt+OKN9vKimVMNuZiHP3//8etu2H8inI1WMAAAA
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Venkata Lakshmi Narayana Gubba <gubbaven@codeaurora.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Johan Hedberg <johan.hedberg@intel.com>,
-        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Simon Horman <simon.horman@corigine.com>,
-        Luca Weiss <luca.weiss@fairphone.com>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1683710206-23905-1-git-send-email-tangyouling@loongson.cn>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The field soc_id in struct qca_btsoc_version is __le32 so we need to
-convert it to host byteorder before using.
+On Wed, May 10, 2023 at 05:16:46PM +0800, Youling Tang wrote:
+> Add jump-label implementation based on the ARM64 version.
+> 
+> Signed-off-by: Youling Tang <tangyouling@loongson.cn>
 
-Reported-by: Simon Horman <simon.horman@corigine.com>
-Fixes: 059924fdf6c1 ("Bluetooth: btqca: Use NVM files based on SoC ID for WCN3991")
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
- drivers/bluetooth/btqca.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> diff --git a/arch/loongarch/include/asm/jump_label.h b/arch/loongarch/include/asm/jump_label.h
+> new file mode 100644
+> index 000000000000..2f9fdec256c5
+> --- /dev/null
+> +++ b/arch/loongarch/include/asm/jump_label.h
+> @@ -0,0 +1,51 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2023 Loongson Technology Corporation Limited
+> + *
+> + * Based on arch/arm64/include/asm/jump_label.h
+> + */
+> +#ifndef __ASM_JUMP_LABEL_H
+> +#define __ASM_JUMP_LABEL_H
+> +
+> +#ifndef __ASSEMBLY__
+> +
+> +#include <linux/types.h>
+> +
+> +#define JUMP_LABEL_NOP_SIZE	4
+> +
+> +static __always_inline bool arch_static_branch(struct static_key * const key,
+> +					       const bool branch)
+> +{
+> +	asm_volatile_goto(
+> +		"1:	nop					\n\t"
+> +		 "	.pushsection	__jump_table, \"aw\"	\n\t"
+> +		 "	.align		3			\n\t"
+> +		 "	.long		1b - ., %l[l_yes] - .	\n\t"
+> +		 "	.quad		%0 - .			\n\t"
+> +		 "	.popsection				\n\t"
+> +		 :  :  "i"(&((char *)key)[branch]) :  : l_yes);
+> +
+> +	return false;
+> +l_yes:
+> +	return true;
+> +}
+> +
+> +static __always_inline bool arch_static_branch_jump(struct static_key * const key,
+> +						    const bool branch)
+> +{
+> +	asm_volatile_goto(
+> +		"1:	b		%l[l_yes]		\n\t"
+> +		 "	.pushsection	__jump_table, \"aw\"	\n\t"
+> +		 "	.align		3			\n\t"
+> +		 "	.long		1b - ., %l[l_yes] - .	\n\t"
+> +		 "	.quad		%0 - .			\n\t"
+> +		 "	.popsection				\n\t"
+> +		 :  :  "i"(&((char *)key)[branch]) :  : l_yes);
+> +
+> +	return false;
+> +l_yes:
+> +	return true;
+> +}
 
-diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
-index fd0941fe8608..e7e58a956d15 100644
---- a/drivers/bluetooth/btqca.c
-+++ b/drivers/bluetooth/btqca.c
-@@ -637,7 +637,7 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t baudrate,
- 		snprintf(config.fwname, sizeof(config.fwname),
- 			 "qca/%s", firmware_name);
- 	else if (qca_is_wcn399x(soc_type)) {
--		if (ver.soc_id == QCA_WCN3991_SOC_ID) {
-+		if (le32_to_cpu(ver.soc_id) == QCA_WCN3991_SOC_ID) {
- 			snprintf(config.fwname, sizeof(config.fwname),
- 				 "qca/crnv%02xu.bin", rom_ver);
- 		} else {
+Seems simple enough; one change I did a while ago for the x86 version is
+to put the __jump_table entry generation in a macro so it could be
+shared between the (3 for x86) variants.
 
----
-base-commit: ac9a78681b921877518763ba0e89202254349d1b
-change-id: 20230510-btqca-byte-order-e6ea10018f1c
+Not saying you have to do that, just saying it's an option.
 
-Best regards,
--- 
-Luca Weiss <luca.weiss@fairphone.com>
+> +#endif  /* __ASSEMBLY__ */
+> +#endif	/* __ASM_JUMP_LABEL_H */
 
+> diff --git a/arch/loongarch/kernel/jump_label.c b/arch/loongarch/kernel/jump_label.c
+> new file mode 100644
+> index 000000000000..b06245955f7a
+> --- /dev/null
+> +++ b/arch/loongarch/kernel/jump_label.c
+> @@ -0,0 +1,23 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (C) 2023 Loongson Technology Corporation Limited
+> + *
+> + * Based on arch/arm64/kernel/jump_label.c
+> + */
+> +#include <linux/jump_label.h>
+> +#include <linux/kernel.h>
+> +#include <asm/inst.h>
+> +
+> +void arch_jump_label_transform(struct jump_entry *entry,
+> +			       enum jump_label_type type)
+> +{
+> +	void *addr = (void *)jump_entry_code(entry);
+> +	u32 insn;
+> +
+> +	if (type == JUMP_LABEL_JMP)
+> +		insn = larch_insn_gen_b(jump_entry_code(entry), jump_entry_target(entry));
+> +	else
+> +		insn = larch_insn_gen_nop();
+> +
+> +	larch_insn_patch_text(addr, insn);
+> +}
+
+This all implies Loongarch is fine with the nop<->b transition (much
+like arm64 is), but I found no actual mention of what transitions are
+valid for the architecture in your inst.c file -- perhaps you could put
+a small comment there to elucidate the occasional reader that doesn't
+have your arch manual memorized?
+
+
+Anyway, as with most RISC implementations it's short and sweet.
+
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
