@@ -2,117 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 125B86FE2AF
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 18:43:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 216E46FE2B3
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 18:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235833AbjEJQna (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 12:43:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
+        id S235908AbjEJQnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 12:43:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235757AbjEJQn2 (ORCPT
+        with ESMTP id S231527AbjEJQno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 12:43:28 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C2B601BB;
-        Wed, 10 May 2023 09:43:26 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id ED6FD12FC;
-        Wed, 10 May 2023 09:44:10 -0700 (PDT)
-Received: from FVFF77S0Q05N.cambridge.arm.com (FVFF77S0Q05N.cambridge.arm.com [10.1.32.173])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9BF0F3F67D;
-        Wed, 10 May 2023 09:43:23 -0700 (PDT)
-Date:   Wed, 10 May 2023 17:43:20 +0100
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Marc Zyngier <maz@kernel.org>, ito-yuichi@fujitsu.com,
-        kgdb-bugreport@lists.sourceforge.net, Chen-Yu Tsai <wens@csie.org>,
-        Masayoshi Mizuma <msys.mizuma@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-perf-users@vger.kernel.org,
-        Frederic Weisbecker <frederic@kernel.org>,
-        "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
-        Ingo Molnar <mingo@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 06/10] arm64: idle: Tag the arm64 idle functions as
- __cpuidle
-Message-ID: <ZFvJqIYo00vfqRiB@FVFF77S0Q05N.cambridge.arm.com>
-References: <20230419225604.21204-1-dianders@chromium.org>
- <20230419155341.v8.6.I4baba13e220bdd24d11400c67f137c35f07f82c7@changeid>
+        Wed, 10 May 2023 12:43:44 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D079C7ED3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 09:43:41 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pwmuc-0006yl-CH; Wed, 10 May 2023 18:43:34 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pwmuY-002XCA-O2; Wed, 10 May 2023 18:43:30 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pwmuY-003ALi-5f; Wed, 10 May 2023 18:43:30 +0200
+Date:   Wed, 10 May 2023 18:43:30 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Fei Shao <fshao@chromium.org>
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH] media: mediatek: vcodec: Convert mtk_vcodec_dec_hw
+ platform remove callback
+Message-ID: <20230510164330.z2ygkl7vws6fci75@pengutronix.de>
+References: <20230510233117.1.I7047714f92ef7569bd21f118ae6aee20b3175a92@changeid>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="q7mthi6fgfcgjjj5"
 Content-Disposition: inline
-In-Reply-To: <20230419155341.v8.6.I4baba13e220bdd24d11400c67f137c35f07f82c7@changeid>
+In-Reply-To: <20230510233117.1.I7047714f92ef7569bd21f118ae6aee20b3175a92@changeid>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 03:56:00PM -0700, Douglas Anderson wrote:
-> As per the (somewhat recent) comment before the definition of
-> `__cpuidle`, the tag is like `noinstr` but also marks a function so it
-> can be identified by cpu_in_idle(). Let'a add this.
-> 
-> After doing this then when we dump stack traces of all processors
-> using nmi_cpu_backtrace() then instead of getting useless backtraces
-> we get things like:
-> 
->   NMI backtrace for cpu N skipped: idling at cpu_do_idle+0x94/0x98
 
-As a heads-up, this is only going to work in the trivial case where a CPU is
-within the default cpu_do_idle(), and not for anything using PSCI
-cpu_suspend() (which I'd *really* hope is the common case).
+--q7mthi6fgfcgjjj5
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-That doesn't get inlined, and the invocation is shared with other SMCCC users,
-so we probably need more work there if culling idle backtraces is important.
+[expanding the audience a bit for more expertise]
 
-I'm not averse to this change itself.
+Hello,
 
-Mark.
-
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+On Wed, May 10, 2023 at 11:31:35PM +0800, Fei Shao wrote:
+> This aligns with [1] and converts the platform remove callback to
+> .remove_new(), which returns void.
+>=20
+> [1]: commit a3afc5b10661 ("media: mtk_vcodec_dec_drv: Convert to
+>      platform remove callback returning void")
+>=20
+> Signed-off-by: Fei Shao <fshao@chromium.org>
+>=20
 > ---
-> 
-> Changes in v8:
-> - "Tag the arm64 idle functions as __cpuidle" new for v8
-> 
->  arch/arm64/kernel/idle.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/arm64/kernel/idle.c b/arch/arm64/kernel/idle.c
-> index c1125753fe9b..05cfb347ec26 100644
-> --- a/arch/arm64/kernel/idle.c
-> +++ b/arch/arm64/kernel/idle.c
-> @@ -20,7 +20,7 @@
->   *	ensure that interrupts are not masked at the PMR (because the core will
->   *	not wake up if we block the wake up signal in the interrupt controller).
->   */
-> -void noinstr cpu_do_idle(void)
-> +void __cpuidle cpu_do_idle(void)
+>=20
+>  drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c b=
+/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
+> index b753bf54ebd9..bd5743723da6 100644
+> --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
+> +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
+> @@ -193,16 +193,14 @@ static int mtk_vdec_hw_probe(struct platform_device=
+ *pdev)
+>  	return ret;
+>  }
+> =20
+> -static int mtk_vdec_hw_remove(struct platform_device *pdev)
+> +static void mtk_vdec_hw_remove(struct platform_device *pdev)
 >  {
->  	struct arm_cpuidle_irq_context context;
->  
-> @@ -35,7 +35,7 @@ void noinstr cpu_do_idle(void)
->  /*
->   * This is our default idle handler.
->   */
-> -void noinstr arch_cpu_idle(void)
-> +void __cpuidle arch_cpu_idle(void)
->  {
->  	/*
->  	 * This should do all the clock switching and wait for interrupt
-> -- 
-> 2.40.0.634.g4ca3ef3211-goog
-> 
+>  	pm_runtime_disable(&pdev->dev);
+> -
+> -	return 0;
+>  }
+> =20
+>  static struct platform_driver mtk_vdec_driver =3D {
+>  	.probe	=3D mtk_vdec_hw_probe,
+> -	.remove =3D mtk_vdec_hw_remove,
+> +	.remove_new =3D mtk_vdec_hw_remove,
+>  	.driver	=3D {
+>  		.name	=3D "mtk-vdec-comp",
+>  		.of_match_table =3D mtk_vdec_hw_match,
+
+While the patch looks fine, I wonder if having a remove callback just to
+do pm_runtime_disable() is worth keeping it. Doesn't the core care for
+things like that? I grepped a bit around, device_unbind_cleanup() is
+called after device_remove() which calls pm_runtime_reinit(). Does that
+mean calling pm_runtime_disable in .remove() is useless? In that case,
+you could just drop the .remove() callback.
+
+Best regards
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--q7mthi6fgfcgjjj5
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRbybEACgkQj4D7WH0S
+/k7BlggAtOk4RsuBv4L9tAsMlhTGVIueKXhZIiBT1IZ0G0tp9SBTwlWNxwIay133
+Q1RFJRhgq7GTusiGx3dw62EeiF9Wxaqa7W+uB9GrAfPs5k8qRyiU/LC27sAfjg9x
+eS4MkSR3dw7iN7wB1DSEiitHVOYXdq+zZ5aqhNNzQZE3DymxwR91cxuK+gG1k/ax
+c4Izpg74XIDk8Q1CrUo1A1N5CQ0qKS1NRRlfZy/7/DjIYzG+tjrhSoUO/h4AQOtR
+lxTcA9knL0vx0NPs7o18g9ZngmMUTtQWgADLgJfFlPcyWs5CABUAnF3Nkafa9nNS
+nLsTffuOpkHKy4mmgrnT0qEGFaGqRA==
+=gg+q
+-----END PGP SIGNATURE-----
+
+--q7mthi6fgfcgjjj5--
