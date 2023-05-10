@@ -2,254 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D10A26FDA07
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:53:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 965166FDA05
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 10:53:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236874AbjEJIxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 04:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42660 "EHLO
+        id S236859AbjEJIxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 04:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236873AbjEJIwm (ORCPT
+        with ESMTP id S236872AbjEJIwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 10 May 2023 04:52:42 -0400
-Received: from mailout1.samsung.com (mailout1.samsung.com [203.254.224.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A4C15249
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 01:52:18 -0700 (PDT)
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout1.samsung.com (KnoxPortal) with ESMTP id 20230510085210epoutp01a7bd9e70fe8cc0f7da799eb6ac71aef7~dvCuG1ry51396213962epoutp01p
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 08:52:10 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.samsung.com 20230510085210epoutp01a7bd9e70fe8cc0f7da799eb6ac71aef7~dvCuG1ry51396213962epoutp01p
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1683708730;
-        bh=g79vP8DDxL631oXd9xY9r2nKOWI/ZL7l+cinRRVML/o=;
-        h=Subject:Reply-To:From:To:In-Reply-To:Date:References:From;
-        b=igJTqMmMYgBixf1/e8+PAgF87edmcv2CPfNsrFD1sGpzaotmR9fF2OXmRQ9fDyFXq
-         94FEPzH6grfjG94kwxpbWyxN5TzqRX+CpzfgAsSBNDiFdimJYpcMazoZM1LfMsqjHf
-         EMRci5gZ7X+52vAY2RqbadMgCCQ6D1N/Ch1JiwJE=
-Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20230510085210epcas2p2f37d467174700937f1d7d24aafd8c897~dvCtcMs_T0839608396epcas2p29;
-        Wed, 10 May 2023 08:52:10 +0000 (GMT)
-Received: from epsmges2p3.samsung.com (unknown [182.195.36.101]) by
-        epsnrtp3.localdomain (Postfix) with ESMTP id 4QGTL1448mz4x9Q2; Wed, 10 May
-        2023 08:52:09 +0000 (GMT)
-X-AuditID: b6c32a47-e99fd70000002007-31-645b5b396bbe
-Received: from epcas2p4.samsung.com ( [182.195.41.56]) by
-        epsmges2p3.samsung.com (Symantec Messaging Gateway) with SMTP id
-        4E.86.08199.93B5B546; Wed, 10 May 2023 17:52:09 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v2 05/14] block: blk-merge: fix to add the number of
- integrity segments to the request twice
-Reply-To: j-young.choi@samsung.com
-Sender: Jinyoung CHOI <j-young.choi@samsung.com>
-From:   Jinyoung CHOI <j-young.choi@samsung.com>
-To:     Jinyoung CHOI <j-young.choi@samsung.com>,
-        "axboe@kernel.dk" <axboe@kernel.dk>,
-        "kbusch@kernel.org" <kbusch@kernel.org>, "hch@lst.de" <hch@lst.de>,
-        "sagi@grimberg.me" <sagi@grimberg.me>,
-        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
-        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
-        "johannes.thumshirn@wdc.com" <johannes.thumshirn@wdc.com>,
-        "kch@nvidia.com" <kch@nvidia.com>,
-        "willy@infradead.org" <willy@infradead.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-In-Reply-To: <20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p1>
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230510085208epcms2p52a6dec8da80152ec2101f11ce2ea5321@epcms2p5>
-Date:   Wed, 10 May 2023 17:52:08 +0900
-X-CMS-MailID: 20230510085208epcms2p52a6dec8da80152ec2101f11ce2ea5321
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692D73C27;
+        Wed, 10 May 2023 01:52:17 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f4449fa085so5914735e9.0;
+        Wed, 10 May 2023 01:52:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683708736; x=1686300736;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+W0u0yW4mt1eIi/4crd+vyLCw2vSkQ6ty0fIhiNv5ZE=;
+        b=IEXCK5RaT8/jHtwqWGvJGg3UVFM7d7GsjZYVh1tmATAN547tNCCLl5d7y9Iv5K2Y/l
+         +1gjQxx8rphBqAmlO/4ExZLjDahGTYxdV3rJPf9lvXkwesAbnwX4UAF7j8JkS8a20UP3
+         3fcAmxsmxIErIAkoRzihqKSEB46YQNDV9ZWSsz0wfN/11Yj6/DpEt8zEOqjjBzhDqNsP
+         bzrMQRKOt7Kbio7/28N1u/9Fr6t7PE92sxtQHJWMJ5CASCttJ4DyRhMaEud7GoO27gHv
+         T1GnYby7wGMQg7Pp7wNHQnybdSxxW5mPs5k4bjuDtOJhwGVyA3MuRxdtqHFhhMdl3yfq
+         saPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683708736; x=1686300736;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+W0u0yW4mt1eIi/4crd+vyLCw2vSkQ6ty0fIhiNv5ZE=;
+        b=fq4nCffzdgo9P8CaF/ESCj+WmCFhie7vjmduivS0rlReKe8gjl/VLNze9NqGkXlwNG
+         gumDU9phUSCr/0o1LjAsRN1KDQsZruqs7vGn2PVyWpDyZdtFm2WjpdhI4UPcd8WZuueW
+         Mtatk2U8l+8vBG2OWogXIq40ONYNarDD5nCpIn/dcllJAV24nluC7PBS8T7RWgJgoE0G
+         daJB2RRvSzlnh01XRpGuISqCY9MeWm69Z2E5//ME+7HAYm/Bb0Xg34N11B21crA6POlU
+         eqJ+k8jZlz8dLbuwyLYSmMFTsoMdGAZyc3iBOtR6Jv4eOgxEMyMCGIf5Ipek/OCQTY6D
+         nrMw==
+X-Gm-Message-State: AC+VfDyFbiMTCB6KXf4NmCGIBqRvFJ4id5O955IR25Ny5BhJnSgWYGVo
+        cgU2fRcBSKYWkMM/soFo3v4=
+X-Google-Smtp-Source: ACHHUZ7ivHBQG4YpZufVS236WKTcLxuvGLQefRgCKFpaeE5Ooo0XYy/L/+l61SuQWpkbjrIqePoofQ==
+X-Received: by 2002:a7b:c5d3:0:b0:3f1:6ef6:c9d0 with SMTP id n19-20020a7bc5d3000000b003f16ef6c9d0mr11110681wmk.17.1683708735582;
+        Wed, 10 May 2023 01:52:15 -0700 (PDT)
+Received: from [192.168.1.131] (cgn-89-1-213-9.nc.de. [89.1.213.9])
+        by smtp.gmail.com with ESMTPSA id q14-20020a7bce8e000000b003f182a10106sm22166844wmj.8.2023.05.10.01.52.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 01:52:15 -0700 (PDT)
+Message-ID: <4378f2ba-f620-b4e8-f0b3-9d08dcb6e2f3@gmail.com>
+Date:   Wed, 10 May 2023 10:52:13 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v1] backlight: lm3630a: turn off both led strings when
+ display is blank
+Content-Language: en-US
+To:     Sam Ravnborg <sam@ravnborg.org>,
+        Maximilian Weigand <mweigand2017@gmail.com>
+Cc:     Lee Jones <lee@kernel.org>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Helge Deller <deller@gmx.de>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pwm@vger.kernel.org
+References: <20230505185752.969476-1-mweigand2017@gmail.com>
+ <20230509165232.GA1072872@ravnborg.org>
+From:   Maximilian Weigand <mweigand2017@gmail.com>
+In-Reply-To: <20230509165232.GA1072872@ravnborg.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-CPGSPASS: Y
-X-CPGSPASS: Y
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrFJsWRmVeSWpSXmKPExsWy7bCmha5ldHSKwZep8har7/azWbw8pGmx
-        cvVRJove/q1sFotubGOy+Nt1j8li0qFrjBZPr85isth7S9vi8q45bBbLj/9jslj3+j2Lxe8f
-        c9gceD3O39vI4rF5hZbH5bOlHptWdbJ5TFh0gNFj980GNo/e5ndsHh+f3mLx6NuyitHj8yY5
-        j/YD3UwB3FHZNhmpiSmpRQqpecn5KZl56bZK3sHxzvGmZgaGuoaWFuZKCnmJuam2Si4+Abpu
-        mTlA5ysplCXmlAKFAhKLi5X07WyK8ktLUhUy8otLbJVSC1JyCswL9IoTc4tL89L18lJLrAwN
-        DIxMgQoTsjO2TN7JWDBdvWLC5S72BsYf8l2MnBwSAiYSy6YeZe1i5OIQEtjBKPH+1jPmLkYO
-        Dl4BQYm/O4RBaoQF8iQmP5zKBGILCShJnFszixGkRFjAQOJWrzlImE1AT+LnkhlsIGNEBHay
-        SHy/f5QRYj6vxIz2pywQtrTE9uVbwXo5BfwkWh9bQoQ1JH4s62WGsEUlbq5+yw5jvz82H2qM
-        iETrvbNQNYISD37uhopLShw69JUNZKSEQL7EhgOBEOEaibfLD0CV6Etc69gIdgGvgK/E452/
-        wD5hEVCVmLDiCRtEjYvEl/sPwMYzC8hLbH87BxwIzAKaEut36UNMV5Y4cosFooJPouPwX3aY
-        /xo2/sbK3jHvCRNEq5rEoiYjiLCMxNfD89knMCrNQgTyLCRrZyGsXcDIvIpRLLWgODc9tdio
-        wBger8n5uZsYwYlYy30H44y3H/QOMTJxMB5ilOBgVhLh9Q6NShHiTUmsrEotyo8vKs1JLT7E
-        aAr08ERmKdHkfGAuyCuJNzSxNDAxMzM0NzI1MFcS55W2PZksJJCeWJKanZpakFoE08fEwSnV
-        wLR+TW1occmm0BVCGW1tlz9tyjwjH1CQGRnQeXCF1+ov4U2r8mJklGsTvpqvPxIecmNxqumi
-        OtdjD8QCVJRld7fV1JzfrtAXXjrlTMwnQ89nv/1q307mPMqqULC4I2WPyJ2wQq6wCxMEllgs
-        1coP8vz4YSWD5Y4/Sl0W+Vtjfu5O2uRfwnWNmZOF+VnGitD1b+5dXqV5/xLv8ZffH2evquia
-        UDRTWzU3zLi3TXRiR1Oy7G7ZzHO6e7QijDsE9i35utch9lluftzkHXw5j+bP28k4U6zG/ub+
-        vHaX5K6jfIF72JUiNy6+aiSyYuGs2s8veZrt3u+alvrsDXPwknkhjzbH1Wm0bDTUZsw4cqm0
-        UYmlOCPRUIu5qDgRALPluVdNBAAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684
-References: <20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p1>
-        <CGME20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p5>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-blk_integrity_merge_bio() not only performs conditional tests, but also
-updates the integrity segment information of request.
-It can be called twice when merging the bio into an existing request.
 
-bio_attempt_bio_merge() or blk_mq_sched_try_merge()
-  blk_rq_merge_ok()
-    blk_integrity_merge_bio()  -  1
-  bio_attemp_{back|front}_merge()
-    ll_{back|front}_merge_fn()
-      ll_new_hw_segments()
-        blk_integrity_merge_bio()  -  2
+>> +	if (backlight_is_blank(bl) || (bl->props.brightness < 0x4))
+> You could replace bl->props.brightness with backlight_get_brightness(bl)
+> to avoid direct access to the properties.
 
-The part of checking the conditions and the code to update the
-information of the actual request were separated. At this time, the
-ll_back_merge_fn was called by passth-path, so the condition check was
-called by all the separated functions.
+Thanks. Changed in v2.
 
-And after success in blk_integrity_merge_bio(), the information of the
-request may be wrong if it is impossible to merge due to other
-conditional tests. Thus, it was changed to be called immediately before
-merging the bio's segments.
+>> +		/* turn the string off  */
+>>  		ret |= lm3630a_update(pchip, REG_CTRL, LM3630A_LEDA_ENABLE, 0);
+>>  	else
+>>  		ret |= lm3630a_update(pchip, REG_CTRL,
+>> @@ -277,7 +279,9 @@ static int lm3630a_bank_b_update_status(struct backlight_device *bl)
+>>  	usleep_range(1000, 2000);
+>>  	/* minimum brightness is 0x04 */
+>>  	ret = lm3630a_write(pchip, REG_BRT_B, bl->props.brightness);
+>> -	if (bl->props.brightness < 0x4)
+>> +
+>> +	if (backlight_is_blank(bl) || (bl->props.brightness < 0x4))
 
-Cc: Christoph Hellwig <hch@lst.de>
-Cc: Martin K. Petersen <martin.petersen@oracle.com>
-
-Fixes: 4eaf99beadce ("block: Don't merge requests if integrity flags differ")
-Signed-off-by: Jinyoung Choi <j-young.choi@samsung.com>
----
- block/blk-integrity.c | 34 +++++++++++++++++++++++++++++-----
- block/blk-merge.c     |  9 +++++----
- block/blk.h           |  7 +++++++
- 3 files changed, 41 insertions(+), 9 deletions(-)
-
-diff --git a/block/blk-integrity.c b/block/blk-integrity.c
-index d4e9b4556d14..03a85e1f6d2e 100644
---- a/block/blk-integrity.c
-+++ b/block/blk-integrity.c
-@@ -184,19 +184,43 @@ bool blk_integrity_merge_rq(struct request_queue *q, struct request *req,
- 	return true;
- }
- 
-+static inline bool blk_integrity_bypass_check(struct request *req,
-+					      struct bio *bio)
-+{
-+	return blk_integrity_rq(req) == 0 && bio_integrity(bio) == NULL;
-+}
-+
-+static bool __blk_integrity_mergeable(struct request_queue *q,
-+				      struct request *req, struct bio *bio)
-+{
-+	if (blk_integrity_rq(req) == 0 || bio_integrity(bio) == NULL)
-+		return false;
-+
-+	if (bio_integrity(req->bio)->bip_flags != bio_integrity(bio)->bip_flags)
-+		return false;
-+
-+	return true;
-+}
-+
-+bool blk_integrity_mergeable(struct request_queue *q, struct request *req,
-+			     struct bio *bio)
-+{
-+	if (blk_integrity_bypass_check(req, bio))
-+		return true;
-+
-+	return __blk_integrity_mergeable(q, req, bio);
-+}
-+
- bool blk_integrity_merge_bio(struct request_queue *q, struct request *req,
- 			     struct bio *bio)
- {
- 	int nr_integrity_segs;
- 	struct bio *next = bio->bi_next;
- 
--	if (blk_integrity_rq(req) == 0 && bio_integrity(bio) == NULL)
-+	if (blk_integrity_bypass_check(req, bio))
- 		return true;
- 
--	if (blk_integrity_rq(req) == 0 || bio_integrity(bio) == NULL)
--		return false;
--
--	if (bio_integrity(req->bio)->bip_flags != bio_integrity(bio)->bip_flags)
-+	if (!__blk_integrity_mergeable(q, req, bio))
- 		return false;
- 
- 	bio->bi_next = NULL;
-diff --git a/block/blk-merge.c b/block/blk-merge.c
-index 65e75efa9bd3..8509f468d6d4 100644
---- a/block/blk-merge.c
-+++ b/block/blk-merge.c
-@@ -611,9 +611,6 @@ static inline int ll_new_hw_segment(struct request *req, struct bio *bio,
- 	if (!blk_cgroup_mergeable(req, bio))
- 		goto no_merge;
- 
--	if (blk_integrity_merge_bio(req->q, req, bio) == false)
--		goto no_merge;
--
- 	/* discard request merge won't add new segment */
- 	if (req_op(req) == REQ_OP_DISCARD)
- 		return 1;
-@@ -621,6 +618,10 @@ static inline int ll_new_hw_segment(struct request *req, struct bio *bio,
- 	if (req->nr_phys_segments + nr_phys_segs > blk_rq_get_max_segments(req))
- 		goto no_merge;
- 
-+	/* This will merge integrity segments */
-+	if (!blk_integrity_merge_bio(req->q, req, bio))
-+		goto no_merge;
-+
- 	/*
- 	 * This will form the start of a new hw segment.  Bump both
- 	 * counters.
-@@ -934,7 +935,7 @@ bool blk_rq_merge_ok(struct request *rq, struct bio *bio)
- 		return false;
- 
- 	/* only merge integrity protected bio into ditto rq */
--	if (blk_integrity_merge_bio(rq->q, rq, bio) == false)
-+	if (!blk_integrity_mergeable(rq->q, rq, bio))
- 		return false;
- 
- 	/* Only merge if the crypt contexts are compatible */
-diff --git a/block/blk.h b/block/blk.h
-index dd7cbb57ce43..b7677a5bdff1 100644
---- a/block/blk.h
-+++ b/block/blk.h
-@@ -202,6 +202,8 @@ static inline bool bio_integrity_endio(struct bio *bio)
- 
- bool blk_integrity_merge_rq(struct request_queue *, struct request *,
- 		struct request *);
-+bool blk_integrity_mergeable(struct request_queue *rq, struct request *r,
-+		struct bio *b);
- bool blk_integrity_merge_bio(struct request_queue *, struct request *,
- 		struct bio *);
- 
-@@ -234,6 +236,11 @@ static inline bool blk_integrity_merge_rq(struct request_queue *rq,
- {
- 	return true;
- }
-+static inline bool blk_integrity_mergeable(struct request_queue *rq,
-+		struct request *r, struct bio *b)
-+{
-+	return true;
-+}
- static inline bool blk_integrity_merge_bio(struct request_queue *rq,
- 		struct request *r, struct bio *b)
- {
--- 
-2.34.1
+Thanks. Changed in v2.
