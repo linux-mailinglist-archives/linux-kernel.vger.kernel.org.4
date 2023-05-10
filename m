@@ -2,152 +2,326 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 453076FDF99
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:05:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E708F6FDF9A
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:06:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237286AbjEJOFz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 10:05:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42268 "EHLO
+        id S237319AbjEJOF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 10:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236956AbjEJOFw (ORCPT
+        with ESMTP id S237263AbjEJOFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 10:05:52 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2083.outbound.protection.outlook.com [40.107.22.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C1FD87C;
+        Wed, 10 May 2023 10:05:53 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB4AEDC5D;
         Wed, 10 May 2023 07:05:31 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZLBAHp8IoiBtuxohW6OXbTR30xWgXAyaCqC0rUnydi1yaUStA9qPjmrJtnIcFTZ/jqbPgzsUBK3tp8qkeBPWldRQXSwOp+WCloW9FIHewvseScmzKtQfznwYi4ZVzqo2Orq88n0Y3PY5HaMbycRRMdb8gtlVp0RC4M5D4p9gJCsxQZK8Fh8QHvJjITVYOX/aFFhG7GnQPvJGpavbSSwdT07mtLlRjXIoyFt1kUFdz+ope6fbt5AbmXJ+NxTGnZGKwS7PqFQzJz5ed95lvzBYw2sTpx6zBUE7WwK4qzUrUCwUU8xmWE/HZkfuLp8J7fAH9Gkx0L4I1hQhPyPCfbHgfg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=r/A6/iwYekT+cUks8Yj56mW5YoG/k8LSSWRsxSo6nq4=;
- b=SMf5se3PkQHQR0qADNphlG2VnDdPH26ccv75jVGBdoCEgLGzeh26Jy1/OZd0oBh+XTH8rbT8MpNg5rSBhPrXNINIxebsG0cYT4OypsHaSwiqgn3xkoK89B7wFjLts3WilDOJGbaFYTVtkaRWsYO+O3qZp0Eepz8okg/aOq8v4fVj1i0g2xfupxFYImzwNb9ZQDIROo2s8Ouf7ep30Edh+JffKOlzAkJOKyfaf/zcb4dajGgdGdHD8wI8vyJso3n8EoXEb9uHeZlAPwo/Cu4P0fuE81yAMQR8ePR/zS72sV8UEx7CiCq4m+iPIvRbzE/X4Zkwhfp7cHJSUdJNcNX4CQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=r/A6/iwYekT+cUks8Yj56mW5YoG/k8LSSWRsxSo6nq4=;
- b=H1w0Pt5Oq1SgIlQwScm46u4yMnT5djImPuOogfsrBQcnIPywELdwexee2L5nNg2IRIFR9GjiShtCinPH9gtbhg+BTQ7V5nGvGe31j/xr1XZapx6JUCs0Dcc7YLPwtdJk25Gom+EMaAmHDoxgMKJf11SofeWlpkYYv1RebaDwtBs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
- by AM0PR04MB7092.eurprd04.prod.outlook.com (2603:10a6:208:19c::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.20; Wed, 10 May
- 2023 14:05:28 +0000
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::bcdd:75c9:176c:39ed]) by AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::bcdd:75c9:176c:39ed%4]) with mapi id 15.20.6363.033; Wed, 10 May 2023
- 14:05:27 +0000
-From:   Frank Li <Frank.Li@nxp.com>
-To:     vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        imx@lists.linux.dev, fushi.peng@nxp.com
-Subject: [PATCH v3 2/2] dt-bindings: phy: cdns,salvo: add property cdns,usb2-disconnect-threshold-microvolt
-Date:   Wed, 10 May 2023 10:05:04 -0400
-Message-Id: <20230510140504.2164565-2-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230510140504.2164565-1-Frank.Li@nxp.com>
-References: <20230510140504.2164565-1-Frank.Li@nxp.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR03CA0235.namprd03.prod.outlook.com
- (2603:10b6:a03:39f::30) To AM6PR04MB4838.eurprd04.prod.outlook.com
- (2603:10a6:20b:4::16)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683727531; x=1715263531;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=cMkjpKeFvfP5K5sO9oI/oUSBFm0m8GII6glpbTa/kME=;
+  b=R48rgMBWBgYwb/D2RzMQ0BAHeKof8x6h3PjTc3lIylFGQ+OFrhWxV6fd
+   YyuCmVSldaYL+o5jhiPVljkU1d1Jz83b6r5TbVgt0hOD3YUT3rmjSeqby
+   GXpavjIzLloNItEGuolT2DLrWKVuMXGYUyZwN6r1TG/1Qxkh4WgFQ+h1w
+   cKS4fx0PsmS0x42eB33WW3xsNqckyuiNuegRC1MDjujN8NruSQR0CYeCR
+   4Hu8hG6W/7JXuJJjpAkaKaj1KIuDG6evz+ELjfBom3ALSyWojh6DWo+HC
+   WrRwfjYTXVzAqxWJg1attqAU6d7Y+CGk+gqK20YJexFt0JAIFhNkByBDh
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="350253915"
+X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
+   d="scan'208";a="350253915"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 07:05:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="768925579"
+X-IronPort-AV: E=Sophos;i="5.99,264,1677571200"; 
+   d="scan'208";a="768925579"
+Received: from sschutze-mobl.ger.corp.intel.com ([10.251.218.236])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 07:05:29 -0700
+Date:   Wed, 10 May 2023 17:05:26 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Liming Sun <limings@nvidia.com>
+cc:     Vadim Pasternak <vadimp@nvidia.com>,
+        David Thompson <davthompson@nvidia.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] mlxbf-bootctl: Add sysfs file for BlueField boot
+ log
+In-Reply-To: <20230510115434.50166-1-limings@nvidia.com>
+Message-ID: <0a9ce95-e861-ad24-7147-59dde7727a37@linux.intel.com>
+References: <1f778872d177146336318cf856a2c0b06870b1b7.1683568762.git.limings@nvidia.com> <20230510115434.50166-1-limings@nvidia.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|AM0PR04MB7092:EE_
-X-MS-Office365-Filtering-Correlation-Id: a4fdf147-1f42-402e-cefe-08db515f9b70
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /WIvlygWqYmLxXdGWsbTtYTTCNrlHphiXb5F7HbNsxa2mh4oKo8cQnLtZta7eLXVuWWNbVk5B2Sf0jpbBZozTy2hoSkG0coVy2m/SSYKAUdrITX7FDmQ8jSuwwbMkZyoy+55CcKlGdoCXNEEBYotrnYEDM07iBJghaKXSCKywSBTugZBgrj2zwINNIwFL5w0pybPBbjv62nsGFwIETwONGR2GZsq9IzzS5heYIOzsR80U8qKQO6UdC3jmM3dhS8QSQWejY/lZ+7zoHU28fJbRM8va9oJ4IFfpYFnccp81Y0r/ogUie7K12SC3g4L5R/HXPGqCaXSdbnUNtWZ2IfEIyOpN7W8rDEqYtkGgW0D0mF36zIF0JsTpEfU/iE4cypRvVM862JytJ9GXZCOOXIdzJsy+iUe8m0rn9HEIJraVXx2LVMQtKSq9p8jXr/hf6d/G7OaELzKgtzlhfZZank9hMOV1w+gkl8BwboT25fnjRNM/GGmqtjh8v3Zk+5w9VrX1UYWQJk9d6GX3MIIC7pKTLMjgEc8VLCSFmlGN1jejb9TSOH7LCyn11CWJCiKObt91QXexXU0j0Mfa6/A8Srt53mDZhvb9RnR542fAfR1D+moMZ4ApzS0mOrzsd0Rny+Y1f9g/eYeUoOVqHhe6xWuRA==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(346002)(376002)(136003)(396003)(451199021)(86362001)(36756003)(6666004)(316002)(6636002)(66476007)(52116002)(478600001)(66946007)(66556008)(6486002)(41300700001)(5660300002)(8936002)(8676002)(4744005)(2906002)(7416002)(921005)(38100700002)(38350700002)(186003)(2616005)(1076003)(26005)(6512007)(6506007)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?iZiU5i0VqsMhaoV7cBRIaEgMnTU5vSibf/0OL/C95dK//zBs6hbILm3XelEG?=
- =?us-ascii?Q?aQ/pQC7YQftXLRd0wv3Qy3ptzXy7da/uhsiU5xLwzxmA1Fi+JfIH7hKqvmWM?=
- =?us-ascii?Q?wGKeSaMpkeL7VMd/AcF7ET/UD6Yd7grIpFZlNT8fP6TUl9hRJ1cXAzEyLRkD?=
- =?us-ascii?Q?D1+Xy03BZSUcPq/Df24KV9Ofxe4IlSyBQlNgo95LxDWCzq6UwRAPBVFhniO3?=
- =?us-ascii?Q?aGKmUinD4HfiPhDrnN74wm27iDiVSQX6//VlRUU9tyg83mC80tiJOd98cAq9?=
- =?us-ascii?Q?J2aF+4ROV/dNEDETWL1T6prlOI37bXVDDhzrSVIkWv8UJPwB7mejS6LHzDp4?=
- =?us-ascii?Q?Ygk4n2i+SKQJOc7Do9zTwl4aJkFs3H/2tbreooty+x/my2tnmUdWLSEF9qBR?=
- =?us-ascii?Q?NjvNbhGEqzp1ovic2RNADaPZ+Ulq82Nj5pRwUnqfXb7CinWHxkVviYAgX30s?=
- =?us-ascii?Q?2GBnK1IJa9SnkSTZPvaIhEwv+zLRMEX5ebo3AbsiXHEmg//dTlXr8vhg9Sf4?=
- =?us-ascii?Q?PIepEpOcVHf8dfpc5WwJJt6111nQeD+4imtiOxEVpwcTNemf9Gn+aIemvLEn?=
- =?us-ascii?Q?/ElvlkX/1lYdx1m/6tQJrvzeJcL+jH5t3OtPlj63rTyDiVaWeCOlRzD07ScR?=
- =?us-ascii?Q?m8gWZU19Qllvwj9BaMagQuJNIjJN/2yjgR3/zFByMYmO2grusEK/pqS8nblv?=
- =?us-ascii?Q?n94IOmDVxWpNgmXfz655rM2h524AjaHL7XFhatpDeEFFFgLEsQPlTw6D8BIs?=
- =?us-ascii?Q?uxEK/iCZP853TLhzbC0tB/N8fio98A/n0ET/kJpSMsdiMNeS2r3WxJEwlA03?=
- =?us-ascii?Q?zVMgmLVI/5XfQN3suKqqX6+0z86wxL2PUrQ1m8MMesIEY0iVAh0XEMTJUlu9?=
- =?us-ascii?Q?fQLtNZ2GS2t01po+Iviv6NkQBpWq2lPFjBOtnL/UOwJJrmXEOZSwy2t4Siep?=
- =?us-ascii?Q?WcEWcNaH1CaKByw2LCqhFmSfSMDanRDqVpOIAQeC3HNnPbuIxF2/3eBg/M1P?=
- =?us-ascii?Q?9/56yLo4Lz4XpyIiAtw8E8zR5BuMcJK/oM/SsxfJv67WsN7QrOvoRv1BC+Vl?=
- =?us-ascii?Q?MToWZytNlAGSm8eE/z3lfdflMQyQH5MluQToObd6taymOr6favGXzeEKnYPg?=
- =?us-ascii?Q?w2JBF87DqciMD27hQR+YzaR/L/oCKmpp+AR4W9xxfJBeCy6CIPYqeyjRlx43?=
- =?us-ascii?Q?6BuewTBNpp/qTEDLFSU0k2n3SJTVMV/DGPHtIAU8H8dw+8k0rp4rkHbOZqBg?=
- =?us-ascii?Q?GYD7TI7izh3BMFVVlN4PD+EeNFCnkcY27P1Gt3xUwQCwcD+AhsvZVatnT2uq?=
- =?us-ascii?Q?FwAt68MfnuHumq/7h3yqUd4RWHGoDzFwZ2/C7CMcMHoJSVb8P9wI2Nc+LiMe?=
- =?us-ascii?Q?jw/dJTxkYupRWLHCrTVR6WMy4Q3jX7y+otrt/IOjQ+VtQqNE2T+ss0ffaoT9?=
- =?us-ascii?Q?89sZYTkNjYdBfU242wMIsxVpu2QnI+sOUIGhNqb3lpHM03Fu7Z4LvDh9JJlr?=
- =?us-ascii?Q?Y7Cu0feP+ZeGdJ3cSt5tikzdWOYCtlfOujzWF3pbdFy3CMTZRJtqp8smDKj1?=
- =?us-ascii?Q?nYK7hbTBk2zXn+UrC1I=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a4fdf147-1f42-402e-cefe-08db515f9b70
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 May 2023 14:05:27.8110
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: pEWdjoJGZov8Df5l/EeOIqlAxk1mpHs5z9WvlwoG0q5onvDVHPg31OPzzBtvf1kHXdfp1BY7RCGNQaaGrhP1Og==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7092
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add cdns,usb2-disconnect-threshold-microvolt property to address fake USB
-disconnection issue during enumeration or suspend state for difference
-platform.
+On Wed, 10 May 2023, Liming Sun wrote:
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
-Change from v2 to v3
-- add prefix cdns
-Change from v1 to V2:
-- fixed subject
-- fixed dt-binding-check warning
+> This commit adds sysfs interface to be used to write into the
+> boot log which is 1KB HW buffer on BlueField SoC. The same log
+> buffer is also used by firmware code like ATF/UEFI, and can be
+> displayed by userspace tools or from external host via USB/PCIe.
+> 
+> Signed-off-by: Liming Sun <limings@nvidia.com>
+> Reviewed-by: Vadim Pasternak <vadimp@nvidia.com>
+> ---
+> v1->v2:
+>     Fixes for comments from Hans:
+>     - Add more details in Documentation about the log levels;
+>     - Replace 0x0a with '\n';
+>     - Solve comment 'Why len + 1, this seems intended to assume some
+>       separator between prefix'. The change is to remove the '+ 1'
+>       here to avoid confusion. Yes, it's trying to remove the space
+>       separator. Since the next block 'Ignore leading spaces' already
+>       has similar logic, no need for the '+ 1" here.
+> v1: Initial version.
+> ---
+>  .../testing/sysfs-platform-mellanox-bootctl   |   9 ++
+>  drivers/platform/mellanox/mlxbf-bootctl.c     | 141 ++++++++++++++++++
+>  2 files changed, 150 insertions(+)
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-platform-mellanox-bootctl b/Documentation/ABI/testing/sysfs-platform-mellanox-bootctl
+> index 9b99a81babb1..4c5c02d8f870 100644
+> --- a/Documentation/ABI/testing/sysfs-platform-mellanox-bootctl
+> +++ b/Documentation/ABI/testing/sysfs-platform-mellanox-bootctl
+> @@ -75,3 +75,12 @@ KernelVersion:	6.4
+>  Contact:	"Liming Sun <limings@nvidia.com>"
+>  Description:
+>  		The file used to access the BlueField boot fifo.
+> +
+> +What:		/sys/bus/platform/devices/MLNXBF04:00/rsh_log
+> +Date:		May 2023
+> +KernelVersion:	6.4
+> +Contact:	"Liming Sun <limings@nvidia.com>"
+> +Description:
+> +		The file used to write BlueField boot log with the format
+> +                "[INFO|WARN|ERR|ASSERT ]<msg>". Log level 'INFO' is used by
+> +                default if not specified.
+> diff --git a/drivers/platform/mellanox/mlxbf-bootctl.c b/drivers/platform/mellanox/mlxbf-bootctl.c
+> index 1bad1d278672..e88ce68acb89 100644
+> --- a/drivers/platform/mellanox/mlxbf-bootctl.c
+> +++ b/drivers/platform/mellanox/mlxbf-bootctl.c
+> @@ -45,10 +45,38 @@ static const char * const mlxbf_bootctl_lifecycle_states[] = {
+>  	[3] = "RMA",
+>  };
+>  
+> +/* Log header format. */
+> +#define MLXBF_RSH_LOG_TYPE_SHIFT	56
+> +#define MLXBF_RSH_LOG_LEN_SHIFT		48
+> +#define MLXBF_RSH_LOG_LEVEL_SHIFT	0
 
- Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml | 6 ++++++
- 1 file changed, 6 insertions(+)
+Use GENMASK_ULL() instead here and FIELD_PREP() below.
 
-diff --git a/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml b/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
-index 3a07285b5470..ea41f35c6444 100644
---- a/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
-+++ b/Documentation/devicetree/bindings/phy/cdns,salvo-phy.yaml
-@@ -31,6 +31,12 @@ properties:
-   "#phy-cells":
-     const: 0
- 
-+  cdns,usb2-disconnect-threshold-microvolt:
-+    description: The microvolt threshold value utilized for detecting
-+      USB disconnection event.
-+    enum: [575, 610, 645]
-+    default: 575
-+
- required:
-   - compatible
-   - reg
+> +
+> +/* Log module ID and type (only MSG type in Linux driver for now). */
+> +#define MLXBF_RSH_LOG_TYPE_MSG		0x04ULL
+> +
+> +/* Log ctl/data register offset. */
+> +#define MLXBF_RSH_SCRATCH_BUF_CTL_OFF	0
+> +#define MLXBF_RSH_SCRATCH_BUF_DATA_OFF	0x10
+> +
+> +/* Log message levels. */
+> +enum {
+> +	MLXBF_RSH_LOG_INFO,
+> +	MLXBF_RSH_LOG_WARN,
+> +	MLXBF_RSH_LOG_ERR
+> +};
+> +
+>  /* Mapped pointer for RSH_BOOT_FIFO_DATA and RSH_BOOT_FIFO_COUNT register. */
+>  static void __iomem *mlxbf_rsh_boot_data;
+>  static void __iomem *mlxbf_rsh_boot_cnt;
+>  
+> +/* Mapped pointer for rsh log semaphore/ctrl/data register. */
+> +static void __iomem *mlxbf_rsh_semaphore;
+> +static void __iomem *mlxbf_rsh_scratch_buf_ctl;
+> +static void __iomem *mlxbf_rsh_scratch_buf_data;
+> +
+> +/* Rsh log levels. */
+> +static const char * const mlxbf_rsh_log_level[] = {
+> +	"INFO", "WARN", "ERR", "ASSERT"};
+> +
+>  /* ARM SMC call which is atomic and no need for lock. */
+>  static int mlxbf_bootctl_smc(unsigned int smc_op, int smc_arg)
+>  {
+> @@ -266,12 +294,111 @@ static ssize_t fw_reset_store(struct device *dev,
+>  	return count;
+>  }
+>  
+> +/* Size(8-byte words) of the log buffer. */
+> +#define RSH_SCRATCH_BUF_CTL_IDX_MASK	0x7f
+> +
+> +static int mlxbf_rsh_log_sem_lock(void)
+> +{
+> +	unsigned long timeout;
+> +
+> +	/* Take the semaphore. */
+> +	timeout = jiffies + msecs_to_jiffies(100);
+> +	while (readq(mlxbf_rsh_semaphore)) {
+> +		if (time_after(jiffies, timeout))
+> +			return -ETIMEDOUT;
+> +	}
+> +
+> +	return 0;
+
+readq_poll_timeout()
+
+> +}
+> +
+> +static void mlxbf_rsh_log_sem_unlock(void)
+> +{
+> +	writeq(0, mlxbf_rsh_semaphore);
+> +}
+> +
+> +static ssize_t rsh_log_store(struct device *dev,
+> +			     struct device_attribute *attr,
+> +			     const char *buf, size_t count)
+> +{
+> +	int rc, idx, num, len, size = (int)count, level = MLXBF_RSH_LOG_INFO;
+
+Why casting to int, why not keep sizes as size_t??
+
+> +	u64 data;
+> +
+> +	if (!size)
+> +		return -EINVAL;
+> +
+> +	if (!mlxbf_rsh_semaphore || !mlxbf_rsh_scratch_buf_ctl)
+> +		return -EOPNOTSUPP;
+> +
+> +	/* Ignore line break at the end. */
+> +	if (buf[size - 1] == '\n')
+> +		size--;
+> +
+> +	/* Check the message prefix. */
+> +	for (idx = 0; idx < ARRAY_SIZE(mlxbf_rsh_log_level); idx++) {
+> +		len = strlen(mlxbf_rsh_log_level[idx]);
+> +		if (len + 1 < size &&
+> +		    !strncmp(buf, mlxbf_rsh_log_level[idx], len)) {
+> +			buf += len;
+> +			size -= len;
+> +			level = idx;
+> +			break;
+> +		}
+> +	}
+> +
+> +	/* Ignore leading spaces. */
+> +	while (size > 0 && buf[0] == ' ') {
+> +		size--;
+> +		buf++;
+> +	}
+> +
+> +	/* Take the semaphore. */
+> +	rc = mlxbf_rsh_log_sem_lock();
+> +	if (rc)
+> +		return rc;
+> +
+> +	/* Calculate how many words are available. */
+> +	num = (size + sizeof(u64) - 1) / sizeof(u64);
+
+DIV_ROUND_UP()
+
+> +	idx = readq(mlxbf_rsh_scratch_buf_ctl);
+> +	if (idx + num + 1 >= RSH_SCRATCH_BUF_CTL_IDX_MASK)
+> +		num = RSH_SCRATCH_BUF_CTL_IDX_MASK - idx - 1;
+
+min() ?
+
+> +	if (num <= 0)
+> +		goto done;
+> +
+> +	/* Write Header. */
+> +	data = (MLXBF_RSH_LOG_TYPE_MSG << MLXBF_RSH_LOG_TYPE_SHIFT) |
+> +		((u64)num << MLXBF_RSH_LOG_LEN_SHIFT) |
+> +		((u64)level << MLXBF_RSH_LOG_LEVEL_SHIFT);
+> +	writeq(data, mlxbf_rsh_scratch_buf_data);
+> +
+> +	/* Write message. */
+> +	for (idx = 0, len = size; idx < num && len > 0; idx++) {
+
+size_t -> int conversion, why? Why you need another variable besides size 
+anyway?
+
+How can len <= 0 occur when idx < num is true?
+
+> +		if (len <= sizeof(u64)) {
+
+Why = ?
+
+> +			data = 0;
+> +			memcpy(&data, buf, len);
+> +			len = 0;
+> +		} else {
+> +			memcpy(&data, buf, sizeof(u64));
+> +			len -= sizeof(u64);
+> +			buf += sizeof(u64);
+> +		}
+> +		writeq(data, mlxbf_rsh_scratch_buf_data);
+> +	}
+> +
+> +done:
+> +	/* Release the semaphore. */
+> +	mlxbf_rsh_log_sem_unlock();
+> +
+> +	/* Ignore the rest if no more space. */
+> +	return count;
+> +}
+> +
+>  static DEVICE_ATTR_RW(post_reset_wdog);
+>  static DEVICE_ATTR_RW(reset_action);
+>  static DEVICE_ATTR_RW(second_reset_action);
+>  static DEVICE_ATTR_RO(lifecycle_state);
+>  static DEVICE_ATTR_RO(secure_boot_fuse_state);
+>  static DEVICE_ATTR_WO(fw_reset);
+> +static DEVICE_ATTR_WO(rsh_log);
+>  
+>  static struct attribute *mlxbf_bootctl_attrs[] = {
+>  	&dev_attr_post_reset_wdog.attr,
+> @@ -280,6 +407,7 @@ static struct attribute *mlxbf_bootctl_attrs[] = {
+>  	&dev_attr_lifecycle_state.attr,
+>  	&dev_attr_secure_boot_fuse_state.attr,
+>  	&dev_attr_fw_reset.attr,
+> +	&dev_attr_rsh_log.attr,
+>  	NULL
+>  };
+>  
+> @@ -345,6 +473,7 @@ static bool mlxbf_bootctl_guid_match(const guid_t *guid,
+>  static int mlxbf_bootctl_probe(struct platform_device *pdev)
+>  {
+>  	struct arm_smccc_res res = { 0 };
+> +	void __iomem *reg;
+>  	guid_t guid;
+>  	int ret;
+>  
+> @@ -358,6 +487,18 @@ static int mlxbf_bootctl_probe(struct platform_device *pdev)
+>  	if (IS_ERR(mlxbf_rsh_boot_cnt))
+>  		return PTR_ERR(mlxbf_rsh_boot_cnt);
+>  
+> +	/* Get the resource of the bootfifo counter register. */
+> +	mlxbf_rsh_semaphore = devm_platform_ioremap_resource(pdev, 2);
+> +	if (IS_ERR(mlxbf_rsh_semaphore))
+> +		return PTR_ERR(mlxbf_rsh_semaphore);
+> +
+> +	/* Get the resource of the bootfifo counter register. */
+> +	reg = devm_platform_ioremap_resource(pdev, 3);
+> +	if (IS_ERR(reg))
+> +		return PTR_ERR(reg);
+> +	mlxbf_rsh_scratch_buf_ctl = reg + MLXBF_RSH_SCRATCH_BUF_CTL_OFF;
+> +	mlxbf_rsh_scratch_buf_data = reg + MLXBF_RSH_SCRATCH_BUF_DATA_OFF;
+> +
+>  	/* Ensure we have the UUID we expect for this service. */
+>  	arm_smccc_smc(MLXBF_BOOTCTL_SIP_SVC_UID, 0, 0, 0, 0, 0, 0, 0, &res);
+>  	guid_parse(mlxbf_bootctl_svc_uuid_str, &guid);
+> 
+
 -- 
-2.34.1
+ i.
 
