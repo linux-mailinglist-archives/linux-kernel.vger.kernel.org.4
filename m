@@ -2,108 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CA1C6FE7FA
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 01:11:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 22EC66FE803
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 01:16:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236865AbjEJXLl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 19:11:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39082 "EHLO
+        id S236801AbjEJXQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 19:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235708AbjEJXLj (ORCPT
+        with ESMTP id S229580AbjEJXQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 19:11:39 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96FB2D3;
-        Wed, 10 May 2023 16:11:38 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34AMsMj3026708;
-        Wed, 10 May 2023 23:11:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=HjDcgjS5DZW6UuYV8r11Pc/FqhPUIigxzCzfrJDDsV8=;
- b=b2UTSaL14g7a6n3Ef9MHaDiNmuUqqjzb3aB40mGEjZxLiHNRB9GpvikZGFqbb2X/89Cb
- QjfSVPcLx377UdWB44Uoxv/t+dpGIbUvI0Jt3oPMRkFRBa4oBNe06+krEAtpvZwio3Wi
- EIBv/C6N9BlCZ309QIsLyoz7qO3OewjM5yoM8gf4ZhzHUuO6iu5o/Oj/ZYRVNcf9AqzB
- ElerFEYnYhqVKh6/SEpok43rABeDH/m8bdGPuZ49Wu9e31yOM7bR9hQ/nIGK9zoLmIKg
- VO1f6sYIRUJ46lC50NCTs/UP+DuB/A6ze+jLL+3o+kslec8J0Vd2XASfthLpJHjDYdTX Xw== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qg79csqmv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 23:11:29 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34ANBRr9015221
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 23:11:27 GMT
-Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 10 May
- 2023 16:11:27 -0700
-Message-ID: <74ae5514-2b04-9363-902e-cb4d7cbe1128@quicinc.com>
-Date:   Wed, 10 May 2023 16:11:26 -0700
+        Wed, 10 May 2023 19:16:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC4C1A1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 16:16:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C58A635F4
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 23:16:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C3BAC433EF;
+        Wed, 10 May 2023 23:16:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683760560;
+        bh=rBmx1yXHlgjq29yI8RX3oTegeXm2Dm3PwYKq6C9UhEg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=aC5k1PPm01evQ+iK2HeIF9cSXIKcxbEuUoyZCyR2X9VeCgMB2UgdJlegPSPTlDM0F
+         cfImJwTp0zC1idPWGAMx8O2kL9CFFgxjiHNpFk6ySlazf+34mwRNFfk97WGsXQM/+w
+         YMcAp7SqpzgUNMnjPNeIfi4PSm4MJ4Y8PFjtaAVlJIjoy1uzXupklJvDphyPIyY4KE
+         EDoCkvhOSTSDEnuXi7H8achdOURjdtuNnzFJrJZhGgZq/q6/NRAtkV64envQw+3CK8
+         6n39TVzTsKl/xb0IML5aOAsyqzJYNdh9YcL5FBrGsi9+I4EaXJic0+m1v2f50W06Ni
+         gqzEhLRwJHUXQ==
+Date:   Wed, 10 May 2023 16:15:59 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Peilin Ye <yepeilin.cs@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Jiri Pirko <jiri@resnulli.us>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Vlad Buslov <vladbu@mellanox.com>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
+Subject: Re: [PATCH net 6/6] net/sched: qdisc_destroy() old ingress and
+ clsact Qdiscs before grafting
+Message-ID: <20230510161559.2767b27a@kernel.org>
+In-Reply-To: <ZFv6Z7hssZ9snNAw@C02FL77VMD6R.googleapis.com>
+References: <cover.1683326865.git.peilin.ye@bytedance.com>
+        <e6c4681dd9205d702ae2e6124e20c6210520e76e.1683326865.git.peilin.ye@bytedance.com>
+        <20230508183324.020f3ec7@kernel.org>
+        <ZFv6Z7hssZ9snNAw@C02FL77VMD6R.googleapis.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v1 2/2] drm/msm/dp: add mutex to protect internal_hpd
- against race condition between different threads
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>, <agross@kernel.org>,
-        <airlied@gmail.com>, <andersson@kernel.org>, <daniel@ffwll.ch>,
-        <dianders@chromium.org>, <dmitry.baryshkov@linaro.org>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <vkoul@kernel.org>
-CC:     <quic_jesszhan@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <marijn.suijten@somainline.org>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1683750665-8764-1-git-send-email-quic_khsieh@quicinc.com>
- <1683750665-8764-3-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n532y=ARQ_+urEA_b3zUn+gKTu1fgK_siHNt3CpbLB9PZg@mail.gmail.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <CAE-0n532y=ARQ_+urEA_b3zUn+gKTu1fgK_siHNt3CpbLB9PZg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: N1Y7ho_dLycMuuFUqlQKFTZn30bqDzLf
-X-Proofpoint-ORIG-GUID: N1Y7ho_dLycMuuFUqlQKFTZn30bqDzLf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
- lowpriorityscore=0 adultscore=0 clxscore=1015 mlxscore=0 suspectscore=0
- bulkscore=0 spamscore=0 priorityscore=1501 mlxlogscore=712 malwarescore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305100192
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/10/2023 3:46 PM, Stephen Boyd wrote:
-> Quoting Kuogee Hsieh (2023-05-10 13:31:05)
->> Intrenal_hpd is referenced by event thread but set by drm bridge callback
->> context. Add mutex to protect internal_hpd to avoid conflicts between
->> threads.
->>
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> ---
+On Wed, 10 May 2023 13:11:19 -0700 Peilin Ye wrote:
+> On Fri,  5 May 2023 17:16:10 -0700 Peilin Ye wrote:
+> >   Thread 1 creates ingress Qdisc A (containing mini Qdisc a1 and a2), then
+> >   adds a flower filter X to A.
+> > 
+> >   Thread 2 creates another ingress Qdisc B (containing mini Qdisc b1 and
+> >   b2) to replace A, then adds a flower filter Y to B.
+> > 
+> >  Thread 1               A's refcnt   Thread 2
+> >   RTM_NEWQDISC (A, RTNL-locked)
+> >    qdisc_create(A)               1
+> >    qdisc_graft(A)                9
+> > 
+> >   RTM_NEWTFILTER (X, RTNL-lockless)
+> >    __tcf_qdisc_find(A)          10
+> >    tcf_chain0_head_change(A)
+> >    mini_qdisc_pair_swap(A) (1st)
+> >             |
+> >             |                         RTM_NEWQDISC (B, RTNL-locked)
+> >            RCU                   2     qdisc_graft(B)
+> >             |                    1     notify_and_destroy(A)
+> >             |
+> >    tcf_block_release(A)          0    RTM_NEWTFILTER (Y, RTNL-lockless)
+> >    qdisc_destroy(A)                    tcf_chain0_head_change(B)
+> >    tcf_chain0_head_change_cb_del(A)    mini_qdisc_pair_swap(B) (2nd)
+> >    mini_qdisc_pair_swap(A) (3rd)                |
+> >            ...                                 ...  
 > 
-> This patch looks completely unnecessary. How can dp_bridge_hpd_enable()
-> be called at the same time that dp_bridge_hpd_disable() is called or
-> dp_bridge_hpd_notify() is called? Isn't there locking or ordering at a
-> higher layer?
+> Looking at the code, I think there is no guarantee that (1st) cannot
+> happen after (2nd), although unlikely?  Can RTNL-lockless RTM_NEWTFILTER
+> handlers get preempted?
 
-Ack. We can drop this patch because we are protected by 
-bridge->hpd_mutex in drm_bridge_hpd_enable() / drm_bridge_hpd_disable () 
-and drm_bridge_hpd_notify().
+Right, we need qdisc_graft(B) to update the appropriate dev pointer 
+to point to b1. With that the ordering should not matter. Probably
+using the ->attach() callback?
+
+> If (1st) happens later than (2nd), we will need to make (1st) no-op, by
+> detecting that we are the "old" Qdisc.  I am not sure there is any
+> (clean) way to do it.  I even thought about:
+> 
+>   (1) Get the containing Qdisc of "miniqp" we are working on, "qdisc";
+>   (2) Test if "qdisc == qdisc->dev_queue->qdisc_sleeping".  If false, it
+>       means we are the "old" Qdisc (have been replaced), and should do
+>       nothing.
+> 
+> However, for clsact Qdiscs I don't know if "miniqp" is the ingress or
+> egress one, so I can't container_of() during step (1) ...
+
+And we can't be using multiple pieces of information to make 
+the decision since AFAIU mini_qdisc_pair_swap() can race with
+qdisc_graft().
+
+My thinking was to make sure that dev->miniq_* pointers always point
+to one of the miniqs of the currently attached qdisc. Right now, on 
+a quick look, those pointers are not initialized during initial graft,
+only when first filter is added, and may be cleared when filters are
+removed. But I don't think that's strictly required, miniq with no
+filters should be fine.
+
+> Eventually I created [5,6/6].  It is a workaround indeed, in the sense
+> that it changes sch_api.c to avoid a mini Qdisc issue.  However I think it
+> makes the code correct in a relatively understandable way,
+
+What's your benchmark for being understandable?
+
+> without slowing down mini_qdisc_pair_swap() or sch_handle_*gress().
+
