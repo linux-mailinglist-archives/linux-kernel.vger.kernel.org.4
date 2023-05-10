@@ -2,128 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5A06FD532
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 06:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 15B3F6FD53C
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 06:46:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235426AbjEJEoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 00:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44672 "EHLO
+        id S235555AbjEJEqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 00:46:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbjEJEny (ORCPT
+        with ESMTP id S235456AbjEJEqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 00:43:54 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C94BF40EB
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 21:43:51 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-55a20a56a01so120775387b3.3
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 21:43:51 -0700 (PDT)
+        Wed, 10 May 2023 00:46:05 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B33BB4480
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 21:46:02 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-6439b410679so4296520b3a.0
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 21:46:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683693831; x=1686285831;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qgvg6hJeX3BMksFNsRntaPo5LAnqTckLGOVnbotKcuE=;
-        b=XSdzuZPhWyo8ejurmvHVm33GJPjVUgijuALNChj5du7O2iYt4Q9Jq2Q59opuXgmszK
-         vq4MYv/Ooq0tJSiRkeuI3pPx9DX2hUCIacbsKIYs/Pr4tOgH5bBu2nqMFCUfyb6E02pf
-         jBk8Kt3LARkTDDVXin2DqNhLRNsinTPL45U22h6RflNgwq03hTBYZXyT9mTDfKsms4Zh
-         4IIRYWo2iyv3RHOXtIB0KC/5A3EJw7nNYEHLsDPx36g0ObzRlzcFoxapfv0z0w7dMYbs
-         CoJBrp445oAQqRN0sKHpj5OzjqC03ok8JMyhyd58GQQ6Bw92QvpdqQzmSHjTpSRLST1k
-         j19g==
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1683693962; x=1686285962;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ofB28UJkMdjbKgicTFJuyXfhP+N1OadXwaIb6BnaMTc=;
+        b=c8IYXtdt/nvXPx3aeJJh+iQIuvYlBMqHn28lPL8dwwKzPPUree4mbogv16cwKHCZA/
+         2KlwhwtNtJ/sOAj9NMMk4nrRtBS+Gj2xlpZYMsGP2F7hUHnyP7Wl/ODFFnjG3C7YtbMU
+         mGCaclhyso80BrQZ3ChT4C2IhfUK4reiuD8T6r1xdMgWCOonQtRHVBWNFTfmxd/nkAyx
+         9pYROnnyFfFqpXKEvFChx9kW6Mv3xGhI78p9oT0Dz/KBN2f/syi2V0pNZNHywY4hlOoT
+         yXYhwYnZuTq/CGlG6+zY6qoV9PuZa2eEmNARbqRIwsfJQjYbQxW/3GXfBm4dbKFMorZz
+         5Uvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683693831; x=1686285831;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qgvg6hJeX3BMksFNsRntaPo5LAnqTckLGOVnbotKcuE=;
-        b=k2VaXXj4IMX/S5r+nliEovK/Rilc1vpSqOCnTximAd+GKrb9g3hafTrfe8SN5OctMO
-         EME/Lsa7C0WZwnxuvYsm31XpiLLaKtpcQbUXuPsAEtyQRr0g0U2pQWLL9xZmHktiH2ot
-         AfX6TRQBpeAEb58OQIz258GOSEfvKpdZHSlUv32ePeNeD032MhzJcb7RXSkC0lPRSmqF
-         xKLEXCai7MTLIJ3lnlRJXSyz6K17onM6juYMkNgESUEpoRsTnDJ0Wyj/PVT24aYxgwiq
-         ikqfhyKvN//PF63Ei/m1k1s7oIcLS7MGSMwNXQOmk7h5+yWRbY43LYNDzeHU6ZvsBH24
-         XtGg==
-X-Gm-Message-State: AC+VfDxS49hCZXxKmNXwwd8xe+wVRQp9JlATNBRp+WlCR5nr42HiOKvf
-        cWWquWY0fj8/70a0tnBmWC1EoQ==
-X-Google-Smtp-Source: ACHHUZ4VcJ8uys5Wg+XhQi/AqGcqZN5zPbzkOujNssPmQqlmUArRuZ8YDG3LYugsQYwQAHxQcBQMpA==
-X-Received: by 2002:a0d:d955:0:b0:55a:ad0a:766 with SMTP id b82-20020a0dd955000000b0055aad0a0766mr17833906ywe.10.1683693830970;
-        Tue, 09 May 2023 21:43:50 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id p185-20020a0dcdc2000000b0055a72f6a462sm2214413ywd.19.2023.05.09.21.43.47
+        d=1e100.net; s=20221208; t=1683693962; x=1686285962;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ofB28UJkMdjbKgicTFJuyXfhP+N1OadXwaIb6BnaMTc=;
+        b=XLfpceCSAnug02+S7SuFip1Dik8wP++vUf5D2fVABWglGrJhBX8geLj7sIbABjSSp4
+         f/9WJD8M/NDX/QvKqhPn0IOlSDmYbiJRcADFDYteyojGDufuTUNa7GAu0Pf+0IO1TlzV
+         fFs5S7XH+R802cR789gFztas+QWrWmebpiqMt2y5mPk6dM1DXKhcAt06STZTssJoQIGz
+         HjuBAtxu7jjyTxe2mhsM9Mz5FhyWmQLlRbPIs5bqe4dG6FP4p6jQhogw6adfobjLIaRL
+         GuHHiH+x7sKeQCOT3WdTjIS2VdoEdHmdUG4ZyOJFVYNikZOlR861QIG9gM/iIZqyE1fr
+         db3A==
+X-Gm-Message-State: AC+VfDyF4vxyqbmDCYAiSlKmhPGhqfYd/JqFSBJfvyCx9HTYwKMT+aMd
+        PxRqGqbhCMWJaibTjJJ0Ivf6Sg==
+X-Google-Smtp-Source: ACHHUZ5thq7haMb94Aftq6by7PVgqXFot+62KXDs1YkuFqVoYOSeojgqeUskjGrAVEZlOo3/EAZ7ew==
+X-Received: by 2002:a05:6a21:6d8a:b0:101:282c:2b with SMTP id wl10-20020a056a216d8a00b00101282c002bmr6552938pzb.32.1683693961867;
+        Tue, 09 May 2023 21:46:01 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
+        by smtp.gmail.com with ESMTPSA id e5-20020aa78c45000000b00640defda6d2sm2555461pfd.207.2023.05.09.21.46.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 21:43:50 -0700 (PDT)
-Date:   Tue, 9 May 2023 21:43:47 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Andrew Morton <akpm@linux-foundation.org>
-cc:     Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: [PATCH 02/23] arm64: allow pte_offset_map() to fail
-In-Reply-To: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
-Message-ID: <e72f6f3e-a8d4-3ed-2b4-5d3ced41484@google.com>
-References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
+        Tue, 09 May 2023 21:46:01 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pwbi9-00DUH0-Sc; Wed, 10 May 2023 14:45:57 +1000
+Date:   Wed, 10 May 2023 14:45:57 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org, Dave Chinner <dchinner@redhat.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH 22/32] vfs: inode cache conversion to hash-bl
+Message-ID: <20230510044557.GF2651828@dread.disaster.area>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-23-kent.overstreet@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230509165657.1735798-23-kent.overstreet@linux.dev>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In rare transient cases, not yet made possible, pte_offset_map() and
-pte_offset_map_lock() may not find a page table: handle appropriately.
+On Tue, May 09, 2023 at 12:56:47PM -0400, Kent Overstreet wrote:
+> From: Dave Chinner <dchinner@redhat.com>
+> 
+> Because scalability of the global inode_hash_lock really, really
+> sucks.
+> 
+> 32-way concurrent create on a couple of different filesystems
+> before:
+> 
+> -   52.13%     0.04%  [kernel]            [k] ext4_create
+>    - 52.09% ext4_create
+>       - 41.03% __ext4_new_inode
+>          - 29.92% insert_inode_locked
+>             - 25.35% _raw_spin_lock
+>                - do_raw_spin_lock
+>                   - 24.97% __pv_queued_spin_lock_slowpath
+> 
+> -   72.33%     0.02%  [kernel]            [k] do_filp_open
+>    - 72.31% do_filp_open
+>       - 72.28% path_openat
+>          - 57.03% bch2_create
+>             - 56.46% __bch2_create
+>                - 40.43% inode_insert5
+>                   - 36.07% _raw_spin_lock
+>                      - do_raw_spin_lock
+>                           35.86% __pv_queued_spin_lock_slowpath
+>                     4.02% find_inode
+> 
+> Convert the inode hash table to a RCU-aware hash-bl table just like
+> the dentry cache. Note that we need to store a pointer to the
+> hlist_bl_head the inode has been added to in the inode so that when
+> it comes to unhash the inode we know what list to lock. We need to
+> do this because the hash value that is used to hash the inode is
+> generated from the inode itself - filesystems can provide this
+> themselves so we have to either store the hash or the head pointer
+> in the inode to be able to find the right list head for removal...
+> 
+> Same workload after:
+> 
+> Signed-off-by: Dave Chinner <dchinner@redhat.com>
+> Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+> Cc: Christian Brauner <brauner@kernel.org>
+> Cc: linux-fsdevel@vger.kernel.org
+> Signed-off-by: Kent Overstreet <kent.overstreet@linux.dev>
 
-Signed-off-by: Hugh Dickins <hughd@google.com>
+I have been maintaining this patchset uptodate in my own local trees
+and the code in this patch looks the same. The commit message above,
+however, has been mangled. The full commit message should be:
+
+vfs: inode cache conversion to hash-bl
+
+Because scalability of the global inode_hash_lock really, really
+sucks and prevents me from doing scalability characterisation and
+analysis of bcachefs algorithms.
+
+Profiles of a 32-way concurrent create of 51.2m inodes with fsmark
+on a couple of different filesystems on a 5.10 kernel:
+
+-   52.13%     0.04%  [kernel]            [k] ext4_create
+   - 52.09% ext4_create
+      - 41.03% __ext4_new_inode
+         - 29.92% insert_inode_locked
+            - 25.35% _raw_spin_lock
+               - do_raw_spin_lock
+                  - 24.97% __pv_queued_spin_lock_slowpath
+
+
+-   72.33%     0.02%  [kernel]            [k] do_filp_open
+   - 72.31% do_filp_open
+      - 72.28% path_openat
+         - 57.03% bch2_create
+            - 56.46% __bch2_create
+               - 40.43% inode_insert5
+                  - 36.07% _raw_spin_lock
+                     - do_raw_spin_lock
+                          35.86% __pv_queued_spin_lock_slowpath
+                    4.02% find_inode
+
+btrfs was tested but it is limited by internal lock contention at
+>=2 threads on this workload, so never hammers the inode cache lock
+hard enough for this change to matter to it's performance.
+
+However, both bcachefs and ext4 demonstrate poor scaling at >=8
+threads on concurrent lookup or create workloads.
+
+Hence convert the inode hash table to a RCU-aware hash-bl table just
+like the dentry cache. Note that we need to store a pointer to the
+hlist_bl_head the inode has been added to in the inode so that when
+it comes to unhash the inode we know what list to lock. We need to
+do this because, unlike the dentry cache, the hash value that is
+used to hash the inode is not generated from the inode itself. i.e.
+filesystems can provide this themselves so we have to either store
+the hashval or the hlist head pointer in the inode to be able to
+find the right list head for removal...
+
+Concurrent create with variying thread count (files/s):
+
+                ext4                    bcachefs
+threads         vanilla  patched        vanilla patched
+2               117k     112k            80k     85k
+4               185k     190k           133k    145k
+8               303k     346k           185k    255k
+16              389k     465k           190k    420k
+32              360k     437k           142k    481k
+
+CPU usage for both bcachefs and ext4 at 16 and 32 threads has been
+halved on the patched kernel, while performance has increased
+marginally on ext4 and massively on bcachefs. Internal filesystem
+algorithms now limit performance on these workloads, not the global
+inode_hash_lock.
+
+Profile of the workloads on the patched kernels:
+
+-   35.94%     0.07%  [kernel]                  [k] ext4_create
+   - 35.87% ext4_create
+      - 20.45% __ext4_new_inode
+...
+           3.36% insert_inode_locked
+
+   - 78.43% do_filp_open
+      - 78.36% path_openat
+         - 53.95% bch2_create
+            - 47.99% __bch2_create
+....
+              - 7.57% inode_insert5
+                    6.94% find_inode
+
+Spinlock contention is largely gone from the inode hash operations
+and the filesystems are limited by contention in their internal
+algorithms.
+
+Signed-off-by: Dave Chinner <dchinner@redhat.com>
 ---
- arch/arm64/mm/fault.c | 3 +++
- 1 file changed, 3 insertions(+)
 
-diff --git a/arch/arm64/mm/fault.c b/arch/arm64/mm/fault.c
-index 9e0db5c387e3..a58780d5fac4 100644
---- a/arch/arm64/mm/fault.c
-+++ b/arch/arm64/mm/fault.c
-@@ -177,6 +177,9 @@ static void show_pte(unsigned long addr)
- 			break;
- 
- 		ptep = pte_offset_map(pmdp, addr);
-+		if (!ptep)
-+			break;
-+
- 		pte = READ_ONCE(*ptep);
- 		pr_cont(", pte=%016llx", pte_val(pte));
- 		pte_unmap(ptep);
+Other than that, the diffstat is the same and I don't see any obvious
+differences in the code comapred to what I've been running locally.
+
+-Dave.
 -- 
-2.35.3
-
+Dave Chinner
+david@fromorbit.com
