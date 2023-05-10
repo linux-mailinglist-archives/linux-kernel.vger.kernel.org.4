@@ -2,85 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BBED6FE077
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:36:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80A9E6FE076
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 16:36:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237339AbjEJOgJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 10:36:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
+        id S237299AbjEJOgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 10:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237332AbjEJOgC (ORCPT
+        with ESMTP id S237111AbjEJOgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 10:36:02 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2839E7AA8;
-        Wed, 10 May 2023 07:36:01 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34AEEkDP021015;
-        Wed, 10 May 2023 14:35:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=emN30TBHHqWYt8kSsxV70C/rXs0PtRmNhisx1C/akdk=;
- b=NIAjKeZrXdkVo4WZxw2hIvnp1A64nRn841NOyTo7UnnrSNF+Gj1a45Prt7tFynQInn8u
- 0ntDV95Fyd5fJORPwcx5SJt0ekFlFgwg0fBOPUO5yTrfasA6yMMfuDVMDtWUSZ0zLwSK
- 3xGgPfS1K7KzLnWtdtBde4vxx/Bm7p15GkupDiSIAzWx46K/B2GsXISTpFpJIVzaYlu6
- VrQnZc+1JP6l0uPgZTF2fWe4epLBJmB1tt2wQ78QBIJVrIGggUquTVXg+PJ4zlMbhgax
- jI4gyrVfFQLNubgUuun1qr5wDEOBbPO+iAOz9c+RbBouXWwirp0KXfS4e2uR6imrsgJ6 eg== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qg1g11aj4-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 14:35:56 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34AEZuvS023692
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 10 May 2023 14:35:56 GMT
-Received: from [10.216.41.111] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 10 May
- 2023 07:35:50 -0700
-Message-ID: <332c114f-51dd-dcfb-687b-439b4bdd6a59@quicinc.com>
-Date:   Wed, 10 May 2023 20:05:47 +0530
+        Wed, 10 May 2023 10:36:00 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7307AB2;
+        Wed, 10 May 2023 07:35:56 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50b9ef67f35so13069328a12.2;
+        Wed, 10 May 2023 07:35:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683729354; x=1686321354;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jy9mHnnlUd36FnWW3GV3jUyIBkRWzWw6MZcV58/+PnA=;
+        b=V98ALotLDfv4DY06o0tBF5rwW0BVK5uoRkl0g/h59wULhpTa/Qq/at9tcAA3plSgJ4
+         nU4XRoGRdc9567D7SGt28uVzci0JGTDr+bjSUD0b/dF1U0aRHJe9YvvQYnu259SRnnwO
+         f5dSCCSWP1xI9MXkPGbJ/7VVHyXvU6uSL+opYu71Si8BEh+C9QpRDUF71f542PgOp+1e
+         7ar6nxKLYyqP/26sekZy0zybHhn/ChUirIVF+LMCYLmJ7z/nD0ftxEv2KxA/mLrm5Gna
+         7JDBVD4g5CePytXKunBUtypELcDHXDtOJ6cpT8IVY4il6ogdTV+6kYJC0jfEwvetD4qD
+         95nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683729354; x=1686321354;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Jy9mHnnlUd36FnWW3GV3jUyIBkRWzWw6MZcV58/+PnA=;
+        b=F6czP2iMHdE661EgHgnI16CnKu07CRchNv/ytxgroGB9sYOzFDcOGmtCqrvg64UxK1
+         YI2FxpRwRMT8qs79W6qAF7ikID5uja9LwovSgX4ABZpvqSZFM9xPyWb4kJYpXFyZ5ZRX
+         KtX4BbLWT9WOMPJfC//EdLTXc6F2AE6yHmoZdZyuhvkrb4ndRwjIlVmv7tCCHvqHSVX7
+         sdC/Br53GzQ2m3GP2zl8JdNvvF1exPyjrJueXwwT/YEvM5Nst7cO+boJlqVfssMHtj+C
+         Z3VrxmnoG+inUa3wBBjgJ1FYY8923umvaIs3sb9zUw2+FzcVisb9dnbKRGkzDZl/2RsX
+         /OYA==
+X-Gm-Message-State: AC+VfDxH8xC68e9FPx2iE0JX4QNiX8SAG/yrQwRpRl/p9VYFVj++sfzs
+        LR2LawFoAl/BVfDUcRepuzI=
+X-Google-Smtp-Source: ACHHUZ57UqvsEczex3L7aooCRx4VflWIp2vb1vqzLGm/7pzcIF75/+CxecWEqn6O6lhCWxKFbfhG3w==
+X-Received: by 2002:aa7:c147:0:b0:50d:1e11:eb9 with SMTP id r7-20020aa7c147000000b0050d1e110eb9mr14636320edp.1.1683729354458;
+        Wed, 10 May 2023 07:35:54 -0700 (PDT)
+Received: from orome (p200300e41f305300f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f30:5300:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id q22-20020aa7da96000000b0050470aa444fsm1902932eds.51.2023.05.10.07.35.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 07:35:53 -0700 (PDT)
+Date:   Wed, 10 May 2023 16:35:52 +0200
+From:   Thierry Reding <thierry.reding@gmail.com>
+To:     Peter De Schrijver <pdeschrijver@nvidia.com>
+Cc:     jonathanh@nvidia.com, Stefan Kristiansson <stefank@nvidia.com>,
+        arnd@arndb.de, kkartik@nvidia.com, sumitg@nvidia.com,
+        windhl@126.com, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/6] soc: tegra: fuse: add support for Tegra264
+Message-ID: <ZFuryEViA0T2FQxZ@orome>
+References: <20230510113129.4167493-1-pdeschrijver@nvidia.com>
+ <20230510113129.4167493-4-pdeschrijver@nvidia.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v6 4/4] pinctrl: qcom: Add SDX75 pincontrol driver
-Content-Language: en-US
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <linus.walleij@linaro.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <richardcochran@gmail.com>, <manivannan.sadhasivam@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <netdev@vger.kernel.org>
-References: <1683718725-14869-1-git-send-email-quic_rohiagar@quicinc.com>
- <1683718725-14869-5-git-send-email-quic_rohiagar@quicinc.com>
- <ZFun8m5y-r0yUHhq@surfacebook>
- <1ffc9474-0a05-44d8-0cc0-24a065443b18@quicinc.com>
- <CAHp75VcCYo2uF2VY6x3jFb3v-whXrCW_U_bKnnWAfzg+dAe1zQ@mail.gmail.com>
-From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
-In-Reply-To: <CAHp75VcCYo2uF2VY6x3jFb3v-whXrCW_U_bKnnWAfzg+dAe1zQ@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: a0WVVcxuQMiDkchGhXCTI9QXDLQMzWGl
-X-Proofpoint-ORIG-GUID: a0WVVcxuQMiDkchGhXCTI9QXDLQMzWGl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=788 clxscore=1015 spamscore=0 bulkscore=0 phishscore=0
- adultscore=0 suspectscore=0 mlxscore=0 malwarescore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305100117
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="4k25NvkuctWTnVXi"
+Content-Disposition: inline
+In-Reply-To: <20230510113129.4167493-4-pdeschrijver@nvidia.com>
+User-Agent: Mutt/2.2.10 (2023-03-25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,24 +78,46 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 5/10/2023 8:04 PM, Andy Shevchenko wrote:
-> On Wed, May 10, 2023 at 5:31 PM Rohit Agarwal <quic_rohiagar@quicinc.com> wrote:
->> On 5/10/2023 7:49 PM, andy.shevchenko@gmail.com wrote:
->>> Wed, May 10, 2023 at 05:08:45PM +0530, Rohit Agarwal kirjoitti:
-> ...
->
->>>> +#define FUNCTION(n)                                                 \
->>>> +    [msm_mux_##n] = {                                               \
->>>> +                    .func = PINCTRL_PINFUNCTION(#n,                 \
->>>> +                                    n##_groups,                     \
->>>> +                                    ARRAY_SIZE(n##_groups))         \
->>>> +                    }
->>> But don't you now have MSM_PIN_FUNCTION() macro?
->> So Sorry, a mistake from my end. Will immediately update.
-> Don't forget to collect my tags for the other patches.
-Yes Sure.
+--4k25NvkuctWTnVXi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Rohit
+On Wed, May 10, 2023 at 02:31:30PM +0300, Peter De Schrijver wrote:
+> From: Stefan Kristiansson <stefank@nvidia.com>
+>=20
+> Add support for Tegra264 to the fuse handling code.
+>=20
+> Signed-off-by: Stefan Kristiansson <stefank@nvidia.com>
+> Signed-off-by: Peter De Schrijver <pdeschrijver@nvidia.com>
+> ---
+>  drivers/soc/tegra/fuse/tegra-apbmisc.c | 3 ++-
+>  include/soc/tegra/fuse.h               | 3 ++-
+>  2 files changed, 4 insertions(+), 2 deletions(-)
 
->
+The preferred subject prefix is "soc/tegra:", but I can fix that up when
+applying. Also, capitalize after the last ":".
+
+Thierry
+
+--4k25NvkuctWTnVXi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmRbq8gACgkQ3SOs138+
+s6GqLA/+J6moqTyFHPsSkQOWqqsHqHtZS8FlYiEK96pP1toNWGPC2unVAKoYL8pg
+wUsyLX0FdjiA983FXOxEzerMwmPa8FVpwrSqTNm99aVGcezrAEr7/CK53+dcEigz
+cYneLCPIEVX6P8NYW8GGmdNob0Kayc1B6T1LhLF1kEfdgKGVwrIJU0psSMma6VVu
+Z+3HjSxeui+KssRodmK/5vP1DTvlpKvpII+yUvcRKo3fKa7d7QY5tmKI1M7IPMz9
+5rziHgcxDGus67oddXv/oYiJc/Co4TuHAG44uNRQxRP2zRYvuHklvdtmIyraI7UN
+GPBfWws4+zVoscF4Rqjlpoif42oE5lVowdD4R3D/iTPxNhVWFcG5jpFKCaH/6/qp
+u8dzwQ0KNQVSGTQZ8DI6wudJ9+ATLQftdofn0l/F48SZD/eL4Hl3+7dp+7cncuH/
+tgiD4nKPzLlOt2nkWlsdr9gzAwBiTPChLMb1NUnK9eVKvoHGfwK/PkqyWDlX5bI/
+J7E42dJ7sedLhjTIsawJ7Xu1mB7eylKdAaLfwpT5guNtSb/vcmi3ekwI3+Mky0Mm
++F2FWlLkeVPH1r++5yE9vJrcxfe+aDXOMFOceBk/tnXSAiaPwTx/AND7S2V6wOn7
+vwVxgWISQms43OsuD2W0g0RXjEFvgwfRHQKroB3iKCfeR+9d4WQ=
+=qnWx
+-----END PGP SIGNATURE-----
+
+--4k25NvkuctWTnVXi--
