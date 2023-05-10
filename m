@@ -2,159 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF58A6FE1AA
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 17:39:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0860D6FE1B0
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 17:40:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237513AbjEJPjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 11:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53760 "EHLO
+        id S237600AbjEJPkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 11:40:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237427AbjEJPjO (ORCPT
+        with ESMTP id S232912AbjEJPkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 11:39:14 -0400
-Received: from smtp-fw-80008.amazon.com (smtp-fw-80008.amazon.com [99.78.197.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC80819B4;
-        Wed, 10 May 2023 08:39:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1683733153; x=1715269153;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=aCHdTaPlfZuhj06LpdR54+yJtYDg/pyYcnvMEvLdHRY=;
-  b=h8QVsq3tRYEneT45+x1r5DQQMrP7OKs3EZL5sOr7v5LNQohqflZfBV46
-   77UwHzVgP4XxuFJSwXgz094BWhRio4nfVn/JKH9S2PZVpfG/DmwPWSYru
-   3FYbvLTrzb+Tc1Joy0pB2+X7rKWo18qhjHagLT1+Ki6eQlgnTM2aBcvAm
-   M=;
-X-IronPort-AV: E=Sophos;i="5.99,265,1677542400"; 
-   d="scan'208";a="1957895"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-pdx-2b-m6i4x-7fa2de02.us-west-2.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80008.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 15:39:10 +0000
-Received: from EX19MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan3.pdx.amazon.com [10.236.137.198])
-        by email-inbound-relay-pdx-2b-m6i4x-7fa2de02.us-west-2.amazon.com (Postfix) with ESMTPS id 38C7F40D6B;
-        Wed, 10 May 2023 15:39:10 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX19MTAUWB001.ant.amazon.com (10.250.64.248) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 10 May 2023 15:39:09 +0000
-Received: from 88665a182662.ant.amazon.com (10.187.171.39) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Wed, 10 May 2023 15:39:06 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     <aleksandr.mikhalitsyn@canonical.com>
-CC:     <ast@kernel.org>, <bpf@vger.kernel.org>, <brauner@kernel.org>,
-        <daniel@iogearbox.net>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <kuniyu@amazon.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <pabeni@redhat.com>, <sdf@google.com>
-Subject: Re: [PATCH net-next] net: core: add SOL_SOCKET filter for bpf getsockopt hook
-Date:   Wed, 10 May 2023 08:38:58 -0700
-Message-ID: <20230510153858.84877-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230510152216.1392682-1-aleksandr.mikhalitsyn@canonical.com>
-References: <20230510152216.1392682-1-aleksandr.mikhalitsyn@canonical.com>
+        Wed, 10 May 2023 11:40:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 463BA19B4;
+        Wed, 10 May 2023 08:40:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CEF2B6349F;
+        Wed, 10 May 2023 15:40:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07336C433EF;
+        Wed, 10 May 2023 15:40:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683733241;
+        bh=suHZgHXOnhG+Y0EFAZh64AmTpplHYWDqeWTt0Ihyy88=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Ad9KCxfE8ESkuSqBrrG4ePhVwIU5ALLDNXUNIFoD23t9ppM3dDkA7kwy61c1cCP3Y
+         8uT6T0wlcWGQ6lDHqdgsOf1DwmGh4efj+/HdG1C0pZNCY72nsE2HPiryeFQflUqg1T
+         t1O45+r0sbGFWXH7sQHtQ5VbX6zLNilU2zhv+lPEPX82CWfY/1zHTk02sMdUz1pyEa
+         uG/SOPDA6K1LcAcI1WL+OOK9jumodP9d9I+fVSSdUEjwgRXkzbfl3eaF6pqYjzogX1
+         IanWFsuOLhkiIG0cxM8XW5fwgshQagvaOm5VySGZtBiYAFb8XVl4x7TVAZFrE3PEiQ
+         K8U7kwGkn5uig==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 4692C403B5; Wed, 10 May 2023 12:40:38 -0300 (-03)
+Date:   Wed, 10 May 2023 12:40:38 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     peterz@infradead.org, mingo@redhat.com, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, irogers@google.com, adrian.hunter@intel.com,
+        nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] perf bpf skels: Make vmlinux.h use bpf.h and
+ perf_event.h in source directory
+Message-ID: <ZFu69puLXBetozhT@kernel.org>
+References: <20230510064401.225051-1-yangjihong1@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.187.171.39]
-X-ClientProxiedBy: EX19D043UWA002.ant.amazon.com (10.13.139.53) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        SORTED_RECIPS,SPF_HELO_NONE,T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230510064401.225051-1-yangjihong1@huawei.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date: Wed, 10 May 2023 17:22:16 +0200
-> We have per struct proto ->bpf_bypass_getsockopt callback
-> to filter out bpf socket cgroup getsockopt hook from being called.
+Em Wed, May 10, 2023 at 06:44:01AM +0000, Yang Jihong escreveu:
+> Currently, vmlinux.h uses the bpf.h and perf_event.h header files in the
+> system path. If the header files in compilation environment are old,
+> compilation may fail. For example:
 > 
-> It seems worthwhile to add analogical helper for SOL_SOCKET
-> level socket options. First user will be SO_PEERPIDFD.
-
-I think this patch should be posted within the series below as
-there is no real user of sock_bpf_bypass_getsockopt() for now.
-
-Thanks,
-Kuniyuki
-
-
+>   /home/yangjihong/linux/tools/perf/util/bpf_skel/.tmp/../vmlinux.h:151:27: error: field has incomplete type 'union perf_sample_weight'
+>           union perf_sample_weight weight;
 > 
-> This patch was born as a result of discussion around a new SCM_PIDFD interface:
-> https://lore.kernel.org/all/20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com/
-> 
-> Cc: Alexei Starovoitov <ast@kernel.org>
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Stanislav Fomichev <sdf@google.com>
-> Cc: "David S. Miller" <davem@davemloft.net>
-> Cc: Eric Dumazet <edumazet@google.com>
-> Cc: Jakub Kicinski <kuba@kernel.org>
-> Cc: Paolo Abeni <pabeni@redhat.com>
-> Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
-> Cc: linux-kernel@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Cc: bpf@vger.kernel.org
-> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+> Use the bpf.h and perf_event.h files in the source code directory to
+> avoid compilation compatibility problems.
+
+Applied, will test it in my build containers.
+
+- Arnaldo
+ 
+> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
 > ---
->  include/linux/bpf-cgroup.h | 8 +++++---
->  include/net/sock.h         | 1 +
->  net/core/sock.c            | 5 +++++
->  3 files changed, 11 insertions(+), 3 deletions(-)
 > 
-> diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.h
-> index 57e9e109257e..97d8a49b35bf 100644
-> --- a/include/linux/bpf-cgroup.h
-> +++ b/include/linux/bpf-cgroup.h
-> @@ -387,10 +387,12 @@ static inline bool cgroup_bpf_sock_enabled(struct sock *sk,
->  	int __ret = retval;						       \
->  	if (cgroup_bpf_enabled(CGROUP_GETSOCKOPT) &&			       \
->  	    cgroup_bpf_sock_enabled(sock, CGROUP_GETSOCKOPT))		       \
-> -		if (!(sock)->sk_prot->bpf_bypass_getsockopt ||		       \
-> -		    !INDIRECT_CALL_INET_1((sock)->sk_prot->bpf_bypass_getsockopt, \
-> +		if (((level != SOL_SOCKET) ||				       \
-> +		     !sock_bpf_bypass_getsockopt(level, optname)) &&	       \
-> +		    (!(sock)->sk_prot->bpf_bypass_getsockopt ||		       \
-> +		     !INDIRECT_CALL_INET_1((sock)->sk_prot->bpf_bypass_getsockopt, \
->  					tcp_bpf_bypass_getsockopt,	       \
-> -					level, optname))		       \
-> +					level, optname)))		       \
->  			__ret = __cgroup_bpf_run_filter_getsockopt(	       \
->  				sock, level, optname, optval, optlen,	       \
->  				max_optlen, retval);			       \
-> diff --git a/include/net/sock.h b/include/net/sock.h
-> index 8b7ed7167243..530d6d22f42d 100644
-> --- a/include/net/sock.h
-> +++ b/include/net/sock.h
-> @@ -1847,6 +1847,7 @@ int sk_getsockopt(struct sock *sk, int level, int optname,
->  		  sockptr_t optval, sockptr_t optlen);
->  int sock_getsockopt(struct socket *sock, int level, int op,
->  		    char __user *optval, int __user *optlen);
-> +bool sock_bpf_bypass_getsockopt(int level, int optname);
->  int sock_gettstamp(struct socket *sock, void __user *userstamp,
->  		   bool timeval, bool time32);
->  struct sk_buff *sock_alloc_send_pskb(struct sock *sk, unsigned long header_len,
-> diff --git a/net/core/sock.c b/net/core/sock.c
-> index 5440e67bcfe3..194a423eb6e5 100644
-> --- a/net/core/sock.c
-> +++ b/net/core/sock.c
-> @@ -1963,6 +1963,11 @@ int sock_getsockopt(struct socket *sock, int level, int optname,
->  			     USER_SOCKPTR(optlen));
->  }
+> Changes since v1:
+>  - Use Makefile to specify that header files in tools/include/uapi directory are preferentially used.
+> 
+>  tools/perf/Makefile.perf           | 3 ++-
+>  tools/perf/util/bpf_skel/vmlinux.h | 1 +
+>  2 files changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index a42a6a99c2bc..9b92749280b2 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -1058,13 +1058,14 @@ $(SKEL_TMP_OUT) $(LIBAPI_OUTPUT) $(LIBBPF_OUTPUT) $(LIBPERF_OUTPUT) $(LIBSUBCMD_
+>  ifdef BUILD_BPF_SKEL
+>  BPFTOOL := $(SKEL_TMP_OUT)/bootstrap/bpftool
+>  BPF_INCLUDE := -I$(SKEL_TMP_OUT)/.. -I$(LIBBPF_INCLUDE)
+> +TOOLS_UAPI_INCLUDE := -I$(srctree)/tools/include/uapi
 >  
-> +bool sock_bpf_bypass_getsockopt(int level, int optname)
-> +{
-> +	return false;
-> +}
-> +
->  /*
->   * Initialize an sk_lock.
->   *
+>  $(BPFTOOL): | $(SKEL_TMP_OUT)
+>  	$(Q)CFLAGS= $(MAKE) -C ../bpf/bpftool \
+>  		OUTPUT=$(SKEL_TMP_OUT)/ bootstrap
+>  
+>  $(SKEL_TMP_OUT)/%.bpf.o: util/bpf_skel/%.bpf.c $(LIBBPF) | $(SKEL_TMP_OUT)
+> -	$(QUIET_CLANG)$(CLANG) -g -O2 -target bpf -Wall -Werror $(BPF_INCLUDE) \
+> +	$(QUIET_CLANG)$(CLANG) -g -O2 -target bpf -Wall -Werror $(BPF_INCLUDE) $(TOOLS_UAPI_INCLUDE) \
+>  	  -c $(filter util/bpf_skel/%.bpf.c,$^) -o $@ && $(LLVM_STRIP) -g $@
+>  
+>  $(SKEL_OUT)/%.skel.h: $(SKEL_TMP_OUT)/%.bpf.o | $(BPFTOOL)
+> diff --git a/tools/perf/util/bpf_skel/vmlinux.h b/tools/perf/util/bpf_skel/vmlinux.h
+> index 449b1ea91fc4..c7ed51b0c1ef 100644
+> --- a/tools/perf/util/bpf_skel/vmlinux.h
+> +++ b/tools/perf/util/bpf_skel/vmlinux.h
+> @@ -1,6 +1,7 @@
+>  #ifndef __VMLINUX_H
+>  #define __VMLINUX_H
+>  
+> +#include <linux/stddef.h> // for define __always_inline
+>  #include <linux/bpf.h>
+>  #include <linux/types.h>
+>  #include <linux/perf_event.h>
 > -- 
-> 2.34.1
+> 2.30.GIT
+> 
 
+-- 
+
+- Arnaldo
