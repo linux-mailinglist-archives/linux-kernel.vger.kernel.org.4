@@ -2,99 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6557D6FDD71
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B584C6FDD7B
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 14:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236853AbjEJMIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 08:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52342 "EHLO
+        id S236928AbjEJMJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 08:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236747AbjEJMIM (ORCPT
+        with ESMTP id S236846AbjEJMJf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 08:08:12 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E057D9E
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 05:08:08 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-96598a7c5e0so1140636166b.3
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 05:08:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683720487; x=1686312487;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=N79rnLnBBvifpn/rGywONJKqPsgsUMB/5px3PC0SkJA=;
-        b=Evqvcrrv0vlZHKChv7OVRMequxaI02TVQV8IaRj4X+NX5lmgapKKFQHtsCjNUNbtY+
-         cb5Epl2tgNebU6v45utxn2CNZzJ+eMzMr2ZfCoVTRbSeHM9uz5+C4e0kilVpZ+jdo9Jy
-         h0HVzGeVs0d0fuj8viMJJxDmkAk7VIAWQL7XpBDtoiOIZOmMav8RFMCAR4rtoF+0vml0
-         CVf3KJlMk1BuqGT7a7QmuBo5IkHXJqA66By67ZDIWb4EhDEuqvUkuRZsbC+Wy5pB3f2k
-         kUMCuBnlimnbkRsv/ZBiM0SIfVHEAjVac0/GUdhiTeJxmFpZPhYKueEa4nM3W1PqITCG
-         BOWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683720487; x=1686312487;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=N79rnLnBBvifpn/rGywONJKqPsgsUMB/5px3PC0SkJA=;
-        b=MqwyyCgHVa7eOQhrr8/kcLVtg/LK2NXN4qfz+Ie3wVtbVBQNgOc8dyYy9gCL3kIQBR
-         KkeuTPksIhWiO4Z21sxVUmYnOgzY8hUi/nUB6IJ+HrZJygt043xkdsDi2rAHn1tyexFN
-         TCi1EfiLxhJhXEXUeGxsmkRNh03blAKh82MDCCI11Wqj3coMBIX3MzhyYHPFy4sKE3xl
-         0NHqQA+mWY7/b/3T/isFhuP/8uG3MNGtapJvNFB0CEQpE3xElDFJ0j5j+Cp5ukwdYMHv
-         pNwtcy1uq41hFmNQ8wlWcVMF3ULZigQGJs//G0lrSjj9cVqgpzfMItj5RCjwSXvtxchl
-         JDpg==
-X-Gm-Message-State: AC+VfDxi5vkQx/SsDsz6YISiQ7X2m1E0pcMl5M7ySkldvrxOD8XscMT9
-        CQjX9PuGEbAS3DXfltdrveWsvw==
-X-Google-Smtp-Source: ACHHUZ7u0aa8wR9dxWCV3LnMuyxcpEgpuKFHc8KUeQWzoxnJciQDNmuM1yiUkbRpGtwtCgKG5D/oUg==
-X-Received: by 2002:a17:906:478a:b0:969:b88c:b8a2 with SMTP id cw10-20020a170906478a00b00969b88cb8a2mr7297470ejc.10.1683720487193;
-        Wed, 10 May 2023 05:08:07 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:c175:a0f9:6928:8c9d? ([2a02:810d:15c0:828:c175:a0f9:6928:8c9d])
-        by smtp.gmail.com with ESMTPSA id d4-20020a170907272400b00965e9b435dfsm2608471ejl.65.2023.05.10.05.08.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 05:08:06 -0700 (PDT)
-Message-ID: <ffc244d4-74cc-ab82-1479-b8a6671ecbac@linaro.org>
-Date:   Wed, 10 May 2023 14:08:05 +0200
+        Wed, 10 May 2023 08:09:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7605F7D9E;
+        Wed, 10 May 2023 05:09:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A52463D94;
+        Wed, 10 May 2023 12:09:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB0DAC433D2;
+        Wed, 10 May 2023 12:09:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683720573;
+        bh=afxbHdjIrwSj6VNrhj4GIHzNMQeWlMeZcAEhNk8Z57M=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=jj0npcpEGWo9SJ0UxtXlkb3FWgHyFQL4qPBNOSfzU5rMo2dl7CuGNbqvuEEk2huRi
+         JxwhxKZUnM98/IIaGlcsvyLBrlyWXGfdAnb8MOWM5JuVEH16bM3UijBrulznA2DH+e
+         YH0ZrlUPPnQX8JuXYwOfCmK7zuqDod8iyrxg55yx3TXTyhIND1XO4wRMpUmQxNPcq6
+         FkJCidWUHcnyOl6IlYnUz1tF1dTxfEkLvVf2E8Z7SApGQqRJvxzM/50ZJzwqaqOlXj
+         uMDgSTRE5z8CtI0MVyfOzHWSi+t7ZLqPY1R1wA/Sbkc4Vys/Bm/xeCJYkxv0ACIqMP
+         i/R4ScVrjyybA==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Hans de Goede <hdegoede@redhat.com>
+Cc:     Felix <nimrod4garoa@gmail.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Franky Lin <franky.lin@broadcom.com>,
+        Hante Meuleman <hante.meuleman@broadcom.com>,
+        regressions@lists.linux.dev,
+        Arend van Spriel <arend.vanspriel@broadcom.com>,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
+        brcm80211-dev-list.pdl@broadcom.com,
+        SHA-cyfmac-dev-list@infineon.com
+Subject: Re: [REGRESSION] wifi: brcmfmac: add firmware vendor info in driver info
+References: <4ef3f252ff530cbfa336f5a0d80710020fc5cb1e.camel@gmail.com>
+        <c7aa9034-59f8-11aa-7170-86c0db012dda@redhat.com>
+Date:   Wed, 10 May 2023 15:09:27 +0300
+In-Reply-To: <c7aa9034-59f8-11aa-7170-86c0db012dda@redhat.com> (Hans de
+        Goede's message of "Wed, 10 May 2023 12:04:32 +0200")
+Message-ID: <87bkiso0aw.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] spi: s3c64xx: Disable IRQ mode when using DMA
-To:     Jaewon Kim <jaewon02.kim@samsung.com>,
-        Andi Shyti <andi@etezian.org>, Mark Brown <broonie@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-References: <CGME20230510120245epcas2p2cea91a04ef2fd46f0fa9f22f73c5b2eb@epcas2p2.samsung.com>
- <20230510113942.89994-1-jaewon02.kim@samsung.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230510113942.89994-1-jaewon02.kim@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/2023 13:39, Jaewon Kim wrote:
-> Fixing the problem of enabling DMA mode and IRQ mode at the same time.
-> In this case, a value of more than 6bits is written to RDY_LVL, it can
-> cause an invasion of other registers, potentially leading to SPI
-> transfer failure.
-> 
-> Fixes: 1ee806718d5e ("spi: s3c64xx: support interrupt based pio mode")
-> Signed-off-by: Jaewon Kim <jaewon02.kim@samsung.com>
-> Reported-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> Tested-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> ---
+Hans de Goede <hdegoede@redhat.com> writes:
 
+> On 5/10/23 10:25, Felix wrote:
+>> Changes made by the mentioned commit lead to Oops when waking up after
+>> suspend to RAM.
+>>=20
+>> When waking up a Dell XPS 13 9350 with BCM4350 wifi card after suspend
+>> to RAM,=C2=A0the kernel hangs with a NULL pointer dereference and Oops. =
+The
+>> issues was introduced by commit
+>> da6d9c8ecd00e20218461007948f2b0a8e7fa242 and only happens when the
+>> brcmfmac module is loaded. This issue is the reason we could not
+>> upgrade to newer kernels than the 6.1 series on the affected machine.
+>>=20
+>>=20
+>> Details:
+>>=20
+>> On a Dell XPS 13 9350 laptop with Broadcom BCM4350 wifi card (according
+>> to lspci), every kernel starting with 6.2 hangs when waking up after
+>> suspend to RAM. The issue persisted as of May 2nd (last tested commit
+>> was 348551ddaf311c76b01cdcbaf61b6fef06a49144). Passing the debug and
+>> no_console_suspend parameters to the kernel show that a NULL pointer
+>> dereference and an Oops happen at wakeup. Please find the kernel
+>> messages readable on the screen at this point attached
+>> (kernel_log_after_suspend.txt).
+>>=20
+>> A bisection was successful and produced the first bad commit
+>> [da6d9c8ecd00e20218461007948f2b0a8e7fa242]=C2=A0wifi: brcmfmac: add firm=
+ware
+>> vendor info in driver info
+>> I've attached the bisection log as well (bisect.txt).
+>>=20
+>> Suspend to RAM works on this machine on newer kernels once the brcmfmac
+>> module is unloaded.
+>>=20
+>> Distribution: Arch Linux
+>> Architecture: x86_64
+>> Device: Dell XPS 13 9350 with BCM4350 wifi card
+>> Kernel config used at compilation (created using the Arch Linux default
+>> config and make olddefconfig):
+>> https://gist.githubusercontent.com/maclomhair/e33fa7eece8f8c77e5a88c4eed=
+e2f523/raw/429dfb022498c026225865dbb3ab2f75d5030a54/config
+>> Dmesg output after boot:
+>> https://gist.githubusercontent.com/maclomhair/47c75fa759d93800e7fb5e937f=
+abef3e/raw/10750996a1ea9dcb3fa14d9b94e11fedd3abf280/dmesg
+>>=20
+>> #regzbot introduced da6d9c8ecd00e20218461007948f2b0a8e7fa242
+>
+> Thank you for reporting this and thank you for bisecting it too!
+>
+> As a result of your excellent bug report I've been able to write
+> a fix for this. I'm confident enough in the fix that I've submitted
+> it upstream right away.
+>
+> But it would still be good if you can test the fix and let us know
+> if it fixes this issue for you. You should have received a copy
+> of the patch when I submitted it upstream.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+For the archives here's the patch:
 
-Best regards,
-Krzysztof
+https://patchwork.kernel.org/project/linux-wireless/patch/20230510100050.27=
+099-1-hdegoede@redhat.com/
 
+--=20
+https://patchwork.kernel.org/project/linux-wireless/list/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
+hes
