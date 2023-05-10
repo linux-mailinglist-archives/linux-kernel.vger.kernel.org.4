@@ -2,108 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29E536FD352
-	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 02:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B3666FD354
+	for <lists+linux-kernel@lfdr.de>; Wed, 10 May 2023 02:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235221AbjEJAjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 9 May 2023 20:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41552 "EHLO
+        id S235253AbjEJAnA convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 9 May 2023 20:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229559AbjEJAja (ORCPT
+        with ESMTP id S229559AbjEJAm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 9 May 2023 20:39:30 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914B33C14
-        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 17:39:29 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1ab1b79d3a7so45436285ad.3
-        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 17:39:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683679169; x=1686271169;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZcViK9IobKDKWPhV8NMoXtvaRoAckuBG9q8Pc6JSThg=;
-        b=nXY2qvmGJh7n28CT9igHKbqJhLwZbxCmkmJruRksz7lOOJuVke+sKIur9g8YYh/aOt
-         jPCSVSvLW8jbZfXorsMloqZYr0kCzmHAZxlbUDDYNINlHwjKpBqDQisRLHmoiuoXmPwH
-         0aHMsLMekAm1ZNNCi5dUMtMEP8cQqiXJzLzbQ=
+        Tue, 9 May 2023 20:42:58 -0400
+Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4A45273E
+        for <linux-kernel@vger.kernel.org>; Tue,  9 May 2023 17:42:57 -0700 (PDT)
+Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-77d049b9040so33576179241.1
+        for <linux-kernel@vger.kernel.org>; Tue, 09 May 2023 17:42:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683679169; x=1686271169;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZcViK9IobKDKWPhV8NMoXtvaRoAckuBG9q8Pc6JSThg=;
-        b=I7FZIkqKFO4LwjQsKCSK/ArUdsoINcbY9BpI20i8WH9pTjhy20bppkkClotBfz1vgP
-         oAfZHaXrdjkXGXwUfrxM2wo/2WqYlYevjJM8zuK4gFiqjvx9CCWwLSkIPFN5XHdNPvKy
-         a6L0fqzfWt1QWNDH7M+xijanG4Fn6LLVNWBiaq0bKMMx/h9vzPufTeyjhg6RXvPhM5Rx
-         5Ik188pyY3/+RjGCmMDpEf13Bk1hSxuWo4/hVjEt/JwkN2gp8Hi+N2w/NDwqIo8LFb41
-         LBGHg9TqzfXcCncAkcXPAsytZoBVZBZj7ReXOt9jOxL4jahR6UVscKCEY1WooXa7y3uC
-         Shpw==
-X-Gm-Message-State: AC+VfDxwkXsqTpzoEsBiaUSLblCda7vNqy8SoQsF8OJG7u5hW+t3ytBt
-        KQoWimuM4iVKLA6Ve9mdvdwUNA==
-X-Google-Smtp-Source: ACHHUZ7VeUOPvO8vvgYTw9Zp2bTuVqG5xU+a1K/++6VYrIoBAxq1tEqbeBiwSSts7jOHtj9FuOI3cw==
-X-Received: by 2002:a17:902:a50b:b0:19a:9880:175f with SMTP id s11-20020a170902a50b00b0019a9880175fmr14549353plq.51.1683679169061;
-        Tue, 09 May 2023 17:39:29 -0700 (PDT)
-Received: from google.com (KD124209188001.ppp-bb.dion.ne.jp. [124.209.188.1])
-        by smtp.gmail.com with ESMTPSA id p16-20020a170902e75000b001aadd0d7364sm2277606plf.83.2023.05.09.17.39.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 09 May 2023 17:39:28 -0700 (PDT)
-Date:   Wed, 10 May 2023 09:39:22 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, minchan@kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
-        ddstreet@ieee.org, vitaly.wool@konsulko.com, kernel-team@meta.com
-Subject: Re: [PATCH] zsmalloc: move LRU update from zs_map_object() to
- zs_malloc()
-Message-ID: <20230510003922.GF11511@google.com>
-References: <20230505185054.2417128-1-nphamcs@gmail.com>
+        d=1e100.net; s=20221208; t=1683679377; x=1686271377;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CfRga80IFuib6OMLZt4mIA+A4rhSmfiaklSGZGPK0eo=;
+        b=j6jM2RsRggsIUWWDWav+T+GSfgONKJ2cfTHzigFEsD4nVoLDhSJyO9nWLq6z3tiB29
+         5k5zHxnYxi6++Uc+cWX5diuWzdn2GNsZeCbh7UPeDubpSNqEC5PTPNpCd1Fz5NgYojeZ
+         gs2ymbbyClB5Uy6pX5GVIHy4nbI6Ed1utcBUjmQc8ZBe2QNpKb9tXEnTf4YAeUdrpQWE
+         RodTHexICk/ZRV+9hdHUz1iV6CaJJmBoQLfNJqi+vxfJ+LuhjiEzVDQguXY26VkclIUo
+         5qwoJWb1dmRMHgGK/ndxJgqspoFGj2iUQSnXnKRFKfK+Bb9zgJ79EaB1MYQ1TMqgWF3P
+         JM8w==
+X-Gm-Message-State: AC+VfDxwC+5wgUXKl2zXAxkAeddy4iqCw0VPzcfHMS2Ln5/PUDQI0QpR
+        0cdqqh0udMoT26SMr2mYeLWdIEufa0TDotz5f94=
+X-Google-Smtp-Source: ACHHUZ5M12ot5FKEaJ5k49lbu1dAcp1028MakEWQcpTLZLKGbIECvQUnFJA2gmhzEzB2i/34d/bIGY6+uxvGP8l4C7Y=
+X-Received: by 2002:a05:6122:dd:b0:440:4c82:6508 with SMTP id
+ h29-20020a05612200dd00b004404c826508mr4556264vkc.3.1683679376495; Tue, 09 May
+ 2023 17:42:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230505185054.2417128-1-nphamcs@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230425181827.219128101@linutronix.de> <20230425183312.932345089@linutronix.de>
+ <ZFUXrCZtWyNG3Esi@lothringen> <87zg6i2xn3.ffs@tglx> <87v8h62vwp.ffs@tglx>
+ <878rdy32ri.ffs@tglx> <87v8h126p2.ffs@tglx> <875y911xeg.ffs@tglx>
+In-Reply-To: <875y911xeg.ffs@tglx>
+From:   Andrey Vagin <avagin@openvz.org>
+Date:   Tue, 9 May 2023 17:42:43 -0700
+Message-ID: <CANaxB-zyaS2OZsdmAGRjz8ZQxGUU8b_cEAgtXNmUW+hyCLY9GQ@mail.gmail.com>
+Subject: Re: [patch 02/20] posix-timers: Ensure timer ID search-loop limit is valid
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Michael Kerrisk <mtk.manpages@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (23/05/05 11:50), Nhat Pham wrote:
-[..]
-> zswap_frontswap_store()            shrink_worker()
->   zs_malloc()                        zs_zpool_shrink()
->     spin_lock(&pool->lock)             zs_reclaim_page()
->     zspage = find_get_zspage()
->     spin_unlock(&pool->lock)
->                                          spin_lock(&pool->lock)
->                                          zspage = list_first_entry(&pool->lru)
->                                          list_del(&zspage->lru)
->                                            zspage->lru.next = LIST_POISON1
->                                            zspage->lru.prev = LIST_POISON2
->                                          spin_unlock(&pool->lock)
->   zs_map_object()
->     spin_lock(&pool->lock)
->     if (!list_empty(&zspage->lru))
->       list_del(&zspage->lru)
->         CHECK_DATA_CORRUPTION(next == LIST_POISON1) /* BOOM */
-> 
-> With the current upstream code, this issue rarely happens. zswap only
-> triggers writeback when the pool is already full, at which point all
-> further store attempts are short-circuited. This creates an implicit
-> pseudo-serialization between reclaim and store. I am working on a new
-> zswap shrinking mechanism, which makes interleaving reclaim and store
-> more likely, exposing this bug.
-> 
-> zbud and z3fold do not have this problem, because they perform the LRU
-> list update in the alloc function, while still holding the pool's lock.
-> This patch fixes the aforementioned bug by moving the LRU update back to
-> zs_malloc(), analogous to zbud and z3fold.
-> 
-> Suggested-by: Johannes Weiner <hannes@cmpxchg.org>
-> Acked-by: Johannes Weiner <hannes@cmpxchg.org>
-> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+On Tue, May 9, 2023 at 5:50 AM Thomas Gleixner <tglx@linutronix.de> wrote:
+>
+> On Tue, May 09 2023 at 11:30, Thomas Gleixner wrote:
+> > On Mon, May 08 2023 at 23:57, Thomas Gleixner wrote:
+> >> More thoughts on this. If we go there and accept the extra page of
+> >> memory then we can just go all the way and make the xarray per process,
+> >> actually per signal.
+> >
+> > Thinking more about it. The current scheme how timer ID allocation works
+> > is really interesting vs. CRIU.
+> >
+> > Assume a process creates/deletes timers frequently. It's not hard to
+> > move the next ID close to INT_MAX, i.e. 2G
+> >
+> > Now checkpoint that thing and restore it which means to do the
+> > create/delete dance to move next ID up to the last one-1. Will only take
+> > a couple of hours....
+>
+> I'm cursing myself for overlooking this back then when the CRIU changes
+> to the timer ID management were made. Why?
+>
+>    Because that created an ABI which CRIU relies on.
+>
+> The proper solution for this would be to make it possible to create a
+> timer with a given ID. That's not rocket science, but we need buy in
+> from the CRIU folks. Otherwise we are up the regression creek without a
+> paddle.
 
-Reviewed-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+Let's go with the proper solution. I will prepare CRIU changes when
+kernel patches are ready.
+
+Thanks,
+Andrei
