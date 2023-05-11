@@ -2,469 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39A286FF227
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:08:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4A06FF22B
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:09:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238002AbjEKNI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 09:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56082 "EHLO
+        id S237526AbjEKNJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237970AbjEKNIG (ORCPT
+        with ESMTP id S237628AbjEKNJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:08:06 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B45885FEB;
-        Thu, 11 May 2023 06:08:02 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34BAfl9O018068;
-        Thu, 11 May 2023 13:07:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references; s=qcppdkim1;
- bh=Ohk076nJXvCJZ0noGqzW5piJgnmJJuXjLyqjOC+dg44=;
- b=fnHBwcic7VctJUerU996mrqtVv0EEtfzxF+k7DO9xFI0FBfPMioEuupRGBsfnVgF6HvL
- sri3zZ9qid0Bx572L7MxRHA2F1GSfwb8Ta3S5XrpJ2GSxNskn/PFoGZYw2ogglqSYn0n
- iujniMz7jGE2O2iXoWpUDchvIa8wy6u6iC0b9lbrQ+lezf+aYy/68GewpFtSKS2XiTsW
- h5BEaSSHfk/V57OTWSR34h0vt4cNFHU9Ls854X8704Bq9uUfLLawMnKIT+O4hpFq3xN/
- 4FZCWPj/GC6TUijNGTJcyTI1Y0AMmu/UAtvE5PmChFwD95LVs2pUjcVKaH7lI4/FFF0a nA== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qgdd9tfft-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 13:07:43 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34BD7eCR013660;
-        Thu, 11 May 2023 13:07:40 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3qdy5bq6rq-1;
-        Thu, 11 May 2023 13:07:40 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34BD7dL0013446;
-        Thu, 11 May 2023 13:07:40 GMT
-Received: from mdalam-linux.qualcomm.com (mdalam-linux.qualcomm.com [10.201.2.71])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 34BD7eEv013468;
-        Thu, 11 May 2023 13:07:40 +0000
-Received: by mdalam-linux.qualcomm.com (Postfix, from userid 466583)
-        id 56DD612010C1; Thu, 11 May 2023 18:37:39 +0530 (IST)
-From:   Md Sadre Alam <quic_mdalam@quicinc.com>
-To:     mani@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
-        vigneshr@ti.com, linux-mtd@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_mdalam@quicinc.com,
-        0000-cover-letter.patch@qualcomm.com
-Subject: [PATCH 5/5] mtd: rawnand: qcom: Remove legacy interface implementation.
-Date:   Thu, 11 May 2023 18:37:30 +0530
-Message-Id: <20230511130730.28689-5-quic_mdalam@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230511130730.28689-1-quic_mdalam@quicinc.com>
-References: <20230511130730.28689-1-quic_mdalam@quicinc.com>
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: X-uE6g_FULKMG_399Aik44nOur5YjbzX
-X-Proofpoint-ORIG-GUID: X-uE6g_FULKMG_399Aik44nOur5YjbzX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-11_09,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=999 mlxscore=0 adultscore=0 clxscore=1015 malwarescore=0
- priorityscore=1501 phishscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305110113
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+        Thu, 11 May 2023 09:09:32 -0400
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2095.outbound.protection.outlook.com [40.107.102.95])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A84C40ED;
+        Thu, 11 May 2023 06:09:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oVPwiJBf+RiFigRB6a0k72TzRBOdwJeB3DzC0GqNssIy7SgXbgPVmfuSNctAqHQCT8IjYTSzaQE7EdLQkmqTRxv8n3trin4gKLQKqx2IfcaUS0R86Z5ldS8H+NWOT+XPklNAkhVLXZFA3H636D80gSd7iK9KaZKHE5305AtWaTPSwKaFrFJHW+gmKBfQ7VEDRevDuxYiTXqB4Awy343B6H7kPmN3b01CHXrzqNfhQdN+ArViS+WwmAf3kiUHbaZSBtgOmO6999hZtH5fPRlOrgPw81tTE1a3knNvxN3EAq+5VcGqX4D8feXVBdfak9JJkl7H1VALPWsfD1+PlkcbtQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=G6I5NQowe6+zS0ATbxr5KM5Cx4tqXOPG64NwhZNImIM=;
+ b=ZbXf5CtSf0iJZRbevka01rfuP1LKnlI57FlVT8d0VLtSEYHQRgRqd3tOmOYvWoIy1TN+tMj01VFjWgFNeocDoNU34dmQikLP2W7QYeAEWgZezi10zTrAGUMDKpBCqVwXIHCaCfG3gWJ2P/181TUdr+lQkeUY14Sm8sQkZOG5FmKIoEh7HmZJ8jjfSeGthDxRMihjZc/bhgNcxrBWK2pg5HnbSgdkvisjugqvF6qRSt19/P3v7DheodGy5WgYBtHeW/qtj2oodUjgXgXlzTnWx+HzVpUhqMHI57acaZCINksKEw6Ki6zlIKQAcyesXHPiNsifncjA2eCrNTfJn4o75Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=G6I5NQowe6+zS0ATbxr5KM5Cx4tqXOPG64NwhZNImIM=;
+ b=v3Ad7z6EMQGzVImxor+dn8bpqQpPTdVD2fJbxKa2UcAokg+DyQEHr9lp1+mGa40oCMY0db6R5GZBdTiQp+hAUw/jGxGkr5Coxf9CYEcLrPhLEeS+9PAyqbUjqG3N+ewylRsZgBRlmMqstPpPo+IZvG1UC9W7/Nn83w0QDFQVjJ0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by BL3PR13MB5122.namprd13.prod.outlook.com (2603:10b6:208:351::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.22; Thu, 11 May
+ 2023 13:08:53 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Thu, 11 May 2023
+ 13:08:53 +0000
+Date:   Thu, 11 May 2023 15:08:45 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Pranavi Somisetty <pranavi.somisetty@amd.com>
+Cc:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, richardcochran@gmail.com, linux@armlinux.org.uk,
+        palmer@dabbelt.com, git@amd.com, michal.simek@amd.com,
+        harini.katakam@amd.com, radhey.shyam.pandey@amd.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH net-next v2 2/2] net: macb: Add support for partial store
+ and forward
+Message-ID: <ZFzo3X1L3JRa98HK@corigine.com>
+References: <20230511071214.18611-1-pranavi.somisetty@amd.com>
+ <20230511071214.18611-3-pranavi.somisetty@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511071214.18611-3-pranavi.somisetty@amd.com>
+X-ClientProxiedBy: AS4P195CA0025.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d6::20) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BL3PR13MB5122:EE_
+X-MS-Office365-Filtering-Correlation-Id: f8c56293-c1af-4b58-971a-08db5220de5c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +YqxuC75tH4svWRZa8LeAOqvrsTvx0wtDR6oYC2SWG0ao6ReSjoMfaFhOPN9lNxuz12eXv7jQxUoM/s0mkHGG7VQi+nZwfbyVYgL92TG4LhI2VP/BlxTWZU5XrMr3CnXxjRYUSNJvhz0qYKk16BpnQa0P4cp9hWBNnLG3Dg4W7nQuDtUUYyZjAzO7NSrp8eTsycDbIxcIAZ+nsw6Ami81U2/MX4xgPVE0znHY6cvpK9+G4+MLDfr2xyQ0guBoXMgDvXbOHoSjTrC1fC0M1DtLQCuaPVITws/X0vpUVTHwTLYnlEAhYgcLJPaDlP9meBW1L7DVIqtVldqAODbYUA3kQua3yG7xKz61WEqIadmrG4IUsh/Flunmd/KumiMDL2xC7sWPARlxladAkLrzoI28j3tvMuF268iOpP1PMFu/jHy0Nl1UNbnfD6dbxOgDRasVlqKoOnDDbVOQnb3CR2kyEx+HqmWl36gTzPYzh5uYlEn5BoOun5MEc/8xHkrWJWNGLP4ihKATopZpz1hyC6NdYTrTeBuvaHdbzy5Z7F7PVYWUOy8vLxFCPvR7VjhGA+1zJtIn8W//dD5CmbMMZmuv3BNQICiu+b8NPT6JnHr6sk=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(366004)(136003)(39840400004)(396003)(376002)(451199021)(478600001)(66946007)(66556008)(66476007)(6486002)(6666004)(36756003)(316002)(6916009)(4326008)(86362001)(186003)(6506007)(2616005)(6512007)(38100700002)(41300700001)(7416002)(5660300002)(2906002)(8936002)(44832011)(8676002)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?uEnwHAigO4ZP4K8m7dp6D6x738vOsIOtsjUXi7O3DR51I9/NODgnh9/18w9a?=
+ =?us-ascii?Q?rtHj5WMr5kTTU/5Zjf4BDanRot3iU/e4mKVqAib85Rg2I5fgQJZul/2cvoYK?=
+ =?us-ascii?Q?2nBODGKJQJgmp/w3U/92RbuOHAWJxgIAi5YtTuOw10gZ43UOeOuU7YpVRS2Z?=
+ =?us-ascii?Q?KqtOcMcaKiBtHl+InX5hoY35/Q8vVfPk+baBLg7ftqJfHps45tBe5Xfkaz95?=
+ =?us-ascii?Q?ZgNC3lBhmNx7kdGoldTnCYp/u0lrCKSbefPBnApVbqb7Rpa1VeS0utfIz++V?=
+ =?us-ascii?Q?Esw4GBmnOWS0sG5lT0FLSg8bq5imtcm2d4LGoYW9slq/dz8xyUEJXo7RT16y?=
+ =?us-ascii?Q?ODQjDa3XQZGMG5hj9+yoS3VzfEdfE1lC10EGy2+wMGu5ilE7JYRx0mLpqeRm?=
+ =?us-ascii?Q?4RyMAfnmmnn9AmzmSXcAQrhsiyuYMpSflTfoWlfNh1fCRR6oZh679Ag1+7hP?=
+ =?us-ascii?Q?mUjtkZYxUmvHZr+PgRgC+XKrj7vR5yTSawoQEv38w9xCM6vblZLuz8aeVGdN?=
+ =?us-ascii?Q?gU1rMgw4F3qxN4zhZaesTh7nKTPKcas3roYGoaVT7ZAW7RYVTNoHJwOJvrhz?=
+ =?us-ascii?Q?IGxvknk9YPwZwlzR1iCKq8YZWN+O6EEvgfqMrahqm/6e+ZbSMiCbNHaL70z3?=
+ =?us-ascii?Q?bJJhqqnaKZodaA3TXQrWgyE52AaGhJAxb2ykuc8FJt3CzWiZwsOzqgG1Pnhl?=
+ =?us-ascii?Q?OzTeo9lSC656q1gfuddY3U7asjr7kws/Nv6drg5mFVlRoZsucYCEr3Xomszs?=
+ =?us-ascii?Q?SkE94kKYQmx2U39MpYTF2SHvrY1gbvdzVBjmFZiMvQuWsHk459w6wbn7rvUy?=
+ =?us-ascii?Q?JEftZi3aN61XvcSC+CSXxWz46yvsdUAa4myi9ilFcMk+Qwhf7frUsXXfXGTm?=
+ =?us-ascii?Q?Fi13C13CGJ8TCK0yhX60HMCZcvyzGBRqdiSJcQmS16ufaCLYvzw2bHU5fVXf?=
+ =?us-ascii?Q?OwfcqFTz3M/H6O7OLEUskDTNrR8/r0nNzV+7tPFNGUvdzUTyD784l4K6/zpW?=
+ =?us-ascii?Q?NAtWiWAUFV/wEZpFSxX7l75VeUbPQxVfpky9bBbmaUfWlWEAsvwXTOR6Sejn?=
+ =?us-ascii?Q?zdRngZmDAVWO7OSSEP3/Rb+zmXYKZCQgUAMUPQItq01juDUxmBOO09Dw35ve?=
+ =?us-ascii?Q?swDnF2mUn7pZb4aGYpempoEH+5VrFkcEZCO7MvnUgTYzIfv5Hp0IfULiWO69?=
+ =?us-ascii?Q?o/ckXVDOb/qhSC7hs5nD3lLauBhs3Vi3QrZvrfk+0CYbS45AINjlrNYdsvSV?=
+ =?us-ascii?Q?uTiXuq8ImNoD/BRdiujG9nKEX+mUg9yI3jb4GjARhu7GKSfDD7NfbZAKVNoB?=
+ =?us-ascii?Q?EusKCnU745zocTYU55KtvFgBEEDax6EaEmAJkyx00/GDemNjtRletk4vTzFT?=
+ =?us-ascii?Q?qP47OmeGMfs85E5kiyXHKAhLvdRJInhCuU97jpew/7OWKEIWZruxWbiCoMxh?=
+ =?us-ascii?Q?u1geklxKU+JZdECl0j5/4BU9ypacWsDhkQQmBJvVuLHGRCPxGlZOnzBMVA6E?=
+ =?us-ascii?Q?xYa3ZDPDUE+DcjkSxPRzYiTLIJP1SVmKXoTW4cfxCqRZfi/mVEvUs1zQ2VXD?=
+ =?us-ascii?Q?7kKj8sgI+v6lmyyY0NmcUvkfwzeC/amC5Wne5tnKc4Fbg4czTJgGUZUeGzZx?=
+ =?us-ascii?Q?MntEdvMJ+gnUOYwmLn6ak5Y+Na55Q7zbHimAZF81bh5y3dWcD6Azv3Iab7f4?=
+ =?us-ascii?Q?K0ghxg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f8c56293-c1af-4b58-971a-08db5220de5c
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 13:08:52.9972
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: w80AQK1K4UU9j2VZ+bHu9gieo6Xst/79jUUEDQSI/Re2UqoyTFP12CsFtjwAuBe1Q7Z5RoKbe4jVAIgiDYa643qwYJdM65yXTpJ2ZUFyMME=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR13MB5122
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This change will remove legacy interface implementation
+On Thu, May 11, 2023 at 01:12:14AM -0600, Pranavi Somisetty wrote:
+> When the receive partial store and forward mode is activated, the
+> receiver will only begin to forward the packet to the external AHB
+> or AXI slave when enough packet data is stored in the packet buffer.
+> The amount of packet data required to activate the forwarding process
+> is programmable via watermark registers which are located at the same
+> address as the partial store and forward enable bits. Adding support to
+> read this rx-watermark value from device-tree, to program the watermark
+> registers and enable partial store and forwarding.
+> 
+> Signed-off-by: Maulik Jodhani <maulik.jodhani@xilinx.com>
+> Signed-off-by: Michal Simek <michal.simek@xilinx.com>
+> Signed-off-by: Harini Katakam <harini.katakam@xilinx.com>
+> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
+> Signed-off-by: Pranavi Somisetty <pranavi.somisetty@amd.com>
+> ---
+> Changes v2:
+> 
+> 1. Removed all the changes related to validating FCS when Rx checksum offload is disabled.
+> 2. Instead of using a platform dependent number (0xFFF) for the reset value of rx watermark,
+> derive it from designcfg_debug2 register.
+> 3. Added a check to see if partial s/f is supported, by reading the
+> designcfg_debug6 register.
+> ---
+>  drivers/net/ethernet/cadence/macb.h      | 14 +++++++
+>  drivers/net/ethernet/cadence/macb_main.c | 49 +++++++++++++++++++++++-
+>  2 files changed, 61 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/cadence/macb.h b/drivers/net/ethernet/cadence/macb.h
+> index 14dfec4db8f9..46833662094d 100644
+> --- a/drivers/net/ethernet/cadence/macb.h
+> +++ b/drivers/net/ethernet/cadence/macb.h
+> @@ -82,6 +82,7 @@
+>  #define GEM_NCFGR		0x0004 /* Network Config */
+>  #define GEM_USRIO		0x000c /* User IO */
+>  #define GEM_DMACFG		0x0010 /* DMA Configuration */
+> +#define GEM_PBUFRXCUT		0x0044 /* RX Partial Store and Forward */
+>  #define GEM_JML			0x0048 /* Jumbo Max Length */
+>  #define GEM_HS_MAC_CONFIG	0x0050 /* GEM high speed config */
+>  #define GEM_HRB			0x0080 /* Hash Bottom */
+> @@ -343,6 +344,11 @@
+>  #define GEM_ADDR64_SIZE		1
+>  
+>  
+> +/* Bitfields in PBUFRXCUT */
+> +#define GEM_WTRMRK_OFFSET	0 /* Watermark value offset */
+> +#define GEM_ENCUTTHRU_OFFSET	31 /* Enable RX partial store and forward */
+> +#define GEM_ENCUTTHRU_SIZE	1
+> +
+>  /* Bitfields in NSR */
+>  #define MACB_NSR_LINK_OFFSET	0 /* pcs_link_state */
+>  #define MACB_NSR_LINK_SIZE	1
+> @@ -509,6 +515,8 @@
+>  #define GEM_TX_PKT_BUFF_OFFSET			21
+>  #define GEM_TX_PKT_BUFF_SIZE			1
+>  
+> +#define GEM_RX_PBUF_ADDR_OFFSET			22
+> +#define GEM_RX_PBUF_ADDR_SIZE			4
+>  
+>  /* Bitfields in DCFG5. */
+>  #define GEM_TSU_OFFSET				8
+> @@ -517,6 +525,8 @@
+>  /* Bitfields in DCFG6. */
+>  #define GEM_PBUF_LSO_OFFSET			27
+>  #define GEM_PBUF_LSO_SIZE			1
+> +#define GEM_PBUF_CUTTHRU_OFFSET			26
+> +#define GEM_PBUF_CUTTHRU_SIZE			1
+>  #define GEM_DAW64_OFFSET			23
+>  #define GEM_DAW64_SIZE				1
+>  
+> @@ -718,6 +728,7 @@
+>  #define MACB_CAPS_NEEDS_RSTONUBR		0x00000100
+>  #define MACB_CAPS_MIIONRGMII			0x00000200
+>  #define MACB_CAPS_NEED_TSUCLK			0x00000400
+> +#define MACB_CAPS_PARTIAL_STORE_FORWARD		0x00000800
+>  #define MACB_CAPS_PCS				0x01000000
+>  #define MACB_CAPS_HIGH_SPEED			0x02000000
+>  #define MACB_CAPS_CLK_HW_CHG			0x04000000
+> @@ -1283,6 +1294,9 @@ struct macb {
+>  
+>  	u32			wol;
+>  
+> +	/* holds value of rx watermark value for pbuf_rxcutthru register */
+> +	u16			rx_watermark;
+> +
+>  	struct macb_ptp_info	*ptp_info;	/* macb-ptp interface */
+>  
+>  	struct phy		*sgmii_phy;	/* for ZynqMP SGMII mode */
+> diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
+> index 41964fd02452..07b9964e7aa3 100644
+> --- a/drivers/net/ethernet/cadence/macb_main.c
+> +++ b/drivers/net/ethernet/cadence/macb_main.c
+> @@ -2600,6 +2600,7 @@ static void macb_init_rings(struct macb *bp)
+>  static void macb_reset_hw(struct macb *bp)
+>  {
+>  	struct macb_queue *queue;
+> +	u16 watermark_reset_value;
+>  	unsigned int q;
+>  	u32 ctrl = macb_readl(bp, NCR);
 
-Co-developed-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
----
- drivers/mtd/nand/raw/qcom_nandc.c | 344 ------------------------------
- 1 file changed, 344 deletions(-)
+Given the review of Conor Dooley of both patches in this series I think
+there will be a v3.
 
-diff --git a/drivers/mtd/nand/raw/qcom_nandc.c b/drivers/mtd/nand/raw/qcom_nandc.c
-index 14ab21a4771b..e689809cd4df 100644
---- a/drivers/mtd/nand/raw/qcom_nandc.c
-+++ b/drivers/mtd/nand/raw/qcom_nandc.c
-@@ -1302,155 +1302,6 @@ static void config_nand_cw_write(struct nand_chip *chip)
- 	write_reg_dma(nandc, NAND_READ_STATUS, 1, NAND_BAM_NEXT_SGL);
- }
- 
--/*
-- * the following functions are used within chip->legacy.cmdfunc() to
-- * perform different NAND_CMD_* commands
-- */
--
--/* sets up descriptors for NAND_CMD_PARAM */
--static int nandc_param(struct qcom_nand_host *host)
--{
--	struct nand_chip *chip = &host->chip;
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--
--	/*
--	 * NAND_CMD_PARAM is called before we know much about the FLASH chip
--	 * in use. we configure the controller to perform a raw read of 512
--	 * bytes to read onfi params
--	 */
--	if (nandc->props->qpic_v2)
--		nandc_set_reg(chip, NAND_FLASH_CMD, OP_PAGE_READ_ONFI_READ |
--			      PAGE_ACC | LAST_PAGE);
--	else
--		nandc_set_reg(chip, NAND_FLASH_CMD, OP_PAGE_READ |
--			      PAGE_ACC | LAST_PAGE);
--
--	nandc_set_reg(chip, NAND_ADDR0, 0);
--	nandc_set_reg(chip, NAND_ADDR1, 0);
--	nandc_set_reg(chip, NAND_DEV0_CFG0, 0 << CW_PER_PAGE
--					| 512 << UD_SIZE_BYTES
--					| 5 << NUM_ADDR_CYCLES
--					| 0 << SPARE_SIZE_BYTES);
--	nandc_set_reg(chip, NAND_DEV0_CFG1, 7 << NAND_RECOVERY_CYCLES
--					| 0 << CS_ACTIVE_BSY
--					| 17 << BAD_BLOCK_BYTE_NUM
--					| 1 << BAD_BLOCK_IN_SPARE_AREA
--					| 2 << WR_RD_BSY_GAP
--					| 0 << WIDE_FLASH
--					| 1 << DEV0_CFG1_ECC_DISABLE);
--	if (!nandc->props->qpic_v2)
--		nandc_set_reg(chip, NAND_EBI2_ECC_BUF_CFG, 1 << ECC_CFG_ECC_DISABLE);
--
--	/* configure CMD1 and VLD for ONFI param probing in QPIC v1 */
--	if (!nandc->props->qpic_v2) {
--		nandc_set_reg(chip, NAND_DEV_CMD_VLD,
--			      (nandc->vld & ~READ_START_VLD));
--		nandc_set_reg(chip, NAND_DEV_CMD1,
--			      (nandc->cmd1 & ~(0xFF << READ_ADDR))
--			      | NAND_CMD_PARAM << READ_ADDR);
--	}
--
--	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
--
--	if (!nandc->props->qpic_v2) {
--		nandc_set_reg(chip, NAND_DEV_CMD1_RESTORE, nandc->cmd1);
--		nandc_set_reg(chip, NAND_DEV_CMD_VLD_RESTORE, nandc->vld);
--	}
--
--	nandc_set_read_loc(chip, 0, 0, 0, 512, 1);
--
--	if (!nandc->props->qpic_v2) {
--		write_reg_dma(nandc, NAND_DEV_CMD_VLD, 1, 0);
--		write_reg_dma(nandc, NAND_DEV_CMD1, 1, NAND_BAM_NEXT_SGL);
--	}
--
--	nandc->buf_count = 512;
--	memset(nandc->data_buffer, 0xff, nandc->buf_count);
--
--	config_nand_single_cw_page_read(chip, false, 0);
--
--	read_data_dma(nandc, FLASH_BUF_ACC, nandc->data_buffer,
--		      nandc->buf_count, 0);
--
--	/* restore CMD1 and VLD regs */
--	if (!nandc->props->qpic_v2) {
--		write_reg_dma(nandc, NAND_DEV_CMD1_RESTORE, 1, 0);
--		write_reg_dma(nandc, NAND_DEV_CMD_VLD_RESTORE, 1, NAND_BAM_NEXT_SGL);
--	}
--
--	return 0;
--}
--
--/* sets up descriptors for NAND_CMD_ERASE1 */
--static int erase_block(struct qcom_nand_host *host, int page_addr)
--{
--	struct nand_chip *chip = &host->chip;
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--
--	nandc_set_reg(chip, NAND_FLASH_CMD,
--		      OP_BLOCK_ERASE | PAGE_ACC | LAST_PAGE);
--	nandc_set_reg(chip, NAND_ADDR0, page_addr);
--	nandc_set_reg(chip, NAND_ADDR1, 0);
--	nandc_set_reg(chip, NAND_DEV0_CFG0,
--		      host->cfg0_raw & ~(7 << CW_PER_PAGE));
--	nandc_set_reg(chip, NAND_DEV0_CFG1, host->cfg1_raw);
--	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
--	nandc_set_reg(chip, NAND_FLASH_STATUS, host->clrflashstatus);
--	nandc_set_reg(chip, NAND_READ_STATUS, host->clrreadstatus);
--
--	write_reg_dma(nandc, NAND_FLASH_CMD, 3, NAND_BAM_NEXT_SGL);
--	write_reg_dma(nandc, NAND_DEV0_CFG0, 2, NAND_BAM_NEXT_SGL);
--	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
--
--	read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
--
--	write_reg_dma(nandc, NAND_FLASH_STATUS, 1, 0);
--	write_reg_dma(nandc, NAND_READ_STATUS, 1, NAND_BAM_NEXT_SGL);
--
--	return 0;
--}
--
--/* sets up descriptors for NAND_CMD_READID */
--static int read_id(struct qcom_nand_host *host, int column)
--{
--	struct nand_chip *chip = &host->chip;
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--
--	if (column == -1)
--		return 0;
--
--	nandc_set_reg(chip, NAND_FLASH_CMD, OP_FETCH_ID);
--	nandc_set_reg(chip, NAND_ADDR0, column);
--	nandc_set_reg(chip, NAND_ADDR1, 0);
--	nandc_set_reg(chip, NAND_FLASH_CHIP_SELECT,
--		      nandc->props->is_bam ? 0 : DM_EN);
--	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
--
--	write_reg_dma(nandc, NAND_FLASH_CMD, 4, NAND_BAM_NEXT_SGL);
--	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
--
--	read_reg_dma(nandc, NAND_READ_ID, 1, NAND_BAM_NEXT_SGL);
--
--	return 0;
--}
--
--/* sets up descriptors for NAND_CMD_RESET */
--static int reset(struct qcom_nand_host *host)
--{
--	struct nand_chip *chip = &host->chip;
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--
--	nandc_set_reg(chip, NAND_FLASH_CMD, OP_RESET_DEVICE);
--	nandc_set_reg(chip, NAND_EXEC_CMD, 1);
--
--	write_reg_dma(nandc, NAND_FLASH_CMD, 1, NAND_BAM_NEXT_SGL);
--	write_reg_dma(nandc, NAND_EXEC_CMD, 1, NAND_BAM_NEXT_SGL);
--
--	read_reg_dma(nandc, NAND_FLASH_STATUS, 1, NAND_BAM_NEXT_SGL);
--
--	return 0;
--}
--
- /* helpers to submit/free our list of dma descriptors */
- static int submit_descs(struct qcom_nand_controller *nandc)
- {
-@@ -1551,135 +1402,6 @@ static void pre_command(struct qcom_nand_host *host, int command)
- 		clear_bam_transaction(nandc);
- }
- 
--/*
-- * this is called after NAND_CMD_PAGEPROG and NAND_CMD_ERASE1 to set our
-- * privately maintained status byte, this status byte can be read after
-- * NAND_CMD_STATUS is called
-- */
--static void parse_erase_write_errors(struct qcom_nand_host *host, int command)
--{
--	struct nand_chip *chip = &host->chip;
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--	struct nand_ecc_ctrl *ecc = &chip->ecc;
--	int num_cw;
--	int i;
--
--	num_cw = command == NAND_CMD_PAGEPROG ? ecc->steps : 1;
--	nandc_read_buffer_sync(nandc, true);
--
--	for (i = 0; i < num_cw; i++) {
--		u32 flash_status = le32_to_cpu(nandc->reg_read_buf[i]);
--
--		if (flash_status & FS_MPU_ERR)
--			host->status &= ~NAND_STATUS_WP;
--
--		if (flash_status & FS_OP_ERR || (i == (num_cw - 1) &&
--						 (flash_status &
--						  FS_DEVICE_STS_ERR)))
--			host->status |= NAND_STATUS_FAIL;
--	}
--}
--
--static void post_command(struct qcom_nand_host *host, int command)
--{
--	struct nand_chip *chip = &host->chip;
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--
--	switch (command) {
--	case NAND_CMD_READID:
--		nandc_read_buffer_sync(nandc, true);
--		memcpy(nandc->data_buffer, nandc->reg_read_buf,
--		       nandc->buf_count);
--		break;
--	case NAND_CMD_PAGEPROG:
--	case NAND_CMD_ERASE1:
--		parse_erase_write_errors(host, command);
--		break;
--	default:
--		break;
--	}
--}
--
--/*
-- * Implements chip->legacy.cmdfunc. It's  only used for a limited set of
-- * commands. The rest of the commands wouldn't be called by upper layers.
-- * For example, NAND_CMD_READOOB would never be called because we have our own
-- * versions of read_oob ops for nand_ecc_ctrl.
-- */
--static void qcom_nandc_command(struct nand_chip *chip, unsigned int command,
--			       int column, int page_addr)
--{
--	struct qcom_nand_host *host = to_qcom_nand_host(chip);
--	struct nand_ecc_ctrl *ecc = &chip->ecc;
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--	bool wait = false;
--	int ret = 0;
--
--	pre_command(host, command);
--
--	switch (command) {
--	case NAND_CMD_RESET:
--		ret = reset(host);
--		wait = true;
--		break;
--
--	case NAND_CMD_READID:
--		nandc->buf_count = 4;
--		ret = read_id(host, column);
--		wait = true;
--		break;
--
--	case NAND_CMD_PARAM:
--		ret = nandc_param(host);
--		wait = true;
--		break;
--
--	case NAND_CMD_ERASE1:
--		ret = erase_block(host, page_addr);
--		wait = true;
--		break;
--
--	case NAND_CMD_READ0:
--		/* we read the entire page for now */
--		WARN_ON(column != 0);
--
--		host->use_ecc = true;
--		set_address(host, 0, page_addr);
--		update_rw_regs(host, ecc->steps, true, 0);
--		break;
--
--	case NAND_CMD_SEQIN:
--		WARN_ON(column != 0);
--		set_address(host, 0, page_addr);
--		break;
--
--	case NAND_CMD_PAGEPROG:
--	case NAND_CMD_STATUS:
--	case NAND_CMD_NONE:
--	default:
--		break;
--	}
--
--	if (ret) {
--		dev_err(nandc->dev, "failure executing command %d\n",
--			command);
--		free_descs(nandc);
--		return;
--	}
--
--	if (wait) {
--		ret = submit_descs(nandc);
--		if (ret)
--			dev_err(nandc->dev,
--				"failure submitting descs for command %d\n",
--				command);
--	}
--
--	free_descs(nandc);
--
--	post_command(host, command);
--}
--
- /*
-  * when using BCH ECC, the HW flags an error in NAND_FLASH_STATUS if it read
-  * an erased CW, and reports an erased CW in NAND_ERASED_CW_DETECT_STATUS.
-@@ -2539,64 +2261,6 @@ static int qcom_nandc_block_markbad(struct nand_chip *chip, loff_t ofs)
- 	return nand_prog_page_end_op(chip);
- }
- 
--/*
-- * the three functions below implement chip->legacy.read_byte(),
-- * chip->legacy.read_buf() and chip->legacy.write_buf() respectively. these
-- * aren't used for reading/writing page data, they are used for smaller data
-- * like reading	id, status etc
-- */
--static uint8_t qcom_nandc_read_byte(struct nand_chip *chip)
--{
--	struct qcom_nand_host *host = to_qcom_nand_host(chip);
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--	u8 *buf = nandc->data_buffer;
--	u8 ret = 0x0;
--
--	if (host->last_command == NAND_CMD_STATUS) {
--		ret = host->status;
--
--		host->status = NAND_STATUS_READY | NAND_STATUS_WP;
--
--		return ret;
--	}
--
--	if (nandc->buf_start < nandc->buf_count)
--		ret = buf[nandc->buf_start++];
--
--	return ret;
--}
--
--static void qcom_nandc_read_buf(struct nand_chip *chip, uint8_t *buf, int len)
--{
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--	int real_len = min_t(size_t, len, nandc->buf_count - nandc->buf_start);
--
--	memcpy(buf, nandc->data_buffer + nandc->buf_start, real_len);
--	nandc->buf_start += real_len;
--}
--
--static void qcom_nandc_write_buf(struct nand_chip *chip, const uint8_t *buf,
--				 int len)
--{
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--	int real_len = min_t(size_t, len, nandc->buf_count - nandc->buf_start);
--
--	memcpy(nandc->data_buffer + nandc->buf_start, buf, real_len);
--
--	nandc->buf_start += real_len;
--}
--
--/* we support only one external chip for now */
--static void qcom_nandc_select_chip(struct nand_chip *chip, int chipnr)
--{
--	struct qcom_nand_controller *nandc = get_qcom_nand_controller(chip);
--
--	if (chipnr <= 0)
--		return;
--
--	dev_warn(nandc->dev, "invalid chip select\n");
--}
--
- /*
-  * NAND controller page layout info
-  *
-@@ -3642,14 +3306,6 @@ static int qcom_nand_host_init_and_register(struct qcom_nand_controller *nandc,
- 	mtd->owner = THIS_MODULE;
- 	mtd->dev.parent = dev;
- 
--	chip->legacy.cmdfunc	= qcom_nandc_command;
--	chip->legacy.select_chip	= qcom_nandc_select_chip;
--	chip->legacy.read_byte	= qcom_nandc_read_byte;
--	chip->legacy.read_buf	= qcom_nandc_read_buf;
--	chip->legacy.write_buf	= qcom_nandc_write_buf;
--	chip->legacy.set_features	= nand_get_set_features_notsupp;
--	chip->legacy.get_features	= nand_get_set_features_notsupp;
--
- 	/*
- 	 * the bad block marker is readable only when we read the last codeword
- 	 * of a page with ECC disabled. currently, the nand_base and nand_bbt
--- 
-2.17.1
+Please consider adjusting the hunk above to move towards rather than
+away from reverse xmas tree - longest line to shortest - for local
+variable names.
 
+That would be:
+
+	u16 watermark_reset_value;
+	struct macb_queue *queue;
+	...
+
+pw-bot: cr
