@@ -2,191 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED9D76FF54A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:58:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 708936FF555
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:59:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238506AbjEKO6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 10:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
+        id S238305AbjEKO7c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 10:59:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237865AbjEKO6W (ORCPT
+        with ESMTP id S238110AbjEKO7a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 10:58:22 -0400
-Received: from mail-oo1-xc2a.google.com (mail-oo1-xc2a.google.com [IPv6:2607:f8b0:4864:20::c2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3E0DEC;
-        Thu, 11 May 2023 07:58:03 -0700 (PDT)
-Received: by mail-oo1-xc2a.google.com with SMTP id 006d021491bc7-54f8b7a4feeso1655779eaf.2;
-        Thu, 11 May 2023 07:58:03 -0700 (PDT)
+        Thu, 11 May 2023 10:59:30 -0400
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46FAEAD28
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 07:59:03 -0700 (PDT)
+Received: by mail-vk1-xa2a.google.com with SMTP id 71dfb90a1353d-44ff2f8ec9dso5274380e0c.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 07:59:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683817083; x=1686409083;
+        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1683817138; x=1686409138;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DKh9RanEco8HkFU0f9YQUCI4J1uPooBwGH0J45ObAN4=;
-        b=sfcr2gDmpA6MfW6T3fpKqQu/TnYVeZ0fxsPI86zsuUPnzmWasEialKeKTWXqS7u4D4
-         nXAmdFPbkhVAxyjP9VrIVNaQNudJ45aNUqOCRB1IGcVfzLaPYqZpk+FHaEBKvM4nIvJa
-         BrPZct/zhxfL5d8xAhEPBCe8Pfoeiko4NS+WsyWv/hMoEfjeE9l5SUEVkELWJLepsLWO
-         bNVm6P2m43HS86NR/CHCBAMuP+OUM4yG/cZymVNXUrdib1sLGRStWZXVcJ6goiUPJ0H5
-         WyjurJUrawTO+PfgOG+D+RJVm+oh27AwT+1gMmuyz1gnnZa2+3OFg+h2Xyq1OF/88BMz
-         +fzg==
+        bh=VpO6U7Z1mcKtQslpBIHzR8nzCY5JK29I5far4gQgMlo=;
+        b=kKN3/B2JbJVf5rKF4ZI6Zg9LF1s3E60sEfHVHP9UbUqP9yq81zQWR60MUMAJ4fAfjN
+         Gel8g1Xnxi5hayYrGVJI40UDFzephMAweqGfKfUYQBSTsicEj2WmtQ15Rg2DjcVLV/ld
+         NaoHkM6cRUtI/ikfsF7kNKqRQEFLtO7xLZQLhCRJr/FqGZFoO38bZJsHlKmPZGs8Bik9
+         jREETS8YKz8fyWWk0OsvFSm22XIOIIuwCKzo+5kZdjzIULNACR10MRIn0DBvrzPKpDCQ
+         kwL2St4jWiYuFot2AnULe5bPxqNQGH/B5ovtEXrDZEfkRVNN4ZlS2lx8ZoTgaWefQNc6
+         LplQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683817083; x=1686409083;
+        d=1e100.net; s=20221208; t=1683817138; x=1686409138;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=DKh9RanEco8HkFU0f9YQUCI4J1uPooBwGH0J45ObAN4=;
-        b=MnyJt7HPbiD9BzwHv1za+DC9iTDhOAzhiFx1+1m9iVqVNFpRA/a9Wg5OyshQzbJmlF
-         gwKVWkWTRSonurPBWVCtEOvGNoNjsh8aHpjd5ZBLEX8QEq1H+I2SDqgBSaHxKcJr5PZ0
-         5f9oOqonZ2WCRbya2sXhElBM74n2jsYinLJL8p1v9WIQl0fjA4gILiDnOZZ01xENSq4g
-         OSaLOhup7mZ45n+HDdea+DyeDkkrRXMnU7/+WLzQuvXfE+D0EJ6R64YQN5afhsK01Hda
-         hjWIa3bL0t99SimTEfvNtJf23CaM+Cr945ZtItQ0U0XCxmfyGvhpVsWgsutFBLIoQnTJ
-         th/w==
-X-Gm-Message-State: AC+VfDymMooX4zBhC4r6WX8qSGMfZRFAYb+t5k9R6uSG98IS9Y3Ely87
-        DG3COhr4U4q4CCLgxvpIR+JGIuz9vouYnu/64AE=
-X-Google-Smtp-Source: ACHHUZ5Khr1M1krofX3oPdVbeyqlHZyoM2Fi52Fky/qFtI72qyW77RliSQNSaGdqi6r11ujdm5AjYBayy415E9N3LzQ=
-X-Received: by 2002:a4a:7606:0:b0:54f:54b3:cb9c with SMTP id
- t6-20020a4a7606000000b0054f54b3cb9cmr4931936ooc.1.1683817082839; Thu, 11 May
- 2023 07:58:02 -0700 (PDT)
+        bh=VpO6U7Z1mcKtQslpBIHzR8nzCY5JK29I5far4gQgMlo=;
+        b=JG1UfM030RDJN6ucRa2dti0Mk9X8CpEOL0AfB4gA6XNWtVCYprf6NUfFtHF12acI6n
+         XQOhoBQTqj9MwVicX4yL89xlsCiwN4P9caeUQO8FdhsyCPVhlG9/SWSxItlQxNEJsP4F
+         H00r5u619UtG5u86oXsaZO3UtKXIXM6cilxP8MW1fM4pdDXFhA5BJ2KX8+XfQB31Lrxt
+         v948Ha5TWdp0KhAc1OEgLuVOEQjeL2chPi2Vihl0+4TAyEDb/Jwf4E7KuXj47WXjoBDy
+         M5H2xz7ywO4HULgkmDaTl+zAUu3aldNvL8qnrzkLBJAKbhij/WSiVgh3hkdooeZ0+9Ff
+         nzRQ==
+X-Gm-Message-State: AC+VfDwn/85H5S6vKW8ICA2YxDVJtOg1RvSji6ySys9oGqBlyY9IyFbg
+        J2bIXIAxyKFMpG+i0Fk6XzYuo2+ZzcQGn7Bul6huEw==
+X-Google-Smtp-Source: ACHHUZ7MMZXbQEYaI0ke/9+cA4R2GurFJnuqHXbPsB3wyk49ZXE7ZZzuwXH49+QFkWCEgSBps0X9X5IGzCMlfeGTxTU=
+X-Received: by 2002:a1f:c905:0:b0:43f:c280:c10b with SMTP id
+ z5-20020a1fc905000000b0043fc280c10bmr8367140vkf.7.1683817138527; Thu, 11 May
+ 2023 07:58:58 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230509163712.376117-1-robdclark@gmail.com> <CAA8EJppVaCuh1kp7842pHt=5sWSBVaf18fZGC6ifmsQKgGNVSw@mail.gmail.com>
-In-Reply-To: <CAA8EJppVaCuh1kp7842pHt=5sWSBVaf18fZGC6ifmsQKgGNVSw@mail.gmail.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Thu, 11 May 2023 07:57:51 -0700
-Message-ID: <CAF6AEGuX721j41jCco1B6F_TW3EO3_W6+JDmh3S7Dfd62iAv7A@mail.gmail.com>
-Subject: Re: [PATCH 1/2] iommu/arm-smmu-qcom: Fix missing adreno_smmu's
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, iommu@lists.linux-foundation.org,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Lepton Wu <lepton@chromium.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Emma Anholt <emma@anholt.net>,
-        "moderated list:ARM SMMU DRIVERS" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:IOMMU SUBSYSTEM" <iommu@lists.linux.dev>,
-        open list <linux-kernel@vger.kernel.org>
+References: <20230426-stmpe-dt-bindings-v4-0-36fdd53d9919@linaro.org> <20230426-stmpe-dt-bindings-v4-1-36fdd53d9919@linaro.org>
+In-Reply-To: <20230426-stmpe-dt-bindings-v4-1-36fdd53d9919@linaro.org>
+From:   Bartosz Golaszewski <brgl@bgdev.pl>
+Date:   Thu, 11 May 2023 16:58:47 +0200
+Message-ID: <CAMRc=MdsBiV3AvzSPtCuR58w0N9z7o+hUrBDtXUC4a++pECb8w@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: gpio: Convert STMPE GPIO to YAML schema
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Lee Jones <lee@kernel.org>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Stefan Agner <stefan@agner.ch>, Marek Vasut <marex@denx.de>,
+        Steffen Trumtrar <s.trumtrar@pengutronix.de>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 7:51=E2=80=AFAM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
+On Mon, May 8, 2023 at 2:35=E2=80=AFPM Linus Walleij <linus.walleij@linaro.=
+org> wrote:
 >
-> On Tue, 9 May 2023 at 19:37, Rob Clark <robdclark@gmail.com> wrote:
-> >
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > When the special handling of qcom,adreno-smmu was moved into
-> > qcom_smmu_create(), it was overlooked that we didn't have all the
-> > required entries in qcom_smmu_impl_of_match.  So we stopped getting
-> > adreno_smmu_priv on sc7180, breaking per-process pgtables.
-> >
-> > Fixes: 30b912a03d91 ("iommu/arm-smmu-qcom: Move the qcom,adreno-smmu ch=
-eck into qcom_smmu_create")
-> > Suggested-by: Lepton Wu <lepton@chromium.org>
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > ---
-> >  drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 3 +++
-> >  1 file changed, 3 insertions(+)
-> >
-> > diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu=
-/arm/arm-smmu/arm-smmu-qcom.c
-> > index d1b296b95c86..760d9c43dbd2 100644
-> > --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> > +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> > @@ -496,20 +496,21 @@ static const struct qcom_smmu_match_data qcom_smm=
-u_500_impl0_data =3D {
-> >  /*
-> >   * Do not add any more qcom,SOC-smmu-500 entries to this list, unless =
-they need
-> >   * special handling and can not be covered by the qcom,smmu-500 entry.
-> >   */
-> >  static const struct of_device_id __maybe_unused qcom_smmu_impl_of_matc=
-h[] =3D {
-> >         { .compatible =3D "qcom,msm8996-smmu-v2", .data =3D &msm8996_sm=
-mu_data },
-> >         { .compatible =3D "qcom,msm8998-smmu-v2", .data =3D &qcom_smmu_=
-v2_data },
-> >         { .compatible =3D "qcom,qcm2290-smmu-500", .data =3D &qcom_smmu=
-_500_impl0_data },
-> >         { .compatible =3D "qcom,qdu1000-smmu-500", .data =3D &qcom_smmu=
-_500_impl0_data  },
-> >         { .compatible =3D "qcom,sc7180-smmu-500", .data =3D &qcom_smmu_=
-500_impl0_data },
-> > +       { .compatible =3D "qcom,sc7180-smmu-v2", .data =3D &qcom_smmu_v=
-2_data },
-> >         { .compatible =3D "qcom,sc7280-smmu-500", .data =3D &qcom_smmu_=
-500_impl0_data },
-> >         { .compatible =3D "qcom,sc8180x-smmu-500", .data =3D &qcom_smmu=
-_500_impl0_data },
-> >         { .compatible =3D "qcom,sc8280xp-smmu-500", .data =3D &qcom_smm=
-u_500_impl0_data },
-> >         { .compatible =3D "qcom,sdm630-smmu-v2", .data =3D &qcom_smmu_v=
-2_data },
-> >         { .compatible =3D "qcom,sdm845-smmu-v2", .data =3D &qcom_smmu_v=
-2_data },
-> >         { .compatible =3D "qcom,sdm845-smmu-500", .data =3D &sdm845_smm=
-u_500_data },
-> >         { .compatible =3D "qcom,sm6115-smmu-500", .data =3D &qcom_smmu_=
-500_impl0_data},
-> >         { .compatible =3D "qcom,sm6125-smmu-500", .data =3D &qcom_smmu_=
-500_impl0_data },
-> >         { .compatible =3D "qcom,sm6350-smmu-v2", .data =3D &qcom_smmu_v=
-2_data },
-> >         { .compatible =3D "qcom,sm6350-smmu-500", .data =3D &qcom_smmu_=
-500_impl0_data },
-> > @@ -540,12 +541,14 @@ struct arm_smmu_device *qcom_smmu_impl_init(struc=
-t arm_smmu_device *smmu)
-> >                 /* Match platform for ACPI boot */
-> >                 if (acpi_match_platform_list(qcom_acpi_platlist) >=3D 0=
-)
-> >                         return qcom_smmu_create(smmu, &qcom_smmu_500_im=
-pl0_data);
-> >         }
-> >  #endif
-> >
-> >         match =3D of_match_node(qcom_smmu_impl_of_match, np);
-> >         if (match)
-> >                 return qcom_smmu_create(smmu, match->data);
-> >
-> > +       WARN_ON(of_device_is_compatible(np, "qcom,adreno-smmu"));
+> This rewrites the STMPE GPIO bindings to a YAML schema.
 >
-> Could you please add a comment here, noting the reason? Or maybe we
-> should  change that to:
-> if (WARN_ON(...))
->   return ERR_PTR(-EINVAL);
-
-I'll add a comment.  Not having an iommu is even worse, so returning
-an error isn't a good idea.  I just wanted to leave some breadcrumbs
-so people can see where the problem actually is if per-process
-pgtables break again.
-
-BR,
--R
-
+> We add the properties that are used in the widely used
+> STMPE GPIO device nodes found in the wild, most notably
+> interrupt support, so interrupt-cells and
+> interrupt-controller is now part of the bindings.
 >
-> > +
-> >         return smmu;
-> >  }
-> > --
-> > 2.40.1
-> >
+> Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
+> ---
+> ChangeLog v3->v4:
+> - Realize that there were actually some old bindings so we
+>   need to get rid of them as part of this patch.
+> - Fix blank lines after description: keyword.
+> ChangeLog v2->v3:
+> - Use a compact hog node schema backed by the standard hog
+>   schema.
+> ChangeLog v1->v2:
+> - New patch split off from the MFD patch.
+> ---
+>  .../devicetree/bindings/gpio/gpio-stmpe.txt        | 17 -------
+>  .../devicetree/bindings/gpio/st,stmpe-gpio.yaml    | 53 ++++++++++++++++=
+++++++
+>  2 files changed, 53 insertions(+), 17 deletions(-)
 >
+> diff --git a/Documentation/devicetree/bindings/gpio/gpio-stmpe.txt b/Docu=
+mentation/devicetree/bindings/gpio/gpio-stmpe.txt
+> deleted file mode 100644
+> index b33f8f02c0d7..000000000000
+> --- a/Documentation/devicetree/bindings/gpio/gpio-stmpe.txt
+> +++ /dev/null
+> @@ -1,17 +0,0 @@
+> -STMPE gpio
+> -----------
+> -
+> -Required properties:
+> - - compatible: "st,stmpe-gpio"
+> -
+> -Optional properties:
+> - - st,norequest-mask: bitmask specifying which GPIOs should _not_ be req=
+uestable
+> -   due to different usage (e.g. touch, keypad)
+> -
+> -Node should be child node of stmpe node to which it belongs.
+> -
+> -Example:
+> -       stmpe_gpio {
+> -               compatible =3D "st,stmpe-gpio";
+> -               st,norequest-mask =3D <0x20>;     //gpio 5 can't be used
+> -       };
+> diff --git a/Documentation/devicetree/bindings/gpio/st,stmpe-gpio.yaml b/=
+Documentation/devicetree/bindings/gpio/st,stmpe-gpio.yaml
+> new file mode 100644
+> index 000000000000..22c0cae73425
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/gpio/st,stmpe-gpio.yaml
+> @@ -0,0 +1,53 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/gpio/st,stmpe-gpio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: STMicroelectonics Port Expander (STMPE) GPIO Block
+> +
+> +description:
+> +  STMicroelectronics Port Expander (STMPE) is a series of slow
+> +  bus controllers for various expanded peripherals such as GPIO, keypad,
+> +  touchscreen, ADC, PWM or rotator. It can contain one or several differ=
+ent
+> +  peripherals connected to SPI or I2C. These bindings pertain to the
+> +  GPIO portions of these expanders.
+> +
+> +maintainers:
+> +  - Linus Walleij <linus.walleij@linaro.org>
+> +
+> +properties:
+> +  compatible:
+> +    const: st,stmpe-gpio
+> +
+> +  "#gpio-cells":
+> +    const: 2
+> +
+> +  "#interrupt-cells":
+> +    const: 2
+> +
+> +  gpio-controller: true
+> +
+> +  interrupt-controller: true
+> +
+> +  st,norequest-mask:
+> +    description:
+> +      A bitmask of GPIO lines that cannot be requested because for
+> +      for example not being connected to anything on the system
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +
+> +patternProperties:
+> +  "^.+-hog(-[0-9]+)?$":
+> +    type: object
+> +
+> +    required:
+> +      - gpio-hog
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - "#gpio-cells"
+> +  - "#interrupt-cells"
+> +  - gpio-controller
+> +  - interrupt-controller
 >
 > --
-> With best wishes
-> Dmitry
+> 2.34.1
+>
+
+Applied, thanks!
+
+Bart
