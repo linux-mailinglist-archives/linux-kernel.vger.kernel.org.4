@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B6FF6FF371
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:52:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7616C6FF372
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:53:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238196AbjEKNwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 09:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45280 "EHLO
+        id S238040AbjEKNx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238040AbjEKNwf (ORCPT
+        with ESMTP id S237735AbjEKNx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:52:35 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6283A89;
-        Thu, 11 May 2023 06:52:34 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34BDUUJS000533;
-        Thu, 11 May 2023 13:52:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=RbRyh5JxCzRNKwywrJitBFStmeMc03vJfDZhpriQN1M=;
- b=cr1qQlAs0Rq2b4wcmbJLi2HiKlajTYyjBBOF/HwRrWO/NyhguG7Txy/fACyEK7P2qRg4
- ObQVJmr7kMs9DzXvvAF0FF3dv+Nq4nRpBKkwbStORra3nNfpzZ94SbxTvRYdVAJSC7YZ
- 7czl5YMalBMw/bw0gHAvhBe3eV+pXGT12OUmYhrbjKwO5+xuLshdl3Kdh5XkWsZzwML5
- uNF8uhKgt41QPPUvz96TyclRefQenfkDxQtbvxC33ukDUr7XFkLuv/PIqKK5bigfvOva
- evgY76f6VDXAXPgGlwNjxe92/HGA+xcYHX8MVqbVzrDGrNiTYt5a2rZWQPGSNggG/PJd Xw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qgv1u8vgs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 13:52:28 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34BDqRh1027265
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 13:52:27 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 11 May
- 2023 06:52:26 -0700
-Message-ID: <73f6b38d-b968-ccad-c00f-86afa883a07d@quicinc.com>
-Date:   Thu, 11 May 2023 07:52:25 -0600
+        Thu, 11 May 2023 09:53:26 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7BC830C2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:53:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=oGt8Fhll3C/V4qi+D0XuWcFjbbPahmaQJChF0zGsRM8=; b=iIOSyArc+Pwpknln/qeD6SlJVY
+        PqT9e+vv5Lvljn94kzVfXMEvIHKvL6Jy+T4PWL034k5g5Yoj0TIYyOPgDs1IhEGOn1ptlVQmepQXu
+        2ODuuddClb4hW4Oa6VesjpC77CEtBU1LyCFPH9dC5CWlRcZt6QeFnO1PxUg73SqFLHbQkWTnWtIsz
+        7rmVgWwRqm7F7VNEWy4lQv1nMp5wPBgkMcP9T0TLaqbbFTv1mGP1E3jcLlHm4WyLdCQ2t5S5CncKJ
+        AbZVTJx7klLNWb/Lkn4GfeE2+utWW7K/rbYPrjUMr9R+izggi974uT2O1L2m0PAKuaC7iBw0Q3mPO
+        3LwqoRtw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1px6jC-00HGP9-01; Thu, 11 May 2023 13:53:06 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 521C0300023;
+        Thu, 11 May 2023 15:53:04 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 0F06D2350E488; Thu, 11 May 2023 15:53:04 +0200 (CEST)
+Date:   Thu, 11 May 2023 15:53:03 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Crystal Wood <swood@redhat.com>
+Cc:     Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        linux-kernel@vger.kernel.org, Ben Segall <bsegall@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        John Stultz <jstultz@google.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Mel Gorman <mgorman@suse.de>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Waiman Long <longman@redhat.com>, Will Deacon <will@kernel.org>
+Subject: Re: [PATCH v2 1/4] sched/core: Provide sched_rtmutex() and expose
+ sched work helpers
+Message-ID: <20230511135303.GE83892@hirez.programming.kicks-ass.net>
+References: <20230427111937.2745231-1-bigeasy@linutronix.de>
+ <20230427111937.2745231-2-bigeasy@linutronix.de>
+ <20230503132051.GB1676736@hirez.programming.kicks-ass.net>
+ <e17e3aa2c9ac1d6e410f66986da3c41efa9f7462.camel@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [PATCH v2] bus: mhi: host: Skip MHI reset if device is in RDDM
-Content-Language: en-US
-To:     Qiang Yu <quic_qianyu@quicinc.com>, <mani@kernel.org>
-CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <quic_cang@quicinc.com>,
-        <quic_mrana@quicinc.com>
-References: <1683772404-13192-1-git-send-email-quic_qianyu@quicinc.com>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <1683772404-13192-1-git-send-email-quic_qianyu@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: bvoZugI4VqJIpH50vtlBfniE9K-RWs0K
-X-Proofpoint-ORIG-GUID: bvoZugI4VqJIpH50vtlBfniE9K-RWs0K
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-11_11,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- phishscore=0 mlxlogscore=948 lowpriorityscore=0 bulkscore=0 spamscore=0
- clxscore=1015 suspectscore=0 adultscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305110119
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <e17e3aa2c9ac1d6e410f66986da3c41efa9f7462.camel@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,17 +75,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/10/2023 8:33 PM, Qiang Yu wrote:
-> In RDDM EE, device can not process MHI reset issued by host. In case of MHI
-> power off, host is issuing MHI reset and polls for it to get cleared until
-> it times out. Since this timeout can not be avoided in case of RDDM, skip
-> the MHI reset in this scenarios.
+On Tue, May 09, 2023 at 05:14:38PM -0500, Crystal Wood wrote:
+> On Wed, 2023-05-03 at 15:20 +0200, Peter Zijlstra wrote:
+
+> > Urgh, so I really don't like this.
+> > 
+> > The end result is something like:
+> > 
+> >         rt_mutex_lock()
+> >           sched_submit_work();
+> >             // a nested rt_mutex_lock() here will not clobber
+> >             // ->pi_blocked_on because it's not set yet.
+> > 
+> >           task_blocks_on_rt_mutex();
+> >             tsk->pi_blocked_on = waiter;
+> >             rt_mutex_enqueue(lock, waiter); <-- the real problem
+> > 
+> >           rt_mutex_slowlock_block();
+> >             schedule_rtmutex();
+> > 
+> >           sched_resume_work();
+> > 
+> > And all of this it not just because tsk->pi_blocked_on, but mostly
+> > because of task_blocks_on_rt_mutex() enqueueing the waiter. The whole
+> > enqueue thing is what makes the 'simple' solution of saving/restoring
+> > tsk->pi_blocked_on not work.
+> > 
+> > Basically the pi_blocked_on curruption is a side effect, not the
+> > fundamental issue. One task having two waiters registered is the bigger
+> > issue.
 > 
-> Fixes: a0f5a630668c ("bus: mhi: Move host MHI code to "host" directory")
+> Where do you see pi_blocked_on being saved/restored? 
 
-This doesn't seem like the correct fixes tag.  That commit looks like it 
-just moves code around, but does not add code.  What is the commit that 
-added the relevant code?  That commit probably predates the move.
+I'm not, I'm saying that *IF* ->pi_blocked_on corruption were the real
+problem that would be a sufficient solution.
 
-> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
-> ---
+But ->pi_blocked_on corruption is just a wee side effect of the real
+problem, which is that the waiter is already enqueued and we've already
+done PI and can't very well back out of all that in a hurry.
+
+> The whole point of
+> this patchset is to deal with sched_submit_work() before anything has
+> been done on the "outer" lock acquisition (not just pi_blocked_on, but
+> also enqueuing) other than failing the fast path.
+
+It's also terribly fragile, sprinkling stuff all over that shouldn't be
+sprinkled.
+
+And it's sprinkled far wider than it needs to be -- per the below
+argument it really only should be applied to rtlock, not to rt_mutex or
+ww_rt_mutex or any of the others that normally block and shouldn't be
+used anyway.
+
+> > Now, sched_submit_work() could also use (regular) mutex -- after all
+> > it's a fully preemptible context. And then we're subject to the 'same'
+> > problem but with tsk->blocked_on (DEBUG_MUTEXES=y).
+> 
+> It's fully preemptible but it still shouldn't be doing things that would
+> block on non-RT.  That'd already be broken for a number of reasons (task
+> state corruption, infinite recursion if current->plug isn't cleared
+> before doing whatever causes another standard schedule(), etc).
+
+task->state is fairly immune to corruption normally -- the typical
+case is that the nested block resolves and resets it to RUNNING, at
+which point the outer loop 'fails' to schedule() and re-tries. All that
+is mostly harmless.
+
+But yes, all that code *SHOULD* not block, but nothing is really
+enforcing that.
+
