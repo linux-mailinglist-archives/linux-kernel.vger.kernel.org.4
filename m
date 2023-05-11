@@ -2,62 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D43966FF760
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:31:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EC166FF75C
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:31:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238654AbjEKQay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 12:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44316 "EHLO
+        id S238898AbjEKQa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 12:30:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238899AbjEKQaU (ORCPT
+        with ESMTP id S238908AbjEKQaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 11 May 2023 12:30:20 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B941A1B8
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 09:30:11 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-965c3f9af2aso1336072466b.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 09:30:11 -0700 (PDT)
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336766195
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 09:30:13 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so81066052a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 09:30:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1683822609; x=1686414609;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1683822611; x=1686414611;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xmbKzKvCEVL3/Z+maa2frRisiuuXCYpfX7aC8pkvAmU=;
-        b=q/dV1Kyz1sXGgpQBSBLe1o1ZHQPsO4KY0ZINVL7sF0dY5PWi8vtO4cTDNAXLPfoYqT
-         9TWMsb30K2KbCfPm9vbXw8PxwLzrni+5W8MkG6TPmYQyj3dQxHiz3rq+u7Htp34zZjTO
-         81APfL/5wjNQfqdsPXAFuh/lgTpuYKvt4vmFNYPPZNe2Eh9Qqd43X69hrrJaaI4rlczC
-         V6Wmcmt+izh+xnOwPYeLQFjbX+D+RV64MzrntDtyBhQ5wF5EjCNdjy5DVmXZIw7Pn8pg
-         EClDjEEEJxVAJptJLWkbq8w2gs7sIXQocpD/V1MXCO1OxSylOdkycHK1CuNanCgUxDAO
-         HjRw==
+        bh=RRBwEvfGQIrh+pVMdhdSvf8KI6OxPqchD4EYbezjkwM=;
+        b=afA0togys2/WCVNqYbtSl6wBcgtlb1iX4/Hi+Z+48VT//dtNljgbBaAl3lNwT5NQ1U
+         V64qYSZXIaeW+Kl5rrQkRWmingsK4LrPv5mNpaP3CS9ZzWyvrGKPiTZnjyVc8s/d1Qrs
+         31pReZiVdfSaEWIFkvgnBg9wQHnQjJlWf/SQaAkT9LYXp6BP+Ztlzn+LLzRg8ge5T0w+
+         u70Xlp9ummOnpFr5duw8/CAf0Cfoj1yEdFs0347fo6Q9sJmB9eX6rZwKtuYeA+ffETcb
+         08VUXfcMKqB2kK5L0frsQh3/17eXGpX6IS7olGMAnPwbmVYF7bmp6okotCx3cLpYgZIW
+         4T7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683822609; x=1686414609;
+        d=1e100.net; s=20221208; t=1683822611; x=1686414611;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=xmbKzKvCEVL3/Z+maa2frRisiuuXCYpfX7aC8pkvAmU=;
-        b=lOOM66cG9g/XJVMNCuNuhrmZfVlZn1YH2eeDyacb/a79JkG+bqtbTZw7LVmN73ndrQ
-         zZfOzw4f3BgtiMPWfWN1JHrKjJOM48mKJ8acgARePnwOF7uZWqt878o6XZuMvqVO9IDy
-         N5h10AwyF54SRom0LQzcf5604t+XSnfjHqpuz/mgfxd6cniCZHmqAVSkrKDfL8AjY9Dn
-         EYTxiTVEXzy6QJcx6+eB8dZszjr2WwRWJlcDrEV6RE3vT+TiuHcQcHAK8ogJAm56mJUg
-         e9OMi65GjKGLMfCaCHngBdpmx/Azme4xEm6S3WNwNhFDEfb8PVq82fPuMXuRftRRHTHU
-         XXeA==
-X-Gm-Message-State: AC+VfDwIkf4PkNtNGENI0mAagT0zrQVkEiQ0mWBPta6xTpoft420TKrV
-        c/k09b42u4QKx85SpEJpCs6LBIMX9/Po76LR/KY=
-X-Google-Smtp-Source: ACHHUZ5uOZDaYJVg9Iy1QBY5C2GOopzZ8IjxRnoeyVNFQMDXFhaxHGCDIKTLpigjJCW/vtgDc5u0yw==
-X-Received: by 2002:a17:906:dc89:b0:957:862a:9e6e with SMTP id cs9-20020a170906dc8900b00957862a9e6emr25298127ejc.73.1683822609676;
-        Thu, 11 May 2023 09:30:09 -0700 (PDT)
+        bh=RRBwEvfGQIrh+pVMdhdSvf8KI6OxPqchD4EYbezjkwM=;
+        b=M0mQJMMyqa+4zNTB/zvG/kP7549WYMCe/HXuSdvqdept0+uOmeaFgXJXTwkhdMdOX1
+         58JmWy+Y2aw8wHQYYt5n/g2DNfIMvrgIZ3e/VgavIjNysED5+/4VUhZU+ERr5K4R93Oe
+         laMXmddiVdgTcWpdr+AMu0sDN6JOEVfkkDe+JMRLomipTm0u0Kdf1ta3Y6v2K1SSIrew
+         1QYuObU8b25iUt8XXA/0ESc4snKebueDj/CNQ2Ugrqdfckh8T1enlsk9EqYU9+zr78Ar
+         fzXJ+VUFEiOASFwWZAYqwoXJsj+9MBWvGaPEfd+zmKzWn/oGYZXJNqLY7p3RbSKbWjh6
+         SGuQ==
+X-Gm-Message-State: AC+VfDy2yZ92/zxC+Y4ADbEr/A1pMpGkfLrmENb67v+BJdmpQIEehLtO
+        Wx3U4bf1fC939WFkn5We9ufV38dmm2sfHRqxIaU=
+X-Google-Smtp-Source: ACHHUZ5ztEmDWE2m42ORaSyVflfkAcBjj30Wzi1DlMGthfU1V9Lk1C1qZzJjaFoWDCd9w5A5cD2cOw==
+X-Received: by 2002:a17:906:5d13:b0:960:6263:138f with SMTP id g19-20020a1709065d1300b009606263138fmr20793864ejt.27.1683822611029;
+        Thu, 11 May 2023 09:30:11 -0700 (PDT)
 Received: from [127.0.1.1] (158.22.5.93.rev.sfr.net. [93.5.22.158])
-        by smtp.googlemail.com with ESMTPSA id v9-20020a170906338900b0094ee99eeb01sm4209935eja.150.2023.05.11.09.30.08
+        by smtp.googlemail.com with ESMTPSA id v9-20020a170906338900b0094ee99eeb01sm4209935eja.150.2023.05.11.09.30.09
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 09:30:09 -0700 (PDT)
-From:   Alexandre Mergnat <amergnat@baylibre.com>
-Date:   Thu, 11 May 2023 18:29:30 +0200
-Subject: [PATCH v7 10/11] arm64: dts: mediatek: add cpufreq support for
- mt8365-evk
+        Thu, 11 May 2023 09:30:10 -0700 (PDT)
+From:   amergnat@baylibre.com
+Date:   Thu, 11 May 2023 18:29:31 +0200
+Subject: [PATCH v7 11/11] arm64: dts: mediatek: Add CPU Idle support
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230203-evk-board-support-v7-10-98cbdfac656e@baylibre.com>
+Message-Id: <20230203-evk-board-support-v7-11-98cbdfac656e@baylibre.com>
 References: <20230203-evk-board-support-v7-0-98cbdfac656e@baylibre.com>
 In-Reply-To: <20230203-evk-board-support-v7-0-98cbdfac656e@baylibre.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>,
@@ -74,21 +73,22 @@ Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-watchdog@vger.kernel.org, devicetree@vger.kernel.org,
         linux-mediatek@lists.infradead.org,
         Alexandre Mergnat <amergnat@baylibre.com>,
+        Amjad Ouled-Ameur <aouledameur@baylibre.com>,
         Kevin Hilman <khilman@baylibre.com>
 X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1201; i=amergnat@baylibre.com;
- h=from:subject:message-id; bh=Rq9Zwic5qmJaMrB9niIQqjmYy4HHPOH7tnCD4z3ywik=;
- b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkXRgFgHKPxikwHNlF53Z9K1ZVag508Iiu4ktC/Erl
- oNn1iLSJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZF0YBQAKCRArRkmdfjHURSf9D/
- 9e8z/M0tLfGh8LKPOPWHUhEpwvDmDGhQ8Sv3EJVcvEbZlehDxc0bKZ5QPW486w7RiMvScyTOrwUwZ4
- /4zH+gUCHFtEo4RbchFHkmCyoVmqBCClMQdJrA+75i4oFwtCCVyCibd6fZ53AUKjXIUJduasVXLzyQ
- x+4Vu2+iEH7jdwPzRI/UOnCOHdBlRtt5G5BiFHX+VkDkbzvheEJltDe9kqIaGeaxWGoxuqKjaSwr26
- 2ItedjGs3qapqQB4dv05/9CJZE3873C/K5QBOw9HOPjiKtGJJSD2PS9FLiDJcpMKAoRw7+FaEMseU9
- OMijDOrupSFfBLHv0VEtBGa4FsjuTYcVM3uBV73z1eyr6YoakLjtjYJye/mHE8N8ek9oxg0mH5DJxQ
- iLTZFAmtZBebXV6us4SmHFT2mzpC9JGhz6rcUM+5Cul8znxNVYut+FPVVHfyDCo02z++xMHGCkXx4d
- tI51+YoFVcXeo6tBEPc3Q1s/xXXudIHndZ1UwRlYs2MSM4fk+aeWOkGkzmUhUTXytJiuoU9YoKD5YP
- yhZ3yu8mKKnXOYV9nR3C9tlHNK2zsmXgNEHMbVcKXqQ6hrPhgosIAXYnWqaRndO3fRcGgD6GqDfiU4
- Mt2ma43fUmMRe8EQ+eqvpgq9TqQMSApPb7QUmqchapJpOMCevP9fvaYtC7tw==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2737; i=amergnat@baylibre.com;
+ h=from:subject:message-id; bh=vYzOQ2oc5j6ZLGT/M6bLKTIS/chNEplrOLaJKWbM7ds=;
+ b=owEBbQKS/ZANAwAKAStGSZ1+MdRFAcsmYgBkXRgFAzS6LbWTWUcMEoCaR8sqFR9Xigsp8S0Hmy95
+ Jlm3L0uJAjMEAAEKAB0WIQQjG17X8+qqcA5g/osrRkmdfjHURQUCZF0YBQAKCRArRkmdfjHURTndEA
+ Cex5rMbwQvMMzR73kflR/rwX5EN4mV+fpZkrlrvBamLuBzAKKj7uOGQqdw/Wks6I4YS/KYMM69x+lR
+ z5GrCRQyHIJ+aL2Rfa/E1sQUxMqwY3HirlK7d2tM2A07/AiDc9pAebsAjOa9p5UeZAw+LLpV2zVfcy
+ Gb+C8m2jwPbiU1GeGiLxWZJe5qarmv7uZU3r8a7KlEeOVN8teeOPcVml7+Uk8xXxU4NA72S6ahPKOw
+ mjw79F0O/LlNWEuUJsFpqMzLnP8xRjFLPeiG5VxwMjJumTr1DKJObvcDnScO4jXR+hSu5d0KK9nSil
+ Y7r1IGj1mhLZQfHaPsaDTJjDvdAPI26eJnPkTVrta3Lom/XYPchJ+lBchE/Ae+nbFLz/zn/0iX7ynV
+ RTlb/swIKGAr8/BtpfWwZHhJM5u+9VjefT9TYVZ3Lm4D390TPM42taib/qj0AZ8PiFqUk6Xee5kcpx
+ dT9pB3+fb0KwteX1w1iSeOvdU23qePJ8W5DceKAfkR+V+4s5sJ8xcLoUfwygcRkCN3IJx4B9ocXv1D
+ pyWwvGkIIOXdaM7BMfbt/T/LPF5tSqOJSTJNcjak7LEI7dzuSVf9twuuw6cUoWgW9B24DyfUwMxjt0
+ gWJXIYWo8XUAkhZMxIPQOR8opD3H5B/jF2M/igVlb7rZplIGufiJvdDVGWow==
 X-Developer-Key: i=amergnat@baylibre.com; a=openpgp;
  fpr=231B5ED7F3EAAA700E60FE8B2B46499D7E31D445
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -101,47 +101,95 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In order to have cpufreq support, this patch adds proc-supply and
-sram-supply for each CPU.
+From: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 
+MT8365 has 3 CPU Idle states:
+- MCDI_CPU. (Multi-Core-Deep-Idle)
+- MCDI_CLUSTER.
+- DPIDLE. (Deep-Idle)
+
+Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Tested-by: Kevin Hilman <khilman@baylibre.com>
 Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 ---
- arch/arm64/boot/dts/mediatek/mt8365-evk.dts | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8365.dtsi | 35 ++++++++++++++++++++++++++++++++
+ 1 file changed, 35 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-index cf81dace466a..b39b2bdfb82f 100644
---- a/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-+++ b/arch/arm64/boot/dts/mediatek/mt8365-evk.dts
-@@ -88,6 +88,26 @@ optee_reserved: optee@43200000 {
- 	};
- };
+diff --git a/arch/arm64/boot/dts/mediatek/mt8365.dtsi b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+index cfe0c67ad61f..413496c92069 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8365.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8365.dtsi
+@@ -128,6 +128,7 @@ cpu0: cpu@0 {
+ 			reg = <0x0>;
+ 			#cooling-cells = <2>;
+ 			enable-method = "psci";
++			cpu-idle-states = <&CPU_MCDI &CLUSTER_MCDI &CLUSTER_DPIDLE>;
+ 			i-cache-size = <0x8000>;
+ 			i-cache-line-size = <64>;
+ 			i-cache-sets = <256>;
+@@ -147,6 +148,7 @@ cpu1: cpu@1 {
+ 			reg = <0x1>;
+ 			#cooling-cells = <2>;
+ 			enable-method = "psci";
++			cpu-idle-states = <&CPU_MCDI &CLUSTER_MCDI &CLUSTER_DPIDLE>;
+ 			i-cache-size = <0x8000>;
+ 			i-cache-line-size = <64>;
+ 			i-cache-sets = <256>;
+@@ -166,6 +168,7 @@ cpu2: cpu@2 {
+ 			reg = <0x2>;
+ 			#cooling-cells = <2>;
+ 			enable-method = "psci";
++			cpu-idle-states = <&CPU_MCDI &CLUSTER_MCDI &CLUSTER_DPIDLE>;
+ 			i-cache-size = <0x8000>;
+ 			i-cache-line-size = <64>;
+ 			i-cache-sets = <256>;
+@@ -185,6 +188,7 @@ cpu3: cpu@3 {
+ 			reg = <0x3>;
+ 			#cooling-cells = <2>;
+ 			enable-method = "psci";
++			cpu-idle-states = <&CPU_MCDI &CLUSTER_MCDI &CLUSTER_DPIDLE>;
+ 			i-cache-size = <0x8000>;
+ 			i-cache-line-size = <64>;
+ 			i-cache-sets = <256>;
+@@ -198,6 +202,37 @@ cpu3: cpu@3 {
+ 			operating-points-v2 = <&cluster0_opp>;
+ 		};
  
-+&cpu0 {
-+	proc-supply = <&mt6357_vproc_reg>;
-+	sram-supply = <&mt6357_vsram_proc_reg>;
-+};
++		idle-states {
++			entry-method = "psci";
 +
-+&cpu1 {
-+	proc-supply = <&mt6357_vproc_reg>;
-+	sram-supply = <&mt6357_vsram_proc_reg>;
-+};
++			CPU_MCDI: cpu-mcdi {
++				compatible = "arm,idle-state";
++				local-timer-stop;
++				arm,psci-suspend-param = <0x00010001>;
++				entry-latency-us = <300>;
++				exit-latency-us = <200>;
++				min-residency-us = <1000>;
++			};
 +
-+&cpu2 {
-+	proc-supply = <&mt6357_vproc_reg>;
-+	sram-supply = <&mt6357_vsram_proc_reg>;
-+};
++			CLUSTER_MCDI: cluster-mcdi {
++				compatible = "arm,idle-state";
++				local-timer-stop;
++				arm,psci-suspend-param = <0x01010001>;
++				entry-latency-us = <350>;
++				exit-latency-us = <250>;
++				min-residency-us = <1200>;
++			};
 +
-+&cpu3 {
-+	proc-supply = <&mt6357_vproc_reg>;
-+	sram-supply = <&mt6357_vsram_proc_reg>;
-+};
++			CLUSTER_DPIDLE: cluster-dpidle {
++				compatible = "arm,idle-state";
++				local-timer-stop;
++				arm,psci-suspend-param = <0x01010004>;
++				entry-latency-us = <300>;
++				exit-latency-us = <800>;
++				min-residency-us = <3300>;
++			};
++		};
 +
- &ethernet {
- 	pinctrl-0 = <&ethernet_pins>;
- 	pinctrl-names = "default";
+ 		l2: l2-cache {
+ 			compatible = "cache";
+ 			cache-level = <2>;
 
 -- 
 2.25.1
