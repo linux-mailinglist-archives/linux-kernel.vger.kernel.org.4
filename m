@@ -2,75 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810946FED8D
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:07:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25A5C6FEDA6
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:14:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235698AbjEKIHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 04:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34916 "EHLO
+        id S232114AbjEKIOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 04:14:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235469AbjEKIHb (ORCPT
+        with ESMTP id S229918AbjEKIOU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 04:07:31 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D922A268
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:06:56 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id 4fb4d7f45d1cf-50bf7bb76d0so21006a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:06:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683792414; x=1686384414;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KljiQtSFqo+YtWAuOB2h9MgfsMKO5eDxysmOsAT/+yw=;
-        b=PHg2bnJhagsGAiFrglfHm2V7DArMp4AhZIz75pfeKg5hc+suQNxDqTW9aBWmE/t6hg
-         3rSf8UPSojB2gZKxGqG0/UowHOztzw5p5lAAZN2Vf1+yYAvtQXP3WQwlktpGpRAGhsul
-         76cey6/H6ww4hompKMHNsShE7/U1XoH7zaojTGiDwydB9LaW0aT7/i8vC0qUT8y86Dt9
-         JfB7dNFSVg2UZLT7eIRIS36WtPlTHetOw3MQyJfJk3tuRS2EvSoKDQXZrkS+IWzOvqzy
-         7r8ipLmCkEC7Puc12VedDlEC2mtTOCK9n6IlSQ+mCAvCUGx1glZoNdF46C3J6OtNfh4E
-         UINA==
+        Thu, 11 May 2023 04:14:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6BF2720
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:13:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683792814;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ISts0ooOqDRfuZXF0qq5A4HD7E+tCGV5ujF6/xdMaMg=;
+        b=PzgRB9stweH5iS4FO+VIw9DhD7A6TyddIKo5AEg2CgODlTZDQr1Ot8BccHu5/oF3tz0AVO
+        38PduJibRwuBgAdzq7sXT9fntJ9oXshcwYOn/s8T7xhIztkhtqsWzhVCOAb3EYVg3PAQT/
+        usbomoYm0DECl8yqSVzLg+ZvybyiuFA=
+Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
+ [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-622-A6A5wXPgPF2zA58ttn3wjA-1; Thu, 11 May 2023 04:13:31 -0400
+X-MC-Unique: A6A5wXPgPF2zA58ttn3wjA-1
+Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-30635d18e55so2887841f8f.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:13:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683792414; x=1686384414;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683792810; x=1686384810;
+        h=content-transfer-encoding:mime-version:message-id:date:references
+         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=KljiQtSFqo+YtWAuOB2h9MgfsMKO5eDxysmOsAT/+yw=;
-        b=gYa3w8c7KLk6kJEsOm5Rh4ylJnxhD/kXKePwNPg7GBvWr/yPJRt3/DcK3xTHWB+Qgp
-         anhGc3MGED56lq50XF8uWzj6z39LYCBtCbjQmQ/Ts/wUcbqOd4gI8XleHD7hiWaSAGKD
-         EP/kmk0P8dWPSEvXnBAij8bZkjm9fs3JZpcp6HdpjPc27H333DhVUgElvr62PqyKds05
-         Ikvebfks8WBZwhU4/iH6ar8QyLW9n9JuKH1jpFW1Uotf0XeQsJseRU34E8hoSIGz5TGA
-         demqhZlWGldesHtFzD09UOTmUM7jD4Ha4MQxSMrPDfYNHmII6L4HSQvJ35qSDgbV245h
-         udoQ==
-X-Gm-Message-State: AC+VfDxVSQw8Sak4LzI9ZbkxXaCGVSTt93SKBtk9KPuOlQ1ZiDnd+k6O
-        Lrl0ZXN4YbUIKpNSKM323nQwF98bv3nq5cqy3DWexQ==
-X-Google-Smtp-Source: ACHHUZ5LaN5TDvN1FyO5MhQS0lmIkF5TXzwK6Dj9VdmOKW2CYodVmwm4+rhlyyeuU7KXDssjyC5Y6cQ5ZlwMYKZjXrE=
-X-Received: by 2002:a50:d71d:0:b0:506:9116:dcc8 with SMTP id
- t29-20020a50d71d000000b005069116dcc8mr31791edi.7.1683792414065; Thu, 11 May
- 2023 01:06:54 -0700 (PDT)
+        bh=ISts0ooOqDRfuZXF0qq5A4HD7E+tCGV5ujF6/xdMaMg=;
+        b=CHZKjEH/EQiN59DdRpwpUpBsDPB3mIekdHJX1E4k/5/aYoSl/0nBxfEwC7LX9hupWr
+         ZiWV2pSSDQJQ6hyxy009lHio2iYB1sx4E0SzHkQv41tqzSpMPXAXzTX6O+Qw8uEMtYP/
+         5p0fLMt6D5sQyrlOxcSru/DRLxuhxcMGJ3emBLWC5zTpqwrETlCs1h5R47BxrAjbxroC
+         IAh7ET2mc9QMEI6RMxRsY+grysOds1E20Akst5585l/0FQ/HIkm4Dn8pV1QMWFN4Mp4J
+         pd+zpAfpY0yX0ImxWryRj8zIzZ9s5KmnHrTpf46MS9djtb52w98t8hiJLbWjbdJXwfc3
+         EVnw==
+X-Gm-Message-State: AC+VfDyJrFaKlEKeOO6Ib/49LUarxlKFSfGk0V/A7Z+Lq8tXFCou7n7b
+        VLlC29YYTnw6oCKv6WZ/OQBu8w3LMbvqhC8Co4d4l4KiJHuBa1N5ib7Aa9uYyfeYk4g+rwlDgU9
+        N0PTDawZFme44MBMXbkutXMbr
+X-Received: by 2002:a5d:6ad2:0:b0:306:3b39:9a3d with SMTP id u18-20020a5d6ad2000000b003063b399a3dmr15181732wrw.15.1683792809977;
+        Thu, 11 May 2023 01:13:29 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4wzkHxXA98ZgAI5RK3TMyhcDtRnsVdn01Y5Ujktfp0w0cSPqr08X4KOya9osApYAYUFMqmaQ==
+X-Received: by 2002:a5d:6ad2:0:b0:306:3b39:9a3d with SMTP id u18-20020a5d6ad2000000b003063b399a3dmr15181702wrw.15.1683792809674;
+        Thu, 11 May 2023 01:13:29 -0700 (PDT)
+Received: from vschneid.remote.csb ([154.57.232.159])
+        by smtp.gmail.com with ESMTPSA id y12-20020adffa4c000000b00306281cfa59sm19596655wrr.47.2023.05.11.01.13.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 01:13:29 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     Leonardo =?utf-8?Q?Br=C3=A1s?= <leobras@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yury Norov <yury.norov@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Nadav Amit <namit@vmware.com>,
+        Zhen Lei <thunder.leizhen@huawei.com>,
+        Chen Zhongjin <chenzhongjin@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@kernel.org>
+Subject: Re: [RFC PATCH 1/1] smp: Add tracepoints for functions called with
+ smp_call_function*()
+In-Reply-To: <f96442e9166e4f73be772656a93c89093eddbb8b.camel@redhat.com>
+References: <20230406075718.68672-1-leobras@redhat.com>
+ <20230406095519.GG386572@hirez.programming.kicks-ass.net>
+ <f294a74cd17bf932621a6a746d592f49770d25ec.camel@redhat.com>
+ <20230503145900.GC1689514@hirez.programming.kicks-ass.net>
+ <xhsmh7ctojoia.mognet@vschneid.remote.csb>
+ <f96442e9166e4f73be772656a93c89093eddbb8b.camel@redhat.com>
+Date:   Thu, 11 May 2023 09:13:27 +0100
+Message-ID: <xhsmhv8gzi8uw.mognet@vschneid.remote.csb>
 MIME-Version: 1.0
-References: <20230504092142.4190069-1-yixuanjiang@google.com>
- <2023050644-dwarf-shabby-d44d@gregkh> <CAGJzVQGxDHa83uV0w4Q35UaGpwNhLpKzcZ5y_qsfd4ELDi+OnA@mail.gmail.com>
- <2023051045-ransack-lullaby-a127@gregkh>
-In-Reply-To: <2023051045-ransack-lullaby-a127@gregkh>
-From:   Yixuan Jiang <yixuanjiang@google.com>
-Date:   Thu, 11 May 2023 16:06:42 +0800
-Message-ID: <CAGJzVQEy2E9WZOgiMtmXq0F=EEcse3YgQdrrqXhBS0dQmwtVGw@mail.gmail.com>
-Subject: Re: [PATCH] ASoC: soc-pcm: Fix and cleanup DPCM locking
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     tiwai@suse.com, lgirdwood@gmail.com, broonie@kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Takashi Iwai <tiwai@suse.de>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,121 +95,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Greg KH <gregkh@linuxfoundation.org> =E6=96=BC 2023=E5=B9=B45=E6=9C=8810=E6=
-=97=A5 =E9=80=B1=E4=B8=89 =E4=B8=8B=E5=8D=8810:40=E5=AF=AB=E9=81=93=EF=BC=
-=9A
+On 10/05/23 17:27, Leonardo Br=C3=A1s wrote:
+> On Thu, 2023-05-04 at 12:59 +0100, Valentin Schneider wrote:
+>> +TRACE_EVENT(csd_queue_cpu,
+>> +
+>> +	TP_PROTO(const unsigned int cpu,
+>> +		 unsigned long callsite,
+>> +		 smp_call_func_t func,
+>> +		 call_single_data_t *csd),
+>> +
+>> +	TP_ARGS(cpu, callsite, func, csd),
+>> +
+>> +	TP_STRUCT__entry(
+>> +		__field(unsigned int, cpu)
+>> +		__field(void *, callsite)
+>> +		__field(void *, func)
+>> +		__field(void *, csd)
+>> +	),
+>> +
+>> +	TP_fast_assign(
+>> +		__entry->cpu =3D cpu;
+>> +		__entry->callsite =3D (void *)callsite;
+>> +		__entry->func =3D func;
+>> +		__entry->csd  =3D csd;
+>> +	),
+>> +
+>> +	TP_printk("cpu=3D%u callsite=3D%pS func=3D%pS csd=3D%p",
+>> +		  __entry->cpu, __entry->callsite, __entry->func, __entry->csd)
+>> +);
 >
-> On Wed, May 10, 2023 at 07:59:49PM +0800, Yixuan Jiang wrote:
-> > Greg KH <greg@kroah.com> =E6=96=BC 2023=E5=B9=B45=E6=9C=886=E6=97=A5 =
-=E9=80=B1=E5=85=AD =E4=B8=8B=E5=8D=881:56=E5=AF=AB=E9=81=93=EF=BC=9A
-> > >
-> > > On Thu, May 04, 2023 at 05:21:42PM +0800, yixuanjiang wrote:
-> > > > From: Takashi Iwai <tiwai@suse.de>
-> > > >
-> > > > The existing locking for DPCM has several issues
-> > > > a) a confusing mix of card->mutex and card->pcm_mutex.
-> > > > b) a dpcm_lock spinlock added inconsistently and on paths that coul=
-d
-> > > > be recursively taken. The use of irqsave/irqrestore was also overki=
-ll.
-> > > >
-> > > > The suggested model is:
-> > > >
-> > > > 1) The pcm_mutex is the top-most protection of BE links in the FE. =
-The
-> > > > pcm_mutex is applied always on either the top PCM callbacks or the
-> > > > external call from DAPM, not taken in the internal functions.
-> > > >
-> > > > 2) the FE stream lock is taken in higher levels before invoking
-> > > > dpcm_be_dai_trigger()
-> > > >
-> > > > 3) when adding and deleting a BE, both the pcm_mutex and FE stream
-> > > > lock are taken.
-> > > >
-> > > > Signed-off-by: Takashi Iwai <tiwai@suse.de>
-> > > > [clarification of commit message by plbossart]
-> > > > Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.int=
-el.com>
-> > > > Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-> > > > Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-> > > > Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-> > > > Link: https://lore.kernel.org/r/20211207173745.15850-4-pierre-louis=
-.bossart@linux.intel.com
-> > > > Cc: stable@vger.kernel.org # 5.15.x
-> > > > Signed-off-by: Mark Brown <broonie@kernel.org>
-> > > > ---
-> > >
-> > > What is the git commit id of this patch in Linus's tree?
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
-> >
-> > Hi Greg,
-> > For this patch I think it is [3/6] b7898396f4bbe160f546d0c5e9fa17cca9a7=
-d153
-> >
-> > >From https://lore.kernel.org/all/163953384515.1515253.1364147710634891=
-3835.b4-ty@kernel.org/
-> > Seems there are total 6 patches.
-> >
-> > [1/6] ASoC: soc-pcm: use GFP_ATOMIC for dpcm structure
-> >       commit: d8a9c6e1f6766a16cf02b4e99a629f3c5512c183
-> > [2/6] ASoC: soc-pcm: align BE 'atomicity' with that of the FE
-> >       commit: bbf7d3b1c4f40eb02dd1dffb500ba00b0bff0303
-> > [3/6] ASoC: soc-pcm: Fix and cleanup DPCM locking
-> >       commit: b7898396f4bbe160f546d0c5e9fa17cca9a7d153
-> > [4/6] ASoC: soc-pcm: serialize BE triggers
-> >       commit: b2ae80663008a7662febe7d13f14ea1b2eb0cd51
-> > [5/6] ASoC: soc-pcm: test refcount before triggering
-> >       commit: 848aedfdc6ba25ad5652797db9266007773e44dd
-> > [6/6] ASoC: soc-pcm: fix BE handling of PAUSE_RELEASE
-> >       commit: 3aa1e96a2b95e2ece198f8dd01e96818971b84df
-> >
-> > These 6 patches could directly cherry-pick to in 5.15 without conflict.
+> This is for the caller side, right?
 >
-> Then please submit them for stable inclusion after you have tested that
-> they all work properly.  But first, what bug is actually needed to be
-> fixed here?  What is not working that this patch series fixes?
+
+Yep, see usage lower down.
+
+>> +
+>> +DECLARE_EVENT_CLASS(csd_function,
+>> +
+>> +	TP_PROTO(smp_call_func_t func, call_single_data_t *csd),
+>> +
+>> +	TP_ARGS(func, csd),
+>> +
+>> +	TP_STRUCT__entry(
+>> +		__field(void *,	func)
+>> +		__field(void *,	csd)
+>> +	),
+>> +
+>> +	TP_fast_assign(
+>> +		__entry->func	=3D func;
+>> +		__entry->csd	=3D csd;
+>> +	),
+>> +
+>> +	TP_printk("func=3D%pS csd=3D%p", __entry->func, __entry->csd)
+>> +);
+>> +
+>> +DEFINE_EVENT(csd_function, csd_function_entry,
+>> +	TP_PROTO(smp_call_func_t func, call_single_data_t *csd),
+>> +	TP_ARGS(func, csd)
+>> +);
+>> +
+>> +DEFINE_EVENT(csd_function, csd_function_exit,
+>> +	TP_PROTO(smp_call_func_t func, call_single_data_t *csd),
+>> +	TP_ARGS(func, csd)
+>> +);
 >
-> thanks,
+> Oh, this is what event_class is for. Thanks for the example :)
 >
-> greg k-h
+>> +
+>> +#endif /* _TRACE_SMP_H */
+>> +
+>> +/* This part must be outside protection */
+>> +#include <trace/define_trace.h>
+>> diff --git a/kernel/smp.c b/kernel/smp.c
+>> index ab3e5dad6cfe9..7d28db303e9bc 100644
+>> --- a/kernel/smp.c
+>> +++ b/kernel/smp.c
+>> @@ -27,6 +27,9 @@
+>>  #include <linux/jump_label.h>
+>>
+>>  #include <trace/events/ipi.h>
+>> +#define CREATE_TRACE_POINTS
+>> +#include <trace/events/smp.h>
+>> +#undef CREATE_TRACE_POINTS
+>>
+>>  #include "smpboot.h"
+>>  #include "sched/smp.h"
+>> @@ -121,6 +124,14 @@ send_call_function_ipi_mask(struct cpumask *mask)
+>>      arch_send_call_function_ipi_mask(mask);
+>>  }
+>>
+>> +static __always_inline void
+>> +csd_do_func(smp_call_func_t func, void *info, call_single_data_t *csd)
+>> +{
+>> +	trace_csd_function_entry(func, csd);
+>> +	func(info);
+>> +	trace_csd_function_exit(func, csd);
+>> +}
+>> +
+>
+> Good one, a helper to avoid calling those traces everywhere.
+>
+> Honest question:
+> Since info =3D=3D csd->info and func =3D=3D csd->func, we could just pass=
+ csd, right?
+> I suppose the suggestion on the 3-argument version is to use the values a=
+lready
+> fetched from memory instead of fetching them again. Is that correct?
+>
 
-Hi Greg,
+There's also the special case of CSD_TYPE_TTWU where there is no csd->func,
+instead we have an implicit func mapping to sched_ttwu_pending). I think
+it's preferable to directly feed the right things to the TP than to
+duplicate the "decoding" logic against the *csd passed as TP argument.
 
-The bug is, in 5.15
-It will always deadlock after stop compress playback.
-
-The patch A
-  ASoC: soc-compress: Reposition and add pcm_mutex commit:
-aa9ff6a4955fdba02b54fbc4386db876603703b7
-From patch A comment it is about to fix the issue by adding lock hold
-becasue patch B will check if lock is held.
-
-The patch B
-  ASoC: soc-pcm: Fix and cleanup DPCM locking commit:
-b7898396f4bbe160f546d0c5e9fa17cca9a7d153
-Patch B remove lock aquire then check if lock is already held.
-
-In 5.15 it only include patch A then cause the deadlock.
-
-[  198.670679][    T1] Call trace:
-[  198.670690][    T1]  __switch_to+0x174/0x328
-[  198.670744][    T1]  __schedule+0x5d0/0xaec
-[  198.670784][    T1]  schedule+0xc8/0x134
-[  198.670803][    T1]  schedule_preempt_disabled+0x30/0x50
-[  198.670820][    T1]  __mutex_lock+0x39c/0xa70
-[  198.670845][    T1]  __mutex_lock_slowpath+0x1c/0x2c
-[  198.670862][    T1]  mutex_lock+0x4c/0x104
-[  198.670878][    T1]  soc_pcm_hw_clean+0x38/0x16c            <--
-Patch B will remove lock aquire, if no patch B, it will aquire lock
-again then cause AA deadlock
-[  198.670958][    T1]  dpcm_be_dai_hw_free+0x17c/0x1b4
-[  198.670983][    T1]  soc_compr_free_fe+0x84/0x158             <--
-Patch A aquire the lock
-[  198.671025][    T1]  snd_compr_free+0xac/0x148
-
-So is it better by revert patch A because purpose of patch A doesn't
-exist in 5.15 ?
-Or just backport full 6 patches series B to 5.15 ?
