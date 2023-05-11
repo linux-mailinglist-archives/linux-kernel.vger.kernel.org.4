@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7CDB6FF99A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 20:53:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 80BCE6FF99B
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 20:53:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238811AbjEKSxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 14:53:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
+        id S239049AbjEKSxM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 14:53:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238932AbjEKSxB (ORCPT
+        with ESMTP id S238948AbjEKSxD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 14:53:01 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E212240E0;
-        Thu, 11 May 2023 11:53:00 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1ab1ce53ca6so65247925ad.0;
-        Thu, 11 May 2023 11:53:00 -0700 (PDT)
+        Thu, 11 May 2023 14:53:03 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515C949FA;
+        Thu, 11 May 2023 11:53:02 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1ab0c697c84so69234255ad.3;
+        Thu, 11 May 2023 11:53:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683831180; x=1686423180;
+        d=gmail.com; s=20221208; t=1683831181; x=1686423181;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=7o+RBiVTUR0DwkNdBEw9knQ1VGeDnk1pNXEP3ntY+eU=;
-        b=UqOBntZpH/hTxsSnqz6tqittgDaSy8/jKh9JGoQD2vwaYlDE1I4i5F0jBM7KlIss6m
-         GWh/4BzyyZnyi/Osozdzroc8kydLSG1vSH6ny+FmMdfkrQl0IFA6XiIazPxJ8ENZW8Re
-         qtTUOSr4JLt8ChpKuMV9uIvLVb+SQylG9waLkaSbR2sSFUmo5GTT0KrCgaAE74e1lrr3
-         SCJI4yDXl2e92y5Fe3aUx+VrOe4s93XEWxbR7nE8ikb5BhMr1wTiCCpl2cntTtDHYOxV
-         0H6LFeoMC8d/vYo2eD+Q9VA4BYVRbfB2dyzTz9d/b/jLsGeY9vdJQp9calmojFD4b/O3
-         Mwuw==
+        bh=HKXVPvgyQquk1TSIQ/OU7pvBBko0Yowmo5LV3A9+bSA=;
+        b=YGArolRMbIDSSJke8TGKqCTntbcRR7Lo0Aq2TLUYrFxRcW80O8kX6d+iXPcW7ZgmH3
+         a90HDabJvBrKVrd7xGL4AKttT9Xd1un9Wi+NvvSdxN1e3hqPVY+0zYGw06Kt5rjQYF5x
+         TteODwJFs0qpMZ5yzX3izLpggoJ6pz5c6bjha1a3bRFlQoqEJuobpE23nr2YDjPRhXOp
+         2+fKwcbFsS7QQHe7j1syiVq/6VAofn8C78hpAseTjpArAruJTgUmjWETo3rvb6jDxdfA
+         MLOrITIrnuxA5QP/UEgIdEKbgZ4J0ia91cQpfgmjZASwFMhVULSmstIXU3ZebGqZnqDE
+         6dYg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683831180; x=1686423180;
+        d=1e100.net; s=20221208; t=1683831181; x=1686423181;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=7o+RBiVTUR0DwkNdBEw9knQ1VGeDnk1pNXEP3ntY+eU=;
-        b=UKsANxMu33Qt9IsMG4WyCX804QeDoHTAK6NBT9uAY562BjBonJmnvuK+9PAFuJADJf
-         R+fkXZv0qvMYURE1+bbW1i5gMTrwAAJIQWK2PXogpnPFP+qbtUM6qJ5gGAlP7wLUi2Va
-         owu0IL0MAGNvWV1w3E7I5gUdOg69KQG6nCwoeJp9LYc58hPBNmy6jAKjCUlH5QapqQMW
-         857Gjqwal+OaFPjkHmsgd2AMztywiotD1dLoI+JyKeIpLTSsIbYhO5rqeov0DVIRrn/l
-         x0sJRSJNFlAwV24UOAX4R/EWVGDvoJRdr4RRC0z/ZY6eYBpmrcIgOjLAJLY3g91kFZuA
-         MrhQ==
-X-Gm-Message-State: AC+VfDw/feXdTrYzsFI6ncPc2vgzNCFeL8dawjsuyMwWVg1ncNNUm466
-        k3jM3X+k+JwKXodrLxfwK3xv+yUkR7M=
-X-Google-Smtp-Source: ACHHUZ70yb4hK5Vbnzzkv1SlgUrq3839eTz9Wvz8+q/sIhLk6M8C93hOhcBVB75jsS89Wm45+FTPWQ==
-X-Received: by 2002:a17:902:c40b:b0:1aa:fd48:f5e2 with SMTP id k11-20020a170902c40b00b001aafd48f5e2mr29678853plk.32.1683831179734;
-        Thu, 11 May 2023 11:52:59 -0700 (PDT)
+        bh=HKXVPvgyQquk1TSIQ/OU7pvBBko0Yowmo5LV3A9+bSA=;
+        b=d5FXh9FzU9fjc2JxSryJO2oYP+FTlxMjLq5oix6ZaGlFZ6ZV30Okg1aegSdDRCQScH
+         vmxQTIc7nCUYYFuswmbLrZJ/hdWx9/tlCd5w5M84zxwfVIbGUwpBSGPwYblVHt+6kex0
+         hoKbirkVqgNykffieH3qal7J6XEHomx7Wkck2qXfd42CLx3+gg3IdlYZESZHTf0YBfdw
+         62yg/LaE7yqgx9Lg5bgXXGCv0FLJ0VDiz0i7JJCPD6PMF0DqXDUKpui/6WqzrMcbcaXX
+         p9tyzXIbPKZTItQ/hHUUcUCoAZS10ljWJCQj0XokMPr8oy4sJb3l6iQY+bcM6H7URYlW
+         G0WA==
+X-Gm-Message-State: AC+VfDx8tdgxec8PknUrB3UQB8jCuS6GmMNdpSy8wbthv1DHzIH1XzoB
+        9besB7nOgZn8n7OajkoR0hMFpstAeZk=
+X-Google-Smtp-Source: ACHHUZ4iYtXDja/WYrLCsLdZdvRrKMJWXkSRRf2mDFbhxqu65bFNoZsLKcdkXTcODEYUt/FIKPHdbg==
+X-Received: by 2002:a17:903:185:b0:1a9:6bd4:236a with SMTP id z5-20020a170903018500b001a96bd4236amr28122650plg.69.1683831181145;
+        Thu, 11 May 2023 11:53:01 -0700 (PDT)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:84a:ed9c:4024:c347])
-        by smtp.gmail.com with ESMTPSA id q5-20020a170902788500b001a980a23804sm6288995pll.4.2023.05.11.11.52.58
+        by smtp.gmail.com with ESMTPSA id q5-20020a170902788500b001a980a23804sm6288995pll.4.2023.05.11.11.52.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 11:52:58 -0700 (PDT)
+        Thu, 11 May 2023 11:53:00 -0700 (PDT)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     linux-input@vger.kernel.org
 Cc:     Raul E Rangel <rrangel@chromium.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/7] Input: libps2 - remove special handling of ACK for command byte
-Date:   Thu, 11 May 2023 11:52:42 -0700
-Message-ID: <20230511185252.386941-3-dmitry.torokhov@gmail.com>
+Subject: [PATCH 3/7] Input: libps2 - rework handling of command response
+Date:   Thu, 11 May 2023 11:52:43 -0700
+Message-ID: <20230511185252.386941-4-dmitry.torokhov@gmail.com>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
 In-Reply-To: <20230511185252.386941-1-dmitry.torokhov@gmail.com>
 References: <20230511185252.386941-1-dmitry.torokhov@gmail.com>
@@ -71,67 +71,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When getting unexpected data while waiting for an acknowledgement it does
-not matter what command phase is currently executed, and ps2_handle_ack()
-should indicate that no further processing is needed for the received data
-byte. Remove PS2_FLAG_ACK_CMD and associated handling.
-
-Note that while it is possible to make ps2_handle_ack (and
-ps2_handle_repsonse) return void, it will be done when the code will be
-converted to common PS/2 interrupt handler later.
+It is not entirely correct that libps2 sets PS2_FLAG_CMD1 after
+the device acknowledges each byte sent to the device by the host.
+Rework the code so that PS2_FLAG_CMD1 and PS2_FLAG_CMD are set only once,
+at the beginning of PS/2 command execution.
 
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- drivers/input/serio/libps2.c | 9 ++-------
- include/linux/libps2.h       | 1 -
- 2 files changed, 2 insertions(+), 8 deletions(-)
+ drivers/input/serio/libps2.c | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
 diff --git a/drivers/input/serio/libps2.c b/drivers/input/serio/libps2.c
-index 764990723847..399cda0d34f5 100644
+index 399cda0d34f5..d09450eca9a7 100644
 --- a/drivers/input/serio/libps2.c
 +++ b/drivers/input/serio/libps2.c
-@@ -253,9 +253,6 @@ int __ps2_command(struct ps2dev *ps2dev, u8 *param, unsigned int command)
- 		for (i = 0; i < receive; i++)
- 			ps2dev->cmdbuf[(receive - 1) - i] = param[i];
+@@ -247,14 +247,19 @@ int __ps2_command(struct ps2dev *ps2dev, u8 *param, unsigned int command)
  
--	/* Signal that we are sending the command byte */
--	ps2dev->flags |= PS2_FLAG_ACK_CMD;
--
+ 	serio_pause_rx(ps2dev->serio);
+ 
++	/* Some mice do not ACK the "get ID" command, prepare to handle this. */
+ 	ps2dev->flags = command == PS2_CMD_GETID ? PS2_FLAG_WAITID : 0;
+ 	ps2dev->cmdcnt = receive;
+-	if (receive && param)
+-		for (i = 0; i < receive; i++)
+-			ps2dev->cmdbuf[(receive - 1) - i] = param[i];
++	if (receive) {
++		/* Indicate that we expect response to the command. */
++		ps2dev->flags |= PS2_FLAG_CMD | PS2_FLAG_CMD1;
++		if (param)
++			for (i = 0; i < receive; i++)
++				ps2dev->cmdbuf[(receive - 1) - i] = param[i];
++	}
+ 
  	/*
- 	 * Some devices (Synaptics) peform the reset before
+-	 * Some devices (Synaptics) peform the reset before
++	 * Some devices (Synaptics) perform the reset before
  	 * ACKing the reset command, and so it can take a long
-@@ -267,9 +264,7 @@ int __ps2_command(struct ps2dev *ps2dev, u8 *param, unsigned int command)
- 	if (rc)
- 		goto out_reset_flags;
- 
--	/* Now we are sending command parameters, if any */
--	ps2dev->flags &= ~PS2_FLAG_ACK_CMD;
--
-+	/* Send command parameters, if any. */
- 	for (i = 0; i < send; i++) {
- 		rc = ps2_do_sendbyte(ps2dev, param[i], 200, 2);
- 		if (rc)
-@@ -436,7 +431,7 @@ bool ps2_handle_ack(struct ps2dev *ps2dev, u8 data)
- 		 */
- 		dev_dbg(&ps2dev->serio->dev, "unexpected %#02x\n", data);
- 		ps2dev->flags &= ~PS2_FLAG_WAITID;
--		return ps2dev->flags & PS2_FLAG_ACK_CMD;
-+		return true;
+ 	 * time before the ACK arrives.
+ 	 */
+@@ -434,11 +439,8 @@ bool ps2_handle_ack(struct ps2dev *ps2dev, u8 data)
+ 		return true;
  	}
  
- 	if (!ps2dev->nak) {
-diff --git a/include/linux/libps2.h b/include/linux/libps2.h
-index 53f7e4d0f4b7..193dd53ad18b 100644
---- a/include/linux/libps2.h
-+++ b/include/linux/libps2.h
-@@ -28,7 +28,6 @@
- #define PS2_FLAG_CMD1		BIT(2)	/* Waiting for the first byte of command response */
- #define PS2_FLAG_WAITID		BIT(3)	/* Command executing is GET ID */
- #define PS2_FLAG_NAK		BIT(4)	/* Last transmission was NAKed */
--#define PS2_FLAG_ACK_CMD	BIT(5)	/* Waiting to ACK the command (first) byte */
+-	if (!ps2dev->nak) {
++	if (!ps2dev->nak)
+ 		ps2dev->flags &= ~PS2_FLAG_NAK;
+-		if (ps2dev->cmdcnt)
+-			ps2dev->flags |= PS2_FLAG_CMD | PS2_FLAG_CMD1;
+-	}
  
- struct ps2dev {
- 	struct serio *serio;
+ 	ps2dev->flags &= ~PS2_FLAG_ACK;
+ 	wake_up(&ps2dev->wait);
 -- 
 2.40.1.606.ga4b1b128d6-goog
 
