@@ -2,107 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0183E6FF79B
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D8146FF79F
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:40:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238836AbjEKQkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 12:40:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53766 "EHLO
+        id S238327AbjEKQkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 12:40:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54012 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238958AbjEKQj7 (ORCPT
+        with ESMTP id S238706AbjEKQkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 12:39:59 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8F021996;
-        Thu, 11 May 2023 09:39:57 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50bc3088b7aso16694755a12.3;
-        Thu, 11 May 2023 09:39:57 -0700 (PDT)
+        Thu, 11 May 2023 12:40:10 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E0667EFB
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 09:40:08 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f4ad71b00eso14530915e9.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 09:40:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683823196; x=1686415196;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mpg8XDB92ynuRzY1i3UBYEufHNkhwJLAak/2Lx31N6M=;
-        b=ibTgPIrHlC7KM/tGyqwtf1UyJoDnPrrLqtP2Zqej1oTbR/ruuQMX9ZXvgnS39ULJvo
-         DERGtBVBE4r78wvrzmORpxZDKusSm7SnefyLARh9hy9m3JL7n5Yu7HlfQmQ34BXafg7r
-         1/GM07+C5kHldeoOv7dn4eYcXFOHvIFUJfDuGzTvPdmfmLIMUh916Sa1Ffbe8Glz5uTC
-         veeqqFL58PtyBrn682RVe0XbnqYAtyRHlIAJyhX/Lwp3/ynI/wiZolwdiO+KfG5L/QIl
-         24BSF3UgtwsHic13L1N4Qvk31GZG9r9hpBup0hFkQFGdYLqJuhnrTbkXNvTIGn9i5+ga
-         eFTg==
+        d=ventanamicro.com; s=google; t=1683823207; x=1686415207;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=rWPj+0MEcU+bJjFDLtiKhJORofVGXZE+QDk7KaJWG9E=;
+        b=UuPFreN/sIyZvma3z9Xm6KxNZFcbh1TpDfsITGLUWBCWA6T4xHCFr5HuwlelWhANsc
+         GODLbDYWSkjxpw1FlGH7zBZhqQl+PBnoza0HREbOpZD4TA496u22UD6bDXXczi7KYVpl
+         vUHL3f5x4AXj97duCDa1dgEYjprlWsVyV+SBIS6xrVMPSwQcsV6kK8n5uf0FR6XnIuc4
+         bHtcnz/0qP1iI3PLzgpdryNpdPYlDZbySxQcLGTnHTgtAXoWs5v1mwmzllg9a6m64GLt
+         EJC3fIG+NQH/j+vTbDoa5wKLgeATWhDm4OwK78ppk49kTcq7mfR/nc2WNPwoATtQv89M
+         LAmQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683823196; x=1686415196;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mpg8XDB92ynuRzY1i3UBYEufHNkhwJLAak/2Lx31N6M=;
-        b=M7EmcvS8cWpM7dDxCT0/1wQA8o9qwQv678X6m4k0PAOupz9sT2LQ30DT3psDXOvcP+
-         zGmp7UJrLwXt+u5Gice7vVFRPWU3KxZhhafzNTl4vq2IZpTI0Gc+97T49RVdOejORPKu
-         cYiBSRif5oTPQlBTp6x+kh6p6aklvgK+zajYLxWATyaoKFsy7NvUOtkvPdy62Z7Z3iK7
-         dBNb51WsuWFXAA77qZm9Id1V69zBtJey33pRDohPN3bMPHptP9Io9F+mSwS6J8w3brfK
-         xOidT412N39qS6zgiYUEEeEaf8ce5jZCZV/58A3QceK5i6shBlpbaAuvaLjcjdufFKID
-         xvMw==
-X-Gm-Message-State: AC+VfDxbE0hgKEXCjxwqhq1qPnyZP+A7JkqGGQi13gYiPbGKtMGgZoEV
-        4u4b4z3cjSKodVqKki+DWTs=
-X-Google-Smtp-Source: ACHHUZ5M06vBgci6zS42m3wRUWv6RwPtzqUTomGRUWOkHFF5nSTmaSbApuSRzoOCjc6tHcHBsCYfeQ==
-X-Received: by 2002:a17:907:843:b0:94f:5847:8ac with SMTP id ww3-20020a170907084300b0094f584708acmr19514441ejb.51.1683823196255;
-        Thu, 11 May 2023 09:39:56 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id r12-20020a1709062ccc00b0094e954fd015sm4260699ejr.175.2023.05.11.09.39.54
+        d=1e100.net; s=20221208; t=1683823207; x=1686415207;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rWPj+0MEcU+bJjFDLtiKhJORofVGXZE+QDk7KaJWG9E=;
+        b=DBWwzHil3O8HiOli9R7CoXWQQuX3EjmioVKSuL7WSH75PGKw2/9Epvm9pkhxDNKXYI
+         AGN63/+IRgyoqe9UksQp5SDTScsWi6FL5caMc2RcFmFuj16RVi4dUVrR404kOnhsm6xF
+         oGT2OXYtVl0Efsuwa65Vi3znG7gVnO+dP5wNT4A+9uGR3EEc0zsXI3RYT0jbbEzgDZ4o
+         jPVuY1jX5hTpidOGzboqMMKIxtMPjOKoeBvvI7MVlA0nLYtrvbWEXsxn2ArB5KAnJPwB
+         EZM6pCbygK9hHuvTDYCYJIIjlcfDtuQ2vI+dHRidNRVfpkK+0JEmpGxKEbGqj5znBVv3
+         op9w==
+X-Gm-Message-State: AC+VfDxeOyiT8xjSQtArR7dSVrhWPLsw2TZUbrgd37P91WXJI402xF1W
+        XXTTQJ8LEuhUMQWR3xe2YZ4f4A==
+X-Google-Smtp-Source: ACHHUZ5lIBereKcBnZpJKQGjLGzbXt7Ys+TI95CPzIw7E6x8cqi52/zghFhzklOdZznlq63vKEcQWg==
+X-Received: by 2002:a1c:f20a:0:b0:3f1:819d:d050 with SMTP id s10-20020a1cf20a000000b003f1819dd050mr15055961wmc.37.1683823206802;
+        Thu, 11 May 2023 09:40:06 -0700 (PDT)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id 12-20020a05600c020c00b003f4b6bcbd8bsm4941659wmi.31.2023.05.11.09.40.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 09:39:55 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Andre Przywara <andre.przywara@arm.com>,
-        Maksim Kiselev <bigunclemax@gmail.com>
-Cc:     Icenowy Zheng <icenowy@aosc.io>,
-        Maksim Kiselev <bigunclemax@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
+        Thu, 11 May 2023 09:40:06 -0700 (PDT)
+Date:   Thu, 11 May 2023 18:40:05 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Haibo Xu <haibo1.xu@intel.com>
+Cc:     xiaobo55x@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
         Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
         Albert Ou <aou@eecs.berkeley.edu>,
-        Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-        Maxime Ripard <mripard@kernel.org>, linux-spi@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v5 1/5] dt-bindings: spi: sun6i: add DT bindings for Allwinner
- R329/D1/R528/T113s SPI
-Date:   Thu, 11 May 2023 18:39:54 +0200
-Message-ID: <3558185.R56niFO833@jernej-laptop>
-In-Reply-To: <20230510081121.3463710-2-bigunclemax@gmail.com>
-References: <20230510081121.3463710-1-bigunclemax@gmail.com>
- <20230510081121.3463710-2-bigunclemax@gmail.com>
+        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] riscv: kvm: Add KVM_GET_REG_LIST API support
+Message-ID: <20230511-d0a207eebb30fc88de875e4f@orel>
+References: <cover.1683791148.git.haibo1.xu@intel.com>
+ <921fc2e1a91887170e277acb1b52df57480a5736.1683791148.git.haibo1.xu@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <921fc2e1a91887170e277acb1b52df57480a5736.1683791148.git.haibo1.xu@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sreda, 10. maj 2023 ob 10:11:08 CEST je Maksim Kiselev napisal(a):
-> Listed above Allwinner SoCs has two SPI controllers. First is the regular
-> SPI controller and the second one has additional functionality for
-> MIPI-DBI Type C.
+On Thu, May 11, 2023 at 05:22:48PM +0800, Haibo Xu wrote:
+> KVM_GET_REG_LIST API will return all registers that are available to
+> KVM_GET/SET_ONE_REG APIs. It's very useful to identify some platform
+> regression issue during VM migration.
 > 
-> Add compatible strings for these controllers
+> Since this API was already supported on arm64, it'd be straightforward
+> to enable it on riscv with similar code structure.
 > 
-> Signed-off-by: Maksim Kiselev <bigunclemax@gmail.com>
-> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
+> ---
+>  Documentation/virt/kvm/api.rst |   2 +-
+>  arch/riscv/kvm/vcpu.c          | 346 +++++++++++++++++++++++++++++++++
+>  2 files changed, 347 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index add067793b90..280e89abd004 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -3499,7 +3499,7 @@ VCPU matching underlying host.
+>  ---------------------
+>  
+>  :Capability: basic
+> -:Architectures: arm64, mips
+> +:Architectures: arm64, mips, riscv
+>  :Type: vcpu ioctl
+>  :Parameters: struct kvm_reg_list (in/out)
+>  :Returns: 0 on success; -1 on error
+> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> index 8bd9f2a8a0b9..fb8834e4fa15 100644
+> --- a/arch/riscv/kvm/vcpu.c
+> +++ b/arch/riscv/kvm/vcpu.c
+> @@ -657,6 +657,334 @@ static int kvm_riscv_vcpu_set_reg_isa_ext(struct kvm_vcpu *vcpu,
+>  	return 0;
+>  }
+>  
+> +static inline unsigned long num_config_regs(void)
+> +{
+> +	return sizeof(struct kvm_riscv_config) / sizeof(unsigned long);
 
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+We can't assume all config registers are present. For example,
+zicbom and zicboz block size registers are only present when their
+respective extensions are available.
 
-Best regards,
-Jernej
-
-
+Thanks,
+drew
