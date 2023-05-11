@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB766FFBDA
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 23:27:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A65B6FFBE1
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 23:34:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239281AbjEKV1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 17:27:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
+        id S232582AbjEKVex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 17:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232437AbjEKV1T (ORCPT
+        with ESMTP id S239096AbjEKVev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 17:27:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5403A80;
-        Thu, 11 May 2023 14:27:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30F3265208;
-        Thu, 11 May 2023 21:27:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D6CFC433D2;
-        Thu, 11 May 2023 21:27:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683840436;
-        bh=MKpx4WeaZw72S2ynWWzQvQwcTmdWNg2PeYSfzsbwLdo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=bK6KiGrC+4q2qsi2uzYihFkXJ0nn8ojQgyvD2agyEMBSDLRHgelQCVGLBGjdFd37a
-         +OuckV1Ssgr4z3nlPL7TWpDUW8f1eBCovGCMnJpsonD+dau29trINMRFXwGjoY6GjO
-         qGQMAfnYsPgKLOIHxUk8iL2oBaye0DAZv3K0sDIK9RP7gawHmimH9dfSdrTXU+Y4J+
-         7YU33kTjAcJs3sAhJaEoJ7+i8PZWJ2jkxlVBK5BmPVzp7OUN+ADvP5RxBVXJMYuEoc
-         NqqjXlOMbnwTJ1FRoFkC8Mc66sklSHVk6+f2axU5VD7s6yYbkj8Lb5uFfjbfEiFPXl
-         MIMFBUSzQ/CqQ==
-Date:   Thu, 11 May 2023 16:27:14 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-pci@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH 01/17] PCI: Add concurrency safe clear_and_set variants
- for LNKCTL{,2}
-Message-ID: <ZF1dsvJYYnl8Wv0v@bhelgaas>
+        Thu, 11 May 2023 17:34:51 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09EA63A9B
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 14:34:50 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-643990c5373so9262381b3a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 14:34:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1683840889; x=1686432889;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q+0/GVZgLBH6PMkReAmP7J8wDURjmtx81m3HSPypGMA=;
+        b=jaNXHgOsOc00cBPbE6wx9gckIw2Q/Um/cKSBDT2gyxXE5t2692YhDFoGrbxBzaKGpz
+         fX1qUuRiG7BqMGEb6gWUkI9GBpnS6wPZpOhfYu7mu30SwaBpiNMxc+Ig0Rqc5DufL4RS
+         AqDHQzqAg+72MtBDEp+tAC3aLLMtJavmkawLw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683840889; x=1686432889;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q+0/GVZgLBH6PMkReAmP7J8wDURjmtx81m3HSPypGMA=;
+        b=MLi3mBdQjEcqZDQTOOuCNu2dev6WvMsqRCG4XnT5W+KSstrRKKX/3WV8MeZV0I+ya3
+         V7cJyTREEhv2IKpzNSYLSZTV5sIlqgX7SmZ5qjLgMXWb3Io+m85PXrJekzvAyuEmtqWT
+         k38OCrqWE0g3MymIOn6xeHIvfgzOheJMZqxitF8TyTG9oNq9hAk+ItL/aflxj9plln9i
+         BofeFrYx5PGhObYEQD9gGWT4t4xaGibIW+IUU0Sl0L6u+qi9QIsi5jHo5HvHTWXgzpve
+         0gXaHf3vduHD9pwVdVxfc/YDlDLQfWxwFO8EW8gxFDmfZUKvK/MEOcWhIDQk5Tsbi503
+         3/7Q==
+X-Gm-Message-State: AC+VfDwm/BUqaxR3g+fzS2PaM8lHR4nDQKYt/Sj+NclgvOa4jkQa8NP5
+        NAqoXtEhfA0wjp4N3u4V2BAKSXD8Th92YnAkoXMewQ==
+X-Google-Smtp-Source: ACHHUZ6aIVQi2PoT8nJNkXF7lJUrXqlz/U4E4/5bAfucHx/weKzuj5vTz8HeUezW4TkZKZWK6UC36A==
+X-Received: by 2002:a05:6a00:88f:b0:648:24c1:fe5a with SMTP id q15-20020a056a00088f00b0064824c1fe5amr11096650pfj.16.1683840889532;
+        Thu, 11 May 2023 14:34:49 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id a13-20020aa7864d000000b0063b85893633sm5723353pfo.197.2023.05.11.14.34.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 14:34:49 -0700 (PDT)
+From:   Kees Cook <keescook@chromium.org>
+To:     John Johansen <john.johansen@canonical.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, apparmor@lists.ubuntu.com,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: [PATCH] apparmor: aa_buffer: Convert 1-element array to flexible array
+Date:   Thu, 11 May 2023 14:34:45 -0700
+Message-Id: <20230511213441.never.401-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1837; h=from:subject:message-id; bh=RrVUNVC3gegju2xKIW8jFRuLI/RiqJcR7VGQB4D/Evs=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBkXV90iD6pl1iKdfr2Ps0RyjFlScFvSso0BrIaopyd ZQOueMqJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCZF1fdAAKCRCJcvTf3G3AJkTuD/ 4guSJdw3bNVmQ7eEYndRa0y3hZ2G3lDOgGzJbSemtYsubbOwoTLZe+nua0LcHDXyY5X27tNGTi+1SL M2w1+4cS74i5Wv7ig0XOjBlSTXJv99aZdTWoek/gPqxzNo/1Z1rvK+EO4jGYYR3eDZJhwpq0iP3REc OeS7z8lj2kaaaSmDPEwUlWqep+kgbb3uZoKAkxnOKRW8s3wLomio5a2iVMLTyohD92ibYs3j0eL7R3 CBOdQ2ZCrCz7kg0RkqC1mytmxEICPDNZokdROVAkKxlnHn03DVS+hQ4L/ytYUIF/LMXwRbP4y3wJWm UPc533JZYrKt1BpU7ubrsfXcuXcgrHRPvy91+GpRdUYNqIJbSwyn4gDo5UTSZs0S8B2m065X0BHcG/ 96PPWKo/woEwMCfFCTS12eG/zQrfrtQuwoCwGnzpwHfVw0r4GGRyv65ck8IRczuKsADvUdhiW5nKjT wE3i70lGdoI8OuMv1xbQVQLbm/Wapp+Xr/ff8uJWd4te9iULOl3bctVgAlTLGcn1bHZiwC7shh+vBE hEYELPR++NZekxFdRZr3ylL6b3TYMspR3f3aGPt1Je0uKcUIhYDuQFck85l2c3/lOikRFyW9ftK6/o GxUiMHjtwTAOBBNZlX0e1ylDvTaN+Gw1flVjeJt5AkPKxUwAp8O/Fqg7mnkw==
+X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <1d5aaff-c7b5-39f6-92ca-319fad6c7fc5@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,84 +73,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Emmanuel, Rafael, Heiner, ancient ASPM history]
+In the ongoing effort to convert all fake flexible arrays to proper
+flexible arrays, replace aa_buffer's 1-element "buffer" member with a
+flexible array.
 
-On Thu, May 11, 2023 at 10:58:40PM +0300, Ilpo Järvinen wrote:
-> On Thu, 11 May 2023, Bjorn Helgaas wrote:
-> > On Thu, May 11, 2023 at 08:35:48PM +0300, Ilpo Järvinen wrote:
-> > > On Thu, 11 May 2023, Bjorn Helgaas wrote:
-> > > > On Thu, May 11, 2023 at 04:14:25PM +0300, Ilpo Järvinen wrote:
-> > > > > A few places write LNKCTL and LNKCTL2 registers without proper
-> > > > > concurrency control and this could result in losing the changes
-> > > > > one of the writers intended to make.
-> > > > > 
-> > > > > Add pcie_capability_clear_and_set_word_locked() and helpers to use it
-> > > > > with LNKCTL and LNKCTL2. The concurrency control is provided using a
-> > > > > spinlock in the struct pci_dev.
-> ...
+Cc: John Johansen <john.johansen@canonical.com>
+Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+Cc: Paul Moore <paul@paul-moore.com>
+Cc: James Morris <jmorris@namei.org>
+Cc: "Serge E. Hallyn" <serge@hallyn.com>
+Cc: apparmor@lists.ubuntu.com
+Cc: linux-security-module@vger.kernel.org
+Signed-off-by: Kees Cook <keescook@chromium.org>
+---
+One thing I notice here is that it may be rare for "buffer" to ever change
+for a given kernel. Could this just be made PATH_MAX * 2 directly and
+remove the module parameter, etc, etc?
+---
+ security/apparmor/lsm.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-[beginning of thread is
-https://lore.kernel.org/r/20230511131441.45704-1-ilpo.jarvinen@linux.intel.com;
-context here is that several drivers clear ASPM config directly,
-probably because pci_disable_link_state() doesn't always do it]
+diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+index d6cc4812ca53..35eb41bb9e3a 100644
+--- a/security/apparmor/lsm.c
++++ b/security/apparmor/lsm.c
+@@ -46,7 +46,7 @@ int apparmor_initialized;
+ 
+ union aa_buffer {
+ 	struct list_head list;
+-	char buffer[1];
++	DECLARE_FLEX_ARRAY(char, buffer);
+ };
+ 
+ #define RESERVE_COUNT 2
+@@ -1647,7 +1647,7 @@ char *aa_get_buffer(bool in_atomic)
+ 		list_del(&aa_buf->list);
+ 		buffer_count--;
+ 		spin_unlock(&aa_buffers_lock);
+-		return &aa_buf->buffer[0];
++		return aa_buf->buffer;
+ 	}
+ 	if (in_atomic) {
+ 		/*
+@@ -1670,7 +1670,7 @@ char *aa_get_buffer(bool in_atomic)
+ 		pr_warn_once("AppArmor: Failed to allocate a memory buffer.\n");
+ 		return NULL;
+ 	}
+-	return &aa_buf->buffer[0];
++	return aa_buf->buffer;
+ }
+ 
+ void aa_put_buffer(char *buf)
+@@ -1747,7 +1747,7 @@ static int __init alloc_buffers(void)
+ 			destroy_buffers();
+ 			return -ENOMEM;
+ 		}
+-		aa_put_buffer(&aa_buf->buffer[0]);
++		aa_put_buffer(aa_buf->buffer);
+ 	}
+ 	return 0;
+ }
+-- 
+2.34.1
 
-> > Many of these are ASPM-related updates that IMHO should not be in
-> > drivers at all.  Drivers should use PCI core interfaces so the core
-> > doesn't get confused.
-> 
-> Ah, yes. I forgot to mention it in the cover letter but I noticed that 
-> some of those seem to be workarounds for the cases where core refuses to 
-> disable ASPM. Some sites even explicit have a comment about that after 
-> the call to pci_disable_link_state():
-> 
-> static void bcm4377_disable_aspm(struct bcm4377_data *bcm4377)
-> {
->         pci_disable_link_state(bcm4377->pdev,
->                                PCIE_LINK_STATE_L0S | PCIE_LINK_STATE_L1);
-> 
->         /*
->          * pci_disable_link_state can fail if either CONFIG_PCIEASPM is disabled
->          * or if the BIOS hasn't handed over control to us. We must *always*
->          * disable ASPM for this device due to hardware errata though.
->          */
->         pcie_capability_clear_word(bcm4377->pdev, PCI_EXP_LNKCTL,
->                                    PCI_EXP_LNKCTL_ASPMC);
-> }
-> 
-> That kinda feels something that would want a force disable quirk that is 
-> reliable. There are quirks for some devices which try to disable it but 
-> could fail for reasons mentioned in that comment. (But I'd prefer to make 
-> another series out of it rather than putting it into this one.)
-> 
-> It might even be that some drivers don't even bother to make the 
-> pci_disable_link_state() call because it isn't reliable enough.
-
-Yeah, I noticed that this is problematic.
-
-We went round and round about this ten years ago [1], which resulted
-in https://git.kernel.org/linus/2add0ec14c25 ("PCI/ASPM: Warn when
-driver asks to disable ASPM, but we can't do it").
-
-I'm not 100% convinced by that anymore.  It's true that if firmware
-retains control of the PCIe capability, the OS is technically not
-allowed to write to it, and it's conceivable that even a locked OS
-update could collide with some SMI or something that also writes to
-it.
-
-I can certainly imagine that firmware might know that *enabling* ASPM
-might break because of signal integrity issues or something.  It seems
-less likely that *disabling* ASPM would break something, but Rafael [2]
-and Matthew [3] rightly pointed out that there is some risk.
-
-But the current situation, where pci_disable_link_state() does nothing
-if CONFIG_PCIEASPM is unset or if _OSC says firmware owns it, leads to
-drivers doing it directly anyway.  I'm not sure that's better than
-making pci_disable_link_state() work 100% of the time, regardless of
-CONFIG_PCIEASPM and _OSC.  At least then the PCI core would know
-what's going on.
-
-Bjorn
-
-[1] https://lore.kernel.org/all/CANUX_P3F5YhbZX3WGU-j1AGpbXb_T9Bis2ErhvKkFMtDvzatVQ@mail.gmail.com/
-[2] https://lore.kernel.org/all/1725435.3DlCxYF2FV@vostro.rjw.lan/
-[3] https://lore.kernel.org/all/1368303730.2425.47.camel@x230/
