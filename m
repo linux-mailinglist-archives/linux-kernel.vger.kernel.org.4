@@ -2,122 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BFA86FED47
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC26A6FED51
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:58:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229473AbjEKH62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 03:58:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
+        id S237656AbjEKH6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 03:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbjEKH6W (ORCPT
+        with ESMTP id S237149AbjEKH6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 03:58:22 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F75DD;
-        Thu, 11 May 2023 00:58:21 -0700 (PDT)
-Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34B7dgUa004840;
-        Thu, 11 May 2023 07:57:23 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : content-type : in-reply-to :
- mime-version; s=pp1; bh=yfYCleIUn+xWJ9AcJe62X2wnauCgiMhHoQILlx/ttD4=;
- b=LFq957axn1UNzTUzhvNVYlDHbCfcqhQ2pRD8ZLsFp/RSpjT1uBMJ/d7ENLNjdQvs8b/O
- ETkXd8kuOadcVr2pCLjNWw4G6MBgssGxGpZMpJIuASv1SpR0PUK34wuL0h5qEW2QJh35
- I82bYrl1LLcaa8T78oJT6a6wtEhLMGPImsQm6ZZ7OMLR004RU4Y4gi9OSAsfKRz/2fjX
- JzkG3CzcsaF9fSk6t5lnZ7W3md1J2Vb7gFuVV3BeMsGsW3QU1zaunkYp8Yy88gnQ5l6D
- XVrXeBgHCOF+7Jj5+rSLVfvXlTFdfCzT/ZEvy3XYrdn6a7Y8+/7BRN1ptdRgFVOcV3xn Hg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qgcdvax5f-1
+        Thu, 11 May 2023 03:58:48 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2275183CE;
+        Thu, 11 May 2023 00:58:45 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34B5w4PT028473;
+        Thu, 11 May 2023 07:58:36 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=yxIaDKbTZyQioRWP53dehZTWKzvQDJYxDuHpbkUnO68=;
+ b=Lg7Ncl9BKwJAyJXi7A2iDoA+IpbSuZl3Ei4ExaRdfdWbQbSr5CkQR0ZYOAARLWFwmO00
+ Cr9Zz4oDdEXEwyKEK4XfkiUMIDCRLyYf2Xoonof/kHFHexChf+g2y6Kga/V14kD6da1h
+ bFacYNrAL3Zb+rCK4GzL2ZAW0BrqoDHB2sh1/h9a7PvDY7FcdW3Le5Go/MuqCIft3A6k
+ fip2ECILfsQ6HWY1J+nbpuuyiqlPyiYpMmyemBgB9rdaop59nvWjyBLvSyKZoSnk3Q2C
+ m9mWG1EuzEaWKjLMMxVfzGcsR0gWSKtXwjRHB6Wq41E9PkEgzOagsXjhqylSQCqE/AoS qw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qgkxmrwhj-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 07:57:23 +0000
-Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34B7vMqo010805;
-        Thu, 11 May 2023 07:57:22 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qgcdvax4h-1
+        Thu, 11 May 2023 07:58:36 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34B7wZ79012400
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 07:57:22 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34B4RaPD016221;
-        Thu, 11 May 2023 07:57:19 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3qf7nh1hc0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 07:57:19 +0000
-Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34B7vF6226739210
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 11 May 2023 07:57:15 GMT
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8227920043;
-        Thu, 11 May 2023 07:57:15 +0000 (GMT)
-Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7766720040;
-        Thu, 11 May 2023 07:57:13 +0000 (GMT)
-Received: from osiris (unknown [9.179.19.134])
-        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Thu, 11 May 2023 07:57:13 +0000 (GMT)
-Date:   Thu, 11 May 2023 09:57:11 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-api@vger.kernel.org, kernel-team@meta.com,
-        linux-arch@vger.kernel.org, hannes@cmpxchg.org,
-        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, linux@armlinux.org.uk, geert@linux-m68k.org,
-        monstr@monstr.eu, tsbogend@alpha.franken.de,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        ysato@users.sourceforge.jp, dalias@libc.org,
-        glaubitz@physik.fu-berlin.de, davem@davemloft.net,
-        chris@zankel.net, jcmvbkbc@gmail.com, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH] cachestat: wire up cachestat for other architectures
-Message-ID: <ZFyf195PuoBmaV2N@osiris>
-References: <20230510195806.2902878-1-nphamcs@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230510195806.2902878-1-nphamcs@gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: 4wqLDbk2I-cFtsb56SrteodOnFigMIFv
-X-Proofpoint-GUID: fOUzFmhABUHi7ZZwffU3nGIoi4bBWM03
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Thu, 11 May 2023 07:58:35 GMT
+Received: from poovendh-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Thu, 11 May 2023 00:58:29 -0700
+From:   Poovendhan Selvaraj <quic_poovendh@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <lee@kernel.org>,
+        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+CC:     <quic_srichara@quicinc.com>, <uic_gokulsri@quicinc.com>,
+        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
+        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
+        <quic_devipriy@quicinc.com>
+Subject: [PATCH V7 0/2] Enable crashdump collection support for IPQ9574
+Date:   Thu, 11 May 2023 13:28:12 +0530
+Message-ID: <20230511075814.2370-1-quic_poovendh@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: y13i4iTRejS1SfTvk_4LZnmxTBwtkXZI
+X-Proofpoint-GUID: y13i4iTRejS1SfTvk_4LZnmxTBwtkXZI
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-11_04,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
- bulkscore=0 clxscore=1011 malwarescore=0 suspectscore=0 mlxlogscore=301
- lowpriorityscore=0 impostorscore=0 priorityscore=1501 spamscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305110065
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ lowpriorityscore=0 adultscore=0 mlxscore=0 spamscore=0 suspectscore=0
+ bulkscore=0 clxscore=1011 mlxlogscore=539 priorityscore=1501
+ malwarescore=0 phishscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305110068
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 12:58:06PM -0700, Nhat Pham wrote:
-> cachestat is previously only wired in for x86 (and architectures using
-> the generic unistd.h table):
-> 
-> https://lore.kernel.org/lkml/20230503013608.2431726-1-nphamcs@gmail.com/
-> 
-> This patch wires cachestat in for all the other architectures.
-> 
-> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-> ---
-...
->  arch/s390/kernel/syscalls/syscall.tbl       | 1 +
+Crashdump collection is enabled based on the DLOAD bit in the TCSR register.
+This bit is set during bootup and clearing during shutdown. During crash,
+dload bit is not cleared, due to which uboot starts crashdump collection.
 
-Acked-by: Heiko Carstens <hca@linux.ibm.com> (s390)
+Enable the support for download mode to collect the crashdumps if
+system crashes, to debug crashes extensively.
+
+During the bootup, bootloaders initialize the SMEM. However the bootup
+after crash, SMEM will not be initialized again. If the memory for the
+SMEM is not reserved, linux consumes that region, which leads to the
+loss of SMEM data. So, during the next bootup after crash, bootloaders
+will hang due to invalid data present in the SMEM region. Due to this,
+added the SMEM support along with crashdump collection series.
+
+This patch series adds the support for crashdump collection.
+
+DTS patch depends on the IPQ9574 baseport series
+	  https://lore.kernel.org/linux-arm-msm/20230425084010.15581-1-quic_devipriy@quicinc.com/
+V7:
+	- [1/2] Sorted the firmware node alphabetically
+	- [2/2] No changes
+
+V6 can be found at
+	  https://lore.kernel.org/linux-arm-msm/20230328102013.21361-1-quic_poovendh@quicinc.com/
+	  
+V5 can be found at
+	  https://lore.kernel.org/linux-arm-kernel/20230216120012.28357-1-quic_poovendh@quicinc.com/
+
+V4 can be found at
+	  https://lore.kernel.org/linux-arm-kernel/20230214051414.10740-1-quic_poovendh@quicinc.com/
+
+V3 can be found at
+	  https://lore.kernel.org/linux-arm-msm/20230208053332.16537-1-quic_poovendh@quicinc.com/
+
+Changes in V2:
+	- rebased on linux-next/master
+	- dropped co-developed by tag wherever applicable
+	- V1 can be found at
+	  https://lore.kernel.org/linux-arm-kernel/20230113160012.14893-1-quic_poovendh@quicinc.com/
+
+Poovendhan Selvaraj (2):
+  arm64: dts: qcom: ipq9574: Enable the download mode support
+  arm64: dts: qcom: ipq9574: Add SMEM support
+
+ arch/arm64/boot/dts/qcom/ipq9574.dtsi | 25 +++++++++++++++++++++++++
+ 1 file changed, 25 insertions(+)
+
+
+base-commit: aabe491169befbe5481144acf575a0260939764a
+-- 
+2.17.1
+
