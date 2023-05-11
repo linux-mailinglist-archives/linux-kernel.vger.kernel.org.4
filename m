@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A2256FFA12
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:22:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 290B16FFA14
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239175AbjEKTWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 15:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
+        id S238918AbjEKTWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 15:22:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239133AbjEKTWc (ORCPT
+        with ESMTP id S239116AbjEKTWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 15:22:32 -0400
+        Thu, 11 May 2023 15:22:33 -0400
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057797EC9
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 12:22:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A13A7DBF
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 12:22:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-type:content-transfer-encoding; s=k1; bh=x
-        UIJi3l3OlbArFSmCEBZla8UKPhZvfGMsCToh+N3b6s=; b=i08uD9ZZ7GICOJYdo
-        u47hN9XOpNtv62uJEBcvSN1a5ECLvh+Y8pn7WwitLmrATxofb+Nq69X1/EHrdn9g
-        1uLD4//DzdUQrUHeg6vqYWQyreHTnbsoAE0acvUEceBKnYP4TaWSljZrf25ZU0+a
-        7Vyg68vUNPc8LOCLj9j4Yg34Ak=
-Received: (qmail 2935159 invoked from network); 11 May 2023 21:22:28 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 May 2023 21:22:28 +0200
-X-UD-Smtp-Session: l3s3148p1@bl2/6G/7ZuAujnsI
+        :mime-version:content-type:content-transfer-encoding; s=k1; bh=L
+        2X4kYWD+K5Hff6OCrdzdHuu9Uc5LjUy9EemkAlKgG4=; b=dXCwErluJ3uVcrjx8
+        JQCpF4FkG4/eiBxwpDNMuoGPFznqCAktZa1HL98MRPTV3CsRQ2lBvC2logGNrPpH
+        YioDjeBx/moNjL/fbdCHGINtGHWy1eaBMCdLGtfkAQ48TPog9K/x47WQHuSc30O5
+        RibS0wbgH3a1nV6KdFs7wN3MG4=
+Received: (qmail 2935211 invoked from network); 11 May 2023 21:22:29 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 May 2023 21:22:29 +0200
+X-UD-Smtp-Session: l3s3148p1@2hvM6G/7cuAujnsI
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     linux-renesas-soc@vger.kernel.org
 Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
@@ -36,9 +36,9 @@ Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
         Amit Kucheria <amitk@kernel.org>,
         Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH RFT v3 1/3] drivers/thermal/rcar_gen3_thermal: introduce 'info' structure
-Date:   Thu, 11 May 2023 21:22:17 +0200
-Message-Id: <20230511192220.7523-2-wsa+renesas@sang-engineering.com>
+Subject: [PATCH RFT v3 2/3] drivers/thermal/rcar_gen3_thermal: refactor reading fuses into seprarate function
+Date:   Thu, 11 May 2023 21:22:18 +0200
+Message-Id: <20230511192220.7523-3-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20230511192220.7523-1-wsa+renesas@sang-engineering.com>
 References: <20230511192220.7523-1-wsa+renesas@sang-engineering.com>
@@ -55,135 +55,120 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-More items to describe the TSCs are needed soon, so encapsulate the
-current 'ths_tj_1' item into a struct.
+Gen4 will be very different, so refactor Gen3 access into separate call
+first.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 Reviewed-by: Niklas Söderlund <niklas.soderlund+renesas@ragnatech.se>
 ---
- drivers/thermal/rcar_gen3_thermal.c | 41 ++++++++++++++++++-----------
- 1 file changed, 26 insertions(+), 15 deletions(-)
+ drivers/thermal/rcar_gen3_thermal.c | 60 +++++++++++++++++------------
+ 1 file changed, 36 insertions(+), 24 deletions(-)
 
 diff --git a/drivers/thermal/rcar_gen3_thermal.c b/drivers/thermal/rcar_gen3_thermal.c
-index 42a4724d3920..e9b0aa0a2016 100644
+index e9b0aa0a2016..39b382ee08c8 100644
 --- a/drivers/thermal/rcar_gen3_thermal.c
 +++ b/drivers/thermal/rcar_gen3_thermal.c
-@@ -66,6 +66,10 @@ struct equation_coefs {
+@@ -66,8 +66,11 @@ struct equation_coefs {
  	int b2;
  };
  
-+struct rcar_thermal_info {
-+	int ths_tj_1;
-+};
++struct rcar_gen3_thermal_priv;
 +
- struct rcar_gen3_thermal_tsc {
- 	void __iomem *base;
- 	struct thermal_zone_device *zone;
-@@ -79,6 +83,7 @@ struct rcar_gen3_thermal_priv {
- 	struct thermal_zone_device_ops ops;
- 	unsigned int num_tscs;
- 	int ptat[3];
-+	const struct rcar_thermal_info *info;
+ struct rcar_thermal_info {
+ 	int ths_tj_1;
++	void (*read_fuses)(struct rcar_gen3_thermal_priv *priv);
  };
  
- static inline u32 rcar_gen3_thermal_read(struct rcar_gen3_thermal_tsc *tsc,
-@@ -318,52 +323,58 @@ static void rcar_gen3_thermal_init(struct rcar_gen3_thermal_priv *priv,
- 	usleep_range(1000, 2000);
+ struct rcar_gen3_thermal_tsc {
+@@ -241,6 +244,34 @@ static irqreturn_t rcar_gen3_thermal_irq(int irq, void *data)
+ 	return IRQ_HANDLED;
  }
  
--static const int rcar_gen3_ths_tj_1 = 126;
--static const int rcar_gen3_ths_tj_1_m3_w = 116;
-+static const struct rcar_thermal_info rcar_m3w_thermal_info = {
-+	.ths_tj_1 = 116,
-+};
++static void rcar_gen3_thermal_read_fuses_gen3(struct rcar_gen3_thermal_priv *priv)
++{
++	unsigned int i;
 +
-+static const struct rcar_thermal_info rcar_gen3_thermal_info = {
-+	.ths_tj_1 = 126,
-+};
++	/*
++	 * Set the pseudo calibration points with fused values.
++	 * PTAT is shared between all TSCs but only fused for the first
++	 * TSC while THCODEs are fused for each TSC.
++	 */
++	priv->ptat[0] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_PTAT1) &
++		GEN3_FUSE_MASK;
++	priv->ptat[1] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_PTAT2) &
++		GEN3_FUSE_MASK;
++	priv->ptat[2] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_PTAT3) &
++		GEN3_FUSE_MASK;
 +
- static const struct of_device_id rcar_gen3_thermal_dt_ids[] = {
- 	{
- 		.compatible = "renesas,r8a774a1-thermal",
--		.data = &rcar_gen3_ths_tj_1_m3_w,
-+		.data = &rcar_m3w_thermal_info,
- 	},
- 	{
- 		.compatible = "renesas,r8a774b1-thermal",
--		.data = &rcar_gen3_ths_tj_1,
-+		.data = &rcar_gen3_thermal_info,
- 	},
- 	{
- 		.compatible = "renesas,r8a774e1-thermal",
--		.data = &rcar_gen3_ths_tj_1,
-+		.data = &rcar_gen3_thermal_info,
- 	},
- 	{
- 		.compatible = "renesas,r8a7795-thermal",
--		.data = &rcar_gen3_ths_tj_1,
-+		.data = &rcar_gen3_thermal_info,
- 	},
- 	{
- 		.compatible = "renesas,r8a7796-thermal",
--		.data = &rcar_gen3_ths_tj_1_m3_w,
-+		.data = &rcar_m3w_thermal_info,
- 	},
- 	{
- 		.compatible = "renesas,r8a77961-thermal",
--		.data = &rcar_gen3_ths_tj_1_m3_w,
-+		.data = &rcar_m3w_thermal_info,
- 	},
- 	{
- 		.compatible = "renesas,r8a77965-thermal",
--		.data = &rcar_gen3_ths_tj_1,
-+		.data = &rcar_gen3_thermal_info,
- 	},
- 	{
- 		.compatible = "renesas,r8a77980-thermal",
--		.data = &rcar_gen3_ths_tj_1,
-+		.data = &rcar_gen3_thermal_info,
- 	},
- 	{
- 		.compatible = "renesas,r8a779a0-thermal",
--		.data = &rcar_gen3_ths_tj_1,
-+		.data = &rcar_gen3_thermal_info,
- 	},
- 	{
- 		.compatible = "renesas,r8a779f0-thermal",
--		.data = &rcar_gen3_ths_tj_1,
-+		.data = &rcar_gen3_thermal_info,
- 	},
- 	{
- 		.compatible = "renesas,r8a779g0-thermal",
--		.data = &rcar_gen3_ths_tj_1,
-+		.data = &rcar_gen3_thermal_info,
- 	},
- 	{},
- };
-@@ -418,7 +429,6 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
++	for (i = 0; i < priv->num_tscs; i++) {
++		struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
++
++		tsc->thcode[0] = rcar_gen3_thermal_read(tsc, REG_GEN3_THCODE1) &
++			GEN3_FUSE_MASK;
++		tsc->thcode[1] = rcar_gen3_thermal_read(tsc, REG_GEN3_THCODE2) &
++			GEN3_FUSE_MASK;
++		tsc->thcode[2] = rcar_gen3_thermal_read(tsc, REG_GEN3_THCODE3) &
++			GEN3_FUSE_MASK;
++	}
++}
++
+ static bool rcar_gen3_thermal_read_fuses(struct rcar_gen3_thermal_priv *priv)
  {
- 	struct rcar_gen3_thermal_priv *priv;
- 	struct device *dev = &pdev->dev;
--	const int *ths_tj_1 = of_device_get_match_data(dev);
- 	struct resource *res;
- 	struct thermal_zone_device *zone;
  	unsigned int i;
-@@ -430,6 +440,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
+@@ -248,7 +279,8 @@ static bool rcar_gen3_thermal_read_fuses(struct rcar_gen3_thermal_priv *priv)
  
- 	priv->ops = rcar_gen3_tz_of_ops;
+ 	/* If fuses are not set, fallback to pseudo values. */
+ 	thscp = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_THSCP);
+-	if ((thscp & THSCP_COR_PARA_VLD) != THSCP_COR_PARA_VLD) {
++	if (!priv->info->read_fuses ||
++	    (thscp & THSCP_COR_PARA_VLD) != THSCP_COR_PARA_VLD) {
+ 		/* Default THCODE values in case FUSEs are not set. */
+ 		static const int thcodes[TSC_MAX_NUM][3] = {
+ 			{ 3397, 2800, 2221 },
+@@ -273,29 +305,7 @@ static bool rcar_gen3_thermal_read_fuses(struct rcar_gen3_thermal_priv *priv)
+ 		return false;
+ 	}
  
-+	priv->info = of_device_get_match_data(dev);
- 	platform_set_drvdata(pdev, priv);
+-	/*
+-	 * Set the pseudo calibration points with fused values.
+-	 * PTAT is shared between all TSCs but only fused for the first
+-	 * TSC while THCODEs are fused for each TSC.
+-	 */
+-	priv->ptat[0] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_PTAT1) &
+-		GEN3_FUSE_MASK;
+-	priv->ptat[1] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_PTAT2) &
+-		GEN3_FUSE_MASK;
+-	priv->ptat[2] = rcar_gen3_thermal_read(priv->tscs[0], REG_GEN3_PTAT3) &
+-		GEN3_FUSE_MASK;
+-
+-	for (i = 0; i < priv->num_tscs; i++) {
+-		struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
+-
+-		tsc->thcode[0] = rcar_gen3_thermal_read(tsc, REG_GEN3_THCODE1) &
+-			GEN3_FUSE_MASK;
+-		tsc->thcode[1] = rcar_gen3_thermal_read(tsc, REG_GEN3_THCODE2) &
+-			GEN3_FUSE_MASK;
+-		tsc->thcode[2] = rcar_gen3_thermal_read(tsc, REG_GEN3_THCODE3) &
+-			GEN3_FUSE_MASK;
+-	}
+-
++	priv->info->read_fuses(priv);
+ 	return true;
+ }
  
- 	if (rcar_gen3_thermal_request_irqs(priv, pdev))
-@@ -469,7 +480,7 @@ static int rcar_gen3_thermal_probe(struct platform_device *pdev)
- 		struct rcar_gen3_thermal_tsc *tsc = priv->tscs[i];
+@@ -325,10 +335,12 @@ static void rcar_gen3_thermal_init(struct rcar_gen3_thermal_priv *priv,
  
- 		rcar_gen3_thermal_init(priv, tsc);
--		rcar_gen3_thermal_calc_coefs(priv, tsc, *ths_tj_1);
-+		rcar_gen3_thermal_calc_coefs(priv, tsc, priv->info->ths_tj_1);
+ static const struct rcar_thermal_info rcar_m3w_thermal_info = {
+ 	.ths_tj_1 = 116,
++	.read_fuses = rcar_gen3_thermal_read_fuses_gen3,
+ };
  
- 		zone = devm_thermal_of_zone_register(dev, i, tsc, &priv->ops);
- 		if (IS_ERR(zone)) {
+ static const struct rcar_thermal_info rcar_gen3_thermal_info = {
+ 	.ths_tj_1 = 126,
++	.read_fuses = rcar_gen3_thermal_read_fuses_gen3,
+ };
+ 
+ static const struct of_device_id rcar_gen3_thermal_dt_ids[] = {
 -- 
 2.35.1
 
