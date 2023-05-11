@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBFFF6FEF4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:52:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A7CF6FEF53
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:52:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237776AbjEKJwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 05:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
+        id S237789AbjEKJwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 05:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237231AbjEKJwC (ORCPT
+        with ESMTP id S237624AbjEKJwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 05:52:02 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EB175FCA
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:51:30 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id 5b1f17b1804b1-3f475366522so12400035e9.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:51:29 -0700 (PDT)
+        Thu, 11 May 2023 05:52:03 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92840A5D5
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:51:31 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f417ea5252so40830125e9.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:51:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1683798688; x=1686390688;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mTPp8QywfNyVkAufTyppdZdc6KOGJR4M0+qiLr9qQQs=;
-        b=M2LUQPL7PGkS+h9rK5dhBDsGVIwbi0H+SqqKfbvwmMT4krCHZpXTMCrmE767sePMqb
-         5EFNi9lAb8z2EPxdCaSX5WyuyNG+8Jeak/9aH0u5mNxLUTDAGYB6YSkCzl1Aa3C1nOPF
-         qgiNUixn91e4zCXCs4gRgx1SSm3nnbNujpyJNDyIocg9GMfbEQKIVB3ntxdxfhqfz3OA
-         Pyx/6zE2kN3KXlul2bovKxK6LNwQZ7/kLn3jrW5mxMmTb0/vt/iggQ/Z5N6AL/aRrECY
-         EWALL8QzrwTG6aunVX+pvC32pBlrasFOVMbAITa8aOcfGcvhPUweEn3pltZtel+PWhOO
-         NLkA==
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1683798690; x=1686390690;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=67/6bAcN5c2GUFRah8RhXGRCsZJE/Ek9N/Y5A37vLkc=;
+        b=RAI4i/gTipbG/OYvkfsJo6hlMYKOeVCAFGzm4BEaxORP45xZWMM+PqTZCbxHoLFXyV
+         YCSlbiE9aib1W1XhOcuYVC4UWbmwU3uC6379QD8umv2PYY7Jkz+EdiUpOhdTWq4Izn0f
+         43YVDlTDH4HM/y8viBZLK+M/cTI3jpBgNXvuJCxU04KG7DSMg5srzr6sv8wnl+XyaOII
+         zv0POnZK2llt3S8eIB5PHSbYwWyTYzy/VLuo6MY62YgJ41QZfLsVo6AaTjFbHIOVkyaS
+         lgwuZY+YjydsjjdmEHllOzg6J6h/NRQF0MaWXcQmQKwQtDKQhY1BatM69gxMnNu3i7LS
+         LmRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683798688; x=1686390688;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mTPp8QywfNyVkAufTyppdZdc6KOGJR4M0+qiLr9qQQs=;
-        b=AIsT5Z0ap50SyboQpOLrc5e6d7RbJgbkk/ioIezJENWaOfoouuP5PPbu6NeT0OiJN7
-         LDgdOCOhcNGEZf7Ofx0CIhiepOs2Oiw3TMl5p2D5DR2UAChqWwbX/NKgBAkRH8Eytdlv
-         ETechZVoBTUhPIgbUsQN+eqAsYQnbyQa0RvNLeXXjkvDdgBKb4jezLEnutMoIOEYniEM
-         ovxAZRK9aC9glFVR8Xme3JxPOhfEY2v2j+kk1ib2MHR8r5yn72NfYkxVgNYDypwLk58/
-         UQKi+c9Cf1J/I5HNLV1BMuXaEPfPdxmrzcKbx5nRAHDfQt8M/CdR7lZQ9Y+St0G3gWfg
-         ncmA==
-X-Gm-Message-State: AC+VfDy0Cq/Vmdhj5CtoLqWrF2blVKs8HXRoqtM2u6FfXpZr1Dh+8MKj
-        NnDNhZeKxN4C5nFI8Vrc8vbBLA==
-X-Google-Smtp-Source: ACHHUZ77oPngL+MeroQzjAKoRK3YdxsUu7omuG52qRybdXF4Kk8HqteMTujXJ2HNRwHilGunhJuR4w==
-X-Received: by 2002:a05:600c:b4b:b0:3f4:2897:4eb7 with SMTP id k11-20020a05600c0b4b00b003f428974eb7mr7663813wmr.38.1683798688437;
-        Thu, 11 May 2023 02:51:28 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683798690; x=1686390690;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=67/6bAcN5c2GUFRah8RhXGRCsZJE/Ek9N/Y5A37vLkc=;
+        b=kSVAptOe0IX36015xX8FSOL3oUUC7THAUdpSTKihDXMtCYVIpfFRM08tdVdztgxRyg
+         lQq32NrolvUy43/YPMSYu6JdY198enuG/hmJeEVq1bPQz/pRlYKXWZzkXAE3Ypy4rmN6
+         A5+QCuWMj85/+PY9sORLQK8fG5DXQMdu040I3gY5/S1rCn3pcnGpqggpF53+HHre/tJx
+         JM0vmo+cC3UmaMGUUkE7x5A//5rAncgFSydOeo/HiIaiYmGfXTIREMuuwBaQzgtpO+7T
+         FV2/eFQyUedAcRkEGtjQaau+8iM39jwaqFOzR/I/5w8OZxzfwgaRuRJIs08bpd63y+A8
+         sIrA==
+X-Gm-Message-State: AC+VfDwiB9lCuEXCThh4HMXe0VOmKI2dYZTM1LRJTJW7DNrQzHJUxbKy
+        5107f0+u+ld/IYAFRZbNcbTcYQ==
+X-Google-Smtp-Source: ACHHUZ6EMq2pHjfcKtG0BqQ6x9EUcaSzjC8zOJ89Wmbp3sTvRcWb9z7mA2X1W0bnscb4M6ZvHPjLTg==
+X-Received: by 2002:a05:600c:2116:b0:3f4:294d:8524 with SMTP id u22-20020a05600c211600b003f4294d8524mr7201971wml.22.1683798689891;
+        Thu, 11 May 2023 02:51:29 -0700 (PDT)
 Received: from baylibre-ThinkPad-T14s-Gen-2i.. (120.205.87.79.rev.sfr.net. [79.87.205.120])
-        by smtp.gmail.com with ESMTPSA id z9-20020a05600c114900b003f4069417absm22389956wmz.24.2023.05.11.02.51.27
+        by smtp.gmail.com with ESMTPSA id z9-20020a05600c114900b003f4069417absm22389956wmz.24.2023.05.11.02.51.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 02:51:28 -0700 (PDT)
+        Thu, 11 May 2023 02:51:29 -0700 (PDT)
 From:   Julien Panis <jpanis@baylibre.com>
 To:     lee@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
@@ -65,15 +66,18 @@ Cc:     macro@orcam.me.uk, baolu.lu@linux.intel.com, yi.l.liu@intel.com,
         linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
         sterzik@ti.com, u-kumar1@ti.com, eblanc@baylibre.com,
         jneanne@baylibre.com, aseketeli@baylibre.com
-Subject: [PATCH v7 0/6] TI TPS6594 PMIC support (Core, ESM, PFSM)
-Date:   Thu, 11 May 2023 11:51:20 +0200
-Message-Id: <20230511095126.105104-1-jpanis@baylibre.com>
+Subject: [PATCH v7 1/6] dt-bindings: mfd: Add TI TPS6594 PMIC
+Date:   Thu, 11 May 2023 11:51:21 +0200
+Message-Id: <20230511095126.105104-2-jpanis@baylibre.com>
 X-Mailer: git-send-email 2.37.3
+In-Reply-To: <20230511095126.105104-1-jpanis@baylibre.com>
+References: <20230511095126.105104-1-jpanis@baylibre.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,92 +86,217 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 TPS6594 is a Power Management IC which provides regulators and others
 features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
-PFSM (Pre-configurable Finite State Machine). The SoC and the PMIC can
-communicate through the I2C or SPI interfaces.
+PFSM (Pre-configurable Finite State Machine) managing the state of the
+device.
 TPS6594 is the super-set device while TPS6593 and LP8764 are derivatives.
 
-This series adds support to TI TPS6594 PMIC and its derivatives.
-
-The features implemented in this series are:
-- Core (MFD I2C and SPI entry points)
-- ESM (child device)
-- PFSM (child device)
-
-- Core description:
-I2C and SPI interface protocols are implemented, with and without
-the bit-integrity error detection feature (CRC mode).
-In multi-PMIC configuration, all instances share a single GPIO of
-the SoC to generate interrupt requests via their respective nINT
-output pin.
-
-- ESM description:
-This device monitors the SoC error output signal at its nERR_SOC
-input pin. In error condition, ESM toggles its nRSTOUT_SOC pin
-to reset the SoC.
-Basically, ESM driver starts ESM hardware.
-
-- PFSM description:
-Strictly speaking, PFSM is not hardware. It is a piece of code.
-PMIC integrates a state machine which manages operational modes.
-Depending on the current operational mode, some voltage domains
-remain energized while others can be off.
-PFSM driver can be used to trigger transitions between configured
-states.
-
-Changes since v6:
-* Rebase on linux v6.4-rc1 (no modification in the series)
-
-Link to v6:
-https://lore.kernel.org/all/20230406075622.8990-1-jpanis@baylibre.com/
-
-Others series will be submitted over the next few weeks, providing
-drivers for others child devices like GPIOs (pinctrl), RTC, and
-regulators. Board support will also be added (device trees).
-
-Julien Panis (6):
-  dt-bindings: mfd: Add TI TPS6594 PMIC
-  mfd: tps6594: Add driver for TI TPS6594 PMIC
-  misc: tps6594-esm: Add driver for TI TPS6594 ESM
-  misc: tps6594-pfsm: Add driver for TI TPS6594 PFSM
-  Documentation: Add TI TPS6594 PFSM
-  samples: Add userspace example for TI TPS6594 PFSM
-
- .../devicetree/bindings/mfd/ti,tps6594.yaml   |  193 ++++
- Documentation/misc-devices/index.rst          |    1 +
- Documentation/misc-devices/tps6594-pfsm.rst   |   87 ++
- .../userspace-api/ioctl/ioctl-number.rst      |    1 +
- drivers/mfd/Kconfig                           |   32 +
- drivers/mfd/Makefile                          |    3 +
- drivers/mfd/tps6594-core.c                    |  462 ++++++++
- drivers/mfd/tps6594-i2c.c                     |  244 ++++
- drivers/mfd/tps6594-spi.c                     |  129 +++
- drivers/misc/Kconfig                          |   23 +
- drivers/misc/Makefile                         |    2 +
- drivers/misc/tps6594-esm.c                    |  132 +++
- drivers/misc/tps6594-pfsm.c                   |  306 +++++
- include/linux/mfd/tps6594.h                   | 1020 +++++++++++++++++
- include/uapi/linux/tps6594_pfsm.h             |   37 +
- samples/Kconfig                               |    6 +
- samples/Makefile                              |    1 +
- samples/pfsm/.gitignore                       |    2 +
- samples/pfsm/Makefile                         |    4 +
- samples/pfsm/pfsm-wakeup.c                    |  125 ++
- 20 files changed, 2810 insertions(+)
+Signed-off-by: Julien Panis <jpanis@baylibre.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Rob Herring <robh@kernel.org>
+---
+ .../devicetree/bindings/mfd/ti,tps6594.yaml   | 193 ++++++++++++++++++
+ 1 file changed, 193 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
- create mode 100644 Documentation/misc-devices/tps6594-pfsm.rst
- create mode 100644 drivers/mfd/tps6594-core.c
- create mode 100644 drivers/mfd/tps6594-i2c.c
- create mode 100644 drivers/mfd/tps6594-spi.c
- create mode 100644 drivers/misc/tps6594-esm.c
- create mode 100644 drivers/misc/tps6594-pfsm.c
- create mode 100644 include/linux/mfd/tps6594.h
- create mode 100644 include/uapi/linux/tps6594_pfsm.h
- create mode 100644 samples/pfsm/.gitignore
- create mode 100644 samples/pfsm/Makefile
- create mode 100644 samples/pfsm/pfsm-wakeup.c
 
-
-base-commit: ac9a78681b921877518763ba0e89202254349d1b
+diff --git a/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml b/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
+new file mode 100644
+index 000000000000..9d43376bebed
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mfd/ti,tps6594.yaml
+@@ -0,0 +1,193 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mfd/ti,tps6594.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: TI TPS6594 Power Management Integrated Circuit
++
++maintainers:
++  - Julien Panis <jpanis@baylibre.com>
++
++description:
++  TPS6594 is a Power Management IC which provides regulators and others
++  features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
++  PFSM (Pre-configurable Finite State Machine) managing the state of the device.
++  TPS6594 is the super-set device while TPS6593 and LP8764 are derivatives.
++
++properties:
++  compatible:
++    enum:
++      - ti,lp8764-q1
++      - ti,tps6593-q1
++      - ti,tps6594-q1
++
++  reg:
++    description: I2C slave address or SPI chip select number.
++    maxItems: 1
++
++  ti,primary-pmic:
++    type: boolean
++    description: |
++      Identify the primary PMIC on SPMI bus.
++      A multi-PMIC synchronization scheme is implemented in the PMIC device
++      to synchronize the power state changes with other PMIC devices. This is
++      accomplished through a SPMI bus: the primary PMIC is the controller
++      device on the SPMI bus, and the secondary PMICs are the target devices
++      on the SPMI bus.
++
++  system-power-controller: true
++
++  gpio-controller: true
++
++  '#gpio-cells':
++    const: 2
++    description: |
++      The first cell is the pin number, the second cell is used to specify flags.
++      See ../gpio/gpio.txt for more information.
++
++  interrupts:
++    maxItems: 1
++
++  regulators:
++    type: object
++    description: List of regulators provided by this controller.
++
++    patternProperties:
++      "^buck([1-5]|12|34|123|1234)$":
++        type: object
++        $ref: /schemas/regulator/regulator.yaml#
++
++        unevaluatedProperties: false
++
++      "^ldo[1-4]$":
++        type: object
++        $ref: /schemas/regulator/regulator.yaml#
++
++        unevaluatedProperties: false
++
++    allOf:
++      - if:
++          required:
++            - buck12
++        then:
++          properties:
++            buck123: false
++            buck1234: false
++      - if:
++          required:
++            - buck123
++        then:
++          properties:
++            buck34: false
++      - if:
++          required:
++            - buck1234
++        then:
++          properties:
++            buck34: false
++
++    additionalProperties: false
++
++patternProperties:
++  "^buck([1-5]|12|34|123|1234)-supply$":
++    description: Input supply phandle for each buck.
++
++  "^ldo[1-4]-supply$":
++    description: Input supply phandle for each ldo.
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    i2c {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        tps6593: pmic@48 {
++            compatible = "ti,tps6593-q1";
++            reg = <0x48>;
++            ti,primary-pmic;
++            system-power-controller;
++
++            gpio-controller;
++            #gpio-cells = <2>;
++
++            pinctrl-names = "default";
++            pinctrl-0 = <&pmic_irq_pins_default>;
++            interrupt-parent = <&mcu_gpio0>;
++            interrupts = <0 IRQ_TYPE_EDGE_FALLING>;
++
++            buck123-supply = <&vcc_3v3_sys>;
++            buck4-supply = <&vcc_3v3_sys>;
++            buck5-supply = <&vcc_3v3_sys>;
++            ldo1-supply = <&vcc_3v3_sys>;
++            ldo2-supply = <&vcc_3v3_sys>;
++            ldo3-supply = <&buck5>;
++            ldo4-supply = <&vcc_3v3_sys>;
++
++            regulators {
++                buck123: buck123 {
++                    regulator-name = "vcc_core";
++                    regulator-min-microvolt = <750000>;
++                    regulator-max-microvolt = <850000>;
++                    regulator-boot-on;
++                    regulator-always-on;
++                };
++
++                buck4: buck4 {
++                    regulator-name = "vcc_1v1";
++                    regulator-min-microvolt = <1100000>;
++                    regulator-max-microvolt = <1100000>;
++                    regulator-boot-on;
++                    regulator-always-on;
++                };
++
++                buck5: buck5 {
++                    regulator-name = "vcc_1v8_sys";
++                    regulator-min-microvolt = <1800000>;
++                    regulator-max-microvolt = <1800000>;
++                    regulator-boot-on;
++                    regulator-always-on;
++                };
++
++                ldo1: ldo1 {
++                    regulator-name = "vddshv5_sdio";
++                    regulator-min-microvolt = <3300000>;
++                    regulator-max-microvolt = <3300000>;
++                    regulator-boot-on;
++                    regulator-always-on;
++                };
++
++                ldo2: ldo2 {
++                    regulator-name = "vpp_1v8";
++                    regulator-min-microvolt = <1800000>;
++                    regulator-max-microvolt = <1800000>;
++                    regulator-boot-on;
++                    regulator-always-on;
++                };
++
++                ldo3: ldo3 {
++                    regulator-name = "vcc_0v85";
++                    regulator-min-microvolt = <850000>;
++                    regulator-max-microvolt = <850000>;
++                    regulator-boot-on;
++                    regulator-always-on;
++                };
++
++                ldo4: ldo4 {
++                    regulator-name = "vdda_1v8";
++                    regulator-min-microvolt = <1800000>;
++                    regulator-max-microvolt = <1800000>;
++                    regulator-boot-on;
++                    regulator-always-on;
++                };
++            };
++        };
++    };
 -- 
 2.37.3
 
