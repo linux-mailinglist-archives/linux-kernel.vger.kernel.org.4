@@ -2,212 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB2986FF2D0
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 942AC6FF2DA
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:31:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238131AbjEKN32 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 09:29:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45992 "EHLO
+        id S237904AbjEKNbd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:31:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238127AbjEKN2u (ORCPT
+        with ESMTP id S237989AbjEKNbQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:28:50 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E696A240
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:27:33 -0700 (PDT)
-Received: from mail-yb1-f197.google.com (mail-yb1-f197.google.com [209.85.219.197])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 8FE393F4A5
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:26:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1683811603;
-        bh=+QWvTZLqx3wPEiv2RyOeDyceRNHlm4uLw1mA+o8yT0I=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=L5usF1D6+MPuqlZUo/Img/wx7PXaopT0aD6IleJi8f0mEoeNRjnFP0r/yFZjd2Xd1
-         hFE6jTr6Pwz5FYfX3wLfsxMpBLI0kV9IF/PqZeyesct95cGKq5su62n2suolNB5Ins
-         gzjNA4EBB0mn/2lLRgdN2bylDi+LUqCxYgCkokrnQEWGETK2Zs6YA2DNUwZGIm45zb
-         iDFJi961jsSLVFcwFLreODh7mdH1cmPtDh9OtFZh781TkyAgasFrKJVK3k6kTVk33w
-         6OAmat5O55obd13vAoOD7fjq7FICfInTAcNI4+mSXoJxUyKVA5Z93KBDqa1/+ACgA2
-         yoX62404sSg4Q==
-Received: by mail-yb1-f197.google.com with SMTP id 3f1490d57ef6-ba2b9ecfadaso9504545276.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:26:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683811602; x=1686403602;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+QWvTZLqx3wPEiv2RyOeDyceRNHlm4uLw1mA+o8yT0I=;
-        b=ekgshwflGCHK6DmsrzHJtyxOvZJuDWbVtLcbiz/EzG6TDrZ1dUzlw4rR4WwzPiuKFP
-         k9RU3P/BUZB6s9Y3yay4YaCWKvUhUxyEE+TYhLI1ZZk9FXWdHMn5jydgWr7q2af/CedC
-         u9mrL+CCns1BVQVBMieoMdYQFwVULpjoZ21Wo7Z7RtLOSL9QJfRc2NId/S3Hube+2G6R
-         A1+PzmhoIl51RHcpfDpLW5KU2LD7COuCAeIJ8cz1CusLEDXcvF2phk5swmGqEmvHai+a
-         CgbvZviqQ+ao6ogz2JhLsD2ElrNDuw79XLd22r57EjSJXcdgXIwOLlTh/XohQXd+50WZ
-         xzrA==
-X-Gm-Message-State: AC+VfDxcnZKbq/JSTXRbCwuSwcAPOwjt5P6JK0ykFs1M/qEpZ75nTOib
-        z0FZphAEgJjJxIAi9sBGLXLPyABwAE9dkWwfqJeMlztmHyebtFGXA2a2c3fTs8CJVAFDifkIPLL
-        F5Hsq1CEN9qj0eBNeXKTGtW76MI/yprZ4LlSCigmkvVjVUb8iGaoC8PI/yA==
-X-Received: by 2002:a25:d308:0:b0:b92:3ed2:1cae with SMTP id e8-20020a25d308000000b00b923ed21caemr22265686ybf.12.1683811602511;
-        Thu, 11 May 2023 06:26:42 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7MlsPe2a7i7uETNPCN+ZsxkelWtDDFvni4jKj1/sYBswsm3loHNcWtNWXcLvhTbkxs9cc/EFQ9lzuN8U97e38=
-X-Received: by 2002:a25:d308:0:b0:b92:3ed2:1cae with SMTP id
- e8-20020a25d308000000b00b923ed21caemr22265681ybf.12.1683811602311; Thu, 11
- May 2023 06:26:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230511123148.332043-1-aleksandr.mikhalitsyn@canonical.com> <ZFzpqZCV6V+hwKjI@t14s.localdomain>
-In-Reply-To: <ZFzpqZCV6V+hwKjI@t14s.localdomain>
-From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Date:   Thu, 11 May 2023 15:26:31 +0200
-Message-ID: <CAEivzxennLfeh=pbMBA2Qj_DQXLMijGKVcRiKuraacCxc=9mgA@mail.gmail.com>
-Subject: Re: [PATCH net-next v2] sctp: add bpf_bypass_getsockopt proto callback
-To:     Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc:     nhorman@tuxdriver.com, davem@davemloft.net,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Christian Brauner <brauner@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Xin Long <lucien.xin@gmail.com>, linux-sctp@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Thu, 11 May 2023 09:31:16 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23C9E10DA;
+        Thu, 11 May 2023 06:30:37 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34BDMVEo025180;
+        Thu, 11 May 2023 13:30:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=4H6cg9/svGMCwZGXxTBtcYg0ozMTszd85OG5cGMvj7Q=;
+ b=PlrJhQ3LqJhtTm+obYnYcWOaAmDaKKxjOZVmNnGu/Gx6mgie+8+Z33InbQsJB/aE19LM
+ u0FfUtl8KcaVHgO/YQkTNj7hOxcycG+qwlACnnlgB1c8fLnQc+KJyvAE3hmfujNR9Csk
+ GBsYkxywzNHmkMosl5Cy7034OZ54yr1yikGHv16X7vxkfkCmR1q1BTuA0bqeY4OooPrS
+ C00WXDEt1YO+AYY7JsPrjFcN/svdlmuZnXuaOVI0fuUPz7pUAZHnI4yIqVWdfyaBg71y
+ 1+oD3zDN4JxzlGs9Qc8bhB7Fk49fhWRRjIDY45zRtUCJojvEHXTlQa0Hyi7rTB+Xllce dw== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qgv1t8v2e-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 May 2023 13:30:25 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34BDULZx001532;
+        Thu, 11 May 2023 13:30:21 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3qdy5bq8kn-1;
+        Thu, 11 May 2023 13:30:21 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34BDULeF001526;
+        Thu, 11 May 2023 13:30:21 GMT
+Received: from mdalam-linux.qualcomm.com (mdalam-linux.qualcomm.com [10.201.2.71])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 34BDUKuZ001525;
+        Thu, 11 May 2023 13:30:21 +0000
+Received: by mdalam-linux.qualcomm.com (Postfix, from userid 466583)
+        id AC8B512010C1; Thu, 11 May 2023 19:00:19 +0530 (IST)
+From:   Md Sadre Alam <quic_mdalam@quicinc.com>
+To:     mani@kernel.org, miquel.raynal@bootlin.com, richard@nod.at,
+        vigneshr@ti.com, linux-mtd@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     quic_srichara@quicinc.com, quic_mdalam@quicinc.com
+Subject: [PATCH 0/5] mtd: rawnand: qcom: Implement exec_op()
+Date:   Thu, 11 May 2023 19:00:12 +0530
+Message-Id: <20230511133017.6307-1-quic_mdalam@quicinc.com>
+X-Mailer: git-send-email 2.17.1
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: nQB32vKZAAlEPhsVUHYMWHeqLZ43SzsH
+X-Proofpoint-GUID: nQB32vKZAAlEPhsVUHYMWHeqLZ43SzsH
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-11_10,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ mlxlogscore=611 malwarescore=0 suspectscore=0 clxscore=1015
+ priorityscore=1501 mlxscore=0 adultscore=0 spamscore=0 phishscore=0
+ bulkscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2304280000 definitions=main-2305110116
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 3:12=E2=80=AFPM Marcelo Ricardo Leitner
-<marcelo.leitner@gmail.com> wrote:
->
-> Hi,
+These series of patches will add exec_ops support in qpic nand
+driver. Earlier posted patches V1,V2 will be discontinued ,after
+addrissing Mani and Miquel comment. These all patches are split
+of single patche posted earlier for exec_ops.
 
-Hi Marcelo,
 
-thanks! Fixed in -v3.
+Md Sadre Alam (5):
+  mtd: rawnand: qcom: Implement exec_op()
+  mtd: rawnand: qcom: Add support for reset, readid, status exec_op
+  mtd: rawnand: qcom: Add support for param_page read exec_ops
+  mtd: rawnand: qcom: Add support for read, write, erase exec_ops
+  mtd: rawnand: qcom: Remove legacy interface implementation.
 
-Kind regards,
-Alex
+ drivers/mtd/nand/raw/qcom_nandc.c | 857 ++++++++++++++++++------------
+ 1 file changed, 510 insertions(+), 347 deletions(-)
 
->
-> Two things:
->
-> On Thu, May 11, 2023 at 02:31:48PM +0200, Alexander Mikhalitsyn wrote:
-> > Add bpf_bypass_getsockopt proto callback and filter out
-> > SCTP_SOCKOPT_PEELOFF and SCTP_SOCKOPT_PEELOFF_FLAGS socket options
-> > from running eBPF hook on them.
-> >
-> > These options do fd_install(), and if BPF_CGROUP_RUN_PROG_GETSOCKOPT
-> > hook returns an error after success of the original handler
-> > sctp_getsockopt(...), userspace will receive an error from getsockopt
-> > syscall and will be not aware that fd was successfully installed into f=
-dtable.
-> >
-> > This patch was born as a result of discussion around a new SCM_PIDFD in=
-terface:
-> > https://lore.kernel.org/all/20230413133355.350571-3-aleksandr.mikhalits=
-yn@canonical.com/
->
-> Cool, but the description is mentioning the CONNECTX3 sockopt.
->
-> >
-> > Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
-> > Cc: Daniel Borkmann <daniel@iogearbox.net>
-> > Cc: Christian Brauner <brauner@kernel.org>
-> > Cc: Stanislav Fomichev <sdf@google.com>
-> > Cc: Neil Horman <nhorman@tuxdriver.com>
-> > Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-> > Cc: Xin Long <lucien.xin@gmail.com>
-> > Cc: linux-sctp@vger.kernel.org
-> > Cc: linux-kernel@vger.kernel.org
-> > Cc: netdev@vger.kernel.org
-> > Suggested-by: Stanislav Fomichev <sdf@google.com>
-> > Acked-by: Stanislav Fomichev <sdf@google.com>
-> > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.c=
-om>
-> > ---
-> >  net/sctp/socket.c | 31 +++++++++++++++++++++++++++++++
-> >  1 file changed, 31 insertions(+)
-> >
-> > diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-> > index cda8c2874691..a211a203003c 100644
-> > --- a/net/sctp/socket.c
-> > +++ b/net/sctp/socket.c
-> > @@ -8281,6 +8281,35 @@ static int sctp_getsockopt(struct sock *sk, int =
-level, int optname,
-> >       return retval;
-> >  }
-> >
-> > +static bool sctp_bpf_bypass_getsockopt(int level, int optname)
-> > +{
-> > +     if (level =3D=3D SOL_SCTP) {
-> > +             switch (optname) {
-> > +             /*
-> > +              * These options do fd_install(), and if BPF_CGROUP_RUN_P=
-ROG_GETSOCKOPT
-> > +              * hook returns an error after success of the original ha=
-ndler
-> > +              * sctp_getsockopt(...), userspace will receive an error =
-from getsockopt
-> > +              * syscall and will be not aware that fd was successfully=
- installed into fdtable.
-> > +              *
-> > +              * Let's prevent bpf cgroup hook from running on them.
-> > +              */
->
-> This and..
->
-> > +             case SCTP_SOCKOPT_PEELOFF:
-> > +             case SCTP_SOCKOPT_PEELOFF_FLAGS:
-> > +             /*
-> > +              * As pointed by Marcelo Ricardo Leitner it seems reasona=
-ble to skip
-> > +              * bpf getsockopt hook for this sockopt too. Because inte=
-rnaly, it
-> > +              * triggers connect() and if error will be masked userspa=
-ce can be confused.
-> > +              */
->
-> ..this comments can be removed, as they are easily visible on the
-> description later on for who is interested on why such lines were
-> added.
->
-> Thanks,
-> Marcelo
->
-> > +             case SCTP_SOCKOPT_CONNECTX3:
-> > +                     return true;
-> > +             default:
-> > +                     return false;
-> > +             }
-> > +     }
-> > +
-> > +     return false;
-> > +}
-> > +
-> >  static int sctp_hash(struct sock *sk)
-> >  {
-> >       /* STUB */
-> > @@ -9650,6 +9679,7 @@ struct proto sctp_prot =3D {
-> >       .shutdown    =3D  sctp_shutdown,
-> >       .setsockopt  =3D  sctp_setsockopt,
-> >       .getsockopt  =3D  sctp_getsockopt,
-> > +     .bpf_bypass_getsockopt  =3D sctp_bpf_bypass_getsockopt,
-> >       .sendmsg     =3D  sctp_sendmsg,
-> >       .recvmsg     =3D  sctp_recvmsg,
-> >       .bind        =3D  sctp_bind,
-> > @@ -9705,6 +9735,7 @@ struct proto sctpv6_prot =3D {
-> >       .shutdown       =3D sctp_shutdown,
-> >       .setsockopt     =3D sctp_setsockopt,
-> >       .getsockopt     =3D sctp_getsockopt,
-> > +     .bpf_bypass_getsockopt  =3D sctp_bpf_bypass_getsockopt,
-> >       .sendmsg        =3D sctp_sendmsg,
-> >       .recvmsg        =3D sctp_recvmsg,
-> >       .bind           =3D sctp_bind,
-> > --
-> > 2.34.1
-> >
+-- 
+2.17.1
+
