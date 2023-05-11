@@ -2,469 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABFBC6FED2A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:53:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 986076FED2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:54:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237680AbjEKHxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 03:53:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53782 "EHLO
+        id S237748AbjEKHyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 03:54:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237380AbjEKHxc (ORCPT
+        with ESMTP id S237717AbjEKHxy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 03:53:32 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 265742D7B;
-        Thu, 11 May 2023 00:53:30 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QH3tS73xnzTk8w;
-        Thu, 11 May 2023 15:48:48 +0800 (CST)
-Received: from localhost.localdomain (10.67.174.95) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+        Thu, 11 May 2023 03:53:54 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA32944A9;
+        Thu, 11 May 2023 00:53:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1683791623; x=1715327623;
+  h=message-id:subject:from:to:date:in-reply-to:references:
+   content-transfer-encoding:mime-version;
+  bh=lWsfkByDlyrH+n6i9pgfcooXuTOClNr2MJKLxhSuFMM=;
+  b=dM7L3FBIEcPbzt73Kn3e6Kyq+Rm2hN9VljXLO8/R48KJDm0Pj3F7vF74
+   Jm5QVU7V8Js18uJD2k5v9bHpg4IqgUA0i+Kk1t/FQH5Of2mCGbrNkYy9/
+   cQhEaZ+/jRDPcpA6YG1lHvq0Of7poHvdWSHnAORFjDafIfm0NVc2shaXS
+   FW4EBAmD1nsmMRDfZuECP30EBtMISLIF00+UJkdhIr1ofX1N2TUwTZNHK
+   O+FW+oZt7+AriJWgYFC7JhooNxm5uE+qroxeM7SVtoJy05MxEfR9YRxNE
+   W8csAzecFte6E0twOKiSvVMvHG48z2xtFwYDeuEsKGlCzaIKiuS+UD/9M
+   w==;
+X-IronPort-AV: E=Sophos;i="5.99,266,1677567600"; 
+   d="scan'208";a="213386863"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 May 2023 00:53:41 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 11 May 2023 15:53:27 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
-        <adrian.hunter@intel.com>, <anshuman.khandual@arm.com>,
-        <jesussanp@google.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH v2 4/4] perf tools: Add printing perf_event_attr config symbol in perf_event_attr__fprintf()
-Date:   Thu, 11 May 2023 07:51:54 +0000
-Message-ID: <20230511075154.240163-5-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
-In-Reply-To: <20230511075154.240163-1-yangjihong1@huawei.com>
-References: <20230511075154.240163-1-yangjihong1@huawei.com>
+ 15.1.2507.21; Thu, 11 May 2023 00:53:39 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Thu, 11 May 2023 00:53:37 -0700
+Message-ID: <60676636bdbeb50e80c02ff24f5b58681689dfba.camel@microchip.com>
+Subject: Re: [PATCH net-next 1/8] net: phy: realtek: rtl8221: allow to
+ configure SERDES mode
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     Alexander Couzens <lynxis@fe80.eu>, <netdev@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Date:   Thu, 11 May 2023 09:53:36 +0200
+In-Reply-To: <302d982c5550f10d589735fc2e46cf27386c39f4.1683756691.git.daniel@makrotopia.org>
+References: <cover.1683756691.git.daniel@makrotopia.org>
+         <302d982c5550f10d589735fc2e46cf27386c39f4.1683756691.git.daniel@makrotopia.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.46.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.95]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When printing perf_event_attr, always display perf_event_attr config and its symbol
-to improve the readability of debugging information.
-
-Before:
-
-  # perf --debug verbose=2 record -e cycles,cpu-clock,sched:sched_switch,branch-load-misses,r101,mem:0x0 -C 0 true
-  <SNIP>
-  ------------------------------------------------------------
-  perf_event_attr:
-    size                             136
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 5
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             1
-    size                             136
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             2
-    size                             136
-    config                           0x143
-    { sample_period, sample_freq }   1
-    sample_type                      IP|TID|TIME|CPU|PERIOD|RAW|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 7
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             3
-    size                             136
-    config                           0x10005
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 9
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             4
-    size                             136
-    config                           0x101
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 10
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             5
-    size                             136
-    { sample_period, sample_freq }   1
-    sample_type                      IP|TID|TIME|CPU|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    sample_id_all                    1
-    exclude_guest                    1
-    bp_type                          3
-    { bp_len, config2 }              0x4
-  ------------------------------------------------------------
-  <SNIP>
-
-After:
-
-  # perf --debug verbose=2 record -e cycles,cpu-clock,sched:sched_switch,branch-load-misses,r101,mem:0x0 -C 0 true
-  <SNIP>
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             0 (PERF_TYPE_HARDWARE)
-    size                             136
-    config                           0 (PERF_COUNT_HW_CPU_CYCLES)
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 5
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             1 (PERF_TYPE_SOFTWARE)
-    size                             136
-    config                           0 (PERF_COUNT_SW_CPU_CLOCK)
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             2 (PERF_TYPE_TRACEPOINT)
-    size                             136
-    config                           0x143 (sched:sched_switch)
-    { sample_period, sample_freq }   1
-    sample_type                      IP|TID|TIME|CPU|PERIOD|RAW|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 7
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             3 (PERF_TYPE_HW_CACHE)
-    size                             136
-    config                           0x10005 (PERF_COUNT_HW_CACHE_RESULT_MISS | PERF_COUNT_HW_CACHE_OP_READ | PERF_COUNT_HW_CACHE_BPU)
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 9
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             4 (PERF_TYPE_RAW)
-    size                             136
-    config                           0x101
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 10
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             5 (PERF_TYPE_BREAKPOINT)
-    size                             136
-    config                           0
-    { sample_period, sample_freq }   1
-    sample_type                      IP|TID|TIME|CPU|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    sample_id_all                    1
-    exclude_guest                    1
-    bp_type                          3
-    { bp_len, config2 }              0x4
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 11
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             1 (PERF_TYPE_SOFTWARE)
-    size                             136
-    config                           9 (PERF_COUNT_SW_DUMMY)
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    inherit                          1
-    mmap                             1
-    comm                             1
-    freq                             1
-    task                             1
-    sample_id_all                    1
-    mmap2                            1
-    comm_exec                        1
-    ksymbol                          1
-    bpf_event                        1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 12
-  <SNIP>
-
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
- tools/perf/util/perf_event_attr_fprintf.c | 159 +++++++++++++++++++++-
- 1 file changed, 158 insertions(+), 1 deletion(-)
-
-diff --git a/tools/perf/util/perf_event_attr_fprintf.c b/tools/perf/util/perf_event_attr_fprintf.c
-index cd0905d8cb7a..7730f0d7c28a 100644
---- a/tools/perf/util/perf_event_attr_fprintf.c
-+++ b/tools/perf/util/perf_event_attr_fprintf.c
-@@ -7,6 +7,11 @@
- #include <linux/perf_event.h>
- #include "util/evsel_fprintf.h"
- 
-+#ifdef HAVE_LIBTRACEEVENT
-+#include <stdlib.h> // for free
-+#include "trace-event.h"
-+#endif
-+
- struct bit_names {
- 	int bit;
- 	const char *name;
-@@ -86,6 +91,85 @@ static const char *stringify_perf_type_id(u64 value)
- 		return NULL;
- 	}
- }
-+
-+static const char *stringify_perf_hw_id(u64 value)
-+{
-+	/* sync with enum perf_hw_id in perf_event.h */
-+	switch (value) {
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CPU_CYCLES)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_INSTRUCTIONS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_REFERENCES)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_MISSES)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_BRANCH_INSTRUCTIONS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_BRANCH_MISSES)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_BUS_CYCLES)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_STALLED_CYCLES_FRONTEND)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_STALLED_CYCLES_BACKEND)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_REF_CPU_CYCLES)
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+static const char *stringify_perf_hw_cache_id(u64 value)
-+{
-+	/* sync with enum perf_hw_cache_id in perf_event.h */
-+	switch (value) {
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_L1D)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_L1I)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_LL)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_DTLB)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_ITLB)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_BPU)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_NODE)
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+static const char *stringify_perf_hw_cache_op_id(u64 value)
-+{
-+	/* sync with enum perf_hw_cache_op_id in perf_event.h */
-+	switch (value) {
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_OP_READ)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_OP_WRITE)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_OP_PREFETCH)
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+static const char *stringify_perf_hw_cache_op_result_id(u64 value)
-+{
-+	/* sync with enum perf_hw_cache_op_result_id in perf_event.h */
-+	switch (value) {
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_RESULT_ACCESS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_RESULT_MISS)
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+static const char *stringify_perf_sw_id(u64 value)
-+{
-+	/* sync with enum perf_sw_ids in perf_event.h */
-+	switch (value) {
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_CPU_CLOCK)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_TASK_CLOCK)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_PAGE_FAULTS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_CONTEXT_SWITCHES)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_CPU_MIGRATIONS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_PAGE_FAULTS_MIN)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_PAGE_FAULTS_MAJ)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_ALIGNMENT_FAULTS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_EMULATION_FAULTS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_DUMMY)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_BPF_OUTPUT)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_CGROUP_SWITCHES)
-+	default:
-+		return NULL;
-+	}
-+}
- #undef ENUM_ID_TO_STR_CASE
- 
- static void __p_type_id(char *buf, size_t size, u64 value)
-@@ -98,6 +182,78 @@ static void __p_type_id(char *buf, size_t size, u64 value)
- 		snprintf(buf, size, "%"PRIu64" (%s)", value, str);
- }
- 
-+static void __p_config_hw_id(char *buf, size_t size, u64 value)
-+{
-+	const char *str = stringify_perf_hw_id(value);
-+
-+	if (str == NULL)
-+		snprintf(buf, size, "%"PRIx64, value);
-+	else
-+		snprintf(buf, size, "%"PRIx64" (%s)", value, str);
-+}
-+
-+static void __p_config_sw_id(char *buf, size_t size, u64 value)
-+{
-+	const char *str = stringify_perf_sw_id(value);
-+
-+	if (str == NULL)
-+		snprintf(buf, size, "%"PRIx64, value);
-+	else
-+		snprintf(buf, size, "%"PRIx64" (%s)", value, str);
-+}
-+
-+static void __p_config_hw_cache_id(char *buf, size_t size, u64 value)
-+{
-+	const char *hw_cache_str = stringify_perf_hw_cache_id(value & 0xff);
-+	const char *hw_cache_op_str =
-+		stringify_perf_hw_cache_op_id((value & 0xff00) >> 8);
-+	const char *hw_cache_op_result_str =
-+		stringify_perf_hw_cache_op_result_id((value & 0xff0000) >> 16);
-+
-+	if (hw_cache_str == NULL || hw_cache_op_str == NULL ||
-+	    hw_cache_op_result_str == NULL) {
-+		snprintf(buf, size, "%#"PRIx64, value);
-+	} else {
-+		snprintf(buf, size, "%#"PRIx64" (%s | %s | %s)", value,
-+			 hw_cache_op_result_str, hw_cache_op_str, hw_cache_str);
-+	}
-+}
-+
-+#ifdef HAVE_LIBTRACEEVENT
-+static void __p_config_tracepoint_id(char *buf, size_t size, u64 value)
-+{
-+	char *str = tracepoint_id_to_name(value);
-+
-+	if (str != NULL) {
-+		snprintf(buf, size, "%#"PRIx64" (%s)", value, str);
-+		free(str);
-+	} else {
-+		snprintf(buf, size, "%#"PRIx64, value);
-+	}
-+}
-+#endif
-+
-+static void __p_config_id(char *buf, size_t size, u32 type, u64 value)
-+{
-+	switch (type) {
-+	case PERF_TYPE_HARDWARE:
-+		return __p_config_hw_id(buf, size, value);
-+	case PERF_TYPE_SOFTWARE:
-+		return __p_config_sw_id(buf, size, value);
-+	case PERF_TYPE_HW_CACHE:
-+		return __p_config_hw_cache_id(buf, size, value);
-+	case PERF_TYPE_TRACEPOINT:
-+#ifdef HAVE_LIBTRACEEVENT
-+		return __p_config_tracepoint_id(buf, size, value);
-+#endif
-+	case PERF_TYPE_RAW:
-+	case PERF_TYPE_BREAKPOINT:
-+	default:
-+		snprintf(buf, size, "%#"PRIx64, value);
-+		return;
-+	}
-+}
-+
- #define BUF_SIZE		1024
- 
- #define p_hex(val)		snprintf(buf, BUF_SIZE, "%#"PRIx64, (uint64_t)(val))
-@@ -107,6 +263,7 @@ static void __p_type_id(char *buf, size_t size, u64 value)
- #define p_branch_sample_type(val) __p_branch_sample_type(buf, BUF_SIZE, val)
- #define p_read_format(val)	__p_read_format(buf, BUF_SIZE, val)
- #define p_type_id(val)		__p_type_id(buf, BUF_SIZE, val)
-+#define p_config_id(val)	__p_config_id(buf, BUF_SIZE, attr->type, val)
- 
- #define PRINT_ATTRn(_n, _f, _p, _a)			\
- do {							\
-@@ -126,7 +283,7 @@ int perf_event_attr__fprintf(FILE *fp, struct perf_event_attr *attr,
- 
- 	PRINT_ATTRn("type", type, p_type_id, true);
- 	PRINT_ATTRf(size, p_unsigned);
--	PRINT_ATTRf(config, p_hex);
-+	PRINT_ATTRn("config", config, p_config_id, true);
- 	PRINT_ATTRn("{ sample_period, sample_freq }", sample_period, p_unsigned, false);
- 	PRINT_ATTRf(sample_type, p_sample_type);
- 	PRINT_ATTRf(read_format, p_read_format);
--- 
-2.30.GIT
+SGkgQWxleGFuZGVyLAoKT24gVGh1LCAyMDIzLTA1LTExIGF0IDAwOjUzICswMjAwLCBBbGV4YW5k
+ZXIgQ291emVucyB3cm90ZToKPiBbWW91IGRvbid0IG9mdGVuIGdldCBlbWFpbCBmcm9tIGx5bnhp
+c0BmZTgwLmV1LiBMZWFybiB3aHkgdGhpcyBpcyBpbXBvcnRhbnQKPiBhdGh0dHBzOi8vYWthLm1z
+L0xlYXJuQWJvdXRTZW5kZXJJZGVudGlmaWNhdGlvbsKgXQo+IAo+IEVYVEVSTkFMIEVNQUlMOiBE
+byBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91IGtub3cgdGhl
+Cj4gY29udGVudCBpcyBzYWZlCj4gCj4gVGhlIHJ0bDgyMjEgc3VwcG9ydHMgbXVsdGlwbGUgU0VS
+REVTIG1vZGVzOgo+IC0gU0dNSUkKPiAtIDI1MDBiYXNlLXgKPiAtIEhpU0dNSUkKPiAKPiBGdXJ0
+aGVyIGl0IHN1cHBvcnRzIHJhdGUgYWRhcHRpb24gb24gU0VSREVTIGxpbmtzIHRvIGFsbG93Cj4g
+c2xvdyBldGhlcm5ldCBzcGVlZHMgKDEwLzEwMC8xMDAwbWJpdCkgdG8gd29yayBvbiAyNTAwYmFz
+ZS14L0hpU0dNSUkKPiBsaW5rcyB3aXRob3V0IHJlZHVjaW5nIHRoZSBTRVJERVMgc3BlZWQuCj4g
+Cj4gV2hlbiBvcGVyYXRpbmcgd2l0aG91dCByYXRlIGFkYXB0ZXJzIHRoZSBTRVJERVMgbGluayB3
+aWxsIGZvbGxvdyB0aGUKPiBldGhlcm5ldCBzcGVlZC4KPiAKPiBTaWduZWQtb2ZmLWJ5OiBBbGV4
+YW5kZXIgQ291emVucyA8bHlueGlzQGZlODAuZXU+Cj4gLS0tCj4gwqBkcml2ZXJzL25ldC9waHkv
+cmVhbHRlay5jIHwgNTUgKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrKysrCj4g
+wqAxIGZpbGUgY2hhbmdlZCwgNTUgaW5zZXJ0aW9ucygrKQo+IAo+IGRpZmYgLS1naXQgYS9kcml2
+ZXJzL25ldC9waHkvcmVhbHRlay5jIGIvZHJpdmVycy9uZXQvcGh5L3JlYWx0ZWsuYwo+IGluZGV4
+IDNkOTlmZDY2NjRkNy4uYTdkZDVhMDc1MTM1IDEwMDY0NAo+IC0tLSBhL2RyaXZlcnMvbmV0L3Bo
+eS9yZWFsdGVrLmMKPiArKysgYi9kcml2ZXJzL25ldC9waHkvcmVhbHRlay5jCj4gQEAgLTUzLDYg
+KzUzLDE1IEBACj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFJUTDgy
+MDFGX0lTUl9MSU5LKQo+IMKgI2RlZmluZSBSVEw4MjAxRl9JRVLCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDB4MTMKPiAKPiArI2RlZmluZSBSVEw4
+MjIxQl9NTURfU0VSREVTX0NUUkzCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIE1ESU9fTU1E
+X1ZFTkQxCj4gKyNkZWZpbmUgUlRMODIyMUJfTU1EX1BIWV9DVFJMwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoCBNRElPX01NRF9WRU5EMgo+ICsjZGVmaW5lIFJUTDgyMjFCX1NFUkRF
+U19PUFRJT07CoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAweDY5N2EKPiArI2RlZmlu
+ZSBSVEw4MjIxQl9TRVJERVNfT1BUSU9OX01PREVfTUFTS8KgwqDCoMKgwqDCoCBHRU5NQVNLKDUs
+IDApCj4gKyNkZWZpbmUgUlRMODIyMUJfU0VSREVTX09QVElPTl9NT0RFXzI1MDBCQVNFWF9TR01J
+ScKgwqDCoCAwCj4gKyNkZWZpbmUgUlRMODIyMUJfU0VSREVTX09QVElPTl9NT0RFX0hJU0dNSUlf
+U0dNSUnCoMKgwqDCoMKgIDEKPiArI2RlZmluZSBSVEw4MjIxQl9TRVJERVNfT1BUSU9OX01PREVf
+MjUwMEJBU0VYwqDCoMKgwqDCoMKgwqDCoMKgIDIKPiArI2RlZmluZSBSVEw4MjIxQl9TRVJERVNf
+T1BUSU9OX01PREVfSElTR01JScKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgMwo+ICsKPiDCoCNkZWZp
+bmUgUlRMODM2NlJCX1BPV0VSX1NBVkXCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgMHgxNQo+IMKgI2RlZmluZSBSVEw4MzY2UkJfUE9XRVJfU0FWRV9PTsKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgQklUKDEyKQo+IAo+IEBAIC04NDksNiAr
+ODU4LDQ4IEBAIHN0YXRpYyBpcnFyZXR1cm5fdCBydGw5MDAwYV9oYW5kbGVfaW50ZXJydXB0KHN0
+cnVjdAo+IHBoeV9kZXZpY2UgKnBoeWRldikKPiDCoMKgwqDCoMKgwqDCoCByZXR1cm4gSVJRX0hB
+TkRMRUQ7Cj4gwqB9Cj4gCj4gK3N0YXRpYyBpbnQgcnRsODIyMWJfY29uZmlnX2luaXQoc3RydWN0
+IHBoeV9kZXZpY2UgKnBoeWRldikKPiArewo+ICvCoMKgwqDCoMKgwqAgdTE2IG9wdGlvbl9tb2Rl
+Owo+ICsKPiArwqDCoMKgwqDCoMKgIHN3aXRjaCAocGh5ZGV2LT5pbnRlcmZhY2UpIHsKPiArwqDC
+oMKgwqDCoMKgIGNhc2UgUEhZX0lOVEVSRkFDRV9NT0RFXzI1MDBCQVNFWDoKPiArwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoCBpZiAoIXBoeWRldi0+aXNfYzQ1KSB7Cj4gK8KgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIG9wdGlvbl9tb2RlID0gUlRMODIyMUJf
+U0VSREVTX09QVElPTl9NT0RFXzI1MDBCQVNFWDsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgYnJlYWs7Cj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqAgfQo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGZhbGx0aHJvdWdoOwo+ICvCoMKg
+wqDCoMKgwqAgY2FzZSBQSFlfSU5URVJGQUNFX01PREVfU0dNSUk6Cj4gK8KgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqAgb3B0aW9uX21vZGUgPSBSVEw4MjIxQl9TRVJERVNfT1BUSU9OX01PREVf
+MjUwMEJBU0VYX1NHTUlJOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOwo+
+ICvCoMKgwqDCoMKgwqAgZGVmYXVsdDoKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBy
+ZXR1cm4gMDsKPiArwqDCoMKgwqDCoMKgIH0KPiArCj4gK8KgwqDCoMKgwqDCoCBwaHlfd3JpdGVf
+bW1kKHBoeWRldiwgUlRMODIyMUJfTU1EX1NFUkRFU19DVFJMLAo+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIDB4NzVmMywgMCk7CgpQbGVhc2UgcHJvdmlkZSBhIHN5
+bWJvbCBmb3IgdGhlIG1hZ2ljIHZhbHVlLgoKPiArCj4gK8KgwqDCoMKgwqDCoCBwaHlfbW9kaWZ5
+X21tZF9jaGFuZ2VkKHBoeWRldiwgUlRMODIyMUJfTU1EX1NFUkRFU19DVFJMLAo+ICvCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIFJUTDgy
+MjFCX1NFUkRFU19PUFRJT04sCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgUlRMODIyMUJfU0VSREVTX09QVElPTl9NT0RFX01BU0ss
+IG9wdGlvbl9tb2RlKTsKPiArwqDCoMKgwqDCoMKgIHN3aXRjaCAob3B0aW9uX21vZGUpIHsKPiAr
+wqDCoMKgwqDCoMKgIGNhc2UgUlRMODIyMUJfU0VSREVTX09QVElPTl9NT0RFXzI1MDBCQVNFWF9T
+R01JSToKPiArwqDCoMKgwqDCoMKgIGNhc2UgUlRMODIyMUJfU0VSREVTX09QVElPTl9NT0RFXzI1
+MDBCQVNFWDoKClRoaXMgbmV4dCBzZWN0aW9uIGFsc28gdXNlcyBhIG51bWJlciBvZiBtYWdpYyB2
+YWx1ZXMuICBQbGVhc2UgY29udmVydCB0bwpzeW1ib2xzLgoKPiArwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoCBwaHlfd3JpdGVfbW1kKHBoeWRldiwgUlRMODIyMUJfTU1EX1NFUkRFU19DVFJM
+LCAweDZhMDQsCj4gMHgwNTAzKTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBwaHlf
+d3JpdGVfbW1kKHBoeWRldiwgUlRMODIyMUJfTU1EX1NFUkRFU19DVFJMLCAweDZmMTAsCj4gMHhk
+NDU1KTsKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBwaHlfd3JpdGVfbW1kKHBoeWRl
+diwgUlRMODIyMUJfTU1EX1NFUkRFU19DVFJMLCAweDZmMTEsCj4gMHg4MDIwKTsKPiArwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBicmVhazsKPiArwqDCoMKgwqDCoMKgIGNhc2UgUlRMODIy
+MUJfU0VSREVTX09QVElPTl9NT0RFX0hJU0dNSUlfU0dNSUk6Cj4gK8KgwqDCoMKgwqDCoCBjYXNl
+IFJUTDgyMjFCX1NFUkRFU19PUFRJT05fTU9ERV9ISVNHTUlJOgo+ICvCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIHBoeV93cml0ZV9tbWQocGh5ZGV2LCBSVEw4MjIxQl9NTURfU0VSREVTX0NU
+UkwsIDB4NmEwNCwKPiAweDA1MDMpOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHBo
+eV93cml0ZV9tbWQocGh5ZGV2LCBSVEw4MjIxQl9NTURfU0VSREVTX0NUUkwsIDB4NmYxMCwKPiAw
+eGQ0MzMpOwo+ICvCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIHBoeV93cml0ZV9tbWQocGh5
+ZGV2LCBSVEw4MjIxQl9NTURfU0VSREVTX0NUUkwsIDB4NmYxMSwKPiAweDgwMjApOwo+ICvCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGJyZWFrOwo+ICvCoMKgwqDCoMKgwqAgfQo+ICsKPiAr
+wqDCoMKgwqDCoMKgIHJldHVybiAwOwo+ICt9Cj4gKwo+IMKgc3RhdGljIHN0cnVjdCBwaHlfZHJp
+dmVyIHJlYWx0ZWtfZHJ2c1tdID0gewo+IMKgwqDCoMKgwqDCoMKgIHsKPiDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgUEhZX0lEX01BVENIX0VYQUNUKDB4MDAwMDgyMDEpLAo+IEBAIC05
+NzAsNiArMTAyMSw3IEBAIHN0YXRpYyBzdHJ1Y3QgcGh5X2RyaXZlciByZWFsdGVrX2RydnNbXSA9
+IHsKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLm5hbWXCoMKgwqDCoMKgwqDCoMKg
+wqDCoCA9ICJSVEw4MjI2Ql9SVEw4MjIxQiAyLjVHYnBzIFBIWSIsCj4gwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIC5nZXRfZmVhdHVyZXPCoMKgID0gcnRsODIyeF9nZXRfZmVhdHVyZXMs
+Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC5jb25maWdfYW5lZ8KgwqDCoCA9IHJ0
+bDgyMnhfY29uZmlnX2FuZWcsCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLmNvbmZp
+Z19pbml0wqDCoMKgID0gcnRsODIyMWJfY29uZmlnX2luaXQsCj4gwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgIC5yZWFkX3N0YXR1c8KgwqDCoCA9IHJ0bDgyMnhfcmVhZF9zdGF0dXMsCj4g
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIC5zdXNwZW5kwqDCoMKgwqDCoMKgwqAgPSBn
+ZW5waHlfc3VzcGVuZCwKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLnJlc3VtZcKg
+wqDCoMKgwqDCoMKgwqAgPSBydGxnZW5fcmVzdW1lLAo+IEBAIC05OTIsNiArMTA0NCw3IEBAIHN0
+YXRpYyBzdHJ1Y3QgcGh5X2RyaXZlciByZWFsdGVrX2RydnNbXSA9IHsKPiDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgLm5hbWXCoMKgwqDCoMKgwqDCoMKgwqDCoCA9ICJSVEw4MjI2Qi1D
+R19SVEw4MjIxQi1DRyAyLjVHYnBzIFBIWSIsCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgIC5nZXRfZmVhdHVyZXPCoMKgID0gcnRsODIyeF9nZXRfZmVhdHVyZXMsCj4gwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgIC5jb25maWdfYW5lZ8KgwqDCoCA9IHJ0bDgyMnhfY29uZmln
+X2FuZWcsCj4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLmNvbmZpZ19pbml0wqDCoMKg
+ID0gcnRsODIyMWJfY29uZmlnX2luaXQsCj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+IC5yZWFkX3N0YXR1c8KgwqDCoCA9IHJ0bDgyMnhfcmVhZF9zdGF0dXMsCj4gwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgIC5zdXNwZW5kwqDCoMKgwqDCoMKgwqAgPSBnZW5waHlfc3VzcGVu
+ZCwKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLnJlc3VtZcKgwqDCoMKgwqDCoMKg
+wqAgPSBydGxnZW5fcmVzdW1lLAo+IEBAIC0xMDAyLDYgKzEwNTUsNyBAQCBzdGF0aWMgc3RydWN0
+IHBoeV9kcml2ZXIgcmVhbHRla19kcnZzW10gPSB7Cj4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgIC5uYW1lwqDCoMKgwqDCoMKgwqDCoMKgwqAgPSAiUlRMODIyMUItVkItQ0cgMi41R2Jw
+cyBQSFkiLAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAuZ2V0X2ZlYXR1cmVzwqDC
+oCA9IHJ0bDgyMnhfZ2V0X2ZlYXR1cmVzLAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oCAuY29uZmlnX2FuZWfCoMKgwqAgPSBydGw4MjJ4X2NvbmZpZ19hbmVnLAo+ICvCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgIC5jb25maWdfaW5pdMKgwqDCoCA9IHJ0bDgyMjFiX2NvbmZpZ19p
+bml0LAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAucmVhZF9zdGF0dXPCoMKgwqAg
+PSBydGw4MjJ4X3JlYWRfc3RhdHVzLAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAu
+c3VzcGVuZMKgwqDCoMKgwqDCoMKgID0gZ2VucGh5X3N1c3BlbmQsCj4gwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgIC5yZXN1bWXCoMKgwqDCoMKgwqDCoMKgID0gcnRsZ2VuX3Jlc3VtZSwK
+PiBAQCAtMTAxMiw2ICsxMDY2LDcgQEAgc3RhdGljIHN0cnVjdCBwaHlfZHJpdmVyIHJlYWx0ZWtf
+ZHJ2c1tdID0gewo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAubmFtZcKgwqDCoMKg
+wqDCoMKgwqDCoMKgID0gIlJUTDgyMjFCLVZNLUNHIDIuNUdicHMgUEhZIiwKPiDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqAgLmdldF9mZWF0dXJlc8KgwqAgPSBydGw4MjJ4X2dldF9mZWF0
+dXJlcywKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLmNvbmZpZ19hbmVnwqDCoMKg
+ID0gcnRsODIyeF9jb25maWdfYW5lZywKPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAu
+Y29uZmlnX2luaXTCoMKgwqAgPSBydGw4MjIxYl9jb25maWdfaW5pdCwKPiDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqAgLnJlYWRfc3RhdHVzwqDCoMKgID0gcnRsODIyeF9yZWFkX3N0YXR1
+cywKPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgLnN1c3BlbmTCoMKgwqDCoMKgwqDC
+oCA9IGdlbnBoeV9zdXNwZW5kLAo+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAucmVz
+dW1lwqDCoMKgwqDCoMKgwqDCoCA9IHJ0bGdlbl9yZXN1bWUsCj4gLS0KPiAyLjQwLjAKPiAKPiAK
+Ck90aGVyd2lzZQoKUmV2aWV3ZWQtYnk6IFN0ZWVuIEhlZ2VsdW5kIDxTdGVlbi5IZWdlbHVuZEBt
+aWNyb2NoaXAuY29tPgoKQmVzdCBSZWdhcmRzClN0ZWVuCgo=
 
