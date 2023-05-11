@@ -2,115 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06B816FE9B4
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 04:06:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 364226FE9B7
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 04:07:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231660AbjEKCGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 22:06:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44890 "EHLO
+        id S233180AbjEKCG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 22:06:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230004AbjEKCG3 (ORCPT
+        with ESMTP id S231797AbjEKCGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 22:06:29 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66723173B;
-        Wed, 10 May 2023 19:06:28 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id DDE0E24E0FC;
-        Thu, 11 May 2023 10:06:25 +0800 (CST)
-Received: from EXMBX062.cuchost.com (172.16.6.62) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 11 May
- 2023 10:06:25 +0800
-Received: from [192.168.125.107] (113.72.146.187) by EXMBX062.cuchost.com
- (172.16.6.62) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 11 May
- 2023 10:06:25 +0800
-Message-ID: <2a6add59-981a-f5c1-e744-1cef2b81f29a@starfivetech.com>
-Date:   Thu, 11 May 2023 10:06:23 +0800
+        Wed, 10 May 2023 22:06:52 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CC00469D;
+        Wed, 10 May 2023 19:06:42 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-50c8d87c775so10590723a12.3;
+        Wed, 10 May 2023 19:06:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683770800; x=1686362800;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t7iPZ+S9lIWU484gy9gFEvIir4SYB7qgUik/l/6/al8=;
+        b=btQqyyVZRjHkwxAhnJhY1niX9rzTTbi6F3EhnhvKjQ6kqfzqo6mucqbUQUEq1TvqMG
+         y07ywc8gMlEGRllLGt73OKbIpyxH5d2+6vvHsB78HdWS/sRHVHaKxJRX3TBp0GwzqT1l
+         uwpQj5nBMDgiuRwELvI+kUU4PQSVPHelfCfGSb6MBWHJEkcwXKblo1bHQYoBFuC7PVaO
+         4eEyecYJgUx8MQq8lkL5dpntlMrbP3qMVdFGLNH/BNlXr+bJ3/fAR3om40U15Y3t1zub
+         SojVaKzqiqdBDmKBNNQhH35fpkqjGAuIPSlbpCySB+MqSFOUsWiqwDS7zH+s/QFY3uB7
+         LoaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683770800; x=1686362800;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=t7iPZ+S9lIWU484gy9gFEvIir4SYB7qgUik/l/6/al8=;
+        b=K0JjUcAkCOD57DSKt4CHXCoT9HDVbgUwy3hX7nnGtLtgdOrbfZMhXu+giFpr5vr77G
+         UuETfiMxBgUFqw/DEyCoYGKsNZioCv8e0fDD/CHXwQfbPVBbwUllOre16KO0+voZAf2W
+         TnuloL36tjM2Zp7T3KXJB47Q2XgkEPDPW1ynIrpa9o1W0Zal4TZwjk8YRL3FSS68NhdP
+         jxVLSqiwtbvH/qrpQJb8DyFbRsMGP3ZpI6U5/trUa55d2ER19wuFH+jB0WB/VldlKeVC
+         /1Eq1qB0FYV20/oJ3GqxTHzX+umD6m1FPq2pKmuM4DYz7TaXbOY9GhIVQQY2Hp4spOtH
+         dvPg==
+X-Gm-Message-State: AC+VfDyRXMlVPiiLnjH0DMFNJTF2r0JJFRQcyEa1rhExnWDXxLYkPdjz
+        HfbWX1zWjkJu8kCnNIcEvOkefTUYwcYxpvzmf2A=
+X-Google-Smtp-Source: ACHHUZ5/P6MYG5XBW24NRdj+MsUW9vEjGQrLSVL6StH4Cr1jcDOFXqxp5pfnyV1e0N9v/+Hda+FuAxfahH+IMvBI4PA=
+X-Received: by 2002:aa7:d659:0:b0:508:14f2:399c with SMTP id
+ v25-20020aa7d659000000b0050814f2399cmr18400597edr.10.1683770800383; Wed, 10
+ May 2023 19:06:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3 1/5] dt-bindings: power: Add JH7110 AON PMU support
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-CC:     Conor Dooley <conor.dooley@microchip.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Walker Chen <walker.chen@starfivetech.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-References: <20230510015311.27505-1-changhuang.liang@starfivetech.com>
- <20230510015311.27505-2-changhuang.liang@starfivetech.com>
- <20230510-cloning-clapping-e262f00a94e8@wendy>
- <d80646ae-cf1b-234a-261c-3753f6cc9080@starfivetech.com>
- <20230510-city-scarf-023705d3c96a@spud>
-From:   Changhuang Liang <changhuang.liang@starfivetech.com>
-In-Reply-To: <20230510-city-scarf-023705d3c96a@spud>
+References: <20230510122045.2259-1-zegao@tencent.com> <6308b8e0-8a54-e574-a312-0a97cfbf810c@meta.com>
+ <ZFvUH+p0ebcgnwEg@krava> <1195c4bd-ef54-2f1d-b079-2a11af42c62f@meta.com>
+ <89159b33-3be4-487b-7647-0cbbd20c233d@meta.com> <CAD8CoPBzqih=0YxumRtywvSLs0aHwEbzpbehqKvpb18GzntVqA@mail.gmail.com>
+In-Reply-To: <CAD8CoPBzqih=0YxumRtywvSLs0aHwEbzpbehqKvpb18GzntVqA@mail.gmail.com>
+From:   Ze Gao <zegao2021@gmail.com>
+Date:   Thu, 11 May 2023 10:06:29 +0800
+Message-ID: <CAD8CoPAg+e8-hdQAd=t1jBYkuErf1KAL0qVOWrHsOu387VM6MA@mail.gmail.com>
+Subject: Re: [PATCH] bpf: reject blacklisted symbols in kprobe_multi to avoid
+ recursive trap
+To:     Yonghong Song <yhs@meta.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ze Gao <zegao@tencent.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.146.187]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX062.cuchost.com
- (172.16.6.62)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I just looked through fprobe_handler, it already does the recursion
+check from the code. So the root cause of the case I mentioned
+above which triggers kernel crash may be much more complicated
+than I read from the exception backtrace.
 
+It seems more effort is needed to look for a better solution than my
+initial proposal. I will keep the thread updated if there is any progress
+anyway.
 
-On 2023/5/11 3:51, Conor Dooley wrote:
-> On Wed, May 10, 2023 at 03:20:14PM +0800, Changhuang Liang wrote:
->> On 2023/5/10 15:06, Conor Dooley wrote:
->>> On Tue, May 09, 2023 at 06:53:07PM -0700, Changhuang Liang wrote:
->>>> +          - starfive,jh7110-pmu
->>>> +      - items:
->>>> +          - enum:
->>>> +              - starfive,jh7110-aon-syscon
->>>> +          - const: syscon
->>>
->>> Unfortunately, this is not what was wanted.
->>> This syscon, of which power domain control is just one of the things that
->>> it can do, should be documented in
->>> Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
->>> alongside it's brethern "starfive,jh7110-sys-syscon" &
->>> "starfive,jh7110-stg-syscon".
->>>
->>
->> That means that I don't need to modify this original yaml file? 
-> 
-> Does "this original" mean starfive,jh7100-pmu.yaml?
-> If so then...
-> 
+Thanks
+Ze
 
-Yes.
-
->> I just need to move current changes in this patch into 
->> "Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml"?
-> 
-> Correct.
-> It makes most sense for that binding, as it depends on the pll binding
-> (because it has a ref: to it), to go through the clock tree in Xingyu's
-> series.
-> I'll apply the driver changes once the binding has been applied.
-> 
-
-I think that I have to send v4 after Xingyu's series resend new version. 
-If drivers have no other comments. I will make the following changes:
-
-patch 1/5: Only keep the content in starfive,jh7110-pmu.h, move other content into Xingyu's PLL series.
-patch 5/5: Drop this patch, move the content into Xingyu's PLL series.
-other patch: no change.
-
-Thanks,
-Changhuang
+On Thu, May 11, 2023 at 9:24=E2=80=AFAM Ze Gao <zegao2021@gmail.com> wrote:
+>
+> Thank yonghong for your sage reviews.
+> Yes, this is an option I am also considering . I will try this out
+> later to see if works
+>
+> But like you said it's not clear whether kprobe blacklist=3D=3D fprobe bl=
+acklist.
+> And also there are cases I need to investigate on, like how to avoid recu=
+rsions
+> when kprobes and fprobes are mixed.
+>
+> Rejecting symbols  kprobe_blacklisted is kinda brute-force yet a straight=
+ way to
+> avoid kernel crash AFAIK.
+>
+> Ze
+>
+> On Thu, May 11, 2023 at 7:54=E2=80=AFAM Yonghong Song <yhs@meta.com> wrot=
+e:
+> >
+> >
+> >
+> > On 5/10/23 1:20 PM, Yonghong Song wrote:
+> > >
+> > >
+> > > On 5/10/23 10:27 AM, Jiri Olsa wrote:
+> > >> On Wed, May 10, 2023 at 07:13:58AM -0700, Yonghong Song wrote:
+> > >>>
+> > >>>
+> > >>> On 5/10/23 5:20 AM, Ze Gao wrote:
+> > >>>> BPF_LINK_TYPE_KPROBE_MULTI attaches kprobe programs through fprobe=
+,
+> > >>>> however it does not takes those kprobe blacklisted into considerat=
+ion,
+> > >>>> which likely introduce recursive traps and blows up stacks.
+> > >>>>
+> > >>>> this patch adds simple check and remove those are in kprobe_blackl=
+ist
+> > >>>> from one fprobe during bpf_kprobe_multi_link_attach. And also
+> > >>>> check_kprobe_address_safe is open for more future checks.
+> > >>>>
+> > >>>> note that ftrace provides recursion detection mechanism, but for k=
+probe
+> > >>>> only, we can directly reject those cases early without turning to
+> > >>>> ftrace.
+> > >>>>
+> > >>>> Signed-off-by: Ze Gao <zegao@tencent.com>
+> > >>>> ---
+> > >>>>    kernel/trace/bpf_trace.c | 37 +++++++++++++++++++++++++++++++++=
+++++
+> > >>>>    1 file changed, 37 insertions(+)
+> > >>>>
+> > >>>> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > >>>> index 9a050e36dc6c..44c68bc06bbd 100644
+> > >>>> --- a/kernel/trace/bpf_trace.c
+> > >>>> +++ b/kernel/trace/bpf_trace.c
+> > >>>> @@ -2764,6 +2764,37 @@ static int get_modules_for_addrs(struct
+> > >>>> module ***mods, unsigned long *addrs, u3
+> > >>>>        return arr.mods_cnt;
+> > >>>>    }
+> > >>>> +static inline int check_kprobe_address_safe(unsigned long addr)
+> > >>>> +{
+> > >>>> +    if (within_kprobe_blacklist(addr))
+> > >>>> +        return -EINVAL;
+> > >>>> +    else
+> > >>>> +        return 0;
+> > >>>> +}
+> > >>>> +
+> > >>>> +static int check_bpf_kprobe_addrs_safe(unsigned long *addrs, int =
+num)
+> > >>>> +{
+> > >>>> +    int i, cnt;
+> > >>>> +    char symname[KSYM_NAME_LEN];
+> > >>>> +
+> > >>>> +    for (i =3D 0; i < num; ++i) {
+> > >>>> +        if (check_kprobe_address_safe((unsigned long)addrs[i])) {
+> > >>>> +            lookup_symbol_name(addrs[i], symname);
+> > >>>> +            pr_warn("bpf_kprobe: %s at %lx is blacklisted\n",
+> > >>>> symname, addrs[i]);
+> > >>>
+> > >>> So user request cannot be fulfilled and a warning is issued and som=
+e
+> > >>> of user requests are discarded and the rest is proceeded. Does not
+> > >>> sound a good idea.
+> > >>>
+> > >>> Maybe we should do filtering in user space, e.g., in libbpf, check
+> > >>> /sys/kernel/debug/kprobes/blacklist and return error
+> > >>> earlier? bpftrace/libbpf-tools/bcc-tools all do filtering before
+> > >>> requesting kprobe in the kernel.
+> > >>
+> > >> also fprobe uses ftrace drectly without paths in kprobe, so I wonder
+> > >> some of the kprobe blacklisted functions are actually safe
+> > >
+> > > Could you give a pointer about 'some of the kprobe blacklisted
+> > > functions are actually safe'?
+> >
+> > Thanks Jiri for answering my question. it is not clear whether
+> > kprobe blacklist =3D=3D fprobe blacklist, probably not.
+> >
+> > You mentioned:
+> >    note that ftrace provides recursion detection mechanism,
+> >    but for kprobe only
+> > Maybe the right choice is to improve ftrace to provide recursion
+> > detection mechanism for fprobe as well?
+> >
+> > >
+> > >>
+> > >> jirka
+> > >>
+> > >>>
+> > >>>> +            /* mark blacklisted symbol for remove */
+> > >>>> +            addrs[i] =3D 0;
+> > >>>> +        }
+> > >>>> +    }
+> > >>>> +
+> > >>>> +    /* remove blacklisted symbol from addrs */
+> > >>>> +    for (i =3D 0, cnt =3D 0; i < num; ++i) {
+> > >>>> +        if (addrs[i])
+> > >>>> +            addrs[cnt++]  =3D addrs[i];
+> > >>>> +    }
+> > >>>> +
+> > >>>> +    return cnt;
+> > >>>> +}
+> > >>>> +
+> > >>>>    int bpf_kprobe_multi_link_attach(const union bpf_attr *attr,
+> > >>>> struct bpf_prog *prog)
+> > >>>>    {
+> > >>>>        struct bpf_kprobe_multi_link *link =3D NULL;
+> > >>>> @@ -2859,6 +2890,12 @@ int bpf_kprobe_multi_link_attach(const unio=
+n
+> > >>>> bpf_attr *attr, struct bpf_prog *pr
+> > >>>>        else
+> > >>>>            link->fp.entry_handler =3D kprobe_multi_link_handler;
+> > >>>> +    cnt =3D check_bpf_kprobe_addrs_safe(addrs, cnt);
+> > >>>> +    if (!cnt) {
+> > >>>> +        err =3D -EINVAL;
+> > >>>> +        goto error;
+> > >>>> +    }
+> > >>>> +
+> > >>>>        link->addrs =3D addrs;
+> > >>>>        link->cookies =3D cookies;
+> > >>>>        link->cnt =3D cnt;
