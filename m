@@ -2,99 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E6326FF48B
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:36:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 818C96FF48E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:36:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238560AbjEKOgd convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 11 May 2023 10:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
+        id S238340AbjEKOgn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 10:36:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238544AbjEKOgQ (ORCPT
+        with ESMTP id S238041AbjEKOgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 10:36:16 -0400
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8552B106D3;
-        Thu, 11 May 2023 07:35:35 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-55c939fb24dso81108037b3.2;
-        Thu, 11 May 2023 07:35:35 -0700 (PDT)
+        Thu, 11 May 2023 10:36:22 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DAD711B6C
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 07:35:51 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so79988322a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 07:35:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683815749; x=1686407749;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iOXRRdgVUBc+UmzsHGXf7yN0Z8AdVArYJOeUqt52Z8s=;
+        b=o0F8r04z7dsrDucISA3J82RCw6niaUS+pJJAo7xmwkX1Ccb2bb7lZh+rOQUT007bZB
+         fai6JrkbPIP8blc4RZFn3ULrYraWHLrmM1VMbLMXsVuEk7qSCAy96CgPth2sKDo7YhTQ
+         6J0RF+czetA5vQiEDH5hxnUnylDJdfLHp2/ALawr09gZtS0b/+rmnJ0tn2Nq1x0FYKTI
+         rpv+X9nDIHggw3HBPcSN5rFkdNrPGh35kWZCBz1/06XbsleRsRUQxva7vTkJf+spfvXK
+         pcinklyEzsi4E+bTSg4edNRmOfW4G97/qFCau4msJybzZXshktravNR9kfIUHdlvMr3r
+         UGxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683815734; x=1686407734;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zuNMFCCjBGiRepfEIV/kIi3+pDm4ryspV/CKvccFj/c=;
-        b=A9h6pBfQVLkxeZ49T1NCNBgmT73VLkPkLC4+DxjgTlgofNzRABS7jTQ6mly3ue0hn0
-         iR9XYeosBM9DZx2rMPul+AJqt2w6mJu/sle/9iJzWEvhwqIq+a9hZ+8vfR2w6qrtHLuz
-         YXbd2T6JhjdH5I0Z8BhOCLCi5RcfmxU9eh6PkFk33gJ7fiBHvWRvteU7MZW6K3LNHuAT
-         tDa1WL63Ihvn5Pp0zPAJDK9CIPb+9ha5017UmfiB3HJBX/IdBuyJBwHj06/EtAcG4Qlo
-         GYa8RsdV08ZKF95GGF2Dndl5jF7k7cHC/zsLKlaO9DHwr77P+z2RT4tc0deAfqnwqp4h
-         hjPw==
-X-Gm-Message-State: AC+VfDzBf6GRyzKNZlzOoo0VuLQGO7xizHuGwdX9c60yVqcajY9aFRav
-        2pEe8zJriIYeKEnOw4EIDfzG/qOWP15B7g==
-X-Google-Smtp-Source: ACHHUZ6/C8pDovpD7gt6Gs1M2dYlDqlXiWHvDCgzxLsa2kwyqTH6w3Qt5/xioq9wI19aFyDfY0E2lg==
-X-Received: by 2002:a0d:ddd7:0:b0:55a:4bd3:f73b with SMTP id g206-20020a0dddd7000000b0055a4bd3f73bmr24081601ywe.10.1683815734332;
-        Thu, 11 May 2023 07:35:34 -0700 (PDT)
-Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com. [209.85.128.177])
-        by smtp.gmail.com with ESMTPSA id c74-20020a814e4d000000b00552f7767803sm4943160ywb.58.2023.05.11.07.35.33
+        d=1e100.net; s=20221208; t=1683815749; x=1686407749;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iOXRRdgVUBc+UmzsHGXf7yN0Z8AdVArYJOeUqt52Z8s=;
+        b=NJEieA25Dlz1VireUNRqBTYrsZEqvyiTymgUhgXHtiiQeyiDzZepvQQzScVgfoC9j+
+         oz2nI2VWhZ0muMwbU+WTDXGcpkXwvCZmB8/XzDj+c2NSJ5KcBo9YTuI/OU7cPoKm8573
+         9slGeiA9DE0gcyBrQr5iFUHVaXMoe5JfIi7J//+66ySZ8+nuYoUk2BKStgqBw/qAaa0o
+         yYiDtPTPj56oy/5AHPlbFiNvfNeGp9Czs4W2QcAEU8aL+Ny6yRWVYCfPKJ8vkBNENJjq
+         t+0cK7zKWnOuYZnHsXFAgV+9wXd6kGPi9D740XcrWM3gH71HU52E4VsOJ/cfAd0ZziIA
+         xJhA==
+X-Gm-Message-State: AC+VfDzMCpgDMOrfVBxz7dv4nPg86yHhcmYN4t5DLBgUbmU5D7byyQFy
+        FTA0HirJec5rWQsSFyEuDLuddA==
+X-Google-Smtp-Source: ACHHUZ6RTe5WgSrqyhZeO20u+ewTN7JFmjPjzgfVPZltFPXUrBhP6CUUeKSFP4dzoOQj6ch8B7Xf7w==
+X-Received: by 2002:a17:906:da8c:b0:94a:653b:ba41 with SMTP id xh12-20020a170906da8c00b0094a653bba41mr5166642ejb.15.1683815749483;
+        Thu, 11 May 2023 07:35:49 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d7cd:1be6:f89d:7218? ([2a02:810d:15c0:828:d7cd:1be6:f89d:7218])
+        by smtp.gmail.com with ESMTPSA id h8-20020a1709060f4800b009600ce4fb53sm4045550ejj.37.2023.05.11.07.35.48
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 May 2023 07:35:34 -0700 (PDT)
-Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-55a8019379fso81280627b3.0;
-        Thu, 11 May 2023 07:35:33 -0700 (PDT)
-X-Received: by 2002:a0d:d90f:0:b0:55a:aeb7:2b0a with SMTP id
- b15-20020a0dd90f000000b0055aaeb72b0amr21601241ywe.23.1683815733695; Thu, 11
- May 2023 07:35:33 -0700 (PDT)
+        Thu, 11 May 2023 07:35:48 -0700 (PDT)
+Message-ID: <ca7a8499-0ac9-43d3-45ab-c974b1a2a564@linaro.org>
+Date:   Thu, 11 May 2023 16:35:47 +0200
 MIME-Version: 1.0
-References: <20230510163343.43090-1-glaubitz@physik.fu-berlin.de>
-In-Reply-To: <20230510163343.43090-1-glaubitz@physik.fu-berlin.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 11 May 2023 16:35:21 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXmtfCir4dt6CKe2YxDN53nNAcE=i5oyMkOsPavJ-p0Tw@mail.gmail.com>
-Message-ID: <CAMuHMdXmtfCir4dt6CKe2YxDN53nNAcE=i5oyMkOsPavJ-p0Tw@mail.gmail.com>
-Subject: Re: [PATCH] irqchip/jcore-aic: Fix missing allocation of IRQ descriptors
-To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>, Rich Felker <dalias@libc.org>,
-        Jason Cooper <jason@lakedaemon.net>,
-        linux-kernel@vger.kernel.org,
-        Linux-sh list <linux-sh@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] arm64: defconfig: enable TYPEC_QCOM_PMIC
+Content-Language: en-US
+To:     neil.armstrong@linaro.org, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230511135503.198538-1-krzysztof.kozlowski@linaro.org>
+ <016ab311-cc66-b1c7-4099-f63e8f3644b8@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <016ab311-cc66-b1c7-4099-f63e8f3644b8@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Adrian,
+On 11/05/2023 16:14, Neil Armstrong wrote:
+> On 11/05/2023 15:55, Krzysztof Kozlowski wrote:
+>> Enable CONFIG_TYPEC_QCOM_PMIC necessary for full USB Type-C support on
+>> Qualcomm QRD8550 and MT8550 boards.
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>   arch/arm64/configs/defconfig | 1 +
+>>   1 file changed, 1 insertion(+)
+>>
+>> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+>> index a24609e14d50..8b6407d2059d 100644
+>> --- a/arch/arm64/configs/defconfig
+>> +++ b/arch/arm64/configs/defconfig
+>> @@ -991,6 +991,7 @@ CONFIG_TYPEC_TCPCI=m
+>>   CONFIG_TYPEC_FUSB302=m
+>>   CONFIG_TYPEC_TPS6598X=m
+>>   CONFIG_TYPEC_HD3SS3220=m
+>> +CONFIG_TYPEC_QCOM_PMIC=m
+>>   CONFIG_TYPEC_UCSI=m
+>>   CONFIG_UCSI_CCG=m
+>>   CONFIG_TYPEC_MUX_GPIO_SBU=m
+> 
+> This driver isn't used on SM8550, only CONFIG_TYPEC_UCSI is needed.
 
-On Wed, May 10, 2023 at 6:36 PM John Paul Adrian Glaubitz
-<glaubitz@physik.fu-berlin.de> wrote:
-> The initialization function for the J-Core AIC aic_irq_of_init() is
-> currently missing the call to irq_alloc_descs() which allocates and
-> initializes all the IRQ descriptors. Add missing function call and
-> return the error code from irq_alloc_descs() in case the allocation
-> fails.
->
-> Fixes: 981b58f66cfc ("irqchip/jcore-aic: Add J-Core AIC driver")
-> Signed-off-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Indeed, apparently I messed something with config while looking for
+other options. Patch can be skipped, the driver has no users in upstream
+(and bindings are still missing :( ).
 
-Thanks for your patch!
+Best regards,
+Krzysztof
 
-I am not an IRQ expert, so I'd like to leave the technical parts for
-e.g. Marc.  But I think you should add to the description that this
-is based on a patch by Rich.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
