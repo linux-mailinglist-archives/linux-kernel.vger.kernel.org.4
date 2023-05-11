@@ -2,44 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E9F96FFA4D
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:38:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 382176FFA5A
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:39:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239262AbjEKTin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 15:38:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
+        id S239266AbjEKTjR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 15:39:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239248AbjEKTif (ORCPT
+        with ESMTP id S239104AbjEKTjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 15:38:35 -0400
+        Thu, 11 May 2023 15:39:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537A47DA8;
-        Thu, 11 May 2023 12:38:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1FF93F8;
+        Thu, 11 May 2023 12:38:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F5A46511A;
-        Thu, 11 May 2023 19:38:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E322DC4339C;
-        Thu, 11 May 2023 19:38:26 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D07A863AEE;
+        Thu, 11 May 2023 19:38:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08F3CC4339B;
+        Thu, 11 May 2023 19:38:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683833907;
-        bh=eusArGtpQsQ/mI/dj7NQjj77kk6DhjwgGYGdfDlh95U=;
+        s=k20201202; t=1683833921;
+        bh=R/2lmrsWm9MQtnWAG1FwpNzYCMdJtFyrkU49IoS33R8=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cUFOOxVzusGEU6LqxtMDNV/tkXapWIk0EvGg7MrtmFeo6dO1lgBfl3JQsGn2ikYQt
-         iLGcbv/6yj8YrGNl30268qnMq3IDzP6WaNFW4PYDy4tIzLTtDa5/V39XEhbtN0ycr5
-         rrR0OnQWTTYS45SCtDrc9o7/wRzaCSMKgS7ml7WpuJQIr+UWGsIy5+5iDtVqdKAQxl
-         6j8ynNAEnvLaUf2im4fa+6G0mhpWsTfC/niNOP0aHVMGcI9/WyAyj2VdlqPHawel7m
-         BjPPojSf6dSkdsrpnc/IrAchDjrQmX7Ew8S/osoog4bqww6OiqAE8bA3RcJBwqbNMs
-         4hU9Av3KEUUDA==
+        b=s229Dr56eD3ZDPRv6T5QMaDy2WronSLI7IAcWA0oOEitmM0yXJTVw2I6OfEF4PJTo
+         SKTpy5oIG3k98SXaQlFDyYsvodBjd/b3LiHRfgLhAHpYS63x+64E7X3qCYHiHH3GY3
+         05/hgd52N8OlDNG8reZT0aC91i4NSqKvDVbNgvHcn7hXjP8SDfU3tQhNA2OSlL6VYk
+         BOZCMBwZU/nyyElL5ov0ioe/jMDlHuq+hZcSX5sKYt2voUznmF5axhyVn/af3/UbHv
+         A4sPVmr+y+JlqlbLQPCoQ980KS3rtnnCTlk7Q/lJ+PhvKsrvoHnIo5y0V8R9ebvGmY
+         oxnPxW5tqK2qA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Lucas Tanure <tanure@linux.com>, Rob Herring <robh@kernel.org>,
-        Sasha Levin <sashal@kernel.org>, robh+dt@kernel.org,
-        frowand.list@gmail.com, devicetree@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.3 06/11] of: fdt: Scan /memreserve/ last
-Date:   Thu, 11 May 2023 15:37:49 -0400
-Message-Id: <20230511193757.623114-6-sashal@kernel.org>
+Cc:     WANG Xuerui <git@xen0n.name>, Huacai Chen <chenhuacai@loongson.cn>,
+        Sasha Levin <sashal@kernel.org>, chenhuacai@kernel.org,
+        yangtiezhu@loongson.cn, zhangqing@loongson.cn,
+        hejinyang@loongson.cn, tangyouling@loongson.cn,
+        jiaxun.yang@flygoat.com, loongarch@lists.linux.dev
+Subject: [PATCH AUTOSEL 6.3 07/11] LoongArch: Relay BCE exceptions to userland as SIGSEGV with si_code=SEGV_BNDERR
+Date:   Thu, 11 May 2023 15:37:50 -0400
+Message-Id: <20230511193757.623114-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230511193757.623114-1-sashal@kernel.org>
 References: <20230511193757.623114-1-sashal@kernel.org>
@@ -57,54 +59,238 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Lucas Tanure <tanure@linux.com>
+From: WANG Xuerui <git@xen0n.name>
 
-[ Upstream commit b413281876292de44ae84e9a9ce9d62e47f266e9 ]
+[ Upstream commit c23e7f01cf621290770069d968ca4c8356a50d00 ]
 
-Change the scanning /memreserve/ and /reserved-memory node order to fix
-Kernel panic on Khadas Vim3 Board.
+SEGV_BNDERR was introduced initially for supporting the Intel MPX, but
+fell into disuse after the MPX support was removed. The LoongArch
+bounds-checking instructions behave very differently than MPX, but
+overall the interface is still kind of suitable for conveying the
+information to userland when bounds-checking assertions trigger, so we
+wouldn't have to invent more UAPI. Specifically, when the BCE triggers,
+a SEGV_BNDERR is sent to userland, with si_addr set to the out-of-bounds
+address or value (in asrt{gt,le}'s case), and one of si_lower or
+si_upper set to the configured bound depending on the faulting
+instruction. The other bound is set to either 0 or ULONG_MAX to resemble
+a range with both lower and upper bounds.
 
-If /memreserve/ goes first, the memory is reserved, but nomap can't be
-applied to the region. So the memory won't be used by Linux, but it is
-still present in the linear map as normal memory, which allows
-speculation. Legitimate access to adjacent pages will cause the CPU
-to end up prefetching into them leading to Kernel panic.
+Note that it is possible to have si_addr == si_lower in case of a
+failing asrtgt or {ld,st}gt, because those instructions test for strict
+greater-than relationship. This should not pose a problem for userland,
+though, because the faulting PC is available for the application to
+associate back to the exact instruction for figuring out the
+expectation.
 
-So /reserved-memory node should go first, as it has a more updated
-description of the memory regions and can apply flags, like nomap.
+Example exception context generated by a faulting `asrtgt.d t0, t1`
+(assert t0 > t1 or BCE) with t0=100 and t1=200:
 
-Link: https://lore.kernel.org/all/CAJX_Q+1Tjc+-TjZ6JW9X0NxEdFe=82a9626yL63j7uVD4LpxEA@mail.gmail.com/
-Signed-off-by: Lucas Tanure <tanure@linux.com>
-Link: https://lore.kernel.org/r/20230424113846.46382-1-tanure@linux.com
-Signed-off-by: Rob Herring <robh@kernel.org>
+> pc 00005555558206a4 ra 00007ffff2d854fc tp 00007ffff2f2f180 sp 00007ffffbf9fb80
+> a0 0000000000000002 a1 00007ffffbf9fce8 a2 00007ffffbf9fd00 a3 00007ffff2ed4558
+> a4 0000000000000000 a5 00007ffff2f044c8 a6 00007ffffbf9fce0 a7 fffffffffffff000
+> t0 0000000000000064 t1 00000000000000c8 t2 00007ffffbfa2d5e t3 00007ffff2f12aa0
+> t4 00007ffff2ed6158 t5 00007ffff2ed6158 t6 000000000000002e t7 0000000003d8f538
+> t8 0000000000000005 u0 0000000000000000 s9 0000000000000000 s0 00007ffffbf9fce8
+> s1 0000000000000002 s2 0000000000000000 s3 00007ffff2f2c038 s4 0000555555820610
+> s5 00007ffff2ed5000 s6 0000555555827e38 s7 00007ffffbf9fd00 s8 0000555555827e38
+>    ra: 00007ffff2d854fc
+>   ERA: 00005555558206a4
+>  CRMD: 000000b0 (PLV0 -IE -DA +PG DACF=CC DACM=CC -WE)
+>  PRMD: 00000007 (PPLV3 +PIE -PWE)
+>  EUEN: 00000000 (-FPE -SXE -ASXE -BTE)
+>  ECFG: 0007181c (LIE=2-4,11-12 VS=7)
+> ESTAT: 000a0000 [BCE] (IS= ECode=10 EsubCode=0)
+>  PRID: 0014c010 (Loongson-64bit, Loongson-3A5000)
+
+Signed-off-by: WANG Xuerui <git@xen0n.name>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/of/fdt.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+ arch/loongarch/include/asm/inst.h | 26 +++++++++
+ arch/loongarch/kernel/genex.S     |  1 +
+ arch/loongarch/kernel/traps.c     | 92 +++++++++++++++++++++++++++++++
+ 3 files changed, 119 insertions(+)
 
-diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
-index d1a68b6d03b3f..c28aedd7ae1f7 100644
---- a/drivers/of/fdt.c
-+++ b/drivers/of/fdt.c
-@@ -635,6 +635,9 @@ void __init early_init_fdt_scan_reserved_mem(void)
- 	if (!initial_boot_params)
- 		return;
+diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
+index a04fe755d7193..b09887ffcd15d 100644
+--- a/arch/loongarch/include/asm/inst.h
++++ b/arch/loongarch/include/asm/inst.h
+@@ -121,6 +121,8 @@ enum reg2bstrd_op {
+ };
  
-+	fdt_scan_reserved_mem();
-+	fdt_reserve_elfcorehdr();
-+
- 	/* Process header /memreserve/ fields */
- 	for (n = 0; ; n++) {
- 		fdt_get_mem_rsv(initial_boot_params, n, &base, &size);
-@@ -643,8 +646,6 @@ void __init early_init_fdt_scan_reserved_mem(void)
- 		memblock_reserve(base, size);
+ enum reg3_op {
++	asrtle_op	= 0x02,
++	asrtgt_op	= 0x03,
+ 	addw_op		= 0x20,
+ 	addd_op		= 0x21,
+ 	subw_op		= 0x22,
+@@ -176,6 +178,30 @@ enum reg3_op {
+ 	amord_op	= 0x70c7,
+ 	amxorw_op	= 0x70c8,
+ 	amxord_op	= 0x70c9,
++	fldgts_op	= 0x70e8,
++	fldgtd_op	= 0x70e9,
++	fldles_op	= 0x70ea,
++	fldled_op	= 0x70eb,
++	fstgts_op	= 0x70ec,
++	fstgtd_op	= 0x70ed,
++	fstles_op	= 0x70ee,
++	fstled_op	= 0x70ef,
++	ldgtb_op	= 0x70f0,
++	ldgth_op	= 0x70f1,
++	ldgtw_op	= 0x70f2,
++	ldgtd_op	= 0x70f3,
++	ldleb_op	= 0x70f4,
++	ldleh_op	= 0x70f5,
++	ldlew_op	= 0x70f6,
++	ldled_op	= 0x70f7,
++	stgtb_op	= 0x70f8,
++	stgth_op	= 0x70f9,
++	stgtw_op	= 0x70fa,
++	stgtd_op	= 0x70fb,
++	stleb_op	= 0x70fc,
++	stleh_op	= 0x70fd,
++	stlew_op	= 0x70fe,
++	stled_op	= 0x70ff,
+ };
+ 
+ enum reg3sa2_op {
+diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
+index 44ff1ff642601..78f0663846575 100644
+--- a/arch/loongarch/kernel/genex.S
++++ b/arch/loongarch/kernel/genex.S
+@@ -82,6 +82,7 @@ SYM_FUNC_END(except_vec_cex)
+ 
+ 	BUILD_HANDLER ade ade badv
+ 	BUILD_HANDLER ale ale badv
++	BUILD_HANDLER bce bce none
+ 	BUILD_HANDLER bp bp none
+ 	BUILD_HANDLER fpe fpe fcsr
+ 	BUILD_HANDLER fpu fpu none
+diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
+index de8ebe20b666c..03ebfd2a4392f 100644
+--- a/arch/loongarch/kernel/traps.c
++++ b/arch/loongarch/kernel/traps.c
+@@ -35,6 +35,7 @@
+ #include <asm/break.h>
+ #include <asm/cpu.h>
+ #include <asm/fpu.h>
++#include <asm/inst.h>
+ #include <asm/loongarch.h>
+ #include <asm/mmu_context.h>
+ #include <asm/pgtable.h>
+@@ -50,6 +51,7 @@
+ 
+ extern asmlinkage void handle_ade(void);
+ extern asmlinkage void handle_ale(void);
++extern asmlinkage void handle_bce(void);
+ extern asmlinkage void handle_sys(void);
+ extern asmlinkage void handle_bp(void);
+ extern asmlinkage void handle_ri(void);
+@@ -430,6 +432,95 @@ static void bug_handler(struct pt_regs *regs)
  	}
- 
--	fdt_scan_reserved_mem();
--	fdt_reserve_elfcorehdr();
- 	fdt_init_reserved_mem();
  }
  
++asmlinkage void noinstr do_bce(struct pt_regs *regs)
++{
++	bool user = user_mode(regs);
++	unsigned long era = exception_era(regs);
++	u64 badv = 0, lower = 0, upper = ULONG_MAX;
++	union loongarch_instruction insn;
++	irqentry_state_t state = irqentry_enter(regs);
++
++	if (regs->csr_prmd & CSR_PRMD_PIE)
++		local_irq_enable();
++
++	current->thread.trap_nr = read_csr_excode();
++
++	die_if_kernel("Bounds check error in kernel code", regs);
++
++	/*
++	 * Pull out the address that failed bounds checking, and the lower /
++	 * upper bound, by minimally looking at the faulting instruction word
++	 * and reading from the correct register.
++	 */
++	if (__get_inst(&insn.word, (u32 *)era, user))
++		goto bad_era;
++
++	switch (insn.reg3_format.opcode) {
++	case asrtle_op:
++		if (insn.reg3_format.rd != 0)
++			break;	/* not asrtle */
++		badv = regs->regs[insn.reg3_format.rj];
++		upper = regs->regs[insn.reg3_format.rk];
++		break;
++
++	case asrtgt_op:
++		if (insn.reg3_format.rd != 0)
++			break;	/* not asrtgt */
++		badv = regs->regs[insn.reg3_format.rj];
++		lower = regs->regs[insn.reg3_format.rk];
++		break;
++
++	case ldleb_op:
++	case ldleh_op:
++	case ldlew_op:
++	case ldled_op:
++	case stleb_op:
++	case stleh_op:
++	case stlew_op:
++	case stled_op:
++	case fldles_op:
++	case fldled_op:
++	case fstles_op:
++	case fstled_op:
++		badv = regs->regs[insn.reg3_format.rj];
++		upper = regs->regs[insn.reg3_format.rk];
++		break;
++
++	case ldgtb_op:
++	case ldgth_op:
++	case ldgtw_op:
++	case ldgtd_op:
++	case stgtb_op:
++	case stgth_op:
++	case stgtw_op:
++	case stgtd_op:
++	case fldgts_op:
++	case fldgtd_op:
++	case fstgts_op:
++	case fstgtd_op:
++		badv = regs->regs[insn.reg3_format.rj];
++		lower = regs->regs[insn.reg3_format.rk];
++		break;
++	}
++
++	force_sig_bnderr((void __user *)badv, (void __user *)lower, (void __user *)upper);
++
++out:
++	if (regs->csr_prmd & CSR_PRMD_PIE)
++		local_irq_disable();
++
++	irqentry_exit(regs, state);
++	return;
++
++bad_era:
++	/*
++	 * Cannot pull out the instruction word, hence cannot provide more
++	 * info than a regular SIGSEGV in this case.
++	 */
++	force_sig(SIGSEGV);
++	goto out;
++}
++
+ asmlinkage void noinstr do_bp(struct pt_regs *regs)
+ {
+ 	bool user = user_mode(regs);
+@@ -797,6 +888,7 @@ void __init trap_init(void)
+ 
+ 	set_handler(EXCCODE_ADE * VECSIZE, handle_ade, VECSIZE);
+ 	set_handler(EXCCODE_ALE * VECSIZE, handle_ale, VECSIZE);
++	set_handler(EXCCODE_BCE * VECSIZE, handle_bce, VECSIZE);
+ 	set_handler(EXCCODE_SYS * VECSIZE, handle_sys, VECSIZE);
+ 	set_handler(EXCCODE_BP * VECSIZE, handle_bp, VECSIZE);
+ 	set_handler(EXCCODE_INE * VECSIZE, handle_ri, VECSIZE);
 -- 
 2.39.2
 
