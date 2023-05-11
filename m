@@ -2,453 +2,972 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D7586FEC00
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 08:54:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 245376FEC3C
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:04:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236563AbjEKGyF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 02:54:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55608 "EHLO
+        id S236717AbjEKHEQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 03:04:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237194AbjEKGxo (ORCPT
+        with ESMTP id S237343AbjEKHD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 02:53:44 -0400
-Received: from mail-wm1-x342.google.com (mail-wm1-x342.google.com [IPv6:2a00:1450:4864:20::342])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C60E65A0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 23:53:41 -0700 (PDT)
-Received: by mail-wm1-x342.google.com with SMTP id 5b1f17b1804b1-3f315712406so271844295e9.0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 23:53:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683788020; x=1686380020;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=UpvUNADgatGSUNbf1DFHHdQ9AqekXwHBfv8Q4aLvujc=;
-        b=mBVlcxXH+iTZY0pBa0EAwoRxuLOBdwD03ZNhzjPDkkQKBC45w2SoM9+i/MvE5DS9kv
-         eC6cpAvAsaO0nGVnY2MihTdzWfL18inltI32ZSNzoiTkxnNT//b3W17BG2TYV7AHmDHv
-         JGa2gEC3ApeuGJL14csQYlXsPG0sCUweboabeMzoGXd2is7fAPDyK6WiTiJUHtRfOskj
-         jG8laSAEtNvsDjXNpa5ZxrHVp7Pl14Fq5CbnloW3InnuKmgga6yhAavF4wXvibQEwAqQ
-         CxLiWF+NKDey73x9cg148sA8ZtS8V7c/xSW3Y/o4hV+XphdBhQytPOd/c0G+e6MWs31V
-         x7bA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683788020; x=1686380020;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UpvUNADgatGSUNbf1DFHHdQ9AqekXwHBfv8Q4aLvujc=;
-        b=f7/gMV9BSPmtUIFIBYsRuolRr1XgzqfIm/df0GOkdGIchlZr/138VrcviFFM8rl7z4
-         M50X9DwgPjnQ7uu0RW4Xph2vr0eSP4wRnUvPwza2cevQduvJK/SpieTLSliIwFdzG9gd
-         EoKZABcJsDdsS6tUJjrrard68C/hgJ6ZTUAykHWt/fFCdA5/GPz49gYk+LyYPFG/41EN
-         Oi2/473gLufF7nUYZNdEhQ7Nn0+1QavhJRbf8z5DuAP/0yK87FvQrmk4+bSGvVOufm4W
-         M+fnVLP/hI6UQRy22r2THi6wc/mrZV4CwlWgXgQBU9UldOE+pW4/vc1ktukDidf4cYbo
-         Pixg==
-X-Gm-Message-State: AC+VfDw/GpYv+BaAGguRvSs1IsT0thqVD8azyQls6gLYhv6c0AeMC7yW
-        ul4QUs7nIGS4+EUZEJ19NfpLqQ==
-X-Google-Smtp-Source: ACHHUZ7dcPbLshCLrogTBjBWx+na9oz70eSVfMk2yYDxTzM4cwXzZAHRJRrzTrovFnsxBuxxRTnRWQ==
-X-Received: by 2002:a05:600c:4e44:b0:3f4:9a86:f2ab with SMTP id e4-20020a05600c4e4400b003f49a86f2abmr2939240wmq.17.1683788019954;
-        Wed, 10 May 2023 23:53:39 -0700 (PDT)
-Received: from linaro.org ([2a00:23c5:680a:d01:3110:8b33:cdf9:dea0])
-        by smtp.gmail.com with ESMTPSA id f8-20020a7bc8c8000000b003f4e8530696sm1038257wml.46.2023.05.10.23.53.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 23:53:39 -0700 (PDT)
-From:   Mike Leach <mike.leach@linaro.org>
-To:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
-        linux-kernel@vger.kernel.org
-Cc:     suzuki.poulose@arm.com, acme@kernel.org, james.clark@arm.com,
-        Mike Leach <mike.leach@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [PATCH v6 6/6] Documentation: coresight: docs for config load via configfs
-Date:   Thu, 11 May 2023 07:53:30 +0100
-Message-Id: <20230511065330.26392-7-mike.leach@linaro.org>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230511065330.26392-1-mike.leach@linaro.org>
-References: <20230511065330.26392-1-mike.leach@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 11 May 2023 03:03:58 -0400
+Received: from muru.com (muru.com [72.249.23.125])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 18D821BC1;
+        Thu, 11 May 2023 00:03:33 -0700 (PDT)
+Received: from hillo.muru.com (localhost [127.0.0.1])
+        by muru.com (Postfix) with ESMTP id 6C370807A;
+        Thu, 11 May 2023 06:54:17 +0000 (UTC)
+From:   Tony Lindgren <tony@atomide.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Andy Shevchenko <andriy.shevchenko@intel.com>,
+        Dhruva Gole <d-gole@ti.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: [PATCH v11 1/1] serial: core: Start managing serial controllers to enable runtime PM
+Date:   Thu, 11 May 2023 09:53:51 +0300
+Message-Id: <20230511065355.47525-1-tony@atomide.com>
+X-Mailer: git-send-email 2.40.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add documentation covering the configfs updates that allow
-configuration tables to be loaded and unloaded via configfs,
-along with the demonstration programs in tools/coresight.
+We want to enable runtime PM for serial port device drivers in a generic
+way. To do this, we want to have the serial core layer manage the
+registered physical serial controller devices.
 
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: linux-doc@vger.kernel.org
-Signed-off-by: Mike Leach <mike.leach@linaro.org>
+To do this, let's set up a struct bus and struct device for the serial
+core controller as suggested by Greg and Jiri. The serial core controller
+devices are children of the physical serial port device. The serial core
+controller device is needed to support multiple different kind of ports
+connected to single physical serial port device.
+
+Let's also set up a struct device for the serial core port. The serial
+core port instances are children of the serial core controller device.
+
+With the serial core port device we can now flush pending TX on the
+runtime PM resume as suggested by Johan.
+
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Suggested-by: Jiri Slaby <jirislaby@kernel.org>
+Suggested-by: Johan Hovold <johan@kernel.org>
+Signed-off-by: Tony Lindgren <tony@atomide.com>
 ---
- .../trace/coresight/coresight-config.rst      | 265 ++++++++++++++++--
- 1 file changed, 242 insertions(+), 23 deletions(-)
 
-diff --git a/Documentation/trace/coresight/coresight-config.rst b/Documentation/trace/coresight/coresight-config.rst
-index 6d5ffa6f7347..fe50bfaada5e 100644
---- a/Documentation/trace/coresight/coresight-config.rst
-+++ b/Documentation/trace/coresight/coresight-config.rst
-@@ -109,20 +109,20 @@ Operation
+Changes since v10:
+
+- Added missing handling for unknown type in serial_base_device_add()
+  as noted by kernel test robot
+
+- Use y instead of objs fro serial_base in Makefile as noted by Andy
+
+- Improve serial_port pm_ops alignment as noted by Andy
+
+Changes since v9:
+
+- Built in serial_base and core related components into serial_base.ko as
+  suggested by Greg. We now have module_init only in serial_base.c that
+  calls serial_base_ctrl_init() and serial_base_port_init(). I renamed
+  serial_bus.c to serial_base_bus.c to build serial_base.ko. Note that
+  if we wanted to build these into serial_core.ko, renaming serial_core.c
+  would be needed which is not necessarily nice for folks that may have
+  pending patches
+
+- Dropped string comparison for ctrl and port, and switched to using
+  struct device_type as suggested by Greg
+
+- Dropped port->state checks in serial_base_get_port() as noted by
+  Greg
+
+- Dropped EXPORT_SYMBOL_NS(), these are no longer needed with components
+  built into serial_base.ko. I also noticed that we have some dependency
+  loops if components are not built into serial_base.ko. And we would
+  have hard time later on moving port specific functions to serial_port.c
+  for example
+
+- Dropped checks for negative ctrl_id in serial_core_ctrl_find() as
+  suggested by Greg
+
+- Stopped resetting ctrl_id in serial_core_remove_one_port(), instead
+  let's properly init it in serial8250_init_port(). The ctrl_id is
+  optionally passed to uart_add_one_port() and zero otherwise
+
+- Moved port_mutex and UPF_DEAD handling from serial_core_add_one_port()
+  to serial_core_register_port() to simplify things a bit
+
+- Updated license and copyright as suggested by Greg
+
+- Dropped Andy's reviewed-by, things still changed quite a bit
+
+Changes since v8:
+
+- Drop unnecessary free for name noticed by Andy, the name is freed
+  on put_device()
+
+- Cosmetic fix for comments in serial_port.c noted by Andy
+
+- Spelling fix for word uninitialized in serial_base_get_port()
+
+Changes since v7:
+
+- Add release() put_device() to serial_base.c as noted by Andy
+
+- Make struct serial_base_device private to serial_base.c by adding
+  serial_base_get_port()
+
+- Add more comments to __uart_start()
+
+- Coding style improvments for serial_base.c from Andy
+
+Changes since v6:
+
+- Fix up a memory leak and a bunch of issues in serial_base.c as noted
+  by Andy
+
+- Replace bool with new_ctrl_dev for freeing the added device on
+  error path
+
+- Drop unused pm ops for serial_ctrl.c as noted by kernel test robot
+
+- Drop documentation updates for acpi devices for now to avoid a merge
+  conflict and make testing easier between -rc2 and Linux next
+
+Changes since v5:
+
+- Replace platform bus and device with bus_add() and device_add(),
+  Greg did not like platform bus and device here. This also gets
+  rid of the need for platform data with struct serial_base_device,
+  see new file serial_base.c
+
+- Update documentation to drop reference to struct uart_device as
+  suggested by Andy
+
+Changes since v4:
+
+- Fix issue noted by Ilpo by calling serial_core_add_one_port() after
+  the devices are created
+
+Changes since v3:
+
+- Simplify things by adding a serial core control device as the child of
+  the physical serial port as suggested by Jiri
+
+- Drop the tinkering of the physical serial port device for runtime PM.
+  Serial core just needs to manage port->port_dev with the addition of
+  the serial core control device and the device hierarchy will keep the
+  pysical serial port device enabled as needed
+
+- Simplify patch description with all the runtime PM tinkering gone
+
+- Coding style improvments as noted by Andy
+
+- Post as a single RFC patch as we're close to the merge window
+
+Changes since v2:
+
+- Make each serial port a proper device as suggested by Greg. This is
+  a separate patch that flushes the TX on runtime PM resume
+
+Changes since v1:
+
+- Use kref as suggested by Andy
+
+- Fix memory leak on error as noted by Andy
+
+- Use use unsigned char for supports_autosuspend as suggested by Andy
+
+- Coding style improvments as suggested by Andy
+
+---
+ drivers/tty/serial/8250/8250_core.c  |   1 +
+ drivers/tty/serial/8250/8250_port.c  |   1 +
+ drivers/tty/serial/Makefile          |   3 +-
+ drivers/tty/serial/serial_base.h     |  35 +++++
+ drivers/tty/serial/serial_base_bus.c | 181 ++++++++++++++++++++++++++
+ drivers/tty/serial/serial_core.c     | 188 +++++++++++++++++++++++----
+ drivers/tty/serial/serial_ctrl.c     |  68 ++++++++++
+ drivers/tty/serial/serial_port.c     | 105 +++++++++++++++
+ include/linux/serial_core.h          |   4 +-
+ 9 files changed, 559 insertions(+), 27 deletions(-)
+ create mode 100644 drivers/tty/serial/serial_base.h
+ create mode 100644 drivers/tty/serial/serial_base_bus.c
+ create mode 100644 drivers/tty/serial/serial_ctrl.c
+ create mode 100644 drivers/tty/serial/serial_port.c
+
+diff --git a/drivers/tty/serial/8250/8250_core.c b/drivers/tty/serial/8250/8250_core.c
+--- a/drivers/tty/serial/8250/8250_core.c
++++ b/drivers/tty/serial/8250/8250_core.c
+@@ -996,6 +996,7 @@ int serial8250_register_8250_port(const struct uart_8250_port *up)
+ 		if (uart->port.dev)
+ 			uart_remove_one_port(&serial8250_reg, &uart->port);
  
- The following steps take place in the operation of a configuration.
++		uart->port.ctrl_id	= up->port.ctrl_id;
+ 		uart->port.iobase       = up->port.iobase;
+ 		uart->port.membase      = up->port.membase;
+ 		uart->port.irq          = up->port.irq;
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -3292,6 +3292,7 @@ void serial8250_init_port(struct uart_8250_port *up)
+ 	struct uart_port *port = &up->port;
  
--1) In this example, the configuration is 'autofdo', which has an
--   associated feature 'strobing' that works on ETMv4 CoreSight Devices.
-+1) In this example, the configuration is ``autofdo``, which has an
-+   associated feature ``strobing`` that works on ETMv4 CoreSight Devices.
+ 	spin_lock_init(&port->lock);
++	port->ctrl_id = 0;
+ 	port->ops = &serial8250_pops;
+ 	port->has_sysrq = IS_ENABLED(CONFIG_SERIAL_8250_CONSOLE);
  
--2) The configuration is enabled. For example 'perf' may select the
-+2) The configuration is enabled. For example ``perf`` may select the
-    configuration as part of its command line::
+diff --git a/drivers/tty/serial/Makefile b/drivers/tty/serial/Makefile
+--- a/drivers/tty/serial/Makefile
++++ b/drivers/tty/serial/Makefile
+@@ -3,7 +3,8 @@
+ # Makefile for the kernel serial device drivers.
+ #
  
-     perf record -e cs_etm/autofdo/ myapp
+-obj-$(CONFIG_SERIAL_CORE) += serial_core.o
++obj-$(CONFIG_SERIAL_CORE) += serial_base.o
++serial_base-y := serial_core.o serial_base_bus.o serial_ctrl.o serial_port.o
  
--   which will enable the 'autofdo' configuration.
-+   which will enable the ``autofdo`` configuration.
+ obj-$(CONFIG_SERIAL_EARLYCON) += earlycon.o
+ obj-$(CONFIG_SERIAL_EARLYCON_SEMIHOST) += earlycon-semihost.o
+diff --git a/drivers/tty/serial/serial_base.h b/drivers/tty/serial/serial_base.h
+new file mode 100644
+--- /dev/null
++++ b/drivers/tty/serial/serial_base.h
+@@ -0,0 +1,35 @@
++/* SPDX-License-Identifier: GPL-2.0+ */
++/*
++ * Serial core related functions, serial port device drivers do not need this.
++ *
++ * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
++ * Author: Tony Lindgren <tony@atomide.com>
++ */
++
++struct uart_driver;
++struct uart_port;
++struct device_driver;
++struct device;
++
++int serial_base_ctrl_init(void);
++void serial_base_ctrl_exit(void);
++
++int serial_base_port_init(void);
++void serial_base_port_exit(void);
++
++int serial_base_driver_register(struct device_driver *driver);
++void serial_base_driver_unregister(struct device_driver *driver);
++
++struct device *serial_base_ctrl_add(struct uart_port *port,
++				    struct device *parent_dev);
++struct device *serial_base_port_add(struct uart_port *port,
++				    struct device *parent_dev);
++void serial_base_device_remove(struct device *dev);
++
++struct uart_port *serial_base_get_port(struct device *dev);
++
++int serial_ctrl_register_port(struct uart_driver *drv, struct uart_port *port);
++void serial_ctrl_unregister_port(struct uart_driver *drv, struct uart_port *port);
++
++int serial_core_register_port(struct uart_driver *drv, struct uart_port *port);
++void serial_core_unregister_port(struct uart_driver *drv, struct uart_port *port);
+diff --git a/drivers/tty/serial/serial_base_bus.c b/drivers/tty/serial/serial_base_bus.c
+new file mode 100644
+--- /dev/null
++++ b/drivers/tty/serial/serial_base_bus.c
+@@ -0,0 +1,181 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Serial base bus layer for controllers
++ *
++ * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
++ * Author: Tony Lindgren <tony@atomide.com>
++ *
++ * The serial core bus manages the serial core controller instances.
++ */
++
++#include <linux/container_of.h>
++#include <linux/device.h>
++#include <linux/module.h>
++#include <linux/serial_core.h>
++#include <linux/slab.h>
++#include <linux/spinlock.h>
++
++#include "serial_base.h"
++
++struct serial_base_device {
++	struct device dev;
++	struct uart_port *port;
++};
++
++#define to_serial_base_device(d) container_of((d), struct serial_base_device, dev)
++
++struct uart_port *serial_base_get_port(struct device *dev)
++{
++	struct serial_base_device *sbd;
++
++	if (!dev)
++		return NULL;
++
++	sbd = to_serial_base_device(dev);
++
++	return sbd->port;
++}
++
++static int serial_base_match(struct device *dev, struct device_driver *drv)
++{
++	int len = strlen(drv->name);
++
++	return !strncmp(dev_name(dev), drv->name, len);
++}
++
++static struct bus_type serial_base_bus_type = {
++	.name = "serial-base",
++	.match = serial_base_match,
++};
++
++int serial_base_driver_register(struct device_driver *driver)
++{
++	driver->bus = &serial_base_bus_type;
++
++	return driver_register(driver);
++}
++
++void serial_base_driver_unregister(struct device_driver *driver)
++{
++	driver_unregister(driver);
++}
++
++static void serial_base_release(struct device *dev)
++{
++	struct serial_base_device *sbd = to_serial_base_device(dev);
++
++	kfree(sbd);
++}
++
++static const struct device_type serial_ctrl_type = {
++	.name = "ctrl",
++};
++
++static const struct device_type serial_port_type = {
++	.name = "port",
++};
++
++static struct device *serial_base_device_add(struct uart_port *port,
++					     struct device *parent_dev,
++					     const struct device_type *type)
++{
++	struct serial_base_device *sbd;
++	int err, id;
++
++	sbd = kzalloc(sizeof(*sbd), GFP_KERNEL);
++	if (!sbd)
++		return NULL;
++
++	device_initialize(&sbd->dev);
++	sbd->dev.type = type;
++	sbd->dev.parent = parent_dev;
++	sbd->dev.bus = &serial_base_bus_type;
++	sbd->dev.release = &serial_base_release;
++
++	if (type == &serial_ctrl_type) {
++		id = port->ctrl_id;
++	} else if (type == &serial_port_type) {
++		id = port->line;
++		sbd->port = port;
++	} else {
++		goto err_free_dev;
++	}
++
++	err = dev_set_name(&sbd->dev, "%s.%s.%d", type->name, dev_name(port->dev), id);
++	if (err)
++		goto err_free_dev;
++
++	err = device_add(&sbd->dev);
++	if (err)
++		goto err_put_device;
++
++	return &sbd->dev;
++
++err_put_device:
++	put_device(&sbd->dev);
++
++err_free_dev:
++	kfree(sbd);
++
++	return NULL;
++}
++
++struct device *serial_base_ctrl_add(struct uart_port *port,
++				    struct device *parent_dev)
++{
++	return serial_base_device_add(port, parent_dev, &serial_ctrl_type);
++}
++
++struct device *serial_base_port_add(struct uart_port *port,
++				    struct device *parent_dev)
++{
++	return serial_base_device_add(port, parent_dev, &serial_port_type);
++}
++
++void serial_base_device_remove(struct device *dev)
++{
++	if (!dev)
++		return;
++
++	device_del(dev);
++}
++
++static int serial_base_init(void)
++{
++	int ret;
++
++	ret = bus_register(&serial_base_bus_type);
++	if (ret)
++		return ret;
++
++	ret = serial_base_ctrl_init();
++	if (ret)
++		goto err_bus_unregister;
++
++	ret = serial_base_port_init();
++	if (ret)
++		goto err_ctrl_exit;
++
++	return 0;
++
++err_ctrl_exit:
++	serial_base_ctrl_exit();
++
++err_bus_unregister:
++	bus_unregister(&serial_base_bus_type);
++
++	return ret;
++}
++module_init(serial_base_init);
++
++static void serial_base_exit(void)
++{
++	serial_base_port_exit();
++	serial_base_ctrl_exit();
++	bus_unregister(&serial_base_bus_type);
++}
++module_exit(serial_base_exit);
++
++MODULE_AUTHOR("Tony Lindgren <tony@atomide.com>");
++MODULE_DESCRIPTION("Serial core bus");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/tty/serial/serial_core.c b/drivers/tty/serial/serial_core.c
+--- a/drivers/tty/serial/serial_core.c
++++ b/drivers/tty/serial/serial_core.c
+@@ -17,6 +17,7 @@
+ #include <linux/gpio/consumer.h>
+ #include <linux/kernel.h>
+ #include <linux/of.h>
++#include <linux/pm_runtime.h>
+ #include <linux/proc_fs.h>
+ #include <linux/seq_file.h>
+ #include <linux/device.h>
+@@ -31,6 +32,8 @@
+ #include <linux/irq.h>
+ #include <linux/uaccess.h>
  
- 3) perf starts tracing on the system. As each ETMv4 that perf uses for
-    trace is enabled,  the configuration manager will check if the ETMv4
-    has a feature that relates to the currently active configuration.
--   In this case 'strobing' is enabled & programmed into the ETMv4.
-+   In this case ``strobing`` is enabled & programmed into the ETMv4.
++#include "serial_base.h"
++
+ /*
+  * This is used to lock changes in serial line configuration.
+  */
+@@ -134,9 +137,30 @@ static void __uart_start(struct tty_struct *tty)
+ {
+ 	struct uart_state *state = tty->driver_data;
+ 	struct uart_port *port = state->uart_port;
++	struct device *port_dev;
++	int err;
  
- 4) When the ETMv4 is disabled, any registers marked as needing to be
-    saved will be read back.
-@@ -136,18 +136,18 @@ Viewing Configurations and Features
- The set of configurations and features that are currently loaded into the
- system can be viewed using the configfs API.
+-	if (port && !(port->flags & UPF_DEAD) && !uart_tx_stopped(port))
++	if (!port || port->flags & UPF_DEAD || uart_tx_stopped(port))
++		return;
++
++	port_dev = port->port_dev;
++
++	/* Increment the runtime PM usage count for the active check below */
++	err = pm_runtime_get(port_dev);
++	if (err < 0) {
++		pm_runtime_put_noidle(port_dev);
++		return;
++	}
++
++	/*
++	 * Start TX if enabled, and kick runtime PM. If the device is not
++	 * enabled, serial_port_runtime_resume() calls start_tx() again
++	 * after enabling the device.
++	 */
++	if (pm_runtime_active(port_dev))
+ 		port->ops->start_tx(port);
++	pm_runtime_mark_last_busy(port_dev);
++	pm_runtime_put_autosuspend(port_dev);
+ }
  
--Mount configfs as normal and the 'cs-syscfg' subsystem will appear::
-+Mount configfs as normal and the ``cs-syscfg`` subsystem will appear::
+ static void uart_start(struct tty_struct *tty)
+@@ -3042,7 +3066,7 @@ static const struct attribute_group tty_dev_attr_group = {
+ };
  
-     $ ls /config
-     cs-syscfg  stp-policy
+ /**
+- * uart_add_one_port - attach a driver-defined port structure
++ * serial_core_add_one_port - attach a driver-defined port structure
+  * @drv: pointer to the uart low level driver structure for this port
+  * @uport: uart port structure to use for this port.
+  *
+@@ -3051,8 +3075,9 @@ static const struct attribute_group tty_dev_attr_group = {
+  * This allows the driver @drv to register its own uart_port structure with the
+  * core driver. The main purpose is to allow the low level uart drivers to
+  * expand uart_port, rather than having yet more levels of structures.
++ * Caller must hold port_mutex.
+  */
+-int uart_add_one_port(struct uart_driver *drv, struct uart_port *uport)
++static int serial_core_add_one_port(struct uart_driver *drv, struct uart_port *uport)
+ {
+ 	struct uart_state *state;
+ 	struct tty_port *port;
+@@ -3066,7 +3091,6 @@ int uart_add_one_port(struct uart_driver *drv, struct uart_port *uport)
+ 	state = drv->state + uport->line;
+ 	port = &state->port;
  
--This has two sub-directories::
-+This has two sub-directories, with the load and unload attribute files::
+-	mutex_lock(&port_mutex);
+ 	mutex_lock(&port->mutex);
+ 	if (state->uart_port) {
+ 		ret = -EINVAL;
+@@ -3131,21 +3155,14 @@ int uart_add_one_port(struct uart_driver *drv, struct uart_port *uport)
+ 		       uport->line);
+ 	}
  
-     $ cd cs-syscfg/
-     $ ls
--    configurations  features
-+    configurations features load  unload
+-	/*
+-	 * Ensure UPF_DEAD is not set.
+-	 */
+-	uport->flags &= ~UPF_DEAD;
+-
+  out:
+ 	mutex_unlock(&port->mutex);
+-	mutex_unlock(&port_mutex);
  
--The system has the configuration 'autofdo' built in. It may be examined as
-+The system has the configuration ``autofdo`` built in. It may be examined as
- follows::
+ 	return ret;
+ }
+-EXPORT_SYMBOL(uart_add_one_port);
  
-     $ cd configurations/
-@@ -162,7 +162,7 @@ follows::
-     $ cat feature_refs
-     strobing
+ /**
+- * uart_remove_one_port - detach a driver defined port structure
++ * serial_core_remove_one_port - detach a driver defined port structure
+  * @drv: pointer to the uart low level driver structure for this port
+  * @uport: uart port structure for this port
+  *
+@@ -3153,8 +3170,10 @@ EXPORT_SYMBOL(uart_add_one_port);
+  *
+  * This unhooks (and hangs up) the specified port structure from the core
+  * driver. No further calls will be made to the low-level code for this port.
++ * Caller must hold port_mutex.
+  */
+-int uart_remove_one_port(struct uart_driver *drv, struct uart_port *uport)
++static int serial_core_remove_one_port(struct uart_driver *drv,
++				       struct uart_port *uport)
+ {
+ 	struct uart_state *state = drv->state + uport->line;
+ 	struct tty_port *port = &state->port;
+@@ -3162,12 +3181,6 @@ int uart_remove_one_port(struct uart_driver *drv, struct uart_port *uport)
+ 	struct tty_struct *tty;
+ 	int ret = 0;
  
--Each preset declared has a 'preset<n>' subdirectory declared. The values for
-+Each preset declared has a ``preset<n>`` subdirectory declared. The values for
- the preset can be examined::
+-	mutex_lock(&port_mutex);
+-
+-	/*
+-	 * Mark the port "dead" - this prevents any opens from
+-	 * succeeding while we shut down the port.
+-	 */
+ 	mutex_lock(&port->mutex);
+ 	uart_port = uart_port_check(state);
+ 	if (uart_port != uport)
+@@ -3176,10 +3189,8 @@ int uart_remove_one_port(struct uart_driver *drv, struct uart_port *uport)
  
-     $ cat preset1/values
-@@ -170,7 +170,7 @@ the preset can be examined::
-     $ cat preset2/values
-     strobing.window = 0x1388 strobing.period = 0x4
+ 	if (!uart_port) {
+ 		mutex_unlock(&port->mutex);
+-		ret = -EINVAL;
+-		goto out;
++		return -EINVAL;
+ 	}
+-	uport->flags |= UPF_DEAD;
+ 	mutex_unlock(&port->mutex);
  
--The 'enable' and 'preset' files allow the control of a configuration when
-+The ``enable`` and ``preset`` files allow the control of a configuration when
- using CoreSight with sysfs.
+ 	/*
+@@ -3211,18 +3222,16 @@ int uart_remove_one_port(struct uart_driver *drv, struct uart_port *uport)
+ 	 * Indicate that there isn't a port here anymore.
+ 	 */
+ 	uport->type = PORT_UNKNOWN;
++	uport->port_dev = NULL;
  
- The features referenced by the configuration can be examined in the features
-@@ -210,18 +210,18 @@ Using Configurations in perf
- ============================
+ 	mutex_lock(&port->mutex);
+ 	WARN_ON(atomic_dec_return(&state->refcount) < 0);
+ 	wait_event(state->remove_wait, !atomic_read(&state->refcount));
+ 	state->uart_port = NULL;
+ 	mutex_unlock(&port->mutex);
+-out:
+-	mutex_unlock(&port_mutex);
  
- The configurations loaded into the CoreSight configuration management are
--also declared in the perf 'cs_etm' event infrastructure so that they can
-+also declared in the perf ``cs_etm`` event infrastructure so that they can
- be selected when running trace under perf::
+ 	return ret;
+ }
+-EXPORT_SYMBOL(uart_remove_one_port);
  
-     $ ls /sys/devices/cs_etm
-     cpu0  cpu2  events  nr_addr_filters		power  subsystem  uevent
-     cpu1  cpu3  format  perf_event_mux_interval_ms	sinks  type
+ /**
+  * uart_match_port - are the two ports equivalent?
+@@ -3257,6 +3266,135 @@ bool uart_match_port(const struct uart_port *port1,
+ }
+ EXPORT_SYMBOL(uart_match_port);
  
--The key directory here is 'events' - a generic perf directory which allows
-+The key directory here is ``events`` - a generic perf directory which allows
- selection on the perf command line. As with the sinks entries, this provides
- a hash of the configuration name.
++/*
++ * Find a registered serial core controller device if one exists. Returns
++ * the first device matching the ctrl_id. Caller must hold port_mutex.
++ */
++static struct device *serial_core_ctrl_find(struct uart_driver *drv,
++					    struct device *phys_dev,
++					    int ctrl_id)
++{
++	struct uart_state *state;
++	int i;
++
++	lockdep_assert_held(&port_mutex);
++
++	for (i = 0; i < drv->nr; i++) {
++		state = drv->state + i;
++		if (!state->uart_port || !state->uart_port->port_dev)
++			continue;
++
++		if (state->uart_port->dev == phys_dev &&
++		    state->uart_port->ctrl_id == ctrl_id)
++			return state->uart_port->port_dev->parent;
++	}
++
++	return NULL;
++}
++
++static struct device *serial_core_ctrl_device_add(struct uart_port *port)
++{
++	return serial_base_ctrl_add(port, port->dev);
++}
++
++static int serial_core_port_device_add(struct device *ctrl_dev, struct uart_port *port)
++{
++	struct device *dev;
++
++	dev = serial_base_port_add(port, ctrl_dev);
++	if (IS_ERR(dev))
++		return PTR_ERR(dev);
++
++	port->port_dev = dev;
++
++	return 0;
++}
++
++/*
++ * Initialize a serial core port device, and a controller device if needed.
++ */
++int serial_core_register_port(struct uart_driver *drv, struct uart_port *port)
++{
++	struct device *ctrl_dev, *new_ctrl_dev = NULL;
++	int ret;
++
++	mutex_lock(&port_mutex);
++
++	/*
++	 * Prevent serial_port_runtime_resume() from trying to use the port
++	 * until serial_core_add_one_port() has completed
++	 */
++	port->flags |= UPF_DEAD;
++
++	/* Inititalize a serial core controller device if needed */
++	ctrl_dev = serial_core_ctrl_find(drv, port->dev, port->ctrl_id);
++	if (!ctrl_dev) {
++		new_ctrl_dev = serial_core_ctrl_device_add(port);
++		if (!new_ctrl_dev) {
++			ret = -ENODEV;
++			goto err_unlock;
++		}
++		ctrl_dev = new_ctrl_dev;
++	}
++
++	/*
++	 * Initialize a serial core port device. Tag the port dead to prevent
++	 * serial_port_runtime_resume() trying to do anything until port has
++	 * been registered. It gets cleared by serial_core_add_one_port().
++	 */
++	ret = serial_core_port_device_add(ctrl_dev, port);
++	if (ret)
++		goto err_unregister_ctrl_dev;
++
++	ret = serial_core_add_one_port(drv, port);
++	if (ret)
++		goto err_unregister_port_dev;
++
++	port->flags &= ~UPF_DEAD;
++
++	mutex_unlock(&port_mutex);
++
++	return 0;
++
++err_unregister_port_dev:
++	serial_base_device_remove(port->port_dev);
++
++err_unregister_ctrl_dev:
++	serial_base_device_remove(new_ctrl_dev);
++
++err_unlock:
++	mutex_unlock(&port_mutex);
++
++	return ret;
++}
++
++/*
++ * Removes a serial core port device, and the related serial core controller
++ * device if the last instance.
++ */
++void serial_core_unregister_port(struct uart_driver *drv, struct uart_port *port)
++{
++	struct device *phys_dev = port->dev;
++	struct device *port_dev = port->port_dev;
++	struct device *ctrl_dev = port_dev->parent;
++	int ctrl_id = port->ctrl_id;
++
++	mutex_lock(&port_mutex);
++
++	port->flags |= UPF_DEAD;
++
++	serial_core_remove_one_port(drv, port);
++
++	/* Note that struct uart_port *port is no longer valid at this point */
++	serial_base_device_remove(port_dev);
++
++	/* Drop the serial core controller device if no ports are using it */
++	if (!serial_core_ctrl_find(drv, phys_dev, ctrl_id))
++		serial_base_device_remove(ctrl_dev);
++
++	mutex_unlock(&port_mutex);
++}
++
+ /**
+  * uart_handle_dcd_change - handle a change of carrier detect state
+  * @uport: uart_port structure for the open port
+diff --git a/drivers/tty/serial/serial_ctrl.c b/drivers/tty/serial/serial_ctrl.c
+new file mode 100644
+--- /dev/null
++++ b/drivers/tty/serial/serial_ctrl.c
+@@ -0,0 +1,68 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Serial core controller driver
++ *
++ * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
++ * Author: Tony Lindgren <tony@atomide.com>
++ *
++ * This driver manages the serial core controller struct device instances.
++ * The serial core controller devices are children of the physical serial
++ * port device.
++ */
++
++#include <linux/device.h>
++#include <linux/module.h>
++#include <linux/pm_runtime.h>
++#include <linux/serial_core.h>
++#include <linux/spinlock.h>
++
++#include "serial_base.h"
++
++static int serial_ctrl_probe(struct device *dev)
++{
++	pm_runtime_enable(dev);
++
++	return 0;
++}
++
++static int serial_ctrl_remove(struct device *dev)
++{
++	pm_runtime_disable(dev);
++
++	return 0;
++}
++
++/*
++ * Serial core controller device init functions. Note that the physical
++ * serial port device driver may not have completed probe at this point.
++ */
++int serial_ctrl_register_port(struct uart_driver *drv, struct uart_port *port)
++{
++	return serial_core_register_port(drv, port);
++}
++
++void serial_ctrl_unregister_port(struct uart_driver *drv, struct uart_port *port)
++{
++	serial_core_unregister_port(drv, port);
++}
++
++static struct device_driver serial_ctrl_driver = {
++	.name = "ctrl",
++	.suppress_bind_attrs = true,
++	.probe = serial_ctrl_probe,
++	.remove = serial_ctrl_remove,
++};
++
++int serial_base_ctrl_init(void)
++{
++	return serial_base_driver_register(&serial_ctrl_driver);
++}
++
++void serial_base_ctrl_exit(void)
++{
++	serial_base_driver_unregister(&serial_ctrl_driver);
++}
++
++MODULE_AUTHOR("Tony Lindgren <tony@atomide.com>");
++MODULE_DESCRIPTION("Serial core controller driver");
++MODULE_LICENSE("GPL");
+diff --git a/drivers/tty/serial/serial_port.c b/drivers/tty/serial/serial_port.c
+new file mode 100644
+--- /dev/null
++++ b/drivers/tty/serial/serial_port.c
+@@ -0,0 +1,105 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Serial core port device driver
++ *
++ * Copyright (C) 2023 Texas Instruments Incorporated - https://www.ti.com/
++ * Author: Tony Lindgren <tony@atomide.com>
++ */
++
++#include <linux/device.h>
++#include <linux/module.h>
++#include <linux/pm_runtime.h>
++#include <linux/serial_core.h>
++#include <linux/spinlock.h>
++
++#include "serial_base.h"
++
++#define SERIAL_PORT_AUTOSUSPEND_DELAY_MS	500
++
++/* Only considers pending TX for now. Caller must take care of locking */
++static int __serial_port_busy(struct uart_port *port)
++{
++	return !uart_tx_stopped(port) &&
++		uart_circ_chars_pending(&port->state->xmit);
++}
++
++static int serial_port_runtime_resume(struct device *dev)
++{
++	struct uart_port *port;
++	unsigned long flags;
++
++	port = serial_base_get_port(dev);
++	if (!port || port->flags & UPF_DEAD)
++		goto out;
++
++	/* Flush any pending TX for the port */
++	spin_lock_irqsave(&port->lock, flags);
++	if (__serial_port_busy(port))
++		port->ops->start_tx(port);
++	spin_unlock_irqrestore(&port->lock, flags);
++
++out:
++	pm_runtime_mark_last_busy(dev);
++
++	return 0;
++}
++
++static DEFINE_RUNTIME_DEV_PM_OPS(serial_port_pm,
++				 NULL, serial_port_runtime_resume, NULL);
++
++static int serial_port_probe(struct device *dev)
++{
++	pm_runtime_enable(dev);
++	pm_runtime_set_autosuspend_delay(dev, SERIAL_PORT_AUTOSUSPEND_DELAY_MS);
++	pm_runtime_use_autosuspend(dev);
++
++	return 0;
++}
++
++static int serial_port_remove(struct device *dev)
++{
++	pm_runtime_dont_use_autosuspend(dev);
++	pm_runtime_disable(dev);
++
++	return 0;
++}
++
++/*
++ * Serial core port device init functions. Note that the physical serial
++ * port device driver may not have completed probe at this point.
++ */
++int uart_add_one_port(struct uart_driver *drv, struct uart_port *port)
++{
++	return serial_ctrl_register_port(drv, port);
++}
++EXPORT_SYMBOL(uart_add_one_port);
++
++int uart_remove_one_port(struct uart_driver *drv, struct uart_port *port)
++{
++	serial_ctrl_unregister_port(drv, port);
++
++	return 0;
++}
++EXPORT_SYMBOL(uart_remove_one_port);
++
++static struct device_driver serial_port_driver = {
++	.name = "port",
++	.suppress_bind_attrs = true,
++	.probe = serial_port_probe,
++	.remove = serial_port_remove,
++	.pm = pm_ptr(&serial_port_pm),
++};
++
++int serial_base_port_init(void)
++{
++	return serial_base_driver_register(&serial_port_driver);
++}
++
++void serial_base_port_exit(void)
++{
++	serial_base_driver_unregister(&serial_port_driver);
++}
++
++MODULE_AUTHOR("Tony Lindgren <tony@atomide.com>");
++MODULE_DESCRIPTION("Serial controller port driver");
++MODULE_LICENSE("GPL");
+diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
+--- a/include/linux/serial_core.h
++++ b/include/linux/serial_core.h
+@@ -458,6 +458,7 @@ struct uart_port {
+ 						struct serial_rs485 *rs485);
+ 	int			(*iso7816_config)(struct uart_port *,
+ 						  struct serial_iso7816 *iso7816);
++	int			ctrl_id;		/* optional serial core controller id */
+ 	unsigned int		irq;			/* irq number */
+ 	unsigned long		irqflags;		/* irq flags  */
+ 	unsigned int		uartclk;		/* base uart clock */
+@@ -563,7 +564,8 @@ struct uart_port {
+ 	unsigned int		minor;
+ 	resource_size_t		mapbase;		/* for ioremap */
+ 	resource_size_t		mapsize;
+-	struct device		*dev;			/* parent device */
++	struct device		*dev;			/* serial port physical parent device */
++	struct device		*port_dev;		/* serial core port device */
  
--The entry in the 'events' directory uses perfs built in syntax generator
-+The entry in the ``events`` directory uses perfs built in syntax generator
- to substitute the syntax for the name when evaluating the command::
- 
-     $ ls events/
-@@ -229,7 +229,7 @@ to substitute the syntax for the name when evaluating the command::
-     $ cat events/autofdo
-     configid=0xa7c3dddd
- 
--The 'autofdo' configuration may be selected on the perf command line::
-+The ``autofdo`` configuration may be selected on the perf command line::
- 
-     $ perf record -e cs_etm/autofdo/u --per-thread <application>
- 
-@@ -246,7 +246,7 @@ Using Configurations in sysfs
- Coresight can be controlled using sysfs. When this is in use then a configuration
- can be made active for the devices that are used in the sysfs session.
- 
--In a configuration there are 'enable' and 'preset' files.
-+In a configuration there are ``enable`` and ``preset`` files.
- 
- To enable a configuration for use with sysfs::
- 
-@@ -256,13 +256,13 @@ To enable a configuration for use with sysfs::
- This will then use any default parameter values in the features - which can be
- adjusted as described above.
- 
--To use a preset<n> set of parameter values::
-+To use a ``preset<n>`` set of parameter values::
- 
-     $ echo 3 > preset
- 
- This will select preset3 for the configuration.
- The valid values for preset are 0 - to deselect presets, and any value of
--<n> where a preset<n> sub-directory is present.
-+<n> where a ``preset<n>`` sub-directory is present.
- 
- Note that the active sysfs configuration is a global parameter, therefore
- only a single configuration can be active for sysfs at any one time.
-@@ -278,9 +278,16 @@ Creating and Loading Custom Configurations
- ==========================================
- 
- Custom configurations and / or features can be dynamically loaded into the
--system by using a loadable module.
-+system by using a loadable module, or by loading a configuration table
-+through in configfs.
- 
--An example of a custom configuration is found in ./samples/coresight.
-+Loaded configurations can use previously loaded features. The system will
-+ensure that it is not possible to unload a feature that is currently in
-+use, by enforcing the unload order as the strict reverse of the load order.
-+
-+
-+Using a Loadable Module
-+-----------------------
- 
- This creates a new configuration that uses the existing built in
- strobing feature, but provides a different set of presets.
-@@ -289,6 +296,218 @@ When the module is loaded, then the configuration appears in the configfs
- file system and is selectable in the same way as the built in configuration
- described above.
- 
--Configurations can use previously loaded features. The system will ensure
--that it is not possible to unload a feature that is currently in use, by
--enforcing the unload order as the strict reverse of the load order.
-+The file ``coresight-cfg-sample.c`` contains the configuration and module
-+initialisation code needed to create the loadable module.
-+
-+This will be built alongside the kernel modules if selected in KConfig.
-+(select ``CONFIG_SAMPLE_CORESIGHT_SYSCFG``).
-+
-+An example of a custom configuration module is found in ``./samples/coresight``.
-+
-+Using a Configuration Table File
-+--------------------------------
-+
-+The ``./tools/coresight`` directory contains example programs to generate and
-+read and print binary configuration table files.
-+
-+Building the tools creates the ``coresight-cfg-file-gen`` program that will
-+generate a configuration binary ``example1.cscfg`` that can be loaded into the
-+system using configfs. The configuration declared in the source file
-+``coresight-cfg-example1.c`` is named ``autofdo3`` - the name that will be used
-+once loaded.
-+
-+The source files ``coresight-cfg-bufw.h`` and ``coresight-cfg-bufw.c`` provide a
-+standard function to convert a configuration declared in 'C' into the correct
-+binary buffer format. These files can be re-used to create new custom
-+configurations. Alternatively, additional examples can be added to the
-+``coresight-cfg-file-gen`` program::
-+
-+    $ ./coresight-cfg-file-gen
-+    Coresight Configuration file Generator
-+
-+    Generating example1 example
-+    Generating example2 example
-+
-+The program ``coresight-cfg-file-read`` can read back and print a configuration
-+binary. This is built using the file reader from the driver code
-+(``coresight-config-file.c``), which is copied over into ``./tools/coresight`` at
-+build time.::
-+
-+    ./coresight-cfg-file-read example1.cscfg
-+    CoreSight Configuration file reader
-+    ============================================
-+
-+    Configuration 1
-+    Name:- autofdo3
-+    Description:-
-+    Setup ETMs with strobing for autofdo
-+    Supplied presets allow experimentation with mark-space ratio for various loads
-+
-+    Uses 1 features:-
-+    Feature-1: strobing
-+
-+    Provides 4 sets of preset values, 2 presets per set
-+    set[0]: 0x7d0, 0x64,
-+    set[1]: 0x7d0, 0x3e8,
-+    set[2]: 0x7d0, 0x1388,
-+    set[3]: 0x7d0, 0x2710,
-+
-+    ============================================
-+    File contains no features
-+
-+There are additional attributes in the cs-syscfg directory - ``load`` and
-+``unload`` that can be used to load and unload configuration tables.
-+
-+To load, 'cat' the table file into the load attribute::
-+
-+    $ ls /config/cs-syscfg
-+    configurations features  load  show_last_load  unload
-+    $ cat example1.cscfg > /config/cs-syscfg/load
-+    $ ls /config/cs-syscfg/configurations/
-+    autofdo  autofdo3
-+
-+As described above, in order to respect configuration dependencies, unload
-+order is scrictly enforced to be the reverse of load order.
-+
-+``unload`` can be used to unload the last loaded configuration, but only
-+if this was loaded using configfs.
-+
-+To unload, the *load name* of the configuration is written to ``unload``.
-+This load name is the name of the first configuration in the table, or if no
-+configurations, the name of the first feature.
-+
-+This name can be read either as described above, or by reading the
-+``show_last_load`` attribute to obtain the details of the last loaded
-+configuration::
-+
-+    $ cat /config/cs-syscfg/show_last_load
-+    load name: autofdo3
-+    load type: configfs dynamic load
-+    (configurations:  autofdo3 )
-+    (features:  None )
-+
-+Once this is known then unload by::
-+
-+    $ echo autofdo3 > /config/cs-syscfg/unload
-+    ls /config/cs-syscfg/configurations/
-+    autofdo
-+
-+Load and unload cannot be done if trace is in progress using a configuration.
-+
-+Unload will fail if the last loaded item was not a configfs dynamic loaded file.
-+When using ``show_last_load`` a non configfs item will show::
-+
-+    cat /config/cs-syscfg/show_last_load
-+    load name: [Not Set]
-+    load type: Built in driver
-+
-+
-+
-+CoreSight Configuration Table Format
-+------------------------------------
-+
-+The file format is defined in the source file ``coresight-config-table.h``
-+
-+The source reader and generator examples use/produce a table in this format,
-+as a binary file.
-+
-+This arrangement is reproduced below:-
-+
-+Overall Table structure
-+~~~~~~~~~~~~~~~~~~~~~~~
-+
-+::
-+
-+   [cscfg_table_header]  // Mandatory
-+   [CONFIG_ELEM]*        // Optional - multiple, defined by cscfg_table_header.nr_configs
-+   [FEATURE_ELEM]*       // Optional - multiple, defined by cscfg_table_header.nr_features
-+
-+Table is invalid if both [CONFIG_ELEM] and [FEATURE_ELEM] are omitted.
-+
-+A table that contains only [FEATURE_ELEM] may be loaded, and the features used
-+by subsequently loaded files with [CONFIG_ELEM] elements.
-+
-+Element Name Strings
-+~~~~~~~~~~~~~~~~~~~~
-+
-+Configuration name strings are required to consist of alphanumeric characters and '_' only. Other special characters are not permitted.
-+
-+For example ``my_config_2`` is a valid name, while ``this-bad-config#5`` will not work.
-+
-+This is in order to comply with the requirements of the perf command line.
-+
-+It is recommended that Feature and Parameter names use the same convention to allow for future enhancements to the command line syntax.
-+
-+CONFIG_ELEM element
-+~~~~~~~~~~~~~~~~~~~
-+
-+::
-+
-+   [cscfg_table_elem_header]               // header length value to end of feature strings.
-+   [cscfg_table_elem_str]                  // name of the configuration.
-+                                           // (see element string name requirements)
-+   [cscfg_table_elem_str]                  // description of configuration.
-+   [u16 value](nr_presets)                 // number of defined sets presets values.
-+   [u32 value](nr_total_params)            // total parameters defined by all used features.
-+   [u16 value](nr_feat_refs)               // number of features referenced by the configuration
-+   [u64 values] * (nr_presets * nr_total_params)     // the preset values.
-+   [cscfg_table_elem_str] * (nr_feat_refs) // names of features used in the configurations.
-+
-+FEATURE_ELEM element
-+~~~~~~~~~~~~~~~~~~~~
-+
-+::
-+
-+   [cscfg_table_elem_header]               // header length is total bytes to end of param structures.
-+   [cscfg_table_elem_str]                  // feature name.
-+   [cscfg_table_elem_str]                  // feature description.
-+   [u32 value](match_flags)                // flags to associate the feature with a device.
-+   [u16 value](nr_regs)                    // number of registers.
-+   [u16 value](nr_params)                  // number of parameters.
-+   [cscfg_regval_desc struct] * (nr_regs)  // register definitions
-+   [PARAM_ELEM] * (nr_params)              // parameters definitions
-+
-+PARAM_ELEM element
-+~~~~~~~~~~~~~~~~~~
-+
-+::
-+
-+   [cscfg_table_elem_str]        // parameter name.
-+   [u64 value](param_value)      // initial value.
-+
-+Additional definitions
-+~~~~~~~~~~~~~~~~~~~~~~
-+
-+The following structures are defined in ``coresight-config-file.h``
-+
-+ * ``struct cscfg_table_header`` : This structure contains an initial magic number, the total
-+   length of the table, and the number of configurations and features in the table.
-+ * ``struct cscfg_table_elem_header``: This defines the total length and type of a CONFIG_ELEM
-+   or a FEATURE_ELEM.
-+ * ``struct cscfg_table_elem_str``: This defines a string and its length.
-+
-+The magic number in cscfg_table_header is defined as two bitfields::
-+
-+   [31:8] Fixed magic number to identify table type.
-+   [7:0]  Current table format version.
-+
-+The following defines determine the maximum overall table size and maximum individual
-+string size
-+
-+ * ``CSCFG_TABLE_MAXSIZE``      : maximum overall table size.
-+ * ``CSCFG_TABLE_STR_MAXSIZE``  : maximum individual string size.
-+
-+Load Dependencies
-+~~~~~~~~~~~~~~~~~
-+
-+Files may be unloaded only in the strict reverse order of loading. This is enforced by the
-+configuration system.
-+
-+This is to ensure that any load dependencies are maintained.
-+
-+A configuration table that contains a CONFIG_ELEM that references named features "feat_A" and "feat_B" will load only if either:-
-+
-+a) "feat_A" and/or "feat_B" has been loaded previously, or are present as built-in / module loaded features.
-+b) "feat_A" and/or "feat_B" are declared as FEAT_ELEM in the same table as the CONFIG_ELEM.
-+
-+Tables that contain features or configurations with the same names as those already loaded will fail to load.
+ 	unsigned long		sysrq;			/* sysrq timeout */
+ 	unsigned int		sysrq_ch;		/* char for sysrq */
 -- 
-2.17.1
-
+2.40.1
