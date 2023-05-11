@@ -2,146 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CC1A6FF7F0
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 19:02:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 42EC96FF7F5
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 19:02:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238682AbjEKRB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 13:01:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
+        id S238801AbjEKRCC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 13:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238771AbjEKRB4 (ORCPT
+        with ESMTP id S238752AbjEKRB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 13:01:56 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A66B3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 10:01:48 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1aaf70676b6so63172035ad.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 10:01:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683824508; x=1686416508;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UKRsLL7kNvDroaLyrSRYU4DWIMyOnhELN3sSuXXaYCw=;
-        b=Ty701zaQ1O4E399AdK72ImGSMYCz9q+3WiRXQgKA+1W0+3aTflaknqlI3jM94oQXlS
-         iA5WQsfGiwkRe0UagRwLLK4DAZII5krsUpBO4oFq6AE+gBwGHdhyLSyQ8dKUa9hh/43i
-         nJJebk+wL2VCpf9fE2t8sQUBlcDpiYdQoVdR0BV5l1OI4zcHq2vQfrbgJhiPtD+Y0aXK
-         v9TfsA1ZCmllXyroxNH6ilkRU66/sMBwB3BLmVEVaIb15Jgl9soi/dEaBJf5ANePbnpD
-         HAihUbzICcvKkz9NDD6eZhAat9VkI4Kp8GbSrmmjI8JjiyPZRj48IAlZRHDE6XCG8r2g
-         QbnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683824508; x=1686416508;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UKRsLL7kNvDroaLyrSRYU4DWIMyOnhELN3sSuXXaYCw=;
-        b=AXYH0MWE9MtLMYWmz2HROoFF1ihSiXG3Ln3zbrczBOgPmTb5xDsgJb3Llu3XBVKK2g
-         L0NAgYDJMFMsxAS27EpC6QZcbDw2kjHxxQI8rbsHbxamHrbckkrlaJENYl/ah0Li0j8V
-         JNAanMSe4VlR4FIMeGNGz/laafOsomWEp2/eI6Ltxwb73D+9EqkyEvvdnJDxIDNaLdUu
-         KoDk7S4HKm3MDOzT18/sLnhSop2PLrgSOIlYLAWgpBDKlQHzdtRpM9EeD3IJxiQMlQwJ
-         wZvLTYZnuZaHx9rI4mu+24JV2hHso3pMTKlree3QgsVaNzmXNIUCRXhLpeqEg39uP2Dy
-         5Fdw==
-X-Gm-Message-State: AC+VfDz/GsKaJOPVFD3oKKWFB26fJoXoGjzv4LTWV5CWaUZb3WNmbELj
-        UBc9Zfd5Whbk1XfezepslQ2gHUV/gGE=
-X-Google-Smtp-Source: ACHHUZ4HQ8nm3POZqJ0DmhNQPity9dUWPiwy5DrVMia0WSQEfmrcqGF0baIfP6K8PEO1PMzoifNcOw==
-X-Received: by 2002:a17:902:7e84:b0:1a6:f755:a4a0 with SMTP id z4-20020a1709027e8400b001a6f755a4a0mr19604683pla.58.1683824508009;
-        Thu, 11 May 2023 10:01:48 -0700 (PDT)
-Received: from ubuntu777.domain.name (36-228-94-72.dynamic-ip.hinet.net. [36.228.94.72])
-        by smtp.gmail.com with ESMTPSA id r7-20020a170902be0700b001ab0083c6c9sm6156240pls.261.2023.05.11.10.01.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 10:01:47 -0700 (PDT)
-From:   Min-Hua Chen <minhuadotchen@gmail.com>
-To:     Vineet Gupta <vgupta@kernel.org>
-Cc:     Min-Hua Chen <minhuadotchen@gmail.com>,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] ARC: rename 16KSTACKS to DEBUG_STACKS
-Date:   Fri, 12 May 2023 01:01:39 +0800
-Message-Id: <20230511170139.343434-3-minhuadotchen@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230511170139.343434-1-minhuadotchen@gmail.com>
-References: <20230511170139.343434-1-minhuadotchen@gmail.com>
+        Thu, 11 May 2023 13:01:57 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909D930EB;
+        Thu, 11 May 2023 10:01:49 -0700 (PDT)
+Received: (Authenticated sender: alexis.lothore@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 18699240010;
+        Thu, 11 May 2023 17:01:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1683824507;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=jsupyfCxIr/oLjFxtWs1d7TDSB1BeVIZRiI5538cfpI=;
+        b=OuolYvJXgYwrYy7iiiqUOn5GZae3MqufNnBo0utOyp5iFFFZvLgr4rmgPPPk0NwjFRVg6S
+        HuOIKSuWv/+5N1cLHz1GDl/dTc9PZ6AaZsOeZ2aA5EiTQbxqqQOenuTuPOmni+oqdP5bl7
+        fXdtIOZBYTzgYzg9T3lLkZtVtE57WDLPkvgllw4LKf/P7WaV2yrjClWd+W/IYNOJ6ixwq7
+        65f8mGedn9jZrbZ1GnPHmjGVgIAogLMteYdn4oiO2coHg4mt3pb3j5a7r30Ax9elGG7KHU
+        BTr4sReh+s/b9wZZHXkYmtTvRjAoYaLGeu8U6avW4iQmLFWgJDUc4Sol9R1rVQ==
+From:   alexis.lothore@bootlin.com
+To:     andrew@lunn.ch, f.fainelli@gmail.com, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
+        herve.codina@bootlin.com, miquel.raynal@bootlin.com,
+        milan.stevanovic@se.com, jimmy.lalande@se.com,
+        pascal.eberhard@se.com
+Subject: [PATCH net v2 0/3] net: dsa: rzn1-a5psw: disabled learning for standalone ports and fix STP support
+Date:   Thu, 11 May 2023 19:01:59 +0200
+Message-Id: <20230511170202.742087-1-alexis.lothore@bootlin.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename 16KSTACKS to DEBUG_STACKS.
+From: Alexis Lothoré <alexis.lothore@bootlin.com>
 
-arch/arc/Kconfig.debug says that the default stack size is 8KB
-and it will become 16KB stack if 16KSTACKS is set.
+This small series fixes STP support and while adding a new function to
+enable/disable learning, use that to disable learning on standalone ports
+at switch setup as reported by Vladimir Oltean.
 
-However, the stack size is based on PAGE_SIZE, and it is
-configurable by CONFIG_ARC_PAGE_SIZE_16K or CONFIG_ARC_PAGE_SIZE_4K.
+This series was initially submitted on net-next by Clement Leger, but some
+professional evolutions has made him hand me over those topics.
+Also, this new revision is submitted on net instead of net-next for V1
+based on Vladimir Oltean's suggestion
 
-See arch/arc/include/uapi/asm/page.h:
-/* PAGE_SHIFT determines the page size */
-\#if defined(CONFIG_ARC_PAGE_SIZE_16K)
-\#define PAGE_SHIFT 14
-\#elif defined(CONFIG_ARC_PAGE_SIZE_4K)
-\#define PAGE_SHIFT 12
-\#else
-\#define PAGE_SHIFT 13
-\#endif
+Changes since v1:
+- fix typos in commit messages and doc
+- re-split STP states handling commit
+- add Fixes: tag and new Signed-off-by
+- submit series as fix on net instead of net-next
+- split learning and blocking setting functions
+- remove unused define A5PSW_PORT_ENA_TX_SHIFT
+- add boolean for tx/rx enabled for clarity
 
-See arch/arc/include/asm/thread_info.h:
-\#ifdef CONFIG_DEBUG_STACKS
-\#define THREAD_SIZE_ORDER 1
-\#else
-\#define THREAD_SIZE_ORDER 0
-\#endif
+Clément Léger (3):
+  net: dsa: rzn1-a5psw: enable management frames for CPU port
+  net: dsa: rzn1-a5psw: fix STP states handling
+  net: dsa: rzn1-a5psw: disable learning for standalone ports
 
-\#define THREAD_SIZE     (PAGE_SIZE << THREAD_SIZE_ORDER)
-\#define THREAD_SHIFT	(PAGE_SHIFT + THREAD_SIZE_ORDER)
+ drivers/net/dsa/rzn1_a5psw.c | 83 ++++++++++++++++++++++++++++--------
+ drivers/net/dsa/rzn1_a5psw.h |  3 +-
+ 2 files changed, 67 insertions(+), 19 deletions(-)
 
-To make CONFIG_16KSTACKS less confusing, rename it to DEBUG_STACKS
-(as it is defined in Kconfig.debug) and modify the Kconfig
-description. No functional changes intended.
-
-Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
----
- arch/arc/Kconfig.debug             | 7 ++++---
- arch/arc/include/asm/thread_info.h | 2 +-
- 2 files changed, 5 insertions(+), 4 deletions(-)
-
-diff --git a/arch/arc/Kconfig.debug b/arch/arc/Kconfig.debug
-index 45add86decd5..9a1e140605c4 100644
---- a/arch/arc/Kconfig.debug
-+++ b/arch/arc/Kconfig.debug
-@@ -1,10 +1,11 @@
- # SPDX-License-Identifier: GPL-2.0
- 
--config 16KSTACKS
--	bool "Use 16Kb for kernel stacks instead of 8Kb"
-+config DEBUG_STACKS
-+	bool "Use double sized kernel stacks"
- 	help
--	  If you say Y here the kernel will use a  16Kb stacksize for the
-+	  If you say Y here the kernel will use a double sized stack for the
- 	  kernel stack attached to each process/thread. The default is 8K.
-+	  (depends on CONFIG_ARC_PAGE_SIZE_16K or CONFIG_ARC_PAGE_SIZE_4K)
- 	  This increases the resident kernel footprint and will cause less
- 	  threads to run on the system and also increase the pressure
- 	  on the VM subsystem for higher order allocations.
-diff --git a/arch/arc/include/asm/thread_info.h b/arch/arc/include/asm/thread_info.h
-index 9f9dd021501c..a7358d1225a6 100644
---- a/arch/arc/include/asm/thread_info.h
-+++ b/arch/arc/include/asm/thread_info.h
-@@ -15,7 +15,7 @@
- 
- #include <asm/page.h>
- 
--#ifdef CONFIG_16KSTACKS
-+#ifdef CONFIG_DEBUG_STACKS
- #define THREAD_SIZE_ORDER 1
- #else
- #define THREAD_SIZE_ORDER 0
 -- 
-2.34.1
+2.40.1
 
