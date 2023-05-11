@@ -2,86 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E4CC6FE8D5
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 02:39:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB496FE8F4
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 02:51:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236450AbjEKAjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 20:39:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37830 "EHLO
+        id S236691AbjEKAvJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 20:51:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjEKAjV (ORCPT
+        with ESMTP id S229490AbjEKAvH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 20:39:21 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5735D135;
-        Wed, 10 May 2023 17:39:20 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34B0bpZY004805;
-        Thu, 11 May 2023 00:39:10 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=JBd4dCnoaYdWnyAXKLFTXNcGOtZv+qeTRUG1UGI5EVc=;
- b=LyYrCeUIqq3LbuTQhH4NG4AxmdJ5HTIRtfKtcE6BIXOSPz2qIBhRNykJUXOo9ZDv4U+i
- oJWJgTE5qpohmKLuffKMOqmDmIyfbPmbLhS5pDR70So4Ra3j7/3QhioXPZKCzeo3/hoK
- SXa/ZJvDb54rcZczpmk6eW4leuNnJ2hLlwyJHdpRMzkB9kPmv+rvhylMZ5OD4g0vEEQK
- A9C/gD2ejVuK8jjJp37OyhD9160KRyHCfp1y50yGKwVUgFqYV7Zk2fFsqDIEmUfmxIH5
- 2olaGJas7wkKcBJymMEziJd5O1Z9aR7bTuK5bFLqoVon7Liueisc9hZk3DI9QdyWDLRA Xw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qgm5m057h-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 00:39:10 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34B0d9hT011241
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 00:39:09 GMT
-Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 10 May
- 2023 17:39:08 -0700
-Message-ID: <6830a829-5b8a-a05a-da6a-5aaaeef23e57@quicinc.com>
-Date:   Wed, 10 May 2023 17:39:07 -0700
+        Wed, 10 May 2023 20:51:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EE052720;
+        Wed, 10 May 2023 17:51:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C9BD615D8;
+        Thu, 11 May 2023 00:51:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A270C433EF;
+        Thu, 11 May 2023 00:50:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683766260;
+        bh=hlsu59yYL057XL1uJtWJNqLlteyZ6CLUk99IsT0nJNU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FHBxyBjFaUgDVAq0tvrgnAobIKYVbv37faFBzz+swkmKLPuuQO93I56+R12W2tCrA
+         Ff5Qu2897gI1EMSxzjidAupOUfc/+7CD25prKsBrP9zhMk+Ocjh9LyE7jk0XjGYlwV
+         OEW7hvK5YA6LfmAPxFpTkK60G+9ivfHNubMl+4yo2DxaydaZCUyLLMyz8EyvMSOGaV
+         xN6hTX1aHnFiExKUq801I+NCrRcr/J3LJ4SOjg/zryJ4VJ6a1UjF7/JOGFYpXpqFlm
+         5izUMtlRRGTddnIQmrzP1FseJPtA9BUzhRml6bHHAjT1SgPDiCNagvF1DxrSsybfU7
+         il3Tj3VhQKsgg==
+Date:   Thu, 11 May 2023 08:39:53 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     Wei Fu <wefu@redhat.com>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Icenowy Zheng <uwu@icenowy.me>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] riscv: dts: add initial T-HEAD light SoC device
+ tree
+Message-ID: <ZFw5WZsckWcDU4uv@xhacker>
+References: <20230510204456.57202-1-frank.li@vivo.com>
+ <20230510204456.57202-2-frank.li@vivo.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v1 1/2] drm/msm/dp: enable HDP plugin/unplugged interrupts
- to hpd_enable/disable
-Content-Language: en-US
-To:     Stephen Boyd <swboyd@chromium.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>, <agross@kernel.org>,
-        <airlied@gmail.com>, <andersson@kernel.org>, <daniel@ffwll.ch>,
-        <dianders@chromium.org>, <dmitry.baryshkov@linaro.org>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <vkoul@kernel.org>
-CC:     <quic_jesszhan@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <marijn.suijten@somainline.org>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1683750665-8764-1-git-send-email-quic_khsieh@quicinc.com>
- <1683750665-8764-2-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n53ywhgFhJXA9krBo-Ds6ezM0K8n6w0xnVZj+sTJ4qt9cA@mail.gmail.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <CAE-0n53ywhgFhJXA9krBo-Ds6ezM0K8n6w0xnVZj+sTJ4qt9cA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: Tp2N6F0bTE9PWQAciXo6TT6gdBjaEZrj
-X-Proofpoint-ORIG-GUID: Tp2N6F0bTE9PWQAciXo6TT6gdBjaEZrj
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 clxscore=1015
- bulkscore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=999
- impostorscore=0 phishscore=0 spamscore=0 suspectscore=0 malwarescore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305110004
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230510204456.57202-2-frank.li@vivo.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -89,85 +64,535 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-
-On 5/10/2023 4:55 PM, Stephen Boyd wrote:
-> Quoting Kuogee Hsieh (2023-05-10 13:31:04)
->> The internal_hpd flag was introduced to handle external DP HPD derived from GPIO
->> pinmuxed into DP controller.
+On Thu, May 11, 2023 at 04:44:53AM +0800, Yangtao Li wrote:
+> From: Jisheng Zhang <jszhang@kernel.org>
 > 
-> Was it? It looks more like it was done to differentiate between eDP and
-> DP, because internal_hpd is set only if DRM_BRIDGE_OP_HPD is set on the
-> bridge and we only set the bridge op if the connector type is DP. The
-> assumption looks like if you have DP connector_type, you have the gpio
-> pinmuxed for "dp_hot" mode, which isn't exactly true. We don't treat
-> that gpio as an irq either, because it isn't. Instead the gpio is muxed
-> to the mdss inside the SoC and then that generates an mdss interrupt
-> that's combined with non-HPD things like "video ready".
+> Add initial device tree for the TH1520 RISC-V SoC by
+> T-HEAD.
+
+It's impolite to randomly jump into and take over other people's patch
+series.
+
 > 
-> If that all follows, then I don't quite understand why we're setting
-> internal_hpd to false at all at runtime. It should be set to true at
-> some point, but ideally that point is during probe.
+> Cc: Icenowy Zheng <uwu@icenowy.me>
+> Cc: Wei Fu <wefu@redhat.com>
+> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> ---
+> v2:
+> -remove reset-sample
+> -convert to use thead,c900-plic
+> -add pvt node
+
+No, plz keep the initial soc dtsi as basic/small as possible. You can
+add the pvt as an independent patch. But again, don't jump into and take
+my patch series.
+
+> -add thermal-zones
+
+ditto
+
+>  arch/riscv/boot/dts/thead/th1520.dtsi | 491 ++++++++++++++++++++++++++
+>  1 file changed, 491 insertions(+)
+>  create mode 100644 arch/riscv/boot/dts/thead/th1520.dtsi
 > 
-
-Kuogee had the same thought originally but were not entirely sure of 
-this part of the commit message in Bjorn's original commit which 
-introduced these changes.
-
-"This difference is not appropriately represented by the "is_edp"
-boolean, but is properly represented by the frameworks invocation of the
-hpd_enable() and hpd_disable() callbacks. Switch the current condition
-to rely on these callbacks instead"
-
-Does this along with below documentation mean we should generate the hpd 
-interrupts only after hpd_enable callback happens?
-
-" * Call &drm_bridge_funcs.hpd_enable if implemented and register the 
-given @cb
-  * and @data as hot plug notification callback. From now on the @cb will be
-  * called with @data when an output status change is detected by the 
-bridge,
-  * until hot plug notification gets disabled with drm_bridge_hpd_disable().
-"
-
-Bjorn, can you please clarify this?
-
->> HPD plug/unplug interrupts cannot be enabled until
->> internal_hpd flag is set to true.
->> At both bootup and resume time, the DP driver will enable external DP
->> plugin interrupts and handle plugin interrupt accordingly. Unfortunately
->> dp_bridge_hpd_enable() bridge ops function was called to set internal_hpd
->> flag to true later than where DP driver expected during bootup time.
->>
->> This causes external DP plugin event to not get detected and display stays blank.
->> Move enabling HDP plugin/unplugged interrupts to dp_bridge_hpd_enable()/disable() to
->> set internal_hpd to true along with enabling HPD plugin/unplugged interrupts
->> simultaneously to avoid timing issue during bootup and resume.
->>
->> Fixes: cd198caddea7 ("drm/msm/dp: Rely on hpd_enable/disable callbacks")
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> ---
->>   drivers/gpu/drm/msm/dp/dp_display.c | 27 ++++++++++++++-------------
->>   1 file changed, 14 insertions(+), 13 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
->> index 3e13acdf..71aa944 100644
->> --- a/drivers/gpu/drm/msm/dp/dp_display.c
->> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
->> @@ -1801,15 +1788,29 @@ void dp_bridge_hpd_enable(struct drm_bridge *bridge)
->>   {
->>          struct msm_dp_bridge *dp_bridge = to_dp_bridge(bridge);
->>          struct msm_dp *dp_display = dp_bridge->dp_display;
->> +       struct dp_display_private *dp;
->> +
->> +       dp = container_of(dp_display, struct dp_display_private, dp_display);
->>
->>          dp_display->internal_hpd = true;
+> diff --git a/arch/riscv/boot/dts/thead/th1520.dtsi b/arch/riscv/boot/dts/thead/th1520.dtsi
+> new file mode 100644
+> index 000000000000..d1d94098b6bf
+> --- /dev/null
+> +++ b/arch/riscv/boot/dts/thead/th1520.dtsi
+> @@ -0,0 +1,491 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (C) 2021 Alibaba Group Holding Limited.
+> + * Copyright (C) 2023 Jisheng Zhang <jszhang@kernel.org>
+> + * Copyright (C) 2023 Yangtao Li <frank.li@vivo.com>
+> + */
+> +
+> +#include <dt-bindings/interrupt-controller/irq.h>
+> +
+> +/ {
+> +	compatible = "thead,th1520";
+> +	#address-cells = <2>;
+> +	#size-cells = <2>;
+> +
+> +	cpus: cpus {
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		timebase-frequency = <3000000>;
+> +
+> +		c910_0: cpu@0 {
+> +			compatible = "thead,c910", "riscv";
+> +			device_type = "cpu";
+> +			riscv,isa = "rv64imafdc";
+> +			reg = <0>;
+> +			i-cache-block-size = <64>;
+> +			i-cache-size = <65536>;
+> +			i-cache-sets = <512>;
+> +			d-cache-block-size = <64>;
+> +			d-cache-size = <65536>;
+> +			d-cache-sets = <512>;
+> +			next-level-cache = <&l2_cache>;
+> +			mmu-type = "riscv,sv39";
+> +
+> +			cpu0_intc: interrupt-controller {
+> +				compatible = "riscv,cpu-intc";
+> +				interrupt-controller;
+> +				#interrupt-cells = <1>;
+> +			};
+> +		};
+> +
+> +		c910_1: cpu@1 {
+> +			compatible = "thead,c910", "riscv";
+> +			device_type = "cpu";
+> +			riscv,isa = "rv64imafdc";
+> +			reg = <1>;
+> +			i-cache-block-size = <64>;
+> +			i-cache-size = <65536>;
+> +			i-cache-sets = <512>;
+> +			d-cache-block-size = <64>;
+> +			d-cache-size = <65536>;
+> +			d-cache-sets = <512>;
+> +			next-level-cache = <&l2_cache>;
+> +			mmu-type = "riscv,sv39";
+> +
+> +			cpu1_intc: interrupt-controller {
+> +				compatible = "riscv,cpu-intc";
+> +				interrupt-controller;
+> +				#interrupt-cells = <1>;
+> +			};
+> +		};
+> +
+> +		c910_2: cpu@2 {
+> +			compatible = "thead,c910", "riscv";
+> +			device_type = "cpu";
+> +			riscv,isa = "rv64imafdc";
+> +			reg = <2>;
+> +			i-cache-block-size = <64>;
+> +			i-cache-size = <65536>;
+> +			i-cache-sets = <512>;
+> +			d-cache-block-size = <64>;
+> +			d-cache-size = <65536>;
+> +			d-cache-sets = <512>;
+> +			next-level-cache = <&l2_cache>;
+> +			mmu-type = "riscv,sv39";
+> +
+> +			cpu2_intc: interrupt-controller {
+> +				compatible = "riscv,cpu-intc";
+> +				interrupt-controller;
+> +				#interrupt-cells = <1>;
+> +			};
+> +		};
+> +
+> +		c910_3: cpu@3 {
+> +			compatible = "thead,c910", "riscv";
+> +			device_type = "cpu";
+> +			riscv,isa = "rv64imafdc";
+> +			reg = <3>;
+> +			i-cache-block-size = <64>;
+> +			i-cache-size = <65536>;
+> +			i-cache-sets = <512>;
+> +			d-cache-block-size = <64>;
+> +			d-cache-size = <65536>;
+> +			d-cache-sets = <512>;
+> +			next-level-cache = <&l2_cache>;
+> +			mmu-type = "riscv,sv39";
+> +
+> +			cpu3_intc: interrupt-controller {
+> +				compatible = "riscv,cpu-intc";
+> +				interrupt-controller;
+> +				#interrupt-cells = <1>;
+> +			};
+> +		};
+> +
+> +		cpu-map {
+> +			cluster0 {
+> +				core0 {
+> +					cpu = <&c910_0>;
+> +				};
+> +
+> +				core1 {
+> +					cpu = <&c910_1>;
+> +				};
+> +
+> +				core2 {
+> +					cpu = <&c910_2>;
+> +				};
+> +
+> +				core3 {
+> +					cpu = <&c910_3>;
+> +				};
+> +			};
+> +		};
+> +
+> +		l2_cache: l2-cache {
+> +			compatible = "cache";
+> +			cache-block-size = <64>;
+> +			cache-level = <2>;
+> +			cache-size = <1048576>;
+> +			cache-sets = <1024>;
+> +			cache-unified;
+> +		};
+> +	};
+> +
+> +	osc: oscillator {
+> +		compatible = "fixed-clock";
+> +		clock-output-names = "osc_24m";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	osc_32k: 32k-oscillator {
+> +		compatible = "fixed-clock";
+> +		clock-output-names = "osc_32k";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	apb_clk: apb-clk-clock {
+> +		compatible = "fixed-clock";
+> +		clock-output-names = "apb_clk";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	uart_sclk: uart-sclk-clock {
+> +		compatible = "fixed-clock";
+> +		clock-output-names = "uart_sclk";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	pvt_clk: pvt-clock {
+> +		compatible = "fixed-clock";
+> +		clock-frequency = <73728000>;
+> +		clock-output-names = "pvt_clk";
+> +		#clock-cells = <0>;
+> +	};
+> +
+> +	soc {
+> +		compatible = "simple-bus";
+> +		interrupt-parent = <&plic>;
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		plic: interrupt-controller@ffd8000000 {
+> +			compatible = "thead,c900-plic";
+> +			reg = <0xff 0xd8000000 0x0 0x01000000>;
+> +			interrupts-extended = <&cpu0_intc 11>, <&cpu0_intc 9>,
+> +					      <&cpu1_intc 11>, <&cpu1_intc 9>,
+> +					      <&cpu2_intc 11>, <&cpu2_intc 9>,
+> +					      <&cpu3_intc 11>, <&cpu3_intc 9>;
+> +			interrupt-controller;
+> +			#interrupt-cells = <2>;
+> +			riscv,ndev = <240>;
+> +
+> +		};
+> +
+> +		clint: timer@ffdc000000 {
+> +			compatible = "thead,c900-clint";
+> +			reg = <0xff 0xdc000000 0x0 0x00010000>;
+> +			interrupts-extended = <&cpu0_intc 3>, <&cpu0_intc 7>,
+> +					      <&cpu1_intc 3>, <&cpu1_intc 7>,
+> +					      <&cpu2_intc 3>, <&cpu2_intc 7>,
+> +					      <&cpu3_intc 3>, <&cpu3_intc 7>;
+> +		};
+> +
+> +		uart0: serial@ffe7014000 {
+> +			compatible = "snps,dw-apb-uart";
+> +			reg = <0xff 0xe7014000 0x0 0x4000>;
+> +			interrupts = <36 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&uart_sclk>;
+> +			clock-names = "baudclk";
+> +			reg-shift = <2>;
+> +			reg-io-width = <4>;
+> +			status = "disabled";
+> +		};
+> +
+> +		uart1: serial@ffe7f00000 {
+> +			compatible = "snps,dw-apb-uart";
+> +			reg = <0xff 0xe7f00000 0x0 0x4000>;
+> +			interrupts = <37 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&uart_sclk>;
+> +			clock-names = "baudclk";
+> +			reg-shift = <2>;
+> +			reg-io-width = <4>;
+> +			status = "disabled";
+> +		};
+> +
+> +		uart3: serial@ffe7f04000 {
+> +			compatible = "snps,dw-apb-uart";
+> +			reg = <0xff 0xe7f04000 0x0 0x4000>;
+> +			interrupts = <39 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&uart_sclk>;
+> +			clock-names = "baudclk";
+> +			reg-shift = <2>;
+> +			reg-io-width = <4>;
+> +			status = "disabled";
+> +		};
+> +
+> +		gpio2: gpio@ffe7f34000 {
+> +			compatible = "snps,dw-apb-gpio";
+> +			reg = <0xff 0xe7f34000 0x0 0x1000>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			portc: gpio-controller@0 {
+> +				compatible = "snps,dw-apb-gpio-port";
+> +				gpio-controller;
+> +				#gpio-cells = <2>;
+> +				ngpios = <32>;
+> +				reg = <0>;
+> +				interrupt-controller;
+> +				#interrupt-cells = <2>;
+> +				interrupts = <58 IRQ_TYPE_LEVEL_HIGH>;
+> +			};
+> +		};
+> +
+> +		gpio3: gpio@ffe7f38000 {
+> +			compatible = "snps,dw-apb-gpio";
+> +			reg = <0xff 0xe7f38000 0x0 0x1000>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			portd: gpio-controller@0 {
+> +				compatible = "snps,dw-apb-gpio-port";
+> +				gpio-controller;
+> +				#gpio-cells = <2>;
+> +				ngpios = <32>;
+> +				reg = <0>;
+> +				interrupt-controller;
+> +				#interrupt-cells = <2>;
+> +				interrupts = <59 IRQ_TYPE_LEVEL_HIGH>;
+> +			};
+> +		};
+> +
+> +		gpio0: gpio@ffec005000 {
+> +			compatible = "snps,dw-apb-gpio";
+> +			reg = <0xff 0xec005000 0x0 0x1000>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			porta: gpio-controller@0 {
+> +				compatible = "snps,dw-apb-gpio-port";
+> +				gpio-controller;
+> +				#gpio-cells = <2>;
+> +				ngpios = <32>;
+> +				reg = <0>;
+> +				interrupt-controller;
+> +				#interrupt-cells = <2>;
+> +				interrupts = <56 IRQ_TYPE_LEVEL_HIGH>;
+> +			};
+> +		};
+> +
+> +		gpio1: gpio@ffec006000 {
+> +			compatible = "snps,dw-apb-gpio";
+> +			reg = <0xff 0xec006000 0x0 0x1000>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			portb: gpio-controller@0 {
+> +				compatible = "snps,dw-apb-gpio-port";
+> +				gpio-controller;
+> +				#gpio-cells = <2>;
+> +				ngpios = <32>;
+> +				reg = <0>;
+> +				interrupt-controller;
+> +				#interrupt-cells = <2>;
+> +				interrupts = <57 IRQ_TYPE_LEVEL_HIGH>;
+> +			};
+> +		};
+> +
+> +		uart2: serial@ffec010000 {
+> +			compatible = "snps,dw-apb-uart";
+> +			reg = <0xff 0xec010000 0x0 0x4000>;
+> +			interrupts = <38 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&uart_sclk>;
+> +			clock-names = "baudclk";
+> +			reg-shift = <2>;
+> +			reg-io-width = <4>;
+> +			status = "disabled";
+> +		};
+> +
+> +		dmac0: dma-controller@ffefc00000 {
+> +			compatible = "snps,axi-dma-1.01a";
+> +			reg = <0xff 0xefc00000 0x0 0x1000>;
+> +			interrupts = <27 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&apb_clk>, <&apb_clk>;
+> +			clock-names = "core-clk", "cfgr-clk";
+> +			#dma-cells = <1>;
+> +			dma-channels = <4>;
+> +			snps,block-size = <65536 65536 65536 65536>;
+> +			snps,priority = <0 1 2 3>;
+> +			snps,dma-masters = <1>;
+> +			snps,data-width = <4>;
+> +			snps,axi-max-burst-len = <16>;
+> +			status = "disabled";
+> +		};
+> +
+> +		timer0: timer@ffefc32000 {
+> +			compatible = "snps,dw-apb-timer";
+> +			reg = <0xff 0xefc32000 0x0 0x14>;
+> +			clocks = <&apb_clk>;
+> +			clock-names = "timer";
+> +			interrupts = <16 IRQ_TYPE_LEVEL_HIGH>;
+> +			status = "disabled";
+> +		};
+> +
+> +		timer1: timer@ffefc32014 {
+> +			compatible = "snps,dw-apb-timer";
+> +			reg = <0xff 0xefc32014 0x0 0x14>;
+> +			clocks = <&apb_clk>;
+> +			clock-names = "timer";
+> +			interrupts = <17 IRQ_TYPE_LEVEL_HIGH>;
+> +			status = "disabled";
+> +		};
+> +
+> +		timer2: timer@ffefc32028 {
+> +			compatible = "snps,dw-apb-timer";
+> +			reg = <0xff 0xefc32028 0x0 0x14>;
+> +			clocks = <&apb_clk>;
+> +			clock-names = "timer";
+> +			interrupts = <18 IRQ_TYPE_LEVEL_HIGH>;
+> +			status = "disabled";
+> +		};
+> +
+> +		timer3: timer@ffefc3203c {
+> +			compatible = "snps,dw-apb-timer";
+> +			reg = <0xff 0xefc3203c 0x0 0x14>;
+> +			clocks = <&apb_clk>;
+> +			clock-names = "timer";
+> +			interrupts = <19 IRQ_TYPE_LEVEL_HIGH>;
+> +			status = "disabled";
+> +		};
+> +
+> +		uart4: serial@fff7f08000 {
+> +			compatible = "snps,dw-apb-uart";
+> +			reg = <0xff 0xf7f08000 0x0 0x4000>;
+> +			interrupts = <40 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&uart_sclk>;
+> +			clock-names = "baudclk";
+> +			reg-shift = <2>;
+> +			reg-io-width = <4>;
+> +			status = "disabled";
+> +		};
+> +
+> +		uart5: serial@fff7f0c000 {
+> +			compatible = "snps,dw-apb-uart";
+> +			reg = <0xff 0xf7f0c000 0x0 0x4000>;
+> +			interrupts = <41 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&uart_sclk>;
+> +			clock-names = "baudclk";
+> +			reg-shift = <2>;
+> +			reg-io-width = <4>;
+> +			status = "disabled";
+> +		};
+> +
+> +		timer4: timer@ffffc33000 {
+> +			compatible = "snps,dw-apb-timer";
+> +			reg = <0xff 0xffc33000 0x0 0x14>;
+> +			clocks = <&apb_clk>;
+> +			clock-names = "timer";
+> +			interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
+> +			status = "disabled";
+> +		};
+> +
+> +		timer5: timer@ffffc33014 {
+> +			compatible = "snps,dw-apb-timer";
+> +			reg = <0xff 0xffc33014 0x0 0x14>;
+> +			clocks = <&apb_clk>;
+> +			clock-names = "timer";
+> +			interrupts = <21 IRQ_TYPE_LEVEL_HIGH>;
+> +			status = "disabled";
+> +		};
+> +
+> +		timer6: timer@ffffc33028 {
+> +			compatible = "snps,dw-apb-timer";
+> +			reg = <0xff 0xffc33028 0x0 0x14>;
+> +			clocks = <&apb_clk>;
+> +			clock-names = "timer";
+> +			interrupts = <22 IRQ_TYPE_LEVEL_HIGH>;
+> +			status = "disabled";
+> +		};
+> +
+> +		timer7: timer@ffffc3303c {
+> +			compatible = "snps,dw-apb-timer";
+> +			reg = <0xff 0xffc3303c 0x0 0x14>;
+> +			clocks = <&apb_clk>;
+> +			clock-names = "timer";
+> +			interrupts = <23 IRQ_TYPE_LEVEL_HIGH>;
+> +			status = "disabled";
+> +		};
+> +
+> +		ao_gpio0: gpio@fffff41000 {
+> +			compatible = "snps,dw-apb-gpio";
+> +			reg = <0xff 0xfff41000 0x0 0x1000>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			porte: gpio-controller@0 {
+> +				compatible = "snps,dw-apb-gpio-port";
+> +				gpio-controller;
+> +				#gpio-cells = <2>;
+> +				ngpios = <32>;
+> +				reg = <0>;
+> +				interrupt-controller;
+> +				#interrupt-cells = <2>;
+> +				interrupts = <76 IRQ_TYPE_LEVEL_HIGH>;
+> +			};
+> +		};
+> +
+> +		pvt: pvt@fffff4e000 {
+> +			compatible = "moortec,mr75203";
+> +			reg = <0xff 0xfff4e000 0x0 0x80>,
+> +			      <0xff 0xfff4e080 0x0 0x100>,
+> +			      <0xff 0xfff4e180 0x0 0x680>,
+> +			      <0xff 0xfff4e800 0x0 0x600>;
+> +			reg-names = "common", "ts", "pd", "vm";
+> +			clocks = <&pvt_clk>;
+> +			/* TODO: add reset */
+> +			#thermal-sensor-cells = <1>;
+> +			status = "disabled";
+> +		};
+> +
+> +		ao_gpio1: gpio@fffff52000 {
+> +			compatible = "snps,dw-apb-gpio";
+> +			reg = <0xff 0xfff52000 0x0 0x1000>;
+> +			#address-cells = <1>;
+> +			#size-cells = <0>;
+> +
+> +			portf: gpio-controller@0 {
+> +				compatible = "snps,dw-apb-gpio-port";
+> +				gpio-controller;
+> +				#gpio-cells = <2>;
+> +				ngpios = <32>;
+> +				reg = <0>;
+> +				interrupt-controller;
+> +				#interrupt-cells = <2>;
+> +				interrupts = <55 IRQ_TYPE_LEVEL_HIGH>;
+> +			};
+> +		};
+> +	};
+> +
+> +	thermal-zones {
+> +		cpu-thermal {
+> +			polling-delay-passive = <250>;
+> +			polling-delay = <2000>;
+> +			thermal-sensors = <&pvt 0>;
+> +
+> +			trips {
+> +				trip0 {
+> +					temperature = <85000>;
+> +					hysteresis = <2000>;
+> +					type = "passive";
+> +				};
+> +
+> +				trip1 {
+> +					temperature = <110000>;
+> +					hysteresis = <2000>;
+> +					type = "critical";
+> +				};
+> +			};
+> +		};
+> +	};
+> +};
+> -- 
+> 2.34.1
 > 
-> Can we set internal_hpd to true during probe when we see that the hpd
-> pinmux exists? Or do any of these bits toggle in the irq status register
-> when the gpio isn't muxed to "dp_hot" or the controller is for eDP and
-> it doesn't have any gpio connection internally? I'm wondering if we can
-> get by with simply enabling the "dp_hot" pin interrupts
-> (plug/unplug/replug/irq_hpd) unconditionally and not worrying about them
-> if eDP is there (because the pin doesn't exist inside the SoC), or if DP
-> HPD is being signalled out of band through type-c framework.
