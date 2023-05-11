@@ -2,98 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB05E6FEB4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 07:40:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 580C16FEB51
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 07:42:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236569AbjEKFkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 01:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52402 "EHLO
+        id S236717AbjEKFmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 01:42:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjEKFkL (ORCPT
+        with ESMTP id S229482AbjEKFmu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 01:40:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DCEAD;
-        Wed, 10 May 2023 22:40:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC86564AB0;
-        Thu, 11 May 2023 05:40:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 43465C433D2;
-        Thu, 11 May 2023 05:40:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683783609;
-        bh=cnwaPvJcu6guyEf9NqX8F6+9/TD4en/lP/amfTvDi7Q=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=NsG5+VEq1Ng8NWZ3+pL7QO6FiKYwu+Lm/FUeXe58wNkj+kw9jkru3dh+hbcauYoeq
-         jdkkei/F7Agv5OJNPSmGHKdQP2/Woffbs7/7Hou2XIQUa/vnEsZL9nLAo9Qt5HHkL0
-         6fJ4SRtUVkI1lmDytETSO7SR/uk39KIsJMdOpjLoDYsQewrnG3YSzItp3zPu4wz7Fd
-         6nybldN50tGpFJdpIIqOfNfp0rfUsZgpzcSKmBtuMldihY8o/hK0n4YRrnGIeLEMwH
-         XejDdKMiHrT7jUESc2R/rI7gPp/WNk05MW/e0gieJwi6cvtQbzFcbQwQDXyINLc615
-         ZYZ7P7QH+2kjQ==
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Jaewon Kim <jaewon02.kim@samsung.com>
-Cc:     linux-spi@vger.kernel.org, linux-samsung-soc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Chanho Park <chanho61.park@samsung.com>,
-        Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20230510113942.89994-1-jaewon02.kim@samsung.com>
-References: <CGME20230510120245epcas2p2cea91a04ef2fd46f0fa9f22f73c5b2eb@epcas2p2.samsung.com>
- <20230510113942.89994-1-jaewon02.kim@samsung.com>
-Subject: Re: [PATCH] spi: s3c64xx: Disable IRQ mode when using DMA
-Message-Id: <168378360579.326766.7361923325048622391.b4-ty@kernel.org>
-Date:   Thu, 11 May 2023 14:40:05 +0900
+        Thu, 11 May 2023 01:42:50 -0400
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E677E26A8;
+        Wed, 10 May 2023 22:42:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=3tt65IPvL25utgB/BrnwIGIDJlkpRnSh4O1Dkc9Fq28=; b=gYnAPhgnMOpNp4Z8f5gKm468RZ
+        Zs6/Nk/mrEr2RUEOrPARIwcXZbj/7r9fER555WTxnGyH5CXYfaL32JNLK/OlOUOmX6Y1NwPzNqoNh
+        by85kFktbQcOvAldc1zfB8r1cJNb91mNTp+JvqfsjUYjy3acMbt0XiY9VjTAul5cfm1MD+dbaUXH9
+        Gf61NgZQRquRVU+gnXtElpd5SLzF3IgjZCSSQmV2OhLDcseNVOFlIfrUQbZSMcybOFow7wwbLPDcs
+        morBPBC/ZUTQCo3vQ2p8jTTBfB9NoE4wG6Fqssdsb7IdUKil85QEpY3Wyi7cTs7Q12mZK2oVs8Uyn
+        /YmNHDaw==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pwz4W-001chr-0A;
+        Thu, 11 May 2023 05:42:36 +0000
+Date:   Thu, 11 May 2023 06:42:36 +0100
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     ye.xingchen@zte.com.cn
+Cc:     jgg@ziepe.ca, leon@kernel.org, jiangjian@cdjrlc.com,
+        linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] RDMA/core: Use fdget() and fdput()
+Message-ID: <20230511054236.GJ3390869@ZenIV>
+References: <202305051133576690069@zte.com.cn>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202305051133576690069@zte.com.cn>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 10 May 2023 20:39:42 +0900, Jaewon Kim wrote:
-> Fixing the problem of enabling DMA mode and IRQ mode at the same time.
-> In this case, a value of more than 6bits is written to RDY_LVL, it can
-> cause an invasion of other registers, potentially leading to SPI
-> transfer failure.
+On Fri, May 05, 2023 at 11:33:57AM +0800, ye.xingchen@zte.com.cn wrote:
+> From: Ye Xingchen <ye.xingchen@zte.com.cn>
 > 
-> 
+> convert the fget()/fput() uses to fdget()/fdput().
 
-Applied to
+NAK on the entire series.  *IF* you do that kind of replacements,
+you need to understand what you are doing; it's not "fdget() is
+like fget(), only better; using it will improve things".
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+	If that comes from seeing my patch series doing fget() to
+fdget() conversions, you might consider the possibility that
+I *do* know how to use grep.  And that there might be some
+objective difference between the instances that had been changed
+and the one that had been left alone.  You could try to figure it
+out.  Or look through the list archives.  Or ask...
 
-Thanks!
-
-[1/1] spi: s3c64xx: Disable IRQ mode when using DMA
-      commit: 26cd10a0b9761bffd4669a429f8a33cbccef5bbd
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+	Al, more than slightly offended by the implications ;-/
