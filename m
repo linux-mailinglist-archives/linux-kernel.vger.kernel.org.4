@@ -2,47 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E60FC6FFB17
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:12:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 958816FFB1A
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:13:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239344AbjEKUMH convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 11 May 2023 16:12:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57072 "EHLO
+        id S239218AbjEKUNI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 11 May 2023 16:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238053AbjEKUME (ORCPT
+        with ESMTP id S238053AbjEKUNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 16:12:04 -0400
+        Thu, 11 May 2023 16:13:06 -0400
 Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28A462D6A;
-        Thu, 11 May 2023 13:12:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FF11BD4;
+        Thu, 11 May 2023 13:13:05 -0700 (PDT)
 Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
           by outpost.zedat.fu-berlin.de (Exim 4.95)
           with esmtps (TLS1.3)
           tls TLS_AES_256_GCM_SHA384
           (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pxCdk-001kHF-Gk; Thu, 11 May 2023 22:11:52 +0200
+          id 1pxCeq-001kUB-5l; Thu, 11 May 2023 22:13:00 +0200
 Received: from p5b13addc.dip0.t-ipconnect.de ([91.19.173.220] helo=suse-laptop.fritz.box)
           by inpost2.zedat.fu-berlin.de (Exim 4.95)
           with esmtpsa (TLS1.3)
           tls TLS_AES_256_GCM_SHA384
           (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pxCdk-0022mr-8U; Thu, 11 May 2023 22:11:52 +0200
-Message-ID: <4358d6ccca2d4e915e07a6e89d2d281e1299fbe5.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 1/2] sh: dma: fix `dmaor_read_reg`/`dmaor_write_reg`
- macros
+          id 1pxCep-0022vC-Uq; Thu, 11 May 2023 22:13:00 +0200
+Message-ID: <c7be097d21933c19c7338391cd6675d6757ad33c.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH 0/2] SH7709 DMA fixes
 From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Artur Rojek <contact@artur-rojek.eu>
-Cc:     Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
+To:     Rich Felker <dalias@libc.org>
+Cc:     Artur Rojek <contact@artur-rojek.eu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
         Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
         linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 11 May 2023 22:11:51 +0200
-In-Reply-To: <ef8a4c361255303359b003185e50f47cf3b422f0.camel@physik.fu-berlin.de>
+Date:   Thu, 11 May 2023 22:12:59 +0200
+In-Reply-To: <20230506165642.GO3298@brightrain.aerifal.cx>
 References: <20230506141703.65605-1-contact@artur-rojek.eu>
-         <20230506141703.65605-2-contact@artur-rojek.eu>
-         <65f873585db0cd9f79a84eb48707413775a9ba5b.camel@physik.fu-berlin.de>
-         <2f73b2ac1ec15a6b0f78d8d3a7f12266@artur-rojek.eu>
-         <ef8a4c361255303359b003185e50f47cf3b422f0.camel@physik.fu-berlin.de>
+         <3e9c027dd90ca9d4a02ba06714960ddcdae5fd2c.camel@physik.fu-berlin.de>
+         <20230506165642.GO3298@brightrain.aerifal.cx>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 User-Agent: Evolution 3.48.1 
@@ -59,17 +56,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 2023-05-07 at 12:32 +0200, John Paul Adrian Glaubitz wrote:
-> > I also wondered that. On SH7709 it's a hard panic, it should be the same
-> > elsewhere.
-> 
-> I will give the patch a spin on my SH-7785LCR and see if it breaks anything.
+Hi Rich!
 
-I have successfully booted a current kernel with both patches applied on my
-SH7785LCR board and will let it run for a few days to make sure it runs stable
-and then apply the two patches to my sh-linux tree.
+On Sat, 2023-05-06 at 12:56 -0400, Rich Felker wrote:
+> At one point I tried to rebase these to run on what was (at the time)
+> current, and had partial success -- I got it to start booting with DT
+> under qemu, but my work rebasing the PCI stuff had problems and IIRC
+> prevented getting virtio working -- it was crashing at that stage. If
+> there's interest I can see if I can dig up that rebased branch in case
+> it would be useful to look at. It probably has mistakes but might be a
+> start for looking at what changed out from under the patches that
+> needs to change.
 
-Thanks,
+Yes, there is definitely interest. Apologies for the late reply, I wanted
+to send an answer earlier but it unfortunately went off my radar.
+
 Adrian
 
 -- 
