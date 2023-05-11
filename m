@@ -2,112 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D63F6FFB7C
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:53:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DBB96FFB85
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:55:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239078AbjEKUx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 16:53:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48624 "EHLO
+        id S239236AbjEKUzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 16:55:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238932AbjEKUx0 (ORCPT
+        with ESMTP id S238390AbjEKUz3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 16:53:26 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233794C12
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:53:25 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ab13da70a3so88217305ad.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:53:25 -0700 (PDT)
+        Thu, 11 May 2023 16:55:29 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D954C1733
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:55:23 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-96a2b6d698cso67670366b.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:55:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1683838404; x=1686430404;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EmqiYN6k7kNOHcOaFBtfG/CJoGmGnLxuGsiwVK55cYc=;
-        b=QMR7fofFIz7UTDWgIWfb/8kl0kAphqE7lnR7CJeis2c94cLuhg3/r0tQz6eL/sMqfr
-         q5xNDM7Hyo8pCRISro7QIUqhbV0mD85g5HYjAcBlMXOYLVpaVTD13xfZjSQmD8E/djLw
-         0NPo8sFeER6dWIgeC+RaBaTHqqemzXR6zPA6W3ilnRtavZimjUbZ1Sa22tPEWq0Toe8y
-         alpjDn886e8wtA1bMsiOvg1d8k7nW6tnvOIrrs3/Gymhm4LuaTtX3LuZ5jrexsSsXg2A
-         PA+LVL4p9c22qmItfYfCYjj3HB682Ah3O0gRd7XS5qTuZaG9SwNSfX4TZgWWPy2lHlYp
-         2JMQ==
+        d=gmail.com; s=20221208; t=1683838522; x=1686430522;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UyU2yJMTTWP+TqXiAQ39h3qUzT30tuE4shvQs3raY5g=;
+        b=blS8/1iEX/8TMezsdHFUshFcOmFv4OetqL6BKXdZxZDDj0uBt7/282csgzqaBBJMZC
+         79JEYdwFrsUhNoHfv2VNX3dmSukMy6FLXxDpU0eHOa/hVqzUVl7+VEaVCcOpYIW3iFQ1
+         LnjtVQuX9Hjfd4t7vCZ4LJhrI2ijSrcBtd3qXZlxXlFWw+t2xv7WCWd8wFKsb1Un5kMl
+         zA/sgRpFXGJ04R1XAh0b6HqTWgfrFteJTva2x5TiPIUXr9Vlu5YDHVYzGIjtlWqy17p8
+         5WmJkFf1mRpOOzWRxQT/o/zX59zzaLWPR5/5cUrz3m0wpiF3HjzdBq2nQOTca++lKUlL
+         7JBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683838404; x=1686430404;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EmqiYN6k7kNOHcOaFBtfG/CJoGmGnLxuGsiwVK55cYc=;
-        b=jUvPcAmNvU/nZYbjc9cL/ybuuOkFGvgJ5TKGv5ljBtmSm1Oau/BoKqHeC4U5AaaPE1
-         EZg9Q+Isml/2HtW0XrTy04Y8fGuA8+b5/ZtaYrPb+LEE50XDAS7SqtPam4Wof7Y4PyGz
-         jCj8QyEAzuusc1g3G1cHqfcLpoFOBdPDqi6TY4fGSbIE89MAzwm5kirT4USUts5d6h7Q
-         9uIIf1bEjKhxELAtGkJD7mJqNdmTArQFdWYt4/bFNDHxcNQFhmQ299qANwRuRlcNzG5Q
-         m+4ahasCV7neu/jOooolUbpfY5ebyL9tZkHFWeThIvZ69mB4McBV/p6hCsLoNtWL8cud
-         PdIg==
-X-Gm-Message-State: AC+VfDxiOt4CRdBReYqJdJ03CLxXPxoRH3ZWkCRopx120AP/p8FjBib8
-        uTotCf/8mMxUrMWz3uK15ntZDg==
-X-Google-Smtp-Source: ACHHUZ4RrmTAXKngjyn+GYqfCF3MaY6lhqY4LbQJaq1mFOhwPgfCLqhai76N7zGoZNwWLze23GeF0w==
-X-Received: by 2002:a17:902:ce82:b0:1ac:95c2:ed75 with SMTP id f2-20020a170902ce8200b001ac95c2ed75mr15028551plg.53.1683838404455;
-        Thu, 11 May 2023 13:53:24 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id a10-20020a170902ee8a00b001a9873495f2sm6366920pld.233.2023.05.11.13.53.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 13:53:23 -0700 (PDT)
-Date:   Thu, 11 May 2023 13:53:23 -0700 (PDT)
-X-Google-Original-Date: Thu, 11 May 2023 13:53:02 PDT (-0700)
-Subject:     Re: [PATCH 0/3] riscv: sbi: Switch to the sys-off handler API
-In-Reply-To: <20221228161915.13194-1-samuel@sholland.org>
-CC:     dmitry.osipenko@collabora.com, rafael.j.wysocki@intel.com,
-        samuel@sholland.org, aou@eecs.berkeley.edu,
-        apatel@ventanamicro.com, Atish Patra <atishp@rivosinc.com>,
-        geert@linux-m68k.org, heiko@sntech.de, kai.heng.feng@canonical.com,
-        mcgrof@kernel.org, paulmck@kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>, pmladek@suse.com,
-        yuehaibing@huawei.com, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, tangmeng@uniontech.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     samuel@sholland.org
-Message-ID: <mhng-59817569-7525-450f-9bfd-ecb34a30744c@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1683838522; x=1686430522;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UyU2yJMTTWP+TqXiAQ39h3qUzT30tuE4shvQs3raY5g=;
+        b=lC9b1jRI21Qp3gKJyRJhiixZ+czLADjp9iKUGb8tQJ8zCwL26avo6KYUxi085EVA01
+         I2Z+jdPCzLrKfoowYktvFitbWDHRMQJ5lguAnqv14fxZS8g3iVnOlbkVjRCyNexW897Q
+         oGmeFplpKW+4JhnbOm/ycFNxDHk1i//0v/esszOSQN4tIbYX9V1stx334GvM5IiS6YtM
+         xqTq5z8CTP+OB864uUSlf/Xwq1XJZEuhsRbb/aYrT9M3EqQl+sBPQ1n+1EqBQSLYWa1D
+         2gDw8hWVZ0eQKv9D/HID1zwrkUzsMtGI7fptubNfF64CvSv3VS2RwLLLILPtu3NyOSzv
+         0ncQ==
+X-Gm-Message-State: AC+VfDyvCHqOBR0TQY7aR2Tg1H1U2Ql8PpPpMD+mS1JdYFf1Vm9CFrLz
+        48ZBaGijKhHSn8mE1LMgamU=
+X-Google-Smtp-Source: ACHHUZ7dRy/liazszbJG1nvxuu2yJ/7t4rA/ZngmnLiUv8UzPGH7twOGifXyyj9jb9ELW4g9nf5RJA==
+X-Received: by 2002:a17:906:72cd:b0:965:9db5:3824 with SMTP id m13-20020a17090672cd00b009659db53824mr18151141ejl.6.1683838522092;
+        Thu, 11 May 2023 13:55:22 -0700 (PDT)
+Received: from [192.168.0.103] (p57935e01.dip0.t-ipconnect.de. [87.147.94.1])
+        by smtp.gmail.com with ESMTPSA id jl21-20020a17090775d500b00965b5540ad7sm4562442ejc.17.2023.05.11.13.55.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 13:55:21 -0700 (PDT)
+Message-ID: <ecdd4474-d570-e0b9-f30f-278d2ce36f1e@gmail.com>
+Date:   Thu, 11 May 2023 22:55:20 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 0/4] staging: rtl8192e: Trivial code cleanup patches
+Content-Language: en-US
+To:     Yogesh Hegde <yogi.kernel@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <cover.1683730854.git.yogi.kernel@gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <cover.1683730854.git.yogi.kernel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 28 Dec 2022 08:19:12 PST (-0800), samuel@sholland.org wrote:
-> I want to convert the axp20x PMIC poweroff handler to use the sys-off
-> API, so it can be used as a fallback for if the SBI poweroff handler
-> is unavailable. But the SBI poweroff handler still uses pm_power_off, so
-> done alone, this would cause the axp20x callback to be called first,
-> before the SBI poweroff handler has a chance to run.
+On 5/10/23 17:08, Yogesh Hegde wrote:
+> Rename variables in function _rtl92e_dm_tx_power_tracking_cb_thermal
+> and Refactor variable assignment to avoid checkpatch complains.
+> The patches are required to be applied in sequence.
+> 
+> Yogesh Hegde (4):
+>    staging: rtl8192e: Rename tmpRegA and TempCCk
+>    staging: rtl8192e: Rename tmpOFDMindex and tmpCCKindex
+>    staging: rtl8192e: Rename tmpCCK20Mindex and tmpCCK40Mindex
+>    staging: rtl8192e: Refactor tmp_ofdm_index variable assignment
+> 
+>   drivers/staging/rtl8192e/rtl8192e/rtl_dm.c | 68 +++++++++++-----------
+>   1 file changed, 34 insertions(+), 34 deletions(-)
 >
-> In order to prevent this change in behavior, the SBI poweroff handler
-> needs to be converted to the sys-off API first, at a higher priority.
->
-> This series performs the conversion, after accounting for the fact that
-> the SBI poweroff handler is registered quite early during boot.
->
-> The first patch is a dependency for both this series and the PSCI
-> series[1], so I would like to get at least patch 1 merged soon.
->
-> [1]: https://lore.kernel.org/lkml/20221105214841.7828-1-samuel@sholland.org/
->
->
-> Samuel Holland (3):
->   kernel/reboot: Use the static sys-off handler for any priority
->   riscv: sbi: Share the code for unsupported extension warnings
->   riscv: sbi: Switch to the sys-off handler API
->
->  arch/riscv/include/asm/sbi.h |  1 -
->  arch/riscv/kernel/sbi.c      | 63 +++++++++++++++++++++---------------
->  kernel/reboot.c              | 10 +++---
->  3 files changed, 41 insertions(+), 33 deletions(-)
 
-Samuel: do you mind rebasing this and resending it with the reboot folks 
-in the To list?  That way we might be able to get an Ack on the generic 
-bits.
 
-Thanks!
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
