@@ -2,89 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6326FED1E
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:49:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E88516FED20
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:50:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237650AbjEKHtp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 03:49:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52156 "EHLO
+        id S237660AbjEKHug (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 03:50:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbjEKHtn (ORCPT
+        with ESMTP id S231625AbjEKHuc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 03:49:43 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03CBC46A5
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:49:41 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4eff50911bfso9166768e87.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:49:40 -0700 (PDT)
+        Thu, 11 May 2023 03:50:32 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0674E469F;
+        Thu, 11 May 2023 00:50:31 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id 6a1803df08f44-61b5a6865dfso66000836d6.3;
+        Thu, 11 May 2023 00:50:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683791379; x=1686383379;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1683791430; x=1686383430;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+ogUO1+9WQ0TMBvbp1ZdwZXcU/JKcXFgSqQBuNVE8KE=;
-        b=pQlzFdrNeavWaUD6BVP6xR2FQqjg7PgSHyNLBMDYeP+jMg874tlg/EisF9Lk9YFmOB
-         rnfHrVFIUH2lGirR9klG/K8sjNksCIvr6zvhyXIM46mdRdR7jhrKFQxGusJ2LWXqHVkS
-         oOGYks8Qi7V+8a8puDCy6Vx/Zw6tL0Sd+a+YLZ9CjuSbVlb7J0KQmhq4Cvc0nG5oYVoy
-         l2JT3D3k9+RClBVUxx7u5yxZXC20xVOPlHy3H2oinhMfTtlodcwhMqZN4J0NvIoizZWB
-         XQv95ZjPvB/R/xpzM3Z4WnkaeKMOuzQisuAErJpLoSz6+UiFfAqj/C9kj4XgBvp6LM/Q
-         D1UQ==
+        bh=H7WMuVCgOkbuhGC7m2MG5PQvTB0YoiyPQB7UrE0k3Fc=;
+        b=CEFjlzJKSM1hdKrGSd1YWdxYQtJjNJZUgp0Hpwo+48YtiR13q+SlCC26ynEHHDp2t9
+         8BKtQsh0PXmwtMJvPJ8KN/SB3hQ9ZiXhdYCP4bi4rkFhC/2T6/NSq0uV4RjWv0vadZ9x
+         +nGhvoUUBJpIJ5Z+PQujwVzZTEuM/IF24cYu26yL93Qe93efI0pEmI63b0nHXIMDp9oG
+         D64Uzz6AmTRMBvDwqI9UdcQKgcpNYbdlJL15vAmze2b3E8/uNi9CS8AB4jfHYcEhXxcZ
+         8JOjhpYgazGbyqHW8i2XLar5ZtyzZcwq2DQ35ltRwowLCunSFQZiAyD0/L1KWKLh32y6
+         sQtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683791379; x=1686383379;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683791430; x=1686383430;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+ogUO1+9WQ0TMBvbp1ZdwZXcU/JKcXFgSqQBuNVE8KE=;
-        b=dEwMuOekcZrol4K6PhgKiLR4fYK9cIs0+SQpeuM/jgSTuApNaVy67doz30a58F+e05
-         Bmzyr7snBIjxfobJvkzGxdj8LjrJbCUuED3L8eRMu9mmzM2dzst5HNw7GTUDUeBrAW+E
-         cxYDqnJ+Vdku+0O22nxtk+3I7RB3l6wl1/E3p4Ln3jg6S2qzFkGmuEQ9dI6mSJzAT1UD
-         fisW3lNY2jyoSBOdFXI7QReKB01xXvQzVNzXyBuSKcO6oUlnK/KRLTbHj3jNTZTnRI+k
-         rhT+j21s6wVBMtTHuBa4ZMqdniKzAcigxCbppXDdK0iBoRCpHiSPX0nFjYRSH+uz+WMU
-         YjKA==
-X-Gm-Message-State: AC+VfDwBWGkdfPf58HGaWgNotThNS/BIKpZk/tD7v0M0Pit/WQ+a7e6f
-        YFeF4v+nY4LcETXcRVbSyUE=
-X-Google-Smtp-Source: ACHHUZ4iSiIFbFUzjj4CY5kOAlevI8zQu0hPS09SydIKGPYiGdCMM0Ik3joyKTtNk2BPUW1So/roBw==
-X-Received: by 2002:ac2:53ae:0:b0:4f1:44c0:a921 with SMTP id j14-20020ac253ae000000b004f144c0a921mr2816460lfh.55.1683791378978;
-        Thu, 11 May 2023 00:49:38 -0700 (PDT)
-Received: from grain.localdomain ([5.18.251.97])
-        by smtp.gmail.com with ESMTPSA id n21-20020ac242d5000000b004ec8b638115sm1012395lfl.193.2023.05.11.00.49.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 00:49:38 -0700 (PDT)
-Received: by grain.localdomain (Postfix, from userid 1000)
-        id 1F73F5A0020; Thu, 11 May 2023 10:49:37 +0300 (MSK)
-Date:   Thu, 11 May 2023 10:49:37 +0300
-From:   Cyrill Gorcunov <gorcunov@gmail.com>
-To:     Andrey Vagin <avagin@openvz.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        Pavel Emelyanov <xemul@openvz.org>
-Subject: Re: [RFD] posix-timers: CRIU woes
-Message-ID: <ZFyeEa87P903Orr1@grain>
-References: <20230425181827.219128101@linutronix.de>
- <20230425183312.932345089@linutronix.de>
- <ZFUXrCZtWyNG3Esi@lothringen>
- <87zg6i2xn3.ffs@tglx>
- <87v8h62vwp.ffs@tglx>
- <878rdy32ri.ffs@tglx>
- <87v8h126p2.ffs@tglx>
- <875y911xeg.ffs@tglx>
- <87ednpyyeo.ffs@tglx>
- <CANaxB-wV9iUT6=Y9nZCWbJhiscMrnAQh4fUXs7Tb8pr=-HwSYQ@mail.gmail.com>
+        bh=H7WMuVCgOkbuhGC7m2MG5PQvTB0YoiyPQB7UrE0k3Fc=;
+        b=V1al4H5kSX+GBwI/u/41M3Qo5ZQePWzMbVvfpFB+tWYuH5A3ekqk6XlP0V1lIwT6Q3
+         EtrteMMn3bkRUqgp+eX+7mqfwpN6MD0CsoJk9NU4Te8C354c38yl1m7y8SbOoJ+vjBOD
+         xtQrdnjjsidw+yu9wSZvak6CCakhsypMMsb105JLxiHsxgAHD/cYZw1yUJG4X+AG2H84
+         2siJ3wyASIU11zXnoROsTVY50gkQTH6eaqV1Z03QVCLdUkCaSFCx1xm1Ug50M0/Dr5pf
+         1rTlyxzyQ1c0axyEGSSQxgtsglwt8/YQvGbvGlVLvGiIX98VwDSykgy3MQEpuDfmnoz/
+         hDAQ==
+X-Gm-Message-State: AC+VfDx6n7x8DDCCSFGWOPiR0HlYj+iU8ntoL86xYKOfMxD6wxp06kPa
+        mO87eFpaHWtkfAMlGsGWVXX/xzfYZRf7Lh0Z9O+rARhb4CnLvA==
+X-Google-Smtp-Source: ACHHUZ6zuzpuizwBFMWuTu3XPGD4XZW9WJPgQChSNY0dB9AMuJlvz+wNMJOijEDmuj4y2YAWZucpS/oc03EGAUYcipc=
+X-Received: by 2002:a05:6214:48b:b0:5ef:486a:505e with SMTP id
+ pt11-20020a056214048b00b005ef486a505emr32434740qvb.41.1683791430102; Thu, 11
+ May 2023 00:50:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANaxB-wV9iUT6=Y9nZCWbJhiscMrnAQh4fUXs7Tb8pr=-HwSYQ@mail.gmail.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
+References: <0b3a257a-f1e5-ad86-4c69-93e038a33ce9@yoseli.org>
+ <ZFvTi3tQGUq2OCHi@surfacebook> <32ecb9f3-1443-210c-0fc9-40891629e25a@yoseli.org>
+In-Reply-To: <32ecb9f3-1443-210c-0fc9-40891629e25a@yoseli.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 11 May 2023 10:49:53 +0300
+Message-ID: <CAHp75Vcsieiab8ks7yLwJvhjHTPv2qeCBJYjMOVYBJXmNhbTYQ@mail.gmail.com>
+Subject: Re: pca953x issue when driving a DSI bridge
+To:     Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        brgl@bgdev.pl, linus.walleij@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -95,32 +70,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 01:16:26AM -0700, Andrey Vagin wrote:
-... 
-> Hi Thomas,
-> 
-> If you give us a new API to create timers with specified id-s, we will
-> figure out how to live with it. It isn't good to ask users to update
-> CRIU to work on new kernels, but here are reasons and event improvements
-> for CRIU, so I think it's worth it.
-> 
-> As for API, we can use one bit of sigevent.sigev_notify to request a
-> timer with a specified id.
+On Wed, May 10, 2023 at 11:18=E2=80=AFPM Jean-Michel Hautbois
+<jeanmichel.hautbois@yoseli.org> wrote:
+> On 10/05/2023 19:25, andy.shevchenko@gmail.com wrote:
+> > Wed, May 10, 2023 at 06:12:19PM +0200, Jean-Michel Hautbois kirjoitti:
 
-Which will do the trick but would look somehow strange I think, since signals
-are not some how related to timer's ID. Another option might be to use output
-`created_timer_id` parameter as an input cookie.
+...
 
-Say we describe input as
+> >> [   11.273968]  gpiod_set_value+0x5c/0xcc
+> >> [   11.277722]  ti_sn65dsi86_resume+0x4c/0x94 [ti_sn65dsi86]
+> >
+> > Your problem even worse, i.e. ->resume() might sleep.
+>
+> Indeed it is worse ;-).
+>
+> >> [   11.283131]  __rpm_callback+0x48/0x19c
+> >> [   11.286885]  rpm_callback+0x6c/0x80
+> >> [   11.290375]  rpm_resume+0x3b0/0x660
+> >> [   11.293864]  __pm_runtime_resume+0x4c/0x90
+> >> [   11.297960]  __device_attach+0x90/0x1e4
+> >> [   11.301797]  device_initial_probe+0x14/0x20
+> >> [   11.305980]  bus_probe_device+0x9c/0xa4
+> >> [   11.309817]  device_add+0x3d8/0x820
+> >> [   11.313308]  __auxiliary_device_add+0x40/0xa0
+> >> [   11.317668]  ti_sn65dsi86_add_aux_device.isra.0+0xb0/0xe0 [ti_sn65d=
+si86]
+> >> [   11.324381]  ti_sn65dsi86_probe+0x20c/0x2ec [ti_sn65dsi86]
+> >> [   11.329876]  i2c_device_probe+0x3b8/0x3f0
+> >> [   11.333889]  really_probe+0xc0/0x3dc
 
-struct {
-	u32 magic;
-	timer_t timer_id;
-};
+...
 
-Then if magic doesn't match we use `created_timer_id` for output only, and
-otherwise we read `timer_id` from input and use it. Of course there is a
-chance that some unitialized memory passed with existing old programs but
-i think false positive gonna be very-very low if ever. Just IMHO.
+> >> I suppose this is not a corner case and we may have other drivers and =
+other
+> >> boards connecting a GPIO which can sleep in a context where it should =
+not ?
+> >>
+> >> I would like to add one thing: on this board, the expander is routed i=
+n a
+> >> way that makes it impossible to "sleep" as the reset is forced pulled-=
+up and
+> >> the power regulators are fixed and can't be stopped.
+> >
+> > Can you elaborate why you think there is a problem?
+>
+> I didn't know if it could be an issue or not, so I mentioned it but
+> sounds like a nonsense :-).
 
-	Cyrill
+Maybe not. I don't know that hardware, schematics and more information
+is needed to understand. But I leave it to you.
+
+> >> I don't know how to address this issue nicely and any thoughts is
+> >> appreciated !
+> >
+> > As a workaround you can consider the code around i2c_in_atomic_xfer_mod=
+e()
+> > but since I have heard about i.MX8 so many negative remarks which makes=
+ me
+> > think that hardware is a train wreck and shouldn't be used at all.
+
+> Not sure to get the workaround proposal right...
+
+There are possibilities to have atomic I2C transfers, but as comment
+says (on top of the above mentioned function) that is only for PMIC
+communications at the system shutdown.
+
+In your case I would try the easiest way (taking into account that
+hardware connection is not preventing us from sleeping context), i.e.
+check if the function that has GPIO call may sleep on its own and
+simply replace gpiod_set_value() by gpiod_set_value_cansleep().
+
+> I won't argue about i.MX8 ;-).
+
+
+--=20
+With Best Regards,
+Andy Shevchenko
