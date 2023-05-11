@@ -2,26 +2,26 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E22E6FF56A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B5E0E6FF56E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:06:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238479AbjEKPG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 11:06:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34366 "EHLO
+        id S238614AbjEKPGd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 11:06:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238474AbjEKPGY (ORCPT
+        with ESMTP id S238518AbjEKPG0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 11:06:24 -0400
-Received: from hutie.ust.cz (hutie.ust.cz [185.8.165.127])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44A810D;
-        Thu, 11 May 2023 08:06:21 -0700 (PDT)
+        Thu, 11 May 2023 11:06:26 -0400
+Received: from hutie.ust.cz (unknown [IPv6:2a03:3b40:fe:f0::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC0A10FA;
+        Thu, 11 May 2023 08:06:23 -0700 (PDT)
 From:   =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cutebit.org; s=mail;
-        t=1683817579; bh=LUXpft4LGfCn5GgpYQv6QU3QQmD6+DR/XZsk9hOWCGg=;
+        t=1683817579; bh=cV/aQYkR5cM/rKm67ytuepltXaaABvz64sPUV6o+vGU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=m+c9kFV4LIiEFh1DscaoTKxX7uZPMsuDU5gVOGJJkRH7CCfqbWyeM/CT3vaMw61Lj
-         p7bi+S31cUb8snlx/h8qv3YFs5nJD3QoC71AnBotJgty5sj5isC85I2fu2UnYCP+Gt
-         S09R9hS8PvRFyOJznORnq3ePMbvW2wZWuwu1AUxY=
+        b=WzEXWxda0oh9aquHqBKdyJNaZKZVnFcTaafbfXT7td/m7mi0JlPLJS6HbhogiRLj1
+         TuuqoavAhCoRER3QMYJO5fPrji7fUS33MU5z0cgLb58N1752i7E3mciy1wzJsqVBiV
+         yaOvFSCcmscxdtkAvhcxSo/Kvs9d5LVYhL+1Pjo4=
 To:     =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
         Mark Brown <broonie@kernel.org>,
@@ -34,87 +34,543 @@ To:     =?UTF-8?q?Martin=20Povi=C5=A1er?= <povik+lin@cutebit.org>,
         =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>
 Cc:     asahi@lists.linux.dev, alsa-devel@alsa-project.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/2] ASoC: dt-bindings: Add adi,ssm3515 amp schema
-Date:   Thu, 11 May 2023 17:05:45 +0200
-Message-Id: <20230511150546.8499-2-povik+lin@cutebit.org>
+Subject: [PATCH v2 2/2] ASoC: ssm3515: Add new amp driver
+Date:   Thu, 11 May 2023 17:05:46 +0200
+Message-Id: <20230511150546.8499-3-povik+lin@cutebit.org>
 In-Reply-To: <20230511150546.8499-1-povik+lin@cutebit.org>
 References: <20230511150546.8499-1-povik+lin@cutebit.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_FAIL,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a DT schema for the SSM3515 amp by Analog Devices. It's a simple
-mono amplifier with digital input.
+The Analog Devices' SSM3515 is a mono audio amplifier with digital
+input, equipped on Apple's 2021 iMacs. Add an ASoC driver for it, and
+register both the driver code and schema in MAINTAINERS.
 
 Signed-off-by: Martin Povišer <povik+lin@cutebit.org>
 ---
- .../bindings/sound/adi,ssm3515.yaml           | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/adi,ssm3515.yaml
+ MAINTAINERS                |   2 +
+ sound/soc/codecs/Kconfig   |   6 +
+ sound/soc/codecs/Makefile  |   2 +
+ sound/soc/codecs/ssm3515.c | 448 +++++++++++++++++++++++++++++++++++++
+ 4 files changed, 458 insertions(+)
+ create mode 100644 sound/soc/codecs/ssm3515.c
 
-diff --git a/Documentation/devicetree/bindings/sound/adi,ssm3515.yaml b/Documentation/devicetree/bindings/sound/adi,ssm3515.yaml
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 460f953f331b..78136300b026 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -1990,9 +1990,11 @@ M:	Martin Povišer <povik+lin@cutebit.org>
+ L:	asahi@lists.linux.dev
+ L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
+ S:	Maintained
++F:	Documentation/devicetree/bindings/sound/adi,ssm3515.yaml
+ F:	Documentation/devicetree/bindings/sound/apple,*
+ F:	sound/soc/apple/*
+ F:	sound/soc/codecs/cs42l83-i2c.c
++F:	sound/soc/codecs/ssm3515.c
+ 
+ ARM/ARTPEC MACHINE SUPPORT
+ M:	Jesper Nilsson <jesper.nilsson@axis.com>
+diff --git a/sound/soc/codecs/Kconfig b/sound/soc/codecs/Kconfig
+index 8020097d4e4c..d5665c21b6f3 100644
+--- a/sound/soc/codecs/Kconfig
++++ b/sound/soc/codecs/Kconfig
+@@ -1652,6 +1652,12 @@ config SND_SOC_SSM2602_I2C
+ 	select SND_SOC_SSM2602
+ 	select REGMAP_I2C
+ 
++config SND_SOC_SSM3515
++	tristate "Analog Devices SSM3515 amplifier driver"
++	select REGMAP_I2C
++	depends on I2C
++	depends on OF
++
+ config SND_SOC_SSM4567
+ 	tristate "Analog Devices ssm4567 amplifier driver support"
+ 	depends on I2C
+diff --git a/sound/soc/codecs/Makefile b/sound/soc/codecs/Makefile
+index 5cdbae88e6e3..8a35bc01c486 100644
+--- a/sound/soc/codecs/Makefile
++++ b/sound/soc/codecs/Makefile
+@@ -256,6 +256,7 @@ snd-soc-ssm2518-objs := ssm2518.o
+ snd-soc-ssm2602-objs := ssm2602.o
+ snd-soc-ssm2602-spi-objs := ssm2602-spi.o
+ snd-soc-ssm2602-i2c-objs := ssm2602-i2c.o
++snd-soc-ssm3515-objs := ssm3515.o
+ snd-soc-ssm4567-objs := ssm4567.o
+ snd-soc-sta32x-objs := sta32x.o
+ snd-soc-sta350-objs := sta350.o
+@@ -623,6 +624,7 @@ obj-$(CONFIG_SND_SOC_SSM2518)	+= snd-soc-ssm2518.o
+ obj-$(CONFIG_SND_SOC_SSM2602)	+= snd-soc-ssm2602.o
+ obj-$(CONFIG_SND_SOC_SSM2602_SPI)	+= snd-soc-ssm2602-spi.o
+ obj-$(CONFIG_SND_SOC_SSM2602_I2C)	+= snd-soc-ssm2602-i2c.o
++obj-$(CONFIG_SND_SOC_SSM3515)	+= snd-soc-ssm3515.o
+ obj-$(CONFIG_SND_SOC_SSM4567)	+= snd-soc-ssm4567.o
+ obj-$(CONFIG_SND_SOC_STA32X)   += snd-soc-sta32x.o
+ obj-$(CONFIG_SND_SOC_STA350)   += snd-soc-sta350.o
+diff --git a/sound/soc/codecs/ssm3515.c b/sound/soc/codecs/ssm3515.c
 new file mode 100644
-index 000000000000..144450df5869
+index 000000000000..784e890031a4
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/adi,ssm3515.yaml
-@@ -0,0 +1,49 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/adi,ssm3515.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/sound/soc/codecs/ssm3515.c
+@@ -0,0 +1,448 @@
++// SPDX-License-Identifier: GPL-2.0-only OR MIT
++//
++// Analog Devices' SSM3515 audio amp driver
++//
++// Copyright (C) The Asahi Linux Contributors
 +
-+title: Analog Devices SSM3515 Audio Amplifier
++#include <linux/bits.h>
++#include <linux/bitfield.h>
++#include <linux/device.h>
++#include <linux/i2c.h>
++#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/regmap.h>
 +
-+maintainers:
-+  - Martin Povišer <povik+lin@cutebit.org>
++#include <sound/pcm.h>
++#include <sound/pcm_params.h>
++#include <sound/soc.h>
++#include <sound/tlv.h>
 +
-+description: |
-+  SSM3515 is a mono Class-D audio amplifier with digital input.
 +
-+  https://www.analog.com/media/en/technical-documentation/data-sheets/SSM3515.pdf
++#define SSM3515_PWR		0x00
++#define SSM3515_PWR_APWDN_EN	BIT(7)
++#define SSM3515_PWR_BSNS_PWDN	BIT(6)
++#define SSM3515_PWR_S_RST	BIT(1)
++#define SSM3515_PWR_SPWDN	BIT(0)
 +
-+allOf:
-+  - $ref: dai-common.yaml#
++#define SSM3515_GEC		0x01
++#define SSM3515_GEC_EDGE	BIT(4)
++#define SSM3515_GEC_EDGE_SHIFT	4
++#define SSM3515_GEC_ANA_GAIN	GENMASK(1, 0)
 +
-+properties:
-+  compatible:
-+    enum:
-+      - adi,ssm3515
++#define SSM3515_DAC		0x02
++#define SSM3515_DAC_HV		BIT(7)
++#define SSM3515_DAC_MUTE	BIT(6)
++#define SSM3515_DAC_HPF		BIT(5)
++#define SSM3515_DAC_LPM		BIT(4)
++#define SSM3515_DAC_FS		GENMASK(2, 0)
 +
-+  reg:
-+    maxItems: 1
++#define SSM3515_DAC_VOL		0x03
 +
-+  '#sound-dai-cells':
-+    const: 0
++#define SSM3515_SAI1		0x04
++#define SSM3515_SAI1_DAC_POL	BIT(7)
++#define SSM3515_SAI1_BCLK_POL	BIT(6)
++#define SSM3515_SAI1_TDM_BCLKS	GENMASK(5, 3)
++#define SSM3515_SAI1_FSYNC_MODE	BIT(2)
++#define SSM3515_SAI1_SDATA_FMT	BIT(1)
++#define SSM3515_SAI1_SAI_MODE	BIT(0)
 +
-+required:
-+  - compatible
-+  - reg
++#define SSM3515_SAI2		0x05
++#define SSM3515_SAI2_DATA_WIDTH	BIT(7)
++#define SSM3515_SAI2_AUTO_SLOT	BIT(4)
++#define SSM3515_SAI2_TDM_SLOT	GENMASK(3, 0)
 +
-+unevaluatedProperties: false
++#define SSM3515_VBAT_OUT	0x06
 +
-+examples:
-+  - |
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
++#define SSM3515_STATUS		0x0a
++#define SSM3515_STATUS_UVLO_REG	BIT(6)
++#define SSM3515_STATUS_LIM_EG	BIT(5)
++#define SSM3515_STATUS_CLIP	BIT(4)
++#define SSM3515_STATUS_AMP_OC	BIT(3)
++#define SSM3515_STATUS_OTF	BIT(2)
++#define SSM3515_STATUS_OTW	BIT(1)
++#define SSM3515_STATUS_BAT_WARN	BIT(0)
 +
-+      codec@14 {
-+        compatible = "adi,ssm3515";
-+        reg = <0x14>;
-+        #sound-dai-cells = <0>;
-+        sound-name-prefix = "Left Tweeter";
-+      };
-+    };
++static bool ssm3515_volatile_reg(struct device *dev, unsigned int reg)
++{
++	switch (reg) {
++	case SSM3515_STATUS:
++	case SSM3515_VBAT_OUT:
++		return true;
++
++	default:
++		return false;
++	}
++}
++
++static const struct reg_default ssm3515_reg_defaults[] = {
++	{ SSM3515_PWR, 0x81 },
++	{ SSM3515_GEC, 0x01 },
++	{ SSM3515_DAC, 0x32 },
++	{ SSM3515_DAC_VOL, 0x40 },
++	{ SSM3515_SAI1, 0x11 },
++	{ SSM3515_SAI2, 0x00 },
++};
++
++static const struct regmap_config ssm3515_i2c_regmap = {
++	.reg_bits = 8,
++	.val_bits = 8,
++	.volatile_reg = ssm3515_volatile_reg,
++	.max_register = 0xb,
++	.reg_defaults = ssm3515_reg_defaults,
++	.num_reg_defaults = ARRAY_SIZE(ssm3515_reg_defaults),
++	.cache_type = REGCACHE_FLAT,
++};
++
++struct ssm3515_data {
++	struct device *dev;
++	struct regmap *regmap;
++};
++
++// The specced range is -71.25...24.00 dB with step size of 0.375 dB,
++// and a mute item below that. This is represented by -71.62...24.00 dB
++// with the mute item mapped onto the low end.
++static DECLARE_TLV_DB_MINMAX_MUTE(ssm3515_dac_volume, -7162, 2400);
++
++static const char * const ssm3515_ana_gain_text[] = {
++	"8.4 V Span", "12.6 V Span", "14 V Span", "15 V Span",
++};
++
++static SOC_ENUM_SINGLE_DECL(ssm3515_ana_gain_enum, SSM3515_GEC,
++			    __bf_shf(SSM3515_GEC_ANA_GAIN),
++			    ssm3515_ana_gain_text);
++
++static const struct snd_kcontrol_new ssm3515_snd_controls[] = {
++	SOC_SINGLE_TLV("DAC Playback Volume", SSM3515_DAC_VOL,
++		       0, 255, 1, ssm3515_dac_volume),
++	SOC_SINGLE("Low EMI Mode Switch", SSM3515_GEC,
++		   __bf_shf(SSM3515_GEC_EDGE), 1, 0),
++	SOC_SINGLE("Soft Volume Ramping Switch", SSM3515_DAC,
++		   __bf_shf(SSM3515_DAC_HV), 1, 1),
++	SOC_SINGLE("HPF Switch", SSM3515_DAC,
++		   __bf_shf(SSM3515_DAC_HPF), 1, 0),
++	SOC_SINGLE("DAC Invert Switch", SSM3515_SAI1,
++		   __bf_shf(SSM3515_SAI1_DAC_POL), 1, 0),
++	SOC_ENUM("DAC Analog Gain Select", ssm3515_ana_gain_enum),
++};
++
++static void ssm3515_read_faults(struct snd_soc_component *component)
++{
++	int ret;
++
++	ret = snd_soc_component_read(component, SSM3515_STATUS);
++	if (ret <= 0) {
++		/*
++		 * If the read was erroneous, ASoC core has printed a message,
++		 * and that's all that's appropriate in handling the error here.
++		 */
++		return;
++	}
++
++	dev_err(component->dev, "device reports:%s%s%s%s%s%s%s\n",
++		FIELD_GET(SSM3515_STATUS_UVLO_REG, ret) ? " voltage regulator fault" : "",
++		FIELD_GET(SSM3515_STATUS_LIM_EG, ret)   ? " limiter engaged" : "",
++		FIELD_GET(SSM3515_STATUS_CLIP, ret)     ? " clipping detected" : "",
++		FIELD_GET(SSM3515_STATUS_AMP_OC, ret)   ? " amp over-current fault" : "",
++		FIELD_GET(SSM3515_STATUS_OTF, ret)      ? " overtemperature fault" : "",
++		FIELD_GET(SSM3515_STATUS_OTW, ret)      ? " overtemperature warning" : "",
++		FIELD_GET(SSM3515_STATUS_BAT_WARN, ret) ? " bat voltage low warning" : "");
++}
++
++static int ssm3515_probe(struct snd_soc_component *component)
++{
++	int ret;
++
++	/* Start out muted */
++	ret = snd_soc_component_update_bits(component, SSM3515_DAC,
++			SSM3515_DAC_MUTE, SSM3515_DAC_MUTE);
++	if (ret < 0)
++		return ret;
++
++	/* Disable the 'master power-down' */
++	ret = snd_soc_component_update_bits(component, SSM3515_PWR,
++			SSM3515_PWR_SPWDN, 0);
++	if (ret < 0)
++		return ret;
++
++	return 0;
++}
++
++static int ssm3515_mute(struct snd_soc_dai *dai, int mute, int direction)
++{
++	int ret;
++
++	ret = snd_soc_component_update_bits(dai->component,
++					    SSM3515_DAC,
++					    SSM3515_DAC_MUTE,
++					    FIELD_PREP(SSM3515_DAC_MUTE, mute));
++	if (ret < 0)
++		return ret;
++	return 0;
++}
++
++static int ssm3515_hw_params(struct snd_pcm_substream *substream,
++			     struct snd_pcm_hw_params *params,
++			     struct snd_soc_dai *dai)
++{
++	struct snd_soc_component *component = dai->component;
++	int ret, rateval;
++
++	switch (params_format(params)) {
++	case SNDRV_PCM_FORMAT_S16:
++	case SNDRV_PCM_FORMAT_S24:
++		ret = snd_soc_component_update_bits(component,
++				SSM3515_SAI2, SSM3515_SAI2_DATA_WIDTH,
++				FIELD_PREP(SSM3515_SAI2_DATA_WIDTH,
++					   params_width(params) == 16));
++		if (ret < 0)
++			return ret;
++		break;
++
++	default:
++		return -EINVAL;
++	}
++
++	switch (params_rate(params)) {
++	case 8000 ... 12000:
++		rateval = 0;
++		break;
++	case 16000 ... 24000:
++		rateval = 1;
++		break;
++	case 32000 ... 48000:
++		rateval = 2;
++		break;
++	case 64000 ... 96000:
++		rateval = 3;
++		break;
++	case 128000 ... 192000:
++		rateval = 4;
++		break;
++	case 48001 ... 63999: /* this is ...72000 but overlaps */
++		rateval = 5;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	ret = snd_soc_component_update_bits(component,
++			SSM3515_DAC, SSM3515_DAC_FS,
++			FIELD_PREP(SSM3515_DAC_FS, rateval));
++	if (ret < 0)
++		return ret;
++
++	return 0;
++}
++
++static int ssm3515_set_fmt(struct snd_soc_dai *dai, unsigned int fmt)
++{
++	struct snd_soc_component *component = dai->component;
++	bool fpol_inv = false; /* non-inverted: frame starts with low-to-high FSYNC */
++	int ret;
++	u8 sai1 = 0;
++
++	switch (fmt & SND_SOC_DAIFMT_INV_MASK) {
++	case SND_SOC_DAIFMT_IB_NF:
++	case SND_SOC_DAIFMT_IB_IF:
++		sai1 |= SSM3515_SAI1_BCLK_POL;
++		break;
++	}
++
++	switch (fmt & SND_SOC_DAIFMT_FORMAT_MASK) {
++	case SND_SOC_DAIFMT_I2S:
++		fpol_inv = 1;
++		sai1 &= ~SSM3515_SAI1_SDATA_FMT; /* 1 bit start delay */
++		break;
++	case SND_SOC_DAIFMT_LEFT_J:
++		fpol_inv = 0;
++		sai1 |= SSM3515_SAI1_SDATA_FMT; /* no start delay */
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	switch (fmt & SND_SOC_DAIFMT_INV_MASK) {
++	case SND_SOC_DAIFMT_NB_IF:
++	case SND_SOC_DAIFMT_IB_IF:
++		fpol_inv ^= 1;
++		break;
++	}
++
++	/* Set the serial input to 'TDM mode' */
++	sai1 |= SSM3515_SAI1_SAI_MODE;
++
++	if (fpol_inv) {
++		/*
++		 * We configure the codec in a 'TDM mode', in which the
++		 * FSYNC_MODE bit of SAI1 is supposed to select between
++		 * what the datasheet calls 'Pulsed FSYNC mode' and '50%
++		 * FSYNC mode'.
++		 *
++		 * Experiments suggest that this bit in fact simply selects
++		 * the FSYNC polarity, so go with that.
++		 */
++		sai1 |= SSM3515_SAI1_FSYNC_MODE;
++	}
++
++	ret = snd_soc_component_update_bits(component, SSM3515_SAI1,
++			SSM3515_SAI1_BCLK_POL | SSM3515_SAI1_SDATA_FMT |
++			SSM3515_SAI1_SAI_MODE | SSM3515_SAI1_FSYNC_MODE, sai1);
++
++	if (ret < 0)
++		return ret;
++	return 0;
++}
++
++static int ssm3515_set_tdm_slot(struct snd_soc_dai *dai,
++				unsigned int tx_mask,
++				unsigned int rx_mask,
++				int slots, int slot_width)
++{
++	struct snd_soc_component *component = dai->component;
++	int slot, tdm_bclks_val, ret;
++
++	if (tx_mask == 0 || rx_mask != 0)
++		return -EINVAL;
++
++	slot = __ffs(tx_mask);
++
++	if (tx_mask & ~BIT(slot))
++		return -EINVAL;
++
++	switch (slot_width) {
++	case 16:
++		tdm_bclks_val = 0;
++		break;
++	case 24:
++		tdm_bclks_val = 1;
++		break;
++	case 32:
++		tdm_bclks_val = 2;
++		break;
++	case 48:
++		tdm_bclks_val = 3;
++		break;
++	case 64:
++		tdm_bclks_val = 4;
++		break;
++	default:
++		return -EINVAL;
++	}
++
++	ret = snd_soc_component_update_bits(component, SSM3515_SAI1,
++			SSM3515_SAI1_TDM_BCLKS,
++			FIELD_PREP(SSM3515_SAI1_TDM_BCLKS, tdm_bclks_val));
++	if (ret < 0)
++		return ret;
++
++	ret = snd_soc_component_update_bits(component, SSM3515_SAI2,
++			SSM3515_SAI2_TDM_SLOT,
++			FIELD_PREP(SSM3515_SAI2_TDM_SLOT, slot));
++	if (ret < 0)
++		return ret;
++
++	return 0;
++}
++
++static int ssm3515_hw_free(struct snd_pcm_substream *substream,
++			   struct snd_soc_dai *dai)
++{
++	/*
++	 * We don't get live notification of faults, so at least at
++	 * this time, when playback is over, check if we have tripped
++	 * over anything and if so, log it.
++	 */
++	ssm3515_read_faults(dai->component);
++	return 0;
++}
++
++static const struct snd_soc_dai_ops ssm3515_dai_ops = {
++	.mute_stream	= ssm3515_mute,
++	.hw_params	= ssm3515_hw_params,
++	.set_fmt	= ssm3515_set_fmt,
++	.set_tdm_slot	= ssm3515_set_tdm_slot,
++	.hw_free	= ssm3515_hw_free,
++};
++
++static struct snd_soc_dai_driver ssm3515_dai_driver = {
++	.name = "SSM3515 SAI",
++	.id = 0,
++	.playback = {
++		.stream_name = "Playback",
++		.channels_min = 1,
++		.channels_max = 1,
++		.rates = SNDRV_PCM_RATE_CONTINUOUS,
++		.formats = SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_S24_LE,
++	},
++	.ops = &ssm3515_dai_ops,
++};
++
++static const struct snd_soc_dapm_widget ssm3515_dapm_widgets[] = {
++	SND_SOC_DAPM_DAC("DAC", NULL, SND_SOC_NOPM, 0, 0),
++	SND_SOC_DAPM_OUTPUT("OUT"),
++};
++
++static const struct snd_soc_dapm_route ssm3515_dapm_routes[] = {
++	{"OUT", NULL, "DAC"},
++	{"DAC", NULL, "Playback"},
++};
++
++static const struct snd_soc_component_driver ssm3515_asoc_component = {
++	.probe = ssm3515_probe,
++	.controls = ssm3515_snd_controls,
++	.num_controls = ARRAY_SIZE(ssm3515_snd_controls),
++	.dapm_widgets = ssm3515_dapm_widgets,
++	.num_dapm_widgets = ARRAY_SIZE(ssm3515_dapm_widgets),
++	.dapm_routes = ssm3515_dapm_routes,
++	.num_dapm_routes = ARRAY_SIZE(ssm3515_dapm_routes),
++	.endianness = 1,
++};
++
++static int ssm3515_i2c_probe(struct i2c_client *client)
++{
++	struct ssm3515_data *data;
++	int ret;
++
++	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->dev = &client->dev;
++	i2c_set_clientdata(client, data);
++
++	data->regmap = devm_regmap_init_i2c(client, &ssm3515_i2c_regmap);
++	if (IS_ERR(data->regmap))
++		return dev_err_probe(data->dev, PTR_ERR(data->regmap),
++				     "initializing register map\n");
++
++	/* Perform a reset */
++	ret = regmap_update_bits(data->regmap, SSM3515_PWR,
++			SSM3515_PWR_S_RST, SSM3515_PWR_S_RST);
++	if (ret < 0)
++		return dev_err_probe(data->dev, ret,
++				     "performing software reset\n");
++	regmap_reinit_cache(data->regmap, &ssm3515_i2c_regmap);
++
++	return devm_snd_soc_register_component(data->dev,
++			&ssm3515_asoc_component,
++			&ssm3515_dai_driver, 1);
++}
++
++static const struct of_device_id ssm3515_of_match[] = {
++	{ .compatible = "adi,ssm3515" },
++	{}
++};
++MODULE_DEVICE_TABLE(of, ssm3515_of_match);
++
++static struct i2c_driver ssm3515_i2c_driver = {
++	.driver = {
++		.name = "ssm3515",
++		.of_match_table = of_match_ptr(ssm3515_of_match),
++	},
++	.probe_new = ssm3515_i2c_probe,
++};
++module_i2c_driver(ssm3515_i2c_driver);
++
++MODULE_AUTHOR("Martin Povišer <povik+lin@cutebit.org>");
++MODULE_DESCRIPTION("ASoC SSM3515 audio amp driver");
++MODULE_LICENSE("Dual MIT/GPL");
 -- 
 2.38.3
 
