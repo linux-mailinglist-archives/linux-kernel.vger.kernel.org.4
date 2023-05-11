@@ -2,89 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 487E16FFB32
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:22:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D1396FFB51
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:30:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbjEKUWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 16:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
+        id S239421AbjEKUaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 16:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238051AbjEKUWg (ORCPT
+        with ESMTP id S229611AbjEKUaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 16:22:36 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32CA749C8
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:22:34 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9a829a3de0so20201399276.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:22:34 -0700 (PDT)
+        Thu, 11 May 2023 16:30:15 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 296A149DB;
+        Thu, 11 May 2023 13:30:14 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34BDx1B2014467;
+        Thu, 11 May 2023 20:29:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
+ : subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=corp-2023-03-30;
+ bh=/Yp5qhHn4keQAkPCibr3+CTO7+NJTOeNPP0TQK5YpZM=;
+ b=1OMgsVUVnMs6q8waCgTMFCmMa3iUC17xrls77PtXopnqCUICXyoERlyxG3NT+s96WE6W
+ w6OK2USD9npihz2N2dBeQ9uuDAmPvKDk6AV0Rooi9g7DEUT9lEt0ACRh09KONzYQRzAa
+ JWdBtROYD0lZMJTQ7t6jUszMOObBqQINmIy9tYTSs0clEcWjx7vwXdYYBN2syrCfSQtO
+ g9ixBZ8AOEVl0zdhCTN+UIVbIR4S2tPZ6O6GPWCTstM9dAhq59hJ4Pgg5gWos84IWCFP
+ 0V3GE0TFVe+Dj77thggQhLubp/s6MKQMABIU3NagZ70POWj6zIgICwdtQGY5/vkO0lX+ EQ== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3qf77c86mr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 11 May 2023 20:29:50 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.19/8.17.1.19) with ESMTP id 34BIdVWX011717;
+        Thu, 11 May 2023 20:29:50 GMT
+Received: from nam02-bn1-obe.outbound.protection.outlook.com (mail-bn1nam02lp2042.outbound.protection.outlook.com [104.47.51.42])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3qf813xa2n-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 11 May 2023 20:29:50 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=dExiWOCW8wMbs8IykCui6ORcENUzaUe+5rRHtcD8VSwo1S1b8tIBmNAL2wxN5/DhtbnmuIwul14u8/DxIIpBq8l3qthRouGXHt/1EcPec8UWY7GSNpX/jsFxv/QQ2D7yeXx2g9DiBEJ/1wztUfW6VXkRpDX8G0OS/Oh9fm6CkVkAgTfPxV5zAIKJ6IL9HLaa/GrxjyNsdwS0Kbl+cQZ2cJYbIFxYxJLu84LxSo9WsezQJ78oxqxwEs6EONl0X1m0jVMiJba3qmoah2vigY12XJTlKeyI1WtxIq2yZwKkc8od8SmjxOMXYMnPJie445mRhFt6d7caBma1qHQD87+vww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/Yp5qhHn4keQAkPCibr3+CTO7+NJTOeNPP0TQK5YpZM=;
+ b=EuFdF0o3YYr8QQvpT6DBXmQ5EN+AHnAwhOQUOA/gf8FWHSI5X9blURMY/G4xiKeJ3soYwmHVcrIGD3Xt82XoIE8pzd/Zd2bcqVcadaC9bOJOKdrfav8CQy+TmxZMRwBx4wwhPER3OUd4xT0Em1L41o+Nc3OgjJjymh7BcfWyPvFtDQV+HkQZJ7QgSMuEjgSIHyIPl0WioBGpcf3rql+eSWgiEeZLPvmDR0jzRlPV5Yw4png36G117f9BeqLjqghv0RsHf6+PMT6P5MrLjMu5IGTVhp4mTo14QoP9Akc5G05QIEBfDkWbhNWuU01ph3tedZ9+E09Jnmmf2LfdCvFvvw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683836553; x=1686428553;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Pc3KTqUCSKzWsEHzUQVAXEAq3C5U5xaJDzEQ7e6JFi4=;
-        b=M2/PeIN97s00eeSmiyRLGD3PvefqBVctLWv3nW5t4O6pOr++sFB6okzpEdh+jpfo/S
-         jemOIrVU7Z7IMbsUdZ7dXTnK+8YnKESUBsfmeDIo4B6gIGKl4mp9YbGYzF05b2MHc++R
-         zkcce/ZyYYpNkKUtCt72zSN1YjgO9e+EWHySXPu/XQ/kyZm/voKg5eCBBSAsHahuDaJH
-         jLL9LhVQJCo8AHn4S8PdTTdejXbygVl0i7ZxwB1wak1aR4nGilvXs1ASnRk30XHqvR7O
-         efEpYYxjaBUGWBULkP6gDuE9gTITT4yxhSlSPSOY1ZVFJN0bRyOk9oCkyt57Bvs8tkus
-         XFtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683836553; x=1686428553;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=Pc3KTqUCSKzWsEHzUQVAXEAq3C5U5xaJDzEQ7e6JFi4=;
-        b=ZUampJJ81q0lhM4bZeXsTSfR+ewyirLZwWDp1p45zOGnxeCSLxYHPwQuULc8ZcYPvD
-         oBM4bifZ01CMffFV4lmRTQ1RZYXiDyZFHfGypR5k1c6CFYwVgxlcz3zxSYjguFtovyBi
-         hfRnn0FRFKapQ3sODkDq37Bo1Cjx0StDRG9WYbwpUV6e1lPjx4Si7nnHjyBmCTsQUG/u
-         gRTTgmBmRh1jOeGWMhS0SGmvx3N/a0DMRGdPFvYIz7N710VSwCeCXVRs/b3PYNadJKdB
-         QPNvXV3gcplx+6yq0BnlwfMq3qNRR28AkE7DpZn+2OuYlCh1QuleAKqZ01l+FgNwR61Q
-         5rSg==
-X-Gm-Message-State: AC+VfDzNHGHcRQaFsW+ugbr5cAjkoXu+MPGNrjySyJHqFbyKKECxrttz
-        GkDBl/9ToDkpmjqB52BiO22LoueUXQk=
-X-Google-Smtp-Source: ACHHUZ7Axk7QKjEI2Ze7kTlQKJK2/j1UAuv4jea1yq8A1ku9q05Red0Z9Gik8pF5gmrO0M4cdRMEeCOKKjQ=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:5e55:0:b0:ba6:c897:53d9 with SMTP id
- s82-20020a255e55000000b00ba6c89753d9mr1141409ybb.10.1683836553436; Thu, 11
- May 2023 13:22:33 -0700 (PDT)
-Date:   Thu, 11 May 2023 13:22:31 -0700
-In-Reply-To: <CAGtprH8jUAM015h4eEhbdAv6Oq2UNbX3P5Z-VCVbcrHtnATJwQ@mail.gmail.com>
-Mime-Version: 1.0
-References: <ZD12htq6dWg0tg2e@google.com> <1ed06a62-05a1-ebe6-7ac4-5b35ba272d13@redhat.com>
- <ZD2bBB00eKP6F8kz@google.com> <9efef45f-e9f4-18d1-0120-f0fc0961761c@redhat.com>
- <ZD86E23gyzF6Q7AF@google.com> <5869f50f-0858-ab0c-9049-4345abcf5641@redhat.com>
- <ZEM5Zq8oo+xnApW9@google.com> <CAGtprH_+bF4VZg2ps6CM8vjJVvShsvSGAvaLfTedts4cKqhSUw@mail.gmail.com>
- <ZFwPBqGeW+d9xMEs@google.com> <CAGtprH8jUAM015h4eEhbdAv6Oq2UNbX3P5Z-VCVbcrHtnATJwQ@mail.gmail.com>
-Message-ID: <ZF1Oh5qrgcNNZ7Jc@google.com>
-Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
- KVM: mm: fd-based approach for supporting KVM)
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vishal Annapurve <vannapurve@google.com>
-Cc:     David Hildenbrand <david@redhat.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        tabba@google.com, Michael Roth <michael.roth@amd.com>,
-        wei.w.wang@intel.com, Mike Rapoport <rppt@kernel.org>,
-        Liam Merwick <liam.merwick@oracle.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        Christian Brauner <brauner@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/Yp5qhHn4keQAkPCibr3+CTO7+NJTOeNPP0TQK5YpZM=;
+ b=H4vS6iPvn/lkJ2uZ74yRKih4OrQ0rkiZABi66I+4cLW+ZW5mznUSzRUCEvAASdL6WVF/7k0kcq67iCJbmrWSdV1anXfgVflJWkbAU8KQ59+c5LtJ9Mq0uTx2Y+jqD11+dsQzNUzZYcCHDRpbgDY8RUgAhyTDW5df+1px0moqTA4=
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
+ by SJ2PR10MB7760.namprd10.prod.outlook.com (2603:10b6:a03:574::20) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.21; Thu, 11 May
+ 2023 20:22:47 +0000
+Received: from BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::ffb:de39:b76b:52eb]) by BY5PR10MB4196.namprd10.prod.outlook.com
+ ([fe80::ffb:de39:b76b:52eb%3]) with mapi id 15.20.6387.022; Thu, 11 May 2023
+ 20:22:47 +0000
+Date:   Thu, 11 May 2023 13:22:43 -0700
+From:   Mike Kravetz <mike.kravetz@oracle.com>
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Huang Ying <ying.huang@intel.com>,
+        James Houghton <jthoughton@google.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
+Message-ID: <20230511202243.GA5466@monkey>
+References: <20230511182426.1898675-1-axelrasmussen@google.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511182426.1898675-1-axelrasmussen@google.com>
+X-ClientProxiedBy: MW4PR03CA0140.namprd03.prod.outlook.com
+ (2603:10b6:303:8c::25) To BY5PR10MB4196.namprd10.prod.outlook.com
+ (2603:10b6:a03:20d::23)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|SJ2PR10MB7760:EE_
+X-MS-Office365-Filtering-Correlation-Id: c98e1d6f-f5f9-4f37-6630-08db525d7c10
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 6dTwhewEaNLp+NR3+PTdBiwFfwZ6JCGQc6leOTJ9F9tYlYJZDSLcdpz5+ZwRCKNz7gbp0jcqLpRNRCp0H8rTU2753acuDihsXaigXH9QWk9Hn5l+8X2h7SbRLvEmOZIxkmy2rx8oZCQfQnZgs+xXgSSqfmRUP5mQkEIQ+SV1X+MIpeQ+l5tgxosTkUtCO/AoJBzSP1OIeDQP+DCzouOni93yz6kn904XSZkh0Lnjejkf+wLS0Auw8ykSjoyoj0/jKW/ne5Bj+1osH/ryWI/wb5d+yqBPGdmSCVi5GtZweoZNj9bymOM0oIsvAwlhmXB2LjHda5T1rAWga+AolDqSTb5H37iisVcQfpXg0kgzD7qeosXiGIE84PcwsClkmHHB82xFqtcA2MacjEKdfEBxOLy3UtICh+dfjhJ9S7RyiOy+QMc65CbX00Pgp28YMhoJl4slRW0HRz/aLhEKAxC0xB/mr0swCnlg8C+rA5e8xH2lhXXdjyQC2rxEeLuzGItSr6kCviiYkU+ct7f/OXKij0Tr7K9KcwWnWF3CO8aeygUTxlNy15+Yo1W1T4V/rmRF
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(396003)(136003)(376002)(346002)(39860400002)(366004)(451199021)(4326008)(66556008)(66476007)(6916009)(478600001)(66946007)(316002)(54906003)(6486002)(33656002)(86362001)(83380400001)(6506007)(26005)(186003)(1076003)(9686003)(6512007)(53546011)(6666004)(8936002)(5660300002)(7416002)(8676002)(44832011)(33716001)(41300700001)(2906002)(38100700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wANhYg5M50O6+W8w9ro63Y8i2v5TpeYoK8wV6NxYzSwNjQOnEkNBL8UerdE7?=
+ =?us-ascii?Q?lX0QTFy06XtK/b/OQBNgnsesiwmeezHycKipiQMHP3bwLpyvOiyxFVrxEBYJ?=
+ =?us-ascii?Q?5f9Ce6vBaloFb/2DLF2TuHdIHWB30gRhmcyahQzSFpWi+++q4inOo4mon9K7?=
+ =?us-ascii?Q?vVG9fIldp7AtQcEeA+s8roJazMrIM0jwcxxnma5I82brW3kGOCVu32sMXdq+?=
+ =?us-ascii?Q?mb8ZGaCoVhk1YEIgoWTqRQ0OjkN4tjP2cLeueclDO8p7+WLGYSGqCmCpou7d?=
+ =?us-ascii?Q?oZwsVGHPDU31leJtbJZb06a9b/n0Z3jIIHkk+6bV6E3QvGP3tieRdOZxfpEo?=
+ =?us-ascii?Q?yF/VgVobC5p1czwLiP+iDwQoSht6KZ32tpjiUbMXAOdE+U/+QyeBjjf6ZTRK?=
+ =?us-ascii?Q?C0aQLmeFqBNlJbf6TZIPaN3g9GsBinLC18szpVRMi5CAP9S3FfJrzawQVt4t?=
+ =?us-ascii?Q?7+9lSCaA7msTmZ7XwLJVZtZuwQXaxEKFLKTJAFcscF2pvZIQGCzltlXHag8V?=
+ =?us-ascii?Q?hGHB+s/8gixJbvd9dCHQXn5FVmme1eTxrbYvTjQPhbw2PVi8uXhV7wzARfuq?=
+ =?us-ascii?Q?5ojWmojnva2DMcxXybTk1EyDxFslLnob5onUWNxwCix0iAjZ+fLNthlBq/lw?=
+ =?us-ascii?Q?KKe5ytrViSdLD6fJ9wLAXBGkKgCYjcaBdqwC2TYRYRMtHxKwWRo3J6FbJc+x?=
+ =?us-ascii?Q?EY0gumRtCECkKlHuucfEDcTM7trqR5o8EV0P8c8Pkh6BIqQzyEEUhwFS8tT/?=
+ =?us-ascii?Q?RK7bYpemfPBNmqDS9J2BPz1t5Qa0TTqXXrdNECbdcJ7fFqgz8Qu1kv80UPCW?=
+ =?us-ascii?Q?Hpa7DHSsmLJcKpjJmpuLiBzEJrFC667DDGjcd873wVhRA/Pe3NXBA5LCuDRY?=
+ =?us-ascii?Q?vSy1VwjW9f53zquRKQSZW2Op+SLwCTflBQRMKedjiD9DttZehbZ5hIcDYVYT?=
+ =?us-ascii?Q?QK/4qpi3Ou46tRQSK7eOXthcnFcEVRhWMMC4DYYg1FdtFtowS7cJRs5vcAmC?=
+ =?us-ascii?Q?Zf9/IXIEGyEII2+92nsEtgs6qP3fZeQzni+zVgan4nR5f4ls3aRjH21amHgy?=
+ =?us-ascii?Q?uXjB9QhnfRRTR9EqZnrxe8PhjPFYT4eJeJE3QnW5Bz16gy3xYabnlMhT+tBh?=
+ =?us-ascii?Q?IfdHeVsf18QRc96ty3Ae4jOV077Z2Yfu4HbL0iVLuBerqKXOrQn3fTbO3SIh?=
+ =?us-ascii?Q?Zo9ejdvaOHVhy4r861ARsibm7E9ZWKh+zK6cj9/deY8+J9p143CklGxuLXT8?=
+ =?us-ascii?Q?ZQNOvTueMaZfxBFLXWGypOth4+c6W4bjayi/m9I2DRZZ9f0/Zw8r4NlLcFfz?=
+ =?us-ascii?Q?hcpRx7/QeWuaXEfClP5xKBok1EPQOSgNFYIpA1VqGw9lrCByS6+qtglhW8R2?=
+ =?us-ascii?Q?OnIdVq5q8ouZnMrz5kHYx5ju0wEayNzc3Etf/LSr0t7DrzU5XStng3CcV6aK?=
+ =?us-ascii?Q?39D6Eex5X9X4wRyoI4GV4Mh3DpDedKoqjNesevY/Xo0gPjYODdyKCir+08Zh?=
+ =?us-ascii?Q?A5oqa91a6PwzE0Tp0eyvIYvZmNYdrn7iADMl/WuxoT+8zqiFdwOY2MhcHTSf?=
+ =?us-ascii?Q?lrCadHW/LHP536lTDg1Ou384sRl45YrUj6fO7zn8?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?6vK4Ucuf1ikvnIw2A57soMEU5TYkSoNE8u/8KsfUTnctMQnwM/jizWSo1Fx0?=
+ =?us-ascii?Q?jPEouzJeMXeftLVeTKvXs022/Aa2oieetvlKWLMT9RKPPen2LS/Fy/d65RoY?=
+ =?us-ascii?Q?FnRNt22zc3SrZcJpU1mD+ct5xyGwI6YIBJMH5xkEHSIwxeyVcfMnyxkdqhWH?=
+ =?us-ascii?Q?fjV+wudDWjPAOws21ZjsD73AqNS+rBQaXAKpt4Pnoz1MFWzsISPc421jIQgJ?=
+ =?us-ascii?Q?AVgA2XaekrPj2f4ESWF1mTJOiKdny11CErOdVu7W8H7QBWNpDC4kMGnG5Qiq?=
+ =?us-ascii?Q?f0txR60l8H2qxWGlWx/G5vVBX2Je6DBemWffZB47vSqcWQGXWXkASo0+UVPu?=
+ =?us-ascii?Q?4zVND0MU3DfMJ0MOkgg0rBH483/Zaua80QXQ3dOEAbdleQMkcRZ15xLTjkL4?=
+ =?us-ascii?Q?xO2fxeBGxWJyeceGg8uVe4e7L9HZQGo3Mnuz6h/D9J2s8+odKoTuO181s4oW?=
+ =?us-ascii?Q?rsCKKVU5lITnH+mJxAFrtgW1cElKVLLDAjLEuhywMW9WzEUcDYEv85nLm0Kh?=
+ =?us-ascii?Q?ANTpU3U2hEhEX0zYKHCs8issv9X5JdMITurxgkWVIxhToovQDVNL4T+knhif?=
+ =?us-ascii?Q?c/HVQxVqBKLsGMt+xGTyzJl1QtFX3hvMO1dfNJapVnlfXztL8esOkg/mXww9?=
+ =?us-ascii?Q?dq1No6KgWzRSJIDVe2cIYA+7yVwlDaT1MT/SqpPgqtesndFwmbB4NfQFvIiI?=
+ =?us-ascii?Q?XFK8yulGrD9/nfCau8Zd3ZUA612z/qUbnrt6NB+qNqJ0tljQ1vIdy687WnqO?=
+ =?us-ascii?Q?WZRFuPbfUt0KNyvWV7l5/KoD2o9M6ncdWjXfb+0epb9iWXYftkQ6LHbUW7R1?=
+ =?us-ascii?Q?RSKeVfxUs0VkuTPEIFEbAtNwQgL0feU8+7Da7omcBMX0eQbQQkci5msVtkNo?=
+ =?us-ascii?Q?BSJ9RH1aolH/Q4UEXp6OvlwZhgtD61FILYy8u78zzPdIARXmLbgv1noGBFth?=
+ =?us-ascii?Q?UJxpjuIgkaB8wSA7qOET2D7Rz63TnKTYlEHJyqMG6DPmkeZasVNd5VjjovCh?=
+ =?us-ascii?Q?YRDPDv0R8/kYuXaQ4OwEskQx7tOMuK9WunYV2W63rKq1Bz+buBxsRyMR7mxu?=
+ =?us-ascii?Q?tjp5dEHQPbZaneptvUx5tr234AVyJ5QRHQdigwNu6eEMOINRqhFdaEEZMaDE?=
+ =?us-ascii?Q?hnCcZgSOpx95?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c98e1d6f-f5f9-4f37-6630-08db525d7c10
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 20:22:47.1955
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 4AyffKTxDGEmW/EVg4hodBkHPJOzM4xPN/OPNwdQWsasvDDpKJFEelDzZlmtkvsJM9O0Lr8bTldihjNvfNVQzg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR10MB7760
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-11_17,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ adultscore=0 spamscore=0 suspectscore=0 malwarescore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305110174
+X-Proofpoint-GUID: W5GM3WaUrLTtsZp9C3bmFtkxgG9S5cfX
+X-Proofpoint-ORIG-GUID: W5GM3WaUrLTtsZp9C3bmFtkxgG9S5cfX
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,259 +178,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023, Vishal Annapurve wrote:
-> On Wed, May 10, 2023 at 2:39=E2=80=AFPM Sean Christopherson <seanjc@googl=
-e.com> wrote:
-> > > But I would still like to get this discussed here before we move on.
-> > >
-> > > I am wondering if it would make sense to implement
-> > > restricted_mem/guest_mem file to expose both private and shared memor=
-y
-> > > regions, inline with Kirill's original proposal now that the file
-> > > implementation is controlled by KVM.
-> > >
-> > > Thinking from userspace perspective:
-> > > 1) Userspace creates guest mem files and is able to mmap them but all
-> > > accesses to these files result into faults as no memory is allowed to
-> > > be mapped into userspace VMM pagetables.
-> >
-> > Never mapping anything into the userspace page table is infeasible.  Te=
-chnically
-> > it's doable, but it'd effectively require all of the work of an fd-base=
-d approach
-> > (and probably significantly more), _and_ it'd require touching core mm =
-code.
-> >
-> > VMAs don't provide hva=3D>pfn information, they're the kernel's way of =
-implementing
-> > the abstraction provided to userspace by mmap(), mprotect() etc.  Among=
- many other
-> > things, a VMA describes properties of what is mapped, e.g. hugetblfs ve=
-rsus
-> > anonymous, where memory is mapped (virtual address), how memory is mapp=
-ed, e.g.
-> > RWX protections, etc.  But a VMA doesn't track the physical address, th=
-at info
-> > is all managed through the userspace page tables.
-> >
-> > To make it possible to allow userspace to mmap() but not access memory =
-(without
-> > redoing how the kernel fundamentally manages virtual=3D>physical mappin=
-gs), the
-> > simplest approach is to install PTEs into userspace page tables, but ne=
-ver mark
-> > them Present in hardware, i.e. prevent actually accessing the backing m=
-emory.
-> > This is is exactly what Kirill's series in link [3] below implemented.
-> >
->=20
-> Maybe it's simpler to do when mmaped regions are backed with files.
->=20
-> I see that shmem has fault handlers for accesses to VMA regions
-> associated with the files, In theory a file implementation can always
-> choose to not allocate physical pages for such faults (similar to
-> F_SEAL_FAULT_AUTOALLOCATE that was discussed earlier).
+On 05/11/23 11:24, Axel Rasmussen wrote:
+> The basic idea here is to "simulate" memory poisoning for VMs. A VM
+> running on some host might encounter a memory error, after which some
+> page(s) are poisoned (i.e., future accesses SIGBUS). They expect that
+> once poisoned, pages can never become "un-poisoned". So, when we live
+> migrate the VM, we need to preserve the poisoned status of these pages.
+> 
+> When live migrating, we try to get the guest running on its new host as
+> quickly as possible. So, we start it running before all memory has been
+> copied, and before we're certain which pages should be poisoned or not.
+> 
+> So the basic way to use this new feature is:
+> 
+> - On the new host, the guest's memory is registered with userfaultfd, in
+>   either MISSING or MINOR mode (doesn't really matter for this purpose).
+> - On any first access, we get a userfaultfd event. At this point we can
+>   communicate with the old host to find out if the page was poisoned.
 
-Ah, you're effectively suggesting a hybrid model where the file is the sing=
-le
-source of truth for what's private versus shared, ad KVM gets pfns through
-direct communication with the backing store via the file descriptor, but us=
-erspace
-can still control things via mmap() and friends.
+Just curious, what is this communication channel with the old host?
+-- 
+Mike Kravetz
 
-If you're not suggesting a backdoor, i.e. KVM still gets private pfns via h=
-vas,
-then we're back at Kirill's series, because otherwise there's no easy way f=
-or KVM
-to retrieve the pfn.
-
-A form of this was also discussed, though I don't know how much of the disc=
-ussion
-happened on-list.
-=20
-KVM actually does something like this for s390's Ultravisor (UV), which is =
-quite
-a bit like TDX (UV is a trusted intermediary) except that it handles faults=
- much,
-much more gracefully.  Specifically, when the untrusted host attempts to ac=
-cess a
-secure page, a fault occurs and the kernel responds by telling UV to export=
- the
-page.  The fault is gracefully handled even even for kernel accesses
-(see do_secure_storage_access()).  The kernel does BUG() if the export fail=
-s when
-handling fault from kernel context, but my understanding is that export can=
- fail
-if and only if there's a fatal error elsewhere, i.e. the UV essentialy _ens=
-ures_
-success, and goes straight to BUG()/panic() if something goes wrong.
-
-On the guest side, accesses to exported (swapped) secure pages generate int=
-ercepts
-and KVM faults in the page.  To do so, KVM freezes the page/folio refcount,=
- tells
-the UV to import the page, and then unfreezes the page/folio.  But very cru=
-cially,
-when _anything_ in the untrusted host attempts to access the secure page, t=
-he
-above fault handling for untrusted host accesses kicks in.  In other words,=
- the
-guest can cause thrash, but can't bring down the host.
-
-TDX on the other hand silently poisons memory, i.e. doesn't even generate a
-synchronous fault.  Thus the kernel needs to be 100% perfect on preventing =
-_any_
-accesses to private memory from the host, and doing that is non-trivial and
-invasive.
-
-SNP does synchronously fault, but the automatically converting in the #PF h=
-andler
-got NAK'd[*] for good reasons, e.g. SNP doesn't guarantee conversion succes=
-s as the
-guest can trigger concurrent RMP modifications.  So the end result ends up =
-being
-the same as TDX, host accesses need to be completely prevented.
-
-Again, this is all doable, but costly.  And IMO, provides very little value=
-.
-
-Allowing things like mbind() is nice-to-have at best, as implementing fbind=
-()
-isn't straightforward and arguably valuable to have irrespective of this
-discussion, e.g. to allow userspace to say "use this policy regardless of w=
-hat
-process maps the file".
-
-Using a common memory pool (same physical page is used for both shared and =
-private)
-is a similar story.  There are plenty of existing controls to limit userspa=
-ce/guest
-memory usage and to deal with OOM scenarios, so barring egregious host acco=
-unting
-and/or limiting bugs, which would affect _all_ VM types, the worst case sce=
-nario
-is that a VM is terminated because host userspace is buggy.  On the slip si=
-de, using
-a common pool brings complexity into the kernel, as backing stores would ne=
-ed to
-be taught to deny access to a subset of pages in their mappings, and in mul=
-tiple
-paths, e.g. faults, read()/write() and similar, page migration, swap, etc.
-
-[*] https://lore.kernel.org/linux-mm/8a244d34-2b10-4cf8-894a-1bf12b59cf92@w=
-ww.fastmail.com
-
-> > Issues that led to us abandoning the "map with special !Present PTEs" a=
-pproach:
-> >
-> >  - Using page tables, i.e. hardware defined structures, to track gfn=3D=
->pfn mappings
-> >    is inefficient and inflexible compared to software defined structure=
-s, especially
-> >    for the expected use cases for CoCo guests.
-> >
-> >  - The kernel wouldn't _easily_ be able to enforce a 1:1 page:guest ass=
-ociation,
-> >    let alone a 1:1 pfn:gfn mapping.
->=20
-> Maybe KVM can ensure that each page of the guest_mem file is
-> associated with a single memslot.
-
-This is a hard NAK.  Guest physical address space is guaranteed to have hol=
-es
-and/or be discontiguous, for the PCI hole at the top of lower memory.  Allo=
-wing
-only a single binding would prevent userspace from backing all (or large ch=
-unks)
-of guest memory with a single file.
-
-> HVAs when they are registered can be associated with offsets into guest_m=
-em files.
-
-Enforcing 1:1 assocations is doable if KVM inserts a shim/interposer, e.g. =
-essentially
-implements the exclusivity bits of restrictedmem.  But that's adding even m=
-ore
-complexity.
-
-> >  - Does not work for memory that isn't backed by 'struct page', e.g. if=
- devices
-> >    gain support for exposing encrypted memory regions to guests.
-> >
-> >  - Poking into the VMAs to convert memory would be likely be less perfo=
-rmant due
-> >    to using infrastructure that is much "heavier", e.g. would require t=
-aking
-> >    mmap_lock for write.
->=20
-> Converting memory doesn't necessarily need to poke holes into VMA, but
-> rather just unmap pagetables just like what would happen when mmapped
-> files are punched to free the backing file offsets.
-
-Sorry, bad choice of word on my part.  I didn't intend to imply poking hole=
-s, in
-this case I used "poking" to mean "modifying".  munmap(), mprotected(), etc=
- all
-require modifying VMAs, which means taking mmap_lock for write.
-
-> > In short, shoehorning this into mmap() requires fighting how the kernel=
- works at
-> > pretty much every step, and in the end, adding e.g. fbind() is a lot ea=
-sier.
-> >
-> > > 2) Userspace registers mmaped HVA ranges with KVM with additional
-> > > KVM_MEM_PRIVATE flag
-> > > 3) Userspace converts memory attributes and this memory conversion
-> > > allows userspace to access shared ranges of the file because those ar=
-e
-> > > allowed to be faulted in from guest_mem. Shared to private conversion
-> > > unmaps the file ranges from userspace VMM pagetables.
-> > > 4) Granularity of userspace pagetable mappings for shared ranges will
-> > > have to be dictated by KVM guest_mem file implementation.
-> > >
-> > > Caveat here is that once private pages are mapped into userspace view=
-.
-> > >
-> > > Benefits here:
-> > > 1) Userspace view remains consistent while still being able to use HV=
-A ranges
-> > > 2) It would be possible to use HVA based APIs from userspace to do
-> > > things like binding.
-> > > 3) Double allocation wouldn't be a concern since hva ranges and gpa
-> > > ranges possibly map to the same HPA ranges.
-> >
-> > #3 isn't entirely correct.  If a different process (call it "B") maps s=
-hared memory,
-> > and then the guest converts that memory from shared to private, the bac=
-king pages
-> > for the previously shared mapping will still be mapped by process B unl=
-ess userspace
-> > also ensures process B also unmaps on conversion.
-> >
->=20
-> This should be ideally handled by something like: unmap_mapping_range()
-
-That'd work for the hybrid model (fd backdoor with pseudo mmap() support), =
-but
-not for a generic VMA-based implementation.  If the file isn't the single s=
-ource
-of truth, then forcing all mappings to go away simply can't work.
-=20
-> > #3 is also a limiter.  E.g. if a guest is primarly backed by 1GiB pages=
-, keeping
-> > the 1GiB mapping is desirable if the guest converts a few KiB of memory=
- to shared,
-> > and possibly even if the guest converts a few MiB of memory.
->=20
-> This caveat maybe can be lived with as shared ranges most likely will
-> not be backed by 1G pages anyways, possibly causing IO performance to
-> get hit. This possibly needs more discussion about conversion
-> granularity used by guests.
-
-Yes, it's not the end of the world.  My point is that separating shared and=
- private
-memory provides more flexibility.  Maybe that flexibility never ends up bei=
-ng
-super important, but at the same time we shouldn't willingly paint ourselve=
-s into
-a corner.
+> - If so, we can respond with a UFFDIO_SIGBUS - this places a swap marker
+>   so any future accesses will SIGBUS. Because the pte is now "present",
+>   future accesses won't generate more userfaultfd events, they'll just
+>   SIGBUS directly.
+> 
+> UFFDIO_SIGBUS does not handle unmapping previously-present PTEs. This
+> isn't needed, because during live migration we want to intercept
+> all accesses with userfaultfd (not just writes, so WP mode isn't useful
+> for this). So whether minor or missing mode is being used (or both), the
+> PTE won't be present in any case, so handling that case isn't needed.
+> 
