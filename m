@@ -2,126 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23D606FF487
+	by mail.lfdr.de (Postfix) with ESMTP id DE9D06FF489
 	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:35:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238593AbjEKOfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 10:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53338 "EHLO
+        id S238299AbjEKOfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 10:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237639AbjEKOf1 (ORCPT
+        with ESMTP id S238097AbjEKOf2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 10:35:27 -0400
-Received: from mail-qk1-x72e.google.com (mail-qk1-x72e.google.com [IPv6:2607:f8b0:4864:20::72e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BFAF11B63
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 07:34:49 -0700 (PDT)
-Received: by mail-qk1-x72e.google.com with SMTP id af79cd13be357-7577a91cfd6so261854185a.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 07:34:49 -0700 (PDT)
+        Thu, 11 May 2023 10:35:28 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2132.outbound.protection.outlook.com [40.107.244.132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3714106E2;
+        Thu, 11 May 2023 07:34:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H/wz27dH6EIfC2ODDwkIVsJgvitVH4pVff9w9Mjn74I1VahzsHGTg8QlwIpRYwIatNcjFtbJmIkhbK79Zhy7zMdevcxr1wUU3Hd3vBjEaFHYTi+3DYI3MSIBQd5cI6F+mQ5t1LVaPuZefFwyFCwenxCVoB7rldHcm2K2Nq9SqevP5ytjsRxiFGduJW3yydr63e1XGcJe73zjFtUlKo0u6KKvRgPL3+BoFER6q04kxDEuka5mAQTZcXg+/izVASKM2RpKOveKEVAOX+/P5INMSb6tZmKaJTlfrfwK3ay/aFklqChhDwqLWeqKfW6z4R3IpQwsWYP08zfMg6tFjwse9g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0K5kcXO42I0YcTXaMQRjQhKoWzeTjgItkU3XSr/7Pfk=;
+ b=Vk9xpbDm6nCtXZ3CMQ2df3sqDzw3zPLTUzGg7qVGM5gB9M4TkUs0iY5aXC4bGs3UeQQFcuwEpUMruFHKYTdZxE2kZ2hhetIZ4wbCKaN4M7Gd9FG1vXLnEodJV3Er2DNegeaUvIR6O2CbS+1bZ/ZO6tB3pKXACMYqgMy4rJl4UTtzR26q7hu9OxsaiG8QmA8ta5GYy2BiiWboYyoT+8ToZsjYGXSksGnFpRkaDHkKrBrhvKNvpfPMrEqDCxiix5NfwGvPenfk58PYdB1ATdOynY+ESk2JKmmWM9ifq28WaXJud9duesdKEgJSoyh38st14zWivNEp4+QVVzQt11g33A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683815686; x=1686407686;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=RDAnVIuo236iFwX8Q4PwBvcDGXZtwfSqujw0bG7p3X0=;
-        b=GTmTypfqSNuLbRXk7CoP5u2QhIfP2ABwgsrnyU8SyjwRhri7xhRhiCPlxWYdoU3vL6
-         QFPcynxldEMfc6XpkSco9M92VA3cEELBoJbd600audt762yS1ER/PFkDdjZJO4jP2j++
-         g4DGXREKQ4yO+KZmco1dWlLLRgejdc3Buw1F8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683815686; x=1686407686;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RDAnVIuo236iFwX8Q4PwBvcDGXZtwfSqujw0bG7p3X0=;
-        b=cDmZ4NXt6IdHzJAGEDOz3hfIrrkfDGIQSevr+Bw7LKnF0Tq9NWoRNYedSldrCuEfxX
-         BOtfUpBorIYxnb+mf9YS+Cn9aX13T90PsjAEli7bxE0kHU9rbZ/anC2znSzC5PZ0gUGx
-         nzxjYDcv5x2Iny5DmZK/5WkBX1MK5wZi8r/vfeYwjpSSBn71FRs6dua9hKXjQ8FTyuZV
-         oDecG/gVvjym+EgaTziinrOw86PLRBwC2V5/WWXyE4zkfY6WgTXqNSdr0e+Bnuamm2vg
-         ApGdmm3azjCwDsrRoR+gEs6oT0JNWAkBx/OWGobkd0G/6uZFIMvoamoONzclTIincn2I
-         Gjdw==
-X-Gm-Message-State: AC+VfDyt5ph1hv+FPA2KdjSpLf1FTnlFPZnZ9tdU0wLfUHblkRe5U+OV
-        nEJ+7TkvWDqMP9Qx0qEuWEa8ftnZhxwhrG2xz7YocA==
-X-Google-Smtp-Source: ACHHUZ4qOeBrL1ZbcIJTI6KIQPB7dC0axNQ1JT4+TnG0VmMU8yYLVjE9mht0T8HYlVzhqhumlDiYHA==
-X-Received: by 2002:a05:6214:e46:b0:621:2641:c656 with SMTP id o6-20020a0562140e4600b006212641c656mr19549867qvc.31.1683815686455;
-        Thu, 11 May 2023 07:34:46 -0700 (PDT)
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com. [209.85.160.179])
-        by smtp.gmail.com with ESMTPSA id a3-20020a0cca83000000b00621626c7003sm528747qvk.56.2023.05.11.07.34.43
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 May 2023 07:34:43 -0700 (PDT)
-Received: by mail-qt1-f179.google.com with SMTP id d75a77b69052e-3ef34c49cb9so747821cf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 07:34:43 -0700 (PDT)
-X-Received: by 2002:a05:622a:1a05:b0:3f3:9c91:fee7 with SMTP id
- f5-20020a05622a1a0500b003f39c91fee7mr421512qtb.16.1683815682956; Thu, 11 May
- 2023 07:34:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230419225604.21204-1-dianders@chromium.org> <20230419155341.v8.8.Ia3aeac89bb6751b682237e76e5ba594318e4b1aa@changeid>
-In-Reply-To: <20230419155341.v8.8.Ia3aeac89bb6751b682237e76e5ba594318e4b1aa@changeid>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Thu, 11 May 2023 07:34:30 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=X=tm_smsi9itwK_Ku2vU0d676JT+MK3fkALn5QMsduiQ@mail.gmail.com>
-Message-ID: <CAD=FV=X=tm_smsi9itwK_Ku2vU0d676JT+MK3fkALn5QMsduiQ@mail.gmail.com>
-Subject: Re: [PATCH v8 08/10] kgdb: Provide a stub kgdb_nmicallback() if !CONFIG_KGDB
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>
-Cc:     ito-yuichi@fujitsu.com, kgdb-bugreport@lists.sourceforge.net,
-        Chen-Yu Tsai <wens@csie.org>,
-        Masayoshi Mizuma <msys.mizuma@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0K5kcXO42I0YcTXaMQRjQhKoWzeTjgItkU3XSr/7Pfk=;
+ b=dyKoXyqxZlxvBRT0H/jbciDxldblicmjd6KEEY0QKJAahujRNXMLaDQrNkES64zotM7Gei5OaiAsfJgkT0HKRfiJ3Bgmwc9LLkaDe7Gq2jphE6J2iX7DJZdrXYqfIJJ3q14aGk4JmWfqrTMeTYi8UG+UCMM/KSjyYMiAFh0oEDw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by PH7PR13MB6509.namprd13.prod.outlook.com (2603:10b6:510:2e8::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Thu, 11 May
+ 2023 14:34:45 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Thu, 11 May 2023
+ 14:34:45 +0000
+Date:   Thu, 11 May 2023 16:34:32 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Staging Drivers <linux-staging@lists.linux.dev>,
+        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
+        Linux Kernel Actions <linux-actions@lists.infradead.org>,
+        Diederik de Haas <didi.debian@cknow.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        David Airlie <airlied@redhat.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Kalle Valo <kvalo@kernel.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Deepak R Varma <drv@mailo.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
         Thomas Gleixner <tglx@linutronix.de>,
-        linux-perf-users@vger.kernel.org,
-        Jason Wessel <jason.wessel@windriver.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Archana <craechal@gmail.com>, Maxime Bizon <mbizon@freebox.fr>,
+        "David A . Hinds" <dahinds@users.sourceforge.net>,
+        "John G . Dorsey" <john+@cs.cmu.edu>
+Subject: Re: [PATCH 06/10] pcmcia: Add SPDX identifier
+Message-ID: <ZFz8+D3X0dvR4Kw2@corigine.com>
+References: <20230511133406.78155-1-bagasdotme@gmail.com>
+ <20230511133406.78155-7-bagasdotme@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511133406.78155-7-bagasdotme@gmail.com>
+X-ClientProxiedBy: AM3PR07CA0062.eurprd07.prod.outlook.com
+ (2603:10a6:207:4::20) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH7PR13MB6509:EE_
+X-MS-Office365-Filtering-Correlation-Id: e9f840f3-865a-4f9a-6e24-08db522cdd3c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: V3kqp4h36nwpYsTNbbMLUlAc+yiUMNE2r79rdqL1K3PMwaOC331DxL8LH6gXu9MBz90hBpO33lG/LNODoXjNRYJMXh4YlpjEe8Seqp6XXte9y0fD+tRosf+JbPwrrYEbu7FEluKtMxvwJcRP7ei/VCbwp7MDmMdIgPkmxWecfHnXoIu6RdYkck0f70PMD9z7JTYo2qipODWtf67ZoIlWQ8B7Kra4ArFSyliyexshK7/G56j9UawT9m/xXcxJAUn+0klspooPafzRhXK2PEm8WlpaxrGsg5+J9ELK6VYAvmDEi4F+pSmagr5nvKLvDbrvGC3z/sDujGCVMHPD43FfAHeRrVM7+7kiWd24Lrc2ZNpVG96blY1rAVpBuJimo3A1/XjCgmPhOJ2yoHrSzLjWmcEhQgridetbm1gBH61xcl0uFYYC7Ot4iRMqVDjVxPI9AIycHwH9e/rD0YNhdmZovffmXpPAIb6dxDXBAUxT7wQWv6iScKT31sG+dFmP1NgMCm6FTPDzLoH6V3Zga3AZG2JtQ0y4jZ8e7BCyECbFRfO4l2YlQWMYazqaByyf+NIXYZn80OVHIgXh6Hu88+yDAQAUcdQS6vS6HAKhEB66sUchzUzkvlaDvhyeExHrexL7jFLjlsOEYuEotrZ6yrgCwg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39850400004)(136003)(396003)(346002)(366004)(376002)(451199021)(36756003)(558084003)(86362001)(478600001)(54906003)(7406005)(2906002)(44832011)(2616005)(7416002)(5660300002)(4326008)(6666004)(38100700002)(8676002)(66476007)(66946007)(6486002)(186003)(316002)(83380400001)(66556008)(41300700001)(6916009)(8936002)(6506007)(6512007)(67856001)(41080700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rRyF89AGh/Q6YFQLaggAHo7nhYUIg+UyFVAaYtByk4BaGK10VcjE/O0+y4Xd?=
+ =?us-ascii?Q?MlK6nD0uyxQlzX6hUm4ZdnM5+RfNRcRJy2ZTdg56g7CpRHZeXSSZyPJ7i7Yg?=
+ =?us-ascii?Q?/ZhV2CGAZOO72Poz0xUmViqeOj/1ZvuyXMJq4CTDwBG3JEDI27GlOJs/kyQC?=
+ =?us-ascii?Q?H2j0+mKnJQpTL+jOknt07NWebChlSI3AZdJ19iQ8Y6hW7K0Q/SLQR8y5lsK8?=
+ =?us-ascii?Q?ELTSf+kxMc39DeLxC+OVwGc0BHTQuWzRd9DUoMH43yebcra+W1AhT9n6W5Yd?=
+ =?us-ascii?Q?Q0neR4qF19F5VkPe14wJ+kWwuAuK4z4DPLp2r5iD9fS6huadgv8lSOHaJ3f3?=
+ =?us-ascii?Q?7XXSXtRJwWw5X6JVhEG+iuzH2tt9YIiVhAsWI90wbLNYZevur6PErFsyASld?=
+ =?us-ascii?Q?PhMAQ78g8SyiFWpk0M/KbDn7Ps2POnXNq90dV9KzL04C5z6jZjxPHVEc5Gxe?=
+ =?us-ascii?Q?cazi1ALrk/uziNuOoRAf5euPBMpU2NXnE91VYjDBUdz2LPHgBg+0CD8TaaLa?=
+ =?us-ascii?Q?ALnYQmhG80Qd30Jtj9cglkd4zIEyzGiMJPtXKvh38540dHl93vdlOKxaUyb/?=
+ =?us-ascii?Q?Pq/foOUiBecOFMEV6oS//2KXUNGy5c0MVgl+VIDfWE7lQkMipaihT7T8VkYH?=
+ =?us-ascii?Q?ycNMZ+Ll0zIIhVFtmokarIHl0U79uGpprM+bRbKXqQufiaV+J92Enp8vOL58?=
+ =?us-ascii?Q?QHmXukxXkylc7gv0vSfnK0hRNVgTXUxjluPOOyr55mTeSbLaLtVuu+uHl2lJ?=
+ =?us-ascii?Q?w8twzbEmXezg8evan2xZqtNRTUIWyb3uurTscJ5Mv9u18HG5YUJqkNYKlBjm?=
+ =?us-ascii?Q?QP+76u1WVQpAkFhFiG96QvEHL5Cvtt9ijG05oKZBk00SGUsM0rNsyz9UEKPc?=
+ =?us-ascii?Q?enDxvIv+lV+dw2UxtjSEgWUhjr0d9qQPRfR5sX5LNOoog4IdyX7WYHnJBEDg?=
+ =?us-ascii?Q?at+iFHdsQWonV1sP03PS5z02CsT4t6K2aC4JgHISuHjdSLk5fxTQCBpNvvEW?=
+ =?us-ascii?Q?P+xQ5JPLUzv9EatiMmqkxdjGq41vDA+YNT632VqtdSGL9IQ70yqAZdrYLCgl?=
+ =?us-ascii?Q?skxiT8Ed7G+4h1xRIXlodIVblbURMVYOr8rU62LACcva487ozSAog714XryM?=
+ =?us-ascii?Q?PYBLtY09blfXx0umjbNVX9mvNzoNF6eN3ny4kjwdaOWTEiO9Jf8bESQDdwB5?=
+ =?us-ascii?Q?AUp3HnWlOIRj9f4OFlqGbvUfRWDBEkrKxaGYFAaqMWYVmbh0IEBAJAccFRI9?=
+ =?us-ascii?Q?tNmy1zxwxUorGtyF1qhET/NO+FOUNR2Odgx+8pRBP99IFRmYqiv5Fw8tl8AV?=
+ =?us-ascii?Q?nVuwrYuuNnjwMINWcCH1O/XuaNfurT/mpH7T7sGeY940o7VvC3ESnf42KU1X?=
+ =?us-ascii?Q?71f0IwvnVKbyZf5e30+Rk2wfPxhuGC575Jatag2ZgDjNW7MS73M1Kkc1WOdK?=
+ =?us-ascii?Q?HTxY9prvjIzhmG6H0ZSf3TETejTJp4zIDBCDSyJmQOeorD9b81r+k7ymf9TX?=
+ =?us-ascii?Q?v1hMTvoBWmUpRgPLNuLIP9HfK5sAVAIQQ9k7yAHyE3q5kFUFJdvZT29MEYmW?=
+ =?us-ascii?Q?VAEoz62BdSrGJwp/rdQQagRolS2Fk1iBN7PxeHiCw97Cfmpyt8n3l3Hxcbg7?=
+ =?us-ascii?Q?mXNVtdPlZKloRfTGubC4ve9bqSu0NY7nm/YGOFZINSG0tsTGaeu5qq9+Z8mG?=
+ =?us-ascii?Q?PmKJYA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9f840f3-865a-4f9a-6e24-08db522cdd3c
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 14:34:45.3174
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: YFjALYzeQfYdLma3As1RyCGXxNpJEtZPn8IQeYrNdb3cLhWr1d5/Hb9w5boojVApO7YK+af9r0swcWL0yWirwChy/JNPvjG8G0TUcyyU+84=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB6509
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, May 11, 2023 at 08:34:02PM +0700, Bagas Sanjaya wrote:
+> Add SPDX identifier on remaining files untouched during previous
+> rounds of SPDX conversion while replacing boilerplate notice if any.
 
-On Wed, Apr 19, 2023 at 3:57=E2=80=AFPM Douglas Anderson <dianders@chromium=
-.org> wrote:
->
-> To save architectures from needing to wrap the call in #ifdefs, add a
-> stub no-op version of kgdb_nmicallback(), which returns 1 if it didn't
-> handle anything.
->
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
->
-> Changes in v8:
-> - "Provide a stub kgdb_nmicallback() if !CONFIG_KGDB" new for v8
->
->  include/linux/kgdb.h | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/include/linux/kgdb.h b/include/linux/kgdb.h
-> index 87713bd390f3..9ce628ee47cc 100644
-> --- a/include/linux/kgdb.h
-> +++ b/include/linux/kgdb.h
-> @@ -377,5 +377,6 @@ extern void kgdb_free_init_mem(void);
->  #define dbg_late_init()
->  static inline void kgdb_panic(const char *msg) {}
->  static inline void kgdb_free_init_mem(void) { }
-> +static int kgdb_nmicallback(int cpu, void *regs) { return 1; }
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-FWIW: I just realized that the above needs an "inline" to make the
-compiler not complain. I'm still hoping for more feedback on the
-series, but I'll plan to fix that in the next spin.
-
--Doug
