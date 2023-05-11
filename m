@@ -2,73 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7AFF6FEED0
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:29:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6F666FEED6
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237411AbjEKJ30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 05:29:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
+        id S234840AbjEKJaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 05:30:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237589AbjEKJ24 (ORCPT
+        with ESMTP id S232984AbjEKJaT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 05:28:56 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC2D7EC9
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:28:54 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50db7ec8188so4964746a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:28:54 -0700 (PDT)
+        Thu, 11 May 2023 05:30:19 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D23DD59E0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:30:17 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id a640c23a62f3a-965ab8ed1c0so1367929066b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:30:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683797332; x=1686389332;
+        d=linaro.org; s=google; t=1683797416; x=1686389416;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=4cHA3LraFcmGDTaIqGBRmZ93pU3RzjaRHQjlm2jCEjo=;
-        b=JXsAiFr6M63ygBIRwO4p+SZCq+xy3AGLgKBO7UA59TEBVF4aWxdjr0p4qxNeUEGjpS
-         H81i4v/xaK46iIye8Xmpu01rg7lYSiheY3PIB+CCDzt5YzJjFhlVGK6cDzMN5OFfbk6Y
-         qKV2WIFlFJp7jQ7lDDIFe2H3uDkrFFpqGnljGuXHPaEJmYvNepbTQgYnJgxvDYmfyfYd
-         3+uXm+JJ+GXraAs9LbTUIlft65Y5QMEqEbbojSftk96J3vMHi21VsTEyqW+RljPYrk8v
-         r2Bo7QkGIWN2r2S7i2awUnVRAZU4z/EwTYQqEqAL59gKoQXskq6/gkjUNaET3qd8WgDV
-         JkrQ==
+        bh=L1D3DyfgLO2qgpd2r/Ml+/RxBZh1GZB83GE0hqLy2tQ=;
+        b=wlBZemLmgEoqTudarPWQuZoMWjupCJqW8eoiFqUKC2Gp4Kisx9Ypm/BWCaXiB425sb
+         wL6FmizCb+Nd7fbe9eek478fDmJcuVtPFcdEwVMYB987GJkWGbSMVj/hHS2uCkg0tQrn
+         9YI5HRkpAj6RFwa3rml75hjqocghOdYJLPCNazm5LwJ1BsFArBwhvSp6aGiJmGEtV4Om
+         9/FGW40Mp5tcufk2U4PFIwL5Z6k80pflF3Or4zvPjiTdYDkxXYLnIP5nrzM1vZxBTBrz
+         woHO0cWJ14RtUahhbItFWkPChjJIzLh8wRLBCJaaBgBWakKP63eA2STq9jEysM4/CCPr
+         NSfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683797332; x=1686389332;
+        d=1e100.net; s=20221208; t=1683797416; x=1686389416;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4cHA3LraFcmGDTaIqGBRmZ93pU3RzjaRHQjlm2jCEjo=;
-        b=Hj2M6MeF0ksUqq/wwYKtOHVvN1lF7N0HLfa/Wgmqv/MimCNru8FybqDqkY3+OPU3hL
-         pxmiFXw+kdlCUVuia8Cwl22Cig2+2g8cDpaskBvN4e7KDIJ821p9X/M+FoDf70s4y7nA
-         sxF/XitF2awU9EFwcF4mOIbDz51579r66yPAxn4FuThiIUpLn0kL9h60PWOusiwHj27e
-         dMRdgu3fg8mTVM28aZHoQazoWctCZY6Zn1Hp0RA4ybbxHpldxVsn1jkeSOoHRUw2NIkR
-         h0K9ZZfX/inY4Xtvqi8U355iE8lWzxS49MzwzV9UaA1WBt7i3C+t8f4vLqT8C+Bov9vq
-         YAlw==
-X-Gm-Message-State: AC+VfDyfHx6bXWGI5RLMshjR4l6767a4zeWKPes+/byyqHroFJCuw+4g
-        kCqgYNZGZh3p9JkV8hFf+uVpuQ==
-X-Google-Smtp-Source: ACHHUZ75ta179hLwDGK7JWKKo/Z4TJGh6O9B4U9ZlcNk2gja0S38wokx5miC8QiJ02RLTkBXBTk2LA==
-X-Received: by 2002:aa7:d659:0:b0:508:14f2:399c with SMTP id v25-20020aa7d659000000b0050814f2399cmr19284560edr.10.1683797332595;
-        Thu, 11 May 2023 02:28:52 -0700 (PDT)
+        bh=L1D3DyfgLO2qgpd2r/Ml+/RxBZh1GZB83GE0hqLy2tQ=;
+        b=c1YS9M0gRyxGKDq65Y0lIp2R3oSglwwHmlekoxx8Y60D+qMHUspUfJACYZXnM6R6w4
+         5oyTaecWPs+Oi6nQkWxeVAukPcUF9ngZNzw8C6ejW/wMtbN5vAGEc6RNX0HU1bY6uxgw
+         QtLiHB3Wubodgn/GnPfsoZWzm1svYnFFQqKZBlHwjl+z4HMSLB7hHzE2IDh6i304XLuE
+         FYetxaYjSLYFrL8Qy46Ry+/hJtaTzQMLvopVGdjk3lDz/qaO75LBIoLly516EZX42DQD
+         106NqR0xjpdh+TlxzEVtPGgE4MIa9qv6l4ZDapt9klCmegzQGtx6m73PugtxvaoGyUrA
+         /kwA==
+X-Gm-Message-State: AC+VfDxYnaA2eDQu+j4xQUEzA80RchS0CrcL2x/+k32EKwK0H+UDeexD
+        9WG8MXYWmIosPevXx9r8ku0OYg==
+X-Google-Smtp-Source: ACHHUZ6MCQhIY5WN8mggDOv6ysIWk93HQOiNqbiulZXCxvlq8N7YKfSeITx+13ES2XfyWpsighV8CQ==
+X-Received: by 2002:a17:907:72d6:b0:94e:43ce:95f6 with SMTP id du22-20020a17090772d600b0094e43ce95f6mr20428602ejc.47.1683797416337;
+        Thu, 11 May 2023 02:30:16 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:7e61:f14a:c3a4:809e? ([2a02:810d:15c0:828:7e61:f14a:c3a4:809e])
-        by smtp.gmail.com with ESMTPSA id l14-20020a056402028e00b00506addaaab0sm2709963edv.32.2023.05.11.02.28.51
+        by smtp.gmail.com with ESMTPSA id kn3-20020a1709079b0300b0096a27dbb5b2sm1835416ejc.209.2023.05.11.02.30.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 May 2023 02:28:52 -0700 (PDT)
-Message-ID: <fc104fdd-3894-aa94-12dc-4c73b26d4159@linaro.org>
-Date:   Thu, 11 May 2023 11:28:50 +0200
+        Thu, 11 May 2023 02:30:15 -0700 (PDT)
+Message-ID: <528a82c2-9520-f8c5-c5cc-1084d9083670@linaro.org>
+Date:   Thu, 11 May 2023 11:30:13 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH] dt-bindings: iio: temperature: Add DT bindings for TMP006
+Subject: Re: [PATCH v5 1/2] dt-bindings: net: can: Add poll-interval for MCAN
 Content-Language: en-US
-To:     Anup Sharma <anupnewsmail@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
+To:     Judith Mendez <jm@ti.com>, linux-can@vger.kernel.org,
+        Chandrasekar Ramakrishnan <rcsekar@samsung.com>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Schuyler Patton <spatton@ti.com>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>,
-        Peter Meerwald <pmeerw@pmeerw.net>, broonie@kernel.org
-Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <ZFvo2TIiPiMFlbXC@yoga>
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        linux-arm-kernel@lists.infradead.org
+References: <20230510202952.27111-1-jm@ti.com>
+ <20230510202952.27111-2-jm@ti.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZFvo2TIiPiMFlbXC@yoga>
+In-Reply-To: <20230510202952.27111-2-jm@ti.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -81,74 +87,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/2023 20:56, Anup Sharma wrote:
-> Add devicetree binding document for TMP006, IR thermopile sensor.
-
-Why? Where is any user of this? DTS? Driver?
-
-Subject: drop second/last, redundant "DT bindings for". The
-"dt-bindings" prefix is already stating that these are bindings.
-
+On 10/05/2023 22:29, Judith Mendez wrote:
+> On AM62x SoC, MCANs on MCU domain do not have hardware interrupt
+> routed to A53 Linux, instead they will use software interrupt by
+> hrtimer.
 > 
-> Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
+> To enable timer polling method, interrupts should be
+> optional so remove interrupts property from required section and
+> add an example for MCAN node with timer polling enabled.
+> 
+> Signed-off-by: Judith Mendez <jm@ti.com>
 > ---
->  .../bindings/iio/temperature/ti,tmp006.yaml   | 38 +++++++++++++++++++
->  1 file changed, 38 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/iio/temperature/ti,tmp006.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/iio/temperature/ti,tmp006.yaml b/Documentation/devicetree/bindings/iio/temperature/ti,tmp006.yaml
-> new file mode 100644
-> index 000000000000..c6c5a4d10898
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/temperature/ti,tmp006.yaml
-> @@ -0,0 +1,38 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/iio/temperature/ti,tmp006.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: TI TMP006 IR thermopile sensor
-> +
-> +maintainers:
-> +  - Peter Meerwald <pmeerw@pmeerw.net>
-> +
-> +description: |
-> +  TI TMP006 - Infrared Thermopile Sensor in Chip-Scale Package.
-> +  https://cdn.sparkfun.com/datasheets/Sensors/Temp/tmp006.pdf
-> +
-> +properties:
-> +  compatible:
-> +    const: ti,tmp006
-> +
-> +  reg:
-> +    maxItems: 1
 
-Missing supply.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        tmp006@40 {
-
-Node names should be generic.
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-temperature-sensor?
-
-> +            compatible = "ti,tmp006";
-> +            reg = <0x40>;
-> +        };
-> +    };
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
