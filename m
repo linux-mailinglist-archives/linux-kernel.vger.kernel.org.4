@@ -2,75 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E046FED3C
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:57:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BFA86FED47
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:58:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237518AbjEKH5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 03:57:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57036 "EHLO
+        id S229473AbjEKH62 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 03:58:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbjEKH46 (ORCPT
+        with ESMTP id S231625AbjEKH6W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 03:56:58 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BB6269E
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:56:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=+CGH7YHU79D1x2zo+JX/L+1Yeo4Kpnw8RAg9mt4T5fI=; b=JaYNfxN6UpDjkg5TCFsg9BwlN+
-        c3txs50rIc3hX+JmCPER1Hf2OJ0PvJ42OxnSzvJ0Vbi2Mta7+67wKYBtcaDiQmphbwPBIJ3GZEr5m
-        zZlA0Sy/tUFu4dFj327ul1jgXZhqfOJ2HcaSXe2NzKlloGT5etzz4BaWeV4u7zZHeFe+BOhyCIZZV
-        DBHeUz2iirtSu7ToxV5lgyWz+5QtGJJ7fd7I9qmEtdvZWpKosNwMZQ/VuhYRBPBfji7KY+5vSBLs3
-        TpPTaXhpTweZBq8I+hJKrv3Yh/wC7S5t59n+xdZScabJ9jlSJ0DBAjL0YpZJp9FuQKLJswTHJ+uzG
-        AXpqQ42A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1px1AA-008AyE-2u;
-        Thu, 11 May 2023 07:56:35 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B7948300023;
-        Thu, 11 May 2023 09:56:32 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 5D70C235CC442; Thu, 11 May 2023 09:56:32 +0200 (CEST)
-Date:   Thu, 11 May 2023 09:56:32 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Andrei Vagin <avagin@openvz.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        Pavel Emelyanov <xemul@openvz.org>
-Subject: Re: [RFD] posix-timers: CRIU woes
-Message-ID: <20230511075632.GR4253@hirez.programming.kicks-ass.net>
-References: <ZFUXrCZtWyNG3Esi@lothringen>
- <87zg6i2xn3.ffs@tglx>
- <87v8h62vwp.ffs@tglx>
- <878rdy32ri.ffs@tglx>
- <87v8h126p2.ffs@tglx>
- <875y911xeg.ffs@tglx>
- <87ednpyyeo.ffs@tglx>
- <009e7658-1377-cc79-7a42-4dda8fec5af0@virtuozzo.com>
- <87wn1gy4e6.ffs@tglx>
- <005a944c-ed2e-6010-a534-26d5947402da@virtuozzo.com>
-MIME-Version: 1.0
+        Thu, 11 May 2023 03:58:22 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3F75DD;
+        Thu, 11 May 2023 00:58:21 -0700 (PDT)
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34B7dgUa004840;
+        Thu, 11 May 2023 07:57:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=yfYCleIUn+xWJ9AcJe62X2wnauCgiMhHoQILlx/ttD4=;
+ b=LFq957axn1UNzTUzhvNVYlDHbCfcqhQ2pRD8ZLsFp/RSpjT1uBMJ/d7ENLNjdQvs8b/O
+ ETkXd8kuOadcVr2pCLjNWw4G6MBgssGxGpZMpJIuASv1SpR0PUK34wuL0h5qEW2QJh35
+ I82bYrl1LLcaa8T78oJT6a6wtEhLMGPImsQm6ZZ7OMLR004RU4Y4gi9OSAsfKRz/2fjX
+ JzkG3CzcsaF9fSk6t5lnZ7W3md1J2Vb7gFuVV3BeMsGsW3QU1zaunkYp8Yy88gnQ5l6D
+ XVrXeBgHCOF+7Jj5+rSLVfvXlTFdfCzT/ZEvy3XYrdn6a7Y8+/7BRN1ptdRgFVOcV3xn Hg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qgcdvax5f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 May 2023 07:57:23 +0000
+Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34B7vMqo010805;
+        Thu, 11 May 2023 07:57:22 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qgcdvax4h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 May 2023 07:57:22 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34B4RaPD016221;
+        Thu, 11 May 2023 07:57:19 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3qf7nh1hc0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 May 2023 07:57:19 +0000
+Received: from smtpav06.fra02v.mail.ibm.com (smtpav06.fra02v.mail.ibm.com [10.20.54.105])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34B7vF6226739210
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 11 May 2023 07:57:15 GMT
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8227920043;
+        Thu, 11 May 2023 07:57:15 +0000 (GMT)
+Received: from smtpav06.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7766720040;
+        Thu, 11 May 2023 07:57:13 +0000 (GMT)
+Received: from osiris (unknown [9.179.19.134])
+        by smtpav06.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Thu, 11 May 2023 07:57:13 +0000 (GMT)
+Date:   Thu, 11 May 2023 09:57:11 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-api@vger.kernel.org, kernel-team@meta.com,
+        linux-arch@vger.kernel.org, hannes@cmpxchg.org,
+        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, linux@armlinux.org.uk, geert@linux-m68k.org,
+        monstr@monstr.eu, tsbogend@alpha.franken.de,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        mpe@ellerman.id.au, npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        ysato@users.sourceforge.jp, dalias@libc.org,
+        glaubitz@physik.fu-berlin.de, davem@davemloft.net,
+        chris@zankel.net, jcmvbkbc@gmail.com, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
+Subject: Re: [PATCH] cachestat: wire up cachestat for other architectures
+Message-ID: <ZFyf195PuoBmaV2N@osiris>
+References: <20230510195806.2902878-1-nphamcs@gmail.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <005a944c-ed2e-6010-a534-26d5947402da@virtuozzo.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <20230510195806.2902878-1-nphamcs@gmail.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 4wqLDbk2I-cFtsb56SrteodOnFigMIFv
+X-Proofpoint-GUID: fOUzFmhABUHi7ZZwffU3nGIoi4bBWM03
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-11_04,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 adultscore=0
+ bulkscore=0 clxscore=1011 malwarescore=0 suspectscore=0 mlxlogscore=301
+ lowpriorityscore=0 impostorscore=0 priorityscore=1501 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305110065
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,12 +107,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 12:12:32PM +0800, Pavel Tikhomirov wrote:
-> Not sure how kernel memory consumption increases with sparse timer IDs,
-> global hashtable (posix_timers_hashtable) is the same size anyway, entries
-> in hlists can be distributed differently as hash depends on id directly but
-> we have same number of entries. Probably I miss something, why do we need
-> dense IDs?
+On Wed, May 10, 2023 at 12:58:06PM -0700, Nhat Pham wrote:
+> cachestat is previously only wired in for x86 (and architectures using
+> the generic unistd.h table):
+> 
+> https://lore.kernel.org/lkml/20230503013608.2431726-1-nphamcs@gmail.com/
+> 
+> This patch wires cachestat in for all the other architectures.
+> 
+> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> ---
+...
+>  arch/s390/kernel/syscalls/syscall.tbl       | 1 +
 
-The proposal was to remove the global hash and use a signal_struct based
-xarray instead.
+Acked-by: Heiko Carstens <hca@linux.ibm.com> (s390)
