@@ -2,66 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12C496FF2E9
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:34:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 923B16FF2FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:34:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238055AbjEKNd7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 09:33:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
+        id S238364AbjEKNep (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:34:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238135AbjEKNd1 (ORCPT
+        with ESMTP id S238271AbjEKNeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:33:27 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8C222700;
-        Thu, 11 May 2023 06:32:35 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Thu, 11 May 2023 09:34:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D0258A7F;
+        Thu, 11 May 2023 06:33:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id BF6071FEB4;
-        Thu, 11 May 2023 13:32:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1683811953; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Q9Gw89LsVWDXknjK9wsazx8tUQuttNJKAyf5DBRTkFo=;
-        b=b6bRdGzsaAVEankWlRffwcd9ratTCqqyuX/vw1ZZrCqLC0Ohw5AUN+JMiTQvFjX/CBqVTI
-        3kXFKPPRA7S2M76RWpS8fqo1xdLTePW+dv00l0zk/o3HBe73/aIU71esF6TsCtaviPg8RI
-        qgR5dWJWjqT9vP1G29RdyovDvK2eYTU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 89E18138FA;
-        Thu, 11 May 2023 13:32:33 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /UAaIHHuXGQEKQAAMHmgww
-        (envelope-from <jgross@suse.com>); Thu, 11 May 2023 13:32:33 +0000
-Message-ID: <45d127c4-71e9-2959-b69c-d31c46ec721e@suse.com>
-Date:   Thu, 11 May 2023 15:32:33 +0200
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 13B9960F76;
+        Thu, 11 May 2023 13:33:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 03BADC433EF;
+        Thu, 11 May 2023 13:33:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1683812002;
+        bh=asAC0jcXp3GtSMVaoQSHXlx7T1tfg7P0hXCfEi1McDo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=co7xWMjfTZpbTw/cY3R4mO/AWqWBlPt9EGOAcU/VAbU8ME8ODtODd90xaYneH2zJt
+         DXSjs+CNun4rEz2+Q/GbeOtUKKYaU0SvVwGnBzfzUTsGeQELmhapZZtlpY/Pov4K0c
+         SHY4vHe06DgMeMxBEbxlsAkWN98Jpxj8DyLH4hNY=
+Date:   Thu, 11 May 2023 22:33:17 +0900
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Rudi Heitbaum <rudi@heitbaum.com>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
+        ntfs3@lists.linux.dev, almaz.alexandrovich@paragon-software.com
+Subject: Re: [PATCH 6.3 000/694] 6.3.2-rc2 review
+Message-ID: <2023051156-alabaster-shading-c266@gregkh>
+References: <20230509080658.GA152864@d6921c044a31>
+ <20230509131032.GA8@9ed91d9f7b3c>
+ <2023050913-spearhead-angrily-fc58@gregkh>
+ <20230509145806.GA8@df3c0d7ae0b0>
+ <2023051025-plug-willow-e278@gregkh>
+ <CAG9oJsnr55Atybm4nOQAFjXQ_TeqVG+Nz_8zqMT3ansdnEpGBQ@mail.gmail.com>
+ <2023051048-plus-mountable-6280@gregkh>
+ <CAG9oJskrJotpyqwi6AHVMmhnFmL+Ym=xAFmL51RiZFaU78wv-A@mail.gmail.com>
+ <2023051132-dweller-upturned-b446@gregkh>
+ <CAG9oJskf0fE7LiumdzD4QW8dTmGpmVyXBSyiKu_xP+s72Rw44A@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] scsi: Let scsi_execute_cmd() mark args->sshdr as invalid
-Content-Language: en-US
-To:     Martin Wilck <mwilck@suse.com>, linux-kernel@vger.kernel.org,
-        linux-scsi@vger.kernel.org
-Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        stable@vger.kernel.org
-References: <20230511123432.5793-1-jgross@suse.com>
- <095a2264120ad51d0500c4ce8221be2f88a9537e.camel@suse.com>
- <85a7dc28-74ec-f4d6-b5c3-ca456ce9d380@suse.com>
- <e7c5f4334ab6ff897547c68ea216fbcba22d4929.camel@suse.com>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <e7c5f4334ab6ff897547c68ea216fbcba22d4929.camel@suse.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------AmTzaEmwjNDFarnUqUcdU2He"
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAG9oJskf0fE7LiumdzD4QW8dTmGpmVyXBSyiKu_xP+s72Rw44A@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,126 +65,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------AmTzaEmwjNDFarnUqUcdU2He
-Content-Type: multipart/mixed; boundary="------------8VleNbXuViHE90YbagetCfNQ";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Martin Wilck <mwilck@suse.com>, linux-kernel@vger.kernel.org,
- linux-scsi@vger.kernel.org
-Cc: "James E.J. Bottomley" <jejb@linux.ibm.com>,
- "Martin K. Petersen" <martin.petersen@oracle.com>, stable@vger.kernel.org
-Message-ID: <45d127c4-71e9-2959-b69c-d31c46ec721e@suse.com>
-Subject: Re: [PATCH] scsi: Let scsi_execute_cmd() mark args->sshdr as invalid
-References: <20230511123432.5793-1-jgross@suse.com>
- <095a2264120ad51d0500c4ce8221be2f88a9537e.camel@suse.com>
- <85a7dc28-74ec-f4d6-b5c3-ca456ce9d380@suse.com>
- <e7c5f4334ab6ff897547c68ea216fbcba22d4929.camel@suse.com>
-In-Reply-To: <e7c5f4334ab6ff897547c68ea216fbcba22d4929.camel@suse.com>
+On Thu, May 11, 2023 at 06:30:02PM +1000, Rudi Heitbaum wrote:
+> On Thu, 11 May 2023 at 09:00, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Wed, May 10, 2023 at 09:58:06PM +1000, Rudi Heitbaum wrote:
+> > > On Wed, 10 May 2023 at 19:09, Greg Kroah-Hartman
+> > > <gregkh@linuxfoundation.org> wrote:
+> > > >
+> > > > On Wed, May 10, 2023 at 06:29:23PM +1000, Rudi Heitbaum wrote:
+> > > > > On Wed, 10 May 2023 at 17:25, Greg Kroah-Hartman
+> > > > > <gregkh@linuxfoundation.org> wrote:
+> > > > > >
+> > > > > > On Tue, May 09, 2023 at 02:58:06PM +0000, Rudi Heitbaum wrote:
+> > > > > > > On Tue, May 09, 2023 at 03:56:42PM +0200, Greg Kroah-Hartman wrote:
+> > > > > > > > On Tue, May 09, 2023 at 01:10:32PM +0000, Rudi Heitbaum wrote:
+> > > > > > > > > On Tue, May 09, 2023 at 08:06:58AM +0000, Rudi Heitbaum wrote:
+> > > > > > > > > > On Tue, May 09, 2023 at 05:26:44AM +0200, Greg Kroah-Hartman wrote:
+> > > > > > > > > > > This is the start of the stable review cycle for the 6.3.2 release.
+> > > > > > > > > > > There are 694 patches in this series, all will be posted as a response
+> > > > > > > > > > > to this one.  If anyone has any issues with these being applied, please
+> > > > > > > > > > > let me know.
+> > > > > > > > > > >
+> > > > > > > > > > > Responses should be made by Thu, 11 May 2023 03:05:05 +0000.
+> > > > > > > > > > > Anything received after that time might be too late.
+> > > > > > > > > >
+> > > > > > > > > > Hi Greg,
+> > > > > > > > > >
+> > > > > > > > > > 6.3.2-rc2 tested.
+> > > > > > > > >
+> > > > > > > > > Hi Greg,
+> > > > > > > > >
+> > > > > > > > > Further testing and have seen ntfs3: NULL pointer dereference with ntfs_lookup errors
+> > > > > > > > > with 6.3.2-rc2 (I have not seen this error before.) No other errors in the logs.
+> > > > > > > >
+> > > > > > > > Can you reproduce this without the extern, gpl-violation module loaded?
+> > > > > > > >
+> > > > > > > > thanks,
+> > > > > > > >
+> > > > > > > > greg k-h
+> > > > > > >
+> > > > > > > Hi Greg,
+> > > > > > >
+> > > > > > > I dropped the bcm_sta and recompiled and commented out the i915.guc=3
+> > > > > > > and was able to reproduce.
+> > > > > > >
+> > > > > > > [   84.745080] BUG: kernel NULL pointer dereference, address: 0000000000000020
+> > > > > > > [   84.746239] #PF: supervisor read access in kernel mode
+> > > > > > > [   84.747599] #PF: error_code(0x0000) - not-present page
+> > > > > > > [   84.748929] PGD 0 P4D 0
+> > > > > > > [   84.750240] Oops: 0000 [#1] SMP NOPTI
+> > > > > > > [   84.751575] CPU: 2 PID: 3176 Comm: .NET ThreadPool Not tainted 6.3.2-rc2 #1
+> > > > > > > [   84.752998] Hardware name: Intel(R) Client Systems NUC12WSKi7/NUC12WSBi7, BIOS WSADL357.0085.2022.0718.1739 07/18/2022
+> > > > > > > [   84.754474] RIP: 0010:ntfs_lookup+0x76/0xe0 [ntfs3]
+> > > > > >
+> > > > > > And do you get this same crash on ntfs3 on 6.4-rc1?  Is this a new
+> > > > > > regression, or does it also show up on 6.3.1?
+> > > > >
+> > > > > Tested with 6.3.1 during the day today. No errors, and had been
+> > > > > running 6.3.1 with no issue. Retested with 6.3.2-rc2 and problem
+> > > > > immediately evident. So yes - I believe a regression.
+> > > > >
+> > > > > I have built and am now testing 6.4.0-rc1 this evening - no errors so far.
+> > > > >
+> > > > > [    0.000000] Linux version 6.4.0-rc1 (docker@1ccd349e2545)
+> > > > > (x86_64-libreelec-linux-gnu-gcc-13.1.0 (GCC) 13.1.0, GNU ld (GNU
+> > > > > Binutils) 2.40) #1 SMP Wed May 10 07:51:37 UTC 2023
+> > > > >
+> > > > > > And ntfs, ick, why?  And .NET?  What a combination...
+> > > > >
+> > > > > Joys of media players. Test device gets to test exfat, ntfs3, .NET,
+> > > > > and throw in a compile host/GHA runner to put it through paces.
+> > > >
+> > > > Yeah, this should work.  Thanks for verifying this works on other
+> > > > releases.  Any chance you can do 'git bisect' to track down the
+> > > > offending commit?  In looking things over, I don't see anything
+> > > > obvious...
+> > >
+> > > Hi Greg,
+> > >
+> > > I can confirm the offending commit in 6.3.2-rc2 is
+> > >
+> > > bf11fd528a97 fs/ntfs3: Fix null-ptr-deref on inode->i_op in ntfs_lookup()
+> >
+> > Thanks!  Odd that this didn't show up for you on the other stable -rc
+> > releases, as that commit is also in those trees.
+> >
+> > I'll go revert this for now and ask the maintainer to send a fixed
+> > version.
+> 
+> Hi Greg,
+> 
+> I have run 6.1.28-rc2 today, and was able to trigger the error. So
+> definitely bad in both 6.3 and 6.1.
+> 
+> [13812.020209] BUG: kernel NULL pointer dereference, address: 0000000000000020
+> [13812.021322] #PF: supervisor read access in kernel mode
+> [13812.022346] #PF: error_code(0x0000) - not-present page
+> [13812.023591] PGD 0 P4D 0
+> [13812.024876] Oops: 0000 [#1] SMP NOPTI
+> [13812.026088] CPU: 5 PID: 20386 Comm: .NET ThreadPool Not tainted 6.1.28-rc2 #1
+> [13812.027336] Hardware name: Intel(R) Client Systems
+> NUC12WSKi7/NUC12WSBi7, BIOS WSADL357.0085.2022.0718.1739 07/18/2022
+> [13812.028593] RIP: 0010:ntfs_lookup+0x76/0xe0 [ntfs3]
+> [13812.029827] Code: 00 00 00 49 89 c4 e8 19 47 fe ff 85 c0 79 3a 48
+> 63 d8 48 8b 3d 4b 1d 77 cd 4c 89 e6 e8 33 25 d1 c3 48 81 fb 00 f0 ff
+> ff 77 07 <48> 83 7b 20 00 74 41 4c 89 ee 48 89 df e8 88 a5 d5 c3 5b 41
+> 5c 41
+> [13812.031149] RSP: 0018:ffff91f40537bbc8 EFLAGS: 00010207
+> [13812.032408] RAX: ffff8a844946a001 RBX: 0000000000000000 RCX: 00000000000042f7
+> [13812.033650] RDX: 00000000000042f6 RSI: fffff40a00000000 RDI: 0000000000030ed0
+> [13812.034869] RBP: ffff91f40537bbe8 R08: ffff8a844946c01e R09: ffff8a8474d0387e
+> [13812.036138] R10: ffff8a845a900000 R11: 0000000000000017 R12: ffff8a844946c000
+> [13812.037372] R13: ffff8a84db3fd2c0 R14: ffff8a84b44a0470 R15: ffff8a84b44a0548
+> [13812.039002] FS:  00007f437e7fc6c0(0000) GS:ffff8a8b77740000(0000)
+> knlGS:0000000000000000
+> [13812.040509] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [13812.041741] CR2: 0000000000000020 CR3: 000000017835e006 CR4: 0000000000f70ea0
+> [13812.042986] PKRU: 55555554
+> [13812.044227] Call Trace:
+> [13812.045464]  <TASK>
+> [13812.046708]  __lookup_slow+0x81/0x130
+> [13812.047939]  walk_component+0x10b/0x180
+> [13812.049169]  path_lookupat+0x6a/0x1a0
+> [13812.050388]  filename_lookup+0xd0/0x190
+> [13812.051612]  vfs_statx+0x84/0x150
+> [13812.052838]  ? getname_flags+0x54/0x1d0
+> [13812.054062]  vfs_fstatat+0x5c/0x80
+> [13812.055284]  __do_sys_newlstat+0x37/0x70
+> [13812.056580]  ? trace_hardirqs_on+0x3a/0xe0
+> [13812.058429]  __x64_sys_newlstat+0x1a/0x20
+> [13812.059878]  do_syscall_64+0x3c/0x90
+> [13812.061109]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> [13812.062369] RIP: 0033:0x7f447ea17184
+> [13812.063598] Code: 89 02 b8 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00
+> 00 00 0f 1f 40 00 89 f8 48 89 f7 48 89 d6 83 f8 01 77 2b b8 06 00 00
+> 00 0f 05 <48> 3d 00 f0 ff ff 77 04 c3 0f 1f 00 48 8b 15 61 cc 0b 00 f7
+> d8 64
+> [13812.064927] RSP: 002b:00007f437e7fa098 EFLAGS: 00000246 ORIG_RAX:
+> 0000000000000006
+> [13812.066267] RAX: ffffffffffffffda RBX: 00007f43cf45a870 RCX: 00007f447ea17184
+> [13812.067601] RDX: 00007f437e7fa0a0 RSI: 00007f437e7fa0a0 RDI: 00007f437e7fa210
+> [13812.068940] RBP: 00007f437e7fa1f0 R08: 00007f437e7fa320 R09: 000000000000002d
+> [13812.070276] R10: 00007f44051a15e8 R11: 0000000000000246 R12: 00007f43cc018408
+> [13812.071616] R13: 00007f437e7fa210 R14: 00007f43cf45a870 R15: 000000000000002d
+> [13812.072960]  </TASK>
+> [13812.074295] Modules linked in: rfcomm xt_nat xt_tcpudp veth
+> xt_conntrack xt_MASQUERADE nf_conntrack_netlink nfnetlink iptable_nat
+> nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 xt_addrtype
+> iptable_filter ip_tables x_tables br_netfilter bridge stp llc overlay
+> 8021q ntfs3 bnep btusb btrtl btbcm btintel btmtk bluetooth
+> ecdh_generic ecc exfat snd_hda_codec_hdmi snd_hda_codec_realtek
+> snd_hda_codec_generic ledtrig_audio snd_hda_intel snd_hda_codec
+> iwlwifi mei_hdcp snd_hwdep tpm_tis mei_pxp x86_pkg_temp_thermal
+> snd_hda_core tpm_tis_core cfg80211 intel_rapl_msr mei_me
+> intel_powerclamp snd_intel_dspcfg intel_rapl_common mei rfkill tpm_crb
+> idma64 tpm rng_core pkcs8_key_parser fuse dmi_sysfs
+> [13812.079600] CR2: 0000000000000020
+> [13812.081160] ---[ end trace 0000000000000000 ]---
 
---------------8VleNbXuViHE90YbagetCfNQ
-Content-Type: multipart/mixed; boundary="------------ZCDTGmwg4WcLL3ym70Z0wmG0"
+Wonderful, thanks for testing this out!
 
---------------ZCDTGmwg4WcLL3ym70Z0wmG0
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+Hopefully the real releases in a bit are all good, thanks for letting us
+know.
 
-T24gMTEuMDUuMjMgMTU6MjMsIE1hcnRpbiBXaWxjayB3cm90ZToNCj4gT24gVGh1LCAyMDIz
-LTA1LTExIGF0IDE1OjE3ICswMjAwLCBKdWVyZ2VuIEdyb3NzIHdyb3RlOg0KPj4+DQo+Pj4g
-V2Uga25vdyBmb3IgY2VydGFpbiB0aGF0IHNpemVvZigqc3NoZHIpIGlzIDggYnl0ZXMsIGFu
-ZCB3aWxsIG1vc3QNCj4+PiBwcm9iYWJseSByZW1haW4gc28uIFRodXMNCj4+Pg0KPj4+ICDC
-oMKgwqDCoCBtZW1zZXQoc3NoZHIsIDAsIHNpemVvZigqc3NoZHIpKQ0KPj4+DQo+Pj4gd291
-bGQgcmVzdWx0IGluIG1vcmUgZWZmaWNpZW50IGNvZGUuDQo+Pg0KPj4gSSBmYWlsIHRvIHNl
-ZSB3aHkgemVyb2luZyBhIHNpbmdsZSBieXRlIHdvdWxkIGJlIGxlc3MgZWZmaWNpZW50IHRo
-YW4NCj4+IHplcm9pbmcNCj4+IGEgcG9zc2libHkgdW5hbGlnbmVkIDgtYnl0ZSBhcmVhLg0K
-PiANCj4gSSBkb24ndCB0aGluayBpdCBjYW4gYmUgdW5hbGlnbmVkLiBnY2Mgc2VlbXMgdG8g
-dGhpbmsgdGhlIHNhbWUuIEl0DQo+IGNvbXBpbGVzIHRoZSBtZW1zZXQoc3NoZHIsIC4uLikg
-aW4gc2NzaV9ub3JtYWxpemVfc2Vuc2UoKSBpbnRvIGEgc2luZ2xlDQo+IGluc3RydWN0aW9u
-IG9uIHg4Nl82NC4NCj4gDQo+IDB4ZmZmZmZmZmY4MTc3ZTlkMCA8c2NzaV9ub3JtYWxpemVf
-c2Vuc2U+OiAgICAgIG5vcGwgICAweDAoJXJheCwlcmF4LDEpIFtGVFJBQ0UgTk9QXQ0KPiAw
-eGZmZmZmZmZmODE3N2U5ZDUgPHNjc2lfbm9ybWFsaXplX3NlbnNlKzU+OiAgICB0ZXN0ICAg
-JXJkaSwlcmRpDQo+IDB4ZmZmZmZmZmY4MTc3ZTlkOCA8c2NzaV9ub3JtYWxpemVfc2Vuc2Ur
-OD46ICAgIG1vdnEgICAkMHgwLCglcmR4KQ0KDQpBIHN0cnVjdCB3aXRoIDggInU4IiBmaWVs
-ZHMgY2FuIGJlIHVuYWxpZ25lZC4NCg0KeDg2XzY0IGNhbiBkbyB1bmFsaWduZWQgOC1ieXRl
-IHN0b3Jlcy4NCg0KT3RoZXIgYXJjaGl0ZWN0dXJlcyBjYW4ndCAoZS5nLiBNSVBTKS4gQW5k
-IDMyLWJpdCBhcmNoaXRlY3R1cmVzIG1pZ2h0IG5lZWQNCjIgc3RvcmVzLg0KDQoNCkp1ZXJn
-ZW4NCg==
---------------ZCDTGmwg4WcLL3ym70Z0wmG0
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
-
------BEGIN PGP PUBLIC KEY BLOCK-----
-
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------ZCDTGmwg4WcLL3ym70Z0wmG0--
-
---------------8VleNbXuViHE90YbagetCfNQ--
-
---------------AmTzaEmwjNDFarnUqUcdU2He
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmRc7nEFAwAAAAAACgkQsN6d1ii/Ey95
-xAf9ELMwKAp13ydHnLPOCZcsC+W1qCni+ViTkFbkZODuOumkWTv1uUIRmLePebmTClzcx7VhsNpj
-a048uAX7Bvj/ij0ie2ZQG22u4thOiLw41W6X5DpMS2JUKxi3QdPGHUEUsjqkYYDk1J2A0mmF6jjt
-UZlb/sUbuQY3/ZvbSxdeT7oubWd9/D6PFlnTICyAVC4tiG1n79l/ylmjygHULaqA6W22HWGYRWAB
-1DUq/BocRTTZzzSPqT56ukMt6IwdWQlCUP/DYs7SHLpdBx8ZcrQXKF9GsD8nNshGCDZyDbW1avbp
-drVP7KuOckqmecbeyiYQMgEJVBoQiD/ASuGt7Tx8xw==
-=fNLa
------END PGP SIGNATURE-----
-
---------------AmTzaEmwjNDFarnUqUcdU2He--
+greg k-h
