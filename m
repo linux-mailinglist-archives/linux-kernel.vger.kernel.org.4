@@ -2,126 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 803F46FFCEB
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 01:03:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E32766FFCF0
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 01:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239401AbjEKXD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 19:03:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54048 "EHLO
+        id S238949AbjEKXHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 19:07:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239296AbjEKXDX (ORCPT
+        with ESMTP id S229601AbjEKXHd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 19:03:23 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 065B410F3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 16:03:19 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba2d0b391d3so12246237276.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 16:03:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683846198; x=1686438198;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=G7in9pHI8f4PbQncUNnm7irUkPJSlHoe9VFQrVjPC7s=;
-        b=tlr7jb7AGBJLC1tGipYMA+NIE4W3qmlQdmY6GWrzLWsGWnOTLjaPHHlQG+JucDh8Qh
-         Q+VUON7noOWe1bBTJLFWP8puzEqijn6x7iGqKtaf9KUTnJocCwIq8bQ4zF4ncz61ZUGV
-         nIHRFyH+MjsY730vxId7VHLbcvyRGoDaRelSW10OrS6ersh1m09qWmIwdCDpEBmNK6ei
-         d6zSU5NXO5rdsbAuzikE+DvT55dlDlrAAaWpeQnkwAGG0fYAdvmwXqV5dGWS3kPWcdMF
-         u2iSGm/rtbBHvcFaFQcphfbZ8bqMKYu0jmywqpH7Ckh7xisCgK+GQqSuL5CH54Cv6zlp
-         sNvQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683846198; x=1686438198;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=G7in9pHI8f4PbQncUNnm7irUkPJSlHoe9VFQrVjPC7s=;
-        b=Xn0tL0oBGhHxdg5aAXX7zKphsBzoxH9W8wRlVzI3QSDgHGe1mYGFJOb9Ba58a+N1hx
-         CHJh4x0paMCWcI+rNBsPrCQz6z0tjjrlEXZZy7c6ptMKR3EY6npennHC6rS4WUY12jSM
-         RZgcJ8padxaAQR1wpOq5N+quHu2RfOkXIR7gsrxB8xyLcVg5MYOJgV2IFqratxczcGHP
-         l0EcgbfyJLkcxUkoS6r5eOi9IRIWqPYbK+LR9YMyFh1wRrJ6ExRdvqbNZFqxv++Sp/YU
-         uqJVK0RWAhHQNDX4fuktd+n8YjYbweZ3mP3eUJKSyZWVhsLXcnKp4qy0A7OoHxQuSKYM
-         FTnQ==
-X-Gm-Message-State: AC+VfDxJMmVHiGT9KfgaYlS71hKazuDkgM4rgbP8tdGGrY+pzk5RMrv3
-        VyFfZMrb5SXju4R1dd7+UzxUGNFY9so=
-X-Google-Smtp-Source: ACHHUZ43vzdgen2cveEeuKc+w92V7EeydHPKvEDKQRhBlrxAUEbdBd/WS3cmrriiVF0Dek+gyLX5N7OBccE=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:21c5:0:b0:ba6:e7ee:bb99 with SMTP id
- h188-20020a2521c5000000b00ba6e7eebb99mr976041ybh.12.1683846198249; Thu, 11
- May 2023 16:03:18 -0700 (PDT)
-Date:   Thu, 11 May 2023 16:03:16 -0700
-In-Reply-To: <fa16b58fb9a8a0a3ad192963a66e327e74b387e5.camel@intel.com>
-Mime-Version: 1.0
-References: <20230503182852.3431281-1-seanjc@google.com> <20230503182852.3431281-3-seanjc@google.com>
- <06715227566b520d4a445466f091dc28a0b8cd95.camel@intel.com>
- <ZFPQodNs0Cn9YDXT@google.com> <fa16b58fb9a8a0a3ad192963a66e327e74b387e5.camel@intel.com>
-Message-ID: <ZF10NPeLviOKtsxT@google.com>
-Subject: Re: [PATCH 2/5] KVM: SVM: Use kvm_pat_valid() directly instead of kvm_mtrr_valid()
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "guoke@uniontech.com" <guoke@uniontech.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "haiwenyao@uniontech.com" <haiwenyao@uniontech.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 11 May 2023 19:07:33 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDAE2D4A;
+        Thu, 11 May 2023 16:07:30 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QHSGQ5Wb8z4wgq;
+        Fri, 12 May 2023 09:07:26 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1683846446;
+        bh=7aOBU3S6gZdjMqA8FSQtrSA3oKTpWMBQzWJVOHffsQw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TTG1/VtPjnlQ29bAnmeWMAW/5bKUS2gBKAmbAohCGu+Hv747h4lhyS8mwaeSrdjF8
+         5kNGAq9o6mYix6aMVYEof2vP6ssKnL7Y79b6PS3c2whTekvto7MYQSOpgC8tWKH+LA
+         3+++bGfoVftEkxhHNqrcTYMASc55b/3FZZIYlX8KmSRbQZPozqukDrLDpDl5g9MN5n
+         uHYa4y9RN+PRqsTJo9JJxdzMVT3DWwM7FbdEn7OmSoCoT5EsO1e33FVqyJwfLxUYi3
+         loCqo5KalZqAzQQbCgGw8qcOvAFnoALQT4ilwd1f8E8+mu0EfT0CByy71x6QUqKq3K
+         2VzYfN2YoCszA==
+Date:   Fri, 12 May 2023 09:07:12 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patches in the v4l-dvb-fixes tree
+Message-ID: <20230512090712.175dd8ee@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/=Cb6DjRX/Zt8nZP/LGcJKzS";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023, Kai Huang wrote:
-> On Thu, 2023-05-04 at 08:34 -0700, Sean Christopherson wrote:
-> > On Wed, May 03, 2023, Kai Huang wrote:
-> > > > for better or worse, KVM doesn't apply the "zap
-> > > > SPTEs" logic to guest PAT changes when the VM has a passthrough device
-> > > > with non-coherent DMA.
-> > > 
-> > > Is it a bug?
-> > 
-> > No.  KVM's MTRR behavior is using a heuristic to try not to break the VM: if the
-> > VM has non-coherent DMA, then honor UC mapping in the MTRRs as such mappings may
-> > be coverage the non-coherent DMA.
-> > 
-> > From vmx_get_mt_mask():
-> > 
-> > 	/* We wanted to honor guest CD/MTRR/PAT, but doing so could result in
-> > 	 * memory aliases with conflicting memory types and sometimes MCEs.
-> > 	 * We have to be careful as to what are honored and when.
-> > 
-> > The PAT is problematic because it is referenced via the guest PTEs, versus the
-> > MTRRs being tied to the guest physical address, e.g. different virtual mappings
-> > for the same physical address can yield different memtypes via the PAT.  My head
-> > hurts just thinking about how that might interact with shadow paging :-)
-> > 
-> > Even the MTRRs are somewhat sketchy because they are technically per-CPU, i.e.
-> > two vCPUs could have different memtypes for the same physical address.  But in
-> > practice, sane software/firmware uses consistent MTRRs across all CPUs.
-> 
-> Agreed on all above odds.
-> 
-> But I think the answer to my question is actually we simply don't _need_ to zap
-> SPTEs (with non-coherent DMA) when guest's IA32_PAT is changed:
-> 
-> 1) If EPT is enabled, IIUC guest's PAT is already horned.  VMCS's GUEST_IA32_PAT
-> always reflects the IA32_PAT that guest wants to set.  EPT's memtype bits are
-> set according to guest's MTRR.  That means guest changing IA32_PAT doesn't need
-> to zap EPT PTEs as "EPT PTEs essentially only replaces guest's MTRRs".
+--Sig_/=Cb6DjRX/Zt8nZP/LGcJKzS
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Ah, yes, you're correct.  I thought KVM _always_ set the "ignore guest PAT" bit
-in the EPT PTEs, but KVM honors guest PAT when non-coherent DMA is present and
-CR0.CD=0.
+Hi all,
 
-> 2) If EPT is disabled, looking at the code, if I read correctly, the
-> 'shadow_memtype_mask' is 0 for Intel, in which case KVM won't try to set any PAT
-> memtype bit in shadow MMU PTE, which means the true PAT memtype is always WB and
-> guest's memtype is never horned (guest's MTRRs are also never actually used by
-> HW), which should be fine I guess??  My brain refused to go further :)
+The following commits are also in Linus Torvalds' tree as different
+commits (but the same patches):
 
-Yep.  It's entirely possible that VT-d without snoop control simply doesn't work
-with shadow paging, but no one has ever cared.
+  6b854bb90d23 ("media: platform: mtk-mdp3: work around unused-variable war=
+ning")
+  814fb7f94d70 ("media: nxp: ignore unused suspend operations")
+  97e814237417 ("media: rcar-vin: Select correct interrupt mode for V4L2_FI=
+ELD_ALTERNATE")
+  07ea2bc2f320 ("media: rcar-vin: Fix NV12 size alignment")
+  60ddb2e1a331 ("media: rcar-vin: Gen3 can not scale NV12")
 
-> But anyway back to my question, I think "changing guest's IA32_PAT" shouldn't
-> result in needing to "zap SPTEs".
+These are commits
+
+  ae3c253f595b ("media: platform: mtk-mdp3: work around unused-variable war=
+ning")
+  55e2a6e36be6 ("media: nxp: ignore unused suspend operations")
+  e10707d5865c ("media: rcar-vin: Select correct interrupt mode for V4L2_FI=
+ELD_ALTERNATE")
+  cb88d8289fc2 ("media: rcar-vin: Fix NV12 size alignment")
+  879c5a458e53 ("media: rcar-vin: Gen3 can not scale NV12")
+
+in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/=Cb6DjRX/Zt8nZP/LGcJKzS
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRddSAACgkQAVBC80lX
+0GyT1wgAi7H4RSVm4mjIYNyO/OUbhTVWNrPRnMngZXMAu9eEJPJFtOEAo4IIa45W
+jlBXUtLTWdhWXTP7wg0kIETDjzpIgNkToXXoQkct9aQqs7Kpi9gXWUA/O4Nxy2BV
+aGtX3flBWlfnGKs9JeUtBrLnX7otQc1V32hKs6Izc3q4ZHRRuvQ3jbZ5sEe+tOEE
+4m6Gq3AuoPlXmVrizdqt94NKvw4Xf34J5dyqp82Mymh04YKk21qA5dyXb0oQmwf4
+MzLxlp6E31XeTPKOP/t28wH0zqBJ7Nq+bR9YjrMuBr4Vtz+Yhb8xEPXXj8DDdVyW
+N8E61iwr7wBK6CY/lxdUkSJHZWDiWQ==
+=3bkx
+-----END PGP SIGNATURE-----
+
+--Sig_/=Cb6DjRX/Zt8nZP/LGcJKzS--
