@@ -2,63 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E226E6FE974
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:27:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A63B6FE977
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:29:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236972AbjEKB15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 21:27:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56190 "EHLO
+        id S236961AbjEKB3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 21:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236661AbjEKB1v (ORCPT
+        with ESMTP id S236468AbjEKB3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 21:27:51 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8DD65BA9;
-        Wed, 10 May 2023 18:27:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683768469; x=1715304469;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=z62C8M1tWfn4U6wg5u2pI6YKTBsSY36H16SFQnfBkLg=;
-  b=XiG0OoyKNFndIK3GwnWtoczWb6ybzI16q4GoivfdTuJZZxVl1vB7hTZ5
-   /Xik1UcnMRmDWzU9EYbwhAhANmALdJFuGpnFy3PNmMI1TwNYjbhey59B/
-   +cCA/McDRw5rzjlltcjjFeBKxI6oxQQWZeVErOHRFdWWnRHOAjtHfQzg0
-   s/48h09D+SjkWOjggJ4U/5Cvoe0fHS+QwUjlF4BzTuh85oe6jT1w5m4AW
-   EpwU0I3HgSopAP5CX8uUPcM/aEhzUhxdaMO+VFrVqLTEOfFovYdP6wGnE
-   t1TycSxXFbwV+wVFVgH3gFfOVy7AD28vEmDrA4XMKZwnYOevahfk70JK4
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="436691263"
-X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
-   d="scan'208";a="436691263"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 18:27:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="649944172"
-X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
-   d="scan'208";a="649944172"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.254.215.43]) ([10.254.215.43])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 18:27:47 -0700
-Message-ID: <0b5ba30f-2b95-3f2d-b2bb-c3101abb3716@linux.intel.com>
-Date:   Thu, 11 May 2023 09:27:45 +0800
+        Wed, 10 May 2023 21:29:51 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9124EDE;
+        Wed, 10 May 2023 18:29:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CAD96142C;
+        Thu, 11 May 2023 01:29:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2011FC433D2;
+        Thu, 11 May 2023 01:29:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683768589;
+        bh=xkZSZx7oD/2ihuOPs+EXiDXcMNsLja6hgA3JirBl9vs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=o94DUBaAqSQq9GKYZaNxFs6khoM6lGobAI0Z/QsFOW2c9a3HRSgKInsmbjDUit8r8
+         BT3n3p08wmJOISJy5qLBAfZ/Fp6G+ppWH4TSA3RaN35KqrNZUZHlo4K/WM9V5v2SDz
+         1bhO118eEgs4wtEj7VlYlDRrdsVAsZd0HpHefHam3GaAYMTKbmYdFVtpwxeFO0PdPn
+         R30WK6u6Xg98mN7SYpLKuYIToz62Y2ViLrorj8OaNzwqGG9XapUXIQIP/qnPcFbXPp
+         NMZzWGDjZ20zpAe32dYS5nmpwXGs8Dn19tCauisnowMP4OryOl03RE0GIrwW8nERm9
+         d0hsUqpg7rZxw==
+Date:   Thu, 11 May 2023 10:29:47 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Joy Chakraborty <joychakr@google.com>
+Cc:     Serge Semin <fancer.lancer@gmail.com>,
+        Andy Shevchenko <andriy.shevchenko@intel.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        manugautam@google.com, rohitner@google.com
+Subject: Re: [PATCH v10 1/5] spi: dw: Add 32 bpw support to SPI DW DMA driver
+Message-ID: <ZFxFCweHVgHyA1E1@finisterre.sirena.org.uk>
+References: <20230509082244.1069623-1-joychakr@google.com>
+ <20230509082244.1069623-2-joychakr@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v8 3/6] KVM: x86: Virtualize CR3.LAM_{U48,U57}
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        seanjc@google.com, pbonzini@redhat.com, kai.huang@intel.com,
-        robert.hu@linux.intel.com
-References: <20230510060611.12950-1-binbin.wu@linux.intel.com>
- <20230510060611.12950-4-binbin.wu@linux.intel.com>
- <ZFtcwACy/1rn2Py1@chao-email>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <ZFtcwACy/1rn2Py1@chao-email>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pS027X83bgCbZaBz"
+Content-Disposition: inline
+In-Reply-To: <20230509082244.1069623-2-joychakr@google.com>
+X-Cookie: Obey all traffic laws.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,24 +60,29 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--pS027X83bgCbZaBz
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 5/10/2023 4:58 PM, Chao Gao wrote:
->> @@ -7743,6 +7744,9 @@ static void vmx_vcpu_after_set_cpuid(struct kvm_vcpu *vcpu)
->> 		vmx->msr_ia32_feature_control_valid_bits &=
->> 			~FEAT_CTL_SGX_LC_ENABLED;
->>
->> +	if (guest_cpuid_has(vcpu, X86_FEATURE_LAM))
->> +		vcpu->arch.cr3_ctrl_bits |= X86_CR3_LAM_U48 | X86_CR3_LAM_U57;
-> This function can be called multiple times. We need to clear LAM bits if LAM
-> isn't exposed to the guest, i.e.,
->
-> 	else
-> 		vcpu->arch.cr3_ctrl_bits &= ~(X86_CR3_LAM_U48 | X86_CR3_LAM_U57);
-Nice catch, will fix it, thanks.
+On Tue, May 09, 2023 at 08:22:40AM +0000, Joy Chakraborty wrote:
+> Add Support for AxSize = 4 bytes configuration from dw dma driver if
+> n_bytes i.e. number of bytes per write to fifo is 4.
 
+This doesn't apply against current code, please check and resend.
 
->
-> With this fixed,
->
-> Reviewed-by: Chao Gao <chao.gao@intel.com>
+--pS027X83bgCbZaBz
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRcRQoACgkQJNaLcl1U
+h9C/FAf9Hem8cgONjfxUCIYwUrdYf9sxLL0K60Ve30VRssMNVxYb15by8J3HwxPk
+xviubx1/Wn9x3PvBRYVE0pBfG1CUj77t5/TwcptqEo3WCHbxV7o6RVdJ6YcVGB3y
+pFsLUJjNqR3P+Ylp7nzcFcHpejxI7wM34gyFTyiEf+a2S0pD3uPeF9voA9vjODoy
+dMfzmhGzhlR6twvGPSievnbiYO5EMQu21043hmZ8TeshCPXOU2VjfUTe+3QqxrQ3
+dJMmUdalQRNGSSIA5nIZAFk2HMjASotEdcENFIOWVO73H/PHp1J+58VOhnQx9ndU
+aAS3jMymQX9FclHzu32RkGGd6KM6BQ==
+=8a0l
+-----END PGP SIGNATURE-----
+
+--pS027X83bgCbZaBz--
