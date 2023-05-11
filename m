@@ -2,74 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33C9F6FEFBD
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:14:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D823A6FF00E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:43:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237723AbjEKKON (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 06:14:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
+        id S237871AbjEKKnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 06:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237602AbjEKKOK (ORCPT
+        with ESMTP id S229548AbjEKKm6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 06:14:10 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B78F659C;
-        Thu, 11 May 2023 03:14:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683800048; x=1715336048;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=OX6/RLsUKcu9rpPuGAmUsq6PrFANuvVqJn6z7EUYoHE=;
-  b=TAmeGF6NHZUJZmQorZ/PX6f8yDtJv0KAihAnjmzUELBj6syR1oChjQKy
-   /xntqHXPoPuj2tkDYt/TjDNu+1uxsY5+GTk6pdStw5h937ze53WPYhYvL
-   hGSXWaomnWT0L3OVrMwnxx3vCtmY/lK+ehvXcaS01eJ3nbXtln3AZKrWI
-   +3ZykhWfMVsjsUwI7N1ulD5qN0CSQOoK+0b+YNCcMsVU4jUwWGjLZsVHx
-   nqc7ifqI4ycPufRL+VDg6ZP2KFuj4R/GERkKdhdQgWHCrjIhDlPRgnUt7
-   +LnP2FW1BhdJlGWRm29LOGyutRWaDWWBFRicsxxXfM67G44kkItIzm8Oj
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="350490017"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="350490017"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 03:14:07 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="946094895"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="946094895"
-Received: from thenehan-mobl1.ger.corp.intel.com (HELO [10.213.214.244]) ([10.213.214.244])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 03:14:03 -0700
-Message-ID: <562bd20d-36b9-a617-92cc-460f2eece22e@linux.intel.com>
-Date:   Thu, 11 May 2023 11:14:01 +0100
+        Thu, 11 May 2023 06:42:58 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 519F52D45;
+        Thu, 11 May 2023 03:42:57 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-30644c18072so5637669f8f.2;
+        Thu, 11 May 2023 03:42:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683801776; x=1686393776;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :references:from:to:cc:subject:date:message-id:reply-to;
+        bh=PrLfI/6EF+lP+FmpMuOvP8uhLGdhvalpprKj2cFd/lA=;
+        b=iQPaLyl/16gHXplnypDmmplXN8cK9AUkOoCh1217AYWB50gSLr5daJsYPcWDAVAs7w
+         RWy1f7RPnZkr+xDDDhuNHYrgTeKqnIXTVwEW7Y74jPCSW90WrBzOh+DTy6xLyOfCD+3N
+         y/dRrW4l+VwusPY7BDDgE08yQaWAxF5hHunkuGrrrQ4+jhNY+SkV8IFCBUeUuxY2euzu
+         QO6h/kSlsOcDI4t+P7AV+0xVKBy35K+a0fv2wb8gRNRaZBxwMn5oY2aPQT2oOBU1Tbkt
+         Ugi+N4Kn7IcaawyH/STzUmQ1hCEFzighxHukX1AyMWlSAnXDDo0uDRMZac1ib8e0vGZD
+         auuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683801776; x=1686393776;
+        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
+         :references:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PrLfI/6EF+lP+FmpMuOvP8uhLGdhvalpprKj2cFd/lA=;
+        b=KINq495I6jE8pAJJefmq8bR4NNUqEfOtpUBk6SwALGUyTA7BNICFfD6eY4LCHKDJD7
+         +gbJkUq/iOYSSLqLY7f6aahlof9rjmbc2Qte97abR4QZ0WoMZliw70E82n4TUfyxxMCV
+         7DA/igP5/sNCGvlIhl3SlWXCydD1o3T4VS0l9I8OJzuL+hqit+PByhwxLbF2p7lK7J5z
+         AVVdwmET7zNVWjmpFawtF1I0PdnPHaDizVSMYtTcNb58I46vA09dUFqSKyKLw4o0XCWh
+         5h8Hma27HgYDES08xIpaR7Ggycp3ejj3hCK2ngyRWk29HlqOhGHFaqlRxAJdXYmmcNHt
+         bgdg==
+X-Gm-Message-State: AC+VfDw9Kexji8Uw1KKFQVmJ5ixgcXvI299SHKF0o4iVUNw95txO/sHX
+        5itmyCqrns/Zw8pKh2c8aK5iJtCoVGE=
+X-Google-Smtp-Source: ACHHUZ47rYP1ziytFCzBKE9uLcP9fev839NJloS4WCDCBjc6Jf1ncpn+PmAdYQmPZjV4fw3ayrmxNg==
+X-Received: by 2002:adf:eac9:0:b0:2f7:c224:cd32 with SMTP id o9-20020adfeac9000000b002f7c224cd32mr15575438wrn.10.1683801775603;
+        Thu, 11 May 2023 03:42:55 -0700 (PDT)
+Received: from localhost ([167.98.27.226])
+        by smtp.gmail.com with ESMTPSA id 10-20020a05600c024a00b003f423dfc686sm12591622wmj.45.2023.05.11.03.42.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 03:42:55 -0700 (PDT)
+References: <20230510112349.939991-1-aidanmacdonald.0x0@gmail.com>
+ <20230510112349.939991-3-aidanmacdonald.0x0@gmail.com>
+ <7b3a37e8-0210-c539-5b5b-bf8e587707ea@linaro.org>
+From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 3/3] dt-bindings: ASoC: Add ESS ES9218P codec bindings
+Date:   Thu, 11 May 2023 11:15:38 +0100
+In-reply-to: <7b3a37e8-0210-c539-5b5b-bf8e587707ea@linaro.org>
+Message-ID: <7Zga7RBqLNcaG5ylTIY4Qn7CUdE1IJsW@localhost>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [Intel-gfx] [RFC PATCH 0/4] Add support for DRM cgroup memory
- accounting.
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        David Airlie <airlied@gmail.com>,
-        intel-xe@lists.freedesktop.org
-References: <20230503083500.645848-1-maarten.lankhorst@linux.intel.com>
- <ZFVeI2DKQXddKDNl@slm.duckdns.org>
- <4d6fbce3-a676-f648-7a09-6f6dcc4bdb46@linux.intel.com>
- <ZFvmaGNo0buQEUi1@slm.duckdns.org>
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Organization: Intel Corporation UK Plc
-In-Reply-To: <ZFvmaGNo0buQEUi1@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,90 +75,68 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 10/05/2023 19:46, Tejun Heo wrote:
-> Hello,
-> 
-> On Wed, May 10, 2023 at 04:59:01PM +0200, Maarten Lankhorst wrote:
->> The misc controller is not granular enough. A single computer may have any number of
->> graphics cards, some of them with multiple regions of vram inside a single card.
-> 
-> Extending the misc controller to support dynamic keys shouldn't be that
-> difficult.
-> 
-> ...
->> In the next version, I will move all the code for handling the resource limit to
->> TTM's eviction layer, because otherwise it cannot handle the resource limit correctly.
->>
->> The effect of moving the code to TTM, is that it will make the code even more generic
->> for drivers that have vram and use TTM. When using TTM, you only have to describe your
->> VRAM, update some fields in the TTM manager and (un)register your device with the
->> cgroup handler on (un)load. It's quite trivial to add vram accounting to amdgpu and
->> nouveau. [2]
->>
->> If you want to add a knob for scheduling weight for a process, it makes sense to
->> also add resource usage as a knob, otherwise the effect of that knob is very
->> limited. So even for Tvrtko's original proposed usecase, it would make sense.
-> 
-> It does make sense but unlike Tvrtko's scheduling weights what's being
-> proposed doesn't seem to encapsulate GPU memory resource in a generic enough
-> manner at least to my untrained eyes. ie. w/ drm.weight, I don't need any
-> specific knoweldge of how a specific GPU operates to say "this guy should
-> get 2x processing power over that guy". This more or less holds for other
-> major resources including CPU, memory and IO. What you're proposing seems a
-> lot more tied to hardware details and users would have to know a lot more
-> about how memory is configured on that particular GPU.
-> 
-> Now, if this is inherent to how all, or at least most, GPUs operate, sure,
-> but otherwise let's start small in terms of interface and not take up space
-> which should be for something universal. If this turns out to be the way,
-> expanding to take up the generic interface space isn't difficult.
-> 
-> I don't know GPU space so please educate me where I'm wrong.
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
 
-I was hoping it might be passable in principle (in some form, pending 
-discussion on semantics) given how Maarten's proposal starts with only 
-very specific per-device-per-memory regions controls, which is 
-applicable to many devices. And hard limit at that, which probably has 
-less complicated semantics, or at least implementation.
+> On 10/05/2023 13:23, Aidan MacDonald wrote:
+>> ...
+>> +  ess,max-clock-div:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      Sets the maximum MCLK divider for generating the internal CLK.
+>> +      CLK must be at least 20x the I2C bus speed or I2C transactions
+>> +      will fail. The maximum divider should be chosen to ensure that
+>> +      CLK will not fall below the limit.
+>> +    enum:
+>> +      - 1
+>> +      - 2
+>> +      - 4
+>> +      - 8
+>> +    default: 1
+>
+> Why do you need to customize it per board?
+>
 
-My understanding of the proposal is that the allocation either fits, or 
-it evicts from the parent's hierarchy (if possible) and then fits, or it 
-fails. Which sounds simple enough.
+There's no generic API to read or change the bus speed (SCL frequency)
+for I2C adapters, so it's impossible to calculate a limit on the MCLK
+divider automatically.
 
-I do however agree that it is a limited use case. So from the negative 
-side of the debating camp I have to ask if this use case could be simply 
-satisfied by providing a driver/device global over commit yes/no 
-control? In other words, is it really important to partition the vram 
-space ahead of time, and from the kernel side too? Wouldn't the relevant 
-(highly specialised) applications work just fine with global over commit 
-disabled? Even if the option to configure their maximum allowed working 
-set from the userspace side was needed.
+Defaulting to 1 is always safe, but means wasting power at lower sample
+rates. If you know what the bus speed is you can use a higher divider
+limit to save power, and it has to be done at the board/firmware level
+because that's the only place where the bus speed is known.
 
-Or if we conclude cgroup controller is the way to go, would adding less 
-specific limits make it more palatable? I am thinking here some generic 
-"device memory resident". Not per device, not per memory region. So 
-userspace/admins have some chance of configuring generic limits. That 
-would require coming up with more generic use cases though so another 
-thing to discuss. Like who would use that and for what.
+>> +
+>> +  ess,oscillator-pad-bias:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description: Sets the oscillator pad drive bias. 0 - full bias, 15 - disabled.
+>> +    minimum: 0
+>> +    maximum: 15
+>> +    default: 0
+>> +
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - "#sound-dai-cells"
+>> +  - avdd-supply
+>> +  - vcca-supply
+>> +  - avcc3v3-supply
+>> +  - avcc1v8-supply
+>> +  - clocks
+>> +  - clock-names
+>> +  - reset-gpios
+>> +
+>> +additionalProperties: false
+>
+> Instead: unevaluatedProperties: false
+>
+>
+>> +
+>> +examples:
+>
+> Best regards,
+> Krzysztof
 
-Assuming also we can agree that "device memory resident" is a 
-stable/solid concept across drm. Should be easier than for integrated 
-GPUs, for which I have to admit I currently don't remember if 
-allocations are already consistently covered by the memory controller. 
-Even if they are ownership is probably wrong.
-
-Group ownership is possibly a concern in this proposal too. Because I 
-remember the previous attempt of adding some drm stats to memcg 
-explained that for instance on Android all buffers are allocated by a 
-central process and then handed over to other processes. So transferring 
-ownership was explained as critical.
+Everything else agreed, I'll send v2 later today.
 
 Regards,
-
-Tvrtko
-
-P.S.
-On the matter of naming the uapi interface - in any case I wouldn't use 
-the "unqualified" drm namespace such as drm.max/current/capacity. I 
-think all those should include a specific prefix to signify it is about 
-memory. In some way.
+Aidan
