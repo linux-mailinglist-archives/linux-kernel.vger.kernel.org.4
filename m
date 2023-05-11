@@ -2,100 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50A56FF34C
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:44:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FF006FF34F
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:45:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238033AbjEKNo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 09:44:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
+        id S238227AbjEKNoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238170AbjEKNoK (ORCPT
+        with ESMTP id S238379AbjEKNo2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:44:10 -0400
-Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D652186;
-        Thu, 11 May 2023 06:43:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1683812625; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=ahzbYv3GbsCy7qFGNW+TS6G1K255Zc8tPaWnlVtL34PzrIjWLJE3OcYUMNikkmzikiQxlaE8iQm1kcfJMFN6O7Z3atGtOsvcfvXBIe5AzcgpvwT1ufp3LS4+9sOGTbpluno1/8y0v1Kg4SLXtGTYn5LHr3fwJMWrWs0BjdfgCWo=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1683812625; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=Kk1qAWGqn4/kFRbf5MQYGMlgX+H8kYV39hdmYP2/k+M=; 
-        b=Keb9SULhVo2MJuQmSeY/mgDU31kNet+uzF3P37nYECsw37mqgogyKxRMD6Leoq8JAXhO53Y8P4qt5uRRdsI783IVEzpKgVwyu5UsTNX2MbHz5E8CvEXpsa4Pgpz+ZEmOdSKm/1crHfZwLHBmv79pWsDggsVQrDSP8e+D+qcHCpg=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1683812625;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=Kk1qAWGqn4/kFRbf5MQYGMlgX+H8kYV39hdmYP2/k+M=;
-        b=DGnJBJ4qU3CD7oYYjhpQrQ5OaZJCAWgCdNNNscX7qvtmkIYZZo1MhdT3glOuQ19p
-        kzhMeXM/5brWbtD2hbwvQEwP1PLIAre522RVXXOfGQrE9rTqIT19RV9t2JY4NcI+Js2
-        hLokbkq9lPKUPb9C/8tMKFdducaae4EOwCvmHb/Y=
-Received: from [10.1.111.147] (185.242.250.116-ip.operadors.cat [185.242.250.116]) by mx.zohomail.com
-        with SMTPS id 168381262314599.20625267029584; Thu, 11 May 2023 06:43:43 -0700 (PDT)
-Message-ID: <7be59dc4-1663-9acc-ae5d-f0ad7e3b1053@arinc9.com>
-Date:   Thu, 11 May 2023 15:43:38 +0200
+        Thu, 11 May 2023 09:44:28 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 719B1100EF;
+        Thu, 11 May 2023 06:44:20 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id E1E575FD13;
+        Thu, 11 May 2023 16:44:17 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1683812657;
+        bh=zpRN19wKJWL95Pe9rYSROAJmHnQ4rR4hEcVtgRpKk68=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=LsEa5uuVVpI5U5qf/kO9mz6Kw6h0QV+TV7C0pfu4gmnlhZtecj13b0HrjlJiXZt4H
+         XyL1v97e/SEtUCc1XXnFJcz1YQOrHokYsQS1x7qU3/ctsNcJEMRklgMSVdZSXXyjpJ
+         h3E5o30imO2R1t17JImKYhIDzByfDqYeBQ3TQaucGshvbxSSQwQ8gNnHoEzZYXDXgx
+         CpCFVGiUWsgZ9925kr0fMd2Z85SWnnedNpDnrBDRHay8mHx4nlRlRDzBMH5B1z/BGS
+         +tPjXRY7yjpGklbGqC7V1K+reqsgmBoOjHGRpWRD43DIGuUdqk/OQ9OopDjOgCdQx8
+         RKuOkISUjTWBg==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Thu, 11 May 2023 16:44:17 +0300 (MSK)
+Date:   Thu, 11 May 2023 16:44:16 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <khilman@baylibre.com>, <jian.hu@amlogic.com>,
+        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v14 5/6] dt-bindings: clock: meson: add A1 Peripherals
+ clock controller bindings
+Message-ID: <20230511134416.pw4led274g72z7e6@CAB-WSD-L081021>
+References: <20230426095805.15338-1-ddrokosov@sberdevices.ru>
+ <20230426095805.15338-6-ddrokosov@sberdevices.ru>
+ <CAFBinCCdoaNuQymcjp5j9MHn2jpPWMqXe-+EgBo=5Ot8Bwaofw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: [PATCH] mips: dts: ralink: Add support for TP-Link HC220 G5 v1
- board.
-Content-Language: en-US
-To:     Liviu Dudau <liviu@dudau.co.uk>
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Paul Burton <paulburton@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230509200125.309026-1-liviu@dudau.co.uk>
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <20230509200125.309026-1-liviu@dudau.co.uk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAFBinCCdoaNuQymcjp5j9MHn2jpPWMqXe-+EgBo=5Ot8Bwaofw@mail.gmail.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/11 10:21:00 #21259776
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9.05.2023 22:01, Liviu Dudau wrote:
-> This WiFi AP is based on a MT7621 SoC with 128MiB RAM, 128MiB NAND,
-> a MT7603 2.4GHz WiFi and a MT7663 5GHz WiFi chips integrated on the board,
-> connected to the main SoC over PCIe.
-> 
-> The GMAC1 on the SoC is connected to PHY0 on the GSW and can be used to
-> improve routing bandwidth.
-> 
-> The device uses NMBM over NAND, which is not currently supported in the
-> mainline, so NAND node is skipped in this revision.
-> 
-> Signed-off-by: Liviu Dudau <liviu@dudau.co.uk>
-> ---
->   arch/mips/boot/dts/ralink/Makefile            |   3 +-
->   .../dts/ralink/mt7621-tplink-hc220_g5.dts     | 126 ++++++++++++++++++
->   2 files changed, 128 insertions(+), 1 deletion(-)
->   create mode 100644 arch/mips/boot/dts/ralink/mt7621-tplink-hc220_g5.dts
-> 
-> diff --git a/arch/mips/boot/dts/ralink/Makefile b/arch/mips/boot/dts/ralink/Makefile
-> index 11732b8c8163a..c57a2b40876b4 100644
-> --- a/arch/mips/boot/dts/ralink/Makefile
-> +++ b/arch/mips/boot/dts/ralink/Makefile
-> @@ -8,6 +8,7 @@ dtb-$(CONFIG_DTB_VOCORE2)	+= vocore2.dtb
->   
->   dtb-$(CONFIG_SOC_MT7621) += \
->   	mt7621-gnubee-gb-pc1.dtb \
-> -	mt7621-gnubee-gb-pc2.dtb
-> +	mt7621-gnubee-gb-pc2.dtb \
-> +	mt7621-tplink-hc220_g5.dtb
+Hello Martin,
 
-No underscores please. And add v1 on the filename.
+Sorry for the delayed response as I was on vacation without laptop.
 
-Arınç
+On Mon, May 01, 2023 at 08:51:30PM +0200, Martin Blumenstingl wrote:
+> Hi Dmitry,
+> 
+> On Wed, Apr 26, 2023 at 11:58 AM Dmitry Rokosov
+> <ddrokosov@sberdevices.ru> wrote:
+> >
+> > Add the documentation for Amlogic A1 Peripherals clock driver,
+> > and A1 Peripherals clock controller bindings.
+> Maybe a native English speaker can comment on whether it's
+> "peripheral" or "peripherals".
+> 
+
+Ok
+
+> [...]
+> > Signed-off-by: Jian Hu <jian.hu@amlogic.com>
+> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > Reviewed-by: Rob Herring <robh@kernel.org>
+> > ---
+> >  .../bindings/clock/amlogic,a1-clkc.yaml       |  73 +++++++++++
+> >  .../bindings/clock/amlogic,a1-pll-clkc.yaml   |   5 +-
+> >  include/dt-bindings/clock/amlogic,a1-clkc.h   | 114 ++++++++++++++++++
+> I have seen that Yu Tu named the S4 peripheral clock controller
+> binding and driver "s4-peripherals-clkc" [0].
+> Does it make sense to apply the same naming here as well?
+
+Yes, it makes sense. I will prepare a new version with the necessary
+renaming.
+
+> 
+> 
+> Best regards,
+> Martin
+> 
+> 
+> [0] https://lore.kernel.org/linux-amlogic/20230417065005.24967-3-yu.tu@amlogic.com/
+
+-- 
+Thank you,
+Dmitry
