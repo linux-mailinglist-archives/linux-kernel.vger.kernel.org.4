@@ -2,195 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B896A6FF10E
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 14:07:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB7C76FF116
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 14:08:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237820AbjEKMG7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 08:06:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44984 "EHLO
+        id S237847AbjEKMIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 08:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233573AbjEKMG5 (ORCPT
+        with ESMTP id S231391AbjEKMIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 08:06:57 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32A4630CD;
-        Thu, 11 May 2023 05:06:56 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6434e263962so6352935b3a.2;
-        Thu, 11 May 2023 05:06:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683806815; x=1686398815;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=DpI0LCtbJtrSBcOMQznyzok/DfI57bJp2AeJkWmxrek=;
-        b=I9OQDRwSkGBi6hkErMi1fSRGe2ljPMCAGhcTrGSBzJvM+mO3+KJyUjFQolNfhFgBUL
-         omRkNM44V3ZA1g9SxM3h/XgCEKrzNTrGJe32PpjLSqfjuK/Kez6jNhzMFUBwWSs8QHUK
-         p0X/YmkIUPCn4sgHNCRftPlVF0k8ogafSyB5tiu3ck+nOW+KQsZNyokGa2kzBbHUWLT8
-         Q5teeW4I2jChjQwoqJpfUNrGtR5Xpr5yDC3n6x1z4et1zxOX9eU0c0K8XS5O3YfxF2DO
-         KpfvtNWxpXQWU5kTbHvyzLZAIog9ie+dBgdBAkMW14Iv4D3fkFhI/9BBIQs93B9D7CIF
-         dG9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683806815; x=1686398815;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DpI0LCtbJtrSBcOMQznyzok/DfI57bJp2AeJkWmxrek=;
-        b=BzSOjww3TswPYYj/ocC0GWj4BP1EPJxtZywXYtaE2nDJb9ins7NxcHb9FSqbi6ztXY
-         hI1CKIwU1MFzIGyUn1Gu/1wQqH9uFW325w0iVVMJ/GH67/5ppORP6rdC0T090EONe2TI
-         vN+r4yCPifmgDqQOQ4ucRPxLpHg4UWQeyPNygpibVoJdgaYNMwnUwuWFb8BXpFb0YntK
-         eIXzFu4HOIorQa3I5Romx5jTSSVis9P2SKHDkewJasda4TeKZ9EttsxgD8rr+8iLYOcl
-         SKL47z5tWNBZVkjzdzILiywTLDzn8g3q5u+4ElP5oV6QUGVh1lpTjPKooLqbpnDkeBVo
-         FiOg==
-X-Gm-Message-State: AC+VfDw2Ug8tB0BRLkpum4qlhrpdBF+qWAKJbf+8Awf1NhnWz6TX1aqg
-        meo/0bEB0if7b/24LCFb9XwTvCWz3Si8YN+g
-X-Google-Smtp-Source: ACHHUZ7i/tHvXuWzkmPvYNLMRCBKrAkpERgjkz4ntg1uINEDSgVSGhF15yyy9xxbtisHBcpkz5zy+w==
-X-Received: by 2002:a05:6a00:2289:b0:625:fe95:f120 with SMTP id f9-20020a056a00228900b00625fe95f120mr28956917pfe.8.1683806815148;
-        Thu, 11 May 2023 05:06:55 -0700 (PDT)
-Received: from kelvin-ThinkPad-L14-Gen-1.lan ([103.184.129.7])
-        by smtp.gmail.com with ESMTPSA id u17-20020aa78491000000b0063d2dae6247sm5179521pfn.77.2023.05.11.05.06.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 05:06:54 -0700 (PDT)
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-To:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Keguang Zhang <keguang.zhang@gmail.com>
-Subject: [PATCH v3] MIPS: Loongson32: Remove reset.c
-Date:   Thu, 11 May 2023 20:06:48 +0800
-Message-Id: <20230511120648.463221-1-keguang.zhang@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Thu, 11 May 2023 08:08:23 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2053.outbound.protection.outlook.com [40.107.92.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3BBD30CD;
+        Thu, 11 May 2023 05:08:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nWKqbb/vAlRsGm+vEuB7Gsc8h74htJR2irZMEgaCsxeqGcbqBZT+pVuPyilr7ZEW+fbW4iq58Jl3W/0Xt5KHQKQc9ZIX69Itmlb1dW3fGG2cqnN9xfp+CBh8UjssvvBkynF6m8DBAWVg7EjzE/5cH7MGoIhC47adh2AXXf0s8Xun0tHwz5wJyyNEDG3BER+etSX4agOPyXOTaP/XCr7j8MNaGupB/MVfUZ6nP/V5THEIt8n+d11Sf8mnbzxo33Dr/hgjW4nr4JE/CWPuCDPnkU3Rh+UBXsHEtH4zrRtEVqbSpx35ukQMTQe4COJl9ajPVk8ndkXtsEnwMFWy/zW+wg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gqFbsTINfbFhaqd4iTOFYv2v2qVNnRaM9LHQwvboaPA=;
+ b=CT4TBY6kgBxVfn1qQWg4jGheOoRDnpxTpjnoIPJ4xCYirG0RJV5iq7ysTMjmR9kdVr9A89MITaBlc1qaVVeYiAQjI6804sJWFSm+HIMsbgPTr64CLqjA/Y6H+WnXmHCE4SD6lox/8LEkOKuiIrprM1ziVX4DM3U/a05UNXOVR9SmwFfGRdv90wd5ow/jD3ZIv5DmPOCaPEMl3U4ATFyeuiUwcOzQR42Z4l3iaVCiHgLpY2AZc3DB2wpe/TyPc5DzYNNVPIrxNfLCb7kD/TRnnnSTnD/YC4DrZeZZ6XP5PTnL3CXgWqYD3MUvqm9Fj/S2bEgC0WuKXu3CIIclzq3n5w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=lunn.ch smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gqFbsTINfbFhaqd4iTOFYv2v2qVNnRaM9LHQwvboaPA=;
+ b=FU6zOyrw1qgBmwehJssFu2cuEAf1h1mhW8YP38TFPx63CpMHaOqOtlFBhf6EEVODkp5HNEZWuKu0h4cAeF+YhaeYtoV8kRS2q7B6tQZkflMF+VQFqxmeQjoWTs5CyXEVA+f7Q6lKR62d5UxR/aritVBzF3dIHgpAVQ9FgE+Kyv4=
+Received: from MW4PR03CA0035.namprd03.prod.outlook.com (2603:10b6:303:8e::10)
+ by CH0PR12MB5251.namprd12.prod.outlook.com (2603:10b6:610:d2::23) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.22; Thu, 11 May
+ 2023 12:08:19 +0000
+Received: from CO1NAM11FT016.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8e:cafe::43) by MW4PR03CA0035.outlook.office365.com
+ (2603:10b6:303:8e::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.22 via Frontend
+ Transport; Thu, 11 May 2023 12:08:19 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ CO1NAM11FT016.mail.protection.outlook.com (10.13.175.141) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6387.22 via Frontend Transport; Thu, 11 May 2023 12:08:19 +0000
+Received: from SATLEXMB08.amd.com (10.181.40.132) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 11 May
+ 2023 07:08:18 -0500
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB08.amd.com
+ (10.181.40.132) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Thu, 11 May
+ 2023 05:08:18 -0700
+Received: from xhdharinik40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2375.34 via Frontend
+ Transport; Thu, 11 May 2023 07:08:14 -0500
+From:   Harini Katakam <harini.katakam@amd.com>
+To:     <andrew@lunn.ch>, <hkallweit1@gmail.com>, <linux@armlinux.org.uk>,
+        <davem@davemloft.net>, <kuba@kernel.org>, <edumazet@google.com>,
+        <pabeni@redhat.com>, <vladimir.oltean@nxp.com>,
+        <wsa+renesas@sang-engineering.com>, <simon.horman@corigine.com>,
+        <mkl@pengutronix.de>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <harinikatakamlinux@gmail.com>, <michal.simek@amd.com>,
+        <harini.katakam@amd.com>, <radhey.shyam.pandey@amd.com>
+Subject: [PATCH net-next v3 0/3] Add support for VSC8531_02 PHY and DT RGMII tuning
+Date:   Thu, 11 May 2023 17:38:05 +0530
+Message-ID: <20230511120808.28646-1-harini.katakam@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT016:EE_|CH0PR12MB5251:EE_
+X-MS-Office365-Filtering-Correlation-Id: 59146002-824f-49a8-000d-08db521868e2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Dg5zZC6YEi2bRc68FyM8j/wYPNuctwpS/HDzeEVJS24k2r7zUVLC8fVxZA6u+X2O0WMTpd1KaPBvCfXxDXCX8LwACYHO2wC7gXHNVVrjEzR9JHJlCuoen8j3herRVK8xw3mpa2ycrr6NkmF5iqD/SYgPbF05ZdytAEzyjYC27C7fqIrNswAWeMDHoRB9SnazepmBFDZiR7+POyhBYdUMn5+YE53LhZOiJcf+IQSB/cDRbKZTl3bgKmRi67ZzGTKTtYVb9huNJOKI6btqKkOq/d2hOiLiYF0faoq1KzAhiyly7/skyzd3NuhVjLYBmf7oJHX83cmIHtsH6DXsZa6p2Vz+oWhtTtrOvgZzxK7GvRopvpNCyt7YOYBbQohhFTrrL3mATP5uYFtgbB3JQP6LsdfAA+qyYrWcdhdLpa7oiUy2Q9HuH1dJPTFD0mTpo+A369h4BxPJkZFRgXpojWllB6P2w5pjEGd4QXUycYpcZ57AvOZ06/0uo+HLfA2AdXTuvIVGjwr7ojtqfogFzwatniq6TocozCQzN0YngZD64cXQ6VRSpqgXuTM2hOAxFcBGvNvqVZgCFLy4rpKfw/cZBmri4t4Y/jTWrkq1liIaE73freQ+k7gSG16Ucq5rCFAIKwvbwWSFNtEasxxT/3DVDytdqvb7luNvvtqxZrKKcwawAAJbFKozf49vmS9c9sU47Twpayn4w7H3C1ipg90IwEi5EWOPLL1L9O/N3V1dZDDaQtW1+JKEiIZdlvLtBHQE4eVppFOjNHrpT0iA10TtzdhV/9KclKPrjm0lehTHE3s=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(396003)(376002)(136003)(451199021)(46966006)(40470700004)(36840700001)(41300700001)(6666004)(70586007)(70206006)(40480700001)(4326008)(1076003)(26005)(110136005)(54906003)(316002)(478600001)(8676002)(8936002)(44832011)(36756003)(5660300002)(40460700003)(7416002)(82310400005)(86362001)(2616005)(36860700001)(2906002)(336012)(426003)(47076005)(83380400001)(81166007)(82740400003)(186003)(356005)(921005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 12:08:19.3985
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 59146002-824f-49a8-000d-08db521868e2
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT016.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5251
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 2a31bf20808a ("watchdog: loongson1_wdt: Implement restart handler")
-implmented .restart ops, Then, _machine_restart is no longer needed.
-The _machine_halt and pm_power_off are also unnecessary,
-which contain no hardware operations.
+Add support for VSC8531_02 PHY ID.
+Also provide an option to change RGMII delay value via devicetree.
 
-Therefore, remove the entire reset.c and related header file.
-Update the Makefile accordingly.
+v3 changes:
+- Remove patch 2/3 from v2 as custom mscc properties dont need to be
+defined. rx-internal-delay-ps and tx-internal-delay-ps can be used.
+- Change RGMII delay precedence as advised by Vladimir:
+ phy-mode                       rgmii                          rgmii-rxid/rgmii-id
+ --------------------------------------------------------------------------------------------
+ rx-internal-delay-ps absent    0.2 ns                         2 ns
+ rx-internal-delay-ps present   follow rx-internal-delay-ps    follow rx-internal-delay-ps
+- Split VSC8531-02 and RGMII delay config into separate patches.
+- Correct vendor ID
+- Update commit description and subject everywhere to say RGMII delays
+instead of RGMII tuning.
 
-Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
----
-V2 -> V3: Update the commit message
-V1 -> V2: Remove the reference to regs-wdt.h
----
- .../include/asm/mach-loongson32/loongson1.h   |  1 -
- .../include/asm/mach-loongson32/regs-wdt.h    | 15 ------
- arch/mips/loongson32/common/Makefile          |  2 +-
- arch/mips/loongson32/common/reset.c           | 51 -------------------
- 4 files changed, 1 insertion(+), 68 deletions(-)
- delete mode 100644 arch/mips/include/asm/mach-loongson32/regs-wdt.h
- delete mode 100644 arch/mips/loongson32/common/reset.c
+v2 changes:
+- Added patch to use a common vendor phy id match
+- Removed dt include header patch because delays should be specied in
+ps, not register values
+- Updated DT binding description and commit for optional delay tuning to
+be clearer on the precedence
+- Updated dt property name to include vendor instead of phy device name
+- Switch both VSC8531 and VSC8531-02 to use exact phy id match as they
+share the same model number
+- Ensure RCT
+- Improve optional property read
 
-diff --git a/arch/mips/include/asm/mach-loongson32/loongson1.h b/arch/mips/include/asm/mach-loongson32/loongson1.h
-index eb3ddbec1752..50358f1a6181 100644
---- a/arch/mips/include/asm/mach-loongson32/loongson1.h
-+++ b/arch/mips/include/asm/mach-loongson32/loongson1.h
-@@ -49,6 +49,5 @@
- #include <regs-mux.h>
- #include <regs-pwm.h>
- #include <regs-rtc.h>
--#include <regs-wdt.h>
- 
- #endif /* __ASM_MACH_LOONGSON32_LOONGSON1_H */
-diff --git a/arch/mips/include/asm/mach-loongson32/regs-wdt.h b/arch/mips/include/asm/mach-loongson32/regs-wdt.h
-deleted file mode 100644
-index c6d345fe13f2..000000000000
---- a/arch/mips/include/asm/mach-loongson32/regs-wdt.h
-+++ /dev/null
-@@ -1,15 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-or-later */
--/*
-- * Copyright (c) 2011 Zhang, Keguang <keguang.zhang@gmail.com>
-- *
-- * Loongson 1 Watchdog Register Definitions.
-- */
--
--#ifndef __ASM_MACH_LOONGSON32_REGS_WDT_H
--#define __ASM_MACH_LOONGSON32_REGS_WDT_H
--
--#define WDT_EN			0x0
--#define WDT_TIMER		0x4
--#define WDT_SET			0x8
--
--#endif /* __ASM_MACH_LOONGSON32_REGS_WDT_H */
-diff --git a/arch/mips/loongson32/common/Makefile b/arch/mips/loongson32/common/Makefile
-index 7b49c8260706..f3950d308187 100644
---- a/arch/mips/loongson32/common/Makefile
-+++ b/arch/mips/loongson32/common/Makefile
-@@ -3,4 +3,4 @@
- # Makefile for common code of loongson1 based machines.
- #
- 
--obj-y	+= time.o irq.o platform.o prom.o reset.o setup.o
-+obj-y	+= time.o irq.o platform.o prom.o setup.o
-diff --git a/arch/mips/loongson32/common/reset.c b/arch/mips/loongson32/common/reset.c
-deleted file mode 100644
-index 0c7399b303fb..000000000000
---- a/arch/mips/loongson32/common/reset.c
-+++ /dev/null
-@@ -1,51 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-or-later
--/*
-- * Copyright (c) 2011 Zhang, Keguang <keguang.zhang@gmail.com>
-- */
--
--#include <linux/io.h>
--#include <linux/pm.h>
--#include <linux/sizes.h>
--#include <asm/idle.h>
--#include <asm/reboot.h>
--
--#include <loongson1.h>
--
--static void __iomem *wdt_reg_base;
--
--static void ls1x_halt(void)
--{
--	while (1) {
--		if (cpu_wait)
--			cpu_wait();
--	}
--}
--
--static void ls1x_restart(char *command)
--{
--	__raw_writel(0x1, wdt_reg_base + WDT_EN);
--	__raw_writel(0x1, wdt_reg_base + WDT_TIMER);
--	__raw_writel(0x1, wdt_reg_base + WDT_SET);
--
--	ls1x_halt();
--}
--
--static void ls1x_power_off(void)
--{
--	ls1x_halt();
--}
--
--static int __init ls1x_reboot_setup(void)
--{
--	wdt_reg_base = ioremap(LS1X_WDT_BASE, (SZ_4 + SZ_8));
--	if (!wdt_reg_base)
--		panic("Failed to remap watchdog registers");
--
--	_machine_restart = ls1x_restart;
--	_machine_halt = ls1x_halt;
--	pm_power_off = ls1x_power_off;
--
--	return 0;
--}
--
--arch_initcall(ls1x_reboot_setup);
 
-base-commit: ac9a78681b921877518763ba0e89202254349d1b
+Harini Katakam (3):
+  phy: mscc: Use PHY_ID_MATCH_VENDOR to minimize PHY ID table
+  phy: mscc: Add support for RGMII delay configuration
+  phy: mscc: Add support for VSC8531_02
+
+ drivers/net/phy/mscc/mscc.h      |  4 ++
+ drivers/net/phy/mscc/mscc_main.c | 75 ++++++++++++++++++++++----------
+ 2 files changed, 57 insertions(+), 22 deletions(-)
+
 -- 
-2.39.2
+2.17.1
 
