@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1EAA6FFA43
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:38:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 980376FFA47
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239185AbjEKTi0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 15:38:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54778 "EHLO
+        id S239233AbjEKTib (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 15:38:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238993AbjEKTiU (ORCPT
+        with ESMTP id S239179AbjEKTi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 15:38:20 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 441847EE6;
-        Thu, 11 May 2023 12:38:19 -0700 (PDT)
+        Thu, 11 May 2023 15:38:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 179B28A53;
+        Thu, 11 May 2023 12:38:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BAA536510F;
-        Thu, 11 May 2023 19:38:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DB96BC433D2;
-        Thu, 11 May 2023 19:38:17 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8DA0F65112;
+        Thu, 11 May 2023 19:38:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86A82C433EF;
+        Thu, 11 May 2023 19:38:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683833898;
-        bh=5xu9uGIHVrajYM32ehWqmIZhYoHMYESQ6y3Talu6q1Q=;
+        s=k20201202; t=1683833902;
+        bh=9X0hUWrkO4/lNnx3WVZf8iL+U1M/n1u33m0Qtf5NXBA=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=iW+Fx/eqQk+lilpXpF7jne6dbJkyi+kLKD96kwr0XUkYMCZ6f7jfnYZtTmcuObtuP
-         H1lih1iThVYfaXx0catME8cNqH2mDjavIgNnOSCkN1L+YRp78Lnq8Bl6BG9ObP3dRC
-         G432nnTfcvQqSiXMD196gbkAE28Af9iCUJeAGrkAOgAYQ4QlVjcCNES6+giWu5LR7L
-         lGoOAbhB61JT2QZN025NoELny7dMH8MiGNS/BxRzRtxf00eALxqxd07Ng4Z4JkUQG8
-         V0KfrrGo1rNte5KmnOHyEFJS4mws3GgCiofsxDSSI3CRVqAqY3etkIwPyzP01eALqI
-         O27RVWFP7S0Sg==
+        b=UWQpNpcGCBuZFkAzBJcM1sCoKrSaIQe48PhgFR7ofYLdsaS8NFV/zBrWT7Wr1An9t
+         9sAEuj3q24V07Bqzbo78Ff2KS5gWJropuSMdh/Adkx0PdA+t6DfNEhkwgUomJycCXN
+         PDNXb0hBy/h40Lx7NBWkf8eLykIjydGkyPFLh4LduPVnbx/JdR7Q6qjMpNIZ9do4Gj
+         7RhisnMIfmI8oXsJ1J2UwsLAzChSL6OHzEkkCLsMkvZqjNqA5caGF2K/q4iC6grRXF
+         9eR/YyYEKTuUDQgeWuYhBHX+twOmkcQd6z9zVEukTnRv03WPPILdcyfJ4bDGFOh3fV
+         tbKxp7bDUrRHQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     jasontao <jasontao@glenfly.com>,
-        Reaper Li <reaperlioc@glenfly.com>,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>,
-        perex@perex.cz, tiwai@suse.com,
-        pierre-louis.bossart@linux.intel.com,
-        yung-chuan.liao@linux.intel.com, kai.vehmanen@linux.intel.com,
-        rander.wang@intel.com, bhelgaas@google.com, evan.quan@amd.com,
-        yong.zhi@intel.com, fred.oh@linux.intel.com,
-        amadeuszx.slawinski@linux.intel.com, mkumard@nvidia.com,
-        alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 6.3 03/11] ALSA: hda: Glenfly: add HD Audio PCI IDs and HDMI Codec Vendor IDs.
-Date:   Thu, 11 May 2023 15:37:46 -0400
-Message-Id: <20230511193757.623114-3-sashal@kernel.org>
+Cc:     Wesley Chalmers <Wesley.Chalmers@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Daniel Wheeler <daniel.wheeler@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>, harry.wentland@amd.com,
+        sunpeng.li@amd.com, christian.koenig@amd.com, Xinhui.Pan@amd.com,
+        airlied@gmail.com, daniel@ffwll.ch, Alvin.Lee2@amd.com,
+        Jun.Lei@amd.com, qingqing.zhuo@amd.com, wenjing.liu@amd.com,
+        Dillon.Varone@amd.com, aurabindo.pillai@amd.com,
+        jiapeng.chong@linux.alibaba.com, Aric.Cyr@amd.com, mwen@igalia.com,
+        felipe.clark@amd.com, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 6.3 04/11] drm/amd/display: Do not set drr on pipe commit
+Date:   Thu, 11 May 2023 15:37:47 -0400
+Message-Id: <20230511193757.623114-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230511193757.623114-1-sashal@kernel.org>
 References: <20230511193757.623114-1-sashal@kernel.org>
@@ -54,8 +56,8 @@ MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -64,143 +66,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: jasontao <jasontao@glenfly.com>
+From: Wesley Chalmers <Wesley.Chalmers@amd.com>
 
-[ Upstream commit c51e431052e2eacfb23fbf6b39bc6c8770d9827a ]
+[ Upstream commit 474f01015ffdb74e01c2eb3584a2822c64e7b2be ]
 
-Add a set of HD Audio PCI IDS, and the HDMI codec vendor IDs for
-Glenfly Gpus.
+[WHY]
+Writing to DRR registers such as OTG_V_TOTAL_MIN on the same frame as a
+pipe commit can cause underflow.
 
-- In default_bdl_pos_adj, set bdl to 128 as Glenfly Gpus have hardware
-limitation, need to increase hdac interrupt interval.
-- In azx_first_init, enable polling mode for Glenfly Gpu. When the codec
-complete the command, it sends interrupt and writes response entries to
-memory, howerver, the write requests sometimes are not actually
-synchronized to memory when driver handle hdac interrupt on Glenfly Gpus.
-If the RIRB status is not updated in the interrupt handler,
-azx_rirb_get_response keeps trying to recevie a response from rirb until
-1s timeout. Enabling polling mode for Glenfly Gpu can fix the issue.
-- In patch_gf_hdmi, set Glenlfy Gpu Codec's no_sticky_stream as it need
-driver to do actual clean-ups for the linked codec when switch from one
-codec to another.
+[HOW]
+Move DMUB p-state delegate into optimze_bandwidth; enabling FAMS sets
+optimized_required.
 
-Signed-off-by: jasontao <jasontao@glenfly.com>
-Signed-off-by: Reaper Li <reaperlioc@glenfly.com>
-Link: https://lore.kernel.org/r/20230426013059.4329-1-reaperlioc@glenfly.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+This change expects that Freesync requests are blocked when
+optimized_required is true.
+
+Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+Signed-off-by: Wesley Chalmers <Wesley.Chalmers@amd.com>
+Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/hda_intel.c  | 21 +++++++++++++++++++++
- sound/pci/hda/patch_hdmi.c | 22 ++++++++++++++++++++++
- 2 files changed, 43 insertions(+)
+ drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c | 6 ++++++
+ drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c | 7 +++++++
+ 2 files changed, 13 insertions(+)
 
-diff --git a/sound/pci/hda/hda_intel.c b/sound/pci/hda/hda_intel.c
-index 77a592f219472..31e16feaa2b4f 100644
---- a/sound/pci/hda/hda_intel.c
-+++ b/sound/pci/hda/hda_intel.c
-@@ -227,6 +227,7 @@ enum {
- 	AZX_DRIVER_ATI,
- 	AZX_DRIVER_ATIHDMI,
- 	AZX_DRIVER_ATIHDMI_NS,
-+	AZX_DRIVER_GFHDMI,
- 	AZX_DRIVER_VIA,
- 	AZX_DRIVER_SIS,
- 	AZX_DRIVER_ULI,
-@@ -349,6 +350,7 @@ static const char * const driver_short_names[] = {
- 	[AZX_DRIVER_ATI] = "HDA ATI SB",
- 	[AZX_DRIVER_ATIHDMI] = "HDA ATI HDMI",
- 	[AZX_DRIVER_ATIHDMI_NS] = "HDA ATI HDMI",
-+	[AZX_DRIVER_GFHDMI] = "HDA GF HDMI",
- 	[AZX_DRIVER_VIA] = "HDA VIA VT82xx",
- 	[AZX_DRIVER_SIS] = "HDA SIS966",
- 	[AZX_DRIVER_ULI] = "HDA ULI M5461",
-@@ -1743,6 +1745,12 @@ static int default_bdl_pos_adj(struct azx *chip)
- 	}
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c
+index b83873a3a534a..7f2e9a300fed9 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c
+@@ -2092,6 +2092,12 @@ void dcn20_optimize_bandwidth(
+ 	if (hubbub->funcs->program_compbuf_size)
+ 		hubbub->funcs->program_compbuf_size(hubbub, context->bw_ctx.bw.dcn.compbuf_size_kb, true);
  
- 	switch (chip->driver_type) {
-+	/*
-+	 * increase the bdl size for Glenfly Gpus for hardware
-+	 * limitation on hdac interrupt interval
-+	 */
-+	case AZX_DRIVER_GFHDMI:
-+		return 128;
- 	case AZX_DRIVER_ICH:
- 	case AZX_DRIVER_PCH:
- 		return 1;
-@@ -1858,6 +1866,12 @@ static int azx_first_init(struct azx *chip)
- 		pci_write_config_dword(pci, PCI_BASE_ADDRESS_1, 0);
- 	}
- #endif
-+	/*
-+	 * Fix response write request not synced to memory when handle
-+	 * hdac interrupt on Glenfly Gpus
-+	 */
-+	if (chip->driver_type == AZX_DRIVER_GFHDMI)
-+		bus->polling_mode = 1;
++	if (context->bw_ctx.bw.dcn.clk.fw_based_mclk_switching) {
++		dc_dmub_srv_p_state_delegate(dc,
++			true, context);
++		context->bw_ctx.bw.dcn.clk.p_state_change_support = true;
++	}
++
+ 	dc->clk_mgr->funcs->update_clocks(
+ 			dc->clk_mgr,
+ 			context,
+diff --git a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c
+index df787fcf8e86e..7f4fe6f8f0214 100644
+--- a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c
++++ b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c
+@@ -992,11 +992,18 @@ void dcn30_set_disp_pattern_generator(const struct dc *dc,
+ void dcn30_prepare_bandwidth(struct dc *dc,
+  	struct dc_state *context)
+ {
++	if (context->bw_ctx.bw.dcn.clk.fw_based_mclk_switching) {
++		dc->optimized_required = true;
++		context->bw_ctx.bw.dcn.clk.p_state_change_support = false;
++	}
++
+ 	if (dc->clk_mgr->dc_mode_softmax_enabled)
+ 		if (dc->clk_mgr->clks.dramclk_khz <= dc->clk_mgr->bw_params->dc_mode_softmax_memclk * 1000 &&
+ 				context->bw_ctx.bw.dcn.clk.dramclk_khz > dc->clk_mgr->bw_params->dc_mode_softmax_memclk * 1000)
+ 			dc->clk_mgr->funcs->set_max_memclk(dc->clk_mgr, dc->clk_mgr->bw_params->clk_table.entries[dc->clk_mgr->bw_params->clk_table.num_entries - 1].memclk_mhz);
  
- 	err = pcim_iomap_regions(pci, 1 << 0, "ICH HD audio");
- 	if (err < 0)
-@@ -1959,6 +1973,7 @@ static int azx_first_init(struct azx *chip)
- 			chip->playback_streams = ATIHDMI_NUM_PLAYBACK;
- 			chip->capture_streams = ATIHDMI_NUM_CAPTURE;
- 			break;
-+		case AZX_DRIVER_GFHDMI:
- 		case AZX_DRIVER_GENERIC:
- 		default:
- 			chip->playback_streams = ICH6_NUM_PLAYBACK;
-@@ -2724,6 +2739,12 @@ static const struct pci_device_id azx_ids[] = {
- 	{ PCI_DEVICE(0x1002, 0xab38),
- 	  .driver_data = AZX_DRIVER_ATIHDMI_NS | AZX_DCAPS_PRESET_ATI_HDMI_NS |
- 	  AZX_DCAPS_PM_RUNTIME },
-+	/* GLENFLY */
-+	{ PCI_DEVICE(0x6766, PCI_ANY_ID),
-+	  .class = PCI_CLASS_MULTIMEDIA_HD_AUDIO << 8,
-+	  .class_mask = 0xffffff,
-+	  .driver_data = AZX_DRIVER_GFHDMI | AZX_DCAPS_POSFIX_LPIB |
-+	  AZX_DCAPS_NO_MSI | AZX_DCAPS_NO_64BIT },
- 	/* VIA VT8251/VT8237A */
- 	{ PCI_DEVICE(0x1106, 0x3288), .driver_data = AZX_DRIVER_VIA },
- 	/* VIA GFX VT7122/VX900 */
-diff --git a/sound/pci/hda/patch_hdmi.c b/sound/pci/hda/patch_hdmi.c
-index 5c6980394dcec..b784ef95390db 100644
---- a/sound/pci/hda/patch_hdmi.c
-+++ b/sound/pci/hda/patch_hdmi.c
-@@ -4489,6 +4489,22 @@ static int patch_via_hdmi(struct hda_codec *codec)
- 	return patch_simple_hdmi(codec, VIAHDMI_CVT_NID, VIAHDMI_PIN_NID);
+ 	dcn20_prepare_bandwidth(dc, context);
++
++	dc_dmub_srv_p_state_delegate(dc, false, context);
  }
  
-+static int patch_gf_hdmi(struct hda_codec *codec)
-+{
-+	int err;
-+
-+	err = patch_generic_hdmi(codec);
-+	if (err)
-+		return err;
-+
-+	/*
-+	 * Glenfly GPUs have two codecs, stream switches from one codec to
-+	 * another, need to do actual clean-ups in codec_cleanup_stream
-+	 */
-+	codec->no_sticky_stream = 1;
-+	return 0;
-+}
-+
- /*
-  * patch entries
-  */
-@@ -4579,6 +4595,12 @@ HDA_CODEC_ENTRY(0x10de009f, "GPU 9f HDMI/DP",	patch_nvhdmi),
- HDA_CODEC_ENTRY(0x10de00a0, "GPU a0 HDMI/DP",	patch_nvhdmi),
- HDA_CODEC_ENTRY(0x10de8001, "MCP73 HDMI",	patch_nvhdmi_2ch),
- HDA_CODEC_ENTRY(0x10de8067, "MCP67/68 HDMI",	patch_nvhdmi_2ch),
-+HDA_CODEC_ENTRY(0x67663d82, "Arise 82 HDMI/DP",	patch_gf_hdmi),
-+HDA_CODEC_ENTRY(0x67663d83, "Arise 83 HDMI/DP",	patch_gf_hdmi),
-+HDA_CODEC_ENTRY(0x67663d84, "Arise 84 HDMI/DP",	patch_gf_hdmi),
-+HDA_CODEC_ENTRY(0x67663d85, "Arise 85 HDMI/DP",	patch_gf_hdmi),
-+HDA_CODEC_ENTRY(0x67663d86, "Arise 86 HDMI/DP",	patch_gf_hdmi),
-+HDA_CODEC_ENTRY(0x67663d87, "Arise 87 HDMI/DP",	patch_gf_hdmi),
- HDA_CODEC_ENTRY(0x11069f80, "VX900 HDMI/DP",	patch_via_hdmi),
- HDA_CODEC_ENTRY(0x11069f81, "VX900 HDMI/DP",	patch_via_hdmi),
- HDA_CODEC_ENTRY(0x11069f84, "VX11 HDMI/DP",	patch_generic_hdmi),
 -- 
 2.39.2
 
