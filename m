@@ -2,141 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 485E96FED73
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:06:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 34A4E6FED7D
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:06:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233461AbjEKIGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 04:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34632 "EHLO
+        id S235216AbjEKIGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 04:06:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231802AbjEKIF5 (ORCPT
+        with ESMTP id S233940AbjEKIG2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 04:05:57 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9750E2684
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:05:56 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 459E72189D;
-        Thu, 11 May 2023 08:05:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683792355; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lhD2nQXEvUKkjKoAXqg0T6rcqGBuxn+66YJTxoOvIQA=;
-        b=k7tF9kFqaRqL0KdhII7mVJghE6Ypa/0GxpeIQ47f6CxdtAB9FeMI1zgqAFs8D0PnzocYBg
-        880AAAaUhhVFpIOtawDLpCsykPNQV9U/j+dT9UtQQVnI5juQirQJfpk1DOBGac690SErFj
-        Ocn4cla1TJzqoLMg36cJqiSvsJh76sQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683792355;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=lhD2nQXEvUKkjKoAXqg0T6rcqGBuxn+66YJTxoOvIQA=;
-        b=Hk9B1oHrZzPTHF02evvrKtptKnUryygYaXaAkFmiX5SLUtJLi9HKV6hUhw2EQira+qZ8k/
-        dmHAiZru+/tgpnDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1ED9E134B2;
-        Thu, 11 May 2023 08:05:55 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id rR+nBuOhXGSibQAAMHmgww
-        (envelope-from <tzimmermann@suse.de>); Thu, 11 May 2023 08:05:55 +0000
-Message-ID: <b8f673e9-1a89-c3b6-7801-5f2d2d2f6c7b@suse.de>
-Date:   Thu, 11 May 2023 10:05:54 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v3] firmware/sysfb: Fix VESA format selection
-Content-Language: en-US
-To:     Pierre Asselin <pa@panix.com>
-Cc:     Daniel Vetter <daniel.vetter@ffwll.ch>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-References: <20230420155705.21463-1-pa@panix.com>
- <2f4370b6-8426-400a-8be1-36a48dadccad@suse.de>
- <1f2a1e8ee99fc9f0a89ad47d112728c9.squirrel@mail.panix.com>
-From:   Thomas Zimmermann <tzimmermann@suse.de>
-In-Reply-To: <1f2a1e8ee99fc9f0a89ad47d112728c9.squirrel@mail.panix.com>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------5DY0GRN0zHylaZNGkHuaJo00"
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 11 May 2023 04:06:28 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6AF337DA9
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:06:20 -0700 (PDT)
+Received: from loongson.cn (unknown [113.200.148.30])
+        by gateway (Coremail) with SMTP id _____8CxE_D7oVxkNK0HAA--.13108S3;
+        Thu, 11 May 2023 16:06:19 +0800 (CST)
+Received: from linux.localdomain (unknown [113.200.148.30])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cxqjr5oVxk7XNVAA--.21787S2;
+        Thu, 11 May 2023 16:06:18 +0800 (CST)
+From:   Tiezhu Yang <yangtiezhu@loongson.cn>
+To:     Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>
+Cc:     loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
+        loongson-kernel@lists.loongnix.cn
+Subject: [PATCH v4 0/6] Add uprobes support for LoongArch
+Date:   Thu, 11 May 2023 16:06:06 +0800
+Message-Id: <1683792372-29338-1-git-send-email-yangtiezhu@loongson.cn>
+X-Mailer: git-send-email 2.1.0
+X-CM-TRANSID: AQAAf8Cxqjr5oVxk7XNVAA--.21787S2
+X-CM-SenderInfo: p1dqw3xlh2x3gn0dqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW7tr1kZw1xKw4DKrWDXw1UKFg_yoW8AF4fpF
+        srursxGr45G34fXr9xt34fur1Yyr4xGrW2q3Zxt34rJr4jqr15JF18KrZ8AF98t3y5KrW0
+        qF1rG3yYga1UA37anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b7AYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        1l1IIY67AEw4v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
+        wVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
+        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
+        e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2
+        IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4U
+        McvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2
+        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
+        6r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
+        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IY
+        s7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr
+        0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1EksDUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------5DY0GRN0zHylaZNGkHuaJo00
-Content-Type: multipart/mixed; boundary="------------dkyeW3W7xDuwTETfQPslEVLU";
- protected-headers="v1"
-From: Thomas Zimmermann <tzimmermann@suse.de>
-To: Pierre Asselin <pa@panix.com>
-Cc: Daniel Vetter <daniel.vetter@ffwll.ch>, linux-kernel@vger.kernel.org,
- dri-devel@lists.freedesktop.org,
- Javier Martinez Canillas <javierm@redhat.com>,
- Hans de Goede <hdegoede@redhat.com>, Ard Biesheuvel <ardb@kernel.org>
-Message-ID: <b8f673e9-1a89-c3b6-7801-5f2d2d2f6c7b@suse.de>
-Subject: Re: [PATCH v3] firmware/sysfb: Fix VESA format selection
-References: <20230420155705.21463-1-pa@panix.com>
- <2f4370b6-8426-400a-8be1-36a48dadccad@suse.de>
- <1f2a1e8ee99fc9f0a89ad47d112728c9.squirrel@mail.panix.com>
-In-Reply-To: <1f2a1e8ee99fc9f0a89ad47d112728c9.squirrel@mail.panix.com>
+v4:
+  -- Rebased on 6.4rc1
+  -- Fix problem about "perf probe -x /lib64/libc.so.6 malloc"
 
---------------dkyeW3W7xDuwTETfQPslEVLU
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+v3:
+  -- Check atomic instructions in insns_not_supported()
+  -- Remove five DIE_* definitions in kdebug.h
 
-SGkNCg0KQW0gMTAuMDUuMjMgdW0gMTk6MjUgc2NocmllYiBQaWVycmUgQXNzZWxpbjoNCj4g
-VGhvbWFzIFppbW1lcm1hbiA8dHppbW1lcm1hbm5Ac3VzZS5kZT4gd3JpdGVzOg0KPj4NCj4+
-IEkgZm91bmQgdGhpcyBjYXN0aW5nIG1lc3MgZXZlbiBtb3JlIHVucmVhZGFibGUuIEkgd2Vu
-dCBiYWNrIHRvIHYyLCBmaXhlZA0KPj4gdGhlIHN0eWxlIGlzc3VlcyBhbmQgY29tbWl0dGVk
-IHRoZSBwYXRjaCBhcyB2NCAoc3RpbGwgdW5kZXIgeW91ciBuYW1lKS4NCj4+DQo+PiBodHRw
-czovL2NnaXQuZnJlZWRlc2t0b3Aub3JnL2RybS9kcm0tdGlwL2NvbW1pdD9pZD0xYjYxN2Jj
-OTMxNzg5MTJmYTM2Zjg3YTk1N2MxNWQxZjE3MDhjMjk5DQo+IA0KPiBXaWxsIHRoaXMgcGF0
-Y2ggbWFrZSBpdCBpbnRvIExpbnV4IDYuNCA/DQoNCkl0IGFwcGVhcnMgdG8gYmUgc3R1Y2sg
-aW4gdGhlIGRybS1taXNjLWZpeGVzIHRyZWUuIFRoZSB0aW1lIGFyb3VuZCB0aGUgDQptZXJn
-ZSB3aW5kb3cgaXMgYWx3YXlzIGNvbXBsaWNhdGVkLiBJJ3ZlIHNlbmQgb3V0IGEgcmVtaW5k
-ZXIgdG8gdGhlIA0KbWFpbnRhaW5lcnMgdG8gZmV0Y2ggdGhlIHBhdGNoLg0KDQpCZXN0IHJl
-Z2FyZHMNClRob21hcw0KDQo+IA0KPiAtLVBBDQo+IA0KDQotLSANClRob21hcyBaaW1tZXJt
-YW5uDQpHcmFwaGljcyBEcml2ZXIgRGV2ZWxvcGVyDQpTVVNFIFNvZnR3YXJlIFNvbHV0aW9u
-cyBHZXJtYW55IEdtYkgNCkZyYW5rZW5zdHJhc3NlIDE0NiwgOTA0NjEgTnVlcm5iZXJnLCBH
-ZXJtYW55DQpHRjogSXZvIFRvdGV2LCBBbmRyZXcgTXllcnMsIEFuZHJldyBNY0RvbmFsZCwg
-Qm91ZGllbiBNb2VybWFuDQpIUkIgMzY4MDkgKEFHIE51ZXJuYmVyZykNCg==
+v2:
+  -- Move the functions to inst.c in patch #1
+  -- Pass around union for insns_not_supported(),
+     insns_need_simulation() and arch_simulate_insn()
 
---------------dkyeW3W7xDuwTETfQPslEVLU--
+v1:
+  -- Split the RFC patch #2 into two patches
+  -- Use larch_insn_gen_break() to generate break insns
+     for kprobes and uprobes
+  -- Pass around instruction word instead of union for
+     insns_not_supported(), insns_need_simulation() and
+     arch_simulate_insn() to avoid type conversion for callers
+  -- Add a simple test case for uprobes in the commit message
 
---------------5DY0GRN0zHylaZNGkHuaJo00
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
+Tiezhu Yang (6):
+  LoongArch: Move three functions from kprobes.c to inst.c
+  LoongArch: Add larch_insn_gen_break() to generate break insns
+  LoongArch: Use larch_insn_gen_break() for kprobes
+  LoongArch: Add uprobes support
+  LoongArch: Check atomic instructions in insns_not_supported()
+  LoongArch: Remove five DIE_* definitions in kdebug.h
 
------BEGIN PGP SIGNATURE-----
+ arch/loongarch/Kconfig               |   3 +
+ arch/loongarch/include/asm/inst.h    |  42 ++++++++++
+ arch/loongarch/include/asm/kdebug.h  |   5 --
+ arch/loongarch/include/asm/kprobes.h |   2 +-
+ arch/loongarch/include/asm/uprobes.h |  35 +++++++++
+ arch/loongarch/kernel/Makefile       |   1 +
+ arch/loongarch/kernel/inst.c         |  54 +++++++++++++
+ arch/loongarch/kernel/kprobes.c      |  75 ++++--------------
+ arch/loongarch/kernel/traps.c        |   9 +--
+ arch/loongarch/kernel/uprobes.c      | 148 +++++++++++++++++++++++++++++++++++
+ 10 files changed, 302 insertions(+), 72 deletions(-)
+ create mode 100644 arch/loongarch/include/asm/uprobes.h
+ create mode 100644 arch/loongarch/kernel/uprobes.c
 
-wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRcoeIFAwAAAAAACgkQlh/E3EQov+CG
-1w//ejLLpCBzmdFAM5YxxufCSJJHp7XCLYVqIY1A6Z2H3MxpHX+6vDg1Pp6UerxqqmsfUT5OUZP8
-0g/MVr8AP0vXy8tk2fUd/rYdTwbv3u8pdW3kaalRR9gLI/fLIdnTOP9lhMAoARXyjWVbdMsW91s1
-+VWJRpxdvoMb6uRJcOu4896XUeL36y+PCfMe+aYz5AoRRKL0E3tUElKAYydiTe2hwR9Ogkl5+sCL
-4Pv3J+igha9Pk1mtCx1/Li6/3ErNSqdEc0tdjD+LnnCYNWTsTYDB2zJZXkSjI4oxLicpEsFZPmkv
-JknKz32EJi4Sh5FW3CmQVq6tWlPuK1F8nVJhfiL0ysvInfqGqPe8WDQByYpYQ4ukxqKKw+mloLcj
-dEWX0EscjIYnwnGe6WZmb9ZB/KQLZGi3pOc3ABdjosbjxeDF79WvoswEsEsc8Bgf+k8LY3Q+9eUL
-awYYtnE+EF31ArDg5pPwE+rjDgWHz/yJubZJIcTRC0H0rN/psNaTsSmDjR8dnG90ik6Eu5EmUX9w
-lOYt2dk6ZJvAQygD6DvzvOkwi3BYlRcbATIce4DvYxR/dBnQ+FPaTXr3xYleJOSbBvbJnHIHQB9Y
-4fGMz8rsi+hS/l+duB1CAT1EiP8+nu4uzvLXnp3jSnGQEyk1UAdSb1KjvRlqe4Q69I8Udgz61fC1
-TJY=
-=AJMs
------END PGP SIGNATURE-----
+-- 
+2.1.0
 
---------------5DY0GRN0zHylaZNGkHuaJo00--
