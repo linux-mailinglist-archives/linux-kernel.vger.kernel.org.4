@@ -2,60 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 630256FEF66
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:54:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36D8C6FEF6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:54:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236972AbjEKJyH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 05:54:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40466 "EHLO
+        id S237273AbjEKJyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 05:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235809AbjEKJyF (ORCPT
+        with ESMTP id S236759AbjEKJyO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 05:54:05 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E553093FF
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:53:19 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50bc075d6b2so15478902a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:53:19 -0700 (PDT)
+        Thu, 11 May 2023 05:54:14 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E1ED871
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:53:28 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so77404837a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:53:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683798792; x=1686390792;
+        d=linaro.org; s=google; t=1683798805; x=1686390805;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=ra1EDpxvz2xv3pLfovf6y0ptDS0ESOKI+0xxALZBic4=;
-        b=JyfQ3vpeV7QV2DXsksKGQykVOBXIpvX+AHhMHcKaCMrJ4vJlVyQEBIqZLTUlnttSYk
-         rkpc2JSKlp+Atk/89aPqBDHXWvhsMyJ5uYRVwOVABKswrJk+30dSZEXtbZHmQ40uTO+V
-         bG7lfpK0AAPOTeRhYZMdz8KLger/caFBBGEFO4+l3QV+/GXqCwXnAoBdhzS8RIRKEdTp
-         pQgT+HApj9tCn7lfBJhXL93rXbqntED2shyBTF/QoppoLxaUfvvqZR5cE/90dKe8I3qs
-         X1AdELeKdNKd2OqkKh9HWS79OenMM+SzPWYXR1LrEvyAtIN9IgntX9UtI6rra27uyrwh
-         FeEg==
+        bh=S708+pUvDFYWDhg/1ibK1FeSHqXbBxrzbsAmRoBje2E=;
+        b=eBrz8ahOX9Nt+cpSY4jQYBLH5/8Y21ybmI4Eh9suIC0RJIDutSLVZajsfe2MHYqUai
+         1VLRvBSY+RmlnV3e2G7l0JpbLLScjAKzVGl9JsWVUBAvzFnKyorYQW2Av0nar80WqIH0
+         YpEMWTODP+6Ar/59jgsas//85yL2Qd02TbRezUAEQFdq0+gzbvco8VEvqwcfdMXkPft2
+         drRB8JlBsBuFY3Af1cOWInNhg6RKM+U+EXj+vNQFjsUw5tyNnDTzptqZPyWFYeGCH0wO
+         YpRWBhygUjuRcgq0nkOnAfooM75wokQbbhTgr3Jv25BayNbZn+nWjhqcMpXHLTF2hyZR
+         O6KQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683798792; x=1686390792;
+        d=1e100.net; s=20221208; t=1683798805; x=1686390805;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ra1EDpxvz2xv3pLfovf6y0ptDS0ESOKI+0xxALZBic4=;
-        b=DkC560oLbHjX6OWjQw0ErZNVew9qpD9ECxJyokyt1Ee5Cdmg8OAvxxX8jLkRfcJVbp
-         n9P1ej3qxVQkuSYpoLQO3dYADoeJC+RxebQE07NfHmsb+15NY59/9kkC0pABOyp7aU1L
-         AutQ2LO2t8F87d8FEEEK6RfIX+g2djjsWvh/QfB/WFIshTWnJyXtiDomulUjmU4Hxoz0
-         KKUZ+FEyEzSEYW9hdlVDDKzO4jkDBlA/AMaXjyMnJpv6Ex/zpR/BARM2lArI2RVj/IuO
-         nnZhCMg2rd/LEYBImhS5icorntsyVG8EWr2aQE4+N2wNNT9SNYB9RunVlS93lgYwuFvB
-         aYEg==
-X-Gm-Message-State: AC+VfDyWrcRQjvEFcGD5j95onGLkquhNgMa0d/+NGEqbWYA+GaTEO5O4
-        cKlv5C5229bXdEnEYS8s9PI0XQ==
-X-Google-Smtp-Source: ACHHUZ7buTqgXwmKazIqHHMobziqeJdbd70yg1RF2bZXXEnxzChFwjX/ueRfM4Ac8GmFrBiUAZCA/w==
-X-Received: by 2002:a05:6402:213:b0:50b:c380:a929 with SMTP id t19-20020a056402021300b0050bc380a929mr17383943edv.10.1683798791655;
-        Thu, 11 May 2023 02:53:11 -0700 (PDT)
+        bh=S708+pUvDFYWDhg/1ibK1FeSHqXbBxrzbsAmRoBje2E=;
+        b=Lw9gbv/XUPLpgyKuOPKlvABBEz5ca7skZy+j6SF5OI45+XOExXcfm5T8OI9sk+eAfc
+         BH35M2oHhtXwjzAVcZUprK8/0sg4+SlHyZAgl0eM+VT2Q2LhR2XAahFHjEpC2kKX6Keo
+         8Vf8itG7VcG8K9s3OyQKch2Jw+2l2O4U9c3QNafFmAR7Vzd8ocU8uzPBXDf32WYSz1B1
+         TifBuIzX2oe2QOwUFWCJbjtKwp749z0kPItuohtQ0Iw+QHRqYg2ilv4cpG63jj7x4QiM
+         hBifqZqxfPy1sgufbBclr9RRywSldTn5DbeHlEZEHQPr6wEjiZK7NtID19PQ+1O444FS
+         /H+Q==
+X-Gm-Message-State: AC+VfDyT1YNgEPX90Mk0RqjOQdVVj36w2YCot117V8Q/RKc/skp3DqXA
+        CKiH15NRhja7Ou/p2R2reAvafQ==
+X-Google-Smtp-Source: ACHHUZ6qMnGtgj1qfIE8u7lEPm6rTd85pDEMMZFe3OwKKQq8fm4MkTTXhsDjhGsGStHPh3U6GVo/Aw==
+X-Received: by 2002:aa7:d3c3:0:b0:509:f399:278d with SMTP id o3-20020aa7d3c3000000b00509f399278dmr18753088edr.5.1683798805438;
+        Thu, 11 May 2023 02:53:25 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:7e61:f14a:c3a4:809e? ([2a02:810d:15c0:828:7e61:f14a:c3a4:809e])
-        by smtp.gmail.com with ESMTPSA id z24-20020aa7d418000000b0050bfa1905f6sm2861035edq.30.2023.05.11.02.53.10
+        by smtp.gmail.com with ESMTPSA id q22-20020a056402041600b004ad601533a3sm2777002edv.55.2023.05.11.02.53.24
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 May 2023 02:53:10 -0700 (PDT)
-Message-ID: <55489ae6-dddc-ca72-07ea-761bf1e40912@linaro.org>
-Date:   Thu, 11 May 2023 11:53:09 +0200
+        Thu, 11 May 2023 02:53:24 -0700 (PDT)
+Message-ID: <23ae905f-cc25-a695-5985-7f9742c4b78a@linaro.org>
+Date:   Thu, 11 May 2023 11:53:23 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [PATCH v1 1/3] ASoC: Add ESS ES9218P codec driver
+Subject: Re: [PATCH v1 2/3] dt-bindings: vendor-prefixes: Add ESS Technology
+ vendor prefix
 Content-Language: en-US
 To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
         lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
@@ -63,13 +64,14 @@ To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>,
 Cc:     perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 References: <20230510112349.939991-1-aidanmacdonald.0x0@gmail.com>
+ <20230510112349.939991-2-aidanmacdonald.0x0@gmail.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230510112349.939991-1-aidanmacdonald.0x0@gmail.com>
+In-Reply-To: <20230510112349.939991-2-aidanmacdonald.0x0@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,35 +80,12 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 10/05/2023 13:23, Aidan MacDonald wrote:
-> The ES9218P is a 32-bit stereo codec featuring an integrated
-> headphone amp with analog volume control and up to 2.0 V rms
-> output, and a low-power bypass path for passing through an
-> analog signal from an alternate source.
+> Add prefix "ess" for ESS Technology <https://www.esstech.com>.
 > 
-> The digital audio interface supports 16/24/32-bit I2S inputs
-> ranging from 8 KHz to 384 KHz, and DSD inputs. This driver
-> only supports I2S operation.
+> Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+> ---
 
-...
-
-> +static const struct of_device_id es9218p_of_match[] = {
-> +	{ .compatible = "ess,es9218p" },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, es9218p_of_match);
-> +
-> +static const struct i2c_device_id es9218p_i2c_id[] = {
-> +	{ "ess-es9218p", 0 },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, es9218p_i2c_id);
-> +
-> +static struct i2c_driver es9218p_i2c_driver = {
-> +	.driver = {
-> +		.name = "ess-es9218p",
-> +		.of_match_table = of_match_ptr(es9218p_of_match),
-
-Drop of_match_ptr or add __maybe_unused to the table.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
