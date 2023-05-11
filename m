@@ -2,221 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5FFB6FE959
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:24:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 431716FE95B
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:24:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236486AbjEKBYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 21:24:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
+        id S229500AbjEKBYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 21:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbjEKBYc (ORCPT
+        with ESMTP id S236642AbjEKBYk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 21:24:32 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EC32D53;
-        Wed, 10 May 2023 18:24:31 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-965cc5170bdso1169220366b.2;
-        Wed, 10 May 2023 18:24:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683768269; x=1686360269;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VtbFuN3sw5A4xlLHEXKg8dMxvjNkGg9uDaGYFlhrrNs=;
-        b=qKeuSu2RxQdE7VjMcmlq0GQ/pw2gqcPmLE/UYZNPn+0Odr6sflDM0sSuFhvOJNDZoh
-         hj4QHy7ILYhaxgnrqLzBE8nCEjxcTe/kw87Ct1Y5PDfFNEYAgXcb0fLY+Wopza9jk3CA
-         8R073JONi5Aa+SQDP7mIOrf54ad+ntuJuPiWc061E+7eu3pb/BE2qSCK9Z3AHEFJAmU3
-         ro9Vc41AZmyZlo4K7/RcItWj/c57lwvLmqky7nJeFUFRfAnHmS4O2SkXXrTnkUdwwEZG
-         8/Rhmtn525K6gl4mabg4At8CND8u9xt6e74HD8juzKlL2Naetas/o7bfYxRjzHUzhCrR
-         lihg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683768269; x=1686360269;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VtbFuN3sw5A4xlLHEXKg8dMxvjNkGg9uDaGYFlhrrNs=;
-        b=KtjRbbHPAboN8YwJG2lsUE4kGSaWrYAJC8+pImx5QhMjXyXRbpkEahXUQ//Zk9io2p
-         Z7ZQtzDTMtfptfO5qDpPZ8b3BRvBweJrjns+PZtTY3edQh5V4X8atGeI7Lt7ZV/1FYdC
-         0wuHVX4TY3DsaeS8B/xMA8ihZUfIi8QN5V2NnjFPmZqo8rHUrdMhgvkp3EudDOoc5tyP
-         YIM5gJbL06jVaj6INPJhrTFifKZDfZGWHLEtkuMSE+V4rdMF5ALQb9ShwAYB0hEoGZro
-         grBMnGP+xoEBpCu8hJE9m1QpSzewQyKdK/gv+xzS3hLxFau9NcXbLVsO2rRjSaRzJ/hU
-         mtBg==
-X-Gm-Message-State: AC+VfDwiI7+rPKshGumFMb2UZpIQ+75DKHKtVJxsnOvl3I7wb+CbB7zl
-        oU8UO7cCG/Wn87Ok2ZHiQPmrmp2vFUfYVuXWk5Q=
-X-Google-Smtp-Source: ACHHUZ5SVtkBkwVTkMpRgi9RzuNlJDHLpJkVBhBmwiO5o64zcubAk4+WUX160MQZpIt2vySGn2gi2h/rt2yUUdmWM/Y=
-X-Received: by 2002:a17:907:97d2:b0:968:1102:1fb7 with SMTP id
- js18-20020a17090797d200b0096811021fb7mr11166653ejc.6.1683768269268; Wed, 10
- May 2023 18:24:29 -0700 (PDT)
+        Wed, 10 May 2023 21:24:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97ACE59F3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 18:24:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F250641B0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:24:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17E7BC433EF;
+        Thu, 11 May 2023 01:24:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683768278;
+        bh=/5yeDC8UTKUoWNjZkDnwIRf8wJ1OTj9SIn1q6+0IQfw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QG4Qm+X34Jc2Kfj5iaXyP5Uc6f0s5KVfJRcMW2NEGwF+tx4uNXdocxJWTacfskn8m
+         jyQn4N2HoZiVZl0qjFXe6VYBZ1vjNZqfgfkmLGcH3OX23oU+fP4Oqi0bAhPKM/hCSD
+         vE9utx86TmN8ruDk1IK1q+SRJxuiKWxeHUEA9KhG/+NHEbd9PvoAGWp3+y0jtrlWV/
+         6jV+BVo0hnQl10583lFAHlqrigRRyWXLFGli1wsRlXYcjm2Rs9NxAIsbaxZfaZSGVE
+         em+KJOVnMgwC+w3vDHaSH1230YPiYSo8lYZ00JuuO2tSRbCrvpQxxKHlpReJMZqRUM
+         4l6lO1hvqIeKA==
+Date:   Thu, 11 May 2023 10:24:35 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 3/6] regmap-irq: Remove type registers
+Message-ID: <ZFxD01UQp6Q2T9n/@finisterre.sirena.org.uk>
+References: <20230509110100.3980123-1-aidanmacdonald.0x0@gmail.com>
+ <20230509110100.3980123-4-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
-References: <20230510122045.2259-1-zegao@tencent.com> <6308b8e0-8a54-e574-a312-0a97cfbf810c@meta.com>
- <ZFvUH+p0ebcgnwEg@krava> <1195c4bd-ef54-2f1d-b079-2a11af42c62f@meta.com> <89159b33-3be4-487b-7647-0cbbd20c233d@meta.com>
-In-Reply-To: <89159b33-3be4-487b-7647-0cbbd20c233d@meta.com>
-From:   Ze Gao <zegao2021@gmail.com>
-Date:   Thu, 11 May 2023 09:24:18 +0800
-Message-ID: <CAD8CoPBzqih=0YxumRtywvSLs0aHwEbzpbehqKvpb18GzntVqA@mail.gmail.com>
-Subject: Re: [PATCH] bpf: reject blacklisted symbols in kprobe_multi to avoid
- recursive trap
-To:     Yonghong Song <yhs@meta.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Ze Gao <zegao@tencent.com>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7iH87ulgmG+nkuiy"
+Content-Disposition: inline
+In-Reply-To: <20230509110100.3980123-4-aidanmacdonald.0x0@gmail.com>
+X-Cookie: A penny saved has not been spent.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thank yonghong for your sage reviews.
-Yes, this is an option I am also considering . I will try this out
-later to see if works
 
-But like you said it's not clear whether kprobe blacklist=3D=3D fprobe blac=
-klist.
-And also there are cases I need to investigate on, like how to avoid recurs=
-ions
-when kprobes and fprobes are mixed.
+--7iH87ulgmG+nkuiy
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Rejecting symbols  kprobe_blacklisted is kinda brute-force yet a straight w=
-ay to
-avoid kernel crash AFAIK.
+On Tue, May 09, 2023 at 12:00:57PM +0100, Aidan MacDonald wrote:
+> No remaining users, these have been replaced by config registers.
 
-Ze
+This doesn't apply against current code, please check and resend.
 
-On Thu, May 11, 2023 at 7:54=E2=80=AFAM Yonghong Song <yhs@meta.com> wrote:
->
->
->
-> On 5/10/23 1:20 PM, Yonghong Song wrote:
-> >
-> >
-> > On 5/10/23 10:27 AM, Jiri Olsa wrote:
-> >> On Wed, May 10, 2023 at 07:13:58AM -0700, Yonghong Song wrote:
-> >>>
-> >>>
-> >>> On 5/10/23 5:20 AM, Ze Gao wrote:
-> >>>> BPF_LINK_TYPE_KPROBE_MULTI attaches kprobe programs through fprobe,
-> >>>> however it does not takes those kprobe blacklisted into consideratio=
-n,
-> >>>> which likely introduce recursive traps and blows up stacks.
-> >>>>
-> >>>> this patch adds simple check and remove those are in kprobe_blacklis=
-t
-> >>>> from one fprobe during bpf_kprobe_multi_link_attach. And also
-> >>>> check_kprobe_address_safe is open for more future checks.
-> >>>>
-> >>>> note that ftrace provides recursion detection mechanism, but for kpr=
-obe
-> >>>> only, we can directly reject those cases early without turning to
-> >>>> ftrace.
-> >>>>
-> >>>> Signed-off-by: Ze Gao <zegao@tencent.com>
-> >>>> ---
-> >>>>    kernel/trace/bpf_trace.c | 37 +++++++++++++++++++++++++++++++++++=
-++
-> >>>>    1 file changed, 37 insertions(+)
-> >>>>
-> >>>> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> >>>> index 9a050e36dc6c..44c68bc06bbd 100644
-> >>>> --- a/kernel/trace/bpf_trace.c
-> >>>> +++ b/kernel/trace/bpf_trace.c
-> >>>> @@ -2764,6 +2764,37 @@ static int get_modules_for_addrs(struct
-> >>>> module ***mods, unsigned long *addrs, u3
-> >>>>        return arr.mods_cnt;
-> >>>>    }
-> >>>> +static inline int check_kprobe_address_safe(unsigned long addr)
-> >>>> +{
-> >>>> +    if (within_kprobe_blacklist(addr))
-> >>>> +        return -EINVAL;
-> >>>> +    else
-> >>>> +        return 0;
-> >>>> +}
-> >>>> +
-> >>>> +static int check_bpf_kprobe_addrs_safe(unsigned long *addrs, int nu=
-m)
-> >>>> +{
-> >>>> +    int i, cnt;
-> >>>> +    char symname[KSYM_NAME_LEN];
-> >>>> +
-> >>>> +    for (i =3D 0; i < num; ++i) {
-> >>>> +        if (check_kprobe_address_safe((unsigned long)addrs[i])) {
-> >>>> +            lookup_symbol_name(addrs[i], symname);
-> >>>> +            pr_warn("bpf_kprobe: %s at %lx is blacklisted\n",
-> >>>> symname, addrs[i]);
-> >>>
-> >>> So user request cannot be fulfilled and a warning is issued and some
-> >>> of user requests are discarded and the rest is proceeded. Does not
-> >>> sound a good idea.
-> >>>
-> >>> Maybe we should do filtering in user space, e.g., in libbpf, check
-> >>> /sys/kernel/debug/kprobes/blacklist and return error
-> >>> earlier? bpftrace/libbpf-tools/bcc-tools all do filtering before
-> >>> requesting kprobe in the kernel.
-> >>
-> >> also fprobe uses ftrace drectly without paths in kprobe, so I wonder
-> >> some of the kprobe blacklisted functions are actually safe
-> >
-> > Could you give a pointer about 'some of the kprobe blacklisted
-> > functions are actually safe'?
->
-> Thanks Jiri for answering my question. it is not clear whether
-> kprobe blacklist =3D=3D fprobe blacklist, probably not.
->
-> You mentioned:
->    note that ftrace provides recursion detection mechanism,
->    but for kprobe only
-> Maybe the right choice is to improve ftrace to provide recursion
-> detection mechanism for fprobe as well?
->
-> >
-> >>
-> >> jirka
-> >>
-> >>>
-> >>>> +            /* mark blacklisted symbol for remove */
-> >>>> +            addrs[i] =3D 0;
-> >>>> +        }
-> >>>> +    }
-> >>>> +
-> >>>> +    /* remove blacklisted symbol from addrs */
-> >>>> +    for (i =3D 0, cnt =3D 0; i < num; ++i) {
-> >>>> +        if (addrs[i])
-> >>>> +            addrs[cnt++]  =3D addrs[i];
-> >>>> +    }
-> >>>> +
-> >>>> +    return cnt;
-> >>>> +}
-> >>>> +
-> >>>>    int bpf_kprobe_multi_link_attach(const union bpf_attr *attr,
-> >>>> struct bpf_prog *prog)
-> >>>>    {
-> >>>>        struct bpf_kprobe_multi_link *link =3D NULL;
-> >>>> @@ -2859,6 +2890,12 @@ int bpf_kprobe_multi_link_attach(const union
-> >>>> bpf_attr *attr, struct bpf_prog *pr
-> >>>>        else
-> >>>>            link->fp.entry_handler =3D kprobe_multi_link_handler;
-> >>>> +    cnt =3D check_bpf_kprobe_addrs_safe(addrs, cnt);
-> >>>> +    if (!cnt) {
-> >>>> +        err =3D -EINVAL;
-> >>>> +        goto error;
-> >>>> +    }
-> >>>> +
-> >>>>        link->addrs =3D addrs;
-> >>>>        link->cookies =3D cookies;
-> >>>>        link->cnt =3D cnt;
+--7iH87ulgmG+nkuiy
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRcQ9IACgkQJNaLcl1U
+h9C7Dwf/RTUF20feXiE7Tevsj/tmmikp8mgwVWiyDLwZolciHpOKHacohzaWn5yJ
+LUK2paot9hdLemi3TVJ9gRZrh1FH1Uu8DHzDf3+cZy+pSmPxgLPYzRzKUJtOjn9S
+Jw51ZliRwv6cESRe5eCq/k0g3m+qs5yThj4UWo/JdPI7E26dXbSngZcpduNh+IGY
+Ts7Yz49w81Pr4ooCAkXASm+iomu3szuQdNYk+5HDbvbDHkCFLgPOsp1gM+1B/VZS
+3LtcAW9eMO+Rk+Nj4KLIzEn08lzTDfyBmL0HGURaPENxbcyMwtjVBqu+MNCJvTtC
+ZJhqhY9yfM6vnfQIAXxiFyTQoTR+wQ==
+=aQMI
+-----END PGP SIGNATURE-----
+
+--7iH87ulgmG+nkuiy--
