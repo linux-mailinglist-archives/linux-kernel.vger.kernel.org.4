@@ -2,132 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05BC56FF6C6
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:07:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D39E66FF6CE
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:08:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238629AbjEKQHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 12:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56274 "EHLO
+        id S238684AbjEKQIb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 12:08:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238412AbjEKQHk (ORCPT
+        with ESMTP id S238650AbjEKQI1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 12:07:40 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88059E4C;
-        Thu, 11 May 2023 09:07:37 -0700 (PDT)
-Received: (Authenticated sender: jeanmichel.hautbois@yoseli.org)
-        by mail.gandi.net (Postfix) with ESMTPSA id 509D96000B;
-        Thu, 11 May 2023 16:07:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yoseli.org; s=gm1;
-        t=1683821256;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=vWHlcsTh2DfuTFpi5+twMvyJp529YJ2ZyhT7Dvw4VIY=;
-        b=l85rPEYwBOLeXkxSjf0bZVw7iYJpKqu8drno00eASVCBN4Z13Eq4I3dUYXIzR3r/5uJl3W
-        v4ME6EBiRsLqneB3mD+IXvRgl5iLi/TQ1YwRdJdOkoU8xnKuAT9CRC/syuFz4K//7zOkGF
-        BWSuJqJCZx1Xbcw3e3sLhEueOcSNyLf33zTR1Slfhnj/klg+1B/4bd4Xu57LtBFEM0ic+Z
-        Zqi2y7zL3A3Tu7Q8Mv03dBzAQNtUo5wEQEMmt7xmxt/vY2spdIoKOl6zX3U8eKqminExTK
-        gBdlZ/KOBnrIwWvFuPkhxclv+BUd+fD+hVSHwOJJ7kNfetyRjjRn3/mUUoxncA==
-Message-ID: <1ab280c2-2536-f507-8e12-2e4d3f3eb37e@yoseli.org>
-Date:   Thu, 11 May 2023 18:07:34 +0200
+        Thu, 11 May 2023 12:08:27 -0400
+Received: from pku.edu.cn (mx18.pku.edu.cn [162.105.129.181])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7AAA276B9;
+        Thu, 11 May 2023 09:08:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=pku.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
+        Message-ID:References:MIME-Version:Content-Type:
+        Content-Disposition:In-Reply-To; bh=GA6F6KLMupm3XEAOfoKLPP9S98jm
+        f1urQ4v3ILsS6CM=; b=Fdx2N8F9i2gJ+IcjtOz+X0+1pGGLoCfW5dS9MZiTvOYJ
+        WCFu8MAy53XsgprExggCeB+zbDDBkG9B9VuRs+LMK6+iiRID+5qT2+ElUOepUINa
+        A3Yjl58cWo251/STtzbf/ONYcSgw2x0u6CRspE3AANPoHG8X0E+0jXCrrjWdvMw=
+Received: from localhost (unknown [10.7.101.92])
+        by front02 (Coremail) with SMTP id 54FpogBnYrnfEl1kJK2TEw--.22381S2;
+        Fri, 12 May 2023 00:08:04 +0800 (CST)
+Date:   Fri, 12 May 2023 00:07:59 +0800
+From:   Ruihan Li <lrh2000@pku.edu.cn>
+To:     David Hildenbrand <david@redhat.com>
+Cc:     linux-mm@kvack.org, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, Ruihan Li <lrh2000@pku.edu.cn>
+Subject: Re: [PATCH 3/4] mm: page_table_check: Make it dependent on !DEVMEM
+Message-ID: <ehnawbpypxg5vppwcoiuswlq5c54td5mos4jldf5tuy7wbjlvb@o7fydrxd2y34>
+References: <20230510085527.57953-1-lrh2000@pku.edu.cn>
+ <20230510085527.57953-4-lrh2000@pku.edu.cn>
+ <f74f2080-1def-f9c2-8884-97bb4c8ba4d1@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: pca953x issue when driving a DSI bridge
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        brgl@bgdev.pl, linus.walleij@linaro.org
-References: <0b3a257a-f1e5-ad86-4c69-93e038a33ce9@yoseli.org>
- <ZFvTi3tQGUq2OCHi@surfacebook>
- <32ecb9f3-1443-210c-0fc9-40891629e25a@yoseli.org>
- <CAHp75Vcsieiab8ks7yLwJvhjHTPv2qeCBJYjMOVYBJXmNhbTYQ@mail.gmail.com>
-Content-Language: en-US
-From:   Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
-In-Reply-To: <CAHp75Vcsieiab8ks7yLwJvhjHTPv2qeCBJYjMOVYBJXmNhbTYQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <f74f2080-1def-f9c2-8884-97bb4c8ba4d1@redhat.com>
+X-CM-TRANSID: 54FpogBnYrnfEl1kJK2TEw--.22381S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxur48JrW7Gry7Jw4xJrW5Wrg_yoWrGF47pa
+        s7JayS9r45G345ur1xZwn2gr1rCrs3Gay5ur9akry5Cas8Ar92kr1agry5Z3WUC393Ca4D
+        ZFWYga4aya15ZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUBI1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
+        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
+        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
+        z280aVAFwI0_Cr0_Gr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2vYz4IE04
+        k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
+        x7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
+        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF
+        7I0E8cxan2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6c
+        x26w4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
+        xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42
+        IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY
+        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
+        CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbHa0DUUUUU==
+X-CM-SenderInfo: yssqiiarrvmko6sn3hxhgxhubq/1tbiAgEHBVPy772BUwAPsv
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andy,
+On Wed, May 10, 2023 at 06:40:31PM +0200, David Hildenbrand wrote:
+> On 10.05.23 10:55, Ruihan Li wrote:
+> > The special device /dev/mem enables users to map arbitrary physical
+> > memory regions into the user space, which can conflict with the double
+> > mapping detection logic used by the page table check. For instance,
+> > pages may change their properties (e.g., from anonymous pages to named
+> > pages) while they are still being mapped in the user space via /dev/mem,
+> > leading to "corruption" detected by the page table check.
+> > 
+> > To address this issue, the PAGE_TABLE_CHECK config option is now
+> > dependent on !DEVMM. This ensures that the page table check cannot be
+> > enabled when /dev/mem is used. It should be noted that /dev/mem itself
+> > is a significant security issue, and its conflict with a hardening
+> > technique is understandable.
+> > 
+> > Cc: <stable@vger.kernel.org> # 5.17
+> > Signed-off-by: Ruihan Li <lrh2000@pku.edu.cn>
+> > ---
+> >   Documentation/mm/page_table_check.rst | 18 ++++++++++++++++++
+> >   mm/Kconfig.debug                      |  2 +-
+> >   2 files changed, 19 insertions(+), 1 deletion(-)
+> > 
+> > diff --git a/Documentation/mm/page_table_check.rst b/Documentation/mm/page_table_check.rst
+> > index cfd8f4117..b04f29230 100644
+> > --- a/Documentation/mm/page_table_check.rst
+> > +++ b/Documentation/mm/page_table_check.rst
+> > @@ -52,3 +52,21 @@ Build kernel with:
+> >   Optionally, build kernel with PAGE_TABLE_CHECK_ENFORCED in order to have page
+> >   table support without extra kernel parameter.
+> > +
+> > +Implementation notes
+> > +====================
+> > +
+> > +We specifically decided not to use VMA information in order to avoid relying on
+> > +MM states (except for limited "struct page" info). The page table check is a
+> > +separate from Linux-MM state machine that verifies that the user accessible
+> > +pages are not falsely shared.
+> > +
+> > +As a result, special devices that violate the model cannot live with
+> > +PAGE_TABLE_CHECK. Currently, /dev/mem is the only known example. Given it
+> > +allows users to map arbitrary physical memory regions into the userspace, any
+> > +pages may change their properties (e.g., from anonymous pages to named pages)
+> > +while they are still being mapped in the userspace via /dev/mem, leading to
+> > +"corruption" detected by the page table check. Therefore, the PAGE_TABLE_CHECK
+> > +config option is now dependent on !DEVMEM. It's worth noting that /dev/mem
+> > +itself is a significant security issue, and its conflict with a hardening
+> > +technique is understandable.
+> > diff --git a/mm/Kconfig.debug b/mm/Kconfig.debug
+> > index a925415b4..37f3d5b20 100644
+> > --- a/mm/Kconfig.debug
+> > +++ b/mm/Kconfig.debug
+> > @@ -97,7 +97,7 @@ config PAGE_OWNER
+> >   config PAGE_TABLE_CHECK
+> >   	bool "Check for invalid mappings in user page tables"
+> > -	depends on ARCH_SUPPORTS_PAGE_TABLE_CHECK
+> > +	depends on ARCH_SUPPORTS_PAGE_TABLE_CHECK && !DEVMEM
+> >   	select PAGE_EXTENSION
+> >   	help
+> >   	  Check that anonymous page is not being mapped twice with read write
+> 
+> That might disable it in a lot of environments I'm afraid. I wonder if we
+> could allow it for STRICT_DEVMEM. Hm ...
+> -- 
+> Thanks,
+> 
+> David / dhildenb
 
-On 11/05/2023 09:49, Andy Shevchenko wrote:
-> On Wed, May 10, 2023 at 11:18 PM Jean-Michel Hautbois
-> <jeanmichel.hautbois@yoseli.org> wrote:
->> On 10/05/2023 19:25, andy.shevchenko@gmail.com wrote:
->>> Wed, May 10, 2023 at 06:12:19PM +0200, Jean-Michel Hautbois kirjoitti:
-> 
-> ...
-> 
->>>> [   11.273968]  gpiod_set_value+0x5c/0xcc
->>>> [   11.277722]  ti_sn65dsi86_resume+0x4c/0x94 [ti_sn65dsi86]
->>>
->>> Your problem even worse, i.e. ->resume() might sleep.
->>
->> Indeed it is worse ;-).
->>
->>>> [   11.283131]  __rpm_callback+0x48/0x19c
->>>> [   11.286885]  rpm_callback+0x6c/0x80
->>>> [   11.290375]  rpm_resume+0x3b0/0x660
->>>> [   11.293864]  __pm_runtime_resume+0x4c/0x90
->>>> [   11.297960]  __device_attach+0x90/0x1e4
->>>> [   11.301797]  device_initial_probe+0x14/0x20
->>>> [   11.305980]  bus_probe_device+0x9c/0xa4
->>>> [   11.309817]  device_add+0x3d8/0x820
->>>> [   11.313308]  __auxiliary_device_add+0x40/0xa0
->>>> [   11.317668]  ti_sn65dsi86_add_aux_device.isra.0+0xb0/0xe0 [ti_sn65dsi86]
->>>> [   11.324381]  ti_sn65dsi86_probe+0x20c/0x2ec [ti_sn65dsi86]
->>>> [   11.329876]  i2c_device_probe+0x3b8/0x3f0
->>>> [   11.333889]  really_probe+0xc0/0x3dc
-> 
-> ...
-> 
->>>> I suppose this is not a corner case and we may have other drivers and other
->>>> boards connecting a GPIO which can sleep in a context where it should not ?
->>>>
->>>> I would like to add one thing: on this board, the expander is routed in a
->>>> way that makes it impossible to "sleep" as the reset is forced pulled-up and
->>>> the power regulators are fixed and can't be stopped.
->>>
->>> Can you elaborate why you think there is a problem?
->>
->> I didn't know if it could be an issue or not, so I mentioned it but
->> sounds like a nonsense :-).
-> 
-> Maybe not. I don't know that hardware, schematics and more information
-> is needed to understand. But I leave it to you.
-> 
->>>> I don't know how to address this issue nicely and any thoughts is
->>>> appreciated !
->>>
->>> As a workaround you can consider the code around i2c_in_atomic_xfer_mode()
->>> but since I have heard about i.MX8 so many negative remarks which makes me
->>> think that hardware is a train wreck and shouldn't be used at all.
-> 
->> Not sure to get the workaround proposal right...
-> 
-> There are possibilities to have atomic I2C transfers, but as comment
-> says (on top of the above mentioned function) that is only for PMIC
-> communications at the system shutdown.
-> 
-> In your case I would try the easiest way (taking into account that
-> hardware connection is not preventing us from sleeping context), i.e.
-> check if the function that has GPIO call may sleep on its own and
-> simply replace gpiod_set_value() by gpiod_set_value_cansleep().
-> 
+That sounds pretty reasonable. However, I'm not quite sure if PageAnon
+makes sense of (and is guaranteed to work well with) I/O memory pages,
+which should be the only pages allowed to be accessed via /dev/mem under
+STRICT_DEVMEM.
 
-And I found a patch, which is merged in v6.4-rc1 which does exactly this !
-https://lore.kernel.org/all/20230405135127.769665-1-alexander.stein@ew.tq-group.com/
+A quick test has shown that PageAnon (by accident or design?) results in
+"false" for I/O memory pages. Meanwhile, the logic used in the page
+table check allows named (i.e., non-anonymous) pages to be shared
+arbitrarily (i.e. in both read-only and read-write modes) between
+processes. So it looks that everything works fine. But is it a
+coincidence?
 
-Thanks as it is your advice which made me find it :-p
+Thanks,
+Ruihan Li
 
-JM
