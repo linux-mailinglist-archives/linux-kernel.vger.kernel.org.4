@@ -2,127 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 980D56FEDCF
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52E326FEDD3
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:26:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235408AbjEKIXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 04:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42738 "EHLO
+        id S229519AbjEKIZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 04:25:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234171AbjEKIXT (ORCPT
+        with ESMTP id S233840AbjEKIZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 04:23:19 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D592D68
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:22:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683793349;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gk+R+YkjF963S2SpF4BsdMdE47AkKmd4xwPaX4Oi4+k=;
-        b=jRWL/k4f5CslsaWj22QP6Rsh4zJ2YmKgfCShbyOo4iWEWo4jyKyXQ4h7n/6ZXL/ChDAbkb
-        FcWHXs0QQrpSt8mSDXrj88zBYtGW8LST7vWJlxfadbuseABqTs1IbrdD1hYrSynBo22aGC
-        8yO5Xrg/4tSD6J7mtLiu79+D5GSDvkc=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-166-gXROxhwMOYWSbwIkt1H3mg-1; Thu, 11 May 2023 04:22:27 -0400
-X-MC-Unique: gXROxhwMOYWSbwIkt1H3mg-1
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-94a348facbbso1035332966b.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:22:27 -0700 (PDT)
+        Thu, 11 May 2023 04:25:52 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5BB2D59
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:25:50 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so76845970a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:25:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683793549; x=1686385549;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vPthJJFX5ICybkhpQbILdoKtwUZwEEscWvDxRj2UCS8=;
+        b=keCpqcazqHLQcn9JA/WC4PqRcOE6Pe0sqmS/4/0Dcr/03siOEhCWlMNowlHTtWZUw+
+         SzQnZwblyTcW+PSQ1mftHjf8I9pRpTbuOGqaDNS9I2f0kuG45xx/Isd4N/NS/hMEENrE
+         ++qFblLb0SYgzrolNxxWsKsbVi3pRxBx904h+iH7KDfLosemfQaRLAS8R3aR8VzjFn7q
+         cFTikMVHG3kIEu33aL32wlDdy96oD/pkeck8/Mlv7UAYlbX2q12wrGbDdsXcEUM0RSwa
+         U/MHxO7lRYDuYayPOqUrimnJbxsy9bJO0JHAL9khTZzlph35Fkb8+jHpAxv23nmavz+W
+         4kvw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683793347; x=1686385347;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gk+R+YkjF963S2SpF4BsdMdE47AkKmd4xwPaX4Oi4+k=;
-        b=CnCVV5GNWwpRc9b2kVElycGp/eczIrKrU9hbkrH5gRGEaQSKFUIENID20waTMuim4G
-         tmQtv5tNb3k6+t4+xqhlIqNf2+onFAyJjvxreqgOMOhQt6dBzqwSLB+UbQEYUvCM4gRi
-         nBtsjZs9E2Vn/QgwoQg2eoCb+/CG6guqAkI7SEj1yKUxi/rfLu/D224HHuA8H4VDmpVY
-         5bjmXFu43/5VVdkb+H0WkYZh2bHRm92wcUw8g7DEWUkzWDb9jyxpqbhxEz65mIBFXrIr
-         tZnhTImkLRQWjCyyH6JNeCRIpOS3jZZ7wkSUH4puawgWH7A2eu55YEhAvg3T4oXBiONP
-         qbjQ==
-X-Gm-Message-State: AC+VfDysqIbh+WgncZTunQebA5oSf99I3EHcvWSSodpjCCo2h1O5o8X3
-        Fq7z8YQtCmfsMhRhElR5yjQ5/Jo8px1o+18WYAt9qobT+FvILaHzysmYZjMBGfj2P+yPeAtCGgM
-        ils4c55VSv46qZAP7sWTLJYO6
-X-Received: by 2002:a17:906:478f:b0:96a:3b67:40bb with SMTP id cw15-20020a170906478f00b0096a3b6740bbmr4004890ejc.40.1683793346899;
-        Thu, 11 May 2023 01:22:26 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6zc4nyULHOnur3f+oxT8ygqFitbgjgoYUQJ4s85VdQCqWOCPEtYkKW/BM86bhB+vNheUGeNg==
-X-Received: by 2002:a17:906:478f:b0:96a:3b67:40bb with SMTP id cw15-20020a170906478f00b0096a3b6740bbmr4004876ejc.40.1683793346524;
-        Thu, 11 May 2023 01:22:26 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c32:7800:5bfa:a036:83f0:f9ec? (2001-1c00-0c32-7800-5bfa-a036-83f0-f9ec.cable.dynamic.v6.ziggo.nl. [2001:1c00:c32:7800:5bfa:a036:83f0:f9ec])
-        by smtp.gmail.com with ESMTPSA id s25-20020a170906285900b0096a5d341b50sm582560ejc.111.2023.05.11.01.22.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 May 2023 01:22:26 -0700 (PDT)
-Message-ID: <7b406485-83dd-f3d9-4e82-6ca42d2f4b5a@redhat.com>
-Date:   Thu, 11 May 2023 10:22:25 +0200
+        d=1e100.net; s=20221208; t=1683793549; x=1686385549;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vPthJJFX5ICybkhpQbILdoKtwUZwEEscWvDxRj2UCS8=;
+        b=SdCcpp0M37S6r8U65b2DHfPxLxe1dhR6qX5Wt3yN3zwbf+lKex3Oy+J6Rc+yn55AxZ
+         7D33YrLOIeCvYrrH86UmkDK305ASvflFk1YNr6+vg8meETEzCJO53iWQ9FxV914Y+SEi
+         7RcF1wvobOoo4LJ9J4e3FjkRdifZ9CU/Z2eujEpBwLv4odYgkWZcWyaZgG10hItat/iB
+         hzsMmu6XR+RzfbeucQxOfxrA0BgeuHn1S66mrqW8XVZYeDCJ+h/YJ9Geu5er+JgFiooK
+         8gq66cHlrnVtFtnz3/Kgi8gFBQJMxRlawEpJAQ+C+4GcAXzs0hCQekCjOeNLpPUzuqop
+         ssXg==
+X-Gm-Message-State: AC+VfDzC7mMI88HbkEfB/fBBz2+jHtoLjguZPPZq4xvPjWf9BdTKddUk
+        XwKgGZhFhhmuUB4o84flCzJY1MqdxtU3p5PfaO6Y5g==
+X-Google-Smtp-Source: ACHHUZ65ndyxPKJzTQECszjt+HbWhyCk1GsXv5AmDRtfTgWc63i5zS5teybqkPaer2P36DQDlaWI3HrLI2ALAwboHPo=
+X-Received: by 2002:a17:907:7f02:b0:958:46aa:7f99 with SMTP id
+ qf2-20020a1709077f0200b0095846aa7f99mr19136007ejc.7.1683793549007; Thu, 11
+ May 2023 01:25:49 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] vboxsf: Replace all non-returning strlcpy with strscpy
-To:     Azeem Shaikh <azeemshaikh38@gmail.com>
-Cc:     linux-hardening@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230510211146.3486600-1-azeemshaikh38@gmail.com>
-Content-Language: en-US, nl
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230510211146.3486600-1-azeemshaikh38@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20230505184318.1355446-1-etienne.carriere@linaro.org>
+ <CSIXYHYSW45R.O3II0HIIHZV4@suppilovahvero> <CAN5uoS8xB7=Ohu4WEA31hGraVBcaOmRxZw9PDtXBLGUMUeB=4Q@mail.gmail.com>
+ <CAN5uoS9UTc-Lz1+k=-7nifuv8MrRmZh_1ck3-DgwRSF58EwpxQ@mail.gmail.com> <CAFA6WYMf+ppAtyT5aivfq1KOEhz4MVG6godqdRhQVd0ORkb7VQ@mail.gmail.com>
+In-Reply-To: <CAFA6WYMf+ppAtyT5aivfq1KOEhz4MVG6godqdRhQVd0ORkb7VQ@mail.gmail.com>
+From:   Etienne Carriere <etienne.carriere@linaro.org>
+Date:   Thu, 11 May 2023 10:25:38 +0200
+Message-ID: <CAN5uoS8mjcPK=3x=RQ8jVFkrCL6hmxYEjd5G9PCzW7A8U=yojg@mail.gmail.com>
+Subject: Re: [PATCH] char: tpm: ftpm_tee: use kernel login identifier
+To:     Sumit Garg <sumit.garg@linaro.org>, thiruan@microsoft.com
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>, linux-kernel@vger.kernel.org,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Thu, 11 May 2023 at 10:15, Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> On Thu, 11 May 2023 at 10:36, Etienne Carriere
+> <etienne.carriere@linaro.org> wrote:
+> >
+> > Dearl all,
+> >
+> > Typo in my previous post!
+> >
+> > On Thu, 11 May 2023 at 06:47, Etienne Carriere
+> > <etienne.carriere@linaro.org> wrote:
+> > >
+> > > Hello Jarkko,
+> > >
+> > > On Thu, 11 May 2023 at 00:12, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > > >
+> > > > On Fri May 5, 2023 at 9:43 PM EEST, Etienne Carriere wrote:
+> > > > > Changes fTPM TEE driver to open the TEE session with REE kernel login
+> > > > > identifier rather than public login. This is needed in case fTPM service
+> > > > > it denied to user land application and restricted to kernel operating
+> > > > > system services only.
+> > > > >
+> > > > > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> > > >
+> > > >
+> > > > Can you bring up a little context here?
+> > > >
+> > > > What is REE login?
+> > > > Does it break backwards compatibility to switch?
+> > > > What kind of scenario we are talking about? What does it mean in plain
+> > > > English when fTPM service is denied.
+> > > > What is fTPM service?
+> > >
+> > > By fTPM service I meant the services exposed by fTPM through its
+> > > OP-TEE interface, that are the commands a client can invoke in fTPM,
+> > > see [1].
+> > >
+> > > Regarding backward compatibility, this change is backward compatible
+> > > as far as the OP-TEE entity this driver communicates with is of
+> > > revision 3.9.0 or above.
+> > > I understand this case should be addressed in some way.
+> > >
+> > > In current implementation, fTPM can be invoked by Linux kernel drivers
+> > > (through Linux kernel tee API as tpm_ftpm_tee currently does) as well
+> > > as by userland application (through TEE client library API [2]).
+> > > This change makes tpm_ftpm_tee to invoke fTPM interface using a client
+> > > identifier stating it is the Linux kernel that invokes it, not a
+> > > userland application. fTPM implementation does not check the client
+> > > identity when a client opens a session toward it. Therefore using a
+> > > public identifier (TEE_IOCTL_LOGIN_PUBLIC) or the OS privilege
+> > > identifier (TEE_IOCTL_LOGIN_REE_KERNEL) does not matter, as far as
+> > > OP-TEE supports these IDs. The former is native to OP-TEE initial UAPI
+> > > [3], the latter was introduced in OP-TEE 3.9.0 [4] and Linux kernel
+> > > v5.8 [5].
+> > >
+> > > That said, this change does fix an existing issue in fTPM integration.
+> >
+> > Typo, sorry, I meant
+> > "That said, this change does **NOT** fix an existing issue in fTPM integration."
+> >
+> > BR,
+> > Etienne
+> >
+> > > The fTPM entity currently only accepts a single session opened towards
+> > > it. This is enforced as fTPM sets property TA_FLAG_SINGLE_INSTANCE and
+> > > does not set property TA_FLAG_MULTI_SESSION [6].
+> > > Linux kernel tpm_ftpm_tee driver currently opens a session to fTPM at
+> > > probe time and releases it at remove time so once the driver is
+> > > successfully probed, no userland application can use TEE userland
+> > > client API to open another session and communicate with fTPM.
+>
+> How about if the fTPM TEE kernel driver is built as a module and
+> removed at runtime by a malicious user-space client?
 
-On 5/10/23 23:11, Azeem Shaikh wrote:
-> strlcpy() reads the entire source buffer first.
-> This read may exceed the destination size limit.
-> This is both inefficient and can lead to linear read
-> overflows if a source string is not NUL-terminated [1].
-> In an effort to remove strlcpy() completely [2], replace
-> strlcpy() here with strscpy().
-> No return values were used, so direct replacement is safe.
-> 
-> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-> [2] https://github.com/KSPP/linux/issues/89
-> 
-> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+This is why this change can help to lower the attack surface IMHO.
 
-Thanks, patch looks good to me:
+Note that if a malicious user manages to load a malicious module,
+there is nothing OP-TEE or fTPM can do about it. I guess it is the
+same situation for all tpm drivers in the Linux kernel.
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+etienne
 
-Regards,
-
-Hans
-
-
-
-> ---
->  fs/vboxsf/super.c |    2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/vboxsf/super.c b/fs/vboxsf/super.c
-> index d2f6df69f611..1fb8f4df60cb 100644
-> --- a/fs/vboxsf/super.c
-> +++ b/fs/vboxsf/super.c
-> @@ -176,7 +176,7 @@ static int vboxsf_fill_super(struct super_block *sb, struct fs_context *fc)
->  	}
->  	folder_name->size = size;
->  	folder_name->length = size - 1;
-> -	strlcpy(folder_name->string.utf8, fc->source, size);
-> +	strscpy(folder_name->string.utf8, fc->source, size);
->  	err = vboxsf_map_folder(folder_name, &sbi->root);
->  	kfree(folder_name);
->  	if (err) {
-
+>
+> -Sumit
+>
+> > >
+> > > [1] https://github.com/microsoft/ms-tpm-20-ref/blob/main/Samples/ARM32-FirmwareTPM/optee_ta/fTPM/fTPM.c#L456
+> > > [2] https://github.com/OP-TEE/optee_client
+> > > [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=967c9cca2cc50569efc65945325c173cecba83bd
+> > > [4] https://github.com/OP-TEE/optee_os/commit/78f462f646e7c037bea13aa6282c81f255922a4f
+> > > [5] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=104edb94cc4b3101bab33161cd861de13e85610b
+> > > [6] https://github.com/microsoft/ms-tpm-20-ref/blob/main/Samples/ARM32-FirmwareTPM/optee_ta/fTPM/user_ta_header_defines.h#L47
+> > >
+> > > Regards,
+> > > Etienne
+> > >
+> > > >
+> > > > > ---
+> > > > >  drivers/char/tpm/tpm_ftpm_tee.c | 2 +-
+> > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > > >
+> > > > > diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
+> > > > > index 528f35b14fb6..6d32e260af43 100644
+> > > > > --- a/drivers/char/tpm/tpm_ftpm_tee.c
+> > > > > +++ b/drivers/char/tpm/tpm_ftpm_tee.c
+> > > > > @@ -241,7 +241,7 @@ static int ftpm_tee_probe(struct device *dev)
+> > > > >       /* Open a session with fTPM TA */
+> > > > >       memset(&sess_arg, 0, sizeof(sess_arg));
+> > > > >       export_uuid(sess_arg.uuid, &ftpm_ta_uuid);
+> > > > > -     sess_arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
+> > > > > +     sess_arg.clnt_login = TEE_IOCTL_LOGIN_REE_KERNEL;
+> > > > >       sess_arg.num_params = 0;
+> > > > >
+> > > > >       rc = tee_client_open_session(pvt_data->ctx, &sess_arg, NULL);
+> > > > > --
+> > > > > 2.25.1
+> > > >
+> > > > BR, Jarkko
