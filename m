@@ -2,67 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61A266FFD71
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 01:44:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA026FFD77
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 01:46:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239524AbjEKXoR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 19:44:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
+        id S239561AbjEKXqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 19:46:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239497AbjEKXoO (ORCPT
+        with ESMTP id S238915AbjEKXql (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 19:44:14 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF30618E;
-        Thu, 11 May 2023 16:44:13 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so1873640b3a.0;
-        Thu, 11 May 2023 16:44:13 -0700 (PDT)
+        Thu, 11 May 2023 19:46:41 -0400
+Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0069530C3;
+        Thu, 11 May 2023 16:46:40 -0700 (PDT)
+Received: by mail-qv1-xf33.google.com with SMTP id 6a1803df08f44-61aecee26feso42403156d6.2;
+        Thu, 11 May 2023 16:46:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683848653; x=1686440653;
+        d=gmail.com; s=20221208; t=1683848800; x=1686440800;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=18inJAfZaaCjkmT/TfMQ+71j6QtEo1Rk/unRTNBLoVE=;
-        b=cUqc8UGQ8fqvCcOZic5D+5ntXzn3rmbpJzEJZ6a3JRpJ3gHxZbGT5tCIABwA/FRThK
-         BfMcxlTtkj1PdwHtWu63/+wtLcuToXDQujcrjeF8yV+Pd9hePKU5tpwq0Ew6rpLRBiCT
-         LJuJ8HF1UYu+y8wgQVArw0PojhNfaz+r2A/lVvfS24gtiSipEJNQoGQYTcoIR6eCkJEZ
-         bQRSJEY39maorYO2RyEtDhWT/nL2I6TMRypFR9K7Na0rsK9/HpFJzg0FHgati2nHFlIL
-         fJYmoA3kmKws7zVd2cMRqq4Jo8Pe/bao5HlZUh370dKHQsyRZTdgWwjVXDzdgDwB55YJ
-         U7yA==
+        bh=VWYVMicQIGCwGUbuMq24kkfpiIJJVDGbM9ZlLCUcgg4=;
+        b=Y6GFuCB4A8uAl4TFv4+ubLWysOkiBqCPJXiQ3cU1Upx49ayKrsVkjbgq1Ysk3nstYB
+         kB83K/DsfBX+e91d10rv7GVyJ5GIPNh/uiIqgFPazkTz1nIjZMffH/ZhyaTkDZL8U99Q
+         LuEBz/ETHCr4jzTVwJdHGHEnM7rDjox83vNioTt+bAT4etacgFaEyXcf8HEy4o5kP5RX
+         9fjkBIW0tmUwvF1L6QlroyOk0EP5lebT953AFZkZV0jbnqouSWCWZKYK6SlZhw5/QiOc
+         6n/qd6ckO0rEjc9hQVqlZteq2mR4iDF6iTqC8fOVBcBhwbxmsz5KvX8K17ElVJehFpr7
+         UfMA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683848653; x=1686440653;
+        d=1e100.net; s=20221208; t=1683848800; x=1686440800;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=18inJAfZaaCjkmT/TfMQ+71j6QtEo1Rk/unRTNBLoVE=;
-        b=G2zlT/T2bIIh20L4bmEUGKWqQAbZ8t7tV2vkoH8/jUDgD2fmWxh/6SVU6yY+cO/QUR
-         AB9lLvwBx8BKqHgUDsV+lj6pjw5KUAmUI4brMgUNKQ/mKFNI0RuGavRtBvPRnfTP29X0
-         LI1t7+j/0y9Kf5jJEqMuCXDaE31juis9t5wGI2g5N8D3fSDNH44awrFhJ3ru6aoqh7kb
-         0xyFUlsT2qZegzT85OiWoCSUMR8VV3y7fYdFbgJo3JXgzK1GJtBBWqYLRAkTpWgIcVMV
-         QXYpanLd0QXbOFwPzLWMVlPQ+FecXqOihp/SNlQvm+sVzPRvnB/nscXGzbxoy6XMqo6A
-         xXDQ==
-X-Gm-Message-State: AC+VfDyq1cIkbnaqmqc/OtgJQE9h4wgs3LADVLiO/Uoa19/6mZPBCUHO
-        /vTkA17ge8FjPWr9UqY1n5d/5ma6fj4=
-X-Google-Smtp-Source: ACHHUZ455lyPD+IZanZEzNs7bCf1nFg1YHHnWTcIjNzqTlLuR0VFcr5T8rPNTyDs25381YWhT9l7nw==
-X-Received: by 2002:a17:902:d2c9:b0:1ac:7245:ba55 with SMTP id n9-20020a170902d2c900b001ac7245ba55mr18012957plc.6.1683848652443;
-        Thu, 11 May 2023 16:44:12 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:53f7:c9da:338e:6206])
-        by smtp.gmail.com with ESMTPSA id t4-20020a1709027fc400b001a95c743ca2sm6571696plb.94.2023.05.11.16.44.10
+        bh=VWYVMicQIGCwGUbuMq24kkfpiIJJVDGbM9ZlLCUcgg4=;
+        b=RrN5LFF2M9fmmzB1CuSVj4zUjF5EpHNuJ/uKAH3UVQ9peEUZ6wg67+a6/j5YjaGXTC
+         6tmhUUrxy1gPRAtjhajI3HuaTt/wulcDfWVQKXUHR3iRtLBlSVZiz4RaHcxLi+6Gq724
+         KCsMWep+leL/5zNi9qnJVY6KECqKSVEKFLf2WJPs6P6U/vMpLnirupKWZR57YSbdmqoh
+         fNysF9L7eIVyltcGtK6H1/PRScbLqY29a9iCIOrNpJsuXMYS6SMsCmurCHxMhq+NHTCj
+         FU5qzFcn+CYJW7d+oToISohFHOXTPiKpwvBx0cUjCgDgNHZRsR3EN78/G1seJZ3iBDtC
+         F9WA==
+X-Gm-Message-State: AC+VfDxo4CtaZVH8CFh2y9lyijMzDfjwf+bC3SwnK73LzV1B2qKPlIv9
+        IhcKs3DspHHktnn1QYA1jA==
+X-Google-Smtp-Source: ACHHUZ6PAbBGLwyRsRceV6yIgPNwuDhds2K8wJqj3lYkE+Ns6349FZxmntaKk0+CdKzdnIBsCeav0A==
+X-Received: by 2002:ad4:5aa1:0:b0:61b:5d38:b736 with SMTP id u1-20020ad45aa1000000b0061b5d38b736mr36766219qvg.35.1683848800018;
+        Thu, 11 May 2023 16:46:40 -0700 (PDT)
+Received: from C02FL77VMD6R.googleapis.com ([2600:1700:d860:12b0:8d4a:f604:7849:d619])
+        by smtp.gmail.com with ESMTPSA id w18-20020a0cb552000000b006216ff88b27sm416141qvd.79.2023.05.11.16.46.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 16:44:11 -0700 (PDT)
-Date:   Thu, 11 May 2023 16:44:08 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Jeff LaBundy <jeff@labundy.com>
-Cc:     Tomas Mudrunka <tomas.mudrunka@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] Fix freeze in lm8333 i2c keyboard driver
-Message-ID: <ZF19yOojiaSbo3vS@google.com>
-References: <CAH2-hcJYVpBNwnMS6qUp4=MW8kSryDAz7G5cNA8R00QabC9bjg@mail.gmail.com>
- <20230503153231.1136114-1-tomas.mudrunka@gmail.com>
- <ZFMN5nmqLAX170SE@nixie71>
+        Thu, 11 May 2023 16:46:39 -0700 (PDT)
+Date:   Thu, 11 May 2023 16:46:33 -0700
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Jiri Pirko <jiri@resnulli.us>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Vlad Buslov <vladbu@mellanox.com>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
+Subject: Re: [PATCH net 6/6] net/sched: qdisc_destroy() old ingress and
+ clsact Qdiscs before grafting
+Message-ID: <ZF1+WTqIXfcPAD9Q@C02FL77VMD6R.googleapis.com>
+References: <cover.1683326865.git.peilin.ye@bytedance.com>
+ <e6c4681dd9205d702ae2e6124e20c6210520e76e.1683326865.git.peilin.ye@bytedance.com>
+ <20230508183324.020f3ec7@kernel.org>
+ <ZFv6Z7hssZ9snNAw@C02FL77VMD6R.googleapis.com>
+ <20230510161559.2767b27a@kernel.org>
+ <ZF1SqomxfPNfccrt@C02FL77VMD6R.googleapis.com>
+ <20230511162023.3651970b@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZFMN5nmqLAX170SE@nixie71>
+In-Reply-To: <20230511162023.3651970b@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -73,46 +89,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 03, 2023 at 08:44:06PM -0500, Jeff LaBundy wrote:
-> Hi Tomas,
-> 
-> On Wed, May 03, 2023 at 05:32:31PM +0200, Tomas Mudrunka wrote:
-> > LM8333 uses gpio interrupt line which is triggered by falling edge.
-> > When button is pressed before driver is loaded,
-> > driver will miss the edge and never respond again.
-> > To fix this we run the interrupt handler before registering IRQ
-> > to clear the interrupt via i2c command.
-> > 
-> > Signed-off-by: Tomas Mudrunka <tomas.mudrunka@gmail.com>
-> > ---
-> 
-> Reviewed-by: Jeff LaBundy <jeff@labundy.com>
-> 
-> >  drivers/input/keyboard/lm8333.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/input/keyboard/lm8333.c b/drivers/input/keyboard/lm8333.c
-> > index 7457c3220..52108c370 100644
-> > --- a/drivers/input/keyboard/lm8333.c
-> > +++ b/drivers/input/keyboard/lm8333.c
-> > @@ -178,6 +178,8 @@ static int lm8333_probe(struct i2c_client *client)
-> >  			dev_warn(&client->dev, "Unable to set active time\n");
-> >  	}
-> >  
-> > +	lm8333_irq_thread(client->irq, lm8333);
+On Thu, May 11, 2023 at 04:20:23PM -0700, Jakub Kicinski wrote:
+> > But I see your point, thanks for the suggestion!  I'll try ->init() and
+> > create v2.
+>
+> ->init() may be too early, aren't there any error points which could
+> prevent the Qdisc from binding after ->init() was called?
 
-So this is still racy, isn't it? The interrupt may come after read is
-done, but before we register the handler.
+You're right, it's in qdisc_create(), argh...
 
-> > +
-> >  	err = request_threaded_irq(client->irq, NULL, lm8333_irq_thread,
-> >  				   IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-> >  				   "lm8333", lm8333);
-> > -- 
-> > 2.40.1
-> 
+On Thu, May 11, 2023 at 04:20:23PM -0700, Jakub Kicinski wrote:
+> > > > Looking at the code, I think there is no guarantee that (1st) cannot
+> > > > happen after (2nd), although unlikely?  Can RTNL-lockless RTM_NEWTFILTER
+> > > > handlers get preempted?
+> > >
+> > > Right, we need qdisc_graft(B) to update the appropriate dev pointer
+> > > to point to b1. With that the ordering should not matter. Probably
+> > > using the ->attach() callback?
+> >
+> > ->attach() is later than dev_graft_qdisc().  We should get ready for
+> > concurrent filter requests (i.e. have dev pointer pointing to b1) before
+> > grafting (publishing) B.
+>
+> I thought even for "unlocked" filter operations the start of it is
+> under the lock, but the lock gets dropped after qdisc/block are found.
+> I could be misremembering, I haven't looked at the code.
 
-Thanks.
+No, f.e. RTM_NEWTFILTER is registered as RTNL_FLAG_DOIT_UNLOCKED, so
+tc_new_tfilter() starts and calls __tcf_qdisc_find() without RTNL mutex,
+at least in latest code.
 
--- 
-Dmitry
+Thinking,
+Peilin Ye
+
