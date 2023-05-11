@@ -2,187 +2,259 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20FB36FE849
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 02:02:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E26D96FE84F
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 02:06:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236589AbjEKACW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 20:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53868 "EHLO
+        id S236691AbjEKAF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 20:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236402AbjEKACT (ORCPT
+        with ESMTP id S230267AbjEKAF4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 20:02:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3488735AB;
-        Wed, 10 May 2023 17:02:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B59D46411E;
-        Thu, 11 May 2023 00:02:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C571C433D2;
-        Thu, 11 May 2023 00:02:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683763337;
-        bh=bEb5oIaBGr9a2Ckb2wtGlPrhp1CSLuKsoMxsw61yPoA=;
-        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
-        b=jUJ8RkZmGixrVCEYGpR9m/MDQQ6nJla8agPhWiD2C+6wN+fNAUin+IiKKmmZrY4I3
-         YY/8xi4FaqxUCtvla88QpFtol69zCHjOxDjA30XMo0eIZZdxmYJFO7Brq8VyQIu7Xu
-         i7moWfVBUI6wIWhOfpbjT+FXNb2b3OWzcjPkHwS0zCvWyAgRkB8wNFdccw81asSPQF
-         rtHZNH+5ungQFnqUdUW7zOsf72A3oq2L9CGjw5c9R1YVqhL5Cqd+xtcWtwXkWblnYB
-         QR+CbSNLW2Vkbgf+mibkVcdeoay7QHaqQoBrY2HuELjDJAGed7rRfUZ/vejRsT6U2J
-         ewsozawVx4lXw==
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Thu, 11 May 2023 03:02:13 +0300
-Message-Id: <CSJ0AD1CFYQP.T6T68M6ZVK49@suppilovahvero>
-Cc:     <peterhuewe@gmx.de>, <hdegoede@redhat.com>, <jgg@ziepe.ca>,
-        <linux-integrity@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Thomas Gleixner" <tglx@linutronix.de>
-Subject: Re: tpm_sis IRQ storm on ThinkStation P360 Tiny
-From:   "Jarkko Sakkinen" <jarkko@kernel.org>
-To:     "Jerry Snitselaar" <jsnitsel@redhat.com>,
-        "Peter Zijlstra" <peterz@infradead.org>
-X-Mailer: aerc 0.14.0
-References: <20230505130731.GO83892@hirez.programming.kicks-ass.net>
- <toe7jsgedknsqj3dgw2fasjlqcpgpiqgloifxow4vnt3tntabw@l6emb5zpbff5>
-In-Reply-To: <toe7jsgedknsqj3dgw2fasjlqcpgpiqgloifxow4vnt3tntabw@l6emb5zpbff5>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 10 May 2023 20:05:56 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 910C03A85;
+        Wed, 10 May 2023 17:05:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683763554; x=1715299554;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=f4m0KrKFZizelSk4rn1WQzUKjIw/z/A6Lc1teZbLrT0=;
+  b=btiiRh043LfM/U6nqo4XNw+NEKu5WZ+WB1O8K5rh1rhFMwYVaebS5wRc
+   cgBIhF0qD/sImn4GcWze00lXKOTxfGGWdu1vp5cpGDm9c0TR2oMvDJFo1
+   FPsd45Re4te7o+juMfYGh1fGx228FGruSrEYd04Q/L3J+ChqAcqxTfimN
+   r/6SgGspcEG9SiI1W8BL24iLZP8QPhuSGlIihwf6DjxTMk8UTQx8rFL9m
+   dEfhV611sh3rYvY80deshNvA8/5iyZt82JvOZF0Qpy/G86b/nho8Uoxwf
+   b963zb5zFRaN77yf4NkWilaO+AEwGicHPB5xMGx/7Ety+VIa3GwtHbMFp
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="350384794"
+X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
+   d="scan'208";a="350384794"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 17:05:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="730119715"
+X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
+   d="scan'208";a="730119715"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 10 May 2023 17:05:49 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pwtob-0003fM-0E;
+        Thu, 11 May 2023 00:05:49 +0000
+Date:   Thu, 11 May 2023 08:04:57 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        David Hildenbrand <david@redhat.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH 04/12] mm: page_alloc: collect mem statistic into
+ show_mem.c
+Message-ID: <202305110807.YVsoVagW-lkp@intel.com>
+References: <20230508071200.123962-5-wangkefeng.wang@huawei.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508071200.123962-5-wangkefeng.wang@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri May 5, 2023 at 6:05 PM EEST, Jerry Snitselaar wrote:
-> On Fri, May 05, 2023 at 03:07:31PM +0200, Peter Zijlstra wrote:
-> > Hi,
-> >=20
-> > I recently saw my Alderlake NUC spewing on boot:
-> >=20
-> > [   13.166514] irq 109: nobody cared (try booting with the "irqpoll" op=
-tion)
-> > [   13.166614] CPU: 5 PID: 0 Comm: swapper/5 Not tainted 6.3.0+ #66
-> > [   13.166694] Hardware name: LENOVO 30FBS0B800/330E, BIOS M4GKT18A 04/=
-26/2022
-> > [   13.166779] Call Trace:
-> > [   13.166812]  <IRQ>
-> > [   13.166840]  dump_stack_lvl+0x5b/0x90
-> > [   13.166891]  __report_bad_irq+0x2b/0xc0
-> > [   13.166941]  note_interrupt+0x2ac/0x2f0
-> > [   13.166991]  handle_irq_event+0x6f/0x80
-> > [   13.167041]  handle_fasteoi_irq+0x94/0x1f0
-> > [   13.167093]  __common_interrupt+0x72/0x160
-> > [   13.167112] intel_rapl_common: Found RAPL domain package
-> > [   13.167141]  common_interrupt+0xb8/0xe0
-> > [   13.167200] intel_rapl_common: Found RAPL domain core
-> > [   13.167242]  </IRQ>
-> > [   13.167297] intel_rapl_common: Found RAPL domain uncore
-> > [   13.167322]  <TASK>
-> > [   13.167437]  asm_common_interrupt+0x26/0x40
-> > [   13.167492] RIP: 0010:cpuidle_enter_state+0xff/0x500
-> > [   13.167554] Code: c0 48 0f a3 05 72 34 ad 01 0f 82 fc 02 00 00 31 ff=
- e8 35 b3 52 ff 45 84 ff 0f 85 cc 02 00 00 e8 f7 13 64 ff fb 0f 1f 44 00 00=
- <45> 85 f6 0f 88 eb 01 00 00 49 63 d6 48 8d 04 52 48 8d 04 82 49 8d
-> > [   13.167766] RSP: 0018:ffffc900001ebe90 EFLAGS: 00000206
-> > [   13.167843] RAX: 000000000012a8f3 RBX: ffffe8ffff480a00 RCX: 0000000=
-000000000
-> > [   13.167928] RDX: 0000000000000000 RSI: ffffffff8244c6ee RDI: fffffff=
-f8242ca22
-> > [   13.168021] RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000=
-000000001
-> > [   13.168105] R10: 0000000000000003 R11: 000000000000000a R12: fffffff=
-f83625a80
-> > [   13.168189] R13: 0000000310c8ee5e R14: 0000000000000001 R15: 0000000=
-000000000
-> > [   13.168289]  cpuidle_enter+0x2d/0x40
-> > [   13.168339]  do_idle+0x231/0x290
-> > [   13.168383]  cpu_startup_entry+0x1d/0x20
-> > [   13.168432]  start_secondary+0x11b/0x140
-> > [   13.168482]  secondary_startup_64_no_verify+0xf9/0xfb
-> > [   13.168549]  </TASK>
-> > [   13.168587] handlers:
-> > [   13.168617] [<00000000497ef927>] irq_default_primary_handler threade=
-d [<00000000cf102de1>] tis_int_handler
-> > [   13.168767] Disabling IRQ #109
-> >=20
-> > this is apparently:
-> >=20
-> > root@alderlake:~# cat /proc/interrupts | grep 109
-> > 109:          0          0          0          0          0     100002 =
-         0          0          0          0          0          0          =
-0          0          0          0          0          0          0        =
-  0          00          0          0  IR-IO-APIC  109-fasteoi   tpm0
-> >=20
-> > the TPM thing, which per same dmesg above is:
-> >=20
-> > [   10.948058] tpm_tis MSFT0101:00: 2.0 TPM (device-id 0x1D, rev-id 54)
-> >=20
-> > Booting with tpm_tis.interrupts=3D0 seems to cure things, and AFAICT th=
-e
-> > tpm device actually works -- that is, tpm2 getcap -l and tpm2 pcrread
-> > both give output, I'm presuming this is 'good'. I've never operated a
-> > TPM before.
-> >=20
-> > The machine in question is:
-> >=20
-> > 	Manufacturer: LENOVO
-> > 	Product Name: 30FBS0B800
-> > 	Version: ThinkStation P360 Tiny
-> >=20
-> > So I'm thinking that perhaps Lenovo carried the bug mentioned in commit=
-:
-> > b154ce11ead9 ("tpm_tis: Disable interrupts on ThinkPad T490s") to more
-> > products.
->
-> Hi Peter,
->
-> It will poll like it has for years with tpm_tis.interrupts=3D0 so that
-> should be working as it was prior to 6.3 when interrupts were re-enabled
-> for tpm_tis. Are you seeing this with 6.2 as well? IIRC with that Thinkpa=
-d
-> case is when it was first realized that interrupts had accidentally been
-> disabled for tpm_tis at one point by a change.
->
-> I guess myself or someone else needs to revisit catching this in
-> general when the irq storm happens, and disabling interrupts for
-> tpm_tis. I think last time I was incorporating some feedback from
-> tglx, let my adhd get me distracted with some other issue and never
-> returned to it.
->
-> The diff below should (compile tested) work for the P360, but
-> tpm_tis.interrupts=3D0 is a good work-around.
->
-> Regards,
-> Jerry
->
->
-> diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
-> index 7af389806643..12dfdbef574d 100644
-> --- a/drivers/char/tpm/tpm_tis.c
-> +++ b/drivers/char/tpm/tpm_tis.c
-> @@ -122,6 +122,14 @@ static const struct dmi_system_id tpm_tis_dmi_table[=
-] =3D {
->  			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T490s"),
->  		},
->  	},
-> +	{
-> +		.callback =3D tpm_tis_disable_irq,
-> +		.ident =3D "ThinkStation P360 Tiny",
-> +		.matches =3D {
-> +			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
-> +			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkStation P360 Tiny"),
-> +		},
-> +	},
->  	{}
->  };
+Hi Kefeng,
 
-OK, this is correct :-) I wonder how my fix candidate passed the
-compiler. Can you send this as a formal patch, which I can then
-ack?
+kernel test robot noticed the following build warnings:
 
-BR, Jarkko
+[auto build test WARNING on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Kefeng-Wang/mm-page_alloc-move-mirrored_kernelcore-into-mm_init-c/20230508-145724
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230508071200.123962-5-wangkefeng.wang%40huawei.com
+patch subject: [PATCH 04/12] mm: page_alloc: collect mem statistic into show_mem.c
+config: loongarch-randconfig-s051-20230509 (https://download.01.org/0day-ci/archive/20230511/202305110807.YVsoVagW-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/be69df472e4d9a6b09a17b854d3aeb9722fc2675
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Kefeng-Wang/mm-page_alloc-move-mirrored_kernelcore-into-mm_init-c/20230508-145724
+        git checkout be69df472e4d9a6b09a17b854d3aeb9722fc2675
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=loongarch SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305110807.YVsoVagW-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> mm/show_mem.c:336:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   mm/show_mem.c:336:17: sparse:     expected void *ptr
+   mm/show_mem.c:336:17: sparse:     got int [noderef] __percpu *
+>> mm/show_mem.c:336:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   mm/show_mem.c:336:17: sparse:     expected void *ptr
+   mm/show_mem.c:336:17: sparse:     got int [noderef] __percpu *
+>> mm/show_mem.c:336:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   mm/show_mem.c:336:17: sparse:     expected void *ptr
+   mm/show_mem.c:336:17: sparse:     got int [noderef] __percpu *
+>> mm/show_mem.c:336:17: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void *ptr @@     got int [noderef] __percpu * @@
+   mm/show_mem.c:336:17: sparse:     expected void *ptr
+   mm/show_mem.c:336:17: sparse:     got int [noderef] __percpu *
+
+vim +336 mm/show_mem.c
+
+   207	
+   208	/*
+   209	 * Show free area list (used inside shift_scroll-lock stuff)
+   210	 * We also calculate the percentage fragmentation. We do this by counting the
+   211	 * memory on each free list with the exception of the first item on the list.
+   212	 *
+   213	 * Bits in @filter:
+   214	 * SHOW_MEM_FILTER_NODES: suppress nodes that are not allowed by current's
+   215	 *   cpuset.
+   216	 */
+   217	void __show_free_areas(unsigned int filter, nodemask_t *nodemask, int max_zone_idx)
+   218	{
+   219		unsigned long free_pcp = 0;
+   220		int cpu, nid;
+   221		struct zone *zone;
+   222		pg_data_t *pgdat;
+   223	
+   224		for_each_populated_zone(zone) {
+   225			if (zone_idx(zone) > max_zone_idx)
+   226				continue;
+   227			if (show_mem_node_skip(filter, zone_to_nid(zone), nodemask))
+   228				continue;
+   229	
+   230			for_each_online_cpu(cpu)
+   231				free_pcp += per_cpu_ptr(zone->per_cpu_pageset, cpu)->count;
+   232		}
+   233	
+   234		printk("active_anon:%lu inactive_anon:%lu isolated_anon:%lu\n"
+   235			" active_file:%lu inactive_file:%lu isolated_file:%lu\n"
+   236			" unevictable:%lu dirty:%lu writeback:%lu\n"
+   237			" slab_reclaimable:%lu slab_unreclaimable:%lu\n"
+   238			" mapped:%lu shmem:%lu pagetables:%lu\n"
+   239			" sec_pagetables:%lu bounce:%lu\n"
+   240			" kernel_misc_reclaimable:%lu\n"
+   241			" free:%lu free_pcp:%lu free_cma:%lu\n",
+   242			global_node_page_state(NR_ACTIVE_ANON),
+   243			global_node_page_state(NR_INACTIVE_ANON),
+   244			global_node_page_state(NR_ISOLATED_ANON),
+   245			global_node_page_state(NR_ACTIVE_FILE),
+   246			global_node_page_state(NR_INACTIVE_FILE),
+   247			global_node_page_state(NR_ISOLATED_FILE),
+   248			global_node_page_state(NR_UNEVICTABLE),
+   249			global_node_page_state(NR_FILE_DIRTY),
+   250			global_node_page_state(NR_WRITEBACK),
+   251			global_node_page_state_pages(NR_SLAB_RECLAIMABLE_B),
+   252			global_node_page_state_pages(NR_SLAB_UNRECLAIMABLE_B),
+   253			global_node_page_state(NR_FILE_MAPPED),
+   254			global_node_page_state(NR_SHMEM),
+   255			global_node_page_state(NR_PAGETABLE),
+   256			global_node_page_state(NR_SECONDARY_PAGETABLE),
+   257			global_zone_page_state(NR_BOUNCE),
+   258			global_node_page_state(NR_KERNEL_MISC_RECLAIMABLE),
+   259			global_zone_page_state(NR_FREE_PAGES),
+   260			free_pcp,
+   261			global_zone_page_state(NR_FREE_CMA_PAGES));
+   262	
+   263		for_each_online_pgdat(pgdat) {
+   264			if (show_mem_node_skip(filter, pgdat->node_id, nodemask))
+   265				continue;
+   266			if (!node_has_managed_zones(pgdat, max_zone_idx))
+   267				continue;
+   268	
+   269			printk("Node %d"
+   270				" active_anon:%lukB"
+   271				" inactive_anon:%lukB"
+   272				" active_file:%lukB"
+   273				" inactive_file:%lukB"
+   274				" unevictable:%lukB"
+   275				" isolated(anon):%lukB"
+   276				" isolated(file):%lukB"
+   277				" mapped:%lukB"
+   278				" dirty:%lukB"
+   279				" writeback:%lukB"
+   280				" shmem:%lukB"
+   281	#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+   282				" shmem_thp: %lukB"
+   283				" shmem_pmdmapped: %lukB"
+   284				" anon_thp: %lukB"
+   285	#endif
+   286				" writeback_tmp:%lukB"
+   287				" kernel_stack:%lukB"
+   288	#ifdef CONFIG_SHADOW_CALL_STACK
+   289				" shadow_call_stack:%lukB"
+   290	#endif
+   291				" pagetables:%lukB"
+   292				" sec_pagetables:%lukB"
+   293				" all_unreclaimable? %s"
+   294				"\n",
+   295				pgdat->node_id,
+   296				K(node_page_state(pgdat, NR_ACTIVE_ANON)),
+   297				K(node_page_state(pgdat, NR_INACTIVE_ANON)),
+   298				K(node_page_state(pgdat, NR_ACTIVE_FILE)),
+   299				K(node_page_state(pgdat, NR_INACTIVE_FILE)),
+   300				K(node_page_state(pgdat, NR_UNEVICTABLE)),
+   301				K(node_page_state(pgdat, NR_ISOLATED_ANON)),
+   302				K(node_page_state(pgdat, NR_ISOLATED_FILE)),
+   303				K(node_page_state(pgdat, NR_FILE_MAPPED)),
+   304				K(node_page_state(pgdat, NR_FILE_DIRTY)),
+   305				K(node_page_state(pgdat, NR_WRITEBACK)),
+   306				K(node_page_state(pgdat, NR_SHMEM)),
+   307	#ifdef CONFIG_TRANSPARENT_HUGEPAGE
+   308				K(node_page_state(pgdat, NR_SHMEM_THPS)),
+   309				K(node_page_state(pgdat, NR_SHMEM_PMDMAPPED)),
+   310				K(node_page_state(pgdat, NR_ANON_THPS)),
+   311	#endif
+   312				K(node_page_state(pgdat, NR_WRITEBACK_TEMP)),
+   313				node_page_state(pgdat, NR_KERNEL_STACK_KB),
+   314	#ifdef CONFIG_SHADOW_CALL_STACK
+   315				node_page_state(pgdat, NR_KERNEL_SCS_KB),
+   316	#endif
+   317				K(node_page_state(pgdat, NR_PAGETABLE)),
+   318				K(node_page_state(pgdat, NR_SECONDARY_PAGETABLE)),
+   319				pgdat->kswapd_failures >= MAX_RECLAIM_RETRIES ?
+   320					"yes" : "no");
+   321		}
+   322	
+   323		for_each_populated_zone(zone) {
+   324			int i;
+   325	
+   326			if (zone_idx(zone) > max_zone_idx)
+   327				continue;
+   328			if (show_mem_node_skip(filter, zone_to_nid(zone), nodemask))
+   329				continue;
+   330	
+   331			free_pcp = 0;
+   332			for_each_online_cpu(cpu)
+   333				free_pcp += per_cpu_ptr(zone->per_cpu_pageset, cpu)->count;
+   334	
+   335			show_node(zone);
+ > 336			printk(KERN_CONT
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
