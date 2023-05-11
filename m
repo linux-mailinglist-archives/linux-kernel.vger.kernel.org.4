@@ -2,65 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1D216FFA36
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:35:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D9716FFA32
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:34:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239218AbjEKTfb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 15:35:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53668 "EHLO
+        id S239200AbjEKTei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 15:34:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232629AbjEKTf3 (ORCPT
+        with ESMTP id S232629AbjEKTef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 15:35:29 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126BC5276;
-        Thu, 11 May 2023 12:35:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683833728; x=1715369728;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=UCfb786k0CkFk6SFe9xc6UK6PQOmd5zPDQwh74go7sI=;
-  b=kcAhseR+loMKbq2HX/RFg+jTmfp80i5ZStzc74YcMWU4oJqusT95uq78
-   qLenjPS/Gqe7J2sysZo7YeE5y+qkezt5WiaWuLaqtYxzjM9lSXneZlrNq
-   BPaNAiO+jdb3Y2W24wt4Y1cli/LDL9ai3NVcBrajHCsjRaxD6hKwoISqs
-   gDO6wlUzlLIHNwsqdse5Xp7vjzVGCB7YxMQffVjZLvFjbMl+DYKB8Q8+h
-   ZrMQHU3LlFjvMWCj77ZZNYjAt1KiqiIPjhihXfXib9CjmK31o071U++GY
-   RhOlWXHeZRCAC5y6e1k4Jp6M6EXxmzqc+g0oOpU5k33Dv7xSfN6egYMnB
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="416231780"
-X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
-   d="scan'208";a="416231780"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 12:34:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="824100176"
-X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
-   d="scan'208";a="824100176"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 11 May 2023 12:34:29 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pxC3Y-0004DY-35;
-        Thu, 11 May 2023 19:34:28 +0000
-Date:   Fri, 12 May 2023 03:33:46 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Elson Roy Serrao <quic_eserrao@quicinc.com>,
-        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com, Elson Roy Serrao <quic_eserrao@quicinc.com>
-Subject: Re: [PATCH 1/2] usb: function: u_ether: Handle rx requests during
- suspend/resume
-Message-ID: <202305120311.KEGxEo2Z-lkp@intel.com>
-References: <1683827311-1462-2-git-send-email-quic_eserrao@quicinc.com>
+        Thu, 11 May 2023 15:34:35 -0400
+Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C1F59D0;
+        Thu, 11 May 2023 12:34:34 -0700 (PDT)
+Received: by mail-qv1-xf31.google.com with SMTP id 6a1803df08f44-619be7d7211so42158626d6.3;
+        Thu, 11 May 2023 12:34:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683833674; x=1686425674;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OkRg4aBIGd+Ujeyjhqn0VJEzJVlq0iY77Z11k0mAFFM=;
+        b=D8VOr21Fczrl0K1COf0x4Ck7WHMsRogiYEEbrY2VpNny+n3MR+tJuDH09I9YAsS652
+         swT6GvFknXTnMBZPWlOxHk2u05+SeKUhRFMH/ZtDMNfuFTmqhV28jtrPoFuIwQ/bqAzu
+         JEHJCZ22+ejNPu9sQ5B4mFAObz8laeWoYTSRIa0MiOnPq0OszLg5zmMrWPnpqMS2qlwN
+         5gjqnyxgdjPUMVEd0f/03my+5DYNfTma/sJ3vnrs+cTqKEwezFl9LOtEmPAD5vfhXfNX
+         JrpZrTJ+uj1uIfEyrp6lAwR5J8sidiziH5Wld/lDfUFxzbjgvyiL15VatExShfnoJdEm
+         /ImQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683833674; x=1686425674;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OkRg4aBIGd+Ujeyjhqn0VJEzJVlq0iY77Z11k0mAFFM=;
+        b=I+e0iSK5LM2XRHfR9+c8Jb9mN0NXDz/nBDRNymh9Jue2t28UrKxRqYi2LAE/un8HXU
+         l/OOq8L0LY8OQVbmwAoWH/BaM0Ae7AY9L0YOjjmHDWt730qnBQmLmnym9oZ0iBbXqNd4
+         gVWJ/+zsy+LxKr+tRpoHswUe1SZbbfIEoedYAQpdDDuJhDQ9bPUD+tQZOHpUrKSAnejI
+         9u0b9DBVMJn0eyhNC8EAk9eFmoxMjQNvibNIGd9h2L1Z5YH86xENlUi8nWwFAHrkiOJK
+         PSsMWFQ6fFXlQaVDIh+PXUezizXqkF3zz0KM+XkAcsoqlQlFCMJuRs4XbetYVKblN/5h
+         jOmQ==
+X-Gm-Message-State: AC+VfDzTm74CQfiyLWsMkFQ3vTps7tfH1fUU0rEwsZ8jQoJJSlcyDrj/
+        Q3nS9z5o1ebkDUsZdHKTVKEx7Y1ZNHkeOKrul8Y=
+X-Google-Smtp-Source: ACHHUZ6FKXu0op+KxzAVHeFuNCXe2D1xFAp09jFVR7D1aeGdyycJWyp3G5ZLoEExaajX1pb4elh/5/+JF1DIDbKGBFc=
+X-Received: by 2002:ad4:5dec:0:b0:5a1:6212:93be with SMTP id
+ jn12-20020ad45dec000000b005a1621293bemr33993641qvb.29.1683833673901; Thu, 11
+ May 2023 12:34:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1683827311-1462-2-git-send-email-quic_eserrao@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+References: <20230510195806.2902878-1-nphamcs@gmail.com> <874joja6vz.fsf@mail.lhotse>
+In-Reply-To: <874joja6vz.fsf@mail.lhotse>
+From:   Nhat Pham <nphamcs@gmail.com>
+Date:   Thu, 11 May 2023 12:34:23 -0700
+Message-ID: <CAKEwX=OHMaUzEG9hoMz20m9DnyFD4xC78KiNV1Qu0bUhkrYhAA@mail.gmail.com>
+Subject: Re: [PATCH] cachestat: wire up cachestat for other architectures
+To:     Michael Ellerman <mpe@ellerman.id.au>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-api@vger.kernel.org, kernel-team@meta.com,
+        linux-arch@vger.kernel.org, hannes@cmpxchg.org,
+        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
+        mattst88@gmail.com, linux@armlinux.org.uk, geert@linux-m68k.org,
+        monstr@monstr.eu, tsbogend@alpha.franken.de,
+        James.Bottomley@hansenpartnership.com, deller@gmx.de,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu, hca@linux.ibm.com,
+        gor@linux.ibm.com, agordeev@linux.ibm.com,
+        borntraeger@linux.ibm.com, svens@linux.ibm.com,
+        ysato@users.sourceforge.jp, dalias@libc.org,
+        glaubitz@physik.fu-berlin.de, davem@davemloft.net,
+        chris@zankel.net, jcmvbkbc@gmail.com, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,68 +85,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Elson,
+On Wed, May 10, 2023 at 8:23=E2=80=AFPM Michael Ellerman <mpe@ellerman.id.a=
+u> wrote:
+>
+> Nhat Pham <nphamcs@gmail.com> writes:
+> > cachestat is previously only wired in for x86 (and architectures using
+> > the generic unistd.h table):
+> >
+> > https://lore.kernel.org/lkml/20230503013608.2431726-1-nphamcs@gmail.com=
+/
+> >
+> > This patch wires cachestat in for all the other architectures.
+> >
+> > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+> > ---
+> >  arch/alpha/kernel/syscalls/syscall.tbl      | 1 +
+> >  arch/arm/tools/syscall.tbl                  | 1 +
+> >  arch/ia64/kernel/syscalls/syscall.tbl       | 1 +
+> >  arch/m68k/kernel/syscalls/syscall.tbl       | 1 +
+> >  arch/microblaze/kernel/syscalls/syscall.tbl | 1 +
+> >  arch/mips/kernel/syscalls/syscall_n32.tbl   | 1 +
+> >  arch/mips/kernel/syscalls/syscall_n64.tbl   | 1 +
+> >  arch/mips/kernel/syscalls/syscall_o32.tbl   | 1 +
+> >  arch/parisc/kernel/syscalls/syscall.tbl     | 1 +
+> >  arch/powerpc/kernel/syscalls/syscall.tbl    | 1 +
+>
+> With the change to the selftest (see my other mail), I tested this on
+> powerpc and all tests pass.
 
-kernel test robot noticed the following build warnings:
+Saw the change you proposed, Michael! It looks good to me.
+Thanks for helping me make the selftest suite more robust :)
 
-[auto build test WARNING on usb/usb-testing]
-[also build test WARNING on usb/usb-next usb/usb-linus linus/master v6.4-rc1 next-20230511]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Elson-Roy-Serrao/usb-function-u_ether-Handle-rx-requests-during-suspend-resume/20230512-015036
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
-patch link:    https://lore.kernel.org/r/1683827311-1462-2-git-send-email-quic_eserrao%40quicinc.com
-patch subject: [PATCH 1/2] usb: function: u_ether: Handle rx requests during suspend/resume
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230512/202305120311.KEGxEo2Z-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/90c8743982bad3c71cd13e366efa6b596dd24120
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Elson-Roy-Serrao/usb-function-u_ether-Handle-rx-requests-during-suspend-resume/20230512-015036
-        git checkout 90c8743982bad3c71cd13e366efa6b596dd24120
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/usb/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305120311.KEGxEo2Z-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   drivers/usb/gadget/function/u_ether.c: In function 'ether_wakeup_work':
->> drivers/usb/gadget/function/u_ether.c:442:33: warning: variable 'ret' set but not used [-Wunused-but-set-variable]
-     442 |         int                     ret;
-         |                                 ^~~
-   drivers/usb/gadget/function/u_ether.c: In function 'gether_suspend':
->> drivers/usb/gadget/function/u_ether.c:1049:13: warning: variable 'status' set but not used [-Wunused-but-set-variable]
-    1049 |         int status;
-         |             ^~~~~~
-
-
-vim +/ret +442 drivers/usb/gadget/function/u_ether.c
-
-2b3d942c487808 drivers/usb/gadget/u_ether.c          David Brownell   2008-06-19  439  
-90c8743982bad3 drivers/usb/gadget/function/u_ether.c Elson Roy Serrao 2023-05-11  440  static void ether_wakeup_work(struct work_struct *w)
-0a1af6dfa0772f drivers/usb/gadget/function/u_ether.c Elson Roy Serrao 2023-03-24  441  {
-0a1af6dfa0772f drivers/usb/gadget/function/u_ether.c Elson Roy Serrao 2023-03-24 @442  	int			ret;
-90c8743982bad3 drivers/usb/gadget/function/u_ether.c Elson Roy Serrao 2023-05-11  443  	struct eth_dev		*dev = container_of(w, struct eth_dev, wakeup_work);
-90c8743982bad3 drivers/usb/gadget/function/u_ether.c Elson Roy Serrao 2023-05-11  444  	struct gether		*port = dev->port_usb;
-0a1af6dfa0772f drivers/usb/gadget/function/u_ether.c Elson Roy Serrao 2023-03-24  445  	struct usb_function	*func = &port->func;
-0a1af6dfa0772f drivers/usb/gadget/function/u_ether.c Elson Roy Serrao 2023-03-24  446  	struct usb_gadget	*gadget = func->config->cdev->gadget;
-0a1af6dfa0772f drivers/usb/gadget/function/u_ether.c Elson Roy Serrao 2023-03-24  447  
-0a1af6dfa0772f drivers/usb/gadget/function/u_ether.c Elson Roy Serrao 2023-03-24  448  	if (func->func_suspended)
-0a1af6dfa0772f drivers/usb/gadget/function/u_ether.c Elson Roy Serrao 2023-03-24  449  		ret = usb_func_wakeup(func);
-0a1af6dfa0772f drivers/usb/gadget/function/u_ether.c Elson Roy Serrao 2023-03-24  450  	else
-0a1af6dfa0772f drivers/usb/gadget/function/u_ether.c Elson Roy Serrao 2023-03-24  451  		ret = usb_gadget_wakeup(gadget);
-0a1af6dfa0772f drivers/usb/gadget/function/u_ether.c Elson Roy Serrao 2023-03-24  452  }
-0a1af6dfa0772f drivers/usb/gadget/function/u_ether.c Elson Roy Serrao 2023-03-24  453  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>
+> Tested-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
+>
+>
+> cheers
