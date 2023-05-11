@@ -2,256 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B0B6FF97B
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 20:25:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 257796FF983
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 20:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238959AbjEKSZB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 14:25:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
+        id S239033AbjEKSex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 14:34:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238673AbjEKSYj (ORCPT
+        with ESMTP id S238915AbjEKSev (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 14:24:39 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0E1E5592
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 11:24:37 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9e2b65f2eeso16114482276.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 11:24:37 -0700 (PDT)
+        Thu, 11 May 2023 14:34:51 -0400
+Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29115584
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 11:34:49 -0700 (PDT)
+Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6ab611e57c2so1028897a34.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 11:34:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683829477; x=1686421477;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pXR2gVK9OA+wwjaEDZ+OSGVT3sLd4z3OrzMBakd4aKc=;
-        b=uljCWBeUfmKO+5Of2CDGdnripKh0c8Rzx0Uw+3mUJQMB0vkRyYLVzF+n17pnlhk/Gx
-         5bJy3V1jOgdbwhD+IzTsmSPyo+npOvf5g9Bg01qvgjSMD6eTNJAt18pXpgDdOP/1R0pG
-         f7W9dTJmQptgBrJNb6rZO42eQOqXUPeL3PmdMoDvsc0jIKFazxlaZQy6iFcTAKrcyb2g
-         Vd4Xof1tpuhpdbe6fUAhZyOPuYJwlVtphMWQs8q/tSYp7h7umSFg6RazMw4joPD08IQq
-         U+PE0b8W/rQAZMz7pnNUhXYfuSp6KyH2zv92pJQFwOvAqZixv97KJ+4OltRNsi03yCWr
-         atQw==
+        d=bitbyteword.org; s=google; t=1683830089; x=1686422089;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Eqk34LLf7CtwfQbk/8o6b4YNIAWEXLYt4n8dWqcS5ck=;
+        b=LBdVZAm7fx0OMMTmY4JLYUPEsaUsWQlkXbKIK11lGvRxosG8NIsr+iX8dOLHMpD3Vl
+         ROCCtj5nN2m2NhyWoLeor+MCXIvxIsRddFPHAInwtIhkJuWpH0S2W6zNB6z+XyddwLUt
+         XwrahT14wszgczKY8a4AnBZq32h321FIGDRQdVFIMO+hMQFuhpDhAW63O987g6tp+m9f
+         8Dz83dFyCvoQbcEBcz79UFZApDbYpApHKnLZKZ9tQrgyKpzxKXdrf9nRozIrG/lzqPoB
+         dMOEAWlfR6TJYbVapjWFYP7uFB4WZ2reB3ls7CCvxlr+Io29Df4Udy9fGmAbxSdaOazZ
+         c7dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683829477; x=1686421477;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pXR2gVK9OA+wwjaEDZ+OSGVT3sLd4z3OrzMBakd4aKc=;
-        b=JbU0kZ7tKqTFM3RATSOjf3bgvNeqwSizAv+oh+YgR+O9etm6KI2DpvLc6Xz6V4OpQS
-         ILcaZm8UuxcS9UTx5UmD7RwWETCYMyyd7spxi2czGAj9zoClTmHDVB7OhEMVvKhXW86b
-         NBd29IpaQDwcROsJyhANNKJQL1ZwMaBt8sMDiR7Y3QnlxyDjQnkkiY6/B8dFnp6JPr8I
-         I3Gtr4geBjFyX+yabTz/0GCqJt/HVJHc3C+I2FlrkM0ZdtrA4OQh7Gsr/QYttjk4wMrb
-         k8iYsvwRWa1u5GeYx38VVYYUDMEj+QldZs6KwGmaXbQbi6xrRdpjVHf+sdJJorN6cmU7
-         CPcQ==
-X-Gm-Message-State: AC+VfDxCSPEUcITNrs79he8ARykbp593gRVVrwwIPr8iw30AAeaKzF98
-        Ev2kNb4VlpV6lnInjhD/hB4NFeagT/4V2KfMP0ph
-X-Google-Smtp-Source: ACHHUZ6/k8WRFVr95FNBEjmhvpwsN42OkGFLi7clqHCCS0gOIKkyVoZZe1vIA3bGUQMYYdRD+oFyrl83UA1YRSgN8vJE
-X-Received: from axel.svl.corp.google.com ([2620:15c:2d4:203:1119:8675:ddb3:1e7a])
- (user=axelrasmussen job=sendgmr) by 2002:a05:6902:114e:b0:b4a:3896:bc17 with
- SMTP id p14-20020a056902114e00b00b4a3896bc17mr9915667ybu.0.1683829477159;
- Thu, 11 May 2023 11:24:37 -0700 (PDT)
-Date:   Thu, 11 May 2023 11:24:26 -0700
-In-Reply-To: <20230511182426.1898675-1-axelrasmussen@google.com>
-Mime-Version: 1.0
-References: <20230511182426.1898675-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Message-ID: <20230511182426.1898675-3-axelrasmussen@google.com>
-Subject: [PATCH 3/3] selftests/mm: add uffd unit test for UFFDIO_SIGBUS
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Huang Ying <ying.huang@intel.com>,
-        James Houghton <jthoughton@google.com>,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>
-Cc:     Axel Rasmussen <axelrasmussen@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+        d=1e100.net; s=20221208; t=1683830089; x=1686422089;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Eqk34LLf7CtwfQbk/8o6b4YNIAWEXLYt4n8dWqcS5ck=;
+        b=bZ1yVHjv2FMZLdrzF3KEBBXVa9DQ/u2YV0ngBXpWgDKf37jEO49ksFPhuRz/7ycg03
+         RHKhhcZvA4boT3vDORtHgcejLiifXiV1ZDVSlTDL7ZQZzIJB5QEgmjH6lOk4Sqy5YmCJ
+         wg+Lku+smSpvbgfCtIplaLk5MIikbEwu7Ig+UPz2HqQ5rFrhUxQBJB61m8QLqNP2Y0vw
+         4En8tIyldBlZgcEyshjXas5UChLArVvLCxOCH+ALGCwotCLSNETbquSfGsghRSLnrySv
+         DXj3IGppIZCr/E2iI/OLVNIM0OzZEatfsPSRqq3zEdW4LnzVBudRZiDg3nsBxMhl+T4Q
+         ALNw==
+X-Gm-Message-State: AC+VfDz46NxRlTMED1IIUwPdk4bfLTLjFEYrFHT2PRXG3O8CioKESHjT
+        VjIkjXn9AE8SsWiMsvo6qhobXkEldGmgdtKWD9lgpqbPLmIPFxwoSVdp3g==
+X-Google-Smtp-Source: ACHHUZ5uA60qYdAeSKObEwcECuose51HMLpDsQyqtfXHDIWS+t2Q6r7nIDwJ6HyPNekR99P7VfeBMaHjdmdwu4VnkBo=
+X-Received: by 2002:a9d:7d07:0:b0:6ab:82ac:fad8 with SMTP id
+ v7-20020a9d7d07000000b006ab82acfad8mr2203405otn.15.1683830089017; Thu, 11 May
+ 2023 11:34:49 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230508160829.2756405-1-vineeth@bitbyteword.org>
+ <20230509132534.09098acc@luca64> <CAO7JXPhrqKWfsp860rRmEenxARi8U2gNMGsOn4m+aKporWwBcg@mail.gmail.com>
+ <20230509224829.2fb547fd@nowhere> <20230509225417.61d36733@nowhere>
+ <CAO7JXPhk5qbz9kmiu9WuXS+gXCt9+X8pP2c37hd9ChByLmXYjA@mail.gmail.com>
+ <20230510090735.68f62cd4@nowhere> <CAO7JXPg03f2YnrmzoGjfHEZZcoN55cU7uVukMw31Bw3x6nnaMw@mail.gmail.com>
+ <20230511093711.2be82409@nowhere>
+In-Reply-To: <20230511093711.2be82409@nowhere>
+From:   Vineeth Remanan Pillai <vineeth@bitbyteword.org>
+Date:   Thu, 11 May 2023 14:34:38 -0400
+Message-ID: <CAO7JXPiKLFLVpqDKoRdu8c2Yd4AJ_2B2UyXJxD3kJAyiJ=n0_Q@mail.gmail.com>
+Subject: Re: [PATCH 1/2] sched/deadline: accurate reclaim bandwidth for GRUB
+To:     luca abeni <luca.abeni@santannapisa.it>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The test is pretty basic, and exercises UFFDIO_SIGBUS straightforwardly.
-We register a region with userfaultfd, in missing fault mode. For each
-fault, we either issue UFFDIO_ZEROPAGE (odd pages) or UFFDIO_SIGBUS
-(even pages). We read each page in the region, and assert that the odd
-pages are zeroed as expected, and the even pages yield a SIGBUS as
-expected.
+Hi Luca,
 
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- tools/testing/selftests/mm/uffd-unit-tests.c | 114 ++++++++++++++++++-
- 1 file changed, 110 insertions(+), 4 deletions(-)
+On Thu, May 11, 2023 at 3:37=E2=80=AFAM luca abeni <luca.abeni@santannapisa=
+.it> wrote:
+>
+> I've just seen v2, and (unless I misunderstand something) I see you
+> removed the max{u_i/u_max, 1 - (u_inact + u_extra}} thing?
+>
+> I fear this might break the real-time guarantees provided by the
+> algorithm...
+>
+I am sorry I missed sending more details before sending out v2. So, I
+think there is another bug in the existing implementation. Let me try
+to explain the details.
 
-diff --git a/tools/testing/selftests/mm/uffd-unit-tests.c b/tools/testing/selftests/mm/uffd-unit-tests.c
-index 269c86768a02..3eb5a6f9b51f 100644
---- a/tools/testing/selftests/mm/uffd-unit-tests.c
-+++ b/tools/testing/selftests/mm/uffd-unit-tests.c
-@@ -881,13 +881,13 @@ static void retry_uffdio_zeropage(int ufd,
- 	}
- }
- 
--static bool do_uffdio_zeropage(int ufd, bool has_zeropage)
-+static bool do_uffdio_zeropage(int ufd, bool has_zeropage, bool test_retry, unsigned long offset)
- {
- 	struct uffdio_zeropage uffdio_zeropage = { 0 };
- 	int ret;
- 	__s64 res;
- 
--	uffdio_zeropage.range.start = (unsigned long) area_dst;
-+	uffdio_zeropage.range.start = (unsigned long) area_dst + offset;
- 	uffdio_zeropage.range.len = page_size;
- 	uffdio_zeropage.mode = 0;
- 	ret = ioctl(ufd, UFFDIO_ZEROPAGE, &uffdio_zeropage);
-@@ -901,7 +901,7 @@ static bool do_uffdio_zeropage(int ufd, bool has_zeropage)
- 	} else if (has_zeropage) {
- 		if (res != page_size)
- 			err("UFFDIO_ZEROPAGE unexpected size");
--		else
-+		else if (test_retry)
- 			retry_uffdio_zeropage(ufd, &uffdio_zeropage);
- 		return true;
- 	} else
-@@ -938,7 +938,7 @@ static void uffd_zeropage_test(uffd_test_args_t *args)
- 		/* Ignore the retval; we already have it */
- 		uffd_register_detect_zeropage(uffd, area_dst_alias, page_size);
- 
--	if (do_uffdio_zeropage(uffd, has_zeropage))
-+	if (do_uffdio_zeropage(uffd, has_zeropage, true, 0))
- 		for (i = 0; i < page_size; i++)
- 			if (area_dst[i] != 0)
- 				err("data non-zero at offset %d\n", i);
-@@ -952,6 +952,106 @@ static void uffd_zeropage_test(uffd_test_args_t *args)
- 	uffd_test_pass();
- }
- 
-+static void do_uffdio_sigbus(int uffd, unsigned long offset)
-+{
-+	struct uffdio_sigbus uffdio_sigbus = { 0 };
-+	int ret;
-+	__s64 res;
-+
-+	uffdio_sigbus.range.start = (unsigned long) area_dst + offset;
-+	uffdio_sigbus.range.len = page_size;
-+	uffdio_sigbus.mode = 0;
-+	ret = ioctl(uffd, UFFDIO_SIGBUS, &uffdio_sigbus);
-+	res = uffdio_sigbus.updated;
-+
-+	if (ret)
-+		err("UFFDIO_SIGBUS error: %"PRId64, (int64_t)res);
-+	else if (res != page_size)
-+		err("UFFDIO_SIGBUS unexpected size: %"PRId64, (int64_t)res);
-+}
-+
-+static void uffd_sigbus_ioctl_handle_fault(
-+	struct uffd_msg *msg, struct uffd_args *args)
-+{
-+	unsigned long offset;
-+
-+	if (msg->event != UFFD_EVENT_PAGEFAULT)
-+		err("unexpected msg event %u", msg->event);
-+
-+	if (msg->arg.pagefault.flags &
-+	    (UFFD_PAGEFAULT_FLAG_WP | UFFD_PAGEFAULT_FLAG_MINOR))
-+		err("unexpected fault type %llu", msg->arg.pagefault.flags);
-+
-+	offset = (char *)(unsigned long)msg->arg.pagefault.address - area_dst;
-+	offset &= ~(page_size-1);
-+
-+	/* Odd pages -> zeropage; even pages -> sigbus. */
-+	if (offset & page_size) {
-+		if (!do_uffdio_zeropage(uffd, true, false, offset))
-+			err("UFFDIO_ZEROPAGE failed");
-+	} else {
-+		do_uffdio_sigbus(uffd, offset);
-+	}
-+}
-+
-+static void uffd_sigbus_ioctl_test(uffd_test_args_t *targs)
-+{
-+	pthread_t uffd_mon;
-+	char c;
-+	struct uffd_args args = { 0 };
-+	struct sigaction act = { 0 };
-+	unsigned long nr_sigbus = 0;
-+	unsigned long nr;
-+
-+	fcntl(uffd, F_SETFL, uffd_flags | O_NONBLOCK);
-+
-+	if (!uffd_register_detect_zeropage(uffd, area_dst, nr_pages * page_size))
-+		err("register failed: no zeropage support");
-+
-+	args.handle_fault = uffd_sigbus_ioctl_handle_fault;
-+	if (pthread_create(&uffd_mon, NULL, uffd_poll_thread, &args))
-+		err("uffd_poll_thread create");
-+
-+	sigbuf = &jbuf;
-+	act.sa_sigaction = sighndl;
-+	act.sa_flags = SA_SIGINFO;
-+	if (sigaction(SIGBUS, &act, 0))
-+		err("sigaction");
-+
-+	for (nr = 0; nr < nr_pages; ++nr) {
-+		unsigned long offset = nr * page_size;
-+		const char *bytes = (const char *) area_dst + offset;
-+		const char *i;
-+
-+		if (sigsetjmp(*sigbuf, 1)) {
-+			/*
-+			 * Access below triggered a SIGBUS, which was caught by
-+			 * sighndl, which then jumped here. Count this SIGBUS,
-+			 * and move on to next page.
-+			 */
-+			++nr_sigbus;
-+			continue;
-+		}
-+
-+		for (i = bytes; i < bytes + page_size; ++i) {
-+			if (*i)
-+				err("nonzero byte in area_dst (%p) at %p: %u",
-+				    area_dst, i, *i);
-+		}
-+	}
-+
-+	if (write(pipefd[1], &c, sizeof(c)) != sizeof(c))
-+		err("pipe write");
-+	if (pthread_join(uffd_mon, NULL))
-+		err("pthread_join()");
-+
-+	if (nr_sigbus != nr_pages / 2)
-+		err("expected to receive %lu SIGBUS, actually received %lu",
-+		    nr_pages / 2, nr_sigbus);
-+
-+	uffd_test_pass();
-+}
-+
- /*
-  * Test the returned uffdio_register.ioctls with different register modes.
-  * Note that _UFFDIO_ZEROPAGE is tested separately in the zeropage test.
-@@ -1127,6 +1227,12 @@ uffd_test_case_t uffd_tests[] = {
- 		UFFD_FEATURE_PAGEFAULT_FLAG_WP |
- 		UFFD_FEATURE_WP_HUGETLBFS_SHMEM,
- 	},
-+	{
-+		.name = "sigbus-ioctl",
-+		.uffd_fn = uffd_sigbus_ioctl_test,
-+		.mem_targets = MEM_ALL & ~(MEM_HUGETLB | MEM_HUGETLB_PRIVATE),
-+		.uffd_feature_required = UFFD_FEATURE_SIGBUS_IOCTL,
-+	},
- };
- 
- static void usage(const char *prog)
--- 
-2.40.1.606.ga4b1b128d6-goog
+SMP GRUB paper has the equation for depreciating runtime as:
+  dq_i =3D -max{u_i, 1 - (extra_bw + Uinact)} dt
 
+Since we are caping at Umax, the equation would be
+  dq_i =3D -(max{u_i, Umax - (extra_bw + Uinact)} / Umax) dt (1)
+
+But existing implementation is:
+  dq_i =3D -max{u_i/Umax, 1 - (extra_bw + Uinact)} dt (2)
+
+Here in (2), we factored Umax only to the first term "u_i" and the
+second term in max{} was as left as it is. What do you think?
+
+Now with normal DL and SCHED_FLAG_RECLAIM tasks, equation (1) can be
+re-written as:
+  dq_i =3D
+   -(max{u_i, Ureclaim_max - (extra_bw + Uinact)}/Ureclaim_max)dt (3)
+
+I tested this equation (3) and it works as expected. What do you think
+about the correctness of equation (3)?
+
+I felt that, since we are using sequential reclaim mentioned in the
+paper and we isolate all parameters per-cpu(except for extra_bw) we
+could use the "-dq =3D -(U/Umax) dt" equation as it was simpler than
+equation (3). Sorry that I missed discussing this. I shall send out
+v3 with equation (3), if you think it's the right way to go to enforce
+deadline guarantees.
+
+Thanks,
+Vineeth
