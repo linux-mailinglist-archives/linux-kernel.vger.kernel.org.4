@@ -2,64 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16A0D6FE9B9
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 04:09:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF62D6FE9C4
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 04:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231660AbjEKCI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 22:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46000 "EHLO
+        id S232030AbjEKCQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 22:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjEKCIz (ORCPT
+        with ESMTP id S229490AbjEKCQX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 22:08:55 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0C2EDE;
-        Wed, 10 May 2023 19:08:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683770933; x=1715306933;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RapQlMH/dlsFJalvQXdyhW1B6c6n6VpKA6SrVWpGKTM=;
-  b=URBGvV0heAGc3fZ4H40C7d0IohL5PAKMr8xyLMcs08wwtv9/XJSiF5ZG
-   BxQBHDZEtnN8sz8CW1HiQib17VzHZ5ReLq/DLZn/WO2AocPJS8kgClsdB
-   ey+UmLr6IxGQ+WPuazreC0AvLTkKzWdf2NTxULx3WpBEP4vFTC9g+6dZM
-   fDEl3DIqL11ikN6DWhRHXLCCnosPnGNGvuHibEKg/3Tx9PGW07yXZfjxP
-   CEEvJSF1FKqK6eNhzOY4KrM+a+kcynokwIfRmajsTVg0UmCY11cn1j2FK
-   TeiefojXsPRA6qqjwBxkhnXwpH7cpQhNbruKgexcLFU48hH/R/50FItjE
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="413691008"
-X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
-   d="scan'208";a="413691008"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 19:08:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="789180107"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="789180107"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 10 May 2023 19:08:51 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pwvje-0003hq-1J;
-        Thu, 11 May 2023 02:08:50 +0000
-Date:   Thu, 11 May 2023 10:08:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Kent Overstreet <kmo@daterainc.com>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, Kent Overstreet <kmo@daterainc.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [PATCH 23/32] iov_iter: copy_folio_from_iter_atomic()
-Message-ID: <202305110949.RCcHYzkJ-lkp@intel.com>
-References: <20230509165657.1735798-24-kent.overstreet@linux.dev>
+        Wed, 10 May 2023 22:16:23 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B91A2D43
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 19:16:22 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-306281edf15so7509047f8f.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 19:16:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683771381; x=1686363381;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=c7NhY70nKePpFKW1tNMvcsBAqsK2Oz2JiYYqlXCn6ek=;
+        b=VzlDVeswYJTkHS18WfZGHZ94kK1HMGNiS+QWCFjD+YQvom1A9OAwXhkdBvdBe22xb1
+         wo2+YNPN2MLaLnGPFkdicBRqtv0CqWMFPg8QmcSKYNV9CwYtC9HjcrmNGJ/D2dsCz3lb
+         Z5PlRQDTuLjC9YYVM1X5I8xGDP/4vF1xu/GrZJojtbOuyCP+QJF9DWyY0/3Y99Q8a5ua
+         eByKEUXFxYnoBU9GBECtwMdo6BJkmns+hZ8YD2GZV8eQReJfbHcXZ0zBy6866p8r3miX
+         9dO9UeQ30UHWgOkJMCSmPXFkmsjsPkCrdbwew7yxIcitgBsJRx24CfkS0WtbbIPC8y/0
+         lm4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683771381; x=1686363381;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=c7NhY70nKePpFKW1tNMvcsBAqsK2Oz2JiYYqlXCn6ek=;
+        b=kW9xn28oY/yrOnIrpav/+sbOBTU+YDgWZrvHHMS7pLCsvcEmqOgvgERZHRzi6G7oax
+         Yy4EntCD5MG3OOexg3qiMCUaLTup1zne5lPXD2BD6FwK7yNhwd5N+ADKCSbmV3ucaYXU
+         FFDYgOmbMocFOb/XCpn539kEiVTyq/GjQkyArULOk1WYo0qBGNw9MhrrDvRvKrGbT4GU
+         W8YermNinO2KZOmasiw0cmusb+EqLPNfdSElBhQC0OGa8mCOeFd0bW8/1DKWysPWhoPp
+         x4nJv2k1d/gQ0NYZ/UkirbCPy86ZlIbA2cuwoLTBrFXxdqubxblmgnewVI79uCYFj5PF
+         m/Mw==
+X-Gm-Message-State: AC+VfDwWvv7LPwMob4xiMVeW+WZ6tWpTNFzZD45hJWhr2MfDrI+2DvwM
+        cmEp0K2DfgbjTBo8MB4EQWu/7g==
+X-Google-Smtp-Source: ACHHUZ7Sd+QhrUQhXDP5FYiCHBKYHYlWW2eiRLWyVaZMfV2uj0aNLztC4C2YUrLSDZA108qzs4//xg==
+X-Received: by 2002:a5d:45c7:0:b0:306:3bac:e235 with SMTP id b7-20020a5d45c7000000b003063bace235mr11720300wrs.10.1683771380676;
+        Wed, 10 May 2023 19:16:20 -0700 (PDT)
+Received: from localhost.localdomain ([64.64.123.10])
+        by smtp.gmail.com with ESMTPSA id j18-20020a5d4492000000b003021288a56dsm18945908wrq.115.2023.05.10.19.16.14
+        (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
+        Wed, 10 May 2023 19:16:20 -0700 (PDT)
+From:   Zhangfei Gao <zhangfei.gao@linaro.org>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        jean-philippe <jean-philippe@linaro.org>,
+        Wangzhou <wangzhou1@hisilicon.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc:     linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        iommu@lists.linux.dev, acc@lists.linaro.org,
+        Zhangfei Gao <zhangfei.gao@linaro.org>,
+        Weili Qian <qianweili@huawei.com>
+Subject: [PATCH] uacce: use filep->f_mapping to replace inode->i_mapping
+Date:   Thu, 11 May 2023 10:15:53 +0800
+Message-Id: <20230511021553.44318-1-zhangfei.gao@linaro.org>
+X-Mailer: git-send-email 2.39.2 (Apple Git-143)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230509165657.1735798-24-kent.overstreet@linux.dev>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,80 +76,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kent,
+The inode can be different in a container, for example, a docker and host
+both open the same uacce parent device, which uses the same uacce struct
+but different inode, so uacce->inode is not enough.
 
-kernel test robot noticed the following build warnings:
+What's worse, when docker stops, the inode will be destroyed as well,
+causing use-after-free in uacce_remove.
 
-[auto build test WARNING on tip/locking/core]
-[cannot apply to axboe-block/for-next akpm-mm/mm-everything kdave/for-next linus/master v6.4-rc1 next-20230510]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+So use q->filep->f_mapping to replace uacce->inode->i_mapping.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Kent-Overstreet/Compiler-Attributes-add-__flatten/20230510-010302
-base:   tip/locking/core
-patch link:    https://lore.kernel.org/r/20230509165657.1735798-24-kent.overstreet%40linux.dev
-patch subject: [PATCH 23/32] iov_iter: copy_folio_from_iter_atomic()
-config: powerpc-randconfig-s042-20230509 (https://download.01.org/0day-ci/archive/20230511/202305110949.RCcHYzkJ-lkp@intel.com/config)
-compiler: powerpc-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/0e5d4229f5e7671dabba56ea36583b1ca20a9a18
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Kent-Overstreet/Compiler-Attributes-add-__flatten/20230510-010302
-        git checkout 0e5d4229f5e7671dabba56ea36583b1ca20a9a18
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=powerpc SHELL=/bin/bash
+Signed-off-by: Weili Qian <qianweili@huawei.com>
+Signed-off-by: Zhangfei Gao <zhangfei.gao@linaro.org>
+---
+ drivers/misc/uacce/uacce.c | 16 +++++++++-------
+ include/linux/uacce.h      |  4 ++--
+ 2 files changed, 11 insertions(+), 9 deletions(-)
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305110949.RCcHYzkJ-lkp@intel.com/
-
-sparse warnings: (new ones prefixed by >>)
->> lib/iov_iter.c:839:30: sparse: sparse: incompatible types in comparison expression (different type sizes):
->> lib/iov_iter.c:839:30: sparse:    unsigned int *
->> lib/iov_iter.c:839:30: sparse:    unsigned long *
-
-vim +839 lib/iov_iter.c
-
-   825	
-   826	size_t copy_folio_from_iter_atomic(struct folio *folio, size_t offset,
-   827					   size_t bytes, struct iov_iter *i)
-   828	{
-   829		size_t ret = 0;
-   830	
-   831		if (WARN_ON(offset + bytes > folio_size(folio)))
-   832			return 0;
-   833		if (WARN_ON_ONCE(!i->data_source))
-   834			return 0;
-   835	
-   836	#ifdef CONFIG_HIGHMEM
-   837		while (bytes) {
-   838			struct page *page = folio_page(folio, offset >> PAGE_SHIFT);
- > 839			unsigned b = min(bytes, PAGE_SIZE - (offset & PAGE_MASK));
-   840			unsigned r = __copy_page_from_iter_atomic(page, offset, b, i);
-   841	
-   842			offset	+= r;
-   843			bytes	-= r;
-   844			ret	+= r;
-   845	
-   846			if (r != b)
-   847				break;
-   848		}
-   849	#else
-   850		ret = __copy_page_from_iter_atomic(&folio->page, offset, bytes, i);
-   851	#endif
-   852	
-   853		return ret;
-   854	}
-   855	EXPORT_SYMBOL(copy_folio_from_iter_atomic);
-   856	
-
+diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
+index 346bd7cf2e94..740ace422baa 100644
+--- a/drivers/misc/uacce/uacce.c
++++ b/drivers/misc/uacce/uacce.c
+@@ -166,8 +166,8 @@ static int uacce_fops_open(struct inode *inode, struct file *filep)
+ 
+ 	init_waitqueue_head(&q->wait);
+ 	filep->private_data = q;
+-	uacce->inode = inode;
+ 	q->state = UACCE_Q_INIT;
++	q->private_data = filep;
+ 	mutex_init(&q->mutex);
+ 	list_add(&q->list, &uacce->queues);
+ 	mutex_unlock(&uacce->mutex);
+@@ -574,12 +574,6 @@ void uacce_remove(struct uacce_device *uacce)
+ 
+ 	if (!uacce)
+ 		return;
+-	/*
+-	 * unmap remaining mapping from user space, preventing user still
+-	 * access the mmaped area while parent device is already removed
+-	 */
+-	if (uacce->inode)
+-		unmap_mapping_range(uacce->inode->i_mapping, 0, 0, 1);
+ 
+ 	/*
+ 	 * uacce_fops_open() may be running concurrently, even after we remove
+@@ -589,6 +583,8 @@ void uacce_remove(struct uacce_device *uacce)
+ 	mutex_lock(&uacce->mutex);
+ 	/* ensure no open queue remains */
+ 	list_for_each_entry_safe(q, next_q, &uacce->queues, list) {
++		struct file *filep = q->private_data;
++
+ 		/*
+ 		 * Taking q->mutex ensures that fops do not use the defunct
+ 		 * uacce->ops after the queue is disabled.
+@@ -597,6 +593,12 @@ void uacce_remove(struct uacce_device *uacce)
+ 		uacce_put_queue(q);
+ 		mutex_unlock(&q->mutex);
+ 		uacce_unbind_queue(q);
++
++		/*
++		 * unmap remaining mapping from user space, preventing user still
++		 * access the mmaped area while parent device is already removed
++		 */
++		unmap_mapping_range(filep->f_mapping, 0, 0, 1);
+ 	}
+ 
+ 	/* disable sva now since no opened queues */
+diff --git a/include/linux/uacce.h b/include/linux/uacce.h
+index 0a81c3dfd26c..64b800b74436 100644
+--- a/include/linux/uacce.h
++++ b/include/linux/uacce.h
+@@ -86,6 +86,7 @@ enum uacce_q_state {
+  * @state: queue state machine
+  * @pasid: pasid associated to the mm
+  * @handle: iommu_sva handle returned by iommu_sva_bind_device()
++ * @private_data: private data for saving filep
+  */
+ struct uacce_queue {
+ 	struct uacce_device *uacce;
+@@ -97,6 +98,7 @@ struct uacce_queue {
+ 	enum uacce_q_state state;
+ 	u32 pasid;
+ 	struct iommu_sva *handle;
++	void *private_data;
+ };
+ 
+ /**
+@@ -114,7 +116,6 @@ struct uacce_queue {
+  * @mutex: protects uacce operation
+  * @priv: private pointer of the uacce
+  * @queues: list of queues
+- * @inode: core vfs
+  */
+ struct uacce_device {
+ 	const char *algs;
+@@ -130,7 +131,6 @@ struct uacce_device {
+ 	struct mutex mutex;
+ 	void *priv;
+ 	struct list_head queues;
+-	struct inode *inode;
+ };
+ 
+ #if IS_ENABLED(CONFIG_UACCE)
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.39.2 (Apple Git-143)
+
