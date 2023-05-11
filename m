@@ -2,86 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 704016FF32C
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:39:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E3386FF32F
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:39:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237951AbjEKNjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 09:39:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
+        id S238205AbjEKNjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:39:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238268AbjEKNij (ORCPT
+        with ESMTP id S238290AbjEKNi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:38:39 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBBD11D9A
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:36:36 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-b9a6ab9ede3so10792470276.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:36:36 -0700 (PDT)
+        Thu, 11 May 2023 09:38:59 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6A2120B6
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:37:08 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f41dceb9c9so41582235e9.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:37:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683812191; x=1686404191;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cFAIywGWIpHXBlSdgbcQzT1KF9uNjxkkfEt4tXTB8GY=;
-        b=NC0E8vqh5yAN4U7/8Y4/aq1xl0d7frmoThyvYuilmHbwwjROn6dxNX8nVcnyidJB/m
-         qatfvm0yPY+Hd+IP/3kpI+kcPi99ppeI5XYfd1P5Ruw8e75i5B1I1jbaaK1EdUI5Ymz3
-         N4kZVZJsafykkM3zIzaecbyDFU9a7TqFZ8nTIJW3gaeoNugJowg7LiiQiuGkwZcnfe2q
-         lYerGGZj/igiPYsHxKj+I0F9H0UjZcRTIQhb8OmxMG4483Qaftq0NXmGIOa6ecdW7Em0
-         8DQri3W1uK6NdjjMQGKcHLW7JsaLdDl4yjoOza8ga5sM1fqbNV8dqJ7nnJ1cciewr7uX
-         Ws8A==
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1683812222; x=1686404222;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J5QAZdjVLVbI0V0MOBRrdkRCmTAX1lGamqSGOVwZZl0=;
+        b=zubWSEySVwG6S1WwoZLBWgivEDgrrzpKil0UxQQUDmONjZVJJ66SUzH6iqu/UZ92C4
+         +hlbxJ96105mAyduA6JTwgws44lxdd852RvVr315fRGKjNohoW5SLTP6/EM9bHVPlOiI
+         kIJ919cEGf4RC2+gtmTHhwpmGx287fjpu4Sc7zfrIgZiJvlww7cFIJLI9MSpa+coIu0o
+         xfg5fh/NpUI7GoP8cc7fcV2vVvvICrLjFnzs/djvhtdYJIjepx8zBZZCiJgioqiGTr5Y
+         z9QVyTRHxW4+K1XSv+jXLo4a5bxfOCbneTdQzgQ5KAe+W18VKNr/4HiJLVjcVLy0IGmT
+         yhjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683812191; x=1686404191;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cFAIywGWIpHXBlSdgbcQzT1KF9uNjxkkfEt4tXTB8GY=;
-        b=jSYEpudWsGSxlJIgIFNS1ds7gE4PeuShsSuD/FghlWe7Pzu9Xds/jstXyKEII1j9jW
-         vNmMs97g/5d4UdRDvwQ+gzTYU85St8eoYgmEkuy4oK9QaM8LoIelu/Fb8Atidsj5CqNv
-         xwf5bz71rgfiBLRlcPOV2mOyKgCxoDVff+XX3oApQtLyhCmrJO3BdNevQqIrnXL51xqp
-         DCSeFRZDEGU232/ifQPmrF9osqKbQcFtfEUp6hXfanXCENbjS2JYbbcMWdK6csi406zI
-         X8YiFLKG3zi7z/gcsxnxLdkdfO9ERlIba/2HJ4k+R1b7Lg14CXQrhheXbfNb93uj7rR/
-         1JnQ==
-X-Gm-Message-State: AC+VfDw8aG5bEKM1djcXMbul/0XfRp0wBi/4OtA0jEa27wVSQJhoZ9k+
-        nPDAEz8BnHkJGfpk2U+3Ww5BSoRtJn0qxJdMDNplpQ==
-X-Google-Smtp-Source: ACHHUZ7QMtu9AVeo1bHy1+Z0/j5lqVmaGvWbkRPmujYL/1PGBpqhTIe8hp6y79vxcM6RG1l/dmxLaabpyZzUPNvVMDw=
-X-Received: by 2002:a25:fc07:0:b0:b9a:6f77:9018 with SMTP id
- v7-20020a25fc07000000b00b9a6f779018mr19959978ybd.41.1683812191411; Thu, 11
- May 2023 06:36:31 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683812222; x=1686404222;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=J5QAZdjVLVbI0V0MOBRrdkRCmTAX1lGamqSGOVwZZl0=;
+        b=B4zMpAIdzLlhyyiEUnpjQz8y2dTkvUrdLlTS6EbVphF7qnqbQZKzbOKsQPHv4fGn7t
+         yC2rGHMe6crAJjrKRIHL+Cf7XYiTEU2AA3QsmY3LcNMGZfOpnflPEaVwL42bGjVKG75e
+         fmXlOPyeJw/rp6LQj3mi46DKVLMUIZZ9CtGqRjxFEuujsT2QXb7O5ut6scaglSF+wYV0
+         MAWjlbh6KstFutP1AD0F+X9DXp74oHUrOgTpG+VCjic+rag6hpw4nkxA17BdLviGMhrI
+         kw+B7MeTB5qDzuOlGEe2uLqLTpxCUwp0Ij63OfXKmvCPDqcGNq2HaBbzQTt7QusIo+f/
+         iorA==
+X-Gm-Message-State: AC+VfDxIPOOH1cBjnSzR36gAnuy/1p5IEy4ZLKheqzGMrQOvm21KVE7e
+        dRYXFQZMI+f7u2Dkueqag4LViw==
+X-Google-Smtp-Source: ACHHUZ6durEogDyWOruj0uja6YyUtEd+bw8P/5czqWQsSh8N78YTOQerfYFo4L6J5TKmEd7dsLzRXw==
+X-Received: by 2002:a05:600c:383:b0:3f1:93c2:4df6 with SMTP id w3-20020a05600c038300b003f193c24df6mr14526564wmd.12.1683812222586;
+        Thu, 11 May 2023 06:37:02 -0700 (PDT)
+Received: from [192.168.1.172] (158.22.5.93.rev.sfr.net. [93.5.22.158])
+        by smtp.gmail.com with ESMTPSA id 12-20020a05600c020c00b003f4b6bcbd8bsm4469844wmi.31.2023.05.11.06.37.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 06:37:02 -0700 (PDT)
+Message-ID: <6abfd685-e2cc-ef0e-188a-4fb6c243ab81@baylibre.com>
+Date:   Thu, 11 May 2023 15:37:01 +0200
 MIME-Version: 1.0
-References: <1683730825-15668-1-git-send-email-quic_rohiagar@quicinc.com>
-In-Reply-To: <1683730825-15668-1-git-send-email-quic_rohiagar@quicinc.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 11 May 2023 15:36:20 +0200
-Message-ID: <CACRpkdZZKsLQbR0zttAWjxYWEPdWo3cHo_OVhuGxBZ89XhDTmw@mail.gmail.com>
-Subject: Re: [PATCH v7 0/4] Add pinctrl support for SDX75
-To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        richardcochran@gmail.com, manivannan.sadhasivam@linaro.org,
-        andy.shevchenko@gmail.com, linux-arm-msm@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] clk: mediatek: mt8365: Fix inverted topclk operations
+Content-Language: en-US
+To:     Markus Schneider-Pargmann <msp@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230511133226.913600-1-msp@baylibre.com>
+From:   Alexandre Mergnat <amergnat@baylibre.com>
+In-Reply-To: <20230511133226.913600-1-msp@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 5:00=E2=80=AFPM Rohit Agarwal <quic_rohiagar@quicin=
-c.com> wrote:
+On 11/05/2023 15:32, Markus Schneider-Pargmann wrote:
+> The given operations are inverted for the wrong registers which makes
+> multiple of the mt8365 hardware units unusable. In my setup at least usb
+> did not work.
+> 
+> Fixed by swapping the operations with the inverted ones.
 
-> Changes in v7:
->  - Collected reviewed by tags from Andy and updated the sdx75
->    driver with the new macro which was missed in v6 patch.
+Reviewed-by: Alexandre Mergnat <amergnat@baylibre.com>
+Tested-by: Alexandre Mergnat <amergnat@baylibre.com>
 
-This looks good to me, but I definitely need Bjorn's ACK on the series
-before I can merge this.
+-- 
+Regards,
+Alexandre
 
-Yours,
-Linus Walleij
