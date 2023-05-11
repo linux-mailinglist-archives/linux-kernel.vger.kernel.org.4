@@ -2,92 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F9C6FF52D
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:54:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3C096FF52A
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:54:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238490AbjEKOyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 10:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48706 "EHLO
+        id S238484AbjEKOyL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 10:54:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238451AbjEKOyF (ORCPT
+        with ESMTP id S238660AbjEKOxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 10:54:05 -0400
-Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DBF6C120AF;
-        Thu, 11 May 2023 07:52:46 -0700 (PDT)
-Received: from iccccc$hust.edu.cn ( [172.16.0.254] ) by ajax-webmail-app2
- (Coremail) ; Thu, 11 May 2023 22:52:25 +0800 (GMT+08:00)
-X-Originating-IP: [172.16.0.254]
-Date:   Thu, 11 May 2023 22:52:25 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   =?UTF-8?B?5YiY5rWp5q+F?= <iccccc@hust.edu.cn>
-To:     "david s. miller" <davem@davemloft.net>,
-        "david ahern" <dsahern@kernel.org>,
-        "eric dumazet" <edumazet@google.com>,
-        "jakub kicinski" <kuba@kernel.org>,
-        "paolo abeni" <pabeni@redhat.com>
-Cc:     hust-os-kernel-patches@googlegroups.com, yalongz@hust.edu.cn,
-        error27@gmail.com, "dongliang mu" <dzm91@hust.edu.cn>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2] net/ipv6: silence 'passing zero to ERR_PTR()'
- warning
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT5.0.14 build 20220802(cbd923c5)
- Copyright (c) 2002-2023 www.mailtech.cn hust
-In-Reply-To: <20230413101005.7504-1-iccccc@hust.edu.cn>
-References: <20230413101005.7504-1-iccccc@hust.edu.cn>
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Thu, 11 May 2023 10:53:46 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36312124B0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 07:52:40 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-94f4b911570so1375761266b.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 07:52:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683816759; x=1686408759;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=lVhW7oIL1jRdPCYTqsMhef8LndoBvPQL+ReNt7bJQu4=;
+        b=Y/g1hfEQ9rQE8qtFk8NmF0/bqZvbHqqp1OCicrEgzlD+czGRyB7Fi1CKRDz4GVd++N
+         bKFGo9bhalQNhyXP2dCDtRgCNzP09C0PKL3a33gJqvDIcL/kF/plkfiSWGU3QmdoKjuz
+         mfO01osj8J28ersqJeRAJ8L56Hot7/4MGlnha/qNnJpNm9v2eoHD8LDLxB+rGukuH4uh
+         WEtK+ZUjMLDq6BA1wBCRLGCBOzestyHJ04JUcOXCrqAP3e+rdDYzEE/lM5T3rRJ1DLvl
+         TWjiqlJuSBP+1OzQ0b70xEEkyT1cYVLVdPTww3dfOPmpcbQ9E3myS9s4ImY5PoxHlf1T
+         snCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683816759; x=1686408759;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lVhW7oIL1jRdPCYTqsMhef8LndoBvPQL+ReNt7bJQu4=;
+        b=bZPXjopHVFCgEe0Ie/9x3jxNKVc9Sld6lb+Vzedni0qhdYgA879XHqBI2IimMb15L4
+         WoZUCBjLaUCurrqeMg7Ipl3xh1i2606lyt2/uPyqdH5DpklixlCsxXo0aHmhootwHMLA
+         lX2folEQU40nUtc8Y1Ccsx+fsO3hchY8LZVHyBY1h/Zcy4LQz0xhoebCtUhgVcaKtQzK
+         hcZANop3PlieXGM4sv5I0LCBfln5Y/I6YSHqMK024wcgl40SxRLE3Eq2P8ySm2FzXQuy
+         yGKCAoYVA9mTHSoO9b8wd9gJ8TqA5w6i4RYUHkBjm2ZY26it1uYH2pE++vjmczfEQa3P
+         TguA==
+X-Gm-Message-State: AC+VfDzo7/nleU6/UIjyg93yiyfIKpKQx58Yd55YMwsjRD+/MHRYlsV1
+        jhb7u4iMOeFU7KdQJKRcN8QWBBUEHbXxZz+9Gs17XQ==
+X-Google-Smtp-Source: ACHHUZ4zVc6Q56vu/0naIlUZrWHwA0g33q4AGmldBKSbAbh8H7/sQxMe6PYhcuM2U8pli/PWhlOn6t+8iv06dhBVTqQ=
+X-Received: by 2002:a17:907:2d90:b0:966:40ad:3af1 with SMTP id
+ gt16-20020a1709072d9000b0096640ad3af1mr16481130ejc.1.1683816758894; Thu, 11
+ May 2023 07:52:38 -0700 (PDT)
 MIME-Version: 1.0
-Message-ID: <5bd5bfa.4758.1880b4c8bb2.Coremail.iccccc@hust.edu.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: GQEQrADHJswpAV1kAbTIAA--.8017W
-X-CM-SenderInfo: bxsqjiirqqkko6kx23oohg3hdfq/1tbiAQkIEWRcidIctgABsZ
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230511135503.198538-1-krzysztof.kozlowski@linaro.org>
+ <016ab311-cc66-b1c7-4099-f63e8f3644b8@linaro.org> <ca7a8499-0ac9-43d3-45ab-c974b1a2a564@linaro.org>
+In-Reply-To: <ca7a8499-0ac9-43d3-45ab-c974b1a2a564@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Thu, 11 May 2023 17:52:27 +0300
+Message-ID: <CAA8EJpptzh1w5-WgybEOOa59PTgo5z7CEr5vstWwhH7naBttjw@mail.gmail.com>
+Subject: Re: [PATCH] arm64: defconfig: enable TYPEC_QCOM_PMIC
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     neil.armstrong@linaro.org, Arnd Bergmann <arnd@arndb.de>,
+        Olof Johansson <olof@lixom.net>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cgo+IC0tLS0t5Y6f5aeL6YKu5Lu2LS0tLS0KPiDlj5Hku7bkuro6ICJIYW95aSBMaXUiIDxpY2Nj
-Y2NAaHVzdC5lZHUuY24+Cj4g5Y+R6YCB5pe26Ze0OiAyMDIzLTA0LTEzIDE4OjEwOjA1ICjmmJ/m
-nJ/lm5spCj4g5pS25Lu25Lq6OiAiRGF2aWQgUy4gTWlsbGVyIiA8ZGF2ZW1AZGF2ZW1sb2Z0Lm5l
-dD4sICJEYXZpZCBBaGVybiIgPGRzYWhlcm5Aa2VybmVsLm9yZz4sICJFcmljIER1bWF6ZXQiIDxl
-ZHVtYXpldEBnb29nbGUuY29tPiwgIkpha3ViIEtpY2luc2tpIiA8a3ViYUBrZXJuZWwub3JnPiwg
-IlBhb2xvIEFiZW5pIiA8cGFiZW5pQHJlZGhhdC5jb20+Cj4g5oqE6YCBOiBodXN0LW9zLWtlcm5l
-bC1wYXRjaGVzQGdvb2dsZWdyb3Vwcy5jb20sIHlhbG9uZ3pAaHVzdC5lZHUuY24sIGVycm9yMjdA
-Z21haWwuY29tLCAiSGFveWkgTGl1IiA8aWNjY2NjQGh1c3QuZWR1LmNuPiwgIkRvbmdsaWFuZyBN
-dSIgPGR6bTkxQGh1c3QuZWR1LmNuPiwgbmV0ZGV2QHZnZXIua2VybmVsLm9yZywgbGludXgta2Vy
-bmVsQHZnZXIua2VybmVsLm9yZwo+IOS4u+mimDogW1BBVENIIG5ldC1uZXh0IHYyXSBuZXQvaXB2
-Njogc2lsZW5jZSAncGFzc2luZyB6ZXJvIHRvIEVSUl9QVFIoKScgd2FybmluZwo+IAo+IFNtYXRj
-aCBjb21wbGFpbnMgdGhhdCBpZiB4ZnJtX2xvb2t1cCgpIHJldHVybnMgTlVMTCB0aGVuIHRoaXMg
-ZG9lcyBhCj4gd2VpcmQgdGhpbmcgd2l0aCAiZXJyIjoKPiAKPiAgICAgbmV0LyBpcHY2LyBpY21w
-LmM6NDExIGljbXB2Nl9yb3V0ZV9sb29rdXAoKQo+ICAgICB3YXJuOiBwYXNzaW5nIHplcm8gdG8g
-RVJSX1BUUigpCj4gCj4gTWVyZ2UgY29uZGl0aW9uYWwgcGF0aHMgYW5kIHJlbW92ZSB1bm5lY2Vz
-c2FyeSAnZWxzZScuIE5vIGZ1bmN0aW9uYWwKPiBjaGFuZ2UuCj4gCj4gU2lnbmVkLW9mZi1ieTog
-SGFveWkgTGl1IDxpY2NjY2NAaHVzdC5lZHUuY24+Cj4gUmV2aWV3ZWQtYnk6IERvbmdsaWFuZyBN
-dSA8ZHptOTFAaHVzdC5lZHUuY24+Cj4gLS0tCj4gdjEtPnYyOiBSZW1vdmUgdW5uZWNlc3Nhcnkg
-J2Vsc2UnLgo+IFRoZSBpc3N1ZSBpcyBmb3VuZCBieSBzdGF0aWMgYW5hbHlzaXMsIGFuZCB0aGUg
-cGF0Y2ggaXMgcmVtYWlucyB1bnRlc3RlZC4KPiAtLS0KPiAgbmV0L2lwdjYvaWNtcC5jIHwgMTcg
-KysrKysrLS0tLS0tLS0tLS0KPiAgMSBmaWxlIGNoYW5nZWQsIDYgaW5zZXJ0aW9ucygrKSwgMTEg
-ZGVsZXRpb25zKC0pCj4gCj4gZGlmZiAtLWdpdCBhL25ldC9pcHY2L2ljbXAuYyBiL25ldC9pcHY2
-L2ljbXAuYwo+IGluZGV4IDFmNTNmMmE3NDQ4MC4uYTEyZWVmMTFjN2VlIDEwMDY0NAo+IC0tLSBh
-L25ldC9pcHY2L2ljbXAuYwo+ICsrKyBiL25ldC9pcHY2L2ljbXAuYwo+IEBAIC0zOTMsMTcgKzM5
-MywxMiBAQCBzdGF0aWMgc3RydWN0IGRzdF9lbnRyeSAqaWNtcHY2X3JvdXRlX2xvb2t1cChzdHJ1
-Y3QgbmV0ICpuZXQsCj4gIAkJZ290byByZWxvb2t1cF9mYWlsZWQ7Cj4gIAo+ICAJZHN0MiA9IHhm
-cm1fbG9va3VwKG5ldCwgZHN0MiwgZmxvd2k2X3RvX2Zsb3dpKCZmbDIpLCBzaywgWEZSTV9MT09L
-VVBfSUNNUCk7Cj4gLQlpZiAoIUlTX0VSUihkc3QyKSkgewo+IC0JCWRzdF9yZWxlYXNlKGRzdCk7
-Cj4gLQkJZHN0ID0gZHN0MjsKPiAtCX0gZWxzZSB7Cj4gLQkJZXJyID0gUFRSX0VSUihkc3QyKTsK
-PiAtCQlpZiAoZXJyID09IC1FUEVSTSkgewo+IC0JCQlkc3RfcmVsZWFzZShkc3QpOwo+IC0JCQly
-ZXR1cm4gZHN0MjsKPiAtCQl9IGVsc2UKPiAtCQkJZ290byByZWxvb2t1cF9mYWlsZWQ7Cj4gLQl9
-Cj4gKwllcnIgPSBQVFJfRVJSX09SX1pFUk8oZHN0Mik7Cj4gKwlpZiAoZXJyICYmIGVyciAhPSAt
-RVBFUk0pCj4gKwkJZ290byByZWxvb2t1cF9mYWlsZWQ7Cj4gKwo+ICsJZHN0X3JlbGVhc2UoZHN0
-KTsKPiArCXJldHVybiBkc3QyOwkvKiByZXR1cm5zIHN1Y2Nlc3Mgb3IgRVJSX1BUUigtRVBFUk0p
-ICovCj4gIAo+ICByZWxvb2t1cF9mYWlsZWQ6Cj4gIAlpZiAoZHN0KQo+IC0tIAo+IDIuNDAuMAoK
-cGluZz8=
+On Thu, 11 May 2023 at 17:36, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 11/05/2023 16:14, Neil Armstrong wrote:
+> > On 11/05/2023 15:55, Krzysztof Kozlowski wrote:
+> >> Enable CONFIG_TYPEC_QCOM_PMIC necessary for full USB Type-C support on
+> >> Qualcomm QRD8550 and MT8550 boards.
+> >>
+> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >> ---
+> >>   arch/arm64/configs/defconfig | 1 +
+> >>   1 file changed, 1 insertion(+)
+> >>
+> >> diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
+> >> index a24609e14d50..8b6407d2059d 100644
+> >> --- a/arch/arm64/configs/defconfig
+> >> +++ b/arch/arm64/configs/defconfig
+> >> @@ -991,6 +991,7 @@ CONFIG_TYPEC_TCPCI=m
+> >>   CONFIG_TYPEC_FUSB302=m
+> >>   CONFIG_TYPEC_TPS6598X=m
+> >>   CONFIG_TYPEC_HD3SS3220=m
+> >> +CONFIG_TYPEC_QCOM_PMIC=m
+> >>   CONFIG_TYPEC_UCSI=m
+> >>   CONFIG_UCSI_CCG=m
+> >>   CONFIG_TYPEC_MUX_GPIO_SBU=m
+> >
+> > This driver isn't used on SM8550, only CONFIG_TYPEC_UCSI is needed.
+>
+> Indeed, apparently I messed something with config while looking for
+> other options. Patch can be skipped, the driver has no users in upstream
+> (and bindings are still missing :( ).
+
+... And it will be hopefully removed by landing Bryan's patches.
+
+-- 
+With best wishes
+Dmitry
