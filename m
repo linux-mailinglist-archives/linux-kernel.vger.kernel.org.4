@@ -2,101 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BDD186FEEC4
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:27:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A7436FEEC5
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232935AbjEKJ1J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 05:27:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
+        id S237572AbjEKJ1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 05:27:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237639AbjEKJ02 (ORCPT
+        with ESMTP id S237690AbjEKJ03 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 05:26:28 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF972D064;
-        Thu, 11 May 2023 02:26:16 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f42c865535so29051815e9.1;
-        Thu, 11 May 2023 02:26:16 -0700 (PDT)
+        Thu, 11 May 2023 05:26:29 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D78D06D
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:26:22 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-965cc5170bdso1228777466b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:26:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683797175; x=1686389175;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=naMkvWEs3370p81pkc0ToJJhjYw14du+DtHvmy6+xsA=;
-        b=X/mP+og+F06qY9A76itoLCfvCOS8gzBQC7Ecst1MjafxcQUstltS8AfWAMMmf/mwZW
-         Vd5AVLs4ojGcQtBkLmVjOi1zr9GTs8+/ekEcYqbKQvXnjtP09mj/YdQO9z8X2OnSI5NI
-         Epd7XMQZ5ZZek+MFRb4bIMBCUYJZJn4PSNa7566LJNS3wbkH0zSKb5ohuJxKkZP54/L1
-         tJ/flLm66Nl/And44PKMeL1tTeYusXjnIJihk27pSlTpj8Cavp5KKKT3UhZwUWeh35wZ
-         WUoRhL+TRNEGY+b8h8Vvs4969R79L5BSYemrVFQUAxHFHYxdUZNBcT1UQFSCwVwH4DXi
-         6r+A==
+        d=linaro.org; s=google; t=1683797181; x=1686389181;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=X1IslJ7/3eQpHk0/ZONImP6ek9rvCI7d+h3hwQhusW0=;
+        b=A3Lr/820FEisUc53N/6tIVzuEVp+khhimTcSLGsHq/i4fzqx7tp7I5DIC8bO/XwKAj
+         DeCiey9CQk6CwmWdxVDc0ZLz0mFUSFVrXlg5gDkLclK8DPZxwGUd8Yk6O8WeNnw0ZD8n
+         Y/BfVlIyj84qT8f0TXBAstume3ASfUzN6q65DvvZ74VUOE188xiWnitj/+IhI6/eUNgH
+         i4cs5MlkAoXkApk/gkivGx4lkUZfcNoETbCpJEgZmTQtRt1GRkblYskEkCSle1KNUfwd
+         kYSffouJuyUP8LZi2uM6C0wNwsQ+oJ+XUE/aeW0qabBZyLyg45XDKfxconB4I5sjwxsd
+         TJDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683797175; x=1686389175;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=naMkvWEs3370p81pkc0ToJJhjYw14du+DtHvmy6+xsA=;
-        b=f8sCwbGF4GkCV1u0lclUkp0FkyP6l9aGKmqvI4/Nn7gobz1vp408OeqV6rIQvZPDny
-         7gyfa376HZ6KW+7F97G/NCLebWsVQM2TbC8Dpz+3HE5hdxnOpJ58R//VDyXA25xiVx24
-         hIutRLKbT4hQ4UBFktkGGn9Z4kNNsIJa+x3IdAfrteDjlyULSxnQiKoY9BURO+bBzekC
-         UBaYCuQWexoeBMTe2LIgBwPe1oyg1xZWY0xlEcQ7bPoqC+TBy/Nkk+CmkNSGBzDotVQo
-         fePFxH/hO0rLjmMxEcFM78pDbKCudU/ZGnpimWykihsgXYLHVUdoiBEJCda5uo60o4kv
-         RzDw==
-X-Gm-Message-State: AC+VfDwg4tVzJwL6hYazrp+RmTP4PbXoI+lzDLlD61ss9IBXz8x6Rxd6
-        8mx3YWKQGwrFiqcYY8cE1to=
-X-Google-Smtp-Source: ACHHUZ6wbNfWDR4BvMm+/wT6JWheNheYlaqor9hV/81g5ObEOBQeaoLZvjKPDuBdRtaDenDAMJfSJQ==
-X-Received: by 2002:a1c:720c:0:b0:3f4:27ff:7d54 with SMTP id n12-20020a1c720c000000b003f427ff7d54mr7570705wmc.3.1683797175139;
-        Thu, 11 May 2023 02:26:15 -0700 (PDT)
-Received: from localhost ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id k1-20020a7bc301000000b003eddc6aa5fasm25289853wmj.39.2023.05.11.02.26.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 02:26:14 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        wens@csie.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] dt-bindings: mfd: add bindings for AXP192 MFD device
-Date:   Thu, 11 May 2023 10:26:09 +0100
-Message-Id: <20230511092609.76183-2-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20230511092609.76183-1-aidanmacdonald.0x0@gmail.com>
-References: <20230511092609.76183-1-aidanmacdonald.0x0@gmail.com>
+        d=1e100.net; s=20221208; t=1683797181; x=1686389181;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X1IslJ7/3eQpHk0/ZONImP6ek9rvCI7d+h3hwQhusW0=;
+        b=QHcQ6/tF819ArqsgXocWAPiCcdkz+6Djr0LDnuG9GypLf27mnBVKhphpULIE8Ep5kR
+         EUGrSk2jy06xMNN+rYbYEfiRtS1dWozVJU6wJ7JPTGKKQ+LxZAM4kQKoY2cf/+FsTm9l
+         W+ICrnm5BfPiGoFF7r+2kF7je2lzlMbMhUGte0QdHCU2a46bqybqa5mpn6xV8hwiQbH/
+         Y0CF0utz51rlD/cWwIKwUozWvn3FwLDD93AXtyUFrcI1X2iInfsSSBmrrga183gvaVQK
+         k+U6dWlQsfGPdOI04J5xbae1FtM9UuIdG3cHFb8ADazYJ7CU0XMul+0g/Iph9keJvacl
+         UiWQ==
+X-Gm-Message-State: AC+VfDzLEUPSYBUK4Puv3AK9WkD4w7cDPYXEf7NhNmxphTK673aykqdp
+        4zBLzhcVH4H/RvHdOBTLHAp9Iw==
+X-Google-Smtp-Source: ACHHUZ74t7K+CeQz4z8BQyobf4t7TRb93OAiK2Zks93fMy5n6HFkZY/H0v/9xh4mpxhbpUlCfqdB2A==
+X-Received: by 2002:a17:907:78c:b0:953:43a1:1988 with SMTP id xd12-20020a170907078c00b0095343a11988mr17157850ejb.46.1683797181377;
+        Thu, 11 May 2023 02:26:21 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:7e61:f14a:c3a4:809e? ([2a02:810d:15c0:828:7e61:f14a:c3a4:809e])
+        by smtp.gmail.com with ESMTPSA id n7-20020aa7d047000000b004fbdfbb5acesm2818308edo.89.2023.05.11.02.26.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 02:26:20 -0700 (PDT)
+Message-ID: <9cf5965a-8290-dfff-9f92-07ed2df66650@linaro.org>
+Date:   Thu, 11 May 2023 11:26:19 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 1/2] dt-bindings: cdns,usb3: Add clock and reset
+Content-Language: en-US
+To:     Minda Chen <minda.chen@starfivetech.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Chen <peter.chen@kernel.org>,
+        Roger Quadros <rogerq@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+References: <20230510132816.108820-1-minda.chen@starfivetech.com>
+ <20230510132816.108820-2-minda.chen@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230510132816.108820-2-minda.chen@starfivetech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The AXP192 PMIC is similar to the AXP202/AXP209, but with different
-regulators, additional GPIOs, and a different IRQ register layout,
-so it needs a new compatible string.
+On 10/05/2023 15:28, Minda Chen wrote:
+> To support generic clock and reset init in Cadence USBSS
+> controller, add clock and reset dts configuration.
+> 
+> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
+> ---
+>  .../devicetree/bindings/usb/cdns,usb3.yaml         | 14 ++++++++++++++
+>  1 file changed, 14 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+> index cae46c4982ad..623c6b34dee3 100644
+> --- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+> @@ -42,6 +42,18 @@ properties:
+>        - const: otg
+>        - const: wakeup
+>  
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 8
+> +    description:
+> +      USB controller clocks.
 
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
----
-v1->v2: Update commit message
-        https://lore.kernel.org/all/20230510151542.312588-2-aidanmacdonald.0x0@gmail.com/
+You need to list the items. And why is it variable? Your clock choice in
+the example is poor, I doubt it is real.
 
- Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml | 1 +
- 1 file changed, 1 insertion(+)
+> +
+> +  resets:
+> +    minItems: 1
+> +    maxItems: 8
+> +    description:
+> +      USB controller generic resets.
 
-diff --git a/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml b/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
-index f7f0f2c0421a..9ad55746133b 100644
---- a/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
-+++ b/Documentation/devicetree/bindings/mfd/x-powers,axp152.yaml
-@@ -90,6 +90,7 @@ properties:
-     oneOf:
-       - enum:
-           - x-powers,axp152
-+          - x-powers,axp192
-           - x-powers,axp202
-           - x-powers,axp209
-           - x-powers,axp221
--- 
-2.39.2
+Here as well.
+
+You had one clock last time, thus the review was - drop the names. Now
+you changed it to 8 clocks... I don't understand.
+
+Best regards,
+Krzysztof
 
