@@ -2,112 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27ECC6FFC83
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 00:07:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EB596FFC8E
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 00:08:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239481AbjEKWH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 18:07:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
+        id S239534AbjEKWIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 18:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239281AbjEKWHg (ORCPT
+        with ESMTP id S239572AbjEKWIF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 18:07:36 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD8456A4B
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 15:07:31 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1aad55244b7so70840645ad.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 15:07:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683842851; x=1686434851;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M9QSMFz65Ju7EmZBc7wzRidxFiF3tMihmY8MVBVsH1A=;
-        b=abRhbKBISwnKIWQVVQLKMmznwGGgrunWJMU/0VhjZdk/cc8Usl3g7DWYipdY5FH4Aa
-         PYljErc5sO2VT6nHpZ9+hN48TDAeiFKIpy5ftWwgGLS6b+dIANlIcesFzchIJOByDFVC
-         BBFJO49zGeiHXqEiNa88t39sNijH1lwGc6/zA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683842851; x=1686434851;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M9QSMFz65Ju7EmZBc7wzRidxFiF3tMihmY8MVBVsH1A=;
-        b=SckI4+LHf/0yVIDcpBQyEWG5hY8yrTOVrGjIOWVim1wno6QqI9J1SOza6jtgJgqrBd
-         wNLheu4+wJ9BEGMN68YZKO07KxuNguVxvMkh6dI5wA5ow2r0zI+z5C4vfmv9Gd170scR
-         7F+gDRVbxBD++mItdAaADfmqpGq3AcFVUV90cuErKyCjFaL4WvqTpcg4vdN5XC6bBPV9
-         ZnLIitCx9f/bw9I8H606JqJGACKTLFCUV3+CzYDRnF/FJYpn7C7pZ60CWZDn/GngIS7c
-         mW5BAS9g0ZgMcJkqb7Xiex9B9ikTkd1TviHSWaALsipaXIUH3A+w31thWdXNYuukthEU
-         61UA==
-X-Gm-Message-State: AC+VfDyqgJLkzkKIzOKUCD4HN+J3eSV7k4yPwaH5as0+zkOKBMpJtya2
-        Gc6gOTRnAnVQaL8SkxGbMuo5kQ==
-X-Google-Smtp-Source: ACHHUZ4eNYjOuXKyMXbgriN8Eh+bAac8ejo2Lcxf9RisUVJt3cHRTOTr5cquWMPd+VUtichC0SkDDg==
-X-Received: by 2002:a17:903:2342:b0:1a5:1438:9bcd with SMTP id c2-20020a170903234200b001a514389bcdmr29543096plh.35.1683842851177;
-        Thu, 11 May 2023 15:07:31 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:b96a:d776:ee3:e572])
-        by smtp.gmail.com with ESMTPSA id h24-20020a17090a9c1800b00247735d1463sm17589457pjp.39.2023.05.11.15.07.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 15:07:30 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        wenst@chromium.org, Eddie Huang <eddie.huang@mediatek.com>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Ben Ho <Ben.Ho@mediatek.com>, Weiyi Lu <weiyi.lu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Tinghan Shen <tinghan.shen@mediatek.com>, jwerner@chromium.org,
-        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
-        yidilin@chromium.org, Seiya Wang <seiya.wang@mediatek.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 6/6] arm64: dts: mediatek: mt8195: Add mediatek,gicr-save-quirk
-Date:   Thu, 11 May 2023 15:05:40 -0700
-Message-ID: <20230511150539.6.Ia0b6ebbaa351e3cd67e201355b9ae67783c7d718@changeid>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-In-Reply-To: <20230511150539.6.Ia0b6ebbaa351e3cd67e201355b9ae67783c7d718@changeid>
-References: <20230511150539.6.Ia0b6ebbaa351e3cd67e201355b9ae67783c7d718@changeid>
+        Thu, 11 May 2023 18:08:05 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F598AD3A;
+        Thu, 11 May 2023 15:07:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683842862; x=1715378862;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=dcivrtBNBKYrwhHCG20eFak+R1jORc9y5Sw1snBi2S4=;
+  b=kxqy3PvUa9WGfpgr+LUEjRxmxUm+zOOENAL6qsOFn8dSkbOUCqHGYL0Z
+   7lXCS6z4OCarbm3jfExXgAAkgqWTx/guJ5pH6OlLGf4BfvHLccFA7/Dy4
+   PgxqKUXsjdWp41iFRXckIONgwPPIWhg5fMf8b4BFia08nwn6JetdP2nw1
+   x2nYIQDBDOoVIwjcPIHEZO9onQgQNLWJD4d6CNcsHqVvsoDGRhej8l8f3
+   e7+QxR4NX11fNgYkUi4DNEMjxKHiZPTwxetNzjoqRcaClmok/6U3CG+qS
+   1wxPwDKjb/oOi8wX6idciuU2KaVCCPQupFz46NS8vrwWcwOOnGXh2U77G
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="378780014"
+X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
+   d="scan'208";a="378780014"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 15:07:23 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="824138929"
+X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
+   d="scan'208";a="824138929"
+Received: from swalker-mobl1.amr.corp.intel.com (HELO [10.209.63.194]) ([10.209.63.194])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 15:07:23 -0700
+Message-ID: <35b33699-227d-d1f5-285a-e18ef8e91e57@linux.intel.com>
+Date:   Thu, 11 May 2023 15:07:22 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+Subject: Re: [PATCH v5 2/3] PCI/AER: Disable AER interrupt on suspend
+Content-Language: en-US
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>, bhelgaas@google.com
+Cc:     mika.westerberg@linux.intel.com, koba.ko@canonical.com,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        Oliver O'Halloran <oohall@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230511133610.99759-1-kai.heng.feng@canonical.com>
+ <20230511133610.99759-2-kai.heng.feng@canonical.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <20230511133610.99759-2-kai.heng.feng@canonical.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Firmware shipped on mt8195 Chromebooks is affected by the GICR
-save/restore issue as described by the patch ("dt-bindings:
-interrupt-controller: arm,gic-v3: Add quirk for Mediatek SoCs w/
-broken FW"). Add the quirk property.
 
-Fixes: 37f2582883be ("arm64: dts: Add mediatek SoC mt8195 and evaluation board")
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
 
- arch/arm64/boot/dts/mediatek/mt8195.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+On 5/11/23 6:36 AM, Kai-Heng Feng wrote:
+> PCIe service that shares IRQ with PME may cause spurious wakeup on
+> system suspend.
+> 
+> This is very similar to previous attempts to suspend AER and DPC [1],
+> but this time disabling AER IRQ is to prevent immediate PME wakeup when
+> AER shares the same IRQ line with PME.
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-index a44aae4ab953..6df9ad8f658f 100644
---- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
-@@ -463,6 +463,7 @@ gic: interrupt-controller@c000000 {
- 			reg = <0 0x0c000000 0 0x40000>,
- 			      <0 0x0c040000 0 0x200000>;
- 			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH 0>;
-+			mediatek,gicr-save-quirk;
- 
- 			ppi-partitions {
- 				ppi_cluster0: interrupt-partition-0 {
+IMHO, you don't need to mention the previous submission reason.
+
+> 
+> It's okay to disable AER because PCIe Base Spec 5.0, section 5.2 "Link
+> State Power Management" states that TLP and DLLP transmission is
+> disabled for a Link in L2/L3 Ready (D3hot), L2 (D3cold with aux power)
+> and L3 (D3cold), hence we don't lose much here to disable AER IRQ during
+> system suspend.
+
+May be something like below?
+
+PCIe services that share an IRQ with PME, such as AER or DPC, may cause a
+spurious wakeup on system suspend. To prevent this, disable the AER
+interrupt notification during the system suspend process.
+
+As Per PCIe Base Spec 5.0, section 5.2, titled "Link State Power Management",
+TLP and DLLP transmission are disabled for a Link in L2/L3 Ready (D3hot), L2
+(D3cold with aux power) and L3 (D3cold) states. So disabling the AER notification
+during suspend and re-enabling them during the resume process should not affect
+the basic functionality.
+
+> 
+> [1] https://lore.kernel.org/linux-pci/20220408153159.106741-1-kai.heng.feng@canonical.com/
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=216295
+> 
+> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+> v5:
+>  - Wording.
+> 
+> v4:
+> v3:
+>  - No change.
+> 
+> v2:
+>  - Only disable AER IRQ.
+>  - No more check on PME IRQ#.
+>  - Use helper.
+> 
+>  drivers/pci/pcie/aer.c | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+> 
+> diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> index 1420e1f27105..9c07fdbeb52d 100644
+> --- a/drivers/pci/pcie/aer.c
+> +++ b/drivers/pci/pcie/aer.c
+> @@ -1356,6 +1356,26 @@ static int aer_probe(struct pcie_device *dev)
+>  	return 0;
+>  }
+>  
+> +static int aer_suspend(struct pcie_device *dev)
+> +{
+> +	struct aer_rpc *rpc = get_service_data(dev);
+> +	struct pci_dev *pdev = rpc->rpd;
+> +
+> +	aer_disable_irq(pdev);
+> +
+> +	return 0;
+> +}
+> +
+> +static int aer_resume(struct pcie_device *dev)
+> +{
+> +	struct aer_rpc *rpc = get_service_data(dev);
+> +	struct pci_dev *pdev = rpc->rpd;
+> +
+> +	aer_enable_irq(pdev);
+> +
+> +	return 0;
+> +}
+> +
+>  /**
+>   * aer_root_reset - reset Root Port hierarchy, RCEC, or RCiEP
+>   * @dev: pointer to Root Port, RCEC, or RCiEP
+> @@ -1420,6 +1440,8 @@ static struct pcie_port_service_driver aerdriver = {
+>  	.service	= PCIE_PORT_SERVICE_AER,
+>  
+>  	.probe		= aer_probe,
+> +	.suspend	= aer_suspend,
+> +	.resume		= aer_resume,
+>  	.remove		= aer_remove,
+>  };
+>  
+
 -- 
-2.40.1.606.ga4b1b128d6-goog
-
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
