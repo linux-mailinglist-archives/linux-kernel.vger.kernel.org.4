@@ -2,89 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DB0B6FF632
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:41:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFAFD6FF635
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:42:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238776AbjEKPlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 11:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33936 "EHLO
+        id S237526AbjEKPl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 11:41:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238773AbjEKPlk (ORCPT
+        with ESMTP id S238773AbjEKPlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 11:41:40 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EA659DC;
-        Thu, 11 May 2023 08:41:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=YCSKwIYzbu1pkwEd81TZJ4LTNXSEnly6dMUBXhXOwZk=; b=C/X4refVDazo6iOvpswWYfmKJr
-        xxGKA45yPV1b1pGaDv1+YmeyRo1aqAV6NOsaU1nCxW+UXZPmhOW2JsKZpBq92NCYZmZY35c20ajHo
-        DdghuIsUAaDIYKNSik2LuduCs8q8zJs6SBJMu/1uC98k1PCVadn7U6nxPiOnbytKO1js=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1px8Pv-00CZXR-4U; Thu, 11 May 2023 17:41:19 +0200
-Date:   Thu, 11 May 2023 17:41:19 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Pranavi Somisetty <pranavi.somisetty@amd.com>
-Cc:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, richardcochran@gmail.com, linux@armlinux.org.uk,
-        palmer@dabbelt.com, git@amd.com, michal.simek@amd.com,
-        harini.katakam@amd.com, radhey.shyam.pandey@amd.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH net-next v2 1/2] dt-bindings: net: cdns,macb: Add
- rx-watermark property
-Message-ID: <5872254a-7a33-4aa5-afa3-50ad5d8c7002@lunn.ch>
-References: <20230511071214.18611-1-pranavi.somisetty@amd.com>
- <20230511071214.18611-2-pranavi.somisetty@amd.com>
+        Thu, 11 May 2023 11:41:53 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42ACC5255;
+        Thu, 11 May 2023 08:41:52 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-969f90d71d4so567849066b.3;
+        Thu, 11 May 2023 08:41:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683819711; x=1686411711;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dJn87lJ+zB7x7vYlqcoYdFAqcEQVzkzw8cISkbBs2PM=;
+        b=MS/vKOlgjTFJ16STLx9hkywiw4c8JZR12KReEBjR04OeuXt56Qz/AWNR2lORa8Q9le
+         qcfVllR1+I75JnPVB9xm/tHB9ajNViScW5q/fgOctvhzm2Cav3rE3i+z7FFT27Gpu33a
+         Vt4h/FY+JgCMyAUFN6ElSYX0l2e6vxhmEQYOMCyDoBjaHoKoLDGJ3F2RhbvOkkwXLIxY
+         39dztP+3BZqO5SIsP8Fr5WgWi837L8cLmXWRAk6acX+O/aWZ/6t5PzyCoMVy7FmAnjIB
+         0EA05FrOTj0+JlM4IreOiWoGf4dAFLhtnQ7bxNkGlKTXX7SYpfi8lazD2/ZgeIVYatHX
+         DYsQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683819711; x=1686411711;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=dJn87lJ+zB7x7vYlqcoYdFAqcEQVzkzw8cISkbBs2PM=;
+        b=fHvCTFCn9Jgwocm2/qRWgeaSaHj2GWxepuiI5XDf20YjtY+owfxresTsTgw2MRL3ep
+         VEcb5yCmOSp5znkwCfgWi3wY7VBtT5tVmrrk7GEvEip8Ui4A/Py/PfHAQ0DmxApeCY+O
+         /WXJA9M8VdUBU0aF6Yj0CfhCOb7Q96JM28wYYH7qprON6HRqtBnhNEZEtMgdRNq7s3ir
+         0T6Ex5XZAHjEiWX669wx3IJc262+lTa0cw7Em0p6gHaudBlHvBAwcut923VuOltoghKd
+         ijvXOYPSxXIw8w/d04nimO46TLU+x2dxD+3JOPmSH7uXZsHgFSYOGxDjdvvxBrXb6Odo
+         BHMw==
+X-Gm-Message-State: AC+VfDz6NmehbNmY63SDh/9tlAKJSuZyUsbsxIXs8DgcVDOBg0sT6TF2
+        rHmTQ9CT866OjEUYoZfV20M=
+X-Google-Smtp-Source: ACHHUZ6JCiu+908nEHSeb+NqEkZ2J9uyEZ9iWqzL4O/f7zJB+PWkptxto5+kHizkAM11S+cRdWVCxQ==
+X-Received: by 2002:a17:907:9347:b0:94f:694e:b953 with SMTP id bv7-20020a170907934700b0094f694eb953mr18294466ejc.59.1683819710654;
+        Thu, 11 May 2023 08:41:50 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id n12-20020a1709065dac00b009664cdb3fc5sm4142676ejv.138.2023.05.11.08.41.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 08:41:50 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jonathan McDowell <noodles@earth.li>
+Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v2 3/5] ARM: dts: sun5i: chip: Enable bluetooth
+Date:   Thu, 11 May 2023 17:41:49 +0200
+Message-ID: <5832181.MhkbZ0Pkbq@jernej-laptop>
+In-Reply-To: <49ff7f3cc79838a55a89baae09a4ba12c88573fb.1683719613.git.noodles@earth.li>
+References: <cover.1681580558.git.noodles@earth.li>
+ <cover.1683719613.git.noodles@earth.li>
+ <49ff7f3cc79838a55a89baae09a4ba12c88573fb.1683719613.git.noodles@earth.li>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511071214.18611-2-pranavi.somisetty@amd.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 01:12:13AM -0600, Pranavi Somisetty wrote:
-> watermark value is the minimum amount of packet data
-> required to activate the forwarding process. The watermark
-> implementation and maximum size is dependent on the device
-> where Cadence MACB/GEM is used.
+Dne sreda, 10. maj 2023 ob 14:01:43 CEST je Jonathan McDowell napisal(a):
+> The C.H.I.P has an rtl8723bs device with the bluetooth interface hooked
+> up on UART3. Support for this didn't exist in mainline when the DTS was
+> initially added, but it does now, so enable it.
 > 
-> Signed-off-by: Pranavi Somisetty <pranavi.somisetty@amd.com>
-> ---
->  Documentation/devicetree/bindings/net/cdns,macb.yaml | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/net/cdns,macb.yaml b/Documentation/devicetree/bindings/net/cdns,macb.yaml
-> index bef5e0f895be..779bc25cf005 100644
-> --- a/Documentation/devicetree/bindings/net/cdns,macb.yaml
-> +++ b/Documentation/devicetree/bindings/net/cdns,macb.yaml
-> @@ -109,6 +109,13 @@ properties:
->    power-domains:
->      maxItems: 1
->  
-> +  rx-watermark:
-> +    maxItems: 1
-> +    $ref: /schemas/types.yaml#/definitions/uint16
-> +    description:
-> +      Set watermark value for pbuf_rxcutthru reg and enable
-> +      rx partial store and forward.
+> Signed-off-by: Jonathan McDowell <noodles@earth.li>
 
-What are the units? Frames, octets, DMA scatter-gather segments, % of
-maximum?
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-	Andrew
+Best regards,
+Jernej
 
----
-pw-bot: cr
 
