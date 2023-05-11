@@ -2,81 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CC4F6FFBD7
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 23:26:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DB766FFBDA
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 23:27:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239214AbjEKV0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 17:26:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35514 "EHLO
+        id S239281AbjEKV1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 17:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232437AbjEKV0e (ORCPT
+        with ESMTP id S232437AbjEKV1T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 17:26:34 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AC696587
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 14:26:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=m7d/EZDyz9vAqfe7UDdO6jyEpmZlnIBccJBZScC5AWI=; b=S2ppX/Xxbfve592D3dMjbCBJSF
-        gSdEmibX40/741Jr5RvFPh+1V8ko1aTx82h7UobgaAsWo+o8+QB9q64t1gN5XH5n9bMz49tKzV8Wb
-        kb84+JHGT0Vb9UtLDE9S4yA8SyL83NB0vPUOYScL/plE8oxl2utFc+ajqk8JUZrk9XLiapjnHW8xW
-        zvUqpkiGUQ8VhY94RaHQ7LTzV/6dSAuGssHc436eHtJtQCEo/HjkNfazffF5gYP5UsSggP1o6SMIl
-        BbINJ/iX/RHlVLPRlkE6XBPYDXORYG1cYHJqa9z9g0HrpD2iSB/2vuP9NXZ3ukhC9+dQguxM5pDRJ
-        NvC0guvw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pxDnc-008Og4-2g;
-        Thu, 11 May 2023 21:26:11 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 28E27300244;
-        Thu, 11 May 2023 23:26:07 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 0780124829418; Thu, 11 May 2023 23:26:07 +0200 (CEST)
-Date:   Thu, 11 May 2023 23:26:06 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     jiangshanlai@gmail.com, torvalds@linux-foundation.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com
-Subject: Re: [PATCH 6/7] workqueue: Report work funcs that trigger automatic
- CPU_INTENSIVE mechanism
-Message-ID: <20230511212606.GI2296992@hirez.programming.kicks-ass.net>
-References: <20230511181931.869812-1-tj@kernel.org>
- <20230511181931.869812-7-tj@kernel.org>
+        Thu, 11 May 2023 17:27:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA5403A80;
+        Thu, 11 May 2023 14:27:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 30F3265208;
+        Thu, 11 May 2023 21:27:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4D6CFC433D2;
+        Thu, 11 May 2023 21:27:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683840436;
+        bh=MKpx4WeaZw72S2ynWWzQvQwcTmdWNg2PeYSfzsbwLdo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=bK6KiGrC+4q2qsi2uzYihFkXJ0nn8ojQgyvD2agyEMBSDLRHgelQCVGLBGjdFd37a
+         +OuckV1Ssgr4z3nlPL7TWpDUW8f1eBCovGCMnJpsonD+dau29trINMRFXwGjoY6GjO
+         qGQMAfnYsPgKLOIHxUk8iL2oBaye0DAZv3K0sDIK9RP7gawHmimH9dfSdrTXU+Y4J+
+         7YU33kTjAcJs3sAhJaEoJ7+i8PZWJ2jkxlVBK5BmPVzp7OUN+ADvP5RxBVXJMYuEoc
+         NqqjXlOMbnwTJ1FRoFkC8Mc66sklSHVk6+f2axU5VD7s6yYbkj8Lb5uFfjbfEiFPXl
+         MIMFBUSzQ/CqQ==
+Date:   Thu, 11 May 2023 16:27:14 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     linux-pci@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH 01/17] PCI: Add concurrency safe clear_and_set variants
+ for LNKCTL{,2}
+Message-ID: <ZF1dsvJYYnl8Wv0v@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230511181931.869812-7-tj@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1d5aaff-c7b5-39f6-92ca-319fad6c7fc5@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 08:19:30AM -1000, Tejun Heo wrote:
-> Workqueue now automatically marks per-cpu work items that hog CPU for too
-> long as CPU_INTENSIVE, which excludes them from concurrency management and
-> prevents stalling other concurrency-managed work items. If a work function
-> keeps running over the thershold, it likely needs to be switched to use an
-> unbound workqueue.
-> 
-> This patch adds a debug mechanism which tracks the work functions which
-> trigger the automatic CPU_INTENSIVE mechanism and report them using
-> pr_warn() with exponential backoff.
-> 
-> Signed-off-by: Tejun Heo <tj@kernel.org>
-> Suggested-by: Peter Zijlstra <peterz@infradead.org>
+[+cc Emmanuel, Rafael, Heiner, ancient ASPM history]
 
-I did do wonder why you chose for external storage for this -- I figured
-it was to keep the cost down since it shouldn't really be happening, so
-storage in the normal data structures is a waste etc..?
+On Thu, May 11, 2023 at 10:58:40PM +0300, Ilpo Järvinen wrote:
+> On Thu, 11 May 2023, Bjorn Helgaas wrote:
+> > On Thu, May 11, 2023 at 08:35:48PM +0300, Ilpo Järvinen wrote:
+> > > On Thu, 11 May 2023, Bjorn Helgaas wrote:
+> > > > On Thu, May 11, 2023 at 04:14:25PM +0300, Ilpo Järvinen wrote:
+> > > > > A few places write LNKCTL and LNKCTL2 registers without proper
+> > > > > concurrency control and this could result in losing the changes
+> > > > > one of the writers intended to make.
+> > > > > 
+> > > > > Add pcie_capability_clear_and_set_word_locked() and helpers to use it
+> > > > > with LNKCTL and LNKCTL2. The concurrency control is provided using a
+> > > > > spinlock in the struct pci_dev.
+> ...
 
-Otherwise seems fine; thanks!
+[beginning of thread is
+https://lore.kernel.org/r/20230511131441.45704-1-ilpo.jarvinen@linux.intel.com;
+context here is that several drivers clear ASPM config directly,
+probably because pci_disable_link_state() doesn't always do it]
+
+> > Many of these are ASPM-related updates that IMHO should not be in
+> > drivers at all.  Drivers should use PCI core interfaces so the core
+> > doesn't get confused.
+> 
+> Ah, yes. I forgot to mention it in the cover letter but I noticed that 
+> some of those seem to be workarounds for the cases where core refuses to 
+> disable ASPM. Some sites even explicit have a comment about that after 
+> the call to pci_disable_link_state():
+> 
+> static void bcm4377_disable_aspm(struct bcm4377_data *bcm4377)
+> {
+>         pci_disable_link_state(bcm4377->pdev,
+>                                PCIE_LINK_STATE_L0S | PCIE_LINK_STATE_L1);
+> 
+>         /*
+>          * pci_disable_link_state can fail if either CONFIG_PCIEASPM is disabled
+>          * or if the BIOS hasn't handed over control to us. We must *always*
+>          * disable ASPM for this device due to hardware errata though.
+>          */
+>         pcie_capability_clear_word(bcm4377->pdev, PCI_EXP_LNKCTL,
+>                                    PCI_EXP_LNKCTL_ASPMC);
+> }
+> 
+> That kinda feels something that would want a force disable quirk that is 
+> reliable. There are quirks for some devices which try to disable it but 
+> could fail for reasons mentioned in that comment. (But I'd prefer to make 
+> another series out of it rather than putting it into this one.)
+> 
+> It might even be that some drivers don't even bother to make the 
+> pci_disable_link_state() call because it isn't reliable enough.
+
+Yeah, I noticed that this is problematic.
+
+We went round and round about this ten years ago [1], which resulted
+in https://git.kernel.org/linus/2add0ec14c25 ("PCI/ASPM: Warn when
+driver asks to disable ASPM, but we can't do it").
+
+I'm not 100% convinced by that anymore.  It's true that if firmware
+retains control of the PCIe capability, the OS is technically not
+allowed to write to it, and it's conceivable that even a locked OS
+update could collide with some SMI or something that also writes to
+it.
+
+I can certainly imagine that firmware might know that *enabling* ASPM
+might break because of signal integrity issues or something.  It seems
+less likely that *disabling* ASPM would break something, but Rafael [2]
+and Matthew [3] rightly pointed out that there is some risk.
+
+But the current situation, where pci_disable_link_state() does nothing
+if CONFIG_PCIEASPM is unset or if _OSC says firmware owns it, leads to
+drivers doing it directly anyway.  I'm not sure that's better than
+making pci_disable_link_state() work 100% of the time, regardless of
+CONFIG_PCIEASPM and _OSC.  At least then the PCI core would know
+what's going on.
+
+Bjorn
+
+[1] https://lore.kernel.org/all/CANUX_P3F5YhbZX3WGU-j1AGpbXb_T9Bis2ErhvKkFMtDvzatVQ@mail.gmail.com/
+[2] https://lore.kernel.org/all/1725435.3DlCxYF2FV@vostro.rjw.lan/
+[3] https://lore.kernel.org/all/1368303730.2425.47.camel@x230/
