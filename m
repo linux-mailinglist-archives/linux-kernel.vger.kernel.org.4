@@ -2,47 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C9486FFACB
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:47:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC476FFAB7
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:43:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239590AbjEKTrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 15:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36128 "EHLO
+        id S239476AbjEKTnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 15:43:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239497AbjEKTr3 (ORCPT
+        with ESMTP id S239353AbjEKTme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 15:47:29 -0400
+        Thu, 11 May 2023 15:42:34 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D191F8A72;
-        Thu, 11 May 2023 12:46:40 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B811993F8;
+        Thu, 11 May 2023 12:42:00 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0577A6515B;
-        Thu, 11 May 2023 19:40:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D710C433AC;
-        Thu, 11 May 2023 19:40:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB6A06510F;
+        Thu, 11 May 2023 19:40:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00097C433A1;
+        Thu, 11 May 2023 19:40:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683834056;
-        bh=nF4sZu0xlvSgPOXCe6sCpUenKbq9M88q+aVA8m/JT3Y=;
+        s=k20201202; t=1683834059;
+        bh=h1AhJQfHCacMoYvXPXKTx1wKJ2WlHGlTurkWEQgISlI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Xh5tAyuhhTs2ZjYD7ugeLWqYS8Ant5E+0FsweCEn+wme2iIOj0kG+xTgp17zBKXDt
-         1IUdv7wIzKIv9uAleu3H6b6xY7S2j3MQOVAqn92E8VGeYLkRMi9ugyB6FmB7FEpnmT
-         7iBTq/joVEsDTbBslklz4Vb1dl23oiAuQZvg74Tz1Aj4ZDJRdKQf65r+XmTtlHLJx4
-         xobDLlfXa+BKvUDR2cApp0Jd/BoisgP0/MngiHE2PXJ+p/ca1Dxeuu633kmm/9IT+5
-         LNYZor3Nvk+ZdK4nyqZJExXI1THgt81m4CWJx3/RXn8LpS8lUhb+c9lkw+8fU39PZG
-         W/ppLqfYK8S3A==
+        b=p2TYaVqkQ8TR1HMb4yUreBylDr1XOzQJ6vI5fqAKtjlxIf/tPJNpRHb7BzjWSGs7Z
+         FqsU4EhlV/YocbqjU6LTDKZFly6rnSDUfyeEcm/XRlp/jfxCx3JumLdhWX4JbPJvHz
+         t4e96epXZAfyvDBSrn3zLIBUquIGuAOnnV/5N78k72jbAfHbZ2MMJARpPRxYWL2lKD
+         Ebzt7mE8YTrHv5OddrW60NVvZH+xfArUBtGZZOePQjNdFY3IaDFazmo1JPNCdfAAwU
+         H6JZq357o7XXLvZYDUiGTKnVta/q/YINBb+FRBhr34XbO9c5pDf4jWA+z05xfgEDjC
+         0aOYaADicyJaw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>, kadlec@netfilter.org,
-        fw@strlen.de, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 4/5] netfilter: nf_tables: deactivate anonymous set from preparation phase
-Date:   Thu, 11 May 2023 15:40:21 -0400
-Message-Id: <20230511194025.623614-4-sashal@kernel.org>
+Cc:     lyndonli <Lyndon.Li@amd.com>, Yunxiang Li <Yunxiang.Li@amd.com>,
+        Feifei Xu <Feifei.Xu@amd.com>,
+        Kenneth Feng <kenneth.feng@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        Hawking.Zhang@amd.com, mario.limonciello@amd.com,
+        lijo.lazar@amd.com, YiPeng.Chai@amd.com, andrey.grodzovsky@amd.com,
+        Amaranath.Somalapuram@amd.com, Bokun.Zhang@amd.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 5.15 5/5] drm/amdgpu: Use the default reset when loading or reloading the driver
+Date:   Thu, 11 May 2023 15:40:22 -0400
+Message-Id: <20230511194025.623614-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230511194025.623614-1-sashal@kernel.org>
 References: <20230511194025.623614-1-sashal@kernel.org>
@@ -60,124 +64,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: lyndonli <Lyndon.Li@amd.com>
 
-[ Upstream commit c1592a89942e9678f7d9c8030efa777c0d57edab ]
+[ Upstream commit 4eea7fb980dc44545a32eec92e2662053b34cd9d ]
 
-Toggle deleted anonymous sets as inactive in the next generation, so
-users cannot perform any update on it. Clear the generation bitmask
-in case the transaction is aborted.
+Below call trace and errors are observed when reloading
+amdgpu driver with the module parameter reset_method=3.
 
-The following KASAN splat shows a set element deletion for a bound
-anonymous set that has been already removed in the same transaction.
+It should do a default reset when loading or reloading the
+driver, regardless of the module parameter reset_method.
 
-[   64.921510] ==================================================================
-[   64.923123] BUG: KASAN: wild-memory-access in nf_tables_commit+0xa24/0x1490 [nf_tables]
-[   64.924745] Write of size 8 at addr dead000000000122 by task test/890
-[   64.927903] CPU: 3 PID: 890 Comm: test Not tainted 6.3.0+ #253
-[   64.931120] Call Trace:
-[   64.932699]  <TASK>
-[   64.934292]  dump_stack_lvl+0x33/0x50
-[   64.935908]  ? nf_tables_commit+0xa24/0x1490 [nf_tables]
-[   64.937551]  kasan_report+0xda/0x120
-[   64.939186]  ? nf_tables_commit+0xa24/0x1490 [nf_tables]
-[   64.940814]  nf_tables_commit+0xa24/0x1490 [nf_tables]
-[   64.942452]  ? __kasan_slab_alloc+0x2d/0x60
-[   64.944070]  ? nf_tables_setelem_notify+0x190/0x190 [nf_tables]
-[   64.945710]  ? kasan_set_track+0x21/0x30
-[   64.947323]  nfnetlink_rcv_batch+0x709/0xd90 [nfnetlink]
-[   64.948898]  ? nfnetlink_rcv_msg+0x480/0x480 [nfnetlink]
+v2: add comments inside and modify commit messages.
 
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+[  +2.180243] [drm] psp gfx command ID_LOAD_TOC(0x20) failed
+and response status is (0x0)
+[  +0.000011] [drm:psp_hw_start [amdgpu]] *ERROR* Failed to load toc
+[  +0.000890] [drm:psp_hw_start [amdgpu]] *ERROR* PSP tmr init failed!
+[  +0.020683] [drm:amdgpu_fill_buffer [amdgpu]] *ERROR* Trying to
+clear memory with ring turned off.
+[  +0.000003] RIP: 0010:amdgpu_bo_release_notify+0x1ef/0x210 [amdgpu]
+[  +0.000004] Call Trace:
+[  +0.000003]  <TASK>
+[  +0.000008]  ttm_bo_release+0x2c4/0x330 [amdttm]
+[  +0.000026]  amdttm_bo_put+0x3c/0x70 [amdttm]
+[  +0.000020]  amdgpu_bo_free_kernel+0xe6/0x140 [amdgpu]
+[  +0.000728]  psp_v11_0_ring_destroy+0x34/0x60 [amdgpu]
+[  +0.000826]  psp_hw_init+0xe7/0x2f0 [amdgpu]
+[  +0.000813]  amdgpu_device_fw_loading+0x1ad/0x2d0 [amdgpu]
+[  +0.000731]  amdgpu_device_init.cold+0x108e/0x2002 [amdgpu]
+[  +0.001071]  ? do_pci_enable_device+0xe1/0x110
+[  +0.000011]  amdgpu_driver_load_kms+0x1a/0x160 [amdgpu]
+[  +0.000729]  amdgpu_pci_probe+0x179/0x3a0 [amdgpu]
+
+Signed-off-by: lyndonli <Lyndon.Li@amd.com>
+Signed-off-by: Yunxiang Li <Yunxiang.Li@amd.com>
+Reviewed-by: Feifei Xu <Feifei.Xu@amd.com>
+Reviewed-by: Kenneth Feng <kenneth.feng@amd.com>
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/netfilter/nf_tables.h |  1 +
- net/netfilter/nf_tables_api.c     | 12 ++++++++++++
- net/netfilter/nft_dynset.c        |  2 +-
- net/netfilter/nft_lookup.c        |  2 +-
- net/netfilter/nft_objref.c        |  2 +-
- 5 files changed, 16 insertions(+), 3 deletions(-)
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/include/net/netfilter/nf_tables.h b/include/net/netfilter/nf_tables.h
-index 8def00a04541e..22f67ae935e0b 100644
---- a/include/net/netfilter/nf_tables.h
-+++ b/include/net/netfilter/nf_tables.h
-@@ -584,6 +584,7 @@ struct nft_set_binding {
- };
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+index 7e940a3bba978..3af9bde986f08 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+@@ -3494,6 +3494,7 @@ int amdgpu_device_init(struct amdgpu_device *adev,
+ 	int r, i;
+ 	bool px = false;
+ 	u32 max_MBps;
++	int tmp;
  
- enum nft_trans_phase;
-+void nf_tables_activate_set(const struct nft_ctx *ctx, struct nft_set *set);
- void nf_tables_deactivate_set(const struct nft_ctx *ctx, struct nft_set *set,
- 			      struct nft_set_binding *binding,
- 			      enum nft_trans_phase phase);
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index d950041364d5f..9c38b227275e8 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -4839,12 +4839,24 @@ static void nf_tables_unbind_set(const struct nft_ctx *ctx, struct nft_set *set,
- 	}
- }
- 
-+void nf_tables_activate_set(const struct nft_ctx *ctx, struct nft_set *set)
-+{
-+	if (nft_set_is_anonymous(set))
-+		nft_clear(ctx->net, set);
-+
-+	set->use++;
-+}
-+EXPORT_SYMBOL_GPL(nf_tables_activate_set);
-+
- void nf_tables_deactivate_set(const struct nft_ctx *ctx, struct nft_set *set,
- 			      struct nft_set_binding *binding,
- 			      enum nft_trans_phase phase)
- {
- 	switch (phase) {
- 	case NFT_TRANS_PREPARE:
-+		if (nft_set_is_anonymous(set))
-+			nft_deactivate_next(ctx->net, set);
-+
- 		set->use--;
- 		return;
- 	case NFT_TRANS_ABORT:
-diff --git a/net/netfilter/nft_dynset.c b/net/netfilter/nft_dynset.c
-index 87f3af4645d9c..29c7ae8789e95 100644
---- a/net/netfilter/nft_dynset.c
-+++ b/net/netfilter/nft_dynset.c
-@@ -342,7 +342,7 @@ static void nft_dynset_activate(const struct nft_ctx *ctx,
- {
- 	struct nft_dynset *priv = nft_expr_priv(expr);
- 
--	priv->set->use++;
-+	nf_tables_activate_set(ctx, priv->set);
- }
- 
- static void nft_dynset_destroy(const struct nft_ctx *ctx,
-diff --git a/net/netfilter/nft_lookup.c b/net/netfilter/nft_lookup.c
-index bd3485dd930f5..9d18c5428d53c 100644
---- a/net/netfilter/nft_lookup.c
-+++ b/net/netfilter/nft_lookup.c
-@@ -167,7 +167,7 @@ static void nft_lookup_activate(const struct nft_ctx *ctx,
- {
- 	struct nft_lookup *priv = nft_expr_priv(expr);
- 
--	priv->set->use++;
-+	nf_tables_activate_set(ctx, priv->set);
- }
- 
- static void nft_lookup_destroy(const struct nft_ctx *ctx,
-diff --git a/net/netfilter/nft_objref.c b/net/netfilter/nft_objref.c
-index 94b2327e71dc4..3ff91bcaa5f24 100644
---- a/net/netfilter/nft_objref.c
-+++ b/net/netfilter/nft_objref.c
-@@ -183,7 +183,7 @@ static void nft_objref_map_activate(const struct nft_ctx *ctx,
- {
- 	struct nft_objref_map *priv = nft_expr_priv(expr);
- 
--	priv->set->use++;
-+	nf_tables_activate_set(ctx, priv->set);
- }
- 
- static void nft_objref_map_destroy(const struct nft_ctx *ctx,
+ 	adev->shutdown = false;
+ 	adev->flags = flags;
+@@ -3693,7 +3694,13 @@ int amdgpu_device_init(struct amdgpu_device *adev,
+ 				}
+ 			}
+ 		} else {
++			tmp = amdgpu_reset_method;
++			/* It should do a default reset when loading or reloading the driver,
++			 * regardless of the module parameter reset_method.
++			 */
++			amdgpu_reset_method = AMD_RESET_METHOD_NONE;
+ 			r = amdgpu_asic_reset(adev);
++			amdgpu_reset_method = tmp;
+ 			if (r) {
+ 				dev_err(adev->dev, "asic reset on init failed\n");
+ 				goto failed;
 -- 
 2.39.2
 
