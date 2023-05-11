@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 752046FEE6F
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:14:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F8FB6FEE70
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237366AbjEKJOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 05:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37998 "EHLO
+        id S237381AbjEKJOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 05:14:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237296AbjEKJOA (ORCPT
+        with ESMTP id S229538AbjEKJOB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 05:14:00 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA6CAAF
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:13:58 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f42c86543bso20532515e9.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:13:58 -0700 (PDT)
+        Thu, 11 May 2023 05:14:01 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F195B2126
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:13:59 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f475366514so13403995e9.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:13:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683796437; x=1686388437;
+        d=gmail.com; s=20221208; t=1683796438; x=1686388438;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=58FKT6mBLi9/p/z/H4le9F9arcqBmz3tNrQ4oPYMtxs=;
-        b=RMfwftQ4O9nVrknSfSxB5Y6EQfvzZDAFihS192nR/sT2BqRlJC/sVyDzKx38lNiXrN
-         IDOrH4j4oCyH6j8Jn/2QFB3uetyQueGmz0aymEHqU43+AicQk7p0L1CwcrvpvhhcwBlg
-         /mYiM01PpSe//t8i3ptdhGFlc5adL50UUObpn7ypufRIOnfX2z6iY2q+aCvyDc1qYvuf
-         pgjjZWvMEaqc8mNGI4Pio71bFsfSWjEKzTtgkNnHTjSkvFC6ZEe9eWdgt4LurRU/G3aS
-         57HVJMcgLAF+wfCMU6na0yi0J4Hmg24VZa0rhbM6UISYLRNrYr97u7j10nn7eKLOhUaJ
-         MyoQ==
+        bh=vtZdgeg9ddbhPRh6PC9cZ0EnGp++W69JKMYWDuC5ZjM=;
+        b=AhK75zZbjGAdW/dYUEU3Goj+tB4VJJrBzSM4Vdb5pqMRkj37o9FXlra9lcfJzDc5Mp
+         qXuPVOYPMBVor3UCpiGhOq6iwERosDJUgBqbZrlh+0v/8GuyaS0fdaQPDmoQiqQGeK1e
+         YsEIZfLMLe5xTzDFLMZmB4PCC5wBL3W7DfqiV3GSGZYl64Z0uRAV+8c41cdvxiCvL3y5
+         McbkBJJmu55RhEkqK2puHTfnpUtkQM/nuBwRXqrz4z/I7lVXt3DPNXafgg0GY9mhhJGQ
+         V8H7Cdo2Pn6CncoUF6VHxgo5WjtBgRrSh6fFTiihH2hVRWfmPL0rKy52/nUdOHbHXzrd
+         GtKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683796437; x=1686388437;
+        d=1e100.net; s=20221208; t=1683796438; x=1686388438;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=58FKT6mBLi9/p/z/H4le9F9arcqBmz3tNrQ4oPYMtxs=;
-        b=fJrLVDRymAfXZuGO0wNB+2Z1rT1pu9RPZvpph2wl91rHmXH7DxmJ1l9l7T/nraZuFS
-         V4xCy+yHTymAbEDeSVvlqaseDFeBy00qM+SQX+fN8lFFHGa4nCsoczVia16ik77X8J9+
-         8IfQ/KHpjiJ6X+TO414YzRUOyckPmmzhGFPAFErpgZXVc6th1bQkP0aLU/9Qk+sr1rIU
-         p3+PlR9Lir//NO5wF4q0XXRGdYH4So1bwzrXcfR5Jn/njsa6C7VOCkNEH4h1z46kVnU5
-         X3H6NhTJJqLe7AIQFw0rD2K5vSOxRIKMuyoq6HvR3sQKzdXVIEHVkfGTUqYY/x13F/Sw
-         PchQ==
-X-Gm-Message-State: AC+VfDx5UhmGlGHnmLuG/ivFBPG6q3ZfnuV+lOgHwgrTybMZSTF3sAjO
-        L61086fgDMls55BsmoaED5xoCpirh88=
-X-Google-Smtp-Source: ACHHUZ4KWq+zh/pqy3xya11mBbGf/1573yTu42zLyTummPtqNR9ujpX3wIFRiCi3NN1wnXtZ4OTQqA==
-X-Received: by 2002:a1c:f615:0:b0:3f1:952c:3c70 with SMTP id w21-20020a1cf615000000b003f1952c3c70mr12815163wmc.40.1683796437347;
-        Thu, 11 May 2023 02:13:57 -0700 (PDT)
+        bh=vtZdgeg9ddbhPRh6PC9cZ0EnGp++W69JKMYWDuC5ZjM=;
+        b=jA7B+A09QGjoFTSpP4vetR7z33OKcB/Sc6qoMphxvAlY3C/nCWoWmzuPXsR03YKtDp
+         qrLcQgZ86T6iCOI7w2OWwbaRMGGyc69qWS3hvtBIjDxgqnSuOEbN8bVP5L9cIBc6WoII
+         9od/DUicu6ljZf3yZ6zmYVCL7+t3epq7S/pqK6lvCFvqW2sT+K7aiCG6rMHomlQ7Ma5g
+         tN4JjLfwcqcNm82xkIrX5tA4SNbRLeE+mEKn1Kzy9ddqBheq5QV2I3NmDJ232aZZmBEC
+         0uA3SD7oDlYF/ii1LeefNYGSRzMoMYNO0UGnOGUOhel+Bqz/4tfa8RIqKc0VGs62NyVj
+         jeaQ==
+X-Gm-Message-State: AC+VfDxUfRGDNhGXlba/Aev4w4mrwUr2Hdrads7uzhp0Qv9miuYqBW19
+        dEr69W9KfWgaohEHV74MzZ8=
+X-Google-Smtp-Source: ACHHUZ6kJY7Xpu7b8kztQLzlN9l9ybqrPkb/6aNx8jQBNgkl9YAO7tlNHBfK+JhHEECjvd/Xb52I0g==
+X-Received: by 2002:a05:600c:24ce:b0:3f2:5641:3d4 with SMTP id 14-20020a05600c24ce00b003f2564103d4mr14102169wmu.33.1683796438339;
+        Thu, 11 May 2023 02:13:58 -0700 (PDT)
 Received: from localhost ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id x18-20020a5d6b52000000b002ff2c39d072sm19889177wrw.104.2023.05.11.02.13.56
+        by smtp.gmail.com with ESMTPSA id e1-20020adfdbc1000000b0030795249ffasm12304958wrj.92.2023.05.11.02.13.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Thu, 11 May 2023 02:13:57 -0700 (PDT)
 From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 To:     broonie@kernel.org
 Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/4] regmap-irq: Minor adjustments to .handle_mask_sync()
-Date:   Thu, 11 May 2023 10:13:41 +0100
-Message-Id: <20230511091342.26604-4-aidanmacdonald.0x0@gmail.com>
+Subject: [PATCH v2 4/4] regmap-irq: Drop backward compatibility for inverted mask/unmask
+Date:   Thu, 11 May 2023 10:13:42 +0100
+Message-Id: <20230511091342.26604-5-aidanmacdonald.0x0@gmail.com>
 In-Reply-To: <20230511091342.26604-1-aidanmacdonald.0x0@gmail.com>
 References: <20230511091342.26604-1-aidanmacdonald.0x0@gmail.com>
 MIME-Version: 1.0
@@ -71,118 +71,112 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If a .handle_mask_sync() callback is provided it supersedes all
-inbuilt handling of mask registers, and judging by the commit
-69af4bcaa08d ("regmap-irq: Add handle_mask_sync() callback") it
-is intended to completely replace all default IRQ masking logic.
-
-The implementation has two minor inconsistencies, which can be
-fixed without breaking compatibility:
-
-(1) mask_base must be set to enable .handle_mask_sync(), even
-    though mask_base is otherwise unused. This is easily fixed
-    because mask_base is already optional.
-
-(2) Unmask registers aren't accounted for -- they are part of
-    the default IRQ masking logic and are just a bit-inverted
-    version of mask registers. It would be a bad idea to allow
-    them to be used at the same time as .handle_mask_sync(),
-    as the result would be confusing and unmaintainable, so
-    make sure this can't happen.
+All users must now specify .mask_unmask_non_inverted = true to
+ensure they are using the expected semantics: 1s disable IRQs
+in the mask registers, and enable IRQs in the unmask registers.
 
 Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
 ---
- drivers/base/regmap/regmap-irq.c | 65 +++++++++++++++-----------------
- 1 file changed, 31 insertions(+), 34 deletions(-)
+ drivers/base/regmap/regmap-irq.c | 44 ++++++++------------------------
+ 1 file changed, 11 insertions(+), 33 deletions(-)
 
 diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
-index 7cb457af2332..95bf457204bf 100644
+index 95bf457204bf..330da5d6c8c3 100644
 --- a/drivers/base/regmap/regmap-irq.c
 +++ b/drivers/base/regmap/regmap-irq.c
-@@ -113,23 +113,21 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
- 	 * suppress pointless writes.
- 	 */
- 	for (i = 0; i < d->chip->num_regs; i++) {
--		if (d->mask_base) {
--			if (d->chip->handle_mask_sync)
--				d->chip->handle_mask_sync(i, d->mask_buf_def[i],
--							  d->mask_buf[i],
--							  d->chip->irq_drv_data);
--			else {
--				reg = d->get_irq_reg(d, d->mask_base, i);
--				ret = regmap_update_bits(d->map, reg,
--						d->mask_buf_def[i],
--						d->mask_buf[i]);
--				if (ret)
--					dev_err(d->map->dev, "Failed to sync masks in %x\n",
--						reg);
--			}
-+		if (d->chip->handle_mask_sync)
-+			d->chip->handle_mask_sync(i, d->mask_buf_def[i],
-+						  d->mask_buf[i],
-+						  d->chip->irq_drv_data);
-+
-+		if (d->mask_base && !d->chip->handle_mask_sync) {
-+			reg = d->get_irq_reg(d, d->mask_base, i);
-+			ret = regmap_update_bits(d->map, reg,
-+						 d->mask_buf_def[i],
-+						 d->mask_buf[i]);
-+			if (ret)
-+				dev_err(d->map->dev, "Failed to sync masks in %x\n", reg);
+@@ -30,9 +30,6 @@ struct regmap_irq_chip_data {
+ 	int irq;
+ 	int wake_count;
+ 
+-	unsigned int mask_base;
+-	unsigned int unmask_base;
+-
+ 	void *status_reg_buf;
+ 	unsigned int *main_status_buf;
+ 	unsigned int *status_buf;
+@@ -118,8 +115,8 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
+ 						  d->mask_buf[i],
+ 						  d->chip->irq_drv_data);
+ 
+-		if (d->mask_base && !d->chip->handle_mask_sync) {
+-			reg = d->get_irq_reg(d, d->mask_base, i);
++		if (d->chip->mask_base && !d->chip->handle_mask_sync) {
++			reg = d->get_irq_reg(d, d->chip->mask_base, i);
+ 			ret = regmap_update_bits(d->map, reg,
+ 						 d->mask_buf_def[i],
+ 						 d->mask_buf[i]);
+@@ -127,8 +124,8 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
+ 				dev_err(d->map->dev, "Failed to sync masks in %x\n", reg);
  		}
  
--		if (d->unmask_base) {
-+		if (d->unmask_base && !d->chip->handle_mask_sync) {
- 			reg = d->get_irq_reg(d, d->unmask_base, i);
+-		if (d->unmask_base && !d->chip->handle_mask_sync) {
+-			reg = d->get_irq_reg(d, d->unmask_base, i);
++		if (d->chip->unmask_base && !d->chip->handle_mask_sync) {
++			reg = d->get_irq_reg(d, d->chip->unmask_base, i);
  			ret = regmap_update_bits(d->map, reg,
  					d->mask_buf_def[i], ~d->mask_buf[i]);
-@@ -785,28 +783,27 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 	for (i = 0; i < chip->num_regs; i++) {
- 		d->mask_buf[i] = d->mask_buf_def[i];
+ 			if (ret)
+@@ -645,6 +642,9 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
+ 	if (chip->clear_on_unmask && (chip->ack_base || chip->use_ack))
+ 		return -EINVAL;
  
--		if (d->mask_base) {
--			if (chip->handle_mask_sync) {
--				ret = chip->handle_mask_sync(i,
--							     d->mask_buf_def[i],
--							     d->mask_buf[i],
--							     chip->irq_drv_data);
--				if (ret)
--					goto err_alloc;
--			} else {
--				reg = d->get_irq_reg(d, d->mask_base, i);
--				ret = regmap_update_bits(d->map, reg,
--						d->mask_buf_def[i],
--						d->mask_buf[i]);
--				if (ret) {
--					dev_err(map->dev, "Failed to set masks in 0x%x: %d\n",
--						reg, ret);
--					goto err_alloc;
--				}
-+		if (chip->handle_mask_sync) {
-+			ret = chip->handle_mask_sync(i, d->mask_buf_def[i],
-+						     d->mask_buf[i],
-+						     chip->irq_drv_data);
-+			if (ret)
-+				goto err_alloc;
-+		}
++	if (chip->mask_base && chip->unmask_base && !chip->mask_unmask_non_inverted)
++		return -EINVAL;
 +
-+		if (d->mask_base && !chip->handle_mask_sync) {
-+			reg = d->get_irq_reg(d, d->mask_base, i);
-+			ret = regmap_update_bits(d->map, reg,
-+						 d->mask_buf_def[i],
-+						 d->mask_buf[i]);
-+			if (ret) {
-+				dev_err(map->dev, "Failed to set masks in 0x%x: %d\n",
-+					reg, ret);
-+				goto err_alloc;
+ 	for (i = 0; i < chip->num_irqs; i++) {
+ 		if (chip->irqs[i].reg_offset % map->reg_stride)
+ 			return -EINVAL;
+@@ -733,28 +733,6 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
+ 	d->chip = chip;
+ 	d->irq_base = irq_base;
+ 
+-	if (chip->mask_base && chip->unmask_base &&
+-	    !chip->mask_unmask_non_inverted) {
+-		/*
+-		 * Chips that specify both mask_base and unmask_base used to
+-		 * get inverted mask behavior by default, with no way to ask
+-		 * for the normal, non-inverted behavior. This "inverted by
+-		 * default" behavior is deprecated, but we have to support it
+-		 * until existing drivers have been fixed.
+-		 *
+-		 * Existing drivers should be updated by swapping mask_base
+-		 * and unmask_base and setting mask_unmask_non_inverted=true.
+-		 * New drivers should always set the flag.
+-		 */
+-		dev_warn(map->dev, "mask_base and unmask_base are inverted, please fix it");
+-
+-		d->mask_base = chip->unmask_base;
+-		d->unmask_base = chip->mask_base;
+-	} else {
+-		d->mask_base = chip->mask_base;
+-		d->unmask_base = chip->unmask_base;
+-	}
+-
+ 	if (chip->irq_reg_stride)
+ 		d->irq_reg_stride = chip->irq_reg_stride;
+ 	else
+@@ -791,8 +769,8 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
+ 				goto err_alloc;
+ 		}
+ 
+-		if (d->mask_base && !chip->handle_mask_sync) {
+-			reg = d->get_irq_reg(d, d->mask_base, i);
++		if (chip->mask_base && !chip->handle_mask_sync) {
++			reg = d->get_irq_reg(d, chip->mask_base, i);
+ 			ret = regmap_update_bits(d->map, reg,
+ 						 d->mask_buf_def[i],
+ 						 d->mask_buf[i]);
+@@ -803,8 +781,8 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
  			}
  		}
  
--		if (d->unmask_base) {
-+		if (d->unmask_base && !chip->handle_mask_sync) {
- 			reg = d->get_irq_reg(d, d->unmask_base, i);
+-		if (d->unmask_base && !chip->handle_mask_sync) {
+-			reg = d->get_irq_reg(d, d->unmask_base, i);
++		if (chip->unmask_base && !chip->handle_mask_sync) {
++			reg = d->get_irq_reg(d, chip->unmask_base, i);
  			ret = regmap_update_bits(d->map, reg,
  					d->mask_buf_def[i], ~d->mask_buf[i]);
+ 			if (ret) {
 -- 
 2.39.2
 
