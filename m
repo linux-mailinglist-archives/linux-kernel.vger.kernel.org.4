@@ -2,225 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC5646FF960
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 20:10:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF7416FF962
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 20:12:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238860AbjEKSKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 14:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
+        id S239097AbjEKSMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 14:12:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239233AbjEKSJ6 (ORCPT
+        with ESMTP id S239142AbjEKSL4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 14:09:58 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BAC26EB5;
-        Thu, 11 May 2023 11:09:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=3Pfh1zcvxcBTMC1uxi72MV10YZm42bS2IcEmQKZMb+4=; b=Xy6+Keou++GVj/codBoqrJy9gL
-        itBLJ1xjf1mlUPlIVxNfKjXcLTAAQxQgVvkDSW28XTylZidk6QtE2PQYmJQUJnQZWcxB5NeAld/vd
-        IYEOh2qbH0ToIRlW0gSw+S2gAJ1WGJ/1frb5LCaG8CQK1aq2Dnd7ahSmo492iNkilNBU6UOddVnaB
-        2G/DZ3A2kPXp+dk+BzsO26n/CDYET8gnNW/nnTphCuVOxiZeHj4Thy5ZL9FaiwRq+YC5K2OSx6ypl
-        /nzyY9khDwqIpRs6uKQTRNjfVzRCJDKCffYlnSGLHy612I3r9wY0uvnDsFnZ4KyWkAr1um0cluB6w
-        mZp1PVtw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35560)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pxAjO-00075o-2n; Thu, 11 May 2023 19:09:34 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pxAjM-0004F7-Bd; Thu, 11 May 2023 19:09:32 +0100
-Date:   Thu, 11 May 2023 19:09:32 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH net-next 0/8] Improvements for RealTek 2.5G Ethernet PHYs
-Message-ID: <ZF0vXAzWg44GT+fA@shell.armlinux.org.uk>
-References: <cover.1683756691.git.daniel@makrotopia.org>
- <55c11fd9-54cf-4460-a10c-52ff62b46a4c@lunn.ch>
- <ZF0iiDIZQzR8vMvm@pidgin.makrotopia.org>
- <ZF0mUeKjdvZNG44q@shell.armlinux.org.uk>
+        Thu, 11 May 2023 14:11:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B73E5FCA;
+        Thu, 11 May 2023 11:11:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2B60D6507C;
+        Thu, 11 May 2023 18:11:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89484C433D2;
+        Thu, 11 May 2023 18:11:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683828691;
+        bh=gwG7e73Xzne2+itUdzAAaXUhIwWHZJlkWTQj+8xXLME=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=b3FEn2YcCVBwycKvYpAB9Wr1domTbJQQfuZUZx8+riLEeFfNI1Zt54G1uZcfYy149
+         SnVpYLiUf73dqb6untAtmL9nsUiLt9DZJUEsEfBdXC7GikC0KkDYwiFLwXA/cppVvl
+         T8yUb9xFhAuLuEPbi2bknVgd9By3wz/r/stW2CHFO1FXFAQ6q3QFy7XqJneiz6TdO7
+         dgN/ERkE/mFivnBoY0diRVqvVISZkQHb5r3B9mRnPofXtpXUQAwEaKflR6H55awxs+
+         38c/FBUQAfWu88XItFtmhc+dWcDrSg6z+iQ2Wa3kG2ctU/o2eHGoDlGgn3YTYzcuiX
+         uamrgPq7nNODg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 11763CE0FED; Thu, 11 May 2023 11:11:31 -0700 (PDT)
+Date:   Thu, 11 May 2023 11:11:31 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, rostedt@goodmis.org,
+        Zqiang <qiang1.zhang@intel.com>
+Subject: Re: [PATCH rcu 5/6] doc/rcutorture: Add description of
+ rcutorture.stall_cpu_block
+Message-ID: <0146f6ad-9a2c-4a28-8992-e054afade42c@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <7ffd4a5d-61e9-4b4c-a312-a85bcde08c39@paulmck-laptop>
+ <20230510171238.2189921-5-paulmck@kernel.org>
+ <CAEXW_YQNRQuPP8GzHMZXWPoLmbpK3rB_+eVXmiRu6RrsihrEpQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <ZF0mUeKjdvZNG44q@shell.armlinux.org.uk>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEXW_YQNRQuPP8GzHMZXWPoLmbpK3rB_+eVXmiRu6RrsihrEpQ@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 06:30:57PM +0100, Russell King (Oracle) wrote:
-> On Thu, May 11, 2023 at 07:14:48PM +0200, Daniel Golle wrote:
-> > On Thu, May 11, 2023 at 02:28:15AM +0200, Andrew Lunn wrote:
-> > > On Thu, May 11, 2023 at 12:53:22AM +0200, Daniel Golle wrote:
-> > > > Improve support for RealTek 2.5G Ethernet PHYs (RTL822x series).
-> > > > The PHYs can operate with Clause-22 and Clause-45 MDIO.
-> > > > 
-> > > > When using Clause-45 it is desireable to avoid rate-adapter mode and
-> > > > rather have the MAC interface mode follow the PHY speed. The PHYs
-> > > > support 2500Base-X for 2500M, and Cisco SGMII for 1000M/100M/10M.
-> > > 
-> > > I don't see what clause-45 has to do with this. The driver knows that
-> > > both C22 and C45 addresses spaces exists in the hardware. It can do
-> > > reads/writes on both. If the bus master does not support C45, C45 over
-> > > C22 will be performed by the core.
-> > 
-> > My understanding is/was that switching the SerDes interface mode is only
-> > intended with Clause-45 PHYs, derived from this comment and code:
-> > 
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/phy/phylink.c#n1661
+On Wed, May 10, 2023 at 10:47:36PM -0700, Joel Fernandes wrote:
+> On Wed, May 10, 2023 at 10:12 AM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > From: Zqiang <qiang1.zhang@intel.com>
+> >
+> > If you build a kernel with CONFIG_PREEMPTION=n and CONFIG_PREEMPT_COUNT=y,
+> > then run the rcutorture tests specifying stalls as follows:
+> >
+> > runqemu kvm slirp nographic qemuparams="-m 1024 -smp 4" \
+> >         bootparams="console=ttyS0 rcutorture.stall_cpu=30 \
+> >         rcutorture.stall_no_softlockup=1 rcutorture.stall_cpu_block=1" -d
+> >
+> > The tests will produce the following splat:
+> >
+> > [   10.841071] rcu-torture: rcu_torture_stall begin CPU stall
+> > [   10.841073] rcu_torture_stall start on CPU 3.
+> > [   10.841077] BUG: scheduling while atomic: rcu_torture_sta/66/0x0000000
+> > ....
+> > [   10.841108] Call Trace:
+> > [   10.841110]  <TASK>
+> > [   10.841112]  dump_stack_lvl+0x64/0xb0
+> > [   10.841118]  dump_stack+0x10/0x20
+> > [   10.841121]  __schedule_bug+0x8b/0xb0
+> > [   10.841126]  __schedule+0x2172/0x2940
+> > [   10.841157]  schedule+0x9b/0x150
+> > [   10.841160]  schedule_timeout+0x2e8/0x4f0
+> > [   10.841192]  schedule_timeout_uninterruptible+0x47/0x50
+> > [   10.841195]  rcu_torture_stall+0x2e8/0x300
+> > [   10.841199]  kthread+0x175/0x1a0
+> > [   10.841206]  ret_from_fork+0x2c/0x50
 > 
-> It's only because:
-> 
-> 1) Clause 22 PHYs haven't done this.
-> 2) There is currently no way to know what set of interfaces a PHY would
->    make use of - and that affects what ethtool linkmodes are possible.
-> 
-> What you point to is nothing more than a hack to make Clause 45 PHYs
-> work with the code that we currently have.
-> 
-> To sort this properly, we need PHY drivers to tell phylink what
-> interfaces they are going to switch between once they have been
-> attached to the network interface. This is what these patches in my
-> net-queue branch are doing:
-> 
-> net: phy: add possible interfaces
-> net: phy: marvell10g: fill in possible_interfaces
-> net: phy: bcm84881: fill in possible_interfaces
-> net: phylink: split out PHY validation from phylink_bringup_phy()
-> net: phylink: validate only used interfaces for c45 PHYs
-> 
-> Why only C45 PHYs again? Because the two PHY drivers that I've added
-> support for "possible_interfaces" to are both C45. There's no reason
-> we can't make that work for C22 PHYs as well.
-> 
-> We could probably make it work for C22 PHYs out of the box by setting
-> the appropriate bit for the supplied interface in "possible_interfaces"
-> inside phy_attach_direct() after the call to phy_init_hw() if
-> "possible_interfaces" is still empty, which means that if a PHY driver
-> isn't updated to setup "possible_interfaces" then we get basically
-> whatever interface mode we're attaching with there.
-> 
-> There may be a problem if phy_attach_direct() gets called with
-> PHY_INTERFACE_MODE_NA (which I believe is possible with DSA.)
+> Another way to get rid of the warning would be to replace the
+> cur_ops->readlock() with rcu_read_lock(). Though perhaps that will not
+> test whether the particular RCU flavor under testing is capable of
+> causing a stall :-).
 
-Maybe something like the below on top of those patches I've pointed
-to above? Note that this requires all MAC users of phylink to fill
-in the supported_interfaces bitmap. One of the other patches in my
-net-queue is:
+Exactly!
 
-net: phylink: require supported_interfaces to be filled
+> >         rcutorture.stall_cpu_block= [KNL]
+> >                         Sleep while stalling if set.  This will result
+> > -                       in warnings from preemptible RCU in addition
+> > -                       to any other stall-related activity.
+> > +                       in warnings from preemptible RCU in addition to
+> > +                       any other stall-related activity.  Note that
+> > +                       in kernels built with CONFIG_PREEMPTION=n and
+> > +                       CONFIG_PREEMPT_COUNT=y, this parameter will
+> > +                       cause the CPU to pass through a quiescent state.
+> > +                       Any such quiescent states will suppress RCU CPU
+> > +                       stall warnings, but the time-based sleep will
+> > +                       also result in scheduling-while-atomic splats.
+> 
+> Could change last part to "but may also result in
+> scheduling-while-atomic splats as preemption might be disabled for
+> certain RCU flavors in order to cause the stall".
 
-which comes before the above patches. I think that's a reasonable
-expectation today but needs testing and review of all users (esp.
-the DSA drivers.)
+Is that needed given the earlier "in kernels built with
+CONFIG_PREEMPTION=n and CONFIG_PREEMPT_COUNT=y"?
 
-diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
-index af070be717ec..1cfa101960b9 100644
---- a/drivers/net/phy/phylink.c
-+++ b/drivers/net/phy/phylink.c
-@@ -1787,8 +1787,26 @@ static int phylink_validate_phy(struct phylink *pl, struct phy_device *phy,
- 	 */
- 	state->rate_matching = phy_get_rate_matching(phy, state->interface);
- 
--	/* If this is a clause 22 PHY or is using rate matching, it only
--	 * operates in a single mode.
-+	/* If the PHY provides a bitmap of the interfaces it will be using,
-+	 * use this to validate the PHY. This can be used for both clause 22
-+	 * and clause 45 PHYs.
-+	 */
-+	if (!phy_interface_empty(phy->possible_interfaces)) {
-+		/* Calculate the union of the interfaces the PHY supports in
-+		 * its configured state, and the host's supported interfaces.
-+		 * We never want an interface that isn't supported by the host.
-+		 */
-+		phy_interface_and(interfaces, phy->possible_interfaces,
-+				  pl->config->supported_interfaces);
-+
-+		return phylink_validate_mask(pl, mode, supported, state,
-+					     interfaces);
-+	}
-+
-+	/* If the PHY doesn't provide it a bitmap of the interfaces it will
-+	 * be using, or is a traditional clause 22 PHY driver that doesn't
-+	 * set ->possible_interfaces, or if we're using rate matching, then
-+	 * we're operating in a single mode.
- 	 */
- 	if (!phy->is_c45 || state->rate_matching != RATE_MATCH_NONE)
- 		return phylink_validate(pl, mode, supported, state);
-@@ -1797,28 +1815,18 @@ static int phylink_validate_phy(struct phylink *pl, struct phy_device *phy,
- 	 * modes according to the negotiated media speed. For example, the
- 	 * interface may switch between 10GBASE-R, 5GBASE-R, 2500BASE-X and
- 	 * SGMII.
-+	 *
-+	 * If we're operating in such a mode, but haven't been provided a
-+	 * possible_interfaces bitmap, then we need to validate all possible
-+	 * interfaces.
- 	 */
--
--	/* Backwards compatibility for those MAC drivers that don't set
--	 * their supported_interfaces, or PHY drivers that don't set
--	 * their possible_interfaces.
--	 */
--	if (phy_interface_empty(phy->possible_interfaces) &&
-+	if (phy->is_c45 &&
- 	    state->interface != PHY_INTERFACE_MODE_RXAUI &&
- 	    state->interface != PHY_INTERFACE_MODE_XAUI &&
--	    state->interface != PHY_INTERFACE_MODE_USXGMII) {
-+	    state->interface != PHY_INTERFACE_MODE_USXGMII)
- 		state->interface = PHY_INTERFACE_MODE_NA;
--		return phylink_validate(pl, mode, supported, state);
--	}
--
--	/* Calculate the union of the interfaces the PHY supports in
--	 * its configured state, and the host's supported interfaces.
--	 * We never want an interface that isn't supported by the host.
--	 */
--	phy_interface_and(interfaces, phy->possible_interfaces,
--			  pl->config->supported_interfaces);
- 
--	return phylink_validate_mask(pl, mode, supported, state, interfaces);
-+	return phylink_validate(pl, mode, supported, state);
- }
- 
- static int phylink_bringup_phy(struct phylink *pl, struct phy_device *phy,
-diff --git a/include/linux/phy.h b/include/linux/phy.h
-index 4e0db4a14f30..b54aa9e8c122 100644
---- a/include/linux/phy.h
-+++ b/include/linux/phy.h
-@@ -178,6 +178,11 @@ static inline bool phy_interface_empty(const unsigned long *intf)
- 	return bitmap_empty(intf, PHY_INTERFACE_MODE_MAX);
- }
- 
-+static inline unsigned int phy_interface_weight(const unsigned long *intf)
-+{
-+	return bitmap_weight(intf, PHY_INTERFACE_MODE_MAX);
-+}
-+
- static inline void phy_interface_and(unsigned long *dst, const unsigned long *a,
- 				     const unsigned long *b)
- {
+> > +                       Which might or might not be what you want.
+> > +
+> 
+> Suggest drop this line ;-).
 
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+OK, I will bite.  ;-)
+
+What is your concern with this line?
+
+							Thanx, Paul
+
+>  - Joel
+> 
+> >         rcutorture.stall_cpu_holdoff= [KNL]
+> >                         Time to wait (s) after boot before inducing stall.
+> > --
+> > 2.40.1
+> >
