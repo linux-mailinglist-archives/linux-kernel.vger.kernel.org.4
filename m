@@ -2,122 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25B996FEECD
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:29:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A7AFF6FEED0
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237448AbjEKJ3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 05:29:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
+        id S237411AbjEKJ30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 05:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237493AbjEKJ2y (ORCPT
+        with ESMTP id S237589AbjEKJ24 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 05:28:54 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066E45FD8;
-        Thu, 11 May 2023 02:28:45 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1ab0c697c2bso77815845ad.1;
-        Thu, 11 May 2023 02:28:44 -0700 (PDT)
+        Thu, 11 May 2023 05:28:56 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC2D7EC9
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:28:54 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50db7ec8188so4964746a12.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:28:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683797324; x=1686389324;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5AKArW/9N1DM1cw/nq7oO3Ipc/BxTBMz8SQU51oi5QM=;
-        b=lSqSpkTeYoe3tO29lldpVHbM32z393QYWP5lHnZIBWCvEarPeFYrVLxfqpKRFeiMH9
-         O/4rvObcKOyglqs8faTtrmcVYFQ8XJOPmtyKy2kiWHSt1RBmvearJPkZQEhcKNjXUV44
-         zPmk9SGD5swqjEFi8vzVyC7S7hRLhT8oymp0Nn+j0Lqb53GMv6htmJ3pwBf5TwaV1uFR
-         bqB49lbtbgVPuSNA3cLK217LA3Bph6pGjOU+UaaDA/QzyAdGYXsakKnwD8no18SkjADS
-         VxaC3PcxwjVwmU+nKQWSxICPOzqvM3jml+aMSgjVP8wtczWmTNUNx3u/IsGxy11QAZfk
-         GwwA==
+        d=linaro.org; s=google; t=1683797332; x=1686389332;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4cHA3LraFcmGDTaIqGBRmZ93pU3RzjaRHQjlm2jCEjo=;
+        b=JXsAiFr6M63ygBIRwO4p+SZCq+xy3AGLgKBO7UA59TEBVF4aWxdjr0p4qxNeUEGjpS
+         H81i4v/xaK46iIye8Xmpu01rg7lYSiheY3PIB+CCDzt5YzJjFhlVGK6cDzMN5OFfbk6Y
+         qKV2WIFlFJp7jQ7lDDIFe2H3uDkrFFpqGnljGuXHPaEJmYvNepbTQgYnJgxvDYmfyfYd
+         3+uXm+JJ+GXraAs9LbTUIlft65Y5QMEqEbbojSftk96J3vMHi21VsTEyqW+RljPYrk8v
+         r2Bo7QkGIWN2r2S7i2awUnVRAZU4z/EwTYQqEqAL59gKoQXskq6/gkjUNaET3qd8WgDV
+         JkrQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683797324; x=1686389324;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5AKArW/9N1DM1cw/nq7oO3Ipc/BxTBMz8SQU51oi5QM=;
-        b=OysjBIQnpYcG3jJJYoGM6rJHu6aDTnGL1rTF1xYYL6BQHQKe/w3PZ29gaB9/OoVQa+
-         DGS/yVDet+oyNDcLf/DQGCN84dvzYEPSCv86XSCzWqE0WHqQYceaZGQEAcOe+jin9C8y
-         F0CXN75MBgR9zJt8GOdHo+rn069hUuoFzCvJ1Aar1q5ZYOc3ts8GpJoWhn7XGQ5t7Epi
-         dqwvHBdj8iHRnwR75chTkzfb9lPXYdSscXh1AKsXTeAQz5zf1jjkZY8Wq3mzS4UTsygx
-         LwDAHCFeDVRCS1owT8URj3bvEkykXdU+ycI1TKG60tjnLnic08Ya2gAMaC/wFz104dq4
-         vwUg==
-X-Gm-Message-State: AC+VfDxBu0+kKJ9oo/1552kONkhgkp26F61Ii2Iho3n9SrJdh6Q+d4A0
-        ni6gKY0Jj3V/Ma7uKg3sFVNNT2PSAUYkpQ==
-X-Google-Smtp-Source: ACHHUZ4kt2fEW6y1LT9sL5KAOXOvB6IxvXmm6lpgkO77jh+uBd0sq2MbCeuvBayswScpQ/VmBXnGwQ==
-X-Received: by 2002:a17:902:db0e:b0:1ab:12cf:9e1c with SMTP id m14-20020a170902db0e00b001ab12cf9e1cmr23993360plx.32.1683797324390;
-        Thu, 11 May 2023 02:28:44 -0700 (PDT)
-Received: from localhost (fwdproxy-prn-019.fbsv.net. [2a03:2880:ff:13::face:b00c])
-        by smtp.gmail.com with ESMTPSA id 13-20020a170902e9cd00b001ab0669d84csm5407877plk.26.2023.05.11.02.28.43
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 02:28:44 -0700 (PDT)
-From:   Nhat Pham <nphamcs@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-api@vger.kernel.org, kernel-team@meta.com,
-        linux-arch@vger.kernel.org, hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, arnd@arndb.de,
-        catalin.marinas@arm.com, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: [PATCH] arm64: wire up cachestat for arm64
-Date:   Thu, 11 May 2023 02:28:43 -0700
-Message-Id: <20230511092843.3896327-1-nphamcs@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230510195806.2902878-1-nphamcs@gmail.com>
-References: <20230510195806.2902878-1-nphamcs@gmail.com>
+        d=1e100.net; s=20221208; t=1683797332; x=1686389332;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4cHA3LraFcmGDTaIqGBRmZ93pU3RzjaRHQjlm2jCEjo=;
+        b=Hj2M6MeF0ksUqq/wwYKtOHVvN1lF7N0HLfa/Wgmqv/MimCNru8FybqDqkY3+OPU3hL
+         pxmiFXw+kdlCUVuia8Cwl22Cig2+2g8cDpaskBvN4e7KDIJ821p9X/M+FoDf70s4y7nA
+         sxF/XitF2awU9EFwcF4mOIbDz51579r66yPAxn4FuThiIUpLn0kL9h60PWOusiwHj27e
+         dMRdgu3fg8mTVM28aZHoQazoWctCZY6Zn1Hp0RA4ybbxHpldxVsn1jkeSOoHRUw2NIkR
+         h0K9ZZfX/inY4Xtvqi8U355iE8lWzxS49MzwzV9UaA1WBt7i3C+t8f4vLqT8C+Bov9vq
+         YAlw==
+X-Gm-Message-State: AC+VfDyfHx6bXWGI5RLMshjR4l6767a4zeWKPes+/byyqHroFJCuw+4g
+        kCqgYNZGZh3p9JkV8hFf+uVpuQ==
+X-Google-Smtp-Source: ACHHUZ75ta179hLwDGK7JWKKo/Z4TJGh6O9B4U9ZlcNk2gja0S38wokx5miC8QiJ02RLTkBXBTk2LA==
+X-Received: by 2002:aa7:d659:0:b0:508:14f2:399c with SMTP id v25-20020aa7d659000000b0050814f2399cmr19284560edr.10.1683797332595;
+        Thu, 11 May 2023 02:28:52 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:7e61:f14a:c3a4:809e? ([2a02:810d:15c0:828:7e61:f14a:c3a4:809e])
+        by smtp.gmail.com with ESMTPSA id l14-20020a056402028e00b00506addaaab0sm2709963edv.32.2023.05.11.02.28.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 02:28:52 -0700 (PDT)
+Message-ID: <fc104fdd-3894-aa94-12dc-4c73b26d4159@linaro.org>
+Date:   Thu, 11 May 2023 11:28:50 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH] dt-bindings: iio: temperature: Add DT bindings for TMP006
+Content-Language: en-US
+To:     Anup Sharma <anupnewsmail@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Peter Meerwald <pmeerw@pmeerw.net>, broonie@kernel.org
+Cc:     linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <ZFvo2TIiPiMFlbXC@yoga>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZFvo2TIiPiMFlbXC@yoga>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-cachestat is a new syscall that was previously wired in for most
-architectures:
+On 10/05/2023 20:56, Anup Sharma wrote:
+> Add devicetree binding document for TMP006, IR thermopile sensor.
 
-https://lore.kernel.org/lkml/20230503013608.2431726-1-nphamcs@gmail.com/
-https://lore.kernel.org/linux-mm/20230510195806.2902878-1-nphamcs@gmail.com/
+Why? Where is any user of this? DTS? Driver?
 
-However, those patches miss arm64, which has its own syscall table in arch/arm64.
-This patch wires cachestat in for arm64.
+Subject: drop second/last, redundant "DT bindings for". The
+"dt-bindings" prefix is already stating that these are bindings.
 
-Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Suggested-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/arm64/include/asm/unistd.h   | 2 +-
- arch/arm64/include/asm/unistd32.h | 2 ++
- 2 files changed, 3 insertions(+), 1 deletion(-)
+> 
+> Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
+> ---
+>  .../bindings/iio/temperature/ti,tmp006.yaml   | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/temperature/ti,tmp006.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/temperature/ti,tmp006.yaml b/Documentation/devicetree/bindings/iio/temperature/ti,tmp006.yaml
+> new file mode 100644
+> index 000000000000..c6c5a4d10898
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/temperature/ti,tmp006.yaml
+> @@ -0,0 +1,38 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/temperature/ti,tmp006.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: TI TMP006 IR thermopile sensor
+> +
+> +maintainers:
+> +  - Peter Meerwald <pmeerw@pmeerw.net>
+> +
+> +description: |
+> +  TI TMP006 - Infrared Thermopile Sensor in Chip-Scale Package.
+> +  https://cdn.sparkfun.com/datasheets/Sensors/Temp/tmp006.pdf
+> +
+> +properties:
+> +  compatible:
+> +    const: ti,tmp006
+> +
+> +  reg:
+> +    maxItems: 1
 
-diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
-index 037feba03a51..64a514f90131 100644
---- a/arch/arm64/include/asm/unistd.h
-+++ b/arch/arm64/include/asm/unistd.h
-@@ -39,7 +39,7 @@
- #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
- #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
- 
--#define __NR_compat_syscalls		451
-+#define __NR_compat_syscalls		452
- #endif
- 
- #define __ARCH_WANT_SYS_CLONE
-diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
-index 604a2053d006..d952a28463e0 100644
---- a/arch/arm64/include/asm/unistd32.h
-+++ b/arch/arm64/include/asm/unistd32.h
-@@ -907,6 +907,8 @@ __SYSCALL(__NR_process_mrelease, sys_process_mrelease)
- __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
- #define __NR_set_mempolicy_home_node 450
- __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
-+#define __NR_cachestat 451
-+__SYSCALL(__NR_cachestat, sys_cachestat)
- 
- /*
-  * Please add new compat syscalls above this comment and update
--- 
-2.34.1
+Missing supply.
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        tmp006@40 {
+
+Node names should be generic.
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+temperature-sensor?
+
+> +            compatible = "ti,tmp006";
+> +            reg = <0x40>;
+> +        };
+> +    };
+
+Best regards,
+Krzysztof
 
