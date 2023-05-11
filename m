@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E4F16FF39F
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:10:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 873D86FF3A6
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:10:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238108AbjEKOKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 10:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53692 "EHLO
+        id S238355AbjEKOKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 10:10:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238308AbjEKOKD (ORCPT
+        with ESMTP id S238316AbjEKOKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 10:10:03 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EB117DBD;
-        Thu, 11 May 2023 07:10:01 -0700 (PDT)
+        Thu, 11 May 2023 10:10:05 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A946900A;
+        Thu, 11 May 2023 07:10:04 -0700 (PDT)
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 6849B1FEFE;
-        Thu, 11 May 2023 14:10:00 +0000 (UTC)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BD9BE21D13;
+        Thu, 11 May 2023 14:10:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683814200; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+        t=1683814202; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=M3XBtCch7yegyAAPfwB9jr7VWVnA8HEFlGZxwrQXAF0=;
-        b=pkAvHPEJGR5Eysl//odafJ9jp6OZ7fc8BqQfUYsHku8XCtNN2/xE+CqZuN6zqtTeDjNsb8
-        LQ1YcQmeRAYL+EYYrJbMg7P0kewY13QpEoCcpeeCVGn/VKSsVlSm2XQSoVAU+V/7xMZxdc
-        5PCIr60NaF/Q94Cz1WC+4yX36GYgs5g=
+        bh=wXg62EC96ajQDdHpd1YF2tGo6DqtEOKYIRcHTFG94OY=;
+        b=cMSL7Vm67GcoZAg0LdTOd732b0V5Drf1VRqpTeENJC4jAnIVOaFkYkJFIAPsqjE9ViJGCk
+        SeuKhi5wzO2xQ4/zvvCb86YapD5N9CtIEpb9/FLF4H5uruDcmh03w0inW/881BLtbPuiOb
+        yzWW7I+7a9e1OZxTpHkbz/vOpvkGTQ0=
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683814200;
+        s=susede2_ed25519; t=1683814202;
         h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
          mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=M3XBtCch7yegyAAPfwB9jr7VWVnA8HEFlGZxwrQXAF0=;
-        b=JqbwMwKLXau30gKt+fpnfoSXFc9p+FMidfBvDDPwmSZKk09UKRbg9NoGrVinb9mVP+n9A7
-        dAhcOcU0CpfdHdBA==
+        bh=wXg62EC96ajQDdHpd1YF2tGo6DqtEOKYIRcHTFG94OY=;
+        b=CzjJMIC6iAg1E/DwNiH3JJbvV3i/DKdswjiwf9ov8BYYh1JIBOR0W9bKfUkb3DXOqlLhW5
+        ooNJNDPMiNK5hDDg==
 Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 188CB134B2;
-        Thu, 11 May 2023 14:09:59 +0000 (UTC)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 68AFC134B2;
+        Thu, 11 May 2023 14:10:02 +0000 (UTC)
 Received: from dovecot-director2.suse.de ([192.168.254.65])
         by imap2.suse-dmz.suse.de with ESMTPSA
-        id jH/rODf3XGRHPwAAMHmgww
-        (envelope-from <dwagner@suse.de>); Thu, 11 May 2023 14:09:59 +0000
+        id WS7NEDr3XGRTPwAAMHmgww
+        (envelope-from <dwagner@suse.de>); Thu, 11 May 2023 14:10:02 +0000
 From:   Daniel Wagner <dwagner@suse.de>
 To:     linux-nvme@lists.infradead.org
 Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
         Chaitanya Kulkarni <kch@nvidia.com>,
         Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
         Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH blktests v4 01/11] nvme/rc: Auto convert test device size info
-Date:   Thu, 11 May 2023 16:09:43 +0200
-Message-Id: <20230511140953.17609-2-dwagner@suse.de>
+Subject: [PATCH blktests v4 02/11] nvme{014/015}: Do not hard code device size for dd test
+Date:   Thu, 11 May 2023 16:09:44 +0200
+Message-Id: <20230511140953.17609-3-dwagner@suse.de>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230511140953.17609-1-dwagner@suse.de>
 References: <20230511140953.17609-1-dwagner@suse.de>
@@ -73,76 +73,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce a convert_to_mb() helper which converts the size argument
-to MBytes and use in test device require function. This makes it
-possible to use user input strings in future.
+Read the block device sizes instead hard coding them,
+so that the device size can be configurable in future.
 
 Reviewed-by: Hannes Reinecke <hare@suse.de>
 Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
 Signed-off-by: Daniel Wagner <dwagner@suse.de>
 ---
- common/rc      | 30 +++++++++++++++++++++++++++---
- tests/nvme/035 |  2 +-
- 2 files changed, 28 insertions(+), 4 deletions(-)
+ tests/nvme/014 | 10 +++++++++-
+ tests/nvme/015 | 10 +++++++++-
+ 2 files changed, 18 insertions(+), 2 deletions(-)
 
-diff --git a/common/rc b/common/rc
-index af4c0b1cab22..f22a7a5eadf8 100644
---- a/common/rc
-+++ b/common/rc
-@@ -324,9 +324,12 @@ _get_pci_parent_from_blkdev() {
- 		tail -2 | head -1
- }
+diff --git a/tests/nvme/014 b/tests/nvme/014
+index d13cff7921da..875e99eea346 100755
+--- a/tests/nvme/014
++++ b/tests/nvme/014
+@@ -23,6 +23,9 @@ test() {
+ 	local port
+ 	local nvmedev
+ 	local loop_dev
++	local size
++	local bs
++	local count
+ 	local file_path="$TMPDIR/img"
+ 	local subsys_name="blktests-subsystem-1"
  
--_require_test_dev_size_mb() {
--	local require_sz_mb=$1
--	local test_dev_sz_mb=$(($(blockdev --getsize64 "$TEST_DEV")/1024/1024))
-+_require_test_dev_size() {
-+	local require_sz_mb
-+	local test_dev_sz_mb
-+
-+	require_sz_mb="$(convert_to_mb "$1")"
-+	test_dev_sz_mb="$(($(blockdev --getsize64 "$TEST_DEV")/1024/1024))"
+@@ -41,7 +44,12 @@ test() {
+ 	cat "/sys/block/${nvmedev}n1/uuid"
+ 	cat "/sys/block/${nvmedev}n1/wwid"
  
- 	if (( "$test_dev_sz_mb" < "$require_sz_mb" )); then
- 		SKIP_REASONS+=("${TEST_DEV} required at least ${require_sz_mb}m")
-@@ -422,3 +425,24 @@ _have_writeable_kmsg() {
- _run_user() {
- 	su "$NORMAL_USER" -c "$1"
- }
+-	dd if=/dev/urandom of="/dev/${nvmedev}n1" count=128000 bs=4k status=none
++	size="$(blockdev --getsize64 "/dev/${nvmedev}n1")"
++	bs="$(blockdev --getbsz "/dev/${nvmedev}n1")"
++	count=$((size / bs))
 +
-+convert_to_mb()
-+{
-+	local str=$1
-+	local res
-+
-+	res=$(echo "${str}" | sed -n 's/^\([0-9]\+\)$/\1/p')
-+	if [[ -n "${res}" ]]; then
-+		echo "$((res / 1024 / 1024))"
-+	fi
-+
-+	res=$(echo "${str}" | sed -n 's/^\([0-9]\+\)[mM]$/\1/p')
-+	if [[ -n "${res}" ]]; then
-+		echo "$((res))"
-+	fi
-+
-+	res=$(echo "${str}" | sed -n 's/^\([0-9]\+\)[gG]$/\1/p')
-+	if [[ -n "${res}" ]]; then
-+		echo "$((res * 1024))"
-+	fi
-+}
-diff --git a/tests/nvme/035 b/tests/nvme/035
-index d169e351e3d0..eb1024edddbf 100755
---- a/tests/nvme/035
-+++ b/tests/nvme/035
-@@ -17,7 +17,7 @@ requires() {
- }
++	dd if=/dev/urandom of="/dev/${nvmedev}n1" \
++		count="${count}" bs="${bs}" status=none
  
- device_requires() {
--	_require_test_dev_size_mb 1024
-+	_require_test_dev_size 1024m
- }
+ 	nvme flush "/dev/${nvmedev}" -n 1
  
- test_device() {
+diff --git a/tests/nvme/015 b/tests/nvme/015
+index bb52ba2598db..8cb343e1d31c 100755
+--- a/tests/nvme/015
++++ b/tests/nvme/015
+@@ -22,6 +22,9 @@ test() {
+ 
+ 	local port
+ 	local nvmedev
++	local size
++	local bs
++	local count
+ 	local file_path="$TMPDIR/img"
+ 	local subsys_name="blktests-subsystem-1"
+ 
+@@ -38,7 +41,12 @@ test() {
+ 	cat "/sys/block/${nvmedev}n1/uuid"
+ 	cat "/sys/block/${nvmedev}n1/wwid"
+ 
+-	dd if=/dev/urandom of="/dev/${nvmedev}n1" count=128000 bs=4k status=none
++	size="$(blockdev --getsize64 "/dev/${nvmedev}n1")"
++	bs="$(blockdev --getbsz "/dev/${nvmedev}n1")"
++	count=$((size / bs))
++
++	dd if=/dev/urandom of="/dev/${nvmedev}n1" \
++		count="${count}" bs="${bs}" status=none
+ 
+ 	nvme flush "/dev/${nvmedev}n1" -n 1
+ 
 -- 
 2.40.0
 
