@@ -2,107 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC41A6FE989
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:43:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A16A6FE993
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:47:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236753AbjEKBnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 21:43:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36548 "EHLO
+        id S236995AbjEKBrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 21:47:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37918 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229791AbjEKBn3 (ORCPT
+        with ESMTP id S230395AbjEKBrt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 21:43:29 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2F08C40CB
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 18:43:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=NIad5
-        o/gCF/UbBioYF/NhdVu7OxbA2d0uZxhfg7phII=; b=EqDt6WIJwLIN9EIlhPeEq
-        su1mQn9rqyxiIKdCJ1yrMEap+ZOAmyDVKyFK4wWwgErhuOOEKhYDeFreqKP3oETK
-        yBppZY6aZ6L+w80vuh+ZQsV6yGABJyBMTbkEIAVyhj8hAXvGHeCx/cpENUPbebV4
-        VKedhJPIcr918o2Jzq9o8I=
-Received: from zhangf-virtual-machine.localdomain (unknown [180.111.102.183])
-        by zwqz-smtp-mta-g2-4 (Coremail) with SMTP id _____wCHxjYWSFxkD+YgBg--.56513S2;
-        Thu, 11 May 2023 09:42:46 +0800 (CST)
-From:   zhangfei <zhang_fei_0403@163.com>
-To:     ajones@ventanamicro.com
-Cc:     aou@eecs.berkeley.edu, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, palmer@dabbelt.com,
-        paul.walmsley@sifive.com, zhang_fei_0403@163.com,
-        zhangfei@nj.iscas.ac.cn
-Subject: Re: [PATCH] riscv: Optimize memset 
-Date:   Thu, 11 May 2023 09:42:43 +0800
-Message-Id: <20230511014243.3336-1-zhang_fei_0403@163.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230510-0adf0b2a2956ca1cd426a2d2@orel>
-References: <20230510-0adf0b2a2956ca1cd426a2d2@orel>
+        Wed, 10 May 2023 21:47:49 -0400
+Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA4775B89;
+        Wed, 10 May 2023 18:47:48 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QGvsq6x6Nz4f3jYF;
+        Thu, 11 May 2023 09:47:43 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.104.67])
+        by APP2 (Coremail) with SMTP id Syh0CgA33eo_SVxkrgJdJA--.7260S4;
+        Thu, 11 May 2023 09:47:45 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     hch@lst.de, tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
+        yukuai3@huawei.com
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai1@huaweicloud.com,
+        yi.zhang@huawei.com, yangerkun@huawei.com
+Subject: [PATCH -next 0/6] blk-wbt: minor fix and cleanup
+Date:   Thu, 11 May 2023 09:45:03 +0800
+Message-Id: <20230511014509.679482-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wCHxjYWSFxkD+YgBg--.56513S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7WFy7urW3XF4rWF1xXrWkJFb_yoW8Aw17pr
-        95JF1DKF4qgwnakw429w4IqrWYk3Z5JF1rXFWUJ3srA3s0g34rtF93KF4Y9a9rGrnakay2
-        vr45Xr1fXF1UZaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEGYLDUUUUU=
-X-Originating-IP: [180.111.102.183]
-X-CM-SenderInfo: x2kd0w5bihxsiquqjqqrwthudrp/1tbiWxVsl2I0Z+m5pQABsw
-X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: Syh0CgA33eo_SVxkrgJdJA--.7260S4
+X-Coremail-Antispam: 1UD129KBjvdXoWrCryrCF1rXr4xtF48JF47Jwb_yoWxWFb_JF
+        WUJFWkXFn8Xan3CF98CF1DXFWUKr4rZr4UZF1vg3y5tr13Jw1DKws5Jr4rZrW3ZF4IkF98
+        XF15Gr4xXr48tjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbxkFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628v
+        n2kIc2xKxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F4
+        0E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFyl
+        IxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxV
+        AFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_
+        Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUb
+        XdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zhangfei <zhangfei@nj.iscas.ac.cn>
+From: Yu Kuai <yukuai3@huawei.com>
 
-On Wed, May 10, 2023 at 14:58:22PM +0200, Andrew Jones wrote:
-> On Wed, May 10, 2023 at 11:52:43AM +0800, zhangfei wrote:
-> > From: zhangfei <zhangfei@nj.iscas.ac.cn>
-> > 
-> > On Tue, May 09, 2023 11:16:33AM +0200, Andrew Jones wrote: 
-> > > On Tue, May 09, 2023 at 10:22:07AM +0800, zhangfei wrote:
-> > > > 
-> > > > Hi,
-> > > > 
-> > > > I filled head and tail with minimal branching. Each conditional ensures that 
-> > > > all the subsequently used offsets are well-defined and in the dest region.
-> > > 
-> > > I know. You trimmed my comment, so I'll quote myself, here
-> > > 
-> > > """
-> > > After the check of a2 against 6 above we know that offsets 6(t0)
-> > > and -7(a3) are safe. Are we trying to avoid too may redundant
-> > > stores with these additional checks?
-> > > """
-> > > 
-> > > So, again. Why the additional check against 8 above and, the one you
-> > > trimmed, checking 10?
-> > 
-> > Hi,
-> > 
-> > These additional checks are to avoid too many redundant stores. 
-> > 
-> > Adding a check for more than 8 bytes is because after the loop 
-> > segment '3' comes out, the remaining bytes are less than 8 bytes, 
-> > which also avoids redundant stores.
-> 
-> So the benchmarks showed these additional checks were necessary to avoid
-> making memset worse? Please add comments to the code explaining the
-> purpose of the checks.
+Yu Kuai (6):
+  blk-wbt: fix that wbt can't be disabled by default
+  blk-wbt: don't create wbt sysfs entry if CONFIG_BLK_WBT is disabled
+  blk-wbt: don't enable wbt for bio based device
+  blk-wbt: remove deadcode to handle wbt enable/disable with io inflight
+  blk-wbt: cleanup rwb_enabled() and wbt_disabled()
+  blk-iocost: move wbt_enable/disable_default() out of spinlock
 
-Hi,
+ block/blk-iocost.c |   7 ++-
+ block/blk-sysfs.c  | 147 ++++++++++++++++++++++++---------------------
+ block/blk-wbt.c    |  26 ++------
+ block/blk-wbt.h    |  19 ------
+ 4 files changed, 88 insertions(+), 111 deletions(-)
 
-As you mentioned, the lack of these additional tests can make memset worse. 
-When I removed the checks for 8 and 10 above, the benchmarks showed that the 
-memset changed to 0.21 bytes/ns at 8B. Although this is better than storing 
-byte by byte, additional detections will bring a better improvement to 0.27 bytes/ns.
-
-Due to the chaotic response in my previous email, I am sorry for this. I have 
-reorganized patch v2 and sent it to you. Please reply under the latest patch.
-
-Thanks,
-Fei Zhang
+-- 
+2.39.2
 
