@@ -2,53 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 958816FFB1A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:13:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E1D66FFB27
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239218AbjEKUNI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 11 May 2023 16:13:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57630 "EHLO
+        id S239359AbjEKUR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 16:17:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238053AbjEKUNG (ORCPT
+        with ESMTP id S239288AbjEKURZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 16:13:06 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25FF11BD4;
-        Thu, 11 May 2023 13:13:05 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pxCeq-001kUB-5l; Thu, 11 May 2023 22:13:00 +0200
-Received: from p5b13addc.dip0.t-ipconnect.de ([91.19.173.220] helo=suse-laptop.fritz.box)
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pxCep-0022vC-Uq; Thu, 11 May 2023 22:13:00 +0200
-Message-ID: <c7be097d21933c19c7338391cd6675d6757ad33c.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 0/2] SH7709 DMA fixes
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Rich Felker <dalias@libc.org>
-Cc:     Artur Rojek <contact@artur-rojek.eu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Thu, 11 May 2023 22:12:59 +0200
-In-Reply-To: <20230506165642.GO3298@brightrain.aerifal.cx>
-References: <20230506141703.65605-1-contact@artur-rojek.eu>
-         <3e9c027dd90ca9d4a02ba06714960ddcdae5fd2c.camel@physik.fu-berlin.de>
-         <20230506165642.GO3298@brightrain.aerifal.cx>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.1 
+        Thu, 11 May 2023 16:17:25 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F692D68;
+        Thu, 11 May 2023 13:17:24 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-966287b0f72so1222425766b.0;
+        Thu, 11 May 2023 13:17:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683836243; x=1686428243;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=o3yFd0Z3WkTu4ff6EQ3UVzmE4FT+cDY8nxJOS33vY3M=;
+        b=b6NNutiXCUcgjnqS41dQCxSVX20rYGFiKJnBG1Q49NP9vu7P8kiGuCCRWQXXe0KcpI
+         yWsOPq7ohgyb+ebyllHnUEc0KKFG9AVIuCMgDvTpNRQBz0mK5PlCbW4bqODkrYpTAdCV
+         XJlOepYB1lXmFBbavUBxszPsEDn6XcKpmGB26aBmh7/HSR6AvU6nTonVZIwo2vyMdNr0
+         1aR895mCqBZZLL01K26jyBmCev/VoF+xJ8/PKwGXta9BzJrvMg3tPLeeShdZzfiLXZOV
+         rB/wecx7wOiZCaqh2ORsQfxK5wsnI8Q31NvBGQ1YP5yMFu6pC3TlNPLKNJL2tjYww7n1
+         S98g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683836243; x=1686428243;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=o3yFd0Z3WkTu4ff6EQ3UVzmE4FT+cDY8nxJOS33vY3M=;
+        b=F9rP3beOTkdBymZ7qSw5Ewa6yV8vkI9xbzxrIYeyNmeVT8ZEboUr237RSGzBTY1lAa
+         Fe+mXUCBA8AHnHVeAqibJWXsn6C0aNytVfJdglIEIRyIt020RnH0lTzzOsNXYSSMZky1
+         M1QyUjzEVSvZIoeoCXlmpY2U2q0MQxygcwzvy04omcSRlpr+lB0oWnKQTtbwd9Sq0Kna
+         wMS8OHAA/UdjAXzEPs0272AE5gHjboiaX/vXukDVZj1ao1xONXj9DBIScneVaxuh4TXD
+         I67w6vJTddb3VglBzSRXwr1gYmTfTm0kUBrBME1FENChU6HIiZgkMOfXIKd+cyFDCaVn
+         O4pw==
+X-Gm-Message-State: AC+VfDwflfLYKAuv9fymjlOexCDBRDtet4aSfciEuLrUS2LWE/Zwh9SD
+        h8LN80/YXFtP7PUdic4QDI0=
+X-Google-Smtp-Source: ACHHUZ60bvluRMfqGjeIfH67tu9UTIjdzm5Olcmw+CtDjzQtA9hK1sFgcrZ/qUrj6j1rQ/psI4+oYA==
+X-Received: by 2002:a17:906:4fd6:b0:94e:56c4:59f2 with SMTP id i22-20020a1709064fd600b0094e56c459f2mr19981370ejw.26.1683836242905;
+        Thu, 11 May 2023 13:17:22 -0700 (PDT)
+Received: from ?IPV6:2a01:c23:c58e:b900:c905:524d:7524:40e1? (dynamic-2a01-0c23-c58e-b900-c905-524d-7524-40e1.c23.pool.telefonica.de. [2a01:c23:c58e:b900:c905:524d:7524:40e1])
+        by smtp.googlemail.com with ESMTPSA id hf15-20020a1709072c4f00b008f89953b761sm4466209ejc.3.2023.05.11.13.17.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 13:17:22 -0700 (PDT)
+Message-ID: <7bb6e2c9-835c-c8d9-f8a5-baa3d3b03b12@gmail.com>
+Date:   Thu, 11 May 2023 22:17:18 +0200
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 91.19.173.220
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Content-Language: en-US
+To:     Lukas Wunner <lukas@wunner.de>
+Cc:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof Wilczy??ski <kw@linux.com>, nic_swsd@realtek.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230511131441.45704-1-ilpo.jarvinen@linux.intel.com>
+ <20230511131441.45704-15-ilpo.jarvinen@linux.intel.com>
+ <98b3b70a-86c0-78c0-b734-0764bb5a21fc@gmail.com>
+ <20230511200244.GA31598@wunner.de>
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH 14/17] r8169: Use pcie_lnkctl_clear_and_set() for changing
+ LNKCTL
+In-Reply-To: <20230511200244.GA31598@wunner.de>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,25 +87,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rich!
+On 11.05.2023 22:02, Lukas Wunner wrote:
+> On Thu, May 11, 2023 at 09:49:52PM +0200, Heiner Kallweit wrote:
+>> On 11.05.2023 15:14, Ilpo Järvinen wrote:
+>>> Don't assume that only the driver would be accessing LNKCTL. ASPM
+>>> policy changes can trigger write to LNKCTL outside of driver's control.
+>>>
+>>> Use pcie_lnkctl_clear_and_set() which does proper locking to avoid
+>>> losing concurrent updates to the register value.
+>>
+>> Wouldn't it be more appropriate to add proper locking to the
+>> underlying pcie_capability_clear_and_set_word()?
+> 
+> PCI config space accessors such as this one are also used in hot paths
+> (e.g. interrupt handlers).  They should be kept lean (and lockless)
 
-On Sat, 2023-05-06 at 12:56 -0400, Rich Felker wrote:
-> At one point I tried to rebase these to run on what was (at the time)
-> current, and had partial success -- I got it to start booting with DT
-> under qemu, but my work rebasing the PCI stuff had problems and IIRC
-> prevented getting virtio working -- it was crashing at that stage. If
-> there's interest I can see if I can dig up that rebased branch in case
-> it would be useful to look at. It probably has mistakes but might be a
-> start for looking at what changed out from under the patches that
-> needs to change.
+I *think* in case the system uses threaded interrupts you may need locking
+also in interrupt handlers.
 
-Yes, there is definitely interest. Apologies for the late reply, I wanted
-to send an answer earlier but it unfortunately went off my radar.
+> by default.  We only need locking for specific PCIe Extended Capabilities
+> which are concurrently accessed by PCI core code and drivers.
+> 
+> Thanks,
+> 
+> Lukas
 
-Adrian
-
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
