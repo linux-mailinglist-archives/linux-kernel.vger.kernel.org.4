@@ -2,126 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 255016FED38
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E046FED3C
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237602AbjEKH4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 03:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56186 "EHLO
+        id S237518AbjEKH5B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 03:57:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237691AbjEKH4B (ORCPT
+        with ESMTP id S231625AbjEKH46 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 03:56:01 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC0B4218
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:55:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C42F615F8
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 07:55:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69344C433A7
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 07:55:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683791752;
-        bh=Ee6CqD05l0SiT8ZITLwZUEkw+FY3HNQg9i3z6kZzgzU=;
-        h=In-Reply-To:References:From:Date:Subject:To:Cc:From;
-        b=QqtxcEeayyeWyqXpOcNbOf4PObo5zx3qTzh8+FMMRcBnh3t+/j5i8Y/jH4pJ6qUG+
-         aoqIzIFEuRrBhTqg/VWYZh1RfYwoNb1U8DkjMw/BvatJeOIa9Pba91z+PFkDI0KARr
-         C+XH6DFmLoLJ5BG43jAiJInZH4yxM+9CGuJa+X7oCZGWGvhy6A/vBI9EdWFCSEkUPn
-         wqJG6RQXxg4eq0iXQByOFrjbASw+/UCUmOGHlspRAgAZaHPiF06IWQzm/SSV92GoEa
-         rHhn8fMDvXOmEcJsSU0TifcxbMXSErjqsFRY9pDxwVI+kqKGcZyG+sfEjsb3/BFV0y
-         zpGJVUygB/o1A==
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-6ab1942ea59so1997265a34.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:55:52 -0700 (PDT)
-X-Gm-Message-State: AC+VfDyOpSqOhMqA8ZOvTdLaHd+RV85E03gCYWpxE6hOQdEisIgCvbU1
-        qqkei56wzxT+r8q5UsanJ66UfeBml+7AHpH45UI=
-X-Google-Smtp-Source: ACHHUZ5QKdyusQlNfoFEyVt6NvreH/pSCh28lVRQWt6epudEY9lAaqfFuSFNQnOTc/oRcnX2Kz7QQhcoMgFZjLRqCSA=
-X-Received: by 2002:aca:1c1a:0:b0:386:9720:77da with SMTP id
- c26-20020aca1c1a000000b00386972077damr3978338oic.26.1683791751414; Thu, 11
- May 2023 00:55:51 -0700 (PDT)
+        Thu, 11 May 2023 03:56:58 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1BB6269E
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:56:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+CGH7YHU79D1x2zo+JX/L+1Yeo4Kpnw8RAg9mt4T5fI=; b=JaYNfxN6UpDjkg5TCFsg9BwlN+
+        c3txs50rIc3hX+JmCPER1Hf2OJ0PvJ42OxnSzvJ0Vbi2Mta7+67wKYBtcaDiQmphbwPBIJ3GZEr5m
+        zZlA0Sy/tUFu4dFj327ul1jgXZhqfOJ2HcaSXe2NzKlloGT5etzz4BaWeV4u7zZHeFe+BOhyCIZZV
+        DBHeUz2iirtSu7ToxV5lgyWz+5QtGJJ7fd7I9qmEtdvZWpKosNwMZQ/VuhYRBPBfji7KY+5vSBLs3
+        TpPTaXhpTweZBq8I+hJKrv3Yh/wC7S5t59n+xdZScabJ9jlSJ0DBAjL0YpZJp9FuQKLJswTHJ+uzG
+        AXpqQ42A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1px1AA-008AyE-2u;
+        Thu, 11 May 2023 07:56:35 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B7948300023;
+        Thu, 11 May 2023 09:56:32 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 5D70C235CC442; Thu, 11 May 2023 09:56:32 +0200 (CEST)
+Date:   Thu, 11 May 2023 09:56:32 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Andrei Vagin <avagin@openvz.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        Pavel Emelyanov <xemul@openvz.org>
+Subject: Re: [RFD] posix-timers: CRIU woes
+Message-ID: <20230511075632.GR4253@hirez.programming.kicks-ass.net>
+References: <ZFUXrCZtWyNG3Esi@lothringen>
+ <87zg6i2xn3.ffs@tglx>
+ <87v8h62vwp.ffs@tglx>
+ <878rdy32ri.ffs@tglx>
+ <87v8h126p2.ffs@tglx>
+ <875y911xeg.ffs@tglx>
+ <87ednpyyeo.ffs@tglx>
+ <009e7658-1377-cc79-7a42-4dda8fec5af0@virtuozzo.com>
+ <87wn1gy4e6.ffs@tglx>
+ <005a944c-ed2e-6010-a534-26d5947402da@virtuozzo.com>
 MIME-Version: 1.0
-Received: by 2002:a8a:290:0:b0:4da:311c:525d with HTTP; Thu, 11 May 2023
- 00:55:50 -0700 (PDT)
-In-Reply-To: <20220829150309.GA26122@Negi>
-References: <20220727001513.11902-1-soumya.negi97@gmail.com> <20220829150309.GA26122@Negi>
-From:   Namjae Jeon <linkinjeon@kernel.org>
-Date:   Thu, 11 May 2023 16:55:50 +0900
-X-Gmail-Original-Message-ID: <CAKYAXd-Aizt2Ffz33ZRWp42Q51-Bs09cwvgXOidmiABaKmcKHA@mail.gmail.com>
-Message-ID: <CAKYAXd-Aizt2Ffz33ZRWp42Q51-Bs09cwvgXOidmiABaKmcKHA@mail.gmail.com>
-Subject: Re: [PATCH v2] ntfs: Ensure $Extend is a directory
-To:     Soumya Negi <soumya.negi97@gmail.com>
-Cc:     Anton Altaparmakov <anton@tuxera.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        linux-ntfs-dev@lists.sourceforge.net, linux-kernel@vger.kernel.org,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        Christian Brauner <brauner@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <005a944c-ed2e-6010-a534-26d5947402da@virtuozzo.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022-08-30 0:03 GMT+09:00, Soumya Negi <soumya.negi97@gmail.com>:
-> On Tue, Jul 26, 2022 at 05:15:13PM -0700, Soumya Negi wrote:
->> Fix Syzbot bug: kernel BUG in ntfs_lookup_inode_by_name
->> https://syzkaller.appspot.com/bug?id=32cf53b48c1846ffc25a185a2e92e170d1a95d71
->>
->> Check whether $Extend is a directory or not( for NTFS3.0+) while
->> loading system files. If it isn't(as in the case of this bug where the
->> mft record for $Extend contains a regular file), load_system_files()
->> returns false.
->>
->> Reported-by: syzbot+30b7f850c6d98ea461d2@syzkaller.appspotmail.com
->> CC: stable@vger.kernel.org # 4.9+
->> Signed-off-by: Soumya Negi <soumya.negi97@gmail.com>
->> ---
->> Changes since v1:
->> * Added CC tag for stable
->> * Formatted changelog to fit within 72 cols
->>
->> ---
->>  fs/ntfs/super.c | 9 +++++++--
->>  1 file changed, 7 insertions(+), 2 deletions(-)
->>
->> diff --git a/fs/ntfs/super.c b/fs/ntfs/super.c
->> index 5ae8de09b271..18e2902531f9 100644
->> --- a/fs/ntfs/super.c
->> +++ b/fs/ntfs/super.c
->> @@ -2092,10 +2092,15 @@ static bool load_system_files(ntfs_volume *vol)
->>  	// TODO: Initialize security.
->>  	/* Get the extended system files' directory inode. */
->>  	vol->extend_ino = ntfs_iget(sb, FILE_Extend);
->> -	if (IS_ERR(vol->extend_ino) || is_bad_inode(vol->extend_ino)) {
->> +	if (IS_ERR(vol->extend_ino) || is_bad_inode(vol->extend_ino) ||
->> +	    !S_ISDIR(vol->extend_ino->i_mode)) {
->> +		static const char *es1 = "$Extend is not a directory";
->> +		static const char *es2 = "Failed to load $Extend";
->> +		const char *es = !S_ISDIR(vol->extend_ino->i_mode) ? es1 : es2;
->> +
->>  		if (!IS_ERR(vol->extend_ino))
->>  			iput(vol->extend_ino);
->> -		ntfs_error(sb, "Failed to load $Extend.");
->> +		ntfs_error(sb, "%s.", es);
->>  		goto iput_sec_err_out;
->>  	}
->>  #ifdef NTFS_RW
->> --
->> 2.17.1
->
-> Hi Anton,
-> Have you had a chance to look at this patch?
-Hi,
+On Thu, May 11, 2023 at 12:12:32PM +0800, Pavel Tikhomirov wrote:
+> Not sure how kernel memory consumption increases with sparse timer IDs,
+> global hashtable (posix_timers_hashtable) is the same size anyway, entries
+> in hlists can be distributed differently as hash depends on id directly but
+> we have same number of entries. Probably I miss something, why do we need
+> dense IDs?
 
-Could you elaborate more ? Isn't MFT_RECORD_IS_DIRECTORY flags set in
-mft record of $Extend ?
-
-> Thanks,
-> Soumya
->
->
+The proposal was to remove the global hash and use a signal_struct based
+xarray instead.
