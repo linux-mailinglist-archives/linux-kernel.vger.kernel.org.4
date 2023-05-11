@@ -2,162 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6649A6FEACD
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 06:39:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 691B06FEAD1
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 06:40:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236759AbjEKEjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 00:39:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56376 "EHLO
+        id S236782AbjEKEj6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 00:39:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236620AbjEKEjD (ORCPT
+        with ESMTP id S236915AbjEKEjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 00:39:03 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AFF94C3E;
-        Wed, 10 May 2023 21:39:00 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-6439d505274so4797565b3a.0;
-        Wed, 10 May 2023 21:39:00 -0700 (PDT)
+        Thu, 11 May 2023 00:39:52 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3726444B8
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 21:39:51 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id 2adb3069b0e04-4ec8eca56cfso9047179e87.0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 21:39:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683779940; x=1686371940;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NfPVn5olpqaJ9gF1uVFBdyzllvA5roFYhnWM8hmvvQs=;
-        b=CM2a/lbq36x13q65iqDwkGGnCpC6151bIAR/XQPvlA8z+Y6wKEd+Nha4w5xrFs44c1
-         H3TY0uUqVGkNT5yVmPS25lxl0Ta9fTqjSwH+v6Anb+zWV3xkwqA0cT1fGAZdxKPX70oP
-         4P79mAd17GqG/uU2P4h8nS47QRJK0omdBXdfRZ2WcCuFKBvC8ZCenZa/Zj2x6h9gQuyK
-         8hZ1kwDHppvJ6rKpsYi7uB20mAyMvlm539JG9spgQZLJjP0lkGsrtV0L1UVqAoPhPCRi
-         kLVkXxtEfOFsSbZFceOA+USKon1SCIEghEDU3aBULWHRHWX61zVmQui0mRm/2Gek26AT
-         QA0g==
+        d=linaro.org; s=google; t=1683779989; x=1686371989;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RQLVQkJFQ/faBhReu2ueMCnuIL91erqtpVqo/xwpkJA=;
+        b=D4lhAg7XBxsQvcgiGqj2A2Pe7cz2On2AVz9DbCfrPHcv5Dh+DhMWrSVMWG6k1lPhkZ
+         ODBX+x2DkOQpouMBuON+g7kVOf3ETKJ3Hu58IemXW9WVL9Bf1vvZLjNPU72KqftDQtu7
+         cpiRZAZ6GMk4KBuLyj3klfr2ERw7WV+tfcqQH0jRJcs/7pDfpUXrq4w9G4/ex6U+BP0i
+         L+8oQAfAC0Dz9nuEFD8ZJwhLDDGKhx9+Ra7CWIAOEhWD3LtvtCw0YR8Slz5+9vdq43jo
+         0O2/cRkr1gRINCTwSO0xH2psg5uhW0J9yI++K9OHbNt2M4bULuqJHjo2ibe4esh7I0Kb
+         5cVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683779940; x=1686371940;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NfPVn5olpqaJ9gF1uVFBdyzllvA5roFYhnWM8hmvvQs=;
-        b=ZnCPgmKEfRtB6KUIL2OdfpkIGrTl6wI8TSTp1KOyQpN3GvXUODwIRepY42ZEh9D2I6
-         3Y5bb5bRVAu1LXoiIoSTU3mRLbgmu7NKwb0MF+n5WnVUx5KHTUQ77XT3mv7+3db0KzEz
-         q+Tqiptq9B8zr+pmYSRyw/pAZ5Q0PHxXxvRcsfE3zjd6jrrD+xGL1WC5Vq72dhHZeer2
-         M4E8uDgPG7jTq9z+UiLw4wadUxg256rEGkIj6E5ARhbQ4LuPsP5y7hPLjv4nVUWqvuMs
-         AKKMmYpqQk6wu7SMjQF5WmA1DN8JUqjKZPZTOzZVj7W858i/0WoHh9hfPS+gWLz5e/d/
-         94ww==
-X-Gm-Message-State: AC+VfDzDol05Umo/2AG/3vgjMQZ4dyDBheNN9oVo0UuH9wadBhpGuM5U
-        MEydZmnXUA4NoUiL7tEa+bE=
-X-Google-Smtp-Source: ACHHUZ5sRVAXm3qGSvE+1Rday563eVVSMrEr5tsVUTa4o9ro6yWRvwUwJUnRr1BQi0R40oBd8GQIOg==
-X-Received: by 2002:a05:6a20:7d8d:b0:101:166:863f with SMTP id v13-20020a056a207d8d00b001010166863fmr13020204pzj.23.1683779939585;
-        Wed, 10 May 2023 21:38:59 -0700 (PDT)
-Received: from debian.me (subs09a-223-255-225-70.three.co.id. [223.255.225.70])
-        by smtp.gmail.com with ESMTPSA id h5-20020a62b405000000b0063932e36437sm4319779pfn.134.2023.05.10.21.38.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 21:38:59 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 852CF106772; Thu, 11 May 2023 11:38:55 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Linux Keyrings <keyrings@vger.kernel.org>,
-        Linux Kernel Build System <linux-kbuild@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: [PATCH] Documentation: module-signing: Mention default_x509.genkey template
-Date:   Thu, 11 May 2023 11:38:52 +0700
-Message-Id: <20230511043852.25803-1-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        d=1e100.net; s=20221208; t=1683779989; x=1686371989;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RQLVQkJFQ/faBhReu2ueMCnuIL91erqtpVqo/xwpkJA=;
+        b=ixAanuLO580j35AVQC9UXiFqWcuLiX5eToIVgIfkPL5QAY+QtRZIMIq7mVhXOA9adh
+         /pgvrpNwfuwM3O8Bh8PgSaUqA0Db6LrMRLs7IlN1YlUXwZZJrPrDf4FglsS3p0N2X8F4
+         HFWi6Of9G2YU6haoH+8ByrSocIQUNegbfd81Cmlv68IY3CtPR1/FVHWyB7zdvX1Rccxh
+         X59TmzGGE232F40iyVcSRKt568PmO2zBJKM7t/4JooK6Dl2OEKqWZA5J78OW9dPu0qh7
+         a52qURGux9ldnG9M+Wtk9S9/jBshdK+KGB2OMGQZcpUqZrv0ipqYlC91exCtHccXAWRz
+         61RA==
+X-Gm-Message-State: AC+VfDxnGPw6P8IMM+qRyLuCrTJqSiapvblTeMk1THQJgJfrIrjOaZGL
+        odJrTn83KIKkrOFF5xrZn23sxg==
+X-Google-Smtp-Source: ACHHUZ6lH8Hu+PVvErghf0IC43biqp7n5FEPCrQxf3iBmTdwCKHD7ha7oZ50swemwg0PykcylFrJhQ==
+X-Received: by 2002:ac2:4e63:0:b0:4f0:1a32:ca23 with SMTP id y3-20020ac24e63000000b004f01a32ca23mr2342580lfs.40.1683779989399;
+        Wed, 10 May 2023 21:39:49 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id h7-20020a05651211c700b004f1430ee142sm965115lfr.17.2023.05.10.21.39.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 21:39:48 -0700 (PDT)
+Message-ID: <a6146d03-18d1-b1c6-cdbb-d3527cb9021a@linaro.org>
+Date:   Thu, 11 May 2023 07:39:48 +0300
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3450; i=bagasdotme@gmail.com; h=from:subject; bh=KYJZUTwEc47lOKWrdoWj83OI1aAJrI5PpPp4KRuKUhk=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCkxhaGrj8yYspKtJX1CWdIUEetLucbtZXt6eTLdr7HES +7adFm0o5SFQYyLQVZMkWVSIl/T6V1GIhfa1zrCzGFlAhnCwMUpABNx2M7I0N/T/uBeTb02h/0B udttJ9kfN3zfqZY6mUlK04/lfrDTeob/MT9z2xM/nS3QbfLYp3zgzsJn9cwyj55te7D+ew7/mY1 3WQA=
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 2/8] drm/msm/dpu: add DPU_PINGPONG_DSC feature bit for
+ DPU < 7.0.0
+Content-Language: en-GB
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org
+Cc:     quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
+        marijn.suijten@somainline.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1683756453-22050-1-git-send-email-quic_khsieh@quicinc.com>
+ <1683756453-22050-3-git-send-email-quic_khsieh@quicinc.com>
+ <b4438422-f24b-7fc1-18cf-3cebdd777530@linaro.org>
+ <1a6109ae-7c83-c04e-60c9-dfca6b83d662@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1a6109ae-7c83-c04e-60c9-dfca6b83d662@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit f3a2ba44e93e2c ("certs: check-in the default x509 config file")
-adds default x509 keypair config file template, but forgets to mention
-it in kernel module signing documentation. Update the doc accordingly.
+On 11/05/2023 07:38, Abhinav Kumar wrote:
+> 
+> 
+> On 5/10/2023 9:29 PM, Dmitry Baryshkov wrote:
+>> On 11/05/2023 01:07, Kuogee Hsieh wrote:
+>>> DPU < 7.0.0 requires the PINGPONG block to be involved during
+>>> DSC setting up. Since DPU >= 7.0.0, enabling and starting the DSC
+>>> encoder engine moved to INTF with the help of the flush mechanism.
+>>
+>> Nit: was moved.
+>>
+>>> Add a DPU_PINGPONG_DSC feature bit to restrict the availability of
+>>> dpu_hw_pp_setup_dsc() and dpu_hw_pp_dsc_{enable,disable}() on the
+>>> PINGPONG block to DPU < 7.0.0 hardware, as the registers are not
+>>> available [in the PINGPONG block] on DPU 7.0.0 and higher anymore.
+>>
+>> this looks good
+>>
+>>> Existing call-sites to these callbacks already skip calling into
+>>> them if the function pointer is NULL.
+>>
+>> This is more relevant for patch 3 commit message.
+>>
+>>> Add DPU_PINGPONG_DSC feature
+>>> bit to all chipset with DPU < 7.0.0.
+>>
+>> This is incorrect, as we do not change the catalog in this patch.
+>>
+> 
+> Sorry but why not? The changes done to dpu_hw_catalog.c do exactly that.
 
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- Documentation/admin-guide/module-signing.rst | 41 ++++++++------------
- 1 file changed, 17 insertions(+), 24 deletions(-)
+Because the patch does not add this feature bit to any of the chipsets. 
+I think the relevant patch was lost somewhere during the rework/rebase.
 
-diff --git a/Documentation/admin-guide/module-signing.rst b/Documentation/admin-guide/module-signing.rst
-index 7d7c7c8a545ca6..365d60a6245f17 100644
---- a/Documentation/admin-guide/module-signing.rst
-+++ b/Documentation/admin-guide/module-signing.rst
-@@ -133,46 +133,39 @@ kernel so that it can be used to check the signatures as the modules are
- loaded.
- 
- Under normal conditions, when ``CONFIG_MODULE_SIG_KEY`` is unchanged from its
--default, the kernel build will automatically generate a new keypair using
--openssl if one does not exist in the file::
--
--	certs/signing_key.pem
--
-+default, the kernel build will automatically generate a new keypair in
-+``certs/signing_key.pem`` using openssl if it doesn't exist,
- during the building of vmlinux (the public part of the key needs to be built
--into vmlinux) using parameters in the::
--
--	certs/x509.genkey
--
-+into vmlinux) using parameters in the ``certs/x509.genkey`` configuration
- file (which is also generated if it does not already exist).
- 
--It is strongly recommended that you provide your own x509.genkey file.
--
--Most notably, in the x509.genkey file, the req_distinguished_name section
--should be altered from the default::
-+If you'd like to provide alternative configuration, copy
-+``certs/default_x509.genkey`` to ``certs/x509.genkey`` and edit the copy
-+instead. Most likely, you will want to edit the ``req_distinguished_name``
-+section, which identifies the resulting keypair. For example::
- 
- 	[ req_distinguished_name ]
--	#O = Unspecified company
--	CN = Build time autogenerated kernel key
--	#emailAddress = unspecified.user@unspecified.company
-+	O = Example company
-+	CN = Example kernel build
-+	emailAddress = user@example.com
- 
- The generated RSA key size can also be set with::
- 
- 	[ req ]
- 	default_bits = 4096
- 
--
--It is also possible to manually generate the key private/public files using the
--x509.genkey key generation configuration file in the root node of the Linux
--kernel sources tree and the openssl command.  The following is an example to
--generate the public/private key files::
-+Optionally, you can also manually generate the keypair so that the same
-+keypair can be used in multiple builds. To generate it::
- 
- 	openssl req -new -nodes -utf8 -sha256 -days 36500 -batch -x509 \
- 	   -config x509.genkey -outform PEM -out kernel_key.pem \
- 	   -keyout kernel_key.pem
- 
--The full pathname for the resulting kernel_key.pem file can then be specified
--in the ``CONFIG_MODULE_SIG_KEY`` option, and the certificate and key therein will
--be used instead of an autogenerated keypair.
-+See :manpage:`openssl-req(1)` for the explanation.
-+
-+The full pathname for the resulting ``kernel_key.pem`` file can then be
-+specified in the ``CONFIG_MODULE_SIG_KEY`` option, and the certificate and key
-+therein will be used instead of an autogenerated keypair.
- 
- 
- =========================
 
-base-commit: ac9a78681b921877518763ba0e89202254349d1b
+
 -- 
-An old man doll... just what I always wanted! - Clara
+With best wishes
+Dmitry
 
