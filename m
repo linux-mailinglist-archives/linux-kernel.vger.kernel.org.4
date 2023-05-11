@@ -2,144 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28D7A6FF89F
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 19:37:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74CF66FF8A0
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 19:38:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238084AbjEKRhU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 13:37:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
+        id S238995AbjEKRir (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 13:38:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238726AbjEKRhR (ORCPT
+        with ESMTP id S238035AbjEKRio (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 13:37:17 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83F196EA1;
-        Thu, 11 May 2023 10:36:53 -0700 (PDT)
+        Thu, 11 May 2023 13:38:44 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A13F3A90
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 10:38:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683826614; x=1715362614;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=9apNON2HayPVUNwneb8oHhRTLdSk+kuKVsHWIPL5d58=;
-  b=ApLnp+cG/htFQdEXZT/fu38YXR3c5QoNfsTkdvAiZwKOaMYVDGNEOigw
-   2q8ox/E6NQv8dKN6+FwxRvBtOaOw2WtU+56LXo1dJFPX927inIbHAx/wr
-   WjGKL+18DZqoXF6hsq1+75ElXAZ9pC45tIAIoVYYqOEAOIzknfrPz13IL
-   5ntpHarIJkxquaJ7as8cX+1P+qJnb8gqS/LTWnP0Flx6SxQcbc8Z8AqR8
-   thztGzXLLdaTlbnLI9yTfVR4ojjWqVPlp4O1V2mRNy7wz1p69pR027yJj
-   f8i+IheF4EijfE7+ICPbI7aMfpX+tGDBvgeIMF06xBa9EqSiMdQLEPNZF
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="330932331"
+  t=1683826723; x=1715362723;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=h1UYVgea54dYa799BBbGISzq4gL2FTA4p+QIZ9Ceb70=;
+  b=ZT00hTLm8nM/DZkI6DGNVm2HZSOK353wSc9VgTLcQunm1Q8/ByBHPZBi
+   EpPAvvi4PTzrrT9DlEMVMMlR0/LwsYVPG2PfpI29slLqYeAq6pE6/balw
+   AX2AVgSnJnYWT0T2aYVPEepRpjH1M8E9r/8RHy9wFLwrzrXjr3W7bNA6n
+   3xYDLx/ZrJbjGmlOzO3p4+BDCJNV5Uh6IxHuH9P+DQQoU1tEXFAVQ6Nll
+   8my4o/XVvhl97wt5bIXTPWG68+zkXXfugQQW92CCHe2+zh0kLlUgyy2BW
+   1FpqJksVfl+JF5Ij6uM4WvhifkqCLnfRqAyfdJX9woRmCFMfFde++vX8h
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="349416910"
 X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
-   d="scan'208";a="330932331"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 10:35:55 -0700
+   d="scan'208";a="349416910"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 10:38:43 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="730463586"
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="789472567"
 X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
-   d="scan'208";a="730463586"
-Received: from jsanche3-mobl1.ger.corp.intel.com ([10.252.39.112])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 10:35:51 -0700
-Date:   Thu, 11 May 2023 20:35:48 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-cc:     linux-pci@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?ISO-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 01/17] PCI: Add concurrency safe clear_and_set variants
- for LNKCTL{,2}
-In-Reply-To: <ZF0P2hedTFXPv8IK@bhelgaas>
-Message-ID: <5140259d-4425-3166-438a-bc9fbbaa49f9@linux.intel.com>
-References: <ZF0P2hedTFXPv8IK@bhelgaas>
+   d="scan'208";a="789472567"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 11 May 2023 10:38:40 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pxAFU-0004A3-0s;
+        Thu, 11 May 2023 17:38:40 +0000
+Date:   Fri, 12 May 2023 01:37:52 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Ryan Roberts <ryan.roberts@arm.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        SeongJae Park <sj@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Ryan Roberts <ryan.roberts@arm.com>,
+        linux-kernel@vger.kernel.org, damon@lists.linux.dev
+Subject: Re: [RESEND PATCH v1 5/5] mm: ptep_deref() conversion
+Message-ID: <202305120142.yXsNEo6H-lkp@intel.com>
+References: <20230511132113.80196-6-ryan.roberts@arm.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323329-1704685674-1683825428=:1900"
-Content-ID: <8185a32d-d6e3-5273-2777-a48ebb2f4a5a@linux.intel.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511132113.80196-6-ryan.roberts@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi Ryan,
 
---8323329-1704685674-1683825428=:1900
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
-Content-ID: <eaf4a3e3-e929-4154-99b5-f0e7a3c58625@linux.intel.com>
+kernel test robot noticed the following build errors:
 
-On Thu, 11 May 2023, Bjorn Helgaas wrote:
+[auto build test ERROR on akpm-mm/mm-everything]
+[also build test ERROR on sj/damon/next drm-intel/for-linux-next-fixes char-misc/char-misc-testing char-misc/char-misc-next char-misc/char-misc-linus tip/perf/core kvm/queue linus/master v6.4-rc1 next-20230511]
+[cannot apply to drm-intel/for-linux-next awilliam-vfio/next awilliam-vfio/for-linus xen-tip/linux-next acme/perf/core kvm/linux-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> On Thu, May 11, 2023 at 04:14:25PM +0300, Ilpo Järvinen wrote:
-> > A few places write LNKCTL and LNKCTL2 registers without proper
-> > concurrency control and this could result in losing the changes
-> > one of the writers intended to make.
-> > 
-> > Add pcie_capability_clear_and_set_word_locked() and helpers to use it
-> > with LNKCTL and LNKCTL2. The concurrency control is provided using a
-> > spinlock in the struct pci_dev.
-> > 
-> > Suggested-by: Lukas Wunner <lukas@wunner.de>
-> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> 
-> Thanks for raising this issue!  Definitely looks like something that
-> needs attention.
-> 
-> > ---
-> >  drivers/pci/access.c | 14 ++++++++++++++
-> >  drivers/pci/probe.c  |  1 +
-> >  include/linux/pci.h  | 17 +++++++++++++++++
-> >  3 files changed, 32 insertions(+)
-> > 
-> > diff --git a/drivers/pci/access.c b/drivers/pci/access.c
-> > index 3c230ca3de58..d92a3daadd0c 100644
-> > --- a/drivers/pci/access.c
-> > +++ b/drivers/pci/access.c
-> > @@ -531,6 +531,20 @@ int pcie_capability_clear_and_set_dword(struct pci_dev *dev, int pos,
-> >  }
-> >  EXPORT_SYMBOL(pcie_capability_clear_and_set_dword);
-> >  
-> > +int pcie_capability_clear_and_set_word_locked(struct pci_dev *dev, int pos,
-> > +					      u16 clear, u16 set)
-> > +{
-> > +	unsigned long flags;
-> > +	int ret;
-> > +
-> > +	spin_lock_irqsave(&dev->cap_lock, flags);
-> > +	ret = pcie_capability_clear_and_set_word(dev, pos, clear, set);
-> > +	spin_unlock_irqrestore(&dev->cap_lock, flags);
-> > +
-> > +	return ret;
-> > +}
-> > +EXPORT_SYMBOL(pcie_capability_clear_and_set_word_locked);
-> 
-> I didn't see the prior discussion with Lukas, so maybe this was
-> answered there, but is there any reason not to add locking to
-> pcie_capability_clear_and_set_word() and friends directly?  
->
-> It would be nice to avoid having to decide whether to use the locked
-> or unlocked versions.  It would also be nice to preserve the use of
-> PCI_EXP_LNKCTL directly, for grep purposes.  And it would obviate the
-> need for some of these patches, e.g., the use of
-> pcie_capability_clear_word(), where it's not obvious at the call site
-> why a change is needed.
+url:    https://github.com/intel-lab-lkp/linux/commits/Ryan-Roberts/mm-vmalloc-must-set-pte-via-arch-code/20230511-213826
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/20230511132113.80196-6-ryan.roberts%40arm.com
+patch subject: [RESEND PATCH v1 5/5] mm: ptep_deref() conversion
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20230512/202305120142.yXsNEo6H-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6cb99aca1b207cdf4f320eec14447bdc654b51df
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Ryan-Roberts/mm-vmalloc-must-set-pte-via-arch-code/20230511-213826
+        git checkout 6cb99aca1b207cdf4f320eec14447bdc654b51df
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash fs/
 
-There wasn't that big discussion about it (internally). I brought both
-alternatives up and Lukas just said he didn't know what's the best 
-approach (+ gave a weak nudge towards the separate accessor so I went 
-with it to make forward progress). Based on that I don't think he had a 
-strong opinion on it.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305120142.yXsNEo6H-lkp@intel.com/
 
-I'm certainly fine to just use it in the normal accessor functions that 
-do RMW and add the locking there. It would certainly have to those good 
-sides you mentioned.
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/migrate.h:8,
+                    from fs/nfs/write.c:17:
+   include/linux/hugetlb.h: In function 'huge_ptep_clear_flush':
+>> include/linux/hugetlb.h:1203:16: error: implicit declaration of function 'ptep_deref' [-Werror=implicit-function-declaration]
+    1203 |         return ptep_deref(ptep);
+         |                ^~~~~~~~~~
+>> include/linux/hugetlb.h:1203:16: error: incompatible types when returning type 'int' but 'pte_t' was expected
+    1203 |         return ptep_deref(ptep);
+         |                ^~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+--
+   In file included from fs/proc/meminfo.c:6:
+   include/linux/hugetlb.h: In function 'huge_ptep_clear_flush':
+>> include/linux/hugetlb.h:1203:16: error: implicit declaration of function 'ptep_deref' [-Werror=implicit-function-declaration]
+    1203 |         return ptep_deref(ptep);
+         |                ^~~~~~~~~~
+>> include/linux/hugetlb.h:1203:16: error: incompatible types when returning type 'int' but 'pte_t' was expected
+    1203 |         return ptep_deref(ptep);
+         |                ^~~~~~~~~~~~~~~~
+   fs/proc/meminfo.c: At top level:
+   fs/proc/meminfo.c:23:28: warning: no previous prototype for 'arch_report_meminfo' [-Wmissing-prototypes]
+      23 | void __attribute__((weak)) arch_report_meminfo(struct seq_file *m)
+         |                            ^~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +/ptep_deref +1203 include/linux/hugetlb.h
+
+  1199	
+  1200	static inline pte_t huge_ptep_clear_flush(struct vm_area_struct *vma,
+  1201						  unsigned long addr, pte_t *ptep)
+  1202	{
+> 1203		return ptep_deref(ptep);
+  1204	}
+  1205	
 
 -- 
- i.
---8323329-1704685674-1683825428=:1900--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
