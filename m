@@ -2,194 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1056FE92A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:16:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5FFB6FE959
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236852AbjEKBQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 21:16:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
+        id S236486AbjEKBYf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 21:24:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231313AbjEKBQq (ORCPT
+        with ESMTP id S229500AbjEKBYc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 21:16:46 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DE7E10CF;
-        Wed, 10 May 2023 18:16:44 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4ecb137af7eso9033824e87.2;
-        Wed, 10 May 2023 18:16:44 -0700 (PDT)
+        Wed, 10 May 2023 21:24:32 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03EC32D53;
+        Wed, 10 May 2023 18:24:31 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-965cc5170bdso1169220366b.2;
+        Wed, 10 May 2023 18:24:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683768269; x=1686360269;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VtbFuN3sw5A4xlLHEXKg8dMxvjNkGg9uDaGYFlhrrNs=;
+        b=qKeuSu2RxQdE7VjMcmlq0GQ/pw2gqcPmLE/UYZNPn+0Odr6sflDM0sSuFhvOJNDZoh
+         hj4QHy7ILYhaxgnrqLzBE8nCEjxcTe/kw87Ct1Y5PDfFNEYAgXcb0fLY+Wopza9jk3CA
+         8R073JONi5Aa+SQDP7mIOrf54ad+ntuJuPiWc061E+7eu3pb/BE2qSCK9Z3AHEFJAmU3
+         ro9Vc41AZmyZlo4K7/RcItWj/c57lwvLmqky7nJeFUFRfAnHmS4O2SkXXrTnkUdwwEZG
+         8/Rhmtn525K6gl4mabg4At8CND8u9xt6e74HD8juzKlL2Naetas/o7bfYxRjzHUzhCrR
+         lihg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683767802; x=1686359802;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:dkim-signature:dkim-signature
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6ZX3gBpj+yVowR5nZi0Lljy6ylvdGKms7Iq3ArHA/fk=;
-        b=hdO+lGi1gMkObZQ/7g9OhwH2V7dSNOhRaTPDAkQngKvMAi1Q7DDSc+zX9BhrFMvoKn
-         irFEoI/Mgsw930Dppz5WXALao4vmBQd8g4tFVviP+nJb+6e1IfjGtZQ+gsBsS/zNEtZU
-         Qm9OsxkQ9jxZawtN/qLi6qKk8Y8qcu5ilGxYDemuSzzaBkmX8VYgrYqxAQn6Fpb9ANHI
-         zYfvLn2ccCwjDQtBg6DHHukZi3w8Cdpl8z6sQvH6dKaDd0SurYSeXwdpTOdiXMYdaX9F
-         Sk8HNz6SnWGFcP1iRVcRv2kIJMn5bsSqbf31b/3++CWTKzKvWWuPo9awhqm1CGHioRbv
-         Zmaw==
-X-Gm-Message-State: AC+VfDwFpIKRGXdywagSXncvjnaNyCythF4e3tmk3ahliJEX9TZ8Ow6m
-        yPZ5ZiOixzduvc3+xcC+xrsqb7A8WiUq7LD1
-X-Google-Smtp-Source: ACHHUZ7PfJesGSVBHVyKaWM1ZJogQTQl0bO3v8WNLP3wXF9WJo+uC0BYEibRlAqz4bkoy0VNj3VHPg==
-X-Received: by 2002:a05:6512:390c:b0:4db:2ab7:43e6 with SMTP id a12-20020a056512390c00b004db2ab743e6mr2342463lfu.44.1683767802595;
-        Wed, 10 May 2023 18:16:42 -0700 (PDT)
-Received: from flawful.org (c-fcf6e255.011-101-6d6c6d3.bbcust.telenor.se. [85.226.246.252])
-        by smtp.gmail.com with ESMTPSA id k4-20020ac24564000000b004edc3f06f5csm905972lfm.296.2023.05.10.18.16.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 18:16:42 -0700 (PDT)
-Received: by flawful.org (Postfix, from userid 112)
-        id 714903B3; Thu, 11 May 2023 03:16:41 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=flawful.org; s=mail;
-        t=1683767801; bh=9YKrOYnwOUN5w6yC/X1JkyB0eGmZBase1QavC726ui8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cZ/o1MSRLegoY4FOQvQDLwikRnqhl8cwuIflPIzQu4HzREjshtzOCMjwn3w9MSDXG
-         MuziwFL+VOCExnbHqJjno/7QGu7/5lk+9ujJ0HS7Zw1MfsTIhKzKcgOVxcfSiQKBq/
-         qILY9ICN/ps4WMyBT0CafoK1eMAjXKJgphx0RGWE=
+        d=1e100.net; s=20221208; t=1683768269; x=1686360269;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VtbFuN3sw5A4xlLHEXKg8dMxvjNkGg9uDaGYFlhrrNs=;
+        b=KtjRbbHPAboN8YwJG2lsUE4kGSaWrYAJC8+pImx5QhMjXyXRbpkEahXUQ//Zk9io2p
+         Z7ZQtzDTMtfptfO5qDpPZ8b3BRvBweJrjns+PZtTY3edQh5V4X8atGeI7Lt7ZV/1FYdC
+         0wuHVX4TY3DsaeS8B/xMA8ihZUfIi8QN5V2NnjFPmZqo8rHUrdMhgvkp3EudDOoc5tyP
+         YIM5gJbL06jVaj6INPJhrTFifKZDfZGWHLEtkuMSE+V4rdMF5ALQb9ShwAYB0hEoGZro
+         grBMnGP+xoEBpCu8hJE9m1QpSzewQyKdK/gv+xzS3hLxFau9NcXbLVsO2rRjSaRzJ/hU
+         mtBg==
+X-Gm-Message-State: AC+VfDwiI7+rPKshGumFMb2UZpIQ+75DKHKtVJxsnOvl3I7wb+CbB7zl
+        oU8UO7cCG/Wn87Ok2ZHiQPmrmp2vFUfYVuXWk5Q=
+X-Google-Smtp-Source: ACHHUZ5SVtkBkwVTkMpRgi9RzuNlJDHLpJkVBhBmwiO5o64zcubAk4+WUX160MQZpIt2vySGn2gi2h/rt2yUUdmWM/Y=
+X-Received: by 2002:a17:907:97d2:b0:968:1102:1fb7 with SMTP id
+ js18-20020a17090797d200b0096811021fb7mr11166653ejc.6.1683768269268; Wed, 10
+ May 2023 18:24:29 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230510122045.2259-1-zegao@tencent.com> <6308b8e0-8a54-e574-a312-0a97cfbf810c@meta.com>
+ <ZFvUH+p0ebcgnwEg@krava> <1195c4bd-ef54-2f1d-b079-2a11af42c62f@meta.com> <89159b33-3be4-487b-7647-0cbbd20c233d@meta.com>
+In-Reply-To: <89159b33-3be4-487b-7647-0cbbd20c233d@meta.com>
+From:   Ze Gao <zegao2021@gmail.com>
+Date:   Thu, 11 May 2023 09:24:18 +0800
+Message-ID: <CAD8CoPBzqih=0YxumRtywvSLs0aHwEbzpbehqKvpb18GzntVqA@mail.gmail.com>
+Subject: Re: [PATCH] bpf: reject blacklisted symbols in kprobe_multi to avoid
+ recursive trap
+To:     Yonghong Song <yhs@meta.com>
+Cc:     Jiri Olsa <olsajiri@gmail.com>, Song Liu <song@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ze Gao <zegao@tencent.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
-Received: from x1-carbon.. (unknown [64.141.80.140])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by flawful.org (Postfix) with ESMTPSA id D4C9C3C7;
-        Thu, 11 May 2023 03:14:39 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=flawful.org; s=mail;
-        t=1683767685; bh=9YKrOYnwOUN5w6yC/X1JkyB0eGmZBase1QavC726ui8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oddCZUd+U9sGBIN2/0yRNxmbKsFKyOpc6BKGWTXp5BqrrxanbUxTjQbVzPpUgIBn5
-         m0wCIptqZzaDe6C1u5LvlHaGw68mZSL3d4o4hJqwFIX6/Za4POa+pxBzZfg4t7g9tM
-         5kLGeuLNHYOEuDO1JskQeePSQesRdyQlwGqzTDMc=
-From:   Niklas Cassel <nks@flawful.org>
-To:     Jens Axboe <axboe@kernel.dk>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Bart Van Assche <bvanassche@acm.org>,
-        Christoph Hellwig <hch@lst.de>, Hannes Reinecke <hare@suse.de>,
-        Damien Le Moal <dlemoal@kernel.org>,
-        linux-scsi@vger.kernel.org, linux-ide@vger.kernel.org,
-        linux-block@vger.kernel.org, Niklas Cassel <niklas.cassel@wdc.com>
-Subject: [PATCH v7 02/19] block: introduce ioprio hints
-Date:   Thu, 11 May 2023 03:13:35 +0200
-Message-Id: <20230511011356.227789-3-nks@flawful.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230511011356.227789-1-nks@flawful.org>
-References: <20230511011356.227789-1-nks@flawful.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Damien Le Moal <dlemoal@kernel.org>
+Thank yonghong for your sage reviews.
+Yes, this is an option I am also considering . I will try this out
+later to see if works
 
-IO priorities currently only use 6-bits of the 16-bits ioprio value: the
-3-upper bits are used to define up to 8 priority classes (4 of which are
-valid) and the 3 lower bits of the value are used to define a priority
-level for the real-time and best-effort class.
+But like you said it's not clear whether kprobe blacklist=3D=3D fprobe blac=
+klist.
+And also there are cases I need to investigate on, like how to avoid recurs=
+ions
+when kprobes and fprobes are mixed.
 
-The remaining 10-bits between the IO priority class and level are
-unused, and in fact, cannot be used by the user as doing so would
-either result in the value being completely ignored, or in an error
-returned by ioprio_check_cap().
+Rejecting symbols  kprobe_blacklisted is kinda brute-force yet a straight w=
+ay to
+avoid kernel crash AFAIK.
 
-Use these 10-bits of an ioprio value to allow a user to specify IO
-hints. An IO hint is defined as a 10-bits value, allowing up to 1023
-different hints to be specified, with the value 0 being reserved as the
-"no hint" case. An IO hint can apply to any IO that specifies a valid
-priority class other than NONE, regardless of the IO priority level
-specified.
+Ze
 
-To do so, the macros IOPRIO_PRIO_HINT() and IOPRIO_PRIO_VALUE_HINT() are
-introduced in include/uapi/linux/ioprio.h to respectively allow a user
-to get and set a hint in an ioprio value.
-
-To support the ATA and SCSI command duration limits feature, 7 hints
-are defined: IOPRIO_HINT_DEV_DURATION_LIMIT_1 to
-IOPRIO_HINT_DEV_DURATION_LIMIT_7, allowing a user to specify which
-command duration limit descriptor should be applied to the commands
-serving an IO. Specifying these hints has for now no effect whatsoever
-if the target block devices do not support the command duration limits
-feature. However, in the future, block IO schedulers can be modified to
-optimize IO issuing order based on these hints, even for devices that
-do not support the command duration limits feature.
-
-Given that the 7 duration limits hints defined have no effect on any
-block layer component, the actual definition of the duration limits
-implied by these hints remains at the device level.
-
-Signed-off-by: Damien Le Moal <dlemoal@kernel.org>
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Christoph Hellwig <hch@lst.de>
-Signed-off-by: Niklas Cassel <niklas.cassel@wdc.com>
----
- include/uapi/linux/ioprio.h | 49 +++++++++++++++++++++++++++++++++++++
- 1 file changed, 49 insertions(+)
-
-diff --git a/include/uapi/linux/ioprio.h b/include/uapi/linux/ioprio.h
-index 4444b4e4fdad..607c7617b9d2 100644
---- a/include/uapi/linux/ioprio.h
-+++ b/include/uapi/linux/ioprio.h
-@@ -58,4 +58,53 @@ enum {
- #define IOPRIO_NORM	4
- #define IOPRIO_BE_NORM	IOPRIO_NORM
- 
-+/*
-+ * The 10-bits between the priority class and the priority level are used to
-+ * optionally define IO hints for any combination of IO priority class and
-+ * level. Depending on the kernel configuration, IO scheduler being used and
-+ * the target IO device being used, hints can influence how IOs are processed
-+ * without affecting the IO scheduling ordering defined by the IO priority
-+ * class and level.
-+ */
-+#define IOPRIO_HINT_SHIFT		IOPRIO_LEVEL_NR_BITS
-+#define IOPRIO_HINT_NR_BITS		10
-+#define IOPRIO_NR_HINTS			(1 << IOPRIO_HINT_NR_BITS)
-+#define IOPRIO_HINT_MASK		(IOPRIO_NR_HINTS - 1)
-+#define IOPRIO_PRIO_HINT(ioprio)	\
-+	(((ioprio) >> IOPRIO_HINT_SHIFT) & IOPRIO_HINT_MASK)
-+
-+/*
-+ * Alternate macro for IOPRIO_PRIO_VALUE() to define an IO priority with
-+ * a class, level and hint.
-+ */
-+#define IOPRIO_PRIO_VALUE_HINT(class, level, hint)		 \
-+	((((class) & IOPRIO_CLASS_MASK) << IOPRIO_CLASS_SHIFT) | \
-+	 (((hint) & IOPRIO_HINT_MASK) << IOPRIO_HINT_SHIFT) |	 \
-+	 ((level) & IOPRIO_LEVEL_MASK))
-+
-+/*
-+ * IO hints.
-+ */
-+enum {
-+	/* No hint */
-+	IOPRIO_HINT_NONE = 0,
-+
-+	/*
-+	 * Device command duration limits: indicate to the device a desired
-+	 * duration limit for the commands that will be used to process an IO.
-+	 * These will currently only be effective for SCSI and ATA devices that
-+	 * support the command duration limits feature. If this feature is
-+	 * enabled, then the commands issued to the device to process an IO with
-+	 * one of these hints set will have the duration limit index (dld field)
-+	 * set to the value of the hint.
-+	 */
-+	IOPRIO_HINT_DEV_DURATION_LIMIT_1 = 1,
-+	IOPRIO_HINT_DEV_DURATION_LIMIT_2 = 2,
-+	IOPRIO_HINT_DEV_DURATION_LIMIT_3 = 3,
-+	IOPRIO_HINT_DEV_DURATION_LIMIT_4 = 4,
-+	IOPRIO_HINT_DEV_DURATION_LIMIT_5 = 5,
-+	IOPRIO_HINT_DEV_DURATION_LIMIT_6 = 6,
-+	IOPRIO_HINT_DEV_DURATION_LIMIT_7 = 7,
-+};
-+
- #endif /* _UAPI_LINUX_IOPRIO_H */
--- 
-2.40.1
-
+On Thu, May 11, 2023 at 7:54=E2=80=AFAM Yonghong Song <yhs@meta.com> wrote:
+>
+>
+>
+> On 5/10/23 1:20 PM, Yonghong Song wrote:
+> >
+> >
+> > On 5/10/23 10:27 AM, Jiri Olsa wrote:
+> >> On Wed, May 10, 2023 at 07:13:58AM -0700, Yonghong Song wrote:
+> >>>
+> >>>
+> >>> On 5/10/23 5:20 AM, Ze Gao wrote:
+> >>>> BPF_LINK_TYPE_KPROBE_MULTI attaches kprobe programs through fprobe,
+> >>>> however it does not takes those kprobe blacklisted into consideratio=
+n,
+> >>>> which likely introduce recursive traps and blows up stacks.
+> >>>>
+> >>>> this patch adds simple check and remove those are in kprobe_blacklis=
+t
+> >>>> from one fprobe during bpf_kprobe_multi_link_attach. And also
+> >>>> check_kprobe_address_safe is open for more future checks.
+> >>>>
+> >>>> note that ftrace provides recursion detection mechanism, but for kpr=
+obe
+> >>>> only, we can directly reject those cases early without turning to
+> >>>> ftrace.
+> >>>>
+> >>>> Signed-off-by: Ze Gao <zegao@tencent.com>
+> >>>> ---
+> >>>>    kernel/trace/bpf_trace.c | 37 +++++++++++++++++++++++++++++++++++=
+++
+> >>>>    1 file changed, 37 insertions(+)
+> >>>>
+> >>>> diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> >>>> index 9a050e36dc6c..44c68bc06bbd 100644
+> >>>> --- a/kernel/trace/bpf_trace.c
+> >>>> +++ b/kernel/trace/bpf_trace.c
+> >>>> @@ -2764,6 +2764,37 @@ static int get_modules_for_addrs(struct
+> >>>> module ***mods, unsigned long *addrs, u3
+> >>>>        return arr.mods_cnt;
+> >>>>    }
+> >>>> +static inline int check_kprobe_address_safe(unsigned long addr)
+> >>>> +{
+> >>>> +    if (within_kprobe_blacklist(addr))
+> >>>> +        return -EINVAL;
+> >>>> +    else
+> >>>> +        return 0;
+> >>>> +}
+> >>>> +
+> >>>> +static int check_bpf_kprobe_addrs_safe(unsigned long *addrs, int nu=
+m)
+> >>>> +{
+> >>>> +    int i, cnt;
+> >>>> +    char symname[KSYM_NAME_LEN];
+> >>>> +
+> >>>> +    for (i =3D 0; i < num; ++i) {
+> >>>> +        if (check_kprobe_address_safe((unsigned long)addrs[i])) {
+> >>>> +            lookup_symbol_name(addrs[i], symname);
+> >>>> +            pr_warn("bpf_kprobe: %s at %lx is blacklisted\n",
+> >>>> symname, addrs[i]);
+> >>>
+> >>> So user request cannot be fulfilled and a warning is issued and some
+> >>> of user requests are discarded and the rest is proceeded. Does not
+> >>> sound a good idea.
+> >>>
+> >>> Maybe we should do filtering in user space, e.g., in libbpf, check
+> >>> /sys/kernel/debug/kprobes/blacklist and return error
+> >>> earlier? bpftrace/libbpf-tools/bcc-tools all do filtering before
+> >>> requesting kprobe in the kernel.
+> >>
+> >> also fprobe uses ftrace drectly without paths in kprobe, so I wonder
+> >> some of the kprobe blacklisted functions are actually safe
+> >
+> > Could you give a pointer about 'some of the kprobe blacklisted
+> > functions are actually safe'?
+>
+> Thanks Jiri for answering my question. it is not clear whether
+> kprobe blacklist =3D=3D fprobe blacklist, probably not.
+>
+> You mentioned:
+>    note that ftrace provides recursion detection mechanism,
+>    but for kprobe only
+> Maybe the right choice is to improve ftrace to provide recursion
+> detection mechanism for fprobe as well?
+>
+> >
+> >>
+> >> jirka
+> >>
+> >>>
+> >>>> +            /* mark blacklisted symbol for remove */
+> >>>> +            addrs[i] =3D 0;
+> >>>> +        }
+> >>>> +    }
+> >>>> +
+> >>>> +    /* remove blacklisted symbol from addrs */
+> >>>> +    for (i =3D 0, cnt =3D 0; i < num; ++i) {
+> >>>> +        if (addrs[i])
+> >>>> +            addrs[cnt++]  =3D addrs[i];
+> >>>> +    }
+> >>>> +
+> >>>> +    return cnt;
+> >>>> +}
+> >>>> +
+> >>>>    int bpf_kprobe_multi_link_attach(const union bpf_attr *attr,
+> >>>> struct bpf_prog *prog)
+> >>>>    {
+> >>>>        struct bpf_kprobe_multi_link *link =3D NULL;
+> >>>> @@ -2859,6 +2890,12 @@ int bpf_kprobe_multi_link_attach(const union
+> >>>> bpf_attr *attr, struct bpf_prog *pr
+> >>>>        else
+> >>>>            link->fp.entry_handler =3D kprobe_multi_link_handler;
+> >>>> +    cnt =3D check_bpf_kprobe_addrs_safe(addrs, cnt);
+> >>>> +    if (!cnt) {
+> >>>> +        err =3D -EINVAL;
+> >>>> +        goto error;
+> >>>> +    }
+> >>>> +
+> >>>>        link->addrs =3D addrs;
+> >>>>        link->cookies =3D cookies;
+> >>>>        link->cnt =3D cnt;
