@@ -2,189 +2,285 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB9BC6FEE50
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D403F6FEE32
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:01:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237170AbjEKJEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 05:04:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
+        id S236717AbjEKJBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 05:01:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236661AbjEKJEG (ORCPT
+        with ESMTP id S229624AbjEKJBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 05:04:06 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B250611C
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:03:52 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id A2DC15FD41;
-        Thu, 11 May 2023 12:03:49 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1683795829;
-        bh=IQFZqqBVnssZ8mraoz9UtGPHU2IuOvSPVd1sfiL/zGQ=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=SbVIy8eXo7aO98UDsQHowxmgrAeIqhTwfSMp0toxfWJiMhgyMRUwuBlhUR99my2Ky
-         DrYUIvtjWSf4IvFBSCg7ncNG1Z1aJ8I8JTW/Qu5fqODgX0TnOnMIos1LHJ42Uafk7h
-         tJ7PFmNY26nBuzUBS3Dkr6IbgiTDkJiCUai0N/MfHtTs3JjSgtFKuCO/oW41bVZFgU
-         aevKcDgmrksUZBt4rvkwGwO//YdPezaQgXM62lxsJ0IUNxW4zADhuyDICG5VFuRZaT
-         +4s91aY1TjUudRqNSv59uSLB4CKZzPVfSWapx2ZnRmRkKLSe7NntkAEb+DU6OLGUoS
-         67M1JsOpkp1pQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 11 May 2023 12:03:47 +0300 (MSK)
-Message-ID: <6918ed54-3929-4832-1e93-6eb55b75c82b@sberdevices.ru>
-Date:   Thu, 11 May 2023 11:59:07 +0300
+        Thu, 11 May 2023 05:01:41 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73682270E
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:01:40 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6434e263962so6218580b3a.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:01:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683795700; x=1686387700;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PpOPhoCRVVr4TLf/GE5sbLeu85r6UE17A7mxhEqx2o0=;
+        b=HHFkKe4JvdA7myvOau9njF7ZmmErc0XVypuKeNk8WMGsuTOFNJXXDeWPDKDQ/yFlE+
+         hUhKmT6e19CYoH4myEJ3S1m5845Wml4A6K7yEp7k+i4VoijSFXox8xWmJL5cI/AeJO2L
+         9IAZu6yZwQa3/y79rbrfI9lzAMN+BiVgHNl+WbEEs+OP7OXomdA1ztkOh738D4ltMhip
+         XHUejG/lTTSuunzbSvQMKUbD4tJYOXKMj85K9+VETxEvJ70OM1EbuMRFnZceU12LZppW
+         EY0sCSPw9D5TSAMzOmTgsrk7dkZ0+5m0ZyajLKW9fPhkL+mulrNak7/f+98AV50t1OS4
+         r7Gg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683795700; x=1686387700;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PpOPhoCRVVr4TLf/GE5sbLeu85r6UE17A7mxhEqx2o0=;
+        b=T/2337rS76hprh5EKfchEVbifH4w+S05Fnxt3W3QoQDU1lKSjxDYeYFvVnbdWYanCk
+         K+LKuRY7dCdkZQGJEsPNqOV24d2JxCcTE6M5KC0TWiCQR4+JI4m1Q7V8vb42foDIfco6
+         sC3QCfnGKexTZXsoZ5PqAtGlQQS2hoZyW6/ZkgWruItBPAJP83Pf26h40n8x6h4YJ8aK
+         UtyK2IghT8OBdHauYnjTJ1YZB2No7Cw+wopR1650g5RcI4Or1x6QjGYL1CvsnLctP0tl
+         cxhpAXLM8I3GWe9NFH9aDbQPD2mjmuw0VtS8xhJnT7uPrZR2JpIjw0wxjaKA71G5IGL5
+         p4BA==
+X-Gm-Message-State: AC+VfDwJ/zwsilaJLsIfFF99m4kji0AEW4J87dty56J/hc3+pThWV7Lj
+        xMi2npxaZ3cxwxKstlpDPhgfwQ==
+X-Google-Smtp-Source: ACHHUZ6JgoRzqLA2cz+zc9bNBX0BbFPi/HYzdaITNpGUB6ZbCCjPlDjACy775tc0kp2mlbDWsu4LPw==
+X-Received: by 2002:a05:6a00:2d0e:b0:641:699:f353 with SMTP id fa14-20020a056a002d0e00b006410699f353mr28047084pfb.22.1683795699855;
+        Thu, 11 May 2023 02:01:39 -0700 (PDT)
+Received: from localhost ([122.172.82.60])
+        by smtp.gmail.com with ESMTPSA id x9-20020aa784c9000000b006475f831838sm3820037pfn.30.2023.05.11.02.01.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 02:01:38 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Markus Elfring <Markus.Elfring@web.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] cpufreq: sparc: Don't allocate cpufreq_driver dynamically
+Date:   Thu, 11 May 2023 14:31:00 +0530
+Message-Id: <96f7ea2c952075030ab8d24ee2d3983e1b144f36.1683795616.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 6/6] mtd: rawnand: meson: rename node for chip select
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-CC:     Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yixun Lan <yixun.lan@amlogic.com>, <oxffffaa@gmail.com>,
-        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-References: <20230510110835.26115-1-AVKrasnov@sberdevices.ru>
- <20230510110835.26115-7-AVKrasnov@sberdevices.ru>
- <CAFBinCAbTuNGEG13f71F8vhN3yGce+kkYJ7PHMpZbh8DzSapJg@mail.gmail.com>
- <20230510225359.061c2df6@xps-13>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230510225359.061c2df6@xps-13>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/11 05:14:00 #21258391
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There is no point allocating the cpufreq driver dynamically and add so
+much complexity in the driver.
 
+Do what is done for other cpufreq drivers and statically allocate the
+cpufreq driver.
 
-On 10.05.2023 23:53, Miquel Raynal wrote:
+Reported-by: Markus Elfring <Markus.Elfring@web.de>
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+Looks like I wrote this back in April and forgot to send it :(
 
-Hello Martin, Miquel
+ drivers/cpufreq/sparc-us2e-cpufreq.c | 58 ++++++++--------------------
+ drivers/cpufreq/sparc-us3-cpufreq.c  | 58 ++++++++--------------------
+ 2 files changed, 34 insertions(+), 82 deletions(-)
 
-> Hi Martin & Arseniy,
-> 
-> martin.blumenstingl@googlemail.com wrote on Wed, 10 May 2023 22:40:37
-> +0200:
-> 
->> Hello Arseniy,
->>
->> On Wed, May 10, 2023 at 1:13 PM Arseniy Krasnov
->> <AVKrasnov@sberdevices.ru> wrote:
->>>
->>> This renames node with values for chip select from "reg" to "cs". It is
->>> needed because when OTP access is enabled on the attached storage, MTD
->>> subsystem registers this storage in the NVMEM subsystem. NVMEM in turn
->>> tries to use "reg" node in its own manner, supposes that it has another
->>> layout. All of this leads to device initialization failure.  
->> In general: if we change the device-tree interface (in this case:
->> replacing a "reg" with a "cs" property) the dt-bindings have to be
->> updated as well.
-> 
-> True, and I would add, bindings should not be broken.
+diff --git a/drivers/cpufreq/sparc-us2e-cpufreq.c b/drivers/cpufreq/sparc-us2e-cpufreq.c
+index 92acbb25abb3..d3510cfdb3eb 100644
+--- a/drivers/cpufreq/sparc-us2e-cpufreq.c
++++ b/drivers/cpufreq/sparc-us2e-cpufreq.c
+@@ -20,8 +20,6 @@
+ #include <asm/asi.h>
+ #include <asm/timer.h>
+ 
+-static struct cpufreq_driver *cpufreq_us2e_driver;
+-
+ struct us2e_freq_percpu_info {
+ 	struct cpufreq_frequency_table table[6];
+ };
+@@ -300,12 +298,19 @@ static int __init us2e_freq_cpu_init(struct cpufreq_policy *policy)
+ 
+ static int us2e_freq_cpu_exit(struct cpufreq_policy *policy)
+ {
+-	if (cpufreq_us2e_driver)
+-		us2e_freq_target(policy, 0);
+-
++	us2e_freq_target(policy, 0);
+ 	return 0;
+ }
+ 
++static struct cpufreq_driver cpufreq_us2e_driver = {
++	.name = "UltraSPARC-IIe",
++	.init = us2e_freq_cpu_init,
++	.verify = cpufreq_generic_frequency_table_verify,
++	.target_index = us2e_freq_target,
++	.get = us2e_freq_get,
++	.exit = us2e_freq_cpu_exit,
++};
++
+ static int __init us2e_freq_init(void)
+ {
+ 	unsigned long manuf, impl, ver;
+@@ -319,39 +324,15 @@ static int __init us2e_freq_init(void)
+ 	impl  = ((ver >> 32) & 0xffff);
+ 
+ 	if (manuf == 0x17 && impl == 0x13) {
+-		struct cpufreq_driver *driver;
+-
+-		ret = -ENOMEM;
+-		driver = kzalloc(sizeof(*driver), GFP_KERNEL);
+-		if (!driver)
+-			goto err_out;
+-
+-		us2e_freq_table = kzalloc((NR_CPUS * sizeof(*us2e_freq_table)),
+-			GFP_KERNEL);
++		us2e_freq_table = kzalloc(NR_CPUS * sizeof(*us2e_freq_table),
++					  GFP_KERNEL);
+ 		if (!us2e_freq_table)
+-			goto err_out;
+-
+-		driver->init = us2e_freq_cpu_init;
+-		driver->verify = cpufreq_generic_frequency_table_verify;
+-		driver->target_index = us2e_freq_target;
+-		driver->get = us2e_freq_get;
+-		driver->exit = us2e_freq_cpu_exit;
+-		strcpy(driver->name, "UltraSPARC-IIe");
++			return -ENOMEM;
+ 
+-		cpufreq_us2e_driver = driver;
+-		ret = cpufreq_register_driver(driver);
++		ret = cpufreq_register_driver(&cpufreq_us2e_driver);
+ 		if (ret)
+-			goto err_out;
++			kfree(us2e_freq_table);
+ 
+-		return 0;
+-
+-err_out:
+-		if (driver) {
+-			kfree(driver);
+-			cpufreq_us2e_driver = NULL;
+-		}
+-		kfree(us2e_freq_table);
+-		us2e_freq_table = NULL;
+ 		return ret;
+ 	}
+ 
+@@ -360,13 +341,8 @@ static int __init us2e_freq_init(void)
+ 
+ static void __exit us2e_freq_exit(void)
+ {
+-	if (cpufreq_us2e_driver) {
+-		cpufreq_unregister_driver(cpufreq_us2e_driver);
+-		kfree(cpufreq_us2e_driver);
+-		cpufreq_us2e_driver = NULL;
+-		kfree(us2e_freq_table);
+-		us2e_freq_table = NULL;
+-	}
++	cpufreq_unregister_driver(&cpufreq_us2e_driver);
++	kfree(us2e_freq_table);
+ }
+ 
+ MODULE_AUTHOR("David S. Miller <davem@redhat.com>");
+diff --git a/drivers/cpufreq/sparc-us3-cpufreq.c b/drivers/cpufreq/sparc-us3-cpufreq.c
+index e41b35b16afd..91d1ed558136 100644
+--- a/drivers/cpufreq/sparc-us3-cpufreq.c
++++ b/drivers/cpufreq/sparc-us3-cpufreq.c
+@@ -19,8 +19,6 @@
+ #include <asm/head.h>
+ #include <asm/timer.h>
+ 
+-static struct cpufreq_driver *cpufreq_us3_driver;
+-
+ struct us3_freq_percpu_info {
+ 	struct cpufreq_frequency_table table[4];
+ };
+@@ -144,12 +142,19 @@ static int __init us3_freq_cpu_init(struct cpufreq_policy *policy)
+ 
+ static int us3_freq_cpu_exit(struct cpufreq_policy *policy)
+ {
+-	if (cpufreq_us3_driver)
+-		us3_freq_target(policy, 0);
+-
++	us3_freq_target(policy, 0);
+ 	return 0;
+ }
+ 
++static struct cpufreq_driver cpufreq_us3_driver = {
++	.name = "UltraSPARC-III",
++	.init = us3_freq_cpu_init,
++	.verify = cpufreq_generic_frequency_table_verify,
++	.target_index = us3_freq_target,
++	.get = us3_freq_get,
++	.exit = us3_freq_cpu_exit,
++};
++
+ static int __init us3_freq_init(void)
+ {
+ 	unsigned long manuf, impl, ver;
+@@ -167,39 +172,15 @@ static int __init us3_freq_init(void)
+ 	     impl == CHEETAH_PLUS_IMPL ||
+ 	     impl == JAGUAR_IMPL ||
+ 	     impl == PANTHER_IMPL)) {
+-		struct cpufreq_driver *driver;
+-
+-		ret = -ENOMEM;
+-		driver = kzalloc(sizeof(*driver), GFP_KERNEL);
+-		if (!driver)
+-			goto err_out;
+-
+-		us3_freq_table = kzalloc((NR_CPUS * sizeof(*us3_freq_table)),
+-			GFP_KERNEL);
++		us3_freq_table = kzalloc(NR_CPUS * sizeof(*us3_freq_table),
++					 GFP_KERNEL);
+ 		if (!us3_freq_table)
+-			goto err_out;
+-
+-		driver->init = us3_freq_cpu_init;
+-		driver->verify = cpufreq_generic_frequency_table_verify;
+-		driver->target_index = us3_freq_target;
+-		driver->get = us3_freq_get;
+-		driver->exit = us3_freq_cpu_exit;
+-		strcpy(driver->name, "UltraSPARC-III");
++			return -ENOMEM;
+ 
+-		cpufreq_us3_driver = driver;
+-		ret = cpufreq_register_driver(driver);
++		ret = cpufreq_register_driver(&cpufreq_us3_driver);
+ 		if (ret)
+-			goto err_out;
++			kfree(us3_freq_table);
+ 
+-		return 0;
+-
+-err_out:
+-		if (driver) {
+-			kfree(driver);
+-			cpufreq_us3_driver = NULL;
+-		}
+-		kfree(us3_freq_table);
+-		us3_freq_table = NULL;
+ 		return ret;
+ 	}
+ 
+@@ -208,13 +189,8 @@ static int __init us3_freq_init(void)
+ 
+ static void __exit us3_freq_exit(void)
+ {
+-	if (cpufreq_us3_driver) {
+-		cpufreq_unregister_driver(cpufreq_us3_driver);
+-		kfree(cpufreq_us3_driver);
+-		cpufreq_us3_driver = NULL;
+-		kfree(us3_freq_table);
+-		us3_freq_table = NULL;
+-	}
++	cpufreq_unregister_driver(&cpufreq_us3_driver);
++	kfree(us3_freq_table);
+ }
+ 
+ MODULE_AUTHOR("David S. Miller <davem@redhat.com>");
+-- 
+2.31.1.272.g89b43f80a514
 
-I see, that's true. That is bad way to change bindings.
-
-> 
->> Documentation/devicetree/bindings/mtd/nand-controller.yaml and
->> Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml show
->> that the chip select of a NAND chip is specified with a "reg"
->> property.
-> 
-> All NAND controller binding expect the chip-select to be in the
-> 'reg' property, very much like a spi device would use reg to store the
-> cs as well: the reg property tells you how you address the device.
-> 
-> I also fully agree with Martin's comments below. Changing reg is likely
-> a wrong approach :)
-> 
->> Also the code has to be backwards compatible with old .dtbs.
->>
->>> Example:
->>>
->>> [...] nvmem mtd0-user-otp: nvmem: invalid reg on /soc/bus@ffe00000/...
->>> [...] mtd mtd0: Failed to register OTP NVMEM device
->>> [...] meson-nand ffe07800.nfc: failed to register MTD device: -22
->>> [...] meson-nand ffe07800.nfc: failed to init NAND chips
->>> [...] meson-nand: probe of ffe07800.nfc failed with error -22  
->> This is odd - can you please share your definition of the &nfc node?
-
-Sure, here it is:
-
-mtd_nand: nfc@7800 {                            
-	compatible = "amlogic,meson-axg-nfc";
-	...
-	nand@0 {                                
-        	reg = <0>;
-        };
-}
-
-I checked, that 'nand_set_flash_node()' is called with 'nand@0' and i suppose
-that it is correct (as You mentioned below). But, 'nvmem_add_cells_from_of()' is called
-with parent: 'nfc@7800', then it iterates over its childs, e.g. 'nand@0' and thus i get such
-situation. I guess, that 'nvmem_add_cells_from_of()' must be called with 'nand@0' ?
-
->>
->> &nfc {
->>       nand_chip0: nand@0 {
->>         reg = <0>;
->>       };
->> };
->>
->> This should result in nand_set_flash_node() being called with
->> &nand_chip0 (if it's called with &nfc then something is buggy in our
->> driver).
->> If there's no child nodes within &nand_chip0 then why would the
->> MTD-to-NVMEM code think that it has to parse something?
->> If you do have child nodes and those are partitions, then make sure
->> that the structure is correct (see the extra "partitions" node inside
->> which all partitions are nested):
->> &nand_chip0 {
->>     partitions {
->>         compatible = "fixed-partitions";
->>         #address-cells = <1>;
->>         #size-cells = <1>;
->>
->>         partition@0 {
->>             label = "u-boot";
->>             reg = <0x0000000 0x4000>;
->>             read-only;
->>         };
->>     };
->> };
-
-No, partition nodes are disabled in this case.
-
-Thanks, Arseniy
-
->>
->>
->> Best regards,,
->> Martin
-> 
-> 
-> Thanks,
-> Miquèl
