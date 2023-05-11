@@ -2,75 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC6F06FE90B
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EEC46FE90D
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:08:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236468AbjEKBHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 21:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45420 "EHLO
+        id S231183AbjEKBIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 21:08:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjEKBHe (ORCPT
+        with ESMTP id S236569AbjEKBH7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 21:07:34 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7E9912B;
-        Wed, 10 May 2023 18:07:32 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-965ddb2093bso1112357966b.2;
-        Wed, 10 May 2023 18:07:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683767251; x=1686359251;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WBFVTTTsvzVv70iU9CVp0O8INXKx7ewdVL5aIiLNN2U=;
-        b=e/mCx6wL3ikdgTkS6CB5+AVSzY4AVgz09Ncp5j58wkv/kquL+YWrSzaTyVxy65cQd7
-         hwY2Un1NQ08yARrzLLKz7yXreB4720ev8/4z3mObwXkBZQpaF/xg1FRlw0PpSr9thGio
-         J/rMAkjKaW+igQx2qDn13145BVNx/b00JiUoV+ntYjE7+hxLWiN9dsT/CV2bu4mnwx5t
-         4s6uxOvkS/GhP2V8nrCPsJip/UkimPiJQhWL4e4D3Ob5+5KgTen0Yl6loO96I5pjO2e0
-         qe1F73CjbQVkIs2zR3d8nNSK6ggGno2VoqGrpHEmpaSkp2yp3cDjIkWqMqbDC0pPXsZs
-         UAKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683767251; x=1686359251;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WBFVTTTsvzVv70iU9CVp0O8INXKx7ewdVL5aIiLNN2U=;
-        b=jAlNzPglAzqhvrNK1NknG0KHr9lQ32J1HY7reAlY0yThDouU6ZSNjvKwvBEwn6DEZg
-         sCF3xc1Aonbjoje3iscKDTx5RVdcG07ToCRmGwO9L1eMAqpx8W3Nmv8ZYDe2tFDIpWDJ
-         Bs4zKBzK63IR9jcREpDQ269N1HKWOxh4eSJCYFdAPc+9/iu8mlCv/M8ea0EjvBzqLRNS
-         RDiCIFblj2XJwpurI3nhA8ob2gZI2sAAdztLu5q3mnAtfubX3g/y0iaYc+IYXeMcbrl7
-         Qix4q0eitjcagq3TLY9Onlphqh8vagHkYdWX2zbrcIvSTPIql/cgHINqcg5+d8yFUJPt
-         q6pA==
-X-Gm-Message-State: AC+VfDzXbh6vPe8sNBHOd5ZbscL3uk+CA9IWHDsp+SV+JX/iN9ufDGVM
-        r9CqcgKp2iT2gRCQ8Lm6s33RV8o8Y1nNXJUkH50=
-X-Google-Smtp-Source: ACHHUZ6y6d+r8/mc7BzoqQn93iv7U0535yE6s3qi/zBmO1f5IIMiJ71mfO3Nu/tyuP/FMMc2KDvKzoU1AAH9FLH3804=
-X-Received: by 2002:a17:906:fe01:b0:94f:322d:909d with SMTP id
- wy1-20020a170906fe0100b0094f322d909dmr17099288ejb.63.1683767250852; Wed, 10
- May 2023 18:07:30 -0700 (PDT)
+        Wed, 10 May 2023 21:07:59 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C1335A6;
+        Wed, 10 May 2023 18:07:54 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QGtzr2gb8z4x41;
+        Thu, 11 May 2023 11:07:51 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1683767272;
+        bh=XZSZUAZVLj2+UzRacgu3j7yyCTBTrxNnC4byOTcfx0o=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=t1ooUHYsdcB+LhPqR7Ug9oT/QFkaKAZlk7iODnk/EM6CggoUdkTvplyYKWUOd8E2U
+         ESLTA6sQgNCX+vzIiMIBQp2zGTuwUKUqW9E2WYOyQ68AjbDoIhlfnTZ7dIKmBSNjwz
+         pa1ER/u0xqv5M4S2WuaWIcWEcpUY9rS9pIxwYdd2rWjnV4tHKI9iVteZhtX/D18H+n
+         /SEEh7TD/ORjf1hWvWTj6QE8H03jQ7XJQ8In2PxCeM36828bTaeQq6aWjwAKRUiTjN
+         uj5gzR1EVP8SVYw8Od6ROGd33vx+D9jh33jVFi4TOsP201Wf7CQYu8HPO9HAEcRx5s
+         lnd5vRQOku91A==
+Date:   Thu, 11 May 2023 11:07:50 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Christian Brauner <christian@brauner.io>,
+        Seth Forshee <sforshee@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: manual merge of the block tree with the
+ vfs-idmapping tree
+Message-ID: <20230511110750.76a33556@canb.auug.org.au>
+In-Reply-To: <b5c0b1b9-9896-2637-458b-ca1003ba7d74@kernel.dk>
+References: <20230510105543.165f102b@canb.auug.org.au>
+        <b5c0b1b9-9896-2637-458b-ca1003ba7d74@kernel.dk>
 MIME-Version: 1.0
-References: <CAMdYzYp6=mYSoUHN3TEXVSMbRt1HpRm0X_4RMez09V0XzQewaw@mail.gmail.com>
- <ZFwC/seTfSoaLn0v@bhelgaas>
-In-Reply-To: <ZFwC/seTfSoaLn0v@bhelgaas>
-From:   Peter Geis <pgwipeout@gmail.com>
-Date:   Wed, 10 May 2023 21:07:18 -0400
-Message-ID: <CAMdYzYoa8dhmBx5MUG0yBPwVVXPXHrYNnR0QvKHXvV=JaKuMfw@mail.gmail.com>
-Subject: Re: [PATCH v1] drivers: pci: introduce configurable delay for
- Rockchip PCIe bus scan
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Vincenzo Palazzo <vincenzopalazzodev@gmail.com>,
-        linux-pci@vger.kernel.org, robh@kernel.org, heiko@sntech.de,
-        kw@linux.com, shawn.lin@rock-chips.com,
-        linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
-        linux-rockchip@lists.infradead.org, broonie@kernel.org,
-        bhelgaas@google.com,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        lpieralisi@kernel.org, linux-arm-kernel@lists.infradead.org,
-        Dan Johansen <strit@manjaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+Content-Type: multipart/signed; boundary="Sig_/zp6IJU1/hKF4ilVOf8xCEZ0";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,81 +56,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 4:48=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.org> =
-wrote:
->
-> On Tue, May 09, 2023 at 08:11:29PM -0400, Peter Geis wrote:
-> > On Tue, May 9, 2023 at 5:19=E2=80=AFPM Bjorn Helgaas <helgaas@kernel.or=
-g> wrote:
-> > > On Tue, May 09, 2023 at 05:39:12PM +0200, Vincenzo Palazzo wrote:
-> > > > Add a configurable delay to the Rockchip PCIe driver to address
-> > > > crashes that occur on some old devices, such as the Pine64 RockPro6=
-4.
-> > > >
-> > > > This issue is affecting the ARM community, but there is no
-> > > > upstream solution for it yet.
-> > >
-> > > It sounds like this happens with several endpoints, right?  And I
-> > > assume the endpoints work fine in other non-Rockchip systems?  If
-> > > that's the case, my guess is the problem is with the Rockchip host
-> > > controller and how it's initialized, not with the endpoints.
-> > > ...
->
-> > The main issue with the rk3399 is the PCIe controller is buggy and
-> > triggers a SoC panic when certain error conditions occur that should
-> > be handled gracefully. One of those conditions is when an endpoint
-> > requests an access to wait and retry later.
->
-> I assume this refers to a Completion with Request Retry Status (RRS)?
+--Sig_/zp6IJU1/hKF4ilVOf8xCEZ0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I'm not sure the full coverage, the test patch from Shawn Lin that
-allowed the system to handle the errors has the following description:
-"Native defect prevents this RC far from supporting any response from
-EP which UR filed is set."
+Hi Jens,
 
+On Wed, 10 May 2023 06:48:39 -0600 Jens Axboe <axboe@kernel.dk> wrote:
 >
-> > Many years ago we ran that issue to ground and with Robin Murphy's
-> > help we found that while it's possible to gracefully handle that
-> > condition it required hijacking the entire arm64 error handling
-> > routine. Not exactly scalable for just one SoC.
->
-> Do you have a pointer to that discussion?  The URL might save
-> repeating the whole exercise and could be useful for the commit log
-> when we try to resolve this.
+> Yes, since Linus didn't like the original approach, it was redone
+> and that particular patch was originally forgotten and then redone
+> without the 'nonblock' variable. So you should just ignore the
+> old version, and Christian should just drop that branch from his
+> for-next tree as it's dead.
 
-The link to the patch email is here, the full discussion is pretty
-easy to follow:
-https://lore.kernel.org/linux-pci/2a381384-9d47-a7e2-679c-780950cd862d@rock=
--chips.com/
-Also:
-https://lore.kernel.org/linux-rockchip/1f180d4b-9e5d-c829-555b-c9750940361e=
-@web.de/T/#m9c9d4a28a0d3aa064864f188b8ee3b16ce107aff
+That appears to have been done now, thanks.
 
->
-> > The configurable waits allow us to program reasonable times for
-> > 90% of the endpoints that come up in the normal amount of time, while
-> > being able to adjust it for the other 10% that do not. Some require
-> > multiple seconds before they return without error. Part of the reason
-> > we don't want to hardcode the wait time is because the probe isn't
-> > handled asynchronously, so the kernel appears to hang while waiting
-> > for the timeout.
->
-> Is there some way for users to figure out that they would need this
-> property?  Or is it just "if your kernel panics on boot, try
-> adding or increasing "bus-scan-delay-ms" in your DT?
+--=20
+Cheers,
+Stephen Rothwell
 
-There's a listing of tested cards at:
-https://wiki.pine64.org/wiki/ROCKPro64_Hardware_compatibility
+--Sig_/zp6IJU1/hKF4ilVOf8xCEZ0
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-Most cards work fine that don't require a large BAR. PCIe switches are
-completely dead without the above hack patch. Cards that lie in the
-middle are ones that expect BIOS / EFI support to initialize, or ones
-that have complex boot roms and don't initialize quickly.
-But yes, it's unfortunately going to be "if you panic, increase the
-delay" unless a more complete database of cards can be generated.
+-----BEGIN PGP SIGNATURE-----
 
-Very Respectfully,
-Peter Geis
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRcP+cACgkQAVBC80lX
+0Gy3Kwf+K4TyZ3emIIjnNaQ4YcxjGKGUkUqZx9rUwUaghOF1di44YpcUoqXOJMl2
+OUHbvrrJ4lFq+dn/1EgrrC6D2JkaQo6ukW5Qy1hb6KLXRshtXLdmDlL1JoVXgHMR
+Gtl7RwXLDODiQMjDwZg5/DX+2rIkSpo71fV8EDn9TOzAH/6PgKn7SjYFrHjNJi6q
++MRL4dknOujdwrvuee4/yewEJKp01h5Px/OgZuZFHhmT2i/nK+96xx6hlAmDHXxZ
+nM8+5D57peLheum2PReS6SVegMeoSsoz7dCAW1r5qmLDo0JC6jDsfPgybhwvfbi1
+pf7HQve14XEaAKXE/1ZBZZs/UcFVxA==
+=BgHY
+-----END PGP SIGNATURE-----
 
->
-> Bjorn
+--Sig_/zp6IJU1/hKF4ilVOf8xCEZ0--
