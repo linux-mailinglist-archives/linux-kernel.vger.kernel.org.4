@@ -2,75 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65EF36FF016
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:45:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D2D6FF01B
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:48:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237876AbjEKKpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 06:45:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
+        id S237673AbjEKKsT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 06:48:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237875AbjEKKor (ORCPT
+        with ESMTP id S229847AbjEKKsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 06:44:47 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414FFAD05
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:44:45 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f315712406so279638685e9.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:44:45 -0700 (PDT)
+        Thu, 11 May 2023 06:48:15 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05E534230
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:48:14 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-3062db220a3so5502862f8f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:48:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1683801883; x=1686393883;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=P7Umlt0HzFSClqRwf3YI2Twu1K26jeRmJZFN/RWjcoM=;
-        b=X/RL8VYyhIZrC4PRL+sEKoia8SgSpPPqHt4QBmvchTjTwBCVbqVe+9ixoBscAjOgKI
-         +c/OvN0f+b+foIcSLcNb7vQrVar+bJxWpapaEKgfmx5JHulNXC+F45wuX0GvFCLd13Q2
-         A8Xj+2RtDYY+OZpzPBuww9hxPuyI8tYPpO5p2yQaPCfV1N7RotoAJgwDFn0DMKh2Or73
-         DKJMokSefadPm2XMFkd75bl2sXPBgmv358l0XOwxUhDrOMl/fqSH7sYGwYVmi9H+w0LJ
-         l9lyBrxKYEwSwkLu2fIqpVG7TM1eyK+fIdMaggFwGhfOzKFCmb3AIRRSOcS4AOmFw2Jq
-         mCyA==
+        d=linaro.org; s=google; t=1683802092; x=1686394092;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7JADIWBUmOCU2mF7tw9c2hF0lxUUJ8uvybFtNfl4/Wg=;
+        b=lNzPM1R+cRkJltiSWXf5AKeqHJ3arnTbuez6xeRf9mGoCm3QmVLbkuLXG3lAlMGoaU
+         4UEWJh0zNnpOPBVgyc8QnDkc8pspCPRVe/uidq8EOzkNY9aLiUP5RQC5d2/QnIAUFMFK
+         cseqfGp2ccftld32jGfBoZILRpCGq1+hgqiOChCm26NRvR5g93E1tLTukMaOv/toAIIl
+         TZrDi0xsywaLpuxLhqyPKmFoBosXJdz3Zvg0847rBjPx23+QcRgrAoB2xWPc0KQaAUdU
+         YhcrqHKUGTq7sJ9ylO2qve5qjJDkEREcn1K1e3aYJKTIwVzr68IIjb19zaLDnXysryM+
+         ud2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683801883; x=1686393883;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P7Umlt0HzFSClqRwf3YI2Twu1K26jeRmJZFN/RWjcoM=;
-        b=SrmEAhpzgkVrycGzPDolgHXBGXC2WiJBH7+n+StOzw/lUJS2yTUfvJxjKxdt6jnbuX
-         zV25VeWCYVi1/pv/2MzXlaI2M/bfivA09qNohHg2gV7ofEWP4DGs8+CY55xhDXP9DZd+
-         6RM58JroiD9xV4hZ6K3bVsbr96Dhahkkjd7hADf67KcnTA3562cL4444iowNGhoMwn/k
-         Sc3KIdIQ95KO29a0TgHQfmQCFrXNm2FZRqxehf3WMit7o2EyoA6HP7brC8ErHfjzllys
-         qp+j1uLm3s/QbzS7Vhnz4b+qv+GNM/HdBxmrwjNAv1Hd/GaO3r7nBdSBY+jVC0EkSUNZ
-         eUIQ==
-X-Gm-Message-State: AC+VfDz5ZWvoee8PY84LEPZEjZT2lg85WSB6Gccc45Lz9Add8MugyAUO
-        uuZeuPhBCWlUtHyy0AKT1i69Cg==
-X-Google-Smtp-Source: ACHHUZ6CScK1XIiX1j+9SIiexcwc0hNJLrd39EK/QefUYCN0gSs2wB98akb5RGZ0mp02hDFUSazkjQ==
-X-Received: by 2002:a1c:f719:0:b0:3f1:70d5:1be8 with SMTP id v25-20020a1cf719000000b003f170d51be8mr16222257wmh.15.1683801883657;
-        Thu, 11 May 2023 03:44:43 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id s7-20020a1cf207000000b003e91b9a92c9sm25273509wmc.24.2023.05.11.03.44.42
+        d=1e100.net; s=20221208; t=1683802092; x=1686394092;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=7JADIWBUmOCU2mF7tw9c2hF0lxUUJ8uvybFtNfl4/Wg=;
+        b=DMxE2YLjk+HmmnWrCejnUQV/OB6hNNIMbrHoyVmA99x4Nw7MNtrqPeaf1LAhycIkBM
+         L2LEIEXYX6oxzqf1M7cIxdXPcY88LfUjSBH3LMf5D1c8FTuRDbcspqP6ruUlc1I67MJz
+         +sn3pBAuAt/caEPNPgFoUvVixAxCLxFHKOO9b+EX8KRUfPafy+JnbY2E2E07+Nqkpnhk
+         Lee7KEZ4/2FAXOYRcssfFQ8W986HqDpLeY78TtUAxLHOVjzngyj/Dg1p3P2Rm0yqpir4
+         r3CR1U0bHTN17YQRAy+o1814lXE5iNk7FMC7z3znYy643EJ7sptXCrbtLbhCMPZnCDhW
+         lqTg==
+X-Gm-Message-State: AC+VfDwP0abPxhh9vNH0oBHlQIuj8tvyae/18UoC/bJGGY+CQy7NN4u3
+        ClwIvQt50Ou7uydNGUQmMulYAQ==
+X-Google-Smtp-Source: ACHHUZ7Va8iFg38r9ewoleVUC9xSujzB06Xl3uWpcybKri8RNGNNtHBcP2WyQKx3+cSC2BTzIsl/Bg==
+X-Received: by 2002:a5d:6990:0:b0:306:2d15:fc35 with SMTP id g16-20020a5d6990000000b003062d15fc35mr14039198wru.37.1683802092418;
+        Thu, 11 May 2023 03:48:12 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id p5-20020a7bcc85000000b003f4dde07956sm3641919wma.42.2023.05.11.03.48.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 03:44:43 -0700 (PDT)
-Date:   Thu, 11 May 2023 12:44:41 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Haibo Xu <haibo1.xu@intel.com>
-Cc:     xiaobo55x@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/2] riscv: kvm: Add KVM_GET_REG_LIST API support
-Message-ID: <20230511-5e8b478be55881a754cc2002@orel>
-References: <cover.1683791148.git.haibo1.xu@intel.com>
- <921fc2e1a91887170e277acb1b52df57480a5736.1683791148.git.haibo1.xu@intel.com>
+        Thu, 11 May 2023 03:48:10 -0700 (PDT)
+Date:   Thu, 11 May 2023 13:48:03 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     oe-kbuild@lists.linux.dev,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: drivers/iio/accel/kionix-kx022a.c:1053 kx022a_probe_internal() warn:
+ passing zero to 'dev_err_probe'
+Message-ID: <46296e39-dbc1-4f27-b89c-af6f08d9f318@kili.mountain>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <921fc2e1a91887170e277acb1b52df57480a5736.1683791148.git.haibo1.xu@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -81,434 +73,91 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 05:22:48PM +0800, Haibo Xu wrote:
-> KVM_GET_REG_LIST API will return all registers that are available to
-> KVM_GET/SET_ONE_REG APIs. It's very useful to identify some platform
-> regression issue during VM migration.
-> 
-> Since this API was already supported on arm64, it'd be straightforward
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ad2fd53a7870a395b8564697bef6c329d017c6c9
+commit: 7c1d1677b3227c6b18ac999f2b84778baa280b8f iio: accel: Support Kionix/ROHM KX022A accelerometer
+config: openrisc-randconfig-m041-20230509 (https://download.01.org/0day-ci/archive/20230511/202305110245.MFxC9bUj-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 12.1.0
 
-s/it'd be/it is/
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202305110245.MFxC9bUj-lkp@intel.com/
 
-> to enable it on riscv with similar code structure.
-> 
-> Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
-> ---
->  Documentation/virt/kvm/api.rst |   2 +-
->  arch/riscv/kvm/vcpu.c          | 346 +++++++++++++++++++++++++++++++++
->  2 files changed, 347 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
-> index add067793b90..280e89abd004 100644
-> --- a/Documentation/virt/kvm/api.rst
-> +++ b/Documentation/virt/kvm/api.rst
-> @@ -3499,7 +3499,7 @@ VCPU matching underlying host.
->  ---------------------
->  
->  :Capability: basic
-> -:Architectures: arm64, mips
-> +:Architectures: arm64, mips, riscv
->  :Type: vcpu ioctl
->  :Parameters: struct kvm_reg_list (in/out)
->  :Returns: 0 on success; -1 on error
-> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
-> index 8bd9f2a8a0b9..fb8834e4fa15 100644
-> --- a/arch/riscv/kvm/vcpu.c
-> +++ b/arch/riscv/kvm/vcpu.c
-> @@ -657,6 +657,334 @@ static int kvm_riscv_vcpu_set_reg_isa_ext(struct kvm_vcpu *vcpu,
->  	return 0;
->  }
->  
-> +static inline unsigned long num_config_regs(void)
-> +{
-> +	return sizeof(struct kvm_riscv_config) / sizeof(unsigned long);
-> +}
-> +
-> +static int copy_config_reg_indices(u64 __user *uindices)
-> +{
-> +	unsigned int i;
-> +	int n = num_config_regs();
-> +
-> +	for (i = 0; i < n; i++) {
-> +		u64 reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CONFIG | i;
-                                          ^ this should be
-					  size-ulong
+smatch warnings:
+drivers/iio/accel/kionix-kx022a.c:1053 kx022a_probe_internal() warn: passing zero to 'dev_err_probe'
 
-  u64 size = IS_ENABLED(CONFIG_32BIT) ? KVM_REG_SIZE_U32 : KVM_REG_SIZE_U64;
-  u64 reg = KVM_REG_RISCV | size | KVM_REG_RISCV_CONFIG | i;
+vim +/dev_err_probe +1053 drivers/iio/accel/kionix-kx022a.c
 
-> +
-> +		if (uindices) {
-> +			if (put_user(reg, uindices))
-> +				return -EFAULT;
-> +			uindices++;
-> +		}
-> +	}
-> +
-> +	return n;
-> +}
-> +
-> +static inline unsigned long num_core_regs(void)
-> +{
-> +	return sizeof(struct kvm_riscv_core) / sizeof(unsigned long);
-> +}
-> +
-> +static int copy_core_reg_indices(u64 __user *uindices)
-> +{
-> +	unsigned int i;
-> +	int n = num_core_regs();
-> +
-> +	for (i = 0; i < n; i++) {
-> +		u64 reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | i;
-                                          ^ size-ulong
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1000  int kx022a_probe_internal(struct device *dev)
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1001  {
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1002  	static const char * const regulator_names[] = {"io-vdd", "vdd"};
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1003  	struct iio_trigger *indio_trig;
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1004  	struct fwnode_handle *fwnode;
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1005  	struct kx022a_data *data;
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1006  	struct regmap *regmap;
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1007  	unsigned int chip_id;
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1008  	struct iio_dev *idev;
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1009  	int ret, irq;
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1010  	char *name;
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1011  
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1012  	regmap = dev_get_regmap(dev, NULL);
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1013  	if (!regmap) {
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1014  		dev_err(dev, "no regmap\n");
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1015  		return -EINVAL;
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1016  	}
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1017  
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1018  	fwnode = dev_fwnode(dev);
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1019  	if (!fwnode)
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1020  		return -ENODEV;
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1021  
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1022  	idev = devm_iio_device_alloc(dev, sizeof(*data));
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1023  	if (!idev)
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1024  		return -ENOMEM;
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1025  
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1026  	data = iio_priv(idev);
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1027  
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1028  	/*
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1029  	 * VDD is the analog and digital domain voltage supply and
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1030  	 * IO_VDD is the digital I/O voltage supply.
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1031  	 */
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1032  	ret = devm_regulator_bulk_get_enable(dev, ARRAY_SIZE(regulator_names),
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1033  					     regulator_names);
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1034  	if (ret && ret != -ENODEV)
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1035  		return dev_err_probe(dev, ret, "failed to enable regulator\n");
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1036  
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1037  	ret = regmap_read(regmap, KX022A_REG_WHO, &chip_id);
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1038  	if (ret)
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1039  		return dev_err_probe(dev, ret, "Failed to access sensor\n");
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1040  
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1041  	if (chip_id != KX022A_ID) {
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1042  		dev_err(dev, "unsupported device 0x%x\n", chip_id);
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1043  		return -EINVAL;
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1044  	}
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1045  
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1046  	irq = fwnode_irq_get_byname(fwnode, "INT1");
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1047  	if (irq > 0) {
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1048  		data->inc_reg = KX022A_REG_INC1;
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1049  		data->ien_reg = KX022A_REG_INC4;
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1050  	} else {
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1051  		irq = fwnode_irq_get_byname(fwnode, "INT2");
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1052  		if (irq <= 0)
+                                                                    ^^^^^^^^
+This code assumes fwnode_irq_get_byname() can return zero.
 
-> +
-> +		if (uindices) {
-> +			if (put_user(reg, uindices))
-> +				return -EFAULT;
-> +			uindices++;
-> +		}
-> +	}
-> +
-> +	return n;
-> +}
-> +
-> +static inline unsigned long num_csr_regs(void)
-> +{
-> +	unsigned long n = sizeof(struct kvm_riscv_csr) / sizeof(unsigned long);
-> +
-> +	if (kvm_riscv_aia_available())
-> +		n += sizeof(struct kvm_riscv_aia_csr) / sizeof(unsigned long);
-> +
-> +	return n;
-> +}
-> +
-> +static int copy_csr_reg_indices(u64 __user *uindices)
-> +{
-> +	unsigned int i;
-> +	int n1 = sizeof(struct kvm_riscv_csr) / sizeof(unsigned long);
-> +	int n2 = 0;
-> +
-> +	/* copy general csr regs */
-> +	for (i = 0; i < n1; i++) {
-> +		u64 reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR |
-                                          ^ size-ulong
+7c1d1677b3227c Matti Vaittinen 2022-10-24 @1053  			return dev_err_probe(dev, irq, "No suitable IRQ\n");
 
-> +				  KVM_REG_RISCV_CSR_GENERAL | i;
-> +
-> +		if (uindices) {
-> +			if (put_user(reg, uindices))
-> +				return -EFAULT;
-> +			uindices++;
-> +		}
-> +	}
-> +
-> +	/* copy AIA csr regs */
-> +	if (kvm_riscv_aia_available()) {
-> +		n2 = sizeof(struct kvm_riscv_aia_csr) / sizeof(unsigned long);
-> +
-> +		for (i = 0; i < n2; i++) {
-> +			u64 reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR |
-                                                  ^ size-ulong
+But fortunately, it can't otherwise this would return success.
 
-> +					  KVM_REG_RISCV_CSR_AIA | i;
-> +
-> +			if (uindices) {
-> +				if (put_user(reg, uindices))
-> +					return -EFAULT;
-> +				uindices++;
-> +			}
-> +		}
-> +	}
-> +
-> +	return n1 + n2;
-> +}
-> +
-> +static inline unsigned long num_timer_regs(void)
-> +{
-> +	return sizeof(struct kvm_riscv_timer) / sizeof(unsigned long);
-> +}
-> +
-> +static int copy_timer_reg_indices(u64 __user *uindices)
-> +{
-> +	unsigned int i;
-> +	int n = num_timer_regs();
-> +
-> +	for (i = 0; i < n; i++) {
-> +		u64 reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | i;
-> +
-> +		if (uindices) {
-> +			if (put_user(reg, uindices))
-> +				return -EFAULT;
-> +			uindices++;
-> +		}
-> +	}
-> +
-> +	return n;
-> +}
-> +
-> +static inline unsigned long num_fp_f_regs(const struct kvm_vcpu *vcpu)
-> +{
-> +	const struct kvm_cpu_context *cntx = &vcpu->arch.guest_context;
-> +
-> +	if (riscv_isa_extension_available(vcpu->arch.isa, f))
-> +		return sizeof(cntx->fp.f) / sizeof(u32);
-> +	else
-> +		return 0;
-> +}
-> +
-> +static int copy_fp_f_reg_indices(const struct kvm_vcpu *vcpu,
-> +					u64 __user *uindices)
-> +{
-> +	unsigned int i;
-> +	int n = num_fp_f_regs(vcpu);
-> +
-> +	for (i = 0; i < n; i++) {
-> +		u64 reg = KVM_REG_RISCV | KVM_REG_SIZE_U32 | KVM_REG_RISCV_FP_F | i;
-> +
-> +		if (uindices) {
-> +			if (put_user(reg, uindices))
-> +				return -EFAULT;
-> +			uindices++;
-> +		}
-> +	}
-> +
-> +	return n;
-> +}
-> +
-> +static inline unsigned long num_fp_d_regs(const struct kvm_vcpu *vcpu)
-> +{
-> +	const struct kvm_cpu_context *cntx = &vcpu->arch.guest_context;
-> +
-> +	if (riscv_isa_extension_available(vcpu->arch.isa, d))
-> +		return sizeof(cntx->fp.d.f) / sizeof(u64) + 1;
-> +	else
-> +		return 0;
-> +}
-> +
-> +static int copy_fp_d_reg_indices(const struct kvm_vcpu *vcpu,
-> +					u64 __user *uindices)
-> +{
-> +	unsigned int i;
-> +	int n = num_fp_d_regs(vcpu);
-> +	u64 reg;
-> +
-> +	/* copy fp.d.f indeices */
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1054  
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1055  		data->inc_reg = KX022A_REG_INC5;
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1056  		data->ien_reg = KX022A_REG_INC6;
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1057  	}
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1058  
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1059  	data->regmap = regmap;
+7c1d1677b3227c Matti Vaittinen 2022-10-24  1060  	data->dev = dev;
 
-indices
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
 
-> +	for (i = 0; i < n-1; i++) {
-> +		reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_FP_D | i;
-> +
-> +		if (uindices) {
-> +			if (put_user(reg, uindices))
-> +				return -EFAULT;
-> +			uindices++;
-> +		}
-> +	}
-> +
-> +	/* copy fp.d.fcsr indeices */
-
-indices
-
-> +	reg = KVM_REG_RISCV | KVM_REG_SIZE_U32 | KVM_REG_RISCV_FP_D | i;
-> +	if (uindices) {
-> +		if (put_user(reg, uindices))
-> +			return -EFAULT;
-> +	}
-> +
-> +	return n;
-> +}
-> +
-> +static inline unsigned long num_isa_ext_regs(void)
-> +{
-> +	return KVM_RISCV_ISA_EXT_MAX;
-> +}
-> +
-> +static int copy_isa_ext_reg_indices(u64 __user *uindices)
-> +{
-> +	unsigned int i;
-> +	int n = num_isa_ext_regs();
-> +
-> +	for (i = 0; i < n; i++) {
-> +		u64 reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | i;
-                                          ^ size-ulong
-
-> +
-> +		if (uindices) {
-> +			if (put_user(reg, uindices))
-> +				return -EFAULT;
-> +			uindices++;
-> +		}
-> +	}
-> +
-> +	return n;
-> +}
-> +
-> +static inline unsigned long num_sbi_ext_regs(void)
-> +{
-> +	/* number of KVM_REG_RISCV_SBI_SINGLE +
-> +	 *  2x(number of KVM_REG_RISCV_SBI_MULTI)
-> +	 */
-
-Please use an opening wing '/*' on comments.
-
-> +	return KVM_RISCV_SBI_EXT_MAX + 2*(KVM_REG_RISCV_SBI_MULTI_REG_LAST+1);
-> +}
-> +
-> +static int copy_sbi_ext_reg_indices(u64 __user *uindices)
-> +{
-> +	unsigned int i;
-> +	int n;
-> +
-> +	/* copy KVM_REG_RISCV_SBI_SINGLE */
-> +	n = KVM_RISCV_SBI_EXT_MAX;
-> +	for (i = 0; i < n; i++) {
-> +		u64 reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_SBI_EXT |
-                                          ^ size-ulong
-
-> +				  KVM_REG_RISCV_SBI_SINGLE | i;
-> +
-> +		if (uindices) {
-> +			if (put_user(reg, uindices))
-> +				return -EFAULT;
-> +			uindices++;
-> +		}
-> +	}
-> +
-> +	/* copy KVM_REG_RISCV_SBI_MULTI */
-> +	n = KVM_REG_RISCV_SBI_MULTI_REG_LAST + 1;
-> +	for (i = 0; i < n; i++) {
-> +		u64 reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_SBI_EXT |
-                                          ^ size-ulong
-
-> +				  KVM_REG_RISCV_SBI_MULTI_EN | i;
-> +
-> +		if (uindices) {
-> +			if (put_user(reg, uindices))
-> +				return -EFAULT;
-> +			uindices++;
-> +		}
-> +
-> +		reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_SBI_EXT |
-> +			  KVM_REG_RISCV_SBI_MULTI_DIS | i;
-> +
-> +		if (uindices) {
-> +			if (put_user(reg, uindices))
-> +				return -EFAULT;
-> +			uindices++;
-> +		}
-> +	}
-> +
-> +	return num_sbi_ext_regs();
-> +}
-> +
-> +/**
-> + * kvm_riscv_vcpu_num_regs - how many registers do we present via KVM_GET/SET_ONE_REG
-> + *
-> + * This is for all registers.
-> + */
-> +static unsigned long kvm_riscv_vcpu_num_regs(struct kvm_vcpu *vcpu)
-> +{
-> +	unsigned long res = 0;
-> +
-> +	res += num_config_regs();
-> +	res += num_core_regs();
-> +	res += num_csr_regs();
-> +	res += num_timer_regs();
-> +	res += num_fp_f_regs(vcpu);
-> +	res += num_fp_d_regs(vcpu);
-> +	res += num_isa_ext_regs();
-> +	res += num_sbi_ext_regs();
-> +
-> +	return res;
-> +}
-> +
-> +/**
-> + * kvm_riscv_vcpu_copy_reg_indices - get indices of all registers.
-> + */
-> +static int kvm_riscv_vcpu_copy_reg_indices(struct kvm_vcpu *vcpu,
-> +				u64 __user *uindices)
-> +{
-> +	int ret;
-> +
-> +	ret = copy_config_reg_indices(uindices);
-> +	if (ret < 0)
-> +		return ret;
-> +	uindices += ret;
-> +
-> +	ret = copy_core_reg_indices(uindices);
-> +	if (ret < 0)
-> +		return ret;
-> +	uindices += ret;
-> +
-> +	ret = copy_csr_reg_indices(uindices);
-> +	if (ret < 0)
-> +		return ret;
-> +	uindices += ret;
-> +
-> +	ret = copy_timer_reg_indices(uindices);
-> +	if (ret < 0)
-> +		return ret;
-> +	uindices += ret;
-> +
-> +	ret = copy_fp_f_reg_indices(vcpu, uindices);
-> +	if (ret < 0)
-> +		return ret;
-> +	uindices += ret;
-> +
-> +	ret = copy_fp_d_reg_indices(vcpu, uindices);
-> +	if (ret < 0)
-> +		return ret;
-> +	uindices += ret;
-> +
-> +	ret = copy_isa_ext_reg_indices(uindices);
-> +	if (ret < 0)
-> +		return ret;
-> +	uindices += ret;
-> +
-> +	ret = copy_sbi_ext_reg_indices(uindices);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-> +
->  static int kvm_riscv_vcpu_set_reg(struct kvm_vcpu *vcpu,
->  				  const struct kvm_one_reg *reg)
->  {
-> @@ -758,6 +1086,24 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
->  			r = kvm_riscv_vcpu_get_reg(vcpu, &reg);
->  		break;
->  	}
-> +	case KVM_GET_REG_LIST: {
-> +		struct kvm_reg_list __user *user_list = argp;
-> +		struct kvm_reg_list reg_list;
-> +		unsigned int n;
-> +
-> +		r = -EFAULT;
-> +		if (copy_from_user(&reg_list, user_list, sizeof(reg_list)))
-> +			break;
-> +		n = reg_list.n;
-> +		reg_list.n = kvm_riscv_vcpu_num_regs(vcpu);
-> +		if (copy_to_user(user_list, &reg_list, sizeof(reg_list)))
-> +			break;
-> +		r = -E2BIG;
-> +		if (n < reg_list.n)
-> +			break;
-> +		r = kvm_riscv_vcpu_copy_reg_indices(vcpu, user_list->reg);
-> +		break;
-> +	}
->  	default:
->  		break;
->  	}
-> -- 
-> 2.34.1
->
-
-Otherwise,
-
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
-
-Thanks,
-drew
