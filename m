@@ -2,181 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F8FB6FEE70
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0A4B6FEE79
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:16:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237381AbjEKJOQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 05:14:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38018 "EHLO
+        id S237338AbjEKJQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 05:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjEKJOB (ORCPT
+        with ESMTP id S229538AbjEKJP5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 05:14:01 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F195B2126
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:13:59 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f475366514so13403995e9.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:13:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683796438; x=1686388438;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vtZdgeg9ddbhPRh6PC9cZ0EnGp++W69JKMYWDuC5ZjM=;
-        b=AhK75zZbjGAdW/dYUEU3Goj+tB4VJJrBzSM4Vdb5pqMRkj37o9FXlra9lcfJzDc5Mp
-         qXuPVOYPMBVor3UCpiGhOq6iwERosDJUgBqbZrlh+0v/8GuyaS0fdaQPDmoQiqQGeK1e
-         YsEIZfLMLe5xTzDFLMZmB4PCC5wBL3W7DfqiV3GSGZYl64Z0uRAV+8c41cdvxiCvL3y5
-         McbkBJJmu55RhEkqK2puHTfnpUtkQM/nuBwRXqrz4z/I7lVXt3DPNXafgg0GY9mhhJGQ
-         V8H7Cdo2Pn6CncoUF6VHxgo5WjtBgRrSh6fFTiihH2hVRWfmPL0rKy52/nUdOHbHXzrd
-         GtKQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683796438; x=1686388438;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vtZdgeg9ddbhPRh6PC9cZ0EnGp++W69JKMYWDuC5ZjM=;
-        b=jA7B+A09QGjoFTSpP4vetR7z33OKcB/Sc6qoMphxvAlY3C/nCWoWmzuPXsR03YKtDp
-         qrLcQgZ86T6iCOI7w2OWwbaRMGGyc69qWS3hvtBIjDxgqnSuOEbN8bVP5L9cIBc6WoII
-         9od/DUicu6ljZf3yZ6zmYVCL7+t3epq7S/pqK6lvCFvqW2sT+K7aiCG6rMHomlQ7Ma5g
-         tN4JjLfwcqcNm82xkIrX5tA4SNbRLeE+mEKn1Kzy9ddqBheq5QV2I3NmDJ232aZZmBEC
-         0uA3SD7oDlYF/ii1LeefNYGSRzMoMYNO0UGnOGUOhel+Bqz/4tfa8RIqKc0VGs62NyVj
-         jeaQ==
-X-Gm-Message-State: AC+VfDxUfRGDNhGXlba/Aev4w4mrwUr2Hdrads7uzhp0Qv9miuYqBW19
-        dEr69W9KfWgaohEHV74MzZ8=
-X-Google-Smtp-Source: ACHHUZ6kJY7Xpu7b8kztQLzlN9l9ybqrPkb/6aNx8jQBNgkl9YAO7tlNHBfK+JhHEECjvd/Xb52I0g==
-X-Received: by 2002:a05:600c:24ce:b0:3f2:5641:3d4 with SMTP id 14-20020a05600c24ce00b003f2564103d4mr14102169wmu.33.1683796438339;
-        Thu, 11 May 2023 02:13:58 -0700 (PDT)
-Received: from localhost ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id e1-20020adfdbc1000000b0030795249ffasm12304958wrj.92.2023.05.11.02.13.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 02:13:57 -0700 (PDT)
-From:   Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To:     broonie@kernel.org
-Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/4] regmap-irq: Drop backward compatibility for inverted mask/unmask
-Date:   Thu, 11 May 2023 10:13:42 +0100
-Message-Id: <20230511091342.26604-5-aidanmacdonald.0x0@gmail.com>
-In-Reply-To: <20230511091342.26604-1-aidanmacdonald.0x0@gmail.com>
-References: <20230511091342.26604-1-aidanmacdonald.0x0@gmail.com>
+        Thu, 11 May 2023 05:15:57 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AA5A2735;
+        Thu, 11 May 2023 02:15:53 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 00222828D;
+        Thu, 11 May 2023 17:15:50 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 11 May
+ 2023 17:15:51 +0800
+Received: from SD-Server.starfivetech.com (113.72.146.187) by
+ EXMBX168.cuchost.com (172.16.6.78) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Thu, 11 May 2023 17:15:50 +0800
+From:   Walker Chen <walker.chen@starfivetech.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Claudiu Beznea <Claudiu.Beznea@microchip.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Walker Chen <walker.chen@starfivetech.com>
+CC:     <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: [PATCH v4 0/3] Add TDM audio on StarFive JH7110
+Date:   Thu, 11 May 2023 17:15:46 +0800
+Message-ID: <20230511091549.28003-1-walker.chen@starfivetech.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [113.72.146.187]
+X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All users must now specify .mask_unmask_non_inverted = true to
-ensure they are using the expected semantics: 1s disable IRQs
-in the mask registers, and enable IRQs in the unmask registers.
+This patchset adds TDM audio driver for the StarFive JH7110 SoC. The
+first patch adds device tree binding for TDM module. The second patch
+adds tdm driver support for JH7110 SoC. The last patch adds device tree
+node and pins configuration of tdm to JH7110 dts.
 
-Signed-off-by: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+The series has been tested on the VisionFive 2 board by plugging an
+audio expansion board. 
+
+For more information of audio expansion board, you can take a look
+at the following webpage:
+https://wiki.seeedstudio.com/ReSpeaker_2_Mics_Pi_HAT/
+
+Changes since v3:
+- Modified the subject of patch [1/3] to reflect which subsystem it is.
+- Use the set of functions with 'clk_bulk_' to get/enable/disable clocks. 
+- Dropped the overlay from patch [3/3].
+- Dropped the redundant macro 'CONFIG_PM' and 'CONFIG_PM_SLEEP' around
+  suspend() and resume().
+
+Changes since v2:
+- Use dt-overlay to describe sound card because need to plug the audio
+  expansion board into the VisionFive2 board.
+- Modified the coding style for driver.
+- Moved assignment of stop_dma_first to startup function of dai_driver.
+- Dropped some useless macro definition.
+- Use loops to get/enable/disable clocks. 
+
+Changes since v1:
+- Rebased on Linux 6.3-rc4.
+- Added the dts file dedicated to describe audio card.
+- Added the item for JH7110 audio board to the dt-binding of StarFive
+  SoC-based boards.
+
 ---
- drivers/base/regmap/regmap-irq.c | 44 ++++++++------------------------
- 1 file changed, 11 insertions(+), 33 deletions(-)
+v3: https://lore.kernel.org/all/20230506090116.9206-1-walker.chen@starfivetech.com/
+v2: https://lore.kernel.org/all/20230420024118.22677-1-walker.chen@starfivetech.com/
+v1: https://lore.kernel.org/all/20230329153320.31390-1-walker.chen@starfivetech.com/
 
-diff --git a/drivers/base/regmap/regmap-irq.c b/drivers/base/regmap/regmap-irq.c
-index 95bf457204bf..330da5d6c8c3 100644
---- a/drivers/base/regmap/regmap-irq.c
-+++ b/drivers/base/regmap/regmap-irq.c
-@@ -30,9 +30,6 @@ struct regmap_irq_chip_data {
- 	int irq;
- 	int wake_count;
- 
--	unsigned int mask_base;
--	unsigned int unmask_base;
--
- 	void *status_reg_buf;
- 	unsigned int *main_status_buf;
- 	unsigned int *status_buf;
-@@ -118,8 +115,8 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
- 						  d->mask_buf[i],
- 						  d->chip->irq_drv_data);
- 
--		if (d->mask_base && !d->chip->handle_mask_sync) {
--			reg = d->get_irq_reg(d, d->mask_base, i);
-+		if (d->chip->mask_base && !d->chip->handle_mask_sync) {
-+			reg = d->get_irq_reg(d, d->chip->mask_base, i);
- 			ret = regmap_update_bits(d->map, reg,
- 						 d->mask_buf_def[i],
- 						 d->mask_buf[i]);
-@@ -127,8 +124,8 @@ static void regmap_irq_sync_unlock(struct irq_data *data)
- 				dev_err(d->map->dev, "Failed to sync masks in %x\n", reg);
- 		}
- 
--		if (d->unmask_base && !d->chip->handle_mask_sync) {
--			reg = d->get_irq_reg(d, d->unmask_base, i);
-+		if (d->chip->unmask_base && !d->chip->handle_mask_sync) {
-+			reg = d->get_irq_reg(d, d->chip->unmask_base, i);
- 			ret = regmap_update_bits(d->map, reg,
- 					d->mask_buf_def[i], ~d->mask_buf[i]);
- 			if (ret)
-@@ -645,6 +642,9 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 	if (chip->clear_on_unmask && (chip->ack_base || chip->use_ack))
- 		return -EINVAL;
- 
-+	if (chip->mask_base && chip->unmask_base && !chip->mask_unmask_non_inverted)
-+		return -EINVAL;
-+
- 	for (i = 0; i < chip->num_irqs; i++) {
- 		if (chip->irqs[i].reg_offset % map->reg_stride)
- 			return -EINVAL;
-@@ -733,28 +733,6 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 	d->chip = chip;
- 	d->irq_base = irq_base;
- 
--	if (chip->mask_base && chip->unmask_base &&
--	    !chip->mask_unmask_non_inverted) {
--		/*
--		 * Chips that specify both mask_base and unmask_base used to
--		 * get inverted mask behavior by default, with no way to ask
--		 * for the normal, non-inverted behavior. This "inverted by
--		 * default" behavior is deprecated, but we have to support it
--		 * until existing drivers have been fixed.
--		 *
--		 * Existing drivers should be updated by swapping mask_base
--		 * and unmask_base and setting mask_unmask_non_inverted=true.
--		 * New drivers should always set the flag.
--		 */
--		dev_warn(map->dev, "mask_base and unmask_base are inverted, please fix it");
--
--		d->mask_base = chip->unmask_base;
--		d->unmask_base = chip->mask_base;
--	} else {
--		d->mask_base = chip->mask_base;
--		d->unmask_base = chip->unmask_base;
--	}
--
- 	if (chip->irq_reg_stride)
- 		d->irq_reg_stride = chip->irq_reg_stride;
- 	else
-@@ -791,8 +769,8 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 				goto err_alloc;
- 		}
- 
--		if (d->mask_base && !chip->handle_mask_sync) {
--			reg = d->get_irq_reg(d, d->mask_base, i);
-+		if (chip->mask_base && !chip->handle_mask_sync) {
-+			reg = d->get_irq_reg(d, chip->mask_base, i);
- 			ret = regmap_update_bits(d->map, reg,
- 						 d->mask_buf_def[i],
- 						 d->mask_buf[i]);
-@@ -803,8 +781,8 @@ int regmap_add_irq_chip_fwnode(struct fwnode_handle *fwnode,
- 			}
- 		}
- 
--		if (d->unmask_base && !chip->handle_mask_sync) {
--			reg = d->get_irq_reg(d, d->unmask_base, i);
-+		if (chip->unmask_base && !chip->handle_mask_sync) {
-+			reg = d->get_irq_reg(d, chip->unmask_base, i);
- 			ret = regmap_update_bits(d->map, reg,
- 					d->mask_buf_def[i], ~d->mask_buf[i]);
- 			if (ret) {
+Walker Chen (3):
+  ASoC: dt-bindings: Add TDM controller bindings for StarFive JH7110
+  ASoC: starfive: Add JH7110 TDM driver
+  riscv: dts: starfive: add the node and pins configuration for tdm
+
+ .../bindings/sound/starfive,jh7110-tdm.yaml   |  98 ++++
+ MAINTAINERS                                   |   6 +
+ .../jh7110-starfive-visionfive-2.dtsi         |  40 ++
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |  21 +
+ sound/soc/Kconfig                             |   1 +
+ sound/soc/Makefile                            |   1 +
+ sound/soc/starfive/Kconfig                    |  15 +
+ sound/soc/starfive/Makefile                   |   2 +
+ sound/soc/starfive/jh7110_tdm.c               | 554 ++++++++++++++++++
+ sound/soc/starfive/jh7110_tdm.h               | 138 +++++
+ 10 files changed, 876 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/sound/starfive,jh7110-tdm.yaml
+ create mode 100644 sound/soc/starfive/Kconfig
+ create mode 100644 sound/soc/starfive/Makefile
+ create mode 100644 sound/soc/starfive/jh7110_tdm.c
+ create mode 100644 sound/soc/starfive/jh7110_tdm.h
+
+
+base-commit: 197b6b60ae7bc51dd0814953c562833143b292aa
+prerequisite-patch-id: 30bec4dba6f250a6edd0c2cbab2ce09442e50e8a
+prerequisite-patch-id: bb939c0c7c26b08addfccd890f9d3974b6eaec53
+prerequisite-patch-id: 8a6f135bcabdad4a4bfb21f0c6a0ffd2bb57efe7
+prerequisite-patch-id: c2366f993a9d85e28c06d8d09f064dd5e8b29a61
+prerequisite-patch-id: 50d53a21f91f4087fc80b6f1f72864adfb0002b9
+prerequisite-patch-id: 0df3703af91c30f1ca2c47f5609012f2d7200028
+prerequisite-patch-id: 89f049f951e5acf75aab92541992f816fd0acc0d
+prerequisite-patch-id: 551fae54377090044c3612fca9740a9b359abdd2
+prerequisite-patch-id: c7fdf904f398d478f0ed6d57eb878982bc73329d
+prerequisite-patch-id: 1b2d0982b18da060c82134f05bf3ce16425bac8d
+prerequisite-patch-id: 090ba4b78d47bc19204916e76fdbc70021785388
+prerequisite-patch-id: a5d9e0f7d4f8163f566678894cf693015119f2d9
+prerequisite-patch-id: 4637a8fa2334a45fa6b64351f4e9e28d3e2d60d3
+prerequisite-patch-id: 32647ec60a3b614e1c59ec8e54cb511ae832c22f
+prerequisite-patch-id: aa06658ecf89c92d0dfdd6a4ba6d9e6e67532971
+prerequisite-patch-id: 1387a7e87b446329dfc21f3e575ceae7ebcf954c
+prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
+prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
+prerequisite-patch-id: dbb0c0151b8bdf093e6ce79fd2fe3f60791a6e0b
+prerequisite-patch-id: 9007c8610fdcd387592475949864edde874c20a2
+prerequisite-patch-id: d57e95d31686772abc4c4d5aa1cadc344dc293cd
+prerequisite-patch-id: 9f911969d0a550648493952c99096d26e05d4d83
+prerequisite-patch-id: 2ddada18ab6ea5cd1da14212aaf59632f5203d40
+prerequisite-patch-id: 80042661ff6156ce577a72e9eb8c0b218b624829
+prerequisite-patch-id: 398744c61913c76a35754de867c4f820ca7a8d99
+prerequisite-patch-id: f59269382164b5d642a5e10443ca447f5caa595c
+prerequisite-patch-id: 1babe83d6bf999bad17584dc595480f9070a5369
+prerequisite-patch-id: 77be3d122d66df813f13088141ce27b21107a341
+prerequisite-patch-id: 9fbb7ad1dd258bb8ff5946c4a0e59de4bfd82a04
+prerequisite-patch-id: 6f6984916dffd0cc66aa733c9b6bd3a55495a50c
+prerequisite-patch-id: 39e1be2a3d1593577ab997f55f59367cba665aa7
+prerequisite-patch-id: 584c256c9acb52ee2773d0c81c3f4977fc18155a
+prerequisite-patch-id: b37ac15032973e1fcd918f157c82a0606775c9e9
+prerequisite-patch-id: 32deea16304859842af5c2151bc41d91cf6dfc9b
+prerequisite-patch-id: 20ac2450fb93b3f69f83fc720fd4800a95e618a6
+prerequisite-patch-id: 6abf359fa445f4104432ddee27044dfbfb128417
 -- 
-2.39.2
+2.17.1
 
