@@ -2,187 +2,642 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E12F6FECEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:34:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 801716FECC1
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237544AbjEKHeK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 03:34:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40844 "EHLO
+        id S236654AbjEKH1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 03:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237532AbjEKHd4 (ORCPT
+        with ESMTP id S232059AbjEKH13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 03:33:56 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2061.outbound.protection.outlook.com [40.107.102.61])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C897A869F;
-        Thu, 11 May 2023 00:33:14 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=kQC85FsypQclvlMZL9zsgf/0Mev44oxBW/rnBYWIgKIVYvTyXlMzfzUnkdJbuoMEhmwj/kF3xK0XJ5RPivyoZzDrRYXfuPwwqQRwHtWKSd3pdJIq0jI8WaoI86pMIgCfPAsHPyCU3q8KDY032r6HZcE5R6KbyRt70uiL1corsiOYxemopHRDwM5YpTQBkJDkLxztTQBZQyAvxIa9gs7EC5Ii8gMg16r5qBzg9QG5o1o6Cmr1CXkfiKLVKBS5Jcdmbq3Nr5RW3YYvwDFujASW9ClULlUwusldMm11T0Y00Q0mhY42qAdF7/vMBA49mADhmPCnMtS6XAeRMQum0tu8RQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1GS2mb3Sq2RblIllbyYHGLHZ0f/Lu1fa37GzLAgtRV4=;
- b=YTsc7Ft3VcLpiax+hv+B+hgxpGfOYXIa9cSaDmMnRK1G2KcPLkqljldzx+CN/lYipMgbhYQCIWBxo8z2K7oHX3AaZiKjyCAtw239GXryJFEQ2VMO6/964sTdnEd9gIothYXMCWKZkUsj4KEG5YeskfDAh1EDk8hXdyZODs+Zi4UgX8OYdzvR1vfQ7U7pHdl5Ogu2HJO/XuBdPfE9OyA1hjZ3JZGr2YV10QgY/tyj9pjD9SfYUD6KRwQhCW/eNMaGL20scAKS5jpUoZFhgazpD4QxdlvgXuw7oGpRjgNhcGz1WPxSbOuvz6LDXijECsiWxpSJVL91IkLca/fFXKNi/g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1GS2mb3Sq2RblIllbyYHGLHZ0f/Lu1fa37GzLAgtRV4=;
- b=5Md4G9P9NumcZ86oQ0O/NythAyvDjDCnl4RsX/qPIMMouVh3LexOp4Aq0za95ypdCbLFV5mqQWIbCc5zAG+uG0QNNeAcVvDx6qZXCaUptLzsXlHRfTpgajdxZ9ulJTb0Uh5Lno6xcu7g2Hnhzzs7pODoeLetJE5Ln6YJEfZrpjo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com (2603:10b6:a03:a5::28)
- by DS0PR12MB8296.namprd12.prod.outlook.com (2603:10b6:8:f7::6) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6363.33; Thu, 11 May 2023 07:32:57 +0000
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::20b9:d472:1981:cf94]) by BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::20b9:d472:1981:cf94%4]) with mapi id 15.20.6363.032; Thu, 11 May 2023
- 07:32:57 +0000
-Message-ID: <ede45df2-2282-4331-f5b2-e9b6f49782c9@amd.com>
-Date:   Thu, 11 May 2023 09:26:49 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 0/2] Add rs485 support to uartps driver
-Content-Language: en-US
-To:     "Guntupalli, Manikanta" <manikanta.guntupalli@amd.com>,
-        "m.brock@vanmierlo.com" <m.brock@vanmierlo.com>
-Cc:     "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "michal.simek@xilinx.com" <michal.simek@xilinx.com>,
-        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>,
-        "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>,
-        "Goud, Srinivas" <srinivas.goud@amd.com>,
-        "manion05gk@gmail.com" <manion05gk@gmail.com>
-References: <1682512187-8828-1-git-send-email-manikanta.guntupalli@amd.com>
- <6b72c56e79a44fec348de26d14d9dce0@vanmierlo.com>
- <DM4PR12MB61098014775DE9950A0E2E588C779@DM4PR12MB6109.namprd12.prod.outlook.com>
-From:   Michal Simek <michal.simek@amd.com>
-In-Reply-To: <DM4PR12MB61098014775DE9950A0E2E588C779@DM4PR12MB6109.namprd12.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: VI1PR0802CA0014.eurprd08.prod.outlook.com
- (2603:10a6:800:aa::24) To BYAPR12MB4758.namprd12.prod.outlook.com
- (2603:10b6:a03:a5::28)
+        Thu, 11 May 2023 03:27:29 -0400
+Received: from mail-vk1-xa36.google.com (mail-vk1-xa36.google.com [IPv6:2607:f8b0:4864:20::a36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B05E19AB
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:27:27 -0700 (PDT)
+Received: by mail-vk1-xa36.google.com with SMTP id 71dfb90a1353d-44f98c344d3so2895563e0c.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:27:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683790046; x=1686382046;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dv6mEYy8fSjf10YuSg3KkaUvRLCQCwLn+npubgQtp0o=;
+        b=r3UE1FPJ22HhwA1IlbRSMrj9bwdHH6Hx7sjI8D3lbCrVPATt9aiOnGtvFAQwOZFEo8
+         xdzg19cFi4IPzjXFpG3HM+ABkCkNWz45j8X83IHcQnvTi5pG0R+95lAWPy/EvFiwZCa7
+         ztd4wI55O1FIu3Ljn8zRoVuTDMTqkA9N9yx35a1+bdIcBtVCg+iMbY2YDx8+jRw+skFT
+         waNWH9W5V6B/JyCMUb4ZEM9po11cb4WtKOGdFZlEx3QvRWyIrCceC1dE1JKQJv1FZk7Q
+         lCbkr5j7TleWuvcjTIuQtufCxjip7AGDM6XaxIwhbTtTrSG6Rg6xbAEOYinlhk0wEING
+         5KuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683790046; x=1686382046;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Dv6mEYy8fSjf10YuSg3KkaUvRLCQCwLn+npubgQtp0o=;
+        b=YMiKUfiIMD/UiqNJhgA46SUxM7sIkGHXYl5odY8HoCLgqzC4A5IiFAQEZg9bZusU+9
+         JaskENdewuTn+rhdMRl2KoSgtuGNE7GdYnYlElE26ZJ2WgjGCyLBPwXIbgpKV40KGNbp
+         9Li6xjAR+uUHDe8l0oorlNzRBxiRODafy9rYLFUgES89aCvOqm0/abQZcjwR9MUK3290
+         Lq6aYWrTRHsEyIB8N9XA6HvyfAsQiRyuhq3BowhnlI0HoexDOtr67/ixWDdKfuS3avYT
+         F3MItE2hGNvWypsjfO2cXAVhjWYpWQ/F8xY1/giaT3NnRpnmvHc49YDCRrH7ZBrW1WHp
+         TZDg==
+X-Gm-Message-State: AC+VfDwMLPoZvWed/5L5IlpxrHCRDUzuBO/nabKidzs3rvUghl1LN+Zx
+        jeh+2tSLWzX0i9YHwM69fNvGPr3dtfl3bgTxf+dhpQ==
+X-Google-Smtp-Source: ACHHUZ6/Ew89xe1AXGF7nspCBpL+S9BZf0mlZNRp5by0cZqd/WC03ffOnxOOk6pPCtc1RphFWUwhhbLEAMSKpC13Y+8=
+X-Received: by 2002:a1f:dd42:0:b0:43f:cc0e:b634 with SMTP id
+ u63-20020a1fdd42000000b0043fcc0eb634mr5798923vkg.5.1683790045576; Thu, 11 May
+ 2023 00:27:25 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4758:EE_|DS0PR12MB8296:EE_
-X-MS-Office365-Filtering-Correlation-Id: 63ab8fef-a6e4-4442-d8f2-08db51f1f0ca
-X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jlGSjRBnuMtLnq55aCZRDuOgntKt12YvwikTRJAymq05wOw6zFEq8f0mD/Ap8Z89EmTYOTPOSU46wLVN8qyB+qEmm5ru6acegQWafIeHzTn/7Q3ToPxtSe255F9lxAYnX3LI0U5lUSC0QiIB9348OT5qGsnKWnj0cm0hmVyOwWEg/LauFMYIWqx8yv1TZeTN1Zpx/hezjnUaZcyaXjCSUCGA7pcmNAE1hqjbii6oKM5S7B2yE13XbZVDzLTvjo2vF9kQUOpTCOsRJ0GgeQ3PXijC0Fujy7KZ4QTC7/NrqUkRO35aEPJQZJ3ODhcaae3udGiXYQhiIbQpyuyso4sLIarPuv7c+hPAyI2FRHReh57hh7g98VTJZzuE9M9EH1oaVikHPjNTtJ+S4a4rvmJrwYS4gfoK05hdTfdDf1Atx0RkqZJZICHvoilk55hm20KYBX8tt01Jnqh0h3AOesBOkaACWcnJTlSRIo5XcIjHTjDZhVNQ5DwXtXyfTRNci6HyPSoDvVQyX3NNGQ6KRxMPpJ8OrzYjRlZItgc2F/LrXgSuyg7jZzSzP76JjdjxcziTiriI8TkY42mf+9QNkgn+38/AQNATySTJ2MFY5ZPULJ8vs0Ugwzp/KgEEjgjMzK5UHVeQwtsXiXs00GeiwIKOMQ==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4758.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(346002)(396003)(366004)(39860400002)(451199021)(2906002)(86362001)(2616005)(83380400001)(186003)(4326008)(66556008)(66946007)(36756003)(66476007)(6506007)(53546011)(6512007)(31696002)(31686004)(26005)(41300700001)(7416002)(5660300002)(6486002)(38100700002)(44832011)(6666004)(54906003)(110136005)(316002)(8936002)(8676002)(478600001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YmR6OUI2Ymx4WitpbSs3eXhzU2p3OEl6L0lmdUpFU3VMUXBlS21wdDZiSUNr?=
- =?utf-8?B?cm9zUVlDb3h2c2t1U0R2eXIvaTRLQVVJMXV3S1JpTnpqVkR4V2lVcm0xM3VU?=
- =?utf-8?B?SUJJdFk4TXhDam9vcmp1VXQ1Z21nZHUvRTVmOHJNODV6Zmg4eHNxelBzOFh2?=
- =?utf-8?B?TEZVUEd2NGZIMDdzMU1ibHMvR0pLUlNscm1kUVNjQWJqdkJBMjZRQzJIa01G?=
- =?utf-8?B?T0RXU2RiR0VNb0pJcnJOdzlLRVMvUExEYUoxTlZ2anVtV2ovV0FKaXhzVkxs?=
- =?utf-8?B?b2MwRVk4QjZxY3JZcXI2NStkNHhhVWFnaHJ1a2kwb1RXOE9uY3h4aHVxaTIz?=
- =?utf-8?B?WTR3cGcwQUE3WWhUdy9NRHlWcHVyWHNSeHhWbjB1c3Q3MjFSVmVQTjR6OU14?=
- =?utf-8?B?TmFTdVRlRU5aY0kvNmg3c0txZERLZ05WMm9MWm4yeTh5ejdjdjFWWjkvbldC?=
- =?utf-8?B?Skkwa2ZBaUVXQ00wckNHV3RZbmZUYW0vRkFyanZ2YnFLSEFxclZocUlYd3Jm?=
- =?utf-8?B?TitoSG1HVXdReTdpS3NhREwveXVUZWVlZGFiTnZTWFhsS2dQbnBMUWJXdGZk?=
- =?utf-8?B?eHNWNUltM3Z6c2VNNjUxWitwWTYrVXQyaTYwTEw2QUVJTnVyL2ZPTTQxZ3Vk?=
- =?utf-8?B?ZkVFRndTWUxoT2UveGZnZWUyMUZsM3BYQWg1QTFoTklrdVZXQ2ZCZWV0WmUz?=
- =?utf-8?B?djMvVUhzdE43VWp4OGVvU3B0cy9mY1BkbXZpbjc2b1N6SHYzOUJBMWl3Ykll?=
- =?utf-8?B?VXVTaXEraU5BOFp5ckE5SmpVOHAyeXQ5MmI0ckhzWjBueS8va2I5M3ZXdU55?=
- =?utf-8?B?SHhuQlpCQ1NEbDRuek1iR2V3NlRVZndwUUpRaTEwY3kzV29NWUljWmhKRFFG?=
- =?utf-8?B?YWllM3V1bzRBMDB6WHhtcDQxSDdzNUQ4aGViTXVuNDVKR2R0UTJmOXRZaDc1?=
- =?utf-8?B?aFRKWUowMENVU2FuVFZKK2xETXgzaG00QkJTRWtISm5FRUUrVjZ5Sy8rM1k1?=
- =?utf-8?B?ZlZqZHVXZGp1QXZqU1REVEpvK0ZrYmdZTHFUTVRFS084eXBreGRsbEV3c3NZ?=
- =?utf-8?B?b294WWlSaGdPOGw5WGxrZ2h6c3lEZlVyY3lNOGcwUi9uZytGdWZwc0tVdHlH?=
- =?utf-8?B?L21uZzI0ZTFtYVNGT2xQYXV3WWMxcGEwVnJtZ1pvcDZKNUdPVXFCa2RCZi9m?=
- =?utf-8?B?Z3hnbzQ4Rno2WkJMWmE5dUliaE16N2VGOWZORWVzSGRVdGZCY3h6NDV2VWdj?=
- =?utf-8?B?YTVaWWZNZWJPQmtsTHI3V3MzM1hwVldOb2ZDMElSQkRuOTRxaEVxTzN6RXl1?=
- =?utf-8?B?a1paYjZCK1NJeVdMSUF5ZEQ4Z2tOQnJkSTN6WERCOUdGY0hpK040OVJQbEpJ?=
- =?utf-8?B?aWJiOVZaeWhHWkRuMm1Hd3lyaSsydWtPamFJc0V6a0c1bHdLM2RVcDVidkpN?=
- =?utf-8?B?bEtFbTVObU1iZEQ5RDloWGVhQXErUFoxYWpraEY5WXJ6aitZVCszYzYxYSs2?=
- =?utf-8?B?UExuQklMbVJub05DZ3Z6Y1JhcHVBeTVWUUNXY2FCVUhWTk9VUWdKcTliOTdD?=
- =?utf-8?B?cUZDUzRRYlhLY1FpQ1pmaHlCb3AyZHU4Tzd3aERlNEhNMzMwa0lxei94c1hu?=
- =?utf-8?B?ZUhoQjkwRkFTMzJ1ektXT2lrc00xaTNYVCtlcElBNTVIOXVSOEdxbVB3N0tr?=
- =?utf-8?B?Yk0ySndLbWErb2ZHaG9yamQxdkozR2RkZzR1N0RiMDZGWFEraUJYNTFzTnVL?=
- =?utf-8?B?dCtwSDdUMzBmNDVLZitvN1IvZmcveW5HVlQ2bkZ0YnRqeVhsd1ExV1d5UEp6?=
- =?utf-8?B?aWlmbVlFZnp6MGFuVk9nTkw0ZVY3QmpBS2V5U3UvVjhzRW81cXNlNmZDeXJG?=
- =?utf-8?B?Rjc5TStoaDBNQlpSc1J0YkdJUW1OV3NpL0JMZERPelVkckRFUHpEenZSRWpx?=
- =?utf-8?B?VTJYYysrSHkxSWJIQ2ZKeS9zQWpvQkNidFlIYng1dHFkNU1IWXU3cTExM3o1?=
- =?utf-8?B?ZWlWVzR1R09UYmVDYjFQT3FTTnYxdXBhUTJnSzZiWVdRSWdRMTd4RlVINUQr?=
- =?utf-8?B?eVJJN2d3Z1BTc2Y2dlJYcEJBcFFjSkZuM0g3TS9wSjNhUkNsa0JYM01ZYkty?=
- =?utf-8?Q?+zUxnAecWp1XNk8oEcLEf5IGS?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 63ab8fef-a6e4-4442-d8f2-08db51f1f0ca
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4758.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 07:32:57.3534
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EPxTwfxC/WLvUAJjDORQfIJ9KqjPtHhqqe43In3UbtmpPf5W1ml6IUSg60kPMWj/
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB8296
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230505173012.881083-1-etienne.carriere@linaro.org>
+ <20230505173012.881083-3-etienne.carriere@linaro.org> <CAFA6WYN4yjjedmsS4nAgR5L7OOTRAcKs7STW0YjCC7XsdfYzkA@mail.gmail.com>
+ <CAN5uoS8eSfeu-BaV5dhbB15q_iGjcd9BKDpp_hEBaBdb4_qbAg@mail.gmail.com> <CAN5uoS99hfjE404_UCm+F4bdVgSfB6Eg_3d1JvHCc2GgSzdUog@mail.gmail.com>
+In-Reply-To: <CAN5uoS99hfjE404_UCm+F4bdVgSfB6Eg_3d1JvHCc2GgSzdUog@mail.gmail.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 11 May 2023 12:57:14 +0530
+Message-ID: <CAFA6WYPUWjK97H5DL-eOT2bjsa79Zrvk4wet2AW0Qb0NOVqt7Q@mail.gmail.com>
+Subject: Re: [PATCH v6 3/4] tee: optee: support tracking system threads
+To:     Etienne Carriere <etienne.carriere@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        op-tee@lists.trustedfirmware.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 10 May 2023 at 23:08, Etienne Carriere
+<etienne.carriere@linaro.org> wrote:
+>
+> On Wed, 10 May 2023 at 17:15, Etienne Carriere
+> <etienne.carriere@linaro.org> wrote:
+> >
+> > On Wed, 10 May 2023 at 12:08, Sumit Garg <sumit.garg@linaro.org> wrote:
+> > >
+> > > On Fri, 5 May 2023 at 23:01, Etienne Carriere
+> > > <etienne.carriere@linaro.org> wrote:
+> > > >
+> > > > From: Jens Wiklander <jens.wiklander@linaro.org>
+> > > >
+> > > > Adds support in the OP-TEE driver to keep track of reserved system
+> > > > threads. The optee_cq_*() functions are updated to handle this if
+> > > > enabled. The SMC ABI part of the driver enables this tracking, but the
+> > > > FF-A ABI part does not.
+> > >
+> > > OP-TEE system threads sound like a core feature towards OP-TEE. If we
+> > > enable it only for SMC ABI then it is likely to break kernel drivers
+> > > who migrate to FFA ABI. Also, looking from implementation point of
+> > > view it shouldn't be that hard to enable it for FFA ABI too.
+> >
+> > It is not mandatory all TEE ABIs support this feature.
+> > Caller driver can still use SMC/OP-TEE transport without this support
+> > yet with some limitation of course.
+> >
 
+IMHO, it would be better if we enable ABIs agnostic features for all
+ABIs from a maintainability perspective. But I don't have a strong
+opinion here.
 
-On 5/10/23 18:26, Guntupalli, Manikanta wrote:
-> Hi Maarten,
-> 
->> -----Original Message-----
->> From: m.brock@vanmierlo.com <m.brock@vanmierlo.com>
->> Sent: Thursday, May 4, 2023 5:52 PM
->> To: Guntupalli, Manikanta <manikanta.guntupalli@amd.com>
->> Cc: gregkh@linuxfoundation.org; robh+dt@kernel.org;
->> krzysztof.kozlowski+dt@linaro.org; michal.simek@xilinx.com; linux-
->> serial@vger.kernel.org; devicetree@vger.kernel.org; linux-
->> kernel@vger.kernel.org; jirislaby@kernel.org; linux-arm-
->> kernel@lists.infradead.org; Simek, Michal <michal.simek@amd.com>; git
->> (AMD-Xilinx) <git@amd.com>; Pandey, Radhey Shyam
->> <radhey.shyam.pandey@amd.com>; Datta, Shubhrajyoti
->> <shubhrajyoti.datta@amd.com>; Goud, Srinivas <srinivas.goud@amd.com>;
->> manion05gk@gmail.com
->> Subject: Re: [PATCH 0/2] Add rs485 support to uartps driver
->>
->> Manikanta Guntupalli wrote 2023-04-26 14:29:
->>> Add optional gpio property to uartps node to support rs485 Add rs485
->>> support to uartps driver
->>>
->>> Manikanta Guntupalli (2):
->>>    dt-bindings: Add optional gpio property to uartps node to support
->>>      rs485
->>>    tty: serial: uartps: Add rs485 support to uartps driver
->>>
->>>   .../devicetree/bindings/serial/cdns,uart.yaml |  5 +
->>>   drivers/tty/serial/xilinx_uartps.c            | 96 ++++++++++++++++++-
->>>   2 files changed, 100 insertions(+), 1 deletion(-)
->>
->> Why would you want to use a GPIO and not RTS for choosing the direction as
->> is more common in this case?
-> In ZynqMp platform Cadence UART Controller RTS signal routed to external through the PL(Programmable Logic) design not through Multiplexed IO.
+> > >
+> > > >
+> > > > Signed-off-by: Jens Wiklander <jens.wiklander@linaro.org>
+> > > > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> > > > ---
+> > > > No change since v5
+> > > >
+> > > > Changes since v4:
+> > > > - New change that supersedes implementation proposed in PATCH v4
+> > > >   (tee: system invocation"). Thanks to Jens implementation we don't need
+> > > >   the new OP-TEE services that my previous patch versions introduced to
+> > > >   monitor system threads entry. Now, Linux optee SMC ABI driver gets TEE
+> > > >   provisioned thread contexts count once and monitors thread entries in
+> > > >   OP-TEE on that basis and the system thread capability of the related
+> > > >   tee session. By the way, I dropped the WARN_ONCE() call I suggested
+> > > >   on tee thread exhaustion as it does not provides useful information.
+> > > > ---
+> > > >  drivers/tee/optee/call.c          | 128 +++++++++++++++++++++++++++---
+> > > >  drivers/tee/optee/ffa_abi.c       |  10 +--
+> > > >  drivers/tee/optee/optee_private.h |  13 ++-
+> > > >  drivers/tee/optee/smc_abi.c       |  24 ++++--
+> > > >  4 files changed, 154 insertions(+), 21 deletions(-)
+> > > >
+> > > > diff --git a/drivers/tee/optee/call.c b/drivers/tee/optee/call.c
+> > > > index dba5339b61ae..c2d484201f79 100644
+> > > > --- a/drivers/tee/optee/call.c
+> > > > +++ b/drivers/tee/optee/call.c
+> > > > @@ -39,9 +39,26 @@ struct optee_shm_arg_entry {
+> > > >         DECLARE_BITMAP(map, MAX_ARG_COUNT_PER_ENTRY);
+> > > >  };
+> > > >
+> > > > +void optee_cq_init(struct optee_call_queue *cq, int thread_count)
+> > > > +{
+> > > > +       mutex_init(&cq->mutex);
+> > > > +       INIT_LIST_HEAD(&cq->normal_waiters);
+> > > > +       INIT_LIST_HEAD(&cq->sys_waiters);
+> > > > +       /*
+> > > > +        * If cq->total_thread_count is 0 then we're not trying to keep
+> > > > +        * track of how many free threads we have, instead we're relying on
+> > > > +        * the secure world to tell us when we're out of thread and have to
+> > > > +        * wait for another thread to become available.
+> > > > +        */
+> > > > +       cq->total_thread_count = thread_count;
+> > > > +       cq->free_normal_thread_count = thread_count;
+> > > > +}
+> > > > +
+> > > >  void optee_cq_wait_init(struct optee_call_queue *cq,
+> > > > -                       struct optee_call_waiter *w)
+> > > > +                       struct optee_call_waiter *w, bool sys_thread)
+> > >
+> > > Introduction of system_thread property should be part of patch #1.
+> >
+> > Patch 1 prepared for TEE system thread support.
+> > This patch implements it for the SMC ABI.
+> > This split looked easier from a patch review perspective.
+>
+> After a second look, I understand your comment.
+> Right, i'll move this function ABI change to patch #1 and ditto for
+> the other places your pointed out.
+>
+> >
+> >
+> > >
+> > > >  {
+> > > > +       bool need_wait = false;
+> > > > +
+> > > >         /*
+> > > >          * We're preparing to make a call to secure world. In case we can't
+> > > >          * allocate a thread in secure world we'll end up waiting in
+> > > > @@ -53,15 +70,40 @@ void optee_cq_wait_init(struct optee_call_queue *cq,
+> > > >         mutex_lock(&cq->mutex);
+> > > >
+> > > >         /*
+> > > > -        * We add ourselves to the queue, but we don't wait. This
+> > > > -        * guarantees that we don't lose a completion if secure world
+> > > > -        * returns busy and another thread just exited and try to complete
+> > > > -        * someone.
+> > > > +        * We add ourselves to a queue, but we don't wait. This guarantees
+> > > > +        * that we don't lose a completion if secure world returns busy and
+> > > > +        * another thread just exited and try to complete someone.
+> > > >          */
+> > > >         init_completion(&w->c);
+> > > > -       list_add_tail(&w->list_node, &cq->waiters);
+> > > > +       w->sys_thread = sys_thread;
+> > > > +       if (sys_thread) {
+> > > > +               list_add_tail(&w->list_node, &cq->sys_waiters);
+> > > > +       } else {
+> > > > +               list_add_tail(&w->list_node, &cq->normal_waiters);
+> > > > +               if (cq->total_thread_count) {
+> > > > +                       /*
+> > > > +                        * Claim a normal thread if one is available, else
+> > > > +                        * we'll need to wait for a normal thread to be
+> > > > +                        * released.
+> > > > +                        */
+> > > > +                       if (cq->free_normal_thread_count > 0)
+> > > > +                               cq->free_normal_thread_count--;
+> > > > +                       else
+> > > > +                               need_wait = true;
+> > > > +               }
+> > > > +       }
+> > > >
+> > > >         mutex_unlock(&cq->mutex);
+> > > > +
+> > > > +       while (need_wait) {
+> > > > +               optee_cq_wait_for_completion(cq, w);
+> > > > +               mutex_lock(&cq->mutex);
+> > > > +               if (cq->free_normal_thread_count > 0) {
+> > > > +                       cq->free_normal_thread_count--;
+> > > > +                       need_wait = false;
+> > > > +               }
+> > > > +               mutex_unlock(&cq->mutex);
+> > > > +       }
+> > > >  }
+> > > >
+> > > >  void optee_cq_wait_for_completion(struct optee_call_queue *cq,
+> > > > @@ -74,7 +116,10 @@ void optee_cq_wait_for_completion(struct optee_call_queue *cq,
+> > > >         /* Move to end of list to get out of the way for other waiters */
+> > > >         list_del(&w->list_node);
+> > > >         reinit_completion(&w->c);
+> > > > -       list_add_tail(&w->list_node, &cq->waiters);
+> > > > +       if (w->sys_thread)
+> > > > +               list_add_tail(&w->list_node, &cq->sys_waiters);
+> > > > +       else
+> > > > +               list_add_tail(&w->list_node, &cq->normal_waiters);
+> > > >
+> > > >         mutex_unlock(&cq->mutex);
+> > > >  }
+> > > > @@ -83,10 +128,19 @@ static void optee_cq_complete_one(struct optee_call_queue *cq)
+> > > >  {
+> > > >         struct optee_call_waiter *w;
+> > > >
+> > > > -       list_for_each_entry(w, &cq->waiters, list_node) {
+> > > > +       list_for_each_entry(w, &cq->sys_waiters, list_node) {
+> > > >                 if (!completion_done(&w->c)) {
+> > > >                         complete(&w->c);
+> > > > -                       break;
+> > > > +                       return;
+> > > > +               }
+> > > > +       }
+> > > > +
+> > > > +       if (!cq->total_thread_count || cq->free_normal_thread_count > 0) {
+> > > > +               list_for_each_entry(w, &cq->normal_waiters, list_node) {
+> > > > +                       if (!completion_done(&w->c)) {
+> > > > +                               complete(&w->c);
+> > > > +                               break;
+> > > > +                       }
+> > > >                 }
+> > > >         }
+> > > >  }
+> > > > @@ -104,6 +158,9 @@ void optee_cq_wait_final(struct optee_call_queue *cq,
+> > > >         /* Get out of the list */
+> > > >         list_del(&w->list_node);
+> > > >
+> > > > +       if (!w->sys_thread)
+> > > > +               cq->free_normal_thread_count++; /* Release a normal thread */
+> > > > +
+> > > >         /* Wake up one eventual waiting task */
+> > > >         optee_cq_complete_one(cq);
+> > > >
+> > > > @@ -119,6 +176,36 @@ void optee_cq_wait_final(struct optee_call_queue *cq,
+> > > >         mutex_unlock(&cq->mutex);
+> > > >  }
+> > > >
+> > > > +bool optee_cq_inc_sys_thread_count(struct optee_call_queue *cq)
+> > > > +{
+> > > > +       bool rc = false;
+> > > > +
+> > > > +       mutex_lock(&cq->mutex);
+> > > > +
+> > > > +       /* Leave at least 1 normal (non-system) thread */
+> > >
+> > > IMO, this might be counter productive. As most kernel drivers open a
+> > > session during driver probe which are only released in the driver
+> > > release method.
+> >
+> > It is always the case?
+>
+> This answer of mine is irrelevant. Sorry,
+> Please read only the below comments of mine, especially:
+> | Note that an OP-TEE thread is not bound to a TEE session but rather
+> | bound to a yielded call to OP-TEE.
+>
+> >
+> > > If the kernel driver is built-in then the session is
+> > > never released. Now with system threads we would reserve an OP-TEE
+> > > thread for that kernel driver as well which will never be available to
+> > > regular user-space clients.
+> >
+> > That is not true. No driver currently requests their TEE thread to be
+> > a system thread.
+> > Only SCMI does because it needs to by construction.
+> >
 
-Just to extend this a little bit. Cadence IP has modem signals but they are not 
-available over MIOs only over EMIO via PL logic. But board which this feature 
-targets can't have connection to PL pins to be able to use any modem signal for 
-this logic.
+Yes that's true but what prevents future/current kernel TEE drivers
+from requesting a system thread once we have this patch-set landed.
 
-Thanks,
-Michal
+> >
+> > > So I would rather suggest we only allow a
+> > > single system thread to be reserved as a starting point which is
+> > > relevant to this critical SCMI service. We can also make this upper
+> > > bound for system threads configurable with default value as 1 if
+> > > needed.
+>
+> Note that SCMI server can expose several SCMI channels (at most 1 per
+> SCMI protocol used) and each of them will need to request a
+> system_thread to TEE driver.
+>
+> Etienne
+>
+> >
+> > Reserving one or more system threads depends on the number of thread
+> > context provisioned by the TEE.
+> > Note that the implementation proposed here prevents Linux kernel from
+> > exhausting TEE threads so user space always has at least a TEE thread
+> > context left available.
 
+Yeah but on the other hand user-space clients which are comparatively
+larger in number than kernel clients. So they will be starved for
+OP-TEE thread availability. Consider a user-space client which needs
+to serve a lot of TLS connections just waiting for OP-TEE thread
+availability.
+
+> >
+> > Note that an OP-TEE thread is not bound to a TEE session but rather
+> > bound to a yielded call to OP-TEE.
+
+tee_client_open_session()
+  -> optee_open_session()
+
+tee_client_system_session()
+  -> optee_system_session()
+    -> optee_cq_inc_sys_thread_count()       <- At this point you
+reserve a system thread corresponding to a particular kernel client
+session
+
+All tee_client_invoke_func() invocations with a system thread capable
+session will use that reserved thread.
+
+tee_client_close_session()
+  -> optee_close_session()
+    -> optee_close_session_helper()
+      -> optee_cq_dec_sys_thread_count()    <- At this point the
+reserved system thread is released
+
+Haven't this tied the system thread to a particular TEE session? Or am
+I missing something?
+
+> >
+> >
+> > >
+> > > > +       if (cq->res_sys_thread_count + 1 < cq->total_thread_count) {
+> > > > +               cq->free_normal_thread_count--;
+> > > > +               cq->res_sys_thread_count++;
+> > > > +               rc = true;
+> > > > +       }
+> > > > +
+> > > > +       mutex_unlock(&cq->mutex);
+> > > > +
+> > > > +       return rc;
+> > > > +}
+> > > > +
+> > > > +void optee_cq_dec_sys_thread_count(struct optee_call_queue *cq)
+> > > > +{
+> > > > +       mutex_lock(&cq->mutex);
+> > > > +       if (cq->res_sys_thread_count > 0) {
+> > > > +               cq->res_sys_thread_count--;
+> > > > +               cq->free_normal_thread_count++;
+> > > > +               /* If there's someone waiting, let it resume */
+> > > > +               optee_cq_complete_one(cq);
+> > > > +       }
+> > > > +       mutex_unlock(&cq->mutex);
+> > > > +}
+> > > > +
+> > > >  /* Requires the filpstate mutex to be held */
+> > > >  static struct optee_session *find_session(struct optee_context_data *ctxdata,
+> > > >                                           u32 session_id)
+> > > > @@ -361,6 +448,27 @@ int optee_open_session(struct tee_context *ctx,
+> > > >         return rc;
+> > > >  }
+> > > >
+> > > > +int optee_system_session(struct tee_context *ctx, u32 session)
+> > > > +{
+> > > > +       struct optee_context_data *ctxdata = ctx->data;
+> > > > +       struct optee *optee = tee_get_drvdata(ctx->teedev);
+> > > > +       struct optee_session *sess;
+> > > > +       int rc = -EINVAL;
+> > > > +
+> > > > +       mutex_lock(&ctxdata->mutex);
+> > > > +
+> > > > +       sess = find_session(ctxdata, session);
+> > > > +       if (sess && !sess->use_sys_thread &&
+> > > > +           optee_cq_inc_sys_thread_count(&optee->call_queue)) {
+> > > > +               rc = 0;
+> > > > +               sess->use_sys_thread = true;
+> > > > +       }
+> > > > +
+> > > > +       mutex_unlock(&ctxdata->mutex);
+> > > > +
+> > > > +       return rc;
+> > > > +}
+> > > > +
+> > > >  int optee_close_session_helper(struct tee_context *ctx, u32 session,
+> > > >                                bool system_thread)
+> > > >  {
+> > > > @@ -378,6 +486,8 @@ int optee_close_session_helper(struct tee_context *ctx, u32 session,
+> > > >         msg_arg->session = session;
+> > > >         optee->ops->do_call_with_arg(ctx, shm, offs, system_thread);
+> > > >
+> > > > +       if (system_thread)
+> > > > +               optee_cq_dec_sys_thread_count(&optee->call_queue);
+> > > >         optee_free_msg_arg(ctx, entry, offs);
+> > > >
+> > > >         return 0;
+> > > > diff --git a/drivers/tee/optee/ffa_abi.c b/drivers/tee/optee/ffa_abi.c
+> > > > index 52cec9d06041..0c9055691343 100644
+> > > > --- a/drivers/tee/optee/ffa_abi.c
+> > > > +++ b/drivers/tee/optee/ffa_abi.c
+> > > > @@ -528,7 +528,8 @@ static void optee_handle_ffa_rpc(struct tee_context *ctx, struct optee *optee,
+> > > >
+> > > >  static int optee_ffa_yielding_call(struct tee_context *ctx,
+> > > >                                    struct ffa_send_direct_data *data,
+> > > > -                                  struct optee_msg_arg *rpc_arg)
+> > > > +                                  struct optee_msg_arg *rpc_arg,
+> > > > +                                  bool system_thread)
+> > > >  {
+> > > >         struct optee *optee = tee_get_drvdata(ctx->teedev);
+> > > >         struct ffa_device *ffa_dev = optee->ffa.ffa_dev;
+> > > > @@ -541,7 +542,7 @@ static int optee_ffa_yielding_call(struct tee_context *ctx,
+> > > >         int rc;
+> > > >
+> > > >         /* Initialize waiter */
+> > > > -       optee_cq_wait_init(&optee->call_queue, &w);
+> > > > +       optee_cq_wait_init(&optee->call_queue, &w, system_thread);
+> > > >         while (true) {
+> > > >                 rc = msg_ops->sync_send_receive(ffa_dev, data);
+> > > >                 if (rc)
+> > > > @@ -643,7 +644,7 @@ static int optee_ffa_do_call_with_arg(struct tee_context *ctx,
+> > > >         if (IS_ERR(rpc_arg))
+> > > >                 return PTR_ERR(rpc_arg);
+> > > >
+> > > > -       return optee_ffa_yielding_call(ctx, &data, rpc_arg);
+> > > > +       return optee_ffa_yielding_call(ctx, &data, rpc_arg, system_thread);
+> > > >  }
+> > >
+> > > Introduction of system_thread property should be part of patch #1.
+> >
+> > See my answer above.
+> >
+> > >
+> > > >
+> > > >  /*
+> > > > @@ -851,8 +852,7 @@ static int optee_ffa_probe(struct ffa_device *ffa_dev)
+> > > >         if (rc)
+> > > >                 goto err_unreg_supp_teedev;
+> > > >         mutex_init(&optee->ffa.mutex);
+> > > > -       mutex_init(&optee->call_queue.mutex);
+> > > > -       INIT_LIST_HEAD(&optee->call_queue.waiters);
+> > > > +       optee_cq_init(&optee->call_queue, 0);
+> > >
+> > > This looks like some refactoring going on which should be part of a
+> > > separate patch to ease the review process.
+> >
+> > I'll see how to handle your request.
+> >
+> > >
+> > > >         optee_supp_init(&optee->supp);
+> > > >         optee_shm_arg_cache_init(optee, arg_cache_flags);
+> > > >         ffa_dev_set_drvdata(ffa_dev, optee);
+> > > > diff --git a/drivers/tee/optee/optee_private.h b/drivers/tee/optee/optee_private.h
+> > > > index 3da7960ab34a..6e0863a70843 100644
+> > > > --- a/drivers/tee/optee/optee_private.h
+> > > > +++ b/drivers/tee/optee/optee_private.h
+> > > > @@ -43,12 +43,17 @@ typedef void (optee_invoke_fn)(unsigned long, unsigned long, unsigned long,
+> > > >  struct optee_call_waiter {
+> > > >         struct list_head list_node;
+> > > >         struct completion c;
+> > > > +       bool sys_thread;
+> > > >  };
+> > > >
+> > > >  struct optee_call_queue {
+> > > >         /* Serializes access to this struct */
+> > > >         struct mutex mutex;
+> > > > -       struct list_head waiters;
+> > > > +       struct list_head normal_waiters;
+> > > > +       struct list_head sys_waiters;
+> > > > +       int total_thread_count;
+> > > > +       int free_normal_thread_count;
+> > > > +       int res_sys_thread_count;
+> > > >  };
+> > > >
+> > > >  struct optee_notif {
+> > > > @@ -254,6 +259,7 @@ int optee_supp_send(struct tee_context *ctx, u32 ret, u32 num_params,
+> > > >  int optee_open_session(struct tee_context *ctx,
+> > > >                        struct tee_ioctl_open_session_arg *arg,
+> > > >                        struct tee_param *param);
+> > > > +int optee_system_session(struct tee_context *ctx, u32 session);
+> > > >  int optee_close_session_helper(struct tee_context *ctx, u32 session,
+> > > >                                bool system_thread);
+> > > >  int optee_close_session(struct tee_context *ctx, u32 session);
+> > > > @@ -303,8 +309,11 @@ static inline void optee_to_msg_param_value(struct optee_msg_param *mp,
+> > > >         mp->u.value.c = p->u.value.c;
+> > > >  }
+> > > >
+> > > > +void optee_cq_init(struct optee_call_queue *cq, int thread_count);
+> > > > +bool optee_cq_inc_sys_thread_count(struct optee_call_queue *cq);
+> > > > +void optee_cq_dec_sys_thread_count(struct optee_call_queue *cq);
+> > > >  void optee_cq_wait_init(struct optee_call_queue *cq,
+> > > > -                       struct optee_call_waiter *w);
+> > > > +                       struct optee_call_waiter *w, bool sys_thread);
+> > > >  void optee_cq_wait_for_completion(struct optee_call_queue *cq,
+> > > >                                   struct optee_call_waiter *w);
+> > > >  void optee_cq_wait_final(struct optee_call_queue *cq,
+> > > > diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+> > > > index 56ebbb96ac97..2819674fd555 100644
+> > > > --- a/drivers/tee/optee/smc_abi.c
+> > > > +++ b/drivers/tee/optee/smc_abi.c
+> > > > @@ -281,9 +281,10 @@ static int optee_to_msg_param(struct optee *optee,
+> > > >  static void optee_enable_shm_cache(struct optee *optee)
+> > > >  {
+> > > >         struct optee_call_waiter w;
+> > > > +       bool system_thread = false;
+> > >
+> > > This variable is redundant.
+> >
+> > Using a variable here makes it more clear which argument is passed to
+> > optee_cq_wait_init().
+> > Calling optee_cq_wait_init(&optee->call_queue, &w, false); is less readable.
+> >
+
+The function declaration is always there to read about the arguments.
+IMO, variables with a constant value which are only used once don't
+add any value.
+
+-Sumit
+
+> > >
+> > > >
+> > > >         /* We need to retry until secure world isn't busy. */
+> > > > -       optee_cq_wait_init(&optee->call_queue, &w);
+> > > > +       optee_cq_wait_init(&optee->call_queue, &w, system_thread);
+> > > >         while (true) {
+> > > >                 struct arm_smccc_res res;
+> > > >
+> > > > @@ -306,9 +307,10 @@ static void optee_enable_shm_cache(struct optee *optee)
+> > > >  static void __optee_disable_shm_cache(struct optee *optee, bool is_mapped)
+> > > >  {
+> > > >         struct optee_call_waiter w;
+> > > > +       bool system_thread = false;
+> > > >
+> > >
+> > > This variable is redundant.
+> >
+> > Ditto
+> >
+> > >
+> > > >         /* We need to retry until secure world isn't busy. */
+> > > > -       optee_cq_wait_init(&optee->call_queue, &w);
+> > > > +       optee_cq_wait_init(&optee->call_queue, &w, system_thread);
+> > > >         while (true) {
+> > > >                 union {
+> > > >                         struct arm_smccc_res smccc;
+> > > > @@ -927,7 +929,7 @@ static int optee_smc_do_call_with_arg(struct tee_context *ctx,
+> > > >                 reg_pair_from_64(&param.a1, &param.a2, parg);
+> > > >         }
+> > > >         /* Initialize waiter */
+> > > > -       optee_cq_wait_init(&optee->call_queue, &w);
+> > > > +       optee_cq_wait_init(&optee->call_queue, &w, system_thread);
+> > > >         while (true) {
+> > > >                 struct arm_smccc_res res;
+> > > >
+> > > > @@ -1209,6 +1211,7 @@ static const struct tee_driver_ops optee_clnt_ops = {
+> > > >         .release = optee_release,
+> > > >         .open_session = optee_open_session,
+> > > >         .close_session = optee_close_session,
+> > > > +       .system_session = optee_system_session,
+> > > >         .invoke_func = optee_invoke_func,
+> > > >         .cancel_req = optee_cancel_req,
+> > > >         .shm_register = optee_shm_register,
+> > > > @@ -1356,6 +1359,16 @@ static bool optee_msg_exchange_capabilities(optee_invoke_fn *invoke_fn,
+> > > >         return true;
+> > > >  }
+> > > >
+> > > > +static unsigned int optee_msg_get_thread_count(optee_invoke_fn *invoke_fn)
+> > > > +{
+> > > > +       struct arm_smccc_res res;
+> > > > +
+> > > > +       invoke_fn(OPTEE_SMC_GET_THREAD_COUNT, 0, 0, 0, 0, 0, 0, 0, &res);
+> > > > +       if (res.a0)
+> > > > +               return 0;
+> > > > +       return res.a1;
+> > > > +}
+> > > > +
+> > > >  static struct tee_shm_pool *
+> > > >  optee_config_shm_memremap(optee_invoke_fn *invoke_fn, void **memremaped_shm)
+> > > >  {
+> > > > @@ -1609,6 +1622,7 @@ static int optee_probe(struct platform_device *pdev)
+> > > >         struct optee *optee = NULL;
+> > > >         void *memremaped_shm = NULL;
+> > > >         unsigned int rpc_param_count;
+> > > > +       unsigned int thread_count;
+> > > >         struct tee_device *teedev;
+> > > >         struct tee_context *ctx;
+> > > >         u32 max_notif_value;
+> > > > @@ -1636,6 +1650,7 @@ static int optee_probe(struct platform_device *pdev)
+> > > >                 return -EINVAL;
+> > > >         }
+> > > >
+> > > > +       thread_count = optee_msg_get_thread_count(invoke_fn);
+> > > >         if (!optee_msg_exchange_capabilities(invoke_fn, &sec_caps,
+> > > >                                              &max_notif_value,
+> > > >                                              &rpc_param_count)) {
+> > > > @@ -1725,8 +1740,7 @@ static int optee_probe(struct platform_device *pdev)
+> > > >         if (rc)
+> > > >                 goto err_unreg_supp_teedev;
+> > > >
+> > > > -       mutex_init(&optee->call_queue.mutex);
+> > > > -       INIT_LIST_HEAD(&optee->call_queue.waiters);
+> > > > +       optee_cq_init(&optee->call_queue, thread_count);
+> > >
+> > > Again, this looks like some refactoring going on which should be part
+> > > of a separate patch to ease the review process.
+> >
+> > I get your point.
+> > Thanks again for the feedback.
+> >
+> > Br,
+> > etienne
+> >
+> > >
+> > > -Sumit
+> > >
+> > > >         optee_supp_init(&optee->supp);
+> > > >         optee->smc.memremaped_shm = memremaped_shm;
+> > > >         optee->pool = pool;
+> > > > --
+> > > > 2.25.1
+> > > >
