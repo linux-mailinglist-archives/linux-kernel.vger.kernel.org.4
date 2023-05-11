@@ -2,104 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 844446FF05C
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 13:03:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 086476FF064
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 13:10:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237917AbjEKLDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 07:03:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47746 "EHLO
+        id S237655AbjEKLKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 07:10:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231843AbjEKLDj (ORCPT
+        with ESMTP id S230466AbjEKLKj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 07:03:39 -0400
-Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF5919A7
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 04:03:38 -0700 (PDT)
-Received: by nautica.notk.org (Postfix, from userid 108)
-        id C49A5C022; Thu, 11 May 2023 13:03:36 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1683803016; bh=TnIrx9Sr+YwwzAQRDNPaH1tRKUc6B/kK4MrTl299Rxw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=F8Y0+TDyglj+K7TYRcAp2F8QRXeMW6KtRemZyFSOPMgyiGjspL9vNXHiKPz5HfgeI
-         LFTMEz/GEz81Jkgdz/bNgGGjiBYEaQrYUkZ+cH7yAtr9pLxvzttLf7BS3748tcVSAl
-         zhDq+J4UbZwTofkXjqi/DdDB/HJIBPYZ3d0B0stkA38f+OqPQe8RCT80fyOqU0fZzS
-         HkpQmKfI+en05cqhSgrNIuK+wl82j155kLl/sasC31eUJTwo37wvQbG2Is4I6CoKu2
-         RZWkCp8VyrTqMjUdmrOAw+K2j6/bNIUEZgDWIvjAisiNf7wzz7LPf9WNOBRc8Q249f
-         A8CMx2NQrt5sA==
+        Thu, 11 May 2023 07:10:39 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E8BF65A8
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 04:10:38 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-956ff2399c9so1619458266b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 04:10:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683803437; x=1686395437;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q7KxdBG/NeF6sWMIRS2EQ/HmjBGOWua4oCF2RfFjnYc=;
+        b=Dyi8ve2u1kiMIWDo8UAn+si7P3sNVvuq0CApWRjlvwBj6ZP4dK29ykmg1GNZ8cX4GN
+         HZpNyBjusvuWiJMFksx5I6awxewE+5LnKfpUMIm0iyGrhMLx/Y82PIcsp/u+5VXW8RBm
+         WsLCfujGqUrUAKmQYf8vL9SryPdGqj2+4WZb7yxegaaxUeFfELEY/GQQxzzc8rGBvSlV
+         AlODw0ga1I5pwhKcfjzsqpopLfIVIcaFeRS/SxTDtyMW7b/vuRUbwmGVUQr7eZ0ulQPC
+         veSXvM2/O2gECUGy7KrcaJeHcXgaTjh33oRwi6DrMrD+XjcM2zgBKyG5yfYNcV1CdZAL
+         xgOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683803437; x=1686395437;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q7KxdBG/NeF6sWMIRS2EQ/HmjBGOWua4oCF2RfFjnYc=;
+        b=JNzpM0twwqgVAs1c+QZKugD9GyA9izP/xAInhkJyMVLoa+c/KiB6m68i6fBdLtdp2r
+         e1/MXL6Ao2BU/C6NsAgiIyuhoFvYNq8+WKhC6Yrek8HKSMUg+yHmi0DXfXIedExzWK2c
+         +YKzZkVqLsIz8YO/Aj1/DMhLg5/oJicSFvfUQXXlJlmyz1CXiICmS7LtPfXHoMZWBp4L
+         W38MXF1HtAhWAdTYGW00eEfxB6F+y/ljs7GZRbub3JdSYFluAN8neIpKM3v56pawwEXG
+         jD7xSfB3aWJMF9L1fxXclgY/HyfYIuswZkhFLzhy+CvJg+DmcLYQp1w/PgDOTMI5AL8z
+         AsIw==
+X-Gm-Message-State: AC+VfDwhUxWYbyL3DzgQiQUG8k5uGsb/cpUyAIBsF8qLOdr29rTwAVJM
+        tPoyV44IovfUPxLA/Uufqzn5gg==
+X-Google-Smtp-Source: ACHHUZ5nKsEhAnsseBCGuUqg/8Vzj4ZcA5NvGpLmygmAm9j0zZJqO7fOoh4aJ+42swdqT33rFR9mcw==
+X-Received: by 2002:a17:907:3d90:b0:968:236:eb17 with SMTP id he16-20020a1709073d9000b009680236eb17mr12046696ejc.24.1683803436971;
+        Thu, 11 May 2023 04:10:36 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:41e7:1b68:d38e:1348? ([2a02:810d:15c0:828:41e7:1b68:d38e:1348])
+        by smtp.gmail.com with ESMTPSA id ze12-20020a170906ef8c00b009659fa6eeddsm3870844ejb.196.2023.05.11.04.10.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 04:10:36 -0700 (PDT)
+Message-ID: <8e98b31a-ef4d-a8bd-32f3-e6f496f2b138@linaro.org>
+Date:   Thu, 11 May 2023 13:10:35 +0200
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v1 3/3] dt-bindings: ASoC: Add ESS ES9218P codec bindings
+Content-Language: en-US
+To:     Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
+Cc:     lgirdwood@gmail.com, broonie@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        perex@perex.cz, tiwai@suse.com, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230510112349.939991-1-aidanmacdonald.0x0@gmail.com>
+ <20230510112349.939991-3-aidanmacdonald.0x0@gmail.com>
+ <7b3a37e8-0210-c539-5b5b-bf8e587707ea@linaro.org>
+ <7Zga7RBqLNcaG5ylTIY4Qn7CUdE1IJsW@localhost>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <7Zga7RBqLNcaG5ylTIY4Qn7CUdE1IJsW@localhost>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
-Received: from odin.codewreck.org (localhost [127.0.0.1])
-        by nautica.notk.org (Postfix) with ESMTPS id 3701FC009;
-        Thu, 11 May 2023 13:03:30 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
-        t=1683803015; bh=TnIrx9Sr+YwwzAQRDNPaH1tRKUc6B/kK4MrTl299Rxw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oQ/6YFNhh9mzDIpaoH5x4Kg19O3IfuS82T1GpMQb5Ys0ZQBcEcRnpZDWjQPlzkKT/
-         ZO5goO37qZ8q2L46V6Wta2u2HgWbGtW9IREcTNF4v8xBwrInU/UOf6RkdKc8iKaY16
-         TDDMNSmLhbXTtvW59vNTZw8RS71xoZGQhry7OJHShcWAzztCKNYMR8+qxJm7VOBUzf
-         YyLzRrRdw4HTCgiGTD2wOutiRk9G8muBeAxp6sIq8lm43fR5d6YenRFK9hQG7X2GlD
-         KMn/jtBl7M4Lva99br/zai15tpVfPN6anZ99n7YrrmMbAaasTWvDuYUc+pukNGJcb7
-         KiGouyFg2JD9Q==
-Received: from localhost (odin.codewreck.org [local])
-        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 12b1c2ba;
-        Thu, 11 May 2023 11:03:27 +0000 (UTC)
-Date:   Thu, 11 May 2023 20:03:12 +0900
-From:   Dominique Martinet <asmadeus@codewreck.org>
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     oe-kbuild@lists.linux.dev,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Stefan Roesch <shr@fb.com>, lkp@intel.com,
-        oe-kbuild-all@lists.linux.dev, Clay Harris <bugs@claycon.org>,
-        Dave Chinner <david@fromorbit.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        io-uring@vger.kernel.org
-Subject: Re: [PATCH v2 4/6] kernfs: implement readdir FMODE_NOWAIT
-Message-ID: <ZFzLcLHvzwqM-uek@codewreck.org>
-References: <20230422-uring-getdents-v2-4-2db1e37dc55e@codewreck.org>
- <4e88ec58-be22-4b0c-968d-fa9a52764c98@kili.mountain>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4e88ec58-be22-4b0c-968d-fa9a52764c98@kili.mountain>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dan Carpenter wrote on Thu, May 11, 2023 at 01:55:57PM +0300:
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1850  		if (!dir_emit(ctx, name, len, ino, type))
-> fd7b9f7b9776b1 Tejun Heo          2013-11-28  1851  			return 0;
-> 393c3714081a53 Minchan Kim        2021-11-18  1852  		down_read(&root->kernfs_rwsem);
->                                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-> Needs to be deleted.
-
-Uh, yes, sorry; I'm not sure how I let that slip, I guess I didn't hit
-any dead lock because nothing ever tried to take a write lock after
-getdents...
-Thanks!
-
-I expect there'll be other comments (this might not make it at all), so
-I'll keep the v3 of this patch with this fix locally and resend after
-other comments.
-
-> a551138c4b3b9f Dominique Martinet 2023-05-10  1853  		if (ctx->flags & DIR_CONTEXT_F_NOWAIT) {
-> a551138c4b3b9f Dominique Martinet 2023-05-10  1854  			if (!down_read_trylock(&root->kernfs_rwsem))
-> a551138c4b3b9f Dominique Martinet 2023-05-10  1855  				return 0;
+On 11/05/2023 12:15, Aidan MacDonald wrote:
 > 
-> It's a bit strange the this doesn't return -EAGAIN;
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> writes:
+> 
+>> On 10/05/2023 13:23, Aidan MacDonald wrote:
+>>> ...
+>>> +  ess,max-clock-div:
+>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>> +    description:
+>>> +      Sets the maximum MCLK divider for generating the internal CLK.
+>>> +      CLK must be at least 20x the I2C bus speed or I2C transactions
+>>> +      will fail. The maximum divider should be chosen to ensure that
+>>> +      CLK will not fall below the limit.
+>>> +    enum:
+>>> +      - 1
+>>> +      - 2
+>>> +      - 4
+>>> +      - 8
+>>> +    default: 1
+>>
+>> Why do you need to customize it per board?
+>>
+> 
+> There's no generic API to read or change the bus speed (SCL frequency)
+> for I2C adapters, so it's impossible to calculate a limit on the MCLK
+> divider automatically.
+> 
+> Defaulting to 1 is always safe, but means wasting power at lower sample
+> rates. If you know what the bus speed is you can use a higher divider
+> limit to save power, and it has to be done at the board/firmware level
+> because that's the only place where the bus speed is known.
 
-That is on purpose: the getdents did work (dir_emit returned success at
-least once), so the caller can process whatever was filled in the buffer
-before calling iterate_shared() again.
+If I understand correctly, you only miss a way to get bus_freq_hz from
+i2c_timings to calculate the divider by yourself? This looks like Linux
+limitation, so we shouldn't push it into DT, but rather fix Linux. The
+I2C bus rate is known, the MCLK rate as well, so divider is possible to
+deduce.
 
-If we were to return -EAGAIN here, we'd actually be throwing out the
-entries we just filled in, and that's not what we want.
+I am actually surprised that I2C core does not store the timings
+anywhere and each bus host has to deal with it on its own.
 
--- 
-Dominique Martinet | Asmadeus
+Best regards,
+Krzysztof
+
