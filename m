@@ -2,156 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EE276FFB4C
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:29:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F0E16FFB4E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239374AbjEKU3I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 16:29:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37792 "EHLO
+        id S239405AbjEKU3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 16:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239160AbjEKU3G (ORCPT
+        with ESMTP id S238918AbjEKU3g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 16:29:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13EC6E90;
-        Thu, 11 May 2023 13:29:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3571B65160;
-        Thu, 11 May 2023 20:29:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D385C433D2;
-        Thu, 11 May 2023 20:29:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683836944;
-        bh=tTH7rKHrO5TIvduxYxjfHjNjYXZc1hEYflMKrrUL640=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=X8h2AOfJuljQNpl0ZblXP97y2wFv4xnVU+D9s9+lU3ZqXA4FN9+JeWdNGaFk6tRMP
-         pO6teecBZ+CJWvKQ96IzJucHL43WZVGAbfS+mhcrDmQmU9xZCefvV2hbFkjwKB1VPT
-         XYawbcFO6k39fRsfZ1pQcbu8frcKvlhK54vePVoDkPgepmz/YXLvYQocqmNrA33kIO
-         KxWnpLI8t4fQWRmTfcAha9PezZQLAWoe2Tx7FxAj2VVQhxDnZvVU9IXksbsL/7Iq0d
-         jrtbaYCUE/dJmUO2MvhQ+ZHazveKP5fTAmhA8Bh49OWRCzspk12KrI1vpOH69BP75C
-         AahyxQ83PZmwA==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 297ECCE0FED; Thu, 11 May 2023 13:29:04 -0700 (PDT)
-Date:   Thu, 11 May 2023 13:29:04 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, akiyks@gmail.com,
-        linux-doc@vger.kernel.org, kernel-team@meta.com,
-        Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Mark Rutland <mark.rutland@arm.com>
-Subject: Re: [PATCH locking/atomic 18/19] locking/atomic: Refrain from
- generating duplicate fallback kernel-doc
-Message-ID: <fc518edb-410b-4ea3-b628-26ef7d61000d@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <19135936-06d7-4705-8bc8-bb31c2a478ca@paulmck-laptop>
- <20230510181717.2200934-18-paulmck@kernel.org>
- <20230511201837.GD2296992@hirez.programming.kicks-ass.net>
+        Thu, 11 May 2023 16:29:36 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFA3B49DB;
+        Thu, 11 May 2023 13:29:35 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1a69e101070so17786595ad.1;
+        Thu, 11 May 2023 13:29:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683836975; x=1686428975;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cIq+csdZEem8CM7fcgH+5/GZeWFKK87200SdyT17Gx0=;
+        b=a1rVpvl/Pn1WWSGMfSMkv2Hxawdf9hhhC1VBT4W0Wmfssa+RjlcSH40UzxVVWmsrT1
+         lBn6e6k4dacM/AxVcp4zm19aar1NjFJdGo7i4u6YmlUswm9opOVShy8A83p+VkxOuI82
+         vqhbTgm83HDxusvCAP4BztOBQfU7+MX0SeoqshAFXkiIiFlqPl3XjFe7QFNhqR6ihnr8
+         Z3NGiRtvIajZHyikPyWgB95PTJLWoGhiwPDCL5K1ncbP8bfu1/ry29cvK6suibd5MvN3
+         RqeK/TAHJkzTdBZX5p3YBhktKyX3NA7ArHzAg2EQBKMZIPyniISKryUjeC42k11Ryz3I
+         4yFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683836975; x=1686428975;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cIq+csdZEem8CM7fcgH+5/GZeWFKK87200SdyT17Gx0=;
+        b=Q+uLN7kel4MNJBd6PZYQAayE3JaavQIHXMIu7C6CBk5EbkiUe37WNu3tw7lE4YVgto
+         Cl8qkvgpf+x/6xup1ifIx4qpP+B02+va8Q1IbXE3VD5Gt1FJP84sbYN9bZAdNijJuk7Q
+         XXp6pGCFZL46wuXT3VUPrekKWeiNV7q+bTZq6utF/Z47gnY0ulPWvTvVFKiH5e5UCqCD
+         Y1l8W/XfiPx0ZgJgYhD7UsLtsNLbz6BraiL4GXaBe+siGMjY9BEoot4O4Sck9V0E8gOM
+         hMdMDLVkWspRowTo3miJLYNMpX8s30BXvb/Xr4FpBeMY2+aM+k1gsIggpYjL1rLrqdeb
+         DZdA==
+X-Gm-Message-State: AC+VfDxilFUnwTe2f35oIw2ZeL3BZQbqEFMMit+VNScUWQ24SnXKRNEn
+        Pvm7uZV5rpqHHRhGWBzMgZRBf8LonbJtG8vdRh0=
+X-Google-Smtp-Source: ACHHUZ7A30kuohXj6o1p5sDSupKTAGuECnl44YgqupI0Fs/UFelDMXdh5M6ZyFb4PBhk1DaShccX5HaGpS1QlDlSLvA=
+X-Received: by 2002:a17:902:d4c4:b0:1ac:40f7:8b5a with SMTP id
+ o4-20020a170902d4c400b001ac40f78b5amr26750525plg.3.1683836975198; Thu, 11 May
+ 2023 13:29:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511201837.GD2296992@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230511135632.78344-1-bstruempfel@ultratronik.de>
+In-Reply-To: <20230511135632.78344-1-bstruempfel@ultratronik.de>
+From:   Fabio Estevam <festevam@gmail.com>
+Date:   Thu, 11 May 2023 17:29:23 -0300
+Message-ID: <CAOMZO5B_a-oauJFsO8aXwSxu-3_=YiYbsHi-B=2MykkJ08fNtA@mail.gmail.com>
+Subject: Re: [PATCH] spi: Add option to keep the MOSI line low, when it is idle.
+To:     Boerge Struempfel <boerge.struempfel@gmail.com>
+Cc:     bstruempfel@ultratronik.de, Mark Brown <broonie@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Schrempf Frieder <frieder.schrempf@kontron.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 10:18:37PM +0200, Peter Zijlstra wrote:
-> On Wed, May 10, 2023 at 11:17:16AM -0700, Paul E. McKenney wrote:
-> > The gen-atomics.sh script currently generates 42 duplicate definitions:
-> > 
-> > 	arch_atomic64_add_negative
-> > 	arch_atomic64_add_negative_acquire
-> > 	arch_atomic64_add_negative_release
-> > 	arch_atomic64_dec_return
-> > 	arch_atomic64_dec_return_acquire
-> > 	arch_atomic64_dec_return_release
-> > 	arch_atomic64_fetch_andnot
-> > 	arch_atomic64_fetch_andnot_acquire
-> > 	arch_atomic64_fetch_andnot_release
-> > 	arch_atomic64_fetch_dec
-> > 	arch_atomic64_fetch_dec_acquire
-> > 	arch_atomic64_fetch_dec_release
-> > 	arch_atomic64_fetch_inc
-> > 	arch_atomic64_fetch_inc_acquire
-> > 	arch_atomic64_fetch_inc_release
-> > 	arch_atomic64_inc_return
-> > 	arch_atomic64_inc_return_acquire
-> > 	arch_atomic64_inc_return_release
-> > 	arch_atomic64_try_cmpxchg
-> > 	arch_atomic64_try_cmpxchg_acquire
-> > 	arch_atomic64_try_cmpxchg_release
-> > 	arch_atomic_add_negative
-> > 	arch_atomic_add_negative_acquire
-> > 	arch_atomic_add_negative_release
-> > 	arch_atomic_dec_return
-> > 	arch_atomic_dec_return_acquire
-> > 	arch_atomic_dec_return_release
-> > 	arch_atomic_fetch_andnot
-> > 	arch_atomic_fetch_andnot_acquire
-> > 	arch_atomic_fetch_andnot_release
-> > 	arch_atomic_fetch_dec
-> > 	arch_atomic_fetch_dec_acquire
-> > 	arch_atomic_fetch_dec_release
-> > 	arch_atomic_fetch_inc
-> > 	arch_atomic_fetch_inc_acquire
-> > 	arch_atomic_fetch_inc_release
-> > 	arch_atomic_inc_return
-> > 	arch_atomic_inc_return_acquire
-> > 	arch_atomic_inc_return_release
-> > 	arch_atomic_try_cmpxchg
-> > 	arch_atomic_try_cmpxchg_acquire
-> > 	arch_atomic_try_cmpxchg_release
-> > 
-> > These duplicates are presumably to handle different architectures
-> > generating hand-coded definitions for different subsets of the atomic
-> > operations.  However, generating duplicate kernel-doc headers is
-> > undesirable.
-> > 
-> > Therefore, generate only the first kernel-doc definition in a group
-> > of duplicates.  A comment indicates the name of the function and the
-> > fallback script that generated it.
-> 
-> So my canonical solution to fixing kernel-doc related problems is this
-> trivial regex:
-> 
-> 	s/\/\*\*/\/\*/
-> 
-> works every time.
+Hi Boerge,
 
-Can't say that I am a fan of that approach.
+On Thu, May 11, 2023 at 10:58=E2=80=AFAM Boerge Struempfel
+<boerge.struempfel@gmail.com> wrote:
+>
+> By default, the imx spi controller uses a high mosi line, whenever it is
+> idle. This may not be desired in all use cases. For example neopixel
+> leds can get confused and flicker due to misinterpreting the idle state.
+> Therefore, we introduce a new spi-mode bit, with which the idle behaviour
+> can be overwritten on a per device basis.
+...
+> +       if (of_property_read_bool(nc, "spi-mosi-idle-low"))
+> +               spi->mode |=3D SPI_MOSI_IDLE_LOW;
 
-> And is *much* simpler than this:
-> 
-> >  scripts/atomic/chkdup.sh                     |  27 ++
-> >  scripts/atomic/fallbacks/acquire             |   3 +
-> >  scripts/atomic/fallbacks/add_negative        |   5 +
-> >  scripts/atomic/fallbacks/add_unless          |   5 +
-> >  scripts/atomic/fallbacks/andnot              |   5 +
-> >  scripts/atomic/fallbacks/dec                 |   5 +
-> >  scripts/atomic/fallbacks/dec_and_test        |   5 +
-> >  scripts/atomic/fallbacks/dec_if_positive     |   5 +
-> >  scripts/atomic/fallbacks/dec_unless_positive |   5 +
-> >  scripts/atomic/fallbacks/fence               |   3 +
-> >  scripts/atomic/fallbacks/fetch_add_unless    |   5 +
-> >  scripts/atomic/fallbacks/inc                 |   5 +
-> >  scripts/atomic/fallbacks/inc_and_test        |   5 +
-> >  scripts/atomic/fallbacks/inc_not_zero        |   5 +
-> >  scripts/atomic/fallbacks/inc_unless_negative |   5 +
-> >  scripts/atomic/fallbacks/read_acquire        |   5 +
-> >  scripts/atomic/fallbacks/release             |   3 +
-> >  scripts/atomic/fallbacks/set_release         |   5 +
-> >  scripts/atomic/fallbacks/sub_and_test        |   5 +
-> >  scripts/atomic/fallbacks/try_cmpxchg         |   5 +
-> >  scripts/atomic/gen-atomics.sh                |   4 +
+Yes, this is useful.
 
-This is not a huge addition, now is it?
+As this is a new property,  please send a patch that adds it to:
+Documentation/devicetree/bindings/spi/spi-peripheral-props.yaml
 
-							Thanx, Paul
+Thanks
