@@ -2,133 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF936FEF22
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:47:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4A36FEF26
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:48:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237655AbjEKJrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 05:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33994 "EHLO
+        id S232333AbjEKJsy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 05:48:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237710AbjEKJre (ORCPT
+        with ESMTP id S230292AbjEKJst (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 05:47:34 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E87F81711;
-        Thu, 11 May 2023 02:47:31 -0700 (PDT)
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34B9d1wK001125;
-        Thu, 11 May 2023 09:47:31 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=qUBlMSQJXzGbCC1vtGh+tTHCrsxJkkRrnCTJgmpwwBw=;
- b=T8D705MIl6SjDvR0W9ap/6cjg13LvFPzGtSA0y+l85MbLWFVskMTvSR4nSuR7N54Nqxs
- o1J5jWSfNA03PVzdSBcHE7EjB7l5x/eVCWXNl70BQ/B6cPrNYta8nFCGCZ/YYMi5Bj3z
- EYfnVhfSEQqEtTU0TILhhMThzcO0IPtCOADHYTkGYpQQoTls6ViFs/vSX9UnDG/CUYIV
- lrrOe2kxE4EnuiCeHLgFf0YTGBfxZ/HczwSJbPU1b+gowh++rjkx9iQgK6jz1GjeNVF1
- 0JcYjSP0Ax368zEcnu4qx7Z0QJimGVRmldvoVzj35eeZMgzoAj12VztFavgAEWl2r2Nq 1A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qgva0u6b7-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 09:47:31 +0000
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34B9dINX004483;
-        Thu, 11 May 2023 09:47:31 GMT
-Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qgva0u6aa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 09:47:31 +0000
-Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
-        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34B4CoIE023348;
-        Thu, 11 May 2023 09:47:28 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3qf7s8h9ck-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 09:47:28 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34B9lMhQ65863996
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 11 May 2023 09:47:22 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2EDD52004E;
-        Thu, 11 May 2023 09:47:22 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 43BB92005A;
-        Thu, 11 May 2023 09:47:21 +0000 (GMT)
-Received: from li-c6ac47cc-293c-11b2-a85c-d421c8e4747b.ibm.com.com (unknown [9.171.23.165])
-        by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Thu, 11 May 2023 09:47:21 +0000 (GMT)
-From:   Pierre Morel <pmorel@linux.ibm.com>
-To:     david@redhat.com
-Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org, borntraeger@de.ibm.com,
-        frankja@linux.ibm.com, cohuck@redhat.com, thuth@redhat.com,
-        imbrenda@linux.ibm.com, hca@linux.ibm.com, gor@linux.ibm.com,
-        svens@linux.ibm.com
-Subject: [PATCH 1/1] KVM: s390: vsie: fix the length of APCB bitmap
-Date:   Thu, 11 May 2023 11:47:19 +0200
-Message-Id: <20230511094719.9691-2-pmorel@linux.ibm.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20230511094719.9691-1-pmorel@linux.ibm.com>
-References: <20230511094719.9691-1-pmorel@linux.ibm.com>
+        Thu, 11 May 2023 05:48:49 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B7D1FFE
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:48:48 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-b9d8b2e1576so10691568276.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:48:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683798527; x=1686390527;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vx18VK8gbasjrWf/cSU+rJppsMri3t7m3OEVcEQZqnI=;
+        b=y0vL277mhdkg0IVyKVF9Xj5BrJGL4T4KRCytU0vWSXUL5Nn/ZM6nF9bPbE+GHaEanR
+         OGyLRpkxZ2ZfGnIxVlL77bgBiljl86Gtt6NOj2l6MIA1yxcI4yLkOJ6diCpZ8GI5e2wI
+         twdCy5OEhLwuCtSv+5ktrCeaiC13IB5JFArPrF6YbimlRI7PvfV4UIiGlT9YTxQ0hPWG
+         PaHwdRQYt7VM5HYCHMzGcT1URzrGtyfXDAmTLlgAqncsbaHtUBU5yMJmdk2zfMon4/eg
+         JDsb6oRzQrZUYyWjJPmfmKHYYcEJXXhsX47A6PIJkoPGjX5aT01vVdf11bChcrs+BrtI
+         WB5w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683798527; x=1686390527;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vx18VK8gbasjrWf/cSU+rJppsMri3t7m3OEVcEQZqnI=;
+        b=FMPJ9EOV29XS4LsbplBhNfhurp5y3HMtz/LM/OxEml/sh0AGLuIQEQEDAuj1DDG2fc
+         puHXJg8IeMo71VKiaKhKm3CdY2Z5Pw+HZgDcE5hBnwdcRUeBe4DryjQYKGqceUCTE4jN
+         eZP6oh1teHp026h5kMMegI/bWb0odwbnq/dKpOyvkDRQUyeXToODeW09ciNLEa62hKVB
+         fNMncxJ67lS4SxUCXwRSnMzYedPSrRCHT4HM7ZI5iyOK9/OBgflI75JtPrEFUAGGOJ0D
+         qJCOHO1G9e9ytzPPiOVLeQvYx31zloBNck3F/LiIczn8Me1xISlKtDnCMFsz511lMRgV
+         O5Gw==
+X-Gm-Message-State: AC+VfDx6EUca4PHfG+cqr9G+MAcJmSJfKkEq9OoYHM1fubsxqaZxN7LL
+        g3h1ABXp4Q/hz+zYY/gBKXGSQOmngD3axBsQp5TAxw==
+X-Google-Smtp-Source: ACHHUZ6zKEPk0T0Rs0M+OLTRj/ZtKnufURKamigf+d5W/5pl3IhfOKJmLsK4V4GYDqd2RzyNOgNTx3ByvndgzekpG5k=
+X-Received: by 2002:a25:d710:0:b0:ba6:bb9a:3e30 with SMTP id
+ o16-20020a25d710000000b00ba6bb9a3e30mr696571ybg.6.1683798527480; Thu, 11 May
+ 2023 02:48:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: in2b5GtM0qivbJKUTB6hodpw-yHwduZj
-X-Proofpoint-ORIG-GUID: jqu9oZizXA6Od4ozCeLCz1g5_1jEUc9v
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-11_06,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- malwarescore=0 mlxlogscore=749 mlxscore=0 clxscore=1015 impostorscore=0
- bulkscore=0 adultscore=0 spamscore=0 suspectscore=0 lowpriorityscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305110081
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1683722688.git.geert+renesas@glider.be> <fe235a1f65bb6c86d2afcdf52d85f80ae728dcc5.1683722688.git.geert+renesas@glider.be>
+In-Reply-To: <fe235a1f65bb6c86d2afcdf52d85f80ae728dcc5.1683722688.git.geert+renesas@glider.be>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 11 May 2023 11:48:11 +0200
+Message-ID: <CAPDyKFoAr47m0cKjwgCLFwEUDoHDzssHnz=33KDb47xrC=1iew@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] iopoll: Call cpu_relax() in busy loops
+To:     Geert Uytterhoeven <geert+renesas@glider.be>
+Cc:     Stephen Boyd <sboyd@kernel.org>,
+        Tomasz Figa <tomasz.figa@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        Dejin Zheng <zhengdejin5@gmail.com>,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Russell King <linux@armlinux.org.uk>,
+        John Stultz <jstultz@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Tony Lindgren <tony@atomide.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Tero Kristo <tero.kristo@linux.intel.com>,
+        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-bit_and() uses the count of bits as the woking length.
-Fix the previous implementation and effectively use
-the right bitmap size.
+On Wed, 10 May 2023 at 15:23, Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
+>
+> It is considered good practice to call cpu_relax() in busy loops, see
+> Documentation/process/volatile-considered-harmful.rst.  This can not
+> only lower CPU power consumption or yield to a hyperthreaded twin
+> processor, but also allows an architecture to mitigate hardware issues
+> (e.g. ARM Erratum 754327 for Cortex-A9 prior to r2p0) in the
+> architecture-specific cpu_relax() implementation.
+>
+> In addition, cpu_relax() is also a compiler barrier.  It is not
+> immediately obvious that the @op argument "function" will result in an
+> actual function call (e.g. in case of inlining).
+>
+> Where a function call is a C sequence point, this is lost on inlining.
+> Therefore, with agressive enough optimization it might be possible for
+> the compiler to hoist the:
+>
+>         (val) = op(args);
+>
+> "load" out of the loop because it doesn't see the value changing. The
+> addition of cpu_relax() would inhibit this.
+>
+> As the iopoll helpers lack calls to cpu_relax(), people are sometimes
+> reluctant to use them, and may fall back to open-coded polling loops
+> (including cpu_relax() calls) instead.
+>
+> Fix this by adding calls to cpu_relax() to the iopoll helpers:
+>   - For the non-atomic case, it is sufficient to call cpu_relax() in
+>     case of a zero sleep-between-reads value, as a call to
+>     usleep_range() is a safe barrier otherwise.  However, it doesn't
+>     hurt to add the call regardless, for simplicity, and for similarity
+>     with the atomic case below.
+>   - For the atomic case, cpu_relax() must be called regardless of the
+>     sleep-between-reads value, as there is no guarantee all
+>     architecture-specific implementations of udelay() handle this.
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Acked-by: Arnd Bergmann <arnd@arndb.de>
 
-Fixes: 19fd83a64718 ("KVM: s390: vsie: allow CRYCB FORMAT-1")
-Fixes: 56019f9aca22 ("KVM: s390: vsie: Allow CRYCB FORMAT-2")
+Makes sense to me! Feel free to add:
 
-Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
----
- arch/s390/kvm/vsie.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-diff --git a/arch/s390/kvm/vsie.c b/arch/s390/kvm/vsie.c
-index 8d6b765abf29..0333ee482eb8 100644
---- a/arch/s390/kvm/vsie.c
-+++ b/arch/s390/kvm/vsie.c
-@@ -177,7 +177,8 @@ static int setup_apcb00(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
- 			    sizeof(struct kvm_s390_apcb0)))
- 		return -EFAULT;
- 
--	bitmap_and(apcb_s, apcb_s, apcb_h, sizeof(struct kvm_s390_apcb0));
-+	bitmap_and(apcb_s, apcb_s, apcb_h,
-+		   BITS_PER_BYTE * sizeof(struct kvm_s390_apcb0));
- 
- 	return 0;
- }
-@@ -203,7 +204,8 @@ static int setup_apcb11(struct kvm_vcpu *vcpu, unsigned long *apcb_s,
- 			    sizeof(struct kvm_s390_apcb1)))
- 		return -EFAULT;
- 
--	bitmap_and(apcb_s, apcb_s, apcb_h, sizeof(struct kvm_s390_apcb1));
-+	bitmap_and(apcb_s, apcb_s, apcb_h,
-+		   BITS_PER_BYTE * sizeof(struct kvm_s390_apcb1));
- 
- 	return 0;
- }
--- 
-2.31.1
+Kind regards
+Uffe
 
+> ---
+> v2:
+>   - Add Acked-by,
+>   - Add compiler barrier and inlining explanation (thanks, Peter!).
+> ---
+>  include/linux/iopoll.h | 2 ++
+>  1 file changed, 2 insertions(+)
+>
+> diff --git a/include/linux/iopoll.h b/include/linux/iopoll.h
+> index 2c8860e406bd8cae..0417360a6db9b0d6 100644
+> --- a/include/linux/iopoll.h
+> +++ b/include/linux/iopoll.h
+> @@ -53,6 +53,7 @@
+>                 } \
+>                 if (__sleep_us) \
+>                         usleep_range((__sleep_us >> 2) + 1, __sleep_us); \
+> +               cpu_relax(); \
+>         } \
+>         (cond) ? 0 : -ETIMEDOUT; \
+>  })
+> @@ -95,6 +96,7 @@
+>                 } \
+>                 if (__delay_us) \
+>                         udelay(__delay_us); \
+> +               cpu_relax(); \
+>         } \
+>         (cond) ? 0 : -ETIMEDOUT; \
+>  })
+> --
+> 2.34.1
+>
