@@ -2,150 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 402BB6FFB66
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:41:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 192456FFB68
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:41:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239316AbjEKUk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 16:40:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43128 "EHLO
+        id S239330AbjEKUlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 16:41:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239225AbjEKUkz (ORCPT
+        with ESMTP id S239015AbjEKUk7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 16:40:55 -0400
-Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18DD199E
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:40:52 -0700 (PDT)
-Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-61b5da092dfso41459416d6.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:40:52 -0700 (PDT)
+        Thu, 11 May 2023 16:40:59 -0400
+Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C964128
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:40:57 -0700 (PDT)
+Received: by mail-oo1-xc2d.google.com with SMTP id 006d021491bc7-546ee6030e5so4402006eaf.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:40:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683837652; x=1686429652;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vZx8FpQdLVzyY5XjqVFGkizAxjSRSvIZJciSNIfEcDI=;
-        b=V31+M9mgzwDUisMy4JDnJDouRAbsaL7pgoffAx/ibC37kMSfO1+m5Ckl4dF2YIbx6Y
-         14tG8z8oHdHnyT3BhNZ68dUmkvkIX2RZyNT0iuqaCU1bWJxlzw/2G9Mg7PsOOTQkrRR2
-         LENQ/q6YuRjcAfhfIG49GvYyegOaAw2YvXMXEQiutviQvY/XL/nNv5MunRO5PZsrKaOV
-         dANDmtfkJwVa5ProdP2UWjpHESzcPCcdR7g8TcsTgg0tUQAl4pL0xHxUk+dJvq3qefrz
-         7e9Dvt4yx0mTF/0nJcU/783igvVhbYIB/PafPCntuI7bQ3E5LaWhoML03Sr9QXQNRgTO
-         xS4Q==
+        d=bitbyteword.org; s=google; t=1683837657; x=1686429657;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HF4n4y/GeCCM6obESYiThOANt4aesbUOtUb4gH3800w=;
+        b=hI0rhREHz7mQ0acrixIxJoOcmRpYu/9CgsJ3Qb4xo3NgbEi9So7RMGD6T9eJfTiMBT
+         IzbjlEup87w8QCsQPhg/CfXpQWvPuhfWn+tO6qjDh5YejWLKjWnWb3ez3tZ5GVXs5VnL
+         kgIwNR1ozUJwPUG2kulmN5CEuXhgDF94WjFhfd/HqvS8K6mIBBstZZ8svcVs/5aUL+FI
+         5aZa2ffTOgdRR4q5r0qOUO56KwoYJw77B2e+vrf8II7tC5NltH6lB8S8Hp4cLiKIMS8V
+         8WFkD3oIQzkkv4GgLHPwVTIATQnEnKHBHcLq3U9MgLCmT3PWuafmKzv9uDcPrdJteWPP
+         YP7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683837652; x=1686429652;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vZx8FpQdLVzyY5XjqVFGkizAxjSRSvIZJciSNIfEcDI=;
-        b=HQd81VKhIijYm6k2DUmNnIUK47+RA3TLxBgBVt+MbdNvNPhCJ7RshZqWAxT2K5j2cr
-         12ppx6gQSIXxx8pisBj/lwZaLrXMYu7VEOSwGNHgpEwO+IQ+xHyZhSUn4HVM6pZXp82X
-         ZVivSuVfSzOK2r9sJoFzndv6uz5u7yZN2iKs9X9CP4XpT3fhzJC+vL8uGZ5JYSJTLhOf
-         iueUg7+OAIzS+WMhYVPb8BYWUmmGip6KVc6vg6QyCp6mHcQFpk9zqD4g4R83WXh6qtvM
-         tAsnsO/vuSwnZiqakxPV4iDe/hs/Oa32pxe28nbcbupL38I6ou7mtDs4vZF6CmHdou6r
-         K8Zg==
-X-Gm-Message-State: AC+VfDwUEvOONEQ3SUUJNs2OiyuYFe3WiIn06MJatD+pP0PN6KXOo7Ap
-        dUkPCx981kOZeWNze4NKeyWyFkRW+O1QCFNchrpzvg==
-X-Google-Smtp-Source: ACHHUZ5U6vqjOUU6SjFBcnB4SMX76q/SJW3pj9XYjfIWuMWuVVkfkZOy0EWLaWX1PvF4jheB/PcL22YAF72NkqzLBrg=
-X-Received: by 2002:ad4:594d:0:b0:621:65de:f5f9 with SMTP id
- eo13-20020ad4594d000000b0062165def5f9mr5248392qvb.5.1683837651964; Thu, 11
- May 2023 13:40:51 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683837657; x=1686429657;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HF4n4y/GeCCM6obESYiThOANt4aesbUOtUb4gH3800w=;
+        b=GHpFOygPWF+GaIR39y3fwUlhj8Nmu7k2tLZSr804KT27bz/8MCQIOz8XBWgr6pKbVZ
+         sy5bvhB6Hnv62Dqm2fy+CZFj3GDgwRjH476PoqnYeRcx5BwVeMUBnJG1vgigCywd/3Xe
+         dSwR/DQa0wkTDzt9/3B37OzTvUS0sVF976u+n6LF7JLgeNGCgSM4SRJzb1dVKHyhSUlO
+         YEY1O6SBVEytlm4vgr9wlWEpG+Qka0zFPAoUdkYRh9UsZ+NXS5kHgANDALL4Qdv44HEe
+         DyBwRiNGjCwJXSTAAiB/FOdcNp3JrrCimUo8CQgbUt2ptevz99qcYtLcbIVePTQjPvzZ
+         lb+w==
+X-Gm-Message-State: AC+VfDy4lgHH66rlPvOWiZAVgCEVIhJQWrIzNqTwKleBpj6eGt1aEmu4
+        levuOuItp2j3onGYgdf45SzaK7zkBwwPmTXGNJJmZw==
+X-Google-Smtp-Source: ACHHUZ5Szow/NJ7Cu3BIYjly279f1dMTGKvorFrSpX63B2R+I+6xnjEAWsSFp9WFhylPlNalzeGE0loBWPzSwNY+MpM=
+X-Received: by 2002:a4a:ea06:0:b0:54a:65e7:9b51 with SMTP id
+ x6-20020a4aea06000000b0054a65e79b51mr5995029ood.8.1683837656891; Thu, 11 May
+ 2023 13:40:56 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230511182426.1898675-1-axelrasmussen@google.com> <20230511202243.GA5466@monkey>
-In-Reply-To: <20230511202243.GA5466@monkey>
-From:   Axel Rasmussen <axelrasmussen@google.com>
-Date:   Thu, 11 May 2023 13:40:16 -0700
-Message-ID: <CAJHvVcg+Sm-=F=Xhi-WVLRxDcDcYzD8AwLpHHoP8zLubOoX6TQ@mail.gmail.com>
-Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christian Brauner <brauner@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Hongchen Zhang <zhanghongchen@loongson.cn>,
-        Huang Ying <ying.huang@intel.com>,
-        James Houghton <jthoughton@google.com>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Nadav Amit <namit@vmware.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        ZhangPeng <zhangpeng362@huawei.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+References: <20230508160829.2756405-1-vineeth@bitbyteword.org>
+ <20230509132534.09098acc@luca64> <CAO7JXPhrqKWfsp860rRmEenxARi8U2gNMGsOn4m+aKporWwBcg@mail.gmail.com>
+ <20230509224829.2fb547fd@nowhere> <20230509225417.61d36733@nowhere>
+ <CAO7JXPhk5qbz9kmiu9WuXS+gXCt9+X8pP2c37hd9ChByLmXYjA@mail.gmail.com>
+ <20230510090735.68f62cd4@nowhere> <CAO7JXPg03f2YnrmzoGjfHEZZcoN55cU7uVukMw31Bw3x6nnaMw@mail.gmail.com>
+ <20230511093711.2be82409@nowhere> <CAO7JXPiKLFLVpqDKoRdu8c2Yd4AJ_2B2UyXJxD3kJAyiJ=n0_Q@mail.gmail.com>
+ <20230511220336.05866e80@nowhere>
+In-Reply-To: <20230511220336.05866e80@nowhere>
+From:   Vineeth Remanan Pillai <vineeth@bitbyteword.org>
+Date:   Thu, 11 May 2023 16:40:46 -0400
+Message-ID: <CAO7JXPg9K4MA7H63Num8-BHBT-Y=GQ3BnEEvaEMVKmYsXCY7Sg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] sched/deadline: accurate reclaim bandwidth for GRUB
+To:     luca abeni <luca.abeni@santannapisa.it>
+Cc:     Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 1:29=E2=80=AFPM Mike Kravetz <mike.kravetz@oracle.c=
-om> wrote:
+> >
+> > I felt that, since we are using sequential reclaim mentioned in the
+> > paper and we isolate all parameters per-cpu(except for extra_bw) we
+> > could use the "-dq = -(U/Umax) dt" equation as it was simpler than
+> > equation (3).
 >
-> On 05/11/23 11:24, Axel Rasmussen wrote:
-> > The basic idea here is to "simulate" memory poisoning for VMs. A VM
-> > running on some host might encounter a memory error, after which some
-> > page(s) are poisoned (i.e., future accesses SIGBUS). They expect that
-> > once poisoned, pages can never become "un-poisoned". So, when we live
-> > migrate the VM, we need to preserve the poisoned status of these pages.
-> >
-> > When live migrating, we try to get the guest running on its new host as
-> > quickly as possible. So, we start it running before all memory has been
-> > copied, and before we're certain which pages should be poisoned or not.
-> >
-> > So the basic way to use this new feature is:
-> >
-> > - On the new host, the guest's memory is registered with userfaultfd, i=
-n
-> >   either MISSING or MINOR mode (doesn't really matter for this purpose)=
-.
-> > - On any first access, we get a userfaultfd event. At this point we can
-> >   communicate with the old host to find out if the page was poisoned.
+> This is the part I am not sure about...
 >
-> Just curious, what is this communication channel with the old host?
-
-James can probably describe it in more detail / more correctly than I
-can. My (possibly wrong :) ) understanding is:
-
-On the source machine we maintain a bitmap indicating which pages are
-clean or dirty (meaning, modified after the initial "precopy" of
-memory to the target machine) or poisoned. Eventually the entire
-bitmap is sent to the target machine, but this takes some time (maybe
-seconds on large machines). After this point though we have all the
-information we need, we no longer need to communicate with the source
-to find out the status of pages (although there may still be some
-memory contents to finish copying over).
-
-In the meantime, I think the target machine can also ask the source
-machine about the status of individual pages (for quick on-demand
-paging).
-
-As for the underlying mechanism, it's an internal protocol but the
-publicly-available thing it's most similar to is probably gRPC [1]. At
-a really basic level, we send binary serialized protocol buffers [2]
-over the network in a request / response fashion.
-
-[1] https://grpc.io/
-[2] https://protobuf.dev/
-
-> --
-> Mike Kravetz
+> Maybe the best way to go is to split the patch: first you implement (1)
+> (and use div64 to remove the approximation I used), then you implement
+> (3) in a second patch.
 >
-> > - If so, we can respond with a UFFDIO_SIGBUS - this places a swap marke=
-r
-> >   so any future accesses will SIGBUS. Because the pte is now "present",
-> >   future accesses won't generate more userfaultfd events, they'll just
-> >   SIGBUS directly.
-> >
-> > UFFDIO_SIGBUS does not handle unmapping previously-present PTEs. This
-> > isn't needed, because during live migration we want to intercept
-> > all accesses with userfaultfd (not just writes, so WP mode isn't useful
-> > for this). So whether minor or missing mode is being used (or both), th=
-e
-> > PTE won't be present in any case, so handling that case isn't needed.
-> >
+> Finally, if removing the max{} is really needed you can do it in a
+> third patch (but I would try to go with Equation 3 before removing the
+> max{})
+>
+Sure, I shall split the patch. Joel also suggested splitting the patch
+and I was probably wrong to think that the patch was simple to be a
+single patch :-).
+
+Since equation (3) has theoretical backing, I am perfectly fine with
+using it for our fix. Will have 2 patches as you suggested.
+
+Will get the v3 out soon..
+
+Thanks,
+Vineeth
