@@ -2,106 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B135A6FF838
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 19:16:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B33506FF83D
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 19:17:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238899AbjEKRQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 13:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49884 "EHLO
+        id S238908AbjEKRRv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 13:17:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238496AbjEKRQm (ORCPT
+        with ESMTP id S238903AbjEKRRp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 13:16:42 -0400
-Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF88C6597;
-        Thu, 11 May 2023 10:16:40 -0700 (PDT)
-Received: from local
-        by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.96)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1px9u9-0001cR-35;
-        Thu, 11 May 2023 17:16:38 +0000
-Date:   Thu, 11 May 2023 19:14:48 +0200
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH net-next 0/8] Improvements for RealTek 2.5G Ethernet PHYs
-Message-ID: <ZF0iiDIZQzR8vMvm@pidgin.makrotopia.org>
-References: <cover.1683756691.git.daniel@makrotopia.org>
- <55c11fd9-54cf-4460-a10c-52ff62b46a4c@lunn.ch>
+        Thu, 11 May 2023 13:17:45 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8DC5BA9
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 10:17:43 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50c8d87c775so11946978a12.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 10:17:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683825462; x=1686417462;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BO10O8iW12DytJ1D0XEr7Txqs1Ww5REXRTxXbIG6fiU=;
+        b=f0A93yTj+verQgVFIIytrLJioCA/4tVJme8XHNExd+sIzhoyQV84OjWUDsBUUu169M
+         O/S8+4wIjd5SZGyvGAOKRcOMuHOIol2/t+DZRVvi5MC1QxG1oPx8cPo/NdVfhdS6LoCk
+         JZAIYkNje4BWbdiUiZjYWRjg5gbqwGgS1tS03dJT0o4meI6/fbo0aXav4T2C3gt4Ibil
+         jXWcr+2DshwGRMuusvMurUtezTIWdW+OyHPQJaM8IyuEqN67y4EaKlmYbTB1X4tKYg3W
+         8RBNzHBN0g/OlZOpUM0/aJjHSr56v89AcmFXjQUaTaa6dyP4/nBO6BbaoCldjgKizamJ
+         zyOw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683825462; x=1686417462;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BO10O8iW12DytJ1D0XEr7Txqs1Ww5REXRTxXbIG6fiU=;
+        b=bUO1NHVCI4f2HUp6ccJ9m37pOri20CV0MLzr147NSDbwQk8R4q3KEGy2m0HjT3UCMG
+         ppOd0tVrPSVeu7e7a0i7iP6gB81HfXSUckeUjAb19q2GVTDZZwHAL61UF5bNR/LaWfDi
+         JkPjjSJJKb50rQLzDuUU248mVQfvon0AXN0pAf+j6wLOcI7ixDW2juKJJRDUxQ0xHi+6
+         RaJNNKCJZw/Wp3GRiMp29aVwWW+P+fIKuP5u7qLT4XTbKtWLZtJ2atFtlpLAEBtTyQQS
+         zUG8mEsAX7QuNDEHlP66cejJKJdoN8CpVRD3mAoRC7v3Kip9oqK+pRkb7WCaW7ZmYDEE
+         LSSw==
+X-Gm-Message-State: AC+VfDwD7km431ENDym/htMk7g3T+f6ORmc1DX24z+1xZ9fX38zFaa/c
+        c5lU6D+dyW+thvCgbJch6uZmzw==
+X-Google-Smtp-Source: ACHHUZ5cgkWlTUCHRNisr81AR6zb+e6IL4lRvsjDC57u1GW1gp2L8yVihNq3CkPY229nDynudhkCfA==
+X-Received: by 2002:a17:907:9347:b0:933:3814:e0f4 with SMTP id bv7-20020a170907934700b009333814e0f4mr20280180ejc.16.1683825462143;
+        Thu, 11 May 2023 10:17:42 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d7cd:1be6:f89d:7218? ([2a02:810d:15c0:828:d7cd:1be6:f89d:7218])
+        by smtp.gmail.com with ESMTPSA id gz4-20020a170907a04400b009571293d6acsm4248476ejc.59.2023.05.11.10.17.40
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 10:17:41 -0700 (PDT)
+Message-ID: <d8544d01-b0a0-f5f6-b0fe-8f6c25bed9bb@linaro.org>
+Date:   Thu, 11 May 2023 19:17:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <55c11fd9-54cf-4460-a10c-52ff62b46a4c@lunn.ch>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: Need suggestions for smp related properties in cpus.yaml to
+ support smpboot for cortex-r52 based platform
+Content-Language: en-US
+To:     Ayan Kumar Halder <ayankuma@amd.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, geert+renesas@glider.be,
+        magnus.damm@gmail.com, konrad.dybcio@linaro.org,
+        andersson@kernel.org, mazziesaccount@gmail.com,
+        conor.dooley@microchip.com, j@jannau.net, mailingradian@gmail.com,
+        me@iskren.info, lpieralisi@kernel.org
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, Julien Grall <julien@xen.org>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Michal Orzel <michal.orzel@amd.com>,
+        Michal Simek <michal.simek@xilinx.com>
+References: <c5ed90c7-7126-0757-a0e3-e3d1fcab2ecc@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <c5ed90c7-7126-0757-a0e3-e3d1fcab2ecc@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 02:28:15AM +0200, Andrew Lunn wrote:
-> On Thu, May 11, 2023 at 12:53:22AM +0200, Daniel Golle wrote:
-> > Improve support for RealTek 2.5G Ethernet PHYs (RTL822x series).
-> > The PHYs can operate with Clause-22 and Clause-45 MDIO.
-> > 
-> > When using Clause-45 it is desireable to avoid rate-adapter mode and
-> > rather have the MAC interface mode follow the PHY speed. The PHYs
-> > support 2500Base-X for 2500M, and Cisco SGMII for 1000M/100M/10M.
+On 11/05/2023 11:35, Ayan Kumar Halder wrote:
+> Hi Device Tree engineers,
 > 
-> I don't see what clause-45 has to do with this. The driver knows that
-> both C22 and C45 addresses spaces exists in the hardware. It can do
-> reads/writes on both. If the bus master does not support C45, C45 over
-> C22 will be performed by the core.
+> 
+> Recently I have ported Xen on Cortex-R52 (AArch32-V8R processor) for our 
+> AMD platform.
+> 
+> I was discussing with xen-devel community about how we can properly 
+> support smpboot when I was suggested that this might be the correct 
+> forum for discussion.
+> 
+> Please refer 
+> https://lists.xenproject.org/archives/html/xen-devel/2023-05/msg00224.html 
+> and the follow-ups for context.
+> 
+> 
+> The way smpboot works on our platform is as follows:-
+> 
+> 1. core0 writes to register (say regA) the address of the secondary core 
+> initialization routine.
+> 
+> 2. core0 writes to another register (say regB) the value "0x1" to put 
+> the secondary core in reset mode.
+> 
+> 3. core0 writes to regB the value "0x0" to pull the secondary core out 
+> of reset mode.
+> 
+> regA, regB will differ for core1, core2, core3 and so on.
+> 
+> 
+> Currently, I am trying to bringup core1 only.
+> 
+> 
+> I am thinking to use "enable-method=spin-table" in the cpu node for 
+> core1.  So that I can use "cpu-release-address" for regA.
+> 
+> For regB, I am thinking of introducing a new property 
+> "amd-cpu-reset-addr" in the cpu node.
 
-My understanding is/was that switching the SerDes interface mode is only
-intended with Clause-45 PHYs, derived from this comment and code:
+Propose a patch, that's how we discuss. Anyway as this is arm then you
+have a machine for your platform right? The address is not fixed?
 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/phy/phylink.c#n1661
+If the the regb is not a pen release-like, so you cannot use
+secondary-boot-reg, then check how other machines are doing it.
 
-
-Hence I concluded that for Clause-22 PHYs we expect the interface mode
-to always remain the same, while many Clause-45 PHYs require switching
-the SerDes interface mode depending on the speed of the external link.
-Trying to use interface mode switching (in the .read_status function)
-with is_c45 == false also just didn't work well:
-
-https://github.com/openwrt/openwrt/pull/11990#issuecomment-1503160296
-
-
-Up to 1000M this has no really been a problem, as the Cisco SGMII SerDes
-supports 10M, 100M and 1000M speeds. Starting with 2500M things have
-became more complicated, and we usually have the choice of either have
-the MAC<->PHY link operate at a contant mode and speed (e.g. 2500Base-X)
-or having to switch the MAC<->PHY interface mode (e.g. between
-2500Base-X and SGMII) depending on whether the link speed on the
-external interface is 2500M or not.
-
-Looking at PHYs which support speeds beyond one gigabit/sec due to the
-higher complexity and need for a larger register space most of them are
-managed using Clause-45 MDIO. 2500Base-T PHYs are kind of the exception
-because some of them (esp. RealTek) are still mostly being managed using
-Clause-22 MDIO using proprietary paging mechanisms to enlarge the
-register space.
-
-I also don't like overloading the meaning of is_c45 to decide whether
-rate-adapter mode should be used or not, neither do I like the idea to
-tie the use of phylink to using SGMII in-band-status or not -- but at
-this point both do correlate and there aren't any other feature flags or
-validation methods to do it in a better way. In the end this can also
-just be solved by documenation, ie. makeing sure that those facts are
-well understood: interface mode switching only being supported when
-using Clause-45 MDIO and also the fact that phylink expects operating
-Cisco SGMII without in-band-status when connecting to a managed PHY.
+Best regards,
+Krzysztof
 
