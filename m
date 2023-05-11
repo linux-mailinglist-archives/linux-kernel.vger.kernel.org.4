@@ -2,189 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52E326FEDD3
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:26:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DCEB6FEDD4
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:26:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbjEKIZ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 04:25:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
+        id S235775AbjEKI0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 04:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233840AbjEKIZw (ORCPT
+        with ESMTP id S234431AbjEKIZx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 04:25:52 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E5BB2D59
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:25:50 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so76845970a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:25:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683793549; x=1686385549;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vPthJJFX5ICybkhpQbILdoKtwUZwEEscWvDxRj2UCS8=;
-        b=keCpqcazqHLQcn9JA/WC4PqRcOE6Pe0sqmS/4/0Dcr/03siOEhCWlMNowlHTtWZUw+
-         SzQnZwblyTcW+PSQ1mftHjf8I9pRpTbuOGqaDNS9I2f0kuG45xx/Isd4N/NS/hMEENrE
-         ++qFblLb0SYgzrolNxxWsKsbVi3pRxBx904h+iH7KDfLosemfQaRLAS8R3aR8VzjFn7q
-         cFTikMVHG3kIEu33aL32wlDdy96oD/pkeck8/Mlv7UAYlbX2q12wrGbDdsXcEUM0RSwa
-         U/MHxO7lRYDuYayPOqUrimnJbxsy9bJO0JHAL9khTZzlph35Fkb8+jHpAxv23nmavz+W
-         4kvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683793549; x=1686385549;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vPthJJFX5ICybkhpQbILdoKtwUZwEEscWvDxRj2UCS8=;
-        b=SdCcpp0M37S6r8U65b2DHfPxLxe1dhR6qX5Wt3yN3zwbf+lKex3Oy+J6Rc+yn55AxZ
-         7D33YrLOIeCvYrrH86UmkDK305ASvflFk1YNr6+vg8meETEzCJO53iWQ9FxV914Y+SEi
-         7RcF1wvobOoo4LJ9J4e3FjkRdifZ9CU/Z2eujEpBwLv4odYgkWZcWyaZgG10hItat/iB
-         hzsMmu6XR+RzfbeucQxOfxrA0BgeuHn1S66mrqW8XVZYeDCJ+h/YJ9Geu5er+JgFiooK
-         8gq66cHlrnVtFtnz3/Kgi8gFBQJMxRlawEpJAQ+C+4GcAXzs0hCQekCjOeNLpPUzuqop
-         ssXg==
-X-Gm-Message-State: AC+VfDzC7mMI88HbkEfB/fBBz2+jHtoLjguZPPZq4xvPjWf9BdTKddUk
-        XwKgGZhFhhmuUB4o84flCzJY1MqdxtU3p5PfaO6Y5g==
-X-Google-Smtp-Source: ACHHUZ65ndyxPKJzTQECszjt+HbWhyCk1GsXv5AmDRtfTgWc63i5zS5teybqkPaer2P36DQDlaWI3HrLI2ALAwboHPo=
-X-Received: by 2002:a17:907:7f02:b0:958:46aa:7f99 with SMTP id
- qf2-20020a1709077f0200b0095846aa7f99mr19136007ejc.7.1683793549007; Thu, 11
- May 2023 01:25:49 -0700 (PDT)
+        Thu, 11 May 2023 04:25:53 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8472510C9;
+        Thu, 11 May 2023 01:25:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=wZpbxpR/RwY9sqwxsSyrWRiWe8/6Lg93oKafl0bZX8E=; b=Qg/LWjpBqHOBF3P7TcpTYxs4F9
+        6JKjmU8x1TYMlI7RYZ0EtAdx6mvXg1xgmS2dk5LJp8cna5pg0yf42UXSMQXQ5481DXZC3qeLtKEXT
+        8KGxZAtU7p3Xf0JtELvcMjxQg2r7aE99P/jpvSa/NNbH6wbUkG94QZcioNtzZdw/KfDh9D8QMOvqv
+        8ICM2QQr84c1Xl5WiMR5jIsWaXA2DNnv4xRZA8u+IxU3E09XUJKihEXSdmKx4tbh47v8MhfjExx3Z
+        /9ff6/2ug8Y3buZuATxa105RCSQaJ1jglJ9NoSvivv29PduL1m6tcCFUgos4BYvqfghkg2J4j/tVE
+        zm7PCaWg==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1px1cP-00H1wb-NZ; Thu, 11 May 2023 08:25:45 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2343C300338;
+        Thu, 11 May 2023 10:25:45 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 01D10235CC450; Thu, 11 May 2023 10:25:44 +0200 (CEST)
+Date:   Thu, 11 May 2023 10:25:44 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH 03/32] locking/lockdep: lockdep_set_no_check_recursion()
+Message-ID: <20230511082544.GS4253@hirez.programming.kicks-ass.net>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-4-kent.overstreet@linux.dev>
+ <20230509193147.GC2148518@hirez.programming.kicks-ass.net>
+ <ZFqqsyDpatgb77Vh@moria.home.lan>
+ <20230510085905.GJ4253@hirez.programming.kicks-ass.net>
+ <ZFwAtwIrKyJ9GJ/U@moria.home.lan>
 MIME-Version: 1.0
-References: <20230505184318.1355446-1-etienne.carriere@linaro.org>
- <CSIXYHYSW45R.O3II0HIIHZV4@suppilovahvero> <CAN5uoS8xB7=Ohu4WEA31hGraVBcaOmRxZw9PDtXBLGUMUeB=4Q@mail.gmail.com>
- <CAN5uoS9UTc-Lz1+k=-7nifuv8MrRmZh_1ck3-DgwRSF58EwpxQ@mail.gmail.com> <CAFA6WYMf+ppAtyT5aivfq1KOEhz4MVG6godqdRhQVd0ORkb7VQ@mail.gmail.com>
-In-Reply-To: <CAFA6WYMf+ppAtyT5aivfq1KOEhz4MVG6godqdRhQVd0ORkb7VQ@mail.gmail.com>
-From:   Etienne Carriere <etienne.carriere@linaro.org>
-Date:   Thu, 11 May 2023 10:25:38 +0200
-Message-ID: <CAN5uoS8mjcPK=3x=RQ8jVFkrCL6hmxYEjd5G9PCzW7A8U=yojg@mail.gmail.com>
-Subject: Re: [PATCH] char: tpm: ftpm_tee: use kernel login identifier
-To:     Sumit Garg <sumit.garg@linaro.org>, thiruan@microsoft.com
-Cc:     Jarkko Sakkinen <jarkko@kernel.org>, linux-kernel@vger.kernel.org,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZFwAtwIrKyJ9GJ/U@moria.home.lan>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 May 2023 at 10:15, Sumit Garg <sumit.garg@linaro.org> wrote:
->
-> On Thu, 11 May 2023 at 10:36, Etienne Carriere
-> <etienne.carriere@linaro.org> wrote:
-> >
-> > Dearl all,
-> >
-> > Typo in my previous post!
-> >
-> > On Thu, 11 May 2023 at 06:47, Etienne Carriere
-> > <etienne.carriere@linaro.org> wrote:
-> > >
-> > > Hello Jarkko,
-> > >
-> > > On Thu, 11 May 2023 at 00:12, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> > > >
-> > > > On Fri May 5, 2023 at 9:43 PM EEST, Etienne Carriere wrote:
-> > > > > Changes fTPM TEE driver to open the TEE session with REE kernel login
-> > > > > identifier rather than public login. This is needed in case fTPM service
-> > > > > it denied to user land application and restricted to kernel operating
-> > > > > system services only.
-> > > > >
-> > > > > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
-> > > >
-> > > >
-> > > > Can you bring up a little context here?
-> > > >
-> > > > What is REE login?
-> > > > Does it break backwards compatibility to switch?
-> > > > What kind of scenario we are talking about? What does it mean in plain
-> > > > English when fTPM service is denied.
-> > > > What is fTPM service?
-> > >
-> > > By fTPM service I meant the services exposed by fTPM through its
-> > > OP-TEE interface, that are the commands a client can invoke in fTPM,
-> > > see [1].
-> > >
-> > > Regarding backward compatibility, this change is backward compatible
-> > > as far as the OP-TEE entity this driver communicates with is of
-> > > revision 3.9.0 or above.
-> > > I understand this case should be addressed in some way.
-> > >
-> > > In current implementation, fTPM can be invoked by Linux kernel drivers
-> > > (through Linux kernel tee API as tpm_ftpm_tee currently does) as well
-> > > as by userland application (through TEE client library API [2]).
-> > > This change makes tpm_ftpm_tee to invoke fTPM interface using a client
-> > > identifier stating it is the Linux kernel that invokes it, not a
-> > > userland application. fTPM implementation does not check the client
-> > > identity when a client opens a session toward it. Therefore using a
-> > > public identifier (TEE_IOCTL_LOGIN_PUBLIC) or the OS privilege
-> > > identifier (TEE_IOCTL_LOGIN_REE_KERNEL) does not matter, as far as
-> > > OP-TEE supports these IDs. The former is native to OP-TEE initial UAPI
-> > > [3], the latter was introduced in OP-TEE 3.9.0 [4] and Linux kernel
-> > > v5.8 [5].
-> > >
-> > > That said, this change does fix an existing issue in fTPM integration.
-> >
-> > Typo, sorry, I meant
-> > "That said, this change does **NOT** fix an existing issue in fTPM integration."
-> >
-> > BR,
-> > Etienne
-> >
-> > > The fTPM entity currently only accepts a single session opened towards
-> > > it. This is enforced as fTPM sets property TA_FLAG_SINGLE_INSTANCE and
-> > > does not set property TA_FLAG_MULTI_SESSION [6].
-> > > Linux kernel tpm_ftpm_tee driver currently opens a session to fTPM at
-> > > probe time and releases it at remove time so once the driver is
-> > > successfully probed, no userland application can use TEE userland
-> > > client API to open another session and communicate with fTPM.
->
-> How about if the fTPM TEE kernel driver is built as a module and
-> removed at runtime by a malicious user-space client?
+On Wed, May 10, 2023 at 04:38:15PM -0400, Kent Overstreet wrote:
+> On Wed, May 10, 2023 at 10:59:05AM +0200, Peter Zijlstra wrote:
 
-This is why this change can help to lower the attack surface IMHO.
+> > Have you read the ww_mutex code? If not, please do so, it does similar
+> > things.
+> > 
+> > The way it gets around the self-nesting check is by using the nest_lock
+> > annotation, the acquire context itself also has a dep_map for this
+> > purpose.
+> 
+> This might work.
+> 
+> I was confused for a good bit when reading tho code to figure out how
+> it works - nest_lock seems to be a pretty bad name, it's really not a
+> lock. acquire_ctx?
 
-Note that if a malicious user manages to load a malicious module,
-there is nothing OP-TEE or fTPM can do about it. I guess it is the
-same situation for all tpm drivers in the Linux kernel.
+That's just how ww_mutex uses it, the annotation itself comes from
+mm_take_all_locks() where mm->mmap_lock (the lock formerly known as
+mmap_sem) is used to serialize multi acquisition of vma locks.
 
-etienne
+That is, no other code takes multiple vma locks (be it i_mmap_rwsem or
+anonvma->root->rwsem) in any order. These locks nest inside mmap_lock
+and therefore by holding mmap_lock you serialize the whole thing and can
+take them in any order you like.
 
->
-> -Sumit
->
-> > >
-> > > [1] https://github.com/microsoft/ms-tpm-20-ref/blob/main/Samples/ARM32-FirmwareTPM/optee_ta/fTPM/fTPM.c#L456
-> > > [2] https://github.com/OP-TEE/optee_client
-> > > [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=967c9cca2cc50569efc65945325c173cecba83bd
-> > > [4] https://github.com/OP-TEE/optee_os/commit/78f462f646e7c037bea13aa6282c81f255922a4f
-> > > [5] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=104edb94cc4b3101bab33161cd861de13e85610b
-> > > [6] https://github.com/microsoft/ms-tpm-20-ref/blob/main/Samples/ARM32-FirmwareTPM/optee_ta/fTPM/user_ta_header_defines.h#L47
-> > >
-> > > Regards,
-> > > Etienne
-> > >
-> > > >
-> > > > > ---
-> > > > >  drivers/char/tpm/tpm_ftpm_tee.c | 2 +-
-> > > > >  1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > >
-> > > > > diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
-> > > > > index 528f35b14fb6..6d32e260af43 100644
-> > > > > --- a/drivers/char/tpm/tpm_ftpm_tee.c
-> > > > > +++ b/drivers/char/tpm/tpm_ftpm_tee.c
-> > > > > @@ -241,7 +241,7 @@ static int ftpm_tee_probe(struct device *dev)
-> > > > >       /* Open a session with fTPM TA */
-> > > > >       memset(&sess_arg, 0, sizeof(sess_arg));
-> > > > >       export_uuid(sess_arg.uuid, &ftpm_ta_uuid);
-> > > > > -     sess_arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
-> > > > > +     sess_arg.clnt_login = TEE_IOCTL_LOGIN_REE_KERNEL;
-> > > > >       sess_arg.num_params = 0;
-> > > > >
-> > > > >       rc = tee_client_open_session(pvt_data->ctx, &sess_arg, NULL);
-> > > > > --
-> > > > > 2.25.1
-> > > >
-> > > > BR, Jarkko
+Perhaps, now, all these many years later another name would've made more
+sense, but I don't think it's worth the hassle of the tree-wide rename
+(there's a few other users since).
