@@ -2,125 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A7436FEEC5
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:27:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25B996FEECD
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:29:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237572AbjEKJ1N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 05:27:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47164 "EHLO
+        id S237448AbjEKJ3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 05:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237690AbjEKJ03 (ORCPT
+        with ESMTP id S237493AbjEKJ2y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 05:26:29 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D78D06D
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:26:22 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-965cc5170bdso1228777466b.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:26:22 -0700 (PDT)
+        Thu, 11 May 2023 05:28:54 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 066E45FD8;
+        Thu, 11 May 2023 02:28:45 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1ab0c697c2bso77815845ad.1;
+        Thu, 11 May 2023 02:28:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683797181; x=1686389181;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X1IslJ7/3eQpHk0/ZONImP6ek9rvCI7d+h3hwQhusW0=;
-        b=A3Lr/820FEisUc53N/6tIVzuEVp+khhimTcSLGsHq/i4fzqx7tp7I5DIC8bO/XwKAj
-         DeCiey9CQk6CwmWdxVDc0ZLz0mFUSFVrXlg5gDkLclK8DPZxwGUd8Yk6O8WeNnw0ZD8n
-         Y/BfVlIyj84qT8f0TXBAstume3ASfUzN6q65DvvZ74VUOE188xiWnitj/+IhI6/eUNgH
-         i4cs5MlkAoXkApk/gkivGx4lkUZfcNoETbCpJEgZmTQtRt1GRkblYskEkCSle1KNUfwd
-         kYSffouJuyUP8LZi2uM6C0wNwsQ+oJ+XUE/aeW0qabBZyLyg45XDKfxconB4I5sjwxsd
-         TJDQ==
+        d=gmail.com; s=20221208; t=1683797324; x=1686389324;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5AKArW/9N1DM1cw/nq7oO3Ipc/BxTBMz8SQU51oi5QM=;
+        b=lSqSpkTeYoe3tO29lldpVHbM32z393QYWP5lHnZIBWCvEarPeFYrVLxfqpKRFeiMH9
+         O/4rvObcKOyglqs8faTtrmcVYFQ8XJOPmtyKy2kiWHSt1RBmvearJPkZQEhcKNjXUV44
+         zPmk9SGD5swqjEFi8vzVyC7S7hRLhT8oymp0Nn+j0Lqb53GMv6htmJ3pwBf5TwaV1uFR
+         bqB49lbtbgVPuSNA3cLK217LA3Bph6pGjOU+UaaDA/QzyAdGYXsakKnwD8no18SkjADS
+         VxaC3PcxwjVwmU+nKQWSxICPOzqvM3jml+aMSgjVP8wtczWmTNUNx3u/IsGxy11QAZfk
+         GwwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683797181; x=1686389181;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X1IslJ7/3eQpHk0/ZONImP6ek9rvCI7d+h3hwQhusW0=;
-        b=QHcQ6/tF819ArqsgXocWAPiCcdkz+6Djr0LDnuG9GypLf27mnBVKhphpULIE8Ep5kR
-         EUGrSk2jy06xMNN+rYbYEfiRtS1dWozVJU6wJ7JPTGKKQ+LxZAM4kQKoY2cf/+FsTm9l
-         W+ICrnm5BfPiGoFF7r+2kF7je2lzlMbMhUGte0QdHCU2a46bqybqa5mpn6xV8hwiQbH/
-         Y0CF0utz51rlD/cWwIKwUozWvn3FwLDD93AXtyUFrcI1X2iInfsSSBmrrga183gvaVQK
-         k+U6dWlQsfGPdOI04J5xbae1FtM9UuIdG3cHFb8ADazYJ7CU0XMul+0g/Iph9keJvacl
-         UiWQ==
-X-Gm-Message-State: AC+VfDzLEUPSYBUK4Puv3AK9WkD4w7cDPYXEf7NhNmxphTK673aykqdp
-        4zBLzhcVH4H/RvHdOBTLHAp9Iw==
-X-Google-Smtp-Source: ACHHUZ74t7K+CeQz4z8BQyobf4t7TRb93OAiK2Zks93fMy5n6HFkZY/H0v/9xh4mpxhbpUlCfqdB2A==
-X-Received: by 2002:a17:907:78c:b0:953:43a1:1988 with SMTP id xd12-20020a170907078c00b0095343a11988mr17157850ejb.46.1683797181377;
-        Thu, 11 May 2023 02:26:21 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:7e61:f14a:c3a4:809e? ([2a02:810d:15c0:828:7e61:f14a:c3a4:809e])
-        by smtp.gmail.com with ESMTPSA id n7-20020aa7d047000000b004fbdfbb5acesm2818308edo.89.2023.05.11.02.26.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 May 2023 02:26:20 -0700 (PDT)
-Message-ID: <9cf5965a-8290-dfff-9f92-07ed2df66650@linaro.org>
-Date:   Thu, 11 May 2023 11:26:19 +0200
+        d=1e100.net; s=20221208; t=1683797324; x=1686389324;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5AKArW/9N1DM1cw/nq7oO3Ipc/BxTBMz8SQU51oi5QM=;
+        b=OysjBIQnpYcG3jJJYoGM6rJHu6aDTnGL1rTF1xYYL6BQHQKe/w3PZ29gaB9/OoVQa+
+         DGS/yVDet+oyNDcLf/DQGCN84dvzYEPSCv86XSCzWqE0WHqQYceaZGQEAcOe+jin9C8y
+         F0CXN75MBgR9zJt8GOdHo+rn069hUuoFzCvJ1Aar1q5ZYOc3ts8GpJoWhn7XGQ5t7Epi
+         dqwvHBdj8iHRnwR75chTkzfb9lPXYdSscXh1AKsXTeAQz5zf1jjkZY8Wq3mzS4UTsygx
+         LwDAHCFeDVRCS1owT8URj3bvEkykXdU+ycI1TKG60tjnLnic08Ya2gAMaC/wFz104dq4
+         vwUg==
+X-Gm-Message-State: AC+VfDxBu0+kKJ9oo/1552kONkhgkp26F61Ii2Iho3n9SrJdh6Q+d4A0
+        ni6gKY0Jj3V/Ma7uKg3sFVNNT2PSAUYkpQ==
+X-Google-Smtp-Source: ACHHUZ4kt2fEW6y1LT9sL5KAOXOvB6IxvXmm6lpgkO77jh+uBd0sq2MbCeuvBayswScpQ/VmBXnGwQ==
+X-Received: by 2002:a17:902:db0e:b0:1ab:12cf:9e1c with SMTP id m14-20020a170902db0e00b001ab12cf9e1cmr23993360plx.32.1683797324390;
+        Thu, 11 May 2023 02:28:44 -0700 (PDT)
+Received: from localhost (fwdproxy-prn-019.fbsv.net. [2a03:2880:ff:13::face:b00c])
+        by smtp.gmail.com with ESMTPSA id 13-20020a170902e9cd00b001ab0669d84csm5407877plk.26.2023.05.11.02.28.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 02:28:44 -0700 (PDT)
+From:   Nhat Pham <nphamcs@gmail.com>
+To:     akpm@linux-foundation.org
+Cc:     linux-api@vger.kernel.org, kernel-team@meta.com,
+        linux-arch@vger.kernel.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, arnd@arndb.de,
+        catalin.marinas@arm.com, will@kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH] arm64: wire up cachestat for arm64
+Date:   Thu, 11 May 2023 02:28:43 -0700
+Message-Id: <20230511092843.3896327-1-nphamcs@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230510195806.2902878-1-nphamcs@gmail.com>
+References: <20230510195806.2902878-1-nphamcs@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: cdns,usb3: Add clock and reset
-Content-Language: en-US
-To:     Minda Chen <minda.chen@starfivetech.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org
-References: <20230510132816.108820-1-minda.chen@starfivetech.com>
- <20230510132816.108820-2-minda.chen@starfivetech.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230510132816.108820-2-minda.chen@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/2023 15:28, Minda Chen wrote:
-> To support generic clock and reset init in Cadence USBSS
-> controller, add clock and reset dts configuration.
-> 
-> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
-> ---
->  .../devicetree/bindings/usb/cdns,usb3.yaml         | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-> index cae46c4982ad..623c6b34dee3 100644
-> --- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-> +++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
-> @@ -42,6 +42,18 @@ properties:
->        - const: otg
->        - const: wakeup
->  
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 8
-> +    description:
-> +      USB controller clocks.
+cachestat is a new syscall that was previously wired in for most
+architectures:
 
-You need to list the items. And why is it variable? Your clock choice in
-the example is poor, I doubt it is real.
+https://lore.kernel.org/lkml/20230503013608.2431726-1-nphamcs@gmail.com/
+https://lore.kernel.org/linux-mm/20230510195806.2902878-1-nphamcs@gmail.com/
 
-> +
-> +  resets:
-> +    minItems: 1
-> +    maxItems: 8
-> +    description:
-> +      USB controller generic resets.
+However, those patches miss arm64, which has its own syscall table in arch/arm64.
+This patch wires cachestat in for arm64.
 
-Here as well.
+Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+Suggested-by: Geert Uytterhoeven <geert@linux-m68k.org>
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+---
+ arch/arm64/include/asm/unistd.h   | 2 +-
+ arch/arm64/include/asm/unistd32.h | 2 ++
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-You had one clock last time, thus the review was - drop the names. Now
-you changed it to 8 clocks... I don't understand.
-
-Best regards,
-Krzysztof
+diff --git a/arch/arm64/include/asm/unistd.h b/arch/arm64/include/asm/unistd.h
+index 037feba03a51..64a514f90131 100644
+--- a/arch/arm64/include/asm/unistd.h
++++ b/arch/arm64/include/asm/unistd.h
+@@ -39,7 +39,7 @@
+ #define __ARM_NR_compat_set_tls		(__ARM_NR_COMPAT_BASE + 5)
+ #define __ARM_NR_COMPAT_END		(__ARM_NR_COMPAT_BASE + 0x800)
+ 
+-#define __NR_compat_syscalls		451
++#define __NR_compat_syscalls		452
+ #endif
+ 
+ #define __ARCH_WANT_SYS_CLONE
+diff --git a/arch/arm64/include/asm/unistd32.h b/arch/arm64/include/asm/unistd32.h
+index 604a2053d006..d952a28463e0 100644
+--- a/arch/arm64/include/asm/unistd32.h
++++ b/arch/arm64/include/asm/unistd32.h
+@@ -907,6 +907,8 @@ __SYSCALL(__NR_process_mrelease, sys_process_mrelease)
+ __SYSCALL(__NR_futex_waitv, sys_futex_waitv)
+ #define __NR_set_mempolicy_home_node 450
+ __SYSCALL(__NR_set_mempolicy_home_node, sys_set_mempolicy_home_node)
++#define __NR_cachestat 451
++__SYSCALL(__NR_cachestat, sys_cachestat)
+ 
+ /*
+  * Please add new compat syscalls above this comment and update
+-- 
+2.34.1
 
