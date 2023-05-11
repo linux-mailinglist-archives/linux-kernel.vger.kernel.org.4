@@ -2,49 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 652D36FEB5A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 07:44:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA9F96FEB5D
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 07:44:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237200AbjEKFoB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 01:44:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53670 "EHLO
+        id S237149AbjEKFox (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 01:44:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236943AbjEKFnb (ORCPT
+        with ESMTP id S237108AbjEKFo0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 01:43:31 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E89E4695;
-        Wed, 10 May 2023 22:43:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=UQgMCGljUJ7oMQ6mf0JD66p8AV+Pricx3j0/87/rFdI=; b=WFSwWicA7I6QjunjDTmUY/mBBw
-        +OdqCiSVAaq7AwaAq4xZwY4gnB6pwGU8tQc4ONz5S15zuLHUMQbn7bCAh3yX9KB2tW33Fi5qb/eNS
-        Ibs3/aYjdR4ROBC4C6Rcpqz7tTp98buzqxNITntt/3+CYEKoWUPKu1fqkOB1mC8XuReJAS68gGjkX
-        SnsCLss8J9Y/ITZE3AKEDHYnQq5uWprxBpTvPQ/Uqqza8xGPleWXp7iK7hqmV9R01T8UVSQ5XW2JU
-        69Cz2ghJ3IVIrfmd8Mmi5c3t55/GrzzZ2POKZ4HVXMJUOrderW05675mtR+tt6C9dnZIJSO7lzZG2
-        /az9cJXQ==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pwz5E-001cjL-19;
-        Thu, 11 May 2023 05:43:20 +0000
-Date:   Thu, 11 May 2023 06:43:20 +0100
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     ye.xingchen@zte.com.cn
-Cc:     sumit.semwal@linaro.org, gustavo@padovan.org,
-        christian.koenig@amd.com, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] dma-buf/sync_file: Use fdget()
-Message-ID: <20230511054320.GL3390869@ZenIV>
-References: <202305051103396748797@zte.com.cn>
+        Thu, 11 May 2023 01:44:26 -0400
+Received: from out-38.mta0.migadu.com (out-38.mta0.migadu.com [91.218.175.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EB675252
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 22:44:22 -0700 (PDT)
+Date:   Thu, 11 May 2023 01:44:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683783860;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0iOiMX6sv+DQehmZI33b0k3P+A/HtVxXVvqqZmBD72U=;
+        b=hmSs4gLAmdr54kJa3buCPbG6CRX+mFcsgPHVdenXCmFW9gT1U5PdBV86nHo8lf/4IJnIrh
+        WHSvFxFv4OLHOHo80TvgsemT19uXyTS5gEpd3uozGpUwxCGRaoAjaiC5wTrDlhVlvgXIkf
+        hGRuujciGhX4BV9JZLntpLgf5lziWFQ=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Theodore Ts'o <tytso@mit.edu>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>, linux-mm@kvack.org
+Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
+Message-ID: <ZFyAr/9L3neIWpF8@moria.home.lan>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-8-kent.overstreet@linux.dev>
+ <ZFqxEWqD19eHe353@infradead.org>
+ <ZFq3SdSBJ_LWsOgd@murray>
+ <20230509214319.GA858791@frogsfrogsfrogs>
+ <ZFrBEsjrfseCUzqV@moria.home.lan>
+ <ZFx+GOjabJIaJWU8@mit.edu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202305051103396748797@zte.com.cn>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+In-Reply-To: <ZFx+GOjabJIaJWU8@mit.edu>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,9 +59,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 11:03:39AM +0800, ye.xingchen@zte.com.cn wrote:
-> From: Ye Xingchen <ye.xingchen@zte.com.cn>
-> 
-> convert the fget() use to fdget().
+On Thu, May 11, 2023 at 01:33:12AM -0400, Theodore Ts'o wrote:
+> Seriously, does this mean that bcachefs won't work on Arm systems
+> (arm32 or arm64)?  Or Risc V systems?  Or S/390's?  Or Power
+> architectuers?  Or Itanium or PA-RISC systems?  (OK, I really don't
+> care all that much about those last two.  :-)
 
-NAK.
+No :)
+
+My CI servers are arm64 servers. There's a bch2_bkey_unpack_key()
+written in C, that works on any architecture. But specializing for a
+particular format is a not-insignificant performance improvement, so
+writing an arm64 version has been on my todo list.
+
+> When people ask me why file systems are so hard to make enterprise
+> ready, I tell them to recall the general advice given to people to
+> write secure, robust systems: (a) avoid premature optimization, (b)
+> avoid fine-grained, multi-threaded programming, as much as possible,
+> because locking bugs are a b*tch, and (c) avoid unnecessary global
+> state as much as possible.
+> 
+> File systems tend to violate all of these precepts: (a) people chase
+> benchmark optimizations to the exclusion of all else, because people
+> have an unhealthy obsession with Phornix benchmark articles, (b) file
+> systems tend to be inherently multi-threaded, with lots of locks, and
+> (c) file systems are all about managing global state in the form of
+> files, directories, etc.
+> 
+> However, hiding a miniature architecture-specific compiler inside a
+> file system seems to be a rather blatent example of "premature
+> optimization".
+
+Ted, this project is _15_ years old.
+
+I'm getting ready to write a full explanation of what this is for and
+why it's important, I've just been busy with the conference - and I want
+to write something good, that provides all the context.
+
+I've also been mulling over fallback options, but I don't see any good
+ones. The unspecialized, C version of unpack has branches (the absolute
+minimum, I took my time when I was writing that code too); the
+specialized versions are branchless and _much_ smaller, and the only way
+to do that specialization is with some form of dynamic codegen.
+
+But I do owe you all a detailed walkthrough of what this is all about,
+so you'll get it in the next day or so.
+
+Cheers,
+Kent
