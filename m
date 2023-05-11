@@ -2,129 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 257796FF983
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 20:34:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5DE6FF986
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 20:38:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239033AbjEKSex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 14:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
+        id S238915AbjEKShk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 14:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238915AbjEKSev (ORCPT
+        with ESMTP id S239059AbjEKShQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 14:34:51 -0400
-Received: from mail-ot1-x335.google.com (mail-ot1-x335.google.com [IPv6:2607:f8b0:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B29115584
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 11:34:49 -0700 (PDT)
-Received: by mail-ot1-x335.google.com with SMTP id 46e09a7af769-6ab611e57c2so1028897a34.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 11:34:49 -0700 (PDT)
+        Thu, 11 May 2023 14:37:16 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A687735A5;
+        Thu, 11 May 2023 11:37:15 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ab14cb3aaeso64077005ad.2;
+        Thu, 11 May 2023 11:37:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bitbyteword.org; s=google; t=1683830089; x=1686422089;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Eqk34LLf7CtwfQbk/8o6b4YNIAWEXLYt4n8dWqcS5ck=;
-        b=LBdVZAm7fx0OMMTmY4JLYUPEsaUsWQlkXbKIK11lGvRxosG8NIsr+iX8dOLHMpD3Vl
-         ROCCtj5nN2m2NhyWoLeor+MCXIvxIsRddFPHAInwtIhkJuWpH0S2W6zNB6z+XyddwLUt
-         XwrahT14wszgczKY8a4AnBZq32h321FIGDRQdVFIMO+hMQFuhpDhAW63O987g6tp+m9f
-         8Dz83dFyCvoQbcEBcz79UFZApDbYpApHKnLZKZ9tQrgyKpzxKXdrf9nRozIrG/lzqPoB
-         dMOEAWlfR6TJYbVapjWFYP7uFB4WZ2reB3ls7CCvxlr+Io29Df4Udy9fGmAbxSdaOazZ
-         c7dw==
+        d=gmail.com; s=20221208; t=1683830235; x=1686422235;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mo08lR/lndoev9zDyfO8bS5MbMffpTCzQ0BQI7W4HeU=;
+        b=ZjufzySMFT0IpCJ6hm1J5F0bwBF0SS1P2pZFAkgBRsJlugPRD6HS3z98JKFKriKQvN
+         I+tTybvdohQu/ozmMbzRQwOFNSLvti+M84qRnRO7p4wpJMIeoQ3ckzTZj2EVyj5N1gU3
+         UueF3ecP1mthhXDYlywKGUgvCdNOywp8UwQg6NqBkl+Fm01bs0lk/nm3M3W1kmlbQtyj
+         zfzDAFDaWL1ncb2z6NJfHqrVATquCbPovH3qM3WGRbRpifGrI05zYcb7NDDbn4K+mde2
+         R7D+hT+BAgWQHphdMFc0sqRC2/aWXhZ6rNQDdHILJ7Wvlxxo0dbCZHlQoQatGBBchkNp
+         mS0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683830089; x=1686422089;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Eqk34LLf7CtwfQbk/8o6b4YNIAWEXLYt4n8dWqcS5ck=;
-        b=bZ1yVHjv2FMZLdrzF3KEBBXVa9DQ/u2YV0ngBXpWgDKf37jEO49ksFPhuRz/7ycg03
-         RHKhhcZvA4boT3vDORtHgcejLiifXiV1ZDVSlTDL7ZQZzIJB5QEgmjH6lOk4Sqy5YmCJ
-         wg+Lku+smSpvbgfCtIplaLk5MIikbEwu7Ig+UPz2HqQ5rFrhUxQBJB61m8QLqNP2Y0vw
-         4En8tIyldBlZgcEyshjXas5UChLArVvLCxOCH+ALGCwotCLSNETbquSfGsghRSLnrySv
-         DXj3IGppIZCr/E2iI/OLVNIM0OzZEatfsPSRqq3zEdW4LnzVBudRZiDg3nsBxMhl+T4Q
-         ALNw==
-X-Gm-Message-State: AC+VfDz46NxRlTMED1IIUwPdk4bfLTLjFEYrFHT2PRXG3O8CioKESHjT
-        VjIkjXn9AE8SsWiMsvo6qhobXkEldGmgdtKWD9lgpqbPLmIPFxwoSVdp3g==
-X-Google-Smtp-Source: ACHHUZ5uA60qYdAeSKObEwcECuose51HMLpDsQyqtfXHDIWS+t2Q6r7nIDwJ6HyPNekR99P7VfeBMaHjdmdwu4VnkBo=
-X-Received: by 2002:a9d:7d07:0:b0:6ab:82ac:fad8 with SMTP id
- v7-20020a9d7d07000000b006ab82acfad8mr2203405otn.15.1683830089017; Thu, 11 May
- 2023 11:34:49 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683830235; x=1686422235;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mo08lR/lndoev9zDyfO8bS5MbMffpTCzQ0BQI7W4HeU=;
+        b=kxJu11GOcRnHWXxvwW3VrViGWgRw2t5US3Z7yiySv/OV2vZY2iBh/rs/1CZxzvRdYy
+         ONVQTTv9/EMQiu1B3TTkqJx9+S/3c2uG5c1NHJexuamI3KIGbAf29hV+b/8h7Oz72PMV
+         IqKsQBb9xriF87aE+HK0rKjAXXCD2DJ7LJapmUCMBrg8eIZlpU7en5ZeBylMwUcAWLm3
+         kUE5v/DrPmjuyMDLVuiA5ggnAwsExJinHGk4bFYxELAgeGvYhpb5YqnNz4O4ZFZBSI0A
+         pb+Pw2GG10qzAkPmqMfHQuRVJFDOliKDSpnAlD24irtvmsWiKCrmcowzM+Qd4ho40YM8
+         LO5Q==
+X-Gm-Message-State: AC+VfDySssxoycJ5ShvCGM4i8vx6xhA35Sr9EFjZkw7JyerHsYOHH7kR
+        cLjCKJiiP8XlpuKdNRN45Rw=
+X-Google-Smtp-Source: ACHHUZ6y9IQWE9dUS3itkOFqCtNsapKpGul15zAsgOE4bbPy/cpxYsOfeABeBdbyYqd9ZoS1EgdBEQ==
+X-Received: by 2002:a17:902:aa8d:b0:1a6:db0a:8003 with SMTP id d13-20020a170902aa8d00b001a6db0a8003mr22022175plr.23.1683830234878;
+        Thu, 11 May 2023 11:37:14 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:84a:ed9c:4024:c347])
+        by smtp.gmail.com with ESMTPSA id b13-20020a170902b60d00b001aafdf8063dsm6264348pls.157.2023.05.11.11.37.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 11:37:13 -0700 (PDT)
+Date:   Thu, 11 May 2023 11:37:10 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Herring <robh@kernel.org>
+Subject: Re: [RESEND PATCH] dt-bindings: input: cypress,cyapa: convert to
+ dtschema
+Message-ID: <ZF011h0Ho0qUI/U8@google.com>
+References: <20230511102559.175088-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <20230508160829.2756405-1-vineeth@bitbyteword.org>
- <20230509132534.09098acc@luca64> <CAO7JXPhrqKWfsp860rRmEenxARi8U2gNMGsOn4m+aKporWwBcg@mail.gmail.com>
- <20230509224829.2fb547fd@nowhere> <20230509225417.61d36733@nowhere>
- <CAO7JXPhk5qbz9kmiu9WuXS+gXCt9+X8pP2c37hd9ChByLmXYjA@mail.gmail.com>
- <20230510090735.68f62cd4@nowhere> <CAO7JXPg03f2YnrmzoGjfHEZZcoN55cU7uVukMw31Bw3x6nnaMw@mail.gmail.com>
- <20230511093711.2be82409@nowhere>
-In-Reply-To: <20230511093711.2be82409@nowhere>
-From:   Vineeth Remanan Pillai <vineeth@bitbyteword.org>
-Date:   Thu, 11 May 2023 14:34:38 -0400
-Message-ID: <CAO7JXPiKLFLVpqDKoRdu8c2Yd4AJ_2B2UyXJxD3kJAyiJ=n0_Q@mail.gmail.com>
-Subject: Re: [PATCH 1/2] sched/deadline: accurate reclaim bandwidth for GRUB
-To:     luca abeni <luca.abeni@santannapisa.it>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511102559.175088-1-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Luca,
+On Thu, May 11, 2023 at 12:25:59PM +0200, Krzysztof Kozlowski wrote:
+> Convert the Cypress All Points Addressable (APA) I2C Touchpad / Trackpad
+> bindings to DT schema.
+> 
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-On Thu, May 11, 2023 at 3:37=E2=80=AFAM luca abeni <luca.abeni@santannapisa=
-.it> wrote:
->
-> I've just seen v2, and (unless I misunderstand something) I see you
-> removed the max{u_i/u_max, 1 - (u_inact + u_extra}} thing?
->
-> I fear this might break the real-time guarantees provided by the
-> algorithm...
->
-I am sorry I missed sending more details before sending out v2. So, I
-think there is another bug in the existing implementation. Let me try
-to explain the details.
+Applied, thank you.
 
-SMP GRUB paper has the equation for depreciating runtime as:
-  dq_i =3D -max{u_i, 1 - (extra_bw + Uinact)} dt
-
-Since we are caping at Umax, the equation would be
-  dq_i =3D -(max{u_i, Umax - (extra_bw + Uinact)} / Umax) dt (1)
-
-But existing implementation is:
-  dq_i =3D -max{u_i/Umax, 1 - (extra_bw + Uinact)} dt (2)
-
-Here in (2), we factored Umax only to the first term "u_i" and the
-second term in max{} was as left as it is. What do you think?
-
-Now with normal DL and SCHED_FLAG_RECLAIM tasks, equation (1) can be
-re-written as:
-  dq_i =3D
-   -(max{u_i, Ureclaim_max - (extra_bw + Uinact)}/Ureclaim_max)dt (3)
-
-I tested this equation (3) and it works as expected. What do you think
-about the correctness of equation (3)?
-
-I felt that, since we are using sequential reclaim mentioned in the
-paper and we isolate all parameters per-cpu(except for extra_bw) we
-could use the "-dq =3D -(U/Umax) dt" equation as it was simpler than
-equation (3). Sorry that I missed discussing this. I shall send out
-v3 with equation (3), if you think it's the right way to go to enforce
-deadline guarantees.
-
-Thanks,
-Vineeth
+-- 
+Dmitry
