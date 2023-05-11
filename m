@@ -2,56 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 445DC6FEDB5
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:15:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 276AE6FEDC8
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:20:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235182AbjEKIPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 04:15:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40228 "EHLO
+        id S233014AbjEKIUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 04:20:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233914AbjEKIP1 (ORCPT
+        with ESMTP id S229644AbjEKIUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 04:15:27 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3756444A9;
-        Thu, 11 May 2023 01:15:21 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 725FA82B9;
-        Thu, 11 May 2023 16:15:13 +0800 (CST)
-Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 11 May
- 2023 16:15:13 +0800
-Received: from [192.168.120.57] (171.223.208.138) by EXMBX168.cuchost.com
- (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 11 May
- 2023 16:15:12 +0800
-Message-ID: <51981900-6447-8a77-1522-66b1ac0563c5@starfivetech.com>
-Date:   Thu, 11 May 2023 16:15:12 +0800
+        Thu, 11 May 2023 04:20:00 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E2259FC
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:19:57 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-965a68abfd4so1556443166b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:19:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683793196; x=1686385196;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=dXUc0AM5YyJGVARdeNJtcPWclgUFkU4IgJaimBLLBy0=;
+        b=gZ6cc/8yzMN93tOp2DvshBUAQ1cusjOnRS0AMGJDoyqX1+rHBNovJHbGTKd9M1J1za
+         BPmNrT53wE3AuTnyLtgYk3LU8rcrzQgO2qDTl9lo7+Eb/uQvrpNEcSbmDFADNIOC6oJq
+         e0sJcLQsPcLkN8CcuOKyhxYpPwdneyEOdSw5yzwUmLhiUvmuAhRLL079cO8Q8Uznfwpq
+         IJt3JfbAwSPQ/Ud/8Am9V+CXk/oX4aMwi+jQ0QUOCRTN0ZCSw5nZGJ09IJHMrnQ4FWbZ
+         Y4wQjNz+VGicdrg0JWmX9zrwxIIVONnp32DxMDeo4RJiVeawV5pW5lGDEXCob/y45Tql
+         Qr+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683793196; x=1686385196;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dXUc0AM5YyJGVARdeNJtcPWclgUFkU4IgJaimBLLBy0=;
+        b=Kmzz2FIr45+qIjOCuSD6Fk5zoRe+DIXJhfrB0IRIHSldA+o7n+WFzAR+LlFSct0c+H
+         pZAjlHj7jVREDYloh/7eDUmsV730jCMflJC4EoY5ikbLFFAza1T8ywyH2W9MTaNFwOiG
+         +Y5OqZYT2CxqY2j4LfOXokuX57BsY/ui+7e/Ow8MseZGCNExCVbyLWVG3xsCCXvMwUYg
+         1nyRS3pQPLILjnRxbzx6Gqu6wnJkF0FNvmm6LKpXIow4GQXe9hqVFUiYTN9tX5X/aVsl
+         LMcCe4oI+uWAwyZECJHmiPgdcg0kqOfzCAKhRb81LBIvY4Y57l506hmgP5ft1bRbzZZk
+         mDRA==
+X-Gm-Message-State: AC+VfDz7l/Qcd32yvwZrJgoJplLzQIz8sAkCG4euTlk0gXeGfq383eAh
+        hQ/UlS3e89IBD/jW3VVay2w/+aXbEUpR3vItQ/IkyA==
+X-Google-Smtp-Source: ACHHUZ6hLwUil/od1v0wksCZxQwWFOm0Sib5lsOFqEc6+f5QuQwsg831STGVh9ufZC/JFJMamzmcRJiRtn/+iYdRgeg=
+X-Received: by 2002:a17:907:9694:b0:96a:1ec1:2c9f with SMTP id
+ hd20-20020a170907969400b0096a1ec12c9fmr5715805ejc.12.1683793196058; Thu, 11
+ May 2023 01:19:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RESEND v3 2/2] pwm: starfive: Add PWM driver support
-To:     Thierry Reding <thierry.reding@gmail.com>
-CC:     <devicetree@vger.kernel.org>, <linux-pwm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Hal Feng <hal.feng@starfivetech.com>
-References: <20230321055228.105945-1-william.qiu@starfivetech.com>
- <20230321055228.105945-3-william.qiu@starfivetech.com>
- <ZC7U3MzdUX_TcA75@orome>
-Content-Language: en-US
-From:   William Qiu <william.qiu@starfivetech.com>
-In-Reply-To: <ZC7U3MzdUX_TcA75@orome>
+References: <20230505173012.881083-1-etienne.carriere@linaro.org>
+ <20230505173012.881083-3-etienne.carriere@linaro.org> <CAFA6WYN4yjjedmsS4nAgR5L7OOTRAcKs7STW0YjCC7XsdfYzkA@mail.gmail.com>
+ <CAN5uoS8eSfeu-BaV5dhbB15q_iGjcd9BKDpp_hEBaBdb4_qbAg@mail.gmail.com>
+ <CAN5uoS99hfjE404_UCm+F4bdVgSfB6Eg_3d1JvHCc2GgSzdUog@mail.gmail.com> <CAFA6WYPUWjK97H5DL-eOT2bjsa79Zrvk4wet2AW0Qb0NOVqt7Q@mail.gmail.com>
+In-Reply-To: <CAFA6WYPUWjK97H5DL-eOT2bjsa79Zrvk4wet2AW0Qb0NOVqt7Q@mail.gmail.com>
+From:   Etienne Carriere <etienne.carriere@linaro.org>
+Date:   Thu, 11 May 2023 10:19:45 +0200
+Message-ID: <CAN5uoS8HF5ymsjkLthFnoQxBHQ3TOVonycTH3g5K76qKzUniuA@mail.gmail.com>
+Subject: Re: [PATCH v6 3/4] tee: optee: support tracking system threads
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        op-tee@lists.trustedfirmware.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [171.223.208.138]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX168.cuchost.com
- (172.16.6.78)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,450 +73,152 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 11 May 2023 at 09:27, Sumit Garg <sumit.garg@linaro.org> wrote:
+> (snip)
+> > > > >
+> > > > > +bool optee_cq_inc_sys_thread_count(struct optee_call_queue *cq)
+> > > > > +{
+> > > > > +       bool rc = false;
+> > > > > +
+> > > > > +       mutex_lock(&cq->mutex);
+> > > > > +
+> > > > > +       /* Leave at least 1 normal (non-system) thread */
+> > > >
+> > > > IMO, this might be counter productive. As most kernel drivers open a
+> > > > session during driver probe which are only released in the driver
+> > > > release method.
+> > >
+> > > It is always the case?
+> >
+> > This answer of mine is irrelevant. Sorry,
+> > Please read only the below comments of mine, especially:
+> > | Note that an OP-TEE thread is not bound to a TEE session but rather
+> > | bound to a yielded call to OP-TEE.
+> >
+> > >
+> > > > If the kernel driver is built-in then the session is
+> > > > never released. Now with system threads we would reserve an OP-TEE
+> > > > thread for that kernel driver as well which will never be available to
+> > > > regular user-space clients.
+> > >
+> > > That is not true. No driver currently requests their TEE thread to be
+> > > a system thread.
+> > > Only SCMI does because it needs to by construction.
+> > >
+>
+> Yes that's true but what prevents future/current kernel TEE drivers
+> from requesting a system thread once we have this patch-set landed.
 
+Only clients really needing this system_thread attribute should request it.
+If they really need, the OP-TEE firmware in secure world should
+provision sufficient thread context.
 
-On 2023/4/6 22:19, Thierry Reding wrote:
-> On Tue, Mar 21, 2023 at 01:52:28PM +0800, William Qiu wrote:
->> Add Pulse Width Modulation driver support for StarFive
->> JH7110 soc.
-> 
-> s/soc/SoC/
-> 
->> 
->> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
->> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
->> ---
->>  MAINTAINERS                    |   7 +
->>  drivers/pwm/Kconfig            |  10 ++
->>  drivers/pwm/Makefile           |   1 +
->>  drivers/pwm/pwm-starfive-ptc.c | 245 +++++++++++++++++++++++++++++++++
->>  4 files changed, 263 insertions(+)
->>  create mode 100644 drivers/pwm/pwm-starfive-ptc.c
->> 
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index ac151975d0d3..efe1811f9501 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -19929,6 +19929,13 @@ F:	drivers/pinctrl/starfive/pinctrl-starfive-jh71*
->>  F:	include/dt-bindings/pinctrl/pinctrl-starfive-jh7100.h
->>  F:	include/dt-bindings/pinctrl/starfive,jh7110-pinctrl.h
->> 
->> +STARFIVE JH71X0 PWM DRIVERS
->> +M:	William Qiu <william.qiu@starfivetech.com>
->> +M:	Hal Feng <hal.feng@starfivetech.com>
->> +S:	Supported
->> +F:	Documentation/devicetree/bindings/pwm/starfive,jh7110-pwm.yaml
->> +F:	drivers/pwm/pwm-starfive-ptc.c
->> +
->>  STARFIVE JH71X0 RESET CONTROLLER DRIVERS
->>  M:	Emil Renner Berthing <kernel@esmil.dk>
->>  M:	Hal Feng <hal.feng@starfivetech.com>
->> diff --git a/drivers/pwm/Kconfig b/drivers/pwm/Kconfig
->> index dae023d783a2..2307a0099994 100644
->> --- a/drivers/pwm/Kconfig
->> +++ b/drivers/pwm/Kconfig
->> @@ -536,6 +536,16 @@ config PWM_SPRD
->>  	  To compile this driver as a module, choose M here: the module
->>  	  will be called pwm-sprd.
->> 
->> +config PWM_STARFIVE_PTC
->> +	tristate "StarFive PWM PTC support"
->> +	depends on OF
->> +	depends on COMMON_CLK
-> 
-> You probably want HAS_IOMEM here as well, otherwise this will likely
-> fail to build on some architectures.
-> 
->> +	help
->> +	  Generic PWM framework driver for StarFive SoCs.
->> +
->> +	  To compile this driver as a module, choose M here: the module
->> +	  will be called pwm-starfive-ptc.
->> +
->>  config PWM_STI
->>  	tristate "STiH4xx PWM support"
->>  	depends on ARCH_STI || COMPILE_TEST
->> diff --git a/drivers/pwm/Makefile b/drivers/pwm/Makefile
->> index 7bf1a29f02b8..577f69904baa 100644
->> --- a/drivers/pwm/Makefile
->> +++ b/drivers/pwm/Makefile
->> @@ -49,6 +49,7 @@ obj-$(CONFIG_PWM_SIFIVE)	+= pwm-sifive.o
->>  obj-$(CONFIG_PWM_SL28CPLD)	+= pwm-sl28cpld.o
->>  obj-$(CONFIG_PWM_SPEAR)		+= pwm-spear.o
->>  obj-$(CONFIG_PWM_SPRD)		+= pwm-sprd.o
->> +obj-$(CONFIG_PWM_STARFIVE_PTC)	+= pwm-starfive-ptc.o
->>  obj-$(CONFIG_PWM_STI)		+= pwm-sti.o
->>  obj-$(CONFIG_PWM_STM32)		+= pwm-stm32.o
->>  obj-$(CONFIG_PWM_STM32_LP)	+= pwm-stm32-lp.o
->> diff --git a/drivers/pwm/pwm-starfive-ptc.c b/drivers/pwm/pwm-starfive-ptc.c
->> new file mode 100644
->> index 000000000000..239df796d240
->> --- /dev/null
->> +++ b/drivers/pwm/pwm-starfive-ptc.c
->> @@ -0,0 +1,245 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * PWM driver for the StarFive JH7110 SoC
->> + *
->> + * Copyright (C) 2018 StarFive Technology Co., Ltd.
->> + */
->> +
->> +#include <dt-bindings/pwm/pwm.h>
-> 
-> You don't use anything from this, nor should you. Just drop it.
-> 
->> +#include <linux/module.h>
->> +#include <linux/platform_device.h>
->> +#include <linux/pwm.h>
->> +#include <linux/slab.h>
->> +#include <linux/clk.h>
->> +#include <linux/reset.h>
->> +#include <linux/io.h>
-> 
-> These should be in alphabetic order.
-> 
->> +
->> +/* how many parameters can be transferred to ptc */
->> +#define OF_PWM_N_CELLS			3
-> 
-> You use this exactly once, so this definition is useless.
-> 
->> +
->> +/* PTC Register offsets */
->> +#define REG_RPTC_CNTR			0x0
->> +#define REG_RPTC_HRC			0x4
->> +#define REG_RPTC_LRC			0x8
->> +#define REG_RPTC_CTRL			0xC
-> 
-> These seem to have been replaced by the REG_PTC_RPTC_* definitions
-> below. Pick one and drop the other.
-> 
->> +/* Bit for PWM clock */
->> +#define BIT_PWM_CLOCK_EN		31
->> +
->> +/* Bit for clock gen soft reset */
->> +#define BIT_CLK_GEN_SOFT_RESET		13
-> 
-> These two bit definitions seem to be completely unused.
-> 
->> +
->> +#define NS_PER_SECOND			1000000000
-> 
-> Use the standard NSEC_PER_SEC.
-> 
->> +
->> +/*
->> + * Access PTC register (cntr hrc lrc and ctrl),
->> + * need to replace PWM_BASE_ADDR
->> + */
->> +#define REG_PTC_BASE_ADDR_SUB(base, N)	\
->> +((base) + (((N) > 3) ? (((N) % 4) * 0x10 + (1 << 15)) : ((N) * 0x10)))
->> +#define REG_PTC_RPTC_CNTR(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N))
->> +#define REG_PTC_RPTC_HRC(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N) + 0x4)
->> +#define REG_PTC_RPTC_LRC(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N) + 0x8)
->> +#define REG_PTC_RPTC_CTRL(base, N)	(REG_PTC_BASE_ADDR_SUB(base, N) + 0xC)
->> +
->> +/* PTC_RPTC_CTRL */
->> +#define PTC_EN      BIT(0)
->> +#define PTC_ECLK    BIT(1)
->> +#define PTC_NEC     BIT(2)
->> +#define PTC_OE      BIT(3)
->> +#define PTC_SIGNLE  BIT(4)
->> +#define PTC_INTE    BIT(5)
->> +#define PTC_INT     BIT(6)
->> +#define PTC_CNTRRST BIT(7)
->> +#define PTC_CAPTE   BIT(8)
->> +
->> +struct starfive_pwm_ptc_device {
->> +	struct pwm_chip		chip;
->> +	struct clk		*clk;
->> +	struct reset_control	*rst;
->> +	void __iomem		*regs;
->> +	int			irq;
->> +	unsigned int		approx_freq;/*pwm apb clock frequency*/
-> 
-> No need for aligning these with tabs. Single space is enough for each of
-> these.
-> 
-> Also, you're dealing with potentially large numbers here, so best to
-> make the approx_freq unsigned long or perhaps even u64.
-> 
->> +};
->> +
->> +static inline
->> +struct starfive_pwm_ptc_device *chip_to_starfive_ptc(struct pwm_chip *c)
->> +{
->> +	return container_of(c, struct starfive_pwm_ptc_device, chip);
->> +}
->> +
->> +static int starfive_pwm_ptc_get_state(struct pwm_chip *chip,
->> +				       struct pwm_device *dev,
->> +				       struct pwm_state *state)
->> +{
->> +	struct starfive_pwm_ptc_device *pwm = chip_to_starfive_ptc(chip);
->> +	u32 data_lrc, data_hrc;
->> +	u32 pwm_clk_ns = 0;
->> +
->> +	data_lrc = ioread32(REG_PTC_RPTC_LRC(pwm->regs, dev->hwpwm));
->> +	data_hrc = ioread32(REG_PTC_RPTC_HRC(pwm->regs, dev->hwpwm));
-> 
-> Why ioread32()? It doesn't look like this is getting used in some sort
-> of I/O port setup, so you probably want readl()/writel() instead.
-> 
->> +
->> +	pwm_clk_ns = NS_PER_SECOND / pwm->approx_freq;
->> +
->> +	state->period = data_lrc * pwm_clk_ns;
->> +	state->duty_cycle = data_hrc * pwm_clk_ns;
-> 
-> Again, you want data_lrc, data_hrc and pwm_clk_ns to be unsigned long
-> or u64 to avoid overflow.
-> 
->> +	state->polarity = PWM_POLARITY_NORMAL;
->> +	state->enabled = 1;
-> 
-> So these cannot be turned off? You seem to emulate enabled = false by
-> setting duty cycle to 0 in starfive_pwm_ptc_apply(), so it's probably
-> best to mirror that here.
-> 
->> +
->> +	return 0;
->> +}
->> +
->> +static int starfive_pwm_ptc_apply(struct pwm_chip *chip,
->> +				  struct pwm_device *dev,
->> +				  struct pwm_state *state)
->> +{
->> +	struct starfive_pwm_ptc_device *pwm = chip_to_starfive_ptc(chip);
->> +	u32 data_hrc = 0;
->> +	u32 data_lrc = 0;
->> +	u32 period_data = 0;
->> +	u32 duty_data = 0;
-> 
-> Some of these can be condensed into a single line.
-> 
->> +	s64 multi = pwm->approx_freq;
->> +	s64 div = NS_PER_SECOND;
-> 
-> NSEC_PER_SEC
-> 
->> +	void __iomem *reg_addr;
->> +
->> +	if (state->duty_cycle > state->period)
->> +		state->duty_cycle = state->period;
->> +
->> +	while (multi % 10 == 0 && div % 10 == 0 && multi > 0 && div > 0) {
->> +		multi /= 10;
->> +		div /= 10;
->> +	}
->> +
->> +	period_data = (u32)(state->period * multi / div);
-> 
-> You're doing 64-bit multiplications and divisions here, which will
-> likely trigger a build error on some platforms (typically 32-bit ARM).
-> You should look using at the various helpers in linux/math64.h.
-> 
->> +	if (abs(period_data * div / multi - state->period)
->> +	    > abs((period_data + 1) * div / multi - state->period) ||
->> +	    (state->period > 0 && period_data == 0))
->> +		period_data += 1;
-> 
-> We typically write this as period_data++;
-> 
->> +
->> +	if (state->enabled) {
->> +		duty_data = (u32)(state->duty_cycle * multi / div);
->> +		if (abs(duty_data * div / multi - state->duty_cycle)
->> +			> abs((duty_data + 1) * div / multi - state->duty_cycle) ||
->> +			(state->duty_cycle > 0 && duty_data == 0))
->> +			duty_data += 1;
-> 
-> Same here. You may also want to create temporary variables for those
-> abs() parameters (or the result) to make this a bit more readable.
-> 
->> +	} else {
->> +		duty_data = 0;
->> +	}
->> +
->> +	if (state->polarity == PWM_POLARITY_NORMAL)
->> +		data_hrc = period_data - duty_data;
->> +	else
->> +		data_hrc = duty_data;
-> 
-> That's not how we do polarity inversion. If you need period - duty for
-> normal polarity, that probably indicates that your PWM supports inverse
-> polarity natively. Furthermore the above seems to only consider the
-> output power when reversing polarity, which is not correct. If you need
-> this for the likes of pwm-fan, then you should look at inverting the
-> polarity in those drivers.
-> 
->> +
->> +	data_lrc = period_data;
->> +
->> +	reg_addr = REG_PTC_RPTC_HRC(pwm->regs, dev->hwpwm);
->> +	iowrite32(data_hrc, reg_addr);
->> +
->> +	reg_addr = REG_PTC_RPTC_LRC(pwm->regs, dev->hwpwm);
->> +	iowrite32(data_lrc, reg_addr);
->> +
->> +	reg_addr = REG_PTC_RPTC_CNTR(pwm->regs, dev->hwpwm);
->> +	iowrite32(0, reg_addr);
->> +
->> +	reg_addr = REG_PTC_RPTC_CTRL(pwm->regs, dev->hwpwm);
->> +	iowrite32(PTC_EN | PTC_OE, reg_addr);
->> +
->> +	return 0;
->> +}
->> +
->> +static const struct pwm_ops starfive_pwm_ptc_ops = {
->> +	.get_state	= starfive_pwm_ptc_get_state,
->> +	.apply		= (void *)starfive_pwm_ptc_apply,
-> 
-> Why do you need to cast this? Also, drop the extra padding.
-> 
->> +	.owner		= THIS_MODULE,
->> +};
->> +
->> +static int starfive_pwm_ptc_probe(struct platform_device *pdev)
->> +{
->> +	struct device *dev = &pdev->dev;
->> +	struct starfive_pwm_ptc_device *pwm;
->> +	struct pwm_chip *chip;
->> +	int ret;
->> +
->> +	pwm = devm_kzalloc(dev, sizeof(*pwm), GFP_KERNEL);
->> +	if (!pwm)
->> +		return -ENOMEM;
->> +
->> +	chip = &pwm->chip;
->> +	chip->dev = dev;
->> +	chip->ops = &starfive_pwm_ptc_ops;
->> +	chip->npwm = 8;
->> +
->> +	chip->of_pwm_n_cells = OF_PWM_N_CELLS;
-> 
-> Simply use the literal "3" here. It's sufficiently clear from the
-> context what this means, so it's not a "magic" value or anything.
-> 
->> +	chip->base = -1;
-> 
-> This is no longer needed.
-> 
->> +
->> +	pwm->regs = devm_platform_ioremap_resource(pdev, 0);
->> +	if (IS_ERR(pwm->regs))
->> +		return dev_err_probe(dev, PTR_ERR(pwm->regs),
->> +					"Unable to map IO resources\n");
-> 
-> The string on the second line should be aligned with "dev" from the
-> first line. Same for the errors below.
-> 
->> +
->> +	pwm->clk = devm_clk_get(dev, NULL);
->> +	if (IS_ERR(pwm->clk))
->> +		return dev_err_probe(dev, PTR_ERR(pwm->clk),
->> +					"Unable to get pwm clock\n");
->> +
->> +	pwm->rst = devm_reset_control_get_exclusive(dev, NULL);
->> +	if (IS_ERR(pwm->rst))
->> +		return dev_err_probe(dev, PTR_ERR(pwm->rst),
->> +					"Unable to get pwm reset\n");
->> +
->> +	ret = clk_prepare_enable(pwm->clk);
->> +	if (ret) {
->> +		dev_err(dev,
->> +			"Failed to enable pwm clock, %d\n", ret);
-> 
-> s/pwm/PWM/ in the strings above. And why not use dev_err_probe() here as
-> well?
-> 
->> +		return ret;
->> +	}
->> +
->> +	reset_control_deassert(pwm->rst);
->> +
->> +	pwm->approx_freq = (unsigned int)clk_get_rate(pwm->clk);
-> 
-> Drop the cast. It's not needed.
-> 
->> +	if (!pwm->approx_freq)
->> +		dev_err(dev, "get pwm apb clock rate failed.\n");
-> 
-> Don't you want to make this fatal? If not, you'll end up dividing by
-> zero in ->get_state(). Also, you may want to reword the error message to
-> be more in line with the others in this function. Perhaps something
-> like:
-> 
-> 	dev_err(dev, "failed to get APB clock rate\n");
-> 
->> +
->> +	ret = devm_pwmchip_add(dev, chip);
->> +	if (ret < 0) {
->> +		dev_err(dev, "cannot register PTC: %d\n", ret);
->> +		clk_disable_unprepare(pwm->clk);
-> 
-> Maybe reset_control_assert() here as well?
-> 
->> +		return ret;
->> +	}
->> +
->> +	platform_set_drvdata(pdev, pwm);
->> +
->> +	return 0;
->> +}
->> +
->> +static int starfive_pwm_ptc_remove(struct platform_device *dev)
->> +{
->> +	struct starfive_pwm_ptc_device *pwm = platform_get_drvdata(dev);
->> +	struct pwm_chip *chip = &pwm->chip;
->> +
->> +	pwmchip_remove(chip);
-> 
-> No need for the temporary variable, you can pass &pwm->chip directly to
-> pwmchip_remove().
-> 
->> +
->> +	return 0;
->> +}
-> 
-> You may want to use the ->remove_new() callback instead since the error
-> code return is misleading.
-> 
-> Although, I just noticed that you use devm_pwmchip_add(), so there
-> should be no need for the remove callback at all.
-> 
-> Thierry
-> 
->> +
->> +static const struct of_device_id starfive_pwm_ptc_of_match[] = {
->> +	{ .compatible = "starfive,jh7110-pwm" },
->> +	{},
->> +};
->> +MODULE_DEVICE_TABLE(of, starfive_pwm_ptc_of_match);
->> +
->> +static struct platform_driver starfive_pwm_ptc_driver = {
->> +	.probe = starfive_pwm_ptc_probe,
->> +	.remove = starfive_pwm_ptc_remove,
->> +	.driver = {
->> +		.name = "pwm-starfive-ptc",
->> +		.of_match_table = starfive_pwm_ptc_of_match,
->> +	},
->> +};
->> +module_platform_driver(starfive_pwm_ptc_driver);
->> +
->> +MODULE_AUTHOR("Jenny Zhang <jenny.zhang@starfivetech.com>");
->> +MODULE_AUTHOR("Hal Feng <hal.feng@starfivetech.com>");
->> +MODULE_DESCRIPTION("StarFive PWM PTC driver");
->> +MODULE_LICENSE("GPL");
->> --
->> 2.34.1
->> 
-Hi Thierry,
+>
+> > >
+> > > > So I would rather suggest we only allow a
+> > > > single system thread to be reserved as a starting point which is
+> > > > relevant to this critical SCMI service. We can also make this upper
+> > > > bound for system threads configurable with default value as 1 if
+> > > > needed.
+> >
+> > Note that SCMI server can expose several SCMI channels (at most 1 per
+> > SCMI protocol used) and each of them will need to request a
+> > system_thread to TEE driver.
+> >
+> > Etienne
+> >
+> > >
+> > > Reserving one or more system threads depends on the number of thread
+> > > context provisioned by the TEE.
+> > > Note that the implementation proposed here prevents Linux kernel from
+> > > exhausting TEE threads so user space always has at least a TEE thread
+> > > context left available.
+>
+> Yeah but on the other hand user-space clients which are comparatively
+> larger in number than kernel clients. So they will be starved for
+> OP-TEE thread availability. Consider a user-space client which needs
+> to serve a lot of TLS connections just waiting for OP-TEE thread
+> availability.
 
-I'm sorry to bother you. I wonder if you have seen the previous email.
-Regarding the realization of polarity inversion, I wonder if you have
-any suggestions for me.
-Thanks for taking time to give useful suggestions.
+Note that OP-TEE default configuration provisions (number of CPUs + 1)
+thread context, so the situation is already present before these
+changes on systems that embedded an OP-TEE without a properly tuned
+configuration. As I said above, Linux kernel cannot be responsible for
+the total number of thread contexts provisioned in OP-TEE. If the
+overall system requires a lot of TEE thread contexts, one should embed
+a suitable OP-TEE firmware.
 
-Best regards,
-William
+>
+> > >
+> > > Note that an OP-TEE thread is not bound to a TEE session but rather
+> > > bound to a yielded call to OP-TEE.
+>
+> tee_client_open_session()
+>   -> optee_open_session()
+>
+> tee_client_system_session()
+>   -> optee_system_session()
+>     -> optee_cq_inc_sys_thread_count()       <- At this point you
+> reserve a system thread corresponding to a particular kernel client
+> session
+>
+> All tee_client_invoke_func() invocations with a system thread capable
+> session will use that reserved thread.
+>
+> tee_client_close_session()
+>   -> optee_close_session()
+>     -> optee_close_session_helper()
+>       -> optee_cq_dec_sys_thread_count()    <- At this point the
+> reserved system thread is released
+>
+> Haven't this tied the system thread to a particular TEE session? Or am
+> I missing something?
+
+These changes do not define an overall single system thread.
+If several sessions requests reservation of TEE system thread, has
+many will be reserved.
+Only the very sessions with its sys_thread attribute set will use a
+reserved thread. If such a kernel client issues several concurrent
+calls to OP-TEE over that session, it will indeed consume more
+reserved system threads than what is actually reserved. Here I think
+it is the responsibility of such client to open as many sessions as
+requests. This is what scmi/optee driver does (see patch v6 4/4). An
+alternative would be to have a ref count of sys_thread in session
+contexts rather than a boolean value. I don't think it's worth it.
+
+> > > > > (snip)
+> > > > > @@ -281,9 +281,10 @@ static int optee_to_msg_param(struct optee *optee,
+> > > > >  static void optee_enable_shm_cache(struct optee *optee)
+> > > > >  {
+> > > > >         struct optee_call_waiter w;
+> > > > > +       bool system_thread = false;
+> > > >
+> > > > This variable is redundant.
+> > >
+> > > Using a variable here makes it more clear which argument is passed to
+> > > optee_cq_wait_init().
+> > > Calling optee_cq_wait_init(&optee->call_queue, &w, false); is less readable.
+> > >
+>
+> The function declaration is always there to read about the arguments.
+> IMO, variables with a constant value which are only used once don't
+> add any value.
+
+Ok, i'll address that. Actually I see that optee_shm_register() and
+optee_shm_unregister() (patch v6 1/4) do use false straight as an
+argument.
+
+etienne
+
+>
+> -Sumit
+>
+> > > >
+> > > > >
+> > > > >         /* We need to retry until secure world isn't busy. */
+> > > > > -       optee_cq_wait_init(&optee->call_queue, &w);
+> > > > > +       optee_cq_wait_init(&optee->call_queue, &w, system_thread);
+> > > > >         while (true) {
+> > > > >                 struct arm_smccc_res res;
+> > > > >
+> > > > > (snip)
