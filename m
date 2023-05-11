@@ -2,121 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 642726FEB20
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 07:23:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CDE9C6FEB23
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 07:24:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229536AbjEKFXt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 01:23:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43752 "EHLO
+        id S236848AbjEKFYg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 01:24:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236869AbjEKFXh (ORCPT
+        with ESMTP id S236939AbjEKFYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 01:23:37 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B28084EFF;
-        Wed, 10 May 2023 22:22:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683782578; x=1715318578;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=YQILfujNddGsJDn6gNgiGkyToy216wtJuXCwsYZYlRU=;
-  b=Y2M0D5j7A0dhgFXUFe6H4aeCFDPPC4kFK0EwSDk0G1sU7yyFLim8h09J
-   vNe/mRY8ZrT7kGi3pFfnIKjdm6LI1R45uvMp8i8MuFWcldA++BJH2LYT4
-   N0JLqL4VMyz9GGaIYU3eotKQmYsj5rZjMMiOEzYmRJPINmZ3rfbY46GGC
-   m8Y4SIvs7VZw4SRTwaoxO+D1TPjRj0dSmWzDsN8De/dd43RL8m6pfj0Cm
-   bujzfGRzNI1Cm/zRlUfsB1FeWeul1Cgyg81fPj9upQ7Vq42dwWDDucsSk
-   fwqKXULIqkEAFxdoCSv9yhMuFK9cU6INfVkYH+HyQHKNgRlYJqRF67rIm
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="353487834"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="353487834"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 22:22:34 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="873819393"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="873819393"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.251.218.125])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 22:22:30 -0700
-Message-ID: <08bc0186-4684-2321-65d8-4c2ae622acea@intel.com>
-Date:   Thu, 11 May 2023 08:22:26 +0300
+        Thu, 11 May 2023 01:24:31 -0400
+Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6A4E61A2
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 22:23:57 -0700 (PDT)
+Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+        by SHSQR01.spreadtrum.com with ESMTP id 34B5MmNo050137;
+        Thu, 11 May 2023 13:22:48 +0800 (+08)
+        (envelope-from zhaoyang.huang@unisoc.com)
+Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Thu, 11 May 2023 13:22:44 +0800
+From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>,
+        Zhaoyang Huang <huangzhaoyang@gmail.com>, <ke.wang@unisoc.com>
+Subject: [PATCHv5] mm: optimization on page allocation when CMA enabled
+Date:   Thu, 11 May 2023 13:22:30 +0800
+Message-ID: <1683782550-25799-1-git-send-email-zhaoyang.huang@unisoc.com>
+X-Mailer: git-send-email 1.9.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [RFC PATCH v1] ufs: poll HCS.UCRDY before issuing a UIC command
-To:     Kiwoong Kim <kwmad.kim@samsung.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alim.akhtar@samsung.com,
-        avri.altman@wdc.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, beanhuo@micron.com, sc.suh@samsung.com,
-        hy50.seo@samsung.com, sh425.lee@samsung.com,
-        kwangwon.min@samsung.com
-References: <CGME20230509083312epcas2p375f77d18a9026f7d263750baf9c9a5bb@epcas2p3.samsung.com>
- <1683620674-160173-1-git-send-email-kwmad.kim@samsung.com>
-Content-Language: en-US
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <1683620674-160173-1-git-send-email-kwmad.kim@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.0.74.65]
+X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL: SHSQR01.spreadtrum.com 34B5MmNo050137
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 9/05/23 11:24, Kiwoong Kim wrote:
-> With auto hibern8 enabled, UIC could be working
-> for a while to process a hibern8 operation and HCI
-> reports UIC not ready for a short term through HCS.UCRDY.
-> And UFS driver can't recognize the operation.
-> UFSHCI spec specifies UCRDY like this:
-> whether the host controller is ready to process UIC COMMAND
-> 
-> The 'ready' could be seen as many different meanings. If the meaning
-> includes not processing any request from HCI, processing a hibern8
-> operation can be 'not ready'. In this situation, the driver needs to
-> wait until the operations is completed.
-> 
-> Signed-off-by: Kiwoong Kim <kwmad.kim@samsung.com>
-> ---
->  drivers/ufs/core/ufshcd.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-> index 96ce6af..fc79539 100644
-> --- a/drivers/ufs/core/ufshcd.c
-> +++ b/drivers/ufs/core/ufshcd.c
-> @@ -2368,7 +2368,18 @@ static inline int ufshcd_hba_capabilities(struct ufs_hba *hba)
->   */
->  static inline bool ufshcd_ready_for_uic_cmd(struct ufs_hba *hba)
->  {
-> -	return ufshcd_readl(hba, REG_CONTROLLER_STATUS) & UIC_COMMAND_READY;
-> +	ktime_t timeout = ktime_add_ms(ktime_get(), UIC_CMD_TIMEOUT);
-> +	u32 val = 0;
-> +
-> +	do {
-> +		val = ufshcd_readl(hba, REG_CONTROLLER_STATUS) &
-> +			UIC_COMMAND_READY;
-> +		if (val)
-> +			break;
-> +		usleep_range(500, 1000);
+From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
 
-Pedantically, the sleep probably needs to be less than the
-auto-hibernate idle timer period?
+Let us look at the timeline of scenarios below with WMARK_LOW=25MB WMARK_MIN=5MB
+(managed pages 1.9GB). We can find that CMA begin to be used until 'C' under the
+method of 'fixed 2 times of free cma over free pages' which could have the
+scenario 'A' and 'B' into a fault state, that is, free UNMOVABLE & RECLAIMABLE
+pages is lower than corresponding watermark without reclaiming which should be
+deemed as against current memory policy. This commit try to solve this by
+checking zone_watermark_ok again with removing CMA pages which could lead to a
+proper time point of CMA's utilization.
 
-> +	} while (ktime_before(ktime_get(), timeout));
+-- Free_pages
+|
+|
+-- WMARK_LOW
+|
+-- Free_CMA
+|
+|
+--
 
-read_poll_timeout() would be a better choice for I/O polling
+Free_CMA/Free_pages(MB)      A(12/30) -->  B(12/25) -->  C(12/20)
+fixed 1/2 ratio                 N             N           Y
+this commit                     Y             Y           Y
 
-> +
-> +	return val ? true : false;
->  }
->  
->  /**
+Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+---
+v2: do proportion check when zone_watermark_ok, update commit message
+v3: update coding style and simplify the logic when zone_watermark_ok
+v4: code update according to Roman's suggest
+v5: update commit message
+---
+---
+ mm/page_alloc.c | 44 ++++++++++++++++++++++++++++++++++++++++----
+ 1 file changed, 40 insertions(+), 4 deletions(-)
+
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 0745aed..4719800 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -3071,6 +3071,43 @@ static bool unreserve_highatomic_pageblock(const struct alloc_context *ac,
+ 
+ }
+ 
++#ifdef CONFIG_CMA
++/*
++ * GFP_MOVABLE allocation could drain UNMOVABLE & RECLAIMABLE page blocks via
++ * the help of CMA which makes GFP_KERNEL failed. Checking if zone_watermark_ok
++ * again without ALLOC_CMA to see if to use CMA first.
++ */
++static bool use_cma_first(struct zone *zone, unsigned int order, unsigned int alloc_flags)
++{
++	unsigned long watermark;
++	bool cma_first = false;
++
++	watermark = wmark_pages(zone, alloc_flags & ALLOC_WMARK_MASK);
++	/* check if GFP_MOVABLE pass previous zone_watermark_ok via the help of CMA */
++	if (zone_watermark_ok(zone, order, watermark, 0, alloc_flags & (~ALLOC_CMA))) {
++		/*
++		 * Balance movable allocations between regular and CMA areas by
++		 * allocating from CMA when over half of the zone's free memory
++		 * is in the CMA area.
++		 */
++		cma_first = (zone_page_state(zone, NR_FREE_CMA_PAGES) >
++				zone_page_state(zone, NR_FREE_PAGES) / 2);
++	} else {
++		/*
++		 * watermark failed means UNMOVABLE & RECLAIMBLE is not enough
++		 * now, we should use cma first to keep them stay around the
++		 * corresponding watermark
++		 */
++		cma_first = true;
++	}
++	return cma_first;
++}
++#else
++static bool use_cma_first(struct zone *zone, unsigned int order, unsigned int alloc_flags)
++{
++	return false;
++}
++#endif
+ /*
+  * Do the hard work of removing an element from the buddy allocator.
+  * Call me with the zone->lock already held.
+@@ -3084,12 +3121,11 @@ static bool unreserve_highatomic_pageblock(const struct alloc_context *ac,
+ 	if (IS_ENABLED(CONFIG_CMA)) {
+ 		/*
+ 		 * Balance movable allocations between regular and CMA areas by
+-		 * allocating from CMA when over half of the zone's free memory
+-		 * is in the CMA area.
++		 * allocating from CMA base on judging zone_watermark_ok again
++		 * to see if the latest check got pass via the help of CMA
+ 		 */
+ 		if (alloc_flags & ALLOC_CMA &&
+-		    zone_page_state(zone, NR_FREE_CMA_PAGES) >
+-		    zone_page_state(zone, NR_FREE_PAGES) / 2) {
++			use_cma_first(zone, order, alloc_flags)) {
+ 			page = __rmqueue_cma_fallback(zone, order);
+ 			if (page)
+ 				return page;
+-- 
+1.9.1
 
