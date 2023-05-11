@@ -2,143 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8F76FFCA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 00:31:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C4B96FFCB6
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 00:37:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239382AbjEKWbn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 18:31:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38850 "EHLO
+        id S239311AbjEKWhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 18:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239311AbjEKWbl (ORCPT
+        with ESMTP id S239279AbjEKWhW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 18:31:41 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BB772738
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 15:31:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=MTY93NpBqjnUjav5lCb8iifRMRcdMW81B6x1yVvfcEQ=; b=M2nEAcQmewAmFfBIMGiiYT1pmI
-        ZZYeDhIFhVsB5P1mr0RWv0sh7a0VyYcbgc5xTWwH3/qaSE43EpQUSgm/jHF85eE6gZ37AsKzLFlga
-        lvvh4SQS8ZAxg/apglt3sF2/gSsTyrmVdZvBbCz0G4H4Pc5f687US7/DQkiV//rCLjha2EzpyRxhC
-        SB061Ymwb6D47w0RTyWtchmJJ5hwsEWxdHcpYGL+qtpqqpP7SDTrVC9cPtJJ2hN8EbAbUv7sd3jh0
-        9UgxNzyO/JbeYptWwmG0BThKJTmqBkZFd0Smdye+UVijLngRb69PV32FUvQV35HEJwhDGdVF4kok2
-        YYNKApmw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pxEoo-0002Lm-Ld; Thu, 11 May 2023 22:31:26 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id BF141300244;
-        Fri, 12 May 2023 00:31:24 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A564C2C7C5BED; Fri, 12 May 2023 00:31:24 +0200 (CEST)
-Date:   Fri, 12 May 2023 00:31:24 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     John Stultz <jstultz@google.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-Subject: Re: [PATCH] sched/wait: Fix a kthread_park race with wait_woken()
-Message-ID: <20230511223124.GJ2296992@hirez.programming.kicks-ass.net>
-References: <20230406194053.876844-1-arve@android.com>
- <20230511214144.1924757-1-jstultz@google.com>
+        Thu, 11 May 2023 18:37:22 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C684525F
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 15:37:18 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-55a64f0053fso138501707b3.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 15:37:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683844637; x=1686436637;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y7hKTTTuYzAS0vkkDuN/hWvEkav8P49YQtcFz2W5wMI=;
+        b=leqASNj4yXDwWkS3XyfGWIhxAw4SXxeg+extgQ/D3LGDyC8VCP1/fZdCDvzoBwFKI4
+         QsCpGgSaYJ3A6Zsn21DOX95W5x878ZXSFyOvGdFILF6cniMlbGpQ7kGstvh8Z0S2dYcr
+         KAZan2e+K8+hIYGfwKwpNjm5N5qCVBq6paKd8Ge6TYCsDubNG0nFnc28YyshVIf+H1TB
+         XtjHozhI9s8vKDiN1ralH7fr2aSIYGrsjfbuSUekrZzkfIqSGnPlfgmSzyftn9ttXqkA
+         wtISLC6kLw6VjZt4HnbIKNxY1VCI8P1bODtk830M8QQedX+j6RlN/KsBHhJiNcIqK0oT
+         5pFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683844637; x=1686436637;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y7hKTTTuYzAS0vkkDuN/hWvEkav8P49YQtcFz2W5wMI=;
+        b=IcLS5wdgiTkdXbsaoxTmBrgYeaPpofy5js/h1OWpo7K/M4dNswXXe5lHAcN7CVCe96
+         m35EFLuClRrnkZpF0esDFKb65aRXVTotOkDl5uCE6pfesMLbM677kT0c/5OsRK33fmPF
+         UqrnnWWcTAgZA7bZTVLNgnr+MM9u1srQKUtIbnaWx6mvBJaOpJqt5V0TK3mpQ4djR6xF
+         jUklUI1Svu0QF4k7qhUmBFSKbHCuSue4kPe/7pnve1zyGIrGAS/gH5XMraepL4lFJKNZ
+         xeMQ+hGlVKbY8gxE/klwJoQ76YTcqpcqW/j6FqjJ5skRFxvEAu8HhvjaasckvqkhfGwP
+         O35Q==
+X-Gm-Message-State: AC+VfDxFqoejbONLd9bs3uXXGzt6TR6K1K+q7EguHI5JgDGMA8zpSCRV
+        A9p1q6vAecaOw4RDtRSbbMaPoA==
+X-Google-Smtp-Source: ACHHUZ5ulkW3cY83+IL8attIxR7bTyRhvIioTTYSGrJhrY5IS/y6LwBFwFzMwChvIicQOTRvegivGA==
+X-Received: by 2002:a0d:d993:0:b0:559:d294:1c48 with SMTP id b141-20020a0dd993000000b00559d2941c48mr22473279ywe.24.1683844637583;
+        Thu, 11 May 2023 15:37:17 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id k189-20020a0dfac6000000b0054fa5f6c0cdsm5262641ywf.53.2023.05.11.15.37.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 15:37:17 -0700 (PDT)
+Date:   Thu, 11 May 2023 15:37:06 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Matthew Wilcox <willy@infradead.org>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Michel Lespinasse <michel@lespinasse.org>
+Subject: Re: [PATCH 00/23] arch: allow pte_offset_map[_lock]() to fail
+In-Reply-To: <ZFz1j1slZHCQmwMJ@casper.infradead.org>
+Message-ID: <5f1dd6f-1e75-8d98-3083-e1bd2163dcc6@google.com>
+References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com> <ZFs0k2rrLPH9A/UU@casper.infradead.org> <d7f3c7b2-25b8-ef66-98a8-43d68f4499f@google.com> <ZFz1j1slZHCQmwMJ@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230511214144.1924757-1-jstultz@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 09:41:30PM +0000, John Stultz wrote:
-> From: Arve Hjønnevåg <arve@android.com>
+On Thu, 11 May 2023, Matthew Wilcox wrote:
 > 
-> kthread_park and wait_woken have a similar race that kthread_stop and
-> wait_woken used to have before it was fixed in
-> cb6538e740d7543cd989128625cf8cac4b471e0a. Extend that fix to also cover
+> I was thinking that removing CONFIG_HIGHPTE might simplify the page
+> fault handling path a little, but now I've looked at it some more, and
+> I'm not sure there's any simplification to be had.  It should probably
+> use kmap_local instead of kmap_atomic(), though.
 
-  cb6538e740d7 ("sched/wait: Fix a kthread race with wait_woken()")
+Re kmap_local, yes, one of the patches in the next series does make
+that change.
 
-> kthread_park.
 > 
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Peter Zijlstra <peterz@infradead.org>
-> Cc: Juri Lelli <juri.lelli@redhat.com>
-> Cc: Vincent Guittot <vincent.guittot@linaro.org>
-> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-> Cc: Steven Rostedt <rostedt@goodmis.org>
-> Cc: Ben Segall <bsegall@google.com>
-> Cc: Mel Gorman <mgorman@suse.de>
-> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-> Cc: Valentin Schneider <vschneid@redhat.com>
-> Signed-off-by: Arve Hjønnevåg <arve@android.com>
-> Signed-off-by: John Stultz <jstultz@google.com>
-> ---
-> This seemingly slipped by, so I wanted to resend it
-> for review.
-> ---
->  kernel/sched/wait.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
+> I infer that what you need is a pte_access_start() and a
+> pte_access_end() which look like they can be plausibly rcu_read_lock()
+> and rcu_read_unlock(), but might need to be local_irq_save() and
+> local_irq_restore() in some configurations?
+
+Yes, except that the local_irq_restore() in PAE-like configurations
+(if we need it at all) is not delayed until the pte_access_end() or
+pte_unmap() - it's internal to the pte_access_start() or pte_offset_map():
+interrupts only disabled across the getting of a consistent pmd entry.
+
+Over-generalizing a little, any user of pte_offset_map() (as opposed to
+pte_offset_map_lock()) has to be prepared for the ptes to change under
+them: but we do need to give them something that is or was recently the
+relevant page table, rather than a random page mishmashed from mismatched
+pmd_low and pmd_high.
+
 > 
-> diff --git a/kernel/sched/wait.c b/kernel/sched/wait.c
-> index 133b74730738..a9cf49da884b 100644
-> --- a/kernel/sched/wait.c
-> +++ b/kernel/sched/wait.c
-> @@ -425,9 +425,9 @@ int autoremove_wake_function(struct wait_queue_entry *wq_entry, unsigned mode, i
->  }
->  EXPORT_SYMBOL(autoremove_wake_function);
->  
-> -static inline bool is_kthread_should_stop(void)
-> +static inline bool is_kthread_should_stop_or_park(void)
->  {
-> -	return (current->flags & PF_KTHREAD) && kthread_should_stop();
-> +	return (current->flags & PF_KTHREAD) && (kthread_should_stop() || kthread_should_park());
->  }
->  
->  /*
+> We also talked about moving x86 to always RCU-free page tables in
+> order to make accessing /proc/$pid/smaps lockless.  I believe Michel
+> is going to take a swing at this project.
 
-That's a bit sad; that two function calls for checking two consecutive
-bits in the same word :-(
+(And /proc/$pid/numa_maps, I hope: that's even worse in some way, IIRC.)
 
-If we move this to kthread.c and write it like:
+That might be orthogonal to what I'm doing: many non-x86 architectures
+already do RCU-freeing of page tables via the TLB route, but that doesn't
+cover a pte_free() from retract_page_tables() or collapse_and_free_pmd().
 
-	kthread = __to_kthread(current);
-	if (!kthread)
-		return false;
-
-	return test_bit(KTHREAD_SHOULD_STOP, &kthread->flags) ||
-	       test_bit(KTHREAD_SHOULD_PARK, &kthread->flags);
-
-Then the compiler should be able to merge the two bits in a single load
-and test due to constant_test_bit() -- do check though.
-
-> @@ -459,7 +459,7 @@ long wait_woken(struct wait_queue_entry *wq_entry, unsigned mode, long timeout)
->  	 * or woken_wake_function() sees our store to current->state.
->  	 */
->  	set_current_state(mode); /* A */
-> -	if (!(wq_entry->flags & WQ_FLAG_WOKEN) && !is_kthread_should_stop())
-> +	if (!(wq_entry->flags & WQ_FLAG_WOKEN) && !is_kthread_should_stop_or_park())
->  		timeout = schedule_timeout(timeout);
->  	__set_current_state(TASK_RUNNING);
->  
-> -- 
-> 2.40.1.606.ga4b1b128d6-goog
-> 
+Hugh
