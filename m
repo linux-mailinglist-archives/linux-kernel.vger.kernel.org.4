@@ -2,102 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8240F6FF97F
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 20:28:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 43AA26FF96A
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 20:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238977AbjEKS2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 14:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49976 "EHLO
+        id S239122AbjEKSTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 14:19:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238620AbjEKS2H (ORCPT
+        with ESMTP id S238819AbjEKSTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 14:28:07 -0400
-X-Greylist: delayed 571 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 11 May 2023 11:28:04 PDT
-Received: from mail-out.m-online.net (mail-out.m-online.net [IPv6:2001:a60:0:28:0:1:25:1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B27729A
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 11:28:03 -0700 (PDT)
-Received: from frontend01.mail.m-online.net (unknown [192.168.8.182])
-        by mail-out.m-online.net (Postfix) with ESMTP id 4QHKrx3P72z1s95F;
-        Thu, 11 May 2023 20:18:25 +0200 (CEST)
-Received: from localhost (dynscan1.mnet-online.de [192.168.6.70])
-        by mail.m-online.net (Postfix) with ESMTP id 4QHKrw5kCfz1qqlb;
-        Thu, 11 May 2023 20:18:24 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at mnet-online.de
-Received: from mail.mnet-online.de ([192.168.8.182])
-        by localhost (dynscan1.mail.m-online.net [192.168.6.70]) (amavisd-new, port 10024)
-        with ESMTP id IerpHNoGBzfN; Thu, 11 May 2023 20:18:23 +0200 (CEST)
-X-Auth-Info: i/Xv+IcJhW0kfDb3RFbFK0/YgUTT+UjCzPxmdmooeKeqEWINPY1r+0B4+hi7eI4b
-Received: from igel.home (aftr-62-216-205-189.dynamic.mnet-online.de [62.216.205.189])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.mnet-online.de (Postfix) with ESMTPSA;
-        Thu, 11 May 2023 20:18:23 +0200 (CEST)
-Received: by igel.home (Postfix, from userid 1000)
-        id 21B822C1D1B; Thu, 11 May 2023 20:18:23 +0200 (CEST)
-From:   Andreas Schwab <schwab@linux-m68k.org>
-To:     Alexandre Ghiti <alex@ghiti.fr>
-Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v8 1/3] riscv: Introduce CONFIG_RELOCATABLE
-In-Reply-To: <4adb27d2-325d-3ce0-23b1-ec69a973b4bf@ghiti.fr> (Alexandre
-        Ghiti's message of "Tue, 9 May 2023 21:55:53 +0200")
-References: <20230215143626.453491-1-alexghiti@rivosinc.com>
-        <20230215143626.453491-2-alexghiti@rivosinc.com>
-        <87wn1h5nne.fsf@igel.home>
-        <4adb27d2-325d-3ce0-23b1-ec69a973b4bf@ghiti.fr>
-X-Yow:  BELA LUGOSI is my co-pilot..
-Date:   Thu, 11 May 2023 20:18:23 +0200
-Message-ID: <87ttwi91g0.fsf@igel.home>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+        Thu, 11 May 2023 14:19:37 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7503330FB
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 11:19:36 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-6438d95f447so6303488b3a.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 11:19:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683829176; x=1686421176;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=BO12zW0+WdffWdg+cJvODSzSdqMENSRhscbq9WXoqTo=;
+        b=qAfk9OxMU2BDdhG4v5LWzoNl42ypdDZtOTChzJPOXGn4QVki964jUWKBhIhsz7uHeG
+         2xfXyPXuIc/TL1FwMaKO/ajlLHW6jnORBGm12Y7mlR2d+69qdKaAnHw9P9du5yIRgIBL
+         20Sb/9tZAGkf5jot+6qyqjt8bNqUV/aSQiR3xa6MRTMfD0lQjmw4U7LW1D43v19dt4Ha
+         llcPLk6r+ixoUkVbWev7IpunUAY1fkBlFPf9akoP0mjbATpjSomSxDGAhm3xFe/qYfnP
+         89UDI5wLIJZaZahJykUyzztHxuGWAkUR7pLXhj/HgjhwkwKXRU4kjsm28oPXY9JX/BBj
+         EMCA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683829176; x=1686421176;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:sender:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BO12zW0+WdffWdg+cJvODSzSdqMENSRhscbq9WXoqTo=;
+        b=fMKiVpWEva6+Q+jk7bV333TJS/O8RpBiCpZnrsuoyBtmKpMBQJR3IXawxZ/5O/xWQ8
+         GnMLho75ocBNjDByRgo7gtAAEuu6H7YligQMY0Oz8Nbc+7i8wQW75Umn1apeDWuprTaa
+         yVMRCh3tH/633dZskJA8B09NWIEHiLVdwzxRzPSxZrWYUHU34G0Aq8WuICtgSLJ1qwl2
+         jiRS9uEaBVB/17bdq9j7ea98XKKiEdiXOvR4VhqePkyGL4V1Fa7qNYC63NRlEEiOKThy
+         tQekdmPX+Znnapk4oJuQoJewsz6cHrv4C0CdTVn0pV6UATRqEh7sXsqZq1u+C2EqOeLn
+         Q6PQ==
+X-Gm-Message-State: AC+VfDzYrnz4aEHyaGubK3QC/NARL9JS8yJaZpUIB077GVOCrhNoxWaP
+        ONkReNiJswY70Yjb8rOcTSKkf2o0Gmc=
+X-Google-Smtp-Source: ACHHUZ580JIUMtXPvnJRdr2tvnTC0xsNdbX/nRT9j2vWvNdUBCC33J9KCFJDi08+wXW7K0sNQJ9SKw==
+X-Received: by 2002:a05:6a20:258d:b0:101:a435:a44 with SMTP id k13-20020a056a20258d00b00101a4350a44mr11895085pzd.37.1683829175401;
+        Thu, 11 May 2023 11:19:35 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
+        by smtp.gmail.com with ESMTPSA id 197-20020a6304ce000000b0052c22778e64sm5242021pge.66.2023.05.11.11.19.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 11:19:34 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+From:   Tejun Heo <tj@kernel.org>
+To:     jiangshanlai@gmail.com
+Cc:     torvalds@linux-foundation.org, peterz@infradead.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com
+Subject: [PATCHSET v3 wq/for-6.5] workqueue: Implement automatic CPU intensive detection and add monitoring
+Date:   Thu, 11 May 2023 08:19:24 -1000
+Message-Id: <20230511181931.869812-1-tj@kernel.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mai 09 2023, Alexandre Ghiti wrote:
+Hello,
 
-> On 5/9/23 21:07, Andreas Schwab wrote:
->> That does not work with UEFI booting:
->>
->> Loading Linux 6.4.0-rc1-1.g668187d-default ...
->> Loading initial ramdisk ...
->> Unhandled exception: Instruction access fault
->> EPC: ffffffff80016d56 RA: 000000008020334e TVAL: 0000007f80016d56
->> EPC: ffffffff002d1d56 RA: 00000000004be34e reloc adjusted
->> Unhandled exception: Load access fault
->> EPC: 00000000fff462d4 RA: 00000000fff462d0 TVAL: ffffffff80016d56
->> EPC: 00000000802012d4 RA: 00000000802012d0 reloc adjusted
->>
->> Code: c825 8e0d 05b3 40b4 d0ef 0636 7493 ffe4 (d783 0004)
->> UEFI image [0x00000000fe65e000:0x00000000fe6e3fff] '/efi\boot\bootriscv64.efi'
->> UEFI image [0x00000000daa82000:0x00000000dcc2afff]
->>
->
-> I need more details please, as I have a UEFI bootflow and it works great
-> (KASLR is based on a relocatable kernel and works fine in UEFI too).
+v3: * Switched to hooking into scheduler_tick() instead of scheduling paths
+      as suggested by Peter. It's less gnarly and works well in general;
+      however, as the mechanism is now sampling based, there can be
+      contrived cases where detection can be temporarily avoided. Also, it
+      wouldn't work on nohz_full CPUs. Neither is critical especially given
+      that common offenders are likely to be weeded out with the debug
+      reporting over time.
 
-It also crashes without UEFI.  Disabling CONFIG_RELOCATABLE fixes that.
-This was tested on the HiFive Unmatched board.
-The kernel image I tested is available from
-<https://download.opensuse.org/repositories/Kernel:/HEAD/RISCV/>.  The
-same kernel with CONFIG_RELOCATABLE disabled is available from
-<https://download.opensuse.org/repositories/home:/Andreas_Schwab:/riscv:/kernel/standard/>.
+    * As the above means that workqueue is no longer obersving all
+      scheduling events, it can't track the CPU time being consumed by the
+      workers on its own and thus can't use global clocks (e.g. jiffies).
+      The CPU time consumption tracking is still done with
+      p->se.sum_exec_runtime.
 
--- 
-Andreas Schwab, schwab@linux-m68k.org
-GPG Key fingerprint = 7578 EB47 D4E5 4D69 2510  2552 DF73 E780 A9DA AEC1
-"And now for something completely different."
+    * The mechanism was incorrectly monitoring the entire CPU time a given
+      work item has consumed instead of each stretch without intervening
+      sleeps. Fixed.
+
+    * CPU time monitoring is now tick sampling based. The previous
+      p->se.sum_exec_runtime implementation was missing CPU time consumed
+      between the last scheduling event the work item finished and the
+      completion, so, e.g., work items that never schedule would always be
+      accounted as zero CPU time. While the sampling based implementation
+      isn't very accurate, this is good enough for getting the overall
+      picture of workqueues that consume a lot of CPU cycles.
+
+    * Patches reordered so that the visibility one can be applied first.
+      Documentation improved.
+
+v2: * Lai pointed out that !SM_NONE cases should also be notified. 0001 and
+      0004 are updated accordingly.
+
+    * PeterZ suggested reporting on work items that trigger the auto CPU
+      intensive mechanism. 0006 adds reporting of work functions that
+      trigger the mechanism repeatedly with exponential backoff.
+
+Hello,
+
+To reduce the number of concurrent worker threads, workqueue holds back
+starting per-cpu work items while the previous work item stays in the
+RUNNING state. As such a per-cpu work item which consumes a lot of CPU
+cycles, even if it has cond_resched()'s in the right places, can stall other
+per-cpu work items.
+
+To support per-cpu work items that may occupy the CPU for a substantial
+period of time, workqueue has WQ_CPU_INTENSIVE flag which exempts work items
+issued through the marked workqueue from concurrency management - they're
+started immediately and don't block other work items. While this works, it's
+error-prone in that a workqueue user can easily forget to set the flag or
+set it unnecessarily. Furthermore, the impacts of the wrong flag setting can
+be rather indirect and challenging to root-cause.
+
+This patchset makes workqueue auto-detect CPU intensive work items based on
+CPU consumption. If a work item consumes more than the threshold (10ms by
+default) of CPU time, it's automatically marked as CPU intensive when it
+gets scheduled out which unblocks starting of pending per-cpu work items.
+
+The mechanism isn't foolproof in that the detection delays can add up if
+many CPU-hogging work items are queued at the same time. However, in such
+situations, the bigger problem likely is the CPU being saturated with
+per-cpu work items and the solution would be making them UNBOUND. Future
+changes will make UNBOUND workqueues more attractive by improving their
+locality behaviors and configurability. We might eventually remove the
+explicit WQ_CPU_INTENSIVE flag.
+
+While at it, add statistics and a monitoring script. Lack of visibility has
+always been a bit of pain point when debugging workqueue related issues and
+with this change and more drastic ones planned for workqueue, this is a good
+time to address the shortcoming.
+
+This patchset was born out of the discussion in the following thread:
+
+ https://lkml.kernel.org/r/CAHk-=wgE9kORADrDJ4nEsHHLirqPCZ1tGaEPAZejHdZ03qCOGg@mail.gmail.com
+
+and contains the following patches:
+
+ 0001-workqueue-Add-pwq-stats-and-a-monitoring-script.patch
+ 0002-workqueue-Re-order-struct-worker-fields.patch
+ 0003-workqueue-Move-worker_set-clr_flags-upwards.patch
+ 0004-workqueue-Improve-locking-rule-description-for-worke.patch
+ 0005-workqueue-Automatically-mark-CPU-hogging-work-items-.patch
+ 0006-workqueue-Report-work-funcs-that-trigger-automatic-C.patch
+ 0007-workqueue-Track-and-monitor-per-workqueue-CPU-time-u.patch
+
+and also available in the following git branch:
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/tj/wq.git auto-cpu-intensive-v3
+
+diffstat follows. Thanks.
+
+ Documentation/core-api/workqueue.rst |   32 +++++
+ kernel/sched/core.c                  |    3
+ kernel/workqueue.c                   |  337 ++++++++++++++++++++++++++++++++++++++++++++++++++-----------
+ kernel/workqueue_internal.h          |   24 ++--
+ lib/Kconfig.debug                    |   13 ++
+ tools/workqueue/wq_monitor.py        |  169 ++++++++++++++++++++++++++++++
+ 6 files changed, 507 insertions(+), 71 deletions(-)
+
+--
+tejun
+
