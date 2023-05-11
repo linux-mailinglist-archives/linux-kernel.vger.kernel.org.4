@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857156FF007
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:39:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FBA56FF012
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:44:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237856AbjEKKjd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 06:39:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36424 "EHLO
+        id S237872AbjEKKom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 06:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjEKKja (ORCPT
+        with ESMTP id S231391AbjEKKoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 06:39:30 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0FAD1FDA
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:39:28 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1px3hk-0007Op-PQ; Thu, 11 May 2023 12:39:24 +0200
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1px3hj-002hiF-Ty; Thu, 11 May 2023 12:39:23 +0200
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1px3hj-003NcI-8D; Thu, 11 May 2023 12:39:23 +0200
-Date:   Thu, 11 May 2023 12:39:23 +0200
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Subject: Re: [PATCH] driver core: Call pm_runtime_put_sync() only after
- device_remove()
-Message-ID: <20230511103923.hvibdyo5ges4bab2@pengutronix.de>
-References: <20230511073428.10264-1-u.kleine-koenig@pengutronix.de>
- <CAJZ5v0gNPt=rq+pQtmoGL5nxzDQboOK4d6h7=NoY=LueVhZjAQ@mail.gmail.com>
+        Thu, 11 May 2023 06:44:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477A12D45
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:43:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683801836;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MHaGSheX03bFaaahcKs7iJDPO3dUtTLJ/9oLvjckzjY=;
+        b=Rk26OXllwwKPUZYneHeBWmthxe+ths6PV8SFlskLgbaRpC0iRfdN9e3mftEK/Pp1zbWfDf
+        2HML2cg3dC4pqlUqnmIWiRhzX/XObfOW9LbglHY4iYoEktmg+73otF41H2ffOXm73+yYSl
+        UtYy1raiLI5K4aKb0rMyqRlT1bGN9Hc=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-39-Yt57wi35P-ier9djhmMlZw-1; Thu, 11 May 2023 06:43:53 -0400
+X-MC-Unique: Yt57wi35P-ier9djhmMlZw-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D31A2280BC5E;
+        Thu, 11 May 2023 10:43:52 +0000 (UTC)
+Received: from gerbillo.redhat.com (unknown [10.39.193.9])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id C0617C15BA0;
+        Thu, 11 May 2023 10:43:51 +0000 (UTC)
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     torvalds@linux-foundation.org
+Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Networking for 6.4-rc2
+Date:   Thu, 11 May 2023 12:43:42 +0200
+Message-Id: <20230511104342.18276-1-pabeni@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7m2fk3b3fmff72si"
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0gNPt=rq+pQtmoGL5nxzDQboOK4d6h7=NoY=LueVhZjAQ@mail.gmail.com>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,67 +58,172 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Linus!
 
---7m2fk3b3fmff72si
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The following changes since commit ed23734c23d2fc1e6a1ff80f8c2b82faeed0ed0c:
 
-On Thu, May 11, 2023 at 12:18:09PM +0200, Rafael J. Wysocki wrote:
-> On Thu, May 11, 2023 at 9:34=E2=80=AFAM Uwe Kleine-K=C3=B6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
-> >
-> > Many drivers that use runtime PM call pm_runtime_get_sync() or one of
-> > its variants in their remove callback. So calling pm_runtime_put_sync()
-> > directly before calling the remove callback results (under some
-> > conditions) in the driver's suspend routine being called just to resume
-> > it again afterwards.
-> >
-> > So delay the pm_runtime_put_sync() call until after device_remove().
-> >
-> > Confirmed on a stm32mp157a that doing
-> >
-> >         echo 4400e000.can > /sys/bus/platform/drivers/m_can_platform/un=
-bind
-> >
-> > (starting with a runtime-pm suspended 4400e000.can) results in one call
-> > less of m_can_runtime_resume() and m_can_runtime_suspend() each after
-> > this change was applied.
-> >
-> > Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
->=20
-> I'm not against this change, although I kind of expect it to trigger
-> some fallout that will need to be addressed.  So caveat emtor.
->=20
-> Anyway
->=20
-> Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
+  Merge tag 'net-6.4-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2023-05-05 19:12:01 -0700)
 
-Thanks for your review tag. I wondered if there will be some fallout,
-and don't know what to expect yet. Sounds like getting it into next soon
-is a good idea?!
+are available in the Git repository at:
 
-Best regards
-Uwe
+  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.4-rc2
 
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+for you to fetch changes up to cceac9267887753f3c9594f1f7b92237cb0f64fb:
 
---7m2fk3b3fmff72si
-Content-Type: application/pgp-signature; name="signature.asc"
+  Merge tag 'nf-23-05-10' of git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf (2023-05-10 19:08:58 -0700)
 
------BEGIN PGP SIGNATURE-----
+----------------------------------------------------------------
+Networking fixes for 6.4-rc2, including fixes from netfilter
 
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmRcxdkACgkQj4D7WH0S
-/k7jXAgAqiN5Sx0I4QVbgbmz3wNVPRVsHVwlqohYzZRSi/SoXrO5XouqiedZTlxb
-N+rfTwegroja2y5jUYhZ6t/g6G6a76fXzwgYV8Mit/bcspRd7oxAlvgGVOzzi8DC
-qUEWRVzDXgTTnZO++4TIxv55SVV0+fYGi87LzObnh/Iq7URXNjlnCpLNgUZGgdoI
-fUPjs6NTmEOFVh6BbC60/7ArxaLwJJLjo4gHzfjt+BaCr8GjwtUoxjgmst3kfV4x
-v8Cjx6JANS4QLSPv5oZ7HGjzAZLEX5bBnvGwmEvufFPyEt04F6ypOe2k7Df9/0r0
-DIZm1vX5Ce1vQEI72CJWBZPRUL0/Mw==
-=Sp3J
------END PGP SIGNATURE-----
+Current release - regressions:
 
---7m2fk3b3fmff72si--
+  - mtk_eth_soc: fix NULL pointer dereference
+
+Previous releases - regressions:
+
+  - core:
+    - skb_partial_csum_set() fix against transport header magic value
+    - fix load-tearing on sk->sk_stamp in sock_recv_cmsgs().
+    - annotate sk->sk_err write from do_recvmmsg()
+    - add vlan_get_protocol_and_depth() helper
+
+  - netlink: annotate accesses to nlk->cb_running
+
+  - netfilter: always release netdev hooks from notifier
+
+Previous releases - always broken:
+
+  - core: deal with most data-races in sk_wait_event()
+
+  - netfilter: fix possible bug_on with enable_hooks=1
+
+  - eth: bonding: fix send_peer_notif overflow
+
+  - eth: xpcs: fix incorrect number of interfaces
+
+  - eth: ipvlan: fix out-of-bounds caused by unclear skb->cb
+
+  - eth: stmmac: Initialize MAC_ONEUS_TIC_COUNTER register
+
+Signed-off-by: Paolo Abeni <pabeni@redhat.com>
+
+----------------------------------------------------------------
+Boris Sukholitko (4):
+      selftests: nft_flowtable.sh: use /proc for pid checking
+      selftests: nft_flowtable.sh: no need for ps -x option
+      selftests: nft_flowtable.sh: wait for specific nc pids
+      selftests: nft_flowtable.sh: monitor result file sizes
+
+Christophe JAILLET (1):
+      net: mdio: mvusb: Fix an error handling path in mvusb_mdio_probe()
+
+Colin Foster (1):
+      net: mscc: ocelot: fix stat counter register values
+
+Daniel Golle (1):
+      net: ethernet: mtk_eth_soc: fix NULL pointer dereference
+
+David S. Miller (1):
+      Merge branch 'bonding-overflow'
+
+Eric Dumazet (7):
+      net: skb_partial_csum_set() fix against transport header magic value
+      netlink: annotate accesses to nlk->cb_running
+      net: annotate sk->sk_err write from do_recvmmsg()
+      net: deal with most data-races in sk_wait_event()
+      net: add vlan_get_protocol_and_depth() helper
+      tcp: add annotations around sk->sk_shutdown accesses
+      net: datagram: fix data-races in datagram_poll()
+
+Florian Fainelli (1):
+      net: phy: bcm7xx: Correct read from expansion register
+
+Florian Westphal (3):
+      netfilter: nf_tables: always release netdev hooks from notifier
+      netfilter: conntrack: fix possible bug_on with enable_hooks=1
+      selftests: nft_flowtable.sh: check ingress/egress chain too
+
+Hangbin Liu (4):
+      bonding: fix send_peer_notif overflow
+      Documentation: bonding: fix the doc of peer_notif_delay
+      selftests: forwarding: lib: add netns support for tc rule handle stats get
+      kselftest: bonding: add num_grat_arp test
+
+Jakub Kicinski (2):
+      Merge branch 'af_unix-fix-two-data-races-reported-by-kcsan'
+      Merge tag 'nf-23-05-10' of git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
+
+Kuniyuki Iwashima (3):
+      net: Fix load-tearing on sk->sk_stamp in sock_recv_cmsgs().
+      af_unix: Fix a data race of sk->sk_receive_queue->qlen.
+      af_unix: Fix data races around sk->sk_shutdown.
+
+Marek Vasut (1):
+      net: stmmac: Initialize MAC_ONEUS_TIC_COUNTER register
+
+Randy Dunlap (1):
+      docs: networking: fix x25-iface.rst heading & index order
+
+Roy Novich (1):
+      linux/dim: Do nothing if no time delta between samples
+
+Russell King (Oracle) (1):
+      net: pcs: xpcs: fix incorrect number of interfaces
+
+Ziwei Xiao (1):
+      gve: Remove the code of clearing PBA bit
+
+t.feng (1):
+      ipvlan:Fix out-of-bounds caused by unclear skb->cb
+
+ Documentation/networking/bonding.rst               |   9 +-
+ Documentation/networking/index.rst                 |   2 +-
+ Documentation/networking/x25-iface.rst             |   3 +-
+ drivers/net/bonding/bond_netlink.c                 |   7 +-
+ drivers/net/bonding/bond_options.c                 |   8 +-
+ drivers/net/ethernet/google/gve/gve_main.c         |  13 --
+ drivers/net/ethernet/mediatek/mtk_wed.c            |   2 +-
+ drivers/net/ethernet/mscc/vsc7514_regs.c           |  18 +--
+ drivers/net/ethernet/stmicro/stmmac/dwmac4.h       |   1 +
+ drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c  |   5 +
+ drivers/net/ipvlan/ipvlan_core.c                   |   6 +
+ drivers/net/mdio/mdio-mvusb.c                      |  11 +-
+ drivers/net/pcs/pcs-xpcs.c                         |   2 +-
+ drivers/net/phy/bcm-phy-lib.h                      |   5 +
+ drivers/net/phy/bcm7xxx.c                          |   2 +-
+ drivers/net/tap.c                                  |   4 +-
+ include/linux/dim.h                                |   3 +-
+ include/linux/if_vlan.h                            |  17 +++
+ include/net/bonding.h                              |   2 +-
+ include/net/sock.h                                 |   2 +-
+ lib/dim/dim.c                                      |   5 +-
+ lib/dim/net_dim.c                                  |   3 +-
+ lib/dim/rdma_dim.c                                 |   3 +-
+ net/bridge/br_forward.c                            |   2 +-
+ net/core/datagram.c                                |  15 ++-
+ net/core/dev.c                                     |   2 +-
+ net/core/skbuff.c                                  |   4 +-
+ net/core/stream.c                                  |  12 +-
+ net/ipv4/af_inet.c                                 |   2 +-
+ net/ipv4/tcp.c                                     |  14 +-
+ net/ipv4/tcp_bpf.c                                 |   2 +-
+ net/ipv4/tcp_input.c                               |   4 +-
+ net/llc/af_llc.c                                   |   8 +-
+ net/netfilter/core.c                               |   6 +-
+ net/netfilter/nf_conntrack_standalone.c            |   3 +-
+ net/netfilter/nft_chain_filter.c                   |   9 +-
+ net/netlink/af_netlink.c                           |   8 +-
+ net/packet/af_packet.c                             |   6 +-
+ net/smc/smc_close.c                                |   4 +-
+ net/smc/smc_rx.c                                   |   4 +-
+ net/smc/smc_tx.c                                   |   4 +-
+ net/socket.c                                       |   2 +-
+ net/tipc/socket.c                                  |   4 +-
+ net/tls/tls_main.c                                 |   3 +-
+ net/unix/af_unix.c                                 |  22 ++--
+ .../selftests/drivers/net/bonding/bond_options.sh  |  50 +++++++
+ .../drivers/net/bonding/bond_topo_3d1c.sh          |   2 +
+ tools/testing/selftests/net/forwarding/lib.sh      |   3 +-
+ tools/testing/selftests/netfilter/nft_flowtable.sh | 145 ++++++++++++++++++++-
+ 49 files changed, 361 insertions(+), 112 deletions(-)
+
