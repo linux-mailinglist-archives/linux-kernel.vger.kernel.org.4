@@ -2,153 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B84E96FEF94
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EF936FEFA1
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:07:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236911AbjEKKDR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 06:03:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
+        id S237445AbjEKKHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 06:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjEKKDP (ORCPT
+        with ESMTP id S237300AbjEKKHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 06:03:15 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6FE7EDD;
-        Thu, 11 May 2023 03:03:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683799393; x=1715335393;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QlT9To/OXd8EOJgtiTI8cBaN4OaCchdOcuG26O4bS00=;
-  b=mX9uxVKLxVUhs2atxKLLhdH8TgisX0f5SSdBdO4OriBsm4CfWQS5spTN
-   l0MjKHeXEXgFTYg9ZbtBoM1V2md5fGcIyzDeYrijhXWiK1fXaVS7Qrvc4
-   crxZUhhkgybLD2kMMITZ0klB4/XcrYRheMs/xcxD53uDddV+tF081WEEL
-   wZU3KIfh97ctbYv+v0XqzcPbLW5Wgifuh61yrzG2pJfV5LswoisSWnHzj
-   kVTP6BniIXdT35yX21EWoCSQHe4OFuiqBPOhX6UrbPDnXWHfLkhhNof6Q
-   3/NwtKdULdsqJ1H9akydPvKn1FLwbaLESEfZVYy7OsCt9tCqcaEMGtRXb
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="353549906"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="353549906"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 03:03:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="843886962"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="843886962"
-Received: from acharach-mobl.ger.corp.intel.com (HELO [10.251.219.38]) ([10.251.219.38])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 03:03:06 -0700
-Message-ID: <56668e29-f697-bd9b-2c13-182e8456dbce@linux.intel.com>
-Date:   Thu, 11 May 2023 12:03:04 +0200
+        Thu, 11 May 2023 06:07:17 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2116.outbound.protection.outlook.com [40.107.92.116])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAAAB211C;
+        Thu, 11 May 2023 03:07:15 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nABhR065F3BlO63vQz/yStwRbLQ9FQuKSiCFGoX6E/2df50N+O9WL1hsGiyeHImJvBocHvlB8XLfvUbCX3u5pKMTgliESY6jqj8xwIrsfXqdKQCDym8Lz854jF27jQMy/nJ1DKmC30TOCs1/x07310WLVPzicFONpdXrZqXGLq85boBiJ4gJu7jtE7hg2UWqP0SstDzdHCE5VHfT/9FULcNHe4jtHABOZ16MVD0v/t0/EEwZKMRjwHu38wZkrOsmJxpxOH0f1Id7qrjcZa9Xag5ltrri2HDG642JoVqoDZEPro5vbj8Da7gZEd4KmoXRJI8RuYr3b0dkS9Lqf5MDIw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wi2rOQPPIiLgAcRx1taE2FmVZeYcjeMRh/YHoVgqB9o=;
+ b=RmdehjQfwzw35aK7dViPxhI5YhURmAVf6uCyMlVRuhyXXLyZfN1nVfSQR1wswOosO48jB8aCyLRe/sz7AhVuQvfRTbuLCobnSBFm6YNMtqBlbwIJLHWj9Dtq4hZAdjv7iH5kB3VkSX05qpHkyOPiQtZq09QCXJuSlfVItiK05I3g6aSiBEbWR+jg7aVO3VWfTD7vaU/aBYK/tFe00KAqmWNPrVH3N2wscsUTNMiIck5tLfIq7zil7r4zLC5HdZj2ZaSN3qdnXaxtWPbEqiEVMHWAWQEzucS+VypQBD/OVrToyYOqucgtXtp0XTb23FV9tZGrchxTXn8T61JWvvSfwg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wi2rOQPPIiLgAcRx1taE2FmVZeYcjeMRh/YHoVgqB9o=;
+ b=u+bBYieYS3nNX4qzEtlGpGZ+EAuttjc0g9p1sCQ96iaN92TAbFiwhPRybS7utuKhb6+fDsI9uj4xXLrgJz0Ufp2XJ2/On/si0+MkX5mrqHjp/kG4nDLTIfce/EL2nhHUYTJj37h5PHUjHmwWxuN2Q89D1jNnm5IUSPU0pFUVrJA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by DM8PR13MB5223.namprd13.prod.outlook.com (2603:10b6:5:314::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.20; Thu, 11 May
+ 2023 10:07:13 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Thu, 11 May 2023
+ 10:07:13 +0000
+Date:   Thu, 11 May 2023 12:07:06 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Siddharth Vadapalli <s-vadapalli@ti.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        srk@ti.com
+Subject: Re: [PATCH net v3] net: phy: dp83867: add w/a for packet errors seen
+ with short cables
+Message-ID: <ZFy+SnPWIn8aBRxg@corigine.com>
+References: <20230510125139.646222-1-s-vadapalli@ti.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230510125139.646222-1-s-vadapalli@ti.com>
+X-ClientProxiedBy: AM4PR07CA0029.eurprd07.prod.outlook.com
+ (2603:10a6:205:1::42) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [RFC PATCH 0/4] Add support for DRM cgroup memory accounting.
-Content-Language: en-US
-To:     Tejun Heo <tj@kernel.org>
-Cc:     dri-devel@lists.freedesktop.org, cgroups@vger.kernel.org,
-        intel-xe@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-References: <20230503083500.645848-1-maarten.lankhorst@linux.intel.com>
- <ZFVeI2DKQXddKDNl@slm.duckdns.org>
- <4d6fbce3-a676-f648-7a09-6f6dcc4bdb46@linux.intel.com>
- <ZFvmaGNo0buQEUi1@slm.duckdns.org>
-From:   Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-In-Reply-To: <ZFvmaGNo0buQEUi1@slm.duckdns.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM8PR13MB5223:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9f72f40d-3613-45ac-13c3-08db52077d7c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zQ97akHl2ut1tMYn5ZKQ8m6XLysbjUrG+/TRaac4WXvFV5536PctRDRNQq2M2yMUrifgXQNhSmaOnJ8tfCRkWJLLj824NJjV8EG9DtM2myJ7MR8f13o4hnPzNfo/DzDgMXf6iVkXiOW5WhKypZ+j1X9UXdY8k6AO5cKCf3yuqY8rfJW1+fdjiB1iketx9JrDRUIwLZzHje7bbkOAKI4uw7Q79s88p9aOHVXiOYCVRkJmQs8KW5AeNBuZeYKhYRN8F49Oi3cAkpMQx15d60kJdDb+opSKxHuhjvhgyqkvRJLKiGXl40xVoe1sYV8yc7mRQHAEwORINBndAkXML8F+jZO9eGHlRuoZ/uAfDQJeeK+gVsBPHWNQW9yTEcO9N+xVoKyzz823J1tqE4mB/Cr8K/8CRB6ZNqnuyvEOu8iNXjq8d/BYomq5FwuopiepGTgPxhbL4b7A5qsI2JTh9jj5LvKOpFJfL2+Bta3G41WcVcakvD+z8eEc0MmAFK7HDn4drFzt1lXUfG45stZZWll38yaCyt1zJ2umAedCN5jd3oeXZ3mhrnizNkToR64s2gVCPgN40cUg1A4RtTK9rwaXJ7hL/+Wy3wTN+HXTmfnOCIdSr4eqEgC01hGNV5Mg3KR0euQZ3d14SRaUh7RmdnFZWA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(376002)(39830400003)(366004)(136003)(451199021)(2906002)(4744005)(86362001)(36756003)(6512007)(44832011)(6506007)(7416002)(478600001)(186003)(5660300002)(6666004)(6486002)(6916009)(38100700002)(66556008)(4326008)(66476007)(66946007)(2616005)(41300700001)(316002)(8936002)(8676002)(67856001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?oETSPRZ3t6t6CYiB/y1oDtzVHiju68XGFW9bzp4BkdjR78UYg6jPWHbwlKGC?=
+ =?us-ascii?Q?pW+QglngsQCg1GVe7JBDHP9W8n4EkpMDAHKS2WO0A0axrhwhnQVKYn3dljIk?=
+ =?us-ascii?Q?caojns6zIS3Bv2PUiBnBnWudqWx6ZVrQkmXl2KH0yQQjjj2OzuwYvzIe6Jtn?=
+ =?us-ascii?Q?iCT6flhXuX+KWXQEdJo/oztd5qjplk14LIso/bMsnmXP+WJ0PTAS4k0a05rH?=
+ =?us-ascii?Q?oZ/VKZJtSeK6XH1MxvoU9R19u2oKUR4bJGnz1fAJ2sdYHCvS4Jh1tx8mrpot?=
+ =?us-ascii?Q?azNB+AGnP/5vH/qXs2mXTPqNMAjcxQrUti+2vEDACCWzpbWbE6UXjFe0sxSI?=
+ =?us-ascii?Q?vB6O2RtzvoGFoFEIv3MOEr7YH10VIwmaiIjWUyDe7ZUczAzHiIa0qZiH042A?=
+ =?us-ascii?Q?i5+Df4rF7HuG0Tc96NufgnEX4RFbI3WFVWK4XyzhM5uNoMGSulkU/4wJprL4?=
+ =?us-ascii?Q?K4WLYIYbQcgVvXlmF4W78SNtSaGSpDda31bW27VPL7yO87jG+Me+NGz6mNo/?=
+ =?us-ascii?Q?P8irKIbK/2CL0YBmYqhIaraUFdNznng4axS9w1grmfroNblt7+tvWus/E8pt?=
+ =?us-ascii?Q?77Mw65eq5fdHT44/c76BrXsReBmiCVUY81ciLVewgKZq1/lXQFtfXOXqC/h6?=
+ =?us-ascii?Q?CpvFcPhT4OsjwxzNHTwjvbnoxzrYnhLdhNtJP/l44LE1q7L7KXCAGBs8/M6B?=
+ =?us-ascii?Q?K+yzVKB4NQe1r5UKF8WnJhXDz9riP9102u5PQSRkdabYmoGiwc0YFN7x7TBS?=
+ =?us-ascii?Q?fjGpY9qno9ElWejTuGfrpXVr/8XABb2ZcccTqBc798FJpunjvsnZbdIJdHlv?=
+ =?us-ascii?Q?l5+igmpmgclkgeHakM7saCzmkknbv2eJc+w1TA9WdOBZVKvtw/QwLg/vk6NU?=
+ =?us-ascii?Q?pjzhMBZjmEEAL3IJ/bLk0s2Qo4kTVfLcmyL62uPng7zIkTANgtnyVI4hIxsf?=
+ =?us-ascii?Q?rkiTP20HupmP1yhzxPvZjrx0fhNMgUdJS2qifxy+cFxOiMz50S5UiDc9iRp5?=
+ =?us-ascii?Q?Rq83II7P2vOUrMUBzh4YkUs5b1WSwph8XoQR9VW3kFOtZKtXLJrmYAO6coNg?=
+ =?us-ascii?Q?oICofsZ3q/IyWNKuzIO9ZfiLSxXRePaYgZSxY/Vbd99hznIvw2FS4yxkIfFX?=
+ =?us-ascii?Q?sLkOLFzFnWA3a8CPFCeUjMwqoFK+D4xmXym7nIkpTTU/vnoChxtE7ZXKQAu2?=
+ =?us-ascii?Q?QvBvyWHJjQJAISMWcPQyka+mvnCCkj6hRGsraewbH7CNa3R+FMG1dufONwgH?=
+ =?us-ascii?Q?SG525gYQ6kQ3I0dPnBwuObD9cv1SktBXdpb87CBzjynimDPAgEp/T1FERPwr?=
+ =?us-ascii?Q?hyNTUvbS/bNdePVCduButLTHK0WaETQZ+kq4oyP9m9rb44eYFpRGMZfOeL3s?=
+ =?us-ascii?Q?h6aLFZWCX7HbQNc78/KECexHNJ4Fd3W+W1Y0O91OfJ7sLDdAbdMvKvQ88eLs?=
+ =?us-ascii?Q?SEELkVAyJFgcOxwZdOyFaW7v8nk4tXo+ZajHMu0E37YhY+uaCG5Z41bgycQA?=
+ =?us-ascii?Q?iaEIWAUwbsqeoGSQpeFysDyrBTQY+5j3F16aHlOvEvockxzidlbYok62NpyK?=
+ =?us-ascii?Q?T46QMlBjURnutYQkK178rlHY1eMVZPZCUH5LdUXUo8/YbJdlW+XQZqSlWBzl?=
+ =?us-ascii?Q?MFjqTIJVecur/8j6Kso4e7PQaeMxsjX7lbL+MqLfRw5roGkHsRevW3YP1dm9?=
+ =?us-ascii?Q?KFP1Zg=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9f72f40d-3613-45ac-13c3-08db52077d7c
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 10:07:12.8735
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6WBP19FFIJeih0FAlh5WOsR5ZzghoMC+Je614n2lj1eX+x7etrAC7zcGwIysCRlkSxzpfyk7mehDn4r4l47FMyH1GGUM8+CK/hVbkFTxats=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM8PR13MB5223
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey,
+On Wed, May 10, 2023 at 06:21:39PM +0530, Siddharth Vadapalli wrote:
+> From: Grygorii Strashko <grygorii.strashko@ti.com>
+> 
+> Introduce the W/A for packet errors seen with short cables (<1m) between
+> two DP83867 PHYs.
+> 
+> The W/A recommended by DM requires FFE Equalizer Configuration tuning by
+> writing value 0x0E81 to DSP_FFE_CFG register (0x012C), surrounded by hard
+> and soft resets as follows:
+> 
+> write_reg(0x001F, 0x8000); //hard reset
+> write_reg(DSP_FFE_CFG, 0x0E81);
+> write_reg(0x001F, 0x4000); //soft reset
+> 
+> Since  DP83867 PHY DM says "Changing this register to 0x0E81, will not
+> affect Long Cable performance.", enable the W/A by default.
+> 
+> Fixes: 2a10154abcb7 ("net: phy: dp83867: Add TI dp83867 phy")
+> Signed-off-by: Grygorii Strashko <grygorii.strashko@ti.com>
+> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
 
-On 2023-05-10 20:46, Tejun Heo wrote:
-> Hello,
->
-> On Wed, May 10, 2023 at 04:59:01PM +0200, Maarten Lankhorst wrote:
->> The misc controller is not granular enough. A single computer may have any number of
->> graphics cards, some of them with multiple regions of vram inside a single card.
-> Extending the misc controller to support dynamic keys shouldn't be that
-> difficult.
->
-> ...
->> In the next version, I will move all the code for handling the resource limit to
->> TTM's eviction layer, because otherwise it cannot handle the resource limit correctly.
->>
->> The effect of moving the code to TTM, is that it will make the code even more generic
->> for drivers that have vram and use TTM. When using TTM, you only have to describe your
->> VRAM, update some fields in the TTM manager and (un)register your device with the
->> cgroup handler on (un)load. It's quite trivial to add vram accounting to amdgpu and
->> nouveau. [2]
->>
->> If you want to add a knob for scheduling weight for a process, it makes sense to
->> also add resource usage as a knob, otherwise the effect of that knob is very
->> limited. So even for Tvrtko's original proposed usecase, it would make sense.
-> It does make sense but unlike Tvrtko's scheduling weights what's being
-> proposed doesn't seem to encapsulate GPU memory resource in a generic enough
-> manner at least to my untrained eyes. ie. w/ drm.weight, I don't need any
-> specific knoweldge of how a specific GPU operates to say "this guy should
-> get 2x processing power over that guy". This more or less holds for other
-> major resources including CPU, memory and IO. What you're proposing seems a
-> lot more tied to hardware details and users would have to know a lot more
-> about how memory is configured on that particular GPU.
-
-There's not much need of knowing the specifics of a card, but there might
-be a need of knowing the workload to determine what allocation limits to set.
-
-I've left region to be implementation specific, but it would make sense to
-standardise it.
-TTM, the layer used by drivers that support VRAM, have the following regions:
-* sysmem - All system memory allocated; includes evicted VRAM.
-* mapped - All physical system memory that is mapped to the GPU, when unbound
-           moves to sysmem. When evicting VRAM to sysmem, it's temporarily
-           mapped here.
-* vramN - All VRAM regions of the device.
-* driver specific regions - probably doesn't make sense to put in cgroup at all,
-  this includes stolen from the PoC.
-
-That leaves the question, what regions would make sense for a cgroup?
-Since vramN can be moved to mapped and sysmem (VRAM eviction, suspend/resume,
-driver_madvise), it becomes a subject of debate if we should include the other
-regions, since things become complicated fast.
-
-For the first iteration, I focus on a single category, vramN.
-
-Even when not knowing anything about a GPU, it will be easy to partition its
-memory like that.
-
-If you can assign a weight for the scheduler, then you can also partition it's
-vram by parsing /drm.capacity for total amount, and then splitting it across
-cgroups.
-
-
-> Now, if this is inherent to how all, or at least most, GPUs operate, sure,
-> but otherwise let's start small in terms of interface and not take up space
-> which should be for something universal. If this turns out to be the way,
-> expanding to take up the generic interface space isn't difficult.
->
-> I don't know GPU space so please educate me where I'm wrong.
-
-Most GPU's have dedicated vram that works roughly in the same way, some
-integrated chips like i915 or arm use shared memory from the host system
-only. I would say amd, nvidia and intel's chips with dedicated memory work
-roughly in the same way for vram.
-
-I hope this explains it a little bit more,
-
-~Maarten
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
