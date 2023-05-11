@@ -2,56 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A63B6FE977
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:29:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8236FE979
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:30:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236961AbjEKB3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 21:29:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57394 "EHLO
+        id S236997AbjEKBah (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 21:30:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236468AbjEKB3v (ORCPT
+        with ESMTP id S236172AbjEKBaf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 21:29:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9124EDE;
-        Wed, 10 May 2023 18:29:50 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0CAD96142C;
-        Thu, 11 May 2023 01:29:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2011FC433D2;
-        Thu, 11 May 2023 01:29:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683768589;
-        bh=xkZSZx7oD/2ihuOPs+EXiDXcMNsLja6hgA3JirBl9vs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o94DUBaAqSQq9GKYZaNxFs6khoM6lGobAI0Z/QsFOW2c9a3HRSgKInsmbjDUit8r8
-         BT3n3p08wmJOISJy5qLBAfZ/Fp6G+ppWH4TSA3RaN35KqrNZUZHlo4K/WM9V5v2SDz
-         1bhO118eEgs4wtEj7VlYlDRrdsVAsZd0HpHefHam3GaAYMTKbmYdFVtpwxeFO0PdPn
-         R30WK6u6Xg98mN7SYpLKuYIToz62Y2ViLrorj8OaNzwqGG9XapUXIQIP/qnPcFbXPp
-         NMZzWGDjZ20zpAe32dYS5nmpwXGs8Dn19tCauisnowMP4OryOl03RE0GIrwW8nERm9
-         d0hsUqpg7rZxw==
-Date:   Thu, 11 May 2023 10:29:47 +0900
-From:   Mark Brown <broonie@kernel.org>
-To:     Joy Chakraborty <joychakr@google.com>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        manugautam@google.com, rohitner@google.com
-Subject: Re: [PATCH v10 1/5] spi: dw: Add 32 bpw support to SPI DW DMA driver
-Message-ID: <ZFxFCweHVgHyA1E1@finisterre.sirena.org.uk>
-References: <20230509082244.1069623-1-joychakr@google.com>
- <20230509082244.1069623-2-joychakr@google.com>
+        Wed, 10 May 2023 21:30:35 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6D44EE8;
+        Wed, 10 May 2023 18:30:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683768634; x=1715304634;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=u4WqbkHoxAV8VYoBAPgpHd4rjkwFS+Zg4DYcUWmcsy4=;
+  b=FcYHYJN0mrAJjBRxNdZX6km8jIvpWJzFtesnusWs4o3OB+IPYAi5wbNz
+   E5H+wM530Q1NSbNmO1EuJCjddbd33sjG/YP2+UmcLe4Vyw5eWMsw0fPLP
+   FLLkOAxM0kA8ddvkG49GtgPSbH+bmc++I2Hud+mNtUKy0/Zd6lPvBJ/qV
+   4ByhRbjX45Vqskj1aIOtCpvSvitzcmEQLwX7uVL8zIQMpLKwHhKUYJIxj
+   kZiTX2cvJYgquIxyWagW67L3+stS84oLol0wBf6AGjYHteot4jkM0O/ds
+   qrHve7x1nFzPHh1ACmi8LqS72Ci39EmK4GxRiPUSiuxBB4/i2LiUntKoL
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="350397636"
+X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
+   d="scan'208";a="350397636"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 18:30:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="789173188"
+X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
+   d="scan'208";a="789173188"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.254.215.43]) ([10.254.215.43])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 18:30:32 -0700
+Message-ID: <121e4796-6150-4bc7-fc6b-3dc292966687@linux.intel.com>
+Date:   Thu, 11 May 2023 09:30:30 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="pS027X83bgCbZaBz"
-Content-Disposition: inline
-In-Reply-To: <20230509082244.1069623-2-joychakr@google.com>
-X-Cookie: Obey all traffic laws.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v8 1/6] KVM: x86: Consolidate flags for __linearize()
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robert.hu@linux.intel.com" <robert.hu@linux.intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+References: <20230510060611.12950-1-binbin.wu@linux.intel.com>
+ <20230510060611.12950-2-binbin.wu@linux.intel.com>
+ <c9cbb52001c7229a6d6d140262adb327233f75fb.camel@intel.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <c9cbb52001c7229a6d6d140262adb327233f75fb.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,29 +70,42 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---pS027X83bgCbZaBz
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Tue, May 09, 2023 at 08:22:40AM +0000, Joy Chakraborty wrote:
-> Add Support for AxSize = 4 bytes configuration from dw dma driver if
-> n_bytes i.e. number of bytes per write to fifo is 4.
+On 5/10/2023 8:41 PM, Huang, Kai wrote:
+> On Wed, 2023-05-10 at 14:06 +0800, Binbin Wu wrote:
+>> Define a 32-bit parameter and consolidate the two bools into it.
+> Technically, per C standard I don't think you can "define" a parameter of a
+> function, but can only "declare".
+>
+>> __linearize() has two bool parameters write and fetch. And new flag
+>> will be needed to support new feature (e.g. LAM needs a flag to skip
+>> address untag under some conditions).
+> Since this is the first patch to mention LAM in this series, it would be better
+> to use the full name Intel Linear Address Masking (LAM).
+>    
+>> No functional change intended.
+>>
+>> In the follow-up patches, the new parameter will be extended for LAM.
+> A duplicated sentence to me.  Perhaps you can just remove it.
+>
+> Some changelog material FYI:
+>
+> 	Consolidate two bool parameters (write/fetch) of __linearize() into a
+> 	'u32 flag' parameter to make the function be more concise and future
+> 	extendable, i.e. to support Intel Linear Address Masking (LAM), which
+> 	allows high non-address bits of linear address to be used as metadata.
+>
+> 	Define two flags to replace the two bools.  A new flag will be added to
+> 	to support LAM to skip masking off metadata bits of linear address
+> under
+> 	some conditions.
+>
+> 	No functional change intended.
+Thanks, will update it.
 
-This doesn't apply against current code, please check and resend.
+>
+>> Signed-off-by: Binbin Wu <binbin.wu@linux.intel.com>
+> Anyway:
+>
+> Acked-by: Kai Huang <kai.huang@intel.com>
 
---pS027X83bgCbZaBz
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRcRQoACgkQJNaLcl1U
-h9C/FAf9Hem8cgONjfxUCIYwUrdYf9sxLL0K60Ve30VRssMNVxYb15by8J3HwxPk
-xviubx1/Wn9x3PvBRYVE0pBfG1CUj77t5/TwcptqEo3WCHbxV7o6RVdJ6YcVGB3y
-pFsLUJjNqR3P+Ylp7nzcFcHpejxI7wM34gyFTyiEf+a2S0pD3uPeF9voA9vjODoy
-dMfzmhGzhlR6twvGPSievnbiYO5EMQu21043hmZ8TeshCPXOU2VjfUTe+3QqxrQ3
-dJMmUdalQRNGSSIA5nIZAFk2HMjASotEdcENFIOWVO73H/PHp1J+58VOhnQx9ndU
-aAS3jMymQX9FclHzu32RkGGd6KM6BQ==
-=8a0l
------END PGP SIGNATURE-----
-
---pS027X83bgCbZaBz--
