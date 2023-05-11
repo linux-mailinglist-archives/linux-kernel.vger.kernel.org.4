@@ -2,98 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA34C6FED5C
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:00:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E2236FED66
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:02:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237721AbjEKIAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 04:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59462 "EHLO
+        id S229633AbjEKICp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 04:02:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237706AbjEKIAB (ORCPT
+        with ESMTP id S231629AbjEKIBN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 04:00:01 -0400
-Received: from mail-yb1-xb2d.google.com (mail-yb1-xb2d.google.com [IPv6:2607:f8b0:4864:20::b2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0888744A9
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:00:00 -0700 (PDT)
-Received: by mail-yb1-xb2d.google.com with SMTP id 3f1490d57ef6-b9a6f17f2b6so39917843276.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:59:59 -0700 (PDT)
+        Thu, 11 May 2023 04:01:13 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1314D59E6
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:01:10 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-b9a6f17f2b6so39922538276.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:01:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683791999; x=1686383999;
+        d=linaro.org; s=google; t=1683792069; x=1686384069;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NLedi3hVqxdWr/OA7+QyOEQ+v1I2KL3cVmpY7bRy76c=;
-        b=6FBEEljZk9zb9AJ2Y6Ynq3Mh+oBSaQ6ySOyjIK42cxxCdlO1BbKVTXo9qKZhOfJ+3Z
-         6yACC97sKr+qKP9PGIjJD0C2u9tSf4ETzMA9eNatUVyDw9OA18w3fLZ8YXfhhMO4dwhE
-         0NrMlvda5NAq/IOq8HSjLnjeAdeOvQK4U38jiaRDkUkziQ0zVeII/0opN4kGV6TDtTKq
-         EmMU+lWrV4n6CNHrorcSH4hxel5O7DnIXMjF235kfBltqENmZX7gMCYLws1TD9VKPZQC
-         RSoVNRc54ExuoguwYkCzNJVvANSjEA49ScWyvvwHSqUy9cbpZzYt2QZoJ5xd6Zmx/6Bd
-         i4rg==
+        bh=McUfZXxoyN68Pz8/SqIaHkQ+qaI7jQjXaWVxB70Fbm4=;
+        b=Ie57tBLP0SjAU+q9HkRqXH7w1Ak/h2UMEEx8u1HKC/qxYM2FqDgcksZr9LIsYNWUsl
+         1OdWVQEMUvPnH0x/W01FXT4sZ0HV7RlstJTxL93uNhfbp8b2uWZtzvExkv2Bq84J0Xdx
+         E7M7vQK5HDjsRQYBSVSBZlV9ajH4qqBTy+xtP2nZ+hnYo/hPjqejkIKIuJlpJ4femakR
+         GnT2CcNFg2SFwMnjdsT9tYJDIREBVSPB8aGgt2EGKdLe3Q1RPbLqoRGObo9z3q4PY/+c
+         ebpTl+aHx97sPkYebtmGUQpug/RUHQ7pXaGzmtX1F+0dnavV4WhjNE3ASyqg8WjU3AHv
+         u5sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683791999; x=1686383999;
+        d=1e100.net; s=20221208; t=1683792069; x=1686384069;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=NLedi3hVqxdWr/OA7+QyOEQ+v1I2KL3cVmpY7bRy76c=;
-        b=ZB+IVNWIohMzr5UOHnjFqHszd767jD8XlmesuyCUpPtV8UosadmFmTowOILDQHDsJ6
-         tME8bJ2RkdeHKNf2zeqxCgq05NwqWl1YFx3QxPR+OcPNxZWjCtQnHte2MrFsbYPCj2xB
-         BNvZ+odMVB3W5P7322FBpWTUPskcJHR/OJY6iiJmaayup/BSlIkd68Hx4FQkRcznot0v
-         nLItknuDK4KvjOESZ/KSzxt7WnTEc7gn5UMa1+2IqhWgj70k/KvqardNgUR05Auw9Zh7
-         tmbbKMPQgyi7nR3MAxhxmD87AZwYvOV11ob6c6qW8KtNYei1gpKlizRpJw8neoMOPX48
-         RrdA==
-X-Gm-Message-State: AC+VfDyOEOfF6+A+Aw35P5VypPXW6MHgdErD6yWU5t4/XMsVbeiw1byT
-        1/vEh03MCqEB0y0b1HbROABfyQuJmo/sf/YAvYUJLHKkAChzqSP+MTa2tw==
-X-Google-Smtp-Source: ACHHUZ5XeLYnAgTnNAPYINTjUZ3CysgP034aVICvD8N6VjAM29zNXayOTGWxPB7hbvhUjplQxGEgFdW20FH3eRj+54w=
-X-Received: by 2002:a25:1d7:0:b0:b9e:7b1d:4d4d with SMTP id
- 206-20020a2501d7000000b00b9e7b1d4d4dmr25075363ybb.12.1683791999085; Thu, 11
- May 2023 00:59:59 -0700 (PDT)
+        bh=McUfZXxoyN68Pz8/SqIaHkQ+qaI7jQjXaWVxB70Fbm4=;
+        b=eq+hyTjUfUjtagFTctbA8z+t6kmjNwICeeWpo4SLxd4A8DvRMXnBFodA6ohXWW7Gud
+         uDjsMChil6lGvn1IJWHo2Eid01CtUWMfFOC/FoAQuL2E8j1Tjpcv59LFr23gUG+gyYnR
+         wDCikmCszNLgg3PjERU74wdvu5AwEJJonJH17RaLcWKkUyuzFzIH6uujVReWr/Y9/00I
+         YqqOYZiCs9/NJaOF2M2u1MVBcbnyrbBDYB8o3qPNYvhq/3zIDsJUivRF8IBsM3hHRP3c
+         crNTEPO3YFpe+cbhokk0N8mtXSqwXpWQsOsTjKYJxbKYSuO+N/GqnZ6j7a0BvO3ODhoj
+         2n/Q==
+X-Gm-Message-State: AC+VfDxoJGeQhpwvXsnT8mC0c/DUoVaVfS4JSKPDXlYtgg7TctRoktGo
+        dxvJD94bOvFCvygUTiT+4qbcZu2Cgp+NudVDBicdUA==
+X-Google-Smtp-Source: ACHHUZ6Tfv9cgVZ5JDwOFlziw588BdOF3QPOAb7FvOB6zNJ5owtsp+TK0PnPcLF8xGZ10EdS89NWugEkzkKG29HTYAs=
+X-Received: by 2002:a25:24b:0:b0:ba6:956f:22d0 with SMTP id
+ 72-20020a25024b000000b00ba6956f22d0mr1765478ybc.2.1683792069275; Thu, 11 May
+ 2023 01:01:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000a686ca05fb6584ea@google.com> <CAG_fn=XUQUpt69a66i7XM9tHeQL96WnzNJ9X60OTm3ZB5=khZA@mail.gmail.com>
-In-Reply-To: <CAG_fn=XUQUpt69a66i7XM9tHeQL96WnzNJ9X60OTm3ZB5=khZA@mail.gmail.com>
-From:   Alexander Potapenko <glider@google.com>
-Date:   Thu, 11 May 2023 09:59:23 +0200
-Message-ID: <CAG_fn=WsX6260u+_oj+srT-_M0LqkoVtNTHeK0vk+364=W__7A@mail.gmail.com>
-Subject: Re: [syzbot] upstream boot error: KMSAN: uninit-value in strlcat
-To:     syzbot <syzbot+26836cb949db3d40c992@syzkaller.appspotmail.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+References: <20230510001151.3946931-1-chris.packham@alliedtelesis.co.nz>
+ <ZFtK3DydE24Qijle@surfacebook> <760ae58f-cb0b-dfe6-9e24-664310651e18@alliedtelesis.co.nz>
+In-Reply-To: <760ae58f-cb0b-dfe6-9e24-664310651e18@alliedtelesis.co.nz>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 11 May 2023 10:00:57 +0200
+Message-ID: <CACRpkdb1UFQ=1gePeBBEQ3ODu+6m0dHBqaxdtOF9Qc01WytMEQ@mail.gmail.com>
+Subject: Re: [PATCH] gpiolib: Don't implicitly disable irq when masking
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        Ben Brown <Ben.Brown@alliedtelesis.co.nz>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 9:07=E2=80=AFAM Alexander Potapenko <glider@google.=
-com> wrote:
->
-> On Thu, May 11, 2023 at 8:58=E2=80=AFAM syzbot
-> <syzbot+26836cb949db3d40c992@syzkaller.appspotmail.com> wrote:
-> >
-> > Hello,
-> >
-> > syzbot found the following issue on:
-> >
-> > HEAD commit:    16a8829130ca nfs: fix another case of NULL/IS_ERR confu=
-sio..
-> > git tree:       upstream
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=3D10811e34280=
-000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Da7a1059074b=
-7bdce
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=3D26836cb949db3=
-d40c992
-> > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for D=
-ebian) 2.35.2
->
-> Sorry for the noise, I was trying to switch KMSAN bots to the upstream
-> tree (it is not ready yet, needs one more patch), and accidentally
-> sent this report to LKML. Please disregard it.
+On Wed, May 10, 2023 at 10:59=E2=80=AFPM Chris Packham
+<Chris.Packham@alliedtelesis.co.nz> wrote:
 
-#syz invalid
+> The coupling of gpiochip_irq_mask()/gpiochip_irq_unmask() with
+> gpiochip_disable_irq()/gpiochip_enable_irq() goes back to the same
+> commit a8173820f441 ("gpio: gpiolib: Allow GPIO IRQs to lazy disable").
+> It's not immediately obvious to me why the coupling is needed.
+
+That is just a refactoring of what existed before.
+
+The use case is here:
+drivers/media/cec/platform/cec-gpio/cec-gpio.c
+
+The driver needs to switch, at runtime, between actively driving a GPIO
+line with gpiod_set_value(), and setting the same line into input mode
+and listening for signalling triggering IRQs on it, and then back to
+output mode and driving the line again. It's a bidirectional GPIO line.
+This use case yields a high need of control.
+
+> I was
+> hoping that someone seeing my patch would confirm that it's not needed
+> or say why it's needed suggest an alternative approach.
+
+Which IRQ-enabled gpiochip is this? Has it been converted to be immutable?
+I think that could be part of the problem.
+
+Yours,
+Linus Walleij
