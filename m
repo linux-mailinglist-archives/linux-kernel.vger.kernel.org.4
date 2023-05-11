@@ -2,172 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E802D6FF18F
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 14:32:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 535E16FF18C
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 14:32:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237327AbjEKMcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 08:32:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34804 "EHLO
+        id S237978AbjEKMc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 08:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237831AbjEKMcp (ORCPT
+        with ESMTP id S237837AbjEKMcY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 08:32:45 -0400
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBAC59E0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 05:32:38 -0700 (PDT)
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 9B6B53F4A5
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 12:32:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1683808356;
-        bh=9aj9w2ur8U+Nd5DK5XALx0/M31BkBPR/KrjmUiEylFY=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=DfDtwLzTMSznDLuBmCqTuJkImwuB+TGx7EYxWMpQtYTOxyXiOvN3fPJoZwQmRjCM+
-         71TNbagxsy09Cm5R38ly58u+IwP3ywvUm+BKJR0HBktCv74K4SrNMGIa89MivtI/Ch
-         AU4F2+KwDGIM/N7HmTZse9TWQYJ8zz0ip08LdZNObo9H7/MY0TH9iDujR5o50lt646
-         paBV5t8wGaKl6D7tTvWKQ1XHOYo0fZm8dK7K3oFrrOUVc2veR6jWLJ1WZdIida0uFZ
-         nJB2SnFA4zqESl3IpEaVL/Ml84YmPmqUkYOX2MleX7B5bvmsbsqGufKit2ipFdSes1
-         cPQqkUR5h7LtQ==
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-95f6f291b9aso1067303966b.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 05:32:36 -0700 (PDT)
+        Thu, 11 May 2023 08:32:24 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7567D40F7;
+        Thu, 11 May 2023 05:32:20 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-965e93f915aso1421923266b.2;
+        Thu, 11 May 2023 05:32:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20221208; t=1683808339; x=1686400339;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qpFCNWYEoyxGLamlVtGBTAfhhqfRF4QezHpbobxA/FY=;
+        b=fWk5CuRJg8SYKLgZdauP3BRsmpVS4LnfF9rI9/Sf343SLC8KtoXqjDWemvr9da8Qk5
+         0iq2yY9biC4KpgoP09qQKJN87l0ovf11apQukRf1cMMMQ06ykxXjHevCZ1g8JfioKqxB
+         c4PbvJKiUTEGbMIceJzcMuTEQCczkUNAiiIK6qSU8eZ9G0NWQ74VCluNKnEOmJ1DXnm6
+         AUMFpSoXG5sXDbULn+2h06ujQAu7wha4QQKrd9rKpvP0V6xkQ9O3+Vbn/eWcdYTz3Fag
+         KKQhw62AhnlM9NCKEhLSwpXPkL/L+Ay5k0Ie5EnYcDr/xQbquLcjDAK61kkZycvY78S2
+         ibDA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683808355; x=1686400355;
+        d=1e100.net; s=20221208; t=1683808339; x=1686400339;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=9aj9w2ur8U+Nd5DK5XALx0/M31BkBPR/KrjmUiEylFY=;
-        b=cRAhW33smiSMJZqOrifxmwj5IS5TjQx4c9U6TjsyMD3kARFTO+UDk3/FVq2BdqLDXJ
-         HITlAEAdusQvzg2SQMpYlFqqRnWVKgYbJIEHgLokwjz5O6l6xiSa6LZpBkPNbhsBQKrl
-         dJVeFWxjuyZmE33C0zRgdXNPumvJP6ygE8/1l2mWUNH6TZOaOudwCcc19cRRGLTF/g+B
-         NL25DgOm4+yVYJ4CDkm9gSsDLZc018jltEb+6YWetlqgEoeJb42Nr2OFbVvqT+QNSSi1
-         lQlitShJGnBEMqrIuw9x979EcUWabAd/b6OaNIWGcqVMKSOyHm2jJRLr4i2QRWX/C+vQ
-         iLuw==
-X-Gm-Message-State: AC+VfDwRugbXAF+78mibnT5i7uaYLtNpenwNKLH/1qrK/VkwgFs06XO4
-        3h0F2dStuZMVJ4GSg/082ig/L6EuGwvYhXQiIXMRLu5INdMorMpNWJ79UXSU3V7dZOAHRjEqSeS
-        tekwwnU9758W01K0oUc37A0hvSyYwbHlJNBhGkErlPg==
-X-Received: by 2002:a17:906:9b8b:b0:96a:7de4:dd24 with SMTP id dd11-20020a1709069b8b00b0096a7de4dd24mr587382ejc.66.1683808355018;
-        Thu, 11 May 2023 05:32:35 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ7sXboCrcgZqmPwaiL+LsLQ9aAYIhDtjlw+ataSN9pCjs1hBQsMsovl64QzHlnIObw8hQfvqg==
-X-Received: by 2002:a17:906:9b8b:b0:96a:7de4:dd24 with SMTP id dd11-20020a1709069b8b00b0096a7de4dd24mr587346ejc.66.1683808354610;
-        Thu, 11 May 2023 05:32:34 -0700 (PDT)
-Received: from amikhalitsyn.. (ip5f5bf3d5.dynamic.kabel-deutschland.de. [95.91.243.213])
-        by smtp.gmail.com with ESMTPSA id ia2-20020a170907a06200b00959c07bdbc8sm3968534ejc.100.2023.05.11.05.32.33
+        bh=qpFCNWYEoyxGLamlVtGBTAfhhqfRF4QezHpbobxA/FY=;
+        b=VZIWWOrNV2oTNQetfEIby/+qCTvji15TlkfJeTsbHaxvaosurtT39guujX2Lied6Dp
+         +Zx700XSApbC64juOV99av43tSCYJ6pgl1v2cEfPchlwa6sj8HUZbheZCekag0HduKKd
+         0ZqJOKE2qaOmTdQCLYAYYSn2RVBKLvFOY8wEKuF5tLtiGtSeTHo1sVyCqZSrjwICPUrL
+         kv0GOscqlWYETeYHe05VIB3qJ6uZon/54/doQApb1uLKMzPCiEwbomN3MdU8//8HtDNe
+         Oe/8WsXD4w6Yympmd0u+FJ0XW+5peCrXzpHQXQXxI6LBlqC6i+Hidch3dFehVbZj+0vL
+         z7Pw==
+X-Gm-Message-State: AC+VfDyKViYPihSHjCQsHLn9f5zB+/4v05yBCMl8MBzc4KJ1ei1AWbQA
+        WM4CGYKrHeeWgaam3HsxnmM/QOwoeIk=
+X-Google-Smtp-Source: ACHHUZ674fyUEpydXaf0GXLzIdR3ik3AJS2+i+ffWrsiKAgqDfyHIDuOVT3a2SN+zHozm6Fa+G+Ucg==
+X-Received: by 2002:a17:907:629e:b0:946:be05:ed7a with SMTP id nd30-20020a170907629e00b00946be05ed7amr19143790ejc.70.1683808338695;
+        Thu, 11 May 2023 05:32:18 -0700 (PDT)
+Received: from debianHome.localdomain (dynamic-077-008-180-228.77.8.pool.telefonica.de. [77.8.180.228])
+        by smtp.gmail.com with ESMTPSA id x4-20020a1709060a4400b0095ed3befbedsm3949057ejf.54.2023.05.11.05.32.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 05:32:34 -0700 (PDT)
-From:   Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-To:     nhorman@tuxdriver.com
-Cc:     davem@davemloft.net,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Christian Brauner <brauner@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>, linux-sctp@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH net-next v2] sctp: add bpf_bypass_getsockopt proto callback
-Date:   Thu, 11 May 2023 14:31:48 +0200
-Message-Id: <20230511123148.332043-1-aleksandr.mikhalitsyn@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 11 May 2023 05:32:18 -0700 (PDT)
+From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
+To:     selinux@vger.kernel.org
+Cc:     Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Xiu Jianfeng <xiujianfeng@huawei.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] selinux: deprecated fs ocon
+Date:   Thu, 11 May 2023 14:32:12 +0200
+Message-Id: <20230511123213.722912-1-cgzones@googlemail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add bpf_bypass_getsockopt proto callback and filter out
-SCTP_SOCKOPT_PEELOFF and SCTP_SOCKOPT_PEELOFF_FLAGS socket options
-from running eBPF hook on them.
+The object context type `fs`, not to be confused with the well used
+object context type `fscon`, was introduced in the initial git commit
+1da177e4c3f4 ("Linux-2.6.12-rc2") but never actually used since.
 
-These options do fd_install(), and if BPF_CGROUP_RUN_PROG_GETSOCKOPT
-hook returns an error after success of the original handler
-sctp_getsockopt(...), userspace will receive an error from getsockopt
-syscall and will be not aware that fd was successfully installed into fdtable.
+The paper "A Security Policy Configuration for the Security-Enhanced
+Linux" [1] mentions it under `7.2 File System Contexts` but also states:
 
-This patch was born as a result of discussion around a new SCM_PIDFD interface:
-https://lore.kernel.org/all/20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com/
+    Currently, this configuration is unused.
 
-Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
-Cc: Daniel Borkmann <daniel@iogearbox.net>
-Cc: Christian Brauner <brauner@kernel.org>
-Cc: Stanislav Fomichev <sdf@google.com>
-Cc: Neil Horman <nhorman@tuxdriver.com>
-Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-Cc: Xin Long <lucien.xin@gmail.com>
-Cc: linux-sctp@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Cc: netdev@vger.kernel.org
-Suggested-by: Stanislav Fomichev <sdf@google.com>
-Acked-by: Stanislav Fomichev <sdf@google.com>
-Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+The policy statement defining such object contexts is `fscon`, e.g.:
+
+    fscon 2 3 gen_context(system_u:object_r:conA_t,s0) gen_context(system_u:object_r:conB_t,s0)
+
+It is not documented at selinuxproject.org or in the SELinux notebook
+and not supported by the Reference Policy buildsystem - the statement is
+not properly sorted - and thus not used in the Reference or Fedora
+Policy.
+
+Print a warning message at policy load for each such object context:
+
+    SELinux:  void and deprecated fs ocon 02:03
+
+This topic was initially highlighted by Nicolas Iooss [2].
+
+[1]: https://media.defense.gov/2021/Jul/29/2002815735/-1/-1/0/SELINUX-SECURITY-POLICY-CONFIGURATION-REPORT.PDF
+[2]: https://lore.kernel.org/selinux/CAJfZ7=mP2eJaq2BfO3y0VnwUJaY2cS2p=HZMN71z1pKjzaT0Eg@mail.gmail.com/
+
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
 ---
- net/sctp/socket.c | 31 +++++++++++++++++++++++++++++++
- 1 file changed, 31 insertions(+)
+ security/selinux/ss/policydb.c | 4 ++++
+ security/selinux/ss/policydb.h | 2 +-
+ 2 files changed, 5 insertions(+), 1 deletion(-)
 
-diff --git a/net/sctp/socket.c b/net/sctp/socket.c
-index cda8c2874691..a211a203003c 100644
---- a/net/sctp/socket.c
-+++ b/net/sctp/socket.c
-@@ -8281,6 +8281,35 @@ static int sctp_getsockopt(struct sock *sk, int level, int optname,
- 	return retval;
- }
+diff --git a/security/selinux/ss/policydb.c b/security/selinux/ss/policydb.c
+index 97c0074f9312..31b08b34c722 100644
+--- a/security/selinux/ss/policydb.c
++++ b/security/selinux/ss/policydb.c
+@@ -2257,6 +2257,10 @@ static int ocontext_read(struct policydb *p, const struct policydb_compat_info *
+ 				if (rc)
+ 					goto out;
  
-+static bool sctp_bpf_bypass_getsockopt(int level, int optname)
-+{
-+	if (level == SOL_SCTP) {
-+		switch (optname) {
-+		/*
-+		 * These options do fd_install(), and if BPF_CGROUP_RUN_PROG_GETSOCKOPT
-+		 * hook returns an error after success of the original handler
-+		 * sctp_getsockopt(...), userspace will receive an error from getsockopt
-+		 * syscall and will be not aware that fd was successfully installed into fdtable.
-+		 *
-+		 * Let's prevent bpf cgroup hook from running on them.
-+		 */
-+		case SCTP_SOCKOPT_PEELOFF:
-+		case SCTP_SOCKOPT_PEELOFF_FLAGS:
-+		/*
-+		 * As pointed by Marcelo Ricardo Leitner it seems reasonable to skip
-+		 * bpf getsockopt hook for this sockopt too. Because internaly, it
-+		 * triggers connect() and if error will be masked userspace can be confused.
-+		 */
-+		case SCTP_SOCKOPT_CONNECTX3:
-+			return true;
-+		default:
-+			return false;
-+		}
-+	}
++				if (i == OCON_FS)
++					pr_warn("SELinux:  void and deprecated fs ocon %s\n",
++						c->u.name);
 +
-+	return false;
-+}
-+
- static int sctp_hash(struct sock *sk)
- {
- 	/* STUB */
-@@ -9650,6 +9679,7 @@ struct proto sctp_prot = {
- 	.shutdown    =	sctp_shutdown,
- 	.setsockopt  =	sctp_setsockopt,
- 	.getsockopt  =	sctp_getsockopt,
-+	.bpf_bypass_getsockopt	= sctp_bpf_bypass_getsockopt,
- 	.sendmsg     =	sctp_sendmsg,
- 	.recvmsg     =	sctp_recvmsg,
- 	.bind        =	sctp_bind,
-@@ -9705,6 +9735,7 @@ struct proto sctpv6_prot = {
- 	.shutdown	= sctp_shutdown,
- 	.setsockopt	= sctp_setsockopt,
- 	.getsockopt	= sctp_getsockopt,
-+	.bpf_bypass_getsockopt	= sctp_bpf_bypass_getsockopt,
- 	.sendmsg	= sctp_sendmsg,
- 	.recvmsg	= sctp_recvmsg,
- 	.bind		= sctp_bind,
+ 				rc = context_read_and_validate(&c->context[0], p, fp);
+ 				if (rc)
+ 					goto out;
+diff --git a/security/selinux/ss/policydb.h b/security/selinux/ss/policydb.h
+index ffc4e7bad205..39cd6222e1a8 100644
+--- a/security/selinux/ss/policydb.h
++++ b/security/selinux/ss/policydb.h
+@@ -225,7 +225,7 @@ struct genfs {
+ 
+ /* object context array indices */
+ #define OCON_ISID	0 /* initial SIDs */
+-#define OCON_FS		1 /* unlabeled file systems */
++#define OCON_FS		1 /* unlabeled file systems (deprecated in 6.5) */
+ #define OCON_PORT	2 /* TCP and UDP port numbers */
+ #define OCON_NETIF	3 /* network interfaces */
+ #define OCON_NODE	4 /* nodes */
 -- 
-2.34.1
+2.40.1
 
