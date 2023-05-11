@@ -2,65 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBDCF6FF298
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:21:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CDAF6FF29D
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:23:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238272AbjEKNVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 09:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40304 "EHLO
+        id S238051AbjEKNXI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:23:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237940AbjEKNUv (ORCPT
+        with ESMTP id S238061AbjEKNWi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:20:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2E4011542;
-        Thu, 11 May 2023 06:19:43 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1876C60B9C;
-        Thu, 11 May 2023 13:19:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2B78C433EF;
-        Thu, 11 May 2023 13:18:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683811139;
-        bh=JYPuz8rXjJmnO/HJsLqAmGKHkECg/RfopqqCAFHwjzk=;
-        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
-        b=G99MefCSp6svtRYqUM43CyoVhOZC7cfhPEPjXzVcAbereHPMdkSE3+kGXWKZiHPQD
-         2yHMwKRKx+EFLHsraEQXiuAmV9j6lJVd8EI6a6iugmsXTe9CsGv1X/sBZiMXhdLUvg
-         HjA9mmyymrzHR/6Hz8bSqw6ZBhK7YNlfd8ZB2LZS2Ok9WFgxmCygkiWVOrz2zac0Hy
-         wkEMdfRNH8TcsMj4zIC8sjIpCcPz6U4C9zoY0PT3L94tSYICwwCHPOVsSo8KHZxSfp
-         +f0iw1IN3XxSOpwO5929RqiVUWL7nqLJ3jRZf9P8Otm+S/xB6mAP0vKLgqGZS4ole2
-         a/a2a9F+ehUbA==
+        Thu, 11 May 2023 09:22:38 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71F8B100CF;
+        Thu, 11 May 2023 06:21:12 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34BDJdYC024505;
+        Thu, 11 May 2023 08:19:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1683811179;
+        bh=dvtDQ02cGc7qai0bvj3/3r2KD0eHYXuLvZlUe0kvyHw=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=THmbf0tgqqkM1xRVXukDVWcjUNlgfBnIDLLWUUqKneCWk0iQH5uLlEnk0le7vnqc8
+         huf9sNvgujgS2C05LOwQbdLsj2j2HWwdMj06LeUBrTc+IyyouXqpzG5lQHlvuoEGpG
+         QduZP4fVaHXVELMIft612OzX0KxcoU+Qwo4JOLNQ=
+Received: from DLEE106.ent.ti.com (dlee106.ent.ti.com [157.170.170.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34BDJd6q044702
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 11 May 2023 08:19:39 -0500
+Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE106.ent.ti.com
+ (157.170.170.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 11
+ May 2023 08:19:39 -0500
+Received: from DLEE101.ent.ti.com ([fe80::91ee:60bc:bfb7:851c]) by
+ DLEE101.ent.ti.com ([fe80::91ee:60bc:bfb7:851c%18]) with mapi id
+ 15.01.2507.023; Thu, 11 May 2023 08:19:39 -0500
+From:   "Ding, Shenghao" <shenghao-ding@ti.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Mark Brown <broonie@kernel.org>
+CC:     Shenghao Ding <13916275206@139.com>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>,
+        "Lu, Kevin" <kevin-lu@ti.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Xu, Baojun" <x1077012@ti.com>, "Gupta, Peeyush" <peeyush@ti.com>,
+        "Navada Kanyana, Mukund" <navada@ti.com>,
+        "gentuser@gmail.com" <gentuser@gmail.com>,
+        "Ryan_Chu@wistron.com" <Ryan_Chu@wistron.com>,
+        "Sam_Wu@wistron.com" <Sam_Wu@wistron.com>
+Subject: RE: [EXTERNAL] Re: [PATCH v2 2/5] ASoC: dt-bindings: Add tas2781
+ amplifier
+Thread-Topic: [EXTERNAL] Re: [PATCH v2 2/5] ASoC: dt-bindings: Add tas2781
+ amplifier
+Thread-Index: AQHZgw2r46dnAmj+dEya5A38wB/fZK9U5kcAgAA/wgD//+cmsA==
+Date:   Thu, 11 May 2023 13:19:39 +0000
+Message-ID: <3c48d5e47aff478b8ce8998d7efe001b@ti.com>
+References: <20230508054512.719-1-13916275206@139.com>
+ <ca9d45cf-8a84-4fbc-e1dd-c96eef36fe25@linaro.org>
+ <ZFyBzHWo3ORKAskX@finisterre.sirena.org.uk>
+ <ca2ed8e9-850a-56c5-e395-72e5861b9c71@linaro.org>
+In-Reply-To: <ca2ed8e9-850a-56c5-e395-72e5861b9c71@linaro.org>
+Accept-Language: zh-CN, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.250.160.143]
+x-exclaimer-md-config: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-Subject: Re: [wireless] wifi: mwifiex: Fix the size of a memory allocation in
- mwifiex_ret_802_11_scan()
-From:   Kalle Valo <kvalo@kernel.org>
-In-Reply-To: <7a6074fb056d2181e058a3cc6048d8155c20aec7.1683371982.git.christophe.jaillet@wanadoo.fr>
-References: <7a6074fb056d2181e058a3cc6048d8155c20aec7.1683371982.git.christophe.jaillet@wanadoo.fr>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Amitkumar Karwar <amitkarwar@gmail.com>,
-        Ganapathi Bhat <ganapathi017@gmail.com>,
-        Sharvari Harisangam <sharvari.harisangam@nxp.com>,
-        Xinming Hu <huxinming820@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        chunfan chen <jeffc@marvell.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Xinming Hu <huxm@marvell.com>,
-        Amitkumar Karwar <akarwar@marvell.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
-Message-ID: <168381113342.27145.15828757976515232623.kvalo@kernel.org>
-Date:   Thu, 11 May 2023 13:18:55 +0000 (UTC)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,26 +87,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Christophe JAILLET <christophe.jaillet@wanadoo.fr> wrote:
-
-> The type of "mwifiex_adapter->nd_info" is "struct cfg80211_wowlan_nd_info",
-> not "struct cfg80211_wowlan_nd_match".
-> 
-> Use struct_size() to ease the computation of the needed size.
-> 
-> The current code over-allocates some memory, so is safe.
-> But it wastes 32 bytes.
-> 
-> Fixes: 7d7f07d8c5d3 ("mwifiex: add wowlan net-detect support")
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
-
-Patch applied to wireless-next.git, thanks.
-
-d9aef04fcfa8 wifi: mwifiex: Fix the size of a memory allocation in mwifiex_ret_802_11_scan()
-
--- 
-https://patchwork.kernel.org/project/linux-wireless/patch/7a6074fb056d2181e058a3cc6048d8155c20aec7.1683371982.git.christophe.jaillet@wanadoo.fr/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
-
+DQpPbiAxMS8wNS8yMDIzIDA3OjQ5LCBNYXJrIEJyb3duIHdyb3RlOg0KPj4gTWlzc2luZyBtaW5J
+dGVtcywgYnV0Li4uDQo+IA0KPj4+ICsgICAgaXRlbXM6DQo+Pj4gKyAgICAgIG1pbmltdW06IDB4
+MzgNCj4+PiArICAgICAgbWF4aW11bTogMHgzZg0KPiANCj4+IC4uLiBTbyB0aGVzZSBhcmUgZml4
+ZWQ/IE5vIG5lZWQgdG8gZW5jb2RlIHRoZW0gaW4gc3VjaCBjYXNlLi4uDQo+IA0KPiBJJ20gbm90
+IHN1cmUgSSB1bmRlcnN0YW5kIHlvdXIgY29uY2VybiBoZXJlLCB0aGVyZSdzIHVwIHRvIDQgcG9z
+c2libGUgDQo+IHZhbHVlcyBmcm9tIDB4MzgtMHgzZiB3aGljaCBoYXMgbW9yZSB0aGFuIDQgcG9z
+c2libGUgdmFsdWVzLg0KDQpBcmVuJ3QgdGhlIGFkZHJlc3NlcyBnb2luZyB0byBiZSBpbmNyZW1l
+bnRlZCBieSBvbmUgKHVwIHRvIDggb2YgZGV2aWNlcyBpbiB0b3RhbCk/DQoNCk5vLCB0aGUgaTJj
+IGFkZHJlc3Mgb3JkZXIgaXMgbm90IGFsd2F5cyBtb25vdG9uaWMgaW5jcmVhc2Ugb3IgZGVjcmVh
+c2UsIHNvbWV0aW1lIGl0IHdvdWxkIGJlIGRpc29yZGVyLCBhY2NvcmRpbmcgdG8gdGhlIGFwcGxp
+Y2F0aW9uLg0KRWFjaCBkZXZpY2Ugd291bGQgaGF2ZSBlaWdodCBwb3NzaWJsZSBpMmMgYWRkcmVz
+cywgdGhlIGZpbmFsIGFkZHJlc3MgZGVwZW5kcyBvbiB0aGUgaGFyZHdhcmUgY29ubmVjdGlvbnMu
+DQoNCkJlc3QgcmVnYXJkcywNCktyenlzenRvZg0KDQo=
