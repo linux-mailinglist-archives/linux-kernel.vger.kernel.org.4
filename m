@@ -2,230 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCC26FF385
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:01:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 829786FF38E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:04:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238218AbjEKOB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 10:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49912 "EHLO
+        id S238264AbjEKOEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 10:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233998AbjEKOBX (ORCPT
+        with ESMTP id S238236AbjEKOEW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 10:01:23 -0400
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2101.outbound.protection.outlook.com [40.107.220.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D877C5247;
-        Thu, 11 May 2023 07:01:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nvEEhQWa2r3jfeO7S7ABAzKPVKrPYQSP9fIKLWCltblxr6hDuO+1nt921lStOOTJXPnqAqqV0aP+gJH0ZmXnv0dp+nvMtD+avejgjyQ6gMsCsWPhzWkgABPjOcKh4pP2UnyWYSlS2fFVeSvmDP2TdEpeDhNeEvN8JIP5CwEJrswuiQtdpv8KzWJ8x2Zcnob65z+V4LdD1BMm6ceApdv0fYD5+OFzcez5Qa2HrK2oPWI+nT0vIkFhkAkxKVXIk2BVxuSk0SXV83Z4weRDAlN6nq6AllOXzfukoHrSY81qzzcB27aGikidsChs0gSorJy8028iznfRxgfoMWZ5620e4Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0Y0xI6rSh2R5D8r5eEnq2spcVeYewEFWya36jjItlxw=;
- b=SSgb4HLrh5v0msP4B5hBXPAUpHe5Rr90+yOjcW5LscKYuo2XtZybA0YcLnxWKcXWMJ3ZyLBN/qYKxkjg7Q/5VYFYtDQ1KODRQ3B/egaAi617aSFM/FV4Ubt+qdVQn6UAjm6bcRA95G4z/daQV2MmTSThn10Tq+snAotEb+HX0Xw9xvu9P+XFYYniYsPbIuM329hXF+WCQwkPLjYz98vAr33AUIasgRfIJkk9UGMN/+MF40AeAjZ/m+RRiUQOM6Nl11+Bk2c+ojOPGO+iA8J/H8Xow4ugx2WI8HcnHqjXZo2mX9MQPS7UCFPTVEYKvCrYKCm1hzuzfe9rebsP/Dh36w==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0Y0xI6rSh2R5D8r5eEnq2spcVeYewEFWya36jjItlxw=;
- b=sL64lqnfwOAD/Ao0I0vUzvxLuNhvJJV/55oGL/o+vnFjwIV6w/rr60rXpfa0Lf8BUFM+dkPTKWlbB4xJbWj7tmRkhTia20/PYKaFuGVIveNBu3WgN/IGTVCA1huKb71pkp24PtB2Tmt8ETNBWvqm5HN0I0RAzRTEpQZU7fpJGAk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by MW5PR13MB5581.namprd13.prod.outlook.com (2603:10b6:303:195::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.19; Thu, 11 May
- 2023 14:01:12 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Thu, 11 May 2023
- 14:01:12 +0000
-Date:   Thu, 11 May 2023 16:00:37 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Harini Katakam <harini.katakam@amd.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, linux@armlinux.org.uk,
-        davem@davemloft.net, kuba@kernel.org, edumazet@google.com,
-        pabeni@redhat.com, vladimir.oltean@nxp.com,
-        wsa+renesas@sang-engineering.com, mkl@pengutronix.de,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        harinikatakamlinux@gmail.com, michal.simek@amd.com,
-        radhey.shyam.pandey@amd.com
-Subject: Re: [PATCH net-next v3 2/3] phy: mscc: Add support for RGMII delay
- configuration
-Message-ID: <ZFz1Bb8byoR1mQxH@corigine.com>
-References: <20230511120808.28646-1-harini.katakam@amd.com>
- <20230511120808.28646-3-harini.katakam@amd.com>
+        Thu, 11 May 2023 10:04:22 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A353F10FF;
+        Thu, 11 May 2023 07:04:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=agTIVDV40QlNuRDmtaMpYQzLmx8ylyt8K8o0YwfCE44=; b=lL2e25Q7Ym9Z2f1ilo2kWwHtLS
+        4LEtDqoDAi/1aC4kjoeLMlHtLt+a+FS4EW3ttxbaQDhTXZfyi02WOEzNc3/vCsr0owbyF5PEsIwHc
+        4EGA9zShanxJYpMWANvO4AfYvUXSJigLrvPdNGyjPeVrrNrqH+tCpFoKNI6P6bYEGIKsYYtBzAtzu
+        8Ajl8g5ng54yFG0pf0AiaE1GeB3gEJ+vkOMxu+NkdXV1EBgexS5qxecZBXe6DpvnyQd7D8QuN/WHz
+        qIZBX6djd2pg1T+ptsLEa/faZBnf92py7b8vnk1aHVuruD1rplz5XIZSxcsHdZBQZO/oPVfH/8958
+        /oI/ASsA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1px6sh-00HGyK-LW; Thu, 11 May 2023 14:02:55 +0000
+Date:   Thu, 11 May 2023 15:02:55 +0100
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Hugh Dickins <hughd@google.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Michel Lespinasse <michel@lespinasse.org>
+Subject: Re: [PATCH 00/23] arch: allow pte_offset_map[_lock]() to fail
+Message-ID: <ZFz1j1slZHCQmwMJ@casper.infradead.org>
+References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
+ <ZFs0k2rrLPH9A/UU@casper.infradead.org>
+ <d7f3c7b2-25b8-ef66-98a8-43d68f4499f@google.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230511120808.28646-3-harini.katakam@amd.com>
-X-ClientProxiedBy: AM0PR05CA0094.eurprd05.prod.outlook.com
- (2603:10a6:208:136::34) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MW5PR13MB5581:EE_
-X-MS-Office365-Filtering-Correlation-Id: 507718f9-5a87-45b0-b3a4-08db52282d9e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: lsL8zNuiqnN2DNRmO1xNFnppFjnfcfR5mdrEcAPOf6bkR8/Yh/yo3YtnLc8ZxchhSlX559+PmLlHWpWAAg186sTakJWJqmp98nDATFsoPkxqlq6GSvNmTrqwkSqRTL2pl7VDtTCoPfiNt6t8P5X59CuI8WJdDNvAsdIdzDxSDunyCsGx+6BbuMbcLd/kpeyL9An35iJysneoXVncRRupj1eLqPCqzipwA1N5/hY3/EmjSPv8WSX4vu8TficmCyj/4Xk3/0m0fuZBmxV7tDxSWjmm+cBmJw5IM1cOb2Ujr85qaAmNHrROd8JYWNhY6vn1M4dL2W4lRcJ4vZuMnzgh/bqJfFZK6TJKQyh0myLVAlZryyZZX5MHjSAtwhxTwg9rwryZKAVHZVDVP7l6fs5vu62SoC+9g5UQcD0wY0fkUuSNvLgI7FQBu3VIGVOPo2SvxC51XWF7PBT1eceTXepGU0asuu4gqFEy+m7JnkL46wvrzTWd5cQn8dOCeUCBqKV7eI9/4tw8i6HDqJALFL7NObloRuT9op9ajrD0lT45tv4RsHCq7SthVLXKrTGyTEU+7Q4GuFVYSu1Y//774WBN/RikEsN0EKjy/UeRQTqDw6o=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(346002)(376002)(366004)(39840400004)(451199021)(186003)(36756003)(478600001)(86362001)(6486002)(40140700001)(6666004)(38100700002)(2906002)(8676002)(8936002)(7416002)(5660300002)(44832011)(6916009)(66476007)(66946007)(66556008)(41300700001)(316002)(6506007)(6512007)(4326008)(2616005)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?wiThRKD5Up2h3/k/0L6W0xS4XFVSSzlGf7kAqR08ZZf91wcI1p860g7WRsTo?=
- =?us-ascii?Q?rJEWi1v7AMXvbgS8R78RuVy3+JXw05fpUWXH0wLy1OP1rBSfDyGlPyaJjw2H?=
- =?us-ascii?Q?/HknvyQ/p9CyXU8DiMap/FLayiQZThAlazRw7nwRG0xvwU8xkeTcaaobp0Jv?=
- =?us-ascii?Q?4DWpiAiMcWgerfRVugt/uhNbccTO9+cM1zr5i2IJESvg/cD4iyU4BDNN1q0M?=
- =?us-ascii?Q?ACWgSkT0iOAx/UInAXqsp82BRk0aZkdJJU6sqMOt25zuTqWpGSjO6MxmAr3E?=
- =?us-ascii?Q?lDTpm0SC1ivc/0KLKdsEXAskhQCuCKtq6L+eE/aqSIvsf1wDJsglYroIJD01?=
- =?us-ascii?Q?AtDv2HmyiXmeqU3eF9zboNUodLarbkv1g4brb28h7VgQ2Jdjces4biTTKswe?=
- =?us-ascii?Q?347D9sy4vXeG64lG+VsBz0Ehmj1hVJsxlbl7mn0jI+gcVbNHfNEdZrhnBdT6?=
- =?us-ascii?Q?Wn+N1vOzoZ3SxwgHjSDzl1KidSfv384A0P8a+MdC3FwvsXkFNWLXD/1WvrzA?=
- =?us-ascii?Q?S5IDUrl3aTP24U9iZ0IzA4kedYVKBeG/KDjiUv295ezyLE2dLcMoX05cOU+z?=
- =?us-ascii?Q?V76aBEV4YOfcQjuSjXWlO8mum65IDoSVX2D5oyyKG5x1xsJMj9EmEuORv/te?=
- =?us-ascii?Q?ZjTIFfbglGGtgloYeTbH77bnPY8oKQQTPeAqwmR8AKU3hBEgV4ICH6Mg5K16?=
- =?us-ascii?Q?m9Fg+u15XV6PviT/ahvmX1LZJsKgHIojGsm3Ie9F+y0n8DlMR344z9jCGyTp?=
- =?us-ascii?Q?Z3xg9ei0Le+FZumrwU1Nh8rr6VENUe4f/afuG64/nLb+yLm9KApGtcTirTWH?=
- =?us-ascii?Q?6XuVhIAmPOIYRV+ax/ES+cosCMMx64eg2C3Kaf9MjkArhd/nf+EDWggbEKVH?=
- =?us-ascii?Q?w1dyrgjkO+XSb9WbIBlIHiLIyVQRMlEC07sUcnmDRB7oMJ5j8D/Sn63BQyLW?=
- =?us-ascii?Q?55FTcuWQr4xCFMMkqTLXaoT+Li49UzT5EbI4mp4fXbO/9V79/5RrWPpZZjz/?=
- =?us-ascii?Q?0P9xQWVXJ/GgKTmWcsvTgFhoDUTOaX6QfhXudHD15KoyjjWUEbdSRDiD1TG+?=
- =?us-ascii?Q?0T8sPVU0zKEGPSoTeXvKCpLvydit4sgKMJMZGdn4Dx83p7jbEPsl9+eKTam1?=
- =?us-ascii?Q?CnRKONN4eU9djfiVHCLN4hVXp4cBjnMXjRBWNL2ct0emetqeuAuUug6BZ4eA?=
- =?us-ascii?Q?Uwj3hiRqhgFDO21P8A38+6YwBckwZ7EmYZq8GO8nrYS/WSxtAf3uNNwLFWlZ?=
- =?us-ascii?Q?LNUJ/FxSduwXRBh0KdtN/1lun12bUT0aIR4XBt4FvRbemk3ygAINyGM7f6Av?=
- =?us-ascii?Q?z9sNGOHLKTNuwPqK5l81gqp6feXTRnS6P1F35nUXP3SbYjEt9vwGcjVszTZp?=
- =?us-ascii?Q?g4TuWACxBamz6IyUtqiOJ/s0LfKixstbK/DRXce+cscAwzRmVp/QKchZPo2q?=
- =?us-ascii?Q?emLLRZ8bsHyHn555Q9uCJvtqQLshnQ9baYqdnhXLqZRkWbyOVHFmGKfRr0W2?=
- =?us-ascii?Q?sW8nccjqtnqOnL+eZSt4bLKeu/tTLguuzOdy4onSSZJPMgM27y4pa0R6m1yj?=
- =?us-ascii?Q?FcNIxkNAd+3I9f68gsQ/xePhUsisNujI4UKf5LRp7ma/Y63FOjtwPPFNjlG3?=
- =?us-ascii?Q?SR2VDT5ewsTPhP21BGa0XKjqm4keXP14Z2zO4yKuB2FUqkStP1UdIEkkc2lj?=
- =?us-ascii?Q?KYdjaw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 507718f9-5a87-45b0-b3a4-08db52282d9e
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 14:01:12.2416
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Hz3CtzpR4VjzyCu+kkMi7GsCFPCzoVCM9QnBOQGL2SkJA7td7R+exwUI20HeSFmE9Y1kAJG+L6UdnccKxuKjJjRDGKBdg4JqGPA2oxqNnpM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW5PR13MB5581
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d7f3c7b2-25b8-ef66-98a8-43d68f4499f@google.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 05:38:07PM +0530, Harini Katakam wrote:
-> Add support for optional rx/tx-internal-delay-ps from devicetree.
-> - When rx/tx-internal-delay-ps is/are specified, these take priority
-> - When either is absent,
-> 1) use 2ns for respective settings if rgmii-id/rxid/txid is/are present
-> 2) use 0.2ns for respective settings if mode is rgmii
+On Wed, May 10, 2023 at 09:35:44PM -0700, Hugh Dickins wrote:
+> On Wed, 10 May 2023, Matthew Wilcox wrote:
+> > On Tue, May 09, 2023 at 09:39:13PM -0700, Hugh Dickins wrote:
+> > > Two: pte_offset_map() will need to do an rcu_read_lock(), with the
+> > > corresponding rcu_read_unlock() in pte_unmap().  But most architectures
+> > > never supported CONFIG_HIGHPTE, so some don't always call pte_unmap()
+> > > after pte_offset_map(), or have used userspace pte_offset_map() where
+> > > pte_offset_kernel() is more correct.  No problem in the current tree,
+> > > but a problem once an rcu_read_unlock() will be needed to keep balance.
+> > 
+> > Hi Hugh,
+> > 
+> > I shall have to spend some time looking at these patches, but at LSFMM
+> > just a few hours ago, I proposed and nobody objected to removing
+> > CONFIG_HIGHPTE.  I don't intend to take action on that consensus
+> > immediately, so I can certainly wait until your patches are applied, but
+> > if this information simplifies what you're doing, feel free to act on it.
 > 
-> Signed-off-by: Harini Katakam <harini.katakam@amd.com>
-> ---
-> v3 - Patch split:
-> - Use rx/tx-internal-delay-ps with phy_get_internal_delay
-> - Change RGMII delay selection precedence
-> - Update commit description and subject everywhere to say RGMII delays
-> instead of RGMII tuning.
+> Thanks a lot, Matthew: very considerate, as usual.
 > 
->  drivers/net/phy/mscc/mscc.h      |  2 ++
->  drivers/net/phy/mscc/mscc_main.c | 35 +++++++++++++++++++++++++-------
->  2 files changed, 30 insertions(+), 7 deletions(-)
+> Yes, I did see your "Whither Highmem?" (wither highmem!) proposal on the
+
+I'm glad somebody noticed the pun ;-)
+
+> list, and it did make me think, better get these patches and preview out
+> soon, before you get to vanish pte_unmap() altogether.  HIGHMEM or not,
+> HIGHPTE or not, I think pte_offset_map() and pte_unmap() still have an
+> important role to play.
 > 
-> diff --git a/drivers/net/phy/mscc/mscc.h b/drivers/net/phy/mscc/mscc.h
-> index 9acee8759105..ab6c0b7c2136 100644
-> --- a/drivers/net/phy/mscc/mscc.h
-> +++ b/drivers/net/phy/mscc/mscc.h
-> @@ -374,6 +374,8 @@ struct vsc8531_private {
->  	 * package.
->  	 */
->  	unsigned int base_addr;
-> +	u32 rx_delay;
-> +	u32 tx_delay;
+> I don't really understand why you're going down a remove-CONFIG_HIGHPTE
+> route: I thought you were motivated by the awkardness of kmap on large
+> folios; but I don't see how removing HIGHPTE helps with that at all
+> (unless you have a "large page tables" effort in mind, but I doubt it).
 
-rx_delay and tx_delay are unsigned...
+Quite right, my primary concern is filesystem metadata; primarily
+directories as I don't think anybody has ever supported symlinks or
+superblocks larger than 4kB.
 
->  
->  #if IS_ENABLED(CONFIG_MACSEC)
->  	/* MACsec fields:
-> diff --git a/drivers/net/phy/mscc/mscc_main.c b/drivers/net/phy/mscc/mscc_main.c
-> index 91010524e03d..9e856231e464 100644
-> --- a/drivers/net/phy/mscc/mscc_main.c
-> +++ b/drivers/net/phy/mscc/mscc_main.c
-> @@ -525,17 +525,14 @@ static int vsc85xx_rgmii_set_skews(struct phy_device *phydev, u32 rgmii_cntl,
->  {
->  	u16 rgmii_rx_delay_pos = ffs(rgmii_rx_delay_mask) - 1;
->  	u16 rgmii_tx_delay_pos = ffs(rgmii_tx_delay_mask) - 1;
-> +	struct vsc8531_private *vsc8531 = phydev->priv;
->  	u16 reg_val = 0;
->  	int rc;
->  
->  	mutex_lock(&phydev->lock);
->  
-> -	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_RXID ||
-> -	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
-> -		reg_val |= RGMII_CLK_DELAY_2_0_NS << rgmii_rx_delay_pos;
-> -	if (phydev->interface == PHY_INTERFACE_MODE_RGMII_TXID ||
-> -	    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
-> -		reg_val |= RGMII_CLK_DELAY_2_0_NS << rgmii_tx_delay_pos;
-> +	reg_val |= vsc8531->rx_delay << rgmii_rx_delay_pos;
-> +	reg_val |= vsc8531->tx_delay << rgmii_tx_delay_pos;
->  
->  	rc = phy_modify_paged(phydev, MSCC_PHY_PAGE_EXTENDED_2,
->  			      rgmii_cntl,
-> @@ -1808,10 +1805,34 @@ static irqreturn_t vsc8584_handle_interrupt(struct phy_device *phydev)
->  	return IRQ_HANDLED;
->  }
->  
-> +static const int vsc8531_internal_delay[] = {200, 800, 1100, 1700, 2000, 2300,
-> +					     2600, 3400};
->  static int vsc85xx_config_init(struct phy_device *phydev)
->  {
-> -	int rc, i, phy_id;
-> +	int delay_size = ARRAY_SIZE(vsc8531_internal_delay);
->  	struct vsc8531_private *vsc8531 = phydev->priv;
-> +	struct device *dev = &phydev->mdio.dev;
-> +	int rc, i, phy_id;
-> +
-> +	vsc8531->rx_delay = phy_get_internal_delay(phydev, dev, &vsc8531_internal_delay[0],
-> +						   delay_size, true);
+I was thinking that removing CONFIG_HIGHPTE might simplify the page
+fault handling path a little, but now I've looked at it some more, and
+I'm not sure there's any simplification to be had.  It should probably
+use kmap_local instead of kmap_atomic(), though.
 
-But phy_get_internal_delay a signed value.
+> But I've no investment in CONFIG_HIGHPTE if people think now is the
+> time to remove it: I disagree, but wouldn't miss it myself - so long
+> as you leave pte_offset_map() and pte_unmap() (under whatever names).
+> 
+> I don't think removing CONFIG_HIGHPTE will simplify what I'm doing.
+> For a moment it looked like it would: the PAE case is nasty (and our
+> data centres have not been on PAE for a long time, so it wasn't a
+> problem I had to face before); and knowing pmd_high must be 0 for a
+> page table looked like it would help, but now I'm not so sure of that
+> (hmm, I'm changing my mind again as I write).
+> 
+> Peter's pmdp_get_lockless() does rely for complete correctness on
+> interrupts being disabled, and I suspect that I may be forced in the
+> PAE case to do so briefly; but detest that notion.  For now I'm just
+> deferring it, hoping for a better idea before third series finalized.
+> 
+> I mention this (and Cc Peter) in passing: don't want this arch thread
+> to go down into that rabbit hole: we can start a fresh thread on it if
+> you wish, but right now my priority is commit messages for the second
+> series, rather than solving (or even detailing) the PAE problem.
 
-> +	if (vsc8531->rx_delay < 0) {
+I infer that what you need is a pte_access_start() and a
+pte_access_end() which look like they can be plausibly rcu_read_lock()
+and rcu_read_unlock(), but might need to be local_irq_save() and
+local_irq_restore() in some configurations?
 
-This comparison can never be true due to the unsigned type of rx_delay.
-
-> +		if (phydev->interface == PHY_INTERFACE_MODE_RGMII_RXID ||
-> +		    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
-> +			vsc8531->rx_delay = RGMII_CLK_DELAY_2_0_NS;
-> +		else
-> +			vsc8531->rx_delay = RGMII_CLK_DELAY_0_2_NS;
-> +	}
-> +
-> +	vsc8531->tx_delay = phy_get_internal_delay(phydev, dev, &vsc8531_internal_delay[0],
-> +						   delay_size, false);
-> +	if (vsc8531->tx_delay < 0) {
-
-Here too.
-
-> +		if (phydev->interface == PHY_INTERFACE_MODE_RGMII_TXID ||
-> +		    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
-> +			vsc8531->rx_delay = RGMII_CLK_DELAY_2_0_NS;
-> +		else
-> +			vsc8531->rx_delay = RGMII_CLK_DELAY_0_2_NS;
-> +	}
->  
->  	rc = vsc85xx_default_config(phydev);
->  	if (rc)
-
----
-pw-bot: cr
+We also talked about moving x86 to always RCU-free page tables in
+order to make accessing /proc/$pid/smaps lockless.  I believe Michel
+is going to take a swing at this project.
