@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EE406FF729
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:27:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CB3B6FF720
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238654AbjEKQ1T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 12:27:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41730 "EHLO
+        id S238622AbjEKQZw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 12:25:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238130AbjEKQ1Q (ORCPT
+        with ESMTP id S238130AbjEKQZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 12:27:16 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAFA7DB
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 09:27:14 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64115eef620so59116970b3a.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 09:27:14 -0700 (PDT)
+        Thu, 11 May 2023 12:25:50 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9904F5255
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 09:25:49 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6439f186366so5476567b3a.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 09:25:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683822434; x=1686414434;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hMQTOddVJSa22SR6zcvBJmFXpgRZVXNpCl3DB1GYgq4=;
-        b=PmisfVof65a4l9eAYcp8O+qzOBcGyWPCT4YUzP5gsLa3PQizXpgoIH+Sl0L2ly0Bvk
-         Da1HdA2Z4zb7UsmM3Y8bBO8MaQpBSb+bgRmbew3sn8MgzDgcuNScF5MyME+mQ0GFhtsm
-         ER5LtWKgDF+zGPeqEYWm1ufwRBywXWdJoU08w=
+        d=chromium.org; s=google; t=1683822349; x=1686414349;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=fBL8bhBy0L4WzzJgjFN8jfCCTqySRrwPrRB44wIqevQ=;
+        b=OQgPu4YfTZL7qqqkSJj4wN2FQ1E0myYUr2GFLGfFuX6XttnvbpHBEg86DJXLw/zJc2
+         r5yBNAb5iPFZaPKz9C15Oc0wI6tD9mpl63JET8HQkFgrBl6aODupG7GbTSHEfekv9OD+
+         zfK69uhe02+gc+45mfBMcsowVM04C0/mv07TI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683822434; x=1686414434;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hMQTOddVJSa22SR6zcvBJmFXpgRZVXNpCl3DB1GYgq4=;
-        b=e6QjI279g7NW4XkEb74jSI5nPxrnXRtqhIz5TEsm/mWWtzpfAyjzb8y2FA5L+poQo7
-         VE2pzZc6ggHsO58NeTeH5rtfcJHwIzSF4yh+Kg5k1SMVR6BKTtW8MbYuXbZQwkpwfMj9
-         BDnht1WyE0XlCaReOErWkKhA/xyxjLTap8/vKrMGg4qDkpHuuUO2Z46/9xk1c4TUXn+1
-         aFbwXG5Oi0p8EQVTHDgL3UjpXC1RIIUGWJ1IgonXzWtSdUdK5NBKKjI9mwJmrqo1sXHp
-         T7fJtLegD6YsH+fno1+tFeQLO092HPNGe87Du/zCjE5GdJhG9VduKzQzCnXJcac/Ob3E
-         zm8g==
-X-Gm-Message-State: AC+VfDxTNfiNvxrjdHYCWOYXnWgQtynAsIsveemsb77xIEYoJOSmSpvs
-        1vbBuNUugWdgxG5R794pTqE/nQ==
-X-Google-Smtp-Source: ACHHUZ4Ihmqgqf0X43I7liRm06xU2X+VRF6LupG5hiM7Cu/k+aNUgx4MBE0VuGDKsTRGYo+uhIwwpw==
-X-Received: by 2002:a05:6a20:4311:b0:104:2d89:8f89 with SMTP id h17-20020a056a20431100b001042d898f89mr1138807pzk.23.1683822434073;
-        Thu, 11 May 2023 09:27:14 -0700 (PDT)
-Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:9915:1a0e:d2b7:87ef])
-        by smtp.gmail.com with ESMTPSA id g15-20020a63f40f000000b0053031f7a367sm5217008pgi.85.2023.05.11.09.27.12
+        d=1e100.net; s=20221208; t=1683822349; x=1686414349;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fBL8bhBy0L4WzzJgjFN8jfCCTqySRrwPrRB44wIqevQ=;
+        b=iwTailNJzBjyVY3XZ6u2WjtpY+qk5ZQXKKiT00sqN8GkRQjGcJEpoDZcdWJz0iXiMP
+         70QMGxdvkwNwlKMOl5+usWOh2MXZ79UqN0ILp4yEoYEUl1HMzHr3R+e6XeMOxRSCYXQH
+         n/euwi+pLCZMqGIJkrtS+JvtGcTOIo+I19jXClqeckU5GS1etjna0GTYNhPcjKZH3chC
+         JqVpnUk4migEpfl0syE3qZQbDeD4242ci/5dmASi7MACg9xTSleSAd5CeUmc3Gy7AO4G
+         bYT+ddyiwLXUoGPMJcKeLLVjh0zWNNy1ZtcLaKXrC2+88bH/AIPmXGtMbRzn0Q1A/nvf
+         KHXw==
+X-Gm-Message-State: AC+VfDwEnBg/SsL/lqL845JjlExO18oG25XNbLcfE87BIALrZGjjmter
+        MTKDeLf/kYg0Tca093t1RROejA==
+X-Google-Smtp-Source: ACHHUZ5YybjzuwHfar2HV5/lx275nqiclRLoLzKA8d50fZnsezq6TRfbkoiOP0AKkYFTBZcU2VXqSg==
+X-Received: by 2002:a17:902:c946:b0:1a5:22a:165c with SMTP id i6-20020a170902c94600b001a5022a165cmr27425021pla.0.1683822349131;
+        Thu, 11 May 2023 09:25:49 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id jh19-20020a170903329300b001ac7af57fd4sm6144610plb.86.2023.05.11.09.25.48
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 09:27:13 -0700 (PDT)
-From:   Douglas Anderson <dianders@chromium.org>
-To:     Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Chunxu Li <chunxu.li@mediatek.com>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [PATCH] ASoC: mediatek: mt8186: Fix use-after-free in driver remove path
-Date:   Thu, 11 May 2023 09:25:12 -0700
-Message-ID: <20230511092437.1.I31cceffc8c45bb1af16eb613e197b3df92cdc19e@changeid>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+        Thu, 11 May 2023 09:25:48 -0700 (PDT)
+Date:   Thu, 11 May 2023 09:25:48 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Azeem Shaikh <azeemshaikh38@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>,
+        Baoquan He <bhe@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Liu Shixin <liushixin2@huawei.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH] procfs: Replace all non-returning strlcpy with strscpy
+Message-ID: <202305110925.22DF454F7F@keescook>
+References: <20230510212457.3491385-1-azeemshaikh38@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230510212457.3491385-1-azeemshaikh38@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -74,162 +74,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When devm runs function in the "remove" path for a device it runs them
-in the reverse order. That means that if you have parts of your driver
-that aren't using devm or are using "roll your own" devm w/
-devm_add_action_or_reset() you need to keep that in mind.
+On Wed, May 10, 2023 at 09:24:57PM +0000, Azeem Shaikh wrote:
+> strlcpy() reads the entire source buffer first.
+> This read may exceed the destination size limit.
+> This is both inefficient and can lead to linear read
+> overflows if a source string is not NUL-terminated [1].
+> In an effort to remove strlcpy() completely [2], replace
+> strlcpy() here with strscpy().
+> No return values were used, so direct replacement is safe.
+> 
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+> [2] https://github.com/KSPP/linux/issues/89
+> 
+> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
 
-The mt8186 audio driver didn't quite get this right. Specifically, in
-mt8186_init_clock() it called mt8186_audsys_clk_register() and then
-went on to call a bunch of other devm function. The caller of
-mt8186_init_clock() used devm_add_action_or_reset() to call
-mt8186_deinit_clock() but, because of the intervening devm functions,
-the order was wrong.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Specifically at probe time, the order was:
-1. mt8186_audsys_clk_register()
-2. afe_priv->clk = devm_kcalloc(...)
-3. afe_priv->clk[i] = devm_clk_get(...)
-
-At remove time, the order (which should have been 3, 2, 1) was:
-1. mt8186_audsys_clk_unregister()
-3. Free all of afe_priv->clk[i]
-2. Free afe_priv->clk
-
-The above seemed to be causing a use-after-free. Luckily, it's easy to
-fix this by simply using devm more correctly. Let's move the
-devm_add_action_or_reset() to the right place. In addition to fixing
-the use-after-free, code inspection shows that this fixes a leak
-(missing call to mt8186_audsys_clk_unregister()) that would have
-happened if any of the syscon_regmap_lookup_by_phandle() calls in
-mt8186_init_clock() had failed.
-
-Fixes: 55b423d5623c ("ASoC: mediatek: mt8186: support audio clock control in platform driver")
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
-
- sound/soc/mediatek/mt8186/mt8186-afe-clk.c    |  6 ---
- sound/soc/mediatek/mt8186/mt8186-afe-clk.h    |  1 -
- sound/soc/mediatek/mt8186/mt8186-afe-pcm.c    |  4 --
- sound/soc/mediatek/mt8186/mt8186-audsys-clk.c | 46 ++++++++++---------
- sound/soc/mediatek/mt8186/mt8186-audsys-clk.h |  1 -
- 5 files changed, 24 insertions(+), 34 deletions(-)
-
-diff --git a/sound/soc/mediatek/mt8186/mt8186-afe-clk.c b/sound/soc/mediatek/mt8186/mt8186-afe-clk.c
-index a6b4f29049bb..539e3a023bc4 100644
---- a/sound/soc/mediatek/mt8186/mt8186-afe-clk.c
-+++ b/sound/soc/mediatek/mt8186/mt8186-afe-clk.c
-@@ -644,9 +644,3 @@ int mt8186_init_clock(struct mtk_base_afe *afe)
- 
- 	return 0;
- }
--
--void mt8186_deinit_clock(void *priv)
--{
--	struct mtk_base_afe *afe = priv;
--	mt8186_audsys_clk_unregister(afe);
--}
-diff --git a/sound/soc/mediatek/mt8186/mt8186-afe-clk.h b/sound/soc/mediatek/mt8186/mt8186-afe-clk.h
-index d5988717d8f2..a9d59e506d9a 100644
---- a/sound/soc/mediatek/mt8186/mt8186-afe-clk.h
-+++ b/sound/soc/mediatek/mt8186/mt8186-afe-clk.h
-@@ -81,7 +81,6 @@ enum {
- struct mtk_base_afe;
- int mt8186_set_audio_int_bus_parent(struct mtk_base_afe *afe, int clk_id);
- int mt8186_init_clock(struct mtk_base_afe *afe);
--void mt8186_deinit_clock(void *priv);
- int mt8186_afe_enable_cgs(struct mtk_base_afe *afe);
- void mt8186_afe_disable_cgs(struct mtk_base_afe *afe);
- int mt8186_afe_enable_clock(struct mtk_base_afe *afe);
-diff --git a/sound/soc/mediatek/mt8186/mt8186-afe-pcm.c b/sound/soc/mediatek/mt8186/mt8186-afe-pcm.c
-index 41172a82103e..a868a04ed4e7 100644
---- a/sound/soc/mediatek/mt8186/mt8186-afe-pcm.c
-+++ b/sound/soc/mediatek/mt8186/mt8186-afe-pcm.c
-@@ -2848,10 +2848,6 @@ static int mt8186_afe_pcm_dev_probe(struct platform_device *pdev)
- 		return ret;
- 	}
- 
--	ret = devm_add_action_or_reset(dev, mt8186_deinit_clock, (void *)afe);
--	if (ret)
--		return ret;
--
- 	/* init memif */
- 	afe->memif_32bit_supported = 0;
- 	afe->memif_size = MT8186_MEMIF_NUM;
-diff --git a/sound/soc/mediatek/mt8186/mt8186-audsys-clk.c b/sound/soc/mediatek/mt8186/mt8186-audsys-clk.c
-index 578969ca91c8..5666be6b1bd2 100644
---- a/sound/soc/mediatek/mt8186/mt8186-audsys-clk.c
-+++ b/sound/soc/mediatek/mt8186/mt8186-audsys-clk.c
-@@ -84,6 +84,29 @@ static const struct afe_gate aud_clks[CLK_AUD_NR_CLK] = {
- 	GATE_AUD2(CLK_AUD_ETDM_OUT1_BCLK, "aud_etdm_out1_bclk", "top_audio", 24),
- };
- 
-+static void mt8186_audsys_clk_unregister(void *data)
-+{
-+	struct mtk_base_afe *afe = data;
-+	struct mt8186_afe_private *afe_priv = afe->platform_priv;
-+	struct clk *clk;
-+	struct clk_lookup *cl;
-+	int i;
-+
-+	if (!afe_priv)
-+		return;
-+
-+	for (i = 0; i < CLK_AUD_NR_CLK; i++) {
-+		cl = afe_priv->lookup[i];
-+		if (!cl)
-+			continue;
-+
-+		clk = cl->clk;
-+		clk_unregister_gate(clk);
-+
-+		clkdev_drop(cl);
-+	}
-+}
-+
- int mt8186_audsys_clk_register(struct mtk_base_afe *afe)
- {
- 	struct mt8186_afe_private *afe_priv = afe->platform_priv;
-@@ -124,27 +147,6 @@ int mt8186_audsys_clk_register(struct mtk_base_afe *afe)
- 		afe_priv->lookup[i] = cl;
- 	}
- 
--	return 0;
-+	return devm_add_action_or_reset(afe->dev, mt8186_audsys_clk_unregister, afe);
- }
- 
--void mt8186_audsys_clk_unregister(struct mtk_base_afe *afe)
--{
--	struct mt8186_afe_private *afe_priv = afe->platform_priv;
--	struct clk *clk;
--	struct clk_lookup *cl;
--	int i;
--
--	if (!afe_priv)
--		return;
--
--	for (i = 0; i < CLK_AUD_NR_CLK; i++) {
--		cl = afe_priv->lookup[i];
--		if (!cl)
--			continue;
--
--		clk = cl->clk;
--		clk_unregister_gate(clk);
--
--		clkdev_drop(cl);
--	}
--}
-diff --git a/sound/soc/mediatek/mt8186/mt8186-audsys-clk.h b/sound/soc/mediatek/mt8186/mt8186-audsys-clk.h
-index b8d6a06e11e8..897a2914dc19 100644
---- a/sound/soc/mediatek/mt8186/mt8186-audsys-clk.h
-+++ b/sound/soc/mediatek/mt8186/mt8186-audsys-clk.h
-@@ -10,6 +10,5 @@
- #define _MT8186_AUDSYS_CLK_H_
- 
- int mt8186_audsys_clk_register(struct mtk_base_afe *afe);
--void mt8186_audsys_clk_unregister(struct mtk_base_afe *afe);
- 
- #endif
 -- 
-2.40.1.606.ga4b1b128d6-goog
-
+Kees Cook
