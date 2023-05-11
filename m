@@ -2,179 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A456FFA05
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:21:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF7A26FFA0D
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239103AbjEKTVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 15:21:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46872 "EHLO
+        id S238945AbjEKTWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 15:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231633AbjEKTVO (ORCPT
+        with ESMTP id S231633AbjEKTWa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 15:21:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2EC10C9;
-        Thu, 11 May 2023 12:21:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0797B650EA;
-        Thu, 11 May 2023 19:21:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5E670C433D2;
-        Thu, 11 May 2023 19:21:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683832872;
-        bh=MJODu8cjkXd6OoV0TmVTxhOZBvGy+7TMYzFGXyH5VYI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=DlVvLRfwPacQywkHeT/JHDv3yu9Tj//cfXhlpXTon41JA+Nfwjreym7+i2DeCO/wY
-         0iSug93frk80OT1fgPtM77WbI/jEO42Abgbrn378TcHcHqgvUcUooYk7CPYBerqccC
-         JlQRx0icWvUyeuej3XLJK5UJsy53fnx+ZUXmc7Wn8oW2Qd2pijw4DnBTPjJLVz8STq
-         qlNnmFnQiGq6LSm2kqi52xSY3DnXMrWwGE/sNDMwvCzoynASVYpm3rb87m6XutvG1P
-         1cHjhUONgjSXpVn3kwP8lLvcWlDqrda8bVcieH8TWZVDHyqxejWMTPvM/ktJnNynVy
-         oX9/ZwaSE7IBw==
-Date:   Thu, 11 May 2023 20:21:07 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Peter De Schrijver <pdeschrijver@nvidia.com>
-Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stefank@nvidia.com
-Subject: Re: [PATCH v4 4/6] dt-bindings: Add support for DRAM MRQ GSCs
-Message-ID: <20230511-carnivore-legend-17206803d713@spud>
-References: <20230511132048.1122075-1-pdeschrijver@nvidia.com>
- <20230511132048.1122075-5-pdeschrijver@nvidia.com>
+        Thu, 11 May 2023 15:22:30 -0400
+Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFA87DA9
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 12:22:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
+        from:to:cc:subject:date:message-id:mime-version:content-type
+        :content-transfer-encoding; s=k1; bh=RRZQj4nBkrR9NFE2zBxx97pW/jO
+        S3vBpJjNEk+Dn3bQ=; b=iSoNI/ugjVZSCt5R6vpeJcW9IBZNFNezQl8HV6RUVLR
+        bTR8ZuESPkrOru5I2k08zLvOmUgqwAP3yOOixL7rrJDacDPt2JFqIRDiC1M13ltL
+        3TCy1I44/scISC/4qtzT8STS/JUCBN0bnl1MK2HycCA/quhRne0COqHfu6MMD4C4
+        =
+Received: (qmail 2935127 invoked from network); 11 May 2023 21:22:27 +0200
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 11 May 2023 21:22:27 +0200
+X-UD-Smtp-Session: l3s3148p1@CR606G/7XuAujnsI
+From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
+To:     linux-renesas-soc@vger.kernel.org
+Cc:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: [PATCH RFT v3 0/3] drivers/thermal/rcar_gen3_thermal: add Gen4 fuse support
+Date:   Thu, 11 May 2023 21:22:16 +0200
+Message-Id: <20230511192220.7523-1-wsa+renesas@sang-engineering.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="ucUeK4weGJVTHNSS"
-Content-Disposition: inline
-In-Reply-To: <20230511132048.1122075-5-pdeschrijver@nvidia.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+R-Car Gen4 has the fuse registers at different locations and with
+different names, but with the same purpose. So, first refactor IP core
+differences into a 'info' struct, then add the fuse_read callback to it.
 
---ucUeK4weGJVTHNSS
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Changes since RFT v2:
+* In patch 3, I mixed up the PTAT and THCODE registers. Fixed now.
+  (Thanks, Shimoda-san!)
+* patches are rebased to 6.4-rc1
 
-On Thu, May 11, 2023 at 04:20:49PM +0300, Peter De Schrijver wrote:
-> Add bindings for DRAM MRQ GSC support.
->=20
-> Co-developed-by: Stefan Kristiansson <stefank@nvidia.com>
-> Signed-off-by: Stefan Kristiansson <stefank@nvidia.com>
-> Signed-off-by: Peter De Schrijver <pdeschrijver@nvidia.com>
+They have been tested on R-Car H3 ES2.0 and M3-N against regressions.
+Actual testing of the new fuses on Gen4 still needs to be done because I
+don't have access to such HW.
 
-Perhaps Krzysztof will disagree, but looks fine to me, with some minor
-remarks below.
-Just to note, I didn't get the cover letter & therefore didn't get the
-changelog :/
-I know you had a back and forth with him about that, *my* =E2=82=AC0.02 is =
-that
-either you put the changelog in the cover & send it to everyone, or you
-put it in each patch.
+@Shimoda-san: maybe the BSP team or Test team can test these patches?
+A branch for testing can be found here:
+git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git renesas/for-thermal
 
-> ---
->  .../nvidia,tegra264-bpmp-shmem.yaml           | 47 +++++++++++++++++++
->  1 file changed, 47 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/reserved-memory/nvi=
-dia,tegra264-bpmp-shmem.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/reserved-memory/nvidia,teg=
-ra264-bpmp-shmem.yaml b/Documentation/devicetree/bindings/reserved-memory/n=
-vidia,tegra264-bpmp-shmem.yaml
-> new file mode 100644
-> index 000000000000..4087459c01db
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/reserved-memory/nvidia,tegra264-b=
-pmp-shmem.yaml
-> @@ -0,0 +1,47 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/reserved-memory/nvidia,tegra264-bpmp-=
-shmem.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Tegra CPU-NS - BPMP IPC reserved memory
-> +
-> +maintainers:
-> +  - Peter De Schrijver <pdeschrijver@nvidia.com>
-> +
-> +description: |
+Looking forward to other review comments, too, of course.
 
-You don't appear to have any formatting to preserve, so the | is not
-needed.
+Happy hacking,
 
-> +  Define a memory region used for communication between CPU-NS and BPMP.
-> +  Typically this node is created by the bootloader as the physical addre=
-ss
-> +  has to be known to both CPU-NS and BPMP for correct IPC operation.
-> +  The memory region is defined using a child node under /reserved-memory.
-> +  The sub-node is named shmem@<address>.
-> +
-> +allOf:
-> +  - $ref: reserved-memory.yaml
-> +
-> +properties:
-> +  compatible:
-> +    const: nvidia,tegra264-bpmp-shmem
-> +
-> +  reg:
-> +    description: The physical address and size of the shared SDRAM region
-> +
-> +unevaluatedProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - no-map
-> +
-> +examples:
-> +  - |
-> +    reserved-memory {
-> +       #address-cells =3D <2>;
-> +       #size-cells =3D <2>;
+   Wolfram
 
-You also do not need these size/address-cells, because...
 
-> +       dram_cpu_bpmp_mail: shmem@f1be0000  {
-(nit: double space                          ^^)
+Wolfram Sang (3):
+  drivers/thermal/rcar_gen3_thermal: introduce 'info' structure
+  drivers/thermal/rcar_gen3_thermal: refactor reading fuses into
+    seprarate function
+  drivers/thermal/rcar_gen3_thermal: add reading fuses for Gen4
 
-> +           compatible =3D "nvidia,tegra264-bpmp-shmem";
-> +           reg =3D <0x0 0xf1be0000 0x0 0x2000>;
+ drivers/thermal/rcar_gen3_thermal.c | 141 ++++++++++++++++++++--------
+ 1 file changed, 102 insertions(+), 39 deletions(-)
 
-=2E..the 64-bit registers here are both 0x0.
+-- 
+2.35.1
 
-With those fixed:
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-
-Cheers,
-Conor.
-
-> +           no-map;
-> +       };
-> +    };
-> +...
-> --=20
-> 2.34.1
->=20
-
---ucUeK4weGJVTHNSS
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZF1AIwAKCRB4tDGHoIJi
-0hbVAPoC6OwAmplzwpoHvCInrWR1V+vNUoeq0VCpxoxhwlYCiAEAyZ7YPJfcr4GB
-kA8X40rOpyVck/Forfn6KiNw7KrzJgo=
-=+I2s
------END PGP SIGNATURE-----
-
---ucUeK4weGJVTHNSS--
