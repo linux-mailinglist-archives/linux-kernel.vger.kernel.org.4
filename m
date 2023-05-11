@@ -2,100 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3E26FF660
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:46:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E71CE6FF673
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:50:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238919AbjEKPqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 11:46:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37706 "EHLO
+        id S232006AbjEKPuN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 11:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238629AbjEKPqB (ORCPT
+        with ESMTP id S238364AbjEKPt4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 11:46:01 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F5A07698;
-        Thu, 11 May 2023 08:45:25 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-966400ee79aso1133728366b.0;
-        Thu, 11 May 2023 08:45:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683819919; x=1686411919;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1xTtwDH0h6ZC1J+u5TGXBVnDx04bkJagkqS0GL4Cl9s=;
-        b=HGke3Utl/C9TQvDOKgcVN/cyReg5F2qCx8t6WTH8Qc+hf7XbWQd35Qe5FwH0U09/dh
-         jyFukCHufWfG2fn5a8bwTqWFmgNyzc4Pr4M+3g6CBmpK5rrn9kww4BVWEx5u2lkEqt6l
-         6QWPYWVhavKoUtxJuUn2PfSM+oqJUSvHdzhV2pJ5hAJBpy/kaeGOQhau9sEOb6CHfVc9
-         v6PaeKbgt6W3jvs3G3FL1w26svXavvy9mFa/iLO8fsL7nWhyEcTe/4S/D/C/07VFjvmb
-         VO2ASpwK78Kmg3g79eMBzTI0TgtrfQ3xpqfv0wsFfK8aoi1CGaXxrmhzmRZIf9gUSmvO
-         O54Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683819919; x=1686411919;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1xTtwDH0h6ZC1J+u5TGXBVnDx04bkJagkqS0GL4Cl9s=;
-        b=k0WroCSS9Oze3LF4oLvJsJc4VbYzvvuQFKLYsX7Lo8d4EQPJLicDiaKzt4KNvxthRf
-         BmjwgwE1s2nzIN5uBsmbBhq3Ze6jjNiqColDHoYTcAE3y7badlwNwZsUzPzW6Wzf4Ehc
-         i+pd566PvH2SwlqNI6CTqFkub18h00J2BcTXuyoI0hjSv1mBVo1SAeHTSS2gq4tBQnIO
-         HwvX1HMspVAfN86D9G65n7NRBaOYpKa/YOg8MonOOunoDUU1mjfzviYBUoInSm53cvcl
-         O1ViYj8+RwrEnoBRngKz1shXMor3CZsfJmpUJ63yORUR+rnFL9Mx68FUFHM7mbowLzzY
-         lPuA==
-X-Gm-Message-State: AC+VfDw88LyM46xOhP4/2wJnVclZtbZuckcUQ6sPAd0WGNEh5ocBg5fQ
-        6G8fZHEFPxDhWsN6GJ6KYWQ=
-X-Google-Smtp-Source: ACHHUZ44Zq76h9r+t5vJCRO5BA4NUFEYuovdWgA8hUG9a9O4KSb/P1SHOMJQ02KV6TwLWdNFjrqPRA==
-X-Received: by 2002:a17:907:3e1b:b0:967:3963:dab8 with SMTP id hp27-20020a1709073e1b00b009673963dab8mr14005143ejc.7.1683819919012;
-        Thu, 11 May 2023 08:45:19 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id j17-20020a170906255100b0096a68648329sm900399ejb.214.2023.05.11.08.45.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 08:45:17 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Jonathan McDowell <noodles@earth.li>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] ARM: dts: sun5i: Add port E pinmux settings for mmc2
-Date:   Thu, 11 May 2023 17:45:16 +0200
-Message-ID: <8259835.NyiUUSuA9g@jernej-laptop>
-In-Reply-To: <7949169f581cab37175602188f44bc26e79a45c0.1683719613.git.noodles@earth.li>
-References: <cover.1681580558.git.noodles@earth.li>
- <cover.1683719613.git.noodles@earth.li>
- <7949169f581cab37175602188f44bc26e79a45c0.1683719613.git.noodles@earth.li>
+        Thu, 11 May 2023 11:49:56 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CBEC4C3F;
+        Thu, 11 May 2023 08:49:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=E7i+xfg7Zmreb4Vww4EYKdJmkpv928hvjj/hafEYQT0=; b=1M5qqDtAkcn+e6iqllMITj2Nmy
+        U756c5EXwyGGyFDZlxHj9uDncFUTsXS7nQbZgXV8HxqdWcquRn7z9S0aRiIN/wNqbqfmobsA6UzcY
+        ZwDulJZWQ/d6D9Y+7Y5p59yV531pEJb5aNNP1oQ8mvRs0uhFCTKosjuCtP55wP/XXr2k=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1px8XW-00CZd1-2A; Thu, 11 May 2023 17:49:10 +0200
+Date:   Thu, 11 May 2023 17:49:10 +0200
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Pranavi Somisetty <pranavi.somisetty@amd.com>
+Cc:     nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, richardcochran@gmail.com, linux@armlinux.org.uk,
+        palmer@dabbelt.com, git@amd.com, michal.simek@amd.com,
+        harini.katakam@amd.com, radhey.shyam.pandey@amd.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH net-next v2 2/2] net: macb: Add support for partial store
+ and forward
+Message-ID: <3a3c6241-2134-42d0-8dd3-0c96d8e7300b@lunn.ch>
+References: <20230511071214.18611-1-pranavi.somisetty@amd.com>
+ <20230511071214.18611-3-pranavi.somisetty@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511071214.18611-3-pranavi.somisetty@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne sreda, 10. maj 2023 ob 14:02:02 CEST je Jonathan McDowell napisal(a):
-> These alternate pins for mmc2 are brought out to the 40 pin U14 header
-> on the C.H.I.P and can be used to add an external MMC device with a 4
-> bit interface. See
-> 
-> https://byteporter.com/ntc-chip-micro-sd-slot/
-> 
-> for further details on how.
-> 
-> Signed-off-by: Jonathan McDowell <noodles@earth.li>
+> +	if (GEM_BFEXT(PBUF_CUTTHRU, gem_readl(bp, DCFG6))) {
+> +		if (bp->caps & MACB_CAPS_PARTIAL_STORE_FORWARD) {
+> +			retval = of_property_read_u16(bp->pdev->dev.of_node,
+> +						      "rx-watermark",
+> +						      &bp->rx_watermark);
+> +
+> +			/* Disable partial store and forward in case of error or
+> +			 * invalid watermark value
+> +			 */
+> +			wtrmrk_rst_val = (1 << (GEM_BFEXT(RX_PBUF_ADDR, gem_readl(bp, DCFG2)))) - 1;
+> +			if (retval || bp->rx_watermark > wtrmrk_rst_val || !bp->rx_watermark) {
+> +				if (bp->rx_watermark > wtrmrk_rst_val) {
+> +					dev_info(&bp->pdev->dev, "Invalid watermark value\n");
+> +					bp->rx_watermark = 0;
 
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Please return -EINVAL. We want the DT author to fix their error.
 
-Best regards,
-Jernej
+> +				}
+> +				dev_info(&bp->pdev->dev, "Not enabling partial store and forward\n");
 
+The DT property is optional? So when it is missing, retval will be
+-EINVAL. Please don't spam the logs in this case.
 
+	 Andrew
