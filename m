@@ -2,154 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE9D06FF489
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:35:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 816796FF543
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:57:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238299AbjEKOfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 10:35:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
+        id S238641AbjEKO5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 10:57:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238097AbjEKOf2 (ORCPT
+        with ESMTP id S238632AbjEKO5O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 10:35:28 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2132.outbound.protection.outlook.com [40.107.244.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3714106E2;
-        Thu, 11 May 2023 07:34:52 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=H/wz27dH6EIfC2ODDwkIVsJgvitVH4pVff9w9Mjn74I1VahzsHGTg8QlwIpRYwIatNcjFtbJmIkhbK79Zhy7zMdevcxr1wUU3Hd3vBjEaFHYTi+3DYI3MSIBQd5cI6F+mQ5t1LVaPuZefFwyFCwenxCVoB7rldHcm2K2Nq9SqevP5ytjsRxiFGduJW3yydr63e1XGcJe73zjFtUlKo0u6KKvRgPL3+BoFER6q04kxDEuka5mAQTZcXg+/izVASKM2RpKOveKEVAOX+/P5INMSb6tZmKaJTlfrfwK3ay/aFklqChhDwqLWeqKfW6z4R3IpQwsWYP08zfMg6tFjwse9g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=0K5kcXO42I0YcTXaMQRjQhKoWzeTjgItkU3XSr/7Pfk=;
- b=Vk9xpbDm6nCtXZ3CMQ2df3sqDzw3zPLTUzGg7qVGM5gB9M4TkUs0iY5aXC4bGs3UeQQFcuwEpUMruFHKYTdZxE2kZ2hhetIZ4wbCKaN4M7Gd9FG1vXLnEodJV3Er2DNegeaUvIR6O2CbS+1bZ/ZO6tB3pKXACMYqgMy4rJl4UTtzR26q7hu9OxsaiG8QmA8ta5GYy2BiiWboYyoT+8ToZsjYGXSksGnFpRkaDHkKrBrhvKNvpfPMrEqDCxiix5NfwGvPenfk58PYdB1ATdOynY+ESk2JKmmWM9ifq28WaXJud9duesdKEgJSoyh38st14zWivNEp4+QVVzQt11g33A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=0K5kcXO42I0YcTXaMQRjQhKoWzeTjgItkU3XSr/7Pfk=;
- b=dyKoXyqxZlxvBRT0H/jbciDxldblicmjd6KEEY0QKJAahujRNXMLaDQrNkES64zotM7Gei5OaiAsfJgkT0HKRfiJ3Bgmwc9LLkaDe7Gq2jphE6J2iX7DJZdrXYqfIJJ3q14aGk4JmWfqrTMeTYi8UG+UCMM/KSjyYMiAFh0oEDw=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by PH7PR13MB6509.namprd13.prod.outlook.com (2603:10b6:510:2e8::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Thu, 11 May
- 2023 14:34:45 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Thu, 11 May 2023
- 14:34:45 +0000
-Date:   Thu, 11 May 2023 16:34:32 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Linux DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Staging Drivers <linux-staging@lists.linux.dev>,
-        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
-        Linux Kernel Actions <linux-actions@lists.infradead.org>,
-        Diederik de Haas <didi.debian@cknow.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        David Airlie <airlied@redhat.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Kalle Valo <kvalo@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Deepak R Varma <drv@mailo.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Archana <craechal@gmail.com>, Maxime Bizon <mbizon@freebox.fr>,
-        "David A . Hinds" <dahinds@users.sourceforge.net>,
-        "John G . Dorsey" <john+@cs.cmu.edu>
-Subject: Re: [PATCH 06/10] pcmcia: Add SPDX identifier
-Message-ID: <ZFz8+D3X0dvR4Kw2@corigine.com>
-References: <20230511133406.78155-1-bagasdotme@gmail.com>
- <20230511133406.78155-7-bagasdotme@gmail.com>
+        Thu, 11 May 2023 10:57:14 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 494C5DC7E
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 07:56:51 -0700 (PDT)
+Received: from pps.filterd (m0353722.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34BEnRla011366;
+        Thu, 11 May 2023 14:56:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=k+HAyR82gDN6GXu6hMcaiEPBrpTb/v8Qlx2V5ldkMGo=;
+ b=tnW9viWP+rBo+hqZ+9L4gC1O9qLCkq7gYVF2t5orVJxfIagyJMRXa1lEM13qVtkcqksP
+ Jumif8ptg02Ll8LbRCyRABIDbY3LRnAoAnik6JT73qHunlSfY63Y1TRw6InFl3H8fj32
+ eAj4si7CwB9S90w9UYSRrlijI7NSYd7FJqGsmEcmvO67V9+ZuazB7NXceA2E0QNTMgFb
+ hme94AtmxGEz+E3ClPYbL5Svf6hRlmWGLHDan5XL/WFzzDgE33v7mLqbkOsr0LGuHZFW
+ CK1usmYu1DRARH81P3cxURpoU7Im0kiphL8lof91tUaF91jTSqi7woEJilwzRYB2T+OD UQ== 
+Received: from ppma06fra.de.ibm.com (48.49.7a9f.ip4.static.sl-reverse.com [159.122.73.72])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qh241s09f-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 May 2023 14:56:03 +0000
+Received: from pps.filterd (ppma06fra.de.ibm.com [127.0.0.1])
+        by ppma06fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34BDeQDJ000768;
+        Thu, 11 May 2023 14:35:20 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+        by ppma06fra.de.ibm.com (PPS) with ESMTPS id 3qf7e0seu8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 May 2023 14:35:20 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+        by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34BEZH0x29229658
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 11 May 2023 14:35:17 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 153B420040;
+        Thu, 11 May 2023 14:35:17 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A64F32004F;
+        Thu, 11 May 2023 14:35:16 +0000 (GMT)
+Received: from osiris (unknown [9.171.73.17])
+        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Thu, 11 May 2023 14:35:16 +0000 (GMT)
+Date:   Thu, 11 May 2023 16:35:15 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Ilya Leoshkevich <iii@linux.ibm.com>
+Cc:     Al Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>
+Subject: Re: [PATCH 0/2] statfs: Enforce statfs[64] structure intialization
+Message-ID: <ZFz9I5bhRh2wH14i@osiris>
+References: <20230504144021.808932-1-iii@linux.ibm.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230511133406.78155-7-bagasdotme@gmail.com>
-X-ClientProxiedBy: AM3PR07CA0062.eurprd07.prod.outlook.com
- (2603:10a6:207:4::20) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|PH7PR13MB6509:EE_
-X-MS-Office365-Filtering-Correlation-Id: e9f840f3-865a-4f9a-6e24-08db522cdd3c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: V3kqp4h36nwpYsTNbbMLUlAc+yiUMNE2r79rdqL1K3PMwaOC331DxL8LH6gXu9MBz90hBpO33lG/LNODoXjNRYJMXh4YlpjEe8Seqp6XXte9y0fD+tRosf+JbPwrrYEbu7FEluKtMxvwJcRP7ei/VCbwp7MDmMdIgPkmxWecfHnXoIu6RdYkck0f70PMD9z7JTYo2qipODWtf67ZoIlWQ8B7Kra4ArFSyliyexshK7/G56j9UawT9m/xXcxJAUn+0klspooPafzRhXK2PEm8WlpaxrGsg5+J9ELK6VYAvmDEi4F+pSmagr5nvKLvDbrvGC3z/sDujGCVMHPD43FfAHeRrVM7+7kiWd24Lrc2ZNpVG96blY1rAVpBuJimo3A1/XjCgmPhOJ2yoHrSzLjWmcEhQgridetbm1gBH61xcl0uFYYC7Ot4iRMqVDjVxPI9AIycHwH9e/rD0YNhdmZovffmXpPAIb6dxDXBAUxT7wQWv6iScKT31sG+dFmP1NgMCm6FTPDzLoH6V3Zga3AZG2JtQ0y4jZ8e7BCyECbFRfO4l2YlQWMYazqaByyf+NIXYZn80OVHIgXh6Hu88+yDAQAUcdQS6vS6HAKhEB66sUchzUzkvlaDvhyeExHrexL7jFLjlsOEYuEotrZ6yrgCwg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39850400004)(136003)(396003)(346002)(366004)(376002)(451199021)(36756003)(558084003)(86362001)(478600001)(54906003)(7406005)(2906002)(44832011)(2616005)(7416002)(5660300002)(4326008)(6666004)(38100700002)(8676002)(66476007)(66946007)(6486002)(186003)(316002)(83380400001)(66556008)(41300700001)(6916009)(8936002)(6506007)(6512007)(67856001)(41080700001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?rRyF89AGh/Q6YFQLaggAHo7nhYUIg+UyFVAaYtByk4BaGK10VcjE/O0+y4Xd?=
- =?us-ascii?Q?MlK6nD0uyxQlzX6hUm4ZdnM5+RfNRcRJy2ZTdg56g7CpRHZeXSSZyPJ7i7Yg?=
- =?us-ascii?Q?/ZhV2CGAZOO72Poz0xUmViqeOj/1ZvuyXMJq4CTDwBG3JEDI27GlOJs/kyQC?=
- =?us-ascii?Q?H2j0+mKnJQpTL+jOknt07NWebChlSI3AZdJ19iQ8Y6hW7K0Q/SLQR8y5lsK8?=
- =?us-ascii?Q?ELTSf+kxMc39DeLxC+OVwGc0BHTQuWzRd9DUoMH43yebcra+W1AhT9n6W5Yd?=
- =?us-ascii?Q?Q0neR4qF19F5VkPe14wJ+kWwuAuK4z4DPLp2r5iD9fS6huadgv8lSOHaJ3f3?=
- =?us-ascii?Q?7XXSXtRJwWw5X6JVhEG+iuzH2tt9YIiVhAsWI90wbLNYZevur6PErFsyASld?=
- =?us-ascii?Q?PhMAQ78g8SyiFWpk0M/KbDn7Ps2POnXNq90dV9KzL04C5z6jZjxPHVEc5Gxe?=
- =?us-ascii?Q?cazi1ALrk/uziNuOoRAf5euPBMpU2NXnE91VYjDBUdz2LPHgBg+0CD8TaaLa?=
- =?us-ascii?Q?ALnYQmhG80Qd30Jtj9cglkd4zIEyzGiMJPtXKvh38540dHl93vdlOKxaUyb/?=
- =?us-ascii?Q?Pq/foOUiBecOFMEV6oS//2KXUNGy5c0MVgl+VIDfWE7lQkMipaihT7T8VkYH?=
- =?us-ascii?Q?ycNMZ+Ll0zIIhVFtmokarIHl0U79uGpprM+bRbKXqQufiaV+J92Enp8vOL58?=
- =?us-ascii?Q?QHmXukxXkylc7gv0vSfnK0hRNVgTXUxjluPOOyr55mTeSbLaLtVuu+uHl2lJ?=
- =?us-ascii?Q?w8twzbEmXezg8evan2xZqtNRTUIWyb3uurTscJ5Mv9u18HG5YUJqkNYKlBjm?=
- =?us-ascii?Q?QP+76u1WVQpAkFhFiG96QvEHL5Cvtt9ijG05oKZBk00SGUsM0rNsyz9UEKPc?=
- =?us-ascii?Q?enDxvIv+lV+dw2UxtjSEgWUhjr0d9qQPRfR5sX5LNOoog4IdyX7WYHnJBEDg?=
- =?us-ascii?Q?at+iFHdsQWonV1sP03PS5z02CsT4t6K2aC4JgHISuHjdSLk5fxTQCBpNvvEW?=
- =?us-ascii?Q?P+xQ5JPLUzv9EatiMmqkxdjGq41vDA+YNT632VqtdSGL9IQ70yqAZdrYLCgl?=
- =?us-ascii?Q?skxiT8Ed7G+4h1xRIXlodIVblbURMVYOr8rU62LACcva487ozSAog714XryM?=
- =?us-ascii?Q?PYBLtY09blfXx0umjbNVX9mvNzoNF6eN3ny4kjwdaOWTEiO9Jf8bESQDdwB5?=
- =?us-ascii?Q?AUp3HnWlOIRj9f4OFlqGbvUfRWDBEkrKxaGYFAaqMWYVmbh0IEBAJAccFRI9?=
- =?us-ascii?Q?tNmy1zxwxUorGtyF1qhET/NO+FOUNR2Odgx+8pRBP99IFRmYqiv5Fw8tl8AV?=
- =?us-ascii?Q?nVuwrYuuNnjwMINWcCH1O/XuaNfurT/mpH7T7sGeY940o7VvC3ESnf42KU1X?=
- =?us-ascii?Q?71f0IwvnVKbyZf5e30+Rk2wfPxhuGC575Jatag2ZgDjNW7MS73M1Kkc1WOdK?=
- =?us-ascii?Q?HTxY9prvjIzhmG6H0ZSf3TETejTJp4zIDBCDSyJmQOeorD9b81r+k7ymf9TX?=
- =?us-ascii?Q?v1hMTvoBWmUpRgPLNuLIP9HfK5sAVAIQQ9k7yAHyE3q5kFUFJdvZT29MEYmW?=
- =?us-ascii?Q?VAEoz62BdSrGJwp/rdQQagRolS2Fk1iBN7PxeHiCw97Cfmpyt8n3l3Hxcbg7?=
- =?us-ascii?Q?mXNVtdPlZKloRfTGubC4ve9bqSu0NY7nm/YGOFZINSG0tsTGaeu5qq9+Z8mG?=
- =?us-ascii?Q?PmKJYA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e9f840f3-865a-4f9a-6e24-08db522cdd3c
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 14:34:45.3174
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: YFjALYzeQfYdLma3As1RyCGXxNpJEtZPn8IQeYrNdb3cLhWr1d5/Hb9w5boojVApO7YK+af9r0swcWL0yWirwChy/JNPvjG8G0TUcyyU+84=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR13MB6509
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+In-Reply-To: <20230504144021.808932-1-iii@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 87iianYofty_ICk42cQp_1CyUf26Ah3t
+X-Proofpoint-ORIG-GUID: 87iianYofty_ICk42cQp_1CyUf26Ah3t
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-11_11,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 adultscore=0
+ clxscore=1011 phishscore=0 mlxscore=0 mlxlogscore=510 spamscore=0
+ priorityscore=1501 impostorscore=0 bulkscore=0 lowpriorityscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305110125
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -157,9 +84,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 08:34:02PM +0700, Bagas Sanjaya wrote:
-> Add SPDX identifier on remaining files untouched during previous
-> rounds of SPDX conversion while replacing boilerplate notice if any.
+On Thu, May 04, 2023 at 04:40:19PM +0200, Ilya Leoshkevich wrote:
+> This series fixes copying of uninitialized memory to userspace by
+> do_statfs_native() and do_statfs64() on s390.
+> 
+> Patch 1 fixes the problem by making the code similar to
+> put_compat_statfs() and put_compat_statfs64().
+> 
+> Patch 2 gets rid of the padding which caused the issue; even though it
+> may be considered redundant, it documents that s390 de-facto has an
+> extra f_spare array element.
+> 
+> Ilya Leoshkevich (2):
+>   statfs: Enforce statfs[64] structure intialization
+>   s390/uapi: Cover statfs padding by growing f_spare
+> 
+>  arch/s390/include/asm/compat.h      | 2 +-
+>  arch/s390/include/uapi/asm/statfs.h | 4 ++--
+>  fs/statfs.c                         | 4 ++--
+>  3 files changed, 5 insertions(+), 5 deletions(-)
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-
+Al, Andrew, should this go via the s390 tree?
