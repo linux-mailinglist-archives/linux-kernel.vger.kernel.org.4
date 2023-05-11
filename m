@@ -2,84 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF7F06FF81A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 19:07:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C36E96FF806
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 19:04:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238836AbjEKRHN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 13:07:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
+        id S238676AbjEKREc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 13:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238799AbjEKRGy (ORCPT
+        with ESMTP id S238873AbjEKREZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 13:06:54 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E11265A7
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 10:06:52 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bdd7b229cso16109752a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 10:06:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683824811; x=1686416811;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ayyCxGH0foji5L7wUxPjLMBEgCkH5OqBptH4GPUcYDk=;
-        b=yQ5Tj7C1ussm/VcwYYhA4Rs12QyIk3aRNikd5NJbYP25dBwJSb4EYVtQhvG8pWTpBH
-         T4xirmZIQF6GvaHKEl3CnI6q6yxNmmyJArTKL536EiBHClq2oE9DdnPzvaffsw88f9oQ
-         apVjOK+XLIqdMlsPQ8AdpHxkyZxSaQC/q0SOczMoE8nzExFNLJ332OEuk36w9nU25Fis
-         oh0U8+Izz6csTiIism28LBA5UWnvkp18HoOaJxdNL8kEEwUAGENOJfeL5tJh4/YhsP50
-         d5HhjkKL4Sys9jLGxfFXLt3eWF2KgIXzWpKN5Ix/Hw9lC0yvnEOfcW4a0SMfn/YEA+90
-         zksA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683824811; x=1686416811;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ayyCxGH0foji5L7wUxPjLMBEgCkH5OqBptH4GPUcYDk=;
-        b=JpsbOCBus53Oj+Hs9UPrRb/vWfJuVyRMO+fj1GjtKLqHGoASVA2eBWbSRYsKlsOYzB
-         7iBNWVLs1baXA/Pmo7U/4HoxzUIasO8Jzlv2yxzi42dwktRxDVjmgP9iHYcuUTWTcv2q
-         UScWEDgbZL9i3IbXK61LYhITMMou+l5R4IdakDXgQfD70K25q9SJFCrKkiWBRGGRRYiv
-         RgCyK9MRv1uUdSiyDCyr0kgJLfUyl/k2gGX6r/H/rUf+kKq8BRNdfcVrzn4n2jHYyPW5
-         c3Ux0V26TFG3yC378NQXIkt3f3HXKmKvvFS4xExiIar8QtSDeynyPHtflYF9pksfS0vr
-         5VJA==
-X-Gm-Message-State: AC+VfDxj3V+WsompxGsPFtrqrfK9ORiQoQ6vZGrlQtO4+sBDFS6O29Vd
-        cqI4F4eL5FFRvELEAEnN61FsDw==
-X-Google-Smtp-Source: ACHHUZ4kcUwO/YhdtrTa+xFa/aeEXoGMeFo5bs2na974KrFHqO2vD2Z8Q1dUjxA1QOC5UsUxODF7gw==
-X-Received: by 2002:a17:906:6a1b:b0:968:2b4a:aba3 with SMTP id qw27-20020a1709066a1b00b009682b4aaba3mr14233722ejc.5.1683824810998;
-        Thu, 11 May 2023 10:06:50 -0700 (PDT)
-Received: from krzk-bin ([2a02:810d:15c0:828:d7cd:1be6:f89d:7218])
-        by smtp.gmail.com with ESMTPSA id jl21-20020a17090775d500b00965b5540ad7sm4331348ejc.17.2023.05.11.10.06.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 10:06:50 -0700 (PDT)
-Date:   Thu, 11 May 2023 19:06:47 +0200
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     Eric Dumazet <edumazet@google.com>,
-        SkyLake Huang <SkyLake.Huang@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
+        Thu, 11 May 2023 13:04:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 980085FD2;
+        Thu, 11 May 2023 10:04:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 26E3D64FD0;
+        Thu, 11 May 2023 17:04:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A073BC433EF;
+        Thu, 11 May 2023 17:04:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683824648;
+        bh=u3E6aJ7ITFzPU6YXeYqlUcKURNgeKhfLOxNlGAiCKic=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hh/Q8QoeF/cM8AJgOiSfS697kbDrfHJjxaNawPiJV5am43Bkh1Xr659HIFETZfFjQ
+         QzpCas46nOrlG1Kty2nc6/Ntgatdx9F5h3/iMTQ6ilRSdwa2lPrg5K/65eNhfmKG7j
+         Q2VvIK+B+Pm01zGy1QH57PB139XC4ijXGm+j9ketp28soWdthYIes/IgKssqXU4AHk
+         EpHFVtu6uts5gnbXbOj3QpJj4Pb13pBpl+jLuHkg0r0pPhym3gnwjhCpVk5/XQL4FG
+         wMHHzK+xxbgD5Az8/gb8s+hj4QCbhmlXviz2U/FFSBIUqh+pZRWEo9WwWL9HS39zBh
+         K70LdkNKTGMRA==
+Date:   Thu, 11 May 2023 10:07:44 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Souradeep Chowdhury <quic_schowdhu@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        linux-mediatek@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>, Paolo Abeni <pabeni@redhat.com>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Qingfang Deng <dqfext@gmail.com>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH net-next v4 1/2] dt-bindings: arm: mediatek: add
- mediatek,boottrap binding
-Message-ID: <20230511170647.g6c3ezlyqqislzaf@krzk-bin>
-References: <cover.1683813687.git.daniel@makrotopia.org>
- <f2d447d8b836cf9584762465a784185e8fcf651f.1683813687.git.daniel@makrotopia.org>
+        Rob Herring <robh+dt@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        Sibi Sankar <quic_sibis@quicinc.com>,
+        Rajendra Nayak <quic_rjendra@quicinc.com>
+Subject: Re: [PATCH V6 2/3] soc: qcom: boot_stat: Add Driver Support for Boot
+ Stats
+Message-ID: <20230511170744.cyex75e5d6md5rtm@ripper>
+References: <cover.1683628357.git.quic_schowdhu@quicinc.com>
+ <35863b47c04c2edd7ae49c57d23682aba6111d4f.1683628357.git.quic_schowdhu@quicinc.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f2d447d8b836cf9584762465a784185e8fcf651f.1683813687.git.daniel@makrotopia.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <35863b47c04c2edd7ae49c57d23682aba6111d4f.1683628357.git.quic_schowdhu@quicinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -88,39 +63,232 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 May 2023 16:10:20 +0200, Daniel Golle wrote:
-> The boottrap is used to read implementation details from the SoC, such
-> as the polarity of LED pins. Add bindings for it as we are going to use
-> it for the LEDs connected to MediaTek built-in 1GE PHYs.
+On Tue, May 09, 2023 at 03:52:22AM -0700, Souradeep Chowdhury wrote:
+> All of Qualcomm's proprietary Android boot-loaders capture boot time
+> stats, like the time when the bootloader started execution and at what
+> point the bootloader handed over control to the kernel etc. in the IMEM
+> region. This information is captured in a specific format by this driver
+> by mapping a structure to the IMEM memory region and then accessing the
+> members of the structure to show the information within debugfs file.
+> This information is useful in verifying if the existing boot KPIs have
+> regressed or not. The information is shown in milliseconds, a sample
+> log from sm8450(waipio) device is as follows:-
 > 
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> /sys/kernel/debug/qcom_boot_stats # cat abl_time
+> 17898 ms
+> /sys/kernel/debug/qcom_boot_stats # cat pre_abl_time
+> 2879 ms
+> 
+> The Module Power Manager(MPM) sleep counter starts ticking at the PBL
+> stage and the timestamp generated by the sleep counter is logged by
+> the Qualcomm proprietary bootloader(ABL) at two points-> First when it
+> starts execution which is logged here as "pre_abl_time" and the second
+> when it is about to load the kernel logged as "abl_time". Documentation
+> details are also added in Documentation/ABI/testing/debugfs-driver-bootstat
+> 
+
+I would have preferred some way to implement this without spending
+countless kB of RAM to occasionally read out two u32 values...
+
+But pulling them out of /dev/mem is the only suggestion that comes to
+mind... Perhaps dropping the MODULE_DEVICE_TABLE() to rely on an
+explicit modprobe/insmod in the few cases where it's needed?
+
+@Arnd, do you have any suggestion about how to handle this kind of debug
+drivers?
+
+> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
 > ---
->  .../arm/mediatek/mediatek,boottrap.yaml       | 37 +++++++++++++++++++
->  1 file changed, 37 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,boottrap.yaml
+>  .../ABI/testing/debugfs-driver-bootstat       |  17 +++
+>  drivers/soc/qcom/Kconfig                      |  10 ++
+>  drivers/soc/qcom/Makefile                     |   1 +
+>  drivers/soc/qcom/boot_stats.c                 | 100 ++++++++++++++++++
+>  4 files changed, 128 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/debugfs-driver-bootstat
+>  create mode 100644 drivers/soc/qcom/boot_stats.c
 > 
+> diff --git a/Documentation/ABI/testing/debugfs-driver-bootstat b/Documentation/ABI/testing/debugfs-driver-bootstat
+> new file mode 100644
+> index 000000000000..7127d15d9f15
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/debugfs-driver-bootstat
+> @@ -0,0 +1,17 @@
+> +What:		/sys/kernel/debug/qcom_boot_stats/pre_abl_time
+> +Date:           May 2023
+> +Contact:        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> +Description:
+> +		This file is used to read the KPI value pre abl time.
+> +		It shows the time in milliseconds from the starting
+> +		point of PBL to the point when the control shifted
+> +		to ABL(Qualcomm proprietary bootloader).
+> +
+> +What:           /sys/kernel/debug/qcom_boot_stats/abl_time
+> +Date:           May 2023
+> +Contact:        Souradeep Chowdhury <quic_schowdhu@quicinc.com>
+> +Description:
+> +		This file is used to read the KPI value abl time.
+> +		It show the duration in milliseconds from the
+> +		time control switched to ABL to the point when
+> +		the linux kernel started getting loaded.
+> diff --git a/drivers/soc/qcom/Kconfig b/drivers/soc/qcom/Kconfig
+> index a491718f8064..04141236dcdd 100644
+> --- a/drivers/soc/qcom/Kconfig
+> +++ b/drivers/soc/qcom/Kconfig
+> @@ -16,6 +16,16 @@ config QCOM_AOSS_QMP
+>  	  subsystems as well as controlling the debug clocks exposed by the Always On
+>  	  Subsystem (AOSS) using Qualcomm Messaging Protocol (QMP).
+>  
+> +config QCOM_BOOTSTAT
+> +	tristate "Qualcomm Technologies, Boot Stat driver"
+> +	depends on ARCH_QCOM || COMPILE_TEST
+> +	depends on DEBUG_FS
+> +	help
+> +	  This option enables driver support for boot stats. Boot stat driver logs
+> +	  the kernel bootloader information by accessing the imem region. These
+> +	  information are exposed in the form of debugfs files. This is used to
+> +	  determine if there is any regression in boot timings.
+> +
+>  config QCOM_COMMAND_DB
+>  	tristate "Qualcomm Command DB"
+>  	depends on ARCH_QCOM || COMPILE_TEST
+> diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
+> index 0f43a88b4894..ae7bda96a539 100644
+> --- a/drivers/soc/qcom/Makefile
+> +++ b/drivers/soc/qcom/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  CFLAGS_rpmh-rsc.o := -I$(src)
+>  obj-$(CONFIG_QCOM_AOSS_QMP) +=	qcom_aoss.o
+> +obj-$(CONFIG_QCOM_BOOTSTAT) += boot_stats.o
+>  obj-$(CONFIG_QCOM_GENI_SE) +=	qcom-geni-se.o
+>  obj-$(CONFIG_QCOM_COMMAND_DB) += cmd-db.o
+>  obj-$(CONFIG_QCOM_CPR)		+= cpr.o
+> diff --git a/drivers/soc/qcom/boot_stats.c b/drivers/soc/qcom/boot_stats.c
+> new file mode 100644
+> index 000000000000..ca67b6b5d8eb
+> --- /dev/null
+> +++ b/drivers/soc/qcom/boot_stats.c
+> @@ -0,0 +1,100 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2013-2019, 2021 The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#include <linux/debugfs.h>
+> +#include <linux/err.h>
+> +#include <linux/io.h>
+> +#include <linux/init.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_address.h>
+> +#include <linux/platform_device.h>
+> +
+> +#define TO_MS(timestamp) ((timestamp * 1000) / 32768)
+> +
+> +/**
+> + *  struct boot_stats - timestamp information related to boot stats
+> + *  @abl_start: Time for the starting point of the abl
+> + *  @abl_end: Time when the kernel starts loading from abl
+> + */
+> +struct boot_stats {
+> +	u32 abl_start;
+> +	u32 abl_end;
+> +} __packed;
+> +
+> +struct bs_data {
+> +	struct boot_stats __iomem *b_stats;
+> +	struct dentry *dbg_dir;
+> +};
+> +
+> +static void populate_boot_stats(char *abl_str, char *pre_abl_str, struct bs_data *drvdata)
+> +{
+> +	 u32 abl_time, pre_abl_time;
+> +
+> +	 abl_time = TO_MS(drvdata->b_stats->abl_end) - TO_MS(drvdata->b_stats->abl_start);
+> +	 sprintf(abl_str, "%u ms", abl_time);
+> +
+> +	 pre_abl_time =  TO_MS(drvdata->b_stats->abl_start);
+> +	 sprintf(pre_abl_str, "%u ms", pre_abl_time);
+> +}
+> +
+> +static int boot_stats_probe(struct platform_device *pdev)
+> +{
+> +	char abl_str[20], pre_abl_str[20], *abl, *pre_abl;
+> +	struct device *bootstat_dev = &pdev->dev;
+> +	struct bs_data *drvdata;
+> +
+> +	drvdata = devm_kzalloc(bootstat_dev, sizeof(*drvdata), GFP_KERNEL);
+> +	if (!drvdata)
+> +		return dev_err_probe(bootstat_dev, -ENOMEM, "failed to allocate memory");
+> +	platform_set_drvdata(pdev, drvdata);
+> +
+> +	drvdata->b_stats = devm_of_iomap(bootstat_dev, bootstat_dev->of_node, 0, NULL);
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+You don't use this region past probe, so no need to keep it mapped, or
+hang onto the pointer.
 
-yamllint warnings/errors:
+This means that you don't need struct bs_data, you can just stuff the
+dentry pointer directly in the drvdata.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/mediatek/mediatek,boottrap.example.dtb: boottrap@1001f6f0: $nodename:0: 'boottrap' was expected
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/mediatek/mediatek,boottrap.yaml
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/mediatek/mediatek,boottrap.example.dtb: boottrap@1001f6f0: reg: [[0, 268564208], [0, 32]] is too long
-	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/arm/mediatek/mediatek,boottrap.yaml
+> +	if (IS_ERR(drvdata->b_stats))
+> +		return dev_err_probe(bootstat_dev, PTR_ERR(drvdata->b_stats),
+> +				     "failed to map imem region");
+> +
+> +	drvdata->dbg_dir = debugfs_create_dir("qcom_boot_stats", NULL);
+> +	if (IS_ERR(drvdata->dbg_dir))
 
+Please omit error handling in the debugfs api.
 
-See https://patchwork.ozlabs.org/patch/1780124
+> +		return dev_err_probe(bootstat_dev, PTR_ERR(drvdata->dbg_dir),
+> +				     "failed to create debugfs directory");
+> +
+> +	populate_boot_stats(abl_str, pre_abl_str, drvdata);
+> +	abl = abl_str;
+> +	pre_abl = pre_abl_str;
+> +
+> +	debugfs_create_str("pre_abl_time", 0400, drvdata->dbg_dir, (char **)&pre_abl);
 
-This check can fail if there are any dependencies. The base for a patch
-series is generally the most recent rc1.
+abl lives on the stack, pre_abl is a pointer to the stack, &pre_abl is a
+pointer to this pointer and if I read the code correctly, in
+__debugfs_create_file this value is stored in inode->i_private.
 
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
+So I think this will only work if your stack isn't resused...
 
-pip3 install dtschema --upgrade
+Regards,
+Bjorn
 
-Please check and re-submit.
+> +	debugfs_create_str("abl_time", 0400, drvdata->dbg_dir, (char **)&abl);
+> +
+> +	return 0;
+> +}
+> +
+> +void boot_stats_remove(struct platform_device *pdev)
+> +{
+> +	struct bs_data *drvdata = platform_get_drvdata(pdev);
+> +
+> +	debugfs_remove_recursive(drvdata->dbg_dir);
+> +}
+> +
+> +static const struct of_device_id boot_stats_dt_match[] = {
+> +	{ .compatible = "qcom,imem-bootstats" },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, boot_stats_dt_match);
+> +
+> +static struct platform_driver boot_stat_driver = {
+> +	.probe  = boot_stats_probe,
+> +	.remove_new = boot_stats_remove,
+> +	.driver = {
+> +		.name = "qcom-boot-stats",
+> +		.of_match_table = boot_stats_dt_match,
+> +	},
+> +};
+> +module_platform_driver(boot_stat_driver);
+> +
+> +MODULE_DESCRIPTION("Qualcomm Technologies Inc. Boot Stat driver");
+> +MODULE_LICENSE("GPL");
+> -- 
+> 2.17.1
+> 
