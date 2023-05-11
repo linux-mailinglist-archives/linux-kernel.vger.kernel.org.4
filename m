@@ -2,115 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 706156FF287
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 223566FF24E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:15:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238240AbjEKNS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 09:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
+        id S238010AbjEKNPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238140AbjEKNRz (ORCPT
+        with ESMTP id S237587AbjEKNO5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:17:55 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1D9010A12;
-        Thu, 11 May 2023 06:16:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683811004; x=1715347004;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=OrrhJ317Kw06HAPoI/hZey2W13pWMJL3yvTYoQlLmp4=;
-  b=FGzm7oyAIdyidsqlTJzCL/iBZu6ciQHHg1ASb95n5fplekNh4OGT8T2f
-   BQedL7h/i4KDndlpOoAqowTR2LB+NY7J9TJGYKgUrxGz3OlehPUF7YmT+
-   U7wArPcmf94fyF7Tnypa7ckcPc23mplZ3AyuQOfrETJXngCLC36ewPRnA
-   F+8eBjxJ5uBg4sKK2C86WxvfHMzX+Fe8i440eirdQEYhhywq4H9A0pkYN
-   tg19Ugt7dlpi4ahjLO/8mhb+v1lu15keay/QXqHlvlt+Y0HPo4QMAwS4n
-   abGWtlDI8Zn8Gujd+/LZHLmOyCRpOB6KS9W+2q+EcNa0gkvZPmF9H3kec
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="378619820"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="378619820"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 06:16:06 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="650170218"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="650170218"
-Received: from jsanche3-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.39.112])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 06:16:02 -0700
-From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Lukas Wunner <lukas@wunner.de>, Kalle Valo <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, ath10k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Subject: [PATCH 17/17] wifi: ath10k: Use pcie_lnkctl_clear_and_set() for changing LNKCTL
-Date:   Thu, 11 May 2023 16:14:41 +0300
-Message-Id: <20230511131441.45704-18-ilpo.jarvinen@linux.intel.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230511131441.45704-1-ilpo.jarvinen@linux.intel.com>
-References: <20230511131441.45704-1-ilpo.jarvinen@linux.intel.com>
+        Thu, 11 May 2023 09:14:57 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E50DD4C13
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:14:48 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 37367113E;
+        Thu, 11 May 2023 06:15:33 -0700 (PDT)
+Received: from [10.1.34.59] (C02Z41KALVDN.cambridge.arm.com [10.1.34.59])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BF0863F5A1;
+        Thu, 11 May 2023 06:14:47 -0700 (PDT)
+Message-ID: <0edc26bd-4341-ff5d-87f4-0c1f685b2d3d@arm.com>
+Date:   Thu, 11 May 2023 14:14:46 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [PATCH v1 4/5] mm: Add new ptep_deref() helper to fully
+ encapsulate pte_t
+To:     Andrew Morton <akpm@linux-foundation.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        SeongJae Park <sj@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        damon@lists.linux.dev
+References: <20230511125848.78621-1-ryan.roberts@arm.com>
+ <20230511125848.78621-5-ryan.roberts@arm.com>
+From:   Ryan Roberts <ryan.roberts@arm.com>
+In-Reply-To: <20230511125848.78621-5-ryan.roberts@arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't assume that only the driver would be accessing LNKCTL. ASPM
-policy changes can trigger write to LNKCTL outside of driver's control.
+My appologies for the noise: A blank line between Cc and Subject has broken the
+subject and grouping in lore.
 
-Use pcie_lnkctl_clear_and_set() which does proper locking to avoid
-losing concurrent updates to the register value. Convert one of the
-writes to only touch PCI_EXP_LNKCTL_ASPMC field which the driver itself
-has been changing, leave the other fields untouched.
+Please Ignore this, I will resend.
 
-Suggested-by: Lukas Wunner <lukas@wunner.de>
-Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
----
- drivers/net/wireless/ath/ath10k/pci.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/net/wireless/ath/ath10k/pci.c b/drivers/net/wireless/ath/ath10k/pci.c
-index a7f44f6335fb..d18dfb495194 100644
---- a/drivers/net/wireless/ath/ath10k/pci.c
-+++ b/drivers/net/wireless/ath/ath10k/pci.c
-@@ -1963,8 +1963,8 @@ static int ath10k_pci_hif_start(struct ath10k *ar)
- 	ath10k_pci_irq_enable(ar);
- 	ath10k_pci_rx_post(ar);
- 
--	pcie_capability_write_word(ar_pci->pdev, PCI_EXP_LNKCTL,
--				   ar_pci->link_ctl);
-+	pcie_lnkctl_clear_and_set(ar_pci->pdev, 0,
-+				  ar_pci->link_ctl & PCI_EXP_LNKCTL_ASPMC);
- 
- 	return 0;
- }
-@@ -2821,8 +2821,8 @@ static int ath10k_pci_hif_power_up(struct ath10k *ar,
- 
- 	pcie_capability_read_word(ar_pci->pdev, PCI_EXP_LNKCTL,
- 				  &ar_pci->link_ctl);
--	pcie_capability_write_word(ar_pci->pdev, PCI_EXP_LNKCTL,
--				   ar_pci->link_ctl & ~PCI_EXP_LNKCTL_ASPMC);
-+	pcie_lnkctl_clear_and_set(ar_pci->pdev,
-+				  ar_pci->link_ctl & PCI_EXP_LNKCTL_ASPMC, 0);
- 
- 	/*
- 	 * Bring the target up cleanly.
--- 
-2.30.2
+On 11/05/2023 13:58, Ryan Roberts wrote:
+> There are many call sites that directly dereference a pte_t pointer.
+> This makes it very difficult to properly encapsulate a page table in the
+> arch code without having to allocate shadow page tables. ptep_deref()
+> aims to solve this by replacing all direct dereferences with a call to
+> this function.
+> 
+> The default implementation continues to just dereference the pointer
+> (*ptep), so generated code should be exactly the same. However, it is
+> possible for the architecture to override the default with their own
+> implementation, that can (e.g.) hide certain bits from the core code, or
+> determine young/dirty status by mixing in state from another source.
+> 
+> While ptep_get() and ptep_get_lockless() already exist, these are
+> implemented as atomic accesses (e.g. READ_ONCE() in the default case).
+> So rather than using ptep_get() and risking performance regressions,
+> introduce an new variant.
+> 
+> Call sites will be converted to use the accessor in future commits.
+> 
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+> ---
+>  include/linux/pgtable.h | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+> index c5a51481bbb9..1161beab2492 100644
+> --- a/include/linux/pgtable.h
+> +++ b/include/linux/pgtable.h
+> @@ -204,6 +204,13 @@ static inline int pudp_set_access_flags(struct vm_area_struct *vma,
+>  #endif /* CONFIG_TRANSPARENT_HUGEPAGE */
+>  #endif
+>  
+> +#ifndef ptep_deref
+> +static inline pte_t ptep_deref(pte_t *ptep)
+> +{
+> +	return *(pte_t *)ptep;
+> +}
+> +#endif
+> +
+>  #ifndef __HAVE_ARCH_PTEP_TEST_AND_CLEAR_YOUNG
+>  static inline int ptep_test_and_clear_young(struct vm_area_struct *vma,
+>  					    unsigned long address,
 
