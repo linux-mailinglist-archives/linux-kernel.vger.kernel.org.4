@@ -2,74 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 110A96FF556
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:59:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 602646FF55A
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:00:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238519AbjEKO7n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 10:59:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56298 "EHLO
+        id S238542AbjEKO7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 10:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238110AbjEKO7j (ORCPT
+        with ESMTP id S238485AbjEKO7k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 10:59:39 -0400
-Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF592187;
-        Thu, 11 May 2023 07:59:14 -0700 (PDT)
-Received: by mail-pf1-x435.google.com with SMTP id d2e1a72fcca58-64384274895so6219110b3a.2;
-        Thu, 11 May 2023 07:59:14 -0700 (PDT)
+        Thu, 11 May 2023 10:59:40 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE00910CF;
+        Thu, 11 May 2023 07:59:15 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id 98e67ed59e1d1-2502346bea0so5394135a91.2;
+        Thu, 11 May 2023 07:59:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683817153; x=1686409153;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jxmpm6QJhLjfIu7rdhWCC28olrB5FLthXZJk0Cftfj8=;
-        b=EKUXk1wUCFkUgZ4mO/Dxzdegw+zmKOoNYNpA058P6CE1+TGsguw8yR9Wq+esTyeRVl
-         JX+/2Og+Kk+6LHAjVUHWV39vnZ4IybuU/wPKCy6YNuqicFZOugXBuLICBVmu4Rka84ru
-         d27IjH+XFL2I7Ftfp+etgrKbpZkEwv9kubh+Cln8JQOozf+hOp1G99QaByl0FFmqdSgM
-         oIibYbWtBvMVPJ6tn+Pg7SiNDlMbVb+cTKr5qI5BJ4cn0sbRwmDZPR1CemoSwK78ucLs
-         GDOAoPTRDaSmkSLz+QcU/ppv0tcWv0y5q83o/xv9NZcngyMpcunQtu48At56mSFnWVOa
-         cgyQ==
+        d=gmail.com; s=20221208; t=1683817155; x=1686409155;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=osWWYYQseCvJCBZt1Q3stKtUhhbUrnP9MQ0pNGBM3gY=;
+        b=XAwtDDfL4AebuXak7bNPPI87nvTlXoYVEeNLYlT0BUwe4sk+v7jj2fSMAaMAVEkLac
+         ASTV+Qd+a+iHRSsrr45q79TD3dqZjxXhxlxvWMDbkTRuogCV00CMQWXjxNJczItOgTLg
+         yIXphxYtHPyqzJRpdLXhyd5kbt7fPsdqfPUEjC07crjg5JAzPfBYhLSaXouULyYUbUSb
+         yAMWFEkA+uKWjPKiyonpbvNWr5WZeGFVeMqxrMvKzKfS2KZtz78sVhZ1nO2EDLxnlvnb
+         5K6F6qy+H8TL5DZ0JLMmh9pfcfZ/e0whO3kjLiwSmpyWIyju/Pm3UibZf+n+1Ksn+Lci
+         AmeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683817153; x=1686409153;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jxmpm6QJhLjfIu7rdhWCC28olrB5FLthXZJk0Cftfj8=;
-        b=RVkBuBcNL7RDi/v/w8IExZuBdv8ggY1aPOzkdETVZrlV4/DUqzpoO4THHLmpBQUJIF
-         YvA6vcOd4BQFxjuNvFrNfAKDA2eKzIR5E+d8KRjIr09+Qtt4heTzbPGXLiZQjPXMG/bC
-         MYzI14cRQckYTU9QvB22bdEGp1HEzpJroJdAche07G52wkRlft6yAZsUEyKhv83e2YcN
-         4maul8xJT34mUD3aM2E77rwPOvu8byTMtMaCgX8PVKFMKEzbQ3Xz1LDhhsGlJ2yWh3n1
-         we38yv29AC54cgi5GR0bMF2U4aOU4NDasU9ez6P8CluwatNdwh1pdE50rhmSaepxmSIO
-         A/kg==
-X-Gm-Message-State: AC+VfDzzTIqbrK6SRf9nbj+H3T7VySU5XCSHPlu0nrKnpxGk2bovognj
-        TnSaf7s4pebaBSa2ciieH/Q=
-X-Google-Smtp-Source: ACHHUZ4UChDZreBdWe7eD7dyF2UmkYB9pYAOAMp4I4A3/HPsdFfgnvoASPCeFX9RddExMgANHVAwlw==
-X-Received: by 2002:a05:6a00:2401:b0:63b:5501:6795 with SMTP id z1-20020a056a00240100b0063b55016795mr27904487pfh.24.1683817152786;
-        Thu, 11 May 2023 07:59:12 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683817155; x=1686409155;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=osWWYYQseCvJCBZt1Q3stKtUhhbUrnP9MQ0pNGBM3gY=;
+        b=b13Swe2+lBx0tLXU5CnGigiyLvGp6FJBjwdnXvtYL/PTHyFAG48gPMPKbNCwunuSPb
+         cH+axUDsm6QtUyfgEC+nCYW8WtljXh7x2Xocp6+1fMt4sThqO69Ru2HO0VCNBErgyJos
+         y1qOCQa52JoxGWJ1i8OsOl1aCKr1UzRwXdAJwfBAulyURXjKUh4GXK/OUQAAJP/GMN7X
+         L2aRAcobcozJ/G4Uci/UsQlLF6D60Rd7staJbI4BvYcDXxIbx0BOn3hjcK1KT6ACi9hh
+         bWt6NWFibZuH24FTaysVz6as4+10u5XtF3uCz3saNOgxVf1CuJ54rIyVxCDzCC9B0HeO
+         /jxQ==
+X-Gm-Message-State: AC+VfDwW8ENFPi3f+enblDT26D+Q4gq7lZoJ12ehOwCVQ8qML5RtysQu
+        H6Cd/cHVxskWdouaOa6rsRo=
+X-Google-Smtp-Source: ACHHUZ5R5SEh6hgEPBhrxyDoUJPaDfMiz4Rtx25aiaUxPLerkMMf/9r2TREIx7jtkfBBQqUHdw7JYQ==
+X-Received: by 2002:a17:90b:1992:b0:24e:55c3:89af with SMTP id mv18-20020a17090b199200b0024e55c389afmr21638386pjb.18.1683817154440;
+        Thu, 11 May 2023 07:59:14 -0700 (PDT)
 Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id i8-20020aa79088000000b006430cb02bd5sm5390140pfa.168.2023.05.11.07.59.12
+        by smtp.gmail.com with ESMTPSA id a1-20020a17090acb8100b0024e2980574asm15558660pju.4.2023.05.11.07.59.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 07:59:12 -0700 (PDT)
+        Thu, 11 May 2023 07:59:14 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org, iommu@lists.linux-foundation.org
 Cc:     freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Rob Clark <robdclark@chromium.org>,
-        Lepton Wu <lepton@chromium.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Sai Prakash Ranjan <quic_saipraka@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Elliot Berman <quic_eberman@quicinc.com>,
-        Adam Skladowski <a39.skl@gmail.com>,
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM SMMU DRIVERS),
-        iommu@lists.linux.dev (open list:IOMMU SUBSYSTEM),
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v3 1/2] iommu/arm-smmu-qcom: Fix missing adreno_smmu's
-Date:   Thu, 11 May 2023 07:59:05 -0700
-Message-Id: <20230511145908.597683-1-robdclark@gmail.com>
+Subject: [PATCH v3 2/2] drm/msm: Be more shouty if per-process pgtables aren't working
+Date:   Thu, 11 May 2023 07:59:06 -0700
+Message-Id: <20230511145908.597683-2-robdclark@gmail.com>
 X-Mailer: git-send-email 2.40.1
+In-Reply-To: <20230511145908.597683-1-robdclark@gmail.com>
+References: <20230511145908.597683-1-robdclark@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,63 +80,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-When the special handling of qcom,adreno-smmu was moved into
-qcom_smmu_create(), it was overlooked that we didn't have all the
-required entries in qcom_smmu_impl_of_match.  So we stopped getting
-adreno_smmu_priv on sc7180, breaking per-process pgtables.
+Otherwise it is not always obvious if a dt or iommu change is causing us
+to fall back to global pgtable.
 
-Fixes: 30b912a03d91 ("iommu/arm-smmu-qcom: Move the qcom,adreno-smmu check into qcom_smmu_create")
-Suggested-by: Lepton Wu <lepton@chromium.org>
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
- drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/gpu/drm/msm/msm_iommu.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-index d1b296b95c86..66e191773099 100644
---- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-+++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-@@ -496,20 +496,21 @@ static const struct qcom_smmu_match_data qcom_smmu_500_impl0_data = {
- /*
-  * Do not add any more qcom,SOC-smmu-500 entries to this list, unless they need
-  * special handling and can not be covered by the qcom,smmu-500 entry.
-  */
- static const struct of_device_id __maybe_unused qcom_smmu_impl_of_match[] = {
- 	{ .compatible = "qcom,msm8996-smmu-v2", .data = &msm8996_smmu_data },
- 	{ .compatible = "qcom,msm8998-smmu-v2", .data = &qcom_smmu_v2_data },
- 	{ .compatible = "qcom,qcm2290-smmu-500", .data = &qcom_smmu_500_impl0_data },
- 	{ .compatible = "qcom,qdu1000-smmu-500", .data = &qcom_smmu_500_impl0_data  },
- 	{ .compatible = "qcom,sc7180-smmu-500", .data = &qcom_smmu_500_impl0_data },
-+	{ .compatible = "qcom,sc7180-smmu-v2", .data = &qcom_smmu_v2_data },
- 	{ .compatible = "qcom,sc7280-smmu-500", .data = &qcom_smmu_500_impl0_data },
- 	{ .compatible = "qcom,sc8180x-smmu-500", .data = &qcom_smmu_500_impl0_data },
- 	{ .compatible = "qcom,sc8280xp-smmu-500", .data = &qcom_smmu_500_impl0_data },
- 	{ .compatible = "qcom,sdm630-smmu-v2", .data = &qcom_smmu_v2_data },
- 	{ .compatible = "qcom,sdm845-smmu-v2", .data = &qcom_smmu_v2_data },
- 	{ .compatible = "qcom,sdm845-smmu-500", .data = &sdm845_smmu_500_data },
- 	{ .compatible = "qcom,sm6115-smmu-500", .data = &qcom_smmu_500_impl0_data},
- 	{ .compatible = "qcom,sm6125-smmu-500", .data = &qcom_smmu_500_impl0_data },
- 	{ .compatible = "qcom,sm6350-smmu-v2", .data = &qcom_smmu_v2_data },
- 	{ .compatible = "qcom,sm6350-smmu-500", .data = &qcom_smmu_500_impl0_data },
-@@ -540,12 +541,18 @@ struct arm_smmu_device *qcom_smmu_impl_init(struct arm_smmu_device *smmu)
- 		/* Match platform for ACPI boot */
- 		if (acpi_match_platform_list(qcom_acpi_platlist) >= 0)
- 			return qcom_smmu_create(smmu, &qcom_smmu_500_impl0_data);
- 	}
- #endif
+diff --git a/drivers/gpu/drm/msm/msm_iommu.c b/drivers/gpu/drm/msm/msm_iommu.c
+index 418e1e06cdde..9b19124c9bd0 100644
+--- a/drivers/gpu/drm/msm/msm_iommu.c
++++ b/drivers/gpu/drm/msm/msm_iommu.c
+@@ -227,21 +227,26 @@ struct msm_mmu *msm_iommu_pagetable_create(struct msm_mmu *parent)
+ 	struct adreno_smmu_priv *adreno_smmu = dev_get_drvdata(parent->dev);
+ 	struct msm_iommu *iommu = to_msm_iommu(parent);
+ 	struct msm_iommu_pagetable *pagetable;
+ 	const struct io_pgtable_cfg *ttbr1_cfg = NULL;
+ 	struct io_pgtable_cfg ttbr0_cfg;
+ 	int ret;
  
- 	match = of_match_node(qcom_smmu_impl_of_match, np);
- 	if (match)
- 		return qcom_smmu_create(smmu, match->data);
- 
-+	/* If you hit this WARN_ON() you are missing an entry in the
-+	 * qcom_smmu_impl_of_match[] table, and GPU per-process page-
-+	 * tables will be broken.
-+	 */
-+	WARN_ON(of_device_is_compatible(np, "qcom,adreno-smmu"));
+ 	/* Get the pagetable configuration from the domain */
+ 	if (adreno_smmu->cookie)
+ 		ttbr1_cfg = adreno_smmu->get_ttbr1_cfg(adreno_smmu->cookie);
+-	if (!ttbr1_cfg)
 +
- 	return smmu;
- }
++	/*
++	 * If you hit this WARN_ONCE() you are probably missing an entry in
++	 * qcom_smmu_impl_of_match[] in arm-smmu-qcom.c
++	 */
++	if (WARN_ONCE(!ttbr1_cfg, "No per-process page tables"))
+ 		return ERR_PTR(-ENODEV);
+ 
+ 	pagetable = kzalloc(sizeof(*pagetable), GFP_KERNEL);
+ 	if (!pagetable)
+ 		return ERR_PTR(-ENOMEM);
+ 
+ 	msm_mmu_init(&pagetable->base, parent->dev, &pagetable_funcs,
+ 		MSM_MMU_IOMMU_PAGETABLE);
+ 
+ 	/* Clone the TTBR1 cfg as starting point for TTBR0 cfg: */
 -- 
 2.40.1
 
