@@ -2,125 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 008486FEA05
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 05:06:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8476E6FEA0C
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 05:16:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236364AbjEKDGX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 23:06:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59784 "EHLO
+        id S232200AbjEKDQn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 23:16:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231797AbjEKDGL (ORCPT
+        with ESMTP id S230520AbjEKDQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 23:06:11 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D72621FCE;
-        Wed, 10 May 2023 20:06:06 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1ab267e3528so57296275ad.0;
-        Wed, 10 May 2023 20:06:06 -0700 (PDT)
+        Wed, 10 May 2023 23:16:41 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 739B82123
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 20:16:40 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-55a76ed088aso121206737b3.2
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 20:16:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683774366; x=1686366366;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mb/zuNQK49JSoqZKwSKfTZmkk+ujcZ98MeItuBZs6L8=;
-        b=bwyZE92K1QVP/JmxyndrCoWQOcxAuaGX1jlplGForAeh8CGTIOlxImtFr6pchUiXUh
-         trKy+l2nAhxGL76XsXOBiL0rcW3v3g05Uom9Vg9abDSAozJ8Fip0pK8d383EKf87mlT+
-         hQe06HIeEbg8XVEG4tF/uwGI6roIDpkRFYPTutkdqPG1kJnjq2j9IdhR2R6WmZHl+pOy
-         QBFrdfNRG9tNPi49BS1QWu/wWTeK3AXxS92bQtNygqQq4mEzOpk8rqD5IbWaQWSZcTug
-         8kDgp+KYXHW7NIDlTUJr3JIHmRulOX10b5gqQ5adfuaLkBOa7n4fasWbxBziNcRPAyOC
-         GQkQ==
+        d=google.com; s=20221208; t=1683774999; x=1686366999;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hRBzifhysJxaavDAsJ+Sa+/VyNhQzLXJPjsoUGcNRd4=;
+        b=JDYjlZO6u5Rd6QYeBUTXCp/kgqPCJk7kIYj5131tW+Oftjr3CeY+3TrtF265PwQLsY
+         CzyhzuHdTlVexa4Irr81wJWJONYV4WJYb+Qmn3xCOOTrZII3mN3FIl3WlUa9ZzRwMyft
+         TbG+lOOAm/FlIwiaNhNLr42JUk/Xp0bH2c5++eORJ8zXY8TzfBVIgW201ldf27i4oXvO
+         WYco0w5tL3fNC1aMrOMXgic+X453i3JN5jojWOgIXdVajjoFoae+wDli+04h87K4PSDU
+         PrZHQkqAQy9rNdfpBcTkPkLhTcEgcEAEnkRKNVLkHXWaXGdspdGha99g/0X8mBFfM1nS
+         C7lQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683774366; x=1686366366;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mb/zuNQK49JSoqZKwSKfTZmkk+ujcZ98MeItuBZs6L8=;
-        b=PzEweIZkezCwSBwDdRBdBZVUUUTLc1I9jeOvquYBmAV1G1NTpSeeY1ccEDBh5hexNZ
-         oNuaSSBhNfSYhfpF/2pdNp2T5Cph2E2pV14qBzepO8btTtCAYVdCp1ajk4uEnEGUvw1G
-         uX6CXhbG3UjniYR1TBT+FTl7hEuEPSP3amZMPg2y2e8cc5pVdGrb5AyE/c+z+sAPbLDN
-         KYmNXwxvv6j7v5/5GfGMeVbQZfHmKM+Os0C+MQKn+7GxKbVi/hIvO44avJaseeBsgZMM
-         d0+k2su8lGsuAPdkC8YEN7xcwkDPWVEPJFSr1lVnWOxC2AnhitrCnyLXFXnHGY2ysbYu
-         D9VA==
-X-Gm-Message-State: AC+VfDzjW45XjgdQ5HyvAJysfRzU5MTFcniQ5wj+siIKIz1YiJpfVR4J
-        RuVCKEaXiNR9dvkqdvz/7tJDDVoCB9yvJw==
-X-Google-Smtp-Source: ACHHUZ6DxRWILStkbEGhuxycP2yMCvHSPfP5Hy3bFVSdBAogx9o/CbCGEwkYMepCkSomZpZmCcHb/Q==
-X-Received: by 2002:a17:902:ec87:b0:1a9:9ace:3e74 with SMTP id x7-20020a170902ec8700b001a99ace3e74mr24758509plg.65.1683774366252;
-        Wed, 10 May 2023 20:06:06 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-26.three.co.id. [180.214.232.26])
-        by smtp.gmail.com with ESMTPSA id f2-20020a170902ce8200b0019ef86c2574sm4544891plg.270.2023.05.10.20.06.05
+        d=1e100.net; s=20221208; t=1683774999; x=1686366999;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hRBzifhysJxaavDAsJ+Sa+/VyNhQzLXJPjsoUGcNRd4=;
+        b=l8Vk8zsfBajA5X6Rvz4V/hky1fXlZB7uipHJblPa/0x1VHveXXJtegqYVR23ufDdqm
+         bw+4t70u0db4UWGe3WDYbfUt3WKp+x1QhQYxnkT1vJNCWtmFAZ86HT5tnNRFPI8PwuLZ
+         nmcx7DcNwl9wl5/OAnogqEECfVNT2hOsPeG01sawelPNqE8MrfSX9NgncgRLj9FRz/+w
+         Hv3TeAN7h1Xt2kNRzzowoorcWNkNbjdGY+d5thaAwrzCVCJ8SdwVamzewT+dM78cdzYZ
+         PwXGARiYYKmz4fjj/fQcMDvcAXPvk0qMLTZpJC16Huifqp4gtx+5hG0YLloUTvxbAWE9
+         Ot7w==
+X-Gm-Message-State: AC+VfDzf3ZkiJxX2Nu2V7RL5tukZAlinDFzNXsZTbAV4qu7+l3BZfAH2
+        BfBSUtuVkglGJTllqE3NbDf16A==
+X-Google-Smtp-Source: ACHHUZ7/wlg4bppDf9uBVNG9J9Qk7aL+NA0hCKaxoiuDXlSicnUNf7o6tqD4YBoUi/tdOZkorZkwaA==
+X-Received: by 2002:a25:4087:0:b0:b9e:5006:42af with SMTP id n129-20020a254087000000b00b9e500642afmr19049386yba.58.1683774998976;
+        Wed, 10 May 2023 20:16:38 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id j128-20020a255586000000b00b923b2935d9sm4144529ybb.20.2023.05.10.20.16.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 20:06:05 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id AC961106778; Thu, 11 May 2023 10:06:02 +0700 (WIB)
-Date:   Thu, 11 May 2023 10:06:02 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Christian Marangi <ansuelsmth@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@ucw.cz>,
-        Lee Jones <lee@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
+        Wed, 10 May 2023 20:16:38 -0700 (PDT)
+Date:   Wed, 10 May 2023 20:16:34 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Peter Zijlstra <peterz@infradead.org>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Helge Deller <deller@gmx.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
         "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-leds@vger.kernel.org,
-        netdev@vger.kernel.org
-Subject: Re: [PATCH 04/11] Documentation: leds: leds-class: Document new
- Hardware driven LEDs APIs
-Message-ID: <ZFxbmnMeQO/rNUFu@debian.me>
-References: <20230427001541.18704-1-ansuelsmth@gmail.com>
- <20230427001541.18704-5-ansuelsmth@gmail.com>
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 21/23] x86: Allow get_locked_pte() to fail
+In-Reply-To: <20230510081848.GD83892@hirez.programming.kicks-ass.net>
+Message-ID: <e5554cd1-417a-aa6a-5e5e-f4f5f773dda@google.com>
+References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com> <eba2b72f-2180-498b-c8bd-ce8f717fc78a@google.com> <20230510081848.GD83892@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="AWn32Q89nm9OZbgz"
-Content-Disposition: inline
-In-Reply-To: <20230427001541.18704-5-ansuelsmth@gmail.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 10 May 2023, Peter Zijlstra wrote:
 
---AWn32Q89nm9OZbgz
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Tue, May 09, 2023 at 10:08:37PM -0700, Hugh Dickins wrote:
+> > In rare transient cases, not yet made possible, pte_offset_map() and
+> > pte_offset_map_lock() may not find a page table: handle appropriately.
+> > 
+> > Signed-off-by: Hugh Dickins <hughd@google.com>
+> > ---
+> >  arch/x86/kernel/ldt.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/x86/kernel/ldt.c b/arch/x86/kernel/ldt.c
+> > index 525876e7b9f4..eb844549cd83 100644
+> > --- a/arch/x86/kernel/ldt.c
+> > +++ b/arch/x86/kernel/ldt.c
+> > @@ -367,8 +367,10 @@ static void unmap_ldt_struct(struct mm_struct *mm, struct ldt_struct *ldt)
+> >  
+> >  		va = (unsigned long)ldt_slot_va(ldt->slot) + offset;
+> >  		ptep = get_locked_pte(mm, va, &ptl);
+> > -		pte_clear(mm, va, ptep);
+> > -		pte_unmap_unlock(ptep, ptl);
+> > +		if (ptep) {
+> > +			pte_clear(mm, va, ptep);
+> > +			pte_unmap_unlock(ptep, ptl);
+> > +		}
+> >  	}
+> 
+> Ow geez, now I have to go remember how the whole PTI/LDT crud worked :/
 
-On Thu, Apr 27, 2023 at 02:15:34AM +0200, Christian Marangi wrote:
-> +     - hw_control_set:
-> +                activate hw control, LED driver will use the provided
-                   "activate hw control. LED driver will use ..."
-> +                flags passed from the supported trigger, parse them to
-> +                a set of mode and setup the LED to be driven by hardware
-> +                following the requested modes.
-> +
-> +                Set LED_OFF via the brightness_set to deactivate hw cont=
-rol.
-> +
-> +    - hw_control_get:
-> +                get from a LED already in hw control, the active modes,
-                   "get active modes from a LED already in hw control ..."
-> +                parse them and set in flags the current active flags for
-> +                the supported trigger.
-> +
-Thanks.
+I apologize for sending you back there!
 
---=20
-An old man doll... just what I always wanted! - Clara
+> 
+> At first glance this seems wrong; we can't just not unmap the LDT if we
+> can't find it in a hurry. Also, IIRC this isn't in fact a regular user
+> mapping, so it should not be subject to THP induced seizures.
+> 
+> ... memory bubbles back ... for PTI kernels we need to map this in the
+> user and kernel page-tables because obviously userspace needs to be able
+> to have access to the LDT. But it is not directly acessible by
+> userspace. It lives in the cpu_entry_area as a virtual map of the real
+> kernel allocation, and this virtual address is used for LLDT.
+> Modification is done through sys_modify_ldt().
 
---AWn32Q89nm9OZbgz
-Content-Type: application/pgp-signature; name="signature.asc"
+And there must be a user-style page table backing that cpu_entry_area,
+because the use of get_locked_pte() and pte_unmap_unlock() implies
+that there's a user page table (struct page containing spinlock if
+config says so) rather than just a kernel page table mapping it.
 
------BEGIN PGP SIGNATURE-----
+> 
+> I think I would feel much better if this were something like:
+> 
+> 	if (!WARN_ON_ONCE(!ptep))
+> 
+> This really shouldn't fail and if it does, simply skipping it isn't the
+> right thing either.
 
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZFxbkgAKCRD2uYlJVVFO
-o3uUAQCycfI5RmXv7icFa57Dzw2XngBZ3pd8MbyU02vwfYCdgAEAp89CPou30fxe
-wUlacpgcoBCjcNFpSXZ67WzwxGq41wY=
-=RzHE
------END PGP SIGNATURE-----
+Sure, I'll gladly make that change when I respin - not immediately, let's
+get more feedback on this arch series first, but maybe in a week's time.
 
---AWn32Q89nm9OZbgz--
+Thanks for looking so quickly, Peter: I didn't Cc you on this particular
+series, but shall certainly be doing so on the ones that follow, because
+a few of those patches go into interesting pmdp_get_lockless() territory.
+
+Hugh
