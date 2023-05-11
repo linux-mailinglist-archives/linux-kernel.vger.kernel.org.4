@@ -2,194 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49E086FEC02
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 08:54:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AA5F6FEBF3
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 08:53:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237249AbjEKGyL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 11 May 2023 02:54:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55654 "EHLO
+        id S237123AbjEKGxi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 02:53:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237197AbjEKGxo (ORCPT
+        with ESMTP id S229461AbjEKGxg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 02:53:44 -0400
-Received: from mail-qv1-f42.google.com (mail-qv1-f42.google.com [209.85.219.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FD94EEB;
-        Wed, 10 May 2023 23:53:42 -0700 (PDT)
-Received: by mail-qv1-f42.google.com with SMTP id 6a1803df08f44-61b79b9f45bso74861116d6.3;
-        Wed, 10 May 2023 23:53:42 -0700 (PDT)
+        Thu, 11 May 2023 02:53:36 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C27F46A6
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 23:53:34 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f41dceb9d1so54991385e9.1
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 23:53:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683788013; x=1686380013;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=nnSwAOoxlqKsXEXi0phXp7gBU+q/tFtYjSr+OR+jm4M=;
+        b=CXqgb/HikTjFy3EMgMfK5CKnIkrDsvskiIiJIOOxZwqPmQiHsjvHHs/JkxmYqGp6ss
+         1qALilLHB0wpDAxsq8XuvjmEbrRAhMvDLoumakHlT7NmJx+5WXbtqvk+ehWHaG+A3yo0
+         RCdzgleIiZ0ws/E2qNN8gV+59IDp+mzts3MmbrPB/otHrcZeRMvuqoV0IFwbZu7rBY29
+         R3IiqwwSb9d9KblyGv56EkJDf2WFAf0QJ1USkXolwdEYTR6lZe60JMzVdawUy++vijQQ
+         qEvYSGFIv0tpJN2x4CU1Q4dUsaqRZy5eHKxVXD2r6qJMo//tA36CoObiHNcwVAd9S/5J
+         zW0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683788021; x=1686380021;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683788013; x=1686380013;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MblyuSVWD0Rw/dgsETYZNoTE8y2XjkYZe4ysDLt2Njg=;
-        b=O/cLH8sVcrgf6Paui9keCwceEcmNVA9suEraLo+PiuQ1+mfY6PLm3wuMxN96CakfYu
-         +4Aa1I80iYB9e+YHaceZuS2DkalUPqsoTNQxDdAa3ZMoujfhZzMmf5U5B+6DtOYCNP4O
-         F5VbcUTwI5ao5A76ZvlBthAB3QqLHZnX0jNIxYqDiqDF2tT8vPRLzeGym1Fca4NDljRI
-         QiLRZWUVkwQjGIrV2o07ResmWryvgjudAgJbIwrtsc9uADe5YZXDO8wzjO43DZaab7hE
-         WSwlGzrSPrxNwF7lV7ALvk9Be8J22PuLEbDYABD3fKx7dgPUThWfrKsS0LOXxpPqqTKB
-         pB/Q==
-X-Gm-Message-State: AC+VfDyECUBZG1PWkToATZ9kDdj8Vwm6EqcFGCnb68QcQpSbkdqElbQC
-        itVcLd2RGpXrAriVO3xFNjqiRGPtOQ57bA==
-X-Google-Smtp-Source: ACHHUZ5kRQZIGWEQ3ZZ0SaGXeZ6Hzw8xqh+Dp51PVpmrNnqu8EP2uBJkzSGmP6UDTCSNfKlN/KFp1g==
-X-Received: by 2002:ad4:5dc2:0:b0:60e:98be:8694 with SMTP id m2-20020ad45dc2000000b0060e98be8694mr28831866qvh.46.1683788021160;
-        Wed, 10 May 2023 23:53:41 -0700 (PDT)
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com. [209.85.160.174])
-        by smtp.gmail.com with ESMTPSA id w14-20020a0562140b2e00b005f9a0018360sm2103665qvj.11.2023.05.10.23.53.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 23:53:40 -0700 (PDT)
-Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-3ef5b5d322dso82386311cf.2;
-        Wed, 10 May 2023 23:53:40 -0700 (PDT)
-X-Received: by 2002:a25:aaa6:0:b0:b9d:a27c:3fc9 with SMTP id
- t35-20020a25aaa6000000b00b9da27c3fc9mr17668190ybi.33.1683787999800; Wed, 10
- May 2023 23:53:19 -0700 (PDT)
-MIME-Version: 1.0
-References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com>
- <237c8410-ce61-94c-4260-7318ad6a4f3@google.com> <CAMuHMdWb0SrEs=cDzKW1Ai2UywnnpZip4pk9mOkiVGivPpj8sg@mail.gmail.com>
- <b4a5f11-68ee-7bba-b362-10ef7c9b956@google.com>
-In-Reply-To: <b4a5f11-68ee-7bba-b362-10ef7c9b956@google.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 11 May 2023 08:53:07 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdXMhQ_DyNC-4yJRRHKYcKCrwRdxvBwGDv2FzhLSNw4Bmw@mail.gmail.com>
-Message-ID: <CAMuHMdXMhQ_DyNC-4yJRRHKYcKCrwRdxvBwGDv2FzhLSNw4Bmw@mail.gmail.com>
-Subject: Re: [PATCH 05/23] m68k: allow pte_offset_map[_lock]() to fail
-To:     Hugh Dickins <hughd@google.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        bh=nnSwAOoxlqKsXEXi0phXp7gBU+q/tFtYjSr+OR+jm4M=;
+        b=de8w9uWB0jt+NwGS8n5QfcWpFLOn5YrpmOAGerheOI3GcgBH8cP+8hzE4hLjo2AuB5
+         ybWBzIb5KqfHvrWxTdP8LPfDt0OBKMCMPm4TeMzxV3CRyswExbZtt87mpEaV6VOJile/
+         /Hpr+Rfq5w7mqixQMZ/p4tpEwuMQG1eOtMpXYRjzOq7Bb/P+IM3U2DemnWh4ypo0b9m9
+         jRahV8fny6bzbRx8FziocSE0HirI9ebcagKt7HSq8wRczwXvXZqF2mIZ8xrxEaliElvc
+         2FXoDHHihcCU5PeIgt+kkuy03+lN0A425th/AmwbIHF8HaM8xFLzABx1dtfwN58XwAfT
+         TxHA==
+X-Gm-Message-State: AC+VfDxTLwxAQB2l68zjXooW50zrLxhekUWwqr20PQAYzKwI1zEb0R+u
+        B1NfjzV9s3pVrt21qxYdXR9ajA==
+X-Google-Smtp-Source: ACHHUZ4KMC8NWau0qULaC1VFjP+QGmYjTCO5cguh96ufu2bK3AiDVLT93ToJ+tMq32AXxxSWtPlGJw==
+X-Received: by 2002:a05:600c:214f:b0:3f4:23cd:6dcf with SMTP id v15-20020a05600c214f00b003f423cd6dcfmr10023464wml.15.1683788013146;
+        Wed, 10 May 2023 23:53:33 -0700 (PDT)
+Received: from linaro.org ([2a00:23c5:680a:d01:3110:8b33:cdf9:dea0])
+        by smtp.gmail.com with ESMTPSA id f8-20020a7bc8c8000000b003f4e8530696sm1038257wml.46.2023.05.10.23.53.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 23:53:32 -0700 (PDT)
+From:   Mike Leach <mike.leach@linaro.org>
+To:     linux-arm-kernel@lists.infradead.org, coresight@lists.linaro.org,
+        linux-kernel@vger.kernel.org
+Cc:     suzuki.poulose@arm.com, acme@kernel.org, james.clark@arm.com,
+        Mike Leach <mike.leach@linaro.org>
+Subject: [PATCH v6 0/6]  coresight: syscfg: Add config table load via configfs
+Date:   Thu, 11 May 2023 07:53:24 +0100
+Message-Id: <20230511065330.26392-1-mike.leach@linaro.org>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Hugh,
+This set extends the configuration management support to allow loading and
+unloading of configurations as structured tables.
 
-On Thu, May 11, 2023 at 4:58 AM Hugh Dickins <hughd@google.com> wrote:
-> On Wed, 10 May 2023, Geert Uytterhoeven wrote:
-> > On Wed, May 10, 2023 at 6:48 AM Hugh Dickins <hughd@google.com> wrote:
-> > > In rare transient cases, not yet made possible, pte_offset_map() and
-> > > pte_offset_map_lock() may not find a page table: handle appropriately.
-> > >
-> > > Restructure cf_tlb_miss() with a pte_unmap() (previously omitted)
-> > > at label out, followed by one local_irq_restore() for all.
-> >
-> > That's a bug fix, which should be a separate patch?
->
-> No, that's not a bug fix for the current tree, since m68k does not
-> offer CONFIG_HIGHPTE, so pte_unmap() is never anything but a no-op
-> for m68k (see include/linux/pgtable.h).
->
-> But I want to change pte_unmap() to do something even without
-> CONFIG_HIGHPTE, so have to fix up any such previously harmless
-> omissions in this series first.
+The existing coresight configuration configfs API is additionally extended
+to use this table functionality to load and unload configuration tables
+as binary files.
 
-OK.
+This allows coresight configurations to be loaded at runtime, and independently
+of kernel version, without the requirement to re-compile as built in kernel
+modules.
 
-> > > --- a/arch/m68k/include/asm/mmu_context.h
-> > > +++ b/arch/m68k/include/asm/mmu_context.h
-> > > @@ -99,7 +99,7 @@ static inline void load_ksp_mmu(struct task_struct *task)
-> > >         p4d_t *p4d;
-> > >         pud_t *pud;
-> > >         pmd_t *pmd;
-> > > -       pte_t *pte;
-> > > +       pte_t *pte = NULL;
-> > >         unsigned long mmuar;
-> > >
-> > >         local_irq_save(flags);
-> > > @@ -139,7 +139,7 @@ static inline void load_ksp_mmu(struct task_struct *task)
-> > >
-> > >         pte = (mmuar >= PAGE_OFFSET) ? pte_offset_kernel(pmd, mmuar)
-> > >                                      : pte_offset_map(pmd, mmuar);
-> > > -       if (pte_none(*pte) || !pte_present(*pte))
-> > > +       if (!pte || pte_none(*pte) || !pte_present(*pte))
-> > >                 goto bug;
-> >
-> > If the absence of a pte is to become a non-abnormal case, it should
-> > probably jump to "end" instead, to avoid spamming the kernel log.
->
-> I don't think so (but of course it's hard for you to tell, without
-> seeing all completed series of series).  If pmd_none(*pmd) can safely
-> goto bug just above, and pte_none(*pte) goto bug here, well, the !pte
-> case is going to be stranger than either of those.
->
-> My understanding of this function, load_ksp_mmu(), is that it's dealing
-> at context switch with a part of userspace which very much needs to be
-> present: whatever keeps that from being swapped out or migrated at
-> present, will be sure to keep the !pte case away - we cannot steal its
-> page table just at random (and a THP on m68k would be surprising too).
->
-> Though there is one case I can think of which will cause !pte here,
-> and so goto bug: if the pmd entry has got corrupted, and counts as
-> pmd_bad(), which will be tested (and cleared) in pte_offset_map().
-> But it is okay to report a bug in that case.
->
-> I can certainly change this to goto end instead if you still prefer,
-> no problem; but I'd rather keep it as is, if only for me to be proved
-> wrong by you actually seeing spam there.
+Additional attributes - load and unload are provided to in the
+/config/cs-syscfg subsytem base group to implement the load functionality.
 
-OK, makes sense.
+The load attribute is a configfs binary attribute, loading the configuration
+table in a similar way as the ACPI table binary attribute for that sub-system.
 
-> > > @@ -161,6 +161,8 @@ static inline void load_ksp_mmu(struct task_struct *task)
-> > >  bug:
-> > >         pr_info("ksp load failed: mm=0x%p ksp=0x08%lx\n", mm, mmuar);
-> > >  end:
-> > > +       if (pte && mmuar < PAGE_OFFSET)
-> > > +               pte_unmap(pte);
-> >
-> > Is this also a bugfix, not mentioned in the patch description?
->
-> I'm not sure whether you're referring to the pte_unmap() which we
-> already discussed above, or you're seeing something else in addition;
-> but I don't think there's a bugfix here, just a rearrangement because
-> we now want lots of cases to do the pte_unmap() and local_irq_restore().
+The configfs binary attribute mechanism supplies a strictly size limited
+kernel buffer, providing better safety than other mechnisms, and also has
+the advantage of being accessible directly from the command line, and being
+part of the existing upstream coresight configuration mechanism in configfs
 
-I was referring to the addition of pte_unmap().
-As per your explanation above, this is not a bugfix.
+Configurations loaded in this way are validated and loaded across the entire
+system of components atomically. If any part fails to load then the whole
+configuration load will be cancelled.
 
-Gr{oetje,eeting}s,
+Routines to generate binary configuration table files are supplied in
+./tools/coresight.
 
-                        Geert
+Example generator and reader applications are provided.
+
+Tools may be cross compiled or built for use on host system.
+
+Documentation is updated to describe feature usage.
+
+Changes since v5:
+1) Possible memory leak removed.
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
+2) Reuse mechanism for reader code revised. (Christoph)
+3) Unload mechnism now by name in standard attribute, rather than
+entire file
+4) Mechanism to check last loaded configuration can be unloaded.
+5) Documentation updates.
+
+Changes since v4:
+1) Update coresight/next - 6.1-rc3
+2) Update to lockdep fixes to avoid read lock race in configfs.
+
+Changes since v3:
+1) Rebase & tested on coresight/next - 5.19-rc3 - which includes the
+fix patch for earlier configfs works.
+2) Lockdep investigations resulted in re-design of some of the code
+accessing configfs.
+3) moved load and unload attributes to root of cs-syscfg. (Mathieu)
+4) Additional minor fixes suggested by Mathieu.
+5) Memory for configfs loaded and unloaded configurations is now
+explicitly freed.
+6) LOCKDEP nesting fix for configfs base code (fs/configfs/dir.c)
+
+Changes since v2:
+1) Rebased & tested on coresight/next - 5.18-rc2
+2) Moved coresight config generator and reader programs from samples to
+tools/coresight. Docs updated to match. (suggested by Mathieu)
+3) userspace builds now use userspace headers from tools/...
+4) Other minor fixes from Mathieu's review.
+
+Changes since v1:
+1) Rebased to coresight/next - 5.16-rc1 with previous coresight config
+set applied.
+2) Makefile.host fixed to default to all target.
+
+Mike Leach (6):
+  coresight: config: add config table runtime load functionality
+  coresight: configfs: Update memory allocation / free for configfs
+    elements
+  coresight: configfs: Add attributes to load config tables at runtime
+  coresight: config: extract shared structures to common header file
+  coresight: tools: Add config table file write and reader tools
+  Documentation: coresight: docs for config load via configfs
+
+ .../trace/coresight/coresight-config.rst      | 265 ++++++++-
+ MAINTAINERS                                   |   1 +
+ drivers/hwtracing/coresight/Makefile          |   3 +-
+ .../coresight/coresight-config-desc.h         | 105 ++++
+ .../coresight/coresight-config-table.c        | 431 +++++++++++++++
+ .../coresight/coresight-config-table.h        | 151 ++++++
+ .../hwtracing/coresight/coresight-config.h    |  98 +---
+ .../coresight/coresight-syscfg-configfs.c     | 513 ++++++++++++++++--
+ .../coresight/coresight-syscfg-configfs.h     |   5 +
+ .../hwtracing/coresight/coresight-syscfg.c    | 101 +++-
+ .../hwtracing/coresight/coresight-syscfg.h    |   6 +-
+ tools/coresight/Makefile                      |  56 ++
+ tools/coresight/coresight-cfg-bufw.c          | 309 +++++++++++
+ tools/coresight/coresight-cfg-bufw.h          |  26 +
+ tools/coresight/coresight-cfg-example1.c      |  62 +++
+ tools/coresight/coresight-cfg-example2.c      |  95 ++++
+ tools/coresight/coresight-cfg-examples.h      |  25 +
+ tools/coresight/coresight-cfg-file-gen.c      |  61 +++
+ tools/coresight/coresight-cfg-file-read.c     | 227 ++++++++
+ tools/coresight/coresight-config-uapi.h       | 105 ++++
+ 20 files changed, 2503 insertions(+), 142 deletions(-)
+ create mode 100644 drivers/hwtracing/coresight/coresight-config-desc.h
+ create mode 100644 drivers/hwtracing/coresight/coresight-config-table.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-config-table.h
+ create mode 100644 tools/coresight/Makefile
+ create mode 100644 tools/coresight/coresight-cfg-bufw.c
+ create mode 100644 tools/coresight/coresight-cfg-bufw.h
+ create mode 100644 tools/coresight/coresight-cfg-example1.c
+ create mode 100644 tools/coresight/coresight-cfg-example2.c
+ create mode 100644 tools/coresight/coresight-cfg-examples.h
+ create mode 100644 tools/coresight/coresight-cfg-file-gen.c
+ create mode 100644 tools/coresight/coresight-cfg-file-read.c
+ create mode 100644 tools/coresight/coresight-config-uapi.h
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+2.17.1
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
