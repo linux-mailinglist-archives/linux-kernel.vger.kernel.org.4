@@ -2,160 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 133176FFB3A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:25:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C406E6FFB3D
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:25:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239241AbjEKUY4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 16:24:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34660 "EHLO
+        id S239468AbjEKUZP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 16:25:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238381AbjEKUYy (ORCPT
+        with ESMTP id S239392AbjEKUZC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 16:24:54 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E889270D;
-        Thu, 11 May 2023 13:24:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=E5l2shnH01QrTljpAFFGCJicO6JUqqgyxvzlIMkP6A0=; b=eszcc0bs0lf/dqVDO8eQ4oUVkU
-        cMqG0k06X+5D5Liq1lzWonVEHUZhG+C4fHoBAx0b2kIHABcyMm6+cnaOofe8PHLUvnloriwFbxFoV
-        Yqem1gFhi9OYmna/FWqs44k/rS2+x6h8vxkpOaqvEyZ6z9ng2JWTiy+HodorH5wmvv7WM0YTRAVUy
-        qPTYmsTBy69OorstP119zRNMNMdRXh9iAua0LPGy+eE2xLKjO0XL4HM5sgiM3D/O7OzRWPVxpdQKv
-        x6jrzvogksLb37T9oN2EKWjffwa5kV/zWypFMtC+VxyMR+i4uabOkU0shVvaJEjBXed5+1s03gDUT
-        qFxpBLLQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pxCpO-008NaG-2j;
-        Thu, 11 May 2023 20:23:55 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B76C1300244;
-        Thu, 11 May 2023 22:23:51 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9F2A32C7C5BE0; Thu, 11 May 2023 22:23:51 +0200 (CEST)
-Date:   Thu, 11 May 2023 22:23:51 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     Michael Kelley <mikelley@microsoft.com>, ltykernel@gmail.com,
-        bigeasy@linutronix.de, mark.rutland@arm.com, maz@kernel.org,
-        catalin.marinas@arm.com, will@kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, hca@linux.ibm.com, gor@linux.ibm.com,
-        agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
-        svens@linux.ibm.com, pbonzini@redhat.com, wanpengli@tencent.com,
-        vkuznets@redhat.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, jgross@suse.com, boris.ostrovsky@oracle.com,
-        daniel.lezcano@linaro.org, kys@microsoft.com,
-        haiyangz@microsoft.com, decui@microsoft.com, rafael@kernel.org,
-        longman@redhat.com, boqun.feng@gmail.com, pmladek@suse.com,
-        senozhatsky@chromium.org, rostedt@goodmis.org,
-        john.ogness@linutronix.de, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        bsegall@google.com, mgorman@suse.de, bristot@redhat.com,
-        vschneid@redhat.com, jstultz@google.com, sboyd@kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-s390@vger.kernel.org, kvm@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [RFC][PATCH 7/9] x86/tsc: Provide sched_clock_noinstr()
-Message-ID: <20230511202351.GE2296992@hirez.programming.kicks-ass.net>
-References: <20230508211951.901961964@infradead.org>
- <20230508213147.853677542@infradead.org>
- <20230508214419.GA2053935@hirez.programming.kicks-ass.net>
- <ZFmGI1EN24xroPHa@liuwe-devbox-debian-v2>
+        Thu, 11 May 2023 16:25:02 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B12FC9023;
+        Thu, 11 May 2023 13:24:58 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 625025FD0C;
+        Thu, 11 May 2023 23:24:56 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1683836696;
+        bh=n7ZPfQp/f4Zm25naSUvNeGBtMhZly0O1U2udb0eukZ0=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=i+hfQz5vTmyq1iVpPBzP3vRD1UTEDN5hBNFu8nsnZc7aZ7AS/gBut5spSku2Re5DH
+         mjlgri0tZzqCwa+nQR116o1H4if84xqu1zZ7JDEcdfeyiBGnulFgcNpmE3eoSOK7pS
+         XmEKQ0e6t25tblI3vWMrX7HqilGd7oIxP/I/V38enId+3H1ScF+WwKA9fIIJx3+Lpf
+         DYTgCbLwpHVTIMrKTfLAyh3ywS3iN92uefVLeVnQa0J4XTz1+U8FGIcZGh9+QCV1B1
+         KUH1Fmw0EZfHYNh1+gLiulEX6NhV+wSygOR7G6LebV4aixlp3TwSiis/aWfnSuQkxz
+         bZw/nhW9QnPwA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Thu, 11 May 2023 23:24:54 +0300 (MSK)
+Date:   Thu, 11 May 2023 23:24:54 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <neil.armstrong@linaro.org>
+CC:     <gregkh@linuxfoundation.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <khilman@baylibre.com>,
+        <jbrunet@baylibre.com>, <martin.blumenstingl@googlemail.com>,
+        <mturquette@baylibre.com>, <vkoul@kernel.org>, <kishon@kernel.org>,
+        <hminas@synopsys.com>, <Thinh.Nguyen@synopsys.com>,
+        <yue.wang@amlogic.com>, <hanjie.lin@amlogic.com>,
+        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-usb@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>
+Subject: Re: [PATCH v3 5/5] arm64: dts: meson: a1: support USB controller in
+ OTG mode
+Message-ID: <20230511202454.m7zjwthjotzl26ms@CAB-WSD-L081021>
+References: <20230426102922.19705-1-ddrokosov@sberdevices.ru>
+ <20230426102922.19705-6-ddrokosov@sberdevices.ru>
+ <acc5eb75-c6ed-98c7-6d69-f8b0f024c744@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <ZFmGI1EN24xroPHa@liuwe-devbox-debian-v2>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <acc5eb75-c6ed-98c7-6d69-f8b0f024c744@linaro.org>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/11 10:21:00 #21259776
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 11:30:43PM +0000, Wei Liu wrote:
-> On Mon, May 08, 2023 at 11:44:19PM +0200, Peter Zijlstra wrote:
-> > On Mon, May 08, 2023 at 11:19:58PM +0200, Peter Zijlstra wrote:
-> > 
-> > > --- a/drivers/clocksource/hyperv_timer.c
-> > > +++ b/drivers/clocksource/hyperv_timer.c
-> > > @@ -408,9 +408,9 @@ static u64 notrace read_hv_clock_tsc_cs(
-> > >  	return read_hv_clock_tsc();
-> > >  }
-> > >  
-> > > -static u64 notrace read_hv_sched_clock_tsc(void)
-> > > +static u64 noinstr read_hv_sched_clock_tsc(void)
-> > >  {
-> > > -	return (read_hv_clock_tsc() - hv_sched_clock_offset) *
-> > > +	return (hv_read_tsc_page(hv_get_tsc_page()) - hv_sched_clock_offset) *
-> > >  		(NSEC_PER_SEC / HV_CLOCK_HZ);
-> > >  }
-> > >  
-> > > --- a/include/clocksource/hyperv_timer.h
-> > > +++ b/include/clocksource/hyperv_timer.h
-> > > @@ -38,7 +38,7 @@ extern void hv_remap_tsc_clocksource(voi
-> > >  extern unsigned long hv_get_tsc_pfn(void);
-> > >  extern struct ms_hyperv_tsc_page *hv_get_tsc_page(void);
-> > >  
-> > > -static inline notrace u64
-> > > +static __always_inline notrace u64
-> > >  hv_read_tsc_page_tsc(const struct ms_hyperv_tsc_page *tsc_pg, u64 *cur_tsc)
-> > >  {
-> > >  	u64 scale, offset;
-> > > @@ -85,7 +85,7 @@ hv_read_tsc_page_tsc(const struct ms_hyp
-> > >  	return mul_u64_u64_shr(*cur_tsc, scale, 64) + offset;
-> > >  }
-> > >  
-> > > -static inline notrace u64
-> > > +static __always_inline notrace u64
-> > >  hv_read_tsc_page(const struct ms_hyperv_tsc_page *tsc_pg)
-> > >  {
-> > >  	u64 cur_tsc;
-> > 
-> > Hyper-V folks!
-> > 
-> > While reviewing all this I found the following 'gem':
-> > 
-> > hv_init_clocksource()
-> >   hv_setup_sched_clock()
-> >     paravirt_set_sched_clock(read_hv_sched_clock_msr)
-> > 
-> > read_hv_sched_clock_msr() [notrace]
-> >   read_hv_clock_msr()     [notrace]
-> >     hv_get_register()      *traced*
-> >       hv_get_non_nested_register() ...
-> >         hv_ghcb_msr_read()
-> > 	  WARN_ON(in_nmi())
-> > 	  ...
-> > 	  local_irq_save()
-> > 
-> > 
-> > Note that:
-> > 
-> >  a) sched_clock() is used in NMI context a *LOT*
-> >  b) sched_clock() is notrace (or even noinstr with these patches)
-> >     and local_irq_save() implies tracing
-> > 
-> 
-> Tianyu and Michael, what's your thought on this?
-> 
-> Is the MSR-based GHCB usable at this point?
-> 
-> What other clock source can be used?
+Hello Neil,
 
-You do have TSC support -- which is what I fixed for you. It's just the
-whole MSR thing that is comically broken.
+I apologize for the delayed response, as I did not have access to my laptop
+for a few days.
 
-You could do a read_hv_clock_msr() implementation using
-__rdmsr() and add some sanity checking that anything GHCB using (SEV?)
-*will* use TSC.
+On Tue, May 09, 2023 at 09:44:33AM +0200, neil.armstrong@linaro.org wrote:
+> Hi,
+> 
+> On 26/04/2023 12:29, Dmitry Rokosov wrote:
+> > Amlogic A1 SoC family has USB2.0 controller based on dwc2 and dwc3
+> > heads. It supports otg/host/peripheral modes.
+> > 
+> > Signed-off-by: Yue Wang <yue.wang@amlogic.com>
+> > Signed-off-by: Hanjie Lin <hanjie.lin@amlogic.com>
+> > Signed-off-by: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+> > ---
+> >   arch/arm64/boot/dts/amlogic/meson-a1.dtsi | 59 +++++++++++++++++++++++
+> >   1 file changed, 59 insertions(+)
+> > 
+> > diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> > index ae7d39cff07a..5588ee602161 100644
+> > --- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> > +++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
+> > @@ -8,6 +8,8 @@
+> >   #include <dt-bindings/gpio/meson-a1-gpio.h>
+> >   #include <dt-bindings/clock/amlogic,a1-pll-clkc.h>
+> >   #include <dt-bindings/clock/amlogic,a1-clkc.h>
+> > +#include <dt-bindings/power/meson-a1-power.h>
+> > +#include <dt-bindings/reset/amlogic,meson-a1-reset.h>
+> >   / {
+> >   	compatible = "amlogic,a1";
+> > @@ -169,6 +171,17 @@ gpio_intc: interrupt-controller@0440 {
+> >   				amlogic,channel-interrupts =
+> >   					<49 50 51 52 53 54 55 56>;
+> >   			};
+> > +
+> > +			usb2_phy1: phy@4000 {
+> > +				compatible = "amlogic,a1-usb2-phy";
+> > +				clocks = <&clkc CLKID_USB_PHY_IN>;
+> > +				clock-names = "xtal";
+> > +				reg = <0x0 0x4000 0x0 0x60>;
+> > +				resets = <&reset RESET_USBPHY>;
+> > +				reset-names = "phy";
+> > +				#phy-cells = <0>;
+> > +				power-domains = <&pwrc PWRC_USB_ID>;
+> > +			};
+> >   		};
+> >   		gic: interrupt-controller@ff901000 {
+> > @@ -192,6 +205,52 @@ spifc: spi@fd000400 {
+> >   			#size-cells = <0>;
+> >   			status = "disabled";
+> >   		};
+> > +
+> > +		usb: usb@fe004400 {
+> > +			status = "disabled";
+> > +			compatible = "amlogic,meson-a1-usb-ctrl";
+> > +			reg = <0x0 0xfe004400 0x0 0xa0>;
+> > +			interrupts = <GIC_SPI 88 IRQ_TYPE_LEVEL_HIGH>;
+> > +			#address-cells = <2>;
+> > +			#size-cells = <2>;
+> > +			ranges;
+> > +
+> > +			clocks = <&clkc CLKID_USB_CTRL>,
+> > +				 <&clkc CLKID_USB_BUS>,
+> > +				 <&clkc CLKID_USB_CTRL_IN>;
+> > +			clock-names = "usb_ctrl", "usb_bus", "xtal_usb_ctrl";
+> > +			resets = <&reset RESET_USBCTRL>;
+> > +			reset-name = "usb_ctrl";
+> > +
+> > +			dr_mode = "otg";
+> > +
+> > +			phys = <&usb2_phy1>;
+> > +			phy-names = "usb2-phy1";
+> > +
+> > +			dwc2: usb@ff500000 {
+> > +				compatible = "amlogic,meson-a1-usb", "snps,dwc2";
+> > +				reg = <0x0 0xff500000 0x0 0x40000>;
+> > +				interrupts = <GIC_SPI 89 IRQ_TYPE_LEVEL_HIGH>;
+> > +				phys = <&usb2_phy1>;
+> > +				phy-names = "usb2-phy";
+> > +				clocks = <&clkc CLKID_USB_PHY>;
+> > +				clock-names = "otg";
+> > +				dr_mode = "peripheral";
+> > +				g-rx-fifo-size = <192>;
+> > +				g-np-tx-fifo-size = <128>;
+> > +				g-tx-fifo-size = <128 128 16 16 16>;
+> > +			};
+> > +
+> > +			dwc3: usb@ff400000 {
+> > +				compatible = "snps,dwc3";
+> > +				reg = <0x0 0xff400000 0x0 0x100000>;
+> > +				interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>;
+> > +				dr_mode = "host";
+> > +				snps,dis_u2_susphy_quirk;
+> > +				snps,quirk-frame-length-adjustment = <0x20>;
+> > +				snps,parkmode-disable-ss-quirk;
+> > +			};
+> > +		};
+> >   	};
+> >   	timer {
+> 
+> This patcj is fine, but depends on clock bindings & dt, so now Vinod took the PHY
+> patch, please resend this wiyhout patches 1 & 5, then resend the DT patch later when
+> the clock bindings is merged.
+> 
+> Thanks,
+> Neil
 
-Anyway, will you guys do that, or should I pull out the chainsaw and fix
-it for you?
+Sure, not a problem. I will resend the 3 patchsets in different series.
+
+-- 
+Thank you,
+Dmitry
