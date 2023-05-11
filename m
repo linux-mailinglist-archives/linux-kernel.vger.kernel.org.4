@@ -2,388 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B81F6FF576
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D573E6FF596
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238502AbjEKPIP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 11:08:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36476 "EHLO
+        id S238482AbjEKPLu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 11:11:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238061AbjEKPIM (ORCPT
+        with ESMTP id S238343AbjEKPLr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 11:08:12 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D64A7E72;
-        Thu, 11 May 2023 08:08:10 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1aae46e62e9so63074035ad.2;
-        Thu, 11 May 2023 08:08:10 -0700 (PDT)
+        Thu, 11 May 2023 11:11:47 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A1DE12A
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 08:11:45 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id e9e14a558f8ab-3330afe3d2fso511035ab.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 08:11:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683817690; x=1686409690;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=91+5dXYzQeyUNC81s4FXhCBQF/Ohu+6dIaUfBtGY2zg=;
-        b=eUfYz6ggXiEzB0u7XwnKyHjrTJND0HjbcVJLDIx/tZvuVqGafyyNi5bwCOzV0uUoKr
-         EkuYS3iFvyhOgcVNoyU48i8FkN4yXD/3g5dPKPyIRpuY579QmW+kcKkMIOzpIypmehjx
-         4y4qK8CBju5EnK8OXwGd/BUeBwvI7GrYyUSJKKOr1eJUUq4ZHus17loSONc3fTR/h2um
-         ibnhD8PiI8zgQGeXhDW7lk+CpwNSguBuX8fqE5rqvRyvytzz+qxZbejr3besNnGgjpLZ
-         RIwngOoYw+QwzUdUb2R8XEUnU5c5PmyEyR1B7z8Sei5hoe4QBh9W9zef0m/08j2xD9/H
-         R4Bg==
+        d=google.com; s=20221208; t=1683817905; x=1686409905;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UO/D1O1faXkPbB/YMuRgtGeWgLWeF6P7NdI3zyMJJGM=;
+        b=XhaSE+lWv6BPmJa70xMSgNcyarLI2AGHV1jYvcKnNz9PIvlzWF7TJAO6RRSEauBG5C
+         mHocJ9FkazVh/RC8YlLltsRIF6E/HFUMEVqcZC0nz4BzWa1aOPqJmP2MEFVvJvfREnoH
+         3CQV1APFAyKXLKEYK2ES1XdEvZgjI3XhPWXlZgzxzXgECE+pN/QzkIzKRfw7Di7tNlCb
+         JJz00jTvXfTeUqTQZmylsf/59UL05Z3UqfgdFQJorm2my9o8VBk3CrBRBUNycCpHwnlH
+         yW4lmJHI1iuf9WdKDiAfa5NvEfJ9LC6cQ6CAOwh37aai0IgmqfLLDFXZlhhcYHkPWNhm
+         rHMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683817690; x=1686409690;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=91+5dXYzQeyUNC81s4FXhCBQF/Ohu+6dIaUfBtGY2zg=;
-        b=KPK3LD/C3ysCc1z0F9L3dfzFvlG1rkjHAJgoP0Ang+6KCfSjqr8W7rcr3yYgIYChY/
-         EoJ7D5fYtIb9uGWg9yMZQyvHWggz0zs3KPdlONyhWU1a0QEyOghByT0GERsO2qBzC/8C
-         cK2vHbGsJxpSJhqY7LNuhpaZ3muSoq1661+/joUDWIB8BOlUgfww/Ofm2vElCAe1E55H
-         UPR8IyatZGq5NX1rNXOpMT3upXDLeee9Bluroy0cyoJd+74i3sIxhPbXJQcPh2RrRC2B
-         3P9HbZYfyFB6orEqund2F0R/WOCYQmtyEVdtoWiHm5ZgE5Ug2W7rGgF8E+GtKG3VRnwJ
-         IUoA==
-X-Gm-Message-State: AC+VfDxlfUS7FJg5oYMXgc4jEFk3IoJoGx7WHF8+TXt5LEH+lB5XmBMu
-        nM+6IcvbINdUKJ82PrjOdpA=
-X-Google-Smtp-Source: ACHHUZ513s30ssA68dscl1SlkKD2ddH1FINT9xWnrgnXyL/6bHLM08gIebQj0TLX1xYU9JKmPDq3Fw==
-X-Received: by 2002:a17:902:d4c6:b0:1ac:8ad0:1707 with SMTP id o6-20020a170902d4c600b001ac8ad01707mr16330835plg.1.1683817689990;
-        Thu, 11 May 2023 08:08:09 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id jj18-20020a170903049200b001ac2f98e953sm5985954plb.216.2023.05.11.08.08.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 08:08:09 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 11 May 2023 08:08:07 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Linux DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Staging Drivers <linux-staging@lists.linux.dev>,
-        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
-        Linux Kernel Actions <linux-actions@lists.infradead.org>,
-        Diederik de Haas <didi.debian@cknow.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        David Airlie <airlied@redhat.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jan Kara <jack@suse.com>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Kalle Valo <kvalo@kernel.org>,
-        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Deepak R Varma <drv@mailo.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Archana <craechal@gmail.com>, Ray Lehtiniemi <rayl@mail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andrey Panin <pazke@donpac.ru>, Oleg Drokin <green@crimea.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Jonas Jensen <jonas.jensen@gmail.com>,
-        Sylver Bruneau <sylver.bruneau@googlemail.com>,
-        Andrew Sharp <andy.sharp@lsi.com>,
-        Denis Turischev <denis@compulab.co.il>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-Subject: Re: [PATCH 08/10] drivers: watchdog: Replace GPL license notice with
- SPDX identifier
-Message-ID: <46c263f6-dd9c-408c-b3e0-bfb2676c6505@roeck-us.net>
-References: <20230511133406.78155-1-bagasdotme@gmail.com>
- <20230511133406.78155-9-bagasdotme@gmail.com>
+        d=1e100.net; s=20221208; t=1683817905; x=1686409905;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UO/D1O1faXkPbB/YMuRgtGeWgLWeF6P7NdI3zyMJJGM=;
+        b=OFopXdAhegBjyiAPlf39KPFbBtOEZfcBWKfsAe02Teng2MM/f8b3jQa7p1Imyc8LX1
+         HQLBqcQGtQCXZ7gFUXJkjFK/CZDw5Q+ZAP/ipWG309kBOhdU808zEv9v2Lu/49qyLo1x
+         uffiIxIaeXC/kLznPM4nk/lKcCyU6ZTvsBfNQG+3qAT1ora4yRMY9okanh1+XaAaAbY0
+         QrY/6+S9C4SNz/k5N9ismwvDj3Z4EMJXMGObZdzryEeU4rfaY07iLnxnEzN6oW9CroSD
+         qmGfDjtzht+n1aggUYZLr1E26wxsYEgOY3jl3+quKZKD7EfjpscHU2aYv7JuQRAXlo7i
+         Du2A==
+X-Gm-Message-State: AC+VfDylDqjWYcCLUGchNMqw7NLBXOfSX/2sy7zRVWEm202kFxkkj0vL
+        MH3rIytBuLs7wL7jJgczpce7qerb0CAumFBSj1fHyQ==
+X-Google-Smtp-Source: ACHHUZ4oa0frYOKWPg9acQ16moL6Vkv9jmlV7/tRR3KKVJcA8x+8hlKHubV/wDzwwLxNeTETfBWH8vbMo2pR62YvD9Y=
+X-Received: by 2002:a05:6e02:1c4a:b0:335:5940:5ca6 with SMTP id
+ d10-20020a056e021c4a00b0033559405ca6mr276338ilg.13.1683817904890; Thu, 11 May
+ 2023 08:11:44 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230511133406.78155-9-bagasdotme@gmail.com>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+References: <00000000000050327205f9d993b2@google.com> <CACT4Y+awU85RHZjf3+_85AvJOHghoOhH3c9E-70p+a=FrRDYkg@mail.gmail.com>
+ <ZFI9bHr1o2Cvdebp@gondor.apana.org.au> <ede92183-bef3-78a7-abae-335c6c5cca1e@linaro.org>
+ <ZFMsvxW+pEZA2EZ7@gondor.apana.org.au> <41ddc20d-8675-d8bc-18c6-2a26f0d6b104@linaro.org>
+ <20230505040134.GA883142@mit.edu> <CACT4Y+ZnTRf5BocMZZCkUva+VddOMXYGu13iWo6+3sopZzh5hQ@mail.gmail.com>
+ <ZFi5FfjVpxLEk48A@mit.edu>
+In-Reply-To: <ZFi5FfjVpxLEk48A@mit.edu>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Thu, 11 May 2023 17:11:33 +0200
+Message-ID: <CANp29Y6ppu5Bi103VnrO+DrnqU2KSQ4eREbJbG22FCeBAMCP4g@mail.gmail.com>
+Subject: Re: [PATCH] hwrng: virtio - Fix race on data_avail and actual data
+To:     "Theodore Ts'o" <tytso@mit.edu>
+Cc:     Dmitry Vyukov <dvyukov@google.com>,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        syzbot <syzbot+726dc8c62c3536431ceb@syzkaller.appspotmail.com>,
+        davem@davemloft.net, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, olivia@selenic.com,
+        syzkaller-bugs@googlegroups.com, Jason Wang <jasowang@redhat.com>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Laurent Vivier <lvivier@redhat.com>,
+        Rusty Russell <rusty@rustcorp.com.au>,
+        syzkaller <syzkaller@googlegroups.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 08:34:04PM +0700, Bagas Sanjaya wrote:
-> Many watchdog drivers's source files has already SPDX license
-> identifier, while some remaining doesn't.
-> 
-> Convert notices on remaining files to SPDX identifier.
-> 
-> Cc: Ray Lehtiniemi <rayl@mail.com>
-> Cc: Alessandro Zummo <a.zummo@towertech.it>
-> Cc: Andrey Panin <pazke@donpac.ru>
-> Cc: Oleg Drokin <green@crimea.edu>
-> Cc: Marc Zyngier <maz@kernel.org>
-> Cc: Jonas Jensen <jonas.jensen@gmail.com>
-> Cc: Sylver Bruneau <sylver.bruneau@googlemail.com>
-> Cc: Andrew Sharp <andy.sharp@lsi.com>
-> Cc: Denis Turischev <denis@compulab.co.il>
-> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  drivers/watchdog/ep93xx_wdt.c     | 5 +----
->  drivers/watchdog/ibmasr.c         | 3 +--
->  drivers/watchdog/m54xx_wdt.c      | 4 +---
->  drivers/watchdog/max63xx_wdt.c    | 5 +----
->  drivers/watchdog/moxart_wdt.c     | 4 +---
->  drivers/watchdog/octeon-wdt-nmi.S | 5 +----
->  drivers/watchdog/orion_wdt.c      | 4 +---
->  drivers/watchdog/rtd119x_wdt.c    | 2 +-
->  drivers/watchdog/sb_wdog.c        | 5 +----
->  drivers/watchdog/sbc_fitpc2_wdt.c | 4 +---
->  drivers/watchdog/ts4800_wdt.c     | 4 +---
->  drivers/watchdog/ts72xx_wdt.c     | 4 +---
->  12 files changed, 12 insertions(+), 37 deletions(-)
-> 
-> diff --git a/drivers/watchdog/ep93xx_wdt.c b/drivers/watchdog/ep93xx_wdt.c
-> index 38e26f160b9a57..f5d70842617fe9 100644
-> --- a/drivers/watchdog/ep93xx_wdt.c
-> +++ b/drivers/watchdog/ep93xx_wdt.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
+Hi Ted,
 
-This was supposed to be a C++ style comment for C source files.
-Has the rule changed ?
+On Mon, May 8, 2023 at 11:06=E2=80=AFAM Theodore Ts'o <tytso@mit.edu> wrote=
+:
+>
+> On Mon, May 08, 2023 at 07:33:39AM +0200, Dmitry Vyukov wrote:
+> > A link like this may work for syzbot instead of the Reported-by tag
+> > (may work out of the box, but need to double check if we start to use
+> > this):
+> >
+> > Link: https://syzkaller.appspot.com/bug?extid=3D726dc8c62c3536431ceb
+> >
+> > Or similarly this may work:
+> >
+> > Reported-by: https://syzkaller.appspot.com/bug?extid=3D726dc8c62c353643=
+1ceb
+> > I think the parsing code mostly looks for the hash.
+> >
+> > This was proposed, but people said that they need links to lore and
+> > don't want links to syzkaller dashboard. So this was rejected at the
+> > time.
+>
+> I think the "Reported-by: " line should continue to contain an e-mail,
+> since that way "git send-email" will automatically include a Cc: to
+> the mailing list address so that the syzbot page for the report will
+> contain a link to the page.
+>
+> What *would* be useful would be a search box on the top-level
+> https://syzkaller.appspot.com where you could either enter an e-mail
+> address like:
+>
+>         syzbot+726dc8c62c3536431ceb@syzkaller.appspotmail.com
+>
+> or the syzbot report title e.g.:
+>
+>        KCSAN: data-race in random_recv_done / virtio_read (3)
+>
+> or just a function name:
+>
+>         sys_quotactl_fd
+>
+> The search box could just push the text to google.com with
+> "site:syzkaller.appspot.com", which should mostly do the right thing.
 
->  /*
->   * Watchdog driver for Cirrus Logic EP93xx family of devices.
->   *
-> @@ -11,10 +12,6 @@
->   * Copyright (c) 2012 H Hartley Sweeten <hsweeten@visionengravers.com>
->   *	Convert to a platform device and use the watchdog framework API
->   *
-> - * This file is licensed under the terms of the GNU General Public
-> - * License version 2. This program is licensed "as is" without any
-> - * warranty of any kind, whether express or implied.
-> - *
->   * This watchdog fires after 250msec, which is a too short interval
->   * for us to rely on the user space daemon alone. So we ping the
->   * wdt each ~200msec and eventually stop doing it if the user space
-> diff --git a/drivers/watchdog/ibmasr.c b/drivers/watchdog/ibmasr.c
-> index 4a22fe15208630..df03f3b2659a3e 100644
-> --- a/drivers/watchdog/ibmasr.c
-> +++ b/drivers/watchdog/ibmasr.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-1.0-or-later */
->  /*
->   * IBM Automatic Server Restart driver.
->   *
-> @@ -6,8 +7,6 @@
->   * Based on driver written by Pete Reynolds.
->   * Copyright (c) IBM Corporation, 1998-2004.
->   *
-> - * This software may be used and distributed according to the terms
-> - * of the GNU Public License, incorporated herein by reference.
->   */
->  
->  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> diff --git a/drivers/watchdog/m54xx_wdt.c b/drivers/watchdog/m54xx_wdt.c
-> index f388a769dbd33d..9ca80b6c1790b6 100644
-> --- a/drivers/watchdog/m54xx_wdt.c
-> +++ b/drivers/watchdog/m54xx_wdt.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * drivers/watchdog/m54xx_wdt.c
->   *
-> @@ -11,9 +12,6 @@
->   *  Copyright 2004 (c) MontaVista, Software, Inc.
->   *  Based on sa1100 driver, Copyright (C) 2000 Oleg Drokin <green@crimea.edu>
->   *
-> - * This file is licensed under  the terms of the GNU General Public
-> - * License version 2. This program is licensed "as is" without any
-> - * warranty of any kind, whether express or implied.
->   */
->  
->  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> diff --git a/drivers/watchdog/max63xx_wdt.c b/drivers/watchdog/max63xx_wdt.c
-> index 9e1541cfae0d89..811f6dabad2c08 100644
-> --- a/drivers/watchdog/max63xx_wdt.c
-> +++ b/drivers/watchdog/max63xx_wdt.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * drivers/char/watchdog/max63xx_wdt.c
->   *
-> @@ -5,10 +6,6 @@
->   *
->   * Copyright (C) 2009 Marc Zyngier <maz@misterjones.org>
->   *
-> - * This file is licensed under the terms of the GNU General Public
-> - * License version 2. This program is licensed "as is" without any
-> - * warranty of any kind, whether express or implied.
-> - *
->   * This driver assumes the watchdog pins are memory mapped (as it is
->   * the case for the Arcom Zeus). Should it be connected over GPIOs or
->   * another interface, some abstraction will have to be introduced.
-> diff --git a/drivers/watchdog/moxart_wdt.c b/drivers/watchdog/moxart_wdt.c
-> index 6340a1f5f471b2..c87873c7d13f86 100644
-> --- a/drivers/watchdog/moxart_wdt.c
-> +++ b/drivers/watchdog/moxart_wdt.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * MOXA ART SoCs watchdog driver.
->   *
-> @@ -5,9 +6,6 @@
->   *
->   * Jonas Jensen <jonas.jensen@gmail.com>
->   *
-> - * This file is licensed under the terms of the GNU General Public
-> - * License version 2.  This program is licensed "as is" without any
-> - * warranty of any kind, whether express or implied.
->   */
->  
->  #include <linux/clk.h>
-> diff --git a/drivers/watchdog/octeon-wdt-nmi.S b/drivers/watchdog/octeon-wdt-nmi.S
-> index 97f6eb7b5a8e04..e308cc74392018 100644
-> --- a/drivers/watchdog/octeon-wdt-nmi.S
-> +++ b/drivers/watchdog/octeon-wdt-nmi.S
-> @@ -1,8 +1,5 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
+Thanks for the suggestion! I've filed
+https://github.com/google/syzkaller/issues/3892
 
-The text below suggests that this should be GPL1+.
+>
+> Also, it would also be nice if all of the URL links on the
+> syzkaller.appspot.com used the id form of the URL.  That is, to use
+>
+> https://syzkaller.appspot.com/bug?extid=3D6c73bd34311ee489dbf5
+>
+> instead of:
+>
+> https://syzkaller.appspot.com/bug?id=3D32c54626e170a6b327ca2c8ae4c1aea666=
+a8c20b
+>
+> The extid form of the URL is shorter, and having a consistency so that
+> the primary URL is the extid would reduce confusion.  The web site
+> will need to continue to support the id form of the URL since there
+> are quite a few of those URL's in mailing list archives and git commit
+> descriptions.
+>
+> It also would be useful if there was a way to translate from the extid
+> hash to the id hash, so that it's possible to search for the extid and
+> id forms of the URL --- since the URL aliasing means that for a
+> developer trying to do code archeology and web searches, that we need
+> to search for both URL forms for past syzbot reports.  (But if we can
+> avoid the aliasing confusion moving forward, that would be **really**
+> nice.)
 
->  /*
-> - * This file is subject to the terms and conditions of the GNU General Public
-> - * License.  See the file "COPYING" in the main directory of this archive
-> - * for more details.
-> - *
->   * Copyright (C) 2007-2017 Cavium, Inc.
->   */
->  #include <asm/asm.h>
-> diff --git a/drivers/watchdog/orion_wdt.c b/drivers/watchdog/orion_wdt.c
-> index 5ec2dd8fd5fa3d..938b357a12b911 100644
-> --- a/drivers/watchdog/orion_wdt.c
-> +++ b/drivers/watchdog/orion_wdt.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * drivers/watchdog/orion_wdt.c
->   *
-> @@ -5,9 +6,6 @@
->   *
->   * Author: Sylver Bruneau <sylver.bruneau@googlemail.com>
->   *
-> - * This file is licensed under  the terms of the GNU General Public
-> - * License version 2. This program is licensed "as is" without any
-> - * warranty of any kind, whether express or implied.
->   */
->  
->  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> diff --git a/drivers/watchdog/rtd119x_wdt.c b/drivers/watchdog/rtd119x_wdt.c
-> index 95c8d7abce42e6..1c3c36e9779739 100644
-> --- a/drivers/watchdog/rtd119x_wdt.c
-> +++ b/drivers/watchdog/rtd119x_wdt.c
-> @@ -1,9 +1,9 @@
-> +/* SPDX-License-Identifier: GPL-2.0+ */
->  /*
->   * Realtek RTD129x watchdog
->   *
->   * Copyright (c) 2017 Andreas Färber
->   *
-> - * SPDX-License-Identifier: GPL-2.0+
->   */
->  
->  #include <linux/bitops.h>
-> diff --git a/drivers/watchdog/sb_wdog.c b/drivers/watchdog/sb_wdog.c
-> index 504be461f992a9..00b35eddf9395f 100644
-> --- a/drivers/watchdog/sb_wdog.c
-> +++ b/drivers/watchdog/sb_wdog.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-1.0 OR GPL-2.0 */
->  /*
->   * Watchdog driver for SiByte SB1 SoCs
->   *
-> @@ -38,10 +39,6 @@
->   *	(c) Copyright 1996 Alan Cox <alan@lxorguk.ukuu.org.uk>,
->   *						All Rights Reserved.
->   *
-> - *	This program is free software; you can redistribute it and/or
-> - *	modify it under the terms of the GNU General Public License
-> - *	version 1 or 2 as published by the Free Software Foundation.
-> - *
->   */
->  
->  #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
-> diff --git a/drivers/watchdog/sbc_fitpc2_wdt.c b/drivers/watchdog/sbc_fitpc2_wdt.c
-> index 13db71e165836e..141fcbd11c4c82 100644
-> --- a/drivers/watchdog/sbc_fitpc2_wdt.c
-> +++ b/drivers/watchdog/sbc_fitpc2_wdt.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * Watchdog driver for SBC-FITPC2 board
->   *
-> @@ -5,9 +6,6 @@
->   *
->   * Adapted from the IXP2000 watchdog driver by Deepak Saxena.
->   *
-> - * This file is licensed under  the terms of the GNU General Public
-> - * License version 2. This program is licensed "as is" without any
-> - * warranty of any kind, whether express or implied.
->   */
->  
->  #define pr_fmt(fmt) KBUILD_MODNAME " WATCHDOG: " fmt
-> diff --git a/drivers/watchdog/ts4800_wdt.c b/drivers/watchdog/ts4800_wdt.c
-> index 0ea554c7cda579..9d7d7ad876a788 100644
-> --- a/drivers/watchdog/ts4800_wdt.c
-> +++ b/drivers/watchdog/ts4800_wdt.c
-> @@ -1,11 +1,9 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * Watchdog driver for TS-4800 based boards
->   *
->   * Copyright (c) 2015 - Savoir-faire Linux
->   *
-> - * This file is licensed under the terms of the GNU General Public
-> - * License version 2. This program is licensed "as is" without any
-> - * warranty of any kind, whether express or implied.
->   */
->  
->  #include <linux/kernel.h>
-> diff --git a/drivers/watchdog/ts72xx_wdt.c b/drivers/watchdog/ts72xx_wdt.c
-> index bf918f5fa13175..bb53dc481006c9 100644
-> --- a/drivers/watchdog/ts72xx_wdt.c
-> +++ b/drivers/watchdog/ts72xx_wdt.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * Watchdog driver for Technologic Systems TS-72xx based SBCs
->   * (TS-7200, TS-7250 and TS-7260). These boards have external
-> @@ -8,9 +9,6 @@
->   *
->   * This driver is based on ep93xx_wdt and wm831x_wdt drivers.
->   *
-> - * This file is licensed under the terms of the GNU General Public
-> - * License version 2. This program is licensed "as is" without any
-> - * warranty of any kind, whether express or implied.
->   */
->  
->  #include <linux/platform_device.h>
-> -- 
-> An old man doll... just what I always wanted! - Clara
-> 
+I've just sent a PR [1] so that URLs from bug lists on the web
+dashboard use the extid=3D instead of the id=3D parameter. Hopefully this
+will reduce the confusion.
+
+[1] https://github.com/google/syzkaller/pull/3891
+
+--=20
+Aleksandr
+
+>
+> Cheers,
+>
+>                                                 - Ted
