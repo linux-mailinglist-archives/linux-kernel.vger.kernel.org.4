@@ -2,198 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 881C06FFD6F
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 01:44:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FAFC6FFD6A
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 01:39:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239473AbjEKXoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 19:44:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
+        id S239603AbjEKXje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 19:39:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239118AbjEKXoF (ORCPT
+        with ESMTP id S239473AbjEKXjb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 19:44:05 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E865B4EC5
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 16:44:03 -0700 (PDT)
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+        Thu, 11 May 2023 19:39:31 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36CDA170D;
+        Thu, 11 May 2023 16:39:29 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 006083F4D8
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 23:35:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1683848137;
-        bh=AavuI0TWlPi0CnfBPjihPkVAm61gVpB2DpqaI9wFivM=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=ilKprwkJ4of1E0Bh5ZESzfBsCYnMUqRn3zj2bG2U1Y6zCIgX5q80PiSBjFsFH4sN5
-         /LCNGzcQwO5hZuVVcZjkxB540wrP4lehgCE25R/8sPnPj1jC1sL285BibLn43gSswp
-         nrr5+vPKc/vKxyy4XPkxz2FP6+auMsqeoJxMALDDvDJb6xgpWQVXFSfAwnbKHJusdm
-         YCoR8IQVQ1MxSvRKTxyvz55eIkJR+X9caHX1Q+GYC3YbytrDkgmPmgME4RGfF+pii1
-         PCCTQAf578Atwu2a+cymDmnHeOBXq7EwAvljgsL3nDwcyrnXtYBMCoxrxQaTS52NMe
-         UGRIcJwYapXJg==
-Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-61b5f526a79so126105956d6.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 16:35:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683848135; x=1686440135;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AavuI0TWlPi0CnfBPjihPkVAm61gVpB2DpqaI9wFivM=;
-        b=cqvcG70APiFzL7++MiVe+/KzCanqNpFX3T7UjtjtThLaTU/wn/3PqPBL7MJvMIic2F
-         kvbYVK4YwVRFx4FATH+t2hPQsH/DB89R9tn4QdRU3PgypLNMGIkILnJ8jQClojGBNy7C
-         +ygfJvnem9Cl41krNrKye2b40oSbva4zrRVPoF9CRgLaWeYs1oAUoeTV8tjz9E/j1jAw
-         1zBamWNIH0C77xPRzBopVyanDc/+t5k4pGeVHS43gXyse1VnjQYmy3fonGxOiPfA2cCn
-         1I/5nS1mzErV4WwC8v35wz3uBUr5fMFwdECqmExLYieENQ56GZElrHl6OvOplKXngtAH
-         nfAw==
-X-Gm-Message-State: AC+VfDzuDTKtoV1J1fJ+7oWINR2RmMOId9gDd5b71bq9Ge2Whsu7xc8i
-        6GKmI0yyKA20KeBBC1Z23EPPmnyKWMCSxoUz83OM51rXziZ7tK3bieu45bwC8T16CPEcf56yqrF
-        CK0t2E32y8kzRncl1Nkxev/1i3sZdPqbw4qXsyKVrusfzAK1XbWnzkI24lFx2hhlz/A==
-X-Received: by 2002:a05:6214:4111:b0:606:5103:9c98 with SMTP id kc17-20020a056214411100b0060651039c98mr31512343qvb.34.1683848135684;
-        Thu, 11 May 2023 16:35:35 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6X2h4PhBnWCS1JA9fsEFMvT4e/yv9Ou8UzrL8YE7aB8SB5MXK8wwK0ov0ztdzDRtm/ZrxJJRZOUJYD9Md7Uq0=
-X-Received: by 2002:a05:6214:4111:b0:606:5103:9c98 with SMTP id
- kc17-20020a056214411100b0060651039c98mr31512322qvb.34.1683848135398; Thu, 11
- May 2023 16:35:35 -0700 (PDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QHSzJ00S6z4x2c;
+        Fri, 12 May 2023 09:39:22 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1683848364;
+        bh=jbFycTOzGO/rHyNPtmryfI+yiFtnzBiWqTgbjL9IAKo=;
+        h=Date:From:To:Cc:Subject:From;
+        b=tvArHnoNxurci3tgqUrTU72XJkUiuEFkpEfywexl3XHfzU8576DmOZoHBWcolHaz8
+         ufXsx2Jk+5KHCCE++HYQWN3chXBZPn/ycyhoGEm3qy1ET+KUlcOus7ltAWhkaMB+ua
+         PbVuZdKeKooVUpbtB3Loqcl1Rls+HX1NEVTScwFWkU+1w5JUipsMKE2UchCVcDPvvq
+         2gFHOYNxx/23QM8Gg+eYG9o6137g7cYpoaU3kqSU6DrQQCOo8faHRw9pM77bRUuZYN
+         NKtY++S31rkn3aE96yg/HC+eQm/TGBL0c2EEAIWuh05Tse/ksGmnOctI9stvgpoISr
+         s1mK43Ps94EEA==
+Date:   Fri, 12 May 2023 09:39:22 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Moritz Fischer <mdf@kernel.org>, Xu Yilun <yilun.xu@intel.com>,
+        Wu Hao <hao.wu@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Ivan Bornyakov <i.bornyakov@metrotek.ru>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the fpga-fixes tree with Linus' tree
+Message-ID: <20230512093922.05dd8ba7@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230511133610.99759-1-kai.heng.feng@canonical.com>
- <20230511133610.99759-2-kai.heng.feng@canonical.com> <35b33699-227d-d1f5-285a-e18ef8e91e57@linux.intel.com>
-In-Reply-To: <35b33699-227d-d1f5-285a-e18ef8e91e57@linux.intel.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Fri, 12 May 2023 07:35:23 +0800
-Message-ID: <CAAd53p7b-kTzU5ZNi-9RCYSjusvarFXXcsL6LSCtc6VO+i7d=g@mail.gmail.com>
-Subject: Re: [PATCH v5 2/3] PCI/AER: Disable AER interrupt on suspend
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
-        koba.ko@canonical.com, Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/DxyIIQq5mwMQb0gdYdUgGso";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 6:08=E2=80=AFAM Sathyanarayanan Kuppuswamy
-<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
->
->
->
-> On 5/11/23 6:36 AM, Kai-Heng Feng wrote:
-> > PCIe service that shares IRQ with PME may cause spurious wakeup on
-> > system suspend.
-> >
-> > This is very similar to previous attempts to suspend AER and DPC [1],
-> > but this time disabling AER IRQ is to prevent immediate PME wakeup when
-> > AER shares the same IRQ line with PME.
->
-> IMHO, you don't need to mention the previous submission reason.
+--Sig_/DxyIIQq5mwMQb0gdYdUgGso
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Sure, will remove it in next revision.
+Hi all,
 
->
-> >
-> > It's okay to disable AER because PCIe Base Spec 5.0, section 5.2 "Link
-> > State Power Management" states that TLP and DLLP transmission is
-> > disabled for a Link in L2/L3 Ready (D3hot), L2 (D3cold with aux power)
-> > and L3 (D3cold), hence we don't lose much here to disable AER IRQ durin=
-g
-> > system suspend.
->
-> May be something like below?
->
-> PCIe services that share an IRQ with PME, such as AER or DPC, may cause a
-> spurious wakeup on system suspend. To prevent this, disable the AER
-> interrupt notification during the system suspend process.
->
-> As Per PCIe Base Spec 5.0, section 5.2, titled "Link State Power Manageme=
-nt",
-> TLP and DLLP transmission are disabled for a Link in L2/L3 Ready (D3hot),=
- L2
-> (D3cold with aux power) and L3 (D3cold) states. So disabling the AER noti=
-fication
-> during suspend and re-enabling them during the resume process should not =
-affect
-> the basic functionality.
+Today's linux-next merge of the fpga-fixes tree got a conflict in:
 
-I'll shamelessly use this in the commit message :)
+  MAINTAINERS
 
-Kai-Heng
+between commit:
 
->
-> >
-> > [1] https://lore.kernel.org/linux-pci/20220408153159.106741-1-kai.heng.=
-feng@canonical.com/
-> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D216295
-> >
-> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > ---
-> > v5:
-> >  - Wording.
-> >
-> > v4:
-> > v3:
-> >  - No change.
-> >
-> > v2:
-> >  - Only disable AER IRQ.
-> >  - No more check on PME IRQ#.
-> >  - Use helper.
-> >
-> >  drivers/pci/pcie/aer.c | 22 ++++++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> >
-> > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> > index 1420e1f27105..9c07fdbeb52d 100644
-> > --- a/drivers/pci/pcie/aer.c
-> > +++ b/drivers/pci/pcie/aer.c
-> > @@ -1356,6 +1356,26 @@ static int aer_probe(struct pcie_device *dev)
-> >       return 0;
-> >  }
-> >
-> > +static int aer_suspend(struct pcie_device *dev)
-> > +{
-> > +     struct aer_rpc *rpc =3D get_service_data(dev);
-> > +     struct pci_dev *pdev =3D rpc->rpd;
-> > +
-> > +     aer_disable_irq(pdev);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int aer_resume(struct pcie_device *dev)
-> > +{
-> > +     struct aer_rpc *rpc =3D get_service_data(dev);
-> > +     struct pci_dev *pdev =3D rpc->rpd;
-> > +
-> > +     aer_enable_irq(pdev);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> >  /**
-> >   * aer_root_reset - reset Root Port hierarchy, RCEC, or RCiEP
-> >   * @dev: pointer to Root Port, RCEC, or RCiEP
-> > @@ -1420,6 +1440,8 @@ static struct pcie_port_service_driver aerdriver =
-=3D {
-> >       .service        =3D PCIE_PORT_SERVICE_AER,
-> >
-> >       .probe          =3D aer_probe,
-> > +     .suspend        =3D aer_suspend,
-> > +     .resume         =3D aer_resume,
-> >       .remove         =3D aer_remove,
-> >  };
-> >
->
-> --
-> Sathyanarayanan Kuppuswamy
-> Linux Kernel Developer
+  80e62bc8487b ("MAINTAINERS: re-sort all entries and fields")
+
+from Linus' tree and commit:
+
+  01b03f6266f4 ("MAINTAINERS: update Microchip MPF FPGA reviewers")
+
+from the fpga-fixes tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc MAINTAINERS
+index 9120487cfcef,ba64194dc7df..000000000000
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@@ -13831,14 -13741,6 +13831,14 @@@ L:	linux-serial@vger.kernel.or
+  S:	Maintained
+  F:	drivers/tty/serial/8250/8250_pci1xxxx.c
+ =20
+ +MICROCHIP POLARFIRE FPGA DRIVERS
+ +M:	Conor Dooley <conor.dooley@microchip.com>
+- R:	Ivan Bornyakov <i.bornyakov@metrotek.ru>
+++R:	Vladimir Georgiev <v.georgiev@metrotek.ru>
+ +L:	linux-fpga@vger.kernel.org
+ +S:	Supported
+ +F:	Documentation/devicetree/bindings/fpga/microchip,mpf-spi-fpga-mgr.yaml
+ +F:	drivers/fpga/microchip-spi.c
+ +
+  MICROCHIP PWM DRIVER
+  M:	Claudiu Beznea <claudiu.beznea@microchip.com>
+  L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
+
+--Sig_/DxyIIQq5mwMQb0gdYdUgGso
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRdfKoACgkQAVBC80lX
+0GzunQf/bKDoyTKck+Bq5cp6E3VTz4ZdA9sBSIpS//Qgb0gkrZiXP4qEfMi+mJlB
+EKsKUjH+975eKLGsVh8YLMPG+arONhGJMBVLzvWjLfWDLaRcSeFXCqIbxolHVqEH
+9EQnIax1NsjB8sdxKmOi/avh2J/6xUQz93QmfXdkptmgydZxiSYymTra4dycJ+rY
+/9CP9MYW6kS56x6DIKY7HPpD/yHltZEdgRll7vBdVa5Suj8DezNQNXH0kn5+mFyG
+fVTE3tfklKVMgF2sIScbdY+4Ora+7TmwpZZOx/0tJnn6t+AYG6tnsFA125IkBtfR
+IIZQmWJ6yzL5XTzgTl3h8gOXWhmSSA==
+=9RoG
+-----END PGP SIGNATURE-----
+
+--Sig_/DxyIIQq5mwMQb0gdYdUgGso--
