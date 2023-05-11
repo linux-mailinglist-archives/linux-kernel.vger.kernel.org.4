@@ -2,139 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8970F6FF6DA
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:13:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECA2F6FF6E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:15:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238411AbjEKQNh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 12:13:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59726 "EHLO
+        id S238622AbjEKQPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 12:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238150AbjEKQNe (ORCPT
+        with ESMTP id S238150AbjEKQPW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 12:13:34 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86C151FCC
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 09:13:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683821613; x=1715357613;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=OTW3U7hWP/pnenQHAXg587szd9tmcKcEkFIByNMvBc0=;
-  b=eyJh6xMyT6FkapJ/tI+c2P0AAjmj3lZlBd6en7+fP+2pJNvQQM8ddbe4
-   +KLkLGnDO8tLjJDIvHYxb/jZKUTI0wZl9RTekWTneiA2dHnCaBupoQcx/
-   IuH6Lo/Pywc62AnGaXWSJ2OS1ML+u7O0+2ooUeP329hHA/NxCNtaT7qMK
-   YA+JXyrWvRPM/7D6eOtuQkJvEMattOvy41fXZvR9Ll45RrE4jrQ7NTGbE
-   detQ6/9WSfbyC8JXpxMxCS1AG+AmSaNiHYPsaGNyeIMBCRdNlen/ETakj
-   9M0+DF3hJIoKVqegjjyiBJUxSHRV7437+wc8+IHWpOc3Z+94EUz5gWhoN
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="330905448"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="330905448"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 09:13:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="874036719"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="874036719"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga005.jf.intel.com with ESMTP; 11 May 2023 09:13:31 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1px8v4-00046O-2o;
-        Thu, 11 May 2023 16:13:30 +0000
-Date:   Fri, 12 May 2023 00:12:58 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Will Deacon <will@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: include/linux/compiler_types.h:338:45: error: call to
- '__compiletime_assert_285' declared with attribute error: BUILD_BUG_ON
- failed: (24-12) >= 12
-Message-ID: <202305120022.64DSCOy5-lkp@intel.com>
+        Thu, 11 May 2023 12:15:22 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FC5F1FCC
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 09:15:21 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bc22805d3so13464086a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 09:15:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683821719; x=1686413719;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1aLFylek1nRr29niLBba+aU+lTWwRvz+crv9/jvyTVY=;
+        b=b0fgib3Qb+R9WwiEGKsu02MNyBz6T+MDKV6ZV63it1tjIu1KnS9h+5d2xNZqksCS/h
+         cs5nhOwLa6NSx9eAFg1c7dmYuCiUWCT+vfM68V/caR1QgVeKBOMqBcumjDSWkd8+dXit
+         1ypmtiFeZB82MHs07GJcUC+2w3TWLo7erI562o7sOOiaOQG3EmJlZH0UPBtGpHeXwjUD
+         jtVXmxo3RqeXxGtT6oPFMiWCfUyHbqBbpowoo9XxDnonXox7AApqCSDIHThc2pKmFQka
+         MCUMQwTi5azkOq2shk5pQH9g8+w96SSI0ht73pjyw0yw6xhJNDEN1ltpaS0jkDOKtBeR
+         eiHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683821719; x=1686413719;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1aLFylek1nRr29niLBba+aU+lTWwRvz+crv9/jvyTVY=;
+        b=SZmwNDY5ucYtCshIuUP8eG+WyIqJFWY+LABa5dx0xGRPyot6nI99k8mrI93E2dpvtb
+         IGmCNJRBMrwWZ3/DbzDU8FjUs4U8//ffMf5Zg/OyqOuexfMtGH7TBWTZAcjK2v0HMGhP
+         aJsQaXbjZl8TGI7UmateBfpZZF3eYDaiV9XRCMBqmjB0M/F7Zi/Gp34qHzijGV9KfDvR
+         XHYrFEhLUJ0zNBrjBQggTOBov9+pjJO1ZLJUZAerE+UdLLRou5e6CDC6Un4qO0NQkgSV
+         T2Cjb0PIk8T1HKYSa/5GXqIOK/w3SlJPmz4S3zfnywX71XzcJ/I8yRxx0j/S1npxCp7w
+         loog==
+X-Gm-Message-State: AC+VfDwVm2c3m+Ii3mp5fdor9kyjbKzLQriOEftf2UVshuLifDUyourZ
+        wpyfHPHPVORPC3oYg5TO0to=
+X-Google-Smtp-Source: ACHHUZ4MBTYqjmy2urC4b8enhRmflW2Lb0rqrX1C351MXcWfwV8pjGIzhlDmFzNtlq8JbF4XeZ4+vg==
+X-Received: by 2002:a50:ed99:0:b0:504:8929:71ca with SMTP id h25-20020a50ed99000000b00504892971camr18032424edr.6.1683821719398;
+        Thu, 11 May 2023 09:15:19 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:2f0a:b207:af00::b5e])
+        by smtp.gmail.com with ESMTPSA id f8-20020a056402068800b0050bc9c38fb4sm2992219edy.69.2023.05.11.09.15.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 09:15:18 -0700 (PDT)
+From:   Alexandru Sorodoc <ealex95@gmail.com>
+To:     Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
+Cc:     Stefan Binding <sbinding@opensource.cirrus.com>,
+        Tim Crawford <tcrawford@system76.com>,
+        Andy Chi <andy.chi@canonical.com>,
+        Meng Tang <tangmeng@uniontech.com>,
+        "Luke D. Jones" <luke@ljones.dev>,
+        Philipp Jungkamp <p.jungkamp@gmx.net>,
+        =?UTF-8?q?Kacper=20Michaj=C5=82ow?= <kasper93@gmail.com>,
+        Yuchi Yang <yangyuchi66@gmail.com>,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Alexandru Sorodoc <ealex95@gmail.com>
+Subject: [PATCH v2] ALSA: hda/realtek: Add quirks for ASUS GU604V and GU603V
+Date:   Thu, 11 May 2023 19:15:10 +0300
+Message-Id: <20230511161510.315170-1-ealex95@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Will,
+These models use 2 CS35L41 amplifiers using SPI for down-facing
+speakers.
 
-FYI, the error/warning still remains.
+alc285_fixup_speaker2_to_dac1 is needed to fix volume control of the
+down-facing speakers.
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   80e62bc8487b049696e67ad133c503bf7f6806f7
-commit: eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5 compiler.h: Move compiletime_assert() macros into compiler_types.h
-date:   2 years, 10 months ago
-config: arc-randconfig-r043-20230509 (https://download.01.org/0day-ci/archive/20230512/202305120022.64DSCOy5-lkp@intel.com/config)
-compiler: arc-elf-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout eb5c2d4b45e3d2d5d052ea6b8f1463976b1020d5
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
+Pin configs are needed to enable headset mic detection.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305120022.64DSCOy5-lkp@intel.com/
+Note that these models lack the ACPI _DSD properties needed to
+initialize the amplifiers. They can be added during boot to get working
+sound out of the speakers:
+  https://gist.github.com/lamperez/862763881c0e1c812392b5574727f6ff
 
-All errors (new ones prefixed by >>):
+Signed-off-by: Alexandru Sorodoc <ealex95@gmail.com>
+---
+v2:
+    Fixed position of quirk entries in table
 
-   In file included from <command-line>:
-   mm/huge_memory.c: In function 'hugepage_init':
->> include/linux/compiler_types.h:338:45: error: call to '__compiletime_assert_285' declared with attribute error: BUILD_BUG_ON failed: (24-12) >= 12
-     338 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |                                             ^
-   include/linux/compiler_types.h:319:25: note: in definition of macro '__compiletime_assert'
-     319 |                         prefix ## suffix();                             \
-         |                         ^~~~~~
-   include/linux/compiler_types.h:338:9: note: in expansion of macro '_compiletime_assert'
-     338 |         _compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-         |         ^~~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:39:37: note: in expansion of macro 'compiletime_assert'
-      39 | #define BUILD_BUG_ON_MSG(cond, msg) compiletime_assert(!(cond), msg)
-         |                                     ^~~~~~~~~~~~~~~~~~
-   include/linux/build_bug.h:50:9: note: in expansion of macro 'BUILD_BUG_ON_MSG'
-      50 |         BUILD_BUG_ON_MSG(condition, "BUILD_BUG_ON failed: " #condition)
-         |         ^~~~~~~~~~~~~~~~
-   include/linux/bug.h:24:25: note: in expansion of macro 'BUILD_BUG_ON'
-      24 |                         BUILD_BUG_ON(cond);             \
-         |                         ^~~~~~~~~~~~
-   mm/huge_memory.c:403:9: note: in expansion of macro 'MAYBE_BUILD_BUG_ON'
-     403 |         MAYBE_BUILD_BUG_ON(HPAGE_PMD_ORDER >= MAX_ORDER);
-         |         ^~~~~~~~~~~~~~~~~~
+ sound/pci/hda/patch_realtek.c | 20 ++++++++++++++++++++
+ 1 file changed, 20 insertions(+)
 
-
-vim +/__compiletime_assert_285 +338 include/linux/compiler_types.h
-
-   324	
-   325	#define _compiletime_assert(condition, msg, prefix, suffix) \
-   326		__compiletime_assert(condition, msg, prefix, suffix)
-   327	
-   328	/**
-   329	 * compiletime_assert - break build and emit msg if condition is false
-   330	 * @condition: a compile-time constant condition to check
-   331	 * @msg:       a message to emit if condition is false
-   332	 *
-   333	 * In tradition of POSIX assert, this macro will break the build if the
-   334	 * supplied condition is *false*, emitting the supplied error message if the
-   335	 * compiler has support to do so.
-   336	 */
-   337	#define compiletime_assert(condition, msg) \
- > 338		_compiletime_assert(condition, msg, __compiletime_assert_, __COUNTER__)
-   339	
-
+diff --git a/sound/pci/hda/patch_realtek.c b/sound/pci/hda/patch_realtek.c
+index bc062c0a1916..4c87a95c5d3d 100644
+--- a/sound/pci/hda/patch_realtek.c
++++ b/sound/pci/hda/patch_realtek.c
+@@ -7063,6 +7063,8 @@ enum {
+ 	ALC225_FIXUP_DELL1_MIC_NO_PRESENCE,
+ 	ALC295_FIXUP_DISABLE_DAC3,
+ 	ALC285_FIXUP_SPEAKER2_TO_DAC1,
++	ALC285_FIXUP_ASUS_SPEAKER2_TO_DAC1,
++	ALC285_FIXUP_ASUS_HEADSET_MIC,
+ 	ALC280_FIXUP_HP_HEADSET_MIC,
+ 	ALC221_FIXUP_HP_FRONT_MIC,
+ 	ALC292_FIXUP_TPT460,
+@@ -8033,6 +8035,22 @@ static const struct hda_fixup alc269_fixups[] = {
+ 		.chained = true,
+ 		.chain_id = ALC269_FIXUP_THINKPAD_ACPI
+ 	},
++	[ALC285_FIXUP_ASUS_SPEAKER2_TO_DAC1] = {
++		.type = HDA_FIXUP_FUNC,
++		.v.func = alc285_fixup_speaker2_to_dac1,
++		.chained = true,
++		.chain_id = ALC245_FIXUP_CS35L41_SPI_2
++	},
++	[ALC285_FIXUP_ASUS_HEADSET_MIC] = {
++		.type = HDA_FIXUP_PINS,
++		.v.pins = (const struct hda_pintbl[]) {
++			{ 0x19, 0x03a11050 },
++			{ 0x1b, 0x03a11c30 },
++			{ }
++		},
++		.chained = true,
++		.chain_id = ALC285_FIXUP_ASUS_SPEAKER2_TO_DAC1
++	},
+ 	[ALC256_FIXUP_DELL_INSPIRON_7559_SUBWOOFER] = {
+ 		.type = HDA_FIXUP_PINS,
+ 		.v.pins = (const struct hda_pintbl[]) {
+@@ -9500,6 +9518,8 @@ static const struct snd_pci_quirk alc269_fixup_tbl[] = {
+ 	SND_PCI_QUIRK(0x1043, 0x1313, "Asus K42JZ", ALC269VB_FIXUP_ASUS_MIC_NO_PRESENCE),
+ 	SND_PCI_QUIRK(0x1043, 0x13b0, "ASUS Z550SA", ALC256_FIXUP_ASUS_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x1427, "Asus Zenbook UX31E", ALC269VB_FIXUP_ASUS_ZENBOOK),
++	SND_PCI_QUIRK(0x1043, 0x1473, "ASUS GU604V", ALC285_FIXUP_ASUS_HEADSET_MIC),
++	SND_PCI_QUIRK(0x1043, 0x1483, "ASUS GU603V", ALC285_FIXUP_ASUS_HEADSET_MIC),
+ 	SND_PCI_QUIRK(0x1043, 0x1517, "Asus Zenbook UX31A", ALC269VB_FIXUP_ASUS_ZENBOOK_UX31A),
+ 	SND_PCI_QUIRK(0x1043, 0x1662, "ASUS GV301QH", ALC294_FIXUP_ASUS_DUAL_SPK),
+ 	SND_PCI_QUIRK(0x1043, 0x1683, "ASUS UM3402YAR", ALC287_FIXUP_CS35L41_I2C_2),
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.40.1
+
