@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C5276FE8A5
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 02:28:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D4546FE8BF
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 02:35:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236225AbjEKA2c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 20:28:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33912 "EHLO
+        id S232071AbjEKAe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 20:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229554AbjEKA23 (ORCPT
+        with ESMTP id S229632AbjEKAex (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 20:28:29 -0400
+        Wed, 10 May 2023 20:34:53 -0400
 Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279151B1;
-        Wed, 10 May 2023 17:28:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE25459C0;
+        Wed, 10 May 2023 17:34:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
         s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
         References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
         Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
         Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=tcLipFI9l2dcvpk4UR/OvX7URY66r8z0RDWBBZZI3BE=; b=0N0j6XxO3sdBOByU603/1de0hj
-        /3hAgqsZZ3F3RPMO2svK5cPiOmcQq6mrUZFp5d+0oCVrYwV4e67vqCE1jGYcreFAwDDXxQzjpUdt5
-        OMv0rgJ8WMDZLY335P/kWuyBEKmtL9xTba9nuR4dP4wYYgp2DQiqXxi8VQbXS/cw8vvk=;
+        bh=SSQW4tiYATgQuO+xcl9Ah2yxbFicjpEMjAjRIi4512E=; b=rqYP6+DwsvXTDnOD+XdKZMKI3N
+        lraYI8v8YK7uqcIb1lqBFELdQvLdZrHU+oqZ3mt6fc/6Ghy0IeTkaYyBgS+aq6k5vNGoEYsmsNtkB
+        w6Uukusg7XsqbOrLuzS/JsUTAMwUU6OeBx7CX1dEJ38IiOEQ2p7ujRHPmPONDvN633PY=;
 Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
         (envelope-from <andrew@lunn.ch>)
-        id 1pwuAJ-00CUqP-8i; Thu, 11 May 2023 02:28:15 +0200
-Date:   Thu, 11 May 2023 02:28:15 +0200
+        id 1pwuGb-00CUs0-Al; Thu, 11 May 2023 02:34:45 +0200
+Date:   Thu, 11 May 2023 02:34:45 +0200
 From:   Andrew Lunn <andrew@lunn.ch>
 To:     Daniel Golle <daniel@makrotopia.org>
 Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
@@ -39,13 +39,15 @@ Cc:     netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
         Paolo Abeni <pabeni@redhat.com>,
         AngeloGioacchino Del Regno 
         <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH net-next 0/8] Improvements for RealTek 2.5G Ethernet PHYs
-Message-ID: <55c11fd9-54cf-4460-a10c-52ff62b46a4c@lunn.ch>
+Subject: Re: [PATCH 1/8] net: phy: realtek: rtl8221: allow to configure
+ SERDES mode
+Message-ID: <303352e7-33f6-45d6-b93d-061f84a027da@lunn.ch>
 References: <cover.1683756691.git.daniel@makrotopia.org>
+ <302d982c5550f10d589735fc2e46cf27386c39f4.1683756691.git.daniel@makrotopia.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1683756691.git.daniel@makrotopia.org>
+In-Reply-To: <302d982c5550f10d589735fc2e46cf27386c39f4.1683756691.git.daniel@makrotopia.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -55,17 +57,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 12:53:22AM +0200, Daniel Golle wrote:
-> Improve support for RealTek 2.5G Ethernet PHYs (RTL822x series).
-> The PHYs can operate with Clause-22 and Clause-45 MDIO.
-> 
-> When using Clause-45 it is desireable to avoid rate-adapter mode and
-> rather have the MAC interface mode follow the PHY speed. The PHYs
-> support 2500Base-X for 2500M, and Cisco SGMII for 1000M/100M/10M.
+On Thu, May 11, 2023 at 12:56:12AM +0200, Daniel Golle wrote:
+> From: Alexander Couzens <lynxis@fe80.eu>
 
-I don't see what clause-45 has to do with this. The driver knows that
-both C22 and C45 addresses spaces exists in the hardware. It can do
-reads/writes on both. If the bus master does not support C45, C45 over
-C22 will be performed by the core.
+Hi Daniel
+
+Why are we getting two copies of this patch from different people?
+
+I would expect to see just this version, sent by Daniel Golle and the
+first line being From: Alexander Couzens <lynxis@fe80.eu> to indicate
+the primary author.
+
+> Signed-off-by: Alexander Couzens <lynxis@fe80.eu>
+
+Your Signed-off-by: should be here as well, since you are submitting
+the patch.
 
     Andrew
