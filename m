@@ -2,83 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA026FFD77
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 01:46:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DB56FFD83
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 01:57:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239561AbjEKXqo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 19:46:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48896 "EHLO
+        id S239523AbjEKX54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 19:57:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238915AbjEKXql (ORCPT
+        with ESMTP id S239160AbjEKX5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 19:46:41 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0069530C3;
-        Thu, 11 May 2023 16:46:40 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id 6a1803df08f44-61aecee26feso42403156d6.2;
-        Thu, 11 May 2023 16:46:40 -0700 (PDT)
+        Thu, 11 May 2023 19:57:55 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55AF149E8;
+        Thu, 11 May 2023 16:57:54 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-6436dfa15b3so6239540b3a.1;
+        Thu, 11 May 2023 16:57:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683848800; x=1686440800;
+        d=gmail.com; s=20221208; t=1683849474; x=1686441474;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VWYVMicQIGCwGUbuMq24kkfpiIJJVDGbM9ZlLCUcgg4=;
-        b=Y6GFuCB4A8uAl4TFv4+ubLWysOkiBqCPJXiQ3cU1Upx49ayKrsVkjbgq1Ysk3nstYB
-         kB83K/DsfBX+e91d10rv7GVyJ5GIPNh/uiIqgFPazkTz1nIjZMffH/ZhyaTkDZL8U99Q
-         LuEBz/ETHCr4jzTVwJdHGHEnM7rDjox83vNioTt+bAT4etacgFaEyXcf8HEy4o5kP5RX
-         9fjkBIW0tmUwvF1L6QlroyOk0EP5lebT953AFZkZV0jbnqouSWCWZKYK6SlZhw5/QiOc
-         6n/qd6ckO0rEjc9hQVqlZteq2mR4iDF6iTqC8fOVBcBhwbxmsz5KvX8K17ElVJehFpr7
-         UfMA==
+        bh=L2h69nhToDVZbyjQX2oWwiTb7dkD95akNUfm0wOkfgQ=;
+        b=Um17SmwS45I4PBkU+IOxjjdL8kv/2+KBklavxxKDfc3n5mXlcmws8jlG41ySudtGrG
+         d7R6+3zN4XDOGKNPQlj1jybAwibHwscWHvNdSQITKnmZOuMkSH9LU8A68NcvaD+UFKgd
+         rgB07JW8TNyMaUqGdThxHJaQ6G6B1HKuc7HxcJ4zhezUa+b6rIAZ/fBdPnH90eAMuqOt
+         F9qFyZla+0w18ql4qOrRMEhKNCDyP8xUR4WUL2Tysil8W4/TsZD5GrjaeaKq3C9Rg54c
+         fyOYvfFWs84EqjnLIsWlt7Al+LlGox9F1ijyuEsDtNy8VE052DALCkDxBe6uAFwbgegr
+         74QQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683848800; x=1686440800;
+        d=1e100.net; s=20221208; t=1683849474; x=1686441474;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VWYVMicQIGCwGUbuMq24kkfpiIJJVDGbM9ZlLCUcgg4=;
-        b=RrN5LFF2M9fmmzB1CuSVj4zUjF5EpHNuJ/uKAH3UVQ9peEUZ6wg67+a6/j5YjaGXTC
-         6tmhUUrxy1gPRAtjhajI3HuaTt/wulcDfWVQKXUHR3iRtLBlSVZiz4RaHcxLi+6Gq724
-         KCsMWep+leL/5zNi9qnJVY6KECqKSVEKFLf2WJPs6P6U/vMpLnirupKWZR57YSbdmqoh
-         fNysF9L7eIVyltcGtK6H1/PRScbLqY29a9iCIOrNpJsuXMYS6SMsCmurCHxMhq+NHTCj
-         FU5qzFcn+CYJW7d+oToISohFHOXTPiKpwvBx0cUjCgDgNHZRsR3EN78/G1seJZ3iBDtC
-         F9WA==
-X-Gm-Message-State: AC+VfDxo4CtaZVH8CFh2y9lyijMzDfjwf+bC3SwnK73LzV1B2qKPlIv9
-        IhcKs3DspHHktnn1QYA1jA==
-X-Google-Smtp-Source: ACHHUZ6PAbBGLwyRsRceV6yIgPNwuDhds2K8wJqj3lYkE+Ns6349FZxmntaKk0+CdKzdnIBsCeav0A==
-X-Received: by 2002:ad4:5aa1:0:b0:61b:5d38:b736 with SMTP id u1-20020ad45aa1000000b0061b5d38b736mr36766219qvg.35.1683848800018;
-        Thu, 11 May 2023 16:46:40 -0700 (PDT)
-Received: from C02FL77VMD6R.googleapis.com ([2600:1700:d860:12b0:8d4a:f604:7849:d619])
-        by smtp.gmail.com with ESMTPSA id w18-20020a0cb552000000b006216ff88b27sm416141qvd.79.2023.05.11.16.46.37
+        bh=L2h69nhToDVZbyjQX2oWwiTb7dkD95akNUfm0wOkfgQ=;
+        b=f4Go2+NWimgkkUyP8nF6iQAE5spmcw2RtwgbFqsl1yLw8AddFd5b8ZGgiHCL5UPa4q
+         rJzKeaxXl2d1lIXnBa5JmbzOLngNIKdL7KbvdcqGsMROL23JH8HJDiWinIvUB65x/19J
+         DlF3wbEC7Kzh8VPsjaUpF1f8xYpzwDS6JlYss8wF+C7fTVhIim+vgVl4lF6twugJ025E
+         /n1Iq3PQmtuX/cGKVFG5gfP0fZNa+FTSq9WDKdIIioi8PWBHpkTGYhAEzHWDjd+OgdsE
+         NB1MQG+Qvz8xyaXZGuB/Pa2TeESDQfK/rsmoY+VPIJxxInGfc6nx8VLYKi+XRWLsPRfU
+         kyeg==
+X-Gm-Message-State: AC+VfDxGTbqh0aKJa6nA3CIieUl/sBQoWC/gE8qM3edNZiyZ8LY8iufL
+        QvkDchMazTavv7gzFL61TdI=
+X-Google-Smtp-Source: ACHHUZ44R0EzFOe886ZeR21MsoCAgOCi/FQW/tCP0gvqq46gqRpM2r6NTzviqH023KF6u0AU+lobCw==
+X-Received: by 2002:a05:6a00:22d2:b0:647:e45f:1a4c with SMTP id f18-20020a056a0022d200b00647e45f1a4cmr10749967pfj.11.1683849473542;
+        Thu, 11 May 2023 16:57:53 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:53f7:c9da:338e:6206])
+        by smtp.gmail.com with ESMTPSA id d9-20020aa78149000000b00639eae8816asm5822788pfn.130.2023.05.11.16.57.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 16:46:39 -0700 (PDT)
-Date:   Thu, 11 May 2023 16:46:33 -0700
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Jiri Pirko <jiri@resnulli.us>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Vlad Buslov <vladbu@mellanox.com>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
-Subject: Re: [PATCH net 6/6] net/sched: qdisc_destroy() old ingress and
- clsact Qdiscs before grafting
-Message-ID: <ZF1+WTqIXfcPAD9Q@C02FL77VMD6R.googleapis.com>
-References: <cover.1683326865.git.peilin.ye@bytedance.com>
- <e6c4681dd9205d702ae2e6124e20c6210520e76e.1683326865.git.peilin.ye@bytedance.com>
- <20230508183324.020f3ec7@kernel.org>
- <ZFv6Z7hssZ9snNAw@C02FL77VMD6R.googleapis.com>
- <20230510161559.2767b27a@kernel.org>
- <ZF1SqomxfPNfccrt@C02FL77VMD6R.googleapis.com>
- <20230511162023.3651970b@kernel.org>
+        Thu, 11 May 2023 16:57:52 -0700 (PDT)
+Date:   Thu, 11 May 2023 16:57:49 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Jiri Valek - 2N <jiriv@axis.com>
+Cc:     krzysztof.kozlowski+dt@linaro.org, devicetree@vger.kernel.org,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        robh+dt@kernel.org, u.kleine-koenig@pengutronix.de
+Subject: Re: [PATCH 2/2] Input: cap11xx - add advanced sensitivity settings
+Message-ID: <ZF2A/STY66sqoOLX@google.com>
+References: <20230414233815.4004526-1-jiriv@axis.com>
+ <20230414233815.4004526-3-jiriv@axis.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230511162023.3651970b@kernel.org>
+In-Reply-To: <20230414233815.4004526-3-jiriv@axis.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -89,36 +73,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 04:20:23PM -0700, Jakub Kicinski wrote:
-> > But I see your point, thanks for the suggestion!  I'll try ->init() and
-> > create v2.
->
-> ->init() may be too early, aren't there any error points which could
-> prevent the Qdisc from binding after ->init() was called?
+Hi Jiri,
 
-You're right, it's in qdisc_create(), argh...
+On Sat, Apr 15, 2023 at 01:38:15AM +0200, Jiri Valek - 2N wrote:
+> @@ -474,7 +645,7 @@ static int cap11xx_i2c_probe(struct i2c_client *i2c_client)
+>  	if (error)
+>  		return error;
+>  
+> -	irq = irq_of_parse_and_map(node, 0);
+> +	irq = irq_of_parse_and_map(dev->of_node, 0);
 
-On Thu, May 11, 2023 at 04:20:23PM -0700, Jakub Kicinski wrote:
-> > > > Looking at the code, I think there is no guarantee that (1st) cannot
-> > > > happen after (2nd), although unlikely?  Can RTNL-lockless RTM_NEWTFILTER
-> > > > handlers get preempted?
-> > >
-> > > Right, we need qdisc_graft(B) to update the appropriate dev pointer
-> > > to point to b1. With that the ordering should not matter. Probably
-> > > using the ->attach() callback?
-> >
-> > ->attach() is later than dev_graft_qdisc().  We should get ready for
-> > concurrent filter requests (i.e. have dev pointer pointing to b1) before
-> > grafting (publishing) B.
->
-> I thought even for "unlocked" filter operations the start of it is
-> under the lock, but the lock gets dropped after qdisc/block are found.
-> I could be misremembering, I haven't looked at the code.
+Do you know if this is actually needed or we can rely on I2C core to
+figure out the interrupt for us?
 
-No, f.e. RTM_NEWTFILTER is registered as RTNL_FLAG_DOIT_UNLOCKED, so
-tc_new_tfilter() starts and calls __tcf_qdisc_find() without RTNL mutex,
-at least in latest code.
+Also, could I ask you to move the driver from of_property_*() to
+device_property_*() API?
 
-Thinking,
-Peilin Ye
+Thanks.
 
+-- 
+Dmitry
