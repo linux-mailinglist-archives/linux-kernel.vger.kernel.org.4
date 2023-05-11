@@ -2,146 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F2F06FF31B
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:36:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D840F6FF31F
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:37:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237590AbjEKNgZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 09:36:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
+        id S238328AbjEKNhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:37:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238036AbjEKNfi (ORCPT
+        with ESMTP id S238379AbjEKNft (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:35:38 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 918C410E69;
-        Thu, 11 May 2023 06:34:20 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-643bb9cdd6eso6252609b3a.1;
-        Thu, 11 May 2023 06:34:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683812060; x=1686404060;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+qd85DAYUoVARV/UQur45Soj2gLrv6sKgolbKo4DNkY=;
-        b=ZCDul+K7uLaQUZcXDKjVmbjfoExTphoXNgcqea3sH4Mq2pae9JTgDXEapkrH4LBnCh
-         koFeeQfJmQ/FOkKcsWd4DY+MU7XEE8CM9bYo3QzTCAxZj8nHJpu2Ojmzcx4x7dMdaKRi
-         r42UuJpeDO16/vpnGD3bIfCUOHKLECsNnlnSY0IUpA3UjbR/qkFQ37AKt572PdaDlIj+
-         a6jSyVhx6NBA24M+nI19A2Xg/+hij072amXHVqmZNjr2RISKa95pBQKmpVN9s1rSFb93
-         XRkPKcrigM+U77/k7SlYt0i2NmGnpGi8yYDR6z2VXLyJPJQm2duIWIbEZPSeSYNASCoS
-         7bsw==
+        Thu, 11 May 2023 09:35:49 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96B2D2E0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:34:43 -0700 (PDT)
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2665C3F550
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:34:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1683812080;
+        bh=011K5wvvIoIZK715UN1HjkgAo3VxiaK+uINHfyAtcqg=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=rsJeGs1byvqB01fvP1Ms/VqC9aEHrba+Ob4gfkJY/ld7mSME9V2GDos24gogmXpr/
+         CMHiJgCtRkuCh5xPJ55UFpyffvR724XT/8OsnbJ6agm/LnnTYDHp0VLXepHn+Ll6Wd
+         Lrk4eXgAOeqAS+N5yMIdfS8Z1gfH9JZ3iaQFN/frotnStNRIZYte/cnb6Nkxk/pFLz
+         p8cuxBhq4s93WBAO0Rh+XnrHf/enf9I1/ND9Bt86GCjVOBAjrHjcpOEJgqUorJyZUQ
+         otXve44skLJ0uGmYqsjEbL826T62XdiJzDIxT9zMQXUbsFBF6H0/+a5GcheGrVMjd0
+         fO4IWooqlmKPQ==
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-24dfb0c13dbso4816684a91.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:34:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683812060; x=1686404060;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683812078; x=1686404078;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+qd85DAYUoVARV/UQur45Soj2gLrv6sKgolbKo4DNkY=;
-        b=A57HjP1itB+zs9RDAKUiH7LO71NU621PTaNSqp/+HHGA7tm7V9LfCL4sLF+GKtfOeU
-         A31J/p/yDk+ag0Zz2abD3nqvxetIwD9fHpElelf5uX2ITBk9W99roHoCmu/qenyuOcPM
-         SFQ3vL3m/MRKmxetPDTm+CT99D75YVRldU1AHUEoAR08HsQfcNUJLU9ePl0amBCOxxas
-         FGv51jvCp7x891eUUVe/QMWIufIPzl2UQkK0rdLe/vSABGRnKJ+PH7odCdjjG13Eexot
-         H0rBE586yHi0iizVWcfqo93sEPcmmpGc2njJSC9NYvvFzQdvtpvH3IGPf7Xe0nqz0v/U
-         0mAQ==
-X-Gm-Message-State: AC+VfDx1UBLJL7/vm6SaJK/pgHVGgVa+1A9QNFHJhCnd97R663PNz6mf
-        K1IOWLjjX6S6Q0cv0Rx8w4E=
-X-Google-Smtp-Source: ACHHUZ6D1SmSibupox7jsjkuLOX/BB/O6IqNdA+Os6V+bkJDhi1wS+hKNMOJm73kAVRAOMQT58zlbA==
-X-Received: by 2002:a05:6a00:248f:b0:634:970e:ca09 with SMTP id c15-20020a056a00248f00b00634970eca09mr26611634pfv.30.1683812059896;
-        Thu, 11 May 2023 06:34:19 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-92.three.co.id. [180.214.232.92])
-        by smtp.gmail.com with ESMTPSA id b26-20020aa7871a000000b00641114ef2dbsm5497963pfo.90.2023.05.11.06.34.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 06:34:18 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id E53961068BF; Thu, 11 May 2023 20:34:11 +0700 (WIB)
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Linux DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Staging Drivers <linux-staging@lists.linux.dev>,
-        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
-        Linux Kernel Actions <linux-actions@lists.infradead.org>
-Cc:     Diederik de Haas <didi.debian@cknow.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        David Airlie <airlied@redhat.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
-        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Tom Rix <trix@redhat.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Kalle Valo <kvalo@kernel.org>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Deepak R Varma <drv@mailo.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Dan Carpenter <error27@gmail.com>, Archana <craechal@gmail.com>
-Subject: [PATCH 10/10] include: synclink: Replace GPL license notice with SPDX identifier
-Date:   Thu, 11 May 2023 20:34:06 +0700
-Message-Id: <20230511133406.78155-11-bagasdotme@gmail.com>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230511133406.78155-1-bagasdotme@gmail.com>
-References: <20230511133406.78155-1-bagasdotme@gmail.com>
+        bh=011K5wvvIoIZK715UN1HjkgAo3VxiaK+uINHfyAtcqg=;
+        b=PG4SynfCkA6ADRI0du76HFZzGEo+bsLI4aShayUr5R9pZ2OnTvUqbjAt8KFRnxDqQ1
+         dmMzorVULlKtcccmKENMQQrYfKirwG2SGm/v4lZEm0NV/PC8PxDPCG0owXUnMG4T4/lb
+         fIzu7wyhtMDC2kziuSkwFlKeofchl6PZNznqKYst+Je6FrJkeLMcOly/R+BNeCleYy/g
+         Z6nICgf+IcvKi/5mAWYm6JNkyZWLTpt1KaLusqbNMGGiwE1yEJCQRXGF3FqhFaoqoCoc
+         dimMVDJNuIQ/vjCJ4oYAEXO3Fv2j+i8eOPyH7XnQCeIe3vea914U4oP9QXP17qAmbTTC
+         Sh1A==
+X-Gm-Message-State: AC+VfDw7e0cPnVd2fj2OhwHTWzu/MoWsnW0VdX5PRvvh76KM4t5gqB8W
+        3eLPd8EdeT+7jUgq4gb57e+4PQ3v4tKcJNX0I7W2xzaNT9kRhyOTOLKJBBPmDkOHeYQ8LIzSu3/
+        m0/EjkGxTYJCHEe89asgfOBfSPB0woMc++UsFxXWF/HLl2GO7VUnIZMzHcQ==
+X-Received: by 2002:a17:90a:db4d:b0:250:8258:1a5 with SMTP id u13-20020a17090adb4d00b00250825801a5mr15729702pjx.33.1683812077995;
+        Thu, 11 May 2023 06:34:37 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4PM1BwcYbS1lb5Q9CzUvOu/d5br84AluARyXzOfos8pADmP57XceNs9VQKShDZU3Dx3q9SP47ED8gQ1AomNMk=
+X-Received: by 2002:a17:90a:db4d:b0:250:8258:1a5 with SMTP id
+ u13-20020a17090adb4d00b00250825801a5mr15729681pjx.33.1683812077662; Thu, 11
+ May 2023 06:34:37 -0700 (PDT)
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=834; i=bagasdotme@gmail.com; h=from:subject; bh=hknv61wvlrkkgOugXTBTgrVsX3ozvkcF0YqHFnV1tm8=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCkx706mnu9+bem1/mXJ3iyvGzNfCv0wiV53KaXoSk6/8 jqzUoPFHaUsDGJcDLJiiiyTEvmaTu8yErnQvtYRZg4rE8gQBi5OAZgIgzkjw6aA6292CMWIVB2c 9u2Mg8RUF/vsKTt1a0IW2F+WdlrdpcTIcGjZ7ygRkU//zwUuvxuUsYZRqtz4vqDKvpnWvMreTmW JPAA=
-X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+References: <20230424055249.460381-1-kai.heng.feng@canonical.com>
+ <20230424055249.460381-2-kai.heng.feng@canonical.com> <97260e8b-1892-49a5-3792-0e3c28378fc0@linux.intel.com>
+In-Reply-To: <97260e8b-1892-49a5-3792-0e3c28378fc0@linux.intel.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Thu, 11 May 2023 21:34:26 +0800
+Message-ID: <CAAd53p5FUJpd2jENOo6YV8MhXdA1pZiO8G3Ho0x26=gL+vDAqw@mail.gmail.com>
+Subject: Re: [PATCH v4 2/3] PCI/AER: Disable AER interrupt on suspend
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
+        koba.ko@canonical.com, Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Replace unversioned GPL license notice with appropriate SPDX
-identifier, which is GPL 1.0+.
+On Tue, Apr 25, 2023 at 7:47=E2=80=AFAM Sathyanarayanan Kuppuswamy
+<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+>
+>
+>
+> On 4/23/23 10:52 PM, Kai-Heng Feng wrote:
+> > PCIe service that shares IRQ with PME may cause spurious wakeup on
+> > system suspend.
+> >
+> > PCIe Base Spec 5.0, section 5.2 "Link State Power Management" states
+> > that TLP and DLLP transmission is disabled for a Link in L2/L3 Ready
+> > (D3hot), L2 (D3cold with aux power) and L3 (D3cold), so we don't lose
+> > much here to disable AER during system suspend.
+> >
+> > This is very similar to previous attempts to suspend AER and DPC [1],
+> > but with a different reason.
+> >
+> > [1] https://lore.kernel.org/linux-pci/20220408153159.106741-1-kai.heng.=
+feng@canonical.com/
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D216295
+> >
+> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ---
+>
+> IIUC, you encounter AER errors during the suspend/resume process, which
+> results in AER IRQ. Because AER and PME share an IRQ, it is regarded as a
+> spurious wake-up IRQ. So to fix it, you want to disable AER reporting,
+> right?
+>
+> It looks like it is harmless to disable the AER during the suspend/resume
+> path. But, I am wondering why we get these errors? Did you check what err=
+ors
+> you get during the suspend/resume path? Are these errors valid?
 
-Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
----
- include/linux/synclink.h | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+AFAIK those errors comes from firmware/hardware side, especially when
+the device gets put to D3hot/D3cold.
 
-diff --git a/include/linux/synclink.h b/include/linux/synclink.h
-index f1405b1c71ba15..2c8436f08da44a 100644
---- a/include/linux/synclink.h
-+++ b/include/linux/synclink.h
-@@ -1,3 +1,4 @@
-+/* SPDX-License-Identifier: GPL-1.0-or-later */
- /*
-  * SyncLink Multiprotocol Serial Adapter Driver
-  *
-@@ -5,8 +6,6 @@
-  *
-  * Copyright (C) 1998-2000 by Microgate Corporation
-  *
-- * Redistribution of this file is permitted under
-- * the terms of the GNU Public License (GPL)
-  */
- #ifndef _SYNCLINK_H_
- #define _SYNCLINK_H_
--- 
-An old man doll... just what I always wanted! - Clara
+Kai-Heng
 
+>
+>
+> >  drivers/pci/pcie/aer.c | 22 ++++++++++++++++++++++
+> >  1 file changed, 22 insertions(+)
+> >
+> > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> > index 1420e1f27105..9c07fdbeb52d 100644
+> > --- a/drivers/pci/pcie/aer.c
+> > +++ b/drivers/pci/pcie/aer.c
+> > @@ -1356,6 +1356,26 @@ static int aer_probe(struct pcie_device *dev)
+> >       return 0;
+> >  }
+> >
+> > +static int aer_suspend(struct pcie_device *dev)
+> > +{
+> > +     struct aer_rpc *rpc =3D get_service_data(dev);
+> > +     struct pci_dev *pdev =3D rpc->rpd;
+> > +
+> > +     aer_disable_irq(pdev);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int aer_resume(struct pcie_device *dev)
+> > +{
+> > +     struct aer_rpc *rpc =3D get_service_data(dev);
+> > +     struct pci_dev *pdev =3D rpc->rpd;
+> > +
+> > +     aer_enable_irq(pdev);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  /**
+> >   * aer_root_reset - reset Root Port hierarchy, RCEC, or RCiEP
+> >   * @dev: pointer to Root Port, RCEC, or RCiEP
+> > @@ -1420,6 +1440,8 @@ static struct pcie_port_service_driver aerdriver =
+=3D {
+> >       .service        =3D PCIE_PORT_SERVICE_AER,
+> >
+> >       .probe          =3D aer_probe,
+> > +     .suspend        =3D aer_suspend,
+> > +     .resume         =3D aer_resume,
+> >       .remove         =3D aer_remove,
+> >  };
+> >
+>
+> --
+> Sathyanarayanan Kuppuswamy
+> Linux Kernel Developer
