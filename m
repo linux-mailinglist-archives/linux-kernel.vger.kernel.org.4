@@ -2,176 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFC7A6FF686
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:55:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DE76FF6AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:00:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238319AbjEKPzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 11:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47284 "EHLO
+        id S238492AbjEKQAx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 12:00:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238236AbjEKPzO (ORCPT
+        with ESMTP id S232006AbjEKQAu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 11:55:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D54976BB;
-        Thu, 11 May 2023 08:55:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A57164F73;
-        Thu, 11 May 2023 15:55:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A512EC433D2;
-        Thu, 11 May 2023 15:55:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683820508;
-        bh=QRaJ2wFNH9rmkUNsYI7EcEVD2fVj4LcKgN5B3/qU0LM=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=u5qEG5bDdT5fTqcwhgWFwqAxaItJBe1PkoHlu/D+Agi7TF6WCVZ9UZQ/SQBge9+NX
-         jN84pzJ56EIPh3mwk6QueC8qrdANgORcY9dXiWbY8SP+zdYohj+4QMKOw7aTLmNvH1
-         XdxHOmiN0eib6pj78tmb/fqZaGD/ZJ3nClRffqEcaT+44+u9nLW3tT1tQhFgCHfLW2
-         W8/j/wSgP8zIX73jKvNaTnJClfF9Tm4EWe1xaMJKFdDLh/zSr2l3d4PHxMW1XVqn5X
-         +1iIPitqfXG+KiaD+ZWKCUUYcJL4lQuD8cRUOuDXCFvREwU5aa7VlSk1XZEuGiwp+M
-         qFLZIyNUEwlig==
-Date:   Thu, 11 May 2023 10:55:06 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     linux-pci@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Lukas Wunner <lukas@wunner.de>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 01/17] PCI: Add concurrency safe clear_and_set variants
- for LNKCTL{,2}
-Message-ID: <ZF0P2hedTFXPv8IK@bhelgaas>
+        Thu, 11 May 2023 12:00:50 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0992F40E7;
+        Thu, 11 May 2023 09:00:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1683820542; i=deller@gmx.de;
+        bh=hOxitp/yaN+69Px02kO6cECAR4+bMiAqGcDDxqr5bj4=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=l6yXOKZHiIm0r5i3aB2VqyGZ6FuFRvtQYKlkazZt+BMEEiCtluT0fIJqlgCBk043R
+         mWg99aCTX7wBfotON0L+6tMKq/aErO5mfCEWPLVRpiuJ71pyBflp1FCJEYlCJf9Caq
+         a/6wh8GFGxE2ZO7H0SVlRGNGI17x0BLHH2syt8i8VfqCTyTReq1di9VJfniRBjVUJZ
+         oa56VC14pOGYEfaciSzV48cAbYidst77uhPN4bvEE/Y1tNtcEhGPuDSKW4ia0Ac/ko
+         VM57mr/EMj9/Ge45vTDbTDlw+USWhobidTnDdVQAMHB02xosXEU8EIEyPJR346pqDm
+         XyUvOjkMbrjzA==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.146.253]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1N5VD8-1qHjVs0yja-0170TE; Thu, 11
+ May 2023 17:55:42 +0200
+Message-ID: <b7e5e4b9-a0c9-96aa-e264-a8ccfac5a768@gmx.de>
+Date:   Thu, 11 May 2023 17:55:39 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230511131441.45704-2-ilpo.jarvinen@linux.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] drivers: fbdev: arcfb: Fix error handling in
+ arcfb_probe()
+To:     Zongjie Li <u202112089@hust.edu.cn>, Andrew Morton <akpm@osdl.org>
+Cc:     hust-os-kernel-patches@googlegroups.com,
+        Dongliang Mu <dzm91@hust.edu.cn>, linux-fbdev@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+References: <20230509112727.3899-1-u202112089@hust.edu.cn>
+Content-Language: en-US
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20230509112727.3899-1-u202112089@hust.edu.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:nvQGXvbSKhOGnAlC8Od/eLS2GcfsQZ1vvzME7KQ87ecMofiVpZX
+ SyeEslrtNOhQytv9cNg74BGJvt+mH/zcrvC9JFzzVh7mbxLzXSojOwIlmrgTXkcOQPygW7t
+ V1ue1iviHLZcsSe06gTBsAostoo6dPrnW9uFokywYQxo3hCn7kJBu+gxD8nHyIi/Jt/Yulj
+ JY4Q6WSmmZu9R/NSs/BlA==
+UI-OutboundReport: notjunk:1;M01:P0:Tq06VYnPlLk=;jg+peQKOTkC+a8UGg6dWmC1XLVD
+ F9j3X8jN/rZ4cVDTjKl6Wqw1IPlIjT7uPo/1vMpBuhq24yqt3dH3q2dmJRpKWKClq+7d4+uqR
+ k525TYJ5pn6EAtO90i2n9XZgqXt3F8p6S1c4yb+YM5qx4hpXUZTjyeqFzMM8DKVnonT36sf7h
+ 7tFNbTOffh242zi5TectolQG08lrAf4Y+8JtFCPOytM0wXHw8FTCrMUm27x8Qrlui6nsSawXx
+ 6/uckt4pymCNLwZhvUKrPGF+iEpe7EmRmCmMzd4NkLH7aBNyL506sKy+/pGoqznp+5XW5uS/Q
+ rOUymI1TMuwSfkeo+53s2RkXMkDF/vR/TjhvzYSSmo8tUfNMjgfnE9jVthRh9/Br7ZPCPxh0U
+ PpUv36NsWtytjOrF0VMOQRBGiPxAnULGfgkt0wKt5w6r/BLzjYMIyDW/iAM45lJeqhbg0mqXu
+ CaBHNdisH5T15ChCFC7uoDiz6uYcNUDiwhyMPhTlmyJd8wuPSVPXGPBfGAAX2BweB9hy7dsDS
+ 1WNqZcPeuimehW/gdXVysqykctkayfKQlZY8rl2zdsV2Y3SNvX/qXv0jgQ60FipzP7bohjew4
+ HokCHv22NAvp9A8nUTCHivb+cHbLcLMlKVqQW0G1GAW1HtG+FIh5pwp6kL8peOGDDwez4z/Um
+ APGrB9sNkht5W61vABGwacZfD0ioSNeuIdeHUpuWgbfHzYKZETYmn9aXF3VyuyLZe9eN8l+TF
+ O980rEcdI0JxhSocQy6tRD2fVwRQVezjqReUw76C8u/StOBXoVGClOzEudmX6JGqF/bg5m7K9
+ XGAv7I51IAt4kP1l8hhikVgseHixJ5T5EnM2X7Wd3u19Mt+03e3mmrya3gWVwoOdkfuSvTW8T
+ U0uzLnNmW8l03L2mV+xVc67xn/qlOQXqFs0+v+K9CdMDTNyVnadkIw35pFp2TKQEto6s85It+
+ 6MaG7MpiKBDi048Ah+/VTdpRu3I=
+X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 04:14:25PM +0300, Ilpo Järvinen wrote:
-> A few places write LNKCTL and LNKCTL2 registers without proper
-> concurrency control and this could result in losing the changes
-> one of the writers intended to make.
-> 
-> Add pcie_capability_clear_and_set_word_locked() and helpers to use it
-> with LNKCTL and LNKCTL2. The concurrency control is provided using a
-> spinlock in the struct pci_dev.
-> 
-> Suggested-by: Lukas Wunner <lukas@wunner.de>
-> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+On 5/9/23 13:27, Zongjie Li wrote:
+> Smatch complains that:
+> arcfb_probe() warn: 'irq' from request_irq() not released on lines: 587.
+>
+> Fix error handling in the arcfb_probe() function. If IO addresses are
+> not provided or framebuffer registration fails, the code will jump to
+> the err_addr or err_register_fb label to release resources.
+> If IRQ request fails, previously allocated resources will be freed.
+>
+> Fixes: 1154ea7dcd8e ("[PATCH] Framebuffer driver for Arc LCD board")
+> Signed-off-by: Zongjie Li <u202112089@hust.edu.cn>
+> Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
 
-Thanks for raising this issue!  Definitely looks like something that
-needs attention.
+applied.
+
+Thanks!
+Helge
 
 > ---
->  drivers/pci/access.c | 14 ++++++++++++++
->  drivers/pci/probe.c  |  1 +
->  include/linux/pci.h  | 17 +++++++++++++++++
->  3 files changed, 32 insertions(+)
-> 
-> diff --git a/drivers/pci/access.c b/drivers/pci/access.c
-> index 3c230ca3de58..d92a3daadd0c 100644
-> --- a/drivers/pci/access.c
-> +++ b/drivers/pci/access.c
-> @@ -531,6 +531,20 @@ int pcie_capability_clear_and_set_dword(struct pci_dev *dev, int pos,
->  }
->  EXPORT_SYMBOL(pcie_capability_clear_and_set_dword);
->  
-> +int pcie_capability_clear_and_set_word_locked(struct pci_dev *dev, int pos,
-> +					      u16 clear, u16 set)
-> +{
-> +	unsigned long flags;
-> +	int ret;
+>   drivers/video/fbdev/arcfb.c | 15 +++++++++------
+>   1 file changed, 9 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/video/fbdev/arcfb.c b/drivers/video/fbdev/arcfb.c
+> index 45e64016db32..024d0ee4f04f 100644
+> --- a/drivers/video/fbdev/arcfb.c
+> +++ b/drivers/video/fbdev/arcfb.c
+> @@ -523,7 +523,7 @@ static int arcfb_probe(struct platform_device *dev)
+>
+>   	info =3D framebuffer_alloc(sizeof(struct arcfb_par), &dev->dev);
+>   	if (!info)
+> -		goto err;
+> +		goto err_fb_alloc;
+>
+>   	info->screen_base =3D (char __iomem *)videomemory;
+>   	info->fbops =3D &arcfb_ops;
+> @@ -535,7 +535,7 @@ static int arcfb_probe(struct platform_device *dev)
+>
+>   	if (!dio_addr || !cio_addr || !c2io_addr) {
+>   		printk(KERN_WARNING "no IO addresses supplied\n");
+> -		goto err1;
+> +		goto err_addr;
+>   	}
+>   	par->dio_addr =3D dio_addr;
+>   	par->cio_addr =3D cio_addr;
+> @@ -551,12 +551,12 @@ static int arcfb_probe(struct platform_device *dev=
+)
+>   			printk(KERN_INFO
+>   				"arcfb: Failed req IRQ %d\n", par->irq);
+>   			retval =3D -EBUSY;
+> -			goto err1;
+> +			goto err_addr;
+>   		}
+>   	}
+>   	retval =3D register_framebuffer(info);
+>   	if (retval < 0)
+> -		goto err1;
+> +		goto err_register_fb;
+>   	platform_set_drvdata(dev, info);
+>   	fb_info(info, "Arc frame buffer device, using %dK of video memory\n",
+>   		videomemorysize >> 10);
+> @@ -580,9 +580,12 @@ static int arcfb_probe(struct platform_device *dev)
+>   	}
+>
+>   	return 0;
+> -err1:
 > +
-> +	spin_lock_irqsave(&dev->cap_lock, flags);
-> +	ret = pcie_capability_clear_and_set_word(dev, pos, clear, set);
-> +	spin_unlock_irqrestore(&dev->cap_lock, flags);
-> +
-> +	return ret;
-> +}
-> +EXPORT_SYMBOL(pcie_capability_clear_and_set_word_locked);
+> +err_register_fb:
+> +	free_irq(par->irq, info);
+> +err_addr:
+>   	framebuffer_release(info);
+> -err:
+> +err_fb_alloc:
+>   	vfree(videomemory);
+>   	return retval;
+>   }
 
-I didn't see the prior discussion with Lukas, so maybe this was
-answered there, but is there any reason not to add locking to
-pcie_capability_clear_and_set_word() and friends directly?  
-
-It would be nice to avoid having to decide whether to use the locked
-or unlocked versions.  It would also be nice to preserve the use of
-PCI_EXP_LNKCTL directly, for grep purposes.  And it would obviate the
-need for some of these patches, e.g., the use of
-pcie_capability_clear_word(), where it's not obvious at the call site
-why a change is needed.
-
-Bjorn
-
->  int pci_read_config_byte(const struct pci_dev *dev, int where, u8 *val)
->  {
->  	if (pci_dev_is_disconnected(dev)) {
-> diff --git a/drivers/pci/probe.c b/drivers/pci/probe.c
-> index 0b2826c4a832..0c14a283f1c7 100644
-> --- a/drivers/pci/probe.c
-> +++ b/drivers/pci/probe.c
-> @@ -2318,6 +2318,7 @@ struct pci_dev *pci_alloc_dev(struct pci_bus *bus)
->  		.end = -1,
->  	};
->  
-> +	spin_lock_init(&dev->cap_lock);
->  #ifdef CONFIG_PCI_MSI
->  	raw_spin_lock_init(&dev->msi_lock);
->  #endif
-> diff --git a/include/linux/pci.h b/include/linux/pci.h
-> index 60b8772b5bd4..82faea085d95 100644
-> --- a/include/linux/pci.h
-> +++ b/include/linux/pci.h
-> @@ -467,6 +467,7 @@ struct pci_dev {
->  	pci_dev_flags_t dev_flags;
->  	atomic_t	enable_cnt;	/* pci_enable_device has been called */
->  
-> +	spinlock_t	cap_lock;		/* Protects RMW ops done with locked RMW capability accessors */
->  	u32		saved_config_space[16]; /* Config space saved at suspend time */
->  	struct hlist_head saved_cap_space;
->  	int		rom_attr_enabled;	/* Display of ROM attribute enabled? */
-> @@ -1221,6 +1222,8 @@ int pcie_capability_clear_and_set_word(struct pci_dev *dev, int pos,
->  				       u16 clear, u16 set);
->  int pcie_capability_clear_and_set_dword(struct pci_dev *dev, int pos,
->  					u32 clear, u32 set);
-> +int pcie_capability_clear_and_set_word_locked(struct pci_dev *dev, int pos,
-> +					      u16 clear, u16 set);
->  
->  static inline int pcie_capability_set_word(struct pci_dev *dev, int pos,
->  					   u16 set)
-> @@ -1246,6 +1249,20 @@ static inline int pcie_capability_clear_dword(struct pci_dev *dev, int pos,
->  	return pcie_capability_clear_and_set_dword(dev, pos, clear, 0);
->  }
->  
-> +static inline int pcie_lnkctl_clear_and_set(struct pci_dev *dev, u16 clear,
-> +					    u16 set)
-> +{
-> +	return pcie_capability_clear_and_set_word_locked(dev, PCI_EXP_LNKCTL,
-> +							 clear, set);
-> +}
-> +
-> +static inline int pcie_lnkctl2_clear_and_set(struct pci_dev *dev, u16 clear,
-> +					    u16 set)
-> +{
-> +	return pcie_capability_clear_and_set_word_locked(dev, PCI_EXP_LNKCTL2,
-> +							 clear, set);
-> +}
-> +
->  /* User-space driven config access */
->  int pci_user_read_config_byte(struct pci_dev *dev, int where, u8 *val);
->  int pci_user_read_config_word(struct pci_dev *dev, int where, u16 *val);
-> -- 
-> 2.30.2
-> 
