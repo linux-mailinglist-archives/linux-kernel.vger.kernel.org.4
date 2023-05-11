@@ -2,193 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C6CA6FEFDF
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:26:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE6DD6FEFE4
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:27:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237816AbjEKK0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 06:26:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58040 "EHLO
+        id S237856AbjEKK1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 06:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237273AbjEKK0G (ORCPT
+        with ESMTP id S237225AbjEKK11 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 06:26:06 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D87810C0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:26:04 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-50bd875398dso12739058a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:26:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683800763; x=1686392763;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ah9vrmwXkmgBXYxu0weg0/evB6b5zH+I5OTrqcCotE4=;
-        b=rXxX/EZCr13k7OrOt467ssxzf2X9J/TlPGkcCk2Lmi0YzVGXnItA9qzHiPDqRgxckk
-         E1BYRXPqAWPpFm1HwrGrxurvp+kh0C6JZW4HX2sq+x2TdsC6CFqxz69Cy8TSci0pCaQ3
-         A5/R4DglPc6NLnrLlYl47Xk2akLwGXB1UXYCzUmewAicNFBn5vYjkIZlt1pJ+C8q98xc
-         Mv19Of4l4dBD4jrMFTWIJF1CrnVFCU5xZ8zKHvMbhr0Yckl0LgofYNw+Qvq2jVC3luJf
-         mdPRcUIHRV8zegspfQF8GwAhWcuX1eJFobzfVazRVG8GzRQsxLaRgjVTcbPEaEYQBczC
-         sllw==
+        Thu, 11 May 2023 06:27:27 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3C9C8A4E
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:26:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683800798;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=RhczK8dDlliuVGSzk9PMw10+gj4mVel9O/McDJEwOJU=;
+        b=EF2rTFtKHpYPtx5zEDGOUUfkZRkyekOqvYV/on4dlZWQ7l42Leku1X0q56iZ/YTlllhHjx
+        b97rxe7DGAwwDq+ZmzHKynkMT/Bhg6Xdaizuy/vjKaUvTsFD6I4yX+uDex+VlfKnz9gmUD
+        ctGFlHpOaVKzvSsi9CNsPm6oyBwd1+Q=
+Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
+ [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-634-vRMWItqsO-WAHDFj8WG4Ug-1; Thu, 11 May 2023 06:26:37 -0400
+X-MC-Unique: vRMWItqsO-WAHDFj8WG4Ug-1
+Received: by mail-wr1-f69.google.com with SMTP id ffacd0b85a97d-307ae58624dso159402f8f.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:26:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683800763; x=1686392763;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ah9vrmwXkmgBXYxu0weg0/evB6b5zH+I5OTrqcCotE4=;
-        b=DBTfqD2pwDn252KYHFyn+G2vW2r9dDWon5FxVrugRtBIIzgfo4RRrUXZqxn1FV4tBr
-         w04cQHoxI4QOPpYf/JDeAZ1SGmzkMO+f92+Uz9SG+X8y6wHJvkhWdSC8GTC0F8+NpI/B
-         ZKE2blCID90D2bkF+l3606apdewGXo7A2NzNZYGsjeHFYLBHDhxTBk65KxAwTJtip3Ui
-         +HNE0wfVpyblyJUYeW7rV8qnNfAYTa+bYMqBEaDt3xM9zLIsFbKeKYuMPwQ3xRWLp6ci
-         Cyxv9UXDulPN39VdgfZTNfwLzTZ6mu8EYAdGY4K8O5amhDXwR9gjxTGBFvsIDPJ/vWaf
-         KB6g==
-X-Gm-Message-State: AC+VfDwKZFu6HrOvCChVqBsFNj2OueoqJW/psgVfTngcWn9s+57/lXON
-        LYt3T38Ga2Qu+mn8WoHupJtfJQ==
-X-Google-Smtp-Source: ACHHUZ6v0q0rkYOVzfy1x5Zv7HMvJ0TR86ZQeUQKPw/eThfnEv2XBPqTzZdzQPuVsKkt4nRhZYtWTA==
-X-Received: by 2002:a05:6402:1056:b0:506:86aa:78ed with SMTP id e22-20020a056402105600b0050686aa78edmr17255596edu.20.1683800762902;
-        Thu, 11 May 2023 03:26:02 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:41e7:1b68:d38e:1348])
-        by smtp.gmail.com with ESMTPSA id d5-20020a50fe85000000b004fbf6b35a56sm2894642edt.76.2023.05.11.03.26.01
+        d=1e100.net; s=20221208; t=1683800796; x=1686392796;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RhczK8dDlliuVGSzk9PMw10+gj4mVel9O/McDJEwOJU=;
+        b=WBEZsSH4lXRemfIxjybf6yKca+bc05NcUtdk20pDAPaCmrbLdOllWqTV/Omw4Q3TpU
+         3k2lt+oK96vS82k8KA79wQSWQ4Qi4dazn+XSNWBwNGALDYfod58PrM6gxXCIMaasUSwq
+         gjN7lSTdkJfiHATxX4L10sflT8q+ad2y0MDS0pgvTWhAB2TnJvqbYbjbDmhpgeawwy6j
+         qQG0qIC756ZUkVrEX7rLYSFOeDCFwNM2DZUsB/6whM9ojmHpIgaoyT/E6iyCiORyZRKq
+         LzpXvq9MzEXc33U7DaG1ulMe/8lV6pikfmPhY+lxMySC6uymDUuv2dvLcCNz7w+sqVcU
+         T3aw==
+X-Gm-Message-State: AC+VfDycrB6YfLc0UsanFmdixA0/wTV+uuWlnnI/iRz9gGe5T4Jqr/8g
+        IixRmyJlGJAZ0BRMOe+xSRMTQUnXMCuWD6zYGQtQG/ThUrNmkoA/KP7S95UsdQIgOmp4PBC4Knf
+        ig10bWxMArLRVzfBUlUjckHLR
+X-Received: by 2002:a05:600c:350a:b0:3f1:78bd:c38b with SMTP id h10-20020a05600c350a00b003f178bdc38bmr14676290wmq.4.1683800796461;
+        Thu, 11 May 2023 03:26:36 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ63NU4Oof1bATaeQhgP8Iy50937zSMDTB6Qrx0C92vLioRIcxbSK8LmdgeNCuXGMWSrGWa1Qw==
+X-Received: by 2002:a05:600c:350a:b0:3f1:78bd:c38b with SMTP id h10-20020a05600c350a00b003f178bdc38bmr14676270wmq.4.1683800796103;
+        Thu, 11 May 2023 03:26:36 -0700 (PDT)
+Received: from gerbillo.redhat.com (146-241-243-149.dyn.eolo.it. [146.241.243.149])
+        by smtp.gmail.com with ESMTPSA id n2-20020a5d4c42000000b003063db8f45bsm19893247wrt.23.2023.05.11.03.26.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 03:26:02 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Subject: [RESEND PATCH] dt-bindings: input: cypress,cyapa: convert to dtschema
-Date:   Thu, 11 May 2023 12:25:59 +0200
-Message-Id: <20230511102559.175088-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 11 May 2023 03:26:35 -0700 (PDT)
+Message-ID: <8aebd38cf057cf659d5133527f55e1ced0e6f70c.camel@redhat.com>
+Subject: Re: [PATCH net-next v2 2/3] net: phy: broadcom: Add support for
+ Wake-on-LAN
+From:   Paolo Abeni <pabeni@redhat.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>, netdev@vger.kernel.org
+Cc:     Doug Berger <opendmb@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Marek =?ISO-8859-1?Q?Beh=FAn?= <kabel@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Frank <Frank.Sae@motor-comm.com>,
+        open list <linux-kernel@vger.kernel.org>
+Date:   Thu, 11 May 2023 12:26:34 +0200
+In-Reply-To: <20230509223403.1852603-3-f.fainelli@gmail.com>
+References: <20230509223403.1852603-1-f.fainelli@gmail.com>
+         <20230509223403.1852603-3-f.fainelli@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Cypress All Points Addressable (APA) I2C Touchpad / Trackpad
-bindings to DT schema.
+Hi,
 
-Reviewed-by: Rob Herring <robh@kernel.org>
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- .../bindings/input/cypress,cyapa.txt          | 42 ----------------
- .../bindings/input/cypress,cyapa.yaml         | 49 +++++++++++++++++++
- 2 files changed, 49 insertions(+), 42 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/input/cypress,cyapa.txt
- create mode 100644 Documentation/devicetree/bindings/input/cypress,cyapa.yaml
+On Tue, 2023-05-09 at 15:34 -0700, Florian Fainelli wrote:
+> @@ -821,7 +917,28 @@ static int bcm54xx_phy_probe(struct phy_device *phyd=
+ev)
+>  	if (IS_ERR(priv->ptp))
+>  		return PTR_ERR(priv->ptp);
+> =20
+> -	return 0;
+> +	/* We cannot utilize the _optional variant here since we want to know
+> +	 * whether the GPIO descriptor exists or not to advertise Wake-on-LAN
+> +	 * support or not.
+> +	 */
+> +	wakeup_gpio =3D devm_gpiod_get(&phydev->mdio.dev, "wakeup", GPIOD_IN);
+> +	if (PTR_ERR(wakeup_gpio) =3D=3D -EPROBE_DEFER)
+> +		return PTR_ERR(wakeup_gpio);
+> +
+> +	if (!IS_ERR(wakeup_gpio)) {
+> +		priv->wake_irq =3D gpiod_to_irq(wakeup_gpio);
+> +		ret =3D irq_set_irq_type(priv->wake_irq, IRQ_TYPE_LEVEL_LOW);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	/* If we do not have a main interrupt or a side-band wake-up interrupt,
+> +	 * then the device cannot be marked as wake-up capable.
+> +	 */
+> +	if (!bcm54xx_phy_can_wakeup(phydev))
+> +		return ret;
 
-diff --git a/Documentation/devicetree/bindings/input/cypress,cyapa.txt b/Documentation/devicetree/bindings/input/cypress,cyapa.txt
-deleted file mode 100644
-index d3db65916a36..000000000000
---- a/Documentation/devicetree/bindings/input/cypress,cyapa.txt
-+++ /dev/null
-@@ -1,42 +0,0 @@
--Cypress I2C Touchpad
--
--Required properties:
--- compatible: must be "cypress,cyapa".
--- reg: I2C address of the chip.
--- interrupts: interrupt to which the chip is connected (see interrupt
--	binding[0]).
--
--Optional properties:
--- wakeup-source: touchpad can be used as a wakeup source.
--- pinctrl-names: should be "default" (see pinctrl binding [1]).
--- pinctrl-0: a phandle pointing to the pin settings for the device (see
--	pinctrl binding [1]).
--- vcc-supply: a phandle for the regulator supplying 3.3V power.
--
--[0]: Documentation/devicetree/bindings/interrupt-controller/interrupts.txt
--[1]: Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt
--
--Example:
--	&i2c0 {
--		/* ... */
--
--		/* Cypress Gen3 touchpad */
--		touchpad@67 {
--			compatible = "cypress,cyapa";
--			reg = <0x67>;
--			interrupt-parent = <&gpio>;
--			interrupts = <2 IRQ_TYPE_EDGE_FALLING>;	/* GPIO 2 */
--			wakeup-source;
--		};
--
--		/* Cypress Gen5 and later touchpad */
--		touchpad@24 {
--			compatible = "cypress,cyapa";
--			reg = <0x24>;
--			interrupt-parent = <&gpio>;
--			interrupts = <2 IRQ_TYPE_EDGE_FALLING>;	/* GPIO 2 */
--			wakeup-source;
--		};
--
--		/* ... */
--	};
-diff --git a/Documentation/devicetree/bindings/input/cypress,cyapa.yaml b/Documentation/devicetree/bindings/input/cypress,cyapa.yaml
-new file mode 100644
-index 000000000000..29515151abe9
---- /dev/null
-+++ b/Documentation/devicetree/bindings/input/cypress,cyapa.yaml
-@@ -0,0 +1,49 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/input/cypress,cyapa.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Cypress All Points Addressable (APA) I2C Touchpad / Trackpad
-+
-+maintainers:
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-+
-+properties:
-+  compatible:
-+    const: cypress,cyapa
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  wakeup-source: true
-+
-+  vcc-supply:
-+    description: 3.3V power
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        trackpad@67 {
-+            reg = <0x67>;
-+            compatible = "cypress,cyapa";
-+            interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
-+            interrupt-parent = <&gpx1>;
-+            wakeup-source;
-+        };
-+    };
--- 
-2.34.1
+AFAICS, as this point 'ret' is 0, so the above is confusing. Do you
+intend the probe to complete successfully? If so, would not be
+better/more clear:
+
+		return 0;
+
+?
+
+Thanks,
+
+Paolo
 
