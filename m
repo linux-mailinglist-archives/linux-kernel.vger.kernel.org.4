@@ -2,124 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF61C6FF5A4
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:18:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3209E6FF5B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:19:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238504AbjEKPR5 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 11 May 2023 11:17:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41856 "EHLO
+        id S238487AbjEKPTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 11:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237687AbjEKPRy (ORCPT
+        with ESMTP id S238460AbjEKPTc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 11:17:54 -0400
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 280D81BE9;
-        Thu, 11 May 2023 08:17:53 -0700 (PDT)
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-4f13bfe257aso9857608e87.3;
-        Thu, 11 May 2023 08:17:53 -0700 (PDT)
+        Thu, 11 May 2023 11:19:32 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78FD31FFC
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 08:19:30 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so80402827a12.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 08:19:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1683818369; x=1686410369;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mJpRi8U4anHxP91Og34clDJuvOhSvC/Ny6ZY6fVS6NA=;
+        b=TmbsosqpHKsbyV71znStNqd9RFeitV2eXYJsFJpgGLAWKEAdwqfW53ks0v0R3avk2a
+         OghVcmxL6fmRRmfoUA4i/6v/wgDgTX0cvj9AUrkOz/zF7mPs0BqHfcVS2hkuwk6XwS/l
+         tgMfDkjGR3PYqyeIZy8t1VHU63NOqSI8LZ6E9Z0I7c7m6chu1sFS75o4OdKGtCdxWUy8
+         oaGw6twk/jGvsUjdobAivroaAm9uEvUB5AgLXUEtT6Q+Mx6aT+2IUSp37uPhTN+O+//J
+         sDyoZFGrkuM56fa5LetP7SulRGvgVJuU++QlN4eWnma9MIYk0XJiH3dWLRUMrxLfbRML
+         2kdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683818269; x=1686410269;
+        d=1e100.net; s=20221208; t=1683818369; x=1686410369;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LeLJUnaY4RpSv7Fr2RyuafyTEGCbWOy7/KdXYyNynDE=;
-        b=ge1gtwjXlKoKZXr/qIp5om/sZLzkRVaPZoKEd+n/64npGC8ZAgJXmeZVOU9dCKyBrL
-         qRdx47yk2qLkmuRxh7eGifrT9eaVecmor5q11BXhaJ2bvcs2dcUrTtB9J2UrAnUaSrfr
-         YbUKSyF/XomYjC09/9GV50LGxkwISrvHUx6/n18DsSSDmqjum5v0TifpJ89ok5HERmi/
-         5VCFJLvV/eF7sI3GJkM3A9B+TgJyqP23zpjIZ3VTvmZ83MlALpNi2IbddO5v7j0sbKYM
-         kx6ftYs353keXixBF8zPyAKnbpK9wYbU/CCJqYSUuLCJ5Nfo/fOSGrm2u/PAwjoHCy7t
-         14EQ==
-X-Gm-Message-State: AC+VfDw3E+dBcf13s+NtbICSOnmyeQnwg/5pHUe0fxHRj9igKjkPYGNK
-        Usk7crOITmi4b4Fvx/ms8naUz7SDKeB2elkP
-X-Google-Smtp-Source: ACHHUZ7AtAYYjTZZBBifPPhnRdvlQJmGftR5qufjOvI46W5MJZJ2S/CxxxUalX7TfpD2oh6B80cmDg==
-X-Received: by 2002:ac2:5930:0:b0:4e9:74a8:134c with SMTP id v16-20020ac25930000000b004e974a8134cmr2779767lfi.43.1683818268565;
-        Thu, 11 May 2023 08:17:48 -0700 (PDT)
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com. [209.85.167.51])
-        by smtp.gmail.com with ESMTPSA id o21-20020ac24355000000b004dda87ecae3sm1125543lfl.246.2023.05.11.08.17.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 May 2023 08:17:47 -0700 (PDT)
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-4f2676d62a2so1729691e87.0;
-        Thu, 11 May 2023 08:17:46 -0700 (PDT)
-X-Received: by 2002:ac2:4c13:0:b0:4f2:22bf:fe98 with SMTP id
- t19-20020ac24c13000000b004f222bffe98mr2776652lfq.37.1683818265953; Thu, 11
- May 2023 08:17:45 -0700 (PDT)
+        bh=mJpRi8U4anHxP91Og34clDJuvOhSvC/Ny6ZY6fVS6NA=;
+        b=FQHvqwxYfBITsGIZx42DTYZbY9edWbdYCAnUBYrrxRuwvkLuBJWhbx86NWPK1GQ8Zf
+         9rXRWs4dlT8lLrXIOlQ7Ff9EtjjtZXne/BnD+Dn/nR0FWsZt3Gcc/fPF2TlHPVvsBh8s
+         Ur2Qm0P2aEJYUUiUag52EejNGp3TjHaTej6k0Mz9As86tUwwBWxpXKIDn2l7Fjw5dwII
+         IOG6mKJPA+ZF0wOhie3kzEUXMZn9O9aCoSzpljnHURthK0MmzwnPTynt0+H4zPQ/DyRV
+         wWzqYPGAhCZMWPIO9UevqfOrXgRtLy1ry196qH+slCLxPCCz6KDiROOBhM2yu8uzbydE
+         dA0g==
+X-Gm-Message-State: AC+VfDzNb2CCpmSE918DIWg40GFPAizdw8O1J+l4IfGgjP8zCktp5R0X
+        r2q2Pt9NAnYHXgEuSERQ+AX4tS59QIgkPg3Kf1z0ZQ==
+X-Google-Smtp-Source: ACHHUZ622cGWEkiUpT7RoLmMpy0Uatilmpa5SvU9Xkc1QW1rLBsLFS38+mmhk0wsxGczsQ251uXMbzXui36AgnhTh7U=
+X-Received: by 2002:a17:907:8a08:b0:969:2df9:a0dd with SMTP id
+ sc8-20020a1709078a0800b009692df9a0ddmr12191725ejc.25.1683818368935; Thu, 11
+ May 2023 08:19:28 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230511150802.737477-1-cgzones@googlemail.com>
-In-Reply-To: <20230511150802.737477-1-cgzones@googlemail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 11 May 2023 17:17:29 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVa69s3g0z6qgayzNx=jT6Ko2RNeZehru0SbzYH8VwkfQ@mail.gmail.com>
-Message-ID: <CAMuHMdVa69s3g0z6qgayzNx=jT6Ko2RNeZehru0SbzYH8VwkfQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v2] fs/xattr: add *at family syscalls
-To:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>
-Cc:     x86@kernel.org, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, audit@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        Nhat Pham <nphamcs@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>
+References: <00000000000019af1d05fb5fdd99@google.com>
+In-Reply-To: <00000000000019af1d05fb5fdd99@google.com>
+From:   Lorenz Bauer <lmb@isovalent.com>
+Date:   Thu, 11 May 2023 08:19:17 -0700
+Message-ID: <CAN+4W8jFTcnS-EBppkoRXmfzUOgiGNwBku69==-b-Z_2fDHfUw@mail.gmail.com>
+Subject: Re: [syzbot] [bpf?] KASAN: slab-out-of-bounds Write in copy_array (2)
+To:     syzbot <syzbot+d742fd7d34097f949179@syzkaller.appspotmail.com>
+Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
+        daniel@iogearbox.net, davem@davemloft.net, haoluo@google.com,
+        hawk@kernel.org, john.fastabend@gmail.com, jolsa@kernel.org,
+        kpsingh@kernel.org, kuba@kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, martin.lau@linux.dev, nathan@kernel.org,
+        ndesaulniers@google.com, netdev@vger.kernel.org, sdf@google.com,
+        song@kernel.org, syzkaller-bugs@googlegroups.com, trix@redhat.com,
+        yhs@fb.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian,
-
-On Thu, May 11, 2023 at 5:10 PM Christian Göttsche
-<cgzones@googlemail.com> wrote:
-> Add the four syscalls setxattrat(), getxattrat(), listxattrat() and
-> removexattrat().  Those can be used to operate on extended attributes,
-> especially security related ones, either relative to a pinned directory
-> or on a file descriptor without read access, avoiding a
-> /proc/<pid>/fd/<fd> detour, requiring a mounted procfs.
+On Wed, May 10, 2023 at 5:14=E2=80=AFPM syzbot
+<syzbot+d742fd7d34097f949179@syzkaller.appspotmail.com> wrote:
 >
-> One use case will be setfiles(8) setting SELinux file contexts
-> ("security.selinux") without race conditions.
+> Hello,
 >
-> Add XATTR flags to the private namespace of AT_* flags.
+> syzbot found the following issue on:
 >
-> Use the do_{name}at() pattern from fs/open.c.
+> HEAD commit:    950b879b7f02 riscv: Fixup race condition on PG_dcache_cle=
+a..
+> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux=
+.git fixes
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D17eaa0c628000=
+0
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Decebece1b90c0=
+342
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3Dd742fd7d34097f9=
+49179
+> compiler:       riscv64-linux-gnu-gcc (Debian 10.2.1-6) 10.2.1 20210110, =
+GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: riscv64
 >
-> Use a single flag parameter for extended attribute flags (currently
-> XATTR_CREATE and XATTR_REPLACE) and *at() flags to not exceed six
-> syscall arguments in setxattrat().
+> Unfortunately, I don't have any reproducer for this issue yet.
 >
-> Previous approach ("f*xattr: allow O_PATH descriptors"): https://lore.kernel.org/all/20220607153139.35588-1-cgzones@googlemail.com/
-> v1 discussion: https://lore.kernel.org/all/20220830152858.14866-2-cgzones@googlemail.com/
+> Downloadable assets:
+> disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/5=
+ab53d394dbf/non_bootable_disk-950b879b.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/938475579d6c/vmlinu=
+x-950b879b.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/bcf263d8c574/I=
+mage-950b879b.xz
 >
-> Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+> IMPORTANT: if you fix the issue, please add the following tag to the comm=
+it:
+> Reported-by: syzbot+d742fd7d34097f949179@syzkaller.appspotmail.com
 
-Thanks for your patch!
+That tree doesn't have the fix yet:
+https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/tree/kernel=
+/bpf/verifier.c?h=3Dfixes&id=3D950b879b7f02#n1065
 
-The syscall numbers conflict with those used in "[PATCH] cachestat:
-wire up cachestat for other architectures", so this needs some
-synchronization.
-https://lore.kernel.org/linux-sh/20230510195806.2902878-1-nphamcs@gmail.com
-
->  arch/m68k/kernel/syscalls/syscall.tbl       |   4 +
-
-For m68k:
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+#syz fix: bpf: Always use maximal size for copy_array()
