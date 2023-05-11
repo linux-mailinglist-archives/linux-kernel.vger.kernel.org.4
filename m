@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 968696FFAA1
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:41:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED766FFAA2
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:41:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239374AbjEKTlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 15:41:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
+        id S239392AbjEKTlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 15:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239442AbjEKTlQ (ORCPT
+        with ESMTP id S239473AbjEKTlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 15:41:16 -0400
+        Thu, 11 May 2023 15:41:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403D1D2E8;
-        Thu, 11 May 2023 12:40:42 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E81483CE;
+        Thu, 11 May 2023 12:40:45 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 84D2E650DB;
-        Thu, 11 May 2023 19:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A607FC4339C;
-        Thu, 11 May 2023 19:40:16 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B0F196511B;
+        Thu, 11 May 2023 19:40:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CADB0C433A0;
+        Thu, 11 May 2023 19:40:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683834017;
-        bh=2QLWUuv7sWoxq91M2t52vu5y6W5FZRv+CbpLAWryEGk=;
+        s=k20201202; t=1683834019;
+        bh=zpV5SE+b+pNWUY2xCtVHyDVz/RSQi2tKBoj7a2cWFUE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TOTv007gMjK5K7HgCerMXY7+dcOfXUX0CPb/El6sFxWYzJZEirx24u5XlZYSHTg4D
-         K9b9tADl7OlZ2UEAyavuTq6x5KLIqxNrpi9gu3lIIn0R4zajBFWTedKVcFJALGH8Hu
-         PkPrVVq3pSfYrqa44z1dUDzzYhN142S46+5Y0B/JqifapjODOznlDNc3Fy7vl5xvCi
-         sCz1p+yu8JoKUy0q+9Jv4IdeP2bWH2ZXZF5gjcSS8acsmF+QlsNg+tiHR2SyKSJbdp
-         74ik5tZTWhuGzVnLtNzKhmJCnyMU+QSOng+D7rfqnsRBXgSBEVvsS9xDMcgLJy9UmO
-         N4WSmsxcnX6oQ==
+        b=YaYgJvXbTc6Dkkjsj+WI9dJf9nYQV9MtphoUytEiMefTmlDWXH4QzmyZ6NLTDxmTY
+         71aa2TTqI8Y777GTmdTQ4QL9QTmJSzJrIfKerwmGWwBwH9Ig+zXbDZcniT9VQyTSsg
+         XyKhy4SXciv1jpiQ42p96shYosS8EYV0sGGfKJaxUOpkDd62lV6+T54yVT5yypNnpO
+         PkCF8Ygh4TuaODxnuWQzHQJU3PdPND+Zsxb74xoJZyiYk9X0f5KzSKjvhXqMM34BLO
+         lNM3NUWBV3LU9Dsfuh1mtKr/SJkzo8G4zNQ6bmkmUmqoCDBCt7a6H24Bi62PulVCMJ
+         MGl21WZ32bB/g==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
-        Sasha Levin <sashal@kernel.org>, kadlec@netfilter.org,
-        fw@strlen.de, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 7/9] netfilter: nf_tables: deactivate anonymous set from preparation phase
-Date:   Thu, 11 May 2023 15:39:40 -0400
-Message-Id: <20230511193945.623476-7-sashal@kernel.org>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        Mark Brown <broonie@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, cezary.rojewski@intel.com,
+        liam.r.girdwood@linux.intel.com, peter.ujfalusi@linux.intel.com,
+        yung-chuan.liao@linux.intel.com, ranjani.sridharan@linux.intel.com,
+        kai.vehmanen@linux.intel.com, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org
+Subject: [PATCH AUTOSEL 6.1 8/9] ASoC: Intel: soc-acpi-cht: Add quirk for Nextbook Ares 8A tablet
+Date:   Thu, 11 May 2023 15:39:41 -0400
+Message-Id: <20230511193945.623476-8-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230511193945.623476-1-sashal@kernel.org>
 References: <20230511193945.623476-1-sashal@kernel.org>
@@ -60,124 +62,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pablo Neira Ayuso <pablo@netfilter.org>
+From: Hans de Goede <hdegoede@redhat.com>
 
-[ Upstream commit c1592a89942e9678f7d9c8030efa777c0d57edab ]
+[ Upstream commit ec6f82b4c63cc68f8dc03316e725106d242706be ]
 
-Toggle deleted anonymous sets as inactive in the next generation, so
-users cannot perform any update on it. Clear the generation bitmask
-in case the transaction is aborted.
+The Nextbook Ares 8A tablet which has Android as factory OS, has a buggy
+DSDT with both ESSX8316 and 10EC5651 ACPI devices.
 
-The following KASAN splat shows a set element deletion for a bound
-anonymous set that has been already removed in the same transaction.
+This tablet actually uses an rt5651 codec, but the matching code ends up
+picking the ESSX8316 device, add a quirk to ignote the ESSX8316 device
+on this tablet.
 
-[   64.921510] ==================================================================
-[   64.923123] BUG: KASAN: wild-memory-access in nf_tables_commit+0xa24/0x1490 [nf_tables]
-[   64.924745] Write of size 8 at addr dead000000000122 by task test/890
-[   64.927903] CPU: 3 PID: 890 Comm: test Not tainted 6.3.0+ #253
-[   64.931120] Call Trace:
-[   64.932699]  <TASK>
-[   64.934292]  dump_stack_lvl+0x33/0x50
-[   64.935908]  ? nf_tables_commit+0xa24/0x1490 [nf_tables]
-[   64.937551]  kasan_report+0xda/0x120
-[   64.939186]  ? nf_tables_commit+0xa24/0x1490 [nf_tables]
-[   64.940814]  nf_tables_commit+0xa24/0x1490 [nf_tables]
-[   64.942452]  ? __kasan_slab_alloc+0x2d/0x60
-[   64.944070]  ? nf_tables_setelem_notify+0x190/0x190 [nf_tables]
-[   64.945710]  ? kasan_set_track+0x21/0x30
-[   64.947323]  nfnetlink_rcv_batch+0x709/0xd90 [nfnetlink]
-[   64.948898]  ? nfnetlink_rcv_msg+0x480/0x480 [nfnetlink]
-
-Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Acked-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Message-Id: <20230429104721.7176-1-hdegoede@redhat.com>
+Signed-off-by: Mark Brown <broonie@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- include/net/netfilter/nf_tables.h |  1 +
- net/netfilter/nf_tables_api.c     | 12 ++++++++++++
- net/netfilter/nft_dynset.c        |  2 +-
- net/netfilter/nft_lookup.c        |  2 +-
- net/netfilter/nft_objref.c        |  2 +-
- 5 files changed, 16 insertions(+), 3 deletions(-)
+ .../intel/common/soc-acpi-intel-cht-match.c   | 26 +++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/include/net/netfilter/nf_tables.h b/include/net/netfilter/nf_tables.h
-index 6bacbf57ac175..a1ccf1276f3ee 100644
---- a/include/net/netfilter/nf_tables.h
-+++ b/include/net/netfilter/nf_tables.h
-@@ -614,6 +614,7 @@ struct nft_set_binding {
- };
- 
- enum nft_trans_phase;
-+void nf_tables_activate_set(const struct nft_ctx *ctx, struct nft_set *set);
- void nf_tables_deactivate_set(const struct nft_ctx *ctx, struct nft_set *set,
- 			      struct nft_set_binding *binding,
- 			      enum nft_trans_phase phase);
-diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
-index 12d815b9aa131..f82a61d92aa90 100644
---- a/net/netfilter/nf_tables_api.c
-+++ b/net/netfilter/nf_tables_api.c
-@@ -4936,12 +4936,24 @@ static void nf_tables_unbind_set(const struct nft_ctx *ctx, struct nft_set *set,
- 	}
+diff --git a/sound/soc/intel/common/soc-acpi-intel-cht-match.c b/sound/soc/intel/common/soc-acpi-intel-cht-match.c
+index 6beb00858c33f..cdcbf04b8832f 100644
+--- a/sound/soc/intel/common/soc-acpi-intel-cht-match.c
++++ b/sound/soc/intel/common/soc-acpi-intel-cht-match.c
+@@ -50,6 +50,31 @@ static struct snd_soc_acpi_mach *cht_quirk(void *arg)
+ 		return mach;
  }
  
-+void nf_tables_activate_set(const struct nft_ctx *ctx, struct nft_set *set)
++/*
++ * Some tablets with Android factory OS have buggy DSDTs with an ESSX8316 device
++ * in the ACPI tables. While they are not using an ESS8316 codec. These DSDTs
++ * also have an ACPI device for the correct codec, ignore the ESSX8316.
++ */
++static const struct dmi_system_id cht_ess8316_not_present_table[] = {
++	{
++		/* Nextbook Ares 8A */
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "Insyde"),
++			DMI_MATCH(DMI_PRODUCT_NAME, "CherryTrail"),
++			DMI_MATCH(DMI_BIOS_VERSION, "M882"),
++		},
++	},
++	{ }
++};
++
++static struct snd_soc_acpi_mach *cht_ess8316_quirk(void *arg)
 +{
-+	if (nft_set_is_anonymous(set))
-+		nft_clear(ctx->net, set);
++	if (dmi_check_system(cht_ess8316_not_present_table))
++		return NULL;
 +
-+	set->use++;
++	return arg;
 +}
-+EXPORT_SYMBOL_GPL(nf_tables_activate_set);
 +
- void nf_tables_deactivate_set(const struct nft_ctx *ctx, struct nft_set *set,
- 			      struct nft_set_binding *binding,
- 			      enum nft_trans_phase phase)
- {
- 	switch (phase) {
- 	case NFT_TRANS_PREPARE:
-+		if (nft_set_is_anonymous(set))
-+			nft_deactivate_next(ctx->net, set);
-+
- 		set->use--;
- 		return;
- 	case NFT_TRANS_ABORT:
-diff --git a/net/netfilter/nft_dynset.c b/net/netfilter/nft_dynset.c
-index 6983e6ddeef90..e65a83328b554 100644
---- a/net/netfilter/nft_dynset.c
-+++ b/net/netfilter/nft_dynset.c
-@@ -342,7 +342,7 @@ static void nft_dynset_activate(const struct nft_ctx *ctx,
- {
- 	struct nft_dynset *priv = nft_expr_priv(expr);
- 
--	priv->set->use++;
-+	nf_tables_activate_set(ctx, priv->set);
- }
- 
- static void nft_dynset_destroy(const struct nft_ctx *ctx,
-diff --git a/net/netfilter/nft_lookup.c b/net/netfilter/nft_lookup.c
-index d9ad1aa818564..68a5dea805480 100644
---- a/net/netfilter/nft_lookup.c
-+++ b/net/netfilter/nft_lookup.c
-@@ -167,7 +167,7 @@ static void nft_lookup_activate(const struct nft_ctx *ctx,
- {
- 	struct nft_lookup *priv = nft_expr_priv(expr);
- 
--	priv->set->use++;
-+	nf_tables_activate_set(ctx, priv->set);
- }
- 
- static void nft_lookup_destroy(const struct nft_ctx *ctx,
-diff --git a/net/netfilter/nft_objref.c b/net/netfilter/nft_objref.c
-index 5d8d91b3904db..7f8e480b6be5b 100644
---- a/net/netfilter/nft_objref.c
-+++ b/net/netfilter/nft_objref.c
-@@ -184,7 +184,7 @@ static void nft_objref_map_activate(const struct nft_ctx *ctx,
- {
- 	struct nft_objref_map *priv = nft_expr_priv(expr);
- 
--	priv->set->use++;
-+	nf_tables_activate_set(ctx, priv->set);
- }
- 
- static void nft_objref_map_destroy(const struct nft_ctx *ctx,
+ static const struct snd_soc_acpi_codecs rt5640_comp_ids = {
+ 	.num_codecs = 2,
+ 	.codecs = { "10EC5640", "10EC3276" },
+@@ -113,6 +138,7 @@ struct snd_soc_acpi_mach  snd_soc_acpi_intel_cherrytrail_machines[] = {
+ 		.drv_name = "bytcht_es8316",
+ 		.fw_filename = "intel/fw_sst_22a8.bin",
+ 		.board = "bytcht_es8316",
++		.machine_quirk = cht_ess8316_quirk,
+ 		.sof_tplg_filename = "sof-cht-es8316.tplg",
+ 	},
+ 	/* some CHT-T platforms rely on RT5640, use Baytrail machine driver */
 -- 
 2.39.2
 
