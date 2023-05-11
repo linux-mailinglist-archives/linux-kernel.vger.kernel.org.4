@@ -2,72 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2F56FF971
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 20:20:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 767FA6FF97D
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 20:26:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239289AbjEKSU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 14:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44370 "EHLO
+        id S238914AbjEKS02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 14:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239208AbjEKSUE (ORCPT
+        with ESMTP id S238411AbjEKS00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 14:20:04 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8844740ED
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 11:19:55 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-644d9bf05b7so4507884b3a.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 11:19:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683829195; x=1686421195;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JkYqgFUcqMwizBouzYCG0qlgoOAQQIMFoBJwBvsb0Vs=;
-        b=GjrHUo2ELF5xX6tAJ6WCz3klJ0+A896W4F4H3/SRCD+B3wCrensN8UKMgygN2Iixiq
-         Hm7POiTzcSOEOK1tEgviFTB3lwTeQ3HKnbeCqSbTy0KY+U2WL/MTLnaX74v0bqkPg9/d
-         +VfXmmg5cyILkqqAtcSlNMcFq8GkWDpTZIu6+iawBItBCddnYwF512URFvaNBcm2Okxj
-         CUYM52k+LdvsqFo0a68PkdmPb/GarXaYafROcpzoiFbEaCoh+Zrrw0Y6ikY6VIEuDJlc
-         Slo1ttHJBzLpPYnAWPopfKQVbdSTksiSuDMg8ipFCBHnklXp0BoPJsZIY70t7RS9ns7l
-         2gkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683829195; x=1686421195;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=JkYqgFUcqMwizBouzYCG0qlgoOAQQIMFoBJwBvsb0Vs=;
-        b=Jsgz9Ftg3T+YjxynCQK7LTOj60RjwF+zKjyWjYkS5qE/Vr+q6FVqBWM50hWmZcmEg+
-         nbWFHhlo2Dpuro1E/GAowBCiBcMxKS9qtohEMKmRZI69bu987nyRK+/ZLIs9AkG954UK
-         272Ikuj0r+i+3+7sncg2p+LVjCo4Sx+BwMjzwMMkPLoefpgAMqUwHW8gO5MKL0UzVbhH
-         Q+XWbOIfnYA8WTyU1TNZCZNLTz+R1oM5lKsnkxeyMWHAymWVLH7uoyJkOs3yn2lJJjme
-         GigEwTBtd/gIYbC85bAiw10MsQil8hr/7sWMDprMPMzeJYQlLMIQojZEgzXEaxw1qVcH
-         dtZQ==
-X-Gm-Message-State: AC+VfDw2khoybVMgHnZfN0FBGiU6fANRkcsm/Lo8tBEXRi4uTHFkMYqw
-        vS5dAj6E6adN3hqkcWFmOZg=
-X-Google-Smtp-Source: ACHHUZ44SzTyICYITfxsgSVnIjj3SySgJUibfB0jBhxGMl9cJBHMxqXCCxJn/2VtxR+YNTmyOUHDFg==
-X-Received: by 2002:a05:6a00:1950:b0:647:2ce5:57c4 with SMTP id s16-20020a056a00195000b006472ce557c4mr12932714pfk.5.1683829194472;
-        Thu, 11 May 2023 11:19:54 -0700 (PDT)
-Received: from localhost (2603-800c-1a02-1bae-a7fa-157f-969a-4cde.res6.spectrum.com. [2603:800c:1a02:1bae:a7fa:157f:969a:4cde])
-        by smtp.gmail.com with ESMTPSA id h5-20020a62b405000000b0062dd9a8c1b8sm5593895pfn.100.2023.05.11.11.19.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 11:19:54 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-From:   Tejun Heo <tj@kernel.org>
-To:     jiangshanlai@gmail.com
-Cc:     torvalds@linux-foundation.org, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        Tejun Heo <tj@kernel.org>
-Subject: [PATCH 7/7] workqueue: Track and monitor per-workqueue CPU time usage
-Date:   Thu, 11 May 2023 08:19:31 -1000
-Message-Id: <20230511181931.869812-8-tj@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <20230511181931.869812-1-tj@kernel.org>
-References: <20230511181931.869812-1-tj@kernel.org>
+        Thu, 11 May 2023 14:26:26 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09BE10C6;
+        Thu, 11 May 2023 11:26:22 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id D310E5FD0C;
+        Thu, 11 May 2023 21:26:20 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1683829580;
+        bh=5nTAfm/pvw11kHJn8DB2F1CXjcxkc985Z7SnZU2jNZw=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=AgMOHm0+2/cEkhAS9xFjJ3Watg2imQsL3Nimrvhnksp0qHif0wmln6Iavj/w451dv
+         jJNEdbOuhpuDfNa1h+S4SjZEazN2+v+NFJ+AB+7+0xl8zyBEhant2cu0l7G0SMO1Pz
+         vNK9qbrNjnn+oRsju0bDj8J2hOgubkP1FMvLzTcLJuwEjHEywCroEAJzEg3J9DXWSp
+         v24jfo6DMf/y+vvEs+nl2mF89lgsaEMMSyAF8tEeczWIpU4bTDuec6vWoFCxsFCvV+
+         x3qIK3d163DzMdNrKTjKYSMegDJvg7NyXV7WlBnGXRqZwZgFgGcc1OK2fCpXDn26fd
+         /AJM8X2VaQt7g==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Thu, 11 May 2023 21:26:16 +0300 (MSK)
+Message-ID: <c873b5a9-17ad-767c-5b20-35a49ab2bd40@sberdevices.ru>
+Date:   Thu, 11 May 2023 21:21:34 +0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RESEND PATCH v3] mtd: rawnand: macronix: OTP access for
+ MX30LFxG18AC
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>,
+        Mason Yang <masonccyang@mxic.com.tw>,
+        Boris Brezillon <boris.brezillon@collabora.com>
+References: <20230511152120.3297853-1-AVKrasnov@sberdevices.ru>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <20230511152120.3297853-1-AVKrasnov@sberdevices.ru>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/11 10:21:00 #21259776
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,136 +75,265 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that wq_worker_tick() is there, we can easily track the rough CPU time
-consumption of each workqueue by charging the whole tick whenever a tick
-hits an active workqueue. While not super accurate, it provides reasonable
-visibility into the workqueues that consume a lot of CPU cycles.
-wq_monitor.py is updated to report the per-workqueue CPU times.
+Cc: Mason Yang <masonccyang@mxic.com.tw> and Boris Brezillon <boris.brezillon@collabora.com>
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
----
- Documentation/core-api/workqueue.rst | 38 ++++++++++++++--------------
- kernel/workqueue.c                   |  3 +++
- tools/workqueue/wq_monitor.py        |  9 ++++++-
- 3 files changed, 30 insertions(+), 20 deletions(-)
-
-diff --git a/Documentation/core-api/workqueue.rst b/Documentation/core-api/workqueue.rst
-index a389f31b025c..a4c9b9d1905f 100644
---- a/Documentation/core-api/workqueue.rst
-+++ b/Documentation/core-api/workqueue.rst
-@@ -354,25 +354,25 @@ Monitoring
- Use tools/workqueue/wq_monitor.py to monitor workqueue operations: ::
- 
-   $ tools/workqueue/wq_monitor.py events
--                              total  infl CPUitsv  CMwake  mayday rescued
--  events                      18545     0       0       5       -       -
--  events_highpri                  8     0       0       0       -       -
--  events_long                     3     0       0       0       -       -
--  events_unbound              38306     0       -       -       -       -
--  events_freezable                0     0       0       0       -       -
--  events_power_efficient      29598     0       0       0       -       -
--  events_freezable_power_        10     0       0       0       -       -
--  sock_diag_events                0     0       0       0       -       -
--
--                              total  infl CPUitsv  CMwake  mayday rescued
--  events                      18548     0       0       5       -       -
--  events_highpri                  8     0       0       0       -       -
--  events_long                     3     0       0       0       -       -
--  events_unbound              38322     0       -       -       -       -
--  events_freezable                0     0       0       0       -       -
--  events_power_efficient      29603     0       0       0       -       -
--  events_freezable_power_        10     0       0       0       -       -
--  sock_diag_events                0     0       0       0       -       -
-+                              total  infl  CPUtime  CPUhog  CMwake  mayday rescued
-+  events                      18545     0      6.1       0       5       -       -
-+  events_highpri                  8     0      0.0       0       0       -       -
-+  events_long                     3     0      0.0       0       0       -       -
-+  events_unbound              38306     0      0.1       -       -       -       -
-+  events_freezable                0     0      0.0       0       0       -       -
-+  events_power_efficient      29598     0      0.2       0       0       -       -
-+  events_freezable_power_        10     0      0.0       0       0       -       -
-+  sock_diag_events                0     0      0.0       0       0       -       -
-+
-+                              total  infl  CPUtime  CPUhog  CMwake  mayday rescued
-+  events                      18548     0      6.1       0       5       -       -
-+  events_highpri                  8     0      0.0       0       0       -       -
-+  events_long                     3     0      0.0       0       0       -       -
-+  events_unbound              38322     0      0.1       -       -       -       -
-+  events_freezable                0     0      0.0       0       0       -       -
-+  events_power_efficient      29603     0      0.2       0       0       -       -
-+  events_freezable_power_        10     0      0.0       0       0       -       -
-+  sock_diag_events                0     0      0.0       0       0       -       -
- 
-   ...
- 
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index b85d70f133f7..42c41d5368dc 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -212,6 +212,7 @@ struct worker_pool {
- enum pool_workqueue_stats {
- 	PWQ_STAT_STARTED,	/* work items started execution */
- 	PWQ_STAT_COMPLETED,	/* work items completed execution */
-+	PWQ_STAT_CPU_TIME,	/* total CPU time consumed */
- 	PWQ_STAT_CPU_INTENSIVE,	/* wq_cpu_intensive_thresh_us violations */
- 	PWQ_STAT_CM_WAKEUP,	/* concurrency-management worker wakeups */
- 	PWQ_STAT_MAYDAY,	/* maydays to rescuer */
-@@ -1170,6 +1171,8 @@ void wq_worker_tick(struct task_struct *task)
- 	if (!pwq)
- 		return;
- 
-+	pwq->stats[PWQ_STAT_CPU_TIME] += TICK_USEC;
-+
- 	/*
- 	 * If the current worker is concurrency managed and hogged the CPU for
- 	 * longer than wq_cpu_intensive_thresh_us, it's automatically marked
-diff --git a/tools/workqueue/wq_monitor.py b/tools/workqueue/wq_monitor.py
-index 5dc0b61b36e8..3c35239d50c4 100644
---- a/tools/workqueue/wq_monitor.py
-+++ b/tools/workqueue/wq_monitor.py
-@@ -12,6 +12,10 @@ https://github.com/osandov/drgn.
- 
-   infl     The number of currently in-flight work items.
- 
-+  CPUtime  Total CPU time consumed by the workqueue in seconds. This is
-+           sampled from scheduler ticks and only provides ballpark
-+           measurement. "nohz_full=" CPUs are excluded from measurement.
-+
-   CPUitsv  The number of times a concurrency-managed work item hogged CPU
-            longer than the threshold (workqueue.cpu_intensive_thresh_us)
-            and got excluded from concurrency management to avoid stalling
-@@ -59,6 +63,7 @@ WQ_MEM_RECLAIM          = prog['WQ_MEM_RECLAIM']
- 
- PWQ_STAT_STARTED        = prog['PWQ_STAT_STARTED']      # work items started execution
- PWQ_STAT_COMPLETED      = prog['PWQ_STAT_COMPLETED']	# work items completed execution
-+PWQ_STAT_CPU_TIME       = prog['PWQ_STAT_CPU_TIME']     # total CPU time consumed
- PWQ_STAT_CPU_INTENSIVE  = prog['PWQ_STAT_CPU_INTENSIVE'] # wq_cpu_intensive_thresh_us violations
- PWQ_STAT_CM_WAKEUP      = prog['PWQ_STAT_CM_WAKEUP']    # concurrency-management worker wakeups
- PWQ_STAT_MAYDAY         = prog['PWQ_STAT_MAYDAY']	# maydays to rescuer
-@@ -82,13 +87,14 @@ PWQ_NR_STATS            = prog['PWQ_NR_STATS']
-                  'mem_reclaim'          : self.mem_reclaim,
-                  'started'              : self.stats[PWQ_STAT_STARTED],
-                  'completed'            : self.stats[PWQ_STAT_COMPLETED],
-+                 'cputime'              : self.stats[PWQ_STAT_CPU_TIME],
-                  'cpu_intensive'        : self.stats[PWQ_STAT_CPU_INTENSIVE],
-                  'cm_wakeup'            : self.stats[PWQ_STAT_CM_WAKEUP],
-                  'mayday'               : self.stats[PWQ_STAT_MAYDAY],
-                  'rescued'              : self.stats[PWQ_STAT_RESCUED], }
- 
-     def table_header_str():
--        return f'{"":>24} {"total":>8} {"infl":>5} {"CPUitsv":>7} '\
-+        return f'{"":>24} {"total":>8} {"infl":>5} {"CPUtime":>8} {"CPUitsv":>7} '\
-             f'{"CMwake":>7} {"mayday":>7} {"rescued":>7}'
- 
-     def table_row_str(self):
-@@ -108,6 +114,7 @@ PWQ_NR_STATS            = prog['PWQ_NR_STATS']
-         out = f'{self.name[-24:]:24} ' \
-               f'{self.stats[PWQ_STAT_STARTED]:8} ' \
-               f'{max(self.stats[PWQ_STAT_STARTED] - self.stats[PWQ_STAT_COMPLETED], 0):5} ' \
-+              f'{self.stats[PWQ_STAT_CPU_TIME] / 1000000:8.1f} ' \
-               f'{cpu_intensive:>7} ' \
-               f'{cm_wakeup:>7} ' \
-               f'{mayday:>7} ' \
--- 
-2.40.1
-
+On 11.05.2023 18:21, Arseniy Krasnov wrote:
+> This adds support for OTP area access on MX30LFxG18AC chip series.
+> 
+> Changelog:
+>   v1 -> v2:
+>   * Add slab.h include due to kernel test robot error.
+>   v2 -> v3:
+>   * Use 'uint64_t' as input argument for 'do_div()' instead
+>     of 'unsigned long' due to kernel test robot error.
+> 
+> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> ---
+>  drivers/mtd/nand/raw/nand_macronix.c | 213 +++++++++++++++++++++++++++
+>  1 file changed, 213 insertions(+)
+> 
+> diff --git a/drivers/mtd/nand/raw/nand_macronix.c b/drivers/mtd/nand/raw/nand_macronix.c
+> index 1472f925f386..2301f990678e 100644
+> --- a/drivers/mtd/nand/raw/nand_macronix.c
+> +++ b/drivers/mtd/nand/raw/nand_macronix.c
+> @@ -6,6 +6,7 @@
+>   * Author: Boris Brezillon <boris.brezillon@free-electrons.com>
+>   */
+>  
+> +#include <linux/slab.h>
+>  #include "linux/delay.h"
+>  #include "internals.h"
+>  
+> @@ -31,6 +32,20 @@
+>  
+>  #define MXIC_CMD_POWER_DOWN 0xB9
+>  
+> +#define ONFI_FEATURE_ADDR_30LFXG18AC_OTP	0x90
+> +#define MACRONIX_30LFXG18AC_OTP_START_PAGE	0
+> +#define MACRONIX_30LFXG18AC_OTP_PAGES		30
+> +#define MACRONIX_30LFXG18AC_OTP_PAGE_SIZE	2112
+> +#define MACRONIX_30LFXG18AC_OTP_START_BYTE	\
+> +	(MACRONIX_30LFXG18AC_OTP_START_PAGE *	\
+> +	 MACRONIX_30LFXG18AC_OTP_PAGE_SIZE)
+> +#define MACRONIX_30LFXG18AC_OTP_SIZE_BYTES	\
+> +	(MACRONIX_30LFXG18AC_OTP_PAGES *	\
+> +	 MACRONIX_30LFXG18AC_OTP_PAGE_SIZE)
+> +
+> +#define MACRONIX_30LFXG18AC_OTP_EN		BIT(0)
+> +#define MACRONIX_30LFXG18AC_OTP_LOCKED		BIT(1)
+> +
+>  struct nand_onfi_vendor_macronix {
+>  	u8 reserved;
+>  	u8 reliability_func;
+> @@ -316,6 +331,203 @@ static void macronix_nand_deep_power_down_support(struct nand_chip *chip)
+>  	chip->ops.resume = mxic_nand_resume;
+>  }
+>  
+> +static int macronix_30lfxg18ac_get_otp_info(struct mtd_info *mtd, size_t len,
+> +					    size_t *retlen,
+> +					    struct otp_info *buf)
+> +{
+> +	if (len < sizeof(*buf))
+> +		return -EINVAL;
+> +
+> +	/* Don't know how to check that OTP is locked. */
+> +	buf->locked = 0;
+> +	buf->start = MACRONIX_30LFXG18AC_OTP_START_BYTE;
+> +	buf->length = MACRONIX_30LFXG18AC_OTP_SIZE_BYTES;
+> +
+> +	*retlen = sizeof(*buf);
+> +
+> +	return 0;
+> +}
+> +
+> +static int macronix_30lfxg18ac_otp_enable(struct nand_chip *nand)
+> +{
+> +	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
+> +
+> +	feature_buf[0] = MACRONIX_30LFXG18AC_OTP_EN;
+> +	return nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
+> +				 feature_buf);
+> +}
+> +
+> +static int macronix_30lfxg18ac_otp_disable(struct nand_chip *nand)
+> +{
+> +	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
+> +
+> +	return nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
+> +				 feature_buf);
+> +}
+> +
+> +static int __macronix_30lfxg18ac_rw_otp(struct mtd_info *mtd,
+> +					loff_t offs_in_flash,
+> +					size_t len, size_t *retlen,
+> +					u_char *buf, bool write)
+> +{
+> +	struct nand_chip *nand;
+> +	size_t bytes_handled;
+> +	off_t offs_in_page;
+> +	uint64_t page;
+> +	void *dma_buf;
+> +	int ret;
+> +
+> +	/* 'nand_prog/read_page_op()' may use 'buf' as DMA buffer,
+> +	 * so allocate properly aligned memory for it. This is
+> +	 * needed because cross page accesses may lead to unaligned
+> +	 * buffer address for DMA.
+> +	 */
+> +	dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
+> +	if (!dma_buf)
+> +		return -ENOMEM;
+> +
+> +	nand = mtd_to_nand(mtd);
+> +	nand_select_target(nand, 0);
+> +
+> +	ret = macronix_30lfxg18ac_otp_enable(nand);
+> +	if (ret)
+> +		goto out_otp;
+> +
+> +	page = offs_in_flash;
+> +	/* 'page' will be result of division. */
+> +	offs_in_page = do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
+> +	bytes_handled = 0;
+> +
+> +	while (bytes_handled < len &&
+> +	       page < MACRONIX_30LFXG18AC_OTP_PAGES) {
+> +		size_t bytes_to_handle;
+> +
+> +		bytes_to_handle = min_t(size_t, len - bytes_handled,
+> +					MACRONIX_30LFXG18AC_OTP_PAGE_SIZE -
+> +					offs_in_page);
+> +
+> +		if (write) {
+> +			memcpy(dma_buf, &buf[bytes_handled], bytes_to_handle);
+> +			ret = nand_prog_page_op(nand, page, offs_in_page,
+> +						dma_buf, bytes_to_handle);
+> +		} else {
+> +			ret = nand_read_page_op(nand, page, offs_in_page,
+> +						dma_buf, bytes_to_handle);
+> +			if (!ret)
+> +				memcpy(&buf[bytes_handled], dma_buf,
+> +				       bytes_to_handle);
+> +		}
+> +		if (ret)
+> +			goto out_otp;
+> +
+> +		bytes_handled += bytes_to_handle;
+> +		offs_in_page = 0;
+> +		page++;
+> +	}
+> +
+> +	*retlen = bytes_handled;
+> +
+> +out_otp:
+> +	if (ret)
+> +		dev_err(&mtd->dev, "failed to perform OTP IO: %i\n", ret);
+> +
+> +	ret = macronix_30lfxg18ac_otp_disable(nand);
+> +	WARN(ret, "failed to leave OTP mode after %s\n",
+> +	     write ? "write" : "read");
+> +	nand_deselect_target(nand);
+> +	kfree(dma_buf);
+> +
+> +	return ret;
+> +}
+> +
+> +static int macronix_30lfxg18ac_write_otp(struct mtd_info *mtd, loff_t to,
+> +					 size_t len, size_t *rlen,
+> +					 const u_char *buf)
+> +{
+> +	return __macronix_30lfxg18ac_rw_otp(mtd, to, len, rlen, (u_char *)buf,
+> +					    true);
+> +}
+> +
+> +static int macronix_30lfxg18ac_read_otp(struct mtd_info *mtd, loff_t from,
+> +					size_t len, size_t *rlen,
+> +					u_char *buf)
+> +{
+> +	return __macronix_30lfxg18ac_rw_otp(mtd, from, len, rlen, buf, false);
+> +}
+> +
+> +static int macronix_30lfxg18ac_lock_otp(struct mtd_info *mtd, loff_t from,
+> +					size_t len)
+> +{
+> +	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
+> +	struct nand_chip *nand;
+> +	int ret;
+> +
+> +	if (from != MACRONIX_30LFXG18AC_OTP_START_BYTE ||
+> +	    len != MACRONIX_30LFXG18AC_OTP_SIZE_BYTES)
+> +		return -EINVAL;
+> +
+> +	dev_dbg(&mtd->dev, "locking OTP\n");
+> +
+> +	nand = mtd_to_nand(mtd);
+> +	nand_select_target(nand, 0);
+> +
+> +	feature_buf[0] = MACRONIX_30LFXG18AC_OTP_EN |
+> +			 MACRONIX_30LFXG18AC_OTP_LOCKED;
+> +	ret = nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
+> +				feature_buf);
+> +	if (ret) {
+> +		dev_err(&mtd->dev,
+> +			"failed to lock OTP (set features): %i\n", ret);
+> +		nand_deselect_target(nand);
+> +		return ret;
+> +	}
+> +
+> +	/* Do dummy page prog with zero address. */
+> +	feature_buf[0] = 0;
+> +	ret = nand_prog_page_op(nand, 0, 0, feature_buf, 1);
+> +	if (ret)
+> +		dev_err(&mtd->dev,
+> +			"failed to lock OTP (page prog): %i\n", ret);
+> +
+> +	ret = macronix_30lfxg18ac_otp_disable(nand);
+> +	WARN(ret, "failed to leave OTP mode after lock\n");
+> +
+> +	nand_deselect_target(nand);
+> +
+> +	return ret;
+> +}
+> +
+> +static void macronix_nand_setup_otp(struct nand_chip *chip)
+> +{
+> +	static const char * const supported_otp_models[] = {
+> +		"MX30LF1G18AC",
+> +		"MX30LF2G18AC",
+> +		"MX30LF4G18AC",
+> +	};
+> +	struct mtd_info *mtd;
+> +
+> +	if (!chip->parameters.supports_set_get_features)
+> +		return;
+> +
+> +	if (match_string(supported_otp_models,
+> +			 ARRAY_SIZE(supported_otp_models),
+> +			 chip->parameters.model) < 0)
+> +		return;
+> +
+> +	bitmap_set(chip->parameters.get_feature_list,
+> +		   ONFI_FEATURE_ADDR_30LFXG18AC_OTP, 1);
+> +	bitmap_set(chip->parameters.set_feature_list,
+> +		   ONFI_FEATURE_ADDR_30LFXG18AC_OTP, 1);
+> +
+> +	mtd = nand_to_mtd(chip);
+> +	mtd->_get_fact_prot_info = macronix_30lfxg18ac_get_otp_info;
+> +	mtd->_read_fact_prot_reg = macronix_30lfxg18ac_read_otp;
+> +	mtd->_get_user_prot_info = macronix_30lfxg18ac_get_otp_info;
+> +	mtd->_read_user_prot_reg = macronix_30lfxg18ac_read_otp;
+> +	mtd->_write_user_prot_reg = macronix_30lfxg18ac_write_otp;
+> +	mtd->_lock_user_prot_reg = macronix_30lfxg18ac_lock_otp;
+> +}
+> +
+>  static int macronix_nand_init(struct nand_chip *chip)
+>  {
+>  	if (nand_is_slc(chip))
+> @@ -325,6 +537,7 @@ static int macronix_nand_init(struct nand_chip *chip)
+>  	macronix_nand_onfi_init(chip);
+>  	macronix_nand_block_protection_support(chip);
+>  	macronix_nand_deep_power_down_support(chip);
+> +	macronix_nand_setup_otp(chip);
+>  
+>  	return 0;
+>  }
