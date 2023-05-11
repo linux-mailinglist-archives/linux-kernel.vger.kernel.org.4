@@ -2,116 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F266FF768
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:33:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 110056FF76C
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:33:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238475AbjEKQc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 12:32:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47834 "EHLO
+        id S238492AbjEKQdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 12:33:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232501AbjEKQc5 (ORCPT
+        with ESMTP id S237590AbjEKQc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 11 May 2023 12:32:57 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B68F386A9;
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A0A9017;
         Thu, 11 May 2023 09:32:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+Received: from zn.tnic (p5de8e8ea.dip0.t-ipconnect.de [93.232.232.234])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3291A64F9A;
-        Thu, 11 May 2023 16:32:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 190FEC433EF;
-        Thu, 11 May 2023 16:32:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683822731;
-        bh=gW/QVNiiP32Xg88rYdghCZ+KlKF0J2C2taBsF0+taHY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tpvaftI0Sc3sYeCtaAg/M0g/a11Fjw5Ofo/Yfwc7yuvArvH/1gdurhWGWRXg4nTOj
-         Zi0x4Nkwg7TqsEJlfRHWUJqY6IcKjKIZsQKX5O0qUNZo7A2M7zCWktVQEHeJ33d3K/
-         d0yHpYRhk3c683Tn/tDKr84n2L3a2p3U7Ziaoj+uc2Sk7K1DTVNdrZRy1TeTILjXxm
-         qMljSKfau5dVdwjha4u5/fq82vfL3fvUr57l1tsTGYdFEsN9UMi/VROQA2aGIJG3up
-         wsj7Ibt2ocFLOqk5HXDWLFs9pHrsjzbxwFm9edGrjS/FpggdX4u/QttQULgqZH6Aho
-         6YTeQ03H1U6gQ==
-From:   Daniel Bristot de Oliveira <bristot@kernel.org>
-To:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Cc:     Daniel Bristot de Oliveira <bristot@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Subject: [PATCH] tracing/timerlat: Always wakeup the timerlat thread
-Date:   Thu, 11 May 2023 18:32:01 +0200
-Message-Id: <1ed8f830638b20a39d535d27d908e319a9a3c4e2.1683822622.git.bristot@kernel.org>
-X-Mailer: git-send-email 2.38.1
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D9DC31EC041F;
+        Thu, 11 May 2023 18:32:11 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1683822731;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=dygT3SQ1Awb918Yj04yvCpz0F75Gt7jJXYbHPMQO368=;
+        b=R5T5ei9aRn2WmdaOiQI0b3lTEpke8mwH+YA13JUw69yB2L7ZadnZ0U2BTvfGyaOHt4JfRC
+        3Aoy+LxV7mQkAih2yejm5Zzwfnof6sebecZ/7cyw7rLXxwO+GHLihccOrl0u8gG8MDSzAm
+        XmteUQ7nficYxQuDo4lTodt4dy/cl80=
+Date:   Thu, 11 May 2023 18:32:08 +0200
+From:   Borislav Petkov <bp@alien8.de>
+To:     Juergen Gross <jgross@suse.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-hyperv@vger.kernel.org, linux-doc@vger.kernel.org,
+        mikelley@microsoft.com, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org, Jonathan Corbet <corbet@lwn.net>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v6 00/16] x86/mtrr: fix handling with PAT but without MTRR
+Message-ID: <20230511163208.GDZF0YiOfxQhSo4RDm@fat_crate.local>
+References: <20230502120931.20719-1-jgross@suse.com>
+ <20230509201437.GFZFqprc6otRejDPUt@fat_crate.local>
+ <20230509233641.GGZFrZCTDH7VwUMp5R@fat_crate.local>
+ <20230510133024.GBZFuccC1FxIZNKL+8@fat_crate.local>
+ <4c47a11c-0565-678d-3467-e01c5ec16600@suse.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <4c47a11c-0565-678d-3467-e01c5ec16600@suse.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While testing rtla timerlat auto analysis, I reach a condition where
-the interface was not receiving tracing data. I was able to manually
-reproduce the problem with these steps:
+On Wed, May 10, 2023 at 05:53:15PM +0200, Juergen Gross wrote:
+> Urgh, yes, there is something missing:
+> 
+> diff --git a/arch/x86/kernel/cpu/mtrr/generic.c b/arch/x86/kernel/cpu/mtrr/generic.c
+> index 031f7ea8e72b..9544e7d13bb3 100644
+> --- a/arch/x86/kernel/cpu/mtrr/generic.c
+> +++ b/arch/x86/kernel/cpu/mtrr/generic.c
+> @@ -521,8 +521,12 @@ u8 mtrr_type_lookup(u64 start, u64 end, u8 *uniform)
+>         for (i = 0; i < cache_map_n && start < end; i++) {
+>                 if (start >= cache_map[i].end)
+>                         continue;
 
-  # echo 0 > tracing_on                 # disable trace
-  # echo 1 > osnoise/stop_tracing_us    # stop trace if timerlat irq > 1 us
-  # echo timerlat > current_tracer      # enable timerlat tracer
-  # sleep 1                             # wait... that is the time when rtla
-                                        # apply configs like prio or cgroup
-  # echo 1 > tracing_on                 # start tracing
-  # cat trace
-  # tracer: timerlat
-  #
-  #                                _-----=> irqs-off
-  #                               / _----=> need-resched
-  #                              | / _---=> hardirq/softirq
-  #                              || / _--=> preempt-depth
-  #                              ||| / _-=> migrate-disable
-  #                              |||| /     delay
-  #                              |||||            ACTIVATION
-  #           TASK-PID      CPU# |||||   TIMESTAMP   ID            CONTEXT                 LATENCY
-  #              | |         |   |||||      |         |                  |                       |
-        NOTHING!
+So the loop will go through the map until...
 
-Then, trying to enable tracing again with echo 1 > tracing_on resulted
-in no change: the trace was still not tracing.
+> -               if (start < cache_map[i].start)
+> +               if (start < cache_map[i].start) {
 
-This problem happens because the timerlat IRQ hits the stop tracing
-condition while tracing is off, and do not wake up the timerlat thread,
-so the timerlat threads are kept sleeping forever, resulting in no
-trace, even after re-enabling the tracer.
+... it reaches the first entry where that is true.
 
-Avoid this condition by always waking up the threads, even after stopping
-tracing, allowing the tracer to return to its normal operating after
-a new tracing on.
+>                         type = type_merge(type, mtrr_state.def_type, uniform);
 
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Fixes: a955d7eac177 ("trace: Add timerlat tracer")
-Signed-off-by: Daniel Bristot de Oliveira <bristot@kernel.org>
----
- kernel/trace/trace_osnoise.c | 2 ++
- 1 file changed, 2 insertions(+)
+the @type argument is MTRR_TYPE_INVALID, def_type is WRBACK so what
+this'll do is simply get you the default WRBACK type:
 
-diff --git a/kernel/trace/trace_osnoise.c b/kernel/trace/trace_osnoise.c
-index efbbec2caff8..e97e3fa5cbed 100644
---- a/kernel/trace/trace_osnoise.c
-+++ b/kernel/trace/trace_osnoise.c
-@@ -1652,6 +1652,8 @@ static enum hrtimer_restart timerlat_irq(struct hrtimer *timer)
- 			osnoise_stop_tracing();
- 			notify_new_max_latency(diff);
- 
-+			wake_up_process(tlat->kthread);
-+
- 			return HRTIMER_NORESTART;
- 		}
- 	}
+type_merge:
+        if (type == MTRR_TYPE_INVALID)
+                return new_type;
+
+> +                       start = cache_map[i].start;
+> +                       if (end <= start)
+> +                               break;
+
+Now you break here because end <= start. Why?
+
+You can just as well do:
+
+	if (start < cache_map[i].start) {
+		/* region non-overlapping with the region in the map */
+		if (end <= cache_map[i].start)
+			return type_merge(type, mtrr_state.def_type, uniform);
+
+		... rest of the processing ...
+
+In general, I get it that your code is slick but I want it to be
+maintainable - not slick. I'd like for when people look at this, not
+have to  add a bunch of debugging output in order to swap the whole
+thing back into their brains.
+
+So mtrr_type_lookup() definitely needs comments explaining what goes
+where.
+
+You can send it as a diff ontop - I'll merge it.
+
+Thx.
+
 -- 
-2.38.1
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
