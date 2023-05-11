@@ -2,50 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C0646FEF75
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:55:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DE186FEF7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:57:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237818AbjEKJzm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 05:55:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41626 "EHLO
+        id S237826AbjEKJ5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 05:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237783AbjEKJze (ORCPT
+        with ESMTP id S237424AbjEKJ4w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 05:55:34 -0400
-Received: from cstnet.cn (smtp25.cstnet.cn [159.226.251.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7C6215FD0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:55:05 -0700 (PDT)
-Received: from localhost.localdomain (unknown [124.16.141.245])
-        by APP-05 (Coremail) with SMTP id zQCowABXXc1Iu1xkAWf0IQ--.37442S2;
-        Thu, 11 May 2023 17:54:16 +0800 (CST)
-From:   sunying@nj.iscas.ac.cn
-To:     peterz@infradead.org, mingo@redhat.com, will@kernel.org
-Cc:     linux-kernel@vger.kernel.org, Ying Sun <sunying@nj.iscas.ac.cn>
-Subject: [PATCH] locking/rwsem: Add configuration dependency constraints consistent with source file
-Date:   Thu, 11 May 2023 17:54:09 +0800
-Message-Id: <20230511095409.7005-1-sunying@nj.iscas.ac.cn>
-X-Mailer: git-send-email 2.17.1
-X-CM-TRANSID: zQCowABXXc1Iu1xkAWf0IQ--.37442S2
-X-Coremail-Antispam: 1UD129KBjvJXoW7KFWkWryDCF43ury5Jry5Arb_yoW8Wr4xpw
-        s5G3W5JF4ktF13tr4DZa40gFyDGas3JrW3CFW7C34rZFyDA3yIvryvqrW2vF18Za9rAFWr
-        XF95WF40vF1UX3DanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvI14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j
-        6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJwA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Cr
-        1j6rxdM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj
-        6xIIjxv20xvE14v26r1Y6r17McIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr
-        0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4kE6xkIj40Ew7xC
-        0wCY02Avz4vE14v_GFWl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
-        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
-        6r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
-        IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv
-        67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf
-        9x0JUY9a9UUUUU=
-X-Originating-IP: [124.16.141.245]
-X-CM-SenderInfo: 5vxq5xdqj60y4olvutnvoduhdfq/
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        Thu, 11 May 2023 05:56:52 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB0E393FF
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:56:34 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id af79cd13be357-7576deacbd6so291964585a.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:56:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683798994; x=1686390994;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=SSI1132STpqumEpf5Ec2V/BEc2eB+fNK9tPTW1B97gw=;
+        b=Nrx9UrUdsK+HUWMkWqBZ3TLP43oATk4+Hg2L6O/B52KpFdhsmhgxU0R59nQuNE1D6K
+         RAqIIx/MyIBOmDErPHfk0NiYNjvGSagoMAQHx/zaBfuGNKkVbnefpTh6RV4rAkKKw5OJ
+         o/9KjWLXQFoUqPTOk3L39Ql1q33x3UaGGBTTVQ4zgMyshDyYFtv4IfpPqR0MTk43NOWF
+         +ZSiSJRj7TuobBu4y8zpryafBQzwhN2qLR/5wkr6PmZlejq/N74usVCz7rnWNa4dXaCM
+         kkEuQGaEIcFcIrHJemeAQZb79a374m6vZI2Co0qvTlvr18XO9heswrGiytaankpJu7qN
+         uzRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683798994; x=1686390994;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SSI1132STpqumEpf5Ec2V/BEc2eB+fNK9tPTW1B97gw=;
+        b=PXTfmtP5L8m4R6HIS7gn3m5zwn1N+X8IlM284/YDyjIqw510gM1v2Suc15fjAa1jaz
+         lqh+6ZlMZtesGgz/jSrzt4DIlTuyYI8N65vli2bmCz3Lo4bp0E5ZFpKE2+PqPyiF5Xfm
+         4ot8gR6ZhQVYjWw7PLMA4ge7bza9W2H3BdJia3d8xiTrH6Vs8+t1JVtbPjUaDPt0PAlN
+         Qhy7lCTFYH6BM6j2E2hGAP5Kz+jpB7HpgNlalsVfm+QuEHQTBtkjZt8UMazwFQJao4JI
+         QyLTjRGm7eb6tnQgUh4ZOPQHgC+pTqi8prPGPbg5q2e/vmz+oRtFvGfX1t15X1FzYnLY
+         PdqQ==
+X-Gm-Message-State: AC+VfDzKLR7thuUud/5MwxUr2Iu5hE5LFFrOySn8upHbKwPIBDA1bCy1
+        qY24JeCM6FAGf7guVr94cs1nv5H2loGlJ1BTO7TWMg==
+X-Google-Smtp-Source: ACHHUZ5bi4evVw/MWVk/X4ejN7KBAO9fofHVgw5h5YbfPQNpRXCyI4vomN3J3/EutpsbTV9kvWDN2FQUML/KQYU0bxw=
+X-Received: by 2002:a05:6214:27e1:b0:56e:a96a:2bdc with SMTP id
+ jt1-20020a05621427e100b0056ea96a2bdcmr24213392qvb.40.1683798993806; Thu, 11
+ May 2023 02:56:33 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230511021553.44318-1-zhangfei.gao@linaro.org> <20230511040508.GF3390869@ZenIV>
+In-Reply-To: <20230511040508.GF3390869@ZenIV>
+From:   Zhangfei Gao <zhangfei.gao@linaro.org>
+Date:   Thu, 11 May 2023 17:56:22 +0800
+Message-ID: <CABQgh9HURQ9r32p7TOpznOhEYSJJ=0VrVrVZyA88mRHvR+Ksmg@mail.gmail.com>
+Subject: Re: [PATCH] uacce: use filep->f_mapping to replace inode->i_mapping
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        jean-philippe <jean-philippe@linaro.org>,
+        Wangzhou <wangzhou1@hisilicon.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        iommu@lists.linux.dev, acc@lists.linaro.org,
+        Weili Qian <qianweili@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,50 +74,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ying Sun <sunying@nj.iscas.ac.cn>
+On Thu, 11 May 2023 at 12:05, Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> On Thu, May 11, 2023 at 10:15:53AM +0800, Zhangfei Gao wrote:
+> > The inode can be different in a container, for example, a docker and host
+> > both open the same uacce parent device, which uses the same uacce struct
+> > but different inode, so uacce->inode is not enough.
+> >
+> > What's worse, when docker stops, the inode will be destroyed as well,
+> > causing use-after-free in uacce_remove.
+> >
+> > So use q->filep->f_mapping to replace uacce->inode->i_mapping.
+>
+> > @@ -574,12 +574,6 @@ void uacce_remove(struct uacce_device *uacce)
+> >
+> >       if (!uacce)
+> >               return;
+> > -     /*
+> > -      * unmap remaining mapping from user space, preventing user still
+> > -      * access the mmaped area while parent device is already removed
+> > -      */
+> > -     if (uacce->inode)
+> > -             unmap_mapping_range(uacce->inode->i_mapping, 0, 0, 1);
+> >
+> >       /*
+> >        * uacce_fops_open() may be running concurrently, even after we remove
+> > @@ -589,6 +583,8 @@ void uacce_remove(struct uacce_device *uacce)
+> >       mutex_lock(&uacce->mutex);
+> >       /* ensure no open queue remains */
+> >       list_for_each_entry_safe(q, next_q, &uacce->queues, list) {
+> > +             struct file *filep = q->private_data;
+> > +
+> >               /*
+> >                * Taking q->mutex ensures that fops do not use the defunct
+> >                * uacce->ops after the queue is disabled.
+> > @@ -597,6 +593,12 @@ void uacce_remove(struct uacce_device *uacce)
+> >               uacce_put_queue(q);
+> >               mutex_unlock(&q->mutex);
+> >               uacce_unbind_queue(q);
+> > +
+> > +             /*
+> > +              * unmap remaining mapping from user space, preventing user still
+> > +              * access the mmaped area while parent device is already removed
+> > +              */
+> > +             unmap_mapping_range(filep->f_mapping, 0, 0, 1);
+>
+> IDGI.  Going through uacce_queue instead of uacce_device is fine, but why
+> bother with file *or* inode?  Just store a reference to struct address_space in
+> your uacce_queue and be done with that...
 
-"CONFIG_RWSEM_SPIN_ON_OWNER" and "CONFIG_DEBUG_RWSEMS" are used in
-kernel/locking/rwsem.c while "#ifndef CONFIG_PREEMPT_RT" is met,
-which means they are available only if "CONFIG_PREEMPT_RT" is turned off.
+Yes, a struct address_space is enough.
 
-To ensure that the corresponding source code can be compiled
-when "CONFIG_RWSEM_SPIN_ON_OWNER" and "CONFIG_DEBUG_RWSEMS" are turned on,
-it is recommended to add a dependency constraint on "CONFIG_PREEMPT_RT"
-in kconfig.
+>
+> Another problem in that driver is uacce_vma_close(); this
+>         if (vma->vm_pgoff < UACCE_MAX_REGION)
+>                 qfr = q->qfrs[vma->vm_pgoff];
+>
+>         kfree(qfr);
+> can't be right - you have q->qfrs left pointing to freed object.  If nothing
+> else, subsequent mmap() will fail with -EEXIST, won't it?
 
-Suggested-by: Yanjie Ren <renyanjie01@gmail.com>
-Signed-off-by: Ying Sun <sunying@nj.iscas.ac.cn>
----
- kernel/Kconfig.locks | 2 +-
- lib/Kconfig.debug    | 2 +-
- 2 files changed, 2 insertions(+), 2 deletions(-)
+Good catch, will fix it.
 
-diff --git a/kernel/Kconfig.locks b/kernel/Kconfig.locks
-index 4198f0273ecd..0e3462b08543 100644
---- a/kernel/Kconfig.locks
-+++ b/kernel/Kconfig.locks
-@@ -230,7 +230,7 @@ config MUTEX_SPIN_ON_OWNER
- 
- config RWSEM_SPIN_ON_OWNER
-        def_bool y
--       depends on SMP && ARCH_SUPPORTS_ATOMIC_RMW
-+       depends on SMP && ARCH_SUPPORTS_ATOMIC_RMW && !PREEMPT_RT
- 
- config LOCK_SPIN_ON_OWNER
-        def_bool y
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index f202648dead9..0b392b1bd741 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -1342,7 +1342,7 @@ config DEBUG_WW_MUTEX_SLOWPATH
- 
- config DEBUG_RWSEMS
- 	bool "RW Semaphore debugging: basic checks"
--	depends on DEBUG_KERNEL
-+	depends on DEBUG_KERNEL && !PREEMPT_RT
- 	help
- 	  This debugging feature allows mismatched rw semaphore locks
- 	  and unlocks to be detected and reported.
--- 
-2.17.1
-
+Thanks
