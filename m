@@ -2,122 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D9716FFA32
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:34:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F6926FFA40
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239200AbjEKTei (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 15:34:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53072 "EHLO
+        id S229834AbjEKTiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 15:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232629AbjEKTef (ORCPT
+        with ESMTP id S232629AbjEKTiP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 15:34:35 -0400
-Received: from mail-qv1-xf31.google.com (mail-qv1-xf31.google.com [IPv6:2607:f8b0:4864:20::f31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C1F59D0;
-        Thu, 11 May 2023 12:34:34 -0700 (PDT)
-Received: by mail-qv1-xf31.google.com with SMTP id 6a1803df08f44-619be7d7211so42158626d6.3;
-        Thu, 11 May 2023 12:34:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683833674; x=1686425674;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OkRg4aBIGd+Ujeyjhqn0VJEzJVlq0iY77Z11k0mAFFM=;
-        b=D8VOr21Fczrl0K1COf0x4Ck7WHMsRogiYEEbrY2VpNny+n3MR+tJuDH09I9YAsS652
-         swT6GvFknXTnMBZPWlOxHk2u05+SeKUhRFMH/ZtDMNfuFTmqhV28jtrPoFuIwQ/bqAzu
-         JEHJCZ22+ejNPu9sQ5B4mFAObz8laeWoYTSRIa0MiOnPq0OszLg5zmMrWPnpqMS2qlwN
-         5gjqnyxgdjPUMVEd0f/03my+5DYNfTma/sJ3vnrs+cTqKEwezFl9LOtEmPAD5vfhXfNX
-         JrpZrTJ+uj1uIfEyrp6lAwR5J8sidiziH5Wld/lDfUFxzbjgvyiL15VatExShfnoJdEm
-         /ImQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683833674; x=1686425674;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OkRg4aBIGd+Ujeyjhqn0VJEzJVlq0iY77Z11k0mAFFM=;
-        b=I+e0iSK5LM2XRHfR9+c8Jb9mN0NXDz/nBDRNymh9Jue2t28UrKxRqYi2LAE/un8HXU
-         l/OOq8L0LY8OQVbmwAoWH/BaM0Ae7AY9L0YOjjmHDWt730qnBQmLmnym9oZ0iBbXqNd4
-         gVWJ/+zsy+LxKr+tRpoHswUe1SZbbfIEoedYAQpdDDuJhDQ9bPUD+tQZOHpUrKSAnejI
-         9u0b9DBVMJn0eyhNC8EAk9eFmoxMjQNvibNIGd9h2L1Z5YH86xENlUi8nWwFAHrkiOJK
-         PSsMWFQ6fFXlQaVDIh+PXUezizXqkF3zz0KM+XkAcsoqlQlFCMJuRs4XbetYVKblN/5h
-         jOmQ==
-X-Gm-Message-State: AC+VfDzTm74CQfiyLWsMkFQ3vTps7tfH1fUU0rEwsZ8jQoJJSlcyDrj/
-        Q3nS9z5o1ebkDUsZdHKTVKEx7Y1ZNHkeOKrul8Y=
-X-Google-Smtp-Source: ACHHUZ6FKXu0op+KxzAVHeFuNCXe2D1xFAp09jFVR7D1aeGdyycJWyp3G5ZLoEExaajX1pb4elh/5/+JF1DIDbKGBFc=
-X-Received: by 2002:ad4:5dec:0:b0:5a1:6212:93be with SMTP id
- jn12-20020ad45dec000000b005a1621293bemr33993641qvb.29.1683833673901; Thu, 11
- May 2023 12:34:33 -0700 (PDT)
+        Thu, 11 May 2023 15:38:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCD311981;
+        Thu, 11 May 2023 12:38:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 71CA3650C2;
+        Thu, 11 May 2023 19:38:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8474EC433D2;
+        Thu, 11 May 2023 19:38:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683833893;
+        bh=nH05vNMzANaFoKW5fkpkAp/sZeYynjms0EzxIcx13lQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=T6HwKghNXhf3ww8tMhUrSPehrdDHRdoa6UWd6zEhvPHmcHfyfYzD7wy6+l06sg6fe
+         PDMLUpsaN8/NN9FJca0gW8zhv7hIOlucxIjzGlKAlALQu6DPQtFwpLgGBQ4fWxJxYj
+         SPZjIxp4wDRuvA+HDAI045GbNgkiFvL77KIlsCEJceRqE5GIoz15QaWEPJDJtcw4ED
+         x+a12GNxwLECb9rMRDz1Uy7wpH62g/1Vd1a4REJBtE5p/Dx8oXLezUimxxxV9AyxIW
+         aoKoctC+Y++WzDN34SQojaZHY+g9kOBPMmk5HGRQ3f9PzrcywIuDWtiN2hKrzgqAt8
+         o3YUKoLwneNlQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Chong Li <chongli2@amd.com>, JingWen.Chen2@amd.com,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Sasha Levin <sashal@kernel.org>, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
+        Hawking.Zhang@amd.com, mario.limonciello@amd.com,
+        lijo.lazar@amd.com, YiPeng.Chai@amd.com, andrey.grodzovsky@amd.com,
+        Amaranath.Somalapuram@amd.com, Bokun.Zhang@amd.com,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH AUTOSEL 6.3 01/11] drm/amdgpu: release gpu full access after "amdgpu_device_ip_late_init"
+Date:   Thu, 11 May 2023 15:37:44 -0400
+Message-Id: <20230511193757.623114-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230510195806.2902878-1-nphamcs@gmail.com> <874joja6vz.fsf@mail.lhotse>
-In-Reply-To: <874joja6vz.fsf@mail.lhotse>
-From:   Nhat Pham <nphamcs@gmail.com>
-Date:   Thu, 11 May 2023 12:34:23 -0700
-Message-ID: <CAKEwX=OHMaUzEG9hoMz20m9DnyFD4xC78KiNV1Qu0bUhkrYhAA@mail.gmail.com>
-Subject: Re: [PATCH] cachestat: wire up cachestat for other architectures
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
-        linux-api@vger.kernel.org, kernel-team@meta.com,
-        linux-arch@vger.kernel.org, hannes@cmpxchg.org,
-        richard.henderson@linaro.org, ink@jurassic.park.msu.ru,
-        mattst88@gmail.com, linux@armlinux.org.uk, geert@linux-m68k.org,
-        monstr@monstr.eu, tsbogend@alpha.franken.de,
-        James.Bottomley@hansenpartnership.com, deller@gmx.de,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu, hca@linux.ibm.com,
-        gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        ysato@users.sourceforge.jp, dalias@libc.org,
-        glaubitz@physik.fu-berlin.de, davem@davemloft.net,
-        chris@zankel.net, jcmvbkbc@gmail.com, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 8:23=E2=80=AFPM Michael Ellerman <mpe@ellerman.id.a=
-u> wrote:
->
-> Nhat Pham <nphamcs@gmail.com> writes:
-> > cachestat is previously only wired in for x86 (and architectures using
-> > the generic unistd.h table):
-> >
-> > https://lore.kernel.org/lkml/20230503013608.2431726-1-nphamcs@gmail.com=
-/
-> >
-> > This patch wires cachestat in for all the other architectures.
-> >
-> > Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-> > ---
-> >  arch/alpha/kernel/syscalls/syscall.tbl      | 1 +
-> >  arch/arm/tools/syscall.tbl                  | 1 +
-> >  arch/ia64/kernel/syscalls/syscall.tbl       | 1 +
-> >  arch/m68k/kernel/syscalls/syscall.tbl       | 1 +
-> >  arch/microblaze/kernel/syscalls/syscall.tbl | 1 +
-> >  arch/mips/kernel/syscalls/syscall_n32.tbl   | 1 +
-> >  arch/mips/kernel/syscalls/syscall_n64.tbl   | 1 +
-> >  arch/mips/kernel/syscalls/syscall_o32.tbl   | 1 +
-> >  arch/parisc/kernel/syscalls/syscall.tbl     | 1 +
-> >  arch/powerpc/kernel/syscalls/syscall.tbl    | 1 +
->
-> With the change to the selftest (see my other mail), I tested this on
-> powerpc and all tests pass.
+From: Chong Li <chongli2@amd.com>
 
-Saw the change you proposed, Michael! It looks good to me.
-Thanks for helping me make the selftest suite more robust :)
+[ Upstream commit 38eecbe086a4e52f54b2bbda8feba65d44addbef ]
 
->
-> Tested-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
->
->
-> cheers
+[WHY]
+ Function "amdgpu_irq_update()" called by "amdgpu_device_ip_late_init()" is an atomic context.
+ We shouldn't access registers through KIQ since "msleep()" may be called in "amdgpu_kiq_rreg()".
+
+[HOW]
+ Move function "amdgpu_virt_release_full_gpu()" after function "amdgpu_device_ip_late_init()",
+ to ensure that registers be accessed through RLCG instead of KIQ.
+
+Call Trace:
+  <TASK>
+  show_stack+0x52/0x69
+  dump_stack_lvl+0x49/0x6d
+  dump_stack+0x10/0x18
+  __schedule_bug.cold+0x4f/0x6b
+  __schedule+0x473/0x5d0
+  ? __wake_up_klogd.part.0+0x40/0x70
+  ? vprintk_emit+0xbe/0x1f0
+  schedule+0x68/0x110
+  schedule_timeout+0x87/0x160
+  ? timer_migration_handler+0xa0/0xa0
+  msleep+0x2d/0x50
+  amdgpu_kiq_rreg+0x18d/0x1f0 [amdgpu]
+  amdgpu_device_rreg.part.0+0x59/0xd0 [amdgpu]
+  amdgpu_device_rreg+0x3a/0x50 [amdgpu]
+  amdgpu_sriov_rreg+0x3c/0xb0 [amdgpu]
+  gfx_v10_0_set_gfx_eop_interrupt_state.constprop.0+0x16c/0x190 [amdgpu]
+  gfx_v10_0_set_eop_interrupt_state+0xa5/0xb0 [amdgpu]
+  amdgpu_irq_update+0x53/0x80 [amdgpu]
+  amdgpu_irq_get+0x7c/0xb0 [amdgpu]
+  amdgpu_fence_driver_hw_init+0x58/0x90 [amdgpu]
+  amdgpu_device_init.cold+0x16b7/0x2022 [amdgpu]
+
+Signed-off-by: Chong Li <chongli2@amd.com>
+Reviewed-by: JingWen.Chen2@amd.com
+Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 32 ++++++++++++----------
+ 1 file changed, 17 insertions(+), 15 deletions(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+index 3d98fc2ad36b0..7543683b2583f 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+@@ -2522,8 +2522,6 @@ static int amdgpu_device_ip_init(struct amdgpu_device *adev)
+ 	amdgpu_fru_get_product_info(adev);
+ 
+ init_failed:
+-	if (amdgpu_sriov_vf(adev))
+-		amdgpu_virt_release_full_gpu(adev, true);
+ 
+ 	return r;
+ }
+@@ -3840,18 +3838,6 @@ int amdgpu_device_init(struct amdgpu_device *adev,
+ 
+ 	r = amdgpu_device_ip_init(adev);
+ 	if (r) {
+-		/* failed in exclusive mode due to timeout */
+-		if (amdgpu_sriov_vf(adev) &&
+-		    !amdgpu_sriov_runtime(adev) &&
+-		    amdgpu_virt_mmio_blocked(adev) &&
+-		    !amdgpu_virt_wait_reset(adev)) {
+-			dev_err(adev->dev, "VF exclusive mode timeout\n");
+-			/* Don't send request since VF is inactive. */
+-			adev->virt.caps &= ~AMDGPU_SRIOV_CAPS_RUNTIME;
+-			adev->virt.ops = NULL;
+-			r = -EAGAIN;
+-			goto release_ras_con;
+-		}
+ 		dev_err(adev->dev, "amdgpu_device_ip_init failed\n");
+ 		amdgpu_vf_error_put(adev, AMDGIM_ERROR_VF_AMDGPU_INIT_FAIL, 0, 0);
+ 		goto release_ras_con;
+@@ -3923,8 +3909,10 @@ int amdgpu_device_init(struct amdgpu_device *adev,
+ 				   msecs_to_jiffies(AMDGPU_RESUME_MS));
+ 	}
+ 
+-	if (amdgpu_sriov_vf(adev))
++	if (amdgpu_sriov_vf(adev)) {
++		amdgpu_virt_release_full_gpu(adev, true);
+ 		flush_delayed_work(&adev->delayed_init_work);
++	}
+ 
+ 	r = sysfs_create_files(&adev->dev->kobj, amdgpu_dev_attributes);
+ 	if (r)
+@@ -3961,6 +3949,20 @@ int amdgpu_device_init(struct amdgpu_device *adev,
+ 	return 0;
+ 
+ release_ras_con:
++	if (amdgpu_sriov_vf(adev))
++		amdgpu_virt_release_full_gpu(adev, true);
++
++	/* failed in exclusive mode due to timeout */
++	if (amdgpu_sriov_vf(adev) &&
++		!amdgpu_sriov_runtime(adev) &&
++		amdgpu_virt_mmio_blocked(adev) &&
++		!amdgpu_virt_wait_reset(adev)) {
++		dev_err(adev->dev, "VF exclusive mode timeout\n");
++		/* Don't send request since VF is inactive. */
++		adev->virt.caps &= ~AMDGPU_SRIOV_CAPS_RUNTIME;
++		adev->virt.ops = NULL;
++		r = -EAGAIN;
++	}
+ 	amdgpu_release_ras_context(adev);
+ 
+ failed:
+-- 
+2.39.2
+
