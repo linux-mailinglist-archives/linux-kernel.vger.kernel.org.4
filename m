@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB0206FFC8B
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 00:08:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 976776FFC86
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 00:08:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239468AbjEKWHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 18:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56722 "EHLO
+        id S239314AbjEKWHn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 18:07:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239185AbjEKWH3 (ORCPT
+        with ESMTP id S239272AbjEKWHa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 18:07:29 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7366E8A54
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 15:07:27 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id 41be03b00d2f7-52cb78647ecso5348695a12.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 15:07:27 -0700 (PDT)
+        Thu, 11 May 2023 18:07:30 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A6716E90
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 15:07:29 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id 98e67ed59e1d1-24e4f674356so8261083a91.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 15:07:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683842847; x=1686434847;
+        d=chromium.org; s=google; t=1683842849; x=1686434849;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=K+dvOm04w8PPu/rImCk8a3YHkXAbeV87AIPZhDPscPw=;
-        b=hssIu15bC0KSO0j4n4UiTUSK1g1EmW3565jzwwoTqGY6zacsfwczA5MEV+3WEIgL51
-         FaOLFcYy4qZNQX5hyMTUAZC8ss2jKpC9yFQP3B0jicwEflxxCKpWdWKbuC6pxB1ydPks
-         q1YL08QBU2trw5ls56AwM/YC2p94uMB+870ko=
+        bh=4oNdmLNDKUs/TKLR+gsT5NpmW/ws1iPV3pHW3NShG8U=;
+        b=FKICgaJfahEVpza6/yNir+fScXx3x3STtdt4nOBeEqwSVZml+ci7oo7WA4LOpHskZg
+         yP1GfbFkAfnafJDiyRdUcrop9yvD/R/KlOyppyOUZYqxS6ThoYq6mLS4Y42Vc70gg1rQ
+         PTkOZyGoUNqzdK7YbeppQldT1a34MEx609nmE=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683842847; x=1686434847;
+        d=1e100.net; s=20221208; t=1683842849; x=1686434849;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=K+dvOm04w8PPu/rImCk8a3YHkXAbeV87AIPZhDPscPw=;
-        b=kIKwVqqOIlFoQC1y2pfhyO5V9QbkTE8nn5WesXKgr1lVuZy82EsZxAr0sWRo9FMdHF
-         3SA+7f2tlrZbphL8rcyyvT4YI6PVN9jrBov+d0LZZJc09KckjcvwDffxw7AWOgBeEGM6
-         VWo9dLDJMU1PA/4KjIriUXPaDkJdnVCD6bKSuc5gZLxe9dYgH86szE3xnPjEQUU6hFy+
-         8ISZQY416p4dcf9R8hZhxwrz2E8n6fg4nCbX5A+Ne3ndGhi31y5OJNbQAPqkRW4si+Z8
-         SC/m23htRM/R7xbCQfObeQPDiRUf4/HAyTElYWjR+Ua4p4ntb5MuEHTbFgcuSbsjxSGn
-         0E6g==
-X-Gm-Message-State: AC+VfDzPoAmYVJDe/KaZTncJax76AufEQZSgavVOo8BKvNiVE9FVmTbQ
-        oZObtAG0hoRVvwzA3Vh8o4t5hw==
-X-Google-Smtp-Source: ACHHUZ41RE00te4Ijen+NU2VZLSRZZeq3ieV/CReVKY7S7BpZdh+5eIYWsjWa5jYSCS63ssl+OjuTQ==
-X-Received: by 2002:a17:90b:1804:b0:24e:39d2:ab80 with SMTP id lw4-20020a17090b180400b0024e39d2ab80mr22819969pjb.4.1683842846799;
-        Thu, 11 May 2023 15:07:26 -0700 (PDT)
+        bh=4oNdmLNDKUs/TKLR+gsT5NpmW/ws1iPV3pHW3NShG8U=;
+        b=JDfnw+leI5MCldZrgf1ZWF4N0HQYkBWmj7k789BZmOCALGW3UzJ3WeYg4lhXvObMU5
+         H6uCID70HjZEICYqLUVGB1i/x7wYkciwiY4Apu2DMHArRWCZkf3OyEidDSPww5zRYr2p
+         GP88ah/dDOIS1FSlgGlrLaFgGmvXBf13n9h4/WXMSugDcNFlJqV5jK5kpKECLQWXc6Ut
+         QP9SPOF/rjSD5AQODdlOn8Yt5dAdOQCKisZbDR5/kD7uCDqGgW2EErRvfj3Wsb+dqeb0
+         bR+sUG6lP0hXYUkn6AX/XvaIg3VaScYMAOaG9TlR8aXynf25rL5pa6pOcjYe7Gnfdkw3
+         n0kw==
+X-Gm-Message-State: AC+VfDx9y0VA5Cqhk3rvGsXzjEFoouSm7BAZPmNAszSr6p7we63K+mv1
+        C97DfXVj3ACUpS8yyypBWhqE9A==
+X-Google-Smtp-Source: ACHHUZ7KHoYJUF8QcmYx3zYXY/ErcV8fKCA+CWgEODGDRJgk0tu1drw3OSzYGpFg9Cpo3TKkns7Hxw==
+X-Received: by 2002:a17:90b:3a8e:b0:247:6ead:d0ed with SMTP id om14-20020a17090b3a8e00b002476eadd0edmr23026494pjb.28.1683842848965;
+        Thu, 11 May 2023 15:07:28 -0700 (PDT)
 Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:b96a:d776:ee3:e572])
-        by smtp.gmail.com with ESMTPSA id h24-20020a17090a9c1800b00247735d1463sm17589457pjp.39.2023.05.11.15.07.24
+        by smtp.gmail.com with ESMTPSA id h24-20020a17090a9c1800b00247735d1463sm17589457pjp.39.2023.05.11.15.07.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 15:07:25 -0700 (PDT)
+        Thu, 11 May 2023 15:07:28 -0700 (PDT)
 From:   Douglas Anderson <dianders@chromium.org>
 To:     Marc Zyngier <maz@kernel.org>,
         Thomas Gleixner <tglx@linutronix.de>,
@@ -66,9 +66,9 @@ Cc:     devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
         Douglas Anderson <dianders@chromium.org>,
         Conor Dooley <conor+dt@kernel.org>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 4/6] arm64: dts: mediatek: mt8186: Add mediatek,gicr-save-quirk
-Date:   Thu, 11 May 2023 15:05:38 -0700
-Message-ID: <20230511150539.4.Iaa0ee05cf0362540fda50dd6a0d87ee35dccd88b@changeid>
+Subject: [PATCH 5/6] arm64: dts: mediatek: mt8192: Add mediatek,gicr-save-quirk
+Date:   Thu, 11 May 2023 15:05:39 -0700
+Message-ID: <20230511150539.5.Ie7e600278ffbed55a1e5a58178203787b1449b35@changeid>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
 In-Reply-To: <20230511150539.6.Ia0b6ebbaa351e3cd67e201355b9ae67783c7d718@changeid>
 References: <20230511150539.6.Ia0b6ebbaa351e3cd67e201355b9ae67783c7d718@changeid>
@@ -84,23 +84,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Firmware shipped on mt8186 Chromebooks is affected by the GICR
+Firmware shipped on mt8192 Chromebooks is affected by the GICR
 save/restore issue as described by the patch ("dt-bindings:
 interrupt-controller: arm,gic-v3: Add quirk for Mediatek SoCs w/
 broken FW"). Add the quirk property.
 
-Fixes: 2e78620b1350 ("arm64: dts: Add MediaTek MT8186 dts and evaluation board and Makefile")
+Fixes: 48489980e27e ("arm64: dts: Add Mediatek SoC MT8192 and evaluation board dts and Makefile")
 Signed-off-by: Douglas Anderson <dianders@chromium.org>
 ---
 
- arch/arm64/boot/dts/mediatek/mt8186.dtsi | 1 +
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/mediatek/mt8186.dtsi b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-index 5e83d4e9efa4..09fbd8f9ea52 100644
---- a/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-+++ b/arch/arm64/boot/dts/mediatek/mt8186.dtsi
-@@ -336,6 +336,7 @@ gic: interrupt-controller@c000000 {
+diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+index 5c30caf74026..8931c59c69f4 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+@@ -412,6 +412,7 @@ gic: interrupt-controller@c000000 {
  			reg = <0 0x0c000000 0 0x40000>,
  			      <0 0x0c040000 0 0x200000>;
  			interrupts = <GIC_PPI 9 IRQ_TYPE_LEVEL_HIGH 0>;
