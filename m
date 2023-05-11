@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 810376FF7EC
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 19:01:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC1A6FF7F0
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 19:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238764AbjEKRBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 13:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39538 "EHLO
+        id S238682AbjEKRB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 13:01:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238752AbjEKRBu (ORCPT
+        with ESMTP id S238771AbjEKRB4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 13:01:50 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B54E57
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 10:01:46 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ab05018381so82307945ad.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 10:01:46 -0700 (PDT)
+        Thu, 11 May 2023 13:01:56 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A66B3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 10:01:48 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1aaf70676b6so63172035ad.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 10:01:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683824506; x=1686416506;
+        d=gmail.com; s=20221208; t=1683824508; x=1686416508;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kiNPfQZ2SsTlTZ73Scqtrooa5dsdeP/h86336+fdM1I=;
-        b=btXNXw42KXxaiNsJfsqp5Wn/dVNYLwALdAKbsBkh72TWh49seYq5HQC2VAXmesyVIq
-         RQizzGe1z14+Elg2CtqSOHZSGJ2O/8ajGCUK/97zqwP8TWERhC7H5GtimBpTHCvrI1az
-         NoiTUVsB6QX1uN/Y5a09s7En+QHiE3dROXxFmtZsa+sMrH5E8tPFrfdQCKGufOGpVy2e
-         ZMxAyNOZs7D9JLraOVC9YAFr0/iGCM+ZTfBp/Lgb4GG7CfEhlCfwakIMYtTY0rfuCeAY
-         gL6FUvDP5Uz8T8e0yWRXaNhO3w4RPcgUTiyuM21VVDATl5mP29FwEu7srA9YPtk1AknF
-         G/IA==
+        bh=UKRsLL7kNvDroaLyrSRYU4DWIMyOnhELN3sSuXXaYCw=;
+        b=Ty701zaQ1O4E399AdK72ImGSMYCz9q+3WiRXQgKA+1W0+3aTflaknqlI3jM94oQXlS
+         iA5WQsfGiwkRe0UagRwLLK4DAZII5krsUpBO4oFq6AE+gBwGHdhyLSyQ8dKUa9hh/43i
+         nJJebk+wL2VCpf9fE2t8sQUBlcDpiYdQoVdR0BV5l1OI4zcHq2vQfrbgJhiPtD+Y0aXK
+         v9TfsA1ZCmllXyroxNH6ilkRU66/sMBwB3BLmVEVaIb15Jgl9soi/dEaBJf5ANePbnpD
+         HAihUbzICcvKkz9NDD6eZhAat9VkI4Kp8GbSrmmjI8JjiyPZRj48IAlZRHDE6XCG8r2g
+         QbnQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683824506; x=1686416506;
+        d=1e100.net; s=20221208; t=1683824508; x=1686416508;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kiNPfQZ2SsTlTZ73Scqtrooa5dsdeP/h86336+fdM1I=;
-        b=h/NXHf+r7hUX1WA6GdZjnNtMoz9lVPBhSFLqa+Ku4920YrK5b3SG4Go3AwxsgNqYV6
-         nkBy8huTqP8CZTcG106Rtwnr3uxjXMNSJm/nuFIvgHDSj4O/5sSE0e959nhYhTmjZX6G
-         ru9wvTz7p5aqQ+jW6ak30f5neEu0JFo0ifr1l/eWZUTJXT+pp2UkEq+0V2vRt/r4wA6G
-         zOJAO7r7DDDtxiertrAfQYhGOtM1YvXAHUNLjDwcS5kysBMt0ZjydmBszKrKKOjYbxiR
-         Rp36oToxptvSYTRDzN9rj78Fq7oYSsqrHVPyUKbpYd2kDKcbe90ZWvpyjuVYy9EwQKqS
-         y1rg==
-X-Gm-Message-State: AC+VfDwWP3ZisBInKWbK1/ilh1bc+jkH1fF/AyjwnnhWSC5Ue8sW3TQV
-        ctgypKzrAxgQiw4Ufa4rgo1K6CCR1kw=
-X-Google-Smtp-Source: ACHHUZ4o0Bf3QbfPBXc9XNpV2pcC/+8tTbPve3WNz79HOKvxqC66aXpXZ2bTOl5FJ50kdm9rHhXDoA==
-X-Received: by 2002:a17:902:f7d3:b0:1a6:dfb3:5f4b with SMTP id h19-20020a170902f7d300b001a6dfb35f4bmr20711948plw.55.1683824505778;
-        Thu, 11 May 2023 10:01:45 -0700 (PDT)
+        bh=UKRsLL7kNvDroaLyrSRYU4DWIMyOnhELN3sSuXXaYCw=;
+        b=AXYH0MWE9MtLMYWmz2HROoFF1ihSiXG3Ln3zbrczBOgPmTb5xDsgJb3Llu3XBVKK2g
+         L0NAgYDJMFMsxAS27EpC6QZcbDw2kjHxxQI8rbsHbxamHrbckkrlaJENYl/ah0Li0j8V
+         JNAanMSe4VlR4FIMeGNGz/laafOsomWEp2/eI6Ltxwb73D+9EqkyEvvdnJDxIDNaLdUu
+         KoDk7S4HKm3MDOzT18/sLnhSop2PLrgSOIlYLAWgpBDKlQHzdtRpM9EeD3IJxiQMlQwJ
+         wZvLTYZnuZaHx9rI4mu+24JV2hHso3pMTKlree3QgsVaNzmXNIUCRXhLpeqEg39uP2Dy
+         5Fdw==
+X-Gm-Message-State: AC+VfDz/GsKaJOPVFD3oKKWFB26fJoXoGjzv4LTWV5CWaUZb3WNmbELj
+        UBc9Zfd5Whbk1XfezepslQ2gHUV/gGE=
+X-Google-Smtp-Source: ACHHUZ4HQ8nm3POZqJ0DmhNQPity9dUWPiwy5DrVMia0WSQEfmrcqGF0baIfP6K8PEO1PMzoifNcOw==
+X-Received: by 2002:a17:902:7e84:b0:1a6:f755:a4a0 with SMTP id z4-20020a1709027e8400b001a6f755a4a0mr19604683pla.58.1683824508009;
+        Thu, 11 May 2023 10:01:48 -0700 (PDT)
 Received: from ubuntu777.domain.name (36-228-94-72.dynamic-ip.hinet.net. [36.228.94.72])
-        by smtp.gmail.com with ESMTPSA id r7-20020a170902be0700b001ab0083c6c9sm6156240pls.261.2023.05.11.10.01.44
+        by smtp.gmail.com with ESMTPSA id r7-20020a170902be0700b001ab0083c6c9sm6156240pls.261.2023.05.11.10.01.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 10:01:45 -0700 (PDT)
+        Thu, 11 May 2023 10:01:47 -0700 (PDT)
 From:   Min-Hua Chen <minhuadotchen@gmail.com>
 To:     Vineet Gupta <vgupta@kernel.org>
 Cc:     Min-Hua Chen <minhuadotchen@gmail.com>,
         linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 1/2] ARC: fix incorrect THREAD_SHIFT definition
-Date:   Fri, 12 May 2023 01:01:38 +0800
-Message-Id: <20230511170139.343434-2-minhuadotchen@gmail.com>
+Subject: [PATCH 2/2] ARC: rename 16KSTACKS to DEBUG_STACKS
+Date:   Fri, 12 May 2023 01:01:39 +0800
+Message-Id: <20230511170139.343434-3-minhuadotchen@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230511170139.343434-1-minhuadotchen@gmail.com>
 References: <20230511170139.343434-1-minhuadotchen@gmail.com>
@@ -72,36 +72,76 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current definition of THREAD_SHIFT is (PAGE_SHIFT << THREAD_SIZE_ORDER)
-look incorrect. It should be (PAGE_SHIFT + THREAD_SIZE_ORDER) because
-the following equation should hold:
+Rename 16KSTACKS to DEBUG_STACKS.
 
-Say PAGE_SHIFT == 13 (as the default value in ARC)
-THREAD_SIZE_ORDER == 1 (as CONFIG_16KSTACKS=y)
+arch/arc/Kconfig.debug says that the default stack size is 8KB
+and it will become 16KB stack if 16KSTACKS is set.
 
-THREAD_SIZE == (1 << THREAD_SHIFT)
-            == (1 << (PAGE_SHIFT + THREAD_SIZE_ORDER))
-	    == (1 << 14)
-	    == 16KB
+However, the stack size is based on PAGE_SIZE, and it is
+configurable by CONFIG_ARC_PAGE_SIZE_16K or CONFIG_ARC_PAGE_SIZE_4K.
+
+See arch/arc/include/uapi/asm/page.h:
+/* PAGE_SHIFT determines the page size */
+\#if defined(CONFIG_ARC_PAGE_SIZE_16K)
+\#define PAGE_SHIFT 14
+\#elif defined(CONFIG_ARC_PAGE_SIZE_4K)
+\#define PAGE_SHIFT 12
+\#else
+\#define PAGE_SHIFT 13
+\#endif
+
+See arch/arc/include/asm/thread_info.h:
+\#ifdef CONFIG_DEBUG_STACKS
+\#define THREAD_SIZE_ORDER 1
+\#else
+\#define THREAD_SIZE_ORDER 0
+\#endif
+
+\#define THREAD_SIZE     (PAGE_SIZE << THREAD_SIZE_ORDER)
+\#define THREAD_SHIFT	(PAGE_SHIFT + THREAD_SIZE_ORDER)
+
+To make CONFIG_16KSTACKS less confusing, rename it to DEBUG_STACKS
+(as it is defined in Kconfig.debug) and modify the Kconfig
+description. No functional changes intended.
 
 Signed-off-by: Min-Hua Chen <minhuadotchen@gmail.com>
 ---
+ arch/arc/Kconfig.debug             | 7 ++++---
  arch/arc/include/asm/thread_info.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ 2 files changed, 5 insertions(+), 4 deletions(-)
 
+diff --git a/arch/arc/Kconfig.debug b/arch/arc/Kconfig.debug
+index 45add86decd5..9a1e140605c4 100644
+--- a/arch/arc/Kconfig.debug
++++ b/arch/arc/Kconfig.debug
+@@ -1,10 +1,11 @@
+ # SPDX-License-Identifier: GPL-2.0
+ 
+-config 16KSTACKS
+-	bool "Use 16Kb for kernel stacks instead of 8Kb"
++config DEBUG_STACKS
++	bool "Use double sized kernel stacks"
+ 	help
+-	  If you say Y here the kernel will use a  16Kb stacksize for the
++	  If you say Y here the kernel will use a double sized stack for the
+ 	  kernel stack attached to each process/thread. The default is 8K.
++	  (depends on CONFIG_ARC_PAGE_SIZE_16K or CONFIG_ARC_PAGE_SIZE_4K)
+ 	  This increases the resident kernel footprint and will cause less
+ 	  threads to run on the system and also increase the pressure
+ 	  on the VM subsystem for higher order allocations.
 diff --git a/arch/arc/include/asm/thread_info.h b/arch/arc/include/asm/thread_info.h
-index 6ba7fe417095..9f9dd021501c 100644
+index 9f9dd021501c..a7358d1225a6 100644
 --- a/arch/arc/include/asm/thread_info.h
 +++ b/arch/arc/include/asm/thread_info.h
-@@ -22,7 +22,7 @@
- #endif
+@@ -15,7 +15,7 @@
  
- #define THREAD_SIZE     (PAGE_SIZE << THREAD_SIZE_ORDER)
--#define THREAD_SHIFT	(PAGE_SHIFT << THREAD_SIZE_ORDER)
-+#define THREAD_SHIFT	(PAGE_SHIFT + THREAD_SIZE_ORDER)
+ #include <asm/page.h>
  
- #ifndef __ASSEMBLY__
- 
+-#ifdef CONFIG_16KSTACKS
++#ifdef CONFIG_DEBUG_STACKS
+ #define THREAD_SIZE_ORDER 1
+ #else
+ #define THREAD_SIZE_ORDER 0
 -- 
 2.34.1
 
