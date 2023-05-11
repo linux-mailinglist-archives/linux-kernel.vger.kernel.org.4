@@ -2,77 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 306676FF540
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:56:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 44BC16FF54B
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:58:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238397AbjEKO4k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 10:56:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51244 "EHLO
+        id S238271AbjEKO6c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 10:58:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238282AbjEKO4X (ORCPT
+        with ESMTP id S238061AbjEKO6Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 10:56:23 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8B57611B48;
-        Thu, 11 May 2023 07:55:58 -0700 (PDT)
-Received: from linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net (linux.microsoft.com [13.77.154.182])
-        by linux.microsoft.com (Postfix) with ESMTPSA id A007220EAB6B;
-        Thu, 11 May 2023 07:55:00 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A007220EAB6B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1683816900;
-        bh=O4J9DTHM5ykaLqmtABIlS+wEAau1jelC6LEZQR7BwQU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=TmNzbGlBq8Eg1wauWEGCh5NWemaFbFcRw00GOHRqhR/k4N+JHh/ImOh9ZSKTA1Dp5
-         V9lvh4Wgnens8yhjLrhGK/SUPbuMEi7QWkgNy1U91iv45Odv5OwCBu56bq0UIZHRXx
-         dcZOVAsORNvKspJArl7ZBXznMayL/GVh/FuaCFfo=
-From:   Saurabh Sengar <ssengar@linux.microsoft.com>
-To:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, mikelley@microsoft.com,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org
-Cc:     ssengar@microsoft.com
-Subject: [PATCH 2/2] Drivers: hv: Kconfig: Add HYPERV_VTL_MODE dependencies
-Date:   Thu, 11 May 2023 07:54:37 -0700
-Message-Id: <1683816877-10747-2-git-send-email-ssengar@linux.microsoft.com>
-X-Mailer: git-send-email 1.8.3.1
-In-Reply-To: <1683816877-10747-1-git-send-email-ssengar@linux.microsoft.com>
-References: <1683816877-10747-1-git-send-email-ssengar@linux.microsoft.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 11 May 2023 10:58:24 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46C7187;
+        Thu, 11 May 2023 07:58:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683817085; x=1715353085;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=xcC/Z7/5lJtWD+qFNw7HuvRGj7Z3+YU6H3jp61sb/YM=;
+  b=Ya6oXwD58t1H3K5YteiL8bjeHUlZhazUwtsjY+ACTk612ujrz0zmU/Ft
+   +nBM+yApIGQ8i4l6Gx9XAK6ufNrL6URbKGHjbkurmAO0TZzTQ56aGNEG3
+   YygphnxXfKJnWh0twfoUh/MhINdKQj3Gdw7dJ1OA3mEn0ORAg3gPKltqX
+   ZxD9Ugz05/TiEDMD6HeBWJF72lOePKgGqQnkBxCeBTzM6QNnh30yx2U+N
+   /r4UO7DG6vLTCIBCbw2W86tGh2CN3aFVtcNl+60X0RbMeYOPFP2RsGcuC
+   FZDswAv33Th3PevAzJOUOet+0M6o/OMmcgXGZXL/IPSIvyAhfLcSUvZhx
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="436854022"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="436854022"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 07:55:09 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="650220286"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="650220286"
+Received: from ambujamp-mobl1.amr.corp.intel.com (HELO [10.212.238.119]) ([10.212.238.119])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 07:55:09 -0700
+Message-ID: <28ead36b-2d9e-1a36-6f4e-04684e420260@intel.com>
+Date:   Thu, 11 May 2023 07:55:08 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] powercap: RAPL: Add Power Limit4 support for Meteor Lake
+ SoC
+Content-Language: en-US
+To:     Sumeet Pawnikar <sumeet.r.pawnikar@intel.com>, rafael@kernel.org,
+        srinivas.pandruvada@linux.intel.com, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <20230215123249.4473-1-sumeet.r.pawnikar@intel.com>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20230215123249.4473-1-sumeet.r.pawnikar@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MTRRs are not per-VTL and are controlled by VTL0, make sure it
-is disabled for all other VTLs.
+On 2/15/23 04:32, Sumeet Pawnikar wrote:
+> diff --git a/drivers/powercap/intel_rapl_msr.c b/drivers/powercap/intel_rapl_msr.c
+> index bc6adda58883..a27673706c3d 100644
+> --- a/drivers/powercap/intel_rapl_msr.c
+> +++ b/drivers/powercap/intel_rapl_msr.c
+> @@ -143,6 +143,8 @@ static const struct x86_cpu_id pl4_support_ids[] = {
+>  	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_ALDERLAKE_N, X86_FEATURE_ANY },
+>  	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_RAPTORLAKE, X86_FEATURE_ANY },
+>  	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_RAPTORLAKE_P, X86_FEATURE_ANY },
+> +	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_METEORLAKE, X86_FEATURE_ANY },
+> +	{ X86_VENDOR_INTEL, 6, INTEL_FAM6_METEORLAKE_L, X86_FEATURE_ANY },
+>  	{}
+>  };
 
-X86_MPPARSE scans low memory for MP tables, which is not required
-for Hyper-V VTL platforms.
+Sumeet, could you _please_ go take a close look at 'struct x86_cpu_id'?
 
-Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
----
- drivers/hv/Kconfig | 2 ++
- 1 file changed, 2 insertions(+)
+> struct x86_cpu_id {
+>         __u16 vendor;
+>         __u16 family;
+>         __u16 model;
+>         __u16 steppings;
+>         __u16 feature;  /* bit index */
+>         kernel_ulong_t driver_data;
+> };
 
-diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
-index 00242107d62e..c8d443886b9d 100644
---- a/drivers/hv/Kconfig
-+++ b/drivers/hv/Kconfig
-@@ -16,6 +16,8 @@ config HYPERV
- config HYPERV_VTL_MODE
- 	bool "Enable Linux to boot in VTL context"
- 	depends on X86_64 && HYPERV
-+	depends on !MTRR
-+	depends on !X86_MPPARSE
- 	default n
- 	help
- 	  Virtual Secure Mode (VSM) is a set of hypervisor capabilities and
--- 
-2.34.1
+You might also want to very carefully count the fields in the structure.
+ Which field is being initialized to X86_FEATURE_ANY?  Is it:
 
+ a. ->feature
+ b. ->steppings
+ c. ->model
+
+How could this _possibly_ work, you ask yourself?  Well, you lucked out:
+
+#define X86_FAMILY_ANY   0
+#define X86_MODEL_ANY    0
+#define X86_STEPPING_ANY 0
+#define X86_FEATURE_ANY  0
+
+so, you actually accidentally *explicitly* specified a 0 for ->steppings
+*AND* accidentally *implicitly* specified a 0 for ->feature.
+
+... and you did this in at least five separate commits over four years.
+
+Why does this matter?  Because some hapless maintainer might take your
+code, copy it, and then s/X86_FEATURE_ANY/X86_FEATURE_FOO/ and then
+scratch their head for an hour as to why it doesn't work.
+
+Could you please fix this up?  As penance, you could even fix the _ANY
+defines so that people can't do this accidentally any longer.
