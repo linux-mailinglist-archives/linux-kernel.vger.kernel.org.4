@@ -2,62 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97E516FFC9E
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 00:25:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDB56FFCA0
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 00:28:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239303AbjEKWZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 18:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35808 "EHLO
+        id S239337AbjEKW2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 18:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231446AbjEKWZs (ORCPT
+        with ESMTP id S238866AbjEKW2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 18:25:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DA33AB7;
-        Thu, 11 May 2023 15:25:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D56864FBB;
-        Thu, 11 May 2023 22:25:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B72C6C433EF;
-        Thu, 11 May 2023 22:25:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683843947;
-        bh=ULMjF1ezqz7St5bBienNvAvCIvE4TfTmf4qQzCY13so=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U1RbWwzc6MezmvlRhRRnsO95dj3YkJq+62PP/cg5FMd8pWxUwNUsLntuUej2yq4KM
-         xQNLHGFZ9tGMQyoxW7EKYCTO0HBldYt2xkhCBvjDliCDHJJgeJAzd1f4AjDQhcpG6Q
-         ja4az/oPKzw4SHyTdqe6Avn+GWzA/+BGLsX6p/RPX49hIBo0t+owGFffsNTCuBzgJ5
-         6dcBeJVOAbm9tPxrqayleNlt8pmVLRJFfEzblYtRBD1SK4PQrho39rOInBII4u8pGa
-         yVFJI1Ma76nGq+MaFpAAD/p5ZfIAgeVK54EY6T6OuQboHiQNlqOOHJU2lOCUKK/tbJ
-         BYCQbCeuExJzA==
-Date:   Thu, 11 May 2023 23:25:41 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Haibo Xu <haibo1.xu@intel.com>
-Cc:     xiaobo55x@gmail.com, ajones@ventanamicro.com,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 1/2] riscv: kvm: Add KVM_GET_REG_LIST API support
-Message-ID: <20230511-boozy-comic-5bc8f297dc8e@spud>
-References: <cover.1683791148.git.haibo1.xu@intel.com>
- <921fc2e1a91887170e277acb1b52df57480a5736.1683791148.git.haibo1.xu@intel.com>
+        Thu, 11 May 2023 18:28:43 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFF72738
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 15:28:42 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so1561984b3a.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 15:28:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1683844122; x=1686436122;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=foguPMzaG5JiKYkGBK5Zqr8oTB+NWVY0GCMBbESmVbo=;
+        b=fE3rVckTldIGJ9X79t1Tocx/fvHS8/EWaaZUWVMfpCQjD6wKu7leVkN9G5nHE7F2LC
+         p4WBsp2m0LR3mee1GBx75i7GQ1hFNp4aJ0AeK9wRgq5DxKNNm6lsnOs+r+KExblYrhxr
+         az+pMa5mQwMDktKT2xO108h0iA2YD2f2nwjW8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683844122; x=1686436122;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=foguPMzaG5JiKYkGBK5Zqr8oTB+NWVY0GCMBbESmVbo=;
+        b=bGY5cOdzTAicZT9F+Y++0kDK91GaYNTTRWkbQ5o5rMzXurwUP3lH3O+6CoHNWl2hL8
+         M7kX1y+JS2ziN+QYSNMNGeJxLanq6zvH2XkG8VfF2ssVsDuVX6Xkc0NqF+agIjtykeEZ
+         wOdig1KVpJ9UPDnsSwLSYRhFb8Ne22+H3aWbi5Kt2Fj/GsbQkGG+JMSWhhKZfXKRjzU5
+         wEC8Ms1+2C0ioAqatcjFw728AzPyRfyasvYckFKNTd7UlOVvJbkXqOAxjB70vVDxf9r2
+         2WuUhwyNGXaFQZ40WNvDBKuMPDM6jwpPpChqlEEzwtKn8+MmKxMIjkbEJdm9Q0CYkcIN
+         nCTQ==
+X-Gm-Message-State: AC+VfDz3T21DyovMuBIgIxoNY2Ujueb+nOqdXUjVyoWHmJ/sv+6eDJBH
+        hTtNj34dYI34MH4u0hqnGc2n7w==
+X-Google-Smtp-Source: ACHHUZ6mEsMPqSDmeIgz0bMbow4zeO58axDoPLJOCw723w8mEoGZDcn2G0FDhPsF6SBJe8srfCjV2Q==
+X-Received: by 2002:a05:6a20:8e14:b0:101:3c60:6794 with SMTP id y20-20020a056a208e1400b001013c606794mr12671176pzj.2.1683844121954;
+        Thu, 11 May 2023 15:28:41 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id p38-20020a631e66000000b0052c766b2f52sm5515338pgm.4.2023.05.11.15.28.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 15:28:41 -0700 (PDT)
+Date:   Thu, 11 May 2023 15:28:40 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
+Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
+        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        "hch@infradead.org" <hch@infradead.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
+Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
+Message-ID: <202305111525.67001E5C4@keescook>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-8-kent.overstreet@linux.dev>
+ <3508afc0-6f03-a971-e716-999a7373951f@wdc.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="LWGkwE7Vf2rchKRZ"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <921fc2e1a91887170e277acb1b52df57480a5736.1683791148.git.haibo1.xu@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+In-Reply-To: <3508afc0-6f03-a971-e716-999a7373951f@wdc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,44 +78,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 10, 2023 at 03:05:48PM +0000, Johannes Thumshirn wrote:
+> On 09.05.23 18:56, Kent Overstreet wrote:
+> > +/**
+> > + * vmalloc_exec - allocate virtually contiguous, executable memory
+> > + * @size:	  allocation size
+> > + *
+> > + * Kernel-internal function to allocate enough pages to cover @size
+> > + * the page level allocator and map them into contiguous and
+> > + * executable kernel virtual space.
+> > + *
+> > + * For tight control over page level allocator and protection flags
+> > + * use __vmalloc() instead.
+> > + *
+> > + * Return: pointer to the allocated memory or %NULL on error
+> > + */
+> > +void *vmalloc_exec(unsigned long size, gfp_t gfp_mask)
+> > +{
+> > +	return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
+> > +			gfp_mask, PAGE_KERNEL_EXEC, VM_FLUSH_RESET_PERMS,
+> > +			NUMA_NO_NODE, __builtin_return_address(0));
+> > +}
+> > +EXPORT_SYMBOL_GPL(vmalloc_exec);
+> 
+> Uh W+X memory reagions.
+> The 90s called, they want their shellcode back.
 
---LWGkwE7Vf2rchKRZ
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Just to clarify: the kernel must never create W+X memory regions. So,
+no, do not reintroduce vmalloc_exec().
 
-On Thu, May 11, 2023 at 05:22:48PM +0800, Haibo Xu wrote:
-> KVM_GET_REG_LIST API will return all registers that are available to
-> KVM_GET/SET_ONE_REG APIs. It's very useful to identify some platform
-> regression issue during VM migration.
->=20
-> Since this API was already supported on arm64, it'd be straightforward
-> to enable it on riscv with similar code structure.
+Dynamic code areas need to be constructed in a non-executable memory,
+then switched to read-only and verified to still be what was expected,
+and only then made executable.
 
-Applied on top of v6.4-rc1 this breaks the build :/
-
-warning: Function parameter or member 'vcpu' not described in 'kvm_riscv_vc=
-pu_num_regs'
-warning: Function parameter or member 'uindices' not described in 'kvm_risc=
-v_vcpu_copy_reg_indices'
-warning: Function parameter or member 'vcpu' not described in 'kvm_riscv_vc=
-pu_copy_reg_indices'
-
-You have a bunch of kerneldoc comments (the ones with /**) that are not
-valid kerneldoc. Apparently allmodconfig catches that!
-
-Cheers,
-Conor.
-
---LWGkwE7Vf2rchKRZ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZF1rZQAKCRB4tDGHoIJi
-0usNAP0Ykfrz+puD2zn8HGUFz+2fk3qtGa/XYSypVrpgWvW7BgD/T7PlZYcevlSv
-hezVcWDYRkavqca+yLrT0grdcCTiBgI=
-=ARK0
------END PGP SIGNATURE-----
-
---LWGkwE7Vf2rchKRZ--
+-- 
+Kees Cook
