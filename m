@@ -2,105 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D284E6FF1E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 14:52:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4A76FF1EB
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 14:53:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237655AbjEKMwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 08:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
+        id S237846AbjEKMxc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 08:53:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236911AbjEKMwb (ORCPT
+        with ESMTP id S237233AbjEKMxa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 08:52:31 -0400
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C4C0114
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 05:52:29 -0700 (PDT)
-Received: by mail-vk1-xa32.google.com with SMTP id 71dfb90a1353d-4518d3a9b12so1848271e0c.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 05:52:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1683809548; x=1686401548;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NIFQBHLwYqv6lGGE429jGVwKNnCLq/V2hGSXlHxpl3g=;
-        b=e726sAhjika6ekgZrLEDdRwkU6D+A3XR54/bVD1oY8BqPYfvURljXn/Ac3NNEbLjJb
-         ZZhUIQtz6UFXbTv+52c9BbucH21xOMeJh78YP0lg9P/QZi7GHRupEfyVKjW7poGejPIk
-         q27gjR3d3WkpQqMYfD1LXJ6t+IgrS13RLYV46pVe10DxmKCeJnBNwt3aVILDl36SWPDx
-         6le3hqL2FaQDU5dxU1vXQQ/jASEcKa3ubPzqCOxLAxKFeT2fQqiNQ2xOiOrKuRcTuW5t
-         xAOXYgcPImoJxi0ipcWoNcEKlw2ZUoQPLWy4W9LeOavD4oNPzHHB1AyRmuB6lygjfcxT
-         bKIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683809548; x=1686401548;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NIFQBHLwYqv6lGGE429jGVwKNnCLq/V2hGSXlHxpl3g=;
-        b=IbRetbV4YeTJcXqBYJfrHVs7GUdgi708h0MUMGRohK35ZbhgzcU82ZmVvT7kHVAnCo
-         bAqM6SAdqAT+Xhc9WTwIYQB2h8Cv9FLo4O+byb/BSJoFj2mLhOoL4tDM0AZmQX7Yz96K
-         KWVh/naHQYutXJhoj2tBWc393iSfJ8cbkl5fn1uVpUe6DOtPWtEto9cEU3QFO5s1gIA0
-         o7jSFHxJsfQjr0mFLs99FSYBErv9v+T9pxzbvU/+NtxlUIuO3Z3iQbZVVjISIME5td/L
-         suvvbMMiFh1Gw+XNeqprr/O6fwCSyoNkA83eCSR53Nno1LvXWVZuUrKiA90YVYVLV232
-         +02g==
-X-Gm-Message-State: AC+VfDwUHLfoJJZiTFIcj5IVWLH+tt0S+eQyAvP+K4F+u4XkuWXnHrHw
-        C8NbT+VjHz600nvbEaSDH+mxxNd3dcIT8CBtISrlOg==
-X-Google-Smtp-Source: ACHHUZ4E+DP2en8hersZMtumGaAAmISlIFjmmKAQ5ogqmesBVVrDmP1MJTPpz4QT+mVGh1wEJXc3/nKrS+0L6DlVwD0=
-X-Received: by 2002:a1f:4510:0:b0:453:4ce3:21e9 with SMTP id
- s16-20020a1f4510000000b004534ce321e9mr1861864vka.10.1683809548173; Thu, 11
- May 2023 05:52:28 -0700 (PDT)
+        Thu, 11 May 2023 08:53:30 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25412106;
+        Thu, 11 May 2023 05:53:29 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id D27181FE91;
+        Thu, 11 May 2023 12:53:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1683809607; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=62ALVCH5ZevkIHeaTUvt0zHjnJ7Is2/sjOVWpC5SGqQ=;
+        b=gtO0bURAAmLSMXELEolZprS8f5jLRq8u9m5BtTDFG9Ppbih92HvAJDtnVmcRcebCLtflZK
+        d6ydqx3qMsm7QwSqFwiszwrNX00eeNVfjtD8HGmjUvO9GhGg3DfQp6XSp0WuIDSMHFLDtp
+        ws3waSrkF6q3ZAhFa1ZRo8k1/MwLowk=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7BE9C138FA;
+        Thu, 11 May 2023 12:53:27 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id orjKG0flXGT3EgAAMHmgww
+        (envelope-from <petr.pavlu@suse.com>); Thu, 11 May 2023 12:53:27 +0000
+From:   Petr Pavlu <petr.pavlu@suse.com>
+To:     rafael@kernel.org, kevin@kevinlocke.name
+Cc:     viresh.kumar@linaro.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Petr Pavlu <petr.pavlu@suse.com>
+Subject: [PATCH] ACPI: cpufreq: Prevent a warning when another frequency driver is loaded
+Date:   Thu, 11 May 2023 14:53:12 +0200
+Message-Id: <20230511125312.24207-1-petr.pavlu@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-References: <20230427152055.18380-1-henning.schild@siemens.com>
- <20230427152055.18380-2-henning.schild@siemens.com> <ZEuBMCxeWAx9OilV@76cbfcf04d45>
- <759b2df004e2445e850a01b33e748972@siemens.com> <20230428113332.3a7b9a18@md1za8fc.ad001.siemens.net>
-In-Reply-To: <20230428113332.3a7b9a18@md1za8fc.ad001.siemens.net>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 11 May 2023 14:52:17 +0200
-Message-ID: <CAMRc=Mdfptr0ZXV=fzBE0T+=vTxhL1tOKxRy+ccFLOqinb0w1A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] gpio-f7188x: fix chip name and pin count on
- Nuvoton chip
-To:     Henning Schild <henning.schild@siemens.com>
-Cc:     "Wu, Xing Tong (DI FA CTR IPC CN PRC4)" <XingTong.Wu@siemens.com>,
-        Simon Guinot <simon.guinot@sequanux.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 11:33=E2=80=AFAM Henning Schild
-<henning.schild@siemens.com> wrote:
->
-> Am Fri, 28 Apr 2023 10:26:18 +0200
-> schrieb "Wu, Xing Tong (DI FA CTR IPC CN PRC4)"
-> <XingTong.Wu@siemens.com>:
->
-> > Hi all
-> >
-> > The chip id of NCT6116D is 0XD281, you can refer to
-> > NCT6116D_Datasheet_V1_0.pdf, Page 291
->
-> Thanks Xing Tong. I think we have come to agree that for now NCT6116D
-> 0xD281 will not be supported in the kernel. Maybe until someone has
-> access to that very chip and a use-case.
->
-> But you managed to somehow get these datasheets, which are still not
-> publicly available. Maybe you can use your contacts at Nuvoton to
-> kindly ask them to publish those specs on their website for future
-> reference. Some specs are there, but not all. That would help people to
-> add more chips and avoid mistakes like they happened to me.
->
-> Henning
->
+The recent change to use platform devices to load ACPI PPC and PCC
+drivers caused that a misleading warning is reported when a respective
+module cannot be loaded because another CPU frequency driver is already
+registered:
 
-Henning, do you plan to respin this with the ID corrected?
+kernel: acpi-cpufreq: probe of acpi-cpufreq failed with error -17
 
-Bart
+Address it by changing the return code in acpi-cpufreq and pcc-cpufreq
+for this case from -EEXIST to -ENODEV which silences the warning in
+call_driver_probe().
+
+The change has also a benefit for users of init_module() as this return
+code is propagated out from the syscall. The previous -EEXIST code made
+the callers, such as kmod, wrongly believe that the module was already
+loaded instead of that it failed to load.
+
+Fixes: 691a63712347 ("ACPI: cpufreq: Use platform devices to load ACPI PPC and PCC drivers")
+Reported-by: Kevin Locke <kevin@kevinlocke.name>
+Link: https://lore.kernel.org/lkml/ZFreh8SDMX67EaB6@kevinlocke.name/
+Signed-off-by: Petr Pavlu <petr.pavlu@suse.com>
+---
+ drivers/cpufreq/acpi-cpufreq.c | 2 +-
+ drivers/cpufreq/pcc-cpufreq.c  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+index 29904395e95f..b2f05d27167e 100644
+--- a/drivers/cpufreq/acpi-cpufreq.c
++++ b/drivers/cpufreq/acpi-cpufreq.c
+@@ -975,7 +975,7 @@ static int __init acpi_cpufreq_probe(struct platform_device *pdev)
+ 
+ 	/* don't keep reloading if cpufreq_driver exists */
+ 	if (cpufreq_get_current_driver())
+-		return -EEXIST;
++		return -ENODEV;
+ 
+ 	pr_debug("%s\n", __func__);
+ 
+diff --git a/drivers/cpufreq/pcc-cpufreq.c b/drivers/cpufreq/pcc-cpufreq.c
+index 1d2cfea9858a..73efbcf5513b 100644
+--- a/drivers/cpufreq/pcc-cpufreq.c
++++ b/drivers/cpufreq/pcc-cpufreq.c
+@@ -583,7 +583,7 @@ static int __init pcc_cpufreq_probe(struct platform_device *pdev)
+ 
+ 	/* Skip initialization if another cpufreq driver is there. */
+ 	if (cpufreq_get_current_driver())
+-		return -EEXIST;
++		return -ENODEV;
+ 
+ 	if (acpi_disabled)
+ 		return -ENODEV;
+-- 
+2.35.3
+
