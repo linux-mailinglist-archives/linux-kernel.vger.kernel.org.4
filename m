@@ -2,78 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F41BE6FFC03
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 23:42:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CD466FFC15
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 23:49:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232437AbjEKVmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 17:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44856 "EHLO
+        id S239415AbjEKVst (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 17:48:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238958AbjEKVmL (ORCPT
+        with ESMTP id S238966AbjEKVso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 17:42:11 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25315BA6
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 14:41:49 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-24df8644eaeso4907388a91.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 14:41:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683841308; x=1686433308;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=43muZZqhwTl5Zf6bR8xbpoiNJBmmJ6GoS2BIrk8XQg0=;
-        b=4MsedK4JufBOK2Pya7wQCIDxG0sCQ1VFTXWDgZhatiOWtPY8opQlb3hL15OT5+unZG
-         c92gYZtsjWyA0xBBYuP1vjtV9F4vB2xfCoB1TbwZDS6rC9lEcLm8vQnbtah9R9tQVvk8
-         3XqKLnL9WIFnp4raTswUlTUXryUFeRB5X3s/tRMH4GmJMbvmyj/r3b8iejmBq+6Dz+Bu
-         BpteMnQmPKMuyMxqdEMLiL+po2QzBiS1Jne4oUn4GHrbhRN5fi04GbTI4PMxSqwaTflW
-         htw1CwW32Ld/0Udqzx2i3OH+tBT7Cvm3ak2yGnWGLZ4oRNFpkr2Mv5GY3T2/7v1h5+uU
-         4Pwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683841308; x=1686433308;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=43muZZqhwTl5Zf6bR8xbpoiNJBmmJ6GoS2BIrk8XQg0=;
-        b=c1OYRs8RKrmS/GFh12BfcbgHoB76lNpsfFKDKBIIoBFCubCOLvzcLClqFYO1E3ihzt
-         g6xUcg7ZArghCFavVUMPbEjk0iY1vEV6YpKRYqY+HRYB1+vBqy41U2RtwW+VVTM3lekG
-         fqpQNNPetcMmpVteCuuSVLBDIfSwggn4NnfE2W6T72/GVvnIC9ENdYMIg+EXjoMhx466
-         KR5QRsocooFxYxewBa20/3VxwLgS6MyKro9NOXQ6kETf/nogrgkXQ0aB3ptTzlIDmJiD
-         8Xmn76aBxxYxhhadAqJKnncTAcK0zwwxJWNJha3aRz4UU7Bp5j5md9UHOeuJ3pgf94dU
-         k8DA==
-X-Gm-Message-State: AC+VfDzHTCXmwiYxf7ssDExztS717hZbclkINtdyKE7qNX7JGSvXS+ZT
-        xtY2ZIjdPIS19XQ95rpVtFydSVQoQFM+q5tx1qcWUFERhLrTEHprYP2RNbJ0/f39nWoCLq77rDX
-        0VqixBtElE4gFKYtk9v16tgYEgDss57iItH+7dg6TARXk8zuqiFZuin15sKfCUHt+qYhcRtM=
-X-Google-Smtp-Source: ACHHUZ4s/bA5bbWMEoCZHDspkz2P/SKgGc9ShoCkPP2udc8klgmNRKyV+96ayDFCh+GNSU2whHAGdftp/1LC
-X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
- (user=jstultz job=sendgmr) by 2002:a17:90a:f517:b0:250:43bb:dced with SMTP id
- cs23-20020a17090af51700b0025043bbdcedmr6155590pjb.5.1683841308026; Thu, 11
- May 2023 14:41:48 -0700 (PDT)
-Date:   Thu, 11 May 2023 21:41:30 +0000
-In-Reply-To: <20230406194053.876844-1-arve@android.com>
-Mime-Version: 1.0
-References: <20230406194053.876844-1-arve@android.com>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Message-ID: <20230511214144.1924757-1-jstultz@google.com>
-Subject: [PATCH] sched/wait: Fix a kthread_park race with wait_woken()
-From:   John Stultz <jstultz@google.com>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        John Stultz <jstultz@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        Thu, 11 May 2023 17:48:44 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2F454690;
+        Thu, 11 May 2023 14:48:42 -0700 (PDT)
+Received: from [10.230.83.65] (unknown [72.28.92.215])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 3722440026;
+        Thu, 11 May 2023 21:48:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1683841719;
+        bh=hjvm1zm7cWLOP+uGf76IIMlTIPMFKlV+xXfMnXyGB8Q=;
+        h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+         In-Reply-To:Content-Type;
+        b=Cjhg1vG0eHurLwCGA5RC85fFZHhbtKuQVMy4+k9XxNBIQ2RfNELgpNkVU2786iQeU
+         EWeNhfVzikltesWaOsNXR8iVjzsuKOtRFjAqbHv2S5gyQt+bta974N+Z9gtor4AfPD
+         dVSTc/GDABBZ5f2Fo9wphW+bkvJ475qR9CcgmYj/u7rOUWmZURzTCskLqVCdRj7uXw
+         3BnhIR0AsBqBsLyPIIz83GmU5vJqRz5gMZJYa9J/d3fYIOfpkv0IuavddN5LKNur7U
+         +UheZL1FcyvGu6wfqcPKwdo1H4d2MuuTrzqDpzKEE4XP129oPMZeXOxU1oPUJ9DZEP
+         9q4Y5MdEPP25g==
+Message-ID: <7085879d-4d21-b90a-c08d-60450d1c7d38@canonical.com>
+Date:   Thu, 11 May 2023 14:48:29 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] apparmor: aa_buffer: Convert 1-element array to flexible
+ array
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>
+Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, apparmor@lists.ubuntu.com,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+References: <20230511213441.never.401-kees@kernel.org>
+From:   John Johansen <john.johansen@canonical.com>
+Organization: Canonical
+In-Reply-To: <20230511213441.never.401-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,61 +63,77 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arve Hj=C3=B8nnev=C3=A5g <arve@android.com>
+On 5/11/23 14:34, Kees Cook wrote:
+> In the ongoing effort to convert all fake flexible arrays to proper
+> flexible arrays, replace aa_buffer's 1-element "buffer" member with a
+> flexible array.
+> 
+> Cc: John Johansen <john.johansen@canonical.com>
+> Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: apparmor@lists.ubuntu.com
+> Cc: linux-security-module@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-kthread_park and wait_woken have a similar race that kthread_stop and
-wait_woken used to have before it was fixed in
-cb6538e740d7543cd989128625cf8cac4b471e0a. Extend that fix to also cover
-kthread_park.
+Acked-by: John Johansen <john.johansen@canonical.com>
 
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Juri Lelli <juri.lelli@redhat.com>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>
-Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Ben Segall <bsegall@google.com>
-Cc: Mel Gorman <mgorman@suse.de>
-Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
-Cc: Valentin Schneider <vschneid@redhat.com>
-Signed-off-by: Arve Hj=C3=B8nnev=C3=A5g <arve@android.com>
-Signed-off-by: John Stultz <jstultz@google.com>
----
-This seemingly slipped by, so I wanted to resend it
-for review.
----
- kernel/sched/wait.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+I have pulled this into my tree.
 
-diff --git a/kernel/sched/wait.c b/kernel/sched/wait.c
-index 133b74730738..a9cf49da884b 100644
---- a/kernel/sched/wait.c
-+++ b/kernel/sched/wait.c
-@@ -425,9 +425,9 @@ int autoremove_wake_function(struct wait_queue_entry *w=
-q_entry, unsigned mode, i
- }
- EXPORT_SYMBOL(autoremove_wake_function);
-=20
--static inline bool is_kthread_should_stop(void)
-+static inline bool is_kthread_should_stop_or_park(void)
- {
--	return (current->flags & PF_KTHREAD) && kthread_should_stop();
-+	return (current->flags & PF_KTHREAD) && (kthread_should_stop() || kthread=
-_should_park());
- }
-=20
- /*
-@@ -459,7 +459,7 @@ long wait_woken(struct wait_queue_entry *wq_entry, unsi=
-gned mode, long timeout)
- 	 * or woken_wake_function() sees our store to current->state.
- 	 */
- 	set_current_state(mode); /* A */
--	if (!(wq_entry->flags & WQ_FLAG_WOKEN) && !is_kthread_should_stop())
-+	if (!(wq_entry->flags & WQ_FLAG_WOKEN) && !is_kthread_should_stop_or_park=
-())
- 		timeout =3D schedule_timeout(timeout);
- 	__set_current_state(TASK_RUNNING);
-=20
---=20
-2.40.1.606.ga4b1b128d6-goog
+> ---
+> One thing I notice here is that it may be rare for "buffer" to ever change
+> for a given kernel. Could this just be made PATH_MAX * 2 directly and
+> remove the module parameter, etc, etc?
+
+possibly. Currently the only use case I know of is for some stress testing
+where we drop the buffer size down really small to try and break things.
+This isn't part of the regular regression runs and could be handle with a
+config/compile time to a buffer size constant.
+
+
+> ---
+>   security/apparmor/lsm.c | 8 ++++----
+>   1 file changed, 4 insertions(+), 4 deletions(-)
+> 
+> diff --git a/security/apparmor/lsm.c b/security/apparmor/lsm.c
+> index d6cc4812ca53..35eb41bb9e3a 100644
+> --- a/security/apparmor/lsm.c
+> +++ b/security/apparmor/lsm.c
+> @@ -46,7 +46,7 @@ int apparmor_initialized;
+>   
+>   union aa_buffer {
+>   	struct list_head list;
+> -	char buffer[1];
+> +	DECLARE_FLEX_ARRAY(char, buffer);
+>   };
+>   
+>   #define RESERVE_COUNT 2
+> @@ -1647,7 +1647,7 @@ char *aa_get_buffer(bool in_atomic)
+>   		list_del(&aa_buf->list);
+>   		buffer_count--;
+>   		spin_unlock(&aa_buffers_lock);
+> -		return &aa_buf->buffer[0];
+> +		return aa_buf->buffer;
+>   	}
+>   	if (in_atomic) {
+>   		/*
+> @@ -1670,7 +1670,7 @@ char *aa_get_buffer(bool in_atomic)
+>   		pr_warn_once("AppArmor: Failed to allocate a memory buffer.\n");
+>   		return NULL;
+>   	}
+> -	return &aa_buf->buffer[0];
+> +	return aa_buf->buffer;
+>   }
+>   
+>   void aa_put_buffer(char *buf)
+> @@ -1747,7 +1747,7 @@ static int __init alloc_buffers(void)
+>   			destroy_buffers();
+>   			return -ENOMEM;
+>   		}
+> -		aa_put_buffer(&aa_buf->buffer[0]);
+> +		aa_put_buffer(aa_buf->buffer);
+>   	}
+>   	return 0;
+>   }
 
