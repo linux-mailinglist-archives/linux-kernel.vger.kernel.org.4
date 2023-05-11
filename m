@@ -2,95 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63D4F6FEA2F
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 05:23:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4518B6FEA3F
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 05:34:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbjEKDXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 23:23:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37230 "EHLO
+        id S232224AbjEKDeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 23:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39198 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjEKDX0 (ORCPT
+        with ESMTP id S229461AbjEKDec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 23:23:26 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB8CFF4;
-        Wed, 10 May 2023 20:23:24 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QGy012TVHz4x4X;
-        Thu, 11 May 2023 13:23:13 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1683775400;
-        bh=segvorBuGekPc5jSCLXtWJe7pAKDaM/2mPQxUa2lvTw=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=mpN6WZbs8ze5YaIng5ERyTBY3chApO1uFrN1U1lTsRVA9HI18/rgyaG/eZmexoGi4
-         xyNRjwovMhVVlZljbfexsALAQ/VC7SXFkLQXhGs4Bb0CKdQ9ZE7uWK8mAGQpR/wXnj
-         Wj/Kq9bEbYeNfiJORTh/qbHavius2OrvxO8nKOQelnsk3QR4A3TJ4hsLhIW2fK+19D
-         90D5YoD3X1p3CFTX+0ixP4wpazzRWLy7HTHBpgR9OBJW3WUEJ01CMuFyOW/rNQ/1o1
-         jq40YmakA31zDnqwNmvC6KPPEIJRM2z/UjkLs2qgYubScN3CGu05cVDjwVg/DFcNT6
-         LL1PDlPViTPUQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org
-Cc:     linux-mm@kvack.org, linux-api@vger.kernel.org,
-        kernel-team@meta.com, linux-arch@vger.kernel.org,
-        hannes@cmpxchg.org, richard.henderson@linaro.org,
-        ink@jurassic.park.msu.ru, mattst88@gmail.com,
-        linux@armlinux.org.uk, geert@linux-m68k.org, monstr@monstr.eu,
-        tsbogend@alpha.franken.de, James.Bottomley@HansenPartnership.com,
-        deller@gmx.de, npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        hca@linux.ibm.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com,
-        ysato@users.sourceforge.jp, dalias@libc.org,
-        glaubitz@physik.fu-berlin.de, davem@davemloft.net,
-        chris@zankel.net, jcmvbkbc@gmail.com, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH] cachestat: wire up cachestat for other architectures
-In-Reply-To: <20230510195806.2902878-1-nphamcs@gmail.com>
-References: <20230510195806.2902878-1-nphamcs@gmail.com>
-Date:   Thu, 11 May 2023 13:23:12 +1000
-Message-ID: <874joja6vz.fsf@mail.lhotse>
+        Wed, 10 May 2023 23:34:32 -0400
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A682D64;
+        Wed, 10 May 2023 20:34:28 -0700 (PDT)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pwx3z-007Ytd-Ii; Thu, 11 May 2023 11:33:57 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Thu, 11 May 2023 11:33:56 +0800
+Date:   Thu, 11 May 2023 11:33:56 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Ross Philipson <ross.philipson@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
+        ross.philipson@oracle.com, dpsmith@apertussolutions.com,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        ardb@kernel.org, mjg59@srcf.ucam.org,
+        James.Bottomley@hansenpartnership.com, luto@amacapital.net,
+        nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
+        trenchboot-devel@googlegroups.com
+Subject: Re: [PATCH v6 06/14] x86: Add early SHA support for Secure Launch
+ early measurements
+Message-ID: <ZFxiJF373HCwZLKE@gondor.apana.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230504145023.835096-7-ross.philipson@oracle.com>
+X-Newsgroups: apana.lists.os.linux.cryptoapi,apana.lists.os.linux.doc,apana.lists.os.linux.kernel
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nhat Pham <nphamcs@gmail.com> writes:
-> cachestat is previously only wired in for x86 (and architectures using
-> the generic unistd.h table):
+Ross Philipson <ross.philipson@oracle.com> wrote:
 >
-> https://lore.kernel.org/lkml/20230503013608.2431726-1-nphamcs@gmail.com/
->
-> This patch wires cachestat in for all the other architectures.
->
-> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-> ---
->  arch/alpha/kernel/syscalls/syscall.tbl      | 1 +
->  arch/arm/tools/syscall.tbl                  | 1 +
->  arch/ia64/kernel/syscalls/syscall.tbl       | 1 +
->  arch/m68k/kernel/syscalls/syscall.tbl       | 1 +
->  arch/microblaze/kernel/syscalls/syscall.tbl | 1 +
->  arch/mips/kernel/syscalls/syscall_n32.tbl   | 1 +
->  arch/mips/kernel/syscalls/syscall_n64.tbl   | 1 +
->  arch/mips/kernel/syscalls/syscall_o32.tbl   | 1 +
->  arch/parisc/kernel/syscalls/syscall.tbl     | 1 +
->  arch/powerpc/kernel/syscalls/syscall.tbl    | 1 +
+> +static void __sha_transform(u32 *digest, const char *data)
+> +{
+> +       u32 ws[SHA1_WORKSPACE_WORDS];
+> +
+> +       sha1_transform(digest, data, ws);
+> +
+> +       memzero_explicit(ws, sizeof(ws));
+> +}
+> +
+> +void early_sha1_init(struct sha1_state *sctx)
+> +{
+> +       sha1_init(sctx->state);
+> +       sctx->count = 0;
+> +}
+> +
+> +void early_sha1_update(struct sha1_state *sctx,
+> +                      const u8 *data,
+> +                      unsigned int len)
+> +{
+> +       unsigned int partial = sctx->count % SHA1_BLOCK_SIZE;
+> +
+> +       sctx->count += len;
+> +
+> +       if (likely((partial + len) >= SHA1_BLOCK_SIZE)) {
+> +               int blocks;
+> +
+> +               if (partial) {
+> +                       int p = SHA1_BLOCK_SIZE - partial;
+> +
+> +                       memcpy(sctx->buffer + partial, data, p);
+> +                       data += p;
+> +                       len -= p;
+> +
+> +                       __sha_transform(sctx->state, sctx->buffer);
+> +               }
+> +
+> +               blocks = len / SHA1_BLOCK_SIZE;
+> +               len %= SHA1_BLOCK_SIZE;
+> +
+> +               if (blocks) {
+> +                       while (blocks--) {
+> +                               __sha_transform(sctx->state, data);
+> +                               data += SHA1_BLOCK_SIZE;
+> +                       }
+> +               }
+> +               partial = 0;
+> +       }
+> +
+> +       if (len)
+> +               memcpy(sctx->buffer + partial, data, len);
+> +}
+> +
+> +void early_sha1_final(struct sha1_state *sctx, u8 *out)
+> +{
+> +       const int bit_offset = SHA1_BLOCK_SIZE - sizeof(__be64);
+> +       unsigned int partial = sctx->count % SHA1_BLOCK_SIZE;
+> +       __be64 *bits = (__be64 *)(sctx->buffer + bit_offset);
+> +       __be32 *digest = (__be32 *)out;
+> +       int i;
+> +
+> +       sctx->buffer[partial++] = 0x80;
+> +       if (partial > bit_offset) {
+> +               memset(sctx->buffer + partial, 0x0, SHA1_BLOCK_SIZE - partial);
+> +               partial = 0;
+> +
+> +               __sha_transform(sctx->state, sctx->buffer);
+> +       }
+> +
+> +       memset(sctx->buffer + partial, 0x0, bit_offset - partial);
+> +       *bits = cpu_to_be64(sctx->count << 3);
+> +       __sha_transform(sctx->state, sctx->buffer);
+> +
+> +       for (i = 0; i < SHA1_DIGEST_SIZE / sizeof(__be32); i++)
+> +               put_unaligned_be32(sctx->state[i], digest++);
+> +
+> +       *sctx = (struct sha1_state){};
+> +}
 
-With the change to the selftest (see my other mail), I tested this on
-powerpc and all tests pass.
+If we're going to add SHA1 then this should go into lib/crypto
+just like SHA2.
 
-Tested-by: Michael Ellerman <mpe@ellerman.id.au> (powerpc)
-
-
-cheers
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
