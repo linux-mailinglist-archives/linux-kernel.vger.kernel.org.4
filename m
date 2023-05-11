@@ -2,69 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1CA96FF3B0
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:11:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A619A6FF4E3
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:45:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238424AbjEKOLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 10:11:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55116 "EHLO
+        id S237972AbjEKOpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 10:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238412AbjEKOKw (ORCPT
+        with ESMTP id S238643AbjEKOoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 10:10:52 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418C2E729;
-        Thu, 11 May 2023 07:10:27 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 75E5021D11;
-        Thu, 11 May 2023 14:10:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1683814224; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jBBNJFzPgSeRiv4JN3mjqd7wSLy3Fu+TgA+AgZ0WBjU=;
-        b=b7hIN+CGfSesgk7ANYYMMoV34Zqgdlrht2Q5N8Mkh2dPgsuuN59ZrZZcxx+/IKShjiimI2
-        ORvfcTRsvbzdyCZa+KRAC8doFtIGGUoPBrPZwGyceFSCAI4qqr9qDg1r0Kg8po5XSBxmgF
-        VBJAqF0WbKJpI/eZRW+/Rq66xNA4HfI=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1683814224;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jBBNJFzPgSeRiv4JN3mjqd7wSLy3Fu+TgA+AgZ0WBjU=;
-        b=hkwG1AqZvoTCwLoOT2+WQG1DhA3JUNoRmY8aPF0cl0PGvgBsomI1ieKWFfBcfeBKsUB/BY
-        2rKfmFcbD3P50vCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 1AA48134B2;
-        Thu, 11 May 2023 14:10:23 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id XjqHOU/3XGSgPwAAMHmgww
-        (envelope-from <dwagner@suse.de>); Thu, 11 May 2023 14:10:23 +0000
-From:   Daniel Wagner <dwagner@suse.de>
-To:     linux-nvme@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        Shin'ichiro Kawasaki <shinichiro@fastmail.com>,
-        Hannes Reinecke <hare@suse.de>, Daniel Wagner <dwagner@suse.de>
-Subject: [PATCH blktests v4 11/11] nvme{016,017}: Make the number iterations configurable
-Date:   Thu, 11 May 2023 16:09:53 +0200
-Message-Id: <20230511140953.17609-12-dwagner@suse.de>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230511140953.17609-1-dwagner@suse.de>
-References: <20230511140953.17609-1-dwagner@suse.de>
+        Thu, 11 May 2023 10:44:10 -0400
+Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23EE35B3;
+        Thu, 11 May 2023 07:39:53 -0700 (PDT)
+Received: from local
+        by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1px71J-0000mD-0V;
+        Thu, 11 May 2023 14:11:49 +0000
+Date:   Thu, 11 May 2023 16:09:54 +0200
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Qingfang Deng <dqfext@gmail.com>,
+        SkyLake Huang <SkyLake.Huang@mediatek.com>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: [PATCH net-next v4 0/2] net: phy: add driver for MediaTek SoC
+ built-in GE PHYs
+Message-ID: <cover.1683813687.git.daniel@makrotopia.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -73,71 +56,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some tests hard code high values of iterations. This makes them run
-relatively long compared to the other tests. Introduce a new environment
-variable nvme_num_iter to allow tune the runtime.
+Some of MediaTek's Filogic SoCs come with built-in gigabit Ethernet
+PHYs which require calibration data from the SoC's efuse.
+Despite the similar design the driver doesn't share any code with the
+existing mediatek-ge.c, so add support for these PHYs by introducing a
+new driver for only MediaTek's ARM64 SoCs.
 
-Reviewed-by: Hannes Reinecke <hare@suse.de>
-Reviewed-by: Chaitanya Kulkarni <kch@nvidia.com>
-Signed-off-by: Daniel Wagner <dwagner@suse.de>
----
- Documentation/running-tests.md | 2 ++
- tests/nvme/016                 | 2 +-
- tests/nvme/017                 | 2 +-
- tests/nvme/rc                  | 1 +
- 4 files changed, 5 insertions(+), 2 deletions(-)
+As the PHYs integrated in the MT7988 SoC require reading the polarity
+of the LEDs from the SoCs's boottrap also add dt-binding for that.
 
-diff --git a/Documentation/running-tests.md b/Documentation/running-tests.md
-index 4d8393f2002d..b35ae10316e4 100644
---- a/Documentation/running-tests.md
-+++ b/Documentation/running-tests.md
-@@ -107,6 +107,8 @@ The NVMe tests can be additionally parameterized via environment variables.
- - nvme_img_size: '1G' (default)
-   Run the tests with given image size in bytes. 'm', 'M', 'g'
- 	and 'G' postfix are supported.
-+- nvme_num_iter: 1000 (default)
-+  The number of iterations a test should do.
- 
- ### Running nvme-rdma nvmeof-mp srp tests
- 
-diff --git a/tests/nvme/016 b/tests/nvme/016
-index 4eba30223a08..c0c31a55b190 100755
---- a/tests/nvme/016
-+++ b/tests/nvme/016
-@@ -17,7 +17,7 @@ test() {
- 	echo "Running ${TEST_NAME}"
- 
- 	local port
--	local iterations=1000
-+	local iterations="${nvme_num_iter}"
- 	local loop_dev
- 	local subsys_nqn="blktests-subsystem-1"
- 
-diff --git a/tests/nvme/017 b/tests/nvme/017
-index 0248aee9bc41..e1674508f654 100755
---- a/tests/nvme/017
-+++ b/tests/nvme/017
-@@ -18,7 +18,7 @@ test() {
- 
- 	local port
- 	local file_path
--	local iterations=1000
-+	local iterations="${nvme_num_iter}"
- 	local subsys_name="blktests-subsystem-1"
- 
- 	_setup_nvmet
-diff --git a/tests/nvme/rc b/tests/nvme/rc
-index 11357cbf7816..933b585643ac 100644
---- a/tests/nvme/rc
-+++ b/tests/nvme/rc
-@@ -18,6 +18,7 @@ def_hostnqn="$(cat /etc/nvme/hostnqn 2> /dev/null)"
- def_hostid="$(cat /etc/nvme/hostid 2> /dev/null)"
- nvme_trtype=${nvme_trtype:-"loop"}
- nvme_img_size=${nvme_img_size:-"1G"}
-+nvme_num_iter=${nvme_num_iter:-"1000"}
- 
- _nvme_requires() {
- 	_have_program nvme
+All LEDs are for now setup with default values, a follow up patch which
+allows custom LED setups will be sent after the PHY LED framework is
+more in shape.
+
+Changes since v3:
+ * fix spelling and reverse xmas tree
+ * add dt-binding for mediatek,boottrap
+
+Changes since v2:
+ * remove everything related to PHY LEDs for now, LED support will
+   be cleaned up and submitted once PHY LED framework is more ready
+
+Changes since v1:
+ * split-off SoC-specific driver from mediatek-ge.c as requested
+ * address comments made by Heiner Kallweit
+ * add pinctrl handling for PHY LED
+ * remove calibration details not needed in production hardware
+
+Daniel Golle (2):
+  dt-bindings: arm: mediatek: add mediatek,boottrap binding
+  net: phy: add driver for MediaTek SoC built-in GE PHYs
+
+ .../arm/mediatek/mediatek,boottrap.yaml       |   37 +
+ MAINTAINERS                                   |    9 +
+ drivers/net/phy/Kconfig                       |   12 +
+ drivers/net/phy/Makefile                      |    1 +
+ drivers/net/phy/mediatek-ge-soc.c             | 1264 +++++++++++++++++
+ drivers/net/phy/mediatek-ge.c                 |    3 +-
+ 6 files changed, 1325 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/arm/mediatek/mediatek,boottrap.yaml
+ create mode 100644 drivers/net/phy/mediatek-ge-soc.c
+
+
+base-commit: 285b2a46953cecea207c53f7c6a7a76c9bbab303
 -- 
 2.40.0
 
