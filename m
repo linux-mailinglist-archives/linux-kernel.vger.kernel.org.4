@@ -2,113 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1D66FFB27
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:17:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 128356FFB2D
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:19:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239359AbjEKUR1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 16:17:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59410 "EHLO
+        id S239374AbjEKUS5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 16:18:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239288AbjEKURZ (ORCPT
+        with ESMTP id S238918AbjEKUSz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 16:17:25 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92F692D68;
-        Thu, 11 May 2023 13:17:24 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-966287b0f72so1222425766b.0;
-        Thu, 11 May 2023 13:17:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683836243; x=1686428243;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=o3yFd0Z3WkTu4ff6EQ3UVzmE4FT+cDY8nxJOS33vY3M=;
-        b=b6NNutiXCUcgjnqS41dQCxSVX20rYGFiKJnBG1Q49NP9vu7P8kiGuCCRWQXXe0KcpI
-         yWsOPq7ohgyb+ebyllHnUEc0KKFG9AVIuCMgDvTpNRQBz0mK5PlCbW4bqODkrYpTAdCV
-         XJlOepYB1lXmFBbavUBxszPsEDn6XcKpmGB26aBmh7/HSR6AvU6nTonVZIwo2vyMdNr0
-         1aR895mCqBZZLL01K26jyBmCev/VoF+xJ8/PKwGXta9BzJrvMg3tPLeeShdZzfiLXZOV
-         rB/wecx7wOiZCaqh2ORsQfxK5wsnI8Q31NvBGQ1YP5yMFu6pC3TlNPLKNJL2tjYww7n1
-         S98g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683836243; x=1686428243;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o3yFd0Z3WkTu4ff6EQ3UVzmE4FT+cDY8nxJOS33vY3M=;
-        b=F9rP3beOTkdBymZ7qSw5Ewa6yV8vkI9xbzxrIYeyNmeVT8ZEboUr237RSGzBTY1lAa
-         Fe+mXUCBA8AHnHVeAqibJWXsn6C0aNytVfJdglIEIRyIt020RnH0lTzzOsNXYSSMZky1
-         M1QyUjzEVSvZIoeoCXlmpY2U2q0MQxygcwzvy04omcSRlpr+lB0oWnKQTtbwd9Sq0Kna
-         wMS8OHAA/UdjAXzEPs0272AE5gHjboiaX/vXukDVZj1ao1xONXj9DBIScneVaxuh4TXD
-         I67w6vJTddb3VglBzSRXwr1gYmTfTm0kUBrBME1FENChU6HIiZgkMOfXIKd+cyFDCaVn
-         O4pw==
-X-Gm-Message-State: AC+VfDwflfLYKAuv9fymjlOexCDBRDtet4aSfciEuLrUS2LWE/Zwh9SD
-        h8LN80/YXFtP7PUdic4QDI0=
-X-Google-Smtp-Source: ACHHUZ60bvluRMfqGjeIfH67tu9UTIjdzm5Olcmw+CtDjzQtA9hK1sFgcrZ/qUrj6j1rQ/psI4+oYA==
-X-Received: by 2002:a17:906:4fd6:b0:94e:56c4:59f2 with SMTP id i22-20020a1709064fd600b0094e56c459f2mr19981370ejw.26.1683836242905;
-        Thu, 11 May 2023 13:17:22 -0700 (PDT)
-Received: from ?IPV6:2a01:c23:c58e:b900:c905:524d:7524:40e1? (dynamic-2a01-0c23-c58e-b900-c905-524d-7524-40e1.c23.pool.telefonica.de. [2a01:c23:c58e:b900:c905:524d:7524:40e1])
-        by smtp.googlemail.com with ESMTPSA id hf15-20020a1709072c4f00b008f89953b761sm4466209ejc.3.2023.05.11.13.17.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 May 2023 13:17:22 -0700 (PDT)
-Message-ID: <7bb6e2c9-835c-c8d9-f8a5-baa3d3b03b12@gmail.com>
-Date:   Thu, 11 May 2023 22:17:18 +0200
+        Thu, 11 May 2023 16:18:55 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3EFF172D;
+        Thu, 11 May 2023 13:18:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=c66/3N3Rqm9uKbY8BXQ+WKytrPOIz5O/bDfq9U5auHQ=; b=VZUMM9xAkjBKj5Z3c2ksEXIJlQ
+        FrKO7VzndNIXGOUw/YakP3IOPuVbuB/+UmprLMei83YiMJ2jFOod1xsF3FN2b+WlkVcrbU698N8Yq
+        lrHN+Gc815VsDMymhX2VPZlNb8y+40fLSCpXvr1PqF8evaK7ASqlom3dW6M4+H4sRmkuxg/uHdvo/
+        /HqZVQvq6sxwSxeSv6LaPQpnGnsBPYTwuaynkdG7NKTKHL3pZAqRC/QzX3YoszxcpVMU7hJ9cqATG
+        DD+RrRzQD/mAMvqovD4LVMx1yucDr14yJzJVFrgW5izOAjUcZgTQZi1hPcL1/Jspwfw55suG8n1Cm
+        sjePik1w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pxCkI-008NTy-2z;
+        Thu, 11 May 2023 20:18:40 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7F2E4300244;
+        Thu, 11 May 2023 22:18:37 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 6280B2C25D25A; Thu, 11 May 2023 22:18:37 +0200 (CEST)
+Date:   Thu, 11 May 2023 22:18:37 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, akiyks@gmail.com,
+        linux-doc@vger.kernel.org, kernel-team@meta.com,
+        Will Deacon <will@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: Re: [PATCH locking/atomic 18/19] locking/atomic: Refrain from
+ generating duplicate fallback kernel-doc
+Message-ID: <20230511201837.GD2296992@hirez.programming.kicks-ass.net>
+References: <19135936-06d7-4705-8bc8-bb31c2a478ca@paulmck-laptop>
+ <20230510181717.2200934-18-paulmck@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Content-Language: en-US
-To:     Lukas Wunner <lukas@wunner.de>
-Cc:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof Wilczy??ski <kw@linux.com>, nic_swsd@realtek.com,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230511131441.45704-1-ilpo.jarvinen@linux.intel.com>
- <20230511131441.45704-15-ilpo.jarvinen@linux.intel.com>
- <98b3b70a-86c0-78c0-b734-0764bb5a21fc@gmail.com>
- <20230511200244.GA31598@wunner.de>
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH 14/17] r8169: Use pcie_lnkctl_clear_and_set() for changing
- LNKCTL
-In-Reply-To: <20230511200244.GA31598@wunner.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230510181717.2200934-18-paulmck@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.05.2023 22:02, Lukas Wunner wrote:
-> On Thu, May 11, 2023 at 09:49:52PM +0200, Heiner Kallweit wrote:
->> On 11.05.2023 15:14, Ilpo Järvinen wrote:
->>> Don't assume that only the driver would be accessing LNKCTL. ASPM
->>> policy changes can trigger write to LNKCTL outside of driver's control.
->>>
->>> Use pcie_lnkctl_clear_and_set() which does proper locking to avoid
->>> losing concurrent updates to the register value.
->>
->> Wouldn't it be more appropriate to add proper locking to the
->> underlying pcie_capability_clear_and_set_word()?
+On Wed, May 10, 2023 at 11:17:16AM -0700, Paul E. McKenney wrote:
+> The gen-atomics.sh script currently generates 42 duplicate definitions:
 > 
-> PCI config space accessors such as this one are also used in hot paths
-> (e.g. interrupt handlers).  They should be kept lean (and lockless)
-
-I *think* in case the system uses threaded interrupts you may need locking
-also in interrupt handlers.
-
-> by default.  We only need locking for specific PCIe Extended Capabilities
-> which are concurrently accessed by PCI core code and drivers.
+> 	arch_atomic64_add_negative
+> 	arch_atomic64_add_negative_acquire
+> 	arch_atomic64_add_negative_release
+> 	arch_atomic64_dec_return
+> 	arch_atomic64_dec_return_acquire
+> 	arch_atomic64_dec_return_release
+> 	arch_atomic64_fetch_andnot
+> 	arch_atomic64_fetch_andnot_acquire
+> 	arch_atomic64_fetch_andnot_release
+> 	arch_atomic64_fetch_dec
+> 	arch_atomic64_fetch_dec_acquire
+> 	arch_atomic64_fetch_dec_release
+> 	arch_atomic64_fetch_inc
+> 	arch_atomic64_fetch_inc_acquire
+> 	arch_atomic64_fetch_inc_release
+> 	arch_atomic64_inc_return
+> 	arch_atomic64_inc_return_acquire
+> 	arch_atomic64_inc_return_release
+> 	arch_atomic64_try_cmpxchg
+> 	arch_atomic64_try_cmpxchg_acquire
+> 	arch_atomic64_try_cmpxchg_release
+> 	arch_atomic_add_negative
+> 	arch_atomic_add_negative_acquire
+> 	arch_atomic_add_negative_release
+> 	arch_atomic_dec_return
+> 	arch_atomic_dec_return_acquire
+> 	arch_atomic_dec_return_release
+> 	arch_atomic_fetch_andnot
+> 	arch_atomic_fetch_andnot_acquire
+> 	arch_atomic_fetch_andnot_release
+> 	arch_atomic_fetch_dec
+> 	arch_atomic_fetch_dec_acquire
+> 	arch_atomic_fetch_dec_release
+> 	arch_atomic_fetch_inc
+> 	arch_atomic_fetch_inc_acquire
+> 	arch_atomic_fetch_inc_release
+> 	arch_atomic_inc_return
+> 	arch_atomic_inc_return_acquire
+> 	arch_atomic_inc_return_release
+> 	arch_atomic_try_cmpxchg
+> 	arch_atomic_try_cmpxchg_acquire
+> 	arch_atomic_try_cmpxchg_release
 > 
-> Thanks,
+> These duplicates are presumably to handle different architectures
+> generating hand-coded definitions for different subsets of the atomic
+> operations.  However, generating duplicate kernel-doc headers is
+> undesirable.
 > 
-> Lukas
+> Therefore, generate only the first kernel-doc definition in a group
+> of duplicates.  A comment indicates the name of the function and the
+> fallback script that generated it.
 
+So my canonical solution to fixing kernel-doc related problems is this
+trivial regex:
+
+	s/\/\*\*/\/\*/
+
+works every time.
+
+And is *much* simpler than this:
+
+>  scripts/atomic/chkdup.sh                     |  27 ++
+>  scripts/atomic/fallbacks/acquire             |   3 +
+>  scripts/atomic/fallbacks/add_negative        |   5 +
+>  scripts/atomic/fallbacks/add_unless          |   5 +
+>  scripts/atomic/fallbacks/andnot              |   5 +
+>  scripts/atomic/fallbacks/dec                 |   5 +
+>  scripts/atomic/fallbacks/dec_and_test        |   5 +
+>  scripts/atomic/fallbacks/dec_if_positive     |   5 +
+>  scripts/atomic/fallbacks/dec_unless_positive |   5 +
+>  scripts/atomic/fallbacks/fence               |   3 +
+>  scripts/atomic/fallbacks/fetch_add_unless    |   5 +
+>  scripts/atomic/fallbacks/inc                 |   5 +
+>  scripts/atomic/fallbacks/inc_and_test        |   5 +
+>  scripts/atomic/fallbacks/inc_not_zero        |   5 +
+>  scripts/atomic/fallbacks/inc_unless_negative |   5 +
+>  scripts/atomic/fallbacks/read_acquire        |   5 +
+>  scripts/atomic/fallbacks/release             |   3 +
+>  scripts/atomic/fallbacks/set_release         |   5 +
+>  scripts/atomic/fallbacks/sub_and_test        |   5 +
+>  scripts/atomic/fallbacks/try_cmpxchg         |   5 +
+>  scripts/atomic/gen-atomics.sh                |   4 +
