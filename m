@@ -2,122 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D59E6FEDDD
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:34:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 94B626FEDE7
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:38:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235809AbjEKIeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 04:34:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
+        id S236267AbjEKIiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 04:38:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234868AbjEKIei (ORCPT
+        with ESMTP id S233655AbjEKIiS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 04:34:38 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C9D49D6
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:34:37 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f41dceb9d1so56011865e9.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:34:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683794075; x=1686386075;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=Eyhkadwy76PvtTG8OTGK3oTxfpKVBdNtjIXr+9MoiDs=;
-        b=fsubfTEI2BtlX6kxz7dYaSrHibGdZ5zzvXiSkL3zgHh7TgTzu+YfFL/j7LTeGcthcR
-         X0wxeAtY7ZOS1spFT1VVA7rWb67xJbO5UVhTw/+L5IO88h8pCEMhXMt60t3UCF5E8xUD
-         6jcrmv0XRHF9cbuCK78hozX1rolI+R9JSX+MF9jUgIkkXisgonH+nwYgCX78QBLHJzN0
-         6kdeyJTz+6n3mNaoc0RaAE1l4tr0A7InOKo+uYPYtZLXIc8vo3b9WEnvjU8maxzOf4KJ
-         887HykpwZKrOp/+6TSaIIokJR91mYFk5ArQQYoBMTP+5kOxqQrGCj+QJ/Q/oPNQPJ47l
-         dRxQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683794075; x=1686386075;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Eyhkadwy76PvtTG8OTGK3oTxfpKVBdNtjIXr+9MoiDs=;
-        b=NE748TdjZlGUWAtAE9LAFEJ+eo9FVx9FPnaWps0zTrH/viC9befkUHt6Kw4CntIX8x
-         6ullgUO7lwFvT49cVu8LDvyobnBcE/MXX//cAqTqTdYdr6b5FAdetawZqhMmvIO1PMZU
-         C1ULt6lumQE99iyQLsCTrGR0JEs2nPqHUmo7u/RXrgGLMBw5Jbw/TPoc4xzAFYo67a0G
-         zZpGPcF4uMnotbpaOt6FAiRZVJdamNPibvO0wa74ChyMVfoKxw2zDFoALyk2eH3fnQrI
-         QlzM2waCDn5i3j9UA6N7B7W9Hfnx5WbSh+s1O8cEe/lcSE8dusLpB8Gk/pkuzTOJ09bo
-         sHDQ==
-X-Gm-Message-State: AC+VfDybLvFhbNVyImVxzDSNXdrEkIMT26IBWvESapstamPgXdZ75eje
-        uXh7og4eKQx4a1d3SEzxuypFuQ==
-X-Google-Smtp-Source: ACHHUZ4gH4IivEWz8QiW7o78Y0QhaNUiSoUPbbKtCiyPYCVSiuxVXZc2m5HIiHYNT+Qn0lAUxh/azw==
-X-Received: by 2002:a7b:c7da:0:b0:3f4:2df7:e332 with SMTP id z26-20020a7bc7da000000b003f42df7e332mr5052691wmk.13.1683794075571;
-        Thu, 11 May 2023 01:34:35 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:182d:9e6c:b8ff:5a99? ([2a01:e0a:982:cbb0:182d:9e6c:b8ff:5a99])
-        by smtp.gmail.com with ESMTPSA id x25-20020a1c7c19000000b003f42a75ac2asm7531323wmc.23.2023.05.11.01.34.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 May 2023 01:34:35 -0700 (PDT)
-Message-ID: <ed230bf6-ef9c-f7e4-81eb-9c01b447aad4@linaro.org>
-Date:   Thu, 11 May 2023 10:34:34 +0200
+        Thu, 11 May 2023 04:38:18 -0400
+Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A3D469F;
+        Thu, 11 May 2023 01:38:15 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.169])
+        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QH4zP1xYXz4f3l2p;
+        Thu, 11 May 2023 16:38:09 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP3 (Coremail) with SMTP id _Ch0CgBH9CFtqVxkBMjoIQ--.27674S3;
+        Thu, 11 May 2023 16:38:07 +0800 (CST)
+Subject: Re: Situation of CONFIG_BLK_WBT_MQ after commit b11d31ae01e6
+ ("blk-wbt: remove unnecessary check in wbt_enable_default()")
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        linux-block@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        "yukuai (C)" <yukuai3@huawei.com>
+References: <CAKXUXMzfKq_J9nKHGyr5P5rvUETY4B-fxoQD4sO+NYjFOfVtZA@mail.gmail.com>
+ <8a86ba08-cde4-97a4-d7e2-dc340609381c@huaweicloud.com>
+ <CAKXUXMzA8GfJaWmdaszhrTtjMy5987oZ8AaBcoT6hNVvgCiZ-w@mail.gmail.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <40f7206a-350b-7522-79b0-35cd92e38017@huaweicloud.com>
+Date:   Thu, 11 May 2023 16:38:05 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] ARM: dts: meson8: correct uart_B and uart_C clock
- references
-Content-Language: en-US
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        linux-amlogic@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Hans-Frieder Vogt <hfdevel@gmx.net>
-References: <20230510210847.996980-1-martin.blumenstingl@googlemail.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20230510210847.996980-1-martin.blumenstingl@googlemail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAKXUXMzA8GfJaWmdaszhrTtjMy5987oZ8AaBcoT6hNVvgCiZ-w@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _Ch0CgBH9CFtqVxkBMjoIQ--.27674S3
+X-Coremail-Antispam: 1UD129KBjvJXoW7WF1rXF1kZr13AF43Zry5Jwb_yoW8uFy8pr
+        y8GF42ka1DKFs2kr4Iy34jka4ftF4kt347Xrn5Gw1UWwn0yayxAr4Sgr1a9F98Ars2gw1j
+        y3ySqry3K345AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
+        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
+        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
+        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
+        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
+        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
+        Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
+        UUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/2023 23:08, Martin Blumenstingl wrote:
-> On Meson8 uart_B and uart_C do not work, because they are relying on
-> incorrect clocks. Change the references of pclk to the correct CLKID
-> (UART1 for uart_B and UART2 for uart_C), to allow use of the two uarts.
+Hi,
+
+在 2023/05/10 13:40, Lukas Bulwahn 写道:
+> On Wed, May 10, 2023 at 5:24 AM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>>
+>> Hi,
+>>
+>> 在 2023/05/08 12:37, Lukas Bulwahn 写道:
+>>> Dear Yu Kuai, dear Christoph, dear Jens,
+>>>
+>>>
+>>> The commit b11d31ae01e6 ("blk-wbt: remove unnecessary check in
+>>> wbt_enable_default()") removes the only reference to the config
+>>> BLK_WBT_MQ in the kernel tree.
+>>>
+>>> The commit comes with the statement "If CONFIG_BLK_WBT_MQ is disabled,
+>>> wbt_init() won't do anything.". The statement "If CONFIG_BLK_WBT is
+>>> disabled, wbt_init() won't do anything." (note: CONFIG_BLK_WBT vs.
+>>> CONFIG_BLK_WBT_MQ) is certainly true, but I do not see that "If
+>>> CONFIG_BLK_WBT_MQ is disabled, wbt_init() won't do anything.", but I
+>>> believe it would simply do what wbt_init() does with CONFIG_BLK_WBT
+>>> being enabled.
+>>>
+>>> Now, it seems that with this commit applied, the intended switch of
+>>> the config BLK_WBT_MQ is gone, and the config really now has no effect
+>>> at all.
+>>>
+>>> So, I am a bit puzzled:
+>>>
+>>> 1. Either the config BLK_WBT_MQ does have an effect somewhere, but one
+>>> cannot find its reference with 'git grep -i "BLK_WBT_MQ" .' --- so, my
+>>> investigation is just incomplete or wrong, or
+>>>
+>>> 2. We really do not need this further build config BLK_WBT_MQ beyond
+>>> the other configs already there --- then this config should just be
+>>> removed, or
+>>>
+>>> 3. the commit unintentionally broke the purpose of the config
+>>> BLK_WBT_MQ --- then this commit above should be reverted.
+>>
+>> Thanks for the report, it's the above case and it's my mistake.
+>> I will fix this.
+>>
 > 
-> Fixes: 57007bfb5469 ("ARM: dts: meson8: Fix the UART device-tree schema validation")
-> Reported-by: Hans-Frieder Vogt <hfdevel@gmx.net> # for meson8b.dtsi
-> Link: https://lore.kernel.org/linux-amlogic/trinity-bf20bcb9-790b-4ab9-99e3-0831ef8257f4-1680878185420@3c-app-gmx-bap55/
+> Kuai, thanks for letting me know. Feel free to add a "Reported-by:
+> Lukas Bulwahn <lukas.bulwahn@gmail.com>" tag, and to include in the
+> list of recipients when you send out the fix to the mailing list.
 
-This is confusing, please move this link to the commit message instead, I'll add
-the Link to reference the patch from Lore.
+I just send the fix, sorry that I forgot to cc you...
 
-With that changes:
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+https://lore.kernel.org/all/20230511014509.679482-2-yukuai1@huaweicloud.com/
 
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
->   arch/arm/boot/dts/meson8.dtsi | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+Thanks,
+Kuai
 > 
-> diff --git a/arch/arm/boot/dts/meson8.dtsi b/arch/arm/boot/dts/meson8.dtsi
-> index 4f22ab451aae..1054297fa69f 100644
-> --- a/arch/arm/boot/dts/meson8.dtsi
-> +++ b/arch/arm/boot/dts/meson8.dtsi
-> @@ -769,13 +769,13 @@ &uart_A {
->   
->   &uart_B {
->   	compatible = "amlogic,meson8-uart";
-> -	clocks = <&xtal>, <&clkc CLKID_UART0>, <&clkc CLKID_CLK81>;
-> +	clocks = <&xtal>, <&clkc CLKID_UART2>, <&clkc CLKID_CLK81>;
->   	clock-names = "xtal", "pclk", "baud";
->   };
->   
->   &uart_C {
->   	compatible = "amlogic,meson8-uart";
-> -	clocks = <&xtal>, <&clkc CLKID_UART0>, <&clkc CLKID_CLK81>;
-> +	clocks = <&xtal>, <&clkc CLKID_UART2>, <&clkc CLKID_CLK81>;
->   	clock-names = "xtal", "pclk", "baud";
->   };
->   
+> I am glad to see that my investigation of kernel code is finding some
+> issues that we can fix.
+> 
+> Lukas
+> .
+> 
 
