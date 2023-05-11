@@ -2,114 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E201B6FFB73
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:48:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BEDF46FFB75
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:49:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239295AbjEKUsR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 16:48:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46784 "EHLO
+        id S239323AbjEKUtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 16:49:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238053AbjEKUsP (ORCPT
+        with ESMTP id S239232AbjEKUtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 16:48:15 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 384861733;
-        Thu, 11 May 2023 13:48:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=linKwuzS07qBKlrsKeBKAw7rqSzVqBcPtibj4WlXSWI=; b=JefOckFGh25vyMtTSRSF7sc9M2
-        wJ8ypkuBF3HYVMEWWDeCBiPdcdlEFSTTKf15bjPjcNf+IDCMNUVxs6rDor5ZOA+q5nk+2aUyhBY7W
-        lJz5zul3CXLm4eCttMKyT+Evd5LLC5Pw3QS+Gam8O+ujVNLfEs4FHucEaPtPzbmit9kiD2Oag7EzZ
-        T63gBvoIcTbmHOKLFE2d20k8xWp5Ld71nG/Ljy0etOAubN+gds8rY3TXUcykBYLfsVunKi4v77g6S
-        H4VGiODwDtSFn7EDspvJDNKcxNQmZ4L2omZ/eEngiDrWKAtiKXsNJal3qmZoQMMpRHNZvIqzQOiz9
-        bAPjeYVw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pxDCp-008O5R-1b;
-        Thu, 11 May 2023 20:48:08 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id DEF15300244;
-        Thu, 11 May 2023 22:48:06 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id CE6C52C7DB756; Thu, 11 May 2023 22:48:06 +0200 (CEST)
-Date:   Thu, 11 May 2023 22:48:06 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, akiyks@gmail.com, linux-doc@vger.kernel.org,
-        kernel-team@meta.com, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH locking/atomic 18/19] locking/atomic: Refrain from
- generating duplicate fallback kernel-doc
-Message-ID: <20230511204806.GA2298690@hirez.programming.kicks-ass.net>
-References: <19135936-06d7-4705-8bc8-bb31c2a478ca@paulmck-laptop>
- <20230510181717.2200934-18-paulmck@kernel.org>
- <ZF0haDfyL3At3Ijw@FVFF77S0Q05N.cambridge.arm.com>
- <20230511193856.GA2296992@hirez.programming.kicks-ass.net>
- <c619d689-e7b5-4136-9bd3-8f41954f43cd@paulmck-laptop>
- <20230511200142.GC2296992@hirez.programming.kicks-ass.net>
- <613a2d06-30f1-4140-aa6c-16d5298d9909@paulmck-laptop>
- <20230511204633.GF2296992@hirez.programming.kicks-ass.net>
+        Thu, 11 May 2023 16:49:06 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EC619B1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:49:05 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-b9a6eec8611so43496490276.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:49:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683838145; x=1686430145;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2PS2/c9QvL/3w6lXNaswW1QRNDamQ1dzdDujUD8jAhA=;
+        b=t5jjnWWlPBzm18PiMq9jTeykQKeXg72a0ZPYkd1CvETgVallEcxQl20dL/arMItNih
+         VDwZTHGN/sArnIcr2Vu2jX/4+9V5T1VPRiWO634UyQB7AGkgCjzArNtlU4FzKB4V2/X5
+         x+5S/QVNcfbm6s528mv+LMJhJVKV+RzuQ5NvqFfKKJLsaNPXG27xBOeFGKWu4tr21p0S
+         196UndwRwbUhGy/W3n4W0bN4oKoDZwSJbnoLnyWZfmB8mvurEose/6ZNuyGA+q1cyAu0
+         lUGjSFn/1OSKbBv5DPIVW9p9I1//SE49bZILQzdCUBLR/58gz+mVzgjFauGY46nvt8KM
+         OZvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683838145; x=1686430145;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2PS2/c9QvL/3w6lXNaswW1QRNDamQ1dzdDujUD8jAhA=;
+        b=OQK9xWyYOgjPr+GCaMwUh+fPUamVtIHv1HmFDKb+6iD6ocxILSb5aqGCdpIim2YJBN
+         jy+QJmREBrSFOXgVVl1deiaBss5QC8wP0sCWxkUt8Hll4NGAPoHCr99Eos8AGP/3u7gQ
+         rV7V0AIroVD4JPrF68zFZkzz6/cmzFR8P6hIMPz6hKR+uOgAkFXp40dowiR1FknsrKIK
+         i56NchhXZNMofNW7HhSGqsif4i2iVpWO7NEefmAoWp8pH8Ew/rw3cwvgeUiW+Liuu8mu
+         SlSGXyqv/ZwWhNCLYXxkKwOHx6KLa6Qo7AsxrpqMgJRp1SIimd136L6HreF/lMY/0xCe
+         exLQ==
+X-Gm-Message-State: AC+VfDxAq+NQicdeJsuYoiAaPi7KPZDILKeNMELtTdMcaSgd1pStVQkg
+        XSVLpMSdspzamylQziyGzkir4suznrkS+uJrCH4T3w==
+X-Google-Smtp-Source: ACHHUZ4st1au4FNJjgEwZ7jT7NEg/ChCFOssevCzS0zHYemDBQorrme8sDYfsHWjvEv/Dy7q2VvkzjonSQAfc60NEFs=
+X-Received: by 2002:a25:d8cd:0:b0:b94:bbf2:19a3 with SMTP id
+ p196-20020a25d8cd000000b00b94bbf219a3mr22194052ybg.18.1683838144767; Thu, 11
+ May 2023 13:49:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511204633.GF2296992@hirez.programming.kicks-ass.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230510001151.3946931-1-chris.packham@alliedtelesis.co.nz>
+ <ZFtK3DydE24Qijle@surfacebook> <760ae58f-cb0b-dfe6-9e24-664310651e18@alliedtelesis.co.nz>
+ <CACRpkdb1UFQ=1gePeBBEQ3ODu+6m0dHBqaxdtOF9Qc01WytMEQ@mail.gmail.com> <ab62b83e-0074-4c71-11d7-9aa6846a1eee@alliedtelesis.co.nz>
+In-Reply-To: <ab62b83e-0074-4c71-11d7-9aa6846a1eee@alliedtelesis.co.nz>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 11 May 2023 22:48:52 +0200
+Message-ID: <CACRpkda55gYEnwgLGX-73POCHsQv769ziS6L6oJzHY2coDD0pQ@mail.gmail.com>
+Subject: Re: [PATCH] gpiolib: Don't implicitly disable irq when masking
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "brgl@bgdev.pl" <brgl@bgdev.pl>,
+        Ben Brown <Ben.Brown@alliedtelesis.co.nz>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 10:46:33PM +0200, Peter Zijlstra wrote:
-> On Thu, May 11, 2023 at 01:25:18PM -0700, Paul E. McKenney wrote:
-> > On Thu, May 11, 2023 at 10:01:42PM +0200, Peter Zijlstra wrote:
-> > > On Thu, May 11, 2023 at 12:53:46PM -0700, Paul E. McKenney wrote:
-> > > > Do you have an alternative suggestion for generating the kernel-doc?
-> > > > The current lack of it is problematic.
-> > > 
-> > > I've never found a lack of kernel-doc to be a problem. And I'm very much
-> > > against complicating the scripts to add it.
-> > 
-> > I am sure that you have not recently found the lack of kernel-doc for
-> > the atomic operations to be a problem, given that you wrote many of
-> > these functions.
-> 
-> Sure; but I meant in general -- I've *never* used kernel-doc. Comments I
-> occasionally read, and sometimes they're not even broken either, but
-> kernel-doc, nope.
-> 
-> > OK, you mentioned concerns about documentation people nitpicking.  This
-> > can be dealt with.  The added scripting is not that large or complex.
-> > 
-> > > Also, there's Documentation/atomic_t.txt
-> > 
-> > Yes, if you very carefully read that document end to end, correctly
-> > interpreting it all, you will know what you need to.  Of course, first
-> > you have to find it.  And then you must avoid any lapses while reading
-> > it while under pressure.  Not particularly friendly to someone trying
-> > to chase a bug.
-> 
-> It's either brief and terse or tediously long -- I vastly prefer the
-> former, my brain can much better parse structure than English prose.
-> 
-> Also, I find, pressure is never conductive to anything, except prehaps
-> cooking rice and steam trains (because nothing is as delicous as a
-> pressure cooked train -- oh wait).
-> 
-> Add enough pressure and the human brain reduces to driven and can't read
+On Thu, May 11, 2023 at 10:36=E2=80=AFPM Chris Packham
+<Chris.Packham@alliedtelesis.co.nz> wrote:
 
-Just in case it weren't clear: s/driven/drivel/
+> I spent yesterday trying to demonstrate the
+> problem on a newer kernel. Some teething issues aside I can trigger the
+> warning if I have a gpio-button using one of the pca9555 pins as an
+> interrupt and then I export some of the other pins via sysfs.
+>
+> Interestingly the warning isn't triggered if I use a gpio-hog instead of
+> exporting the pins.
 
-> even the most coherent of text no matter how easy to find.
-> 
-> In such situations it's for the manager to take the pressure away and
-> the engineer to think in relative peace.
+What happens if you use the gpio character device instead of sysfs?
+
+Like for example with the tools in tools/gpio or using libgpiod
+example tools?
+
+> I haven't figured out why that is but I'm assuming
+> it's something to do with the hogged pins being excluded from the irq
+> domain before it is registered.
+
+If you write something to the "edge" file I can easily see things
+going sidewise. The sysfs is really not a nice tool, which is why
+it is deprecated.
+
+Yours,
+Linus Walleij
