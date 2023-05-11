@@ -2,91 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BE1B6FEBF1
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 08:53:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C77F16FEBEF
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 08:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237173AbjEKGw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 02:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
+        id S237165AbjEKGwZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 02:52:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229461AbjEKGwx (ORCPT
+        with ESMTP id S229535AbjEKGwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 02:52:53 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AEAB4EF7;
-        Wed, 10 May 2023 23:52:52 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so76177351a12.0;
-        Wed, 10 May 2023 23:52:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683787971; x=1686379971;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uRe1w5FWeqoWKmR0bHUIMrdBbrMcG1q+nVCKm02YZco=;
-        b=Hv1WB+7EyzwgPCJZDduY7FX8yxPzQkS4A8oTWwnakgoABcYcR6I6e0b84zScp95khk
-         fKHtuNDTMSjY8prA5qFKatasF2JLd/VSxeIBScEqCNKOFMyoZ3GIfnEu9/1CMg/0PQfC
-         NjJpZKeJSZEGVdzGoCKvKS3CS4uj+W4ZWi5TwdS2OcS2JOs/4+l8FEzHjnTUO7tmp0XB
-         WALjQTj7VcDq2x5KPJxNrYxGOV1gHwJGcwELo/oiMcSDTtFPpikACwCtXXCt3BmJknmu
-         KhvbUpk5drWkq4uaqPLy18fjTNBnb6stCMa+w5r+StWCtSeKf56aHidtR6YES/Adxow3
-         izEQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683787971; x=1686379971;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uRe1w5FWeqoWKmR0bHUIMrdBbrMcG1q+nVCKm02YZco=;
-        b=lYlUWv55ytpNPCMxvyZqU6QvZBsiFfP8371lwGWcBV5c7YXZvkyAl9+WuHThd5ztHV
-         7hECtO7wVtULvzbO72D6pqE4Uj6hbUBXDijNCDv79+cvuWYLKdOba2RLRczYiWg9qZ1u
-         yRb/6naJjW4awORHmdlaDkLNIuc5FU40/USYs1LHj8BEj1xYMUC/nC710aWimZ5dE/qB
-         FMeKbMpqbwt//FyvnRz9paT2/1zoo5S4bym2ouNgN8T+gSd7Ju01/r3tgQAbuK8SeCdM
-         Y2qyZgbyScapsw90r1rMNyRP2HKkWh3ALbGoaLrDqHul4/AR7pmDEno7zFLLr7tLfqdd
-         rgqw==
-X-Gm-Message-State: AC+VfDxgLyp9f10Jd1mrGV0OXxrzZHrLKoKj03KdPKdVGkFpYI9TKqM1
-        lLKxSa2cvMW/hYRxDIZ5T53yXE/6khhuideXC28=
-X-Google-Smtp-Source: ACHHUZ7PGE+Um8vm5gLFQjqAYmw+XEoUHkJYyiYsZK7SwIH25IV1XkshnicZkVyNT3LK0zug3M56wLn8vqD/UoIQE4M=
-X-Received: by 2002:a17:907:1c8c:b0:965:cac1:53ad with SMTP id
- nb12-20020a1709071c8c00b00965cac153admr20395001ejc.8.1683787968886; Wed, 10
- May 2023 23:52:48 -0700 (PDT)
+        Thu, 11 May 2023 02:52:23 -0400
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81B1846A6
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 23:52:20 -0700 (PDT)
+Received: (Authenticated sender: maxime.chevallier@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 4C45560004;
+        Thu, 11 May 2023 06:52:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1683787939;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=loWLMtt1SB4E9zCWd42lbXNMFAZQMbQFf4TMhSHwRzE=;
+        b=CNOkzqcnZN95xcMetZKz9SsNHIfo4oEcr3PjRBuZkeDdmZxpWgyIFKxQ0OkKous/CKSOYM
+        k4irE4M8p97ocMMXVuYdSGNXUynrolMopSPFezRT//IlcdbCGK1RnsOUKmnbBANwTJcFvh
+        /0e/N86Ob0c8AlZV5zcRuCd5JQAAXmxXFl9Fby7X2NmtnqrXSqCquviE6/3y+/dAcvRV1/
+        WB7RjIRK6DL2JHeWcN95lcxWDsqzrWq4TTZnXFsHhwSDQJ18nL0gYkACyAQNBbmXd8XgKs
+        LFKpdObn+T3rg043c1NuBjeslkaj0KkDIKKiEIPsThfpBFkCxFdnMLRdvogIxg==
+Date:   Thu, 11 May 2023 08:52:17 +0200
+From:   Maxime Chevallier <maxime.chevallier@bootlin.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Colin Foster <colin.foster@in-advantage.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, alexis.lothore@bootlin.com
+Subject: Re: [PATCH] regmap: don't check for alignment when using reg_shift
+Message-ID: <20230511085217.4fe390d4@pc-7.home>
+In-Reply-To: <ZFWcy/Z19vffsAg+@finisterre.sirena.org.uk>
+References: <20230420150617.381922-1-maxime.chevallier@bootlin.com>
+        <ZEKwxhJJNkuX7VTr@colin-ia-desktop>
+        <bb836be3-456c-48fd-9b19-62279fee6b8d@sirena.org.uk>
+        <20230428093010.07e61080@pc-7.home>
+        <20230428094745.63677228@pc-7.home>
+        <ZFU6oepWPoYDJczo@euler>
+        <ZFWcy/Z19vffsAg+@finisterre.sirena.org.uk>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-References: <20230503090708.2524310-1-nmi@metaspace.dk> <20230503090708.2524310-4-nmi@metaspace.dk>
- <iL2M45BoRlK6yS9y8uo0A5yUXcZWMkdk3vtH3LRFSWXfvPVagVZ-0YC7taIKOBFUcjJYA_2xNNFPoC4WL-_ulCHOLkbqvsZlIshE_LEeYtU=@proton.me>
-In-Reply-To: <iL2M45BoRlK6yS9y8uo0A5yUXcZWMkdk3vtH3LRFSWXfvPVagVZ-0YC7taIKOBFUcjJYA_2xNNFPoC4WL-_ulCHOLkbqvsZlIshE_LEeYtU=@proton.me>
-From:   =?UTF-8?Q?Sergio_Gonz=C3=A1lez_Collado?= <sergio.collado@gmail.com>
-Date:   Thu, 11 May 2023 08:52:12 +0200
-Message-ID: <CAA76j92c1e9E7ik_k_8gqfrAczdReKwH0ZvviFMv+7rr1_GoNA@mail.gmail.com>
-Subject: Re: [RFC PATCH 03/11] rust: block: introduce `kernel::block::mq` module
-To:     Benno Lossin <benno.lossin@proton.me>
-Cc:     Andreas Hindborg <nmi@metaspace.dk>, Jens Axboe <axboe@kernel.dk>,
-        Christoph Hellwig <hch@lst.de>,
-        Keith Busch <kbusch@kernel.org>,
-        Damien Le Moal <Damien.LeMoal@wdc.com>,
-        Hannes Reinecke <hare@suse.de>,
-        lsf-pc@lists.linux-foundation.org, rust-for-linux@vger.kernel.org,
-        linux-block@vger.kernel.org,
-        Andreas Hindborg <a.hindborg@samsung.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        linux-kernel@vger.kernel.org, gost.dev@samsung.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+    /// Call to tell the block layer the capcacity of the device
-+    pub fn set_capacity(&self, sectors: u64) {
-+        unsafe { bindings::set_capacity(self.gendisk, sectors) };
-+    }
+Hello Mark, Colin,
 
-Nit in the comment: capcacity -> capacity
+On Sat, 6 May 2023 09:18:19 +0900
+Mark Brown <broonie@kernel.org> wrote:
 
-Cheers,
- Sergio
+> On Fri, May 05, 2023 at 10:19:29AM -0700, Colin Foster wrote:
+> 
+> > Sorry for a really delayed response, but I just got back around to
+> > thinking about this. Crazy busy times for me.  
+> 
+> > What about an explicit parameter in regmap_config that will disable
+> > alignment checks? That seems like it might be a welcome feature
+> > addition.  
+> 
+> You can already just not specify an alignment requirement - if you can
+> configure the regmap to specify some new flag you could also just not
+> specify the alignment requirement in the first place.
+
+Ok thanks, I will try that approach then. Thanks !
+
+Maxime
