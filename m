@@ -2,219 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5E16FECA3
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:21:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A89D06FECA4
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:21:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237542AbjEKHVS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 03:21:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54674 "EHLO
+        id S237655AbjEKHVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 03:21:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237492AbjEKHU4 (ORCPT
+        with ESMTP id S237467AbjEKHVQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 03:20:56 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5764B93E3;
-        Thu, 11 May 2023 00:20:02 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 12BE34000C;
-        Thu, 11 May 2023 07:19:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1683789550;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yyHerlYHFamkJnQqL//Z3uWo0RLDtOmR22dPgo2ut2A=;
-        b=EV2PDAfzCs+eKt3zCjs+7X23c3yyFyjOHpCoyvuZs4X2JMo5r8O/5mQlblbTHepa+lbF7+
-        vJrcJzFR3lP2e/ZGRYMgqGZ121jtkG5YFFOprbRqkLMeUEms8DV1s6rxchCVYhYHkYk9M7
-        U0E2X/uofrc+FdIkpYHV9AMn9uFP3WmIPgw37MArWxuS45ZdpTlXiO2T+hQ47qXSZlahO9
-        ISKvoT/CyZbC5qvA8bO4pd08yK46bysM4peeRD0/Ceo81tzIBlZPHqVDsBHDSeneX4RdPY
-        nI6GfYOLp1C/ZGv9aV8Arf5mJO+m6AaOkTWVJLsZRYxuWxhxC7tXhiD68RqAaQ==
-Date:   Thu, 11 May 2023 09:19:07 +0200
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-iio@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 1/4] dt-bindings: sound: Add simple-iio-aux
-Message-ID: <20230511091907.6794457b@bootlin.com>
-In-Reply-To: <ZFMzC7OBrcL9l5AH@finisterre.sirena.org.uk>
-References: <20230421124122.324820-1-herve.codina@bootlin.com>
-        <20230421124122.324820-2-herve.codina@bootlin.com>
-        <20230425173029.GA1967523-robh@kernel.org>
-        <20230426093621.3834e703@bootlin.com>
-        <5bcb2741-9212-f1aa-335b-6bc4b6fad448@linaro.org>
-        <ZFMzC7OBrcL9l5AH@finisterre.sirena.org.uk>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Thu, 11 May 2023 03:21:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE8C88A60;
+        Thu, 11 May 2023 00:20:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5D30664B1F;
+        Thu, 11 May 2023 07:19:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEF67C433D2;
+        Thu, 11 May 2023 07:19:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683789574;
+        bh=RldIo1naMhWsjg+eblgYl0fqvCmzAXd9XT2gYmTJlYY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=TCHeOcbFHEFBlnfvO2DcVzeUngNfP9qkTplOBwpJtXXFm9ai6OdBnNDT9v2KbJldH
+         GSKdJOlY20kYo0JrPMQ2XgkAFVs57BEzQ42lZst5p2ifzeNZ7VwJi6VWWM+pRJoXvc
+         luYYyULNuHr2AYM9rq9TfPfl/4j7N3zOiDwABp1n+b2N5KVKOQ62R2Xvd9ZeOmW6a0
+         wmINNZvpe1S+4QkmnGCbzBhPCJgRNmWc2lFoa4Z5Hd7q91FjRrBOIJDfIRb3zck7wP
+         Nfr1vK3OlwFDEm3utEc61YVW68cxEaekwQSEfBg35kihDnjzGjRk/t9WlrwPHI4DQP
+         TsO/jDqPF2aeg==
+From:   =?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@kernel.org>
+To:     Song Shuai <suagrfillet@gmail.com>, paul.walmsley@sifive.com,
+        palmer@dabbelt.com, aou@eecs.berkeley.edu, rostedt@goodmis.org,
+        mhiramat@kernel.org, mark.rutland@arm.com, guoren@kernel.org,
+        suagrfillet@gmail.com, jszhang@kernel.org, e.shatokhin@yadro.com
+Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH V9 3/4] riscv: ftrace: Add
+ DYNAMIC_FTRACE_WITH_DIRECT_CALLS support
+In-Reply-To: <20230510101857.2953955-4-suagrfillet@gmail.com>
+References: <20230510101857.2953955-1-suagrfillet@gmail.com>
+ <20230510101857.2953955-4-suagrfillet@gmail.com>
+Date:   Thu, 11 May 2023 09:19:31 +0200
+Message-ID: <87ttwjjpx8.fsf@all.your.base.are.belong.to.us>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob, Krzysztof, Mark,
+Song Shuai <suagrfillet@gmail.com> writes:
 
-On Thu, 4 May 2023 13:22:35 +0900
-Mark Brown <broonie@kernel.org> wrote:
+> This patch adds DYNAMIC_FTRACE_WITH_DIRECT_CALLS support for RISC-V.
+>
+> select the DYNAMIC_FTRACE_WITH_DIRECT_CALLS to provide the
+> register_ftrace_direct[_multi] interfaces allowing users to register
+> the customed trampoline (direct_caller) as the mcount for one or
+> more target functions. And modify_ftrace_direct[_multi] are also
+> provided for modifying direct_caller.
+>
+> To make the direct_caller and the other ftrace hooks (eg. function/fgraph
+> tracer, k[ret]probes) co-exist, a temporary register is nominated to
+> store the address of direct_caller in ftrace_regs_caller. After the
+> setting of the address direct_caller by direct_ops->func and the
+> RESTORE_REGS in ftrace_regs_caller, direct_caller will be jumped to
+> by the `jr` inst.
+>
+> Signed-off-by: Song Shuai <suagrfillet@gmail.com>
+> Tested-by: Guo Ren <guoren@kernel.org>
+> Signed-off-by: Guo Ren <guoren@kernel.org>
+> ---
+>  arch/riscv/Kconfig              |  1 +
+>  arch/riscv/include/asm/ftrace.h |  8 ++++++++
+>  arch/riscv/kernel/mcount-dyn.S  | 10 ++++++++++
+>  3 files changed, 19 insertions(+)
+>
+> diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> index e0632493482f..fdf0b219a02c 100644
+> --- a/arch/riscv/Kconfig
+> +++ b/arch/riscv/Kconfig
+> @@ -144,6 +144,7 @@ config RISCV
+>  	select UACCESS_MEMCPY if !MMU
+>  	select ZONE_DMA32 if 64BIT
+>  	select HAVE_DYNAMIC_FTRACE if !XIP_KERNEL && MMU && (CLANG_SUPPORTS_DYN=
+AMIC_FTRACE || GCC_SUPPORTS_DYNAMIC_FTRACE)
+> +	select HAVE_DYNAMIC_FTRACE_WITH_DIRECT_CALLS
+>  	select HAVE_DYNAMIC_FTRACE_WITH_REGS if HAVE_DYNAMIC_FTRACE
+>  	select HAVE_FTRACE_MCOUNT_RECORD if !XIP_KERNEL
+>  	select HAVE_FUNCTION_GRAPH_TRACER
+> diff --git a/arch/riscv/include/asm/ftrace.h b/arch/riscv/include/asm/ftr=
+ace.h
+> index 84f856a3286e..84904c1e4369 100644
+> --- a/arch/riscv/include/asm/ftrace.h
+> +++ b/arch/riscv/include/asm/ftrace.h
+> @@ -114,6 +114,14 @@ struct ftrace_regs;
+>  void ftrace_graph_func(unsigned long ip, unsigned long parent_ip,
+>  		       struct ftrace_ops *op, struct ftrace_regs *fregs);
+>  #define ftrace_graph_func ftrace_graph_func
+> +
+> +static inline void
+> +__arch_ftrace_set_direct_caller(struct pt_regs *regs, unsigned long addr)
+> +{
+> +		regs->t1 =3D addr;
+> +}
+> +#define arch_ftrace_set_direct_caller(fregs, addr) \
+> +	__arch_ftrace_set_direct_caller(&(fregs)->regs, addr)
+>  #endif /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+>=20=20
+>  #endif /* __ASSEMBLY__ */
+> diff --git a/arch/riscv/kernel/mcount-dyn.S b/arch/riscv/kernel/mcount-dy=
+n.S
+> index f26e9f6e2fed..9d405baedb52 100644
+> --- a/arch/riscv/kernel/mcount-dyn.S
+> +++ b/arch/riscv/kernel/mcount-dyn.S
+> @@ -231,6 +231,7 @@ ENDPROC(ftrace_caller)
+>=20=20
+>  #else /* CONFIG_DYNAMIC_FTRACE_WITH_REGS */
+>  ENTRY(ftrace_regs_caller)
+> +	move	t1, zero
 
-> On Tue, May 02, 2023 at 09:26:32AM +0200, Krzysztof Kozlowski wrote:
-> > On 26/04/2023 09:36, Herve Codina wrote:  
-> > > Rob Herring <robh@kernel.org> wrote:  
-> > >> On Fri, Apr 21, 2023 at 02:41:19PM +0200, Herve Codina wrote:  
-> 
-> > >>> simple-iio-aux allows to consider these Industrial I/O devices as
-> > >>> auxliary audio devices.    
-> 
-> > >> What makes it simple? Any binding called simple or generic is a trigger 
-> > >> for me. Best to avoid those terms. :)  
-> 
-> > > I choose simple-iio-aux because some simple-* already exists.
-> > > For instance simple-audio-amplifier or simple-audio-mux.  
-> 
-> > > Do you prefer audio-iio-aux ?
-> > > Let me know if I should change.  
-> 
-> > It means that often what people call "simple" and "generic" works only
-> > for their specific case, because it is not really simple and generic.
-> > After some time the "simple" and "generic" becomes "complicated" and
-> > "huge". Conclusion: sometimes simple and generic bindings are bad idea
-> > and you should have something specific.  
-> 
-> > Your description in the binding also does not help to match it to
-> > specific, real device. Provide the examples, as Rob asked.  
-> 
-> I don't understand what you are looking for here.  IIO is a subsystem
-> which represents generic DACs and ADCs (along with other I/O things).
-> Audio devices also have DACs and ADCs, somewhat specialised for use in
-> audio but more limited by specs and interfaces than by anything
-> fundamental.  The goal here is to map DACs and ADCs described as IIO for
-> use in an audio context.
-> 
-> ADCs are devices that convert analog signals into digital values, DACs
-> are devices that convert digital values into analog signals.
-> 
-> > >> How do support multiple instances? Say you have 2 sound cards (or 1 
-> > >> sound card with multiple audio paths) each with different sets of IIO 
-> > >> channels associated with it. You'd need a link to each 'aux' node. Why 
-> > >> not just add io-channels to the sound card nodes directly? That's 
-> > >> already just a virtual, top-level container node grouping all the 
-> > >> components. I don't see why we need another virtual node grouping a 
-> > >> subset of them.  
-> 
-> > > I don't see what you mean.
-> > > I use a simple-audio-card and here is a full example using several
-> > > instances:  
-> 
-> > Just like Rob said: "You'd need a link to each 'aux' node"  
-> 
-> > and you did it...  
-> 
-> > So now the rest of Rob's answer:  
-> 
-> > "Why not just add io-channels to the sound card nodes directly? That's
-> > already just a virtual, top-level container node grouping all the
-> > components. I don't see why we need another virtual node grouping a
-> > subset of them."  
-> 
-> > Why do you need another node if it is not really representing a real,
-> > separate device?  
-> 
-> If nothing else I would expect it to be useful from a comprehensibility
-> point of view to bundle multiple IIO devices into a single multi-channel
-> audio stream, an individual IIO device is likely to only present a
-> single channel of data but it is common to group multiple channels of
-> audio data.
+Please use "mv", and not "move" [1].
 
-I cannot simply add io-channels to the sound card directly. I need a node
-to set at least the sound-name-prefix property. Further more having a node
-and a related compatible string can be easier to maintain and add future
-evolution related to these "virtual" devices.
+>  	SAVE_ABI_REGS 1
+>  	PREPARE_ARGS
+>=20=20
+> @@ -239,7 +240,10 @@ ftrace_regs_call:
+>  	call	ftrace_stub
+>=20=20
+>  	RESTORE_ABI_REGS 1
+> +	bnez	t1,.Ldirect
+>  	jr t0
+> +.Ldirect:
+> +	jr t1
 
-As some subnodes are already defined for a sound card node, I propose to
-group these "virtual" audio devices node in a specific bundle node.
-This lead to the following example:
----- 8< ----
-    spi {
-        #address-cells = <1>;
-        #size-cells = <0>;
-	/* potentiometers present in an input amplifier design */
-        pot_in: potentiometer@0 {
-            compatible = "foo,xxx";
-            reg = <0>;
-            #io-channel-cells = <1>;
-        };
-	/* potentiometers present in an output amplifier design */
-	pot_out: potentiometer@1 {
-            compatible = "foo,xxx";
-            reg = <1>;
-            #io-channel-cells = <1>;
-        };
-	/* A codec */
-        codec: codec@2 {
-            compatible = "bar,yyy";
-            reg = <2>;
-            sound-name-prefix = "CODEC";
-        };
+Again, while you're doing changes here, please try to align op/operands.
 
-    };
+Wearing my BPF hat, I'm happy to finally get DIRECT_CALLS support!
 
-    sound {
-        compatible = "simple-audio-card";
-        #address-cells = <1>;
-        #size-cells = <0>;
-        simple-audio-card,name = "My Sound Card";
+This does not take the WITH_CALL_OPS approach Mark suggested in the v7
+threads, but given that text patching story on RISC-V is still a bit sad
+(inconsistency in the RV tree, no specification, cannot work with
+preempt, ...) I'd say this approach is OK for now, and we can change to
+WITH_CALL_OPS later in a wider "let's improve RISC-V textpatching" work.
 
-        simple-audio-card,aux-devs = <&amp_in>, <&amp_out>;
-        simple-audio-card,routing =
-            "CODEC IN0", "AMP_IN CH0 OUT",
-            "CODEC IN1", "AMP_IN CH1 OUT",
-            "AMP_OUT CH0 IN", "CODEC OUT0",
-            "AMP_OUT CH1 IN", "CODEC OUT1";
+Thoughts?
 
-        simple-audio-card,dai-link@0 {
-            ...
-        };
 
-        ...
+Bj=C3=B6rn
 
-        /* A bundle for the additional devices */
-        simple-audio-card,additional-devs { 
-            amp_out: aux-out {
-                compatible = "audio-iio-aux";    /* Instead of "simple-iio-aux */
-                io-channels = <&pot_out 0>, <&pot_out 1>,
-                io-channel-names = "CH0", "CH1";
-                snd-control-invert-range = <1 1>;  /* Old 'invert' renamed */
-                sound-name-prefix = "AMP_OUT";
-            };
-
-            amp_in: aux-in {
-	       compatible = "audio-iio-aux";
-               io-channels = <&pot_in 0>, <&pot_in 1>;
-	       io-channel-names = "CH0", "CH1";
-	       sound-name-prefix = "AMP_IN";
-            };
-	};
-    };
----- 8< ----
-
-What do you think about this new binding ?
-
-Best regards,
-Hervé
+[1] https://github.com/riscv-non-isa/riscv-asm-manual/blob/master/riscv-asm=
+.md#-a-listing-of-standard-risc-v-pseudoinstructions
