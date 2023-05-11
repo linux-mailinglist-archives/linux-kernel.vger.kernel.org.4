@@ -2,143 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A6E26FEB02
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 07:01:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E69556FEB08
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 07:07:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236943AbjEKFBE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 01:01:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
+        id S236991AbjEKFHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 01:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231797AbjEKFBA (ORCPT
+        with ESMTP id S236953AbjEKFG4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 01:01:00 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2755930EB;
-        Wed, 10 May 2023 22:00:59 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34B3f3hF027445;
-        Thu, 11 May 2023 05:00:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=qcppdkim1;
- bh=zuL2sjpi13HXnQSxvXxQtFgiwlU0qeaUXm5LPxK416M=;
- b=l9KfjzhGciAy3GYwN3Oso/KmPAfIBSvia2tJCvnP1vEP38XQpZGqjDSMjrWc7WMiC95f
- hcYSJ+5X49OWvVzwkfZ4BQPIporBQMMDVHBbFwPIKZHT/mE1RYhOosgEyxDgC+0KmWWv
- gHCIzwU56cnxcPBgmSVrqgxeqj3xcLzJ5NiZm1LeWJC+iZIS3Q2t1x15OhGMuceFRVtZ
- cZYtQoRia/Tu1yodiNHIb/Z5BqminTk4lqfrDpasOSjzka74e+S9gI+RMakmJxYHij9g
- /ro3xRezQ3KPJtCu7dCrBeISDPJatcVYw8ZrVg1/wKgM/gH2ya4K+g4rN5K8CAXlgYAW DA== 
-Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qgdd9sds8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 05:00:46 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34B50PqP007411
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 05:00:25 GMT
-Received: from nasanex01a.na.qualcomm.com (10.52.223.231) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Wed, 10 May 2023 22:00:24 -0700
-Received: from nasanex01a.na.qualcomm.com ([fe80::efb2:2dda:c355:1de3]) by
- nasanex01a.na.qualcomm.com ([fe80::efb2:2dda:c355:1de3%12]) with mapi id
- 15.02.0986.042; Wed, 10 May 2023 22:00:24 -0700
-From:   "Sarthak Garg (QUIC)" <quic_sartgarg@quicinc.com>
-To:     Christoph Hellwig <hch@infradead.org>
-CC:     "adrian.hunter@intel.com" <adrian.hunter@intel.com>,
-        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "Ram Prakash Gupta (QUIC)" <quic_rampraka@quicinc.com>,
-        "Bhaskar Valaboju (QUIC)" <quic_bhaskarv@quicinc.com>,
-        "Sachin Gupta (QUIC)" <quic_sachgupt@quicinc.com>,
-        "Pradeep Pragallapati (QUIC)" <quic_pragalla@quicinc.com>,
-        "Sayali Lokhande (QUIC)" <quic_sayalil@quicinc.com>,
-        Brian Norris <briannorris@chromium.org>,
-        "Wolfram Sang" <wsa+renesas@sang-engineering.com>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: RE: [PATCH V1 1/2] mmc: core: Define new vendor ops to enable
- internal features
-Thread-Topic: [PATCH V1 1/2] mmc: core: Define new vendor ops to enable
- internal features
-Thread-Index: AQHZZLsSreM1n2UsG0iOAGSJueq9468bFEYAgA9GsjCAAHb4AP//nJxwgADjuYCAJTsTYA==
-Date:   Thu, 11 May 2023 05:00:24 +0000
-Message-ID: <c1dc3d77db644958b906fa55200a0ae2@quicinc.com>
-References: <20230401165723.19762-1-quic_sartgarg@quicinc.com>
- <20230401165723.19762-2-quic_sartgarg@quicinc.com>
- <ZCux+gsR8Nz4Epxw@infradead.org>
- <e492e234b3ec4624ae2f905bdae78785@quicinc.com>
- <ZDjmTi1+WA2BtLct@infradead.org>
- <53eda50111e2402e889bd690a0112ee1@quicinc.com>
- <ZDlR9VB7jRxMsEZH@infradead.org>
-In-Reply-To: <ZDlR9VB7jRxMsEZH@infradead.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.216.8.139]
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Thu, 11 May 2023 01:06:56 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0794E3A82
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 22:06:54 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-966287b0f72so1029544366b.0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 22:06:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683781612; x=1686373612;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ObDKyM8SX+0UqX+mAIg4MkhraaGDH1WX7ttcTrJfPxM=;
+        b=eYX/B5tdCWC5hzH6/2bxXrb4WOp/vhHCrUth0dV9y/8pCU9fMS4uA5Cw01mTJtlCLw
+         iOdqETMuZK7DZsjVcjQwyO8N5/q9ykbqILsAlgTzO49Wc5VoCR3x1wKCoxQmMWWLWojL
+         XAsI3jslb6mNQWVmUL3sZmsDDty7i8VpQcrIvKqJARwdSbSnYSihdafvgmJDhJFb65br
+         MwNH0HLTxIhlAsHHo8XLA/XaJlLIyYYp9MbLfCiA7r0AXqnjZCQ1GJo0ujLvifgEyG9X
+         MXaqm+HIspmyIfGN3t85RrK9RCUFKxoPxZlQyzv1f+rE3dAnVGfdg9BvgkOmUlt/lFcC
+         TJlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683781612; x=1686373612;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ObDKyM8SX+0UqX+mAIg4MkhraaGDH1WX7ttcTrJfPxM=;
+        b=X4oe6Kt1bWAAGe6yqCBxG87CSm7hzS43+394bzlLSXSnsXIX/vj+CGjY+U/ZpgBFr3
+         G50BDjsspei403Djc/uxGrrP7JpoJoUdArMepn7E56NZbp/VygpJLEWmdiljCdIUuHKy
+         OHhihuqFF4Fua3PAHuUWkzzpgLGu9/IjRgJai1KEwciRSiouov7QcQtJUUjHUNJ9Hb4Z
+         CeSaB8U+wroE83jffZVh6CrYLT1rw4UsE5wvfsFoGUz++ks/rqy6gKC5qLqsIrKMYus9
+         fe8b0rGMt5vyi+8fT3Dtmdu+19vdo2BVFm1lSUp4dYtFqZHTUMGWaIEYN+CpxCjmY0T1
+         Bzfw==
+X-Gm-Message-State: AC+VfDxLH6KwSEQx/0dlb6dKnf9EHQm2ApySMz2QOlRgaENf35JFvAVc
+        AwPqKHn6923A+sgxGLmiGTs30G2SexlYdzG4s5YJbcFHvNAnGrMlsZE=
+X-Google-Smtp-Source: ACHHUZ72y8WNM+Hmf70DMBI+IqrAD6j9u9wcZ6cbv1cMCRgqiOr1ZyElft8zz1Sme4zCWA+T26cfXJNCoTFG3/c6JKk=
+X-Received: by 2002:a17:907:d86:b0:94a:9c4e:d2e9 with SMTP id
+ go6-20020a1709070d8600b0094a9c4ed2e9mr18714773ejc.0.1683781612520; Wed, 10
+ May 2023 22:06:52 -0700 (PDT)
 MIME-Version: 1.0
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: fkvlJ7lTMBMSgRr8zFHGHeMZ7aLa0Spc
-X-Proofpoint-ORIG-GUID: fkvlJ7lTMBMSgRr8zFHGHeMZ7aLa0Spc
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- mlxlogscore=999 mlxscore=0 adultscore=0 clxscore=1011 malwarescore=0
- priorityscore=1501 phishscore=0 spamscore=0 bulkscore=0 lowpriorityscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305110041
+References: <20230505184318.1355446-1-etienne.carriere@linaro.org>
+ <CSIXYHYSW45R.O3II0HIIHZV4@suppilovahvero> <CAN5uoS8xB7=Ohu4WEA31hGraVBcaOmRxZw9PDtXBLGUMUeB=4Q@mail.gmail.com>
+In-Reply-To: <CAN5uoS8xB7=Ohu4WEA31hGraVBcaOmRxZw9PDtXBLGUMUeB=4Q@mail.gmail.com>
+From:   Etienne Carriere <etienne.carriere@linaro.org>
+Date:   Thu, 11 May 2023 07:06:41 +0200
+Message-ID: <CAN5uoS9UTc-Lz1+k=-7nifuv8MrRmZh_1ck3-DgwRSF58EwpxQ@mail.gmail.com>
+Subject: Re: [PATCH] char: tpm: ftpm_tee: use kernel login identifier
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for your valuable comments. We didn't ignore the previous comments i=
-nstead we tried to address most of the comments by trying the suggested alt=
-ernatives as well but didn't see power improvement as compared to this feat=
-ure. Moreover we got the intuition that maintainability was the main concer=
-n hence we came up with this newer approach of hooks to limit the lines of =
-code in core layer. Every change was pushed earlier in the previous posts a=
-nd this time we just refactored the code and was about to push the series b=
-ut as per current discussion we'll be reviving the old discussion and try t=
-o close all the comments. Closing this thread now.
+Dearl all,
 
-> -----Original Message-----
-> From: Christoph Hellwig <hch@infradead.org>
-> Sent: Friday, April 14, 2023 6:46 PM
-> To: Sarthak Garg (QUIC) <quic_sartgarg@quicinc.com>
-> Cc: Christoph Hellwig <hch@infradead.org>; adrian.hunter@intel.com;
-> ulf.hansson@linaro.org; linux-mmc@vger.kernel.org; linux-
-> kernel@vger.kernel.org; linux-arm-msm@vger.kernel.org; Ram Prakash Gupta
-> (QUIC) <quic_rampraka@quicinc.com>; Bhaskar Valaboju (QUIC)
-> <quic_bhaskarv@quicinc.com>; Sachin Gupta (QUIC)
-> <quic_sachgupt@quicinc.com>; Pradeep Pragallapati (QUIC)
-> <quic_pragalla@quicinc.com>; Sayali Lokhande (QUIC)
-> <quic_sayalil@quicinc.com>; Brian Norris <briannorris@chromium.org>;
-> Wolfram Sang <wsa+renesas@sang-engineering.com>; Linus Walleij
-> <linus.walleij@linaro.org>
-> Subject: Re: [PATCH V1 1/2] mmc: core: Define new vendor ops to enable
-> internal features
->=20
-> On Fri, Apr 14, 2023 at 06:52:18AM +0000, Sarthak Garg (QUIC) wrote:
-> > Sorry for the confusion by vendor file I meant driver file for Qualcomm=
- SDCC
-> controller (sdhci-msm.c).
->=20
-> This is still not how we do development.  The two series you've been poin=
-ted out
-> got valuable feedback that;s been ignored for between one and four years,=
- that
-> needs to be followed up with.
->=20
-> You're not going to get magic hooks for your driver that you're not shari=
-ng with
-> us just because you're too lazy to follow up on the review comments.
+Typo in my previous post!
+
+On Thu, 11 May 2023 at 06:47, Etienne Carriere
+<etienne.carriere@linaro.org> wrote:
+>
+> Hello Jarkko,
+>
+> On Thu, 11 May 2023 at 00:12, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> >
+> > On Fri May 5, 2023 at 9:43 PM EEST, Etienne Carriere wrote:
+> > > Changes fTPM TEE driver to open the TEE session with REE kernel login
+> > > identifier rather than public login. This is needed in case fTPM service
+> > > it denied to user land application and restricted to kernel operating
+> > > system services only.
+> > >
+> > > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> >
+> >
+> > Can you bring up a little context here?
+> >
+> > What is REE login?
+> > Does it break backwards compatibility to switch?
+> > What kind of scenario we are talking about? What does it mean in plain
+> > English when fTPM service is denied.
+> > What is fTPM service?
+>
+> By fTPM service I meant the services exposed by fTPM through its
+> OP-TEE interface, that are the commands a client can invoke in fTPM,
+> see [1].
+>
+> Regarding backward compatibility, this change is backward compatible
+> as far as the OP-TEE entity this driver communicates with is of
+> revision 3.9.0 or above.
+> I understand this case should be addressed in some way.
+>
+> In current implementation, fTPM can be invoked by Linux kernel drivers
+> (through Linux kernel tee API as tpm_ftpm_tee currently does) as well
+> as by userland application (through TEE client library API [2]).
+> This change makes tpm_ftpm_tee to invoke fTPM interface using a client
+> identifier stating it is the Linux kernel that invokes it, not a
+> userland application. fTPM implementation does not check the client
+> identity when a client opens a session toward it. Therefore using a
+> public identifier (TEE_IOCTL_LOGIN_PUBLIC) or the OS privilege
+> identifier (TEE_IOCTL_LOGIN_REE_KERNEL) does not matter, as far as
+> OP-TEE supports these IDs. The former is native to OP-TEE initial UAPI
+> [3], the latter was introduced in OP-TEE 3.9.0 [4] and Linux kernel
+> v5.8 [5].
+>
+> That said, this change does fix an existing issue in fTPM integration.
+
+Typo, sorry, I meant
+"That said, this change does **NOT** fix an existing issue in fTPM integration."
+
+BR,
+Etienne
+
+> The fTPM entity currently only accepts a single session opened towards
+> it. This is enforced as fTPM sets property TA_FLAG_SINGLE_INSTANCE and
+> does not set property TA_FLAG_MULTI_SESSION [6].
+> Linux kernel tpm_ftpm_tee driver currently opens a session to fTPM at
+> probe time and releases it at remove time so once the driver is
+> successfully probed, no userland application can use TEE userland
+> client API to open another session and communicate with fTPM.
+>
+> [1] https://github.com/microsoft/ms-tpm-20-ref/blob/main/Samples/ARM32-FirmwareTPM/optee_ta/fTPM/fTPM.c#L456
+> [2] https://github.com/OP-TEE/optee_client
+> [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=967c9cca2cc50569efc65945325c173cecba83bd
+> [4] https://github.com/OP-TEE/optee_os/commit/78f462f646e7c037bea13aa6282c81f255922a4f
+> [5] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=104edb94cc4b3101bab33161cd861de13e85610b
+> [6] https://github.com/microsoft/ms-tpm-20-ref/blob/main/Samples/ARM32-FirmwareTPM/optee_ta/fTPM/user_ta_header_defines.h#L47
+>
+> Regards,
+> Etienne
+>
+> >
+> > > ---
+> > >  drivers/char/tpm/tpm_ftpm_tee.c | 2 +-
+> > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
+> > > index 528f35b14fb6..6d32e260af43 100644
+> > > --- a/drivers/char/tpm/tpm_ftpm_tee.c
+> > > +++ b/drivers/char/tpm/tpm_ftpm_tee.c
+> > > @@ -241,7 +241,7 @@ static int ftpm_tee_probe(struct device *dev)
+> > >       /* Open a session with fTPM TA */
+> > >       memset(&sess_arg, 0, sizeof(sess_arg));
+> > >       export_uuid(sess_arg.uuid, &ftpm_ta_uuid);
+> > > -     sess_arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
+> > > +     sess_arg.clnt_login = TEE_IOCTL_LOGIN_REE_KERNEL;
+> > >       sess_arg.num_params = 0;
+> > >
+> > >       rc = tee_client_open_session(pvt_data->ctx, &sess_arg, NULL);
+> > > --
+> > > 2.25.1
+> >
+> > BR, Jarkko
