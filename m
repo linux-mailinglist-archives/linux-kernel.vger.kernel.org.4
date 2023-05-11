@@ -2,107 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CFEB6FEEE5
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:32:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BD626FEEE8
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:32:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236943AbjEKJcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 05:32:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53346 "EHLO
+        id S237503AbjEKJck (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 05:32:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235589AbjEKJcP (ORCPT
+        with ESMTP id S235589AbjEKJcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 05:32:15 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D245E2D57
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:32:13 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-55a6efe95c9so123266487b3.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:32:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683797533; x=1686389533;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dtz1ydyDS624VmYCi2VaMy7J7QuV0VVyUJjC2kZ/qf8=;
-        b=B214r8mF5kYcxT+mAmQuyN0qjB6xCyKs/y+9LQeVtodRGPgjN3pRxs+JbDp6I5yqaT
-         tJR/scry3pC+y5in5G+Wz/VtFPD7OcLp6IwfddKWhVp8UgzVh72QuxHANVyuP8B65F+/
-         9prX+/tDl4XX5009PxzXc9VpQvCph7mCFMr/+R74vtgjuOhfBjNRrBvMHGT1JDNWbxe4
-         isUTN2RTF3zGYUGaThiVKRwMQb2cpdhiGzDtPe4NbD+ljunHzF6x+pCJ7+e1lG9Q2zCL
-         Pm2eZ6P6+anIo8x2HZvOY0gRFUnThjrkH7MOSvzDC9b2rQLgTMIP3QpS7oWmw2NfGgqI
-         z20w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683797533; x=1686389533;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dtz1ydyDS624VmYCi2VaMy7J7QuV0VVyUJjC2kZ/qf8=;
-        b=P8HfTtO+aV89CPqqZ0fWx1A9OxEDkwNZ3yMd7/YoLRKaM2JSYw8pUQucS/cJLEoe2R
-         DF76keshCa+5BouRojjLrTeQKloJtqM3eG3/sqg0i4NwIHPGiq26Wz+ZaCHbe97xscDv
-         EW7COqCiEka3dkWYd+ghLTTPMfnhhdcLFxGh+KJclAOvozeq3kmm8H4j9CY2ssIY7aha
-         izMhjzxIMrKu/sT6YuvNiYvpCtZVq0giHB2KpMeAOJVWEPGLDdphfYfgHz869vbaONh5
-         KhcZpYy4wrYHdrpShpX9GpGToJRtap/iClQ8Zsx7MKbZER9wa5HDZrotgUKph2eFpbdV
-         qPOw==
-X-Gm-Message-State: AC+VfDw9FkI+ZYtsfk1Y1I7V5vcpXFe21lpG1iMGFpOmTY8klu4ZYawd
-        yjYOlW7sb21oVTPdq+1KoERx4IB6JpmdI8hIyio6uA==
-X-Google-Smtp-Source: ACHHUZ66RgmNmxlWlLfb0U/n0vXe+S6/WC0lP4dIijKvwnUC9l9M6Qxr/jNJgXWNz8egBl9iLaj453DXS0cfu9DOT4I=
-X-Received: by 2002:a0d:db47:0:b0:55a:5e16:7257 with SMTP id
- d68-20020a0ddb47000000b0055a5e167257mr20621217ywe.35.1683797532915; Thu, 11
- May 2023 02:32:12 -0700 (PDT)
+        Thu, 11 May 2023 05:32:35 -0400
+Received: from out-13.mta0.migadu.com (out-13.mta0.migadu.com [IPv6:2001:41d0:1004:224b::d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E0385BB2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:32:31 -0700 (PDT)
+Date:   Thu, 11 May 2023 05:32:22 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683797547;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xnpK2EQat/Ff2KEBV71odomLn6KPTIV5+P/7fITBQhY=;
+        b=Ey1KdQotjaQR2+EzlA3MPQ6M81s96sZA66yvMsBaAI0FOSARyHtWvwB74GkAYD0TCcGKGs
+        2VRZPsWRDRjhqsYegKW+MmI4fxDbjfM/uF+K/eFWRmXuBcaZG/40kxbelv4JGCe7lb1EKL
+        w1dq9zwbGcMCiskQgaydjx+yPpKhpG8=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH 03/32] locking/lockdep: lockdep_set_no_check_recursion()
+Message-ID: <ZFy2JqL/xkvIn+O1@moria.home.lan>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-4-kent.overstreet@linux.dev>
+ <20230509193147.GC2148518@hirez.programming.kicks-ass.net>
+ <ZFqqsyDpatgb77Vh@moria.home.lan>
+ <20230510085905.GJ4253@hirez.programming.kicks-ass.net>
+ <ZFwAtwIrKyJ9GJ/U@moria.home.lan>
+ <20230511082544.GS4253@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-References: <20230509082244.1069623-1-joychakr@google.com> <20230509082244.1069623-2-joychakr@google.com>
- <ZFxFCweHVgHyA1E1@finisterre.sirena.org.uk>
-In-Reply-To: <ZFxFCweHVgHyA1E1@finisterre.sirena.org.uk>
-From:   Joy Chakraborty <joychakr@google.com>
-Date:   Thu, 11 May 2023 15:02:00 +0530
-Message-ID: <CAOSNQF1GtxY7ud-kobHW=HHvYcq3ySp+YTvvHnPAkxmP5Nv85A@mail.gmail.com>
-Subject: Re: [PATCH v10 1/5] spi: dw: Add 32 bpw support to SPI DW DMA driver
-To:     Mark Brown <broonie@kernel.org>
-Cc:     Serge Semin <fancer.lancer@gmail.com>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        manugautam@google.com, rohitner@google.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511082544.GS4253@hirez.programming.kicks-ass.net>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 6:59=E2=80=AFAM Mark Brown <broonie@kernel.org> wro=
-te:
->
-> On Tue, May 09, 2023 at 08:22:40AM +0000, Joy Chakraborty wrote:
-> > Add Support for AxSize =3D 4 bytes configuration from dw dma driver if
-> > n_bytes i.e. number of bytes per write to fifo is 4.
->
-> This doesn't apply against current code, please check and resend.
+On Thu, May 11, 2023 at 10:25:44AM +0200, Peter Zijlstra wrote:
+> On Wed, May 10, 2023 at 04:38:15PM -0400, Kent Overstreet wrote:
+> > On Wed, May 10, 2023 at 10:59:05AM +0200, Peter Zijlstra wrote:
+> 
+> > > Have you read the ww_mutex code? If not, please do so, it does similar
+> > > things.
+> > > 
+> > > The way it gets around the self-nesting check is by using the nest_lock
+> > > annotation, the acquire context itself also has a dep_map for this
+> > > purpose.
+> > 
+> > This might work.
+> > 
+> > I was confused for a good bit when reading tho code to figure out how
+> > it works - nest_lock seems to be a pretty bad name, it's really not a
+> > lock. acquire_ctx?
+> 
+> That's just how ww_mutex uses it, the annotation itself comes from
+> mm_take_all_locks() where mm->mmap_lock (the lock formerly known as
+> mmap_sem) is used to serialize multi acquisition of vma locks.
+> 
+> That is, no other code takes multiple vma locks (be it i_mmap_rwsem or
+> anonvma->root->rwsem) in any order. These locks nest inside mmap_lock
+> and therefore by holding mmap_lock you serialize the whole thing and can
+> take them in any order you like.
+> 
+> Perhaps, now, all these many years later another name would've made more
+> sense, but I don't think it's worth the hassle of the tree-wide rename
+> (there's a few other users since).
 
-Hello Mark,
-
-This patch seems to be applied already as per the reply to the cover letter=
-:
-
-[1/5] spi: dw: Add 32 bpw support to SPI DW DMA driver
-      commit: 5147d5bfddc807e990a762aed0e56724afeda663
-[2/5] spi: dw: Move dw_spi_can_dma()
-      commit: d2ae5d42464e990b4d26734c180fbff64233992c
-[3/5] spi: dw: Add DMA directional capability check
-      (no commit info)
-[4/5] spi: dw: Add DMA address widths capability check
-      (no commit info)
-[5/5] spi: dw: Round of n_bytes to power of 2
-      (no commit info)
-
-Whereas [3/5] to [5/5] has not been applied.
-
-Do I need to rebase and send the whole series again or resend the last
-3 patches based on
-https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git ?
-
-Thanks
-Joy
+Thanks for the history lesson :)
