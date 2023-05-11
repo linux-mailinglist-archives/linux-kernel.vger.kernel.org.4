@@ -2,112 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF3A46FF1F5
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 14:56:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36A8E6FF1F7
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 14:58:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237889AbjEKM4Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 08:56:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48904 "EHLO
+        id S237896AbjEKM6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 08:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237754AbjEKM4X (ORCPT
+        with ESMTP id S237508AbjEKM6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 08:56:23 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on20700.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8a::700])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C656106;
-        Thu, 11 May 2023 05:56:21 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=VjCuiqpLyJOsolfhM53nGGvYiRUHzvam/+cdrcohKpgy0zIF8JRuMZWLKkra5aMvmMOYjBNVgXio4PBBqyjXAze/p/SVUEFIqg1i93ayp2JRChv9Xr1pPdaj5J5WypwROgeeSja2J2Uf6Lg3omtkwuDHz86TK9VmE3bghiE7flKt3XTw4V86fs6CUllgPk3kMIZGQ1OsM0Uhl2MQtuOJqchUx+18zXTTVjk8LT+ksalOje7Q9xXZtmXxqxWBV1EUEVSF/DQ1B9qMzp7LU26IMmRMxnIVCL4eG0U5DkNApacyTZ3qKgGSYcwTEwTeAXSg+Vet2ktgIj0JV7cW5rMIFg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+XL8Scde6O9KFLXlNUQHyPsvm5I7veouXmH0GYyaXWk=;
- b=EwzE4HAiuvNqNYVgqQTPZfEZnNGKV4BFPy4lP+oubYhvc7z5E0mi2x+ECps3eb1a3VcRVOUeWeH2mhGScX6cB8mdwhQ8NtNXQtTeyl3W1efP2XyynXV+Q6+nmepeszz11m0BazF020MMRVcxzmBvQzx/YISJmiGuooCK3T/zKAuxhv5jnGDTYRIIuRU+K7BLvkxHY+RnhihlzE9ci2MaasWDXouFGmMofeQe0pk7BdHpKIKaxvKX4YJ4wzSA/dyuBj4SNbHFE40+sZCjLCty+AEJTSdFyvz9sBVesA3ZKhzM6XcpYI2RNq5/LXVbfYRM1MJMpzkil0qJlW2eBPc7Qg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Thu, 11 May 2023 08:58:23 -0400
+Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9791C268B
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 05:58:21 -0700 (PDT)
+Received: by mail-wm1-x330.google.com with SMTP id 5b1f17b1804b1-3f315712406so284627705e9.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 05:58:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+XL8Scde6O9KFLXlNUQHyPsvm5I7veouXmH0GYyaXWk=;
- b=ZeSKH8OITkwTL7MtiO10RSQ+Sa1nxf5xBA9bnUBQwp88VwxTDn7mz4smzeWjIDtaRxXGCCROdPNU/ti4MLK1RDGFrhHvArg8hIXTlHp/7IiN/xmRkMoHTQtRdxymMo8oLDw5NytCVr5+l3p0aFNd+wlw6Qy6cFNCsn/IC+z/i0s=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by BN0PR13MB5136.namprd13.prod.outlook.com (2603:10b6:408:166::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.20; Thu, 11 May
- 2023 12:56:16 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Thu, 11 May 2023
- 12:56:16 +0000
-Date:   Thu, 11 May 2023 14:56:08 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Yang Li <yang.lee@linux.alibaba.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] ipvlan: Remove NULL check before dev_{put, hold}
-Message-ID: <ZFzl6J4wwyr5QyLw@corigine.com>
-References: <20230511072119.72536-1-yang.lee@linux.alibaba.com>
+        d=linaro.org; s=google; t=1683809900; x=1686401900;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=mU6P1e5+4Xl8Bpy2fjdcYeE81cfd4b/6UBOEOmWNG6w=;
+        b=kgx9Gt4BXZh5aRNkCN33QpSN6nItFvh8EUJX9XC62edw0kMW0sMq4sO/fTpPRiS9HQ
+         xr8v2ax803lyFIp7Qo//NYBD4xH5ipWs8BiGsB9fhJ1JXKwhBKip5AkW8W2EnD2ZWLvI
+         SZKne4t8kEEFO5ebEEjSsmgHltZiTg4uiWYGMoAfawnU8oGbUaaitPIBhjOOqtSFsoNA
+         5F/pP53939UA+Wiz3G9BxJrHw2EPxWRhti2CYwsYUvdTetIfsb57a1sqPL91CG9NWwdY
+         ONzIJBzvQpfjYdcJwqrRQdwSjqX36eXJhYTHKEdSPhcR6ipF4h4ZJ59YRzNVSrfvIMKG
+         TKOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683809900; x=1686401900;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mU6P1e5+4Xl8Bpy2fjdcYeE81cfd4b/6UBOEOmWNG6w=;
+        b=YNrZVoNIPdX/O6qatL8J3OZ2o3a0cN9d74Iezz9QjDWrMB1cDYMxfbUY7RDGYtsnTN
+         35ftsxAKPTEz9VfHKLOQCY1xYVbmSxHTTScKnVX/gB5X84OwzLzkIRYru0k7cmeIqk80
+         +x6Ph/NfFt7wS6WcKKv35q4BdkVrIu82WQ/QXGd5cIk/4tJz+n49WKWoseGw2rWmMfSx
+         VOcIojp/A1bpluBhSfRvg0a6mtxUuOu8PYQjYqJJVCdP586uREokw0Ga1PHFq8G5clbY
+         s/KxcJEwIUVe9ZlTZ3nR2op7+/P8Zrz5WJsH1kLhK/yfX0pvcMvHW/nv5tIUzVwVB3yG
+         eigw==
+X-Gm-Message-State: AC+VfDwin0e8mT9+G6GjMA6VkGEvY6c3f0Mg4khzIlQ4Ijp/JwGEsjI7
+        ewbJc9OrkH7s/j5YTcy1kPt0zw==
+X-Google-Smtp-Source: ACHHUZ5pru7jo+OrktILu9OGEvB3oapcBP6a97zjnrxab9iWoPW9uVlzcCQgeDmLs/AhOTHwp77zKA==
+X-Received: by 2002:adf:e904:0:b0:306:2d81:341d with SMTP id f4-20020adfe904000000b003062d81341dmr18873867wrm.24.1683809899942;
+        Thu, 11 May 2023 05:58:19 -0700 (PDT)
+Received: from linaro.org ([86.121.163.20])
+        by smtp.gmail.com with ESMTPSA id p26-20020a05600c205a00b003f4f1b884b3sm39829wmg.20.2023.05.11.05.58.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 05:58:19 -0700 (PDT)
+Date:   Thu, 11 May 2023 15:58:17 +0300
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Saravana Kannan <saravanak@google.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Mike Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, mka@chromium.org
+Subject: Re: [PATCH v3 1/2] clk: Add generic sync_state callback for
+ disabling unused clocks
+Message-ID: <ZFzmaavGYy4isU7J@linaro.org>
+References: <20221227204528.1899863-1-abel.vesa@linaro.org>
+ <ebc257025ebd641e624ef506ea09c800.sboyd@kernel.org>
+ <Y/OV3CF0ootyooDJ@linaro.org>
+ <Y/OfjbxI1tHYJHNv@linaro.org>
+ <CAGETcx_mD3pbAmT5FDZaVAsKb_2PAnrHL8B_6gSR=+a0O4kHfQ@mail.gmail.com>
+ <Y/PALlrQpwPlum9M@linaro.org>
+ <CAGETcx_TZN3=GKrEf5fy_tA=JnOfw7m-N=+hD=qhe_yRRpngPw@mail.gmail.com>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230511072119.72536-1-yang.lee@linux.alibaba.com>
-X-ClientProxiedBy: AM3PR03CA0062.eurprd03.prod.outlook.com
- (2603:10a6:207:5::20) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|BN0PR13MB5136:EE_
-X-MS-Office365-Filtering-Correlation-Id: bc37cf13-3dc3-486a-2614-08db521f1bb1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Phe/2Dg+O/G3xp0XUVbLGDmq40uSmH97FKk9YgjNDVwAifXD3iV5Vjkw/vp1M1syR19RUEO9F4Es3Fh/f8DQqOKUcMF1TVS6z+ZB7SyWpEMHKmH61dH4cA/dYiq+RiCkgEZDPbJnZRnl5nezgjYCxmi5+pnAwiEJjJoIEx3WXzvssUhG9coHt6aXznT48/D2+yayA0wczydv8qMUg+R+lQ0Bg73mZHal4ANO5+uPd69AnMHcS2POgWMpnuv4NLxkfIFJ3c5fchyZScb1TpCyCWpwnTgcmJDVdewGY/l8FT0v93RKTeCZHTpnveLA0LIuoLkRFYh+agU5S1+aEoXP1H0vwk7kaHS248oQd3x39q/GmfGxdRk5heIScGQvvYHnf0kTdccYn54nbOYsnUB1U6tTHWM/5F3FYtg9Ge7ahnJx8M66JSqSqMOf12v6wH9bZIhN/f15EMKZHcsticJG025xEzYxYoe19T6nI5l3fKtDnrcdeWEjf8vI3A2HLrO12VVii4A6GxF7UoGoVctfJi6x9OhLN62j5yJThutdyGs=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39840400004)(376002)(366004)(346002)(451199021)(186003)(2616005)(4744005)(2906002)(83380400001)(36756003)(38100700002)(86362001)(6486002)(966005)(8676002)(8936002)(316002)(6666004)(41300700001)(44832011)(5660300002)(478600001)(6916009)(66946007)(4326008)(66476007)(66556008)(6512007)(6506007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DvglMie2n9Ht8G1caX8zfcFAgwNgyo93aMeKh8SmzLdr76cIVlNlahLdGsMA?=
- =?us-ascii?Q?Vhr2PLzMYGsfDX6DGNwyMDq3Dm5yneucYIm3E20JMTVbClGjlUdzGA3OGlz9?=
- =?us-ascii?Q?h3CVJ8NDoHgYKRCLHwMO48HVedKKBFRbMtRvj7zSkFkNx0HJZNvzJyQOO0mA?=
- =?us-ascii?Q?fTKZ6HgXwZpjJKOyvmbkbBkCFl1JKezCURcLX4Y/RCruU8iDTA9BtFTGIWU4?=
- =?us-ascii?Q?QaTPer6H3tIVa6ug+4xJNIwj7PgQK1DUBVTW5/nr5LZS0nxmj3ttKUrbi47d?=
- =?us-ascii?Q?rHTGJNQp1FBN18y3Ml1iGAM8RHSXp0KihSLDrIFHKJ7KPHJfb6nhbVERo1c/?=
- =?us-ascii?Q?1syoknRFjoShEOYkeJCIBzN8uelQFazT2PM3sXzm9EnA6NZiM2JhGaoh2vQI?=
- =?us-ascii?Q?Kqy0xoWd+8OYy+WiR88zX/PPIH/psE8EAdnjIqrrQJvafRihnfnp69c4N4YJ?=
- =?us-ascii?Q?qTPHFEai/gQWm90kIQ9wg2P9t8okVcLXpo52JOEEtD3BRVDZS3Msoea3qdsy?=
- =?us-ascii?Q?/tnfCg6p0vURRODBZYsNvQFcNKZe1fCfjLQVNj/j97IRaKAOtVXtX/LGOmb7?=
- =?us-ascii?Q?sXr3NUjubytl2xxDQY18v7bCkva5e20RXI17eaP088fIbHlI6DdKNlmv3pfo?=
- =?us-ascii?Q?dyCp4qtpDRX7h7kxdcmGIBedj/htqdpX4/Is9FMLkC5kZaygonNz9L8RjxgL?=
- =?us-ascii?Q?wEd4aYMHFkV1p2kQXUG4ALOYZkTc2b/xZJU+pqgPa9bOiMpQMV3XCevGYnNq?=
- =?us-ascii?Q?kQgXTaOctVxkdtsxpVGhuluwxNJF/REp7couuimUzdBg0gv5w95iERCcV5Q9?=
- =?us-ascii?Q?8lSW2BpVuWvuR1+HIdI3Q3mpAn4X2DYGTnjbUcQDpPuEEUfvgSvSti0bGPMv?=
- =?us-ascii?Q?msauVvUAmVgll/vtER/EF2hakA1lO1XDoPviYjCwMhq7/LxqegVru2Q64T7u?=
- =?us-ascii?Q?DNxlItTI5UVi1nw8OEf5qNRKkJlIz0DeZzF7qSDq8hIPoXpw2aCQU+BtshdU?=
- =?us-ascii?Q?0Zn6TF82S4LW7g5U82GY/LZOd5IEGHY2g/fPodtk5a53VvHEsP8j5j8fSPsv?=
- =?us-ascii?Q?3rnQB/5NUEgtQ0Z67GAktqZ/F4pCDlnqIeTP7Camdw2T+arJwHsdLObBptda?=
- =?us-ascii?Q?B72kgZqktI0jQf/G3KzBPveUvYdlJmDZSM+lrGY/i58jJ/8RPM75Mdp9mCpT?=
- =?us-ascii?Q?ZbTcZwTN6UjwYZT3HiApp1wkB6xTK7R7+qc7BTVCC1wTFLNmzbi4pN545lHy?=
- =?us-ascii?Q?p9Ac8XpvthOMVcRFSc7q2AfrGO8a6ewS9RwAPXjuhiyKO2tJyfoqRv5pe+bE?=
- =?us-ascii?Q?S3QtEWrguK52hROnsJxcscj+v0wV4NnUD3hDbCbarl//YRkljCutQ82z2Fzr?=
- =?us-ascii?Q?U0dj0RqHkA+8FnrzKF36xzwPgBat1EBsUvStWBuPydRrLBkLh+sXcb478m2v?=
- =?us-ascii?Q?A03I3zOu9lKI5g3j4q0qxOOozJ04zWtLaHQyfp/myCBK7t+dDYgZlMBYkpVd?=
- =?us-ascii?Q?EiZkRT/KNEAr1YwTf9BbsHipQMgCYGaixd/wsI2NTGvOlU0uzSf1ZYfOKrZ5?=
- =?us-ascii?Q?ozzeV/NFnFlNae4BeRH7YxDxdqa9cgb77uOypel+6721aK0DU/KyAr5zheQV?=
- =?us-ascii?Q?t0KbfgTuvCuzcdzBofmvHc5oWOCjU2lwZ5ecDZjy/Wh7YbDX2BR4tEkP5bne?=
- =?us-ascii?Q?eB9gaw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bc37cf13-3dc3-486a-2614-08db521f1bb1
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 12:56:16.7445
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: KjTXO5vOcyKjgCOgG9nZHaZerQhgZwev+zVF/XOkiaYKoCDzzfYQBcU++G621erVSJSeT5XCQkYicI1liyUR52ftCNDf9ffbhxSwFHSZ6AU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR13MB5136
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+In-Reply-To: <CAGETcx_TZN3=GKrEf5fy_tA=JnOfw7m-N=+hD=qhe_yRRpngPw@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -115,15 +84,216 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 03:21:19PM +0800, Yang Li wrote:
-> The call netdev_{put, hold} of dev_{put, hold} will check NULL,
-> so there is no need to check before using dev_{put, hold},
-> remove it to silence the warning:
+On 23-02-21 11:58:24, Saravana Kannan wrote:
+> On Mon, Feb 20, 2023 at 10:47 AM Abel Vesa <abel.vesa@linaro.org> wrote:
+> >
+> > On 23-02-20 09:51:55, Saravana Kannan wrote:
+> > > On Mon, Feb 20, 2023 at 8:28 AM Abel Vesa <abel.vesa@linaro.org> wrote:
+> > > >
+> > > > On 23-02-20 17:46:36, Abel Vesa wrote:
+> > > > > On 23-02-17 21:38:22, Stephen Boyd wrote:
+> > > > > > Quoting Abel Vesa (2022-12-27 12:45:27)
+> > > > > > > There are unused clocks that need to remain untouched by clk_disable_unused,
+> > > > > > > and most likely could be disabled later on sync_state. So provide a generic
+> > > > > > > sync_state callback for the clock providers that register such clocks.
+> > > > > > > Then, use the same mechanism as clk_disable_unused from that generic
+> > > > > > > callback, but pass the device to make sure only the clocks belonging to
+> > > > > > > the current clock provider get disabled, if unused. Also, during the
+> > > > > > > default clk_disable_unused, if the driver that registered the clock has
+> > > > > > > the generic clk_sync_state_disable_unused callback set for sync_state,
+> > > > > > > skip disabling its clocks.
+> > >
+> > > Hi Abel,
+> > >
+> > > We have the day off today, so I'll respond more later. Also, please cc
+> > > me on all sync_state() related patches in the future.
+> > >
+> >
+> > Sure thing.
+> >
+> > > I haven't taken a close look at your series yet, but at a glance it
+> > > seems incomplete.
+> > >
+> > > Any reason you didn't just try to revive my series[1] or nudge me?
+> > > [1]- https://lore.kernel.org/lkml/20210407034456.516204-3-saravanak@google.com/
+> >
+> > This patchset is heavily reworked and much more simpler as it relies
+> > strictly on the sync_state being registered by the clock provider.
 > 
-> ./drivers/net/ipvlan/ipvlan_core.c:559:3-11: WARNING: NULL check before dev_{put, hold} functions is not needed.
-> 
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4930
-> Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
+> It's simpler because it's not complete. It for sure doesn't handle
+> orphan-reparenting. It also doesn't make a lot of sense for only some
+> clock providers registering for sync_state(). If CC-A is feeding a
+> clock signal that's used as a root for clocks in CC-B, then what
+> happens if only CC-B implements sync_state() but CC-A doesn't. The
+> clocks from CC-B are still going to turn off when CC-A turns off its
+> PLL before CC-B registers.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+I gave your patchset a try and it breaks the uart for qcom platforms.
+That is because your patchset enables the clock on __clk_core_init and
+does not take into account the fact that 'boot enabled' clocks should be
+left untouched. This also means the orphan-reparenting enabling should
+be dropped as well.
+
+As for the second part, related to providers that might not have a
+registered sync_state(), your patchset sets the clock core generic
+one. This is also wrong because it doesn't take into account the fact
+that there might be providers that need to do their own stuff on
+sync_state() and should do that by registering their own implementation
+of it.
+
+Therefore, I'll respin your patchset and use only the skipping of
+disabling the unused clocks, but I'll drop all the enable on init and orphan
+reparenting changes.
+
+> 
+> Nack for this patch.
+> 
+> Also, unless there's a strong objection, let's go back to my patch
+> please. It's way more well tested and used across different SoCs than
+> this patch. Also, I'm pretty sure the orphan handling is needed for
+> qcom SoC's too.
+> 
+> -Saravana
+> 
+> >
+> > I saw your patchset a few months ago but then forgot about its
+> > existence. That's also why I forgot to nudge you. Sorry about that.
+> >
+> > >
+> > > At the least, I know [1] works on all Android devices (including
+> > > Qualcomm SoCs) released in the past 2-3 years or more. If [1] works
+> > > for you, I'd rather land that after addressing Stephen's comments
+> > > there (I remember them being fairly easy to address comments) instead
+> > > of whipping up a new series that's not as well used. I just got busy
+> > > with other things and addressing more fundamental fw_devlink TODOs
+> > > before getting back to this.
+> > >
+> > > Hi Bjorn,
+> > >
+> > > I see in another reply you've said:
+> > >
+> > > Applied, thanks!
+> > >
+> > > [1/2] clk: Add generic sync_state callback for disabling unused clocks
+> > >       commit: 26b36df7516692292312063ca6fd19e73c06d4e7
+> > > [2/2] clk: qcom: sdm845: Use generic clk_sync_state_disable_unused callback
+> > >       commit: 99c0f7d35c4b204dd95ba50e155f32c99695b445
+> > >
+> > > Where exactly have you applied them? I hope you haven't applied the
+> > > clk.c changes to some tree that goes into 6.3.
+> >
+> > I think it is already part of Bjorn's Qualcomm clocks pull request.
+> >
+> > >
+> > > -Saravana
+> > >
+> > > > > >
+> > > > > > How does that avoid disabling clks randomly in the clk tree? I'm
+> > > > > > concerned about disabling an unused clk in the middle of the tree
+> > > > > > because it doesn't have a driver using sync state, while the clk is the
+> > > > > > parent of an unused clk that is backed by sync state.
+> > > > > >
+> > > > > >    clk A -->  clk B
+> > > > > >
+> > > > > > clk A: No sync state
+> > > > > > clk B: sync state
+> > > > > >
+> > > > > > clk B is left on by the bootloader. __clk_disable_unused(NULL) is called
+> > > > > > from late init. Imagine clk A is the root of the tree.
+> > > > > >
+> > > > > >     clk_disable_unused_subtree(clk_core A)
+> > > > > >       clk_disable_unused_subtree(clk_core B)
+> > > > > >         if (from_sync_state && core->dev != dev)
+> > > > > >           return;
+> > > > > >       ...
+> > > > > >       clk core A->ops->disable()
+> > > > > >
+> > > > > > clk core B is off now?
+> > > > >
+> > > > > Yes, that is correct. But the same thing is happening currently if the
+> > > > > clk_ignore_unused in not specified. At least with this new approach, we
+> > > > > get to leave unused clocks enabled either until sync_state is called or forever.
+> > > > > All the provider has to do is to implement a sync_state callback (or use
+> > > > > the generic one provided). So the provider of clk A would obviously need
+> > > > > a sync state callback registered.
+> > > > >
+> > > > > >
+> > > > > > Also sync_state seems broken right now. I saw mka mentioned that if you
+> > > > > > have a device node enabled in your DT but never enable a driver for it
+> > > > > > in the kernel we'll never get sync_state called. This is another
+> > > > > > problem, but it concerns me that sync_state would make the unused clk
+> > > > > > disabling happen at some random time or not at all.
+> > > > >
+> > > > > Well, the fact that the sync state not being called because a driver for
+> > > > > a consumer device doesn't probe does not really mean it is broken. Just
+> > > > > because the consumer driver hasn't probed yet, doesn't mean it will
+> > > > > not probe later on.
+> > > > >
+> > > >
+> > > > CC'ed Saravana
+> > > >
+> > > > > That aside, rather than going with clk_ignore_unused all the time on
+> > > > > qcom platforms, at least in a perfect scenario (where sync state is
+> > > > > reached for all providers) the clocks get disabled.
+> > > > >
+> > > > > >
+> > > > > > Can the problem be approached more directly? If this is about fixing
+> > > > > > continuous splash screen, then I wonder why we can't list out the clks
+> > > > > > that we know are enabled by the bootloader in some new DT binding, e.g.:
+> > > > > >
+> > > > > >     clock-controller {
+> > > > > >             #clock-cells = <1>;
+> > > > > >             boot-handoff-clocks = <&consumer_device "clock cells for this clk provider">;
+> > > > > >     };
+> > > > > >
+> > > > > > Then mark those as "critical/don't turn off" all the way up the clk tree
+> > > > > > when the clk driver probes by essentially incrementing the
+> > > > > > prepare/enable count but not actually touching the hardware, and when
+> > > > > > the clks are acquired by clk_get() for that device that's using them
+> > > > > > from boot we make the first clk_prepare_enable() do nothing and not
+> > > > > > increment the count at all. We can probably stick some flag into the
+> > > > > > 'struct clk' for this when we create the handle in clk_get() so that the
+> > > > > > prepare and enable functions can special case and skip over.
+> > > > >
+> > > > > Well, that means we need to play whack-a-mole by alsways adding such clocks to
+> > > > > devicetree.
+> > > > >
+> > > > > >
+> > > > > > The sync_state hook operates on a driver level, which is too large when
+> > > > > > you consider that a single clk driver may register hundreds of clks that
+> > > > > > are not related. We want to target a solution at the clk level so that
+> > > > > > any damage from keeping on all the clks provided by the controller is
+> > > > > > limited to just the drivers that aren't probed and ready to handle their
+> > > > > > clks. If sync_state could be called whenever a clk consumer consumes a
+> > > > > > clk it may work? Technically we already have that by the clk_hw_provider
+> > > > > > function but there isn't enough information being passed there, like the
+> > > > > > getting device.
+> > > > >
+> > > > > Actually, from the multitude of clocks registered by one provider, the
+> > > > > ones already explicitely enabled (and obvisously their parents) by thier
+> > > > > consumer are safe. The only ones we need to worry about are the ones that
+> > > > > might be enabled by bootloader and need to remain on. With the sync state
+> > > > > approach, the latter mentioned clocks will either remain on indefinitely
+> > > > > or will be disabled on sync state. The provider driver is the only level
+> > > > > that has a registered sync state callback.
+> > > > >
+> > > > > >
+> > > > > > > diff --git a/include/linux/clk-provider.h b/include/linux/clk-provider.h
+> > > > > > > index 842e72a5348f..cf1adfeaf257 100644
+> > > > > > > --- a/include/linux/clk-provider.h
+> > > > > > > +++ b/include/linux/clk-provider.h
+> > > > > > > @@ -720,6 +720,7 @@ struct clk *clk_register_divider_table(struct device *dev, const char *name,
+> > > > > > >                 void __iomem *reg, u8 shift, u8 width,
+> > > > > > >                 u8 clk_divider_flags, const struct clk_div_table *table,
+> > > > > > >                 spinlock_t *lock);
+> > > > > > > +void clk_sync_state_disable_unused(struct device *dev);
+> > > > > >
+> > > > > > This is a weird place to put this. Why not in the helper functions
+> > > > > > section?
+> > > > >
+> > > > > Sure this can be moved.
+> > > > >
+> > > > > >
+> > > > > > >  /**
+> > > > > > >   * clk_register_divider - register a divider clock with the clock framework
+> > > > > > >   * @dev: device registering this clock
