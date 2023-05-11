@@ -2,138 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF3D6FEADE
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 06:42:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7ADF16FEAE2
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 06:46:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236758AbjEKEmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 00:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57870 "EHLO
+        id S236856AbjEKEp7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 00:45:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232695AbjEKEmP (ORCPT
+        with ESMTP id S229589AbjEKEp5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 00:42:15 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6D82D68;
-        Wed, 10 May 2023 21:42:15 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34B2LJrx019918;
-        Thu, 11 May 2023 04:42:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=WnaEZ/hrDXv4JIBL/URErpZ1fvDCqaexQA/xJTQYwgw=;
- b=fGEmLNYIP+9QGIoEze9jzdPvFzwi+wS8CaeYEYEpBUzdk8ra78zso0kTZWZtxLLhoG02
- tNWilDx/pvjLT2QBftQdVen+4badhnw+nXcGW0Tzs584zCfK3ogL76JorLvXi5kw/muM
- tu7buXyVx/LMemR3KyjxY5eclEOo2jZACRzBwbUPDdMuepOUTpho6SKZoYACTKELxWz9
- UynBO9/pv3jAFzqDhBMrhtBfTt1U0sFZ9izM+oXIxgpfS0ktfPPBnKv8ba3HZiNBKeQO
- CrSE3C4r+J0Laex4tCmReBdUJW8SpBTFB8ptpaU1K9ypT0siWoJf6s3PtCOsBFS3Lolk BA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qg5mptcyy-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 04:42:04 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34B4g33M013210
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 04:42:03 GMT
-Received: from [10.110.82.209] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 10 May
- 2023 21:42:02 -0700
-Message-ID: <ff0a7628-b9e2-d5f5-cb1e-678ea25ec1cb@quicinc.com>
-Date:   Wed, 10 May 2023 21:42:01 -0700
+        Thu, 11 May 2023 00:45:57 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10B452D5E;
+        Wed, 10 May 2023 21:45:54 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QGzqD6d7fz4x4h;
+        Thu, 11 May 2023 14:45:44 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1683780345;
+        bh=gGQo2Hod1s0dUe8TaV/VGhddTEqXZ34G+98W5auwrHA=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=SYn1FHGeyN2/KAqF8+2vnJXhmFrxun3VUz0Gm9tCde4qEbF3rEovKXDUS6pQCfiyw
+         glrKlKcrrf9chWC+x/mErRxsdtXBHUqxEKAC6crYiVTLfcP/SprOVnkVTHA6ouhNQ/
+         ETxHTeSacOeGfaPHeCdf5c+LKnmdBlSDnLZEOySHAZkk5TuanfORoUgQWu6TTmeK1x
+         fFP2VQAp6atPbM6/tlL4TDo2TzY9xwKsD2SVLI3Va4Qaa/5FBcR5jDFYoIkEKSiUjb
+         LKs1sKrmmNjOr77HT5e+V2hgGKTADo9yergTHjCiPGLJrbDHrlFDbxHHGwgXVy8vzx
+         smd4t/8KrwPIA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>,
+        PowerPC <linuxppc-dev@lists.ozlabs.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: Re: linux-next: build warnings in powercp build
+In-Reply-To: <20230511121635.0a6764a0@canb.auug.org.au>
+References: <20230511121635.0a6764a0@canb.auug.org.au>
+Date:   Thu, 11 May 2023 14:45:44 +1000
+Message-ID: <871qjna32f.fsf@mail.lhotse>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v6 2/8] drm/msm/dpu: add DPU_PINGPONG_DSC feature bit for
- DPU < 7.0.0
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>
-CC:     <quic_jesszhan@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <marijn.suijten@somainline.org>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1683756453-22050-1-git-send-email-quic_khsieh@quicinc.com>
- <1683756453-22050-3-git-send-email-quic_khsieh@quicinc.com>
- <b4438422-f24b-7fc1-18cf-3cebdd777530@linaro.org>
- <1a6109ae-7c83-c04e-60c9-dfca6b83d662@quicinc.com>
- <a6146d03-18d1-b1c6-cdbb-d3527cb9021a@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <a6146d03-18d1-b1c6-cdbb-d3527cb9021a@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: kNV8cmfP4i2KXlo-0mgbeAlY_QlSPyka
-X-Proofpoint-GUID: kNV8cmfP4i2KXlo-0mgbeAlY_QlSPyka
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
- priorityscore=1501 phishscore=0 mlxlogscore=492 clxscore=1015
- suspectscore=0 malwarescore=0 mlxscore=0 adultscore=0 lowpriorityscore=0
- impostorscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305110038
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Stephen Rothwell <sfr@canb.auug.org.au> writes:
+> Hi all,
+>
+> Today's (and a few before) linux-next build (powerpc pseries_le_defconfig)
+> produced these warnings:
 
+Those aren't really warnings, it's just merge_config.sh telling you what
+it's doing. The whole point of the generated configs is to override
+those symbols.
 
-On 5/10/2023 9:39 PM, Dmitry Baryshkov wrote:
-> On 11/05/2023 07:38, Abhinav Kumar wrote:
->>
->>
->> On 5/10/2023 9:29 PM, Dmitry Baryshkov wrote:
->>> On 11/05/2023 01:07, Kuogee Hsieh wrote:
->>>> DPU < 7.0.0 requires the PINGPONG block to be involved during
->>>> DSC setting up. Since DPU >= 7.0.0, enabling and starting the DSC
->>>> encoder engine moved to INTF with the help of the flush mechanism.
->>>
->>> Nit: was moved.
->>>
->>>> Add a DPU_PINGPONG_DSC feature bit to restrict the availability of
->>>> dpu_hw_pp_setup_dsc() and dpu_hw_pp_dsc_{enable,disable}() on the
->>>> PINGPONG block to DPU < 7.0.0 hardware, as the registers are not
->>>> available [in the PINGPONG block] on DPU 7.0.0 and higher anymore.
->>>
->>> this looks good
->>>
->>>> Existing call-sites to these callbacks already skip calling into
->>>> them if the function pointer is NULL.
->>>
->>> This is more relevant for patch 3 commit message.
->>>
->>>> Add DPU_PINGPONG_DSC feature
->>>> bit to all chipset with DPU < 7.0.0.
->>>
->>> This is incorrect, as we do not change the catalog in this patch.
->>>
->>
->> Sorry but why not? The changes done to dpu_hw_catalog.c do exactly that.
-> 
-> Because the patch does not add this feature bit to any of the chipsets. 
-> I think the relevant patch was lost somewhere during the rework/rebase.
-> 
-> 
-> 
+Looks like there is a way to silence them, by using merge_into_defconfig_override.
 
-This is adding it right?
+cheers
 
-   #define PINGPONG_SDM845_MASK \
--    (BIT(DPU_PINGPONG_DITHER) | BIT(DPU_PINGPONG_TE))
-+    (BIT(DPU_PINGPONG_DITHER) | BIT(DPU_PINGPONG_TE) | 
-BIT(DPU_PINGPONG_DSC))
-   #define PINGPONG_SDM845_TE2_MASK \
+> Building: powerpc pseries_le_defconfig
+> Using /home/sfr/next/next/arch/powerpc/configs/ppc64_defconfig as base
+> Merging /home/sfr/next/next/arch/powerpc/configs/le.config
+> Merging /home/sfr/next/next/arch/powerpc/configs/guest.config
+> Value of CONFIG_VIRTIO_BLK is redefined by fragment /home/sfr/next/next/arch/powerpc/configs/guest.config:
+> Previous value: CONFIG_VIRTIO_BLK=m
+> New value: CONFIG_VIRTIO_BLK=y
+>
+> Value of CONFIG_SCSI_VIRTIO is redefined by fragment /home/sfr/next/next/arch/powerpc/configs/guest.config:
+> Previous value: CONFIG_SCSI_VIRTIO=m
+> New value: CONFIG_SCSI_VIRTIO=y
+>
+> Value of CONFIG_VIRTIO_NET is redefined by fragment /home/sfr/next/next/arch/powerpc/configs/guest.config:
+> Previous value: CONFIG_VIRTIO_NET=m
+> New value: CONFIG_VIRTIO_NET=y
+>
+> Value of CONFIG_VIRTIO_CONSOLE is redefined by fragment /home/sfr/next/next/arch/powerpc/configs/guest.config:
+> Previous value: CONFIG_VIRTIO_CONSOLE=m
+> New value: CONFIG_VIRTIO_CONSOLE=y
+>
+> Value of CONFIG_VIRTIO_PCI is redefined by fragment /home/sfr/next/next/arch/powerpc/configs/guest.config:
+> Previous value: CONFIG_VIRTIO_PCI=m
+> New value: CONFIG_VIRTIO_PCI=y
+>
+> Value of CONFIG_VIRTIO_BALLOON is redefined by fragment /home/sfr/next/next/arch/powerpc/configs/guest.config:
+> Previous value: CONFIG_VIRTIO_BALLOON=m
+> New value: CONFIG_VIRTIO_BALLOON=y
+>
+> Value of CONFIG_VHOST_NET is redefined by fragment /home/sfr/next/next/arch/powerpc/configs/guest.config:
+> Previous value: CONFIG_VHOST_NET=m
+> New value: CONFIG_VHOST_NET=y
+>
+> Value of CONFIG_IBMVETH is redefined by fragment /home/sfr/next/next/arch/powerpc/configs/guest.config:
+> Previous value: CONFIG_IBMVETH=m
+> New value: CONFIG_IBMVETH=y
+>
+> Value of CONFIG_IBMVNIC is redefined by fragment /home/sfr/next/next/arch/powerpc/configs/guest.config:
+> Previous value: CONFIG_IBMVNIC=m
+> New value: CONFIG_IBMVNIC=y
+>
+> I am not sure exactly which change(s) introduced these warnings.
+>
+> -- 
+> Cheers,
+> Stephen Rothwell
