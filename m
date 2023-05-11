@@ -2,94 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A44A96FEFA4
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:07:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF94D6FEFAB
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:10:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237745AbjEKKHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 06:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49378 "EHLO
+        id S237480AbjEKKK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 06:10:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237549AbjEKKHe (ORCPT
+        with ESMTP id S237262AbjEKKKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 06:07:34 -0400
-Received: from mailbox.box.xen0n.name (mail.xen0n.name [115.28.160.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74A35A1;
-        Thu, 11 May 2023 03:07:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xen0n.name; s=mail;
-        t=1683799650; bh=VqDgL7HU+yu2cg9LzMt1GR3g7Ypf89l9GP5PH/EG4Zk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=ApqH0CwwldgFtdmJItmpSyedxMCa3vdCBBm1hLHAx7rb9nb90/4I4cvWSP/Nzvdic
-         RHn1nQZ70lRpD5Hrlx+MpgfGDbhrsk8SCxsJPMPylE6stTj9TDWmjWcZg7snb4OC3H
-         ZfLVCSSArHDsVRRb5dReCKL0FPZZ1//ebSGRWyJM=
-Received: from [100.100.57.122] (unknown [58.34.185.106])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mailbox.box.xen0n.name (Postfix) with ESMTPSA id B758360106;
-        Thu, 11 May 2023 18:07:29 +0800 (CST)
-Message-ID: <160f2a29-e935-143a-cdae-7b3e1f2797f9@xen0n.name>
-Date:   Thu, 11 May 2023 18:07:29 +0800
+        Thu, 11 May 2023 06:10:23 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2098.outbound.protection.outlook.com [40.107.101.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CADC6E9D;
+        Thu, 11 May 2023 03:10:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kPbbq0KtR2171tWjad7A3ggqNZHeWteK3Qw+6Wp8H/YR73/sHrUO7ADH7gGk7n/WD80mprf0Z5XmwoSdHo/tohvgMaqauvD2mBGegJjCe3HGRUoc9n4NSye1tejek+lWvWW66frsv1+h6wWRzdt7ToEal9LAtEywiwWnfWamsz9BpnEZsPOjzIWA0lC02+hGcWi9f3bBRo1HnyylK6XZmpSa9gEAESw3e8zDGjDArQBRCplKJM2LXdOqKFJ1ylkhC+BXpzvpeSZulkJz4WDC2MYuFZsWYCVz/BTSUZbq0TIM25GR01mepDPmYjT4tucbLEo/YIFrydPxthmoC+JguA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5HB/6+rQbnuH1yr3EHOINO/vz49rLPGGQcHqp11bk80=;
+ b=gf5P5rNpF7KSChKwUkbYniW5bLeN86fgK/SdAGzSXrjQAyMa7usWG5Cs3qY3j4T8lWBJeVgbikgKVt5NRhFvrdvf+mkgeS6bG9TQ7AgI1GBTBanoJQMhwATj4FSqE7YmGxYQ2NuSWgAJH7wMrK6Du35V40JnZCJffOcnN1PoN2vOK2J2uhOw6/PTHSUXjhbGvfHawq6FGII2UI9imEF4UCfkgwa0FPqZ+kIyQNVpvC7J5av9IsKwed4AZMRcUyScZAYkwBInZ4vIx6bi1CZmnOlAqQ1ESxtcv3i1XFhMp0iLg77UT/hxa+WrTF+frgqC1i8Q4mjlzvPHu6CNhP59Tg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5HB/6+rQbnuH1yr3EHOINO/vz49rLPGGQcHqp11bk80=;
+ b=dM8yMoI1mvIDKbAOTVbpLs9uI86OSSMvum/rIb6khquDs7gOmUSZ6hTrbxRDwduck27Asw/YfLmjv4k0QQ9l9mxi0gUOil28OrMs0BQCbj+pgTG3X2PW0zU57wgfODgRxeJ1XAW27lSs51wK1h4Qkz1SrwRta9Gj+JPAoBX4i3s=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CH2PR13MB3848.namprd13.prod.outlook.com (2603:10b6:610:9d::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Thu, 11 May
+ 2023 10:10:18 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Thu, 11 May 2023
+ 10:10:18 +0000
+Date:   Thu, 11 May 2023 12:10:11 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     netdev@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Frank <Frank.Sae@motor-comm.com>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net-next v2 1/3] net: phy: Allow drivers to always call
+ into ->suspend()
+Message-ID: <ZFy/A9vuxBl7WKt9@corigine.com>
+References: <20230509223403.1852603-1-f.fainelli@gmail.com>
+ <20230509223403.1852603-2-f.fainelli@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230509223403.1852603-2-f.fainelli@gmail.com>
+X-ClientProxiedBy: AM0PR02CA0030.eurprd02.prod.outlook.com
+ (2603:10a6:208:3e::43) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH v2] LoongArch: Add jump-label implementation
-Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Youling Tang <tangyouling@loongson.cn>
-Cc:     Huacai Chen <chenhuacai@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Zhangjin Wu <falcon@tinylab.org>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
-References: <1683710206-23905-1-git-send-email-tangyouling@loongson.cn>
- <3b360532-6ad5-b22c-b02a-103be491be4c@xen0n.name>
- <72b6c81a-d4ee-575a-ff48-6be7e034ac96@loongson.cn>
- <20230511074359.GQ4253@hirez.programming.kicks-ass.net>
-From:   WANG Xuerui <kernel@xen0n.name>
-In-Reply-To: <20230511074359.GQ4253@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CH2PR13MB3848:EE_
+X-MS-Office365-Filtering-Correlation-Id: aca7599f-8eae-42c2-80f1-08db5207ebfe
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 0Ibpo1gC2FuqJnkwrNqI6b99+QokrWyhnxbWoOOl9yTBTPK/u4vxlYJfT66ds5SytI6o5/XPCRXwuIjuOpRQZ2fnzOGxiUCOcsuFLS8NlTU5I+bZrLswQZ5lytfXo2aPayFP4TAG6SwWvNfFWXutQypMfbNv0jU8j14HU7y4bTSMQgJtFNdmjtfm4tSlh24mwZPewJseJ1j4FIcDH+96DXH7SanVUgvT+YhKSaWeTAG5akKPjqZyaiRBystCKQw0PrvgnzSJ2hleYR845/jTREJ/+PiAbABgR/r1Rr8hivbEydpooHezTom57JRH/4K6dOr4pwxnkaOyMoSAiYXM094h93RQ2xpFE5epObGj2ROQqK2j1sYgE/LgdP87ohF4X91oqktdjySWM1A2v0tM4g9b5w84vHnJieAGgHhZv6G6GTWZfHgYUSIe8bbYqcZmjRI0BpgSN8bxlvd1zlHKf88GpGItOq1+DnxoToyJ9IsoojS+ZteRhgzWZiIaJTbMA2h9U3pYkMwATdee/SSlsgbxTEkDn89QMPE1cP8sU5LNlujE2qbrU1BZk3pQ+znz
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39830400003)(396003)(376002)(136003)(346002)(366004)(451199021)(83380400001)(8676002)(8936002)(54906003)(316002)(6666004)(15650500001)(66946007)(4744005)(4326008)(2616005)(6486002)(6916009)(44832011)(5660300002)(66556008)(7416002)(478600001)(66476007)(2906002)(86362001)(186003)(6512007)(6506007)(36756003)(41300700001)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?jCZUfVHQoA9M3lnp9/qlHtW2vkWhvc6K59kcyNF8wO/LYNebmPIIPnvBiqRz?=
+ =?us-ascii?Q?O9lmEgmR+dnCb9dZQ8OQg2FCqw9o+EmiAw+xhDVNMoreMiHNNEHTkjwscdSO?=
+ =?us-ascii?Q?gcyiPNBbIJ6fkNFw+oFb8r04mgXRY0xJ25k5arkyRFxzOKYgQaqSd0ExWSUZ?=
+ =?us-ascii?Q?GBC4iCxcNrqLIatyrStC8fr3I2IByAg5mP9oZhgfmortqzXRg/RXJ0NtzX2R?=
+ =?us-ascii?Q?IOs4wF4mpEelPAG08Wm1UMXeMNSz0NaaPYQSpqXBbNGrkNAi0XQlFQvkMhec?=
+ =?us-ascii?Q?T8kawX25G4jBIrB6iSmhnOTqsxUR3mXPQq08OA9rT/e/WUSTKmJzmFGcqCNz?=
+ =?us-ascii?Q?6+Bo5Nb54fVNv0bnuHLHYjPMMMy9AGECjOV0QJvrLN5rg+BusDn+mTOghtfQ?=
+ =?us-ascii?Q?j9Ajk34R5YWKne6xaXuNaJxd2AtcL2cw0hBnQfn3diUUrEebjLgAUTpKUGU6?=
+ =?us-ascii?Q?XRHqjemZCwe/ualLEDtZOSE2H/jO9Ip7ORW1N+CI57h8WfnaN1igbQlnH6Fn?=
+ =?us-ascii?Q?spjagktSzRyy4YyYQIMWkE8SqxhYGButjq6zlI4FhKC9kGBECmbzu8u7sG9n?=
+ =?us-ascii?Q?i7KRaKRiP8SlfzpQ/R5fG/chWOk5M3b6VzpUT5J+7cI012CWDpz2lMle+GHI?=
+ =?us-ascii?Q?V7eIsaRPeRiWWb6vEROJ6PMy1j1QeUgmmQh76hnhENBkTj9ilsl5+ZhhbTgN?=
+ =?us-ascii?Q?u+7HVAV7o6pIeaNs81s0UGLUEN38+twurBlSOh5nUgLs64QtRi653nVqSMxc?=
+ =?us-ascii?Q?pbFRUK88XLuIpqi7xLKqMkvCFFO36/5q61PwjvWyFrWsKWOxyCIym2UgyemA?=
+ =?us-ascii?Q?ql7KvlZljHR2OQvYk1n7ZyBjcNRSe+omGTmqkV5qcfpVhWcX9GQtNsvAZv5c?=
+ =?us-ascii?Q?/hHPqrYM56+thQQ0j8cEbuW53w7ahsbCqTGt/VZUz43fWeM3XMaQCHYUzU6j?=
+ =?us-ascii?Q?GHb5QTP4G3Mr3CTopdUAqccwGmyebmVnKDkU6y+B39RV/Oo3p1bX//wFSKN9?=
+ =?us-ascii?Q?efOYEVxs+M5SWaclHlrsWtIMsEXhmn9FMEAHkf3ST4QoiFRZbtfRJybCLeXJ?=
+ =?us-ascii?Q?toYT7r+opm8aDSgq810pRDb4yb6IkRm5k/PGst0/hoBatD7smJZfsSaxgjDU?=
+ =?us-ascii?Q?RDNddF1Tgad/L9+EL/vbIxa9ADpPy6p803VlTMDaWT5xfhfEd1G0lCcM9F7Y?=
+ =?us-ascii?Q?dLMTq29jO+RjxjiifgXVznkv5KnsPDxg2n930rxEfqOW+N5rPEiOEy1dDoJ/?=
+ =?us-ascii?Q?C2a/LTuCUAFBOG9LK2sWmeqmgAyTS/95QiO04EJq7/x3YEKDmOvw/Z2eOFCK?=
+ =?us-ascii?Q?o8FpMwgex0wYYyfle5Crd3tG+Gdw0i0Hw8cHUVd9H/ia1y52ENq2FF/N3IBV?=
+ =?us-ascii?Q?g7YkD3yznJo+66F2yIgXs7f48CDMTxkyBCbd2Af7/jRHwgqD/OZmRX1epaac?=
+ =?us-ascii?Q?C2GfJiRqU/Z/mSy7IZqsZ00at4dBjaqYHP3lqiMZ6z2Nk0IcE/GGPmCirrOr?=
+ =?us-ascii?Q?MHcRVRRq4n5ync9IjmKeVqzLf8i4F+gE9/TW4+3V71514o1o95dY4wrC4c5+?=
+ =?us-ascii?Q?OxE7kP5yH4B9WIYPYlYqEPgfD1xvQRaT7Re2htEzYXZoK8FvrZlUGvOVO/or?=
+ =?us-ascii?Q?KKMbAnM/UE8JWpVeWHrgITTENRrUXGttOMHubtk8MD7Xhvj1AVrgWOmXm3Zo?=
+ =?us-ascii?Q?IhelWA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: aca7599f-8eae-42c2-80f1-08db5207ebfe
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 10:10:18.3162
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: UsfJKcvhcH7DI+26MH07FPIaUg1BkiF78b66jEsN5K8NNWj9qeiCrbuT0H5jA9tMuRqZsNyEfpmWMzI0rP7agBcxXyfedBeX2MtSbPvPAwo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR13MB3848
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/11 15:43, Peter Zijlstra wrote:
-> On Thu, May 11, 2023 at 09:33:37AM +0800, Youling Tang wrote:
+On Tue, May 09, 2023 at 03:34:01PM -0700, Florian Fainelli wrote:
+> A few PHY drivers are currently attempting to not suspend the PHY when
+> Wake-on-LAN is enabled, however that code is not currently executing at
+> all due to an early check in phy_suspend().
 > 
->>>> +void arch_jump_label_transform(struct jump_entry *entry,
->>>> +                   enum jump_label_type type)
->>>> +{
->>>> +    void *addr = (void *)jump_entry_code(entry);
->>>> +    u32 insn;
->>>> +
->>>> +    if (type == JUMP_LABEL_JMP)
->>>
->>> Please use a switch for dealing with enum-typed values.
->>
->> Because the current type only has JUMP_LABEL_NOP and JUMP_LABEL_JMP,
->> using if may be simpler than switch.
+> This prevents PHY drivers from making an appropriate decisions and put
+> the hardware into a low power state if desired.
 > 
-> IIRC we used an enum with descriptive names instead of a boolean because
-> true/false just doesn't tell you much.
+> In order to allow the PHY drivers to opt into getting their ->suspend
+> routine to be called, add a PHY_ALWAYS_CALL_SUSPEND bit which can be
+> set. A boolean that tracks whether the PHY or the attached MAC has
+> Wake-on-LAN enabled is also provided for convenience.
 > 
-> The whole thing fundamentally is a boolean descision though, either
-> you write a JMP or a NOP, jump-labels don't have more options.
+> If phydev::wol_enabled then the PHY shall not prevent its own
+> Wake-on-LAN detection logic from working and shall not prevent the
+> Ethernet MAC from receiving packets for matching.
+> 
+> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
 
-Ah thanks for the background. My previous suggestion is just kinda 
-generally applicable software engineering best practice, so if the 
-actual enum is unlikely to get >2 variants then it should be fine to 
-keep using "if". Youling, feel free to ignore the piece of comment, and 
-sorry for not doing my archaeology beforehand. :)
-
--- 
-WANG "xen0n" Xuerui
-
-Linux/LoongArch mailing list: https://lore.kernel.org/loongarch/
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
