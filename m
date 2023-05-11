@@ -2,125 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC7AB6FEFCA
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 731E06FEFCB
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:20:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237480AbjEKKS0 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 11 May 2023 06:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
+        id S237655AbjEKKUM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 06:20:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231363AbjEKKSY (ORCPT
+        with ESMTP id S231363AbjEKKUI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 06:18:24 -0400
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B991B558F
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:18:23 -0700 (PDT)
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-50a20bfe366so2165914a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:18:23 -0700 (PDT)
+        Thu, 11 May 2023 06:20:08 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047126A78
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:20:07 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id d9443c01a7336-1aae46e62e9so60574925ad.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:20:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683800406; x=1686392406;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=1IdKaYTN4becysX4nA0PefiZtmiomrwgAAThVv5nuQg=;
+        b=sX3ySwisJEvh87zusZ+O3SdXJ2JsGLpzbFc2myV8nmdaDwZABOsxfTJh7jpCggzhJe
+         FbaVzUHxmwfY6K3ewbzytbVBCdD3Nt+d7E2+liLopJ9fBn3WgS9POt+w5wbCg9H0ndT2
+         atXQq243nbpYY+5tK18ISlDvtNbpHCVFN/S7sPoqvvaI9eqAWhIj3XQnkX+NmJPHo05k
+         f6wKisB0qEKT+bIeECoigo7g+TXepTs20kMB4inxuWYvUHqMrRhPLiv0dM3Wf65nS35P
+         RmZd4DL/M7/vlLioGD3VWA0gcfHO1xLMk4UzX5rOzS47NQs/DXRlF+JeaWMRpuyEnbJ/
+         3HFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683800302; x=1686392302;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HP+Cpoo9zLukv11/WFYzra5FPdxL5BNvlBgYeO1J/5A=;
-        b=W4wqrO+Bs+ZWu+lWP1mIuXLuKdBYqpPEAOv1xNY1Jb8b12+mzhk0WEUA98pTQP0xXt
-         pcFL4uMVgrZXJq5khmlRfZk5885X5p00i11ptT8Zp80Rveil0ufv2NCVR9SJtqhLvddD
-         KbqG0D6rQzV0CeG7VDGzfDQyF+9q8nS87Pv6dwbT5uW2s31CWr+b2vnhy/g+PG2ZK/5C
-         lhRYAxwTyOgUm1gMEekI4F6BEIoxFgrE1ZA1daq9wPB+VPuFU0YKLKgYpbGSLHqfH4oT
-         z8Qmy1yleq4IDO0kCfLD+TGvOXR9cpJ4R9IY6Kx7n8gO2CPh7cidcuRS1Ly7yvGFvCv5
-         d9wg==
-X-Gm-Message-State: AC+VfDxJFyIeswoVixxaafQ7cEaeRTdOcYlfr/pXxh+q1lywzhAYP6AL
-        EdY4grHEvwfyIaFTiPYCyuBMlbKbWusbQ+Cqm5o=
-X-Google-Smtp-Source: ACHHUZ7tWAJBsqgFja6XrJ9bgARb539/07MVZjnQjes8mh4VhypFbc8+VVAssxfuxZBJ4jRI5OGxZP1wqEUP4i1TaSk=
-X-Received: by 2002:a17:906:217:b0:965:d0b1:b72f with SMTP id
- 23-20020a170906021700b00965d0b1b72fmr14793312ejd.1.1683800302103; Thu, 11 May
- 2023 03:18:22 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683800406; x=1686392406;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1IdKaYTN4becysX4nA0PefiZtmiomrwgAAThVv5nuQg=;
+        b=JdPohbjmzdSC2oFuFaTTiHJc8QqGFCVdC9WjLGKhrY9rnynV6ZSctFZmiNqH5tB0hi
+         gxmVUhVg2lSVaFlTfVWp5/JZtO/+qcpe9LdUO5VKF6ilLIwgXW2tx4r0Fyb5usuHcSUr
+         +f++/fJk3Oe+ZVu75NjpR5t6MXtBRy8jUbViKoqvqKG4RSEznE5NrPQVwTwWMF1H9tJu
+         WAKPW4QVzO03p6Yps69WiG2n/tFceBZZWjeBz2q9SjtrU7YxI3lWBf2jFD24/ZzETSMS
+         TchJo/bvPJbRn714CzjWgcFgBTK3NJl61Ik+Wxk9PEAQm6CiaYp4tXu2s7njtrVlOUEV
+         3qqw==
+X-Gm-Message-State: AC+VfDxxyagAEMWvmAfz9xtVXzcj+XcwBrVS7rOsmTYyCgCY45Vcq+4q
+        evo/JL7YoqjdfNTYdASlw6oonzx5folQ2ZbY
+X-Google-Smtp-Source: ACHHUZ6JwOr+s4/XyMgloVPyWCUofPJM56cU77Ugo02HdW1uu1jUZtY9mC8r/waaT0D03klAicn6pw==
+X-Received: by 2002:a17:902:dac2:b0:1ac:4d3e:1bf5 with SMTP id q2-20020a170902dac200b001ac4d3e1bf5mr26881570plx.23.1683800406432;
+        Thu, 11 May 2023 03:20:06 -0700 (PDT)
+Received: from localhost.localdomain ([143.92.64.18])
+        by smtp.gmail.com with ESMTPSA id u11-20020a170902a60b00b001ab1a737c8dsm5451110plq.285.2023.05.11.03.20.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 03:20:06 -0700 (PDT)
+From:   Chunguang Xu <brookxu.cn@gmail.com>
+X-Google-Original-From: Chunguang Xu <chunguang.xu@shopee.com>
+To:     kbusch@kernel.org, axboe@fb.com, hch@lst.de, sagi@grimberg.me
+Cc:     linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] nvme: donot try to resubmit a canceled IO
+Date:   Thu, 11 May 2023 18:20:03 +0800
+Message-Id: <20230511102003.398070-1-chunguang.xu@shopee.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230511073428.10264-1-u.kleine-koenig@pengutronix.de>
-In-Reply-To: <20230511073428.10264-1-u.kleine-koenig@pengutronix.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 11 May 2023 12:18:09 +0200
-Message-ID: <CAJZ5v0gNPt=rq+pQtmoGL5nxzDQboOK4d6h7=NoY=LueVhZjAQ@mail.gmail.com>
-Subject: Re: [PATCH] driver core: Call pm_runtime_put_sync() only after device_remove()
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 9:34 AM Uwe Kleine-König
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> Many drivers that use runtime PM call pm_runtime_get_sync() or one of
-> its variants in their remove callback. So calling pm_runtime_put_sync()
-> directly before calling the remove callback results (under some
-> conditions) in the driver's suspend routine being called just to resume
-> it again afterwards.
->
-> So delay the pm_runtime_put_sync() call until after device_remove().
->
-> Confirmed on a stm32mp157a that doing
->
->         echo 4400e000.can > /sys/bus/platform/drivers/m_can_platform/unbind
->
-> (starting with a runtime-pm suspended 4400e000.can) results in one call
-> less of m_can_runtime_resume() and m_can_runtime_suspend() each after
-> this change was applied.
->
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+From: "chunguang.xu" <chunguang.xu@shopee.com>
 
-I'm not against this change, although I kind of expect it to trigger
-some fallout that will need to be addressed.  So caveat emtor.
+Now if NVMe over rdma and NVMe over TCP module detected
+controller is INACTIVE on the IO timeout path, it will
+try to call nvmf_complete_timed_out_request() to
+terminated this IO. But nvme_complete_rq() will continue
+to retry this IO, as the request_queue is quiescing at
+this time, if the target cannot connected or the host
+actively executes disconnect, it will cause this IO hang
+in the hctx dispatch queue and cannot be processed,
+resulting in hung task, the calltrace as followed:
 
-Anyway
+[ 1575.570245] INFO: task kworker/u129:6:758 blocked for more than 966 seconds.
+[ 1575.577829]       Tainted: G           OE     5.4.0-77-shopee-generic #86+5
+[ 1575.585323] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+[ 1575.593670] kworker/u129:6  D    0   758      2 0x80004000
+[ 1575.593681] Workqueue: nvme-wq nvme_scan_work [nvme_core]
+[ 1575.593683] Call Trace:
+[ 1575.593689]  __schedule+0x2ee/0x750
+[ 1575.593691]  schedule+0x42/0xb0
+[ 1575.593693]  io_schedule+0x16/0x40
+[ 1575.593696]  do_read_cache_page+0x438/0x840
+[ 1575.593698]  ? __switch_to_asm+0x40/0x70
+[ 1575.593700]  ? file_fdatawait_range+0x30/0x30
+[ 1575.593702]  read_cache_page+0x12/0x20
+[ 1575.593704]  read_dev_sector+0x27/0xd0
+[ 1575.593705]  read_lba+0xbd/0x220
+[ 1575.593707]  ? kmem_cache_alloc_trace+0x1b0/0x240
+[ 1575.593708]  efi_partition+0x1e0/0x700
+[ 1575.593710]  ? vsnprintf+0x39e/0x4e0
+[ 1575.593712]  ? snprintf+0x49/0x60
+[ 1575.593714]  check_partition+0x154/0x250
+[ 1575.593715]  rescan_partitions+0xae/0x280
+[ 1575.593718]  bdev_disk_changed+0x5f/0x70
+[ 1575.593719]  __blkdev_get+0x3e3/0x550
+[ 1575.593720]  blkdev_get+0x3d/0x150
+[ 1575.593722]  __device_add_disk+0x329/0x480
+[ 1575.593723]  device_add_disk+0x13/0x20
+[ 1575.593727]  nvme_mpath_set_live+0x125/0x130 [nvme_core]
+[ 1575.593731]  nvme_mpath_add_disk+0x11e/0x130 [nvme_core]
+[ 1575.593734]  nvme_validate_ns+0x6a8/0x9d0 [nvme_core]
+[ 1575.593736]  ? __switch_to_asm+0x40/0x70
+[ 1575.593739]  nvme_scan_work+0x1e0/0x350 [nvme_core]
+[ 1575.593743]  process_one_work+0x1eb/0x3b0
+[ 1575.593745]  worker_thread+0x4d/0x400
+[ 1575.593747]  kthread+0x104/0x140
+[ 1575.593748]  ? process_one_work+0x3b0/0x3b0
+[ 1575.593750]  ? kthread_park+0x90/0x90
+[ 1575.593751]  ret_from_fork+0x1f/0x40
 
-Reviewed-by: Rafael J. Wysocki <rafael@kernel.org>
+This issue seems not fixed on lastes kernel, try to fix it here.
 
-> ---
-> Hello,
->
-> side note: To test I added a dev_info() to m_can_runtime_resume() and
-> m_can_runtime_suspend(). I was surprised that directly after boot I had:
->
->         # dmesg | grep -E '4400e000.can: m_can_runtime_(resume|suspend)' | wc -l
->         15
->
-> I didn't go down that rabbit hole to debug this.
->
-> Best regards
-> Uwe
->
->  drivers/base/dd.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
-> index 9c09ca5c4ab6..d97f6b1486d1 100644
-> --- a/drivers/base/dd.c
-> +++ b/drivers/base/dd.c
-> @@ -1267,10 +1267,10 @@ static void __device_release_driver(struct device *dev, struct device *parent)
->
->                 bus_notify(dev, BUS_NOTIFY_UNBIND_DRIVER);
->
-> -               pm_runtime_put_sync(dev);
-> -
->                 device_remove(dev);
->
-> +               pm_runtime_put_sync(dev);
-> +
->                 if (dev->bus && dev->bus->dma_cleanup)
->                         dev->bus->dma_cleanup(dev);
->
-> --
-> 2.39.2
->
+Signed-off-by: chunguang.xu <chunguang.xu@shopee.com>
+---
+ drivers/nvme/host/core.c    | 3 +++
+ drivers/nvme/host/fabrics.h | 1 +
+ 2 files changed, 4 insertions(+)
+
+diff --git a/drivers/nvme/host/core.c b/drivers/nvme/host/core.c
+index ccb6eb1282f8..bf9273081595 100644
+--- a/drivers/nvme/host/core.c
++++ b/drivers/nvme/host/core.c
+@@ -349,6 +349,9 @@ static inline enum nvme_disposition nvme_decide_disposition(struct request *req)
+ 	if (likely(nvme_req(req)->status == 0))
+ 		return COMPLETE;
+ 
++	if (nvme_req(req)->flags & NVME_REQ_CANCELLED)
++		return COMPLETE;
++
+ 	if ((nvme_req(req)->status & 0x7ff) == NVME_SC_AUTH_REQUIRED)
+ 		return AUTHENTICATE;
+ 
+diff --git a/drivers/nvme/host/fabrics.h b/drivers/nvme/host/fabrics.h
+index dcac3df8a5f7..40a5d6659af0 100644
+--- a/drivers/nvme/host/fabrics.h
++++ b/drivers/nvme/host/fabrics.h
+@@ -199,6 +199,7 @@ static inline void nvmf_complete_timed_out_request(struct request *rq)
+ {
+ 	if (blk_mq_request_started(rq) && !blk_mq_request_completed(rq)) {
+ 		nvme_req(rq)->status = NVME_SC_HOST_ABORTED_CMD;
++		nvme_req(rq)->flags |= NVME_REQ_CANCELLED;
+ 		blk_mq_complete_request(rq);
+ 	}
+ }
+-- 
+2.25.1
+
