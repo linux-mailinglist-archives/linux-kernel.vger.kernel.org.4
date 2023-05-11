@@ -2,285 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78BDF6FEEEF
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:33:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9B5A6FEEF5
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:35:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237712AbjEKJd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 05:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54398 "EHLO
+        id S237730AbjEKJfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 05:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237706AbjEKJdH (ORCPT
+        with ESMTP id S237725AbjEKJfL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 05:33:07 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA559EE4;
-        Thu, 11 May 2023 02:32:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683797576; x=1715333576;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=Im5pkr2QRlb8LR+SYpjjhDpJdt78iPfURYZcShZDMQg=;
-  b=lKtiODNvOm4/R4EsWR8dWM/mWFmJkw/9GKFKU+b1y1HmVqXN9mjSu4TU
-   UcGg8VPxXD/gf4cdy9mN0woFMMO28PAoY4MKz1wXP+cWGbv9igW75N7h5
-   K0ouQU5OPJYlpI+3TFSgPAW7Po5g1zzY6PU21b+PDDjbgWhao+zRtSIhE
-   IO2U3wteCG+eCDIMPmTn/6YR6m8J+I7cAEAU8MdDlCgI4SxwZ0bNoBmGG
-   XMcHfQkKGkQWLcKwrzznk8EUQq1ViC8wL9ZT6RxO7qtucMZj+2O6Anrh1
-   htUs+FK9+gRpMaHvMDa+aEcDMxlfBy2cACg4WpguigJPBn+SpHbiDe9AL
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="413778616"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="413778616"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 02:32:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="873902817"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="873902817"
-Received: from jsanche3-mobl1.ger.corp.intel.com ([10.252.39.112])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 02:32:53 -0700
-Date:   Thu, 11 May 2023 12:32:51 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Jorge Lopez <jorgealtxwork@gmail.com>
-cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, thomas@t-8ch.de
-Subject: Re: [PATCH v12 11/13] HP BIOSCFG driver - surestart-attributes
-In-Reply-To: <CAOOmCE_dRivApf46KO1Cq-vHGsHVXNVCqbqF2NV4Y6SVpYx6hA@mail.gmail.com>
-Message-ID: <79db2a99-5cd7-19c0-212d-9e28869a6a18@linux.intel.com>
-References: <20230505220043.39036-1-jorge.lopez2@hp.com> <20230505220043.39036-12-jorge.lopez2@hp.com> <ef445e78-5751-bd8f-44ce-d9beaebaac6@linux.intel.com> <CAOOmCE_dRivApf46KO1Cq-vHGsHVXNVCqbqF2NV4Y6SVpYx6hA@mail.gmail.com>
+        Thu, 11 May 2023 05:35:11 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E72E93F8
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:34:45 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-9659443fb56so1300716266b.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:34:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683797684; x=1686389684;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ex/aKjn90EFJWYDLrPJvxbqGHEj9FjzjYBAyGP2XVQo=;
+        b=Asx/w4Edt7+dgdf5Ppv3yBqkvWO6IbtpteydOqqall+rPi2Ep/l/j3tc4P3u6731kP
+         1937bl7xi69PCz8qKjEZF8oPS00d6FF4syxY3CJjh8xt/V1ZxHooU43MTMwSKMPJSfA7
+         4NmcCNwbmLc/+QyFXXFZeuuMJkEmrvcN351F72xRJv6cW2Fa8Zf8fGQ/ekbjq616OJuO
+         QnmQrqSnpBE5kjkrlESag4ORK15TmocBh6zP05JHs/7zt9Pd1JzNLISgtlVr+fRjem3l
+         KmhozfPNr1jznI3p2Q8rxDZNbWRPZgblot04t8lBnbpRQbMLegNJQPaTyySPW+zLcW4d
+         piOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683797684; x=1686389684;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ex/aKjn90EFJWYDLrPJvxbqGHEj9FjzjYBAyGP2XVQo=;
+        b=DpOSoGbQRZ8dPQAbNIjTEFqlJq2dxeptLCKVot04UX2xb2E9aD+31YDOMRZxeYJ7Gq
+         mXmkLJTDpbtxuSCQXyYqtCpoqg09wzl9dWgNrUygNyvHBc9mcGVbsFKYbgYeyokNHSrM
+         tK+kuYZLbnCTPjsDQcqNKCocuZDOg91APb1NwPGPGrMj+rcQTtLSjyggJN7QBuxF/0sE
+         632im9b1rkUnbMECgmZ2+zzbAcXpSHd5Xy54ZuvWHtZJGkRnliEfdkRrEzZDgeITXmTK
+         I99fAOMZ4jxHJF5H8Ys7eGZm6X9jrdYp5547fBEIPDNhznouBsS3SnzELz5HUEVGcLk8
+         O+ZQ==
+X-Gm-Message-State: AC+VfDy7oaYjRerJQMLmjV/uO2rkTJ+2H+DLqZER2zPAtqwHhmPO1pyU
+        M+BDAtOvGnB6/vTqMYhYQ4z3nQ==
+X-Google-Smtp-Source: ACHHUZ4qwUJIawM1CqXQt5W8mKyqouVMxGYUzhR1RJbAvGXoVhZeB00zYWSWejWEeEdo6g2JBMNQtA==
+X-Received: by 2002:a17:907:6e9e:b0:931:ad32:79ed with SMTP id sh30-20020a1709076e9e00b00931ad3279edmr22568324ejc.12.1683797684074;
+        Thu, 11 May 2023 02:34:44 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:7e61:f14a:c3a4:809e? ([2a02:810d:15c0:828:7e61:f14a:c3a4:809e])
+        by smtp.gmail.com with ESMTPSA id k21-20020a170906971500b00965ffb8407asm3708531ejx.87.2023.05.11.02.34.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 02:34:43 -0700 (PDT)
+Message-ID: <ca8b31f5-ce4e-d7b1-d077-3684862083bf@linaro.org>
+Date:   Thu, 11 May 2023 11:34:42 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-624878464-1683797575=:1900"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V2] dt-bindings: usb: dwc3: Add interrupt-names property
+ support for wakeup interrupt
+Content-Language: en-US
+To:     Piyush Mehta <piyush.mehta@amd.com>, gregkh@linuxfoundation.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        conor+dt@kernel.org, balbi@kernel.org, michal.simek@xilinx.com
+Cc:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, michal.simek@amd.com,
+        siva.durga.prasad.paladugu@amd.com, git@amd.com
+References: <20230511072154.2030703-1-piyush.mehta@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230511072154.2030703-1-piyush.mehta@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-624878464-1683797575=:1900
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-On Wed, 10 May 2023, Jorge Lopez wrote:
-
-> On Tue, May 9, 2023 at 8:57 AM Ilpo Järvinen
-> <ilpo.jarvinen@linux.intel.com> wrote:
-> >
-> > On Fri, 5 May 2023, Jorge Lopez wrote:
-> >
-> > > HP BIOS Configuration driver purpose is to provide a driver supporting
-> > > the latest sysfs class firmware attributes framework allowing the user
-> > > to change BIOS settings and security solutions on HP Inc.’s commercial
-> > > notebooks.
-> > >
-> > > Many features of HP Commercial notebooks can be managed using Windows
-> > > Management Instrumentation (WMI). WMI is an implementation of Web-Based
-> > > Enterprise Management (WBEM) that provides a standards-based interface
-> > > for changing and monitoring system settings. HP BIOSCFG driver provides
-> > > a native Linux solution and the exposed features facilitates the
-> > > migration to Linux environments.
-> > >
-> > > The Linux security features to be provided in hp-bioscfg driver enables
-> > > managing the BIOS settings and security solutions via sysfs, a virtual
-> > > filesystem that can be used by user-mode applications. The new
-> > > documentation cover HP-specific firmware sysfs attributes such Secure
-> > > Platform Management and Sure Start. Each section provides security
-> > > feature description and identifies sysfs directories and files exposed
-> > > by the driver.
-> > >
-> > > Many HP Commercial notebooks include a feature called Secure Platform
-> > > Management (SPM), which replaces older password-based BIOS settings
-> > > management with public key cryptography. PC secure product management
-> > > begins when a target system is provisioned with cryptographic keys
-> > > that are used to ensure the integrity of communications between system
-> > > management utilities and the BIOS.
-> > >
-> > > HP Commercial notebooks have several BIOS settings that control its
-> > > behaviour and capabilities, many of which are related to security.
-> > > To prevent unauthorized changes to these settings, the system can
-> > > be configured to use a cryptographic signature-based authorization
-> > > string that the BIOS will use to verify authorization to modify the
-> > > setting.
-> > >
-> > > Linux Security components are under development and not published yet.
-> > > The only linux component is the driver (hp bioscfg) at this time.
-> > > Other published security components are under Windows.
-> > >
-> > > Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
-> > >
-> > > ---
-> > > Based on the latest platform-drivers-x86.git/for-next
-> > > ---
-
-> > > diff --git a/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c b/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
-> > > new file mode 100644
-> > > index 000000000000..b627c324f6a6
-> > > --- /dev/null
-> > > +++ b/drivers/platform/x86/hp/hp-bioscfg/surestart-attributes.c
-> > > @@ -0,0 +1,133 @@
-> > > +// SPDX-License-Identifier: GPL-2.0
-> > > +/*
-> > > + * Functions corresponding to sure start object type attributes under
-> > > + * BIOS for use with hp-bioscfg driver
-> > > + *
-> > > + *  Copyright (c) 2022 HP Development Company, L.P.
-> > > + */
-> > > +
-> > > +#include "bioscfg.h"
-> > > +#include <linux/types.h>
-> > > +
-> > > +/* Maximum number of log entries supported when log entry size is 16
-> > > + * bytes.  This value is calculated by dividing 4096 (page size) by
-> > > + * log entry size.
-> > > + */
-> > > +#define LOG_MAX_ENTRIES              254
-> > > +
-> > > +/*
-> > > + * Current Log entry size.  This value size will change in the
-> > > + * future. The driver reads a total of 128 bytes for each log entry
-> > > + * provided by BIOS but only the first 16 bytes are used/read.
-> > > + */
-> > > +#define LOG_ENTRY_SIZE               16
-> > > +
-> > > +/*
-> > > + * audit_log_entry_count_show - Reports the number of
-> > > + *                           existing audit log entries available
-> > > + *                           to be read
-> > > + */
-> > > +static ssize_t audit_log_entry_count_show(struct kobject *kobj,
-> > > +                                       struct kobj_attribute *attr, char *buf)
-> > > +{
-> > > +     int ret;
-> > > +     u32 count = 0;
-> > > +
-> > > +     ret = hp_wmi_perform_query(HPWMI_SURESTART_GET_LOG_COUNT,
-> > > +                                HPWMI_SURESTART,
-> > > +                                &count, 1, sizeof(count));
-> > > +
-> >
-> > Extra newline.
-> Done!
-> >
-> > > +     if (ret < 0)
-> > > +             return ret;
-> > > +
-> > > +     return sysfs_emit(buf, "%d,%d,%d\n", count, LOG_ENTRY_SIZE,
-> > > +                       LOG_MAX_ENTRIES);
-> >
-> > Why 3 values instead of 1?
-> This version of BIOS only returns the number of audit log events available.
-> The other two values are the current log entry size which today is
-> hardcoded.  This will change in future when BIOS returns the log entry
-> size.
-
-And you cannot provide the others in separate sysfs files?
-
-> > > +}
-> > > +
-> > > +/*
-> > > + * audit_log_entries_show() - Return all entries found in log file
-> > > + */
-> > > +static ssize_t audit_log_entries_show(struct kobject *kobj,
-> > > +                                   struct kobj_attribute *attr, char *buf)
-> > > +{
-> > > +     int ret;
-> > > +     int i;
-> > > +     u32 count = 0;
-> > > +     u8 audit_log_buffer[128];
-> > > +
-> > > +     // Get the number of event logs
-> > > +     ret = hp_wmi_perform_query(HPWMI_SURESTART_GET_LOG_COUNT,
-> > > +                                HPWMI_SURESTART,
-> > > +                                &count, 1, sizeof(count));
-> > > +
-> >
-> > Extra newline.
-> Done!
-> >
-> > > +     if (ret < 0)
-> > > +             return ret;
-> > > +
-> > > +     /*
-> > > +      * The show() api will not work if the audit logs ever go
-> > > +      *  beyond 4KB
-> >
-> > Extra space.
-> Done!
-> >
-> > > +      */
-> > > +     if (count * LOG_ENTRY_SIZE > PAGE_SIZE)
-> > > +             return -EIO;
-> > > +
-> > > +     /*
-> > > +      * We are guaranteed the buffer is 4KB so today all the event
-> > > +      * logs will fit
-> > > +      */
-> > > +     for (i = 0; i < count; i++) {
-> > > +             audit_log_buffer[0] = (i + 1);
-> >
-> > Extra parenthesis.
-> Done!
-> >
-> > > +
-> > > +             /*
-> > > +              * read audit log entry at a time. 'buf' input value
-> > > +              * provides  the audit log entry to be read.  On
-> >
-> > Extra spaces.
-> Done!
-> >
-> > > +              * input, Byte 0 = Audit Log entry number from
-> > > +              * beginning (1..254)
-> > > +              * Entry number 1 is the newest entry whereas the
-> > > +              * highest entry number (number of entries) is the
-> > > +              * oldest entry.
-> > > +              */
-> > > +             ret = hp_wmi_perform_query(HPWMI_SURESTART_GET_LOG,
-> > > +                                        HPWMI_SURESTART,
-> > > +                                        audit_log_buffer, 1, 128);
-> > > +
-> > > +             if (ret >= 0 && (LOG_ENTRY_SIZE * i) < PAGE_SIZE) {
-> >
-> > Can the second condition ever fail?
-> >
-> Only in the event BIOS data is corrupted.
-
-i runs from 0 to count - 1 and you prevented count * LOG_ENTRY_SIZE > 
-PAGE_SIZE above. So what the BIOS data has to do with that?
-
-> > > +                     memcpy(buf, audit_log_buffer, LOG_ENTRY_SIZE);
-> > > +                     buf += LOG_ENTRY_SIZE;
-> > > +             } else {
-> > > +                     /*
-> > > +                      * Encountered a failure while reading
-> > > +                      * individual logs. Only a partial list of
-> > > +                      * audit log will be returned.
-> > > +                      */
-> > > +                     count = i + 1;
-> > > +                     break;
-> > > +             }
-> >
-> > Reverse order, do error handling with break first.
-> Done!
-> >
-> > Why not return i * LOG_ENTRY_SIZE directly (or at the end), no need to
-> > tweak count?
+On 11/05/2023 09:21, Piyush Mehta wrote:
+> The hibernation feature enabled for Xilinx Versal NET SoC in DWC3 IP.
+> As the DWC3 IP supports the hibernation feature, to handle the wakeup
+> or hibernation interrupt, add host mode "wakeup" interrupt-names
+> optional property in the binding schema to capture remote-wakeup and
+> connect/ disconnect event in the hibernation state.
 > 
-> Done!
-> >
-> > > +     }
-> > > +
-> > > +     return count * LOG_ENTRY_SIZE;
-> > > +}
+> Signed-off-by: Piyush Mehta <piyush.mehta@amd.com>
+> ---
+> Change in V2:
+> -  Addressed ROB review comments
+>  - Updated name of interrupt-names property with "wakeup"
+>  - Move interrupt-names property from dwc3-xilinx core to dwc3 core.
+> 
+> Link: https://lore.kernel.org/all/CAL_JsqK6_7XD7+w+EQvPPmbmSOpfo3JDb0xDN4StuHUm1kgchw@mail.gmail.com/
+> ---
+>  Documentation/devicetree/bindings/usb/snps,dwc3.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> index 50edc4da780e..db512769bd80 100644
+> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> @@ -53,6 +53,8 @@ properties:
+>        - const: dwc_usb3
+>        - items:
+>            enum: [host, peripheral, otg]
+> +      - items:
+> +          enum: [dwc_usb3, otg, wakeup]
 
+You didn't add only "wakeup" but also dwc_usb3 which does not look
+correct here as it is common interrupt. The change does not match commit
+msg and I don't know what you actually want to achieve.
 
--- 
- i.
+Best regards,
+Krzysztof
 
---8323329-624878464-1683797575=:1900--
