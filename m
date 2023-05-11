@@ -2,86 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 150EA6FF049
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 186BD6FF048
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:57:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237917AbjEKK5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 06:57:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43714 "EHLO
+        id S237773AbjEKK5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 06:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237751AbjEKK5R (ORCPT
+        with ESMTP id S237261AbjEKK5R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 11 May 2023 06:57:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D227297
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:56:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683802588;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=tJZQ2TQo82z6Oemv+3a/ZReUoAgQPxK5a+WyIZI499E=;
-        b=YVv34xLd9inl1TZ/tyA21PRYg6/RHz0RhC+EjHQhIdD9PeIrVPEsEk7Prgdegjkw3jUVmJ
-        AD5r8nEDXbmVplrxXkDP1SxtYKLakTY/Fnl/mjJovYf9F6JTw5ValYC4RE+03A33Azkym7
-        aiqYbjU1KdZfL7f4ZzB8TS1B70/yrHQ=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-583-k13SAWWTM_alWDS9fMILHQ-1; Thu, 11 May 2023 06:56:26 -0400
-X-MC-Unique: k13SAWWTM_alWDS9fMILHQ-1
-Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f4245ffbb4so26788985e9.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:56:26 -0700 (PDT)
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 789D6C1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:57:15 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id 5b1f17b1804b1-3f42d937d61so25751925e9.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:57:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683802634; x=1686394634;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=riHRWt/DT+R28lyCQk8l026iqpHj8sFQPrXZkKMI/V8=;
+        b=NlqxWhQSqp4pPP59kmIiP6KPGwkBx08LzsGm5JsdqN3td5dPO+XFwobTm0PqtfPBHg
+         4l6907DDc2X68t7KDWg8o8avYdocnLTiKS6QPBP5Vd5mnExC95O0xoSVoyQEdhi39CC8
+         o0WYpK7xCePuEnZUHdcVc1vjT7t79VXMTMiEvkl8uYN5MFvh/Wz/JHhbqQHhV32HJRrC
+         i3u+iWOZApClFv5zvbFR+lPb7iu85MysO+nTlF+DnoRrcRbzeKclryegFYCdS3eL0VZl
+         vG/6/Me2bbPRQeqp2s1iza9kYcHtnxMFOVFenwm8YNnuAGDOwPUwTRaub4LSlf5sM+gF
+         xhcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683802585; x=1686394585;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tJZQ2TQo82z6Oemv+3a/ZReUoAgQPxK5a+WyIZI499E=;
-        b=RSwPb3WTQguMY50+Mj79el9s8MEYxrcQTp6j/GHpY+glXGNg00KuOrxVjlzSPxL2kx
-         Ii/5yFPaR1S2D6E+YR1XlqI1SuZG9VXTa86tvg+fU21Kv9Hsw8SNgATNncj8oSryTNG7
-         P/yEr703BXzgJ4Hs/l9kzamgYKXq82xV8TxvFu8O/M3pcYORvh1SpiC5P9SwjVZUe7gg
-         z9ZPxcsG0UNWeWgU6TwLKzguVyshEkvoO6fOF62K3jBVNXMMZb7XZdYUyDToTuAOFmr7
-         xc2vYJNGFOxdedRiPQtGQwkyAHT+0jgqqY4aeqwJ2DR7N0y95r1nOcQ58QrlqLUfwcM0
-         dAmg==
-X-Gm-Message-State: AC+VfDz8Q+nLr7eJfxACeGfbO0lKYNJV5XnNP0uIf0dtZuibpQgVwuFS
-        SyPxqqhAJnALMaWJUjT9UcS7/5xVIXTQJc0/4mKzZPc8lbEMbqfT4OD73HQHKrG/Cyf2JX+jCNq
-        zi4g7S9qQ/Gm5X/KmpSPB1XfxCfuDBfko
-X-Received: by 2002:a7b:cc13:0:b0:3f3:468d:d017 with SMTP id f19-20020a7bcc13000000b003f3468dd017mr15288296wmh.6.1683802585062;
-        Thu, 11 May 2023 03:56:25 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4H/cgL05AV28bp78/4RrLkVyRmBQBkCfDxojUE6Q4dcoXKlU4gD3MeQOb/1rNztmQYtxnPcQ==
-X-Received: by 2002:a7b:cc13:0:b0:3f3:468d:d017 with SMTP id f19-20020a7bcc13000000b003f3468dd017mr15288266wmh.6.1683802584736;
-        Thu, 11 May 2023 03:56:24 -0700 (PDT)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id l4-20020a5d4104000000b00304832cd960sm19965543wrp.10.2023.05.11.03.56.23
+        d=1e100.net; s=20221208; t=1683802634; x=1686394634;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=riHRWt/DT+R28lyCQk8l026iqpHj8sFQPrXZkKMI/V8=;
+        b=R/vnsIWgEDOSKW58omqlJhJ/Lork6a1BAaAuVwaTj51EuI/wx23GBGT7iJ5jk5PjJh
+         lPumafzkyOhrpmnlN/wfcBwAD4sNSHsjHo0bq2ppEmFCNJ1phsEFg0c6JOjQg917xjpy
+         BzSlYeSbLnvvX4zatoF1AvlyX0io8Y8pY6ocTIWawTTXGRyGZifqXfXwJx0RvHFcZW/9
+         +AFREaD9EG1yU0E9/7mxlMYIjeDtlUyTfjRjHPN5pcSchJ28+Qk4jmvLFik+sefUbIW7
+         WHXZu3cEymVCwrTeJta3gNrBgRGERG3tGIw4/DE6+7ZeLHVbNDb9aF21q4cnvX2xaGcA
+         6mdQ==
+X-Gm-Message-State: AC+VfDwRHpDc/Voxi36m2yn1dY7uXhg7F4s4URDLFFXZ8lhgpxZBRQ2m
+        0EKSn0b3B4Z14O8tSDKKEZ2n1w==
+X-Google-Smtp-Source: ACHHUZ4IgK5mNu3z2Q2O5fEX2GY1HT2CzWIHuj09gR8HPhiprguCuf6QlexEz5Hz9AoAYzkpp0ixNQ==
+X-Received: by 2002:a05:600c:3646:b0:3f4:2215:6d6 with SMTP id y6-20020a05600c364600b003f4221506d6mr12162026wmq.33.1683802634018;
+        Thu, 11 May 2023 03:57:14 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id y18-20020a5d6212000000b0030796e103a1sm11826810wru.5.2023.05.11.03.57.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 03:56:24 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Leonardo Bras <leobras@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Leonardo Bras <leobras@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Juergen Gross <jgross@suse.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Nadav Amit <namit@vmware.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH v3 1/1] trace,smp: Add tracepoints around remotelly
- called functions
-In-Reply-To: <20230510230128.150384-1-leobras@redhat.com>
-References: <20230510230128.150384-1-leobras@redhat.com>
-Date:   Thu, 11 May 2023 11:56:23 +0100
-Message-ID: <xhsmhsfc3i1bc.mognet@vschneid.remote.csb>
+        Thu, 11 May 2023 03:57:12 -0700 (PDT)
+Date:   Thu, 11 May 2023 13:57:07 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     oe-kbuild@lists.linux.dev, Wenchao Hao <haowenchao2@huawei.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Douglas Gilbert <dgilbert@interlog.com>,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linfeilong@huawei.com, louhongxiang@huawei.com,
+        Wenchao Hao <haowenchao2@huawei.com>
+Subject: Re: [PATCH v2 2/6] scsi:scsi_debug: Add interface to manage single
+ device's error inject
+Message-ID: <5f8d3e23-9ac7-4ed2-bf5b-1d247109869a@kili.mountain>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230428013320.347050-3-haowenchao2@huawei.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,159 +76,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/23 20:01, Leonardo Bras wrote:
-> When running RT workloads in isolated CPUs, many cases of deadline misses
-> are caused by remote CPU requests such as smp_call_function*().
->
-> For those cases, having the names of those functions running around the
-> deadline miss moment could help (a lot) finding a target for the next
-> improvements.
->
-> Add tracepoints for acquiring the function name & csd before entry and
-> after returning from the remote-cpu requested function.
->
-> Also, add tracepoints on the remote cpus requesting them.
+Hi Wenchao,
 
-Per the v1 thread, I got some context as to why we want this, but this
-changelog is quite sparse on the subject. How about:
+kernel test robot noticed the following build warnings:
 
-"""
-The recently added ipi_send_{cpu,cpumask} tracepoints allow finding sources
-of IPIs targeting CPUs running latency-sensitive applications.
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-For NOHZ_FULL CPUs, all IPIs are interference, and those tracepoints are
-sufficient to find them and work on getting rid of them. In some setups
-however, not *all* IPIs are to be suppressed, but long-running IPI
-callbacks can still be problematic.
+url:    https://github.com/intel-lab-lkp/linux/commits/Wenchao-Hao/scsi-scsi_debug-create-scsi_debug-directory-in-the-debugfs-filesystem/20230427-201534
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
+patch link:    https://lore.kernel.org/r/20230428013320.347050-3-haowenchao2%40huawei.com
+patch subject: [PATCH v2 2/6] scsi:scsi_debug: Add interface to manage single device's error inject
+config: mips-randconfig-m041-20230509 (https://download.01.org/0day-ci/archive/20230511/202305110949.SGOuSCr6-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 12.1.0
 
-Add a pair of tracepoints to mark the start and end of processing a CSD IPI
-callback, similar to what exists for softirq, workqueue or timer callbacks.
-"""
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202305110949.SGOuSCr6-lkp@intel.com/
 
-And you can probably split the csd_queue_cpu TP into a separate commit,
-with something along the lines of:
+smatch warnings:
+drivers/scsi/scsi_debug.c:5359 scsi_debug_slave_destroy() warn: variable dereferenced before check 'devip' (see line 5358)
 
-"""
-Add a tracepoint for when a CSD is queued to a remote CPU's
-call_single_queue. This allows finding exactly which CPU queued a given CSD
-when looking at a csd_function_{entry,exit} event, and also enables us to
-accurately measure IPI delivery time with e.g. a synthetic event:
+vim +/devip +5359 drivers/scsi/scsi_debug.c
 
-  $ echo 'hist:keys=cpu,csd.hex:ts=common_timestamp.usecs' >\
-      /sys/kernel/tracing/events/smp/csd_queue_cpu/trigger
-  $ echo 'csd_latency unsigned int dst_cpu; unsigned long csd; u64 time' >\
-      /sys/kernel/tracing/synthetic_events
-  $ echo \
-  'hist:keys=common_cpu,csd.hex:'\
-  'time=common_timestamp.usecs-$ts:'\
-  'onmatch(smp.csd_queue_cpu).trace(csd_latency,common_cpu,csd,$time)' >\
-      /sys/kernel/tracing/events/smp/csd_function_entry/trigger
+8dea0d02f8bb71 FUJITA Tomonori 2008-03-30  5349  static void scsi_debug_slave_destroy(struct scsi_device *sdp)
+8dea0d02f8bb71 FUJITA Tomonori 2008-03-30  5350  {
+8dea0d02f8bb71 FUJITA Tomonori 2008-03-30  5351  	struct sdebug_dev_info *devip =
+8dea0d02f8bb71 FUJITA Tomonori 2008-03-30  5352  		(struct sdebug_dev_info *)sdp->hostdata;
+a34c4e98367965 FUJITA Tomonori 2008-03-25  5353  
+773642d95b8220 Douglas Gilbert 2016-04-25  5354  	if (sdebug_verbose)
+c1287970f4847a Tomas Winkler   2015-07-28  5355  		pr_info("slave_destroy <%u %u %u %llu>\n",
+8dea0d02f8bb71 FUJITA Tomonori 2008-03-30  5356  		       sdp->host->host_no, sdp->channel, sdp->id, sdp->lun);
+46ab9018f5b07d Wenchao Hao     2023-04-28  5357  
+46ab9018f5b07d Wenchao Hao     2023-04-28 @5358  	debugfs_remove(devip->debugfs_entry);
+                                                                       ^^^^^^^^^^^^^^^^^^^^
+Dereference
 
-  $ trace-cmd record -e 'synthetic:csd_latency' hackbench
-  $ trace-cmd report
-  <...>-467   [001]    21.824263: csd_queue_cpu:        cpu=0 callsite=try_to_wake_up+0x2ea func=sched_ttwu_pending csd=0xffff8880076148b8
-  <...>-467   [001]    21.824280: ipi_send_cpu:         cpu=0 callsite=try_to_wake_up+0x2ea callback=generic_smp_call_function_single_interrupt+0x0
-  <...>-489   [000]    21.824299: csd_function_entry:   func=sched_ttwu_pending csd=0xffff8880076148b8
-  <...>-489   [000]    21.824320: csd_latency:          dst_cpu=0, csd=18446612682193848504, time=36
-"""
+8dea0d02f8bb71 FUJITA Tomonori 2008-03-30 @5359  	if (devip) {
+                                                            ^^^^^
+Checked too late.
 
->
-> Signed-off-by: Leonardo Bras <leobras@redhat.com>
+25985edcedea63 Lucas De Marchi 2011-03-30  5360  		/* make this slot available for re-use */
+c2248fc974df7b Douglas Gilbert 2014-11-24  5361  		devip->used = false;
+8dea0d02f8bb71 FUJITA Tomonori 2008-03-30  5362  		sdp->hostdata = NULL;
+8dea0d02f8bb71 FUJITA Tomonori 2008-03-30  5363  	}
+8dea0d02f8bb71 FUJITA Tomonori 2008-03-30  5364  }
 
-Overall I like the CSD vs IPI split, it's a saner approach than logging it
-all as IPIs, even if it does generate more events as we have to emit an
-event for every csd queued (i.e. no _cpumask() variant is possible).
-
-Some nitpicks below, and one other thing: are we happy with the smp event
-namespace, and with the new TP names? Should the namespace be csd instead,
-to match the trace_<namespace>_* nomenclature?
-
-> ---
->
-> Changes since RFCv2:
-> - Fixed some spacing issues and trace calls
->
-> Changes since RFCv1:
-> - Implemented trace_csd_queue_cpu() as suggested by Valentin Schneider
-> - Using EVENT_CLASS in order to avoid duplication
-> - Introduced new helper: csd_do_func()
-> - Name change from smp_call_function_* to csd_function_*
-> - Rebased on top of torvalds/master
->
->  include/trace/events/smp.h | 72 ++++++++++++++++++++++++++++++++++++++
->  kernel/smp.c               | 41 +++++++++++++---------
->  2 files changed, 96 insertions(+), 17 deletions(-)
->  create mode 100644 include/trace/events/smp.h
->
-> diff --git a/include/trace/events/smp.h b/include/trace/events/smp.h
-> new file mode 100644
-> index 000000000000..c304318a0203
-> --- /dev/null
-> +++ b/include/trace/events/smp.h
-> @@ -0,0 +1,72 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#undef TRACE_SYSTEM
-> +#define TRACE_SYSTEM smp
-> +
-> +#if !defined(_TRACE_SMP_H) || defined(TRACE_HEADER_MULTI_READ)
-> +#define _TRACE_SMP_H
-> +
-> +#include <linux/tracepoint.h>
-> +
-> +TRACE_EVENT(csd_queue_cpu,
-> +
-> +	TP_PROTO(const unsigned int cpu,
-> +		 unsigned long callsite,
-> +		 smp_call_func_t func,
-> +		 call_single_data_t *csd),
-> +
-> +	TP_ARGS(cpu, callsite, func, csd),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(unsigned int, cpu)
-> +		__field(void *, callsite)
-> +		__field(void *, func)
-> +		__field(void *, csd)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->cpu = cpu;
-> +		__entry->callsite = (void *)callsite;
-> +		__entry->func = func;
-> +		__entry->csd  = csd;
-> +	),
-> +
-> +	TP_printk("cpu=%u callsite=%pS func=%pS csd=%p",
-                                       ^^^^^^^^
-This can be func=%ps, offsets should always be 0 so not very useful (I know
-I put %pS for the IPI TPs, that's a force of habit...)
-
-> +		  __entry->cpu, __entry->callsite, __entry->func, __entry->csd)
-> +);
-
-> +
-> +/*
-> + * Tracepoints for a function which is called as an effect of smp_call_function.*
-> + */
-> +DECLARE_EVENT_CLASS(csd_function,
-> +
-> +	TP_PROTO(smp_call_func_t func, call_single_data_t *csd),
-> +
-> +	TP_ARGS(func, csd),
-> +
-> +	TP_STRUCT__entry(
-> +		__field(void *,	func)
-> +		__field(void *,	csd)
-> +	),
-> +
-> +	TP_fast_assign(
-> +		__entry->func	= func;
-> +		__entry->csd	= csd;
-> +	),
-> +
-> +	TP_printk("function %ps, csd = %p", __entry->func, __entry->csd)
-
-To match the style of the other TPs, that should be:
-
-        TP_printk("func=%ps csd=%p", __entry->func, __entry->csd)
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
 
