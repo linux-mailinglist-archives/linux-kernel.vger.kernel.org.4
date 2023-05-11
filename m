@@ -2,69 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D403F6FEE32
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:01:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C47766FEE30
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:01:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236717AbjEKJBn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 05:01:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57506 "EHLO
+        id S233923AbjEKJBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 05:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjEKJBl (ORCPT
+        with ESMTP id S229624AbjEKJBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 05:01:41 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73682270E
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:01:40 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6434e263962so6218580b3a.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:01:40 -0700 (PDT)
+        Thu, 11 May 2023 05:01:17 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D5026B7
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:01:16 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so77119322a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:01:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683795700; x=1686387700;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PpOPhoCRVVr4TLf/GE5sbLeu85r6UE17A7mxhEqx2o0=;
-        b=HHFkKe4JvdA7myvOau9njF7ZmmErc0XVypuKeNk8WMGsuTOFNJXXDeWPDKDQ/yFlE+
-         hUhKmT6e19CYoH4myEJ3S1m5845Wml4A6K7yEp7k+i4VoijSFXox8xWmJL5cI/AeJO2L
-         9IAZu6yZwQa3/y79rbrfI9lzAMN+BiVgHNl+WbEEs+OP7OXomdA1ztkOh738D4ltMhip
-         XHUejG/lTTSuunzbSvQMKUbD4tJYOXKMj85K9+VETxEvJ70OM1EbuMRFnZceU12LZppW
-         EY0sCSPw9D5TSAMzOmTgsrk7dkZ0+5m0ZyajLKW9fPhkL+mulrNak7/f+98AV50t1OS4
-         r7Gg==
+        d=linaro.org; s=google; t=1683795674; x=1686387674;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0CisL2rUE4Hw6hlxlukZuowP2tixyFGxjkXdRANpN4o=;
+        b=cWCRSOdDgP46O6T1hMKoF/8U0aNMUK8Rt1UUXmAgisr+nnDt24sRYnhmXSx0YMLi83
+         Tv43KqVI7M8dGwOuXmp8wTGaoxcLPIwynVL4gr9HdgdeTAf+OQpE1waZuLzcsxy/sSFg
+         TU91PqWhPY7irbdfC+m/heDD7O5PtIBYYnFatINeBL0Qq6zYPgNdp5yYmK8wLPzMZMeD
+         t3E9QC3y6K9mud1kciwYf5qkS8vVkcXlbeRqutAixTGCkB532igmHdiKaoGRWdZCtOcM
+         3KQQhkOh1Qb5OKi4Ud7op4c9SDpIuOj3br7U2WB85Ik+qmGm2UoSKohftY7lDJ0zsRSl
+         D+/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683795700; x=1686387700;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PpOPhoCRVVr4TLf/GE5sbLeu85r6UE17A7mxhEqx2o0=;
-        b=T/2337rS76hprh5EKfchEVbifH4w+S05Fnxt3W3QoQDU1lKSjxDYeYFvVnbdWYanCk
-         K+LKuRY7dCdkZQGJEsPNqOV24d2JxCcTE6M5KC0TWiCQR4+JI4m1Q7V8vb42foDIfco6
-         sC3QCfnGKexTZXsoZ5PqAtGlQQS2hoZyW6/ZkgWruItBPAJP83Pf26h40n8x6h4YJ8aK
-         UtyK2IghT8OBdHauYnjTJ1YZB2No7Cw+wopR1650g5RcI4Or1x6QjGYL1CvsnLctP0tl
-         cxhpAXLM8I3GWe9NFH9aDbQPD2mjmuw0VtS8xhJnT7uPrZR2JpIjw0wxjaKA71G5IGL5
-         p4BA==
-X-Gm-Message-State: AC+VfDwJ/zwsilaJLsIfFF99m4kji0AEW4J87dty56J/hc3+pThWV7Lj
-        xMi2npxaZ3cxwxKstlpDPhgfwQ==
-X-Google-Smtp-Source: ACHHUZ6JgoRzqLA2cz+zc9bNBX0BbFPi/HYzdaITNpGUB6ZbCCjPlDjACy775tc0kp2mlbDWsu4LPw==
-X-Received: by 2002:a05:6a00:2d0e:b0:641:699:f353 with SMTP id fa14-20020a056a002d0e00b006410699f353mr28047084pfb.22.1683795699855;
-        Thu, 11 May 2023 02:01:39 -0700 (PDT)
-Received: from localhost ([122.172.82.60])
-        by smtp.gmail.com with ESMTPSA id x9-20020aa784c9000000b006475f831838sm3820037pfn.30.2023.05.11.02.01.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 02:01:38 -0700 (PDT)
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     linux-pm@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Markus Elfring <Markus.Elfring@web.de>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: sparc: Don't allocate cpufreq_driver dynamically
-Date:   Thu, 11 May 2023 14:31:00 +0530
-Message-Id: <96f7ea2c952075030ab8d24ee2d3983e1b144f36.1683795616.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+        d=1e100.net; s=20221208; t=1683795674; x=1686387674;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0CisL2rUE4Hw6hlxlukZuowP2tixyFGxjkXdRANpN4o=;
+        b=byGP2dM7PWtCx6wJ6fWXvWLFtAZYtzyH5+OgkR/Y8IMjhSuUHPiVtXjYLf5tmhgBke
+         sMqUuPIXf/1J9B8SYs6SOiUyObDFR4wGLF024y9KlICdzUcRTLZ339mBvJJth/a/0wIL
+         8GUOZNpxNwszCsMGeNSCsyGBlgEpESKJ65ElYwXr9hIkKy+pe4HrjYXzwcFX/tEplRMZ
+         lcmS8qclvyP/lgSQCY29likWFWmWZSeWjCcMEqKDaTFdMK1wHEAfylDVZxAL+hW7n9H4
+         l1JXyK36KIuOOy0eY89htPwNhQpm3LjKuViiN6Os9w8Orqd7aehJ2EAroGLwSzN66vRM
+         Ufxw==
+X-Gm-Message-State: AC+VfDz1Xoiq637HF7wYie1SvHyj3LU2TFTeCGkIby37RjW6UVwSuNEM
+        ES56sEwm7n6gCkCZMlFciTZYdw==
+X-Google-Smtp-Source: ACHHUZ6KOZWGlcRewxIzNr2yQQxjbZCIQpTw1t3mlu3ayU+bXuAyBCLXZ+Z5vsm6LCoN8NVEKftVCA==
+X-Received: by 2002:a17:907:da4:b0:966:4e4c:a36d with SMTP id go36-20020a1709070da400b009664e4ca36dmr12121142ejc.20.1683795674367;
+        Thu, 11 May 2023 02:01:14 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:7e61:f14a:c3a4:809e? ([2a02:810d:15c0:828:7e61:f14a:c3a4:809e])
+        by smtp.gmail.com with ESMTPSA id w10-20020a170907270a00b00965e9a23f2bsm3679359ejk.134.2023.05.11.02.01.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 02:01:13 -0700 (PDT)
+Message-ID: <1959eb8a-d55f-5f62-2b41-0e7ea41b27b2@linaro.org>
+Date:   Thu, 11 May 2023 11:01:12 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [EXTERNAL] Re: [PATCH v2 2/5] ASoC: dt-bindings: Add tas2781
+ amplifier
+Content-Language: en-US
+To:     "Ding, Shenghao" <shenghao-ding@ti.com>
+Cc:     "Lu, Kevin" <kevin-lu@ti.com>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Xu, Baojun" <x1077012@ti.com>, "Gupta, Peeyush" <peeyush@ti.com>,
+        "Navada Kanyana, Mukund" <navada@ti.com>,
+        "gentuser@gmail.com" <gentuser@gmail.com>,
+        "Ryan_Chu@wistron.com" <Ryan_Chu@wistron.com>,
+        "Sam_Wu@wistron.com" <Sam_Wu@wistron.com>,
+        Shenghao Ding <13916275206@139.com>,
+        "broonie@kernel.org" <broonie@kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "lgirdwood@gmail.com" <lgirdwood@gmail.com>,
+        "perex@perex.cz" <perex@perex.cz>,
+        "pierre-louis.bossart@linux.intel.com" 
+        <pierre-louis.bossart@linux.intel.com>
+References: <20230508054512.719-1-13916275206@139.com>
+ <ca9d45cf-8a84-4fbc-e1dd-c96eef36fe25@linaro.org>
+ <c088d7dce83a45168d0dc25fee4a9e35@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <c088d7dce83a45168d0dc25fee4a9e35@ti.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,215 +94,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no point allocating the cpufreq driver dynamically and add so
-much complexity in the driver.
+On 10/05/2023 16:03, Ding, Shenghao wrote:
+> 
+>> +    items:
+>> +      minimum: 0x38
+>> +      maximum: 0x3f
+> 
+> ... So these are fixed? No need to encode them in such case...
+> 
+> and anyway actually I agree with Rob here - these addresses should be put in reg.
+> [DING] if all the put in reg, the i2c_probe will be called several time. The code don not want to register several codecs, but one codec including several tas2781s.
 
-Do what is done for other cpufreq drivers and statically allocate the
-cpufreq driver.
+Eh? Why and what would call probe multiple times for one device? It's
+the first time I hear... I don't know, maybe Linux I2C has some
+specifics, but sounds surprising.
 
-Reported-by: Markus Elfring <Markus.Elfring@web.de>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
-Looks like I wrote this back in April and forgot to send it :(
+> 
+>> +      description:
+>> +        I2C address of the device for different audio slots,
+>> +        useless in mono case.
+>> +
+>> +  ti,broadcast-addr:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>> +    description:
+>> +      Generic I2C address for all the tas2781 devices in
+>> +      purpose of I2C broadcast during the multi-device
+>> +      writes, useless in mono case.
+> 
+> Probably you can figure it out from previous addresses and there is no need for this property.
+> [Ding] this address is the common address for all the tas2781, it can be used for dsp firmware downloading to all the tas2781s in parallel, which can save more downloading time
 
- drivers/cpufreq/sparc-us2e-cpufreq.c | 58 ++++++++--------------------
- drivers/cpufreq/sparc-us3-cpufreq.c  | 58 ++++++++--------------------
- 2 files changed, 34 insertions(+), 82 deletions(-)
+So the answer is yes? Then please drop it... If not, say why it cannot
+be deducted from other addresses (e.g. last address + 1).
 
-diff --git a/drivers/cpufreq/sparc-us2e-cpufreq.c b/drivers/cpufreq/sparc-us2e-cpufreq.c
-index 92acbb25abb3..d3510cfdb3eb 100644
---- a/drivers/cpufreq/sparc-us2e-cpufreq.c
-+++ b/drivers/cpufreq/sparc-us2e-cpufreq.c
-@@ -20,8 +20,6 @@
- #include <asm/asi.h>
- #include <asm/timer.h>
- 
--static struct cpufreq_driver *cpufreq_us2e_driver;
--
- struct us2e_freq_percpu_info {
- 	struct cpufreq_frequency_table table[6];
- };
-@@ -300,12 +298,19 @@ static int __init us2e_freq_cpu_init(struct cpufreq_policy *policy)
- 
- static int us2e_freq_cpu_exit(struct cpufreq_policy *policy)
- {
--	if (cpufreq_us2e_driver)
--		us2e_freq_target(policy, 0);
--
-+	us2e_freq_target(policy, 0);
- 	return 0;
- }
- 
-+static struct cpufreq_driver cpufreq_us2e_driver = {
-+	.name = "UltraSPARC-IIe",
-+	.init = us2e_freq_cpu_init,
-+	.verify = cpufreq_generic_frequency_table_verify,
-+	.target_index = us2e_freq_target,
-+	.get = us2e_freq_get,
-+	.exit = us2e_freq_cpu_exit,
-+};
-+
- static int __init us2e_freq_init(void)
- {
- 	unsigned long manuf, impl, ver;
-@@ -319,39 +324,15 @@ static int __init us2e_freq_init(void)
- 	impl  = ((ver >> 32) & 0xffff);
- 
- 	if (manuf == 0x17 && impl == 0x13) {
--		struct cpufreq_driver *driver;
--
--		ret = -ENOMEM;
--		driver = kzalloc(sizeof(*driver), GFP_KERNEL);
--		if (!driver)
--			goto err_out;
--
--		us2e_freq_table = kzalloc((NR_CPUS * sizeof(*us2e_freq_table)),
--			GFP_KERNEL);
-+		us2e_freq_table = kzalloc(NR_CPUS * sizeof(*us2e_freq_table),
-+					  GFP_KERNEL);
- 		if (!us2e_freq_table)
--			goto err_out;
--
--		driver->init = us2e_freq_cpu_init;
--		driver->verify = cpufreq_generic_frequency_table_verify;
--		driver->target_index = us2e_freq_target;
--		driver->get = us2e_freq_get;
--		driver->exit = us2e_freq_cpu_exit;
--		strcpy(driver->name, "UltraSPARC-IIe");
-+			return -ENOMEM;
- 
--		cpufreq_us2e_driver = driver;
--		ret = cpufreq_register_driver(driver);
-+		ret = cpufreq_register_driver(&cpufreq_us2e_driver);
- 		if (ret)
--			goto err_out;
-+			kfree(us2e_freq_table);
- 
--		return 0;
--
--err_out:
--		if (driver) {
--			kfree(driver);
--			cpufreq_us2e_driver = NULL;
--		}
--		kfree(us2e_freq_table);
--		us2e_freq_table = NULL;
- 		return ret;
- 	}
- 
-@@ -360,13 +341,8 @@ static int __init us2e_freq_init(void)
- 
- static void __exit us2e_freq_exit(void)
- {
--	if (cpufreq_us2e_driver) {
--		cpufreq_unregister_driver(cpufreq_us2e_driver);
--		kfree(cpufreq_us2e_driver);
--		cpufreq_us2e_driver = NULL;
--		kfree(us2e_freq_table);
--		us2e_freq_table = NULL;
--	}
-+	cpufreq_unregister_driver(&cpufreq_us2e_driver);
-+	kfree(us2e_freq_table);
- }
- 
- MODULE_AUTHOR("David S. Miller <davem@redhat.com>");
-diff --git a/drivers/cpufreq/sparc-us3-cpufreq.c b/drivers/cpufreq/sparc-us3-cpufreq.c
-index e41b35b16afd..91d1ed558136 100644
---- a/drivers/cpufreq/sparc-us3-cpufreq.c
-+++ b/drivers/cpufreq/sparc-us3-cpufreq.c
-@@ -19,8 +19,6 @@
- #include <asm/head.h>
- #include <asm/timer.h>
- 
--static struct cpufreq_driver *cpufreq_us3_driver;
--
- struct us3_freq_percpu_info {
- 	struct cpufreq_frequency_table table[4];
- };
-@@ -144,12 +142,19 @@ static int __init us3_freq_cpu_init(struct cpufreq_policy *policy)
- 
- static int us3_freq_cpu_exit(struct cpufreq_policy *policy)
- {
--	if (cpufreq_us3_driver)
--		us3_freq_target(policy, 0);
--
-+	us3_freq_target(policy, 0);
- 	return 0;
- }
- 
-+static struct cpufreq_driver cpufreq_us3_driver = {
-+	.name = "UltraSPARC-III",
-+	.init = us3_freq_cpu_init,
-+	.verify = cpufreq_generic_frequency_table_verify,
-+	.target_index = us3_freq_target,
-+	.get = us3_freq_get,
-+	.exit = us3_freq_cpu_exit,
-+};
-+
- static int __init us3_freq_init(void)
- {
- 	unsigned long manuf, impl, ver;
-@@ -167,39 +172,15 @@ static int __init us3_freq_init(void)
- 	     impl == CHEETAH_PLUS_IMPL ||
- 	     impl == JAGUAR_IMPL ||
- 	     impl == PANTHER_IMPL)) {
--		struct cpufreq_driver *driver;
--
--		ret = -ENOMEM;
--		driver = kzalloc(sizeof(*driver), GFP_KERNEL);
--		if (!driver)
--			goto err_out;
--
--		us3_freq_table = kzalloc((NR_CPUS * sizeof(*us3_freq_table)),
--			GFP_KERNEL);
-+		us3_freq_table = kzalloc(NR_CPUS * sizeof(*us3_freq_table),
-+					 GFP_KERNEL);
- 		if (!us3_freq_table)
--			goto err_out;
--
--		driver->init = us3_freq_cpu_init;
--		driver->verify = cpufreq_generic_frequency_table_verify;
--		driver->target_index = us3_freq_target;
--		driver->get = us3_freq_get;
--		driver->exit = us3_freq_cpu_exit;
--		strcpy(driver->name, "UltraSPARC-III");
-+			return -ENOMEM;
- 
--		cpufreq_us3_driver = driver;
--		ret = cpufreq_register_driver(driver);
-+		ret = cpufreq_register_driver(&cpufreq_us3_driver);
- 		if (ret)
--			goto err_out;
-+			kfree(us3_freq_table);
- 
--		return 0;
--
--err_out:
--		if (driver) {
--			kfree(driver);
--			cpufreq_us3_driver = NULL;
--		}
--		kfree(us3_freq_table);
--		us3_freq_table = NULL;
- 		return ret;
- 	}
- 
-@@ -208,13 +189,8 @@ static int __init us3_freq_init(void)
- 
- static void __exit us3_freq_exit(void)
- {
--	if (cpufreq_us3_driver) {
--		cpufreq_unregister_driver(cpufreq_us3_driver);
--		kfree(cpufreq_us3_driver);
--		cpufreq_us3_driver = NULL;
--		kfree(us3_freq_table);
--		us3_freq_table = NULL;
--	}
-+	cpufreq_unregister_driver(&cpufreq_us3_driver);
-+	kfree(us3_freq_table);
- }
- 
- MODULE_AUTHOR("David S. Miller <davem@redhat.com>");
--- 
-2.31.1.272.g89b43f80a514
+Best regards,
+Krzysztof
 
