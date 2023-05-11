@@ -2,125 +2,253 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 113016FED55
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:59:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 81A846FED4B
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:58:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237262AbjEKH7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 03:59:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58336 "EHLO
+        id S237658AbjEKH6p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 03:58:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237709AbjEKH67 (ORCPT
+        with ESMTP id S237691AbjEKH6l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 03:58:59 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CAF049D6;
-        Thu, 11 May 2023 00:58:52 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34B5tUvf016680;
-        Thu, 11 May 2023 07:58:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=rhZmmJ3ZZCtZWS9eOJTxqlSvJ4VHjguaSECjKWiSqHM=;
- b=b63NaBGp60aSxd6ma4YT51Fcx+gLgg6tX/pFKfccxkA4qdX4DN4f9OMkwcXkt1/w+NZr
- VLiqlhosZPW6Cg5B2lQ+z0KOWRL+KSBNl49tkzuJy10D4NOXC6jDm4unKUt9YlflMboo
- 108ErxWLXlYgIA+oCS5e0FKD9cDssW+othrBI6V5k7Ga8AI6BemZFq5YwJsJ6heANeko
- k/VFKPcL83/KbAH+oQTUhUiDb+86ikgKrpo6NAHerbbK2wx0psUSnyBkJabYAPtYoPgk
- dhjIlKW0jEy0yV7bEJ2zkoBMBAPFmeqie85N0LYNcF42sGAjRZ3cVG2LL+jvO65rpEKO fQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qgpfk0q2c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 07:58:46 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34B7wktp012957
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 07:58:46 GMT
-Received: from poovendh-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 11 May 2023 00:58:40 -0700
-From:   Poovendhan Selvaraj <quic_poovendh@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <lee@kernel.org>,
-        <conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-CC:     <quic_srichara@quicinc.com>, <uic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_anusha@quicinc.com>,
-        <quic_devipriy@quicinc.com>
-Subject: [PATCH V7 2/2] arm64: dts: qcom: ipq9574: Add SMEM support
-Date:   Thu, 11 May 2023 13:28:14 +0530
-Message-ID: <20230511075814.2370-3-quic_poovendh@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230511075814.2370-1-quic_poovendh@quicinc.com>
-References: <20230511075814.2370-1-quic_poovendh@quicinc.com>
+        Thu, 11 May 2023 03:58:41 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60C6F8699
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:58:34 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-55c939fb24dso76727337b3.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:58:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683791913; x=1686383913;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PkscnF/KTXJ0FECfCsyp1oedck4XNhpkqlVKEGQkMDU=;
+        b=ZigNMeK/lP5H1Z47r2LaTyi0KdLf8+YU/dY5F3l51D8o5Fzrk2imdMYmwQAesGKTwu
+         rEF9pmkHjLhIPV0ZE8b2AGzqpXRVd4M2VcjEz4AZTA2Bihx8n1f1Cbw5GNExtqWHD7eA
+         3jqySoToHxFPANVf5ocDHqtFTjPi9OR7udiEzzYF47ubqq3WFfhyPqpisDrBzhevgAYT
+         BkSXIcEYAb5GUdxWgWyJI0UDXslyE3JtMm2tso66dARf7sGN9BjrTYylI3AiJIyXGzx+
+         nv6wLyN1yu0sBisqjkCXOh4r+yQ0qPEApldhpcqsGYkfxBvmp6b48Fi4IJCkeCe1X2eu
+         +oTQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683791913; x=1686383913;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=PkscnF/KTXJ0FECfCsyp1oedck4XNhpkqlVKEGQkMDU=;
+        b=ibcCs3DZ0mmhstxNhI87rYM/Ta4kQh651oyI/wqYHBQCJlhqcHAmsBxmUmmyu2k2bm
+         tx86izRBGEREijuhgJ8dATxuHmoeLACGe9dcCMMxIIPHsPJeCB5E3MZpXGsZJjIQZlkt
+         gar3i/Vn+/GkpgstiQSsoARPXItC6ZoX/ndOaEPi73hvyWw26bXpGKhNQ8FrE9vYhun+
+         5d8s/8BYgcjbRCXB6feBrMyatIfi0Y5JxahCJ5TNaut+W6nVzEptqf74AfhZm9VqiVHV
+         owda1jCMCe1yE5wxUu2CxCeanux2e1vVwPCKaV8cjZauOSKevqjA5IiTD8VX3TwVgets
+         rw9g==
+X-Gm-Message-State: AC+VfDxyAgTZUamveRDszXwYkxoznjujIsR+0MR8p+d1lH87LwbRDjkC
+        e57QvNpwiPCGP//5lmIs8SfsjT29l9btR5EJeUupoA==
+X-Google-Smtp-Source: ACHHUZ4/zj52rhxmIebfw5gIIU+TlEzSnxJDO6Mk7HaJD2y76ykj/GxLSP1pR7mI1xvpSroW7WN55rqJzibeWkyNkek=
+X-Received: by 2002:a0d:f042:0:b0:559:f026:46d1 with SMTP id
+ z63-20020a0df042000000b00559f02646d1mr20497691ywe.40.1683791913445; Thu, 11
+ May 2023 00:58:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: HEKXquEscCA3qn6qp_DILvVGgIxw01xh
-X-Proofpoint-GUID: HEKXquEscCA3qn6qp_DILvVGgIxw01xh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-11_04,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- suspectscore=0 mlxlogscore=835 lowpriorityscore=0 adultscore=0
- malwarescore=0 priorityscore=1501 bulkscore=0 mlxscore=0 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305110068
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230504145737.286444-1-joychakr@google.com> <20230504145737.286444-8-joychakr@google.com>
+ <78616bc1-8d9e-4a1c-70d6-ad62c2cfa8a8@linaro.org> <CAOSNQF15UN2Rckes55UHxbUvN1PJcbj9aWirVGSLDOs5Y5EPnQ@mail.gmail.com>
+ <3d9d545d-a620-85f6-b7bd-d57a8729f818@linaro.org> <CAOSNQF0jJLc78_1aGYY3=csJc7WqqvydwxmQ22rvXpLruQ-XRg@mail.gmail.com>
+ <83b8d419-9d43-3c81-2014-a4380de45b88@linaro.org>
+In-Reply-To: <83b8d419-9d43-3c81-2014-a4380de45b88@linaro.org>
+From:   Joy Chakraborty <joychakr@google.com>
+Date:   Thu, 11 May 2023 13:28:19 +0530
+Message-ID: <CAOSNQF1NVrOAvzQym1NpSDfUE01Rb7jp79Tu9QLMKB-7m1JCMw@mail.gmail.com>
+Subject: Re: [PATCH 7/7] dt-bindings: dmaengine: pl330: Add new quirks
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Vinod Koul <vkoul@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, manugautam@google.com,
+        danielmentz@google.com, sjadavani@google.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the required nodes to support SMEM
+On Mon, May 8, 2023 at 10:13=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 08/05/2023 13:58, Joy Chakraborty wrote:
+> > On Fri, May 5, 2023 at 5:53=E2=80=AFPM Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org> wrote:
+> >>
+> >> On 05/05/2023 11:44, Joy Chakraborty wrote:
+> >>> On Thu, May 4, 2023 at 8:38=E2=80=AFPM Krzysztof Kozlowski
+> >>> <krzysztof.kozlowski@linaro.org> wrote:
+> >>>>
+> >>>> On 04/05/2023 16:57, Joy Chakraborty wrote:
+> >>>>> Add 2 new quirks added to the driver "arm,pl330-optimize-dev2mem-ax=
+size"
+> >>>>> and "arm,pl330-periph-single-dregs"
+> >>>>
+> >>>> This we can see from the diff. You need to answer why?
+> >>>>
+> >>>
+> >>> Sure will change it to:
+> >>> "
+> >>> Addition of following quirks :
+> >>> - "arm,pl330-periph-use-diff-axsize"
+> >>>    AxSize of transactions to peripherals are limited by the periphera=
+l
+> >>> address width which inturn limits the AxSize used for transactions
+> >>> towards memory.
+> >>>    This quirk will make transactions to memory use the maximum
+> >>> possible bus width(AxSize), store data in MFIFO and use narrow
+> >>> multi-beat transactions to move data to peripherals.
+> >>>    This only applies to transfers between memory and peripherals wher=
+e
+> >>> bus widths available are different for memory and the peripheral.
+> >>> - "arm,pl330-periph-complete-with-singles" :
+> >>>    When transfer sizes are not a multiple of a block of burst
+> >>> transfers (AxLen * AxSize configured at the peripheral), certain
+> >>> peripherals might choose not to set the burst request at the
+> >>> peripheral request interface of the DMA.
+> >>>    This quirk moves the remaining bytes to the peripheral using singl=
+e
+> >>> transactions.
+> >>> "
+> >>
+> >> This does not answer why. You just copied again the patch contents.
+> >>
+> > Hi Krzysztof,
+> > Both the changes could be useful for SOC's which have PL330 integrated
+> > with a peripheral
+>
+> What do you mean here by "PL330 integrated with a peripheral"?
 
-Signed-off-by: Poovendhan Selvaraj <quic_poovendh@quicinc.com>
----
- arch/arm64/boot/dts/qcom/ipq9574.dtsi | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+Hi Krzysztof,
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-index ee85258da066..ccf70bafabab 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-@@ -101,6 +101,13 @@
- 			reg = <0x0 0x4a600000 0x0 0x400000>;
- 			no-map;
- 		};
-+
-+		smem@4aa00000 {
-+			compatible = "qcom,smem";
-+			reg = <0x0 0x4aa00000 0x0 0x00100000>;
-+			hwlocks = <&tcsr_mutex 0>;
-+			no-map;
-+		};
- 	};
- 
- 	soc: soc@0 {
-@@ -143,6 +150,12 @@
- 			#power-domain-cells = <1>;
- 		};
- 
-+		tcsr_mutex: hwlock@1905000 {
-+			compatible = "qcom,tcsr-mutex";
-+			reg = <0x01905000 0x20000>;
-+			#hwlock-cells = <1>;
-+		};
-+
- 		tcsr: syscon@1937000 {
- 			compatible = "qcom,tcsr-ipq9574", "syscon";
- 			reg = <0x01937000 0x21000>;
--- 
-2.17.1
+By integration with peripheral I mean when the PL330 DMA is used to
+copy data to/from memory to a peripheral hardware (e.g. FIFO of a SPI
+master) where flow control of data is managed by the peripheral
+request interface exposed by PL330 :
+https://developer.arm.com/documentation/ddi0424/a/functional-overview/perip=
+heral-request-interface
 
+>
+> > but I am not sure if all SOC's need/want this change
+> > hence wanted to keep it as a DT knob to avoid any regressions.
+> > But like you say it might not be the right thing to do.
+>
+> Devicetree is for describing hardware, not the contents of registers of
+> a device. Your changes might fit or might not, I don't know this good
+> enough, so I wait for your justification. Without justification this
+> looks like controlling driver from DT...
+>
+
+Yes this does control the driver behaviour on how the PL330 DMA
+hardware is programmed but it also is a function of
+   - The bus width available in the soc towards memory and peripheral
+to be different.
+   - The requirement of peripherals interfaced with PL330 on how odd
+transfer sizes are to be copied from memory to peripheral.
+
+But, both changes IMO can be enabled by default as well in the driver
+without devicetree knobs but it carries the risk of regression on
+SOC's which do not have such a requirement.
+
+Hence I was looking for some insight from Vinod Koul to see if it is
+okay to go ahead with the changes without device tree knobs.
+
+> >
+> >>>
+> >>>>>
+> >>>>> Signed-off-by: Joy Chakraborty <joychakr@google.com>
+> >>>>> ---
+> >>>>>  Documentation/devicetree/bindings/dma/arm,pl330.yaml | 8 ++++++++
+> >>>>>  1 file changed, 8 insertions(+)
+> >>>>>
+> >>>>> diff --git a/Documentation/devicetree/bindings/dma/arm,pl330.yaml b=
+/Documentation/devicetree/bindings/dma/arm,pl330.yaml
+> >>>>> index 4a3dd6f5309b..0499a7fba88d 100644
+> >>>>> --- a/Documentation/devicetree/bindings/dma/arm,pl330.yaml
+> >>>>> +++ b/Documentation/devicetree/bindings/dma/arm,pl330.yaml
+> >>>>> @@ -53,6 +53,14 @@ properties:
+> >>>>>      type: boolean
+> >>>>>      description: quirk for performing burst transfer only
+> >>>>>
+> >>>>> +  arm,pl330-optimize-dev2mem-axsize:
+> >>>>> +    type: boolean
+> >>>>> +    description: quirk for optimizing AxSize used between dev<->me=
+m
+> >>>>
+> >>>> This tells me nothing... Neither what it is about nor why this is
+> >>>> property of a board or PL330 hardware implementation. Please describ=
+e
+> >>>> hardware, not drivers.
+> >>>>
+> >>>
+> >>> Will change the name to "arm,pl330-periph-use-diff-axsize" and add de=
+scription:
+> >>> "
+> >>> Quirk to use different AxSize for bursts while accessing source and
+> >>> destination when moving data between memory and peripheral.
+> >>> Maximum possible bus width is used as AxSize for transactions towards
+> >>> memory and transactions towards peripherals use AxSize as per
+> >>> peripheral address width.
+> >>> "
+> >>
+> >> Still no answer. Why this is property of a board or PL330 hardware
+> >> implementation?
+> >> I also asked to describe hardware but I still see "quirk to ...". We u=
+se
+> >> "quirk" as concept in Linux driver. Describe the hardware, not Linux d=
+river.
+> >>
+> >
+> > This comes to use when the bus width requirement between peripheral
+> > and memory is different, but buswidth is something we read from HW
+> > registers so this can be enabled by default.
+>
+> Don't add discoverable stuff to DT.
+
+Sure, will not add this to DT.
+
+>
+> >
+> >>
+> >>>
+> >>>>> +
+> >>>>> +  arm,pl330-periph-single-dregs:
+> >>>>> +    type: boolean
+> >>>>> +    description: quirk for using dma-singles for peripherals in _d=
+regs()
+> >>>>
+> >>>> Same concerns.
+> >>>>
+> >
+> > An example of such a case is given in the ARM TRM for PL330, so maybe
+> > we can have this by default as well.
+> > Link : https://developer.arm.com/documentation/ddi0424/d/functional-ove=
+rview/peripheral-request-interface/dmac-length-management#:~:text=3DDMAC%20=
+length%20management-,Example%202.3,-shows%20a%20DMAC
+>
+> I could not find here a case describing hardware. You pointed out some
+> code. What does the code have anything to do with DT?
+>
+
+The instructions mentioned here are consumed by the PL330 Hardware to
+generate AXI transactions on the system bus. The example mentioned in
+the link is similar to how the driver would behave when this is
+enabled.
+
+I shall remove this as well and create a new patch without any DT
+depency for the changes.
+
+Thanks
+Joy
+>
+> Best regards,
+> Krzysztof
+>
