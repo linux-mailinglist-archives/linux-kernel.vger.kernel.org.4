@@ -2,98 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 580FB6FF5E5
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:27:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A226FF5E7
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:27:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238478AbjEKP06 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 11:26:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51128 "EHLO
+        id S238569AbjEKP12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 11:27:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238328AbjEKP04 (ORCPT
+        with ESMTP id S237754AbjEKP10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 11:26:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A31C197;
-        Thu, 11 May 2023 08:26:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EAF5364F02;
-        Thu, 11 May 2023 15:26:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53101C433A0;
-        Thu, 11 May 2023 15:26:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683818814;
-        bh=yX+KBh46sRECtS54M5dooUORP+MvkRKDtoQcUIKDYzw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=HK/bPiVJqW1AVZoDBZcQcpF3C9UZZYF2xCSZQzGAab9P99CPmY3Bw23JY/yL1RNju
-         RhX0Wpi+97Xg8oTi5oz17b+B/zkLUSnUsYkMsULkS6H71AuKvMXnbrlVIQKmDxYlN1
-         J1AYLBsb2Fb50/01yVioC6S5kKGkHXzwQ2IT8VM6mY2Rbbh8l+2fTD0ag8MQgWi4q/
-         sh/+KIJ+VkR8It0P4CHXC2WTm91kaB+Q5kVLg8j39cxEdeu1LWV2G/D1qYi7tY36EX
-         kpZ3akhhapolJvQy5zp2dAq9hzaQ5ajrNLIUdA9s4nehfUsHw/aLuTAwp6Yi458/er
-         UiDkmqqJ8IKnw==
-Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-44fd15d6824so3077202e0c.3;
-        Thu, 11 May 2023 08:26:54 -0700 (PDT)
-X-Gm-Message-State: AC+VfDz9YAVpZlQ4eAHuE6rSVyIDCUt2iuVICvgCPqC40fVAbOACZArC
-        mDHAVFaCqRYo6FdfumPzAP7I7QL8glsBbLn8Tb0=
-X-Google-Smtp-Source: ACHHUZ6k2Xr7l6KB/m8y+sPvxgkea/KIOkz7DRPfd3A5d1yrCF+9ae9dQBu0mje0wrDXblDj4E1P1R6H0vlAvguAzh4=
-X-Received: by 2002:a1f:c343:0:b0:450:17ac:47ca with SMTP id
- t64-20020a1fc343000000b0045017ac47camr6143019vkf.16.1683818813106; Thu, 11
- May 2023 08:26:53 -0700 (PDT)
+        Thu, 11 May 2023 11:27:26 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5E9197
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 08:27:25 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id d75a77b69052e-3f38824a025so805831cf.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 08:27:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683818845; x=1686410845;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=nZwryojbiiF9EvUp77SgYE7ffGG2HOXgxsgQSk0SW90=;
+        b=XK8dfVDhUlD9RY5tIA5pURuiFv0LK0d/fEHTNDlORCZ3wJNn8katgQwGUbN9OG3zsa
+         4AneP7QJfPKD97VihJ1s010ULU11wzJ9t3Q9nV0Cq6rIrtmMp3euuGqzNVEYdMYI2xYR
+         svwCI+JUp5n7EdS/utV5KL29taeW9gN0WcfHOjKVAUr1h0+2OTEyrUsQQVu1jMUfrF/M
+         zNa7bxzir+x581m6XbrcVWIJedGMUdw+UL7VequbRtMpAfmnJD8rU96JjlvUtsupTs71
+         oA8SqmJEsK6WzMhxHjg7UMAFs1/mZzIYrQ8LO3AyuQQxhw/Fie4Z7QV43sBSC9Lbe2x/
+         /L4w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683818845; x=1686410845;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nZwryojbiiF9EvUp77SgYE7ffGG2HOXgxsgQSk0SW90=;
+        b=bEcz87j5O+rx2UyfB4J1fXUhnLiveA/P1l4OkkqImWgZQ71O3Atj/XisRS2qVD+gEY
+         uhi5y9Tth19FEFQ6SxNr1Tw7zx5PwDOKL2CsfDKg/uYhMuIxqn4fPwTK6ZpaCqQePTc/
+         36IbIN++GNmbwmv6NsG2fwWJqrF2kq4cD/4vICoVE/k9i+3zYZlwFl3rHYxveYlS2PXy
+         3W+F29q5nPKBg8TwfDuOlWG52dxFU4jiI9RUV2EdDF6PyoN0o3R8dOVlqqfS2M71/gFm
+         OH4Ba8EPs2pj6Y1FNxQ08Hx+Tf5f4LDLMz3b0dY0fNB996HzOW9230NHnDhtXdjIGpLV
+         XiNA==
+X-Gm-Message-State: AC+VfDwNKTkNZCQQoEVhfIASFWIB8/ZUZD2GbNZvbKkk226DueCUAcWy
+        IPbjKM4b/OdvgPyXem4NDe8Q2NalD/Lqr9aCMwInZw==
+X-Google-Smtp-Source: ACHHUZ6S0b7lDho6w2zD7BoNTHa989m/4tZ6Vf7LXlYaNaMEH99xHjgRjwBKMYW1er0VEh19YV+pCd4yp4igyw0ZPYY=
+X-Received: by 2002:a05:622a:111:b0:3f3:a373:c9d5 with SMTP id
+ u17-20020a05622a011100b003f3a373c9d5mr367906qtw.13.1683818844527; Thu, 11 May
+ 2023 08:27:24 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230414193845.2494120-1-mcgrof@kernel.org> <3f5c5c28-3814-3fea-dfbb-a3c7604e0edc@collabora.com>
-In-Reply-To: <3f5c5c28-3814-3fea-dfbb-a3c7604e0edc@collabora.com>
-From:   Luis Chamberlain <mcgrof@kernel.org>
-Date:   Thu, 11 May 2023 08:26:42 -0700
-X-Gmail-Original-Message-ID: <CAB=NE6Wx=PQ6n__hdseLzahNdkGoyUXDW4w9B5bBLvg-kVxbXA@mail.gmail.com>
-Message-ID: <CAB=NE6Wx=PQ6n__hdseLzahNdkGoyUXDW4w9B5bBLvg-kVxbXA@mail.gmail.com>
-Subject: Re: [PATCH] selftests: allow runners to override the timeout
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org,
-        tiwai@suse.de, tianfei.zhang@intel.com, russell.h.weight@intel.com,
-        keescook@chromium.org, tweek@google.com, a.manzanares@samsung.com,
-        dave@stgolabs.net, vincenzopalazzodev@gmail.com,
-        linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        "Darrick J. Wong" <djwong@kernel.org>
+References: <20230510205054.2667898-1-mshavit@google.com> <20230510205054.2667898-5-mshavit@google.com>
+ <ZFwLph9WXByeHxAW@nvidia.com>
+In-Reply-To: <ZFwLph9WXByeHxAW@nvidia.com>
+From:   Michael Shavit <mshavit@google.com>
+Date:   Thu, 11 May 2023 23:26:48 +0800
+Message-ID: <CAKHBV2535Dsbm_w0LQYi=NuyqrYmXdPLjd1JrUVEHo+DiO0=ZA@mail.gmail.com>
+Subject: Re: [PATCH v1 4/5] iommu/arm-smmu-v3: Keep track of attached ssids
+To:     Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>, jean-philippe@linaro.org,
+        nicolinc@nvidia.com, baolu.lu@linux.intel.com,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Apr 28, 2023 at 1:34=E2=80=AFAM Muhammad Usama Anjum
-<usama.anjum@collabora.com> wrote:
+> You should be getting rid of mm->pasid in this series as well.
 >
-> On 4/15/23 12:38=E2=80=AFAM, Luis Chamberlain wrote:
-> > The default timeout for selftests tests is 45 seconds. Although
-> > we already have 13 settings for tests of about 96 sefltests which
-> > use a timeout greater than this, we want to try to avoid encouraging
-> > more tests to forcing a higher test timeout as selftests strives to
-> > run all tests quickly. Selftests also uses the timeout as a non-fatal
-> > error. Only tests runners which have control over a system would know
-> > if to treat a timeout as fatal or not.
-> >
-> > To help with all this:
-> >
-> >   o Enhance documentation to avoid future increases of insane timeouts
-> >   o Add the option to allow overriding the default timeout with test
-> >     runners with a command line option
-> >
-> > Suggested-by: Shuah Khan <skhan@linuxfoundation.org>
-> > Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
-> Reviewed-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> Tested-by:Muhammad Usama Anjum <usama.anjum@collabora.com>
+> When each domain keeps track of what STE/CD entries that point to it then
+> *ALL* invalidation should iterate over the list of pointing entires
+> and generate the correct invalidation for that pointer.
+>
 
-Shuah, just a friendly poke! This is needed to allow me to enable full
-automation for kdevops for selftests.
-
- Luis
+Completely agree. The arm_smmu_atc_inv_domain_ssid function introduced
+by this patch is a stopgap to decompose this patch from the SVA
+refactor that's required to stop using ssid in these calls.
+I also agree that such a refactoring probably belongs in the same
+patch series. @Jean-Philippe Brucker and others: is there any way I
+can about testing or at least exercising the SVA flow without physical
+hardware that supports SVA?
