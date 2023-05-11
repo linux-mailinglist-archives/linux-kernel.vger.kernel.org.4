@@ -2,263 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 689BA6FF862
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 19:27:53 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 04ADD6FF869
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 19:30:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238620AbjEKR1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 13:27:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57788 "EHLO
+        id S238908AbjEKRab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 13:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbjEKR1p (ORCPT
+        with ESMTP id S238759AbjEKRa1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 13:27:45 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 582A940C1;
-        Thu, 11 May 2023 10:27:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683826063; x=1715362063;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fx0F7VWVFJR9TKtE5LsUTJCThvMpQxKJrzNOZit9T2U=;
-  b=lqKMcsrfO8Y8khdxLevwHB0t5UrPo95T+ie5BJWeY+EsTJprkaFcyLIZ
-   AXhi+DW+AIEmKYzC8hW/b5zfPqVyEQRk9+FkaaexOJSW5xeuXkhVH3kau
-   AvwNW3okpsS3W7iWKQMgCZ4YlHTuKJC1gdNIoo3TnitiiB6hTMHROSygF
-   kmKnKi4wOuRTO9b7mqTyBpJSsPAt+jAyrfsl2KF/kpFUUSVJ6lEFjFJC8
-   kK7Cykl7nS4BosDrZ+XQlWl4Ss5XFrJvfqZNb7IsZ9NY9SdQczccqMP5Z
-   DJVxZcu3Q9Oy1y1gIDUFVmEzyxcohY5lsWUmIzFBzCCa3zlEitW3zjOTF
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="335082371"
-X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
-   d="scan'208";a="335082371"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 10:27:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="844065141"
-X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
-   d="scan'208";a="844065141"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 11 May 2023 10:27:38 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pxA4n-00049Y-2m;
-        Thu, 11 May 2023 17:27:37 +0000
-Date:   Fri, 12 May 2023 01:27:19 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     "larry.lai" <larry.lai@yunjingtech.com>, lee@kernel.org,
-        andriy.shevchenko@linux.intel.com, linus.walleij@linaro.org,
-        pavel@ucw.cz
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-leds@vger.kernel.org,
-        GaryWang@aaeon.com.tw, musa.lin@yunjingtech.com,
-        jack.chang@yunjingtech.com, noah.hung@yunjingtech.com,
-        michael.wang@yunjingtech.com,
-        "larry.lai" <larry.lai@yunjingtech.com>
-Subject: Re: [PATCH V4 2/3] pinctrl: Add support pin control for UP board
- CPLD/FPGA
-Message-ID: <202305120120.iVpl8euc-lkp@intel.com>
-References: <20230511094934.4941-3-larry.lai@yunjingtech.com>
+        Thu, 11 May 2023 13:30:27 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B192840D7
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 10:30:24 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id 2adb3069b0e04-4f22908a082so7011815e87.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 10:30:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1683826223; x=1686418223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:user-agent
+         :from:references:in-reply-to:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fg8PRT8lkm3NPG8eSAKVMEE5ErkK9HmIXAxn27oczZs=;
+        b=VTN9N0z2GsuFCm4SJGRZ/zR2tPa24eBCC8JF2Hft6EJmkWPX/s3vIUK4nuG5n5nWJ/
+         nE/e05S270+8cRS2tYdJs2Oq8VIqYR15aXaig9dVHs/hRxEYwBrYUfy1bKvdJlthMIgP
+         nHUCLIrXHx9Fuyug8KFKu9/7cfowMEhPOmw0I=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683826223; x=1686418223;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:user-agent
+         :from:references:in-reply-to:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Fg8PRT8lkm3NPG8eSAKVMEE5ErkK9HmIXAxn27oczZs=;
+        b=e0j7DnEj5/ezkEdWUl3OekP5HmD81oEzLvFLwyKujuMe8PsIcjZrVD6QYxHURp4yQf
+         u+672YbY1FA+54yChLT+llj2d/hnj2iWVkfZQIoHlf2cAYeW3egvfbAFPXFxTGtIQ2A3
+         x+NLyMjG5j45H1o4ciCac/iEHEsRrIGN298L/Qq0XaJ825dDeGhHBupUFEPSTD9rf6VE
+         N0f96hBZkt5yex05I1kawo3107x7N9DQsMChhI+78sdCt7OrhHfp2FsdFAa98YX6jNsN
+         IKZK4uhCVbnLoOEc5JMJabj5AEVchTy9GxxMHDNHYy8/dkvUzfxY/moFljYmketHMSDE
+         5/Sw==
+X-Gm-Message-State: AC+VfDzujRNEnR7yuE050a/2YnuZaCl0kmfVmTD4ZmgVaV7V2KdDhIsj
+        XHidwGzC+6HlYxKttSmaRinOYEE3tXHDsgTkQNOORg==
+X-Google-Smtp-Source: ACHHUZ7+DsiBLVL+G+PyPSCvDv2Rf18Jgj9RceQGNCWvdyWZ2Go6iibCk0Ty1ltmNZIOPyj9kaUmS6Hr2h/EYJZZLAM=
+X-Received: by 2002:ac2:4302:0:b0:4f1:26f5:780c with SMTP id
+ l2-20020ac24302000000b004f126f5780cmr2687173lfh.13.1683826222788; Thu, 11 May
+ 2023 10:30:22 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Thu, 11 May 2023 10:30:22 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511094934.4941-3-larry.lai@yunjingtech.com>
+In-Reply-To: <CAEXTbpcWfYV_58pw_VupjhAFZsUU3pkLRN_8JoASyLLBmgTYqQ@mail.gmail.com>
+References: <20230331091145.737305-1-treapking@chromium.org>
+ <20230331091145.737305-5-treapking@chromium.org> <CAE-0n51E5foFWQAsA73662_5e6XP426wuUCVVmcS5UWwiYpDmw@mail.gmail.com>
+ <CAEXTbpdcbB_z4ZGCGzc-cM74ECKyxekbroKCWFnhH8eR=4HmvA@mail.gmail.com>
+ <CAE-0n50atfmr-bFh5XtTCm4WpSijJGSe0B5JP8ni7CCYk7Bs5A@mail.gmail.com>
+ <CAE-0n51Qy-KDGHOCr4Smpebq1fCURqvJ2RJz6KAtVpv5e+DSGA@mail.gmail.com>
+ <CAEXTbpeKe1dVHp9cauMN-9nQb35oJ-ZhdFV-8BiWzjjhWAy0Zg@mail.gmail.com>
+ <CAE-0n50bj303jou==v6eMabrZ3EL6Cq7tPJmCj9vM_B7FA8s2g@mail.gmail.com> <CAEXTbpcWfYV_58pw_VupjhAFZsUU3pkLRN_8JoASyLLBmgTYqQ@mail.gmail.com>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Thu, 11 May 2023 10:30:22 -0700
+Message-ID: <CAE-0n51i0kzSKYeUtzLV93miq2GcN1APDYh18p4wr9XxWGrfWA@mail.gmail.com>
+Subject: Re: [PATCH v15 04/10] dt-bindings: display: bridge: anx7625: Add
+ mode-switch support
+To:     Pin-yen Lin <treapking@chromium.org>
+Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Benson Leung <bleung@chromium.org>,
+        Daniel Scally <djrscally@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Prashant Malani <pmalani@chromium.org>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Xin Ji <xji@analogixsemi.com>, Marek Vasut <marex@denx.de>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Lyude Paul <lyude@redhat.com>, devicetree@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-acpi@vger.kernel.org,
+        chrome-platform@lists.linux.dev,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Chen-Yu Tsai <wenst@chromium.org>, jagan@amarulasolutions.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi larry.lai,
+Quoting Pin-yen Lin (2023-05-09 20:41:54)
+> On Sat, Apr 29, 2023 at 12:47=E2=80=AFPM Stephen Boyd <swboyd@chromium.or=
+g> wrote:
+> >
+> > Good point. I'm suggesting to make the drm bridge chain into a tree. We
+> > need to teach drm_bridge core about a mux, and have some logic to
+> > navigate atomically switching from one output to another. I was talking
+> > with dianders@ and he was suggesting to use bridge attach/detach for
+> > this. I'm not sure that will work though because that hook is only
+> > called when the encoder is attached to the bridge.
+> >
+> > It may also turn out that this helps with DP multi-stream transport
+> > (MST). As far as I can recall DP MST doesn't mesh well with drm_bridge
+> > designs because it wants to operate on a drm_connector and
+> > drm_bridge_connector_init() wants to make only one drm_connector for a
+> > chain of bridges. If you squint, the anx7625 could be an MST "branch"
+> > that only supports one drm_connector being enabled at a time. Maybe tha=
+t
+> > is what we should do here, make drm_bridge support creating more than
+> > one drm_connector and when there is a mux in the tree it walks both
+> > sides and runs a callback similar to struct
+> > drm_dp_mst_topology_cbs::add_connector() to tell the encoder that
+> > there's another possible drm_connector here.
+>
+> I have been surveying the approaches to change the bridge chain in
+> runtime, and I found this thread[1]. Quoting from Daniel:
 
-kernel test robot noticed the following build warnings:
+I find the lore links easier to read.
 
-[auto build test WARNING on 4fe89d07dcc2804c8b562f6c7896a45643d34b2f]
+> "... exchanging the bridge chain isn't supported, there's no locking
+> for that since it's assumed to be invariant over the lifetime of the
+> drm_device instance. The simplest way to make that happen right now is to
+> have 2 drm_encoder instances, one with the lvds bridge chain, the other
+> with the hdmi bridge chain, and select the right encoder/bridge chain
+> depending upon which output userspace picks.
+> ...
+> I wouldn't try to make bridge chains exchangeable instead, that's
+> headaches - e.g. with dp mst we've also opted for a bunch of fake
+> drm_encoders to model that kind of switching."
+>
+> I'm not sure how we register two encoders properly, though. Do we make
+> the encoder driver check all the downstream bridges and register two
+> drm_encoder when a bridge is acting as a mux?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/larry-lai/mfd-Add-support-for-UP-board-CPLD-FPGA/20230511-175210
-base:   4fe89d07dcc2804c8b562f6c7896a45643d34b2f
-patch link:    https://lore.kernel.org/r/20230511094934.4941-3-larry.lai%40yunjingtech.com
-patch subject: [PATCH V4 2/3] pinctrl: Add support pin control for UP board CPLD/FPGA
-config: x86_64-allyesconfig (https://download.01.org/0day-ci/archive/20230512/202305120120.iVpl8euc-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/c2073ac67e35aff192c5ee51f3a37e103c1f0233
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review larry-lai/mfd-Add-support-for-UP-board-CPLD-FPGA/20230511-175210
-        git checkout c2073ac67e35aff192c5ee51f3a37e103c1f0233
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/pinctrl/
+I honestly don't know because I'm not a DRM expert. Maybe Jagan or DRM
+bridge maintainers can add to the thread here.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305120120.iVpl8euc-lkp@intel.com/
+I kept reading the thread[2] and I think they settled on 2 drm_encoders
+because they're different display formats (LVDS vs. HDMI) and 2
+drm_connector structures. But then I watched the youtube video from this
+thread[3] and it seems like 1 drm_encoder is actually what should be
+done because there is really only DSI at the root. There's at least
+three people working on this topic of muxing displays though. Good news?
 
-All warnings (new ones prefixed by >>):
+The analogy between their gpio controlled mux and this anx part with a
+crosspoint switch is that the gpio is like the crosspoint switch, but
+the gpio is like a virtual mux? If the gpio is asserted for them, one
+display bridge is enabled (HDMI) and the other one is not (LVDS).
 
-   drivers/pinctrl/pinctrl-upboard.c: In function 'upboard_alt_func_enable':
-   drivers/pinctrl/pinctrl-upboard.c:779:17: warning: ISO C90 forbids mixed declarations and code [-Wdeclaration-after-statement]
-     779 |                 bool input = false;
-         |                 ^~~~
-   drivers/pinctrl/pinctrl-upboard.c: In function 'upboard_pinctrl_probe':
->> drivers/pinctrl/pinctrl-upboard.c:1268:32: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
-    1268 |                 pctrl->ident = (int) system_id->ident;
-         |                                ^
+In this case, the type-c cables may be connected to both
+usb-c-connectors and HPD may be asserted on both, but only one
+drm_connector will be able to attach to the 1 drm_encoder at a time. If
+we had 2 drm_encoders it would be possible to attach both encoders to
+both drm_connectors at the same time, which is impossible because it's a
+mux. Indicating that each connector is connected is OK when HPD is high
+on both usb-c-connectors. Userspace will have to attach an encoder to
+the drm_connector it wants to use, and the drm_connector will indicate
+which drm_encoders are possible for it, so all the information will be
+provided to userspace in this design.
 
+I think it really comes down to implementing the tree walking logic in
+the drm bridge APIs. The problem is things like
+drm_bridge_get_next_bridge(), drm_bridge_get_prev_bridge(), and
+drm_for_each_bridge_in_chain() which will have to operate on a tree
+instead of a list. There's also drm_bridge_chain_get_first_bridge() and
+drm_bridge_attach(). The good news is most of these APIs are used
+sparingly.
 
-vim +1268 drivers/pinctrl/pinctrl-upboard.c
+Maybe the simplest way to handle this is to maintain a tree of bridges
+and generate bridge chains when an encoder is attached to a connector in
+the tree. Presumably there is only one connector possible for a leaf of
+the bridge tree, and one encoder at the root of the bridge chain. From
+the drm_bridge structure, you'll only be able to iterate over the bridge
+chain that is currently configured. Same for the encoder, you'll only be
+able to walk the currently configured bridge chain from struct
+drm_encoder::bridge_chain.
 
-  1140	
-  1141	static int __init upboard_pinctrl_probe(struct platform_device *pdev)
-  1142	{
-  1143		struct upboard_fpga * const fpga = dev_get_drvdata(pdev->dev.parent);
-  1144		struct acpi_device * const adev = ACPI_COMPANION(&pdev->dev);
-  1145		struct pinctrl_desc *pctldesc;
-  1146		struct upboard_pinctrl *pctrl;
-  1147		struct upboard_pin *pins;
-  1148		const struct dmi_system_id *system_id;
-  1149		const char *hid;
-  1150		const unsigned int *rpi_mapping;
-  1151		unsigned int ngpio;
-  1152		int ret;
-  1153		int i;
-  1154	
-  1155		if (!fpga)
-  1156			return -EINVAL;
-  1157	
-  1158		if (!adev)
-  1159			return -ENODEV;
-  1160	
-  1161		/* set pin desc and rpi GPIO mapping table by HID */
-  1162		hid = acpi_device_hid(adev);
-  1163		if (!strcmp(hid, "AANT0F00") || !strcmp(hid, "AANT0F04") ||
-  1164		    !strcmp(hid, "AANT0000")) {
-  1165			pctldesc = &upboard_up_pinctrl_desc;
-  1166			rpi_mapping = upboard_up_rpi_mapping;
-  1167			ngpio = ARRAY_SIZE(upboard_up_rpi_mapping);
-  1168		} else if (!strcmp(hid, "AANT0F01")) {
-  1169			pctldesc = &upboard_up2_pinctrl_desc;
-  1170			rpi_mapping = upboard_up2_rpi_mapping;
-  1171			ngpio = ARRAY_SIZE(upboard_up2_rpi_mapping);
-  1172		} else if (!strcmp(hid, "AANT0F02")) {
-  1173			pctldesc = &upboard_upcore_crex_pinctrl_desc;
-  1174			rpi_mapping = upboard_upcore_crex_rpi_mapping;
-  1175			ngpio = ARRAY_SIZE(upboard_upcore_crex_rpi_mapping);
-  1176		} else if (!strcmp(hid, "AANT0F03")) {
-  1177			pctldesc = &upboard_upcore_crst02_pinctrl_desc;
-  1178			rpi_mapping = upboard_upcore_crst02_rpi_mapping;
-  1179			ngpio = ARRAY_SIZE(upboard_upcore_crst02_rpi_mapping);
-  1180		} else
-  1181			return -ENODEV;
-  1182	
-  1183		pctldesc->name = dev_name(&pdev->dev);
-  1184	
-  1185		pins = devm_kcalloc(&pdev->dev, pctldesc->npins, sizeof(*pins), GFP_KERNEL);
-  1186		if (!pins)
-  1187			return -ENOMEM;
-  1188	
-  1189		/* initialise pins */
-  1190		for (i = 0; i < pctldesc->npins; i++) {
-  1191			struct upboard_pin *pin = &pins[i];
-  1192			struct pinctrl_pin_desc *pd = (struct pinctrl_pin_desc *) &pctldesc->pins[i];
-  1193			struct reg_field fldconf = {0};
-  1194			unsigned int regoff = (pd->number / UPFPGA_REGISTER_SIZE);
-  1195			unsigned int lsb = pd->number % UPFPGA_REGISTER_SIZE;
-  1196	
-  1197			pin->funcbit = NULL;
-  1198	
-  1199			if (pd->drv_data) {
-  1200				fldconf = *(struct reg_field *)pd->drv_data;
-  1201	
-  1202				pin->funcbit = devm_regmap_field_alloc(&pdev->dev,
-  1203								       fpga->regmap,
-  1204								       fldconf);
-  1205				if (IS_ERR(pin->funcbit))
-  1206					return PTR_ERR(pin->funcbit);
-  1207			}
-  1208	
-  1209			pin->enbit = NULL;
-  1210			fldconf.reg = UPFPGA_REG_GPIO_EN0 + regoff;
-  1211			fldconf.lsb = lsb;
-  1212			fldconf.msb = lsb;
-  1213	
-  1214			pin->enbit = devm_regmap_field_alloc(&pdev->dev,
-  1215							     fpga->regmap,
-  1216							     fldconf);
-  1217			if (IS_ERR(pin->enbit))
-  1218				return PTR_ERR(pin->enbit);
-  1219	
-  1220			fldconf.reg = UPFPGA_REG_GPIO_DIR0 + regoff;
-  1221			fldconf.lsb = lsb;
-  1222			fldconf.msb = lsb;
-  1223	
-  1224			pin->dirbit = devm_regmap_field_alloc(&pdev->dev,
-  1225							      fpga->regmap,
-  1226							      fldconf);
-  1227			if (IS_ERR(pin->dirbit))
-  1228				return PTR_ERR(pin->dirbit);
-  1229	
-  1230			pd->drv_data = pin;
-  1231	
-  1232			/* set output by default */
-  1233			regmap_field_write(pin->dirbit, false);
-  1234		}
-  1235	
-  1236		/* create a new pinctrl device and register it */
-  1237		pctrl = devm_kzalloc(&pdev->dev, sizeof(*pctrl), GFP_KERNEL);
-  1238		if (!pctrl)
-  1239			return -ENOMEM;
-  1240	
-  1241		pctrl->regmap = fpga->regmap;
-  1242		pctrl->rpi_mapping = rpi_mapping;
-  1243		pctrl->chip = upboard_gpio_chip;
-  1244		pctrl->pctldesc = pctldesc;
-  1245		pctrl->chip.parent = &pdev->dev;
-  1246		pctrl->chip.ngpio = ngpio;
-  1247		pctrl->pins = pins;
-  1248	
-  1249		ret = devm_gpiochip_add_data(&pdev->dev, &pctrl->chip, pctrl);
-  1250		if (ret)
-  1251			return ret;
-  1252	
-  1253		pctrl->pctldev = devm_pinctrl_register(&pdev->dev, pctldesc, pctrl);
-  1254		if (IS_ERR(pctrl->pctldev))
-  1255			return PTR_ERR(pctrl->pctldev);
-  1256	
-  1257		/* add acpi pin mapping according to external-gpios key */
-  1258		ret = upboard_acpi_node_pin_mapping(fpga, pctrl,
-  1259						    "external",
-  1260						    dev_name(&pdev->dev),
-  1261						    0);
-  1262		if (ret)
-  1263			return ret;
-  1264	
-  1265		/* check for special board versions that require register patches */
-  1266		system_id = dmi_first_match(upboard_dmi_table);
-  1267		if (system_id)
-> 1268			pctrl->ident = (int) system_id->ident;
-  1269		else
-  1270			pctrl->ident = BOARD_UP_APL03;
-  1271	
-  1272		upboard_alt_func_enable(&pctrl->chip, "I2C",    pctrl->ident);
-  1273		upboard_alt_func_enable(&pctrl->chip, "SPI",    pctrl->ident);
-  1274		upboard_alt_func_enable(&pctrl->chip, "SPI1",   pctrl->ident);
-  1275		upboard_alt_func_enable(&pctrl->chip, "SPI2",   pctrl->ident);
-  1276		upboard_alt_func_enable(&pctrl->chip, "UART",   pctrl->ident);
-  1277		upboard_alt_func_enable(&pctrl->chip, "I2S",    pctrl->ident);
-  1278		upboard_alt_func_enable(&pctrl->chip, "PWM",    pctrl->ident);
-  1279		upboard_alt_func_enable(&pctrl->chip, "ADC",    pctrl->ident);
-  1280		/* I2C pin mux by CPLD in UP2 */
-  1281		upboard_alt_func_enable(&pctrl->chip, "NONAME", pctrl->ident);
-  1282	
-  1283		return ret;
-  1284	}
-  1285	
+This hinges on the idea that the bridge_chain is a list, not a tree, and
+that it only needs to exist when an encoder is attached to a connector.
+When an encoder isn't attached to a connector the bridges will be in the
+tree, and probably that tree structure will be maintained in the bridge
+driver itself knowing that there is one input side bridge and two output
+side bridges. When the input bridge is attached, it should be able to
+query the output side bridges for the connector that the encoder is
+attaching to and configure the mux and hook the input bridge to the
+correct output bridge.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+[2] https://lore.kernel.org/all/CAPj87rO7a=3DNbarOyZp1pE=3D19Lf2aGjWu7sru-e=
+HwGjX0fpN+-A@mail.gmail.com/
+[3] https://lore.kernel.org/all/CAMty3ZAQyADGLVcB13qJdEy_BiZEKpyDfCr9QrM-uc=
+FLFPZLcw@mail.gmail.com/
