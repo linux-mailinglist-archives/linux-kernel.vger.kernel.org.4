@@ -2,54 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23D76FF610
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:34:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DBBFE6FF614
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:34:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238660AbjEKPeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 11:34:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
+        id S238751AbjEKPe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 11:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238331AbjEKPeG (ORCPT
+        with ESMTP id S238331AbjEKPe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 11:34:06 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B31D755B9;
-        Thu, 11 May 2023 08:34:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=xhaK2YJhS01Edz36x6rlrMEpbRMzClC0qIef6ZatYys=; b=hUKHDIOfLOGJGTM8PG9Bw/V/Zq
-        fiVPS0DcKvzGZEe90/nK8LG5GKM250qzdASPE0J3N3qRRbIJnAPK1F37gHnlf7hZC8c9RPHXccVNB
-        8zAHo3aWRcONC27CkFLKcPljIQXE4SDhCqrau/MODBh/dAypgVg1So9NKfl2uxBDXsD9wrkUecD/N
-        ozhvC/yHBvn8uA4oGk4bYJf4yc/hXZXw7lhwREJ1VsBItvPJb3zZickbwFk7FpTmsZEfus8qtWSSj
-        lqlsFZorU/8OJznHZXHGCNUOVaQOqjbubnFy9PzpX9XbgSlYfSRtFBTOEbQGTeUl5GQdg60rB6Miz
-        +bpHk0RQ==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1px8Iu-009DtS-30;
-        Thu, 11 May 2023 15:34:04 +0000
-Date:   Thu, 11 May 2023 08:34:04 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Ed Tsai <ed.tsai@mediatek.com>
-Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        martin.petersen@oracle.com, bvanassche@acm.org,
-        stanley.chu@mediatek.com, peter.wang@mediatek.com,
-        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
-        powen.kao@mediatek.com, naomi.chu@mediatek.com,
-        wsd_upstream@mediatek.com
-Subject: Re: [PATCH 2/2] ufs: don't use the fair tag sharings
-Message-ID: <ZF0K7A6G2cYBjSgn@infradead.org>
-References: <20230509065230.32552-1-ed.tsai@mediatek.com>
- <20230509065230.32552-3-ed.tsai@mediatek.com>
+        Thu, 11 May 2023 11:34:56 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 589FC559F;
+        Thu, 11 May 2023 08:34:51 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34BEXimc009368;
+        Thu, 11 May 2023 15:34:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=mvWpFNBqIZ3K+SPGiMWgBjURs/bSbyQGKKt/UcYADzY=;
+ b=MpDy02Q6mEEkoKRsZSv5TGHEe12Dk5PgKmXpKljSye7wA5Q5UVN7D60AqquJmFxTRPqQ
+ kd0ejdU1n0JAAYwVOoZzqAKd7W6x4iy1h9uhY8a2odMnGo9JttKIYWd1pZqT7kHWvX+N
+ TJfJzhkllb4elkavIDPgZOsU9nNdhP8tKmqcrZvIn+DTgO9GE7rFeGRwz2MGrFjQsZU2
+ TbxK6+22BLc0MRbmtEyOHND4YOE+5UfydKvcoZdu7qsowNh9XGQeUVoxyu48jLSBeYxv
+ mQgHGzXjqSAJBob/74TW9P1XzZGt0pmwd95PEgBERQtraB2BAaIsn7G6ktcuNt8qHf2v hA== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qh27tr5u8-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 May 2023 15:34:43 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34BFYgH7026650
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 May 2023 15:34:42 GMT
+Received: from [10.110.38.53] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 11 May
+ 2023 08:34:42 -0700
+Message-ID: <a144e830-acf8-55c6-c323-d049095e9fac@quicinc.com>
+Date:   Thu, 11 May 2023 08:34:34 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230509065230.32552-3-ed.tsai@mediatek.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] accel/qaic: silence some uninitialized variable warnings
+To:     Dan Carpenter <dan.carpenter@linaro.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>
+CC:     Oded Gabbay <ogabbay@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <kernel-janitors@vger.kernel.org>
+References: <d11ee378-7b06-4b5e-b56f-d66174be1ab3@kili.mountain>
+Content-Language: en-US
+From:   Carl Vanderlip <quic_carlv@quicinc.com>
+In-Reply-To: <d11ee378-7b06-4b5e-b56f-d66174be1ab3@kili.mountain>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: yLaaiaKONj9PnGubx_VSs_GiiEp7rKF7
+X-Proofpoint-GUID: yLaaiaKONj9PnGubx_VSs_GiiEp7rKF7
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-11_12,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ priorityscore=1501 impostorscore=0 lowpriorityscore=0 clxscore=1011
+ malwarescore=0 phishscore=0 suspectscore=0 mlxscore=0 spamscore=0
+ mlxlogscore=636 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305110134
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,11 +81,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 02:52:30PM +0800, Ed Tsai wrote:
-> The tags allocation is limited by the fair sharing algorithm. It hurts
-> the performance for UFS devices, because the queue depth of general I/O
-> is reduced by half once the UFS send a control command.
+On 5/3/2023 3:41 AM, Dan Carpenter wrote:
+> Smatch complains that these are not initialized if get_cntl_version()
+> fails but we still print them in the debug message.  Not the end of
+> the world, but true enough.  Let's just initialize them to a dummy value
+> to make the checker happy.
+> 
+> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
 
-But it is there for a reason.  You completely fail to explain why you
-think your change is safe, and also why you did not try to even explain
-where the overhead is and how else you tried to mitigate it.
+LGTM
+
+Reviewed-by: Carl Vanderlip <quic_carlv@quicinc.com>
