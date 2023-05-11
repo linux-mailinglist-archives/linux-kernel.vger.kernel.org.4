@@ -2,60 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5288A6FF4ED
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:49:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EFC896FF4DD
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:43:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238542AbjEKOti (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 10:49:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41992 "EHLO
+        id S237771AbjEKOnb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 10:43:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238521AbjEKOtM (ORCPT
+        with ESMTP id S238179AbjEKOme (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 10:49:12 -0400
-X-Greylist: delayed 465 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 11 May 2023 07:47:17 PDT
-Received: from mx2.securetransport.de (mx2.securetransport.de [IPv6:2a03:4000:13:6c7::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6462F12486;
-        Thu, 11 May 2023 07:47:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
-        s=dhelectronicscom; t=1683815927;
-        bh=1yj/IKE5GtQ/NghhKpBm3Au13woVZKptiZvn9g7W1fo=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=w4brse4wW0VyosRPYpG2i80bkVRTDUDBOalUGVh4L0iKQejrc6JHt3EMJXKvsOOsI
-         0O1YGwuiCSMQiOiyTETMUZn6xdTjCg0qhBEdayakFfvQGpo4b1QcqKLDvm3lRiPCbe
-         jRsXeR73NVwJhIBPCRSfYmVa8ijmavex3MUGgCupwM/qjg9W4nQBA7ttdrvR5/KgHg
-         PEZBokwn4im7n+as/F3rEvbT9aFCKl+w7AW4ZXUjFEheIWoOJcKKFqsNVQvoMuuXqc
-         s5nMzpDVcGkhGa81Ravr0tzs+T5vPhg2YuP/sa3AamV/tP4JFJ4QGtJrxisHbhvynZ
-         BJOKwOS4ULL0Q==
-X-secureTransport-forwarded: yes
-From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
-Complaints-To: abuse@cubewerk.de
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-CC:     "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>, Marek Vasut <marex@denx.de>,
-        Fabio Estevam <festevam@denx.de>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "open list:CPU FREQUENCY SCALING FRAMEWORK" 
-        <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] cpufreq: imx6q: Disable only available frequencies
-Thread-Topic: [PATCH] cpufreq: imx6q: Disable only available frequencies
-Thread-Index: AQHZg+p2AXZhE0CYb0WkO6LusMFecq9Us6OAgABksVA=
-Date:   Thu, 11 May 2023 14:38:42 +0000
-Message-ID: <a7bfc85a9b664daf84e90adf520c0a56@dh-electronics.com>
-References: <20230511092334.3017-1-cniedermaier@dh-electronics.com>
- <20230511095355.5t7ldsyg5eglrrtv@vireshk-i7>
-In-Reply-To: <20230511095355.5t7ldsyg5eglrrtv@vireshk-i7>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Thu, 11 May 2023 10:42:34 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A3D8124B3;
+        Thu, 11 May 2023 07:38:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683815934; x=1715351934;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=BS+fRsn96RzSNGa/WgYbuBJ4b2bz4r4Rvr0liZj3b6M=;
+  b=CTTqhLot24hB+lv+SQRz1Be8uTEPB17XSF3FsuOhesCO438EAXaxQ+/T
+   I8i7UqOKerCSA4m8GjT5WJzA2T4/ume+AmtJSfMNdeSiSPcRx2oeeQ3Lt
+   L3WGkjSRI/zbtgxSCu8VAagzZBlXtjaSW4/gsSPOMJj7y/3l7uVQGMUkH
+   pWR9DGTAazuUUBbbzh/Po3WFv6X7ygnIQv7h3jUaLu7bSXJfXjlDZFLar
+   g/9fa2qKzvPUqaGstgLiwk8/thE+Bei0g6m9eJdLg57jkb6MFAoBdOB2o
+   9DgZS7r6UTDnUta5Dc7lSRTIVRlRP6AY/akROG7MtV5aio2huBdh/Ph1+
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="339812954"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="339812954"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 07:38:52 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="730382634"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="730382634"
+Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
+  by orsmga008.jf.intel.com with ESMTP; 11 May 2023 07:38:52 -0700
+From:   Yi Liu <yi.l.liu@intel.com>
+To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
+        kevin.tian@intel.com, robin.murphy@arm.com,
+        baolu.lu@linux.intel.com
+Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
+        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
+        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        zhenzhong.duan@intel.com
+Subject: [PATCH v2 09/11] iommufd/selftest: Add coverage for IOMMU_HWPT_ALLOC with user data
+Date:   Thu, 11 May 2023 07:38:42 -0700
+Message-Id: <20230511143844.22693-10-yi.l.liu@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230511143844.22693-1-yi.l.liu@intel.com>
+References: <20230511143844.22693-1-yi.l.liu@intel.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,23 +69,231 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogVmlyZXNoIEt1bWFyIFttYWlsdG86dmlyZXNoLmt1bWFyQGxpbmFyby5vcmddDQpTZW50
-OiBUaHVyc2RheSwgTWF5IDExLCAyMDIzIDExOjU0IEFNDQo+IE9uIDExLTA1LTIzLCAxMToyMywg
-Q2hyaXN0b3BoIE5pZWRlcm1haWVyIHdyb3RlOg0KPj4gQEAgLTI1NCwxNiArMjY5LDE2IEBAIHN0
-YXRpYyBpbnQgaW14NnFfb3BwX2NoZWNrX3NwZWVkX2dyYWRpbmcoc3RydWN0IGRldmljZSAqZGV2
-KQ0KPj4gICAgICAgdmFsICY9IDB4MzsNCj4+DQo+PiAgICAgICBpZiAodmFsIDwgT0NPVFBfQ0ZH
-M19TUEVFRF85OTZNSFopDQo+PiAtICAgICAgICAgICAgIGlmIChkZXZfcG1fb3BwX2Rpc2FibGUo
-ZGV2LCA5OTYwMDAwMDApKQ0KPj4gKyAgICAgICAgICAgICBpZiAoZGlzYWJsZV9mcmVxX2lmX2F2
-YWlsYWJsZShkZXYsIDk5NjAwMDAwMCkpDQo+PiAgICAgICAgICAgICAgICAgICAgICAgZGV2X3dh
-cm4oZGV2LCAiZmFpbGVkIHRvIGRpc2FibGUgOTk2TUh6IE9QUFxuIik7DQo+IA0KPiBBaGgsIHRo
-ZXNlIHdhcm5pbmdzLg0KPiANCj4gV2hhdCBhYm91dCBwcmludGluZyB0aGUgd2FybmluZyBvbmx5
-IHdoZW4gcmV0dXJuZWQgZXJyb3IgIT0gLUVOT0RFViA/DQo+IE9yIGp1c3QgbWFya2luZyB0aGVt
-IGRldl9kYmcoKSA/DQoNCkkgaGF2ZSBrZXB0IHRvIHRoZSBkb2N1bWVudGF0aW9uIG9mIG9wcCwg
-YnV0IGlmIC1FTk9ERVYgaXMgcG9zc2libGUNCkkgcHJlZmVyIGl0LiBNeSBzdWdnZXN0aW9uIGlz
-IHRvIGNoYW5nZSBlYWNoICJkZXZfcG1fb3BwX2Rpc2FibGUiIGluDQp0aGlzIHdheToNCg0KLQlp
-ZiAodmFsIDwgT0NPVFBfQ0ZHM19TUEVFRF85OTZNSFopDQotCQlpZiAoZGV2X3BtX29wcF9kaXNh
-YmxlKGRldiwgOTk2MDAwMDAwKSkNCisJaWYgKHZhbCA8IE9DT1RQX0NGRzNfU1BFRURfOTk2TUha
-KSB7DQorCQlyZXRfb3BwID0gZGV2X3BtX29wcF9kaXNhYmxlKGRldiwgOTk2MDAwMDAwKTsNCisJ
-CWlmIChyZXRfb3BwIDwgMCAmJiByZXRfb3BwICE9IC1FTk9ERVYpDQogCQkJZGV2X3dhcm4oZGV2
-LCAiZmFpbGVkIHRvIGRpc2FibGUgOTk2TUh6IE9QUFxuIik7DQorCX0NCg0KSWYgdGhhdCdzIE9L
-LCBJIGNhbiBkbyBhIHZlcnNpb24gMiB3aXRoIGl0Lg0KDQoNClJlZ2FyZHMNCkNocmlzdG9waA0K
+From: Nicolin Chen <nicolinc@nvidia.com>
+
+The IOMMU_HWPT_ALLOC ioctl now supports passing user_data to allocate a
+customized domain. Add its coverage for both a regular domain case and
+a nested domain case.
+
+Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+Signed-off-by: Yi Liu <yi.l.liu@intel.com>
+---
+ tools/testing/selftests/iommu/iommufd.c       | 114 +++++++++++++++++-
+ tools/testing/selftests/iommu/iommufd_utils.h |  36 ++++++
+ 2 files changed, 149 insertions(+), 1 deletion(-)
+
+diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
+index fa2324741ad2..568f80f596ad 100644
+--- a/tools/testing/selftests/iommu/iommufd.c
++++ b/tools/testing/selftests/iommu/iommufd.c
+@@ -122,6 +122,7 @@ TEST_F(iommufd, cmd_length)
+ 	TEST_LENGTH(iommu_option, IOMMU_OPTION);
+ 	TEST_LENGTH(iommu_vfio_ioas, IOMMU_VFIO_IOAS);
+ 	TEST_LENGTH(iommu_hw_info, IOMMU_DEVICE_GET_HW_INFO);
++	TEST_LENGTH(iommu_hwpt_alloc, IOMMU_HWPT_ALLOC);
+ #undef TEST_LENGTH
+ }
+ 
+@@ -194,6 +195,7 @@ FIXTURE_VARIANT(iommufd_ioas)
+ {
+ 	unsigned int mock_domains;
+ 	unsigned int memory_limit;
++	bool new_hwpt;
+ };
+ 
+ FIXTURE_SETUP(iommufd_ioas)
+@@ -233,6 +235,12 @@ FIXTURE_VARIANT_ADD(iommufd_ioas, mock_domain)
+ 	.mock_domains = 1,
+ };
+ 
++FIXTURE_VARIANT_ADD(iommufd_ioas, mock_domain_hwpt)
++{
++	.mock_domains = 1,
++	.new_hwpt = true,
++};
++
+ FIXTURE_VARIANT_ADD(iommufd_ioas, two_mock_domain)
+ {
+ 	.mock_domains = 2,
+@@ -260,6 +268,93 @@ TEST_F(iommufd_ioas, ioas_destroy)
+ 	}
+ }
+ 
++TEST_F(iommufd_ioas, hwpt_alloc)
++{
++	uint32_t new_hwpt_id = 0;
++
++	if (self->stdev_id && self->device_id) {
++		test_cmd_hwpt_alloc(self->device_id, self->ioas_id, &new_hwpt_id);
++		test_cmd_mock_domain_replace(self->stdev_id, new_hwpt_id);
++		/* hw_pagetable cannot be freed if a device is attached to it */
++		EXPECT_ERRNO(EBUSY, _test_ioctl_destroy(self->fd, new_hwpt_id));
++
++		/* Detach from the new hw_pagetable and try again */
++		test_cmd_mock_domain_replace(self->stdev_id, self->ioas_id);
++		test_ioctl_destroy(new_hwpt_id);
++	} else {
++		test_err_cmd_hwpt_alloc(ENOENT, self->device_id,
++					self->ioas_id, &new_hwpt_id);
++		test_err_mock_domain_replace(ENOENT,
++					     self->stdev_id, new_hwpt_id);
++	}
++}
++
++TEST_F(iommufd_ioas, nested_hwpt_alloc)
++{
++	uint32_t nested_hwpt_id[2] = {};
++	uint32_t parent_hwpt_id = 0;
++	uint32_t test_hwpt_id = 0;
++
++	if (self->device_id) {
++		/* Negative tests */
++		test_err_cmd_hwpt_alloc(ENOENT, self->ioas_id, self->device_id,
++					&test_hwpt_id);
++		test_err_cmd_hwpt_alloc(EINVAL, self->device_id,
++					self->device_id, &test_hwpt_id);
++
++		/* Allocate two nested hwpts sharing one common parent hwpt */
++		test_cmd_hwpt_alloc(self->device_id, self->ioas_id,
++				    &parent_hwpt_id);
++
++		test_cmd_hwpt_alloc_nested(self->device_id, parent_hwpt_id,
++					   &nested_hwpt_id[0]);
++		test_cmd_hwpt_alloc_nested(self->device_id, parent_hwpt_id,
++					   &nested_hwpt_id[1]);
++
++		/* Negative test: a nested hwpt on top of a nested hwpt */
++		test_err_cmd_hwpt_alloc_nested(EINVAL, self->device_id,
++					       nested_hwpt_id[0],
++					       &test_hwpt_id);
++		/* Negative test: parent hwpt now cannot be freed */
++		EXPECT_ERRNO(EBUSY,
++			     _test_ioctl_destroy(self->fd, parent_hwpt_id));
++
++		/* Attach device to nested_hwpt_id[0] that then will be busy */
++		test_cmd_mock_domain_replace(self->stdev_id,
++					     nested_hwpt_id[0]);
++		EXPECT_ERRNO(EBUSY,
++			     _test_ioctl_destroy(self->fd, nested_hwpt_id[0]));
++
++		/* Switch from nested_hwpt_id[0] to nested_hwpt_id[1] */
++		test_cmd_mock_domain_replace(self->stdev_id,
++					     nested_hwpt_id[1]);
++		EXPECT_ERRNO(EBUSY,
++			     _test_ioctl_destroy(self->fd, nested_hwpt_id[1]));
++		test_ioctl_destroy(nested_hwpt_id[0]);
++
++		/* Detach from nested_hwpt_id[1] and destroy it */
++		test_cmd_mock_domain_replace(self->stdev_id, parent_hwpt_id);
++		test_ioctl_destroy(nested_hwpt_id[1]);
++
++		/* Detach from the parent hw_pagetable and destroy it */
++		test_cmd_mock_domain_replace(self->stdev_id, self->ioas_id);
++		test_ioctl_destroy(parent_hwpt_id);
++	} else {
++		test_err_cmd_hwpt_alloc(ENOENT, self->device_id, self->ioas_id,
++					&parent_hwpt_id);
++		test_err_cmd_hwpt_alloc_nested(ENOENT, self->device_id,
++					       parent_hwpt_id,
++					       &nested_hwpt_id[0]);
++		test_err_cmd_hwpt_alloc_nested(ENOENT, self->device_id,
++					       parent_hwpt_id,
++					       &nested_hwpt_id[1]);
++		test_err_mock_domain_replace(ENOENT, self->stdev_id,
++					     nested_hwpt_id[0]);
++		test_err_mock_domain_replace(ENOENT, self->stdev_id,
++					     nested_hwpt_id[1]);
++	}
++}
++
+ TEST_F(iommufd_ioas, hwpt_attach)
+ {
+ 	/* Create a device attached directly to a hwpt */
+@@ -663,6 +758,8 @@ TEST_F(iommufd_ioas, access_pin)
+ 			       MOCK_FLAGS_ACCESS_CREATE_NEEDS_PIN_PAGES);
+ 
+ 	for (npages = 1; npages < BUFFER_SIZE / PAGE_SIZE; npages++) {
++		uint32_t new_hwpt_id = 0;
++		uint32_t mock_device_id;
+ 		uint32_t mock_stdev_id;
+ 		uint32_t mock_hwpt_id;
+ 
+@@ -696,12 +793,27 @@ TEST_F(iommufd_ioas, access_pin)
+ 				   _IOMMU_TEST_CMD(IOMMU_TEST_OP_ACCESS_PAGES),
+ 				   &access_cmd));
+ 		test_cmd_mock_domain(self->ioas_id, &mock_stdev_id,
+-				     &mock_hwpt_id, NULL);
++				     &mock_hwpt_id, &mock_device_id);
+ 		check_map_cmd.id = mock_hwpt_id;
++		if (variant->new_hwpt) {
++			test_cmd_hwpt_alloc(mock_device_id, self->ioas_id,
++					    &new_hwpt_id);
++			test_cmd_mock_domain_replace(mock_stdev_id,
++						     new_hwpt_id);
++			check_map_cmd.id = new_hwpt_id;
++		} else {
++			check_map_cmd.id = mock_hwpt_id;
++		}
+ 		ASSERT_EQ(0, ioctl(self->fd,
+ 				   _IOMMU_TEST_CMD(IOMMU_TEST_OP_MD_CHECK_MAP),
+ 				   &check_map_cmd));
+ 
++		if (variant->new_hwpt) {
++			/* Detach from the new hwpt for its destroy() */
++			test_cmd_mock_domain_replace(mock_stdev_id,
++						     mock_hwpt_id);
++			test_ioctl_destroy(new_hwpt_id);
++		}
+ 		test_ioctl_destroy(mock_stdev_id);
+ 		test_cmd_destroy_access_pages(
+ 			access_cmd.id,
+diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
+index 8dced7ef9118..e2c26168ec89 100644
+--- a/tools/testing/selftests/iommu/iommufd_utils.h
++++ b/tools/testing/selftests/iommu/iommufd_utils.h
+@@ -118,6 +118,42 @@ static int _test_cmd_hwpt_alloc(int fd, __u32 device_id, __u32 pt_id,
+ 
+ #define test_cmd_hwpt_alloc(device_id, pt_id, hwpt_id) \
+ 	ASSERT_EQ(0, _test_cmd_hwpt_alloc(self->fd, device_id, pt_id, hwpt_id))
++#define test_err_cmd_hwpt_alloc(_errno, device_id, pt_id, hwpt_id)     \
++	EXPECT_ERRNO(_errno, _test_cmd_hwpt_alloc(self->fd, device_id, \
++						  pt_id, hwpt_id))
++
++static int _test_cmd_hwpt_alloc_nested(int fd, __u32 device_id, __u32 parent_id,
++				       __u32 *hwpt_id)
++{
++	struct iommu_hwpt_selftest data = {
++		.flags = IOMMU_TEST_FLAG_NESTED,
++		.test_config = IOMMU_TEST_IOTLB_DEFAULT,
++	};
++	struct iommu_hwpt_alloc cmd = {
++		.size = sizeof(cmd),
++		.dev_id = device_id,
++		.pt_id = parent_id,
++		.hwpt_type = IOMMU_HWPT_TYPE_SELFTTEST,
++		.data_len = sizeof(data),
++		.data_uptr = (uint64_t)&data,
++	};
++	int ret;
++
++	ret = ioctl(fd, IOMMU_HWPT_ALLOC, &cmd);
++	if (ret)
++		return ret;
++	if (hwpt_id)
++		*hwpt_id = cmd.out_hwpt_id;
++	return 0;
++}
++
++#define test_cmd_hwpt_alloc_nested(device_id, parent_id, hwpt_id)     \
++	ASSERT_EQ(0, _test_cmd_hwpt_alloc_nested(self->fd, device_id, \
++						 parent_id, hwpt_id))
++#define test_err_cmd_hwpt_alloc_nested(_errno, device_id, parent_id, hwpt_id) \
++	EXPECT_ERRNO(_errno,                                                  \
++		     _test_cmd_hwpt_alloc_nested(self->fd, device_id,         \
++						 parent_id, hwpt_id))
+ 
+ static int _test_cmd_access_replace_ioas(int fd, __u32 access_id,
+ 					 unsigned int ioas_id)
+-- 
+2.34.1
+
