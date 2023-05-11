@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9589E6FF321
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:37:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8224D6FF353
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:45:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237855AbjEKNhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 09:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
+        id S238006AbjEKNpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:45:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237981AbjEKNf7 (ORCPT
+        with ESMTP id S238046AbjEKNpR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:35:59 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051A611545
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:35:00 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-33172d0eb28so123447565ab.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:35:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683812100; x=1686404100;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YEtKPqXPc8KwjQyplWNpVUtXydk8COJxQKJbi5Nsyvo=;
-        b=QUMWPUEyuQemMdOY508svUcNf1S7tZJYXj6sRgOUDc9yOpcQ1ntx3HJUJtVXT7LKsU
-         eGat0PtH0u8Y2DGXoi3vZDN2snMzzA0B445p3YFiZXwTpPEWyZKS3L9EPs+Lcl/39UOa
-         vNPmE3A7o9plXf3I2oAYoczGm5BacFm/U/xECBGUBvwJj7gTH8yUAW6wgJ0i1fJa7sSJ
-         q0+TpsFHtPsyZQADhiZfuw64r0jrNj3L2PGzabY7ckCo+Xh3OxeooMRyiKxLPRAawYiT
-         EIoP95KzxBT/OWHRBQGKA4WymFkFgQ29rsTSiLIdRdiEPzsZB/W5+DBqOsy0nHMW156d
-         OQRg==
-X-Gm-Message-State: AC+VfDwNOCXFnfIC5f8/wY9bYOHUXncsUzbAx1AC7JHM3bI5+/W3rUq1
-        IAoMVs68kAdNdZQHp/RL05sszqOFYaaoeeu6RovHfcKBoIa7
-X-Google-Smtp-Source: ACHHUZ6qcDTWku63SrxWIveG39qSJbRmc55sb0oQ/h2PLZ3REUH9VGDGcu3/x5ZFjx4lgB+7xhDtRaP1O9WIbEodeikrbJCfID09
+        Thu, 11 May 2023 09:45:17 -0400
+Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B52DEC1;
+        Thu, 11 May 2023 06:45:05 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.101.196.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 46A3D42A99;
+        Thu, 11 May 2023 13:36:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1683812218;
+        bh=k6U60AfyHoi50EUXdw1yC205/vKIebqXK872eoYXLZ0=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=boAXbNMqDUHZwzGQv4J58ZS/mKyhZy13pTeRNv17MLiFusW7e6vhqXAKS0mcDdrGr
+         LAmfQ3uwlG7oRvscmEMnBwBJEkgq7O23Vkc3n7vk+zOxczHzWS7rjuss6SdDO9x49i
+         VGGer0xXbwzWTv45h33SY2Kebu7bhqe3dz6xrVNFrtN9WqSZkY7a1wa7Q9vaGU5rIU
+         fAaXEmIwmim1zjLHss1DEk3xzE2QT3TLmDTLh2dKATTUgRNYHX4Fdq59dke3yAwT/U
+         qqpQvcXqXi81i0GmpFbEThzUPamaKbvKFUj1j0g0yFJaRaxB64Rw0HzJnEVNAiEuu9
+         hsPURx+u0mV7Q==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     bhelgaas@google.com
+Cc:     mika.westerberg@linux.intel.com, koba.ko@canonical.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v5 1/3] PCI/AER: Factor out interrupt toggling into helpers
+Date:   Thu, 11 May 2023 21:36:07 +0800
+Message-Id: <20230511133610.99759-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Received: by 2002:a92:c686:0:b0:317:9096:e80f with SMTP id
- o6-20020a92c686000000b003179096e80fmr11324593ilg.4.1683812100231; Thu, 11 May
- 2023 06:35:00 -0700 (PDT)
-Date:   Thu, 11 May 2023 06:35:00 -0700
-In-Reply-To: <000000000000602c0e05f55d793c@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000001a583a05fb6b0e76@google.com>
-Subject: Re: [syzbot] [ntfs?] kernel BUG in ntfs_iget
-From:   syzbot <syzbot+d62e6bd2a2d05103d105@syzkaller.appspotmail.com>
-To:     anton@tuxera.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,96 +57,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+There are many places that enable and disable AER interrupt, so move
+them into helpers.
 
-HEAD commit:    d295b66a7b66 Merge tag 'fsnotify_for_v6.4-rc2' of git://gi..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1438109e280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=38526bf24c8d961b
-dashboard link: https://syzkaller.appspot.com/bug?extid=d62e6bd2a2d05103d105
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16ba9dec280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12ef95fa280000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/95f1878df2f4/disk-d295b66a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/6d18d65ddcb5/vmlinux-d295b66a.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/6a59b1fdff8e/bzImage-d295b66a.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/eee641006b52/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d62e6bd2a2d05103d105@syzkaller.appspotmail.com
-
-loop0: detected capacity change from 0 to 190
-ntfs: (device loop0): is_boot_sector_ntfs(): Invalid boot sector checksum.
-ntfs: (device loop0): map_mft_record_page(): Mft record 0x1 is corrupt.  Run chkdsk.
-ntfs: (device loop0): map_mft_record(): Failed with error code 5.
-ntfs: (device loop0): ntfs_read_locked_inode(): Failed with error code -5.  Marking corrupt inode 0x1 as bad.  Run chkdsk.
-ntfs: (device loop0): load_system_files(): Failed to load $MFTMirr.  Mounting read-only.  Run ntfsfix and/or chkdsk.
-------------[ cut here ]------------
-kernel BUG at fs/ntfs/malloc.h:31!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 4993 Comm: syz-executor320 Not tainted 6.4.0-rc1-syzkaller-00025-gd295b66a7b66 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-RIP: 0010:__ntfs_malloc fs/ntfs/malloc.h:31 [inline]
-RIP: 0010:ntfs_malloc_nofs+0xfd/0x100 fs/ntfs/malloc.h:52
-Code: 17 e8 d7 1e c7 fe 48 89 df be 42 0c 00 00 5b 41 5e 41 5f e9 a5 f2 10 ff e8 c0 1e c7 fe 31 c0 5b 41 5e 41 5f c3 e8 b3 1e c7 fe <0f> 0b 90 66 0f 1f 00 55 41 57 41 56 41 55 41 54 53 49 89 fe 49 bc
-RSP: 0018:ffffc90003a3f818 EFLAGS: 00010293
-RAX: ffffffff82c4488d RBX: 0000000000000000 RCX: ffff88802476bb80
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffff888073a05118 R08: ffffffff82c447bd R09: ffffed100e9c5323
-R10: 0000000000000000 R11: dffffc0000000001 R12: dffffc0000000000
-R13: ffff888074e29be0 R14: ffff888073a05147 R15: dffffc0000000000
-FS:  000055555752e300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f02336e6000 CR3: 000000007a170000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- ntfs_read_locked_inode+0x1fd5/0x49c0 fs/ntfs/inode.c:703
- ntfs_iget+0x113/0x190 fs/ntfs/inode.c:177
- load_and_init_upcase fs/ntfs/super.c:1663 [inline]
- load_system_files+0x151c/0x4840 fs/ntfs/super.c:1818
- ntfs_fill_super+0x19b3/0x2bd0 fs/ntfs/super.c:2900
- mount_bdev+0x274/0x3a0 fs/super.c:1380
- legacy_get_tree+0xef/0x190 fs/fs_context.c:610
- vfs_get_tree+0x8c/0x270 fs/super.c:1510
- do_new_mount+0x28f/0xae0 fs/namespace.c:3039
- do_mount fs/namespace.c:3382 [inline]
- __do_sys_mount fs/namespace.c:3591 [inline]
- __se_sys_mount+0x2d9/0x3c0 fs/namespace.c:3568
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f023bb1cafa
-Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fffebbdb6c8 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
-RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f023bb1cafa
-RDX: 000000002001f1c0 RSI: 000000002001f200 RDI: 00007fffebbdb6e0
-RBP: 00007fffebbdb6e0 R08: 00007fffebbdb720 R09: 0000000000000987
-R10: 0000000000000000 R11: 0000000000000286 R12: 0000000000000004
-R13: 000055555752e2c0 R14: 0000000000000000 R15: 00007fffebbdb720
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:__ntfs_malloc fs/ntfs/malloc.h:31 [inline]
-RIP: 0010:ntfs_malloc_nofs+0xfd/0x100 fs/ntfs/malloc.h:52
-Code: 17 e8 d7 1e c7 fe 48 89 df be 42 0c 00 00 5b 41 5e 41 5f e9 a5 f2 10 ff e8 c0 1e c7 fe 31 c0 5b 41 5e 41 5f c3 e8 b3 1e c7 fe <0f> 0b 90 66 0f 1f 00 55 41 57 41 56 41 55 41 54 53 49 89 fe 49 bc
-RSP: 0018:ffffc90003a3f818 EFLAGS: 00010293
-RAX: ffffffff82c4488d RBX: 0000000000000000 RCX: ffff88802476bb80
-RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
-RBP: ffff888073a05118 R08: ffffffff82c447bd R09: ffffed100e9c5323
-R10: 0000000000000000 R11: dffffc0000000001 R12: dffffc0000000000
-R13: ffff888074e29be0 R14: ffff888073a05147 R15: dffffc0000000000
-FS:  000055555752e300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f02336e6000 CR3: 000000007a170000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-
-
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+Reviewed-by: Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 ---
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
+v5
+ - Fix misspelling.
+
+v4:
+ - No change.
+
+v3:
+ - Correct subject.
+
+v2:
+ - New patch.
+
+ drivers/pci/pcie/aer.c | 45 +++++++++++++++++++++++++-----------------
+ 1 file changed, 27 insertions(+), 18 deletions(-)
+
+diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+index f6c24ded134c..1420e1f27105 100644
+--- a/drivers/pci/pcie/aer.c
++++ b/drivers/pci/pcie/aer.c
+@@ -1227,6 +1227,28 @@ static irqreturn_t aer_irq(int irq, void *context)
+ 	return IRQ_WAKE_THREAD;
+ }
+ 
++static void aer_enable_irq(struct pci_dev *pdev)
++{
++	int aer = pdev->aer_cap;
++	u32 reg32;
++
++	/* Enable Root Port's interrupt in response to error messages */
++	pci_read_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, &reg32);
++	reg32 |= ROOT_PORT_INTR_ON_MESG_MASK;
++	pci_write_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, reg32);
++}
++
++static void aer_disable_irq(struct pci_dev *pdev)
++{
++	int aer = pdev->aer_cap;
++	u32 reg32;
++
++	/* Disable Root's interrupt in response to error messages */
++	pci_read_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, &reg32);
++	reg32 &= ~ROOT_PORT_INTR_ON_MESG_MASK;
++	pci_write_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, reg32);
++}
++
+ /**
+  * aer_enable_rootport - enable Root Port's interrupts when receiving messages
+  * @rpc: pointer to a Root Port data structure
+@@ -1256,10 +1278,7 @@ static void aer_enable_rootport(struct aer_rpc *rpc)
+ 	pci_read_config_dword(pdev, aer + PCI_ERR_UNCOR_STATUS, &reg32);
+ 	pci_write_config_dword(pdev, aer + PCI_ERR_UNCOR_STATUS, reg32);
+ 
+-	/* Enable Root Port's interrupt in response to error messages */
+-	pci_read_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, &reg32);
+-	reg32 |= ROOT_PORT_INTR_ON_MESG_MASK;
+-	pci_write_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, reg32);
++	aer_enable_irq(pdev);
+ }
+ 
+ /**
+@@ -1274,10 +1293,7 @@ static void aer_disable_rootport(struct aer_rpc *rpc)
+ 	int aer = pdev->aer_cap;
+ 	u32 reg32;
+ 
+-	/* Disable Root's interrupt in response to error messages */
+-	pci_read_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, &reg32);
+-	reg32 &= ~ROOT_PORT_INTR_ON_MESG_MASK;
+-	pci_write_config_dword(pdev, aer + PCI_ERR_ROOT_COMMAND, reg32);
++	aer_disable_irq(pdev);
+ 
+ 	/* Clear Root's error status reg */
+ 	pci_read_config_dword(pdev, aer + PCI_ERR_ROOT_STATUS, &reg32);
+@@ -1372,12 +1388,8 @@ static pci_ers_result_t aer_root_reset(struct pci_dev *dev)
+ 	 */
+ 	aer = root ? root->aer_cap : 0;
+ 
+-	if ((host->native_aer || pcie_ports_native) && aer) {
+-		/* Disable Root's interrupt in response to error messages */
+-		pci_read_config_dword(root, aer + PCI_ERR_ROOT_COMMAND, &reg32);
+-		reg32 &= ~ROOT_PORT_INTR_ON_MESG_MASK;
+-		pci_write_config_dword(root, aer + PCI_ERR_ROOT_COMMAND, reg32);
+-	}
++	if ((host->native_aer || pcie_ports_native) && aer)
++		aer_disable_irq(root);
+ 
+ 	if (type == PCI_EXP_TYPE_RC_EC || type == PCI_EXP_TYPE_RC_END) {
+ 		rc = pcie_reset_flr(dev, PCI_RESET_DO_RESET);
+@@ -1396,10 +1408,7 @@ static pci_ers_result_t aer_root_reset(struct pci_dev *dev)
+ 		pci_read_config_dword(root, aer + PCI_ERR_ROOT_STATUS, &reg32);
+ 		pci_write_config_dword(root, aer + PCI_ERR_ROOT_STATUS, reg32);
+ 
+-		/* Enable Root Port's interrupt in response to error messages */
+-		pci_read_config_dword(root, aer + PCI_ERR_ROOT_COMMAND, &reg32);
+-		reg32 |= ROOT_PORT_INTR_ON_MESG_MASK;
+-		pci_write_config_dword(root, aer + PCI_ERR_ROOT_COMMAND, reg32);
++		aer_enable_irq(root);
+ 	}
+ 
+ 	return rc ? PCI_ERS_RESULT_DISCONNECT : PCI_ERS_RESULT_RECOVERED;
+-- 
+2.34.1
+
