@@ -2,132 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94B626FEDE7
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BBC9B6FEDE8
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:38:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236267AbjEKIiV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 04:38:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47654 "EHLO
+        id S236570AbjEKIia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 04:38:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233655AbjEKIiS (ORCPT
+        with ESMTP id S233655AbjEKIiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 04:38:18 -0400
-Received: from dggsgout12.his.huawei.com (unknown [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99A3D469F;
-        Thu, 11 May 2023 01:38:15 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.169])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QH4zP1xYXz4f3l2p;
-        Thu, 11 May 2023 16:38:09 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP3 (Coremail) with SMTP id _Ch0CgBH9CFtqVxkBMjoIQ--.27674S3;
-        Thu, 11 May 2023 16:38:07 +0800 (CST)
-Subject: Re: Situation of CONFIG_BLK_WBT_MQ after commit b11d31ae01e6
- ("blk-wbt: remove unnecessary check in wbt_enable_default()")
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        linux-block@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <CAKXUXMzfKq_J9nKHGyr5P5rvUETY4B-fxoQD4sO+NYjFOfVtZA@mail.gmail.com>
- <8a86ba08-cde4-97a4-d7e2-dc340609381c@huaweicloud.com>
- <CAKXUXMzA8GfJaWmdaszhrTtjMy5987oZ8AaBcoT6hNVvgCiZ-w@mail.gmail.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <40f7206a-350b-7522-79b0-35cd92e38017@huaweicloud.com>
-Date:   Thu, 11 May 2023 16:38:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Thu, 11 May 2023 04:38:24 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 401CA76BD
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:38:23 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id 2adb3069b0e04-4ec8149907aso9630279e87.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:38:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683794301; x=1686386301;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FURj9AzValj5QACsSli0Vwx4tsK5MhX+LSZftjhcMSs=;
+        b=lkRhXgWkBGSBpDesK0bqg6v+YDvgBKhgGjN2r+PoBw8mBbRJugn2aoGdfYQoJoFpWk
+         1f+qQ2AKPJS03RABZp9M7oGR0TGRVGWgUkp6p1l3FZqCpMwioCV0qVBABiM4S6iw80+2
+         d9AzDz3uRRgBmevsFpZtNIwqXaIJl8VTEDIKbb5XCCulNk6kqpawCMPnDUi5SZmRRH30
+         KSzE+iZujHXyM/CVrHKqWuy/1osrF77FxcFYzB2iX9iRRrAI9ne/1ZONVS5ETFttVfmD
+         z8aUy0gw6ZeqpZOWNfh5h+5/z9GyX5ygX4IW6n0XZjPwPE+3SjHNu0B7Iu3KSqpCfdYJ
+         9GaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683794301; x=1686386301;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FURj9AzValj5QACsSli0Vwx4tsK5MhX+LSZftjhcMSs=;
+        b=Lj7HrdJ3kkIDyfSfq7CoRPksgdo4jWJuMF8TG6P5TWCJTRSHm4Wy2htqkehT4bU+eH
+         DltFKb74BCanuPgpGLfSDK5NpN0ScMJq9UeqFP1/yiC0syr3eD5cY50VgoUdLcZ+07Rs
+         hE+oqIV6gX8aGTsQz1VFSwc3tadutNA+5DuvOIp4KpmFyRm1xUUtt4n1TiZ34rnwXN/O
+         P9DsF96Gz8cdN5AM/E9dtiXTSUY7Y9nAOCkNgNMHJ3SsnkKCLgRYiHJ713nawRTTzJFI
+         qRN3U7T/Hz3dicuuo4Y33SrUwSjb/k/YDnEj4DEMz+t/WqjzTSU7/6OoWWLjjiaCDTB9
+         st4g==
+X-Gm-Message-State: AC+VfDy6+2lCsoGPrbJsjhVELLf+6Q65UOF5mBRTbHR40XNlzABQsk6E
+        JE+3U9NVvzhL4psF7RqYpgrWQQ==
+X-Google-Smtp-Source: ACHHUZ4KZqTl1GAfdpqLRF8PuNBZ3NweOSj0wV85fB2y/9k/HSNqCP2mYm7PItDI5hxP28D6L04hjQ==
+X-Received: by 2002:a05:6512:961:b0:4eb:7e:1fa5 with SMTP id v1-20020a056512096100b004eb007e1fa5mr2554589lft.8.1683794301026;
+        Thu, 11 May 2023 01:38:21 -0700 (PDT)
+Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
+        by smtp.gmail.com with ESMTPSA id b28-20020ac25e9c000000b004f24ee39661sm1018858lfq.137.2023.05.11.01.38.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 01:38:20 -0700 (PDT)
+Message-ID: <cb04d8e1-f2ab-8a5f-5c2c-fde125cbb243@linaro.org>
+Date:   Thu, 11 May 2023 10:38:16 +0200
 MIME-Version: 1.0
-In-Reply-To: <CAKXUXMzA8GfJaWmdaszhrTtjMy5987oZ8AaBcoT6hNVvgCiZ-w@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _Ch0CgBH9CFtqVxkBMjoIQ--.27674S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7WF1rXF1kZr13AF43Zry5Jwb_yoW8uFy8pr
-        y8GF42ka1DKFs2kr4Iy34jka4ftF4kt347Xrn5Gw1UWwn0yayxAr4Sgr1a9F98Ars2gw1j
-        y3ySqry3K345AaDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkK14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4U
-        JVWxJr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gc
-        CE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E
-        2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJV
-        W8JwACjcxG0xvEwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAY
-        IcxG8wCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
-        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
-        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
-        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_
-        Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VUbXdbU
-        UUUUU==
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        MAY_BE_FORGED,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH 1/3] ARM: dts: qcom: msm8226: Use XO from rpmcc where
+ possible
+Content-Language: en-US
+To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Taniya Das <tdas@codeaurora.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20230509-msm8226-mmcc-parents-v1-0-83a2dfc986ab@z3ntu.xyz>
+ <20230509-msm8226-mmcc-parents-v1-1-83a2dfc986ab@z3ntu.xyz>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230509-msm8226-mmcc-parents-v1-1-83a2dfc986ab@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-在 2023/05/10 13:40, Lukas Bulwahn 写道:
-> On Wed, May 10, 2023 at 5:24 AM Yu Kuai <yukuai1@huaweicloud.com> wrote:
->>
->> Hi,
->>
->> 在 2023/05/08 12:37, Lukas Bulwahn 写道:
->>> Dear Yu Kuai, dear Christoph, dear Jens,
->>>
->>>
->>> The commit b11d31ae01e6 ("blk-wbt: remove unnecessary check in
->>> wbt_enable_default()") removes the only reference to the config
->>> BLK_WBT_MQ in the kernel tree.
->>>
->>> The commit comes with the statement "If CONFIG_BLK_WBT_MQ is disabled,
->>> wbt_init() won't do anything.". The statement "If CONFIG_BLK_WBT is
->>> disabled, wbt_init() won't do anything." (note: CONFIG_BLK_WBT vs.
->>> CONFIG_BLK_WBT_MQ) is certainly true, but I do not see that "If
->>> CONFIG_BLK_WBT_MQ is disabled, wbt_init() won't do anything.", but I
->>> believe it would simply do what wbt_init() does with CONFIG_BLK_WBT
->>> being enabled.
->>>
->>> Now, it seems that with this commit applied, the intended switch of
->>> the config BLK_WBT_MQ is gone, and the config really now has no effect
->>> at all.
->>>
->>> So, I am a bit puzzled:
->>>
->>> 1. Either the config BLK_WBT_MQ does have an effect somewhere, but one
->>> cannot find its reference with 'git grep -i "BLK_WBT_MQ" .' --- so, my
->>> investigation is just incomplete or wrong, or
->>>
->>> 2. We really do not need this further build config BLK_WBT_MQ beyond
->>> the other configs already there --- then this config should just be
->>> removed, or
->>>
->>> 3. the commit unintentionally broke the purpose of the config
->>> BLK_WBT_MQ --- then this commit above should be reverted.
->>
->> Thanks for the report, it's the above case and it's my mistake.
->> I will fix this.
->>
+
+On 9.05.2023 23:16, Luca Weiss wrote:
+> The xo clock being used everywhere actually goes via the RPM. Since the
+> rpmcc driver recently got support for this clock we can use this now.
 > 
-> Kuai, thanks for letting me know. Feel free to add a "Reported-by:
-> Lukas Bulwahn <lukas.bulwahn@gmail.com>" tag, and to include in the
-> list of recipients when you send out the fix to the mailing list.
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-I just send the fix, sorry that I forgot to cc you...
-
-https://lore.kernel.org/all/20230511014509.679482-2-yukuai1@huaweicloud.com/
-
-Thanks,
-Kuai
+Konrad
+>  arch/arm/boot/dts/qcom-msm8226.dtsi | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
 > 
-> I am glad to see that my investigation of kernel code is finding some
-> issues that we can fix.
+> diff --git a/arch/arm/boot/dts/qcom-msm8226.dtsi b/arch/arm/boot/dts/qcom-msm8226.dtsi
+> index 42acb9ddb8cc..4dd4e26c73a2 100644
+> --- a/arch/arm/boot/dts/qcom-msm8226.dtsi
+> +++ b/arch/arm/boot/dts/qcom-msm8226.dtsi
+> @@ -176,7 +176,7 @@ sdhc_1: mmc@f9824900 {
+>  			interrupt-names = "hc_irq", "pwr_irq";
+>  			clocks = <&gcc GCC_SDCC1_AHB_CLK>,
+>  				 <&gcc GCC_SDCC1_APPS_CLK>,
+> -				 <&xo_board>;
+> +				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+>  			clock-names = "iface", "core", "xo";
+>  			pinctrl-names = "default";
+>  			pinctrl-0 = <&sdhc1_default_state>;
+> @@ -192,7 +192,7 @@ sdhc_2: mmc@f98a4900 {
+>  			interrupt-names = "hc_irq", "pwr_irq";
+>  			clocks = <&gcc GCC_SDCC2_AHB_CLK>,
+>  				 <&gcc GCC_SDCC2_APPS_CLK>,
+> -				 <&xo_board>;
+> +				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+>  			clock-names = "iface", "core", "xo";
+>  			pinctrl-names = "default";
+>  			pinctrl-0 = <&sdhc2_default_state>;
+> @@ -208,7 +208,7 @@ sdhc_3: mmc@f9864900 {
+>  			interrupt-names = "hc_irq", "pwr_irq";
+>  			clocks = <&gcc GCC_SDCC3_AHB_CLK>,
+>  				 <&gcc GCC_SDCC3_APPS_CLK>,
+> -				 <&xo_board>;
+> +				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
+>  			clock-names = "iface", "core", "xo";
+>  			pinctrl-names = "default";
+>  			pinctrl-0 = <&sdhc3_default_state>;
+> @@ -362,7 +362,8 @@ usb_hs_phy: phy {
+>  					compatible = "qcom,usb-hs-phy-msm8226",
+>  						     "qcom,usb-hs-phy";
+>  					#phy-cells = <0>;
+> -					clocks = <&xo_board>, <&gcc GCC_USB2A_PHY_SLEEP_CLK>;
+> +					clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>,
+> +						 <&gcc GCC_USB2A_PHY_SLEEP_CLK>;
+>  					clock-names = "ref", "sleep";
+>  					resets = <&gcc GCC_USB2A_PHY_BCR>, <&usb 0>;
+>  					reset-names = "phy", "por";
+> @@ -617,7 +618,7 @@ adsp: remoteproc@fe200000 {
+>  			power-domains = <&rpmpd MSM8226_VDDCX>;
+>  			power-domain-names = "cx";
+>  
+> -			clocks = <&xo_board>;
+> +			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>;
+>  			clock-names = "xo";
+>  
+>  			memory-region = <&adsp_region>;
 > 
-> Lukas
-> .
-> 
-
