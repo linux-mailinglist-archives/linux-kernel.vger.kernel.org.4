@@ -2,119 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61716FEA14
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 05:17:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC52B6FEA17
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 05:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229482AbjEKDRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 23:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34152 "EHLO
+        id S236284AbjEKDRj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 23:17:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235731AbjEKDRR (ORCPT
+        with ESMTP id S232410AbjEKDRd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 23:17:17 -0400
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (mail-tyzapc01olkn2046.outbound.protection.outlook.com [40.92.107.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A8D4230;
-        Wed, 10 May 2023 20:17:13 -0700 (PDT)
+        Wed, 10 May 2023 23:17:33 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2102.outbound.protection.outlook.com [40.107.22.102])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D8294EF7
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 20:17:26 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=NdzI+JILhAZm1FK5eCYlc6YgiDFcbvlZfn/OCKnMdReVq9YnA/Ei5sb9YZDcqnEwY6zohYmoLXK/4fiz/GctJbpOzHvW8B3aAoB2zgz2kh44OjMddUQ7VXW7PqZN99bniKS3OAZ3AD5iOjB4qFOLW+K5E257ii9BbGl/mmfNVfFkVi+uo1PuEaznoPhqX9Efw8rL8F57/lC1bKd07hDrE8asiFw3x69Z9XW976QdjPSl64Uok8FKzXHR41qdfLe49W88pUJb63i/M2FxmVGm+HFwiQxRQFYJtoWwkJhmLqMX/cnOZLEY+Wxw0v0A3vud/2kK/3vrNpK1CqK0LTTulw==
+ b=Rj/i7A3naMWC3Q9Em3DqSO6B7p6T7XNL9lr0fek7E1ZqMhB9uZl2bhESxb//Xpa/UzYNWNimM39In973q6dtBZPXA0AoiJqSTqSIQy/XG7fnVPpfCnW4uWm2QNx8KESMooADouMQxpiuLSMMQpj2jeSs+gchW3+SsIFfGwzQ3omW+bAqwTaHg0pvPjhCo+i1DGE6MLJzl0GjO4+eprIRwjhIiNS7zvD16ZpStKNd1q6nJEOLB+TzhXLmPkWzafoMDZ5azMjSvSbJ2gmjj1St/SFIUheC0r+G3UO0Oz3fq7r4ZT7n6rgK0nOVDzEGOtMxSl3kKJCBo+xgERmXkxs/Kw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sCq7AIj7Rkd+59By2ou4H55UQRh/tHJ/x5HWhqIRRok=;
- b=KQ9aWsQdkEKlUQ++HbmvQGicYcEXuAwqfRLTh+niIY2SIZa99x5APFzKoCxuatd6Wu4xB3dSqscHNU1BMD9hj51yiKT+xFyQoSlGnm2Bq9LtggYg/1haerm9VLJ1aSfY5uqPVVRYwYtnFRyn+UPDHh5/fIDDvvgxm4DtBeMaJxEZBcXMfy6cIr+cTQSibj6VyfwxDhrSzmoynwF8pRIEZU9OWzFv1Eme317ICL31gQQyhI/jO2a+827CyIKo3xMTcwPnFVAGOLCVtOdzFEFn7lfFt1Q4spZqWhAo6y9YIOUf9V+HBsCTrv0hCEe7c1K2MPY5Bglhzhbo8jqB9WuvGw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
+ bh=XKnc1XEjGO2dd+M2/sy3a+35EH/O1xzx2Cw+uH/nMLo=;
+ b=HXHFhqa7TfCNbgab+LuFcQd5XJhmJmFBxE5AKG3CqpUql/pl920sWEz16VXdWbPmqrxxZkeKUDeas/9S/2V/iZivD6uyeWvCjBvS8P2lSeKsj3OqglOcSBx0D9iUmlAmNmb3WC9b3UpNWtuetsvpEwDcN3bI+s6AMK0Imy1+D3pKNx3if7jL2rog0wZeHqzUnZfBnstO07ZJUL88R2783U8Z8uEukbH9BcxxW64VWCnfB9hHnk3Lt5aH71k3hRFqDW++AXz2RNoHSiUtCJFir1bWe77XDTH1R7IJ7XvR0LXmiJq8OZSsR0XbnXgu1Lzja3NkW5RFkWZlF36WXj79LA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=virtuozzo.com; dmarc=pass action=none
+ header.from=virtuozzo.com; dkim=pass header.d=virtuozzo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=virtuozzo.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=sCq7AIj7Rkd+59By2ou4H55UQRh/tHJ/x5HWhqIRRok=;
- b=bl+7nCcTrQog0DQ2XsuXr+7+OJnnoPNo6vRnMBmAfzPk37WySinEGvkql7U0+uU436MBos3xjD+TJJXpwOMaOxCyfrIOfev4JUZy2aDB8Di8EV4yS60/Ayl4Oj0qVw5mxT8YfOXY2JScYZ9NMSheg5nqaymzUDtDRmhevg18s1ZBAYTrXsiRLkp9mibcMgTZbS9qu43/ziCg5+qRM5CdSnx8iwIIDFSn5cBGeBN6hTuNevKflECdvqZkjoNcvw9Dgcnv3x2HBZto92Tx/LR2XV1eZQjqEgFr4UKNx9npwA6dAuPAYurYvMSGnuBnTqf9KvREQnq4XYPcZEDjKcoapg==
-Received: from KL1PR01MB5448.apcprd01.prod.exchangelabs.com
- (2603:1096:820:9a::12) by PUZPR01MB4932.apcprd01.prod.exchangelabs.com
- (2603:1096:301:f3::14) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.19; Thu, 11 May
- 2023 03:16:56 +0000
-Received: from KL1PR01MB5448.apcprd01.prod.exchangelabs.com
- ([fe80::93cb:1631:4c4c:1821]) by KL1PR01MB5448.apcprd01.prod.exchangelabs.com
- ([fe80::93cb:1631:4c4c:1821%4]) with mapi id 15.20.6387.018; Thu, 11 May 2023
- 03:16:56 +0000
-Message-ID: <KL1PR01MB54486E8738DC81E062BA2D0EE6749@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
-Date:   Thu, 11 May 2023 11:16:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2] net: mdiobus: Add a function to deassert reset
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>, andrew@lunn.ch
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "open list:ETHERNET PHY LIBRARY" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <96a1b95e-d05e-40f0-ada9-1956f43010e0@lunn.ch>
- <KL1PR01MB54482416A8BE0D80EA27223CE6779@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
- <9107661.CDJkKcVGEf@steina-w>
-From:   Yan Wang <rk.code@outlook.com>
-In-Reply-To: <9107661.CDJkKcVGEf@steina-w>
+ bh=XKnc1XEjGO2dd+M2/sy3a+35EH/O1xzx2Cw+uH/nMLo=;
+ b=HElx8I+2K26krXEFz6XSAOV+EIuKB+XYxx0KizKPYrJ5Yy6RuG5PYPN6bEVAyQqmxbnO7hjaNNmxSb5vnjLonjTIZ2cskGgcctQnMoUU8HmGqSIiFFX9CKfWw/TtqCpknwjPtxr40dkC43lzU1aVvxf27wdChWAEdz/f8qUvX0gKPX//mf7rbWdrE/Yy+rWaXzk5dDJ+uBxWLF8nJZozvzFDSALoInXqzlykqlG4JgRkY5fYGAsr2jBns1x2AnLSxeLxEA5/RzNPVflA/02fWEXStPSmWSV5GM4FbuQXngKRKCcs64rJoj+zntNRxwb46YHVUEyoUfmChYtOvwVzXg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=virtuozzo.com;
+Received: from VE1PR08MB4989.eurprd08.prod.outlook.com (2603:10a6:803:114::19)
+ by DBBPR08MB6043.eurprd08.prod.outlook.com (2603:10a6:10:20b::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.20; Thu, 11 May
+ 2023 03:17:20 +0000
+Received: from VE1PR08MB4989.eurprd08.prod.outlook.com
+ ([fe80::cc7e:f565:88eb:67af]) by VE1PR08MB4989.eurprd08.prod.outlook.com
+ ([fe80::cc7e:f565:88eb:67af%5]) with mapi id 15.20.6387.020; Thu, 11 May 2023
+ 03:17:19 +0000
+Message-ID: <cc8aa6a4-a187-f3ad-fec9-05f037a3886d@virtuozzo.com>
+Date:   Thu, 11 May 2023 11:17:07 +0800
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [RFD] posix-timers: CRIU woes
+Content-Language: en-US
+To:     Andrey Vagin <avagin@openvz.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Frederic Weisbecker <frederic@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Anna-Maria Behnsen <anna-maria@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Sebastian Siewior <bigeasy@linutronix.de>,
+        Michael Kerrisk <mtk.manpages@gmail.com>,
+        Christian Brauner <brauner@kernel.org>,
+        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
+        Pavel Emelyanov <xemul@openvz.org>
+References: <20230425181827.219128101@linutronix.de>
+ <20230425183312.932345089@linutronix.de> <ZFUXrCZtWyNG3Esi@lothringen>
+ <87zg6i2xn3.ffs@tglx> <87v8h62vwp.ffs@tglx> <878rdy32ri.ffs@tglx>
+ <87v8h126p2.ffs@tglx> <875y911xeg.ffs@tglx> <87ednpyyeo.ffs@tglx>
+ <CANaxB-wV9iUT6=Y9nZCWbJhiscMrnAQh4fUXs7Tb8pr=-HwSYQ@mail.gmail.com>
+From:   Pavel Tikhomirov <ptikhomirov@virtuozzo.com>
+In-Reply-To: <CANaxB-wV9iUT6=Y9nZCWbJhiscMrnAQh4fUXs7Tb8pr=-HwSYQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-TMN:  [Q7JojGAbaI9VqIvq83L5ApDzpGMsV/RYYKmLKjlqzwI=]
-X-ClientProxiedBy: SG2PR03CA0108.apcprd03.prod.outlook.com
- (2603:1096:4:7c::36) To KL1PR01MB5448.apcprd01.prod.exchangelabs.com
- (2603:1096:820:9a::12)
-X-Microsoft-Original-Message-ID: <2591cbd3-5bc1-515a-a157-8a51dc321e13@outlook.com>
+X-ClientProxiedBy: KL1PR01CA0080.apcprd01.prod.exchangelabs.com
+ (2603:1096:820:2::20) To VE1PR08MB4989.eurprd08.prod.outlook.com
+ (2603:10a6:803:114::19)
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: KL1PR01MB5448:EE_|PUZPR01MB4932:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8fe48ab3-4447-477a-bfd8-08db51ce2cf2
+X-MS-TrafficTypeDiagnostic: VE1PR08MB4989:EE_|DBBPR08MB6043:EE_
+X-MS-Office365-Filtering-Correlation-Id: 91f3243c-1b88-4f5a-07c4-08db51ce3adb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: gqsTBqNZ+6YT44/twAgBfZbZHnoqV165z4ctIl8CfiaggZaSLb8prtqU/PshyLlkXNYpfQ+vSxI4ec5cGkc5kAb82hpnAWg9px5fwLJfC6E92h+UlLxGqJSd4YBCEjZpmJhnXmO66OsPMhBcJH35mOnlkTzQKatc+Plo6DGdDuaLxEG/wB6ecL6am/3rt/ByaJJ0ZPJ3fSti1yLCtG/caOXj7h8/zWJ4H16IdTPqXJhuyl3OtZIVz4Uq/MVd5INPOctssVV1SPAMJjW69fkfvSYeq4JFbRIrTsbIdYY0Dn1zEoqxhbRtY91I7eGoCb8WkHwcdjwXyS+2m8D45ipfT6OisWuYY8ERNct+77ftlvNRNvH+8bfaci5vKNQIcaeUJ1Lp+OyXjubvts52iTXSrgthdaPtnrv1yt1KHmsWJmrWeFBRNusUIU0Ry8qF9r7hGvKF15KpdTBJiCVqGkxGhCcpmaWbl+yrpjlQdBkMfvAo3m6cM9st6a9eBXuBMYd0eYpT58U5fzkVRejClM4WO6zvD9OcMb9I5xhW7zj0M8CLqTILIAwYvfqP4WMlpb70UDxlDn7qJ4A7r+WJgdL/2wNJ6i7aRGfDY61mp7usI1c=
+X-Microsoft-Antispam-Message-Info: KCzEZyyQHwPmCmuts4r6BkPUFGxrbNcIl4HBdeh3vyyBb4OkzHxm88TUou+6inc2cTve61vWYRNqwA5x6ma35QNnZoBCEJjd2h5YAMFY4ofJb6TLKUX5pMTtdx3Kn7MCRCG5cRIUPj173eB9Gx6CbQq+6nhAYYxwOspL5Yz70I8uCsdTw5atZSfVhJAcecAzBJnjjuISxEU7rORuWeACBAwuN1R4/5EBhNlpYYB3gv3w55F3bKCrSdErYCYo8ytUmYO7V7NSPt8FGyY3NFt9ftmxasjBxTXM3d5aNQTYTUa8SaMu/RN27EI+uvngyBGBLALMnGhr40m0Agua5e5OBACMWBkX9v8ldMy1E9gOiylDwSmItTo45Ag52n/GoShGvunepPLRsTGYEaXhe65zLuyeawAB6vfp2s5m0x4u7wzaIepQ4hp9th40QKMBXBhGYn+I9U+3MdVhnf5bo3IBVHa9hdORsr39SMrFQUaU/b1QLBBDKuI19ogX3CUhai/6PVr7hxC4e7ltOGsxC2+v15nLYy5q5w3Og2VvVWSuFaYc3FCi9k6QaBwgZU+DDASUaht3NBOh1bbw+4zCJt1zDOZx09l+7eUjjyv8pRsajxySbMSKVN+QUUOcKJJQgi5w6bJmaaA5yrZSgkUNzDGjjgnunMiJC7ZA+JXdcLYK3PGRG7nExrN7X6iXClgV1iAN
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VE1PR08MB4989.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(376002)(346002)(39850400004)(396003)(451199021)(54906003)(110136005)(478600001)(31686004)(7416002)(86362001)(966005)(6486002)(6666004)(31696002)(316002)(66946007)(4326008)(66476007)(66556008)(83380400001)(36756003)(2616005)(8676002)(41300700001)(38100700002)(8936002)(186003)(2906002)(6512007)(5660300002)(6506007)(107886003)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M3JxOXlSS3ByLy80Q3Jwai82YW45a1ZQamRjWmwvSkhLUXNiOFVqand5WVRW?=
- =?utf-8?B?Q1JDVmpyZXFpYkxNenZzaDMzejhjaFljVExIYVlTRGg2aFdFdVdNM09Rd2p5?=
- =?utf-8?B?VVFyV1c1SnlIaW1HcHRobU9qRXYzVzloQXB6MUhtV1RLNTdDVlpBUnltc2ND?=
- =?utf-8?B?Y3NrdkZqd0RCZVhVeGZzRlB1czdSVXdOSm1WaWE0MXdscG03OEoycXJNaE0y?=
- =?utf-8?B?Qkd1ZW96bUp5bU5Rcm1kdXZ2LzhrNWptOHh1QzBjWjc5SnBYeXZHZFFyWXlj?=
- =?utf-8?B?L3pmVlEydEg0aHMxNm4wdDZBazJuQloyOEI2YVdHV2xqQ0FpZE4vcm4rVk9D?=
- =?utf-8?B?NXlLdXNzUnVqdG9MSXpiWldoeVlmcDE0NU9Ba3BINFQvNmJlK21ya0J4QzFh?=
- =?utf-8?B?R2tKbHFGRW1ZL2Y4MHViRnIrcE5qeTRqUjlMM3RCaFhMaDZFbVYzVHhONXBa?=
- =?utf-8?B?UkpndCtlOUNhS3hJUGNzSHdNdmV3dE5ub3VMTXBOZXQ2NUtXMWVWcDFPb1JQ?=
- =?utf-8?B?UWhWV3lQdGlGWDZlcTk3Q1NyWWw2cWlHei92QVA3bkdrVFhiL3dUMDZiUnlR?=
- =?utf-8?B?Z1pKTG5LT3JYL3hBeW0vbVFHQ0lSUmxwWFBVei9hS0JNb0ROazFjUDJVVnMy?=
- =?utf-8?B?ZGpyRXUwZ0swdTM1UXFYR0xTVVFOeVFHWEovZ21YeHpaLzFMSlp0M3I1cUxr?=
- =?utf-8?B?OHhkWFJmbVpzamplM3kvYzJjSEVOVjhmRUU0bTBrZElEdExaSEVWQnBTZ0hw?=
- =?utf-8?B?enlKSW83cGRleE05VHhwbGVOZlJ4dWVwTFhYdEkwc0lsY2FQVFNPWXpzZGY1?=
- =?utf-8?B?dXFRQ3dHOE4yQWpPRDZ2RzJiTGJyRTJpZkxSY0tJZy9OdDlKK1B6T2hzd0x4?=
- =?utf-8?B?T2k0RTBpdURhNDN2czZ1Y2wwTGFKZ3hGYVk5dXZwSEtvTFYzZ05xQTVlQlhG?=
- =?utf-8?B?T05TZC9XekRwM0h5emZuMFpGZzRYRk9OeGpPcEh5emlpczVlSTlWeVA1ckQr?=
- =?utf-8?B?bUxQT3dGc05FT2Z4ZXRvMk14QmkzYjRRbXd4STZVYUpESWU5ejYrZDJ4QnBW?=
- =?utf-8?B?Vm16dFNScm01UzhpaEF4OWNja0NibllyVHN3MnhsSDR0d0ZqRElwbWdseGZB?=
- =?utf-8?B?N1RMbGVJZWVZMjZBMlpDMmVVWE8vMDFqenRlbHJnaXFSVEpHOWFKcHAycm54?=
- =?utf-8?B?Sk5vZDQrbWRGUFFKOTJSeVFLdVpnM29NbUdYODZ0aFpxWmxoOFVscUQ1NFZT?=
- =?utf-8?B?Q3hSMEhQTzFqRUloNEhPWlZERmhWSjgzcExXeXd2amVseHMvVENEUTFacDBB?=
- =?utf-8?B?Z0krTFJ2ajFuaUd2cHRrVXZjSTJ4dUpBQ2QxOGZsd0pUSk9OZjhzNk1jcHZS?=
- =?utf-8?B?T1NLL045OVp4R0xVTTN2OWc5c1FuOTFVOXFnM0I3bkJXU1B5VmlISzVOYysz?=
- =?utf-8?B?TmRsUDVtQXJuZzBzZE4yNnJWOTQxcE1lRks0Y3MxV2hZNWpOSmR0UGJOMzR0?=
- =?utf-8?B?Q0duZy9EV28wK1NtOElWaXRlS2RDcXhRKzlORUIvUmtwRlVTUnh0d3VQYUtI?=
- =?utf-8?B?S3lFSkhUVjVvT0dFYTkxOTFlMWFEL0dTTm1GbERkSHdzUmEyZ2xHakxkS1ZB?=
- =?utf-8?B?Vi8wUEpwTE83R1U1RGV4dzA1dnQvdUE9PQ==?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8fe48ab3-4447-477a-bfd8-08db51ce2cf2
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a1NHN3hqMGdnV0JYalg2Tm1YeXBJN2pqd3FUblprYWdVQUwzT1Y0TU5WL2Nn?=
+ =?utf-8?B?YjFuSGhGK3pLZUNzRGV1a0RRZTZ2VkJaRGdTbjY3dEFqODBOcFlnZDUrSzdX?=
+ =?utf-8?B?akRyeWUxY2RHOXZUcWJ4bmZBenAvZzVUcEVOSEdLQjFEcCs0QVIxMmUvdThJ?=
+ =?utf-8?B?YVRNb2QvVmZrcXZhVVJFclBRdzhPSlBDdU54MERvZTBvLzJBRE5meTZOUHc1?=
+ =?utf-8?B?UXdXUU9vVVAxRE1uTFJzeDJ2eXlCWlJobjJQclQvUUtPTnpZUDk4SnI4bWFO?=
+ =?utf-8?B?bnp5NjRBT0lycHc4Uk16WXhGTDNWd3htK1pWYkJ2K0o4a1p0c2M4dEFPRXFp?=
+ =?utf-8?B?L0NBaW1XS3Q5RXJDSlJjOHpONDVUSHRSSkM3SENDU2dUKzUwUUtPSGVKTitx?=
+ =?utf-8?B?cFZaR3BSR2xVMVFwTUJLeEdHSzN2TG1PaFhoemEvcllHWWYrd0hLb0tyeUpv?=
+ =?utf-8?B?cFZIc0ZrS1lWaVg3eVBqdXBTYWk4RVo5N2RGRnV4dFlSTXV3cXNzWWViVGwr?=
+ =?utf-8?B?eVdCRWZSb3g3T3hraHRCa3VMblhHVm5xMTlmcEdpaG0zc2RZMGFNUnpZYkgz?=
+ =?utf-8?B?SWdqU3FNcGhTcWVqSnNNMis2TUxFdXJNUzRQNys0Vk1EWW5VYUhISWhpckdm?=
+ =?utf-8?B?VWczKzlFY3JpQ3ZPdkR4eTI1SU9ldmltTUlXQkxlN3pKNGRqdWlvcmRHQjZm?=
+ =?utf-8?B?bG5wY2FHbU03QjQ5T2FLaTNHcGhlSHR1Zmd6Qy9QMmNvWDg5d2FsSnB1dGZs?=
+ =?utf-8?B?WGF3Y1BGSkVqbGVZVjJ2Q2RwbFp5OVlZb3EzZE5xeUx2aDVDallaYUlGdWI5?=
+ =?utf-8?B?eFpBMXh1OWlxaVlPR2R6L3ZyNVZ4VElSMSs2SkI4eitjYXZreWR0QUduUXhl?=
+ =?utf-8?B?VkxrT3h6YllVOGIzNzRVQmlUdEJ6SlJBa2NMZnRHTUJ3SE13Zk94RmVubmU4?=
+ =?utf-8?B?NFRiZEdOOFJOY2hoK1h0Z3lKZHc4SVVwRyt4a01IWjRySTBuSlJiSEFmQnB2?=
+ =?utf-8?B?d1dZOHhpN2I3WTlBSkRCTGhCYWUzYXBuZDRId1NreG1udDFXRUtySzJDQ3hX?=
+ =?utf-8?B?ak5ERkE3L3d3TitaWE9sbmFBYlJSRHVoS09vZ0IyLytJL24yRTM3TTZHZXVx?=
+ =?utf-8?B?K3R6YUtTSW1sd05rRFhnNWVUNjY3V2tPcE11Yzh2WmgvaXo1QnB1aFBUWVRw?=
+ =?utf-8?B?b3lBQVJvMzVNVnNiTGVMZlFVOGw0KzVYTUFRRm8xQ1VETW9BQ1dyYUZSaTlo?=
+ =?utf-8?B?RHZSQ2hEcEFKcW1iZXdOQmF1VXlrNmRLTXQrMElUb1MrQVZJaWllRGpMS2NU?=
+ =?utf-8?B?a0s4YUhodGdrTnJIM1U1dC9TM2F5MkFQcnJnVnVabUpWQ2VxQU1ibTFoL3dJ?=
+ =?utf-8?B?YzJwWDRETHlTOWVBbVIzb0dhcTJYeWRaY0JTanVJQjlHaEFoOC93VjRDd25Q?=
+ =?utf-8?B?aWlBUDN5TjZWS0kyODlGZFc4WWJibE00TEZXK1p0Y1ZXRSsybkZPVWRDOCtp?=
+ =?utf-8?B?bmczZGwrblVKWGNLbnZDMlYzYWtVVWU0Nk9sbEgzL0NKYXVrbnAybVFaUm1Z?=
+ =?utf-8?B?bDNWcVhPWVFIS3djSElKQWZqUW9rbUVYYzJ1RXFTMEp3eWVoUzRGeTJQUDEz?=
+ =?utf-8?B?cUJMWXlSVEZZc0lNK3pPWDZhbjFjcGpWVHY1NzZQbVVGL0hRNGRZVGZmVUI1?=
+ =?utf-8?B?R01GTUkzT0k2ektwQ05TcytlSXNEUDZYeUZZZmN2NHErb1gxSnNYclpFZE41?=
+ =?utf-8?B?Q21RekpobnpQMnVzWlZjWVRLdmpWTGowNG1rTkV2Q1hPR0haOTVPWGErMkVJ?=
+ =?utf-8?B?Z1MvREVUYjhCSjhIeGNzSDZLVUs3QWFJMzBKd0JCbnIvc2NVUzBNdnpRbXpD?=
+ =?utf-8?B?amJTWFg1ODFubmdUL3EzT2Q2NE5DcWZndUZldFVVRGF6SlZmNGN6NVZFS1dk?=
+ =?utf-8?B?OHZwTU8rUElWREtyNXIvS1NiMmtTQnF1eVZxWTd3b0hkKzA2MWtkR0FnYVBM?=
+ =?utf-8?B?Qm8zZUFKaE1mZUc3NlF4NXM2M3NvY2JyazV5VU1YK3ZnK1MxU1YxQlZ4S3FC?=
+ =?utf-8?B?V0NyMTg3NTRhWUJwV0huNEsvV051Z3VnbHc4anY5dFhvbUovdkszYW9NWFVv?=
+ =?utf-8?B?ZGZ6SW5zS1dySGQ0d1VZSW1odlBONGxUNVpIQmdreEt6V1R0NUJJcFVldU5P?=
+ =?utf-8?B?WGN6aEtzbnZCbnpuUXlBOGRmcGZNVk9aK1ZSMThoTFU2TmVPRFppMG0xVlhF?=
+ =?utf-8?B?T0NTRzBvcGxBYlNrU0JQMXFKODlBPT0=?=
+X-OriginatorOrg: virtuozzo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91f3243c-1b88-4f5a-07c4-08db51ce3adb
+X-MS-Exchange-CrossTenant-AuthSource: VE1PR08MB4989.eurprd08.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 03:16:56.4654
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 03:17:19.8311
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PUZPR01MB4932
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_MUA_MOZILLA,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Id: 0bc7f26d-0264-416e-a6fc-8352af79c58f
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qLGzFtJ2wF+xurBWRfLs0yLNePZ5RiFEwm3/ZiX8ur2/pGvbG3OMHwGi3kaiWrbTYZCSjPFnypYhE4KBxTIDHsZF+6qlu4EAnYN9/VmXYxo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR08MB6043
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -123,92 +143,124 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 
 
-On 5/10/2023 7:55 PM, Alexander Stein wrote:
-> Am Mittwoch, 10. Mai 2023, 10:02:52 CEST schrieb Yan Wang:
->> It is possible to mount multiple sub-devices on the mido bus.
-> mdio bus
-Yes, misspelled.
->> The hardware power-on does not necessarily reset these devices.
->> The device may be in an uncertain state, causing the device's ID
->> to be scanned.
+On 10.05.2023 16:16, Andrey Vagin wrote:
+> On Tue, May 9, 2023 at 2:42 PM Thomas Gleixner <tglx@linutronix.de> wrote:
 >>
->> So, before adding a reset to the scan, make sure the device is in
->> normal working mode.
+>> Hi!
 >>
->> I found that the subsequent drive registers the reset pin into the
->> structure of the sub-device to prevent conflicts, so release the
->> reset pin.
+>> This is a summary of several mails so that the CRIU people have the full
+>> picture.
 >>
->> Signed-off-by: Yan Wang <rk.code@outlook.com>
-> We had similar cases where the (single) PHY was in reset during Linux boot.
-> Should you be able to make this work by using a "ethernet-phy-id%4x.%4x"
-> compatible? See also [1]
->
-> [1] https://lkml.org/lkml/2020/10/28/1139
-Well, I've seen the [1] before, this method may mask some issues. For 
-example ,if I use
-another type of phy ,I have to modify the DT, Is it very cumbersome?
->> ---
->> v2:
->>    - fixed commit message
->>    - Using gpiod_ replace gpio_
->> v1:
->> https://lore.kernel.org/all/KL1PR01MB5448631F2D6F71021602117FE6769@KL1PR01M
->> B5448.apcprd01.prod.exchangelabs.com/ - Incorrect description of commit
->> message.
->>    - The gpio-api too old
->> ---
->>   drivers/net/mdio/fwnode_mdio.c | 16 ++++++++++++++++
->>   1 file changed, 16 insertions(+)
+>> A recent syzbot report made me look at the timer ID management, which
+>> was modified 7 years ago to accomodate CRIU:
 >>
->> diff --git a/drivers/net/mdio/fwnode_mdio.c b/drivers/net/mdio/fwnode_mdio.c
->> index 1183ef5e203e..6695848b8ef2 100644
->> --- a/drivers/net/mdio/fwnode_mdio.c
->> +++ b/drivers/net/mdio/fwnode_mdio.c
->> @@ -57,6 +57,20 @@ fwnode_find_mii_timestamper(struct fwnode_handle *fwnode)
->> return register_mii_timestamper(arg.np, arg.args[0]);
->>   }
+>>      5ed67f05f66c ("posix timers: Allocate timer id per process (v2)")
 >>
->> +static void fwnode_mdiobus_pre_enable_phy(struct fwnode_handle *fwnode)
->> +{
->> +	struct gpio_desc *reset;
->> +
->> +	reset = fwnode_gpiod_get_index(fwnode, "reset", 0, GPIOD_OUT_HIGH,
-> NULL);
->> +	if (IS_ERR(reset) && PTR_ERR(reset) != -EPROBE_DEFER)
-> How are you dealing with EPROBE_DEFER if the reset line is e.g. attached to an
-> i2c expander, which is to be probed later on?
-Thank you ,The logic is wrong,trying to fix it.
->> +		return;
->> +
->> +	usleep_range(100, 200);
-> How do you know a PHY's reset pulse width?
->
->> +	gpiod_set_value_cansleep(reset, 0);
-> What about post-reset stabilization times before MDIO access is allowed?
-yes,I need to get reset pulse width and post-reset stabilization times 
-from reset-assert-us and  reset-deassert-us. right?
->> +	/*Release the reset pin,it needs to be registered with the PHY.*/
-> /* Release [...] PHY. */
->
-> Best regards,
-> Alexander
-Thank you for your support.
->> +	gpiod_put(reset);
->> +}
->> +
->>   int fwnode_mdiobus_phy_device_register(struct mii_bus *mdio,
->>   				       struct phy_device *phy,
->>   				       struct fwnode_handle *child,
-> u32 addr)
->> @@ -119,6 +133,8 @@ int fwnode_mdiobus_register_phy(struct mii_bus *bus,
->>   	u32 phy_id;
->>   	int rc;
+>> and introduced that reported issue along with a bogus loop termination
+>> problem. See
 >>
->> +	fwnode_mdiobus_pre_enable_phy(child);
->> +
->>   	psec = fwnode_find_pse_control(child);
->>   	if (IS_ERR(psec))
->>   		return PTR_ERR(psec);
->
+>>      https://lore.kernel.org/lkml/000000000000a3723305f9d98fc3@google.com/
+>>      https://lore.kernel.org/lkml/20230425183312.932345089@linutronix.de
+>>
+>> for details.
+>>
+>> The intent to make the timer IDs per process is definitely correct, but
+>> the implementation is beyond suboptimal. I really regret that I did not
+>> catch this back then when picking those changes up.
+>>
+>> The way it works is that each process keeps a 'next_timer_id' which it
+>> uses to allocate the next timer. That allows CRIU to reconstruct timers
+>> with the same ID by walking the ID space via
+>>
+>>    do {
+>>       timer_create(&timer, ...., &id);
+>>       if (id == original_id)
+>>          goto success;
+>>       timer_delete(&timer);
+>>    } while (idspace_not_exhausted());
+>>
+>> That works by some definition of works, but it is problematic in two ways:
+>>
+>>   1) As the timer ID space is up to INT_MAX, a process which creates and
+>>      deletes timers frequently, can easily move up close to the INT_MAX
+>>      id space over time.
+>>
+>>      If such a process is checkpointed and restored, then the above loop
+>>      will run for at least an hour to restore a single timer.
+>>
+>>      And no, this is not only a hypothetical issue. There are legitimate
+>>      scenarios where threads are created and the control thread arms a
+>>      posix CPU timer on them. Such threads can be torn down on a regular
+>>      base due to thread pool consolidations. As CRIU does not happen
+>>      every 5 minutes it's not completely unlikely that such a process
+>>      surives quite some time on a particular host and thereby approaches
+>>      the ID space limit.
+>>
+>>      Sure we can restrict the ID space to a way smaller number so the
+>>      search wraps around earlier, but what's a sensible limit?
+>>
+>>      Though restricting the ID space has its own issue vs. backwards
+>>      compability. A process which created a timer on an older kernel with
+>>      an ID larger than the newer kernels ID limit cannot longer be
+>>      restored on that newer kernel.
+>>
+>>      Aside of that it does not solve the other problem this created:
+>>
+>>   2) That change created an user space ABI, which means that the kernel
+>>      side has to stick with this next ID search mechanism forever.
+>>
+>>      That prevents to get rid of that global lock and hash table by
+>>      sticking an xarray into task::signal which makes a lot of sense in
+>>      terms of cache locality and gets rid of the extra timer list
+>>      management in task::signal. Making this change would be very useful
+>>      to address some other issues in the posix-timer code without
+>>      creating yet more duct tape horrors.
+>>
+>>      Such a change obviously has to aim for a dense ID space to keep the
+>>      memory overhead low, but that breaks existing CRIU userspace because
+>>      dense ID space and next ID search does not fit together.
+>>
+>>      Next ID search is obviously creating non-recoverable holes in the
+>>      case that timers are deleted afterwards.
+>>
+>>      A dense ID space approach can create holes too, but they are
+>>      recoverable and well within the resource limits, because the process
+>>      has to be able to create enough timers in the first place in order
+>>      to release those in the middle.
+>>
+>>      With the next ID search brute force recovery is not possible on a
+>>      kernel with dense ID as there is no way to create all intermediate
+>>      timers first before reaching the one at the far end due to resource
+>>      limits.
+>>
+>> So because of that half thought out user space ABI we are now up the
+>> regression creek without a paddle, unless CRIU can accomodate to a
+>> different restore mechanism to lift this restriction from the kernel.
+>>
+>> Thoughts?
+> 
+> Hi Thomas,
+> 
+> If you give us a new API to create timers with specified id-s, we will
+> figure out how to live with it. It isn't good to ask users to update
+> CRIU to work on new kernels, but here are reasons and event improvements
+> for CRIU, so I think it's worth it.
 
+I agree, any API to create timers with specified id-s would work for new 
+CRIU versions.
+
+> 
+> As for API, we can use one bit of sigevent.sigev_notify to request a
+> timer with a specified id.
+
+Yes, I agree, this kind of API is a good option.
+
+> 
+> Thanks,
+> Andrei
+
+
+
+-- 
+Best regards, Tikhomirov Pavel
+Senior Software Developer, Virtuozzo.
