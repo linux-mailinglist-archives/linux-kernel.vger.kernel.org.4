@@ -2,147 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9AC96FF5F7
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:29:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D6EF6FF5FB
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:30:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238724AbjEKP3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 11:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53196 "EHLO
+        id S238726AbjEKPaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 11:30:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238529AbjEKP3d (ORCPT
+        with ESMTP id S238529AbjEKPaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 11:29:33 -0400
-Received: from smtp-fw-80008.amazon.com (smtp-fw-80008.amazon.com [99.78.197.219])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B35B19B2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 08:29:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
-  t=1683818972; x=1715354972;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=Yklgg+I1PX9hURyg5UEers4I67XL77IDZYl+G241f/A=;
-  b=aIf6H3EfQe6LD9YOUS4yqDvvZnN/i1qtXWD0Fc8wJ+bu1d77c3Cwlc8Y
-   kkqUkJZhH6JiWaZUgYuYTB1bscAA+IipE72AIvD+Wy4TP3fDnZiauB7JD
-   cpxqHTYr3U+quhS5S3lPDgisfI3+aR6CG2CLBQ57/48+mi1dz/i3xMQTl
-   I=;
-X-IronPort-AV: E=Sophos;i="5.99,266,1677542400"; 
-   d="scan'208";a="2265657"
-Received: from pdx4-co-svc-p1-lb2-vlan2.amazon.com (HELO email-inbound-relay-iad-1d-m6i4x-b404fda3.us-east-1.amazon.com) ([10.25.36.210])
-  by smtp-border-fw-80008.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 15:29:29 +0000
-Received: from EX19MTAUEA001.ant.amazon.com (iad12-ws-svc-p26-lb9-vlan3.iad.amazon.com [10.40.163.38])
-        by email-inbound-relay-iad-1d-m6i4x-b404fda3.us-east-1.amazon.com (Postfix) with ESMTPS id 4B5A983222;
-        Thu, 11 May 2023 15:29:26 +0000 (UTC)
-Received: from EX19D008UEA004.ant.amazon.com (10.252.134.191) by
- EX19MTAUEA001.ant.amazon.com (10.252.134.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 11 May 2023 15:29:25 +0000
-Received: from EX19MTAUEC001.ant.amazon.com (10.252.135.222) by
- EX19D008UEA004.ant.amazon.com (10.252.134.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26; Thu, 11 May 2023 15:29:25 +0000
-Received: from dev-dsk-attofari-1c-9e00ebdc.eu-west-1.amazon.com
- (10.13.242.123) by mail-relay.amazon.com (10.252.135.200) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.26 via Frontend Transport; Thu, 11 May 2023 15:29:24 +0000
-From:   Adamos Ttofari <attofari@amazon.de>
-CC:     <abusse@amazon.de>, <dwmw@amazon.co.uk>, <hborghor@amazon.de>,
-        <sironi@amazon.de>, <attofari@amazon.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>, Kyle Huey <me@kylehuey.com>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH] fpu: xstate: Keep xfd_state always in-sync with IA32_XFD MSR
-Date:   Thu, 11 May 2023 15:28:17 +0000
-Message-ID: <20230511152818.13839-1-attofari@amazon.de>
-X-Mailer: git-send-email 2.39.2
+        Thu, 11 May 2023 11:30:04 -0400
+Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE9FDC;
+        Thu, 11 May 2023 08:30:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1683819000;
+        bh=ybI9etnYDeQic3cNfT+50TmyK07V19yIie3KtQzWR4A=;
+        h=From:To:Cc:Subject:Date:From;
+        b=c9Xgxsa0UI0aFCduuDQWO5g3Suvys5yNjo8BCOvUcuQNxymsfIN3iK8tUZwOrxiGx
+         T6eRyt0F424ckJ8v/42zzZ+MWAKJCM+prqoMgbdmbtUpa57nP9fMDxx8/4N4+Pg0AS
+         fxEHGF7Wqpa339aX+iEBueklxuCizMsdaOTwbf+e/Z7V/3M0/+9AC21UN/Yl2H4GTR
+         y1ETkmZ56PX3g6cAwTsYYP4s8g4WQgoPsjW0bj70YWsyUH8CIgLOHU6iab4uPn4+fw
+         tf3J6FEbSu38efZKRg0BCRTu1zRzc9V33t2MMU25arAkKLeR56mn8rDLXUm/+DGQkG
+         xw5i0qOjJxwPg==
+Received: from localhost.localdomain (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QHG6c2HJXz12TM;
+        Thu, 11 May 2023 11:30:00 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
+Subject: [RFC PATCH] Documentation: Document macro coding style
+Date:   Thu, 11 May 2023 11:29:51 -0400
+Message-Id: <20230511152951.1970870-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 672365477ae8 ("x86/fpu: Update XFD state where required") and
-commit 8bf26758ca96 ("x86/fpu: Add XFD state to fpstate") introduced a
-per_cpu variable xfd_state to keep the IA32_XFD MSR value cached. In
-order to avoid unnecessary writes to the MSR.
+Document the kernel coding style for macros with parameters.
 
-xfd_state might not be always synced with the MSR. Eventually affecting
-MSR writes. xfd_state is initialized with 0, meanwhile the MSR is
-initialized with the XFEATURE_MASK_USER_DYNAMIC to make XFD fire. Then
-later on reschedule to a different CPU, when a process that uses extended
-xfeatures and handled the #NM (by allocating the additional space in task's
-fpstate for extended xfeatures) it will skip the MSR update in
-restore_fpregs_from_fpstate because the value might match to already cached
-xfd_state (meanwhile it is not the same with the MSR). Eventually calling a
-XRSTOR to set the new state (that caries extended xfeatures) and fire a #NM
-from kernel context. The XFD is expected to fire from user-space context,
-but not in this case and the kernel crashes.
+The purpose of this text is to be used as a reference to gradually
+transition towards macros with a more consistent style, and eliminate
+subtle bugs that can creep up due to missing parentheses, and generally
+remove the need to think and argue about C operator precedence.
 
-To address the issue mentioned initialize xfd_state with the current MSR
-value and update the XFD MSR always with xfd_update_state to avoid
-un-sync cases.
+This is based on a mailing list discussion with Linus.
 
-Fixes: 672365477ae8 ("x86/fpu: Update XFD state where required")
-
-Signed-off-by: Adamos Ttofari <attofari@amazon.de>
+Link: https://lore.kernel.org/lkml/CAHk-=wjfgCa-u8h9z+8U7gaKK6PnRCpws1Md9wYSSXywUxoUSA@mail.gmail.com/
+Link: https://lore.kernel.org/lkml/CAHk-=wjzpHjqhybyEhkTzGgTdBP3LZ1FmOw8=1MMXr=-j5OPxQ@mail.gmail.com/
+Link: https://lore.kernel.org/lkml/CAHk-=wh-x1PL=UUGD__Dv6kd+kyCHjNF-TCHGG9ayLnysf-PdQ@mail.gmail.com/
+Link: https://lore.kernel.org/lkml/CAHk-=wg27iiFZWYmjKmULxwkXisOHuAXq=vbiazBabgh9M1rqg@mail.gmail.com/
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Jonathan Corbet <corbet@lwn.net>
+Cc: linux-doc@vger.kernel.org
 ---
- arch/x86/kernel/fpu/xstate.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ Documentation/process/coding-style.rst | 152 ++++++++++++++++++++++++-
+ 1 file changed, 151 insertions(+), 1 deletion(-)
 
-diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
-index 0bab497c9436..36ed27ac0ecd 100644
---- a/arch/x86/kernel/fpu/xstate.c
-+++ b/arch/x86/kernel/fpu/xstate.c
-@@ -179,8 +179,14 @@ void fpu__init_cpu_xstate(void)
- 	 * key as that does not work on the boot CPU. This also ensures
- 	 * that any stale state is wiped out from XFD.
- 	 */
--	if (cpu_feature_enabled(X86_FEATURE_XFD))
--		wrmsrl(MSR_IA32_XFD, init_fpstate.xfd);
-+	if (cpu_feature_enabled(X86_FEATURE_XFD)) {
-+		u64 xfd;
+diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
+index 6db37a46d305..3cf62c91d91c 100644
+--- a/Documentation/process/coding-style.rst
++++ b/Documentation/process/coding-style.rst
+@@ -819,10 +819,160 @@ Macros with multiple statements should be enclosed in a do - while block:
+ 
+ 	#define macrofun(a, b, c)			\
+ 		do {					\
+-			if (a == 5)			\
++			if ((a) == 5)			\
+ 				do_this(b, c);		\
+ 		} while (0)
+ 
++Always use parentheses around macro arguments, except for the situations listed
++below.
 +
-+		rdmsrl(MSR_IA32_XFD, xfd);
-+		__this_cpu_write(xfd_state, xfd);
++Examples where parentheses are required around macro arguments:
 +
-+		xfd_update_state(&init_fpstate);
-+	}
++.. code-block:: c
++
++	#define foo(a, b)				\
++		do {					\
++			(a) = (b);			\
++		} while (0)
++
++.. code-block:: c
++
++	#define foo(a)					\
++		do {					\
++			(a)++;				\
++		} while (0)
++
++.. code-block:: c
++
++	#define cmp_gt(a, b)			((a) > (b))
++
++.. code-block:: c
++
++	#define foo(a)				do_this(!(a))
++
++.. code-block:: c
++
++	#define foo(a)				do_this(*(a))
++
++.. code-block:: c
++
++	#define foo(a)				do_this(&(a))
++
++.. code-block:: c
++
++	#define get_member(struct_var)		do_this((struct_var).member)
++
++.. code-block:: c
++
++	#define deref_member(struct_ptr)	do_this((struct_ptr)->member)
++
++Situations where parentheses should not be added around arguments, when:
++
++* they are used as a full expression:
++
++  * as an initializer:
++
++    .. code-block:: c
++
++	#define foo(a)					\
++		do {					\
++			int __m_var = a;		\
++		} while (0)
++
++  * as an expression statement:
++
++    .. code-block:: c
++
++	#define foo(a)					\
++		do {					\
++			a;				\
++		} while (0)
++
++  * as the controlling expression of a selection statement (``if`` or ``switch``):
++
++    .. code-block:: c
++
++	#define foo(a)					\
++		do {					\
++			if (a)				\
++				do_this();		\
++		} while (0)
++
++    .. code-block:: c
++
++	#define foo(a)					\
++		do {					\
++			switch (a) {			\
++			case 1:	do_this();		\
++				break;			\
++			}				\
++		} while (0)
++
++  * as the controlling expression of a ``while`` or ``do`` statement:
++
++    .. code-block:: c
++
++	#define foo(a)					\
++		do {					\
++			while (a)			\
++				do_this();		\
++		} while (0)
++
++    .. code-block:: c
++
++	#define foo(a)					\
++		do {					\
++			do_this();			\
++		} while (a)
++
++  * as any of the expressions of a ``for`` statement:
++
++    .. code-block:: c
++
++	#define foo(a, b, c)				\
++		do {					\
++			for (a; b; c)			\
++				do_this();		\
++		} while (0)
++
++  * as the expression in a return statement (note that use of return
++    statements in macros is strongly discouraged because it affects the control
++    flow),
++
++    .. code-block:: c
++
++	#define foo(a)					\
++		do {					\
++			return a;			\
++		} while (0)
++
++* they are used as expression within an array subscript operator "[]":
++
++  .. code-block:: c
++
++	#define foo(a)					\
++		do {					\
++			if (array[a] == 1)		\
++				do_this();		\
++		} while (0)
++
++* they are used as arguments to functions or other macros:
++
++  .. code-block:: c
++
++	#define foo(a)		do_this(a)
++
++  .. code-block:: c
++
++	#define foo(a, b, c)	do_this(a, b, c)
++
++* there is some syntax reason why adding the parentheses would not work, e.g.
++  the ``member`` argument:
++
++  .. code-block:: c
++
++	#define foo(struct_p, member)	do_this((struct_p)->member)
++
+ Things to avoid when using macros:
  
- 	/*
- 	 * XCR_XFEATURE_ENABLED_MASK (aka. XCR0) sets user features
-@@ -915,7 +921,7 @@ void fpu__resume_cpu(void)
- 	}
- 
- 	if (fpu_state_size_dynamic())
--		wrmsrl(MSR_IA32_XFD, current->thread.fpu.fpstate->xfd);
-+		xfd_update_state(&init_fpstate);
- }
- 
- /*
+ 1) macros that affect control flow:
 -- 
-2.39.2
-
-
-
-
-Amazon Development Center Germany GmbH
-Krausenstr. 38
-10117 Berlin
-Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
-Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
-Sitz: Berlin
-Ust-ID: DE 289 237 879
-
-
+2.25.1
 
