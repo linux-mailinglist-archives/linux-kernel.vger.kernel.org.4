@@ -2,141 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7EE86FEA4B
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 05:41:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EFC46FEA51
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 05:44:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232376AbjEKDlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 23:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40524 "EHLO
+        id S232030AbjEKDom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 23:44:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233180AbjEKDku (ORCPT
+        with ESMTP id S230205AbjEKDok (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 23:40:50 -0400
-Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A619735A0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 20:40:46 -0700 (PDT)
-Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-55b7630a736so121577177b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 20:40:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683776445; x=1686368445;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ENej4jeIUZxBD8VRbCOiI8elHKtxPPI57IP2BPex2w8=;
-        b=dRwxCttbruWpOV8kYGHv3nNrU7YtDC+OTBLfOopudv25EcY0eOmFueuJ1hPNX/4yPK
-         lZ+CKDV1ixGM1wGcKj6qimEkiOeHP6uO8k5UBK+K1guiiOneHW0aTpdbI9jx4n9a3pWh
-         YFOswR2fPcVLNVki1JCjWzUrcXjuJx2vuRzc9QuQNzAXt9LIKAoY0UTfBY1lvuZsc4wF
-         pZT0aAuiR0nq7zlCMbbcyMMj9SgafH/QvrYzNVzvWnn9FvZdI2qYWnYMs14sXD98qyJZ
-         5JrZz4aeYcjgWQTN89jue2C1nxgpjN2jR5BgjDHmda2BP2F+t1GLE3TEXf4gxBg+jWes
-         mQFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683776445; x=1686368445;
-        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ENej4jeIUZxBD8VRbCOiI8elHKtxPPI57IP2BPex2w8=;
-        b=HJd072f7WRjwO9Kq0jJxyFoN6zgVS9CpmKc96KDsxcs1fR7X2tgUr0afSrn37/KNMX
-         C+kLOJ3fLx5ybPl14KMZFZaYbU/TUwDIQLshhNVy1eNJQB9YwNgXkTAvBiiIU5EPKZ/V
-         MIUijlcgWhw0Pjtp+wfwBZAevy1Kp1fGOv8HqqwW1HZgiZ62nx3Tsj8QVz6/HLeuxaiq
-         l1YPcLarPnqW5R/Ju+U1UZ28ucZ6pjiHXJazKvS49sTkFLpSOVpmiO0Y3tOR3R14od9N
-         1zi8LfAuJlDI9+qXZYLAkOK9GHKBUIBfWCPYC1CUQn+Da4wrUO22NBzb26mNGBWoZkcO
-         QD7A==
-X-Gm-Message-State: AC+VfDw0W6eg1tnj2FaTsOuEwccu7GO/LzzrikaTJq18NkwGTa6Ja8QN
-        iOegdKcRefXUSgc4UeF/Adu8bg==
-X-Google-Smtp-Source: ACHHUZ7h//pElwTWDcmRkblmnEL8tpIvH3DpaXFnfKmYUIesZtUkvvAepMEKFrx4IKpikCPoidpc1g==
-X-Received: by 2002:a81:8702:0:b0:560:bb81:6468 with SMTP id x2-20020a818702000000b00560bb816468mr6471997ywf.23.1683776445583;
-        Wed, 10 May 2023 20:40:45 -0700 (PDT)
-Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
-        by smtp.gmail.com with ESMTPSA id g138-20020a815290000000b0054629ed8300sm4571040ywb.80.2023.05.10.20.40.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 20:40:45 -0700 (PDT)
-Date:   Wed, 10 May 2023 20:40:41 -0700 (PDT)
-From:   Hugh Dickins <hughd@google.com>
-X-X-Sender: hugh@ripple.attlocal.net
-To:     Matthew Wilcox <willy@infradead.org>
-cc:     Hugh Dickins <hughd@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        David Hildenbrand <david@redhat.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Qi Zheng <zhengqi.arch@bytedance.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Helge Deller <deller@gmx.de>,
-        John David Anglin <dave.anglin@bell.net>,
-        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Alexandre Ghiti <alexghiti@rivosinc.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Chris Zankel <chris@zankel.net>,
-        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Subject: Re: [PATCH 01/23] arm: allow pte_offset_map[_lock]() to fail
-In-Reply-To: <ZFup/fG50MPFF979@casper.infradead.org>
-Message-ID: <b9dc75bf-b13c-37ba-6c16-9fc163703dd@google.com>
-References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com> <5011977-d876-6a24-a3fc-c7e6a02877b8@google.com> <ZFup/fG50MPFF979@casper.infradead.org>
+        Wed, 10 May 2023 23:44:40 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AF8E30FB;
+        Wed, 10 May 2023 20:44:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1730B64160;
+        Thu, 11 May 2023 03:44:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD1A6C433EF;
+        Thu, 11 May 2023 03:44:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1683776678;
+        bh=0znUxwXk2K0JJbiEiLhhTK64Sd0XVZz9CaoB7WaSTOQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Sk8439F0iNdydOVyHAr9ets543Vgaznl/4yqDjkXoVux9ZjftvyQTZKHy/3L7kEoV
+         OGbQmqdKeom9HSU1lSxUVe+c4t8x2H7VtWNr+/CSk1hjtrzqE/JMN8SQEH9HlRDGaC
+         UgfyfVLeoAhSW7y0DKufd0mGLED6PyZ5cwOPuEgk=
+Date:   Thu, 11 May 2023 12:44:32 +0900
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Zhangfei Gao <zhangfei.gao@linaro.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        jean-philippe <jean-philippe@linaro.org>,
+        Wangzhou <wangzhou1@hisilicon.com>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+        iommu@lists.linux.dev, acc@lists.linaro.org,
+        Weili Qian <qianweili@huawei.com>
+Subject: Re: [PATCH] uacce: use filep->f_mapping to replace inode->i_mapping
+Message-ID: <2023051110-jelly-barricade-d737@gregkh>
+References: <20230511021553.44318-1-zhangfei.gao@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511021553.44318-1-zhangfei.gao@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 10 May 2023, Matthew Wilcox wrote:
-> On Tue, May 09, 2023 at 09:42:44PM -0700, Hugh Dickins wrote:
-> > diff --git a/arch/arm/lib/uaccess_with_memcpy.c b/arch/arm/lib/uaccess_with_memcpy.c
-> > index e4c2677cc1e9..2f6163f05e93 100644
-> > --- a/arch/arm/lib/uaccess_with_memcpy.c
-> > +++ b/arch/arm/lib/uaccess_with_memcpy.c
-> > @@ -74,6 +74,9 @@ pin_page_for_write(const void __user *_addr, pte_t **ptep, spinlock_t **ptlp)
-> >  		return 0;
-> >  
-> >  	pte = pte_offset_map_lock(current->mm, pmd, addr, &ptl);
-> > +	if (unlikely(!pte))
-> > +		return 0;
+On Thu, May 11, 2023 at 10:15:53AM +0800, Zhangfei Gao wrote:
+> The inode can be different in a container, for example, a docker and host
+> both open the same uacce parent device, which uses the same uacce struct
+> but different inode, so uacce->inode is not enough.
 > 
-> Failing seems like the wrong thig to do if we transitioned from a PTE
-> to PMD here?  Looks to me like we should goto a new label right after
-> the 'pmd = pmd_offset(pud, addr);', no?
+> What's worse, when docker stops, the inode will be destroyed as well,
+> causing use-after-free in uacce_remove.
+> 
+> So use q->filep->f_mapping to replace uacce->inode->i_mapping.
+> 
+> Signed-off-by: Weili Qian <qianweili@huawei.com>
+> Signed-off-by: Zhangfei Gao <zhangfei.gao@linaro.org>
+> ---
+>  drivers/misc/uacce/uacce.c | 16 +++++++++-------
+>  include/linux/uacce.h      |  4 ++--
+>  2 files changed, 11 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/misc/uacce/uacce.c b/drivers/misc/uacce/uacce.c
+> index 346bd7cf2e94..740ace422baa 100644
+> --- a/drivers/misc/uacce/uacce.c
+> +++ b/drivers/misc/uacce/uacce.c
+> @@ -166,8 +166,8 @@ static int uacce_fops_open(struct inode *inode, struct file *filep)
+>  
+>  	init_waitqueue_head(&q->wait);
+>  	filep->private_data = q;
+> -	uacce->inode = inode;
+>  	q->state = UACCE_Q_INIT;
+> +	q->private_data = filep;
+>  	mutex_init(&q->mutex);
+>  	list_add(&q->list, &uacce->queues);
+>  	mutex_unlock(&uacce->mutex);
+> @@ -574,12 +574,6 @@ void uacce_remove(struct uacce_device *uacce)
+>  
+>  	if (!uacce)
+>  		return;
+> -	/*
+> -	 * unmap remaining mapping from user space, preventing user still
+> -	 * access the mmaped area while parent device is already removed
+> -	 */
+> -	if (uacce->inode)
+> -		unmap_mapping_range(uacce->inode->i_mapping, 0, 0, 1);
+>  
+>  	/*
+>  	 * uacce_fops_open() may be running concurrently, even after we remove
+> @@ -589,6 +583,8 @@ void uacce_remove(struct uacce_device *uacce)
+>  	mutex_lock(&uacce->mutex);
+>  	/* ensure no open queue remains */
+>  	list_for_each_entry_safe(q, next_q, &uacce->queues, list) {
+> +		struct file *filep = q->private_data;
+> +
+>  		/*
+>  		 * Taking q->mutex ensures that fops do not use the defunct
+>  		 * uacce->ops after the queue is disabled.
+> @@ -597,6 +593,12 @@ void uacce_remove(struct uacce_device *uacce)
+>  		uacce_put_queue(q);
+>  		mutex_unlock(&q->mutex);
+>  		uacce_unbind_queue(q);
+> +
+> +		/*
+> +		 * unmap remaining mapping from user space, preventing user still
+> +		 * access the mmaped area while parent device is already removed
+> +		 */
+> +		unmap_mapping_range(filep->f_mapping, 0, 0, 1);
+>  	}
+>  
+>  	/* disable sva now since no opened queues */
+> diff --git a/include/linux/uacce.h b/include/linux/uacce.h
+> index 0a81c3dfd26c..64b800b74436 100644
+> --- a/include/linux/uacce.h
+> +++ b/include/linux/uacce.h
+> @@ -86,6 +86,7 @@ enum uacce_q_state {
+>   * @state: queue state machine
+>   * @pasid: pasid associated to the mm
+>   * @handle: iommu_sva handle returned by iommu_sva_bind_device()
+> + * @private_data: private data for saving filep
+>   */
+>  struct uacce_queue {
+>  	struct uacce_device *uacce;
+> @@ -97,6 +98,7 @@ struct uacce_queue {
+>  	enum uacce_q_state state;
+>  	u32 pasid;
+>  	struct iommu_sva *handle;
+> +	void *private_data;
 
-I'm pretty sure it's right as is; but probably more by luck than care -
-I do not think I studied this code as closely as you have now made me do;
-and it's clear that this is a piece of code where rare transient issues
-could come up, and must be handled correctly.  Thank you for making me
-look again.
+Make this a real pointer to the inode, no need to make this "void *",
+right?
 
-The key is in the callers of pin_page_for_write(): __copy_to_user_memcpy()
-and __clear_user_memset().  They're doing "while (!pin_page_for_write())"
-loops - they hope for the fast path of getting pte_lock or pmd_lock on
-the page, and doing a __memcpy() or __memset() to the user address; but
-if anything goes "wrong", a __put_user() to fault in the page (or fail)
-then pin_page_for_write() again.
+thanks,
 
-"if (unlikely(!pte)) return 0" says that the expected fast path did not
-succeed, so please __put_user() and have another go.
-
-It is somewhere I could have done a "goto again", but that would be
-superfluous when it's already designed that way at the outer level.
-
-Hugh
+greg k-h
