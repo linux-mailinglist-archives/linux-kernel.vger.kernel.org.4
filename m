@@ -2,74 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEDB56FFCA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 00:28:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5800D6FFCA2
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 00:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239337AbjEKW2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 18:28:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37060 "EHLO
+        id S239435AbjEKW33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 18:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238866AbjEKW2n (ORCPT
+        with ESMTP id S238381AbjEKW32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 18:28:43 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AFF72738
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 15:28:42 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so1561984b3a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 15:28:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683844122; x=1686436122;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=foguPMzaG5JiKYkGBK5Zqr8oTB+NWVY0GCMBbESmVbo=;
-        b=fE3rVckTldIGJ9X79t1Tocx/fvHS8/EWaaZUWVMfpCQjD6wKu7leVkN9G5nHE7F2LC
-         p4WBsp2m0LR3mee1GBx75i7GQ1hFNp4aJ0AeK9wRgq5DxKNNm6lsnOs+r+KExblYrhxr
-         az+pMa5mQwMDktKT2xO108h0iA2YD2f2nwjW8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683844122; x=1686436122;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=foguPMzaG5JiKYkGBK5Zqr8oTB+NWVY0GCMBbESmVbo=;
-        b=bGY5cOdzTAicZT9F+Y++0kDK91GaYNTTRWkbQ5o5rMzXurwUP3lH3O+6CoHNWl2hL8
-         M7kX1y+JS2ziN+QYSNMNGeJxLanq6zvH2XkG8VfF2ssVsDuVX6Xkc0NqF+agIjtykeEZ
-         wOdig1KVpJ9UPDnsSwLSYRhFb8Ne22+H3aWbi5Kt2Fj/GsbQkGG+JMSWhhKZfXKRjzU5
-         wEC8Ms1+2C0ioAqatcjFw728AzPyRfyasvYckFKNTd7UlOVvJbkXqOAxjB70vVDxf9r2
-         2WuUhwyNGXaFQZ40WNvDBKuMPDM6jwpPpChqlEEzwtKn8+MmKxMIjkbEJdm9Q0CYkcIN
-         nCTQ==
-X-Gm-Message-State: AC+VfDz3T21DyovMuBIgIxoNY2Ujueb+nOqdXUjVyoWHmJ/sv+6eDJBH
-        hTtNj34dYI34MH4u0hqnGc2n7w==
-X-Google-Smtp-Source: ACHHUZ6mEsMPqSDmeIgz0bMbow4zeO58axDoPLJOCw723w8mEoGZDcn2G0FDhPsF6SBJe8srfCjV2Q==
-X-Received: by 2002:a05:6a20:8e14:b0:101:3c60:6794 with SMTP id y20-20020a056a208e1400b001013c606794mr12671176pzj.2.1683844121954;
-        Thu, 11 May 2023 15:28:41 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id p38-20020a631e66000000b0052c766b2f52sm5515338pgm.4.2023.05.11.15.28.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 15:28:41 -0700 (PDT)
-Date:   Thu, 11 May 2023 15:28:40 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Johannes Thumshirn <Johannes.Thumshirn@wdc.com>
-Cc:     Kent Overstreet <kent.overstreet@linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-bcachefs@vger.kernel.org" <linux-bcachefs@vger.kernel.org>,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
-Message-ID: <202305111525.67001E5C4@keescook>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-8-kent.overstreet@linux.dev>
- <3508afc0-6f03-a971-e716-999a7373951f@wdc.com>
+        Thu, 11 May 2023 18:29:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77C6C2738
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 15:29:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E898F6507C
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 22:29:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E92B0C433EF;
+        Thu, 11 May 2023 22:29:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683844166;
+        bh=JTzpkxSr+WUr9mtwXRAATmDWd54k8NYw09DpF3q2F8E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H7xHg04127AaUCeXJEtiVTjf+c2HWlvGS2BaNojXk9aqOgK9I4+rTaXlC3dBOg5Wx
+         yquhLWhV0pIh3nJ2gBQ02OwcpUueebcI9okxB7dxkaY1t55EzqHvlvC82CrtLBfR3m
+         Te45ZfCRrUb9mFZ2X9h3ZaeWE1mZy+R6LOjQcbDMAw3MeBF2cOLvoBW2+kR+I9cwPL
+         /nXqfT0JnCdd+wrwzi3jPnMx/KI15bZl/7lvZ5s0XzOmOuMFy/QmnuKczuDHnbnpSS
+         nFNMWQFdYEfsU1zWZM2KBKHJQrPS94n0iAVjExjGLNnF5CaEAGwbUQK+Y3Shrm0w2w
+         GK8LIZVQjPgfw==
+Date:   Thu, 11 May 2023 23:29:20 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Conor Dooley <conor.dooley@microchip.com>
+Cc:     Pranavi Somisetty <pranavi.somisetty@amd.com>,
+        nicolas.ferre@microchip.com, claudiu.beznea@microchip.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, richardcochran@gmail.com, linux@armlinux.org.uk,
+        palmer@dabbelt.com, git@amd.com, michal.simek@amd.com,
+        harini.katakam@amd.com, radhey.shyam.pandey@amd.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH net-next v2 1/2] dt-bindings: net: cdns,macb: Add
+ rx-watermark property
+Message-ID: <20230511-unhidden-mummify-800fe847e25d@spud>
+References: <20230511071214.18611-1-pranavi.somisetty@amd.com>
+ <20230511071214.18611-2-pranavi.somisetty@amd.com>
+ <20230511-canned-gray-005130594368@wendy>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="cp1Gsw0Yd1cfGjfb"
 Content-Disposition: inline
-In-Reply-To: <3508afc0-6f03-a971-e716-999a7373951f@wdc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20230511-canned-gray-005130594368@wendy>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -78,38 +64,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 03:05:48PM +0000, Johannes Thumshirn wrote:
-> On 09.05.23 18:56, Kent Overstreet wrote:
-> > +/**
-> > + * vmalloc_exec - allocate virtually contiguous, executable memory
-> > + * @size:	  allocation size
-> > + *
-> > + * Kernel-internal function to allocate enough pages to cover @size
-> > + * the page level allocator and map them into contiguous and
-> > + * executable kernel virtual space.
-> > + *
-> > + * For tight control over page level allocator and protection flags
-> > + * use __vmalloc() instead.
-> > + *
-> > + * Return: pointer to the allocated memory or %NULL on error
-> > + */
-> > +void *vmalloc_exec(unsigned long size, gfp_t gfp_mask)
-> > +{
-> > +	return __vmalloc_node_range(size, 1, VMALLOC_START, VMALLOC_END,
-> > +			gfp_mask, PAGE_KERNEL_EXEC, VM_FLUSH_RESET_PERMS,
-> > +			NUMA_NO_NODE, __builtin_return_address(0));
-> > +}
-> > +EXPORT_SYMBOL_GPL(vmalloc_exec);
-> 
-> Uh W+X memory reagions.
-> The 90s called, they want their shellcode back.
 
-Just to clarify: the kernel must never create W+X memory regions. So,
-no, do not reintroduce vmalloc_exec().
+--cp1Gsw0Yd1cfGjfb
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Dynamic code areas need to be constructed in a non-executable memory,
-then switched to read-only and verified to still be what was expected,
-and only then made executable.
+On Thu, May 11, 2023 at 08:25:15AM +0100, Conor Dooley wrote:
+> On Thu, May 11, 2023 at 01:12:13AM -0600, Pranavi Somisetty wrote:
+> > watermark value is the minimum amount of packet data
+> > required to activate the forwarding process. The watermark
+> > implementation and maximum size is dependent on the device
+> > where Cadence MACB/GEM is used.
+> >=20
+> > Signed-off-by: Pranavi Somisetty <pranavi.somisetty@amd.com>
+>=20
+> Please send dt-binding patches to the dt-binding maintainers and list.
+> get_maintainer.pl should have told you to do so & without having done
+> so, the bindings will not get tested :/
 
--- 
-Kees Cook
+The automation we run for the linux-riscv did actually run against
+this though, and even dtbs_check complains about this binding:
+
+Documentation/devicetree/bindings/net/cdns,macb.yaml: properties:rx-waterma=
+rk:maxItems: False schema does not allow 1
+	hint: Scalar properties should not have array keywords
+	from schema $id: http://devicetree.org/meta-schemas/keywords.yaml#
+
+Please test your bindings :/
+
+Cheers,
+Conor.
+
+--cp1Gsw0Yd1cfGjfb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZF1sQAAKCRB4tDGHoIJi
+0mx8AQDvCXrHHAJUliEbLe3FqTXIyyuFRBHjHbmN16sg23MaCwEAwYNs6Dk9vDu4
+ES17DcW0ax+qchBDdyxacGBtlx2oswU=
+=lc3I
+-----END PGP SIGNATURE-----
+
+--cp1Gsw0Yd1cfGjfb--
