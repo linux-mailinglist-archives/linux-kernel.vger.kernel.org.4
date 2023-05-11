@@ -2,115 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45BC06FFAD1
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:48:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A58776FFADA
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:50:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239340AbjEKTsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 15:48:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36318 "EHLO
+        id S238980AbjEKTur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 15:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239518AbjEKTsW (ORCPT
+        with ESMTP id S239584AbjEKTug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 15:48:22 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47F6AD24;
-        Thu, 11 May 2023 12:47:49 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34BJKCvj005540;
-        Thu, 11 May 2023 19:47:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=subject : to : cc :
- references : from : message-id : date : mime-version : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=GMdMZanCPuIQdAXFLNo3WJTphkoKE1vlUhMHToOgUww=;
- b=aaCmjPWsPPS0/rMgDhaOhjDwTkK6wDhJdVDs9/rlyi61CzeIhnpwGSvTpbs4mnx6aRIt
- cQocYxGP75Dqfm4PX2dtsHKdUkg/tgIxMhDSpofNAAIq46EG+XIojMJkHx2ZGe9InPMB
- CJcRDRFMKNRn0PBTkdaFnWyZ4DzyEzOID/nN8RSNdOzRB6Eu+gWeOBJDCof2OaPfOh8J
- juT1g6QSFDmhZLzHUKx9sS+A8VUnT7Es3BBhCkDyM48jJ3XHQHrXXtWpzvMPvt+DTeXw
- WQHC+/11bykeZrchfDERRJ4QOxsevr3hLmp71+DvK+7U5vmXKNPl4i9LTqWE9a4D6Reu WQ== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qgv1u9pe1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 19:47:06 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34BJl4Sj030846
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 19:47:04 GMT
-Received: from [10.50.47.207] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 11 May
- 2023 12:47:02 -0700
-Subject: Re: [PATCH] accel/qaic: silence some uninitialized variable warnings
-To:     Dan Carpenter <dan.carpenter@linaro.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>
-CC:     Oded Gabbay <ogabbay@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
-        <kernel-janitors@vger.kernel.org>
-References: <d11ee378-7b06-4b5e-b56f-d66174be1ab3@kili.mountain>
-From:   Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
-Message-ID: <962011a6-9089-b678-6ac8-ce29b8ffa2fb@quicinc.com>
-Date:   Fri, 12 May 2023 01:16:59 +0530
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.0
+        Thu, 11 May 2023 15:50:36 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F93D041;
+        Thu, 11 May 2023 12:50:18 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-9659f452148so1616556466b.1;
+        Thu, 11 May 2023 12:50:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683834597; x=1686426597;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=49+wF3dhiJ5ry2Q356rv8LAmJkXZ30kFszS6vJAnNZs=;
+        b=g0LA4OoUg3kQOmMAzBOrSwRBOXXIKInTZnHL0lTfR77a7OyJ/NCj4+fk7crY2JRd/5
+         4YSVadRTFFlwhBIRQfrIx0cxfx6CDFJ7EiPuFtKhkwVU2Xyk9qH+Pq50Z80rMCgZkHMT
+         /VdV7VsTCoPJID8JrTJOPMj6XksVZJLigx9HNpdXlBKIbzQAgPymTETRQC0kwnRKxrVZ
+         tttHHS1qYpUoJgIXUs7ne7JH50GlNC4qcRlfUqfV97K6m197dbKU1yYADReh01GPNlK6
+         BHinkNX1wMW7X1/tpu8bGP+WdFexL0r2PQyBcDlHlLKsDM6aS+fmFpMefpDAJNCvs1+o
+         E7+g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683834597; x=1686426597;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=49+wF3dhiJ5ry2Q356rv8LAmJkXZ30kFszS6vJAnNZs=;
+        b=bjF7HEZu4lqIxPsuv3sOUh8Dw+qz7u7rB+LycCioFTxD0vW8wcywpHcONCp3Yyql2g
+         Jff7ZxSLPcGsuxQPutGtAmjoz28XIXQuKCy9FUD1kc29aEoceivFoM7APjcrsIfJL+vM
+         tsIMmNLzbiQKzE5h9xfm3iPsYI0VLlPJrtQ7P5uJlWIYenSqoilmhopLtkSQ9gQssJFj
+         dKR617AfqHawZ8JJ22NDBirUtXyA2zzGTWiINb7QztHkL1OBNqPIVxosJzbO04iR0npM
+         sc7x5hVWSY48HJlOX2zXfT6j0+IZgWWuBUH9pHYinUODb/oQSfXvPs3wiC6GqVZhgPb+
+         /2FA==
+X-Gm-Message-State: AC+VfDx2KRecoUcevOm3XuTC+FyiFFwXgwcCYKESPS/uwA0nkT4XbyhP
+        ds44xghP7ON5HbbQk8a90No=
+X-Google-Smtp-Source: ACHHUZ5OPPbd7yz9fMwLSwXmpWJ8icV82cKE5yuc6idjNH+I+rZ24nf5enOSgo65ZAWuwzP8Nvtzug==
+X-Received: by 2002:a17:906:58cd:b0:966:350f:f42d with SMTP id e13-20020a17090658cd00b00966350ff42dmr19047994ejs.23.1683834597092;
+        Thu, 11 May 2023 12:49:57 -0700 (PDT)
+Received: from ?IPV6:2a01:c23:c58e:b900:c905:524d:7524:40e1? (dynamic-2a01-0c23-c58e-b900-c905-524d-7524-40e1.c23.pool.telefonica.de. [2a01:c23:c58e:b900:c905:524d:7524:40e1])
+        by smtp.googlemail.com with ESMTPSA id n5-20020a1709065da500b0096616adc0d5sm4432982ejv.104.2023.05.11.12.49.56
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 12:49:56 -0700 (PDT)
+Message-ID: <98b3b70a-86c0-78c0-b734-0764bb5a21fc@gmail.com>
+Date:   Thu, 11 May 2023 21:49:52 +0200
 MIME-Version: 1.0
-In-Reply-To: <d11ee378-7b06-4b5e-b56f-d66174be1ab3@kili.mountain>
-Content-Type: text/plain; charset="utf-8"; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 14/17] r8169: Use pcie_lnkctl_clear_and_set() for changing
+ LNKCTL
+To:     =?UTF-8?Q?Ilpo_J=c3=a4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Lukas Wunner <lukas@wunner.de>, nic_swsd@realtek.com,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230511131441.45704-1-ilpo.jarvinen@linux.intel.com>
+ <20230511131441.45704-15-ilpo.jarvinen@linux.intel.com>
 Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 5zfhe7JIzJ0c6nTCWcOPBlG6meEolwCV
-X-Proofpoint-ORIG-GUID: 5zfhe7JIzJ0c6nTCWcOPBlG6meEolwCV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-11_15,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
- phishscore=0 mlxlogscore=999 lowpriorityscore=0 bulkscore=0 spamscore=0
- clxscore=1011 suspectscore=0 adultscore=0 malwarescore=0
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305110167
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+In-Reply-To: <20230511131441.45704-15-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/3/2023 4:11 PM, Dan Carpenter wrote:
-> Smatch complains that these are not initialized if get_cntl_version()
-> fails but we still print them in the debug message.  Not the end of
-> the world, but true enough.  Let's just initialize them to a dummy value
-> to make the checker happy.
+On 11.05.2023 15:14, Ilpo Järvinen wrote:
+> Don't assume that only the driver would be accessing LNKCTL. ASPM
+> policy changes can trigger write to LNKCTL outside of driver's control.
 > 
-> Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+> Use pcie_lnkctl_clear_and_set() which does proper locking to avoid
+> losing concurrent updates to the register value.
+> 
+
+Wouldn't it be more appropriate to add proper locking to the
+underlying pcie_capability_clear_and_set_word()?
+
+
+> Suggested-by: Lukas Wunner <lukas@wunner.de>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > ---
->   drivers/accel/qaic/qaic_drv.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  drivers/net/ethernet/realtek/r8169_main.c | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/accel/qaic/qaic_drv.c b/drivers/accel/qaic/qaic_drv.c
-> index ff80eb571729..e10e8b603e37 100644
-> --- a/drivers/accel/qaic/qaic_drv.c
-> +++ b/drivers/accel/qaic/qaic_drv.c
-> @@ -263,7 +263,7 @@ static void qaic_destroy_drm_device(struct qaic_device *qdev, s32 partition_id)
->   static int qaic_mhi_probe(struct mhi_device *mhi_dev, const struct mhi_device_id *id)
->   {
->   	struct qaic_device *qdev;
-> -	u16 major, minor;
-> +	u16 major = -1, minor = -1;
->   	int ret;
->   
->   	/*
-> 
+> diff --git a/drivers/net/ethernet/realtek/r8169_main.c b/drivers/net/ethernet/realtek/r8169_main.c
+> index a7e376e7e689..c0294a833681 100644
+> --- a/drivers/net/ethernet/realtek/r8169_main.c
+> +++ b/drivers/net/ethernet/realtek/r8169_main.c
+> @@ -2686,14 +2686,12 @@ static void __rtl_ephy_init(struct rtl8169_private *tp,
+>  
+>  static void rtl_disable_clock_request(struct rtl8169_private *tp)
+>  {
+> -	pcie_capability_clear_word(tp->pci_dev, PCI_EXP_LNKCTL,
+> -				   PCI_EXP_LNKCTL_CLKREQ_EN);
+> +	pcie_lnkctl_clear_and_set(tp->pci_dev, PCI_EXP_LNKCTL_CLKREQ_EN, 0);
+>  }
+>  
+>  static void rtl_enable_clock_request(struct rtl8169_private *tp)
+>  {
+> -	pcie_capability_set_word(tp->pci_dev, PCI_EXP_LNKCTL,
+> -				 PCI_EXP_LNKCTL_CLKREQ_EN);
+> +	pcie_lnkctl_clear_and_set(tp->pci_dev, 0, PCI_EXP_LNKCTL_CLKREQ_EN);
+>  }
+>  
+>  static void rtl_pcie_state_l2l3_disable(struct rtl8169_private *tp)
 
-Thank you Dan for the patch.
-
-Reviewed-by: Pranjal Ramajor Asha Kanojiya <quic_pkanojiy@quicinc.com>
-
-I agree with Jeff's comment to sort the variable declaration length wise.
