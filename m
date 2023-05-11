@@ -2,161 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 262AC6FF37D
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:58:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BF46FF37B
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:57:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238150AbjEKN6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 09:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48858 "EHLO
+        id S237929AbjEKN47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:56:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238041AbjEKN6s (ORCPT
+        with ESMTP id S238043AbjEKN45 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:58:48 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4201BF4;
-        Thu, 11 May 2023 06:58:47 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so79612044a12.1;
-        Thu, 11 May 2023 06:58:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683813526; x=1686405526;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=plAKUv42Sn46En3seCmYitfaF7G/SLKfsBL9Nzw7uRw=;
-        b=Y7AqvUuLXbmjeEGage7I+9M2J2MQst3psCrciGGTiGFZOpwCvvh+wGd5x7eNIQugRU
-         2c4Hka8ERtwqxm0zK8AJqlzKhrV3Xwlji8aNv1zyXjDMoZN+lBz9V/UdyYFNnLMOBQS4
-         y+d2TouKBAFExIjLazpq4aAeFoHMnLZMJp+GlmEMXn0ZbYTRlkukAs2WFL6az4Bt/iDE
-         qVwVKXuXl66OwQY1tWPQkblznUHMFJOjcSjllblG683WoomCpQyt2wRdNK31G3/6IeBc
-         CBZCLMaalvZrU/3h1DNZGslHt+2C4T2wK3iEDSPZTIOAQYKW3UlHdbV1cj6YdNOfYXS1
-         No3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683813526; x=1686405526;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=plAKUv42Sn46En3seCmYitfaF7G/SLKfsBL9Nzw7uRw=;
-        b=T8AW13f1NH4pYETHe2i+Om+84db42zbAxm3R/xx/nI1QoMYLlPh/eUPC4fceceHJJm
-         h7Bn0jPmR9a2wJALnLNL4HsB2Z09ILl76g+Xt8rRqyxPrbEL5VApBIXIfFBIVgBfv2gr
-         aXIZBVHcGHInuaUSHuEMe0ZlYa/Nxv0xOJ9sYjiv6eSa1gZir8UOTVX/jA9g7jOzhQkf
-         +ck8HKU3JjXt0Yg5/5ydkkXEoc6KIEX1LlZQtrfIqN+WZVcbqMSrYG6CVPXX3Smxs2sg
-         Aiao4bXnwxqgcCqGHac64z6EBtNFx7RothkroYUBYNutqGW1fJm3iVFHCKDJNdOOBYUt
-         fx7Q==
-X-Gm-Message-State: AC+VfDytK0aUSuNtU5wtCuRQ/SITvVy06s9X0B3PyUNwT4EDVcXLzM/F
-        dDhw/hv26n/nVbIcnMB+ZQ8=
-X-Google-Smtp-Source: ACHHUZ6W/hrepCZO8dtSF4PWtMXMh5m0iaLmX86DlYJ3hPfenOSBlDCLLqnXhALJMjKCox8mjf1rZQ==
-X-Received: by 2002:a17:907:d0e:b0:94a:57d1:5539 with SMTP id gn14-20020a1709070d0e00b0094a57d15539mr19781061ejc.5.1683813525596;
-        Thu, 11 May 2023 06:58:45 -0700 (PDT)
-Received: from wslxew193.ultratronik.de (mail.ultratronik.de. [82.100.224.114])
-        by smtp.gmail.com with ESMTPSA id de39-20020a1709069be700b00969e9fef151sm3627994ejc.97.2023.05.11.06.58.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 06:58:45 -0700 (PDT)
-From:   Boerge Struempfel <boerge.struempfel@gmail.com>
-X-Google-Original-From: Boerge Struempfel <bstruempfel@ultratronik.de>
-Cc:     boerge.struempfel@gmail.com, bstruempfel@ultratronik.de,
-        Mark Brown <broonie@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: Add option to keep the MOSI line low, when it is idle.
-Date:   Thu, 11 May 2023 15:56:32 +0200
-Message-Id: <20230511135632.78344-1-bstruempfel@ultratronik.de>
-X-Mailer: git-send-email 2.25.1
+        Thu, 11 May 2023 09:56:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F7275249;
+        Thu, 11 May 2023 06:56:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A678964DB2;
+        Thu, 11 May 2023 13:56:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00E7DC433D2;
+        Thu, 11 May 2023 13:56:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683813415;
+        bh=AFYNgBRlkZAIM+XPW/DgpQZP3bXSSbaVQ2TNqPf27Jg=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=dlWmPM4ySc1VWnSiCNCDl+iQH1JfRVLKkGL+EsLU8osKL/BmYaWWZNJut3wvKrW8f
+         PwC9CVOJJujizIOrK4k9KFs5+CQWl09x6rdC3O5PQgn+OvQScst25QTZBWC5pJWsMM
+         t0Z8w7rm//o0oFD4pih3jiPdtXB4bCE3LIKnLDXPW7bD36Hjxk9fXRgd5WZVINlRNb
+         cjuo4mwyNEMnJNhfNh34boCMC1G0xtFXITcis56Z+sRYXRaVVlt34VsXH/x3dIfxQL
+         6+C8Wmj0ZN2TyQIbiF7xQQ/Eb4DqspZNnSQAWnKDAo1l8hUJ11jDuC7YITDPy4SC8s
+         zZIYEPOVZVLhA==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 95BE3CE0DB0; Thu, 11 May 2023 06:56:54 -0700 (PDT)
+Date:   Thu, 11 May 2023 06:56:54 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel-team@meta.com" <kernel-team@meta.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>
+Subject: Re: [PATCH rcu 3/6] rcu/rcuscale: Move rcu_scale_*() after
+ kfree_scale_cleanup()
+Message-ID: <7a91a10d-3518-4452-b9ca-51240f00d29f@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <7ffd4a5d-61e9-4b4c-a312-a85bcde08c39@paulmck-laptop>
+ <20230510171238.2189921-3-paulmck@kernel.org>
+ <CAEXW_YTHNbzdSn3RpJwnwKZOJX=rGdMabfsCw0ZuMZhsXZMjQA@mail.gmail.com>
+ <IA1PR11MB6171FA965F8FF915621482E789749@IA1PR11MB6171.namprd11.prod.outlook.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <IA1PR11MB6171FA965F8FF915621482E789749@IA1PR11MB6171.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By default, the imx spi controller uses a high mosi line, whenever it is
-idle. This may not be desired in all use cases. For example neopixel
-leds can get confused and flicker due to misinterpreting the idle state.
-Therefore, we introduce a new spi-mode bit, with which the idle behaviour
-can be overwritten on a per device basis.
+On Thu, May 11, 2023 at 07:01:59AM +0000, Zhuo, Qiuxu wrote:
+> > From: Joel Fernandes <joel@joelfernandes.org>
+> > Sent: Thursday, May 11, 2023 1:23 PM
+> > To: Paul E. McKenney <paulmck@kernel.org>
+> > Cc: rcu@vger.kernel.org; linux-kernel@vger.kernel.org; kernel-
+> > team@meta.com; rostedt@goodmis.org; Zhuo, Qiuxu
+> > <qiuxu.zhuo@intel.com>
+> > Subject: Re: [PATCH rcu 3/6] rcu/rcuscale: Move rcu_scale_*() after
+> > kfree_scale_cleanup()
+> > 
+> > On Wed, May 10, 2023 at 10:12 AM Paul E. McKenney <paulmck@kernel.org>
+> > wrote:
+> > >
+> > > From: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+> > >
+> > > This code-movement-only commit moves the rcu_scale_cleanup() and
+> > > rcu_scale_shutdown() functions to follow kfree_scale_cleanup().
+> > > This is code movement is in preparation for a bug-fix patch that
+> > > invokes
+> > > kfree_scale_cleanup() from rcu_scale_cleanup().
+> > >
+> > > Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+> > > Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> > > ---
+> > >  kernel/rcu/rcuscale.c | 194
+> > > +++++++++++++++++++++---------------------
+> > >  1 file changed, 97 insertions(+), 97 deletions(-)
+> > 
+> > I wish diff was better at showing what really changed. The meld tool can help
+> > but its gui...
+> > 
+> > Should I run meld later (I'm out at a conference so no access to meld-capable
+> > machines) or are we sufficiently confident that the lines were moved as-is ? :)
+> > 
+> 
+> Thank you, Joel for this concern. Good to know the meld diff GUI tool. 
+> I just run the command below and confirmed that the lines were moved 
+> as-is: rcu_scale_{cleanup,shutdown}() follows kfree_scale_cleanup().
+> You may double check it ;-).
+> 
+>       meld --diff ./rcuscale.c.before ./rcuscale.c.after
 
-Signed-off-by: Boerge Struempfel <bstruempfel@ultratronik.de>
----
- drivers/spi/spi-imx.c        | 9 ++++++++-
- drivers/spi/spi.c            | 2 ++
- include/uapi/linux/spi/spi.h | 3 ++-
- 3 files changed, 12 insertions(+), 2 deletions(-)
+Nice, thank you both!
 
-diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
-index 34e5f81ec431e..6acab2b4ffaa5 100644
---- a/drivers/spi/spi-imx.c
-+++ b/drivers/spi/spi-imx.c
-@@ -281,6 +281,7 @@ static bool spi_imx_can_dma(struct spi_controller *controller, struct spi_device
- #define MX51_ECSPI_CONFIG_SCLKPOL(cs)	(1 << ((cs & 3) +  4))
- #define MX51_ECSPI_CONFIG_SBBCTRL(cs)	(1 << ((cs & 3) +  8))
- #define MX51_ECSPI_CONFIG_SSBPOL(cs)	(1 << ((cs & 3) + 12))
-+#define MX51_ECSPI_CONFIG_DATACTL(cs)	(1 << ((cs & 3) + 16))
- #define MX51_ECSPI_CONFIG_SCLKCTL(cs)	(1 << ((cs & 3) + 20))
- 
- #define MX51_ECSPI_INT		0x10
-@@ -573,6 +574,11 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
- 		cfg &= ~MX51_ECSPI_CONFIG_SCLKCTL(spi_get_chipselect(spi, 0));
- 	}
- 
-+	if (spi->mode & SPI_MOSI_IDLE_LOW)
-+		cfg |= MX51_ECSPI_CONFIG_DATACTL(spi->chip_select);
-+	else
-+		cfg &= ~MX51_ECSPI_CONFIG_DATACTL(spi->chip_select);
-+
- 	if (spi->mode & SPI_CS_HIGH)
- 		cfg |= MX51_ECSPI_CONFIG_SSBPOL(spi_get_chipselect(spi, 0));
- 	else
-@@ -1743,7 +1749,8 @@ static int spi_imx_probe(struct platform_device *pdev)
- 	spi_imx->controller->prepare_message = spi_imx_prepare_message;
- 	spi_imx->controller->unprepare_message = spi_imx_unprepare_message;
- 	spi_imx->controller->slave_abort = spi_imx_slave_abort;
--	spi_imx->controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_NO_CS;
-+	spi_imx->controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_NO_CS |
-+					 SPI_MOSI_IDLE_LOW;
- 
- 	if (is_imx35_cspi(spi_imx) || is_imx51_ecspi(spi_imx) ||
- 	    is_imx53_ecspi(spi_imx))
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 9291b2a0e8871..3ad538b317a84 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2260,6 +2260,8 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
- 		spi->mode |= SPI_LSB_FIRST;
- 	if (of_property_read_bool(nc, "spi-cs-high"))
- 		spi->mode |= SPI_CS_HIGH;
-+	if (of_property_read_bool(nc, "spi-mosi-idle-low"))
-+		spi->mode |= SPI_MOSI_IDLE_LOW;
- 
- 	/* Device DUAL/QUAD mode */
- 	if (!of_property_read_u32(nc, "spi-tx-bus-width", &value)) {
-diff --git a/include/uapi/linux/spi/spi.h b/include/uapi/linux/spi/spi.h
-index 9d5f580597039..ca56e477d1619 100644
---- a/include/uapi/linux/spi/spi.h
-+++ b/include/uapi/linux/spi/spi.h
-@@ -28,6 +28,7 @@
- #define	SPI_RX_OCTAL		_BITUL(14)	/* receive with 8 wires */
- #define	SPI_3WIRE_HIZ		_BITUL(15)	/* high impedance turnaround */
- #define	SPI_RX_CPHA_FLIP	_BITUL(16)	/* flip CPHA on Rx only xfer */
-+#define SPI_MOSI_IDLE_LOW	_BITUL(17)	/* leave mosi line low when idle */
- 
- /*
-  * All the bits defined above should be covered by SPI_MODE_USER_MASK.
-@@ -37,6 +38,6 @@
-  * These bits must not overlap. A static assert check should make sure of that.
-  * If adding extra bits, make sure to increase the bit index below as well.
-  */
--#define SPI_MODE_USER_MASK	(_BITUL(17) - 1)
-+#define SPI_MODE_USER_MASK	(_BITUL(18) - 1)
- 
- #endif /* _UAPI_SPI_H */
--- 
-2.25.1
+Another option is to check out the commit corresponding to this patch,
+then do "git blame -M kernel/rcu/rcuscale.c".  Given a move-only commit,
+there should be no line tagged with this commit's SHA-1.
 
+They say that another option is to use "git diff --color-moved", which
+colors the changes.  That it does, but I am hard-pressed to work out
+exactly what distinguishes a moved hunk from an added or removed hunk.
+Fall colors vs. winter colors?  Exterior vs. interior?  Any particular
+decade in the endless rush of changes to fashion?  Perhaps someone with
+normal color vision (to say nothing of better fashion sense) could try it.
+
+On the other hand: "default: Is a synonym for zebra. This may change to
+a more sensible mode in the future."  So maybe it is not just me.  ;-)
+
+You can also apparently choose colors using "color.diff.newMoved" and
+"color.diff.oldMoved" when using "--color-moved=plain".
+
+But "git diff --color-moved=dimmed-zebra" might be more to the point for
+someone like me.  I would need to experiment with it more in order to
+confirm my hypotheses about what it is doing.  To say nothing of building
+trust in it.  Plus I have to open a color terminal to use it effectively.
+So maybe "git blame -M" continues to be the tool for me?
+
+							Thanx, Paul
