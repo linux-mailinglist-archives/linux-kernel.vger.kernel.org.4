@@ -2,181 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA716FE891
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 02:25:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB3B6FE898
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 02:26:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236684AbjEKAZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 20:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60714 "EHLO
+        id S236863AbjEKA0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 20:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjEKAZI (ORCPT
+        with ESMTP id S232797AbjEKA0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 20:25:08 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D38BC558D;
-        Wed, 10 May 2023 17:25:06 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64115eef620so54107901b3a.1;
-        Wed, 10 May 2023 17:25:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683764706; x=1686356706;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NiIAKS0VeNTa0Mpe7u/4NIaUrufb6wO/HHXswmRGRIQ=;
-        b=D6ZVr8L5gm2c6Qrq+kA00eiTsg5rBpmsfXi9fenQ0gNlZZ8pjMcDY5F0LcGwVe5m1c
-         ZlNY1pTqDOh/Sdf3JJHuwU2SqXmTUiXD4tznuUwPnzXOq+wlmAJTMX/s+ETnP39OKyPA
-         MW1R4sgwYXh4euC0Qy4GDOcS2yIPoXJDSIxSqJh0YglohoKveKeZLF/qYDesMD/cJ/WO
-         iEQU1gfl3UM8uA6u0Wv2sawFK/cw0P5kunYnDN1IuuwJZPUQv2SSmModvt329ibayPth
-         pcLChR3avq77eEklPDgP7Sk7KLIodNJWal96Kf6qohTgQZ28DMvwL3+NypmWANhL4j3D
-         Q+ew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683764706; x=1686356706;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NiIAKS0VeNTa0Mpe7u/4NIaUrufb6wO/HHXswmRGRIQ=;
-        b=iL/hF//28QbcL/zovAMQZqzzl9nBpeocZtejrvYaravh4j/GsxIdlkVaJV53UEIZLY
-         AHBz/XRkEY45unQulPem8Iy8IDF0FIndRnycn7wt2PBOfsECrEc8ygET/8P55ThuMzZK
-         ztYmzCcIzrXvNliqNqlS5DznDUnFPSypKOJsvGO07dqP9ud4TIUzDs9LKYzFDSZ/jtqo
-         I9M64t4o5+8JYYtcTmxNBF7H/0ZT2BojQgnp2TFhL2zhxznl9Af/GBZjVjaBpAhbWUSJ
-         jVa0b9+jRo8cGPUdiCdZIB5sX0fY74zwB2YK1Zcda1oH2zP5NFF0VluyOePY9fUZSozs
-         fBjw==
-X-Gm-Message-State: AC+VfDyRNAZj+nt9M/g9TbEADn4Vth/sqXUX2fjJdsU8tpIWQN08bGYh
-        zXC2bp00vs0vx72I6KsjhqQ=
-X-Google-Smtp-Source: ACHHUZ4xdFMjnxzjvjJ1Fd7ldfzzLJIyyYXtJr+gghVAO38rUN0DBRdC8d6E6cSW+9qzfZpLdHvkeA==
-X-Received: by 2002:a17:902:ea0e:b0:1ac:7d8a:35a with SMTP id s14-20020a170902ea0e00b001ac7d8a035amr14529498plg.12.1683764705845;
-        Wed, 10 May 2023 17:25:05 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:84a:ed9c:4024:c347])
-        by smtp.gmail.com with ESMTPSA id jn22-20020a170903051600b001a80ad9c599sm4386641plb.294.2023.05.10.17.25.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 10 May 2023 17:25:05 -0700 (PDT)
-Date:   Wed, 10 May 2023 17:25:02 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        linux-input@vger.kernel.org
-Subject: Re: [PATCH] HID: google: Don't use devm for hid_hw_stop()
-Message-ID: <ZFw13uv7/q5jsLWE@google.com>
-References: <20230505232417.1377393-1-swboyd@chromium.org>
- <ZFWZ785FRHDii/+5@google.com>
- <CAE-0n521MhmdWjEb0-xwnPLQz07bMCGyXokZ3L87azYcw6_C_Q@mail.gmail.com>
- <ZFv9aKZlZbfK1cVr@google.com>
- <CAE-0n52bv1-VaQikOV6hdFmuRyPBX6YV7MT=2+xrpReJecrgbQ@mail.gmail.com>
+        Wed, 10 May 2023 20:26:32 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91F0558F
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 17:26:30 -0700 (PDT)
+Received: from epcas2p2.samsung.com (unknown [182.195.41.54])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230511002626epoutp032f8248f3bdd64019a8b0f1ab423b4ab6~d7ycAfdsW0883908839epoutp03I
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:26:26 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230511002626epoutp032f8248f3bdd64019a8b0f1ab423b4ab6~d7ycAfdsW0883908839epoutp03I
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1683764786;
+        bh=anMEz2QucImTr7uBDxjHJeVZNcXrSgNZt0ct0sxAnw8=;
+        h=From:To:In-Reply-To:Subject:Date:References:From;
+        b=ix8KFZSJpqVxvV2LR3RMvzus5ua8s7nfgTDPShvtNHiWDTg0Q2I340UYSxdTcDOj4
+         6ynNsprWXOJT4vCDnKSa4C1J1wopuSn0EORetWYlh+g0YIyTFfgU6un3Q0meuL6+dJ
+         37dfgwlTSYW4h8kuSQvVj2b6bhlmRmjGIoiM5O9M=
+Received: from epsnrtp3.localdomain (unknown [182.195.42.164]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20230511002625epcas2p2ae8ce39b12618b84d08aa88e43ae39ac~d7ybTtfyZ2965229652epcas2p2F;
+        Thu, 11 May 2023 00:26:25 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.88]) by
+        epsnrtp3.localdomain (Postfix) with ESMTP id 4QGt4100tpz4x9Q2; Thu, 11 May
+        2023 00:26:25 +0000 (GMT)
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        08.9A.17293.0363C546; Thu, 11 May 2023 09:26:24 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTPA id
+        20230511002624epcas2p2de25beb7d136e1d983ad4f5dd436b546~d7yaLbbKL1896418964epcas2p2e;
+        Thu, 11 May 2023 00:26:24 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20230511002624epsmtrp118a5bdea9f791fdec231a372682e3b34~d7yaKOuC_0896508965epsmtrp1m;
+        Thu, 11 May 2023 00:26:24 +0000 (GMT)
+X-AuditID: b6c32a46-0c1eba800001438d-41-645c3630627e
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        BC.2A.27706.0363C546; Thu, 11 May 2023 09:26:24 +0900 (KST)
+Received: from KORCO011456 (unknown [10.229.38.105]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20230511002624epsmtip16b1bdad732e5bd595caf9db22314ecb9~d7yZ65i7J0520905209epsmtip1Q;
+        Thu, 11 May 2023 00:26:24 +0000 (GMT)
+From:   "Kiwoong Kim" <kwmad.kim@samsung.com>
+To:     "'Bart Van Assche'" <bvanassche@acm.org>,
+        <linux-scsi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <alim.akhtar@samsung.com>, <avri.altman@wdc.com>,
+        <jejb@linux.ibm.com>, <martin.petersen@oracle.com>,
+        <beanhuo@micron.com>, <adrian.hunter@intel.com>,
+        <sc.suh@samsung.com>, <hy50.seo@samsung.com>,
+        <sh425.lee@samsung.com>, <bhoon95.kim@samsung.com>,
+        <kwangwon.min@samsung.com>, <junwoo80.lee@samsung.com>
+In-Reply-To: <60542301-e77f-ad26-e249-29d42f446d74@acm.org>
+Subject: RE: [PATCH v2] ufs: poll pmc until another pa request is completed
+Date:   Thu, 11 May 2023 09:26:24 +0900
+Message-ID: <039b01d9839f$37cef8d0$a76cea70$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAE-0n52bv1-VaQikOV6hdFmuRyPBX6YV7MT=2+xrpReJecrgbQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: ko
+Thread-Index: AQN1t83238AtSis63Xat9rXUxX7L4wHvqgOrAXsXcCusAGySUA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrFJsWRmVeSWpSXmKPExsWy7bCmma6BWUyKweKvFhYnn6xhs3gwbxub
+        xcufV9ksDj7sZLH4uvQZq8W0Dz+ZLVYvfsBisejGNiaLXX+bmSy23tjJYnF51xw2i+7rO9gs
+        lh//x2TRdfcGo8XSf29ZHPg9Ll/x9li85yWTx4RFBxg9vq/vYPP4+PQWi0ffllWMHp83yXm0
+        H+hmCuCIyrbJSE1MSS1SSM1Lzk/JzEu3VfIOjneONzUzMNQ1tLQwV1LIS8xNtVVy8QnQdcvM
+        ATpeSaEsMacUKBSQWFyspG9nU5RfWpKqkJFfXGKrlFqQklNgXqBXnJhbXJqXrpeXWmJlaGBg
+        ZApUmJCd8WPSNOaCq9IVU9u/MTcw3hbtYuTkkBAwkfg1Ywk7iC0ksINRovm7WBcjF5D9iVFi
+        7ufjjBDON0aJVbe2scB0TDq1gBUisZdR4uvXkywQzktGic7+I4wgVWwC2hLTHu4GqxIRWMos
+        8eRCK9gSTgFricsfnoPZwgLeEjsetDOB2CwCqhJfmjrB4rwClhJrDs9lhLAFJU7OfAK2mhlo
+        6LKFr5khzlCQ+Pl0GStEXERidmcbUJwDaJmTxL2ZHCB7JQRucEhcX/uLCaLeReLA5Q1sELaw
+        xKvjW9ghbCmJl/1t7CC9EgLZEnsWikGEKyQWT3sL9bGxxKxn7YwgJcwCmhLrd+lDVCtLHLkF
+        dRifRMfhv1BDeCU62oQgGpUlfk2azAhhS0rMvHkHqsRDYuVbrwmMirOQfDgLyYezkHw1C2Ht
+        AkaWVYxiqQXFuempxUYFRvCYTs7P3cQITtRabjsYp7z9oHeIkYmD8RCjBAezkgjv2yXRKUK8
+        KYmVValF+fFFpTmpxYcYTYFhPpFZSjQ5H5gr8kriDU0sDUzMzAzNjUwNzJXEeaVtTyYLCaQn
+        lqRmp6YWpBbB9DFxcEo1MJ1b1vMjeOf2LyvmTglev0P9l/cKncf5jywVTJV+1S39fjfPXPpt
+        d07xq/Tbsx7sXfBO85iVbLjyDP+3iyaKSejM2S72xvzNJI6m/rS+M1zcU/Vzgus/O4ptD5jz
+        JlRhZd/a60q5GW5L406tTr/8qXjTz4MKG18fX6WfLNddwcan3fvRzVU2l51j9sfMX9Y38mLj
+        uo4/m75hnXXkUYa38rO2Xb/vtTvySGdKgfPhW0/fcP+ccyjwSWb961s753v6B0dIdGve3a98
+        zLut6e26kxdCAuJ9F91dumh7aFx3m/OxokexjlUSS9XZmZNtTS6nOEnUf+Xq9nQ/+uTNquc/
+        jpgsbHx9QORqm7yXotoLbwYlluKMREMt5qLiRACeVPSkXQQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrHIsWRmVeSWpSXmKPExsWy7bCSnK6BWUyKwb61khYnn6xhs3gwbxub
+        xcufV9ksDj7sZLH4uvQZq8W0Dz+ZLVYvfsBisejGNiaLXX+bmSy23tjJYnF51xw2i+7rO9gs
+        lh//x2TRdfcGo8XSf29ZHPg9Ll/x9li85yWTx4RFBxg9vq/vYPP4+PQWi0ffllWMHp83yXm0
+        H+hmCuCI4rJJSc3JLEst0rdL4Mq49ewgS8E06Yp1L26yNzDOE+1i5OSQEDCRmHRqAWsXIxeH
+        kMBuRomXb3+xQiQkJU7sfM4IYQtL3G85AlX0nFGi99Z6sASbgLbEtIe7wRIiAtuZJR5e/MkG
+        UXWMUWL7uulgozgFrCUuf3jODmILC3hL7HjQzgRiswioSnxp6gSL8wpYSqw5PJcRwhaUODnz
+        CQuIzQy0ofdhKyOMvWzha2aIkxQkfj5dxgoRF5GY3dkGFOcAusJJ4t5MjgmMQrOQTJqFZNIs
+        JJNmIelewMiyilEytaA4Nz232LDAMC+1XK84Mbe4NC9dLzk/dxMjOEq1NHcwbl/1Qe8QIxMH
+        4yFGCQ5mJRHet0uiU4R4UxIrq1KL8uOLSnNSiw8xSnOwKInzXug6GS8kkJ5YkpqdmlqQWgST
+        ZeLglGpgMt/1KUAr4JHcKp2pktUm8z4efvlJx6Zr/6rF6sd3/pRrZLp0pLLK5ubWboVDUn4c
+        cZM2xOdsrWXVeFsUm3Bmm9BG/1v/8uddEaiesv5Ye735kyKh7mePr915fnrj1PY/ukc3MoU+
+        boz4uiGa66LmrW8J/z9cbeFbflxU+EFonohA8Jx9BeeeKrZlTT9w7vrfyB/pM/YbfVPacapl
+        xfQ6jtiThXcW1BxN/mdbqXZ7n6/qw1cnXvK+uB2UoZN2cdqOKNuDRv9mV727NWduvuOX2Keh
+        Ucekgx78149LmBB25ayy28Jq2c/qD2atu8xRsy7zcJJL+z3GDasfeTKFpPTtiP10b5n591un
+        Fgvf5pnrODFBiaU4I9FQi7moOBEA9CAsBUEDAAA=
+X-CMS-MailID: 20230511002624epcas2p2de25beb7d136e1d983ad4f5dd436b546
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230425012857epcas2p45eaa3f5f87de424bbf951b22653b3e70
+References: <CGME20230425012857epcas2p45eaa3f5f87de424bbf951b22653b3e70@epcas2p4.samsung.com>
+        <1682385635-43601-1-git-send-email-kwmad.kim@samsung.com>
+        <60542301-e77f-ad26-e249-29d42f446d74@acm.org>
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        PDS_BAD_THREAD_QP_64,RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 01:50:01PM -0700, Stephen Boyd wrote:
-> Quoting Dmitry Torokhov (2023-05-10 13:24:08)
-> > On Wed, May 10, 2023 at 11:51:31AM -0700, Stephen Boyd wrote:
-> > > Quoting Dmitry Torokhov (2023-05-05 17:06:07)
-> > > > On Fri, May 05, 2023 at 04:24:16PM -0700, Stephen Boyd wrote:
-> > > > >
-> > > > ...
-> > > > > Unfortunately, the hid google hammer driver hand rolls a devm function
-> > > > > to call hid_hw_stop() when the driver is unbound and implements an
-> > > > > hid_driver::remove() function. The driver core doesn't call the devm
-> > > > > release functions until _after_ the bus unbinds the driver, so the order
-> > > > > of operations is like this:
-> > > >
-> > > > Excellent analysis, but the problem is not limited to the hammer driver
-> > > > (potentially) and shalt be dealt with appropriately, at the HID bus
-> > > > level.
-> > >
-> > > Thanks. I thought of the bus level approach as well, but I was trying to
-> > > keep the fix isolated to the driver that had the problem. I'd like to
-> > > get the fix into the stable kernel, as this fixes a regression
-> > > introduced by commit d950db3f80a8 ("HID: google: switch to devm when
-> > > registering keyboard backlight LED") in v5.18.
-> > >
-> > > Is the bus level approach going to be acceptable as a stable backport?
+> > =40=40 -4138,6 +4141,61 =40=40 int ufshcd_dme_get_attr(struct ufs_hba *=
+hba, u32
+> attr_sel,
+> >   =7D
+> >   EXPORT_SYMBOL_GPL(ufshcd_dme_get_attr);
 > >
-> > Sure, why not given the kind of stuff flowing into stable kernels. At
-> > least this would be fixing real issue that can be triggered with a real
-> > device.
-> 
-> Hmm, ok. I was worried it would be too much "new code" vs. fixing
-> something.
-> 
-> > >
-> > > This got me thinking that maybe both of these approaches are wrong.
-> > > Maybe the call to hid_close_report() should be removed from
-> > > hid_device_remove() instead.
-> > >
-> > > The device is being removed from the bus when hid_device_remove() is
-> > > called, but it hasn't been released yet. Other devices like the hidinput
-> > > device are referencing the hdev device because they set the hdev as
-> > > their parent. Basically, child devices are still bound to some sort of
-> > > driver or subsystem when the parent hdev is unbound from its driver,
-> > > leading to a state where the child drivers could still access the hdev
-> > > while it is being destroyed. If we remove the hid_close_report() call
-> > > from this function it will eventually be called by hid_device_release()
-> > > when the last reference to the device is dropped, i.e. when the child
-> > > devices all get destroyed. In the case of hid-google-hammer, that would
-> > > be when hid_hw_stop() is called from the devm release function by driver
-> > > core.
-> > >
-> > > The benefit of this approach is that we don't allocate a devres group
-> > > for all the hid devices when only two drivers need it. The possible
-> > > downside is that we keep the report around while the device exists but
-> > > has no driver bound to it.
-> > >
-> > > Here's a totally untested patch for that.
-> > >
-> > > ---8<----
-> > > diff --git a/drivers/hid/hid-core.c b/drivers/hid/hid-core.c
-> > > index 22623eb4f72f..93905e200cae 100644
-> > > --- a/drivers/hid/hid-core.c
-> > > +++ b/drivers/hid/hid-core.c
-> > > @@ -1211,8 +1211,8 @@ int hid_open_report(struct hid_device *device)
-> > >               hid_parser_reserved
-> > >       };
-> > >
-> > > -     if (WARN_ON(device->status & HID_STAT_PARSED))
-> > > -             return -EBUSY;
-> > > +     if (device->status & HID_STAT_PARSED)
-> > > +             hid_close_report(device);
-> > >
-> > >       start = device->dev_rdesc;
-> > >       if (WARN_ON(!start))
-> > > @@ -2662,7 +2662,6 @@ static void hid_device_remove(struct device *dev)
-> > >                       hdrv->remove(hdev);
-> > >               else /* default remove */
-> > >                       hid_hw_stop(hdev);
-> > > -             hid_close_report(hdev);
-> > >               hdev->driver = NULL;
-> > >       }
-> >
-> > This will probably work, but it I consider this still being fragile as
-> > at some point we might want to add some more unwinding, and we'll run
-> > into this issue again. I would feel much safer if the order of release
-> > followed (inversely) order of allocations more closely.
-> >
-> 
-> Sorry, I'm not following here. How is it fragile? Are you saying that if
-> we want to add devm calls into the bus layer itself the order of release
-> won't be inverse of allocation/creation?
+> > +static int __ufshcd_poll_uic_pwr(struct ufs_hba *hba, struct
+> uic_command *cmd,
+> > +		struct completion *cnf)
+>=20
+> What does the name =22cnf=22 mean? To me it seems to be a weird name for =
+a
+> completion function pointer.
 
-What I was trying to say is that later someone else might be tempted to
-add more traditional-style resources and non-devm-unwinding for them.
-Having an explicit devres groups gives exact point when driver-allocated resources
-are released, and makes patch authors take it into consideration.
+'cnf' is a term used in Unipro spec and I thought it's good to use terms in=
+ the spec, especially in this file.
+ufshcd.c is an implementation of UFS and its related specifications.
 
-If everything is devm-controlled then we do not need a separate devres
-group.
+It's a notification meaning that UFS host's Unipro HW receives a UIC reques=
+t from the host.
+I guess maybe 'cnf' stands for 'confirm' but I thought 'confirm' look a lit=
+tle bit abstract.
+
+If you have an better idea of naming it, please let me know.
+
+>=20
+> > +=7B
+> > +	unsigned long flags;
+> > +	int ret;
+> > +	ktime_t timeout;
+> > +	u32 mode =3D cmd->argument3;
+>=20
+> Is my understanding correct that __ufshcd_send_uic_cmd() does not modify
+> cmd->argument3? If so, why does this function copy cmd->argument3 and
+> re-assign cmd->argument3?
+
+This is for the case when unipro responds w/ busy(09h).
+When IS.UCCS is enabled and is raised, UFS driver updates cmd->argumen3.
+With this patch, it will go through the loop again w/ an unexpected value o=
+f cmd->argumen3.
+
+>=20
+> > +	timeout =3D ktime_add_ms(ktime_get(), UIC_PA_RDY_TIMEOUT);
+>=20
+> =22deadline=22 is probably a better name for this variable than =22timeou=
+t=22.
+> Additionally, please consider using jiffies since I think that the
+> accuracy of the jiffies counter is sufficient in this context.
+>=20
+> > +	do =7B
+> > +		spin_lock_irqsave(hba->host->host_lock, flags);
+> > +		hba->active_uic_cmd =3D NULL;
+>=20
+> Is my understanding correct that it is guaranteed that
+> hba->active_uic_cmd is NULL here? If so, what is the purpose of the
+> above statement?
+
+Yeah, putting 'hba->active_uic_cmd =3D NULL' after wait_for_completion_time=
+out looks natural.
+But you can see there is one goto case w/ a UIC command not issued for UIC =
+not ready, i.e. =21ufshcd_ready_for_uic_cmd.
+To cover it together, 'hba->active_uic_cmd =3D NULL' has to be also put at =
+the end of this function
+and even wrapped w/ the spin lock. I wanted to reduce LOC and found a perio=
+d already wrapped by the spin lock.
+That is, it has the same result, I thought.
+
+>=20
+> > +		ret =3D __ufshcd_send_uic_cmd(hba, cmd, true);
+> > +		spin_unlock_irqrestore(hba->host->host_lock, flags);
+> > +		if (ret) =7B
+> > +			dev_err(hba->dev,
+> > +				=22pwr ctrl cmd 0x%x with mode 0x%x uic
+> error %d=5Cn=22,
+> > +				cmd->command, cmd->argument3, ret);
+> > +			goto out;
+> > +		=7D
+> > +
+> > +		/* This value is heuristic */
+> > +		if (=21wait_for_completion_timeout(&cmd->done,
+> > +		    msecs_to_jiffies(5))) =7B
+>=20
+> Please align msecs_to_jiffies(5) with the first argument (=22&cmd->done=
+=22).
+>=20
+> > +			ret =3D -ETIMEDOUT;
+> > +			dev_err(hba->dev,
+> > +				=22pwr ctrl cmd 0x%x with mode 0x%x timeout=5Cn=22,
+> > +				cmd->command, cmd->argument3);
+> > +			if (cmd->cmd_active)
+> > +				goto out;
+> > +
+> > +			dev_info(hba->dev, =22%s: pwr ctrl cmd has already been
+> completed=5Cn=22, __func__);
+> > +		=7D
+> > +
+> > +		/* retry for only busy cases */
+>=20
+> Please fix the word order in the above comment (for only -> only for)
+>=20
+> Thanks,
+>=20
+> Bart.=20
+
+For others, let me change it.
 
 Thanks.
+Kiwoong Kim
 
--- 
-Dmitry
+
