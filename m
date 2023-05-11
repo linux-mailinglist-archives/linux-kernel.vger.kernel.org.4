@@ -2,46 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80D4D6FFAB0
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:42:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 968696FFAA1
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:41:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239430AbjEKTmp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 15:42:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58432 "EHLO
+        id S239374AbjEKTlm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 15:41:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239401AbjEKTmR (ORCPT
+        with ESMTP id S239442AbjEKTlQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 15:42:17 -0400
+        Thu, 11 May 2023 15:41:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3597AD84B;
-        Thu, 11 May 2023 12:41:44 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 403D1D2E8;
+        Thu, 11 May 2023 12:40:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BCDD465104;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 84D2E650DB;
+        Thu, 11 May 2023 19:40:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A607FC4339C;
         Thu, 11 May 2023 19:40:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAB94C433D2;
-        Thu, 11 May 2023 19:40:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683834016;
-        bh=iBbMJ4OT6Okws+/8Aq4QYIVmJgt6KYB2M66A88XXqus=;
+        s=k20201202; t=1683834017;
+        bh=2QLWUuv7sWoxq91M2t52vu5y6W5FZRv+CbpLAWryEGk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=QWJ1zr8DfGAhnmjiO57f/2VZYyJuds3seCJR3vQIXTe5MZHAjlZqqLGJF3PRMz0Nt
-         1QoAxyuKo2IUIsHTs2nTx12b0ExHrmZAPwFWmFOmF0J7egx7Hb9x590cOmT3LyFGcX
-         EqbjbFMJjwKSMg1gZ2cCwVxPRiJCcMHlAUHQOZJcSs6YSQqLXzI3tbj9VzkXz64BJQ
-         ASYDDQVcAzz8dqaImNCO/zVmhgF6Un5eIVuxi3lVdBLULlotyfXXHKUVbtnmp1vaBr
-         gXX9BtRCPga2J2gspa7qkT9lF1t9DBDKThCyfITRdg8PPLUtjnCYTpV1QZY9yVS3Cm
-         F0IiacO3LDPVg==
+        b=TOTv007gMjK5K7HgCerMXY7+dcOfXUX0CPb/El6sFxWYzJZEirx24u5XlZYSHTg4D
+         K9b9tADl7OlZ2UEAyavuTq6x5KLIqxNrpi9gu3lIIn0R4zajBFWTedKVcFJALGH8Hu
+         PkPrVVq3pSfYrqa44z1dUDzzYhN142S46+5Y0B/JqifapjODOznlDNc3Fy7vl5xvCi
+         sCz1p+yu8JoKUy0q+9Jv4IdeP2bWH2ZXZF5gjcSS8acsmF+QlsNg+tiHR2SyKSJbdp
+         74ik5tZTWhuGzVnLtNzKhmJCnyMU+QSOng+D7rfqnsRBXgSBEVvsS9xDMcgLJy9UmO
+         N4WSmsxcnX6oQ==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     WANG Xuerui <git@xen0n.name>, Huacai Chen <chenhuacai@loongson.cn>,
-        Sasha Levin <sashal@kernel.org>, chenhuacai@kernel.org,
-        yangtiezhu@loongson.cn, zhangqing@loongson.cn,
-        hejinyang@loongson.cn, tangyouling@loongson.cn,
-        jiaxun.yang@flygoat.com, loongarch@lists.linux.dev
-Subject: [PATCH AUTOSEL 6.1 6/9] LoongArch: Relay BCE exceptions to userland as SIGSEGV with si_code=SEGV_BNDERR
-Date:   Thu, 11 May 2023 15:39:39 -0400
-Message-Id: <20230511193945.623476-6-sashal@kernel.org>
+Cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>, kadlec@netfilter.org,
+        fw@strlen.de, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.1 7/9] netfilter: nf_tables: deactivate anonymous set from preparation phase
+Date:   Thu, 11 May 2023 15:39:40 -0400
+Message-Id: <20230511193945.623476-7-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230511193945.623476-1-sashal@kernel.org>
 References: <20230511193945.623476-1-sashal@kernel.org>
@@ -59,238 +60,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: WANG Xuerui <git@xen0n.name>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit c23e7f01cf621290770069d968ca4c8356a50d00 ]
+[ Upstream commit c1592a89942e9678f7d9c8030efa777c0d57edab ]
 
-SEGV_BNDERR was introduced initially for supporting the Intel MPX, but
-fell into disuse after the MPX support was removed. The LoongArch
-bounds-checking instructions behave very differently than MPX, but
-overall the interface is still kind of suitable for conveying the
-information to userland when bounds-checking assertions trigger, so we
-wouldn't have to invent more UAPI. Specifically, when the BCE triggers,
-a SEGV_BNDERR is sent to userland, with si_addr set to the out-of-bounds
-address or value (in asrt{gt,le}'s case), and one of si_lower or
-si_upper set to the configured bound depending on the faulting
-instruction. The other bound is set to either 0 or ULONG_MAX to resemble
-a range with both lower and upper bounds.
+Toggle deleted anonymous sets as inactive in the next generation, so
+users cannot perform any update on it. Clear the generation bitmask
+in case the transaction is aborted.
 
-Note that it is possible to have si_addr == si_lower in case of a
-failing asrtgt or {ld,st}gt, because those instructions test for strict
-greater-than relationship. This should not pose a problem for userland,
-though, because the faulting PC is available for the application to
-associate back to the exact instruction for figuring out the
-expectation.
+The following KASAN splat shows a set element deletion for a bound
+anonymous set that has been already removed in the same transaction.
 
-Example exception context generated by a faulting `asrtgt.d t0, t1`
-(assert t0 > t1 or BCE) with t0=100 and t1=200:
+[   64.921510] ==================================================================
+[   64.923123] BUG: KASAN: wild-memory-access in nf_tables_commit+0xa24/0x1490 [nf_tables]
+[   64.924745] Write of size 8 at addr dead000000000122 by task test/890
+[   64.927903] CPU: 3 PID: 890 Comm: test Not tainted 6.3.0+ #253
+[   64.931120] Call Trace:
+[   64.932699]  <TASK>
+[   64.934292]  dump_stack_lvl+0x33/0x50
+[   64.935908]  ? nf_tables_commit+0xa24/0x1490 [nf_tables]
+[   64.937551]  kasan_report+0xda/0x120
+[   64.939186]  ? nf_tables_commit+0xa24/0x1490 [nf_tables]
+[   64.940814]  nf_tables_commit+0xa24/0x1490 [nf_tables]
+[   64.942452]  ? __kasan_slab_alloc+0x2d/0x60
+[   64.944070]  ? nf_tables_setelem_notify+0x190/0x190 [nf_tables]
+[   64.945710]  ? kasan_set_track+0x21/0x30
+[   64.947323]  nfnetlink_rcv_batch+0x709/0xd90 [nfnetlink]
+[   64.948898]  ? nfnetlink_rcv_msg+0x480/0x480 [nfnetlink]
 
-> pc 00005555558206a4 ra 00007ffff2d854fc tp 00007ffff2f2f180 sp 00007ffffbf9fb80
-> a0 0000000000000002 a1 00007ffffbf9fce8 a2 00007ffffbf9fd00 a3 00007ffff2ed4558
-> a4 0000000000000000 a5 00007ffff2f044c8 a6 00007ffffbf9fce0 a7 fffffffffffff000
-> t0 0000000000000064 t1 00000000000000c8 t2 00007ffffbfa2d5e t3 00007ffff2f12aa0
-> t4 00007ffff2ed6158 t5 00007ffff2ed6158 t6 000000000000002e t7 0000000003d8f538
-> t8 0000000000000005 u0 0000000000000000 s9 0000000000000000 s0 00007ffffbf9fce8
-> s1 0000000000000002 s2 0000000000000000 s3 00007ffff2f2c038 s4 0000555555820610
-> s5 00007ffff2ed5000 s6 0000555555827e38 s7 00007ffffbf9fd00 s8 0000555555827e38
->    ra: 00007ffff2d854fc
->   ERA: 00005555558206a4
->  CRMD: 000000b0 (PLV0 -IE -DA +PG DACF=CC DACM=CC -WE)
->  PRMD: 00000007 (PPLV3 +PIE -PWE)
->  EUEN: 00000000 (-FPE -SXE -ASXE -BTE)
->  ECFG: 0007181c (LIE=2-4,11-12 VS=7)
-> ESTAT: 000a0000 [BCE] (IS= ECode=10 EsubCode=0)
->  PRID: 0014c010 (Loongson-64bit, Loongson-3A5000)
-
-Signed-off-by: WANG Xuerui <git@xen0n.name>
-Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- arch/loongarch/include/asm/inst.h | 26 +++++++++
- arch/loongarch/kernel/genex.S     |  1 +
- arch/loongarch/kernel/traps.c     | 92 +++++++++++++++++++++++++++++++
- 3 files changed, 119 insertions(+)
+ include/net/netfilter/nf_tables.h |  1 +
+ net/netfilter/nf_tables_api.c     | 12 ++++++++++++
+ net/netfilter/nft_dynset.c        |  2 +-
+ net/netfilter/nft_lookup.c        |  2 +-
+ net/netfilter/nft_objref.c        |  2 +-
+ 5 files changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/arch/loongarch/include/asm/inst.h b/arch/loongarch/include/asm/inst.h
-index fce1843ceebb3..d476a88b9616c 100644
---- a/arch/loongarch/include/asm/inst.h
-+++ b/arch/loongarch/include/asm/inst.h
-@@ -105,6 +105,8 @@ enum reg2bstrd_op {
+diff --git a/include/net/netfilter/nf_tables.h b/include/net/netfilter/nf_tables.h
+index 6bacbf57ac175..a1ccf1276f3ee 100644
+--- a/include/net/netfilter/nf_tables.h
++++ b/include/net/netfilter/nf_tables.h
+@@ -614,6 +614,7 @@ struct nft_set_binding {
  };
  
- enum reg3_op {
-+	asrtle_op	= 0x02,
-+	asrtgt_op	= 0x03,
- 	addw_op		= 0x20,
- 	addd_op		= 0x21,
- 	subw_op		= 0x22,
-@@ -156,6 +158,30 @@ enum reg3_op {
- 	amord_op	= 0x70c7,
- 	amxorw_op	= 0x70c8,
- 	amxord_op	= 0x70c9,
-+	fldgts_op	= 0x70e8,
-+	fldgtd_op	= 0x70e9,
-+	fldles_op	= 0x70ea,
-+	fldled_op	= 0x70eb,
-+	fstgts_op	= 0x70ec,
-+	fstgtd_op	= 0x70ed,
-+	fstles_op	= 0x70ee,
-+	fstled_op	= 0x70ef,
-+	ldgtb_op	= 0x70f0,
-+	ldgth_op	= 0x70f1,
-+	ldgtw_op	= 0x70f2,
-+	ldgtd_op	= 0x70f3,
-+	ldleb_op	= 0x70f4,
-+	ldleh_op	= 0x70f5,
-+	ldlew_op	= 0x70f6,
-+	ldled_op	= 0x70f7,
-+	stgtb_op	= 0x70f8,
-+	stgth_op	= 0x70f9,
-+	stgtw_op	= 0x70fa,
-+	stgtd_op	= 0x70fb,
-+	stleb_op	= 0x70fc,
-+	stleh_op	= 0x70fd,
-+	stlew_op	= 0x70fe,
-+	stled_op	= 0x70ff,
- };
- 
- enum reg3sa2_op {
-diff --git a/arch/loongarch/kernel/genex.S b/arch/loongarch/kernel/genex.S
-index 75e5be807a0d5..42ff28eadf04d 100644
---- a/arch/loongarch/kernel/genex.S
-+++ b/arch/loongarch/kernel/genex.S
-@@ -79,6 +79,7 @@ SYM_FUNC_END(except_vec_cex)
- 
- 	BUILD_HANDLER ade ade badv
- 	BUILD_HANDLER ale ale badv
-+	BUILD_HANDLER bce bce none
- 	BUILD_HANDLER bp bp none
- 	BUILD_HANDLER fpe fpe fcsr
- 	BUILD_HANDLER fpu fpu none
-diff --git a/arch/loongarch/kernel/traps.c b/arch/loongarch/kernel/traps.c
-index 1a4dce84ebc60..5d5ae11d9f67e 100644
---- a/arch/loongarch/kernel/traps.c
-+++ b/arch/loongarch/kernel/traps.c
-@@ -35,6 +35,7 @@
- #include <asm/break.h>
- #include <asm/cpu.h>
- #include <asm/fpu.h>
-+#include <asm/inst.h>
- #include <asm/loongarch.h>
- #include <asm/mmu_context.h>
- #include <asm/pgtable.h>
-@@ -50,6 +51,7 @@
- 
- extern asmlinkage void handle_ade(void);
- extern asmlinkage void handle_ale(void);
-+extern asmlinkage void handle_bce(void);
- extern asmlinkage void handle_sys(void);
- extern asmlinkage void handle_bp(void);
- extern asmlinkage void handle_ri(void);
-@@ -401,6 +403,95 @@ static void bug_handler(struct pt_regs *regs)
+ enum nft_trans_phase;
++void nf_tables_activate_set(const struct nft_ctx *ctx, struct nft_set *set);
+ void nf_tables_deactivate_set(const struct nft_ctx *ctx, struct nft_set *set,
+ 			      struct nft_set_binding *binding,
+ 			      enum nft_trans_phase phase);
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index 12d815b9aa131..f82a61d92aa90 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -4936,12 +4936,24 @@ static void nf_tables_unbind_set(const struct nft_ctx *ctx, struct nft_set *set,
  	}
  }
  
-+asmlinkage void noinstr do_bce(struct pt_regs *regs)
++void nf_tables_activate_set(const struct nft_ctx *ctx, struct nft_set *set)
 +{
-+	bool user = user_mode(regs);
-+	unsigned long era = exception_era(regs);
-+	u64 badv = 0, lower = 0, upper = ULONG_MAX;
-+	union loongarch_instruction insn;
-+	irqentry_state_t state = irqentry_enter(regs);
++	if (nft_set_is_anonymous(set))
++		nft_clear(ctx->net, set);
 +
-+	if (regs->csr_prmd & CSR_PRMD_PIE)
-+		local_irq_enable();
-+
-+	current->thread.trap_nr = read_csr_excode();
-+
-+	die_if_kernel("Bounds check error in kernel code", regs);
-+
-+	/*
-+	 * Pull out the address that failed bounds checking, and the lower /
-+	 * upper bound, by minimally looking at the faulting instruction word
-+	 * and reading from the correct register.
-+	 */
-+	if (__get_inst(&insn.word, (u32 *)era, user))
-+		goto bad_era;
-+
-+	switch (insn.reg3_format.opcode) {
-+	case asrtle_op:
-+		if (insn.reg3_format.rd != 0)
-+			break;	/* not asrtle */
-+		badv = regs->regs[insn.reg3_format.rj];
-+		upper = regs->regs[insn.reg3_format.rk];
-+		break;
-+
-+	case asrtgt_op:
-+		if (insn.reg3_format.rd != 0)
-+			break;	/* not asrtgt */
-+		badv = regs->regs[insn.reg3_format.rj];
-+		lower = regs->regs[insn.reg3_format.rk];
-+		break;
-+
-+	case ldleb_op:
-+	case ldleh_op:
-+	case ldlew_op:
-+	case ldled_op:
-+	case stleb_op:
-+	case stleh_op:
-+	case stlew_op:
-+	case stled_op:
-+	case fldles_op:
-+	case fldled_op:
-+	case fstles_op:
-+	case fstled_op:
-+		badv = regs->regs[insn.reg3_format.rj];
-+		upper = regs->regs[insn.reg3_format.rk];
-+		break;
-+
-+	case ldgtb_op:
-+	case ldgth_op:
-+	case ldgtw_op:
-+	case ldgtd_op:
-+	case stgtb_op:
-+	case stgth_op:
-+	case stgtw_op:
-+	case stgtd_op:
-+	case fldgts_op:
-+	case fldgtd_op:
-+	case fstgts_op:
-+	case fstgtd_op:
-+		badv = regs->regs[insn.reg3_format.rj];
-+		lower = regs->regs[insn.reg3_format.rk];
-+		break;
-+	}
-+
-+	force_sig_bnderr((void __user *)badv, (void __user *)lower, (void __user *)upper);
-+
-+out:
-+	if (regs->csr_prmd & CSR_PRMD_PIE)
-+		local_irq_disable();
-+
-+	irqentry_exit(regs, state);
-+	return;
-+
-+bad_era:
-+	/*
-+	 * Cannot pull out the instruction word, hence cannot provide more
-+	 * info than a regular SIGSEGV in this case.
-+	 */
-+	force_sig(SIGSEGV);
-+	goto out;
++	set->use++;
 +}
++EXPORT_SYMBOL_GPL(nf_tables_activate_set);
 +
- asmlinkage void noinstr do_bp(struct pt_regs *regs)
+ void nf_tables_deactivate_set(const struct nft_ctx *ctx, struct nft_set *set,
+ 			      struct nft_set_binding *binding,
+ 			      enum nft_trans_phase phase)
  {
- 	bool user = user_mode(regs);
-@@ -721,6 +812,7 @@ void __init trap_init(void)
+ 	switch (phase) {
+ 	case NFT_TRANS_PREPARE:
++		if (nft_set_is_anonymous(set))
++			nft_deactivate_next(ctx->net, set);
++
+ 		set->use--;
+ 		return;
+ 	case NFT_TRANS_ABORT:
+diff --git a/net/netfilter/nft_dynset.c b/net/netfilter/nft_dynset.c
+index 6983e6ddeef90..e65a83328b554 100644
+--- a/net/netfilter/nft_dynset.c
++++ b/net/netfilter/nft_dynset.c
+@@ -342,7 +342,7 @@ static void nft_dynset_activate(const struct nft_ctx *ctx,
+ {
+ 	struct nft_dynset *priv = nft_expr_priv(expr);
  
- 	set_handler(EXCCODE_ADE * VECSIZE, handle_ade, VECSIZE);
- 	set_handler(EXCCODE_ALE * VECSIZE, handle_ale, VECSIZE);
-+	set_handler(EXCCODE_BCE * VECSIZE, handle_bce, VECSIZE);
- 	set_handler(EXCCODE_SYS * VECSIZE, handle_sys, VECSIZE);
- 	set_handler(EXCCODE_BP * VECSIZE, handle_bp, VECSIZE);
- 	set_handler(EXCCODE_INE * VECSIZE, handle_ri, VECSIZE);
+-	priv->set->use++;
++	nf_tables_activate_set(ctx, priv->set);
+ }
+ 
+ static void nft_dynset_destroy(const struct nft_ctx *ctx,
+diff --git a/net/netfilter/nft_lookup.c b/net/netfilter/nft_lookup.c
+index d9ad1aa818564..68a5dea805480 100644
+--- a/net/netfilter/nft_lookup.c
++++ b/net/netfilter/nft_lookup.c
+@@ -167,7 +167,7 @@ static void nft_lookup_activate(const struct nft_ctx *ctx,
+ {
+ 	struct nft_lookup *priv = nft_expr_priv(expr);
+ 
+-	priv->set->use++;
++	nf_tables_activate_set(ctx, priv->set);
+ }
+ 
+ static void nft_lookup_destroy(const struct nft_ctx *ctx,
+diff --git a/net/netfilter/nft_objref.c b/net/netfilter/nft_objref.c
+index 5d8d91b3904db..7f8e480b6be5b 100644
+--- a/net/netfilter/nft_objref.c
++++ b/net/netfilter/nft_objref.c
+@@ -184,7 +184,7 @@ static void nft_objref_map_activate(const struct nft_ctx *ctx,
+ {
+ 	struct nft_objref_map *priv = nft_expr_priv(expr);
+ 
+-	priv->set->use++;
++	nf_tables_activate_set(ctx, priv->set);
+ }
+ 
+ static void nft_objref_map_destroy(const struct nft_ctx *ctx,
 -- 
 2.39.2
 
