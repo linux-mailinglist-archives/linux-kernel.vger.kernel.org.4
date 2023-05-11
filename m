@@ -2,117 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55EE26FECE9
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC42C6FECF4
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:35:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237260AbjEKHdl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 03:33:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39984 "EHLO
+        id S232224AbjEKHfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 03:35:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237420AbjEKHdS (ORCPT
+        with ESMTP id S237717AbjEKHfH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 03:33:18 -0400
-Received: from out3-smtp.messagingengine.com (out3-smtp.messagingengine.com [66.111.4.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C05E8689
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:32:45 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 601E65C084A;
-        Thu, 11 May 2023 03:32:44 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 11 May 2023 03:32:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1683790364; x=1683876764; bh=wYFYldVZ7F6H2DOpsymRO/OM8vDYBZCnRDN
-        SUpMOjpE=; b=e+RYGBqnkGYFVQEo2Mac00EHhWQefHpqIMtmXgDynoceEB6PhIO
-        2shdgrz7H0fIvxJW4MImc2s12FN49MaDCKhORtZcOSUr8pp2Kopy5wxKFOatkdaV
-        +VFevbWkFI86HXZO+fk0Dfk8C5/04XwWA40lOIN380Q2XTQYL9yK20Qt7/SE455w
-        6NArPYlrAbqehZXYZt/77evofgzO/0BESWyvaqIU7woK+usMj6/9EWq0B9eIBeyb
-        iJ59LznmTG9nqhe3hXIBvYuyJ4QQCFZzL/jm1MZQeoOqJMg9bgSY6cnRS9kEiSiE
-        o/uIFG78u2eOvpmv3DQ3EN6GkHdYcpidxrw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
-        1683790364; x=1683876764; bh=wYFYldVZ7F6H2DOpsymRO/OM8vDYBZCnRDN
-        SUpMOjpE=; b=k0CrTwxQd8aP88MVJO8COQ+0xCOYfjH/wWc6CfsXnFOeK4rDyfM
-        oD1ljUCBVj1KqsVWyVjmxHKkP226T7TcVE1t8wj4TSWlT3SL6iftJySJy9D8rGHM
-        KOzAvzkvKOLYA3Gad+EiXgb1/AZZ/OkmytE8XvQ8k0FQGaI9Wau8EWSNYlq5xbRA
-        4j9shG28HOOjWaZqWGAJCUVVmG2UqC1zm8hid3f6MCoHyHoYT3U72kW8vcDYcxn0
-        m+G/KwrW60Ydwxh+Tr9ZIAQ/cGDFMlM22urAqc6jC58GfnDIYZ60PseX9GecAHKc
-        Cc/p5imo2FqNztI7/I+hqrKywoOeiWwbz7g==
-X-ME-Sender: <xms:G5pcZEMmEq1XBfUXxBbjl9ASO8tlS7556n_lfgkZyYWfRNfry4kEzg>
-    <xme:G5pcZK-Y1KblLowMMv7sVbzW7bUsFw7jKq7jDpNhGR9x28I-bUEa5jqScOLG9hvQY
-    RlJvYnivhO32spf330>
-X-ME-Received: <xmr:G5pcZLSUZoSMiuX32lqPLQD8U2oc7DOvZDp0Y9sdFWm4eFH2fxti0zSd5gTUeUFbPbz0hdVEXD7UMXFQuYJn5Q>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeegjedguddvudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevjghfuffkffggtgfgofesthejredtredtjeenucfhrhhomhepofgr
-    gihimhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtf
-    frrghtthgvrhhnpeelieffgfdvteejjeeujeeiheeuvdetieegheethffhieefgeelkedu
-    keetgeeuffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhroh
-    hmpehmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:G5pcZMt0GvwW2Cb5HrpgRdcJ2ShYGfK6ZYyWKMxFtgL4vSetDTfYEA>
-    <xmx:G5pcZMfgmQ0WoF9qbb2vBkAt41jz2jevbFbQG8-EaKlKKlP2x8Kc9Q>
-    <xmx:G5pcZA0b0lQORNGKW-uF2MDcggltMrpzwgdjC6VMsqmHeAFxB-TM4g>
-    <xmx:HJpcZL_qFPPAolowwQd8r5ZwD-8yRumotup1QCkzD4tbZZEI_zBJ0w>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 11 May 2023 03:32:43 -0400 (EDT)
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Maxime Ripard <mripard@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Boris Brezillon <bbrezillon@kernel.org>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        XuDong Liu <m202071377@hust.edu.cn>
-Cc:     hust-os-kernel-patches@googlegroups.com,
-        Dongliang Mu <dzm91@hust.edu.cn>,
-        dri-devel@lists.freedesktop.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20230430112347.4689-1-m202071377@hust.edu.cn>
-References: <20230430112347.4689-1-m202071377@hust.edu.cn>
-Subject: Re: (subset) [PATCH] drm: sun4i_tcon: use devm_clk_get_enabled in
- `sun4i_tcon_init_clocks`
-Message-Id: <168379036200.796072.421403145532970427.b4-ty@cerno.tech>
-Date:   Thu, 11 May 2023 09:32:42 +0200
+        Thu, 11 May 2023 03:35:07 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5533F9EE5
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:34:37 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1px0os-0007Zn-TE; Thu, 11 May 2023 09:34:34 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1px0os-002fr1-2v; Thu, 11 May 2023 09:34:34 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1px0or-003LJM-58; Thu, 11 May 2023 09:34:33 +0200
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: [PATCH] driver core: Call pm_runtime_put_sync() only after device_remove()
+Date:   Thu, 11 May 2023 09:34:28 +0200
+Message-Id: <20230511073428.10264-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1613; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=inxu00lxAvQhhTdGwdmmOXbixsATQzMqe2CB3zBDu5I=; b=owEBbQGS/pANAwAKAY+A+1h9Ev5OAcsmYgBkXJqDyBlNnJ+V0dwc6hrHJ43dopD/xjtOQqTyu VX7vDqJ/uKJATMEAAEKAB0WIQQ/gaxpOnoeWYmt/tOPgPtYfRL+TgUCZFyagwAKCRCPgPtYfRL+ TmGdB/9Mu2bv39+Vfrpo+4ssj59lgz65Oc97qu74DfG3s7/lLI0AsUWxoEOuE++iqeatemZlwvH 4QURYl7UbHzj+pUAfDx6gxTzCmUqPd/40uC35U61Ah+h1YN3hMLRKmmtDw67FjeqsX1i7G+rqI9 8jTXKOk427HvZPHsX3nuyWBkUqhIRwdEEh3DPBbngoRQYkQkJZV2dxBQ9warhDnRbYqV7Nv19o+ Ielf3E3CW/ZhfnJIeTHGcviYojHygYaa88y0NgKThdu9e1h0meTIiCQR7oEr8OBhifGj6HIDB/M R+QHgkZwc8FwpmGXfN80j4gqIkQZVq59jdg6TpWwqhSMwncO
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 30 Apr 2023 19:23:46 +0800, XuDong Liu wrote:
-> Smatch reports:
-> drivers/gpu/drm/sun4i/sun4i_tcon.c:805 sun4i_tcon_init_clocks() warn:
-> 'tcon->clk' from clk_prepare_enable() not released on lines: 792,801.
-> 
-> In the function sun4i_tcon_init_clocks(), tcon->clk and tcon->sclk0 are
-> not disabled in the error handling, which affects the release of
-> these variable. Although sun4i_tcon_bind(), which calls
-> sun4i_tcon_init_clocks(), use sun4i_tcon_free_clocks to disable the
-> variables mentioned, but the error handling branch of
-> sun4i_tcon_init_clocks() ignores the required disable process.
-> 
-> [...]
+Many drivers that use runtime PM call pm_runtime_get_sync() or one of
+its variants in their remove callback. So calling pm_runtime_put_sync()
+directly before calling the remove callback results (under some
+conditions) in the driver's suspend routine being called just to resume
+it again afterwards.
 
-Applied to drm/drm-misc (drm-misc-next).
+So delay the pm_runtime_put_sync() call until after device_remove().
 
-Thanks!
-Maxime
+Confirmed on a stm32mp157a that doing
+
+	echo 4400e000.can > /sys/bus/platform/drivers/m_can_platform/unbind
+
+(starting with a runtime-pm suspended 4400e000.can) results in one call
+less of m_can_runtime_resume() and m_can_runtime_suspend() each after
+this change was applied.
+
+Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
+---
+Hello,
+
+side note: To test I added a dev_info() to m_can_runtime_resume() and
+m_can_runtime_suspend(). I was surprised that directly after boot I had:
+
+	# dmesg | grep -E '4400e000.can: m_can_runtime_(resume|suspend)' | wc -l
+	15
+
+I didn't go down that rabbit hole to debug this.
+
+Best regards
+Uwe
+
+ drivers/base/dd.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/base/dd.c b/drivers/base/dd.c
+index 9c09ca5c4ab6..d97f6b1486d1 100644
+--- a/drivers/base/dd.c
++++ b/drivers/base/dd.c
+@@ -1267,10 +1267,10 @@ static void __device_release_driver(struct device *dev, struct device *parent)
+ 
+ 		bus_notify(dev, BUS_NOTIFY_UNBIND_DRIVER);
+ 
+-		pm_runtime_put_sync(dev);
+-
+ 		device_remove(dev);
+ 
++		pm_runtime_put_sync(dev);
++
+ 		if (dev->bus && dev->bus->dma_cleanup)
+ 			dev->bus->dma_cleanup(dev);
+ 
+-- 
+2.39.2
 
