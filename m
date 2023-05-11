@@ -2,62 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57BD86FF427
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:27:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7606FF425
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:27:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238233AbjEKO1H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 10:27:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43626 "EHLO
+        id S238493AbjEKO1K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 10:27:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238469AbjEKO0o (ORCPT
+        with ESMTP id S238045AbjEKO0r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 10:26:44 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6897440E3;
-        Thu, 11 May 2023 07:26:34 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-9659c5b14d8so1430115666b.3;
-        Thu, 11 May 2023 07:26:34 -0700 (PDT)
+        Thu, 11 May 2023 10:26:47 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4AC1161A;
+        Thu, 11 May 2023 07:26:35 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bc1612940so15770603a12.2;
+        Thu, 11 May 2023 07:26:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1683815193; x=1686407193;
+        d=googlemail.com; s=20221208; t=1683815194; x=1686407194;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VtnLQFC3gXKN18su7z8CdgFlcJ7YFC5IMpgUUhV6x+s=;
-        b=odR9I3ZdlQySSrmNFXoB6k5sPZrNpWKh4/Y3cgy7V+hTnDwQ2U7nRTFcMk6eIRXPWH
-         zvDAoYwk4T9Jlf9igEiUD77UETuhyS2fUf1IMAptXXC4RXCQxUk8dKu625kbiDy7vzFS
-         x2SC3oRk34/JZ/OH/mU7wwmykBJsq7ei2kebFWo6qyZgMVgEkyqeXdttwAT3mbQ1Bkpo
-         lATUda+9JDgXZG0+sDbBtsdOtBfilMry3M+V3HTBRiogJ+HGNg5/7T+shxnESaQZECHI
-         HFDdZJbg6D2Si66ia4hS+LOe+3FzusmXTEemEyzvefQAbbXXOdyOr2AX4gpJzUgUlpL3
-         XETA==
+        bh=4MLvCJECEpiR/gI61O4GG27R/3uA2bLpDgI5SluFLTA=;
+        b=N68pkqzbvbgbZoltAtubUv7rw9JDXyqdkHGdeKmUKjGpn+E5r4zpUDvVnJnAQ8q/TY
+         nswT/PA0t6FiilhbAjs2ZA920mxwXyD7SPZTe7HZNbzTny4MzUzAmNvhHHV66wy8snLx
+         133de9nuoDoyUqThzedi9BsiMhYhtTdzwgVSciKF5qTuT6oJJsuGF27/VMHe0X56VIIk
+         TwicLhuN0EsOIppLFg+9pJM4liuIKAxwv8n5eVI+mkQNQ2mlq7LvRyBDbf8JRgmqTfO7
+         lcYKKtolCRyYdFmOIAklkRShS3Ku0tT6icHA08d77cjRjtZaOJjtu2NwGCVMoJJKg9E7
+         ZhHQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683815193; x=1686407193;
+        d=1e100.net; s=20221208; t=1683815194; x=1686407194;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VtnLQFC3gXKN18su7z8CdgFlcJ7YFC5IMpgUUhV6x+s=;
-        b=iKxiV1R6b+IH5ZgI8rpPt34PnMBqvr4MKhFwUS16HrXanvwadAu3YZdzGt9pZGhsJd
-         65jbMW+xaDf04jrMcmiBdhbQC4oaqvmT7DWIORhGzklarHB3aDmW4B44an/+II2905W3
-         XrslIPxVSfwJZ1Dg5HWwHBVcQ3sCSjY09wszHcz13FD2MrBev/P+UMmcsq1soBy2BAko
-         y/vbJPWeJTEaYgrXKGqaGKd/PBSUvkszQwXgWHkLQQe9cT3ia8d7xV4uarB/Q+guRwec
-         gcjfi1ExcZQrMbrid43PvMirOjBBy7BCgPCZ/trSMqpxCDMViQGgGN+1l6PwwIEjvDaI
-         Oykg==
-X-Gm-Message-State: AC+VfDwnGPMXzsBp3+Of4Cef9jJ8rGdbHeWrx2x6XBaSF3fLGjthdPbv
-        BbACpt5Ngb5n4mqfevOZOELACpolLjiuSg==
-X-Google-Smtp-Source: ACHHUZ76zRw/n3CXINb3Kxob9YX9dRNiUQZNHbToS6sPNTsKtr/pbSnRHh2+lOTYP0thZbDfVbgcxw==
-X-Received: by 2002:a17:906:4fd1:b0:94f:21f3:b5f8 with SMTP id i17-20020a1709064fd100b0094f21f3b5f8mr19432094ejw.21.1683815192723;
-        Thu, 11 May 2023 07:26:32 -0700 (PDT)
+        bh=4MLvCJECEpiR/gI61O4GG27R/3uA2bLpDgI5SluFLTA=;
+        b=bQeLQbs/hGeQuIf7/9PVgM2IAje2zH8TKSITp0UdE3zE2DwvMRneblejwZCsnzu28w
+         MHBhYxbaIcwl2Lgs88dHu9i62qmVlYznHhEi3Wf+02h13ragHeNq8zl0Z4weEpyzpLn5
+         5kg+kOpv64Gh1srARmIXiQKmrfcZksGpgnHxuaPsOMhx4bSRmilFx320OcacfrTWxST4
+         ap8IZ80kxHl6Wr0XmZXd02p6Hd5Y1niYMj/XSu/gyxJx9NjRUqI4d3BXYUzi1QGd31fa
+         f8eXJuJUamhquCnPwmHxvoNpTCFfBGwtw/Xd1XQwhvQih97HwUJTbtrbIqT91ssWJhwK
+         bn+A==
+X-Gm-Message-State: AC+VfDyGMDGgV5k9ee9OajuoUKh/xQTtC3PNDLcfuGr3pgx5N/VTuGkO
+        tYuaJDnDg4GMjEHFcnYtw3d9ZY2VqnXmhw==
+X-Google-Smtp-Source: ACHHUZ46hOkfDQhmJnGL2G54E94Gis8MlvJwgbU2cj9cJ39h0TTPpvN63Du9gpl7pzhrlXMK+ihZEg==
+X-Received: by 2002:a17:907:868b:b0:961:57fb:10c1 with SMTP id qa11-20020a170907868b00b0096157fb10c1mr19859592ejc.63.1683815193736;
+        Thu, 11 May 2023 07:26:33 -0700 (PDT)
 Received: from debianHome.localdomain (dynamic-077-008-180-228.77.8.pool.telefonica.de. [77.8.180.228])
-        by smtp.gmail.com with ESMTPSA id hf15-20020a1709072c4f00b0094f58a85bc5sm4056647ejc.180.2023.05.11.07.26.32
+        by smtp.gmail.com with ESMTPSA id hf15-20020a1709072c4f00b0094f58a85bc5sm4056647ejc.180.2023.05.11.07.26.33
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 07:26:32 -0700 (PDT)
+        Thu, 11 May 2023 07:26:33 -0700 (PDT)
 From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
 To:     selinux@vger.kernel.org
-Cc:     Serge Hallyn <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org,
+Cc:     Jens Axboe <axboe@kernel.dk>, Alistair Delva <adelva@google.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Serge Hallyn <serge@hallyn.com>, linux-block@vger.kernel.org,
         linux-kernel@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH v4 3/9] capability: use new capable_any functionality
-Date:   Thu, 11 May 2023 16:25:26 +0200
-Message-Id: <20230511142535.732324-3-cgzones@googlemail.com>
+Subject: [PATCH v4 4/9] block: use new capable_any functionality
+Date:   Thu, 11 May 2023 16:25:27 +0200
+Message-Id: <20230511142535.732324-4-cgzones@googlemail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230511142535.732324-1-cgzones@googlemail.com>
 References: <20230511142535.732324-1-cgzones@googlemail.com>
@@ -77,41 +78,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 Use the new added capable_any function in appropriate cases, where a
 task is required to have any of two capabilities.
 
+Reorder CAP_SYS_ADMIN last.
+
+Fixes: 94c4b4fd25e6 ("block: Check ADMIN before NICE for IOPRIO_CLASS_RT")
+
 Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
 ---
 v3:
-  - rename to capable_any()
-  - simplify checkpoint_restore_ns_capable()
+   rename to capable_any()
 ---
- include/linux/capability.h | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ block/ioprio.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/include/linux/capability.h b/include/linux/capability.h
-index eeb958440656..4db0ffb47271 100644
---- a/include/linux/capability.h
-+++ b/include/linux/capability.h
-@@ -204,18 +204,17 @@ extern bool file_ns_capable(const struct file *file, struct user_namespace *ns,
- extern bool ptracer_capable(struct task_struct *tsk, struct user_namespace *ns);
- static inline bool perfmon_capable(void)
- {
--	return capable(CAP_PERFMON) || capable(CAP_SYS_ADMIN);
-+	return capable_any(CAP_PERFMON, CAP_SYS_ADMIN);
- }
+diff --git a/block/ioprio.c b/block/ioprio.c
+index 32a456b45804..0a7df88bf6d9 100644
+--- a/block/ioprio.c
++++ b/block/ioprio.c
+@@ -37,14 +37,7 @@ int ioprio_check_cap(int ioprio)
  
- static inline bool bpf_capable(void)
- {
--	return capable(CAP_BPF) || capable(CAP_SYS_ADMIN);
-+	return capable_any(CAP_BPF, CAP_SYS_ADMIN);
- }
- 
- static inline bool checkpoint_restore_ns_capable(struct user_namespace *ns)
- {
--	return ns_capable(ns, CAP_CHECKPOINT_RESTORE) ||
--		ns_capable(ns, CAP_SYS_ADMIN);
-+	return ns_capable_any(ns, CAP_CHECKPOINT_RESTORE, CAP_SYS_ADMIN);
- }
- 
- /* audit system wants to get cap info from files as well */
+ 	switch (class) {
+ 		case IOPRIO_CLASS_RT:
+-			/*
+-			 * Originally this only checked for CAP_SYS_ADMIN,
+-			 * which was implicitly allowed for pid 0 by security
+-			 * modules such as SELinux. Make sure we check
+-			 * CAP_SYS_ADMIN first to avoid a denial/avc for
+-			 * possibly missing CAP_SYS_NICE permission.
+-			 */
+-			if (!capable(CAP_SYS_ADMIN) && !capable(CAP_SYS_NICE))
++			if (!capable_any(CAP_SYS_NICE, CAP_SYS_ADMIN))
+ 				return -EPERM;
+ 			fallthrough;
+ 			/* rt has prio field too */
 -- 
 2.40.1
 
