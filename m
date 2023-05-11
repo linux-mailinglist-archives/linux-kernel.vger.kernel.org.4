@@ -2,63 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED94B6FE96A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:25:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCDD6FE96E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:26:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236378AbjEKBZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 21:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54164 "EHLO
+        id S235540AbjEKB0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 21:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231465AbjEKBZu (ORCPT
+        with ESMTP id S229482AbjEKB0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 21:25:50 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543E43A8E;
-        Wed, 10 May 2023 18:25:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683768347; x=1715304347;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Gx1xSLA5d0yp2DjVwjwwCY3Ftth1Tj8DVA150LgfKIY=;
-  b=SSp9wEwql27yrIR8xsYsujf5F3V99DWulA2uJD+1dnwmWcENIpwXUrP8
-   GYEzi+QgqvTOSaEOIhnnvRWirHTVY3bTX2/dICfXxTNZHzBr7IiJdj58J
-   mFIONU163PkLCAMhObzWjtynQAMLvIe/baFycM2Q8a4F343/ESM87/l3w
-   TxIkiTI7GtgtpFfIGKLqcX1rhaiJiXCL6BOzS8Oa6LZVUcIXPqIQyVnch
-   XHKWx9sd+UPzkn1VUfMwEof4COsbArjTFStWnUY+GL/wJCKaex65xwAoa
-   g73QMESfnZHVgO8nZdyKlPR9Yr55TG8YfALiUNaQP65K1Go65ZP9WmF4o
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="334836723"
-X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
-   d="scan'208";a="334836723"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 18:25:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="677069929"
-X-IronPort-AV: E=Sophos;i="5.99,265,1677571200"; 
-   d="scan'208";a="677069929"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.254.215.43]) ([10.254.215.43])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 18:25:44 -0700
-Message-ID: <68a5df32-82de-1f07-5ea2-52ecf1c17e63@linux.intel.com>
-Date:   Thu, 11 May 2023 09:25:42 +0800
+        Wed, 10 May 2023 21:26:46 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E99453C01
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 18:26:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=fynBX
+        Be0YRetn4JE0IoCqaW6RoGd8z+XaR6yIF0rwKU=; b=gA8N0d0WRlASL1ZRwHBPD
+        nnFp90PfkAm5HXlbdhm7shuDwS0zvRLpZhsnF5A64GcPKO0c0m1H1lKhaGmPdnV2
+        UPocstIyXlbFANWFGUJq1BRZIVl1Njr9wgyoEDfKg3ikAzdPwFEaeCqeFUHSkUSv
+        Qo/ZiRI0NNFCTOQl7qc/MQ=
+Received: from zhangf-virtual-machine.localdomain (unknown [180.111.102.183])
+        by zwqz-smtp-mta-g0-4 (Coremail) with SMTP id _____wAnrh4uRFxk8Y0ZBg--.55424S2;
+        Thu, 11 May 2023 09:26:07 +0800 (CST)
+From:   zhangfei <zhang_fei_0403@163.com>
+To:     linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Cc:     aou@eecs.berkeley.edu, ajones@ventanamicro.com, palmer@dabbelt.com,
+        paul.walmsley@sifive.com, conor.dooley@microchip.com,
+        zhangfei@nj.iscas.ac.cn
+Subject: [PATCH v2 0/2] RISC-V: Optimize memset for data sizes less than 16 bytes
+Date:   Thu, 11 May 2023 09:26:04 +0800
+Message-Id: <20230511012604.3222-1-zhang_fei_0403@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v8 1/6] KVM: x86: Consolidate flags for __linearize()
-To:     Chao Gao <chao.gao@intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        seanjc@google.com, pbonzini@redhat.com, kai.huang@intel.com,
-        robert.hu@linux.intel.com
-References: <20230510060611.12950-1-binbin.wu@linux.intel.com>
- <20230510060611.12950-2-binbin.wu@linux.intel.com>
- <ZFtK/NS8rzCx9Mus@chao-email>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <ZFtK/NS8rzCx9Mus@chao-email>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wAnrh4uRFxk8Y0ZBg--.55424S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Ww17trykXw4DJF1UAr1kZrb_yoW5JrW7pr
+        WfGr9xWr15trZ7G3WfJa1kWrn0qr1rtr47tF4xKa48Crn8C3Z8Ar1fCa40gFy7JrWxJr15
+        Xr45Xw18uFy5u37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jtNVkUUUUU=
+X-Originating-IP: [180.111.102.183]
+X-CM-SenderInfo: x2kd0w5bihxsiquqjqqrwthudrp/1tbiMhJsl1WB3tErLgAAsF
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,64 +53,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: zhangfei <zhangfei@nj.iscas.ac.cn>
 
+At present, the implementation of the memset function uses byte by byte storage 
+when processing tail data or when the initial data size is less than 16 bytes. 
+This approach is not efficient. Therefore, I filled head and tail with minimal 
+branching. Each conditional ensures that all the subsequently used offsets are 
+well-defined and in the dest region. Although this approach may result in 
+redundant storage, compared to byte by byte storage, it allows storage instructions 
+to be executed in parallel, reduces the number of jumps, and ultimately achieves 
+performance improvement.
 
-On 5/10/2023 3:42 PM, Chao Gao wrote:
-> On Wed, May 10, 2023 at 02:06:06PM +0800, Binbin Wu wrote:
->> Define a 32-bit parameter and consolidate the two bools into it.
->>
->> __linearize() has two bool parameters write and fetch. And new flag
->> will be needed to support new feature (e.g. LAM needs a flag to skip
->> address untag under some conditions).
->>
->> No functional change intended.
->>
->> In the follow-up patches, the new parameter will be extended for LAM.
->>
->> Signed-off-by: Binbin Wu <binbin.wu@linux.intel.com>
-> Reviewed-by: Chao Gao <chao.gao@intel.com>
->
-> one nit below
->
->> ---
->> arch/x86/kvm/emulate.c     | 19 +++++++++++++------
->> arch/x86/kvm/kvm_emulate.h |  4 ++++
->> 2 files changed, 17 insertions(+), 6 deletions(-)
->>
->> diff --git a/arch/x86/kvm/emulate.c b/arch/x86/kvm/emulate.c
->> index 936a397a08cd..9508836e8a35 100644
->> --- a/arch/x86/kvm/emulate.c
->> +++ b/arch/x86/kvm/emulate.c
->> @@ -687,8 +687,8 @@ static unsigned insn_alignment(struct x86_emulate_ctxt *ctxt, unsigned size)
->> static __always_inline int __linearize(struct x86_emulate_ctxt *ctxt,
->> 				       struct segmented_address addr,
->> 				       unsigned *max_size, unsigned size,
->> -				       bool write, bool fetch,
->> -				       enum x86emul_mode mode, ulong *linear)
->> +				       u32 flags, enum x86emul_mode mode,
->> +				       ulong *linear)
->> {
->> 	struct desc_struct desc;
->> 	bool usable;
->> @@ -696,6 +696,8 @@ static __always_inline int __linearize(struct x86_emulate_ctxt *ctxt,
->> 	u32 lim;
->> 	u16 sel;
->> 	u8  va_bits;
->> +	bool fetch = !!(flags & X86EMUL_F_FETCH);
->> +	bool write = !!(flags & X86EMUL_F_WRITE);
->>
->> 	la = seg_base(ctxt, addr.seg) + addr.ea;
->> 	*max_size = 0;
->> @@ -757,7 +759,11 @@ static int linearize(struct x86_emulate_ctxt *ctxt,
->> 		     ulong *linear)
->> {
->> 	unsigned max_size;
->> -	return __linearize(ctxt, addr, &max_size, size, write, false,
->> +	u32 flags = 0;
->> +
->> +	if (write)
->> +		flags |= X86EMUL_F_WRITE;
-> this can be more dense:
->
-> 	u32 flags = write ? X86EMUL_F_WRITE : 0;
-Thanks, will update it.
+I used the code linked below for performance testing and commented on the memset 
+that calls the arm architecture in the code to ensure it runs properly on the 
+risc-v platform.
+
+[1] https://github.com/ARM-software/optimized-routines/blob/master/string/bench/memset.c#L53
+
+The testing platform selected RISC-V SiFive U74.The test data is as follows:
+
+Before optimization
+---------------------
+Random memset (bytes/ns):
+           memset_call 32K:0.45 64K:0.35 128K:0.30 256K:0.28 512K:0.27 1024K:0.25 avg 0.30
+
+Medium memset (bytes/ns):
+           memset_call 8B:0.18 16B:0.48 32B:0.91 64B:1.63 128B:2.71 256B:4.40 512B:5.67
+Large memset (bytes/ns):
+           memset_call 1K:6.62 2K:7.02 4K:7.46 8K:7.70 16K:7.82 32K:7.63 64K:1.40
+
+After optimization
+---------------------
+Random memset bytes/ns):
+           memset_call 32K:0.46 64K:0.35 128K:0.30 256K:0.28 512K:0.27 1024K:0.25 avg 0.31
+Medium memset (bytes/ns )
+           memset_call 8B:0.27 16B:0.48 32B:0.91 64B:1.64 128B:2.71 256B:4.40 512B:5.67
+Large memset (bytes/ns):
+           memset_call 1K:6.62 2K:7.02 4K:7.47 8K:7.71 16K:7.83 32K:7.63 64K:1.40
+
+From the results, it can be seen that memset has significantly improved its performance with 
+a data volume of around 8B, from 0.18 bytes/ns to 0.27 bytes/ns.
+
+The previous work was as follows:
+1. "[PATCH] riscv: Optimize memset"
+   6d1cbe2e.3c31d.187eb14d990.Coremail.zhangfei@nj.iscas.ac.cn
+
+Thanks,
+Fei Zhang
+
+Andrew Jones (1):
+  RISC-V: lib: Improve memset assembler formatting
+
+ arch/riscv/lib/memset.S | 143 ++++++++++++++++++++--------------------
+ 1 file changed, 72 insertions(+), 71 deletions(-)
+
+zhangfei (1):
+  RISC-V: lib: Optimize memset performance
+
+ arch/riscv/lib/memset.S | 40 +++++++++++++++++++++++++++++++++++++---
+ 1 file changed, 37 insertions(+), 3 deletions(-)
+
