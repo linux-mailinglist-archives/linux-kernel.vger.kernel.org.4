@@ -2,118 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C11DF6FF23B
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:11:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5916FF239
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:11:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237940AbjEKNLa convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 11 May 2023 09:11:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58488 "EHLO
+        id S237701AbjEKNLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236695AbjEKNLB (ORCPT
+        with ESMTP id S237796AbjEKNKw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:11:01 -0400
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B643440ED;
-        Thu, 11 May 2023 06:10:57 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-55a00da4e53so153651357b3.0;
-        Thu, 11 May 2023 06:10:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683810657; x=1686402657;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XFpq6TfFDkhgvBTK4lDV32kTv2wLv5jHDb1iGqYi2iA=;
-        b=SYJrVUjqVBrvmAiE0paABwMvCIR57g9q8r/1uuOaS6oW+wejYfYSJaYJre8lx1Utoo
-         1s2PvAqooBs15dRB7NhlkcX56nyntFeeT3kVYbPMDYEcn7XIyMvBihskHrKiiAKITdY5
-         GNwUupMQJVvcEi6tc2wsp9BDTYdXRobXr/H7HMmZIEqhTgbJxrjgXuYyeAt7Fi4rXBGC
-         6WtjyqDw7AyWJVviow57c9BYe6taGvTOkQ9LNXSye4Iy3viISQCtAcvyxAPQf16sCNsb
-         e9lrV6Q60ZaFzjnlh1dbiYzKPaL3k9Yaz8ekb59jOg7UrFwiPKDYF6GQE2ZZTNaHIbw4
-         VbIg==
-X-Gm-Message-State: AC+VfDx1WMqIveGhONIvPKrGcM2fP0UHMU+1PaWy55OYiLMMkJVzh/Hb
-        GajYp5IebsSld1GzGQjg59R41LEmuo+9oA==
-X-Google-Smtp-Source: ACHHUZ4xoBrFJrG29LJfzdFL3U0IPY913sxscaao7G6y2auDH+vr1IkUtjGXEFsnOWBo+VIQ4wBiMg==
-X-Received: by 2002:a81:5b54:0:b0:559:f52b:7c5f with SMTP id p81-20020a815b54000000b00559f52b7c5fmr21667863ywb.17.1683810656706;
-        Thu, 11 May 2023 06:10:56 -0700 (PDT)
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
-        by smtp.gmail.com with ESMTPSA id d201-20020a0ddbd2000000b0055a777e3c50sm4841077ywe.62.2023.05.11.06.10.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 May 2023 06:10:54 -0700 (PDT)
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-b9e2b65d006so12577616276.3;
-        Thu, 11 May 2023 06:10:54 -0700 (PDT)
-X-Received: by 2002:a25:3792:0:b0:ba1:e7bb:a3a6 with SMTP id
- e140-20020a253792000000b00ba1e7bba3a6mr17227303yba.18.1683810654067; Thu, 11
- May 2023 06:10:54 -0700 (PDT)
+        Thu, 11 May 2023 09:10:52 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A52205FEB;
+        Thu, 11 May 2023 06:10:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 5096C1FDF7;
+        Thu, 11 May 2023 13:10:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1683810648; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=2kHWk0gaCy7sFq5ZjcvtYIgAcrVlu1oZLofczV71BSo=;
+        b=GCERDsj+FKy6LW7J6+MdfkxxC8Acz6TXWjoh8a8oHTEWiH807oBwtkJzaaIqIGzyvLDzN+
+        bbV4arMw5cn+/Z/Fy/ko5a3z/QBEwJx+w61/t8uJSQObCV9XplDbgQE65tSZrzs9Xx7IIm
+        mfmAJ8cQSET96RDEtf6ud/bW4O0Vv4M=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 13816138FA;
+        Thu, 11 May 2023 13:10:48 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id exAqA1jpXGTWHAAAMHmgww
+        (envelope-from <mwilck@suse.com>); Thu, 11 May 2023 13:10:48 +0000
+Message-ID: <095a2264120ad51d0500c4ce8221be2f88a9537e.camel@suse.com>
+Subject: Re: [PATCH] scsi: Let scsi_execute_cmd() mark args->sshdr as invalid
+From:   Martin Wilck <mwilck@suse.com>
+To:     Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org
+Date:   Thu, 11 May 2023 15:10:47 +0200
+In-Reply-To: <20230511123432.5793-1-jgross@suse.com>
+References: <20230511123432.5793-1-jgross@suse.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 
 MIME-Version: 1.0
-References: <20230510110557.14343-1-tzimmermann@suse.de> <20230510110557.14343-2-tzimmermann@suse.de>
- <0e13efbf-9a48-6e70-fdf3-8290f28c6dc7@189.cn> <a2315b9a-0747-1f0f-1f0a-1c6773931db4@suse.de>
- <15fe1489-f0fa-bbf6-ec08-a270bd4f1559@gmx.de>
-In-Reply-To: <15fe1489-f0fa-bbf6-ec08-a270bd4f1559@gmx.de>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Thu, 11 May 2023 15:10:41 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdX8piLhEbV+pcWvdn1OEGH9N5FwDOQcqNcEjBx3=ThjXA@mail.gmail.com>
-Message-ID: <CAMuHMdX8piLhEbV+pcWvdn1OEGH9N5FwDOQcqNcEjBx3=ThjXA@mail.gmail.com>
-Subject: Re: [PATCH v6 1/6] fbdev/matrox: Remove trailing whitespaces
-To:     Helge Deller <deller@gmx.de>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Sui Jingfeng <15330273260@189.cn>, javierm@redhat.com,
-        daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
-        kernel@xen0n.name, davem@davemloft.net, arnd@arndb.de,
-        sam@ravnborg.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-arch@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-ia64@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, sparclinux@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-parisc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Helge,
+On Thu, 2023-05-11 at 14:34 +0200, Juergen Gross wrote:
+> Some callers of scsi_execute_cmd() (like e.g. sd_spinup_disk()) are
+> passing an uninitialized struct sshdr and don't look at the return
+> value of scsi_execute_cmd() before looking at the contents of that
+> struct.
+>=20
+> This can result in false positives when looking for specific error
+> conditions.
+>=20
+> In order to fix that let scsi_execute_cmd() zero sshdr-
+> >response_code,
+> resulting in scsi_sense_valid() returning false.
+>=20
+> Cc: stable@vger.kernel.org
+> Fixes: 3949e2f04262 ("scsi: simplify scsi_execute_req_flags")
+> Signed-off-by: Juergen Gross <jgross@suse.com>
+> ---
+> I'm not aware of any real error having happened due to this problem,
+> but I thought it should be fixed anyway.
+> I _think_ 3949e2f04262 was introducing the problem, but I'm not 100%
+> sure it is really the commit to be blamed.
+> ---
+> =A0drivers/scsi/scsi_lib.c | 14 ++++++++++----
+> =A01 file changed, 10 insertions(+), 4 deletions(-)
 
-On Thu, May 11, 2023 at 3:05 PM Helge Deller <deller@gmx.de> wrote:
-> On 5/11/23 09:55, Thomas Zimmermann wrote:
-> > But the work I do within fbdev is mostly for improving DRM.
->
-> Sure.
->
-> > For the
-> > other issues in this file, I don't think that matroxfb should even be
-> > around any longer. Fbdev has been deprecated for a long time. But a
-> > small number of drivers are still in use and we still need its
-> > framebuffer console. So someone should either put significant effort
-> > into maintaining fbdev, or it should be phased out. But neither is
-> > happening.
->
-> You're wrong.
->
-> You don't mention that for most older machines DRM isn't an acceptable
-> way to go due to it's limitations, e.g. it's low-speed due to missing
-> 2D-acceleration for older cards and and it's incapability to change screen
-> resolution at runtime (just to name two of the bigger limitations here).
-> So, unless we somehow find a good way to move such drivers over to DRM
-> (with a set of minimal 2D acceleration), they are still important.
+One nitpick below, otherwise it looks good to me.
 
-DRM can change resolution at runtime, just not through the fbdev API.
+>=20
+> diff --git a/drivers/scsi/scsi_lib.c b/drivers/scsi/scsi_lib.c
+> index b7c569a42aa4..923336620bff 100644
+> --- a/drivers/scsi/scsi_lib.c
+> +++ b/drivers/scsi/scsi_lib.c
+> @@ -209,11 +209,17 @@ int scsi_execute_cmd(struct scsi_device *sdev,
+> const unsigned char *cmd,
+> =A0=A0=A0=A0=A0=A0=A0=A0struct scsi_cmnd *scmd;
+> =A0=A0=A0=A0=A0=A0=A0=A0int ret;
+> =A0
+> -=A0=A0=A0=A0=A0=A0=A0if (!args)
+> +=A0=A0=A0=A0=A0=A0=A0if (!args) {
+> =A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0args =3D &default_args;
+> -=A0=A0=A0=A0=A0=A0=A0else if (WARN_ON_ONCE(args->sense &&
+> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0 args->sense_len !=3D
+> SCSI_SENSE_BUFFERSIZE))
+> -=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0return -EINVAL;
+> +=A0=A0=A0=A0=A0=A0=A0} else {
+> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0/* Mark sense data to be in=
+valid. */
+> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0if (args->sshdr)
+> +=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0arg=
+s->sshdr->response_code =3D 0;
 
-Or do you mean the resolution of the text console, akin to
-"fbset <mode>"? I have to admit I do not know if there is a command
-line tool to do that...
+We know for certain that sizeof(*sshdr) is 8 bytes, and will most
+probably remain so. Thus=A0
 
-Gr{oetje,eeting}s,
+    memset(sshdr, 0, sizeof(*sshdr))
 
-                        Geert
+would result in more efficient code.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Martin
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
