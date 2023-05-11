@@ -2,54 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC476FFAB7
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:43:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0E116FFABA
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:43:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239476AbjEKTnB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 15:43:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58554 "EHLO
+        id S239550AbjEKTnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 15:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239353AbjEKTme (ORCPT
+        with ESMTP id S239345AbjEKTml (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 15:42:34 -0400
+        Thu, 11 May 2023 15:42:41 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B811993F8;
-        Thu, 11 May 2023 12:42:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB964A5EB;
+        Thu, 11 May 2023 12:42:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB6A06510F;
-        Thu, 11 May 2023 19:40:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00097C433A1;
-        Thu, 11 May 2023 19:40:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 725A365110;
+        Thu, 11 May 2023 19:41:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB44DC433D2;
+        Thu, 11 May 2023 19:41:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683834059;
-        bh=h1AhJQfHCacMoYvXPXKTx1wKJ2WlHGlTurkWEQgISlI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=p2TYaVqkQ8TR1HMb4yUreBylDr1XOzQJ6vI5fqAKtjlxIf/tPJNpRHb7BzjWSGs7Z
-         FqsU4EhlV/YocbqjU6LTDKZFly6rnSDUfyeEcm/XRlp/jfxCx3JumLdhWX4JbPJvHz
-         t4e96epXZAfyvDBSrn3zLIBUquIGuAOnnV/5N78k72jbAfHbZ2MMJARpPRxYWL2lKD
-         Ebzt7mE8YTrHv5OddrW60NVvZH+xfArUBtGZZOePQjNdFY3IaDFazmo1JPNCdfAAwU
-         H6JZq357o7XXLvZYDUiGTKnVta/q/YINBb+FRBhr34XbO9c5pDf4jWA+z05xfgEDjC
-         0aOYaADicyJaw==
+        s=k20201202; t=1683834070;
+        bh=eUyy4o0ZFlQgxEmoGpUGIqucDH7lEIHYip0rJcopiEI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=RrjFPXnXhokL6OURou9XkInQMz+f0ZUJCaUx/jfNBI63l7KSMrETtGbg5tOgALCpW
+         +6mdHwDSCBST7WFKUaUAWFyqRdcBs8aagb9YNZKh9XzI+YvIMrrMgTNVIvevkyte/d
+         5rnKiEulcgNQrEUCyR/kPKMPvC2HidkPMXdqKj5geBbkjBGcJZJe0o7inO0ZQYIS/J
+         9EhYVIS+k/GS8V5t/Z5QoKsk9AHOXPdQ3pGoReYGNNGepA+NTjW18LGE3HEzMNSIEP
+         /pdrHjzpSA9qTNQp90eQXz3pIPbbjciWl0i0JJ78gi7skzFN5kYs3NGYe7bLHMJ6Bc
+         76IF6OqQ4q3yw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     lyndonli <Lyndon.Li@amd.com>, Yunxiang Li <Yunxiang.Li@amd.com>,
-        Feifei Xu <Feifei.Xu@amd.com>,
-        Kenneth Feng <kenneth.feng@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch,
-        Hawking.Zhang@amd.com, mario.limonciello@amd.com,
-        lijo.lazar@amd.com, YiPeng.Chai@amd.com, andrey.grodzovsky@amd.com,
-        Amaranath.Somalapuram@amd.com, Bokun.Zhang@amd.com,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 5.15 5/5] drm/amdgpu: Use the default reset when loading or reloading the driver
-Date:   Thu, 11 May 2023 15:40:22 -0400
-Message-Id: <20230511194025.623614-5-sashal@kernel.org>
+Cc:     Johannes Thumshirn <jth@kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 1/3] watchdog: menz069_wdt: fix watchdog initialisation
+Date:   Thu, 11 May 2023 15:40:57 -0400
+Message-Id: <20230511194059.623695-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230511194025.623614-1-sashal@kernel.org>
-References: <20230511194025.623614-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -64,74 +56,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: lyndonli <Lyndon.Li@amd.com>
+From: Johannes Thumshirn <jth@kernel.org>
 
-[ Upstream commit 4eea7fb980dc44545a32eec92e2662053b34cd9d ]
+[ Upstream commit 87b22656ca6a896d0378e9e60ffccb0c82f48b08 ]
 
-Below call trace and errors are observed when reloading
-amdgpu driver with the module parameter reset_method=3.
+Doing a 'cat /dev/watchdog0' with menz069_wdt as watchdog0 will result in
+a NULL pointer dereference.
 
-It should do a default reset when loading or reloading the
-driver, regardless of the module parameter reset_method.
+This happens because we're passing the wrong pointer to
+watchdog_register_device(). Fix this by getting rid of the static
+watchdog_device structure and use the one embedded into the driver's
+per-instance private data.
 
-v2: add comments inside and modify commit messages.
-
-[  +2.180243] [drm] psp gfx command ID_LOAD_TOC(0x20) failed
-and response status is (0x0)
-[  +0.000011] [drm:psp_hw_start [amdgpu]] *ERROR* Failed to load toc
-[  +0.000890] [drm:psp_hw_start [amdgpu]] *ERROR* PSP tmr init failed!
-[  +0.020683] [drm:amdgpu_fill_buffer [amdgpu]] *ERROR* Trying to
-clear memory with ring turned off.
-[  +0.000003] RIP: 0010:amdgpu_bo_release_notify+0x1ef/0x210 [amdgpu]
-[  +0.000004] Call Trace:
-[  +0.000003]  <TASK>
-[  +0.000008]  ttm_bo_release+0x2c4/0x330 [amdttm]
-[  +0.000026]  amdttm_bo_put+0x3c/0x70 [amdttm]
-[  +0.000020]  amdgpu_bo_free_kernel+0xe6/0x140 [amdgpu]
-[  +0.000728]  psp_v11_0_ring_destroy+0x34/0x60 [amdgpu]
-[  +0.000826]  psp_hw_init+0xe7/0x2f0 [amdgpu]
-[  +0.000813]  amdgpu_device_fw_loading+0x1ad/0x2d0 [amdgpu]
-[  +0.000731]  amdgpu_device_init.cold+0x108e/0x2002 [amdgpu]
-[  +0.001071]  ? do_pci_enable_device+0xe1/0x110
-[  +0.000011]  amdgpu_driver_load_kms+0x1a/0x160 [amdgpu]
-[  +0.000729]  amdgpu_pci_probe+0x179/0x3a0 [amdgpu]
-
-Signed-off-by: lyndonli <Lyndon.Li@amd.com>
-Signed-off-by: Yunxiang Li <Yunxiang.Li@amd.com>
-Reviewed-by: Feifei Xu <Feifei.Xu@amd.com>
-Reviewed-by: Kenneth Feng <kenneth.feng@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Signed-off-by: Johannes Thumshirn <jth@kernel.org>
+Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+Link: https://lore.kernel.org/r/20230418172531.177349-2-jth@kernel.org
+Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/watchdog/menz69_wdt.c | 16 ++++++----------
+ 1 file changed, 6 insertions(+), 10 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-index 7e940a3bba978..3af9bde986f08 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -3494,6 +3494,7 @@ int amdgpu_device_init(struct amdgpu_device *adev,
- 	int r, i;
- 	bool px = false;
- 	u32 max_MBps;
-+	int tmp;
+diff --git a/drivers/watchdog/menz69_wdt.c b/drivers/watchdog/menz69_wdt.c
+index 8973f98bc6a56..bca0938f3429f 100644
+--- a/drivers/watchdog/menz69_wdt.c
++++ b/drivers/watchdog/menz69_wdt.c
+@@ -98,14 +98,6 @@ static const struct watchdog_ops men_z069_ops = {
+ 	.set_timeout = men_z069_wdt_set_timeout,
+ };
  
- 	adev->shutdown = false;
- 	adev->flags = flags;
-@@ -3693,7 +3694,13 @@ int amdgpu_device_init(struct amdgpu_device *adev,
- 				}
- 			}
- 		} else {
-+			tmp = amdgpu_reset_method;
-+			/* It should do a default reset when loading or reloading the driver,
-+			 * regardless of the module parameter reset_method.
-+			 */
-+			amdgpu_reset_method = AMD_RESET_METHOD_NONE;
- 			r = amdgpu_asic_reset(adev);
-+			amdgpu_reset_method = tmp;
- 			if (r) {
- 				dev_err(adev->dev, "asic reset on init failed\n");
- 				goto failed;
+-static struct watchdog_device men_z069_wdt = {
+-	.info = &men_z069_info,
+-	.ops = &men_z069_ops,
+-	.timeout = MEN_Z069_DEFAULT_TIMEOUT,
+-	.min_timeout = 1,
+-	.max_timeout = MEN_Z069_WDT_COUNTER_MAX / MEN_Z069_TIMER_FREQ,
+-};
+-
+ static int men_z069_probe(struct mcb_device *dev,
+ 			  const struct mcb_device_id *id)
+ {
+@@ -125,15 +117,19 @@ static int men_z069_probe(struct mcb_device *dev,
+ 		goto release_mem;
+ 
+ 	drv->mem = mem;
++	drv->wdt.info = &men_z069_info;
++	drv->wdt.ops = &men_z069_ops;
++	drv->wdt.timeout = MEN_Z069_DEFAULT_TIMEOUT;
++	drv->wdt.min_timeout = 1;
++	drv->wdt.max_timeout = MEN_Z069_WDT_COUNTER_MAX / MEN_Z069_TIMER_FREQ;
+ 
+-	drv->wdt = men_z069_wdt;
+ 	watchdog_init_timeout(&drv->wdt, 0, &dev->dev);
+ 	watchdog_set_nowayout(&drv->wdt, nowayout);
+ 	watchdog_set_drvdata(&drv->wdt, drv);
+ 	drv->wdt.parent = &dev->dev;
+ 	mcb_set_drvdata(dev, drv);
+ 
+-	return watchdog_register_device(&men_z069_wdt);
++	return watchdog_register_device(&drv->wdt);
+ 
+ release_mem:
+ 	mcb_release_mem(mem);
 -- 
 2.39.2
 
