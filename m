@@ -2,184 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B08246FEB73
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 07:59:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0135D6FEB75
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 08:00:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236955AbjEKF7g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 01:59:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60354 "EHLO
+        id S237012AbjEKGAD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 02:00:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236642AbjEKF7b (ORCPT
+        with ESMTP id S236972AbjEKGAA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 01:59:31 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24A8930C7;
-        Wed, 10 May 2023 22:59:30 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34B4GmGK009238;
-        Thu, 11 May 2023 05:59:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=FhEY+h/GhVElLpNz743SwbvsQx7kkloIQE75pbqZpsk=;
- b=XPo/DCKwzI2YsYURlcqNvMIYa8FN0iuPI/aksFoYidYV4OkJ4Zfo7/TjkoxXh73FrfyW
- L5jkAmulYvpYkQAY5C07XetRl2+G4hDqbhZt4zgyAeZcyGrENApdXTKpWydgVHfvB1XI
- CYspsOMms/fUJbb0bQ+oLZ8jPOl1wo4y2e1M2+Xa49QWA0I746i7jzn9jXgvNOQg0X4J
- 3mipOhfVkOzkxcmYXvwy/D4CDbGpggxJRs3m84HAzzHdpnxJDLSw4ymghgM1RR+dZfX3
- BsAiLix7hzmC7Q6DpCOLH9YOKMNKN7xthKgL7qb3aH/860unQIpVSrVXY/xSsC/tPMad GQ== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qgett19c6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 05:59:20 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34B5xInG007071
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 11 May 2023 05:59:18 GMT
-Received: from [10.79.141.17] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Wed, 10 May
- 2023 22:59:15 -0700
-Message-ID: <15042631-4012-61bd-11ef-dde378215fed@quicinc.com>
-Date:   Thu, 11 May 2023 11:29:12 +0530
+        Thu, 11 May 2023 02:00:00 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C786448C
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 22:59:58 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id 2adb3069b0e04-4f13d8f74abso9183693e87.0
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 22:59:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683784796; x=1686376796;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Ob7GWlTRgvWZ3pXLoalNHIlZFx5sCzWHAfObxgHzBLQ=;
+        b=MbC0YPcN712jWen4x7kIlMBrUhrF/5Bld1BpEG7CIHbc3v9862gjnS2MCI88PXb4CF
+         +050yeVT4cYIzsHmHTxcAuvfX6vwc9PEKFSgelcA4PIOSM/mbnAsiToFRR59w6Jm5msQ
+         O/G9qRptHQJxOU1m/2FaF7PsVZGCSNViLl7qxgtyDBOcnqX+PT0GUqFzzMpNmksRvEIj
+         E2LqH2IbIdFyYrAhIK5DzAEJFairEY9LtWc497htip4V//8D9GuxWogiZL2utN5jE/+S
+         uJFvvA6vHAPScdNkOxbT9QOx02FX1WyvoyYdCJ6KGHBcfDo9NxA1nJ+o7s9FWWz21s0X
+         AzqA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683784796; x=1686376796;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Ob7GWlTRgvWZ3pXLoalNHIlZFx5sCzWHAfObxgHzBLQ=;
+        b=YQXV2B6lm5bZ2lgcJsHJME8Hh7XT66BW44HDS1W+nzSuGLUnncsPw+503m9uGKa462
+         ghMqICrEQLv0cBf29SABZgSeblPCAHniCgqBrfqxfcCKFB31Gzt7qUSxQ+SRaV4MxpXd
+         UJ1CEK4Y37Vwj0SCrycPpOczEe5JOz+nlHiclgfZotIWK+msltja8s8vhECRdsiPByiP
+         jDb/C4ds2nBYPDnRkhwkAt4+i1dwB0/AKU8/vtJKQNSZM67LyQiQ3vpa3SXl9Wt1BSoG
+         yIH4MlMaRx6ubaJHnSUNjaAa+JTKmQCTsoBZmGsyFXX7tJsDA7huQYnrCN9v/KCLAzv9
+         s6tQ==
+X-Gm-Message-State: AC+VfDwWsuPkYdJPOSHthLtnoKBP6xWFSBpyRSR0oQj20yA6ansYJAhd
+        /pgl6Rx2PMbqIcPh32S45N8V2RO1HFtkEf/aG0w=
+X-Google-Smtp-Source: ACHHUZ6xNLZsaDCyh/KMjbZbeY+ZkovihJ5HXWgKfX+Sd+1H5LyClJymrRQw81Rs8x4JTtW0xmfkrnOX0fVC+GbYHYE=
+X-Received: by 2002:ac2:42d1:0:b0:4e8:c5d:42a5 with SMTP id
+ n17-20020ac242d1000000b004e80c5d42a5mr2358825lfl.24.1683784796346; Wed, 10
+ May 2023 22:59:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH V6 1/3] dt-bindings: sram: qcom,imem: Add Boot Stat region
- within IMEM
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>,
-        "Rajendra Nayak" <quic_rjendra@quicinc.com>
-References: <cover.1683628357.git.quic_schowdhu@quicinc.com>
- <343182748e12b6a4ac57d336405c50e36fc5520c.1683628357.git.quic_schowdhu@quicinc.com>
- <CAA8EJpp2x2OEB2sg+caKmjkDYJp_NJ9mXo85FxTZr-9zRXHNhw@mail.gmail.com>
- <10fa20f9-33d9-a8a8-3fca-f5ff320a6574@quicinc.com>
- <CAA8EJprJfmtFs1dx0uJw0bi1ig2JsCYzH_4BncPop4aO16D2aA@mail.gmail.com>
-From:   Souradeep Chowdhury <quic_schowdhu@quicinc.com>
-In-Reply-To: <CAA8EJprJfmtFs1dx0uJw0bi1ig2JsCYzH_4BncPop4aO16D2aA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: gGsmcM4e1NmjRTwT613a-cBM5by8uNij
-X-Proofpoint-GUID: gGsmcM4e1NmjRTwT613a-cBM5by8uNij
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-10_04,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999
- priorityscore=1501 bulkscore=0 impostorscore=0 mlxscore=0
- lowpriorityscore=0 spamscore=0 clxscore=1015 phishscore=0 adultscore=0
- suspectscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2304280000 definitions=main-2305110050
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <1683538383-19685-1-git-send-email-zhaoyang.huang@unisoc.com> <1683538383-19685-3-git-send-email-zhaoyang.huang@unisoc.com>
+In-Reply-To: <1683538383-19685-3-git-send-email-zhaoyang.huang@unisoc.com>
+From:   Zhaoyang Huang <huangzhaoyang@gmail.com>
+Date:   Thu, 11 May 2023 13:59:33 +0800
+Message-ID: <CAGWkznEdrbenvczHcQbv94jOprg7OBEHmsgBtm4knZ7mRJvdLw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] mm: skip CMA pages when they are not available
+To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Roman Gushchin <guro@fb.com>, Minchan Kim <minchan@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
++Matthew Wilcox
 
-
-On 5/9/2023 6:35 PM, Dmitry Baryshkov wrote:
-> On Tue, 9 May 2023 at 15:21, Souradeep Chowdhury
-> <quic_schowdhu@quicinc.com> wrote:
->>
->>
->>
->> On 5/9/2023 5:05 PM, Dmitry Baryshkov wrote:
->>> On Tue, 9 May 2023 at 13:53, Souradeep Chowdhury
->>> <quic_schowdhu@quicinc.com> wrote:
->>>>
->>>> All Qualcomm bootloaders log useful timestamp information related
->>>> to bootloader stats in the IMEM region. Add the child node within
->>>> IMEM for the boot stat region containing register address and
->>>> compatible string.
->>>
->>> I might have a minor vote here. Is there any reason why you have to
->>> instantiate the device from DT?
->>> It looks like a software interface. Ideally software should not be
->>> described in DT (e.g. this can be instantiated from imem
->>> driver-to-be).
->>> Or we can follow the RPM master-stats approach, where the device is a
->>> top-level device, having handle pointers to the sram regions.
->>
->> This is a dedicated region of IMEM reserved for storing stats related
->> information. So it is represented as a child of IMEM, please
->> refer to Documentation/devicetree/bindings/sram/sram.yaml which
->> follows a similar philosophy. Also since this is a child of IMEM with
->> a specific purpose, does it not warrant a dedicated driver?
-> 
-> I do not question a dedicated driver. I was asking about the DT node.
-> Even the mentioned bindings file describes the SRAM regions inside the
-> SRAM, rather than a proper device to be instantiated in the SRAM node.
-> I'd point to the boot_stats discussions (present on the list in the
-> last several months).
-> 
-
-Ack. Will instantiate the device from the parent node in the driver and
-access the stats region to print the boot_stats information.
-
-
->>
->>>
->>>>
->>>> Signed-off-by: Souradeep Chowdhury <quic_schowdhu@quicinc.com>
->>>> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>> ---
->>>>    .../devicetree/bindings/sram/qcom,imem.yaml   | 22 +++++++++++++++++++
->>>>    1 file changed, 22 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/sram/qcom,imem.yaml b/Documentation/devicetree/bindings/sram/qcom,imem.yaml
->>>> index 0548e8e0d30b..bb884c5c8952 100644
->>>> --- a/Documentation/devicetree/bindings/sram/qcom,imem.yaml
->>>> +++ b/Documentation/devicetree/bindings/sram/qcom,imem.yaml
->>>> @@ -50,6 +50,28 @@ patternProperties:
->>>>        $ref: /schemas/remoteproc/qcom,pil-info.yaml#
->>>>        description: Peripheral image loader relocation region
->>>>
->>>> +  "^stats@[0-9a-f]+$":
->>>> +    type: object
->>>> +    description:
->>>> +      Imem region dedicated for storing timestamps related
->>>> +      information regarding bootstats.
->>>> +
->>>> +    additionalProperties: false
->>>> +
->>>> +    properties:
->>>> +      compatible:
->>>> +        items:
->>>> +          - enum:
->>>> +              - qcom,sm8450-bootstats
->>>> +          - const: qcom,imem-bootstats
->>>> +
->>>> +      reg:
->>>> +        maxItems: 1
->>>> +
->>>> +    required:
->>>> +      - compatible
->>>> +      - reg
->>>> +
->>>>    required:
->>>>      - compatible
->>>>      - reg
->>>> --
->>>> 2.17.1
->>>>
->>>
->>>
-> 
-> 
-> 
+On Mon, May 8, 2023 at 5:35=E2=80=AFPM zhaoyang.huang <zhaoyang.huang@uniso=
+c.com> wrote:
+>
+> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+>
+> This patch fixes unproductive reclaiming of CMA pages by skipping them wh=
+en they
+> are not available for current context. It is arise from bellowing OOM iss=
+ue, which
+> caused by large proportion of MIGRATE_CMA pages among free pages. There h=
+as been
+> commit(168676649) to fix it by trying CMA pages first instead of fallback=
+ in
+> rmqueue.
+>
+> 04166 < 4> [   36.172486] [03-19 10:05:52.172] ActivityManager: page allo=
+cation failure: order:0, mode:0xc00(GFP_NOIO), nodemask=3D(null),cpuset=3Df=
+oreground,mems_allowed=3D0
+> 0419C < 4> [   36.189447] [03-19 10:05:52.189] DMA32: 0*4kB 447*8kB (C) 2=
+17*16kB (C) 124*32kB (C) 136*64kB (C) 70*128kB (C) 22*256kB (C) 3*512kB (C)=
+ 0*1024kB 0*2048kB 0*4096kB =3D 35848kB
+> 0419D < 4> [   36.193125] [03-19 10:05:52.193] Normal: 231*4kB (UMEH) 49*=
+8kB (MEH) 14*16kB (H) 13*32kB (H) 8*64kB (H) 2*128kB (H) 0*256kB 1*512kB (H=
+) 0*1024kB 0*2048kB 0*4096kB =3D 3236kB
+>         ......
+> 041EA < 4> [   36.234447] [03-19 10:05:52.234] SLUB: Unable to allocate m=
+emory on node -1, gfp=3D0xa20(GFP_ATOMIC)
+> 041EB < 4> [   36.234455] [03-19 10:05:52.234] cache: ext4_io_end, object=
+ size: 64, buffer size: 64, default order: 0, min order: 0
+> 041EC < 4> [   36.234459] [03-19 10:05:52.234] node 0: slabs: 53,objs: 33=
+92, free: 0
+>
+> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+> ---
+>  mm/vmscan.c | 15 +++++++++++++--
+>  1 file changed, 13 insertions(+), 2 deletions(-)
+>
+> diff --git a/mm/vmscan.c b/mm/vmscan.c
+> index bd6637f..19fb445 100644
+> --- a/mm/vmscan.c
+> +++ b/mm/vmscan.c
+> @@ -2225,10 +2225,16 @@ static unsigned long isolate_lru_folios(unsigned =
+long nr_to_scan,
+>         unsigned long nr_skipped[MAX_NR_ZONES] =3D { 0, };
+>         unsigned long skipped =3D 0;
+>         unsigned long scan, total_scan, nr_pages;
+> +       bool cma_cap =3D true;
+> +       struct page *page;
+>         LIST_HEAD(folios_skipped);
+>
+>         total_scan =3D 0;
+>         scan =3D 0;
+> +       if ((IS_ENABLED(CONFIG_CMA)) && !current_is_kswapd()
+> +               && (gfp_migratetype(sc->gfp_mask) !=3D MIGRATE_MOVABLE))
+> +               cma_cap =3D false;
+> +
+>         while (scan < nr_to_scan && !list_empty(src)) {
+>                 struct list_head *move_to =3D src;
+>                 struct folio *folio;
+> @@ -2239,12 +2245,17 @@ static unsigned long isolate_lru_folios(unsigned =
+long nr_to_scan,
+>                 nr_pages =3D folio_nr_pages(folio);
+>                 total_scan +=3D nr_pages;
+>
+> -               if (folio_zonenum(folio) > sc->reclaim_idx) {
+> +               page =3D &folio->page;
+> +
+> +               if ((folio_zonenum(folio) > sc->reclaim_idx)
+> +#ifdef CONFIG_CMA
+> +                       || (get_pageblock_migratetype(page) =3D=3D MIGRAT=
+E_CMA && !cma_cap)
+> +#endif
+> +               ) {
+>                         nr_skipped[folio_zonenum(folio)] +=3D nr_pages;
+>                         move_to =3D &folios_skipped;
+>                         goto move;
+>                 }
+> -
+>                 /*
+>                  * Do not count skipped folios because that makes the fun=
+ction
+>                  * return with no isolated folios if the LRU mostly conta=
+ins
+> --
+> 1.9.1
+>
