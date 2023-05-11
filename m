@@ -2,79 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1A736FF84C
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 19:21:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E506FF856
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 19:23:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238616AbjEKRVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 13:21:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52944 "EHLO
+        id S238881AbjEKRXl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 13:23:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238935AbjEKRVY (ORCPT
+        with ESMTP id S230102AbjEKRXk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 13:21:24 -0400
-Received: from mail-qv1-xf2a.google.com (mail-qv1-xf2a.google.com [IPv6:2607:f8b0:4864:20::f2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4B5B8A4A;
-        Thu, 11 May 2023 10:21:23 -0700 (PDT)
-Received: by mail-qv1-xf2a.google.com with SMTP id 6a1803df08f44-61b58b6e864so77544956d6.3;
-        Thu, 11 May 2023 10:21:23 -0700 (PDT)
+        Thu, 11 May 2023 13:23:40 -0400
+Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 276E0A8;
+        Thu, 11 May 2023 10:23:39 -0700 (PDT)
+Received: by mail-qv1-xf34.google.com with SMTP id 6a1803df08f44-619be7d7211so41430306d6.3;
+        Thu, 11 May 2023 10:23:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683825682; x=1686417682;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1683825818; x=1686417818;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=SabCXeVjik/SQe8lEZKTulGkwrKo1Wd7M5yO8zFFbD4=;
-        b=KVrpGiKK9kahGnyXBq9oEXMDboWTQfOgu8/459WM56vuFQ/HDXQ+87Hyn7QUUwDZ4U
-         5n1Vygst+XHVPKZ/PmYi/wRHDHzpK+AWuxvb41w5vtHpWMPKZR7+x9tSJaUz46JboDj2
-         OArx6ofpcLM0aweQMEHQF03JX80OlIaQ8Pe2UDBVL94td7BUNgHPuMlZoFgg/F6FtAt0
-         1SmWSnop15jb0xwtln7CVqZB1VZbd3U/EYtfwWgL/tkEIv3eIJ/lHKD863dFXPuA/jEW
-         8SfUrYX6oS389IGnLeeagAm+e2qcyDNL4X4YOsWOwKmIyP+Y3bsgVdu03RQBDEdDVle1
-         GhMA==
+        bh=OM6TFiDQhgWQropng+AeJTYlJzn+bEC9f9zpp2BwMP0=;
+        b=qpwCPqa4hqsdoIwTVUeTtOZ4pWT9CxBB/YaRF8axxSDjFwFTN0R848WaH8dfguKxlA
+         RcKtzXQFZlv8VYa5DjhQSVEVFQesBXPKQHChDE84Qt9SIiu+eViQlvAq3dLuzN7ENDsM
+         MMrNGHBLvOUywThafQbjbcOYFQ3v/+MSnln5N916ph2UyPoRh4DlTj80N7HPxe0rKRrP
+         7pA6iV+7h1DG/jgsLQtT9QJxsM58vtwMcScgaNFUUi0Y5VssstNTe77sh+Umfuj9etYW
+         aHrZv8N1wZfXjoaxMa1ndn2wwt8gUojXniUhdQVixp29oi+ijqakudpeYxKONy41wgW1
+         0dSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683825682; x=1686417682;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683825818; x=1686417818;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=SabCXeVjik/SQe8lEZKTulGkwrKo1Wd7M5yO8zFFbD4=;
-        b=gxbNT65d7J9TqqjBcMQ9yHwp8d8kX5YYNJ4rNJhDU7IPdmummLB/4MlrvkNmBpLCcN
-         2LPdGAOzXJOJVLqkIw4j5Z8kktOba+wzt6YIoq8YJIZmDQ7SDdY25BjMeUj2E0IubFz6
-         sf/u3sZPf26JDV3vg9hRJTLJQuboR5u5CyJOfmuTJP9N0Uio2Irp5vZQ1oH52GjW+3vl
-         srrlSVm/eGoUiXXcW6h9JBN9YfVfzO5hEQz/tm/iII8uuJ3z7SnTNROU4N09ugRLzfHX
-         YM2A9sSrLJDoMk6tSbh8cK1am+m5+k+uOifHEmTrb+evxfTTfZgjA7qdkT9sOI5BdySR
-         ToMA==
-X-Gm-Message-State: AC+VfDw3/3OthjakL7KRCnnYxD4QtrSh56N/dnLOwyPdZJkVtD1gQ0FQ
-        v7ShbaLYNZKw21ys7Hni3DINOIzLdmE=
-X-Google-Smtp-Source: ACHHUZ5414xAke2CWHd7H2AOAq1hZf2XDZplwb8S8lTVZuRwYevZUnLFRKY1JntsXwWblMQ0Y3XQEA==
-X-Received: by 2002:a05:6214:1243:b0:5c5:1a25:edf0 with SMTP id r3-20020a056214124300b005c51a25edf0mr34929330qvv.26.1683825682330;
-        Thu, 11 May 2023 10:21:22 -0700 (PDT)
-Received: from fainelli-desktop.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id j7-20020a0ce007000000b0062168714c8fsm462822qvk.120.2023.05.11.10.21.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 10:21:21 -0700 (PDT)
-From:   Florian Fainelli <f.fainelli@gmail.com>
-To:     netdev@vger.kernel.org
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Doug Berger <opendmb@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        =?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Frank <Frank.Sae@motor-comm.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH net-next v3 3/3] net: bcmgenet: Add support for PHY-based Wake-on-LAN
-Date:   Thu, 11 May 2023 10:21:10 -0700
-Message-Id: <20230511172110.2243275-4-f.fainelli@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230511172110.2243275-1-f.fainelli@gmail.com>
-References: <20230511172110.2243275-1-f.fainelli@gmail.com>
+        bh=OM6TFiDQhgWQropng+AeJTYlJzn+bEC9f9zpp2BwMP0=;
+        b=JbYlf+0t5O9VJgYTT1bMFYhehMUJuH3DS4vEHc6z8YfYltVqK5p70Lwi3d56hmaMYO
+         ln0LLw++7u2QM3L1ki7EMBJ1lpfNUtG9Q+z5M9PGvTIs+p41xBinWzIGK6rCF5Qc03KO
+         rYTsYOv6eZP22OcCeEbBcvGzBGkpa+7yAuVoHz/FERB/rLeKsUGNfJIQt9XIgWrFyE5h
+         M6ZvWbGJ0+kbNU2q4kkTyy/mFzQAyMSX58Nlrq2nvGz2nNnJ+kVUishY4YFzGjeYb7Pi
+         1u/QuHTjflKfLm50aSVjuH3ZIcu2MnZrn3RRyHi7siT2GwhX1Ru/0kJkzDI9EgKqn0Kp
+         qI0g==
+X-Gm-Message-State: AC+VfDyBf7hOXR9gf7zRYLv46CwEIoh368UPDuBj8xmwlupljkjbp5j9
+        WTxFwfoHtX/tl6KKlMpRWx0KK2F/+mgh2VSjAXM=
+X-Google-Smtp-Source: ACHHUZ4Zvb/5yAMtSdGtdjyV4RQywVu4Ra/sFnP5BEB6FUzbAP4eGKnSZFjRbgqKWLDgMYqUxya2jOby5MhLP8YvTO8=
+X-Received: by 2002:a05:6214:e48:b0:621:363c:ea9f with SMTP id
+ o8-20020a0562140e4800b00621363cea9fmr15938098qvc.19.1683825817959; Thu, 11
+ May 2023 10:23:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <0b3a257a-f1e5-ad86-4c69-93e038a33ce9@yoseli.org>
+ <ZFvTi3tQGUq2OCHi@surfacebook> <32ecb9f3-1443-210c-0fc9-40891629e25a@yoseli.org>
+ <CAHp75Vcsieiab8ks7yLwJvhjHTPv2qeCBJYjMOVYBJXmNhbTYQ@mail.gmail.com> <1ab280c2-2536-f507-8e12-2e4d3f3eb37e@yoseli.org>
+In-Reply-To: <1ab280c2-2536-f507-8e12-2e4d3f3eb37e@yoseli.org>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Thu, 11 May 2023 20:23:01 +0300
+Message-ID: <CAHp75VeGMMOk0_C3E6hmg3Z06ARbN0tRLVFo5151bngFLDLSpw@mail.gmail.com>
+Subject: Re: pca953x issue when driving a DSI bridge
+To:     Jean-Michel Hautbois <jeanmichel.hautbois@yoseli.org>
+Cc:     linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        brgl@bgdev.pl, linus.walleij@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
@@ -85,49 +71,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If available, interrogate the PHY to find out whether we can use it for
-Wake-on-LAN. This can be a more power efficient way of implementing
-that feature, especially when the MAC is powered off in low power
-states.
+On Thu, May 11, 2023 at 7:07=E2=80=AFPM Jean-Michel Hautbois
+<jeanmichel.hautbois@yoseli.org> wrote:
+> On 11/05/2023 09:49, Andy Shevchenko wrote:
+> > On Wed, May 10, 2023 at 11:18=E2=80=AFPM Jean-Michel Hautbois
+> > <jeanmichel.hautbois@yoseli.org> wrote:
+...
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
-Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
----
- drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+> > In your case I would try the easiest way (taking into account that
+> > hardware connection is not preventing us from sleeping context), i.e.
+> > check if the function that has GPIO call may sleep on its own and
+> > simply replace gpiod_set_value() by gpiod_set_value_cansleep().
+>
+> And I found a patch, which is merged in v6.4-rc1 which does exactly this =
+!
+> https://lore.kernel.org/all/20230405135127.769665-1-alexander.stein@ew.tq=
+-group.com/
 
-diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c b/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c
-index 3a4b6cb7b7b9..7a41cad5788f 100644
---- a/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c
-+++ b/drivers/net/ethernet/broadcom/genet/bcmgenet_wol.c
-@@ -42,6 +42,12 @@ void bcmgenet_get_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
- 	struct bcmgenet_priv *priv = netdev_priv(dev);
- 	struct device *kdev = &priv->pdev->dev;
- 
-+	if (dev->phydev) {
-+		phy_ethtool_get_wol(dev->phydev, wol);
-+		if (wol->supported)
-+			return;
-+	}
-+
- 	if (!device_can_wakeup(kdev)) {
- 		wol->supported = 0;
- 		wol->wolopts = 0;
-@@ -63,6 +69,14 @@ int bcmgenet_set_wol(struct net_device *dev, struct ethtool_wolinfo *wol)
- {
- 	struct bcmgenet_priv *priv = netdev_priv(dev);
- 	struct device *kdev = &priv->pdev->dev;
-+	int ret;
-+
-+	/* Try Wake-on-LAN from the PHY first */
-+	if (dev->phydev) {
-+		ret = phy_ethtool_set_wol(dev->phydev, wol);
-+		if (ret != -EOPNOTSUPP)
-+			return ret;
-+	}
- 
- 	if (!device_can_wakeup(kdev))
- 		return -ENOTSUPP;
--- 
-2.34.1
+Ah, cool!
 
+> Thanks as it is your advice which made me find it :-p
+
+You are welcome!
+
+--=20
+With Best Regards,
+Andy Shevchenko
