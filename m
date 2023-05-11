@@ -2,95 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1C186FEEFE
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:36:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD7F96FEF00
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:37:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237513AbjEKJgu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 05:36:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56774 "EHLO
+        id S236419AbjEKJhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 05:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237718AbjEKJgg (ORCPT
+        with ESMTP id S231843AbjEKJhR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 05:36:36 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C95D8A4E
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:36:33 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683797792;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0MlX4bO/xsxPE0sSg+a9U+jP9cGlaqB1yl1v5aiA+/E=;
-        b=TTbWyGieMlEBBfbnkkY2EjapO14NeDqkq0x0sOHxK+4SkaEf9CTwaLgxc37OSO/YGqdnL4
-        NdqPIWtt3FzESBpZZZi3JSVyEdOmqep77spuecl+uzVA62tKAzK3WZn/MKql+w/1H41ilH
-        9axz1e4Pz8rhXM1DVP/coKZgThf6AT2m73CBHYD6PN/1iFOj5DxCm8aH1hJ4j98Yr4RNNV
-        jTIzypG7lXD8Gxmf+buhXmD5sZFL51nkoVCL+5/3PvXqrHU5lJO2PWk/GWzyQmIuadvKHL
-        QP/+KtnOlfmxt/VPks9SrKZEW77RGT9I53tUXGM2AXDrwNlyLDOKJ1NYklganQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683797792;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0MlX4bO/xsxPE0sSg+a9U+jP9cGlaqB1yl1v5aiA+/E=;
-        b=2hBMTzm/9BDA3Z81b8FkbaaU1N6TgJ2274PVQdsEibctklbW7+IwuVAriE+8iE2S51Co7A
-        vkqTM4imuSxSBSCA==
-To:     Pavel Tikhomirov <ptikhomirov@virtuozzo.com>,
-        Andrey Vagin <avagin@openvz.org>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        syzbot+5c54bd3eb218bb595aa9@syzkaller.appspotmail.com,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Sebastian Siewior <bigeasy@linutronix.de>,
-        Michael Kerrisk <mtk.manpages@gmail.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>,
-        Pavel Emelyanov <xemul@openvz.org>
-Subject: Re: [RFD] posix-timers: CRIU woes
-In-Reply-To: <cc8aa6a4-a187-f3ad-fec9-05f037a3886d@virtuozzo.com>
-References: <20230425181827.219128101@linutronix.de>
- <20230425183312.932345089@linutronix.de> <ZFUXrCZtWyNG3Esi@lothringen>
- <87zg6i2xn3.ffs@tglx> <87v8h62vwp.ffs@tglx> <878rdy32ri.ffs@tglx>
- <87v8h126p2.ffs@tglx> <875y911xeg.ffs@tglx> <87ednpyyeo.ffs@tglx>
- <CANaxB-wV9iUT6=Y9nZCWbJhiscMrnAQh4fUXs7Tb8pr=-HwSYQ@mail.gmail.com>
- <cc8aa6a4-a187-f3ad-fec9-05f037a3886d@virtuozzo.com>
-Date:   Thu, 11 May 2023 11:36:31 +0200
-Message-ID: <87r0rnciqo.ffs@tglx>
+        Thu, 11 May 2023 05:37:17 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D4BCE49
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:37:15 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-9660af2499dso1235330166b.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:37:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683797834; x=1686389834;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0TRjdhGheNLs8yioJ0et+AqnEpVQkoA539PlQCzm5lQ=;
+        b=pfZeriXXUl23v8ujioeEl7tU7lkqZg4uhs1cDv8ogmQ4nDTwj4f5BrsvbPAmGKE+ke
+         uizekmWLlrfLoIYnZXtWu8r4Bk27QGRAOcSQgIefdvzWF1drv5DcN/2bYjyBydovPbWz
+         TjkfKwbW/gTpYXSPT+otsiOxypWwGQga3lNVdpeqacOBNqeYH5UbRuhTFWNiQIebwHG0
+         lvonbYwuR9dng+4MBA+oIWqCQAuRk65DjpAJvOCJhHZn5+OdBySlrvFSb8sP/GVFmYUU
+         z6gh0CMcQZnO3DREanelq2x3pJSKKcQf/yAkbETAtg3Axm7UZNr78vG4FoaLf2W6JCHW
+         bHlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683797834; x=1686389834;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0TRjdhGheNLs8yioJ0et+AqnEpVQkoA539PlQCzm5lQ=;
+        b=VRDCpAkWLnDHJ6t7knv1vhTJFhIY1D+U/KgnVc240Qz5zqthv43B/mfF5c5uZxqhfy
+         hXarKuChSR/3kdAMiUCk8i8Y0rI2P7VF6gLGqpdd83Qei0RB4zsY4uf9pYkGSp5Qy3DC
+         wYMrUeFmsCr3XIFLlxh9yLFJu3OI6+0WtufmO0Cx33PnrNan+XQDhBqjZUsph6D0R/rU
+         po/OXNKfUcr6iSsl5Xlu8nAiA5rTQdofmxgDKpH4diRAKrJHQA8zcfqpTmet+YG8+zhg
+         hRZfXLrH5yI2IP4FRXzqMqT2pDsCwecSUvOb5ipX29Kgq5Jv9LXjymHcaOSX5HAfJC8u
+         SIJg==
+X-Gm-Message-State: AC+VfDzO8XT3PPJq7mKcHDjDz/T1/JIhA096A3zjT/uzHLKRflI8spva
+        lxSmpFzMawxpHnJF0cUmc7dxBw==
+X-Google-Smtp-Source: ACHHUZ4Hx4V319vc6VylXMO0Suff5DbHcFrowjRJuWGQieE5u6uGRJkXgthm4dY8KecLpl8JO8tKQQ==
+X-Received: by 2002:a17:907:9308:b0:965:b2c3:9575 with SMTP id bu8-20020a170907930800b00965b2c39575mr16984246ejc.57.1683797833890;
+        Thu, 11 May 2023 02:37:13 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:7e61:f14a:c3a4:809e? ([2a02:810d:15c0:828:7e61:f14a:c3a4:809e])
+        by smtp.gmail.com with ESMTPSA id v9-20020a170906380900b0094e1344ddfdsm3712446ejc.34.2023.05.11.02.37.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 02:37:13 -0700 (PDT)
+Message-ID: <ca2ed8e9-850a-56c5-e395-72e5861b9c71@linaro.org>
+Date:   Thu, 11 May 2023 11:37:12 +0200
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2 2/5] ASoC: dt-bindings: Add tas2781 amplifier
+Content-Language: en-US
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Shenghao Ding <13916275206@139.com>, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, robh+dt@kernel.org,
+        lgirdwood@gmail.com, perex@perex.cz,
+        pierre-louis.bossart@linux.intel.com, kevin-lu@ti.com,
+        shenghao-ding@ti.com, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org, x1077012@ti.com, peeyush@ti.com,
+        navada@ti.com, gentuser@gmail.com, Ryan_Chu@wistron.com,
+        Sam_Wu@wistron.com
+References: <20230508054512.719-1-13916275206@139.com>
+ <ca9d45cf-8a84-4fbc-e1dd-c96eef36fe25@linaro.org>
+ <ZFyBzHWo3ORKAskX@finisterre.sirena.org.uk>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <ZFyBzHWo3ORKAskX@finisterre.sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11 2023 at 11:17, Pavel Tikhomirov wrote:
-> On 10.05.2023 16:16, Andrey Vagin wrote:
->>>
->>> So because of that half thought out user space ABI we are now up the
->>> regression creek without a paddle, unless CRIU can accomodate to a
->>> different restore mechanism to lift this restriction from the kernel.
->>>
->> If you give us a new API to create timers with specified id-s, we will
->> figure out how to live with it. It isn't good to ask users to update
->> CRIU to work on new kernels, but here are reasons and event improvements
->> for CRIU, so I think it's worth it.
->
-> I agree, any API to create timers with specified id-s would work for new 
-> CRIU versions.
+On 11/05/2023 07:49, Mark Brown wrote:
+>> Missing minItems, but...
+> 
+>>> +    items:
+>>> +      minimum: 0x38
+>>> +      maximum: 0x3f
+> 
+>> ... So these are fixed? No need to encode them in such case...
+> 
+> I'm not sure I understand your concern here, there's up to 4 possible
+> values from 0x38-0x3f which has more than 4 possible values.
 
-The real question is whether this will cause any upheaval when a new
-kernel meets a non-updated CRIU stack.
+Aren't the addresses going to be incremented by one (up to 8 of devices
+in total)?
 
-You know the UABI regression rules of the kernel...
 
-Thanks,
-
-        tglx
+Best regards,
+Krzysztof
 
