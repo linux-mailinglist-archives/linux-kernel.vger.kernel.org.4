@@ -2,87 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14ED96FE971
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:27:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 160866FE972
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:27:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236172AbjEKB1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 21:27:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55792 "EHLO
+        id S236450AbjEKB1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 21:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231183AbjEKB1d (ORCPT
+        with ESMTP id S236284AbjEKB1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 21:27:33 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 849C84EE8;
-        Wed, 10 May 2023 18:27:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=Date:From:Subject:Message-ID:MIME-Version:
-        Content-Type; bh=nRiWGp52ftlfW8uMdyTbOyMwGQ0nyy4tXUjVPjkaNKI=;
-        b=hxGfT+r8XUR/NfkrPRyXguLG2DBK40+RZFu3yZo2C9G6gU+DvfQgm39lFz1e9q
-        SHbXTwgdRFKik8Idjh4KrpqAlyBOCTNxcgSOLDUlC1SzGxhkyYOQpuQ8i1fowEhN
-        4hLEF5UtDYiKGUkLdQgSrQHNOu0HhezXC6Y7sLuHocEGQ=
-Received: from haoge-QiTianM428-A376 (unknown [116.128.244.169])
-        by zwqz-smtp-mta-g3-2 (Coremail) with SMTP id _____wCnVuNfRFxk2VIuBg--.37991S2;
-        Thu, 11 May 2023 09:26:55 +0800 (CST)
-Date:   Thu, 11 May 2023 09:26:54 +0800
-From:   Hao Ge <gehao618@163.com>
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Hao Ge <gehao@kylinos.cn>, angelogioacchino.delregno@collabora.com,
-        matthias.bgg@gmail.com, mturquette@baylibre.com,
-        wenst@chromium.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH] mediatek/clk-mt8173-apmixedsys: use devm_of_iomap to
- avoid resource leak in clk_mt8173_apmixed_probe
-Message-ID: <20230511092654.6d8fab41@haoge-QiTianM428-A376>
-In-Reply-To: <b35458250af972d95c708792633c9a58.sboyd@kernel.org>
-References: <20230509021214.17105-1-gehao@kylinos.cn>
-        <b35458250af972d95c708792633c9a58.sboyd@kernel.org>
-Organization: 123
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Wed, 10 May 2023 21:27:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B247A5B8C
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 18:27:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C847631D0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:27:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A8EDC433D2;
+        Thu, 11 May 2023 01:27:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683768463;
+        bh=qqBOOeUYvI7M9wWSH+W7NvMq7bhorBPWYafMTcNEbEs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WSj93CFklowT8jj8Fhq4ZCGLEFlHOsBaopMrEe7H6Wu3tbX/Gqc0y2/bCS2jU9PSL
+         Ok4aRcAoaI7ewTXf4yQBb51LAvOlXJcMNqdAfFxoYXa28gpHJEm0hZJ664T6m5cwWC
+         dQXWWHC9Q3uz2RR3pvzM8lASHrsUAMRsLIw9//0043AqIYozWiwo/sDq1yZSI5b9CJ
+         LrPtp++EL8nFAA3oINUB5p7uCJvfNdRdPzYjblJEF8pLLgakOItrhgPKnrH3xlbo9d
+         nKzuRp9bwTlVXb3gNLpaJcTxK+/xd71wS2lyfYbkyS0zI14sEx0+c1wkPrhUDtuyCG
+         ZyNxLX7qcs/mA==
+Date:   Thu, 11 May 2023 10:27:41 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        Robin Gong <yibin.gong@nxp.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] regulator: pca9450: Fix BUCK2 enable_mask
+Message-ID: <ZFxEjaSMqj5YjWzw@finisterre.sirena.org.uk>
+References: <20230510135718.2268529-1-alexander.stein@ew.tq-group.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: _____wCnVuNfRFxk2VIuBg--.37991S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7JrWxAF4kWF17tr4ruw1UAwb_yoW3Grc_ua
-        1ku3Z7uw4UZFs7GwsIkr9Fk342y3s8Wr98tF95Za4fta9IgryavFW8C3y3ArZ8Wa48Kr98
-        Ga9Yga1kZF1SkjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IUU3xhJUUUUU==
-X-Originating-IP: [116.128.244.169]
-X-CM-SenderInfo: 5jhkt0qwryqiywtou0bp/xtbBaQRsFlXlz21ORwAAsM
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="qN2H9Cv/ku1E+R1p"
+Content-Disposition: inline
+In-Reply-To: <20230510135718.2268529-1-alexander.stein@ew.tq-group.com>
+X-Cookie: Elliptic paraboloids for sale.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 10 May 2023 14:18:08 -0700
-Stephen Boyd <sboyd@kernel.org> wrote:
 
-> Quoting Hao Ge (2023-05-08 19:12:14)
-> > Use devm_platform_ioremap_resource to take the place of of_iomap for
-> > avoid that we don't called iounmap when return some error or remove
-> > device.
-> > 
-> > Fixes: 4c02c9af3cb9 ("clk: mediatek: mt8173: Break down clock
-> > drivers and allow module build") Signed-off-by: Hao Ge
-> > <gehao@kylinos.cn> ---  
-> 
-> Is this v3?
-Hi Stephen
+--qN2H9Cv/ku1E+R1p
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-yes,Perhaps you are too busy,I have not received a response
-in the future, so you are unsure about the status of V2.
-So I adjusted the code and title make changes smaller and
-sent V3 for it.It is precisely because of these that I did 
-not continue the original mail thread.
+On Wed, May 10, 2023 at 03:57:18PM +0200, Alexander Stein wrote:
+> This fixes a copy & paste error.
+> No functional change intended, BUCK1_ENMODE_MASK equals BUCK2_ENMODE_MASK.
 
-Best regards
-Hao
+This doesn't apply against current code, please check and resend.  git
+can't find the SHAs this is based on...
 
+--qN2H9Cv/ku1E+R1p
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRcRIwACgkQJNaLcl1U
+h9BstggAgVMeJlI0X52WFhrifoBTIrNvp7KmS15xYnol7fTW9xvik3R7SP5XnJ+p
+yn9WMB4zK04uHnJxbx3UVoT2fJ26IRVB/ASBO6jdNB428l2GEYZ4fRr46QJM0yYf
+6z5zL38P9vILoqqxgnK3AyLw7bhk92udr5JCxXmY9HFEFdorUqttAsrt1SifdjZ+
+p/dbeW9S/uUTmCxQxoBP34k5qUcVozHpa+EbNfd2t1nuEw+vjCbAkq12k5hbcD2L
+8Z4UvXa5wVHb+UNwpfw/OLMu0IDbQZIlUqTYpP9nkk3jhiuXkUMhQNdSAIDY8xD9
+8FKbrxBTx6Y7ZB91mx8wwwnMli2ZmA==
+=NhwP
+-----END PGP SIGNATURE-----
+
+--qN2H9Cv/ku1E+R1p--
