@@ -2,47 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 191746FE9A9
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:56:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D3AA6FE9AB
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:57:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230004AbjEKBz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 21:55:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42338 "EHLO
+        id S230316AbjEKB5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 21:57:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjEKBz5 (ORCPT
+        with ESMTP id S229447AbjEKB5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 21:55:57 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D95851FE1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 18:55:55 -0700 (PDT)
+        Wed, 10 May 2023 21:57:20 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 67B1E5B89;
+        Wed, 10 May 2023 18:57:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=cn2Bc
-        LMyMhxye3IxabtnbH4ZW+Rn/MMBFx9wan1/8Qw=; b=WkpwlhZOUtkAIyKMD5dMU
-        FfhWQ6WdpmuXGxKoNzLhrIaikgJaGO29pY9mTGIfbfBPjv4MM1U+EEdwJsO1yTAZ
-        QZfrdDPO8q5W6ssAO7qDkbm6wwjASdKdphl8mRpO7K2N/70maZx8XNuf25XAHJOs
-        2ORHuWxFwX6zgrXYN6+T5k=
-Received: from zhangf-virtual-machine.localdomain (unknown [180.111.102.183])
-        by zwqz-smtp-mta-g2-2 (Coremail) with SMTP id _____wB3f7MQS1xkGnWFAA--.60569S2;
-        Thu, 11 May 2023 09:55:29 +0800 (CST)
-From:   zhangfei <zhang_fei_0403@163.com>
-To:     conor.dooley@microchip.com
-Cc:     ajones@ventanamicro.com, aou@eecs.berkeley.edu,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-        palmer@dabbelt.com, paul.walmsley@sifive.com,
-        zhang_fei_0403@163.com, zhangfei@nj.iscas.ac.cn
-Subject: Re: [PATCH 1/2] RISC-V: lib: Improve memset assembler formatting 
-Date:   Thu, 11 May 2023 09:55:23 +0800
-Message-Id: <20230511015523.3430-1-zhang_fei_0403@163.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230510-cricket-dwindling-a35d40f1da10@wendy>
-References: <20230510-cricket-dwindling-a35d40f1da10@wendy>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wB3f7MQS1xkGnWFAA--.60569S2
-X-Coremail-Antispam: 1Uf129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UbIYCTnIWIevJa73UjIFyTuYvj4R9txSUUUUU
-X-Originating-IP: [180.111.102.183]
-X-CM-SenderInfo: x2kd0w5bihxsiquqjqqrwthudrp/xtbCfABsl2DcJgufkwABsb
+        s=s110527; h=Content-Type:From:Mime-Version:Subject:Message-Id:
+        Date; bh=TCXfahH34hYJqqM1SC8s3Anj/uF5zt4/S2+/aK5TN+I=; b=lYFYwiP
+        rORVUhXZD/CUiM4kmhoO3M+EWN1NOs6+lYJ6oOfi1P2OPnoYs1MTEDRgFg/LyS5G
+        zQniEN2HYeVQF6wbFXKkeUPadp/QGfUEKY5rSd7Sxx8MVbCrJIRDKSMgo4jy4l4f
+        EQ9LA/kBePjJTIN4jaV6NAzpzByBfreTBDXo=
+Received: from smtpclient.apple (unknown [223.148.153.92])
+        by zwqz-smtp-mta-g3-4 (Coremail) with SMTP id _____wB3n4ddS1xkRp4sBg--.9829S2;
+        Thu, 11 May 2023 09:56:46 +0800 (CST)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Hao Ge <gehao618@163.com>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH] mediatek/clk-mt8173-apmixedsys: use devm_of_iomap to avoid resource leak in clk_mt8173_apmixed_probe
+Message-Id: <7F568F0F-1F19-4302-8BBB-556146B3C521@163.com>
+Date:   Thu, 11 May 2023 09:56:35 +0800
+Cc:     Hao Ge <gehao@kylinos.cn>, angelogioacchino.delregno@collabora.com,
+        matthias.bgg@gmail.com, mturquette@baylibre.com,
+        wenst@chromium.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+To:     Stephen Boyd <sboyd@kernel.org>
+X-Mailer: iPhone Mail (20E252)
+X-CM-TRANSID: _____wB3n4ddS1xkRp4sBg--.9829S2
+X-Coremail-Antispam: 1Uf129KBjvJXoWrZw4rGw1xCr45Ar1fKr1UGFg_yoW8Jr1kpF
+        ykKFWqkFWkJFy2ka1vva18tay5Aws8ZrZ3Z3Wagr9Ivan8Zry5u34rKFs5XF48trW3Gr4Y
+        qrZ8K3s7KFW7ZaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x07jI5lbUUUUU=
+X-Originating-IP: [223.148.153.92]
+X-CM-SenderInfo: 5jhkt0qwryqiywtou0bp/1tbiNB9sFlaECrAlcAAAss
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
@@ -54,13 +56,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zhangfei <zhangfei@nj.iscas.ac.cn>
+=EF=BB=BF
 
-Hi,
+> On May 11, 2023, at 09:27, Hao Ge <gehao618@163.com> wrote:
+>=20
+> =EF=BB=BFOn Wed, 10 May 2023 14:18:08 -0700
+> Stephen Boyd <sboyd@kernel.org> wrote:
+>=20
+>> Quoting Hao Ge (2023-05-08 19:12:14)
+>>> Use devm_platform_ioremap_resource to take the place of of_iomap for
+>>> avoid that we don't called iounmap when return some error or remove
+>>> device.
+>>> Fixes: 4c02c9af3cb9 ("clk: mediatek: mt8173: Break down clock
+>>> drivers and allow module build") Signed-off-by: Hao Ge
+>>> <gehao@kylinos.cn> --- =20
+>> Is this v3?
+> Hi Stephen
+>=20
+> yes,Perhaps you are too busy,I have not received a response
+> in the future, so you are unsure about the status of V2.
+> So I adjusted the code and title make changes smaller and
+> sent V3 for it.It is precisely because of these that I did=20
+> not continue the original mail thread.
+>=20
+> Best regards
+> Hao
+Hi Stephen
 
-Due to the chaotic response in my previous email, I am sorry for this. I have 
-reorganized patch v2 and sent it to you. Please reply under the latest patch.
+I made a few typos in my previous email. To avoid misunderstandings, I corre=
+cted them and sent a new one.
 
-Thanks,
-Fei Zhang
+Yes,Perhaps you are too busy,I have not received a response in the future, s=
+o I am unsure about the status of V2.So I adjusted the code and title make c=
+hanges smaller and
+sent V3 for it.It is precisely because of these that I did not continue the o=
+riginal mail thread.
+
+Best regards
+Hao=
 
