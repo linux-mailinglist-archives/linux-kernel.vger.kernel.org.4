@@ -2,152 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A71C6FED08
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:39:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13FE46FED09
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:40:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237174AbjEKHjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 03:39:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
+        id S237530AbjEKHjr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 03:39:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237123AbjEKHjj (ORCPT
+        with ESMTP id S237409AbjEKHjn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 03:39:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD662115
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:38:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683790734;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=P8V2QwKOyBLdpEe+T44KJG8tyl5eRHglc0YEq82GCmE=;
-        b=O5F9sBhnW/i4lP3Qy+iGStNAgYoLYNizCbqx3602EnteLgZXZWinp6YXl7efjqIvNbY3U8
-        WACfa/3f4sU5p1baNO1zUnhz0KxbOBe9QSEGdAc2QNrvwLzEsbGON+r6PSXJq48+k5W/Dz
-        KoLPsWNqAIPD7kDD0LDbZPacNeKa9yg=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-582-cAzqYYDsM52c-0kzc-Bo_A-1; Thu, 11 May 2023 03:38:53 -0400
-X-MC-Unique: cAzqYYDsM52c-0kzc-Bo_A-1
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3078df8ae31so3203243f8f.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:38:52 -0700 (PDT)
+        Thu, 11 May 2023 03:39:43 -0400
+Received: from mail-vk1-xa35.google.com (mail-vk1-xa35.google.com [IPv6:2607:f8b0:4864:20::a35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B601F10EB
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:39:40 -0700 (PDT)
+Received: by mail-vk1-xa35.google.com with SMTP id 71dfb90a1353d-44fdac26696so2618547e0c.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:39:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683790780; x=1686382780;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JPIfdZXpQclo2XOVCzhBUsw2JR/pG+gLtlBy53C+n8M=;
+        b=MmDiIH1cRCp5UdGpVzWlYl8NC2m8NByJ7QAYLF+3G33PcKcr36fIxB/q7Xy9tlxqXM
+         3U07Ytioo2gK4N7F4soZe3UeUarAlweUjoRskLpalbaH1dprd7s0T4b6nH+KJPdB6KLK
+         3qb4/sfLbDPPMJ/LQwrbOhc7MZ0iRaOzyzw0tdt9yWEjB0pSYSiiXRIx61Lzvn44jEfK
+         YHFsjcclhjbRlIdOuF62ak2MH45nawvlDWoBY8AwOOSGPmdRCtur18eJTaYBEyy4L5yZ
+         LHSAoKYJ9AVHil/RHpJgQM9hSoRdyOzjGWv2lBcy1bALNFrlqnjKekvHZJn27KoXn9T1
+         xP9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683790732; x=1686382732;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P8V2QwKOyBLdpEe+T44KJG8tyl5eRHglc0YEq82GCmE=;
-        b=Ey6OhyqgX/2ojPSWF4iNZOBnlbAr47jElDEBJGqIWjoC6YZFxIc/AsNQTamqer9xLV
-         oh6gyEaxNbWFlImI44l603wE4CrV55VKLycK2pOQABZ7eVMeXgseIGZaMsw1Kx6BUcrW
-         q4kVxIf2T11VwH+PvWwO5XbnPPRfZDkHPv69UXaYTXvkb1j/AvHPZ3pNSYluO8OkZTtS
-         OP/fVsFzEruN4E7ofX9NRPqNC1Lanc7anWzVNwbsq5IO2PmOHuh6hxaJjXK3DSPFUB/D
-         3XvxC7wpFHTjyDBS7F0+UTwQq2kW12NoWugGbq7W9ewdLFSIcn/LOmRYOuM+SULm0JWa
-         roiA==
-X-Gm-Message-State: AC+VfDx275RQ1Fq3iNCe7sLYSXnyOvV7YsHAJ4lp3l9U8mWeelXJXVwk
-        ssPOeORjsSy/bmnTgz0eYzxo+1yphGCmIXoHCD50oMvRvjMYPiupzL3u1d9bEKKW0T4n3LlB+Uy
-        ZjYdOqLSmia2nJL8kHKg/3YRM
-X-Received: by 2002:adf:db50:0:b0:306:2c01:4029 with SMTP id f16-20020adfdb50000000b003062c014029mr13772014wrj.5.1683790731848;
-        Thu, 11 May 2023 00:38:51 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6x0IJBlDxk1RWKp0J3GN8GvUv8W7bVfSINnkrH9+VJR1VdtxEl1+FWChFsErbmp5oDi7Ey4g==
-X-Received: by 2002:adf:db50:0:b0:306:2c01:4029 with SMTP id f16-20020adfdb50000000b003062c014029mr13771996wrj.5.1683790731594;
-        Thu, 11 May 2023 00:38:51 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:280:24f0:9db0:474c:ff43:9f5c? ([2a01:e0a:280:24f0:9db0:474c:ff43:9f5c])
-        by smtp.gmail.com with ESMTPSA id n16-20020a5d67d0000000b002fae7408544sm19621051wrw.108.2023.05.11.00.38.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 May 2023 00:38:51 -0700 (PDT)
-Message-ID: <ae970fc9-dc05-ebcc-ce31-997462fd41ec@redhat.com>
-Date:   Thu, 11 May 2023 09:38:50 +0200
+        d=1e100.net; s=20221208; t=1683790780; x=1686382780;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JPIfdZXpQclo2XOVCzhBUsw2JR/pG+gLtlBy53C+n8M=;
+        b=SirqxOtCIOgI9CGNAVGjQX6hVKS6VHkpv5pZCiTf9tD2ZPXt5Rm6k3uO8Lj1buPCLa
+         jspy9yOOUvtbAXS8ISbtFWXWoylXou9l94M+uCb/gS4qEnwA6KMWN63DeuwzAvovH3v9
+         b7iyW2FGpSxkjItBIqI3pKEeOTKGGRQr8dKwwJLKbfCbfpUlFN0x5n68lA8jfmQziRuh
+         vK69yc1FgzVJ039usM/7onpxpP/C5/cGfA55EDxB8jmTNSEu3vHMwgVZWgpx7F1o+/M8
+         e2TbQZ4LDL3pJlJaqkVOP7SSz7kvAV17Hh44Sh87KXT7kOGgWtaRCio7n0QEdV1OlwZs
+         utdQ==
+X-Gm-Message-State: AC+VfDzP2UTZ3xk1nibiDHwBbja6PwAJD8afsyCsmcd/T5+YCTEuwg2P
+        Rij4QyLKmNdCCMXVkjg0iwEXPe9Cpzp5xPgOAr4V0Q==
+X-Google-Smtp-Source: ACHHUZ5mO4TUw+8huugyRdeOBEQkw2CkR0y6yhHL3jbqqG8NKIq7PZrbNSEe+bqShRtnctkT/jAsFlG/55WhAKfO+go=
+X-Received: by 2002:a1f:60d8:0:b0:43f:b31b:f1d1 with SMTP id
+ u207-20020a1f60d8000000b0043fb31bf1d1mr6077121vkb.13.1683790779805; Thu, 11
+ May 2023 00:39:39 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] vfio/pci: take mmap write lock for io_remap_pfn_range
-Content-Language: en-US
-To:     Yan Zhao <yan.y.zhao@intel.com>, Jason Gunthorpe <jgg@nvidia.com>
-Cc:     Alex Williamson <alex.williamson@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kevin.tian@intel.com,
-        yishaih@nvidia.com, shameerali.kolothum.thodi@huawei.com
-References: <20230508125842.28193-1-yan.y.zhao@intel.com>
- <ZFkn3q45RUJXMS+P@nvidia.com>
- <20230508145715.630fe3ae.alex.williamson@redhat.com>
- <ZFwBYtjL1V0r5WW3@nvidia.com> <ZFyRlnXmEy6Enk4w@yzhao56-desk.sh.intel.com>
-From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@redhat.com>
-In-Reply-To: <ZFyRlnXmEy6Enk4w@yzhao56-desk.sh.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230505173012.881083-1-etienne.carriere@linaro.org>
+ <CAFA6WYMGw5Dh09BfZwmYtdWQOLGvft4DPuQt4mUByk55vQwjJg@mail.gmail.com>
+ <CAN5uoS9QZCRiN=USbSNm1vz34vg_9+msT0NP9B3mCAx9evesYQ@mail.gmail.com>
+ <CAFA6WYPL9MadOp1DYcMWcjD34wnwD+bRVtBmHS+hR=976HsopA@mail.gmail.com> <CAN5uoS_0pF=-9=gznYUOU9oWPKz8HkRb=6gTAumMv=Vey8qb0g@mail.gmail.com>
+In-Reply-To: <CAN5uoS_0pF=-9=gznYUOU9oWPKz8HkRb=6gTAumMv=Vey8qb0g@mail.gmail.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 11 May 2023 13:09:28 +0530
+Message-ID: <CAFA6WYNf0xk0QVKyJvRKx1cisLtbjkG_FTDQ47Q_FPAAu3WFHg@mail.gmail.com>
+Subject: Re: [PATCH v6 1/4] tee: optee: system call property
+To:     Etienne Carriere <etienne.carriere@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        op-tee@lists.trustedfirmware.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/11/23 08:56, Yan Zhao wrote:
-> On Wed, May 10, 2023 at 05:41:06PM -0300, Jason Gunthorpe wrote:
->> On Mon, May 08, 2023 at 02:57:15PM -0600, Alex Williamson wrote:
->>
->>> We already try to set the flags in advance, but there are some
->>> architectural flags like VM_PAT that make that tricky.  Cedric has been
->>> looking at inserting individual pages with vmf_insert_pfn(), but that
->>> incurs a lot more faults and therefore latency vs remapping the entire
->>> vma on fault.  I'm not convinced that we shouldn't just attempt to
->>> remove the fault handler entirely, but I haven't tried it yet to know
->>> what gotchas are down that path.  Thanks,
->>
->> I thought we did it like this because there were races otherwise with
->> PTE insertion and zapping? I don't remember well anymore.
->>
->> I vaugely remember the address_space conversion might help remove the
->> fault handler?
->>
-> What about calling vmf_insert_pfn() in bulk as below?
+On Thu, 11 May 2023 at 12:50, Etienne Carriere
+<etienne.carriere@linaro.org> wrote:
+>
+> On Thu, 11 May 2023 at 08:03, Sumit Garg <sumit.garg@linaro.org> wrote:
+> > (snip)
+> > > > >
+> > > > >  int optee_invoke_func(struct tee_context *ctx, struct tee_ioctl_invoke_arg *arg,
+> > > > > @@ -408,12 +412,15 @@ int optee_invoke_func(struct tee_context *ctx, struct tee_ioctl_invoke_arg *arg,
+> > > > >         struct optee_msg_arg *msg_arg;
+> > > > >         struct optee_session *sess;
+> > > > >         struct tee_shm *shm;
+> > > > > +       bool system_thread;
+> > > > >         u_int offs;
+> > > > >         int rc;
+> > > > >
+> > > > >         /* Check that the session is valid */
+> > > > >         mutex_lock(&ctxdata->mutex);
+> > > > >         sess = find_session(ctxdata, arg->session);
+> > > > > +       if (sess)
+> > > >
+> > > > This check is redundant if we move the assignment below...
+> > >
+> > > Here we change the sesssion attribute while the mutex is locked, in
+> > > case some equivalent call with that session is issued.
+> > > Below we return to caller once mutex is unlocked.
+> > > I think it is the safer behavior. What do you think?
+> >
+> > Aren't we only reading session attribute in order to capture value in
+> > a local variable: system_thread? I don't think that it would require a
+> > mutex.
+>
+> optee_system_session() sets session::use_sys_thread with mutex locked
+> hence I think we should get the attribute with the mutex locked.
+> See "[PATCH v6 3/4] tee: optee: support tracking system threads".
+>
 
-This works too, it is slightly slower than the io_remap_pfn_range() call
-but doesn't have the lockdep issues.
+Okay I see your point. Although I don't see a practical race between
+optee_invoke_func() vs optee_system_session(), you never know what
+complex kernel TEE client use-case comes up. So I can live with it
+being protected by a mutex.
 
-Thanks,
+-Sumit
 
-C.
-
-> And what is address_space conversion?
-> 
-> 
-> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
-> index a5ab416cf476..1476e537f593 100644
-> --- a/drivers/vfio/pci/vfio_pci_core.c
-> +++ b/drivers/vfio/pci/vfio_pci_core.c
-> @@ -1686,6 +1686,7 @@ static vm_fault_t vfio_pci_mmap_fault(struct vm_fault *vmf)
->          struct vfio_pci_core_device *vdev = vma->vm_private_data;
->          struct vfio_pci_mmap_vma *mmap_vma;
->          vm_fault_t ret = VM_FAULT_NOPAGE;
-> +       unsigned long base_pfn, offset, i;
-> 
->          mutex_lock(&vdev->vma_lock);
->          down_read(&vdev->memory_lock);
-> @@ -1710,12 +1711,15 @@ static vm_fault_t vfio_pci_mmap_fault(struct vm_fault *vmf)
->                          goto up_out;
->          }
-> 
-> -       if (io_remap_pfn_range(vma, vma->vm_start, vma->vm_pgoff,
-> -                              vma->vm_end - vma->vm_start,
-> -                              vma->vm_page_prot)) {
-> -               ret = VM_FAULT_SIGBUS;
-> -               zap_vma_ptes(vma, vma->vm_start, vma->vm_end - vma->vm_start);
-> -               goto up_out;
-> +       base_pfn = (vmf->address - vma->vm_start) >> PAGE_SHIFT;
-> +       base_pfn += vma->vm_pgoff;
-> +       for (i = vma->vm_start; i < vma->vm_end; i += PAGE_SIZE) {
-> +               offset = (i - vma->vm_start) >> PAGE_SHIFT;
-> +               ret = vmf_insert_pfn(vma, i, base_pfn + offset);
-> +               if (ret != VM_FAULT_NOPAGE) {
-> +                       zap_vma_ptes(vma, vma->vm_start, vma->vm_end - vma->vm_start);
-> +                       goto up_out;
-> +               }
->          }
-> 
->          if (__vfio_pci_add_vma(vdev, vma)) {
-> 
-
+> Etienne
+>
+> >
+> > -Sumit
+> >
+> > >
+> > > Best regards,
+> > > Etienne
+> > >
+> > > >
+> > > > > +               system_thread = sess->use_sys_thread;
+> > > > >         mutex_unlock(&ctxdata->mutex);
+> > > > >         if (!sess)
+> > > > >                 return -EINVAL;
+> > > >
+> > > > ...here as:
+> > > >            system_thread = sess->use_sys_thread;
+> > > > (snip)
