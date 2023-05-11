@@ -2,149 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C0C6FFD61
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 01:34:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 881C06FFD6F
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 01:44:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239673AbjEKXea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 19:34:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40134 "EHLO
+        id S239473AbjEKXoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 19:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239644AbjEKXeR (ORCPT
+        with ESMTP id S239118AbjEKXoF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 19:34:17 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25F1761B3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 16:34:09 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b9a25f6aa0eso16973704276.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 16:34:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683848048; x=1686440048;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=5OzO4AIyk8CcuO4AHVhystfnHKvcEmys7VtS5dmQ4ZE=;
-        b=FabEf2n42yFdnZkLbN5ZUvfZEnmjHnwc4bL3soeRte3ESjENRciPwc/+PDZO96NOZy
-         ZGGZDkN10x7aFM5fJzHXRkvFdq8wZ+4fCecT0IaaAcnc/wXwuLylmJmoTdVDvJR4UWYi
-         vg476bGBpmuyYEsvZY+Xb3uAuueflvB9z5Gi6PzZpVSHGWmOJV0QMIguBJEHhrmxAP1K
-         zPe2v24Slvbp+iTgxUkYTDijq8YotnQYgnIbnVIY/C4JG1djQ81M6oZIoFX2JV4vADOR
-         QZcvWzaC97bo95iCT9wb0MUtrAyG16dPWRGRc8ag3Gb0XE0JF0vq+rhlLsdjQhb/Fuzw
-         9IHg==
+        Thu, 11 May 2023 19:44:05 -0400
+Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E865B4EC5
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 16:44:03 -0700 (PDT)
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com [209.85.219.69])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 006083F4D8
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 23:35:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1683848137;
+        bh=AavuI0TWlPi0CnfBPjihPkVAm61gVpB2DpqaI9wFivM=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=ilKprwkJ4of1E0Bh5ZESzfBsCYnMUqRn3zj2bG2U1Y6zCIgX5q80PiSBjFsFH4sN5
+         /LCNGzcQwO5hZuVVcZjkxB540wrP4lehgCE25R/8sPnPj1jC1sL285BibLn43gSswp
+         nrr5+vPKc/vKxyy4XPkxz2FP6+auMsqeoJxMALDDvDJb6xgpWQVXFSfAwnbKHJusdm
+         YCoR8IQVQ1MxSvRKTxyvz55eIkJR+X9caHX1Q+GYC3YbytrDkgmPmgME4RGfF+pii1
+         PCCTQAf578Atwu2a+cymDmnHeOBXq7EwAvljgsL3nDwcyrnXtYBMCoxrxQaTS52NMe
+         UGRIcJwYapXJg==
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-61b5f526a79so126105956d6.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 16:35:36 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683848048; x=1686440048;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5OzO4AIyk8CcuO4AHVhystfnHKvcEmys7VtS5dmQ4ZE=;
-        b=XQAuRlLL/0YVRF6RTc3BIBOW+tpgyQRhrMHp06xHngZqclsw8QLCoZtMoPD2/axTQ+
-         OkhKLHonHm0EQ6Pw7OFUlwhY3gV3iUQ7LaumyptVyc3cBTGHup3Wn/i+uaAucp1espbj
-         /ah473EoOG0t8/MVxtVN9mSWQgiKHLLaJyadwxqFPkHkJ1grJGvhdoQVc2ELaAkeoXzl
-         TbcgjUja2xDbVjUuOn/hS/SV5tlOdG0kKgXJwsUuvuzWja+IWKtU12ijsqoeKbw3N2MZ
-         DS1D3PhQh5Wgw1t0NqPH1C51qp55wqsCePwqLDCCQtvG4/HQwvi93RvxFlhwdtalgkCg
-         v2Sw==
-X-Gm-Message-State: AC+VfDx5h8PFJNZevAkgwFztOpYht06krhXr8qVmNn/PLw7kvSFi0Ahk
-        pm1KZziH70fPWhEENhs0F1521KAcm5E=
-X-Google-Smtp-Source: ACHHUZ6eSWGmngZVlLRhCtXtjaxjnWEvvr2M16cfqckuopueDFEMBXB17+9yzcQfk7oe7i5bM+LlMeGzC9Q=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:e746:0:b0:ba6:c52a:cb7a with SMTP id
- e67-20020a25e746000000b00ba6c52acb7amr1357395ybh.4.1683848048189; Thu, 11 May
- 2023 16:34:08 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 11 May 2023 16:33:51 -0700
-In-Reply-To: <20230511233351.635053-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20230511233351.635053-1-seanjc@google.com>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Message-ID: <20230511233351.635053-9-seanjc@google.com>
-Subject: [PATCH v2 8/8] KVM: x86: Move common handling of PAT MSR writes to kvm_set_msr_common()
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Kai Huang <kai.huang@intel.com>,
-        Wenyao Hai <haiwenyao@uniontech.com>,
-        Ke Guo <guoke@uniontech.com>
+        d=1e100.net; s=20221208; t=1683848135; x=1686440135;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AavuI0TWlPi0CnfBPjihPkVAm61gVpB2DpqaI9wFivM=;
+        b=cqvcG70APiFzL7++MiVe+/KzCanqNpFX3T7UjtjtThLaTU/wn/3PqPBL7MJvMIic2F
+         kvbYVK4YwVRFx4FATH+t2hPQsH/DB89R9tn4QdRU3PgypLNMGIkILnJ8jQClojGBNy7C
+         +ygfJvnem9Cl41krNrKye2b40oSbva4zrRVPoF9CRgLaWeYs1oAUoeTV8tjz9E/j1jAw
+         1zBamWNIH0C77xPRzBopVyanDc/+t5k4pGeVHS43gXyse1VnjQYmy3fonGxOiPfA2cCn
+         1I/5nS1mzErV4WwC8v35wz3uBUr5fMFwdECqmExLYieENQ56GZElrHl6OvOplKXngtAH
+         nfAw==
+X-Gm-Message-State: AC+VfDzuDTKtoV1J1fJ+7oWINR2RmMOId9gDd5b71bq9Ge2Whsu7xc8i
+        6GKmI0yyKA20KeBBC1Z23EPPmnyKWMCSxoUz83OM51rXziZ7tK3bieu45bwC8T16CPEcf56yqrF
+        CK0t2E32y8kzRncl1Nkxev/1i3sZdPqbw4qXsyKVrusfzAK1XbWnzkI24lFx2hhlz/A==
+X-Received: by 2002:a05:6214:4111:b0:606:5103:9c98 with SMTP id kc17-20020a056214411100b0060651039c98mr31512343qvb.34.1683848135684;
+        Thu, 11 May 2023 16:35:35 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6X2h4PhBnWCS1JA9fsEFMvT4e/yv9Ou8UzrL8YE7aB8SB5MXK8wwK0ov0ztdzDRtm/ZrxJJRZOUJYD9Md7Uq0=
+X-Received: by 2002:a05:6214:4111:b0:606:5103:9c98 with SMTP id
+ kc17-20020a056214411100b0060651039c98mr31512322qvb.34.1683848135398; Thu, 11
+ May 2023 16:35:35 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230511133610.99759-1-kai.heng.feng@canonical.com>
+ <20230511133610.99759-2-kai.heng.feng@canonical.com> <35b33699-227d-d1f5-285a-e18ef8e91e57@linux.intel.com>
+In-Reply-To: <35b33699-227d-d1f5-285a-e18ef8e91e57@linux.intel.com>
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+Date:   Fri, 12 May 2023 07:35:23 +0800
+Message-ID: <CAAd53p7b-kTzU5ZNi-9RCYSjusvarFXXcsL6LSCtc6VO+i7d=g@mail.gmail.com>
+Subject: Re: [PATCH v5 2/3] PCI/AER: Disable AER interrupt on suspend
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
+        koba.ko@canonical.com, Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        "Oliver O'Halloran" <oohall@gmail.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move the common check-and-set handling of PAT MSR writes out of vendor
-code and into kvm_set_msr_common().  This aligns writes with reads, which
-are already handled in common code, i.e. makes the handling of reads and
-writes symmetrical in common code.
+On Fri, May 12, 2023 at 6:08=E2=80=AFAM Sathyanarayanan Kuppuswamy
+<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
+>
+>
+>
+> On 5/11/23 6:36 AM, Kai-Heng Feng wrote:
+> > PCIe service that shares IRQ with PME may cause spurious wakeup on
+> > system suspend.
+> >
+> > This is very similar to previous attempts to suspend AER and DPC [1],
+> > but this time disabling AER IRQ is to prevent immediate PME wakeup when
+> > AER shares the same IRQ line with PME.
+>
+> IMHO, you don't need to mention the previous submission reason.
 
-Alternatively, the common handling in kvm_get_msr_common() could be moved
-to vendor code, but duplicating code is generally undesirable (even though
-the duplicatated code is trivial in this case), and guest writes to PAT
-should be rare, i.e. the overhead of the extra function call is a
-non-issue in practice.
+Sure, will remove it in next revision.
 
-Suggested-by: Kai Huang <kai.huang@intel.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/svm/svm.c | 7 ++++---
- arch/x86/kvm/vmx/vmx.c | 7 +++----
- arch/x86/kvm/x86.c     | 6 ------
- 3 files changed, 7 insertions(+), 13 deletions(-)
+>
+> >
+> > It's okay to disable AER because PCIe Base Spec 5.0, section 5.2 "Link
+> > State Power Management" states that TLP and DLLP transmission is
+> > disabled for a Link in L2/L3 Ready (D3hot), L2 (D3cold with aux power)
+> > and L3 (D3cold), hence we don't lose much here to disable AER IRQ durin=
+g
+> > system suspend.
+>
+> May be something like below?
+>
+> PCIe services that share an IRQ with PME, such as AER or DPC, may cause a
+> spurious wakeup on system suspend. To prevent this, disable the AER
+> interrupt notification during the system suspend process.
+>
+> As Per PCIe Base Spec 5.0, section 5.2, titled "Link State Power Manageme=
+nt",
+> TLP and DLLP transmission are disabled for a Link in L2/L3 Ready (D3hot),=
+ L2
+> (D3cold with aux power) and L3 (D3cold) states. So disabling the AER noti=
+fication
+> during suspend and re-enabling them during the resume process should not =
+affect
+> the basic functionality.
 
-diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
-index db237ccdc957..61d329760f6c 100644
---- a/arch/x86/kvm/svm/svm.c
-+++ b/arch/x86/kvm/svm/svm.c
-@@ -2935,9 +2935,10 @@ static int svm_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr)
- 
- 		break;
- 	case MSR_IA32_CR_PAT:
--		if (!kvm_pat_valid(data))
--			return 1;
--		vcpu->arch.pat = data;
-+		ret = kvm_set_msr_common(vcpu, msr);
-+		if (ret)
-+			break;
-+
- 		svm->vmcb01.ptr->save.g_pat = data;
- 		if (is_guest_mode(vcpu))
- 			nested_vmcb02_compute_g_pat(svm);
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 33b8625d3541..2d9d155691a7 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -2287,10 +2287,9 @@ static int vmx_set_msr(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 			return 1;
- 		goto find_uret_msr;
- 	case MSR_IA32_CR_PAT:
--		if (!kvm_pat_valid(data))
--			return 1;
--
--		vcpu->arch.pat = data;
-+		ret = kvm_set_msr_common(vcpu, msr_info);
-+		if (ret)
-+			break;
- 
- 		if (is_guest_mode(vcpu) &&
- 		    get_vmcs12(vcpu)->vm_exit_controls & VM_EXIT_SAVE_IA32_PAT)
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index d71cf924cd8f..3759737c0873 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -3701,12 +3701,6 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
- 		}
- 		break;
- 	case MSR_IA32_CR_PAT:
--		/*
--		 * Writes to PAT should be handled by vendor code as both SVM
--		 * and VMX track the guest's PAT in the VMCB/VMCS.
--		 */
--		WARN_ON_ONCE(1);
--
- 		if (!kvm_pat_valid(data))
- 			return 1;
- 
--- 
-2.40.1.606.ga4b1b128d6-goog
+I'll shamelessly use this in the commit message :)
 
+Kai-Heng
+
+>
+> >
+> > [1] https://lore.kernel.org/linux-pci/20220408153159.106741-1-kai.heng.=
+feng@canonical.com/
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D216295
+> >
+> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
+> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> > ---
+> > v5:
+> >  - Wording.
+> >
+> > v4:
+> > v3:
+> >  - No change.
+> >
+> > v2:
+> >  - Only disable AER IRQ.
+> >  - No more check on PME IRQ#.
+> >  - Use helper.
+> >
+> >  drivers/pci/pcie/aer.c | 22 ++++++++++++++++++++++
+> >  1 file changed, 22 insertions(+)
+> >
+> > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
+> > index 1420e1f27105..9c07fdbeb52d 100644
+> > --- a/drivers/pci/pcie/aer.c
+> > +++ b/drivers/pci/pcie/aer.c
+> > @@ -1356,6 +1356,26 @@ static int aer_probe(struct pcie_device *dev)
+> >       return 0;
+> >  }
+> >
+> > +static int aer_suspend(struct pcie_device *dev)
+> > +{
+> > +     struct aer_rpc *rpc =3D get_service_data(dev);
+> > +     struct pci_dev *pdev =3D rpc->rpd;
+> > +
+> > +     aer_disable_irq(pdev);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static int aer_resume(struct pcie_device *dev)
+> > +{
+> > +     struct aer_rpc *rpc =3D get_service_data(dev);
+> > +     struct pci_dev *pdev =3D rpc->rpd;
+> > +
+> > +     aer_enable_irq(pdev);
+> > +
+> > +     return 0;
+> > +}
+> > +
+> >  /**
+> >   * aer_root_reset - reset Root Port hierarchy, RCEC, or RCiEP
+> >   * @dev: pointer to Root Port, RCEC, or RCiEP
+> > @@ -1420,6 +1440,8 @@ static struct pcie_port_service_driver aerdriver =
+=3D {
+> >       .service        =3D PCIE_PORT_SERVICE_AER,
+> >
+> >       .probe          =3D aer_probe,
+> > +     .suspend        =3D aer_suspend,
+> > +     .resume         =3D aer_resume,
+> >       .remove         =3D aer_remove,
+> >  };
+> >
+>
+> --
+> Sathyanarayanan Kuppuswamy
+> Linux Kernel Developer
