@@ -2,128 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 724456FF1BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 14:43:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D0936FF1BD
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 14:44:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237524AbjEKMnU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 08:43:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40962 "EHLO
+        id S237540AbjEKMoC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 08:44:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbjEKMnS (ORCPT
+        with ESMTP id S236695AbjEKMoA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 08:43:18 -0400
-Received: from mail-vs1-xe2e.google.com (mail-vs1-xe2e.google.com [IPv6:2607:f8b0:4864:20::e2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3AA4C39
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 05:43:15 -0700 (PDT)
-Received: by mail-vs1-xe2e.google.com with SMTP id ada2fe7eead31-4360e73d0d4so2566228137.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 05:43:15 -0700 (PDT)
+        Thu, 11 May 2023 08:44:00 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A20A4EDD
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 05:43:59 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-965fc25f009so1266821766b.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 05:43:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1683808994; x=1686400994;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jc4TG/e8NTwXjjYtMMN70anYqnJTjgk3/xcobt+webk=;
-        b=aNc1dkG0RMJEXhOtmHTOutlIkXZRjlKU8wzGsMrWh+1/bpZ9Ht6yx5MREwp/LkH5JE
-         PhLLdRSCx77/l45wiIekoD8va8ahZL6OIPKwJOWFvNHCARgTiYgD4TprQ0F4539tSGtu
-         MLndSaNme+ZvnUaRwjrdW5dXpJx8kQJGGebs8A7fST5L4rVTyNZFDctiemfg6cKMW3FI
-         3VLTu0Onb6WKNdJrHI5FwbA+W29XIlLcG5qwYs/EtN2XsTtEhrowyaIJD/mJX9gU4FWs
-         /D0wvSuXXlPpbn04spOSbbXBYwO2ZDYmnZWXs2EoXDGyKyphJw93lQ5ocMgw+sO2Ov3I
-         jH1Q==
+        d=linaro.org; s=google; t=1683809037; x=1686401037;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=B78qU79u+pggk87zvrUws0OM04ktfZG0Nhpeqi3E0n8=;
+        b=VrdiPEZHXAuSQA8o7hWdh19QMusTk5IlknJDmA7J89JNw0CokXkenxV0oNTWnqVtHQ
+         Gd2PoFTa+4+44hjucLWAVdsN70ACrvu7r8jlPZzAZNppbf7a9OflRIePTh2Fx+QmRWvI
+         T/KThbGFtvBPV+UW3UbbSg3oK8l3q5VVP0KNm4cpghruN8pNW9QJ50RTmO8/wEWIhXnL
+         mKxFvLAvINZdsWJd7Mr0vhws1V91ST8WXJDfdxJYDo+bDze18crMXA8zodsUNQ2QpcK6
+         8e3sKwZQf+E3LFbdPxxWrWW1PL4KuFRfQ4k+TSF5CzTLTMa5RheKFhsOlwETvWEKzpqC
+         76+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683808994; x=1686400994;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1683809037; x=1686401037;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=jc4TG/e8NTwXjjYtMMN70anYqnJTjgk3/xcobt+webk=;
-        b=BU2NU6VvdrtSzz9x8MRso+pTSYUAxnFP5w+IdyGOGEfyjsbgAWGQ+tzrppJW90Js3O
-         omSMHrGU6Fva6dttwc/kKANN75Xy3AmDVjGipCreuRSxUrXL2iblTKzwtc4hBGFcZP69
-         kd3qZp5jEpbux51vHqfVCHToWQ9yMB3vqwZCAcsqyOgh/AVGVS6XpuaC1SCOWiKe5PG7
-         K8XTmx6d1IDhBw1FpZ0Chpm5DJLxIxrsqO8c2p9A/gCZ7//g4H0uH6VoJ0aFRPtnEQev
-         EZG80kHP4PRVfTymCsvi5CwoGh8TFh0P7Btr9EtvFPRd0LuqRk1ZJs4SvYU6/ItybjXJ
-         4lLQ==
-X-Gm-Message-State: AC+VfDzKWIEVKZwDIDSqkkRcup4IkjwEIoNL2nZX6AsVdG1QZC4FDsn0
-        ezoZ7R63rJ/s3FmUSA7FoJ3/txJjlu78dBkiSNXL2w==
-X-Google-Smtp-Source: ACHHUZ4npqirNcTYWVQyZx0Yvg4ZmtVZnpcgNx1G5V0A9Urqjcw+ydi8ESzpy0ob2Z2c09L1mbaKhxgLPTeRYMSlcM8=
-X-Received: by 2002:a67:e3bc:0:b0:42f:78d5:d987 with SMTP id
- j28-20020a67e3bc000000b0042f78d5d987mr7041065vsm.1.1683808994426; Thu, 11 May
- 2023 05:43:14 -0700 (PDT)
+        bh=B78qU79u+pggk87zvrUws0OM04ktfZG0Nhpeqi3E0n8=;
+        b=anhMyH5Wxn+Y9Y6K5vp7qZ+4+V/SbtS4WY3PLjlTRhXLULuO2xx1b9daApV2cxxgqb
+         Fa/aWI5WKFc95AGmQw570FgGjweDErXM4n7nDwmnCkWW/Zl9JxNNq4ZlM4iv0s78Bprr
+         HhTHaOWN1d7I9FLObgKqBauN+vI+9pCv1tsdgUGVjf+SpEOQ9HSXSomMQJXDJJ8FRhrF
+         61A07gfAfgSEq/WMxAUiG9Sj6IpqOYeOvpZcG0bBA8Wl09hJhRTTc6IgbpXKuE/2WUCJ
+         P8cSb77di+rMGd9JbP287L12iyKxFSvo7Ou0zflplACycCJB5NKuboUOrhOEoDV8gdwl
+         xf5A==
+X-Gm-Message-State: AC+VfDx2/joQLySUw7vEuDKP3h7G6kyFjRE+euYPnfSt1ajP0zvOEDyV
+        drn3NNrGriu8oNJ2cSUoLNtXtA==
+X-Google-Smtp-Source: ACHHUZ4VDdroTP4QStI01ZbfFBFsbxkbjFxJGhgNLoKlOsYEPxKm1wA+/iiFtAEmZpdlF9EWF00hVg==
+X-Received: by 2002:a17:907:72d1:b0:967:dff4:e0f9 with SMTP id du17-20020a17090772d100b00967dff4e0f9mr12801672ejc.71.1683809037527;
+        Thu, 11 May 2023 05:43:57 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:41e7:1b68:d38e:1348])
+        by smtp.gmail.com with ESMTPSA id t27-20020a170906269b00b0096616aef7e5sm4073675ejc.149.2023.05.11.05.43.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 05:43:56 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH] arm64: dts: mba6ulx: correct GPIO keys wakeup
+Date:   Thu, 11 May 2023 14:43:53 +0200
+Message-Id: <168380903252.184807.8687658539539135053.b4-ty@linaro.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230304123341.34223-1-krzysztof.kozlowski@linaro.org>
+References: <20230304123341.34223-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <20230411171521.29678-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20230411171521.29678-1-andriy.shevchenko@linux.intel.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Thu, 11 May 2023 14:43:03 +0200
-Message-ID: <CAMRc=MeugGZmPxrezTxRR4CiiULeWZjsmdJbQEPq159mWfEVTQ@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] selftests: gpio: gpio-sim: Fix BUG: test FAILED
- due to recent change
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     linux-gpio@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bamvor Jian Zhang <bamv2005@gmail.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 11, 2023 at 7:15=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> From: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
->
-> According to Mirsad the gpio-sim.sh test appears to FAIL in a wrong way
-> due to missing initialisation of shell variables:
->
->  4.2. Bias settings work correctly
->  cat: /sys/devices/platform/gpio-sim.0/gpiochip18/sim_gpio0/value: No suc=
-h file or directory
->  ./gpio-sim.sh: line 393: test: =3D: unary operator expected
->  bias setting does not work
->  GPIO gpio-sim test FAIL
->
-> After this change the test passed:
->
->  4.2. Bias settings work correctly
->  GPIO gpio-sim test PASS
->
-> His testing environment is AlmaLinux 8.7 on Lenovo desktop box with
-> the latest Linux kernel based on v6.2:
->
->   Linux 6.2.0-mglru-kmlk-andy-09238-gd2980d8d8265 x86_64
->
-> Suggested-by: Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> ---
->  tools/testing/selftests/gpio/gpio-sim.sh | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/tools/testing/selftests/gpio/gpio-sim.sh b/tools/testing/sel=
-ftests/gpio/gpio-sim.sh
-> index 9f539d454ee4..fa2ce2b9dd5f 100755
-> --- a/tools/testing/selftests/gpio/gpio-sim.sh
-> +++ b/tools/testing/selftests/gpio/gpio-sim.sh
-> @@ -389,6 +389,9 @@ create_chip chip
->  create_bank chip bank
->  set_num_lines chip bank 8
->  enable_chip chip
-> +DEVNAME=3D`configfs_dev_name chip`
-> +CHIPNAME=3D`configfs_chip_name chip bank`
-> +SYSFS_PATH=3D"/sys/devices/platform/$DEVNAME/$CHIPNAME/sim_gpio0/value"
->  $BASE_DIR/gpio-mockup-cdev -b pull-up /dev/`configfs_chip_name chip bank=
-` 0
->  test `cat $SYSFS_PATH` =3D "1" || fail "bias setting does not work"
->  remove_chip chip
-> --
-> 2.40.0.1.gaa8946217a0b
->
 
-Queued for fixes. Thanks!
+On Sat, 04 Mar 2023 13:33:41 +0100, Krzysztof Kozlowski wrote:
+> gpio-keys,wakeup is a deprecated property.
+> 
+> 
 
-Bart
+Applied, thanks!
+
+[1/1] arm64: dts: mba6ulx: correct GPIO keys wakeup
+      https://git.kernel.org/krzk/linux-dt/c/7c4f1f1830648bbdce02b13ff5f215c7400e7ea0
+
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
