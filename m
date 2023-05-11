@@ -2,50 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8FBFA6FFAAB
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DFB66FFAAC
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:42:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239499AbjEKTmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 15:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57514 "EHLO
+        id S239319AbjEKTmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 15:42:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239395AbjEKTl4 (ORCPT
+        with ESMTP id S239396AbjEKTl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 11 May 2023 15:41:56 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC6AEDD8B;
-        Thu, 11 May 2023 12:41:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7029FD073;
+        Thu, 11 May 2023 12:41:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 946E865121;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 51C936511B;
+        Thu, 11 May 2023 19:41:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 829B7C433EF;
         Thu, 11 May 2023 19:41:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85F90C433D2;
-        Thu, 11 May 2023 19:41:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1683834075;
-        bh=DD2aM/JJlI9AmJhswCb2q6THb2WTgg1R14kyz4RwfdQ=;
+        bh=xFqnQ7dKbJoucFKjbDCN3aUSMWocxOUA89ooGcf/sYQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=WOa4voYnFSVWVGpv0nWB4VkApJmkCgn/1Lze/eQzuD8tj31UpiGq0tz6EbmtSQWlh
-         5/JdIqCQG62Mpgyno+amHZu4byH24HXs6/qFtxdhhMql90h4MrtFcZnqDhxBeDMSf6
-         wmQUJK0eXcEKmQWIfVSX/44szJ/Y/igqvHPOZwbnMcNIXmnzwYnc7mUmdQGhxyyTkT
-         wuzKLA74oGLnNKkU3KYVZVCbrixR6Lg7+h343asokQsuOnx1fWxWqz1zB701EKMfMu
-         ejy3AmFieVWFtCj+HqHUoGbTntp/zAA+iH5YmDgm4AJCVDLWbajL4RFs3D9jBe2qUP
-         VZSDLtRVB7rqA==
+        b=I1Bh+/Lla1AcBppgrFzt6nySk+e/MUONn2rtMrK6dzsdKEtCyZyLldrUBg1D87EfE
+         5OcIwjuWxsT35uL1lZs8TO5G0VSxvpgIL1IFUKU+/JskM+1mgpdBHsUo9/r0BLd/uO
+         B6y7sSdCM9Oh1BrhwHXPlgf04mun3e6NyJTe+xOOxARyGZecWpT3USX9t4fia5dmzH
+         64aa1R0NoODegtxW50+L82ptp/X6K37mHaLlT0h15SgxX4ZuLnGq8Hkcoc9VSQcnjh
+         h2oERAObEUN0YBNArT0EnufcHNJNQJqImTdXxV51MfcnHNwi9e87tU1GEfjQ9eDttS
+         FIKhGpCcc6vKA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     jasontao <jasontao@glenfly.com>,
-        Reaper Li <reaperlioc@glenfly.com>,
-        Takashi Iwai <tiwai@suse.de>, Sasha Levin <sashal@kernel.org>,
-        perex@perex.cz, tiwai@suse.com,
-        pierre-louis.bossart@linux.intel.com, kai.vehmanen@linux.intel.com,
-        yung-chuan.liao@linux.intel.com, rander.wang@intel.com,
-        orlandoch.dev@gmail.com, amadeuszx.slawinski@linux.intel.com,
-        fred.oh@linux.intel.com, bhelgaas@google.com, mkumard@nvidia.com,
-        alsa-devel@alsa-project.org
-Subject: [PATCH AUTOSEL 5.10 2/3] ALSA: hda: Glenfly: add HD Audio PCI IDs and HDMI Codec Vendor IDs.
-Date:   Thu, 11 May 2023 15:40:58 -0400
-Message-Id: <20230511194059.623695-2-sashal@kernel.org>
+Cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>, kadlec@netfilter.org,
+        fw@strlen.de, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 5.10 3/3] netfilter: nf_tables: deactivate anonymous set from preparation phase
+Date:   Thu, 11 May 2023 15:40:59 -0400
+Message-Id: <20230511194059.623695-3-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230511194059.623695-1-sashal@kernel.org>
 References: <20230511194059.623695-1-sashal@kernel.org>
@@ -63,143 +60,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: jasontao <jasontao@glenfly.com>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit c51e431052e2eacfb23fbf6b39bc6c8770d9827a ]
+[ Upstream commit c1592a89942e9678f7d9c8030efa777c0d57edab ]
 
-Add a set of HD Audio PCI IDS, and the HDMI codec vendor IDs for
-Glenfly Gpus.
+Toggle deleted anonymous sets as inactive in the next generation, so
+users cannot perform any update on it. Clear the generation bitmask
+in case the transaction is aborted.
 
-- In default_bdl_pos_adj, set bdl to 128 as Glenfly Gpus have hardware
-limitation, need to increase hdac interrupt interval.
-- In azx_first_init, enable polling mode for Glenfly Gpu. When the codec
-complete the command, it sends interrupt and writes response entries to
-memory, howerver, the write requests sometimes are not actually
-synchronized to memory when driver handle hdac interrupt on Glenfly Gpus.
-If the RIRB status is not updated in the interrupt handler,
-azx_rirb_get_response keeps trying to recevie a response from rirb until
-1s timeout. Enabling polling mode for Glenfly Gpu can fix the issue.
-- In patch_gf_hdmi, set Glenlfy Gpu Codec's no_sticky_stream as it need
-driver to do actual clean-ups for the linked codec when switch from one
-codec to another.
+The following KASAN splat shows a set element deletion for a bound
+anonymous set that has been already removed in the same transaction.
 
-Signed-off-by: jasontao <jasontao@glenfly.com>
-Signed-off-by: Reaper Li <reaperlioc@glenfly.com>
-Link: https://lore.kernel.org/r/20230426013059.4329-1-reaperlioc@glenfly.com
-Signed-off-by: Takashi Iwai <tiwai@suse.de>
+[   64.921510] ==================================================================
+[   64.923123] BUG: KASAN: wild-memory-access in nf_tables_commit+0xa24/0x1490 [nf_tables]
+[   64.924745] Write of size 8 at addr dead000000000122 by task test/890
+[   64.927903] CPU: 3 PID: 890 Comm: test Not tainted 6.3.0+ #253
+[   64.931120] Call Trace:
+[   64.932699]  <TASK>
+[   64.934292]  dump_stack_lvl+0x33/0x50
+[   64.935908]  ? nf_tables_commit+0xa24/0x1490 [nf_tables]
+[   64.937551]  kasan_report+0xda/0x120
+[   64.939186]  ? nf_tables_commit+0xa24/0x1490 [nf_tables]
+[   64.940814]  nf_tables_commit+0xa24/0x1490 [nf_tables]
+[   64.942452]  ? __kasan_slab_alloc+0x2d/0x60
+[   64.944070]  ? nf_tables_setelem_notify+0x190/0x190 [nf_tables]
+[   64.945710]  ? kasan_set_track+0x21/0x30
+[   64.947323]  nfnetlink_rcv_batch+0x709/0xd90 [nfnetlink]
+[   64.948898]  ? nfnetlink_rcv_msg+0x480/0x480 [nfnetlink]
+
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- sound/pci/hda/hda_intel.c  | 21 +++++++++++++++++++++
- sound/pci/hda/patch_hdmi.c | 22 ++++++++++++++++++++++
- 2 files changed, 43 insertions(+)
+ include/net/netfilter/nf_tables.h |  1 +
+ net/netfilter/nf_tables_api.c     | 12 ++++++++++++
+ net/netfilter/nft_dynset.c        |  2 +-
+ net/netfilter/nft_lookup.c        |  2 +-
+ net/netfilter/nft_objref.c        |  2 +-
+ 5 files changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/sound/pci/hda/hda_intel.c b/sound/pci/hda/hda_intel.c
-index de1fe604905f3..1f641712233ef 100644
---- a/sound/pci/hda/hda_intel.c
-+++ b/sound/pci/hda/hda_intel.c
-@@ -264,6 +264,7 @@ enum {
- 	AZX_DRIVER_ATI,
- 	AZX_DRIVER_ATIHDMI,
- 	AZX_DRIVER_ATIHDMI_NS,
-+	AZX_DRIVER_GFHDMI,
- 	AZX_DRIVER_VIA,
- 	AZX_DRIVER_SIS,
- 	AZX_DRIVER_ULI,
-@@ -386,6 +387,7 @@ static const char * const driver_short_names[] = {
- 	[AZX_DRIVER_ATI] = "HDA ATI SB",
- 	[AZX_DRIVER_ATIHDMI] = "HDA ATI HDMI",
- 	[AZX_DRIVER_ATIHDMI_NS] = "HDA ATI HDMI",
-+	[AZX_DRIVER_GFHDMI] = "HDA GF HDMI",
- 	[AZX_DRIVER_VIA] = "HDA VIA VT82xx",
- 	[AZX_DRIVER_SIS] = "HDA SIS966",
- 	[AZX_DRIVER_ULI] = "HDA ULI M5461",
-@@ -1783,6 +1785,12 @@ static int default_bdl_pos_adj(struct azx *chip)
- 	}
+diff --git a/include/net/netfilter/nf_tables.h b/include/net/netfilter/nf_tables.h
+index e66fee99ed3ea..564fbe0c865fd 100644
+--- a/include/net/netfilter/nf_tables.h
++++ b/include/net/netfilter/nf_tables.h
+@@ -507,6 +507,7 @@ struct nft_set_binding {
+ };
  
- 	switch (chip->driver_type) {
-+	/*
-+	 * increase the bdl size for Glenfly Gpus for hardware
-+	 * limitation on hdac interrupt interval
-+	 */
-+	case AZX_DRIVER_GFHDMI:
-+		return 128;
- 	case AZX_DRIVER_ICH:
- 	case AZX_DRIVER_PCH:
- 		return 1;
-@@ -1902,6 +1910,12 @@ static int azx_first_init(struct azx *chip)
- 		pci_write_config_dword(pci, PCI_BASE_ADDRESS_1, 0);
+ enum nft_trans_phase;
++void nf_tables_activate_set(const struct nft_ctx *ctx, struct nft_set *set);
+ void nf_tables_deactivate_set(const struct nft_ctx *ctx, struct nft_set *set,
+ 			      struct nft_set_binding *binding,
+ 			      enum nft_trans_phase phase);
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index 2143edafba772..695b7ea55f183 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -4479,12 +4479,24 @@ static void nf_tables_unbind_set(const struct nft_ctx *ctx, struct nft_set *set,
  	}
- #endif
-+	/*
-+	 * Fix response write request not synced to memory when handle
-+	 * hdac interrupt on Glenfly Gpus
-+	 */
-+	if (chip->driver_type == AZX_DRIVER_GFHDMI)
-+		bus->polling_mode = 1;
- 
- 	err = pci_request_regions(pci, "ICH HD audio");
- 	if (err < 0)
-@@ -2011,6 +2025,7 @@ static int azx_first_init(struct azx *chip)
- 			chip->playback_streams = ATIHDMI_NUM_PLAYBACK;
- 			chip->capture_streams = ATIHDMI_NUM_CAPTURE;
- 			break;
-+		case AZX_DRIVER_GFHDMI:
- 		case AZX_DRIVER_GENERIC:
- 		default:
- 			chip->playback_streams = ICH6_NUM_PLAYBACK;
-@@ -2756,6 +2771,12 @@ static const struct pci_device_id azx_ids[] = {
- 	{ PCI_DEVICE(0x1002, 0xab38),
- 	  .driver_data = AZX_DRIVER_ATIHDMI_NS | AZX_DCAPS_PRESET_ATI_HDMI_NS |
- 	  AZX_DCAPS_PM_RUNTIME },
-+	/* GLENFLY */
-+	{ PCI_DEVICE(0x6766, PCI_ANY_ID),
-+	  .class = PCI_CLASS_MULTIMEDIA_HD_AUDIO << 8,
-+	  .class_mask = 0xffffff,
-+	  .driver_data = AZX_DRIVER_GFHDMI | AZX_DCAPS_POSFIX_LPIB |
-+	  AZX_DCAPS_NO_MSI | AZX_DCAPS_NO_64BIT },
- 	/* VIA VT8251/VT8237A */
- 	{ PCI_DEVICE(0x1106, 0x3288), .driver_data = AZX_DRIVER_VIA },
- 	/* VIA GFX VT7122/VX900 */
-diff --git a/sound/pci/hda/patch_hdmi.c b/sound/pci/hda/patch_hdmi.c
-index 1afe9cddb69eb..bd151465f2089 100644
---- a/sound/pci/hda/patch_hdmi.c
-+++ b/sound/pci/hda/patch_hdmi.c
-@@ -4287,6 +4287,22 @@ static int patch_via_hdmi(struct hda_codec *codec)
- 	return patch_simple_hdmi(codec, VIAHDMI_CVT_NID, VIAHDMI_PIN_NID);
  }
  
-+static int patch_gf_hdmi(struct hda_codec *codec)
++void nf_tables_activate_set(const struct nft_ctx *ctx, struct nft_set *set)
 +{
-+	int err;
++	if (nft_set_is_anonymous(set))
++		nft_clear(ctx->net, set);
 +
-+	err = patch_generic_hdmi(codec);
-+	if (err)
-+		return err;
-+
-+	/*
-+	 * Glenfly GPUs have two codecs, stream switches from one codec to
-+	 * another, need to do actual clean-ups in codec_cleanup_stream
-+	 */
-+	codec->no_sticky_stream = 1;
-+	return 0;
++	set->use++;
 +}
++EXPORT_SYMBOL_GPL(nf_tables_activate_set);
 +
- /*
-  * patch entries
-  */
-@@ -4376,6 +4392,12 @@ HDA_CODEC_ENTRY(0x10de009f, "GPU 9f HDMI/DP",	patch_nvhdmi),
- HDA_CODEC_ENTRY(0x10de00a0, "GPU a0 HDMI/DP",	patch_nvhdmi),
- HDA_CODEC_ENTRY(0x10de8001, "MCP73 HDMI",	patch_nvhdmi_2ch),
- HDA_CODEC_ENTRY(0x10de8067, "MCP67/68 HDMI",	patch_nvhdmi_2ch),
-+HDA_CODEC_ENTRY(0x67663d82, "Arise 82 HDMI/DP",	patch_gf_hdmi),
-+HDA_CODEC_ENTRY(0x67663d83, "Arise 83 HDMI/DP",	patch_gf_hdmi),
-+HDA_CODEC_ENTRY(0x67663d84, "Arise 84 HDMI/DP",	patch_gf_hdmi),
-+HDA_CODEC_ENTRY(0x67663d85, "Arise 85 HDMI/DP",	patch_gf_hdmi),
-+HDA_CODEC_ENTRY(0x67663d86, "Arise 86 HDMI/DP",	patch_gf_hdmi),
-+HDA_CODEC_ENTRY(0x67663d87, "Arise 87 HDMI/DP",	patch_gf_hdmi),
- HDA_CODEC_ENTRY(0x11069f80, "VX900 HDMI/DP",	patch_via_hdmi),
- HDA_CODEC_ENTRY(0x11069f81, "VX900 HDMI/DP",	patch_via_hdmi),
- HDA_CODEC_ENTRY(0x11069f84, "VX11 HDMI/DP",	patch_generic_hdmi),
+ void nf_tables_deactivate_set(const struct nft_ctx *ctx, struct nft_set *set,
+ 			      struct nft_set_binding *binding,
+ 			      enum nft_trans_phase phase)
+ {
+ 	switch (phase) {
+ 	case NFT_TRANS_PREPARE:
++		if (nft_set_is_anonymous(set))
++			nft_deactivate_next(ctx->net, set);
++
+ 		set->use--;
+ 		return;
+ 	case NFT_TRANS_ABORT:
+diff --git a/net/netfilter/nft_dynset.c b/net/netfilter/nft_dynset.c
+index 8c45e01fecdd8..038588d4d80e1 100644
+--- a/net/netfilter/nft_dynset.c
++++ b/net/netfilter/nft_dynset.c
+@@ -233,7 +233,7 @@ static void nft_dynset_activate(const struct nft_ctx *ctx,
+ {
+ 	struct nft_dynset *priv = nft_expr_priv(expr);
+ 
+-	priv->set->use++;
++	nf_tables_activate_set(ctx, priv->set);
+ }
+ 
+ static void nft_dynset_destroy(const struct nft_ctx *ctx,
+diff --git a/net/netfilter/nft_lookup.c b/net/netfilter/nft_lookup.c
+index b0f558b4fea54..8bc008ff00cb7 100644
+--- a/net/netfilter/nft_lookup.c
++++ b/net/netfilter/nft_lookup.c
+@@ -132,7 +132,7 @@ static void nft_lookup_activate(const struct nft_ctx *ctx,
+ {
+ 	struct nft_lookup *priv = nft_expr_priv(expr);
+ 
+-	priv->set->use++;
++	nf_tables_activate_set(ctx, priv->set);
+ }
+ 
+ static void nft_lookup_destroy(const struct nft_ctx *ctx,
+diff --git a/net/netfilter/nft_objref.c b/net/netfilter/nft_objref.c
+index bc104d36d3bb2..25157d8cc2504 100644
+--- a/net/netfilter/nft_objref.c
++++ b/net/netfilter/nft_objref.c
+@@ -180,7 +180,7 @@ static void nft_objref_map_activate(const struct nft_ctx *ctx,
+ {
+ 	struct nft_objref_map *priv = nft_expr_priv(expr);
+ 
+-	priv->set->use++;
++	nf_tables_activate_set(ctx, priv->set);
+ }
+ 
+ static void nft_objref_map_destroy(const struct nft_ctx *ctx,
 -- 
 2.39.2
 
