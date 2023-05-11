@@ -2,207 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 260CF6FEA1E
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 05:21:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 88FFF6FEA20
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 05:21:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232410AbjEKDVl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 23:21:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36010 "EHLO
+        id S236017AbjEKDVq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 23:21:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229799AbjEKDVi (ORCPT
+        with ESMTP id S232261AbjEKDVl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 23:21:38 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8533E63;
-        Wed, 10 May 2023 20:21:34 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QGxy40qx8z4x2c;
-        Thu, 11 May 2023 13:21:32 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
-        s=201909; t=1683775292;
-        bh=9VphvYDUUTpJa6Y51rDbdnX2+VZhjxsrx/SPIlypOzg=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=NJNN2mxnfu/5QYe7146XafzWTY72GFa0FBjWrl2NLrxKyugO0NAVfnvefKNqSd6pa
-         yQzeAxhIemK5n1/e0B8WFeiOUkigosZGcXEkcK8l8kQ1qQNk/OQ+4+PdoZoVutNUq9
-         mFkl2ewnLvfRjTL9efoWJN5c14AkgYpUrfyPElVTvbpr1OCax+7l8CPQkZUET5fBE4
-         F488/tp145G5ISsXEhhYnOw7qJ/ZbGXVDqj45X75FmW0Ifq6CcdC0EH4JPwMlatPi1
-         COCqhjngty6kkF+aWLnfOykGPX2ig66VE9Wvld7fRyrnldUEGBEihtrS6EaG3QRXWi
-         7BQRutfI41uWQ==
-From:   Michael Ellerman <mpe@ellerman.id.au>
-To:     Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org
-Cc:     hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, bfoster@redhat.com,
-        willy@infradead.org, linux-api@vger.kernel.org,
-        kernel-team@meta.com, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v13 3/3] selftests: Add selftests for cachestat
-In-Reply-To: <20230503013608.2431726-4-nphamcs@gmail.com>
-References: <20230503013608.2431726-1-nphamcs@gmail.com>
- <20230503013608.2431726-4-nphamcs@gmail.com>
-Date:   Thu, 11 May 2023 13:21:28 +1000
-Message-ID: <877ctfa6yv.fsf@mail.lhotse>
+        Wed, 10 May 2023 23:21:41 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CA81719;
+        Wed, 10 May 2023 20:21:35 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id EB91682D4;
+        Thu, 11 May 2023 11:21:33 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 11 May
+ 2023 11:21:34 +0800
+Received: from [192.168.125.124] (113.72.146.187) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 11 May
+ 2023 11:21:33 +0800
+Message-ID: <ef13177a-2028-9fc9-628a-e3d287758207@starfivetech.com>
+Date:   Thu, 11 May 2023 11:21:32 +0800
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3 3/3] riscv: dts: starfive: add tdm node and sound card
+To:     Conor Dooley <conor@kernel.org>
+CC:     Emil Renner Berthing <emil.renner.berthing@canonical.com>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+References: <20230506090116.9206-1-walker.chen@starfivetech.com>
+ <20230506090116.9206-4-walker.chen@starfivetech.com>
+ <a0932e84-3813-bbbe-762d-948d75fbcd8a@starfivetech.com>
+ <20230509-overheat-pliable-00d60523637e@spud>
+ <CAJM55Z9AxMVw=ymfFBb=45nODq89O8dMebzRgo-XD0GKduDBYg@mail.gmail.com>
+ <f27b7ee7-f23a-35a2-3b82-71f50871dfcc@starfivetech.com>
+ <20230510-riveter-ridden-3f056251e623@spud>
+Content-Language: en-US
+From:   Walker Chen <walker.chen@starfivetech.com>
+In-Reply-To: <20230510-riveter-ridden-3f056251e623@spud>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.146.187]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nhat Pham <nphamcs@gmail.com> writes:
-> Test cachestat on a newly created file, /dev/ files, and /proc/ files.
-> Also test on a shmem file (which can also be tested with huge pages
-> since tmpfs supports huge pages).
->
-> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
-...
-> diff --git a/tools/testing/selftests/cachestat/test_cachestat.c b/tools/testing/selftests/cachestat/test_cachestat.c
-> new file mode 100644
-> index 000000000000..c3823b809c25
-> --- /dev/null
-> +++ b/tools/testing/selftests/cachestat/test_cachestat.c
-> @@ -0,0 +1,258 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +#define _GNU_SOURCE
-> +
-> +#include <stdio.h>
-> +#include <stdbool.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mman.h>
-> +#include <sys/mman.h>
-> +#include <sys/shm.h>
-> +#include <sys/syscall.h>
-> +#include <unistd.h>
-> +#include <string.h>
-> +#include <fcntl.h>
-> +#include <errno.h>
-> +
-> +#include "../kselftest.h"
-> +
-> +static const char * const dev_files[] = {
-> +	"/dev/zero", "/dev/null", "/dev/urandom",
-> +	"/proc/version", "/proc"
-> +};
-> +static const int cachestat_nr = 451;
-> +
-> +void print_cachestat(struct cachestat *cs)
-> +{
-> +	ksft_print_msg(
-> +	"Using cachestat: Cached: %lu, Dirty: %lu, Writeback: %lu, Evicted: %lu, Recently Evicted: %lu\n",
-> +	cs->nr_cache, cs->nr_dirty, cs->nr_writeback,
-> +	cs->nr_evicted, cs->nr_recently_evicted);
-> +}
-> +
-> +bool write_exactly(int fd, size_t filesize)
-> +{
-> +	char data[filesize];
 
-On kernels with 64K pages (powerpc at least), this tries to allocate
-64MB on the stack which segfaults.
+On 2023/5/11 4:22, Conor Dooley wrote:
+> On Wed, May 10, 2023 at 05:21:21PM +0800, Walker Chen wrote:
+>> On 2023/5/10 16:33, Emil Renner Berthing wrote:
+>> > On Tue, 9 May 2023 at 20:05, Conor Dooley <conor@kernel.org> wrote:
+>> >>
+>> >> On Tue, May 09, 2023 at 08:52:48PM +0800, Walker Chen wrote:
+>> >> > Hi Conor/Emil,
+>> >> >
+>> >> > DT overlay is used to describe combinations of VF2 and hat.
+>> >> > Do you have any comments on this patch ?
+>> >>
+>> >> I seem to recall that he said at the linux-riscv sync-up call that we
+>> >> have* that he was not in favour of overlays for hats like this.
+>> >> I'll let him confirm that though, I might very well be misinterpreting or
+>> >> misremembering what he said.
+>> > 
+>> > What probably meant was that I didn't want a bunch of different device
+>> > trees for each combination board * hat. An overlay makes a lot more
+>> > sense. However, looking through the kernel tree there is a surprising
+>> > lack of overlays for hats committed already, so I suspect there is
+>> > some sort of policy around overlays already in place.
+> 
+>> About the specific usage of overlay for this board + hat, referenced to the following example in kernel:
+>> linux/arch/arm64/boot/dts/freescale/imx8mm-venice-gw73xx-0x-imx219.dtso
+>> That board is connected with imx219 sensor via mipi_csi interface. That patch was accepted in 2022.
+> 
+> Hmm, so spoke to Emil again today about it. In the interest of being
+> fair, I did go looking at that particular board & looked through their
+> documentation for more information on why there are overlays.
+> They do actually sell the bits required to use the overlays, based on
+> what I saw in their datasheet for the board & wiki. That said, what is
+> done for one arm64 platform does not necessarily apply elsewhere ;)
+> 
+> I'm not against allowing in-tree overlays for hats/capes/daughter-boards
+> that come bundled with a board, but accepting ones for a hat that
+> someone decided to use theoretically has no limit! The "someone" in this
+> case might be a StarFive developer, but it could be any random one of
+> your customers next!
+> We've got to draw a line somewhere, so my answer to the overlay *in this
+> case* is a no. Sorry.
+> When you submit your next version, please drop the overlay from this
+> patch.
 
-Allocating data with malloc avoids the problem and allows the test to
-pass.
+I'm trying to understand what you mean. so the conclusion is that I need to drop the file
+ 'jh7110-starfive-visionfive-2-wm8960.dtso' from this patch.
+When I submit the next version, just keep the TDM node and the pins configuration for TDM in patch [3/3],
+need to drop the wm8960 stuff.
+Right ?
 
-Looks like this commit is still in mm-unstable, so maybe Andrew can
-squash the incremental diff below in, if it looks OK to you. The diff is
-a bit big because I unindented the body of the function.
-
-cheers
-
-
-diff --git a/tools/testing/selftests/cachestat/test_cachestat.c b/tools/testing/selftests/cachestat/test_cachestat.c
-index 9be2262e5c17..54d09b820ed4 100644
---- a/tools/testing/selftests/cachestat/test_cachestat.c
-+++ b/tools/testing/selftests/cachestat/test_cachestat.c
-@@ -31,48 +31,59 @@ void print_cachestat(struct cachestat *cs)
- 
- bool write_exactly(int fd, size_t filesize)
- {
--	char data[filesize];
--	bool ret = true;
- 	int random_fd = open("/dev/urandom", O_RDONLY);
-+	char *cursor, *data;
-+	int remained;
-+	bool ret;
- 
- 	if (random_fd < 0) {
- 		ksft_print_msg("Unable to access urandom.\n");
- 		ret = false;
- 		goto out;
--	} else {
--		int remained = filesize;
--		char *cursor = data;
-+	}
- 
--		while (remained) {
--			ssize_t read_len = read(random_fd, cursor, remained);
-+	data = malloc(filesize);
-+	if (!data) {
-+		ksft_print_msg("Unable to allocate data.\n");
-+		ret = false;
-+		goto close_random_fd;
-+	}
- 
--			if (read_len <= 0) {
--				ksft_print_msg("Unable to read from urandom.\n");
--				ret = false;
--				goto close_random_fd;
--			}
-+	remained = filesize;
-+	cursor = data;
- 
--			remained -= read_len;
--			cursor += read_len;
-+	while (remained) {
-+		ssize_t read_len = read(random_fd, cursor, remained);
-+
-+		if (read_len <= 0) {
-+			ksft_print_msg("Unable to read from urandom.\n");
-+			ret = false;
-+			goto out_free_data;
- 		}
- 
--		/* write random data to fd */
--		remained = filesize;
--		cursor = data;
--		while (remained) {
--			ssize_t write_len = write(fd, cursor, remained);
-+		remained -= read_len;
-+		cursor += read_len;
-+	}
- 
--			if (write_len <= 0) {
--				ksft_print_msg("Unable write random data to file.\n");
--				ret = false;
--				goto close_random_fd;
--			}
-+	/* write random data to fd */
-+	remained = filesize;
-+	cursor = data;
-+	while (remained) {
-+		ssize_t write_len = write(fd, cursor, remained);
- 
--			remained -= write_len;
--			cursor += write_len;
-+		if (write_len <= 0) {
-+			ksft_print_msg("Unable write random data to file.\n");
-+			ret = false;
-+			goto out_free_data;
- 		}
-+
-+		remained -= write_len;
-+		cursor += write_len;
- 	}
- 
-+	ret = true;
-+out_free_data:
-+	free(data);
- close_random_fd:
- 	close(random_fd);
- out:
-
+Best regards,
+Walker
