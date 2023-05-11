@@ -2,141 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E98956FEDFC
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:44:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DBB26FEDFF
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:47:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234093AbjEKIoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 04:44:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50250 "EHLO
+        id S234840AbjEKIrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 04:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjEKIoR (ORCPT
+        with ESMTP id S229482AbjEKIrR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 04:44:17 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 432A7269D;
-        Thu, 11 May 2023 01:44:16 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5DA2D5C012C;
-        Thu, 11 May 2023 04:44:12 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 11 May 2023 04:44:12 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1683794652; x=1683881052; bh=R9
-        VqD6wzJ9+2S9ieidssv+Mz4v5L702oFUBmV8sB3YQ=; b=wdKxKXYE4wa5dQwAkp
-        AOzpijAFw9Y3TsrXoW74T9fkj64KyMGfie1hT3Zl+/prXuNGxrkG/IgDUICnpkDI
-        XXGdG/S5OOAoBqZwzRnCO0RH9AiZwhDgyFItQnvtdusNtcj3Yzs5Bqxi9mztZpp0
-        tVUy75KatFaWOpeHiPR0vvVyVn/RWYAVHSbpdm5qDMlNhxTUov6txAhmml/Z/Agw
-        iVexPmLtGJHwdWpkKgj21165Vlgze4z41uW8cBrnLqr83cMBLzpEZQXbAnM3Qpe2
-        CN20N7GtJjmIxJlshZzOMcTCClwCOFbJpuy9fq786egA0A2C1v4Z3V/h0sN/o97r
-        uFWQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683794652; x=1683881052; bh=R9VqD6wzJ9+2S
-        9ieidssv+Mz4v5L702oFUBmV8sB3YQ=; b=iPfuyBRlzRQHD6Jt/uxdIGBQDJvnT
-        y1TakYZyQbzyKERHzGZr4BPu7/WEHcwTQB6y7jjCfDxDyFWQakjbCikeZR33KN05
-        Gzkn1EryxMFDPPKZXn5zsjRdxDjSa6+YeovuqECwJINMXLmNtVcL6TGjWoQcHq2V
-        4tTuk1VcQXk9MtHzXGNOwcNtBPBC5RdpT+32Lk7Go6HAEyX4te1wUeGmZpogQ2sj
-        sTWIohiT40eN4ZOprOMXsYmv+Ew4DFJtUKTfqJxnP1M2F0JhGui0jmvuuqSCJZEP
-        Le8HKGTwhnb/UFPsuqIWYIXR8t+UaDZyNpwR+ZVtKffJZKiAPkk1H7WvA==
-X-ME-Sender: <xms:3KpcZNoWBT22YbKi_MmeOwKfkZdmZBjrp96Ld3gS8nrLecDFN5mprQ>
-    <xme:3KpcZPqyoPLXLB5OTFEPqWA3DTbf2pthdOOHm8sLre8U_69lC5XOejkjDRyA0ZlLD
-    XuhwZGuGrXFRGiJ7ZI>
-X-ME-Received: <xmr:3KpcZKMoEXF1ezspX4hHeIcvJamMW_3M9GkcD8lyskkpqmMk5M2cmV7d-9TYWr_iGImLn1vj2b7kkOPSzFejQA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeegkedgtdejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtsfertddtvdenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpedtgfdukeeigeeuhfelheeftdfhgfegfefgudeuiefhueeuleekveetvdei
-    tddvieenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepmhgrgihimhgvsegtvghrnhhordhtvggt
-    hh
-X-ME-Proxy: <xmx:3KpcZI4r-KOOBmDqhOaZYDL_rhs1x2myHwYA7Bl6T1RmxqUaLJGUww>
-    <xmx:3KpcZM7j904aGfZJcjEPDCBK3g46St8CaDFULSYAykz4AkCHTElaTA>
-    <xmx:3KpcZAivBX3IDCFrc0jLpuXRXklpB4PRAvyYpCh_kORIAWJ1TxlBYQ>
-    <xmx:3KpcZGQni5aIO9l8I1DyI1uJPFXq0TVmw9PhEuiPc90-2YuHUAcXxQ>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 11 May 2023 04:44:11 -0400 (EDT)
-Date:   Thu, 11 May 2023 10:44:09 +0200
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Brendan Higgins <brendan.higgins@linux.dev>,
-        David Gow <davidgow@google.com>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2] drivers: base: Add tests showing devm handling
- inconsistencies
-Message-ID: <7rjlinncexvux7qyx5ochk23tstalslfmh6rpqtz7dofuk3jwk@q3bsgi3lixzk>
-References: <20230329-kunit-devm-inconsistencies-test-v1-0-c33127048375@cerno.tech>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dku4l7aigas53bcw"
-Content-Disposition: inline
-In-Reply-To: <20230329-kunit-devm-inconsistencies-test-v1-0-c33127048375@cerno.tech>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 11 May 2023 04:47:17 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7046E4EF6
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:47:16 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D6A8760E9C
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 08:47:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1CC94C433D2;
+        Thu, 11 May 2023 08:47:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683794835;
+        bh=4TLG3y9qYIVVTgqmdcT1+wV71ze9TJdgas6viAVD10M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=u4n6aw3FC/JOm4h/fZ1KsDQd+jdus7CM8mmBoxtHrGISNz9Gx1HjRCSIuBdetlp1P
+         DQQP0/5stuBoKKDvQIATIwTJx8yk+yQ8NmZO1eQVbSdGvs0qVwge7W5aO7L2xSM+hM
+         ixEL5EuqIKo91B1hrmL/FDtYcAseWeAfYf6GvgnAcOHWfMqI5RjKLUj2bFvfhOzWYa
+         /8MtoqVutVCu/sMykm6ohPJbro69UQc8FWkm32+GuwZy5mVnOsVddZxIvKi2GENE3C
+         R6fAcN9Cw5pc+CgYzQaL+45RttzL2L1o3P+cthW9v8etM8JL41WTNDnJ88SuECJ7Nh
+         L0ILgpi4UjYpQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1px1xA-00EHXq-R1;
+        Thu, 11 May 2023 09:47:12 +0100
+Date:   Thu, 11 May 2023 09:47:12 +0100
+Message-ID: <86zg6bmezz.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rich Felker <dalias@libc.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] irqchip/jcore-aic: Fix missing allocation of IRQ descriptors
+In-Reply-To: <3c76bea5e45a5ae9ea58b3ff87f9971955a3a021.camel@physik.fu-berlin.de>
+References: <20230510163343.43090-1-glaubitz@physik.fu-berlin.de>
+        <479a18513b9d8c6e8ccb96093a0f0dd7@kernel.org>
+        <3c76bea5e45a5ae9ea58b3ff87f9971955a3a021.camel@physik.fu-berlin.de>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: glaubitz@physik.fu-berlin.de, tglx@linutronix.de, dalias@libc.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 11 May 2023 08:22:20 +0100,
+John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de> wrote:
+> 
+> Hi Jason!
 
---dku4l7aigas53bcw
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+???
 
-On Wed, Mar 29, 2023 at 08:38:30PM +0100, Maxime Ripard wrote:
-> Hi,
->=20
-> This follows the discussion here:
-> https://lore.kernel.org/linux-kselftest/20230324123157.bbwvfq4gsxnlnfwb@h=
-ouat/
->=20
-> This shows a couple of inconsistencies with regard to how device-managed
-> resources are cleaned up. Basically, devm resources will only be cleaned =
-up
-> if the device is attached to a bus and bound to a driver. Failing any of
-> these cases, a call to device_unregister will not end up in the devm
-> resources being released.
->=20
-> We had to work around it in DRM to provide helpers to create a device for
-> kunit tests, but the current discussion around creating similar, generic,
-> helpers for kunit resumed interest in fixing this.
->=20
-> This can be tested using the command:
-> ./tools/testing/kunit/kunit.py run --kunitconfig=3Ddrivers/base/test/
->=20
-> Let me know what you think,
-> Maxime
->=20
-> Signed-off-by: Maxime Ripard <maxime@cerno.tech>
+> 
+> On Thu, 2023-05-11 at 07:56 +0100, Marc Zyngier wrote:
+> > On 2023-05-10 17:33, John Paul Adrian Glaubitz wrote:
+> > > The initialization function for the J-Core AIC aic_irq_of_init() is
+> > > currently missing the call to irq_alloc_descs() which allocates and
+> > > initializes all the IRQ descriptors. Add missing function call and
+> > > return the error code from irq_alloc_descs() in case the allocation
+> > > fails.
+> > > 
+> > > Fixes: 981b58f66cfc ("irqchip/jcore-aic: Add J-Core AIC driver")
+> > > Signed-off-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+> > > ---
+> > >  drivers/irqchip/irq-jcore-aic.c | 7 +++++++
+> > >  1 file changed, 7 insertions(+)
+> > > 
+> > > diff --git a/drivers/irqchip/irq-jcore-aic.c 
+> > > b/drivers/irqchip/irq-jcore-aic.c
+> > > index 5f47d8ee4ae3..b9dcc8e78c75 100644
+> > > --- a/drivers/irqchip/irq-jcore-aic.c
+> > > +++ b/drivers/irqchip/irq-jcore-aic.c
+> > > @@ -68,6 +68,7 @@ static int __init aic_irq_of_init(struct device_node 
+> > > *node,
+> > >  	unsigned min_irq = JCORE_AIC2_MIN_HWIRQ;
+> > >  	unsigned dom_sz = JCORE_AIC_MAX_HWIRQ+1;
+> > >  	struct irq_domain *domain;
+> > > +	int ret;
+> > > 
+> > >  	pr_info("Initializing J-Core AIC\n");
+> > > 
+> > > @@ -100,6 +101,12 @@ static int __init aic_irq_of_init(struct 
+> > > device_node *node,
+> > >  	jcore_aic.irq_unmask = noop;
+> > >  	jcore_aic.name = "AIC";
+> > > 
+> > > +	ret = irq_alloc_descs(-1, min_irq, dom_sz - min_irq,
+> > > +			      of_node_to_nid(node));
+> > > +
+> > > +	if (ret < 0)
+> > > +		return ret;
+> > > +
+> > >  	domain = irq_domain_add_legacy(node, dom_sz - min_irq, min_irq, 
+> > > min_irq,
+> > >  				       &jcore_aic_irqdomain_ops,
+> > >  				       &jcore_aic);
+> > 
+> > [- Jason]
+> > 
+> > It really begs the question: how has it ever been working before?
+> 
+> Users already used a locally patched kernel to work around this problem.
 
-Ping?
+You're not answering my question. Does it mean JCore never worked
+upstream?
 
-How can we move this forward?
+> > Is there any plan to modernise the port and get it to allocate
+> > irq_descs on demand, as we do on most architectures?
+> 
+> Yes, there are plans to modernize the port. We're first working on
+> upstreaming all kinds of patches that have been queuing up over the
+> time.
 
-Maxime
+I'd rather you skip that step and focus on making it work as a modern
+architecture. This really looks like ARM circa 2007... :-/
 
---dku4l7aigas53bcw
-Content-Type: application/pgp-signature; name="signature.asc"
+	M.
 
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCZFyq2QAKCRDj7w1vZxhR
-xcMUAQC9f1QhkLHDTh90PoFdTg2i2y/lG81SGyKT80FhMSOrpQD/eTIPWIEaLIF4
-81G+f9EVTurUgMO5DP+xDigDeiqx+wA=
-=szW3
------END PGP SIGNATURE-----
-
---dku4l7aigas53bcw--
+-- 
+Without deviation from the norm, progress is not possible.
