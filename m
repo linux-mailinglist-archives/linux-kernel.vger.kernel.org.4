@@ -2,219 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC64C6FEEA2
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:23:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5699F6FEEF8
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:35:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237366AbjEKJXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 05:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46604 "EHLO
+        id S237687AbjEKJft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 05:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232333AbjEKJXb (ORCPT
+        with ESMTP id S237740AbjEKJff (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 05:23:31 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7784910E;
-        Thu, 11 May 2023 02:23:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683797010; x=1715333010;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=QgdaHAAgZazMw6AXL+sJC63JncWFpuoO5svFVyBFHic=;
-  b=DhuD5ydFjme7MBLkVGs96GQcpXADft/ZAuc3iSYQs9Y/z4jH1UoJgaJ0
-   9eeITOJ86JZpltundD/8qtXYcIQY5VFkZTHE6tjzvQUYCNpkrbONVMCiP
-   P3chByVXQ2vw1Hx+bLrfiF67hd6ZHT7HfJWeLTWLdeEdKHNWJu3gmIojA
-   EHwTSkyyNZldvNsLQ3aMg0L8ZYJsI42MjnASy/4gt0lat+diaBMpHb2tf
-   DbDHCmga6+n4yMQjaYWUnL3UZx91XxowlhdvQm1H6W7FH3vWGfdBVd8hS
-   T8JL1miZcdWYWI2KpsJkx6UuVMgxBU9pyP6Ep4w4ClZzsEZy9XnYKnZZq
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="330806852"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="330806852"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 02:23:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="650087353"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="650087353"
-Received: from jsanche3-mobl1.ger.corp.intel.com ([10.252.39.112])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 02:23:28 -0700
-Date:   Thu, 11 May 2023 12:23:25 +0300 (EEST)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Jorge Lopez <jorgealtxwork@gmail.com>
-cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, thomas@t-8ch.de
-Subject: Re: [PATCH v12 10/13] HP BIOSCFG driver - spmobj-attributes
-In-Reply-To: <CAOOmCE9m5++_4nBu3C64uWVOeyUQs3afn_Q9AJz9oudGvMHHiQ@mail.gmail.com>
-Message-ID: <4a14de7-58fb-4192-496a-279dd4109b6@linux.intel.com>
-References: <20230505220043.39036-1-jorge.lopez2@hp.com> <20230505220043.39036-11-jorge.lopez2@hp.com> <4537f210-4a7a-3c11-ecbb-ed4762a1f598@linux.intel.com> <CAOOmCE9m5++_4nBu3C64uWVOeyUQs3afn_Q9AJz9oudGvMHHiQ@mail.gmail.com>
+        Thu, 11 May 2023 05:35:35 -0400
+X-Greylist: delayed 584 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 11 May 2023 02:35:31 PDT
+Received: from mx4.securetransport.de (mx4.securetransport.de [178.254.6.145])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1D71A8A47;
+        Thu, 11 May 2023 02:35:30 -0700 (PDT)
+Received: from mail.dh-electronics.com (unknown [77.24.89.57])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx4.securetransport.de (Postfix) with ESMTPSA id 1D35E720163;
+        Thu, 11 May 2023 11:25:03 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
+        s=dhelectronicscom; t=1683797104;
+        bh=Vap+41/PY6pXzbjKvr9Q+3GpaSZ82N/7BpF/0fTMCj8=;
+        h=From:To:CC:Subject:Date:From;
+        b=b5Zw/J+gzTB7D2sT7mNE7AoYe2Uk9/Km4o+WPa4OQ3QQT2XYC5mIsJRaAvH5uEuaZ
+         FFHkEiViLqdOs/g0FaEHRgYcGcnTAvcJJUa+QG1AN9qFLCF548kFKEez634W9d5Kc3
+         7vTG2I3d70yPFy+F/m8n0AtmOCaPox/te72scJ1KbWL60+CYxJQEzMs9d81Co+qpDq
+         qYOlaizCvU6WIBGxasuJK11YzANyzQcFW6/Wq8GUVP9U35T37FoZPKePtkDez37iQv
+         GQKB37YvMZvVHsV+ZMTII6+NasY8+YKC92zc6X6KpN1iY3Dj4EYVabUlS4mHPEByux
+         zKyximx+Zdt+w==
+Received: from DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Thu, 11 May 2023 11:25:02 +0200
+Received: from localhost.localdomain (172.16.51.5) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26 via Frontend Transport; Thu, 11 May 2023 11:25:01 +0200
+From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
+To:     <linux-arm-kernel@lists.infradead.org>
+CC:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Marek Vasut <marex@denx.de>,
+        Fabio Estevam <festevam@denx.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "open list:CPU FREQUENCY SCALING FRAMEWORK" 
+        <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: [PATCH] cpufreq: imx6q: Disable only available frequencies
+Date:   Thu, 11 May 2023 11:23:34 +0200
+Message-ID: <20230511092334.3017-1-cniedermaier@dh-electronics.com>
+X-Mailer: git-send-email 2.11.0
+X-klartext: yes
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1104371954-1683797009=:1900"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+In the example in Documentation/power/opp.rst, an availability check
+is present before disabling a specific frequency. If a frequency isn't
+available, the warning of a failed disabling of a non-existent
+frequency is misleading. Therefore, check the availability of the
+frequency in a separate inline function before disabling it.
 
---8323329-1104371954-1683797009=:1900
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+---
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Marek Vasut <marex@denx.de>
+Cc: Fabio Estevam <festevam@denx.de>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: linux-pm@vger.kernel.org (open list:CPU FREQUENCY SCALING FRAMEWORK)
+Cc: linux-kernel@vger.kernel.org (open list)
+To: linux-arm-kernel@lists.infradead.org
+---
+ drivers/cpufreq/imx6q-cpufreq.c | 27 +++++++++++++++++++++------
+ 1 file changed, 21 insertions(+), 6 deletions(-)
 
-On Wed, 10 May 2023, Jorge Lopez wrote:
-
-> On Tue, May 9, 2023 at 8:48 AM Ilpo Järvinen
-> <ilpo.jarvinen@linux.intel.com> wrote:
-> >
-> > On Fri, 5 May 2023, Jorge Lopez wrote:
-> >
-> > > HP BIOS Configuration driver purpose is to provide a driver supporting
-> > > the latest sysfs class firmware attributes framework allowing the user
-> > > to change BIOS settings and security solutions on HP Inc.’s commercial
-> > > notebooks.
-> > >
-> > > Many features of HP Commercial notebooks can be managed using Windows
-> > > Management Instrumentation (WMI). WMI is an implementation of Web-Based
-> > > Enterprise Management (WBEM) that provides a standards-based interface
-> > > for changing and monitoring system settings. HP BIOSCFG driver provides
-> > > a native Linux solution and the exposed features facilitates the
-> > > migration to Linux environments.
-> > >
-> > > The Linux security features to be provided in hp-bioscfg driver enables
-> > > managing the BIOS settings and security solutions via sysfs, a virtual
-> > > filesystem that can be used by user-mode applications. The new
-> > > documentation cover HP-specific firmware sysfs attributes such Secure
-> > > Platform Management and Sure Start. Each section provides security
-> > > feature description and identifies sysfs directories and files exposed
-> > > by the driver.
-> > >
-> > > Many HP Commercial notebooks include a feature called Secure Platform
-> > > Management (SPM), which replaces older password-based BIOS settings
-> > > management with public key cryptography. PC secure product management
-> > > begins when a target system is provisioned with cryptographic keys
-> > > that are used to ensure the integrity of communications between system
-> > > management utilities and the BIOS.
-> > >
-> > > HP Commercial notebooks have several BIOS settings that control its
-> > > behaviour and capabilities, many of which are related to security.
-> > > To prevent unauthorized changes to these settings, the system can
-> > > be configured to use a cryptographic signature-based authorization
-> > > string that the BIOS will use to verify authorization to modify the
-> > > setting.
-> > >
-> > > Linux Security components are under development and not published yet.
-> > > The only linux component is the driver (hp bioscfg) at this time.
-> > > Other published security components are under Windows.
-> > >
-> > > Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
-> > >
-> > > ---
-
-
-> > > +     } else {
-> > > +             /*
-> > > +              * UTF-16 prefix is append to the * buffer when a BIOS
-> >
-> > What is "the * buffer" ?
-> 
-> It is the data stored in 'buffer' variable which is composed of three
-> strings concatenated together to be submitted to BIOS via WMI call.
-> 'Buffer' will looks something as    [size attribute][attribute][size
-> value][value][auth size][auth payload]
-> size is the length in bytes,  attribute/value/auth are string represented in u16
-
-Even after this explanation I don't understand why it's called "the * 
-buffer". Is that common terminology in this domain (in which case it's 
-fine, I just haven't come across such term before)?
-
-> > > +              * admin password is configured in BIOS
-> > > +              */
-> > > +
-
-[...snip...]
-
-> > > +/*
-> > > + * status_show - Reads SPM status
-> > > + */
-> > > +static ssize_t status_show(struct kobject *kobj, struct kobj_attribute
-> > > +                 *attr, char *buf)
-> > > +{
-> > > +     int ret, i;
-> > > +     struct secureplatform_provisioning_data data;
-> > > +
-> > > +     ret = statusbin(kobj, attr, &data);
-> > > +     if (ret < 0)
-> > > +             goto status_exit;
-> >
-> > Can you calculate strnlen() from buf at this point, or is the result
-> > garbage? Should you return ret instead here?
-> 
-> It should return the error instead.
-> >
-> > > +
-> > > +     sysfs_emit(buf, "%s{\n", buf);
-> > > +     sysfs_emit(buf, "%s\t\"State\": \"%s\",\n", buf,
-> > > +                spm_state_types[data.state]);
-> > > +     sysfs_emit(buf, "%s\t\"Version\": \"%d.%d\",\n", buf, data.version[0],
-> > > +                data.version[1]);
-> > > +
-> > > +     /*
-> > > +      * state == 0 means secure platform management
-> > > +      * feature is not configured in BIOS.
-> > > +      */
-> > > +     if (data.state == 0)
-> > > +             goto status_exit;
-> > > +
-> > > +     sysfs_emit(buf, "%s\t\"Nonce\": %d,\n", buf, data.nonce);
-> > > +     sysfs_emit(buf, "%s\t\"FeaturesInUse\": %d,\n", buf, data.features);
-> > > +     sysfs_emit(buf, "%s\t\"EndorsementKeyMod\": \"", buf);
-> > > +
-> > > +     for (i = 255; i >= 0; i--)
-> > > +             sysfs_emit(buf, "%s %u", buf, data.kek_mod[i]);
-> > > +
-> > > +     sysfs_emit(buf, "%s \",\n", buf);
-> > > +     sysfs_emit(buf, "%s\t\"SigningKeyMod\": \"", buf);
-> > > +
-> > > +     for (i = 255; i >= 0; i--)
-> > > +             sysfs_emit(buf, "%s %u", buf, data.sk_mod[i]);
-> > > +
-> > > +     /* Return buf contents */
-> > > +
-> > > +     sysfs_emit(buf, "%s \"\n", buf);
-> > > +     sysfs_emit(buf, "%s}\n", buf);
-> > > +
-> > > +status_exit:
-> > > +     return strnlen(buf, PAGE_SIZE);
-> > > +}
-> >
-> > Emit buf into buf? There's sysfs_emit_at(), however,
-> >
-> > while I'm far from sysfs formatting expert, this feels something that
-> > tries to expose more than one thing over same sysfs file. Shouldn't they
-> > be each in their own files?
-> 
-> This concern was brought up in earlier reviews but it was decided to
-> allow returning the information as a single json file.
-> Because the information is part of the same structure and received in
-> a single WMI call, separating the components into multiple files can
-> cause the data read in one field to be stale by the time is read.
-
-Okay, makes more sense. Maybe add a comment that the return is a json 
-string because that's not very obvious (I only realized now when you told 
-me).
-
-The other point is still valid though, you should keep length in a 
-variable and use sysfs_emit_at() to avoid printing buf into buf on 
-every line.
-
-
+diff --git a/drivers/cpufreq/imx6q-cpufreq.c b/drivers/cpufreq/imx6q-cpufreq.c
+index 48e1772e98fd..4e2d2bc47aba 100644
+--- a/drivers/cpufreq/imx6q-cpufreq.c
++++ b/drivers/cpufreq/imx6q-cpufreq.c
+@@ -209,6 +209,21 @@ static struct cpufreq_driver imx6q_cpufreq_driver = {
+ 	.suspend = cpufreq_generic_suspend,
+ };
+ 
++static inline int disable_freq_if_available(struct device *dev,
++					    unsigned long freq)
++{
++	struct dev_pm_opp *opp;
++	int ret = 0;
++
++	opp = dev_pm_opp_find_freq_exact(dev, freq, true);
++	if (!IS_ERR(opp)) {
++		dev_pm_opp_put(opp);
++		ret = dev_pm_opp_disable(dev, freq);
++	}
++
++	return ret;
++}
++
+ #define OCOTP_CFG3			0x440
+ #define OCOTP_CFG3_SPEED_SHIFT		16
+ #define OCOTP_CFG3_SPEED_1P2GHZ		0x3
+@@ -254,16 +269,16 @@ static int imx6q_opp_check_speed_grading(struct device *dev)
+ 	val &= 0x3;
+ 
+ 	if (val < OCOTP_CFG3_SPEED_996MHZ)
+-		if (dev_pm_opp_disable(dev, 996000000))
++		if (disable_freq_if_available(dev, 996000000))
+ 			dev_warn(dev, "failed to disable 996MHz OPP\n");
+ 
+ 	if (of_machine_is_compatible("fsl,imx6q") ||
+ 	    of_machine_is_compatible("fsl,imx6qp")) {
+ 		if (val != OCOTP_CFG3_SPEED_852MHZ)
+-			if (dev_pm_opp_disable(dev, 852000000))
++			if (disable_freq_if_available(dev, 852000000))
+ 				dev_warn(dev, "failed to disable 852MHz OPP\n");
+ 		if (val != OCOTP_CFG3_SPEED_1P2GHZ)
+-			if (dev_pm_opp_disable(dev, 1200000000))
++			if (disable_freq_if_available(dev, 1200000000))
+ 				dev_warn(dev, "failed to disable 1.2GHz OPP\n");
+ 	}
+ 
+@@ -318,17 +333,17 @@ static int imx6ul_opp_check_speed_grading(struct device *dev)
+ 
+ 	if (of_machine_is_compatible("fsl,imx6ul")) {
+ 		if (val != OCOTP_CFG3_6UL_SPEED_696MHZ)
+-			if (dev_pm_opp_disable(dev, 696000000))
++			if (disable_freq_if_available(dev, 696000000))
+ 				dev_warn(dev, "failed to disable 696MHz OPP\n");
+ 	}
+ 
+ 	if (of_machine_is_compatible("fsl,imx6ull")) {
+ 		if (val != OCOTP_CFG3_6ULL_SPEED_792MHZ)
+-			if (dev_pm_opp_disable(dev, 792000000))
++			if (disable_freq_if_available(dev, 792000000))
+ 				dev_warn(dev, "failed to disable 792MHz OPP\n");
+ 
+ 		if (val != OCOTP_CFG3_6ULL_SPEED_900MHZ)
+-			if (dev_pm_opp_disable(dev, 900000000))
++			if (disable_freq_if_available(dev, 900000000))
+ 				dev_warn(dev, "failed to disable 900MHz OPP\n");
+ 	}
+ 
 -- 
- i.
+2.11.0
 
---8323329-1104371954-1683797009=:1900--
