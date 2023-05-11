@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28EEF6FEDDA
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:30:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D59E6FEDDD
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:34:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233814AbjEKIaV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 04:30:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45044 "EHLO
+        id S235809AbjEKIeo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 04:34:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjEKIaS (ORCPT
+        with ESMTP id S234868AbjEKIei (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 04:30:18 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F8F59C4
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:30:15 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 41be03b00d2f7-5304913530fso2267054a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:30:15 -0700 (PDT)
+        Thu, 11 May 2023 04:34:38 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29C9D49D6
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:34:37 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id 5b1f17b1804b1-3f41dceb9d1so56011865e9.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:34:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google; t=1683793814; x=1686385814;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uBduSQSx05MHlBvD82+EqabT9/Ep5JlcWUORXDoOtcA=;
-        b=cUmBs1hPWa2SRLAW2xRdKd+TCclc1WmU+SkhJJ6LXx87U2+FgfoZ/hZrtFnsRD8I6M
-         ZuSZh5pGfLIJh01kxkYNjntsqag9jkEdu6GlV/vTvLIyQFsD1TIzCtKodT7EO2cHvuWR
-         Ia3bHhF+vy5bxWq53vTLQaB2zrKQJ6IqvncT8=
+        d=linaro.org; s=google; t=1683794075; x=1686386075;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Eyhkadwy76PvtTG8OTGK3oTxfpKVBdNtjIXr+9MoiDs=;
+        b=fsubfTEI2BtlX6kxz7dYaSrHibGdZ5zzvXiSkL3zgHh7TgTzu+YfFL/j7LTeGcthcR
+         X0wxeAtY7ZOS1spFT1VVA7rWb67xJbO5UVhTw/+L5IO88h8pCEMhXMt60t3UCF5E8xUD
+         6jcrmv0XRHF9cbuCK78hozX1rolI+R9JSX+MF9jUgIkkXisgonH+nwYgCX78QBLHJzN0
+         6kdeyJTz+6n3mNaoc0RaAE1l4tr0A7InOKo+uYPYtZLXIc8vo3b9WEnvjU8maxzOf4KJ
+         887HykpwZKrOp/+6TSaIIokJR91mYFk5ArQQYoBMTP+5kOxqQrGCj+QJ/Q/oPNQPJ47l
+         dRxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683793814; x=1686385814;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20221208; t=1683794075; x=1686386075;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uBduSQSx05MHlBvD82+EqabT9/Ep5JlcWUORXDoOtcA=;
-        b=JbemWlyMnbM9hN8IGJr415jXiNMj5JI8z3V75qqnQImAMPviD7OBkJqq/G+J/U+3un
-         XTEB5vZvGCxGe20cpo6u7qNtPbZtQeNg8NPExxteXeoVNkJfJQVJgxJv4/aXsidvpTaN
-         AsjljFpyPPhSp6bBT/052IWoG7ibJ8+tO3C4rMPNOpOW/BiaEibKzNhPYtENlzD2AjDA
-         4qxnTTCXJUi0lkzjomN8+stD8SW7dzjkOpV2SPmEcR4qqMQo4IhmchDcOSzwfckEvlsU
-         +p49gPyWeoneOTVfONEtGJb+dCR676NExW21phzh8zzvGtyv/P95THErjHNP0Z7wfF9J
-         kUfQ==
-X-Gm-Message-State: AC+VfDxHE13hejAZ9b6Z9Oxao6enzI43Or1PG75WTCuhaGVVtkeB+vLa
-        Z7N5cf0lsuYNpl/j3a8WUnJDsc6O28RwrNwxhP20Ow==
-X-Google-Smtp-Source: ACHHUZ5fZH5sQTSF9kSLjomYFKmTXdEya8wfytEsAnCND0kXRN3jlhDQ+LjZOBfSPpSW+yd7TjJQPApe7tfGB7zoTK4=
-X-Received: by 2002:a17:90b:b85:b0:24b:a5b6:e866 with SMTP id
- bd5-20020a17090b0b8500b0024ba5b6e866mr21612001pjb.24.1683793814515; Thu, 11
- May 2023 01:30:14 -0700 (PDT)
+        bh=Eyhkadwy76PvtTG8OTGK3oTxfpKVBdNtjIXr+9MoiDs=;
+        b=NE748TdjZlGUWAtAE9LAFEJ+eo9FVx9FPnaWps0zTrH/viC9befkUHt6Kw4CntIX8x
+         6ullgUO7lwFvT49cVu8LDvyobnBcE/MXX//cAqTqTdYdr6b5FAdetawZqhMmvIO1PMZU
+         C1ULt6lumQE99iyQLsCTrGR0JEs2nPqHUmo7u/RXrgGLMBw5Jbw/TPoc4xzAFYo67a0G
+         zZpGPcF4uMnotbpaOt6FAiRZVJdamNPibvO0wa74ChyMVfoKxw2zDFoALyk2eH3fnQrI
+         QlzM2waCDn5i3j9UA6N7B7W9Hfnx5WbSh+s1O8cEe/lcSE8dusLpB8Gk/pkuzTOJ09bo
+         sHDQ==
+X-Gm-Message-State: AC+VfDybLvFhbNVyImVxzDSNXdrEkIMT26IBWvESapstamPgXdZ75eje
+        uXh7og4eKQx4a1d3SEzxuypFuQ==
+X-Google-Smtp-Source: ACHHUZ4gH4IivEWz8QiW7o78Y0QhaNUiSoUPbbKtCiyPYCVSiuxVXZc2m5HIiHYNT+Qn0lAUxh/azw==
+X-Received: by 2002:a7b:c7da:0:b0:3f4:2df7:e332 with SMTP id z26-20020a7bc7da000000b003f42df7e332mr5052691wmk.13.1683794075571;
+        Thu, 11 May 2023 01:34:35 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:182d:9e6c:b8ff:5a99? ([2a01:e0a:982:cbb0:182d:9e6c:b8ff:5a99])
+        by smtp.gmail.com with ESMTPSA id x25-20020a1c7c19000000b003f42a75ac2asm7531323wmc.23.2023.05.11.01.34.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 01:34:35 -0700 (PDT)
+Message-ID: <ed230bf6-ef9c-f7e4-81eb-9c01b447aad4@linaro.org>
+Date:   Thu, 11 May 2023 10:34:34 +0200
 MIME-Version: 1.0
-References: <20230509030705.399628514@linuxfoundation.org> <20230509080658.GA152864@d6921c044a31>
- <20230509131032.GA8@9ed91d9f7b3c> <2023050913-spearhead-angrily-fc58@gregkh>
- <20230509145806.GA8@df3c0d7ae0b0> <2023051025-plug-willow-e278@gregkh>
- <CAG9oJsnr55Atybm4nOQAFjXQ_TeqVG+Nz_8zqMT3ansdnEpGBQ@mail.gmail.com>
- <2023051048-plus-mountable-6280@gregkh> <CAG9oJskrJotpyqwi6AHVMmhnFmL+Ym=xAFmL51RiZFaU78wv-A@mail.gmail.com>
- <2023051132-dweller-upturned-b446@gregkh>
-In-Reply-To: <2023051132-dweller-upturned-b446@gregkh>
-From:   Rudi Heitbaum <rudi@heitbaum.com>
-Date:   Thu, 11 May 2023 18:30:02 +1000
-Message-ID: <CAG9oJskf0fE7LiumdzD4QW8dTmGpmVyXBSyiKu_xP+s72Rw44A@mail.gmail.com>
-Subject: Re: [PATCH 6.3 000/694] 6.3.2-rc2 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-        ntfs3@lists.linux.dev, almaz.alexandrovich@paragon-software.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+From:   neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH] ARM: dts: meson8: correct uart_B and uart_C clock
+ references
+Content-Language: en-US
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-amlogic@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Hans-Frieder Vogt <hfdevel@gmx.net>
+References: <20230510210847.996980-1-martin.blumenstingl@googlemail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20230510210847.996980-1-martin.blumenstingl@googlemail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,164 +80,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 May 2023 at 09:00, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Wed, May 10, 2023 at 09:58:06PM +1000, Rudi Heitbaum wrote:
-> > On Wed, 10 May 2023 at 19:09, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Wed, May 10, 2023 at 06:29:23PM +1000, Rudi Heitbaum wrote:
-> > > > On Wed, 10 May 2023 at 17:25, Greg Kroah-Hartman
-> > > > <gregkh@linuxfoundation.org> wrote:
-> > > > >
-> > > > > On Tue, May 09, 2023 at 02:58:06PM +0000, Rudi Heitbaum wrote:
-> > > > > > On Tue, May 09, 2023 at 03:56:42PM +0200, Greg Kroah-Hartman wrote:
-> > > > > > > On Tue, May 09, 2023 at 01:10:32PM +0000, Rudi Heitbaum wrote:
-> > > > > > > > On Tue, May 09, 2023 at 08:06:58AM +0000, Rudi Heitbaum wrote:
-> > > > > > > > > On Tue, May 09, 2023 at 05:26:44AM +0200, Greg Kroah-Hartman wrote:
-> > > > > > > > > > This is the start of the stable review cycle for the 6.3.2 release.
-> > > > > > > > > > There are 694 patches in this series, all will be posted as a response
-> > > > > > > > > > to this one.  If anyone has any issues with these being applied, please
-> > > > > > > > > > let me know.
-> > > > > > > > > >
-> > > > > > > > > > Responses should be made by Thu, 11 May 2023 03:05:05 +0000.
-> > > > > > > > > > Anything received after that time might be too late.
-> > > > > > > > >
-> > > > > > > > > Hi Greg,
-> > > > > > > > >
-> > > > > > > > > 6.3.2-rc2 tested.
-> > > > > > > >
-> > > > > > > > Hi Greg,
-> > > > > > > >
-> > > > > > > > Further testing and have seen ntfs3: NULL pointer dereference with ntfs_lookup errors
-> > > > > > > > with 6.3.2-rc2 (I have not seen this error before.) No other errors in the logs.
-> > > > > > >
-> > > > > > > Can you reproduce this without the extern, gpl-violation module loaded?
-> > > > > > >
-> > > > > > > thanks,
-> > > > > > >
-> > > > > > > greg k-h
-> > > > > >
-> > > > > > Hi Greg,
-> > > > > >
-> > > > > > I dropped the bcm_sta and recompiled and commented out the i915.guc=3
-> > > > > > and was able to reproduce.
-> > > > > >
-> > > > > > [   84.745080] BUG: kernel NULL pointer dereference, address: 0000000000000020
-> > > > > > [   84.746239] #PF: supervisor read access in kernel mode
-> > > > > > [   84.747599] #PF: error_code(0x0000) - not-present page
-> > > > > > [   84.748929] PGD 0 P4D 0
-> > > > > > [   84.750240] Oops: 0000 [#1] SMP NOPTI
-> > > > > > [   84.751575] CPU: 2 PID: 3176 Comm: .NET ThreadPool Not tainted 6.3.2-rc2 #1
-> > > > > > [   84.752998] Hardware name: Intel(R) Client Systems NUC12WSKi7/NUC12WSBi7, BIOS WSADL357.0085.2022.0718.1739 07/18/2022
-> > > > > > [   84.754474] RIP: 0010:ntfs_lookup+0x76/0xe0 [ntfs3]
-> > > > >
-> > > > > And do you get this same crash on ntfs3 on 6.4-rc1?  Is this a new
-> > > > > regression, or does it also show up on 6.3.1?
-> > > >
-> > > > Tested with 6.3.1 during the day today. No errors, and had been
-> > > > running 6.3.1 with no issue. Retested with 6.3.2-rc2 and problem
-> > > > immediately evident. So yes - I believe a regression.
-> > > >
-> > > > I have built and am now testing 6.4.0-rc1 this evening - no errors so far.
-> > > >
-> > > > [    0.000000] Linux version 6.4.0-rc1 (docker@1ccd349e2545)
-> > > > (x86_64-libreelec-linux-gnu-gcc-13.1.0 (GCC) 13.1.0, GNU ld (GNU
-> > > > Binutils) 2.40) #1 SMP Wed May 10 07:51:37 UTC 2023
-> > > >
-> > > > > And ntfs, ick, why?  And .NET?  What a combination...
-> > > >
-> > > > Joys of media players. Test device gets to test exfat, ntfs3, .NET,
-> > > > and throw in a compile host/GHA runner to put it through paces.
-> > >
-> > > Yeah, this should work.  Thanks for verifying this works on other
-> > > releases.  Any chance you can do 'git bisect' to track down the
-> > > offending commit?  In looking things over, I don't see anything
-> > > obvious...
-> >
-> > Hi Greg,
-> >
-> > I can confirm the offending commit in 6.3.2-rc2 is
-> >
-> > bf11fd528a97 fs/ntfs3: Fix null-ptr-deref on inode->i_op in ntfs_lookup()
->
-> Thanks!  Odd that this didn't show up for you on the other stable -rc
-> releases, as that commit is also in those trees.
->
-> I'll go revert this for now and ask the maintainer to send a fixed
-> version.
+On 10/05/2023 23:08, Martin Blumenstingl wrote:
+> On Meson8 uart_B and uart_C do not work, because they are relying on
+> incorrect clocks. Change the references of pclk to the correct CLKID
+> (UART1 for uart_B and UART2 for uart_C), to allow use of the two uarts.
+> 
+> Fixes: 57007bfb5469 ("ARM: dts: meson8: Fix the UART device-tree schema validation")
+> Reported-by: Hans-Frieder Vogt <hfdevel@gmx.net> # for meson8b.dtsi
+> Link: https://lore.kernel.org/linux-amlogic/trinity-bf20bcb9-790b-4ab9-99e3-0831ef8257f4-1680878185420@3c-app-gmx-bap55/
 
-Hi Greg,
+This is confusing, please move this link to the commit message instead, I'll add
+the Link to reference the patch from Lore.
 
-I have run 6.1.28-rc2 today, and was able to trigger the error. So
-definitely bad in both 6.3 and 6.1.
+With that changes:
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
 
-[13812.020209] BUG: kernel NULL pointer dereference, address: 0000000000000020
-[13812.021322] #PF: supervisor read access in kernel mode
-[13812.022346] #PF: error_code(0x0000) - not-present page
-[13812.023591] PGD 0 P4D 0
-[13812.024876] Oops: 0000 [#1] SMP NOPTI
-[13812.026088] CPU: 5 PID: 20386 Comm: .NET ThreadPool Not tainted 6.1.28-rc2 #1
-[13812.027336] Hardware name: Intel(R) Client Systems
-NUC12WSKi7/NUC12WSBi7, BIOS WSADL357.0085.2022.0718.1739 07/18/2022
-[13812.028593] RIP: 0010:ntfs_lookup+0x76/0xe0 [ntfs3]
-[13812.029827] Code: 00 00 00 49 89 c4 e8 19 47 fe ff 85 c0 79 3a 48
-63 d8 48 8b 3d 4b 1d 77 cd 4c 89 e6 e8 33 25 d1 c3 48 81 fb 00 f0 ff
-ff 77 07 <48> 83 7b 20 00 74 41 4c 89 ee 48 89 df e8 88 a5 d5 c3 5b 41
-5c 41
-[13812.031149] RSP: 0018:ffff91f40537bbc8 EFLAGS: 00010207
-[13812.032408] RAX: ffff8a844946a001 RBX: 0000000000000000 RCX: 00000000000042f7
-[13812.033650] RDX: 00000000000042f6 RSI: fffff40a00000000 RDI: 0000000000030ed0
-[13812.034869] RBP: ffff91f40537bbe8 R08: ffff8a844946c01e R09: ffff8a8474d0387e
-[13812.036138] R10: ffff8a845a900000 R11: 0000000000000017 R12: ffff8a844946c000
-[13812.037372] R13: ffff8a84db3fd2c0 R14: ffff8a84b44a0470 R15: ffff8a84b44a0548
-[13812.039002] FS:  00007f437e7fc6c0(0000) GS:ffff8a8b77740000(0000)
-knlGS:0000000000000000
-[13812.040509] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-[13812.041741] CR2: 0000000000000020 CR3: 000000017835e006 CR4: 0000000000f70ea0
-[13812.042986] PKRU: 55555554
-[13812.044227] Call Trace:
-[13812.045464]  <TASK>
-[13812.046708]  __lookup_slow+0x81/0x130
-[13812.047939]  walk_component+0x10b/0x180
-[13812.049169]  path_lookupat+0x6a/0x1a0
-[13812.050388]  filename_lookup+0xd0/0x190
-[13812.051612]  vfs_statx+0x84/0x150
-[13812.052838]  ? getname_flags+0x54/0x1d0
-[13812.054062]  vfs_fstatat+0x5c/0x80
-[13812.055284]  __do_sys_newlstat+0x37/0x70
-[13812.056580]  ? trace_hardirqs_on+0x3a/0xe0
-[13812.058429]  __x64_sys_newlstat+0x1a/0x20
-[13812.059878]  do_syscall_64+0x3c/0x90
-[13812.061109]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[13812.062369] RIP: 0033:0x7f447ea17184
-[13812.063598] Code: 89 02 b8 ff ff ff ff c3 66 2e 0f 1f 84 00 00 00
-00 00 0f 1f 40 00 89 f8 48 89 f7 48 89 d6 83 f8 01 77 2b b8 06 00 00
-00 0f 05 <48> 3d 00 f0 ff ff 77 04 c3 0f 1f 00 48 8b 15 61 cc 0b 00 f7
-d8 64
-[13812.064927] RSP: 002b:00007f437e7fa098 EFLAGS: 00000246 ORIG_RAX:
-0000000000000006
-[13812.066267] RAX: ffffffffffffffda RBX: 00007f43cf45a870 RCX: 00007f447ea17184
-[13812.067601] RDX: 00007f437e7fa0a0 RSI: 00007f437e7fa0a0 RDI: 00007f437e7fa210
-[13812.068940] RBP: 00007f437e7fa1f0 R08: 00007f437e7fa320 R09: 000000000000002d
-[13812.070276] R10: 00007f44051a15e8 R11: 0000000000000246 R12: 00007f43cc018408
-[13812.071616] R13: 00007f437e7fa210 R14: 00007f43cf45a870 R15: 000000000000002d
-[13812.072960]  </TASK>
-[13812.074295] Modules linked in: rfcomm xt_nat xt_tcpudp veth
-xt_conntrack xt_MASQUERADE nf_conntrack_netlink nfnetlink iptable_nat
-nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4 xt_addrtype
-iptable_filter ip_tables x_tables br_netfilter bridge stp llc overlay
-8021q ntfs3 bnep btusb btrtl btbcm btintel btmtk bluetooth
-ecdh_generic ecc exfat snd_hda_codec_hdmi snd_hda_codec_realtek
-snd_hda_codec_generic ledtrig_audio snd_hda_intel snd_hda_codec
-iwlwifi mei_hdcp snd_hwdep tpm_tis mei_pxp x86_pkg_temp_thermal
-snd_hda_core tpm_tis_core cfg80211 intel_rapl_msr mei_me
-intel_powerclamp snd_intel_dspcfg intel_rapl_common mei rfkill tpm_crb
-idma64 tpm rng_core pkcs8_key_parser fuse dmi_sysfs
-[13812.079600] CR2: 0000000000000020
-[13812.081160] ---[ end trace 0000000000000000 ]---
+> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+> ---
+>   arch/arm/boot/dts/meson8.dtsi | 4 ++--
+>   1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm/boot/dts/meson8.dtsi b/arch/arm/boot/dts/meson8.dtsi
+> index 4f22ab451aae..1054297fa69f 100644
+> --- a/arch/arm/boot/dts/meson8.dtsi
+> +++ b/arch/arm/boot/dts/meson8.dtsi
+> @@ -769,13 +769,13 @@ &uart_A {
+>   
+>   &uart_B {
+>   	compatible = "amlogic,meson8-uart";
+> -	clocks = <&xtal>, <&clkc CLKID_UART0>, <&clkc CLKID_CLK81>;
+> +	clocks = <&xtal>, <&clkc CLKID_UART2>, <&clkc CLKID_CLK81>;
+>   	clock-names = "xtal", "pclk", "baud";
+>   };
+>   
+>   &uart_C {
+>   	compatible = "amlogic,meson8-uart";
+> -	clocks = <&xtal>, <&clkc CLKID_UART0>, <&clkc CLKID_CLK81>;
+> +	clocks = <&xtal>, <&clkc CLKID_UART2>, <&clkc CLKID_CLK81>;
+>   	clock-names = "xtal", "pclk", "baud";
+>   };
+>   
 
-> thanks,
->
-> greg k-h
