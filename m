@@ -2,111 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8B776FF407
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:24:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C558E6FF40E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:25:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238079AbjEKOYO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 10:24:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42408 "EHLO
+        id S238085AbjEKOZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 10:25:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238302AbjEKOXy (ORCPT
+        with ESMTP id S238470AbjEKOZW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 10:23:54 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1C6106C5
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 07:23:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683815032; x=1715351032;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=be2GtGpChjQC18AL8KYB2LRliaSADqMrGVcS9L1D0U0=;
-  b=jMJAJCq08UDR8v89x8za9VfXRvm7x7NewOJt1mVYc9f19Q6QBKZPANcJ
-   KT94H8pNP1D3phOoA0z+MZ4bWHZ9y4cLMa2c/Nq501dMAgpEIxVD5YZw6
-   je6J/+UmcE/Vu26AH2MNa1SYN+BPeIBwAQi2mvd+G+/zE+7Fm0TFruNT4
-   QPVD3geCRnv/2Kir/8VJ4f/qXXkIWQg6B9oARcWNM5d2Jgo44thyBABKS
-   h6QF8xp2ohyn/GboX/DizUk0evVnfbzLKkjszc0BYAWyRViTmHQ80QvZ9
-   40vqHS9wBYn+mkSwJEF07iz3WKhNwGoesy1R6QnHSxAFDyjcWLC3XPJUN
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="349352185"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="349352185"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 07:23:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="769349575"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="769349575"
-Received: from ambujamp-mobl1.amr.corp.intel.com (HELO [10.212.238.119]) ([10.212.238.119])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 07:23:51 -0700
-Message-ID: <e314748f-b4df-c65d-7acc-45c21abf31ce@intel.com>
-Date:   Thu, 11 May 2023 07:23:51 -0700
+        Thu, 11 May 2023 10:25:22 -0400
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2101.outbound.protection.outlook.com [40.107.96.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC05611575;
+        Thu, 11 May 2023 07:24:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=eNEZR1V9cicsPIicS3u3akllebJseEm0z6EEGUCSAaE9LCr23X4wrU5xmq1rv3YoqovC+pEfgh22IxL3yOB0ui3osv25aepnAw2ZYdPjhfBk0HR6Fk1gcIm/wTfzy1H0WAhtvuoHfVnXYnKbmLSh7dyMk3Kqsx0cf3S2sMc14kyKC6/aB4baT9v2NAGTUKng0t+qoJfFGDt94Bhth75JfKvQABP1hM2+Kn8yLQcAs6GpIGxpRI+Yx4nHychUSPuuAp7qzOLcJhdpLy8RbHQ74DPg4h1Fhdbn3HlxgWgX7kdajPYFVvsGLr+ZoADiicxV8SL548hYkcf4S5UcYWyGVQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7RYmxkQ/ji41+jhyUAH9q4OQql59eG1Qtdit4nAaHJ0=;
+ b=AcEpL3EcPvnepJTN1YSHawQ05MV6ULxAbbXycoavMjIAw/AMOSh0ZfMtSuDS0PipAojo24bU9WW9lTCiZjvTzXG+dOdiWNKTVPlyiccNK4rBeYP0nKPx60WYcybo63/IXodgM9hz9Z3K4SkylMCiMGJRg+atK12buejwWJkzf5YPl0wYhGFqXNJPeXFa+LhD1lov/Y5tfi22nIDEGnbKCcVKtBGpEn5ciqgOQWAiqGbeLVXyL92Wifmh6Ef50qnjHhUYHdU6sofHWOC3zKGpsONOpP9HlhGtZRQRpFp2mJZIpjWP3p870mXrOARpYD+/sS87rzThipmPjPbRny4w7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7RYmxkQ/ji41+jhyUAH9q4OQql59eG1Qtdit4nAaHJ0=;
+ b=amgmYNBn6odxr/Ufgxx53TbqXMQcjOWtwwLIkIlJGvsvVqg+k/0524ZsE84OR5CI7lQB+xiKV7clVfTzMppBR653B+++eqnwnqBwH2gcsh9Y/ycZ81Zz268QjNQNjKQWnCsamtJ630TA8jR5x+MhBhz6k3MMX3kKn3jW8f6CptY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SJ2PR13MB6522.namprd13.prod.outlook.com (2603:10b6:a03:561::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Thu, 11 May
+ 2023 14:24:48 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Thu, 11 May 2023
+ 14:24:48 +0000
+Date:   Thu, 11 May 2023 16:24:35 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Staging Drivers <linux-staging@lists.linux.dev>,
+        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
+        Linux Kernel Actions <linux-actions@lists.infradead.org>,
+        Diederik de Haas <didi.debian@cknow.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        David Airlie <airlied@redhat.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Kalle Valo <kvalo@kernel.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Deepak R Varma <drv@mailo.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Archana <craechal@gmail.com>,
+        "David A . Hinds" <dahinds@users.sourceforge.net>,
+        Donald Becker <becker@scyld.com>,
+        Peter De Schrijver <p2@mind.be>,
+        Greg Ungerer <gerg@linux-m68k.org>
+Subject: Re: [PATCH 04/10] net: ethernet: 8390: Replace GPL boilerplate with
+ SPDX identifier
+Message-ID: <ZFz6o4NerIKW/db9@corigine.com>
+References: <20230511133406.78155-1-bagasdotme@gmail.com>
+ <20230511133406.78155-5-bagasdotme@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511133406.78155-5-bagasdotme@gmail.com>
+X-ClientProxiedBy: AM4PR0202CA0012.eurprd02.prod.outlook.com
+ (2603:10a6:200:89::22) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [RFC 0/6] mm: improve page allocator scalability via splitting
- zones
-Content-Language: en-US
-To:     Huang Ying <ying.huang@intel.com>, linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org,
-        Arjan Van De Ven <arjan@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <jweiner@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        Matthew Wilcox <willy@infradead.org>
-References: <20230511065607.37407-1-ying.huang@intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230511065607.37407-1-ying.huang@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ2PR13MB6522:EE_
+X-MS-Office365-Filtering-Correlation-Id: 079f9e82-b533-41d1-0fed-08db522b79a8
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HrO3qMY54g7s+R0TY4gShgDySFw43IfO6KpRR+xtG/HFFRTYZOW4LihUwTk+XVMvcHVeEFdReuuaKKCP/KyLEBPk1Knw22J0e8XMeRyt77azpb0D4MD4LWC7jRiXFXHIoOstAZV3xesKrD2gEWQHzFYNUEhocVhEk6YFV2WR5Sz6/k7/xbpN2WvepaAUvJ4VQI+B54Ux1EIM+iMvQE7tK6e/M79j2ThBLAW/bt2gBmY6p/F5Pq7x+XGTleGZTi0TN5z1Bh1xTaW7GwEgXdSFKhKxhp7yNrvVxxjJVqNDwHgDyTGayf+0KlWDndYlNH/+csh8sjK/ogsLGBGQW3f+VYx+DFnzBY31mlEgpkOMqFBYS/m2jaSBecCPJQ68k+hZYbxudBncvrNowNKKaXINGJ3PMQW812NEUC9tlxBj7UtiY3IjhUAsIQgt+QBXUMOGXac05CnW7QLPRErkq3ptO1fbiPY5fippTwIwWdjQqXCLuoWTDVpnLc7WzaM6IHBorIk4IYgq+Wok2pdRg2iHxe9eB+uQx7dRF7yir0SG8og0f0KTZYbZcJb8c8vbY7G/EmU45ldOZw51cbi2HUukZ4wkyDQZ53m2sU1a4Mr0WP2siQ104ucuoCTd9i7uBQuK
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(396003)(39840400004)(376002)(346002)(451199021)(186003)(6506007)(2906002)(41300700001)(4326008)(6512007)(6916009)(66556008)(66476007)(316002)(558084003)(38100700002)(83380400001)(7406005)(7416002)(2616005)(8676002)(86362001)(44832011)(8936002)(36756003)(5660300002)(54906003)(478600001)(6666004)(6486002)(66946007)(41080700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1IW8BJyNoU4F6B3Cw5ECWGrwPpkI7fzqw+DqvlkAdzMXhNp82XKG24BzhXe4?=
+ =?us-ascii?Q?HE699Uj5M2/NNyPRonVMg5B0NBivACNj7PY2hNlbNU8eUzgmBcKt81xvvMz4?=
+ =?us-ascii?Q?WjA7BNVWZ+78c+g8jsy0bjPrrZf1NDOn8yv48JZfHzznVca3AopY4SxMpEvo?=
+ =?us-ascii?Q?Y+HqngUJ3uhCdp5rX8IV4kVLqpQlLkK7P1tQ9fzkk5uMfrv2lbX5SP929+ud?=
+ =?us-ascii?Q?ToCK7+85eWizKEsWddR3nkLd6N6TN/rfGHL+b2i21lrSBG5aXEtGOQwXV8uS?=
+ =?us-ascii?Q?3SUAe7YZljodex9ntwNQskXCnA+P1+NUTXSGz7VgFtJDeYdXaMg8OdimTDvx?=
+ =?us-ascii?Q?vtZ4xUSUe5p4/kZ1WKwuo8RbaMRJ59snhWUwHiybgt8NRrihnl+OfVzsJ4wB?=
+ =?us-ascii?Q?zRGRtZMpaq9h4zGXCsYjKcxlGTiPFTstdKFkiT8ZHj1NCqLLCzwO0GZIrvIi?=
+ =?us-ascii?Q?aSo1TJujNZj5P/M1APR6i6dwmHMBtq75tOXsBrRou5YY8MEK54EzAcePv28U?=
+ =?us-ascii?Q?Y7rxCekp8UGMURQB7uWTGaa9En6EcuwANyVr9C2LvohgrBTcxheUZWxMvFda?=
+ =?us-ascii?Q?IrQ2x409VAsMiYWDy8Erw7glaZFNEhbMIQnFin2cC5wZJgX11s8uWfdUwMgA?=
+ =?us-ascii?Q?oKV9me7NjhSBbv2cLb+k1+Nn8+Y3isiuO3bFtm4ViipBgr9quMTwrfJCfv0c?=
+ =?us-ascii?Q?fsj2T0lyLylElGI/9KjJN3Cgy/Z5o8YhyEUIlN/1ANeDlm3KfetluJu0ryei?=
+ =?us-ascii?Q?5I7GXJkz3bNlsmXuru8lvEsF53t66DFFpZh+2NyANXohmwn387ut0u/13zMi?=
+ =?us-ascii?Q?aEcJErVziXTSyw+hYRwnracOhqbBmrpZunwMnSBY7zMzdqwHbLISN9W9N6hr?=
+ =?us-ascii?Q?U+58OrRs1xMCgdsk8dqkPbGHXITaRx9sGqLmwUMY0RItcPntlxEcYilZ3eP4?=
+ =?us-ascii?Q?j+umMdTFpJKo/X6wALnIUdZx1OrNGZMyvU0UtIgEvVF8UTD5cEOu1Vl5CHIl?=
+ =?us-ascii?Q?E4tz0SoLmiXEP3/yPzMJmbpYEW8JPR/m5pdOt6oeIaSZcGMBHNQ2CkROpNs0?=
+ =?us-ascii?Q?0f7W2QiOzECYO/bQmsl0gLRvEuxnMX8yahd9nGlGMcriCIblWiio2BLpNiec?=
+ =?us-ascii?Q?0bSoY9m8q+4NPND6RsxAKwE3GVvG3HuR52FjHuP8tHjITT1+BE1GQGAXXMUJ?=
+ =?us-ascii?Q?yUnyFlENLpR6DNGTcYhIE2GGafTN0o5nOPPqt61vIA5e2eRLKrZhDJHEaSU0?=
+ =?us-ascii?Q?EBlSy/Zv/9YcWyYc61/D7lcjfBAfOlGw1pwQcjS2B/NEFuAmTD0q8iorovn8?=
+ =?us-ascii?Q?TZRhXZ97P/GxIqVG9riroJcqKd3WfxhS3o1Odk9xyLoNkdixw73HOWdP6cU0?=
+ =?us-ascii?Q?9GFIA5FpZH2bJx5J08v+hOPq13NVH+MA5njcfN+3UKw9YpLADXTf9WjeTk4+?=
+ =?us-ascii?Q?XWAe0nnSFVL9TGjZAOzbyz3dNK9yteJuOmP6KBKc5GlN8ShXGczioxSFSvAz?=
+ =?us-ascii?Q?n6ja/7lKL8+77iCRc0IlnLAt1yE8rRthRCHSLfHjTfuoAnr1w4hiJYjg48E3?=
+ =?us-ascii?Q?FWSwMsAl5uZoshw82UmDyaoUH7iplGdZOu3GbXyGana0+7QTT7+4EQBq60js?=
+ =?us-ascii?Q?aEQgScSLGfbz1dR/4dNz5WgjwRPeJNOd+nj1WCZsEeAvjoC7H+PIOlqWZain?=
+ =?us-ascii?Q?IXJlqA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 079f9e82-b533-41d1-0fed-08db522b79a8
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 14:24:48.4821
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: eBYa4i0225d+FWEhZcGlcrSsF4Rw6q8PM3lEkU6283qEywrGDDidvQtc3+5Xnfb2Oua5HZuJYc46tFhAXujJMZqJDxVGnJCURPBtYL0Pa/8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR13MB6522
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/10/23 23:56, Huang Ying wrote:
-> To improve the scalability of the page allocation, in this series, we
-> will create one zone instance for each about 256 GB memory of a zone
-> type generally.  That is, one large zone type will be split into
-> multiple zone instances. 
+On Thu, May 11, 2023 at 08:34:00PM +0700, Bagas Sanjaya wrote:
+> Replace GPL boilerplate notice on remaining files with appropriate SPDX
+> tag. For files mentioning COPYING, use GPL 2.0; otherwise GPL 1.0+.
 
-A few anecdotes for why I think _some_ people will like this:
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-Some Intel hardware has a "RAM" caching mechanism.  It either caches
-DRAM in High-Bandwidth Memory or Persistent Memory in DRAM.  This cache
-is direct-mapped and can have lots of collisions.  One way to prevent
-collisions is to chop up the physical memory into cache-sized zones and
-let users choose to allocate from one zone.  That fixes the conflicts.
-
-Some other Intel hardware a ways to chop a NUMA node representing a
-single socket into slices.  Usually one slice gets a memory controller
-and its closest cores.  Intel calls these approaches Cluster on Die or
-Sub-NUMA Clustering and users can select it from the BIOS.
-
-In both of these cases, users have reported scalability improvements.
-We've gone as far as to suggest the socket-splitting options to folks
-today who are hitting zone scalability issues on that hardware.
-
-That said, those _same_ users sometimes come back and say something
-along the lines of: "So... we've got this app that allocates a big hunk
-of memory.  It's going slower than before."  They're filling up one of
-the chopped-up zones, hitting _some_ kind of undesirable reclaim
-behavior and they want their humpty-dumpty zones put back together again
-... without hurting scalability.  Some people will never be happy. :)
-
-Anyway, _if_ you do this, you might also consider being able to
-dynamically adjust a CPU's zonelists somehow.  That would relieve
-pressure on one zone for those uneven allocations.  That wasn't an
-option in the two cases above because users had ulterior motives for
-sticking inside a single zone.  But, in your case, the zones really do
-have equivalent performance.
