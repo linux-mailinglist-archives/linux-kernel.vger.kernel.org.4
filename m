@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9C6C6FFD09
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 01:14:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 07E046FFD0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 01:14:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239464AbjEKXOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 19:14:30 -0400
+        id S239538AbjEKXOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 19:14:33 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239420AbjEKXO0 (ORCPT
+        with ESMTP id S239256AbjEKXO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 19:14:26 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C8C059DC;
-        Thu, 11 May 2023 16:14:20 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-965ab8ed1c0so1524186066b.2;
-        Thu, 11 May 2023 16:14:19 -0700 (PDT)
+        Thu, 11 May 2023 19:14:27 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C824D5B8C;
+        Thu, 11 May 2023 16:14:21 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bc1612940so16698031a12.2;
+        Thu, 11 May 2023 16:14:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683846858; x=1686438858;
+        d=gmail.com; s=20221208; t=1683846860; x=1686438860;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=udZm9qn498R0QUgsicv7hzCtWJWxnPlcjDTKukuQ0jk=;
-        b=KfGSMne2sEcVDFYwErj0jDzCKsz9TXKKJ164bQeaYd+FDzQ7iMPeK57IyWfgy/6mhr
-         MibE3cZ9M1E992ODcvCyTI4XFgNAe6kZtdb/jB/TstA0gORlrhfWZxjJrvAXMhasKeOb
-         i5wa7Aht/K+56NSJzrUwVEwKh3Gxx8x+VSDqeD9ZuHdhNjHTasUTYQe5YZ8uht4uUqfn
-         SWKgjLr0/4xJC34u6UvPkBFzTyDK8mmpJnUKYXLnBC7d23NdZq+rr8bmejjfTTsroSjX
-         T0+0ydAQRFJq5I5JmEHvkDOzAhi3Sb1ZUCu60Nd9k4lM2lDDoHDv2fMYUHleRF/gmOwr
-         C9XQ==
+        bh=b2VsN8atgMi+3hxkQqcD7Uds4tmy7HqZMS9gPdrmsb4=;
+        b=pkuQKYnnCEdft/G+uiYZJ8uWi/2kTtLl0j2agga0xhMKI/ziSUNGiFld/hG/AgBZNZ
+         BrtnO3GlFynmbRq/MkB1WyaYbe3/UAMmYb24ub6pp4SoxNtLs3bucSN5tdGxMFsrrloe
+         QR0HzL7A60P6DHpR8rU53MTdtwbJJWMuATbIPgrMdwvxWSPDMzhaSn2TVhkqmuoR64Sc
+         4wv+4YD9oV6RzyFf5YjeJMOBmOR/ZZKRvEyYeXkjB4do9tkvFw8Tt4ymc00m8MAyULT9
+         CxrUWDTUDlQYlUa4Eq+G/afe+sNlpvUhFqvWWP78/zDbqPbM3d9AzfzuJxbU3/nS3tIz
+         1thw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683846858; x=1686438858;
+        d=1e100.net; s=20221208; t=1683846860; x=1686438860;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=udZm9qn498R0QUgsicv7hzCtWJWxnPlcjDTKukuQ0jk=;
-        b=aI0MwHi19jWDngRhY4h1O0gk/wxMGl3FNd9nCegZTC4rvYYmGpVAeWxr5W/APtO4Td
-         BKuMkY1tF3C7G91f9W1NhtCxkqM1jZJLC1+PQ3o7OKlXdo9zADoIgNztqynJpz7QxFb7
-         jjjY6RVH9W+Q7bJZPyFiREr4Z++9aptn7X/UmJT4ieSQVOM/xUxawTngnCCTSFdDX6QY
-         XyTEHn/gubmTrqkJxvNSY/hTVKBYRCa9LnTUJfF5FT5P2/HICOSxcst/Vdrx5Se1b83c
-         F/YFdV4pw5/GTx7y/9OWNNtjNADcjvwrhhRqnDzTAgSd3DcRHevLIwaEQmpbg6LcJzZA
-         xsEA==
-X-Gm-Message-State: AC+VfDzAJVjpw9Ypl8+3vHv0OJJUnzLxBFspUxaSi6ju37YKD8z9CM1T
-        RXBDQctVkru+AWWCKCcGqvw=
-X-Google-Smtp-Source: ACHHUZ6iAlnfrRSk7IuQeZS4b2xJfCvQTlVbacLS+oD75KUuTXUpj3la1tjGEOnfgWLl7OJOEH22xA==
-X-Received: by 2002:a17:906:eec5:b0:953:4775:baa7 with SMTP id wu5-20020a170906eec500b009534775baa7mr22383355ejb.52.1683846858377;
-        Thu, 11 May 2023 16:14:18 -0700 (PDT)
+        bh=b2VsN8atgMi+3hxkQqcD7Uds4tmy7HqZMS9gPdrmsb4=;
+        b=JkzvjXf2HowaTFlDH0Bro6D8FNNdoqBcSi9Hdr9wutIvJ/MIOut+ij/nnwHNTO7l0F
+         rFUxouJZhIJcQ/9J9fdrSmh2kjP57TE7ILjyUbANUeUtzdh0j0l79JK0nQ8Jcw9gzx2T
+         YiomCJWyYIyMXV7U8nNLvXyooYt6u80/YHATKXxAFCvLFktVMgZdnaSWR/GceOif9Bl0
+         3xfNbuGRTf42+f0u8JmfO1LRaiZmFRI/TGt4qVx/2WiD2vog/zoF8datYZvPCo5HmiBv
+         ZTa1W9Yx1alTwxUDAd6A5hKAWbdT0TrKE+1pgDZvf5yMkf7GMGgE7COqaoR6zO3TtEdY
+         A5OA==
+X-Gm-Message-State: AC+VfDy6n6W/xrK0d44wMkmkDDVJi5pUA78K/D3C5NNr8+S6pj0zzmdm
+        ffc7/ZPKxFYR4GoA7EZP7COZExfBLF3uTQT5
+X-Google-Smtp-Source: ACHHUZ77bHdjVSfvFyyDQR4vgqCTNKD6gRFnm6VieLTdykuJJ5rYhLVSHX8aHqbXliTmbb99aS9ZdQ==
+X-Received: by 2002:a17:907:31c9:b0:94f:6627:22b5 with SMTP id xf9-20020a17090731c900b0094f662722b5mr19742819ejb.47.1683846859987;
+        Thu, 11 May 2023 16:14:19 -0700 (PDT)
 Received: from wslxew193.fritz.box (p200300c7874f2f0049cdad3080524d03.dip0.t-ipconnect.de. [2003:c7:874f:2f00:49cd:ad30:8052:4d03])
-        by smtp.gmail.com with ESMTPSA id hx8-20020a170906846800b00965e839f56bsm4543023ejc.182.2023.05.11.16.14.17
+        by smtp.gmail.com with ESMTPSA id hx8-20020a170906846800b00965e839f56bsm4543023ejc.182.2023.05.11.16.14.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 16:14:17 -0700 (PDT)
+        Thu, 11 May 2023 16:14:19 -0700 (PDT)
 From:   Boerge Struempfel <boerge.struempfel@gmail.com>
 X-Google-Original-From: Boerge Struempfel <bstruempfel@ultratronik.de>
 Cc:     boerge.struempfel@gmail.com, bstruempfel@ultratronik.de,
@@ -64,9 +64,9 @@ Cc:     boerge.struempfel@gmail.com, bstruempfel@ultratronik.de,
         NXP Linux Team <linux-imx@nxp.com>,
         linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v2 2/4] spi: add SPI_MOSI_IDLE_LOW mode bit
-Date:   Fri, 12 May 2023 01:13:15 +0200
-Message-Id: <20230511231317.158214-3-bstruempfel@ultratronik.de>
+Subject: [PATCH v2 3/4] spi: spi-imx: add support for SPI_MOSI_IDLE_LOW mode bit
+Date:   Fri, 12 May 2023 01:13:16 +0200
+Message-Id: <20230511231317.158214-4-bstruempfel@ultratronik.de>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230511231317.158214-1-bstruempfel@ultratronik.de>
 References: <20230511135632.78344-1-bstruempfel@ultratronik.de>
@@ -84,51 +84,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some spi controller switch the mosi line to high, whenever they are
-idle. This may not be desired in all use cases. For example neopixel
-leds can get confused and flicker due to misinterpreting the idle state.
-Therefore, we introduce a new spi-mode bit, with which the idle behaviour
-can be overwritten on a per device basis.
+By default, the spi-imx controller pulls the mosi line high, whenever it
+is idle. This behaviour can be inverted per CS by setting the
+corresponding DATA_CTL bit in the config register of the controller.
+
+Also, since the controller mode-bits have to be touched anyways, the
+SPI_CPOL and SPI_CPHA are replaced by the combined SPI_MODE_X_MASK flag.
 
 Signed-off-by: Boerge Struempfel <bstruempfel@ultratronik.de>
 ---
- drivers/spi/spi.c            | 2 ++
- include/uapi/linux/spi/spi.h | 3 ++-
- 2 files changed, 4 insertions(+), 1 deletion(-)
+ drivers/spi/spi-imx.c | 9 ++++++++-
+ 1 file changed, 8 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c
-index 9291b2a0e8871..3ad538b317a84 100644
---- a/drivers/spi/spi.c
-+++ b/drivers/spi/spi.c
-@@ -2260,6 +2260,8 @@ static int of_spi_parse_dt(struct spi_controller *ctlr, struct spi_device *spi,
- 		spi->mode |= SPI_LSB_FIRST;
- 	if (of_property_read_bool(nc, "spi-cs-high"))
- 		spi->mode |= SPI_CS_HIGH;
-+	if (of_property_read_bool(nc, "spi-mosi-idle-low"))
-+		spi->mode |= SPI_MOSI_IDLE_LOW;
+diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c
+index 34e5f81ec431e..cb6c088706b21 100644
+--- a/drivers/spi/spi-imx.c
++++ b/drivers/spi/spi-imx.c
+@@ -281,6 +281,7 @@ static bool spi_imx_can_dma(struct spi_controller *controller, struct spi_device
+ #define MX51_ECSPI_CONFIG_SCLKPOL(cs)	(1 << ((cs & 3) +  4))
+ #define MX51_ECSPI_CONFIG_SBBCTRL(cs)	(1 << ((cs & 3) +  8))
+ #define MX51_ECSPI_CONFIG_SSBPOL(cs)	(1 << ((cs & 3) + 12))
++#define MX51_ECSPI_CONFIG_DATACTL(cs)	(1 << ((cs & 3) + 16))
+ #define MX51_ECSPI_CONFIG_SCLKCTL(cs)	(1 << ((cs & 3) + 20))
  
- 	/* Device DUAL/QUAD mode */
- 	if (!of_property_read_u32(nc, "spi-tx-bus-width", &value)) {
-diff --git a/include/uapi/linux/spi/spi.h b/include/uapi/linux/spi/spi.h
-index 9d5f580597039..ca56e477d1619 100644
---- a/include/uapi/linux/spi/spi.h
-+++ b/include/uapi/linux/spi/spi.h
-@@ -28,6 +28,7 @@
- #define	SPI_RX_OCTAL		_BITUL(14)	/* receive with 8 wires */
- #define	SPI_3WIRE_HIZ		_BITUL(15)	/* high impedance turnaround */
- #define	SPI_RX_CPHA_FLIP	_BITUL(16)	/* flip CPHA on Rx only xfer */
-+#define SPI_MOSI_IDLE_LOW	_BITUL(17)	/* leave mosi line low when idle */
+ #define MX51_ECSPI_INT		0x10
+@@ -573,6 +574,11 @@ static int mx51_ecspi_prepare_message(struct spi_imx_data *spi_imx,
+ 		cfg &= ~MX51_ECSPI_CONFIG_SCLKCTL(spi_get_chipselect(spi, 0));
+ 	}
  
- /*
-  * All the bits defined above should be covered by SPI_MODE_USER_MASK.
-@@ -37,6 +38,6 @@
-  * These bits must not overlap. A static assert check should make sure of that.
-  * If adding extra bits, make sure to increase the bit index below as well.
-  */
--#define SPI_MODE_USER_MASK	(_BITUL(17) - 1)
-+#define SPI_MODE_USER_MASK	(_BITUL(18) - 1)
++	if (spi->mode & SPI_MOSI_IDLE_LOW)
++		cfg |= MX51_ECSPI_CONFIG_DATACTL(spi->chip_select);
++	else
++		cfg &= ~MX51_ECSPI_CONFIG_DATACTL(spi->chip_select);
++
+ 	if (spi->mode & SPI_CS_HIGH)
+ 		cfg |= MX51_ECSPI_CONFIG_SSBPOL(spi_get_chipselect(spi, 0));
+ 	else
+@@ -1743,7 +1749,8 @@ static int spi_imx_probe(struct platform_device *pdev)
+ 	spi_imx->controller->prepare_message = spi_imx_prepare_message;
+ 	spi_imx->controller->unprepare_message = spi_imx_unprepare_message;
+ 	spi_imx->controller->slave_abort = spi_imx_slave_abort;
+-	spi_imx->controller->mode_bits = SPI_CPOL | SPI_CPHA | SPI_CS_HIGH | SPI_NO_CS;
++	spi_imx->controller->mode_bits = SPI_MODE_X_MASK | SPI_CS_HIGH | SPI_NO_CS |
++					 SPI_MOSI_IDLE_LOW;
  
- #endif /* _UAPI_SPI_H */
+ 	if (is_imx35_cspi(spi_imx) || is_imx51_ecspi(spi_imx) ||
+ 	    is_imx53_ecspi(spi_imx))
 -- 
 2.25.1
 
