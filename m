@@ -2,55 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7FBA56FF012
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:44:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65EF36FF016
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:45:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237872AbjEKKom (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 06:44:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
+        id S237876AbjEKKpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 06:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231391AbjEKKoj (ORCPT
+        with ESMTP id S237875AbjEKKor (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 06:44:39 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 477A12D45
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:43:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683801836;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=MHaGSheX03bFaaahcKs7iJDPO3dUtTLJ/9oLvjckzjY=;
-        b=Rk26OXllwwKPUZYneHeBWmthxe+ths6PV8SFlskLgbaRpC0iRfdN9e3mftEK/Pp1zbWfDf
-        2HML2cg3dC4pqlUqnmIWiRhzX/XObfOW9LbglHY4iYoEktmg+73otF41H2ffOXm73+yYSl
-        UtYy1raiLI5K4aKb0rMyqRlT1bGN9Hc=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-39-Yt57wi35P-ier9djhmMlZw-1; Thu, 11 May 2023 06:43:53 -0400
-X-MC-Unique: Yt57wi35P-ier9djhmMlZw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D31A2280BC5E;
-        Thu, 11 May 2023 10:43:52 +0000 (UTC)
-Received: from gerbillo.redhat.com (unknown [10.39.193.9])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C0617C15BA0;
-        Thu, 11 May 2023 10:43:51 +0000 (UTC)
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Networking for 6.4-rc2
-Date:   Thu, 11 May 2023 12:43:42 +0200
-Message-Id: <20230511104342.18276-1-pabeni@redhat.com>
+        Thu, 11 May 2023 06:44:47 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 414FFAD05
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:44:45 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f315712406so279638685e9.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:44:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1683801883; x=1686393883;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=P7Umlt0HzFSClqRwf3YI2Twu1K26jeRmJZFN/RWjcoM=;
+        b=X/RL8VYyhIZrC4PRL+sEKoia8SgSpPPqHt4QBmvchTjTwBCVbqVe+9ixoBscAjOgKI
+         +c/OvN0f+b+foIcSLcNb7vQrVar+bJxWpapaEKgfmx5JHulNXC+F45wuX0GvFCLd13Q2
+         A8Xj+2RtDYY+OZpzPBuww9hxPuyI8tYPpO5p2yQaPCfV1N7RotoAJgwDFn0DMKh2Or73
+         DKJMokSefadPm2XMFkd75bl2sXPBgmv358l0XOwxUhDrOMl/fqSH7sYGwYVmi9H+w0LJ
+         l9lyBrxKYEwSwkLu2fIqpVG7TM1eyK+fIdMaggFwGhfOzKFCmb3AIRRSOcS4AOmFw2Jq
+         mCyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683801883; x=1686393883;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P7Umlt0HzFSClqRwf3YI2Twu1K26jeRmJZFN/RWjcoM=;
+        b=SrmEAhpzgkVrycGzPDolgHXBGXC2WiJBH7+n+StOzw/lUJS2yTUfvJxjKxdt6jnbuX
+         zV25VeWCYVi1/pv/2MzXlaI2M/bfivA09qNohHg2gV7ofEWP4DGs8+CY55xhDXP9DZd+
+         6RM58JroiD9xV4hZ6K3bVsbr96Dhahkkjd7hADf67KcnTA3562cL4444iowNGhoMwn/k
+         Sc3KIdIQ95KO29a0TgHQfmQCFrXNm2FZRqxehf3WMit7o2EyoA6HP7brC8ErHfjzllys
+         qp+j1uLm3s/QbzS7Vhnz4b+qv+GNM/HdBxmrwjNAv1Hd/GaO3r7nBdSBY+jVC0EkSUNZ
+         eUIQ==
+X-Gm-Message-State: AC+VfDz5ZWvoee8PY84LEPZEjZT2lg85WSB6Gccc45Lz9Add8MugyAUO
+        uuZeuPhBCWlUtHyy0AKT1i69Cg==
+X-Google-Smtp-Source: ACHHUZ6CScK1XIiX1j+9SIiexcwc0hNJLrd39EK/QefUYCN0gSs2wB98akb5RGZ0mp02hDFUSazkjQ==
+X-Received: by 2002:a1c:f719:0:b0:3f1:70d5:1be8 with SMTP id v25-20020a1cf719000000b003f170d51be8mr16222257wmh.15.1683801883657;
+        Thu, 11 May 2023 03:44:43 -0700 (PDT)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id s7-20020a1cf207000000b003e91b9a92c9sm25273509wmc.24.2023.05.11.03.44.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 03:44:43 -0700 (PDT)
+Date:   Thu, 11 May 2023 12:44:41 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Haibo Xu <haibo1.xu@intel.com>
+Cc:     xiaobo55x@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] riscv: kvm: Add KVM_GET_REG_LIST API support
+Message-ID: <20230511-5e8b478be55881a754cc2002@orel>
+References: <cover.1683791148.git.haibo1.xu@intel.com>
+ <921fc2e1a91887170e277acb1b52df57480a5736.1683791148.git.haibo1.xu@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <921fc2e1a91887170e277acb1b52df57480a5736.1683791148.git.haibo1.xu@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,172 +81,434 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus!
+On Thu, May 11, 2023 at 05:22:48PM +0800, Haibo Xu wrote:
+> KVM_GET_REG_LIST API will return all registers that are available to
+> KVM_GET/SET_ONE_REG APIs. It's very useful to identify some platform
+> regression issue during VM migration.
+> 
+> Since this API was already supported on arm64, it'd be straightforward
 
-The following changes since commit ed23734c23d2fc1e6a1ff80f8c2b82faeed0ed0c:
+s/it'd be/it is/
 
-  Merge tag 'net-6.4-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2023-05-05 19:12:01 -0700)
+> to enable it on riscv with similar code structure.
+> 
+> Signed-off-by: Haibo Xu <haibo1.xu@intel.com>
+> ---
+>  Documentation/virt/kvm/api.rst |   2 +-
+>  arch/riscv/kvm/vcpu.c          | 346 +++++++++++++++++++++++++++++++++
+>  2 files changed, 347 insertions(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/virt/kvm/api.rst b/Documentation/virt/kvm/api.rst
+> index add067793b90..280e89abd004 100644
+> --- a/Documentation/virt/kvm/api.rst
+> +++ b/Documentation/virt/kvm/api.rst
+> @@ -3499,7 +3499,7 @@ VCPU matching underlying host.
+>  ---------------------
+>  
+>  :Capability: basic
+> -:Architectures: arm64, mips
+> +:Architectures: arm64, mips, riscv
+>  :Type: vcpu ioctl
+>  :Parameters: struct kvm_reg_list (in/out)
+>  :Returns: 0 on success; -1 on error
+> diff --git a/arch/riscv/kvm/vcpu.c b/arch/riscv/kvm/vcpu.c
+> index 8bd9f2a8a0b9..fb8834e4fa15 100644
+> --- a/arch/riscv/kvm/vcpu.c
+> +++ b/arch/riscv/kvm/vcpu.c
+> @@ -657,6 +657,334 @@ static int kvm_riscv_vcpu_set_reg_isa_ext(struct kvm_vcpu *vcpu,
+>  	return 0;
+>  }
+>  
+> +static inline unsigned long num_config_regs(void)
+> +{
+> +	return sizeof(struct kvm_riscv_config) / sizeof(unsigned long);
+> +}
+> +
+> +static int copy_config_reg_indices(u64 __user *uindices)
+> +{
+> +	unsigned int i;
+> +	int n = num_config_regs();
+> +
+> +	for (i = 0; i < n; i++) {
+> +		u64 reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CONFIG | i;
+                                          ^ this should be
+					  size-ulong
 
-are available in the Git repository at:
+  u64 size = IS_ENABLED(CONFIG_32BIT) ? KVM_REG_SIZE_U32 : KVM_REG_SIZE_U64;
+  u64 reg = KVM_REG_RISCV | size | KVM_REG_RISCV_CONFIG | i;
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.4-rc2
+> +
+> +		if (uindices) {
+> +			if (put_user(reg, uindices))
+> +				return -EFAULT;
+> +			uindices++;
+> +		}
+> +	}
+> +
+> +	return n;
+> +}
+> +
+> +static inline unsigned long num_core_regs(void)
+> +{
+> +	return sizeof(struct kvm_riscv_core) / sizeof(unsigned long);
+> +}
+> +
+> +static int copy_core_reg_indices(u64 __user *uindices)
+> +{
+> +	unsigned int i;
+> +	int n = num_core_regs();
+> +
+> +	for (i = 0; i < n; i++) {
+> +		u64 reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CORE | i;
+                                          ^ size-ulong
 
-for you to fetch changes up to cceac9267887753f3c9594f1f7b92237cb0f64fb:
+> +
+> +		if (uindices) {
+> +			if (put_user(reg, uindices))
+> +				return -EFAULT;
+> +			uindices++;
+> +		}
+> +	}
+> +
+> +	return n;
+> +}
+> +
+> +static inline unsigned long num_csr_regs(void)
+> +{
+> +	unsigned long n = sizeof(struct kvm_riscv_csr) / sizeof(unsigned long);
+> +
+> +	if (kvm_riscv_aia_available())
+> +		n += sizeof(struct kvm_riscv_aia_csr) / sizeof(unsigned long);
+> +
+> +	return n;
+> +}
+> +
+> +static int copy_csr_reg_indices(u64 __user *uindices)
+> +{
+> +	unsigned int i;
+> +	int n1 = sizeof(struct kvm_riscv_csr) / sizeof(unsigned long);
+> +	int n2 = 0;
+> +
+> +	/* copy general csr regs */
+> +	for (i = 0; i < n1; i++) {
+> +		u64 reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR |
+                                          ^ size-ulong
 
-  Merge tag 'nf-23-05-10' of git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf (2023-05-10 19:08:58 -0700)
+> +				  KVM_REG_RISCV_CSR_GENERAL | i;
+> +
+> +		if (uindices) {
+> +			if (put_user(reg, uindices))
+> +				return -EFAULT;
+> +			uindices++;
+> +		}
+> +	}
+> +
+> +	/* copy AIA csr regs */
+> +	if (kvm_riscv_aia_available()) {
+> +		n2 = sizeof(struct kvm_riscv_aia_csr) / sizeof(unsigned long);
+> +
+> +		for (i = 0; i < n2; i++) {
+> +			u64 reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_CSR |
+                                                  ^ size-ulong
 
-----------------------------------------------------------------
-Networking fixes for 6.4-rc2, including fixes from netfilter
+> +					  KVM_REG_RISCV_CSR_AIA | i;
+> +
+> +			if (uindices) {
+> +				if (put_user(reg, uindices))
+> +					return -EFAULT;
+> +				uindices++;
+> +			}
+> +		}
+> +	}
+> +
+> +	return n1 + n2;
+> +}
+> +
+> +static inline unsigned long num_timer_regs(void)
+> +{
+> +	return sizeof(struct kvm_riscv_timer) / sizeof(unsigned long);
+> +}
+> +
+> +static int copy_timer_reg_indices(u64 __user *uindices)
+> +{
+> +	unsigned int i;
+> +	int n = num_timer_regs();
+> +
+> +	for (i = 0; i < n; i++) {
+> +		u64 reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_TIMER | i;
+> +
+> +		if (uindices) {
+> +			if (put_user(reg, uindices))
+> +				return -EFAULT;
+> +			uindices++;
+> +		}
+> +	}
+> +
+> +	return n;
+> +}
+> +
+> +static inline unsigned long num_fp_f_regs(const struct kvm_vcpu *vcpu)
+> +{
+> +	const struct kvm_cpu_context *cntx = &vcpu->arch.guest_context;
+> +
+> +	if (riscv_isa_extension_available(vcpu->arch.isa, f))
+> +		return sizeof(cntx->fp.f) / sizeof(u32);
+> +	else
+> +		return 0;
+> +}
+> +
+> +static int copy_fp_f_reg_indices(const struct kvm_vcpu *vcpu,
+> +					u64 __user *uindices)
+> +{
+> +	unsigned int i;
+> +	int n = num_fp_f_regs(vcpu);
+> +
+> +	for (i = 0; i < n; i++) {
+> +		u64 reg = KVM_REG_RISCV | KVM_REG_SIZE_U32 | KVM_REG_RISCV_FP_F | i;
+> +
+> +		if (uindices) {
+> +			if (put_user(reg, uindices))
+> +				return -EFAULT;
+> +			uindices++;
+> +		}
+> +	}
+> +
+> +	return n;
+> +}
+> +
+> +static inline unsigned long num_fp_d_regs(const struct kvm_vcpu *vcpu)
+> +{
+> +	const struct kvm_cpu_context *cntx = &vcpu->arch.guest_context;
+> +
+> +	if (riscv_isa_extension_available(vcpu->arch.isa, d))
+> +		return sizeof(cntx->fp.d.f) / sizeof(u64) + 1;
+> +	else
+> +		return 0;
+> +}
+> +
+> +static int copy_fp_d_reg_indices(const struct kvm_vcpu *vcpu,
+> +					u64 __user *uindices)
+> +{
+> +	unsigned int i;
+> +	int n = num_fp_d_regs(vcpu);
+> +	u64 reg;
+> +
+> +	/* copy fp.d.f indeices */
 
-Current release - regressions:
+indices
 
-  - mtk_eth_soc: fix NULL pointer dereference
+> +	for (i = 0; i < n-1; i++) {
+> +		reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_FP_D | i;
+> +
+> +		if (uindices) {
+> +			if (put_user(reg, uindices))
+> +				return -EFAULT;
+> +			uindices++;
+> +		}
+> +	}
+> +
+> +	/* copy fp.d.fcsr indeices */
 
-Previous releases - regressions:
+indices
 
-  - core:
-    - skb_partial_csum_set() fix against transport header magic value
-    - fix load-tearing on sk->sk_stamp in sock_recv_cmsgs().
-    - annotate sk->sk_err write from do_recvmmsg()
-    - add vlan_get_protocol_and_depth() helper
+> +	reg = KVM_REG_RISCV | KVM_REG_SIZE_U32 | KVM_REG_RISCV_FP_D | i;
+> +	if (uindices) {
+> +		if (put_user(reg, uindices))
+> +			return -EFAULT;
+> +	}
+> +
+> +	return n;
+> +}
+> +
+> +static inline unsigned long num_isa_ext_regs(void)
+> +{
+> +	return KVM_RISCV_ISA_EXT_MAX;
+> +}
+> +
+> +static int copy_isa_ext_reg_indices(u64 __user *uindices)
+> +{
+> +	unsigned int i;
+> +	int n = num_isa_ext_regs();
+> +
+> +	for (i = 0; i < n; i++) {
+> +		u64 reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_ISA_EXT | i;
+                                          ^ size-ulong
 
-  - netlink: annotate accesses to nlk->cb_running
+> +
+> +		if (uindices) {
+> +			if (put_user(reg, uindices))
+> +				return -EFAULT;
+> +			uindices++;
+> +		}
+> +	}
+> +
+> +	return n;
+> +}
+> +
+> +static inline unsigned long num_sbi_ext_regs(void)
+> +{
+> +	/* number of KVM_REG_RISCV_SBI_SINGLE +
+> +	 *  2x(number of KVM_REG_RISCV_SBI_MULTI)
+> +	 */
 
-  - netfilter: always release netdev hooks from notifier
+Please use an opening wing '/*' on comments.
 
-Previous releases - always broken:
+> +	return KVM_RISCV_SBI_EXT_MAX + 2*(KVM_REG_RISCV_SBI_MULTI_REG_LAST+1);
+> +}
+> +
+> +static int copy_sbi_ext_reg_indices(u64 __user *uindices)
+> +{
+> +	unsigned int i;
+> +	int n;
+> +
+> +	/* copy KVM_REG_RISCV_SBI_SINGLE */
+> +	n = KVM_RISCV_SBI_EXT_MAX;
+> +	for (i = 0; i < n; i++) {
+> +		u64 reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_SBI_EXT |
+                                          ^ size-ulong
 
-  - core: deal with most data-races in sk_wait_event()
+> +				  KVM_REG_RISCV_SBI_SINGLE | i;
+> +
+> +		if (uindices) {
+> +			if (put_user(reg, uindices))
+> +				return -EFAULT;
+> +			uindices++;
+> +		}
+> +	}
+> +
+> +	/* copy KVM_REG_RISCV_SBI_MULTI */
+> +	n = KVM_REG_RISCV_SBI_MULTI_REG_LAST + 1;
+> +	for (i = 0; i < n; i++) {
+> +		u64 reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_SBI_EXT |
+                                          ^ size-ulong
 
-  - netfilter: fix possible bug_on with enable_hooks=1
+> +				  KVM_REG_RISCV_SBI_MULTI_EN | i;
+> +
+> +		if (uindices) {
+> +			if (put_user(reg, uindices))
+> +				return -EFAULT;
+> +			uindices++;
+> +		}
+> +
+> +		reg = KVM_REG_RISCV | KVM_REG_SIZE_U64 | KVM_REG_RISCV_SBI_EXT |
+> +			  KVM_REG_RISCV_SBI_MULTI_DIS | i;
+> +
+> +		if (uindices) {
+> +			if (put_user(reg, uindices))
+> +				return -EFAULT;
+> +			uindices++;
+> +		}
+> +	}
+> +
+> +	return num_sbi_ext_regs();
+> +}
+> +
+> +/**
+> + * kvm_riscv_vcpu_num_regs - how many registers do we present via KVM_GET/SET_ONE_REG
+> + *
+> + * This is for all registers.
+> + */
+> +static unsigned long kvm_riscv_vcpu_num_regs(struct kvm_vcpu *vcpu)
+> +{
+> +	unsigned long res = 0;
+> +
+> +	res += num_config_regs();
+> +	res += num_core_regs();
+> +	res += num_csr_regs();
+> +	res += num_timer_regs();
+> +	res += num_fp_f_regs(vcpu);
+> +	res += num_fp_d_regs(vcpu);
+> +	res += num_isa_ext_regs();
+> +	res += num_sbi_ext_regs();
+> +
+> +	return res;
+> +}
+> +
+> +/**
+> + * kvm_riscv_vcpu_copy_reg_indices - get indices of all registers.
+> + */
+> +static int kvm_riscv_vcpu_copy_reg_indices(struct kvm_vcpu *vcpu,
+> +				u64 __user *uindices)
+> +{
+> +	int ret;
+> +
+> +	ret = copy_config_reg_indices(uindices);
+> +	if (ret < 0)
+> +		return ret;
+> +	uindices += ret;
+> +
+> +	ret = copy_core_reg_indices(uindices);
+> +	if (ret < 0)
+> +		return ret;
+> +	uindices += ret;
+> +
+> +	ret = copy_csr_reg_indices(uindices);
+> +	if (ret < 0)
+> +		return ret;
+> +	uindices += ret;
+> +
+> +	ret = copy_timer_reg_indices(uindices);
+> +	if (ret < 0)
+> +		return ret;
+> +	uindices += ret;
+> +
+> +	ret = copy_fp_f_reg_indices(vcpu, uindices);
+> +	if (ret < 0)
+> +		return ret;
+> +	uindices += ret;
+> +
+> +	ret = copy_fp_d_reg_indices(vcpu, uindices);
+> +	if (ret < 0)
+> +		return ret;
+> +	uindices += ret;
+> +
+> +	ret = copy_isa_ext_reg_indices(uindices);
+> +	if (ret < 0)
+> +		return ret;
+> +	uindices += ret;
+> +
+> +	ret = copy_sbi_ext_reg_indices(uindices);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+>  static int kvm_riscv_vcpu_set_reg(struct kvm_vcpu *vcpu,
+>  				  const struct kvm_one_reg *reg)
+>  {
+> @@ -758,6 +1086,24 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
+>  			r = kvm_riscv_vcpu_get_reg(vcpu, &reg);
+>  		break;
+>  	}
+> +	case KVM_GET_REG_LIST: {
+> +		struct kvm_reg_list __user *user_list = argp;
+> +		struct kvm_reg_list reg_list;
+> +		unsigned int n;
+> +
+> +		r = -EFAULT;
+> +		if (copy_from_user(&reg_list, user_list, sizeof(reg_list)))
+> +			break;
+> +		n = reg_list.n;
+> +		reg_list.n = kvm_riscv_vcpu_num_regs(vcpu);
+> +		if (copy_to_user(user_list, &reg_list, sizeof(reg_list)))
+> +			break;
+> +		r = -E2BIG;
+> +		if (n < reg_list.n)
+> +			break;
+> +		r = kvm_riscv_vcpu_copy_reg_indices(vcpu, user_list->reg);
+> +		break;
+> +	}
+>  	default:
+>  		break;
+>  	}
+> -- 
+> 2.34.1
+>
 
-  - eth: bonding: fix send_peer_notif overflow
+Otherwise,
 
-  - eth: xpcs: fix incorrect number of interfaces
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
 
-  - eth: ipvlan: fix out-of-bounds caused by unclear skb->cb
-
-  - eth: stmmac: Initialize MAC_ONEUS_TIC_COUNTER register
-
-Signed-off-by: Paolo Abeni <pabeni@redhat.com>
-
-----------------------------------------------------------------
-Boris Sukholitko (4):
-      selftests: nft_flowtable.sh: use /proc for pid checking
-      selftests: nft_flowtable.sh: no need for ps -x option
-      selftests: nft_flowtable.sh: wait for specific nc pids
-      selftests: nft_flowtable.sh: monitor result file sizes
-
-Christophe JAILLET (1):
-      net: mdio: mvusb: Fix an error handling path in mvusb_mdio_probe()
-
-Colin Foster (1):
-      net: mscc: ocelot: fix stat counter register values
-
-Daniel Golle (1):
-      net: ethernet: mtk_eth_soc: fix NULL pointer dereference
-
-David S. Miller (1):
-      Merge branch 'bonding-overflow'
-
-Eric Dumazet (7):
-      net: skb_partial_csum_set() fix against transport header magic value
-      netlink: annotate accesses to nlk->cb_running
-      net: annotate sk->sk_err write from do_recvmmsg()
-      net: deal with most data-races in sk_wait_event()
-      net: add vlan_get_protocol_and_depth() helper
-      tcp: add annotations around sk->sk_shutdown accesses
-      net: datagram: fix data-races in datagram_poll()
-
-Florian Fainelli (1):
-      net: phy: bcm7xx: Correct read from expansion register
-
-Florian Westphal (3):
-      netfilter: nf_tables: always release netdev hooks from notifier
-      netfilter: conntrack: fix possible bug_on with enable_hooks=1
-      selftests: nft_flowtable.sh: check ingress/egress chain too
-
-Hangbin Liu (4):
-      bonding: fix send_peer_notif overflow
-      Documentation: bonding: fix the doc of peer_notif_delay
-      selftests: forwarding: lib: add netns support for tc rule handle stats get
-      kselftest: bonding: add num_grat_arp test
-
-Jakub Kicinski (2):
-      Merge branch 'af_unix-fix-two-data-races-reported-by-kcsan'
-      Merge tag 'nf-23-05-10' of git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
-
-Kuniyuki Iwashima (3):
-      net: Fix load-tearing on sk->sk_stamp in sock_recv_cmsgs().
-      af_unix: Fix a data race of sk->sk_receive_queue->qlen.
-      af_unix: Fix data races around sk->sk_shutdown.
-
-Marek Vasut (1):
-      net: stmmac: Initialize MAC_ONEUS_TIC_COUNTER register
-
-Randy Dunlap (1):
-      docs: networking: fix x25-iface.rst heading & index order
-
-Roy Novich (1):
-      linux/dim: Do nothing if no time delta between samples
-
-Russell King (Oracle) (1):
-      net: pcs: xpcs: fix incorrect number of interfaces
-
-Ziwei Xiao (1):
-      gve: Remove the code of clearing PBA bit
-
-t.feng (1):
-      ipvlan:Fix out-of-bounds caused by unclear skb->cb
-
- Documentation/networking/bonding.rst               |   9 +-
- Documentation/networking/index.rst                 |   2 +-
- Documentation/networking/x25-iface.rst             |   3 +-
- drivers/net/bonding/bond_netlink.c                 |   7 +-
- drivers/net/bonding/bond_options.c                 |   8 +-
- drivers/net/ethernet/google/gve/gve_main.c         |  13 --
- drivers/net/ethernet/mediatek/mtk_wed.c            |   2 +-
- drivers/net/ethernet/mscc/vsc7514_regs.c           |  18 +--
- drivers/net/ethernet/stmicro/stmmac/dwmac4.h       |   1 +
- drivers/net/ethernet/stmicro/stmmac/dwmac4_core.c  |   5 +
- drivers/net/ipvlan/ipvlan_core.c                   |   6 +
- drivers/net/mdio/mdio-mvusb.c                      |  11 +-
- drivers/net/pcs/pcs-xpcs.c                         |   2 +-
- drivers/net/phy/bcm-phy-lib.h                      |   5 +
- drivers/net/phy/bcm7xxx.c                          |   2 +-
- drivers/net/tap.c                                  |   4 +-
- include/linux/dim.h                                |   3 +-
- include/linux/if_vlan.h                            |  17 +++
- include/net/bonding.h                              |   2 +-
- include/net/sock.h                                 |   2 +-
- lib/dim/dim.c                                      |   5 +-
- lib/dim/net_dim.c                                  |   3 +-
- lib/dim/rdma_dim.c                                 |   3 +-
- net/bridge/br_forward.c                            |   2 +-
- net/core/datagram.c                                |  15 ++-
- net/core/dev.c                                     |   2 +-
- net/core/skbuff.c                                  |   4 +-
- net/core/stream.c                                  |  12 +-
- net/ipv4/af_inet.c                                 |   2 +-
- net/ipv4/tcp.c                                     |  14 +-
- net/ipv4/tcp_bpf.c                                 |   2 +-
- net/ipv4/tcp_input.c                               |   4 +-
- net/llc/af_llc.c                                   |   8 +-
- net/netfilter/core.c                               |   6 +-
- net/netfilter/nf_conntrack_standalone.c            |   3 +-
- net/netfilter/nft_chain_filter.c                   |   9 +-
- net/netlink/af_netlink.c                           |   8 +-
- net/packet/af_packet.c                             |   6 +-
- net/smc/smc_close.c                                |   4 +-
- net/smc/smc_rx.c                                   |   4 +-
- net/smc/smc_tx.c                                   |   4 +-
- net/socket.c                                       |   2 +-
- net/tipc/socket.c                                  |   4 +-
- net/tls/tls_main.c                                 |   3 +-
- net/unix/af_unix.c                                 |  22 ++--
- .../selftests/drivers/net/bonding/bond_options.sh  |  50 +++++++
- .../drivers/net/bonding/bond_topo_3d1c.sh          |   2 +
- tools/testing/selftests/net/forwarding/lib.sh      |   3 +-
- tools/testing/selftests/netfilter/nft_flowtable.sh | 145 ++++++++++++++++++++-
- 49 files changed, 361 insertions(+), 112 deletions(-)
-
+Thanks,
+drew
