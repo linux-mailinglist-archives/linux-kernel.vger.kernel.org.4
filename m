@@ -2,139 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 204476FEB69
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 07:50:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7330C6FEB6B
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 07:58:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236884AbjEKFuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 01:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
+        id S236896AbjEKF6A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 01:58:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbjEKFug (ORCPT
+        with ESMTP id S229589AbjEKF56 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 01:50:36 -0400
-Received: from mail-vk1-xa33.google.com (mail-vk1-xa33.google.com [IPv6:2607:f8b0:4864:20::a33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 104952726
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 22:50:35 -0700 (PDT)
-Received: by mail-vk1-xa33.google.com with SMTP id 71dfb90a1353d-44fd3c2300dso2953127e0c.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 22:50:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683784234; x=1686376234;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6TZUTUOuw8gS3YY4QfM/+qXEJz2gQxAmQCsDAHLbmhU=;
-        b=cmQ4baQnxQ6OJaWyiKd9TwKrwVLa3z9moGFNjZHUpOJdcpGwRAgzMMUDJZMnfbWv8J
-         QGiI7irEoRuJrTYfRvNNvXnt4McMMkn6LRHsWtp6fbJHSE0OkTfKZBk9uWpVHzEP7euO
-         N/kNcWjhR6aHrPQP8chTmD6UOlmnRpa+cAmiA=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683784234; x=1686376234;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6TZUTUOuw8gS3YY4QfM/+qXEJz2gQxAmQCsDAHLbmhU=;
-        b=YfZYGnZKUxUqwATSnXvDHNovcE8eCagFgvA6Q+l4j4akkW65fhm0N0/DgOjJMMF88u
-         us15NY1z1JTygfQI2FeHRxoH+2hv3i8dqq9y+fUARj89YKh9SziLZFToUeTRkhAppPSr
-         yCPGesTUBHOpG58mhotpdQo0yPYyLGGWJXrARPlO1zTCNtPX89+fCDalOMQyooU/Y3K5
-         mxHEfXSFy+l/zfP98A7Z+pS0Q+mbl1Det9qOpvOr3nW6gb6w9BZMT9X8UiWW5Cu+cJll
-         SKC2WEeFxZyEYzQOVvvZXv+pKTtzk4oOn2BtfBgxPSSFEgJxnRxOldilqhhpj3tWYnDb
-         sGPg==
-X-Gm-Message-State: AC+VfDxhJM5k8Hgj/2R3LaHfGwJtz3DDGjcui5lSe9Zdwg107pHrU/am
-        S0oQIb6asv0tWucBT99QsI1hbSy4R3N3mbkzxHZugA==
-X-Google-Smtp-Source: ACHHUZ7fGE4nB3zdLHbvSnPzibOTMUdkLYtLPvJiu7zEMVz/OES4+wnOovyGzoWDL0QKVJZH9Czbi0nR2DM+Cg67Ouk=
-X-Received: by 2002:a1f:3f8a:0:b0:44f:a64b:479b with SMTP id
- m132-20020a1f3f8a000000b0044fa64b479bmr6002540vka.6.1683784234113; Wed, 10
- May 2023 22:50:34 -0700 (PDT)
+        Thu, 11 May 2023 01:57:58 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6DA272A
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 22:57:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683784676; x=1715320676;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=esf7Awl5wAqdz1VlrbA/Roc3Np8AvsfoKm6R0aAVP/0=;
+  b=EaPKLSXyo3rASJ/cgi8mg5o4hYEm1aCPFh2kH8Sn+ffVogLE+1wdBg6X
+   hQTq+8tgwvNTvPIgDe8gz6hySOeYy2CHwy+ktIDb02YNKRH6l6Em6pDsg
+   HZp7ZR6zo2R9G91tSYIPs9VE9lhCLLIh2feC7wPkLU+BkkFWz3HAJy4JI
+   MlXeTHsQvV5GTRkgnvx7NG1wl0dEYerl05roexdhaRRjylgO4otky5m3A
+   Q+nw/t/jRPSixbeozzCYz/L4edL4uWfOCySrGhwCtrKNbVmREi896fJW/
+   BRk6/Pbdtnso+vG+lWWcJ7rvZ9/7SXugOYRJ4Ku2lkhtpYueAiDhsnF8a
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="415995381"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="415995381"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 May 2023 22:57:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="702594632"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="702594632"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 10 May 2023 22:57:55 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pwzJK-0003o4-22;
+        Thu, 11 May 2023 05:57:54 +0000
+Date:   Thu, 11 May 2023 13:56:58 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: drivers/clk/pxa/clk-pxa3xx.c:167:9: sparse: sparse: Using plain
+ integer as NULL pointer
+Message-ID: <202305111301.RAHohdob-lkp@intel.com>
 MIME-Version: 1.0
-References: <20230510233117.1.I7047714f92ef7569bd21f118ae6aee20b3175a92@changeid>
- <20230510164330.z2ygkl7vws6fci75@pengutronix.de>
-In-Reply-To: <20230510164330.z2ygkl7vws6fci75@pengutronix.de>
-From:   Chen-Yu Tsai <wenst@chromium.org>
-Date:   Thu, 11 May 2023 13:50:23 +0800
-Message-ID: <CAGXv+5HBM+eksJaxL2GqLfqSmK8vsQx5NXHfhe075HkOK3vjHw@mail.gmail.com>
-Subject: Re: [PATCH] media: mediatek: vcodec: Convert mtk_vcodec_dec_hw
- platform remove callback
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Fei Shao <fshao@chromium.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 12:43=E2=80=AFAM Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
->
-> [expanding the audience a bit for more expertise]
->
-> Hello,
->
-> On Wed, May 10, 2023 at 11:31:35PM +0800, Fei Shao wrote:
-> > This aligns with [1] and converts the platform remove callback to
-> > .remove_new(), which returns void.
-> >
-> > [1]: commit a3afc5b10661 ("media: mtk_vcodec_dec_drv: Convert to
-> >      platform remove callback returning void")
-> >
-> > Signed-off-by: Fei Shao <fshao@chromium.org>
-> >
-> > ---
-> >
-> >  drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c | 6 ++----
-> >  1 file changed, 2 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c=
- b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-> > index b753bf54ebd9..bd5743723da6 100644
-> > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-> > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-> > @@ -193,16 +193,14 @@ static int mtk_vdec_hw_probe(struct platform_devi=
-ce *pdev)
-> >       return ret;
-> >  }
-> >
-> > -static int mtk_vdec_hw_remove(struct platform_device *pdev)
-> > +static void mtk_vdec_hw_remove(struct platform_device *pdev)
-> >  {
-> >       pm_runtime_disable(&pdev->dev);
-> > -
-> > -     return 0;
-> >  }
-> >
-> >  static struct platform_driver mtk_vdec_driver =3D {
-> >       .probe  =3D mtk_vdec_hw_probe,
-> > -     .remove =3D mtk_vdec_hw_remove,
-> > +     .remove_new =3D mtk_vdec_hw_remove,
-> >       .driver =3D {
-> >               .name   =3D "mtk-vdec-comp",
-> >               .of_match_table =3D mtk_vdec_hw_match,
->
-> While the patch looks fine, I wonder if having a remove callback just to
-> do pm_runtime_disable() is worth keeping it. Doesn't the core care for
-> things like that? I grepped a bit around, device_unbind_cleanup() is
-> called after device_remove() which calls pm_runtime_reinit(). Does that
-> mean calling pm_runtime_disable in .remove() is useless? In that case,
-> you could just drop the .remove() callback.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   80e62bc8487b049696e67ad133c503bf7f6806f7
+commit: 3c816d950a494ae6e16b1fa017af29bc53cb7791 ARM: pxa: move clk register definitions to driver
+date:   1 year ago
+config: arm-randconfig-s053-20230511 (https://download.01.org/0day-ci/archive/20230511/202305111301.RAHohdob-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3c816d950a494ae6e16b1fa017af29bc53cb7791
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 3c816d950a494ae6e16b1fa017af29bc53cb7791
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mach-lpc32xx/ arch/arm/mach-orion5x/ arch/arm/mach-spear/ arch/arm/mm/ drivers/clk/pxa/ drivers/irqchip/
 
-Maybe just switch to devm_pm_runtime_enable() on the enable side?
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305111301.RAHohdob-lkp@intel.com/
 
-ChenYu
+sparse warnings: (new ones prefixed by >>)
+>> drivers/clk/pxa/clk-pxa3xx.c:167:9: sparse: sparse: Using plain integer as NULL pointer
+
+vim +167 drivers/clk/pxa/clk-pxa3xx.c
+
+   159	
+   160	void pxa3xx_clk_update_accr(u32 disable, u32 enable, u32 xclkcfg, u32 mask)
+   161	{
+   162		u32 accr = readl(clk_regs + ACCR);
+   163	
+   164		accr &= ~disable;
+   165		accr |= enable;
+   166	
+ > 167		writel(accr, ACCR);
+   168		if (xclkcfg)
+   169			__asm__("mcr p14, 0, %0, c6, c0, 0\n" : : "r"(xclkcfg));
+   170	
+   171		while ((readl(clk_regs + ACSR) & mask) != (accr & mask))
+   172			cpu_relax();
+   173	}
+   174	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
