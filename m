@@ -2,79 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D840F6FF31F
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:37:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9589E6FF321
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:37:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238328AbjEKNhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 09:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53586 "EHLO
+        id S237855AbjEKNhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:37:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238379AbjEKNft (ORCPT
+        with ESMTP id S237981AbjEKNf7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:35:49 -0400
-Received: from smtp-relay-internal-1.canonical.com (smtp-relay-internal-1.canonical.com [185.125.188.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96B2D2E0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:34:43 -0700 (PDT)
-Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-internal-1.canonical.com (Postfix) with ESMTPS id 2665C3F550
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:34:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1683812080;
-        bh=011K5wvvIoIZK715UN1HjkgAo3VxiaK+uINHfyAtcqg=;
-        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-         To:Cc:Content-Type;
-        b=rsJeGs1byvqB01fvP1Ms/VqC9aEHrba+Ob4gfkJY/ld7mSME9V2GDos24gogmXpr/
-         CMHiJgCtRkuCh5xPJ55UFpyffvR724XT/8OsnbJ6agm/LnnTYDHp0VLXepHn+Ll6Wd
-         Lrk4eXgAOeqAS+N5yMIdfS8Z1gfH9JZ3iaQFN/frotnStNRIZYte/cnb6Nkxk/pFLz
-         p8cuxBhq4s93WBAO0Rh+XnrHf/enf9I1/ND9Bt86GCjVOBAjrHjcpOEJgqUorJyZUQ
-         otXve44skLJ0uGmYqsjEbL826T62XdiJzDIxT9zMQXUbsFBF6H0/+a5GcheGrVMjd0
-         fO4IWooqlmKPQ==
-Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-24dfb0c13dbso4816684a91.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:34:39 -0700 (PDT)
+        Thu, 11 May 2023 09:35:59 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 051A611545
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:35:00 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-33172d0eb28so123447565ab.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:35:00 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683812078; x=1686404078;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=011K5wvvIoIZK715UN1HjkgAo3VxiaK+uINHfyAtcqg=;
-        b=PG4SynfCkA6ADRI0du76HFZzGEo+bsLI4aShayUr5R9pZ2OnTvUqbjAt8KFRnxDqQ1
-         dmMzorVULlKtcccmKENMQQrYfKirwG2SGm/v4lZEm0NV/PC8PxDPCG0owXUnMG4T4/lb
-         fIzu7wyhtMDC2kziuSkwFlKeofchl6PZNznqKYst+Je6FrJkeLMcOly/R+BNeCleYy/g
-         Z6nICgf+IcvKi/5mAWYm6JNkyZWLTpt1KaLusqbNMGGiwE1yEJCQRXGF3FqhFaoqoCoc
-         dimMVDJNuIQ/vjCJ4oYAEXO3Fv2j+i8eOPyH7XnQCeIe3vea914U4oP9QXP17qAmbTTC
-         Sh1A==
-X-Gm-Message-State: AC+VfDw7e0cPnVd2fj2OhwHTWzu/MoWsnW0VdX5PRvvh76KM4t5gqB8W
-        3eLPd8EdeT+7jUgq4gb57e+4PQ3v4tKcJNX0I7W2xzaNT9kRhyOTOLKJBBPmDkOHeYQ8LIzSu3/
-        m0/EjkGxTYJCHEe89asgfOBfSPB0woMc++UsFxXWF/HLl2GO7VUnIZMzHcQ==
-X-Received: by 2002:a17:90a:db4d:b0:250:8258:1a5 with SMTP id u13-20020a17090adb4d00b00250825801a5mr15729702pjx.33.1683812077995;
-        Thu, 11 May 2023 06:34:37 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4PM1BwcYbS1lb5Q9CzUvOu/d5br84AluARyXzOfos8pADmP57XceNs9VQKShDZU3Dx3q9SP47ED8gQ1AomNMk=
-X-Received: by 2002:a17:90a:db4d:b0:250:8258:1a5 with SMTP id
- u13-20020a17090adb4d00b00250825801a5mr15729681pjx.33.1683812077662; Thu, 11
- May 2023 06:34:37 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683812100; x=1686404100;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YEtKPqXPc8KwjQyplWNpVUtXydk8COJxQKJbi5Nsyvo=;
+        b=QUMWPUEyuQemMdOY508svUcNf1S7tZJYXj6sRgOUDc9yOpcQ1ntx3HJUJtVXT7LKsU
+         eGat0PtH0u8Y2DGXoi3vZDN2snMzzA0B445p3YFiZXwTpPEWyZKS3L9EPs+Lcl/39UOa
+         vNPmE3A7o9plXf3I2oAYoczGm5BacFm/U/xECBGUBvwJj7gTH8yUAW6wgJ0i1fJa7sSJ
+         q0+TpsFHtPsyZQADhiZfuw64r0jrNj3L2PGzabY7ckCo+Xh3OxeooMRyiKxLPRAawYiT
+         EIoP95KzxBT/OWHRBQGKA4WymFkFgQ29rsTSiLIdRdiEPzsZB/W5+DBqOsy0nHMW156d
+         OQRg==
+X-Gm-Message-State: AC+VfDwNOCXFnfIC5f8/wY9bYOHUXncsUzbAx1AC7JHM3bI5+/W3rUq1
+        IAoMVs68kAdNdZQHp/RL05sszqOFYaaoeeu6RovHfcKBoIa7
+X-Google-Smtp-Source: ACHHUZ6qcDTWku63SrxWIveG39qSJbRmc55sb0oQ/h2PLZ3REUH9VGDGcu3/x5ZFjx4lgB+7xhDtRaP1O9WIbEodeikrbJCfID09
 MIME-Version: 1.0
-References: <20230424055249.460381-1-kai.heng.feng@canonical.com>
- <20230424055249.460381-2-kai.heng.feng@canonical.com> <97260e8b-1892-49a5-3792-0e3c28378fc0@linux.intel.com>
-In-Reply-To: <97260e8b-1892-49a5-3792-0e3c28378fc0@linux.intel.com>
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-Date:   Thu, 11 May 2023 21:34:26 +0800
-Message-ID: <CAAd53p5FUJpd2jENOo6YV8MhXdA1pZiO8G3Ho0x26=gL+vDAqw@mail.gmail.com>
-Subject: Re: [PATCH v4 2/3] PCI/AER: Disable AER interrupt on suspend
-To:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-Cc:     bhelgaas@google.com, mika.westerberg@linux.intel.com,
-        koba.ko@canonical.com, Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+X-Received: by 2002:a92:c686:0:b0:317:9096:e80f with SMTP id
+ o6-20020a92c686000000b003179096e80fmr11324593ilg.4.1683812100231; Thu, 11 May
+ 2023 06:35:00 -0700 (PDT)
+Date:   Thu, 11 May 2023 06:35:00 -0700
+In-Reply-To: <000000000000602c0e05f55d793c@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001a583a05fb6b0e76@google.com>
+Subject: Re: [syzbot] [ntfs?] kernel BUG in ntfs_iget
+From:   syzbot <syzbot+d62e6bd2a2d05103d105@syzkaller.appspotmail.com>
+To:     anton@tuxera.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,93 +56,96 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Apr 25, 2023 at 7:47=E2=80=AFAM Sathyanarayanan Kuppuswamy
-<sathyanarayanan.kuppuswamy@linux.intel.com> wrote:
->
->
->
-> On 4/23/23 10:52 PM, Kai-Heng Feng wrote:
-> > PCIe service that shares IRQ with PME may cause spurious wakeup on
-> > system suspend.
-> >
-> > PCIe Base Spec 5.0, section 5.2 "Link State Power Management" states
-> > that TLP and DLLP transmission is disabled for a Link in L2/L3 Ready
-> > (D3hot), L2 (D3cold with aux power) and L3 (D3cold), so we don't lose
-> > much here to disable AER during system suspend.
-> >
-> > This is very similar to previous attempts to suspend AER and DPC [1],
-> > but with a different reason.
-> >
-> > [1] https://lore.kernel.org/linux-pci/20220408153159.106741-1-kai.heng.=
-feng@canonical.com/
-> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D216295
-> >
-> > Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> > Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
-> > ---
->
-> IIUC, you encounter AER errors during the suspend/resume process, which
-> results in AER IRQ. Because AER and PME share an IRQ, it is regarded as a
-> spurious wake-up IRQ. So to fix it, you want to disable AER reporting,
-> right?
->
-> It looks like it is harmless to disable the AER during the suspend/resume
-> path. But, I am wondering why we get these errors? Did you check what err=
-ors
-> you get during the suspend/resume path? Are these errors valid?
+syzbot has found a reproducer for the following issue on:
 
-AFAIK those errors comes from firmware/hardware side, especially when
-the device gets put to D3hot/D3cold.
+HEAD commit:    d295b66a7b66 Merge tag 'fsnotify_for_v6.4-rc2' of git://gi..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1438109e280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=38526bf24c8d961b
+dashboard link: https://syzkaller.appspot.com/bug?extid=d62e6bd2a2d05103d105
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16ba9dec280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=12ef95fa280000
 
-Kai-Heng
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/95f1878df2f4/disk-d295b66a.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/6d18d65ddcb5/vmlinux-d295b66a.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/6a59b1fdff8e/bzImage-d295b66a.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/eee641006b52/mount_0.gz
 
->
->
-> >  drivers/pci/pcie/aer.c | 22 ++++++++++++++++++++++
-> >  1 file changed, 22 insertions(+)
-> >
-> > diff --git a/drivers/pci/pcie/aer.c b/drivers/pci/pcie/aer.c
-> > index 1420e1f27105..9c07fdbeb52d 100644
-> > --- a/drivers/pci/pcie/aer.c
-> > +++ b/drivers/pci/pcie/aer.c
-> > @@ -1356,6 +1356,26 @@ static int aer_probe(struct pcie_device *dev)
-> >       return 0;
-> >  }
-> >
-> > +static int aer_suspend(struct pcie_device *dev)
-> > +{
-> > +     struct aer_rpc *rpc =3D get_service_data(dev);
-> > +     struct pci_dev *pdev =3D rpc->rpd;
-> > +
-> > +     aer_disable_irq(pdev);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> > +static int aer_resume(struct pcie_device *dev)
-> > +{
-> > +     struct aer_rpc *rpc =3D get_service_data(dev);
-> > +     struct pci_dev *pdev =3D rpc->rpd;
-> > +
-> > +     aer_enable_irq(pdev);
-> > +
-> > +     return 0;
-> > +}
-> > +
-> >  /**
-> >   * aer_root_reset - reset Root Port hierarchy, RCEC, or RCiEP
-> >   * @dev: pointer to Root Port, RCEC, or RCiEP
-> > @@ -1420,6 +1440,8 @@ static struct pcie_port_service_driver aerdriver =
-=3D {
-> >       .service        =3D PCIE_PORT_SERVICE_AER,
-> >
-> >       .probe          =3D aer_probe,
-> > +     .suspend        =3D aer_suspend,
-> > +     .resume         =3D aer_resume,
-> >       .remove         =3D aer_remove,
-> >  };
-> >
->
-> --
-> Sathyanarayanan Kuppuswamy
-> Linux Kernel Developer
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+d62e6bd2a2d05103d105@syzkaller.appspotmail.com
+
+loop0: detected capacity change from 0 to 190
+ntfs: (device loop0): is_boot_sector_ntfs(): Invalid boot sector checksum.
+ntfs: (device loop0): map_mft_record_page(): Mft record 0x1 is corrupt.  Run chkdsk.
+ntfs: (device loop0): map_mft_record(): Failed with error code 5.
+ntfs: (device loop0): ntfs_read_locked_inode(): Failed with error code -5.  Marking corrupt inode 0x1 as bad.  Run chkdsk.
+ntfs: (device loop0): load_system_files(): Failed to load $MFTMirr.  Mounting read-only.  Run ntfsfix and/or chkdsk.
+------------[ cut here ]------------
+kernel BUG at fs/ntfs/malloc.h:31!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 1 PID: 4993 Comm: syz-executor320 Not tainted 6.4.0-rc1-syzkaller-00025-gd295b66a7b66 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+RIP: 0010:__ntfs_malloc fs/ntfs/malloc.h:31 [inline]
+RIP: 0010:ntfs_malloc_nofs+0xfd/0x100 fs/ntfs/malloc.h:52
+Code: 17 e8 d7 1e c7 fe 48 89 df be 42 0c 00 00 5b 41 5e 41 5f e9 a5 f2 10 ff e8 c0 1e c7 fe 31 c0 5b 41 5e 41 5f c3 e8 b3 1e c7 fe <0f> 0b 90 66 0f 1f 00 55 41 57 41 56 41 55 41 54 53 49 89 fe 49 bc
+RSP: 0018:ffffc90003a3f818 EFLAGS: 00010293
+RAX: ffffffff82c4488d RBX: 0000000000000000 RCX: ffff88802476bb80
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: ffff888073a05118 R08: ffffffff82c447bd R09: ffffed100e9c5323
+R10: 0000000000000000 R11: dffffc0000000001 R12: dffffc0000000000
+R13: ffff888074e29be0 R14: ffff888073a05147 R15: dffffc0000000000
+FS:  000055555752e300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f02336e6000 CR3: 000000007a170000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ ntfs_read_locked_inode+0x1fd5/0x49c0 fs/ntfs/inode.c:703
+ ntfs_iget+0x113/0x190 fs/ntfs/inode.c:177
+ load_and_init_upcase fs/ntfs/super.c:1663 [inline]
+ load_system_files+0x151c/0x4840 fs/ntfs/super.c:1818
+ ntfs_fill_super+0x19b3/0x2bd0 fs/ntfs/super.c:2900
+ mount_bdev+0x274/0x3a0 fs/super.c:1380
+ legacy_get_tree+0xef/0x190 fs/fs_context.c:610
+ vfs_get_tree+0x8c/0x270 fs/super.c:1510
+ do_new_mount+0x28f/0xae0 fs/namespace.c:3039
+ do_mount fs/namespace.c:3382 [inline]
+ __do_sys_mount fs/namespace.c:3591 [inline]
+ __se_sys_mount+0x2d9/0x3c0 fs/namespace.c:3568
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f023bb1cafa
+Code: 83 c4 08 5b 5d c3 66 2e 0f 1f 84 00 00 00 00 00 c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 44 00 00 49 89 ca b8 a5 00 00 00 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007fffebbdb6c8 EFLAGS: 00000286 ORIG_RAX: 00000000000000a5
+RAX: ffffffffffffffda RBX: 0000000000000003 RCX: 00007f023bb1cafa
+RDX: 000000002001f1c0 RSI: 000000002001f200 RDI: 00007fffebbdb6e0
+RBP: 00007fffebbdb6e0 R08: 00007fffebbdb720 R09: 0000000000000987
+R10: 0000000000000000 R11: 0000000000000286 R12: 0000000000000004
+R13: 000055555752e2c0 R14: 0000000000000000 R15: 00007fffebbdb720
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:__ntfs_malloc fs/ntfs/malloc.h:31 [inline]
+RIP: 0010:ntfs_malloc_nofs+0xfd/0x100 fs/ntfs/malloc.h:52
+Code: 17 e8 d7 1e c7 fe 48 89 df be 42 0c 00 00 5b 41 5e 41 5f e9 a5 f2 10 ff e8 c0 1e c7 fe 31 c0 5b 41 5e 41 5f c3 e8 b3 1e c7 fe <0f> 0b 90 66 0f 1f 00 55 41 57 41 56 41 55 41 54 53 49 89 fe 49 bc
+RSP: 0018:ffffc90003a3f818 EFLAGS: 00010293
+RAX: ffffffff82c4488d RBX: 0000000000000000 RCX: ffff88802476bb80
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: ffff888073a05118 R08: ffffffff82c447bd R09: ffffed100e9c5323
+R10: 0000000000000000 R11: dffffc0000000001 R12: dffffc0000000000
+R13: ffff888074e29be0 R14: ffff888073a05147 R15: dffffc0000000000
+FS:  000055555752e300(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f02336e6000 CR3: 000000007a170000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+
+
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
