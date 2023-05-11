@@ -2,67 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858946FF024
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:50:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BB84D6FF02F
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:53:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237880AbjEKKuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 06:50:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40480 "EHLO
+        id S237519AbjEKKxu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 06:53:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231864AbjEKKuL (ORCPT
+        with ESMTP id S237884AbjEKKxq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 06:50:11 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B23242D48
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:50:10 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50bcb229adaso15549540a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:50:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683802209; x=1686394209;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YYmQOiJo0GwahUuK9YIJi/PO7yGRaao3xUZsJxQQPGw=;
-        b=Qq24/0rH2Wy7PCHvEv6ahBRTBtEhVyh/iSjSwPmN3k920PBQd4sEmegEq9y3Wme/d3
-         2BzG92K6N91pdsVQrwOjolbvpXtAwomgqYwv4rWQuKz3DYTt5BpZuAbjkKsFTvd17FHy
-         utp1kT4EnIqHutSwloEDpRiW1mimUBKo3CJhUwSjy9/dxrFZzwaCai9L/1FkywV78iuU
-         aewPcQBpU3taQJZkatQmOqfwNkWgBGPtENCxlsmJ4EFAjATkWgdVCvA2gpEMDNKej1Ir
-         S8VFm3KAKTQXMmtAMGoUsuGiJSlTurUCdPu6GBjEdh8oU0+OCa1jqJp7rJ4lAOdw5T0u
-         U2iw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683802209; x=1686394209;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YYmQOiJo0GwahUuK9YIJi/PO7yGRaao3xUZsJxQQPGw=;
-        b=CKd1/LDK/WvxbiyLwoe4OzAHyB5bhETrAKoKZflpOIOl16a0miT8EpBGnBEKFPu2wW
-         f8mDVEcvt+ITS6GYgKhxoanMcdTO/eOj6ybKtofDPJOyGUdgl6LjdxoUb/zsjLhSpQG+
-         lZQrBKevGKj1YBbfy+1y9zfD8BZ9qky4fY7tOEzJe9k9vgY2onsa/iIHVaS77G1SOfK9
-         fgakJiyJdvyxeHnFw3L8WjK4Xrf6eMgg49U4toZaesy7DWDs59szUOl67/Y/jOC8156T
-         Xuap8gNnEgLKteT9JuPZxrMQ/wRKBguPO7SHAoSEHAeeMif97tUImi20VKH17K8xP4Ri
-         KjDg==
-X-Gm-Message-State: AC+VfDxQ08OAlrCajhDNJnt2vmJABXizvY44hTz2RuK4PCpVNVI3sIJX
-        VA4vW/2GvbJWxJYRKbWGo00Jnw==
-X-Google-Smtp-Source: ACHHUZ7K5/ZpkInBfiFXdz7ldveY5d6mjUUS7cf4oZPvIEM3vCUsgAbg0ltzrAMTFOgTDPrNbtqv+w==
-X-Received: by 2002:a17:906:fd8c:b0:953:3e29:f35c with SMTP id xa12-20020a170906fd8c00b009533e29f35cmr17143266ejb.45.1683802209171;
-        Thu, 11 May 2023 03:50:09 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:41e7:1b68:d38e:1348])
-        by smtp.gmail.com with ESMTPSA id ia21-20020a170907a07500b00966392de4easm3874389ejc.14.2023.05.11.03.50.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 03:50:08 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: [GIT PULL] Devicetree fixes for v6.4, part 2
-Date:   Thu, 11 May 2023 12:50:06 +0200
-Message-Id: <20230511105006.176979-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Thu, 11 May 2023 06:53:46 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B462059C4;
+        Thu, 11 May 2023 03:53:45 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 5E88321AFD;
+        Thu, 11 May 2023 10:53:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683802424; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i3LZh1EONWVfbVG0uAzUZHlDL1AqBEqEdp5FLcPsG/o=;
+        b=1rEaE59C9gOZq3Rqzwx4QdPoKmD4WuNDAASNX31ocsmQi8d5/p37GxDurM9BEEhYFiqmy/
+        tye/mqN1hmtTER34vyNYUsygW69lryFpgJLLqDz4QttwnRSIIxDwtCd6z14QHDeSOS/XlI
+        nw7SoPPEfNEldI0B04FdyAaSVeGpXyM=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683802424;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=i3LZh1EONWVfbVG0uAzUZHlDL1AqBEqEdp5FLcPsG/o=;
+        b=GDBxgFVn5ravCTx6nanSkuobRAkYarnG3E6goiquTOZ3PTnOiuyNJ2qycP1zO/iVeYGuba
+        A/diddMfOKYoJVCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DF1B7138FA;
+        Thu, 11 May 2023 10:53:43 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id GFOmNTfJXGTFTAAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Thu, 11 May 2023 10:53:43 +0000
+Message-ID: <9ea087ab-95f3-3274-b464-ef13718562b1@suse.de>
+Date:   Thu, 11 May 2023 12:53:43 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v6 5/6] fbdev: Move framebuffer I/O helpers into
+ <asm/fb.h>
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
+        Helge Deller <deller@gmx.de>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Vineet Gupta <vgupta@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        "David S . Miller" <davem@davemloft.net>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Sam Ravnborg <sam@ravnborg.org>, suijingfeng@loongson.cn
+Cc:     Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-m68k@lists.linux-m68k.org,
+        loongarch@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        sparclinux@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230510110557.14343-6-tzimmermann@suse.de>
+ <202305102136.eMjTSPwH-lkp@intel.com>
+ <f6b2d541-d235-4e98-afcc-9137fb8afa35@app.fastmail.com>
+ <49684d58-c19d-b147-5e9f-2ac526dd50f0@suse.de>
+ <743d2b1e-c843-4fb2-b252-0006be2e2bd8@app.fastmail.com>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <743d2b1e-c843-4fb2-b252-0006be2e2bd8@app.fastmail.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------gOpI1L9pL7Bq8Fb2HvhAlzDV"
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -71,75 +93,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------gOpI1L9pL7Bq8Fb2HvhAlzDV
+Content-Type: multipart/mixed; boundary="------------IBuMtqzq4nm9A3mKPOZXAzct";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Arnd Bergmann <arnd@arndb.de>, kernel test robot <lkp@intel.com>,
+ Helge Deller <deller@gmx.de>, Geert Uytterhoeven <geert@linux-m68k.org>,
+ Javier Martinez Canillas <javierm@redhat.com>,
+ Daniel Vetter <daniel@ffwll.ch>, Vineet Gupta <vgupta@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ "David S . Miller" <davem@davemloft.net>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Sam Ravnborg <sam@ravnborg.org>, suijingfeng@loongson.cn
+Cc: Linux-Arch <linux-arch@vger.kernel.org>, linux-fbdev@vger.kernel.org,
+ linux-ia64@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-m68k@lists.linux-m68k.org, loongarch@lists.linux.dev,
+ oe-kbuild-all@lists.linux.dev, sparclinux@vger.kernel.org,
+ linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Message-ID: <9ea087ab-95f3-3274-b464-ef13718562b1@suse.de>
+Subject: Re: [PATCH v6 5/6] fbdev: Move framebuffer I/O helpers into
+ <asm/fb.h>
+References: <20230510110557.14343-6-tzimmermann@suse.de>
+ <202305102136.eMjTSPwH-lkp@intel.com>
+ <f6b2d541-d235-4e98-afcc-9137fb8afa35@app.fastmail.com>
+ <49684d58-c19d-b147-5e9f-2ac526dd50f0@suse.de>
+ <743d2b1e-c843-4fb2-b252-0006be2e2bd8@app.fastmail.com>
+In-Reply-To: <743d2b1e-c843-4fb2-b252-0006be2e2bd8@app.fastmail.com>
 
-It's my first pull for you, so let me introduce myself.  With Rob Herring
-and recently also Conor Dooley, I co-maintain the Devicetree
-bindings [1].  I also maintain few other subsystems, but all my other
-pull requests are going to SoC folks (Arnd and Olof).
+--------------IBuMtqzq4nm9A3mKPOZXAzct
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
-The git tag for pull is signed with my usual key which you can get
-from kernel.org pgp keys repo: keys/1B93437D3B41629B.asc
+SGkNCg0KQW0gMTAuMDUuMjMgdW0gMTc6NTQgc2NocmllYiBBcm5kIEJlcmdtYW5uOg0KPiBP
+biBXZWQsIE1heSAxMCwgMjAyMywgYXQgMTY6MjcsIFRob21hcyBaaW1tZXJtYW5uIHdyb3Rl
+Og0KPj4gQW0gMTAuMDUuMjMgdW0gMTY6MTUgc2NocmllYiBBcm5kIEJlcmdtYW5uOg0KPj4+
+IE9uIFdlZCwgTWF5IDEwLCAyMDIzLCBhdCAxNjowMywga2VybmVsIHRlc3Qgcm9ib3Qgd3Jv
+dGU6DQo+ICAgDQo+Pj4gSSB0aGluayB0aGF0J3MgYSBwcmVleGlzdGluZyBidWcgYW5kIEkg
+aGF2ZSBubyBpZGVhIHdoYXQgdGhlDQo+Pj4gY29ycmVjdCBzb2x1dGlvbiBpcy4gTG9va2lu
+ZyBmb3IgSEQ2NDQ2MSBzaG93cyBpdCBiZWluZyB1c2VkDQo+Pj4gYm90aCB3aXRoIGludy9v
+dXR3IGFuZCByZWFkdy93cml0ZXcsIHNvIHRoZXJlIGlzIG5vIHdheSB0byBoYXZlDQo+Pj4g
+dGhlIGNvcnJlY3QgdHlwZS4gVGhlIHNoIF9fcmF3X3JlYWR3KCkgZGVmaW5pdGlvbiBoaWRl
+cyB0aGlzIGJ1ZywNCj4+PiBidXQgdGhhdCBpcyBhIHByb2JsZW0gd2l0aCBhcmNoL3NoIGFu
+ZCBpdCBwcm9iYWJseSBoaWRlcyBvdGhlcnMNCj4+PiBhcyB3ZWxsLg0KPj4NCj4+IFRoZSBj
+b25zdGFudCBIRDY0NDYxX0lPQkFTRSBpcyBkZWZpbmVkIGFzIGludGVnZXIgYXQNCj4+DQo+
+Pg0KPj4gaHR0cHM6Ly9lbGl4aXIuYm9vdGxpbi5jb20vbGludXgvbGF0ZXN0L3NvdXJjZS9h
+cmNoL3NoL2luY2x1ZGUvYXNtL2hkNjQ0NjEuaCNMMTcNCj4+DQo+PiBidXQgZmJfcmVhZHco
+KSBleHBlY3RzIGEgdm9sYXRpbGUtdm9pZCBwb2ludGVyLiBJIGd1ZXNzIHdlIGNvdWxkIGFk
+ZCBhDQo+PiBjYXN0IHNvbWV3aGVyZSB0byBzaWxlbmNlIHRoZSBwcm9ibGVtLiBJbiB0aGUg
+Y3VycmVudCB1cHN0cmVhbSBjb2RlLA0KPj4gdGhhdCBhcHBlYXJzIHRvIGJlIGRvbmUgYnkg
+c2gncyBfX3Jhd19yZWFkdygpIGludGVybmFsbHk6DQo+Pg0KPj4NCj4+IGh0dHBzOi8vZWxp
+eGlyLmJvb3RsaW4uY29tL2xpbnV4L2xhdGVzdC9zb3VyY2UvYXJjaC9zaC9pbmNsdWRlL2Fz
+bS9pby5oI0wzNQ0KPiANCj4gU3VyZSwgdGhhdCB3b3VsZCBtYWtlIGl0IGJ1aWxkIGFnYWlu
+LCBidXQgdGhhdCBzdGlsbCBkb2Vzbid0IG1ha2UgdGhlDQo+IGNvZGUgY29ycmVjdCwgc2lu
+Y2UgaXQncyBjb21wbGV0ZWx5IHVuY2xlYXIgd2hhdCBiYXNlIGFkZHJlc3MgdGhlDQoNCk9o
+LCBPSy4gSSB0aG91Z2h0IGl0J3MgbGlrZSB2Z2FmYiwgd2hpY2ggZ3JhYnMgdGhlIGZpeGVk
+IFZHQSBmcmFtZWJ1ZmZlciANCnJhbmdlLg0KDQo+IEhENjQ0NjFfSU9CQVNFIGlzIHJlbGF0
+aXZlIHRvLiBUaGUgaHA2eHggcGxhdGZvcm0gY29kZSBvbmx5IHBhc3NlcyBpdA0KPiB0aHJv
+dWdoIGludygpL291dHcoKSwgd2hpY2ggdGFrZSBhbiBvZmZzZXQgcmVsYXRpdmUgdG8gc2hf
+aW9fcG9ydF9iYXNlLA0KPiBidXQgdGhhdCBpcyBub3QgaW5pdGlhbGl6ZWQgb24gaHA2eHgu
+IEkgdHJpZWQgdG8gZmluZCBpbiB0aGUgaGlzdG9yeQ0KPiB3aGVuIGl0IGJyb2tlLCBhcHBh
+cmVudGx5IHRoYXQgd2FzIGluIDIwMDcgY29tbWl0IDM0YTc4MGEwYWZlYiAoInNoOg0KPiBo
+cDZ4eCBwYXRhX3BsYXRmb3JtIHN1cHBvcnQuIiksIHdoaWNoIHJlbW92ZWQgdGhlIGN1c3Rv
+bSBpbncvb3V0dw0KPiBpbXBsZW1lbnRhdGlvbnMuDQoNClRoYW5rcyBmb3IgbG9va2luZyB0
+aGlzIHVwLiBJZiB0aGlzIGRyaXZlciBoYXMgYmVlbiBicm9rZW4gZm9yIDE1IHllYXJzLCAN
+CnRoZSBjb3JyZWN0IGZpeCBpcyB0byBkZWxldGUgaXQuIEkndmUgbWVhbndoaWxlIHByZXBh
+cmVkIHRoZSBzZWNvbmQtYmVzdCANCmZpeCwgd2hpY2ggaXMgdGhlIHR5cGUgY2FzdGluZy4g
+SXQnbGwgYmUgaW4gdGhlIG5leHQgcGF0Y2hzZXQuDQoNCkJlc3QgcmVnYXJkcw0KVGhvbWFz
+DQoNCj4gDQo+ICAgICAgICBBcm5kDQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBo
+aWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkg
+R21iSA0KRnJhbmtlbnN0cmFzc2UgMTQ2LCA5MDQ2MSBOdWVybmJlcmcsIEdlcm1hbnkNCkdG
+OiBJdm8gVG90ZXYsIEFuZHJldyBNeWVycywgQW5kcmV3IE1jRG9uYWxkLCBCb3VkaWVuIE1v
+ZXJtYW4NCkhSQiAzNjgwOSAoQUcgTnVlcm5iZXJnKQ0K
 
-Rob is currently away from keyboard and he also mentioned in last pull
-to you that something might be coming from me [2].  So here it goes - few
-fixes for current cycle.
+--------------IBuMtqzq4nm9A3mKPOZXAzct--
 
-[1] https://www.kernel.org/doc/html/latest/process/maintainers.html#open-firmware-and-flattened-device-tree-bindings
-[2] https://lore.kernel.org/all/20230505192951.GA3409270-robh@kernel.org/
+--------------gOpI1L9pL7Bq8Fb2HvhAlzDV
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
-Best regards,
-Krzysztof
+-----BEGIN PGP SIGNATURE-----
 
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmRcyTcFAwAAAAAACgkQlh/E3EQov+CN
+DA//eC7/2pGbq9WXlm5DpkCSr+KA3eCi9FiYTm4qjDyGoj8p6KJe1IBhFymP11n1J1TKH2y5rfrV
+mGwY3w0ZCSVoA6lE/ky+YMtk9FfixMVMoWAnbuhy9mgOvKapLtJLsHCwmJvFzPe/hCMMpH2WFbet
+g0xbVgFrew0BFVACsE8Z5Zdu72OjSHZ1UeKw5pJDnZhP8Ve6Ax5biBjzk3rCO5RZcNGUOLOvlW98
+CogUbVr9ZPPEE2N1h49QKdgLR14uy27dDmIa4gwBShKLSsH4/REu/t8WBxbMut/lyC07gtUbFk0B
+ORC/RTJEBh/PqVSXAfQCq4nZwCYdo7c2JjDctUbNb/zmqeNmPiMcw/s1xRiD1stwWgHQwP/cBSJ8
+tmZbMWlLzwPenhKgvMhT6arUL3TLGrvIRXXFinEqhsdIYlaS6tFBUKU+LF1+2cytN0nexk2giAI1
+ZxV+aCzgSfC1PjKXNKeraGOWLR9thPzHBGmGjZv/l1ht8SttKkq1P+4HxfIqm6AO4amRLLymWP3t
+MishZo5Om5N3W6USdA/dtQbKSbn7IgaUGXYx56S+Cjd24ZuF5qUjssZ8mH8NWPB3nlPZBvvi8eWC
+1iW6v8QeIUpftFEtpyumNrmi4lanoL/KbsyHJGapGD5jWcklAeH4eLOUTmCNURjZGd1JBtvEA/ep
+dyQ=
+=bKPx
+-----END PGP SIGNATURE-----
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
-
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/krzk/linux-dt.git tags/dt-fixes-6.4
-
-for you to fetch changes up to 8bbec86ce6d66fb33530c679f7bb3a123fc9e7da:
-
-  dt-bindings: PCI: fsl,imx6q: fix assigned-clocks warning (2023-05-09 08:01:49 +0200)
-
-----------------------------------------------------------------
-Devicetree binding fixes for v6.4
-
-Few fixes for Devicetree bindings and related docs, all for issues
-introduced in v6.4-rc1 commits:
-
-1. media/ov2685: fix number of possible data lanes, as old binding
-   explicitly mentioned one data lane. This fixes dt_binding_check
-   warnings like:
-   Documentation/devicetree/bindings/media/rockchip-isp1.example.dtb: camera@3c: port:endpoint:data-lanes: [[1]] is too short
-   From schema: Documentation/devicetree/bindings/media/i2c/ovti,ov2685.yaml
-
-2. Maintainers: correct path of Apple PWM binding. This fixes
-   refcheckdocs warning.
-
-3. PCI/fsl,imx6q: correct parsing of assigned-clocks and related
-   properties and make the clocks more specific per PCI device (host or
-   endpoint).  This fixes dtschema limitation and dt_binding_check
-   warnings like:
-
-   Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.example.dtb: pcie-ep@33800000: Unevaluated properties are not allowed
-   From schema: Documentation/devicetree/bindings/pci/fsl,imx6q-pcie-ep.yaml
-
-----------------------------------------------------------------
-Krzysztof Kozlowski (1):
-      dt-bindings: PCI: fsl,imx6q: fix assigned-clocks warning
-
-Luca Weiss (1):
-      media: dt-bindings: ov2685: Correct data-lanes attribute
-
-Lukas Bulwahn (1):
-      MAINTAINERS: adjust file entry for ARM/APPLE MACHINE SUPPORT
-
- .../devicetree/bindings/media/i2c/ovti,ov2685.yaml |  1 +
- .../bindings/pci/fsl,imx6q-pcie-common.yaml        | 13 +---
- .../devicetree/bindings/pci/fsl,imx6q-pcie-ep.yaml | 38 +++++++++++
- .../devicetree/bindings/pci/fsl,imx6q-pcie.yaml    | 77 ++++++++++++++++++++++
- MAINTAINERS                                        |  2 +-
- 5 files changed, 119 insertions(+), 12 deletions(-)
+--------------gOpI1L9pL7Bq8Fb2HvhAlzDV--
