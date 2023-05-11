@@ -2,95 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C760E6FF9EF
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:10:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E23F6FF9F1
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:12:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239204AbjEKTKN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 15:10:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
+        id S238949AbjEKTMt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 15:12:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239035AbjEKTJ3 (ORCPT
+        with ESMTP id S233472AbjEKTMr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 15:09:29 -0400
-Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C6DC5BB2;
-        Thu, 11 May 2023 12:09:28 -0700 (PDT)
-Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id AAF06E0EC8;
-        Thu, 11 May 2023 22:09:27 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        baikalelectronics.ru; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:from:from:in-reply-to:message-id
-        :mime-version:references:reply-to:subject:subject:to:to; s=post;
-         bh=aQn0dbwJHG6Y+ZqZl2fkBWcHMJmERaYFt7DSJry68/g=; b=M1UU+mveWStN
-        3gTNpPEzVjcVfuM3zt+w2PWSSkpl+T3ykmbJ/VHmgTpA91L1JEr8oG8YsYddb8uu
-        Qfg1nOwNfCicxV+e+UjVPUrj3OHUSH3wJKtz/fISylJKBWBVKmgMQ3qes1kvG1kk
-        U3rRhm0RyL4J6pxHD3p0EcN1WYXhm5Q=
-Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
-        by post.baikalelectronics.com (Proxmox) with ESMTP id 92F71E0EB1;
-        Thu, 11 May 2023 22:09:27 +0300 (MSK)
-Received: from localhost (10.8.30.6) by mail (192.168.51.25) with Microsoft
- SMTP Server (TLS) id 15.0.1395.4; Thu, 11 May 2023 22:09:27 +0300
-From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
-To:     Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        Rob Herring <robh@kernel.org>
-CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        <linux-pci@vger.kernel.org>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH RESEND v5 14/14] MAINTAINERS: Add myself as the DW eDMA driver reviewer
-Date:   Thu, 11 May 2023 22:09:02 +0300
-Message-ID: <20230511190902.28896-15-Sergey.Semin@baikalelectronics.ru>
-X-Mailer: git-send-email 2.40.0
-In-Reply-To: <20230511190902.28896-1-Sergey.Semin@baikalelectronics.ru>
-References: <20230511190902.28896-1-Sergey.Semin@baikalelectronics.ru>
+        Thu, 11 May 2023 15:12:47 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D456E8A57
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 12:12:15 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683832263;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z/c57fGI76Etvz35JP6oYi56+W2cE5Opvi4hQ9J18Gk=;
+        b=eieIKIMVU6HyUXgjUhiQnvhyCt0FltP7sWWls5ql4poV9hK21esWHSd0mHfiQi9aY6OEs8
+        7/EkYpiasPxMwNyJ77uIjD1sldif2LJ1zW0dV4EnYZWZxYMMtVH+Nt9vlpvIe3Yo3J7KB+
+        OSiIEIi3+vgdAI36p5GCloBxJv/uYJ98+D1KgV+Gh/wgPioj8zlHGeIOwJoqrteTVN2R7y
+        uZjNMleW8+zNWU9WHxuS+jPjlE5N+X9ElCXVaVgMUFMefEj4eWariHnyEOqIow2SbSl+q2
+        Nk3Kt8bev2QHCyRSbudoB56jRaOWbG18AUIrdzwv4bKhnJ+Km0bf7XesbWzGdg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683832263;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Z/c57fGI76Etvz35JP6oYi56+W2cE5Opvi4hQ9J18Gk=;
+        b=mx435wk27fjwmLF8qGCLTrq98EJJ76mOT5Snc5JargynMtdsU1X8/5wfzkRWj68wXA86ZV
+        kiIh1FNJo3YuIkCg==
+To:     Adamos Ttofari <attofari@amazon.de>
+Cc:     abusse@amazon.de, dwmw@amazon.co.uk, hborghor@amazon.de,
+        sironi@amazon.de, attofari@amazon.de,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Kyle Huey <me@kylehuey.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fpu: xstate: Keep xfd_state always in-sync with
+ IA32_XFD MSR
+In-Reply-To: <20230511152818.13839-1-attofari@amazon.de>
+References: <20230511152818.13839-1-attofari@amazon.de>
+Date:   Thu, 11 May 2023 21:11:02 +0200
+Message-ID: <877cted6pl.ffs@tglx>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Originating-IP: [10.8.30.6]
-X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver original maintainer has been inactive for almost two years now.
-It doesn't positively affect the new patches tests and reviews process.
-Since the DW eDMA engine has been embedded into the PCIe controllers in
-several our SoCs we will be interested in helping with the updates review.
+On Thu, May 11 2023 at 15:28, Adamos Ttofari wrote:
 
-Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Commit 672365477ae8 ("x86/fpu: Update XFD state where required") and
+> commit 8bf26758ca96 ("x86/fpu: Add XFD state to fpstate") introduced a
+> per_cpu variable xfd_state to keep the IA32_XFD MSR value cached. In
+> order to avoid unnecessary writes to the MSR.
+>
+> xfd_state might not be always synced with the MSR. Eventually affecting
+> MSR writes. xfd_state is initialized with 0, meanwhile the MSR is
+> initialized with the XFEATURE_MASK_USER_DYNAMIC to make XFD fire. Then
+> later on reschedule to a different CPU, when a process that uses extended
+> xfeatures and handled the #NM (by allocating the additional space in task's
+> fpstate for extended xfeatures) it will skip the MSR update in
+> restore_fpregs_from_fpstate because the value might match to already cached
+> xfd_state (meanwhile it is not the same with the MSR). Eventually calling a
+> XRSTOR to set the new state (that caries extended xfeatures) and fire a #NM
+> from kernel context. The XFD is expected to fire from user-space context,
+> but not in this case and the kernel crashes.
+
+I'm completely confused.
+
+So after reading the patch I think I know what you are trying to
+explain:
+
+   On CPU hotplug MSR_IA32_XFD is reset to the init_fpstate.xfd, which
+   wipes out any stale state. But the per CPU cached xfd value is not
+   reset, which brings them out of sync.
+
+   As a consequence a subsequent xfd_update_state() might fail to update
+   the MSR which in turn can result in XRSTOR raising a #NM in kernel
+   space, which crashes the kernel.
+
+Right?
+
+> To address the issue mentioned initialize xfd_state with the current MSR
+> value and update the XFD MSR always with xfd_update_state to avoid
+> un-sync cases.
+>
+> Fixes: 672365477ae8 ("x86/fpu: Update XFD state where required")
+>
+> Signed-off-by: Adamos Ttofari <attofari@amazon.de>
+> ---
+>  arch/x86/kernel/fpu/xstate.c | 12 +++++++++---
+>  1 file changed, 9 insertions(+), 3 deletions(-)
+>
+> diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+> index 0bab497c9436..36ed27ac0ecd 100644
+> --- a/arch/x86/kernel/fpu/xstate.c
+> +++ b/arch/x86/kernel/fpu/xstate.c
+> @@ -179,8 +179,14 @@ void fpu__init_cpu_xstate(void)
+>  	 * key as that does not work on the boot CPU. This also ensures
+>  	 * that any stale state is wiped out from XFD.
+>  	 */
+> -	if (cpu_feature_enabled(X86_FEATURE_XFD))
+> -		wrmsrl(MSR_IA32_XFD, init_fpstate.xfd);
+> +	if (cpu_feature_enabled(X86_FEATURE_XFD)) {
+> +		u64 xfd;
+> +
+> +		rdmsrl(MSR_IA32_XFD, xfd);
+> +		__this_cpu_write(xfd_state, xfd);
+> +
+> +		xfd_update_state(&init_fpstate);
+> +	}
+
+This does not compile on 32bit. You want something like the uncompiled
+below.
+
+>  	/*
+>  	 * XCR_XFEATURE_ENABLED_MASK (aka. XCR0) sets user features
+> @@ -915,7 +921,7 @@ void fpu__resume_cpu(void)
+>  	}
+>  
+>  	if (fpu_state_size_dynamic())
+> -		wrmsrl(MSR_IA32_XFD, current->thread.fpu.fpstate->xfd);
+> +		xfd_update_state(&init_fpstate);
+
+On suspend per CPU xfd_state == current->thread.fpu.fpstate->xfd so it's
+correct to restore the exact state which was active _before_ suspend.
+xfd_state can't be out of sync in that case, no?
+
+Thanks,
+
+        tglx
 ---
- MAINTAINERS | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 9f66461ede29..485d32e630d4 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -5887,6 +5887,7 @@ F:	drivers/mtd/nand/raw/denali*
- DESIGNWARE EDMA CORE IP DRIVER
- M:	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
- R:	Gustavo Pimentel <gustavo.pimentel@synopsys.com>
-+R:	Serge Semin <fancer.lancer@gmail.com>
- L:	dmaengine@vger.kernel.org
- S:	Maintained
- F:	drivers/dma/dw-edma/
--- 
-2.40.0
-
-
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index 0bab497c9436..70785a722759 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -177,10 +177,11 @@ void fpu__init_cpu_xstate(void)
+ 	 * Must happen after CR4 setup and before xsetbv() to allow KVM
+ 	 * lazy passthrough.  Write independent of the dynamic state static
+ 	 * key as that does not work on the boot CPU. This also ensures
+-	 * that any stale state is wiped out from XFD.
++	 * that any stale state is wiped out from XFD. Reset the per CPU
++	 * xfd cache too.
+ 	 */
+ 	if (cpu_feature_enabled(X86_FEATURE_XFD))
+-		wrmsrl(MSR_IA32_XFD, init_fpstate.xfd);
++		xfd_reset_state();
+ 
+ 	/*
+ 	 * XCR_XFEATURE_ENABLED_MASK (aka. XCR0) sets user features
+diff --git a/arch/x86/kernel/fpu/xstate.h b/arch/x86/kernel/fpu/xstate.h
+index a4ecb04d8d64..6cfaf72228f4 100644
+--- a/arch/x86/kernel/fpu/xstate.h
++++ b/arch/x86/kernel/fpu/xstate.h
+@@ -159,9 +159,16 @@ static inline void xfd_update_state(struct fpstate *fpstate)
+ 	}
+ }
+ 
++static inline void xfd_reset_state(void)
++{
++	wrmsrl(MSR_IA32_XFD, init_fpstate.xfd);
++	__this_cpu_write(xfd_state, init_fpstate.xfd);
++}
++
+ extern int __xfd_enable_feature(u64 which, struct fpu_guest *guest_fpu);
+ #else
+ static inline void xfd_update_state(struct fpstate *fpstate) { }
++static inline void xfd_reset_state(void) { }
+ 
+ static inline int __xfd_enable_feature(u64 which, struct fpu_guest *guest_fpu) {
+ 	return -EPERM;
