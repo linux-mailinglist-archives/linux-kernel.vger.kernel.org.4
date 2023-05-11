@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58C3E6FFAF6
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:02:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 514F66FFAFC
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:02:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239565AbjEKUB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 16:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51374 "EHLO
+        id S239583AbjEKUC0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 16:02:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238946AbjEKUBz (ORCPT
+        with ESMTP id S238946AbjEKUCY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 16:01:55 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA9A91993;
-        Thu, 11 May 2023 13:01:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=qzvpHVkHKwBUFoLEvoOtwGUUaiDfLA17+CYXmIWURuo=; b=VzwQGby1CTkSKX0IT4HnG8n4SG
-        oZWTQm9sLGtnjIvr6ENbkjd1c+G1wRO83RECDNlldkBYxSwKeJMgxYkjGHQYsjefh8UzpSDqWNCGI
-        MvMP6744ORM/68xuL0sFA0hK2pqVi5eCiWxjlFXrLea93W220W9g1bk3YyT8bMvKXZ0OJ5XJj1rhF
-        cPkS7dVHEtKWvFx6n6hcDc5PQfJDOSAEvl4vPzX0/+KE6YBHFJLDmKI8WYvt8YYUcOComYQL9Av8m
-        tmzqFVd1Z8iJPQzmUhAoLA9kQ7aMmNztHIEiBT84yPcVbRhKXSCJV/dl87ZayJPucZGGUq1lVs10q
-        JAeFEU7A==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pxCTv-00HWgY-Ay; Thu, 11 May 2023 20:01:43 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D5FFA300451;
-        Thu, 11 May 2023 22:01:42 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 96FA42BB639C3; Thu, 11 May 2023 22:01:42 +0200 (CEST)
-Date:   Thu, 11 May 2023 22:01:42 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>, linux-kernel@vger.kernel.org,
-        x86@kernel.org, akiyks@gmail.com, linux-doc@vger.kernel.org,
-        kernel-team@meta.com, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH locking/atomic 18/19] locking/atomic: Refrain from
- generating duplicate fallback kernel-doc
-Message-ID: <20230511200142.GC2296992@hirez.programming.kicks-ass.net>
-References: <19135936-06d7-4705-8bc8-bb31c2a478ca@paulmck-laptop>
- <20230510181717.2200934-18-paulmck@kernel.org>
- <ZF0haDfyL3At3Ijw@FVFF77S0Q05N.cambridge.arm.com>
- <20230511193856.GA2296992@hirez.programming.kicks-ass.net>
- <c619d689-e7b5-4136-9bd3-8f41954f43cd@paulmck-laptop>
+        Thu, 11 May 2023 16:02:24 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A20D1993;
+        Thu, 11 May 2023 13:02:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683835343; x=1715371343;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=4QWXIMyuHZYaqyYjU5d8Hz2Xi/48qqDvh3RaVHzyOAc=;
+  b=LtZWI2qpudIRCgmegCDCZh2fZjz6DLQKfc/C0pZVCy4OVKg9gYdOMne8
+   UEa8XjenMIVma+mMLx4KRrh2g3lQfjrZiB+1OphaBH9ZtH8t87av4jHKI
+   a26q/0TIMd6kcYsptWHyLFM2N88wtQlAahKmtL9S98RSsUS5eSDbjsT30
+   +o+VQ5I7TqN1DmAgMflGrrmq6seLdczKDZr3lhpO8cava8GPSmJJLqspD
+   DbLW3jSI+QBwB1rbO13Qsf0dalB0RYORyH170gr4m2a68JzrmsZPiK2tT
+   7MmfNf6nhJZnKqTD5pEBQF1sdYn1H5I/zO5ynsuyeb8+fiked3Pecxc0y
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="330979945"
+X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
+   d="scan'208";a="330979945"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 13:02:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="844119899"
+X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
+   d="scan'208";a="844119899"
+Received: from jsanche3-mobl1.ger.corp.intel.com ([10.252.39.112])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 13:02:19 -0700
+Date:   Thu, 11 May 2023 23:02:12 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Dean Luick <dean.luick@cornelisnetworks.com>
+cc:     linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?ISO-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 06/17] IB/hfi1: Use pcie_lnkctl{,2}_clear_and_set() for
+ changing LNKCTL{,2}
+In-Reply-To: <b2202998-b67b-ee45-b6de-1da5d30cefd0@cornelisnetworks.com>
+Message-ID: <1b4ebce-1fcb-90e0-6396-967a5b6d563e@linux.intel.com>
+References: <20230511131441.45704-1-ilpo.jarvinen@linux.intel.com> <20230511131441.45704-7-ilpo.jarvinen@linux.intel.com> <b2202998-b67b-ee45-b6de-1da5d30cefd0@cornelisnetworks.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c619d689-e7b5-4136-9bd3-8f41954f43cd@paulmck-laptop>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+Content-Type: multipart/mixed; boundary="8323329-1333249942-1683835342=:1900"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -65,11 +68,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 12:53:46PM -0700, Paul E. McKenney wrote:
-> Do you have an alternative suggestion for generating the kernel-doc?
-> The current lack of it is problematic.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-I've never found a lack of kernel-doc to be a problem. And I'm very much
-against complicating the scripts to add it.
+--8323329-1333249942-1683835342=:1900
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-Also, there's Documentation/atomic_t.txt
+On Thu, 11 May 2023, Dean Luick wrote:
+
+> On 5/11/2023 8:14 AM, Ilpo Järvinen wrote:
+> > Don't assume that only the driver would be accessing LNKCTL/LNKCTL2.
+> > ASPM policy changes can trigger write to LNKCTL outside of driver's
+> > control. And in the case of upstream (parent), the driver does not even
+> > own the device it's changing the registers for.
+> >
+> > Use pcie_lnkctl_clear_and_set() and pcie_lnkctl2_clear_and_set() which
+> > do proper locking to avoid losing concurrent updates to the register
+> > value.
+> >
+> > Suggested-by: Lukas Wunner <lukas@wunner.de>
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > ---
+
+> > diff --git a/drivers/infiniband/hw/hfi1/pcie.c b/drivers/infiniband/hw/hfi1/pcie.c
+> > index 08732e1ac966..fe7324d38d64 100644
+> > --- a/drivers/infiniband/hw/hfi1/pcie.c
+> > +++ b/drivers/infiniband/hw/hfi1/pcie.c
+> > @@ -1212,14 +1212,10 @@ int do_pcie_gen3_transition(struct hfi1_devdata *dd)
+> >                   (u32)lnkctl2);
+> >       /* only write to parent if target is not as high as ours */
+> >       if ((lnkctl2 & PCI_EXP_LNKCTL2_TLS) < target_vector) {
+> > -             lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
+> > -             lnkctl2 |= target_vector;
+> > -             dd_dev_info(dd, "%s: ..new link control2: 0x%x\n", __func__,
+> > -                         (u32)lnkctl2);
+> > -             ret = pcie_capability_write_word(parent,
+> > -                                              PCI_EXP_LNKCTL2, lnkctl2);
+> > +             pcie_lnkctl2_clear_and_set(parent, PCI_EXP_LNKCTL2_TLS,
+> > +                                        target_vector);
+> 
+> You are missing an assignment to "ret" above.
+
+Thanks for noticing, I'll fix it in the next version.
+
+-- 
+ i.
+
+--8323329-1333249942-1683835342=:1900--
