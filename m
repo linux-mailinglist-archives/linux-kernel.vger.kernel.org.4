@@ -2,56 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D30DE6FEFF0
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:30:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A4C9B6FEFF6
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 12:31:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237639AbjEKKaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 06:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60612 "EHLO
+        id S237868AbjEKKbq convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 11 May 2023 06:31:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236394AbjEKKaO (ORCPT
+        with ESMTP id S237909AbjEKKbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 06:30:14 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 473998A78
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 03:30:13 -0700 (PDT)
-Received: from lhrpeml500005.china.huawei.com (unknown [172.18.147.207])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4QH7Rn152Vz67dY8;
-        Thu, 11 May 2023 18:29:25 +0800 (CST)
-Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
- (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Thu, 11 May
- 2023 11:30:10 +0100
-Date:   Thu, 11 May 2023 11:30:09 +0100
-From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
-To:     Huang Ying <ying.huang@intel.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Arjan Van De Ven <arjan@linux.intel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Mel Gorman" <mgorman@techsingularity.net>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        David Hildenbrand <david@redhat.com>,
-        Johannes Weiner <jweiner@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Michal Hocko <mhocko@suse.com>,
-        Pavel Tatashin <pasha.tatashin@soleen.com>,
-        Matthew Wilcox <willy@infradead.org>
-Subject: Re: [RFC 0/6] mm: improve page allocator scalability via splitting
- zones
-Message-ID: <20230511113009.00004821@Huawei.com>
-In-Reply-To: <20230511065607.37407-1-ying.huang@intel.com>
-References: <20230511065607.37407-1-ying.huang@intel.com>
-Organization: Huawei Technologies Research and Development (UK) Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
+        Thu, 11 May 2023 06:31:17 -0400
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C571BAD34;
+        Thu, 11 May 2023 03:30:54 -0700 (PDT)
+Received: from ip5b412278.dynamic.kabel-deutschland.de ([91.65.34.120] helo=diego.localnet)
+        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <heiko@sntech.de>)
+        id 1px3ZJ-0004sW-Uy; Thu, 11 May 2023 12:30:41 +0200
+From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
+To:     Nathan Huckleberry <nhuck@google.com>
+Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
+        aou@eecs.berkeley.edu, herbert@gondor.apana.org.au,
+        davem@davemloft.net, conor.dooley@microchip.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-crypto@vger.kernel.org, christoph.muellner@vrull.eu
+Subject: Re: [PATCH v4 4/4] RISC-V: crypto: add accelerated GCM GHASH implementation
+Date:   Thu, 11 May 2023 12:30:41 +0200
+Message-ID: <3540048.LM0AJKV5NW@diego>
+In-Reply-To: <CAJkfWY63E7x-OQ2yTKJ03Sd7P2AuLruan_41EXzYcTZpNnLPzw@mail.gmail.com>
+References: <20230329140642.2186644-1-heiko.stuebner@vrull.eu>
+ <20230329140642.2186644-5-heiko.stuebner@vrull.eu>
+ <CAJkfWY63E7x-OQ2yTKJ03Sd7P2AuLruan_41EXzYcTZpNnLPzw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.202.227.76]
-X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
- lhrpeml500005.china.huawei.com (7.191.163.240)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8BIT
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,55 +46,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 May 2023 14:56:01 +0800
-Huang Ying <ying.huang@intel.com> wrote:
+Hi Nathan,
 
-> The patchset is based on upstream v6.3.
+Am Dienstag, 11. April 2023, 17:00:00 CEST schrieb Nathan Huckleberry:
+> On Wed, Mar 29, 2023 at 7:08 AM Heiko Stuebner <heiko@sntech.de> wrote:
+> > +struct riscv64_ghash_ctx {
+> > +       void (*ghash_func)(u64 Xi[2], const u128 Htable[16],
+> > +                          const u8 *inp, size_t len);
+> > +
+> > +       /* key used by vector asm */
+> > +       u128 htable[16];
 > 
-> More and more cores are put in one physical CPU (usually one NUMA node
-> too).  In 2023, one high-end server CPU has 56, 64, or more cores.
-> Even more cores per physical CPU are planned for future CPUs.  While
-> all cores in one physical CPU will contend for the page allocation on
-> one zone in most cases.  This causes heavy zone lock contention in
-> some workloads.  And the situation will become worse and worse in the
-> future.
-> 
-> For example, on an 2-socket Intel server machine with 224 logical
-> CPUs, if the kernel is built with `make -j224`, the zone lock
-> contention cycles% can reach up to about 12.7%.
-> 
-> To improve the scalability of the page allocation, in this series, we
-> will create one zone instance for each about 256 GB memory of a zone
-> type generally.  That is, one large zone type will be split into
-> multiple zone instances.  Then, different logical CPUs will prefer
-> different zone instances based on the logical CPU No.  So the total
-> number of logical CPUs contend on one zone will be reduced.  Thus the
-> scalability is improved.
-> 
-> With the series, the zone lock contention cycles% reduces to less than
-> 1.6% in the above kbuild test case when 4 zone instances are created
-> for ZONE_NORMAL.
-> 
-> Also tested the series with the will-it-scale/page_fault1 with 16
-> processes.  With the optimization, the benchmark score increases up to
-> 18.2% and the zone lock contention reduces from 13.01% to 0.56%.
-> 
-> To create multiple zone instances for a zone type, another choice is
-> to create zone instances based on the total number of logical CPUs.
-> We choose to use memory size because it is easier to be implemented.
-> In most cases, the more the cores, the larger the memory size is.
-> And, on system with larger memory size, the performance requirement of
-> the page allocator is usually higher.
-> 
-> Best Regards,
-> Huang, Ying
-> 
-Hi,
+> This field looks too big. The assembly only loads the first 128-byte
+> value from this table.
 
-Interesting idea.  I'm curious though on whether this can suffer from
-imbalance problems where due to uneven allocations from particular CPUs
-you can end up with all page faults happening in one zone and the original
-contention problem coming back?  Or am I missing some process that will
-result in that imbalance being corrected?
+OpenSSL defines the Htable field handed to the init- and the other
+functions as this "u128 Htable[16]"    [0] . As I really like the concept
+of keeping in sync with openSSL, I guess I'd rather not change that.
 
-Jonathan
+[0] https://github.com/openssl/openssl/blob/master/crypto/modes/gcm128.c#L88
+
+
+> Is this copied from another implementation? There's an optimization
+> where you precompute the first N powers of H so that you can perform 1
+> finite field reduction for every N multiplications, but it doesn't
+> look like that's being used here.
+
+The whole crypto-specific code comes from openSSL itself, so for now I
+guess I'd like to try keeping things the same.
+
+
+> > +#define RISCV64_ZBC_SETKEY(VARIANT, GHASH)                             \
+> > +void gcm_init_rv64i_ ## VARIANT(u128 Htable[16], const u64 Xi[2]);     \
+> > +static int riscv64_zbc_ghash_setkey_ ## VARIANT(struct crypto_shash *tfm,      \
+> > +                                          const u8 *key,               \
+> > +                                          unsigned int keylen)         \
+> > +{                                                                      \
+> > +       struct riscv64_ghash_ctx *ctx = crypto_tfm_ctx(crypto_shash_tfm(tfm)); \
+> > +       const u64 k[2] = { cpu_to_be64(((const u64 *)key)[0]),          \
+> > +                          cpu_to_be64(((const u64 *)key)[1]) };        \
+> > +                                                                       \
+> > +       if (keylen != GHASH_BLOCK_SIZE)                                 \
+> > +               return -EINVAL;                                         \
+> > +                                                                       \
+> > +       memcpy(&ctx->key, key, GHASH_BLOCK_SIZE);                       \
+> > +       gcm_init_rv64i_ ## VARIANT(ctx->htable, k);                     \
+> > +                                                                       \
+> > +       ctx->ghash_func = gcm_ghash_rv64i_ ## GHASH;                    \
+> > +                                                                       \
+> > +       return 0;                                                       \
+> > +}
+> 
+> I'd prefer three identical functions over a macro here. Code searching
+> tools and compiler warnings are significantly worse with macros.
+
+done :-)
+
+
+> > +
+> > +static int riscv64_zbc_ghash_update(struct shash_desc *desc,
+> > +                          const u8 *src, unsigned int srclen)
+> > +{
+> > +       unsigned int len;
+> > +       struct riscv64_ghash_ctx *ctx = crypto_tfm_ctx(crypto_shash_tfm(desc->tfm));
+> > +       struct riscv64_ghash_desc_ctx *dctx = shash_desc_ctx(desc);
+> > +
+> > +       if (dctx->bytes) {
+> > +               if (dctx->bytes + srclen < GHASH_DIGEST_SIZE) {
+> > +                       memcpy(dctx->buffer + dctx->bytes, src,
+> > +                               srclen);
+> > +                       dctx->bytes += srclen;
+> > +                       return 0;
+> > +               }
+> > +               memcpy(dctx->buffer + dctx->bytes, src,
+> > +                       GHASH_DIGEST_SIZE - dctx->bytes);
+> > +
+> > +               ctx->ghash_func(dctx->shash, ctx->htable,
+> > +                               dctx->buffer, GHASH_DIGEST_SIZE);
+> > +
+> > +               src += GHASH_DIGEST_SIZE - dctx->bytes;
+> > +               srclen -= GHASH_DIGEST_SIZE - dctx->bytes;
+> > +               dctx->bytes = 0;
+> > +       }
+> > +       len = srclen & ~(GHASH_DIGEST_SIZE - 1);
+> > +
+> > +       if (len) {
+> > +               gcm_ghash_rv64i_zbc(dctx->shash, ctx->htable,
+> > +                               src, len);
+> > +               src += len;
+> > +               srclen -= len;
+> > +       }
+> > +
+> > +       if (srclen) {
+> > +               memcpy(dctx->buffer, src, srclen);
+> > +               dctx->bytes = srclen;
+> > +       }
+> > +       return 0;
+> > +}
+> > +
+> > +static int riscv64_zbc_ghash_final(struct shash_desc *desc, u8 *out)
+> > +{
+> > +       int i;
+> > +       struct riscv64_ghash_ctx *ctx = crypto_tfm_ctx(crypto_shash_tfm(desc->tfm));
+> > +       struct riscv64_ghash_desc_ctx *dctx = shash_desc_ctx(desc);
+> > +
+> > +       if (dctx->bytes) {
+> > +               for (i = dctx->bytes; i < GHASH_DIGEST_SIZE; i++)
+> > +                       dctx->buffer[i] = 0;
+> > +               ctx->ghash_func(dctx->shash, ctx->htable,
+> > +                               dctx->buffer, GHASH_DIGEST_SIZE);
+> 
+> Can we do this without an indirect call?
+
+hmm, the indirect call is in both riscv64_zbc_ghash_update() and
+riscv64_zbc_ghash_final() . And I found a missing one at the bottom
+of riscv64_zbc_ghash_update(), where gcm_ghash_rv64i_zbc() is
+called right now.
+
+Getting rid of the indirect call would mean duplicating both of these
+functions for all instances. Especially with the slightly higher
+complexity of the update this somehow seems not the best way to go.
+
+
+Thanks for your pointers
+Heiko
+
+
