@@ -2,172 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BE56FF370
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:52:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6FF6FF371
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:52:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238122AbjEKNwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 09:52:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45266 "EHLO
+        id S238196AbjEKNwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:52:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236577AbjEKNwe (ORCPT
+        with ESMTP id S238040AbjEKNwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:52:34 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968C635A7;
-        Thu, 11 May 2023 06:52:32 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f22908a082so6701818e87.1;
-        Thu, 11 May 2023 06:52:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683813151; x=1686405151;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=94GUMh2At/vGwoRKKOJX0Z9VU5+Cp+4GaApU4ASVFxQ=;
-        b=L1fUZuuAOKbNgn/+Qzr4dyiiTKcYNxVg7GbYuJT2ToA/8QK1DVpH8IdUm8jhE/Fs4n
-         o5+Tmu3ZnQBAcKy7WsLY67m9/VeTBJhwNk5d/6HF61OoUvE/LmcKiOPMFKa/lNYyh1Ub
-         js6KhPe508TFmYdskpWCDttqFvOwgQJeOYDPojzPZN8hTr16H3ht3k7mq4g3+4SEF7GM
-         CtBf2+deyIOWh/mpXMkpwRtpsf9P/AL0x+dEO18ZTIAeKUIYs9ojVYvh/JPl8OQAOozg
-         CTJkR34kq/MybNv2++ebco3U/MlgUPdScRQLJsAFJ9afox5694I52jZSJvXJ3SvzBIC7
-         +ygg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683813151; x=1686405151;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=94GUMh2At/vGwoRKKOJX0Z9VU5+Cp+4GaApU4ASVFxQ=;
-        b=Hfa3AdHoLdkr3YLNH+TDpNbDTp4sIY/K7ddKo9yhZ9Fp18hzG5rFlkd4dkxOflbVdD
-         FHq96ypVUXM9lZPAS8B4j20rgp+RyFqKNIZtdqFbb4oUzEf4GldXf+obHNXi0nR1Fqyy
-         UuYXQfi/AKABerhjVm6aqVMk8VvwPDrN7V0KAQrhAuR4wICtRI5yU4eIpv5s1ACCoxLW
-         D98I61HkEPRqRqbA3ki5w4bBAtmc6Hf4aM8hd9JfGnO6HpHbN5j2bkgdE5sWrqFvF373
-         cYMGfXRNpEf4scdwhXc7pgeRGYGeFtKLQjVkWGU6Dl93DzdvJJ+fqLZr6nvaN2UV+fDM
-         yAfw==
-X-Gm-Message-State: AC+VfDx7CLtd8Oe1c4YwDfP9+LLm/zvBUcm7Wr41pGqef/6kHTluxXD7
-        eD95QW3FnNYdEZNJpD2d3FRda6Vl1EED+epA8jM=
-X-Google-Smtp-Source: ACHHUZ4vwA21i8+m6tp88IUPyNNAFjRCTB2zwxs+aTrDvd1h/Qb30LjmRi3tFDX81fh1QbJCSTaHhY7veI6ca5typok=
-X-Received: by 2002:a05:6512:1024:b0:4ec:89d3:a8ac with SMTP id
- r4-20020a056512102400b004ec89d3a8acmr2537648lfr.30.1683813150527; Thu, 11 May
- 2023 06:52:30 -0700 (PDT)
+        Thu, 11 May 2023 09:52:35 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D6283A89;
+        Thu, 11 May 2023 06:52:34 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34BDUUJS000533;
+        Thu, 11 May 2023 13:52:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=RbRyh5JxCzRNKwywrJitBFStmeMc03vJfDZhpriQN1M=;
+ b=cr1qQlAs0Rq2b4wcmbJLi2HiKlajTYyjBBOF/HwRrWO/NyhguG7Txy/fACyEK7P2qRg4
+ ObQVJmr7kMs9DzXvvAF0FF3dv+Nq4nRpBKkwbStORra3nNfpzZ94SbxTvRYdVAJSC7YZ
+ 7czl5YMalBMw/bw0gHAvhBe3eV+pXGT12OUmYhrbjKwO5+xuLshdl3Kdh5XkWsZzwML5
+ uNF8uhKgt41QPPUvz96TyclRefQenfkDxQtbvxC33ukDUr7XFkLuv/PIqKK5bigfvOva
+ evgY76f6VDXAXPgGlwNjxe92/HGA+xcYHX8MVqbVzrDGrNiTYt5a2rZWQPGSNggG/PJd Xw== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qgv1u8vgs-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 May 2023 13:52:28 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34BDqRh1027265
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 11 May 2023 13:52:27 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Thu, 11 May
+ 2023 06:52:26 -0700
+Message-ID: <73f6b38d-b968-ccad-c00f-86afa883a07d@quicinc.com>
+Date:   Thu, 11 May 2023 07:52:25 -0600
 MIME-Version: 1.0
-References: <20230505220043.39036-1-jorge.lopez2@hp.com> <20230505220043.39036-7-jorge.lopez2@hp.com>
- <ff831b68-58ca-947e-1e1-b9461b781bc0@linux.intel.com> <CAOOmCE9MUFyXzeb-iBaXdpD0-ctSnYPnM_07VCAzGCg-vaOjsg@mail.gmail.com>
- <5fe49d95-79bd-441d-3a3a-4e2894536ae9@linux.intel.com>
-In-Reply-To: <5fe49d95-79bd-441d-3a3a-4e2894536ae9@linux.intel.com>
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-Date:   Thu, 11 May 2023 08:52:01 -0500
-Message-ID: <CAOOmCE-0V0WJEAL3Hg=RM1m1hf=vvRB1DqU1NUKaS9BrUye1Jg@mail.gmail.com>
-Subject: Re: [PATCH v12 06/13] HP BIOSCFG driver - passwdobj-attributes
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, thomas@t-8ch.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [PATCH v2] bus: mhi: host: Skip MHI reset if device is in RDDM
+Content-Language: en-US
+To:     Qiang Yu <quic_qianyu@quicinc.com>, <mani@kernel.org>
+CC:     <mhi@lists.linux.dev>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <quic_cang@quicinc.com>,
+        <quic_mrana@quicinc.com>
+References: <1683772404-13192-1-git-send-email-quic_qianyu@quicinc.com>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <1683772404-13192-1-git-send-email-quic_qianyu@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: bvoZugI4VqJIpH50vtlBfniE9K-RWs0K
+X-Proofpoint-ORIG-GUID: bvoZugI4VqJIpH50vtlBfniE9K-RWs0K
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-11_11,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 mlxscore=0
+ phishscore=0 mlxlogscore=948 lowpriorityscore=0 bulkscore=0 spamscore=0
+ clxscore=1015 suspectscore=0 adultscore=0 malwarescore=0
+ priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305110119
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 4:09=E2=80=AFAM Ilpo J=C3=A4rvinen
-<ilpo.jarvinen@linux.intel.com> wrote:
->
-> On Wed, 10 May 2023, Jorge Lopez wrote:
->
-> > On Tue, May 9, 2023 at 7:34=E2=80=AFAM Ilpo J=C3=A4rvinen
-> > <ilpo.jarvinen@linux.intel.com> wrote:
-> > >
-> > > On Fri, 5 May 2023, Jorge Lopez wrote:
-> > >
-> > > > HP BIOS Configuration driver purpose is to provide a driver support=
-ing
-> > > > the latest sysfs class firmware attributes framework allowing the u=
-ser
-> > > > to change BIOS settings and security solutions on HP Inc.=E2=80=99s=
- commercial
-> > > > notebooks.
-> > > >
-> > > > Many features of HP Commercial notebooks can be managed using Windo=
-ws
-> > > > Management Instrumentation (WMI). WMI is an implementation of Web-B=
-ased
-> > > > Enterprise Management (WBEM) that provides a standards-based interf=
-ace
-> > > > for changing and monitoring system settings. HP BIOSCFG driver prov=
-ides
-> > > > a native Linux solution and the exposed features facilitates the
-> > > > migration to Linux environments.
-> > > >
-> > > > The Linux security features to be provided in hp-bioscfg driver ena=
-bles
-> > > > managing the BIOS settings and security solutions via sysfs, a virt=
-ual
-> > > > filesystem that can be used by user-mode applications. The new
-> > > > documentation cover HP-specific firmware sysfs attributes such Secu=
-re
-> > > > Platform Management and Sure Start. Each section provides security
-> > > > feature description and identifies sysfs directories and files expo=
-sed
-> > > > by the driver.
-> > > >
-> > > > Many HP Commercial notebooks include a feature called Secure Platfo=
-rm
-> > > > Management (SPM), which replaces older password-based BIOS settings
-> > > > management with public key cryptography. PC secure product manageme=
-nt
-> > > > begins when a target system is provisioned with cryptographic keys
-> > > > that are used to ensure the integrity of communications between sys=
-tem
-> > > > management utilities and the BIOS.
-> > > >
-> > > > HP Commercial notebooks have several BIOS settings that control its
-> > > > behaviour and capabilities, many of which are related to security.
-> > > > To prevent unauthorized changes to these settings, the system can
-> > > > be configured to use a cryptographic signature-based authorization
-> > > > string that the BIOS will use to verify authorization to modify the
-> > > > setting.
-> > > >
-> > > > Linux Security components are under development and not published y=
-et.
-> > > > The only linux component is the driver (hp bioscfg) at this time.
-> > > > Other published security components are under Windows.
-> > > >
-> > > > Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
-> > > >
-> > > > ---
-> > > > Based on the latest platform-drivers-x86.git/for-next
-> > >
-> > > FYI, for me you don't need to reply into the comments where you'll be
-> > > following the review suggestion. It saves us both time if we focus on
-> > > points where there's more to discuss.
->
->
-> > > > +                     /*
-> > > > +                      * This HACK is needed to keep the expected
-> > > > +                      * element list pointing to the right obj[ele=
-m].type
-> > > > +                      * when the size is zero.  PREREQUISITES
-> > >
-> > > Please remove all these double space from your patches (should be eas=
-y
-> > > to find them with grep). Please check if your editor adds them e.g., =
-when
-> > > reflowing text.
-> >
-> > What double spaces are you referring to?
->
-> There's "zero.  PREREQUISITES" so double space after the full stop. We
-> don't use them in the kernel comments.
->
-> It could be that your editor auto inserts the second space (by default)
-> when e.g. reflowing text because it's some English rule to use two spaces
-> there.
->
->
+On 5/10/2023 8:33 PM, Qiang Yu wrote:
+> In RDDM EE, device can not process MHI reset issued by host. In case of MHI
+> power off, host is issuing MHI reset and polls for it to get cleared until
+> it times out. Since this timeout can not be avoided in case of RDDM, skip
+> the MHI reset in this scenarios.
+> 
+> Fixes: a0f5a630668c ("bus: mhi: Move host MHI code to "host" directory")
 
-Thank you for the clarification.  I checked and fixed all double
-spaces in all source files
-> --
->  i.
+This doesn't seem like the correct fixes tag.  That commit looks like it 
+just moves code around, but does not add code.  What is the commit that 
+added the relevant code?  That commit probably predates the move.
+
+> Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
+> ---
