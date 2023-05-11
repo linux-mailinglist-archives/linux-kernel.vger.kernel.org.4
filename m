@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 934F46FFC9A
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 00:21:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 97E516FFC9E
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 00:25:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239160AbjEKWVt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 18:21:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34468 "EHLO
+        id S239303AbjEKWZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 18:25:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238953AbjEKWVr (ORCPT
+        with ESMTP id S231446AbjEKWZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 18:21:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40A8173D;
-        Thu, 11 May 2023 15:21:46 -0700 (PDT)
+        Thu, 11 May 2023 18:25:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24DA33AB7;
+        Thu, 11 May 2023 15:25:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 81E726129A;
-        Thu, 11 May 2023 22:21:46 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA1F6C433D2;
-        Thu, 11 May 2023 22:21:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D56864FBB;
+        Thu, 11 May 2023 22:25:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B72C6C433EF;
+        Thu, 11 May 2023 22:25:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683843705;
-        bh=uEoG19WBzDgFCX22lW5kC0LgLB9V2u85hfxE6ag5YkA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=ulzjhPJYTRC4uNs09sODz7gu3QFGottnH387NekTYaeDanZxk4OxFmB2gKM/GMAxs
-         FCn7qrmOxH50BGO/Vzxe011AiAvTKpJ3V0ISv/n5VrmHSNNR3yCj1f1hOQ5yyabSt1
-         O1Urd8vker0uVvCO08/KP7g2HLNIoklU3nneVly6C2Od04TP+qg15vVsAmW5RMsRZh
-         EMEG8QAAhYcJjexZ9VDIuJwBRXr02rP78Vho996NqUH5GnrE+FuF8n/yOTaHUwPX1n
-         h5pFxeFHu5pfl/eWV4vy9xQ2FgeJvzsart6qmgiNXQf3+ZKMf7IfOXCqqgIlXubm1d
-         SUz9wnUay+QtA==
-Date:   Thu, 11 May 2023 17:21:44 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Lukas Wunner <lukas@wunner.de>, linux-pci@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof Wilczy?ski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Emmanuel Grumbach <emmanuel.grumbach@intel.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Heiner Kallweit <hkallweit1@gmail.com>
-Subject: Re: [PATCH 01/17] PCI: Add concurrency safe clear_and_set variants
- for LNKCTL{,2}
-Message-ID: <ZF1qeGhCaO5+TlKu@bhelgaas>
+        s=k20201202; t=1683843947;
+        bh=ULMjF1ezqz7St5bBienNvAvCIvE4TfTmf4qQzCY13so=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=U1RbWwzc6MezmvlRhRRnsO95dj3YkJq+62PP/cg5FMd8pWxUwNUsLntuUej2yq4KM
+         xQNLHGFZ9tGMQyoxW7EKYCTO0HBldYt2xkhCBvjDliCDHJJgeJAzd1f4AjDQhcpG6Q
+         ja4az/oPKzw4SHyTdqe6Avn+GWzA/+BGLsX6p/RPX49hIBo0t+owGFffsNTCuBzgJ5
+         6dcBeJVOAbm9tPxrqayleNlt8pmVLRJFfEzblYtRBD1SK4PQrho39rOInBII4u8pGa
+         yVFJI1Ma76nGq+MaFpAAD/p5ZfIAgeVK54EY6T6OuQboHiQNlqOOHJU2lOCUKK/tbJ
+         BYCQbCeuExJzA==
+Date:   Thu, 11 May 2023 23:25:41 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Haibo Xu <haibo1.xu@intel.com>
+Cc:     xiaobo55x@gmail.com, ajones@ventanamicro.com,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Shuah Khan <shuah@kernel.org>, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 1/2] riscv: kvm: Add KVM_GET_REG_LIST API support
+Message-ID: <20230511-boozy-comic-5bc8f297dc8e@spud>
+References: <cover.1683791148.git.haibo1.xu@intel.com>
+ <921fc2e1a91887170e277acb1b52df57480a5736.1683791148.git.haibo1.xu@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="LWGkwE7Vf2rchKRZ"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <13f587b-e937-d546-817d-5fd94443c1eb@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <921fc2e1a91887170e277acb1b52df57480a5736.1683791148.git.haibo1.xu@intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,22 +66,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Emmanuel, Rafael, Heiner]
 
-On Thu, May 11, 2023 at 11:28:05PM +0300, Ilpo Järvinen wrote:
-> ...
-> One question before I trying to come up something is when PCIEASPM is =n, 
-> should I provide some simple function that just does the LNKCTL write to 
-> disable it?
+--LWGkwE7Vf2rchKRZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-The current pci_disable_link_state() stub when CONFIG_PCIEASPM is
-unset seems clearly wrong.  In fact, it returns *success* when it
-actually did nothing.
+On Thu, May 11, 2023 at 05:22:48PM +0800, Haibo Xu wrote:
+> KVM_GET_REG_LIST API will return all registers that are available to
+> KVM_GET/SET_ONE_REG APIs. It's very useful to identify some platform
+> regression issue during VM migration.
+>=20
+> Since this API was already supported on arm64, it'd be straightforward
+> to enable it on riscv with similar code structure.
 
-I think it should probably clear ASPM Control, at least when the OS
-has ownership via _OSC.  I kind of think it should do that independent
-of _OSC, but that depends on the conversation at [1].
+Applied on top of v6.4-rc1 this breaks the build :/
 
-Bjorn
+warning: Function parameter or member 'vcpu' not described in 'kvm_riscv_vc=
+pu_num_regs'
+warning: Function parameter or member 'uindices' not described in 'kvm_risc=
+v_vcpu_copy_reg_indices'
+warning: Function parameter or member 'vcpu' not described in 'kvm_riscv_vc=
+pu_copy_reg_indices'
 
-[1] https://lore.kernel.org/r/ZF1dsvJYYnl8Wv0v@bhelgaas
+You have a bunch of kerneldoc comments (the ones with /**) that are not
+valid kerneldoc. Apparently allmodconfig catches that!
+
+Cheers,
+Conor.
+
+--LWGkwE7Vf2rchKRZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZF1rZQAKCRB4tDGHoIJi
+0usNAP0Ykfrz+puD2zn8HGUFz+2fk3qtGa/XYSypVrpgWvW7BgD/T7PlZYcevlSv
+hezVcWDYRkavqca+yLrT0grdcCTiBgI=
+=ARK0
+-----END PGP SIGNATURE-----
+
+--LWGkwE7Vf2rchKRZ--
