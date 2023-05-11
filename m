@@ -2,87 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91DFD6FEBDA
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 08:44:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AEBF76FEBCC
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 08:36:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236163AbjEKGoY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 02:44:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50980 "EHLO
+        id S236916AbjEKGgi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 02:36:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjEKGoU (ORCPT
+        with ESMTP id S229609AbjEKGgf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 02:44:20 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3E8469D
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 23:44:19 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-55a6efe95c9so121018427b3.1
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 23:44:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683787458; x=1686379458;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pPmMK/vjZZrn+75oLPGLVOkpQXhNBYzPy7ovkiUarXQ=;
-        b=VVS/GnYOQt6twyFQXFJxZ4NNMcDF3+/2S0hiUez5v9Uuf6WCHhg1wz6Ku145X0oJcV
-         pxOH6l6LnER1o996kYBt+7CM5lN2daqmpYqNeM6VtH0fKIqvsNMwtKOHfuaZCS5iaFJq
-         PRSEUfLMWgcAtsUib5n/CEYYkbP/s5WmDqMzg=
+        Thu, 11 May 2023 02:36:35 -0400
+Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CC40172D
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 23:36:32 -0700 (PDT)
+Received: from mail-yb1-f200.google.com (mail-yb1-f200.google.com [209.85.219.200])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id B24503F4A5
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:36:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1683786990;
+        bh=XY9w/Ra5VtNNGnAwkTxPLsHPDd0g0Ln+BJiNp09GaI8=;
+        h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+         To:Cc:Content-Type;
+        b=Tx3JQ68gQyyJiecPEj22651LvG+uDvs5cvlCHPYyNZEe8O1yE+8Y+R+Qn0qqQbFCL
+         UIhXSzmdCu5Q8XN8A2fQIxyNER1wie5WK/7MkS/IrdsDecYjMejbpv2N1aDEW9jYOR
+         2b3og0nasy1A1i9DMcU923ce6l2YdC+ETq/uupAXTdIfLDCYvRUe1aKd3wFoX5ANwp
+         cQu1JOIR9h82oH+8iHJ6qThsnX2YH+hYlbKwXh+qwfmAopxeSOsAbcEPcEP4XS7Gn5
+         1ZZyaHh6mpSmOAJ7OVqjAFNIwsthohkJrdwxSLO9nTkMosAHN9nLX7XLO2EzsiZ8rM
+         HRFdHXSf9SFEA==
+Received: by mail-yb1-f200.google.com with SMTP id 3f1490d57ef6-b9a829a3de0so18387879276.2
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 23:36:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683787458; x=1686379458;
+        d=1e100.net; s=20221208; t=1683786989; x=1686378989;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=pPmMK/vjZZrn+75oLPGLVOkpQXhNBYzPy7ovkiUarXQ=;
-        b=W9b80xVk+M7J7zY3MrCIoMn16uLb60UJ250URXsxiwVDaByJCDaWZFq+T7FeIC3y1i
-         xAk4FLqs0vbCpxvcAFCZLMaldxGDWDePJw97oa6jq+c1pcaYZjzMQV/qPFh7RvD2pDot
-         T8kSIVQGg3pou57nSv+F6whxoYo5sggbEzZ8Jd4iievLtPoxMUD/IZUJnIFYeJCrXhN1
-         Wr2lFGnt9hM2jlLa00oYhsyd+3+jsYVDSDcX5+znbt5VE7Ug0Rl5hW9lK527A09ZuMpU
-         rosujkmjxR/8KNpny3afHOtk9D9LQGGQ6iI7oP3EXiaSHiZIiYiv8EatPlLVo79015N7
-         TE7w==
-X-Gm-Message-State: AC+VfDzkAo0QBobpCfVUWVM94aea90bC8z1WbC8pKIOs5QIw0yT5bfTA
-        vWCtt4+rmDUYkxT5TPuo3CrcJsrRulCyGf1x5+lARw==
-X-Google-Smtp-Source: ACHHUZ7FzIyvcqkCQ8yWm34MX1j+GNpVzrtVXkjd7nJUW71eolo4VVP/QE83DBBI4VuDyytkj1TOJg==
-X-Received: by 2002:a0d:e701:0:b0:55a:1c6b:1ea7 with SMTP id q1-20020a0de701000000b0055a1c6b1ea7mr18925460ywe.6.1683787458560;
-        Wed, 10 May 2023 23:44:18 -0700 (PDT)
-Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com. [209.85.128.182])
-        by smtp.gmail.com with ESMTPSA id t65-20020a814644000000b005569567aac1sm4616164ywa.106.2023.05.10.23.44.18
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 23:44:18 -0700 (PDT)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-559e317eef1so121426157b3.0
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 23:44:18 -0700 (PDT)
-X-Received: by 2002:a5e:8e07:0:b0:760:ea63:3385 with SMTP id
- a7-20020a5e8e07000000b00760ea633385mr13727151ion.19.1683786980560; Wed, 10
- May 2023 23:36:20 -0700 (PDT)
+        bh=XY9w/Ra5VtNNGnAwkTxPLsHPDd0g0Ln+BJiNp09GaI8=;
+        b=GXUU3dAu1IX/sYlnnSccSrMaZ/6jO0RoDDEnln8r3L/RxJ43xkDmDvSvmOZCR4Oo+Y
+         00C5d1kaY5M2NMgyicsw41zlKWoqqODXrIENiE/iLng5zUp0BnWJllPPAgCeIGypzpRi
+         SRn7zihcvmPzKhz+VAUAsxFsF5WWsYnUPE0c66Dq/5K4SU9rRzV0+XzVa72XN3CINMv+
+         /1Vuv4n+SNF2S+qkVwtTJgLL3xDfP5bBdCSQS2QSCPsGWQUkI622aDVtx9ZbomWVYhUg
+         Jr5dMUg8FYOtAxF7DpENLhpyxbRgF2Siuaq6H/mOfQxVNZtz/8RL7W0qPk8tnOo5k+FQ
+         iLYQ==
+X-Gm-Message-State: AC+VfDxFTnoV+GjCJbnw0GN9TrSIM3qOCaQz178BeSiP+S0U/S/OegIj
+        C6nT1350RvARaT1lKwvcJMsD/mMVm/GZTxuZnD9hoqMiRy74qhrzsB8kqzbJtcC4cv8VAkhDXOZ
+        KnKy1mUsdpiZaGAJ6G7WgTjeQTAyoqgzi95jp6AyZ+41yvQLjmFSNoDOpl/1v3CFhVw==
+X-Received: by 2002:a05:6902:18cd:b0:b9a:29e5:1922 with SMTP id ck13-20020a05690218cd00b00b9a29e51922mr23466510ybb.8.1683786989298;
+        Wed, 10 May 2023 23:36:29 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4aqEPhDtnnC3jxp7GBApiXjpoGJ1ZYWQ92e1ax//bm5EDJ4xKVFAWI4h84qH1T8addxQ3Ey0LwN/+K1Ew0Kc4=
+X-Received: by 2002:a05:6902:18cd:b0:b9a:29e5:1922 with SMTP id
+ ck13-20020a05690218cd00b00b9a29e51922mr23466501ybb.8.1683786989089; Wed, 10
+ May 2023 23:36:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230510233117.1.I7047714f92ef7569bd21f118ae6aee20b3175a92@changeid>
- <20230510164330.z2ygkl7vws6fci75@pengutronix.de> <CAGXv+5HBM+eksJaxL2GqLfqSmK8vsQx5NXHfhe075HkOK3vjHw@mail.gmail.com>
-In-Reply-To: <CAGXv+5HBM+eksJaxL2GqLfqSmK8vsQx5NXHfhe075HkOK3vjHw@mail.gmail.com>
-From:   Fei Shao <fshao@chromium.org>
-Date:   Thu, 11 May 2023 14:35:43 +0800
-X-Gmail-Original-Message-ID: <CAC=S1niad5qa-rGFSqqRQX=DZN9f4U=WWoP8-A0LQ-UyF31OnA@mail.gmail.com>
-Message-ID: <CAC=S1niad5qa-rGFSqqRQX=DZN9f4U=WWoP8-A0LQ-UyF31OnA@mail.gmail.com>
-Subject: Re: [PATCH] media: mediatek: vcodec: Convert mtk_vcodec_dec_hw
- platform remove callback
-To:     Chen-Yu Tsai <wenst@chromium.org>
-Cc:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20230510152216.1392682-1-aleksandr.mikhalitsyn@canonical.com>
+ <CAKH8qBuAoobsVP2Q5KN06fZ2NM3_aMwT7Y2OoKwS4Cf=cv3ZGg@mail.gmail.com>
+ <CAEivzxc3hzqMROfCgshD6qW3=NErpF6LWXFGjoBhPNNzEZ3kDg@mail.gmail.com> <CAKH8qBvp3iNPHrus3NpgwN1JCkSxzTTi3G3WoAR2LKwX1-QzhQ@mail.gmail.com>
+In-Reply-To: <CAKH8qBvp3iNPHrus3NpgwN1JCkSxzTTi3G3WoAR2LKwX1-QzhQ@mail.gmail.com>
+From:   Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Date:   Thu, 11 May 2023 08:36:18 +0200
+Message-ID: <CAEivzxfso6dJCB31MsrCkMg4DXBszY9QxQKsX-x0oMoaUQz5Fg@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: core: add SOL_SOCKET filter for bpf
+ getsockopt hook
+To:     Stanislav Fomichev <sdf@google.com>
+Cc:     davem@davemloft.net, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Christian Brauner <brauner@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        bpf@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -91,92 +87,149 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, May 11, 2023 at 1:50=E2=80=AFPM Chen-Yu Tsai <wenst@chromium.org> w=
-rote:
+On Wed, May 10, 2023 at 11:58=E2=80=AFPM Stanislav Fomichev <sdf@google.com=
+> wrote:
 >
-> On Thu, May 11, 2023 at 12:43=E2=80=AFAM Uwe Kleine-K=C3=B6nig
-> <u.kleine-koenig@pengutronix.de> wrote:
+> On Wed, May 10, 2023 at 2:41=E2=80=AFPM Aleksandr Mikhalitsyn
+> <aleksandr.mikhalitsyn@canonical.com> wrote:
 > >
-> > [expanding the audience a bit for more expertise]
+> > On Wed, May 10, 2023 at 11:31=E2=80=AFPM Stanislav Fomichev <sdf@google=
+.com> wrote:
+> > >
+> > > On Wed, May 10, 2023 at 8:23=E2=80=AFAM Alexander Mikhalitsyn
+> > > <aleksandr.mikhalitsyn@canonical.com> wrote:
+> > > >
+> > > > We have per struct proto ->bpf_bypass_getsockopt callback
+> > > > to filter out bpf socket cgroup getsockopt hook from being called.
+> > > >
+> > > > It seems worthwhile to add analogical helper for SOL_SOCKET
+> > > > level socket options. First user will be SO_PEERPIDFD.
+> > > >
+> > > > This patch was born as a result of discussion around a new SCM_PIDF=
+D interface:
+> > > > https://lore.kernel.org/all/20230413133355.350571-3-aleksandr.mikha=
+litsyn@canonical.com/
+> > > >
+> > > > Cc: Alexei Starovoitov <ast@kernel.org>
+> > > > Cc: Daniel Borkmann <daniel@iogearbox.net>
+> > > > Cc: Christian Brauner <brauner@kernel.org>
+> > > > Cc: Stanislav Fomichev <sdf@google.com>
+> > > > Cc: "David S. Miller" <davem@davemloft.net>
+> > > > Cc: Eric Dumazet <edumazet@google.com>
+> > > > Cc: Jakub Kicinski <kuba@kernel.org>
+> > > > Cc: Paolo Abeni <pabeni@redhat.com>
+> > > > Cc: Kuniyuki Iwashima <kuniyu@amazon.com>
+> > > > Cc: linux-kernel@vger.kernel.org
+> > > > Cc: netdev@vger.kernel.org
+> > > > Cc: bpf@vger.kernel.org
+> > > > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonic=
+al.com>
+> > > > ---
+> > > >  include/linux/bpf-cgroup.h | 8 +++++---
+> > > >  include/net/sock.h         | 1 +
+> > > >  net/core/sock.c            | 5 +++++
+> > > >  3 files changed, 11 insertions(+), 3 deletions(-)
+> > > >
+> > > > diff --git a/include/linux/bpf-cgroup.h b/include/linux/bpf-cgroup.=
+h
+> > > > index 57e9e109257e..97d8a49b35bf 100644
+> > > > --- a/include/linux/bpf-cgroup.h
+> > > > +++ b/include/linux/bpf-cgroup.h
+> > > > @@ -387,10 +387,12 @@ static inline bool cgroup_bpf_sock_enabled(st=
+ruct sock *sk,
+> > > >         int __ret =3D retval;                                      =
+              \
+> > > >         if (cgroup_bpf_enabled(CGROUP_GETSOCKOPT) &&               =
+            \
+> > > >             cgroup_bpf_sock_enabled(sock, CGROUP_GETSOCKOPT))      =
+            \
+> > > > -               if (!(sock)->sk_prot->bpf_bypass_getsockopt ||     =
+            \
+> > > > -                   !INDIRECT_CALL_INET_1((sock)->sk_prot->bpf_bypa=
+ss_getsockopt, \
+> > > > +               if (((level !=3D SOL_SOCKET) ||                    =
+              \
+> > > > +                    !sock_bpf_bypass_getsockopt(level, optname)) &=
+&           \
+> > > > +                   (!(sock)->sk_prot->bpf_bypass_getsockopt ||    =
+            \
+> > >
+> > > Any reason we are not putting this into bpf_bypass_getsockopt for
+> > > af_unix struct proto? SO_PEERPIDFD seems relevant only for af_unix?
 > >
-> > Hello,
+> > Yes, that should work perfectly well. The reason why I'm going this
+> > way is that we are
+> > declaring all SOL_SOCKET-level options in the net/core/sock.c which is
+> > not specific to any address family.
+> > It seems reasonable to have a way to filter out getsockopt for these
+> > options too.
 > >
-> > On Wed, May 10, 2023 at 11:31:35PM +0800, Fei Shao wrote:
-> > > This aligns with [1] and converts the platform remove callback to
-> > > .remove_new(), which returns void.
-> > >
-> > > [1]: commit a3afc5b10661 ("media: mtk_vcodec_dec_drv: Convert to
-> > >      platform remove callback returning void")
-> > >
-> > > Signed-off-by: Fei Shao <fshao@chromium.org>
-> > >
-> > > ---
-> > >
-> > >  drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c | 6 ++---=
--
-> > >  1 file changed, 2 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw=
-.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-> > > index b753bf54ebd9..bd5743723da6 100644
-> > > --- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-> > > +++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec_hw.c
-> > > @@ -193,16 +193,14 @@ static int mtk_vdec_hw_probe(struct platform_de=
-vice *pdev)
-> > >       return ret;
-> > >  }
-> > >
-> > > -static int mtk_vdec_hw_remove(struct platform_device *pdev)
-> > > +static void mtk_vdec_hw_remove(struct platform_device *pdev)
-> > >  {
-> > >       pm_runtime_disable(&pdev->dev);
-> > > -
-> > > -     return 0;
-> > >  }
-> > >
-> > >  static struct platform_driver mtk_vdec_driver =3D {
-> > >       .probe  =3D mtk_vdec_hw_probe,
-> > > -     .remove =3D mtk_vdec_hw_remove,
-> > > +     .remove_new =3D mtk_vdec_hw_remove,
-> > >       .driver =3D {
-> > >               .name   =3D "mtk-vdec-comp",
-> > >               .of_match_table =3D mtk_vdec_hw_match,
-> >
-> > While the patch looks fine, I wonder if having a remove callback just t=
-o
-> > do pm_runtime_disable() is worth keeping it. Doesn't the core care for
-> > things like that? I grepped a bit around, device_unbind_cleanup() is
-> > called after device_remove() which calls pm_runtime_reinit(). Does that
-> > mean calling pm_runtime_disable in .remove() is useless? In that case,
-> > you could just drop the .remove() callback.
+> > But I'm not insisting on that way.
+>
+> Yeah, let's move it into af_unix struct proto for now. That should
+> avoid adding extra conditionals for a few places that care about
+> performance (tcp zerocopy fastpath).
+> If we'd ever need to filter out generic SOL_SOCKET level options that
+> apply for all sockets, we might put (and copy-paste) them in the
+> respective {tcp,udp,unix,etc}_bpf_bypass_getsockopt.
 
-Thanks for the feedback.
+Will do.
 
-I wonder if the core would handle that for drivers... if I understand
-it correctly, pm_runtime_reinit() does not disable runtime PM for a
-device, otherwise pm_runtime_remove() wouldn't need to bother
-calling __pm_runtime_disable() before pm_runtime_reinit().
+Thanks!
 
-In fact, from the runtime_pm documentation [1] I read the following:
-"Drivers in ->remove() callback should undo the runtime PM changes
-done in ->probe(). Usually this means calling pm_runtime_disable(),
-pm_runtime_dont_use_autosuspend() etc."
-
-Based on the above I assume it's still necessary given pm_runtime_enable()
-was called in ->probe().
-
-[1]: https://www.kernel.org/doc/Documentation/power/runtime_pm.txt
+Kind regards,
+Alex
 
 >
-> Maybe just switch to devm_pm_runtime_enable() on the enable side?
-
-That sounds like a good alternative, I'll revise and send a new patch, than=
-ks.
-
-Regards,
-Fei
-
->
-> ChenYu
+> > Kind regards,
+> > Alex
+> >
+> > >
+> > > > +                    !INDIRECT_CALL_INET_1((sock)->sk_prot->bpf_byp=
+ass_getsockopt, \
+> > > >                                         tcp_bpf_bypass_getsockopt, =
+            \
+> > > > -                                       level, optname))           =
+            \
+> > > > +                                       level, optname)))          =
+            \
+> > > >                         __ret =3D __cgroup_bpf_run_filter_getsockop=
+t(            \
+> > > >                                 sock, level, optname, optval, optle=
+n,          \
+> > > >                                 max_optlen, retval);               =
+            \
+> > > > diff --git a/include/net/sock.h b/include/net/sock.h
+> > > > index 8b7ed7167243..530d6d22f42d 100644
+> > > > --- a/include/net/sock.h
+> > > > +++ b/include/net/sock.h
+> > > > @@ -1847,6 +1847,7 @@ int sk_getsockopt(struct sock *sk, int level,=
+ int optname,
+> > > >                   sockptr_t optval, sockptr_t optlen);
+> > > >  int sock_getsockopt(struct socket *sock, int level, int op,
+> > > >                     char __user *optval, int __user *optlen);
+> > > > +bool sock_bpf_bypass_getsockopt(int level, int optname);
+> > > >  int sock_gettstamp(struct socket *sock, void __user *userstamp,
+> > > >                    bool timeval, bool time32);
+> > > >  struct sk_buff *sock_alloc_send_pskb(struct sock *sk, unsigned lon=
+g header_len,
+> > > > diff --git a/net/core/sock.c b/net/core/sock.c
+> > > > index 5440e67bcfe3..194a423eb6e5 100644
+> > > > --- a/net/core/sock.c
+> > > > +++ b/net/core/sock.c
+> > > > @@ -1963,6 +1963,11 @@ int sock_getsockopt(struct socket *sock, int=
+ level, int optname,
+> > > >                              USER_SOCKPTR(optlen));
+> > > >  }
+> > > >
+> > > > +bool sock_bpf_bypass_getsockopt(int level, int optname)
+> > > > +{
+> > > > +       return false;
+> > > > +}
+> > > > +
+> > > >  /*
+> > > >   * Initialize an sk_lock.
+> > > >   *
+> > > > --
+> > > > 2.34.1
+> > > >
