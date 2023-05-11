@@ -2,101 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 089376FF6FC
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:19:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F07AF6FF702
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:21:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238522AbjEKQTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 12:19:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
+        id S238499AbjEKQV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 12:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238204AbjEKQTc (ORCPT
+        with ESMTP id S238319AbjEKQVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 12:19:32 -0400
-Received: from pku.edu.cn (mx19.pku.edu.cn [162.105.129.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 69EE3E70;
-        Thu, 11 May 2023 09:19:29 -0700 (PDT)
+        Thu, 11 May 2023 12:21:23 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BA022101
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 09:21:21 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-517c01edaaaso5892053a12.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 09:21:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pku.edu.cn; s=dkim; h=Received:Date:From:To:Cc:Subject:
-        Message-ID:References:MIME-Version:Content-Type:
-        Content-Disposition:In-Reply-To; bh=T46lKjyksdSH1mMWMKwFyNNuZqIq
-        3bsgJShvfu2imFw=; b=EYxzrv7yMThObCD2fNLyafIhForMgk7uoc+tziV+8jNF
-        hQWhx+2nWjh/PPfagI73Jl3svDIVmHR8Gtjt0SIe9CS0V04XGTWr8DudC/nYsAle
-        huohL4AKMJo2DMsSrr9HqSlPk5TPxNazbbZiUC8Nq/XpaFEaAdn1BACFDYW4mJ0=
-Received: from localhost (unknown [10.7.101.92])
-        by front02 (Coremail) with SMTP id 54FpogCXbjh9FV1kchqUEw--.22912S2;
-        Fri, 12 May 2023 00:19:15 +0800 (CST)
-Date:   Fri, 12 May 2023 00:19:09 +0800
-From:   Ruihan Li <lrh2000@pku.edu.cn>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mm@kvack.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Ruihan Li <lrh2000@pku.edu.cn>
-Subject: Re: [PATCH 0/4] Fix type confusion in page_table_check
-Message-ID: <zwixiok55avpjvfiknp7tzm7e4aragjj43a46abna4qqegdvdx@suat6sk34lgb>
-References: <20230510085527.57953-1-lrh2000@pku.edu.cn>
- <2023051108-lens-unsocial-8425@gregkh>
- <cyym2uqyqdtegfbdpworng4fa7iiuyh3e2wjrf4lp47jksvoxt@wwhvnzy5757c>
- <ZF0KcRgclDJ6POrb@infradead.org>
+        d=chromium.org; s=google; t=1683822080; x=1686414080;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=heapyBOK3aV1fZtrL6FBCSipibEU/9iPf6nNQf6o/H8=;
+        b=fpLgr46GjmxVMykYNDwOPIDPvHafCefP8fNnepKPuq1erqsrurtMc293jCPXm5AJ/1
+         181Wlk1a4XNBgrUwPzQHmhoo7wwGmdwe6hvuqZuT8MDxsHxQCTuasgNNj85oze+hfZSh
+         DJj4iRKF/NrcBtey8LbCWG+dblmVoazJENJwk=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683822080; x=1686414080;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=heapyBOK3aV1fZtrL6FBCSipibEU/9iPf6nNQf6o/H8=;
+        b=ijnxZL1sddW1OEgS2MXn/SxVxTjWLYEr65vgD03UjR2Zz5HxSyKhwYlGfB7kHwBDVd
+         8QbuPDY6MTMc/bRIcTh9i1WrzGnvMLyVdjtJX29QS8fSA/gBeNV8yhQki5JOnHyZIXSP
+         flzVi14RuVfKfDMDeTu27SkVGoiw41EfrniU7nHR5IonTrABxxmq8dJMo+jRBiAhNnHf
+         r+VJcF0mEKQz+wP5NlH9BlWIayEoJpT7IqFGO1fH00cnDwDGBAA5PQIyO/feNU2dtdCC
+         WUvPoZTuUyHss6Ya11jXTd+UB3imBKdbCVykT7udK1nJEHkLLhCJnFnn/cFXa3HhElV8
+         5l5w==
+X-Gm-Message-State: AC+VfDwa2JdWoNf3PTZyy6bPDKRNmM4eMS5Ihfjjc4Q+wMk/1gI8RDth
+        Ut7j7RFgEHTAaOevTBSMIregIw==
+X-Google-Smtp-Source: ACHHUZ4rDN7oDHBSu5wOHvTjki4kVxR42aG5JcpjDaVZMOvXaRpv+OTXQovzh68r5d1kTHycgead+Q==
+X-Received: by 2002:a17:902:eb4b:b0:1a6:7632:2b20 with SMTP id i11-20020a170902eb4b00b001a676322b20mr23433122pli.40.1683822080560;
+        Thu, 11 May 2023 09:21:20 -0700 (PDT)
+Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
+        by smtp.gmail.com with ESMTPSA id d12-20020a170902cecc00b001a6f7744a27sm6160602plg.87.2023.05.11.09.21.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 09:21:20 -0700 (PDT)
+Date:   Thu, 11 May 2023 09:21:18 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Azeem Shaikh <azeemshaikh38@gmail.com>
+Cc:     Hans de Goede <hdegoede@redhat.com>,
+        linux-hardening@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] vboxsf: Replace all non-returning strlcpy with strscpy
+Message-ID: <202305110921.B62DD1BB@keescook>
+References: <20230510211146.3486600-1-azeemshaikh38@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZF0KcRgclDJ6POrb@infradead.org>
-X-CM-TRANSID: 54FpogCXbjh9FV1kchqUEw--.22912S2
-X-Coremail-Antispam: 1UD129KBjvdXoWrtFy5uF4kXw15Cr4UCr17KFg_yoWDCFgE9F
-        yDKFnF93yDJa13tr43tF4IqrZ3KF4kXF10vFZYqr4IkF98XF97t3WkGrnrZF1xGw4Fva45
-        Crnaya42vr12qjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUbSkFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AK
-        wVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20x
-        vE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4UJVWxJr1l84ACjcxK6I8E
-        87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2vYz4IE04
-        k24VAvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40E
-        x7xfMcIj6xIIjxv20xvE14v26r106r15McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x
-        0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF
-        7I0E8cxan2IY04v7MxkIecxEwVCm-wCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6c
-        x26w4UJr1UMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2Iq
-        xVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42
-        IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY
-        6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aV
-        CY1x0267AKxVW8JVW8JrUvcSsGvfC2KfnxnUUI43ZEXa7VU1c4S5UUUUU==
-X-CM-SenderInfo: yssqiiarrvmko6sn3hxhgxhubq/1tbiAgEHBVPy772BUwARsx
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230510211146.3486600-1-azeemshaikh38@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 08:32:01AM -0700, Christoph Hellwig wrote:
-> On Thu, May 11, 2023 at 09:44:55PM +0800, Ruihan Li wrote:
-> > Christoph's patch perfectly fixes _one_ problem: kmalloc'ed memory
-> > cannot be mapped to user space. However, as I detailed in the commit
-> > message, this series of patches fixes _three_ problems.
+On Wed, May 10, 2023 at 09:11:46PM +0000, Azeem Shaikh wrote:
+> strlcpy() reads the entire source buffer first.
+> This read may exceed the destination size limit.
+> This is both inefficient and can lead to linear read
+> overflows if a source string is not NUL-terminated [1].
+> In an effort to remove strlcpy() completely [2], replace
+> strlcpy() here with strscpy().
+> No return values were used, so direct replacement is safe.
 > 
-> FYI, I agree with you.  My simple patch was sent before reading
-> your new series, and is a strict subset of it.
-
-Thank you for the clarification.
-
-> > I have to say that the original code is quite buggy. In the
-> > gen_pool_dma_alloc path, there is no guarantee of page alignment. 
+> [1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+> [2] https://github.com/KSPP/linux/issues/89
 > 
-> I also find this whole interface very problematic to start with,
-> but that's a separate discussion for later.
+> Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
 
-Yes. I don't think hybrid allocation of DMA memory and normal memory in
-one function is a good thing, but currently there is no clear way to fix
-this. Mixing memory allocation and page allocation is another bad thing,
-and at least, my patch can (hopefully) solve the second (and much
-easier) issue.
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-Thanks,
-Ruihan Li
-
+-- 
+Kees Cook
