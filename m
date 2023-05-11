@@ -2,175 +2,331 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D517D6FF5C3
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:21:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6C136FF5E1
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238609AbjEKPVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 11:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
+        id S238594AbjEKP03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 11:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238586AbjEKPVj (ORCPT
+        with ESMTP id S238399AbjEKP01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 11:21:39 -0400
-Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2089.outbound.protection.outlook.com [40.107.14.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CABE91BF8;
-        Thu, 11 May 2023 08:21:37 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=C1cIyZki8O1kJ8vRo4f8D2roHQGQauOftSn+DQYoQxHy7/BDbnZBoULLGYwfzSsGVkFtQQNtld7OQCkepqljCsjqOvqPA4CvLXckSgNdSxbHIND7CTTtzKMSR8XtyR7bAFRxAQdetd/l0yUeZUTfFc0HQHqvWmAx98enqbnEpVwSvQ28Z4n9QQE9p9l4g8cVdEeyTVVHCxh9KK1eev0oH3XrJd2P+jLehnsC2YowsdMeYfeDE56L0qRAe/x4rS63gYtY6wmUr+BIuoWYOEE+Nu62W96La/L1krpiy0J6Xo2gH+FcTJo1ms1VWECfRzMBBYGhoLuZjZMfhNY1SmIMyw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=q5sUeZMnNsQcm3LajAujOtB5TursVNZTNcPqagCNQYQ=;
- b=Co27qitpwokxj+Pcshq+e3k09fuDi3jgjtVVyytzRiLgXO0KQgvfaTN8GxjCYXMqovAxzMENRZploRpCFEIjZYGTtt0r0pOzOm82iWA/3qoRNUW5zxqJV98wVsubU+qCqPR8Xx2gqypskJ/OL/yiTTtf4714rK9E2mS8OgsC37wKpSbYeQRfels1tNLOqGt74PA1yk/RwdY3Ii8EU3u/Aa6k8tzdRIGtSn5SV2wfaycBNjAxZ1IQ+HKOALeI550aI4/kMI8uV+/YlNhmlDIzVB1ntwTG2XOsHfbVIoFwnCbXTCPx5VLIZg5Pi24KzBlgoNyop8WkIfaYMJcCrhpQ3A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=q5sUeZMnNsQcm3LajAujOtB5TursVNZTNcPqagCNQYQ=;
- b=Slb1tgYJV/GD/lrDjFkA2WYuX3osX7R1v8l2GgdiHIEvRB2yxMS1dVMjS+KwfQiwkG32c6aN146uSSjiJZi0ioq3rlSSAZJDHRlf6RB6Xn/Ztoh8On8czsKlMAwVaua0jW5Jd2EqqFym3SSnSU+8mHumRgW7DhXY0bTYoR22Y/0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9185.eurprd04.prod.outlook.com (2603:10a6:102:231::11)
- by AS8PR04MB8040.eurprd04.prod.outlook.com (2603:10a6:20b:2a9::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.21; Thu, 11 May
- 2023 15:21:35 +0000
-Received: from PAXPR04MB9185.eurprd04.prod.outlook.com
- ([fe80::28fb:82ec:7a6:62f3]) by PAXPR04MB9185.eurprd04.prod.outlook.com
- ([fe80::28fb:82ec:7a6:62f3%5]) with mapi id 15.20.6387.020; Thu, 11 May 2023
- 15:21:34 +0000
-From:   Shenwei Wang <shenwei.wang@nxp.com>
-To:     Wei Fang <wei.fang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, imx@lists.linux.dev
-Subject: [PATCH v3 net-next] net: fec: using the standard return codes when xdp xmit errors
-Date:   Thu, 11 May 2023 10:21:15 -0500
-Message-Id: <20230511152115.1355010-1-shenwei.wang@nxp.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 11 May 2023 11:26:27 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C493138;
+        Thu, 11 May 2023 08:26:23 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 97CA55FD5F;
+        Thu, 11 May 2023 18:26:20 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1683818780;
+        bh=CLzqYTcujARq4NJQtsx22VCX1wovz6DLx4a2PMX1RH8=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=QrTKlw7J5Gzzkx3Qobltq6T2Dr7NZOt/8o6qPD/ClpUEg50r7WB+MabC6gHAya3b3
+         zBoTKsHsHc7JpvM7A4Gom0uySbZGIm3I7HjnvcsTGkIxPe4qpONwfKy4OZGqq0TXQX
+         Ix5plf6jmNioA2FaLlMP3e77Mr3+cWNPswFWBR81qbe8woTromaFu/5D8vfbcKPY0S
+         W6TO2urTgSwoFxwiurUQIks8UzTCifKYMqx5z11Hvo+q5h9hXNpwZZlvSoca/tc39A
+         KddmTDbYGx4PoajmKmvqwUsSexyU5cPtdaGBUQm0R+0pk3rhW+m0dAdyqY0TJ5CA9L
+         pDi0/bw+u6+gQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Thu, 11 May 2023 18:26:18 +0300 (MSK)
+From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
+        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>
+Subject: [RESEND PATCH v3] mtd: rawnand: macronix: OTP access for MX30LFxG18AC
+Date:   Thu, 11 May 2023 18:21:16 +0300
+Message-ID: <20230511152120.3297853-1-AVKrasnov@sberdevices.ru>
+X-Mailer: git-send-email 2.35.0
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: BYAPR07CA0052.namprd07.prod.outlook.com
- (2603:10b6:a03:60::29) To PAXPR04MB9185.eurprd04.prod.outlook.com
- (2603:10a6:102:231::11)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9185:EE_|AS8PR04MB8040:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6ec2d9ee-d221-488b-edd3-08db523367ee
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9nfFmPMWXjbAm34uEA8FXd1GZ9xCPUsjFwLRNrQDBVG9SN2P4eu5wkSbOpXkLrh0TsSPT5QXW82tPLALboTld2Cobb/WzX1kKv0zSITxtvFN4t1YeGw6iwxf7QxHvdvTV1Pk9O9MSQwD9HI+3ylFqSSlyvyZ+uCJ/FjXu6OBz6lKb8E4tIDn8rmz7Us/rJTlquMOBWSsMt4Dp0DAwbMR0OoHVmIstmLMHVhs8LEMTaQQRr97SlZkLCI0fc16HFyh+Otc9uHmoK9JLGeLVqYFyfV0Vw6RRx+aBY7NcpTgbBCs4opP8XV6WxjeemF1GILQn1Hc5saVpVgfMjevIl38w1sNkJsiBDzlinMx8X4WC3rtpUIpOg3KMAhmFFY7KRlsUaTt4yIEfA4Y1QH89wi2WwQ9av3fXVPaY+OfAx0IBE0e8p7De4eRhv2I1JTsGZJ3nRikklugMSf9BFIkr1HnShHG23oeR4+T8+QA3tk229GmLAbDSHe/4sQO93T5J8ryD+euGBXCvGQLfeAWYdcRa/z2MYr99TVZWvnErUecF/iyA4ryz4Wot/j9CHiQ0jPpVUg+hXStyofye5KhCPZBBTqrk5V/agGR3USjR1sDTarP/jwaCUFNlruOnGCdmcVI
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9185.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(366004)(39860400002)(346002)(136003)(451199021)(6512007)(6506007)(26005)(1076003)(2616005)(83380400001)(38100700002)(38350700002)(41300700001)(52116002)(6666004)(6486002)(186003)(55236004)(478600001)(110136005)(54906003)(66476007)(4326008)(66556008)(66946007)(316002)(5660300002)(7416002)(8676002)(8936002)(86362001)(2906002)(36756003)(44832011);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9xbZisAlUNx7LKwdDt8dw38LUbryw5QM7Rx5FA1zK2S5ciRdhbc5YmyUE9HC?=
- =?us-ascii?Q?iImakxiYhBNfyjGxBic6t5oSiBgoyqP0migJu0avs6L+ld9Ldor89e6ZOiP6?=
- =?us-ascii?Q?IkhA2KFcicMrFTUBe9oQp5ISH5Y515uR5EohQ9YsHhAj0VecU4OyE1+FcBrp?=
- =?us-ascii?Q?OyM2ansdZUNJYuH4a+9TwGk+KsmuZWfghhGdduyRwVoMOFACeAhhb+NS51VW?=
- =?us-ascii?Q?TLLYh2gRbd9yrF4VTgeBOKkQHp5PIjO4nike/pk+l4G8i9UbQcc/AMDDbn5j?=
- =?us-ascii?Q?h25iH7KhzsQkqKBi+w79+MWCK791lsrszGm7qlLQKviIrxmZyZYEH6mZMhtB?=
- =?us-ascii?Q?q02bA20cJOyG1PY9mG2+FgNfhpMD5JcNPCsHJz6027iWoGT2ZKPiUOKs3yiN?=
- =?us-ascii?Q?32njtRl8nl8ajHdrNmkP/55KJwru2M3Z/OsVqBT5fbf1Uq81a6uKJptMVUwQ?=
- =?us-ascii?Q?GCpbVnypQZWDbfu4dq1HWiskzZmoCYoRKWH5pjAj0lWp53m1PyCNxspzHa54?=
- =?us-ascii?Q?Mlb5asKmM8AzCppWSEdOs5yQVqKsnsbAZI0/Yf8ZYIf7IHu4aOLC8wDjU/Ov?=
- =?us-ascii?Q?Asm1sT2EOumKy9Pc5yb/gGWAEJ6yku3/2y1T0ins8WrpiF2746/JirvcjVh1?=
- =?us-ascii?Q?HybYQakWaJFqmtWnC+Ml2IijrlfaeMNUHLG5yzmF1MjgeQ9C0aEec2U4y7XW?=
- =?us-ascii?Q?D8jBvCFn2QOrBJyitWfhfbP13vdXsehGbYMbOW3zQLq8NCTTXyqtCAxTVmps?=
- =?us-ascii?Q?y95MCJonF0ilxahAB3bu3/HPb0Gbj4MLijXHVaSThOPZNLzDJ8uXN1oqKdBV?=
- =?us-ascii?Q?ce5fbto7XLRSanGEuDcyyQ23l8ai827ltx1CCisuifS6qRnKNP1WSs05rkkB?=
- =?us-ascii?Q?/4oql72AKJwADlO2I/7oyHqbWZpo12BpXK7zcIORwWVnaBrNeALg4IZWCOSs?=
- =?us-ascii?Q?lnq679eRNUHPafegrpTCv+M6ydkCrRFG1HW+OlxyMUodR8eIu0YDnrCIQ4K0?=
- =?us-ascii?Q?6qQAQp/xNO/x+pYZWctervhG3wuzWJ0N+LwzbsuPbfvlhA0zJd/EZnPgGjrN?=
- =?us-ascii?Q?vPubajLz6GczmWKomM7Fd1fArcGqbt4MKyjzgoPjPAqImiM/P34mZ0sv4IP9?=
- =?us-ascii?Q?vo2A1sm/gFDYsBhAARv7IKqrdFxTTE4XPmg3hVaHNyhLRs3MU1wFYIxIq8tu?=
- =?us-ascii?Q?P/Uk8nDxPTomIbcDymUxhqhCnmPiNnZGwOuTF2zs7hx/Ij0MfpfyruOgoNun?=
- =?us-ascii?Q?9founehXZYQj0eKbOZQNcMIyC8K/E+4eGQ03tC98rWxt/i3Vlxge1C0Dxjh3?=
- =?us-ascii?Q?1qHJY24aUo/Bsn8eDRKQid0V2HBSTDy92rrYjAW6EQoc9pXP2xCSAkndwUlN?=
- =?us-ascii?Q?CSGdJPahaoOxBbLn+wi0Y9TbegogAVuIn+/2Zlegh6tlaSfRAWj19swzOpcI?=
- =?us-ascii?Q?QSST3d7AzML8uJpE8bcGdyBB98QU1pSyfGteHXhgwLCtSG5NOjAHmVPQxDrv?=
- =?us-ascii?Q?7yUgGk+VylE1/4Q+nij3MfKcTrFkRBXpYFKdO60+pKlhdJjld2uPRwHzNSL4?=
- =?us-ascii?Q?TudhhPlJh0n9dZIshG+C/MWWq9B7vDN7LKkubrwb?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6ec2d9ee-d221-488b-edd3-08db523367ee
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9185.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 15:21:34.6791
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: LgdInuFRtNhyNSbJsil0W4B25aLGNpRGn36K7ApIpF56i4ndwvNCvUp0e9K5rdgRkTRHZMpx05nxqlE+RunL6A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8040
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/11 10:21:00 #21259776
+X-KSMG-AntiVirus-Status: Clean, skipped
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch standardizes the inconsistent return values for unsuccessful
-XDP transmits by using standardized error codes (-EBUSY or -ENOMEM).
+This adds support for OTP area access on MX30LFxG18AC chip series.
 
-Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
+Changelog:
+  v1 -> v2:
+  * Add slab.h include due to kernel test robot error.
+  v2 -> v3:
+  * Use 'uint64_t' as input argument for 'do_div()' instead
+    of 'unsigned long' due to kernel test robot error.
+
+Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
 ---
- v3:
-  - remove the fix tag.
-  - resend to net-next
+ drivers/mtd/nand/raw/nand_macronix.c | 213 +++++++++++++++++++++++++++
+ 1 file changed, 213 insertions(+)
 
- v2:
-  - focusing on code clean up per Simon's feedback.
-
- drivers/net/ethernet/freescale/fec_main.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index 42ec6ca3bf03..6a021fe24dfe 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -3798,8 +3798,7 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
- 	entries_free = fec_enet_get_free_txdesc_num(txq);
- 	if (entries_free < MAX_SKB_FRAGS + 1) {
- 		netdev_err(fep->netdev, "NOT enough BD for SG!\n");
--		xdp_return_frame(frame);
--		return NETDEV_TX_BUSY;
-+		return -EBUSY;
- 	}
-
- 	/* Fill in a Tx ring entry */
-@@ -3813,7 +3812,7 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
- 	dma_addr = dma_map_single(&fep->pdev->dev, frame->data,
- 				  frame->len, DMA_TO_DEVICE);
- 	if (dma_mapping_error(&fep->pdev->dev, dma_addr))
--		return FEC_ENET_XDP_CONSUMED;
+diff --git a/drivers/mtd/nand/raw/nand_macronix.c b/drivers/mtd/nand/raw/nand_macronix.c
+index 1472f925f386..2301f990678e 100644
+--- a/drivers/mtd/nand/raw/nand_macronix.c
++++ b/drivers/mtd/nand/raw/nand_macronix.c
+@@ -6,6 +6,7 @@
+  * Author: Boris Brezillon <boris.brezillon@free-electrons.com>
+  */
+ 
++#include <linux/slab.h>
+ #include "linux/delay.h"
+ #include "internals.h"
+ 
+@@ -31,6 +32,20 @@
+ 
+ #define MXIC_CMD_POWER_DOWN 0xB9
+ 
++#define ONFI_FEATURE_ADDR_30LFXG18AC_OTP	0x90
++#define MACRONIX_30LFXG18AC_OTP_START_PAGE	0
++#define MACRONIX_30LFXG18AC_OTP_PAGES		30
++#define MACRONIX_30LFXG18AC_OTP_PAGE_SIZE	2112
++#define MACRONIX_30LFXG18AC_OTP_START_BYTE	\
++	(MACRONIX_30LFXG18AC_OTP_START_PAGE *	\
++	 MACRONIX_30LFXG18AC_OTP_PAGE_SIZE)
++#define MACRONIX_30LFXG18AC_OTP_SIZE_BYTES	\
++	(MACRONIX_30LFXG18AC_OTP_PAGES *	\
++	 MACRONIX_30LFXG18AC_OTP_PAGE_SIZE)
++
++#define MACRONIX_30LFXG18AC_OTP_EN		BIT(0)
++#define MACRONIX_30LFXG18AC_OTP_LOCKED		BIT(1)
++
+ struct nand_onfi_vendor_macronix {
+ 	u8 reserved;
+ 	u8 reliability_func;
+@@ -316,6 +331,203 @@ static void macronix_nand_deep_power_down_support(struct nand_chip *chip)
+ 	chip->ops.resume = mxic_nand_resume;
+ }
+ 
++static int macronix_30lfxg18ac_get_otp_info(struct mtd_info *mtd, size_t len,
++					    size_t *retlen,
++					    struct otp_info *buf)
++{
++	if (len < sizeof(*buf))
++		return -EINVAL;
++
++	/* Don't know how to check that OTP is locked. */
++	buf->locked = 0;
++	buf->start = MACRONIX_30LFXG18AC_OTP_START_BYTE;
++	buf->length = MACRONIX_30LFXG18AC_OTP_SIZE_BYTES;
++
++	*retlen = sizeof(*buf);
++
++	return 0;
++}
++
++static int macronix_30lfxg18ac_otp_enable(struct nand_chip *nand)
++{
++	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
++
++	feature_buf[0] = MACRONIX_30LFXG18AC_OTP_EN;
++	return nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
++				 feature_buf);
++}
++
++static int macronix_30lfxg18ac_otp_disable(struct nand_chip *nand)
++{
++	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
++
++	return nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
++				 feature_buf);
++}
++
++static int __macronix_30lfxg18ac_rw_otp(struct mtd_info *mtd,
++					loff_t offs_in_flash,
++					size_t len, size_t *retlen,
++					u_char *buf, bool write)
++{
++	struct nand_chip *nand;
++	size_t bytes_handled;
++	off_t offs_in_page;
++	uint64_t page;
++	void *dma_buf;
++	int ret;
++
++	/* 'nand_prog/read_page_op()' may use 'buf' as DMA buffer,
++	 * so allocate properly aligned memory for it. This is
++	 * needed because cross page accesses may lead to unaligned
++	 * buffer address for DMA.
++	 */
++	dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
++	if (!dma_buf)
 +		return -ENOMEM;
-
- 	status |= (BD_ENET_TX_INTR | BD_ENET_TX_LAST);
- 	if (fep->bufdesc_ex)
-@@ -3869,7 +3868,7 @@ static int fec_enet_xdp_xmit(struct net_device *dev,
- 	__netif_tx_lock(nq, cpu);
-
- 	for (i = 0; i < num_frames; i++) {
--		if (fec_enet_txq_xmit_frame(fep, txq, frames[i]) != 0)
-+		if (fec_enet_txq_xmit_frame(fep, txq, frames[i]) < 0)
- 			break;
- 		sent_frames++;
- 	}
---
-2.34.1
++
++	nand = mtd_to_nand(mtd);
++	nand_select_target(nand, 0);
++
++	ret = macronix_30lfxg18ac_otp_enable(nand);
++	if (ret)
++		goto out_otp;
++
++	page = offs_in_flash;
++	/* 'page' will be result of division. */
++	offs_in_page = do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
++	bytes_handled = 0;
++
++	while (bytes_handled < len &&
++	       page < MACRONIX_30LFXG18AC_OTP_PAGES) {
++		size_t bytes_to_handle;
++
++		bytes_to_handle = min_t(size_t, len - bytes_handled,
++					MACRONIX_30LFXG18AC_OTP_PAGE_SIZE -
++					offs_in_page);
++
++		if (write) {
++			memcpy(dma_buf, &buf[bytes_handled], bytes_to_handle);
++			ret = nand_prog_page_op(nand, page, offs_in_page,
++						dma_buf, bytes_to_handle);
++		} else {
++			ret = nand_read_page_op(nand, page, offs_in_page,
++						dma_buf, bytes_to_handle);
++			if (!ret)
++				memcpy(&buf[bytes_handled], dma_buf,
++				       bytes_to_handle);
++		}
++		if (ret)
++			goto out_otp;
++
++		bytes_handled += bytes_to_handle;
++		offs_in_page = 0;
++		page++;
++	}
++
++	*retlen = bytes_handled;
++
++out_otp:
++	if (ret)
++		dev_err(&mtd->dev, "failed to perform OTP IO: %i\n", ret);
++
++	ret = macronix_30lfxg18ac_otp_disable(nand);
++	WARN(ret, "failed to leave OTP mode after %s\n",
++	     write ? "write" : "read");
++	nand_deselect_target(nand);
++	kfree(dma_buf);
++
++	return ret;
++}
++
++static int macronix_30lfxg18ac_write_otp(struct mtd_info *mtd, loff_t to,
++					 size_t len, size_t *rlen,
++					 const u_char *buf)
++{
++	return __macronix_30lfxg18ac_rw_otp(mtd, to, len, rlen, (u_char *)buf,
++					    true);
++}
++
++static int macronix_30lfxg18ac_read_otp(struct mtd_info *mtd, loff_t from,
++					size_t len, size_t *rlen,
++					u_char *buf)
++{
++	return __macronix_30lfxg18ac_rw_otp(mtd, from, len, rlen, buf, false);
++}
++
++static int macronix_30lfxg18ac_lock_otp(struct mtd_info *mtd, loff_t from,
++					size_t len)
++{
++	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
++	struct nand_chip *nand;
++	int ret;
++
++	if (from != MACRONIX_30LFXG18AC_OTP_START_BYTE ||
++	    len != MACRONIX_30LFXG18AC_OTP_SIZE_BYTES)
++		return -EINVAL;
++
++	dev_dbg(&mtd->dev, "locking OTP\n");
++
++	nand = mtd_to_nand(mtd);
++	nand_select_target(nand, 0);
++
++	feature_buf[0] = MACRONIX_30LFXG18AC_OTP_EN |
++			 MACRONIX_30LFXG18AC_OTP_LOCKED;
++	ret = nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
++				feature_buf);
++	if (ret) {
++		dev_err(&mtd->dev,
++			"failed to lock OTP (set features): %i\n", ret);
++		nand_deselect_target(nand);
++		return ret;
++	}
++
++	/* Do dummy page prog with zero address. */
++	feature_buf[0] = 0;
++	ret = nand_prog_page_op(nand, 0, 0, feature_buf, 1);
++	if (ret)
++		dev_err(&mtd->dev,
++			"failed to lock OTP (page prog): %i\n", ret);
++
++	ret = macronix_30lfxg18ac_otp_disable(nand);
++	WARN(ret, "failed to leave OTP mode after lock\n");
++
++	nand_deselect_target(nand);
++
++	return ret;
++}
++
++static void macronix_nand_setup_otp(struct nand_chip *chip)
++{
++	static const char * const supported_otp_models[] = {
++		"MX30LF1G18AC",
++		"MX30LF2G18AC",
++		"MX30LF4G18AC",
++	};
++	struct mtd_info *mtd;
++
++	if (!chip->parameters.supports_set_get_features)
++		return;
++
++	if (match_string(supported_otp_models,
++			 ARRAY_SIZE(supported_otp_models),
++			 chip->parameters.model) < 0)
++		return;
++
++	bitmap_set(chip->parameters.get_feature_list,
++		   ONFI_FEATURE_ADDR_30LFXG18AC_OTP, 1);
++	bitmap_set(chip->parameters.set_feature_list,
++		   ONFI_FEATURE_ADDR_30LFXG18AC_OTP, 1);
++
++	mtd = nand_to_mtd(chip);
++	mtd->_get_fact_prot_info = macronix_30lfxg18ac_get_otp_info;
++	mtd->_read_fact_prot_reg = macronix_30lfxg18ac_read_otp;
++	mtd->_get_user_prot_info = macronix_30lfxg18ac_get_otp_info;
++	mtd->_read_user_prot_reg = macronix_30lfxg18ac_read_otp;
++	mtd->_write_user_prot_reg = macronix_30lfxg18ac_write_otp;
++	mtd->_lock_user_prot_reg = macronix_30lfxg18ac_lock_otp;
++}
++
+ static int macronix_nand_init(struct nand_chip *chip)
+ {
+ 	if (nand_is_slc(chip))
+@@ -325,6 +537,7 @@ static int macronix_nand_init(struct nand_chip *chip)
+ 	macronix_nand_onfi_init(chip);
+ 	macronix_nand_block_protection_support(chip);
+ 	macronix_nand_deep_power_down_support(chip);
++	macronix_nand_setup_otp(chip);
+ 
+ 	return 0;
+ }
+-- 
+2.35.0
 
