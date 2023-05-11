@@ -2,181 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19D7A6FF62D
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:40:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 234606FF647
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:45:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238769AbjEKPkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 11:40:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32872 "EHLO
+        id S238498AbjEKPo4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 11:44:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238768AbjEKPkn (ORCPT
+        with ESMTP id S237526AbjEKPoz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 11:40:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F09E5BA5;
-        Thu, 11 May 2023 08:40:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 04D8164F18;
-        Thu, 11 May 2023 15:40:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C80EC433EF;
-        Thu, 11 May 2023 15:40:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683819640;
-        bh=//YCHN0izg/VsWfOmB6peEqK02YPQEdFXzbMANOXruY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CzBfZu5f6wQiV92wXoVyExa/7BfTK/ZgvqHLo3t53uI5HtgRqEBSX5XLpZr5raHAy
-         tX9SISUN0TGWnt+aKhh9VVytV6pl6a6QsGlxOqJJZny/wfrMnE7sq55w0CDHMs388+
-         oD90KzFckhB52iXunQOP1SxmtMuuOHb79gkmJVuI2W8/2OPlnysjcJY5I1iwh0sfSH
-         rjtOX/llHkK2sKIEYn4jFqJI5EFU/Y7BixHALg51mYaFTqZm8Tkyw+O4agw7mRT/f8
-         mtqAkHfyILHQHCHQMIH4wGxBEFDVfWo+wSvXE+YjXAoF8wHX8+mq8AmYlsFxWWMpKe
-         ep2fy9yQ9T1NA==
-Date:   Thu, 11 May 2023 08:44:16 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Stephen Boyd <swboyd@chromium.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
-        airlied@gmail.com, daniel@ffwll.ch, dianders@chromium.org,
-        dmitry.baryshkov@linaro.org, dri-devel@lists.freedesktop.org,
-        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org,
-        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
-        marijn.suijten@somainline.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] drm/msm/dp: enable HDP plugin/unplugged
- interrupts to hpd_enable/disable
-Message-ID: <20230511154416.67habdpdasy2szvs@ripper>
-References: <1683750665-8764-1-git-send-email-quic_khsieh@quicinc.com>
- <1683750665-8764-2-git-send-email-quic_khsieh@quicinc.com>
- <CAE-0n53ywhgFhJXA9krBo-Ds6ezM0K8n6w0xnVZj+sTJ4qt9cA@mail.gmail.com>
- <6830a829-5b8a-a05a-da6a-5aaaeef23e57@quicinc.com>
+        Thu, 11 May 2023 11:44:55 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDCED7;
+        Thu, 11 May 2023 08:44:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683819894; x=1715355894;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=UPzRdwh80F7gww+xL3tYd6eQrJ5u7CiNTO8sjTFxYz8=;
+  b=WwchiOZ/dPsMt2jhO+sAHKVyBiqoiB1S6y2FLy5zaYjm7GHMyo1x+KWX
+   lkWVrPHVzps9wA7CqE0TjqvX4kQjk6LueoLU9OG7IXDsePqZ8DoW90YIa
+   W1JKW6RLxtg5Vb3QQYp6eJVCYjyYJQbNYxjjtx241yO+lUPVfNpRvZR7G
+   Kvl2E2ig94Cqo22eguPO4MY4sN88G8NMIdwtN56nUV8UbsiOKqNd5s9Rb
+   4uLWY8mRzKVfSQiinGhHaLmZHlTbTaO3F5ZkO5of73okCKhVy+5fgKRse
+   5qeVKHE6MgAITsZnqCzIca8pnvBS7AUUDdKXo9sN2cZ9fXNSnqClW6A87
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="335046640"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="335046640"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 08:44:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="699776218"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="699776218"
+Received: from rchatre-ws.ostc.intel.com ([10.54.69.144])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 08:44:48 -0700
+From:   Reinette Chatre <reinette.chatre@intel.com>
+To:     jgg@nvidia.com, yishaih@nvidia.com,
+        shameerali.kolothum.thodi@huawei.com, kevin.tian@intel.com,
+        alex.williamson@redhat.com
+Cc:     tglx@linutronix.de, darwi@linutronix.de, kvm@vger.kernel.org,
+        dave.jiang@intel.com, jing2.liu@intel.com, ashok.raj@intel.com,
+        fenghua.yu@intel.com, tom.zanussi@linux.intel.com,
+        reinette.chatre@intel.com, linux-kernel@vger.kernel.org
+Subject: [PATCH V5 00/11] vfio/pci: Support dynamic allocation of MSI-X interrupts
+Date:   Thu, 11 May 2023 08:44:27 -0700
+Message-Id: <cover.1683740667.git.reinette.chatre@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6830a829-5b8a-a05a-da6a-5aaaeef23e57@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 05:39:07PM -0700, Abhinav Kumar wrote:
-> 
-> 
-> On 5/10/2023 4:55 PM, Stephen Boyd wrote:
-> > Quoting Kuogee Hsieh (2023-05-10 13:31:04)
-> > > The internal_hpd flag was introduced to handle external DP HPD derived from GPIO
-> > > pinmuxed into DP controller.
-> > 
-> > Was it? It looks more like it was done to differentiate between eDP and
-> > DP, because internal_hpd is set only if DRM_BRIDGE_OP_HPD is set on the
-> > bridge and we only set the bridge op if the connector type is DP. The
-> > assumption looks like if you have DP connector_type, you have the gpio
-> > pinmuxed for "dp_hot" mode, which isn't exactly true. We don't treat
-> > that gpio as an irq either, because it isn't. Instead the gpio is muxed
-> > to the mdss inside the SoC and then that generates an mdss interrupt
-> > that's combined with non-HPD things like "video ready".
-> > 
-> > If that all follows, then I don't quite understand why we're setting
-> > internal_hpd to false at all at runtime. It should be set to true at
-> > some point, but ideally that point is during probe.
-> > 
-> 
-> Kuogee had the same thought originally but were not entirely sure of this
-> part of the commit message in Bjorn's original commit which introduced these
-> changes.
-> 
-> "This difference is not appropriately represented by the "is_edp"
-> boolean, but is properly represented by the frameworks invocation of the
-> hpd_enable() and hpd_disable() callbacks. Switch the current condition
-> to rely on these callbacks instead"
-> 
-> Does this along with below documentation mean we should generate the hpd
-> interrupts only after hpd_enable callback happens?
-> 
-> " * Call &drm_bridge_funcs.hpd_enable if implemented and register the given
-> @cb
->  * and @data as hot plug notification callback. From now on the @cb will be
->  * called with @data when an output status change is detected by the bridge,
->  * until hot plug notification gets disabled with drm_bridge_hpd_disable().
-> "
-> 
-> Bjorn, can you please clarify this?
-> 
+Changes since V4:
+- V4: https://lore.kernel.org/lkml/cover.1682615447.git.reinette.chatre@intel.com/
+- Add Kevin's Reviewed-by tag as applicable.
+- Treat non-existing INTx interrupt context as kernel bug with WARN. This
+  exposed an issue in the scenario where INTx mask/unmask may occur without
+  INTx enabled. This is fixed by obtaining the interrupt context later
+  (right before use) within impacted functions: vfio_pci_intx_mask() and
+  vfio_pci_intx_unmask_handler(). (Kevin)
+- Treat pci_irq_vector() returning '0' for a MSI/MSI-X interrupt as a kernel
+  bug via a WARN instead of ignoring this value. (Kevin)
+- Improve accuracy of comments. (Kevin)
+- Please refer to individual patches for local changes.
 
-We currently have 3 cases:
+Changes since V3:
+- V3: https://lore.kernel.org/lkml/cover.1681837892.git.reinette.chatre@intel.com/
+- Be considerate about layout and size with changes to
+  struct vfio_pci_core_device. Keep flags together and transition all to
+  use bitfields. (Alex and Jason)
+- Do not free dynamically allocated interrupts on error path. (Alex)
+- Please refer to individual patches for localized changes.
 
-1) DP with GPIO: No downstream drm_bridge are connected, is_edp = false
-and internal HPD-logic is in used (internal_hpd = true). Power needs to
-be on at all times etc.
+Changes since V2:
+- V2: https://lore.kernel.org/lkml/cover.1680038771.git.reinette.chatre@intel.com/
+- During testing of V2 "kernel test robot" reported issues resulting from
+  include/linux/pci.h missing a stub for pci_msix_can_alloc_dyn() when
+  CONFIG_PCI_MSI=n. A separate fix was sent to address this. The fix can
+  be found in the kernel (since v6.3-rc7) as
+  commit 195d8e5da3ac ("PCI/MSI: Provide missing stub for pci_msix_can_alloc_dyn()")
+- Biggest change is the transition to "active contexts" for both MSI and MSI-X.
+  Interrupt contexts have always been allocated when the interrupts are
+  allocated while they are only used while interrupts are
+  enabled. In this series interrupt contexts are made dynamic, while doing
+  so their allocation is moved to match how they are used: allocated when
+  interrupts are enabled. Whether a Linux interrupt number exists determines
+  whether an interrupt can be enabled.
+  Previous policy (up to V2) that an allocated interrupt has an interrupt
+  context no longer applies. Instead, an interrupt context has a
+  handler/trigger, aka "active contexts". (Alex)
+- Re-ordered patches in support of "active contexts".
+- Only free interrupts on MSI-X teardown and otherwise use the
+  allocated interrupts as a cache. (Alex)
+- Using unsigned int for the vector broke the unwind loop within
+  vfio_msi_set_block(). (Alex)
+- Introduce new "has_dyn_msix" property of virtual device instead of
+  querying support every time. (Alex)
+- Some smaller changes, please refer to individual patches.
 
-2) DP without GPIO: Downstream drm_bridge connected, is_edp = false and
-internal HPD-logic should not be used/enabled (internal_hpd = false).
-Power doesn't need to be on unless hpd_notify is invoked to tell us that
-there's something connected...
+Changes since RFC V1:
+- RFC V1: https://lore.kernel.org/lkml/cover.1678911529.git.reinette.chatre@intel.com/
+- Improved changelogs.
+- Simplify interface so that vfio_irq_ctx_alloc_single() returns pointer to
+  allocated context. (Alex)
+- Remove vfio_irq_ctx_range_allocated() and associated attempts to maintain
+  invalid error path behavior. (Alex and Kevin)
+- Add pointer to interrupt context as function parameter to
+  vfio_irq_ctx_free(). (Alex)
+- Ensure variables are initialized. (Dan Carpenter)
+- Only support dynamic allocation if device supports it. (Alex)
 
-3) eDP with or without HPD signal and/or HPD gpio. Downstream
-drm_bridge/panel is connected, is_edp = true and internal HPD logic is
-short-circuited regardless of the panel providing HPD signal or not.
+Qemu allocates interrupts incrementally at the time the guest unmasks an
+interrupt, for example each time a Linux guest runs request_irq().
+
+Dynamic allocation of MSI-X interrupts was not possible until v6.2 [1].
+This prompted Qemu to, when allocating a new interrupt, first release all
+previously allocated interrupts (including disable of MSI-X) followed
+by re-allocation of all interrupts that includes the new interrupt.
+Please see [2] for a detailed discussion about this issue.
+
+Releasing and re-allocating interrupts may be acceptable if all
+interrupts are unmasked during device initialization. If unmasking of
+interrupts occur during runtime this may result in lost interrupts.
+For example, consider an accelerator device with multiple work queues,
+each work queue having a dedicated interrupt. A work queue can be
+enabled at any time with its associated interrupt unmasked while other
+work queues are already active. Having all interrupts released and MSI-X
+disabled to enable the new work queue will impact active work queues.
+
+This series builds on the recent interrupt sub-system core changes
+that added support for dynamic MSI-X allocation after initial MSI-X
+enabling.
+
+Add support for dynamic MSI-X allocation to vfio-pci. A flag
+indicating lack of support for dynamic allocation already exist:
+VFIO_IRQ_INFO_NORESIZE and has always been set for MSI and MSI-X. With
+support for dynamic MSI-X the flag is cleared for MSI-X when supported,
+enabling Qemu to modify its behavior.
+
+Any feedback is appreciated
+
+Reinette
+
+[1] commit 34026364df8e ("PCI/MSI: Provide post-enable dynamic allocation interfaces for MSI-X")
+[2] https://lore.kernel.org/kvm/MWHPR11MB188603D0D809C1079F5817DC8C099@MWHPR11MB1886.namprd11.prod.outlook.com/#t
+
+Reinette Chatre (11):
+  vfio/pci: Consolidate irq cleanup on MSI/MSI-X disable
+  vfio/pci: Remove negative check on unsigned vector
+  vfio/pci: Prepare for dynamic interrupt context storage
+  vfio/pci: Move to single error path
+  vfio/pci: Use xarray for interrupt context storage
+  vfio/pci: Remove interrupt context counter
+  vfio/pci: Update stale comment
+  vfio/pci: Use bitfield for struct vfio_pci_core_device flags
+  vfio/pci: Probe and store ability to support dynamic MSI-X
+  vfio/pci: Support dynamic MSI-X
+  vfio/pci: Clear VFIO_IRQ_INFO_NORESIZE for MSI-X
+
+ drivers/vfio/pci/vfio_pci_core.c  |   8 +-
+ drivers/vfio/pci/vfio_pci_intrs.c | 305 ++++++++++++++++++++----------
+ include/linux/vfio_pci_core.h     |  26 +--
+ include/uapi/linux/vfio.h         |   3 +
+ 4 files changed, 229 insertions(+), 113 deletions(-)
 
 
-In #1 dp_bridge_hpd_enable() will be invoked to indicate that the DP
-controller is expected to perform HPD handling. In #2
-dp_bridge_hpd_enable() will _not_ be invoked, instead some downstream
-drm_bridge/panel will get the hpd_enable() callback and will be
-responsible to updating the HPD state of the chain, which will cause
-hpd_notify to be invoked.
+base-commit: 457391b0380335d5e9a5babdec90ac53928b23b4
+-- 
+2.34.1
 
-
-Note that #3 is based entirely on the controller, it has currently no
-relation to what is attached. It seems reasonable that this is just
-another case of #2 (perhaps just always reporting
-connector_status_connected?).
-
-Regards,
-Bjorn
-
-> > > HPD plug/unplug interrupts cannot be enabled until
-> > > internal_hpd flag is set to true.
-> > > At both bootup and resume time, the DP driver will enable external DP
-> > > plugin interrupts and handle plugin interrupt accordingly. Unfortunately
-> > > dp_bridge_hpd_enable() bridge ops function was called to set internal_hpd
-> > > flag to true later than where DP driver expected during bootup time.
-> > > 
-> > > This causes external DP plugin event to not get detected and display stays blank.
-> > > Move enabling HDP plugin/unplugged interrupts to dp_bridge_hpd_enable()/disable() to
-> > > set internal_hpd to true along with enabling HPD plugin/unplugged interrupts
-> > > simultaneously to avoid timing issue during bootup and resume.
-> > > 
-> > > Fixes: cd198caddea7 ("drm/msm/dp: Rely on hpd_enable/disable callbacks")
-> > > Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> > > ---
-> > >   drivers/gpu/drm/msm/dp/dp_display.c | 27 ++++++++++++++-------------
-> > >   1 file changed, 14 insertions(+), 13 deletions(-)
-> > > 
-> > > diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
-> > > index 3e13acdf..71aa944 100644
-> > > --- a/drivers/gpu/drm/msm/dp/dp_display.c
-> > > +++ b/drivers/gpu/drm/msm/dp/dp_display.c
-> > > @@ -1801,15 +1788,29 @@ void dp_bridge_hpd_enable(struct drm_bridge *bridge)
-> > >   {
-> > >          struct msm_dp_bridge *dp_bridge = to_dp_bridge(bridge);
-> > >          struct msm_dp *dp_display = dp_bridge->dp_display;
-> > > +       struct dp_display_private *dp;
-> > > +
-> > > +       dp = container_of(dp_display, struct dp_display_private, dp_display);
-> > > 
-> > >          dp_display->internal_hpd = true;
-> > 
-> > Can we set internal_hpd to true during probe when we see that the hpd
-> > pinmux exists? Or do any of these bits toggle in the irq status register
-> > when the gpio isn't muxed to "dp_hot" or the controller is for eDP and
-> > it doesn't have any gpio connection internally? I'm wondering if we can
-> > get by with simply enabling the "dp_hot" pin interrupts
-> > (plug/unplug/replug/irq_hpd) unconditionally and not worrying about them
-> > if eDP is there (because the pin doesn't exist inside the SoC), or if DP
-> > HPD is being signalled out of band through type-c framework.
