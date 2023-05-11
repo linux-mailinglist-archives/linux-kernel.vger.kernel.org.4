@@ -2,101 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E32766FFCF0
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 01:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F2E46FFCF6
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 01:08:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238949AbjEKXHf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 19:07:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56100 "EHLO
+        id S238993AbjEKXIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 19:08:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjEKXHd (ORCPT
+        with ESMTP id S229601AbjEKXIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 19:07:33 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDAE2D4A;
-        Thu, 11 May 2023 16:07:30 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QHSGQ5Wb8z4wgq;
-        Fri, 12 May 2023 09:07:26 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1683846446;
-        bh=7aOBU3S6gZdjMqA8FSQtrSA3oKTpWMBQzWJVOHffsQw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=TTG1/VtPjnlQ29bAnmeWMAW/5bKUS2gBKAmbAohCGu+Hv747h4lhyS8mwaeSrdjF8
-         5kNGAq9o6mYix6aMVYEof2vP6ssKnL7Y79b6PS3c2whTekvto7MYQSOpgC8tWKH+LA
-         3+++bGfoVftEkxhHNqrcTYMASc55b/3FZZIYlX8KmSRbQZPozqukDrLDpDl5g9MN5n
-         uHYa4y9RN+PRqsTJo9JJxdzMVT3DWwM7FbdEn7OmSoCoT5EsO1e33FVqyJwfLxUYi3
-         loCqo5KalZqAzQQbCgGw8qcOvAFnoALQT4ilwd1f8E8+mu0EfT0CByy71x6QUqKq3K
-         2VzYfN2YoCszA==
-Date:   Fri, 12 May 2023 09:07:12 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: duplicate patches in the v4l-dvb-fixes tree
-Message-ID: <20230512090712.175dd8ee@canb.auug.org.au>
+        Thu, 11 May 2023 19:08:19 -0400
+Received: from mail-vk1-xa31.google.com (mail-vk1-xa31.google.com [IPv6:2607:f8b0:4864:20::a31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E8993C12
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 16:08:18 -0700 (PDT)
+Received: by mail-vk1-xa31.google.com with SMTP id 71dfb90a1353d-45297bbe2c6so2121142e0c.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 16:08:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683846497; x=1686438497;
+        h=to:subject:message-id:date:from:sender:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XPER73ryVVRTIjMIzOcJeLz+gA3jNhcxkGDLzNMgB8U=;
+        b=rWJeix3bKLmlR6yT7RLweg0yIBwfkPl9RAgxcgVsD7O/3+5zTmWR7fNv+X1YnY7Nwr
+         cImpRXbagbHAK2pLV0ieXcfEHQI2uib7OQ/0rXnXBByYz5hRdtUSZWKRN/9QRc/pKZ+A
+         98i6DCBXthavx36ptkthl7yCXcoG99xuW6gqwB82qLwWukepK6+TIK/bM+B24IKnRXqq
+         p3U2c4lyE/CLvd22unBZaWWJ68WFgYOcWPYuRWMebMtoRvAf7YtMhugn2u+a8eDG5li8
+         eA1vNoTg9Tn7xFO0JsO0xFcMhEn+t2Uj9ITiJb9JZLV4y65btthTAXJiL6fPpVR/R82d
+         aN4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683846497; x=1686438497;
+        h=to:subject:message-id:date:from:sender:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XPER73ryVVRTIjMIzOcJeLz+gA3jNhcxkGDLzNMgB8U=;
+        b=ekxczxe/s4cR7Oauoxa4l+NRPOrOM8yvH8xQNO/wbVckFQ+d04Ho1X7Gh4hYujmv3V
+         72y56zq7+xxSzjsNWHNtD74beGkOZ5v0zV/8GApGQ38DjqHa6kcR/sM5FE2JPhR91Laj
+         9c47qWLd3ippFfFHn9SABp0YgGYvSZQR62lKx61qeuJFm7lUGY428CvO41+0u8cfZDAH
+         Snn1hth7ryePxOgrZC+61IcNfXzeLZ+0VBFsZKr1M9Xg0QmOWBzslY0wh/g+PvXiNb89
+         RrGCUVUQXD5wlnamUykhsVCX9XIMVy883+GqqyAC1/BGl3za9I7tG0rAf6iAUm+6h2sU
+         NYCA==
+X-Gm-Message-State: AC+VfDy25gK9NE//pNhb69kzHPmvRNUKNB+Byqwa4bjPl0dxaGFFsFlz
+        B8P4n3GrMWPQBCmNK8IEdKE7OG8BgJFwXALq6yg=
+X-Google-Smtp-Source: ACHHUZ4rpmEwjUYuXvFbg3s4OwqpCNkPnA/wNoJIPxIGADhrnn0pxNMkmac3eKDX15bsFkKLIcuwjxlmldxygnhWtxY=
+X-Received: by 2002:a67:f659:0:b0:436:120:c91f with SMTP id
+ u25-20020a67f659000000b004360120c91fmr6513707vso.4.1683846496982; Thu, 11 May
+ 2023 16:08:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=Cb6DjRX/Zt8nZP/LGcJKzS";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Sender: mastergassol@gmail.com
+Received: by 2002:ab0:274a:0:b0:779:1141:e6e2 with HTTP; Thu, 11 May 2023
+ 16:08:16 -0700 (PDT)
+From:   "Mrs. Margaret Christopher" <mrsmargaretchristopher001@gmail.com>
+Date:   Thu, 11 May 2023 17:08:16 -0600
+X-Google-Sender-Auth: oPgGD7z0l-WxUD9Dcx5JfPQR5fI
+Message-ID: <CAHTKmohix0kc73ONEQKbLr0yacqtfe2rctai+W-Yj-JvW4RaiQ@mail.gmail.com>
+Subject: Humanitarian Project For Less Privileged.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_HK_NAME_FM_MR_MRS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/=Cb6DjRX/Zt8nZP/LGcJKzS
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+-- 
+Hello Dear
 
-Hi all,
+  Am a dying woman here in the hospital, i was diagnose as a
+Coronavirus patient over 2 months ago. I am A business woman who is
+dealing with Gold Exportation, I Am 59 year old from USA California i
+have a charitable and unfufilling  project that am about to handover
+to you, if you are interested to know more about this project please reply me.
 
-The following commits are also in Linus Torvalds' tree as different
-commits (but the same patches):
+ Hope to hear from you
 
-  6b854bb90d23 ("media: platform: mtk-mdp3: work around unused-variable war=
-ning")
-  814fb7f94d70 ("media: nxp: ignore unused suspend operations")
-  97e814237417 ("media: rcar-vin: Select correct interrupt mode for V4L2_FI=
-ELD_ALTERNATE")
-  07ea2bc2f320 ("media: rcar-vin: Fix NV12 size alignment")
-  60ddb2e1a331 ("media: rcar-vin: Gen3 can not scale NV12")
-
-These are commits
-
-  ae3c253f595b ("media: platform: mtk-mdp3: work around unused-variable war=
-ning")
-  55e2a6e36be6 ("media: nxp: ignore unused suspend operations")
-  e10707d5865c ("media: rcar-vin: Select correct interrupt mode for V4L2_FI=
-ELD_ALTERNATE")
-  cb88d8289fc2 ("media: rcar-vin: Fix NV12 size alignment")
-  879c5a458e53 ("media: rcar-vin: Gen3 can not scale NV12")
-
-in Linus' tree.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/=Cb6DjRX/Zt8nZP/LGcJKzS
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRddSAACgkQAVBC80lX
-0GyT1wgAi7H4RSVm4mjIYNyO/OUbhTVWNrPRnMngZXMAu9eEJPJFtOEAo4IIa45W
-jlBXUtLTWdhWXTP7wg0kIETDjzpIgNkToXXoQkct9aQqs7Kpi9gXWUA/O4Nxy2BV
-aGtX3flBWlfnGKs9JeUtBrLnX7otQc1V32hKs6Izc3q4ZHRRuvQ3jbZ5sEe+tOEE
-4m6Gq3AuoPlXmVrizdqt94NKvw4Xf34J5dyqp82Mymh04YKk21qA5dyXb0oQmwf4
-MzLxlp6E31XeTPKOP/t28wH0zqBJ7Nq+bR9YjrMuBr4Vtz+Yhb8xEPXXj8DDdVyW
-N8E61iwr7wBK6CY/lxdUkSJHZWDiWQ==
-=3bkx
------END PGP SIGNATURE-----
-
---Sig_/=Cb6DjRX/Zt8nZP/LGcJKzS--
+Regards.
