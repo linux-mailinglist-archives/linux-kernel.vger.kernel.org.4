@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB8256FF601
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:31:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E6886FF5F2
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:28:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238201AbjEKPbG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 11:31:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54618 "EHLO
+        id S238712AbjEKP2S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 11:28:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238053AbjEKPbD (ORCPT
+        with ESMTP id S232006AbjEKP2Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 11:31:03 -0400
+        Thu, 11 May 2023 11:28:16 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899E719B2;
-        Thu, 11 May 2023 08:30:58 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 075F2DC;
+        Thu, 11 May 2023 08:28:15 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E8CD64F11;
-        Thu, 11 May 2023 15:30:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BDE00C433EF;
-        Thu, 11 May 2023 15:30:54 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 90F2864EF0;
+        Thu, 11 May 2023 15:28:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1A82C433EF;
+        Thu, 11 May 2023 15:28:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683819057;
-        bh=SJGJCU3gDVdyuC2QEctenjUwW0dVdNNgc2Fs7wfRUns=;
+        s=k20201202; t=1683818894;
+        bh=bfzVkgchG3ADANDZ9tx7JhDsCOgB/EmrIyZFm4dmlJ8=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Plchd8Sgzf0HyZ6hAta56VujgSCqgIqmnXlPXxDg3/EQeUS2meUBh57yRNcbIwcvf
-         ymUNvFgu9cQF2habL+H6SJxZyzn0tSJV68f1wG3dlb8dcbYDPRRCylRubpvGiung9b
-         Acu3rRXq2q6WQ4S592Be2MD7seZqsiHsRJm9kjPULT4RIIz5eeSAiL+mBiBqBSJ29e
-         nvQTswr6Xhoao9K2aYU2ZCFBoAXe1qDBf8MpGgmIipD+pWELVlZfFstz5/Wwh6gpQy
-         cm9Pq+e3lC3hTAIuubP7rfe07pmFqU8pnAD3sPbd6sWBhcsi6eiB+4xiyjIHYHU0x1
-         n71zOWGE8XU0w==
-Date:   Thu, 11 May 2023 16:30:52 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Simon Horman <horms@kernel.org>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>,
-        Daire McNamara <daire.mcnamara@microchip.com>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-riscv@lists.infradead.org,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: Re: [PATCH] PCI: microchip: Avoid cast to incompatible function type
-Message-ID: <20230511-coming-saturate-a2ae32462a3a@spud>
-References: <20230511-pci-microchip-clk-cast-v1-1-7674f4d4e218@kernel.org>
+        b=irNHUONwsI6CQtLpREtNLSyQ69irtMLtOthyrhALcmJVzvlWu74WO7y6iT8Nax/vt
+         m/iT8bDf3ZfD1xzf+rwP+OXozll17Fvrxibk+XTJn6T7HLWHH76z5Y4TkaelGbJMuW
+         4+dnu5w24X1HzFUX2jK/gIugQjwlfptG2xKFcSp6nhyYc2PTZ0V/om9HKqTuNYpEMl
+         86/4HEiMLy7t3hrv8soCMojL2eBIeljcfbJ1p7JrUlAHlBUWTbQQVq9S6yEz2CNL5f
+         GxF9oCtHdW27I2K3Ogs9Y1NlRuZx68aVMET5/xK9FJ/oNSiPDa6RtizaVoi/Bkc102
+         KYnZPAr/nPsFg==
+Date:   Thu, 11 May 2023 08:31:50 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>, agross@kernel.org,
+        airlied@gmail.com, daniel@ffwll.ch, dianders@chromium.org,
+        dmitry.baryshkov@linaro.org, dri-devel@lists.freedesktop.org,
+        robdclark@gmail.com, sean@poorly.run, vkoul@kernel.org,
+        quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
+        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/2] drm/msm/dp: enable HDP plugin/unplugged
+ interrupts to hpd_enable/disable
+Message-ID: <20230511153150.qn3psei655ixprtx@ripper>
+References: <1683750665-8764-1-git-send-email-quic_khsieh@quicinc.com>
+ <1683750665-8764-2-git-send-email-quic_khsieh@quicinc.com>
+ <CAE-0n53ywhgFhJXA9krBo-Ds6ezM0K8n6w0xnVZj+sTJ4qt9cA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="EILHGzwimB/Seb9q"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230511-pci-microchip-clk-cast-v1-1-7674f4d4e218@kernel.org>
+In-Reply-To: <CAE-0n53ywhgFhJXA9krBo-Ds6ezM0K8n6w0xnVZj+sTJ4qt9cA@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -64,97 +63,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, May 10, 2023 at 04:55:04PM -0700, Stephen Boyd wrote:
+> Quoting Kuogee Hsieh (2023-05-10 13:31:04)
+> > The internal_hpd flag was introduced to handle external DP HPD derived from GPIO
+> > pinmuxed into DP controller.
+> 
+> Was it? It looks more like it was done to differentiate between eDP and
+> DP, because internal_hpd is set only if DRM_BRIDGE_OP_HPD is set on the
+> bridge and we only set the bridge op if the connector type is DP. The
+> assumption looks like if you have DP connector_type, you have the gpio
+> pinmuxed for "dp_hot" mode, which isn't exactly true. We don't treat
+> that gpio as an irq either, because it isn't. Instead the gpio is muxed
+> to the mdss inside the SoC and then that generates an mdss interrupt
+> that's combined with non-HPD things like "video ready".
+> 
 
---EILHGzwimB/Seb9q
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The purpose of "internal_hpd" is to indicate track if the internal
+HPD-logic should be used or not.
 
-On Thu, May 11, 2023 at 05:24:18PM +0200, Simon Horman wrote:
-> Rather than casting clk_disable_unprepare to an incompatible function typ=
-e,
-> update the type to match that expected by devm_add_action_or_reset.
->=20
-> Reported by clang-16 with W-1:
->=20
->  .../pcie-microchip-host.c:866:32: warning: cast from 'void (*)(struct cl=
-k *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-=
-function-type-strict]
->          devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unp=
-repare,
->                                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~=
-~~~~~~
->  ./include/linux/device.h:265:38: note: expanded from macro 'devm_add_act=
-ion_or_reset'
->          __devm_add_action_or_reset(release, action, data, #action)
->                                              ^~~~~~
-> No functional change intended.
-> Compile tested only.
->=20
+> If that all follows, then I don't quite understand why we're setting
+> internal_hpd to false at all at runtime. It should be set to true at
+> some point, but ideally that point is during probe.
+> 
 
-Yeah, there's already a patch for this:
-https://lore.kernel.org/linux-pci/20230111125323.1911373-3-daire.mcnamara@m=
-icrochip.com/
+The DRM framework will invoke hpd_enable on the bridge furthest out that
+has OP_HPD. So in the case of HPD signal being pinmuxed into the
+HPD-logic, dp_bridge_hpd_enable() will be invoked.
 
-The lads didn't want to pick any of that piecemeal & Daire hasn't been
-able to get back to that work until this week.
+I therefor think the appropriate thing to do is to move the enablement
+of the internal HPD-logic to dp_bridge_hpd_enable(), further more I
+think the correct thing to do would be to tie the power state of the DP
+block to this (and to when the external hpd_notify events signals that
+there's something attached).
 
-I don't think we an ETA though on a v4, so:
-Fixes: 6f15a9c9f941 ("PCI: microchip: Add Microchip PolarFire PCIe controll=
-er driver")
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-and I don't know if you wanna propagate the:
-| Reported-by: kernel test robot <lkp@intel.com>
+> > HPD plug/unplug interrupts cannot be enabled until
+> > internal_hpd flag is set to true.
+> > At both bootup and resume time, the DP driver will enable external DP
+> > plugin interrupts and handle plugin interrupt accordingly. Unfortunately
+> > dp_bridge_hpd_enable() bridge ops function was called to set internal_hpd
+> > flag to true later than where DP driver expected during bootup time.
+> >
+> > This causes external DP plugin event to not get detected and display stays blank.
+> > Move enabling HDP plugin/unplugged interrupts to dp_bridge_hpd_enable()/disable() to
+> > set internal_hpd to true along with enabling HPD plugin/unplugged interrupts
+> > simultaneously to avoid timing issue during bootup and resume.
+> >
+> > Fixes: cd198caddea7 ("drm/msm/dp: Rely on hpd_enable/disable callbacks")
+> > Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> > ---
+> >  drivers/gpu/drm/msm/dp/dp_display.c | 27 ++++++++++++++-------------
+> >  1 file changed, 14 insertions(+), 13 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> > index 3e13acdf..71aa944 100644
+> > --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> > +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> > @@ -1801,15 +1788,29 @@ void dp_bridge_hpd_enable(struct drm_bridge *bridge)
+> >  {
+> >         struct msm_dp_bridge *dp_bridge = to_dp_bridge(bridge);
+> >         struct msm_dp *dp_display = dp_bridge->dp_display;
+> > +       struct dp_display_private *dp;
+> > +
+> > +       dp = container_of(dp_display, struct dp_display_private, dp_display);
+> >
+> >         dp_display->internal_hpd = true;
+> 
+> Can we set internal_hpd to true during probe when we see that the hpd
+> pinmux exists? Or do any of these bits toggle in the irq status register
+> when the gpio isn't muxed to "dp_hot" or the controller is for eDP and
+> it doesn't have any gpio connection internally? I'm wondering if we can
+> get by with simply enabling the "dp_hot" pin interrupts
+> (plug/unplug/replug/irq_hpd) unconditionally and not worrying about them
+> if eDP is there (because the pin doesn't exist inside the SoC), or if DP
+> HPD is being signalled out of band through type-c framework.
 
-Thanks,
-Conor.
+It seems logical to me that the panel driver should handle HPD signaling
+(or signal it always-asserted), in which case it also seems reasonable
+that hpd_enable() would not be invoked... I didn't go far enough into
+that rabbit hole though, but I think it would allow us to drop the
+is_edp flag (which isn't at all a property of the controller, but of
+what you have connected).
 
-> Signed-off-by: Simon Horman <horms@kernel.org>
-> ---
->  drivers/pci/controller/pcie-microchip-host.c | 8 ++++++--
->  1 file changed, 6 insertions(+), 2 deletions(-)
->=20
-> diff --git a/drivers/pci/controller/pcie-microchip-host.c b/drivers/pci/c=
-ontroller/pcie-microchip-host.c
-> index 5e710e485464..d8aa6e3cdbff 100644
-> --- a/drivers/pci/controller/pcie-microchip-host.c
-> +++ b/drivers/pci/controller/pcie-microchip-host.c
-> @@ -848,6 +848,11 @@ static const struct irq_domain_ops event_domain_ops =
-=3D {
->  	.map =3D mc_pcie_event_map,
->  };
-> =20
-> +inline void mc_clk_disable_unprepare(void *data)
-> +{
-> +	clk_disable_unprepare(data);
-> +}
-> +
->  static inline struct clk *mc_pcie_init_clk(struct device *dev, const cha=
-r *id)
->  {
->  	struct clk *clk;
-> @@ -863,8 +868,7 @@ static inline struct clk *mc_pcie_init_clk(struct dev=
-ice *dev, const char *id)
->  	if (ret)
->  		return ERR_PTR(ret);
-> =20
-> -	devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare,
-> -				 clk);
-> +	devm_add_action_or_reset(dev, mc_clk_disable_unprepare, clk);
-> =20
->  	return clk;
->  }
->=20
+I don't think we should peak into the pinmux settings to determine if
+the internal HPD logic should be enabled or not, when the DRM framework
+already has this callback to tell us "hey, you're the one doing HPD
+detection!".
 
---EILHGzwimB/Seb9q
-Content-Type: application/pgp-signature; name="signature.asc"
 
------BEGIN PGP SIGNATURE-----
+And as mentioned above, the continuation of this is to tie the power
+state to hpd_enable/hpd_disable/hpd_notify and thereby allow the DP
+block (and MMCX) to be powered down when nothing is connected (and we
+don't need to drive the HPD logic).
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZF0KLAAKCRB4tDGHoIJi
-0tK+AQD8LmbqfvLBNOFt2fxN3TxKPiyS2a77L81h8U5fsh6TCQD/ZHftPgTlHksh
-kHFdg+H8MRi1rLrypMvc0N6nRlCySwM=
-=Prv1
------END PGP SIGNATURE-----
-
---EILHGzwimB/Seb9q--
+Regards,
+Bjorn
