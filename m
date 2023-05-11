@@ -2,56 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1482D6FF355
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:45:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 704016FF32C
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:39:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238233AbjEKNpe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 09:45:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38722 "EHLO
+        id S237951AbjEKNjA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:39:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238054AbjEKNpR (ORCPT
+        with ESMTP id S238268AbjEKNij (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:45:17 -0400
-Received: from smtp-relay-canonical-1.canonical.com (smtp-relay-canonical-1.canonical.com [185.125.188.121])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E452B1BE;
-        Thu, 11 May 2023 06:45:05 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.101.196.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-1.canonical.com (Postfix) with ESMTPSA id 2EE2C42AAF;
-        Thu, 11 May 2023 13:37:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1683812227;
-        bh=/jWMueCzoMOVJ33QBenY907j4dy6f0ZLbi4Ji6SmwJU=;
-        h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-         MIME-Version;
-        b=LXJMcg6F9RUJNMo3hZzU+HLq5osdsPX+H9YoRDj7ckVglQpmM5hwQs0Oi0n5qLrlr
-         YN4gdmoWuiE11eVj5sBunbh3Xf4ahe8Hc6+hmNN/E3KNizGO0Yoh0QIU/tIAkXAyLK
-         xt392Fv5/d+W6poGq7jgdWWDe2sR2aBsgZG2p8bg26ppH1xg9j6jTglbeKPqTLQtEq
-         iysasQd8nnIl3nBfZxUExcZmUfLV4FFdBCgVD+pJxjGUJZbO8vCh3F26VoaLGtTbEf
-         8y/GYPe7JXXx1FO8pyxZHzfF3Mo+PwZhIZ5NuGG11noyPVwFck9vWHLE4kbDOIvDR3
-         k/xyWpGVmiqtQ==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     bhelgaas@google.com
-Cc:     mika.westerberg@linux.intel.com, koba.ko@canonical.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
-        "Oliver O'Halloran" <oohall@gmail.com>,
-        linuxppc-dev@lists.ozlabs.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v5 3/3] PCI/DPC: Disable DPC interrupt during suspend
-Date:   Thu, 11 May 2023 21:36:09 +0800
-Message-Id: <20230511133610.99759-3-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230511133610.99759-1-kai.heng.feng@canonical.com>
-References: <20230511133610.99759-1-kai.heng.feng@canonical.com>
+        Thu, 11 May 2023 09:38:39 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CEBBD11D9A
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:36:36 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-b9a6ab9ede3so10792470276.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:36:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683812191; x=1686404191;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cFAIywGWIpHXBlSdgbcQzT1KF9uNjxkkfEt4tXTB8GY=;
+        b=NC0E8vqh5yAN4U7/8Y4/aq1xl0d7frmoThyvYuilmHbwwjROn6dxNX8nVcnyidJB/m
+         qatfvm0yPY+Hd+IP/3kpI+kcPi99ppeI5XYfd1P5Ruw8e75i5B1I1jbaaK1EdUI5Ymz3
+         N4kZVZJsafykkM3zIzaecbyDFU9a7TqFZ8nTIJW3gaeoNugJowg7LiiQiuGkwZcnfe2q
+         lYerGGZj/igiPYsHxKj+I0F9H0UjZcRTIQhb8OmxMG4483Qaftq0NXmGIOa6ecdW7Em0
+         8DQri3W1uK6NdjjMQGKcHLW7JsaLdDl4yjoOza8ga5sM1fqbNV8dqJ7nnJ1cciewr7uX
+         Ws8A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683812191; x=1686404191;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cFAIywGWIpHXBlSdgbcQzT1KF9uNjxkkfEt4tXTB8GY=;
+        b=jSYEpudWsGSxlJIgIFNS1ds7gE4PeuShsSuD/FghlWe7Pzu9Xds/jstXyKEII1j9jW
+         vNmMs97g/5d4UdRDvwQ+gzTYU85St8eoYgmEkuy4oK9QaM8LoIelu/Fb8Atidsj5CqNv
+         xwf5bz71rgfiBLRlcPOV2mOyKgCxoDVff+XX3oApQtLyhCmrJO3BdNevQqIrnXL51xqp
+         DCSeFRZDEGU232/ifQPmrF9osqKbQcFtfEUp6hXfanXCENbjS2JYbbcMWdK6csi406zI
+         X8YiFLKG3zi7z/gcsxnxLdkdfO9ERlIba/2HJ4k+R1b7Lg14CXQrhheXbfNb93uj7rR/
+         1JnQ==
+X-Gm-Message-State: AC+VfDw8aG5bEKM1djcXMbul/0XfRp0wBi/4OtA0jEa27wVSQJhoZ9k+
+        nPDAEz8BnHkJGfpk2U+3Ww5BSoRtJn0qxJdMDNplpQ==
+X-Google-Smtp-Source: ACHHUZ7QMtu9AVeo1bHy1+Z0/j5lqVmaGvWbkRPmujYL/1PGBpqhTIe8hp6y79vxcM6RG1l/dmxLaabpyZzUPNvVMDw=
+X-Received: by 2002:a25:fc07:0:b0:b9a:6f77:9018 with SMTP id
+ v7-20020a25fc07000000b00b9a6f779018mr19959978ybd.41.1683812191411; Thu, 11
+ May 2023 06:36:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+References: <1683730825-15668-1-git-send-email-quic_rohiagar@quicinc.com>
+In-Reply-To: <1683730825-15668-1-git-send-email-quic_rohiagar@quicinc.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Thu, 11 May 2023 15:36:20 +0200
+Message-ID: <CACRpkdZZKsLQbR0zttAWjxYWEPdWo3cHo_OVhuGxBZ89XhDTmw@mail.gmail.com>
+Subject: Re: [PATCH v7 0/4] Add pinctrl support for SDX75
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        richardcochran@gmail.com, manivannan.sadhasivam@linaro.org,
+        andy.shevchenko@gmail.com, linux-arm-msm@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,81 +73,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PCIe service that shares IRQ with PME may cause spurious wakeup on
-system suspend.
+On Wed, May 10, 2023 at 5:00=E2=80=AFPM Rohit Agarwal <quic_rohiagar@quicin=
+c.com> wrote:
 
-Since AER is conditionally disabled in previous patch, also apply the
-same logic to disable DPC which depends on AER to work.
+> Changes in v7:
+>  - Collected reviewed by tags from Andy and updated the sdx75
+>    driver with the new macro which was missed in v6 patch.
 
-It's okay to disable DPC because PCIe Base Spec 5.0, section 5.2 "Link
-State Power Management" states that TLP and DLLP transmission is
-disabled for a Link in L2/L3 Ready (D3hot), L2 (D3cold with aux power)
-and L3 (D3cold), hence we don't lose much here to disable DPC during system
-suspend.
+This looks good to me, but I definitely need Bjorn's ACK on the series
+before I can merge this.
 
-[1] https://lore.kernel.org/linux-pci/20220408153159.106741-1-kai.heng.feng@canonical.com/
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=216295
-
-Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
-v5:
- - Wording.
-
-v4:
-v3:
- - No change.
-
-v2:
- - Only disable DPC IRQ.
- - No more check on PME IRQ#.
- drivers/pci/pcie/dpc.c | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
-
-diff --git a/drivers/pci/pcie/dpc.c b/drivers/pci/pcie/dpc.c
-index 3ceed8e3de41..d2d845c20438 100644
---- a/drivers/pci/pcie/dpc.c
-+++ b/drivers/pci/pcie/dpc.c
-@@ -384,6 +384,30 @@ static int dpc_probe(struct pcie_device *dev)
- 	return status;
- }
- 
-+static int dpc_suspend(struct pcie_device *dev)
-+{
-+	struct pci_dev *pdev = dev->port;
-+	u16 ctl;
-+
-+	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
-+	ctl &= ~PCI_EXP_DPC_CTL_INT_EN;
-+	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
-+
-+	return 0;
-+}
-+
-+static int dpc_resume(struct pcie_device *dev)
-+{
-+	struct pci_dev *pdev = dev->port;
-+	u16 ctl;
-+
-+	pci_read_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, &ctl);
-+	ctl |= PCI_EXP_DPC_CTL_INT_EN;
-+	pci_write_config_word(pdev, pdev->dpc_cap + PCI_EXP_DPC_CTL, ctl);
-+
-+	return 0;
-+}
-+
- static void dpc_remove(struct pcie_device *dev)
- {
- 	struct pci_dev *pdev = dev->port;
-@@ -399,6 +423,8 @@ static struct pcie_port_service_driver dpcdriver = {
- 	.port_type	= PCIE_ANY_PORT,
- 	.service	= PCIE_PORT_SERVICE_DPC,
- 	.probe		= dpc_probe,
-+	.suspend	= dpc_suspend,
-+	.resume		= dpc_resume,
- 	.remove		= dpc_remove,
- };
- 
--- 
-2.34.1
-
+Yours,
+Linus Walleij
