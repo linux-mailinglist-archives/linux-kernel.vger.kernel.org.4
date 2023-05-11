@@ -2,231 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DB86FEE21
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:59:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AB9BC6FEE50
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:04:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236207AbjEKI71 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 04:59:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55898 "EHLO
+        id S237170AbjEKJEH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 05:04:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233461AbjEKI7Y (ORCPT
+        with ESMTP id S236661AbjEKJEG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 04:59:24 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C70E2107;
-        Thu, 11 May 2023 01:59:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1683795563; x=1715331563;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=v42NvPVBKaIwu61SkEdAj1zG9Hx2b4e6U93BhDKvPUs=;
-  b=LUW5f2er9wwUCEqbSHDqBxeLBIdHf1PA+kMCsXgtiNkWLcDRN7WvVztH
-   dXjJ2k/z/5nJ8dcez8gG91jqhqO76cVPfAaqObae8vXoVZV5xDUFaeApe
-   bnvdiz+d4uLuXH8RUQ2HDnJ2qDIXLRekyYfH/q5rllTTT8RTw1ZPfQaq2
-   +mIMJxzBf+yU/eJ1vQoST/G5HfLKdXtvrRo8YDkjMRucP6fcALjkzFjAN
-   GtR0yJLca4OyjtgBb6hmMukJUGnxChHyH0Nq/fVJ7sH0QXpbhTTHGKqGp
-   ZhhLUr0sjAk7WuGQPZLn8Pxs2HaGzqgz3zJVnTA4a2IEUxARKWeT530Ku
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.99,266,1677567600"; 
-   d="asc'?scan'208";a="213392843"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 11 May 2023 01:59:22 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Thu, 11 May 2023 01:59:21 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Thu, 11 May 2023 01:59:19 -0700
-Date:   Thu, 11 May 2023 09:58:59 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     <Claudiu.Beznea@microchip.com>
-CC:     <krzysztof.kozlowski@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <Nicolas.Ferre@microchip.com>,
-        <alexandre.belloni@bootlin.com>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 2/5] dt-bindings: clocks: atmel,at91rm9200-pmc:
- convert to yaml
-Message-ID: <20230511-strike-viper-f4171c88a040@wendy>
-References: <20230509052757.539274-1-claudiu.beznea@microchip.com>
- <20230509052757.539274-3-claudiu.beznea@microchip.com>
- <e463eb68-3ea0-5230-76fd-4a2ee66bf397@linaro.org>
- <773d0d90-29c7-b1bd-bd16-898b435eafb6@microchip.com>
- <b3c7db03-6614-47d9-a9e0-a8e51c836d86@linaro.org>
- <a4d934c6-ec28-50d0-b9bb-9b11fee7ebb6@microchip.com>
- <1c2aa022-348a-8ac2-1a26-eedf57aadb77@linaro.org>
- <71a1e8de-932d-09a1-efeb-af459fee9423@microchip.com>
- <8f21f892-de54-9bc7-d4b9-f36aaa6b4a7c@linaro.org>
- <e8e2de0e-ca7b-44e3-7853-5693a7926a2b@microchip.com>
+        Thu, 11 May 2023 05:04:06 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B250611C
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:03:52 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id A2DC15FD41;
+        Thu, 11 May 2023 12:03:49 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1683795829;
+        bh=IQFZqqBVnssZ8mraoz9UtGPHU2IuOvSPVd1sfiL/zGQ=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=SbVIy8eXo7aO98UDsQHowxmgrAeIqhTwfSMp0toxfWJiMhgyMRUwuBlhUR99my2Ky
+         DrYUIvtjWSf4IvFBSCg7ncNG1Z1aJ8I8JTW/Qu5fqODgX0TnOnMIos1LHJ42Uafk7h
+         tJ7PFmNY26nBuzUBS3Dkr6IbgiTDkJiCUai0N/MfHtTs3JjSgtFKuCO/oW41bVZFgU
+         aevKcDgmrksUZBt4rvkwGwO//YdPezaQgXM62lxsJ0IUNxW4zADhuyDICG5VFuRZaT
+         +4s91aY1TjUudRqNSv59uSLB4CKZzPVfSWapx2ZnRmRkKLSe7NntkAEb+DU6OLGUoS
+         67M1JsOpkp1pQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Thu, 11 May 2023 12:03:47 +0300 (MSK)
+Message-ID: <6918ed54-3929-4832-1e93-6eb55b75c82b@sberdevices.ru>
+Date:   Thu, 11 May 2023 11:59:07 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="w4yJ+fuYCr9l/xTM"
-Content-Disposition: inline
-In-Reply-To: <e8e2de0e-ca7b-44e3-7853-5693a7926a2b@microchip.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 6/6] mtd: rawnand: meson: rename node for chip select
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yixun Lan <yixun.lan@amlogic.com>, <oxffffaa@gmail.com>,
+        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+References: <20230510110835.26115-1-AVKrasnov@sberdevices.ru>
+ <20230510110835.26115-7-AVKrasnov@sberdevices.ru>
+ <CAFBinCAbTuNGEG13f71F8vhN3yGce+kkYJ7PHMpZbh8DzSapJg@mail.gmail.com>
+ <20230510225359.061c2df6@xps-13>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <20230510225359.061c2df6@xps-13>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/11 05:14:00 #21258391
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---w4yJ+fuYCr9l/xTM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, May 11, 2023 at 06:29:39AM +0000, Claudiu.Beznea@microchip.com wrot=
-e:
-> On 10.05.2023 13:12, Krzysztof Kozlowski wrote:
-> > EXTERNAL EMAIL: Do not click links or open attachments unless you know =
-the content is safe
-> >=20
-> > On 10/05/2023 10:31, Claudiu.Beznea@microchip.com wrote:
-> >> On 10.05.2023 10:58, Krzysztof Kozlowski wrote:
-> >>> EXTERNAL EMAIL: Do not click links or open attachments unless you kno=
-w the content is safe
-> >>>
-> >>> On 10/05/2023 09:14, Claudiu.Beznea@microchip.com wrote:
-> >>>> On 10.05.2023 10:06, Krzysztof Kozlowski wrote:
-> >>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you k=
-now the content is safe
-> >>>>>
-> >>>>> On 10/05/2023 09:00, Claudiu.Beznea@microchip.com wrote:
-> >>>>>> On 09.05.2023 09:25, Krzysztof Kozlowski wrote:
-> >>>>>>> EXTERNAL EMAIL: Do not click links or open attachments unless you=
- know the content is safe
-> >>>>>>>
-> >>>>>>> On 09/05/2023 07:27, Claudiu Beznea wrote:
-> >>>>>>>> Convert Atmel PMC documentation to yaml. Along with it clock nam=
-es
-> >>>>>>>> were adapted according to the current available device trees as
-> >>>>>>>> different controller versions accept different clocks (some of t=
-hem
-> >>>>>>>> have 3 clocks as input, some has 2 clocks as inputs and some wit=
-h 2
-> >>>>>>>> input clocks uses different clock names).
-> >>>>>>>>
-> >>>>>>>
-> >>>>>>> Thank you for your patch. There is something to discuss/improve.
-> >>>>>>>
-> >>>>>>>> +title: Atmel Power Management Controller (PMC)
-> >>>>>>>> +
-> >>>>>>>> +maintainers:
-> >>>>>>>> +  - Claudiu Beznea <claudiu.beznea@microchip.com>
-> >>>>>>>> +
-> >>>>>>>> +description:
-> >>>>>>>> +  The power management controller optimizes power consumption b=
-y controlling all
-> >>>>>>>> +  system and user peripheral clocks. The PMC enables/disables t=
-he clock inputs
-> >>>>>>>> +  to many of the peripherals and to the processor.
-> >>>>>>>> +
-> >>>>>>>> +properties:
-> >>>>>>>> +  compatible:
-> >>>>>>>> +    oneOf:
-> >>>>>>>> +      - items:
-> >>>>>>>> +          - enum:
-> >>>>>>>> +              - atmel,at91sam9g15-pmc
-> >>>>>>>> +              - atmel,at91sam9g20-pmc
-> >>>>>>>> +              - atmel,at91sam9g25-pmc
-> >>>>>>>> +              - atmel,at91sam9g35-pmc
-> >>>>>>>> +              - atmel,at91sam9x25-pmc
-> >>>>>>>> +              - atmel,at91sam9x35-pmc
-> >>>>>>>> +          - enum:
-> >>>>>>>> +              - atmel,at91sam9260-pmc
-> >>>>>>>> +              - atmel,at91sam9x5-pmc
-> >>>>>>>
-> >>>>>>> I missed it last time - why you have two enums? We never talked a=
-bout
-> >>>>>>> this. It's usually wrong... are you sure this is real hardware:
-> >>>>>>> atmel,at91sam9g20-pmc, atmel,at91sam9260-pmc
-> >>>>>>> ?
-> >>>>>>
-> >>>>>> I have 2 enums because there are some hardware covered by:
-> >>>>>> "vendor-name,hardware-v1-pmc", "syscon" and some covered by:
-> >>>>>> "vendor-name,hardware-v2-pmc", "vendor-name,hardware-v1-pmc", "sys=
-con".
-> >>>>>
-> >>>>> The enum does not say this. At all.
-> >>>>>
-> >>>>> So again, answer, do not ignore:
-> >>>>> is this valid setup:
-> >>>>> atmel,at91sam9g20-pmc, atmel,at91sam9260-pmc
-> >>>>> ?
-> >>>>
-> >>>> Not w/o syscon. This is valid:
-> >>>
-> >>> Syscon is not important here, but indeed I missed it.
-> >>>
-> >>>>
-> >>>> compatible =3D "atmel,at91sam9g20-pmc", "atmel,at91sam9260-pmc", "sy=
-scon";
-> >>>>
-> >>>> available in arch/arm/boot/dts/at91sam9g20.dtsi +45
-> >>>
-> >>> Nice, so my random choice was actually correct. Ok, so another:
-> >>>
-> >>> atmel,at91sam9g15-pmc, atmel,at91sam9260-pmc, syscon
-> >>>
-> >>> Is it valid hardware?
-> >>
-> >> This one, no. So, I guess, the wrong here is that there could be
-> >> combinations that are not for actual hardware and yet considered valid=
- by
-> >> changes in this patch?
-> >=20
-> > I just don't understand why you have two enums. This is not a pattern
-> > which is allowed anywhere. It might appear but only as exception or mis=
-take.
->=20
-> I'm not at all an YAML expert and this is how I've managed to make
-> dt_binding_check/dtbs_check happy.
 
-Picking one item at random, do the devicetrees contain stuff like:
-"atmel,at91sam9g35-pmc", "atmel,at91sam9260-pmc", "syscon"
-//AND//
-"atmel,at91sam9g35-pmc", "atmel,at91sam9x5-pmc", "syscon"
-?
+On 10.05.2023 23:53, Miquel Raynal wrote:
 
-If not, why do you not break it down to something like:
-- items:
-    - enum:
-        - atmel,compatible
-        - atmel,with
-        - atmel,sam9260's pmc
-    - const: atmel,at91sam9260-pmc
-    - const: syscon
+Hello Martin, Miquel
 
-- items:
-    - enum:
-        - atmel,compatible
-        - atmel,with
-        - atmel,sam9x5's pmc
-    - const: atmel,at91sam9x5-pmc
-    - const: syscon
+> Hi Martin & Arseniy,
+> 
+> martin.blumenstingl@googlemail.com wrote on Wed, 10 May 2023 22:40:37
+> +0200:
+> 
+>> Hello Arseniy,
+>>
+>> On Wed, May 10, 2023 at 1:13 PM Arseniy Krasnov
+>> <AVKrasnov@sberdevices.ru> wrote:
+>>>
+>>> This renames node with values for chip select from "reg" to "cs". It is
+>>> needed because when OTP access is enabled on the attached storage, MTD
+>>> subsystem registers this storage in the NVMEM subsystem. NVMEM in turn
+>>> tries to use "reg" node in its own manner, supposes that it has another
+>>> layout. All of this leads to device initialization failure.  
+>> In general: if we change the device-tree interface (in this case:
+>> replacing a "reg" with a "cs" property) the dt-bindings have to be
+>> updated as well.
+> 
+> True, and I would add, bindings should not be broken.
 
-Cheers,
-Conor.
+I see, that's true. That is bad way to change bindings.
 
---w4yJ+fuYCr9l/xTM
-Content-Type: application/pgp-signature; name="signature.asc"
+> 
+>> Documentation/devicetree/bindings/mtd/nand-controller.yaml and
+>> Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml show
+>> that the chip select of a NAND chip is specified with a "reg"
+>> property.
+> 
+> All NAND controller binding expect the chip-select to be in the
+> 'reg' property, very much like a spi device would use reg to store the
+> cs as well: the reg property tells you how you address the device.
+> 
+> I also fully agree with Martin's comments below. Changing reg is likely
+> a wrong approach :)
+> 
+>> Also the code has to be backwards compatible with old .dtbs.
+>>
+>>> Example:
+>>>
+>>> [...] nvmem mtd0-user-otp: nvmem: invalid reg on /soc/bus@ffe00000/...
+>>> [...] mtd mtd0: Failed to register OTP NVMEM device
+>>> [...] meson-nand ffe07800.nfc: failed to register MTD device: -22
+>>> [...] meson-nand ffe07800.nfc: failed to init NAND chips
+>>> [...] meson-nand: probe of ffe07800.nfc failed with error -22  
+>> This is odd - can you please share your definition of the &nfc node?
 
------BEGIN PGP SIGNATURE-----
+Sure, here it is:
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZFyuUwAKCRB4tDGHoIJi
-0suRAQDysc87JyYDx/XRfnlXqky2ma5ajlXlcxrFkB2DILD75AEAm51N9jtu/TiC
-JNvrPPBAryZOpPnm/VSyGXlHS7sgJQg=
-=3SaE
------END PGP SIGNATURE-----
+mtd_nand: nfc@7800 {                            
+	compatible = "amlogic,meson-axg-nfc";
+	...
+	nand@0 {                                
+        	reg = <0>;
+        };
+}
 
---w4yJ+fuYCr9l/xTM--
+I checked, that 'nand_set_flash_node()' is called with 'nand@0' and i suppose
+that it is correct (as You mentioned below). But, 'nvmem_add_cells_from_of()' is called
+with parent: 'nfc@7800', then it iterates over its childs, e.g. 'nand@0' and thus i get such
+situation. I guess, that 'nvmem_add_cells_from_of()' must be called with 'nand@0' ?
+
+>>
+>> &nfc {
+>>       nand_chip0: nand@0 {
+>>         reg = <0>;
+>>       };
+>> };
+>>
+>> This should result in nand_set_flash_node() being called with
+>> &nand_chip0 (if it's called with &nfc then something is buggy in our
+>> driver).
+>> If there's no child nodes within &nand_chip0 then why would the
+>> MTD-to-NVMEM code think that it has to parse something?
+>> If you do have child nodes and those are partitions, then make sure
+>> that the structure is correct (see the extra "partitions" node inside
+>> which all partitions are nested):
+>> &nand_chip0 {
+>>     partitions {
+>>         compatible = "fixed-partitions";
+>>         #address-cells = <1>;
+>>         #size-cells = <1>;
+>>
+>>         partition@0 {
+>>             label = "u-boot";
+>>             reg = <0x0000000 0x4000>;
+>>             read-only;
+>>         };
+>>     };
+>> };
+
+No, partition nodes are disabled in this case.
+
+Thanks, Arseniy
+
+>>
+>>
+>> Best regards,,
+>> Martin
+> 
+> 
+> Thanks,
+> Miquèl
