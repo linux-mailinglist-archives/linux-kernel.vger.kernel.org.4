@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 988C76FFD58
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 01:34:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 914956FFD5A
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 01:34:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239615AbjEKXeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 19:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40036 "EHLO
+        id S239551AbjEKXeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 19:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239577AbjEKXeD (ORCPT
+        with ESMTP id S239593AbjEKXeE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 19:34:03 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE9865A4
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 16:34:00 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-53017eb8b2eso5547426a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 16:34:00 -0700 (PDT)
+        Thu, 11 May 2023 19:34:04 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556827D97
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 16:34:02 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba6f530c9c7so715882276.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 16:34:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683848039; x=1686440039;
+        d=google.com; s=20221208; t=1683848041; x=1686440041;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=kPIJozqKXpOav88tMQOfWStS9Qhm+Sc47i+elwuNCsI=;
-        b=B086lI0nSfRZjZS0qeaNeIB8DDth56jWhjosvQ9CDikIgaIEztFBmRseLITc0/8cEN
-         sB4veeK84ZUL5joKqH6ggii054kSdHisLNq4Utk7jHhXp0af8TfzwZumClHUC8FvBk7J
-         8Mn7v2WRwzoXX4Dh8QgorX7R9KwtJzd8qEu11tgjrMJZT1ICpcVZXQQuwZRp3qdStBe0
-         dDug+R5w9hlsFahXiEhsS2LDD7b4TUG9NKTFAJYKWgj39cgoGsnveKJOxcyKQDYFaMEY
-         dGTvrnwDnI8ragV8iJXBF8PH8pc4brBGGTDJKecp03K3pLmgEWeVo38MoVQ6c+QI63On
-         6/bQ==
+        bh=AFwpP1qaMZwSk6fg6R/6MjpXxVjL9zg4kzfgxnB0LR8=;
+        b=gRE1sRBKIQ5Ra7bt0VwwSFM1mECWSD6F7GBLdTQMnjyjyz8bVZQXjUUNykSsjOnHuu
+         +DPx8I/98NIdwNReplgbGD8Pe4SLS4bNBIRHM4gOXin2tZgfjZbLvP0lQ7m/81NBpHWy
+         F1x3/3gSRp52FDkcPBt0yQIAEiOkjInBwg/L/DjKZdNVfADwiRx19khBIXCCDzv44m/9
+         Zrk1iRstbv28z3bqnmhI9Y2P41ZvnHWKVvkYZ/0QPgMyjRyIYgcvNOmwIj79x1Bw68cK
+         xfq+4rShX9qITK3fhum5rLU0WtYbvVGmGFzXr9LUCneg6ctC44jqlRF0UNCLnKdZ7JSz
+         4M4w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683848039; x=1686440039;
+        d=1e100.net; s=20221208; t=1683848041; x=1686440041;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=kPIJozqKXpOav88tMQOfWStS9Qhm+Sc47i+elwuNCsI=;
-        b=K1+QhBqOJhWYpahTBK12o69o4Q+OJaL7ZL64ypXAEeR0Yj5SbKBb9BXCFRsw+IWNrE
-         A9NipQgFeo672OIgAmd1Mvr6I6/xqbZui42uijo6Zsj8dx3dIK29BhyWHrXusccqivuH
-         l6P8/26FZeRuLdgUNbX8bYMbniiIByJ/F5md51MDlp36WrfacA+01uunX+5njRD98mJ/
-         j2brB4VupCJluzCuZnR65hcYXkBz6hTzOzLVJ5leuGmZ8Q7RiOKtCs6rzoWLy3ZsFGhP
-         fDRIkTCFy9l6bnBlYSghS69Kenb7IVD/PFMZCvpnE9fQGkH8B/HXRuk/O6X4MpZwN4gW
-         Uk7w==
-X-Gm-Message-State: AC+VfDw9aQSPEXJZOfEVcHAyHlhKXEdOza0vMBIw2zEoAjKnOfwZin9Y
-        f207z6oqKziIz8g1o6TDZdXQjI16Evk=
-X-Google-Smtp-Source: ACHHUZ7X6FBQGLOCTTcxT9hzp5S6WwNmF7xHmxSvEmycK6vfJS89hW4oBFJWtB8q/lv6HQZ18nbdn7PJc7U=
+        bh=AFwpP1qaMZwSk6fg6R/6MjpXxVjL9zg4kzfgxnB0LR8=;
+        b=J3+VEhAUWTnz/XqSKmvK+gJIuImP+ZX8U5oYtf6tb/+Gvh7142csgbHwa6yoiQ4nj5
+         k3qaVKB61PRflNIHmf44CoO5QyrFY7hv6e8hMLBOKRtCDVsCj2Iln4gXTTUT3M3LdCAz
+         AxkQIZgLbLd4F4DtTRQyPrr/NlTA8tylwww75NqxxYYRHfOZ722rE4I1Q/Ybw/mdzsbh
+         CzXYpe+iOBXoP0tD/FL7dbj+tvy2xy+Ws9gVzRDhUPXp3fSnNbhP1sW7aZe5Iguy/in0
+         PcnoCaIvTJymQitoV+EyEdXmAyqg/dtfaLCnjJiyEJ0sq93pW3bZYChjrJ50ja82yeDy
+         F5dQ==
+X-Gm-Message-State: AC+VfDyMefbkMd4BAYz7nslRgHm+hLQ+5NjKCvy6kIfshIUSgcA0jbyM
+        N1TQ9Nyh/Kxx4olO4eT5HaWQ5mZi0/U=
+X-Google-Smtp-Source: ACHHUZ4x7Q6rzUq3yBfEBW59YBCelyJ2qS+ssWWkdWnuGyiULCmChSNOGNfpRXomIMuUB0gZfLCqetL0JGk=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:a1d:0:b0:530:8674:b4d5 with SMTP id
- 29-20020a630a1d000000b005308674b4d5mr676894pgk.12.1683848039669; Thu, 11 May
- 2023 16:33:59 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a25:2283:0:b0:ba5:38b:fbbe with SMTP id
+ i125-20020a252283000000b00ba5038bfbbemr5912969ybi.3.1683848041456; Thu, 11
+ May 2023 16:34:01 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Thu, 11 May 2023 16:33:46 -0700
+Date:   Thu, 11 May 2023 16:33:47 -0700
 In-Reply-To: <20230511233351.635053-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230511233351.635053-1-seanjc@google.com>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Message-ID: <20230511233351.635053-4-seanjc@google.com>
-Subject: [PATCH v2 3/8] KVM: x86: Add helper to query if variable MTRR MSR is
- base (versus mask)
+Message-ID: <20230511233351.635053-5-seanjc@google.com>
+Subject: [PATCH v2 4/8] KVM: x86: Add helper to get variable MTRR range from
+ MSR index
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -67,73 +67,91 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a helper to query whether a variable MTRR MSR is a base versus as mask
-MSR.  Replace the unnecessarily complex math with a simple check on bit 0;
-base MSRs are even, mask MSRs are odd.
+Add a helper to dedup the logic for retrieving a variable MTRR range
+structure given a variable MTRR MSR index.
+
+No functional change intended.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/mtrr.c | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ arch/x86/kvm/mtrr.c | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
 diff --git a/arch/x86/kvm/mtrr.c b/arch/x86/kvm/mtrr.c
-index 9fac1ec03463..f65ce4b3980f 100644
+index f65ce4b3980f..59851dbebfea 100644
 --- a/arch/x86/kvm/mtrr.c
 +++ b/arch/x86/kvm/mtrr.c
-@@ -25,6 +25,12 @@
- #define IA32_MTRR_DEF_TYPE_FE		(1ULL << 10)
- #define IA32_MTRR_DEF_TYPE_TYPE_MASK	(0xff)
+@@ -31,6 +31,14 @@ static bool is_mtrr_base_msr(unsigned int msr)
+ 	return !(msr & 0x1);
+ }
  
-+static bool is_mtrr_base_msr(unsigned int msr)
++static struct kvm_mtrr_range *var_mtrr_msr_to_range(struct kvm_vcpu *vcpu,
++						    unsigned int msr)
 +{
-+	/* MTRR base MSRs use even numbers, masks use odd numbers. */
-+	return !(msr & 0x1);
++	int index = (msr - 0x200) / 2;
++
++	return &vcpu->arch.mtrr_state.var_ranges[index];
 +}
 +
  static bool msr_mtrr_valid(unsigned msr)
  {
  	switch (msr) {
-@@ -342,10 +348,9 @@ static void set_var_mtrr_msr(struct kvm_vcpu *vcpu, u32 msr, u64 data)
+@@ -314,7 +322,6 @@ static void update_mtrr(struct kvm_vcpu *vcpu, u32 msr)
+ {
+ 	struct kvm_mtrr *mtrr_state = &vcpu->arch.mtrr_state;
+ 	gfn_t start, end;
+-	int index;
+ 
+ 	if (msr == MSR_IA32_CR_PAT || !tdp_enabled ||
+ 	      !kvm_arch_has_noncoherent_dma(vcpu->kvm))
+@@ -332,8 +339,7 @@ static void update_mtrr(struct kvm_vcpu *vcpu, u32 msr)
+ 		end = ~0ULL;
+ 	} else {
+ 		/* variable range MTRRs. */
+-		index = (msr - 0x200) / 2;
+-		var_mtrr_range(&mtrr_state->var_ranges[index], &start, &end);
++		var_mtrr_range(var_mtrr_msr_to_range(vcpu, msr), &start, &end);
+ 	}
+ 
+ 	kvm_zap_gfn_range(vcpu->kvm, gpa_to_gfn(start), gpa_to_gfn(end));
+@@ -348,14 +354,12 @@ static void set_var_mtrr_msr(struct kvm_vcpu *vcpu, u32 msr, u64 data)
  {
  	struct kvm_mtrr *mtrr_state = &vcpu->arch.mtrr_state;
  	struct kvm_mtrr_range *tmp, *cur;
--	int index, is_mtrr_mask;
-+	int index;
+-	int index;
  
- 	index = (msr - 0x200) / 2;
--	is_mtrr_mask = msr - 0x200 - 2 * index;
- 	cur = &mtrr_state->var_ranges[index];
+-	index = (msr - 0x200) / 2;
+-	cur = &mtrr_state->var_ranges[index];
++	cur = var_mtrr_msr_to_range(vcpu, msr);
  
  	/* remove the entry if it's in the list. */
-@@ -356,7 +361,7 @@ static void set_var_mtrr_msr(struct kvm_vcpu *vcpu, u32 msr, u64 data)
+ 	if (var_mtrr_range_is_valid(cur))
+-		list_del(&mtrr_state->var_ranges[index].node);
++		list_del(&cur->node);
+ 
+ 	/*
  	 * Set all illegal GPA bits in the mask, since those bits must
- 	 * implicitly be 0.  The bits are then cleared when reading them.
- 	 */
--	if (!is_mtrr_mask)
-+	if (is_mtrr_base_msr(msr))
- 		cur->base = data;
- 	else
- 		cur->mask = data | kvm_vcpu_reserved_gpa_bits_raw(vcpu);
-@@ -418,11 +423,8 @@ int kvm_mtrr_get_msr(struct kvm_vcpu *vcpu, u32 msr, u64 *pdata)
+@@ -423,11 +427,10 @@ int kvm_mtrr_get_msr(struct kvm_vcpu *vcpu, u32 msr, u64 *pdata)
  	else if (msr == MSR_IA32_CR_PAT)
  		*pdata = vcpu->arch.pat;
  	else {	/* Variable MTRRs */
--		int is_mtrr_mask;
--
- 		index = (msr - 0x200) / 2;
--		is_mtrr_mask = msr - 0x200 - 2 * index;
--		if (!is_mtrr_mask)
-+		if (is_mtrr_base_msr(msr))
- 			*pdata = vcpu->arch.mtrr_state.var_ranges[index].base;
+-		index = (msr - 0x200) / 2;
+ 		if (is_mtrr_base_msr(msr))
+-			*pdata = vcpu->arch.mtrr_state.var_ranges[index].base;
++			*pdata = var_mtrr_msr_to_range(vcpu, msr)->base;
  		else
- 			*pdata = vcpu->arch.mtrr_state.var_ranges[index].mask;
+-			*pdata = vcpu->arch.mtrr_state.var_ranges[index].mask;
++			*pdata = var_mtrr_msr_to_range(vcpu, msr)->mask;
+ 
+ 		*pdata &= ~kvm_vcpu_reserved_gpa_bits_raw(vcpu);
+ 	}
 -- 
 2.40.1.606.ga4b1b128d6-goog
 
