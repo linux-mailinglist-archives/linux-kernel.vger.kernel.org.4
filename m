@@ -2,88 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35FE26FF335
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 960426FF33D
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:42:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238308AbjEKNkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 09:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
+        id S238107AbjEKNmD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:42:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238380AbjEKNj4 (ORCPT
+        with ESMTP id S237983AbjEKNlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:39:56 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1A2710E44
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:38:55 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-b9e6ec482b3so10864759276.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:38:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683812314; x=1686404314;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aUnqXRzBOhveOIpqDcwC7nsIl2ocjdjKERR1GWcB3Ts=;
-        b=FipM+ypoVPe8Xx8VfnTBmVOBwl9PDxqw2SxjPqFGN2y+D/J3QvOUKDVdwSCTMyN3iF
-         d0fsMLS7+1QHOLh79vMDtS7Gzc74Zxks9owOFqYeM1eCeZrbz0Zhm/gRj0C+JcNGNHsR
-         jvSx19jJNCjOzJIFH9M6LwlmyNwlMNPYURhHUZzXqXfMZ/ea5HnCZqXAOYJb5oPHmnUU
-         aRQ1hH13ujoMsNcX+vfdq3CYuxZa0adZmPod10DOVuyPVs63E5lUF5JYV+VSs+lk29n7
-         /5VndbVw1ASb0YuqxgPNqk17/q8lidwnjjB3fNiksTGhnnjTtTBQQFCM3rSan32fpOE+
-         1yvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683812314; x=1686404314;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aUnqXRzBOhveOIpqDcwC7nsIl2ocjdjKERR1GWcB3Ts=;
-        b=BTKKDAP3bRcSjI94PwH2jT+Cwr82BdBzNaDxmK7eNRxOn+GKgrKGUQPUxlEY41ZpDh
-         RpdUNdPy5Ct0Ob438UCB4ioxO6mHQJQLfffST2eatS0mVEXpLo2WUGsUow5TcdgOMUG2
-         hi5rHuv2K2qcaukwE9Glvytg534PU54t7mnsu87SEygPzwSPGK1PAkPACeCrdtolByCs
-         jlUvUt9+zcorgK4dG74FF8ZoppMenX1EHqHBQhwLzD9s0mI+OTD53ZLAyVRl9jwMKiOA
-         eUz/Krc9DSeay9pRdtVE3sFRiO021SaXs64rqwtnFGS+TXjHP4D4z8T8ZT4yhFkR0/Pn
-         /xeA==
-X-Gm-Message-State: AC+VfDz1k2jLbsfAKJCRHRmgxIE4OQNVY2Uf5EiWgM1uTkrF1bm/utta
-        qFPWbERG9+ot09TP9h+hPQBLPGXxFvWEkPmV9P6N5w==
-X-Google-Smtp-Source: ACHHUZ4YvXMBKvbTdA3WQDhmjRorxhecX2zhL92+p5FotauXBp2ZXPqxJMjHzHbciqZpaYgckIg6pnvmRtv6uOIFo98=
-X-Received: by 2002:a25:26c6:0:b0:b9e:1fd4:5050 with SMTP id
- m189-20020a2526c6000000b00b9e1fd45050mr22584982ybm.44.1683812314148; Thu, 11
- May 2023 06:38:34 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230123151519.369158-1-krzysztof.kozlowski@linaro.org> <168380903252.184807.5434491458801772510.b4-ty@linaro.org>
-In-Reply-To: <168380903252.184807.5434491458801772510.b4-ty@linaro.org>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 11 May 2023 15:38:23 +0200
-Message-ID: <CACRpkdanhYRtZZunV8UuF3yVc9NVqv3DDfQQTF5=ecLgQJ0VhA@mail.gmail.com>
-Subject: Re: [PATCH] ARM: dts: ste: align UART node name with bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 11 May 2023 09:41:53 -0400
+Received: from wnew1-smtp.messagingengine.com (wnew1-smtp.messagingengine.com [64.147.123.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F0232700;
+        Thu, 11 May 2023 06:41:30 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.west.internal (Postfix) with ESMTP id 06E522B05DDC;
+        Thu, 11 May 2023 09:41:02 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Thu, 11 May 2023 09:41:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1683812462; x=1683819662; bh=bN
+        MS+yJaTUyOEJLQDsSJtM7hMQk3rsz9Tjm7dcU5DZg=; b=pbfvNGcEhT5R087tiN
+        QnEE33cGWBvS5AiGVm1gu96LmUVgkxF03e4K96Ei9qPwA7fiKdXmlXU35YSty4lV
+        upc6nhsgrNKO1Zu5vJdZRzsTYt5+zUsNa1/G1LgbSdyvZAkWWcimIWPpFpGxaLK6
+        hH7/y6eKFwClAzo+2pbOB483InnbRNbufNRaxh3CrbmLD7GhYXkCtmotomtbcOHW
+        NAkD92i1A1Bqcysq66C1J4W0/8Ffr4tm/CjkCymgi72EioBx6dkJg+rOhYWSOSEQ
+        rfFDwhYNZARWUi2ZC5uIDwtU5o7jO6mXg31RmRIKFygPD4lgfPnMU2vHZpWLzWR9
+        tY6A==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm3; t=1683812462; x=1683819662; bh=bNMS+yJaTUyOE
+        JLQDsSJtM7hMQk3rsz9Tjm7dcU5DZg=; b=NUVaoKGjAUB1IvBp3dt6JHnnJHLVm
+        5FazabUKUOC3zaEmLNyDQKpBgQBJXDhw6415JSYAsI7vcdS5XzphHJbcm+e1RYhU
+        llcs9weTW01qk5AxUBbjOtH2kzwx7xePfQXIMcfPmjZGOSYBauaruz9JqW/61W85
+        heX8lT7nka5DtfPGfdG7S5QpZIuNTpDxxrHbUPJHanrVYS+a2Xfw0XBnyLyCziCN
+        FQo1Pxm5MNwRhnbgYrHcF3+uL/xmCS5YxmDTGoWN77KSYtOLmS5dlADRru9/PWae
+        uUp8Kzt4lULTaZjWcoN7X0TwqmJ+FUlxtD2Zae1Lsi2pmq9JY+k/goTzg==
+X-ME-Sender: <xms:bfBcZMNSgCzv51ibNqiMadxkekdHAGVmhQZVB7Xg4Ch3ubv8oc_OqQ>
+    <xme:bfBcZC-LuOp4qL-OBOPp41xrwYUB7X6JxntaEUrPpvOl-0LjASR1mtr0iBts6oiZU
+    CITzOT_9aVK9gzgF74>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeegkedgieekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
+    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
+    htvghrnhepvefhffeltdegheeffffhtdegvdehjedtgfekueevgfduffettedtkeekueef
+    hedunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:bfBcZDTVU8Z1aHlCiwHMzI3BQFNOhMCOOgQIyHMelQO9w3lKyBypBg>
+    <xmx:bfBcZEvrEazOWER04N0wAeZIGr8U1lNFD45nasK99m4-LBGcCbMMFQ>
+    <xmx:bfBcZEdVboxFWTIW74hVqDVfva2XernqNuoZ92ynPmme6ph_Ri3bvw>
+    <xmx:bvBcZKe-JadH7ZmJYk5LO7CV-vuIG1KgQLl2SxyA8Qajy4KAMUmi0_Uv4kk>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 81468B60089; Thu, 11 May 2023 09:41:01 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-415-gf2b17fe6c3-fm-20230503.001-gf2b17fe6
+Mime-Version: 1.0
+Message-Id: <d27e359c-1ea3-4d08-b124-e794fd372b28@app.fastmail.com>
+In-Reply-To: <9c4be198444e9987c826c87b592e9dc6@artur-rojek.eu>
+References: <20230510110557.14343-6-tzimmermann@suse.de>
+ <202305102136.eMjTSPwH-lkp@intel.com>
+ <f6b2d541-d235-4e98-afcc-9137fb8afa35@app.fastmail.com>
+ <49684d58-c19d-b147-5e9f-2ac526dd50f0@suse.de>
+ <743d2b1e-c843-4fb2-b252-0006be2e2bd8@app.fastmail.com>
+ <CAMuHMdVvR1jdbZS8KoMf4R3zhLRWKv9XbG61iBGOGGZPHB+taA@mail.gmail.com>
+ <9c4be198444e9987c826c87b592e9dc6@artur-rojek.eu>
+Date:   Thu, 11 May 2023 15:40:28 +0200
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Artur Rojek" <contact@artur-rojek.eu>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>
+Cc:     "Thomas Zimmermann" <tzimmermann@suse.de>,
+        "kernel test robot" <lkp@intel.com>,
+        "Helge Deller" <deller@gmx.de>,
+        "Javier Martinez Canillas" <javierm@redhat.com>,
+        "Daniel Vetter" <daniel@ffwll.ch>,
+        "Vineet Gupta" <vgupta@kernel.org>,
+        "Huacai Chen" <chenhuacai@kernel.org>,
+        "WANG Xuerui" <kernel@xen0n.name>,
+        "David S . Miller" <davem@davemloft.net>,
+        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+        "Sam Ravnborg" <sam@ravnborg.org>, suijingfeng@loongson.cn,
+        oe-kbuild-all@lists.linux.dev,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-m68k@lists.linux-m68k.org,
+        loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v6 5/6] fbdev: Move framebuffer I/O helpers into <asm/fb.h>
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 2:44=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
-> On Mon, 23 Jan 2023 16:15:18 +0100, Krzysztof Kozlowski wrote:
-> > Bindings expect UART/serial node names to be "serial".
-> >
-> >
+On Thu, May 11, 2023, at 15:22, Artur Rojek wrote:
+> On 2023-05-11 14:35, Geert Uytterhoeven wrote:
+>> 
+>> CC Artur, who's working on HP Jornada 680.
+> Thanks for CC'ing me - I faced this exact issue while working on my
+> (still not upstreamed) hd6446x PCMCIA controller driver. The PCMCIA
+> subsystem uses `inb/outb`, which expect the `sh_io_port_base` to be set
+> to something else than the default `-1`. At first I tried to set it to
+> `0xa0000000`, so that all I/O goes through the fixed, non-cacheable P2
+> area. That however broke some other driver code (I had no time to debug
+> which one). Eventually I ended up taking a suggestion from a MIPS PCMCIA
+> driver [1] and simply substract the broken `sh_io_port_base` address
+> from `HD64461_IOBASE`, as the base for `socket.io_offset`. This way all
+> the PCMCIA `inb/outb` accesses are absolute, no matter what the
+> `sh_io_port_base` is set to. This of course is a very ugly solution and
+> we should instead fix the root cause of this mess. I will have a better
+> look at this patch set and the problem at hand at a later date.
 >
-> Applied, thanks!
+> Cheers,
+> Artur
+>
+> [1] 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pcmcia/db1xxx_ss.c?h=v6.4-rc1#n527
 
-Sorry for missing to send a pull request for this for v6.4 :(
+I think the best fix would be to change all those drivers away
+from using inb/outb to readb/writeb, except when they access the
+actual PCMCIA I/O space behind the bridge.
 
-I actually have it in my tree (along with some other stuff)
-and was planning to push it upstream, but this works too.
+On most of the modern architectures, inb(addr) now turns into
+approximately readb(PCI_IOBASE + addr), with a bit of extra
+logic to deal with endianess and barrier semantics.
 
-Yours,
-Linus Walleij
+PCI_IOBASE in turn tends to be a hardcoded virtual address
+to which the physical I/O space window gets mapped during
+early boot, though you can also #define it to sh_io_port_base
+if you want to allocate the virtual address dynamically and
+leave the existing logic unchanged.
+
+Setting sh_io_port_base to zero however is a problem for any
+driver that passes a small port number into it -- this then
+turns into a user space pointer dereference, which is trivially
+exploitable.
+
+     Arnd
