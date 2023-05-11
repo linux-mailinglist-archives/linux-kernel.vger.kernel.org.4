@@ -2,137 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CCCE6FF2BB
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:25:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B27C6FF2B2
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:25:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238061AbjEKNZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 09:25:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42194 "EHLO
+        id S238167AbjEKNZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238285AbjEKNYZ (ORCPT
+        with ESMTP id S238424AbjEKNZG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:24:25 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A0B11623;
-        Thu, 11 May 2023 06:22:26 -0700 (PDT)
-Received: (Authenticated sender: contact@artur-rojek.eu)
-        by mail.gandi.net (Postfix) with ESMTPA id AC3D220007;
-        Thu, 11 May 2023 13:22:13 +0000 (UTC)
+        Thu, 11 May 2023 09:25:06 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E33C0100E9;
+        Thu, 11 May 2023 06:23:16 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8A0691FEC0;
+        Thu, 11 May 2023 13:23:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1683811395; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=yXN1X+z5ambEAc+bzP74ebt1H+9gjSv5BYNzgZqPVgY=;
+        b=BkTFKGG5GivUO6HQEAQ6qq5PbLw5r5KEokIsQ/ZYvhPO6btOeYZXW21TPdn2h4jYfmZ2oo
+        8S51Xs5Tzl3oivc+wVI8+c90gWjc1EEaM3W++wEBDC9TpPKtFtE/lpcXTxjEU+mP+2T5Of
+        v8yMXj4ZoeXxT8hX1tsVHF5S2uExeWc=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4F1E4138FA;
+        Thu, 11 May 2023 13:23:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Y8IrEUPsXGSuIwAAMHmgww
+        (envelope-from <mwilck@suse.com>); Thu, 11 May 2023 13:23:15 +0000
+Message-ID: <e7c5f4334ab6ff897547c68ea216fbcba22d4929.camel@suse.com>
+Subject: Re: [PATCH] scsi: Let scsi_execute_cmd() mark args->sshdr as invalid
+From:   Martin Wilck <mwilck@suse.com>
+To:     Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Cc:     "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        stable@vger.kernel.org
+Date:   Thu, 11 May 2023 15:23:14 +0200
+In-Reply-To: <85a7dc28-74ec-f4d6-b5c3-ca456ce9d380@suse.com>
+References: <20230511123432.5793-1-jgross@suse.com>
+         <095a2264120ad51d0500c4ce8221be2f88a9537e.camel@suse.com>
+         <85a7dc28-74ec-f4d6-b5c3-ca456ce9d380@suse.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 
 MIME-Version: 1.0
-Date:   Thu, 11 May 2023 15:22:13 +0200
-From:   Artur Rojek <contact@artur-rojek.eu>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        kernel test robot <lkp@intel.com>,
-        Helge Deller <deller@gmx.de>,
-        Javier Martinez Canillas <javierm@redhat.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Vineet Gupta <vgupta@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        "David S . Miller" <davem@davemloft.net>,
-        "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Sam Ravnborg <sam@ravnborg.org>, suijingfeng@loongson.cn,
-        oe-kbuild-all@lists.linux.dev,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-fbdev@vger.kernel.org, linux-ia64@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linux-m68k@lists.linux-m68k.org,
-        loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
-        linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v6 5/6] fbdev: Move framebuffer I/O helpers into
- <asm/fb.h>
-In-Reply-To: <CAMuHMdVvR1jdbZS8KoMf4R3zhLRWKv9XbG61iBGOGGZPHB+taA@mail.gmail.com>
-References: <20230510110557.14343-6-tzimmermann@suse.de>
- <202305102136.eMjTSPwH-lkp@intel.com>
- <f6b2d541-d235-4e98-afcc-9137fb8afa35@app.fastmail.com>
- <49684d58-c19d-b147-5e9f-2ac526dd50f0@suse.de>
- <743d2b1e-c843-4fb2-b252-0006be2e2bd8@app.fastmail.com>
- <CAMuHMdVvR1jdbZS8KoMf4R3zhLRWKv9XbG61iBGOGGZPHB+taA@mail.gmail.com>
-Message-ID: <9c4be198444e9987c826c87b592e9dc6@artur-rojek.eu>
-X-Sender: contact@artur-rojek.eu
-Content-Type: text/plain; charset=UTF-8;
- format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-11 14:35, Geert Uytterhoeven wrote:
-> Hi Arnd,
-> 
-> CC Artur, who's working on HP Jornada 680.
-Thanks for CC'ing me - I faced this exact issue while working on my
-(still not upstreamed) hd6446x PCMCIA controller driver. The PCMCIA
-subsystem uses `inb/outb`, which expect the `sh_io_port_base` to be set
-to something else than the default `-1`. At first I tried to set it to
-`0xa0000000`, so that all I/O goes through the fixed, non-cacheable P2
-area. That however broke some other driver code (I had no time to debug
-which one). Eventually I ended up taking a suggestion from a MIPS PCMCIA
-driver [1] and simply substract the broken `sh_io_port_base` address
-from `HD64461_IOBASE`, as the base for `socket.io_offset`. This way all
-the PCMCIA `inb/outb` accesses are absolute, no matter what the
-`sh_io_port_base` is set to. This of course is a very ugly solution and
-we should instead fix the root cause of this mess. I will have a better
-look at this patch set and the problem at hand at a later date.
+On Thu, 2023-05-11 at 15:17 +0200, Juergen Gross wrote:
+> >=20
+> > We know for certain that sizeof(*sshdr) is 8 bytes, and will most
+> > probably remain so. Thus
+> >=20
+> > =A0=A0=A0=A0 memset(sshdr, 0, sizeof(*sshdr))
+> >=20
+> > would result in more efficient code.
+>=20
+> I fail to see why zeroing a single byte would be less efficient than
+> zeroing
+> a possibly unaligned 8-byte area.
 
-Cheers,
-Artur
+I don't think it can be unaligned. gcc seems to think the same. It
+compiles the memset(sshdr, ...) in scsi_normalize_sense() into a single
+instruction on x86_64.
 
-[1] 
-https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pcmcia/db1xxx_ss.c?h=v6.4-rc1#n527
+0xffffffff8177e9d0 <scsi_normalize_sense>:      nopl   0x0(%rax,%rax,1) [FT=
+RACE NOP]
+0xffffffff8177e9d5 <scsi_normalize_sense+5>:    test   %rdi,%rdi
+0xffffffff8177e9d8 <scsi_normalize_sense+8>:    movq   $0x0,(%rdx)
 
-> 
-> On Wed, May 10, 2023 at 5:55 PM Arnd Bergmann <arnd@arndb.de> wrote:
->> On Wed, May 10, 2023, at 16:27, Thomas Zimmermann wrote:
->> > Am 10.05.23 um 16:15 schrieb Arnd Bergmann:
->> >> On Wed, May 10, 2023, at 16:03, kernel test robot wrote:
->> 
->> >> I think that's a preexisting bug and I have no idea what the
->> >> correct solution is. Looking for HD64461 shows it being used
->> >> both with inw/outw and readw/writew, so there is no way to have
->> >> the correct type. The sh __raw_readw() definition hides this bug,
->> >> but that is a problem with arch/sh and it probably hides others
->> >> as well.
->> >
->> > The constant HD64461_IOBASE is defined as integer at
->> >
->> >
->> > https://elixir.bootlin.com/linux/latest/source/arch/sh/include/asm/hd64461.h#L17
->> >
->> > but fb_readw() expects a volatile-void pointer. I guess we could add a
->> > cast somewhere to silence the problem. In the current upstream code,
->> > that appears to be done by sh's __raw_readw() internally:
->> >
->> >
->> > https://elixir.bootlin.com/linux/latest/source/arch/sh/include/asm/io.h#L35
->> 
->> Sure, that would make it build again, but that still doesn't make the
->> code correct, since it's completely unclear what base address the
->> HD64461_IOBASE is relative to. The hp6xx platform code only passes it
->> through inw()/outw(), which take an offset relative to 
->> sh_io_port_base,
->> but that is not initialized on hp6xx. I tried to find in the history
->> when it broke, apparently that was in 2007 commit 34a780a0afeb ("sh:
->> hp6xx pata_platform support."), which removed the custom inw/outw
->> implementations.
-> 
-> See also commit 4aafae27d0ce73f8 ("sh: hd64461 tidying."), which
-> claims they are no longer needed.
-> 
-> Don't the I/O port macros just treat the port as an absolute base 
-> address
-> when sh_io_port_base isn't set?
-> 
-> Gr{oetje,eeting}s,
-> 
->                         Geert
-
+Martin
 
