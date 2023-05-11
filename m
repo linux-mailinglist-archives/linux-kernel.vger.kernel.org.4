@@ -2,163 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9ECC16FFC02
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 23:41:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F41BE6FFC03
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 23:42:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239445AbjEKVlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 17:41:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        id S232437AbjEKVmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 17:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239425AbjEKVlc (ORCPT
+        with ESMTP id S238958AbjEKVmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 17:41:32 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7313E6A52;
-        Thu, 11 May 2023 14:41:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683841285; x=1715377285;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=USb6atDLMfV3uIalyKRjhPqvEoCRYFObYyrgUHZ1sLM=;
-  b=ejA1fzIPCZmf9EYJUHAlD6jUdH9ltYd+0SM+zvy0dDD7slb+MFVmNztF
-   PlDvOpJ3K65zyxvIlPYCXUeVg1tc9MovbrI8wSAUq8c+6AQwoWMMqt5j2
-   suu/8+t7kJgWsS5iQc9qGqkGJF2BtJNLtTPcPuZgu171YR5S9V9u+8xjM
-   rHuURs6JCDX8N8hjvBXwTjvpksLdvUAhrskbf5mmXPK3sxgszljuQWGTg
-   vsBiNs5FJuLVEqj6pE2DubeWNxjnqGqleYv4DcNXrwtCnqGZ83XL/EFOm
-   KyllIcjRpec+he0EMIbjE9cu4UWYp69Tlm9PrvptvfoMOUJ8YbpDaV0kB
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="330258359"
-X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
-   d="scan'208";a="330258359"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 14:41:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="650392878"
-X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
-   d="scan'208";a="650392878"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga003.jf.intel.com with ESMTP; 11 May 2023 14:41:24 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Thu, 11 May 2023 14:41:24 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Thu, 11 May 2023 14:41:24 -0700
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.109)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Thu, 11 May 2023 14:41:24 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EKMrqiA3d036ScglSTvrdz0LDLaZdZaAgL6Ywycoqw0Y0ZvRYXxMWSDznQg46ON4zfv5PtHH0C9OnJugOKkPJvNfbRuqmBS1EnJPU4W6AjK93mmzLWkv0SiZ3y8nE+rJ65yM++agqSF56sD1TzOrzL70t9b3aalmHpZvgdHK3yCDkqOCenOK+Cs2oQ8nkglntboOExsZXM9SBe+cNjgjGhwpny9YuqV6SOuagIFGfOxCHhE5TolT8g++8Ksv0rW5KMtNiA1NWNmT28C9bl3jHQUy/gvm2obfGrOBTlZgZre/nHfNZeMyPDdHZmMnrkqYjjklAKMSRev4OUnog7Hq/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BR1lA7LM+WK6y+Npl1zpo5qOGRfiDMVwZUFV3Kl4O78=;
- b=hcKZgsXvcap0TuPITe9ELklqB/ElWRCKisfopoUGxTumXeKTicG9DdlK5TriDnYRNK9c2sD0uJcItZwHepKCZWgIMPmoqHvHzyX1tn6owAZ2Ka7t5r9hAp59a3WRoJ5CDiynhgzVpKTMdKOXTEtu8UZf1DM/sN0DC5QfIf1P9Hbw+gh8eSVCYgEkLyX12nu7HSYZmZTxIq4hJf7pwtt743dW9voST+1XF3f3qPEjN4b9sIwjUXgS/l1E/O5dNqAdzjyU8/dyZVF4GUuB82752sHZgldQVbwKkJhJmA6kM1QkiqWIgVpxfz6jyefwyJ2j0A8sBet8Cq9gSRrdUWchXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
- by MN0PR11MB6109.namprd11.prod.outlook.com (2603:10b6:208:3cf::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.22; Thu, 11 May
- 2023 21:41:16 +0000
-Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::591f:4873:fd80:9a6d]) by SJ2PR11MB7573.namprd11.prod.outlook.com
- ([fe80::591f:4873:fd80:9a6d%6]) with mapi id 15.20.6363.032; Thu, 11 May 2023
- 21:41:15 +0000
-Message-ID: <78f3f6c9-c051-6004-570e-25966b1bc58a@intel.com>
-Date:   Thu, 11 May 2023 14:41:13 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.1
-Subject: Re: [PATCH v1 9/9] x86/resctrl: Add mount option to enable soft RMID
-Content-Language: en-US
-To:     Peter Newman <peternewman@google.com>,
-        Fenghua Yu <fenghua.yu@intel.com>
-CC:     Babu Moger <babu.moger@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Stephane Eranian <eranian@google.com>,
-        James Morse <james.morse@arm.com>,
-        <linux-kernel@vger.kernel.org>, <linux-kselftest@vger.kernel.org>
-References: <20230421141723.2405942-1-peternewman@google.com>
- <20230421141723.2405942-10-peternewman@google.com>
-From:   Reinette Chatre <reinette.chatre@intel.com>
-In-Reply-To: <20230421141723.2405942-10-peternewman@google.com>
+        Thu, 11 May 2023 17:42:11 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E25315BA6
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 14:41:49 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-24df8644eaeso4907388a91.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 14:41:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683841308; x=1686433308;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=43muZZqhwTl5Zf6bR8xbpoiNJBmmJ6GoS2BIrk8XQg0=;
+        b=4MsedK4JufBOK2Pya7wQCIDxG0sCQ1VFTXWDgZhatiOWtPY8opQlb3hL15OT5+unZG
+         c92gYZtsjWyA0xBBYuP1vjtV9F4vB2xfCoB1TbwZDS6rC9lEcLm8vQnbtah9R9tQVvk8
+         3XqKLnL9WIFnp4raTswUlTUXryUFeRB5X3s/tRMH4GmJMbvmyj/r3b8iejmBq+6Dz+Bu
+         BpteMnQmPKMuyMxqdEMLiL+po2QzBiS1Jne4oUn4GHrbhRN5fi04GbTI4PMxSqwaTflW
+         htw1CwW32Ld/0Udqzx2i3OH+tBT7Cvm3ak2yGnWGLZ4oRNFpkr2Mv5GY3T2/7v1h5+uU
+         4Pwg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683841308; x=1686433308;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=43muZZqhwTl5Zf6bR8xbpoiNJBmmJ6GoS2BIrk8XQg0=;
+        b=c1OYRs8RKrmS/GFh12BfcbgHoB76lNpsfFKDKBIIoBFCubCOLvzcLClqFYO1E3ihzt
+         g6xUcg7ZArghCFavVUMPbEjk0iY1vEV6YpKRYqY+HRYB1+vBqy41U2RtwW+VVTM3lekG
+         fqpQNNPetcMmpVteCuuSVLBDIfSwggn4NnfE2W6T72/GVvnIC9ENdYMIg+EXjoMhx466
+         KR5QRsocooFxYxewBa20/3VxwLgS6MyKro9NOXQ6kETf/nogrgkXQ0aB3ptTzlIDmJiD
+         8Xmn76aBxxYxhhadAqJKnncTAcK0zwwxJWNJha3aRz4UU7Bp5j5md9UHOeuJ3pgf94dU
+         k8DA==
+X-Gm-Message-State: AC+VfDzHTCXmwiYxf7ssDExztS717hZbclkINtdyKE7qNX7JGSvXS+ZT
+        xtY2ZIjdPIS19XQ95rpVtFydSVQoQFM+q5tx1qcWUFERhLrTEHprYP2RNbJ0/f39nWoCLq77rDX
+        0VqixBtElE4gFKYtk9v16tgYEgDss57iItH+7dg6TARXk8zuqiFZuin15sKfCUHt+qYhcRtM=
+X-Google-Smtp-Source: ACHHUZ4s/bA5bbWMEoCZHDspkz2P/SKgGc9ShoCkPP2udc8klgmNRKyV+96ayDFCh+GNSU2whHAGdftp/1LC
+X-Received: from jstultz-noogler2.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:600])
+ (user=jstultz job=sendgmr) by 2002:a17:90a:f517:b0:250:43bb:dced with SMTP id
+ cs23-20020a17090af51700b0025043bbdcedmr6155590pjb.5.1683841308026; Thu, 11
+ May 2023 14:41:48 -0700 (PDT)
+Date:   Thu, 11 May 2023 21:41:30 +0000
+In-Reply-To: <20230406194053.876844-1-arve@android.com>
+Mime-Version: 1.0
+References: <20230406194053.876844-1-arve@android.com>
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+Message-ID: <20230511214144.1924757-1-jstultz@google.com>
+Subject: [PATCH] sched/wait: Fix a kthread_park race with wait_woken()
+From:   John Stultz <jstultz@google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     "=?UTF-8?q?Arve=20Hj=C3=B8nnev=C3=A5g?=" <arve@android.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        John Stultz <jstultz@google.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SJ0PR13CA0002.namprd13.prod.outlook.com
- (2603:10b6:a03:2c0::7) To SJ2PR11MB7573.namprd11.prod.outlook.com
- (2603:10b6:a03:4d2::10)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|MN0PR11MB6109:EE_
-X-MS-Office365-Filtering-Correlation-Id: 555ffced-b700-42f7-e446-08db526872a8
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sRoML6W7AAINo5UVYQFpCEVkxxh3UpIlbWYpwc+1wIwIM2SBOCsjCfqAwPxLbwm8bp0ouD9OaKsYCGJWaMBvw+EhxSA7tRAaNJnVqfhyz25blR/enicUjjDK6kyA1WujjQOssRfFQ+vU7gUUEM7Xik1Hiu1nMjQEXK17exGgf4p7AwyvWoNYsLnI2+i9LftYKFXUmIOu/C7QMVEBfblMh46RoD8HVcOr7xfzV7UHHBviIPIst8WxSseq1j+26Gb8oNgP7ZPpxuMvpuaa74Q8/pWAGF5tc7dl9Oi7Tj3xouRzARjukT4i1TpO5INLcelMUnj7P3+lmzBEmMW7pKDeDYHb3pN6IQq/pxTvDAsA5Mcxbks6zuNoeE90TP3t/bpK4o7+v7P8wqm7ZidR3LsDmQEwOaV64rCXzw8VYP8mjy06D02jwXOynx0E4jmIGhnjI1G7SCiFLnDn+zEbwgBitdOhIa7NPvor+oKnPaa6C9Xqc5vC0FZ+S+gVyOaG+bCxTa7PFDWr9iGevQxUhOCR5CI8+yCZCdpuR/BsjBq/LuuI+omzVtB2lKRCWJ3Jtfi1WI7+nqu0345POmRyhh3peq3Q01xvzP6ZA7RFIrgFZAkdhuURHmtLE3Odq+q+9mgtDtnjWsUEQwHpFtgPly28Eg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(39860400002)(366004)(136003)(376002)(396003)(451199021)(478600001)(110136005)(54906003)(7416002)(44832011)(5660300002)(8676002)(8936002)(2906002)(86362001)(36756003)(31696002)(66476007)(6636002)(82960400001)(4326008)(66556008)(66946007)(316002)(38100700002)(41300700001)(31686004)(186003)(6486002)(53546011)(2616005)(6512007)(83380400001)(26005)(6506007)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?S3pZcWZWSEFhRDhzZnpyNndLYVFBeWRjdUM4UE5Xb3h0cVRCOHZrQkV5eHRC?=
- =?utf-8?B?bTgwN3Q0cHZua0JvbllPQjh0MXZlUmF4NytGUkFITXlMMTkra1hZd3V2eTRi?=
- =?utf-8?B?a3NKZE1kaXJ5Ym5vaWF5UWQxVXdtZFN3T1dBK1k3bDVvYkFoeDc2RXFndGhz?=
- =?utf-8?B?VVRya3JHMFJEVWZhb1BneHFiVHY4dkw1Y05XYVpKVmZ5alBxWnRRMjhBRXpw?=
- =?utf-8?B?TEdkUS9LbVFXMjg3bEtwV3F4L0k4aTlWRitTc1AxOG8ySUxQdStHSmZBY1pE?=
- =?utf-8?B?UFd6U01zbEFLaUJIcXlsR2Nub292VFNicmlOZEo1TkxBSzd3MldWbk9tMWpC?=
- =?utf-8?B?Vmh3a3lnemF5azQvdnkzOElvbElISUkrV0hsbWtncjBjQTJOVEl3VmlCUVlW?=
- =?utf-8?B?amJzeGpNbXJqQkNzZWlmUWJvRHNQb0I0QXhhWWVRNDJNNS9ramlLS2poOTdG?=
- =?utf-8?B?elJ5a25aanNjVU5JZkZ1Z09ub2Q5UU16WkVvbHpqVFdUbXM4b0FTejkzNkt2?=
- =?utf-8?B?M1FrdkNBRzY4eHRET2RRdDdueTZlNS9LWW5HdnZTV2tlbTZvQUR3aTkyVjBD?=
- =?utf-8?B?OHZNM2RxU2hDd1l3Nmh2SXkza1hTdXgyay9zT05vazNJZTlFc1pmY0Q1Vmxm?=
- =?utf-8?B?R3JWdnlZV3dKcmdLL3JBeC91R1YxSFMwaU1vREFsUWdLWXB1SWNWTitaV0pq?=
- =?utf-8?B?aTZsdjFvVEVLL2FVdXh6Mk1ReENOUUVmSUJabnFUSVFNaDBPVmpsRUVPczEy?=
- =?utf-8?B?L2FWajE0UUdrQTAyWXV5dnFrY0Q3WHFZeFJlcU1zQ2NlZzd6dllQbDRIQ0ZZ?=
- =?utf-8?B?N0x2bzlvT0d0eWc3RmJsSjRubmJLRm9YeG1iVEdVVGtLMzlOMkhWbmFXcnZo?=
- =?utf-8?B?UURIeVhXemZPb1RlSG80L3NRU3UrNER4a0Z2V2hHRU4wYkgxcDB5UDVIdENB?=
- =?utf-8?B?dWhiWXRkdy96TWozdVZueGZVMkcyT2N2MnY4M0VlTWxpUFVGYnJLNW9QdVM0?=
- =?utf-8?B?cHJFY0xhYjZsTE5WZFZmNjVENVdSajZ3NWJWeHpNRkV1V2JQN2xkUjJCc2RZ?=
- =?utf-8?B?N1YzTVJURlluUHRKY1U1SWZHRW9sUUU5RUVYSDV1NXZoRUJINDFpNDVDbUpD?=
- =?utf-8?B?YlRHeC9xRC91d21vRGVCaGd5UVpMcVNOVUY2ampKSmlPS0pXWFR4UUREY3JJ?=
- =?utf-8?B?elJUTG9nc1YveG5WaTBmWmMrWE9qQXdhWC9wYVEvMU5YcVFlZjNicnZvbUFs?=
- =?utf-8?B?aWJoWmMyZkNaTndja0lVdE5yakNMT3N5TUhPcThNNnFOL1N1Nmx1SlVGbGFi?=
- =?utf-8?B?WFBpTnFvNU5Pb1JvS3J4Mk5YOGdUdkYvcnhrNEQ2V2JFb3RMZE9YaUpkQmhu?=
- =?utf-8?B?cTY5VGVRcjFxdGZkV2ZrYzZURUtvUFRVT2ZRME9uMzZDTGZiMXovWUhLa09T?=
- =?utf-8?B?ZURtVmRwTmZLek1vbjhSMm9KWldoaDJBUTRSbXp6UUE4Z0c2anJnbmNVTXVN?=
- =?utf-8?B?QmNWcGZlVnBucTV6YUs3ZGlwWFZaNFNpYnBhUlFRQ0dzU0JMY1pjUjBVNDRT?=
- =?utf-8?B?SzJJdTFxTWtwcThxUDlTTmR2YUNOWHJYcm5iWDlkQVkrcndiYWVUbngzK2sx?=
- =?utf-8?B?djVUem93NFpLMVkrOCtuUEd2eFBleDkzQlFaNHBCOEttRmdGY3BjMWkydnVq?=
- =?utf-8?B?TGdvMXRRaHJpWDVJS09kMERDS1FycnFLQTE5ZUtGY3dla05xVGJ2bkVVTzVL?=
- =?utf-8?B?VmJMUUpPamIyT1hhK0NDeHQ4MlVRMzYyOThrVmNOZzNEdE5jc1kvZjJ4ZC95?=
- =?utf-8?B?YzBuL1hzVlpUKytEM2tJcStNQW5oYU1RS3ZjaXpRQmkrUEZFRGlqZjJUdFhM?=
- =?utf-8?B?ZGhWY0gweVIwRFg5QlY2QThMRStqMElIRm1sYjlSMmljQk1wODVQbjNpaVp1?=
- =?utf-8?B?bkFKT3hkT2RaMytaT3Q1cWtsOVpEdmRsNFdLVHQ5NW56VUxoWEtZd1lReSt4?=
- =?utf-8?B?cnkyOXE4U1daSmozQ2dVeHAydFFNUEFSdGVZM2YySjVvU0tlQ2lqUTdLemlo?=
- =?utf-8?B?U1pwRnJWZ2lwSFFVZGl6dUNUQUsyN0VJZDJ2WVFEY0w0Z0pMWlFYclNGc3Ur?=
- =?utf-8?B?YTdlSENPZVA3SVNsRjlGM0JlUlVtYUhibS9tZDgwM2s4S2hubjdpZjVpbysw?=
- =?utf-8?B?RXc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 555ffced-b700-42f7-e446-08db526872a8
-X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 21:41:15.8365
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: blYCgiBd37OLhGFn4lSX6/l6guHGhaD7COmDWZIRHGXq+GxQReUUijYKu4t6G0SDiN+9arjwE6c34cX8TPHx1zzXkZjAKihmVNrkMEQRo30=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR11MB6109
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -166,50 +81,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Peter,
+From: Arve Hj=C3=B8nnev=C3=A5g <arve@android.com>
 
-On 4/21/2023 7:17 AM, Peter Newman wrote:
-> Add the 'mbm_soft_rmid' mount option to enable soft RMIDs.
-> 
-> This requires adding a mechanism for disabling a monitoring event at
-> mount time to prevent the llc_occupancy event from being presented to
-> the user.
-> 
-> Signed-off-by: Peter Newman <peternewman@google.com>
-> ---
->  arch/x86/kernel/cpu/resctrl/internal.h |  3 ++
->  arch/x86/kernel/cpu/resctrl/rdtgroup.c | 51 ++++++++++++++++++++++++++
->  2 files changed, 54 insertions(+)
-> 
-> diff --git a/arch/x86/kernel/cpu/resctrl/internal.h b/arch/x86/kernel/cpu/resctrl/internal.h
-> index e6ff31a4dbc4..604e3d550601 100644
-> --- a/arch/x86/kernel/cpu/resctrl/internal.h
-> +++ b/arch/x86/kernel/cpu/resctrl/internal.h
-> @@ -59,6 +59,7 @@ struct rdt_fs_context {
->  	bool				enable_cdpl2;
->  	bool				enable_cdpl3;
->  	bool				enable_mba_mbps;
-> +	bool				enable_mbm_soft_rmid;
->  };
->  
->  static inline struct rdt_fs_context *rdt_fc2context(struct fs_context *fc)
-> @@ -76,12 +77,14 @@ DECLARE_STATIC_KEY_FALSE(rdt_mon_enable_key);
->   * @evtid:		event id
->   * @name:		name of the event
->   * @configurable:	true if the event is configurable
-> + * @enabled:		true if event is disabled
->   * @list:		entry in &rdt_resource->evt_list
->   */
->  struct mon_evt {
->  	enum resctrl_event_id	evtid;
->  	char			*name;
->  	bool			configurable;
-> +	bool			disabled;
->  	struct list_head	list;
->  };
+kthread_park and wait_woken have a similar race that kthread_stop and
+wait_woken used to have before it was fixed in
+cb6538e740d7543cd989128625cf8cac4b471e0a. Extend that fix to also cover
+kthread_park.
 
-Note the description of member named "enabled" of member
-named "disabled".
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Juri Lelli <juri.lelli@redhat.com>
+Cc: Vincent Guittot <vincent.guittot@linaro.org>
+Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: Steven Rostedt <rostedt@goodmis.org>
+Cc: Ben Segall <bsegall@google.com>
+Cc: Mel Gorman <mgorman@suse.de>
+Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+Cc: Valentin Schneider <vschneid@redhat.com>
+Signed-off-by: Arve Hj=C3=B8nnev=C3=A5g <arve@android.com>
+Signed-off-by: John Stultz <jstultz@google.com>
+---
+This seemingly slipped by, so I wanted to resend it
+for review.
+---
+ kernel/sched/wait.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
+diff --git a/kernel/sched/wait.c b/kernel/sched/wait.c
+index 133b74730738..a9cf49da884b 100644
+--- a/kernel/sched/wait.c
++++ b/kernel/sched/wait.c
+@@ -425,9 +425,9 @@ int autoremove_wake_function(struct wait_queue_entry *w=
+q_entry, unsigned mode, i
+ }
+ EXPORT_SYMBOL(autoremove_wake_function);
+=20
+-static inline bool is_kthread_should_stop(void)
++static inline bool is_kthread_should_stop_or_park(void)
+ {
+-	return (current->flags & PF_KTHREAD) && kthread_should_stop();
++	return (current->flags & PF_KTHREAD) && (kthread_should_stop() || kthread=
+_should_park());
+ }
+=20
+ /*
+@@ -459,7 +459,7 @@ long wait_woken(struct wait_queue_entry *wq_entry, unsi=
+gned mode, long timeout)
+ 	 * or woken_wake_function() sees our store to current->state.
+ 	 */
+ 	set_current_state(mode); /* A */
+-	if (!(wq_entry->flags & WQ_FLAG_WOKEN) && !is_kthread_should_stop())
++	if (!(wq_entry->flags & WQ_FLAG_WOKEN) && !is_kthread_should_stop_or_park=
+())
+ 		timeout =3D schedule_timeout(timeout);
+ 	__set_current_state(TASK_RUNNING);
+=20
+--=20
+2.40.1.606.ga4b1b128d6-goog
 
-Reinette
