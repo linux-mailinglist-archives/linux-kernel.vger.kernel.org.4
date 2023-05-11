@@ -2,149 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1593D6FF12E
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 14:10:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C669A6FF132
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 14:11:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238010AbjEKMKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 08:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48254 "EHLO
+        id S237795AbjEKMLm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 08:11:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238001AbjEKMKX (ORCPT
+        with ESMTP id S237756AbjEKMLf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 08:10:23 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B03BA24E
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 05:09:45 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9963a72fd9so18552749276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 05:09:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683806984; x=1686398984;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DFFdKRwDpDILumhyLuLJOTrk05DbXLc6wTGy62C/3Mw=;
-        b=wS6sSkP9YPrEQci5WRw3K0xUtOK5+0/bwAebx2k91pqCIj0EfYjinxZrDO4ajIZjGM
-         93t//KRpj0A5F6J4KjOlKV1y+Lm/ePEWG+KQn/cR4aakq3zES0kTJ5K9FNJ38y837AN0
-         zBdhJGmHaQva80CE20d2I7pxXjrPjUcICIIMWKC+WwF8uB15gtNLv/4ImBvcL36KXmeB
-         lqIS0virSRAaqSbuFnvycK3dKd0Kl7oqzEVb5PehKYMtdlLdGF42nsRcfsVhiU5qg+8j
-         RWNR0gNjin97dZ3upG8fYJP+RPue2YJLbFd3/VCnCJqCjLsUh1T1O2t+pQCpgrkHV8vM
-         z1/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683806984; x=1686398984;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DFFdKRwDpDILumhyLuLJOTrk05DbXLc6wTGy62C/3Mw=;
-        b=h5QCytYEAxFbWn7MyMU3s2TIzhjedppvL4V0e+kVt+F1jmOE9HrIELFMxAVKnXcOxW
-         C9WX16c7OyNbyJ+zDZdKqck78dzFqNh/E4x8zGDd3D15g0Sp16+VQG6L6fCY30jZiAOz
-         efchWAPDlsi+nfRxSl9hHNP3Yrt9/7629Am0UuZ63O2LFTfZBeyAt8qcANy/hysAKEj9
-         nPMxnK6J03BGHELdOoPodujjV0PNEGl7eW9dJv2D19K2bCM0VYDsxjguy8pj5fduwKsS
-         pj9mfcquDESZw2Z9O2jgmKXT/K5BW8odjYpQX00xpmILBTT0iBQDWB+FvjOhHhbhFhck
-         oB9Q==
-X-Gm-Message-State: AC+VfDz3lffewHY0PhY0fyXcjMnJOsYGMQ9RQEnTUUGa6mE6YO5XbzjF
-        WlOwdIFbWcfrZrrtDCvjUI/KGWpbyfuDE9hPgg==
-X-Google-Smtp-Source: ACHHUZ6WNFGb++Bi1s3+Qljz7xPC8nDjrsTQIYeDWQxaajEyJ9TDJ4kJ1ngdN74pybDKr5utVuVJdeHDE4xVvgjKyw==
-X-Received: from yixuanjiang.ntc.corp.google.com ([2401:fa00:fc:202:6c9a:64c9:7e44:6b1d])
- (user=yixuanjiang job=sendgmr) by 2002:a25:6648:0:b0:b68:7a4a:5258 with SMTP
- id z8-20020a256648000000b00b687a4a5258mr12799183ybm.3.1683806984600; Thu, 11
- May 2023 05:09:44 -0700 (PDT)
-Date:   Thu, 11 May 2023 20:08:41 +0800
-In-Reply-To: <20230511120841.2096524-1-yixuanjiang@google.com>
-Mime-Version: 1.0
-References: <20230511120841.2096524-1-yixuanjiang@google.com>
-X-Mailer: git-send-email 2.40.1.521.gf1e218fcd8-goog
-Message-ID: <20230511120841.2096524-7-yixuanjiang@google.com>
-Subject: [PATCH 6/6] ASoC: soc-pcm: fix BE handling of PAUSE_RELEASE
-From:   yixuanjiang <yixuanjiang@google.com>
-To:     tiwai@suse.com, lgirdwood@gmail.com, broonie@kernel.org
-Cc:     linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Bard Liao <bard.liao@intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Yixuan Jiang <yixuanjiang@google.com>, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 11 May 2023 08:11:35 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BDA593EB;
+        Thu, 11 May 2023 05:11:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683807061; x=1715343061;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=GgId0k8oBG7lRV4xr41min05HrG3B+vzXuK7KKW5Bc8=;
+  b=DxbfSPnUpFa5kbMdJbrnIRel+IWx+mhBv18J3qnPM+mnBBHJ5Vr8JeT0
+   r9ZEm90vY7WN44ujVit6pIDT1vzsKZgE8nzF0Wi1T6d/F2iuRK1hPBdiP
+   llKkiEUZHjmzBzmvpzDeSF/UFERjqp4ZLux24KcQxyeacyNL34KJT7lHO
+   egUbnn+Db1j6KE0FwT0odSjV1B/jr+1LJeuFazNpScqCVzGHjvuXeckfZ
+   NnU/5tZGhG28JPzeVrmaOqCEwca22SOL4pYBryslM2UlxJeljagw5Gn2t
+   pd9CrSjxFMbHaOBWpf9oe8RoMq9cAnndA3OnkFVXrQ4/EaDYmNu4+D/3X
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="330839030"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="330839030"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 05:10:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="843921173"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="843921173"
+Received: from jsanche3-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.39.112])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 05:10:35 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-serial@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        =?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH v4 0/6] serial: Separate RT288x/Au1xxx code into own file
+Date:   Thu, 11 May 2023 15:10:23 +0300
+Message-Id: <20230511121029.13128-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+A non-trivial amount of RT288x/Au1xxx code is encapsulated into
+ifdeffery in 8250_port / 8250_early and some if/switch UPIO_AU blocks.
+Create a separate file from them and do a few additional cleanups.
 
-[ Upstream commit 3aa1e96a2b95e2ece198f8dd01e96818971b84df ]
+I kept the Kconfig entry as bool because the code has somewhat tricky
+dependency chain (mips arch code and 8250_of driver).
 
-A BE connected to more than one FE, e.g. in a mixer case, can go
-through the following transitions.
+v4:
+- Type changes
+	- bugs: unsigned short -> u16
+	- use u32 for old_dl too
 
-play FE1    -> BE state is START
-pause FE1   -> BE state is PAUSED
-play FE2    -> BE state is START
-stop FE2    -> BE state is STOP (see note [1] below)
-release FE1 -> BE state is START
-stop FE1    -> BE state is STOP
+v3:
+- Convert dl_read/write() to take u32 arg + name the args
+- Separatate the non-driver datastructure changes & document them better
+- Fix build when SERIAL_8250=m + SERIAL_8250_RT288X=y (+note reasoning
+  in the commit message for future reference)
+- Use u8 for arrays that no longer have < 0 values
 
-play FE1    -> BE state is START
-pause FE1   -> BE state is PAUSED
-play FE2    -> BE state is START
-release FE1 -> BE state is START
-stop FE2    -> BE state is START
-stop FE1    -> BE state is STOP
+v2:
+- Define register map array lengths explicitly to avoid creating
+  declaration trap.
 
-play FE1    -> BE state is START
-play FE2    -> BE state is START (no change)
-pause FE1   -> BE state is START (no change)
-pause FE2   -> BE state is PAUSED
-release FE1 -> BE state is START
-release FE2 -> BE state is START (no change)
-stop FE1    -> BE state is START (no change)
-stop FE2    -> BE state is STOP
+Ilpo Järvinen (6):
+  serial: 8250: Change dl_read/write to handle value as u32
+  serial: 8250: Document uart_8250_port's ->dl_read/write()
+  serial: 8250: Add dl_read/write, bugs and mapsize into
+    plat_serial8250_port
+  serial: 8250: RT288x/Au1xxx code away from core
+  serial: 8250_rt288x: Name non-standard divisor latch reg
+  serial: 8250_rt288x: Remove unnecessary UART_REG_UNMAPPED
 
-The existing code for PAUSE_RELEASE only allows for the case where the
-BE is paused, which clearly would not work in the sequences above.
+ arch/mips/alchemy/common/platform.c     |  10 +-
+ drivers/tty/serial/8250/8250.h          |   4 +-
+ drivers/tty/serial/8250/8250_core.c     |   4 +
+ drivers/tty/serial/8250/8250_early.c    |  21 ----
+ drivers/tty/serial/8250/8250_em.c       |   4 +-
+ drivers/tty/serial/8250/8250_of.c       |   4 +-
+ drivers/tty/serial/8250/8250_port.c     |  84 +--------------
+ drivers/tty/serial/8250/8250_pxa.c      |   2 +-
+ drivers/tty/serial/8250/8250_rt288x.c   | 136 ++++++++++++++++++++++++
+ drivers/tty/serial/8250/8250_uniphier.c |   4 +-
+ drivers/tty/serial/8250/Makefile        |   1 +
+ drivers/tty/serial/Makefile             |   2 +-
+ include/linux/serial_8250.h             |  44 ++++++--
+ 13 files changed, 201 insertions(+), 119 deletions(-)
+ create mode 100644 drivers/tty/serial/8250/8250_rt288x.c
 
-Extend the allowed states to restart the BE when PAUSE_RELEASE is
-received, and increase the refcount if the BE is already in START.
-
-[1] the existing logic does not move the BE state back to PAUSED when
-the FE2 is stopped. This patch does not change the logic; it would be
-painful to keep a history of changes on the FE side, the state machine
-is already rather complicated with transitions based on the last BE
-state and the trigger type.
-
-Reported-by: Bard Liao <bard.liao@intel.com>
-Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Kai Vehmanen <kai.vehmanen@linux.intel.com>
-Reviewed-by: Bard Liao <yung-chuan.liao@linux.intel.com>
-Reviewed-by: Ranjani Sridharan <ranjani.sridharan@linux.intel.com>
-Link: https://lore.kernel.org/r/20211207173745.15850-7-pierre-louis.bossart@linux.intel.com
-Signed-off-by: Mark Brown <broonie@kernel.org>
-Fixes: aa9ff6a4955f ("ASoC: soc-compress: Reposition and add pcm_mutex")
-Signed-off-by: Yixuan Jiang <yixuanjiang@google.com>
-Cc: stable@vger.kernel.org # 5.15+
----
- sound/soc/soc-pcm.c | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/sound/soc/soc-pcm.c b/sound/soc/soc-pcm.c
-index b6099d36518f5..6e589708b9338 100644
---- a/sound/soc/soc-pcm.c
-+++ b/sound/soc/soc-pcm.c
-@@ -2151,7 +2151,10 @@ int dpcm_be_dai_trigger(struct snd_soc_pcm_runtime *fe, int stream,
- 			be->dpcm[stream].state = SND_SOC_DPCM_STATE_START;
- 			break;
- 		case SNDRV_PCM_TRIGGER_PAUSE_RELEASE:
--			if ((be->dpcm[stream].state != SND_SOC_DPCM_STATE_PAUSED))
-+			if (!be->dpcm[stream].be_start &&
-+			    (be->dpcm[stream].state != SND_SOC_DPCM_STATE_START) &&
-+			    (be->dpcm[stream].state != SND_SOC_DPCM_STATE_STOP) &&
-+			    (be->dpcm[stream].state != SND_SOC_DPCM_STATE_PAUSED))
- 				goto next;
- 
- 			be->dpcm[stream].be_start++;
 -- 
-2.40.1.521.gf1e218fcd8-goog
+2.30.2
 
