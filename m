@@ -2,84 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E354C6FFB62
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:40:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 402BB6FFB66
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:41:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239249AbjEKUkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 16:40:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42580 "EHLO
+        id S239316AbjEKUk5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 16:40:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43128 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239016AbjEKUkW (ORCPT
+        with ESMTP id S239225AbjEKUkz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 16:40:22 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF600AD;
-        Thu, 11 May 2023 13:40:17 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id af79cd13be357-75764d20db3so536446585a.2;
-        Thu, 11 May 2023 13:40:17 -0700 (PDT)
+        Thu, 11 May 2023 16:40:55 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18DD199E
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:40:52 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id 6a1803df08f44-61b5da092dfso41459416d6.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:40:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683837617; x=1686429617;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rnld3zEnNrYJTC+Po5oprlcoZKv9fFDKe9k4DZBIlFI=;
-        b=K5eZFpcQMIncRsOeztQjS+Er6+WbVtg0SoBKQpSBMRTLBXyT/UASXIgdHU5uHd7/kF
-         icuBns2EO3hiT1O26gu6l/yw7daxFyAZd+Ab90alEpPtQ5t81bp77HtRBEfIOPAI0csz
-         80FCOj2CbKZYm85KGvQf/ndc2cTbaoqHs3vfcQ1Zb9Nwj9H6xqL+XXLZJlu44BI48iYp
-         ab9Wu+U2PA1SzhvQXTE1bz1kBBA0T3/cGB5RlAGBI55rowfc1v9vAcmtjIjbgKYHV9n2
-         tv8ulHS/rspek2tGLWlrpO+YgWJo94kY2lZfR+VTdwtJ5hLKeiU74dHpZ+rQcQNoqwcm
-         EXkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683837617; x=1686429617;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1683837652; x=1686429652;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Rnld3zEnNrYJTC+Po5oprlcoZKv9fFDKe9k4DZBIlFI=;
-        b=G8R7mLGM909PXArb1U8AHvPxYHA+uU8ZSA/fz2YmwfgrpQr3pWRE1jFSE/F+x83jkK
-         V7CJI3t0+UkAvbqiZk1X77XTC4GfnB9PyqwRUQZG1kZuHzDvARNC+4c8PthENhH7OelR
-         smR9IhdySRJ3txivrPP38byXTZpuF/YvGUg5EaxiqcQtweKHmzqdi8Gh0SZVtVHb0G06
-         KKaUI3x/kK32IBgYoHmAJlqhokiLvjboFAiwZf1qHfY+L+iiHiTHgObzcCjmQu/lOACf
-         VPlHWz0Pc3OxTegs0WP+HErwmmDJleBFxL3RUfGGfNd1EVsJr4V6JHIAMbgdp2mMaHcn
-         uU/w==
-X-Gm-Message-State: AC+VfDz+BvbmiSE5CjubWQ9Jo9FGyi+XP7Z8yi1tQwT7vqCu8KMjaAxe
-        4HayBdMUBvNeop5fRPA1PdlsHB2p7A==
-X-Google-Smtp-Source: ACHHUZ72cysp9w6EvSts3m3lHTzZZTu9anT0uvFcKwZAjN/2YHQYi2ue+od9ZhzOcpw965RYA5DkbQ==
-X-Received: by 2002:a05:6214:1cc4:b0:61b:6e43:b20 with SMTP id g4-20020a0562141cc400b0061b6e430b20mr32286427qvd.42.1683837617037;
-        Thu, 11 May 2023 13:40:17 -0700 (PDT)
-Received: from C02FL77VMD6R.googleapis.com ([2600:1700:d860:12b0:b187:de6c:7549:89e])
-        by smtp.gmail.com with ESMTPSA id r12-20020a0c8d0c000000b0062136626e09sm2328311qvb.57.2023.05.11.13.40.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 13:40:16 -0700 (PDT)
-Date:   Thu, 11 May 2023 13:40:10 -0700
-From:   Peilin Ye <yepeilin.cs@gmail.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang <xiyou.wangcong@gmail.com>,
-        Jiri Pirko <jiri@resnulli.us>,
-        Peilin Ye <peilin.ye@bytedance.com>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Vlad Buslov <vladbu@mellanox.com>,
-        Pedro Tammela <pctammela@mojatatu.com>,
-        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
-Subject: Re: [PATCH net 6/6] net/sched: qdisc_destroy() old ingress and
- clsact Qdiscs before grafting
-Message-ID: <ZF1SqomxfPNfccrt@C02FL77VMD6R.googleapis.com>
-References: <cover.1683326865.git.peilin.ye@bytedance.com>
- <e6c4681dd9205d702ae2e6124e20c6210520e76e.1683326865.git.peilin.ye@bytedance.com>
- <20230508183324.020f3ec7@kernel.org>
- <ZFv6Z7hssZ9snNAw@C02FL77VMD6R.googleapis.com>
- <20230510161559.2767b27a@kernel.org>
+        bh=vZx8FpQdLVzyY5XjqVFGkizAxjSRSvIZJciSNIfEcDI=;
+        b=V31+M9mgzwDUisMy4JDnJDouRAbsaL7pgoffAx/ibC37kMSfO1+m5Ckl4dF2YIbx6Y
+         14tG8z8oHdHnyT3BhNZ68dUmkvkIX2RZyNT0iuqaCU1bWJxlzw/2G9Mg7PsOOTQkrRR2
+         LENQ/q6YuRjcAfhfIG49GvYyegOaAw2YvXMXEQiutviQvY/XL/nNv5MunRO5PZsrKaOV
+         dANDmtfkJwVa5ProdP2UWjpHESzcPCcdR7g8TcsTgg0tUQAl4pL0xHxUk+dJvq3qefrz
+         7e9Dvt4yx0mTF/0nJcU/783igvVhbYIB/PafPCntuI7bQ3E5LaWhoML03Sr9QXQNRgTO
+         xS4Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683837652; x=1686429652;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vZx8FpQdLVzyY5XjqVFGkizAxjSRSvIZJciSNIfEcDI=;
+        b=HQd81VKhIijYm6k2DUmNnIUK47+RA3TLxBgBVt+MbdNvNPhCJ7RshZqWAxT2K5j2cr
+         12ppx6gQSIXxx8pisBj/lwZaLrXMYu7VEOSwGNHgpEwO+IQ+xHyZhSUn4HVM6pZXp82X
+         ZVivSuVfSzOK2r9sJoFzndv6uz5u7yZN2iKs9X9CP4XpT3fhzJC+vL8uGZ5JYSJTLhOf
+         iueUg7+OAIzS+WMhYVPb8BYWUmmGip6KVc6vg6QyCp6mHcQFpk9zqD4g4R83WXh6qtvM
+         tAsnsO/vuSwnZiqakxPV4iDe/hs/Oa32pxe28nbcbupL38I6ou7mtDs4vZF6CmHdou6r
+         K8Zg==
+X-Gm-Message-State: AC+VfDwUEvOONEQ3SUUJNs2OiyuYFe3WiIn06MJatD+pP0PN6KXOo7Ap
+        dUkPCx981kOZeWNze4NKeyWyFkRW+O1QCFNchrpzvg==
+X-Google-Smtp-Source: ACHHUZ5U6vqjOUU6SjFBcnB4SMX76q/SJW3pj9XYjfIWuMWuVVkfkZOy0EWLaWX1PvF4jheB/PcL22YAF72NkqzLBrg=
+X-Received: by 2002:ad4:594d:0:b0:621:65de:f5f9 with SMTP id
+ eo13-20020ad4594d000000b0062165def5f9mr5248392qvb.5.1683837651964; Thu, 11
+ May 2023 13:40:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230510161559.2767b27a@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+References: <20230511182426.1898675-1-axelrasmussen@google.com> <20230511202243.GA5466@monkey>
+In-Reply-To: <20230511202243.GA5466@monkey>
+From:   Axel Rasmussen <axelrasmussen@google.com>
+Date:   Thu, 11 May 2023 13:40:16 -0700
+Message-ID: <CAJHvVcg+Sm-=F=Xhi-WVLRxDcDcYzD8AwLpHHoP8zLubOoX6TQ@mail.gmail.com>
+Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Huang Ying <ying.huang@intel.com>,
+        James Houghton <jthoughton@google.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,72 +84,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 04:15:59PM -0700, Jakub Kicinski wrote:
-> My thinking was to make sure that dev->miniq_* pointers always point
-> to one of the miniqs of the currently attached qdisc. Right now, on
-> a quick look, those pointers are not initialized during initial graft,
-> only when first filter is added, and may be cleared when filters are
-> removed. But I don't think that's strictly required, miniq with no
-> filters should be fine.
-
-Ah, I see, thanks for explaining, I didn't think of that.  Looking at
-sch_handle_ingress() BTW, currently mini Qdisc stats aren't being updated
-(mini_qdisc_bstats_cpu_update()) if there's no filters, is this intended?
-Should I keep this behavior by:
-
-diff --git a/net/core/dev.c b/net/core/dev.c
-index 735096d42c1d..9016481377e0 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -5116,7 +5116,7 @@ sch_handle_ingress(struct sk_buff *skb, struct packet_type **pt_prev, int *ret,
-         * that are not configured with an ingress qdisc will bail
-         * out here.
-         */
--       if (!miniq)
-+       if (!miniq || !miniq->filter_list)
-                return skb;
-
-        if (*pt_prev) {
-
-On Wed, May 10, 2023 at 04:15:59PM -0700, Jakub Kicinski wrote:
-> On Wed, 10 May 2023 13:11:19 -0700 Peilin Ye wrote:
-> > On Fri,  5 May 2023 17:16:10 -0700 Peilin Ye wrote:
-> > >  Thread 1               A's refcnt   Thread 2
-> > >   RTM_NEWQDISC (A, RTNL-locked)
-> > >    qdisc_create(A)               1
-> > >    qdisc_graft(A)                9
-> > >
-> > >   RTM_NEWTFILTER (X, RTNL-lockless)
-> > >    __tcf_qdisc_find(A)          10
-> > >    tcf_chain0_head_change(A)
-> > >    mini_qdisc_pair_swap(A) (1st)
-> > >             |
-> > >             |                         RTM_NEWQDISC (B, RTNL-locked)
-> > >            RCU                   2     qdisc_graft(B)
-> > >             |                    1     notify_and_destroy(A)
-> > >             |
-> > >    tcf_block_release(A)          0    RTM_NEWTFILTER (Y, RTNL-lockless)
-> > >    qdisc_destroy(A)                    tcf_chain0_head_change(B)
-> > >    tcf_chain0_head_change_cb_del(A)    mini_qdisc_pair_swap(B) (2nd)
-> > >    mini_qdisc_pair_swap(A) (3rd)                |
-> > >            ...                                 ...
-> >
-> > Looking at the code, I think there is no guarantee that (1st) cannot
-> > happen after (2nd), although unlikely?  Can RTNL-lockless RTM_NEWTFILTER
-> > handlers get preempted?
+On Thu, May 11, 2023 at 1:29=E2=80=AFPM Mike Kravetz <mike.kravetz@oracle.c=
+om> wrote:
 >
-> Right, we need qdisc_graft(B) to update the appropriate dev pointer
-> to point to b1. With that the ordering should not matter. Probably
-> using the ->attach() callback?
+> On 05/11/23 11:24, Axel Rasmussen wrote:
+> > The basic idea here is to "simulate" memory poisoning for VMs. A VM
+> > running on some host might encounter a memory error, after which some
+> > page(s) are poisoned (i.e., future accesses SIGBUS). They expect that
+> > once poisoned, pages can never become "un-poisoned". So, when we live
+> > migrate the VM, we need to preserve the poisoned status of these pages.
+> >
+> > When live migrating, we try to get the guest running on its new host as
+> > quickly as possible. So, we start it running before all memory has been
+> > copied, and before we're certain which pages should be poisoned or not.
+> >
+> > So the basic way to use this new feature is:
+> >
+> > - On the new host, the guest's memory is registered with userfaultfd, i=
+n
+> >   either MISSING or MINOR mode (doesn't really matter for this purpose)=
+.
+> > - On any first access, we get a userfaultfd event. At this point we can
+> >   communicate with the old host to find out if the page was poisoned.
+>
+> Just curious, what is this communication channel with the old host?
 
-->attach() is later than dev_graft_qdisc().  We should get ready for
-concurrent filter requests (i.e. have dev pointer pointing to b1) before
-grafting (publishing) B.  Also currently qdisc_graft() doesn't call
-->attach() for ingress and clsact Qdiscs.
+James can probably describe it in more detail / more correctly than I
+can. My (possibly wrong :) ) understanding is:
 
-But I see your point, thanks for the suggestion!  I'll try ->init() and
-create v2.
+On the source machine we maintain a bitmap indicating which pages are
+clean or dirty (meaning, modified after the initial "precopy" of
+memory to the target machine) or poisoned. Eventually the entire
+bitmap is sent to the target machine, but this takes some time (maybe
+seconds on large machines). After this point though we have all the
+information we need, we no longer need to communicate with the source
+to find out the status of pages (although there may still be some
+memory contents to finish copying over).
 
-Thanks,
-Peilin Ye
+In the meantime, I think the target machine can also ask the source
+machine about the status of individual pages (for quick on-demand
+paging).
 
+As for the underlying mechanism, it's an internal protocol but the
+publicly-available thing it's most similar to is probably gRPC [1]. At
+a really basic level, we send binary serialized protocol buffers [2]
+over the network in a request / response fashion.
+
+[1] https://grpc.io/
+[2] https://protobuf.dev/
+
+> --
+> Mike Kravetz
+>
+> > - If so, we can respond with a UFFDIO_SIGBUS - this places a swap marke=
+r
+> >   so any future accesses will SIGBUS. Because the pte is now "present",
+> >   future accesses won't generate more userfaultfd events, they'll just
+> >   SIGBUS directly.
+> >
+> > UFFDIO_SIGBUS does not handle unmapping previously-present PTEs. This
+> > isn't needed, because during live migration we want to intercept
+> > all accesses with userfaultfd (not just writes, so WP mode isn't useful
+> > for this). So whether minor or missing mode is being used (or both), th=
+e
+> > PTE won't be present in any case, so handling that case isn't needed.
+> >
