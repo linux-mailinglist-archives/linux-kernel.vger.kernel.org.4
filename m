@@ -2,194 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB2136FE8E0
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 02:42:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 843106FE8FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 02:55:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236614AbjEKAmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 20:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39778 "EHLO
+        id S236723AbjEKAzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 20:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbjEKAmh (ORCPT
+        with ESMTP id S232030AbjEKAy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 20:42:37 -0400
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89E15E42;
-        Wed, 10 May 2023 17:42:36 -0700 (PDT)
-Date:   Thu, 11 May 2023 08:42:31 +0800
-From:   Yixun Lan <dlan@gentoo.org>
-To:     Yangtao Li <frank.li@vivo.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jisheng Zhang <jszhang@kernel.org>, Wei Fu <wefu@redhat.com>,
-        Icenowy Zheng <uwu@icenowy.me>, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/5] riscv: dts: thead: add sipeed Lichee Pi 4A board
- device tree
-Message-ID: <ZFw59xlxoCSyb--J@ofant>
-References: <20230510204456.57202-1-frank.li@vivo.com>
- <20230510204456.57202-3-frank.li@vivo.com>
+        Wed, 10 May 2023 20:54:59 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9EF719B7
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 17:54:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683766449;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=gQADr3uLo7kuMaIoXdW68k59lf8w0tnVTrTJLVpL2l4=;
+        b=M2TlbuSFCvwf3UIPuO9k005kzaKzvtiQ11rzX7UNsZtIzo94zfqBEfynaEPksUDvQ0pxRM
+        KW/xZwr2Dzg2pKedcSS/WRe1G02lX6q/wnB4czWTzeuHJzPGSIIYh72gHJw+NDNfS8j8r+
+        +AmDf7XIhKagx3sPgx0dYrDd0xGhowk=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-75-49nZcDDvOsKY-XjYHmJ1TQ-1; Wed, 10 May 2023 20:54:06 -0400
+X-MC-Unique: 49nZcDDvOsKY-XjYHmJ1TQ-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E7AC2100F64F;
+        Thu, 11 May 2023 00:54:05 +0000 (UTC)
+Received: from cantor.redhat.com (unknown [10.2.16.36])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id CD736141511D;
+        Thu, 11 May 2023 00:54:04 +0000 (UTC)
+From:   Jerry Snitselaar <jsnitsel@redhat.com>
+To:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org
+Cc:     Peter Zijlstra <peterz@infradead.org>, stable@vger.kernel.org,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>
+Subject: [PATCH] tpm/tpm_tis: Disable interrupts for more Lenovo devices
+Date:   Wed, 10 May 2023 17:54:03 -0700
+Message-Id: <20230511005403.24689-1-jsnitsel@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230510204456.57202-3-frank.li@vivo.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yangtao:
+The P360 Tiny suffers from an irq storm issue like the T490s, so add
+an entry for it to tpm_tis_dmi_table, and force polling. There also
+previously was a report from the previous attempt to enable interrupts
+that involved a ThinkPad L490. So an entry is added for it as well.
 
-On 04:44 Thu 11 May     , Yangtao Li wrote:
-> From: Jisheng Zhang <jszhang@kernel.org>
-> 
-> Sipeed's Lichee Pi 4A development board uses Lichee Module 4A core
-> module which is powered by T-HEAD's light(a.k.a TH1520) SoC. Add
-> minimal device tree files for the core module and the development
-> board.
-> 
-> Support basic uart/gpio/dmac drivers, so supports booting to a basic
-> shell.
-> 
-> Cc: Icenowy Zheng <uwu@icenowy.me>
-> Cc: Wei Fu <wefu@redhat.com>
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
-> v2:
-> -cleanup `light`
->  arch/riscv/boot/dts/Makefile                  |  1 +
->  arch/riscv/boot/dts/thead/Makefile            |  2 +
->  .../dts/thead/th1520-lichee-module-4a.dtsi    | 39 +++++++++++++++++++
->  .../boot/dts/thead/th1520-lichee-pi-4a.dts    | 33 ++++++++++++++++
->  4 files changed, 75 insertions(+)
->  create mode 100644 arch/riscv/boot/dts/thead/Makefile
->  create mode 100644 arch/riscv/boot/dts/thead/th1520-lichee-module-4a.dtsi
->  create mode 100644 arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts
-> 
-> diff --git a/arch/riscv/boot/dts/Makefile b/arch/riscv/boot/dts/Makefile
-> index f0d9f89054f8..1e884868ccba 100644
-> --- a/arch/riscv/boot/dts/Makefile
-> +++ b/arch/riscv/boot/dts/Makefile
-> @@ -2,6 +2,7 @@
->  subdir-y += allwinner
->  subdir-y += sifive
->  subdir-y += starfive
-> +subdir-y += thead
->  subdir-y += canaan
->  subdir-y += microchip
->  subdir-y += renesas
-> diff --git a/arch/riscv/boot/dts/thead/Makefile b/arch/riscv/boot/dts/thead/Makefile
-> new file mode 100644
-> index 000000000000..e311fc9a5939
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/thead/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +dtb-$(CONFIG_ARCH_THEAD) += th1520-lichee-pi-4a.dtb
-> diff --git a/arch/riscv/boot/dts/thead/th1520-lichee-module-4a.dtsi b/arch/riscv/boot/dts/thead/th1520-lichee-module-4a.dtsi
-> new file mode 100644
-> index 000000000000..bc5f8677d546
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/thead/th1520-lichee-module-4a.dtsi
-> @@ -0,0 +1,39 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2023 Jisheng Zhang <jszhang@kernel.org>
-> + * Copyright (C) 2023 Yangtao Li <frank.li@vivo.com>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "th1520.dtsi"
-> +
-> +/ {
-> +	model = "Sipeed Lichee Module 4A";
-> +	compatible = "sipeed,lichee-module-4a", "thead,th1520";
-we should have these compatibles documented, so a DT-Binding should go first
+Reported-by: Peter Zijlstra <peterz@infradead.org> # P360 Tiny
+Closes: https://lore.kernel.org/linux-integrity/20230505130731.GO83892@hirez.programming.kicks-ass.net/
+Cc: stable@vger.kernel.org # 6.2
+Cc: Peter Huewe <peterhuewe@gmx.de>
+Cc: Jarkko Sakkinen <jarkko@kernel.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Signed-off-by: Jerry Snitselaar <jsnitsel@redhat.com>
+---
+ drivers/char/tpm/tpm_tis.c | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-> +
-> +	memory@0 {
-> +		device_type = "memory";
-> +		reg = <0x0 0x00000000 0x2 0x00000000>;
-> +	};
-> +};
-> +
-> +&osc {
-> +	clock-frequency = <24000000>;
-> +};
-> +
-> +&osc_32k {
-> +	clock-frequency = <32768>;
-> +};
-> +
-> +&apb_clk {
-> +	clock-frequency = <62500000>;
-> +};
-> +
-> +&uart_sclk {
-> +	clock-frequency = <100000000>;
-> +};
-for all the above clock-frequency, if it's a real fixed one - so should all hardware
-be the same? then probably moving them to th1520.dtsi would be better?
-
-> +
-> +&dmac0 {
-> +	status = "okay";
-> +};
-> diff --git a/arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts b/arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts
-> new file mode 100644
-> index 000000000000..86d677175feb
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts
-> @@ -0,0 +1,33 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2023 Jisheng Zhang <jszhang@kernel.org>
-> + * Copyright (C) 2023 Yangtao Li <frank.li@vivo.com>
-> + */
-> +
-> +#include "th1520-lichee-module-4a.dtsi"
-> +
-> +/ {
-> +	model = "Sipeed Lichee Pi 4A";
-> +	compatible = "sipeed,lichee-pi-4a", "sipeed,lichee-module-4a", "thead,th1520";
-ditto
-
-> +
-> +	aliases {
-> +		gpio0 = &gpio0;
-> +		gpio1 = &gpio1;
-> +		gpio2 = &gpio2;
-> +		gpio3 = &gpio3;
-> +		serial0 = &uart0;
-> +		serial1 = &uart1;
-> +		serial2 = &uart2;
-> +		serial3 = &uart3;
-> +		serial4 = &uart4;
-> +		serial5 = &uart5;
-> +	};
-> +
-> +	chosen {
-> +		stdout-path = "serial0:115200n8";
-> +	};
-> +};
-> +
-> +&uart0 {
-> +	status = "okay";
-> +};
-> -- 
-> 2.34.1
-> 
-
+diff --git a/drivers/char/tpm/tpm_tis.c b/drivers/char/tpm/tpm_tis.c
+index 7af389806643..709b4e13bd6e 100644
+--- a/drivers/char/tpm/tpm_tis.c
++++ b/drivers/char/tpm/tpm_tis.c
+@@ -122,6 +122,22 @@ static const struct dmi_system_id tpm_tis_dmi_table[] = {
+ 			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad T490s"),
+ 		},
+ 	},
++	{
++		.callback = tpm_tis_disable_irq,
++		.ident = "ThinkStation P360 Tiny",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkStation P360 Tiny"),
++		},
++	},
++	{
++		.callback = tpm_tis_disable_irq,
++		.ident = "ThinkPad L490",
++		.matches = {
++			DMI_MATCH(DMI_SYS_VENDOR, "LENOVO"),
++			DMI_MATCH(DMI_PRODUCT_VERSION, "ThinkPad L490"),
++		},
++	},
+ 	{}
+ };
+ 
 -- 
-Yixun Lan (dlan)
-Gentoo Linux Developer
-GPG Key ID AABEFD55
+2.38.1
+
