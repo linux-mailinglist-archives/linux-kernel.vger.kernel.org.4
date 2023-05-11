@@ -2,53 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C8C6FFA73
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:40:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BD4FD6FFA72
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:40:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239359AbjEKTkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 15:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
+        id S239309AbjEKTkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 15:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57300 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239325AbjEKTjt (ORCPT
+        with ESMTP id S239329AbjEKTju (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 15:39:49 -0400
+        Thu, 11 May 2023 15:39:50 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793E4A5DA;
-        Thu, 11 May 2023 12:39:22 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDABA5F1;
+        Thu, 11 May 2023 12:39:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C8DE36511B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5CD8665123;
+        Thu, 11 May 2023 19:39:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5947C433EF;
         Thu, 11 May 2023 19:39:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3AA6C433D2;
-        Thu, 11 May 2023 19:39:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1683833961;
-        bh=OC8/Rw5yYSmYiW8Ovjk8aeVlIoaw3Mq8Wy4m8vm3iEs=;
+        bh=eusArGtpQsQ/mI/dj7NQjj77kk6DhjwgGYGdfDlh95U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mj5q3c+0wKqTYtW5CwceFf3StLYwXORqOvEqz92bEs8XyYVOsdb3dqwIQ0OO47oFy
-         MEqZ8vDgf9zHR6yQPN2556vFaD6Rzun5DdniU+bsTqH4CpJIKgMH3TKaBg+fDhVq82
-         qgfDG2dOG9SsXAzLxpsylxPSeXYBM32s4bBJdPe4nzbEnTSmOYbWXSXkaT54rzJE4c
-         Dwtm7KEX4KtnuCb4SfVgXvmM4wWmB3ej1xl3x/LzyHJPyTG3cjMU/TEBF8uFoKLj+D
-         cBDJf9yQevC3JqcIzGiWlb4T/E5AIoEP+ii48080f5gA8J+BfAfsZ8pmUMVTEWX+Od
-         XAYXsAiUltJaw==
+        b=dovm443LT+fICEbOAcS0pe1kumXbYJHrHlVKVtU569uAgpgHspUqEVCQdK0Rr3q9w
+         bAQoBmZCapTV7qYjICeoVmMylGUd9tepJbaa9B/0g3x8Mm/usrMiF8rXSsNx59kAfm
+         SMWwAs3qfKooB5s/+d/qTZBGkqZkd7EuKslhyXOPkg/y96/XbMVOuCihMZxdSyYgmx
+         kmr9Ioaa334MnrUKQRxb6b7EJzEM7Hr0PZAqhRog1SBtksi6HAm459ww6Wz5o//Rwt
+         c+/MGSfmez8bEpp8TRk8mpl7RCvv50tTorHFyX+OMN5TzGiYqOCkIg2JgoETgkWYtN
+         8AndyGFUm80Aw==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Wesley Chalmers <Wesley.Chalmers@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>, harry.wentland@amd.com,
-        sunpeng.li@amd.com, christian.koenig@amd.com, Xinhui.Pan@amd.com,
-        airlied@gmail.com, daniel@ffwll.ch, Alvin.Lee2@amd.com,
-        Jun.Lei@amd.com, qingqing.zhuo@amd.com, wenjing.liu@amd.com,
-        Dillon.Varone@amd.com, aurabindo.pillai@amd.com,
-        jiapeng.chong@linux.alibaba.com, Aric.Cyr@amd.com, mwen@igalia.com,
-        felipe.clark@amd.com, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 6.2 04/10] drm/amd/display: Do not set drr on pipe commit
-Date:   Thu, 11 May 2023 15:38:42 -0400
-Message-Id: <20230511193850.623289-4-sashal@kernel.org>
+Cc:     Lucas Tanure <tanure@linux.com>, Rob Herring <robh@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, robh+dt@kernel.org,
+        frowand.list@gmail.com, devicetree@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.2 05/10] of: fdt: Scan /memreserve/ last
+Date:   Thu, 11 May 2023 15:38:43 -0400
+Message-Id: <20230511193850.623289-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230511193850.623289-1-sashal@kernel.org>
 References: <20230511193850.623289-1-sashal@kernel.org>
@@ -66,69 +57,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Wesley Chalmers <Wesley.Chalmers@amd.com>
+From: Lucas Tanure <tanure@linux.com>
 
-[ Upstream commit 474f01015ffdb74e01c2eb3584a2822c64e7b2be ]
+[ Upstream commit b413281876292de44ae84e9a9ce9d62e47f266e9 ]
 
-[WHY]
-Writing to DRR registers such as OTG_V_TOTAL_MIN on the same frame as a
-pipe commit can cause underflow.
+Change the scanning /memreserve/ and /reserved-memory node order to fix
+Kernel panic on Khadas Vim3 Board.
 
-[HOW]
-Move DMUB p-state delegate into optimze_bandwidth; enabling FAMS sets
-optimized_required.
+If /memreserve/ goes first, the memory is reserved, but nomap can't be
+applied to the region. So the memory won't be used by Linux, but it is
+still present in the linear map as normal memory, which allows
+speculation. Legitimate access to adjacent pages will cause the CPU
+to end up prefetching into them leading to Kernel panic.
 
-This change expects that Freesync requests are blocked when
-optimized_required is true.
+So /reserved-memory node should go first, as it has a more updated
+description of the memory regions and can apply flags, like nomap.
 
-Reviewed-by: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
-Signed-off-by: Wesley Chalmers <Wesley.Chalmers@amd.com>
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+Link: https://lore.kernel.org/all/CAJX_Q+1Tjc+-TjZ6JW9X0NxEdFe=82a9626yL63j7uVD4LpxEA@mail.gmail.com/
+Signed-off-by: Lucas Tanure <tanure@linux.com>
+Link: https://lore.kernel.org/r/20230424113846.46382-1-tanure@linux.com
+Signed-off-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c | 6 ++++++
- drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c | 7 +++++++
- 2 files changed, 13 insertions(+)
+ drivers/of/fdt.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c
-index 6291a241158ad..c5410a38c1d03 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn20/dcn20_hwseq.c
-@@ -2055,6 +2055,12 @@ void dcn20_optimize_bandwidth(
- 	if (hubbub->funcs->program_compbuf_size)
- 		hubbub->funcs->program_compbuf_size(hubbub, context->bw_ctx.bw.dcn.compbuf_size_kb, true);
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index d1a68b6d03b3f..c28aedd7ae1f7 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -635,6 +635,9 @@ void __init early_init_fdt_scan_reserved_mem(void)
+ 	if (!initial_boot_params)
+ 		return;
  
-+	if (context->bw_ctx.bw.dcn.clk.fw_based_mclk_switching) {
-+		dc_dmub_srv_p_state_delegate(dc,
-+			true, context);
-+		context->bw_ctx.bw.dcn.clk.p_state_change_support = true;
-+	}
++	fdt_scan_reserved_mem();
++	fdt_reserve_elfcorehdr();
 +
- 	dc->clk_mgr->funcs->update_clocks(
- 			dc->clk_mgr,
- 			context,
-diff --git a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c
-index c20e9f76f0213..54f71da717357 100644
---- a/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c
-+++ b/drivers/gpu/drm/amd/display/dc/dcn30/dcn30_hwseq.c
-@@ -986,11 +986,18 @@ void dcn30_set_disp_pattern_generator(const struct dc *dc,
- void dcn30_prepare_bandwidth(struct dc *dc,
-  	struct dc_state *context)
- {
-+	if (context->bw_ctx.bw.dcn.clk.fw_based_mclk_switching) {
-+		dc->optimized_required = true;
-+		context->bw_ctx.bw.dcn.clk.p_state_change_support = false;
-+	}
-+
- 	if (dc->clk_mgr->dc_mode_softmax_enabled)
- 		if (dc->clk_mgr->clks.dramclk_khz <= dc->clk_mgr->bw_params->dc_mode_softmax_memclk * 1000 &&
- 				context->bw_ctx.bw.dcn.clk.dramclk_khz > dc->clk_mgr->bw_params->dc_mode_softmax_memclk * 1000)
- 			dc->clk_mgr->funcs->set_max_memclk(dc->clk_mgr, dc->clk_mgr->bw_params->clk_table.entries[dc->clk_mgr->bw_params->clk_table.num_entries - 1].memclk_mhz);
+ 	/* Process header /memreserve/ fields */
+ 	for (n = 0; ; n++) {
+ 		fdt_get_mem_rsv(initial_boot_params, n, &base, &size);
+@@ -643,8 +646,6 @@ void __init early_init_fdt_scan_reserved_mem(void)
+ 		memblock_reserve(base, size);
+ 	}
  
- 	dcn20_prepare_bandwidth(dc, context);
-+
-+	dc_dmub_srv_p_state_delegate(dc, false, context);
+-	fdt_scan_reserved_mem();
+-	fdt_reserve_elfcorehdr();
+ 	fdt_init_reserved_mem();
  }
  
 -- 
