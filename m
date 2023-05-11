@@ -2,46 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E04CA6FFAC3
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C89B6FFAC7
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:44:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239572AbjEKToC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 15:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57294 "EHLO
+        id S239588AbjEKToa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 15:44:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239508AbjEKTno (ORCPT
+        with ESMTP id S239546AbjEKTn5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 15:43:44 -0400
+        Thu, 11 May 2023 15:43:57 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFAADDA8;
-        Thu, 11 May 2023 12:42:57 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF32CD84C;
+        Thu, 11 May 2023 12:43:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5FCEB65142;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1B0C96515A;
+        Thu, 11 May 2023 19:41:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48F3BC4339B;
         Thu, 11 May 2023 19:41:50 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D1B1C43443;
-        Thu, 11 May 2023 19:41:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683834109;
-        bh=yKGcdrssA11YUCE5AUIKpueGETZlG7QwlPbKBiFbRT4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=tOtxC9gjTRtyx2gLKlkwzUWNSx6KTcJweUH4MbZm4mirVsVDHyTX9fTxW13rs4pNM
-         AVX9zQN/9bYUDCPY2VN2JCNxU7XJhRlnNpkxkyX/oEOrQVPJ34hWOyvxNkKz9758Z6
-         JLecnu92BbJFXuYv+YeRjJtHuMnCaR9jRsFhIBnEK27WjH3iEdlWMjxvRNgiY6NCcm
-         Het5UBU+ivNdPFCs/OQO/re9uQXMP2+AhLODb6tpZk1dTzJKjBGLqDZ+/mXqxqDwR1
-         3fRoD+lQfQX8vHucg+VxMBA5EyT5c9JxZgYLCeig5VcJAkuYMPhrZZxPe+Q1rOM98s
-         DvkXOCFU4G9YA==
+        s=k20201202; t=1683834110;
+        bh=zAgzbywmnArIZnQp5buTjA9Nau+l+FxCl24Fj98z3rA=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=I4oLc6s7IEqZSBdQJSPUDfffugMbDQ8Pfv+bDOG0W9AmrIxqHCuadru7MbNhytwZR
+         jjIzpu1ke6SqFzrLqmopFdoWca6UA7Ux+FvZheA29ikvxT4O0l++wd9JiA55NfENZQ
+         C0nzbsURYOQ2SQjdNcZzPRyNXVOlITg3AhpgDWXqCWrMM1W+N+vt/XpBoA7Haksv+7
+         nX6s4ZdMIjv/kLDw/xLBtgMz8VZR6h2vrrsjFdhxhUMag2lMnIokb8441mPfaIcje0
+         k2JnO99UWsTBzPW4Q+qZTLPJwm+zLpd4ucGvDQhK0NbyXn2IzsIxcwkiZXXacHrb2k
+         ykHlJRt5n+ZEA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Johannes Thumshirn <jth@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Sasha Levin <sashal@kernel.org>, linux-watchdog@vger.kernel.org
-Subject: [PATCH AUTOSEL 4.19 1/2] watchdog: menz069_wdt: fix watchdog initialisation
-Date:   Thu, 11 May 2023 15:41:27 -0400
-Message-Id: <20230511194128.623783-1-sashal@kernel.org>
+Cc:     Pablo Neira Ayuso <pablo@netfilter.org>,
+        Sasha Levin <sashal@kernel.org>, kadlec@netfilter.org,
+        fw@strlen.de, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org
+Subject: [PATCH AUTOSEL 4.19 2/2] netfilter: nf_tables: deactivate anonymous set from preparation phase
+Date:   Thu, 11 May 2023 15:41:28 -0400
+Message-Id: <20230511194128.623783-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230511194128.623783-1-sashal@kernel.org>
+References: <20230511194128.623783-1-sashal@kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
@@ -56,69 +60,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Johannes Thumshirn <jth@kernel.org>
+From: Pablo Neira Ayuso <pablo@netfilter.org>
 
-[ Upstream commit 87b22656ca6a896d0378e9e60ffccb0c82f48b08 ]
+[ Upstream commit c1592a89942e9678f7d9c8030efa777c0d57edab ]
 
-Doing a 'cat /dev/watchdog0' with menz069_wdt as watchdog0 will result in
-a NULL pointer dereference.
+Toggle deleted anonymous sets as inactive in the next generation, so
+users cannot perform any update on it. Clear the generation bitmask
+in case the transaction is aborted.
 
-This happens because we're passing the wrong pointer to
-watchdog_register_device(). Fix this by getting rid of the static
-watchdog_device structure and use the one embedded into the driver's
-per-instance private data.
+The following KASAN splat shows a set element deletion for a bound
+anonymous set that has been already removed in the same transaction.
 
-Signed-off-by: Johannes Thumshirn <jth@kernel.org>
-Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-Link: https://lore.kernel.org/r/20230418172531.177349-2-jth@kernel.org
-Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-Signed-off-by: Wim Van Sebroeck <wim@linux-watchdog.org>
+[   64.921510] ==================================================================
+[   64.923123] BUG: KASAN: wild-memory-access in nf_tables_commit+0xa24/0x1490 [nf_tables]
+[   64.924745] Write of size 8 at addr dead000000000122 by task test/890
+[   64.927903] CPU: 3 PID: 890 Comm: test Not tainted 6.3.0+ #253
+[   64.931120] Call Trace:
+[   64.932699]  <TASK>
+[   64.934292]  dump_stack_lvl+0x33/0x50
+[   64.935908]  ? nf_tables_commit+0xa24/0x1490 [nf_tables]
+[   64.937551]  kasan_report+0xda/0x120
+[   64.939186]  ? nf_tables_commit+0xa24/0x1490 [nf_tables]
+[   64.940814]  nf_tables_commit+0xa24/0x1490 [nf_tables]
+[   64.942452]  ? __kasan_slab_alloc+0x2d/0x60
+[   64.944070]  ? nf_tables_setelem_notify+0x190/0x190 [nf_tables]
+[   64.945710]  ? kasan_set_track+0x21/0x30
+[   64.947323]  nfnetlink_rcv_batch+0x709/0xd90 [nfnetlink]
+[   64.948898]  ? nfnetlink_rcv_msg+0x480/0x480 [nfnetlink]
+
+Signed-off-by: Pablo Neira Ayuso <pablo@netfilter.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/watchdog/menz69_wdt.c | 16 ++++++----------
- 1 file changed, 6 insertions(+), 10 deletions(-)
+ include/net/netfilter/nf_tables.h |  1 +
+ net/netfilter/nf_tables_api.c     | 12 ++++++++++++
+ net/netfilter/nft_dynset.c        |  2 +-
+ net/netfilter/nft_lookup.c        |  2 +-
+ net/netfilter/nft_objref.c        |  2 +-
+ 5 files changed, 16 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/watchdog/menz69_wdt.c b/drivers/watchdog/menz69_wdt.c
-index ed18238c54074..96a25d18ab643 100644
---- a/drivers/watchdog/menz69_wdt.c
-+++ b/drivers/watchdog/menz69_wdt.c
-@@ -98,14 +98,6 @@ static const struct watchdog_ops men_z069_ops = {
- 	.set_timeout = men_z069_wdt_set_timeout,
+diff --git a/include/net/netfilter/nf_tables.h b/include/net/netfilter/nf_tables.h
+index 93253ba1eeac3..78f5f0426e6b6 100644
+--- a/include/net/netfilter/nf_tables.h
++++ b/include/net/netfilter/nf_tables.h
+@@ -471,6 +471,7 @@ struct nft_set_binding {
  };
  
--static struct watchdog_device men_z069_wdt = {
--	.info = &men_z069_info,
--	.ops = &men_z069_ops,
--	.timeout = MEN_Z069_DEFAULT_TIMEOUT,
--	.min_timeout = 1,
--	.max_timeout = MEN_Z069_WDT_COUNTER_MAX / MEN_Z069_TIMER_FREQ,
--};
--
- static int men_z069_probe(struct mcb_device *dev,
- 			  const struct mcb_device_id *id)
+ enum nft_trans_phase;
++void nf_tables_activate_set(const struct nft_ctx *ctx, struct nft_set *set);
+ void nf_tables_deactivate_set(const struct nft_ctx *ctx, struct nft_set *set,
+ 			      struct nft_set_binding *binding,
+ 			      enum nft_trans_phase phase);
+diff --git a/net/netfilter/nf_tables_api.c b/net/netfilter/nf_tables_api.c
+index 079f768496937..7f3044b847dc4 100644
+--- a/net/netfilter/nf_tables_api.c
++++ b/net/netfilter/nf_tables_api.c
+@@ -3758,12 +3758,24 @@ void nf_tables_unbind_set(const struct nft_ctx *ctx, struct nft_set *set,
+ }
+ EXPORT_SYMBOL_GPL(nf_tables_unbind_set);
+ 
++void nf_tables_activate_set(const struct nft_ctx *ctx, struct nft_set *set)
++{
++	if (nft_set_is_anonymous(set))
++		nft_clear(ctx->net, set);
++
++	set->use++;
++}
++EXPORT_SYMBOL_GPL(nf_tables_activate_set);
++
+ void nf_tables_deactivate_set(const struct nft_ctx *ctx, struct nft_set *set,
+ 			      struct nft_set_binding *binding,
+ 			      enum nft_trans_phase phase)
  {
-@@ -125,15 +117,19 @@ static int men_z069_probe(struct mcb_device *dev,
- 		goto release_mem;
+ 	switch (phase) {
+ 	case NFT_TRANS_PREPARE:
++		if (nft_set_is_anonymous(set))
++			nft_deactivate_next(ctx->net, set);
++
+ 		set->use--;
+ 		return;
+ 	case NFT_TRANS_ABORT:
+diff --git a/net/netfilter/nft_dynset.c b/net/netfilter/nft_dynset.c
+index cc076d535e145..ea73130427eb8 100644
+--- a/net/netfilter/nft_dynset.c
++++ b/net/netfilter/nft_dynset.c
+@@ -248,7 +248,7 @@ static void nft_dynset_activate(const struct nft_ctx *ctx,
+ {
+ 	struct nft_dynset *priv = nft_expr_priv(expr);
  
- 	drv->mem = mem;
-+	drv->wdt.info = &men_z069_info;
-+	drv->wdt.ops = &men_z069_ops;
-+	drv->wdt.timeout = MEN_Z069_DEFAULT_TIMEOUT;
-+	drv->wdt.min_timeout = 1;
-+	drv->wdt.max_timeout = MEN_Z069_WDT_COUNTER_MAX / MEN_Z069_TIMER_FREQ;
+-	priv->set->use++;
++	nf_tables_activate_set(ctx, priv->set);
+ }
  
--	drv->wdt = men_z069_wdt;
- 	watchdog_init_timeout(&drv->wdt, 0, &dev->dev);
- 	watchdog_set_nowayout(&drv->wdt, nowayout);
- 	watchdog_set_drvdata(&drv->wdt, drv);
- 	drv->wdt.parent = &dev->dev;
- 	mcb_set_drvdata(dev, drv);
+ static void nft_dynset_destroy(const struct nft_ctx *ctx,
+diff --git a/net/netfilter/nft_lookup.c b/net/netfilter/nft_lookup.c
+index 55754d9939b50..cb9e937a5ce02 100644
+--- a/net/netfilter/nft_lookup.c
++++ b/net/netfilter/nft_lookup.c
+@@ -132,7 +132,7 @@ static void nft_lookup_activate(const struct nft_ctx *ctx,
+ {
+ 	struct nft_lookup *priv = nft_expr_priv(expr);
  
--	return watchdog_register_device(&men_z069_wdt);
-+	return watchdog_register_device(&drv->wdt);
+-	priv->set->use++;
++	nf_tables_activate_set(ctx, priv->set);
+ }
  
- release_mem:
- 	mcb_release_mem(mem);
+ static void nft_lookup_destroy(const struct nft_ctx *ctx,
+diff --git a/net/netfilter/nft_objref.c b/net/netfilter/nft_objref.c
+index bf92a40dd1b2d..eff2173db7e4b 100644
+--- a/net/netfilter/nft_objref.c
++++ b/net/netfilter/nft_objref.c
+@@ -182,7 +182,7 @@ static void nft_objref_map_activate(const struct nft_ctx *ctx,
+ {
+ 	struct nft_objref_map *priv = nft_expr_priv(expr);
+ 
+-	priv->set->use++;
++	nf_tables_activate_set(ctx, priv->set);
+ }
+ 
+ static void nft_objref_map_destroy(const struct nft_ctx *ctx,
 -- 
 2.39.2
 
