@@ -2,338 +2,423 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 767FA6FF97D
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 20:26:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEC6D6FF976
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 20:24:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238914AbjEKS02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 14:26:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48876 "EHLO
+        id S238768AbjEKSYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 14:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238411AbjEKS00 (ORCPT
+        with ESMTP id S237590AbjEKSYg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 14:26:26 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D09BE10C6;
-        Thu, 11 May 2023 11:26:22 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id D310E5FD0C;
-        Thu, 11 May 2023 21:26:20 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1683829580;
-        bh=5nTAfm/pvw11kHJn8DB2F1CXjcxkc985Z7SnZU2jNZw=;
-        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-        b=AgMOHm0+2/cEkhAS9xFjJ3Watg2imQsL3Nimrvhnksp0qHif0wmln6Iavj/w451dv
-         jJNEdbOuhpuDfNa1h+S4SjZEazN2+v+NFJ+AB+7+0xl8zyBEhant2cu0l7G0SMO1Pz
-         vNK9qbrNjnn+oRsju0bDj8J2hOgubkP1FMvLzTcLJuwEjHEywCroEAJzEg3J9DXWSp
-         v24jfo6DMf/y+vvEs+nl2mF89lgsaEMMSyAF8tEeczWIpU4bTDuec6vWoFCxsFCvV+
-         x3qIK3d163DzMdNrKTjKYSMegDJvg7NyXV7WlBnGXRqZwZgFgGcc1OK2fCpXDn26fd
-         /AJM8X2VaQt7g==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 11 May 2023 21:26:16 +0300 (MSK)
-Message-ID: <c873b5a9-17ad-767c-5b20-35a49ab2bd40@sberdevices.ru>
-Date:   Thu, 11 May 2023 21:21:34 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RESEND PATCH v3] mtd: rawnand: macronix: OTP access for
- MX30LFxG18AC
-Content-Language: en-US
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>,
-        Mason Yang <masonccyang@mxic.com.tw>,
-        Boris Brezillon <boris.brezillon@collabora.com>
-References: <20230511152120.3297853-1-AVKrasnov@sberdevices.ru>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-In-Reply-To: <20230511152120.3297853-1-AVKrasnov@sberdevices.ru>
+        Thu, 11 May 2023 14:24:36 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 600171FD7
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 11:24:34 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba6f530c9c7so186513276.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 11:24:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683829473; x=1686421473;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=pi6QoZ5SCLGgP2sxC+MkaEgbY1VXhaAz9TEP3dwrDPs=;
+        b=zpyNZKJdhGrBM4FCCCFdLJNUeHu7VB5x1zBza86yuRYT//8gc05k3M+A1XAjXeHYQU
+         XsEPOjhIWX936abY0RAnUz756Co2yEtSnUBul6v6sCxjIPkPJgNCvPmNFhIN62HuVOE1
+         irkrkZ4ocjIKKQeR0IfXiH2yEHFBjv0I6mZrVd3b7aEQFXXsYHEuLzZoJ1h6qn/7NkBG
+         Kjw+bEIhpmgecGP8AQgNQNhH64/X0SBEYMkbt0iVzYsNyZ87+y4B+sEecTBCV4ftXZHx
+         CwAYGbE8i4Tg39vPlkbL8N9Ogy15Z6Fr4rHTurnmFTOuV0J1qAkQm721UxKaMxjwzdwc
+         hf5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683829473; x=1686421473;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pi6QoZ5SCLGgP2sxC+MkaEgbY1VXhaAz9TEP3dwrDPs=;
+        b=ft3pVcBU2bx9LEW2ObA6LZR2WTx2j/h8b228y2L0iik+pRh4B3ajGGogLj0Bw7exE9
+         2EtLIv/C43tJXYFGpDwq7fbRnwTC9g+DqyYwu81MPD8MO29NYzEs3K6vHPxHSknkLZGH
+         rWyJ+v3vVXHExzrd6afgDQ3+GiDgUliuJm9fwmDPnp8S/1pB+o3J0P+Mxh5UzpBEC9rm
+         wrZ63rt5vxX/6PPHetswl6isU/Js9D6b5vBkA5+W/zmdBn6Zc9DhchTWp2KwHrTUfVvg
+         yJiWQ1TeAXOtIpn87GgPYFuAwVSBsZStk/lbQeEueRe5x0fkw1bUUrDK+fTVl42ITL9O
+         PpGA==
+X-Gm-Message-State: AC+VfDyLECqX1ga2QoHwBu4LfUybyS4nbGkQdOjeJokKmrU9LzNSqyiO
+        Ljh5Qjrwx3B+caJZQpNjI34QIBdAfJRed4UKj/FB
+X-Google-Smtp-Source: ACHHUZ7u4hIr1abfAjSfObToFMnjaZ5a7i67wz1z8K+AHbBfqmL+8z0DeI0fgjzjTRoAf5zNOgmTizL/c3RRg3dEL+oU
+X-Received: from axel.svl.corp.google.com ([2620:15c:2d4:203:1119:8675:ddb3:1e7a])
+ (user=axelrasmussen job=sendgmr) by 2002:a05:6902:114e:b0:b4a:3896:bc17 with
+ SMTP id p14-20020a056902114e00b00b4a3896bc17mr9915594ybu.0.1683829473641;
+ Thu, 11 May 2023 11:24:33 -0700 (PDT)
+Date:   Thu, 11 May 2023 11:24:24 -0700
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+Message-ID: <20230511182426.1898675-1-axelrasmussen@google.com>
+Subject: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
+From:   Axel Rasmussen <axelrasmussen@google.com>
+To:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Huang Ying <ying.huang@intel.com>,
+        James Houghton <jthoughton@google.com>,
+        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>
+Cc:     Axel Rasmussen <axelrasmussen@google.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/11 10:21:00 #21259776
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Cc: Mason Yang <masonccyang@mxic.com.tw> and Boris Brezillon <boris.brezillon@collabora.com>
+The basic idea here is to "simulate" memory poisoning for VMs. A VM
+running on some host might encounter a memory error, after which some
+page(s) are poisoned (i.e., future accesses SIGBUS). They expect that
+once poisoned, pages can never become "un-poisoned". So, when we live
+migrate the VM, we need to preserve the poisoned status of these pages.
 
-On 11.05.2023 18:21, Arseniy Krasnov wrote:
-> This adds support for OTP area access on MX30LFxG18AC chip series.
-> 
-> Changelog:
->   v1 -> v2:
->   * Add slab.h include due to kernel test robot error.
->   v2 -> v3:
->   * Use 'uint64_t' as input argument for 'do_div()' instead
->     of 'unsigned long' due to kernel test robot error.
-> 
-> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> ---
->  drivers/mtd/nand/raw/nand_macronix.c | 213 +++++++++++++++++++++++++++
->  1 file changed, 213 insertions(+)
-> 
-> diff --git a/drivers/mtd/nand/raw/nand_macronix.c b/drivers/mtd/nand/raw/nand_macronix.c
-> index 1472f925f386..2301f990678e 100644
-> --- a/drivers/mtd/nand/raw/nand_macronix.c
-> +++ b/drivers/mtd/nand/raw/nand_macronix.c
-> @@ -6,6 +6,7 @@
->   * Author: Boris Brezillon <boris.brezillon@free-electrons.com>
->   */
->  
-> +#include <linux/slab.h>
->  #include "linux/delay.h"
->  #include "internals.h"
->  
-> @@ -31,6 +32,20 @@
->  
->  #define MXIC_CMD_POWER_DOWN 0xB9
->  
-> +#define ONFI_FEATURE_ADDR_30LFXG18AC_OTP	0x90
-> +#define MACRONIX_30LFXG18AC_OTP_START_PAGE	0
-> +#define MACRONIX_30LFXG18AC_OTP_PAGES		30
-> +#define MACRONIX_30LFXG18AC_OTP_PAGE_SIZE	2112
-> +#define MACRONIX_30LFXG18AC_OTP_START_BYTE	\
-> +	(MACRONIX_30LFXG18AC_OTP_START_PAGE *	\
-> +	 MACRONIX_30LFXG18AC_OTP_PAGE_SIZE)
-> +#define MACRONIX_30LFXG18AC_OTP_SIZE_BYTES	\
-> +	(MACRONIX_30LFXG18AC_OTP_PAGES *	\
-> +	 MACRONIX_30LFXG18AC_OTP_PAGE_SIZE)
-> +
-> +#define MACRONIX_30LFXG18AC_OTP_EN		BIT(0)
-> +#define MACRONIX_30LFXG18AC_OTP_LOCKED		BIT(1)
-> +
->  struct nand_onfi_vendor_macronix {
->  	u8 reserved;
->  	u8 reliability_func;
-> @@ -316,6 +331,203 @@ static void macronix_nand_deep_power_down_support(struct nand_chip *chip)
->  	chip->ops.resume = mxic_nand_resume;
->  }
->  
-> +static int macronix_30lfxg18ac_get_otp_info(struct mtd_info *mtd, size_t len,
-> +					    size_t *retlen,
-> +					    struct otp_info *buf)
-> +{
-> +	if (len < sizeof(*buf))
-> +		return -EINVAL;
-> +
-> +	/* Don't know how to check that OTP is locked. */
-> +	buf->locked = 0;
-> +	buf->start = MACRONIX_30LFXG18AC_OTP_START_BYTE;
-> +	buf->length = MACRONIX_30LFXG18AC_OTP_SIZE_BYTES;
-> +
-> +	*retlen = sizeof(*buf);
-> +
-> +	return 0;
-> +}
-> +
-> +static int macronix_30lfxg18ac_otp_enable(struct nand_chip *nand)
-> +{
-> +	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
-> +
-> +	feature_buf[0] = MACRONIX_30LFXG18AC_OTP_EN;
-> +	return nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
-> +				 feature_buf);
-> +}
-> +
-> +static int macronix_30lfxg18ac_otp_disable(struct nand_chip *nand)
-> +{
-> +	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
-> +
-> +	return nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
-> +				 feature_buf);
-> +}
-> +
-> +static int __macronix_30lfxg18ac_rw_otp(struct mtd_info *mtd,
-> +					loff_t offs_in_flash,
-> +					size_t len, size_t *retlen,
-> +					u_char *buf, bool write)
-> +{
-> +	struct nand_chip *nand;
-> +	size_t bytes_handled;
-> +	off_t offs_in_page;
-> +	uint64_t page;
-> +	void *dma_buf;
-> +	int ret;
-> +
-> +	/* 'nand_prog/read_page_op()' may use 'buf' as DMA buffer,
-> +	 * so allocate properly aligned memory for it. This is
-> +	 * needed because cross page accesses may lead to unaligned
-> +	 * buffer address for DMA.
-> +	 */
-> +	dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
-> +	if (!dma_buf)
-> +		return -ENOMEM;
-> +
-> +	nand = mtd_to_nand(mtd);
-> +	nand_select_target(nand, 0);
-> +
-> +	ret = macronix_30lfxg18ac_otp_enable(nand);
-> +	if (ret)
-> +		goto out_otp;
-> +
-> +	page = offs_in_flash;
-> +	/* 'page' will be result of division. */
-> +	offs_in_page = do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
-> +	bytes_handled = 0;
-> +
-> +	while (bytes_handled < len &&
-> +	       page < MACRONIX_30LFXG18AC_OTP_PAGES) {
-> +		size_t bytes_to_handle;
-> +
-> +		bytes_to_handle = min_t(size_t, len - bytes_handled,
-> +					MACRONIX_30LFXG18AC_OTP_PAGE_SIZE -
-> +					offs_in_page);
-> +
-> +		if (write) {
-> +			memcpy(dma_buf, &buf[bytes_handled], bytes_to_handle);
-> +			ret = nand_prog_page_op(nand, page, offs_in_page,
-> +						dma_buf, bytes_to_handle);
-> +		} else {
-> +			ret = nand_read_page_op(nand, page, offs_in_page,
-> +						dma_buf, bytes_to_handle);
-> +			if (!ret)
-> +				memcpy(&buf[bytes_handled], dma_buf,
-> +				       bytes_to_handle);
-> +		}
-> +		if (ret)
-> +			goto out_otp;
-> +
-> +		bytes_handled += bytes_to_handle;
-> +		offs_in_page = 0;
-> +		page++;
-> +	}
-> +
-> +	*retlen = bytes_handled;
-> +
-> +out_otp:
-> +	if (ret)
-> +		dev_err(&mtd->dev, "failed to perform OTP IO: %i\n", ret);
-> +
-> +	ret = macronix_30lfxg18ac_otp_disable(nand);
-> +	WARN(ret, "failed to leave OTP mode after %s\n",
-> +	     write ? "write" : "read");
-> +	nand_deselect_target(nand);
-> +	kfree(dma_buf);
-> +
-> +	return ret;
-> +}
-> +
-> +static int macronix_30lfxg18ac_write_otp(struct mtd_info *mtd, loff_t to,
-> +					 size_t len, size_t *rlen,
-> +					 const u_char *buf)
-> +{
-> +	return __macronix_30lfxg18ac_rw_otp(mtd, to, len, rlen, (u_char *)buf,
-> +					    true);
-> +}
-> +
-> +static int macronix_30lfxg18ac_read_otp(struct mtd_info *mtd, loff_t from,
-> +					size_t len, size_t *rlen,
-> +					u_char *buf)
-> +{
-> +	return __macronix_30lfxg18ac_rw_otp(mtd, from, len, rlen, buf, false);
-> +}
-> +
-> +static int macronix_30lfxg18ac_lock_otp(struct mtd_info *mtd, loff_t from,
-> +					size_t len)
-> +{
-> +	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
-> +	struct nand_chip *nand;
-> +	int ret;
-> +
-> +	if (from != MACRONIX_30LFXG18AC_OTP_START_BYTE ||
-> +	    len != MACRONIX_30LFXG18AC_OTP_SIZE_BYTES)
-> +		return -EINVAL;
-> +
-> +	dev_dbg(&mtd->dev, "locking OTP\n");
-> +
-> +	nand = mtd_to_nand(mtd);
-> +	nand_select_target(nand, 0);
-> +
-> +	feature_buf[0] = MACRONIX_30LFXG18AC_OTP_EN |
-> +			 MACRONIX_30LFXG18AC_OTP_LOCKED;
-> +	ret = nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
-> +				feature_buf);
-> +	if (ret) {
-> +		dev_err(&mtd->dev,
-> +			"failed to lock OTP (set features): %i\n", ret);
-> +		nand_deselect_target(nand);
-> +		return ret;
-> +	}
-> +
-> +	/* Do dummy page prog with zero address. */
-> +	feature_buf[0] = 0;
-> +	ret = nand_prog_page_op(nand, 0, 0, feature_buf, 1);
-> +	if (ret)
-> +		dev_err(&mtd->dev,
-> +			"failed to lock OTP (page prog): %i\n", ret);
-> +
-> +	ret = macronix_30lfxg18ac_otp_disable(nand);
-> +	WARN(ret, "failed to leave OTP mode after lock\n");
-> +
-> +	nand_deselect_target(nand);
-> +
-> +	return ret;
-> +}
-> +
-> +static void macronix_nand_setup_otp(struct nand_chip *chip)
-> +{
-> +	static const char * const supported_otp_models[] = {
-> +		"MX30LF1G18AC",
-> +		"MX30LF2G18AC",
-> +		"MX30LF4G18AC",
-> +	};
-> +	struct mtd_info *mtd;
-> +
-> +	if (!chip->parameters.supports_set_get_features)
-> +		return;
-> +
-> +	if (match_string(supported_otp_models,
-> +			 ARRAY_SIZE(supported_otp_models),
-> +			 chip->parameters.model) < 0)
-> +		return;
-> +
-> +	bitmap_set(chip->parameters.get_feature_list,
-> +		   ONFI_FEATURE_ADDR_30LFXG18AC_OTP, 1);
-> +	bitmap_set(chip->parameters.set_feature_list,
-> +		   ONFI_FEATURE_ADDR_30LFXG18AC_OTP, 1);
-> +
-> +	mtd = nand_to_mtd(chip);
-> +	mtd->_get_fact_prot_info = macronix_30lfxg18ac_get_otp_info;
-> +	mtd->_read_fact_prot_reg = macronix_30lfxg18ac_read_otp;
-> +	mtd->_get_user_prot_info = macronix_30lfxg18ac_get_otp_info;
-> +	mtd->_read_user_prot_reg = macronix_30lfxg18ac_read_otp;
-> +	mtd->_write_user_prot_reg = macronix_30lfxg18ac_write_otp;
-> +	mtd->_lock_user_prot_reg = macronix_30lfxg18ac_lock_otp;
-> +}
-> +
->  static int macronix_nand_init(struct nand_chip *chip)
->  {
->  	if (nand_is_slc(chip))
-> @@ -325,6 +537,7 @@ static int macronix_nand_init(struct nand_chip *chip)
->  	macronix_nand_onfi_init(chip);
->  	macronix_nand_block_protection_support(chip);
->  	macronix_nand_deep_power_down_support(chip);
-> +	macronix_nand_setup_otp(chip);
->  
->  	return 0;
->  }
+When live migrating, we try to get the guest running on its new host as
+quickly as possible. So, we start it running before all memory has been
+copied, and before we're certain which pages should be poisoned or not.
+
+So the basic way to use this new feature is:
+
+- On the new host, the guest's memory is registered with userfaultfd, in
+  either MISSING or MINOR mode (doesn't really matter for this purpose).
+- On any first access, we get a userfaultfd event. At this point we can
+  communicate with the old host to find out if the page was poisoned.
+- If so, we can respond with a UFFDIO_SIGBUS - this places a swap marker
+  so any future accesses will SIGBUS. Because the pte is now "present",
+  future accesses won't generate more userfaultfd events, they'll just
+  SIGBUS directly.
+
+UFFDIO_SIGBUS does not handle unmapping previously-present PTEs. This
+isn't needed, because during live migration we want to intercept
+all accesses with userfaultfd (not just writes, so WP mode isn't useful
+for this). So whether minor or missing mode is being used (or both), the
+PTE won't be present in any case, so handling that case isn't needed.
+
+Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
+---
+ fs/userfaultfd.c                 | 63 ++++++++++++++++++++++++++++++++
+ include/linux/swapops.h          |  3 +-
+ include/linux/userfaultfd_k.h    |  4 ++
+ include/uapi/linux/userfaultfd.h | 25 +++++++++++--
+ mm/memory.c                      |  4 ++
+ mm/userfaultfd.c                 | 62 ++++++++++++++++++++++++++++++-
+ 6 files changed, 156 insertions(+), 5 deletions(-)
+
+diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+index 0fd96d6e39ce..edc2928dae2b 100644
+--- a/fs/userfaultfd.c
++++ b/fs/userfaultfd.c
+@@ -1966,6 +1966,66 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
+ 	return ret;
+ }
+ 
++static inline int userfaultfd_sigbus(struct userfaultfd_ctx *ctx, unsigned long arg)
++{
++	__s64 ret;
++	struct uffdio_sigbus uffdio_sigbus;
++	struct uffdio_sigbus __user *user_uffdio_sigbus;
++	struct userfaultfd_wake_range range;
++
++	user_uffdio_sigbus = (struct uffdio_sigbus __user *)arg;
++
++	ret = -EAGAIN;
++	if (atomic_read(&ctx->mmap_changing))
++		goto out;
++
++	ret = -EFAULT;
++	if (copy_from_user(&uffdio_sigbus, user_uffdio_sigbus,
++			   /* don't copy the output fields */
++			   sizeof(uffdio_sigbus) - (sizeof(__s64))))
++		goto out;
++
++	ret = validate_range(ctx->mm, uffdio_sigbus.range.start,
++			     uffdio_sigbus.range.len);
++	if (ret)
++		goto out;
++
++	ret = -EINVAL;
++	/* double check for wraparound just in case. */
++	if (uffdio_sigbus.range.start + uffdio_sigbus.range.len <=
++	    uffdio_sigbus.range.start) {
++		goto out;
++	}
++	if (uffdio_sigbus.mode & ~UFFDIO_SIGBUS_MODE_DONTWAKE)
++		goto out;
++
++	if (mmget_not_zero(ctx->mm)) {
++		ret = mfill_atomic_sigbus(ctx->mm, uffdio_sigbus.range.start,
++					  uffdio_sigbus.range.len,
++					  &ctx->mmap_changing, 0);
++		mmput(ctx->mm);
++	} else {
++		return -ESRCH;
++	}
++
++	if (unlikely(put_user(ret, &user_uffdio_sigbus->updated)))
++		return -EFAULT;
++	if (ret < 0)
++		goto out;
++
++	/* len == 0 would wake all */
++	BUG_ON(!ret);
++	range.len = ret;
++	if (!(uffdio_sigbus.mode & UFFDIO_SIGBUS_MODE_DONTWAKE)) {
++		range.start = uffdio_sigbus.range.start;
++		wake_userfault(ctx, &range);
++	}
++	ret = range.len == uffdio_sigbus.range.len ? 0 : -EAGAIN;
++
++out:
++	return ret;
++}
++
+ static inline unsigned int uffd_ctx_features(__u64 user_features)
+ {
+ 	/*
+@@ -2067,6 +2127,9 @@ static long userfaultfd_ioctl(struct file *file, unsigned cmd,
+ 	case UFFDIO_CONTINUE:
+ 		ret = userfaultfd_continue(ctx, arg);
+ 		break;
++	case UFFDIO_SIGBUS:
++		ret = userfaultfd_sigbus(ctx, arg);
++		break;
+ 	}
+ 	return ret;
+ }
+diff --git a/include/linux/swapops.h b/include/linux/swapops.h
+index 3a451b7afcb3..fa778a0ae730 100644
+--- a/include/linux/swapops.h
++++ b/include/linux/swapops.h
+@@ -405,7 +405,8 @@ typedef unsigned long pte_marker;
+ 
+ #define  PTE_MARKER_UFFD_WP			BIT(0)
+ #define  PTE_MARKER_SWAPIN_ERROR		BIT(1)
+-#define  PTE_MARKER_MASK			(BIT(2) - 1)
++#define  PTE_MARKER_UFFD_SIGBUS			BIT(2)
++#define  PTE_MARKER_MASK			(BIT(3) - 1)
+ 
+ static inline swp_entry_t make_pte_marker_entry(pte_marker marker)
+ {
+diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
+index d78b01524349..6de1084939c5 100644
+--- a/include/linux/userfaultfd_k.h
++++ b/include/linux/userfaultfd_k.h
+@@ -46,6 +46,7 @@ enum mfill_atomic_mode {
+ 	MFILL_ATOMIC_COPY,
+ 	MFILL_ATOMIC_ZEROPAGE,
+ 	MFILL_ATOMIC_CONTINUE,
++	MFILL_ATOMIC_SIGBUS,
+ 	NR_MFILL_ATOMIC_MODES,
+ };
+ 
+@@ -83,6 +84,9 @@ extern ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm,
+ extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long dst_start,
+ 				     unsigned long len, atomic_t *mmap_changing,
+ 				     uffd_flags_t flags);
++extern ssize_t mfill_atomic_sigbus(struct mm_struct *dst_mm, unsigned long start,
++				   unsigned long len, atomic_t *mmap_changing,
++				   uffd_flags_t flags);
+ extern int mwriteprotect_range(struct mm_struct *dst_mm,
+ 			       unsigned long start, unsigned long len,
+ 			       bool enable_wp, atomic_t *mmap_changing);
+diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
+index 66dd4cd277bd..616e33d3db97 100644
+--- a/include/uapi/linux/userfaultfd.h
++++ b/include/uapi/linux/userfaultfd.h
+@@ -39,7 +39,8 @@
+ 			   UFFD_FEATURE_MINOR_SHMEM |		\
+ 			   UFFD_FEATURE_EXACT_ADDRESS |		\
+ 			   UFFD_FEATURE_WP_HUGETLBFS_SHMEM |	\
+-			   UFFD_FEATURE_WP_UNPOPULATED)
++			   UFFD_FEATURE_WP_UNPOPULATED |	\
++			   UFFD_FEATURE_SIGBUS_IOCTL)
+ #define UFFD_API_IOCTLS				\
+ 	((__u64)1 << _UFFDIO_REGISTER |		\
+ 	 (__u64)1 << _UFFDIO_UNREGISTER |	\
+@@ -49,12 +50,14 @@
+ 	 (__u64)1 << _UFFDIO_COPY |		\
+ 	 (__u64)1 << _UFFDIO_ZEROPAGE |		\
+ 	 (__u64)1 << _UFFDIO_WRITEPROTECT |	\
+-	 (__u64)1 << _UFFDIO_CONTINUE)
++	 (__u64)1 << _UFFDIO_CONTINUE |		\
++	 (__u64)1 << _UFFDIO_SIGBUS)
+ #define UFFD_API_RANGE_IOCTLS_BASIC		\
+ 	((__u64)1 << _UFFDIO_WAKE |		\
+ 	 (__u64)1 << _UFFDIO_COPY |		\
++	 (__u64)1 << _UFFDIO_WRITEPROTECT |	\
+ 	 (__u64)1 << _UFFDIO_CONTINUE |		\
+-	 (__u64)1 << _UFFDIO_WRITEPROTECT)
++	 (__u64)1 << _UFFDIO_SIGBUS)
+ 
+ /*
+  * Valid ioctl command number range with this API is from 0x00 to
+@@ -71,6 +74,7 @@
+ #define _UFFDIO_ZEROPAGE		(0x04)
+ #define _UFFDIO_WRITEPROTECT		(0x06)
+ #define _UFFDIO_CONTINUE		(0x07)
++#define _UFFDIO_SIGBUS			(0x08)
+ #define _UFFDIO_API			(0x3F)
+ 
+ /* userfaultfd ioctl ids */
+@@ -91,6 +95,8 @@
+ 				      struct uffdio_writeprotect)
+ #define UFFDIO_CONTINUE		_IOWR(UFFDIO, _UFFDIO_CONTINUE,	\
+ 				      struct uffdio_continue)
++#define UFFDIO_SIGBUS		_IOWR(UFFDIO, _UFFDIO_SIGBUS, \
++				      struct uffdio_sigbus)
+ 
+ /* read() structure */
+ struct uffd_msg {
+@@ -225,6 +231,7 @@ struct uffdio_api {
+ #define UFFD_FEATURE_EXACT_ADDRESS		(1<<11)
+ #define UFFD_FEATURE_WP_HUGETLBFS_SHMEM		(1<<12)
+ #define UFFD_FEATURE_WP_UNPOPULATED		(1<<13)
++#define UFFD_FEATURE_SIGBUS_IOCTL		(1<<14)
+ 	__u64 features;
+ 
+ 	__u64 ioctls;
+@@ -321,6 +328,18 @@ struct uffdio_continue {
+ 	__s64 mapped;
+ };
+ 
++struct uffdio_sigbus {
++	struct uffdio_range range;
++#define UFFDIO_SIGBUS_MODE_DONTWAKE		((__u64)1<<0)
++	__u64 mode;
++
++	/*
++	 * Fields below here are written by the ioctl and must be at the end:
++	 * the copy_from_user will not read past here.
++	 */
++	__s64 updated;
++};
++
+ /*
+  * Flags for the userfaultfd(2) system call itself.
+  */
+diff --git a/mm/memory.c b/mm/memory.c
+index f69fbc251198..e4b4207c2590 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -3675,6 +3675,10 @@ static vm_fault_t handle_pte_marker(struct vm_fault *vmf)
+ 	if (WARN_ON_ONCE(!marker))
+ 		return VM_FAULT_SIGBUS;
+ 
++	/* SIGBUS explicitly requested for this PTE. */
++	if (marker & PTE_MARKER_UFFD_SIGBUS)
++		return VM_FAULT_SIGBUS;
++
+ 	/* Higher priority than uffd-wp when data corrupted */
+ 	if (marker & PTE_MARKER_SWAPIN_ERROR)
+ 		return VM_FAULT_SIGBUS;
+diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+index e97a0b4889fc..933587eebd5d 100644
+--- a/mm/userfaultfd.c
++++ b/mm/userfaultfd.c
+@@ -278,6 +278,51 @@ static int mfill_atomic_pte_continue(pmd_t *dst_pmd,
+ 	goto out;
+ }
+ 
++/* Handles UFFDIO_SIGBUS for all non-hugetlb VMAs. */
++static int mfill_atomic_pte_sigbus(pmd_t *dst_pmd,
++				   struct vm_area_struct *dst_vma,
++				   unsigned long dst_addr,
++				   uffd_flags_t flags)
++{
++	int ret;
++	struct mm_struct *dst_mm = dst_vma->vm_mm;
++	pte_t _dst_pte, *dst_pte;
++	spinlock_t *ptl;
++
++	_dst_pte = make_pte_marker(PTE_MARKER_UFFD_SIGBUS);
++	dst_pte = pte_offset_map_lock(dst_mm, dst_pmd, dst_addr, &ptl);
++
++	if (vma_is_shmem(dst_vma)) {
++		struct inode *inode;
++		pgoff_t offset, max_off;
++
++		/* serialize against truncate with the page table lock */
++		inode = dst_vma->vm_file->f_inode;
++		offset = linear_page_index(dst_vma, dst_addr);
++		max_off = DIV_ROUND_UP(i_size_read(inode), PAGE_SIZE);
++		ret = -EFAULT;
++		if (unlikely(offset >= max_off))
++			goto out_unlock;
++	}
++
++	ret = -EEXIST;
++	/*
++	 * For now, we don't handle unmapping pages, so only support filling in
++	 * none PTEs, or replacing PTE markers.
++	 */
++	if (!pte_none_mostly(*dst_pte))
++		goto out_unlock;
++
++	set_pte_at(dst_mm, dst_addr, dst_pte, _dst_pte);
++
++	/* No need to invalidate - it was non-present before */
++	update_mmu_cache(dst_vma, dst_addr, dst_pte);
++	ret = 0;
++out_unlock:
++	pte_unmap_unlock(dst_pte, ptl);
++	return ret;
++}
++
+ static pmd_t *mm_alloc_pmd(struct mm_struct *mm, unsigned long address)
+ {
+ 	pgd_t *pgd;
+@@ -328,8 +373,12 @@ static __always_inline ssize_t mfill_atomic_hugetlb(
+ 	 * supported by hugetlb.  A PMD_SIZE huge pages may exist as used
+ 	 * by THP.  Since we can not reliably insert a zero page, this
+ 	 * feature is not supported.
++	 *
++	 * PTE marker handling for hugetlb is a bit special, so for now
++	 * UFFDIO_SIGBUS is not supported.
+ 	 */
+-	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE)) {
++	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_ZEROPAGE) ||
++	    uffd_flags_mode_is(flags, MFILL_ATOMIC_SIGBUS)) {
+ 		mmap_read_unlock(dst_mm);
+ 		return -EINVAL;
+ 	}
+@@ -473,6 +522,9 @@ static __always_inline ssize_t mfill_atomic_pte(pmd_t *dst_pmd,
+ 	if (uffd_flags_mode_is(flags, MFILL_ATOMIC_CONTINUE)) {
+ 		return mfill_atomic_pte_continue(dst_pmd, dst_vma,
+ 						 dst_addr, flags);
++	} else if (uffd_flags_mode_is(flags, MFILL_ATOMIC_SIGBUS)) {
++		return mfill_atomic_pte_sigbus(dst_pmd, dst_vma,
++					       dst_addr, flags);
+ 	}
+ 
+ 	/*
+@@ -694,6 +746,14 @@ ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long start,
+ 			    uffd_flags_set_mode(flags, MFILL_ATOMIC_CONTINUE));
+ }
+ 
++ssize_t mfill_atomic_sigbus(struct mm_struct *dst_mm, unsigned long start,
++			    unsigned long len, atomic_t *mmap_changing,
++			    uffd_flags_t flags)
++{
++	return mfill_atomic(dst_mm, start, 0, len, mmap_changing,
++			    uffd_flags_set_mode(flags, MFILL_ATOMIC_SIGBUS));
++}
++
+ long uffd_wp_range(struct vm_area_struct *dst_vma,
+ 		   unsigned long start, unsigned long len, bool enable_wp)
+ {
+-- 
+2.40.1.606.ga4b1b128d6-goog
+
