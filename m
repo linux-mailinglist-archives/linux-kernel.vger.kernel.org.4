@@ -2,195 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D35486FECF7
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A71C6FED08
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:39:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237092AbjEKHh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 03:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44370 "EHLO
+        id S237174AbjEKHjp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 03:39:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbjEKHhZ (ORCPT
+        with ESMTP id S237123AbjEKHjj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 03:37:25 -0400
-Received: from EUR01-HE1-obe.outbound.protection.outlook.com (mail-he1eur01on2047.outbound.protection.outlook.com [40.107.13.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2401D10DD;
-        Thu, 11 May 2023 00:37:18 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mYXqO8ZqpG+phseYkgNVE5TGa0UoEAUmCEYASTk7mVkD9q5Qzdl5dFvcnca3o8cNFIsV0ThjDVDzrUWQRhw7GSTAA8ja7t4q6/iKcoSqWypI5rDdHWW6HtNty9gIA8To4B8kkeE9AFBzOC6gRf2p2ivH1oal9omWu7KdiTua1kwCnL/Z5isTM+K8H/07SQZtcNPSOdYiJHbDU0pBOuVaq8g+Sd/Kg0cexX5BQDwsF8iduRnWZc083eZCgYbfvq78hzPiaZjIZiNApyOFA2UIc9KkeEgvsQMrTsnWJ1turlV7FuyQrHQlLq04GIKO2UFY8NlHD/LBFJV3ldJmVgPuNQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=g92VZvV0Gp81FZ3EVT7g0PeFqiVEhQCcZiQRkg+SO2o=;
- b=OZ4lPD5WfdgM16JEZkrjD8aCJWgDSYiNFt3je6mK9rbdgSLV5R8WpSlv9qYEXGxaFm3zuoGoz8FZ9UDK8+Z3Q/YDOQgyBib07fSXxRDkEKEJBZC2aoKprjZFXS9SdCgjscsjYEPp2c8sIfk/nU17Nd7VWbresRqakQmP6XDlvRLwd83//rHg6uDm+q4T5b/6oVZOJDSp76nlJAa6QeWMxzKCpe/d0urtkNARmn3TRbIDl+VCPnMNCuRfIHS969snDdK2OQQS//7wZl9urEPFLHTyzXpJMnZoCXahqvXS0daCp5liB7xSaFAl8n6LcETvTHiYT7yxChIeK4v596tBCg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=santannapisa.it; dmarc=pass action=none
- header.from=santannapisa.it; dkim=pass header.d=santannapisa.it; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=santannapisa.it;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=g92VZvV0Gp81FZ3EVT7g0PeFqiVEhQCcZiQRkg+SO2o=;
- b=mi2zVljXwQ+Hgjz2x9DIV5mQTmi06CzDu8QCqBNBWLpW53AJjdMfXQh5bTOC7ldoYAX2E8xNsKmjJKlM1Y4P8Jb0wvYqrpu2bbrLnPS40zkLSBtJfh1pT6cXmDBJoZsK+ZX8A7QQyWREmYkfKNLUTkfmJIThRQFEi8Ol5tFXnTo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=santannapisa.it;
-Received: from VI1PR03MB2880.eurprd03.prod.outlook.com (2603:10a6:802:2d::21)
- by AS8PR03MB9700.eurprd03.prod.outlook.com (2603:10a6:20b:61c::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Thu, 11 May
- 2023 07:37:14 +0000
-Received: from VI1PR03MB2880.eurprd03.prod.outlook.com
- ([fe80::f649:8c94:52f9:3979]) by VI1PR03MB2880.eurprd03.prod.outlook.com
- ([fe80::f649:8c94:52f9:3979%6]) with mapi id 15.20.6387.019; Thu, 11 May 2023
- 07:37:14 +0000
-Date:   Thu, 11 May 2023 09:37:11 +0200
-From:   luca abeni <luca.abeni@santannapisa.it>
-To:     Vineeth Remanan Pillai <vineeth@bitbyteword.org>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH 1/2] sched/deadline: accurate reclaim bandwidth for GRUB
-Message-ID: <20230511093711.2be82409@nowhere>
-In-Reply-To: <CAO7JXPg03f2YnrmzoGjfHEZZcoN55cU7uVukMw31Bw3x6nnaMw@mail.gmail.com>
-References: <20230508160829.2756405-1-vineeth@bitbyteword.org>
-        <20230509132534.09098acc@luca64>
-        <CAO7JXPhrqKWfsp860rRmEenxARi8U2gNMGsOn4m+aKporWwBcg@mail.gmail.com>
-        <20230509224829.2fb547fd@nowhere>
-        <20230509225417.61d36733@nowhere>
-        <CAO7JXPhk5qbz9kmiu9WuXS+gXCt9+X8pP2c37hd9ChByLmXYjA@mail.gmail.com>
-        <20230510090735.68f62cd4@nowhere>
-        <CAO7JXPg03f2YnrmzoGjfHEZZcoN55cU7uVukMw31Bw3x6nnaMw@mail.gmail.com>
-Organization: Scuola Superiore Sant'Anna
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ZR0P278CA0002.CHEP278.PROD.OUTLOOK.COM
- (2603:10a6:910:16::12) To VI1PR03MB2880.eurprd03.prod.outlook.com
- (2603:10a6:802:2d::21)
+        Thu, 11 May 2023 03:39:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BD662115
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:38:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683790734;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=P8V2QwKOyBLdpEe+T44KJG8tyl5eRHglc0YEq82GCmE=;
+        b=O5F9sBhnW/i4lP3Qy+iGStNAgYoLYNizCbqx3602EnteLgZXZWinp6YXl7efjqIvNbY3U8
+        WACfa/3f4sU5p1baNO1zUnhz0KxbOBe9QSEGdAc2QNrvwLzEsbGON+r6PSXJq48+k5W/Dz
+        KoLPsWNqAIPD7kDD0LDbZPacNeKa9yg=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-582-cAzqYYDsM52c-0kzc-Bo_A-1; Thu, 11 May 2023 03:38:53 -0400
+X-MC-Unique: cAzqYYDsM52c-0kzc-Bo_A-1
+Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3078df8ae31so3203243f8f.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 00:38:52 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683790732; x=1686382732;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=P8V2QwKOyBLdpEe+T44KJG8tyl5eRHglc0YEq82GCmE=;
+        b=Ey6OhyqgX/2ojPSWF4iNZOBnlbAr47jElDEBJGqIWjoC6YZFxIc/AsNQTamqer9xLV
+         oh6gyEaxNbWFlImI44l603wE4CrV55VKLycK2pOQABZ7eVMeXgseIGZaMsw1Kx6BUcrW
+         q4kVxIf2T11VwH+PvWwO5XbnPPRfZDkHPv69UXaYTXvkb1j/AvHPZ3pNSYluO8OkZTtS
+         OP/fVsFzEruN4E7ofX9NRPqNC1Lanc7anWzVNwbsq5IO2PmOHuh6hxaJjXK3DSPFUB/D
+         3XvxC7wpFHTjyDBS7F0+UTwQq2kW12NoWugGbq7W9ewdLFSIcn/LOmRYOuM+SULm0JWa
+         roiA==
+X-Gm-Message-State: AC+VfDx275RQ1Fq3iNCe7sLYSXnyOvV7YsHAJ4lp3l9U8mWeelXJXVwk
+        ssPOeORjsSy/bmnTgz0eYzxo+1yphGCmIXoHCD50oMvRvjMYPiupzL3u1d9bEKKW0T4n3LlB+Uy
+        ZjYdOqLSmia2nJL8kHKg/3YRM
+X-Received: by 2002:adf:db50:0:b0:306:2c01:4029 with SMTP id f16-20020adfdb50000000b003062c014029mr13772014wrj.5.1683790731848;
+        Thu, 11 May 2023 00:38:51 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6x0IJBlDxk1RWKp0J3GN8GvUv8W7bVfSINnkrH9+VJR1VdtxEl1+FWChFsErbmp5oDi7Ey4g==
+X-Received: by 2002:adf:db50:0:b0:306:2c01:4029 with SMTP id f16-20020adfdb50000000b003062c014029mr13771996wrj.5.1683790731594;
+        Thu, 11 May 2023 00:38:51 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:280:24f0:9db0:474c:ff43:9f5c? ([2a01:e0a:280:24f0:9db0:474c:ff43:9f5c])
+        by smtp.gmail.com with ESMTPSA id n16-20020a5d67d0000000b002fae7408544sm19621051wrw.108.2023.05.11.00.38.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 00:38:51 -0700 (PDT)
+Message-ID: <ae970fc9-dc05-ebcc-ce31-997462fd41ec@redhat.com>
+Date:   Thu, 11 May 2023 09:38:50 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VI1PR03MB2880:EE_|AS8PR03MB9700:EE_
-X-MS-Office365-Filtering-Correlation-Id: aa205e87-b9cf-4df7-6725-08db51f289fe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: iKWGd7TGiJ0SfijkU2b9VrkfoBK9eSBEpf3aZOz7nLfdNi9n/WCKrI5zEfG+f3qqxi2zFIWudmDt9U3TBSLMLtzSuSRUAqsP9wyEXb2xr4cF64oO274c4IyTV2i/DWFisSNqT/5bnVKUXE4y0ChhgRK//kkJIonjCSGaExShYaaXjf5zd3l3hojBEI3xK1+GYurhGL47fDP+DY9tRZkzzMtDS6vmCqKnhicj0ekNzIrnl3DPCwy7VofMzxsoWU5z8PNEuAI3qu741O/DHRK9w8q0/2MsnOpo3Pl2M+T2K7PEpLzWd9Kri+Wbx6hpzDa8x5AFXhntwOcBTdNSwtpuOlFMZGsDVasTdXAC7dcnEziV+gXYwXr2wMEpMwOkIAo4KKDGv6sN++V2kvOvl03nFnBgoYWcUFDSJrP0e6by//Mo3MdZDvgurcb/LTDJFChiY/Ivgxkz+v5IoSJdwa7JXpO9Bs+AZkRhHfZkD4tJS4fVz8J7Q3GU4+rItclPPJuVoP0wg26DXgSjkSQNMKVWEeA50mekP2tKBskVCySX0SPXWDHSpXAIO+Vp5bA7MlzR
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR03MB2880.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(4636009)(39850400004)(376002)(396003)(366004)(346002)(136003)(451199021)(86362001)(41320700001)(33716001)(38100700002)(9686003)(6512007)(1076003)(6506007)(26005)(5660300002)(4326008)(186003)(6916009)(8676002)(8936002)(66476007)(66946007)(66556008)(7416002)(316002)(41300700001)(786003)(36916002)(6666004)(478600001)(54906003)(6486002)(2906002)(83380400001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Tx27lgD35W99TPRVdGYOWhr2g8p1TvdjYVNF/UQQSMQRigMlpsmiBiZPIylx?=
- =?us-ascii?Q?3pCM4URMqvuyt7zfFvRLiLg/gabSr1639D8/YgLhQI6mHWE+JsRnpp92vMIn?=
- =?us-ascii?Q?r9R7KNNJL4gDx+c265vx/GajvCffVo2Q/nNZZDF8qX3kjcN6Yh+ay6LQYifq?=
- =?us-ascii?Q?hhlXNRbGjL7jo7gNTKQ27+HwxK5g6vghBFxJGBufjQzWfiZjVLNCE8qqc2CZ?=
- =?us-ascii?Q?wWDQ4RRcZInqsovGA9A5OIG+kK0TYM4pBlo7Npj69L7zWT4rw0/GyV6SqC9B?=
- =?us-ascii?Q?pQTZ7nOIP27FhPGAHCxOBmjIw3FJOa7cLAQIUCK4L46kU3iHlWEwFs5NwOOU?=
- =?us-ascii?Q?ZB4TvQX4PXKaKlk2rUuyiizlvEDbG652sIZOkp+JVmJWodB4uE2pjFkUcX64?=
- =?us-ascii?Q?LiupWJleIXKuecwM2tBn2FwQ1FlrRb29tZ02zI6sdH5F3d2MHbQfTe55WRtN?=
- =?us-ascii?Q?sjhDSQnyO9yw30X3iV/wTV3hnJ/N1c6SnhQAsIAugT6mcFuHRU8u7i8OYQFW?=
- =?us-ascii?Q?OPpihJ/v5eLD7JP2fsxE2B4UpOJFjvCW0gYq+wxkDWL+fIsNL0bN6bdMg1qM?=
- =?us-ascii?Q?jsgTav5n7YvRxZK8DWZeUbRwc1Hlx0sVsDhijSWhq5oL4liaMwSHUsVR+HMz?=
- =?us-ascii?Q?4BOGAX0C73TimrFMZzRniAN715LQXdMqpDiuwd8KY8+zQhTRNeAqYbNXOEwR?=
- =?us-ascii?Q?w1gV1zoh0g4V+mhiXAQxBnTgHx4m4tT33wPUw4OAOaMaOEzSXfPPiIfOhDdU?=
- =?us-ascii?Q?PKGXxTZrrf6cvy/tj1V8GLPsOB4Q+XvtazhkW8swFeMerlFyKDMIpOjchkHu?=
- =?us-ascii?Q?BojxoVgghfM9TPxRXzcD64au2DGtzs3EmgfipvJU98nLlMfNmK+ErEMeUsZo?=
- =?us-ascii?Q?nkDkNhdh3JcfQu28aXlaq2YyZ9s+zHOoIWFAhGlWDYO/+/WENC9Gy9V4n4fK?=
- =?us-ascii?Q?pr9EDBHpiFKjN5F//AVK/AAyvwepPKTFUObanA6AkQCpBgrZxcP0AC0+eKCb?=
- =?us-ascii?Q?7VEIlQF46ESQX9Mcdj4ni0IvkxTxerYKIgTl3XIf3LSntnuGl72mHdd8uzQ4?=
- =?us-ascii?Q?6fUvLHWQAjlaEGcFffeMePdECKtAklzX5ZO3vVWAcEHv6D18NGt6KDr2pe7D?=
- =?us-ascii?Q?hDUFx7XV8LE+eLvl1f1megjR2dtZbsp8xgBxKSkHpAWtjnhOtjtJ6KeyZ4L4?=
- =?us-ascii?Q?FF5F9OfMbxVdD1olnQfaBaY+N1xoqD7f8XaimEJ3tiLAkMgswV/NsGPgfLPX?=
- =?us-ascii?Q?qsdW31u0dl/PtxzzMct4ROYktemXCN9+CaM+V2k0onf2VhWf0+HXbFBXhehW?=
- =?us-ascii?Q?SPktzbk0PAN2pqYPYXV9jhYsmflaZTzayJvwFWt07jJG6JPIQRV8ic0q+YeD?=
- =?us-ascii?Q?4aeDhSycwGFH9aNeMiuIKbswFa8UIOoVR7Ja5cjhyIysOJsUMmvVhJ9r3J6V?=
- =?us-ascii?Q?pdkUNwIVumnCuMNtbVk1yg4BKhmXpZlqpvclpLIs4mRo87+GPNEUiTXKC7CO?=
- =?us-ascii?Q?eb6YpD7/Bz9+bvuckhF9gYTcdEHZ+OTNdvA1sQXpjPoQfVFddstnF16dsKkw?=
- =?us-ascii?Q?tfAv2m8ZD67VjJ+RYgDZ87ZOwIqJurjMYPEIeCHNw4KXoN7X9QThq+Z59fiN?=
- =?us-ascii?Q?Mg=3D=3D?=
-X-OriginatorOrg: santannapisa.it
-X-MS-Exchange-CrossTenant-Network-Message-Id: aa205e87-b9cf-4df7-6725-08db51f289fe
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR03MB2880.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 07:37:14.3888
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: d97360e3-138d-4b5f-956f-a646c364a01e
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 0aMj7thLxRbQbLq/JucFWLWxiw5L+0BoEcjJr1LDlvHuu9sCONdtayIGaeox8vKLBC5Iw27E7LJGut4ulDbAwGR0oCy8tnOD86cUhRW3+mU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB9700
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] vfio/pci: take mmap write lock for io_remap_pfn_range
+Content-Language: en-US
+To:     Yan Zhao <yan.y.zhao@intel.com>, Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Alex Williamson <alex.williamson@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kevin.tian@intel.com,
+        yishaih@nvidia.com, shameerali.kolothum.thodi@huawei.com
+References: <20230508125842.28193-1-yan.y.zhao@intel.com>
+ <ZFkn3q45RUJXMS+P@nvidia.com>
+ <20230508145715.630fe3ae.alex.williamson@redhat.com>
+ <ZFwBYtjL1V0r5WW3@nvidia.com> <ZFyRlnXmEy6Enk4w@yzhao56-desk.sh.intel.com>
+From:   =?UTF-8?Q?C=c3=a9dric_Le_Goater?= <clg@redhat.com>
+In-Reply-To: <ZFyRlnXmEy6Enk4w@yzhao56-desk.sh.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 5/11/23 08:56, Yan Zhao wrote:
+> On Wed, May 10, 2023 at 05:41:06PM -0300, Jason Gunthorpe wrote:
+>> On Mon, May 08, 2023 at 02:57:15PM -0600, Alex Williamson wrote:
+>>
+>>> We already try to set the flags in advance, but there are some
+>>> architectural flags like VM_PAT that make that tricky.  Cedric has been
+>>> looking at inserting individual pages with vmf_insert_pfn(), but that
+>>> incurs a lot more faults and therefore latency vs remapping the entire
+>>> vma on fault.  I'm not convinced that we shouldn't just attempt to
+>>> remove the fault handler entirely, but I haven't tried it yet to know
+>>> what gotchas are down that path.  Thanks,
+>>
+>> I thought we did it like this because there were races otherwise with
+>> PTE insertion and zapping? I don't remember well anymore.
+>>
+>> I vaugely remember the address_space conversion might help remove the
+>> fault handler?
+>>
+> What about calling vmf_insert_pfn() in bulk as below?
 
-On Wed, 10 May 2023 11:50:00 -0400
-Vineeth Remanan Pillai <vineeth@bitbyteword.org> wrote:
-[...]
-> > the "1 - u_inact - u_extra" part is needed to make sure that the
-> > real-time guarantees are not broken by the reclaiming mechanism...
-> > But it can end up with a task trying to consume too much time on a
-> > single CPU, hence the "u/Umax" term in the "max{}" is needed to
-> > make sure that a task will not consume more than Umax of a CPU.
-> >
-> > Now, if we have one single task on a CPU u/Umax will always be
-> > larger than the other term... But when we have multiple tasks the
-> > other term is needed too.
-> >  
-> Understood, thanks for explaining.
+This works too, it is slightly slower than the io_remap_pfn_range() call
+but doesn't have the lockdep issues.
+
+Thanks,
+
+C.
+
+> And what is address_space conversion?
 > 
-> > (BTW, when considering multiple tasks on multiple CPUs, another
-> > potential problem is given by u_extra... Now that I remember all the
-> > details, u_extra is not "Umax - this_bw" - this is true when we
-> > consider only one CPU, but is is "Umax - sum(u_i)/m" (where
-> > "sum(u_i)" is the sum of the bandwidths of all the SCHED_DEADLINE
-> > tasks in the root domain, and "m" is the number of CPUs in the root
-> > domain)... So, the reclaimable CPU time is distributed uniformly on
-> > all the CPUs and this could create some issues. But let's see what
-> > happens after the div64 fix and the SCHED_FLAG_RECLAIM fix)
-> >  
-> This makes sense. This also means that we wouldn't be able to replace
-> "Uextra + Uinact" with "Umax - running_bw"
-
-Right. When I suggested it, I was mistaken (I probably mis-read some
-comments, and I did not remember how u_extra is exactly computed)
-
-
-> and I was seeing problems
-> with SMP testing. So I shall revert to "Uextra + Uinact" in v2. And I
-> think the potential issue with Uextra would be avoided by the check
-> for Uextra + Uinact > Umax to make sure that we don't reclaim more
-> than Umax for a single cpu.
 > 
-> I have tested the patch with SMP using the stressor mentioned in the
-> commit message and running cyclicdeadline in parallel. The results
-> are similar to upstream and GRUB able to reclaim upto Umax now.
+> diff --git a/drivers/vfio/pci/vfio_pci_core.c b/drivers/vfio/pci/vfio_pci_core.c
+> index a5ab416cf476..1476e537f593 100644
+> --- a/drivers/vfio/pci/vfio_pci_core.c
+> +++ b/drivers/vfio/pci/vfio_pci_core.c
+> @@ -1686,6 +1686,7 @@ static vm_fault_t vfio_pci_mmap_fault(struct vm_fault *vmf)
+>          struct vfio_pci_core_device *vdev = vma->vm_private_data;
+>          struct vfio_pci_mmap_vma *mmap_vma;
+>          vm_fault_t ret = VM_FAULT_NOPAGE;
+> +       unsigned long base_pfn, offset, i;
 > 
-> I shall send the v2 soon after a bit more testing..
+>          mutex_lock(&vdev->vma_lock);
+>          down_read(&vdev->memory_lock);
+> @@ -1710,12 +1711,15 @@ static vm_fault_t vfio_pci_mmap_fault(struct vm_fault *vmf)
+>                          goto up_out;
+>          }
+> 
+> -       if (io_remap_pfn_range(vma, vma->vm_start, vma->vm_pgoff,
+> -                              vma->vm_end - vma->vm_start,
+> -                              vma->vm_page_prot)) {
+> -               ret = VM_FAULT_SIGBUS;
+> -               zap_vma_ptes(vma, vma->vm_start, vma->vm_end - vma->vm_start);
+> -               goto up_out;
+> +       base_pfn = (vmf->address - vma->vm_start) >> PAGE_SHIFT;
+> +       base_pfn += vma->vm_pgoff;
+> +       for (i = vma->vm_start; i < vma->vm_end; i += PAGE_SIZE) {
+> +               offset = (i - vma->vm_start) >> PAGE_SHIFT;
+> +               ret = vmf_insert_pfn(vma, i, base_pfn + offset);
+> +               if (ret != VM_FAULT_NOPAGE) {
+> +                       zap_vma_ptes(vma, vma->vm_start, vma->vm_end - vma->vm_start);
+> +                       goto up_out;
+> +               }
+>          }
+> 
+>          if (__vfio_pci_add_vma(vdev, vma)) {
+> 
 
-I've just seen v2, and (unless I misunderstand something) I see you
-removed the max{u_i/u_max, 1 - (u_inact + u_extra}} thing?
-
-I fear this might break the real-time guarantees provided by the
-algorithm...
-
-
-> Thanks a lot for all the valuable inputs and detailed explanation :-)
-
-And thank you for addressing this issue and listening to me :)
-
-
-
-			Thanks,
-				Luca
