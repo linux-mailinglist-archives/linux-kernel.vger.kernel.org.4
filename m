@@ -2,135 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14AB86FEB2E
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 07:29:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F716FEB30
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 07:30:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbjEKF3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 01:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
+        id S232410AbjEKFay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 01:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229490AbjEKF32 (ORCPT
+        with ESMTP id S229490AbjEKFav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 01:29:28 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0C5E42;
-        Wed, 10 May 2023 22:29:26 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-96652cb7673so784018666b.0;
-        Wed, 10 May 2023 22:29:26 -0700 (PDT)
+        Thu, 11 May 2023 01:30:51 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F31E2FB
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 22:30:49 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-965f7bdab6bso1310903166b.3
+        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 22:30:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683782965; x=1686374965;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=y4x62um4Cta2MQq5bfpbv18O8tiAYzIjxL+XVu9krq4=;
-        b=BqiVoaul5DML2AqPp+E7WU7ceWXoBHlpyTtNNIMKY0tZejHwgMHdmHVlp18lYeBX51
-         KBZe5HxHrPy9UKGdt4UWv+n2tne9YlLrDJ5C6p95YeUtbLvugYgkp40MY+0s+JDC3wE/
-         OvdwXJXCdPW9gwlBDIZ3TVVT8uCjLFaNLCzTtloaMWliMO9hACDK++fZU3+5zpVlfjwm
-         QjZJtM3YPmpfMooM/Vu0VGelf9K6FaGDUvH/FFLodarhpj2TnnapceAplCOv0F2SpmE5
-         GPz2i+zVGpP1mX4JJkZCQb2cFA0G22BhmFrbYijzyxVy9IOnoR7kQxHYrmJBo1z6pLEq
-         QYqg==
+        d=linaro.org; s=google; t=1683783048; x=1686375048;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=wS8SR9y31c6dnD5LAteD//cxbDMOfkqvXitaCTZlWPw=;
+        b=j/cVE+YAkw8s3fjKcxaw16FENQWhT0YG2JxU8UzSQHE2I5mSpjpeI5nFhH4oANCfNE
+         7+15BWvSUj/cY9/32vvaBPBZkLt0yG8dpc/SA+bJo/KgqfPxB/EgoD/uh5ld6lg+JQTD
+         pBCSLf1iaze/JwcfyHw/inhLhmb9Z4ZUewkTzCNmJacjEs0ggpjkDv/cHCCq6gzwzZ1E
+         eWW6krE4MzKa77GayBwnhyqx9u4KTwE41OkfGd4I440XdM9GidmBgHRIE93nOw4vw/+V
+         gOqimp3aw5dY3S8WHDVicWeTwTGQMZd2YfM9s1HWcE+ZznOuQQLImwidDlwB+oa8qara
+         M3TA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683782965; x=1686374965;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1683783048; x=1686375048;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=y4x62um4Cta2MQq5bfpbv18O8tiAYzIjxL+XVu9krq4=;
-        b=gDLAXHFwXllDHK5NBh0tDgd3FsS4BVc4DRnmH29sB1ANsPnB54svYHEPfGs30G/TGC
-         aqpJfOxioVe9tigq2ydfQ+XdhTdvHZIiNmHJ9YQCBbNgz9AqYN8SEgnaByRSBW+mN/Gw
-         r90fxe7YN1c264fcfeVchmWf5PSFbiUEMlptP5xt3VbVjyifRbJOle7bYAvAgjan4cp4
-         QHZrVOf7s8hQcNXSK9JDvGErHXGklRnH1g7mBVnxcjuz3PRb+FKWsuhZGH4sJbtCXhQA
-         /6iubpWSUCJeDml8QxU1FMDD1DNqyRnlFkBTmH8ATaWpNpVChy1VOlDydLHIGE7UYn3u
-         IH0Q==
-X-Gm-Message-State: AC+VfDwuyacd+TlCyU7HLgZONFYD7sKP2dRYKj6SpvvyfLb5drrGm9kW
-        R1ljioDK3MoaWIFhloO3VG0=
-X-Google-Smtp-Source: ACHHUZ7vvF+qW3TK0cuJqLdLw9Uk4jrATGpY2Ush2Z+Cvi9O0kUzQSGq/YHYtzqKPLGW6ubNDQbOlA==
-X-Received: by 2002:a17:907:2684:b0:94e:75f8:668 with SMTP id bn4-20020a170907268400b0094e75f80668mr16593122ejc.56.1683782964468;
-        Wed, 10 May 2023 22:29:24 -0700 (PDT)
-Received: from ?IPV6:2a01:c23:c58e:b900:6079:61ec:4537:dead? (dynamic-2a01-0c23-c58e-b900-6079-61ec-4537-dead.c23.pool.telefonica.de. [2a01:c23:c58e:b900:6079:61ec:4537:dead])
-        by smtp.googlemail.com with ESMTPSA id 13-20020a170906328d00b00969f44bbef1sm2875122ejw.89.2023.05.10.22.29.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 10 May 2023 22:29:24 -0700 (PDT)
-Message-ID: <018df89a-c3d2-1bda-9966-7f06b24f87f2@gmail.com>
-Date:   Thu, 11 May 2023 07:29:21 +0200
+        bh=wS8SR9y31c6dnD5LAteD//cxbDMOfkqvXitaCTZlWPw=;
+        b=iNtXbF0k5YXVGQFxf6sHDtHNT9utFf2l5fDxfbXxZwMXhN+UOiVbVzaRTgepmYDUuU
+         PnVWMUlo5lZO3cRRquqNdvg2Wmp3+ayBY8Zs/t71ssdQMWBGeilSMYm5i2/pKgD2pnQS
+         5CZ0PLwO7MJOjXyHRCxAp05TQmWDfuV2S/lOLep5b/ll+0f1GVjG2i7GOUVItcIScDVC
+         GcQJ6U2R57Zx3vE3J4KB8/ATUtmTkbV2HzAGz+jQxPC3PY05ooIXxPyRXYOAy8D/WQgw
+         ZZdffJuMTJhmU8ov6gGFX0tsmO/payPsMbJcB5SNvw0JWUItIAb2XAzT5aUXM3q2MI65
+         RmcQ==
+X-Gm-Message-State: AC+VfDyh/BNygXjj4f2/H45DIKqY2FfZ0pk5c0Cwci04L3LSBsNEwY97
+        O+8LG7Z/h9W44NtV0lgFBxivQQ==
+X-Google-Smtp-Source: ACHHUZ62Kd6/mIjS5ts32ZuQpT3uuflQCqqx5uqAB/Ww6qdKZj47Wb+YKPqpge+iEVOG6OSZ8C7fMg==
+X-Received: by 2002:a17:906:7952:b0:969:789d:5948 with SMTP id l18-20020a170906795200b00969789d5948mr10116343ejo.41.1683783048352;
+        Wed, 10 May 2023 22:30:48 -0700 (PDT)
+Received: from krzk-bin ([2a02:810d:15c0:828:a01e:5c6:be3:7baa])
+        by smtp.gmail.com with ESMTPSA id n17-20020a170906725100b0096a6bf89259sm187524ejk.167.2023.05.10.22.30.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 10 May 2023 22:30:47 -0700 (PDT)
+Date:   Thu, 11 May 2023 07:30:45 +0200
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Martin =?utf-8?B?WmHFpW92acSN?= <m.zatovic1@gmail.com>
+Cc:     arnd@arndb.de, linus.walleij@linaro.org,
+        jacek.lawrynowicz@linux.intel.com, linux-kernel@vger.kernel.org,
+        nipun.gupta@amd.com, conor+dt@kernel.org, geert+renesas@glider.be,
+        krzysztof.kozlowski+dt@linaro.org, beanhuo@micron.com,
+        bvanassche@acm.org, ogabbay@kernel.org, linux@zary.sk,
+        mwen@igalia.com, robh+dt@kernel.org, yangyicong@hisilicon.com,
+        benjamin.tissoires@redhat.com, devicetree@vger.kernel.org,
+        gregkh@linuxfoundation.org, masahiroy@kernel.org
+Subject: Re: [PATCHv4 3/4] dt-bindings: wiegand: add GPIO bitbanged Wiegand
+ controller
+Message-ID: <20230511053045.iuv6a3knfg6sob5b@krzk-bin>
+References: <20230510162243.95820-1-m.zatovic1@gmail.com>
+ <20230510162243.95820-4-m.zatovic1@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH net-next 0/8] Improvements for RealTek 2.5G Ethernet PHYs
-To:     Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Andrew Lunn <andrew@lunn.ch>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-References: <cover.1683756691.git.daniel@makrotopia.org>
-Content-Language: en-US
-From:   Heiner Kallweit <hkallweit1@gmail.com>
-In-Reply-To: <cover.1683756691.git.daniel@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230510162243.95820-4-m.zatovic1@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.05.2023 00:53, Daniel Golle wrote:
-> Improve support for RealTek 2.5G Ethernet PHYs (RTL822x series).
-> The PHYs can operate with Clause-22 and Clause-45 MDIO.
-> 
-> When using Clause-45 it is desireable to avoid rate-adapter mode and
-> rather have the MAC interface mode follow the PHY speed. The PHYs
-> support 2500Base-X for 2500M, and Cisco SGMII for 1000M/100M/10M.
-> 
-> Also prepare support for proprietary RealTek HiSGMII mode which will
-> be needed for situations when used with RealTek switch or router SoCs
-> such as RTL839x or RTL93xx.
-> 
-> Add support for Link Down Power Saving Mode (ALDPS) which is already
-> supported for older RTL821x series 1GbE PHYs.
-> 
-> Make sure that link-partner advertised modes are only used if the
-> advertisement can be considered valid. Otherwise we are seeing
-> false-positives warning about downscaling eventhough higher speeds
-> are not actually advertised by the link partner.
-> 
-> While at it, use helper function for paged operation and make sure
-> to use use locking for that as well.
-> 
-> Changes since RFC:
->  * Turns out paged read used to identify the PHY needs to be hardcoded
->    for the simple reason that the function pointers for paged operations
->    have not yet been populated at this point. Hence keep open-coding it,
->    but use helper function and make sure it happening while the MDIO bus
->    mutex is locked.
-> 
-> Alexander Couzens (1):
->   net: phy: realtek: rtl8221: allow to configure SERDES mode
-> 
-> Chukun Pan (1):
->   net: phy: realtek: switch interface mode for RTL822x series
-> 
-> Daniel Golle (6):
->   net: phy: realtek: use genphy_soft_reset for 2.5G PHYs
->   net: phy: realtek: disable SGMII in-band AN for 2.5G PHYs
->   net: phy: realtek: make sure paged read is protected by mutex
->   net: phy: realtek: use inline functions for 10GbE advertisement
->   net: phy: realtek: check validity of 10GbE link-partner advertisement
->   net: phy: realtek: setup ALDPS on RTL8221B
-> 
->  drivers/net/phy/realtek.c | 161 ++++++++++++++++++++++++++++++++------
->  1 file changed, 138 insertions(+), 23 deletions(-)
-> 
+On Wed, 10 May 2023 18:22:42 +0200, Martin Za=C5=A5ovi=C4=8D wrote:
+> GPIO bitbanged Wiegand controller requires definitions of GPIO
+> lines to be used on top of the common Wiegand properties. Wiegand
+> utilizes two such lines - D0(low data line) and D1(high data line).
+>=20
+> Acked-by: Linus Walleij <linus.walleij@linaro.org>
+> Signed-off-by: Martin Za=C5=A5ovi=C4=8D <m.zatovic1@gmail.com>
+> ---
+>  .../bindings/wiegand/wiegand-gpio.yaml        | 51 +++++++++++++++++++
+>  MAINTAINERS                                   |  5 ++
+>  2 files changed, 56 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/wiegand/wiegand-gpi=
+o.yaml
+>=20
 
-Has this series been tested with RTL8125A/B to ensure that the internal
-PHY use case still works?
+My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+=2E/Documentation/devicetree/bindings/wiegand/wiegand-gpio.yaml: Unable to =
+find schema file matching $id: http://devicetree.org/schemas/wiegand/wiegan=
+d-controller.yaml
+Documentation/devicetree/bindings/wiegand/wiegand-gpio.example.dts:20.21-29=
+=2E11: Warning (unit_address_vs_reg): /example-0/wiegand@f00: node has a un=
+it name, but no reg or ranges property
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/wie=
+gand/wiegand-gpio.example.dtb: wiegand@f00: False schema does not allow {'c=
+ompatible': ['wiegand-gpio'], 'pulse-len-us': [[50]], 'interval-len-us': [[=
+2000]], 'frame-gap-us': [[2000]], 'data-lo-gpios': [[4294967295, 6, 6]], 'd=
+ata-hi-gpios': [[4294967295, 7, 6]], '$nodename': ['wiegand@f00']}
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetre=
+e/bindings/wiegand/wiegand-gpio.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/wie=
+gand/wiegand-gpio.example.dtb: wiegand@f00: Unevaluated properties are not =
+allowed ('frame-gap-us', 'interval-len-us', 'pulse-len-us' were unexpected)
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetre=
+e/bindings/wiegand/wiegand-gpio.yaml
+
+See https://patchwork.ozlabs.org/patch/1779628
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
