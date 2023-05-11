@@ -2,52 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4762A6FEB7A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 08:01:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A0D3D6FEB7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 08:01:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236896AbjEKGBK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 02:01:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33178 "EHLO
+        id S237021AbjEKGBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 02:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbjEKGBH (ORCPT
+        with ESMTP id S236812AbjEKGBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 02:01:07 -0400
+        Thu, 11 May 2023 02:01:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 081E4272A;
-        Wed, 10 May 2023 23:01:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 238D530C7;
+        Wed, 10 May 2023 23:01:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 97485635B9;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B3635641DF;
+        Thu, 11 May 2023 06:01:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A5ACC433D2;
         Thu, 11 May 2023 06:01:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5733BC433EF;
-        Thu, 11 May 2023 06:01:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683784866;
-        bh=DRAyWIVBVl/Vja8Y6YNCq8vTtf3RsA1/UCfLfuH/Fkw=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Y9PY77s7aH3WeiI0xSgZfJX5Ilh3vZj3S8whWKLJCvf+e8lYVAMIyjS4syhdgraIE
-         u1l1uj7I8p9Hxm/8Q/xkRIXf8Ngic8Ub1478fwReF7MYvqJJwscPtbaKAsOcZVLPYh
-         oN/2t5DVGC6qc5nLfR2W2eZSzWZku0WD2CrXTWgMpgOSleSvlOrOM+nkgQ4nXfSEdk
-         41+Lu1TZq0VNVewY/2q19P4o/wdYQ+t/+XQzeGSAVg+xMVlCqgsDRX6P2cO6a1IPVk
-         zCSqrpRIkaf6yd2s+wZ7Mr+w9Idxv97q+sYwAcvEMM5eR17DBI5CWUj58Omr2prFoF
-         8VxLupA9MmRiw==
-From:   Mark Brown <broonie@kernel.org>
-To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        dianders@chromium.org, linux-arm-msm@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Vijaya Krishna Nivarthi <quic_vnivarth@quicinc.com>
-Cc:     quic_msavaliy@quicinc.com, mka@chromium.org, swboyd@chromium.org,
-        quic_vtanuku@quicinc.com, quic_ptalari@quicinc.com
-In-Reply-To: <1683626496-9685-1-git-send-email-quic_vnivarth@quicinc.com>
-References: <1683626496-9685-1-git-send-email-quic_vnivarth@quicinc.com>
-Subject: Re: [PATCH] spi: spi-geni-qcom: Select FIFO mode for chip select
-Message-Id: <168378486157.333092.4222573391811617519.b4-ty@kernel.org>
-Date:   Thu, 11 May 2023 15:01:01 +0900
+        s=k20201202; t=1683784868;
+        bh=Utc7Og0AJ3hMUXcuPoc5Qe9YwMUiMJIgT1Su886wP0o=;
+        h=Date:From:To:Cc:Subject:From;
+        b=oIpMyVev9yH7kfYY17Y12q4G8IzPE/gbz3b1oafMWVz1hhynGowsEOMKXrLykye7I
+         SrbM8tOmg3nCELyWxDazg4p9K0ic+rKSNW1p8vdrnKYRerik6MrK59upEvigPJCEWo
+         vYSdfsqMC635GMq9VQL6pHdOuXW6RqelmWtWoGVEn84URh9eZ040P71AgXGb9HbTbB
+         I59FwKWIREII5eWXEuaYYLhUJ4POazYi3cPmT50CX1TrUaiBpYqlMi4N88PJKu8rfX
+         iAlk3lfSlJUnln0f39/b4JHxqTIA02vlnaUQSPiubnfhfWBaTXynuxV7CkYYlnpcPj
+         kZqFuL+A9DrXg==
+Date:   Thu, 11 May 2023 07:01:03 +0100
+From:   Mauro Carvalho Chehab <mchehab@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Media Mailing List <linux-media@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: [GIT PULL for v6.4-rc2] media fixes
+Message-ID: <20230511070103.263505ba@sal.lan>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -58,44 +55,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 09 May 2023 15:31:36 +0530, Vijaya Krishna Nivarthi wrote:
-> Spi geni driver switches between FIFO and DMA modes based on xfer length.
-> FIFO mode relies on M_CMD_DONE_EN interrupt for completion while DMA mode
-> relies on XX_DMA_DONE.
-> During dynamic switching, if FIFO mode is chosen, FIFO related interrupts
-> are enabled and DMA related interrupts are disabled. And viceversa.
-> Chip select shares M_CMD_DONE_EN interrupt with FIFO to check completion.
-> Now, if a chip select operation is preceded by a DMA xfer, M_CMD_DONE_EN
-> interrupt would have been disabled and hence it will never receive one
-> resulting in timeout.
-> 
-> [...]
+Hi Linus,
 
-Applied to
+Please pull from:
+  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/me=
+dia/v6.4-2
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+For a couple of fixes:
+  - fix some unused-variable warning at mtk-mdp3;
+  - ignore unused suspend operations at nxp;
+  - some driver fixes at rcar-vin.
 
-Thanks!
+Regards,
+Mauro
 
-[1/1] spi: spi-geni-qcom: Select FIFO mode for chip select
-      commit: 4c329f5da7cfa366bacfda1328a025dd38951317
+---
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+The following changes since commit ba0ad6ed89fd5dada3b7b65ef2b08e95d449d4ab:
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+  media: nxp: imx8-isi: fix buiding on 32-bit (2023-05-08 09:10:07 -0700)
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+are available in the Git repository at:
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+  git://git.kernel.org/pub/scm/linux/kernel/git/mchehab/linux-media tags/me=
+dia/v6.4-2
 
-Thanks,
-Mark
+for you to fetch changes up to ae3c253f595b31ff30d55b4c50b4470e56bc4e0d:
+
+  media: platform: mtk-mdp3: work around unused-variable warning (2023-05-0=
+8 12:11:25 +0100)
+
+----------------------------------------------------------------
+media fixes for v6.4-rc2
+
+----------------------------------------------------------------
+Arnd Bergmann (2):
+      media: nxp: ignore unused suspend operations
+      media: platform: mtk-mdp3: work around unused-variable warning
+
+Niklas S=C3=B6derlund (3):
+      media: rcar-vin: Gen3 can not scale NV12
+      media: rcar-vin: Fix NV12 size alignment
+      media: rcar-vin: Select correct interrupt mode for V4L2_FIELD_ALTERNA=
+TE
+
+ .../media/platform/mediatek/mdp3/mtk-mdp3-comp.c    |  3 +--
+ drivers/media/platform/nxp/imx8-isi/imx8-isi-core.c |  6 +++---
+ drivers/media/platform/renesas/rcar-vin/rcar-dma.c  | 21 +++++++++++++++--=
+----
+ 3 files changed, 19 insertions(+), 11 deletions(-)
 
