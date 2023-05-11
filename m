@@ -2,52 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7426FF604
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:32:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9EB26FF60A
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:33:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238735AbjEKPcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 11:32:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55946 "EHLO
+        id S238741AbjEKPdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 11:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238331AbjEKPcO (ORCPT
+        with ESMTP id S238331AbjEKPdR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 11:32:14 -0400
+        Thu, 11 May 2023 11:33:17 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72D6E559F;
-        Thu, 11 May 2023 08:32:12 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391BE559F;
+        Thu, 11 May 2023 08:33:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
         :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
         Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=ukarEjrht7JhMJxsWUDK8oALIr9FUvFh7Sj9Teu/1Wk=; b=wEQNUTAcDAM2o1nSwW8TRDfzef
-        pR2hm2LdCvaF9/3/ZGKV4hA2eHkUo8SRHXan5JeOGeinnWQ4sztTfMDIqVB3bxU5coTLeVs4EKgX4
-        RyV1i6KPTSC0T26g1h1aio5Zkp4eV/opt7tCMpUOMUtZ+4yudzHlzf1bhb7XYWnHV4cPBSSIrpdcv
-        r9Kq7LlzKTyYnYBPG6Yyf7FXiBlgkGMwPkIFStRNsNISQhY7lb7NaeYOBqUbYb6VY1ANG03l6g4CZ
-        E2NQftm7xEz7YJ4dVuFR0I4WJhtLUEOodbkZ8WCNBdQalIL1pNTEBQKMvvNniuqegBmDKNLp2do+u
-        eG4S7bmQ==;
+        bh=TFdTw592d1WOTkLZRizlwyL3RYF/7jsd4eJ+YyPPK5g=; b=W8G6bqUyJkrX6o82ZtqnkGRhIf
+        7iIWW4uYNY8T9ARlE3uCP1Q7afdudYlX+ztWxRPYAp/wf21EgDlQOgP+ptVwOWH3eeMfuMD4nINs8
+        aeissJYzFk6I3ZnXlTMi9MawsP0h4/j+/FtNXWIqFk8FF903X3wYOYsfPdBr+bFyr9WZ7PGP8oWdp
+        +K5vT1ZMrJcfZwv7vTLBAVvuvPJkJ78Tx2jlFVvDTa1iFwoi5Gj65rxO3UWjmFhsccwmLR7oAwyFl
+        SwfXTihdMyKBnvjBC+MS39AG6viKWbHL1SlLNkY4ZUD24Uv/ap6KQw2J7t4Es9kA6fqVpvvRShet1
+        pNmWejwA==;
 Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1px8Gv-009DVp-09;
-        Thu, 11 May 2023 15:32:01 +0000
-Date:   Thu, 11 May 2023 08:32:01 -0700
+        id 1px8I7-009Dji-13;
+        Thu, 11 May 2023 15:33:15 +0000
+Date:   Thu, 11 May 2023 08:33:15 -0700
 From:   Christoph Hellwig <hch@infradead.org>
-To:     Ruihan Li <lrh2000@pku.edu.cn>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-mm@kvack.org, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        David Hildenbrand <david@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Hellwig <hch@infradead.org>
-Subject: Re: [PATCH 0/4] Fix type confusion in page_table_check
-Message-ID: <ZF0KcRgclDJ6POrb@infradead.org>
-References: <20230510085527.57953-1-lrh2000@pku.edu.cn>
- <2023051108-lens-unsocial-8425@gregkh>
- <cyym2uqyqdtegfbdpworng4fa7iiuyh3e2wjrf4lp47jksvoxt@wwhvnzy5757c>
+To:     Ed Tsai <ed.tsai@mediatek.com>
+Cc:     axboe@kernel.dk, linux-block@vger.kernel.org,
+        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        martin.petersen@oracle.com, bvanassche@acm.org,
+        stanley.chu@mediatek.com, peter.wang@mediatek.com,
+        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
+        powen.kao@mediatek.com, naomi.chu@mediatek.com,
+        wsd_upstream@mediatek.com
+Subject: Re: [PATCH 1/2] block: make the fair sharing of tag configurable
+Message-ID: <ZF0Ku2b94mYtZDxO@infradead.org>
+References: <20230509065230.32552-1-ed.tsai@mediatek.com>
+ <20230509065230.32552-2-ed.tsai@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cyym2uqyqdtegfbdpworng4fa7iiuyh3e2wjrf4lp47jksvoxt@wwhvnzy5757c>
+In-Reply-To: <20230509065230.32552-2-ed.tsai@mediatek.com>
 X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
@@ -59,16 +57,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 09:44:55PM +0800, Ruihan Li wrote:
-> Christoph's patch perfectly fixes _one_ problem: kmalloc'ed memory
-> cannot be mapped to user space. However, as I detailed in the commit
-> message, this series of patches fixes _three_ problems.
+On Tue, May 09, 2023 at 02:52:29PM +0800, Ed Tsai wrote:
+> Add a new queue flag QUEUE_FLAG_FAIR_TAG_SHARING to make the fair tag
+> sharing configurable.
 
-FYI, I agree with you.  My simple patch was sent before reading
-your new series, and is a strict subset of it.
-
-> I have to say that the original code is quite buggy. In the
-> gen_pool_dma_alloc path, there is no guarantee of page alignment. 
-
-I also find this whole interface very problematic to start with,
-but that's a separate discussion for later.
+Why?
