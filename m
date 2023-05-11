@@ -2,49 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2F006FF5D3
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:23:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A21606FF5D6
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:24:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238698AbjEKPXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 11:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47384 "EHLO
+        id S238515AbjEKPYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 11:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238611AbjEKPXb (ORCPT
+        with ESMTP id S238149AbjEKPY2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 11:23:31 -0400
-Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FA8126;
-        Thu, 11 May 2023 08:23:30 -0700 (PDT)
-Received: by verein.lst.de (Postfix, from userid 2407)
-        id CA36968D0A; Thu, 11 May 2023 17:23:27 +0200 (CEST)
-Date:   Thu, 11 May 2023 17:23:27 +0200
-From:   Christoph Hellwig <hch@lst.de>
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     hch@lst.de, tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
-        yukuai3@huawei.com, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com, yangerkun@huawei.com
-Subject: Re: [PATCH -next 5/6] blk-wbt: cleanup rwb_enabled() and
- wbt_disabled()
-Message-ID: <20230511152327.GE7880@lst.de>
-References: <20230511014509.679482-1-yukuai1@huaweicloud.com> <20230511014509.679482-6-yukuai1@huaweicloud.com>
+        Thu, 11 May 2023 11:24:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF67CF;
+        Thu, 11 May 2023 08:24:27 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3ECA364EFD;
+        Thu, 11 May 2023 15:24:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 451A5C433EF;
+        Thu, 11 May 2023 15:24:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683818666;
+        bh=gTCIsTeyvWVF7CNHhHZqQxWhHlR+f/E82arExFViVMw=;
+        h=From:Date:Subject:To:Cc:From;
+        b=VhUgQka3XsqdVpNVOu3b0Ofus2BN683WIdaE8dHh6/OFIT59zLXdCx/jTPsXJe4Za
+         i7fhpyMEKAozHakcAsWM3PhFZoFbbC6yFpRrBbDtFb9ecdXrk0CCQaXp1d6Y7r3o+/
+         zVyE3sBNpvgb11fkEJCOJBDDUzsxLzIyA9ICtDnxoVTXn+6LqUAjsLWXuqW7IOlv5h
+         xrtPyMHIEZTSkAUsjVl6wxAsS/Yz1GnduqJaPf/XSP8sqgoCtSfS3MdyFwrMUcJ9AS
+         Mhg58ZBjL9O9Er4tfQm1RR6RSg/3gWU1Yoia4pbaEdEbDOZpQOEM/DypmW00bRqFUH
+         DPQBLbrFd754A==
+From:   Simon Horman <horms@kernel.org>
+Date:   Thu, 11 May 2023 17:24:18 +0200
+Subject: [PATCH] PCI: microchip: Avoid cast to incompatible function type
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511014509.679482-6-yukuai1@huaweicloud.com>
-User-Agent: Mutt/1.5.17 (2007-11-01)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230511-pci-microchip-clk-cast-v1-1-7674f4d4e218@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAKEIXWQC/x2N0QrCMAwAf2Xk2cA6rWX+iuyhy6IN1q40KsLYv
+ xt8vIPjNlBuwgqXboPGH1FZi4E7dEApljujLMYw9MOx985hJcGnUFspSUXKD6SoL/TLOYyjP7n
+ AASyeozLOLRZKlpd3ziZr45t8/7frtO8/GrgVU30AAAA=
+To:     Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Daire McNamara <daire.mcnamara@microchip.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-riscv@lists.infradead.org,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, Simon Horman <horms@kernel.org>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 09:45:08AM +0800, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
-> 
-> The code is redundant, reuse rwb_enabled() for wbt_disabled().
+Rather than casting clk_disable_unprepare to an incompatible function type,
+update the type to match that expected by devm_add_action_or_reset.
 
-This also changes how rwb_enabled is implemented.
+Reported by clang-16 with W-1:
+
+ .../pcie-microchip-host.c:866:32: warning: cast from 'void (*)(struct clk *)' to 'void (*)(void *)' converts to incompatible function type [-Wcast-function-type-strict]
+         devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare,
+                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+ ./include/linux/device.h:265:38: note: expanded from macro 'devm_add_action_or_reset'
+         __devm_add_action_or_reset(release, action, data, #action)
+                                             ^~~~~~
+No functional change intended.
+Compile tested only.
+
+Signed-off-by: Simon Horman <horms@kernel.org>
+---
+ drivers/pci/controller/pcie-microchip-host.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/pci/controller/pcie-microchip-host.c b/drivers/pci/controller/pcie-microchip-host.c
+index 5e710e485464..d8aa6e3cdbff 100644
+--- a/drivers/pci/controller/pcie-microchip-host.c
++++ b/drivers/pci/controller/pcie-microchip-host.c
+@@ -848,6 +848,11 @@ static const struct irq_domain_ops event_domain_ops = {
+ 	.map = mc_pcie_event_map,
+ };
+ 
++inline void mc_clk_disable_unprepare(void *data)
++{
++	clk_disable_unprepare(data);
++}
++
+ static inline struct clk *mc_pcie_init_clk(struct device *dev, const char *id)
+ {
+ 	struct clk *clk;
+@@ -863,8 +868,7 @@ static inline struct clk *mc_pcie_init_clk(struct device *dev, const char *id)
+ 	if (ret)
+ 		return ERR_PTR(ret);
+ 
+-	devm_add_action_or_reset(dev, (void (*) (void *))clk_disable_unprepare,
+-				 clk);
++	devm_add_action_or_reset(dev, mc_clk_disable_unprepare, clk);
+ 
+ 	return clk;
+ }
+
