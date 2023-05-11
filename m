@@ -2,242 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D6EF6FF5FB
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:30:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25DEE6FF5FE
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:30:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238726AbjEKPaG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 11:30:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53678 "EHLO
+        id S238411AbjEKPan (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 11:30:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238529AbjEKPaE (ORCPT
+        with ESMTP id S238053AbjEKPak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 11:30:04 -0400
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AE9FDC;
-        Thu, 11 May 2023 08:30:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1683819000;
-        bh=ybI9etnYDeQic3cNfT+50TmyK07V19yIie3KtQzWR4A=;
-        h=From:To:Cc:Subject:Date:From;
-        b=c9Xgxsa0UI0aFCduuDQWO5g3Suvys5yNjo8BCOvUcuQNxymsfIN3iK8tUZwOrxiGx
-         T6eRyt0F424ckJ8v/42zzZ+MWAKJCM+prqoMgbdmbtUpa57nP9fMDxx8/4N4+Pg0AS
-         fxEHGF7Wqpa339aX+iEBueklxuCizMsdaOTwbf+e/Z7V/3M0/+9AC21UN/Yl2H4GTR
-         y1ETkmZ56PX3g6cAwTsYYP4s8g4WQgoPsjW0bj70YWsyUH8CIgLOHU6iab4uPn4+fw
-         tf3J6FEbSu38efZKRg0BCRTu1zRzc9V33t2MMU25arAkKLeR56mn8rDLXUm/+DGQkG
-         xw5i0qOjJxwPg==
-Received: from localhost.localdomain (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QHG6c2HJXz12TM;
-        Thu, 11 May 2023 11:30:00 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org
-Subject: [RFC PATCH] Documentation: Document macro coding style
-Date:   Thu, 11 May 2023 11:29:51 -0400
-Message-Id: <20230511152951.1970870-1-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 11 May 2023 11:30:40 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2117.outbound.protection.outlook.com [40.107.93.117])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289A5E64;
+        Thu, 11 May 2023 08:30:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=VpAyOfz2FzTC11bF7n12cInDsY4QIQiq5yriL39CGxkCw/HiZJmiduk6TPQBmsBVUYL50EXDCQRRq9+uFgAOy9gUQJ2gQSv2RKwpnDWr3uVBG9dvX56UOflAYoKn9TwcYS2u/nUyVhqWWQNC7V4wTXZjzjlZpLFMzC0OKn7fusvARPZaLCeG0HPPQqCb7NukXJGcDYE7RQ6pij8Trj3cIk18CM48Nab0zAIhq+SQlMY+QxcTTDXFGQ5kD7ns0xZL0yj+71YeCpca5zf2CrjcXPVluCqofSipAzVHVwNY1k28QYe2ybBX5lr2jBDZZrWKJ2pIL+r4vLCo3jdA86cElg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=fPCDsr2aHXgl9cUNSqCYc4P40ekWRhIvFN5M/tusm5g=;
+ b=SSvuz6MoUKNCT69skYwFQmD7WcZpXJEeel8ew1ABotzL6H9RxbW0PgnxeDDM9x1NjeWQx93iZNrecVYrr0ttAjR26PfpxeQUO/+AKgW8ClpsQiouTH9wF4bvYwlfFM5ozukm92t5tBc8DTfwLxzRerW2jmsjkSQ3EOd2c30KIoe3owIoN3WbZGMdEmZPIEmtFl6YYJwzwdtjQ+D3cVCRx/PE4KUVzI5hzyPXK6QBuxoCnzlgbk+U2qjMh1fjoFM+AlF8RGDDEuMRRUTyyKv0bsKnu3GLLXhhtnj1zcsx22mDYek34WEIF4tQHvKx/Sh2kF/QfNo2Tjs9OYl2+VHMVQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=fPCDsr2aHXgl9cUNSqCYc4P40ekWRhIvFN5M/tusm5g=;
+ b=TR0KlBuLUrS6L2Mc0c2tXVc4nZjtll4Oa+a9k4PUlvNMYrOJslCQOIBA5Sk4dKO+7EiIuIHYT7HW28EtrdtM4gMjdEgzeFLblgazVvbPYmXMfOAHpBGDlccj1ZOmx+pjyqoJrXM0S+klntYFBIyaMX4+z0KnYHB4CSvnOdXqKzA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SA3PR13MB6281.namprd13.prod.outlook.com (2603:10b6:806:301::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.26; Thu, 11 May
+ 2023 15:30:34 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Thu, 11 May 2023
+ 15:30:31 +0000
+Date:   Thu, 11 May 2023 17:30:23 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Shenwei Wang <shenwei.wang@nxp.com>
+Cc:     Wei Fang <wei.fang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, imx@lists.linux.dev
+Subject: Re: [PATCH v3 net-next] net: fec: using the standard return codes
+ when xdp xmit errors
+Message-ID: <ZF0KD/3mHX7tyN46@corigine.com>
+References: <20230511152115.1355010-1-shenwei.wang@nxp.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511152115.1355010-1-shenwei.wang@nxp.com>
+X-ClientProxiedBy: AS4P195CA0053.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:20b:65a::9) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SA3PR13MB6281:EE_
+X-MS-Office365-Filtering-Correlation-Id: 287cf58b-9ac7-492c-324a-08db5234a7e4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: FaPgVxpdPrCk2y44TEMFbNxQckF7N0wYIygazQy7swLNiGDiQJAyM+wvgdIznschDfPFmDGszMlaJU52/m3eOzywO4bUi6dmznriWiMiNYzCB2q/xs35HbwVe/qzfoki4d/SuqWuFgAFe/vwC9eMw6k+s4PbbkivdbWaQkk1zheuz5uhuzOuehA4XkEiWvQdXkJek8fxgbQVdDtBcoUYgioC8Lar7bqGV+hXX0UzkOW5ItwQ++ahfJuVT+aXtyWG3tzUz78A4X3gLZ42BmGURUUOiA+JdQ/s3stGBsxqCBFINHo820007KDE2fe+3RrwLpVeirh8gGT/ItVwDVRbuxFupnz6IMck5GVzNCX1PcqX5Du9P20RvOMIw1kriTCYSlmE5xeHpi3+mGfCP0sagFyGZyBUW0yyojFin9tkkaDrLOYSAPnaSUDw4sAVPyRAC4P08K9mOn+1kfqFTs9bK3goJG4WiqLEHqHuDbiwX9GKOClFQjDBAOWgsuGmauhXmPH3emzSSGv8PK4Szw3PqlAObnTpLjbH3okH07k+Qh7rPHngyibQmgLyNFQ+bG2u
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(366004)(39850400004)(136003)(346002)(451199021)(2906002)(6666004)(478600001)(4744005)(54906003)(8936002)(8676002)(5660300002)(4326008)(36756003)(7416002)(316002)(66946007)(6916009)(66476007)(44832011)(66556008)(6506007)(86362001)(2616005)(186003)(38100700002)(41300700001)(6486002)(6512007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?5z4liIt9kAcPjd751VSDC7lAFXWLVg9n+DeUyh+r7YoYmamKe/6ahZj9X44L?=
+ =?us-ascii?Q?DOTgygmNJ7ExHF/G8rJvxbO1M2t4TygOEHH0t0Bp4q5YlNP9g1z8qqcHH+gR?=
+ =?us-ascii?Q?iwhpM48L5+saOtPj1LqtBMAzZLNjNT8f0YRUBQK/fTXUK8Ph/xU0nvJlFVfQ?=
+ =?us-ascii?Q?MBq7UzG8sxLIILfeEXQ+qF0IKPJOAaAMGhII+5f3fRzK07gARxa0Ba2gtaX0?=
+ =?us-ascii?Q?JGkvinLrJ/lClSH4/tnUjaBGpOx2/31gnbUfTOw0Jg8KQvSv8EI/S9Ua9GvR?=
+ =?us-ascii?Q?VUGnxbhkN0RtWa9tK/rwrBjs+wu46Y7s7G7PflK9278DmDIo0dYEIgnNxUq5?=
+ =?us-ascii?Q?k7WlvV6RpIkNG9h7Qk79PS1xLEmG5kCW0wGE+Cd9AhiU6TAx202lyqHYdqt3?=
+ =?us-ascii?Q?0SyBvFKTSJXh3V9hFUznTdyHJwLchvu6ReciMYx8vuqTh7aV6zUlMDARMlVB?=
+ =?us-ascii?Q?WNnRRFisfbuznExD60WH6L3E9/yL8ZC9HoOtlCemDK4jcjtiQfQRV7cOT4++?=
+ =?us-ascii?Q?Fx7XACjcmnrKDwrVaL8uo4bntagnWlZwWKHzG3oBscPKF2KPDMRGRfBBjSnD?=
+ =?us-ascii?Q?uR5PWt/i/bxFWJ4Lq+cdMCqobJHJW0onKnB9rj15yugbarDC0AkWiS1sLlu6?=
+ =?us-ascii?Q?de8CFO7k5MpBn49nAepI9cl/huUtaAQZCtPbiVFe1bUBxU/6er25aFxC8EKb?=
+ =?us-ascii?Q?oWs10N3jBLHcJFYArn5a97DfB4j0AzGu3kR9SsPpthjpHgeh8s956Ml2u09c?=
+ =?us-ascii?Q?NI27xm32vxPWRkbw2NZ5420fOUS+oXAzGtFvjQQxNG0RWzf5usQz8ybjn0dg?=
+ =?us-ascii?Q?DyOnKYOOfDb0UI3qycGu9Y3+qZ6F1j0Wpu/oyfFMLwXvsnUmvagJZNI0e2v1?=
+ =?us-ascii?Q?II/Q8KjlgIfoFm6xrV3bO7mRSbf/Lv7wf7zuEq37oode6NcfEXnHwJBmjg0k?=
+ =?us-ascii?Q?vO3W68D0GnCsBG6Gr2Z5ZEt16A8M/4Mj8/jjt0ANZiumjIeSKLM5b9hFIxwp?=
+ =?us-ascii?Q?7uMM72YxxwtTl/6pKOfBQaz2j09rzolgQ3vljlWWt55xLf5Xh3iBxkD0YSed?=
+ =?us-ascii?Q?4+ZzTNUuuHXNkA5GvmnIhFhD0FvNtFvFaVEtI1vOOoqC+1aN/bXTGbYaxnbs?=
+ =?us-ascii?Q?6zPe65XEWE1hlqUjv4BVq7Q6Nt04mfawhzpX8jRzCvap+oGEc3/KIPm+vu+I?=
+ =?us-ascii?Q?NLdoO9cO5iYxkkTeMhQM9CSkJxHVIQB2mCRRnzthGIuNjhJ/7TfYdAhvU5wi?=
+ =?us-ascii?Q?7mBuu00hfjLXrJoEq+D3ABPnb5WutR9xEKI3ojiJniGmK7tcUZY+R58QaofP?=
+ =?us-ascii?Q?QdqyyfXRB07M4wRVApVgZTj/5gx9sh/ktE7UJZTX2Q/2Bk4pbT/oVS7vMg4G?=
+ =?us-ascii?Q?u65/9XHzileJlPGg8BjCdmClwjEl7+SAAMFN+YoSdX+p5xaA0fVXtD4WnUV3?=
+ =?us-ascii?Q?fv38gM+7U29V0lfbrkZ+DhGrbdtPrsQGdx+9Wl/ohm8igZbs/kdBYAFDaC37?=
+ =?us-ascii?Q?cTV7h0PKAz9SS/jfaBJgMplNf8AdqC5SCH+I8rhU0zeOBMi0YBarpmD+Pxwk?=
+ =?us-ascii?Q?No3T/gx9szBVlfQqEzianczgsX71xm/fUYSy7ksgXCqmuXkk4AIVEl5gjb9b?=
+ =?us-ascii?Q?YLi0YD1R0mY7UyocMLDAksHu6PlsohtJznH8k1ZGbsTdFvgIEDjBGVHW7inn?=
+ =?us-ascii?Q?QAO6Cw=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 287cf58b-9ac7-492c-324a-08db5234a7e4
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 15:30:31.4812
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: m7TEjyd5jM0HpK+LBe8g2pABhIqHgHUSY+Iecmu/PvOqUycKav+CiQ4IY08DbTYm1DAq03/Guf8KWLV56m2kSYZ0NG6xx72MKaylD+0JckM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR13MB6281
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Document the kernel coding style for macros with parameters.
+On Thu, May 11, 2023 at 10:21:15AM -0500, Shenwei Wang wrote:
+> This patch standardizes the inconsistent return values for unsuccessful
+> XDP transmits by using standardized error codes (-EBUSY or -ENOMEM).
+> 
+> Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
 
-The purpose of this text is to be used as a reference to gradually
-transition towards macros with a more consistent style, and eliminate
-subtle bugs that can creep up due to missing parentheses, and generally
-remove the need to think and argue about C operator precedence.
-
-This is based on a mailing list discussion with Linus.
-
-Link: https://lore.kernel.org/lkml/CAHk-=wjfgCa-u8h9z+8U7gaKK6PnRCpws1Md9wYSSXywUxoUSA@mail.gmail.com/
-Link: https://lore.kernel.org/lkml/CAHk-=wjzpHjqhybyEhkTzGgTdBP3LZ1FmOw8=1MMXr=-j5OPxQ@mail.gmail.com/
-Link: https://lore.kernel.org/lkml/CAHk-=wh-x1PL=UUGD__Dv6kd+kyCHjNF-TCHGG9ayLnysf-PdQ@mail.gmail.com/
-Link: https://lore.kernel.org/lkml/CAHk-=wg27iiFZWYmjKmULxwkXisOHuAXq=vbiazBabgh9M1rqg@mail.gmail.com/
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
-Cc: Jonathan Corbet <corbet@lwn.net>
-Cc: linux-doc@vger.kernel.org
----
- Documentation/process/coding-style.rst | 152 ++++++++++++++++++++++++-
- 1 file changed, 151 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
-index 6db37a46d305..3cf62c91d91c 100644
---- a/Documentation/process/coding-style.rst
-+++ b/Documentation/process/coding-style.rst
-@@ -819,10 +819,160 @@ Macros with multiple statements should be enclosed in a do - while block:
- 
- 	#define macrofun(a, b, c)			\
- 		do {					\
--			if (a == 5)			\
-+			if ((a) == 5)			\
- 				do_this(b, c);		\
- 		} while (0)
- 
-+Always use parentheses around macro arguments, except for the situations listed
-+below.
-+
-+Examples where parentheses are required around macro arguments:
-+
-+.. code-block:: c
-+
-+	#define foo(a, b)				\
-+		do {					\
-+			(a) = (b);			\
-+		} while (0)
-+
-+.. code-block:: c
-+
-+	#define foo(a)					\
-+		do {					\
-+			(a)++;				\
-+		} while (0)
-+
-+.. code-block:: c
-+
-+	#define cmp_gt(a, b)			((a) > (b))
-+
-+.. code-block:: c
-+
-+	#define foo(a)				do_this(!(a))
-+
-+.. code-block:: c
-+
-+	#define foo(a)				do_this(*(a))
-+
-+.. code-block:: c
-+
-+	#define foo(a)				do_this(&(a))
-+
-+.. code-block:: c
-+
-+	#define get_member(struct_var)		do_this((struct_var).member)
-+
-+.. code-block:: c
-+
-+	#define deref_member(struct_ptr)	do_this((struct_ptr)->member)
-+
-+Situations where parentheses should not be added around arguments, when:
-+
-+* they are used as a full expression:
-+
-+  * as an initializer:
-+
-+    .. code-block:: c
-+
-+	#define foo(a)					\
-+		do {					\
-+			int __m_var = a;		\
-+		} while (0)
-+
-+  * as an expression statement:
-+
-+    .. code-block:: c
-+
-+	#define foo(a)					\
-+		do {					\
-+			a;				\
-+		} while (0)
-+
-+  * as the controlling expression of a selection statement (``if`` or ``switch``):
-+
-+    .. code-block:: c
-+
-+	#define foo(a)					\
-+		do {					\
-+			if (a)				\
-+				do_this();		\
-+		} while (0)
-+
-+    .. code-block:: c
-+
-+	#define foo(a)					\
-+		do {					\
-+			switch (a) {			\
-+			case 1:	do_this();		\
-+				break;			\
-+			}				\
-+		} while (0)
-+
-+  * as the controlling expression of a ``while`` or ``do`` statement:
-+
-+    .. code-block:: c
-+
-+	#define foo(a)					\
-+		do {					\
-+			while (a)			\
-+				do_this();		\
-+		} while (0)
-+
-+    .. code-block:: c
-+
-+	#define foo(a)					\
-+		do {					\
-+			do_this();			\
-+		} while (a)
-+
-+  * as any of the expressions of a ``for`` statement:
-+
-+    .. code-block:: c
-+
-+	#define foo(a, b, c)				\
-+		do {					\
-+			for (a; b; c)			\
-+				do_this();		\
-+		} while (0)
-+
-+  * as the expression in a return statement (note that use of return
-+    statements in macros is strongly discouraged because it affects the control
-+    flow),
-+
-+    .. code-block:: c
-+
-+	#define foo(a)					\
-+		do {					\
-+			return a;			\
-+		} while (0)
-+
-+* they are used as expression within an array subscript operator "[]":
-+
-+  .. code-block:: c
-+
-+	#define foo(a)					\
-+		do {					\
-+			if (array[a] == 1)		\
-+				do_this();		\
-+		} while (0)
-+
-+* they are used as arguments to functions or other macros:
-+
-+  .. code-block:: c
-+
-+	#define foo(a)		do_this(a)
-+
-+  .. code-block:: c
-+
-+	#define foo(a, b, c)	do_this(a, b, c)
-+
-+* there is some syntax reason why adding the parentheses would not work, e.g.
-+  the ``member`` argument:
-+
-+  .. code-block:: c
-+
-+	#define foo(struct_p, member)	do_this((struct_p)->member)
-+
- Things to avoid when using macros:
- 
- 1) macros that affect control flow:
--- 
-2.25.1
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
