@@ -2,199 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 500166FEE67
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EB406FEE68
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 11:13:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232224AbjEKJMu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 05:12:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36966 "EHLO
+        id S237262AbjEKJNa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 05:13:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237235AbjEKJMs (ORCPT
+        with ESMTP id S232267AbjEKJN2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 05:12:48 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19F296E9D
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:12:45 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50db7ec8188so4939363a12.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:12:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683796363; x=1686388363;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lDUjdj+Iypx9FcQl5FOdB2kP0msJAjTr8nwomYPJ6mY=;
-        b=BRhcP4U4WOW6kWSSy8MgyGHENqZQjiqUwKTdvHBaPtcKf4daG31Fd2+X6lHGAZlbuu
-         avIkAnYmDWuCHHJj7GdMBn+i+d12/mAW4QP09B2J226LyqAJ4/6STn632gSF807Q1F5R
-         QCxrcrlFB5tylXAcVb7Ir1H/9Zsb4Q7ASSq+XUApbLpSeNXAg0AFwtYXmu+BNqGJ4r1C
-         rqNr2ldTHfsQzPGihA6x9kbXULyEwE7+sxQrVRbxufd0msQv/uyF22WV8yUf1Ggva7Uu
-         uLc5jMv1WK5pSNerA5gRQq620AqoEw7GAptzNfqRXA5xPMx+KiavJ7oxi13UPZo4MXN5
-         B7Vw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683796363; x=1686388363;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lDUjdj+Iypx9FcQl5FOdB2kP0msJAjTr8nwomYPJ6mY=;
-        b=jF8HTlLC0LeNvYHWpia8Dj6xr3iamRL0QmbPuO5jAcLj57MghkpSYrcguuRKfkwvMP
-         gHbOdmSOWqoYudGa7tAcK2MlAtVIS020tlmQeyh9ROC0Q64/LswRLWjzsc5nE+9DKbYR
-         rObWK1sdPwHSRv0kPdgSGIRWK6qAchewbRp3Ikd22tnUitcpTHSecb7zGbnxUSZZim+m
-         R4JQ6O9FQT5AaMdTZu0JBc/mxwmNXA5ebHtz3W8l+FEun8o0UHjGKJ596EMsRNEgk8fa
-         wadPiRCrWumXcrDOhNxYKazkHUZluxL+VFAFm/7DIXcbuhz8BFQAGkM22YpkPGgSc5NH
-         d6EQ==
-X-Gm-Message-State: AC+VfDySElxzcd/G0/LfTb0Bb2F82H9h3VMAZ1rYk5q/Ktgt+9gUkWtN
-        EGCGD2RXGy5/EzrAMObkaHhNDw==
-X-Google-Smtp-Source: ACHHUZ4DOKhebB1vHG765Jc1wnpOXsgULcjllpOZUSAXOrc+LK+vlzdVvo6IB+8wnKK4Bm3FthvJmw==
-X-Received: by 2002:aa7:d705:0:b0:50d:8c5b:86b with SMTP id t5-20020aa7d705000000b0050d8c5b086bmr15489089edq.21.1683796363264;
-        Thu, 11 May 2023 02:12:43 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:7e61:f14a:c3a4:809e? ([2a02:810d:15c0:828:7e61:f14a:c3a4:809e])
-        by smtp.gmail.com with ESMTPSA id k23-20020a05640212d700b0050c0b9d31a7sm2786457edx.22.2023.05.11.02.12.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 May 2023 02:12:42 -0700 (PDT)
-Message-ID: <11ba5878-da04-d4fc-8e22-a20e5986d2ee@linaro.org>
-Date:   Thu, 11 May 2023 11:12:40 +0200
+        Thu, 11 May 2023 05:13:28 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01on2109.outbound.protection.outlook.com [40.107.215.109])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D2AFAF
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 02:13:25 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZYnq6kUfCl+QQIiVYluBtfVfKlc7OP6YtfB/t+b4yz317tv2RYH5kDN1eGR1/E7k0JyyN25W4Ukd7/ZbFQ2n5o67Fq0pD4zAXLpQUROWnoRzxo5XjSKNLzJRI9I9Du6IGqI532G2tXHJYjF0IaNL7hPom/ypw8zk16jL5PLwipRIJA29TOdvdZtjFSjzX3FreZSDw+JXfY0UejIFci/ZuqmUqq3RkAWreCooixrrXBZolRNZhKS/gKPQEy9SzCqdaCEjpbKs5pjPIql3EaHYxim2Eqa7WXBgMtWpeUNqTZUVXyG2zBRt1MQaZkgquVVJbzYhujaYNGegb8DUw7OYrQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=eyd01Gz0989Bi0WTGp7Or6Ye52CZFtSQKD8g4oqItE4=;
+ b=nlhRa/Y7kXvXKrj+f4JhmsJl7UC0C4Yw+wtYj7lRjmcgs5G4nikASq3/UGYHMl2Mq4NABdGw2cQY7bIpw7JlcFdeNYSZlfotyI+KcTw1yCRn9t8ZZ4ZtMc82eyAe8qxwsS/JX4XBb5Hn1YnoVZeSH1Xz2n6TYdmESpfWzHSx8GARw6AeEqQoSOBpcM/r4QXq46TRWGNRkobj22ulKaZa6nvqIDTzJk5Y890TCc8wuROF1i+cCXvUmwmtX3R5GJGY2yiqBSdg/BXOCnpQRxa5zBb3SB1YIt21cQIEsT2koOoSXTSMHit/DteOqqEHtN4t5fom6Ci0xkSUg5dOEJBCeQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vivo.com; dmarc=pass action=none header.from=vivo.com;
+ dkim=pass header.d=vivo.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vivo.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=eyd01Gz0989Bi0WTGp7Or6Ye52CZFtSQKD8g4oqItE4=;
+ b=ROMZx3CvIU4DnpGtlyKLcLymz+P0m4yj9hmN78kzrH4UPZ1oX6c+VkKm1a9+u9gCWL3UUCkbYI0Y+s+02F7uqMTExppTl/VgphmU0lUYWmJ6P+85hs1iBdr97HGgYbDGx/lVDCpR76q5k8YxQxx+0+T1HcKnsYwWaQArDPhMsFG0WMTg3mA3IaFM0/VHVN3sT+yHPSJTV8N/reurhL7q/eK6WJr1RsdkpmoBWA5h5RePHtkwQh2a1lJ2FYxlClgo6nVuqI8rB+3kXgNiwoDZIrLNtoXV+TPQjl+Eul9tHNgRnan5f+EPoRC6aRn4iCZhAYY+D67No7uE89PcK1o5rQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vivo.com;
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com (2603:1096:101:78::6)
+ by SG2PR06MB5059.apcprd06.prod.outlook.com (2603:1096:4:1c7::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.33; Thu, 11 May
+ 2023 09:13:20 +0000
+Received: from SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965]) by SEZPR06MB5269.apcprd06.prod.outlook.com
+ ([fe80::76d6:4828:7e80:2965%3]) with mapi id 15.20.6363.033; Thu, 11 May 2023
+ 09:13:20 +0000
+From:   Yangtao Li <frank.li@vivo.com>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>
+Cc:     Yangtao Li <frank.li@vivo.com>,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] f2fs: add fsnotify_sb_error() in f2fs_save_errors
+Date:   Thu, 11 May 2023 17:13:07 +0800
+Message-Id: <20230511091308.10509-1-frank.li@vivo.com>
+X-Mailer: git-send-email 2.39.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI1PR02CA0009.apcprd02.prod.outlook.com
+ (2603:1096:4:1f7::10) To SEZPR06MB5269.apcprd06.prod.outlook.com
+ (2603:1096:101:78::6)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v2 3/5] riscv: dts: thead: add sipeed Lichee Pi 4A board
- device tree
-Content-Language: en-US
-To:     Yangtao Li <frank.li@vivo.com>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jisheng Zhang <jszhang@kernel.org>, Wei Fu <wefu@redhat.com>
-Cc:     Icenowy Zheng <uwu@icenowy.me>, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-References: <20230510204456.57202-1-frank.li@vivo.com>
- <20230510204456.57202-3-frank.li@vivo.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230510204456.57202-3-frank.li@vivo.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SEZPR06MB5269:EE_|SG2PR06MB5059:EE_
+X-MS-Office365-Filtering-Correlation-Id: 399be76b-3a3c-4fc4-625c-08db51fff692
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: +/OEu5ZDeKkm1dmg8xQamukUWhVOQgOkvdlX7Ea1GqCn3dvyvTuMVyZXTBwoNWfl2YF2nqYdBIj7ZomzeMHaDwniKqcscOa8tzp+db5CUjrmdwzPj/07t7snMpIulJBzyyjeP2ulMy87CAH+uWWi5NBGK9HH7gaDfT6XKy9qLpeI/L2ktFp7VBVuDEozT455X8iAJbE4mnkT4FvQH6rgo0A7p9lb4f0A2SMSo4qQsp+J1OJWAsxe71UmRmtpG6TAIMDClPiaf2voIUlfGLkk329VCVXxsKgMNvwLs/FzahSh4TZgOWdeOaT6Ki7QbjxdMylSvAcV7SQgATffrX2E3wYv3C+Cd59HrF5vtB9kQEKnzrM6OTeJeppXeDKvjSi9LQxuv7Hl8DPZ66qjlRjUOB7Ha2ecxCPqJu8dSTe4dIz/YpsJfuxG2zKC4miCWlDCBlxXg2oZ+wPiI8XH8bLdMp1mNYOU3uS+3ZoqqnB8xC46dm/q1Y49Tt5yo74gVYKMVzPsiT+mWYx7TLXUC99NMtUdQeLnT2xX3aXAvYbbPatsLasM+DeDcSO4Yn8D1miDkA109OFUyFkMrOIb+ij9djxCCKseElyU0i8rS8nNHctggTldJVcorzqwSuLqkOXN
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SEZPR06MB5269.apcprd06.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(396003)(376002)(39860400002)(346002)(451199021)(478600001)(8676002)(66556008)(66946007)(41300700001)(66476007)(6666004)(4326008)(110136005)(8936002)(6486002)(52116002)(316002)(86362001)(5660300002)(1076003)(38350700002)(186003)(6512007)(6506007)(38100700002)(4744005)(2906002)(26005)(83380400001)(2616005)(36756003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?i1/ie3MIU1/k/2BfBZuV4OtLrXQep2/XOEOd+qB4BSv5xEyfRryfA/Ac7GRd?=
+ =?us-ascii?Q?4ZSaSWXfD3W9Bo/67SAetxZFKn71lCtWjVKLiKBUevu5RTTKrjh/OTa2G7p1?=
+ =?us-ascii?Q?tXvZIGe4TWKxnjO4jr+BfXtYZR1LgZkucxvWJarPP1ggSZqEN9pbMaYLH4Jt?=
+ =?us-ascii?Q?RwbbJGezz7rj8lql1Chl53ekOUpQllskaaQaIJERnHcUs9O4iKdE8cT2dZpe?=
+ =?us-ascii?Q?O1yqZMnFkswsofAeA3Nblj0Qe0KVbKzhT/F/f3280UjIyahUi1GHFwLs/IdK?=
+ =?us-ascii?Q?r4kKV9A7br38gC9HfcG0LDtwakk1gYqfKG2czhTmu6nO9dhM/SxbCs1nPdzb?=
+ =?us-ascii?Q?c3dsNWKxxh7lAUrfyVnUrqFZcl/WTW7Yff5/hfMSD5bDHpfhCe5qJZ8Pvwzu?=
+ =?us-ascii?Q?T6fkrafApZVTiCb9SrvA5ksi5PchbiMl0s7VKXowIYKGVWbYncfEOakrQEPS?=
+ =?us-ascii?Q?PoObKg1L6GK00m8A80Bh1FmsvLtRE0AudlvHLgGWv3XnUdq7pzduFIkhMRza?=
+ =?us-ascii?Q?IIwyyMuhILQZ+5sVx2HRxmtfbdIkyz7KTkthCujSttbItWPkLCPxvzFC9QuS?=
+ =?us-ascii?Q?BFmWK0fGM1W/RyMzZBZcm3yKag9NMORm47YH0XWjtNKF4sxU6PTnr34IMB3W?=
+ =?us-ascii?Q?q9RZnNJgzkPcZshq3ViRNUwGoRFCWlKai/1XDL9ilI64stdqQKyQH/RwWl31?=
+ =?us-ascii?Q?zI0a9p1cSrY1sPoWj0cL1/U3fpzh4ZhiSbkTZNSMCJ0aysArh5TOIfKIOXn0?=
+ =?us-ascii?Q?YtH0YyhrqPiBvggVfuw4dbnt0JMIm73+NBVsO6ehT2aYI//YZb1Lhxal+o8h?=
+ =?us-ascii?Q?s2JDBLhYG8FjkeE0ByhaSd5oGNF5StoChTWFvDmvSIPby609jYPSwlaBJkv1?=
+ =?us-ascii?Q?4kzWTwZJ3xVtfLK9M23AOktdzeV9Eh76PNz/LTgwhs+tuG5bwfGINvpj0T6F?=
+ =?us-ascii?Q?9sMD2/UoQ+dJMO8yW2ho1ToklzVH/x3tpx3vDMTptDVAGIwk4weRBuR+m1vH?=
+ =?us-ascii?Q?g7qLj/oS3/tT2q0AsYDICRH0tG47eQC6NDwUnNquNhTs7aU+KiLWGm2iZMLk?=
+ =?us-ascii?Q?mfMdZBrChSUPWE+ereEtWyLO3Yegmwlz73oYQwntGubaNknDKUUnIDUcRD61?=
+ =?us-ascii?Q?sbrbo2sls+zrsXcsHtx6GHbEJhcGu4g0wMsF8BmbcVkA2DFP8fy/Zf+kZNXw?=
+ =?us-ascii?Q?i5hx01ohq+JpKnjTbSPiToDvDbv8kM0ufQ1RBG9DxHP/+KQUlyB1U8vEWZtd?=
+ =?us-ascii?Q?mHD1Un6rbGMRlRlSy7Pwg4G6R4VQeOYoWOuc3U2956pkd3ek5SUSQePPP0tD?=
+ =?us-ascii?Q?fVs5TUPb+xUbdvq3GmvWluWi0LY1NiXg9SP78xRVsItjvkrG7obCKEI3TUkX?=
+ =?us-ascii?Q?vKqQwtPQX0d4SiqNDfzD35jXySSSs4LwlYpjaFz5axwluU3fw1Z0wCNCvssc?=
+ =?us-ascii?Q?U9JV9HHJGlH+uBQiOrIv/Gesv8FxMvtpOuAWEwqbRitIH6mhqCNN1KRlQid4?=
+ =?us-ascii?Q?r9Q3chpypO3pMZkmD42RPsJsYLIrQbeveVlVwcylNW2k3M1Rfm+c74FoYYBy?=
+ =?us-ascii?Q?lSjrKWss2wje6hSoTDDmR6aS/r2O8PUKSR0i/uTi?=
+X-OriginatorOrg: vivo.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 399be76b-3a3c-4fc4-625c-08db51fff692
+X-MS-Exchange-CrossTenant-AuthSource: SEZPR06MB5269.apcprd06.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 09:13:20.0890
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 923e42dc-48d5-4cbe-b582-1a797a6412ed
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: w2en42UKMFD6QFVxrmDQaSlhl3i/GvzJKu9ejhZ1eVgXJeEn8P86uoCUgy6olkNIoR99kAVX6Pu6RbHt8nPM+w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SG2PR06MB5059
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/2023 22:44, Yangtao Li wrote:
-> From: Jisheng Zhang <jszhang@kernel.org>
-> 
-> Sipeed's Lichee Pi 4A development board uses Lichee Module 4A core
-> module which is powered by T-HEAD's light(a.k.a TH1520) SoC. Add
-> minimal device tree files for the core module and the development
-> board.
-> 
-> Support basic uart/gpio/dmac drivers, so supports booting to a basic
-> shell.
-> 
-> Cc: Icenowy Zheng <uwu@icenowy.me>
-> Cc: Wei Fu <wefu@redhat.com>
-> Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-> Signed-off-by: Yangtao Li <frank.li@vivo.com>
-> ---
-> v2:
-> -cleanup `light`
->  arch/riscv/boot/dts/Makefile                  |  1 +
->  arch/riscv/boot/dts/thead/Makefile            |  2 +
->  .../dts/thead/th1520-lichee-module-4a.dtsi    | 39 +++++++++++++++++++
->  .../boot/dts/thead/th1520-lichee-pi-4a.dts    | 33 ++++++++++++++++
->  4 files changed, 75 insertions(+)
->  create mode 100644 arch/riscv/boot/dts/thead/Makefile
->  create mode 100644 arch/riscv/boot/dts/thead/th1520-lichee-module-4a.dtsi
->  create mode 100644 arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts
-> 
-> diff --git a/arch/riscv/boot/dts/Makefile b/arch/riscv/boot/dts/Makefile
-> index f0d9f89054f8..1e884868ccba 100644
-> --- a/arch/riscv/boot/dts/Makefile
-> +++ b/arch/riscv/boot/dts/Makefile
-> @@ -2,6 +2,7 @@
->  subdir-y += allwinner
->  subdir-y += sifive
->  subdir-y += starfive
-> +subdir-y += thead
->  subdir-y += canaan
->  subdir-y += microchip
->  subdir-y += renesas
-> diff --git a/arch/riscv/boot/dts/thead/Makefile b/arch/riscv/boot/dts/thead/Makefile
-> new file mode 100644
-> index 000000000000..e311fc9a5939
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/thead/Makefile
-> @@ -0,0 +1,2 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +dtb-$(CONFIG_ARCH_THEAD) += th1520-lichee-pi-4a.dtb
-> diff --git a/arch/riscv/boot/dts/thead/th1520-lichee-module-4a.dtsi b/arch/riscv/boot/dts/thead/th1520-lichee-module-4a.dtsi
-> new file mode 100644
-> index 000000000000..bc5f8677d546
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/thead/th1520-lichee-module-4a.dtsi
-> @@ -0,0 +1,39 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2023 Jisheng Zhang <jszhang@kernel.org>
-> + * Copyright (C) 2023 Yangtao Li <frank.li@vivo.com>
-> + */
-> +
-> +/dts-v1/;
-> +
-> +#include "th1520.dtsi"
-> +
-> +/ {
-> +	model = "Sipeed Lichee Module 4A";
-> +	compatible = "sipeed,lichee-module-4a", "thead,th1520";
-> +
-> +	memory@0 {
-> +		device_type = "memory";
-> +		reg = <0x0 0x00000000 0x2 0x00000000>;
-> +	};
-> +};
-> +
-> +&osc {
-> +	clock-frequency = <24000000>;
-> +};
-> +
-> +&osc_32k {
-> +	clock-frequency = <32768>;
-> +};
-> +
-> +&apb_clk {
-> +	clock-frequency = <62500000>;
-> +};
-> +
-> +&uart_sclk {
-> +	clock-frequency = <100000000>;
-> +};
-> +
-> +&dmac0 {
-> +	status = "okay";
-> +};
-> diff --git a/arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts b/arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts
-> new file mode 100644
-> index 000000000000..86d677175feb
-> --- /dev/null
-> +++ b/arch/riscv/boot/dts/thead/th1520-lichee-pi-4a.dts
-> @@ -0,0 +1,33 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (C) 2023 Jisheng Zhang <jszhang@kernel.org>
-> + * Copyright (C) 2023 Yangtao Li <frank.li@vivo.com>
-> + */
-> +
-> +#include "th1520-lichee-module-4a.dtsi"
-> +
-> +/ {
-> +	model = "Sipeed Lichee Pi 4A";
-> +	compatible = "sipeed,lichee-pi-4a", "sipeed,lichee-module-4a", "thead,th1520";
+When an EFSCORRUPTED error occurs in f2fs, report the error to
+userspace monitoring tools.
 
-Missing bindings.
+Signed-off-by: Yangtao Li <frank.li@vivo.com>
+---
+ fs/f2fs/super.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Best regards,
-Krzysztof
+diff --git a/fs/f2fs/super.c b/fs/f2fs/super.c
+index 51812f459581..42d5aa504afe 100644
+--- a/fs/f2fs/super.c
++++ b/fs/f2fs/super.c
+@@ -28,6 +28,7 @@
+ #include <linux/part_stat.h>
+ #include <linux/zstd.h>
+ #include <linux/lz4.h>
++#include <linux/fsnotify.h>
+ 
+ #include "f2fs.h"
+ #include "node.h"
+@@ -4000,6 +4001,8 @@ void f2fs_save_errors(struct f2fs_sb_info *sbi, unsigned char flag)
+ 		sbi->error_dirty = true;
+ 	}
+ 	spin_unlock_irqrestore(&sbi->error_lock, flags);
++
++	fsnotify_sb_error(sbi->sb, NULL, EFSCORRUPTED);
+ }
+ 
+ static bool f2fs_update_errors(struct f2fs_sb_info *sbi)
+-- 
+2.39.0
 
