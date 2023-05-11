@@ -2,85 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC3466FF24D
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:14:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8DF56FF275
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:17:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbjEKNOs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 09:14:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33098 "EHLO
+        id S238196AbjEKNRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:17:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237922AbjEKNOk (ORCPT
+        with ESMTP id S238135AbjEKNQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:14:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F36C40ED
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:14:38 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BE07C113E;
-        Thu, 11 May 2023 06:15:22 -0700 (PDT)
-Received: from [10.1.34.59] (C02Z41KALVDN.cambridge.arm.com [10.1.34.59])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 24A423F5A1;
-        Thu, 11 May 2023 06:14:37 -0700 (PDT)
-Message-ID: <27f2ad91-2507-a58c-2fb7-211c7f90bbdb@arm.com>
-Date:   Thu, 11 May 2023 14:14:35 +0100
+        Thu, 11 May 2023 09:16:59 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F072100DC;
+        Thu, 11 May 2023 06:15:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683810946; x=1715346946;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=8XQL7bYEaCNAsPYfNtNmF5YMRERIojn4B8v+BqlhGOQ=;
+  b=mflnzpifX7zqm8eXAwHKvnk5a4hleC0Ctjaa1b5ho4zFevEThqLI7Y2o
+   WJbJpN/YRgFYEbKyno1PUiMkoDnCEfjCfaGeBDZzgZ3QWZRbdHBZ3MGXB
+   /rhZYT4LAi7cqJB3K7VoA+RTyC6FS2z5tQd0776DfXoxy5iLTqDTtHXVh
+   DVMDxhUhgDYLcXB1MdsNt4HNGy0oE3N/yKVvgAPoVZZ5PQP9cEyc190i8
+   BT/xsfZS95yJW84QPmOzsFSn0/HMcj3cZF5J0k+v9Wc4ewbMeRuUxjCFc
+   K/647eNMV594JyZdoMR8NuWvTHtsk9BJQPzrVMoO+odMmjeD5iO2JC6yk
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="378619605"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="378619605"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 06:15:39 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10706"; a="650169921"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="650169921"
+Received: from jsanche3-mobl1.ger.corp.intel.com (HELO ijarvine-MOBL2.ger.corp.intel.com) ([10.252.39.112])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 06:15:35 -0700
+From:   =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     linux-pci@vger.kernel.org, Bjorn Helgaas <helgaas@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 11/17] Bluetooth: hci_bcm4377: Use pcie_lnkctl_clear_and_set() for changing LNKCTL
+Date:   Thu, 11 May 2023 16:14:35 +0300
+Message-Id: <20230511131441.45704-12-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230511131441.45704-1-ilpo.jarvinen@linux.intel.com>
+References: <20230511131441.45704-1-ilpo.jarvinen@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH v1 3/5] mm: Fix failure to unmap pte on highmem systems
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        SeongJae Park <sj@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        damon@lists.linux.dev
-References: <20230511125848.78621-1-ryan.roberts@arm.com>
- <20230511125848.78621-4-ryan.roberts@arm.com>
-From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <20230511125848.78621-4-ryan.roberts@arm.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-My appologies for the noise: A blank line between Cc and Subject has broken the
-subject and grouping in lore.
+Don't assume that only the driver would be accessing LNKCTL. ASPM
+policy changes can trigger write to LNKCTL outside of driver's control.
 
-Please Ignore this, I will resend.
+Use pcie_lnkctl_clear_and_set() which does proper locking to avoid
+losing concurrent updates to the register value.
 
+Suggested-by: Lukas Wunner <lukas@wunner.de>
+Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+---
+ drivers/bluetooth/hci_bcm4377.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-On 11/05/2023 13:58, Ryan Roberts wrote:
-> The loser of a race to service a pte for a device private entry in the
-> swap path previously unlocked the ptl, but failed to unmap the pte. This
-> only affects highmem systems since unmapping a pte is a noop on
-> non-highmem systems.
-> 
-> Fixes: 16ce101db85d ("mm/memory.c: fix race when faulting a device private page")
-> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-> ---
->  mm/memory.c | 6 ++----
->  1 file changed, 2 insertions(+), 4 deletions(-)
-> 
-> diff --git a/mm/memory.c b/mm/memory.c
-> index f69fbc251198..ed429e20a1bb 100644
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -3728,10 +3728,8 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
->  			vmf->page = pfn_swap_entry_to_page(entry);
->  			vmf->pte = pte_offset_map_lock(vma->vm_mm, vmf->pmd,
->  					vmf->address, &vmf->ptl);
-> -			if (unlikely(!pte_same(*vmf->pte, vmf->orig_pte))) {
-> -				spin_unlock(vmf->ptl);
-> -				goto out;
-> -			}
-> +			if (unlikely(!pte_same(*vmf->pte, vmf->orig_pte)))
-> +				goto unlock;
->  
->  			/*
->  			 * Get a page reference while we know the page can't be
+diff --git a/drivers/bluetooth/hci_bcm4377.c b/drivers/bluetooth/hci_bcm4377.c
+index 19ad0e788646..e2b489f678d9 100644
+--- a/drivers/bluetooth/hci_bcm4377.c
++++ b/drivers/bluetooth/hci_bcm4377.c
+@@ -2232,8 +2232,7 @@ static void bcm4377_disable_aspm(struct bcm4377_data *bcm4377)
+ 	 * or if the BIOS hasn't handed over control to us. We must *always*
+ 	 * disable ASPM for this device due to hardware errata though.
+ 	 */
+-	pcie_capability_clear_word(bcm4377->pdev, PCI_EXP_LNKCTL,
+-				   PCI_EXP_LNKCTL_ASPMC);
++	pcie_lnkctl_clear_and_set(bcm4377->pdev, PCI_EXP_LNKCTL_ASPMC, 0);
+ }
+ 
+ static void bcm4377_pci_free_irq_vectors(void *data)
+-- 
+2.30.2
 
