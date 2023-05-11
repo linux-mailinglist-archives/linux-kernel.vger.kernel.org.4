@@ -2,111 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 192456FFB68
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:41:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AE4B76FFB6A
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:45:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239330AbjEKUlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 16:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43182 "EHLO
+        id S239197AbjEKUoh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 16:44:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239015AbjEKUk7 (ORCPT
+        with ESMTP id S238452AbjEKUoT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 16:40:59 -0400
-Received: from mail-oo1-xc2d.google.com (mail-oo1-xc2d.google.com [IPv6:2607:f8b0:4864:20::c2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C964128
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:40:57 -0700 (PDT)
-Received: by mail-oo1-xc2d.google.com with SMTP id 006d021491bc7-546ee6030e5so4402006eaf.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:40:57 -0700 (PDT)
+        Thu, 11 May 2023 16:44:19 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 094321FF1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:44:18 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id 98e67ed59e1d1-24deb9c5ffcso6265877a91.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:44:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bitbyteword.org; s=google; t=1683837657; x=1686429657;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HF4n4y/GeCCM6obESYiThOANt4aesbUOtUb4gH3800w=;
-        b=hI0rhREHz7mQ0acrixIxJoOcmRpYu/9CgsJ3Qb4xo3NgbEi9So7RMGD6T9eJfTiMBT
-         IzbjlEup87w8QCsQPhg/CfXpQWvPuhfWn+tO6qjDh5YejWLKjWnWb3ez3tZ5GVXs5VnL
-         kgIwNR1ozUJwPUG2kulmN5CEuXhgDF94WjFhfd/HqvS8K6mIBBstZZ8svcVs/5aUL+FI
-         5aZa2ffTOgdRR4q5r0qOUO56KwoYJw77B2e+vrf8II7tC5NltH6lB8S8Hp4cLiKIMS8V
-         8WFkD3oIQzkkv4GgLHPwVTIATQnEnKHBHcLq3U9MgLCmT3PWuafmKzv9uDcPrdJteWPP
-         YP7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683837657; x=1686429657;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20221208; t=1683837857; x=1686429857;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HF4n4y/GeCCM6obESYiThOANt4aesbUOtUb4gH3800w=;
-        b=GHpFOygPWF+GaIR39y3fwUlhj8Nmu7k2tLZSr804KT27bz/8MCQIOz8XBWgr6pKbVZ
-         sy5bvhB6Hnv62Dqm2fy+CZFj3GDgwRjH476PoqnYeRcx5BwVeMUBnJG1vgigCywd/3Xe
-         dSwR/DQa0wkTDzt9/3B37OzTvUS0sVF976u+n6LF7JLgeNGCgSM4SRJzb1dVKHyhSUlO
-         YEY1O6SBVEytlm4vgr9wlWEpG+Qka0zFPAoUdkYRh9UsZ+NXS5kHgANDALL4Qdv44HEe
-         DyBwRiNGjCwJXSTAAiB/FOdcNp3JrrCimUo8CQgbUt2ptevz99qcYtLcbIVePTQjPvzZ
-         lb+w==
-X-Gm-Message-State: AC+VfDy4lgHH66rlPvOWiZAVgCEVIhJQWrIzNqTwKleBpj6eGt1aEmu4
-        levuOuItp2j3onGYgdf45SzaK7zkBwwPmTXGNJJmZw==
-X-Google-Smtp-Source: ACHHUZ5Szow/NJ7Cu3BIYjly279f1dMTGKvorFrSpX63B2R+I+6xnjEAWsSFp9WFhylPlNalzeGE0loBWPzSwNY+MpM=
-X-Received: by 2002:a4a:ea06:0:b0:54a:65e7:9b51 with SMTP id
- x6-20020a4aea06000000b0054a65e79b51mr5995029ood.8.1683837656891; Thu, 11 May
- 2023 13:40:56 -0700 (PDT)
+        bh=4hjCuhDdEpisTNEgIUNHt8mdh/WtukpJUPhW4o+llao=;
+        b=DzptXMJESoyD2cU6GH7BV0t5a3uv+1D7VfT2KoLoczknojYd0DwBwVxS/eWthAieQQ
+         hV1IvRE2P4Fo+45Tc06HCzsKRKcBdBRbE9sDTxNaVwX+sHDzhbrX2ZsEP+59QYUraARQ
+         Z98FmW9d2rssrFBBPfl2ZwTGpqjUzEtzVky1JG8FP0C4B7rYWWjr9ZfoFhX/8WV7mMdU
+         PWMN18rWFyfJlRhZUKGMf9JG0UHkX6nLqhJAtF24wd1F/pnpvAYsoHa/RlGBVfwMs9Ui
+         ZdCgj69aBqIPQtNzj6lG5OJRQYs5I3N+NuDeukeFspYIRrC8kGuRZeedGFwD0KiZzEK7
+         Avbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683837857; x=1686429857;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4hjCuhDdEpisTNEgIUNHt8mdh/WtukpJUPhW4o+llao=;
+        b=gI1nAzxlB3414V1YMhUzKQpbNrvJYB5NeDdK5lXBfw1jqIqwPOMj5uCMfME935J2XD
+         cnm8ShEbTKbZFx5URPVXAeWkaNzq3kGhzpfbk34XNQx6tZvy2NuohugRCA0pxPm0RyZz
+         NJIdJLbfi1hfKfB6+bq4x1D+ChdEim8wz8WWus2x5SGsKsCD1vA4rC3LDdKgrab/a7gk
+         MALVpQgV/1uf9I5WEiin9gp7PDG2TjeizfzRKkvVcNmQDpkoqx8pb6YzmpGHFwq7sPEU
+         H8t47ZZLQEsf8tLeDgITsxu1uiZIbIbeHhdEYLq5nsubehbRQOMLdKTKBUNgh1cjizBk
+         5SPw==
+X-Gm-Message-State: AC+VfDyS1YOqYaLiSCgI50go1F5y6T1Xhs2PoSuU+1yX+6hl7H3QEiqc
+        jIVqNqKZMMIE0X1jSJq/QCA=
+X-Google-Smtp-Source: ACHHUZ5hQnUC2s8ywUsFomsmvpvRU6S4XCPDUAhd7Tb1dugMgzmlRcrqmf/Hr3jtex/qu9nuGVhixA==
+X-Received: by 2002:a17:90a:db07:b0:250:a4f5:fb34 with SMTP id g7-20020a17090adb0700b00250a4f5fb34mr11969525pjv.2.1683837857291;
+        Thu, 11 May 2023 13:44:17 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s14-20020a17090a760e00b0024e134a2408sm18906917pjk.14.2023.05.11.13.44.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 13:44:16 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Thu, 11 May 2023 13:44:15 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@kernel.dk>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        linux-nvme@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] nvme: host: hwmon: constify pointers to
+ hwmon_channel_info
+Message-ID: <38162cf3-44e8-4774-b60b-539075369699@roeck-us.net>
+References: <20230511174650.279452-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <20230508160829.2756405-1-vineeth@bitbyteword.org>
- <20230509132534.09098acc@luca64> <CAO7JXPhrqKWfsp860rRmEenxARi8U2gNMGsOn4m+aKporWwBcg@mail.gmail.com>
- <20230509224829.2fb547fd@nowhere> <20230509225417.61d36733@nowhere>
- <CAO7JXPhk5qbz9kmiu9WuXS+gXCt9+X8pP2c37hd9ChByLmXYjA@mail.gmail.com>
- <20230510090735.68f62cd4@nowhere> <CAO7JXPg03f2YnrmzoGjfHEZZcoN55cU7uVukMw31Bw3x6nnaMw@mail.gmail.com>
- <20230511093711.2be82409@nowhere> <CAO7JXPiKLFLVpqDKoRdu8c2Yd4AJ_2B2UyXJxD3kJAyiJ=n0_Q@mail.gmail.com>
- <20230511220336.05866e80@nowhere>
-In-Reply-To: <20230511220336.05866e80@nowhere>
-From:   Vineeth Remanan Pillai <vineeth@bitbyteword.org>
-Date:   Thu, 11 May 2023 16:40:46 -0400
-Message-ID: <CAO7JXPg9K4MA7H63Num8-BHBT-Y=GQ3BnEEvaEMVKmYsXCY7Sg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] sched/deadline: accurate reclaim bandwidth for GRUB
-To:     luca abeni <luca.abeni@santannapisa.it>
-Cc:     Juri Lelli <juri.lelli@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511174650.279452-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> >
-> > I felt that, since we are using sequential reclaim mentioned in the
-> > paper and we isolate all parameters per-cpu(except for extra_bw) we
-> > could use the "-dq = -(U/Umax) dt" equation as it was simpler than
-> > equation (3).
->
-> This is the part I am not sure about...
->
-> Maybe the best way to go is to split the patch: first you implement (1)
-> (and use div64 to remove the approximation I used), then you implement
-> (3) in a second patch.
->
-> Finally, if removing the max{} is really needed you can do it in a
-> third patch (but I would try to go with Equation 3 before removing the
-> max{})
->
-Sure, I shall split the patch. Joel also suggested splitting the patch
-and I was probably wrong to think that the patch was simple to be a
-single patch :-).
+On Thu, May 11, 2023 at 07:46:50PM +0200, Krzysztof Kozlowski wrote:
+> Statically allocated array of pointed to hwmon_channel_info can be made
+> const for safety.
+> 
+> Acked-by: Christoph Hellwig <hch@lst.de>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Since equation (3) has theoretical backing, I am perfectly fine with
-using it for our fix. Will have 2 patches as you suggested.
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
-Will get the v3 out soon..
-
-Thanks,
-Vineeth
+> 
+> ---
+> 
+> Changes since v1:
+> 1. Correct whitespace (Christoph)
+> 2. Add tag
+> ---
+>  drivers/nvme/host/hwmon.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/nvme/host/hwmon.c b/drivers/nvme/host/hwmon.c
+> index 9e6e56c20ec9..6aa153f3178a 100644
+> --- a/drivers/nvme/host/hwmon.c
+> +++ b/drivers/nvme/host/hwmon.c
+> @@ -185,7 +185,7 @@ static umode_t nvme_hwmon_is_visible(const void *_data,
+>  	return 0;
+>  }
+>  
+> -static const struct hwmon_channel_info *nvme_hwmon_info[] = {
+> +static const struct hwmon_channel_info *const nvme_hwmon_info[] = {
+>  	HWMON_CHANNEL_INFO(chip, HWMON_C_REGISTER_TZ),
+>  	HWMON_CHANNEL_INFO(temp,
+>  			   HWMON_T_INPUT | HWMON_T_MAX | HWMON_T_MIN |
+> -- 
+> 2.34.1
+> 
