@@ -2,178 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF9C66FF6E8
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D3326FF6EF
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:17:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238738AbjEKQQb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 12:16:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
+        id S238741AbjEKQR0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 12:17:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238150AbjEKQQ3 (ORCPT
+        with ESMTP id S238107AbjEKQRY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 12:16:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC232681;
-        Thu, 11 May 2023 09:16:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F15C5619A5;
-        Thu, 11 May 2023 16:16:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F355C4339E;
-        Thu, 11 May 2023 16:16:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683821786;
-        bh=37BLDMCQApsAYWkD2Fzkf9WBWnl8ntaXgQXEeNJfu6g=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=vFduNp+AFVlR1whHWfYkSSUXtqdrbdmkSvG29SAJ52Fo0fYb7Za4cEdoiqrLKFoYL
-         iSxEE9zmu3ljSqd/ykPAiKPbHFmZEAE1o8IX7Ej6ylyQIXFcaEUyThU73H1xSACKcl
-         C21nEWbeImzjsQ4YRDUrYy+Zko54/xhHj5BKauuFicWNrXtohDqx3uzj2zl5iPetw+
-         YIU3Rb8GqcklpcVqBigUvTcg4DWNkPz7YgxoDE114K1RL3FrUjyDCS+gxyYwoBVJHc
-         hCYVzN3MlxvSYrvIn07dnnqa3Kn+SrwUmJASt2EoZCRo3auEAQigxFq/XbVB5NVXsx
-         yTieR1wDilSVA==
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-192cfb46e75so4017367fac.3;
-        Thu, 11 May 2023 09:16:26 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxQJoHFS3yu9RLiSqx35BMhtUMKgjelLHf5bmZczhHUpOsDgeJ1
-        c/2Ch3vtUdDgl1NyEExNNAuVuBkrVaoEj38uloI=
-X-Google-Smtp-Source: ACHHUZ4T2QkjrGxdQHl22Ge1T3nDuhIFk9OGTimOV7hj2Mp6VKkmVCr4clyp0D4xpw355k0a1jz+0o15ZxnnvtR6tlA=
-X-Received: by 2002:a05:6870:a455:b0:196:3004:cc07 with SMTP id
- n21-20020a056870a45500b001963004cc07mr4435471oal.39.1683821785529; Thu, 11
- May 2023 09:16:25 -0700 (PDT)
+        Thu, 11 May 2023 12:17:24 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46DFAE70;
+        Thu, 11 May 2023 09:17:23 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-64115e652eeso59152747b3a.0;
+        Thu, 11 May 2023 09:17:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683821843; x=1686413843;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hWigqkmbwjH+qj3HGTAq3LiZQSthJU7TTJei/KtCz3g=;
+        b=Jp1MM5zIbOC3i2hi5NdnJJmDqd3d2Rnhtlgw5+jQUuy5eqkiQp6/+5+pp0Lvru6PcD
+         b6s+xNjGNIS5mo2Vcs2gq6pLhRq6MxMQWXxnJMzKMyGPRBN6uVk0vZb1bvSiOf3o+Fk3
+         i9jaGw1USscmRimFSbu3Ieqx5LSP1wd2Y+4N2agK3FRRBzvlV63EP/dHFg10g6HH9LTa
+         VlMXO2N6xJOMDlqdEp8Q71knZoyCcGreepvR4xfkD1X5GPaYSQulMI9v2jgY1xy8LlMR
+         OYrysA98QUxjt8zPVYuCE6wU/cwl7YuAmO9RA1pTV6RdMhJnCBuQPEDtxaOBASc0/WTW
+         jezA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683821843; x=1686413843;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hWigqkmbwjH+qj3HGTAq3LiZQSthJU7TTJei/KtCz3g=;
+        b=VzFJlAVqHMoJHOmicC1aEHXVMHIlLFB18kJ2G05HBWj17IFo3fNEjqLdn9iU4+Hfh4
+         F0/Fn2TVXoYQ5uYZTT70+Dq9WX287DVRW4om4hR697x9QdC8Dty5Z4ynyABBN/c6anF2
+         yTQc+cvkQTq51xR57Nxlgx30iy8CfSPCaBjE9pR7eQ6fYp6+O2KbKf/f57K7RiybpFoX
+         D5Rx5JnOA8BR5KYs5OFEznkru9/wyK2e+NDdLMAZl+0h0+opIXrys2taTsOmTLMiL8CE
+         LLptU89gs4Ugg0Q+auviTuPNH4/KZAMYC94UQHfxScHN7WeT1iBJDMECBTsPjZ0+DbYX
+         R6Sg==
+X-Gm-Message-State: AC+VfDwlmoHHb2qMB3UAIJXkiBSmcAF6vg1TmkJS2QzfQT4Gy443LCgn
+        I9h7lFcA34FcAIUeTaiRvqU=
+X-Google-Smtp-Source: ACHHUZ4sv20ghK1eTdLmYspjK4wvNz7eoffWCAy6KbdvGlMSgAPxDSiU53v1bB/4D3cnwFEYfmG+cw==
+X-Received: by 2002:a17:90b:3ece:b0:24e:3413:c7ff with SMTP id rm14-20020a17090b3ece00b0024e3413c7ffmr32458870pjb.7.1683821842539;
+        Thu, 11 May 2023 09:17:22 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id bj8-20020a17090b088800b00247164c1947sm10638556pjb.0.2023.05.11.09.17.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 09:17:21 -0700 (PDT)
+Message-ID: <e459ad06-e261-91a0-1c42-d9135b9ca6b5@gmail.com>
+Date:   Thu, 11 May 2023 09:17:19 -0700
 MIME-Version: 1.0
-References: <4cb758c7-f4f5-820c-c7e7-5b900ccc2534@kernel.org>
-In-Reply-To: <4cb758c7-f4f5-820c-c7e7-5b900ccc2534@kernel.org>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 12 May 2023 01:15:49 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATQeT8MaQr450x0SpHJV=QU7nrfWfDO1ZRKimppVZG4KA@mail.gmail.com>
-Message-ID: <CAK7LNATQeT8MaQr450x0SpHJV=QU7nrfWfDO1ZRKimppVZG4KA@mail.gmail.com>
-Subject: Re: make localmodconfig doesn't work for thunderbolt
-To:     Jiri Slaby <jirislaby@kernel.org>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        andreas.noever@gmail.com, michael.jamet@intel.com,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        YehezkelShB@gmail.com, USB list <linux-usb@vger.kernel.org>,
-        Linux kernel mailing list <linux-kernel@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH net-next v2 2/3] net: phy: broadcom: Add support for
+ Wake-on-LAN
+Content-Language: en-US
+To:     Paolo Abeni <pabeni@redhat.com>,
+        Florian Fainelli <f.fainelli@gmail.com>, netdev@vger.kernel.org
+Cc:     Doug Berger <opendmb@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        =?UTF-8?Q?Marek_Beh=c3=ban?= <kabel@kernel.org>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Frank <Frank.Sae@motor-comm.com>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20230509223403.1852603-1-f.fainelli@gmail.com>
+ <20230509223403.1852603-3-f.fainelli@gmail.com>
+ <8aebd38cf057cf659d5133527f55e1ced0e6f70c.camel@redhat.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <8aebd38cf057cf659d5133527f55e1ced0e6f70c.camel@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+CC Steven Rostedt, author of streamline_config.pl
-
-
-
-On Wed, May 10, 2023 at 8:01=E2=80=AFPM Jiri Slaby <jirislaby@kernel.org> w=
-rote:
->
+On 5/11/23 03:26, Paolo Abeni wrote:
 > Hi,
->
-> if I use localmodconfig for example like this:
-> mkdir /tmp/tb/
-> echo thunderbolt >/tmp/tb/lsmod
-> make O=3D/tmp/tb LSMOD=3D/tmp/tb/lsmod localmodconfig
->
-> I get:
-> using config: '.config'
-> thunderbolt config not found!!
->
-> $ grep 'USB4\>' /tmp/tb/.config
-> # CONFIG_USB4 is not set
->
-> I believe it's due to:
->    obj-${CONFIG_USB4} :=3D thunderbolt.o
-> in drivers/thunderbolt/Makefile. I.e. ${} used instead of more common $()=
-.
->
-> But even if I change the parser:
->
-> --- a/scripts/kconfig/streamline_config.pl
-> +++ b/scripts/kconfig/streamline_config.pl
-> @@ -317,7 +317,7 @@ foreach my $makefile (@makefiles) {
->          $_ =3D convert_vars($_, %make_vars);
->
->          # collect objects after obj-$(CONFIG_FOO_BAR)
-> -       if (/obj-\$\((CONFIG_[^\)]*)\)\s*[+:]?=3D\s*(.*)/) {
-> +       if (/obj-\$[({](CONFIG_[^})]*)[)}]\s*[+:]?=3D\s*(.*)/) {
->              $var =3D $1;
->              $objs =3D $2;
->
->
-> I see:
-> module thunderbolt did not have configs CONFIG_USB4
->
-> and:
-> $ grep 'USB4\>' /tmp/tb/.config
-> # CONFIG_USB4 is not set
->
-> So two questions:
-> 1) is ${} supported and should be the above change sent as a patch? Or
-> should be drivers/thunderbolt/Makefile fixed to use $(). (And maybe
-> other Makefiles too.)
+> 
+> On Tue, 2023-05-09 at 15:34 -0700, Florian Fainelli wrote:
+>> @@ -821,7 +917,28 @@ static int bcm54xx_phy_probe(struct phy_device *phydev)
+>>   	if (IS_ERR(priv->ptp))
+>>   		return PTR_ERR(priv->ptp);
+>>   
+>> -	return 0;
+>> +	/* We cannot utilize the _optional variant here since we want to know
+>> +	 * whether the GPIO descriptor exists or not to advertise Wake-on-LAN
+>> +	 * support or not.
+>> +	 */
+>> +	wakeup_gpio = devm_gpiod_get(&phydev->mdio.dev, "wakeup", GPIOD_IN);
+>> +	if (PTR_ERR(wakeup_gpio) == -EPROBE_DEFER)
+>> +		return PTR_ERR(wakeup_gpio);
+>> +
+>> +	if (!IS_ERR(wakeup_gpio)) {
+>> +		priv->wake_irq = gpiod_to_irq(wakeup_gpio);
+>> +		ret = irq_set_irq_type(priv->wake_irq, IRQ_TYPE_LEVEL_LOW);
+>> +		if (ret)
+>> +			return ret;
+>> +	}
+>> +
+>> +	/* If we do not have a main interrupt or a side-band wake-up interrupt,
+>> +	 * then the device cannot be marked as wake-up capable.
+>> +	 */
+>> +	if (!bcm54xx_phy_can_wakeup(phydev))
+>> +		return ret;
+> 
+> AFAICS, as this point 'ret' is 0, so the above is confusing. Do you
+> intend the probe to complete successfully? If so, would not be
+> better/more clear:
+> 
+> 		return 0;
 
+Yes probe needs to be successful if bcm54xx_phy_can_wakeup() returns 
+false, will change to return 0 to make that clearer. Thanks!
+-- 
+Florian
 
-I believe streamline_config.pl should be fixed.
-
-There is no good reason to support only $(), but not ${}.
-
-
-In fact, the comment line around line 395 of this script
-uses the curly brace style.
-
-  # a loaded module. This is a direct obj-${CONFIG_FOO} +=3D bar.o
-
-
-
-
-
-
-> 2) how to fix that 'thunderbolt did not have configs'?
-
-That warning is CONFIG_USB4 was unset in the resulting .config.
-
-Was CONFIG_USB4 enabled before running localmodconfig?
-
-In my understanding, the purpose of localmodconfig
-is to slim down the .config file.
-
-It disables unneeded CONFIG options, but
-it does not enable needed CONFIG options.
-
-
-
-
-If I start from allnoconfig (i.e. CONFIG_USB4 is unset), I see the warning.
-
-$ echo thunderbolt >/tmp/tb/lsmod
-$ make -s O=3D/tmp/tb allnoconfig
-$ make O=3D/tmp/tb LSMOD=3D/tmp/tb/lsmod  localmodconfig
-  GEN     Makefile
-using config: '.config'
-module thunderbolt did not have configs CONFIG_USB4
-
-
-
-If I start from allmodconfig (i.e. CONFIG_USB4 is m), I do not see the warn=
-ing.
-
-$ echo thunderbolt >/tmp/tb/lsmod
-$ make -s O=3D/tmp/tb allmodconfig
-$ make O=3D/tmp/tb LSMOD=3D/tmp/tb/lsmod  localmodconfig
-  GEN     Makefile
-using config: '.config'
-
-
-
-
-
---=20
-Best Regards
-Masahiro Yamada
