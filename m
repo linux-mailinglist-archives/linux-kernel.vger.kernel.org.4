@@ -2,51 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5282A6FEC19
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:00:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 641C96FEC1D
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:01:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236570AbjEKHAQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 03:00:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33548 "EHLO
+        id S236863AbjEKHAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 03:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237345AbjEKHAJ (ORCPT
+        with ESMTP id S237230AbjEKHAZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 03:00:09 -0400
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C0A46A76
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 23:59:25 -0700 (PDT)
-Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-7606e3c6c8aso545374439f.2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 23:59:25 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683788319; x=1686380319;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FDmGzb0EAcK7O5vcmkwcvazowRZw0i6s484o3OBJttQ=;
-        b=Yev3vNlDTCbUH4l41JdMK3LxpZrN/gjdVy5a3E/hYlW0LwMzGIOMJ6DbQofWasiVWE
-         LWkBVQWtTYWZzTVb6qVlqpckmLHPNTcdCQ5in2N5NXroyxj65kAZeymmutvRTaZ6D8S6
-         CDe74v5GmMb5AOStxs8Yajb5azyVhed7+x+/cXRkbKWDsMRlqRZVqN9yoDhKJly2tBFi
-         +uA32Q6PQcbseEfjeAoFS1CyuLucSCNWXFgNhdkb5bPsDi05dujjU8CMgz0p9RaivrZo
-         HDo5oVCWaF0onZLIDOVs8GuDXr3YG8o9SMG+mGlLTKYctK2pmzMpXMagRT3UuhcX1p5d
-         PTbg==
-X-Gm-Message-State: AC+VfDwNeJ1N4uPkuDHpIb3Wnv87jsIbprH8AWhSZ8JF+60s5uTBLmm5
-        PzbKzYheo+eHhUNZyxP8VE+9d152GOoK7y0CvEKtPvBHdcu/
-X-Google-Smtp-Source: ACHHUZ7hwuBx0DrAwQF3mb7msJLh363FZDYdEVQJZY1eQ7z+xJ4zU18vqCq8f3C6lBGIzI/dywqo1SJ8456Jojs1CbU3IB+xGBEC
+        Thu, 11 May 2023 03:00:25 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01olkn2021.outbound.protection.outlook.com [40.92.53.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A56DC5265;
+        Wed, 10 May 2023 23:59:50 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=UeUC1oJ4PUNA9rwJ9pYqBooPhiMhDCxeSx5WIM/Hw50oPgYlseCMd924Nuk93jcbkDVuOEZ+jGcT9lZT8Irqo9RqCXMkCEZR1GOkzt7IBqGBJ1PRyMs/p6EifradB+1KO5a/csPlBU7pD/IiZ7SHqLHXlqtvPqsZRwCLIeEuOKg+peOxZkJNxza7hrAvyGgkkh5bxkg5JovIHCyHLGq+N5ypVoVbck93+abKu8hYuBITHZENnrQIpXbPTdBO+5uxTx03DYvb4K7yZEge9I3eJKgJLH+IyeucvOw3NiIa0THYzfpUwDyXt/bL/jsArI+ZYcadKde7fK8uTt/a6QqV7w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zwm3bT0OHUUbgkLF3YHQagTln1G6CZmA+7H01PQWkmk=;
+ b=hY8kPlQBhjL5/RBwvMgNkOEKdCILIcfGw4UNy0224nOimD+Q9HOKSBzLfpVveN+wpqJIXDQXAmPzxHwPHb3Zv1mWMkj9zTQlVnDJlGvHMA7nC1A081sQZvNtTOGQDpviKG0tFe5VTagJO9lF4/xUcatT4Et1ouX1g8ZGaWYT3zdNTcnEuZ67hphQNqF7udszeSxsoSaCnD5V2Eg+hgg18gnB9ljP15w8+JsbTKOyujsYZoqqZm/8xkUtbnoiNeTaF6UmrOsQchKZdjD440QocLohGer0zzvX3Ywjjcsoo8QQugLLsAQIvFRuevoIlY6G+Bhftfb13OXBDMGe956THQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zwm3bT0OHUUbgkLF3YHQagTln1G6CZmA+7H01PQWkmk=;
+ b=h5wx8J61Qoa4cRAMFiv8WHrXBgZtgRtKvO1T7aC324y0MWdycD7m48XCTPoQ7bVqcSc0WNiZmrzyaC59IUtde87ZMBAYKeGv/c+sOOAspTVOV95FJrnPddeJqj4P4YZJD2nBcr4ADS6n3BIWY9KteHIMYYoQt/YOs1CYroSGhx/y+JKPXeSAZsV7clnnuuqeskE24aChzqKyjlB1tiUaC4Yr7CAZaiatRXPQYFNbd6ChU6A7IG4Jp7WEQPv4eVc+0k/lUT7rSY7j+P3thLctYXa/LidfmA4Ja0gGcEvwGEB9JvYgEuvp880V/tgix5mOXEHCl+pT0Byuu7PMJblJHg==
+Received: from KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ (2603:1096:820:9a::12) by TYZPR01MB4140.apcprd01.prod.exchangelabs.com
+ (2603:1096:400:1c8::7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.31; Thu, 11 May
+ 2023 06:59:30 +0000
+Received: from KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ ([fe80::93cb:1631:4c4c:1821]) by KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ ([fe80::93cb:1631:4c4c:1821%4]) with mapi id 15.20.6387.018; Thu, 11 May 2023
+ 06:59:30 +0000
+From:   Yan Wang <rk.code@outlook.com>
+To:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk
+Cc:     Yan Wang <rk.code@outlook.com>
+Subject: [PATCH v4] net: mdiobus: Add a function to deassert reset
+Date:   Thu, 11 May 2023 14:59:09 +0800
+Message-ID: <KL1PR01MB54480925428513803DF3D03AE6749@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-TMN:  [HLsnJVlr1CdsThsnyTyvNoBu0cOg29N4]
+X-ClientProxiedBy: SG2PR01CA0196.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:189::23) To KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ (2603:1096:820:9a::12)
+X-Microsoft-Original-Message-ID: <20230511065909.1920-1-rk.code@outlook.com>
 MIME-Version: 1.0
-X-Received: by 2002:a6b:7104:0:b0:76c:552c:1c64 with SMTP id
- q4-20020a6b7104000000b0076c552c1c64mr4195105iog.4.1683788319325; Wed, 10 May
- 2023 23:58:39 -0700 (PDT)
-Date:   Wed, 10 May 2023 23:58:39 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a686ca05fb6584ea@google.com>
-Subject: [syzbot] upstream boot error: KMSAN: uninit-value in strlcat
-From:   syzbot <syzbot+26836cb949db3d40c992@syzkaller.appspotmail.com>
-To:     axboe@kernel.dk, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: KL1PR01MB5448:EE_|TYZPR01MB4140:EE_
+X-MS-Office365-Filtering-Correlation-Id: 91420bb8-717e-4cb3-7359-08db51ed446b
+X-MS-Exchange-SLBlob-MailProps: ZILSnhm0P3k2XayEnZ/FXgv66CsfMCS1CpyJ1582nDelJTLmLlEk7YU7wM7TwsPqY6G+1N2g87q67s3q1apWzJrks0oeEDnEi1j81Rp/L+a1/PzPmChWOg54OJMLOIJSuG2zbpjFAyvIhbS4RgguxmE3m6aiflEtgNLbEf8JhxkXrHg3jTUnZ85Y5SvEvK/H5ZpyH6DMnEJkxCQi7GDD/85grEvj3dwaoJ0uTFLD97OS6p+ZW5GZ1pLtFoLtZCHSJ8CX/zrulFeANkG1uTH3gTqsMWSbl54Nq+YUSG949yXhx09EafcQDQJSsUbqGqzyLggYjDkZ9VlBo46WGn931V/OzcDTqgVrKXWK/k440o/bZdyLaus5sgVlhsLc3vo+DRVa9jYtA4WI7lxrJNyPBuvEfMq/uS/okpOgA8a+ooQ1ytkArSCuCjSwinWB0vgDZyCMI16eEwgFBCR8qq6lc73hqd3dyiuiuCA1fpn7AtI1DU8KjJBhbpItUfrglz0CXmuRNaLRsal5FZ2kvCB5S6qDxAg85jKebWlrxK0Ivlv16syVQ/Ei22VBbKP9bpmlNr5GAmWdZWyCgwcWLMHRTV0FkfLgdCOok+7/fsb37Qb8e97sARUvWfLAvSLOcSeR1gniAaW3D7HP0aN+do1d4qTZ6lVaWIfV7UIRVx5TGCvzgpEPIovRiVQnPqYGguc9b/peUNSuTLNmpjS7hn2NIXtl9qi1BY3rTvzGGSEdy6qYVSQlTyAAjlEpiPLeJcaNxV/t+fubGcytDCcMlJ9OUOPhO3OugW6/
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: QSmbsbyUP9UWMZitPq1Zqi4nT8vbAGw4yJb9ZxM+Bv1Ndz3OoTYH5v3tBqPDFtcU/MXS4iAcqVqgkNHiM0wkbc/mzj5LcSz7tXOEMkaQBZgO1agyZWwMNVlBOQulKPq6ncuIdpf0AIxALZ8b2QnRAdW+NKMALPkNUu8uIEFPC6huDKhV1KROypMxz9jbZql3gM7bJ42mch2HrMZ+FeXXOWQtnRzSNE6CPNpivaXYWwZ4IQ0na48nPxAQHlKTlIZa9+oCkXYflDLnzHR45ZK3ttmXpQd2TJpra5Tt45a0nwR6pkl739RTErRKbxX5Ws6xWqX9AqaM3lLdm4kuz1DVFIkZN/SLHUPQiYWSUafhvl+cwh1OnpauOPAjjhltF5c1LSkBUBGfZrpEer1FFW/O+zgbkWbSuDy81vmBsLdE2MLfl6VVcCbDt4F8JammBgXXe3X5e7yHazsCCPKzWduYoOtcsHzY7eZ7xsAytvpVGRaqKMiQeXrM/JMQbDxy9wyEN625+5NfV3fsB5ZsEhE4SrbA5Lu/L16JsYmhyGjlA1oi6S9Oqe4HCZDBQuYrGSFvDdfwFF5LY+Jv/7oRBWotPCbO25iaAk5uUjlfFJFUQqbL4Y3N84GNNeWgTVjh6wxvBpYl/vIYcBV0EsosGLrQyw==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?25mqsSDMLg8YKFHEqIP+4YfsL/QfunTUvp+5bO0jOjcZ4O7bvWcNAagIGP75?=
+ =?us-ascii?Q?6Daf8PromYzuph+mO0q2WSNBEFxCVYZcNCZ7v4Y8n1p6dIZKZsH5LhlE+2a1?=
+ =?us-ascii?Q?K4q20IQxjBiAieelvxvPr8RDKn5oUWgTdQB46uj2vzY4xfQIzgX12eU79JUr?=
+ =?us-ascii?Q?VM599naoRIYy5F5BQVuY5QXO7jYD6dR/ueC/Tb+Fw+wUiDvC84rsQkowxx/H?=
+ =?us-ascii?Q?WO8UAXwIgmmjy8Hm7a+M1SKLkqbBkPX0/nrEA/ZiSmdXcCeOUo6X+5U+6VRf?=
+ =?us-ascii?Q?7m8+qjSpGhx28227jIQjJuf/dN7bcPPQY+5/l56yKzdv3Xd6gBtefcWUTiAl?=
+ =?us-ascii?Q?iVxrL27Wff9r5s8zhM6K6BA7oswEeJvwqZU3fCQUBjFSOijqVDsZSqAn2VCD?=
+ =?us-ascii?Q?/4UVDg8Q1MVCMfm9nnLFBVC+hIB3OEaHfUd5p8zhOZlQxNbuDJ6Kz2lE3RBe?=
+ =?us-ascii?Q?1Nq7P63GqRM2/E5id/MskLoR8FmRY151Mc64SDKwTuibi1OAsmBKs23qkFlz?=
+ =?us-ascii?Q?e6eiZFpZ4LKN1iR1rx+tTkHoMQGYtcIYl0AViB7Zp5OK11W2Jh3TU5Q32Oj4?=
+ =?us-ascii?Q?zB9n3KX/kbGkVpc1H30kVzdRa/Ug2rKnYPGied6jsqE08aNKPYaDs+Vzzfe/?=
+ =?us-ascii?Q?0g6uNwnd6OTZZ0J3SGR3r34qw5jFozuNidBx51lE4b4zlPEWse1bHpqW+QTZ?=
+ =?us-ascii?Q?89YmgWfZE3vkNWxQXDoOMJHAMwInsyAX5vFC8+wFtF/pND46Bm0XvV54iRH8?=
+ =?us-ascii?Q?X7ERIgvwN1x2QgZ+uIunRkIEFO/IKnE4OeB5i7hxi5It4WgTnX9acfh5EF5G?=
+ =?us-ascii?Q?NVXhPy1LaB8dM36wc8GqYFuhf2I9srR/MHPwnyhJb1mOG8VEuj9lBYTaNeDe?=
+ =?us-ascii?Q?7dBhFFd1H6gf6ZV1bKuEh9gOOPzIErF/0NJEq5yNXz0iGh6FxuzzIt41AU0R?=
+ =?us-ascii?Q?q9XUw8T2OoME/XVyb/QCVQy25J6SqdZsgRJzHOmNU45CcHCOG8ZNqEK2P7ap?=
+ =?us-ascii?Q?Ew5TCa0gYHZxkVLUx6N/PGM861/Xl4HgxixkgLhEaFwRTCR27mhAGYxGqy2Q?=
+ =?us-ascii?Q?fDtThgS5iQoiViwidYufow54leSgVvFirH7ArQ2HC+eMo/aJoh0iL9TVWYPD?=
+ =?us-ascii?Q?u8Xkr4btYITjML9taHj0lQeV+F/Q9LNHsVkg4xzccobcj/CV11N7JDuwu5VL?=
+ =?us-ascii?Q?Du4fildH6XYDm/zVjNisNUY46hA6I344dusUnA=3D=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 91420bb8-717e-4cb3-7359-08db51ed446b
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 06:59:30.4051
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZPR01MB4140
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,103 +104,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+It is possible to mount multiple sub-devices on the mido bus.
+The hardware power-on does not necessarily reset these devices.
+The device may be in an uncertain state, causing the device's ID
+to not be scanned.
 
-syzbot found the following issue on:
+So,before adding a reset to the scan, make sure the device is in
+normal working mode.
 
-HEAD commit:    16a8829130ca nfs: fix another case of NULL/IS_ERR confusio..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=10811e34280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a7a1059074b7bdce
-dashboard link: https://syzkaller.appspot.com/bug?extid=26836cb949db3d40c992
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d4c6da24829a/disk-16a88291.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7b2a0fc666c9/vmlinux-16a88291.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/710105c78106/bzImage-16a88291.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+26836cb949db3d40c992@syzkaller.appspotmail.com
-
-sd 0:0:1:0: [sda] 4194304 512-byte logical blocks: (2.15 GB/2.00 GiB)
-sd 0:0:1:0: [sda] 4096-byte physical blocks
-sd 0:0:1:0: [sda] Write Protect is off
-sd 0:0:1:0: [sda] Write cache: enabled, read cache: enabled, doesn't support DPO or FUA
-=====================================================
-BUG: KMSAN: uninit-value in strlen lib/string.c:418 [inline]
-BUG: KMSAN: uninit-value in strlcat+0x67/0x160 lib/string.c:252
- strlen lib/string.c:418 [inline]
- strlcat+0x67/0x160 lib/string.c:252
- msdos_partition+0x366d/0x46a0 block/partitions/msdos.c:696
- check_partition block/partitions/core.c:138 [inline]
- blk_add_partitions block/partitions/core.c:594 [inline]
- bdev_disk_changed+0xab5/0x2070 block/partitions/core.c:680
- blkdev_get_whole+0x633/0x6c0 block/bdev.c:619
- blkdev_get_by_dev+0x50f/0x1200 block/bdev.c:756
- disk_scan_partitions+0x2d8/0x3d0 block/genhd.c:379
- device_add_disk+0x16d9/0x17b0 block/genhd.c:519
- sd_probe+0x132e/0x1710 drivers/scsi/sd.c:3587
- really_probe+0x506/0xf40 drivers/base/dd.c:658
- __driver_probe_device+0x2a7/0x5d0 drivers/base/dd.c:800
- driver_probe_device+0x72/0x7b0 drivers/base/dd.c:830
- __device_attach_driver+0x55a/0x8f0 drivers/base/dd.c:958
- bus_for_each_drv+0x3ff/0x620 drivers/base/bus.c:457
- __device_attach_async_helper+0x208/0x2b0 drivers/base/dd.c:987
- async_run_entry_fn+0x97/0x420 kernel/async.c:127
- process_one_work+0xb0d/0x1410 kernel/workqueue.c:2405
- worker_thread+0x107e/0x1d60 kernel/workqueue.c:2552
- kthread+0x3e8/0x540 kernel/kthread.c:379
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-Uninit was created at:
- __alloc_pages+0x9a4/0xe00 mm/page_alloc.c:4791
- alloc_pages+0xd01/0x1040
- __get_free_pages+0x34/0xc0 mm/page_alloc.c:4818
- check_partition block/partitions/core.c:122 [inline]
- blk_add_partitions block/partitions/core.c:594 [inline]
- bdev_disk_changed+0x63c/0x2070 block/partitions/core.c:680
- blkdev_get_whole+0x633/0x6c0 block/bdev.c:619
- blkdev_get_by_dev+0x50f/0x1200 block/bdev.c:756
- disk_scan_partitions+0x2d8/0x3d0 block/genhd.c:379
- device_add_disk+0x16d9/0x17b0 block/genhd.c:519
- sd_probe+0x132e/0x1710 drivers/scsi/sd.c:3587
- really_probe+0x506/0xf40 drivers/base/dd.c:658
- __driver_probe_device+0x2a7/0x5d0 drivers/base/dd.c:800
- driver_probe_device+0x72/0x7b0 drivers/base/dd.c:830
- __device_attach_driver+0x55a/0x8f0 drivers/base/dd.c:958
- bus_for_each_drv+0x3ff/0x620 drivers/base/bus.c:457
- __device_attach_async_helper+0x208/0x2b0 drivers/base/dd.c:987
- async_run_entry_fn+0x97/0x420 kernel/async.c:127
- process_one_work+0xb0d/0x1410 kernel/workqueue.c:2405
- worker_thread+0x107e/0x1d60 kernel/workqueue.c:2552
- kthread+0x3e8/0x540 kernel/kthread.c:379
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-CPU: 1 PID: 1018 Comm: kworker/u4:5 Not tainted 6.4.0-rc1-syzkaller-00012-g16a8829130ca #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-Workqueue: events_unbound async_run_entry_fn
-
-=====================================================
-
-
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202305101702.4xW6vT72-lkp@intel.com/
+Signed-off-by: Yan Wang <rk.code@outlook.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+v4:
+  - Get pulse width and settling time from the device tree
+  - Add logic for processing (PTR_ERR(reset) == -EPROBE_DEFER)
+  - included <linux/goio/consumer.h>
+  - fixed commit message
+v3: https://lore.kernel.org/all/KL1PR01MB5448A33A549CDAD7D68945B9E6779@KL1PR01MB5448.apcprd01.prod.exchangelabs.com/
+  - fixed commit message
+v2: https://lore.kernel.org/all/KL1PR01MB54482416A8BE0D80EA27223CE6779@KL1PR01MB5448.apcprd01.prod.exchangelabs.com/
+  - fixed commit message
+  - Using gpiod_ replace gpio_
+v1: https://lore.kernel.org/all/KL1PR01MB5448631F2D6F71021602117FE6769@KL1PR01MB5448.apcprd01.prod.exchangelabs.com/
+  - Incorrect description of commit message.
+  - The gpio-api too old
+---
+ drivers/net/mdio/fwnode_mdio.c | 32 ++++++++++++++++++++++++++++++++
+ 1 file changed, 32 insertions(+)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/net/mdio/fwnode_mdio.c b/drivers/net/mdio/fwnode_mdio.c
+index 1183ef5e203e..9d7df6393059 100644
+--- a/drivers/net/mdio/fwnode_mdio.c
++++ b/drivers/net/mdio/fwnode_mdio.c
+@@ -11,6 +11,7 @@
+ #include <linux/of.h>
+ #include <linux/phy.h>
+ #include <linux/pse-pd/pse.h>
++#include <linux/gpio/consumer.h>
+ 
+ MODULE_AUTHOR("Calvin Johnson <calvin.johnson@oss.nxp.com>");
+ MODULE_LICENSE("GPL");
+@@ -57,6 +58,35 @@ fwnode_find_mii_timestamper(struct fwnode_handle *fwnode)
+ 	return register_mii_timestamper(arg.np, arg.args[0]);
+ }
+ 
++static void fwnode_mdiobus_pre_enable_phy(struct fwnode_handle *fwnode)
++{
++	struct gpio_desc *reset;
++	unsigned int reset_assert_delay;
++	unsigned int reset_deassert_delay;
++
++	reset = fwnode_gpiod_get_index(fwnode, "reset", 0, GPIOD_OUT_LOW, NULL);
++	if (IS_ERR(reset)) {
++		if (PTR_ERR(reset) == -EPROBE_DEFER)
++			pr_debug("%pOFn: %s: GPIOs not yet available, retry later\n",
++				 to_of_node(fwnode), __func__);
++		else
++			pr_err("%pOFn: %s: Can't get reset line property\n",
++			       to_of_node(fwnode), __func__);
++
++		return;
++	}
++	fwnode_property_read_u32(fwnode, "reset-assert-us",
++				 &reset_assert_delay);
++	fwnode_property_read_u32(fwnode, "reset-deassert-us",
++				 &reset_deassert_delay);
++	gpiod_set_value_cansleep(reset, 1);
++	fsleep(reset_assert_delay);
++	gpiod_set_value_cansleep(reset, 0);
++	fsleep(reset_deassert_delay);
++	/*Release phy's reset line, mdiobus_register_gpiod() need to request it*/
++	gpiod_put(reset);
++}
++
+ int fwnode_mdiobus_phy_device_register(struct mii_bus *mdio,
+ 				       struct phy_device *phy,
+ 				       struct fwnode_handle *child, u32 addr)
+@@ -119,6 +149,8 @@ int fwnode_mdiobus_register_phy(struct mii_bus *bus,
+ 	u32 phy_id;
+ 	int rc;
+ 
++	fwnode_mdiobus_pre_enable_phy(child);
++
+ 	psec = fwnode_find_pse_control(child);
+ 	if (IS_ERR(psec))
+ 		return PTR_ERR(psec);
+-- 
+2.17.1
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
