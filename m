@@ -2,331 +2,353 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6C136FF5E1
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:26:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B1AD6FF5CD
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 17:22:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238594AbjEKP03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 11:26:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
+        id S238688AbjEKPWj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 11:22:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238399AbjEKP01 (ORCPT
+        with ESMTP id S238623AbjEKPWd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 11:26:27 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C493138;
-        Thu, 11 May 2023 08:26:23 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 97CA55FD5F;
-        Thu, 11 May 2023 18:26:20 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1683818780;
-        bh=CLzqYTcujARq4NJQtsx22VCX1wovz6DLx4a2PMX1RH8=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=QrTKlw7J5Gzzkx3Qobltq6T2Dr7NZOt/8o6qPD/ClpUEg50r7WB+MabC6gHAya3b3
-         zBoTKsHsHc7JpvM7A4Gom0uySbZGIm3I7HjnvcsTGkIxPe4qpONwfKy4OZGqq0TXQX
-         Ix5plf6jmNioA2FaLlMP3e77Mr3+cWNPswFWBR81qbe8woTromaFu/5D8vfbcKPY0S
-         W6TO2urTgSwoFxwiurUQIks8UzTCifKYMqx5z11Hvo+q5h9hXNpwZZlvSoca/tc39A
-         KddmTDbYGx4PoajmKmvqwUsSexyU5cPtdaGBUQm0R+0pk3rhW+m0dAdyqY0TJ5CA9L
-         pDi0/bw+u6+gQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Thu, 11 May 2023 18:26:18 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-media@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <linaro-mm-sig@lists.linaro.org>
-Subject: [RESEND PATCH v3] mtd: rawnand: macronix: OTP access for MX30LFxG18AC
-Date:   Thu, 11 May 2023 18:21:16 +0300
-Message-ID: <20230511152120.3297853-1-AVKrasnov@sberdevices.ru>
-X-Mailer: git-send-email 2.35.0
+        Thu, 11 May 2023 11:22:33 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B4C18D;
+        Thu, 11 May 2023 08:22:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683818545; x=1715354545;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=FsfjS41u2qx+ij80+EIng+hoUa8+xMlcVJCvISgDyDI=;
+  b=Wao9e6AmUIa4pOjq/hNPRI3tS+PhthJfsNZ/89x5viSnY8NIMrv+GQXT
+   Sl7cZnPzorm5C/pul/WX4iyzhpvVovj4/w/kkuXbzlAIxXusj1v3qk6dV
+   qOFrQZXBuwWjAY8f1gXMMz2O63ZCIGS9QCPXaKp0G34pFIMzUVwnxGAc6
+   INekYeRCNyYeHVARi9xhcs1jLpSOoqFEuuBjHlqjycrBYMmWvlIwMQy02
+   SislygE6n7PnQafUsyUbumwTf7y3uEhSepS5eThZvMe3A38yXMvTBi22e
+   n9OLahJTsZSpE1Qx7ngRhzd8+xhvteOPJK0DHjBLMhzHUzkwuj7+8Z87d
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="416146695"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="416146695"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 08:21:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="730401535"
+X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
+   d="scan'208";a="730401535"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 11 May 2023 08:21:30 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1px86j-00044m-1C;
+        Thu, 11 May 2023 15:21:29 +0000
+Date:   Thu, 11 May 2023 23:21:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Daniel Matyas <daniel.matyas@analog.com>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Daniel Matyas <daniel.matyas@analog.com>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, linux-hwmon@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v7 2/2] hwmon: max31827: add MAX31827 driver
+Message-ID: <202305112351.DBkFfs76-lkp@intel.com>
+References: <20230508172427.23915-2-daniel.matyas@analog.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/11 10:21:00 #21259776
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508172427.23915-2-daniel.matyas@analog.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds support for OTP area access on MX30LFxG18AC chip series.
+Hi Daniel,
 
-Changelog:
-  v1 -> v2:
-  * Add slab.h include due to kernel test robot error.
-  v2 -> v3:
-  * Use 'uint64_t' as input argument for 'do_div()' instead
-    of 'unsigned long' due to kernel test robot error.
+kernel test robot noticed the following build warnings:
 
-Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
----
- drivers/mtd/nand/raw/nand_macronix.c | 213 +++++++++++++++++++++++++++
- 1 file changed, 213 insertions(+)
+[auto build test WARNING on groeck-staging/hwmon-next]
+[also build test WARNING on robh/for-next linus/master v6.4-rc1 next-20230511]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-diff --git a/drivers/mtd/nand/raw/nand_macronix.c b/drivers/mtd/nand/raw/nand_macronix.c
-index 1472f925f386..2301f990678e 100644
---- a/drivers/mtd/nand/raw/nand_macronix.c
-+++ b/drivers/mtd/nand/raw/nand_macronix.c
-@@ -6,6 +6,7 @@
-  * Author: Boris Brezillon <boris.brezillon@free-electrons.com>
-  */
- 
-+#include <linux/slab.h>
- #include "linux/delay.h"
- #include "internals.h"
- 
-@@ -31,6 +32,20 @@
- 
- #define MXIC_CMD_POWER_DOWN 0xB9
- 
-+#define ONFI_FEATURE_ADDR_30LFXG18AC_OTP	0x90
-+#define MACRONIX_30LFXG18AC_OTP_START_PAGE	0
-+#define MACRONIX_30LFXG18AC_OTP_PAGES		30
-+#define MACRONIX_30LFXG18AC_OTP_PAGE_SIZE	2112
-+#define MACRONIX_30LFXG18AC_OTP_START_BYTE	\
-+	(MACRONIX_30LFXG18AC_OTP_START_PAGE *	\
-+	 MACRONIX_30LFXG18AC_OTP_PAGE_SIZE)
-+#define MACRONIX_30LFXG18AC_OTP_SIZE_BYTES	\
-+	(MACRONIX_30LFXG18AC_OTP_PAGES *	\
-+	 MACRONIX_30LFXG18AC_OTP_PAGE_SIZE)
-+
-+#define MACRONIX_30LFXG18AC_OTP_EN		BIT(0)
-+#define MACRONIX_30LFXG18AC_OTP_LOCKED		BIT(1)
-+
- struct nand_onfi_vendor_macronix {
- 	u8 reserved;
- 	u8 reliability_func;
-@@ -316,6 +331,203 @@ static void macronix_nand_deep_power_down_support(struct nand_chip *chip)
- 	chip->ops.resume = mxic_nand_resume;
- }
- 
-+static int macronix_30lfxg18ac_get_otp_info(struct mtd_info *mtd, size_t len,
-+					    size_t *retlen,
-+					    struct otp_info *buf)
-+{
-+	if (len < sizeof(*buf))
-+		return -EINVAL;
-+
-+	/* Don't know how to check that OTP is locked. */
-+	buf->locked = 0;
-+	buf->start = MACRONIX_30LFXG18AC_OTP_START_BYTE;
-+	buf->length = MACRONIX_30LFXG18AC_OTP_SIZE_BYTES;
-+
-+	*retlen = sizeof(*buf);
-+
-+	return 0;
-+}
-+
-+static int macronix_30lfxg18ac_otp_enable(struct nand_chip *nand)
-+{
-+	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
-+
-+	feature_buf[0] = MACRONIX_30LFXG18AC_OTP_EN;
-+	return nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
-+				 feature_buf);
-+}
-+
-+static int macronix_30lfxg18ac_otp_disable(struct nand_chip *nand)
-+{
-+	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
-+
-+	return nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
-+				 feature_buf);
-+}
-+
-+static int __macronix_30lfxg18ac_rw_otp(struct mtd_info *mtd,
-+					loff_t offs_in_flash,
-+					size_t len, size_t *retlen,
-+					u_char *buf, bool write)
-+{
-+	struct nand_chip *nand;
-+	size_t bytes_handled;
-+	off_t offs_in_page;
-+	uint64_t page;
-+	void *dma_buf;
-+	int ret;
-+
-+	/* 'nand_prog/read_page_op()' may use 'buf' as DMA buffer,
-+	 * so allocate properly aligned memory for it. This is
-+	 * needed because cross page accesses may lead to unaligned
-+	 * buffer address for DMA.
-+	 */
-+	dma_buf = kmalloc(MACRONIX_30LFXG18AC_OTP_PAGE_SIZE, GFP_KERNEL);
-+	if (!dma_buf)
-+		return -ENOMEM;
-+
-+	nand = mtd_to_nand(mtd);
-+	nand_select_target(nand, 0);
-+
-+	ret = macronix_30lfxg18ac_otp_enable(nand);
-+	if (ret)
-+		goto out_otp;
-+
-+	page = offs_in_flash;
-+	/* 'page' will be result of division. */
-+	offs_in_page = do_div(page, MACRONIX_30LFXG18AC_OTP_PAGE_SIZE);
-+	bytes_handled = 0;
-+
-+	while (bytes_handled < len &&
-+	       page < MACRONIX_30LFXG18AC_OTP_PAGES) {
-+		size_t bytes_to_handle;
-+
-+		bytes_to_handle = min_t(size_t, len - bytes_handled,
-+					MACRONIX_30LFXG18AC_OTP_PAGE_SIZE -
-+					offs_in_page);
-+
-+		if (write) {
-+			memcpy(dma_buf, &buf[bytes_handled], bytes_to_handle);
-+			ret = nand_prog_page_op(nand, page, offs_in_page,
-+						dma_buf, bytes_to_handle);
-+		} else {
-+			ret = nand_read_page_op(nand, page, offs_in_page,
-+						dma_buf, bytes_to_handle);
-+			if (!ret)
-+				memcpy(&buf[bytes_handled], dma_buf,
-+				       bytes_to_handle);
-+		}
-+		if (ret)
-+			goto out_otp;
-+
-+		bytes_handled += bytes_to_handle;
-+		offs_in_page = 0;
-+		page++;
-+	}
-+
-+	*retlen = bytes_handled;
-+
-+out_otp:
-+	if (ret)
-+		dev_err(&mtd->dev, "failed to perform OTP IO: %i\n", ret);
-+
-+	ret = macronix_30lfxg18ac_otp_disable(nand);
-+	WARN(ret, "failed to leave OTP mode after %s\n",
-+	     write ? "write" : "read");
-+	nand_deselect_target(nand);
-+	kfree(dma_buf);
-+
-+	return ret;
-+}
-+
-+static int macronix_30lfxg18ac_write_otp(struct mtd_info *mtd, loff_t to,
-+					 size_t len, size_t *rlen,
-+					 const u_char *buf)
-+{
-+	return __macronix_30lfxg18ac_rw_otp(mtd, to, len, rlen, (u_char *)buf,
-+					    true);
-+}
-+
-+static int macronix_30lfxg18ac_read_otp(struct mtd_info *mtd, loff_t from,
-+					size_t len, size_t *rlen,
-+					u_char *buf)
-+{
-+	return __macronix_30lfxg18ac_rw_otp(mtd, from, len, rlen, buf, false);
-+}
-+
-+static int macronix_30lfxg18ac_lock_otp(struct mtd_info *mtd, loff_t from,
-+					size_t len)
-+{
-+	uint8_t feature_buf[ONFI_SUBFEATURE_PARAM_LEN] = { 0 };
-+	struct nand_chip *nand;
-+	int ret;
-+
-+	if (from != MACRONIX_30LFXG18AC_OTP_START_BYTE ||
-+	    len != MACRONIX_30LFXG18AC_OTP_SIZE_BYTES)
-+		return -EINVAL;
-+
-+	dev_dbg(&mtd->dev, "locking OTP\n");
-+
-+	nand = mtd_to_nand(mtd);
-+	nand_select_target(nand, 0);
-+
-+	feature_buf[0] = MACRONIX_30LFXG18AC_OTP_EN |
-+			 MACRONIX_30LFXG18AC_OTP_LOCKED;
-+	ret = nand_set_features(nand, ONFI_FEATURE_ADDR_30LFXG18AC_OTP,
-+				feature_buf);
-+	if (ret) {
-+		dev_err(&mtd->dev,
-+			"failed to lock OTP (set features): %i\n", ret);
-+		nand_deselect_target(nand);
-+		return ret;
-+	}
-+
-+	/* Do dummy page prog with zero address. */
-+	feature_buf[0] = 0;
-+	ret = nand_prog_page_op(nand, 0, 0, feature_buf, 1);
-+	if (ret)
-+		dev_err(&mtd->dev,
-+			"failed to lock OTP (page prog): %i\n", ret);
-+
-+	ret = macronix_30lfxg18ac_otp_disable(nand);
-+	WARN(ret, "failed to leave OTP mode after lock\n");
-+
-+	nand_deselect_target(nand);
-+
-+	return ret;
-+}
-+
-+static void macronix_nand_setup_otp(struct nand_chip *chip)
-+{
-+	static const char * const supported_otp_models[] = {
-+		"MX30LF1G18AC",
-+		"MX30LF2G18AC",
-+		"MX30LF4G18AC",
-+	};
-+	struct mtd_info *mtd;
-+
-+	if (!chip->parameters.supports_set_get_features)
-+		return;
-+
-+	if (match_string(supported_otp_models,
-+			 ARRAY_SIZE(supported_otp_models),
-+			 chip->parameters.model) < 0)
-+		return;
-+
-+	bitmap_set(chip->parameters.get_feature_list,
-+		   ONFI_FEATURE_ADDR_30LFXG18AC_OTP, 1);
-+	bitmap_set(chip->parameters.set_feature_list,
-+		   ONFI_FEATURE_ADDR_30LFXG18AC_OTP, 1);
-+
-+	mtd = nand_to_mtd(chip);
-+	mtd->_get_fact_prot_info = macronix_30lfxg18ac_get_otp_info;
-+	mtd->_read_fact_prot_reg = macronix_30lfxg18ac_read_otp;
-+	mtd->_get_user_prot_info = macronix_30lfxg18ac_get_otp_info;
-+	mtd->_read_user_prot_reg = macronix_30lfxg18ac_read_otp;
-+	mtd->_write_user_prot_reg = macronix_30lfxg18ac_write_otp;
-+	mtd->_lock_user_prot_reg = macronix_30lfxg18ac_lock_otp;
-+}
-+
- static int macronix_nand_init(struct nand_chip *chip)
- {
- 	if (nand_is_slc(chip))
-@@ -325,6 +537,7 @@ static int macronix_nand_init(struct nand_chip *chip)
- 	macronix_nand_onfi_init(chip);
- 	macronix_nand_block_protection_support(chip);
- 	macronix_nand_deep_power_down_support(chip);
-+	macronix_nand_setup_otp(chip);
- 
- 	return 0;
- }
+url:    https://github.com/intel-lab-lkp/linux/commits/Daniel-Matyas/hwmon-max31827-add-MAX31827-driver/20230508-222643
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20230508172427.23915-2-daniel.matyas%40analog.com
+patch subject: [PATCH v7 2/2] hwmon: max31827: add MAX31827 driver
+config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20230511/202305112351.DBkFfs76-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/89289262b54eadd8ac5f955bd358ed6d9a51908a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Daniel-Matyas/hwmon-max31827-add-MAX31827-driver/20230508-222643
+        git checkout 89289262b54eadd8ac5f955bd358ed6d9a51908a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/hwmon/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305112351.DBkFfs76-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/hwmon/max31827.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from drivers/hwmon/max31827.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from drivers/hwmon/max31827.c:12:
+   In file included from include/linux/i2c.h:19:
+   In file included from include/linux/regulator/consumer.h:35:
+   In file included from include/linux/suspend.h:5:
+   In file included from include/linux/swap.h:9:
+   In file included from include/linux/memcontrol.h:13:
+   In file included from include/linux/cgroup.h:26:
+   In file included from include/linux/kernel_stat.h:9:
+   In file included from include/linux/interrupt.h:11:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> drivers/hwmon/max31827.c:238:7: warning: variable 'ret' is used uninitialized whenever 'if' condition is false [-Wsometimes-uninitialized]
+                   if (attr == hwmon_chip_update_interval) {
+                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hwmon/max31827.c:280:9: note: uninitialized use occurs here
+           return ret;
+                  ^~~
+   drivers/hwmon/max31827.c:238:3: note: remove the 'if' if its condition is always true
+                   if (attr == hwmon_chip_update_interval) {
+                   ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/hwmon/max31827.c:134:9: note: initialize the variable 'ret' to silence this warning
+           int ret;
+                  ^
+                   = 0
+   7 warnings generated.
+
+
+vim +238 drivers/hwmon/max31827.c
+
+   128	
+   129	static int max31827_read(struct device *dev, enum hwmon_sensor_types type,
+   130				 u32 attr, int channel, long *val)
+   131	{
+   132		struct max31827_state *st = dev_get_drvdata(dev);
+   133		unsigned int uval;
+   134		int ret;
+   135	
+   136		switch (type) {
+   137		case hwmon_temp:
+   138			switch (attr) {
+   139			case hwmon_temp_enable:
+   140				ret = regmap_read(st->regmap,
+   141						  MAX31827_CONFIGURATION_REG, &uval);
+   142				if (ret)
+   143					break;
+   144	
+   145				uval = FIELD_GET(MAX31827_CONFIGURATION_1SHOT_MASK |
+   146						 MAX31827_CONFIGURATION_CNV_RATE_MASK,
+   147						 uval);
+   148				*val = !!uval;
+   149	
+   150				break;
+   151			case hwmon_temp_input:
+   152				mutex_lock(&st->lock);
+   153	
+   154				if (!st->enable) {
+   155					/*
+   156					 * This operation requires mutex protection,
+   157					 * because the chip configuration should not
+   158					 * be changed during the conversion process.
+   159					 */
+   160	
+   161					ret = regmap_update_bits(st->regmap,
+   162								 MAX31827_CONFIGURATION_REG,
+   163								 MAX31827_CONFIGURATION_1SHOT_MASK,
+   164								 1);
+   165					if (ret) {
+   166						mutex_unlock(&st->lock);
+   167						return ret;
+   168					}
+   169	
+   170					msleep(MAX31827_12_BIT_CNV_TIME);
+   171				}
+   172				ret = regmap_read(st->regmap, MAX31827_T_REG, &uval);
+   173	
+   174				mutex_unlock(&st->lock);
+   175	
+   176				if (ret)
+   177					break;
+   178	
+   179				*val = MAX31827_16_BIT_TO_M_DGR(uval);
+   180	
+   181				break;
+   182			case hwmon_temp_max:
+   183				ret = regmap_read(st->regmap, MAX31827_TH_REG, &uval);
+   184				if (ret)
+   185					break;
+   186	
+   187				*val = MAX31827_16_BIT_TO_M_DGR(uval);
+   188				break;
+   189			case hwmon_temp_max_hyst:
+   190				ret = regmap_read(st->regmap, MAX31827_TH_HYST_REG,
+   191						  &uval);
+   192				if (ret)
+   193					break;
+   194	
+   195				*val = MAX31827_16_BIT_TO_M_DGR(uval);
+   196				break;
+   197			case hwmon_temp_max_alarm:
+   198				ret = regmap_read(st->regmap,
+   199						  MAX31827_CONFIGURATION_REG, &uval);
+   200				if (ret)
+   201					break;
+   202	
+   203				*val = FIELD_GET(MAX31827_CONFIGURATION_O_TEMP_STAT_MASK,
+   204						 uval);
+   205				break;
+   206			case hwmon_temp_min:
+   207				ret = regmap_read(st->regmap, MAX31827_TL_REG, &uval);
+   208				if (ret)
+   209					break;
+   210	
+   211				*val = MAX31827_16_BIT_TO_M_DGR(uval);
+   212				break;
+   213			case hwmon_temp_min_hyst:
+   214				ret = regmap_read(st->regmap, MAX31827_TL_HYST_REG,
+   215						  &uval);
+   216				if (ret)
+   217					break;
+   218	
+   219				*val = MAX31827_16_BIT_TO_M_DGR(uval);
+   220				break;
+   221			case hwmon_temp_min_alarm:
+   222				ret = regmap_read(st->regmap,
+   223						  MAX31827_CONFIGURATION_REG, &uval);
+   224				if (ret)
+   225					break;
+   226	
+   227				*val = FIELD_GET(MAX31827_CONFIGURATION_U_TEMP_STAT_MASK,
+   228						 uval);
+   229				break;
+   230			default:
+   231				ret = -EOPNOTSUPP;
+   232				break;
+   233			}
+   234	
+   235			break;
+   236	
+   237		case hwmon_chip:
+ > 238			if (attr == hwmon_chip_update_interval) {
+   239				ret = regmap_read(st->regmap,
+   240						  MAX31827_CONFIGURATION_REG, &uval);
+   241				if (ret)
+   242					break;
+   243	
+   244				uval = FIELD_GET(MAX31827_CONFIGURATION_CNV_RATE_MASK,
+   245						 uval);
+   246				switch (uval) {
+   247				case MAX31827_CNV_1_DIV_64_HZ:
+   248					*val = 64000;
+   249					break;
+   250				case MAX31827_CNV_1_DIV_32_HZ:
+   251					*val = 32000;
+   252					break;
+   253				case MAX31827_CNV_1_DIV_16_HZ:
+   254					*val = 16000;
+   255					break;
+   256				case MAX31827_CNV_1_DIV_4_HZ:
+   257					*val = 4000;
+   258					break;
+   259				case MAX31827_CNV_1_HZ:
+   260					*val = 1000;
+   261					break;
+   262				case MAX31827_CNV_4_HZ:
+   263					*val = 250;
+   264					break;
+   265				case MAX31827_CNV_8_HZ:
+   266					*val = 125;
+   267					break;
+   268				default:
+   269					*val = 0;
+   270					break;
+   271				}
+   272			}
+   273			break;
+   274	
+   275		default:
+   276			ret = -EOPNOTSUPP;
+   277			break;
+   278		}
+   279	
+   280		return ret;
+   281	}
+   282	
+
 -- 
-2.35.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
