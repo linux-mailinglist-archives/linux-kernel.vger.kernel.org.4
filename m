@@ -2,107 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CB306FEB2B
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 07:26:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 14AB86FEB2E
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 07:29:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232410AbjEKF0m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 01:26:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46608 "EHLO
+        id S230267AbjEKF3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 01:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230249AbjEKF0i (ORCPT
+        with ESMTP id S229490AbjEKF32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 01:26:38 -0400
-Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0A8C4213
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 22:26:36 -0700 (PDT)
-Received: by mail-yb1-xb2e.google.com with SMTP id 3f1490d57ef6-ba1911d60f5so12022812276.2
-        for <linux-kernel@vger.kernel.org>; Wed, 10 May 2023 22:26:36 -0700 (PDT)
+        Thu, 11 May 2023 01:29:28 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F0C5E42;
+        Wed, 10 May 2023 22:29:26 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-96652cb7673so784018666b.0;
+        Wed, 10 May 2023 22:29:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1683782796; x=1686374796;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/7yTENVyOqFjUfzaGJwWt+oOgBMebhIk0NqAg6/+aCg=;
-        b=E3fqH+C1TZNntj8XWs7Ld78+jxI7qMTtnccB5OVdHIipQZe02qJRykfjXf3ciqoyQd
-         iwuNgbfoH9bDnGMTiXO+5Xulm42HNjAjIftdKiHXRqH1kWCBGImuAb45Kx0wlV+gC5ea
-         jGHjsEU/2l00dJ600ly9uY08OnOCrTdWTIFxc=
+        d=gmail.com; s=20221208; t=1683782965; x=1686374965;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=y4x62um4Cta2MQq5bfpbv18O8tiAYzIjxL+XVu9krq4=;
+        b=BqiVoaul5DML2AqPp+E7WU7ceWXoBHlpyTtNNIMKY0tZejHwgMHdmHVlp18lYeBX51
+         KBZe5HxHrPy9UKGdt4UWv+n2tne9YlLrDJ5C6p95YeUtbLvugYgkp40MY+0s+JDC3wE/
+         OvdwXJXCdPW9gwlBDIZ3TVVT8uCjLFaNLCzTtloaMWliMO9hACDK++fZU3+5zpVlfjwm
+         QjZJtM3YPmpfMooM/Vu0VGelf9K6FaGDUvH/FFLodarhpj2TnnapceAplCOv0F2SpmE5
+         GPz2i+zVGpP1mX4JJkZCQb2cFA0G22BhmFrbYijzyxVy9IOnoR7kQxHYrmJBo1z6pLEq
+         QYqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683782796; x=1686374796;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/7yTENVyOqFjUfzaGJwWt+oOgBMebhIk0NqAg6/+aCg=;
-        b=iMxBCMLRAV1OjkRQ9alDdtAqzcW7wgEKP7U98cWNfAdREMlBy9DQHClSWkP3HvALm5
-         ateC5DR77wCjLUXr+zmg+WJjl62CNQLnwq6KnOItK8xqIegxRLh13ecAZSh14NaBTWgd
-         UP7ND/qqDen+uFQRqesjpqSyHvANZNDDmC9HuIhSem9DPUxq3JwkBPX0RRpyq5EooLGe
-         zOROWy4hHbFTbmasCNt4OoLZmlpxh9uiuarPf973HP++EmSnpawhrD52PVPKPO9w8gfz
-         ytCJ/N8AhVP7m+o7oWsgnWsbT0MKeAedsrZlV6I02Dzfb4Fxh7izrFvhz44q42qbC8va
-         ZQ5g==
-X-Gm-Message-State: AC+VfDyNNJbDz9XJcor7WMIDNhlgf6xmg1TUhU6y/ZD9MZO4yXwxLd5b
-        Kp5nefahomGMPJJDIisPRO78KqU/E5/kvNXxEx2SLQ==
-X-Google-Smtp-Source: ACHHUZ4ntDzdE8uBKO3utIIAtwq/ZLfBZlZzrpxFAD3yE0ohaVJvDEWtv7oPkHqvfIZt+Fa2i56UMm+7j+o9FilwBs8=
-X-Received: by 2002:a25:d187:0:b0:b9e:917c:c8ba with SMTP id
- i129-20020a25d187000000b00b9e917cc8bamr20142971ybg.10.1683782795792; Wed, 10
- May 2023 22:26:35 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683782965; x=1686374965;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y4x62um4Cta2MQq5bfpbv18O8tiAYzIjxL+XVu9krq4=;
+        b=gDLAXHFwXllDHK5NBh0tDgd3FsS4BVc4DRnmH29sB1ANsPnB54svYHEPfGs30G/TGC
+         aqpJfOxioVe9tigq2ydfQ+XdhTdvHZIiNmHJ9YQCBbNgz9AqYN8SEgnaByRSBW+mN/Gw
+         r90fxe7YN1c264fcfeVchmWf5PSFbiUEMlptP5xt3VbVjyifRbJOle7bYAvAgjan4cp4
+         QHZrVOf7s8hQcNXSK9JDvGErHXGklRnH1g7mBVnxcjuz3PRb+FKWsuhZGH4sJbtCXhQA
+         /6iubpWSUCJeDml8QxU1FMDD1DNqyRnlFkBTmH8ATaWpNpVChy1VOlDydLHIGE7UYn3u
+         IH0Q==
+X-Gm-Message-State: AC+VfDwuyacd+TlCyU7HLgZONFYD7sKP2dRYKj6SpvvyfLb5drrGm9kW
+        R1ljioDK3MoaWIFhloO3VG0=
+X-Google-Smtp-Source: ACHHUZ7vvF+qW3TK0cuJqLdLw9Uk4jrATGpY2Ush2Z+Cvi9O0kUzQSGq/YHYtzqKPLGW6ubNDQbOlA==
+X-Received: by 2002:a17:907:2684:b0:94e:75f8:668 with SMTP id bn4-20020a170907268400b0094e75f80668mr16593122ejc.56.1683782964468;
+        Wed, 10 May 2023 22:29:24 -0700 (PDT)
+Received: from ?IPV6:2a01:c23:c58e:b900:6079:61ec:4537:dead? (dynamic-2a01-0c23-c58e-b900-6079-61ec-4537-dead.c23.pool.telefonica.de. [2a01:c23:c58e:b900:6079:61ec:4537:dead])
+        by smtp.googlemail.com with ESMTPSA id 13-20020a170906328d00b00969f44bbef1sm2875122ejw.89.2023.05.10.22.29.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 10 May 2023 22:29:24 -0700 (PDT)
+Message-ID: <018df89a-c3d2-1bda-9966-7f06b24f87f2@gmail.com>
+Date:   Thu, 11 May 2023 07:29:21 +0200
 MIME-Version: 1.0
-References: <7ffd4a5d-61e9-4b4c-a312-a85bcde08c39@paulmck-laptop> <20230510171238.2189921-6-paulmck@kernel.org>
-In-Reply-To: <20230510171238.2189921-6-paulmck@kernel.org>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Wed, 10 May 2023 22:26:24 -0700
-Message-ID: <CAEXW_YRRMfbfXJwCA89hD_VCpbxR8AoEvv9xzrX=W_4Ffi-g2A@mail.gmail.com>
-Subject: Re: [PATCH rcu 6/6] torture: Remove duplicated argument -enable-kvm
- for ppc64
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org,
-        Zhouyi Zhou <zhouzhouyi@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH net-next 0/8] Improvements for RealTek 2.5G Ethernet PHYs
+To:     Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Andrew Lunn <andrew@lunn.ch>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+References: <cover.1683756691.git.daniel@makrotopia.org>
+Content-Language: en-US
+From:   Heiner Kallweit <hkallweit1@gmail.com>
+In-Reply-To: <cover.1683756691.git.daniel@makrotopia.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 10:13=E2=80=AFAM Paul E. McKenney <paulmck@kernel.o=
-rg> wrote:
->
-> From: Zhouyi Zhou <zhouzhouyi@gmail.com>
->
-> The qemu argument -enable-kvm is duplicated because the qemu_args bash
-> variable in kvm-test-1-run.sh has already provides it.  This commit
+On 11.05.2023 00:53, Daniel Golle wrote:
+> Improve support for RealTek 2.5G Ethernet PHYs (RTL822x series).
+> The PHYs can operate with Clause-22 and Clause-45 MDIO.
+> 
+> When using Clause-45 it is desireable to avoid rate-adapter mode and
+> rather have the MAC interface mode follow the PHY speed. The PHYs
+> support 2500Base-X for 2500M, and Cisco SGMII for 1000M/100M/10M.
+> 
+> Also prepare support for proprietary RealTek HiSGMII mode which will
+> be needed for situations when used with RealTek switch or router SoCs
+> such as RTL839x or RTL93xx.
+> 
+> Add support for Link Down Power Saving Mode (ALDPS) which is already
+> supported for older RTL821x series 1GbE PHYs.
+> 
+> Make sure that link-partner advertised modes are only used if the
+> advertisement can be considered valid. Otherwise we are seeing
+> false-positives warning about downscaling eventhough higher speeds
+> are not actually advertised by the link partner.
+> 
+> While at it, use helper function for paged operation and make sure
+> to use use locking for that as well.
+> 
+> Changes since RFC:
+>  * Turns out paged read used to identify the PHY needs to be hardcoded
+>    for the simple reason that the function pointers for paged operations
+>    have not yet been populated at this point. Hence keep open-coding it,
+>    but use helper function and make sure it happening while the MDIO bus
+>    mutex is locked.
+> 
+> Alexander Couzens (1):
+>   net: phy: realtek: rtl8221: allow to configure SERDES mode
+> 
+> Chukun Pan (1):
+>   net: phy: realtek: switch interface mode for RTL822x series
+> 
+> Daniel Golle (6):
+>   net: phy: realtek: use genphy_soft_reset for 2.5G PHYs
+>   net: phy: realtek: disable SGMII in-band AN for 2.5G PHYs
+>   net: phy: realtek: make sure paged read is protected by mutex
+>   net: phy: realtek: use inline functions for 10GbE advertisement
+>   net: phy: realtek: check validity of 10GbE link-partner advertisement
+>   net: phy: realtek: setup ALDPS on RTL8221B
+> 
+>  drivers/net/phy/realtek.c | 161 ++++++++++++++++++++++++++++++++------
+>  1 file changed, 138 insertions(+), 23 deletions(-)
+> 
 
-drop the has.
+Has this series been tested with RTL8125A/B to ensure that the internal
+PHY use case still works?
 
- - Joel
-
-> therefore removes the ppc64-specific copy in functions.sh.
->
-> Signed-off-by: Zhouyi Zhou <zhouzhouyi@gmail.com>
-> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
-> ---
->  tools/testing/selftests/rcutorture/bin/functions.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/tools/testing/selftests/rcutorture/bin/functions.sh b/tools/=
-testing/selftests/rcutorture/bin/functions.sh
-> index b52d5069563c..48b9147e8c91 100644
-> --- a/tools/testing/selftests/rcutorture/bin/functions.sh
-> +++ b/tools/testing/selftests/rcutorture/bin/functions.sh
-> @@ -250,7 +250,7 @@ identify_qemu_args () {
->                 echo -machine virt,gic-version=3Dhost -cpu host
->                 ;;
->         qemu-system-ppc64)
-> -               echo -enable-kvm -M pseries -nodefaults
-> +               echo -M pseries -nodefaults
->                 echo -device spapr-vscsi
->                 if test -n "$TORTURE_QEMU_INTERACTIVE" -a -n "$TORTURE_QE=
-MU_MAC"
->                 then
-> --
-> 2.40.1
->
