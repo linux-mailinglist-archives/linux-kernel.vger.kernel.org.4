@@ -2,166 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EAF96FFAEA
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:58:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDE56FFAEE
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:58:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239497AbjEKT6M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 15:58:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48598 "EHLO
+        id S239518AbjEKT6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 15:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238254AbjEKT6K (ORCPT
+        with ESMTP id S238254AbjEKT6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 15:58:10 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4FF2D74;
-        Thu, 11 May 2023 12:58:09 -0700 (PDT)
+        Thu, 11 May 2023 15:58:48 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03DAA2D74;
+        Thu, 11 May 2023 12:58:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683835089; x=1715371089;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=oZQ2G4WUfAcfYRxx/1cCaNzzx8xkE/WLQXfCP4Oc3BE=;
-  b=J1Q9LW9qKHiIAECKGTfYpf0wRw0t0TKBr2XKntWceh6atxq2mcQwpcD7
-   zosXh86LgRMA/Ovu+YtL59JbN8spLECJNs/rfZXs0v9Q+B01nOW7aMMcw
-   qUxcDnIrFbenMxRocOVva1vbXfekzNLJ6L92NCDZsuOfYYfNV+iFy1LSR
-   3BWB5lK8Bm8kIDQ+iPKFcUyBiYMdMn/1nP/qxWea0zJCXs5Uxo+Rn0rJB
-   T59w9YnMKWeXYA/0IKmXO2uB0/Ou+FDcx0+Zymj1Zmoqk4btxPdmJp6V1
-   W3Mv5LwrX/+bt2kuyYKHmBNyErmTpy4m8maym2vJs+CuAuaColSjfbm1x
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="349456615"
+  t=1683835126; x=1715371126;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=pUsvKdquvKmuHGamcnxWxip93E9oYVuUB3NcqWyDNOY=;
+  b=Aki7zXhMvR1fJeAjtnkRcp1xPdvzXWToDz/WexsxRr/pia1QzUuhk4+i
+   vQPKcd3ntFnsQX+UOxjN+Dt5S+0RdFcn09a61d6VFA6g0/jX479WnzO5a
+   LzCymrP+FCtoxbrWRWD8AMwfliAyg9hVo6qg9/FNsfQ9gTVpbotLeNJHI
+   6Umq2OnRe8pXS45+oQb6mIwqE2EIa3fG2iYz4YI6dsCcevA6nmw/4wPMT
+   iaar+2eyPQ3uPGwiESL7Pz8JrUClYD6GeUlvOejqIBPh9sz88FOIdOqO8
+   WGKH4m6lxxVNWCgjz7z6mNFJgWtuXgnbK7mcat7XnjhUC6US3S7FPBOJW
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="413976012"
 X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
-   d="scan'208";a="349456615"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 12:58:08 -0700
+   d="scan'208";a="413976012"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 12:58:46 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="946319301"
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="811762514"
 X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
-   d="scan'208";a="946319301"
-Received: from acharach-mobl.ger.corp.intel.com (HELO [10.251.219.38]) ([10.251.219.38])
-  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 12:58:03 -0700
-Message-ID: <a7200fd7-769c-6a32-0fa7-6a37b7214d70@linux.intel.com>
-Date:   Thu, 11 May 2023 21:58:02 +0200
+   d="scan'208";a="811762514"
+Received: from jsanche3-mobl1.ger.corp.intel.com ([10.252.39.112])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 12:58:43 -0700
+Date:   Thu, 11 May 2023 22:58:40 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+cc:     linux-pci@vger.kernel.org, Rob Herring <robh@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        =?ISO-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 01/17] PCI: Add concurrency safe clear_and_set variants
+ for LNKCTL{,2}
+In-Reply-To: <ZF1AjOKDVlbNFJPK@bhelgaas>
+Message-ID: <1d5aaff-c7b5-39f6-92ca-319fad6c7fc5@linux.intel.com>
+References: <ZF1AjOKDVlbNFJPK@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.11.0
-Subject: Re: [Intel-gfx] [RFC PATCH 0/4] Add support for DRM cgroup memory
- accounting.
-Content-Language: en-US
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Tejun Heo <tj@kernel.org>
-Cc:     Maxime Ripard <mripard@kernel.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, amd-gfx@lists.freedesktop.org,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>, cgroups@vger.kernel.org,
-        David Airlie <airlied@gmail.com>,
-        intel-xe@lists.freedesktop.org
-References: <20230503083500.645848-1-maarten.lankhorst@linux.intel.com>
- <ZFVeI2DKQXddKDNl@slm.duckdns.org>
- <4d6fbce3-a676-f648-7a09-6f6dcc4bdb46@linux.intel.com>
- <ZFvmaGNo0buQEUi1@slm.duckdns.org>
- <562bd20d-36b9-a617-92cc-460f2eece22e@linux.intel.com>
-From:   Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
-In-Reply-To: <562bd20d-36b9-a617-92cc-460f2eece22e@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-975131088-1683835125=:1900"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hey,
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On 2023-05-11 12:14, Tvrtko Ursulin wrote:
->
-> On 10/05/2023 19:46, Tejun Heo wrote:
->> Hello,
->>
->> On Wed, May 10, 2023 at 04:59:01PM +0200, Maarten Lankhorst wrote:
->>> The misc controller is not granular enough. A single computer may have any number of
->>> graphics cards, some of them with multiple regions of vram inside a single card.
->>
->> Extending the misc controller to support dynamic keys shouldn't be that
->> difficult.
->>
->> ...
->>> In the next version, I will move all the code for handling the resource limit to
->>> TTM's eviction layer, because otherwise it cannot handle the resource limit correctly.
->>>
->>> The effect of moving the code to TTM, is that it will make the code even more generic
->>> for drivers that have vram and use TTM. When using TTM, you only have to describe your
->>> VRAM, update some fields in the TTM manager and (un)register your device with the
->>> cgroup handler on (un)load. It's quite trivial to add vram accounting to amdgpu and
->>> nouveau. [2]
->>>
->>> If you want to add a knob for scheduling weight for a process, it makes sense to
->>> also add resource usage as a knob, otherwise the effect of that knob is very
->>> limited. So even for Tvrtko's original proposed usecase, it would make sense.
->>
->> It does make sense but unlike Tvrtko's scheduling weights what's being
->> proposed doesn't seem to encapsulate GPU memory resource in a generic enough
->> manner at least to my untrained eyes. ie. w/ drm.weight, I don't need any
->> specific knoweldge of how a specific GPU operates to say "this guy should
->> get 2x processing power over that guy". This more or less holds for other
->> major resources including CPU, memory and IO. What you're proposing seems a
->> lot more tied to hardware details and users would have to know a lot more
->> about how memory is configured on that particular GPU.
->>
->> Now, if this is inherent to how all, or at least most, GPUs operate, sure,
->> but otherwise let's start small in terms of interface and not take up space
->> which should be for something universal. If this turns out to be the way,
->> expanding to take up the generic interface space isn't difficult.
->>
->> I don't know GPU space so please educate me where I'm wrong.
->
-> I was hoping it might be passable in principle (in some form, pending discussion on semantics) given how Maarten's proposal starts with only very specific per-device-per-memory regions controls, which is applicable to many devices. And hard limit at that, which probably has less complicated semantics, or at least implementation.
->
-> My understanding of the proposal is that the allocation either fits, or it evicts from the parent's hierarchy (if possible) and then fits, or it fails. Which sounds simple enough.
+--8323329-975131088-1683835125=:1900
+Content-Type: text/plain; charset=iso-8859-1
+Content-Transfer-Encoding: 8BIT
 
-Yeah, for vram itÅ› that simple. I think for mapped and sysmem regions we may require the
-possiblity to ignore the limits as well, as it's possible to move to those regions from
-eviction. We probably don't want eviction to fail because of too low limits.
+On Thu, 11 May 2023, Bjorn Helgaas wrote:
 
-> I do however agree that it is a limited use case. So from the negative side of the debating camp I have to ask if this use case could be simply satisfied by providing a driver/device global over commit yes/no control? In other words, is it really important to partition the vram space ahead of time, and from the kernel side too? Wouldn't the relevant (highly specialised) applications work just fine with global over commit disabled? Even if the option to configure their maximum allowed working set from the userspace side was needed.
+> On Thu, May 11, 2023 at 08:35:48PM +0300, Ilpo Järvinen wrote:
+> > On Thu, 11 May 2023, Bjorn Helgaas wrote:
+> > 
+> > > On Thu, May 11, 2023 at 04:14:25PM +0300, Ilpo Järvinen wrote:
+> > > > A few places write LNKCTL and LNKCTL2 registers without proper
+> > > > concurrency control and this could result in losing the changes
+> > > > one of the writers intended to make.
+> > > > 
+> > > > Add pcie_capability_clear_and_set_word_locked() and helpers to use it
+> > > > with LNKCTL and LNKCTL2. The concurrency control is provided using a
+> > > > spinlock in the struct pci_dev.
+> > > > 
+> > > > Suggested-by: Lukas Wunner <lukas@wunner.de>
+> > > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> > > 
+> > > Thanks for raising this issue!  Definitely looks like something that
+> > > needs attention.
+> > > 
+> > > > ---
+> > > >  drivers/pci/access.c | 14 ++++++++++++++
+> > > >  drivers/pci/probe.c  |  1 +
+> > > >  include/linux/pci.h  | 17 +++++++++++++++++
+> > > >  3 files changed, 32 insertions(+)
+> > > > 
+> > > > diff --git a/drivers/pci/access.c b/drivers/pci/access.c
+> > > > index 3c230ca3de58..d92a3daadd0c 100644
+> > > > --- a/drivers/pci/access.c
+> > > > +++ b/drivers/pci/access.c
+> > > > @@ -531,6 +531,20 @@ int pcie_capability_clear_and_set_dword(struct pci_dev *dev, int pos,
+> > > >  }
+> > > >  EXPORT_SYMBOL(pcie_capability_clear_and_set_dword);
+> > > >  
+> > > > +int pcie_capability_clear_and_set_word_locked(struct pci_dev *dev, int pos,
+> > > > +					      u16 clear, u16 set)
+> > > > +{
+> > > > +	unsigned long flags;
+> > > > +	int ret;
+> > > > +
+> > > > +	spin_lock_irqsave(&dev->cap_lock, flags);
+> > > > +	ret = pcie_capability_clear_and_set_word(dev, pos, clear, set);
+> > > > +	spin_unlock_irqrestore(&dev->cap_lock, flags);
+> > > > +
+> > > > +	return ret;
+> > > > +}
+> > > > +EXPORT_SYMBOL(pcie_capability_clear_and_set_word_locked);
+> > > 
+> > > I didn't see the prior discussion with Lukas, so maybe this was
+> > > answered there, but is there any reason not to add locking to
+> > > pcie_capability_clear_and_set_word() and friends directly?  
+> > >
+> > > It would be nice to avoid having to decide whether to use the locked
+> > > or unlocked versions.  It would also be nice to preserve the use of
+> > > PCI_EXP_LNKCTL directly, for grep purposes.  And it would obviate the
+> > > need for some of these patches, e.g., the use of
+> > > pcie_capability_clear_word(), where it's not obvious at the call site
+> > > why a change is needed.
+> > 
+> > There wasn't that big discussion about it (internally). I brought both
+> > alternatives up and Lukas just said he didn't know what's the best 
+> > approach (+ gave a weak nudge towards the separate accessor so I went 
+> > with it to make forward progress). Based on that I don't think he had a 
+> > strong opinion on it.
+> > 
+> > I'm certainly fine to just use it in the normal accessor functions that 
+> > do RMW and add the locking there. It would certainly have to those good 
+> > sides you mentioned.
+> 
+> Let's start with that, then.
+> 
+> Many of these are ASPM-related updates that IMHO should not be in
+> drivers at all.  Drivers should use PCI core interfaces so the core
+> doesn't get confused.
 
-Disabling overcommit? Do you mean pinning the memory workload? This causes a denial of service if
-done without limits, and that's what we're trying to avoid. There is no need for immunity from
-eviction. Overcommit is still useful inside the cgroup itself, we only want immunity from being
-evicted by another process performing another workload.
+Ah, yes. I forgot to mention it in the cover letter but I noticed that 
+some of those seem to be workarounds for the cases where core refuses to 
+disable ASPM. Some sites even explicit have a comment about that after 
+the call to pci_disable_link_state():
 
-> Or if we conclude cgroup controller is the way to go, would adding less specific limits make it more palatable? I am thinking here some generic "device memory resident". Not per device, not per memory region. So userspace/admins have some chance of configuring generic limits. That would require coming up with more generic use cases though so another thing to discuss. Like who would use that and for what.
+static void bcm4377_disable_aspm(struct bcm4377_data *bcm4377)
+{
+        pci_disable_link_state(bcm4377->pdev,
+                               PCIE_LINK_STATE_L0S | PCIE_LINK_STATE_L1);
 
-You would run into ambiguity with that. I think it's fine to assume any number of vram regions. In most cases, the number is 1.
+        /*
+         * pci_disable_link_state can fail if either CONFIG_PCIEASPM is disabled
+         * or if the BIOS hasn't handed over control to us. We must *always*
+         * disable ASPM for this device due to hardware errata though.
+         */
+        pcie_capability_clear_word(bcm4377->pdev, PCI_EXP_LNKCTL,
+                                   PCI_EXP_LNKCTL_ASPMC);
+}
 
-I don't see that number going much higher, 2 is already on the high side. A simple controller could just half each region separately.
+That kinda feels something that would want a force disable quirk that is 
+reliable. There are quirks for some devices which try to disable it but 
+could fail for reasons mentioned in that comment. (But I'd prefer to make 
+another series out of it rather than putting it into this one.)
 
-> Assuming also we can agree that "device memory resident" is a stable/solid concept across drm. Should be easier than for integrated GPUs, for which I have to admit I currently don't remember if allocations are already consistently covered by the memory controller. Even if they are ownership is probably wrong.
-Likely, especially when evicting another process' memory. That needs some thought. Likely we have to keep the original cgroup as an owner.
-> Group ownership is possibly a concern in this proposal too. Because I remember the previous attempt of adding some drm stats to memcg explained that for instance on Android all buffers are allocated by a central process and then handed over to other processes. So transferring ownership was explained as critical.
-Is this done using dma-buf? Ownership could be handed over on import then. If not, what is the mechanism they use?
-> Regards,
->
-> Tvrtko
->
-> P.S.
-> On the matter of naming the uapi interface - in any case I wouldn't use the "unqualified" drm namespace such as drm.max/current/capacity. I think all those should include a specific prefix to signify it is about memory. In some way.
+It might even be that some drivers don't even bother to make the 
+pci_disable_link_state() call because it isn't reliable enough.
 
-I've deliberately added region to each key, so what happens is that drm.capacity/max/current contains: $pciid region.vram0=$value, that way, if we want to add non-memory resources, it becomes possible to do so by choosing a different prefix.
 
-For example number of engines that can be created would also be possible to add to those files, but that might be more driver specific.
+-- 
+ i.
 
-I tried to keep it generic like that. In this way I didn't immediately pollute the entire namespace.
-
-Of course, if needed, we can make it drm.region_max etc instead and drop it from the cgroup key entries instead.
-
-Cheers,
-
-Maarten
-
+--8323329-975131088-1683835125=:1900--
