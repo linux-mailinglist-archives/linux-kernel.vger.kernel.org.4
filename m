@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3B936FF24A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:14:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 224F86FF24B
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 15:14:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237879AbjEKNOG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 09:14:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60982 "EHLO
+        id S238034AbjEKNO0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 09:14:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230253AbjEKNOD (ORCPT
+        with ESMTP id S237996AbjEKNOQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 09:14:03 -0400
+        Thu, 11 May 2023 09:14:16 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 17033B4
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:14:02 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C2AF72BE
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 06:14:14 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 62463113E;
-        Thu, 11 May 2023 06:14:46 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4F832113E;
+        Thu, 11 May 2023 06:14:58 -0700 (PDT)
 Received: from [10.1.34.59] (C02Z41KALVDN.cambridge.arm.com [10.1.34.59])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E80413F5A1;
-        Thu, 11 May 2023 06:14:00 -0700 (PDT)
-Message-ID: <e73130ff-f583-5382-8c7a-8d608dd26db6@arm.com>
-Date:   Thu, 11 May 2023 14:13:59 +0100
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D65933F5A1;
+        Thu, 11 May 2023 06:14:12 -0700 (PDT)
+Message-ID: <e414905a-8129-5c39-77cb-53fd75910440@arm.com>
+Date:   Thu, 11 May 2023 14:14:11 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
  Gecko/20100101 Thunderbird/102.10.1
-Subject: Re:
+Subject: Re: [PATCH v1 1/5] mm: vmalloc must set pte via arch code
 To:     Andrew Morton <akpm@linux-foundation.org>,
         "Matthew Wilcox (Oracle)" <willy@infradead.org>,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
@@ -34,8 +34,9 @@ To:     Andrew Morton <akpm@linux-foundation.org>,
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         damon@lists.linux.dev
 References: <20230511125848.78621-1-ryan.roberts@arm.com>
+ <20230511125848.78621-2-ryan.roberts@arm.com>
 From:   Ryan Roberts <ryan.roberts@arm.com>
-In-Reply-To: <20230511125848.78621-1-ryan.roberts@arm.com>
+In-Reply-To: <20230511125848.78621-2-ryan.roberts@arm.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,NICE_REPLY_A,
@@ -54,119 +55,34 @@ Please Ignore this, I will resend.
 
 
 On 11/05/2023 13:58, Ryan Roberts wrote:
-> Date: Thu, 11 May 2023 11:38:28 +0100
-> Subject: [PATCH v1 0/5] Encapsulate PTE contents from non-arch code
+> It is bad practice to directly set pte entries within a pte table.
+> Instead all modifications must go through arch-provided helpers such as
+> set_pte_at() to give the arch code visibility and allow it to validate
+> (and potentially modify) the operation.
 > 
-> Hi All,
+> Fixes: 3e9a9e256b1e ("mm: add a vmap_pfn function")
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+> ---
+>  mm/vmalloc.c | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
 > 
-> This series improves the encapsulation of pte entries by disallowing non-arch
-> code from directly dereferencing pte_t pointers. Instead code must use a new
-> helper, `pte_t ptep_deref(pte_t *ptep)`. By default, this helper does a direct
-> dereference of the pointer, so generated code should be exactly the same. But
-> it's presence sets us up for arch code being able to override the default to
-> "virtualize" the ptes without needing to maintain a shadow table.
-> 
-> I intend to take advantage of this for arm64 to enable use of its "contiguous
-> bit" to coalesce multiple ptes into a single tlb entry, reducing pressure and
-> improving performance. I have an RFC for the first part of this work at [1]. The
-> cover letter there also explains the second part, which this series is enabling.
-> 
-> I intend to post an RFC for the contpte changes in due course, but it would be
-> good to get the ball rolling on this enabler.
-> 
-> There are 2 reasons that I need the encapsulation:
-> 
->   - Prevent leaking the arch-private PTE_CONT bit to the core code. If the core
->     code reads a pte that contains this bit, it could end up calling
->     set_pte_at() with the bit set which would confuse the implementation. So we
->     can always clear PTE_CONT in ptep_deref() (and ptep_get()) to avoid a leaky
->     abstraction.
->   - Contiguous ptes have a single access and dirty bit for the contiguous range.
->     So we need to "mix-in" those bits when the core is dereferencing a pte that
->     lies in the contig range. There is code that dereferences the pte then takes
->     different actions based on access/dirty (see e.g. write_protect_page()).
-> 
-> While ptep_get() and ptep_get_lockless() already exist, both of them are
-> implemented using READ_ONCE() by default. While we could use ptep_get() instead
-> of the new ptep_deref(), I didn't want to risk performance regression.
-> Alternatively, all call sites that currently use ptep_get() that need the
-> lockless behaviour could be upgraded to ptep_get_lockless() and ptep_get() could
-> be downgraded to a simple dereference. That would be cleanest, but is a much
-> bigger (and likely error prone) change because all the arch code would need to
-> be updated for the new definitions of ptep_get().
-> 
-> The series is split up as follows:
-> 
-> patchs 1-2: Fix bugs where code was _setting_ ptes directly, rather than using
->             set_pte_at() and friends.
-> patch 3:    Fix highmem unmapping issue I spotted while doing the work.
-> patch 4:    Introduce the new ptep_deref() helper with default implementation.
-> patch 5:    Convert all direct dereferences to use ptep_deref().
-> 
-> [1] https://lore.kernel.org/linux-mm/20230414130303.2345383-1-ryan.roberts@arm.com/
-> 
-> Thanks,
-> Ryan
-> 
-> 
-> Ryan Roberts (5):
->   mm: vmalloc must set pte via arch code
->   mm: damon must atomically clear young on ptes and pmds
->   mm: Fix failure to unmap pte on highmem systems
->   mm: Add new ptep_deref() helper to fully encapsulate pte_t
->   mm: ptep_deref() conversion
-> 
->  .../drm/i915/gem/selftests/i915_gem_mman.c    |   8 +-
->  drivers/misc/sgi-gru/grufault.c               |   2 +-
->  drivers/vfio/vfio_iommu_type1.c               |   7 +-
->  drivers/xen/privcmd.c                         |   2 +-
->  fs/proc/task_mmu.c                            |  33 +++---
->  fs/userfaultfd.c                              |   6 +-
->  include/linux/hugetlb.h                       |   2 +-
->  include/linux/mm_inline.h                     |   2 +-
->  include/linux/pgtable.h                       |  13 ++-
->  kernel/events/uprobes.c                       |   2 +-
->  mm/damon/ops-common.c                         |  18 ++-
->  mm/damon/ops-common.h                         |   4 +-
->  mm/damon/paddr.c                              |   6 +-
->  mm/damon/vaddr.c                              |  14 ++-
->  mm/filemap.c                                  |   2 +-
->  mm/gup.c                                      |  21 ++--
->  mm/highmem.c                                  |  12 +-
->  mm/hmm.c                                      |   2 +-
->  mm/huge_memory.c                              |   4 +-
->  mm/hugetlb.c                                  |   2 +-
->  mm/hugetlb_vmemmap.c                          |   6 +-
->  mm/kasan/init.c                               |   9 +-
->  mm/kasan/shadow.c                             |  10 +-
->  mm/khugepaged.c                               |  24 ++--
->  mm/ksm.c                                      |  22 ++--
->  mm/madvise.c                                  |   6 +-
->  mm/mapping_dirty_helpers.c                    |   4 +-
->  mm/memcontrol.c                               |   4 +-
->  mm/memory-failure.c                           |   6 +-
->  mm/memory.c                                   | 103 +++++++++---------
->  mm/mempolicy.c                                |   6 +-
->  mm/migrate.c                                  |  14 ++-
->  mm/migrate_device.c                           |  14 ++-
->  mm/mincore.c                                  |   2 +-
->  mm/mlock.c                                    |   6 +-
->  mm/mprotect.c                                 |   8 +-
->  mm/mremap.c                                   |   2 +-
->  mm/page_table_check.c                         |   4 +-
->  mm/page_vma_mapped.c                          |  26 +++--
->  mm/pgtable-generic.c                          |   2 +-
->  mm/rmap.c                                     |  32 +++---
->  mm/sparse-vmemmap.c                           |   8 +-
->  mm/swap_state.c                               |   4 +-
->  mm/swapfile.c                                 |  16 +--
->  mm/userfaultfd.c                              |   4 +-
->  mm/vmalloc.c                                  |  11 +-
->  mm/vmscan.c                                   |  14 ++-
->  virt/kvm/kvm_main.c                           |   9 +-
->  48 files changed, 302 insertions(+), 236 deletions(-)
-> 
-> --
-> 2.25.1
-> 
+> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+> index 9683573f1225..d8d2fe797c55 100644
+> --- a/mm/vmalloc.c
+> +++ b/mm/vmalloc.c
+> @@ -2899,10 +2899,13 @@ struct vmap_pfn_data {
+>  static int vmap_pfn_apply(pte_t *pte, unsigned long addr, void *private)
+>  {
+>  	struct vmap_pfn_data *data = private;
+> +	pte_t ptent;
+>  
+>  	if (WARN_ON_ONCE(pfn_valid(data->pfns[data->idx])))
+>  		return -EINVAL;
+> -	*pte = pte_mkspecial(pfn_pte(data->pfns[data->idx++], data->prot));
+> +
+> +	ptent = pte_mkspecial(pfn_pte(data->pfns[data->idx++], data->prot));
+> +	set_pte_at(&init_mm, addr, pte, ptent);
+>  	return 0;
+>  }
+>  
 
