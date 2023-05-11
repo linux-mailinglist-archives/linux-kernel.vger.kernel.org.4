@@ -2,103 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEDF46FFB75
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:49:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D63F6FFB7C
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 22:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239323AbjEKUtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 16:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47232 "EHLO
+        id S239078AbjEKUx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 16:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239232AbjEKUtG (ORCPT
+        with ESMTP id S238932AbjEKUx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 16:49:06 -0400
-Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EC619B1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:49:05 -0700 (PDT)
-Received: by mail-yb1-xb29.google.com with SMTP id 3f1490d57ef6-b9a6eec8611so43496490276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:49:05 -0700 (PDT)
+        Thu, 11 May 2023 16:53:26 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 233794C12
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:53:25 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1ab13da70a3so88217305ad.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 13:53:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683838145; x=1686430145;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2PS2/c9QvL/3w6lXNaswW1QRNDamQ1dzdDujUD8jAhA=;
-        b=t5jjnWWlPBzm18PiMq9jTeykQKeXg72a0ZPYkd1CvETgVallEcxQl20dL/arMItNih
-         VDwZTHGN/sArnIcr2Vu2jX/4+9V5T1VPRiWO634UyQB7AGkgCjzArNtlU4FzKB4V2/X5
-         x+5S/QVNcfbm6s528mv+LMJhJVKV+RzuQ5NvqFfKKJLsaNPXG27xBOeFGKWu4tr21p0S
-         196UndwRwbUhGy/W3n4W0bN4oKoDZwSJbnoLnyWZfmB8mvurEose/6ZNuyGA+q1cyAu0
-         lUGjSFn/1OSKbBv5DPIVW9p9I1//SE49bZILQzdCUBLR/58gz+mVzgjFauGY46nvt8KM
-         OZvA==
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1683838404; x=1686430404;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EmqiYN6k7kNOHcOaFBtfG/CJoGmGnLxuGsiwVK55cYc=;
+        b=QMR7fofFIz7UTDWgIWfb/8kl0kAphqE7lnR7CJeis2c94cLuhg3/r0tQz6eL/sMqfr
+         q5xNDM7Hyo8pCRISro7QIUqhbV0mD85g5HYjAcBlMXOYLVpaVTD13xfZjSQmD8E/djLw
+         0NPo8sFeER6dWIgeC+RaBaTHqqemzXR6zPA6W3ilnRtavZimjUbZ1Sa22tPEWq0Toe8y
+         alpjDn886e8wtA1bMsiOvg1d8k7nW6tnvOIrrs3/Gymhm4LuaTtX3LuZ5jrexsSsXg2A
+         PA+LVL4p9c22qmItfYfCYjj3HB682Ah3O0gRd7XS5qTuZaG9SwNSfX4TZgWWPy2lHlYp
+         2JMQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683838145; x=1686430145;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2PS2/c9QvL/3w6lXNaswW1QRNDamQ1dzdDujUD8jAhA=;
-        b=OQK9xWyYOgjPr+GCaMwUh+fPUamVtIHv1HmFDKb+6iD6ocxILSb5aqGCdpIim2YJBN
-         jy+QJmREBrSFOXgVVl1deiaBss5QC8wP0sCWxkUt8Hll4NGAPoHCr99Eos8AGP/3u7gQ
-         rV7V0AIroVD4JPrF68zFZkzz6/cmzFR8P6hIMPz6hKR+uOgAkFXp40dowiR1FknsrKIK
-         i56NchhXZNMofNW7HhSGqsif4i2iVpWO7NEefmAoWp8pH8Ew/rw3cwvgeUiW+Liuu8mu
-         SlSGXyqv/ZwWhNCLYXxkKwOHx6KLa6Qo7AsxrpqMgJRp1SIimd136L6HreF/lMY/0xCe
-         exLQ==
-X-Gm-Message-State: AC+VfDxAq+NQicdeJsuYoiAaPi7KPZDILKeNMELtTdMcaSgd1pStVQkg
-        XSVLpMSdspzamylQziyGzkir4suznrkS+uJrCH4T3w==
-X-Google-Smtp-Source: ACHHUZ4st1au4FNJjgEwZ7jT7NEg/ChCFOssevCzS0zHYemDBQorrme8sDYfsHWjvEv/Dy7q2VvkzjonSQAfc60NEFs=
-X-Received: by 2002:a25:d8cd:0:b0:b94:bbf2:19a3 with SMTP id
- p196-20020a25d8cd000000b00b94bbf219a3mr22194052ybg.18.1683838144767; Thu, 11
- May 2023 13:49:04 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230510001151.3946931-1-chris.packham@alliedtelesis.co.nz>
- <ZFtK3DydE24Qijle@surfacebook> <760ae58f-cb0b-dfe6-9e24-664310651e18@alliedtelesis.co.nz>
- <CACRpkdb1UFQ=1gePeBBEQ3ODu+6m0dHBqaxdtOF9Qc01WytMEQ@mail.gmail.com> <ab62b83e-0074-4c71-11d7-9aa6846a1eee@alliedtelesis.co.nz>
-In-Reply-To: <ab62b83e-0074-4c71-11d7-9aa6846a1eee@alliedtelesis.co.nz>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Thu, 11 May 2023 22:48:52 +0200
-Message-ID: <CACRpkda55gYEnwgLGX-73POCHsQv769ziS6L6oJzHY2coDD0pQ@mail.gmail.com>
-Subject: Re: [PATCH] gpiolib: Don't implicitly disable irq when masking
-To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-Cc:     "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        Ben Brown <Ben.Brown@alliedtelesis.co.nz>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1683838404; x=1686430404;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EmqiYN6k7kNOHcOaFBtfG/CJoGmGnLxuGsiwVK55cYc=;
+        b=jUvPcAmNvU/nZYbjc9cL/ybuuOkFGvgJ5TKGv5ljBtmSm1Oau/BoKqHeC4U5AaaPE1
+         EZg9Q+Isml/2HtW0XrTy04Y8fGuA8+b5/ZtaYrPb+LEE50XDAS7SqtPam4Wof7Y4PyGz
+         jCj8QyEAzuusc1g3G1cHqfcLpoFOBdPDqi6TY4fGSbIE89MAzwm5kirT4USUts5d6h7Q
+         9uIIf1bEjKhxELAtGkJD7mJqNdmTArQFdWYt4/bFNDHxcNQFhmQ299qANwRuRlcNzG5Q
+         m+4ahasCV7neu/jOooolUbpfY5ebyL9tZkHFWeThIvZ69mB4McBV/p6hCsLoNtWL8cud
+         PdIg==
+X-Gm-Message-State: AC+VfDxiOt4CRdBReYqJdJ03CLxXPxoRH3ZWkCRopx120AP/p8FjBib8
+        uTotCf/8mMxUrMWz3uK15ntZDg==
+X-Google-Smtp-Source: ACHHUZ4RrmTAXKngjyn+GYqfCF3MaY6lhqY4LbQJaq1mFOhwPgfCLqhai76N7zGoZNwWLze23GeF0w==
+X-Received: by 2002:a17:902:ce82:b0:1ac:95c2:ed75 with SMTP id f2-20020a170902ce8200b001ac95c2ed75mr15028551plg.53.1683838404455;
+        Thu, 11 May 2023 13:53:24 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id a10-20020a170902ee8a00b001a9873495f2sm6366920pld.233.2023.05.11.13.53.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 13:53:23 -0700 (PDT)
+Date:   Thu, 11 May 2023 13:53:23 -0700 (PDT)
+X-Google-Original-Date: Thu, 11 May 2023 13:53:02 PDT (-0700)
+Subject:     Re: [PATCH 0/3] riscv: sbi: Switch to the sys-off handler API
+In-Reply-To: <20221228161915.13194-1-samuel@sholland.org>
+CC:     dmitry.osipenko@collabora.com, rafael.j.wysocki@intel.com,
+        samuel@sholland.org, aou@eecs.berkeley.edu,
+        apatel@ventanamicro.com, Atish Patra <atishp@rivosinc.com>,
+        geert@linux-m68k.org, heiko@sntech.de, kai.heng.feng@canonical.com,
+        mcgrof@kernel.org, paulmck@kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>, pmladek@suse.com,
+        yuehaibing@huawei.com, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, tangmeng@uniontech.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     samuel@sholland.org
+Message-ID: <mhng-59817569-7525-450f-9bfd-ecb34a30744c@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 10:36=E2=80=AFPM Chris Packham
-<Chris.Packham@alliedtelesis.co.nz> wrote:
-
-> I spent yesterday trying to demonstrate the
-> problem on a newer kernel. Some teething issues aside I can trigger the
-> warning if I have a gpio-button using one of the pca9555 pins as an
-> interrupt and then I export some of the other pins via sysfs.
+On Wed, 28 Dec 2022 08:19:12 PST (-0800), samuel@sholland.org wrote:
+> I want to convert the axp20x PMIC poweroff handler to use the sys-off
+> API, so it can be used as a fallback for if the SBI poweroff handler
+> is unavailable. But the SBI poweroff handler still uses pm_power_off, so
+> done alone, this would cause the axp20x callback to be called first,
+> before the SBI poweroff handler has a chance to run.
 >
-> Interestingly the warning isn't triggered if I use a gpio-hog instead of
-> exporting the pins.
+> In order to prevent this change in behavior, the SBI poweroff handler
+> needs to be converted to the sys-off API first, at a higher priority.
+>
+> This series performs the conversion, after accounting for the fact that
+> the SBI poweroff handler is registered quite early during boot.
+>
+> The first patch is a dependency for both this series and the PSCI
+> series[1], so I would like to get at least patch 1 merged soon.
+>
+> [1]: https://lore.kernel.org/lkml/20221105214841.7828-1-samuel@sholland.org/
+>
+>
+> Samuel Holland (3):
+>   kernel/reboot: Use the static sys-off handler for any priority
+>   riscv: sbi: Share the code for unsupported extension warnings
+>   riscv: sbi: Switch to the sys-off handler API
+>
+>  arch/riscv/include/asm/sbi.h |  1 -
+>  arch/riscv/kernel/sbi.c      | 63 +++++++++++++++++++++---------------
+>  kernel/reboot.c              | 10 +++---
+>  3 files changed, 41 insertions(+), 33 deletions(-)
 
-What happens if you use the gpio character device instead of sysfs?
+Samuel: do you mind rebasing this and resending it with the reboot folks 
+in the To list?  That way we might be able to get an Ack on the generic 
+bits.
 
-Like for example with the tools in tools/gpio or using libgpiod
-example tools?
-
-> I haven't figured out why that is but I'm assuming
-> it's something to do with the hogged pins being excluded from the irq
-> domain before it is registered.
-
-If you write something to the "edge" file I can easily see things
-going sidewise. The sysfs is really not a nice tool, which is why
-it is deprecated.
-
-Yours,
-Linus Walleij
+Thanks!
