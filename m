@@ -2,165 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DF7B6FF415
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:26:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C0D616FF422
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:27:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238128AbjEKO0L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 10:26:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43998 "EHLO
+        id S237548AbjEKO07 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 10:26:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238156AbjEKOZ4 (ORCPT
+        with ESMTP id S238459AbjEKO0n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 10:25:56 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2095.outbound.protection.outlook.com [40.107.96.95])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D19100D9;
-        Thu, 11 May 2023 07:25:27 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HNs7I5nBMxAW5kOVm8mrLxZo9hB6vJ3kYhV3a3HFu2q7EH6Taynjxr8VztkJpB9BIqAsZiXmuWizcxMqO2Lw6e9YOc/AbkTKaUET1elZ3YbvyynaQIiTzVG/6Kxx7f9et8bei+bUtT/Wz4QP8ReY4HHgVG6Emaj0Sf2QJGYRIQI0wtxNtextTk4q/wyzkW+00uOxFf7OJBRXxUqgG+bOysZ5nZDAOS4phoU5jo30uiqtT3/vFIpl+/Y5Eo7+T4ejFUrjEmN/m8Ju/TGQ92T9WAtxuV0YC1IolSLJD2gysLPe+nX9GZc3JzRYoLVnf5ticXO/5Qk5SxVF9P+sU+Dr8w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JserVRuEy+6K0aBtxc8x2wewn2ouP72b1YRM8gMc9Go=;
- b=eXVTAXIoYX7+Bc4vBhpA8dQywhqIF2KEpCiup6kEitV8VhkILtpa0z1W3fJTZlcqEaghIGHTVRrMrf31HF2XV9iHXzm4S/M0h0OVp83opPVy6ns5s65dC4QWF8WApK2MSez2Tx/ZYk4qcXbjzn023xDqfgMInWZBLPZ1EFs+4c4jQVWIwcIEbBLnbKKL/TSON+J3lqvefW7tRP5hb+9E4C4TcilLt9bfNxSrLnoNURK0H8jjY65Kt6XOYg8HdqYhMQK7muhQ6oI64zmQcj8tNI2oCL/geSi1xxqdbFZLaL0x2aG6sn5SRYOJeH/Et/PeMz4EyksI5S7LTr0xDfPy4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Thu, 11 May 2023 10:26:43 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D8CF11600;
+        Thu, 11 May 2023 07:26:32 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50b383222f7so12957097a12.3;
+        Thu, 11 May 2023 07:26:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JserVRuEy+6K0aBtxc8x2wewn2ouP72b1YRM8gMc9Go=;
- b=PrMiz7t1LqPSlBJyPdNMFLJ0ZUlS4wKrqfbustoXefJfr30Nl7UInjmJ4IGboIlaxthgKfR/C9Lckwg4QeCFQliFIpJnFLOQg5BdFFAC2Nb+1fhUcJ8Wur+vXAM+Vz38pAkQwPBBmJhqBNZ4x6JENb62fGeGYN98cO1f+Gal6VM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SJ2PR13MB6522.namprd13.prod.outlook.com (2603:10b6:a03:561::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Thu, 11 May
- 2023 14:25:26 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Thu, 11 May 2023
- 14:25:26 +0000
-Date:   Thu, 11 May 2023 16:25:14 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Linux DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Staging Drivers <linux-staging@lists.linux.dev>,
-        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
-        Linux Kernel Actions <linux-actions@lists.infradead.org>,
-        Diederik de Haas <didi.debian@cknow.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        David Airlie <airlied@redhat.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Kalle Valo <kvalo@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Deepak R Varma <drv@mailo.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Archana <craechal@gmail.com>,
-        Stephen Hemminger <stephen@networkplumber.org>
-Subject: Re: [PATCH 02/10] mISDN: Replace GPL notice boilerplate with SPDX
- identifier
-Message-ID: <ZFz6ykUp7SJEJCSm@corigine.com>
-References: <20230511133406.78155-1-bagasdotme@gmail.com>
- <20230511133406.78155-3-bagasdotme@gmail.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511133406.78155-3-bagasdotme@gmail.com>
-X-ClientProxiedBy: AS4P195CA0016.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:20b:5d6::18) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=googlemail.com; s=20221208; t=1683815191; x=1686407191;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FfHvJaE373FwPkBo+MbvKKH9vrJm6j2m01pppMLR2Fs=;
+        b=n9Y7Em7SkB9orYrAbcCUvQXxkKi727MiQdFajf4HlIYSHX2PG9dMO34uyKqJrZ5cit
+         i4+wO58Ror05WSxbokgiqseHvrBbqqie2cxX7KTFU071x1BQhSh+2dEnOHgunVWzaPOO
+         IQvNEKYfRGf05i3DNDX88Njr55+onoL6F2nnpPjanz16zRSjfQdZj6yyRVqiQrzImILd
+         Z/OWXk2gkmISUByuBUlZnuNGfbmO4N9WHTkesGj3dEgnTkcJmbXkIqjAHdpjSzgn8YLm
+         wTv3jqTgBm+oKURueLWtI94wjqxO2TmC1YXk9er+4EojpU1xst3Cr6Jg+XEtf2oScBgM
+         odyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683815191; x=1686407191;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FfHvJaE373FwPkBo+MbvKKH9vrJm6j2m01pppMLR2Fs=;
+        b=l9eaLf5Zu+DvpscGeB6yQrBViffhtwaRVI2YX+Izny+pezvhT7zBj7pmBFtBYB70Wv
+         ylUFhwVfCbdk9rX7V04m/N8747AoAPf56lfzUXxh7YHY4pCZHz1crkyu0G00CxbjlFDJ
+         emgTYKddD4GXNssnFQbvfxw/OJWi5kLEjK6PGVdhtMdL403gvIWPgtJKZrFHmWRJx/j8
+         k8F3NoCB7lraMg6c3mT3+LXw3Sm6LS9Leeu1Pyt2nBsOtLLAYZiUgYWpFUrp7Bs3OLZJ
+         Ml1PlDcLplxvu8hq3lNEzdtcYa74mpebOf3G+Pf/HyHDCJDqQeWiNSfR961IPz/V5+tW
+         +hQw==
+X-Gm-Message-State: AC+VfDwOa1LydRGbHSNmP9YW/CWzf+wGyU4ycosvmVHI5oGQk6vEvnS9
+        JnN2bmQgW63dq797dKEos36qjCx6TMY9og==
+X-Google-Smtp-Source: ACHHUZ5y1zkVgoN4BZ0TJw5mvRpA0PrhNACP4gefsO5AZ+PYeLklJn3cCj9SPGF8TNfMkgAfKB6DEQ==
+X-Received: by 2002:a17:907:a46:b0:94f:2b80:f3b4 with SMTP id be6-20020a1709070a4600b0094f2b80f3b4mr17315061ejc.69.1683815190662;
+        Thu, 11 May 2023 07:26:30 -0700 (PDT)
+Received: from debianHome.localdomain (dynamic-077-008-180-228.77.8.pool.telefonica.de. [77.8.180.228])
+        by smtp.gmail.com with ESMTPSA id hf15-20020a1709072c4f00b0094f58a85bc5sm4056647ejc.180.2023.05.11.07.26.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 07:26:29 -0700 (PDT)
+From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
+To:     selinux@vger.kernel.org
+Cc:     Paul Moore <paul@paul-moore.com>,
+        John Johansen <john.johansen@canonical.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        Dave Chinner <dchinner@redhat.com>,
+        Nathan Lynch <nathanl@linux.ibm.com>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Micah Morton <mortonm@chromium.org>,
+        Frederick Lawler <fred@cloudflare.com>,
+        =?UTF-8?q?G=C3=BCnther=20Noack?= <gnoack3000@gmail.com>,
+        linux-kernel@vger.kernel.org, apparmor@lists.ubuntu.com,
+        linux-security-module@vger.kernel.org, bpf@vger.kernel.org
+Subject: [PATCH v4 1/9] capability: introduce new capable flag NODENYAUDIT
+Date:   Thu, 11 May 2023 16:25:24 +0200
+Message-Id: <20230511142535.732324-1-cgzones@googlemail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ2PR13MB6522:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0ba0c30e-58b5-486a-5fa4-08db522b902e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: pdo8fP3oGb7RB0fRrJniTjRud1DwHG00NIJtAv5NwFQChUbX2pqX7DBOz2HmNWVejg0vjGOdN4fHm7WQk26TYl2LuQUHT1bCnagdZhz1rQQMZUX4eY3uF/b/QGOB+XxJ/TRYXekwG2VaUuyBLKLqvRaDlC22rlsuoDgZRj91fp1NAoWDBBafUXELDA13cP6W+bpLFHJHnRH19wNL28+9LGxUQcFeRIzS+NHvSFg1rqcB3aBcF7UvO7Hfo75SCG3KIEyaVZzWmnLkGZ5Yg8kNr0u/Av2Q0qm4hiz2Xh7+REjU7mOmExsJu6gIzgqh7gKAES+tLLfkRoW/bLbSk6sjTSEyoNTZiYlv0yHww2A7lzm1ZgjH5iCyX6zpZVjzdO2YMXZM5/GeK1CR+AmnjS+6neiMph/Zr4Z48Dcb6YJg2KGhyCipTSMnEDMkYsBDNDnF+IuUFUnsOjUIevhACx4EjNaIjDw5FGn4gdHC67uDTKgxhNOXqIJk/Pv0ip9aaxiwmGwRh1CPDd7nFDj+q1LKj4NhmPyDuJWwCQzPzq9JMWPNz3Byw75SmgRWCVYPzQk7L4oMkq1raWaXI8q+SOtFQXh3Dw1UR5yYl6kclobZRYRsATBOYjfeqQJNww0NHMEC
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(136003)(396003)(39840400004)(376002)(346002)(451199021)(186003)(6506007)(2906002)(41300700001)(4326008)(6512007)(6916009)(66556008)(66476007)(316002)(558084003)(38100700002)(15650500001)(83380400001)(7406005)(7416002)(2616005)(8676002)(86362001)(44832011)(8936002)(36756003)(5660300002)(54906003)(478600001)(6666004)(6486002)(66946007)(41080700001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9tzuQ2jlyp1AUwFcJ+WZlZsn1bx1lbmVNEiO8ZaFKL25egtM2NhVMJvBE56B?=
- =?us-ascii?Q?yiFKh/pRKJHX3tWkPZskIwVF4Xy+AaWgxQh22Cxi/HJ/n2mZV/AvSY0vLAdM?=
- =?us-ascii?Q?2Z+MPV3eaJZY89G1mGk06KQwFjY6P/eDXP66ETp1bK54GqKadlFh5b8Vs5uu?=
- =?us-ascii?Q?lWafvtZacB8iW5VUvYp/A7OmxulIr+CcCTPbvTXfM6BIErTDOOX3V3eYuDI0?=
- =?us-ascii?Q?M77QC5Y/6RAwVc66zEKX4G4mMaTaNDQEf0dxi6FurNCg+ISW9fs/cQeqbbaP?=
- =?us-ascii?Q?YEDoMw7JruiQNSOzp/V3tG8R1y7ictoYTKNvexKZdLs0HU94Iaopdkq4T3yu?=
- =?us-ascii?Q?L5WJRXZaIqiktq/XwRraydGQG8vXmBfPYtmwAv1gh8qtsP4TtfAnq/BLFH+a?=
- =?us-ascii?Q?XcXdhIMGyQl66dDoUdSBzhEsCEGC58d+nxjmTgNLyoBf+JXKSdnv8JMQLYKC?=
- =?us-ascii?Q?x5n1cu8IGX1hegipqsAmEfMq5N/b5qgy9o+0a/XUFAEv40/EGD/YiULmKlaz?=
- =?us-ascii?Q?QjcMMj+xN1BJCgA73sw+6hKHGHzTtj+v7yKxH8QzpSkB0KJlBgq4V6RA1lH4?=
- =?us-ascii?Q?IdrXbLizhbtGUcN0EIgIgSOO2JvTDZVYEFoz0sM/NFvaR0LP/c/oob7f1oYy?=
- =?us-ascii?Q?akjxBDXc27z7ZMQ6JOH6MQR5fLzhf0ZKn0ZVvt0A1DZ+BTvdJiXaDShvBl++?=
- =?us-ascii?Q?okaq4gJEhFy2muJ7LxOvqYk/jxTCQbhxqLOhThtitPzP9p8TCP8Mj3NhHtwk?=
- =?us-ascii?Q?yLAoXK0m+x2GnlnlsJ4bUNxNzJM8F7HxrtDsSZAEf785nZPGkVFgrjFQYdtD?=
- =?us-ascii?Q?dNkKOl33M2EmFGOle5v35oMi19kef06gDl4C5tXu2cmOcV2J2RNxu5/RcLMY?=
- =?us-ascii?Q?zqQys+3BpkHP1fAmt2lEyvXxoXJb6j5G7qAban3zx4LFEXAd+dbAkjv2EUoU?=
- =?us-ascii?Q?7oYMJRmH5G2ZWU/4qW0B/8OOS/kSzfuuJFu6pqTy9wdWyANYXEBVwQ81nD/u?=
- =?us-ascii?Q?PG3CgRJmDQuRknclmwjUT2Vcj/D7x3gxW8lmqZukADVow2xhLCPMmcuBc+We?=
- =?us-ascii?Q?Ql+vQQe99oY68bpkb3LHP8DANt6UJ+eyH73OV/05+vh/j7stQcosh6xXRjWg?=
- =?us-ascii?Q?fjDIcgKEum08V1wNPLSAJ6hDJQz7IHcLLF5uLKwu7spMQXw4F/OFkuRCC7tv?=
- =?us-ascii?Q?GjAloKU84w+JLYkcciyLAPhvSI9oJuxmotEhVJL/2QxL9rvRSCLE7vrmEX+8?=
- =?us-ascii?Q?A4ereXI12DRa0un8/yKkrg17pGHIe3fJRA/++kjJozndqnxERq4TX/viGCxj?=
- =?us-ascii?Q?8jB+zxh00fB+HziE2hOKiuCPnxqYj+mX0X2MySKHMsuFJjti2Xs/6VL5w3m2?=
- =?us-ascii?Q?SliAgRIzf/+CBjgHpWZWQeKkQ0ih174yjvj2t520tmUoX8COHAlwR6XInu4R?=
- =?us-ascii?Q?k76FIeLkQbwPCsLsU1VR+jSzxJ07icUt5xKoEoHPv+u8ZRR2R3QnY6apm6Ma?=
- =?us-ascii?Q?ts6oD3cdKE5wi3RcT6A8gjt54c9xdzGXZRbr5Wc/WCppEiuGMI2zeBSz/LE+?=
- =?us-ascii?Q?3c+yxz+gCI6CY+Spr6enI10IjrcnCytq4wWzMaW4WUOUQTqxAvYEfjw+K6vh?=
- =?us-ascii?Q?m3JrZkiRlIfehJes1Z8U2544CMEk4cC0xXrobqR/Gb1870JSwOyZi6odk+s0?=
- =?us-ascii?Q?B4yRdQ=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0ba0c30e-58b5-486a-5fa4-08db522b902e
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 14:25:26.2016
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: nFBPjg0R5xMiMNDLn8uZDFiZ/PYehyZWBRaP0vsTKVVrGlDIRWCw9TPlKLwuELWBVzLU3SquxzfyB6AkdagXzcfUKq6PRQYxR142nA/Qggo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR13MB6522
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 08:33:58PM +0700, Bagas Sanjaya wrote:
-> Replace unversioned GPL notice boilerplate on dsp_* with SPDX identifier
-> for GPL 1.0+. These files missed previous SPDX conversion batches
-> due to not specifying GPL version.
+Introduce a new capable flag, CAP_OPT_NODENYAUDIT, to not generate
+an audit event if the requested capability is not granted.  This will be
+used in a new capable_any() functionality to reduce the number of
+necessary capable calls.
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+Handle the flag accordingly in AppArmor and SELinux.
+
+Suggested-by: Paul Moore <paul@paul-moore.com>
+Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+---
+ include/linux/security.h       |  2 ++
+ security/apparmor/capability.c |  8 +++++---
+ security/selinux/hooks.c       | 14 ++++++++------
+ 3 files changed, 15 insertions(+), 9 deletions(-)
+
+diff --git a/include/linux/security.h b/include/linux/security.h
+index e2734e9e44d5..629c775ec297 100644
+--- a/include/linux/security.h
++++ b/include/linux/security.h
+@@ -67,6 +67,8 @@ struct watch_notification;
+ #define CAP_OPT_NOAUDIT BIT(1)
+ /* If capable is being called by a setid function */
+ #define CAP_OPT_INSETID BIT(2)
++/* If capable should audit the security request for authorized requests only */
++#define CAP_OPT_NODENYAUDIT BIT(3)
+ 
+ /* LSM Agnostic defines for security_sb_set_mnt_opts() flags */
+ #define SECURITY_LSM_NATIVE_LABELS	1
+diff --git a/security/apparmor/capability.c b/security/apparmor/capability.c
+index 326a51838ef2..98120dd62ca7 100644
+--- a/security/apparmor/capability.c
++++ b/security/apparmor/capability.c
+@@ -108,7 +108,8 @@ static int audit_caps(struct common_audit_data *sa, struct aa_profile *profile,
+  * profile_capable - test if profile allows use of capability @cap
+  * @profile: profile being enforced    (NOT NULL, NOT unconfined)
+  * @cap: capability to test if allowed
+- * @opts: CAP_OPT_NOAUDIT bit determines whether audit record is generated
++ * @opts: CAP_OPT_NOAUDIT/CAP_OPT_NODENYAUDIT bit determines whether audit
++ *	record is generated
+  * @sa: audit data (MAY BE NULL indicating no auditing)
+  *
+  * Returns: 0 if allowed else -EPERM
+@@ -126,7 +127,7 @@ static int profile_capable(struct aa_profile *profile, int cap,
+ 	else
+ 		error = -EPERM;
+ 
+-	if (opts & CAP_OPT_NOAUDIT) {
++	if ((opts & CAP_OPT_NOAUDIT) || ((opts & CAP_OPT_NODENYAUDIT) && error)) {
+ 		if (!COMPLAIN_MODE(profile))
+ 			return error;
+ 		/* audit the cap request in complain mode but note that it
+@@ -142,7 +143,8 @@ static int profile_capable(struct aa_profile *profile, int cap,
+  * aa_capable - test permission to use capability
+  * @label: label being tested for capability (NOT NULL)
+  * @cap: capability to be tested
+- * @opts: CAP_OPT_NOAUDIT bit determines whether audit record is generated
++ * @opts: CAP_OPT_NOAUDIT/CAP_OPT_NODENYAUDIT bit determines whether audit
++ *	record is generated
+  *
+  * Look up capability in profile capability set.
+  *
+diff --git a/security/selinux/hooks.c b/security/selinux/hooks.c
+index 79b4890e9936..0730edf2f5f1 100644
+--- a/security/selinux/hooks.c
++++ b/security/selinux/hooks.c
+@@ -1571,7 +1571,7 @@ static int cred_has_capability(const struct cred *cred,
+ 	u16 sclass;
+ 	u32 sid = cred_sid(cred);
+ 	u32 av = CAP_TO_MASK(cap);
+-	int rc;
++	int rc, rc2;
+ 
+ 	ad.type = LSM_AUDIT_DATA_CAP;
+ 	ad.u.cap = cap;
+@@ -1590,11 +1590,13 @@ static int cred_has_capability(const struct cred *cred,
+ 	}
+ 
+ 	rc = avc_has_perm_noaudit(sid, sid, sclass, av, 0, &avd);
+-	if (!(opts & CAP_OPT_NOAUDIT)) {
+-		int rc2 = avc_audit(sid, sid, sclass, av, &avd, rc, &ad);
+-		if (rc2)
+-			return rc2;
+-	}
++	if ((opts & CAP_OPT_NOAUDIT) || ((opts & CAP_OPT_NODENYAUDIT) && rc))
++		return rc;
++
++	rc2 = avc_audit(sid, sid, sclass, av, &avd, rc, &ad);
++	if (rc2)
++		return rc2;
++
+ 	return rc;
+ }
+ 
+-- 
+2.40.1
 
