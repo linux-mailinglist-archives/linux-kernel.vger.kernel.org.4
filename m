@@ -2,52 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A5576FFA4A
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:38:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E9F96FFA4D
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:38:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239241AbjEKTii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 15:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55188 "EHLO
+        id S239262AbjEKTin (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 15:38:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239235AbjEKTib (ORCPT
+        with ESMTP id S239248AbjEKTif (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 15:38:31 -0400
+        Thu, 11 May 2023 15:38:35 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB7F07EC9;
-        Thu, 11 May 2023 12:38:27 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 537A47DA8;
+        Thu, 11 May 2023 12:38:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 337AA63AEE;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F5A46511A;
         Thu, 11 May 2023 19:38:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A0DFC4339B;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E322DC4339C;
         Thu, 11 May 2023 19:38:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683833906;
-        bh=32Dyk/hnYKXbkSTD+0XGzrBbDpEETte5HuuCckT159c=;
+        s=k20201202; t=1683833907;
+        bh=eusArGtpQsQ/mI/dj7NQjj77kk6DhjwgGYGdfDlh95U=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MLF0C6ve2dKFFNSaPLfTmfBJtVBXGmpenB1RXnh3m40KcwxVkXScb1bTjZ5RhI9A/
-         0B0yEQ97KtOuAKRORcD5v3d8NJgOdW6nuty6iiTsFokQukx6/U+dZIg0QWanMirv8n
-         so3xrmVIm98RZQ5bjY61g4+Vrd+dpddt18Jt/XQ34r54lDlaPJ+/Zhy0troFACR30x
-         rS032EukqsV3R5t0IVXHF0WeISZXZAGFhnh+Z84Fr2yQ33t7Czv8Isxm++/ETKDH8f
-         qqlo8Fw1W0aHzRJymvJ9lAeaK4xprZINPD+TVFXSAo+XUpOR/o+kFFy59p+hm2xfsK
-         LdWgWsq8oP1iw==
+        b=cUFOOxVzusGEU6LqxtMDNV/tkXapWIk0EvGg7MrtmFeo6dO1lgBfl3JQsGn2ikYQt
+         iLGcbv/6yj8YrGNl30268qnMq3IDzP6WaNFW4PYDy4tIzLTtDa5/V39XEhbtN0ycr5
+         rrR0OnQWTTYS45SCtDrc9o7/wRzaCSMKgS7ml7WpuJQIr+UWGsIy5+5iDtVqdKAQxl
+         6j8ynNAEnvLaUf2im4fa+6G0mhpWsTfC/niNOP0aHVMGcI9/WyAyj2VdlqPHawel7m
+         BjPPojSf6dSkdsrpnc/IrAchDjrQmX7Ew8S/osoog4bqww6OiqAE8bA3RcJBwqbNMs
+         4hU9Av3KEUUDA==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Hersen Wu <hersenxs.wu@amd.com>,
-        Qingqing Zhuo <Qingqing.Zhuo@amd.com>,
-        Qingqing Zhuo <qingqing.zhuo@amd.com>,
-        Daniel Wheeler <daniel.wheeler@amd.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Sasha Levin <sashal@kernel.org>, harry.wentland@amd.com,
-        sunpeng.li@amd.com, Rodrigo.Siqueira@amd.com,
-        christian.koenig@amd.com, Xinhui.Pan@amd.com, airlied@gmail.com,
-        daniel@ffwll.ch, aurabindo.pillai@amd.com, hdegoede@redhat.com,
-        stylon.wang@amd.com, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org
-Subject: [PATCH AUTOSEL 6.3 05/11] drm/amd/display: fix memleak in aconnector->timing_requested
-Date:   Thu, 11 May 2023 15:37:48 -0400
-Message-Id: <20230511193757.623114-5-sashal@kernel.org>
+Cc:     Lucas Tanure <tanure@linux.com>, Rob Herring <robh@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, robh+dt@kernel.org,
+        frowand.list@gmail.com, devicetree@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.3 06/11] of: fdt: Scan /memreserve/ last
+Date:   Thu, 11 May 2023 15:37:49 -0400
+Message-Id: <20230511193757.623114-6-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230511193757.623114-1-sashal@kernel.org>
 References: <20230511193757.623114-1-sashal@kernel.org>
@@ -65,50 +57,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hersen Wu <hersenxs.wu@amd.com>
+From: Lucas Tanure <tanure@linux.com>
 
-[ Upstream commit 025ce392b5f213696ca0af3e07735d0fae020694 ]
+[ Upstream commit b413281876292de44ae84e9a9ce9d62e47f266e9 ]
 
-[Why]
-when amdgpu_dm_update_connector_after_detect is called
-two times successively with valid sink, memory allocated of
-aconnector->timing_requested for the first call is not free.
-this causes memeleak.
+Change the scanning /memreserve/ and /reserved-memory node order to fix
+Kernel panic on Khadas Vim3 Board.
 
-[How]
-allocate memory only when aconnector->timing_requested
-is null.
+If /memreserve/ goes first, the memory is reserved, but nomap can't be
+applied to the region. So the memory won't be used by Linux, but it is
+still present in the linear map as normal memory, which allows
+speculation. Legitimate access to adjacent pages will cause the CPU
+to end up prefetching into them leading to Kernel panic.
 
-Reviewed-by: Qingqing Zhuo <Qingqing.Zhuo@amd.com>
-Acked-by: Qingqing Zhuo <qingqing.zhuo@amd.com>
-Signed-off-by: Hersen Wu <hersenxs.wu@amd.com>
-Tested-by: Daniel Wheeler <daniel.wheeler@amd.com>
-Signed-off-by: Alex Deucher <alexander.deucher@amd.com>
+So /reserved-memory node should go first, as it has a more updated
+description of the memory regions and can apply flags, like nomap.
+
+Link: https://lore.kernel.org/all/CAJX_Q+1Tjc+-TjZ6JW9X0NxEdFe=82a9626yL63j7uVD4LpxEA@mail.gmail.com/
+Signed-off-by: Lucas Tanure <tanure@linux.com>
+Link: https://lore.kernel.org/r/20230424113846.46382-1-tanure@linux.com
+Signed-off-by: Rob Herring <robh@kernel.org>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 9 ++++++---
- 1 file changed, 6 insertions(+), 3 deletions(-)
+ drivers/of/fdt.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-index a01fd41643fc2..5dced13f4ae8d 100644
---- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-+++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-@@ -3094,9 +3094,12 @@ void amdgpu_dm_update_connector_after_detect(
- 						    aconnector->edid);
- 		}
+diff --git a/drivers/of/fdt.c b/drivers/of/fdt.c
+index d1a68b6d03b3f..c28aedd7ae1f7 100644
+--- a/drivers/of/fdt.c
++++ b/drivers/of/fdt.c
+@@ -635,6 +635,9 @@ void __init early_init_fdt_scan_reserved_mem(void)
+ 	if (!initial_boot_params)
+ 		return;
  
--		aconnector->timing_requested = kzalloc(sizeof(struct dc_crtc_timing), GFP_KERNEL);
--		if (!aconnector->timing_requested)
--			dm_error("%s: failed to create aconnector->requested_timing\n", __func__);
-+		if (!aconnector->timing_requested) {
-+			aconnector->timing_requested =
-+				kzalloc(sizeof(struct dc_crtc_timing), GFP_KERNEL);
-+			if (!aconnector->timing_requested)
-+				dm_error("failed to create aconnector->requested_timing\n");
-+		}
++	fdt_scan_reserved_mem();
++	fdt_reserve_elfcorehdr();
++
+ 	/* Process header /memreserve/ fields */
+ 	for (n = 0; ; n++) {
+ 		fdt_get_mem_rsv(initial_boot_params, n, &base, &size);
+@@ -643,8 +646,6 @@ void __init early_init_fdt_scan_reserved_mem(void)
+ 		memblock_reserve(base, size);
+ 	}
  
- 		drm_connector_update_edid_property(connector, aconnector->edid);
- 		amdgpu_dm_update_freesync_caps(connector, aconnector->edid);
+-	fdt_scan_reserved_mem();
+-	fdt_reserve_elfcorehdr();
+ 	fdt_init_reserved_mem();
+ }
+ 
 -- 
 2.39.2
 
