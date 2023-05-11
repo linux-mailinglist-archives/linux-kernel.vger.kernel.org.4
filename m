@@ -2,49 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1499B6FE9AF
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 04:02:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B816FE9B4
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 04:06:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbjEKCCO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 22:02:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44016 "EHLO
+        id S231660AbjEKCGc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 22:06:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjEKCCJ (ORCPT
+        with ESMTP id S230004AbjEKCG3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 22:02:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC20E7A;
-        Wed, 10 May 2023 19:02:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DDA6463F65;
-        Thu, 11 May 2023 02:02:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE05DC433D2;
-        Thu, 11 May 2023 02:02:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683770526;
-        bh=8kVvNTf+SIgWcuslTbMYwVXYnOSgaLXA0Yfwmxi6Yho=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hwrvHBzn4f4aLRx4Rf7teQtUSM+k4glGOd7ddiLGBZxh9yVAEudQYS5+4CA3cY7hH
-         ECumTP5vaAXYz67ehGZLdtpr5rGG4mDZVD63g72qymZO0WqJLAVjApMOvm6JmKncUk
-         F+Ash32VsNAtr6FE2nZ1jOlGGGP5Zif+4t3BX4QN1MPdAJe5w9Kx+Sqgonik0iRY6Z
-         irsJfCmYsoZIdwL2KieDr/PBV4k6Ks4nc4M2jb3SAAFXd5WHJj7rm8P0XE91DezvV9
-         yxDypvoGMT1/i5nRD7z4EOm4ZObMMSDawCNl/3zUnln3xYfwE+jwI3Cor5GVk4Smob
-         07Mp+bcUOac5Q==
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     corbet@lwn.net
-Cc:     torvalds@linux-foundation.org, linux-doc@vger.kernel.org,
-        workflows@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jakub Kicinski <kuba@kernel.org>
-Subject: [RFC] MAINTAINERS: direct process doc changes to a dedicated ML
-Date:   Wed, 10 May 2023 19:02:04 -0700
-Message-Id: <20230511020204.910178-1-kuba@kernel.org>
-X-Mailer: git-send-email 2.40.1
+        Wed, 10 May 2023 22:06:29 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66723173B;
+        Wed, 10 May 2023 19:06:28 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id DDE0E24E0FC;
+        Thu, 11 May 2023 10:06:25 +0800 (CST)
+Received: from EXMBX062.cuchost.com (172.16.6.62) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 11 May
+ 2023 10:06:25 +0800
+Received: from [192.168.125.107] (113.72.146.187) by EXMBX062.cuchost.com
+ (172.16.6.62) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Thu, 11 May
+ 2023 10:06:25 +0800
+Message-ID: <2a6add59-981a-f5c1-e744-1cef2b81f29a@starfivetech.com>
+Date:   Thu, 11 May 2023 10:06:23 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v3 1/5] dt-bindings: power: Add JH7110 AON PMU support
+Content-Language: en-US
+To:     Conor Dooley <conor@kernel.org>
+CC:     Conor Dooley <conor.dooley@microchip.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Walker Chen <walker.chen@starfivetech.com>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>
+References: <20230510015311.27505-1-changhuang.liang@starfivetech.com>
+ <20230510015311.27505-2-changhuang.liang@starfivetech.com>
+ <20230510-cloning-clapping-e262f00a94e8@wendy>
+ <d80646ae-cf1b-234a-261c-3753f6cc9080@starfivetech.com>
+ <20230510-city-scarf-023705d3c96a@spud>
+From:   Changhuang Liang <changhuang.liang@starfivetech.com>
+In-Reply-To: <20230510-city-scarf-023705d3c96a@spud>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.146.187]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX062.cuchost.com
+ (172.16.6.62)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-5.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,49 +67,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's hard to keep track of changes to the process docs.
-Subsystem maintainers should probably know what's going on,
-to ensure reasonably uniform developer experience across
-trees.
 
-We also need a place where process discussions can be held
-(i.e. designated mailing list which can be CCed on naturally
-arising discussions). I'm using workflows@ in this RFC,
-but a new list may be better.
 
-No change to the patch flow intended.
+On 2023/5/11 3:51, Conor Dooley wrote:
+> On Wed, May 10, 2023 at 03:20:14PM +0800, Changhuang Liang wrote:
+>> On 2023/5/10 15:06, Conor Dooley wrote:
+>>> On Tue, May 09, 2023 at 06:53:07PM -0700, Changhuang Liang wrote:
+>>>> +          - starfive,jh7110-pmu
+>>>> +      - items:
+>>>> +          - enum:
+>>>> +              - starfive,jh7110-aon-syscon
+>>>> +          - const: syscon
+>>>
+>>> Unfortunately, this is not what was wanted.
+>>> This syscon, of which power domain control is just one of the things that
+>>> it can do, should be documented in
+>>> Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+>>> alongside it's brethern "starfive,jh7110-sys-syscon" &
+>>> "starfive,jh7110-stg-syscon".
+>>>
+>>
+>> That means that I don't need to modify this original yaml file? 
+> 
+> Does "this original" mean starfive,jh7100-pmu.yaml?
+> If so then...
+> 
 
-Signed-off-by: Jakub Kicinski <kuba@kernel.org>
----
-I've been pondering the lack of cross-maintainer communication
-as the kernel grows, and I hope this could help bring us together
-a little. Plus twice over the last 2 weeks someone popped up on
-netdev with what I personally considered incorrect interpretation
-of the process docs, so it'd be nice to CC a list on my replies
-so I can be corrected, in case I'm wrong.
+Yes.
 
-Opinions more than welcome!
----
- MAINTAINERS | 6 ++++++
- 1 file changed, 6 insertions(+)
+>> I just need to move current changes in this patch into 
+>> "Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml"?
+> 
+> Correct.
+> It makes most sense for that binding, as it depends on the pll binding
+> (because it has a ref: to it), to go through the clock tree in Xingyu's
+> series.
+> I'll apply the driver changes once the binding has been applied.
+> 
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 1c78e61a3387..58239fbc7007 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6223,6 +6223,12 @@ X:	Documentation/power/
- X:	Documentation/spi/
- X:	Documentation/userspace-api/media/
- 
-+DOCUMENTATION PROCESS
-+M:	Jonathan Corbet <corbet@lwn.net>
-+S:	Maintained
-+F:	Documentation/process/
-+L:	workflows@vger.kernel.org
-+
- DOCUMENTATION REPORTING ISSUES
- M:	Thorsten Leemhuis <linux@leemhuis.info>
- L:	linux-doc@vger.kernel.org
--- 
-2.40.1
+I think that I have to send v4 after Xingyu's series resend new version. 
+If drivers have no other comments. I will make the following changes:
 
+patch 1/5: Only keep the content in starfive,jh7110-pmu.h, move other content into Xingyu's PLL series.
+patch 5/5: Drop this patch, move the content into Xingyu's PLL series.
+other patch: no change.
+
+Thanks,
+Changhuang
