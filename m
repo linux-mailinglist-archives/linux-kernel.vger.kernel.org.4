@@ -2,209 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25A5C6FEDA6
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5256E6FEDB0
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:15:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232114AbjEKIOX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 04:14:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
+        id S233853AbjEKIPK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 04:15:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229918AbjEKIOU (ORCPT
+        with ESMTP id S233461AbjEKIPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 04:14:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B6BF2720
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:13:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683792814;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ISts0ooOqDRfuZXF0qq5A4HD7E+tCGV5ujF6/xdMaMg=;
-        b=PzgRB9stweH5iS4FO+VIw9DhD7A6TyddIKo5AEg2CgODlTZDQr1Ot8BccHu5/oF3tz0AVO
-        38PduJibRwuBgAdzq7sXT9fntJ9oXshcwYOn/s8T7xhIztkhtqsWzhVCOAb3EYVg3PAQT/
-        usbomoYm0DECl8yqSVzLg+ZvybyiuFA=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-622-A6A5wXPgPF2zA58ttn3wjA-1; Thu, 11 May 2023 04:13:31 -0400
-X-MC-Unique: A6A5wXPgPF2zA58ttn3wjA-1
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-30635d18e55so2887841f8f.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:13:30 -0700 (PDT)
+        Thu, 11 May 2023 04:15:07 -0400
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9E02D4A
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:15:05 -0700 (PDT)
+Received: by mail-vk1-xa2a.google.com with SMTP id 71dfb90a1353d-44fd6c24d5aso2990362e0c.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:15:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683792904; x=1686384904;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8J5AyuQb7KXDhIq7T1eUiZkECmH3AgrEkNzwG7/4Y1k=;
+        b=KgCLnWvpzk8wO6112cUpK908N2b+S2E470158cKhpD6VK5oDTWwT6KWU0jTB0folPt
+         iefqzxmp4BSYgHduOrq7Mn2L0x28DVzikB/uPlCqj4ljkyp9RKAItujtQKjQZIfJfcC8
+         nlAz1+6W8yIlBmOA+It7lENXJGIzxJp8KFQ7kGa8hbnrLfmbeO9B8plIqtxs4Vg8M0kA
+         FKYOToPEXquxE8ApDoE0sNKif1eU0K3G9sN4WfV9NcjbwdILdqM4DFnqB7MsrGwytwFu
+         GD0nvDmfY8n6CKognNQD5kbhGuCTivQlpyz3rJToYunhRewjgHsWq4OJH8CeW6Hp5NyY
+         RLiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683792810; x=1686384810;
-        h=content-transfer-encoding:mime-version:message-id:date:references
-         :in-reply-to:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ISts0ooOqDRfuZXF0qq5A4HD7E+tCGV5ujF6/xdMaMg=;
-        b=CHZKjEH/EQiN59DdRpwpUpBsDPB3mIekdHJX1E4k/5/aYoSl/0nBxfEwC7LX9hupWr
-         ZiWV2pSSDQJQ6hyxy009lHio2iYB1sx4E0SzHkQv41tqzSpMPXAXzTX6O+Qw8uEMtYP/
-         5p0fLMt6D5sQyrlOxcSru/DRLxuhxcMGJ3emBLWC5zTpqwrETlCs1h5R47BxrAjbxroC
-         IAh7ET2mc9QMEI6RMxRsY+grysOds1E20Akst5585l/0FQ/HIkm4Dn8pV1QMWFN4Mp4J
-         pd+zpAfpY0yX0ImxWryRj8zIzZ9s5KmnHrTpf46MS9djtb52w98t8hiJLbWjbdJXwfc3
-         EVnw==
-X-Gm-Message-State: AC+VfDyJrFaKlEKeOO6Ib/49LUarxlKFSfGk0V/A7Z+Lq8tXFCou7n7b
-        VLlC29YYTnw6oCKv6WZ/OQBu8w3LMbvqhC8Co4d4l4KiJHuBa1N5ib7Aa9uYyfeYk4g+rwlDgU9
-        N0PTDawZFme44MBMXbkutXMbr
-X-Received: by 2002:a5d:6ad2:0:b0:306:3b39:9a3d with SMTP id u18-20020a5d6ad2000000b003063b399a3dmr15181732wrw.15.1683792809977;
-        Thu, 11 May 2023 01:13:29 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4wzkHxXA98ZgAI5RK3TMyhcDtRnsVdn01Y5Ujktfp0w0cSPqr08X4KOya9osApYAYUFMqmaQ==
-X-Received: by 2002:a5d:6ad2:0:b0:306:3b39:9a3d with SMTP id u18-20020a5d6ad2000000b003063b399a3dmr15181702wrw.15.1683792809674;
-        Thu, 11 May 2023 01:13:29 -0700 (PDT)
-Received: from vschneid.remote.csb ([154.57.232.159])
-        by smtp.gmail.com with ESMTPSA id y12-20020adffa4c000000b00306281cfa59sm19596655wrr.47.2023.05.11.01.13.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 01:13:29 -0700 (PDT)
-From:   Valentin Schneider <vschneid@redhat.com>
-To:     Leonardo =?utf-8?Q?Br=C3=A1s?= <leobras@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yury Norov <yury.norov@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Nadav Amit <namit@vmware.com>,
-        Zhen Lei <thunder.leizhen@huawei.com>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        Daniel Bristot de Oliveira <bristot@kernel.org>
-Subject: Re: [RFC PATCH 1/1] smp: Add tracepoints for functions called with
- smp_call_function*()
-In-Reply-To: <f96442e9166e4f73be772656a93c89093eddbb8b.camel@redhat.com>
-References: <20230406075718.68672-1-leobras@redhat.com>
- <20230406095519.GG386572@hirez.programming.kicks-ass.net>
- <f294a74cd17bf932621a6a746d592f49770d25ec.camel@redhat.com>
- <20230503145900.GC1689514@hirez.programming.kicks-ass.net>
- <xhsmh7ctojoia.mognet@vschneid.remote.csb>
- <f96442e9166e4f73be772656a93c89093eddbb8b.camel@redhat.com>
-Date:   Thu, 11 May 2023 09:13:27 +0100
-Message-ID: <xhsmhv8gzi8uw.mognet@vschneid.remote.csb>
+        d=1e100.net; s=20221208; t=1683792904; x=1686384904;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8J5AyuQb7KXDhIq7T1eUiZkECmH3AgrEkNzwG7/4Y1k=;
+        b=CC0dN5zjUpBsfMScqXMboZtcyuwBWu8jfy95bUxOiUK2ZHFP0Th9ezZ/Ikw2i82nHG
+         KrSH04XNAMf2RS5ynIhcVV9/SL6uR6y+6eIblTwOOJ7XrlSpD3MeCepL1VzOr80gOVPM
+         I5c5hwY6/z3Wiz/BhzTAiF8MU5wHVcLpUlPJLQRI/goxCpQOcDOxFncG2JO9zIIU08Ak
+         iWzPV1Wc3hUWrjZV2rDu9xhUwpr2VoYEMxw61P7VN8SkqSKKbA1BLZbQIithqPskGNnb
+         2b6Eqzl4W7uGt8at1O9CiNtqGbv0YWD9tuC6h485zq6M3ColFra8H6pLIo2uWE1iFD1+
+         ujUQ==
+X-Gm-Message-State: AC+VfDzergksHnzUP5YCCJfBZXAOK94T5ApPihALraqK7WRXJRMyMlp5
+        nVXUFUZJDZco47VCFb8h8X7L2nAW8yUyLA+6k3mn+A==
+X-Google-Smtp-Source: ACHHUZ6BxV1B86vSq3Yaj66p+bAKChbLmh2xv+IMsMDwd3lqyIymRigPWyvZpvqRTFmQrGtuECPvbklOmWTORlcon7g=
+X-Received: by 2002:a1f:bfd2:0:b0:43f:9aaf:b629 with SMTP id
+ p201-20020a1fbfd2000000b0043f9aafb629mr5416392vkf.0.1683792904155; Thu, 11
+ May 2023 01:15:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230505184318.1355446-1-etienne.carriere@linaro.org>
+ <CSIXYHYSW45R.O3II0HIIHZV4@suppilovahvero> <CAN5uoS8xB7=Ohu4WEA31hGraVBcaOmRxZw9PDtXBLGUMUeB=4Q@mail.gmail.com>
+ <CAN5uoS9UTc-Lz1+k=-7nifuv8MrRmZh_1ck3-DgwRSF58EwpxQ@mail.gmail.com>
+In-Reply-To: <CAN5uoS9UTc-Lz1+k=-7nifuv8MrRmZh_1ck3-DgwRSF58EwpxQ@mail.gmail.com>
+From:   Sumit Garg <sumit.garg@linaro.org>
+Date:   Thu, 11 May 2023 13:44:53 +0530
+Message-ID: <CAFA6WYMf+ppAtyT5aivfq1KOEhz4MVG6godqdRhQVd0ORkb7VQ@mail.gmail.com>
+Subject: Re: [PATCH] char: tpm: ftpm_tee: use kernel login identifier
+To:     Etienne Carriere <etienne.carriere@linaro.org>
+Cc:     Jarkko Sakkinen <jarkko@kernel.org>, linux-kernel@vger.kernel.org,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, linux-integrity@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/05/23 17:27, Leonardo Br=C3=A1s wrote:
-> On Thu, 2023-05-04 at 12:59 +0100, Valentin Schneider wrote:
->> +TRACE_EVENT(csd_queue_cpu,
->> +
->> +	TP_PROTO(const unsigned int cpu,
->> +		 unsigned long callsite,
->> +		 smp_call_func_t func,
->> +		 call_single_data_t *csd),
->> +
->> +	TP_ARGS(cpu, callsite, func, csd),
->> +
->> +	TP_STRUCT__entry(
->> +		__field(unsigned int, cpu)
->> +		__field(void *, callsite)
->> +		__field(void *, func)
->> +		__field(void *, csd)
->> +	),
->> +
->> +	TP_fast_assign(
->> +		__entry->cpu =3D cpu;
->> +		__entry->callsite =3D (void *)callsite;
->> +		__entry->func =3D func;
->> +		__entry->csd  =3D csd;
->> +	),
->> +
->> +	TP_printk("cpu=3D%u callsite=3D%pS func=3D%pS csd=3D%p",
->> +		  __entry->cpu, __entry->callsite, __entry->func, __entry->csd)
->> +);
+On Thu, 11 May 2023 at 10:36, Etienne Carriere
+<etienne.carriere@linaro.org> wrote:
 >
-> This is for the caller side, right?
+> Dearl all,
 >
+> Typo in my previous post!
+>
+> On Thu, 11 May 2023 at 06:47, Etienne Carriere
+> <etienne.carriere@linaro.org> wrote:
+> >
+> > Hello Jarkko,
+> >
+> > On Thu, 11 May 2023 at 00:12, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > >
+> > > On Fri May 5, 2023 at 9:43 PM EEST, Etienne Carriere wrote:
+> > > > Changes fTPM TEE driver to open the TEE session with REE kernel login
+> > > > identifier rather than public login. This is needed in case fTPM service
+> > > > it denied to user land application and restricted to kernel operating
+> > > > system services only.
+> > > >
+> > > > Signed-off-by: Etienne Carriere <etienne.carriere@linaro.org>
+> > >
+> > >
+> > > Can you bring up a little context here?
+> > >
+> > > What is REE login?
+> > > Does it break backwards compatibility to switch?
+> > > What kind of scenario we are talking about? What does it mean in plain
+> > > English when fTPM service is denied.
+> > > What is fTPM service?
+> >
+> > By fTPM service I meant the services exposed by fTPM through its
+> > OP-TEE interface, that are the commands a client can invoke in fTPM,
+> > see [1].
+> >
+> > Regarding backward compatibility, this change is backward compatible
+> > as far as the OP-TEE entity this driver communicates with is of
+> > revision 3.9.0 or above.
+> > I understand this case should be addressed in some way.
+> >
+> > In current implementation, fTPM can be invoked by Linux kernel drivers
+> > (through Linux kernel tee API as tpm_ftpm_tee currently does) as well
+> > as by userland application (through TEE client library API [2]).
+> > This change makes tpm_ftpm_tee to invoke fTPM interface using a client
+> > identifier stating it is the Linux kernel that invokes it, not a
+> > userland application. fTPM implementation does not check the client
+> > identity when a client opens a session toward it. Therefore using a
+> > public identifier (TEE_IOCTL_LOGIN_PUBLIC) or the OS privilege
+> > identifier (TEE_IOCTL_LOGIN_REE_KERNEL) does not matter, as far as
+> > OP-TEE supports these IDs. The former is native to OP-TEE initial UAPI
+> > [3], the latter was introduced in OP-TEE 3.9.0 [4] and Linux kernel
+> > v5.8 [5].
+> >
+> > That said, this change does fix an existing issue in fTPM integration.
+>
+> Typo, sorry, I meant
+> "That said, this change does **NOT** fix an existing issue in fTPM integration."
+>
+> BR,
+> Etienne
+>
+> > The fTPM entity currently only accepts a single session opened towards
+> > it. This is enforced as fTPM sets property TA_FLAG_SINGLE_INSTANCE and
+> > does not set property TA_FLAG_MULTI_SESSION [6].
+> > Linux kernel tpm_ftpm_tee driver currently opens a session to fTPM at
+> > probe time and releases it at remove time so once the driver is
+> > successfully probed, no userland application can use TEE userland
+> > client API to open another session and communicate with fTPM.
 
-Yep, see usage lower down.
+How about if the fTPM TEE kernel driver is built as a module and
+removed at runtime by a malicious user-space client?
 
->> +
->> +DECLARE_EVENT_CLASS(csd_function,
->> +
->> +	TP_PROTO(smp_call_func_t func, call_single_data_t *csd),
->> +
->> +	TP_ARGS(func, csd),
->> +
->> +	TP_STRUCT__entry(
->> +		__field(void *,	func)
->> +		__field(void *,	csd)
->> +	),
->> +
->> +	TP_fast_assign(
->> +		__entry->func	=3D func;
->> +		__entry->csd	=3D csd;
->> +	),
->> +
->> +	TP_printk("func=3D%pS csd=3D%p", __entry->func, __entry->csd)
->> +);
->> +
->> +DEFINE_EVENT(csd_function, csd_function_entry,
->> +	TP_PROTO(smp_call_func_t func, call_single_data_t *csd),
->> +	TP_ARGS(func, csd)
->> +);
->> +
->> +DEFINE_EVENT(csd_function, csd_function_exit,
->> +	TP_PROTO(smp_call_func_t func, call_single_data_t *csd),
->> +	TP_ARGS(func, csd)
->> +);
->
-> Oh, this is what event_class is for. Thanks for the example :)
->
->> +
->> +#endif /* _TRACE_SMP_H */
->> +
->> +/* This part must be outside protection */
->> +#include <trace/define_trace.h>
->> diff --git a/kernel/smp.c b/kernel/smp.c
->> index ab3e5dad6cfe9..7d28db303e9bc 100644
->> --- a/kernel/smp.c
->> +++ b/kernel/smp.c
->> @@ -27,6 +27,9 @@
->>  #include <linux/jump_label.h>
->>
->>  #include <trace/events/ipi.h>
->> +#define CREATE_TRACE_POINTS
->> +#include <trace/events/smp.h>
->> +#undef CREATE_TRACE_POINTS
->>
->>  #include "smpboot.h"
->>  #include "sched/smp.h"
->> @@ -121,6 +124,14 @@ send_call_function_ipi_mask(struct cpumask *mask)
->>      arch_send_call_function_ipi_mask(mask);
->>  }
->>
->> +static __always_inline void
->> +csd_do_func(smp_call_func_t func, void *info, call_single_data_t *csd)
->> +{
->> +	trace_csd_function_entry(func, csd);
->> +	func(info);
->> +	trace_csd_function_exit(func, csd);
->> +}
->> +
->
-> Good one, a helper to avoid calling those traces everywhere.
->
-> Honest question:
-> Since info =3D=3D csd->info and func =3D=3D csd->func, we could just pass=
- csd, right?
-> I suppose the suggestion on the 3-argument version is to use the values a=
-lready
-> fetched from memory instead of fetching them again. Is that correct?
->
+-Sumit
 
-There's also the special case of CSD_TYPE_TTWU where there is no csd->func,
-instead we have an implicit func mapping to sched_ttwu_pending). I think
-it's preferable to directly feed the right things to the TP than to
-duplicate the "decoding" logic against the *csd passed as TP argument.
-
+> >
+> > [1] https://github.com/microsoft/ms-tpm-20-ref/blob/main/Samples/ARM32-FirmwareTPM/optee_ta/fTPM/fTPM.c#L456
+> > [2] https://github.com/OP-TEE/optee_client
+> > [3] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=967c9cca2cc50569efc65945325c173cecba83bd
+> > [4] https://github.com/OP-TEE/optee_os/commit/78f462f646e7c037bea13aa6282c81f255922a4f
+> > [5] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=104edb94cc4b3101bab33161cd861de13e85610b
+> > [6] https://github.com/microsoft/ms-tpm-20-ref/blob/main/Samples/ARM32-FirmwareTPM/optee_ta/fTPM/user_ta_header_defines.h#L47
+> >
+> > Regards,
+> > Etienne
+> >
+> > >
+> > > > ---
+> > > >  drivers/char/tpm/tpm_ftpm_tee.c | 2 +-
+> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > >
+> > > > diff --git a/drivers/char/tpm/tpm_ftpm_tee.c b/drivers/char/tpm/tpm_ftpm_tee.c
+> > > > index 528f35b14fb6..6d32e260af43 100644
+> > > > --- a/drivers/char/tpm/tpm_ftpm_tee.c
+> > > > +++ b/drivers/char/tpm/tpm_ftpm_tee.c
+> > > > @@ -241,7 +241,7 @@ static int ftpm_tee_probe(struct device *dev)
+> > > >       /* Open a session with fTPM TA */
+> > > >       memset(&sess_arg, 0, sizeof(sess_arg));
+> > > >       export_uuid(sess_arg.uuid, &ftpm_ta_uuid);
+> > > > -     sess_arg.clnt_login = TEE_IOCTL_LOGIN_PUBLIC;
+> > > > +     sess_arg.clnt_login = TEE_IOCTL_LOGIN_REE_KERNEL;
+> > > >       sess_arg.num_params = 0;
+> > > >
+> > > >       rc = tee_client_open_session(pvt_data->ctx, &sess_arg, NULL);
+> > > > --
+> > > > 2.25.1
+> > >
+> > > BR, Jarkko
