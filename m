@@ -2,129 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D18EA6FEC48
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:05:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA9496FEC4F
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 09:06:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237108AbjEKHFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 03:05:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38290 "EHLO
+        id S237405AbjEKHGP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 03:06:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237224AbjEKHFq (ORCPT
+        with ESMTP id S237229AbjEKHF7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 03:05:46 -0400
-Received: from new2-smtp.messagingengine.com (new2-smtp.messagingengine.com [66.111.4.224])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 797D47A81;
-        Thu, 11 May 2023 00:05:05 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.nyi.internal (Postfix) with ESMTP id BAB925802DF;
-        Thu, 11 May 2023 03:04:59 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Thu, 11 May 2023 03:04:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1683788699; x=1683795899; bh=jq
-        n9+i6S4uqktD4A+W4DhCnytpnr+GsOBOt4qhEN0dg=; b=VWXFys/0BV6m5RpZl2
-        THPKXeF4YwHBhmXGHtHdIdnvjgDSIkVaQiJODFgiAPc6l5ALQz6E1fsfw32O/PsQ
-        Bjk+gtazbYhFvNTmKslA+aFPzOW+HvaQwWgGV7Na81W2yU1L9NnA2fg3WeMXz5GE
-        seZASc3hhKXbYSxv6BT00t4r5/jFufhxtUqnoyoM5fYQyu+iVj8XHbFVJX64byjq
-        X8M78d5TZi4FoEjvjWM2+Yjxc5p1KvKkvnFT5I+nby5e/OvMn0j3dy5hHF6jwP1B
-        WL9/ZS/4j9Evjonx35W4rZQP3CZS0VRTQE9LK5pSVKPmpajZqYawAxnBGYZJcaow
-        rlyQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1683788699; x=1683795899; bh=jqn9+i6S4uqkt
-        D4A+W4DhCnytpnr+GsOBOt4qhEN0dg=; b=WQV9C5RAcekZyjyo8xQuUDMSKPBcY
-        lnbfOsB99ZwjDrX/avO6/64hJ07wRRy8asTMoAKht5Urd8CwUSv01sBXRoYk1YkO
-        hJ9L5X9LWOshcTwUqt1dAKQGXHQ/VIUZaBvXt4uYksyjKQhGEL1UnmoQYxwNZTXE
-        AcpPd+6kgB+AsxEpB3TMneh9RB90w1AwzVNkf4uNd+/sn/PKZus8T8lb55Cba6iX
-        v0pISulFuCDCHfbzIbQAd7FrOIOh2QwFWiSbA6qGO84EVcbXRHj5m3P5yvClkjOw
-        jsNeUuXoCisohtsWIuNct7oH+Ek6wgaiB9J4sCYoLQH1FK2GhWVigTe6g==
-X-ME-Sender: <xms:mZNcZMUVOPS4KvcrRFNAUSa7IhpzQkn3-W3hyAEcPGpjW6pJ8ZQctQ>
-    <xme:mZNcZAlfAo8XRJjQBaLVMGz0HL8UQpYnJl5dNRBxac6llOmbhPzHdgXWj6mjLJvW4
-    KxSpT7vo52hd1yTgto>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeegjedgudduhecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
-    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
-    htthgvrhhnpeevhfffledtgeehfeffhfdtgedvheejtdfgkeeuvefgudffteettdekkeeu
-    feehudenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:mZNcZAblEGdGOum33TRaQz934Sm_cmG_AI3VZKduIfaYNrprT_rPsw>
-    <xmx:mZNcZLVTYKpBRbcCBg5nj9ItxXjR4zYy3HG8RCbl6-xzXtwc279zkw>
-    <xmx:mZNcZGkGWHPsPEaCdU8I9oPufVmlwrerXOSIA-mLSRWqjLYl3av57Q>
-    <xmx:m5NcZAtSj8fgu7jGjAdf6t_duFJ2eK_SSZv24q6pAyzIgRcskr8CYQ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 9F8D1B60086; Thu, 11 May 2023 03:04:57 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-415-gf2b17fe6c3-fm-20230503.001-gf2b17fe6
-Mime-Version: 1.0
-Message-Id: <0d8e2503-5d4f-4b60-84ff-01a23bcf557f@app.fastmail.com>
-In-Reply-To: <20230510195806.2902878-1-nphamcs@gmail.com>
-References: <20230510195806.2902878-1-nphamcs@gmail.com>
-Date:   Thu, 11 May 2023 09:04:36 +0200
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Nhat Pham" <nphamcs@gmail.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>
-Cc:     linux-mm@kvack.org, linux-api@vger.kernel.org,
-        kernel-team@meta.com, Linux-Arch <linux-arch@vger.kernel.org>,
-        "Johannes Weiner" <hannes@cmpxchg.org>,
-        "Richard Henderson" <richard.henderson@linaro.org>,
-        "Ivan Kokshaysky" <ink@jurassic.park.msu.ru>,
-        "Matt Turner" <mattst88@gmail.com>,
-        "Russell King" <linux@armlinux.org.uk>,
-        "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Michal Simek" <monstr@monstr.eu>,
-        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
-        "James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-        "Helge Deller" <deller@gmx.de>,
-        "Michael Ellerman" <mpe@ellerman.id.au>,
-        "Nicholas Piggin" <npiggin@gmail.com>,
-        "Christophe Leroy" <christophe.leroy@csgroup.eu>,
-        "Heiko Carstens" <hca@linux.ibm.com>, gor@linux.ibm.com,
-        "Alexander Gordeev" <agordeev@linux.ibm.com>,
-        borntraeger@linux.ibm.com, "Sven Schnelle" <svens@linux.ibm.com>,
-        "Yoshinori Sato" <ysato@users.sourceforge.jp>,
-        "Rich Felker" <dalias@libc.org>,
-        "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
-        "David S . Miller" <davem@davemloft.net>, chris@zankel.net,
-        "Max Filippov" <jcmvbkbc@gmail.com>, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH] cachestat: wire up cachestat for other architectures
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 11 May 2023 03:05:59 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830DC5FF2;
+        Thu, 11 May 2023 00:05:29 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R361e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046059;MF=tianjia.zhang@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0ViJZHzM_1683788724;
+Received: from localhost(mailfrom:tianjia.zhang@linux.alibaba.com fp:SMTPD_---0ViJZHzM_1683788724)
+          by smtp.aliyun-inc.com;
+          Thu, 11 May 2023 15:05:25 +0800
+From:   Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+To:     Serge Hallyn <serge@hallyn.com>, Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        Frederick Lawler <fred@cloudflare.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Joseph Qi <joseph.qi@linux.alibaba.com>,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>
+Subject: [PATCH 0/2] capability: Introduce CAP_BLOCK_ADMIN
+Date:   Thu, 11 May 2023 15:05:18 +0800
+Message-Id: <20230511070520.72939-1-tianjia.zhang@linux.alibaba.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023, at 21:58, Nhat Pham wrote:
-> cachestat is previously only wired in for x86 (and architectures using
-> the generic unistd.h table):
->
-> https://lore.kernel.org/lkml/20230503013608.2431726-1-nphamcs@gmail.com/
->
-> This patch wires cachestat in for all the other architectures.
->
-> Signed-off-by: Nhat Pham <nphamcs@gmail.com>
+Separated fine-grained capability CAP_BLOCK_ADMIN from CAP_SYS_ADMIN.
+For backward compatibility, the CAP_BLOCK_ADMIN capability is included
+within CAP_SYS_ADMIN.
 
-The changes you did here look good, but you missed one
-file that has never been converted to the syscall.tbl format:
-arch/arm64/include/asm/unistd32.h along with the __NR_compat_syscalls
-definition in arch/arm64/include/asm/unistd.h, please add those
-as well, and then
+Some database products rely on shared storage to complete the
+write-once-read-multiple and write-multiple-read-multiple functions.
+When HA occurs, they rely on the PR (Persistent Reservations) protocol
+provided by the storage layer to manage block device permissions to
+ensure data correctness.
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+CAP_SYS_ADMIN is required in the PR protocol implementation of existing
+block devices in the Linux kernel, which has too many sensitive
+permissions, which may lead to risks such as container escape. The
+kernel needs to provide more fine-grained permission management like
+CAP_NET_ADMIN to avoid online products directly relying on root to run.
+
+CAP_BLOCK_ADMIN can also provide support for other block device
+operations that require CAP_SYS_ADMIN capabilities in the future,
+ensuring that applications run with least privilege.
+
+Tianjia Zhang (2):
+  capability: Introduce CAP_BLOCK_ADMIN
+  block: use block_admin_capable() for Persistent Reservations
+
+ block/ioctl.c                       | 10 +++++-----
+ include/linux/capability.h          |  5 +++++
+ include/uapi/linux/capability.h     |  7 ++++++-
+ security/selinux/include/classmap.h |  4 ++--
+ 4 files changed, 18 insertions(+), 8 deletions(-)
+
+-- 
+2.24.3 (Apple Git-128)
+
