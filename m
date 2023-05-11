@@ -2,66 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE7F36FF46C
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:32:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6C06FF46F
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 16:32:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238462AbjEKOce (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 10:32:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52840 "EHLO
+        id S238434AbjEKOcp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 10:32:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238340AbjEKObo (ORCPT
+        with ESMTP id S238465AbjEKObw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 10:31:44 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7ABA10E70;
-        Thu, 11 May 2023 07:30:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683815459; x=1715351459;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=IlKPNhYF4zUphxpvzme0xicSOsh8D7vSbG1nRYC5sXE=;
-  b=Zdkcm6cLPAoOgoJP2hCKfw4QGzUKPfXpv41Y5cZl/1xSjrHpJKylMH/n
-   nBxc8lqZ+/2fgS99FEv/vNlsegzAjOS9B6iKBOuRF9AQAoe3k//ZDOs6y
-   HEDoD2+VzSqaTWlPZ7CfOgE9E7TUvD/uAMO0ZtZUIWpFjQy/kCI1xhO3v
-   W3H/H/zbFw2SHPWEl38If6tu38nUG94tHHw2op5BY0xv6uKcCghcLkldc
-   9UgqsExXKVTiQBjPrkpY0n4bip/EF1R6FHliJ5FaHC5g958GgKXFr+F8Y
-   JJ2sfYAPrHvv3EqDlk2Y126h9FmeFuCYE4JGCZbUcYrSLMw6jbvGWBsY5
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="378639931"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="378639931"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 07:30:36 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="874004479"
-X-IronPort-AV: E=Sophos;i="5.99,266,1677571200"; 
-   d="scan'208";a="874004479"
-Received: from 984fee00a4c6.jf.intel.com ([10.165.58.231])
-  by orsmga005.jf.intel.com with ESMTP; 11 May 2023 07:30:32 -0700
-From:   Yi Liu <yi.l.liu@intel.com>
-To:     joro@8bytes.org, alex.williamson@redhat.com, jgg@nvidia.com,
-        kevin.tian@intel.com, robin.murphy@arm.com,
-        baolu.lu@linux.intel.com
-Cc:     cohuck@redhat.com, eric.auger@redhat.com, nicolinc@nvidia.com,
-        kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.l.liu@intel.com,
-        yi.y.sun@linux.intel.com, peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        zhenzhong.duan@intel.com
-Subject: [PATCH v3 4/4] iommufd/selftest: Add coverage for IOMMU_DEVICE_GET_HW_INFO ioctl
-Date:   Thu, 11 May 2023 07:30:24 -0700
-Message-Id: <20230511143024.19542-5-yi.l.liu@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230511143024.19542-1-yi.l.liu@intel.com>
-References: <20230511143024.19542-1-yi.l.liu@intel.com>
+        Thu, 11 May 2023 10:31:52 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2094.outbound.protection.outlook.com [40.107.244.94])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C69071163D;
+        Thu, 11 May 2023 07:31:02 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=GVeXcz9dIe1cOF8ZFNHU/vGp8a7OHsaU81Dpclv196XUnm54XtU8E32GAElsm6vXiJSGjDivxT+ak1jTCCMK50w6oYosQQSJY/rMQIDsCVs0qb0To6bEU9sKtW6ZYojoojKwo5yFZ9Id/1PrFsTyAOMVqKSpYAv/KcWA4JeklTx59jN7XGgWdQNnlA9iBUBh0yDqOw0bsuh9uQwNuW5LMjByxqQyD3gyyz3BUY1dr9w/yQAa7wyGYfSgLON/CCfJJO5179MTXBjkgzupYL5v4dPtyF+1pw3Rsn4YPcyJg0WG3aTQxAwER8UI+hXlCxlJP29wWlOeUwdVtece6tMC/g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=n0BdTFgIt/06rldDrtz2cg8QkzuSD3hwoqai3ictyJU=;
+ b=YNJnIYXzoJbX14aajluXbYLlnVx7RXMNMnZ3sMktwce2EomxXH8HPpKHpewS6EYjHTQPDfnRR5mRDhvVnG03JrfZdeF0Kw4gUlx6/vno73CCgDiidK5kAz9IUtOzSamqq9DO6Y0yCYOVW1cd/AJSYdu6AXS1VpSqtOOB0rTV9JInZsnKDQjREy6MeS+RQA/x+CllYjdVMWJmp+R1y1tzUM2ybgVydR7iv4GQCpi5h/a7u/xaS51Oo1aDsxKxzmJlUc3tPioil3xuOLgeNhEPhc84ClDZAjC8l6itbZxNRi6nW9udOViAUy1h0mrg3YIHYwYrYjwFqla/UxtJ4eeL2Q==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=n0BdTFgIt/06rldDrtz2cg8QkzuSD3hwoqai3ictyJU=;
+ b=woKT8r6rDg4WV8kbAwwdOI+H3tV5TA06uxyH7cyiW5ThGXs6fXHy8RrF5E6TFOrd6XmE2hVE6r5JIc9tlBVTghRt2HoHRxBqy5IxTWqOn51uL9FRwy7vY0K4MDEMFw07pyf4IySpxnhH+XZwld2l6XhBmqBDhzMSIxCDxyAj7hI=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by SN4PR13MB5677.namprd13.prod.outlook.com (2603:10b6:806:21d::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.29; Thu, 11 May
+ 2023 14:30:58 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.020; Thu, 11 May 2023
+ 14:30:58 +0000
+Date:   Thu, 11 May 2023 16:30:45 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Staging Drivers <linux-staging@lists.linux.dev>,
+        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
+        Linux Kernel Actions <linux-actions@lists.infradead.org>,
+        Diederik de Haas <didi.debian@cknow.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        David Airlie <airlied@redhat.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Kalle Valo <kvalo@kernel.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Deepak R Varma <drv@mailo.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Archana <craechal@gmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: Re: [PATCH 01/10] agp/amd64: Remove GPL distribution notice
+Message-ID: <ZFz8FWoRyHzVseMK@corigine.com>
+References: <20230511133406.78155-1-bagasdotme@gmail.com>
+ <20230511133406.78155-2-bagasdotme@gmail.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511133406.78155-2-bagasdotme@gmail.com>
+X-ClientProxiedBy: AM0PR03CA0038.eurprd03.prod.outlook.com (2603:10a6:208::15)
+ To PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SN4PR13MB5677:EE_
+X-MS-Office365-Filtering-Correlation-Id: f22cbf6c-5b20-4bd7-6354-08db522c55e9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gVHJX7y+9PeHI3RRfuxrl2vtF9JLxJ0tzILRe4TH8ztylfbTLH3mVXXCqZa2tr2Oj694dHLdiG90Xzd7u9yI36Nr5+9iKo4HzOWEpt+3Doj6ccaLsKjutDJpX1yAUsQ8YtGrqjhG4uS6D/TymIxkM5zE0jZHIK11KXvm/Uwm2x7LxV5MG14rqTdNHb8tG7uSw69hI1xtzZtnbGGgM/8NV1KzrOeMPlbn+8RBJOOAeloG/GQvnhl8WWEZJYCXSRgwhUG+RhNgQuKN/S3dOJOAb43gWe/CV+Rwa8hYBietkEmanptsskaUs3UvMU6GlG5u0sHrsW5ThS6stSfTen7xsgpmeEQ1PuqHjDX0/+OjJhNq9WcE2gGqr3/wckKvTu+iA3A1gRKYonYTPxTjSsWNAmjI36Bk2fzHaEr9fO3yibgSasNJ+ZutgvGsQb840C1MpH3ha6LgUjhsHes77PbdZAbAcZiPspiZ6/L7W7Pa+MZni46Fqlkl35DeVm2CQXZYdd0aYD5H/PQN72rlmZPRqhx0VP7GSkS2+lAXm8L2qnn9I8p/3NxWy8gr4JaoS5gKv7hwhbMkvrMU8hdiI4yeXIZyEtQSx/cJpOzuP3iHFwCX2XPVJzyzd/w4dq9dtXBf
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39840400004)(136003)(346002)(366004)(376002)(396003)(451199021)(2616005)(6666004)(36756003)(6486002)(83380400001)(86362001)(6512007)(6506007)(186003)(41300700001)(5660300002)(2906002)(44832011)(38100700002)(54906003)(4744005)(4326008)(66476007)(478600001)(66946007)(66556008)(15650500001)(316002)(6916009)(8936002)(7406005)(7416002)(8676002)(41080700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?tr6wJPrU7DD8T9ygVVSW0yKZ5CJ7CZ6i3LD2FF8DGI1KfTDUcEpsS5M6N2qo?=
+ =?us-ascii?Q?YY185vZGvPmYBZsYSQDc8OvatUQo2HHL51Y9cDSXrxp6lcv2OUGZV8kbSTGH?=
+ =?us-ascii?Q?uEMI2cp6ryMzrjrSi3R50pom5oU43Lvacuw5BLj5tRlZpvB3mBf/tV2+QvAU?=
+ =?us-ascii?Q?dhMGD+xPlIY19ZRQ2p3p56B1oVVHp6DzB62cCbwmyyM4w055sPEGo0nHfL6t?=
+ =?us-ascii?Q?czRfpSadFagVyzgJfS2+jIRZtdNbw3nnbrxNJvPRyo4dcPeB3y/y522wrQ9G?=
+ =?us-ascii?Q?eCcb8wWRuafou92+Zhxi8/AmyagngTAKQQEhbFKmTkeCMUxDJxKI4HHNo9Gv?=
+ =?us-ascii?Q?q9OLuggUuUu9i+rKpgMpevKgdX9YHioR5w2UHnW59x4mBeEp5t6epNOKnNZk?=
+ =?us-ascii?Q?2H/Bu32wP7Zg7t+f+sfAJlmsb0A2EeF7gA6kR+FOIqk1C108KXA5+S9+Q7xI?=
+ =?us-ascii?Q?VI10QdKfGSNb47/9HqCoGHxQbpFTZ4qHW1+3AGTb+yD9nfj2ckMnyfhgVYec?=
+ =?us-ascii?Q?UIwgEAHiHUgAugy8BgsLROvSxeIxE5QxRJI4X+BV7NqjBwGh9jZn4dUzOiYA?=
+ =?us-ascii?Q?3OVlr6gWQoefiqtZnAxTcJcocM3EuiZRq3GqsrKr26K1VX0C6tA8rAehGQSu?=
+ =?us-ascii?Q?sb7XkjHwKm88GoGHqofYEcoeLtDTmgL6589lSRw1b3BBfb/T0xvKxJ1sZI/V?=
+ =?us-ascii?Q?wiDjNSIje85/dAPed9VEjR6aOimBQyLEDXfFUrIFluKbvXBKNEbwKjb1DVDq?=
+ =?us-ascii?Q?FewBzgDH0NYxc4AtxPmxu/7xULCGpd7xEww0sarMCw3h9oJFDZaMcmpqIBMG?=
+ =?us-ascii?Q?ADe1t40j3x48psTfwDLmAkd8iblzvtvY0936LRKancrA4MjxNyCmhxVBU16y?=
+ =?us-ascii?Q?AFWaILs1HHRoK1WvHt0BIgeiG1rfpdN8UDiT+J6ZIkiqlmOybasT+Nxscezi?=
+ =?us-ascii?Q?LJHva8cwtBQgx9D+3S+pmIDJIJBE0FTl5mN6eHVNhIppzFNyka4hwf6ycxze?=
+ =?us-ascii?Q?s5ZLdp8mruxVN1H3WMRz5YI8RHR2v9mUF2E88+YRM6SEgbGwy/GWZk3kd5zV?=
+ =?us-ascii?Q?YuuVeK67Thpabz1stfQ8K7ToaBvIf48QPg7rQa8c1UuwuDh3UpOxML0ZaTe9?=
+ =?us-ascii?Q?WdWjjd8BC3VzxgTFHhK3ywJlf10/0OY9rhDLIuLzqBx9CtiM1eImlv/yG5uX?=
+ =?us-ascii?Q?+d/KLlc++e+1aPA9ak8yOC8+rDORYDK20w+UMV77Ot7lO0MBCNRdjDFtyGPR?=
+ =?us-ascii?Q?6lKQHO9OmqT4hu1nUNRR+ljniAgoEKcctS9TcNmF1VOr+KxOlRsLex7pq8h7?=
+ =?us-ascii?Q?NbLa3RUfYOhvYfphixcCxlQmMDPAt8i174T3K+v8xtIfBPeJXWrgL2oPv2jM?=
+ =?us-ascii?Q?iQNHzNp7k0jrEkC424UoZmp8iQOUW7E8O3kmQkUEXoM7/13R/RmAqL8WRQvD?=
+ =?us-ascii?Q?mcvcxjsweAuwGxUROzTzB9UQLLdQ97+5bDS6gTMRN1mr/RQRcRrrghu2geUm?=
+ =?us-ascii?Q?xZEioIwA+LrpIbl0moF6KY5eBzWT9FEw1eYBZk7XLHpVzyKTNPGxGcPLRnJx?=
+ =?us-ascii?Q?/fTB1iA0CBOixpyYVUwxfHw9df71XmuKgHKLwv39B0P6BzCFEJybaif/ICup?=
+ =?us-ascii?Q?NvO/4iJ/hM1nuVMzosjbFXl9bFLRjrrJZFHS2KM7ffeFPnKbN1u1YGOZrbbM?=
+ =?us-ascii?Q?9ot3Ew=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f22cbf6c-5b20-4bd7-6354-08db522c55e9
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 14:30:57.9909
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: m3nVT/s2WeYEwmp+WJDUzR5E5zlx/iwdRel+/B9CBN0BkE5DKomGPmJE1Npu+PFXXmgOMROITyXnBdqeokjK1FRRxuUST6AeZxf/2kO18ks=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN4PR13MB5677
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,169 +155,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nicolin Chen <nicolinc@nvidia.com>
+On Thu, May 11, 2023 at 08:33:57PM +0700, Bagas Sanjaya wrote:
+> There is already SPDX tag which does the job, so remove the redundant
+> notice.
+> 
+> Cc: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-Add a mock_domain_hw_info function and an iommu_test_hw_info data
-structure. This allows to test the IOMMU_DEVICE_GET_HW_INFO ioctl by
-passing the test_reg value for the mock_dev.
-
-Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-Signed-off-by: Yi Liu <yi.l.liu@intel.com>
----
- drivers/iommu/iommufd/device.c                |  1 +
- drivers/iommu/iommufd/iommufd_test.h          |  9 +++++++
- drivers/iommu/iommufd/selftest.c              | 16 ++++++++++++
- tools/testing/selftests/iommu/iommufd.c       | 17 +++++++++++-
- tools/testing/selftests/iommu/iommufd_utils.h | 26 +++++++++++++++++++
- 5 files changed, 68 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-index bc99d092de8f..4541d785bfd8 100644
---- a/drivers/iommu/iommufd/device.c
-+++ b/drivers/iommu/iommufd/device.c
-@@ -8,6 +8,7 @@
- 
- #include "io_pagetable.h"
- #include "iommufd_private.h"
-+#include "iommufd_test.h"
- 
- static bool allow_unsafe_interrupts;
- module_param(allow_unsafe_interrupts, bool, S_IRUGO | S_IWUSR);
-diff --git a/drivers/iommu/iommufd/iommufd_test.h b/drivers/iommu/iommufd/iommufd_test.h
-index 258de2253b61..3f3644375bf1 100644
---- a/drivers/iommu/iommufd/iommufd_test.h
-+++ b/drivers/iommu/iommufd/iommufd_test.h
-@@ -100,4 +100,13 @@ struct iommu_test_cmd {
- };
- #define IOMMU_TEST_CMD _IO(IOMMUFD_TYPE, IOMMUFD_CMD_BASE + 32)
- 
-+/* Mock structs for IOMMU_DEVICE_GET_HW_INFO ioctl */
-+#define IOMMU_HW_INFO_TYPE_SELFTEST	0xfeedbeef
-+#define IOMMU_HW_INFO_SELFTEST_REGVAL	0xdeadbeef
-+
-+struct iommu_test_hw_info {
-+	__u32 flags;
-+	__u32 test_reg;
-+};
-+
- #endif
-diff --git a/drivers/iommu/iommufd/selftest.c b/drivers/iommu/iommufd/selftest.c
-index bb2cd54ca7b6..af7459e211ad 100644
---- a/drivers/iommu/iommufd/selftest.c
-+++ b/drivers/iommu/iommufd/selftest.c
-@@ -128,6 +128,20 @@ static struct iommu_domain mock_blocking_domain = {
- 	.ops = &mock_blocking_ops,
- };
- 
-+static void *mock_domain_hw_info(struct device *dev, u32 *length)
-+{
-+	struct iommu_test_hw_info *info;
-+
-+	info = kzalloc(sizeof(*info), GFP_KERNEL);
-+	if (!info)
-+		return ERR_PTR(-ENOMEM);
-+
-+	info->test_reg = IOMMU_HW_INFO_SELFTEST_REGVAL;
-+	*length = sizeof(*info);
-+
-+	return info;
-+}
-+
- static struct iommu_domain *mock_domain_alloc(unsigned int iommu_domain_type)
- {
- 	struct mock_iommu_domain *mock;
-@@ -279,6 +293,8 @@ static void mock_domain_set_plaform_dma_ops(struct device *dev)
- static const struct iommu_ops mock_ops = {
- 	.owner = THIS_MODULE,
- 	.pgsize_bitmap = MOCK_IO_PAGE_SIZE,
-+	.hw_info_type = IOMMU_HW_INFO_TYPE_SELFTEST,
-+	.hw_info = mock_domain_hw_info,
- 	.domain_alloc = mock_domain_alloc,
- 	.capable = mock_domain_capable,
- 	.set_platform_dma_ops = mock_domain_set_plaform_dma_ops,
-diff --git a/tools/testing/selftests/iommu/iommufd.c b/tools/testing/selftests/iommu/iommufd.c
-index 8acd0af37aa5..fa2324741ad2 100644
---- a/tools/testing/selftests/iommu/iommufd.c
-+++ b/tools/testing/selftests/iommu/iommufd.c
-@@ -121,6 +121,7 @@ TEST_F(iommufd, cmd_length)
- 	TEST_LENGTH(iommu_ioas_unmap, IOMMU_IOAS_UNMAP);
- 	TEST_LENGTH(iommu_option, IOMMU_OPTION);
- 	TEST_LENGTH(iommu_vfio_ioas, IOMMU_VFIO_IOAS);
-+	TEST_LENGTH(iommu_hw_info, IOMMU_DEVICE_GET_HW_INFO);
- #undef TEST_LENGTH
- }
- 
-@@ -185,6 +186,7 @@ FIXTURE(iommufd_ioas)
- 	uint32_t ioas_id;
- 	uint32_t stdev_id;
- 	uint32_t hwpt_id;
-+	uint32_t device_id;
- 	uint64_t base_iova;
- };
- 
-@@ -211,7 +213,7 @@ FIXTURE_SETUP(iommufd_ioas)
- 
- 	for (i = 0; i != variant->mock_domains; i++) {
- 		test_cmd_mock_domain(self->ioas_id, &self->stdev_id,
--				     &self->hwpt_id, NULL);
-+				     &self->hwpt_id, &self->device_id);
- 		self->base_iova = MOCK_APERTURE_START;
- 	}
- }
-@@ -290,6 +292,19 @@ TEST_F(iommufd_ioas, ioas_area_auto_destroy)
- 	}
- }
- 
-+TEST_F(iommufd_ioas, device_get_hw_info)
-+{
-+	struct iommu_test_hw_info info;
-+
-+	if (self->device_id) {
-+		test_cmd_device_get_hw_info(self->device_id, sizeof(info), &info);
-+		assert(info.test_reg == IOMMU_HW_INFO_SELFTEST_REGVAL);
-+	} else {
-+		test_err_device_get_hw_info(ENOENT, self->device_id,
-+					    sizeof(info), &info);
-+	}
-+}
-+
- TEST_F(iommufd_ioas, area)
- {
- 	int i;
-diff --git a/tools/testing/selftests/iommu/iommufd_utils.h b/tools/testing/selftests/iommu/iommufd_utils.h
-index 70353e68e599..8dced7ef9118 100644
---- a/tools/testing/selftests/iommu/iommufd_utils.h
-+++ b/tools/testing/selftests/iommu/iommufd_utils.h
-@@ -348,3 +348,29 @@ static void teardown_iommufd(int fd, struct __test_metadata *_metadata)
- 	})
- 
- #endif
-+
-+static int _test_cmd_device_get_hw_info(int fd, __u32 device_id,
-+					__u32 data_len, void *data)
-+{
-+	struct iommu_hw_info cmd = {
-+		.size = sizeof(cmd),
-+		.dev_id = device_id,
-+		.data_len = data_len,
-+		.data_ptr = (uint64_t)data,
-+	};
-+	int ret;
-+
-+	ret = ioctl(fd, IOMMU_DEVICE_GET_HW_INFO, &cmd);
-+	if (ret)
-+		return ret;
-+	return 0;
-+}
-+
-+#define test_cmd_device_get_hw_info(device_id, data_len, data)         \
-+	ASSERT_EQ(0, _test_cmd_device_get_hw_info(self->fd, device_id, \
-+						  data_len, data))
-+
-+#define test_err_device_get_hw_info(_errno, device_id, data_len, data) \
-+	EXPECT_ERRNO(_errno,                                           \
-+		     _test_cmd_device_get_hw_info(self->fd, device_id, \
-+						  data_len, data))
--- 
-2.34.1
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
