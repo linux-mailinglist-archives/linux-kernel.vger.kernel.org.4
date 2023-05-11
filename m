@@ -2,245 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 393676FF9B8
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:02:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A2B66FF9BB
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 21:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238974AbjEKTCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 15:02:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34064 "EHLO
+        id S239018AbjEKTDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 15:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238502AbjEKTCo (ORCPT
+        with ESMTP id S238921AbjEKTDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 15:02:44 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2C9830E7
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 12:02:42 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f42397f41fso215585e9.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 12:02:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683831761; x=1686423761;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aRtr65hf9ccqynjXPIiNojbvPdO5ozceM8RcS1ysWrc=;
-        b=ovDltNBSrtnPvOFyWQzOYXTGlTtE+TOG9cKwFIL5AdP69UNcoYy5wLhZ/5uq8JhWjt
-         wqaayeZLt0bd3vl25p1Bre8bkvv+cx225RlJe4dvL/1fcYJmD2NVvLblW2G3v5klZ3Qo
-         Oz+WPQ6wI6V2cqEici32aQJtT44Zq7NUsOHa0xAcOamhxIHQm6XyoU/abiCCLT54cnXr
-         0B4G0xPk/KZdFYZoyESm7BKJDiBxPy1rsqe0gnWwHGX/p9nwRS8oMW0XCNArXDYGLE+2
-         U/GGopoV4e8XOWHxOWmikbak5JG0Vt6k5knpIr+REfP46AlSKy0WqO9+kgZ8Yj6dDkrB
-         uMfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683831761; x=1686423761;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aRtr65hf9ccqynjXPIiNojbvPdO5ozceM8RcS1ysWrc=;
-        b=cjhbudxCChFl4M/48CB4In5hjmoZIQjhRfq8gPMh2LmQs+eqHIVXXnWHIUQEmdh/Gy
-         0PaZaA+LDfg1v6almoG59Jkn7WKiYJ8BjLu10MZ874jqC69CNL2q2hYJRE1gyvq/aChd
-         Z5BpGZ1EergOxtuMNp0MXHfvDL+EBkn4zJzam507/Dp/rrGttlddCU1tsPuyi4Z/EdDy
-         PnQmC1RWlYhzstKoC7Hs4H3l/2Rnnxe1/+JM+jsQfq1Ln3kLHtasc0yeHToFJVkYo44r
-         h27Gslc2Zpha+jZbMbAHKpa/WxVxsfPgV9PRNLt/8qmf2NZ/TPnvEFa7TiBlP6P+M6TL
-         xt1Q==
-X-Gm-Message-State: AC+VfDy/3CM8+dYJBLcVd2rTvi8NMPTVwJHS5mvOb4mMNhjwBe6ji3KN
-        s3NPVWI0Val0DpsL2CnvQu19BvgjOLBJfYDV3gcRTg==
-X-Google-Smtp-Source: ACHHUZ6EwkB6TpSsKUGSeGR7/PBzBofH+A6xbPaLmP7AOuMFn9l2HC3PcKPvMaY8gM8wc456ZjAzGYgborz6n+SaqBc=
-X-Received: by 2002:a05:600c:3b18:b0:3f1:9a3d:4f7f with SMTP id
- m24-20020a05600c3b1800b003f19a3d4f7fmr25701wms.1.1683831760922; Thu, 11 May
- 2023 12:02:40 -0700 (PDT)
+        Thu, 11 May 2023 15:03:47 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2079.outbound.protection.outlook.com [40.107.244.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C687525F;
+        Thu, 11 May 2023 12:03:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=IxzolSa5dlvcpD0o6dmbwEzANLeig9TIVN0ATHPLP5nz+U/gu/zWdZTVXflI2n0l4D19UuDvso7ZzNp0Sxpiodvqf2dksYEYs1P/bHLIuHahRcs4X0zNMFprSYq2xHIMYf/97mNxHK1Md0ONwjfoVgj+RxiT8Rn9oD1szFeBrtPayqMc/HibDAfmXQ2TfUej+8zGKNRfX6K7ebEhbhIF/yDTBOmNknr5BdPwTN9jZu4KujFEduQW3QlqDWYkjW8eRYD0ar3vBOy3IwqTHqcLFrQJqe85CWIrqLMFIVgedbty1Ep+lvPU1R7ozut97wTE/imqGz7p+rKqvc68/UG7xA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sDqNHYPIL6vanMn8Yj+2NCwT4/TcfeHrHP8z45/FHWE=;
+ b=HznshgiH96DR3D5qYHhat6qd4ri11nqZEH59Iz+OsL8eOlC7y2SSX6J3ZjfEvoWlD1bhYxpI357RMKhBI5xILapvOy15/3Nj3saK9+OxKU1HVc0YfGKRKUO4cIhcZ74sM7MD0MYcS5i3j3JTnqZ0XpcptULXBWWNW5Sf8zI4an5GBBJL1EtnHuQfgjLIC2ghoNKp81H9whJ7jhjNYxaz6zZmrYA0NsmwqEzZFG/aWC73C7uxLVCZ0Q3BF/21Va5H7nfw/caGgKvgesoDBLXYfnNU1wSM2zovplnYsAD8APGoKCL+y+kB+5jg4Oz/LwumMg3ne6gEsqP1WWES7IVCdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sDqNHYPIL6vanMn8Yj+2NCwT4/TcfeHrHP8z45/FHWE=;
+ b=jNyGDGrf7tvNu7bQYAATrVl6sIZNpGRBDteNPAV0zAvwbPJtHvzhU+bOzKXPeM6pYQyHuiY6ICNpnB61cgO/aWRsh8iXNqFpSOlLHJEP2LdHYoKGSJjX8+fKJaKb0cdhE6hAc9z4Pa1/5jltQLZwba+uNPxgEU1104zLECQSqFKf1yQKZxtGy4xmk4QG3mmC2oYVXI+1SGSFC5pm065cbkjLDQj7oJSV/Eq3WzAmQkoYmBC4xspeGEX0mnWm+GdIvImcaL3du9oj7DuNpd1H90W/pE135a9qYd7nlMY0cdTpSnPm4JQkLxuutMSfcMlS/TgehwuI6vOz48Gtle5Ctg==
+Received: from BN8PR04CA0029.namprd04.prod.outlook.com (2603:10b6:408:70::42)
+ by MN6PR12MB8515.namprd12.prod.outlook.com (2603:10b6:208:470::15) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6363.32; Thu, 11 May
+ 2023 19:03:44 +0000
+Received: from BN8NAM11FT075.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:70:cafe::a1) by BN8PR04CA0029.outlook.office365.com
+ (2603:10b6:408:70::42) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.21 via Frontend
+ Transport; Thu, 11 May 2023 19:03:44 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT075.mail.protection.outlook.com (10.13.176.208) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6387.22 via Frontend Transport; Thu, 11 May 2023 19:03:43 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Thu, 11 May 2023
+ 12:03:28 -0700
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Thu, 11 May
+ 2023 12:03:28 -0700
+Received: from vdi.nvidia.com (10.127.8.12) by mail.nvidia.com (10.129.68.8)
+ with Microsoft SMTP Server id 15.2.986.37 via Frontend Transport; Thu, 11 May
+ 2023 12:03:27 -0700
+From:   Liming Sun <limings@nvidia.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        David Thompson <davthompson@nvidia.com>
+CC:     Liming Sun <limings@nvidia.com>, <linux-mmc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v1 1/1] mmc: sdhci-of-dwcmshc: Add runtime PM operations for BlueField-3
+Date:   Thu, 11 May 2023 15:03:17 -0400
+Message-ID: <79137159a833c164ea8ea3f05d8d6d9537db2f42.1683747334.git.limings@nvidia.com>
+X-Mailer: git-send-email 2.30.1
 MIME-Version: 1.0
-References: <20230329140642.2186644-1-heiko.stuebner@vrull.eu>
- <20230329140642.2186644-5-heiko.stuebner@vrull.eu> <CAJkfWY63E7x-OQ2yTKJ03Sd7P2AuLruan_41EXzYcTZpNnLPzw@mail.gmail.com>
- <3540048.LM0AJKV5NW@diego>
-In-Reply-To: <3540048.LM0AJKV5NW@diego>
-From:   Nathan Huckleberry <nhuck@google.com>
-Date:   Thu, 11 May 2023 12:02:00 -0700
-Message-ID: <CAJkfWY524YtCXebG1Nj1=wGjGJpwRMCyOQyXk4fpg3BvPM17zw@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] RISC-V: crypto: add accelerated GCM GHASH implementation
-To:     =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>
-Cc:     palmer@dabbelt.com, paul.walmsley@sifive.com,
-        aou@eecs.berkeley.edu, herbert@gondor.apana.org.au,
-        davem@davemloft.net, conor.dooley@microchip.com,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-crypto@vger.kernel.org, christoph.muellner@vrull.eu
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT075:EE_|MN6PR12MB8515:EE_
+X-MS-Office365-Filtering-Correlation-Id: dddb80ba-4746-4c16-c13f-08db52527104
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5+H01Zj6qJrFLFsJpRwl6wTY6Sq4WsP18IQccdmq4HMOz9Uq+uOLE2R7giW5lWno8smitFBC9SPqiQG4iq/5uOUq4jjsx7J1vr10rSYcEwkmSebp5F4vmF9uzuy9DHyrpiMpmLTZaO6nb+iK3JVv94r6Zf8Jd7xB9fepZR2DxJPGARwDif/bictkRu4+kuBXWOiEgQ0FKhgDl3yuhNeRbQtLl4op1uzKjnlh3dTVo++Ln0qaDHqyqbV7mWOUkr4JKSBO2XGsgJodYF6j9km8KoGtRgTxkgh3Nj1sjQpFb9mYZoyQybbda/RgLvTrtQBRC/B9xhsHJSII5935h6xNXAoMEDf120umHQSJLBHa4kmrPyJCFerAfPZz6wY6Ha8dXEtkNJWVFD9DNQ2erkR3DgwCVCqXJBOQZAWbyXxLZudQrfarc8gxKkh/sqcJkXErjUf1kTnS0rUj3bpnKocwcGO1kYj1gAwSx+a6PtN5O8zfJlq9LXxfPmA8MrouZe39TfG/shoHfwCBgviPt23d0u2LNdq9i2tQmOMcXY/mF8n3eKuKu4wIXCeqXeDwLkA/Wng090GTIK7gpBbRol4cidsRLdQonPEY0xe9Yn8OOp3e0UELKeDwlC3YNA+WLRZWwqrujvH5xEviSVzO0jLwgF4/LmSRdEKrV+nDhYZI5kbSfQfgkZptWfdJ9b9gSQwxuRXZvCCiRzpizHXYhSzjh6fnG+MnYM/76VMfj99wvTE=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(136003)(396003)(39860400002)(346002)(376002)(451199021)(46966006)(40470700004)(36840700001)(40460700003)(7696005)(36756003)(82310400005)(70206006)(478600001)(6636002)(70586007)(4326008)(316002)(54906003)(110136005)(86362001)(47076005)(8676002)(26005)(6666004)(336012)(2616005)(36860700001)(186003)(2906002)(41300700001)(426003)(40480700001)(8936002)(356005)(5660300002)(7636003)(83380400001)(82740400003)(133343001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 May 2023 19:03:43.8115
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: dddb80ba-4746-4c16-c13f-08db52527104
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT075.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR12MB8515
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 3:30=E2=80=AFAM Heiko St=C3=BCbner <heiko@sntech.de=
-> wrote:
->
-> Hi Nathan,
->
-> Am Dienstag, 11. April 2023, 17:00:00 CEST schrieb Nathan Huckleberry:
-> > On Wed, Mar 29, 2023 at 7:08=E2=80=AFAM Heiko Stuebner <heiko@sntech.de=
-> wrote:
-> > > +struct riscv64_ghash_ctx {
-> > > +       void (*ghash_func)(u64 Xi[2], const u128 Htable[16],
-> > > +                          const u8 *inp, size_t len);
-> > > +
-> > > +       /* key used by vector asm */
-> > > +       u128 htable[16];
-> >
-> > This field looks too big. The assembly only loads the first 128-byte
-> > value from this table.
->
-> OpenSSL defines the Htable field handed to the init- and the other
-> functions as this "u128 Htable[16]"    [0] . As I really like the concept
-> of keeping in sync with openSSL, I guess I'd rather not change that.
->
-> [0] https://github.com/openssl/openssl/blob/master/crypto/modes/gcm128.c#=
-L88
->
->
-> > Is this copied from another implementation? There's an optimization
-> > where you precompute the first N powers of H so that you can perform 1
-> > finite field reduction for every N multiplications, but it doesn't
-> > look like that's being used here.
->
-> The whole crypto-specific code comes from openSSL itself, so for now I
-> guess I'd like to try keeping things the same.
->
->
-> > > +#define RISCV64_ZBC_SETKEY(VARIANT, GHASH)                          =
-   \
-> > > +void gcm_init_rv64i_ ## VARIANT(u128 Htable[16], const u64 Xi[2]);  =
-   \
-> > > +static int riscv64_zbc_ghash_setkey_ ## VARIANT(struct crypto_shash =
-*tfm,      \
-> > > +                                          const u8 *key,            =
-   \
-> > > +                                          unsigned int keylen)      =
-   \
-> > > +{                                                                   =
-   \
-> > > +       struct riscv64_ghash_ctx *ctx =3D crypto_tfm_ctx(crypto_shash=
-_tfm(tfm)); \
-> > > +       const u64 k[2] =3D { cpu_to_be64(((const u64 *)key)[0]),     =
-     \
-> > > +                          cpu_to_be64(((const u64 *)key)[1]) };     =
-   \
-> > > +                                                                    =
-   \
-> > > +       if (keylen !=3D GHASH_BLOCK_SIZE)                            =
-     \
-> > > +               return -EINVAL;                                      =
-   \
-> > > +                                                                    =
-   \
-> > > +       memcpy(&ctx->key, key, GHASH_BLOCK_SIZE);                    =
-   \
-> > > +       gcm_init_rv64i_ ## VARIANT(ctx->htable, k);                  =
-   \
-> > > +                                                                    =
-   \
-> > > +       ctx->ghash_func =3D gcm_ghash_rv64i_ ## GHASH;               =
-     \
-> > > +                                                                    =
-   \
-> > > +       return 0;                                                    =
-   \
-> > > +}
-> >
-> > I'd prefer three identical functions over a macro here. Code searching
-> > tools and compiler warnings are significantly worse with macros.
->
-> done :-)
->
->
-> > > +
-> > > +static int riscv64_zbc_ghash_update(struct shash_desc *desc,
-> > > +                          const u8 *src, unsigned int srclen)
-> > > +{
-> > > +       unsigned int len;
-> > > +       struct riscv64_ghash_ctx *ctx =3D crypto_tfm_ctx(crypto_shash=
-_tfm(desc->tfm));
-> > > +       struct riscv64_ghash_desc_ctx *dctx =3D shash_desc_ctx(desc);
-> > > +
-> > > +       if (dctx->bytes) {
-> > > +               if (dctx->bytes + srclen < GHASH_DIGEST_SIZE) {
-> > > +                       memcpy(dctx->buffer + dctx->bytes, src,
-> > > +                               srclen);
-> > > +                       dctx->bytes +=3D srclen;
-> > > +                       return 0;
-> > > +               }
-> > > +               memcpy(dctx->buffer + dctx->bytes, src,
-> > > +                       GHASH_DIGEST_SIZE - dctx->bytes);
-> > > +
-> > > +               ctx->ghash_func(dctx->shash, ctx->htable,
-> > > +                               dctx->buffer, GHASH_DIGEST_SIZE);
-> > > +
-> > > +               src +=3D GHASH_DIGEST_SIZE - dctx->bytes;
-> > > +               srclen -=3D GHASH_DIGEST_SIZE - dctx->bytes;
-> > > +               dctx->bytes =3D 0;
-> > > +       }
-> > > +       len =3D srclen & ~(GHASH_DIGEST_SIZE - 1);
-> > > +
-> > > +       if (len) {
-> > > +               gcm_ghash_rv64i_zbc(dctx->shash, ctx->htable,
-> > > +                               src, len);
-> > > +               src +=3D len;
-> > > +               srclen -=3D len;
-> > > +       }
-> > > +
-> > > +       if (srclen) {
-> > > +               memcpy(dctx->buffer, src, srclen);
-> > > +               dctx->bytes =3D srclen;
-> > > +       }
-> > > +       return 0;
-> > > +}
-> > > +
-> > > +static int riscv64_zbc_ghash_final(struct shash_desc *desc, u8 *out)
-> > > +{
-> > > +       int i;
-> > > +       struct riscv64_ghash_ctx *ctx =3D crypto_tfm_ctx(crypto_shash=
-_tfm(desc->tfm));
-> > > +       struct riscv64_ghash_desc_ctx *dctx =3D shash_desc_ctx(desc);
-> > > +
-> > > +       if (dctx->bytes) {
-> > > +               for (i =3D dctx->bytes; i < GHASH_DIGEST_SIZE; i++)
-> > > +                       dctx->buffer[i] =3D 0;
-> > > +               ctx->ghash_func(dctx->shash, ctx->htable,
-> > > +                               dctx->buffer, GHASH_DIGEST_SIZE);
-> >
-> > Can we do this without an indirect call?
->
-> hmm, the indirect call is in both riscv64_zbc_ghash_update() and
-> riscv64_zbc_ghash_final() . And I found a missing one at the bottom
-> of riscv64_zbc_ghash_update(), where gcm_ghash_rv64i_zbc() is
-> called right now.
->
-> Getting rid of the indirect call would mean duplicating both of these
-> functions for all instances. Especially with the slightly higher
-> complexity of the update this somehow seems not the best way to go.
+This commit implements the runtime PM operations for BlueField-3 SoC
+to disable eMMC card clock when idle.
 
-Indirect calls are quite expensive. They are an issue for things like
-disk/filesystem encryption because it introduces a ton of latency per
-block.
+Reviewed-by: David Thompson <davthompson@nvidia.com>
+Signed-off-by: Liming Sun <limings@nvidia.com>
+---
+ drivers/mmc/host/sdhci-of-dwcmshc.c | 76 ++++++++++++++++++++++++++++-
+ 1 file changed, 74 insertions(+), 2 deletions(-)
 
-I think this is a candidate for static calls. It looks like static
-call support hasn't been accepted for riscv yet. Maybe just add a TODO
-for now?
+diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
+index e68cd87998c8..19ce058fc5f0 100644
+--- a/drivers/mmc/host/sdhci-of-dwcmshc.c
++++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
+@@ -15,6 +15,7 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
++#include <linux/pm_runtime.h>
+ #include <linux/reset.h>
+ #include <linux/sizes.h>
+ 
+@@ -542,8 +543,10 @@ static int dwcmshc_probe(struct platform_device *pdev)
+ 	}
+ 
+ #ifdef CONFIG_ACPI
+-	if (pltfm_data == &sdhci_dwcmshc_bf3_pdata)
++	if (pltfm_data == &sdhci_dwcmshc_bf3_pdata) {
+ 		sdhci_enable_v4_mode(host);
++		pm_runtime_enable(dev);
++	}
+ #endif
+ 
+ 	host->mmc->caps |= MMC_CAP_WAIT_WHILE_BUSY;
+@@ -646,7 +649,76 @@ static int dwcmshc_resume(struct device *dev)
+ }
+ #endif
+ 
+-static SIMPLE_DEV_PM_OPS(dwcmshc_pmops, dwcmshc_suspend, dwcmshc_resume);
++#ifdef CONFIG_PM
++
++#ifdef CONFIG_ACPI
++static void dwcmshc_enable_card_clk(struct sdhci_host *host)
++{
++	u16 ctrl;
++
++	ctrl = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
++	ctrl |= SDHCI_CLOCK_CARD_EN;
++	sdhci_writew(host, ctrl, SDHCI_CLOCK_CONTROL);
++}
++
++static void dwcmshc_disable_card_clk(struct sdhci_host *host)
++{
++	u16 ctrl;
++
++	ctrl = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
++	ctrl &= ~SDHCI_CLOCK_CARD_EN;
++	sdhci_writew(host, ctrl, SDHCI_CLOCK_CONTROL);
++}
++#endif
++
++static int dwcmshc_runtime_suspend(struct device *dev)
++{
++	struct sdhci_host *host = dev_get_drvdata(dev);
++	const struct sdhci_pltfm_data *pltfm_data;
++	int ret = 0;
++
++	pltfm_data = device_get_match_data(dev);
++	if (!pltfm_data)
++		return -ENODEV;
++
++#ifdef CONFIG_ACPI
++	if (pltfm_data == &sdhci_dwcmshc_bf3_pdata) {
++		ret = sdhci_runtime_suspend_host(host);
++		if (!ret)
++			dwcmshc_disable_card_clk(host);
++	}
++#endif
++
++	return ret;
++}
++
++static int dwcmshc_runtime_resume(struct device *dev)
++{
++	struct sdhci_host *host = dev_get_drvdata(dev);
++	const struct sdhci_pltfm_data *pltfm_data;
++	int ret = 0;
++
++	pltfm_data = device_get_match_data(dev);
++	if (!pltfm_data)
++		return -ENODEV;
++
++#ifdef CONFIG_ACPI
++	if (pltfm_data == &sdhci_dwcmshc_bf3_pdata) {
++		dwcmshc_enable_card_clk(host);
++		ret = sdhci_runtime_resume_host(host, 0);
++	}
++#endif
++
++	return ret;
++}
++
++#endif
++
++static const struct dev_pm_ops dwcmshc_pmops = {
++	SET_SYSTEM_SLEEP_PM_OPS(dwcmshc_suspend, dwcmshc_resume)
++	SET_RUNTIME_PM_OPS(dwcmshc_runtime_suspend,
++			   dwcmshc_runtime_resume, NULL)
++};
+ 
+ static struct platform_driver sdhci_dwcmshc_driver = {
+ 	.driver	= {
+-- 
+2.30.1
 
-See:
-https://lwn.net/Articles/771209/
-https://lore.kernel.org/all/tencent_A8A256967B654625AEE1DB222514B0613B07@qq=
-.com/
-
->
->
-> Thanks for your pointers
-> Heiko
->
->
-
-Thanks,
-Huck
