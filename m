@@ -2,62 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07B1B6FF191
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 14:33:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63D2B6FF198
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 14:33:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237540AbjEKMc4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 08:32:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34988 "EHLO
+        id S237730AbjEKMdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 08:33:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238002AbjEKMcx (ORCPT
+        with ESMTP id S237570AbjEKMda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 08:32:53 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8358749CC;
-        Thu, 11 May 2023 05:32:43 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-965ac4dd11bso1696294066b.2;
-        Thu, 11 May 2023 05:32:43 -0700 (PDT)
+        Thu, 11 May 2023 08:33:30 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7737293F4;
+        Thu, 11 May 2023 05:33:04 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-50bc040c7b8so13019291a12.2;
+        Thu, 11 May 2023 05:33:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20221208; t=1683808362; x=1686400362;
+        d=googlemail.com; s=20221208; t=1683808382; x=1686400382;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UgBzRU2uzV6XtIpRwtsK9Z2OAn4rY86ByIz0hF5YH7o=;
-        b=fKCyLvQpJWN+ijF8GWDrLH9ehTGQE0KsXkAjZxM35ki3X3vx59D0pIqoph9fKAHmNn
-         l0ME89DxdGx2vpOhdNI1Azj8YNlRJBQerZkMcC0YUi2hcDJ8Wq1GX3tPoOU2F504Ednw
-         /IdLt0jb1+O+tgKST3w+4mIKcPZBExmI17Tnm49TDZNwLamqbAIYnxYD8eZAV3fHJU6D
-         JVEdXCcNpXSagdQ0YwoCQ7mbtENDsAwk6uYAcbqdkHL7yhrRoNcF2FP6DqWTXc8PkWS1
-         5xlDkLHR/bDifLxBpyO2tP+7ZhLkG37NJBbDy2oQIQj5sNffA8BgKQ8Pf60DhcrqBqpg
-         Ktbg==
+        bh=B1HnU7hHqbTpTiFx0D4GmXFi6g1csMfXh2pFRmqf63Q=;
+        b=cZOkZddVd06q0IYtPQjNvERik5w+80yb6gfW6TPrOrwznxgHEEZgC4SocVmagWAdxb
+         eZdcQwGi4lch1wKUmPdKMv4tAbDXvPO1fFAXO1Xqh2lO3AIUUpUPC70b/eFZQ4vjXC/k
+         Z/h1oA/vdZvVYjPlNWRZ7ThNRzdyuqmpPRIr8YmojTn4Qh25tGvkFvrIlhn70W4FoMvW
+         KuVuAtDuAKnEltwY4GQ4kbrXIyhHnbybA1iYLv8qsr1dSELGyWWcDauyJOhyD8nKTvE7
+         4zzEx2aM53p+TyrAv+9gF6Map+JhEgh55wsTYriqMLmLe20hfp2bG3E3Z06xlrBmwEEr
+         j5Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683808362; x=1686400362;
+        d=1e100.net; s=20221208; t=1683808382; x=1686400382;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UgBzRU2uzV6XtIpRwtsK9Z2OAn4rY86ByIz0hF5YH7o=;
-        b=VqIxBRLGLNENMb5s7RJZrHJhX5J0RezW5qhtcpKavP/v5h17lY87KDOjYU6KIT2eyz
-         TBiaf4ML9eh/KQl8cKnKuqPFYwsxKqGPOqyqxBJYbEP2SUjevjaBiV6HX+V/qpLIWD8q
-         2snG5AUnrE74xmJ48XJCd882B8pZrN7HtxfuhBebrVBVFjknIryS1nsW033HDUQoMxLe
-         Qwydp6S91GR3fxQE1/H+ylqTtJE4EFEfROi5JtqWGdjRH1ND0byOR3IgG09Fy2MFp3SA
-         c5SvrBBPsyPJbK/jSmgdsW83d1UefNgZUUB71oGTxy9BQ94WOXnur3jyXn1+Y1QQ2LCY
-         pyng==
-X-Gm-Message-State: AC+VfDwPmnPY28B192v/kBrKnZN0Ssaww5LM94rXgvE0ty92i7MWA2TM
-        am4cKfn83VHEGthOFaW9OSn4AoLszpI=
-X-Google-Smtp-Source: ACHHUZ4Hw0BvIywoUdS8T4+40B48lJk0jGBfqwzfbOZrikpfDpqi3VmFOGmP3duVEiEO4h985xFPLQ==
-X-Received: by 2002:a17:907:6e0a:b0:967:e015:f542 with SMTP id sd10-20020a1709076e0a00b00967e015f542mr12764969ejc.44.1683808361963;
-        Thu, 11 May 2023 05:32:41 -0700 (PDT)
+        bh=B1HnU7hHqbTpTiFx0D4GmXFi6g1csMfXh2pFRmqf63Q=;
+        b=dYf9cQDLjswyRAhn7zD0Qu/SQqHDd6f4/1qE4Lz9PALPZSwnnybROeLCV9JJPJMCcd
+         Jf09qHGT/qtFqlV1XFvdoMdZ9dyI2XRwNAAko33a/+o/IlU1lGq9j51CX+FPpCFP6oYA
+         /nxLoMIhJR1sW39hB7NX+TAw9nw0H32/Jo1ANu58S/3sqxS6IBZZAbLl+irUrPEUs4cI
+         JftQ55deW6sOCnaYh9qi0y4HWp3f8r5Otc1TuEVVEAuYlD6PzPRzKXjnNW0b98CVOPp5
+         1i/7wKiVw9K3qrw8nUzD4nKK+KPzdOyV1CAF6jY2Vsl7BGav34VfIPYtKCAebfSbE1Xt
+         ZI0w==
+X-Gm-Message-State: AC+VfDwOZdXGAJ6xHHRV4NVTK/SEvC1T4R1LJs7blxMoFB5/CFenGMis
+        5u1Sd29x0tGCKl5uvuXjuRKmhEyw6VUetw==
+X-Google-Smtp-Source: ACHHUZ4RhLm/85qEFAJSfeTkxZQiCvA9R35mMVU82bid3wS2Hw3iIXntAX9PvWGjM5zEmZdBdUqfnA==
+X-Received: by 2002:a17:907:1b17:b0:965:6075:d0e1 with SMTP id mp23-20020a1709071b1700b009656075d0e1mr16727032ejc.72.1683808382331;
+        Thu, 11 May 2023 05:33:02 -0700 (PDT)
 Received: from debianHome.localdomain (dynamic-077-008-180-228.77.8.pool.telefonica.de. [77.8.180.228])
-        by smtp.gmail.com with ESMTPSA id s24-20020aa7d798000000b0050bc37ff74asm2950213edq.44.2023.05.11.05.32.41
+        by smtp.gmail.com with ESMTPSA id mz11-20020a1709071b8b00b009603d34cfecsm3908638ejc.164.2023.05.11.05.33.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 05:32:41 -0700 (PDT)
+        Thu, 11 May 2023 05:33:02 -0700 (PDT)
 From:   =?UTF-8?q?Christian=20G=C3=B6ttsche?= <cgzones@googlemail.com>
 To:     selinux@vger.kernel.org
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] selinux: make header files self-including
-Date:   Thu, 11 May 2023 14:32:35 +0200
-Message-Id: <20230511123236.723025-1-cgzones@googlemail.com>
+Cc:     David Howells <dhowells@redhat.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Paul Moore <paul@paul-moore.com>,
+        James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>, keyrings@vger.kernel.org,
+        linux-security-module@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] security: keys: perform capable check only on privileged operations
+Date:   Thu, 11 May 2023 14:32:52 +0200
+Message-Id: <20230511123252.723185-1-cgzones@googlemail.com>
 X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -72,42 +74,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Include all necessary headers in header files to enable third party
-applications, like LSP servers, to resolve all used symbols.
+If the current task fails the check for the queried capability via
+`capable(CAP_SYS_ADMIN)` LSMs like SELinux generate a denial message.
+Issuing such denial messages unnecessarily can lead to a policy author
+granting more privileges to a subject than needed to silence them.
 
-ibpkey.h: include "../flask.h" for SECINITSID_UNLABELED
-initial_sid_to_string.h: include <linux/stddef.h> for NULL
+Reorder CAP_SYS_ADMIN checks after the check whether the operation is
+actually privileged.
 
 Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
 ---
- security/selinux/include/ibpkey.h                | 1 +
- security/selinux/include/initial_sid_to_string.h | 3 +++
- 2 files changed, 4 insertions(+)
+ security/keys/keyctl.c | 11 ++++++++---
+ 1 file changed, 8 insertions(+), 3 deletions(-)
 
-diff --git a/security/selinux/include/ibpkey.h b/security/selinux/include/ibpkey.h
-index c992f83b0aae..f8a791b07092 100644
---- a/security/selinux/include/ibpkey.h
-+++ b/security/selinux/include/ibpkey.h
-@@ -15,6 +15,7 @@
- #define _SELINUX_IB_PKEY_H
+diff --git a/security/keys/keyctl.c b/security/keys/keyctl.c
+index d54f73c558f7..19be69fa4d05 100644
+--- a/security/keys/keyctl.c
++++ b/security/keys/keyctl.c
+@@ -980,14 +980,19 @@ long keyctl_chown_key(key_serial_t id, uid_t user, gid_t group)
+ 	ret = -EACCES;
+ 	down_write(&key->sem);
  
- #include <linux/types.h>
-+#include "../flask.h"
+-	if (!capable(CAP_SYS_ADMIN)) {
++	{
++		bool is_privileged_op = false;
++
+ 		/* only the sysadmin can chown a key to some other UID */
+ 		if (user != (uid_t) -1 && !uid_eq(key->uid, uid))
+-			goto error_put;
++			is_privileged_op = true;
  
- #ifdef CONFIG_SECURITY_INFINIBAND
- void sel_ib_pkey_flush(void);
-diff --git a/security/selinux/include/initial_sid_to_string.h b/security/selinux/include/initial_sid_to_string.h
-index 60820517aa43..ecc6e74fa09b 100644
---- a/security/selinux/include/initial_sid_to_string.h
-+++ b/security/selinux/include/initial_sid_to_string.h
-@@ -1,4 +1,7 @@
- /* SPDX-License-Identifier: GPL-2.0 */
+ 		/* only the sysadmin can set the key's GID to a group other
+ 		 * than one of those that the current process subscribes to */
+ 		if (group != (gid_t) -1 && !gid_eq(gid, key->gid) && !in_group_p(gid))
++			is_privileged_op = true;
 +
-+#include <linux/stddef.h>
-+
- static const char *const initial_sid_to_string[] = {
- 	NULL,
- 	"kernel",
++		if (is_privileged_op && !capable(CAP_SYS_ADMIN))
+ 			goto error_put;
+ 	}
+ 
+@@ -1088,7 +1093,7 @@ long keyctl_setperm_key(key_serial_t id, key_perm_t perm)
+ 	down_write(&key->sem);
+ 
+ 	/* if we're not the sysadmin, we can only change a key that we own */
+-	if (capable(CAP_SYS_ADMIN) || uid_eq(key->uid, current_fsuid())) {
++	if (uid_eq(key->uid, current_fsuid()) || capable(CAP_SYS_ADMIN)) {
+ 		key->perm = perm;
+ 		notify_key(key, NOTIFY_KEY_SETATTR, 0);
+ 		ret = 0;
 -- 
 2.40.1
 
