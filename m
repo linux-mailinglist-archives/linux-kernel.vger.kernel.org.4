@@ -2,125 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9178C6FF6F1
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:17:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 406FF6FF6F3
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 18:17:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238769AbjEKQRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 12:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33824 "EHLO
+        id S238760AbjEKQR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 12:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238747AbjEKQR2 (ORCPT
+        with ESMTP id S238726AbjEKQR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 12:17:28 -0400
-Received: from sonic303-27.consmr.mail.ne1.yahoo.com (sonic303-27.consmr.mail.ne1.yahoo.com [66.163.188.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF513E70
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 09:17:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1683821846; bh=tBePyjOsobbrh0POLBOAWPIX2IJq3gFqvcNAxxVll90=; h=Date:Subject:To:References:From:In-Reply-To:From:Subject:Reply-To; b=Pky1pr12kC0hniYc8eOYsrwiYqOfy8leelrXe41rJKlT2EWoHC36sPpMenNk2bVESNhxDc0jDw32y8qaKLaNPW2OFRTSgeqOuySK6hCuNEjiZYIB7T2xXVOtQvWk1tIx2hsHUKt5sProrgkhm7NlAn/L/3QGX+zwvOlC6cB8By8k+xUzltvanfbl3h1Hj9xRHZ9xX1bzfMC7tZPo+gvV8RkP7X9LpGhjfF4vrujKAm3sFSK3IY9CEws+PDIY1r61B1og235knq8xkj4wtrKX1Mg43qRcKQHsi6Aw4xuAbT1PwNlFOPhazXDlXoWeQ9JxD842Cdjwev3MLiIKLi5YQg==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1683821846; bh=tuxVHm9t5X9p3QUiihBvLvdkUBpEiZ9Kuii+oT7AyQ9=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=YUT8ebnoO1912eok2zEKmY+pIBp7jV8ty1z7Iew9UMUOwdrC5MAFVkjkOhBJypKAW/fb37T+JyNAvoBO++wQVU0Z49v93mchI/BCW6y5OcoV0zOUi9+5KwktyUu53H051Qi3rxDpPAIrKt1zDtYZUKASudLSRAVXi5Ii68EhIqER1uLDK7KAq2FYxBHiFYevC2F4VLavzo4X8HDs351jAEdNj/4QrAacYZ0LXa71DYDKP3RtoawbgIiWVRdhMuGmtIAHkhWh9IKp6yiSe1c+jlK7UZhGf3m8OxLBEn4t+rdVCJkM25Ksp3wxPUgbnnYe7rz3uCNxLW2+fdnXzKJQ+A==
-X-YMail-OSG: LOLywCcVM1kVBzrWmlPsSC.VjpPcFpU21umt3pn0wgdqp2nFtK5cFH0DlnWWNap
- ABIC7vdbnor.9bdMG9QCyAwOLqN.4iBueEzzSUQFtPSzhgDAnEF7YqMcwqOrm6jo.606xgDlaMJA
- 1NnflFz8TYpO..NxumgTyLszys2FQlKap0u9OZ9VHi.HnZQM7LX8VbP.WBpyL241gMjFTnZDrP5z
- xO1mjZtD.UVTXuPQQrueXEyacpYFyDIfFdRNhATsqS77U0kTaD0scXtS359B4tmYl2X4qTwTC0Uo
- tYZKT.bfLq4pL0u9yJDLiyEQmdyXOlJagv7SVZqXyTE23J9ncnyq2FspIaiUX4AtcH4WIejXBQ9T
- P5WHXmubw7dyAJ0EH.NcLIrCngXS1YfKAEvDCFwMB.nf6GxJnmMv69SXLufbI1AmFFw3g7SQT3ye
- GV7Uaob144m39wSy.zVFlt1p0RL9j1V.pBVND5PidMC9LlubzKunrODq95VUiZkzWpWTIWjuVkrs
- uQJSr3odesfNGh1KHmFRXkCufLEQ.JzfioTG9o9Yr5O6aLTV07yCx7H4vs93tnB4OzVfz3.qhwJP
- aBX7f8pI91w37FO_psoPiJ5qpDZANKpYcOawQfQurO2qJT5NmXzKA9zaKj0tRszBr3nDREZBaEcs
- q_vtt9tNe7gQezdv8lRo36KEFtJqzkIby4LMd2boTnNujnvOXdgndzYkaHISwQMzoKIxrjaDo3WC
- Qh3kYJc4.FGP9OxF_ofO9kN828tzYCN1tLB.B7Seg8bMSu6ydnn_lrvkfnLtdqq9kyPvVR8ZjMCT
- aN4S5xSwSzEWh12yllymIaAhB.V_ocMS4G2SqjlacPkIYC4HftFcWbd8ntuthkpIvmxkqJLk8Tjh
- FmHUH.KJU3WrXN7W0oyPFitki9dxO6cmQYIlqzYCiEujqG0fJQ2tzpEv9uuByy6SU0l0jq_qdbTm
- Gs27ybGiwViMY9mxUgoy8WvSgZR0knsbka437OHkoDDwwoDKjIIwJwuU9sl7Bq0ytuCkv1ioYn14
- wikcNLdXTZovG7lxenrqg6ypd_xkklYpEgjLF.2zwV4FKR_3JJ1QU4zfGSg2p5ggqm4v_hkSIukp
- A.QpBc_1DXd1IOiwv4CsQijNnsG1fnPIvMorTyQ1srlrJbU4j.PBh5kmNEQMEifzFhXHA81drazj
- vwTofEkVQ70Lm9DABfcVPkZj0TyrdJIjcRYZ4Y.Bm8_HN7bYcTlYzZB5X2MCl6_VH2hK0zzOiEKP
- YmoeO09yWKFUFfH7rkLCEfwc6K9AtXDnIF_3Xf8DX4yyoDFZp8GcXDXDWuE56RrQMFNHikLpA.Iu
- eV4Q_8JOrWxoqq_oISEgnl8TehIB9wJ_1Rr9WltDNshqUsZoq.OinMr.O.Qk1JpgEwq2A4lT6CRF
- rgt0Fg3WvLyamABcKUVKB_uFcW.GoRrMoROPgd1OfiQ6hmhrWFv5Yzy526UjQ29rcQQ0csdQoWKz
- 8jlVj.UKfqKZ9soG8EGUoJDrMgl1tTeQJs3gHttmdI8uMuFy.pXCK4kpy_dRsyZ7UicNkbeNuR2m
- 9ungLrqqtaGUX6Y5b7u04_uZNEnzpduhqND8bDCXx9t49u4XqHGi9MYJ7R9.oLS9myY_9ZdB5svf
- pzXnrAKyOyx9U0scsW5IJwLX8cY66teCm4lhORXMB6cMpzYtf3pYQWYa6fyRCaZe7LWVCkIzjei3
- JDAHR5HZ5TfSkrLxyzpGD0eTtg3AfYmkr3gcz.SY6MNdn3e890ukssfvFZ2UOdrH87gH5fAS3NAz
- _mYloXYBlTkDyAaJ2lZ6KLdjKqyyeNCPTYjSG7cLQ5UfiYb2FNLtMxbe9PGD57LbIwotd_qakknq
- qIfeQ7bmNn8KXAvCYmp04a7gvTNGp.QFPe3lONtdKG8Mbv9e8Fi0YUHrXphf42ZwjsB0bXcGXu1k
- 2Df1wX8D7y0fQNhqJIP4R5j8zYC3HSxo6r4hrVoqPi_AXff5KiCLEggNOBSU3AD.Av2b9GgBsRs5
- ZdNdEIPZzu0uAOTBZqj4W1ydMp5JJEl7_zR3j3vhlzXOy1HOcP01UMXq2YfMIbm_pvbnNJFyhG8V
- QhO8x3H8HWJaRsZw.qMwd3gu9Zv7awBoKLNBk7IxhCn2zkfj.haxjYT9Ikrusra863uH0xeyBKX5
- ADNDH2dymFQ.AZXMAEa6JUVOXYw2KPlmOGwukDK1_ZaIm.yZyDqB_fjT6RkW9XCysahuQ2atqagt
- ZGZj4LHSM7sFj2tn9hERXIneWCNIJ
-X-Sonic-MF: <casey@schaufler-ca.com>
-X-Sonic-ID: 4d41208e-0f56-4c5d-a9ca-d36dcaf86d48
-Received: from sonic.gate.mail.ne1.yahoo.com by sonic303.consmr.mail.ne1.yahoo.com with HTTP; Thu, 11 May 2023 16:17:26 +0000
-Received: by hermes--production-ne1-574d4b7954-hz4nw (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID c439c490bbc67d9fb7ebb8e5a3da94e7;
-          Thu, 11 May 2023 16:17:21 +0000 (UTC)
-Message-ID: <b645e195-7875-9fc3-a8de-6676dfe800b8@schaufler-ca.com>
-Date:   Thu, 11 May 2023 09:17:19 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH 0/2] capability: Introduce CAP_BLOCK_ADMIN
+        Thu, 11 May 2023 12:17:26 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2088.outbound.protection.outlook.com [40.107.220.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE8DE70;
+        Thu, 11 May 2023 09:17:24 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nTDJS67XjZl6Bcr0IHXLVyxe0DP5K9y3isrkA4VE97zhHneOmEXHxaOUYDbZKhoqTtO2UYTXkCY2kV6+6wO5XAfmlAfd0BUlnb0cP45Iilsd+uVonpzKbIMNbqf8rNT8WsRZ+yWx/B9+hN/yf1UX2Rh8Q5F0+Mqt1tPjxg+YRJSEZlGio6ngLLzKhDGTUELU5q6J5UZV820852qBTQO8pop6jiw9ha+EsgVZkYab49oc24y7+7x5T1CLpZIbD2NVcK0eqY7G4Y6oAbv+lk7WZI4efAzi4xt0lbOvWr2ICyaUojXCnca6Ky6UDW197sAMEW9y1osBJVwNZOyODPgj9A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=epgnWgH6tDtZJdNNcRVpfvYn0RY6pbORDkaUzmDDyQM=;
+ b=CzIk4acaq916TRBZ8SXoOWeQYcmym5TL9rkol/zfMjX2I7Vm/6DDKZxJfLSYVrv3rLzRc+M2RRSpBb1xMyBVSbtorJ/vDJCNKSq7y25f1/G9/RxK8vOndbjH8q5SaZOQiiK8kidiV05mhH32In397oGrsgzTBjiFIVcT9lkeSOjH15CzSG7Mn+MGG3l7tAcjVoXoO8itqaQYeE66SOjE3vR9G49V0PKzL7UsiqtX9X7v07SbKza9bBjEivTch7Xm4hgqPsfFixiynDf+9SrA5jZZ+20gSWVXgzAQq4xlsC0BquWYgXLitdJWzQWWD0FGXSLTOESFf+KeMcuRQ6l+5A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=epgnWgH6tDtZJdNNcRVpfvYn0RY6pbORDkaUzmDDyQM=;
+ b=Pr2Gh1A0bJPxopG3aBvDHEwJSoEkxBjEHlNSc7+ObfbyF+LdKBfaRnFeQdPA78oRnjNaCHXfx9TD91wXroXRHEFrYFvEOsDvaluOWXbtAumeh23fG81voJvpYgIrmgOljs5X8EwgvzbX+E/qWSpAi7syA01PXjtYB+iYDZ8yavs=
+Received: from BYAPR12MB4773.namprd12.prod.outlook.com (2603:10b6:a03:109::17)
+ by PH7PR12MB7354.namprd12.prod.outlook.com (2603:10b6:510:20d::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.22; Thu, 11 May
+ 2023 16:17:21 +0000
+Received: from BYAPR12MB4773.namprd12.prod.outlook.com
+ ([fe80::4efa:ce77:84f7:93b1]) by BYAPR12MB4773.namprd12.prod.outlook.com
+ ([fe80::4efa:ce77:84f7:93b1%5]) with mapi id 15.20.6363.033; Thu, 11 May 2023
+ 16:17:21 +0000
+From:   "Katakam, Harini" <harini.katakam@amd.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+        "linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "vladimir.oltean@nxp.com" <vladimir.oltean@nxp.com>,
+        "wsa+renesas@sang-engineering.com" <wsa+renesas@sang-engineering.com>,
+        "simon.horman@corigine.com" <simon.horman@corigine.com>,
+        "mkl@pengutronix.de" <mkl@pengutronix.de>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "harinikatakamlinux@gmail.com" <harinikatakamlinux@gmail.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>
+Subject: RE: [PATCH net-next v3 3/3] phy: mscc: Add support for VSC8531_02
+Thread-Topic: [PATCH net-next v3 3/3] phy: mscc: Add support for VSC8531_02
+Thread-Index: AQHZhAFVaEeZnn4aeEyZcvSiQUtANa9VHQcAgAAW1qA=
+Date:   Thu, 11 May 2023 16:17:21 +0000
+Message-ID: <BYAPR12MB47731D5AAC7091F89C2CA9AC9E749@BYAPR12MB4773.namprd12.prod.outlook.com>
+References: <20230511120808.28646-1-harini.katakam@amd.com>
+ <20230511120808.28646-4-harini.katakam@amd.com>
+ <ed6cd234-1d75-47f4-a808-6a152a63af0b@lunn.ch>
+In-Reply-To: <ed6cd234-1d75-47f4-a808-6a152a63af0b@lunn.ch>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Tianjia Zhang <tianjia.zhang@linux.alibaba.com>,
-        Serge Hallyn <serge@hallyn.com>,
-        Paul Moore <paul@paul-moore.com>,
-        Stephen Smalley <stephen.smalley.work@gmail.com>,
-        Eric Paris <eparis@parisplace.org>,
-        Frederick Lawler <fred@cloudflare.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Joseph Qi <joseph.qi@linux.alibaba.com>,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Casey Schaufler <casey@schaufler-ca.com>
-References: <20230511070520.72939-1-tianjia.zhang@linux.alibaba.com>
-From:   Casey Schaufler <casey@schaufler-ca.com>
-In-Reply-To: <20230511070520.72939-1-tianjia.zhang@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Mailer: WebService/1.1.21471 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR12MB4773:EE_|PH7PR12MB7354:EE_
+x-ms-office365-filtering-correlation-id: 0c0b64ed-27c5-4ac1-e8cd-08db523b32bd
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 0wLkPdS0RabNYl6WZsQMVwklsN2zZce56h7orzRwVvsN81oi089quQRT8o4iXbAin8VcsoO1fmtcmMTT9ERS0swxyk/Dr8EVFAeif9CUzJBa3TVfL4WbGuMQ88ymgyqj4BSRti3NB2v/4GqW5SMHTrj2Bvxx8n0MYyAO36FD29Uac7Os6H4WhHU8f1c/Ov/Rig03D6ncsUe7lELklrq7YPLHku+DyW6yuXOKQTTVNW4p2K4oOFeZV8bz8CNuiSoqWKObpuQk37PVFj0mfaQ1tIEM7HfsVBTaO39oKfQFg2WXeShMaWU35KCZMZ8GqpuHQDQOBR6u/G7ggIBW1rlbEn1FRNmWH7amBY9woEXBUNHAGgjVJM09UZ+MlcHV5ZGvBxpL+9qTR7DVJLqH662e6EvufXxCSyYahFWEemB6wcqruFrR5zK9UfN8qLqPmtCgb1/Ime/Idi3NIDtmsN62cRdXChxIl6P9d9IgvJf+TUSaTuZ183PX4rPUnGEAkdL8HWUobACVi9pbFaRE0LoFn0bDkKExexmXt6icnakgpHNt3v0k5SUq7aj+iCpPF8oa0p5jZ/qII6QZFIMMP0gKmFcr7ajBQgm1vtnkGsAOhLM=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4773.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(136003)(366004)(346002)(376002)(396003)(451199021)(33656002)(38070700005)(86362001)(54906003)(316002)(66556008)(66446008)(6916009)(4326008)(66476007)(76116006)(66946007)(64756008)(966005)(7696005)(478600001)(55016003)(5660300002)(52536014)(71200400001)(8676002)(41300700001)(8936002)(2906002)(7416002)(38100700002)(122000001)(53546011)(6506007)(186003)(26005)(9686003)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?e4otYyQeGKke/94dBoNDTo5lvGzMQG0ubcIDMAIT1UgHAvwdb80q51DYXKIa?=
+ =?us-ascii?Q?j6VUOkvR4ixwuNYB6kwT3idqT/utOkbf/Ti+2OM9uVY2wk0nXG7WvQbJBlMc?=
+ =?us-ascii?Q?OMNYZgAZX7DGCSG8asUSl731caALfObvvH6UjOBcgyoWklLp79qzaDhsxag6?=
+ =?us-ascii?Q?8egYnhc4FXN7QdBSzJME0u/vOHZOeZI9uO5yhQ/Txs5s+mBSb+UUJYnkxj6j?=
+ =?us-ascii?Q?CP4NhsOkY9TOz1jtZAYFVTgFXjgkBkRjGPTTx1ljGbpWkrMx/5Ge+PEmlefe?=
+ =?us-ascii?Q?HM8efsPqvjVSDGyLyIfF9hKK5RskG74+v/r5pBIqhx594e8Uiy4uJ0h7JpHk?=
+ =?us-ascii?Q?SKcvcShwC3KahuYQmQKVCgDkmrt6qq0JliEQA76owxIY6MlxS6qAGEfvHgYv?=
+ =?us-ascii?Q?E3goOSIdsxu8nEymqnFJLDhxvxp8Z8+VmEFH/O3BrHGOoRs4C/pivke8OkAt?=
+ =?us-ascii?Q?stzR5F5VoHpkPFLHUDhq6sBkX5uOI1O0Huas7clytpVOpaN1OeVJr08oyctq?=
+ =?us-ascii?Q?o18+/909eenWsQ+VA/YuUs4EBAQOKsQl2cA4PjLFPyrq1NJQzIBUYPNJ56LA?=
+ =?us-ascii?Q?uZEscdaSX3C/+m9XwJVCr0qk+NLlpVFB1MW4bIRcLeRl15KT0QKOdkEOx72P?=
+ =?us-ascii?Q?o34yZB4uCb/dUpAyX+H6ywW9yAXrKN74YVZCWHLvIxy4t9gyYp77wF/Y4f/l?=
+ =?us-ascii?Q?pSTglfY9QFbZhJoXE7KZgG5RZHK2ppqGlHZ7NwgIqa4F/4PYnn0dVVIaxPGP?=
+ =?us-ascii?Q?U3jCb9iJaJvsVZY8YfSczcBPTqrgEGWNsWP59cUpNvbuyWQVtV2y61IO8XGk?=
+ =?us-ascii?Q?oF93GVtBxI/oMdlJnsJr9n+Uom+bQRC+sExCImYjh75HIyl/mod9kUpsjrQB?=
+ =?us-ascii?Q?x0m0nA+gZ5NVIhIAoXpuwNhvH3l9OWWd14w6a9u0oSh/TB1ettkY7TdWUpMa?=
+ =?us-ascii?Q?zilqRaApz5pwK9nd0ZNV54mSOrxkGaptcPmgP9i14tjn42UANd7jO7MyTrBo?=
+ =?us-ascii?Q?KGqwU0TT5kh8kn0kVNMlgLk9MTSeB0SjYBEhYJmTA8K7+tWV6Utt/cOcgTiD?=
+ =?us-ascii?Q?KBHYmX6sha8hi5drepXclsH+A0JiXCdEC13ESgAXJ/iZSEsyPEqTCe3VWFIX?=
+ =?us-ascii?Q?PdkBw0qWD1E1GE5u6GfwRyNrLh7hAJ8hjmnoexgSWiroKnCFU8LHA3nZgJco?=
+ =?us-ascii?Q?i+IFsyQuJynQrcEUu+nguN9dLKNPZK+fvnMEvDBtCVlWhQQpwsUhjl735FVw?=
+ =?us-ascii?Q?mE2Cp9AkkB50/FdDtygmwt3jQ8eiZYD98HCfjoKl4CfIsWm5x9cxBmKm6klo?=
+ =?us-ascii?Q?3m32qtbXVIKpwVNQUQbvwznKGxjSqp2cveQL/EZ17EmTlPftF9qWfsQkot2X?=
+ =?us-ascii?Q?mJ9ar1f+ndCExQzba2xkixD93Vw5mZG44NtHLikDsDpcIg7keG6l7BYcMyoh?=
+ =?us-ascii?Q?t9GmLy4XYwQ4vtPOnVHpkWQjh5rUIExEcpSXMWYXP9GRSbVPVbwm2ibrAna9?=
+ =?us-ascii?Q?yCEt3vvLdjWLKSUCyeIpCFBRdgrz4oZWeQ0oT2p9fVZPTMB3L/GuRZAyHTQ2?=
+ =?us-ascii?Q?xS+XHR1TN9caCFMDaZI=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4773.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0c0b64ed-27c5-4ac1-e8cd-08db523b32bd
+X-MS-Exchange-CrossTenant-originalarrivaltime: 11 May 2023 16:17:21.0815
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: i+6uRrHLf9fHcqWbTtCUfwpTl/MeB3G9u8RUi7mAAwwIYf1J62O+lVTMsGZudrqP
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7354
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/11/2023 12:05 AM, Tianjia Zhang wrote:
-> Separated fine-grained capability CAP_BLOCK_ADMIN from CAP_SYS_ADMIN.
-> For backward compatibility, the CAP_BLOCK_ADMIN capability is included
-> within CAP_SYS_ADMIN.
->
-> Some database products rely on shared storage to complete the
-> write-once-read-multiple and write-multiple-read-multiple functions.
-> When HA occurs, they rely on the PR (Persistent Reservations) protocol
-> provided by the storage layer to manage block device permissions to
-> ensure data correctness.
->
-> CAP_SYS_ADMIN is required in the PR protocol implementation of existing
-> block devices in the Linux kernel, which has too many sensitive
-> permissions, which may lead to risks such as container escape. The
-> kernel needs to provide more fine-grained permission management like
-> CAP_NET_ADMIN to avoid online products directly relying on root to run.
->
-> CAP_BLOCK_ADMIN can also provide support for other block device
-> operations that require CAP_SYS_ADMIN capabilities in the future,
-> ensuring that applications run with least privilege.
+Hi Andrew,
 
-Can you demonstrate that there are cases where a program that needs
-CAP_BLOCK_ADMIN does not also require CAP_SYS_ADMIN for other operations?
-How much of what's allowed by CAP_SYS_ADMIN would be allowed by
-CAP_BLOCK_ADMIN? If use of a new capability is rare it's difficult to
-justify.
+> -----Original Message-----
+> From: Andrew Lunn <andrew@lunn.ch>
+> Sent: Thursday, May 11, 2023 7:42 PM
+> To: Katakam, Harini <harini.katakam@amd.com>
+> Cc: hkallweit1@gmail.com; linux@armlinux.org.uk; davem@davemloft.net;
+> kuba@kernel.org; edumazet@google.com; pabeni@redhat.com;
+> vladimir.oltean@nxp.com; wsa+renesas@sang-engineering.com;
+> simon.horman@corigine.com; mkl@pengutronix.de;
+> netdev@vger.kernel.org; linux-kernel@vger.kernel.org;
+> harinikatakamlinux@gmail.com; Simek, Michal <michal.simek@amd.com>;
+> Pandey, Radhey Shyam <radhey.shyam.pandey@amd.com>
+> Subject: Re: [PATCH net-next v3 3/3] phy: mscc: Add support for VSC8531_0=
+2
+>=20
+> On Thu, May 11, 2023 at 05:38:08PM +0530, Harini Katakam wrote:
+> > Add support for VSC8531_02 (Rev 2) device. Use exact PHY ID match.
+> >
+> > Signed-off-by: Harini Katakam <harini.katakam@amd.com>
+> > ---
+> > v3 - Patch split
+> >
+> >  drivers/net/phy/mscc/mscc.h      |  1 +
+> >  drivers/net/phy/mscc/mscc_main.c | 26 ++++++++++++++++++++++++--
+> >  2 files changed, 25 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/net/phy/mscc/mscc.h b/drivers/net/phy/mscc/mscc.h
+> > index ab6c0b7c2136..6a0521ff61d2 100644
+> > --- a/drivers/net/phy/mscc/mscc.h
+> > +++ b/drivers/net/phy/mscc/mscc.h
+> > @@ -281,6 +281,7 @@ enum rgmii_clock_delay {
+> >  #define PHY_ID_VSC8514			  0x00070670
+> >  #define PHY_ID_VSC8530			  0x00070560
+> >  #define PHY_ID_VSC8531			  0x00070570
+> > +#define PHY_ID_VSC8531_02		  0x00070572
+>=20
+> Does PHY_ID_VSC8531_01 exist? The current code would support that,
+> where as now i don't think any entry will match.
 
->
-> Tianjia Zhang (2):
->   capability: Introduce CAP_BLOCK_ADMIN
->   block: use block_admin_capable() for Persistent Reservations
->
->  block/ioctl.c                       | 10 +++++-----
->  include/linux/capability.h          |  5 +++++
->  include/uapi/linux/capability.h     |  7 ++++++-
->  security/selinux/include/classmap.h |  4 ++--
->  4 files changed, 18 insertions(+), 8 deletions(-)
->
+Yes, PHY_ID_VSC8531_01 exists:
+https://ww1.microchip.com/downloads/en/DeviceDoc/VMDS-10494.pdf
+And I'm sorry I realize now that this patch breaks that version.
+
+Also considering your RC on the other thread,
+" Just to make it clear why the existing PHY_ID_VSC853/0xfffffff0 is not su=
+fficient."
+Currently there is no difference in the phy driver structure between
+VSC8531 and VSC8531_02. Let me double check the identification on
+my board and skip this patch if possible. The RGMII delay support in
+2/3 is generic anyway.
+
+Regards,
+Harini
+
