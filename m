@@ -2,94 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EEC46FE90D
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:08:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DDE16FE912
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 03:11:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231183AbjEKBIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 10 May 2023 21:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
+        id S233919AbjEKBLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 10 May 2023 21:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236569AbjEKBH7 (ORCPT
+        with ESMTP id S229461AbjEKBLm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 10 May 2023 21:07:59 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38C1335A6;
-        Wed, 10 May 2023 18:07:54 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Wed, 10 May 2023 21:11:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 982E112B;
+        Wed, 10 May 2023 18:11:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QGtzr2gb8z4x41;
-        Thu, 11 May 2023 11:07:51 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1683767272;
-        bh=XZSZUAZVLj2+UzRacgu3j7yyCTBTrxNnC4byOTcfx0o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=t1ooUHYsdcB+LhPqR7Ug9oT/QFkaKAZlk7iODnk/EM6CggoUdkTvplyYKWUOd8E2U
-         ESLTA6sQgNCX+vzIiMIBQp2zGTuwUKUqW9E2WYOyQ68AjbDoIhlfnTZ7dIKmBSNjwz
-         pa1ER/u0xqv5M4S2WuaWIcWEcpUY9rS9pIxwYdd2rWjnV4tHKI9iVteZhtX/D18H+n
-         /SEEh7TD/ORjf1hWvWTj6QE8H03jQ7XJQ8In2PxCeM36828bTaeQq6aWjwAKRUiTjN
-         uj5gzR1EVP8SVYw8Od6ROGd33vx+D9jh33jVFi4TOsP201Wf7CQYu8HPO9HAEcRx5s
-         lnd5vRQOku91A==
-Date:   Thu, 11 May 2023 11:07:50 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Christian Brauner <christian@brauner.io>,
-        Seth Forshee <sforshee@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: manual merge of the block tree with the
- vfs-idmapping tree
-Message-ID: <20230511110750.76a33556@canb.auug.org.au>
-In-Reply-To: <b5c0b1b9-9896-2637-458b-ca1003ba7d74@kernel.dk>
-References: <20230510105543.165f102b@canb.auug.org.au>
-        <b5c0b1b9-9896-2637-458b-ca1003ba7d74@kernel.dk>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F265F640EF;
+        Thu, 11 May 2023 01:11:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC468C433D2;
+        Thu, 11 May 2023 01:11:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683767500;
+        bh=M9+WbndZqXjkrw+21DO8YKqOQHdc/suzPYKkitzNKlY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KjtkEhyYGHIKo2TpcTt5re5oaA6f/6cH7RQLUZm9PY5kI6YvvCNnU1eiyAzwO1amW
+         KNb3jYOdqygO8hsd1zOEQ7Z8+H1PhCOBC6jQEFOfynZp/hk7mfXL94XwoNyLr7Db/V
+         sWOvXboJyR7S6GF3/lmtf2zZsZin/0cZf0XU4x1xtmQW2gWlYXYTO52hy7wR1Zpq1t
+         Ukj5M84eN8it2jp3E0Z3q7lU/vxe4sKWqa7Y6Z1gXnaWBxSW0LNu/06Jralk/P5j9B
+         d1D4G2k/LS4K8FUCI8dJMXMV3/dhUU7OFdghiXsuiI+Md5tbo9aZE5tUy52tyasFBR
+         oVqlTFR/DYBwg==
+Date:   Thu, 11 May 2023 10:11:37 +0900
+From:   Mark Brown <broonie@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Conor Dooley <conor@kernel.org>,
+        Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Nuno =?iso-8859-1?Q?S=E1?= <nuno.sa@analog.com>,
+        asahi@lists.linux.dev, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] ASoC: dt-bindings: Add adi,ssm3515 amp schema
+Message-ID: <ZFxAyeOteYo6nGlU@finisterre.sirena.org.uk>
+References: <20230509163828.86003-1-povik+lin@cutebit.org>
+ <20230509-marxism-plug-759c99ac601c@spud>
+ <f38b984c-e49a-0686-a907-5d86ea93d7bc@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/zp6IJU1/hKF4ilVOf8xCEZ0";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="dVKFyKievi3KFxqa"
+Content-Disposition: inline
+In-Reply-To: <f38b984c-e49a-0686-a907-5d86ea93d7bc@linaro.org>
+X-Cookie: Avoid contact with eyes.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/zp6IJU1/hKF4ilVOf8xCEZ0
-Content-Type: text/plain; charset=US-ASCII
+
+--dVKFyKievi3KFxqa
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi Jens,
+On Wed, May 10, 2023 at 09:51:50AM +0200, Krzysztof Kozlowski wrote:
+> On 09/05/2023 20:25, Conor Dooley wrote:
+> > On Tue, May 09, 2023 at 06:38:27PM +0200, Martin Povi=C5=A1er wrote:
 
-On Wed, 10 May 2023 06:48:39 -0600 Jens Axboe <axboe@kernel.dk> wrote:
->
-> Yes, since Linus didn't like the original approach, it was redone
-> and that particular patch was originally forgotten and then redone
-> without the 'nonblock' variable. So you should just ignore the
-> old version, and Christian should just drop that branch from his
-> for-next tree as it's dead.
+> >> +        00: 8.4 V Full-Scale Gain Mapping
+> >> +        01: 12.6 V Full-Scale Gain Mapping
+> >> +        10: 14 V Full-Scale Gain Mapping
+> >> +        11: 15 V Full-Scale Gain Mapping
 
-That appears to have been done now, thanks.
+> > Putting register values into the DT does not seem correct, although
+> > I know nothing about sound and will have to defer to Krzysztof & Co. on
+> > that front.
 
---=20
-Cheers,
-Stephen Rothwell
+> Depends whether these are really voltages or something else (e.g. gain)
+> just related to voltage.
 
---Sig_/zp6IJU1/hKF4ilVOf8xCEZ0
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+They are configuring the voltage range that the output will generate.
+
+--dVKFyKievi3KFxqa
+Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRcP+cACgkQAVBC80lX
-0Gy3Kwf+K4TyZ3emIIjnNaQ4YcxjGKGUkUqZx9rUwUaghOF1di44YpcUoqXOJMl2
-OUHbvrrJ4lFq+dn/1EgrrC6D2JkaQo6ukW5Qy1hb6KLXRshtXLdmDlL1JoVXgHMR
-Gtl7RwXLDODiQMjDwZg5/DX+2rIkSpo71fV8EDn9TOzAH/6PgKn7SjYFrHjNJi6q
-+MRL4dknOujdwrvuee4/yewEJKp01h5Px/OgZuZFHhmT2i/nK+96xx6hlAmDHXxZ
-nM8+5D57peLheum2PReS6SVegMeoSsoz7dCAW1r5qmLDo0JC6jDsfPgybhwvfbi1
-pf7HQve14XEaAKXE/1ZBZZs/UcFVxA==
-=BgHY
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRcQMUACgkQJNaLcl1U
+h9Am9gf/eDLq7JsOkXRtURy4HihqO7yPqu3e2S1JEHN+SQ+UjhTk6j7moRz3Ou5V
+Jjs+HhwX+qGWzPfogrNZ/ehao/dQ1ztZUdUIAhYVuGLCsWK2cm874fo5Epyk6pNx
+Cjyyq3QqMiarq67+1Qb7zTj6IRVkLccKa0NneZG6+6xwJKYNltPuCm0x9gSajE9S
+YbGwNzraPv1divCYpxxaJbsM9nxStNqrVh8M7oENo2tBnvxkgE2XdHhhr/Kag2Lr
+QV1SPOOvcQJStFp7+jzw91NsmWahwagu3dQd83hk+hfZ/fyBv13jOFbNfJ0iXGAl
+EZtXHVCvKXztB9LCPFE5rRk3W4jKKA==
+=sDMR
 -----END PGP SIGNATURE-----
 
---Sig_/zp6IJU1/hKF4ilVOf8xCEZ0--
+--dVKFyKievi3KFxqa--
