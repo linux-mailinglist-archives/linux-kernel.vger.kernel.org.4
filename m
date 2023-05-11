@@ -2,223 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 276AE6FEDC8
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:20:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C53E06FEDCD
+	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 10:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233014AbjEKIUD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 04:20:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41514 "EHLO
+        id S234000AbjEKIVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 04:21:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229644AbjEKIUA (ORCPT
+        with ESMTP id S229644AbjEKIVK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 04:20:00 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E2259FC
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:19:57 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-965a68abfd4so1556443166b.2
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:19:57 -0700 (PDT)
+        Thu, 11 May 2023 04:21:10 -0400
+Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170F75B84
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:21:09 -0700 (PDT)
+Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-643b7b8f8ceso4184893b3a.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 01:21:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683793196; x=1686385196;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=dXUc0AM5YyJGVARdeNJtcPWclgUFkU4IgJaimBLLBy0=;
-        b=gZ6cc/8yzMN93tOp2DvshBUAQ1cusjOnRS0AMGJDoyqX1+rHBNovJHbGTKd9M1J1za
-         BPmNrT53wE3AuTnyLtgYk3LU8rcrzQgO2qDTl9lo7+Eb/uQvrpNEcSbmDFADNIOC6oJq
-         e0sJcLQsPcLkN8CcuOKyhxYpPwdneyEOdSw5yzwUmLhiUvmuAhRLL079cO8Q8Uznfwpq
-         IJt3JfbAwSPQ/Ud/8Am9V+CXk/oX4aMwi+jQ0QUOCRTN0ZCSw5nZGJ09IJHMrnQ4FWbZ
-         Y4wQjNz+VGicdrg0JWmX9zrwxIIVONnp32DxMDeo4RJiVeawV5pW5lGDEXCob/y45Tql
-         Qr+Q==
+        d=gmail.com; s=20221208; t=1683793268; x=1686385268;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+Jp5FMcj8qW/qF9+EPM6cpVi/auZQyM2oJutX39eAmo=;
+        b=cdm0u5zGxEfYEeUz8qOBXpt0efyu/r3E/BtQnk58SviivLMfKnwbXdPa4DtXsdUvh0
+         ZFMHolZ3JeJyJ8LI6V3dS3jpUGnY963K1zBRNfHL2U/0wo01Gf2VRgQo/FICBxEA7BQJ
+         7/piaZt36cczH0T6GPGw7d51DXDDpFD+ltSTw5y1rlBHqMTvQb3w41iXB3UTFDAqAzBZ
+         IH2wwVzU7zga3ewk/tQ0pfCCcBiZILzxmkd+Jt5XlRkeFIk3L4D1JuvwT1oN7zaypmxE
+         k2/+Zn2EiyIqygWODox0/JeeGDCxx0UyXrqkcDqWRjgoDZN38XFEmrf0fkhQl3sqmq34
+         DBIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683793196; x=1686385196;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dXUc0AM5YyJGVARdeNJtcPWclgUFkU4IgJaimBLLBy0=;
-        b=Kmzz2FIr45+qIjOCuSD6Fk5zoRe+DIXJhfrB0IRIHSldA+o7n+WFzAR+LlFSct0c+H
-         pZAjlHj7jVREDYloh/7eDUmsV730jCMflJC4EoY5ikbLFFAza1T8ywyH2W9MTaNFwOiG
-         +Y5OqZYT2CxqY2j4LfOXokuX57BsY/ui+7e/Ow8MseZGCNExCVbyLWVG3xsCCXvMwUYg
-         1nyRS3pQPLILjnRxbzx6Gqu6wnJkF0FNvmm6LKpXIow4GQXe9hqVFUiYTN9tX5X/aVsl
-         LMcCe4oI+uWAwyZECJHmiPgdcg0kqOfzCAKhRb81LBIvY4Y57l506hmgP5ft1bRbzZZk
-         mDRA==
-X-Gm-Message-State: AC+VfDz7l/Qcd32yvwZrJgoJplLzQIz8sAkCG4euTlk0gXeGfq383eAh
-        hQ/UlS3e89IBD/jW3VVay2w/+aXbEUpR3vItQ/IkyA==
-X-Google-Smtp-Source: ACHHUZ6hLwUil/od1v0wksCZxQwWFOm0Sib5lsOFqEc6+f5QuQwsg831STGVh9ufZC/JFJMamzmcRJiRtn/+iYdRgeg=
-X-Received: by 2002:a17:907:9694:b0:96a:1ec1:2c9f with SMTP id
- hd20-20020a170907969400b0096a1ec12c9fmr5715805ejc.12.1683793196058; Thu, 11
- May 2023 01:19:56 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683793268; x=1686385268;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+Jp5FMcj8qW/qF9+EPM6cpVi/auZQyM2oJutX39eAmo=;
+        b=Gri+arzWzU2Zsn8ojlpPnWeaSnaFyY0WyjNVg85pWd0M9SFeAhGCwU2FvFNMV7zA3D
+         /jiW12AitMGAAu4fqk5zYlzmN9IzMpaAsxGUdSDRdBxjohCgdR6dl1Msp8nGNeQxvjJr
+         P+uCKz867dOKfvzoXDqJj8jK/Fqr1OSMUIfRlBVhRCep7LRJQ3SAyNSg/mm3Ssj5ICZX
+         g36vZzDXcjmDkyB6+CL62Emhzyxl78rUgpwdyUh3oSksV8NLFf/ZEAbpVpcdXPNS8mSp
+         1/xcpWQVjZW2iXcNvzkSYvvN6LZoMl84VQ2NBdFOg5lmJta09q/wsDXaIUJpUSmxjzcw
+         oRzw==
+X-Gm-Message-State: AC+VfDy/vC6CDxfLZKI1RVVTRrxXj+xtd2+HFYOzkRiBx7v1i0xMYZZM
+        znRKs/NHdR9nxP6hvjDSvhxaPcEYBb/bGw==
+X-Google-Smtp-Source: ACHHUZ6poMgSpBXjekCHCU2R0xtu8ZoPNSfut814Zgk2iJ/eD+Pg1WoMG8fpwM9cN9KzuLKt0HXb8Q==
+X-Received: by 2002:a17:902:b493:b0:1ac:921c:87fc with SMTP id y19-20020a170902b49300b001ac921c87fcmr9878342plr.32.1683793268240;
+        Thu, 11 May 2023 01:21:08 -0700 (PDT)
+Received: from localhost ([64.141.80.140])
+        by smtp.gmail.com with ESMTPSA id 16-20020a631150000000b0050f85ef50d1sm4429322pgr.26.2023.05.11.01.21.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 01:21:07 -0700 (PDT)
+Date:   Thu, 11 May 2023 01:21:06 -0700
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH] mm/mmap/vma_merge: always check invariants
+Message-ID: <ZFylcp2pmUVgxE7g@murray>
+References: <df548a6ae3fa135eec3b446eb3dae8eb4227da97.1682885809.git.lstoakes@gmail.com>
+ <ZFunF7DmMdK05MoF@FVFF77S0Q05N.cambridge.arm.com>
+ <ZFvAnF0DzEUN7F9r@murray>
+ <ZFvDrZRV8RnoPR69@FVFF77S0Q05N.cambridge.arm.com>
+ <ZFvFoj--H21sxzCQ@murray>
 MIME-Version: 1.0
-References: <20230505173012.881083-1-etienne.carriere@linaro.org>
- <20230505173012.881083-3-etienne.carriere@linaro.org> <CAFA6WYN4yjjedmsS4nAgR5L7OOTRAcKs7STW0YjCC7XsdfYzkA@mail.gmail.com>
- <CAN5uoS8eSfeu-BaV5dhbB15q_iGjcd9BKDpp_hEBaBdb4_qbAg@mail.gmail.com>
- <CAN5uoS99hfjE404_UCm+F4bdVgSfB6Eg_3d1JvHCc2GgSzdUog@mail.gmail.com> <CAFA6WYPUWjK97H5DL-eOT2bjsa79Zrvk4wet2AW0Qb0NOVqt7Q@mail.gmail.com>
-In-Reply-To: <CAFA6WYPUWjK97H5DL-eOT2bjsa79Zrvk4wet2AW0Qb0NOVqt7Q@mail.gmail.com>
-From:   Etienne Carriere <etienne.carriere@linaro.org>
-Date:   Thu, 11 May 2023 10:19:45 +0200
-Message-ID: <CAN5uoS8HF5ymsjkLthFnoQxBHQ3TOVonycTH3g5K76qKzUniuA@mail.gmail.com>
-Subject: Re: [PATCH v6 3/4] tee: optee: support tracking system threads
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        op-tee@lists.trustedfirmware.org,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZFvFoj--H21sxzCQ@murray>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 May 2023 at 09:27, Sumit Garg <sumit.garg@linaro.org> wrote:
-> (snip)
+On Wed, May 10, 2023 at 09:26:10AM -0700, Lorenzo Stoakes wrote:
+> On Wed, May 10, 2023 at 05:17:49PM +0100, Mark Rutland wrote:
+> > On Wed, May 10, 2023 at 09:04:44AM -0700, Lorenzo Stoakes wrote:
+> > > On Wed, May 10, 2023 at 03:15:51PM +0100, Mark Rutland wrote:
+> > > > Hi,
+> > > >
+> > > > On Sun, Apr 30, 2023 at 09:19:17PM +0100, Lorenzo Stoakes wrote:
+> > > > > We may still have inconsistent input parameters even if we choose not to
+> > > > > merge and the vma_merge() invariant checks are useful for checking this
+> > > > > with no production runtime cost (these are only relevant when
+> > > > > CONFIG_DEBUG_VM is specified).
 > > > > >
-> > > > > +bool optee_cq_inc_sys_thread_count(struct optee_call_queue *cq)
-> > > > > +{
-> > > > > +       bool rc = false;
+> > > > > Therefore, perform these checks regardless of whether we merge.
+> > > > >
+> > > > > This is relevant, as a recent issue (addressed in commit "mm/mempolicy:
+> > > > > Correctly update prev when policy is equal on mbind") in the mbind logic
+> > > > > was only picked up in the 6.2.y stable branch where these assertions are
+> > > > > performed prior to determining mergeability.
+> > > > >
+> > > > > Had this remained the same in mainline this issue may have been picked up
+> > > > > faster, so moving forward let's always check them.
+> > > > >
+> > > > > Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> > > > > ---
+> > > > >  mm/mmap.c | 10 +++++-----
+> > > > >  1 file changed, 5 insertions(+), 5 deletions(-)
+> > > > >
+> > > > > diff --git a/mm/mmap.c b/mm/mmap.c
+> > > > > index 5522130ae606..13678edaa22c 100644
+> > > > > --- a/mm/mmap.c
+> > > > > +++ b/mm/mmap.c
+> > > > > @@ -960,17 +960,17 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+> > > > >  		merge_next = true;
+> > > > >  	}
+> > > > >
+> > > > > +	/* Verify some invariant that must be enforced by the caller. */
+> > > > > +	VM_WARN_ON(prev && addr <= prev->vm_start);
+> > > > > +	VM_WARN_ON(curr && (addr != curr->vm_start || end > curr->vm_end));
+> > > > > +	VM_WARN_ON(addr >= end);
 > > > > > +
-> > > > > +       mutex_lock(&cq->mutex);
-> > > > > +
-> > > > > +       /* Leave at least 1 normal (non-system) thread */
 > > > >
-> > > > IMO, this might be counter productive. As most kernel drivers open a
-> > > > session during driver probe which are only released in the driver
-> > > > release method.
-> > >
-> > > It is always the case?
-> >
-> > This answer of mine is irrelevant. Sorry,
-> > Please read only the below comments of mine, especially:
-> > | Note that an OP-TEE thread is not bound to a TEE session but rather
-> > | bound to a yielded call to OP-TEE.
-> >
-> > >
-> > > > If the kernel driver is built-in then the session is
-> > > > never released. Now with system threads we would reserve an OP-TEE
-> > > > thread for that kernel driver as well which will never be available to
-> > > > regular user-space clients.
-> > >
-> > > That is not true. No driver currently requests their TEE thread to be
-> > > a system thread.
-> > > Only SCMI does because it needs to by construction.
-> > >
->
-> Yes that's true but what prevents future/current kernel TEE drivers
-> from requesting a system thread once we have this patch-set landed.
-
-Only clients really needing this system_thread attribute should request it.
-If they really need, the OP-TEE firmware in secure world should
-provision sufficient thread context.
-
->
-> > >
-> > > > So I would rather suggest we only allow a
-> > > > single system thread to be reserved as a starting point which is
-> > > > relevant to this critical SCMI service. We can also make this upper
-> > > > bound for system threads configurable with default value as 1 if
-> > > > needed.
-> >
-> > Note that SCMI server can expose several SCMI channels (at most 1 per
-> > SCMI protocol used) and each of them will need to request a
-> > system_thread to TEE driver.
-> >
-> > Etienne
-> >
-> > >
-> > > Reserving one or more system threads depends on the number of thread
-> > > context provisioned by the TEE.
-> > > Note that the implementation proposed here prevents Linux kernel from
-> > > exhausting TEE threads so user space always has at least a TEE thread
-> > > context left available.
->
-> Yeah but on the other hand user-space clients which are comparatively
-> larger in number than kernel clients. So they will be starved for
-> OP-TEE thread availability. Consider a user-space client which needs
-> to serve a lot of TLS connections just waiting for OP-TEE thread
-> availability.
-
-Note that OP-TEE default configuration provisions (number of CPUs + 1)
-thread context, so the situation is already present before these
-changes on systems that embedded an OP-TEE without a properly tuned
-configuration. As I said above, Linux kernel cannot be responsible for
-the total number of thread contexts provisioned in OP-TEE. If the
-overall system requires a lot of TEE thread contexts, one should embed
-a suitable OP-TEE firmware.
-
->
-> > >
-> > > Note that an OP-TEE thread is not bound to a TEE session but rather
-> > > bound to a yielded call to OP-TEE.
->
-> tee_client_open_session()
->   -> optee_open_session()
->
-> tee_client_system_session()
->   -> optee_system_session()
->     -> optee_cq_inc_sys_thread_count()       <- At this point you
-> reserve a system thread corresponding to a particular kernel client
-> session
->
-> All tee_client_invoke_func() invocations with a system thread capable
-> session will use that reserved thread.
->
-> tee_client_close_session()
->   -> optee_close_session()
->     -> optee_close_session_helper()
->       -> optee_cq_dec_sys_thread_count()    <- At this point the
-> reserved system thread is released
->
-> Haven't this tied the system thread to a particular TEE session? Or am
-> I missing something?
-
-These changes do not define an overall single system thread.
-If several sessions requests reservation of TEE system thread, has
-many will be reserved.
-Only the very sessions with its sys_thread attribute set will use a
-reserved thread. If such a kernel client issues several concurrent
-calls to OP-TEE over that session, it will indeed consume more
-reserved system threads than what is actually reserved. Here I think
-it is the responsibility of such client to open as many sessions as
-requests. This is what scmi/optee driver does (see patch v6 4/4). An
-alternative would be to have a ref count of sys_thread in session
-contexts rather than a boolean value. I don't think it's worth it.
-
-> > > > > (snip)
-> > > > > @@ -281,9 +281,10 @@ static int optee_to_msg_param(struct optee *optee,
-> > > > >  static void optee_enable_shm_cache(struct optee *optee)
-> > > > >  {
-> > > > >         struct optee_call_waiter w;
-> > > > > +       bool system_thread = false;
+> > > > I'm seeing this fire a lot when fuzzing v6.4-rc1 on arm64 using Syzkaller.
 > > > >
-> > > > This variable is redundant.
 > > >
-> > > Using a variable here makes it more clear which argument is passed to
-> > > optee_cq_wait_init().
-> > > Calling optee_cq_wait_init(&optee->call_queue, &w, false); is less readable.
-> > >
+> > > Thanks, from the line I suspect addr != curr->vm_start, but need to look
+> > > into the repro, at lsf/mm so a bit time lagged :)
+> >
+> > No problem; FWIW I can confirm your theory, the reproducer is causing:
+> >
+> > 	addr > curr->vm_start
+> >
+> > ... confirmed the the following hack, log below.
 >
-> The function declaration is always there to read about the arguments.
-> IMO, variables with a constant value which are only used once don't
-> add any value.
-
-Ok, i'll address that. Actually I see that optee_shm_register() and
-optee_shm_unregister() (patch v6 1/4) do use false straight as an
-argument.
-
-etienne
-
+> Awesome thanks for that! Just been firing up qemu to do this.
 >
-> -Sumit
+> Cases 5-8 should really have addr == curr->vm_start, I wonder if it's
+> another case but curr is being set incorrectly, it should in theory not be
+> the case.
 >
-> > > >
-> > > > >
-> > > > >         /* We need to retry until secure world isn't busy. */
-> > > > > -       optee_cq_wait_init(&optee->call_queue, &w);
-> > > > > +       optee_cq_wait_init(&optee->call_queue, &w, system_thread);
-> > > > >         while (true) {
-> > > > >                 struct arm_smccc_res res;
-> > > > >
-> > > > > (snip)
+> (See [1] for a visualisation of merge cases as a handy reference)
+>
+> Of course userfaultfd might be the offender here and might be relying on no
+> merge case arising but passing dodgy parameters.
+>
+> [1]:https://ljs.io/merge_cases.png
+>
+> >
+> > | diff --git a/mm/mmap.c b/mm/mmap.c
+> > | index 13678edaa22c..2cdebba15719 100644
+> > | --- a/mm/mmap.c
+> > | +++ b/mm/mmap.c
+> > | @@ -961,9 +961,21 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
+> > |         }
+> > |
+> > |         /* Verify some invariant that must be enforced by the caller. */
+> > | -       VM_WARN_ON(prev && addr <= prev->vm_start);
+> > | -       VM_WARN_ON(curr && (addr != curr->vm_start || end > curr->vm_end));
+> > | -       VM_WARN_ON(addr >= end);
+> > | +       VM_WARN(prev && addr <= prev->vm_start,
+> > | +               "addr = 0x%016lx, prev->vm_start = 0x%016lx\n",
+> > | +               addr, prev->vm_start);
+> > | +
+> > | +       VM_WARN(curr && addr != curr->vm_start,
+> > | +               "addr = 0x%016lx, curr->vm_start = 0x%016lx\n",
+> > | +               addr, curr->vm_start);
+> > | +
+> > | +       VM_WARN(curr && addr > curr->vm_end,
+> > | +               "addr = 0x%016lx, curr->vm_end = 0x%016lx\n",
+> > | +               addr, curr->vm_end);
+> > | +
+> > | +       VM_WARN(addr >= end,
+> > | +               "addr = 0x%016lx, end = 0x%016lx\n",
+> > | +               addr, end);
+> > |
+> > |         if (!merge_prev && !merge_next)
+> > |                 return NULL; /* Not mergeable. */
+> >
+> > ... with that applied, running the reproducer results in:
+> >
+> > | addr = 0x0000ffff99dc2000, curr->vm_start = 0x0000ffff99db2000
+> > | WARNING: CPU: 0 PID: 163 at mm/mmap.c:968 vma_merge+0x3d4/0x1260
+> >
+> > ... i.e. addr > curr->vm_start
+> >
+> > Thanks,
+> > Mark.
+
+It looks like userfaultfd_register() is indeed using vma_merge() to
+determine whether potentially broken input is mergeable, e.g.:-
+
+		if (vma->vm_start < start) {
+			ret = split_vma(&vmi, vma, start, 1);
+			if (ret)
+				break;
+		}
+
+
+So it is proactively using this to determine whether the VMA needs
+splitting which is... interesting :)
+
+I need to look at this in detail, but I do suspect uffd could do this check
+_before_ the vma_merge() (I'd need to double-check this though), or perhaps
+vma_merge could un-warn it.
+
+What's worrying here is that having addr > curr->vm_start but end ==
+next->vm_start could result in a broken, overlapped merged.
+
+In any case this needs some post-jet lag analysis (happy for you or Liam or
+whoever to step in too if you fancy ;)
+
+THe most proximal solution is to just drop the addr != curr->vm_start check
+or at least return NULL if that check is failed, but I think it'd be better
+to take a step back and examing the uffd code in detail because the
+approach seems like it might have a broken edge case.
+
+I think this check has more so brought out an issue rather than caused one,
+but until I can give a post-lsf/mm, post-jet lag analysis I can't be
+conclusively coherent on this.
+
+Instinct says we should probably change uffd but might be wrong!
