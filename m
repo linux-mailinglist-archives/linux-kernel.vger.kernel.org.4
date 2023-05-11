@@ -2,114 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8940C6FFC21
-	for <lists+linux-kernel@lfdr.de>; Thu, 11 May 2023 23:55:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F1C56FFC7B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 00:00:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239281AbjEKVzL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 17:55:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49560 "EHLO
+        id S239454AbjEKWAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 18:00:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239033AbjEKVzJ (ORCPT
+        with ESMTP id S239175AbjEKWAs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 17:55:09 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C3D03C1B
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 14:55:07 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64395e2a715so9202859b3a.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 14:55:07 -0700 (PDT)
+        Thu, 11 May 2023 18:00:48 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DFA1FD7
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 15:00:46 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id d75a77b69052e-3ef34c49cb9so872381cf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 15:00:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683842106; x=1686434106;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wYm5zbUoXvdWIIZXy8x+n7jNjexrKMjFs8iZueww7nk=;
-        b=oXs2eM/yvZexnnpdmxfsrd7zRsaq3g2sJh2MHT1oELeZFpkKjkBEJIkOJR/jDAePzC
-         9fHDcwvGL0LoPfoexCswVshOQpWmlVqekET0XPyMhlHP/duuOOuBDgXwALhf2SjKEzpx
-         jDBoIlxvTPtHLtaMU2EMRkiDNW3SlWHc6guPs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683842106; x=1686434106;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=google.com; s=20221208; t=1683842446; x=1686434446;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=wYm5zbUoXvdWIIZXy8x+n7jNjexrKMjFs8iZueww7nk=;
-        b=YfzoQPQTH2xc1eM5BKG//RgNXDyJgF72dcIz0WoZhL7XN411dnKo3sVpRTv1XRHTDO
-         9gQJwC3w+P0N6NSQgHENIyY0IeOIM8cF5HP7ihC9X7gmkABJupu3dC2OWNK8OyEanTgC
-         s61Xc/Xgj5ETmTqONcmhfJa+kRgjqTbNK0qVSZfVz+F4zZqBLvDlpqxBlxTWqysQVzZe
-         JGgM3WDGdRUlUvZSJU74XLx4rlmy9df5QgcSteJW15thigggXbpmgQZLV/s0H8BVC6W+
-         RjJ0oXoKGPWRXpCXwqSxff1TQdX2Xmr6su4CNGJvMlCLKbBYA28CgSrzF9Uu8O0mlQ4B
-         H6QA==
-X-Gm-Message-State: AC+VfDzziWyZGAQbLsL0bDqHVQR1QL7WkVirdumWxU0ZhzuEoU73rdtw
-        EvGPXVWvQ5zRud8h7bkkR4s2tg==
-X-Google-Smtp-Source: ACHHUZ5VnBXv0IpdLguOXUNVfu9OdAeXFEuVvxq29s+dS+1xyrg5TY3p75gjO9lG9WeyS9PiHyRwjg==
-X-Received: by 2002:a05:6a00:218a:b0:637:aea0:b23d with SMTP id h10-20020a056a00218a00b00637aea0b23dmr31347173pfi.10.1683842106648;
-        Thu, 11 May 2023 14:55:06 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id f3-20020aa78b03000000b0064385a057dfsm5754939pfd.181.2023.05.11.14.55.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 14:55:06 -0700 (PDT)
-Date:   Thu, 11 May 2023 14:55:05 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     John Johansen <john.johansen@canonical.com>
-Cc:     "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>, apparmor@lists.ubuntu.com,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH] apparmor: aa_buffer: Convert 1-element array to flexible
- array
-Message-ID: <202305111453.082DC179@keescook>
-References: <20230511213441.never.401-kees@kernel.org>
- <7085879d-4d21-b90a-c08d-60450d1c7d38@canonical.com>
+        bh=EEnuBFRoeoCUMFkZqOok9vk168rBBPu1XkXprJKNlqs=;
+        b=EuTOAJASK3+B5vjp1G5fp4oCLaqBqstFV5xmxZMlYUxLY4Y9iaOjEZaaBdlcUMJoyK
+         Rxd9ZhJUgNmNCOYrDQmB/rYzrmzr599ZoTdKdi4lM/nJcZiqeJCLmtMVItEvr8pzShjd
+         cla+UzOFyahonvzdiuuSkFkC8Vkz05yeAaUxWrG+89kfFDk4aSrMQsUZ1QrLVOcVN9Hn
+         RzCX8FwrGWSCvxWJw5Mu9LPk1XnDDAWiuuUFh5udKk4tTKqIeN+c+H4k0vSrR42I7UIF
+         g0M3HzoMVLzfJtHxpGrMdDQIESwD2veYvVSOu3Ex2qW5Kg+wC8Pfpyy8yjTV67vSS5Ro
+         XMzg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683842446; x=1686434446;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=EEnuBFRoeoCUMFkZqOok9vk168rBBPu1XkXprJKNlqs=;
+        b=SrP7FbKvwV4M69D8n4MyY8niTsmqJhUoFd+lAU5oefr7R+e16YML3QRDSq7mdaGZaj
+         NyvWI6QQiNwjrdalw+TgxKAVrTCnnxwAauvK2zIdXHHZOTK7fd+bqZLn/wPQT9wTeYJa
+         tJn2eNVWx/p96PKnQDLMP5eEg3Bf8hG80QtFoGLAK1PaJ2oVtwhMbpdrJEBBxswS7Fep
+         FvRV7w1i9Z+M1QUoOnsKwvXAh5HPeAaUKiq7kO1Z2PjVbRLo41tJONBiCe9woKb4k8wu
+         LrOI/qM0K2yh0wc6/QPYH8wwVYUBi+qYLOCHh4xd5JnNv5uK8uSmNJoTd/lTRfUEYcKJ
+         CHsA==
+X-Gm-Message-State: AC+VfDz4/Vcj1EGOpEYoteOf+6+oD8HGIz91D4gJsFwFQLmpjdG0g2WQ
+        t5NRdVT0ArHO2iSuAnBZOgZlawrQAG5o4RJ7kuN3Bg==
+X-Google-Smtp-Source: ACHHUZ76UIMQRNxt62E19OmIL/umDvVX387jn2iloTd079HNSRy91xM1m1n4PpSK9EnBriiaEHnVjYd84JhsYIBiHUs=
+X-Received: by 2002:a05:622a:11cd:b0:3ef:19fe:230d with SMTP id
+ n13-20020a05622a11cd00b003ef19fe230dmr5923qtk.17.1683842445770; Thu, 11 May
+ 2023 15:00:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <7085879d-4d21-b90a-c08d-60450d1c7d38@canonical.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230511182426.1898675-1-axelrasmussen@google.com>
+In-Reply-To: <20230511182426.1898675-1-axelrasmussen@google.com>
+From:   James Houghton <jthoughton@google.com>
+Date:   Thu, 11 May 2023 15:00:09 -0700
+Message-ID: <CADrL8HXFiTL-RDnETS2BUg_qH8CvcCMZiX-kutsrS1-8Uy25=w@mail.gmail.com>
+Subject: Re: [PATCH 1/3] mm: userfaultfd: add new UFFDIO_SIGBUS ioctl
+To:     Axel Rasmussen <axelrasmussen@google.com>
+Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Christian Brauner <brauner@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Hongchen Zhang <zhanghongchen@loongson.cn>,
+        Huang Ying <ying.huang@intel.com>,
+        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        "Mike Rapoport (IBM)" <rppt@kernel.org>,
+        Nadav Amit <namit@vmware.com>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Peter Xu <peterx@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        ZhangPeng <zhangpeng362@huawei.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
+        Anish Moorthy <amoorthy@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 02:48:29PM -0700, John Johansen wrote:
-> On 5/11/23 14:34, Kees Cook wrote:
-> > In the ongoing effort to convert all fake flexible arrays to proper
-> > flexible arrays, replace aa_buffer's 1-element "buffer" member with a
-> > flexible array.
-> > 
-> > Cc: John Johansen <john.johansen@canonical.com>
-> > Cc: Gustavo A. R. Silva <gustavoars@kernel.org>
-> > Cc: Paul Moore <paul@paul-moore.com>
-> > Cc: James Morris <jmorris@namei.org>
-> > Cc: "Serge E. Hallyn" <serge@hallyn.com>
-> > Cc: apparmor@lists.ubuntu.com
-> > Cc: linux-security-module@vger.kernel.org
-> > Signed-off-by: Kees Cook <keescook@chromium.org>
-> 
-> Acked-by: John Johansen <john.johansen@canonical.com>
-> 
-> I have pulled this into my tree.
+On Thu, May 11, 2023 at 11:24=E2=80=AFAM Axel Rasmussen
+<axelrasmussen@google.com> wrote:
+>
+> So the basic way to use this new feature is:
+>
+> - On the new host, the guest's memory is registered with userfaultfd, in
+>   either MISSING or MINOR mode (doesn't really matter for this purpose).
+> - On any first access, we get a userfaultfd event. At this point we can
+>   communicate with the old host to find out if the page was poisoned.
+> - If so, we can respond with a UFFDIO_SIGBUS - this places a swap marker
+>   so any future accesses will SIGBUS. Because the pte is now "present",
+>   future accesses won't generate more userfaultfd events, they'll just
+>   SIGBUS directly.
 
-Thanks!
+I want to clarify the SIGBUS mechanism here when KVM is involved,
+keeping in mind that we need to be able to inject an MCE into the
+guest for this to be useful.
 
-> 
-> > ---
-> > One thing I notice here is that it may be rare for "buffer" to ever change
-> > for a given kernel. Could this just be made PATH_MAX * 2 directly and
-> > remove the module parameter, etc, etc?
-> 
-> possibly. Currently the only use case I know of is for some stress testing
-> where we drop the buffer size down really small to try and break things.
-> This isn't part of the regular regression runs and could be handle with a
-> config/compile time to a buffer size constant.
+1. vCPU gets an EPT violation --> KVM attempts GUP.
+2. GUP finds a PTE_MARKER_UFFD_SIGBUS and returns VM_FAULT_SIGBUS.
+3. KVM finds that GUP failed and returns -EFAULT.
 
-Okay, cool. I figured the conversion to fixed-size is sort of nice, but
-it probably won't be of much use as-is since it's the buffer, not the
-aa_buffer, is passed around. The compiler would still not have any idea
-what the bounds are. :)
+This is different than if GUP found poison, in which case KVM will
+actually queue up a SIGBUS *containing the address of the fault*, and
+userspace can use it to inject an appropriate MCE into the guest. With
+UFFDIO_SIGBUS, we are missing the address!
 
--- 
-Kees Cook
+I see three options:
+1. Make KVM_RUN queue up a signal for any VM_FAULT_SIGBUS. I think
+this is pointless.
+2. Don't have UFFDIO_SIGBUS install a PTE entry, but instead have a
+UFFDIO_WAKE_MODE_SIGBUS, where upon waking, we return VM_FAULT_SIGBUS
+instead of VM_FAULT_RETRY. We will keep getting userfaults on repeated
+accesses, just like how we get repeated signals for real poison.
+3. Use this in conjunction with the additional KVM EFAULT info that
+Anish proposed (the first part of [1]).
+
+I think option 3 is fine. :)
+
+[1]: https://lore.kernel.org/kvm/20230412213510.1220557-1-amoorthy@google.c=
+om/
+
+
+- James
