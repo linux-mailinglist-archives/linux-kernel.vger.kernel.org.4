@@ -2,145 +2,390 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11BDE700AAE
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 86BE1700ABC
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:54:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241381AbjELOvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 10:51:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39574 "EHLO
+        id S241558AbjELOyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 10:54:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241173AbjELOv3 (ORCPT
+        with ESMTP id S241536AbjELOyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 10:51:29 -0400
-Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2085.outbound.protection.outlook.com [40.107.104.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC0926B7;
-        Fri, 12 May 2023 07:51:28 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cmPJ366+RZLB7QMowUvQzr8+m0GZKsuDwheAsIWlb02HjzjFipl5PWtDirTWck/Bye2HGViGeok8QpojRFeH1++MwTkCKwai4rkO78bORWNWVClmohiHZJfShzQuA3LeM+SiVRg5w+gDZgl6htANsr8LdWlq1i6CDKLbeL3YDNAA7IrtJ4Q1f5cL5VskFdL7w2awSy4L30Pd+uXHo/LU3RD2Dmti+sWh1YgV6Hf1+yCrOCMd9DLGTzBAsfljV7ZRR5tVz5JBYG7rAxbw1ojzRAZTl+C271PTqlFVSxSKPhPGjx5C1zZnw/RLPTSL4OrsXmIrlAEmEQYns+DEPy3rwg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=C9OHJlMkGgW3nOwbTlrD0NNQ8za9X/p+8vQ8xQWpFRQ=;
- b=ggCUXe0TQbiEkZO3c6ZxRXq6RiMwKT9GLTKq5Dm1H5q6emLS91YHrTmx+GlJ/Gdm1LDFauZTpuxvlSpnveMB+Dmz8nKZJS4vQJr9zl8c/HARKcsyBSxk0vrD6iop9dSkZ+t0SWByHcrpi2iiZbmqO2uoz3l5SYuEA+mLg54L+O4hlCWkI7mWJllxEeaJlCUs97/he1ikMNhbCOwrXi1NEhd3nWuQVvpNBFTE/EFHgngNEdOeKQnaYzkHC2+k3PD904ox8MrxTjNJn7/bPVMaw4Gh4xhXyeW70nrmq56MvRlx/7dmyMl2GSMC73gG0Vo89CZ03HUQfGSmM68KSmJdGA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=C9OHJlMkGgW3nOwbTlrD0NNQ8za9X/p+8vQ8xQWpFRQ=;
- b=plgF0Gli32QUg6fuI5BIz2ebzUJEVVeQQM5M50BluV/Z4VAMz6ZreYRVyn/Riiq1Xo+zouIVdMFgiNCBBlZTY6wqk/gbwsn+l9gCtTjf1U93zcDMNjKQOzfCF0XIQ+YxdNyRmTBwANZGKb5BmZ4eYqWhOr4A9Ahbf78ETLOL+eU=
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
- by PAXPR04MB9519.eurprd04.prod.outlook.com (2603:10a6:102:22e::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.23; Fri, 12 May
- 2023 14:51:26 +0000
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::25d3:de2:ef1:3884]) by AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::25d3:de2:ef1:3884%4]) with mapi id 15.20.6387.023; Fri, 12 May 2023
- 14:51:26 +0000
-From:   Frank Li <frank.li@nxp.com>
-To:     Manivannan Sadhasivam <mani@kernel.org>,
-        "lpieralisi@kernel.org" <lpieralisi@kernel.org>
-CC:     "allenbh@gmail.com" <allenbh@gmail.com>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "dave.jiang@intel.com" <dave.jiang@intel.com>,
-        "helgaas@kernel.org" <helgaas@kernel.org>,
-        "imx@lists.linux.dev" <imx@lists.linux.dev>,
-        "jdmason@kudzu.us" <jdmason@kudzu.us>,
-        "kw@linux.com" <kw@linux.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "ntb@lists.linux.dev" <ntb@lists.linux.dev>
-Subject: RE: [EXT] Re: [PATCH 1/1] PCI: endpoint: pci-epf-vntb: fix typo span
- in comments
-Thread-Topic: [EXT] Re: [PATCH 1/1] PCI: endpoint: pci-epf-vntb: fix typo span
- in comments
-Thread-Index: AQHZD+C/PN18RSdcf02dRof7zAQM1K8h24EAgBHFQkCAJAGbwA==
-Date:   Fri, 12 May 2023 14:51:26 +0000
-Message-ID: <AM6PR04MB483811AF4DE87D78412053B788759@AM6PR04MB4838.eurprd04.prod.outlook.com>
-References: <20221214172254.668282-1-Frank.Li@nxp.com>
- <20230408093644.GG11124@thinkpad>
- <AM6PR04MB48382B6FDA347EE8A0E65F7B88629@AM6PR04MB4838.eurprd04.prod.outlook.com>
-In-Reply-To: <AM6PR04MB48382B6FDA347EE8A0E65F7B88629@AM6PR04MB4838.eurprd04.prod.outlook.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM6PR04MB4838:EE_|PAXPR04MB9519:EE_
-x-ms-office365-filtering-correlation-id: 1e63dce5-5be6-4986-fd1d-08db52f85ca7
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fDsleTzkVcihQrnU+U04RWjdtr/LyiocI8l02tuXjojT4m3575U7Ajaz6WmHstp0hH0LBTp8TbailkqgXSbSQLQ0mdy6VLnyuIOGeOHNK2BBzVJlM3sTvd+zO1NpsNTuCwcugiVof8AHggtA75gn8b+vTx1r3ygQwy4YlJt78o+ATJtSnyKKp2hfTLnzkk0vCGsqq8mKHdm6JABmAs/9+Nt36JJVkvyfAuVoubH6eeh+Lcpqrw50DrM2VcYBy/6ltNL5/fQLqe49Hx0TVklCVeRDYO4LaMIcVAhrhqZrEBc8+iuhd9uDwrhfF2CHRxMtRzjgpAafxdcZPxlAru0m2oxI8JvH7UfSl0nTvAd85Hc7URC+PN0L7iq6P79PIRbvEKb0+au5SR0vVyQHqyajV5rwLz+S6fvNgyjf7Hqcv+LR7vLncx/UiF+BgMUM3cDR36xvd87QRydU3/Cyv2F9CQMSJrxapt1nz1wwAb3/sKJoaLlfO+hHcpS6r4EDdHn04BIbyb4sggZ4cdb0S8Vi3HdfgOsRj+HR9apUESKBVbp3nzEzMeDcNG1Wv2djDKDsCkXKB/cxOTHecnzU8FgTsY13kFpncvxzF4SZlfS2RRhm/8LiR/wUF6Krao018c6Y
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(39860400002)(376002)(366004)(136003)(451199021)(186003)(55016003)(66476007)(66446008)(4326008)(64756008)(66556008)(66946007)(38070700005)(41300700001)(52536014)(5660300002)(7416002)(8936002)(122000001)(76116006)(44832011)(8676002)(26005)(316002)(6506007)(55236004)(9686003)(54906003)(86362001)(478600001)(71200400001)(33656002)(7696005)(558084003)(110136005)(38100700002)(2906002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NTRiREdzYnllbEdmdTJHdUlUbTdmSE0rNlJMd1lZNUdaSENmVEZXKzZLc3BN?=
- =?utf-8?B?cUVvWFdFWWpWVDhISWpYaitXcEhBNXoya2VlcE93eEtlS2lucXYrODJMa1Vq?=
- =?utf-8?B?dTZBdHVZT3VEampDNGoxdU05Z29RZ2szYjNkTkk2Y1prMlB1Qi8xTFpZK3BW?=
- =?utf-8?B?c2FXT280THUwZDhSOVpxamVzT242KzZxM1pxN3dPU1IvNW5JR3NVaFlhS0RL?=
- =?utf-8?B?NWRiR3JhbXVDQ0hnS09hOEpMbXprUnJIMStrdFRvQVNvL3NYQ0IyQTR4Y3dw?=
- =?utf-8?B?RkdSRWRrengxQTY2L0xEZmhyMjNjSzE5U2dNbk9hWFRrTWFrbkxlTGUvbFlP?=
- =?utf-8?B?dzNobFlaQWpMUkFlWFoybGI1OFFETDdZdU1jQ0ZiSGNuT2lrQVZkS0hsaWRa?=
- =?utf-8?B?Q2pzU09YMXc1OWpyNzZJZW1sY3pEellHNS9aTGNBejk3QlBxTnArTGZyVTY2?=
- =?utf-8?B?am9zVEZ3V1JtRkovWmwzVEt3cUNlQUNqMUdKdDdQNU5hR3h5OEJYMGRnNWwy?=
- =?utf-8?B?Sm5sN2ZWSkl0Q0lWSFBmZWRlK3QrWlNpcTd5VjZBMGNZZnNmWUd0ODlOUUhK?=
- =?utf-8?B?ZVZXeGdVeVJxMElSRnhQaWtoVmFrSjNiOHFOM3JtVGN3c2hvYk9Cem5jbmx5?=
- =?utf-8?B?U1ZlVXczVFNJUDRhQ3p3aS9PZk8vSkx6NzVxck13b1lqYjlrU1lxeGJIVDFY?=
- =?utf-8?B?eFZUK0lKeXNvVmduQThiT3dOSnFEcUtCV0RjZG0zMFZxYitqekFORFFScVZk?=
- =?utf-8?B?WHZ6TEFCVCt1aGhMV2pBM28rNGMvTVVEVGNSaFZPdUxxVGhMaGYyT2ovOUJS?=
- =?utf-8?B?YzMyeUJPUkREeEpCZDlHQkRBblRhR05CVXFPMGZnend4UkFzYTZSaU0yVVli?=
- =?utf-8?B?MTh5SmRjK1ZhaGtrVFBGR3N6RUx2M2VUMmFhWldNS1VITXVISkpKRk9uZXhJ?=
- =?utf-8?B?aURuTGtGZXNON2NHQ2ZhV0paRWNYOFFsUnRrM2RhMWs3amN2emlyQTFQS2Iy?=
- =?utf-8?B?WmtqRzFERlNUL04vZnFqVldXMGQ2WXhiWnJPNi84b2gvZTRxKzNNaHh3V2Vn?=
- =?utf-8?B?VmZWN2MzT3pJZitDdVJTMkVOTGw1T0hxK2ZTT3hLYm9aM3pyQVZDUFZ1d1BY?=
- =?utf-8?B?R0o4VkM5UXZuaXVId0lDU2kwMll6L2dPVFpXMUxMVk0rRnJmbnExTW1idjJG?=
- =?utf-8?B?Slh2S3Qra0VwdXZ0cVZGSWxHV1JCRlFSQjdiOC85RGNkdjEwU2I0N1NPK0M1?=
- =?utf-8?B?MnIxUzBKbEhIUUo1WVQwRThrYitQdlpQRUFOYURHNEdHN2hieGtKME5aaWF5?=
- =?utf-8?B?QnE4NGxzdEs2UWgwdW1wdTRVbXhpSnhQemdyNGcyQTRXYXZiODVWQ0xxb3FN?=
- =?utf-8?B?TUkxSGl2WlF0d2VPRWFEVmNsdDBUOHpSdy8rSXNpYmwyRVBGV3pNL0t5eDlk?=
- =?utf-8?B?U3ByRmJKZzB2emFpRUJmM2U3aXFLcVFEbk9ISHU0WjlCbktQMkFpeitUQWtD?=
- =?utf-8?B?UW1pOWY3ZmwvVEtOb0cweVBHSE5OU25pSkh3WlFPRjlURUlQQTNiSiszMVhZ?=
- =?utf-8?B?ZTFCQzhlVHl1RXpOdTUwTUd5cmt6ajR5WURqTUt2ZWwzNW5SL3c1MDhUVDJP?=
- =?utf-8?B?ZFU1Yk5sTWFSOEVHWXhXeGkvSTQ0Qm5pbktSdDlUQ1l1QWh5MmdlN3lGMjlT?=
- =?utf-8?B?eWlFdE9QeS9IbDVQZlFXNFhRcXM4YUd3bkU4S0ZHazQ1K3dVN0h4QkUvY25K?=
- =?utf-8?B?S1ZHTkhKMVl2RXVwNW1sc3pMUk9jOWV6Um5HMTYxM0FzUk1xbFpwdUNzL1Nt?=
- =?utf-8?B?dTNNZkVOM1FkT1NqNmVNMnJ6aDl5Z3ZGdTUyYk9YWTcrT0k1Y3pEelY3Sm5w?=
- =?utf-8?B?RHJ1cWZhRUVsL3FFUUwzT2pZOGgyWkJlakVVcFExRTlPT3NHekVRRlZmaEo4?=
- =?utf-8?B?bEtnb3l5OFFmMlZrYnpsQXJBd2hwU2xkbnU5Q3A2dXNDZDV0Vk1adExpVW1l?=
- =?utf-8?B?dUhFWGRoQkRXR3J3dnQ0ZVNibWgwZWNsN0dXSWJObUU1SnFuNHZoUnlHVlp0?=
- =?utf-8?B?T0swd2dxYU1GZmtqRmNFYjJXd0NPeFVJekMzWnlaZmc3aW4ySVdmOGNUcVBx?=
- =?utf-8?Q?c0uw=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Fri, 12 May 2023 10:54:33 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23A4FD2D3;
+        Fri, 12 May 2023 07:54:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683903270; x=1715439270;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=LsQQVwQKDu5wqILYLhD8gDsG8ROmJlBhf0DL4ry9z4M=;
+  b=kC9tWUajZaan+1H55Gxo3e+0DadzTB6flsUd7nYjHE9CzMadfk8u3ijr
+   xOkmuMN6EAiJdaw+7IKk52fbeQXpJXpFhyyDAxsCR9EbGC775SfMvMn2J
+   NTwU2wdx4PYgXfOEyeBAUzW8D7z6K21Qe00amiuIS8S7dIYU8NXvSvOZ2
+   sx13ZxYkWc4NYxaF40vArDhGu+J9jpyG9N5Y94nMkYcLnysJ4iDz+2czV
+   UR3pICIyrufil+WOObgdKnqqLnDNKGHCr48BZF2VKKbvdQdWvN1rtUQ6e
+   U9WR5lNPvBmfKaMj/Gyw0zIXFCTc2bpkCvnudUACSb5BavGTJDNkP9SX4
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="437140453"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="437140453"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 07:54:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="844441335"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="844441335"
+Received: from winkelru-mobl.amr.corp.intel.com (HELO [10.212.144.249]) ([10.212.144.249])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 07:54:28 -0700
+Message-ID: <c79e354d-4d09-a04b-798b-e42bdc47d694@linux.intel.com>
+Date:   Fri, 12 May 2023 09:52:21 -0500
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e63dce5-5be6-4986-fd1d-08db52f85ca7
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 May 2023 14:51:26.2537
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: D4+DumWRPk3d/pCc4UxqGsAPzf5MOagMOvwo30Tvp3cyVkx9qSpgSuRyLvFNKlZiKv0tqMhDgpd5yPx2VbiC4A==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9519
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.0
+From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
+Subject: Re: [PATCH 06/10] mfd: cs42l43: Add support for cs42l43 core driver
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
+        lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        tglx@linutronix.de, maz@kernel.org, linus.walleij@linaro.org,
+        vkoul@kernel.org
+Cc:     lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com,
+        sanyog.r.kale@intel.com, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
+ <20230512122838.243002-7-ckeepax@opensource.cirrus.com>
+Content-Language: en-US
+In-Reply-To: <20230512122838.243002-7-ckeepax@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiA+IE9uIFdlZCwgRGVjIDE0LCAyMDIyIGF0IDEyOjIyOjU0UE0gLTA1MDAsIEZyYW5rIExpIHdy
-b3RlOg0KPiA+ID4gUmVwbGFjZSBzcGFuIHdpdGggc3BhZC4NCj4gPiA+DQo+ID4gPiBTaWduZWQt
-b2ZmLWJ5OiBGcmFuayBMaSA8RnJhbmsuTGlAbnhwLmNvbT4NCj4gPg0KPiA+IFJldmlld2VkLWJ5
-OiBNYW5pdmFubmFuIFNhZGhhc2l2YW0gPG1hbmlAa2VybmVsLm9yZz4NCj4gDQo+IFtGcmFuayBM
-aV0gRnJpZW5kbHkgUGluZywganVzdCBjb21tZW50cyBjaGFuZ2UuDQoNCldoeSBubyBwaWNrdXAg
-dGhpcyBwYXRjaD8gSnVzdCBmaXhlZCBjb21tZW50cyENCg0KPiANCj4gPg0KPiA+IC0gTWFuaQ0K
-PiA+DQo+ID4gPiAtLS0NCg0K
+
+
+
+> +static int cs42l43_sdw_update_status(struct sdw_slave *sdw, enum sdw_slave_status status)
+> +{
+> +	struct cs42l43 *cs42l43 = dev_get_drvdata(&sdw->dev);
+> +
+> +	switch (status) {
+> +	case SDW_SLAVE_ATTACHED:
+> +		dev_dbg(cs42l43->dev, "Device attach\n");
+> +
+> +		sdw_write_no_pm(sdw, CS42L43_GEN_INT_MASK_1,
+> +				CS42L43_INT_STAT_GEN1_MASK);
+> +
+> +		cs42l43->attached = true;
+> +
+> +		complete(&cs42l43->device_attach);
+> +		break;
+> +	case SDW_SLAVE_UNATTACHED:
+> +		dev_dbg(cs42l43->dev, "Device detach\n");
+> +
+> +		cs42l43->attached = false;
+> +
+> +		reinit_completion(&cs42l43->device_attach);
+> +		complete(&cs42l43->device_detach);
+> +		break;
+> +	default:
+> +		break;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int cs42l43_sdw_interrupt(struct sdw_slave *sdw,
+> +				 struct sdw_slave_intr_status *status)
+> +{
+> +	/*
+> +	 * There is only a single bit in GEN_INT_STAT_1 and it doesn't clear if
+> +	 * IRQs are still pending so doing a read/write here after handling the
+> +	 * IRQ is fine.
+> +	 */
+> +	sdw_read_no_pm(sdw, CS42L43_GEN_INT_STAT_1);
+> +	sdw_write_no_pm(sdw, CS42L43_GEN_INT_STAT_1, 1);
+> +
+> +	return 0;
+> +}
+
+not really getting the comment and code above. Where is the IRQ handled?
+In the 'other non-SoundWire part"?
+
+
+> +static void cs42l43_boot_work(struct work_struct *work)
+> +{
+> +	struct cs42l43 *cs42l43 = container_of(work, struct cs42l43, boot_work);
+> +	unsigned int devid, revid, otp;
+> +	int ret;
+> +
+> +	dev_dbg(cs42l43->dev, "Boot work running\n");
+> +
+> +	ret = cs42l43_wait_for_attach(cs42l43);
+> +	if (ret)
+> +		goto err;
+> +
+> +	if (cs42l43->sdw)
+> +		cs42l43->irq = cs42l43->sdw->irq;
+> +
+> +	ret = regmap_read(cs42l43->regmap, CS42L43_DEVID, &devid);
+> +	if (ret) {
+> +		dev_err(cs42l43->dev, "Failed to read devid: %d\n", ret);
+> +		goto err;
+> +	}
+> +
+> +	switch (devid) {
+> +	case 0x42a43:
+> +		break;
+> +	default:
+> +		dev_err(cs42l43->dev, "Unrecognised devid: 0x%06x\n", devid);
+> +		goto err;
+> +	}
+> +
+> +	ret = regmap_read(cs42l43->regmap, CS42L43_REVID, &revid);
+> +	if (ret) {
+> +		dev_err(cs42l43->dev, "Failed to read rev: %d\n", ret);
+> +		goto err;
+> +	}
+> +
+> +	ret = regmap_read(cs42l43->regmap, CS42L43_OTP_REVISION_ID, &otp);
+> +	if (ret) {
+> +		dev_err(cs42l43->dev, "Failed to read otp rev: %d\n", ret);
+> +		goto err;
+> +	}
+> +
+> +	dev_info(cs42l43->dev,
+> +		 "devid: 0x%06x, rev: 0x%02x, otp: 0x%02x\n", devid, revid, otp);
+> +
+> +	ret = cs42l43_mcu_update(cs42l43);
+> +	if (ret)
+> +		goto err;
+> +
+> +	ret = regmap_register_patch(cs42l43->regmap, cs42l43_reva_patch,
+> +				    ARRAY_SIZE(cs42l43_reva_patch));
+> +	if (ret) {
+> +		dev_err(cs42l43->dev, "Failed to apply register patch: %d\n", ret);
+> +		goto err;
+> +	}
+> +
+> +	pm_runtime_mark_last_busy(cs42l43->dev);
+> +	pm_runtime_put_autosuspend(cs42l43->dev);
+
+any reason why the two pm_runtime routines are not placed last, just
+before the return?
+
+> +	ret = devm_mfd_add_devices(cs42l43->dev, PLATFORM_DEVID_NONE,
+> +				   cs42l43_devs, ARRAY_SIZE(cs42l43_devs),
+> +				   NULL, 0, NULL);
+> +	if (ret) {
+> +		dev_err(cs42l43->dev, "Failed to add subdevices: %d\n", ret);
+> +		goto err;
+> +	}
+> +
+> +	dev_dbg(cs42l43->dev, "Successfully initialised\n");
+> +
+> +	return;
+> +
+> +err:
+> +	pm_runtime_put_sync(cs42l43->dev);
+> +	cs42l43_dev_remove(cs42l43);
+> +}
+
+
+> +int cs42l43_dev_probe(struct cs42l43 *cs42l43)
+> +{
+> +	int i, ret;
+> +
+> +	dev_set_drvdata(cs42l43->dev, cs42l43);
+> +
+> +	mutex_init(&cs42l43->pll_lock);
+> +	init_completion(&cs42l43->device_attach);
+> +	init_completion(&cs42l43->device_detach);
+> +	init_completion(&cs42l43->firmware_download);
+> +	INIT_WORK(&cs42l43->boot_work, cs42l43_boot_work);
+> +
+> +	regcache_cache_only(cs42l43->regmap, true);
+> +
+> +	cs42l43->reset = devm_gpiod_get_optional(cs42l43->dev, "reset", GPIOD_OUT_LOW);
+> +	if (IS_ERR(cs42l43->reset)) {
+> +		ret = PTR_ERR(cs42l43->reset);
+> +		dev_err(cs42l43->dev, "Failed to get reset: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	cs42l43->vdd_p = devm_regulator_get(cs42l43->dev, "VDD_P");
+> +	if (IS_ERR(cs42l43->vdd_p)) {
+> +		ret = PTR_ERR(cs42l43->vdd_p);
+> +		dev_err(cs42l43->dev, "Failed to get VDD_P: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	cs42l43->vdd_d = devm_regulator_get(cs42l43->dev, "VDD_D");
+> +	if (IS_ERR(cs42l43->vdd_d)) {
+> +		ret = PTR_ERR(cs42l43->vdd_d);
+> +		dev_err(cs42l43->dev, "Failed to get VDD_D: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	BUILD_BUG_ON(ARRAY_SIZE(cs42l43_core_supplies) != CS42L43_N_SUPPLIES);
+> +
+> +	for (i = 0; i < CS42L43_N_SUPPLIES; i++)
+> +		cs42l43->core_supplies[i].supply = cs42l43_core_supplies[i];
+> +
+> +	ret = devm_regulator_bulk_get(cs42l43->dev, CS42L43_N_SUPPLIES,
+> +				      cs42l43->core_supplies);
+> +	if (ret) {
+> +		dev_err(cs42l43->dev, "Failed to get core supplies: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = cs42l43_power_up(cs42l43);
+> +	if (ret)
+> +		return ret;
+> +
+> +	pm_runtime_set_autosuspend_delay(cs42l43->dev, 250);
+> +	pm_runtime_use_autosuspend(cs42l43->dev);
+> +	pm_runtime_set_active(cs42l43->dev);> +	pm_runtime_get_noresume(cs42l43->dev);
+
+you probably want a comment to explain that the get_noresume() is
+intentional to prevent the device from suspending before the workqueue
+is handled.
+
+> +	pm_runtime_enable(cs42l43->dev);
+> +
+> +	queue_work(system_long_wq, &cs42l43->boot_work);
+> +
+> +	return 0;
+> +}
+> +EXPORT_SYMBOL_NS_GPL(cs42l43_dev_probe, MFD_CS42L43);
+
+> +static int __maybe_unused cs42l43_suspend(struct device *dev)
+> +{
+> +	struct cs42l43 *cs42l43 = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	dev_dbg(cs42l43->dev, "System suspend\n");
+> +
+> +	/*
+> +	 * Don't care about being resumed here, but we do want force_resume to
+> +	 * always trigger an actual resume, so that register state for the
+> +	 * MCU/GPIOs is returned as soon as possible after system resume
+> +	 */
+> +	pm_runtime_get_noresume(dev);
+> +
+> +	ret = pm_runtime_force_suspend(dev);
+> +	if (ret) {
+> +		dev_err(cs42l43->dev, "Failed to force suspend: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	pm_runtime_put_noidle(dev);
+
+Is the get_noresume/put_noidle useful here? What does it do?
+
+And it seems wrong anyways, if pm_runtime_force_suspend() fails then the
+usage-count is not decreased.
+
+Surprising sequence...
+
+> +
+> +	ret = cs42l43_power_down(cs42l43);
+> +	if (ret)
+> +		return ret;
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused cs42l43_resume(struct device *dev)
+> +{
+> +	struct cs42l43 *cs42l43 = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	dev_dbg(cs42l43->dev, "System resume\n");
+> +
+> +	ret = cs42l43_power_up(cs42l43);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = pm_runtime_force_resume(dev);
+> +	if (ret) {
+> +		dev_err(cs42l43->dev, "Failed to force resume: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused cs42l43_runtime_suspend(struct device *dev)
+> +{
+> +	struct cs42l43 *cs42l43 = dev_get_drvdata(dev);
+> +
+> +	dev_dbg(cs42l43->dev, "Runtime suspend\n");
+> +
+> +	/*
+> +	 * Whilst we don't power the chip down here, going into runtime
+> +	 * suspend lets the SoundWire bus power down, which means we can't
+> +	 * communicate with the device any more.
+> +	 */
+> +	regcache_cache_only(cs42l43->regmap, true);
+> +
+> +	return 0;
+> +}
+> +
+> +static int __maybe_unused cs42l43_runtime_resume(struct device *dev)
+> +{
+> +	struct cs42l43 *cs42l43 = dev_get_drvdata(dev);
+> +	unsigned int reset_canary;
+> +	int ret;
+> +
+> +	dev_dbg(cs42l43->dev, "Runtime resume\n");
+> +
+> +	ret = cs42l43_wait_for_attach(cs42l43);
+
+is there a specific reason why the existing initialization_complete is
+not used?
+
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = regmap_read(cs42l43->regmap, CS42L43_RELID, &reset_canary);
+> +	if (ret) {
+> +		dev_err(cs42l43->dev, "Failed to check reset canary: %d\n", ret);
+> +		goto err;
+> +	}
+> +
+> +	if (!reset_canary) {
+> +		/*
+> +		 * If the canary has cleared the chip has reset, re-handle the
+> +		 * MCU and mark the cache as dirty to indicate the chip reset.
+> +		 */
+> +		ret = cs42l43_mcu_update(cs42l43);
+> +		if (ret)
+> +			goto err;
+> +
+> +		regcache_mark_dirty(cs42l43->regmap);
+> +	}
+> +
+> +	ret = regcache_sync(cs42l43->regmap);
+> +	if (ret) {
+> +		dev_err(cs42l43->dev, "Failed to restore register cache: %d\n", ret);
+> +		goto err;
+> +	}
+> +
+> +	return 0;
+> +
+> +err:
+> +	regcache_cache_only(cs42l43->regmap, true);
+> +
+> +	return ret;
+> +}
