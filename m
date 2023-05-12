@@ -2,167 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC947006F3
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:38:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 801847006FA
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:40:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240728AbjELLi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 07:38:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
+        id S240804AbjELLkB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 07:40:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240230AbjELLiY (ORCPT
+        with ESMTP id S240230AbjELLj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 07:38:24 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E20213F;
-        Fri, 12 May 2023 04:38:22 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.nyi.internal (Postfix) with ESMTP id 054B95C041E;
-        Fri, 12 May 2023 07:38:19 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute6.internal (MEProxy); Fri, 12 May 2023 07:38:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1683891498; x=1683977898; bh=9q
-        AOuPR81wdPIMJq/ul1Z1ZgLOrwDPtn2FpzZci5EkY=; b=MT5xz0YxP3UruUyKZy
-        7TCEGigykY1e8mQK0VTM7nl0hxMJQpMHFzCEQB4/G//ujbBUpAI5gOuY92oASXKI
-        8/DkHoH9s1k4VmNkc+Dh3Pp2ypodlCV380TnG+4DuUTwoAdm3tEoyTwWIMNC9hjD
-        fonnzyJs56rdFtH3xrURdb46ZRn0eW7Ul/XIHI6y8obdGo/+sms/RR9fSGjHdIxO
-        CvT+5QTwtawEx+X8Qa5uiIS/djx9xPTMJ4tSdCakrzppUrbpYXuzOQAjim4xq+p4
-        EPQ6CiOBl2qIJCuLkhVHCadFEWBaDxCDUTps94MIoV0tXD/nB3YRHDgfKAMoHqua
-        cEEw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1683891498; x=1683977898; bh=9qAOuPR81wdPI
-        MJq/ul1Z1ZgLOrwDPtn2FpzZci5EkY=; b=ScXFSHvxKD4mTOvqnXuUeVuMco5J/
-        Fm5JXG6BzheiBC4zlr4BU5uWzz1O22v06Xn/zZCWxU8WzLJLCoksnrFjjthkfn1g
-        dbQ5rPE6zFV/4inncX+ewq86p6az0uR+5LOSJCig/bIyXKpuExKNt8zgTF/UHaYV
-        yDU+sZKr+xjVf37hD4/V7DgG4RuGXWd/TCrWF4dvYDnk+2rz3nPU9G5rkPab8wA9
-        WAhRaQ6Kd/Ke1c/4Fgyrwh/uDoZFi9HWlnxMSwTestHI5G5CLpriDvTMRAjuZxOU
-        +sav+fiifhtdA+BmlVQoD85rWhZH/JOjyST/qpsbF/Aj2moBDgedWFGbA==
-X-ME-Sender: <xms:KiVeZEGjFkK5WzttluNkyIDvVATUeeKeZ1qKcOyL4tVwjmIf-3sPmA>
-    <xme:KiVeZNUEMqCPX210aEPW2vIuP73O5YTPfDHtX2g8fLcrTl4DNKFLM0CGwY7u6qXEY
-    4h9rBv-dBBVfw>
-X-ME-Received: <xmr:KiVeZOLEX0dF7MUAovzGDPwhPO7Bhb4wcaexgxtcAncTJNULxAAuOkeH_9cOuwCPlyNuqxB6uSIPgZo2fQXsY7b6>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehtddggedvucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
-    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgeehue
-    ehgfdtledutdelkeefgeejteegieekheefudeiffdvudeffeelvedttddvnecuffhomhgr
-    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
-X-ME-Proxy: <xmx:KiVeZGFM5S-CembPJInGX85HTXRRmj7vm5a5jSzhkQCRFdPB-qOXSw>
-    <xmx:KiVeZKVv8CpYTf1SLUayNkAiWEI80RI8IrP850Q6GF_Awpk6mPBWhA>
-    <xmx:KiVeZJNjsM9qCFytn2KOJE7ivIXiQi-0blqU7vkYCCwg-rmwAwdm2w>
-    <xmx:KiVeZAnAxFPB9NRaNjbyn8O9yj_zXaaVEy8EM-PgrcBvetGVwt2qzA>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 12 May 2023 07:38:17 -0400 (EDT)
-Date:   Fri, 12 May 2023 20:38:11 +0900
-From:   Greg KH <greg@kroah.com>
-To:     Peng Fan <peng.fan@oss.nxp.com>
-Cc:     Peng Fan <peng.fan@nxp.com>,
-        "abelvesa@kernel.org" <abelvesa@kernel.org>,
-        "mturquette@baylibre.com" <mturquette@baylibre.com>,
-        "sboyd@kernel.org" <sboyd@kernel.org>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-        "kernel@pengutronix.de" <kernel@pengutronix.de>,
-        "festevam@gmail.com" <festevam@gmail.com>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] clk: imx: imx93: introduce clk_bypassed module parameter
-Message-ID: <2023051224-freezing-dweeb-25b3@gregkh>
-References: <20230504085506.504474-1-peng.fan@oss.nxp.com>
- <2023050410-rejoin-vocation-8560@gregkh>
- <DU0PR04MB9417FE67ABF9A2B1EE4DEBA088779@DU0PR04MB9417.eurprd04.prod.outlook.com>
- <2023051027-wages-feminine-cb5d@gregkh>
- <28629bcd-d01a-92ab-b27c-0b8ae8bfdaf3@oss.nxp.com>
+        Fri, 12 May 2023 07:39:59 -0400
+Received: from smtp-fw-80009.amazon.com (smtp-fw-80009.amazon.com [99.78.197.220])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E916BFA
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:39:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=amazon.de; i=@amazon.de; q=dns/txt; s=amazon201209;
+  t=1683891598; x=1715427598;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=l1iA6qEQdQZuo8aepsGp3eChy0zgLfi4JYPW6IsDG7I=;
+  b=hYfUSLNnGQJbc40lu7MON9SeBfPKaPFjxw9oGi7+XMJc7/4FlbiXoW7Y
+   ieoS3hZEaxg+NapIZySTyDVaxSw+z9jow12fwLj0AxcMc1lOYWbWNDmMx
+   jAh9GZrt9gSqkAUDju70ChpZSDpzl3580Rzvt6AmYT/2vieHsXOIUYZVD
+   I=;
+X-IronPort-AV: E=Sophos;i="5.99,269,1677542400"; 
+   d="scan'208";a="2487811"
+Received: from pdx4-co-svc-p1-lb2-vlan3.amazon.com (HELO email-inbound-relay-pdx-2c-m6i4x-94edd59b.us-west-2.amazon.com) ([10.25.36.214])
+  by smtp-border-fw-80009.pdx80.corp.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 11:39:55 +0000
+Received: from EX19D001EUA003.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-2c-m6i4x-94edd59b.us-west-2.amazon.com (Postfix) with ESMTPS id 74E2841460;
+        Fri, 12 May 2023 11:39:54 +0000 (UTC)
+Received: from EX19D039EUA003.ant.amazon.com (10.252.50.203) by
+ EX19D001EUA003.ant.amazon.com (10.252.50.232) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.26;
+ Fri, 12 May 2023 11:39:53 +0000
+Received: from EX19MTAUEA001.ant.amazon.com (10.252.134.203) by
+ EX19D039EUA003.ant.amazon.com (10.252.50.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 12 May 2023 11:39:52 +0000
+Received: from dev-dsk-attofari-1c-9e00ebdc.eu-west-1.amazon.com
+ (10.13.242.123) by mail-relay.amazon.com (10.252.134.102) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26 via Frontend Transport; Fri, 12 May 2023 11:39:51 +0000
+From:   Adamos Ttofari <attofari@amazon.de>
+CC:     <attofari@amazon.de>, Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>, Kyle Huey <me@kylehuey.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] x86: fpu: Keep xfd_state always in sync with MSR_IA32_XFD
+Date:   Fri, 12 May 2023 11:38:58 +0000
+Message-ID: <20230512113900.56393-1-attofari@amazon.de>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230511152818.13839-1-attofari@amazon.de>
+References: <20230511152818.13839-1-attofari@amazon.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <28629bcd-d01a-92ab-b27c-0b8ae8bfdaf3@oss.nxp.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 04:54:23PM +0800, Peng Fan wrote:
-> 
-> 
-> On 5/10/2023 5:13 PM, Greg KH wrote:
-> > Caution: This is an external email. Please take care when clicking links or opening attachments. When in doubt, report the message using the 'Report this email' button
-> > 
-> > 
-> > On Wed, May 10, 2023 at 07:49:20AM +0000, Peng Fan wrote:
-> > > 
-> > > > Subject: Re: [PATCH] clk: imx: imx93: introduce clk_bypassed module
-> > > > parameter
-> > > > 
-> > > > On Thu, May 04, 2023 at 04:55:06PM +0800, Peng Fan (OSS) wrote:
-> > > > > From: Peng Fan <peng.fan@nxp.com>
-> > > > > 
-> > > > > With the clk names specified in clk_bypassed module parameter, give
-> > > > > user an option to bypass the clk from managing them by Linux kernel.
-> > > > 
-> > > > As I said on another email, no, please do not add new module parameters
-> > > > for drivers, this is not the 1990s
-> > > 
-> > > After a search of the list,
-> > > https://lore.kernel.org/all/?q=module_param
-> > > 
-> > > I still see many drivers are adding module_param.
-> > 
-> > And they should not be doing so as it is almost always not a good idea
-> > (note, some subsystems, like sound, do require it, as that's the api
-> > they use, so this is not a blanket statement.)
-> > 
-> > > Is this is strict ban that new platform driver should not add
-> > > module_param?
-> > 
-> > You need to really really really justify, and document in the changelog
-> > text, why all of the other methods of configuring a platform driver will
-> > not work in order to have it considered.
-> 
-> I just wanna use the module parateter to give user a choice to choose
-> to bypass some clocks.
+Commit 672365477ae8 ("x86/fpu: Update XFD state where required") and
+commit 8bf26758ca96 ("x86/fpu: Add XFD state to fpstate") introduced a
+per CPU variable xfd_state to keep the MSR_IA32_XFD value cached. In
+order to avoid unnecessary writes to the MSR.
 
-That is not what a module paramter is for, a "user" does not use them,
-that would be required to be set at boot time.
+On CPU hotplug MSR_IA32_XFD is reset to the init_fpstate.xfd, which
+wipes out any stale state. But the per CPU cached xfd value is not
+reset, which brings them out of sync.
 
-> There are 100+ clocks in the driver. Different user
-> may wanna different configuration. With device tree, it is
-> not flexible.Such as user A may wanna bypass clock X, Y; user B may
-> wanna bypass clock Z.
+As a consequence a subsequent xfd_update_state() might fail to update
+the MSR which in turn can result in XRSTOR raising a #NM in kernel
+space, which crashes the kernel.
 
-Device tree is supposed to be flexible to handle this.  If not, please
-rework the way your driver handles the device tree information about the
-clocks.
+To address the issue mentioned, initialize xfd_state together with
+MSR_IA32_XFD and always update MSR_IA32_XFD with xfd_set_state to
+avoid out of sync cases.
 
-Again, module parameters is not the way to handle this issue, sorry.
-Think about what would happen if all drivers were to attempt to have a
-module parameter like this.  That would be unmaintainable.
+Fixes: 672365477ae8 ("x86/fpu: Update XFD state where required")
 
-> With module parameter, I could easily set it in bootargs.
+Signed-off-by: Adamos Ttofari <attofari@amazon.de>
+---
+ arch/x86/kernel/fpu/xstate.c |  8 ++++----
+ arch/x86/kernel/fpu/xstate.h | 14 ++++++++++----
+ 2 files changed, 14 insertions(+), 8 deletions(-)
 
-Users do not set bootargs :)
+diff --git a/arch/x86/kernel/fpu/xstate.c b/arch/x86/kernel/fpu/xstate.c
+index 0bab497c9436..d0f151d209d4 100644
+--- a/arch/x86/kernel/fpu/xstate.c
++++ b/arch/x86/kernel/fpu/xstate.c
+@@ -177,10 +177,11 @@ void fpu__init_cpu_xstate(void)
+ 	 * Must happen after CR4 setup and before xsetbv() to allow KVM
+ 	 * lazy passthrough.  Write independent of the dynamic state static
+ 	 * key as that does not work on the boot CPU. This also ensures
+-	 * that any stale state is wiped out from XFD.
++	 * that any stale state is wiped out from XFD. Reset the per CPU
++	 * xfd cache too.
+ 	 */
+ 	if (cpu_feature_enabled(X86_FEATURE_XFD))
+-		wrmsrl(MSR_IA32_XFD, init_fpstate.xfd);
++		xfd_set_state(init_fpstate.xfd);
+ 
+ 	/*
+ 	 * XCR_XFEATURE_ENABLED_MASK (aka. XCR0) sets user features
+@@ -914,8 +915,7 @@ void fpu__resume_cpu(void)
+ 				     xfeatures_mask_independent());
+ 	}
+ 
+-	if (fpu_state_size_dynamic())
+-		wrmsrl(MSR_IA32_XFD, current->thread.fpu.fpstate->xfd);
++	xfd_update_state(current->thread.fpu.fpstate);
+ }
+ 
+ /*
+diff --git a/arch/x86/kernel/fpu/xstate.h b/arch/x86/kernel/fpu/xstate.h
+index a4ecb04d8d64..d272fc214113 100644
+--- a/arch/x86/kernel/fpu/xstate.h
++++ b/arch/x86/kernel/fpu/xstate.h
+@@ -147,20 +147,26 @@ static inline void xfd_validate_state(struct fpstate *fpstate, u64 mask, bool rs
+ #endif
+ 
+ #ifdef CONFIG_X86_64
++static inline void xfd_set_state(u64 xfd)
++{
++	wrmsrl(MSR_IA32_XFD, xfd);
++	__this_cpu_write(xfd_state, xfd);
++}
++
+ static inline void xfd_update_state(struct fpstate *fpstate)
+ {
+ 	if (fpu_state_size_dynamic()) {
+ 		u64 xfd = fpstate->xfd;
+ 
+-		if (__this_cpu_read(xfd_state) != xfd) {
+-			wrmsrl(MSR_IA32_XFD, xfd);
+-			__this_cpu_write(xfd_state, xfd);
+-		}
++		if (__this_cpu_read(xfd_state) != xfd)
++			xfd_set_state(xfd);
+ 	}
+ }
+ 
+ extern int __xfd_enable_feature(u64 which, struct fpu_guest *guest_fpu);
+ #else
++static inline void xfd_set_state(u64 xfd) { }
++
+ static inline void xfd_update_state(struct fpstate *fpstate) { }
+ 
+ static inline int __xfd_enable_feature(u64 which, struct fpu_guest *guest_fpu) {
+-- 
+2.39.2
 
-> But anyway if this is not preferred, I need to find other way.
 
-Use device tree please, that is what it is there for.
 
-thanks,
 
-greg k-h
+Amazon Development Center Germany GmbH
+Krausenstr. 38
+10117 Berlin
+Geschaeftsfuehrung: Christian Schlaeger, Jonathan Weiss
+Eingetragen am Amtsgericht Charlottenburg unter HRB 149173 B
+Sitz: Berlin
+Ust-ID: DE 289 237 879
+
+
+
