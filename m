@@ -2,78 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432DF700B18
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 17:10:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FB62700B16
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 17:10:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241754AbjELPKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 11:10:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
+        id S241564AbjELPKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 11:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241757AbjELPKf (ORCPT
+        with ESMTP id S241757AbjELPKQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 11:10:35 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 385187695;
-        Fri, 12 May 2023 08:10:26 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 4D7391C0ABB; Fri, 12 May 2023 17:10:24 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1683904224;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=m+tuCGTpWa1yn/iDsjxKmoSoh9Y6nyn25fuTmBqNyqo=;
-        b=YPWarCic8gSCff9zOS5ukcu0QErdCHhYcqvd+5PE0F9EtHhoeKtCfXuMAJVYrr9oUIDjVo
-        uavrz8JnHpV2uxRg69NUiExtZeDf75S3H4ltUN4Ez8A5qnJ7IolKBLFZHqkJvjkn99ljuD
-        N9c0F8PZbOMGvnQW2qcwM3RpXEktfKg=
-Date:   Fri, 12 May 2023 17:09:57 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Maxime Ripard <mripard@kernel.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Li Yi <liyi@loongson.cn>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Helge Deller <deller@gmx.de>,
-        Lucas De Marchi <lucas.demarchi@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] video/aperture: fix typos
-Message-ID: <ZF5WxRrQwVjUuD6z@localhost>
-References: <20230404040101.2165600-1-suijingfeng@loongson.cn>
- <0ad03743-0224-b154-a149-e3e4d54b252d@suse.de>
- <87355fex1f.fsf@minerva.mail-host-address-is-not-set>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87355fex1f.fsf@minerva.mail-host-address-is-not-set>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 12 May 2023 11:10:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF3C7A24C;
+        Fri, 12 May 2023 08:10:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52DF9656FE;
+        Fri, 12 May 2023 15:10:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6F35C433D2;
+        Fri, 12 May 2023 15:10:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683904208;
+        bh=/hz3ta5XNZof/0N79CR5zsvKkh88g9PLrKTXJa4XIk8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=PHwNktIXeV485y4Q6NXqGz7qmUq7ZRMt7NSTDDXli5K2EmI5yfp+NhEJ+LG6pCs3w
+         qabAqsKFj3eyHyrp4fhKIkeFHse5HHYGuzMQJdDePP0XZJXc/Cc/a1DAu9BgXbKmoF
+         v0uR5x7maspQHEckuNVIfZgD1hMgX30Y+WSHk/5TamwHbZxenUOuxFthsg6f54vULL
+         rDmARMZZFNIl33D5G9SazuYMePAO12EdzXJO4YuwZb6V3Ap37hk6weSOUacNNUYfwX
+         m4lYoh+myCNF7U+Km0Q/mJGSkrOx+S1IpDTwdiFCqsasvQltCGEJyIUk9VMsSnfBlD
+         //DJpIA0F8pLQ==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pxUPG-00EbFV-1B;
+        Fri, 12 May 2023 16:10:06 +0100
+Date:   Fri, 12 May 2023 16:10:05 +0100
+Message-ID: <86o7mpmvqq.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     <broonie@kernel.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <tglx@linutronix.de>, <linus.walleij@linaro.org>,
+        <vkoul@kernel.org>, <lgirdwood@gmail.com>,
+        <yung-chuan.liao@linux.intel.com>, <sanyog.r.kale@intel.com>,
+        <pierre-louis.bossart@linux.intel.com>,
+        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 07/10] irqchip/cs42l43: Add support for the cs42l43 IRQs
+In-Reply-To: <20230512122838.243002-8-ckeepax@opensource.cirrus.com>
+References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
+        <20230512122838.243002-8-ckeepax@opensource.cirrus.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: ckeepax@opensource.cirrus.com, broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org, tglx@linutronix.de, linus.walleij@linaro.org, vkoul@kernel.org, lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com, pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org, patches@opensource.cirrus.com, devicetree@vger.kernel.org, linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
-
-> > Am 04.04.23 um 06:01 schrieb Sui Jingfeng:
-> >>   EFI FB, VESA FB or VGA FB etc are belong to firmware based framebuffer
-> >>   driver.
-> >
+On Fri, 12 May 2023 13:28:35 +0100,
+Charles Keepax <ckeepax@opensource.cirrus.com> wrote:
 > 
-...
-> I fixed that before applying, also removed the "are" in the sentence
-> above, since it sounded off and repharsed subject line as "Fix typos
-> in comments".
+> The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
+> (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
+> for portable applications. It provides a high dynamic range, stereo
+> DAC for headphone output, two integrated Class D amplifiers for
+> loudspeakers, and two ADCs for wired headset microphone input or
+> stereo line input. PDM inputs are provided for digital microphones.
+> 
+> The IRQ chip provides IRQ functionality both to other parts of the
+> cs42l43 device and to external devices that wish to use its IRQs.
 
-I seem to remember that 'all your bases are belong to us' is an old
-meme, but that was probably not intentional here.
+Sorry, but this isn't much of an interrupt controller driver. A modern
+interrupt controller driver is firmware-driven (DT or ACPI, pick your
+poison), uses irq domains, and uses the irqchip API.
 
-Best regards,
-						Pavel
+This is just a another variant of the board-file theme, which has
+nothing to do with the irqchip subsystem.
+
+	M.
 
 -- 
+Without deviation from the norm, progress is not possible.
