@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71D28700317
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 10:57:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8345700319
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 10:58:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240241AbjELI5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 04:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33364 "EHLO
+        id S240244AbjELI6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 04:58:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbjELI5H (ORCPT
+        with ESMTP id S239962AbjELI6L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 04:57:07 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076C010A3D
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 01:56:58 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f315735514so312634185e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 01:56:57 -0700 (PDT)
+        Fri, 12 May 2023 04:58:11 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859DE2126
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 01:58:05 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-307c040797bso1840919f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 01:58:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1683881816; x=1686473816;
+        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1683881877; x=1686473877;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hbhrF1vaRRoJzYyea1JBFcTA2VAH3WkbBcvliTXkyWM=;
-        b=acVr4rEpZzh5BDTE3sCn1nL2V53Rd6FEEhr9YcXuVFfaaqCmyAiwlO95PasYfT0SGj
-         kGR1ZV2BHmTa2qKvGMrDop8XWV7YinIqdDnGqQQT74v6MaiI5j7pik4jo+/fqg21x6f0
-         YOS1AvpcZbF6yUuI/szDxFNTKKScZXq+a/zfEYSFViTnUDJdJ1o3AV440ACM5WinqbA8
-         N/jROH4LvspGZDwgbqPZoypXDcNLEuNf+RYM0lESX4aGNXX0YNItu2rVcEGI8MUL3qDh
-         lexX4ho58ebwc2SbO9qrSxysj8oD6C6z3V6mt7Uq7e5Oo7aQxDVJW6zfRgi0o8Kp+MwO
-         2M9Q==
+        bh=mcoGNF7JhrmxjCUJ31ZWLSLoY1qQtRXBvkDSeKWeoAE=;
+        b=j0DLCCtMEV6UXHGMXtA6jElCfmVNii679kPYYZsmKm9aD75PHOebwGkVrc6Gfiboyx
+         RvCFvQmdeuzdeOvfXCdQOXwLou3CT6k5zHrydjFCJOM4CfLlm23nYTXhdENsRytg1bw2
+         M+WUTSR3utlqD0vuCxQR2w2Ifa3W3yUVTfIhLcL+gs4ADta+RZD/IzA7ThYOKELeV3hw
+         /YXVPvWlRyErSS21CkUFyhAfXahfWVYARbMIE9VKbydkHTCJT+v3ZtI+4FtUTpkIkXTZ
+         uUkHKb7RdfHC8Q06kUAnddmIThthmriXlIOQgdPdvAX5tb59HXmbwuvIUmyRBi8UL7kz
+         2WdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683881816; x=1686473816;
+        d=1e100.net; s=20221208; t=1683881877; x=1686473877;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hbhrF1vaRRoJzYyea1JBFcTA2VAH3WkbBcvliTXkyWM=;
-        b=fNAWfudBtJWFIdszOGRu3uaUMIVflAC+Xg1fhws8iRz5qp9PBnyfA07wLg9Jdw3Kaq
-         pQVVSOmhqk99uDTelSwOw4ErsJQ+p5F73/7E0QMtEIXm1zmqGUvTSw2eKEbRsw1kK4zY
-         +lLsFGqQg8NJoqFoxJ66OYkKc4Dkn/ASzb9x80AVTkip5lhXkFYGMt5YN/4d1u9V6YyC
-         M4aGMsBnWUxQxaSuiHPvIj9ESG1dZmsXa5RQbm1OIDXVLzIyXKpfaxOxYybKopNnOKDB
-         h1XstxEZjOkAWKCanHUTBXimpPAkzFkjMr7oIfYFu0GR0mNgEYklA7/l7JY79fHI4nb1
-         wKeA==
-X-Gm-Message-State: AC+VfDz+bqXOA5BlJfM3MXlptw3a8MLykM0tTQXcXoNnVZHrLeT9uw+Y
-        Qp4FZhokpXQNXtMrpdzQ+utvwQ==
-X-Google-Smtp-Source: ACHHUZ5iEPG/+h+duX0vfpwWwpJ/AAziiXGkzegiSPOBvbbch/qAjATyDjuRLujdEH9ME1cg+vOqzw==
-X-Received: by 2002:a05:600c:4f45:b0:3f4:2bcf:e19 with SMTP id m5-20020a05600c4f4500b003f42bcf0e19mr8250663wmq.8.1683881816508;
-        Fri, 12 May 2023 01:56:56 -0700 (PDT)
+        bh=mcoGNF7JhrmxjCUJ31ZWLSLoY1qQtRXBvkDSeKWeoAE=;
+        b=DaXl68QYvq2xyKCfA86zOUM1UXJjiyHrJglUJ8ooTeQQofaoNC23L4lf7goXspx6MV
+         PUWSKSKD1r7QCilvsS5E0YSHLdF3x7YTy7hAAYG5lX0y5/08pcTTW6xLzaR/Da/7Uimm
+         9pZLQ/rfyJHZj2n8pQKm+s22lqZTpKimQpiBoYMtKylqRfLPw1a4dIImIoGnfpsw+58n
+         lSRD8s9B1u2m1wb2lsDNt+2gvSFxXBG+yimx0pKd6GfkRVyC1dB28Tbp5AlDa2w1/6GE
+         Teffjs3GLvtnbb5OaBnEK761Vs47HEv7y5ACQPVxfTERzVN8DZLyDfNtngGGizZZuAQn
+         vVPg==
+X-Gm-Message-State: AC+VfDzUyzbMk29JdENyJDSR4kCyOZpnWoX/Ot9C6KoQ8+lGHrRPGK8M
+        I00uApGOMvipbN5Ozkr+H0RsZQ==
+X-Google-Smtp-Source: ACHHUZ59QZ/d2h0X4opjouOE+vww3Ww10su+H5NJb68TnAb4iZVlA+QJrLsykQHhtEpQNw67FT9wNQ==
+X-Received: by 2002:adf:e941:0:b0:307:a8e8:ca6c with SMTP id m1-20020adfe941000000b00307a8e8ca6cmr8411496wrn.35.1683881877661;
+        Fri, 12 May 2023 01:57:57 -0700 (PDT)
 Received: from alex-rivos.home (amontpellier-656-1-456-62.w92-145.abo.wanadoo.fr. [92.145.124.62])
-        by smtp.gmail.com with ESMTPSA id s7-20020a1cf207000000b003e91b9a92c9sm27963429wmc.24.2023.05.12.01.56.55
+        by smtp.gmail.com with ESMTPSA id z22-20020a7bc7d6000000b003f42813b315sm12616421wmk.32.2023.05.12.01.57.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 01:56:56 -0700 (PDT)
+        Fri, 12 May 2023 01:57:57 -0700 (PDT)
 From:   Alexandre Ghiti <alexghiti@rivosinc.com>
 To:     Jonathan Corbet <corbet@lwn.net>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -71,9 +71,9 @@ To:     Jonathan Corbet <corbet@lwn.net>,
         linux-perf-users@vger.kernel.org, linux-riscv@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH v2 03/10] riscv: Make legacy counter enum match the HW numbering
-Date:   Fri, 12 May 2023 10:53:14 +0200
-Message-Id: <20230512085321.13259-4-alexghiti@rivosinc.com>
+Subject: [PATCH v2 04/10] drivers: perf: Rename riscv pmu driver
+Date:   Fri, 12 May 2023 10:53:15 +0200
+Message-Id: <20230512085321.13259-5-alexghiti@rivosinc.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230512085321.13259-1-alexghiti@rivosinc.com>
 References: <20230512085321.13259-1-alexghiti@rivosinc.com>
@@ -81,39 +81,48 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RISCV_PMU_LEGACY_INSTRET used to be set to 1 whereas the offset of this
-hardware counter from CSR_CYCLE is actually 2: make this offset match the
-real hw offset so that we can directly expose those values to userspace.
+In addition to being more pretty, it will be useful in upcoming commits
+to distinguish those pmu drivers from the other pmu drivers.
 
 Signed-off-by: Alexandre Ghiti <alexghiti@rivosinc.com>
 ---
- drivers/perf/riscv_pmu_legacy.c | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+ drivers/perf/riscv_pmu_legacy.c | 2 +-
+ drivers/perf/riscv_pmu_sbi.c    | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/perf/riscv_pmu_legacy.c b/drivers/perf/riscv_pmu_legacy.c
-index ca9e20bfc7ac..0d8c9d8849ee 100644
+index 0d8c9d8849ee..ffe09d857366 100644
 --- a/drivers/perf/riscv_pmu_legacy.c
 +++ b/drivers/perf/riscv_pmu_legacy.c
-@@ -12,8 +12,11 @@
- #include <linux/perf/riscv_pmu.h>
- #include <linux/platform_device.h>
+@@ -95,7 +95,7 @@ static void pmu_legacy_init(struct riscv_pmu *pmu)
+ 	pmu->ctr_clear_idx = NULL;
+ 	pmu->ctr_read = pmu_legacy_read_ctr;
  
--#define RISCV_PMU_LEGACY_CYCLE		0
--#define RISCV_PMU_LEGACY_INSTRET	1
-+enum {
-+	RISCV_PMU_LEGACY_CYCLE,
-+	RISCV_PMU_LEGACY_TIME,
-+	RISCV_PMU_LEGACY_INSTRET
-+};
+-	perf_pmu_register(&pmu->pmu, "cpu", PERF_TYPE_RAW);
++	perf_pmu_register(&pmu->pmu, RISCV_PMU_LEGACY_PDEV_NAME, PERF_TYPE_RAW);
+ }
  
- static bool pmu_init_done;
+ static int pmu_legacy_device_probe(struct platform_device *pdev)
+diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
+index 70cb50fd41c2..3b0ee2148054 100644
+--- a/drivers/perf/riscv_pmu_sbi.c
++++ b/drivers/perf/riscv_pmu_sbi.c
+@@ -897,7 +897,7 @@ static int pmu_sbi_device_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		goto out_unregister;
+ 
+-	ret = perf_pmu_register(&pmu->pmu, "cpu", PERF_TYPE_RAW);
++	ret = perf_pmu_register(&pmu->pmu, RISCV_PMU_PDEV_NAME, PERF_TYPE_RAW);
+ 	if (ret)
+ 		goto out_unregister;
  
 -- 
 2.37.2
