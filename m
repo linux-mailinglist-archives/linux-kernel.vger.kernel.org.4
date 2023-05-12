@@ -2,118 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E83FC6FFEB9
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 04:06:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0202B6FFED2
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 04:14:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239685AbjELCGS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 22:06:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54194 "EHLO
+        id S239770AbjELCOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 22:14:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233568AbjELCGP (ORCPT
+        with ESMTP id S231799AbjELCOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 22:06:15 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 563321993;
-        Thu, 11 May 2023 19:06:14 -0700 (PDT)
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34C1Q4Re024747;
-        Fri, 12 May 2023 02:06:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=k268/CPTFl1nHE3gNz6WaABtB2MSV6qC7WdFBYW5Wmc=;
- b=UmYMKTL+J3O5MGdI8gcoN0D5NBD+BGCr5H5ovkiHYGwuHtaEEuqCSAWwgDQEo5rvYhnZ
- ku4sGLjbhpaR/Z+WbFCVq5R3SqNxx3ZitLKfxNRIyihtwEZKHS1tDm4h48Bnvx+Tq46d
- ammL9bJBk5FwLyoU6AMN/5YJNixbZWxnuFA4kJcYyurEUQNoxH4Bo4MyMR6K/ZcZvcJK
- ox6sBBkhUGYXlAplapUHHb7JH3dqSfmcBtbyYAcrFPFwvy1fNr3kRJA58CDXvrxBsF2E
- I63TMKmb4uZx2nsyK0ie3520k68wW4ane5SUXkg3bcuPLTvnVKZmytvaml7NlyoslBtK gA== 
-Received: from aptaippmta01.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qgpfk2xs3-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 02:06:03 +0000
-Received: from pps.filterd (APTAIPPMTA01.qualcomm.com [127.0.0.1])
-        by APTAIPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34C261xp015509;
-        Fri, 12 May 2023 02:06:01 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTP id 3qdfyku37s-1;
-        Fri, 12 May 2023 02:06:01 +0000
-Received: from APTAIPPMTA01.qualcomm.com (APTAIPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34C261sY015503;
-        Fri, 12 May 2023 02:06:01 GMT
-Received: from cbsp-sh-gv.qualcomm.com (CBSP-SH-gv.ap.qualcomm.com [10.231.249.68])
-        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTP id 34C2610O015476;
-        Fri, 12 May 2023 02:06:01 +0000
-Received: by cbsp-sh-gv.qualcomm.com (Postfix, from userid 4098150)
-        id 550E94235; Fri, 12 May 2023 10:06:00 +0800 (CST)
-From:   Qiang Yu <quic_qianyu@quicinc.com>
-To:     mani@kernel.org, quic_jhugo@quicinc.com
-Cc:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_cang@quicinc.com,
-        quic_mrana@quicinc.com, Qiang Yu <quic_qianyu@quicinc.com>
-Subject: [PATCH v3] bus: mhi: host: Skip MHI reset if device is in RDDM
-Date:   Fri, 12 May 2023 10:05:58 +0800
-Message-Id: <1683857158-9804-1-git-send-email-quic_qianyu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: z8hE2GqBr6jpQ3gq92NqITSfmrwAOYkl
-X-Proofpoint-GUID: z8hE2GqBr6jpQ3gq92NqITSfmrwAOYkl
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-11_19,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 spamscore=0
- suspectscore=0 mlxlogscore=999 lowpriorityscore=0 adultscore=0
- malwarescore=0 priorityscore=1501 bulkscore=0 mlxscore=0 phishscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305120017
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Thu, 11 May 2023 22:14:37 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 860C41FD4;
+        Thu, 11 May 2023 19:14:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683857676; x=1715393676;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+uP3qdeQwkNNyPV4cDI0woVqqifLQC8W3QFlpDqZ5rw=;
+  b=F4RRofB/TqVdWNMqcWSV2VTr5oEbxfzszF4QI2BHmzFGYPjiHxrP9X0X
+   AZf9XUZYJi+g+iDNlF2Ag1NRvT8SgstWCmrXl1bv5Yfn4dCDXxYzQWOfO
+   sxZJJRlzAMzQstwT7B6Kxn1GHrZsz6o3kpaF8mE8VjphslFaA/h0u7CJD
+   sd/R1rdK2AOJzpKwh4DWFPuESIe1cRA4iv/f1UVQJxvVkC8ijQQOMlgTs
+   5e29YY1IbCtB57J8JN0ST01mRpglfoZoTjN5dfHsQr8628LaRqKmIlJPf
+   qvN0SRxK4A+dBYULY2ykFiUemc5D5uXEdMEhZdwuTVEG5+JiBljIvE0UW
+   g==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="437016856"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="437016856"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 19:14:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="730630998"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="730630998"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 11 May 2023 19:14:34 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pxIIj-0004Q8-0p;
+        Fri, 12 May 2023 02:14:33 +0000
+Date:   Fri, 12 May 2023 10:13:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
+        selinux@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, Paul Moore <paul@paul-moore.com>,
+        Stephen Smalley <stephen.smalley.work@gmail.com>,
+        Eric Paris <eparis@parisplace.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] selinux: make header files self-including
+Message-ID: <202305121044.Q88iF2NQ-lkp@intel.com>
+References: <20230511123236.723025-1-cgzones@googlemail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511123236.723025-1-cgzones@googlemail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In RDDM EE, device can not process MHI reset issued by host. In case of MHI
-power off, host is issuing MHI reset and polls for it to get cleared until
-it times out. Since this timeout can not be avoided in case of RDDM, skip
-the MHI reset in this scenarios.
+Hi Christian,
 
-Fixes: a6e2e3522f29 ("bus: mhi: core: Add support for PM state transitions")
-Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
----
-v1->v2: use ~75 columns in commit text,	add Fixes tag
-v2->v3: update Fixes tag
- 
- drivers/bus/mhi/host/pm.c | 5 +++++
- 1 file changed, 5 insertions(+)
+kernel test robot noticed the following build errors:
 
-diff --git a/drivers/bus/mhi/host/pm.c b/drivers/bus/mhi/host/pm.c
-index 0834590..8a4362d 100644
---- a/drivers/bus/mhi/host/pm.c
-+++ b/drivers/bus/mhi/host/pm.c
-@@ -470,6 +470,10 @@ static void mhi_pm_disable_transition(struct mhi_controller *mhi_cntrl)
- 
- 	/* Trigger MHI RESET so that the device will not access host memory */
- 	if (!MHI_PM_IN_FATAL_STATE(mhi_cntrl->pm_state)) {
-+		/* Skip MHI RESET if in RDDM state */
-+		if (mhi_cntrl->rddm_image && mhi_get_exec_env(mhi_cntrl) == MHI_EE_RDDM)
-+			goto skip_mhi_reset;
-+
- 		dev_dbg(dev, "Triggering MHI Reset in device\n");
- 		mhi_set_mhi_state(mhi_cntrl, MHI_STATE_RESET);
- 
-@@ -495,6 +499,7 @@ static void mhi_pm_disable_transition(struct mhi_controller *mhi_cntrl)
- 		}
- 	}
- 
-+skip_mhi_reset:
- 	dev_dbg(dev,
- 		 "Waiting for all pending event ring processing to complete\n");
- 	mhi_event = mhi_cntrl->mhi_event;
+[auto build test ERROR on pcmoore-selinux/next]
+[also build test ERROR on linus/master v6.4-rc1 next-20230511]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-G-ttsche/selinux-make-header-files-self-including/20230511-203619
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/pcmoore/selinux.git next
+patch link:    https://lore.kernel.org/r/20230511123236.723025-1-cgzones%40googlemail.com
+patch subject: [PATCH] selinux: make header files self-including
+config: mips-allyesconfig (https://download.01.org/0day-ci/archive/20230512/202305121044.Q88iF2NQ-lkp@intel.com/config)
+compiler: mips-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/2b237d995d423baa5707fe9f59441d4744892eda
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Christian-G-ttsche/selinux-make-header-files-self-including/20230511-203619
+        git checkout 2b237d995d423baa5707fe9f59441d4744892eda
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305121044.Q88iF2NQ-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from security/selinux/ibpkey.c:26:
+>> security/selinux/include/ibpkey.h:18:10: fatal error: ../flask.h: No such file or directory
+      18 | #include "../flask.h"
+         |          ^~~~~~~~~~~~
+   compilation terminated.
+
+
+vim +18 security/selinux/include/ibpkey.h
+
+    16	
+    17	#include <linux/types.h>
+  > 18	#include "../flask.h"
+    19	
+
 -- 
-2.7.4
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
