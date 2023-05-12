@@ -2,173 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC84700B5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 17:22:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D27A9700B28
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 17:16:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241855AbjELPWA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 11:22:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37784 "EHLO
+        id S241700AbjELPQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 11:16:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241819AbjELPVs (ORCPT
+        with ESMTP id S232739AbjELPQl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 11:21:48 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A83125;
-        Fri, 12 May 2023 08:21:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683904878; x=1715440878;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=HYcETTLQrd7Q2kE/D+/Vk/4DhcDrCT+MKt7UQ1PXhqI=;
-  b=nkn1kchO6o5toaxFObrMadi4z2u/8kA24SQKzEXN0OWFlr+Z3SCkcKwO
-   FeKEY/5E5RaoahHT3Ff3TdIsqfKKV1TH1Z+aYs0R//kcLVya4iIhdVcbj
-   ij3q5ZPkGk+9h9kjUOKusJuiRaphTYIxi3vSU3tpPrNeVhSnqFqIE8JKq
-   jsAsN67zP1bDcwvSzKtWTfyzO38Orz+2xhELVL5lDw/5x1FDnmdf84QrP
-   J04+Ti7KPGLPlGz26Zg1W58qNyYUOouYrCHIYwsLWkusXf9bTle5ac7DD
-   K88YHPgKezLwT/6QeSHce5I8dSdPNoVUvh6UGr8kcMmWkub+mV3fTW9o9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="353061226"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="353061226"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 08:20:52 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="812114475"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="812114475"
-Received: from irvmail002.ir.intel.com ([10.43.11.120])
-  by fmsmga002.fm.intel.com with ESMTP; 12 May 2023 08:20:41 -0700
-Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
-        by irvmail002.ir.intel.com (Postfix) with ESMTP id 9E44536351;
-        Fri, 12 May 2023 16:20:38 +0100 (IST)
-From:   Larysa Zaremba <larysa.zaremba@intel.com>
-To:     bpf@vger.kernel.org
-Cc:     Larysa Zaremba <larysa.zaremba@intel.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
-        netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 11/15] xdp: Add checksum level hint
-Date:   Fri, 12 May 2023 17:16:35 +0200
-Message-Id: <20230512151639.992033-12-larysa.zaremba@intel.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230512151639.992033-1-larysa.zaremba@intel.com>
-References: <20230512151639.992033-1-larysa.zaremba@intel.com>
+        Fri, 12 May 2023 11:16:41 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 778EA5BA5;
+        Fri, 12 May 2023 08:16:40 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 95F223200907;
+        Fri, 12 May 2023 11:16:39 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Fri, 12 May 2023 11:16:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=tycho.pizza; h=
+        cc:cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1683904599; x=1683990999; bh=xt
+        kb0nJV/iS7JIfrwakr/gfmwjRljCPV+qLudxkRwvA=; b=sBX9ErKRfkz9Ul1g96
+        LV+tKo1DkSmM49i8E+NsCfLc9uZA1ibWE5qlYXjZUkoLkc4f+KAO52Y3jpCeB6hr
+        xzS3uPmQFCcRSevNIP29Yf+84wW/iwjpLQy6TY/ZlSGuJmFIY/xnMO3SQFTaQpJF
+        FormSQyKFuvnB10Po/Z4bduNspwBs7f7pAipK6q6zHcnopoRJ5wGNrDC4g75ZM2l
+        skaUdemsMa+iiAxNYS5byhFL69rMFy+UzpNaiRDLkKQGRu86DTUJyif6FxcOnuvC
+        9Opx1QNWICUcBkmvT12ndteLx3Czy9LX4VIqt11/eUpK02J9+462hbFgL3EBgDJs
+        PXjw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1683904599; x=1683990999; bh=xtkb0nJV/iS7J
+        Ifrwakr/gfmwjRljCPV+qLudxkRwvA=; b=WdXbKy6BLe1bFynIaA8GGQIwotTaw
+        pbWzDihwlD9aVcvLcNQKkInousioevCf1ybERYVHQ2f5WWEAdwRpE0MG3p4JpoiP
+        e29Z+2UL9V88UTVGIqoNrDBBJNJEshG2wSPZhVOxoj9E7wOvY4wV95HYY+wnk0iF
+        QX351PyYZMkDaK3ISmGW9e41bV9QuxG9fKby3kHhewOs5lO1aib2JnL5+wL4ksMH
+        tRVBzwne97msGrMT2TeTuOzpfBhcngoq2ThPjkgSe0iUEAXBOF8nrJ+rkq2wbyZ7
+        NOgweavZ3ztN2iN52qwUSnKlvs5i74JoWy+3+oQGfJJ4n1uQ+J+h4TI4A==
+X-ME-Sender: <xms:V1heZJQTmJMC2hbul4vj_bXa3rgxi_TjROX8wv3RjQTpEczvKZGTuw>
+    <xme:V1heZCxqvSVdosCWMx4BDEmkypoeh8xl49W-z-Ub7mD-ARgy-vrlD-J-z_GFUAuqO
+    -Up26qsWatcrXIUG7o>
+X-ME-Received: <xmr:V1heZO0U-j4aGTBrvRyZ_b9xHVuRtrLP6IKoc8jNxOAIFAZ-_97FAwyK--LyYQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehtddgkeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepvfihtghh
+    ohcutehnuggvrhhsvghnuceothihtghhohesthihtghhohdrphhiiiiirgeqnecuggftrf
+    grthhtvghrnhepueettdetgfejfeffheffffekjeeuveeifeduleegjedutdefffetkeel
+    hfelleetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epthihtghhohesthihtghhohdrphhiiiiirg
+X-ME-Proxy: <xmx:V1heZBBDp5QkShqK-1eVcHzI7XVr5qhXQtrbZl7N_KWmektV5wjT9A>
+    <xmx:V1heZCiye4CUpRCFSX9NzvOLoCn-8Q-atAZdbArAGRWCrRF7vgNzpQ>
+    <xmx:V1heZFpngUQJ44J_RX25Jd8VoRTqS-awPIHUlK35Jo3rCbg9WVvT0g>
+    <xmx:V1heZKcAuYI1ENaGrW4njRQzj6JoYiTqWi3FnsfNjI_YO2L7_xnH9w>
+Feedback-ID: i21f147d5:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 12 May 2023 11:16:37 -0400 (EDT)
+Date:   Fri, 12 May 2023 09:16:36 -0600
+From:   Tycho Andersen <tycho@tycho.pizza>
+To:     Dave Chinner <david@fromorbit.com>
+Cc:     "Darrick J . Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Tycho Andersen <tandersen@netflix.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Subject: Re: [PATCH] xfs: don't do inodgc work if task is exiting
+Message-ID: <ZF5YVNdeVNSoG08p@tycho.pizza>
+References: <20230511151702.14704-1-tycho@tycho.pizza>
+ <20230512014547.GA3223426@dread.disaster.area>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512014547.GA3223426@dread.disaster.area>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Implement functionality that enables drivers to expose to XDP code,
-whether checksums was checked and on what level.
+On Fri, May 12, 2023 at 11:45:47AM +1000, Dave Chinner wrote:
+> 
+> Yeah, this is papering over the observed symptom, not addressing the
+> root cause of the inodegc flush delay. What do you see when you run
+> sysrq-w and sysrq-l? Are there inodegc worker threads blocked
+> performing inodegc?
 
-Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
----
- Documentation/networking/xdp-rx-metadata.rst |  3 +++
- include/linux/netdevice.h                    |  1 +
- include/net/xdp.h                            |  2 ++
- kernel/bpf/offload.c                         |  2 ++
- net/core/xdp.c                               | 12 ++++++++++++
- 5 files changed, 20 insertions(+)
+I will try this next time we encounter this.
 
-diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentation/networking/xdp-rx-metadata.rst
-index 73a78029c596..f74f0e283097 100644
---- a/Documentation/networking/xdp-rx-metadata.rst
-+++ b/Documentation/networking/xdp-rx-metadata.rst
-@@ -29,6 +29,9 @@ metadata is supported, this set will grow:
- .. kernel-doc:: net/core/xdp.c
-    :identifiers: bpf_xdp_metadata_rx_stag
- 
-+.. kernel-doc:: net/core/xdp.c
-+   :identifiers: bpf_xdp_metadata_rx_csum_lvl
-+
- An XDP program can use these kfuncs to read the metadata into stack
- variables for its own consumption. Or, to pass the metadata on to other
- consumers, an XDP program can store it into the metadata area carried
-diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-index fdae37fe11f5..ddade3a15366 100644
---- a/include/linux/netdevice.h
-+++ b/include/linux/netdevice.h
-@@ -1657,6 +1657,7 @@ struct xdp_metadata_ops {
- 			       enum xdp_rss_hash_type *rss_type);
- 	int	(*xmo_rx_ctag)(const struct xdp_md *ctx, u16 *vlan_tag);
- 	int	(*xmo_rx_stag)(const struct xdp_md *ctx, u16 *vlan_tag);
-+	int	(*xmo_rx_csum_lvl)(const struct xdp_md *ctx, u8 *csum_level);
- };
- 
- /**
-diff --git a/include/net/xdp.h b/include/net/xdp.h
-index 2db7439fc60f..0fbd25616241 100644
---- a/include/net/xdp.h
-+++ b/include/net/xdp.h
-@@ -393,6 +393,8 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
- 			   bpf_xdp_metadata_rx_ctag) \
- 	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_STAG, \
- 			   bpf_xdp_metadata_rx_stag) \
-+	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CSUM_LVL, \
-+			   bpf_xdp_metadata_rx_csum_lvl) \
- 
- enum {
- #define XDP_METADATA_KFUNC(name, _) name,
-diff --git a/kernel/bpf/offload.c b/kernel/bpf/offload.c
-index 2c6b6e82cfac..8bd54fb4ac63 100644
---- a/kernel/bpf/offload.c
-+++ b/kernel/bpf/offload.c
-@@ -852,6 +852,8 @@ void *bpf_dev_bound_resolve_kfunc(struct bpf_prog *prog, u32 func_id)
- 		p = ops->xmo_rx_ctag;
- 	else if (func_id == bpf_xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_STAG))
- 		p = ops->xmo_rx_stag;
-+	else if (func_id == bpf_xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_CSUM_LVL))
-+		p = ops->xmo_rx_csum_lvl;
- out:
- 	up_read(&bpf_devs_lock);
- 
-diff --git a/net/core/xdp.c b/net/core/xdp.c
-index eff21501609f..7dd45fd62983 100644
---- a/net/core/xdp.c
-+++ b/net/core/xdp.c
-@@ -762,6 +762,18 @@ __bpf_kfunc int bpf_xdp_metadata_rx_stag(const struct xdp_md *ctx, u16 *vlan_tag
- 	return -EOPNOTSUPP;
- }
- 
-+/**
-+ * bpf_xdp_metadata_rx_csum_lvl - Get depth at which HW has checked the checksum.
-+ * @ctx: XDP context pointer.
-+ * @csum_level: Return value pointer.
-+ *
-+ * Returns 0 on success (HW has checked the checksum) or ``-errno`` on error.
-+ */
-+__bpf_kfunc int bpf_xdp_metadata_rx_csum_lvl(const struct xdp_md *ctx, u8 *csum_level)
-+{
-+	return -EOPNOTSUPP;
-+}
-+
- __diag_pop();
- 
- BTF_SET8_START(xdp_metadata_kfunc_ids)
--- 
-2.35.3
+> e.g. inodegc flushes could simply be delayed by an unlinked inode
+> being processed that has millions of extents that need to be freed.
+> 
+> In reality, inode reclaim can block for long periods of time
+> on any filesystem, so the concept of "inode reclaim should
+> not block when PF_EXITING" is not a behaviour that we guarantee
+> anywhere or could guarantee across the board.
+> 
+> Let's get to the bottom of why inodegc has apparently stalled before
+> trying to work out how to fix it...
 
+I'm happy to try, but I think it is also worth applying this patch.
+Like I said in the other thread, having to evac a box to get rid of an
+unkillable userspace process is annoying.
+
+Thanks for the debugging tips.
+
+Tycho
