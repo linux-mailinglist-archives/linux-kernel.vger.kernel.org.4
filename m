@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97F87700086
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 08:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CCD6700088
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 08:30:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239985AbjELGaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 02:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50986 "EHLO
+        id S240026AbjELGa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 02:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239991AbjELGaT (ORCPT
+        with ESMTP id S239992AbjELGaU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 02:30:19 -0400
+        Fri, 12 May 2023 02:30:20 -0400
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 669591BDF;
-        Thu, 11 May 2023 23:29:52 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34C5NmjF020069;
-        Fri, 12 May 2023 06:29:16 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B38430FF;
+        Thu, 11 May 2023 23:29:57 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34C69auT001576;
+        Fri, 12 May 2023 06:29:39 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-type; s=qcppdkim1;
- bh=ED2z0SWJQdtsXeNB10u1bZ3I35ao4yJL0XpQ9FzVPcI=;
- b=Ll3qP4cgOnFtLVp1Q9ipR/m7tKTu1byQSzMxyFwMJ6j496HcYF1NtCQScOrk266JpfBI
- PbKfrcmZxBMW+/WNgMl0NhzFc7p801hArehmcE1WRKpF8+Wfz4diZeKrKL7M6oYTQf5u
- f5P8bZXTJTQXyZKdS80zFNu0aerlu86mqPticC/1A5CtPbRfbg3MM38HqmmVpv8w2X0Q
- Cv+xFQcW+eaJHCplWRS3VVDxaanl0svdv1lkygsI/5BXREdnKKxP73a+YLSDkjNNp07n
- Cj3EpqA3pYzhaxi/HJoNpmbm3009s+Sjxv0RI38+T1qWfdneDIumAcWpX4bKtC6RNcHl Vg== 
+ bh=q7nIQjxy0Rk6zBtMB+Tgpt3ybbAW+kM/J9WXgMAMuZ0=;
+ b=SjU2KrxLkLU8swwPDDPrzHPXLWMeH27ERHeIvAlaBGa8ELdjnIzPZcdjl0oHfaW9kBQZ
+ WJmTKYBwkYjlnjTfTm7roaRPBSe82+xj81q1PqdkQmeVp4r/QalOHm7kjBXFRTIfuqJ2
+ mLx2Jt0cs+wErt3lclQwnvRXJqPdtrRw3Q7eBJuf2ioX10mwpZIaSHsgBSj/yqlsbVjw
+ 4CqWoqIZM7uecPkS1j/CK42Sx9xh6PSCrZ913uiLhJpcFWOiPmYdXdiamiUe7/jKDhYP
+ 7d1QKtZrC0nMhnyjECknj87vcJaX1yaJVmB73T0Em1z5VVr6EQ2EdDv48gCLgdPXaxih 4w== 
 Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qhdf40cxf-1
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qhfww013t-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 06:29:16 +0000
+        Fri, 12 May 2023 06:29:39 +0000
 Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34C6TEPE025447
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34C6TcZV026465
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 06:29:14 GMT
+        Fri, 12 May 2023 06:29:38 GMT
 Received: from stor-berry.qualcomm.com (10.80.80.8) by
  nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Thu, 11 May 2023 23:29:14 -0700
+ 15.2.986.42; Thu, 11 May 2023 23:29:38 -0700
 From:   "Bao D. Nguyen" <quic_nguyenb@quicinc.com>
 To:     <quic_asutoshd@quicinc.com>, <quic_cang@quicinc.com>,
         <bvanassche@acm.org>, <mani@kernel.org>,
@@ -49,10 +49,13 @@ CC:     <linux-scsi@vger.kernel.org>,
         "Bao D. Nguyen" <quic_nguyenb@quicinc.com>,
         Alim Akhtar <alim.akhtar@samsung.com>,
         "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Alice Chao <alice.chao@mediatek.com>,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>,
+        Eric Biggers <ebiggers@google.com>,
         open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 2/7] ufs: core: Update the ufshcd_clear_cmds() functionality
-Date:   Thu, 11 May 2023 23:28:49 -0700
-Message-ID: <91bddbc5945a7a651bb1edc35ac5ff54a20bf6c1.1683872601.git.quic_nguyenb@quicinc.com>
+Subject: [PATCH v5 3/7] ufs: mcq: Add supporting functions for mcq abort
+Date:   Thu, 11 May 2023 23:28:50 -0700
+Message-ID: <e95d40f2d9e473b809d6aa54cfa85b9d1a2e8b15.1683872601.git.quic_nguyenb@quicinc.com>
 X-Mailer: git-send-email 2.7.4
 In-Reply-To: <cover.1683872601.git.quic_nguyenb@quicinc.com>
 References: <cover.1683872601.git.quic_nguyenb@quicinc.com>
@@ -63,124 +66,333 @@ X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01a.na.qualcomm.com (10.52.223.231)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: rtPyRW4S6eiQloC1mQv6sIA9gLT63Q07
-X-Proofpoint-ORIG-GUID: rtPyRW4S6eiQloC1mQv6sIA9gLT63Q07
+X-Proofpoint-ORIG-GUID: 4az-Sit_1jFB4j_2_0Lhr4CpXVdai0b7
+X-Proofpoint-GUID: 4az-Sit_1jFB4j_2_0Lhr4CpXVdai0b7
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
  definitions=2023-05-12_03,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- clxscore=1015 bulkscore=0 spamscore=0 suspectscore=0 phishscore=0
- malwarescore=0 lowpriorityscore=0 impostorscore=0 priorityscore=1501
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=999 malwarescore=0
+ spamscore=0 clxscore=1015 adultscore=0 mlxscore=0 phishscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2304280000 definitions=main-2305120056
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_PASS,T_PDS_OTHER_BAD_TLD,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the ufshcd_clear_cmds(), the 2nd pamameter would be the
-bit mask of the command to be cleared in the transfer request
-door bell register. This bit mask mechanism does not scale well in
-mcq mode when the queue depth becomes much greater than 64. Change the
-2nd parameter to the function to be the task_tag number of the
-corresponding bit to be cleared in the door bell register.
-By doing so, mcq mode with a large queue depth can reuse this function.
-
-Since the behavior of this function is changed from handling
-multiple commands into a single command, rename ufshcd_clear_cmds()
-into ufshcd_clear_cmd().
+Add supporting functions to handle ufs abort in mcq mode.
 
 Signed-off-by: Bao D. Nguyen <quic_nguyenb@quicinc.com>
 ---
- drivers/ufs/core/ufshcd.c | 37 +++++++++++++++++++++----------------
- 1 file changed, 21 insertions(+), 16 deletions(-)
+ drivers/ufs/core/ufs-mcq.c     | 167 +++++++++++++++++++++++++++++++++++++++++
+ drivers/ufs/core/ufshcd-priv.h |  10 +++
+ drivers/ufs/core/ufshcd.c      |   1 -
+ include/ufs/ufshcd.h           |   3 +
+ include/ufs/ufshci.h           |  17 +++++
+ 5 files changed, 197 insertions(+), 1 deletion(-)
 
+diff --git a/drivers/ufs/core/ufs-mcq.c b/drivers/ufs/core/ufs-mcq.c
+index 202ff71..655f220 100644
+--- a/drivers/ufs/core/ufs-mcq.c
++++ b/drivers/ufs/core/ufs-mcq.c
+@@ -12,6 +12,10 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include "ufshcd-priv.h"
++#include <linux/delay.h>
++#include <scsi/scsi_cmnd.h>
++#include <linux/bitfield.h>
++#include <linux/iopoll.h>
+ 
+ #define MAX_QUEUE_SUP GENMASK(7, 0)
+ #define UFS_MCQ_MIN_RW_QUEUES 2
+@@ -27,6 +31,9 @@
+ #define MCQ_ENTRY_SIZE_IN_DWORD	8
+ #define CQE_UCD_BA GENMASK_ULL(63, 7)
+ 
++/* Max mcq register polling time in microseconds */
++#define MCQ_POLL_US 500000
++
+ static int rw_queue_count_set(const char *val, const struct kernel_param *kp)
+ {
+ 	return param_set_uint_minmax(val, kp, UFS_MCQ_MIN_RW_QUEUES,
+@@ -419,6 +426,7 @@ int ufshcd_mcq_init(struct ufs_hba *hba)
+ 		hwq->max_entries = hba->nutrs;
+ 		spin_lock_init(&hwq->sq_lock);
+ 		spin_lock_init(&hwq->cq_lock);
++		mutex_init(&hwq->sq_mutex);
+ 	}
+ 
+ 	/* The very first HW queue serves device commands */
+@@ -429,3 +437,162 @@ int ufshcd_mcq_init(struct ufs_hba *hba)
+ 	host->host_tagset = 1;
+ 	return 0;
+ }
++
++static int ufshcd_mcq_sq_stop(struct ufs_hba *hba, struct ufs_hw_queue *hwq)
++{
++	void __iomem *reg;
++	u32 id = hwq->id, val;
++	int err;
++
++	writel(SQ_STOP, mcq_opr_base(hba, OPR_SQD, id) + REG_SQRTC);
++	reg = mcq_opr_base(hba, OPR_SQD, id) + REG_SQRTS;
++	err = read_poll_timeout(readl, val, val & SQ_STS, 20,
++				MCQ_POLL_US, false, reg);
++	if (err)
++		dev_err(hba->dev, "%s: failed. hwq-id=%d, err=%d\n",
++			__func__, id, err);
++	return err;
++}
++
++static int ufshcd_mcq_sq_start(struct ufs_hba *hba, struct ufs_hw_queue *hwq)
++{
++	void __iomem *reg;
++	u32 id = hwq->id, val;
++	int err;
++
++	writel(SQ_START, mcq_opr_base(hba, OPR_SQD, id) + REG_SQRTC);
++	reg = mcq_opr_base(hba, OPR_SQD, id) + REG_SQRTS;
++	err = read_poll_timeout(readl, val, !(val & SQ_STS), 20,
++				MCQ_POLL_US, false, reg);
++	if (err)
++		dev_err(hba->dev, "%s: failed. hwq-id=%d, err=%d\n",
++			__func__, id, err);
++	return err;
++}
++
++/**
++ * ufshcd_mcq_sq_cleanup - Clean up submission queue resources
++ * associated with the pending command.
++ * @hba - per adapter instance.
++ * @task_tag - The command's task tag.
++ *
++ * Returns 0 for success; error code otherwise.
++ */
++int ufshcd_mcq_sq_cleanup(struct ufs_hba *hba, int task_tag)
++{
++	struct ufshcd_lrb *lrbp = &hba->lrb[task_tag];
++	struct scsi_cmnd *cmd = lrbp->cmd;
++	struct ufs_hw_queue *hwq;
++	void __iomem *reg, *opr_sqd_base;
++	u32 nexus, id, val;
++	int err;
++
++	if (task_tag != hba->nutrs - UFSHCD_NUM_RESERVED) {
++		if (!cmd)
++			return -EINVAL;
++		hwq = ufshcd_mcq_req_to_hwq(hba, scsi_cmd_to_rq(cmd));
++	} else {
++		hwq = hba->dev_cmd_queue;
++	}
++
++	id = hwq->id;
++
++	mutex_lock(&hwq->sq_mutex);
++
++	/* stop the SQ fetching before working on it */
++	err = ufshcd_mcq_sq_stop(hba, hwq);
++	if (err)
++		goto unlock;
++
++	/* SQCTI = EXT_IID, IID, LUN, Task Tag */
++	nexus = lrbp->lun << 8 | task_tag;
++	opr_sqd_base = mcq_opr_base(hba, OPR_SQD, id);
++	writel(nexus, opr_sqd_base + REG_SQCTI);
++
++	/* SQRTCy.ICU = 1 */
++	writel(SQ_ICU, opr_sqd_base + REG_SQRTC);
++
++	/* Poll SQRTSy.CUS = 1. Return result from SQRTSy.RTC */
++	reg = opr_sqd_base + REG_SQRTS;
++	err = read_poll_timeout(readl, val, val & SQ_CUS, 20,
++				MCQ_POLL_US, false, reg);
++	if (err)
++		dev_err(hba->dev, "%s: failed. hwq=%d, tag=%d err=%ld\n",
++			__func__, id, task_tag,
++			FIELD_GET(SQ_ICU_ERR_CODE_MASK, readl(reg)));
++
++	if (ufshcd_mcq_sq_start(hba, hwq))
++		err = -ETIMEDOUT;
++
++unlock:
++	mutex_unlock(&hwq->sq_mutex);
++	return err;
++}
++
++/**
++ * ufshcd_mcq_nullify_sqe - Nullify the submission queue entry.
++ * Write the sqe's Command Type to 0xF. The host controller will not
++ * fetch any sqe with Command Type = 0xF.
++ *
++ * @utrd - UTP Transfer Request Descriptor to be nullified.
++ */
++static void ufshcd_mcq_nullify_sqe(struct utp_transfer_req_desc *utrd)
++{
++	u32 dword_0;
++
++	dword_0 = le32_to_cpu(utrd->header.dword_0);
++	dword_0 &= ~UPIU_COMMAND_TYPE_MASK;
++	dword_0 |= FIELD_PREP(UPIU_COMMAND_TYPE_MASK, 0xF);
++	utrd->header.dword_0 = cpu_to_le32(dword_0);
++}
++
++/**
++ * ufshcd_mcq_sqe_search - Search for the command in the submission queue
++ * If the command is in the submission queue and not issued to the device yet,
++ * nullify the sqe so the host controller will skip fetching the sqe.
++ *
++ * @hba - per adapter instance.
++ * @hwq - Hardware Queue to be searched.
++ * @task_tag - The command's task tag.
++ *
++ * Returns true if the SQE containing the command is present in the SQ
++ * (not fetched by the controller); returns false if the SQE is not in the SQ.
++ */
++static bool ufshcd_mcq_sqe_search(struct ufs_hba *hba,
++				  struct ufs_hw_queue *hwq, int task_tag)
++{
++	struct ufshcd_lrb *lrbp = &hba->lrb[task_tag];
++	struct utp_transfer_req_desc *utrd;
++	u32 mask = hwq->max_entries - 1;
++	__le64  cmd_desc_base_addr;
++	bool ret = false;
++	u64 addr, match;
++	u32 sq_head_slot;
++
++	mutex_lock(&hwq->sq_mutex);
++
++	ufshcd_mcq_sq_stop(hba, hwq);
++	sq_head_slot = ufshcd_mcq_get_sq_head_slot(hwq);
++	if (sq_head_slot == hwq->sq_tail_slot)
++		goto out;
++
++	cmd_desc_base_addr = lrbp->utr_descriptor_ptr->command_desc_base_addr;
++	addr = le64_to_cpu(cmd_desc_base_addr) & CQE_UCD_BA;
++
++	while (sq_head_slot != hwq->sq_tail_slot) {
++		utrd = hwq->sqe_base_addr +
++				sq_head_slot * sizeof(struct utp_transfer_req_desc);
++		match = le64_to_cpu(utrd->command_desc_base_addr) & CQE_UCD_BA;
++		if (addr == match) {
++			ufshcd_mcq_nullify_sqe(utrd);
++			ret = true;
++			goto out;
++		}
++		sq_head_slot = (sq_head_slot + 1) & mask;
++	}
++
++out:
++	ufshcd_mcq_sq_start(hba, hwq);
++	mutex_unlock(&hwq->sq_mutex);
++	return ret;
++}
+diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-priv.h
+index d53b93c2..40727e8 100644
+--- a/drivers/ufs/core/ufshcd-priv.h
++++ b/drivers/ufs/core/ufshcd-priv.h
+@@ -78,6 +78,8 @@ struct ufs_hw_queue *ufshcd_mcq_req_to_hwq(struct ufs_hba *hba,
+ unsigned long ufshcd_mcq_poll_cqe_lock(struct ufs_hba *hba,
+ 				       struct ufs_hw_queue *hwq);
+ 
++int ufshcd_mcq_sq_cleanup(struct ufs_hba *hba, int task_tag);
++
+ #define UFSHCD_MCQ_IO_QUEUE_OFFSET	1
+ #define SD_ASCII_STD true
+ #define SD_RAW false
+@@ -404,4 +406,12 @@ static inline struct cq_entry *ufshcd_mcq_cur_cqe(struct ufs_hw_queue *q)
+ 
+ 	return cqe + q->cq_head_slot;
+ }
++
++static inline u32 ufshcd_mcq_get_sq_head_slot(struct ufs_hw_queue *q)
++{
++	u32 val = readl(q->mcq_sq_head);
++
++	return val / sizeof(struct utp_transfer_req_desc);
++}
++
+ #endif /* _UFSHCD_PRIV_H_ */
 diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 5527d45..a37e1eb 100644
+index a37e1eb..140ab15 100644
 --- a/drivers/ufs/core/ufshcd.c
 +++ b/drivers/ufs/core/ufshcd.c
-@@ -3006,13 +3006,15 @@ static int ufshcd_compose_dev_cmd(struct ufs_hba *hba,
- }
- 
- /*
-- * Clear all the requests from the controller for which a bit has been set in
-- * @mask and wait until the controller confirms that these requests have been
-- * cleared.
-+ * Clear the pending command in the controller and wait until
-+ * the controller confirms that the command has been cleared.
-+ * @hba: per adapter instance
-+ * @task_tag: The tag number of the command to be cleared.
+@@ -173,7 +173,6 @@ EXPORT_SYMBOL_GPL(ufshcd_dump_regs);
+ enum {
+ 	UFSHCD_MAX_CHANNEL	= 0,
+ 	UFSHCD_MAX_ID		= 1,
+-	UFSHCD_NUM_RESERVED	= 1,
+ 	UFSHCD_CMD_PER_LUN	= 32 - UFSHCD_NUM_RESERVED,
+ 	UFSHCD_CAN_QUEUE	= 32 - UFSHCD_NUM_RESERVED,
+ };
+diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
+index 721ae4c..3c9ecda 100644
+--- a/include/ufs/ufshcd.h
++++ b/include/ufs/ufshcd.h
+@@ -1088,6 +1088,7 @@ struct ufs_hba {
+  * @cq_tail_slot: current slot to which CQ tail pointer is pointing
+  * @cq_head_slot: current slot to which CQ head pointer is pointing
+  * @cq_lock: Synchronize between multiple polling instances
++ * @sq_mutex: prevent submission queue concurrent access
   */
--static int ufshcd_clear_cmds(struct ufs_hba *hba, u32 mask)
-+static int ufshcd_clear_cmd(struct ufs_hba *hba, u32 task_tag)
- {
- 	unsigned long flags;
-+	u32 mask = 1U << task_tag;
+ struct ufs_hw_queue {
+ 	void __iomem *mcq_sq_head;
+@@ -1106,6 +1107,8 @@ struct ufs_hw_queue {
+ 	u32 cq_tail_slot;
+ 	u32 cq_head_slot;
+ 	spinlock_t cq_lock;
++	/* prevent concurrent access to submission queue */
++	struct mutex sq_mutex;
+ };
  
- 	/* clear outstanding transaction before retry */
- 	spin_lock_irqsave(hba->host->host_lock, flags);
-@@ -3113,7 +3115,7 @@ static int ufshcd_wait_for_dev_cmd(struct ufs_hba *hba,
- 		err = -ETIMEDOUT;
- 		dev_dbg(hba->dev, "%s: dev_cmd request timedout, tag %d\n",
- 			__func__, lrbp->task_tag);
--		if (ufshcd_clear_cmds(hba, 1U << lrbp->task_tag) == 0) {
-+		if (ufshcd_clear_cmd(hba, lrbp->task_tag) == 0) {
- 			/* successfully cleared the command, retry if needed */
- 			err = -EAGAIN;
- 			/*
-@@ -7286,7 +7288,7 @@ static int ufshcd_eh_device_reset_handler(struct scsi_cmnd *cmd)
- 	unsigned long flags, pending_reqs = 0, not_cleared = 0;
- 	struct Scsi_Host *host;
- 	struct ufs_hba *hba;
--	u32 pos;
-+	u32 pos, not_cleared_mask = 0;
- 	int err;
- 	u8 resp = 0xF, lun;
+ static inline bool is_mcq_enabled(struct ufs_hba *hba)
+diff --git a/include/ufs/ufshci.h b/include/ufs/ufshci.h
+index 7c5a76b..9d291ca 100644
+--- a/include/ufs/ufshci.h
++++ b/include/ufs/ufshci.h
+@@ -99,6 +99,9 @@ enum {
+ enum {
+ 	REG_SQHP		= 0x0,
+ 	REG_SQTP		= 0x4,
++	REG_SQRTC		= 0x8,
++	REG_SQCTI		= 0xC,
++	REG_SQRTS		= 0x10,
+ };
  
-@@ -7309,17 +7311,20 @@ static int ufshcd_eh_device_reset_handler(struct scsi_cmnd *cmd)
- 	hba->outstanding_reqs &= ~pending_reqs;
- 	spin_unlock_irqrestore(&hba->outstanding_lock, flags);
+ enum {
+@@ -111,12 +114,26 @@ enum {
+ 	REG_CQIE		= 0x4,
+ };
  
--	if (ufshcd_clear_cmds(hba, pending_reqs) < 0) {
--		spin_lock_irqsave(&hba->outstanding_lock, flags);
--		not_cleared = pending_reqs &
--			ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
--		hba->outstanding_reqs |= not_cleared;
--		spin_unlock_irqrestore(&hba->outstanding_lock, flags);
-+	for_each_set_bit(pos, &pending_reqs, hba->nutrs) {
-+		if (ufshcd_clear_cmd(hba, pos) < 0) {
-+			spin_lock_irqsave(&hba->outstanding_lock, flags);
-+			not_cleared = 1U << pos &
-+				ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
-+			hba->outstanding_reqs |= not_cleared;
-+			not_cleared_mask |= not_cleared;
-+			spin_unlock_irqrestore(&hba->outstanding_lock, flags);
++enum {
++	SQ_START		= 0x0,
++	SQ_STOP			= 0x1,
++	SQ_ICU			= 0x2,
++};
++
++enum {
++	SQ_STS			= 0x1,
++	SQ_CUS			= 0x2,
++};
++
++#define SQ_ICU_ERR_CODE_MASK		GENMASK(7, 4)
++#define UPIU_COMMAND_TYPE_MASK		GENMASK(31, 28)
+ #define UFS_MASK(mask, offset)		((mask) << (offset))
  
--		dev_err(hba->dev, "%s: failed to clear requests %#lx\n",
--			__func__, not_cleared);
-+			dev_err(hba->dev, "%s: failed to clear request %d\n",
-+				__func__, pos);
-+		}
- 	}
--	__ufshcd_transfer_req_compl(hba, pending_reqs & ~not_cleared);
-+	__ufshcd_transfer_req_compl(hba, pending_reqs & ~not_cleared_mask);
+ /* UFS Version 08h */
+ #define MINOR_VERSION_NUM_MASK		UFS_MASK(0xFFFF, 0)
+ #define MAJOR_VERSION_NUM_MASK		UFS_MASK(0xFFFF, 16)
  
- out:
- 	hba->req_abort_count = 0;
-@@ -7416,7 +7421,7 @@ static int ufshcd_try_to_abort_task(struct ufs_hba *hba, int tag)
- 		goto out;
- 	}
- 
--	err = ufshcd_clear_cmds(hba, 1U << tag);
-+	err = ufshcd_clear_cmd(hba, tag);
- 	if (err)
- 		dev_err(hba->dev, "%s: Failed clearing cmd at tag %d, err %d\n",
- 			__func__, tag, err);
++#define UFSHCD_NUM_RESERVED	1
+ /*
+  * Controller UFSHCI version
+  * - 2.x and newer use the following scheme:
 -- 
 2.7.4
 
