@@ -2,92 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 274247002EB
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 10:44:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06AE3700301
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 10:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240057AbjELIoC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 12 May 2023 04:44:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
+        id S240074AbjELIyi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 04:54:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232659AbjELIoB (ORCPT
+        with ESMTP id S239826AbjELIye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 04:44:01 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758FC4EC2;
-        Fri, 12 May 2023 01:44:00 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pxONW-000HaH-0B; Fri, 12 May 2023 10:43:54 +0200
-Received: from p5b13afa1.dip0.t-ipconnect.de ([91.19.175.161] helo=[192.168.178.81])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pxONV-000Czl-Oz; Fri, 12 May 2023 10:43:53 +0200
-Message-ID: <6be49109f6ee00da175f56698332932f27779389.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 2/2] sh: dma: Correct the number of DMA channels in
- SH7709
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Artur Rojek <contact@artur-rojek.eu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Fri, 12 May 2023 10:43:52 +0200
-In-Reply-To: <CAMuHMdVD9kDqhaZsVO8sLMAxB0NX524y8e7m-3n=Bz+PALJJ7Q@mail.gmail.com>
-References: <20230506141703.65605-1-contact@artur-rojek.eu>
-         <20230506141703.65605-3-contact@artur-rojek.eu>
-         <CAMuHMdV4hDULr43_4Z=Q9EHEvbzGStMRY45d4Ja1ixqSvMd2Cg@mail.gmail.com>
-         <079f78025bf0af7808951ff0b56393cff99d957b.camel@physik.fu-berlin.de>
-         <CAMuHMdVD9kDqhaZsVO8sLMAxB0NX524y8e7m-3n=Bz+PALJJ7Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.1 
+        Fri, 12 May 2023 04:54:34 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B46E43;
+        Fri, 12 May 2023 01:54:33 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id C8A1320447;
+        Fri, 12 May 2023 08:54:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1683881671;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7ZadqfqzlE6y/GkIBIfeb/w5RxmHH4WLXaW0JIjrBhg=;
+        b=srUxSznMBn3Nf/c4Fq1n+ar6OWZ22QDXL6yZ02vsIoXPNzI6sl3FumZvF1whlniGY6vPfN
+        Dlu5/pGOVNfVMKE19eZCNL/vJyYLgYkttZ65T75KqAcPWL2njWtESyRJUEgW9m2YvaTanv
+        dDyrUAOgCOIhXmpkRqu4FLOb2KI1eXE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1683881671;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7ZadqfqzlE6y/GkIBIfeb/w5RxmHH4WLXaW0JIjrBhg=;
+        b=I/QwA/3U+1oaNqwMPE8zIULP57B0xgIKnB/9fHkMJbY8Daw6BNaHFmisavmTl3pR/JGBE1
+        sWB7l8lPZNfTukBA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id A274C13499;
+        Fri, 12 May 2023 08:54:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id sjwFJ8f+XWR9LwAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Fri, 12 May 2023 08:54:31 +0000
+Date:   Fri, 12 May 2023 10:48:31 +0200
+From:   David Sterba <dsterba@suse.cz>
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+Cc:     clm@fb.com, josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: Re: [PATCH] btrfs: scrub: Remove some unused functions
+Message-ID: <20230512084831.GE32559@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <20230512054457.43501-1-jiapeng.chong@linux.alibaba.com>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 91.19.175.161
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512054457.43501-1-jiapeng.chong@linux.alibaba.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-05-12 at 09:34 +0200, Geert Uytterhoeven wrote:
-> Hi Adrian,
+On Fri, May 12, 2023 at 01:44:57PM +0800, Jiapeng Chong wrote:
+> These functions are defined in the scrub.c file, but not called
+> elsewhere, so delete these unused functions.
 > 
-> On Thu, May 11, 2023 at 10:20 PM John Paul Adrian Glaubitz
-> <glaubitz@physik.fu-berlin.de> wrote:
-> > On Mon, 2023-05-08 at 12:55 +0200, Geert Uytterhoeven wrote:
-> > > On Sat, May 6, 2023 at 4:22 PM Artur Rojek <contact@artur-rojek.eu> wrote:
-> > > > According to the PM, the DMAC found in SH7709 features only 4 channels.
-> > > > 
-> > > > Signed-off-by: Artur Rojek <contact@artur-rojek.eu>
-> > > 
-> > > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > 
-> > I assume we can't find a commit for the Fixes tag? Looking at the "git blame"
-> > for the Kconfig file, it seems the corresponding lines were changed before
-> > the source tree was imported into git in 1da177e4c3f4.
+> fs/btrfs/scrub.c:553:20: warning: unused function 'scrub_stripe_index_and_offset'.
+> fs/btrfs/scrub.c:543:19: warning: unused function 'scrub_nr_raid_mirrors'.
 > 
-> I don't think Fixes has much relevance, as the issue is present in all
-> LTS kernel versions that are still maintained.
-> The stable machinery AI will just pick it up, based on the word "correct" in
-> the description.
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4937
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 
-Ah, I didn't know about that. Thanks for the clarification.
-
-Adrian
-
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Added to misc-next, thanks.
