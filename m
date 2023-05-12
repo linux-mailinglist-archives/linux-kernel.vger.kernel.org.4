@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01403700303
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 10:54:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 483DD700304
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 10:55:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240086AbjELIyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 04:54:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
+        id S240135AbjELIy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 04:54:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240095AbjELIyu (ORCPT
+        with ESMTP id S240099AbjELIyy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 04:54:50 -0400
+        Fri, 12 May 2023 04:54:54 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66970100F0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 01:54:47 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B1710A2E
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 01:54:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683881687; x=1715417687;
+  t=1683881690; x=1715417690;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=bpwPWVXhPzXzGldUZ9YGfL84iDla+D57ECet7awb6b4=;
-  b=Xeav67PPP6XXvI3nP48BcxJWS0WqyaRCjrKPvWOq5Le+8mQuFpU7PUyz
-   nDK3Oph92L4QU0vAB+yKiSpG+A2M2fbmgX+nIh5WhHSdg2WUWpR+sZb+V
-   3BCF3Ki0gAzXrLLQFoFvUbuBFrqB0UcRoIhisNxTIThcXwQsrIYagAv/g
-   prkwz2vaMmJXech4DvksR+5qpx1uQv1Ce2MrKzBhrwqMSAxDUm0xpncy8
-   fVAeruwvGAJhxGIE+nduF0DuS6xcDfxSGB1PT6lVo6kXa+W/qe2eWNdpX
-   Oelpai9EXHzuVGi3guqt3MgxYS9U/slqNTeRn2jIIwaH2RfEVhKHxqCd4
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="353874482"
+  bh=ZLf5MT4SG1toK2Ewf11jOOLaMp++8Z7s0AFeltCagdg=;
+  b=TUAUX148n0+7ZnR4iWVH92LO4LadJgYSq7bJuAOQiRNBGRFo5T5ZBFP0
+   7GQlhBIEAt+FWwvixDjl0TWZp77yUgS5ElUEsB1kNSKLNtqEOeJJktyLl
+   5K5Driun9UQPDue/z7L7puovWxsyu8/gvwIaF4RKi2KDM/iueddS1kZfP
+   vacY5yXgfnFJcOn6IEL4gTAmBkL2ITSJZaJBoCGnl/3pYPlOhgn+EYlWW
+   kopy8hDtgZgNAil/7Hl5sJ8NHTptFvisNO5t0XmnAlJWPU3PObZ5lHDNM
+   ce3EJB2yJMlKrKRPfzDd6/zuUKON2ODWhXj5sBDuXd6htdvadaiRH83gN
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="353874490"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="353874482"
+   d="scan'208";a="353874490"
 Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 01:54:46 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 01:54:47 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="700106936"
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="700106937"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="700106936"
+   d="scan'208";a="700106937"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
   by orsmga002.jf.intel.com with ESMTP; 12 May 2023 01:54:44 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pxOXz-0004jI-1I;
+        id 1pxOXz-0004jE-12;
         Fri, 12 May 2023 08:54:43 +0000
-Date:   Fri, 12 May 2023 16:54:23 +0800
+Date:   Fri, 12 May 2023 16:54:24 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
         Phillip Lougher <phillip@squashfs.org.uk>,
         Andrew Morton <akpm@linux-foundation.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
         Linux Memory Management List <linux-mm@kvack.org>,
         Philippe Liard <pliard@google.com>, hch@lst.de,
         linux-kernel@vger.kernel.org, squashfs-devel@lists.sourceforge.net,
         kernel@axis.com, Vincent Whitchurch <vincent.whitchurch@axis.com>
 Subject: Re: [PATCH] squashfs: cache partial compressed blocks
-Message-ID: <202305121615.T6PJo2hI-lkp@intel.com>
+Message-ID: <202305121650.kWn3uM2f-lkp@intel.com>
 References: <20230510-squashfs-cache-v1-1-3b6bb0e7d952@axis.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -80,8 +80,8 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Whitchurch/squash
 base:   457391b0380335d5e9a5babdec90ac53928b23b4
 patch link:    https://lore.kernel.org/r/20230510-squashfs-cache-v1-1-3b6bb0e7d952%40axis.com
 patch subject: [PATCH] squashfs: cache partial compressed blocks
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230512/202305121615.T6PJo2hI-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
+config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230512/202305121650.kWn3uM2f-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
@@ -91,18 +91,23 @@ reproduce (this is a W=1 build):
         git checkout 3ca22c93f1faf376ecf133f84d0148497284366a
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash fs/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/squashfs/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305121615.T6PJo2hI-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305121650.kWn3uM2f-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
->> fs/squashfs/block.c:168:5: warning: no previous prototype for 'squashfs_bio_read' [-Wmissing-prototypes]
-     168 | int squashfs_bio_read(struct super_block *sb, u64 index, int length,
-         |     ^~~~~~~~~~~~~~~~~
+>> fs/squashfs/block.c:168:5: warning: no previous prototype for function 'squashfs_bio_read' [-Wmissing-prototypes]
+   int squashfs_bio_read(struct super_block *sb, u64 index, int length,
+       ^
+   fs/squashfs/block.c:168:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   int squashfs_bio_read(struct super_block *sb, u64 index, int length,
+   ^
+   static 
+   1 warning generated.
 
 
 vim +/squashfs_bio_read +168 fs/squashfs/block.c
