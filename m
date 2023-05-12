@@ -2,110 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7902D70099B
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:57:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8EB777009A6
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:59:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241327AbjELN5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 09:57:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35374 "EHLO
+        id S241366AbjELN7D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 09:59:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240855AbjELN5U (ORCPT
+        with ESMTP id S241351AbjELN65 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 09:57:20 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96B4211DB1;
-        Fri, 12 May 2023 06:57:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1683899836; x=1715435836;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=QwWE/tJlAPiCpmRXJUsvyc0KqZbQ5lpruaSv6RHumwg=;
-  b=n9yvwfKQOFStLfiN/7ANP61yDQXq4M5JKwqpZTupb6QKaT5X//BQwv/d
-   Cw8xwGCmOfN3VGjjDn4BNWJz5t9Owd1bySvbRL+kzFbNcM0FxdoEwDZ7E
-   3UXIQGukEa+E4tkmtnr7itWbA1NcNyyvueA84wKUXAsc/GT9h3jbE1Dp+
-   fQQ+ZQEPpBVHInBZi0wraH4/mU+UVYeCgn9EUuelE9ZArsa1CUVqDrsSO
-   hlw5pGkia1SaNJUzXKRjKkup5zs0U04yPtZ1S28ToHeW+rmcUCUMkTwxf
-   IgisY9wE6gMP0okz4Kh+vJ9/nHjG8R4ZJ0DcxG2EFUDcXiAo2GcAOcNk3
-   A==;
-X-IronPort-AV: E=Sophos;i="5.99,269,1677567600"; 
-   d="scan'208";a="210976329"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 May 2023 06:57:15 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 12 May 2023 06:57:14 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.21 via Frontend
- Transport; Fri, 12 May 2023 06:57:14 -0700
-Date:   Fri, 12 May 2023 15:57:13 +0200
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Shenwei Wang <shenwei.wang@nxp.com>
-CC:     Wei Fang <wei.fang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        Fri, 12 May 2023 09:58:57 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 343345FD3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:58:54 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-965ac4dd11bso1979195966b.2
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:58:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair; t=1683899932; x=1686491932;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=s/KFs/2B7m9MZiz0WLTsjGkrH/SBAUtK2lt6sIgh0XA=;
+        b=j8Qzw0Lowk/cxZNFBonlAujktmiNhfOIJJVOfo680Kzh/5Av8OSb/w7fykhFtPAaT/
+         dmtk7+vfzCj6deZEfAtwVWGYBTW2yYJxVxgSXGm0ps69GH93iTzYAjNtu2h3LqW0ULjb
+         xs7947lefsb43rbw1Y4vZ/LJ/mzF59vj3Iesg7bs5UWAD2LVZRo7OY1cgpqZALLuiUve
+         ZmExppHvF5NaXX5OxXybJxpYHpMEodMGrASNNDS4mX8zPuuxkGSC1BfAYREnuMWg9+Ci
+         KUHcXu/yTSMzsA8TT35GrWpi2BL3W3BHIlM20Gly4oHhugLl/s3JpXn3/BJlZxWr4PN2
+         HpiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683899932; x=1686491932;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=s/KFs/2B7m9MZiz0WLTsjGkrH/SBAUtK2lt6sIgh0XA=;
+        b=HdavxgkicsdiVnjjWgrJBVvnYA+FXAk3LkAyuvqErGie+VcKmY8UAsPFNt2FiTbrkG
+         OGn9P/sW6gm45T5dPVchtg+Gou1u6NfPUDOUTjNHpL/VkgWqIaNbz9nU9A5nZDreYArP
+         /9ckAGnaMhpzjuIaKAFXEmvSsNfxjxFl3z2buT230+6KaTwm0mlUcagVZIk4reF8/9Ir
+         O+TNjiGTJPH8QKDU3mklPux3svdRzIGU3+XXBaLWT29Jwehh0GqZAEllBTA6S3XCrVPY
+         xTWNeOy2nYmTRXE/2N4e8H5bI0FMhZzhca2P6Hhds5u4m8OwnSB8JjwyKidrfFv2fyzq
+         VfAw==
+X-Gm-Message-State: AC+VfDy+1SvK4m5zxr/ehNt76bwqbuhWiTrQgnCf2B07JQd2PWzMY0RB
+        OMDNIYulmkb63I9mRIodh8Xa3g==
+X-Google-Smtp-Source: ACHHUZ5gu9z6nIoI4TPFD7yn1Mzc9Dza0XUQXZZ4AyQHtno7HmWHZ9MneOnQYiLcjhLeVX+jeH0cfg==
+X-Received: by 2002:a17:907:9686:b0:966:65ee:beb7 with SMTP id hd6-20020a170907968600b0096665eebeb7mr18927481ejc.71.1683899932573;
+        Fri, 12 May 2023 06:58:52 -0700 (PDT)
+Received: from [172.16.240.113] (144-178-202-138.static.ef-service.nl. [144.178.202.138])
+        by smtp.gmail.com with ESMTPSA id mc27-20020a170906eb5b00b00966330021e9sm5399061ejb.47.2023.05.12.06.58.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 06:58:52 -0700 (PDT)
+From:   Luca Weiss <luca.weiss@fairphone.com>
+Subject: [PATCH v2 0/4] Add WCN3988 Bluetooth support for Fairphone 4
+Date:   Fri, 12 May 2023 15:58:22 +0200
+Message-Id: <20230421-fp4-bluetooth-v2-0-3de840d5483e@fairphone.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAP5FXmQC/3WNQQ6CMBBFr2Jm7ZihJYKuvIdh0dbBToItaYFoC
+ He3snf5XvL/WyFzEs5wPayQeJEsMRRQxwM4b8KTUR6FQZHSVKsK+7FGO8w8xTh5tPpsiNvGXlw
+ LZWNNZrTJBOfLKszDUOSYuJf3Hrl3hb3kKabP3lyqn/13v1RISLUm1qZhMurWG0mjj4FPLr6g2
+ 7btC86hTjbDAAAA
+To:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Simon Horman <horms@kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <imx@lists.linux.dev>
-Subject: Re: [PATCH net] net: fec: remove the xdp_return_frame when lack of
- tx BDs
-Message-ID: <20230512135713.lwfpw4lzreece4rb@soft-dev3-1>
-References: <20230512133843.1358661-1-shenwei.wang@nxp.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20230512133843.1358661-1-shenwei.wang@nxp.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marcel Holtmann <marcel@holtmann.org>,
+        Johan Hedberg <johan.hedberg@gmail.com>,
+        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org,
+        Luca Weiss <luca.weiss@fairphone.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 05/12/2023 08:38, Shenwei Wang wrote:
-> 
-> In the implementation, the sent_frame count does not increment when
-> transmit errors occur. Therefore, bq_xmit_all() will take care of
-> returning the XDP frames.
+Add support in the btqca/hci_qca driver for the WCN3988 and add it to
+the sm7225 Fairphone 4 devicetree.
 
-Reviewed-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+Devicetree patches go via Qualcomm tree, the rest via their respective
+trees.
 
-> 
-> Fixes: 26312c685ae0 ("net: fec: correct the counting of XDP sent frames")
-> Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
-> ---
->  drivers/net/ethernet/freescale/fec_main.c | 1 -
->  1 file changed, 1 deletion(-)
-> 
-> diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-> index 42ec6ca3bf03..2a3e8b69b70a 100644
-> --- a/drivers/net/ethernet/freescale/fec_main.c
-> +++ b/drivers/net/ethernet/freescale/fec_main.c
-> @@ -3798,7 +3798,6 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
->         entries_free = fec_enet_get_free_txdesc_num(txq);
->         if (entries_free < MAX_SKB_FRAGS + 1) {
->                 netdev_err(fep->netdev, "NOT enough BD for SG!\n");
-> -               xdp_return_frame(frame);
->                 return NETDEV_TX_BUSY;
->         }
-> 
-> --
-> 2.34.1
-> 
-> 
+--
+Previously with the RFC version I've had problems before with Bluetooth
+scanning failing like the following:
 
+  [bluetooth]# scan on
+  Failed to start discovery: org.bluez.Error.InProgress
+
+  [  202.371374] Bluetooth: hci0: Opcode 0x200b failed: -16
+
+This appears to only happen with driver built-in (=y) when the supported
+local commands list doesn't get updated in the Bluetooth core and
+use_ext_scan() returning false. I'll try to submit this separately since
+this now works well enough with =m. But in both cases (=y, =m) it's
+behaving a bit weirdly before (re-)setting the MAC address with "sudo
+btmgmt public-addr fo:oo:ba:ar"
+
+Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
+---
+Changes in v2:
+- Add pinctrl & 'tlmm 64' irq to uart node
+- Pick up tags
+- Link to v1: https://lore.kernel.org/r/20230421-fp4-bluetooth-v1-0-0430e3a7e0a2@fairphone.com
+
+---
+Luca Weiss (4):
+      dt-bindings: net: qualcomm: Add WCN3988
+      Bluetooth: btqca: Add WCN3988 support
+      arm64: dts: qcom: sm6350: add uart1 node
+      arm64: dts: qcom: sm7225-fairphone-fp4: Add Bluetooth
+
+ .../bindings/net/bluetooth/qualcomm-bluetooth.yaml |   2 +
+ arch/arm64/boot/dts/qcom/sm6350.dtsi               |  63 +++++++++++++
+ arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts  | 103 +++++++++++++++++++++
+ drivers/bluetooth/btqca.c                          |  13 ++-
+ drivers/bluetooth/btqca.h                          |  12 ++-
+ drivers/bluetooth/hci_qca.c                        |  12 +++
+ 6 files changed, 201 insertions(+), 4 deletions(-)
+---
+base-commit: f2fe50eb7ca6b7bc6c63745f5c26f7c6022fcd4a
+change-id: 20230421-fp4-bluetooth-b36a0e87b9c8
+
+Best regards,
 -- 
-/Horatiu
+Luca Weiss <luca.weiss@fairphone.com>
+
