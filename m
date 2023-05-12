@@ -2,119 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61599700E6D
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 20:12:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 25F68700E71
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 20:13:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238368AbjELSMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 14:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58226 "EHLO
+        id S237397AbjELSNM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 14:13:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbjELSMn (ORCPT
+        with ESMTP id S238081AbjELSNK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 14:12:43 -0400
-Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA6202105;
-        Fri, 12 May 2023 11:12:42 -0700 (PDT)
-Received: by mail-pf1-f171.google.com with SMTP id d2e1a72fcca58-643aad3bc41so9427842b3a.0;
-        Fri, 12 May 2023 11:12:42 -0700 (PDT)
+        Fri, 12 May 2023 14:13:10 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 018E9271F
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:13:07 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id 38308e7fff4ca-2ac785015d7so113093911fa.1
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:13:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683915186; x=1686507186;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uKD+LoFNXdeJroT3MlEs5tmlumv0cQy/KCdwnSxoZK8=;
+        b=VLoPyIveRs40es+1Zdi7/hqZ2yvU/choqNvtv3z+3a0MVMCQcLn0cFMhBXOLI/lVsQ
+         TX90Civo7BLEzZElnQyzMJZ8xvrxB2quS71fH3LOkptwpklKHTahe0P6NWNmQScM0H4L
+         nUdO6kgNJ3U5Ytf3TD4fx4uWx67VOpr7adGXuatWuwOfz/rhwbcHj0e4/RMviFzRIFcG
+         VIO0Ok+SxEM47uRQPz1AunL6nfUty21jLgzCF6xzL2c032UZ2T6dB5ROK8Osk3TqX03G
+         qwOJgYbZw6NZD3YNhEe61UOWD0Yuv+HyChwxSPNSBjr5kWywLVT8k4psJp8Kj57tEMve
+         xfJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683915162; x=1686507162;
+        d=1e100.net; s=20221208; t=1683915186; x=1686507186;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bQfYCthLnyaujnup9YmDJTbvBFRzuX2vx8uShEoIOJM=;
-        b=i7HQew0MTTsc4aHI2jX5mC8nDSTikm8gvaj8bb9M1GnlhwE2AOJedl4Jjqx4x1LMxy
-         /qZ0RhATMipqDMxi5tB1UpMSHA4rmC4CwP4cdbQaMSI9Ev0/O/7V5Ik6TfmIpBha4e5y
-         DjWpIzy7g1vWakItho3/4AZ+/tCyNJlAMJgOXYReoJ/hDs16f4QinROb15DmwjvqsZxY
-         kr2S8vvnlieIDjYjnmhRnlbodo2zCIrjF1DDPXs2fGwFYU9Nv38Zkth4qnYcQvgm3yaB
-         WHz7kWGd5gSR6/AR6GivOd1StUYrfprkd87tsp7E6Xm7Es3W4btduLOkwwh27bpxyKx1
-         qx2A==
-X-Gm-Message-State: AC+VfDy9xJbmLvK7Ni4tRB5HDPlvFR6ZLKVMSA+Ae+g+FpJQH3VoomOx
-        GADjkB3buOxxQK+MFOMQ58lNfZ9+xHTvLA==
-X-Google-Smtp-Source: ACHHUZ6ZU0gVSt6zpLxhCV9TDGL5kLhwmuSyj16MwTybO75Mae0F0hxqlgR7UKzaERM141Y0Q6ViMA==
-X-Received: by 2002:a05:6a00:2183:b0:634:7ba3:d140 with SMTP id h3-20020a056a00218300b006347ba3d140mr31644745pfi.15.1683915162110;
-        Fri, 12 May 2023 11:12:42 -0700 (PDT)
-Received: from [192.168.51.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id w4-20020aa78584000000b0063a04905379sm7352532pfn.137.2023.05.12.11.12.40
+        bh=uKD+LoFNXdeJroT3MlEs5tmlumv0cQy/KCdwnSxoZK8=;
+        b=aTXbEdKCvajy0lp2cHbd4yK/a0CCfyzYQOrdFLUMqBmQ5fJQjB5ABSTWHMfgduhyDE
+         sPXciFCVpd5Sv59KP/bCf0s8z1sxmoDrFzMmibgGMfKeM1g+9WWqMMHhp6OGynoPoYv3
+         sggFoNyfVtsoWXZtT34RFYp7MuOYPN/+9qVQlHRN2Znw7BWVDIsez19sK2FNaNaZGyxB
+         c6pnc2p1tq+wH+xt4ecirYdRPDLrXvTVXylCeCfYbAia2ZJqYJpa0bJ2feqQd2jug3BS
+         4ovwzCrqw8y8PLLbgauZnRdFJBrXeC32DDhvlhG4wNU8IxmBkSA07ZP466inDTgdr/BD
+         mlgQ==
+X-Gm-Message-State: AC+VfDxJGwezZqVT5E1GImt5rv956EGQ+bNJAP0hWaCbYuXXzCj82vsj
+        IUWmCV8lu3c/aPmm8EadM41vcA==
+X-Google-Smtp-Source: ACHHUZ6XRMgKnPqEWJyYc/6mw+o+JZPDKh3xXIcQh+pV773C4JK7LbdiAPNfIiOQ3XOMFcWzQ6iivA==
+X-Received: by 2002:a2e:9b97:0:b0:2ad:98a6:4af0 with SMTP id z23-20020a2e9b97000000b002ad98a64af0mr4602161lji.23.1683915186220;
+        Fri, 12 May 2023 11:13:06 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id u24-20020a2e8558000000b002a7746800d0sm2844004ljj.130.2023.05.12.11.13.05
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 11:12:41 -0700 (PDT)
-Message-ID: <2740ee82-e35f-1cbf-f5d0-373f94eb14a5@acm.org>
-Date:   Fri, 12 May 2023 11:12:40 -0700
+        Fri, 12 May 2023 11:13:05 -0700 (PDT)
+Message-ID: <053819bd-b3c4-a72c-9316-85d974082ad6@linaro.org>
+Date:   Fri, 12 May 2023 21:13:04 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Subject: Re: [PATCH 2/2] ufs: don't use the fair tag sharings
-Content-Language: en-US
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     Ed Tsai <ed.tsai@mediatek.com>, axboe@kernel.dk,
-        linux-block@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, martin.petersen@oracle.com,
-        stanley.chu@mediatek.com, peter.wang@mediatek.com,
-        chun-hung.wu@mediatek.com, alice.chao@mediatek.com,
-        powen.kao@mediatek.com, naomi.chu@mediatek.com,
-        wsd_upstream@mediatek.com
-References: <20230509065230.32552-1-ed.tsai@mediatek.com>
- <20230509065230.32552-3-ed.tsai@mediatek.com>
- <ZF0K7A6G2cYBjSgn@infradead.org>
- <aa9af9ae-62a4-6469-244c-b5d9106bb044@acm.org>
- <ZF5G5ztMng8Xbd1W@infradead.org>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <ZF5G5ztMng8Xbd1W@infradead.org>
+Subject: Re: [PATCH] drm/msm/dp: add module parameter for PSR
+Content-Language: en-GB
+To:     Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        freedreno@lists.freedesktop.org, Rob Clark <robdclark@gmail.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, quic_jesszhan@quicinc.com,
+        swboyd@chromium.org, dianders@chromium.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230427232848.5200-1-quic_abhinavk@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230427232848.5200-1-quic_abhinavk@quicinc.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.3 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/12/23 07:02, Christoph Hellwig wrote:
-> On Thu, May 11, 2023 at 08:38:04AM -0700, Bart Van Assche wrote:
->> For which devices is the fair sharing algorithm useful? As far as I know the
->> legacy block layer did not have an equivalent of the fair sharing algorithm
->> and I'm not aware of any complaints about the legacy block layer regarding
->> to fairness. This is why I proposed in January to remove the fair sharing
->> code entirely. See also https://lore.kernel.org/linux-block/20230103195337.158625-1-bvanassche@acm.org/.
+On 28/04/2023 02:28, Abhinav Kumar wrote:
+> On sc7280 where eDP is the primary display, PSR is causing
+> IGT breakage even for basic test cases like kms_atomic and
+> kms_atomic_transition. Most often the issue starts with below
+> stack so providing that as reference
 > 
-> Because the old code did not do tag allocation itself?  Either way I
-> don't think a "I'll opt out for a random driver" is the proper approach
-> when you think it's not needed.  Especially not without any data
-> explaining why just that driver is a special snowflake.
+> Call trace:
+>   dpu_encoder_assign_crtc+0x64/0x6c
+>   dpu_crtc_enable+0x188/0x204
+>   drm_atomic_helper_commit_modeset_enables+0xc0/0x274
+>   msm_atomic_commit_tail+0x1a8/0x68c
+>   commit_tail+0xb0/0x160
+>   drm_atomic_helper_commit+0x11c/0x124
+>   drm_atomic_commit+0xb0/0xdc
+>   drm_atomic_connector_commit_dpms+0xf4/0x110
+>   drm_mode_obj_set_property_ioctl+0x16c/0x3b0
+>   drm_connector_property_set_ioctl+0x4c/0x74
+>   drm_ioctl_kernel+0xec/0x15c
+>   drm_ioctl+0x264/0x408
+>   __arm64_sys_ioctl+0x9c/0xd4
+>   invoke_syscall+0x4c/0x110
+>   el0_svc_common+0x94/0xfc
+>   do_el0_svc+0x3c/0xb0
+>   el0_svc+0x2c/0x7c
+>   el0t_64_sync_handler+0x48/0x114
+>   el0t_64_sync+0x190/0x194
+> ---[ end trace 0000000000000000 ]---
+> [drm-dp] dp_ctrl_push_idle: PUSH_IDLE pattern timedout
+> 
+> Other basic use-cases still seem to work fine hence add a
+> a module parameter to allow toggling psr enable/disable till
+> PSR related issues are hashed out with IGT.
 
-Hi Christoph,
+For the reference: Bjorn reported that he has issues with VT on a 
+PSR-enabled laptops. This patch fixes the issue for him
 
-I'm still wondering whether there are any drivers that benefit from the 
-fair tag sharing algorithm. If the number of tags is large enough 
-(NVMe), the number of tags exceeds the number of requests in flight and 
-hence the fair tag sharing algorithm is not necessary.
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-The fair tag sharing algorithm has a negative impact on all SCSI devices 
-with multiple logical units. This is because logical units are 
-considered active until (request timeout) seconds have elapsed after the 
-logical unit stopped being used (see also the blk_mq_tag_idle() call in 
-blk_mq_timeout_work()). UFS users are hit by this because UFS 3.0 
-devices have a limited queue depth (32) and because power management 
-commands are submitted to a logical unit (WLUN). Hence, it happens often 
-that the block layer "active queue" counter is equal to 2 while only one 
-logical unit is being used actively (a logical unit backed by NAND 
-flash). The performance difference between queue depths 16 and 32 for 
-UFS devices is significant.
+> 
+> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/dp/dp_display.c | 6 +++++-
+>   1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/dp/dp_display.c b/drivers/gpu/drm/msm/dp/dp_display.c
+> index 628b0e248db6..dba43167de66 100644
+> --- a/drivers/gpu/drm/msm/dp/dp_display.c
+> +++ b/drivers/gpu/drm/msm/dp/dp_display.c
+> @@ -28,6 +28,10 @@
+>   #include "dp_audio.h"
+>   #include "dp_debug.h"
+>   
+> +static bool psr_enabled = false;
+> +module_param(psr_enabled, bool, 0);
+> +MODULE_PARM_DESC(psr_enabled, "enable PSR for eDP and DP displays");
+> +
+>   #define HPD_STRING_SIZE 30
+>   
+>   enum {
+> @@ -407,7 +411,7 @@ static int dp_display_process_hpd_high(struct dp_display_private *dp)
+>   
+>   	edid = dp->panel->edid;
+>   
+> -	dp->dp_display.psr_supported = dp->panel->psr_cap.version;
+> +	dp->dp_display.psr_supported = dp->panel->psr_cap.version && psr_enabled;
+>   
+>   	dp->audio_supported = drm_detect_monitor_audio(edid);
+>   	dp_panel_handle_sink_request(dp->panel);
 
-Is my understanding correct that in the legacy block layer 
-implementation blk_queue_start_tag() had to be called to assign a tag to 
-a request? I haven't found any code in the Linux kernel v4.20 
-implementation of blk_queue_start_tag() that implements fairness in case 
-a request tag map (struct blk_queue_tag) is shared across request queues 
-(one request queue per logical unit in case of SCSI). Do you agree with 
-my conclusion that from the point of view of the SCSI core in general 
-and the UFS driver in particular the fair tag sharing algorithm in the 
-blk-mq code introduced a performance regression?
+-- 
+With best wishes
+Dmitry
 
-Thanks,
-
-Bart.
