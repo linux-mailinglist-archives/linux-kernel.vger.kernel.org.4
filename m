@@ -2,125 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF17B700743
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:54:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D8E3170074B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:56:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241006AbjELLyc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 07:54:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39104 "EHLO
+        id S240736AbjELL4L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 07:56:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240512AbjELLya (ORCPT
+        with ESMTP id S240622AbjELL4J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 07:54:30 -0400
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADFBD2DC;
-        Fri, 12 May 2023 04:54:29 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id C9B4C5C0413;
-        Fri, 12 May 2023 07:54:28 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Fri, 12 May 2023 07:54:28 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-        cc:cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm2; t=
-        1683892468; x=1683978868; bh=pIYLJhteS0xaiu/2AbStobp2ge8ca7OYHyp
-        CEuy5t+E=; b=OStugvB5bL53ImHFOSSNM/X1uzwrmaqdaKG6GWB3TnfmXM+oiuO
-        z7B2bEqgA5b4cXpBHFNfka2Wp+wRBPXBXB07lrqtuavsF/+XNsH8OxHkS7a138oD
-        yjpc3rsuVgarNtOFnnxFKKAVbd1DF2UerQV7fJI+0DBvmdYjVU91WnXieWN6agpw
-        YokQFhvDIA9L1Qo4Aj6SVNDCnLIRgEtCg801yXNFY0hxu7rrGghlMHaYF4OYr/Vo
-        E1VwG7laBunfMc/gVYQEVHh0UvyhLvqXtKLIHrFqzkil9CWRXQ/6gRU7ubD8I9fG
-        bUAC0QwPafiz5bcBOFMbVuk+B+cvj5qF1+g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1683892468; x=1683978868; bh=pIYLJhteS0xaiu/2AbStobp2ge8ca7OYHyp
-        CEuy5t+E=; b=MWCIRqIq7BSqxBvxI3VAbYeAKUPT6jlUGCvxdEAYR+TvPP5CKtO
-        ymEK6BsLfel6z1nyx/WfLadi6mis1bj2WIbJcRXiScGhhIIzRmq3/MJBamsIqrTW
-        U+jm6eO/+lQOazIn6EHeOtiG3x+LKqDMudKaYJvRbYvkwvb8JatxR+NjuBPRiBAV
-        zkQD04115S6cDrdosltWuk76bRqlvq4e4aTTCdCZyOEKQPPfct2295dU8uA0AZvI
-        NOXijQpV1Mh3u/YDG2edDZXOGRqTtutVrQIHcaGmCsTW/lVGHLnHH0CiSp5wwjE4
-        LORWN7Xxii8oLrpJLkynhaPLDpPNR65sMhA==
-X-ME-Sender: <xms:9CheZPXGh_CGH24cKtJx-41xYNlws6bPWxYAaVrOjWr1W-2UlcnYIA>
-    <xme:9CheZHnwYY5zhCgaMp6kkGTUyczWbCudZIqkzCm6frtN_UlIf9GINC1ICt2PL_vUv
-    AO-J1xe3S6tbdj3L5k>
-X-ME-Received: <xmr:9CheZLZxrDLaGpBoNAKITJ7xWZVReC9q0u617SBqrVx2iP4GI-8DlXBweU_IEdMoyUIr>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehtddggeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurheptggguffhjgffvefgkfhfvffosehtqhhmtdhhtdejnecuhfhrohhmpeflihgr
-    gihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhepuddtjeffteetfeekjeeiheefueeigeeutdevieejveeihfff
-    ledvgfduiefhvddtnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomh
-X-ME-Proxy: <xmx:9CheZKVaQW5CQb-X1fXCaIPYwNHTZEfj0qpzwN3zHa7UTEXUsnwJnA>
-    <xmx:9CheZJmao4vdKWMfn4E064dVQQqILN4F_Me0YV98XJ2r5qfXFKjgAg>
-    <xmx:9CheZHflgCVYy_aP2ruxNqPiwGDcr242EFefO2g35tWWwyOZHrbJRA>
-    <xmx:9CheZCATOFdoAuT4sL6ek63ZPGYOMzj87T8sokykMxstvtxIw7SASQ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 12 May 2023 07:54:27 -0400 (EDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.500.231\))
-Subject: Re: [PATCH 0/2] irqchip/mips-gic fixes
-From:   Jiaxun Yang <jiaxun.yang@flygoat.com>
-In-Reply-To: <20230424103156.66753-1-jiaxun.yang@flygoat.com>
-Date:   Fri, 12 May 2023 12:54:15 +0100
-Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <482E6FDE-1BF0-4972-B47A-04B379F8E5FA@flygoat.com>
-References: <20230424103156.66753-1-jiaxun.yang@flygoat.com>
-To:     Marc Zyngier <maz@kernel.org>
-X-Mailer: Apple Mail (2.3731.500.231)
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 12 May 2023 07:56:09 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACD69DDA4;
+        Fri, 12 May 2023 04:56:07 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CBTUSs015701;
+        Fri, 12 May 2023 11:56:04 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=yHlQfXiN3GaouJUmrChLI34lMMNZ0SrIvYTSsJEJWCg=;
+ b=YEyQPtQkT5L68mRZZpEa5a1OVekU3muTrwdcHM5Q6tUo62cwTrtpmzVUUVyCiUwEsv7Y
+ V/gU5P4pGuGn3JZU0ChYULx6uCbN8dBG6dVgCf/xQ4NkB2BMfdXXaPOv2kl33d/aEXSU
+ ucKbp75tiakDbPyL0DoioBoGqCEwVRvlFCdspPMlY6NaINu3VY9zPH7zPi03GWvALHba
+ 1TRjueLxtefcpLnYFpayVWDU7nJv5NufERGlIuDn24rEFHC4AJyBF7b5XQYuF6y7e1C6
+ AY3nNJG5YPdJ/ACJNmiiVFkFxwNtNss5L0QERz3ZSTpSG3v1+QZ5YFqjrDmO6uZRPPKZ RQ== 
+Received: from apblrppmta01.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qhfww0n4v-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 11:56:03 +0000
+Received: from pps.filterd (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 34CBtwjG003719;
+        Fri, 12 May 2023 11:55:58 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 3qdy59txbg-1;
+        Fri, 12 May 2023 11:55:58 +0000
+Received: from APBLRPPMTA01.qualcomm.com (APBLRPPMTA01.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34CBtwPr003707;
+        Fri, 12 May 2023 11:55:58 GMT
+Received: from hu-sgudaval-hyd.qualcomm.com (hu-rohiagar-hyd.qualcomm.com [10.213.106.138])
+        by APBLRPPMTA01.qualcomm.com (PPS) with ESMTP id 34CBtwvO003705;
+        Fri, 12 May 2023 11:55:58 +0000
+Received: by hu-sgudaval-hyd.qualcomm.com (Postfix, from userid 3970568)
+        id 6240E50CE; Fri, 12 May 2023 17:25:57 +0530 (+0530)
+From:   Rohit Agarwal <quic_rohiagar@quicinc.com>
+To:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        linus.walleij@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, richardcochran@gmail.com,
+        manivannan.sadhasivam@linaro.org, andy.shevchenko@gmail.com
+Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Rohit Agarwal <quic_rohiagar@quicinc.com>
+Subject: [PATCH 0/2] Refactor the pinctrl driver
+Date:   Fri, 12 May 2023 17:25:51 +0530
+Message-Id: <1683892553-19882-1-git-send-email-quic_rohiagar@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: r9OpPr1f_dNF66iKj91ksu7Lb7GFA0GO
+X-Proofpoint-GUID: r9OpPr1f_dNF66iKj91ksu7Lb7GFA0GO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-12_08,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxlogscore=417 malwarescore=0
+ spamscore=0 clxscore=1015 adultscore=0 mlxscore=0 phishscore=0 bulkscore=0
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305120099
+X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
+This series refactor the target specific pinctrl driver for qcom
+by reusing the generic pinfunction struct, pingroup struct and the defined
+macros to avoid code repetition.
+The series is rebased on linux-next and based on all the review and
+comments from different versions of [1].
 
-> 2023=E5=B9=B44=E6=9C=8824=E6=97=A5 11:31=EF=BC=8CJiaxun Yang =
-<jiaxun.yang@flygoat.com> =E5=86=99=E9=81=93=EF=BC=9A
->=20
-> Hi all,
->=20
-> This patchset fixes two issues in the MIPS GIC driver that may block
-> booting on some systems.
->=20
-> Please review.
+[1] https://lore.kernel.org/linux-arm-msm/1681966915-15720-1-git-send-email-quic_rohiagar@quicinc.com/
 
-Ping?
+Thanks,
+Rohit.
 
-I expect this series go through irqchip fixes tree.
+Rohit Agarwal (2):
+  pinctrl: qcom: Remove the msm_function struct
+  pinctrl: qcom: Refactor generic qcom pinctrl driver
 
-Thanks
-- Jiaxun
+ drivers/pinctrl/qcom/pinctrl-apq8064.c  | 104 +++---
+ drivers/pinctrl/qcom/pinctrl-apq8084.c  | 264 ++++++++-------
+ drivers/pinctrl/qcom/pinctrl-ipq4019.c  | 104 +++---
+ drivers/pinctrl/qcom/pinctrl-ipq5332.c  | 206 ++++++------
+ drivers/pinctrl/qcom/pinctrl-ipq6018.c  | 260 +++++++--------
+ drivers/pinctrl/qcom/pinctrl-ipq8064.c  | 114 +++----
+ drivers/pinctrl/qcom/pinctrl-ipq8074.c  | 240 +++++++-------
+ drivers/pinctrl/qcom/pinctrl-ipq9574.c  | 176 +++++-----
+ drivers/pinctrl/qcom/pinctrl-mdm9607.c  | 276 ++++++++--------
+ drivers/pinctrl/qcom/pinctrl-mdm9615.c  |  90 +++--
+ drivers/pinctrl/qcom/pinctrl-msm.c      |  13 +-
+ drivers/pinctrl/qcom/pinctrl-msm.h      |  42 ++-
+ drivers/pinctrl/qcom/pinctrl-msm8226.c  | 156 +++++----
+ drivers/pinctrl/qcom/pinctrl-msm8660.c  | 252 +++++++-------
+ drivers/pinctrl/qcom/pinctrl-msm8909.c  | 268 ++++++++-------
+ drivers/pinctrl/qcom/pinctrl-msm8916.c  | 556 ++++++++++++++++---------------
+ drivers/pinctrl/qcom/pinctrl-msm8953.c  | 424 ++++++++++++------------
+ drivers/pinctrl/qcom/pinctrl-msm8960.c  | 464 +++++++++++++-------------
+ drivers/pinctrl/qcom/pinctrl-msm8976.c  | 212 ++++++------
+ drivers/pinctrl/qcom/pinctrl-msm8994.c  | 564 ++++++++++++++++----------------
+ drivers/pinctrl/qcom/pinctrl-msm8996.c  | 508 ++++++++++++++--------------
+ drivers/pinctrl/qcom/pinctrl-msm8998.c  | 380 +++++++++++----------
+ drivers/pinctrl/qcom/pinctrl-msm8x74.c  | 474 +++++++++++++--------------
+ drivers/pinctrl/qcom/pinctrl-qcm2290.c  | 230 +++++++------
+ drivers/pinctrl/qcom/pinctrl-qcs404.c   | 388 +++++++++++-----------
+ drivers/pinctrl/qcom/pinctrl-qdf2xxx.c  |   6 +-
+ drivers/pinctrl/qcom/pinctrl-qdu1000.c  | 249 +++++++-------
+ drivers/pinctrl/qcom/pinctrl-sa8775p.c  | 308 +++++++++--------
+ drivers/pinctrl/qcom/pinctrl-sc7180.c   | 254 +++++++-------
+ drivers/pinctrl/qcom/pinctrl-sc7280.c   | 322 +++++++++---------
+ drivers/pinctrl/qcom/pinctrl-sc8180x.c  | 286 ++++++++--------
+ drivers/pinctrl/qcom/pinctrl-sc8280xp.c | 358 ++++++++++----------
+ drivers/pinctrl/qcom/pinctrl-sdm660.c   | 387 +++++++++++-----------
+ drivers/pinctrl/qcom/pinctrl-sdm670.c   | 284 ++++++++--------
+ drivers/pinctrl/qcom/pinctrl-sdm845.c   | 286 ++++++++--------
+ drivers/pinctrl/qcom/pinctrl-sdx55.c    | 190 ++++++-----
+ drivers/pinctrl/qcom/pinctrl-sdx65.c    | 194 ++++++-----
+ drivers/pinctrl/qcom/pinctrl-sm6115.c   | 162 +++++----
+ drivers/pinctrl/qcom/pinctrl-sm6125.c   | 282 ++++++++--------
+ drivers/pinctrl/qcom/pinctrl-sm6350.c   | 296 ++++++++---------
+ drivers/pinctrl/qcom/pinctrl-sm6375.c   | 358 ++++++++++----------
+ drivers/pinctrl/qcom/pinctrl-sm8150.c   | 286 ++++++++--------
+ drivers/pinctrl/qcom/pinctrl-sm8250.c   | 258 +++++++--------
+ drivers/pinctrl/qcom/pinctrl-sm8350.c   | 298 ++++++++---------
+ drivers/pinctrl/qcom/pinctrl-sm8450.c   | 300 +++++++++--------
+ drivers/pinctrl/qcom/pinctrl-sm8550.c   | 320 +++++++++---------
+ 46 files changed, 6055 insertions(+), 6394 deletions(-)
 
->=20
-> Thanks
->=20
-> Jiaxun Yang (2):
->  irqchip/mips-gic: Don't touch vl_map if a local interrupt is not
->    routable
->  irqchip/mips-gic: Use raw spinlock for gic_lock
->=20
-> drivers/irqchip/irq-mips-gic.c | 32 +++++++++++++++++---------------
-> 1 file changed, 17 insertions(+), 15 deletions(-)
->=20
-> --=20
-> 2.34.1
->=20
+-- 
+2.7.4
 
