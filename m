@@ -2,162 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 472F0700FC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 22:34:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CC4A700FCA
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 22:35:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239375AbjELUex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 16:34:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45112 "EHLO
+        id S239504AbjELUfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 16:35:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239397AbjELUeu (ORCPT
+        with ESMTP id S239392AbjELUfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 16:34:50 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 235FEF1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 13:34:48 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id ca18e2360f4ac-763997ab8cdso1527169639f.2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 13:34:48 -0700 (PDT)
+        Fri, 12 May 2023 16:35:14 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 084D9F1;
+        Fri, 12 May 2023 13:35:07 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f41d087b3bso75412005e9.0;
+        Fri, 12 May 2023 13:35:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683923705; x=1686515705;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=p9q9IOHjC1OlavttONB/fPhSqhjx1Pw6wrvM4VT66EA=;
+        b=mee6+fm9UuOx2D9z1/CST2E0V5GoFJv+K8lnL/C5HttDfQHVMKrSEzTqnmiHMpGdT3
+         8MM6QKyuKcjo5OpPI9+DkZOXV1Mz6ZFnpKiod5pjTcOg/IoKpPte73wpQ+gJuN6k7r8v
+         qXp2+BtD1pOPEn9AgqOQE9FnfR6mlDCK5JZ2GV7VqEJ9vsLX4BFAozufBNXYgmDLRBlL
+         2mCwahBIo9gt3tFxW/9jb3WayG0wBFOY79/hm7aoxV60csL1hVaEAcDZYm4UN/aZpu7+
+         4X0vwcfnFV2XlRqqv1ZcSo4L6D6kwvmJIr34iRQzA3SAdzLff//sIlb3gNur9s1AwB+3
+         mrJg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683923687; x=1686515687;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0Jbdlq6Qh2gIvbCvuqqmkF7qyFanKC+s6l78ieWXaEQ=;
-        b=eOxMvsKfwFVV5DlNlkDWQ3eA6Ko+ccNxbscUmYKotSP7uZoTGi8vmM6Uw8v0TS8YoF
-         6CO/4TsU3/nq2W1gglRtQOJfbyHFd5Z95g5yKFSuuuTb5GaLsV3qcJ6UjBQjaMjkoJuU
-         6uW9lyYrb4XUFd6yktpUir49FbgARKZaBQnWL0xD0qubxNtYZKiTCD5DMAydDXnL3uLL
-         /5mNH2JpmyKqzVDpHrloyVD9dP8h5cdOECzwMO2uQw13C7mqsuUJ8KxGg3pHwVb6t7UR
-         42R/prGnguiNrkEBUXJlOQDtSB9/gJoF1QDpURAk/1kheWl94cSFl5N+B4RFRKlxdl89
-         gpmA==
-X-Gm-Message-State: AC+VfDyyXnCFz5un9w0vL2f0RJ/iIAynpTKrbWgdK+FHrB3k1MnnBSac
-        cJ7q39smwpGU6GJtMKSx7p8yURvZ0758zTL+D93gXKSLI5+K
-X-Google-Smtp-Source: ACHHUZ75RRPVogNTRfUpjWWSirB/LfsHA7kwauVX9LwfzKRe4UnntCZBUDvPWYCdDrHdwQ/ZRl5xYQYoQCfxDj74PNDqKlzssjKS
+        d=1e100.net; s=20221208; t=1683923705; x=1686515705;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=p9q9IOHjC1OlavttONB/fPhSqhjx1Pw6wrvM4VT66EA=;
+        b=g8r/5rniBMc7b/2tEHuP8fVm/NHpi5DlzYhQtoIPDzSyBRIsYdBCv3hT/zYUOU5m50
+         +VnamUNV5HO8hHa4VZr+8TiJTk48bSvQQy/8y7ZOcgQ9nk+XRJDcQp7lLSJ9Vz64C/fn
+         R39VxP49SJuiPDqgMaq12hcxSsvLjLO/DITxkiXCWngfc/en72PitK/DQ+L0Ui8JAvBH
+         6JUonj+17UHHTE2634mLk7sqWHNFVaNCy4ThHzlQdk9eHHTGUnXChvHxmHg+QUnX17ok
+         GJrB7ieNXLoFszZZ1HqmFRlOc7jfYfDAK8emlvPtzJtuI5Atyr73gxH/KOqONBZzIgyJ
+         g1rg==
+X-Gm-Message-State: AC+VfDztF2RMsuBHosy+qHYu117ROJ01Yi1dqCAMCSPBx0tnNjBtpgk+
+        ys9ZTF0j5aoEaukem+pcpE/cS9+CtaDKVHb1RlQ=
+X-Google-Smtp-Source: ACHHUZ5Sf/6b7x4wWJ30YW/9I8P3WMl2ezn3idBZagON+lEhCcFEQqrfO0PLUy49/T0gVhwc7OHItE1f/Gg1us37eV8=
+X-Received: by 2002:a1c:cc14:0:b0:3f4:20bd:ba46 with SMTP id
+ h20-20020a1ccc14000000b003f420bdba46mr15619935wmb.5.1683923705179; Fri, 12
+ May 2023 13:35:05 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a02:b1d5:0:b0:40f:99ae:dba8 with SMTP id
- u21-20020a02b1d5000000b0040f99aedba8mr7589353jah.1.1683923687453; Fri, 12 May
- 2023 13:34:47 -0700 (PDT)
-Date:   Fri, 12 May 2023 13:34:47 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000383da505fb8509b7@google.com>
-Subject: [syzbot] [wireless?] memory leak in hwsim_new_radio_nl
-From:   syzbot <syzbot+904ce6fbb38532d9795c@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com,
-        johannes@sipsolutions.net, kuba@kernel.org, kvalo@kernel.org,
-        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com
+References: <20230512145356.396567-1-azeemshaikh38@gmail.com>
+ <109A2974-3AE0-48C6-8EE3-FADE95E8EF30@oracle.com> <5E054593-8995-46FF-824E-55B18BF53BE2@oracle.com>
+In-Reply-To: <5E054593-8995-46FF-824E-55B18BF53BE2@oracle.com>
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+Date:   Fri, 12 May 2023 16:34:54 -0400
+Message-ID: <CADmuW3UQ-wqobay34PY+myyk1Pr7s-cf7b-U7TUCnarEf+jsxg@mail.gmail.com>
+Subject: Re: [PATCH v2] NFSD: Remove all occurences of strlcpy
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Resending as plain text.
 
-syzbot found the following issue on:
+> >> strlcpy() reads the entire source buffer first.
+> >> This read may exceed the destination size limit.
+> >> This is both inefficient and can lead to linear read
+> >> overflows if a source string is not NUL-terminated [1].
+> >> In an effort to remove strlcpy() completely [2], replace
+> >> strlcpy here.
+> >
+> > Let's update the patch description. This change is really
+> > a clean up -- it doesn't address the memory issues you
+> > originally described.
+>
+> Unless, of course, you intend to apply this patch /after/
+> a patch that fixes __assign_str(). In that case, no change
+> to the patch description is needed.
 
-HEAD commit:    105131df9c3b Merge tag 'dt-fixes-6.4' of git://git.kernel...
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1193dc92280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fa9562c0bfb72fa2
-dashboard link: https://syzkaller.appspot.com/bug?extid=904ce6fbb38532d9795c
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=10b4577c280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14a9e29e280000
+No, I plan to land this patch before attempting to fix __assign_str itself.
+Let me know if the below description looks good to you and I'll send
+over a v3 patch:
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/029c9c553eb9/disk-105131df.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c807843227d1/vmlinux-105131df.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/dfce3441d47b/bzImage-105131df.xz
+[PATCH v3] NFSD: Remove open coding of string copy
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+904ce6fbb38532d9795c@syzkaller.appspotmail.com
+Instead of open coding a __dynamic_array(), use the __string() and
+__assign_str()
+helper macros that exist for this kind of use case.
 
-Warning: Permanently added '10.128.1.177' (ECDSA) to the list of known hosts.
-executing program
-executing program
-BUG: memory leak
-unreferenced object 0xffff88810e2ac920 (size 32):
-  comm "syz-executor238", pid 4983, jiffies 4294944120 (age 14.000s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff815458a4>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff830fc4fb>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff830fc4fb>] hwsim_new_radio_nl+0x43b/0x660 drivers/net/wireless/virtual/mac80211_hwsim.c:5962
-    [<ffffffff83f4aa6e>] genl_family_rcv_msg_doit.isra.0+0xee/0x150 net/netlink/genetlink.c:968
-    [<ffffffff83f4ada7>] genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
-    [<ffffffff83f4ada7>] genl_rcv_msg+0x2d7/0x430 net/netlink/genetlink.c:1065
-    [<ffffffff83f49111>] netlink_rcv_skb+0x91/0x1e0 net/netlink/af_netlink.c:2546
-    [<ffffffff83f4a118>] genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
-    [<ffffffff83f4805b>] netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
-    [<ffffffff83f4805b>] netlink_unicast+0x39b/0x4d0 net/netlink/af_netlink.c:1365
-    [<ffffffff83f4852a>] netlink_sendmsg+0x39a/0x720 net/netlink/af_netlink.c:1913
-    [<ffffffff83db5258>] sock_sendmsg_nosec net/socket.c:724 [inline]
-    [<ffffffff83db5258>] sock_sendmsg+0x58/0xb0 net/socket.c:747
-    [<ffffffff83db5817>] ____sys_sendmsg+0x397/0x430 net/socket.c:2503
-    [<ffffffff83db9e08>] ___sys_sendmsg+0xa8/0x110 net/socket.c:2557
-    [<ffffffff83db9fac>] __sys_sendmsg+0x8c/0x100 net/socket.c:2586
-    [<ffffffff84a127b9>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a127b9>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Part of an effort to remove deprecated strlcpy() [1] completely from the
+kernel[2].
 
-BUG: memory leak
-unreferenced object 0xffff88810e2ac800 (size 32):
-  comm "syz-executor238", pid 4984, jiffies 4294944700 (age 8.200s)
-  hex dump (first 32 bytes):
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-    00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00  ................
-  backtrace:
-    [<ffffffff815458a4>] kmalloc_trace+0x24/0x90 mm/slab_common.c:1057
-    [<ffffffff830fc4fb>] kmalloc include/linux/slab.h:559 [inline]
-    [<ffffffff830fc4fb>] hwsim_new_radio_nl+0x43b/0x660 drivers/net/wireless/virtual/mac80211_hwsim.c:5962
-    [<ffffffff83f4aa6e>] genl_family_rcv_msg_doit.isra.0+0xee/0x150 net/netlink/genetlink.c:968
-    [<ffffffff83f4ada7>] genl_family_rcv_msg net/netlink/genetlink.c:1048 [inline]
-    [<ffffffff83f4ada7>] genl_rcv_msg+0x2d7/0x430 net/netlink/genetlink.c:1065
-    [<ffffffff83f49111>] netlink_rcv_skb+0x91/0x1e0 net/netlink/af_netlink.c:2546
-    [<ffffffff83f4a118>] genl_rcv+0x28/0x40 net/netlink/genetlink.c:1076
-    [<ffffffff83f4805b>] netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
-    [<ffffffff83f4805b>] netlink_unicast+0x39b/0x4d0 net/netlink/af_netlink.c:1365
-    [<ffffffff83f4852a>] netlink_sendmsg+0x39a/0x720 net/netlink/af_netlink.c:1913
-    [<ffffffff83db5258>] sock_sendmsg_nosec net/socket.c:724 [inline]
-    [<ffffffff83db5258>] sock_sendmsg+0x58/0xb0 net/socket.c:747
-    [<ffffffff83db5817>] ____sys_sendmsg+0x397/0x430 net/socket.c:2503
-    [<ffffffff83db9e08>] ___sys_sendmsg+0xa8/0x110 net/socket.c:2557
-    [<ffffffff83db9fac>] __sys_sendmsg+0x8c/0x100 net/socket.c:2586
-    [<ffffffff84a127b9>] do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-    [<ffffffff84a127b9>] do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
-    [<ffffffff84c0008b>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+[2] https://github.com/KSPP/linux/issues/89
 
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+Fixes: 3c92fba557c6 ("NFSD: Enhance the nfsd_cb_setup tracepoint")
+Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
