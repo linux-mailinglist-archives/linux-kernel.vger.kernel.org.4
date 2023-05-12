@@ -2,140 +2,250 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0BF46FFFC1
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 06:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 657586FFFC6
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 06:57:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229603AbjELEwG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 00:52:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50646 "EHLO
+        id S239682AbjELE5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 00:57:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239720AbjELEwE (ORCPT
+        with ESMTP id S229463AbjELE5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 00:52:04 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19C31B2;
-        Thu, 11 May 2023 21:51:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683867105; x=1715403105;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NyIB/CXyxsn/NtOavJ2qH7mGRgxIAWm4RWZld4YUq1g=;
-  b=ZOEQMHammbndTT5jSZzdix6gtgJLUIarzN4h7cS3qjpu55k6fKL5FDCM
-   QI548v66ndbigQ3ruPBOi6+X1+MMUB5Yp2VXMNKgTjvykfAnd47V/qa+n
-   RXPTb5q+QFgtF8e4Sbk7ssnz6qQNEIVvRNOn1dL9Haam7B6NiX3C0KQI+
-   AarUMkEGXsxqedRYW/KVO0Yw6UvJJb1zv1V61HB8vhJ2HNyh9mmM/gxly
-   Dy3NMLmayhlXtE5G6Oy1UOJOXtXiEabVb8Ql/MK4o8T48vT7ylw94CFKz
-   yflKYiYh5jNnFP7d3DmE55byKj0CJKnO85fO+nfnaMWTQOx0aJlpaCWGC
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="416330128"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="416330128"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 21:51:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="677521648"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="677521648"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga006.jf.intel.com with ESMTP; 11 May 2023 21:51:37 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pxKki-0004XQ-1i;
-        Fri, 12 May 2023 04:51:36 +0000
-Date:   Fri, 12 May 2023 12:50:56 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Staging Drivers <linux-staging@lists.linux.dev>,
-        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
-        Linux Kernel Actions <linux-actions@lists.infradead.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Pavel Machek <pavel@ucw.cz>, Tom Rix <trix@redhat.com>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        "David A . Hinds" <dahinds@users.sourceforge.net>,
-        Maxime Bizon <mbizon@freebox.fr>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        Dan Carpenter <error27@gmail.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Simon Horman <simon.horman@corigine.com>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Sam Creasey <sammy@sammy.net>, Arnd Bergmann <arnd@arndb.de>,
-        Manivannan Sadhasivam <mani@kernel.org>
-Subject: Re: [PATCH 06/10] pcmcia: Add SPDX identifier
-Message-ID: <202305121243.1SzqYNEp-lkp@intel.com>
-References: <20230511133406.78155-7-bagasdotme@gmail.com>
+        Fri, 12 May 2023 00:57:12 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E939171E
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 21:57:11 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50bc075d6b2so17393539a12.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 21:57:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683867429; x=1686459429;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=35gdnVPixa4iKPZedkPNUnZFbG4+0zQuHU9UMu15v94=;
+        b=kB4PdKzV8bAwlSSksBXwtDmw+fv17kWnegyfSEIXqy6towfTcYXU6YufakGhJusode
+         2A7o39PRBtACpB6a/PIAkPcYIfSO08F3B+9SYNCLuw9NMf15DjS0ORakiNVN7m1FRZRB
+         T2wHi/IfooBgpTYNPTXJjYRXKP5Xb22XSDXdWFBFCzZRcvZsb9huVGH0ziVexZ4f0TRq
+         9gMHnPn9uQLnb29szQ9t8mtBnJjVNyb52qU8kkSo0CbWksCH1mCJ0yLV1e8fQVWF7oG+
+         0e6cDl65o/IzycTItG7sTarc3Z2DVamT2B7CNhyhB7uJPgYtdpbSAgHa00zk5TNF8tLS
+         eBgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683867429; x=1686459429;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=35gdnVPixa4iKPZedkPNUnZFbG4+0zQuHU9UMu15v94=;
+        b=LMBHNSwYLcLyo3Nv38cJvSybL4NHwMDcl73R+0T2hz3KDU3JS503Gj/wXyOCStL26d
+         Qcs6oeS7lqujSRnD+4b6LfZEh0KJwy390azcq7k5azeJvsBJHj4xh5gJBynBv4Di7f51
+         uA5e18TTbSyoHzb8/809CjutD9lyN8myhJOv70aX0Ue2X6JV07BUckWpevfxnaVG0Jqd
+         jDn0aqakvrlXcFNDEUnsy8HgC62UpHyCZYrLIFwxgoqL3B3PveD9nBIxvN0DFTr4dFTz
+         u/++j79pM3olWjOA4873YDgSsxNIeVJSv9LsvdTk3k0iyK4o9/Bu9Ujnb+Qedjsc+Sih
+         oB2w==
+X-Gm-Message-State: AC+VfDxAIZOis7lTbhnR1PwDMz9K9Lu8sAOqx4m+lJ/15QeQVg3aBnIY
+        8mcnMEVsfoaiuMQpYKYS2vFeNQE2zQC9op0IhA++ew==
+X-Google-Smtp-Source: ACHHUZ6UmXarJw2q1KAMNPFRzUE3yStbqMICaW4X3HcZDvLVeVmsAiopQX5+/od6KK7inYLAWK1oBRn2NyTtd3/69y4=
+X-Received: by 2002:a17:906:9b89:b0:96a:6939:11af with SMTP id
+ dd9-20020a1709069b8900b0096a693911afmr3968370ejc.50.1683867429483; Thu, 11
+ May 2023 21:57:09 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511133406.78155-7-bagasdotme@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230505173012.881083-1-etienne.carriere@linaro.org>
+ <20230505173012.881083-3-etienne.carriere@linaro.org> <CAFA6WYN4yjjedmsS4nAgR5L7OOTRAcKs7STW0YjCC7XsdfYzkA@mail.gmail.com>
+ <CAN5uoS8eSfeu-BaV5dhbB15q_iGjcd9BKDpp_hEBaBdb4_qbAg@mail.gmail.com>
+ <CAN5uoS99hfjE404_UCm+F4bdVgSfB6Eg_3d1JvHCc2GgSzdUog@mail.gmail.com>
+ <CAFA6WYPUWjK97H5DL-eOT2bjsa79Zrvk4wet2AW0Qb0NOVqt7Q@mail.gmail.com>
+ <CAN5uoS8HF5ymsjkLthFnoQxBHQ3TOVonycTH3g5K76qKzUniuA@mail.gmail.com> <CAFA6WYMBoUom6yr-BGzfJKLsuQLPEkkcS021mf-KjCfkt-ejJw@mail.gmail.com>
+In-Reply-To: <CAFA6WYMBoUom6yr-BGzfJKLsuQLPEkkcS021mf-KjCfkt-ejJw@mail.gmail.com>
+From:   Etienne Carriere <etienne.carriere@linaro.org>
+Date:   Fri, 12 May 2023 06:56:58 +0200
+Message-ID: <CAN5uoS8mj35qXdhHaHVsiuEJ4PtZWCRn=OmNUDrQM=JjFc7P0w@mail.gmail.com>
+Subject: Re: [PATCH v6 3/4] tee: optee: support tracking system threads
+To:     Sumit Garg <sumit.garg@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        op-tee@lists.trustedfirmware.org,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bagas,
+On Thu, 11 May 2023 at 13:31, Sumit Garg <sumit.garg@linaro.org> wrote:
+>
+> On Thu, 11 May 2023 at 13:49, Etienne Carriere
+> <etienne.carriere@linaro.org> wrote:
+> >
+> > On Thu, 11 May 2023 at 09:27, Sumit Garg <sumit.garg@linaro.org> wrote:
+> > > (snip)
+> > > > > > >
+> > > > > > > +bool optee_cq_inc_sys_thread_count(struct optee_call_queue *cq)
+> > > > > > > +{
+> > > > > > > +       bool rc = false;
+> > > > > > > +
+> > > > > > > +       mutex_lock(&cq->mutex);
+> > > > > > > +
+> > > > > > > +       /* Leave at least 1 normal (non-system) thread */
+> > > > > >
+> > > > > > IMO, this might be counter productive. As most kernel drivers open a
+> > > > > > session during driver probe which are only released in the driver
+> > > > > > release method.
+> > > > >
+> > > > > It is always the case?
+> > > >
+> > > > This answer of mine is irrelevant. Sorry,
+> > > > Please read only the below comments of mine, especially:
+> > > > | Note that an OP-TEE thread is not bound to a TEE session but rather
+> > > > | bound to a yielded call to OP-TEE.
+> > > >
+> > > > >
+> > > > > > If the kernel driver is built-in then the session is
+> > > > > > never released. Now with system threads we would reserve an OP-TEE
+> > > > > > thread for that kernel driver as well which will never be available to
+> > > > > > regular user-space clients.
+> > > > >
+> > > > > That is not true. No driver currently requests their TEE thread to be
+> > > > > a system thread.
+> > > > > Only SCMI does because it needs to by construction.
+> > > > >
+> > >
+> > > Yes that's true but what prevents future/current kernel TEE drivers
+> > > from requesting a system thread once we have this patch-set landed.
+> >
+> > Only clients really needing this system_thread attribute should request it.
+> > If they really need, the OP-TEE firmware in secure world should
+> > provision sufficient thread context.
+>
+> How do we quantify it? We definitely need a policy here regarding
+> normal vs system threads.
+>
+> One argument in favor of kernel clients requiring system threads could
+> be that we don't want to compete with user-space for OP-TEE threads.
 
-kernel test robot noticed the following build warnings:
+Sorry I don't understand. What do you mean qualifying this?
+In an ideal situation, we would have OP-TEE provisioned with largely
+sufficient thread contexts. However there are systems with constraints
+memory resource that do lower at most the number of OP-TEE thread
+contexts.
 
-[auto build test WARNING on ac9a78681b921877518763ba0e89202254349d1b]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Bagas-Sanjaya/agp-amd64-Remove-GPL-distribution-notice/20230511-214307
-base:   ac9a78681b921877518763ba0e89202254349d1b
-patch link:    https://lore.kernel.org/r/20230511133406.78155-7-bagasdotme%40gmail.com
-patch subject: [PATCH 06/10] pcmcia: Add SPDX identifier
-reproduce:
-        scripts/spdxcheck.py
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305121243.1SzqYNEp-lkp@intel.com/
+>
+> >
+> > >
+> > > > >
+> > > > > > So I would rather suggest we only allow a
+> > > > > > single system thread to be reserved as a starting point which is
+> > > > > > relevant to this critical SCMI service. We can also make this upper
+> > > > > > bound for system threads configurable with default value as 1 if
+> > > > > > needed.
+> > > >
+> > > > Note that SCMI server can expose several SCMI channels (at most 1 per
+> > > > SCMI protocol used) and each of them will need to request a
+> > > > system_thread to TEE driver.
+> > > >
+> > > > Etienne
+> > > >
+> > > > >
+> > > > > Reserving one or more system threads depends on the number of thread
+> > > > > context provisioned by the TEE.
+> > > > > Note that the implementation proposed here prevents Linux kernel from
+> > > > > exhausting TEE threads so user space always has at least a TEE thread
+> > > > > context left available.
+> > >
+> > > Yeah but on the other hand user-space clients which are comparatively
+> > > larger in number than kernel clients. So they will be starved for
+> > > OP-TEE thread availability. Consider a user-space client which needs
+> > > to serve a lot of TLS connections just waiting for OP-TEE thread
+> > > availability.
+> >
+> > Note that OP-TEE default configuration provisions (number of CPUs + 1)
+> > thread context, so the situation is already present before these
+> > changes on systems that embedded an OP-TEE without a properly tuned
+> > configuration. As I said above, Linux kernel cannot be responsible for
+> > the total number of thread contexts provisioned in OP-TEE. If the
+> > overall system requires a lot of TEE thread contexts, one should embed
+> > a suitable OP-TEE firmware.
+>
+> Wouldn't the SCMI deadlock problem be solved with just having a lot of
+> OP-TEE threads? But we are discussing the system threads solution here
+> to make efficient use of OP-TEE threads. The total number of OP-TEE
+> threads is definitely in control of OP-TEE but the control of how to
+> schedule and efficiently use them lies with the Linux OP-TEE driver.
+>
+> So, given our overall discussion in this thread, how about the upper
+> bound for system threads being 50% of the total number of OP-TEE
+> threads?
 
-spdxcheck warnings: (new ones prefixed by >>)
->> drivers/pcmcia/cirrus.h: 1:44 Invalid License ID: MPL
->> drivers/pcmcia/pd6729.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   include/net/bonding.h: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/isdn/mISDN/dsp_audio.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/isdn/mISDN/dsp_blowfish.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/isdn/mISDN/dsp_cmx.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/isdn/mISDN/dsp_core.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/isdn/mISDN/dsp_dtmf.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/isdn/mISDN/dsp_tones.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/bonding/bond_main.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/bonding/bonding_priv.h: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/8390.h: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/apne.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/axnet_cs.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/hydra.c: 1:28 Invalid License ID: GPL-1.0-only
-   drivers/net/ethernet/8390/lib8390.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/mac8390.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/ne.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/ne2k-pci.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/pcnet_cs.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/smc-ultra.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/8390/wd.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/i825xx/82596.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/i825xx/lasi_82596.c: 1:28 Invalid License ID: GPL-1.0-or-later
-   drivers/net/ethernet/i825xx/lib82596.c: 1:28 Invalid License ID: GPL-1.0-or-later
+What would be a shame if the system does not use any Linux kernel
+client sessions, only userland clients. This information cannot be
+knwon be the linux optee driver.
+Instead of leaving at least 1 TEE thread context for regular session,
+what if this change enforce 2? or 3? Which count?
+I think 1 is a fair choice: it allows to support OP-TEE firmwares with
+a very small thread context pool (when running in small secure
+memory), embedding only 2 or 3 contextes.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>
+> >
+> > >
+> > > > >
+> > > > > Note that an OP-TEE thread is not bound to a TEE session but rather
+> > > > > bound to a yielded call to OP-TEE.
+> > >
+> > > tee_client_open_session()
+> > >   -> optee_open_session()
+> > >
+> > > tee_client_system_session()
+> > >   -> optee_system_session()
+> > >     -> optee_cq_inc_sys_thread_count()       <- At this point you
+> > > reserve a system thread corresponding to a particular kernel client
+> > > session
+> > >
+> > > All tee_client_invoke_func() invocations with a system thread capable
+> > > session will use that reserved thread.
+> > >
+> > > tee_client_close_session()
+> > >   -> optee_close_session()
+> > >     -> optee_close_session_helper()
+> > >       -> optee_cq_dec_sys_thread_count()    <- At this point the
+> > > reserved system thread is released
+> > >
+> > > Haven't this tied the system thread to a particular TEE session? Or am
+> > > I missing something?
+> >
+> > These changes do not define an overall single system thread.
+> > If several sessions requests reservation of TEE system thread, has
+> > many will be reserved.
+> > Only the very sessions with its sys_thread attribute set will use a
+> > reserved thread. If such a kernel client issues several concurrent
+> > calls to OP-TEE over that session, it will indeed consume more
+> > reserved system threads than what is actually reserved. Here I think
+> > it is the responsibility of such client to open as many sessions as
+> > requests. This is what scmi/optee driver does (see patch v6 4/4). An
+> > alternative would be to have a ref count of sys_thread in session
+> > contexts rather than a boolean value. I don't think it's worth it.
+>
+> Ah, I missed that during the review. The invocations with system
+> threads should be limited by res_sys_thread_count in a similar manner
+> as we do with normal threads via free_normal_thread_count. Otherwise,
+> it's unfair for normal thread scheduling.
+>
+> I suppose there isn't any interdependency among SCMI channels itself
+> such that a particular SCMI invocation can wait until the other SCMI
+> invocation has completed.
+
+I think that would over complexify the logic.
+
+Note I will send a patch v8 series but feel free to continue the discussion.
+It will at least address other comments you shared.
+
+Best regards,
+Etienne
+
+>
+> -Sumit
