@@ -2,151 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 796CF6FFF8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 06:15:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21D496FFF90
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 06:16:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239603AbjELEPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 00:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38096 "EHLO
+        id S239786AbjELEQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 00:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjELEPc (ORCPT
+        with ESMTP id S229547AbjELEQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 00:15:32 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E254A4EFE
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 21:15:30 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-3f4fdf564d1so118811cf.1
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 21:15:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1683864930; x=1686456930;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=4TPdIu92hVjkNl8T0IUuailFGe8fCvhTrnZtqlSjp5M=;
-        b=xxyeGAJgdIOdxBYoDYVaY2zURP1w2xYTzIUDxH9Rq/Fm++I/WlE+bKTH1iuDuD9z7U
-         zXdARcF39ulLFdhT5lKddCnZnAJcnOJFYgYAPTb6JCzg+JRomdwxLmF8Lo9IWR+eF0mN
-         fVyd6o9RW6+aVGcxjWhcdDctEpiQyjT1uLs/g=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683864930; x=1686456930;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4TPdIu92hVjkNl8T0IUuailFGe8fCvhTrnZtqlSjp5M=;
-        b=T4GfYktuQ7KOdpOPx0gHKhELWY/BiZ1wiFjMinpJ0I6b1DOpYqzwYdHmmGpX5pgkm6
-         KfH/7YWDS76pz81FHQ6GnZu8U27AVT1Hu0wNAtSqCuMkWM+qKbQNNVqgqfqd62vZwvCl
-         ewzNHtkR8SYAThixYd174XN2Koi6i8lLuktz/c/3VYIbr8+L0oEbukZXjXxXkWB2OLqU
-         mq449NYTAUh0rb6LcPcKhRaZf9t9/cfj/hIb2aTsbEzIJAtkg6+68nzf6olrYm322thl
-         lGLc4MXECwO0WRc/0pxugkAQszP8g1JssG22GXKsofTdsiFt2hiHKZKES59QC4ACB4mj
-         u2Vw==
-X-Gm-Message-State: AC+VfDyZH8sZHMbkVBTKPL9WmdXe1U5ZGszF8c/4CVClr4tI8Xh4C7B8
-        UfrEz3Pa01AZ84Gp/krXnozm1E+2jSNSqqD0G6UIdQ==
-X-Google-Smtp-Source: ACHHUZ5KW0IGIezIRko/dgxuwz1tV/Lhi6kryhRQJNDyZTIMV634SAgzQmdZLpw+Pokzb+1LymGBdA==
-X-Received: by 2002:a05:622a:1045:b0:3ef:5847:d7c8 with SMTP id f5-20020a05622a104500b003ef5847d7c8mr36977284qte.44.1683864930004;
-        Thu, 11 May 2023 21:15:30 -0700 (PDT)
-Received: from smtpclient.apple (123.sub-174-208-224.myvzw.com. [174.208.224.123])
-        by smtp.gmail.com with ESMTPSA id bz13-20020a05622a1e8d00b003e8160cf93asm2775677qtb.80.2023.05.11.21.15.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 May 2023 21:15:29 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH rcu 3/6] rcu/rcuscale: Move rcu_scale_*() after kfree_scale_cleanup()
-Date:   Thu, 11 May 2023 21:15:17 -0700
-Message-Id: <30F06C03-6950-4E2B-B3CE-3939B3CDD295@joelfernandes.org>
-References: <IA1PR11MB6171B1AD7716B95B0B2C683889759@IA1PR11MB6171.namprd11.prod.outlook.com>
-Cc:     paulmck@kernel.org, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        rostedt@goodmis.org
-In-Reply-To: <IA1PR11MB6171B1AD7716B95B0B2C683889759@IA1PR11MB6171.namprd11.prod.outlook.com>
-To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-X-Mailer: iPhone Mail (20B101)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 12 May 2023 00:16:16 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF0E4EFE
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 21:16:14 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230512041611epoutp03134bbcdb831527ec107ebb1e087854cd~eSkUrXnMC1950419504epoutp03N
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:16:11 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230512041611epoutp03134bbcdb831527ec107ebb1e087854cd~eSkUrXnMC1950419504epoutp03N
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1683864971;
+        bh=v0F36rdhCqmYHzWYCcSPoz47p9NTpAJZ63jsBopms9k=;
+        h=Subject:Reply-To:From:To:CC:Date:References:From;
+        b=uxvtEuD/qycRzM3UlP2AR/4D8BIUc7CpiQ/9/UtV4bJm9eFjAfzqrKvFw75diVJyz
+         hO9oQardNXTuYcKqdSLF+TYrMvYAVsbd+TdusCtPV+XyNEoAOGQNqjUeXMmjVSywwK
+         ZCY34nSp2Zm9N5spgEzKePDL1mk7pnwK8k0ixjsA=
+Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20230512041611epcas2p205e0bc905f352e9afb7f95c468911e09~eSkUWIr0p0853708537epcas2p2R;
+        Fri, 12 May 2023 04:16:11 +0000 (GMT)
+Received: from epsmges2p4.samsung.com (unknown [182.195.36.92]) by
+        epsnrtp4.localdomain (Postfix) with ESMTP id 4QHb6f6fd4z4x9QB; Fri, 12 May
+        2023 04:16:10 +0000 (GMT)
+X-AuditID: b6c32a48-475ff70000005998-af-645dbd8ab9e8
+Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
+        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
+        7D.2D.22936.A8DBD546; Fri, 12 May 2023 13:16:10 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v1] f2fs: Fix over-estimating free section during FG GC
+Reply-To: yonggil.song@samsung.com
+Sender: Yonggil Song <yonggil.song@samsung.com>
+From:   Yonggil Song <yonggil.song@samsung.com>
+To:     "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "chao@kernel.org" <chao@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Seokhwan Kim <sukka.kim@samsung.com>,
+        Daejun Park <daejun7.park@samsung.com>,
+        beomsu kim <beomsu7.kim@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20230512041610epcms2p506e7539079670524146ba6eeeb9dbd63@epcms2p5>
+Date:   Fri, 12 May 2023 13:16:10 +0900
+X-CMS-MailID: 20230512041610epcms2p506e7539079670524146ba6eeeb9dbd63
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpik+LIzCtJLcpLzFFi42LZdljTVLdrb2yKwYENZhYX5n1ktjg99SyT
+        xaoH4RZP1s9itri0yN3i8q45bBarOuYyWkw9f4TJgcNj06pONo/dCz4zefRtWcXo8XmTXABL
+        VLZNRmpiSmqRQmpecn5KZl66rZJ3cLxzvKmZgaGuoaWFuZJCXmJuqq2Si0+ArltmDtARSgpl
+        iTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSClJwC8wK94sTc4tK8dL281BIrQwMDI1OgwoTs
+        jLMPZ7EVdIhWvLwq38D4TqCLkZNDQsBEYm/nQdYuRi4OIYEdjBITXp9l6WLk4OAVEJT4u0MY
+        pEZYwF3i4oa9rCC2kICSxLUDvSwQcX2JzYuXsYPYbAK6En83LAezRQReMUqcWS0KYjMLVEhs
+        /vCSBWIXr8SM9qdQtrTE9uVbGSFsDYkfy3qZIWxRiZur37LD2O+PzYeqEZFovXcWqkZQ4sHP
+        3VBxSYlFh84zQdj5En9XXGeDsGsktja0QcX1Ja51bATbyyvgK3HteDNYnEVAVWLLrC9Q9S4S
+        879tY4e4WV5i+9s5zKBgYBbQlFi/Sx/ElBBQljhyiwWigk+i4/Bfdpivdsx7ArVJTWLzps2s
+        ELaMxIXHbVBXekgcf3WZCRKCgRI3O5tZJjAqzEKE8ywke2ch7F3AyLyKUSy1oDg3PbXYqMAE
+        HrPJ+bmbGMGJUctjB+Pstx/0DjEycTAeYpTgYFYS4X27JDpFiDclsbIqtSg/vqg0J7X4EKMp
+        0McTmaVEk/OBqTmvJN7QxNLAxMzM0NzI1MBcSZz3Y4dyipBAemJJanZqakFqEUwfEwenVAOT
+        p2fyuYo1LrvzqpJSXnQ7PiqbwLJ5fejyZAXlj5LSxy9FmvWku+i/nfTRnsv8mOfsmTNnPDr0
+        /6rR1tTc/b0L5KMnrJNbm/z/S5dHwsqQlR1sM24Z8dTdOK54Q/LPltWdykkXc3K2sVXfKG+9
+        e3i3ic0H9R9yJspMX5jd9zl/Dw5fxPb4YYqhzYNbm9dcu6jFt3R/2AQb6Yt/mo4IOGv/XLcr
+        LWnl1p0MwYzsAXczXzCtCH3/TX7/P9EDM1/JbJe3C57zprEp9mVg/ySJOO63h/XZJn1Ysdgp
+        1Pv36hVnyhPqUt7w+MnGHHWYtCNvjsgb9gM7PhZsnZp7zde76nfqLeWj5v2NecHbA7WfJKzO
+        VGIpzkg01GIuKk4EABRcudwVBAAA
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20230512041610epcms2p506e7539079670524146ba6eeeb9dbd63
+References: <CGME20230512041610epcms2p506e7539079670524146ba6eeeb9dbd63@epcms2p5>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+There was a bug that finishing FG GC unconditionally because free sections
+are over-estimated after checkpoint in FG GC.
+This patch initializes sec_freed by every checkpoint in FG GC.
 
+Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
+---
+ fs/f2fs/gc.c | 16 +++++++++++-----
+ 1 file changed, 11 insertions(+), 5 deletions(-)
 
-> On May 11, 2023, at 8:20 PM, Zhuo, Qiuxu <qiuxu.zhuo@intel.com> wrote:
->=20
-> =EF=BB=BF
->>=20
->> From: Paul E. McKenney <paulmck@kernel.org>
->> ...
->>>> I wish diff was better at showing what really changed. The meld tool
->>>> can help but its gui...
->>>>=20
->>>> Should I run meld later (I'm out at a conference so no access to
->>>> meld-capable
->>>> machines) or are we sufficiently confident that the lines were moved
->>>> as-is ? :)
->>>>=20
->>>=20
->>> Thank you, Joel for this concern. Good to know the meld diff GUI tool.
->>> I just run the command below and confirmed that the lines were moved
->>> as-is: rcu_scale_{cleanup,shutdown}() follows kfree_scale_cleanup().
->>> You may double check it ;-).
->>>=20
->>>      meld --diff ./rcuscale.c.before ./rcuscale.c.after
->>=20
->> Nice, thank you both!
->>=20
->> Another option is to check out the commit corresponding to this patch, th=
-en
->> do "git blame -M kernel/rcu/rcuscale.c".  Given a move-only commit, there=
-
->> should be no line tagged with this commit's SHA-1.
->=20
-> Just had a good experiment with the "git blame -M" option:=20
-> - Used this option to prove a move-only commit quickly (no line tagged wit=
-h that commit) (the fastest method to me).=20
-> - Then just only needed to quickly check the positions of the moved code c=
-hunk by myself (easy). =20
->=20
-> Thank you, Paul for sharing this. It's very useful to me.=20
-
-Looks good to me as well and thank you both for sharing the tips.
-
- - Joel
-
-
-
->=20
->> They say that another option is to use "git diff --color-moved", which co=
-lors
->> the changes.  That it does, but I am hard-pressed to work out exactly wha=
-t
->> distinguishes a moved hunk from an added or removed hunk.
->> Fall colors vs. winter colors?  Exterior vs. interior?  Any particular de=
-cade in
->> the endless rush of changes to fashion?  Perhaps someone with normal colo=
-r
->> vision (to say nothing of better fashion sense) could try it.
->>=20
->> On the other hand: "default: Is a synonym for zebra. This may change to a=
-
->> more sensible mode in the future."  So maybe it is not just me.  ;-)
->>=20
->> You can also apparently choose colors using "color.diff.newMoved" and
->> "color.diff.oldMoved" when using "--color-moved=3Dplain".
->>=20
->> But "git diff --color-moved=3Ddimmed-zebra" might be more to the point fo=
-r
->> someone like me.  I would need to experiment with it more in order to
->> confirm my hypotheses about what it is doing.  To say nothing of building=
-
->=20
-> Yup, this looks a bit painful for me too (need experiments to confirm hypo=
-theses ...).=20
->=20
->> trust in it.  Plus I have to open a color terminal to use it effectively.=
-
->> So maybe "git blame -M" continues to be the tool for me?
->>=20
->>                            Thanx, Paul
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index d455140322a8..51d7e8d29bf1 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1797,7 +1797,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ {
+ 	int gc_type = gc_control->init_gc_type;
+ 	unsigned int segno = gc_control->victim_segno;
+-	int sec_freed = 0, seg_freed = 0, total_freed = 0;
++	int sec_freed = 0, seg_freed = 0, total_freed = 0, total_sec_freed = 0;
+ 	int ret = 0;
+ 	struct cp_control cpc;
+ 	struct gc_inode_list gc_list = {
+@@ -1842,6 +1842,8 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 			ret = f2fs_write_checkpoint(sbi, &cpc);
+ 			if (ret)
+ 				goto stop;
++			/* Reset due to checkpoint */
++			sec_freed = 0;
+ 		}
+ 	}
+ 
+@@ -1866,15 +1868,17 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 				gc_control->should_migrate_blocks);
+ 	total_freed += seg_freed;
+ 
+-	if (seg_freed == f2fs_usable_segs_in_sec(sbi, segno))
++	if (seg_freed == f2fs_usable_segs_in_sec(sbi, segno)) {
+ 		sec_freed++;
++		total_sec_freed++;
++	}
+ 
+ 	if (gc_type == FG_GC) {
+ 		sbi->cur_victim_sec = NULL_SEGNO;
+ 
+ 		if (has_enough_free_secs(sbi, sec_freed, 0)) {
+ 			if (!gc_control->no_bg_gc &&
+-			    sec_freed < gc_control->nr_free_secs)
++			    total_sec_freed < gc_control->nr_free_secs)
+ 				goto go_gc_more;
+ 			goto stop;
+ 		}
+@@ -1901,6 +1905,8 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 		ret = f2fs_write_checkpoint(sbi, &cpc);
+ 		if (ret)
+ 			goto stop;
++		/* Reset due to checkpoint */
++		sec_freed = 0;
+ 	}
+ go_gc_more:
+ 	segno = NULL_SEGNO;
+@@ -1913,7 +1919,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 	if (gc_type == FG_GC)
+ 		f2fs_unpin_all_sections(sbi, true);
+ 
+-	trace_f2fs_gc_end(sbi->sb, ret, total_freed, sec_freed,
++	trace_f2fs_gc_end(sbi->sb, ret, total_freed, total_sec_freed,
+ 				get_pages(sbi, F2FS_DIRTY_NODES),
+ 				get_pages(sbi, F2FS_DIRTY_DENTS),
+ 				get_pages(sbi, F2FS_DIRTY_IMETA),
+@@ -1927,7 +1933,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
+ 	put_gc_inode(&gc_list);
+ 
+ 	if (gc_control->err_gc_skipped && !ret)
+-		ret = sec_freed ? 0 : -EAGAIN;
++		ret = total_sec_freed ? 0 : -EAGAIN;
+ 	return ret;
+ }
+ 
+-- 
+2.34.1
