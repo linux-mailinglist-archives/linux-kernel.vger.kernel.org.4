@@ -2,168 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D7EB26FFFC8
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 07:00:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 093CB6FFFD8
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 07:16:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239783AbjELFAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 01:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53020 "EHLO
+        id S239812AbjELFQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 01:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjELFAc (ORCPT
+        with ESMTP id S229885AbjELFQH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 01:00:32 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E4319B5
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 22:00:30 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-559e317eef1so139659627b3.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 22:00:30 -0700 (PDT)
+        Fri, 12 May 2023 01:16:07 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9D835A0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 22:16:05 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f2510b2b98so6495864e87.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 22:16:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google; t=1683867629; x=1686459629;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+G0YQVid8BAUmDK4avXBWV3q8tHjdbwoFwpJ8dCo55c=;
-        b=LSyQ73u1cO9ubO87ZHj25fnF1p8pwVA2g0Mk76uJfyrdc6DdZ4B37SuS4VIiOLfJk/
-         37yMNZeOxw4a1QG4l2aBLnZys4v0vkMzue+WqsIF/beFFtXhqA5TFCJU18R/YmaV22Se
-         sTj1DU3lNZqtAHBTxwm9vbEGJlJHZirIQEVYQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683867629; x=1686459629;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=gmail.com; s=20221208; t=1683868564; x=1686460564;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+G0YQVid8BAUmDK4avXBWV3q8tHjdbwoFwpJ8dCo55c=;
-        b=cEY3PhTkcGJ5GkD0oVREdP9o1FHkVKHEdY/taL5nEjINsousKfmw6kFTVebSI0WfUE
-         OVjkmPG2uWx6R0+Mgsc+MTg7SjJmlyD/vh/BhYiK0VFaIhZ5rgANeB3tB4Fb8DLGN+Da
-         TAagRsMnQBm451PUSUeXxBfVWiuXCR73DqWEyctomDG7cJP8Q5zXKvvojMqb10ocHI4u
-         Qi6t/+jptNHriUV7U1rbPvlJ30EN1x4eUiilKcjvVZPZUYlcxNJZVesE41Q1jnG+wPCQ
-         Z5d06YUSqnmllDVQ70llS1fc2HklXbKkgj6JAhqzpsVDhI+CbXAR5eAFMduSygMfEJG/
-         aIog==
-X-Gm-Message-State: AC+VfDyNXYwlPKNes9QSxVhAuvO2I3TbUfji4uXhwRVGbdpxj5OWAcoJ
-        5qckYrCsb3pfnMqqsfQU6GxKIvxBh1hk8HHeYCii3A==
-X-Google-Smtp-Source: ACHHUZ6MLhbi5iBf/nXMLBN3mawFSRCoMhV1RHc31ogXUDbs6hd3pzeO2VCHa5DliqCbriCdIqWu32xLtao+ibFfYDo=
-X-Received: by 2002:a81:4e4e:0:b0:55a:a90c:ecb8 with SMTP id
- c75-20020a814e4e000000b0055aa90cecb8mr24912252ywb.15.1683867629436; Thu, 11
- May 2023 22:00:29 -0700 (PDT)
+        bh=YItu8HOFGjYbDrIPqGGARNcDK3pUy+l3/DwuX5PBOMY=;
+        b=bEsKpiJvKUTBv1g5LUaLwpyRPv+OK55MbS7suNx4ObvbZKT4LM+Azxm8g4Zsg3BMt7
+         2V/gJIDjieQa3gBjOfYjgKsWDpcLzs/Lkbo+4LZNNVBUlOr1A8o/V4Yp6mkOEgYqw47u
+         KjULcu/2+YI74c56daRLU/GgMo796idjRtzgW7D4rJxURF1qI/4Ki1YrQuRvLNYJierS
+         v5+CRtPkxUOLwxtXGvCRgzi1IZqskcb0SMuBlCl6AenvAz7Uxa50w0Qh7JXu70ihNbSA
+         jqGZygtnGnAunYRSFYUBz7LKxEVvkcKbZWV/qzvLYROoyl1OJTZUdC9ixw46c1y5tLWL
+         QkUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683868564; x=1686460564;
+        h=content-transfer-encoding:in-reply-to:subject:from:content-language
+         :references:cc:to:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YItu8HOFGjYbDrIPqGGARNcDK3pUy+l3/DwuX5PBOMY=;
+        b=MM0wUKjpLDuWx34pUHbqos+uoPKCe+glx7IiWBHSGOh8hUnq8IdY5KpQflLKuuKT91
+         cQAy458YTCArCMUrUAmgj1WHyd1QGItYAJNRM8hGw/Vp7xe8Q1doE5pvQA/DZMP8HKA7
+         emyGkIM80h1Rv30S0+NA8roDcC/U/Pa//6sgz342Ys4LRMGUF9Oj/5c2foqrMPiZcsTv
+         MZcTOXSXHgcz5YCp0OQDlCHWOPvYPCFF5Hdp23W8wYyt64DJbCeHDT/D1CashxIjOkqM
+         lmi39ReFtgwDfVy6u8CkmB7tQnwtK0vI63Iy3k3Hj6M5Am6VvfooxCfUMO+vZmRahnE4
+         YT9A==
+X-Gm-Message-State: AC+VfDwhRAFn0RE1iPU9ocS7ZQXgY5kTFed/tRu/1zL1v5g+Diissmo0
+        hy7QReGCCD49mTZG3AQ67nSydLqPue4=
+X-Google-Smtp-Source: ACHHUZ7xqbSiYWWJw+ymmfXp8GvtwoAJrLwf2Ob1CzonIyAw/QsmMJarpqeDK7MkXNJDYIICn8j1Xg==
+X-Received: by 2002:ac2:41cb:0:b0:4ec:a18e:f985 with SMTP id d11-20020ac241cb000000b004eca18ef985mr2847376lfi.13.1683868563709;
+        Thu, 11 May 2023 22:16:03 -0700 (PDT)
+Received: from [192.168.1.126] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id i4-20020ac25d24000000b004edb2cb3500sm1341672lfb.279.2023.05.11.22.16.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 22:16:03 -0700 (PDT)
+Message-ID: <a1ad0e10-23d2-a860-e9a1-2680313d643f@gmail.com>
+Date:   Fri, 12 May 2023 08:16:02 +0300
 MIME-Version: 1.0
-References: <7ffd4a5d-61e9-4b4c-a312-a85bcde08c39@paulmck-laptop>
- <20230510171238.2189921-5-paulmck@kernel.org> <CAEXW_YQNRQuPP8GzHMZXWPoLmbpK3rB_+eVXmiRu6RrsihrEpQ@mail.gmail.com>
- <0146f6ad-9a2c-4a28-8992-e054afade42c@paulmck-laptop>
-In-Reply-To: <0146f6ad-9a2c-4a28-8992-e054afade42c@paulmck-laptop>
-From:   Joel Fernandes <joel@joelfernandes.org>
-Date:   Thu, 11 May 2023 22:00:18 -0700
-Message-ID: <CAEXW_YQ0o8f-J3QqQKur7GkY+kxOvtANpFH4uajMGe6ioFErvw@mail.gmail.com>
-Subject: Re: [PATCH rcu 5/6] doc/rcutorture: Add description of rcutorture.stall_cpu_block
-To:     paulmck@kernel.org
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com, rostedt@goodmis.org,
-        Zqiang <qiang1.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+To:     Dan Carpenter <dan.carpenter@linaro.org>,
+        oe-kbuild@lists.linux.dev,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+References: <46296e39-dbc1-4f27-b89c-af6f08d9f318@kili.mountain>
+Content-Language: en-US, en-GB
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: drivers/iio/accel/kionix-kx022a.c:1053 kx022a_probe_internal()
+ warn: passing zero to 'dev_err_probe'
+In-Reply-To: <46296e39-dbc1-4f27-b89c-af6f08d9f318@kili.mountain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 11:11=E2=80=AFAM Paul E. McKenney <paulmck@kernel.o=
-rg> wrote:
->
-> On Wed, May 10, 2023 at 10:47:36PM -0700, Joel Fernandes wrote:
-> > On Wed, May 10, 2023 at 10:12=E2=80=AFAM Paul E. McKenney <paulmck@kern=
-el.org> wrote:
-> > >
-> > > From: Zqiang <qiang1.zhang@intel.com>
-> > >
-> > > If you build a kernel with CONFIG_PREEMPTION=3Dn and CONFIG_PREEMPT_C=
-OUNT=3Dy,
-> > > then run the rcutorture tests specifying stalls as follows:
-> > >
-> > > runqemu kvm slirp nographic qemuparams=3D"-m 1024 -smp 4" \
-> > >         bootparams=3D"console=3DttyS0 rcutorture.stall_cpu=3D30 \
-> > >         rcutorture.stall_no_softlockup=3D1 rcutorture.stall_cpu_block=
-=3D1" -d
-> > >
-> > > The tests will produce the following splat:
-> > >
-> > > [   10.841071] rcu-torture: rcu_torture_stall begin CPU stall
-> > > [   10.841073] rcu_torture_stall start on CPU 3.
-> > > [   10.841077] BUG: scheduling while atomic: rcu_torture_sta/66/0x000=
-0000
-> > > ....
-> > > [   10.841108] Call Trace:
-> > > [   10.841110]  <TASK>
-> > > [   10.841112]  dump_stack_lvl+0x64/0xb0
-> > > [   10.841118]  dump_stack+0x10/0x20
-> > > [   10.841121]  __schedule_bug+0x8b/0xb0
-> > > [   10.841126]  __schedule+0x2172/0x2940
-> > > [   10.841157]  schedule+0x9b/0x150
-> > > [   10.841160]  schedule_timeout+0x2e8/0x4f0
-> > > [   10.841192]  schedule_timeout_uninterruptible+0x47/0x50
-> > > [   10.841195]  rcu_torture_stall+0x2e8/0x300
-> > > [   10.841199]  kthread+0x175/0x1a0
-> > > [   10.841206]  ret_from_fork+0x2c/0x50
-> >
-> > Another way to get rid of the warning would be to replace the
-> > cur_ops->readlock() with rcu_read_lock(). Though perhaps that will not
-> > test whether the particular RCU flavor under testing is capable of
-> > causing a stall :-).
->
-> Exactly!
->
-> > >         rcutorture.stall_cpu_block=3D [KNL]
-> > >                         Sleep while stalling if set.  This will resul=
-t
-> > > -                       in warnings from preemptible RCU in addition
-> > > -                       to any other stall-related activity.
-> > > +                       in warnings from preemptible RCU in addition =
-to
-> > > +                       any other stall-related activity.  Note that
-> > > +                       in kernels built with CONFIG_PREEMPTION=3Dn a=
-nd
-> > > +                       CONFIG_PREEMPT_COUNT=3Dy, this parameter will
-> > > +                       cause the CPU to pass through a quiescent sta=
-te.
-> > > +                       Any such quiescent states will suppress RCU C=
-PU
-> > > +                       stall warnings, but the time-based sleep will
-> > > +                       also result in scheduling-while-atomic splats=
-.
-> >
-> > Could change last part to "but may also result in
-> > scheduling-while-atomic splats as preemption might be disabled for
-> > certain RCU flavors in order to cause the stall".
->
-> Is that needed given the earlier "in kernels built with
-> CONFIG_PREEMPTION=3Dn and CONFIG_PREEMPT_COUNT=3Dy"?
+On 5/11/23 13:48, Dan Carpenter wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   ad2fd53a7870a395b8564697bef6c329d017c6c9
+> commit: 7c1d1677b3227c6b18ac999f2b84778baa280b8f iio: accel: Support Kionix/ROHM KX022A accelerometer
+> config: openrisc-randconfig-m041-20230509 (https://download.01.org/0day-ci/archive/20230511/202305110245.MFxC9bUj-lkp@intel.com/config)
+> compiler: or1k-linux-gcc (GCC) 12.1.0
+> 
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Reported-by: Dan Carpenter <error27@gmail.com>
+> | Link: https://lore.kernel.org/r/202305110245.MFxC9bUj-lkp@intel.com/
+> 
+> smatch warnings:
+> drivers/iio/accel/kionix-kx022a.c:1053 kx022a_probe_internal() warn: passing zero to 'dev_err_probe'
+> 
+> vim +/dev_err_probe +1053 drivers/iio/accel/kionix-kx022a.c
+> 
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1000  int kx022a_probe_internal(struct device *dev)
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1001  {
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1002  	static const char * const regulator_names[] = {"io-vdd", "vdd"};
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1003  	struct iio_trigger *indio_trig;
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1004  	struct fwnode_handle *fwnode;
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1005  	struct kx022a_data *data;
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1006  	struct regmap *regmap;
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1007  	unsigned int chip_id;
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1008  	struct iio_dev *idev;
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1009  	int ret, irq;
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1010  	char *name;
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1011
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1012  	regmap = dev_get_regmap(dev, NULL);
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1013  	if (!regmap) {
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1014  		dev_err(dev, "no regmap\n");
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1015  		return -EINVAL;
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1016  	}
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1017
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1018  	fwnode = dev_fwnode(dev);
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1019  	if (!fwnode)
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1020  		return -ENODEV;
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1021
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1022  	idev = devm_iio_device_alloc(dev, sizeof(*data));
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1023  	if (!idev)
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1024  		return -ENOMEM;
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1025
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1026  	data = iio_priv(idev);
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1027
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1028  	/*
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1029  	 * VDD is the analog and digital domain voltage supply and
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1030  	 * IO_VDD is the digital I/O voltage supply.
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1031  	 */
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1032  	ret = devm_regulator_bulk_get_enable(dev, ARRAY_SIZE(regulator_names),
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1033  					     regulator_names);
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1034  	if (ret && ret != -ENODEV)
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1035  		return dev_err_probe(dev, ret, "failed to enable regulator\n");
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1036
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1037  	ret = regmap_read(regmap, KX022A_REG_WHO, &chip_id);
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1038  	if (ret)
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1039  		return dev_err_probe(dev, ret, "Failed to access sensor\n");
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1040
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1041  	if (chip_id != KX022A_ID) {
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1042  		dev_err(dev, "unsupported device 0x%x\n", chip_id);
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1043  		return -EINVAL;
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1044  	}
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1045
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1046  	irq = fwnode_irq_get_byname(fwnode, "INT1");
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1047  	if (irq > 0) {
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1048  		data->inc_reg = KX022A_REG_INC1;
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1049  		data->ien_reg = KX022A_REG_INC4;
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1050  	} else {
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1051  		irq = fwnode_irq_get_byname(fwnode, "INT2");
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1052  		if (irq <= 0)
+>                                                                      ^^^^^^^^
+> This code assumes fwnode_irq_get_byname() can return zero.
+> 
+> 7c1d1677b3227c Matti Vaittinen 2022-10-24 @1053  			return dev_err_probe(dev, irq, "No suitable IRQ\n");
+> 
+> But fortunately, it can't otherwise this would return success.
+> 
 
-Hmm, I guess is not clear to the reader without code reading about why
-preempt got disabled. So I would add that last part I mentioned, but I
-am Ok either way, it is just a suggestion.
+Ouch. Actually, the fwnode_irq_get_byname() can return zero on 
+device-tree mapping error. I did actually send a patch to address this 
+some time ago:
+https://lore.kernel.org/lkml/cover.1666710197.git.mazziesaccount@gmail.com/
 
->
-> > > +                       Which might or might not be what you want.
-> > > +
-> >
-> > Suggest drop this line ;-).
->
-> OK, I will bite.  ;-)
->
-> What is your concern with this line?
+but got stuck on not knowing "the right way" of handling an smbus 
+use-case. Later I forgot this.
 
-It is not needed IMO.
+It seems I did describe this very same error in the cover-letter - and 
+right after that I fell on this very trap I described... :/
 
-thanks,
+Thanks for the heads-up Dan!
 
- - Joel
+Yours,
+	-- Matti
 
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
 
-> > >         rcutorture.stall_cpu_holdoff=3D [KNL]
-> > >                         Time to wait (s) after boot before inducing s=
-tall.
-> > > --
-> > > 2.40.1
-> > >
+~~ When things go utterly wrong vim users can always type :help! ~~
+
