@@ -2,101 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6E386FFEFF
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 04:36:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C6CF6FFF01
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 04:38:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239689AbjELCge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 22:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36210 "EHLO
+        id S239664AbjELCiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 22:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239158AbjELCgc (ORCPT
+        with ESMTP id S230020AbjELCiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 22:36:32 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3753659D4;
-        Thu, 11 May 2023 19:36:31 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1a516fb6523so88099335ad.3;
-        Thu, 11 May 2023 19:36:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683858990; x=1686450990;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=JLOnR+TZq7I0ACsVGp4QS0zHoJpqoYfqy4vPmKAWQdI=;
-        b=sB4gSnD9iXxiHEzCZ5632EilGI1/tk5kFTaJ+wlHXJc+sxwpTgaSN1Z8mCdj3VPC5/
-         sFPcLSrSDoD9Iblo9FyNo9D6HfkLeczZM23f0l2cTI3Fmrd0xL20DwYlD40F+q0bih/7
-         1WURb8MDTO0CZdR7j+8vYB/sWeobgEESxa0FOnUwSrmN1Vn+l8UUJr1D8OIQJhXU0mTd
-         Ky2IQvNxjqymrgcH8bbyPR84YU+Ew1ZKu8cleZ0uHh6Oa+9q/0WedjPqMVqvBlvhUcut
-         /q9Zht61gq31ydcyuKMeL4onDUgH+kIzEoI9FlfE4/Aed8w3+M7/Ix+CsARZrwxBDnGt
-         GHug==
+        Thu, 11 May 2023 22:38:05 -0400
+Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35F210C6
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 19:38:03 -0700 (PDT)
+Received: by mail-io1-f69.google.com with SMTP id ca18e2360f4ac-763997ab8cdso1383197839f.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 19:38:03 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683858990; x=1686450990;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JLOnR+TZq7I0ACsVGp4QS0zHoJpqoYfqy4vPmKAWQdI=;
-        b=Ewq+nYOjxnCdXFMn/cfMeVbAxccz/8w+sNbCnbk78iATPSM58slzVibhtpz1h0PPVo
-         p24/SX3U9O9NGG7vxGRkpquWQFJoNB0N73Rwny8SZos8b43cBQpkFF2FCZwGCV6c4UnL
-         EyO1M3iZ/sOiMIqk+88+21KgDSVWyh532eL+rEf88Zl1CiLPbMYxbPdbWFdYAHb7RUEm
-         rWJwgwyL3mPKfod4Bj89ntf87wBzh3sX73KtOfJqFMwpaLvtW04Zxqn2tKlXlHYchlpO
-         WSF6DrK9j+ZkrNrEJe2c8iTCsgj/szr1lqVW44x3m4FggSp34jRpRv8xznSlIIr5NNoA
-         KflA==
-X-Gm-Message-State: AC+VfDyy67oBtVZavjEpPO/1nPzPe2Tf5DGo+u080kzMV4QwYmFvk+EN
-        ZxjhRcysPLbwXXtHp+9Ap4s=
-X-Google-Smtp-Source: ACHHUZ59m+n7obFadBYYqI+7nMSPeg1gXvLySTC5HjO3gnt4GQRdhhRs8CIjLkDV1Y0XFALcXuG+qg==
-X-Received: by 2002:a17:902:d2c2:b0:1ad:cef8:f916 with SMTP id n2-20020a170902d2c200b001adcef8f916mr3631543plc.1.1683858990577;
-        Thu, 11 May 2023 19:36:30 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-24.three.co.id. [180.214.232.24])
-        by smtp.gmail.com with ESMTPSA id y18-20020a17090322d200b001a1a82fc6d3sm6595884plg.268.2023.05.11.19.36.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 May 2023 19:36:30 -0700 (PDT)
-Message-ID: <f74a911c-82c5-b4d0-1406-0acb5a327312@gmail.com>
-Date:   Fri, 12 May 2023 09:36:22 +0700
+        d=1e100.net; s=20221208; t=1683859083; x=1686451083;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6mqvjxLoa4rHNVpGPVS/SfycGbbBXHvMhFDxNvAM1VQ=;
+        b=MIxNJ0OHoDYmNqExjzxUMuJRhupJ1zfJqF7/nRkk1eZ7Vs+zkm89eqBh8rmQCi2cjc
+         Gj5M/MHl0uCLyFY6amyWPEZwLHt3/FrlXC0HT678X1XbFzEydxgbglUwF3ab/Qgfl64e
+         KfTZE5UofW0rDUf2xji0m88vMS5oL8lCTBqPfCVBRKZLij/Mq4xnqYbRtsdfUjcddCup
+         5wZzIH2UDLX9u1eVZtgfutoe3er8AMFZnCQ6yl8PnLbAOkfVKKUgdmwj9VfkUUJjHZ+I
+         XDyhW08sgj7sknMjqLxsgN5fb9vRZyanKzOsxt9rf0OZO5Pcy8KzPWxmekBqkywhU/84
+         Yx5g==
+X-Gm-Message-State: AC+VfDw6BLNoTIs1KsCEP3gdHZHJYVrPnhSwxM9GXNk39rI6ONx202V9
+        sSVZFr/2emzh2ifZdJSUvA4pPzaUoj5y33t6UEleStCjvqRk
+X-Google-Smtp-Source: ACHHUZ4tFCy7JYrOHet0uHWxvnRtWJLAiNMJcmBmqU0D4u9jven5x2H7hHQ4qqso/VJ72m1H70g4HtpOF/ZZK9sSeIL1mS0PLli2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH] Documentation: module-signing: Mention
- default_x509.genkey template
-Content-Language: en-US
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Linux Keyrings <keyrings@vger.kernel.org>,
-        Linux Kernel Build System <linux-kbuild@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        David Howells <dhowells@redhat.com>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Jonathan Corbet <corbet@lwn.net>
-References: <20230511043852.25803-1-bagasdotme@gmail.com>
- <CAK7LNATY7EEWy6krs+J-XzXDzmuKQ4Ae4RrxEH6mX=SmcWCiPA@mail.gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <CAK7LNATY7EEWy6krs+J-XzXDzmuKQ4Ae4RrxEH6mX=SmcWCiPA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a5d:960e:0:b0:76c:74d8:a2d7 with SMTP id
+ w14-20020a5d960e000000b0076c74d8a2d7mr3194789iol.4.1683859083249; Thu, 11 May
+ 2023 19:38:03 -0700 (PDT)
+Date:   Thu, 11 May 2023 19:38:03 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000008254fa05fb75fedd@google.com>
+Subject: [syzbot] [usb?] WARNING in amradio_set_mute/usb_submit_urb
+From:   syzbot <syzbot+347ac4ce4eeebbe8a129@syzkaller.appspotmail.com>
+To:     gregkh@linuxfoundation.org, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/11/23 23:55, Masahiro Yamada wrote:
-> On Thu, May 11, 2023 at 1:39 PM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
->>
->> Commit f3a2ba44e93e2c ("certs: check-in the default x509 config file")
->> adds default x509 keypair config file template, but forgets to mention
->> it in kernel module signing documentation.
-> 
-> What did it forget?
-> 
+Hello,
 
-I mean the phrase "provide your own x509.genkey" can means
-creating that config from scratch when there is already
-default_x509.genkey template which can be used as a base for
-adjusting certificate keypair.
+syzbot found the following issue on:
 
--- 
-An old man doll... just what I always wanted! - Clara
+HEAD commit:    14f8db1c0f9a Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=17275338280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a837a8ba7e88bb45
+dashboard link: https://syzkaller.appspot.com/bug?extid=347ac4ce4eeebbe8a129
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14a13424280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15b7c75c280000
 
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ad6ce516eed3/disk-14f8db1c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1f38c2cc7667/vmlinux-14f8db1c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d795115eee39/Image-14f8db1c.gz.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+347ac4ce4eeebbe8a129@syzkaller.appspotmail.com
+
+usb 1-1: New USB device found, idVendor=07ca, idProduct=b800, bcdDevice=b9.c5
+usb 1-1: New USB device strings: Mfr=1, Product=2, SerialNumber=3
+------------[ cut here ]------------
+usb 1-1: BOGUS urb xfer, pipe 1 != type 3
+WARNING: CPU: 0 PID: 2016 at drivers/usb/core/urb.c:505 usb_submit_urb+0xa44/0x1588 drivers/usb/core/urb.c:504
+Modules linked in:
+CPU: 0 PID: 2016 Comm: kworker/0:2 Not tainted 6.3.0-rc7-syzkaller-g14f8db1c0f9a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+Workqueue: usb_hub_wq hub_event
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : usb_submit_urb+0xa44/0x1588 drivers/usb/core/urb.c:504
+lr : usb_submit_urb+0xa44/0x1588 drivers/usb/core/urb.c:504
+sp : ffff800024726740
+x29: ffff800024726780 x28: 0000000000000001 x27: ffff8000138dd388
+x26: ffff0000c6ef2c00 x25: ffff0000d4abe000 x24: 0000000000000008
+x23: ffff8000138e3c00 x22: dfff800000000000 x21: 0000000000000002
+x20: 0000000000000c00 x19: ffff0000cf47bc00 x18: ffff800024725c60
+x17: 0000000000000000 x16: ffff80001236e294 x15: 0000000000000002
+x14: 0000000000000000 x13: 0000000000000001 x12: 0000000000000001
+x11: 0000000000000000 x10: 0000000000000000 x9 : b47e7648083a6600
+x8 : b47e7648083a6600 x7 : 0000000000000001 x6 : 0000000000000001
+x5 : ffff800024726038 x4 : ffff800015e4ccc0 x3 : ffff800008584230
+x2 : 0000000000000001 x1 : 0000000100000000 x0 : 0000000000000000
+Call trace:
+ usb_submit_urb+0xa44/0x1588 drivers/usb/core/urb.c:504
+ usb_start_wait_urb+0xec/0x414 drivers/usb/core/message.c:58
+ usb_bulk_msg+0x2ec/0x3ec drivers/usb/core/message.c:387
+ amradio_send_cmd drivers/media/radio/radio-mr800.c:150 [inline]
+ amradio_set_mute+0x1d4/0x428 drivers/media/radio/radio-mr800.c:182
+ usb_amradio_init drivers/media/radio/radio-mr800.c:411 [inline]
+ usb_amradio_probe+0x388/0x6f8 drivers/media/radio/radio-mr800.c:554
+ usb_probe_interface+0x500/0x984 drivers/usb/core/driver.c:396
+ really_probe+0x394/0xa7c drivers/base/dd.c:631
+ __driver_probe_device+0x1bc/0x3f8 drivers/base/dd.c:768
+ driver_probe_device+0x78/0x330 drivers/base/dd.c:798
+ __device_attach_driver+0x2a8/0x4f4 drivers/base/dd.c:926
+ bus_for_each_drv+0x228/0x2bc drivers/base/bus.c:457
+ __device_attach+0x2b4/0x434 drivers/base/dd.c:998
+ device_initial_probe+0x24/0x34 drivers/base/dd.c:1047
+ bus_probe_device+0x178/0x240 drivers/base/bus.c:532
+ device_add+0xabc/0xf58 drivers/base/core.c:3589
+ usb_set_configuration+0x15a4/0x1b1c drivers/usb/core/message.c:2171
+ usb_generic_driver_probe+0x8c/0x148 drivers/usb/core/generic.c:238
+ usb_probe_device+0x120/0x25c drivers/usb/core/driver.c:293
+ really_probe+0x394/0xa7c drivers/base/dd.c:631
+ __driver_probe_device+0x1bc/0x3f8 drivers/base/dd.c:768
+ driver_probe_device+0x78/0x330 drivers/base/dd.c:798
+ __device_attach_driver+0x2a8/0x4f4 drivers/base/dd.c:926
+ bus_for_each_drv+0x228/0x2bc drivers/base/bus.c:457
+ __device_attach+0x2b4/0x434 drivers/base/dd.c:998
+ device_initial_probe+0x24/0x34 drivers/base/dd.c:1047
+ bus_probe_device+0x178/0x240 drivers/base/bus.c:532
+ device_add+0xabc/0xf58 drivers/base/core.c:3589
+ usb_new_device+0x904/0x142c drivers/usb/core/hub.c:2575
+ hub_port_connect drivers/usb/core/hub.c:5407 [inline]
+ hub_port_connect_change drivers/usb/core/hub.c:5551 [inline]
+ port_event drivers/usb/core/hub.c:5711 [inline]
+ hub_event+0x25e4/0x474c drivers/usb/core/hub.c:5793
+ process_one_work+0x788/0x12d4 kernel/workqueue.c:2390
+ worker_thread+0x8e0/0xfe8 kernel/workqueue.c:2537
+ kthread+0x250/0x2d8 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:870
+irq event stamp: 156472
+hardirqs last  enabled at (156471): [<ffff8000083416f0>] __up_console_sem+0x60/0xb4 kernel/printk/printk.c:345
+hardirqs last disabled at (156472): [<ffff800012369e90>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
+softirqs last  enabled at (154114): [<ffff800008020c1c>] softirq_handle_end kernel/softirq.c:414 [inline]
+softirqs last  enabled at (154114): [<ffff800008020c1c>] __do_softirq+0xac0/0xd54 kernel/softirq.c:600
+softirqs last disabled at (154103): [<ffff80000802a658>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:80
+---[ end trace 0000000000000000 ]---
+ (null): radio-mr800 - initialization failed
+radio-mr800: probe of 1-1:6.199 failed with error -71
+usbhid 1-1:6.199: couldn't find an input interrupt endpoint
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
