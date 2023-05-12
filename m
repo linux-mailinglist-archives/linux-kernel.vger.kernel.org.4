@@ -2,65 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA79700AC6
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:55:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 232AA700AC8
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:55:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241581AbjELOzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 10:55:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
+        id S241609AbjELOzJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 10:55:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241553AbjELOyy (ORCPT
+        with ESMTP id S241592AbjELOzB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 10:54:54 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D088D11540
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:54:41 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f435658d23so39784765e9.3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:54:41 -0700 (PDT)
+        Fri, 12 May 2023 10:55:01 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170F510E4D
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:54:43 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f417ea5252so52753215e9.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:54:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683903280; x=1686495280;
+        d=linaro.org; s=google; t=1683903282; x=1686495282;
         h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BKfmgbuszdvDDc9sqyY46erImsNPtg5y7vnASGC/Nak=;
-        b=cH5TTtx7stq/st9Qq4O+vbohxE4rN1CuSAohhK7s/wz+/cIwG8rhfNfhsqiL/f6mGl
-         ulxtXOlv1Wc8wVYjs7tZ5LfykgvCDorpIwwNpELTW/3Bdh2ZEIk0lzAIJMSMSqwRA2TN
-         xDdeOnKMOkAGmKfPlMxGobR0fYKuOHzk3h4xDFQwvK9gCHZlXVbCU2Ji4k2rc4Buy2/y
-         XAOCU6viGcrHD2jwQ0bUguKRvwTFIb30LelHqTaD/td1zCKCqtQLWwBSgeJzUObHEVpk
-         w+J+6DwU7RNYb26vLfoilddxYN93EJd3V9rSt45gWvDI05/jNIBwkiPFtxDTfEavuXCA
-         Ggyg==
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KPibGk/VsIl1NlQ+E8IH62HD3HFwxeLmQ0A1sDyLGrY=;
+        b=oTbQ0MBI8O99aP/PPw6jI4vWNvScQWUEVVtYJraANg7ALPnGNrbsQhOg/7BE6YG2DG
+         knUbYfPO47MoKkrGI+Pa+q+z8MbVXxH6SJhAF7i1so2qVCuA2LCyOI+1QTPEbjKzPJuM
+         mToXO0p38qTrWNcoAfZ9ZVAi7uBdR//OddKFxWOmf7PU5FIHQ4LKl7IFbSOn3aj+swha
+         15IlcBrpedoTFLlctspWBEXrgz4JbBCHwEEKpFL9cTU1hMDkZDaKCTiGpP1X3SZQAd8E
+         /Kt2rScCLy+3DJXp5l3IElEDnbd+foCmxd0FndbZzGfoBwmqnI/t9AAN+V46+3OGUYs5
+         ekow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683903280; x=1686495280;
+        d=1e100.net; s=20221208; t=1683903282; x=1686495282;
         h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=BKfmgbuszdvDDc9sqyY46erImsNPtg5y7vnASGC/Nak=;
-        b=PPR4T50GunPSMcWlgbZCntzu9+7dG/YZKk77FSEc+Kxp49S8D+TERpWpLNgDjcmNgL
-         TLVMmsTx+RFFd/1ERoMfgZsoDXNeljK5soFueTPPwwqaXVsOhbmbJ6h6EK/e+NarkIZ5
-         SJa5WMEWywHKHRBvLMMVe7a8kXvLhahRx2qkX1A2KQG8QeVpyszRBSdWYU4IvwB3SuZv
-         VZHy2hD4SQ/5Sg8+A2BJehLhDP1sKcfFKI+rE4CwcR/oTjqZm3+CXRKU1yiLCWDj9FjV
-         yoVvJ+5AaIHt3hHKZ3ecfPlUyTQGr3JkW4SD4bRyOjvXF/dJhTtD8bBbDXZzkwaI5Rf+
-         5UWA==
-X-Gm-Message-State: AC+VfDw7D+vkHfefkPT6jb++g5o0sHmAeK7ACLw2Nk67dK6urD39mhWG
-        qj3aBNK0jam9rr2uRsBtNneo3g==
-X-Google-Smtp-Source: ACHHUZ5tPyHi33MTRX57RF55CmFbX40lS2fT/2Lh8npaFZmKporo8/VuwJMbk9Kq7r0wEJuakQsG/w==
-X-Received: by 2002:a1c:f401:0:b0:3f0:3ab2:a7e5 with SMTP id z1-20020a1cf401000000b003f03ab2a7e5mr18894557wma.34.1683903280118;
-        Fri, 12 May 2023 07:54:40 -0700 (PDT)
+        bh=KPibGk/VsIl1NlQ+E8IH62HD3HFwxeLmQ0A1sDyLGrY=;
+        b=kAdkJg76YxT1wx5VMWPQf9Lq6yjGm5NzypFm7DOA0nEmdQau2AuMmKs9FP1VNDYbIi
+         1JN1ShPuNrOrit+HfnC4xbTwmfTcvJGz5v7buQtOOPOXjminiUpvcJ8TDjltOasdelUB
+         fh/6n5d+Bw99fkMrRxKBWhbCh2P9GD127IAX/xop4jmGffXNve/e7l0FZqRHEvHE1tj5
+         he+NNx5BmN3/30yVpaXIHifYyRFkdWxlxRCO4JsqTbfZvK2Cf4Txy50DrCU0xJPQT7GT
+         8m9qjqs5pzYoVvYHJ/KW5l5zoVa/SeP2Lxx/MCiM2tEkQkbbr+h29CY/SbzaQMwWH05Q
+         Nazg==
+X-Gm-Message-State: AC+VfDymfHbwPNBdnKr4HiWSGo8nMl5weP40dbt7ToITIR8nwC+2smfZ
+        hmz/Qa4ozDVBCMzZ0ec44SusjA==
+X-Google-Smtp-Source: ACHHUZ6CncOxg8qPy8qYrW4dm6HRCcDc6I/jklbEDF8sFnXgTK8ZuBSeeupPp/h25wntlT3Rp+dn2w==
+X-Received: by 2002:a7b:cb53:0:b0:3f2:53a5:d308 with SMTP id v19-20020a7bcb53000000b003f253a5d308mr16833397wmj.6.1683903281792;
+        Fri, 12 May 2023 07:54:41 -0700 (PDT)
 Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id v2-20020a1cf702000000b003f32f013c3csm28953540wmh.6.2023.05.12.07.54.38
+        by smtp.gmail.com with ESMTPSA id v2-20020a1cf702000000b003f32f013c3csm28953540wmh.6.2023.05.12.07.54.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 07:54:39 -0700 (PDT)
+        Fri, 12 May 2023 07:54:41 -0700 (PDT)
 From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To:     Amol Maheshwari <amahesh@qti.qualcomm.com>,
+To:     Sumit Semwal <sumit.semwal@linaro.org>,
+        =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        Liam Mark <lmark@codeaurora.org>,
+        Brian Starkey <Brian.Starkey@arm.com>,
+        John Stultz <jstultz@google.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
         Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Richard Acayan <mailingradian@gmail.com>
-In-Reply-To: <20230327210217.60948-1-mailingradian@gmail.com>
-References: <20230327210217.60948-1-mailingradian@gmail.com>
-Subject: Re: [PATCH v2 0/2] misc: fastrpc: Fixes for issues in userspace
-Message-Id: <168390327884.185210.15199527234235828124.b4-ty@linaro.org>
-Date:   Fri, 12 May 2023 15:54:38 +0100
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Tomi Valkeinen <tomba@kernel.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Tomasz Figa <tfiga@chromium.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>
+Cc:     linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
+        linux-tegra@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        kernel@collabora.com
+In-Reply-To: <20230406160637.541702-1-dmitry.osipenko@collabora.com>
+References: <20230406160637.541702-1-dmitry.osipenko@collabora.com>
+Subject: Re: (subset) [PATCH v2 0/7] Move dma-buf mmap() reservation
+ locking down to exporters
+Message-Id: <168390328031.185210.8399521458221830929.b4-ty@linaro.org>
+Date:   Fri, 12 May 2023 15:54:40 +0100
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -68,7 +88,7 @@ X-Mailer: b4 0.12.2
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -76,22 +96,23 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Mon, 27 Mar 2023 17:02:16 -0400, Richard Acayan wrote:
-> Changes since v1 (20230130222716.7016-1-mailingradian@gmail.com):
->  - use /* */ for comments (2/2)
->  - exclude demonstration from final commit message (2/2)
->  - accumulate review tags (1-2/2)
+On Thu, 06 Apr 2023 19:06:30 +0300, Dmitry Osipenko wrote:
+> This patchset makes dma-buf exporters responisble for taking care of
+> the reservation lock. I also included patch that moves drm-shmem to use
+> reservation lock, to let CI test the whole set. I'm going to take all
+> the patches via the drm-misc tree, please give an ack.
 > 
-> Hi everyone,
+> Previous policy stated that dma-buf core takes the lock around mmap()
+> callback. Which meant that both importers and exporters shouldn't touch
+> the reservation lock in the mmap() code path. This worked well until
+> Intel-CI found a deadlock problem in a case of self-imported dma-buf [1].
 > 
 > [...]
 
 Applied, thanks!
 
-[1/2] misc: fastrpc: return -EPIPE to invocations on device removal
-      commit: 578b3c7d15e65770a9b6317343a523e58f97d037
-[2/2] misc: fastrpc: reject new invocations during device removal
-      commit: 3a1f192ad1b46a2d783f54f1008e25d81d42587c
+[4/7] fastrpc: Don't assert held reservation lock for dma-buf mmapping
+      commit: 3f6b4c6f0bd0126f673f3578429239ae3860718b
 
 Best regards,
 -- 
