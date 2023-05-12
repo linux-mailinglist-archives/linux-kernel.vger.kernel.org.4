@@ -2,183 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94171700880
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 14:53:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 002DF700883
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 14:54:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240930AbjELMxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 08:53:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
+        id S241107AbjELMx5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 08:53:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240962AbjELMxR (ORCPT
+        with ESMTP id S241057AbjELMxf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 08:53:17 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F2C535B6
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 05:52:49 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230512125245euoutp022b18f762d74623aee912aec622b41047~eZnWYZ8ZJ1320513205euoutp02f
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 12:52:45 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230512125245euoutp022b18f762d74623aee912aec622b41047~eZnWYZ8ZJ1320513205euoutp02f
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1683895965;
-        bh=V3rxQTRSZd7Pf7I80d3lvCaeQe97jhSxZA6BS7xfmJ0=;
-        h=From:To:CC:Subject:Date:References:From;
-        b=mkd+Iu2DCJUWgP9HUyH2THQyR7hVnFKS9oyJnSHjMNTcSquANoKLW3+2D2X2LQ9V6
-         yoOGoNW2LKc9mt70hjPgBRIsghcPrSzGEBXxFDasUC5UnbEPJSOYunYmnsSq2NmmNM
-         IS6kHDHMj9p41FYiWw1GLSczwVs6QlV8d50FgAmA=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230512125245eucas1p26959ebac952862a82284d09c4c0e25b6~eZnWDLSJE0544805448eucas1p2c;
-        Fri, 12 May 2023 12:52:45 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges3new.samsung.com (EUCPMTA) with SMTP id A7.4F.37758.D963E546; Fri, 12
-        May 2023 13:52:45 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20230512125245eucas1p1053d2f8bdf304b920b8012eaf6abf02a~eZnVzTsWO0093200932eucas1p1e;
-        Fri, 12 May 2023 12:52:45 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230512125245eusmtrp1ba3e325972e178b0de191cd96054284f~eZnVyyu140800508005eusmtrp1s;
-        Fri, 12 May 2023 12:52:45 +0000 (GMT)
-X-AuditID: cbfec7f5-815ff7000002937e-61-645e369d028b
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id CD.DF.14344.D963E546; Fri, 12
-        May 2023 13:52:45 +0100 (BST)
-Received: from CAMSVWEXC02.scsc.local (unknown [106.1.227.72]) by
-        eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-        20230512125245eusmtip177f96acee8419b98de9b30a17b3e00bf~eZnVkjtVO1289712897eusmtip17;
-        Fri, 12 May 2023 12:52:45 +0000 (GMT)
-Received: from localhost (106.110.32.140) by CAMSVWEXC02.scsc.local
-        (2002:6a01:e348::6a01:e348) with Microsoft SMTP Server (TLS) id 15.0.1497.2;
-        Fri, 12 May 2023 13:52:44 +0100
-From:   Pankaj Raghav <p.raghav@samsung.com>
-To:     <adilger.kernel@dilger.ca>, <tytso@mit.edu>
-CC:     <linux-ext4@vger.kernel.org>, <willy@infradead.org>,
-        <linux-kernel@vger.kernel.org>, <gost.dev@samsung.com>,
-        Pankaj Raghav <p.raghav@samsung.com>
-Subject: [PATCH] ext4: use folio_create_empty_buffers() instead of
- create_empty_buffers()
-Date:   Fri, 12 May 2023 14:52:43 +0200
-Message-ID: <20230512125243.73696-1-p.raghav@samsung.com>
-X-Mailer: git-send-email 2.39.2
+        Fri, 12 May 2023 08:53:35 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D475414E51;
+        Fri, 12 May 2023 05:53:26 -0700 (PDT)
+Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CChBQX019856;
+        Fri, 12 May 2023 12:53:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=4/L4M7NmQerqFjBvgJbiEMN4JttL1a2wd+8RqKU0MOE=;
+ b=cKvIrjQ4IMtL5h5V62VsztICKrALfAsmzl1/xDBznZlgAvBEAKXh291hFRxJIQO6cSIU
+ +IJdrMYrIxO0ICp477L+Btnb8vC8TV5RKR8BxsFGqJbiE3vBR1TtLQMV2mWV6BABeq3O
+ GhJLpp3fe6IVDFyGaoJzhnNVPJFs08FUZXG/F17djGax5INTjhx6bQLpdkIkK2sh7GHU
+ OWmfmytvFKNcPdnn50+CqBKYZ+L7Wgzkt3MFZgUUsZf2DajwDi1fpgZzN5SYWT2Jq7eW
+ XO+xNu7acd62YaT8P2PZchLDQHWgAGKzrPHcomwazRvXHDSCwLQrNUyvC4thrEPoxxEF jA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qhk5h5yae-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 12:53:25 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34C3JXxX011390;
+        Fri, 12 May 2023 12:53:23 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3qf7nh2bxw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 12:53:23 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34CCrJNY67043810
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 12 May 2023 12:53:19 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AD2D020040;
+        Fri, 12 May 2023 12:53:19 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0DB3D20043;
+        Fri, 12 May 2023 12:53:19 +0000 (GMT)
+Received: from osiris (unknown [9.179.20.70])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri, 12 May 2023 12:53:18 +0000 (GMT)
+Date:   Fri, 12 May 2023 14:53:17 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Steffen Eiden <seiden@linux.ibm.com>
+Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Viktor Mihajlovski <mihajlov@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Nico Boehr <nrb@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Hendrik Brueckner <brueckner@linux.ibm.com>
+Subject: Re: [PATCH 5/5] s390/uv: Update query for secret-UVCs
+Message-ID: <ZF42vescJsAtK9pL@osiris>
+References: <20230512093153.206378-1-seiden@linux.ibm.com>
+ <20230512093153.206378-6-seiden@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [106.110.32.140]
-X-ClientProxiedBy: CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348) To
-        CAMSVWEXC02.scsc.local (2002:6a01:e348::6a01:e348)
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpkleLIzCtJLcpLzFFi42LZduzned25ZnEpBrc3KVh8/dLBYjFz3h02
-        i8u75rBZtPb8ZLf4/WMOmwOrR8vmco/NK7Q8ms4cZfb4vEkugCWKyyYlNSezLLVI3y6BK2PH
-        ig2sBVuEKl59XsnWwLiRv4uRk0NCwESiccE/xi5GLg4hgRWMEs8n7WKGcL4wSkw/95gNwvnM
-        KDF/0xJGmJbFzbvZIRLLGSUez5nDDle1dMdKqGFbGCW6lr4FynBwsAloSTR2gpkiAvoScxdJ
-        gZQwC8xklGht2s4MMlVYIFri9ZHdTCA2i4CqxN4jf9hAbF4BS4l11w8wg/RKCMhLLH4gAREW
-        lDg58wkLiM0MFG7eOpsZwpaQOPjiBTPEoUoSDZvPsEDYtRJ7mw+A3SkhsIdDYuvjPqgiF4nz
-        T4+yQ9jCEq+Ob4GyZSROT+6Baq6WeHrjNzNEcwujRP/O9WwQB1lL9J3JgahxlNhwdzITRJhP
-        4sZbQYh7+CQmbZsOdT6vREebEES1msTqe29YJjAqz0LyzSwk38xC8s0CRuZVjOKppcW56anF
-        xnmp5XrFibnFpXnpesn5uZsYgank9L/jX3cwrnj1Ue8QIxMH4yFGCQ5mJRHet0uiU4R4UxIr
-        q1KL8uOLSnNSiw8xSnOwKInzatueTBYSSE8sSc1OTS1ILYLJMnFwSjUwicVeO/vmSMEEqVCZ
-        xKVfUsylj32IeezXyxo29aVrhWz6od2bHK6FWitEcM8qq7V+67e61zFaKOC8erDf5pvqSw3X
-        Lwqa/yesPWZTVfa+nLv6XH8T8noZw+YemuG/Qnb+ywbZjvZ5anHV72fLJkbmigQmnLswNSL9
-        5+vC/Gcxt7bvcZsgbfi+OGDnv8eVhy2zTrhtujE3dnXolgVLd/WmvrpsuUa7dPY7nmUaWhO4
-        /zw3ZJ1psXFZyLOnE35qv/i+7PuszAs9BsoPBHd5/gm438q18urzcO/rfokOacxh2hwVRxP+
-        hmkzLZw3sVDs2DnTYvPKDRs8Oe4zpG0qbUquru574Pl82ozPopI5VWr/lFiKMxINtZiLihMB
-        Ms1JTJQDAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprEIsWRmVeSWpSXmKPExsVy+t/xu7pzzeJSDM7+5LL4+qWDxWLmvDts
-        Fpd3zWGzaO35yW7x+8ccNgdWj5bN5R6bV2h5NJ05yuzxeZNcAEuUnk1RfmlJqkJGfnGJrVK0
-        oYWRnqGlhZ6RiaWeobF5rJWRqZK+nU1Kak5mWWqRvl2CXsaOFRtYC7YIVbz6vJKtgXEjfxcj
-        J4eEgInE4ubd7F2MXBxCAksZJSb9384GkZCR2PjlKiuELSzx51oXG0TRR0aJmcebGCGcLYwS
-        rbdbmLsYOTjYBLQkGjvZQUwRAX2JuYukQEqYBWYClTRtZwYZJCwQKTH9y3Iwm0VAVWLvkT9g
-        y3gFLCXWXT8ANkZCQF5i8QMJiLCgxMmZT1hAbGagcPPW2cwQtoTEwRcvmCFuU5Jo2HyGBcKu
-        leh8dZptAqPQLCTts5C0z0LSvoCReRWjSGppcW56brGRXnFibnFpXrpecn7uJkZg5Gw79nPL
-        DsaVrz7qHWJk4mA8xCjBwawkwvt2SXSKEG9KYmVValF+fFFpTmrxIUZToHcmMkuJJucDYzev
-        JN7QzMDU0MTM0sDU0sxYSZzXs6AjUUggPbEkNTs1tSC1CKaPiYNTqoEp77PYrrCzsZxT1gs9
-        3RB4tL4o7bu7wGvp1s+WRzcdShNSX9q8M1Xr5iyh2vn7lu55MumuoNi21pavyo5Gi9ZsYBCZ
-        /COpU+ZpgmZW18TXayvYbkgnZrIv2BR3iitA6ME9HbmyCU6TOyPTTq20zGNSy5jV7Hv1vvh9
-        l6q0d1c2H2zafNbzdAHz1liX/yWch59Gu6j+n/tJLcQ3cZulyb9LmzevYlZduo2ZU3JK8q/q
-        fM1X/kcuXpnJVn3a+mYTj9aPs5OWbl3wwudapL2wXrtc6sclT7/n7Hot0/m34O60AouKvfy/
-        ZDQPLjP6v/N+5cn217ZVIrEnU2/K2+SpLnVk8Dx0Ua/6FLN1xu31QruPK7EUZyQaajEXFScC
-        AJMSzcElAwAA
-X-CMS-MailID: 20230512125245eucas1p1053d2f8bdf304b920b8012eaf6abf02a
-X-Msg-Generator: CA
-X-RootMTR: 20230512125245eucas1p1053d2f8bdf304b920b8012eaf6abf02a
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230512125245eucas1p1053d2f8bdf304b920b8012eaf6abf02a
-References: <CGME20230512125245eucas1p1053d2f8bdf304b920b8012eaf6abf02a@eucas1p1.samsung.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512093153.206378-6-seiden@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: TStAkSQwbKPhJzdn-b0sM9kBRglX6DMF
+X-Proofpoint-ORIG-GUID: TStAkSQwbKPhJzdn-b0sM9kBRglX6DMF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-12_08,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ malwarescore=0 priorityscore=1501 suspectscore=0 clxscore=1015 bulkscore=0
+ adultscore=0 mlxscore=0 lowpriorityscore=0 spamscore=0 mlxlogscore=925
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305120105
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use folio_create_empty_buffers() as the functions that call
-create_empty_buffers() work directly on folios.
+On Fri, May 12, 2023 at 11:31:53AM +0200, Steffen Eiden wrote:
+> Update the query struct such that secret-UVC related
+> information can be parsed.
+> Add sysfs files for these new values.
+> 
+> Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
+> ---
+>  arch/s390/boot/uv.c        |  4 ++++
+>  arch/s390/include/asm/uv.h | 11 ++++++++++-
+>  arch/s390/kernel/uv.c      | 40 ++++++++++++++++++++++++++++++++++++++
+>  3 files changed, 54 insertions(+), 1 deletion(-)
+...
+> +static ssize_t uv_query_supp_add_secret_req_ver(struct kobject *kobj,
+> +						struct kobj_attribute *attr, char *page)
+> +{
+> +	return scnprintf(page, PAGE_SIZE, "%lx\n", uv_info.supp_add_secret_req_ver);
+> +}
 
-Signed-off-by: Pankaj Raghav <p.raghav@samsung.com>
----
- fs/ext4/inode.c       | 6 +++---
- fs/ext4/move_extent.c | 4 ++--
- 2 files changed, 5 insertions(+), 5 deletions(-)
-
-diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
-index ce5f21b6c2b3..a43bbf019316 100644
---- a/fs/ext4/inode.c
-+++ b/fs/ext4/inode.c
-@@ -1037,7 +1037,7 @@ static int ext4_block_write_begin(struct folio *folio, loff_t pos, unsigned len,
- 
- 	head = folio_buffers(folio);
- 	if (!head) {
--		create_empty_buffers(&folio->page, blocksize, 0);
-+		folio_create_empty_buffers(folio, blocksize, 0);
- 		head = folio_buffers(folio);
- 	}
- 	bbits = ilog2(blocksize);
-@@ -1169,7 +1169,7 @@ static int ext4_write_begin(struct file *file, struct address_space *mapping,
- 	 * starting the handle.
- 	 */
- 	if (!folio_buffers(folio))
--		create_empty_buffers(&folio->page, inode->i_sb->s_blocksize, 0);
-+		folio_create_empty_buffers(folio, inode->i_sb->s_blocksize, 0);
- 
- 	folio_unlock(folio);
- 
-@@ -3632,7 +3632,7 @@ static int __ext4_block_zero_page_range(handle_t *handle,
- 
- 	bh = folio_buffers(folio);
- 	if (!bh) {
--		create_empty_buffers(&folio->page, blocksize, 0);
-+		folio_create_empty_buffers(folio, blocksize, 0);
- 		bh = folio_buffers(folio);
- 	}
- 
-diff --git a/fs/ext4/move_extent.c b/fs/ext4/move_extent.c
-index b5af2fc03b2f..18b38cefa27e 100644
---- a/fs/ext4/move_extent.c
-+++ b/fs/ext4/move_extent.c
-@@ -184,7 +184,7 @@ mext_page_mkuptodate(struct folio *folio, unsigned from, unsigned to)
- 	blocksize = i_blocksize(inode);
- 	head = folio_buffers(folio);
- 	if (!head) {
--		create_empty_buffers(&folio->page, blocksize, 0);
-+		folio_create_empty_buffers(folio, blocksize, 0);
- 		head = folio_buffers(folio);
- 	}
- 
-@@ -385,7 +385,7 @@ move_extent_per_page(struct file *o_filp, struct inode *donor_inode,
- 	/* Perform all necessary steps similar write_begin()/write_end()
- 	 * but keeping in mind that i_size will not change */
- 	if (!folio_buffers(folio[0]))
--		create_empty_buffers(&folio[0]->page, 1 << orig_inode->i_blkbits, 0);
-+		folio_create_empty_buffers(folio[0], 1 << orig_inode->i_blkbits, 0);
- 	bh = folio_buffers(folio[0]);
- 	for (i = 0; i < data_offset_in_page; i++)
- 		bh = bh->b_this_page;
--- 
-2.39.2
-
+FWIW, another minor thing: all of these should be sysfs_emit() instead.
