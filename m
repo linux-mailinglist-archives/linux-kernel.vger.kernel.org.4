@@ -2,178 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21D496FFF90
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 06:16:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C9426FFF98
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 06:18:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239786AbjELEQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 00:16:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
+        id S239866AbjELESe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 00:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbjELEQQ (ORCPT
+        with ESMTP id S229547AbjELES2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 00:16:16 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF0E4EFE
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 21:16:14 -0700 (PDT)
-Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230512041611epoutp03134bbcdb831527ec107ebb1e087854cd~eSkUrXnMC1950419504epoutp03N
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:16:11 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230512041611epoutp03134bbcdb831527ec107ebb1e087854cd~eSkUrXnMC1950419504epoutp03N
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1683864971;
-        bh=v0F36rdhCqmYHzWYCcSPoz47p9NTpAJZ63jsBopms9k=;
-        h=Subject:Reply-To:From:To:CC:Date:References:From;
-        b=uxvtEuD/qycRzM3UlP2AR/4D8BIUc7CpiQ/9/UtV4bJm9eFjAfzqrKvFw75diVJyz
-         hO9oQardNXTuYcKqdSLF+TYrMvYAVsbd+TdusCtPV+XyNEoAOGQNqjUeXMmjVSywwK
-         ZCY34nSp2Zm9N5spgEzKePDL1mk7pnwK8k0ixjsA=
-Received: from epsnrtp4.localdomain (unknown [182.195.42.165]) by
-        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
-        20230512041611epcas2p205e0bc905f352e9afb7f95c468911e09~eSkUWIr0p0853708537epcas2p2R;
-        Fri, 12 May 2023 04:16:11 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.92]) by
-        epsnrtp4.localdomain (Postfix) with ESMTP id 4QHb6f6fd4z4x9QB; Fri, 12 May
-        2023 04:16:10 +0000 (GMT)
-X-AuditID: b6c32a48-475ff70000005998-af-645dbd8ab9e8
-Received: from epcas2p1.samsung.com ( [182.195.41.53]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        7D.2D.22936.A8DBD546; Fri, 12 May 2023 13:16:10 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v1] f2fs: Fix over-estimating free section during FG GC
-Reply-To: yonggil.song@samsung.com
-Sender: Yonggil Song <yonggil.song@samsung.com>
-From:   Yonggil Song <yonggil.song@samsung.com>
-To:     "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
-        "chao@kernel.org" <chao@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Seokhwan Kim <sukka.kim@samsung.com>,
-        Daejun Park <daejun7.park@samsung.com>,
-        beomsu kim <beomsu7.kim@samsung.com>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230512041610epcms2p506e7539079670524146ba6eeeb9dbd63@epcms2p5>
-Date:   Fri, 12 May 2023 13:16:10 +0900
-X-CMS-MailID: 20230512041610epcms2p506e7539079670524146ba6eeeb9dbd63
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFmpik+LIzCtJLcpLzFFi42LZdljTVLdrb2yKwYENZhYX5n1ktjg99SyT
-        xaoH4RZP1s9itri0yN3i8q45bBarOuYyWkw9f4TJgcNj06pONo/dCz4zefRtWcXo8XmTXABL
-        VLZNRmpiSmqRQmpecn5KZl66rZJ3cLxzvKmZgaGuoaWFuZJCXmJuqq2Si0+ArltmDtARSgpl
-        iTmlQKGAxOJiJX07m6L80pJUhYz84hJbpdSClJwC8wK94sTc4tK8dL281BIrQwMDI1OgwoTs
-        jLMPZ7EVdIhWvLwq38D4TqCLkZNDQsBEYm/nQdYuRi4OIYEdjBITXp9l6WLk4OAVEJT4u0MY
-        pEZYwF3i4oa9rCC2kICSxLUDvSwQcX2JzYuXsYPYbAK6En83LAezRQReMUqcWS0KYjMLVEhs
-        /vCSBWIXr8SM9qdQtrTE9uVbGSFsDYkfy3qZIWxRiZur37LD2O+PzYeqEZFovXcWqkZQ4sHP
-        3VBxSYlFh84zQdj5En9XXGeDsGsktja0QcX1Ja51bATbyyvgK3HteDNYnEVAVWLLrC9Q9S4S
-        879tY4e4WV5i+9s5zKBgYBbQlFi/Sx/ElBBQljhyiwWigk+i4/Bfdpivdsx7ArVJTWLzps2s
-        ELaMxIXHbVBXekgcf3WZCRKCgRI3O5tZJjAqzEKE8ywke2ch7F3AyLyKUSy1oDg3PbXYqMAE
-        HrPJ+bmbGMGJUctjB+Pstx/0DjEycTAeYpTgYFYS4X27JDpFiDclsbIqtSg/vqg0J7X4EKMp
-        0McTmaVEk/OBqTmvJN7QxNLAxMzM0NzI1MBcSZz3Y4dyipBAemJJanZqakFqEUwfEwenVAOT
-        p2fyuYo1LrvzqpJSXnQ7PiqbwLJ5fejyZAXlj5LSxy9FmvWku+i/nfTRnsv8mOfsmTNnPDr0
-        /6rR1tTc/b0L5KMnrJNbm/z/S5dHwsqQlR1sM24Z8dTdOK54Q/LPltWdykkXc3K2sVXfKG+9
-        e3i3ic0H9R9yJspMX5jd9zl/Dw5fxPb4YYqhzYNbm9dcu6jFt3R/2AQb6Yt/mo4IOGv/XLcr
-        LWnl1p0MwYzsAXczXzCtCH3/TX7/P9EDM1/JbJe3C57zprEp9mVg/ySJOO63h/XZJn1Ysdgp
-        1Pv36hVnyhPqUt7w+MnGHHWYtCNvjsgb9gM7PhZsnZp7zde76nfqLeWj5v2NecHbA7WfJKzO
-        VGIpzkg01GIuKk4EABRcudwVBAAA
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230512041610epcms2p506e7539079670524146ba6eeeb9dbd63
-References: <CGME20230512041610epcms2p506e7539079670524146ba6eeeb9dbd63@epcms2p5>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 12 May 2023 00:18:28 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8173240E2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 21:18:26 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f417ea5252so48217095e9.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 21:18:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683865105; x=1686457105;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=lKSRIDy0J+UduLCQdBIRVgaNQhqBgLMPH7ha37U/mpY=;
+        b=blQ1l551mkk+RhRNR4/CbhJIKKut5nb8rgm1ZlVdYS3Xs/ZAsSfjl9OmJXiFhLRw//
+         fLThEdWuA50YQnH2BZtawfZwWJQL4qD7NbGHby0VERYx9vzBTpa+wxNjToFvj4uRjARx
+         Q1zj3aHn8M1OaIfRQN7nFnUYn/LIwrmKZ9YP9n3+D1R+hkV6k7Z8RenSqfHy9PuHieTZ
+         40zj5vxBqUuHpHvSZhtL86t70GXZZQNBvXN0cCqktdTtlrE2uWJ+HfdDCT8K7BmgBJCA
+         IV0REqLjOlrUvv0Ycs8yZm0zBIQrPutGQ7/qQZScPERY/ozbTz3c+t9jXjAATkuqlv49
+         j0tA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683865105; x=1686457105;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=lKSRIDy0J+UduLCQdBIRVgaNQhqBgLMPH7ha37U/mpY=;
+        b=CzyqBnWaVGz/zxtA2HqMSvK3ED0tPX4cQHD3icEb+e85BweSjgnCXBWEIeyvJ5CCY6
+         Fn0xS26J3d33pu01CDD9tM95d5IIjFHuHkqUt+hsOYSgNuN1E0MTI4Ncotz50kB324R5
+         YdrG1k7Mk48vqq8SLYBeUibQ1fyYCBhkjBoHOGCwxnhblJtdcF4TEiUc5kYg0QMit7s7
+         6lAujN1Cx9RuP0fWRotugNe49A3+Y4oMwnp7APMWOW8NCqqF41K5EoJYurIrxxI/2Rgj
+         oi7PIax6GYCapRNdYEShEnZlc3D/D6QxigIcZUHEyIdawTMWlfw+J8OrL0HhMzbYLmVm
+         JJ/Q==
+X-Gm-Message-State: AC+VfDwZ24C8GngJv02FgLvwB7bhO9SYcP08HRdYiE0F5vW00XGl13L7
+        XpSMpn4uiXlqyegIY6mJyo9ylg==
+X-Google-Smtp-Source: ACHHUZ5p1QJeBJjKCYP8wu3GMgGcx+MS7p0O3HhkJyuYY/Yip8cIUKZ3F1vH9Kfd5azZX90khyqONQ==
+X-Received: by 2002:a7b:c85a:0:b0:3f4:ecf0:8c93 with SMTP id c26-20020a7bc85a000000b003f4ecf08c93mr2384658wml.20.1683865104843;
+        Thu, 11 May 2023 21:18:24 -0700 (PDT)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id x16-20020a05600c21d000b003f318be9442sm27555561wmj.40.2023.05.11.21.18.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 21:18:23 -0700 (PDT)
+Date:   Fri, 12 May 2023 07:18:16 +0300
+From:   Dan Carpenter <dan.carpenter@linaro.org>
+To:     oe-kbuild@lists.linux.dev,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>,
+        gregkh@linuxfoundation.org, Thinh.Nguyen@synopsys.com
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        quic_wcheng@quicinc.com, quic_jackp@quicinc.com,
+        Elson Roy Serrao <quic_eserrao@quicinc.com>
+Subject: Re: [PATCH 2/2] usb: dwc3: Modify runtime pm ops to handle bus
+ suspend
+Message-ID: <3e035312-3c06-44e1-95ef-0a4d36456a7d@kili.mountain>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1683827311-1462-3-git-send-email-quic_eserrao@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There was a bug that finishing FG GC unconditionally because free sections
-are over-estimated after checkpoint in FG GC.
-This patch initializes sec_freed by every checkpoint in FG GC.
+Hi Elson,
 
-Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
----
- fs/f2fs/gc.c | 16 +++++++++++-----
- 1 file changed, 11 insertions(+), 5 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-index d455140322a8..51d7e8d29bf1 100644
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -1797,7 +1797,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
- {
- 	int gc_type = gc_control->init_gc_type;
- 	unsigned int segno = gc_control->victim_segno;
--	int sec_freed = 0, seg_freed = 0, total_freed = 0;
-+	int sec_freed = 0, seg_freed = 0, total_freed = 0, total_sec_freed = 0;
- 	int ret = 0;
- 	struct cp_control cpc;
- 	struct gc_inode_list gc_list = {
-@@ -1842,6 +1842,8 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
- 			ret = f2fs_write_checkpoint(sbi, &cpc);
- 			if (ret)
- 				goto stop;
-+			/* Reset due to checkpoint */
-+			sec_freed = 0;
- 		}
- 	}
- 
-@@ -1866,15 +1868,17 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
- 				gc_control->should_migrate_blocks);
- 	total_freed += seg_freed;
- 
--	if (seg_freed == f2fs_usable_segs_in_sec(sbi, segno))
-+	if (seg_freed == f2fs_usable_segs_in_sec(sbi, segno)) {
- 		sec_freed++;
-+		total_sec_freed++;
-+	}
- 
- 	if (gc_type == FG_GC) {
- 		sbi->cur_victim_sec = NULL_SEGNO;
- 
- 		if (has_enough_free_secs(sbi, sec_freed, 0)) {
- 			if (!gc_control->no_bg_gc &&
--			    sec_freed < gc_control->nr_free_secs)
-+			    total_sec_freed < gc_control->nr_free_secs)
- 				goto go_gc_more;
- 			goto stop;
- 		}
-@@ -1901,6 +1905,8 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
- 		ret = f2fs_write_checkpoint(sbi, &cpc);
- 		if (ret)
- 			goto stop;
-+		/* Reset due to checkpoint */
-+		sec_freed = 0;
- 	}
- go_gc_more:
- 	segno = NULL_SEGNO;
-@@ -1913,7 +1919,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
- 	if (gc_type == FG_GC)
- 		f2fs_unpin_all_sections(sbi, true);
- 
--	trace_f2fs_gc_end(sbi->sb, ret, total_freed, sec_freed,
-+	trace_f2fs_gc_end(sbi->sb, ret, total_freed, total_sec_freed,
- 				get_pages(sbi, F2FS_DIRTY_NODES),
- 				get_pages(sbi, F2FS_DIRTY_DENTS),
- 				get_pages(sbi, F2FS_DIRTY_IMETA),
-@@ -1927,7 +1933,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
- 	put_gc_inode(&gc_list);
- 
- 	if (gc_control->err_gc_skipped && !ret)
--		ret = sec_freed ? 0 : -EAGAIN;
-+		ret = total_sec_freed ? 0 : -EAGAIN;
- 	return ret;
- }
- 
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Elson-Roy-Serrao/usb-function-u_ether-Handle-rx-requests-during-suspend-resume/20230512-015036
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git usb-testing
+patch link:    https://lore.kernel.org/r/1683827311-1462-3-git-send-email-quic_eserrao%40quicinc.com
+patch subject: [PATCH 2/2] usb: dwc3: Modify runtime pm ops to handle bus suspend
+config: x86_64-randconfig-m001 (https://download.01.org/0day-ci/archive/20230512/202305120709.tCFYCtsd-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <error27@gmail.com>
+| Link: https://lore.kernel.org/r/202305120709.tCFYCtsd-lkp@intel.com/
+
+New smatch warnings:
+drivers/usb/dwc3/gadget.c:2409 dwc3_gadget_wakeup() warn: pm_runtime_get_sync() also returns 1 on success
+drivers/usb/dwc3/gadget.c:2437 dwc3_gadget_func_wakeup() warn: pm_runtime_get_sync() also returns 1 on success
+
+Old smatch warnings:
+drivers/usb/dwc3/gadget.c:1648 __dwc3_gadget_kick_transfer() warn: missing error code? 'ret'
+drivers/usb/dwc3/gadget.c:2744 dwc3_gadget_pullup() warn: pm_runtime_get_sync() also returns 1 on success
+
+vim +2409 drivers/usb/dwc3/gadget.c
+
+218ef7b647e336 Felipe Balbi     2016-04-04  2392  static int dwc3_gadget_wakeup(struct usb_gadget *g)
+218ef7b647e336 Felipe Balbi     2016-04-04  2393  {
+218ef7b647e336 Felipe Balbi     2016-04-04  2394  	struct dwc3		*dwc = gadget_to_dwc(g);
+218ef7b647e336 Felipe Balbi     2016-04-04  2395  	unsigned long		flags;
+218ef7b647e336 Felipe Balbi     2016-04-04  2396  	int			ret;
+218ef7b647e336 Felipe Balbi     2016-04-04  2397  
+047161686b813a Elson Roy Serrao 2023-03-24  2398  	if (!dwc->wakeup_configured) {
+047161686b813a Elson Roy Serrao 2023-03-24  2399  		dev_err(dwc->dev, "remote wakeup not configured\n");
+047161686b813a Elson Roy Serrao 2023-03-24  2400  		return -EINVAL;
+047161686b813a Elson Roy Serrao 2023-03-24  2401  	}
+047161686b813a Elson Roy Serrao 2023-03-24  2402  
+047161686b813a Elson Roy Serrao 2023-03-24  2403  	if (!dwc->gadget->wakeup_armed) {
+047161686b813a Elson Roy Serrao 2023-03-24  2404  		dev_err(dwc->dev, "not armed for remote wakeup\n");
+047161686b813a Elson Roy Serrao 2023-03-24  2405  		return -EINVAL;
+047161686b813a Elson Roy Serrao 2023-03-24  2406  	}
+047161686b813a Elson Roy Serrao 2023-03-24  2407  
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2408  	ret = pm_runtime_get_sync(dwc->dev);
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11 @2409  	if (ret) {
+
+The checker is correct.  These days it's better to use the
+pm_runtime_resume_and_get() function instead of pm_runtime_get_sync().
+
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2410  		pm_runtime_put(dwc->dev);
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2411  		return ret;
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2412  	}
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2413  
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2414  	spin_lock_irqsave(&dwc->lock, flags);
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2415  	ret = __dwc3_gadget_wakeup(dwc, true);
+72246da40f3719 Felipe Balbi     2011-08-19  2416  	spin_unlock_irqrestore(&dwc->lock, flags);
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2417  	pm_runtime_put_noidle(dwc->dev);
+72246da40f3719 Felipe Balbi     2011-08-19  2418  
+72246da40f3719 Felipe Balbi     2011-08-19  2419  	return ret;
+72246da40f3719 Felipe Balbi     2011-08-19  2420  }
+72246da40f3719 Felipe Balbi     2011-08-19  2421  
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2422  static void dwc3_resume_gadget(struct dwc3 *dwc);
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2423  
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2424  static int dwc3_gadget_func_wakeup(struct usb_gadget *g, int intf_id)
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2425  {
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2426  	struct  dwc3		*dwc = gadget_to_dwc(g);
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2427  	unsigned long		flags;
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2428  	int			ret;
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2429  	int			link_state;
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2430  
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2431  	if (!dwc->wakeup_configured) {
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2432  		dev_err(dwc->dev, "remote wakeup not configured\n");
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2433  		return -EINVAL;
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2434  	}
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2435  
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2436  	ret = pm_runtime_get_sync(dwc->dev);
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11 @2437  	if (ret) {
+
+Same.
+
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2438  		pm_runtime_put(dwc->dev);
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2439  		return ret;
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2440  	}
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2441  
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2442  	spin_lock_irqsave(&dwc->lock, flags);
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2443  	/*
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2444  	 * If the link is in U3, signal for remote wakeup and wait for the
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2445  	 * link to transition to U0 before sending device notification.
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2446  	 */
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2447  	link_state = dwc3_gadget_get_link_state(dwc);
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2448  	if (link_state == DWC3_LINK_STATE_U3) {
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2449  		ret = __dwc3_gadget_wakeup(dwc, false);
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2450  		if (ret) {
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2451  			spin_unlock_irqrestore(&dwc->lock, flags);
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2452  			pm_runtime_put_noidle(dwc->dev);
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2453  			return -EINVAL;
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2454  		}
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2455  		dwc3_resume_gadget(dwc);
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2456  		dwc->link_state = DWC3_LINK_STATE_U0;
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2457  	}
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2458  
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2459  	ret = dwc3_send_gadget_generic_command(dwc, DWC3_DGCMD_DEV_NOTIFICATION,
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2460  					       DWC3_DGCMDPAR_DN_FUNC_WAKE |
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2461  					       DWC3_DGCMDPAR_INTF_SEL(intf_id));
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2462  	if (ret)
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2463  		dev_err(dwc->dev, "function remote wakeup failed, ret:%d\n", ret);
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2464  
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2465  	spin_unlock_irqrestore(&dwc->lock, flags);
+0660b8a88d4d6a Elson Roy Serrao 2023-05-11  2466  	pm_runtime_put_noidle(dwc->dev);
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2467  
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2468  	return ret;
+92c08a84b53e5d Elson Roy Serrao 2023-03-24  2469  }
+
 -- 
-2.34.1
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
+
