@@ -2,122 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 783BB700D2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:40:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE54B700D2B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:40:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236972AbjELQkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 12:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
+        id S236982AbjELQkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 12:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231256AbjELQkK (ORCPT
+        with ESMTP id S231196AbjELQkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 12 May 2023 12:40:10 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BC6900E;
-        Fri, 12 May 2023 09:40:07 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f41d087b3bso73356915e9.0;
-        Fri, 12 May 2023 09:40:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683909606; x=1686501606;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gOPr8RiZNSgqggpmzVuoRlbviV7C/s+3BUUqAAb6inU=;
-        b=DOCSZD3R4gA0NV+uJmIYMvCPKGm8d9kpASOgAAz+Pf4S+bC0zfZIpDVA6j4pA5/G9z
-         2pv/aZk9u0O0KFrGIRGMFN5sxS4S/44ucOrDp+w9VpWR4uuZvwDTzUhBQBhBZ8S1Tz3B
-         A5RVjIX26Ua+r+QGuGgXEYRPOaEK2M0bQL6s3XxHIXuZRKLWM+xfN3SpYRT0P92uopQt
-         CkJRyCOBuJ4vl5d6ZVUxN/FPuTayqcbUDbcbnkY8KA6iyaI8vGfTnKQJuxTpkgX780tb
-         2n2REXdeuXT4AOACppzPbHWgY1hFyp1P5fqnXt0Bz0wOeGEDCNuAqXOkQ+hG5w5ExObO
-         OR2g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683909606; x=1686501606;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=gOPr8RiZNSgqggpmzVuoRlbviV7C/s+3BUUqAAb6inU=;
-        b=HQCfSbIea/CxUIZwbbqW3T94c+9721kUxZ2mxLjkgQs94a3pKSjWSFEVER8m5ZL7J+
-         rdUMpG+hyVlr+XQ6KX24vJ4EXJZf/0LK+dRdpJRssMThitn/vQ7BqBaaUWru/aOrkUEA
-         +NcNRbmmd0fXH8w3lRxZgg60PdqSaE43Kg4er1ChiLhjnNQW8D4lAfM2cdkUf+4wiNz+
-         YwXehIM7JPsXyIZMgZaVAuL5pSkscxdk4/CTjOqN5iHDGLR0kePiqUDGH5xFfwWRwEAR
-         ekBSAvJgp0P+9mwVHSDRxHn5Xc+Rba4b0hLaRXuxSxlvMpn7OiUPw3TXsvk1PB2ewmA2
-         8EiQ==
-X-Gm-Message-State: AC+VfDyr4+3Pd8OUOwLrOPt5p4GnL2Jqo6weUpMQbrKBjbXZzGmETMg6
-        jurtTXugS2nHWj23gT7wnbh9a9axkh4RIsxIMvY=
-X-Google-Smtp-Source: ACHHUZ5yxbWW2Bv6DZDq5gkRtNdoEDpV2I3JPwHvYv23gd+IPRTMx71bA/LG2dz5CkgOQTwYpkRxhA==
-X-Received: by 2002:a5d:5968:0:b0:2c9:e585:84b0 with SMTP id e40-20020a5d5968000000b002c9e58584b0mr16128939wri.1.1683909605667;
-        Fri, 12 May 2023 09:40:05 -0700 (PDT)
-Received: from localhost ([146.70.133.78])
-        by smtp.gmail.com with ESMTPSA id v13-20020a05600c214d00b003f42461ac75sm16140195wml.12.2023.05.12.09.40.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 09:40:05 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 12 May 2023 18:40:03 +0200
-Message-Id: <CSKG4WDA4MVH.1RVYIN4NYH4EA@vincent-arch>
-Cc:     <linux-pci@vger.kernel.org>, <robh@kernel.org>, <heiko@sntech.de>,
-        <kw@linux.com>, <shawn.lin@rock-chips.com>,
-        <linux-kernel@vger.kernel.org>, <lgirdwood@gmail.com>,
-        <linux-rockchip@lists.infradead.org>, <broonie@kernel.org>,
-        <bhelgaas@google.com>,
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        <lpieralisi@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        "Dan Johansen" <strit@manjaro.org>
-Subject: Re: [PATCH v1] drivers: pci: introduce configurable delay for
- Rockchip PCIe bus scan
-From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
-To:     "Bjorn Helgaas" <helgaas@kernel.org>
-X-Mailer: aerc 0.15.1
-References: <20230509153912.515218-1-vincenzopalazzodev@gmail.com>
- <20230509211902.GA1270901@bhelgaas>
-In-Reply-To: <20230509211902.GA1270901@bhelgaas>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FFAA10F3;
+        Fri, 12 May 2023 09:40:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2D45563A6D;
+        Fri, 12 May 2023 16:40:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BE27C433D2;
+        Fri, 12 May 2023 16:40:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683909605;
+        bh=mFss654Av6NPd92VYAU9bWcL0SPn6hYIYfGafkyQKig=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=WKGPZmGNT5X7m7XurXJcDmqWlBSe4qJ3Xm9oD3u4XpDGK2OVP2o04h/tJQ/Xj/Ohq
+         jLPfoMuXsv/u96UZFhruCaneaqJ/Uu+yYLDQhNKBE/hZ18Sn0MrhLW9CuKAJwvUyJ3
+         gR8yzngfAuObAuPExF6lQX8RHOusBD+/Lnx14pirtjn3RFaDaGlQRLg0cFtlhm6POB
+         3ejebmE0BKMuc64TffNkIAtN8vuIgWkVlUEFtUO2C8QuvExvgJLchlMVO+qlDmztRK
+         EyxkjZtQDf7kuTAJr75tl9mqhJXqmE0ue6CAx7yYbc0ZBGfhv8+Iw+vWvp1zV+3sMz
+         HuQcvdmAvkBWg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 0FE5ACE0CCF; Fri, 12 May 2023 09:40:05 -0700 (PDT)
+Date:   Fri, 12 May 2023 09:40:05 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@meta.com,
+        rostedt@goodmis.org
+Subject: Re: [PATCH rcu 3/6] rcu/rcuscale: Move rcu_scale_*() after
+ kfree_scale_cleanup()
+Message-ID: <4d508096-300c-4d16-9c39-18598d00b500@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <IA1PR11MB6171B1AD7716B95B0B2C683889759@IA1PR11MB6171.namprd11.prod.outlook.com>
+ <30F06C03-6950-4E2B-B3CE-3939B3CDD295@joelfernandes.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <30F06C03-6950-4E2B-B3CE-3939B3CDD295@joelfernandes.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
-> Thanks for raising this issue.  Let's see what we can do to address
-> it.
->
-> On Tue, May 09, 2023 at 05:39:12PM +0200, Vincenzo Palazzo wrote:
-> > Add a configurable delay to the Rockchip PCIe driver to address
-> > crashes that occur on some old devices, such as the Pine64 RockPro64.
-> >=20
-> > This issue is affecting the ARM community, but there is no
-> > upstream solution for it yet.
->
-> It sounds like this happens with several endpoints, right?  And I
-> assume the endpoints work fine in other non-Rockchip systems?  If
-> that's the case, my guess is the problem is with the Rockchip host
-> controller and how it's initialized, not with the endpoints.
->
-> The only delays and timeouts I see in the driver now are in
-> rockchip_pcie_host_init_port(), where it waits for link training to
-> complete.  I assume the link training did completely successfully
-> since you don't mention either a gen1 or gen2 timeout (although the
-> gen2 message is a dev_dbg() that normally wouldn't go to the console).
->
-> I don't know that the spec contains a retrain timeout value.  Several
-> other drivers use 1 second, while rockchip uses 500ms (for example,
-> see LINK_RETRAIN_TIMEOUT and LINK_UP_TIMEOUT).
->
-> I think we need to understand the issue better before adding a DT
-> property and a module parameter.  Those are hard for users to deal
-> with.  If we can figure out a value that works for everybody, it would
-> be better to just hard-code it in the driver and use that all the
-> time.
->
-> A few minor style/formatting comments below just for future reference:
+On Thu, May 11, 2023 at 09:15:17PM -0700, Joel Fernandes wrote:
+> 
+> 
+> > On May 11, 2023, at 8:20 PM, Zhuo, Qiuxu <qiuxu.zhuo@intel.com> wrote:
+> > 
+> > ﻿
+> >> 
+> >> From: Paul E. McKenney <paulmck@kernel.org>
+> >> ...
+> >>>> I wish diff was better at showing what really changed. The meld tool
+> >>>> can help but its gui...
+> >>>> 
+> >>>> Should I run meld later (I'm out at a conference so no access to
+> >>>> meld-capable
+> >>>> machines) or are we sufficiently confident that the lines were moved
+> >>>> as-is ? :)
+> >>>> 
+> >>> 
+> >>> Thank you, Joel for this concern. Good to know the meld diff GUI tool.
+> >>> I just run the command below and confirmed that the lines were moved
+> >>> as-is: rcu_scale_{cleanup,shutdown}() follows kfree_scale_cleanup().
+> >>> You may double check it ;-).
+> >>> 
+> >>>      meld --diff ./rcuscale.c.before ./rcuscale.c.after
+> >> 
+> >> Nice, thank you both!
+> >> 
+> >> Another option is to check out the commit corresponding to this patch, then
+> >> do "git blame -M kernel/rcu/rcuscale.c".  Given a move-only commit, there
+> >> should be no line tagged with this commit's SHA-1.
+> > 
+> > Just had a good experiment with the "git blame -M" option: 
+> > - Used this option to prove a move-only commit quickly (no line tagged with that commit) (the fastest method to me). 
+> > - Then just only needed to quickly check the positions of the moved code chunk by myself (easy).  
+> > 
+> > Thank you, Paul for sharing this. It's very useful to me. 
+> 
+> Looks good to me as well and thank you both for sharing the tips.
 
-Due the recent email I think it is worth make a version 2 of this
-patch with your suggestion? and iterate over it another time?
+Here is one way to script this, where "SHA" identifies the commit to
+be checked and PATHS the affected pathnames:
 
-Cheers!
+	git checkout SHA^
+	git show SHA | git apply -
+	git blame -M PATHS | grep '^0* '
 
-Vincent.
+If there is no output, there were no non-move changes.  
+
+Or just do the "git blame -M PATHS | grep '^0* '" before doing the
+checking.
+
+And yes, you can derive PATHS using "git status" if you want.  ;-)
+
+							Thanx, Paul
