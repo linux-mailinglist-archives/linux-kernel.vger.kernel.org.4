@@ -2,83 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBDE700890
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:02:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E42A1700896
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:04:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240975AbjELNCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 09:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56380 "EHLO
+        id S241037AbjELNEf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 09:04:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240898AbjELNCA (ORCPT
+        with ESMTP id S240990AbjELNEc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 09:02:00 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD46183CD
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:01:57 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f41d087b3bso70659945e9.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:01:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683896516; x=1686488516;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eHNLdLV1yL8+y4b8BbEoJJz9JNG8cbYJZ0jmuESeBGE=;
-        b=DXeVpHCYMm12mbenJps25wBzKJRDc10719EbMXfRk6rFLfCjNMKjY33/ic9jnZC1m6
-         IGzFPmPFZ6bRoyf2AJhiAYR9aKe6+hCdYrF9N5kBf35y+ktxS1Ao5/lH9EtoqirdWJBX
-         6+ueMqFczRijADIIEoRRJFRtb04qFhZ0OkNWZwOXTZBNHXpgWCkyo7wy4iDIFTexWkA5
-         kcdYDj4RIa13q80tIFyKK3k6l6lDxnLda//YEzz42KlejQ6Gt0pd8awCH10bSM1YzdCc
-         /19t05u8gMsIR9lVcX/C8mrX/5ZGcmYVjXtmtX+NxVv9hiK6PxKh0PS8jMe4rEnm3dy1
-         ceYw==
+        Fri, 12 May 2023 09:04:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466229033
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:03:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683896625;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7vyYqKowntrH5TESdu+nnql3fraQEOqrTs1VN1eLvlA=;
+        b=KIUMt6k+mEpfTCRhEWgzyyNLBcPrSNCd0NWAvnosd5HNPECnQ4muQ+BLw0NaUStk4PxSbH
+        foq773bEVYQOvUxMW1ZHXdpEJsRvbtiqE/TrjtfxuqlEr5zz+pS2x1SybUL4uCu5dFCQDe
+        qPF/+x+aU3UVaCTklldeEpyyvmzzkzM=
+Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
+ [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-458-I4vcOVkoOg-3sgph6Hw2Cw-1; Fri, 12 May 2023 09:03:43 -0400
+X-MC-Unique: I4vcOVkoOg-3sgph6Hw2Cw-1
+Received: by mail-yb1-f198.google.com with SMTP id 3f1490d57ef6-ba1b052e540so19163911276.3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:03:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683896516; x=1686488516;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eHNLdLV1yL8+y4b8BbEoJJz9JNG8cbYJZ0jmuESeBGE=;
-        b=gd/OJ0cyUvPTwdEwo9X0H7n2/oHbSFUJUCzSLwcknfetvrby+kKB7dZ/NtkXPDAXG6
-         2e2O5LcnovMBmacr8Z9yRd7K1BvGtCYQnktmL6uxC3VghQNpm8/4M0b8OMXK3XD3UlC7
-         6m6DuLEr0s9IuFWSVuV6lisKUdw7mIEC0R0yX36Qcs9UfGsS22PYp6VfNDr+rs/CwSEG
-         3Vwa1LkmuHtnVFKXZ9YWa8qhAjn+HRLurZQO54ydS5iPv4Wazr9/cf/8V/F7mq2h/KcO
-         n4izjDxh7HCnLgMG23lalCahdn6sQzVM6TeKLo1RSKx7YBEI1ELg9DypRtkMRNVl3+NW
-         a4TQ==
-X-Gm-Message-State: AC+VfDzbyamNUfOFGB8Qr60MtPFqKCr9CwJxz/+Oknkz58ly6OJvWB1K
-        hw+YKLKVYW+oeG16sNGqmsZuig==
-X-Google-Smtp-Source: ACHHUZ41jeQnFk7iiNK+bYQbaxPy0G3xlNuNN9epfdfcFuJUYV7w3/elbJCSelgwSgfVZZduyn44RA==
-X-Received: by 2002:a5d:448c:0:b0:307:34d4:7ec8 with SMTP id j12-20020a5d448c000000b0030734d47ec8mr17712788wrq.34.1683896516089;
-        Fri, 12 May 2023 06:01:56 -0700 (PDT)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id i6-20020adfdec6000000b002c70ce264bfsm23317559wrn.76.2023.05.12.06.01.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 06:01:55 -0700 (PDT)
-Message-ID: <97a253b6-b8cc-e37a-ffc4-75f0d39e9c5d@linaro.org>
-Date:   Fri, 12 May 2023 14:01:54 +0100
+        d=1e100.net; s=20221208; t=1683896623; x=1686488623;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=7vyYqKowntrH5TESdu+nnql3fraQEOqrTs1VN1eLvlA=;
+        b=P9Pili8lNrtcnkGKb5XLfEPjNmHGS/Fkk+7eHojIFd4GM7j/HhuATGHSSpjwzdfcSH
+         x9XSKOf+Fcx46dRw+k7kAHkbhygmXHY1s1GZvfhTlCA2c438LYP+NwA7xecPHWYtU8K0
+         FC+j35K4A4Ql0bc09RyCTN4FfocHXHUo0fLdaRJCvNk2emwvCaP9D6VFU6JzV+uH6Fxp
+         AMh01dy36V2lQJtx0qX9cs/fLeE4++D3/11Skavlas/vVt2b2nad2XYE2Mz9Upa2Ivm+
+         jeL9nIJnWuuirbP/KLGfQVHdBr6f+SlaJv9dKHRJcppbDNOuht1YngGgbGR0t1d3PZqv
+         uiJA==
+X-Gm-Message-State: AC+VfDxjR3Qyof3TskS36karEYop3JO813dM5hoEUaOM1ncKKmdC6EVU
+        zK6TD+4BLmLFtPUHCei7vf4yGT8FIALAxaEInQ6DCae61rPTb+ZJzAvl7jHTevY+a99mCfGsCHB
+        +nJ2l4pMsCO+t7YX81ZvkpAj2s3nrRyrTkP7MdD1P
+X-Received: by 2002:a05:7500:e56a:b0:105:7a07:8604 with SMTP id rh42-20020a057500e56a00b001057a078604mr943437gab.61.1683896622960;
+        Fri, 12 May 2023 06:03:42 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5dVexvddLUcjN/zVlZgJrAoivqibOPzux2/Wn/gjHcLQ5Nb6s+25KWtNakTprxdBljBky3vIfmIcNIUXqFI88=
+X-Received: by 2002:a05:7500:e56a:b0:105:7a07:8604 with SMTP id
+ rh42-20020a057500e56a00b001057a078604mr943377gab.61.1683896622432; Fri, 12
+ May 2023 06:03:42 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 0/6] Add StarFive Camera Subsystem driver
-Content-Language: en-US
-To:     Jack Zhu <jack.zhu@starfivetech.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Todor Tomov <todor.too@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Eugen Hristev <eugen.hristev@collabora.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, changhuang.liang@starfivetech.com
-References: <20230512102844.51084-1-jack.zhu@starfivetech.com>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20230512102844.51084-1-jack.zhu@starfivetech.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230512100620.36807-1-bagasdotme@gmail.com> <20230512100620.36807-5-bagasdotme@gmail.com>
+In-Reply-To: <20230512100620.36807-5-bagasdotme@gmail.com>
+From:   Richard Fontana <rfontana@redhat.com>
+Date:   Fri, 12 May 2023 09:03:31 -0400
+Message-ID: <CAC1cPGxxOhmQS6J9tDCSaaaMEAgpCVRv2XpndyNnyEfvUKcQoA@mail.gmail.com>
+Subject: Re: [PATCH v2 04/10] net: ethernet: 8390: Replace GPL boilerplate
+ with SPDX identifier
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
+        Linux DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Staging Drivers <linux-staging@lists.linux.dev>,
+        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
+        Linux Kernel Actions <linux-actions@lists.infradead.org>,
+        Diederik de Haas <didi.debian@cknow.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Philippe Ombredanne <pombredanne@nexb.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Airlie <airlied@redhat.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        "David A . Hinds" <dahinds@users.sourceforge.net>,
+        Donald Becker <becker@scyld.com>,
+        Peter De Schrijver <p2@mind.be>,
+        Topi Kanerva <topi@susanna.oulu.fi>,
+        Alain Malek <Alain.Malek@cryogen.com>,
+        Bruce Abbott <bhabbott@inhb.co.nz>,
+        Alan Cox <alan@linux.intel.com>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Simon Horman <simon.horman@corigine.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,98 +112,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2023 11:28, Jack Zhu wrote:
-> hi,
-> 
-> This series is the v5 of the series, the CSI driver is moved to another separate
-> series.
+On Fri, May 12, 2023 at 6:07=E2=80=AFAM Bagas Sanjaya <bagasdotme@gmail.com=
+> wrote:
+>
+> Replace GPL boilerplate notice on remaining files with appropriate SPDX
+> tag. For files mentioning COPYING, use GPL 2.0; otherwise GPL 1.0+.
 
-You should run your series through checkpatch.pl --strict
+> diff --git a/drivers/net/ethernet/8390/ne2k-pci.c b/drivers/net/ethernet/=
+8390/ne2k-pci.c
+> index 6a0a2039600a0a..ea3488e81c5f3c 100644
+> --- a/drivers/net/ethernet/8390/ne2k-pci.c
+> +++ b/drivers/net/ethernet/8390/ne2k-pci.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-1.0+
+>  /* A Linux device driver for PCI NE2000 clones.
+>   *
+>   * Authors and other copyright holders:
+> @@ -6,13 +7,6 @@
+>   * Copyright 1993 assigned to the United States Government as represente=
+d
+>   * by the Director, National Security Agency.
+>   *
+> - * This software may be used and distributed according to the terms of
+> - * the GNU General Public License (GPL), incorporated herein by referenc=
+e.
+> - * Drivers based on or derived from this code fall under the GPL and mus=
+t
+> - * retain the authorship, copyright and license notice.  This file is no=
+t
+> - * a complete program and may only be used when the entire operating
+> - * system is licensed under the GPL.
 
-0001-media-dt-bindings-Add-JH7110-Camera-Subsystem.patch has no obvious 
-style problems and is ready for submission.
-total: 0 errors, 0 warnings, 0 checks, 87 lines checked
+I don't think you should delete those last two sentences.
 
-0002-media-admin-guide-Add-starfive_camss.rst-for-Starfiv.patch has no 
-obvious style problems and is ready for submission.
-CHECK: Lines should not end with a '('
-#263: FILE: drivers/media/platform/starfive/stf_camss.c:157:
-+		ret = media_create_pad_link(
+"Drivers based on or derived from this code fall under the GPL and must
+retain the authorship, copyright and license notice."
 
-total: 0 errors, 0 warnings, 1 checks, 592 lines checked
+The notice has:
 
-NOTE: For some of the reported defects, checkpatch may be able to
-       mechanically convert to the typical style using --fix or 
---fix-inplace.
+ * Authors and other copyright holders:
+ * 1992-2000 by Donald Becker, NE2000 core and various modifications.
+ * 1995-1998 by Paul Gortmaker, core modifications and PCI support.
+ * Copyright 1993 assigned to the United States Government as represented
+ * by the Director, National Security Agency.
 
-0003-media-starfive-Add-basic-driver.patch has style problems, please 
-review.
+Nothing in the GPL requires retention of "authorship", as some other
+licenses do (you can argue that GPLv2 conflates authorship with
+copyright ownership, but this sentence seems to distinguish
+"authorship" from "copyright" as does the listing of authors). There
+is (arguably) a tradition of treating extra author attribution
+requirements as legitimate, but if you view them as extra requirements
+you can't, or shouldn't, just remove them arbitrarily.
 
-NOTE: If any of the errors are false positives, please report
-       them to the maintainer, see CHECKPATCH in MAINTAINERS.
-WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
-#31:
-new file mode 100644
+Then there's this:
 
-total: 0 errors, 1 warnings, 0 checks, 967 lines checked
+"This file is not a complete program and may only be used when the
+entire operating system is licensed under the GPL."
 
-NOTE: For some of the reported defects, checkpatch may be able to
-       mechanically convert to the typical style using --fix or 
---fix-inplace.
+Whether or not that's a correct statement of GPL interpretation
+(perhaps it depends on the meaning of "entire operating system"), it's
+significant enough as a nonstandard interpretive comment that I think
+you should probably not remove it.
 
-0004-media-starfive-Add-video-driver.patch has style problems, please 
-review.
-
-NOTE: If any of the errors are false positives, please report
-       them to the maintainer, see CHECKPATCH in MAINTAINERS.
-WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
-#188:
-new file mode 100644
-
-total: 0 errors, 1 warnings, 0 checks, 1625 lines checked
-
-NOTE: For some of the reported defects, checkpatch may be able to
-       mechanically convert to the typical style using --fix or 
---fix-inplace.
-
-0005-media-starfive-Add-ISP-driver.patch has style problems, please review.
-
-NOTE: If any of the errors are false positives, please report
-       them to the maintainer, see CHECKPATCH in MAINTAINERS.
-WARNING: added, moved or deleted file(s), does MAINTAINERS need updating?
-#138:
-new file mode 100644
-
-CHECK: Macro argument reuse 'ptr_line' - possible side-effects?
-#155: FILE: drivers/media/platform/starfive/stf_vin.c:13:
-+#define vin_line_array(ptr_line) \
-+	((const struct vin_line (*)[]) &(ptr_line)[-((ptr_line)->id)])
-
-CHECK: Alignment should match open parenthesis
-#597: FILE: drivers/media/platform/starfive/stf_vin.c:455:
-+			vin_set_dummy_buffer(line,
-+				stf_vin_map_isp_pad(line->id, STF_ISP_PAD_SINK));
-
-CHECK: Lines should not end with a '('
-#1222: FILE: drivers/media/platform/starfive/stf_vin.c:1080:
-+		ret = media_create_pad_link(
-
-CHECK: Lines should not end with a '('
-#1513: FILE: drivers/media/platform/starfive/stf_vin_hw_ops.c:45:
-+			vin_dev->isr_ops->isr_buffer_done(
-
-CHECK: Lines should not end with a '('
-#1543: FILE: drivers/media/platform/starfive/stf_vin_hw_ops.c:75:
-+				vin_dev->isr_ops->isr_change_buffer(
-
-total: 0 errors, 1 warnings, 5 checks, 1654 lines checked
-
-NOTE: For some of the reported defects, checkpatch may be able to
-       mechanically convert to the typical style using --fix or 
---fix-inplace.
-
-0006-media-starfive-Add-VIN-driver.patch has style problems, please review.
-
----
-bod
+Richard
 
