@@ -2,218 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E79876FFF24
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 05:00:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E8A6FFF06
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 04:43:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239806AbjELDAG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 23:00:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44520 "EHLO
+        id S239718AbjELCnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 22:43:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239808AbjELDAE (ORCPT
+        with ESMTP id S233568AbjELCm4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 23:00:04 -0400
-X-Greylist: delayed 599 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 11 May 2023 20:00:02 PDT
-Received: from synology.com (mail.synology.com [211.23.38.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D27761B7;
-        Thu, 11 May 2023 20:00:01 -0700 (PDT)
-Received: from vbm-samho.. (unknown [10.17.211.193])
+        Thu, 11 May 2023 22:42:56 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95ED74EDD
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 19:42:53 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by synology.com (Postfix) with ESMTPSA id E0F525B039585;
-        Fri, 12 May 2023 10:41:44 +0800 (CST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=synology.com; s=123;
-        t=1683859305; bh=Y67WksmBilFV6xWdagrLpjikadFsRz5+NrupSGkmcag=;
-        h=From:To:Cc:Subject:Date;
-        b=dmd6sLDVIqg415aDq2GBEFSUmNpYnBN3Hz3QQjZGfkZVazv0LnFMpihlKXKMyUXcI
-         bmq/doL7rq9wXAVgYn9HUaSMZWF43+YYg4LXNbS5l0uwJfPJtTsgRf4+Gba54bHxJh
-         0cZvcbxvtRYHtzM+vuCyGKXS9gufTos87wGy0duI=
-From:   samho <samho@synology.com>
-To:     clm@fb.com
-Cc:     josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        samho <samho@synology.com>
-Subject: [PATCH] btrfs: check extent type while finding extent clone source
-Date:   Fri, 12 May 2023 02:41:35 +0000
-Message-Id: <20230512024135.325711-1-samho@synology.com>
-X-Mailer: git-send-email 2.34.1
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QHY2v2286z4x5R;
+        Fri, 12 May 2023 12:42:46 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1683859368;
+        bh=UHonVxCxl9tE/BE4saKmOTqDfW/Z+XH0atlSFKqQKFw=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=dIps/oqn68QXS/wtfWcyekxrrBV800VlhYXyckk0yyHlNuAi/OANA1HtUmq/Dm9HY
+         RCiAcMCb25X2GkBordupXcyG4V4fbQ21NRVicTRxpC+ul9+wr55ARw5deXskUIusKV
+         A89LRqgyTf2iZog4EKY6eRpyMZI2Og/axtJ7SqtKHDnysjUjgr1MLwuvMgrcsChKxW
+         Tn2qFReh+IIS6pyD5m3dl/jn19fXV3tTJtc0MPNh86ctlPKzO7xmR2cz77y5pDu1Lj
+         MfpgFo/YdkymlLAJvrkNWgdTIxMES90GDKurKIxsqVbTZxQfmtWNicbivLkrkYQk0o
+         7shnTEqgaAJpA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+Cc:     Anatolij Gustschin <agust@denx.de>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] powerpc: Drop MPC5200 LocalPlus bus FIFO driver
+In-Reply-To: <20230509082153.jcy2qpvyd44bjaee@pengutronix.de>
+References: <20221228145129.31700-1-u.kleine-koenig@pengutronix.de>
+ <20230412150524.ojsvukh47hing6db@pengutronix.de>
+ <87zg7cabf6.fsf@mpe.ellerman.id.au>
+ <20230413061642.kqkor4wkt7lp2mhp@pengutronix.de>
+ <20230509082153.jcy2qpvyd44bjaee@pengutronix.de>
+Date:   Fri, 12 May 2023 12:42:46 +1000
+Message-ID: <873542l17d.fsf@mail.lhotse>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Synology-Spam-Status: score=0, required 6, WHITELIST_FROM_ADDRESS 0
-X-Synology-Spam-Flag: no
-X-Synology-Virus-Status: no
-X-Synology-MCP-Status: no
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For btrfs incremental backup:
-`btrfs send -p /vol/subvol_835 /vol/subvol_846 | btrfs receive /vol/`
+Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> writes:
+> On Thu, Apr 13, 2023 at 08:16:42AM +0200, Uwe Kleine-K=C3=B6nig wrote:
+>> While mpc5200b.dtsi contains a device that this driver can bind to, the
+>> only purpose of a bound device is to be used by the four exported functi=
+ons
+>> mpc52xx_lpbfifo_submit(), mpc52xx_lpbfifo_abort(), mpc52xx_lpbfifo_poll()
+>> and mpc52xx_lpbfifo_start_xfer(). However there are no callers to this
+>> function and so the driver is effectively superfluous and can be deleted.
+>> Also drop some defines and a struct from <asm/mpc52xx.h> that are unused
+>> now together with the declarations of the four mentioned functions.
+>>=20
+>> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de>
+>> ---
+>> On Thu, Apr 13, 2023 at 10:11:25AM +1000, Michael Ellerman wrote:
+>> > Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.de> writes:
+>> > > On Wed, Dec 28, 2022 at 03:51:29PM +0100, Uwe Kleine-K=C3=B6nig wrot=
+e:
+>> > >> The four exported functions mpc52xx_lpbfifo_submit(),
+>> > >> mpc52xx_lpbfifo_abort(), mpc52xx_lpbfifo_poll(), and
+>> > >> mpc52xx_lpbfifo_start_xfer() are not used. So they can be dropped a=
+nd the
+>> > >> definitions needed to call them can be moved into the driver file.
+>> > >>=20
+>> > >> Signed-off-by: Uwe Kleine-K=C3=B6nig <u.kleine-koenig@pengutronix.d=
+e>
+>> > >
+>> > > I never got feedback about this driver and it has not appeared in ne=
+xt
+>> > > up to now. Did it fell through the cracks?
+>> >=20
+>> > Yeah. I was hoping someone would explain what's going on with the
+>> > driver.
+>> >=20
+>> > Presumably there are some out-of-tree drivers that use the routines
+>> > provided by this driver?
+>>=20
+>> I googled for the function names but the only related hits were
+>> references to this thread :-)
+>>=20
+>> > I think rather than merging this patch, which keeps the code but makes
+>> > it completely useless, do you mind sending a patch to remove the whole
+>> > driver? Maybe that will get someone's attention.
+>>=20
+>> fair enough, here it is.
+>
+> What is your thought about this patch? If you (also) think getting it
+> into next soon after a merge window closed, around now would be a good
+> opportunity to do so ..
 
-The following pattern will result in the data inconsistency between
-the received subvol and the subvol to be sent.
+I was hoping someone would explain why we have a driver that does
+nothing useful :) But I guess it's too old for anyone to remember/care.
 
-(66755 EXTENT_DATA 2121728) is supposed to be regular extent data,
-while `find_extent_clone()` may find the extent item in tree 835
-which is prealloc data.
+So yeah I'll take this, we can always put it back if someone needs it.
 
-DS:server[~]# btrfs-debug-tree -t 835 /dev/dev_1
-        item 129 key (58924 EXTENT_DATA 2412544) itemoff 7891 itemsize 53
-                prealloc data disk byte 6599543226368 nr 389120
-                prealloc data offset 0 nr 389120
-DS:server[~]# btrfs-debug-tree -t 846 /dev/dev_1
-        item 42 key (66755 EXTENT_DATA 2109440) itemoff 9964 itemsize 53
-                prealloc data disk byte 6599543226368 nr 389120
-                prealloc data offset 0 nr 12288
-        item 43 key (66755 EXTENT_DATA 2121728) itemoff 9911 itemsize 53
-                extent data disk byte 6599543226368 nr 389120
-                extent data offset 12288 nr 4096 ram 389120
-                extent compression(none)
-        item 44 key (66755 EXTENT_DATA 2125824) itemoff 9858 itemsize 53
-                prealloc data disk byte 6599543226368 nr 389120
-                prealloc data offset 16384 nr 159744
-DS:server[~]#
+I base my next on rc2, so I'll pick this up next week.
 
-Signed-off-by: samho <samho@synology.com>
----
- fs/btrfs/backref.c | 10 +++++++---
- fs/btrfs/backref.h |  2 +-
- fs/btrfs/scrub.c   |  2 +-
- fs/btrfs/send.c    | 12 ++++++++++--
- 4 files changed, 19 insertions(+), 7 deletions(-)
-
-diff --git a/fs/btrfs/backref.c b/fs/btrfs/backref.c
-index e54f0884802a..e446ca35b96c 100644
---- a/fs/btrfs/backref.c
-+++ b/fs/btrfs/backref.c
-@@ -29,6 +29,7 @@ struct extent_inode_elem {
- 	u64 inum;
- 	u64 offset;
- 	u64 num_bytes;
-+	int extent_type;
- 	struct extent_inode_elem *next;
- };
- 
-@@ -40,6 +41,7 @@ static int check_extent_in_eb(struct btrfs_backref_walk_ctx *ctx,
- {
- 	const u64 data_len = btrfs_file_extent_num_bytes(eb, fi);
- 	u64 offset = key->offset;
-+	const int extent_type = btrfs_file_extent_type(eb, fi);
- 	struct extent_inode_elem *e;
- 	const u64 *root_ids;
- 	int root_count;
-@@ -70,7 +72,7 @@ static int check_extent_in_eb(struct btrfs_backref_walk_ctx *ctx,
- 		int ret;
- 
- 		ret = ctx->indirect_ref_iterator(key->objectid, offset,
--						 data_len, root_ids[i],
-+						 data_len, extent_type, root_ids[i],
- 						 ctx->user_ctx);
- 		if (ret)
- 			return ret;
-@@ -85,6 +87,7 @@ static int check_extent_in_eb(struct btrfs_backref_walk_ctx *ctx,
- 	e->inum = key->objectid;
- 	e->offset = offset;
- 	e->num_bytes = data_len;
-+	e->extent_type = btrfs_file_extent_type(eb, fi);
- 	*eie = e;
- 
- 	return 0;
-@@ -2388,7 +2391,7 @@ static int iterate_leaf_refs(struct btrfs_fs_info *fs_info,
- 			    "ref for %llu resolved, key (%llu EXTEND_DATA %llu), root %llu",
- 			    extent_item_objectid, eie->inum,
- 			    eie->offset, root);
--		ret = iterate(eie->inum, eie->offset, eie->num_bytes, root, ctx);
-+		ret = iterate(eie->inum, eie->offset, eie->num_bytes, eie->extent_type, root, ctx);
- 		if (ret) {
- 			btrfs_debug(fs_info,
- 				    "stopping iteration for %llu due to ret=%d",
-@@ -2526,7 +2529,8 @@ int iterate_extent_inodes(struct btrfs_backref_walk_ctx *ctx,
- 	return ret;
- }
- 
--static int build_ino_list(u64 inum, u64 offset, u64 num_bytes, u64 root, void *ctx)
-+static int build_ino_list(u64 inum, u64 offset, u64 num_bytes, int extent_type,
-+				u64 root, void *ctx)
- {
- 	struct btrfs_data_container *inodes = ctx;
- 	const size_t c = 3 * sizeof(u64);
-diff --git a/fs/btrfs/backref.h b/fs/btrfs/backref.h
-index ef6bbea3f456..bcbea7baefc5 100644
---- a/fs/btrfs/backref.h
-+++ b/fs/btrfs/backref.h
-@@ -28,7 +28,7 @@
-  * value to immediately stop iteration and possibly signal an error back to
-  * the caller.
-  */
--typedef int (iterate_extent_inodes_t)(u64 inum, u64 offset, u64 num_bytes,
-+typedef int (iterate_extent_inodes_t)(u64 inum, u64 offset, u64 num_bytes, int extent_type,
- 				      u64 root, void *ctx);
- 
- /*
-diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
-index 836725a19661..904051bebe0d 100644
---- a/fs/btrfs/scrub.c
-+++ b/fs/btrfs/scrub.c
-@@ -374,7 +374,7 @@ static noinline_for_stack struct scrub_ctx *scrub_setup_ctx(
- 	return ERR_PTR(-ENOMEM);
- }
- 
--static int scrub_print_warning_inode(u64 inum, u64 offset, u64 num_bytes,
-+static int scrub_print_warning_inode(u64 inum, u64 offset, u64 num_bytes, int extent_type,
- 				     u64 root, void *warn_ctx)
- {
- 	u32 nlink;
-diff --git a/fs/btrfs/send.c b/fs/btrfs/send.c
-index af2e153543a5..77b4b5db11be 100644
---- a/fs/btrfs/send.c
-+++ b/fs/btrfs/send.c
-@@ -1297,6 +1297,9 @@ struct backref_ctx {
- 	u64 backref_owner;
- 	/* The offset of the data backref for the current extent. */
- 	u64 backref_offset;
-+
-+	/* used for extent iteration to check if the type is matched */
-+	int extent_type;
- };
- 
- static int __clone_root_cmp_bsearch(const void *key, const void *elt)
-@@ -1327,8 +1330,8 @@ static int __clone_root_cmp_sort(const void *e1, const void *e2)
-  * Called for every backref that is found for the current extent.
-  * Results are collected in sctx->clone_roots->ino/offset.
-  */
--static int iterate_backrefs(u64 ino, u64 offset, u64 num_bytes, u64 root_id,
--			    void *ctx_)
-+static int iterate_backrefs(u64 ino, u64 offset, u64 num_bytes, int extent_type,
-+			    u64 root_id, void *ctx_)
- {
- 	struct backref_ctx *bctx = ctx_;
- 	struct clone_root *clone_root;
-@@ -1341,6 +1344,10 @@ static int iterate_backrefs(u64 ino, u64 offset, u64 num_bytes, u64 root_id,
- 	if (!clone_root)
- 		return 0;
- 
-+	/* Type is not matched */
-+	if (extent_type != bctx->extent_type)
-+		return 0;
-+
- 	/* This is our own reference, bail out as we can't clone from it. */
- 	if (clone_root->root == bctx->sctx->send_root &&
- 	    ino == bctx->cur_objectid &&
-@@ -1599,6 +1606,7 @@ static int find_extent_clone(struct send_ctx *sctx,
- 	extent_type = btrfs_file_extent_type(eb, fi);
- 	if (extent_type == BTRFS_FILE_EXTENT_INLINE)
- 		return -ENOENT;
-+	backref_ctx.extent_type = extent_type;
- 
- 	disk_byte = btrfs_file_extent_disk_bytenr(eb, fi);
- 	if (disk_byte == 0)
--- 
-2.34.1
-
+cheers
