@@ -2,183 +2,316 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD9AF700A32
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:20:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 63585700A38
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:22:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241460AbjELOUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 10:20:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
+        id S241472AbjELOWh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 10:22:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240862AbjELOUk (ORCPT
+        with ESMTP id S232739AbjELOWg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 10:20:40 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8A42681;
-        Fri, 12 May 2023 07:20:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683901239; x=1715437239;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=QZH4gfC+cJfW1sueDY1bjWs1ku3z29RXWX/9qU5KVvw=;
-  b=ZCPTo04s1bcC8abpwxqctFGbhnb9Y6hmutLAp4z082vdJULlgMdtBkNo
-   SobweWUsdl5FQ4vDagBFv5ceQrOo2qKFRyVFrRYyfQ9BPN7FrIGGyDNBI
-   NtnhvGs0cUsxkbqDTkgkun6A2btJnfIkgiGRB86BLnGsYmvkzrrL5QCKd
-   bIEcnEV1MlSBNWzXW6BnK4eYf5Az3CB4WdsUyXtPMwUaDOj+O1Fc2/v50
-   BZ8TYog8/Zgt+nlk2VtJfIBB6JL3H/Z4qK8bYAfSfmI0xccWPEPcuk+Uv
-   NP2wbImgwUQslMWWo4KoyWM5VuK1qyXUVWzPZfZv1E42aW0c1t9ffTGop
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="340113272"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="340113272"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 07:20:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="733063545"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="733063545"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga001.jf.intel.com with ESMTP; 12 May 2023 07:20:38 -0700
-Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 12 May 2023 07:20:37 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Fri, 12 May 2023 07:20:37 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.168)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Fri, 12 May 2023 07:20:37 -0700
+        Fri, 12 May 2023 10:22:36 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2060e.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e8c::60e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90DE62D7C
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:22:34 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fvHdYpAJkky5LfG0y96PT3oMtrq905e0QagpZZkAhaETR2sk0kD/uwT9bHIyf7hlKNDjyG3SXxiox4Fbbde217TFGpVqT0fPH3WPFrRvSu5FoXcTaWiYZcpB1T7zk2tFU99CaChgp67IVjZk3LFBEMfXVN7/BeEhzYG10Nr7ydzAvtNJYsrAdKAk+bX4wEFaH60Va00ydhoK1PhmyAlGHSBouPbKdeqXFpfmyoUUhydmu7pWGIBuKgrtsDtn1B8P2naGFyAVh7nqUQhjF55toqIjqli7V/cgCiSd1N0eqbCOaSHDt/1T9GU95bah59Lokr/MPNLs9KaN4ew6HfnswA==
+ b=nUwRD8IiD6/e/bFFpS33DjCfN/TWf+mv19f/L6UcWCSH8bytvDjUN+FHUnv4mCGq4ZtmJjgyhQkoBAuu+mQoDJ0GsVPtHlBupxxc26KAuqHxj2p1SAx+JgmKFvv0b33tkWFc2IfDudKbRp3T7z3zxtXydlyJgYTokIRUHsb497iMHbabJb2RXwA/7QAwS1KH6lBkbaQ6SYwq1Iv80bhNEv9YHuzwM13cOA7dM8/8OVYoxQ3iHB0lFfEBsfL9xksIHV5VzJ21RsBZ9Mv1LCWS3UCe5gKMQVqVotW0KaBNInkkbP3ZhQOBU2Se0DJM0EYBtnqY/p+CYzgfdwOBO6GIrg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VuEzK5NWXGXhERQ22UVq8ELy58R6faNZM8dGPLlGPo0=;
- b=Gpci2i6AP+SznR69uQzECRffO6Zt+Y/VwxKeqysFY2VrS+qV4rLPK6EuaQ0FqxqeeY3UPOqCKwNvmZOUV6QFPpZEnep9KKrtvUYofAGtbZhiZHwWUuR364Oumoq3+cBu6CepunCyTXlodhnyuRU+uiXLy2qYRoyh/IuLhN16zZj2rHhan8tPt3BwA2rBJFhaNIjM2st0x8faGNM/oCxtw3oHYmDhoeBOqayeMYpz9SCY/FXwYpWRhA6tsD7kmnEMhHZPfHgbcjO5eY2oMxGJqx2DLNzaV8em/tOQgtYPwDs3ojkFU7PElxhmeu4ZHVK2QG8AF7aqyJDBnzfDG08F8g==
+ bh=Y86MfdbTnIj/0Yuo5yRtRmjlGXea56FdJ/EHja6Jixc=;
+ b=oazRhe2ALBrhXBSyD1TL8TnuNZ/dbStmN3yZNf2xKdpXjtE+n7bD1UZm2lBX9ozVDK0V4LlFzIfia2CnQ6ZHKW8SPianGhAhVKF5j/7Yzaw2A9pJicZobW1G9XNjH9do81/Dl04/6vpeS9i+gBqI62NhjJqp92GZlqmjsWgzgejOTadXJNblpAog8bGwzeD095gTE99nXxshmOOlvKocX0CMNsbCffqqTn92fC/XGu4An2v+isjX9jXIbT7yg0Z1pYAKhZEsafkFqNLuFqqn1Xx48+OTk0iqGa46YNvMsx2LjgJxKJYIew5hVymxAtwnIM6xUFcC01URHwqq6BWUGg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Y86MfdbTnIj/0Yuo5yRtRmjlGXea56FdJ/EHja6Jixc=;
+ b=I2Jc27J1qGkxEH1g7y+a0wVVrEt8PHaVwSEdVF/CqHXCNFpcobSHaw94tW8vojhVd4IAO6HS3Sj4emgVlQYBWJAj5tRQtNB2uIecZd8Acwgk2kmYoFJgewJaDUlJT6ssc/JvYEAUOkww9VysCm7pGjBO3QWtDO3tHTxI74MS/lE=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from PH0PR11MB7471.namprd11.prod.outlook.com (2603:10b6:510:28a::13)
- by PH0PR11MB4917.namprd11.prod.outlook.com (2603:10b6:510:32::16) with
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CH3PR12MB8308.namprd12.prod.outlook.com (2603:10b6:610:131::8)
+ by BL3PR12MB6643.namprd12.prod.outlook.com (2603:10b6:208:38f::17) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.20; Fri, 12 May
- 2023 14:20:36 +0000
-Received: from PH0PR11MB7471.namprd11.prod.outlook.com
- ([fe80::ee76:10c6:9f42:9ed9]) by PH0PR11MB7471.namprd11.prod.outlook.com
- ([fe80::ee76:10c6:9f42:9ed9%4]) with mapi id 15.20.6387.024; Fri, 12 May 2023
- 14:20:36 +0000
-Date:   Fri, 12 May 2023 16:20:15 +0200
-From:   Piotr Raczynski <piotr.raczynski@intel.com>
-To:     "alexis.lothore@bootlin.com" <alexis.lothore@bootlin.com>
-CC:     "andrew@lunn.ch" <andrew@lunn.ch>,
-        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
-        "olteanv@gmail.com" <olteanv@gmail.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
-        "herve.codina@bootlin.com" <herve.codina@bootlin.com>,
-        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
-        "milan.stevanovic@se.com" <milan.stevanovic@se.com>,
-        "jimmy.lalande@se.com" <jimmy.lalande@se.com>,
-        "pascal.eberhard@se.com" <pascal.eberhard@se.com>
-Subject: Re: [PATCH net v3 1/3] net: dsa: rzn1-a5psw: enable management
- frames for CPU port
-Message-ID: <ZF5LH91XDIh9ArfG@nimitz>
-References: <20230512072712.82694-1-alexis.lothore@bootlin.com>
- <20230512072712.82694-2-alexis.lothore@bootlin.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230512072712.82694-2-alexis.lothore@bootlin.com>
-X-ClientProxiedBy: LO4P265CA0161.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2c7::8) To PH0PR11MB7471.namprd11.prod.outlook.com
- (2603:10b6:510:28a::13)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.23; Fri, 12 May
+ 2023 14:22:31 +0000
+Received: from CH3PR12MB8308.namprd12.prod.outlook.com
+ ([fe80::4e4f:3a93:b7bd:489c]) by CH3PR12MB8308.namprd12.prod.outlook.com
+ ([fe80::4e4f:3a93:b7bd:489c%5]) with mapi id 15.20.6387.023; Fri, 12 May 2023
+ 14:22:30 +0000
+Message-ID: <182c4d7b-9e91-c00e-43ab-a2c0bd671828@amd.com>
+Date:   Fri, 12 May 2023 19:50:31 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] cdx: add MSI support for CDX bus
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "maz@kernel.org" <maz@kernel.org>, "jgg@ziepe.ca" <jgg@ziepe.ca>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     "git (AMD-Xilinx)" <git@amd.com>,
+        "Anand, Harpreet" <harpreet.anand@amd.com>,
+        "Jansen Van Vuuren, Pieter" <pieter.jansen-van-vuuren@amd.com>,
+        "Agarwal, Nikhil" <nikhil.agarwal@amd.com>,
+        "Simek, Michal" <michal.simek@amd.com>,
+        "Gangurde, Abhijit" <abhijit.gangurde@amd.com>,
+        "Cascon, Pablo" <pablo.cascon@amd.com>
+References: <20230508140950.12717-1-nipun.gupta@amd.com> <874jom2ash.ffs@tglx>
+ <CH3PR12MB83081FC5F89386EA9C54B4A7E8769@CH3PR12MB8308.namprd12.prod.outlook.com>
+ <87bkityxk3.ffs@tglx> <6dd142f8-5a8e-b62c-c629-a3a5859e73b3@amd.com>
+ <87ednnes6o.ffs@tglx>
+From:   Nipun Gupta <nipun.gupta@amd.com>
+In-Reply-To: <87ednnes6o.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0146.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:c8::15) To CH3PR12MB8308.namprd12.prod.outlook.com
+ (2603:10b6:610:131::8)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR11MB7471:EE_|PH0PR11MB4917:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8f046833-2c82-4e9a-c9ee-08db52f40d9b
+X-MS-TrafficTypeDiagnostic: CH3PR12MB8308:EE_|BL3PR12MB6643:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1c9ce4c4-2214-4ec9-be6d-08db52f45147
+X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: zkkw3AeblKn0u+LykrgiL3KiWVTYVoUFs/o/kon7vunhtN5NAcm/f0MF6W0meFaS0MYbgHZj7SLBTFDbpkVmVTrPxLTXMbGDHsli0ZY7ZfQqvV4glsIP70uRzRa5uuPWPwqRs68TY5oViLEX8eEJSxSx7g99KNarjlNgr5u6de+4uRBumIz9Ae8EtGAA1HSjDaNjgst+uM4AT72L0EZahoPJVaVSzwKEgw4QeRIh5ktMKeB7MCWb7W1yBfbaNfQUlP5/75WgE4msuPcvK0XYF7DyCbhO82eiT5qUo+XZn36/34Jqh4T4cHZ8fr28W02IPUwgzjfpIRwguC0LtLMYEtlBlzT1MP2vGwIhgrSv0AZRkEJ3FG7FMXwQevJmB1+a1Vklf4AX6Hfhwhi0LEM/FBic7Dg3APy17B1EZk6I9A/awNvQOOv5tUgOZcIyawOV0z7U/s9wX5zmjTfLu6vHyq40jQfn0jTz/HKmuH5CYfoyKu1Hl+WziwJvKeUI1MKZxgqMKYNoBC9HOfMJS0NTOLEtBgWPqpq3BWUcPEyeDB96Tb0yMWBXwOlqAi31RCQb
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB7471.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(376002)(366004)(136003)(346002)(396003)(451199021)(66574015)(186003)(2906002)(83380400001)(4744005)(33716001)(38100700002)(86362001)(82960400001)(8936002)(8676002)(6486002)(316002)(6666004)(41300700001)(44832011)(7416002)(5660300002)(478600001)(54906003)(66556008)(66946007)(66476007)(4326008)(6916009)(6512007)(9686003)(26005)(6506007);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: gP+JJumSY1FoKgsLW0iDZoN2a7CCyj3Z1cScGTNpASLrxYao7E85ECZWx/nIC25R/wmuNDcHXr+gYf9UJ2Q7T0O6YdpnfIChoKJsPYoaogr49kjqv7kqCT3hqI1EtZ44yzG0eV1W9uqh4S+JRit0XStj1ivn7KJhwRSQ7S/bFefmUvWzlQk0xlSDCBu1m6dbY7Mm3yeYWHjlAuONGPhcSlROECHhVm7V75F59Axy8CtJm8s4jYk+ZSpAAtykcpCzio4CyInOcTNdsJX5JNn9FluEzpd/rAog1wcqBAz+/mo5pF6Qieo+6cy2TT14ihRGbQGg09UwXb+8vWNhHsMey5wBkzrozGgljqnlmD5m3fcPUkmCpVTaOX5cOVFpVd06gbm2amqSTz9s0/RSiXnmShNaCc+SJPbXQ5HSWIU/6ZGX1OXfOGklTq87KvZzN+5ep/CdRjwQCKnSXV2tWH3hnvWKZOAAdI1CRWTmk4MXq9aV/B+/s1MXOVG9Zmo8RMqTB1hu403Y01yZzY2okiYciSJ2KhJvDL4RMfrBLP4PNZ8xbfHJCChLGkni2K9ZSu22FyMJAPDEJ9OuKcdypvT/gwZbn8dU8ycFFtD0RwU+uPgcNz5LPcpi2RXEjee0x0xE0leW1Ni8/W3p8htNumuSgw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8308.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(396003)(376002)(136003)(366004)(451199021)(110136005)(54906003)(83380400001)(478600001)(66556008)(66946007)(66476007)(2616005)(316002)(2906002)(4326008)(31686004)(41300700001)(8936002)(8676002)(5660300002)(44832011)(26005)(186003)(6512007)(6506007)(53546011)(6486002)(66899021)(38100700002)(31696002)(86362001)(36756003)(45980500001)(43740500002);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?+4bkuwDWUqrRziSjqBM2PSFvNWDTWONBY11aPhBfpIMG4umBcWaNa9L3Fe?=
- =?iso-8859-1?Q?8mxofxBpA3udk2Pb4FwbxfQg3F0tPR7OgGkXbFabW6RFPMMExt5tg6xdnH?=
- =?iso-8859-1?Q?Og9LKPkJhEjbGgvh5FECPBXBWd8jQiM3+PVjN/snVNvpIvX8OfPVbdBCOv?=
- =?iso-8859-1?Q?fmt9M0pSpDsnf14DflzcZi+VGEw7X1jJ5eqB6ddp+cSK/q7i3ffdnxvlQp?=
- =?iso-8859-1?Q?Fxu9ZxqBwDGZw2H5qJeUcUiV8looihjvW8rYdq4wXKGQZxxHOGYZqaNw8Z?=
- =?iso-8859-1?Q?jKavx3i1m7ZDMZCfVj9GkIF5kq0Fj777rrejlrefG8elsSQM9iuMZv8DwH?=
- =?iso-8859-1?Q?97Wbkj+Xp5cPoUE7E39cNAixnCnQfCg/18Q8nHU9dakaml3uDwAeeaj2mB?=
- =?iso-8859-1?Q?dFmwbnJV5GO3LYPsHOPG+rRE4vU5LIDnpx564OyDuvLT9aSYaq50/02kgh?=
- =?iso-8859-1?Q?OQxYlD0d11Zy9k7ThoqN8k89GfKf6jDPPXyywF0D8d8s88XkEIkL4FgIp8?=
- =?iso-8859-1?Q?9PBM+Doa3RCc3tuiaK0+vwLfVi7Csqj/yX9DxeKgU7dt+l0w8d4oXlcjin?=
- =?iso-8859-1?Q?d+Gr4bY9YXmlNiyt/ay6srjNbqSvOvWMqCd8xvuUa2kG9yoOAztBiqt7NW?=
- =?iso-8859-1?Q?d9d6dggnrvEoIZEiKwwAnuh//e94liTwQqb/qQpB7c8/MDM9nzLwc3P6zi?=
- =?iso-8859-1?Q?f07kXLCS1m0dF/aOPIYhmwm5RST1tR5IwhSZ/BQ+WgyWLJ6Ui3LEON48AZ?=
- =?iso-8859-1?Q?rQMJ/wCTxrFm8qv1O2/XbC7GjSoFZZGfcn8lXtviTnCwROLj+eFj3i9NXa?=
- =?iso-8859-1?Q?30UfjehEl8H/qgXyXD4rzjMR10N1AeSqF+VKc0WE9spLULNvEHtF7Q41EY?=
- =?iso-8859-1?Q?8MhHboipJCwkw2nAlqgycdz7IvmixPalvHWmAUIyWlVvP6DdwFZWUoasYt?=
- =?iso-8859-1?Q?x+zTLmeYnClAuOQ7ND2qhLQ5axdmIOWJhgel37uHx49A3ufwmpcD/y9Lyy?=
- =?iso-8859-1?Q?kNSxNrv6CcQfiN3BNkxOFLzPiFti+PL99DejxjpA/TnCKBG1Gu/S/UulhQ?=
- =?iso-8859-1?Q?E7HyrE258NC9/Iu2vCbb5tm/vVAZ0mXCD7wDSkyVooEnLWBY3KR6SCaSCw?=
- =?iso-8859-1?Q?A8KBGAaXfnhZDwT7t5rQnhM1CG2bDwbZ/4HfhaK/kwJPivoRZRDKfDSDr+?=
- =?iso-8859-1?Q?xFoFJCg+Dux8Nl1/sxGAcf5jJJbR38RmcgnM+pBXGP5qEW1R9UNGePFQGR?=
- =?iso-8859-1?Q?O1lQP+KaCiIpDNgvmxFhT5aHv1mBaeEEXgzY8NWATUTn8NkfhUFWDGuOyY?=
- =?iso-8859-1?Q?Ggb1MMfaTe2HmY7/zkB1ylzl04tFpIr1cuWlzxd4figGn6xejb0oeKMIpe?=
- =?iso-8859-1?Q?9kZDQX1VtoE/b5rwGn/cqIGEjo25fzEPyPWXGFC0ADe9lnQd+605zGejZA?=
- =?iso-8859-1?Q?d9vnPw3HrqUMswqpQ02jnwMqDGTSyZBCzLTpLCknn1bDccoVfrlAGIvfUn?=
- =?iso-8859-1?Q?hnFqF9Tms+i94eK9+8gkBTmgihz82a6OMVZJUa/39X4JJ+EMHJqqyGJMxb?=
- =?iso-8859-1?Q?AFPj4UHk3biidzJ58GjCrwk7Mqso5lupaqxKoNiqMvtj3Oir+s1FKkBNid?=
- =?iso-8859-1?Q?6r6O61QXNv9l89UKnwURlJhD+JvwZOqfR7rHMZIBn94UDfdC6sZjKZEg?=
- =?iso-8859-1?Q?=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8f046833-2c82-4e9a-c9ee-08db52f40d9b
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB7471.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?VU9raGJRVy9vRGJtMmQ2ZjBjM2dHU1IvcU9lSFh5dHRnZXNhNFFOZDRBUVBy?=
+ =?utf-8?B?dUxxMUZQWUp2TU1IZnBlWjh2RmtaUHZGbGdxMHZiNCtYY0RsK3I4ZENXbHdv?=
+ =?utf-8?B?ek03NU5KdWg2VkFBMmZRNE1YVEM0SERnUDFpT3pObTVOd0luWGcwaEZWS3RV?=
+ =?utf-8?B?dGZYbjB2aWs4UThDdGxuV1FMdnMxN0JLbUJQdENVS1Q2S3l6a0o3UWd3cWNi?=
+ =?utf-8?B?WkRmL0ZROGtHZi9hdG9KQzk4RHhSeGFWalVTTW52TjJBNGxIdEdPOFdpRW95?=
+ =?utf-8?B?RC9mdHJsVlEreWh3TDJscStoQVdTSWpRc01xMFFVV0p4RjlhOEhHRitRZnhN?=
+ =?utf-8?B?WXMrNTkySktMR1BWN1NydU1jSUwwWGo5NnBuSDVSL3pPTVZBOXVFQTlWN1BT?=
+ =?utf-8?B?aFl4M3U2SDZOaTk5MmhlS2Izck1uRFdsUDFIR2xWVGpsb25nd2FEclR4ZjBP?=
+ =?utf-8?B?MUlFbCtKclk1RTVQYjVMYzRucVRaZ1FMczg1WGJjT3lmeGRVMlBEQVpDZ1hB?=
+ =?utf-8?B?L0ZTYlU1ZXpiV2wyWjZIemVzQ0dJZXVieHpzTks3dFBDVEpraW4wbjRQVWM4?=
+ =?utf-8?B?UDQxUlVsYnJLMFBUdHljZFNnVXFIZ2NHakpXZFJ2QWNuOW15TEkxN3FQeUNH?=
+ =?utf-8?B?RHBPdXQ0TVJ6WUwxMWlPVjZCSEo0SFQ5b01ZMGtRbDU2VXhvcG5JS2V6U0Yy?=
+ =?utf-8?B?azU2emt6WFpHTUtPZzNhQjNYTkttbENzL0NHRzJ6MHlaakRFYXNUY21OYkxV?=
+ =?utf-8?B?WG0rSjNpdldwWDlNOVpnV0NYSk1pRk1KWXFOVFMwZmdYZ0xUdWhGWkxqNlVD?=
+ =?utf-8?B?dDF2dXVyVGJHaUYzM0lyeS9PSnhLSVFReDMyZmhWMUM5ajhlUjdxSGxkVFh6?=
+ =?utf-8?B?VVZjTStBbkdFY05ZTnBJZU52ZkI2K3djRW0yeVgvODdJSjJlbjE3V0EzZTJq?=
+ =?utf-8?B?K2VOMzcvSXZJbjIvb3FKVDFvNkVObGQ4WVZjWkdoSmVKaytwdmdHSFVJWE1j?=
+ =?utf-8?B?M2hVY0RyUE9KVStTSFV1Y2U1dDAycG1pM1RlZGZDbXBiZS9lTnBseWxja2Zn?=
+ =?utf-8?B?TDFQNTRBVkF4TEg4c09qb1dnd2p6R3NwWnVwM29tZ3BQeW1SMW9HNTNtNFhC?=
+ =?utf-8?B?eVdnTlk2ME9scUNzYThvNTN1RUlxMUM0YytUdkhVS3NlSHR0THVEYTQwM3JT?=
+ =?utf-8?B?N01JcDZ6eDlLWGwwUzVXVUNBOTRWRStaaGxzZ1A1RVU2TGNZcCtkUHFIVHBy?=
+ =?utf-8?B?TGo5ZlkyTDYzc01VazQwb2o2enhNaWtXSHZCSng2V0lpaWZvNlBzclpVbmxn?=
+ =?utf-8?B?anZMNW5aYisyRngzV1M3Wkdwcm5rOXgreGIxUnFBbzlQUjlEV29iMmROcWEv?=
+ =?utf-8?B?VXNrY2U2RHZzb1gxYjZ5Slc1STBtdFhLMGRtNUU3SkdOVzcxcmVmeFU0WjlQ?=
+ =?utf-8?B?RlR3MlllalNNYy80VWIrQlRkQ09xeW5LTmZzZ1FyRjNFREpoVnY2N2JYWTFQ?=
+ =?utf-8?B?bW5hL3RLT3E5dlZPUUhnRlVzZlNpOWZIbkFDQlJRRTlWNkRRT3pyemJmczVC?=
+ =?utf-8?B?YWxNWER6VTNLSXUyVzJKUzVyeWxDdm9Qa2dJOEFuWkdTTVFVdmhnNVRhKzBx?=
+ =?utf-8?B?K09Fa3dnamRUL1FaMnp3TXBFUzlYelc4TVlORjRMRG96WDAxL1VFTTluYUQ3?=
+ =?utf-8?B?WnVpdEVQMEF6dzJlNHpmdjVjWEZlaXZUeFZWMThreXo5aHNTa01UeW0rSG1S?=
+ =?utf-8?B?WEwzcmRDcUg3eFg4RmZTYnNDZzcwTWtieGNSUkYxbHNzQ3RScUtpSkkvaEty?=
+ =?utf-8?B?aHFYQUJyOXc1Q1NMNHZ6N0tRVjVWMVdDOTlLdStNTnpibVNhSTVBTERhK1pq?=
+ =?utf-8?B?VXBkUlFRYjh6WXhmTkxCSFdnRXYzc2p2YjhmYS8ra09wUm5pU3RXSzFUQUp4?=
+ =?utf-8?B?UDFWNUIzb3lYa3lla3RQZzNiMU9iZjVGOHFCTGxveWlTREtScUErbFRmOE4z?=
+ =?utf-8?B?b1lpTEVwK3pqLzlmY1krTjFwOUc5dUg2blU5bnpMakN3SGxscVVzQWFRWVhG?=
+ =?utf-8?B?S1RNYUtwdFVQNDVFYitBMVArQ1hhRnBhL3U4elpNdnpMWmNaTjZZRHlZYk9t?=
+ =?utf-8?Q?hVGp7CxlA7dcuRn/puZbaIYaQ?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1c9ce4c4-2214-4ec9-be6d-08db52f45147
+X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8308.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 14:20:35.9881
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 14:22:29.6404
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: zR7fbpAAhOJc9STJfSNNJlBB6bjJz5AD860EjY04aXtM9P/jknHjrkXj7ILIV7VY/o01L2F8883Tz0J71hCStlm3L8KlsktlZnYFUJGJBdo=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4917
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: O7Kn+CJCFvJLZt+cLvQ4ceu9nx0Z9yrE6lhtfKYDQ94/PfUL9eFgLbMng8pg52bi
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6643
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 09:27:10AM +0200, alexis.lothore@bootlin.com wrote:
-> From: Clément Léger <clement.leger@bootlin.com>
+
+
+On 5/11/2023 3:59 AM, Thomas Gleixner wrote:
 > 
-> Currently, management frame were discarded before reaching the CPU port due
-> to a misconfiguration of the MGMT_CONFIG register. Enable them by setting
-> the correct value in this register in order to correctly receive management
-> frame and handle STP.
+> Nipun!
 > 
-> Fixes: 888cdb892b61 ("net: dsa: rzn1-a5psw: add Renesas RZ/N1 advanced 5 port switch driver")
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-> Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
-> ---
-> Changes since v2:
-> - move A5PSW_MGMT_CFG_ENABLE definition in this commit
-> ---
-Looks OK, thanks.
-Reviewed-by: Piotr Raczynski <piotr.raczynski@intel.com>
+> On Wed, May 10 2023 at 19:34, Nipun Gupta wrote:
+>> On 5/10/2023 3:31 AM, Thomas Gleixner wrote:
+>>> I'm not insisting on that, but you could at least have had the courtesy
+>>> of responding to my review reply and explain to me why you want to solve
+>>> it differently and why my suggestion is not the right solution.
+>>>
+>>> Alternatively you could have added that information in the changelog or
+>>> cover letter.
+>>>
+>>> So in summary you ignored _all_ review comments I made, went off and did
+>>> something different and provided a slightly different useless changelog
+>>> with the extra add on of a broken Signed-off-by chain.
+>>>
+>>> Feel free to ignore my reviews and the documentation which we put out
+>>> there to make collaboration feasible for both sides, but please don't be
+>>> upset when I ignore you and your patches in return.
+>>
+>> Sincere apology for not responding to the earlier comments. Intention
+>> was never to ignore the review comments. Appreciate your vast changes
+>> regarding the MSI, and the patch series you shared took time to
+>> understand (provided other things as well), and it was quite late to
+>> reply. I understand that even in this case atleast I should have added
+>> this as part of the cover-letter.
+> 
+> Fair enough. All settled.
+> 
+>> IMHO, use-case for MSI in CDX subsystem is a bit different from per
+>> device MSI domain. Here we are trying to create a domain per CDX
+>> controller which is attached to a MSI controller, and all devices on a
+>> particular CDX controller will have same mechanism of write MSI
+>> message.
+> 
+> That was exactly the same assumption which PCI/MSI and other MSI
+> implementations made. It turned out to be the wrong abstraction.
+> 
+> CDX is not any different than PCI. The actual "interrupt chip" is not
+> part of the bus, it's part of the device and pretending that it is a bus
+> specific thing is just running in to the same cul-de-sac sooner than
+> later.
+
+I understand your viewpoint, but would state that CDX bus is somewhat 
+different than PCI in the sense that firmware is a controller for
+all the devices and their configuration. CDX bus controller sends all 
+the write_msi_msg commands to firmware running on RPU over the RPmsg and 
+it is the firmware which interfaces with actual devices to pass this 
+information to devices in a way agreed between firmware and device. The 
+only way to pass MSI information to device is via firmware and CDX bus 
+controller is only entity which can communicate with the firmware for this.
+
+> 
+>> Also, the current CDX controller that we have added has a different
+>> mechanism for MSI prepare (it gets requester ID from firmware).
+> 
+> That's not an argument, that's just an implementation detail.
+> 
+>> In your opinion is there any advantage in moving to a per device domain
+>> for CDX devices? We can definitely rethink the implementation of MSI in
+>> CDX subsystem.
+> 
+> See above.
+> 
+> While talking about implementation and design. I actually got curious
+> and looked at CDX because I was amazed about the gazillion indirections
+> in that msi_write_msg() callback.
+> 
+> So this ends up doing:
+> 
+>     cdx->ops->dev_configure(cdx, ...)
+>       cdx_configure_device()
+>         cdx_mcdi_write_msi()
+>           cdx_mcdi_rpc_async()
+>             kmalloc()                            <- FAIL #1
+>             cdx_mcdi_rpc_async_internal()
+>                queue_work()                      <- FAIL #2
+> 
+> #1) That kmalloc() uses GFP_ATOMIC, but this is invoked deep in the guts
+>      of interrupt handling with locks held and interrupts disabled.
+> 
+>      Aside of the fact that this breaks on PREEMPT_RT, such allocations
+>      are generally frowned upon. As a consequence the kref_put()s in the
+>      error paths of cdx_mcdi_rpc_async_internal() will blow up on RT
+>      too.
+> 
+>      I know that Xilinx stated publicly that they don't support RT, but
+>      RT is not that far out to be supported in mainline and aside of that
+>      I know for sure that quite a lot of Xilinx customers use PREEMPT_RT
+>      nevertheless.
+> 
+> #2) That's actually the worse part of it and completely broken versus
+>      device setup
+> 
+>      probe()
+>        cdx_msi_domain_alloc_irqs()
+>        ...
+>        request_irq() {
+>          ...
+>          irq_activate()
+>            irq_chip_write_msi_msg()
+>              ...
+>              queue_work()
+>            ...
+>        }
+> 
+>        enable_irq_in_device()
+> 
+>          <- device raises interrupt and eventually uses an uninitialized
+>             MSI message because the scheduled work has not yet completed.
+> 
+>      That's going to be a nightmare to debug and it's going to happen
+>      once in a blue moon out in the field.
+> 
+> The interrupt subsystem already can handle update mechanisms which
+> require sleepable context:
+> 
+>     irq_bus_lock() and irq_bus_sync_unlock() irqchip callbacks
+> 
+> They were initially implemented to deal with interrupt chips which are
+> configured via I2C, SPI etc.
+> 
+> How does that work?
+> 
+> On entry to interrupt management functions the sequence is:
+> 
+>      if (desc->irq_data.chip->irq_bus_lock)
+>         desc->irq_data.chip->irq_bus_lock(...)
+>      raw_spin_lock_irq(&desc->lock);
+> 
+> and on exit:
+> 
+>      raw_spin_unlock_irq(&desc->lock);
+>      if (desc->irq_data.chip->irq_bus_sync_unlock)
+>         desc->irq_data.chip->irq_bus_sync_unlock(...)
+> 
+> irq_bus_lock() usually just acquires a mutex.
+> 
+> The other irqchip callbacks just cache the relevant information, but do
+> not execute the bus transaction because that is not possible with
+> desc->lock held.
+> 
+> In the irq_bus_sync_unlock() they execute the bus transaction with the
+> cached information before dropping the mutex.
+> 
+> So you can solve #1 and #2 with that. Your msi_write_msg() callback will
+> just save the message and set some internal flag that it needs to be
+> written out in the irq_bus_sync_unlock() callback.
+> 
+> See?
+> 
+> IIRC, there is a gap vs. interrupt affinity setting from user space,
+> which is irrelevant for I2C, SPI etc. configured interrupt chips as they
+> raise interrupt via an SoC interrupt pin and that's the entity which
+> does the affinity management w/o requiring I2C/SPI. IIRC I posted a
+> patch snippet to that effect in one of those lengthy PCI/MSI/IMS threads
+> because that is also required for MSI storage which happens to be in
+> queue memory and needs to be synchronized via some command channel. But
+> I can't be bothered to search for it as it's a no-brainer to fix that
+> up.
+
+Thanks for this analysis and pointing the hidden crucial issues with the 
+implementation. These needs to be fixed.
+
+As per your suggestion, we can add Firmware interaction code in the 
+irq_bus_sync_xx APIs. Another option is to change the 
+cdx_mcdi_rpc_async() API to atomic synchronous API. We are evaluating 
+both the solutions and will update the implementation accordingly.
+
+Thanks,
+Nipun
+
+> 
+> Thanks,
+> 
+>          tglx
