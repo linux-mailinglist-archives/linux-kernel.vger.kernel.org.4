@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF10F700F60
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 21:40:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 512A9700F5F
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 21:40:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239194AbjELTkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 15:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
+        id S239069AbjELTkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 15:40:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238859AbjELTkB (ORCPT
+        with ESMTP id S230443AbjELTkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 15:40:01 -0400
+        Fri, 12 May 2023 15:40:00 -0400
 Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E8E2108;
-        Fri, 12 May 2023 12:40:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D911FE4;
+        Fri, 12 May 2023 12:39:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683920400; x=1715456400;
+  t=1683920399; x=1715456399;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=oLlJPch9Ytj6zBQioqD0gTcP99Inly/ST53TUTG0mAA=;
-  b=iCixv7495tlWeVsodeh9ynI0yBr8UmBX5xeIRq294TlXxFMiOf4yUzTS
-   gME9gsSS9vyESbmwsMbmGY5d/Y6/UHwp7Azwxr1AD0B8k0Ya5HzFlJFWX
-   KbQGVda+Wa9cJB8O027W3QiYF58D5PINYHUtoer2gV2Wc8HP/aNnAFL26
-   4uyu1TdtVjZ9OOs4EhOw1yFi2uoY+nsBS4pQkHc/9x+CBTEOVKSl3IGWs
-   0mE8Vo/22YipzFCzaw1Qe56k3ZvekM8Ck1/kmCDjgbc/0+vn7zZFwBIBF
-   IC7yUjwQ/HCJFRhDWAVrniEyWy9NDB8TrkLiBhHJbBlFNwEApb5SvuMIF
+  bh=oYw5r8hR87hJDnq03J6dMbdqVbJIN5U3WktNqH4vWlA=;
+  b=i/Un6Rk5jGdHoyRfaVe+cvCzGQfDQ+TfSggQT3pU19uAEQMf1aS19PAt
+   GmEV9KI2moY9pDW37yYnjndmD6Hbzo7B0d4nZVd5zsTgqFAn3lQwNb3TX
+   NH6atdk6LydjEw1IYthhk5FHvY50rpJvzIG7gKcAvbGsKTev7N7wedUd+
+   vzcrKHjcJHZXmZiEG9B5PWLMBt+CIumduddJKq01G9OZEZAMfsVCCBDOg
+   ijjUK0PLQ5+NhKu+n0c9Jg6gws0gekgf1rcFnaxyQAcya4O3Oz9bVN1k6
+   TseOjxD4G3uKlZ2ecH+wdoLSNPlpKOGNKCbNMPMEkEaxHO+SGLJHZYIwg
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="335394077"
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="335394073"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="335394077"
+   d="scan'208";a="335394073"
 Received: from orsmga007.jf.intel.com ([10.7.209.58])
   by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 12:39:58 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="694351036"
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="694351039"
 X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="694351036"
+   d="scan'208";a="694351039"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
   by orsmga007.jf.intel.com with ESMTP; 12 May 2023 12:39:55 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1pxYcM-00054a-2V;
+        id 1pxYcM-00054W-2Q;
         Fri, 12 May 2023 19:39:54 +0000
-Date:   Sat, 13 May 2023 03:39:09 +0800
+Date:   Sat, 13 May 2023 03:39:10 +0800
 From:   kernel test robot <lkp@intel.com>
 To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
         Andy Gross <agross@kernel.org>,
@@ -53,13 +53,13 @@ To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
         Krzysztof Kozlowski <krzk@kernel.org>,
         Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
         Conor Dooley <conor+dt@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+Cc:     oe-kbuild-all@lists.linux.dev,
         Komal Bajaj <quic_kbajaj@quicinc.com>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
 Subject: Re: [PATCH v3 06/10] soc: qcom: Add LLCC support for multi channel
  DDR
-Message-ID: <202305130303.wwdZb5hy-lkp@intel.com>
+Message-ID: <202305130308.9zOC4OZC-lkp@intel.com>
 References: <20230512122134.24339-7-quic_kbajaj@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -90,35 +90,35 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Komal-Bajaj/nvmem-qfprom-
 base:   linus/master
 patch link:    https://lore.kernel.org/r/20230512122134.24339-7-quic_kbajaj%40quicinc.com
 patch subject: [PATCH v3 06/10] soc: qcom: Add LLCC support for multi channel DDR
-config: riscv-randconfig-r042-20230509 (https://download.01.org/0day-ci/archive/20230513/202305130303.wwdZb5hy-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+config: nios2-buildonly-randconfig-r001-20230509 (https://download.01.org/0day-ci/archive/20230513/202305130308.9zOC4OZC-lkp@intel.com/config)
+compiler: nios2-linux-gcc (GCC) 12.1.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # install riscv cross compiling tool for clang build
-        # apt-get install binutils-riscv64-linux-gnu
         # https://github.com/intel-lab-lkp/linux/commit/52808ee1c4720767ab330b371d356ffbd8fe7235
         git remote add linux-review https://github.com/intel-lab-lkp/linux
         git fetch --no-tags linux-review Komal-Bajaj/nvmem-qfprom-Add-support-for-secure-reading/20230512-202430
         git checkout 52808ee1c4720767ab330b371d356ffbd8fe7235
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/soc/qcom/
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=nios2 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/soc/qcom/
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305130303.wwdZb5hy-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305130308.9zOC4OZC-lkp@intel.com/
 
 All errors (new ones prefixed by >>):
 
->> drivers/soc/qcom/llcc-qcom.c:951:8: error: call to undeclared function 'nvmem_cell_read_u8'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           ret = nvmem_cell_read_u8(&pdev->dev, "multi_chan_ddr", cfg_index);
-                 ^
-   1 error generated.
+   drivers/soc/qcom/llcc-qcom.c: In function 'qcom_llcc_get_cfg_index':
+>> drivers/soc/qcom/llcc-qcom.c:951:15: error: implicit declaration of function 'nvmem_cell_read_u8'; did you mean 'nvmem_cell_read_u64'? [-Werror=implicit-function-declaration]
+     951 |         ret = nvmem_cell_read_u8(&pdev->dev, "multi_chan_ddr", cfg_index);
+         |               ^~~~~~~~~~~~~~~~~~
+         |               nvmem_cell_read_u64
+   cc1: some warnings being treated as errors
 
 
-vim +/nvmem_cell_read_u8 +951 drivers/soc/qcom/llcc-qcom.c
+vim +951 drivers/soc/qcom/llcc-qcom.c
 
    946	
    947	static int qcom_llcc_get_cfg_index(struct platform_device *pdev, u8 *cfg_index)
