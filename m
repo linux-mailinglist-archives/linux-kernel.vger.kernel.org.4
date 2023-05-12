@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53584700489
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 11:59:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 41ECD70048C
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 11:59:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240730AbjELJ7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 05:59:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53508 "EHLO
+        id S240736AbjELJ7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 05:59:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240653AbjELJ7C (ORCPT
+        with ESMTP id S240684AbjELJ7F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 05:59:02 -0400
+        Fri, 12 May 2023 05:59:05 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D00551208E;
-        Fri, 12 May 2023 02:58:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3A5AB11B76;
+        Fri, 12 May 2023 02:58:36 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 182EC16A3;
-        Fri, 12 May 2023 02:59:18 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3AE9B1063;
+        Fri, 12 May 2023 02:59:21 -0700 (PDT)
 Received: from e123648.arm.com (unknown [10.57.22.28])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CF6D93F5A1;
-        Fri, 12 May 2023 02:58:30 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id CA13D3F5A1;
+        Fri, 12 May 2023 02:58:33 -0700 (PDT)
 From:   Lukasz Luba <lukasz.luba@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         rafael@kernel.org
@@ -29,9 +29,9 @@ Cc:     lukasz.luba@arm.com, dietmar.eggemann@arm.com, rui.zhang@intel.com,
         daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
         len.brown@intel.com, pavel@ucw.cz, Pierre.Gondois@arm.com,
         ionela.voinescu@arm.com, rostedt@goodmis.org, mhiramat@kernel.org
-Subject: [PATCH v2 12/17] PM: EM: Add argument to get_cost() for runtime modification
-Date:   Fri, 12 May 2023 10:57:38 +0100
-Message-Id: <20230512095743.3393563-13-lukasz.luba@arm.com>
+Subject: [PATCH v2 13/17] PM: EM: Refactor struct em_perf_domain and add default_table
+Date:   Fri, 12 May 2023 10:57:39 +0100
+Message-Id: <20230512095743.3393563-14-lukasz.luba@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230512095743.3393563-1-lukasz.luba@arm.com>
 References: <20230512095743.3393563-1-lukasz.luba@arm.com>
@@ -46,107 +46,569 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Energy Model (EM) supports runtime modifications. Let also the
-artificial EM use this new feature and allow to update the 'cost' values
-at runtime. When the artificial EM is used there is a need to provide
-two callbacks: get_cost() and update_power(), not only the last one.
+The Energy Model support runtime modifications. Refactor old
+implementation which accessed struct em_perf_state and introduce
+em_perf_domain::default_table to clean up the design. This new field
+is better aligned with em_perf_domain::runtime_table and helps to
+distinguish them better.
 
-Update also CPPC driver code, since the new argument is needed there
-to compile properly and register EM.
+Update all drivers or frameworks which used the old field:
+em_perf_domain::table and now should use em_perf_domain::default_table.
 
 Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 ---
- drivers/cpufreq/cppc_cpufreq.c | 2 +-
- include/linux/energy_model.h   | 7 ++++++-
- kernel/power/energy_model.c    | 9 +++++----
- 3 files changed, 12 insertions(+), 6 deletions(-)
+ drivers/powercap/dtpm_cpu.c       | 27 ++++++++++++++++++--------
+ drivers/powercap/dtpm_devfreq.c   | 23 +++++++++++++++-------
+ drivers/thermal/cpufreq_cooling.c | 23 ++++++++++++++--------
+ drivers/thermal/devfreq_cooling.c | 23 ++++++++++++++++------
+ include/linux/energy_model.h      |  4 ++--
+ kernel/power/energy_model.c       | 32 ++++++++++++++++++++++---------
+ 6 files changed, 92 insertions(+), 40 deletions(-)
 
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index 022e3555407c..f5353c10552b 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -574,7 +574,7 @@ static int cppc_get_cpu_power(struct device *cpu_dev,
+diff --git a/drivers/powercap/dtpm_cpu.c b/drivers/powercap/dtpm_cpu.c
+index 2ff7717530bf..743a0ac8ecdf 100644
+--- a/drivers/powercap/dtpm_cpu.c
++++ b/drivers/powercap/dtpm_cpu.c
+@@ -43,6 +43,7 @@ static u64 set_pd_power_limit(struct dtpm *dtpm, u64 power_limit)
+ {
+ 	struct dtpm_cpu *dtpm_cpu = to_dtpm_cpu(dtpm);
+ 	struct em_perf_domain *pd = em_cpu_get(dtpm_cpu->cpu);
++	struct em_perf_state *table;
+ 	struct cpumask cpus;
+ 	unsigned long freq;
+ 	u64 power;
+@@ -51,19 +52,21 @@ static u64 set_pd_power_limit(struct dtpm *dtpm, u64 power_limit)
+ 	cpumask_and(&cpus, cpu_online_mask, to_cpumask(pd->cpus));
+ 	nr_cpus = cpumask_weight(&cpus);
+ 
++	table = pd->default_table->state;
++
+ 	for (i = 0; i < pd->nr_perf_states; i++) {
+ 
+-		power = pd->table[i].power * nr_cpus;
++		power = table[i].power * nr_cpus;
+ 
+ 		if (power > power_limit)
+ 			break;
+ 	}
+ 
+-	freq = pd->table[i - 1].frequency;
++	freq = table[i - 1].frequency;
+ 
+ 	freq_qos_update_request(&dtpm_cpu->qos_req, freq);
+ 
+-	power_limit = pd->table[i - 1].power * nr_cpus;
++	power_limit = table[i - 1].power * nr_cpus;
+ 
+ 	return power_limit;
+ }
+@@ -88,12 +91,14 @@ static u64 scale_pd_power_uw(struct cpumask *pd_mask, u64 power)
+ static u64 get_pd_power_uw(struct dtpm *dtpm)
+ {
+ 	struct dtpm_cpu *dtpm_cpu = to_dtpm_cpu(dtpm);
++	struct em_perf_state *table;
+ 	struct em_perf_domain *pd;
+ 	struct cpumask *pd_mask;
+ 	unsigned long freq;
+ 	int i;
+ 
+ 	pd = em_cpu_get(dtpm_cpu->cpu);
++	table = pd->default_table->state;
+ 
+ 	pd_mask = em_span_cpus(pd);
+ 
+@@ -101,10 +106,10 @@ static u64 get_pd_power_uw(struct dtpm *dtpm)
+ 
+ 	for (i = 0; i < pd->nr_perf_states; i++) {
+ 
+-		if (pd->table[i].frequency < freq)
++		if (table[i].frequency < freq)
+ 			continue;
+ 
+-		return scale_pd_power_uw(pd_mask, pd->table[i].power *
++		return scale_pd_power_uw(pd_mask, table[i].power *
+ 					 MICROWATT_PER_MILLIWATT);
+ 	}
+ 
+@@ -115,17 +120,20 @@ static int update_pd_power_uw(struct dtpm *dtpm)
+ {
+ 	struct dtpm_cpu *dtpm_cpu = to_dtpm_cpu(dtpm);
+ 	struct em_perf_domain *em = em_cpu_get(dtpm_cpu->cpu);
++	struct em_perf_state *table;
+ 	struct cpumask cpus;
+ 	int nr_cpus;
+ 
+ 	cpumask_and(&cpus, cpu_online_mask, to_cpumask(em->cpus));
+ 	nr_cpus = cpumask_weight(&cpus);
+ 
+-	dtpm->power_min = em->table[0].power;
++	table = em->default_table->state;
++
++	dtpm->power_min = table[0].power;
+ 	dtpm->power_min *= MICROWATT_PER_MILLIWATT;
+ 	dtpm->power_min *= nr_cpus;
+ 
+-	dtpm->power_max = em->table[em->nr_perf_states - 1].power;
++	dtpm->power_max = table[em->nr_perf_states - 1].power;
+ 	dtpm->power_max *= MICROWATT_PER_MILLIWATT;
+ 	dtpm->power_max *= nr_cpus;
+ 
+@@ -182,6 +190,7 @@ static int __dtpm_cpu_setup(int cpu, struct dtpm *parent)
+ {
+ 	struct dtpm_cpu *dtpm_cpu;
+ 	struct cpufreq_policy *policy;
++	struct em_perf_state *table;
+ 	struct em_perf_domain *pd;
+ 	char name[CPUFREQ_NAME_LEN];
+ 	int ret = -ENOMEM;
+@@ -198,6 +207,8 @@ static int __dtpm_cpu_setup(int cpu, struct dtpm *parent)
+ 	if (!pd || em_is_artificial(pd))
+ 		return -EINVAL;
+ 
++	table = pd->default_table->state;
++
+ 	dtpm_cpu = kzalloc(sizeof(*dtpm_cpu), GFP_KERNEL);
+ 	if (!dtpm_cpu)
+ 		return -ENOMEM;
+@@ -216,7 +227,7 @@ static int __dtpm_cpu_setup(int cpu, struct dtpm *parent)
+ 
+ 	ret = freq_qos_add_request(&policy->constraints,
+ 				   &dtpm_cpu->qos_req, FREQ_QOS_MAX,
+-				   pd->table[pd->nr_perf_states - 1].frequency);
++				   table[pd->nr_perf_states - 1].frequency);
+ 	if (ret)
+ 		goto out_dtpm_unregister;
+ 
+diff --git a/drivers/powercap/dtpm_devfreq.c b/drivers/powercap/dtpm_devfreq.c
+index 91276761a31d..6ef0f2b4a683 100644
+--- a/drivers/powercap/dtpm_devfreq.c
++++ b/drivers/powercap/dtpm_devfreq.c
+@@ -37,11 +37,14 @@ static int update_pd_power_uw(struct dtpm *dtpm)
+ 	struct devfreq *devfreq = dtpm_devfreq->devfreq;
+ 	struct device *dev = devfreq->dev.parent;
+ 	struct em_perf_domain *pd = em_pd_get(dev);
++	struct em_perf_state *table;
+ 
+-	dtpm->power_min = pd->table[0].power;
++	table = pd->default_table->state;
++
++	dtpm->power_min = table[0].power;
+ 	dtpm->power_min *= MICROWATT_PER_MILLIWATT;
+ 
+-	dtpm->power_max = pd->table[pd->nr_perf_states - 1].power;
++	dtpm->power_max = table[pd->nr_perf_states - 1].power;
+ 	dtpm->power_max *= MICROWATT_PER_MILLIWATT;
+ 
+ 	return 0;
+@@ -53,22 +56,25 @@ static u64 set_pd_power_limit(struct dtpm *dtpm, u64 power_limit)
+ 	struct devfreq *devfreq = dtpm_devfreq->devfreq;
+ 	struct device *dev = devfreq->dev.parent;
+ 	struct em_perf_domain *pd = em_pd_get(dev);
++	struct em_perf_state *table;
+ 	unsigned long freq;
+ 	u64 power;
+ 	int i;
+ 
++	table = pd->default_table->state;
++
+ 	for (i = 0; i < pd->nr_perf_states; i++) {
+ 
+-		power = pd->table[i].power * MICROWATT_PER_MILLIWATT;
++		power = table[i].power * MICROWATT_PER_MILLIWATT;
+ 		if (power > power_limit)
+ 			break;
+ 	}
+ 
+-	freq = pd->table[i - 1].frequency;
++	freq = table[i - 1].frequency;
+ 
+ 	dev_pm_qos_update_request(&dtpm_devfreq->qos_req, freq);
+ 
+-	power_limit = pd->table[i - 1].power * MICROWATT_PER_MILLIWATT;
++	power_limit = table[i - 1].power * MICROWATT_PER_MILLIWATT;
+ 
+ 	return power_limit;
+ }
+@@ -94,6 +100,7 @@ static u64 get_pd_power_uw(struct dtpm *dtpm)
+ 	struct device *dev = devfreq->dev.parent;
+ 	struct em_perf_domain *pd = em_pd_get(dev);
+ 	struct devfreq_dev_status status;
++	struct em_perf_state *table;
+ 	unsigned long freq;
+ 	u64 power;
+ 	int i;
+@@ -102,15 +109,17 @@ static u64 get_pd_power_uw(struct dtpm *dtpm)
+ 	status = devfreq->last_status;
+ 	mutex_unlock(&devfreq->lock);
+ 
++	table = pd->default_table->state;
++
+ 	freq = DIV_ROUND_UP(status.current_frequency, HZ_PER_KHZ);
+ 	_normalize_load(&status);
+ 
+ 	for (i = 0; i < pd->nr_perf_states; i++) {
+ 
+-		if (pd->table[i].frequency < freq)
++		if (table[i].frequency < freq)
+ 			continue;
+ 
+-		power = pd->table[i].power * MICROWATT_PER_MILLIWATT;
++		power = table[i].power * MICROWATT_PER_MILLIWATT;
+ 		power *= status.busy_time;
+ 		power >>= 10;
+ 
+diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+index e2cc7bd30862..1d979c5e05ed 100644
+--- a/drivers/thermal/cpufreq_cooling.c
++++ b/drivers/thermal/cpufreq_cooling.c
+@@ -91,10 +91,11 @@ struct cpufreq_cooling_device {
+ static unsigned long get_level(struct cpufreq_cooling_device *cpufreq_cdev,
+ 			       unsigned int freq)
+ {
++	struct em_perf_state *table = cpufreq_cdev->em->default_table->state;
+ 	int i;
+ 
+ 	for (i = cpufreq_cdev->max_level - 1; i >= 0; i--) {
+-		if (freq > cpufreq_cdev->em->table[i].frequency)
++		if (freq > table[i].frequency)
+ 			break;
+ 	}
+ 
+@@ -104,15 +105,16 @@ static unsigned long get_level(struct cpufreq_cooling_device *cpufreq_cdev,
+ static u32 cpu_freq_to_power(struct cpufreq_cooling_device *cpufreq_cdev,
+ 			     u32 freq)
+ {
++	struct em_perf_state *table = cpufreq_cdev->em->default_table->state;
+ 	unsigned long power_mw;
+ 	int i;
+ 
+ 	for (i = cpufreq_cdev->max_level - 1; i >= 0; i--) {
+-		if (freq > cpufreq_cdev->em->table[i].frequency)
++		if (freq > table[i].frequency)
+ 			break;
+ 	}
+ 
+-	power_mw = cpufreq_cdev->em->table[i + 1].power;
++	power_mw = table[i + 1].power;
+ 	power_mw /= MICROWATT_PER_MILLIWATT;
+ 
+ 	return power_mw;
+@@ -121,18 +123,19 @@ static u32 cpu_freq_to_power(struct cpufreq_cooling_device *cpufreq_cdev,
+ static u32 cpu_power_to_freq(struct cpufreq_cooling_device *cpufreq_cdev,
+ 			     u32 power)
+ {
++	struct em_perf_state *table = cpufreq_cdev->em->default_table->state;
+ 	unsigned long em_power_mw;
+ 	int i;
+ 
+ 	for (i = cpufreq_cdev->max_level; i > 0; i--) {
+ 		/* Convert EM power to milli-Watts to make safe comparison */
+-		em_power_mw = cpufreq_cdev->em->table[i].power;
++		em_power_mw = table[i].power;
+ 		em_power_mw /= MICROWATT_PER_MILLIWATT;
+ 		if (power >= em_power_mw)
+ 			break;
+ 	}
+ 
+-	return cpufreq_cdev->em->table[i].frequency;
++	return table[i].frequency;
  }
  
- static int cppc_get_cpu_cost(struct device *cpu_dev, unsigned long KHz,
--		unsigned long *cost)
-+		unsigned long *cost, void *priv)
+ /**
+@@ -262,8 +265,9 @@ static int cpufreq_get_requested_power(struct thermal_cooling_device *cdev,
+ static int cpufreq_state2power(struct thermal_cooling_device *cdev,
+ 			       unsigned long state, u32 *power)
  {
- 	unsigned long perf_step, perf_prev;
- 	struct cppc_perf_caps *perf_caps;
+-	unsigned int freq, num_cpus, idx;
+ 	struct cpufreq_cooling_device *cpufreq_cdev = cdev->devdata;
++	unsigned int freq, num_cpus, idx;
++	struct em_perf_state *table;
+ 
+ 	/* Request state should be less than max_level */
+ 	if (state > cpufreq_cdev->max_level)
+@@ -271,8 +275,9 @@ static int cpufreq_state2power(struct thermal_cooling_device *cdev,
+ 
+ 	num_cpus = cpumask_weight(cpufreq_cdev->policy->cpus);
+ 
++	table = cpufreq_cdev->em->default_table->state;
+ 	idx = cpufreq_cdev->max_level - state;
+-	freq = cpufreq_cdev->em->table[idx].frequency;
++	freq = table[idx].frequency;
+ 	*power = cpu_freq_to_power(cpufreq_cdev, freq) * num_cpus;
+ 
+ 	return 0;
+@@ -378,8 +383,10 @@ static unsigned int get_state_freq(struct cpufreq_cooling_device *cpufreq_cdev,
+ #ifdef CONFIG_THERMAL_GOV_POWER_ALLOCATOR
+ 	/* Use the Energy Model table if available */
+ 	if (cpufreq_cdev->em) {
++		struct em_perf_state *table;
++		table = cpufreq_cdev->em->default_table->state;
+ 		idx = cpufreq_cdev->max_level - state;
+-		return cpufreq_cdev->em->table[idx].frequency;
++		return table[idx].frequency;
+ 	}
+ #endif
+ 
+diff --git a/drivers/thermal/devfreq_cooling.c b/drivers/thermal/devfreq_cooling.c
+index 262e62ab6cf2..4207ef850582 100644
+--- a/drivers/thermal/devfreq_cooling.c
++++ b/drivers/thermal/devfreq_cooling.c
+@@ -87,6 +87,7 @@ static int devfreq_cooling_set_cur_state(struct thermal_cooling_device *cdev,
+ 	struct devfreq_cooling_device *dfc = cdev->devdata;
+ 	struct devfreq *df = dfc->devfreq;
+ 	struct device *dev = df->dev.parent;
++	struct em_perf_state *table;
+ 	unsigned long freq;
+ 	int perf_idx;
+ 
+@@ -99,8 +100,9 @@ static int devfreq_cooling_set_cur_state(struct thermal_cooling_device *cdev,
+ 		return -EINVAL;
+ 
+ 	if (dfc->em_pd) {
++		table = dfc->em_pd->default_table->state;
+ 		perf_idx = dfc->max_state - state;
+-		freq = dfc->em_pd->table[perf_idx].frequency * 1000;
++		freq = table[perf_idx].frequency * 1000;
+ 	} else {
+ 		freq = dfc->freq_table[state];
+ 	}
+@@ -123,10 +125,11 @@ static int devfreq_cooling_set_cur_state(struct thermal_cooling_device *cdev,
+  */
+ static int get_perf_idx(struct em_perf_domain *em_pd, unsigned long freq)
+ {
++	struct em_perf_state *table = em_pd->default_table->state;
+ 	int i;
+ 
+ 	for (i = 0; i < em_pd->nr_perf_states; i++) {
+-		if (em_pd->table[i].frequency == freq)
++		if (table[i].frequency == freq)
+ 			return i;
+ 	}
+ 
+@@ -181,6 +184,7 @@ static int devfreq_cooling_get_requested_power(struct thermal_cooling_device *cd
+ 	struct devfreq_cooling_device *dfc = cdev->devdata;
+ 	struct devfreq *df = dfc->devfreq;
+ 	struct devfreq_dev_status status;
++	struct em_perf_state *table;
+ 	unsigned long state;
+ 	unsigned long freq;
+ 	unsigned long voltage;
+@@ -192,6 +196,8 @@ static int devfreq_cooling_get_requested_power(struct thermal_cooling_device *cd
+ 
+ 	freq = status.current_frequency;
+ 
++	table = dfc->em_pd->default_table->state;
++
+ 	if (dfc->power_ops && dfc->power_ops->get_real_power) {
+ 		voltage = get_voltage(df, freq);
+ 		if (voltage == 0) {
+@@ -204,7 +210,7 @@ static int devfreq_cooling_get_requested_power(struct thermal_cooling_device *cd
+ 			state = dfc->capped_state;
+ 
+ 			/* Convert EM power into milli-Watts first */
+-			dfc->res_util = dfc->em_pd->table[state].power;
++			dfc->res_util = table[state].power;
+ 			dfc->res_util /= MICROWATT_PER_MILLIWATT;
+ 
+ 			dfc->res_util *= SCALE_ERROR_MITIGATION;
+@@ -225,7 +231,7 @@ static int devfreq_cooling_get_requested_power(struct thermal_cooling_device *cd
+ 		_normalize_load(&status);
+ 
+ 		/* Convert EM power into milli-Watts first */
+-		*power = dfc->em_pd->table[perf_idx].power;
++		*power = table[perf_idx].power;
+ 		*power /= MICROWATT_PER_MILLIWATT;
+ 		/* Scale power for utilization */
+ 		*power *= status.busy_time;
+@@ -245,13 +251,15 @@ static int devfreq_cooling_state2power(struct thermal_cooling_device *cdev,
+ 				       unsigned long state, u32 *power)
+ {
+ 	struct devfreq_cooling_device *dfc = cdev->devdata;
++	struct em_perf_state *table;
+ 	int perf_idx;
+ 
+ 	if (state > dfc->max_state)
+ 		return -EINVAL;
+ 
++	table = dfc->em_pd->default_table->state;
+ 	perf_idx = dfc->max_state - state;
+-	*power = dfc->em_pd->table[perf_idx].power;
++	*power = table[perf_idx].power;
+ 	*power /= MICROWATT_PER_MILLIWATT;
+ 
+ 	return 0;
+@@ -264,6 +272,7 @@ static int devfreq_cooling_power2state(struct thermal_cooling_device *cdev,
+ 	struct devfreq *df = dfc->devfreq;
+ 	struct devfreq_dev_status status;
+ 	unsigned long freq, em_power_mw;
++	struct em_perf_state *table;
+ 	s32 est_power;
+ 	int i;
+ 
+@@ -273,6 +282,8 @@ static int devfreq_cooling_power2state(struct thermal_cooling_device *cdev,
+ 
+ 	freq = status.current_frequency;
+ 
++	table = dfc->em_pd->default_table->state;
++
+ 	if (dfc->power_ops && dfc->power_ops->get_real_power) {
+ 		/* Scale for resource utilization */
+ 		est_power = power * dfc->res_util;
+@@ -290,7 +301,7 @@ static int devfreq_cooling_power2state(struct thermal_cooling_device *cdev,
+ 	 */
+ 	for (i = dfc->max_state; i > 0; i--) {
+ 		/* Convert EM power to milli-Watts to make safe comparison */
+-		em_power_mw = dfc->em_pd->table[i].power;
++		em_power_mw = table[i].power;
+ 		em_power_mw /= MICROWATT_PER_MILLIWATT;
+ 		if (est_power >= em_power_mw)
+ 			break;
 diff --git a/include/linux/energy_model.h b/include/linux/energy_model.h
-index 8e3fa2b6bf28..b8506df9af2d 100644
+index b8506df9af2d..eb28920b1b2c 100644
 --- a/include/linux/energy_model.h
 +++ b/include/linux/energy_model.h
-@@ -162,6 +162,8 @@ struct em_data_callback {
- 	 * @freq	: Frequency at the performance state in kHz
- 	 * @cost	: The cost value for the performance state
- 	 *		(modified)
-+	 * @priv	: Pointer to private data useful for tracking context
-+	 *		during run-time modifications of EM.
- 	 *
- 	 * In case of CPUs, the cost is the one of a single CPU in the domain.
- 	 * It is expected to fit in the [0, EM_MAX_POWER] range due to internal
-@@ -170,7 +172,7 @@ struct em_data_callback {
- 	 * Return 0 on success, or appropriate error value in case of failure.
- 	 */
- 	int (*get_cost)(struct device *dev, unsigned long freq,
--			unsigned long *cost);
-+			unsigned long *cost, void *priv);
+@@ -49,7 +49,7 @@ struct em_perf_table {
  
- 	/**
- 	 * update_power() - Provide new power at the given performance state of
-@@ -199,6 +201,9 @@ struct em_data_callback {
- #define EM_DATA_CB(_active_power_cb)			\
- 		EM_ADV_DATA_CB(_active_power_cb, NULL)
- #define EM_UPDATE_CB(_update_power_cb) { .update_power = &_update_power_cb }
-+#define EM_ADV_UPDATE_CB(_update_power_cb, _cost_cb)	\
-+	{ .update_power = &_update_power_cb,		\
-+	  .get_cost = _cost_cb }
- 
- struct em_perf_domain *em_cpu_get(int cpu);
- struct em_perf_domain *em_pd_get(struct device *dev);
+ /**
+  * struct em_perf_domain - Performance domain
+- * @table:		List of performance states, in ascending order
++ * @default_table:	Pointer to the default em_perf_table
+  * @runtime_table:	Pointer to the runtime modified em_perf_table
+  * @nr_perf_states:	Number of performance states
+  * @flags:		See "em_perf_domain flags"
+@@ -65,7 +65,7 @@ struct em_perf_table {
+  * field is unused.
+  */
+ struct em_perf_domain {
+-	struct em_perf_state *table;
++	struct em_perf_table *default_table;
+ 	struct em_perf_table __rcu *runtime_table;
+ 	int nr_perf_states;
+ 	unsigned long flags;
 diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-index b5675dda00e1..456d9f2b4370 100644
+index 456d9f2b4370..204fd415ebc9 100644
 --- a/kernel/power/energy_model.c
 +++ b/kernel/power/energy_model.c
-@@ -165,7 +165,7 @@ static void em_perf_runtime_table_set(struct device *dev,
+@@ -72,6 +72,7 @@ DEFINE_SHOW_ATTRIBUTE(em_debug_flags);
  
- static int em_compute_costs(struct device *dev, struct em_perf_state *table,
- 			    struct em_data_callback *cb, int nr_states,
--			    unsigned long flags)
-+			    unsigned long flags, void *priv)
+ static void em_debug_create_pd(struct device *dev)
  {
- 	unsigned long prev_cost = ULONG_MAX;
- 	u64 fmax;
-@@ -177,7 +177,8 @@ static int em_compute_costs(struct device *dev, struct em_perf_state *table,
- 		unsigned long power_res, cost;
++	struct em_perf_table *table = dev->em_pd->default_table;
+ 	struct dentry *d;
+ 	int i;
  
- 		if (flags & EM_PERF_DOMAIN_ARTIFICIAL && cb->get_cost) {
--			ret = cb->get_cost(dev, table[i].frequency, &cost);
-+			ret = cb->get_cost(dev, table[i].frequency, &cost,
-+					   priv);
- 			if (ret || !cost || cost > EM_MAX_POWER) {
- 				dev_err(dev, "EM: invalid cost %lu %d\n",
- 					cost, ret);
-@@ -277,7 +278,7 @@ int em_dev_update_perf_domain(struct device *dev, struct em_data_callback *cb,
- 	}
+@@ -87,7 +88,7 @@ static void em_debug_create_pd(struct device *dev)
  
- 	ret = em_compute_costs(dev, runtime_table->state, cb,
--			       pd->nr_perf_states, pd->flags);
-+			       pd->nr_perf_states, pd->flags, priv);
- 	if (ret)
- 		goto free_runtime_state_table;
+ 	/* Create a sub-directory for each performance state */
+ 	for (i = 0; i < dev->em_pd->nr_perf_states; i++)
+-		em_debug_create_ps(&dev->em_pd->table[i], d);
++		em_debug_create_ps(&table->state[i], d);
  
-@@ -347,7 +348,7 @@ static int em_create_perf_table(struct device *dev, struct em_perf_domain *pd,
- 		table[i].frequency = prev_freq = freq;
- 	}
+ }
  
--	ret = em_compute_costs(dev, table, cb, nr_states, flags);
-+	ret = em_compute_costs(dev, table, cb, nr_states, flags, NULL);
+@@ -157,7 +158,7 @@ static void em_perf_runtime_table_set(struct device *dev,
+ 	 * Check if the 'state' array is not actually the one from setup.
+ 	 * If it is then don't free it.
+ 	 */
+-	if (tmp->state == pd->table)
++	if (tmp->state == pd->default_table->state)
+ 		call_rcu(&tmp->rcu, em_destroy_tmp_setup_rcu);
+ 	else
+ 		call_rcu(&tmp->rcu, em_destroy_rt_table_rcu);
+@@ -261,7 +262,7 @@ int em_dev_update_perf_domain(struct device *dev, struct em_data_callback *cb,
+ 
+ 	/* Populate runtime table with updated values using driver callback */
+ 	for (i = 0; i < pd->nr_perf_states; i++) {
+-		freq = pd->table[i].frequency;
++		freq = pd->default_table->state[i].frequency;
+ 		runtime_table->state[i].frequency = freq;
+ 
+ 		/*
+@@ -352,7 +353,7 @@ static int em_create_perf_table(struct device *dev, struct em_perf_domain *pd,
  	if (ret)
  		goto free_ps_table;
  
+-	pd->table = table;
++	pd->default_table->state = table;
+ 	pd->nr_perf_states = nr_states;
+ 
+ 	return 0;
+@@ -366,7 +367,7 @@ static int em_create_pd(struct device *dev, int nr_states,
+ 			struct em_data_callback *cb, cpumask_t *cpus,
+ 			unsigned long flags)
+ {
+-	struct em_perf_table *runtime_table;
++	struct em_perf_table *default_table, *runtime_table;
+ 	struct em_perf_domain *pd;
+ 	struct device *cpu_dev;
+ 	int cpu, ret, num_cpus;
+@@ -391,21 +392,31 @@ static int em_create_pd(struct device *dev, int nr_states,
+ 			return -ENOMEM;
+ 	}
+ 
++	default_table = kzalloc(sizeof(*default_table), GFP_KERNEL);
++	if (!default_table) {
++		kfree(pd);
++		return -ENOMEM;
++	}
++
+ 	runtime_table = kzalloc(sizeof(*runtime_table), GFP_KERNEL);
+ 	if (!runtime_table) {
+ 		kfree(pd);
++		kfree(default_table);
+ 		return -ENOMEM;
+ 	}
+ 
++	pd->default_table = default_table;
++
+ 	ret = em_create_perf_table(dev, pd, nr_states, cb, flags);
+ 	if (ret) {
+ 		kfree(pd);
++		kfree(default_table);
+ 		kfree(runtime_table);
+ 		return ret;
+ 	}
+ 
+ 	/* Re-use temporally (till 1st modification) the memory */
+-	runtime_table->state = pd->table;
++	runtime_table->state = pd->default_table->state;
+ 	rcu_assign_pointer(pd->runtime_table, runtime_table);
+ 
+ 	if (_is_cpu_device(dev))
+@@ -526,6 +537,7 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
+ 				bool microwatts)
+ {
+ 	unsigned long cap, prev_cap = 0;
++	struct em_perf_state *table;
+ 	unsigned long flags = 0;
+ 	int cpu, ret;
+ 
+@@ -584,7 +596,8 @@ int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
+ 
+ 	dev->em_pd->flags |= flags;
+ 
+-	em_cpufreq_update_efficiencies(dev, dev->em_pd->table);
++	table = dev->em_pd->default_table->state;
++	em_cpufreq_update_efficiencies(dev, table);
+ 
+ 	em_debug_create_pd(dev);
+ 	dev_info(dev, "EM: created perf domain\n");
+@@ -638,12 +651,13 @@ void em_dev_unregister_perf_domain(struct device *dev)
+ 	 * After the sync no updates will be in-flight, so free the old
+ 	 * memory.
+ 	 */
+-	if (tmp->state != pd->table)
++	if (tmp->state != pd->default_table->state)
+ 		kfree(tmp->state);
+ 
+ 	kfree(tmp);
+ 
+-	kfree(dev->em_pd->table);
++	kfree(pd->default_table->state);
++	kfree(pd->default_table);
+ 	kfree(dev->em_pd);
+ 	dev->em_pd = NULL;
+ 	mutex_unlock(&em_pd_mutex);
 -- 
 2.25.1
 
