@@ -2,71 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A0EF6FFFF7
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 07:42:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F956FFFF3
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 07:42:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239826AbjELFlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 01:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60170 "EHLO
+        id S239903AbjELFmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 01:42:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjELFlR (ORCPT
+        with ESMTP id S229603AbjELFmh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 01:41:17 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1A88422F
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 22:41:15 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id ffacd0b85a97d-3078d1c8828so6463309f8f.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 22:41:15 -0700 (PDT)
+        Fri, 12 May 2023 01:42:37 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A195172A
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 22:42:36 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-3078aa0b152so4647854f8f.3
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 22:42:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683870074; x=1686462074;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=GRLM54m4oNof2pLRboZuVsUjfYt5aZs+58w3qZaftDY=;
-        b=kFDBkoGue96E/tX+H3qVJQxr7ukww/c4REfNOx2RBujhBTRXlOAWnKt7r5cgdmU1JB
-         aLbCxazsL0mhKGxbhhvjS8IfqoH3LM/EowWfU8d7xMWLq0aoJEm7bB1cCjf9PNdn7ouS
-         kSpIZd/d+Yltor7bIu1hKBwJ9yBiI2s8iaqDDV2gpJ/7aQxO8XfZsjmQbt6Yn0gvnxeC
-         62syf98HY8bSC9t8PPyWPDuc1G+8QULNXUhMeESQNcVLjnhIrHnUwdl50P9usyctng/r
-         zPG9OvzLbkPciHHy6ze9sycFdfYz1cEJ8gQlQPbthO0M99+wnRpxxtJx3hfrfgeaGGV3
-         rS7g==
+        d=linaro.org; s=google; t=1683870155; x=1686462155;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=V6olrtJonCVLJtFNntlrMczEuf6svIHnm0xX7DjUdLc=;
+        b=dcUKxV0xY6Cwef52D2kCNDwf33OdAJMEe92Qv1bdPPZK3KtpE9eBmCcj3UxAxiG63l
+         xpw/ElqZTXfCVwYuWthNp9cShitE7a5iXvIZHj6kN+p8O2rTmgkY37SZc2Tiqf6bkJGj
+         AWyw3XD4aNIhnVIX/vxwP+cTZ4/NrVCAFa4v1N+uVLDe151Ha9i+IoIb3QaerLBycE+z
+         Igrv9oShdsG4gW74ud6zAbpRSCO3IhDHdixwu6Gn8ioPOOvv8qiuYnqzsqAQqxyJtH/L
+         nJ+2SLcX/W7YI/ne/5CgHf//E0wrm2pZBTie2FkxIY7idja5ER0lnzaCqaeut2wl/EkW
+         XsWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683870074; x=1686462074;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GRLM54m4oNof2pLRboZuVsUjfYt5aZs+58w3qZaftDY=;
-        b=SKegNPga+DY1IJYJucnw9zRxfd6wIVCe0DMUzxbgyGPS9uP8MvyDmiCpLVgpA+rcur
-         32Usb+5gDV/w6pVPNqGSiTpRRUcHInt0UI/HcckIus0eK6eZRum8LmwdjB7qAjCxqNgp
-         D2COVT2y8BmqX787J8J0If6q/lcdgCOQhTvkDzcrTJ5Ge6htm8wJp4+uscCZPmFBP5cU
-         2EdUCi3mVnLzOqJWqcS31ttuk+Q43adY71T9yhQl58ilAQbThmWFEMfgG8OwSUwrawur
-         i9PLmcIyl3ip0W1qHmotJAK3uFi466MuG2MbbLt0LxkebxS6Jp5yrbvIVRpbZK3+dC4c
-         cjbg==
-X-Gm-Message-State: AC+VfDwFMaKfjzW7VTzXir8GjOIXjYNp7dbcGQbVs64gdUBgHU1wutIS
-        4OuM/sPbRKC+zazgGzT/4UKgxQ==
-X-Google-Smtp-Source: ACHHUZ6seLDwpj4RolVQYyb0o1iErqMDr1kmvf6fp+MtcMehIqrlZQ8vKDd63c9pWnSxB6RtD1MWgA==
-X-Received: by 2002:adf:cd0e:0:b0:304:6a26:1f6 with SMTP id w14-20020adfcd0e000000b003046a2601f6mr17996620wrm.59.1683870074239;
-        Thu, 11 May 2023 22:41:14 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id v3-20020adfebc3000000b00307c0afc030sm5251841wrn.4.2023.05.11.22.41.11
+        d=1e100.net; s=20221208; t=1683870155; x=1686462155;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=V6olrtJonCVLJtFNntlrMczEuf6svIHnm0xX7DjUdLc=;
+        b=XqTGXBhFjB7vuQdljjClwkG2HRoxyMO9UzQMFgZitBiwvVwhwpZfL2BTqhpYwOsBit
+         PpZpxLvB+PVXQzCXAbdHGOPO+7uD37nHh72ZuIRFrc2RIM85SwPU7ycjkUphEAC8LzAC
+         VlOUQ4HRwaVoCG4MAFqRILb3R3tFOKSDRei1KuJRHDH7BpAcbXyWuUB+Vh9gUAMzRvjl
+         82lF22fZ5Xhcp9T2s4NQP7fpCqRuiePCF2xM7PRRXhGVEsVKYP183IaSiDZtJwdB+Q7P
+         Yf5dBKr9vLK+Ji9UhM786ymsVCMQ+UJ3K9UQsA9yKEcoB0lCV3r5ryf4W4quQiIH7w6C
+         gAdA==
+X-Gm-Message-State: AC+VfDxa5TSe5sjlgLUXVGKOC/shEO9krBMo5M4cihXUVFna1qQ56ZUS
+        xWCCloBe+wMJW89Lcvw08F/UWS2pLtNEeRQvUeM=
+X-Google-Smtp-Source: ACHHUZ5vdoQWPYItp1xhkCrr3z/W3FWKhMOYZu/PAyNl1aHwFUoKaFnDsD/fhVcaRvnCubOp9AfJGw==
+X-Received: by 2002:adf:f9d2:0:b0:2fa:6e37:3d97 with SMTP id w18-20020adff9d2000000b002fa6e373d97mr15815998wrr.54.1683870154757;
+        Thu, 11 May 2023 22:42:34 -0700 (PDT)
+Received: from lmecxl1178.home (lfbn-nan-1-1169-52.w86-212.abo.wanadoo.fr. [86.212.112.52])
+        by smtp.gmail.com with ESMTPSA id j18-20020adfff92000000b00307bc4e39e5sm6301253wrr.117.2023.05.11.22.42.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 22:41:12 -0700 (PDT)
-Date:   Fri, 12 May 2023 08:41:07 +0300
-From:   Dan Carpenter <dan.carpenter@linaro.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     oe-kbuild@lists.linux.dev,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: drivers/iio/accel/kionix-kx022a.c:1053 kx022a_probe_internal()
- warn: passing zero to 'dev_err_probe'
-Message-ID: <f5f669fc-ebb4-46df-8957-84c714481ace@kili.mountain>
-References: <46296e39-dbc1-4f27-b89c-af6f08d9f318@kili.mountain>
- <a1ad0e10-23d2-a860-e9a1-2680313d643f@gmail.com>
+        Thu, 11 May 2023 22:42:34 -0700 (PDT)
+From:   Etienne Carriere <etienne.carriere@linaro.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-arm-kernel@lists.infradead.org,
+        op-tee@lists.trustedfirmware.org,
+        Sumit Garg <sumit.garg@linaro.org>,
+        Jens Wiklander <jens.wiklander@linaro.org>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Cristian Marussi <cristian.marussi@arm.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Etienne Carriere <etienne.carriere@linaro.org>
+Subject: [PATCH v7 0/4] tee: introduce TEE system session
+Date:   Fri, 12 May 2023 07:42:18 +0200
+Message-Id: <20230512054222.2088837-1-etienne.carriere@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a1ad0e10-23d2-a860-e9a1-2680313d643f@gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -77,47 +75,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 08:16:02AM +0300, Matti Vaittinen wrote:
-> > 7c1d1677b3227c Matti Vaittinen 2022-10-24  1046  	irq = fwnode_irq_get_byname(fwnode, "INT1");
-> > 7c1d1677b3227c Matti Vaittinen 2022-10-24  1047  	if (irq > 0) {
-> > 7c1d1677b3227c Matti Vaittinen 2022-10-24  1048  		data->inc_reg = KX022A_REG_INC1;
-> > 7c1d1677b3227c Matti Vaittinen 2022-10-24  1049  		data->ien_reg = KX022A_REG_INC4;
-> > 7c1d1677b3227c Matti Vaittinen 2022-10-24  1050  	} else {
-> > 7c1d1677b3227c Matti Vaittinen 2022-10-24  1051  		irq = fwnode_irq_get_byname(fwnode, "INT2");
-> > 7c1d1677b3227c Matti Vaittinen 2022-10-24  1052  		if (irq <= 0)
-> >                                                                      ^^^^^^^^
-> > This code assumes fwnode_irq_get_byname() can return zero.
-> > 
-> > 7c1d1677b3227c Matti Vaittinen 2022-10-24 @1053  			return dev_err_probe(dev, irq, "No suitable IRQ\n");
-> > 
-> > But fortunately, it can't otherwise this would return success.
-> > 
-> 
-> Ouch. Actually, the fwnode_irq_get_byname() can return zero on device-tree
-> mapping error. I did actually send a patch to address this some time ago:
-> https://lore.kernel.org/lkml/cover.1666710197.git.mazziesaccount@gmail.com/
-> 
+This series introduces TEE system sessions for TEE service sessions that
+require TEE to provision resources to prevent deadlock when clients call
+the TEE.
 
-Ah.  I just went by the documentation instead of looking at the code.
+This deadlock situation can happen when a TEE service is used by low
+level system resources as for example when Linux kernel uses SCMI
+service embedded in TEE for clock, reset, regulator, etc... controls.
+This case is detailled in patch 3/4:
 
-Originally a bunch of irq functions return NO_IRQ on error which was a
-design mistake...  irq_of_parse_and_map() still returns zero on error
-instead of negative error codes.  I wrote a check for that yesterday.
+> This feature is needed to prevent a system deadlock when several TEE
+> client applications invoke TEE, consuming all TEE thread contexts
+> available in the secure world. The deadlock can happen in the OP-TEE
+> driver for example if all these TEE threads issue an RPC call from TEE
+> to Linux OS to access an eMMC RPMB partition (TEE secure storage) which
+> device clock or regulator controller is accessed through an OP-TEE SCMI
+> services. In that case, Linux SCMI driver must reach OP-TEE SCMI
+> service without waiting until one of the consumed TEE threads is freed.
 
-drivers/gpu/drm/msm/dsi/dsi_host.c:1949 msm_dsi_host_init() warn: irq_of_parse_and_map() returns zero on failure
-drivers/dma/ti/edma.c:2405 edma_probe() warn: irq_of_parse_and_map() returns zero on failure
-drivers/dma/ti/edma.c:2421 edma_probe() warn: irq_of_parse_and_map() returns zero on failure
-drivers/net/ethernet/xilinx/ll_temac_main.c:1570 temac_probe() warn: irq_of_parse_and_map() returns zero on failure
-drivers/net/ethernet/xilinx/ll_temac_main.c:1573 temac_probe() warn: irq_of_parse_and_map() returns zero on failure
-drivers/ata/sata_mv.c:4094 mv_platform_probe() warn: irq_of_parse_and_map() returns zero on failure
+Etienne Carriere (4):
+  tee: optee: system call property
+  tee: system session
+  tee: optee: support tracking system threads
+  firmware: arm_scmi: optee: use optee system invocation
 
-It would be good if we could apply your patch, otherwise I could create
-an explicit check for fwnode_irq_get_byname() returns.
+ drivers/firmware/arm_scmi/optee.c |   4 +
+ drivers/tee/optee/call.c          | 150 +++++++++++++++++++++++++++---
+ drivers/tee/optee/core.c          |   5 +-
+ drivers/tee/optee/ffa_abi.c       |  13 +--
+ drivers/tee/optee/optee_private.h |  20 +++-
+ drivers/tee/optee/smc_abi.c       |  31 ++++--
+ drivers/tee/tee_core.c            |   8 ++
+ include/linux/tee_drv.h           |  16 ++++
+ 8 files changed, 211 insertions(+), 36 deletions(-)
 
-Ideally, everything would just return negative error codes on error.
-It's harder to change irq_of_parse_and_map() because it doesn't return a
-mix of errors and zero, but just zero.  We would have to rename it to
-something else, otherwise backports would get messed up.
+---
+Changes since v6:
+- Added this cover letter missing in previous patch series revisions.
 
-regards,
-dan carpenter
+-- 
+2.25.1
+
