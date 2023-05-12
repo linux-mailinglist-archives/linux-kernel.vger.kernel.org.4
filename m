@@ -2,265 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39DDD700D0B
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2B86700D12
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:35:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231358AbjELQaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 12:30:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57974 "EHLO
+        id S233552AbjELQfC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 12:35:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjELQaX (ORCPT
+        with ESMTP id S231358AbjELQfA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 12:30:23 -0400
-Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01olkn20812.outbound.protection.outlook.com [IPv6:2a01:111:f400:feab::812])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D713C900E;
-        Fri, 12 May 2023 09:30:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=DMDfkDowk3NQllBwI3yfp8qmyp9gczgy9d7LP0smSfVtxfhCScKtHDCw97LFYT67FgutB2vBoMYi2dbZFkhpb2LANYJ9iTLwIKzP0RRM7efR3iSFvFvh641Sh28BZpL9gGqZXABI9Y8QMy5O9mALLNcLFvZM9U5Igi/KprVDEZbJgYCDbNXkKde/BOuYNTL5fFTIjA2/QdfbUorFZ5QZpAhMve4S32BrLmfYhxlizgApSzxhc0mxFn1i9FLOKIm9+ZQjQM/tuWHsoPDF9j81/mhNkAQrhWS47qEPdIJGUDjecaCdwLFZxXTEjtAt4eB2daBaFuiPPtzOjXmnlQSTcQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BxZ+UIvvtKvwwW9MLQiOdIb96ph0o6/4WGeOVuVPTo8=;
- b=jpN3cM70EhSYH5DqK/3Ij92RB3zihW0tnfOsDKOs2QZYy54ZP0MHiVEmGUnYZQIo8v8QKtG+dxFQjbwg27iON4g5EVpl0bRdWA49IPax20BKOPM4wMjHa3snULz4cDfoM6JizuEnLVZQ2r3EXVOOf+0NQ+Vb5kWd41xe/ka9XzOzYeMtC0jEVXMay0sqbGXwGf8hvTRzGjHQ54ONe5R0WS2NFFz3KhdE3RlvqhlDKj+Qz7h9TdnJtApnv5rxHXdyNxzua4kDv34sClmmoV6x3bHPba30y2p6O5BBQ382zk6YaL6heGM4Il1unGo7u9a4VOfm5jzsRQPcLdM/I4QCwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=BxZ+UIvvtKvwwW9MLQiOdIb96ph0o6/4WGeOVuVPTo8=;
- b=EqEQJ/erVayoOD9MEkiuJ8wim/1ktDts9ahfwLeuxWvaqbv0vUSlZVTyYxVaDa9aAqTQN7JZwbNMS+qjcqrKmYUoxkZw79MKfo/yN53mBkoS8RSKCMoMmDXyeCjN4IWO/D6nQVnh8DFpsxuUH6h1806ADqiZSx278nZEcO9HtD/s7k2VKENPyHi6te9q/+iQ77rQkiywDZHea+ynqnRgxeXHQY+rbfqVcVxci5Xy4ZNBAlIwbxNugtZJquBcOkebQZpwRxPzGzFcIzxZ7mkOSkTuTcQOseTfYb8eAbWyUfzYb3ViCICdVcsnMxln+Q97uiys3h61qRb35BmEwETiMA==
-Received: from KL1PR01MB5448.apcprd01.prod.exchangelabs.com
- (2603:1096:820:9a::12) by SI2PR01MB3899.apcprd01.prod.exchangelabs.com
- (2603:1096:4:109::6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.21; Fri, 12 May
- 2023 16:30:14 +0000
-Received: from KL1PR01MB5448.apcprd01.prod.exchangelabs.com
- ([fe80::93cb:1631:4c4c:1821]) by KL1PR01MB5448.apcprd01.prod.exchangelabs.com
- ([fe80::93cb:1631:4c4c:1821%4]) with mapi id 15.20.6387.018; Fri, 12 May 2023
- 16:30:14 +0000
-Content-Type: text/plain;
-        charset=utf-8
-Subject: Re: [PATCH v5] net: mdiobus: Add a function to deassert reset
-From:   Yan Wang <rk.code@outlook.com>
-In-Reply-To: <1828875.atdPhlSkOF@steina-w>
-Date:   Sat, 13 May 2023 00:30:09 +0800
-Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
-        Andrew Lunn <andrew@lunn.ch>, hkallweit1@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        open list <linux-kernel@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-ID: <KL1PR01MB5448242DBD4EA7170341A418E6759@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
-References: <KL1PR01MB54486A247214CC72CAB5A433E6759@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
- <KL1PR01MB54488021E5650ED8A203057FE6759@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
- <ZF4J1VqEqbnE6JG9@shell.armlinux.org.uk> <1828875.atdPhlSkOF@steina-w>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.2)
-X-TMN:  [8WJ+SISt6ablb+TglZSJmt/+fX51PQ767qlILcmympQ=]
-X-ClientProxiedBy: SGBP274CA0018.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::30)
- To KL1PR01MB5448.apcprd01.prod.exchangelabs.com (2603:1096:820:9a::12)
-X-Microsoft-Original-Message-ID: <9AE749AC-1734-4A63-8421-7EA487887B7E@outlook.com>
+        Fri, 12 May 2023 12:35:00 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9705E1BF2;
+        Fri, 12 May 2023 09:34:58 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CFq5EG018240;
+        Fri, 12 May 2023 16:34:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=9WU0F0MVcux5FDfZibYYwUshorLv1fpr3rzhFkYzNIc=;
+ b=O9B69os5SZA5qhp167TQ5XWT88Oq8SDYSMWCuRs6UGYTBfBoF0z3KDif0pKinr4JBjZV
+ DRt1STuNVlA6L4JQBog1iGdV1mbkKbfQDXXhWcpAX9DAJMZVne60azJiWKYPNaHBL9SJ
+ Vre4xVNDOVQyxI4K303Ihp2UFIooGB9CEmgedys0FOFj4udFdfUzBX1WP3JBucQhrdk6
+ oDsFzL/0wf4QydTbBfMQiEqjjJhWBnb78xt/U5ntlkXMBykuY5f8gxDBWqrEn/Ew1Wlc
+ grwu5MTkrjnPWa771bpwoCWEbm40qqt7W0DBlzcWHdfCthB366HgMgsESY9a7ggrJYps og== 
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qhrdsg3hv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 16:34:41 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34CGYeRD018537
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 16:34:40 GMT
+Received: from [10.110.80.184] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 12 May
+ 2023 09:34:39 -0700
+Message-ID: <169ecb01-0ab6-93d7-7350-0c551b69e7ae@quicinc.com>
+Date:   Fri, 12 May 2023 09:34:39 -0700
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: KL1PR01MB5448:EE_|SI2PR01MB3899:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0dc8561b-df9e-4105-ce37-08db530629c9
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: hljr2TlVm9zMi5owLUpRuaLzksu/Un2nMETJ9tDV3L4HfElgd5RqV3ieRmLGaqaKvg2bPx+Sb6s6yR0BajhjcKS7dufIJam1mn4XXhOXVetLK8Y/RmNeo+F4wxSvSwAo7uomvhTIUCPwGSECGfh/ZwIask86LySudRct6h14mPYKMLFXlterVSzadgKLC9OUDcJ8Asxgcju3gYNWARtRlIob3FnV90dJWy2ZuPIVHPFO6nAaZyogB5tFNuNSunU1SFjkk4o8k+ej9EbWFdWFb4H6IyqNmhXhyenBUQwMBriItElXr2NAwjOIQq1XvNp+dStlR4q/PbdX9gcHHmN/Lldtk/y5u8qrmnv+u51TUeQJATwfVDzGYHrae4C4WzEchmPwQMcWe/MPbyAYLm4Oto6YJsKidzUNLwodQ+6sOkp71iJypVqT1Xi/hk1nCtyM3ozcxlZYSiHuxrBM0IkdRNhD6jwWExuE14VnqBsplF1LPCzHyGPP2r1bxihlN7m2tjdszKofTNTKxhgNxwWAXqNnLc/RBfZxZQXeYxOJ/sTpJt6EG1w8oUmpkiy7SqTAVa8RK/fU4E+i2EClbALKd+OmV1aJnxBOidYphZjghrs=
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NldBVTg1TUtkRDFMTUd2SWVpRzYvVk1nUG9lQ0VsTVNYeDVRbk5aSUFCUzFv?=
- =?utf-8?B?OElsaEllWnJkMmN2b3VEcElnY3lSZFg5L3k4SWprSmszSkVveEhmRkNGSEhn?=
- =?utf-8?B?WmpmSXlxOEJweWJsb2k2ZDA2UUhCdFhLYTVGWkRxenlTNzlINW5MY0VGVnRu?=
- =?utf-8?B?R1M3emxEaWRMbVRZbDR4cURGdFlaTWpPQ3FBVU5mRkFmcjQ3RlVwdHJXbEp5?=
- =?utf-8?B?TXRtSmxQRTB3NElvQzFNQXpaTk5vR01SZUZWaWRlb2xSVHpxblY1WTZOUE4x?=
- =?utf-8?B?elExeHI3WnhYUXZIZHAza2lXUVdCSzI3R3NlSTZrdzNJalJKUnZTYzBxNDVB?=
- =?utf-8?B?ZEdSWDdZR1BOdG9KK3h2QWZiSDl0NGZFODZyYisxc0gxWHBud0J2KzExTE1a?=
- =?utf-8?B?MUhoNUxlYmUxT0Uzek5Bd0NyYnZFUVFuV1BZRElaaTNJUW9oNFdRa1N1TEl5?=
- =?utf-8?B?bEIveFFnVVYzQmVqNk1nQ0VIWEluOFZEa2oyQStwOTVub21DNm1pUzZGYmVu?=
- =?utf-8?B?bTYrV3JUeERrbzVHeDA3d2tNRlk4K0VELy9wWW85UEl1NFRIUmtYZ2NJRjJ4?=
- =?utf-8?B?dG1sZGpaRlpROXRkbUV5eGlTSnBnVmMvb3pkenprODl2ZnNyMWU2MXZuNTVo?=
- =?utf-8?B?aHUvMXMzUm9KMGlINmJoTkpPZHJmMUxTT1pqUHlwUTVSeVlMT3VsaXlucFg1?=
- =?utf-8?B?WEU4QVhKVmx4d2J1RHBBRGpCSnhPWVFSUEZBcE4vZDZtOFBXYXdCN1BrTHJ4?=
- =?utf-8?B?c0ZQWjMzeDZyeFUzQjdlYlZ0SmU4aHVFQlBuekNDUXZFbU80aVdlWmZOTmxL?=
- =?utf-8?B?UWpmWmsyRnRkZUtWZTFjbDZkcGJFbExKK3ExaEwxMHhtYW0rM1BMVVJ1T002?=
- =?utf-8?B?U3JvNVlPeFFRbDNCYlVUL0ltNHJhV3hSREFTUFY5UDM5ekNUZjEwSFpjQVFt?=
- =?utf-8?B?djEvSVBLYjVpT1Vha0NESlU0b2Y1VW9oclNVWmhaeVo4Wk5jZXdHVXErc0pM?=
- =?utf-8?B?VURwL0pSV0hSZHdOZGpMSjhwWU5ObE9OSmw2TXFCOG5SWjE2cGd2Z0VGbHNo?=
- =?utf-8?B?T3UwLzlTUmVzQVJFMGJDUS9HV1YrUVl5S05vS1E2NmZXOGM4YWlydzNQanE2?=
- =?utf-8?B?eDgxL2dXczhHK1lkQnMwMm9EbjI3eEJMU3BxT2pxOGF6ZFhSUFR0ZjU4aFRM?=
- =?utf-8?B?SXZOWStmbEtaWGVuODN2WFEveUN1aE1JVzNSaTJMNUNzM2RQVWZRSTVCVktl?=
- =?utf-8?B?ZWFDT0dCK3hENmNNTG1MWXI0eEYrNWtydGtYeGtON2c2dkkxV1hKYURYN2J5?=
- =?utf-8?B?WEFXTDIxVU03eFlpWVE1N201RUs0c0J0Vmh4NWFtcCtSM1ZiOVdXWEYzNkR5?=
- =?utf-8?B?Rkhxam8waFpqSXpweUNmNGE3SXFxMzZ6TnVxRU5ZWFdwUVRSU2kzeXhoYTd6?=
- =?utf-8?B?aVJ6M1RLZkxtSDBLaE9ZN2M2am5KY1NHQlNWWUdGcVM1ZW5lQ1FwZ2Q0RE1m?=
- =?utf-8?B?czRGQ05Ib3ZqWVNFdGZnYWM2WXJ4ZzRxNzJJZXZnRHNnOHNRL1c4dG1Gd2pS?=
- =?utf-8?B?LzBGMUJWRmJwOExaMzhBcVNXRTQ2cjdTV0FuOUFiQXRCd2wrVEpyc1dmejlo?=
- =?utf-8?B?OENWUFkvVEk1NmovQ2E2UTRuellodmc9PQ==?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0dc8561b-df9e-4105-ce37-08db530629c9
-X-MS-Exchange-CrossTenant-AuthSource: KL1PR01MB5448.apcprd01.prod.exchangelabs.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 16:30:14.1827
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR01MB3899
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v2 2/7] dt-bindings: hypervisor: Add MediaTek GenieZone
+ hypervisor
+To:     =?UTF-8?B?WWktRGUgV3UgKOWQs+S4gOW+tyk=?= <Yi-De.Wu@mediatek.com>,
+        "robh@kernel.org" <robh@kernel.org>
+CC:     "corbet@lwn.net" <corbet@lwn.net>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        =?UTF-8?B?TVkgQ2h1YW5nICjojormmI7ouo0p?= <MY.Chuang@mediatek.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?B?UGVpTHVuIFN1ZWkgKOmai+WfueWAqyk=?= 
+        <PeiLun.Suei@mediatek.com>,
+        =?UTF-8?B?TGlqdS1jbHIgQ2hlbiAo6Zmz6bqX5aaCKQ==?= 
+        <Liju-clr.Chen@mediatek.com>,
+        =?UTF-8?B?SmFkZXMgU2hpaCAo5pa95ZCR546oKQ==?= 
+        <jades.shih@mediatek.com>,
+        "catalin.marinas@arm.com" <catalin.marinas@arm.com>,
+        "dbrazdil@google.com" <dbrazdil@google.com>,
+        =?UTF-8?B?U2hhd24gSHNpYW8gKOiVreW/l+elpSk=?= 
+        <shawn.hsiao@mediatek.com>,
+        =?UTF-8?B?WWluZ3NoaXVhbiBQYW4gKOa9mOepjui7kik=?= 
+        <Yingshiuan.Pan@mediatek.com>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?B?TWlsZXMgQ2hlbiAo6Zmz5rCR5qi6KQ==?= 
+        <Miles.Chen@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
+        =?UTF-8?B?SXZhbiBUc2VuZyAo5pu+5b+X6LuSKQ==?= 
+        <ivan.tseng@mediatek.com>,
+        =?UTF-8?B?WmUteXUgV2FuZyAo546L5r6k5a6HKQ==?= 
+        <Ze-yu.Wang@mediatek.com>,
+        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
+        "will@kernel.org" <will@kernel.org>
+References: <20230428103622.18291-1-yi-de.wu@mediatek.com>
+ <20230428103622.18291-3-yi-de.wu@mediatek.com>
+ <168269352006.3076.11433928748883862569.robh@kernel.org>
+ <c0b590711516f5bb0e9db688685e09a8e73abd5e.camel@mediatek.com>
+Content-Language: en-US
+From:   Trilok Soni <quic_tsoni@quicinc.com>
+In-Reply-To: <c0b590711516f5bb0e9db688685e09a8e73abd5e.camel@mediatek.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: PHlsf2qDKrQvOQgX44F-Xv2J-6oVnwUP
+X-Proofpoint-GUID: PHlsf2qDKrQvOQgX44F-Xv2J-6oVnwUP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-12_10,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 mlxlogscore=999 suspectscore=0 spamscore=0 malwarescore=0
+ adultscore=0 mlxscore=0 priorityscore=1501 clxscore=1011 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305120138
+X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 5/11/2023 11:42 PM, Yi-De Wu (吳一德) wrote:
+> On Fri, 2023-04-28 at 09:52 -0500, Rob Herring wrote:
+>> External email : Please do not click links or open attachments until
+>> you have verified the sender or the content.
+>> 
+>> 
+>> On Fri, 28 Apr 2023 18:36:17 +0800, Yi-De Wu wrote:
+>> > From: "Yingshiuan Pan" <yingshiuan.pan@mediatek.com>
+>> > 
+>> > Add documentation for GenieZone(gzvm) node. This node informs gzvm
+>> > driver to start probing if geniezone hypervisor is available and
+>> > able to do virtual machine operations.
+>> > 
+>> > Signed-off-by: Yingshiuan Pan <yingshiuan.pan@mediatek.com>
+>> > Signed-off-by: Yi-De Wu <yi-de.wu@mediatek.com>
+>> > ---
+>> >  .../hypervisor/mediatek,geniezone-hyp.yaml    | 31
+>> > +++++++++++++++++++
+>> >  MAINTAINERS                                   |  1 +
+>> >  2 files changed, 32 insertions(+)
+>> >  create mode 100644
+>> > Documentation/devicetree/bindings/hypervisor/mediatek,geniezone-
+>> > hyp.yaml
+>> > 
+>> 
+>> My bot found errors running 'make DT_CHECKER_FLAGS=-m
+>> dt_binding_check'
+>> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+>> 
+>> yamllint warnings/errors:
+>> 
+>> dtschema/dtc warnings/errors:
+>> ./Documentation/devicetree/bindings/hypervisor/mediatek,geniezone-
+>> hyp.yaml: $id: relative path/filename doesn't match actual path or
+>> filename
+>>         expected: 
+>> https://urldefense.com/v3/__http://devicetree.org/schemas/hypervisor/mediatek,geniezone-hyp.yaml*__;Iw!!CTRNKA9wMg0ARbw!joIOXbICM7UGvy3XBEJvfzSKO7s61efB87_NX5cqpUqpu5ot5cuzw50A8-8ledZT9_7ifsB2sKzxSD0$
+>> 
+>> doc reference errors (make refcheckdocs):
+>> 
+>> See 
+>> https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230428103622.18291-3-yi-de.wu@mediatek.com
+>> 
+>> The base for the series is generally the latest rc1. A different
+>> dependency
+>> should be noted in *this* patch.
+>> 
+>> If you already ran 'make dt_binding_check' and didn't see the above
+>> error(s), then make sure 'yamllint' is installed and dt-schema is up
+>> to
+>> date:
+>> 
+>> pip3 install dtschema --upgrade
+>> 
+>> Please check and re-submit after running the above command yourself.
+>> Note
+>> that DT_SCHEMA_FILES can be set to your schema file to speed up
+>> checking
+>> your schema. However, it must be unset to test all examples with your
+>> schema.
+>> 
+> 
+> Noted, we've run the yaml check and we are going to re-submit the
+> latest version in v3.
+> 
+> ************* MEDIATEK Confidentiality Notice ********************
+> The information contained in this e-mail message (including any
+> attachments) may be confidential, proprietary, privileged, or otherwise
+> exempt from disclosure under applicable laws. It is intended to be
+> conveyed only to the designated recipient(s). Any use, dissemination,
+> distribution, printing, retaining or copying of this e-mail (including its
+> attachments) by unintended recipient(s) is strictly prohibited and may
+> be unlawful. If you are not an intended recipient of this e-mail, or believe
+> that you have received this e-mail in error, please notify the sender
+> immediately (by replying to this e-mail), delete any and all copies of
+> this e-mail (including any attachments) from your system, and do not
+> disclose the content of this e-mail to any other person. Thank you!
 
-
-> On May 12, 2023, at 21:37, Alexander Stein <alexander.stein@ew.tq-group.c=
-om> wrote:
->=20
-> Hi Russel,
->=20
-> Am Freitag, 12. Mai 2023, 11:41:41 CEST schrieb Russell King (Oracle):
->> On Fri, May 12, 2023 at 05:28:47PM +0800, Yan Wang wrote:
->>> On 5/12/2023 5:02 PM, Russell King (Oracle) wrote:
->>>> On Fri, May 12, 2023 at 03:08:53PM +0800, Yan Wang wrote:
->>>>> +	gpiod_set_value_cansleep(reset, gpiod_is_active_low(reset));
->>>>> +	fsleep(reset_assert_delay);
->>>>> +	gpiod_set_value_cansleep(reset, !gpiod_is_active_low(reset));
->>>>=20
->>>> Andrew, one of the phylib maintainers and thus is responsible for code
->>>> in the area you are touching. Andrew has complained about the above
->>>> which asserts and then deasserts reset on two occasions now, explained
->>>> why it is wrong, but still the code persists in doing this.
->>>>=20
->>>> I am going to add my voice as another phylib maintainer to this and sa=
-y
->>>> NO to this code, for the exact same reasons that Andrew has given.
->>>>=20
->>>> You now have two people responsible for the code in question telling
->>>> you that this is the wrong approach.
->>>>=20
->>>> Until this is addressed in some way, it is pointless you posting
->>>> another version of this patch.
->>>>=20
->>>> Thanks.
->>>=20
->>> I'm very sorry, I didn't have their previous intention.
->>> The meaning of the two assertions is reset and reset release.
->>> If you believe this is the wrong method, please ignore it.
->>=20
->> As Andrew has told you twice:
->>=20
->> We do not want to be resetting the PHY while we are probing the bus,
->> and he has given one reason for it.
->>=20
->> The reason Andrew gave is that hardware resetting a PHY that was not
->> already in reset means that any link is immediately terminated, and
->> the PHY has to renegotiate with its link partner when your code
->> subsequently releases the reset signal. This is *not* the behaviour
->> that phylib maintainers want to see.
->>=20
->> The second problem that Andrew didn't mention is that always hardware
->> resetting the PHY will clear out any firmware setup that has happened
->> before the kernel has been booted. Again, that's a no-no.
->=20
-> I am a bit confused by your statement regarding always resetting a PHY is=
- a=20
-> no-no. Isn't mdiobus_register_device() exactly doing this for PHYs? Using=
-=20
-> either a GPIO or reset-controller.
-> Thats's also what I see on our boards. During startup while device probin=
-g=20
-> there is a PHY reset, including the link reset.
-> And yes, that clears settings done by the firmware, e.g. setting PHY's LE=
-D=20
-> configuration.
->=20
-
-
-
-What he expressed is that the phy has been linked before the kernel has bee=
-n booted,=20
-and at this point, resetting the phy hardware will lose its original config=
-uration.=20
-The main focus is on fast links, resetting phy, and renegotiate
-
-I am not sure if my statement is correct
-
-the mdiobus_ register_ Device (), I didn't understand it either In the foll=
-owing example,=20
-I submitted a patch and did the same thing.
-
-int phy_device_register(struct phy_device *phydev)
-{
-	int err;
-
-	*err =3D mdiobus_register_device(&phydev->mdio);*
-	if (err)
-		return err;
-
-	/* Deassert the reset signal */
-	*phy_device_reset(phydev, 0);*
-
-	/* Run all of the fixups for this PHY */
-	err =3D phy_scan_fixups(phydev);
-	if (err) {
-		phydev_err(phydev, "failed to initialize\n");
-		goto out;
-	}
-
-	err =3D device_add(&phydev->mdio.dev);
-	if (err) {
-		phydev_err(phydev, "failed to add\n");
-		goto out;
-	}
-
-	return 0;
-
- out:
-	/* Assert the reset signal */
-	phy_device_reset(phydev, 1);
-
-	mdiobus_unregister_device(&phydev->mdio);
-	return err;
-}
-
-Firstly, I think this operation is too late.
-
-Secondly, it was in the boot program that I did not reset my phy and was un=
-able to detect it,=20
-so I submitted a patch, which caused trouble for maintenance personnel.
-
-
-> Best
-> Alexander
->=20
->> The final issue I have is that your patch is described as "add a
->> function do *DEASSERT* reset" not "add a function to *ALWAYS* *RESET*"
->> which is what you are actually doing here. So the commit message and
->> the code disagree with what's going on - the summary line is at best
->> misleading.
->>=20
->> If your hardware case is that the PHY is already in reset, then of
->> course you don't see any of the above as a problem, but that is not
->> universally true - and that is exactly why Andrew is bringing this
->> up. There are platforms out there where the reset is described in
->> the firmware hardware description, *but* when the kernel boots, the
->> reset signal is already deasserted. Raising it during kernel boot as
->> you are doing will terminate the PHY's link with the remote end,
->> and then deasserting it will cause it to renegotiate.
->>=20
->> Thanks.
->=20
->=20
-> --=20
-> TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Ge=
-rmany
-> Amtsgericht M=C3=BCnchen, HRB 105018
-> Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan S=
-chneider
-> http://www.tq-group.com/
+Do you want us to reply w/ such a big confidentiality notice?
 
