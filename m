@@ -2,140 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65A4F700AF5
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 17:04:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C009E700AFB
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 17:05:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241690AbjELPEX convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 12 May 2023 11:04:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
+        id S241701AbjELPFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 11:05:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241670AbjELPEV (ORCPT
+        with ESMTP id S241696AbjELPEr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 11:04:21 -0400
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2BB22D60
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 08:04:20 -0700 (PDT)
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-50d8d4efd13so1794312a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 08:04:20 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683903859; x=1686495859;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/8r8EIzdiXeXG/Z0ECjEsALK1soC+rf/Zy6+YvirHCY=;
-        b=gkIGnebHLXVYcubZfxuDYjPZsQ3QSgd9q+VoAc9Sqi+gxO3vwcCKqFQ74lVLsYDn0u
-         rJ265Yf4CajzLJaMgIKlLqmWz4lwj7mJ3dcxRPUbiqbbTUZlDGwSNhFm7pYiVbcnKv8D
-         CAiwp+sIimLNw+O2K3ILzbcCYhfGX7X0PyOf10U/TSfe8jFVh3qE8X+/ot3Uh8HjQuRx
-         vBCScFVhOfC0TDXFI+SnXLXm25o1nbrEkXBLkqX3MhDEU5HQplin26EadLPksFF2OKdQ
-         gXGxL9ZcbYUdG6E6JxyIFkg1uXHtKPm6QG+BdRnxhWAV4aq/2ZznYHssVlUjmHVurcWI
-         7CHg==
-X-Gm-Message-State: AC+VfDxbN1I8vJuyuwXy+qiddyA/ls/2hz7zOgaVUguKrQDyOIqTESxZ
-        NL23m6HiviHrJk0iUp1T+tidxYfcMR0nj/O1ieMDbpuu
-X-Google-Smtp-Source: ACHHUZ4Fi1WViOnDPHVoEZjlRHXOAYSggSu7/u1p1qyqKPCznxTUPFZhL8UgpViTVQ+v9eAUuZmsa31pUoQh4xSn7kQ=
-X-Received: by 2002:a17:906:2252:b0:965:bc62:fe38 with SMTP id
- 18-20020a170906225200b00965bc62fe38mr21176956ejr.7.1683903858828; Fri, 12 May
- 2023 08:04:18 -0700 (PDT)
+        Fri, 12 May 2023 11:04:47 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E16676A6;
+        Fri, 12 May 2023 08:04:41 -0700 (PDT)
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CDJomA006467;
+        Fri, 12 May 2023 15:04:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=NCeAupFipwrt8mD4aFJWb678AM5yOEw1p39DaJCb9g4=;
+ b=EdTDwTx6jaBZSROgztMHfMydriRyo6Utb90xO8qtlGBHP39uvjd4TT2QJ/FV/Cz2bbD7
+ B/8M97whEL/SPEGywDZbkmwZCSvIIB6tyFzHTRuylVlPKuYPEf0LFSDW8YwpIYGpYH//
+ 1uSR8vDz4lxhPY1Eg69py66rMIAUlw3eC/7iAit3cQDh+pHG/Mj1wNNBHwq2+8izfqoD
+ 62UfXoQ2FSvMjRg6kyU4w8XcyEfiXNVdu916hJulIfQqw+cZVbIWdcmAPh0s+H/696+9
+ grEB/xto5YWYZYy0kg+VRINYCl7UE/qYcug3jmaLuZEeeSSNV++WZeT5Q2ar6I/Qkp8J 8w== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qhh390xfj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 15:04:31 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34CF4UCa004240
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 15:04:30 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 12 May 2023 08:04:30 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH] arm64: dts: qcom: sc8280xp: Flush RSC sleep & wake votes
+Date:   Fri, 12 May 2023 08:04:25 -0700
+Message-ID: <20230512150425.3171122-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230511073428.10264-1-u.kleine-koenig@pengutronix.de>
- <CAJZ5v0gNPt=rq+pQtmoGL5nxzDQboOK4d6h7=NoY=LueVhZjAQ@mail.gmail.com>
- <20230511103923.hvibdyo5ges4bab2@pengutronix.de> <ZFzWCey825wSlr2v@hovoldconsulting.com>
- <CAJZ5v0jvJT4JkHtO3RCUEzkfawxLCwR=QO2Y2CsL=cYN9s4hXw@mail.gmail.com>
- <ZF3tUQFTeILXV_VT@hovoldconsulting.com> <CAJZ5v0gRcaL5y4nyDcFYfnH8sNYOHSHZN1qwcv+Z7yu4jhSiMA@mail.gmail.com>
- <ZF5UpOzmvXLX-056@hovoldconsulting.com>
-In-Reply-To: <ZF5UpOzmvXLX-056@hovoldconsulting.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 12 May 2023 17:04:07 +0200
-Message-ID: <CAJZ5v0j14X2SweUds+dT3pGsWC79xGR6s8jguPseFVLmftK9wg@mail.gmail.com>
-Subject: Re: [PATCH] driver core: Call pm_runtime_put_sync() only after device_remove()
-To:     Johan Hovold <johan@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: TUEEDQSV5vg-O2UHV8zcMAP2RPpwr321
+X-Proofpoint-ORIG-GUID: TUEEDQSV5vg-O2UHV8zcMAP2RPpwr321
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-12_09,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
+ priorityscore=1501 malwarescore=0 lowpriorityscore=0 phishscore=0
+ suspectscore=0 clxscore=1015 mlxscore=0 impostorscore=0 mlxlogscore=999
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305120124
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 5:00 PM Johan Hovold <johan@kernel.org> wrote:
->
-> On Fri, May 12, 2023 at 04:04:59PM +0200, Rafael J. Wysocki wrote:
-> > On Fri, May 12, 2023 at 9:39 AM Johan Hovold <johan@kernel.org> wrote:
-> > >
-> > > On Thu, May 11, 2023 at 04:44:25PM +0200, Rafael J. Wysocki wrote:
-> > > > On Thu, May 11, 2023 at 1:48 PM Johan Hovold <johan@kernel.org> wrote:
-> > >
-> > > > > No, this seems like very bad idea and even violates the documentation
-> > > > > which clearly states that the usage counter is balanced before calling
-> > > > > remove() so that drivers can use pm_runtime_suspend() to put devices
-> > > > > into suspended state.
-> > > >
-> > > > I missed that, sorry.
-> > > >
-> > > > > There's is really no good reason to even try to change as this is in no
-> > > > > way a fast path.
-> > > >
-> > > > Still, I think that while the "put" part needs to be done before
-> > > > device_remove(), the actual state change can be carried out later.
-> > > >
-> > > > So something like
-> > > >
-> > > >     pm_runtime_put_noidle(dev);
-> > > >
-> > > >     device_remove(dev);
-> > > >
-> > > >     pm_runtime_suspend(dev);
-> > > >
-> > > > would generally work, wouldn't it?
-> > >
-> > > No, as drivers typically disable runtime pm in their remove callbacks,
-> >
-> > What exactly do you mean by "typically"?  None of the PCI drivers
-> > should do that, for instance.
->
-> I had platform drivers in mind, but so do i2c drivers for example.
->
-> > > that pm_runtime_suspend() would amount to a no-op (and calling the
-> > > driver pm ops post unbind and the driver having freed its data would
-> > > not work either).
-> >
-> > Well, not really.
-> >
-> > There are drivers and there are bus types/PM domains.  Drivers need
-> > not disable PM-runtime in their "remove" callbacks if they know that
-> > the bus type/PM domain will take care of handling PM-runtime properly
-> > after the driver's remove callback has run and the bus type/PM domain
-> > may very well want its PM-runtime suspend callback to run then (for
-> > example, to remove power from the unused device).  Arguably it can
-> > invoke runtime_suspend() from its "remove" callback, so it's not like
-> > this is a big deal, but IMO it helps if the most general case is
-> > considered.
->
-> My point was that hundreds of drivers do and for these this call becomes
-> a no-op. Same for buses that disable runtime pm at remove.
->
-> > Anyway, the question here really is: Does it make sense to carry out a
-> > runtime suspend immediately before device_remove()?  Honestly, I'm not
-> > sure about that.
->
-> I'd say it doesn't really matter as driver unbind is not a common
-> operation and drivers using autosuspend would generally not be affected
-> either.
->
-> You can try to rework this, but clearly it needs more thought than
-> simply moving the put sync and some drivers may also be relying on the
-> current behaviour.
->
-> A quick grep reveals a few which would be left active if you change
-> pm_runtime_put_sync() to pm_runtime_put_noidle(), even if that could be
-> fixed driver by driver of course.
+The rpmh driver will cache sleep and wake votes until the cluster
+power-domain is about to enter idle, to avoid unnecessary writes. So
+associate the apps_rsc with the cluster pd, so that it can be notified
+about this event.
 
-OK, fair enough.
+Without this, only AMC votes are being commited.
+
+Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+---
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+index 8fa9fbfe5d00..5c68f2182c2f 100644
+--- a/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc8280xp.dtsi
+@@ -3982,6 +3982,7 @@ apps_rsc: rsc@18200000 {
+ 			qcom,tcs-config = <ACTIVE_TCS  2>, <SLEEP_TCS   3>,
+ 					  <WAKE_TCS    3>, <CONTROL_TCS 1>;
+ 			label = "apps_rsc";
++			power-domains = <&CLUSTER_PD>;
+ 
+ 			apps_bcm_voter: bcm-voter {
+ 				compatible = "qcom,bcm-voter";
+-- 
+2.25.1
+
