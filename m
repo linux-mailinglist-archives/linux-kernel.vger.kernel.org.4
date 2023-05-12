@@ -2,155 +2,242 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF02700DCB
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 19:22:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 56FF4700DCE
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 19:22:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237996AbjELRWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 13:22:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34838 "EHLO
+        id S238045AbjELRWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 13:22:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjELRWn (ORCPT
+        with ESMTP id S229901AbjELRWs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 13:22:43 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C5D4205
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 10:22:41 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f41dceb93bso51605015e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 10:22:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683912160; x=1686504160;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9UKhgFOsFOUm1i3OTVWLnAknbppUMdId4xzOBuxqB5g=;
-        b=NsrIrh96sAJgzY3qNhe7YkUp9L64mLBlPEM+5iW8LDzk9I39y31DPewD3xCHMMaJQ2
-         +YRAzGYFvh8cp6htC5NuIFlUear8IskmNx3hzXPDck6YDKpJbuyAUZ+55VRN1GVA9vcZ
-         XzE3njXU2pJ+dQZ0354V9e1SvJEulycfaQQIJRW+TjlzkNseyXaj32NENUVT7gYYPR2X
-         oBAQ2TVqgKo2QxMKIUzqZmvTQDL0bFDuVALPVYnj3YmXtoLstReyK58oAWWIWukdKWiW
-         amIR1A03HrlUJA13claHV42EVuyQZTFrtuGB8GGqtzn/DoDviaIS8goShNVqNbZX2+Ez
-         h8Hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683912160; x=1686504160;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9UKhgFOsFOUm1i3OTVWLnAknbppUMdId4xzOBuxqB5g=;
-        b=DVgv3Ew2m40vupXIo6Qx1CA2nh61A3Ig1OCo3q3gTgjSDRPo6ngpNQUR8H/Hrub7Wd
-         QlQZZ6dC6dLFx1O9qwZg+9PuKTxk0KjhRc4D+LkkHxTWjHqVRXzhk7eXP1XZjazoRMev
-         T8Mlpxa/TKG2XwUPsNQ8+nCd//JSLYdf20zQozGeZ5hqs5RWNCjj5wkuhBmUy4EPWfJ0
-         GhtL9uzCcnOxGhS501ZKAqQaGOgL2QrDscWQ5MbJckRuNMa3NRFfFXPzUeZXOfj4Ao7n
-         dOjoiC2CSr86cXCxTkERwInahzIJYxi/+astsDK0nyGSC1dS8mM01ZQO9a3yK73qJ/KA
-         rjbA==
-X-Gm-Message-State: AC+VfDwnHrDb1T3SWbdHNTHZaL2HaugybsC94x9Du1X6eDgcx9ACyOap
-        reTLP0TTzJSoTSL5PwMVhzjtKA==
-X-Google-Smtp-Source: ACHHUZ5s1/DQ3DjzrYlm5BwHrIhd9/mPvWxYqMo2RuhRNAGUtGs21KLLHUD50TpSIaoEUqJUZLveSQ==
-X-Received: by 2002:a7b:c8d9:0:b0:3f4:2174:b284 with SMTP id f25-20020a7bc8d9000000b003f42174b284mr13833496wml.28.1683912159779;
-        Fri, 12 May 2023 10:22:39 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:5efd:dba0:e7fa:b5bf? ([2a05:6e02:1041:c10:5efd:dba0:e7fa:b5bf])
-        by smtp.googlemail.com with ESMTPSA id 10-20020a05600c024a00b003f423dfc686sm16512777wmj.45.2023.05.12.10.22.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 10:22:39 -0700 (PDT)
-Message-ID: <b1237581-3ece-a358-f1ba-7a3ebb08d8d2@linaro.org>
-Date:   Fri, 12 May 2023 19:22:38 +0200
+        Fri, 12 May 2023 13:22:48 -0400
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95F10D852
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 10:22:46 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw21.mail.saunalahti.fi (Halon) with ESMTP
+        id 9aaf40ea-f0e9-11ed-abf4-005056bdd08f;
+        Fri, 12 May 2023 20:22:44 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Fri, 12 May 2023 20:22:43 +0300
+To:     Esteban Blanc <eblanc@baylibre.com>
+Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
+        jneanne@baylibre.com, aseketeli@baylibre.com, sterzik@ti.com,
+        u-kumar1@ti.com
+Subject: Re: [PATCH v4 1/3] rtc: tps6594: Add driver for TPS6594 RTC
+Message-ID: <ZF514wvUt_xrU1gG@surfacebook>
+References: <20230512141755.1712358-1-eblanc@baylibre.com>
+ <20230512141755.1712358-2-eblanc@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-Subject: Re: power_supply cooling interface
-Content-Language: en-US
-To:     Pavel Machek <pavel@ucw.cz>,
-        Caleb Connolly <caleb.connolly@linaro.org>
-Cc:     Sebastian Reichel <sre@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        linux-arm-msm <linux-arm-msm@vger.kernel.org>
-References: <164f2458-fb66-f238-7143-bdbe1e200870@linaro.org>
- <ZF5t5BWqLLEvDdfz@localhost>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <ZF5t5BWqLLEvDdfz@localhost>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512141755.1712358-2-eblanc@baylibre.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
+        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2023 18:48, Pavel Machek wrote:
-> Hi!
+Fri, May 12, 2023 at 04:17:53PM +0200, Esteban Blanc kirjoitti:
+> TPS6594 PMIC is a MFD. This patch adds support for
+> the RTC found inside TPS6594 family of PMIC.
 > 
->> I've been working on a driver for the charger found in most Snapdragon
->> 845 phones (the OnePlus 6, SHIFT6mq, PocoPhone F1, etc). I wanted to
->> include support for the POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT
->> property.
->>
->> My understanding is that it exposes the current limit as a cooling
->> device so that userspace (or frameworks like DTPM) can optimise for
->> performance in a thermally constrained device by limiting the input
->> current and thus reducing the heat generated by the charger circuitry,
->> a similar idea was applied on the Pixel C:
->> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=a4496d52b3430cb3c4c16d03cdd5f4ee97ad1241
->>
->> However, reading through the sysfs docs for cooling devices, and
->> looking at the implementation in power_supply_core.c, it seems like the
->> behavior here is wrong in a few ways:
->>   1. The values should scale from 0: no cooling to max_state: max
->> cooling, but the power_supply docs and the only existing implementation
->> (the smbb driver) just export the current_limit, such that increasing
->> cur_state would increase the current limit, not decrease it.
->>   2. (unsure?)The scale is completely different to most other cooling
->> devices, most cooling devices don't seem to have a max state much
->> beyond the double digits, but CHARGE_CONTROL_LIMIT is on the scale of
->> uA, so approaches like incrementing the cooling state by 1 don't really
->> work.
-> 
-> Did this get solved somehow?
+> Alarm is also supported.
 
-Thanks for resurrecting the discussion.
+...
 
-> Anyway, I am not sure mW will be useful here, as elsewhere it is mW
-> thermal and here it is mW from charger. Most of that energy should be
-> stored in battery, not converted to heat.
+> +/*
+> + * Min and max values supported with 'offset' interface (swapped sign)
+> + * After conversion, the values does not exceed the range [-32767, 33767] which COMP_REG must
+> + * conform to
 
-I'm not sure to understand the comment. The question is about decreasing 
-the speed of the charge of the battery because the faster it charges the 
-warmer it gets. Doing a fast charge is ok, if the phone is for instance 
-on a table doing nothing. But if the environment is hot (a car, a 
-pocket) or there are other sources of heat on the phone like a game, the 
-temperature of the battery could be too high (or the skin temperature). 
-In this case we have to balance the heat contribution of the different 
-components by reducing their performances. The first knob to act on is 
-to reduce the charge speed of the battery by reducing the delivered power.
+Please, format it better and do not forget to use proper punctuation (commas,
+periods, etc.).
 
-For that we need a connection between the thermal framework which 
-monitors the battery temperature and the power supply to reduce the 
-charge speed when it is too hot. This connection is the cooling device.
+> + */
+> +#define MIN_OFFSET (-277774)
+> +#define MAX_OFFSET (277774)
 
-The cooling devices have opaque values where the min and max cooling 
-effect vary depending on the implementation (eg. a fan 0/1, a LCD light 
-0/1023).
+...
 
-Here the power supply has yet another unit (uA) to act on and difficult 
-to translate to a cooling device discrete numbers (that is my 
-understanding).
+> +/* Multiplier for ppb conversions */
+> +#define PPB_MULT (1000000000LL)
 
-My suggestion is adding to the power supply the power capping capability 
-using the powercap framework and add it to the DTPM nomenclature.
+We have something in units.h. Can you use generic macro?
 
-With enough components in DTPM, it will be possible to create a generic 
-power cooling device using the unified unit uW with the powercap API.
+...
 
+> +	ret = regmap_update_bits(tps->regmap, TPS6594_REG_RTC_INTERRUPTS,
+> +				 TPS6594_BIT_IT_ALARM, val);
+> +
+> +	return ret;
 
+	return regmap_update_bits(...);
+
+...
+
+> +	/*
+> +	 * Set GET_TIME to 0. This way, next time we set GET_TIME to 1 we are sure to store an
+> +	 * up-to-date timestamp
+> +	 */
+
+Please, check all your multi-line comments for proper punctuation.
+
+...
+
+> +	/* Check if RTC is running. */
+
+Please, keep a single style for the one-line comments (with or without period
+at the end).
+
+> +	alm->enabled = int_val & TPS6594_BIT_IT_ALARM ? 1 : 0;
+
+Ternary is reduntand.
+
+> +	return ret;
+
+Why not return 0 explicitly? Or do you return positive value?
+
+...
+
+> +	comp_data[0] = (u16)value & 0xFF;
+> +	comp_data[1] = ((u16)value >> 8) & 0xFF;
+
+Use proper bitwise type, i.e. __le16.
+
+...
+
+> +	value = (u16)comp_data[0] | ((u16)comp_data[1] << 8);
+
+Ditto.
+
+...
+
+> +	/* Convert from RTC calibration register format to ppb format */
+> +	tmp = calibration * (s64)PPB_MULT;
+
+Is casting really needed?
+
+> +	if (tmp < 0)
+> +		tmp -= TICKS_PER_HOUR / 2LL;
+> +	else
+> +		tmp += TICKS_PER_HOUR / 2LL;
+
+Is it guaranteed to have no overflow here?
+
+> +	tmp = div_s64(tmp, TICKS_PER_HOUR);
+> +
+> +	/*
+> +	 * Offset value operates in negative way, so swap sign.
+> +	 * See 8.3.10.5, (32768 - COMP_REG)
+> +	 */
+> +	*offset = (long)-tmp;
+> +
+> +	return ret;
+
+ret?!
+
+> +}
+> +
+> +static int tps6594_rtc_set_offset(struct device *dev, long offset)
+> +{
+> +	int calibration;
+> +	s64 tmp;
+
+Similar questions here as per above routine.
+
+> +	/* Make sure offset value is within supported range */
+> +	if (offset < MIN_OFFSET || offset > MAX_OFFSET)
+> +		return -ERANGE;
+> +
+> +	/* Convert from ppb format to RTC calibration register format */
+> +	tmp = offset * (s64)TICKS_PER_HOUR;
+> +	if (tmp < 0)
+> +		tmp -= PPB_MULT / 2LL;
+> +	else
+> +		tmp += PPB_MULT / 2LL;
+> +	tmp = div_s64(tmp, PPB_MULT);
+> +
+> +	/* Offset value operates in negative way, so swap sign */
+> +	calibration = (int)-tmp;
+> +
+> +	return tps6594_rtc_set_calibration(dev, calibration);
+> +}
+
+...
+
+> +static int tps6594_rtc_probe(struct platform_device *pdev)
+> +{
+> +	struct tps6594 *tps;
+> +	struct rtc_device *rtc;
+> +	int irq;
+> +	int ret;
+
+> +	tps = dev_get_drvdata(pdev->dev.parent);
+
+Can be united with definition of tps above.
+
+...
+
+> +	/* RTC not running */
+> +	if (ret == 0) {
+> +		/* Start rtc */
+
+RTC for the sake of consistency.
+
+But I think one of the comment is redundant.
+
+...
+
+> +		mdelay(100);
+
+Such long delays have to be explicitly elaborated (in the comment on top).
+
+> +	}
+
+...
+
+> +	irq = platform_get_irq_byname(pdev, TPS6594_IRQ_NAME_ALARM);
+> +	if (irq < 0) {
+> +		dev_err(&pdev->dev, "Failed to get irq\n");
+> +		return irq;
+
+	return dev_err_probe(...);
+
+> +	}
+
+...
+
+> +		dev_err(&pdev->dev, "Failed to request_threaded_irq\n");
+> +		return ret;
+
+Ditto.
+
+...
+
+> +		dev_err(&pdev->dev, "Failed to init rtc as wakeup source\n");
+> +		return ret;
+
+Ditto.
+
+...
+
+> +
+
+Blank line is not needed.
+
+> +module_platform_driver(tps6594_rtc_driver);
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+With Best Regards,
+Andy Shevchenko
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
