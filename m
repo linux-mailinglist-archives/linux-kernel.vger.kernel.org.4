@@ -2,94 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 200BD7004F0
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1576C7004F1
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:11:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240230AbjELKLg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39182 "EHLO
+        id S240287AbjELKLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 06:11:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240013AbjELKLe (ORCPT
+        with ESMTP id S240013AbjELKLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:11:34 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F356106D3;
-        Fri, 12 May 2023 03:10:59 -0700 (PDT)
-Received: from dggpemm500016.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QHktL6xytz18LRW;
-        Fri, 12 May 2023 18:06:02 +0800 (CST)
-Received: from [10.67.108.26] (10.67.108.26) by dggpemm500016.china.huawei.com
- (7.185.36.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 12 May
- 2023 18:10:15 +0800
-Message-ID: <f7a58629-05ae-18f4-d047-a2592f501b45@huawei.com>
-Date:   Fri, 12 May 2023 18:10:15 +0800
+        Fri, 12 May 2023 06:11:41 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A12E911DA4
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:11:04 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9B96DFEC;
+        Fri, 12 May 2023 03:11:26 -0700 (PDT)
+Received: from e125579.fritz.box (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 67C9D3F5A1;
+        Fri, 12 May 2023 03:10:40 -0700 (PDT)
+From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
+To:     Ingo Molnar <mingo@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Qais Yousef <qyousef@layalina.io>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Vincent Donnefort <vdonnefort@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] sched: Consider CPU contention in frequency, EAS max util & load-balance busiest CPU selection
+Date:   Fri, 12 May 2023 12:10:27 +0200
+Message-Id: <20230512101029.342823-1-dietmar.eggemann@arm.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.0
-To:     <masahiroy@kernel.org>
-CC:     <aou@eecs.berkeley.edu>, <ardb@kernel.org>, <arnd@arndb.de>,
-        <catalin.marinas@arm.com>, <dennis@ausil.us>, <jszhang@kernel.org>,
-        <linux-arch@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kbuild@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, <nicolas@fjasle.eu>,
-        <palmer@dabbelt.com>, <paul.walmsley@sifive.com>,
-        <regressions@leemhuis.info>, <will@kernel.org>
-References: <20221226184537.744960-1-masahiroy@kernel.org>
-Subject: Re: [PATCH v2] arch: fix broken BuildID for arm64 and riscv
-Content-Language: en-US
-From:   "chenjiahao (C)" <chenjiahao16@huawei.com>
-In-Reply-To: <20221226184537.744960-1-masahiroy@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.108.26]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500016.china.huawei.com (7.185.36.25)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-6.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+This is the implementation of the idea to factor in CPU runnable_avg
+into the CPU utilization getter functions (so called
+'runnable boosting') as a way to consider CPU contention for:
 
-It seems this patch introduces a compile error on powerpc 85xx platform with
-CONFIG_RELOCATABLE enabled.
+  (a) CPU frequency
+  (b) EAS' max util and
+  (c) 'migrate_util' type load-balance busiest CPU selection.
 
-To reproduce the problem, I compiled the mainline linux kernel with patch
-99cb0d917ffa ("arch: fix broken BuildID for arm64 and riscv"), using 
-configure
-file:
+Tests:
 
-arch/powerpc/configs/85xx-32bit.config
+for (a) and (b):
 
-and enabled CONFIG_RELOCATABLE manually. Then the compile log with
-Segmentation fault appeared as below:
+Testcase is Jankbench (all subtests, 10 iterations) on Pixel6 (Android
+12) with mainline v5.18 kernel and forward ported task scheduler
+patches.
 
-   ...
-   AR      fs/proc/built-in.a
-   AR      fs/built-in.a
-   AR      built-in.a
-   AR      vmlinux.a
-   LD      vmlinux.o
-   OBJCOPY modules.builtin.modinfo
-   GEN     modules.builtin
-   MODPOST vmlinux.symvers
-   UPD     include/generated/utsversion.h
-   CC      init/version-timestamp.o
-   LD      .tmp_vmlinux.kallsyms1
-Segmentation fault (core dumped)
-scripts/Makefile.vmlinux:34: recipe for target 'vmlinux' failed
-make[1]: *** [vmlinux] Error 139
-Makefile:1252: recipe for target 'vmlinux' failed
-make: *** [vmlinux] Error 2
+Uclamp has been deactivated so that the Android Dynamic Performance
+Framework (ADPF) 'CPU performance hints' feature (Userspace task
+boosting via uclamp_min) does not interfere.
 
-Could anyone reproduce above error, or have I missed anything else?
+Max_frame_duration:
++-----------------+------------+
+|     kernel      | value [ms] |
++-----------------+------------+
+|      base       | 163.061513 |
+|    runnable     | 161.991705 |
++-----------------+------------+
 
-Thanks,
-Jiahao
+Mean_frame_duration:
++-----------------+------------+----------+
+|     kernel      | value [ms] | diff [%] |
++-----------------+------------+----------+
+|      base       |    18.0    |    0.0   |
+|    runnable     |    12.7    |  -29.43  |
++-----------------+------------+----------+
+
+Jank percentage (Jank deadline 16ms):
++-----------------+------------+----------+
+|     kernel      | value [%]  | diff [%] |
++-----------------+------------+----------+
+|      base       |     3.6    |    0.0   |
+|    runnable     |     1.0    |  -68.86  |
++-----------------+------------+----------+
+
+Power usage [mW] (total - all CPUs):
++-----------------+------------+----------+
+|     kernel      | value [mW] | diff [%] |
++-----------------+------------+----------+
+|      base       |    129.5   |    0.0   |
+|    runnable     |    134.3   |   3.71*  |
++-----------------+------------+----------+
+
+* Power usage went up from 129.3 (-0.15%) in v1 to 134.3 (3.71%) whereas
+all the other benchmark numbers stayed roughly the same. This is
+probably because of using 'runnable boosting' for EAS max util now as
+well and tasks more often end up running on non-little CPUs because of
+that.
+
+for (c):
+
+Testcase is 'perf bench sched messaging' on Arm64 Ampere Altra with 160
+CPUs (sched domains = {MC, DIE, NUMA}) which shows some small
+improvement:
+
+perf stat --null --repeat 10 -- perf bench sched messaging -t -g 1 -l 2000
+
+0.4869 +- 0.0173 seconds time elapsed (+- 3.55%) ->
+0.4377 +- 0.0147 seconds time elapsed (+- 3.36%)
+
+Chen Yu tested v1** with schbench, hackbench, netperf and tbench on an
+Intel Sapphire Rapids with 2x56C/112T = 224 CPUs which showed no obvious
+difference and some small improvements on tbench:
+
+https://lkml.kernel.org/r/ZFSr4Adtx1ZI8hoc@chenyu5-mobl1
+
+** The implementation for (c) hasn't changed in v2.
+
+v1 -> v2:
+
+(1) Refactor CPU utilization getter functions, let cpu_util_cfs() call
+    cpu_util_next() (now cpu_util()).
+
+(2) Consider CPU contention in EAS (find_energy_efficient_cpu() ->
+    eenv_pd_max_util()) next to schedutil (sugov_get_util()) as well so
+    that EAS' and schedutil's views on CPU frequency selection are in
+    sync.
+
+(3) Move 'util_avg = max(util_avg, runnable_avg)' from
+    cpu_boosted_util_cfs() to cpu_util_next() (now cpu_util()) so that
+    EAS can use it too.
+
+(4) Rework patch header.
+
+(5) Add test results (JankbenchX on Pixel6 to test changes in schedutil
+    and EAS) and 'perf bench sched messaging' on Arm64 Ampere Altra for
+    CFS load-balance (find_busiest_queue()).
+
+
+Dietmar Eggemann (2):
+  sched/fair: Refactor CPU utilization functions
+  sched/fair, cpufreq: Introduce 'runnable boosting'
+
+ kernel/sched/core.c              |  2 +-
+ kernel/sched/cpufreq_schedutil.c |  3 +-
+ kernel/sched/fair.c              | 72 +++++++++++++++++++++++++-------
+ kernel/sched/sched.h             | 49 +---------------------
+ 4 files changed, 63 insertions(+), 63 deletions(-)
+
+-- 
+2.25.1
+
