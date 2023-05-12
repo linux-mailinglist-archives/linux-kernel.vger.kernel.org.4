@@ -2,72 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C9BB700EFE
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 20:41:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 26491700F04
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 20:42:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239027AbjELSl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 14:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
+        id S239089AbjELSmY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 14:42:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238514AbjELSlW (ORCPT
+        with ESMTP id S238620AbjELSmW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 14:41:22 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A60BEC
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:41:21 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-24ded4b33d7so7104099a91.3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:41:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1683916880; x=1686508880;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/koMj+9kCWnn+HpYnU02beKNw32OHAll5JRoBttwWow=;
-        b=UIhGNBCTmqrch9vZbwJdVHFCubylnX3lcJyBGWavwa7JY8D/CttT9kGCDbOafsAU5t
-         vRGkZetPBOTBep0hAclU+TvrJrsGAcm/cmzfx87RHZxbSOm/1zOHCe1nI8Z1CWv1Ps9D
-         D952EwlqaD3t3yacv+04O0gQbGqwleDPiwJAfoDvrdUT6jNeoX47UMmTa5Nhrxp9KLTu
-         JlBCktj76+eSbrUIG9171EIYm1HesTFO1GehE0SGP7Zz4cud4wCc0eSKdVsUSQ1gmH6f
-         qpkn9CtmJbzw5p3uYmUZ0UnZpWrgxx2rYRHTfZBYjywgnOZqECdRQJFMHKa48i7ms19Q
-         y94g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683916880; x=1686508880;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/koMj+9kCWnn+HpYnU02beKNw32OHAll5JRoBttwWow=;
-        b=JKm2A/4plMiMu9xMtg4BNydT3AYfSXcO251i168B6UNfXTRFVG3xOlIkS9RtML56sY
-         jkgwbhs2vshNPY3CnjZ7rrR5m0aj7F9+plawwaj+N6IbTe6Dc6pHmvoaV/dNYd2+ecOG
-         198NanzEswVUO5Y1NPOEBVDamnx0j/Yli9YAXy8ow9dPCAyPV0zcW/IeVRbH2L67dkn3
-         rBXsHeoNoPLf14OEMT44VA/eIwXbPYcgS+8Wfha+wqEpY4JiIXcDUxNGN9LjHJsF36dh
-         8Skj7sWm1psRjJWDKauYneiSNHXDGc7smmHOJ3YXGBpyvwBMar+NJ7/DoJQkAG7csGqm
-         VPdw==
-X-Gm-Message-State: AC+VfDxBJ/oFiTn1hKjV6/N/H4+2znaD2jvFo0yCgvEo4JlPwVX/qw8P
-        ziuv8uq9R0roB+RopZxFzxPtSQ==
-X-Google-Smtp-Source: ACHHUZ7tzMVQBdyjPy08WAKw09bAKD7sofw01RBIRabRo3XqbykGfqUcjR5vOU1bPn+AEZQv0/dWSA==
-X-Received: by 2002:a17:90a:ea90:b0:24d:ee3f:b682 with SMTP id h16-20020a17090aea9000b0024dee3fb682mr24863163pjz.35.1683916880378;
-        Fri, 12 May 2023 11:41:20 -0700 (PDT)
-Received: from localhost ([50.221.140.188])
-        by smtp.gmail.com with ESMTPSA id c3-20020a17090a020300b00250c1392ed3sm6500634pjc.55.2023.05.12.11.41.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 11:41:19 -0700 (PDT)
-Date:   Fri, 12 May 2023 11:41:19 -0700 (PDT)
-X-Google-Original-Date: Fri, 12 May 2023 11:40:58 PDT (-0700)
-Subject:     Re: [PATCH v8 1/3] riscv: Introduce CONFIG_RELOCATABLE
-In-Reply-To: <87ttwi91g0.fsf@igel.home>
-CC:     alex@ghiti.fr, alexghiti@rivosinc.com, mpe@ellerman.id.au,
-        npiggin@gmail.com, christophe.leroy@csgroup.eu,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        aou@eecs.berkeley.edu, linuxppc-dev@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     schwab@linux-m68k.org
-Message-ID: <mhng-c528747d-5f47-4e42-b6db-f9db4e756ff9@palmer-ri-x1c9a>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        Fri, 12 May 2023 14:42:22 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD207695
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:42:14 -0700 (PDT)
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CIdN3K018349;
+        Fri, 12 May 2023 18:41:59 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=A0ZlywmD2aD1qzsJXpiHd4vLw+jeD/XeIFy/jQ6YHpg=;
+ b=jzl74cEeenulsYMrmOGpxNR1j6AQn8Fn3FSr6IJzBkqiImzYhIUfrA5czH1NnyaxGJja
+ AiiT2ri0oKLAFkzm0WrYCAZ4jv06EkkY150WvR5Mg7rlSg0u8Ldhy3e801tngzHuIx/u
+ PBiZfyRMEFL0w6p5HCTYgZmxNEfEWq6J4IC7fRpTCJ5KVuYXc4uT+xh5J2YXGEOiqac0
+ 8CeXPYY1yVBN0N/wMoyfb5VvQONuTn4XJSh6bsdqI8eBSq01rE7r+UjJsGZkbe+0FOXN
+ qjABnomlVCvYM+Tb7nZwxyuIZeWeaH4/BiXOHHAkX3sTDDqRNgXkskBzxKu4f8LKYxRx lA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qhth78mf7-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 18:41:59 +0000
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34CIehV9024517;
+        Fri, 12 May 2023 18:41:57 GMT
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qhth78me5-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 18:41:57 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34CGDJMC029893;
+        Fri, 12 May 2023 18:41:56 GMT
+Received: from smtprelay07.wdc07v.mail.ibm.com ([9.208.129.116])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3qf7y9kxsb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 18:41:56 +0000
+Received: from smtpav02.wdc07v.mail.ibm.com (smtpav02.wdc07v.mail.ibm.com [10.39.53.229])
+        by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34CIftDX41877892
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 12 May 2023 18:41:55 GMT
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 024E85805E;
+        Fri, 12 May 2023 18:41:55 +0000 (GMT)
+Received: from smtpav02.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E5BAD5805D;
+        Fri, 12 May 2023 18:41:46 +0000 (GMT)
+Received: from [9.43.118.245] (unknown [9.43.118.245])
+        by smtpav02.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 12 May 2023 18:41:46 +0000 (GMT)
+Message-ID: <431faa39-4f5c-0087-7ce5-16796ca1a9e1@linux.vnet.ibm.com>
+Date:   Sat, 13 May 2023 00:11:45 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v4 05/12] sched/fair: Keep a fully_busy SMT sched group as
+ busiest
+Content-Language: en-US
+To:     Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Cc:     Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Tim C . Chen" <tim.c.chen@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        shrikanth hegde <sshegde@linux.vnet.ibm.com>,
+        Srikar Dronamraju <srikar@linux.vnet.ibm.com>
+References: <20230406203148.19182-1-ricardo.neri-calderon@linux.intel.com>
+ <20230406203148.19182-6-ricardo.neri-calderon@linux.intel.com>
+From:   Shrikanth Hegde <sshegde@linux.vnet.ibm.com>
+In-Reply-To: <20230406203148.19182-6-ricardo.neri-calderon@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: N_8bzCah2WlTkoBS2S9n5SgJpBoRZCYX
+X-Proofpoint-GUID: Gzjm0TfiVbaoHEqaXk59UirojH1_Fja8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-12_11,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
+ phishscore=0 bulkscore=0 clxscore=1011 mlxlogscore=999 lowpriorityscore=0
+ impostorscore=0 suspectscore=0 priorityscore=1501 adultscore=0 spamscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305120156
+X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,39 +113,87 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 May 2023 11:18:23 PDT (-0700), schwab@linux-m68k.org wrote:
-> On Mai 09 2023, Alexandre Ghiti wrote:
->
->> On 5/9/23 21:07, Andreas Schwab wrote:
->>> That does not work with UEFI booting:
->>>
->>> Loading Linux 6.4.0-rc1-1.g668187d-default ...
->>> Loading initial ramdisk ...
->>> Unhandled exception: Instruction access fault
->>> EPC: ffffffff80016d56 RA: 000000008020334e TVAL: 0000007f80016d56
->>> EPC: ffffffff002d1d56 RA: 00000000004be34e reloc adjusted
->>> Unhandled exception: Load access fault
->>> EPC: 00000000fff462d4 RA: 00000000fff462d0 TVAL: ffffffff80016d56
->>> EPC: 00000000802012d4 RA: 00000000802012d0 reloc adjusted
->>>
->>> Code: c825 8e0d 05b3 40b4 d0ef 0636 7493 ffe4 (d783 0004)
->>> UEFI image [0x00000000fe65e000:0x00000000fe6e3fff] '/efi\boot\bootriscv64.efi'
->>> UEFI image [0x00000000daa82000:0x00000000dcc2afff]
->>>
->>
->> I need more details please, as I have a UEFI bootflow and it works great
->> (KASLR is based on a relocatable kernel and works fine in UEFI too).
->
-> It also crashes without UEFI.  Disabling CONFIG_RELOCATABLE fixes that.
-> This was tested on the HiFive Unmatched board.
-> The kernel image I tested is available from
-> <https://download.opensuse.org/repositories/Kernel:/HEAD/RISCV/>.  The
-> same kernel with CONFIG_RELOCATABLE disabled is available from
-> <https://download.opensuse.org/repositories/home:/Andreas_Schwab:/riscv:/kernel/standard/>.
 
-Sorry I missed this earlier, there's been some other reports of boot 
-failures on rc1 showing up but those were all a lot more vague.  Just 
-setting CONFIG_RELOCATABLE=y doesn't manifest a boot failure on QEMU on 
-my end and I don't have an UNmatched floating around.
 
-Alex says he's going to look into it (and IIRC he has my Unmatched...).
+On 4/7/23 2:01 AM, Ricardo Neri wrote:
+> When comparing two fully_busy scheduling groups, keep the current busiest
+> group if it represents an SMT core. Tasks in such scheduling group share
+> CPU resources and need more help than tasks in a non-SMT fully_busy group.
+>
+> Cc: Ben Segall <bsegall@google.com>
+> Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> Cc: Ionela Voinescu <ionela.voinescu@arm.com>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Mel Gorman <mgorman@suse.de>
+> Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Tim C. Chen <tim.c.chen@intel.com>
+> Cc: Valentin Schneider <vschneid@redhat.com>
+> Cc: x86@kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Tested-by: Zhang Rui <rui.zhang@intel.com>
+> Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> ---
+> Changes since v3:
+>  * None
+>
+> Changes since v2:
+>  * Introduced this patch.
+>
+> Changes since v1:
+>  * N/A
+> ---
+>  kernel/sched/fair.c | 16 ++++++++++++++--
+>  1 file changed, 14 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index b151e93ec316..ea23a5163bfa 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -9566,10 +9566,22 @@ static bool update_sd_pick_busiest(struct lb_env *env,
+>  		 * contention when accessing shared HW resources.
+>  		 *
+>  		 * XXX for now avg_load is not computed and always 0 so we
+> -		 * select the 1st one.
+> +		 * select the 1st one, except if @sg is composed of SMT
+> +		 * siblings.
+>  		 */
+> -		if (sgs->avg_load <= busiest->avg_load)
+> +
+> +		if (sgs->avg_load < busiest->avg_load)
+>  			return false;
+> +
+> +		if (sgs->avg_load == busiest->avg_load) {
+> +			/*
+> +			 * SMT sched groups need more help than non-SMT groups.
+> +			 * If @sg happens to also be SMT, either choice is good.
+> +			 */
+> +			if (sds->busiest->flags & SD_SHARE_CPUCAPACITY)
+> +				return false;
+> +		}
+> +
+>  		break;
+
+IIUC,
+
+Earlier, we used to go to out_balanced if sgs->avg_load <= busiest->avg_load.
+Now we go only if it is less. lets say sgs->avg_load == busiest->avg_load,
+then we will return true in MC,DIE domain. This might end up traversing
+multiple such group's and pick the last one as the busiest instead of
+first. I guess eventually any load balance if exists will be fixed.  But
+this might cause slight overhead. would it?
+
+
+
+nit: There is typo in [2/12]  if the whole core is repeated.
++	 * CPUs. When done between cores, do it only if the whole core if the
++	 * whole core is idle.
+
+Mentioning in this reply instead, to avoid sending another mail reply for this.
+
+
+>  
+>  	case group_has_spare:
+
