@@ -2,152 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B40700D8D
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 19:01:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A864700D8F
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 19:01:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237560AbjELRBa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 13:01:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51290 "EHLO
+        id S237741AbjELRBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 13:01:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237550AbjELRB1 (ORCPT
+        with ESMTP id S237723AbjELRBa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 13:01:27 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BB95A250;
-        Fri, 12 May 2023 10:01:25 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CDxbt7008999;
-        Fri, 12 May 2023 17:01:22 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=qcppdkim1;
- bh=l+x8I3jMdw0dPpamdqg83+y7xFpkmuF7ZN4JBnW8eHY=;
- b=HXqkf8IBF3DeGkIrK5YVmcTNyPwLow5BDqfAOgMBtTb9qH5A2wBotY57sG6n0mXnO1e4
- +kWx+Kemw/AmO9HmaocjcZJ0T9Cl4fCuvGQV8qebv70TvWcdp/WVW9+oOUeTHf9Jqlaj
- t2Mh+RCnFQq/USL8k29Mi4EACnuUsYqpTlXx5kPr/9L5vGOUvs48Rt3OpCYU2wEjqYLl
- YZb4EJpippcisqlRTc1HjPrLaKehUgQo/cMZRIZjeyF9CqZFCf0giKvVAHLUKYHb7yXM
- +xRMZnv90jxdBtacFymhLZCvqBbYqJRcKBFpqnBUMclqUANAqffw2zqOD9QJWYhss5zW bw== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qhpsdre58-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 17:01:22 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34CH1Ljk001778
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 17:01:21 GMT
-Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 12 May 2023 10:01:18 -0700
-From:   Krishna Kurapati <quic_kriskura@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
-        <quic_jackp@quicinc.com>,
-        Krishna Kurapati <quic_kriskura@quicinc.com>
-Subject: [RFC] usb: dwc3: core: set force_gen1 bit in USB31 devices if max speed is SS
-Date:   Fri, 12 May 2023 22:31:07 +0530
-Message-ID: <20230512170107.18821-1-quic_kriskura@quicinc.com>
-X-Mailer: git-send-email 2.40.0
+        Fri, 12 May 2023 13:01:30 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FFAA272
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 10:01:28 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so91341983a12.1
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 10:01:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683910887; x=1686502887;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=WgyCZc0+du4N+dTZkKE4PbFdEgp5xlJtk0+36+OFtLs=;
+        b=aq1mpL/CYYPyVxxuT1synoTadOINqfKrW4ajIyM2WqaRyGAkJGBxsYYe/2Y2cQ97Yh
+         UWUYdRoH2SuCArWPH8YMFDrus8laLXbW3HNV/AAO/tdION23+5QleTt9IsGGvVHYkAlJ
+         beTwgJ5WwjCdlCb4/warYmKtSammHAffCzLoEVeFj57dvbn1PZ5p21FxSKiBTTUGeIvu
+         V+Z+/4/o6lotQ6wygwrus+wbKRQFc2xnD5hx46LWCiVHYkcSQbgkvkS8VV6dWZuXMa1j
+         rg0/SZJvig9ulJ9NP5vM78uqaQizjpCrBC0ku4t2rM4YwS+JGOMAlH0LjyEDJDfh/3TO
+         aFGA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683910887; x=1686502887;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WgyCZc0+du4N+dTZkKE4PbFdEgp5xlJtk0+36+OFtLs=;
+        b=SbI7Ybr0Te/uiYjO8bL8wiwDeHLUDeob9p9DsZw3Ip5466sgLLpVQaVkUf5CfOGs8i
+         Ub1sFr3veGPVwYIVnLv2ay0fD9j/NkygM7dBJeqC9r59b1fGqrHeygRBzbvkEqTubGDb
+         gvOv90hnMZHQnzIsI0CKMPh1KIF2s20s3w/FYNtoI5Yz2ri14klfqyytgRIrL6p4yz3v
+         XHEGRELlfnbQAqvpbL2YWuLfYZkb7vF9eXC7x1dty5uxbvnfCaDU3uBZL3gRTNItmo8V
+         761er5SUf5VsBiiSczONpg/0QWIndvz6PsB1H/bWOWs77MSYQJc8im8Wu6cFu9og8+O3
+         4sWQ==
+X-Gm-Message-State: AC+VfDxJtzaWXTdy12PxBrSbU9N+45DmooW5KigxnmI0GCZv5q3AxvJg
+        X5auRxo2loZkk+pVLnrREcniOQ==
+X-Google-Smtp-Source: ACHHUZ5uUqEBoBhIS5B1WUsaCYWCtvoNEX8tDn3L5tF8EV6C9KWlEcA+qH+cE9OxMmohcdB6Kr5Ifw==
+X-Received: by 2002:a17:906:db04:b0:960:175a:3af7 with SMTP id xj4-20020a170906db0400b00960175a3af7mr20987144ejb.19.1683910886814;
+        Fri, 12 May 2023 10:01:26 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:7ede:fc7b:2328:3883? ([2a02:810d:15c0:828:7ede:fc7b:2328:3883])
+        by smtp.gmail.com with ESMTPSA id hy25-20020a1709068a7900b0096607baaf19sm5635497ejc.101.2023.05.12.10.01.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 May 2023 10:01:26 -0700 (PDT)
+Message-ID: <68f9bee2-5a5b-2962-6c3d-e73ade371545@linaro.org>
+Date:   Fri, 12 May 2023 19:01:24 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: bAuNgqmSHth-X4Ms25_G0nfWt_NIUVk6
-X-Proofpoint-ORIG-GUID: bAuNgqmSHth-X4Ms25_G0nfWt_NIUVk6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-12_10,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- mlxscore=0 impostorscore=0 malwarescore=0 lowpriorityscore=0
- suspectscore=0 phishscore=0 priorityscore=1501 mlxlogscore=858 bulkscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305120141
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 04/10] nvmem: qfprom: Add support for secure reading on
+ QDU1000/QRU1000
+Content-Language: en-US
+To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230512122134.24339-1-quic_kbajaj@quicinc.com>
+ <20230512122134.24339-5-quic_kbajaj@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230512122134.24339-5-quic_kbajaj@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently for dwc3_usb31 devices, if maximum_speed is limited to
-super-speed in DT, then device mode is limited to SS, but host mode
-still works in SSP.
+On 12/05/2023 14:21, Komal Bajaj wrote:
+> Add qfprom driver support for QDU1000/QRU1000 SOCs.
+> 
+> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
+> ---
+>  drivers/nvmem/qfprom.c | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/drivers/nvmem/qfprom.c b/drivers/nvmem/qfprom.c
+> index 20662e2d3732..12a7981a8a71 100644
+> --- a/drivers/nvmem/qfprom.c
+> +++ b/drivers/nvmem/qfprom.c
+> @@ -109,6 +109,10 @@ struct qfprom_soc_compatible_data {
+>  	bool secure;
+>  };
+> 
+> +static const struct qfprom_soc_compatible_data qdu1000_qfprom = {
+> +	.secure = true
+> +};
+> +
+>  static const struct nvmem_keepout sc7180_qfprom_keepout[] = {
+>  	{.start = 0x128, .end = 0x148},
+>  	{.start = 0x220, .end = 0x228}
+> @@ -490,6 +494,7 @@ static int qfprom_probe(struct platform_device *pdev)
+> 
+>  static const struct of_device_id qfprom_of_match[] = {
+>  	{ .compatible = "qcom,qfprom",},
+> +	{ .compatible = "qcom,qdu1000-qfprom", .data = &qdu1000_qfprom},
+>  	{ .compatible = "qcom,sc7180-qfprom", .data = &sc7180_qfprom},
 
-The documentation for max-speed property is as follows:
+I have doubts that this is still compatible with qcom,qfprom. It uses
+entirely different read method. That's why generic fallbacks are bad,
+one more case to my growing list of awesome examples. :)
 
-"Tells USB controllers we want to work up to a certain speed.
-Incase  this isn't passed via DT, USB controllers should default to
-their maximum HW capability."
-
-It doesn't specify that the property is only for device mode.
-Fix this by forcing controller supported max speed to Gen1 by
-setting LLUCTL.Force_Gen1 bit if controller is DWC3_USB31 and
-max speed is mentioned as SS in DT.
-
-Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
----
-Discussion regarding the same at:
-https://lore.kernel.org/all/e465c69c-3a9d-cbdb-d44e-96b99cfa1a92@quicinc.com/
-
- drivers/usb/dwc3/core.c | 13 +++++++++++++
- drivers/usb/dwc3/core.h |  4 ++++
- 2 files changed, 17 insertions(+)
-
-diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
-index 0beaab932e7d..989dc76ecbca 100644
---- a/drivers/usb/dwc3/core.c
-+++ b/drivers/usb/dwc3/core.c
-@@ -116,6 +116,18 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
- 	dwc->current_dr_role = mode;
- }
- 
-+static void dwc3_configure_host_speed(struct dwc3 *dwc)
-+{
-+	u32 reg;
-+
-+	if (DWC3_IP_IS(DWC31) &&
-+	   (dwc->maximum_speed == USB_SPEED_SUPER)) {
-+		reg = dwc3_readl(dwc->regs, DWC3_LLUCTL);
-+		reg |= DWC3_LLUCTL_FORCE_GEN1;
-+		dwc3_writel(dwc->regs, DWC3_LLUCTL, reg);
-+	}
-+}
-+
- static void __dwc3_set_mode(struct work_struct *work)
- {
- 	struct dwc3 *dwc = work_to_dwc(work);
-@@ -194,6 +206,7 @@ static void __dwc3_set_mode(struct work_struct *work)
- 
- 	switch (desired_dr_role) {
- 	case DWC3_GCTL_PRTCAP_HOST:
-+		dwc3_configure_host_speed(dwc);
- 		ret = dwc3_host_init(dwc);
- 		if (ret) {
- 			dev_err(dwc->dev, "failed to initialize host\n");
-diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
-index d56457c02996..29b780a58dc6 100644
---- a/drivers/usb/dwc3/core.h
-+++ b/drivers/usb/dwc3/core.h
-@@ -121,6 +121,10 @@
- #define DWC3_GPRTBIMAP_FS0	0xc188
- #define DWC3_GPRTBIMAP_FS1	0xc18c
- #define DWC3_GUCTL2		0xc19c
-+#define DWC3_LLUCTL		0xd024
-+
-+/* Force Gen1 speed on Gen2 link */
-+#define DWC3_LLUCTL_FORCE_GEN1	BIT(10)
- 
- #define DWC3_VER_NUMBER		0xc1a0
- #define DWC3_VER_TYPE		0xc1a4
--- 
-2.40.0
+Best regards,
+Krzysztof
 
