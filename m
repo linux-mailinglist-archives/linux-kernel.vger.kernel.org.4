@@ -2,58 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8853C70009A
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 08:34:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4001270009F
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 08:36:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240020AbjELGeD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 02:34:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55344 "EHLO
+        id S240018AbjELGgI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 02:36:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239991AbjELGeB (ORCPT
+        with ESMTP id S240000AbjELGgH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 02:34:01 -0400
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::227])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 312483C1B;
-        Thu, 11 May 2023 23:33:38 -0700 (PDT)
-Received: (Authenticated sender: alexis.lothore@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 11F3C20009;
-        Fri, 12 May 2023 06:33:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1683873217;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=O1dFYZRvKs4qv+uZsl9ppvEEACIWA+psNysfH673qxs=;
-        b=Zdf+fefnpviYfTYSM6hSlNchA5psiLJSt3pN1J8qFDSD5pSgPcaJCR3vXhhGx7wILvKiHF
-        GgyjFtafMX7T4HDX9RKIa22aZvZpdnUcGF0j/9Exbap6pe+dAn2piY7VgR+mUNs4vDfw5T
-        2KC/WJjhCLzEwW7WRhbeoJ+H6HLYZSV56hmyT910UCwz+30LRFQ3D23Go6CSQ66fmnX2Q6
-        G8Vo8Z4i21ELlJylwiJblQxBQjstRI5ZlK8wcWBtyLIuKWC3k4tZeQluShvUGZlPYTN+SD
-        K0RjOUXUhwzQCR7GWNFW/EQAVch8gnP5rQ+z5jdLi+toYSlxpFWAi5H7UX5EiQ==
-Message-ID: <7a2c205a-70dc-0d62-9e7b-cf09f7f5aac7@bootlin.com>
-Date:   Fri, 12 May 2023 08:33:52 +0200
+        Fri, 12 May 2023 02:36:07 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBDBF900E
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 23:35:46 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-50bcb229adaso17485899a12.2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 23:35:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683873345; x=1686465345;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aTgXqw1DQiVxfPuVhpWdkrrVopkfZHC/fCmNPR7iEmw=;
+        b=ijv3t4S3+ROAAhh3+bMTEFjg8ZUs0YTiAc26pykuzAxOzjR650GGOHIszIsTKdv7e5
+         edv36KAU1FW9cjS/WYMJE0jPX7q5yM8aQ9L5YFjmhZdf8/6CFq66g92PZpppWqtwz5Pt
+         eXDtMApIONch2DReTW+6j82CFZUFBjejQLutd92NFxkn8yWuqUdqFE2loxb/zZR6bpwn
+         iZ52Rcj9yFx3f1+Q3dDVYZMbRS1RHIsO2liVGRLBHX/MVUkU1dqa3yk+/uCta83fxNRZ
+         LxfDrwse6A/Fmx4Y7mOm29/3hUb09AOOVTuVSBfRCY4CwU9CvV6C1XmZNV85Wtit0aYS
+         1FDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683873345; x=1686465345;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aTgXqw1DQiVxfPuVhpWdkrrVopkfZHC/fCmNPR7iEmw=;
+        b=MFRmwajFa5Ms/Y4Q89FeTI3EEX9NnPRB9ibyDFtwv/jCxElJB0n+gZFdqowzKJt/Rw
+         cXpELP0f/EYJqBsnupyFGxNj9Ce3gRNP062+ibwJCnanNn6OYswcE6xjkDDSKBITWn5G
+         6KBM9tDUF72zvwFoW1w9AtRedsuafZZmbjmone0lW9Ba3Wf+71dkYRJhAN0pu/I9PCnf
+         NXAud4fHTgJClMnop/SPsIc8DfieDwNPOYYuHD8HDBDgVd3l+aqclLpM93DT/8cCn68g
+         Jyj5smOUyZiHgUrbihLkPbDhJY2cejOjJI67UWkzfc/aeOlSuQEqwMmmv/AVN8A9TLXE
+         R4RQ==
+X-Gm-Message-State: AC+VfDxeY2RiNJJPSCDVbLKZvSd/Bv3WsgNXuVWfp9ifQid5kq8L2Y/g
+        0mLUaRy0wxSUUM6eLdQqV7tEcw==
+X-Google-Smtp-Source: ACHHUZ73iH41QdZJrSGj6lKTg012fYOj2ZUG7b/uT7YMwaVbxaR4Hzc92pN9p2zKO81JafHjkbcmUw==
+X-Received: by 2002:aa7:cf16:0:b0:50b:f654:8846 with SMTP id a22-20020aa7cf16000000b0050bf6548846mr18432311edy.19.1683873345196;
+        Thu, 11 May 2023 23:35:45 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:7ede:fc7b:2328:3883? ([2a02:810d:15c0:828:7ede:fc7b:2328:3883])
+        by smtp.gmail.com with ESMTPSA id d16-20020a056402001000b0050dfd7de30dsm1100820edu.94.2023.05.11.23.35.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 May 2023 23:35:44 -0700 (PDT)
+Message-ID: <2fb8c88a-dab5-791b-eefe-c983decad5e8@linaro.org>
+Date:   Fri, 12 May 2023 08:35:43 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH net v2 2/3] net: dsa: rzn1-a5psw: fix STP states handling
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     andrew@lunn.ch, f.fainelli@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        herve.codina@bootlin.com, miquel.raynal@bootlin.com,
-        milan.stevanovic@se.com, jimmy.lalande@se.com,
-        pascal.eberhard@se.com
-References: <20230511170202.742087-1-alexis.lothore@bootlin.com>
- <20230511170202.742087-3-alexis.lothore@bootlin.com>
- <20230511213749.j2be7po5n2vgfwmu@skbuf>
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 5/7] dt-bindings: soc: starfive: Add StarFive syscon
+ module
 Content-Language: en-US
-From:   =?UTF-8?Q?Alexis_Lothor=c3=a9?= <alexis.lothore@bootlin.com>
-In-Reply-To: <20230511213749.j2be7po5n2vgfwmu@skbuf>
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>,
+        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        William Qiu <william.qiu@starfivetech.com>,
+        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
+References: <20230512022036.97987-1-xingyu.wu@starfivetech.com>
+ <20230512022036.97987-6-xingyu.wu@starfivetech.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230512022036.97987-6-xingyu.wu@starfivetech.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -62,51 +89,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Vladimir,
-thanks for the fast review !
-On 5/11/23 23:37, Vladimir Oltean wrote:
-> On Thu, May 11, 2023 at 07:02:01PM +0200, alexis.lothore@bootlin.com wrote:
->> From: Clément Léger <clement.leger@bootlin.com>
->>
->> stp_set_state() should actually allow receiving BPDU while in LEARNING
->> mode which is not the case. Additionally, the BLOCKEN bit does not
->> actually forbid sending forwarded frames from that port. To fix this, add
->> a5psw_port_tx_enable() function which allows to disable TX. However, while
->> its name suggest that TX is totally disabled, it is not and can still
->> allow to send BPDUs even if disabled. This can be done by using forced
->> forwarding with the switch tagging mechanism but keeping "filtering"
->> disabled (which is already the case in the rzn1-a5sw tag driver). With
->> these fixes, STP support is now functional.
->>
->> Fixes: 888cdb892b61 ("net: dsa: rzn1-a5psw: add Renesas RZ/N1 advanced 5 port switch driver")
->> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
->> Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
->> ---
+On 12/05/2023 04:20, Xingyu Wu wrote:
+> From: William Qiu <william.qiu@starfivetech.com>
 > 
-> Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+> Add documentation to describe StarFive System Controller Registers.
 > 
->> @@ -344,28 +376,35 @@ static void a5psw_port_bridge_leave(struct dsa_switch *ds, int port,
->>  
->>  static void a5psw_port_stp_state_set(struct dsa_switch *ds, int port, u8 state)
->>  {
->> -	u32 mask = A5PSW_INPUT_LEARN_DIS(port) | A5PSW_INPUT_LEARN_BLOCK(port);
->>  	struct a5psw *a5psw = ds->priv;
->> -	u32 reg = 0;
->> +	bool learning_enabled, rx_enabled, tx_enabled;
+> Co-developed-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+
+You made significant changes. Explain them in changelog here and drop
+the tag.
+
+> Signed-off-by: William Qiu <william.qiu@starfivetech.com>
+> ---
+>  .../soc/starfive/starfive,jh7110-syscon.yaml  | 67 +++++++++++++++++++
+>  MAINTAINERS                                   |  7 ++
+>  2 files changed, 74 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
 > 
-> Absolutely minor comment: in the networking subsystem there is a coding
-> style preference to order lines with variable declarations longest to
-> shortest (reverse Christmas tree). Since I don't see another less
-> frivolous reason to resend the patch set, I thought I'd just mention
-> for next time.
+> diff --git a/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+> new file mode 100644
+> index 000000000000..26dc99cb0c89
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/soc/starfive/starfive,jh7110-syscon.yaml
+> @@ -0,0 +1,67 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/soc/starfive/starfive,jh7110-syscon.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: StarFive JH7110 SoC system controller
+> +
+> +maintainers:
+> +  - William Qiu <william.qiu@starfivetech.com>
+> +
+> +description: |
+> +  The StarFive JH7110 SoC system controller provides register information such
+> +  as offset, mask and shift to configure related modules such as MMC and PCIe.
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - const: starfive,jh7110-sys-syscon
+> +          - const: syscon
+> +          - const: simple-mfd
+> +      - items:
+> +          - enum:
+> +              - starfive,jh7110-aon-syscon
+> +              - starfive,jh7110-stg-syscon
+> +          - const: syscon
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clock-controller:
+> +    $ref: /schemas/clock/starfive,jh7110-pll.yaml#
+> +    type: object
+> +
+> +  "#power-domain-cells":
+> +    const: 1
 
-ACK. Since an error has been raised by CI bot on this series, I will send a V3
-and fix this ordering too.
+Add it to the existing examples.
 
-Regards,
+This part confuses me... why aon appeared here?  Why power-controller
+disappeared? I don't think that Rob or me proposed any of this.
 
--- 
-Alexis Lothoré, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: starfive,jh7110-aon-syscon
+> +    then:
+> +      required:
+> +        - "#power-domain-cells"
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    syscon@10240000 {
+> +        compatible = "starfive,jh7110-stg-syscon", "syscon";
+> +        reg = <0x10240000 0x1000>;
+> +    };
+> +
+> +    syscon@13030000 {
+> +        compatible = "starfive,jh7110-sys-syscon", "syscon", "simple-mfd";
+> +        reg = <0x13030000 0x1000>;
+
+Why simple-mfd? You do not have any children here.
+
+
+
+Best regards,
+Krzysztof
 
