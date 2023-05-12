@@ -2,232 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC0607009B4
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:59:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3477009BA
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:00:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241415AbjELN7N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 09:59:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36438 "EHLO
+        id S240832AbjELOAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 10:00:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241351AbjELN7F (ORCPT
+        with ESMTP id S241428AbjELN7i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 09:59:05 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2134213C3E
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:58:58 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id a640c23a62f3a-965ddb2093bso1444984166b.2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:58:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1683899936; x=1686491936;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uD3Ipvt0NExfmILEv8OKGxIPIOoFOtued5pY1YUMvaA=;
-        b=ZPbUlqd510c1ym+w8AeWysEGsU8WE4AvhtiRwFFFnqVDALOh+khbiSvxLg23oSyqZb
-         m23j7QATGuiB4u5f77wUiSITvARRigOD9JS+B/tkoTq68F3Xv8HSx5C+8gufqCGb2jjJ
-         vfVjzyKT6UxdFfWKSp5p+ftUI4XHKVG3wf6dHJVycvhQkMEdGfMDVCKE6Q9hO5a7wwr4
-         faAyGH3z4UyfAob0fREEEbsUpcUmp5EOxCWdfKQsqY0Pp9kfi8jdZs0uKlY7pUej7IV6
-         GEgNxH+Bh2Ib7LWsorTTtcuvaEnZz+D04+udrmhsU1TW+sJBVVAmAn82d6dQyBoArZ56
-         biYQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683899936; x=1686491936;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uD3Ipvt0NExfmILEv8OKGxIPIOoFOtued5pY1YUMvaA=;
-        b=fiC6MHHESZdZh20FvcTgDJjlTejSdz9ZtD0JWZ0J0IZ7eA4UaKmb5nlYPpp8fr+WV2
-         DwfsroJThwmhl1UG78mnIkFMtffMff5DkNYJmFctNDbt1vZCmSdOLfE5xuUcKx07yCmU
-         ev5t1OsUtukPDZiNIQF4+FwOjZ5IyL3t446sftAa40Iz/t8rcMjtsolOrST7PS7qO9VB
-         GkM++XTAcCBxEa7kk2lfKkvLl4F0jr/N/sqd90G+lQfb/LIv7hPmDgwGWHN7t0nBAUVi
-         tPytFjDeruho7q4DJ7ULX4mDZCtJXWjF7yqvYxIhy7BiRVMzgI7tRcvt7GHfKtwD4n2T
-         p4FQ==
-X-Gm-Message-State: AC+VfDxTt968i/KEEISXDbNgI8HMY4A9mL1lA+IawngLDxO8siBd75/S
-        9Un2Hpv5ElIDZ5/rZUAgHU8BXw==
-X-Google-Smtp-Source: ACHHUZ5NT+vNCm97DRq7kbKwyyr5lRuNUHvWe9eNLgCczj2xQoRRAEPi7wrQRonSYKHmEGpAR8uEog==
-X-Received: by 2002:a17:907:9347:b0:933:3814:e0f4 with SMTP id bv7-20020a170907934700b009333814e0f4mr23139917ejc.16.1683899936411;
-        Fri, 12 May 2023 06:58:56 -0700 (PDT)
-Received: from [172.16.240.113] (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id mc27-20020a170906eb5b00b00966330021e9sm5399061ejb.47.2023.05.12.06.58.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 06:58:55 -0700 (PDT)
-From:   Luca Weiss <luca.weiss@fairphone.com>
-Date:   Fri, 12 May 2023 15:58:26 +0200
-Subject: [PATCH v2 4/4] arm64: dts: qcom: sm7225-fairphone-fp4: Add
- Bluetooth
+        Fri, 12 May 2023 09:59:38 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C139C13C2E;
+        Fri, 12 May 2023 06:59:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1683899972; x=1715435972;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RgLBvhgm2odiQ2SzAp4nOs61NsPOgBYkIG0oBcKhByU=;
+  b=GVSUzRfFY5YYiWXPfcAo6iwrCosOKSgjUkT76TiU9XbpSJiLnbxW6UJ+
+   GUzlqgkvcambJp4qB8YS6HJq3fjXs/V71+EaJltxM4+aIOvXawbUlP6Jz
+   5hFI4uzrkT2SuXWYoDiLoDMWWj9Y8SCaGy0GHLjwvMVxKNNkGHtE2nHPI
+   2r5FeRcJiw9DFSsc4aUkemV4n3rpmIF1A6AC612/6+b9jQ5TyhxMs9H/a
+   GI0uxm7dh8Ss7yg01Irv/zeLD0fNqIGvpmPV82iPgd2yJxTWbsEqAbmu9
+   6Bzj0H9JOFoJKNV0xwta8lGPX5suFUFZgVrrnMSwgNpIJBoA1hYRVx4rG
+   g==;
+X-IronPort-AV: E=Sophos;i="5.99,269,1677567600"; 
+   d="asc'?scan'208";a="151755680"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 May 2023 06:59:12 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
+ chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 12 May 2023 06:59:11 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
+ (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Fri, 12 May 2023 06:59:10 -0700
+Date:   Fri, 12 May 2023 14:58:49 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Jisheng Zhang <jszhang@kernel.org>
+CC:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnd Bergmann <arnd@arndb.de>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arch@vger.kernel.org>
+Subject: Re: [PATCH 4/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
+Message-ID: <20230512-spouse-pang-87f2e579baa2@wendy>
+References: <20230511141211.2418-1-jszhang@kernel.org>
+ <20230511141211.2418-5-jszhang@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230421-fp4-bluetooth-v2-4-3de840d5483e@fairphone.com>
-References: <20230421-fp4-bluetooth-v2-0-3de840d5483e@fairphone.com>
-In-Reply-To: <20230421-fp4-bluetooth-v2-0-3de840d5483e@fairphone.com>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-bluetooth@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Luca Weiss <luca.weiss@fairphone.com>
-X-Mailer: b4 0.12.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="aCJ58t5/KMUTtFbc"
+Content-Disposition: inline
+In-Reply-To: <20230511141211.2418-5-jszhang@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The device has a WCN3988 chip for WiFi and Bluetooth. Configure the
-Bluetooth node and enable the UART it is connected to, plus the
-necessary pinctrl that has been borrowed with comments from
-sc7280-idp.dtsi.
+--aCJ58t5/KMUTtFbc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
----
- arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts | 103 ++++++++++++++++++++++
- 1 file changed, 103 insertions(+)
+On Thu, May 11, 2023 at 10:12:11PM +0800, Jisheng Zhang wrote:
 
-diff --git a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-index 7ae6aba5d2ec..e3dc49951523 100644
---- a/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-+++ b/arch/arm64/boot/dts/qcom/sm7225-fairphone-fp4.dts
-@@ -31,6 +31,7 @@ / {
- 
- 	aliases {
- 		serial0 = &uart9;
-+		serial1 = &uart1;
- 	};
- 
- 	chosen {
-@@ -524,6 +525,39 @@ adc-chan@644 {
- 	};
- };
- 
-+&qup_uart1_cts {
-+	/*
-+	 * Configure a bias-bus-hold on CTS to lower power
-+	 * usage when Bluetooth is turned off. Bus hold will
-+	 * maintain a low power state regardless of whether
-+	 * the Bluetooth module drives the pin in either
-+	 * direction or leaves the pin fully unpowered.
-+	 */
-+	bias-bus-hold;
-+};
-+
-+&qup_uart1_rts {
-+	/* We'll drive RTS, so no pull */
-+	drive-strength = <2>;
-+	bias-disable;
-+};
-+
-+&qup_uart1_rx {
-+	/*
-+	 * Configure a pull-up on RX. This is needed to avoid
-+	 * garbage data when the TX pin of the Bluetooth module is
-+	 * in tri-state (module powered off or not driving the
-+	 * signal yet).
-+	 */
-+	bias-pull-up;
-+};
-+
-+&qup_uart1_tx {
-+	/* We'll drive TX, so no pull */
-+	drive-strength = <2>;
-+	bias-disable;
-+};
-+
- &qupv3_id_0 {
- 	status = "okay";
- };
-@@ -561,6 +595,75 @@ &sdhc_2 {
- 
- &tlmm {
- 	gpio-reserved-ranges = <13 4>, <56 2>;
-+
-+	qup_uart1_sleep_cts: qup-uart1-sleep-cts-state {
-+		pins = "gpio61";
-+		function = "gpio";
-+		/*
-+		 * Configure a bias-bus-hold on CTS to lower power
-+		 * usage when Bluetooth is turned off. Bus hold will
-+		 * maintain a low power state regardless of whether
-+		 * the Bluetooth module drives the pin in either
-+		 * direction or leaves the pin fully unpowered.
-+		 */
-+		bias-bus-hold;
-+	};
-+
-+	qup_uart1_sleep_rts: qup-uart1-sleep-rts-state {
-+		pins = "gpio62";
-+		function = "gpio";
-+		/*
-+		 * Configure pull-down on RTS. As RTS is active low
-+		 * signal, pull it low to indicate the BT SoC that it
-+		 * can wakeup the system anytime from suspend state by
-+		 * pulling RX low (by sending wakeup bytes).
-+		 */
-+		bias-pull-down;
-+	};
-+
-+	qup_uart1_sleep_rx: qup-uart1-sleep-rx-state {
-+		pins = "gpio64";
-+		function = "gpio";
-+		/*
-+		 * Configure a pull-up on RX. This is needed to avoid
-+		 * garbage data when the TX pin of the Bluetooth module
-+		 * is floating which may cause spurious wakeups.
-+		 */
-+		bias-pull-up;
-+	};
-+
-+	qup_uart1_sleep_tx: qup-uart1-sleep-tx-state {
-+		pins = "gpio63";
-+		function = "gpio";
-+		/*
-+		 * Configure pull-up on TX when it isn't actively driven
-+		 * to prevent BT SoC from receiving garbage during sleep.
-+		 */
-+		bias-pull-up;
-+	};
-+};
-+
-+&uart1 {
-+	/delete-property/ interrupts;
-+	interrupts-extended = <&intc GIC_SPI 602 IRQ_TYPE_LEVEL_HIGH>,
-+			      <&tlmm 64 IRQ_TYPE_EDGE_FALLING>;
-+
-+	pinctrl-names = "default", "sleep";
-+	pinctrl-1 = <&qup_uart1_sleep_cts>, <&qup_uart1_sleep_rts>, <&qup_uart1_sleep_tx>, <&qup_uart1_sleep_rx>;
-+
-+	status = "okay";
-+
-+	bluetooth {
-+		compatible = "qcom,wcn3988-bt";
-+
-+		vddio-supply = <&vreg_l11a>;
-+		vddxo-supply = <&vreg_l7a>;
-+		vddrf-supply = <&vreg_l2e>;
-+		vddch0-supply = <&vreg_l10e>;
-+		swctrl-gpios = <&tlmm 69 GPIO_ACTIVE_HIGH>;
-+
-+		max-speed = <3200000>;
-+	};
- };
- 
- &uart9 {
+> diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.=
+lds.S
+> index e5f9f4677bbf..492dd4b8f3d6 100644
+> --- a/arch/riscv/kernel/vmlinux.lds.S
+> +++ b/arch/riscv/kernel/vmlinux.lds.S
+> @@ -85,11 +85,11 @@ SECTIONS
+>  	INIT_DATA_SECTION(16)
+> =20
+>  	.init.pi : {
+> -		*(.init.pi*)
+> +		KEEP(*(.init.pi*))
+>  	}
 
--- 
-2.40.1
+This section no longer exists in v6.4-rc1, it is now:
+	/* Those sections result from the compilation of kernel/pi/string.c */
+	.init.pidata : {
+		*(.init.srodata.cst8*)
+		*(.init__bug_table*)
+		*(.init.sdata*)
+	}
 
+Cheers,
+Conor.
+
+--aCJ58t5/KMUTtFbc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZF5GGQAKCRB4tDGHoIJi
+0qYyAQCRMo5iM+rBTlmU5brSvMFm+H9q1MMggt56ESxJdUM5owEA1Rux0WE9Ky3q
+wRiS5v6F7DGyWjBZXjvhP+7kcWDqfQM=
+=O/cE
+-----END PGP SIGNATURE-----
+
+--aCJ58t5/KMUTtFbc--
