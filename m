@@ -2,150 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13B58700949
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:39:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A470A70096B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:47:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241295AbjELNjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 09:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52548 "EHLO
+        id S241313AbjELNrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 09:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240996AbjELNjF (ORCPT
+        with ESMTP id S241017AbjELNrb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 09:39:05 -0400
-Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2082.outbound.protection.outlook.com [40.107.15.82])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1748A11DAB;
-        Fri, 12 May 2023 06:39:04 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iL250IhjW9+tZCbxKXpnXOlmZXEhyg9EnFkYah/W2P4KRdfhwOzXHo2aL8jVoolaR3qyNFfkHFrbCwyMnrcncUM7UVDPXni/nG0W/5XZvEkT8NU0Q/1j24bAOd1COpus5Ge2Gqqfr1xHnuzlIBUUOFMcM0Xgjdq0xUSe7ipjv7dH94oqb//bNB84ryi55MaRpYK+d3Z12yGf11yrdN7NY1C2BIKct0czz6hDBZ0RfZYfRN2TbebTjsV3MYYLU81OwZ3i+HkB2Qhds5VCF9nD9pv3JZI+VtuA47HOeW7bO7b44cafhkUlAC91mw9k/y+MN9KIPdpmoyD8LmU5VYKNzg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=7o1olkSVX7f7WMt24WHnKppcpCJKudMgi/Q8/GkPu1c=;
- b=kUumWRD2rEDNxZ92CpSx9NINnjqEI53JEt48Ied1fPKCc9K0VepQmrH/omL6vwWEP3NIPD5J8yuWxbny1ZW44YhKSWnkF+rQV0691bKSqir86GBJ+ELmunGfFKYYxMnvCM45kvzWVtQMWNRmXRzC0sKjptGWDYriHoe6FC1BwinMi3pMdzrEUwf2fiIZAFMsLDFKC2P9FSm7ThXtKo046C0jLEufjPdrZOATBcKV772pTbsuWJ+dJkdJwOCKNxHqJZtT4UJ6xYxkr6NA6z1YbKrAkTk31qsPjG2kJybcqG4TDqK5n6BOmtdVjxOpd4QokxGmeUoGCicSgvJZrnQomw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=7o1olkSVX7f7WMt24WHnKppcpCJKudMgi/Q8/GkPu1c=;
- b=YQ5S+vmcnwxkrr2pFcXIe1nvOhN9ANbH/LNHjHhZLR/yR9lToNctHNevLGIb58gtyUjOdzr7xf7STXbtPfbM3b6fYZ7Sj5F0beqfssj2m50szhelk13kKdvMsbKm8waQOSmgVF5xBBlK2DSwypBVkKriyM3CqFvb0bdK0VgjyyM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from PAXPR04MB9185.eurprd04.prod.outlook.com (2603:10a6:102:231::11)
- by AM0PR04MB6803.eurprd04.prod.outlook.com (2603:10a6:208:187::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.21; Fri, 12 May
- 2023 13:39:00 +0000
-Received: from PAXPR04MB9185.eurprd04.prod.outlook.com
- ([fe80::28fb:82ec:7a6:62f3]) by PAXPR04MB9185.eurprd04.prod.outlook.com
- ([fe80::28fb:82ec:7a6:62f3%5]) with mapi id 15.20.6387.020; Fri, 12 May 2023
- 13:39:00 +0000
-From:   Shenwei Wang <shenwei.wang@nxp.com>
-To:     Wei Fang <wei.fang@nxp.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, imx@lists.linux.dev
-Subject: [PATCH net] net: fec: remove the xdp_return_frame when lack of tx BDs
-Date:   Fri, 12 May 2023 08:38:43 -0500
-Message-Id: <20230512133843.1358661-1-shenwei.wang@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: SJ0PR05CA0047.namprd05.prod.outlook.com
- (2603:10b6:a03:33f::22) To PAXPR04MB9185.eurprd04.prod.outlook.com
- (2603:10a6:102:231::11)
+        Fri, 12 May 2023 09:47:31 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F0C7124BD
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:47:28 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id d9443c01a7336-1ab0c697c84so76539385ad.3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:47:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1683899247; x=1686491247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GHh7THGmNUX1NDYtIMVbnhFwwspK0WwD8hBv2/VAAYc=;
+        b=AtsBtM0p84Ya9Yr132qEbPbG0hgvQy4U1ULcnFJCBLee24ilvAQIo0Txf7LAzrgpKM
+         kCSbM3Gi4exuc4QDmN3xuYkwpj/90/ZmIP4fG7smdSwJhB/4OraNH6hHv4EAlYHCByLP
+         4MItjhTBcq/XLtALkZNmuE9pYTAzLB9pzoFPw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683899247; x=1686491247;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GHh7THGmNUX1NDYtIMVbnhFwwspK0WwD8hBv2/VAAYc=;
+        b=cOxsvPR14Qs0QEIdJUGnbJJCxYI1CpMhw5f36r0h/VpRX86flJz2SH6Iq7XLc4+r2k
+         zcfHedZRzoLmRq8a+Q1z3Ez99I4xhDzg3Wxld46fut8lKdGhgmAENQfXT+xzaL9Uj9kn
+         UOqMxa46ozLVAF4nmZu1sZvUf1qc3IsnizSrsoBiNNBtc6tTUqlDWuGDaEEFCfwgnD/F
+         vaEqE6Pr1iIhjwZwnddgHt5vVBu67gzNy5me9ptitmenAOWHb/cJ1msTxjkR3/9jZZSX
+         2//cUG+H5TmCNFej0yuFP/Yg48gTLHtRbGWRc7IUfqmGx9xr0dY6Y6joafS7L0H0vpyl
+         IFXg==
+X-Gm-Message-State: AC+VfDwMO9Ve1Bfdu73TGBv0O8mn7pHbjZMGmGXYpVzYHIu+O7AlVvqx
+        I4eNDRaQaYWVuQ3kbaq8t9YXGwnCe4SmMw5WKeI=
+X-Google-Smtp-Source: ACHHUZ4wYuMPxbnq+A2zSLqfym8bRxfivjprB9XQMV6mFQEzsb0UV3fSNm8+sYef1/KmJCC85F/vSA==
+X-Received: by 2002:a17:902:c402:b0:1ac:b259:87ea with SMTP id k2-20020a170902c40200b001acb25987eamr12228890plk.0.1683899247018;
+        Fri, 12 May 2023 06:47:27 -0700 (PDT)
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com. [209.85.214.169])
+        by smtp.gmail.com with ESMTPSA id h11-20020a170902b94b00b00194d14d8e54sm7962466pls.96.2023.05.12.06.47.26
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 May 2023 06:47:26 -0700 (PDT)
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-1a950b982d4so503685ad.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:47:26 -0700 (PDT)
+X-Received: by 2002:a05:622a:1812:b0:3ef:1c85:5b5e with SMTP id
+ t18-20020a05622a181200b003ef1c855b5emr253424qtc.19.1683898839232; Fri, 12 May
+ 2023 06:40:39 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PAXPR04MB9185:EE_|AM0PR04MB6803:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4cd2ab4b-ec52-49f5-86d5-08db52ee3e04
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: oP5mzx5YYz3l7It6dHbmu7Npxlqp1Ggd24gxfHN067x5N/yjiz2IiCzUF+xgPTlzPy8UHey27eSC25H0QWuomE3O0SgeaR9QsNPpB+gFa6YMZyB9q7HxaqJfXHFBdKNDNg/WKyxdZNkLoN/8D0Wn8IP5uZ8y5AsotWvcVkEzuDicYJnoVaxA1iP+uP6cRVB8DliDoNvqYmrsoUOrdTKbOsCiL9Qen3sxbOIfaGuxaV9RVhniIXEcT4JBDzk820PK49iuMMZfEj56pcP8yvnlSWHC0MivXwx4dihbxGCkedhxbTSkjAiCIJwqvpzL/L2/N45+qlofexa9O3GX8LZdTV+8gXhkDMPz0oKp+QSuh0bjHkq0F3zBNwpZhh+KLP62dpbyz13AsdSX0Ce6QNX1Qp10EaPqKT5tJMt8c014N3pfcju2nidKpFCau4wTtawb89WlryHGPJlrkqYBKM9SR8pgpYPycFQjSbO5jDOlt48PxI6QfDQQvWvEh4OHMUzitbUpI5N36obsSTCMMc8SvwWbdPF0jSnX5v8CjRSbJUj4N+l6gTcpGoaRVGGNRzmofEmiuUdZstA5cYGx/h0c4ykvD5StsbPqLAQ6MB8L++rmQEJWXfnXBNuNWPNlcXRs
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9185.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(39860400002)(366004)(136003)(376002)(451199021)(7416002)(41300700001)(6666004)(6512007)(38350700002)(44832011)(5660300002)(55236004)(6506007)(26005)(38100700002)(1076003)(8936002)(8676002)(6486002)(2616005)(83380400001)(186003)(2906002)(4744005)(52116002)(86362001)(66476007)(316002)(478600001)(36756003)(66556008)(54906003)(66946007)(4326008)(110136005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vgfHDpayGZQFKKr1q7H3kSNKLny/GM9Q4+Of//U7LLuxCwUM7GmHj1FjUC//?=
- =?us-ascii?Q?+82FHJE8/hx37y3ELi4lQqug/BCUPfPsJygQ8PafMjlbd/6eKVrl/gxf7rSo?=
- =?us-ascii?Q?TNXUSx1e0IcMWfYZO7re5ljTRq6Rx1fiHD3xYjIruhqxsCGR2vEH/YxDNnKU?=
- =?us-ascii?Q?MJUWKAG48CoEDTS2Mdtf5gvigQIkI++O9+PYduZ0m9tw3AcoD67ga+rSMi5U?=
- =?us-ascii?Q?mKS5sfrQW8/GyXSHvuOEh4CZddSB1RDY4tgcKxJKYRJxeo6RO1YV1zpDA9cq?=
- =?us-ascii?Q?V+KrQYJn+p7ibFXo/fcICVFKCAuasm6xBox2b0RBDJcbTzc5MGOLiay7IW8x?=
- =?us-ascii?Q?9aVrGV4vHgVcpt0j6Z7VN9M1EB9aVhZyiYx1YwZDXcFZkQbI8VS4Q1+UAnZU?=
- =?us-ascii?Q?QJaArD2uSBh0nM1ZMo7tQYsKf5vhANFJs2i0VzOvuu2McCzJN942rDoqAqXh?=
- =?us-ascii?Q?ou4QwrjDoPIASmpDk0tf1GetrfWuIkRE5tevz7J2WTxRcznnmnThKPBqkhng?=
- =?us-ascii?Q?GCTDtkWMHrcGmSVbdYZ9tz3FtP3uzhfre/hldav3eFmjoQN/tDVIlNSPN4rc?=
- =?us-ascii?Q?FoslTNlfj8a9IQqAjjjshAdipBXYmYT7cgy3IIuojc8l4c8yiAkZWYMzL9gR?=
- =?us-ascii?Q?R4YR5ZwQaxNxTwHniwlT8w9v64CR0V8IdVWTFLunLfFidZIkUIP2NZ5dlqOm?=
- =?us-ascii?Q?LfD2zzXr2qb4litYlV9j5bHun+Xe34N/PzgauHCrLnGNBnhBHlvE2qABL84b?=
- =?us-ascii?Q?3Dph/8Nrd/xp1Ge6dxNBuGTUcB8/Cjp9s2t9pT6ci0A2YpTrEu7APjRRF6gE?=
- =?us-ascii?Q?cmBAQvkQ3tFWIbqjsgeoTXIPNVwzH4YieokxtIjVZzUGrAucnp0HltRI68fj?=
- =?us-ascii?Q?NzOltBOMiAbcCJNTwsQaXKcMHVw8HEvx8JxA/ZhQf6lpIxis6GF6a8k5siKe?=
- =?us-ascii?Q?FFTKznANvKDbHeHDms3IK5lzGZKYcNpn/CN9qlKsz9xJyFndvPGiz4QDXflr?=
- =?us-ascii?Q?PHo58ZHVyyi+zBtHjzc7MhlS9rp2uSh67e53XR9uyKBk6COpVz4U83bbHB24?=
- =?us-ascii?Q?2XXz1CK4CmjasP1F8G/9L+NkGThwzROD0VHioGiGJOuUNe43z9WCo65lKl4L?=
- =?us-ascii?Q?8MsyQp8//Mk1488PH2dDf+02ReW+yBWbpfGaeqtSVj8qmArOYmyzws5r6C69?=
- =?us-ascii?Q?MijmvK+OktZelNY5eNfwGUH9e3fV3kvrNP/8uLSad+8d8+Z83WU8EvXcSqGE?=
- =?us-ascii?Q?eUgLNpoMFN82RteO9zD/yVnCRlARQ2uAZLA8NCjY5RmTidnoR8UeQjbdA+7n?=
- =?us-ascii?Q?C5QVf+z7GiL2xzmtOaQ4fCVXh0NEzAsm2DgByrIQWw/flcSIM57iPfcTWf1E?=
- =?us-ascii?Q?CNjjGJhEBS45yVcw70dC5acBJdor2LMU+Y38qOwGGex85wgiZ2T8Ew13bZHX?=
- =?us-ascii?Q?PHtkc/pkH45V8Sb4sf8FAxZ07ywQj8bI6yeF3MdSYV0pxdYHx/FzEtpA27O5?=
- =?us-ascii?Q?9Oe/tuhOMeBVK/c/uHJ6yq+Y/xTikC8P42mrX/zoq3rj43bM2jBY6ignVoIx?=
- =?us-ascii?Q?NQInbHQralbDRVUY4nV4kQgit9EUgoHTlhhoGzmH?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4cd2ab4b-ec52-49f5-86d5-08db52ee3e04
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9185.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 13:39:00.2357
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: DI801lf9p7pjeC1mLgO8IGM/ei+M9WpuPDH3H+qfiMSHJc1ly0OUb2kwJGM2aaidWpunCEtqy7BNZA8PTY52iw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6803
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230511150539.6.Ia0b6ebbaa351e3cd67e201355b9ae67783c7d718@changeid>
+ <20230511150539.1.Iabe67a827e206496efec6beb5616d5a3b99c1e65@changeid> <86v8gym0ys.wl-maz@kernel.org>
+In-Reply-To: <86v8gym0ys.wl-maz@kernel.org>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Fri, 12 May 2023 06:40:27 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VnNaRc7D3nZ658KD18fDSQCBODS-16gpERkKcb7v793w@mail.gmail.com>
+Message-ID: <CAD=FV=VnNaRc7D3nZ658KD18fDSQCBODS-16gpERkKcb7v793w@mail.gmail.com>
+Subject: Re: [PATCH 1/6] dt-bindings: interrupt-controller: arm,gic-v3: Add
+ quirk for Mediatek SoCs w/ broken FW
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        wenst@chromium.org, Eddie Huang <eddie.huang@mediatek.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Ben Ho <Ben.Ho@mediatek.com>, Weiyi Lu <weiyi.lu@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Tinghan Shen <tinghan.shen@mediatek.com>, jwerner@chromium.org,
+        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
+        yidilin@chromium.org, Seiya Wang <seiya.wang@mediatek.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the implementation, the sent_frame count does not increment when
-transmit errors occur. Therefore, bq_xmit_all() will take care of
-returning the XDP frames.
+Hi,
 
-Fixes: 26312c685ae0 ("net: fec: correct the counting of XDP sent frames")
-Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
----
- drivers/net/ethernet/freescale/fec_main.c | 1 -
- 1 file changed, 1 deletion(-)
+On Fri, May 12, 2023 at 1:02=E2=80=AFAM Marc Zyngier <maz@kernel.org> wrote=
+:
+>
+> On Thu, 11 May 2023 23:05:35 +0100,
+> Douglas Anderson <dianders@chromium.org> wrote:
+> >
+> > When trying to turn on the "pseudo NMI" kernel feature in Linux, it
+> > was discovered that all Mediatek-based Chromebooks that ever shipped
+> > (at least ones with GICv3) had a firmware bug where they wouldn't save
+> > certain GIC "GICR" registers properly. If a processor ever entered a
+> > suspend/idle mode where the GICR registers lost state then they'd be
+> > reset to their default state.
+> >
+> > As a result of the bug, if you try to enable "pseudo NMIs" on the
+> > affected devices then certain interrupts will unexpectedly get
+> > promoted to be "pseudo NMIs" and cause crashes / freezes / general
+> > mayhem.
+> >
+> > ChromeOS is looking to start turning on "pseudo NMIs" in production to
+> > make crash reports more actionable. To do so, we will release firmware
+> > updates for at least some of the affected Mediatek Chromebooks.
+> > However, even when we update the firmware of a Chromebook it's always
+> > possible that a user will end up booting with old firmware. We need to
+> > be able to detect when we're running with firmware that will crash and
+> > burn if pseudo NMIs are enabled.
+> >
+> > The current plan is:
+> > * Update the device trees of all affected Chromebooks to include the
+> >   'mediatek,gicr-save-quirk' property. The kernel can use this to know
+> >   not to enable certain features like "pseudo NMI". NOTE: device trees
+> >   for Chromebooks are never baked into the firmware but are bundled
+> >   with the kernel. A kernel will never be configured to use "pseudo
+> >   NMIs" and be bundled with an old device tree.
+> > * When we get a fixed firmware for one of these Chromebooks, it will
+> >   patch the device tree to remove this property.
+>
+> Since you're in control of distributing the FW together with the
+> kernel, I assume you're also in control of the command line. Why can't
+> that firmware pass the option enabling the pseudo-NMI support,
+> dispensing ourselves from all of this?
 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index 42ec6ca3bf03..2a3e8b69b70a 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -3798,7 +3798,6 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
- 	entries_free = fec_enet_get_free_txdesc_num(txq);
- 	if (entries_free < MAX_SKB_FRAGS + 1) {
- 		netdev_err(fep->netdev, "NOT enough BD for SG!\n");
--		xdp_return_frame(frame);
- 		return NETDEV_TX_BUSY;
- 	}
+I considered the option, but it gets really awkward. Specifically:
 
---
-2.34.1
+1. We can't have old firmwares "take away" the kernel command line
+option enabling pseudoNMI, obviously.
 
+2. Having new firmware inject `irqchip.gicv3_pseudo_nmi=3D1` into the
+kernel command line feels really awkward from an abstraction point of
+view. This bakes into the firmware an implementation detail about how
+something is implemented / enabled in the kernel, which feels wrong.
+In general I'm not a fan of needing the kernel command line argument
+to begin with and I'd hope that eventually it could go away.
+
+3. Having the firmware inject `irqchip.gicv3_pseudo_nmi=3D1` into the
+kernel command line also makes it awkward when you consider
+non-affected boards. On Qualcomm boards, Rockchip boards, and x86
+boards we want to enable pseudo NMI without needing to spin the
+firmware to have it add this option. ...so we have to add this option
+to the "default" command line for every board _except_ affected
+Mediatek boards? Is this weird convention something that our build
+system carries as we move to newer Mediatek SoCs that aren't affected?
+What if we want a single build for Mediatek and Qulcomm boards (which
+is something that has been bandied about, even if we haven't done it
+yet).
+
+Considering all the above, I think trying to use the
+`irqchip.gicv3_pseudo_nmi=3D1` like this wouldn't fly.
+
+
+> > For some details, you can also see the public bug
+> > <https://issuetracker.google.com/281831288>
+> >
+> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> > ---
+> >
+> >  .../bindings/interrupt-controller/arm,gic-v3.yaml           | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> >
+> > diff --git a/Documentation/devicetree/bindings/interrupt-controller/arm=
+,gic-v3.yaml b/Documentation/devicetree/bindings/interrupt-controller/arm,g=
+ic-v3.yaml
+> > index 92117261e1e1..8c251caae537 100644
+> > --- a/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3=
+.yaml
+> > +++ b/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3=
+.yaml
+> > @@ -166,6 +166,12 @@ properties:
+> >    resets:
+> >      maxItems: 1
+> >
+> > +  mediatek,gicr-save-quirk:
+>
+> I think this deserves something *much* stronger that outlines what is
+> wrong, because this is not just a quirk. This is a failure to even
+> remotely grasp the requirements of the architecture (and to use
+> standard, public code that would have done it correctly). Something
+> like "mediatek,broken-save-restore-fw" would be more adequate.
+
+Sure, I'll rename it in the next spin. Unless we get into a big
+discussion somewhere else in this patch, I'll plan that for early next
+week.
+
+
+> > +    type: boolean
+> > +    description:
+> > +      Asserts that the firmware on this device has issues saving and r=
+estoring
+> > +      GICR registers when CPUs are powered off.
+>
+> Nit: not the the CPUs, but the GIC redistributors.
+
+Ah, good point. I'll update.
