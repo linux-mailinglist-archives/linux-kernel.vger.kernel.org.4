@@ -2,69 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46626700ECE
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 20:30:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E2398700EDB
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 20:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238713AbjELS3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 14:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43992 "EHLO
+        id S238908AbjELSbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 14:31:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238600AbjELS3J (ORCPT
+        with ESMTP id S238768AbjELSbE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 14:29:09 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15DBB86BF
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:28:40 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64388cf3263so7366928b3a.3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:28:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683916057; x=1686508057;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wu7QjxyIEj8Ln0iJ7kC1lictfM5N8E9aPqKarxQcnRo=;
-        b=mVWTZPifMoHLSVHy4Y+TkqiPsN5TBnj8pw9/akxIyVJwOmHNbjAXiei7xFChDHXtk8
-         UgPD+eFo5yiRVXIvsSrzHmLZIk2wgtMCVBQ1a/ieZOm9+IZsNleOG3Z7r8tcxmqaNcH9
-         HCGBf2lqfK0w6tZ7WND306xHjlXb0gbgfi1gY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683916057; x=1686508057;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wu7QjxyIEj8Ln0iJ7kC1lictfM5N8E9aPqKarxQcnRo=;
-        b=VCqUvrkNB8C4d3RfpPdE8LTC9SNJGHwMMML9ZLWJbaAp5cRhFSnL20incmV6BLnpZJ
-         9kOy+y5K5rP9+cMflt+pHF+UshbNfRd4ozM2n3W0zzHewN1moVxHP9z2AntGiB1eq9IY
-         4sHpCulejy3P/tC3GOsHS3nEQwpR5okekf+fIu305xmDyIoJ166TcNLnO0sdaBhuXIDw
-         xdhGQ7op3b/KSwKhDd/nGNdBuLG1hn/3ujEaT2iZjTkDikPcXxqqafoFmK69eRtqkfVI
-         s2hAIZ5QCdXpXJdxApxK5GdVOeuZQBnFOXfqLsLmdgazMydJbFm03r1gQ8CUQ1zbRYbe
-         bo6A==
-X-Gm-Message-State: AC+VfDyeP+Ojc5hEmF45p0UrJYxBfIuYxvtqVNNjAttr4hhIZgLeZ8V/
-        uKBLDRXzDnEurBjDPdCzwJT3fQ==
-X-Google-Smtp-Source: ACHHUZ7p/urZKZskQu20+A4odA3ca2trpKf9+C2kVlEdDBeyGa5r+sUN4pDeYAbVnf/yzpt4mWqLyA==
-X-Received: by 2002:a05:6a00:1703:b0:644:c365:50d5 with SMTP id h3-20020a056a00170300b00644c36550d5mr30144377pfc.6.1683916057299;
-        Fri, 12 May 2023 11:27:37 -0700 (PDT)
-Received: from www.outflux.net (198-0-35-241-static.hfc.comcastbusiness.net. [198.0.35.241])
-        by smtp.gmail.com with ESMTPSA id bm17-20020a056a00321100b0062e0515f020sm7328051pfb.162.2023.05.12.11.27.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 11:27:36 -0700 (PDT)
-Date:   Fri, 12 May 2023 11:27:35 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Fangrui Song <maskray@google.com>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>, linux-fsdevel@vger.kernel.org,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] coredump, vmcore: Set p_align to 4 for PT_NOTE
-Message-ID: <202305121126.E5AD334AA3@keescook>
-References: <20230512022528.3430327-1-maskray@google.com>
+        Fri, 12 May 2023 14:31:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A0EA5EA;
+        Fri, 12 May 2023 11:30:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65FB565813;
+        Fri, 12 May 2023 18:28:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A7CEC433EF;
+        Fri, 12 May 2023 18:28:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683916110;
+        bh=w4BYbrUUGHBITQkzRcbNyFmmLJOqvqi+aKvWsEEycQI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=qcQpAJe8Ks7bN6xK6U9RUhJE/NQcOHEBNNm5xop2qHgkrKdHm6XZNkD8PlqRsExUc
+         /YdjftfUuubfI11N84ZNPtVQq4pmiaQx1RXL3pgvr/08Wwk8wirsANqxBjOHLVPAJh
+         nbfqSBG3T0T0SpqbVdUSRKSHCnT2rup9sdCNaxTcjaKKUo8kOR7awmStpCeA/0cJ4M
+         osKD10KEYEK6Ge51NBOnzindGh14uXmq/ZvG420AR/wtgf5t1mAVrAnGuinmz5WHG+
+         q8F8K2LEEz+pWjZBAIO4UN5FidEj/TQyBcHBVqQT16U5RZKiahDp0zW21AIySzcRW1
+         VasZ0HClYeogw==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 06D6E403B5; Fri, 12 May 2023 15:28:27 -0300 (-03)
+Date:   Fri, 12 May 2023 15:28:27 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Kan Liang <kan.liang@linux.intel.com>,
+        Ahmad Yasin <ahmad.yasin@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Samantha Alt <samantha.alt@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Weilin Wang <weilin.wang@intel.com>,
+        Edward Baker <edward.baker@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Rob Herring <robh@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 00/44] Fix perf on Intel hybrid CPUs
+Message-ID: <ZF6FS95479mWh17I@kernel.org>
+References: <20230502223851.2234828-1-irogers@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230512022528.3430327-1-maskray@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230502223851.2234828-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,WEIRD_PORT
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,38 +88,223 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 02:25:28AM +0000, Fangrui Song wrote:
-> Tools like readelf/llvm-readelf use p_align to parse a PT_NOTE program
-> header as an array of 4-byte entries or 8-byte entries. Currently, there
-> are workarounds[1] in place for Linux to treat p_align==0 as 4. However,
-> it would be more appropriate to set the correct alignment so that tools
-> do not have to rely on guesswork. FreeBSD coredumps set p_align to 4 as
-> well.
->
-> [1]: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=82ed9683ec099d8205dc499ac84febc975235af6
+Em Tue, May 02, 2023 at 03:38:07PM -0700, Ian Rogers escreveu:
+> TL;DR: hybrid doesn't crash, json metrics work on hybrid on both PMUs
+> or individually, event parsing doesn't always scan all PMUs, more and
+> new tests that also run without hybrid, less code.
+> 
+> The first 4 patches are aimed at Linux 6.4 to address issues raised,
+> in particular by Kan, on the existing perf stat behavior with json
+> metrics. They avoid duplicated events by removing groups. They don't
+> hide events and metrics to make event multiplexing obvious. They avoid
+> terminating perf when paranoia is higher due to certain events that
+> always fail. They avoid rearranging events by PMUs when the events
+> aren't in a group.
 
-The interesting bit from here is:
+Took the first 4, skipped patch 19 that Adrian asked to be in 6.4 and
+then went all the way to:
 
-  /* NB: Some note sections may have alignment value of 0 or 1.  gABI
-     specifies that notes should be aligned to 4 bytes in 32-bit
-     objects and to 8 bytes in 64-bit objects.  As a Linux extension,
-     we also support 4 byte alignment in 64-bit objects.  If section
-     alignment is less than 4, we treate alignment as 4 bytes.   */
-  if (align < 4)
-    align = 4;
-  else if (align != 4 && align != 8)
-    {
-      warn (_("Corrupt note: alignment %ld, expecting 4 or 8\n"),
-           (long) align);
-      return FALSE;
-    }
+Applying: perf test: Add cputype testing to perf stat
+error: patch failed: tools/perf/tests/shell/stat.sh:91
+error: tools/perf/tests/shell/stat.sh: patch does not apply
+Patch failed at 0012 perf test: Add cputype testing to perf stat
+hint: Use 'git am --show-current-patch=diff' to see the failed patch
+When you have resolved this problem, run "git am --continue".
+If you prefer to skip this patch, run "git am --skip" instead.
+To restore the original branch and stop patching, run "git am --abort".
+⬢[acme@toolbox perf-tools-next]$ git am --abort
+⬢[acme@toolbox perf-tools-next]$
 
-Should Linux use 8 for 64-bit processes to avoid the other special case?
+Will test with it and put what I have in tmp.perf-tools-next, testing
+now.
 
-(And do we need to make some changes to make sure we are actually
-aligned?)
+- Arnaldo
 
--Kees
+ 
+> The next 5 patches avoid grouping events for metrics where they could
+> never succeed and were previously posted as:
+> "perf vendor events intel: Add xxx metric constraints"
+> https://lore.kernel.org/all/20230419005423.343862-1-irogers@google.com/
+> In general the generated json is coming from:
+> https://github.com/intel/perfmon/pull/73
+> 
+> Next are some general and test improvements.
+> 
+> Next event parsing is rewritten to not scan all PMUs for the benefit
+> of raw and legacy cache parsing, instead these are handled by the
+> lexer and a new term type. This ultimately removes the need for the
+> event parser for hybrid to be recursive as legacy cache can be just a
+> term. Tests are re-enabled for events with hyphens, so AMD's
+> branch-brs event is now parsable.
+> 
+> The cputype option is made a generic pmu filter flag and is tested
+> even on non-hybrid systems.
+> 
+> The final patches address specific json metric issues on hybrid, in
+> both the json metrics and the metric code.
+> 
+> The patches add slightly more code than they remove, in areas like
+> better json metric constraints and tests, but in the core util code,
+> the removal of hybrid is a net reduction:
+>  22 files changed, 711 insertions(+), 1016 deletions(-)
+> 
+> Sample output is contained in the v1 patch set:
+> https://lore.kernel.org/lkml/bff481ba-e60a-763f-0aa0-3ee53302c480@linux.intel.com/
+> 
+> Tested on Tigerlake, Skylake and Alderlake CPUs.
+> 
+> The v4 patch set:
+>  - rebase, 1 of the Linux 6.4 recommended patches are merged leaving:
+>    1) perf metric: Change divide by zero and !support events behavior
+>    2) perf stat: Introduce skippable evsels
+>    3) perf metric: Json flag to not group events if gathering a metric group
+>    4) perf parse-events: Don't reorder ungrouped events by pmu
+>    whose diffstat is:
+>     30 files changed, 326 insertions(+), 33 deletions(-)
+>    but without the vendor event updates (the tend to be large as they
+>    repeat something per architecture per metric) is just:
+>     10 files changed, 90 insertions(+), 32 deletions(-)
+>  - Address review comments from Ravi Bangoria <ravi.bangoria@amd.com>
+>    that are only in the patches targeting Linux 6.5.
+> 
+> The v3 patch set:
+>  - for Linux 6.4 the first 5 patches are recommended:
+>    - changes skippable evsels to always print in case short running
+>      benchmarks meet the 0 enable and 0 count condition (suggested by
+>      Stephane).
+>    - changes metrics to show "nan" so that it is more obvious they
+>      couldn't be computed (suggested by Stephane).
+>    - fixes a reordering issue that reordered events that lacked a
+>      group, especially when the core PMU isn't "cpu".
+>  - for Linux 6.5 added extra hybrid type tests in the x86 hybrid test
+>    as suggested by Kan.
+>  - note, the patches aren't rebased against the tmp.perf-tools branch
+>    meaning patches 1 and 11 should be dropped there.
+>  
+> The v2 patch set:
+>  - restructures the 3 Linux 6.4 patches first;
+>  - makes it so that is_event_supported isn't called during core event parsing;
+>  - displays skippable 0 count events that were enabled;
+>  - addresses output formatting review comments;
+>  - addresses some test issues and an uninitialized variable use in strchr;
+>  - addresses checkpatch.pl reported issues;
+>  - adds reviewed-by to some patches.
+> 
+> Ian Rogers (44):
+>   perf metric: Change divide by zero and !support events behavior
+>   perf stat: Introduce skippable evsels
+>   perf metric: Json flag to not group events if gathering a metric group
+>   perf parse-events: Don't reorder ungrouped events by pmu
+>   perf vendor events intel: Add alderlake metric constraints
+>   perf vendor events intel: Add icelake metric constraints
+>   perf vendor events intel: Add icelakex metric constraints
+>   perf vendor events intel: Add sapphirerapids metric constraints
+>   perf vendor events intel: Add tigerlake metric constraints
+>   perf test: Test more sysfs events
+>   perf test: Use valid for PMU tests
+>   perf test: Mask configs with extended types then test
+>   perf test: Test more with config_cache
+>   perf test: Roundtrip name, don't assume 1 event per name
+>   perf parse-events: Set attr.type to PMU type early
+>   perf parse-events: Set pmu_name whenever a pmu is given
+>   perf print-events: Avoid unnecessary strlist
+>   perf parse-events: Avoid scanning PMUs before parsing
+>   perf evsel: Modify group pmu name for software events
+>   perf test: Move x86 hybrid tests to arch/x86
+>   perf test x86 hybrid: Update test expectations
+>   perf test x86 hybrid: Add hybrid extended type checks
+>   perf parse-events: Support PMUs for legacy cache events
+>   perf parse-events: Wildcard legacy cache events
+>   perf print-events: Print legacy cache events for each PMU
+>   perf parse-events: Support wildcards on raw events
+>   perf parse-events: Remove now unused hybrid logic
+>   perf parse-events: Minor type safety cleanup
+>   perf parse-events: Add pmu filter
+>   perf stat: Make cputype filter generic
+>   perf test: Add cputype testing to perf stat
+>   perf test: Fix parse-events tests for >1 core PMU
+>   perf parse-events: Support hardware events as terms
+>   perf parse-events: Avoid error when assigning a term
+>   perf parse-events: Avoid error when assigning a legacy cache term
+>   perf parse-events: Don't auto merge hybrid wildcard events
+>   perf parse-events: Don't reorder atom cpu events
+>   perf metrics: Be PMU specific for referenced metrics.
+>   perf stat: Command line PMU metric filtering
+>   perf vendor events intel: Correct alderlake metrics
+>   perf jevents: Don't rewrite metrics across PMUs
+>   perf metrics: Be PMU specific in event match
+>   perf stat: Don't disable TopdownL1 metric on hybrid
+>   perf parse-events: Reduce scope of is_event_supported
+> 
+>  tools/perf/arch/x86/include/arch-tests.h      |   1 +
+>  tools/perf/arch/x86/tests/Build               |   1 +
+>  tools/perf/arch/x86/tests/arch-tests.c        |  10 +
+>  tools/perf/arch/x86/tests/hybrid.c            | 287 ++++++
+>  tools/perf/arch/x86/util/evlist.c             |   4 +-
+>  tools/perf/builtin-list.c                     |  21 +-
+>  tools/perf/builtin-record.c                   |  13 +-
+>  tools/perf/builtin-stat.c                     |  77 +-
+>  tools/perf/builtin-top.c                      |   5 +-
+>  tools/perf/builtin-trace.c                    |   5 +-
+>  .../arch/x86/alderlake/adl-metrics.json       | 275 +++---
+>  .../arch/x86/alderlaken/adln-metrics.json     |  20 +-
+>  .../arch/x86/broadwell/bdw-metrics.json       |  12 +
+>  .../arch/x86/broadwellde/bdwde-metrics.json   |  12 +
+>  .../arch/x86/broadwellx/bdx-metrics.json      |  12 +
+>  .../arch/x86/cascadelakex/clx-metrics.json    |  12 +
+>  .../arch/x86/haswell/hsw-metrics.json         |  12 +
+>  .../arch/x86/haswellx/hsx-metrics.json        |  12 +
+>  .../arch/x86/icelake/icl-metrics.json         |  23 +
+>  .../arch/x86/icelakex/icx-metrics.json        |  23 +
+>  .../arch/x86/ivybridge/ivb-metrics.json       |  12 +
+>  .../arch/x86/ivytown/ivt-metrics.json         |  12 +
+>  .../arch/x86/jaketown/jkt-metrics.json        |  12 +
+>  .../arch/x86/sandybridge/snb-metrics.json     |  12 +
+>  .../arch/x86/sapphirerapids/spr-metrics.json  |  23 +
+>  .../arch/x86/skylake/skl-metrics.json         |  12 +
+>  .../arch/x86/skylakex/skx-metrics.json        |  12 +
+>  .../arch/x86/tigerlake/tgl-metrics.json       |  23 +
+>  tools/perf/pmu-events/jevents.py              |  10 +-
+>  tools/perf/pmu-events/metric.py               |  28 +-
+>  tools/perf/pmu-events/metric_test.py          |   6 +-
+>  tools/perf/pmu-events/pmu-events.h            |   2 +
+>  tools/perf/tests/evsel-roundtrip-name.c       | 119 +--
+>  tools/perf/tests/expr.c                       |   3 +-
+>  tools/perf/tests/parse-events.c               | 858 +++++++++---------
+>  tools/perf/tests/parse-metric.c               |   1 +
+>  tools/perf/tests/pmu-events.c                 |  12 +-
+>  tools/perf/tests/shell/stat.sh                |  44 +
+>  tools/perf/util/Build                         |   1 -
+>  tools/perf/util/evlist.h                      |   1 -
+>  tools/perf/util/evsel.c                       |  30 +-
+>  tools/perf/util/evsel.h                       |   1 +
+>  tools/perf/util/expr.y                        |   6 +-
+>  tools/perf/util/metricgroup.c                 | 111 ++-
+>  tools/perf/util/metricgroup.h                 |   3 +-
+>  tools/perf/util/parse-events-hybrid.c         | 214 -----
+>  tools/perf/util/parse-events-hybrid.h         |  25 -
+>  tools/perf/util/parse-events.c                | 720 ++++++---------
+>  tools/perf/util/parse-events.h                |  63 +-
+>  tools/perf/util/parse-events.l                | 108 +--
+>  tools/perf/util/parse-events.y                | 222 ++---
+>  tools/perf/util/pmu-hybrid.c                  |  20 -
+>  tools/perf/util/pmu-hybrid.h                  |   1 -
+>  tools/perf/util/pmu.c                         |  16 +-
+>  tools/perf/util/pmu.h                         |   3 +
+>  tools/perf/util/pmus.c                        |  25 +-
+>  tools/perf/util/pmus.h                        |   3 +
+>  tools/perf/util/print-events.c                | 127 ++-
+>  tools/perf/util/stat-display.c                |   2 +-
+>  tools/perf/util/stat-shadow.c                 |  25 +-
+>  60 files changed, 2066 insertions(+), 1699 deletions(-)
+>  create mode 100644 tools/perf/arch/x86/tests/hybrid.c
+>  delete mode 100644 tools/perf/util/parse-events-hybrid.c
+>  delete mode 100644 tools/perf/util/parse-events-hybrid.h
+> 
+> -- 
+> 2.40.1.495.gc816e09b53d-goog
+> 
 
 -- 
-Kees Cook
+
+- Arnaldo
