@@ -2,213 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 361D5700D3E
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:44:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B80E700D3B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232390AbjELQoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 12:44:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37874 "EHLO
+        id S237227AbjELQn7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 12:43:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236662AbjELQoF (ORCPT
+        with ESMTP id S236662AbjELQn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 12:44:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D6BEAD36
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 09:44:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 91A9B63BC3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:44:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECFE9C433A1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:44:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683909843;
-        bh=cCuZX4ujJbA7/yPKfk7OPV+6vTF3PdHT+sv9n8geJhM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LDHLU/ZJHBVyQotQOk2VlyorTHZWK3JCHkx1LX4PXNrLGNr4VOQCrgSfflPOoXBag
-         AhapF4qsaENACL6H/v22lkRy/eZWmVslCqUn3KDFF3822glhBZiYNJN54POS1GpNl2
-         bOjiFHNzCX0jDza2zEnL2poozs5g4iSkMevskk+y47ANaf+wz2QQYNbncvZrf+RTND
-         cj7k7w0VK8v5RY9EP314zLhqTu3miiGzM3cNSiUSwhrQlrW00lTHTggNILgUa9iOMN
-         9XhDKAPZSaodsBwbxNEy2zvhmEluYqd9dBo2v/sOh1YmspQBJmr0nLxkrbqm+FyR3N
-         qDESZ35uC8wUQ==
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-2ac836f4447so104069971fa.2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 09:44:02 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzPypva0iHCl3ixvNsg9ehjlRb0H+Lqzbbrch26h8O+/2wRvOLJ
-        pTgqvwtjRt1i6udSyDWjcf8kHFSpvKKj+tbpHWs=
-X-Google-Smtp-Source: ACHHUZ4wSdZRYdHIPNeVp0x4gcnmZ3D4NFTRnQbw7PpbqP3N4Ss5pemly64/C/jjuwxNNiAqu9xiEoUEG/cJuUBWVPY=
-X-Received: by 2002:ac2:511e:0:b0:4eb:c4e:bd87 with SMTP id
- q30-20020ac2511e000000b004eb0c4ebd87mr3954785lfb.58.1683909840877; Fri, 12
- May 2023 09:44:00 -0700 (PDT)
+        Fri, 12 May 2023 12:43:56 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1338C2D43
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 09:43:55 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id 2adb3069b0e04-4f139de8cefso53296619e87.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 09:43:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683909833; x=1686501833;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=oQ35jiD0iHCimmXNvqE7wf5xzhSOyJCookuzUyurpLM=;
+        b=LmEGhTe2a0TlygbG0pgEn3ULmATOXb0sCfMtBAEgM5W8HG+6IAO5PVCooWsF9UEups
+         c7QodB3vbWifw2arGdJiSkUy+9wDhkMxw3zwR3IRHGWoootxT9mc7amQycF3LDRUdFHZ
+         jEI3pSuMaamdcLeQJgKQXHIEgGwNg8gQZkxiIzxDAdl4u0/mTwG6yeSwGEC8yR6R2GI6
+         CujVaK1xb9uvKUYlGGTcvPHUuaIOuWkuaT3hGJbbmPAB/upM9nCpfpbRGVRw9EsCrVea
+         obaH884kC3q3FsXANPfe4kS18rAryzP+5Wa/CwJLJhmu1D8Yv+1jd+tsjMJCtcCs1a6N
+         93Xw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683909833; x=1686501833;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=oQ35jiD0iHCimmXNvqE7wf5xzhSOyJCookuzUyurpLM=;
+        b=YFgC/xcV9o+rUhF1dLrjtv6QJsvM605Nl9cj9LQfNWDoGn/MIbU28VPZBSwE9SWbPu
+         HoK+eWfxG2o1tBvb/lDpJN3i4YuJK3pmgaGg87WnHOU5lbSF+WUIskYrwQ37MF8gZvEL
+         kj2K/9O50J4GLnBrKgF4XollFjQAN0mAqSB67d7W68pa/VwwdBNzdDWxGNUj0cLfdHbu
+         jc1Gbvhq49QJzZ095Ys9SW43TeRmYggTfFvihPXTHkWA69jLBaoze3Z6EcJ9GeFD9+OZ
+         gL/Z44EYFMz+X3c0hw8B6buHEyp/zS8ihucyjbO1VFqBiN7aqP3xuG2okaXeWv25kXpH
+         k4zg==
+X-Gm-Message-State: AC+VfDzzBEIr5CbcJ/f4ROcgBNKR3dTLmnbbW+WE+gadLgUkV3OpIjg2
+        jgdSYo5i668kmuJUPhdKHtsyWA==
+X-Google-Smtp-Source: ACHHUZ6Knr8V9h2tzeBW26Liibmojqhi318dz0i7nIVAWX3Oxrywq7eHYWTvTbXUamXXHscf7fgd4A==
+X-Received: by 2002:a05:6512:3f19:b0:4ec:83fd:1599 with SMTP id y25-20020a0565123f1900b004ec83fd1599mr4095277lfa.33.1683909833320;
+        Fri, 12 May 2023 09:43:53 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:a0db:1f00::8a5? (dzdqv0yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a0db:1f00::8a5])
+        by smtp.gmail.com with ESMTPSA id o14-20020a05651238ae00b004f250513215sm1513284lft.198.2023.05.12.09.43.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 May 2023 09:43:52 -0700 (PDT)
+Message-ID: <ddb79cfb-8ddd-5ca3-e133-465518e5e973@linaro.org>
+Date:   Fri, 12 May 2023 19:43:51 +0300
 MIME-Version: 1.0
-References: <20230509221700.859865-1-song@kernel.org> <20230512124659.GY4253@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230512124659.GY4253@hirez.programming.kicks-ass.net>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 12 May 2023 09:43:48 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW4GD77L-i-t90E743HTam=qRC0HP7XefT_rXC_WM6s2Hw@mail.gmail.com>
-Message-ID: <CAPhsuW4GD77L-i-t90E743HTam=qRC0HP7XefT_rXC_WM6s2Hw@mail.gmail.com>
-Subject: Re: [PATCH] watchdog: Prefer use "ref-cycles" for NMI watchdog
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-team@meta.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v7 0/8] add DSC 1.2 dpu supports
+Content-Language: en-GB
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, andersson@kernel.org
+Cc:     quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
+        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <1683827607-19193-1-git-send-email-quic_khsieh@quicinc.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <1683827607-19193-1-git-send-email-quic_khsieh@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 5:47=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> On Tue, May 09, 2023 at 03:17:00PM -0700, Song Liu wrote:
-> > NMI watchdog permanently consumes one hardware counters per CPU on the
-> > system. For systems that use many hardware counters, this causes more
-> > aggressive time multiplexing of perf events.
-> >
-> > OTOH, some CPUs (mostly Intel) support "ref-cycles" event, which is rar=
-ely
-> > used. Try use "ref-cycles" for the watchdog. If the CPU supports it, so
-> > that one more hardware counter is available to the user. If the CPU doe=
-sn't
-> > support "ref-cycles", fall back to "cycles".
-> >
-> > The downside of this change is that users of "ref-cycles" need to disab=
-le
-> > nmi_watchdog.
->
-> Urgh..
->
-> how about something like so instead; then you can use whatever event you
-> like...
+On 11/05/2023 20:53, Kuogee Hsieh wrote:
+> This series adds the DPU side changes to support DSC 1.2 encoder. This
+> was validated with both DSI DSC 1.2 panel and DP DSC 1.2 monitor.
+> The DSI and DP parts will be pushed later on top of this change.
+> This seriel is rebase on [1], [2] and catalog fixes from rev-4 of [3].
+> 
+> [1]: https://patchwork.freedesktop.org/series/116851/
+> [2]: https://patchwork.freedesktop.org/series/116615/
+> [3]: https://patchwork.freedesktop.org/series/112332/
 
-Configuring this at boot time is not ideal for our use case. Currently, we =
-have
-some systems support ref-cycles and some don't. So this is one more kernel
-argument we need to make sure to get correctly. This also means we cannot
-change this setting without reboot.
+Please run the series through ./scripts/checkpatch.pl --strict. For this 
+series it reports tons of issues with the mixed indentation, 
+whitespaces, alignment, etc.
 
-Another idea I have is to use sysctl kernel.nmi_watchdog, so we can change
-the event after boot. Would this work?
+-- 
+With best wishes
+Dmitry
 
-Btw, the limitation here (ref-cycles users need to disable NMI watchdog) co=
-mes
-from the limitation that the programmable counters cannot do ref-cycles. Is=
- this
-something we may change (or already changed)?
-
-Thanks,
-Song
-
->
-> ---
->  include/linux/nmi.h   |  2 ++
->  kernel/watchdog.c     | 45 ++++++++++++++++++++++++++++++++++++---------
->  kernel/watchdog_hld.c |  4 ++--
->  3 files changed, 40 insertions(+), 11 deletions(-)
->
-> diff --git a/include/linux/nmi.h b/include/linux/nmi.h
-> index 048c0b9aa623..8b6307837346 100644
-> --- a/include/linux/nmi.h
-> +++ b/include/linux/nmi.h
-> @@ -19,6 +19,8 @@ bool is_hardlockup(void);
->
->  extern int watchdog_user_enabled;
->  extern int nmi_watchdog_user_enabled;
-> +extern int nmi_watchdog_type;
-> +extern u64 nmi_watchdog_config;
->  extern int soft_watchdog_user_enabled;
->  extern int watchdog_thresh;
->  extern unsigned long watchdog_enabled;
-> diff --git a/kernel/watchdog.c b/kernel/watchdog.c
-> index 8e61f21e7e33..b3c09e0f96a3 100644
-> --- a/kernel/watchdog.c
-> +++ b/kernel/watchdog.c
-> @@ -40,6 +40,8 @@ static DEFINE_MUTEX(watchdog_mutex);
->  unsigned long __read_mostly watchdog_enabled;
->  int __read_mostly watchdog_user_enabled =3D 1;
->  int __read_mostly nmi_watchdog_user_enabled =3D NMI_WATCHDOG_DEFAULT;
-> +int __ro_after_init nmi_watchdog_type =3D PERF_TYPE_HARDWARE;
-> +u64 __ro_after_init nmi_watchdog_config =3D PERF_COUNT_HW_CPU_CYCLES;
->  int __read_mostly soft_watchdog_user_enabled =3D 1;
->  int __read_mostly watchdog_thresh =3D 10;
->  static int __read_mostly nmi_watchdog_available;
-> @@ -73,15 +75,40 @@ void __init hardlockup_detector_disable(void)
->
->  static int __init hardlockup_panic_setup(char *str)
->  {
-> -       if (!strncmp(str, "panic", 5))
-> -               hardlockup_panic =3D 1;
-> -       else if (!strncmp(str, "nopanic", 7))
-> -               hardlockup_panic =3D 0;
-> -       else if (!strncmp(str, "0", 1))
-> -               nmi_watchdog_user_enabled =3D 0;
-> -       else if (!strncmp(str, "1", 1))
-> -               nmi_watchdog_user_enabled =3D 1;
-> -       return 1;
-> +       int ret =3D 1;
-> +
-> +       if (!str)
-> +               return -EINVAL;
-> +
-> +       while (str) {
-> +               char *next =3D strchr(str, ',');
-> +               if (next) {
-> +                       *next =3D 0;
-> +                       next++;
-> +               }
-> +
-> +               if (!strcmp(str, "panic"))
-> +                       hardlockup_panic =3D 1;
-> +               else if (!strcmp(str, "nopanic"))
-> +                       hardlockup_panic =3D 0;
-> +               else if (!strcmp(str, "0"))
-> +                       nmi_watchdog_user_enabled =3D 0;
-> +               else if (!strcmp(str, "1"))
-> +                       nmi_watchdog_user_enabled =3D 1;
-> +               else if (str[0] =3D=3D 'r') {
-> +                       str++;
-> +                       ret =3D kstrtou64(str, 16, &nmi_watchdog_config);
-> +                       if (ret)
-> +                               break;
-> +                       nmi_watchdog_type =3D PERF_TYPE_RAW;
-> +                       nmi_watchdog_user_enabled =3D 1;
-> +               }
-> +
-> +               str =3D next;
-> +       }
-> +
-> +       return ret;
-> +
->  }
->  __setup("nmi_watchdog=3D", hardlockup_panic_setup);
->
-> diff --git a/kernel/watchdog_hld.c b/kernel/watchdog_hld.c
-> index 247bf0b1582c..27bc15f9a92a 100644
-> --- a/kernel/watchdog_hld.c
-> +++ b/kernel/watchdog_hld.c
-> @@ -99,8 +99,6 @@ static inline bool watchdog_check_timestamp(void)
->  #endif
->
->  static struct perf_event_attr wd_hw_attr =3D {
-> -       .type           =3D PERF_TYPE_HARDWARE,
-> -       .config         =3D PERF_COUNT_HW_CPU_CYCLES,
->         .size           =3D sizeof(struct perf_event_attr),
->         .pinned         =3D 1,
->         .disabled       =3D 1,
-> @@ -170,6 +168,8 @@ static int hardlockup_detector_event_create(void)
->         struct perf_event *evt;
->
->         wd_attr =3D &wd_hw_attr;
-> +       wd_attr->type =3D nmi_watchdog_type;
-> +       wd_attr->config =3D nmi_watchdog_config;
->         wd_attr->sample_period =3D hw_nmi_get_sample_period(watchdog_thre=
-sh);
->
->         /* Try to register using hardware perf events */
