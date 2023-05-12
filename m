@@ -2,113 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A36BA700D16
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:35:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6961A700D19
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:35:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234868AbjELQfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 12:35:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59782 "EHLO
+        id S235698AbjELQfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 12:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbjELQfI (ORCPT
+        with ESMTP id S235448AbjELQf1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 12:35:08 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE44BA25F;
-        Fri, 12 May 2023 09:35:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683909305; x=1715445305;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=478mvwmsv9IeCMZb4/HmUb/CH/Ey2PB85AwyLXEFDQk=;
-  b=UeEvL9hWfot7tSnqfsI2FbgI5ESm1HAlmg3BbnV7MgpL/ysAA3dhbjv8
-   6zVUa4KFZ+8wJV35SYcvBezL46wytR+Z4VRj4TlpZb5dxgz3Jbo6YWXst
-   KAt1/R0jIWobmrhdQxOCWVkaXgNpZcZd1RP/URnBUaogS/I0g2J7VzlEt
-   DfyBCBZr5nU63VMD2iSwlOv1lGweEXsgUPQky/T6M0F9umqPemUyui48K
-   jGFgdE/w3L9OfPjxe10jFJHHhneIiWT4XiFPsSPDs8+PVSmkm7msjR68p
-   LTT90qUbyq44P5axVYuQLhu64TT2tUJ+/55wZZn6lfY4+a86nj0FMDy08
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="331193612"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="331193612"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 09:35:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="1030146824"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="1030146824"
-Received: from winkelru-mobl.amr.corp.intel.com (HELO [10.212.144.249]) ([10.212.144.249])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 09:35:03 -0700
-Message-ID: <5363c7b7-7a5b-490c-445b-fb7ccd693c63@linux.intel.com>
-Date:   Fri, 12 May 2023 11:34:44 -0500
+        Fri, 12 May 2023 12:35:27 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A38A5F8
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 09:35:17 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id a640c23a62f3a-965ac4dd11bso2017806566b.2
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 09:35:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683909316; x=1686501316;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Oj3vBLYi0VGg7znZN4GARmcXM9pKwrBpVwIV9KkQbec=;
+        b=cX9t50W3qWgc+/ZaeMekhrhK1HUSgn6pR9RA6For+1pKOyNl38tWsLSYOfttWTB89c
+         Vr2S7zudABZH+b7KSDqiMNpgQAWPYU7rpl+r5I9fF147w2jcxg6cRplVOIq4PYhRJSuX
+         1H2dQdesYD3RgRF+wtsb5y2D+cBLKlR/go2UbTI757Xu/FfM2oQTSbndCZzd6iGc2Wvh
+         Wg+KeqlAtEUQbqigYT559PDPA5RPd2OVmYiP4zXf3PP3bsJ6e/ZtLEtAfaGvZO3NIjOc
+         L4BCIFXPgs9MbOyq4n0ZUayjP7HhqQcTqVmuYAtJnYBi9943hkimGEBt6m7DAqjRCsuJ
+         ZEpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683909316; x=1686501316;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oj3vBLYi0VGg7znZN4GARmcXM9pKwrBpVwIV9KkQbec=;
+        b=YjG4fRYs00KePaY+zBrts2a63NJmYPg+1Wd5CFBrdLGOi48NP7D8LLqYBJCE9Cyicc
+         ES5lxh6IXSr6C+JnRDgn3sphTSseCwTICOIUKNuReH4JAQvgwooj5gX4RE3iJdYo+fRy
+         qU0dWNi7YPY096AnqjzE9kSJOXeK5av8+3eyC7/g6P80+Anyh51LqN44GjYVQkWXBNkn
+         82dWnV4eocTM0WIGAgEcJvejeuANAcjS9CemJ405Sz+ajgYBpqbavRHhWT2VN8AeHS+X
+         5/ZXztjy1ar1TivtuLeJ5ZBRHJv01BLuI/H2VaskqYO3fpnb/u1bIun4UmbZmBUD28Bd
+         S2sg==
+X-Gm-Message-State: AC+VfDyftKoeiIeFIO0tBeoan4iM+uqvhjTTD5Yr0YZP0oaxzABT2ayP
+        Y0dDZCiiKw0lTioEQQKmQ3EBpQ==
+X-Google-Smtp-Source: ACHHUZ4ot459mbkMzA1b+DbStmTsgAlYaGVvjjMaw+ecLAMB38L9UcblvQxLt2/wAAYALelHBjLbFA==
+X-Received: by 2002:a17:907:3e9e:b0:96a:29c0:8515 with SMTP id hs30-20020a1709073e9e00b0096a29c08515mr8774854ejc.58.1683909315994;
+        Fri, 12 May 2023 09:35:15 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:7ede:fc7b:2328:3883? ([2a02:810d:15c0:828:7ede:fc7b:2328:3883])
+        by smtp.gmail.com with ESMTPSA id lt14-20020a170906fa8e00b0094efdfe60dcsm5490714ejb.206.2023.05.12.09.35.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 May 2023 09:35:15 -0700 (PDT)
+Message-ID: <98a77653-ec58-56c4-9893-3b424f67c87e@linaro.org>
+Date:   Fri, 12 May 2023 18:35:12 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH 01/10] soundwire: bus: Allow SoundWire peripherals to
- register IRQ handlers
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 01/28] media: cec: ch7322: drop of_match_ptr for ID table
 Content-Language: en-US
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>
-Cc:     broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, linus.walleij@linaro.org,
-        vkoul@kernel.org, lgirdwood@gmail.com,
-        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
- <20230512122838.243002-2-ckeepax@opensource.cirrus.com>
- <0471f085-14bf-c159-9b92-62983af6c19a@linux.intel.com>
- <20230512160224.GK68926@ediswmail.ad.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230512160224.GK68926@ediswmail.ad.cirrus.com>
+To:     Joe Tessler <jrt@google.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Wenyou Yang <wenyou.yang@microchip.com>,
+        Bin Liu <bin.liu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-rockchip@lists.infradead.org
+References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/12/23 11:02, Charles Keepax wrote:
-> On Fri, May 12, 2023 at 08:45:51AM -0500, Pierre-Louis Bossart wrote:
->>> @@ -1711,6 +1739,9 @@ static int sdw_handle_slave_alerts(struct sdw_slave *slave)
->>>  				struct device *dev = &slave->dev;
->>>  				struct sdw_driver *drv = drv_to_sdw_driver(dev->driver);
->>>  
->>> +				if (slave->prop.use_domain_irq && slave->irq)
->>> +					handle_nested_irq(slave->irq);
->>> +
->>
->> I am a bit lost here, I can understand that alerts would be handled by a
->> dedicated handler, but here the code continues and will call the
->> existing interrupt_callback.
->>
->> Is this intentional? I wonder if there's a risk with two entities
->> dealing with the same event and programming the same registers.
->> Shouldn't there be some sort of 'either or' rule?
->>
+On 12/03/2023 14:12, Krzysztof Kozlowski wrote:
+> The driver can match only via the DT table so the table should be always
+> used and the of_match_ptr does not have any sense (this also allows ACPI
+> matching via PRP0001, even though it might not be relevant here).
 > 
-> I guess there is a risk of them "handling" the IRQ twice,
-> although it is hard to see why you would write the driver that
-> way. Also since they are sequencial the second would I guess
-> just see that no IRQs are pending.
+>   drivers/media/cec/i2c/ch7322.c:583:34: error: ‘ch7322_of_match’ defined but not used [-Werror=unused-const-variable=]
 > 
-> The intention for calling both is that it facilitates using
-> the same IRQ handler for I2C and SoundWire. At least on the
-> Cirrus devices there are a bunch of chip specific registers
-> that need treated exactly the same on I2C and SoundWire, but
-> then a couple of extra registers that need handled in the
-> SoundWire case. This way the handling of those can be kept
-> completely in the SoundWire part of the code and not ifdef-ed
-> into the main IRQ path.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-Sounds good to me, but it's worth adding a comment and improving the
-commit message with design intent/rules since it's a common part in
-drivers/soundwire/
+Hans, Sakari,
+
+Can you pick up the patchset? There was positive feedback:
+https://patchwork.linuxtv.org/project/linux-media/patch/20230312131318.351173-1-krzysztof.kozlowski@linaro.org/
+
+but it seems it was not applied.
+
+Best regards,
+Krzysztof
+
