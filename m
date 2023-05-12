@@ -2,212 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA3B7700D60
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:52:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EF1BC700D66
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:52:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237489AbjELQv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 12:51:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
+        id S237502AbjELQwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 12:52:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjELQv4 (ORCPT
+        with ESMTP id S237494AbjELQwm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 12:51:56 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9AF3C06
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 09:51:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683910314; x=1715446314;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZSyuKKhgjP3if26/69yZAX/EwR/5beZlAyQ6qOl09tI=;
-  b=PH3pWrlvWmiRTennN+fWK35euPSRS2lOtDWGg4pM91lgtgVcClWwjVY7
-   o5dAPZYYtzpqX0oiRSa3ASvU/5EoAt8K7bEYIHy1XIYZM3oFRy/+7iyEs
-   pYbCsRu3mBfw0qCaVZNc5kISGwpLC/lnnLRELsP7MMH+NwfBvvwj2WjLg
-   baIn9XbnW3j2fB+Kt+mu8jqY2rJhIewMdKuYMSYDXe0CgJm4kfZOmcs0E
-   J4nzI0mW3GXSnUA0cw1WifnFttn+OJgG2OGiQBNfvDyRdqF9NW4UPfi8j
-   eXZcQ42NyAVUiWBVWnZn8yQNUJEHDsnKTnYJOOq8L/2smtPLSlsbEGkSe
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="437171215"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="437171215"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 09:51:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="700246820"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="700246820"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 12 May 2023 09:51:51 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pxVzj-0004yi-0J;
-        Fri, 12 May 2023 16:51:51 +0000
-Date:   Sat, 13 May 2023 00:51:14 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Xia Fukun <xiafukun@huawei.com>, gregkh@linuxfoundation.org,
-        prajnoha@redhat.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, xiafukun@huawei.com
-Subject: Re: [PATCH v4] kobject: Fix global-out-of-bounds in
- kobject_action_type()
-Message-ID: <202305130029.EtJLG9kz-lkp@intel.com>
-References: <20230512103029.183852-1-xiafukun@huawei.com>
+        Fri, 12 May 2023 12:52:42 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4203B1982
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 09:52:40 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50be0d835aaso18004575a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 09:52:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683910359; x=1686502359;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=taY6vqOnlwfgSEUKM+GvHWsmve6rMezjk03XxW2GBtM=;
+        b=YB7mprcJ1M7cWZosUXrcU9KX6AhR1MPra/gLlGmxOPlwn3zgfK5TSnI41JqGAf66p3
+         sthhLP/TYi6Q5EHDYoU0U8tbi0Y0qwrljREJAl0PCaZ8948HKD8WcBe6VUFJA1/LcQQy
+         VU5qmAXELTaZX2VqCkK7ZUBM/hW3JCzs+16ilzayFqwgTPBg5d++VKyinAwkiWMoTeOD
+         v7BAEHU+R4HPKVzfeDWTCy9JWjr/NUTAqSh8UpbRSpgK7bY0A6Et8xcbuCnfjJufh0NN
+         XVjnnjPrWiMlILwDzxOaBk38HCut10BeQFCgvr9+5qdtZx4p5e0bmP3Dh5rPFrI8SDew
+         JbUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683910359; x=1686502359;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=taY6vqOnlwfgSEUKM+GvHWsmve6rMezjk03XxW2GBtM=;
+        b=WnpY1Dcyl0AbFSo6nji+trGINyTSh+6sH+Fe6qo507Mz/If+R3DqbUwpPw0Zb5Paw/
+         yuPB8JKzTjfxcsY+LBri6GrM3Jnzjgkry1bMMe4nCrOGVbA9P2fcfcUZ9i08CxMFsrBQ
+         cCfZZPt3GKZPkeV6RWo7GSOtmK7PNpLZgDbPC219+h0v7ruyRyEusC9XoyryFK+jIz8c
+         LgHnjR2xFINeEGp+QkHLJsIUAVGRSmfhAKDJ8fMJJa60+XEUhQc+iiKlJ4JQy5wL+U0x
+         uQcBFzhrE7kZXpV9uyYn1QYbb+EdW3V3OSyRyKplJ6W3lGG/hoivmIRYn6jG5yF7EWV0
+         GApw==
+X-Gm-Message-State: AC+VfDwpaKxCNLK4bC0QxsUBNepBYujBiY3jwA5CVAXeo/Q7Ro8bX8Ay
+        38Ks8G1sfkYQcYWhoVYe06i5Gg==
+X-Google-Smtp-Source: ACHHUZ59eFhWe1aXjkUV2GDKtKNfDQ9z13JZWV+UAdinGaGhOsxQrTLgqX2nVUOz8lj6XNB/0/btDw==
+X-Received: by 2002:a17:907:2d0c:b0:966:5c04:2c5a with SMTP id gs12-20020a1709072d0c00b009665c042c5amr18475819ejc.69.1683910358651;
+        Fri, 12 May 2023 09:52:38 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:7ede:fc7b:2328:3883? ([2a02:810d:15c0:828:7ede:fc7b:2328:3883])
+        by smtp.gmail.com with ESMTPSA id y18-20020a170906525200b0094f7acbafe0sm5694243ejm.177.2023.05.12.09.52.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 May 2023 09:52:38 -0700 (PDT)
+Message-ID: <e3c36382-f768-bb4d-4a32-dfac079cfd3e@linaro.org>
+Date:   Fri, 12 May 2023 18:52:36 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230512103029.183852-1-xiafukun@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V2 2/5] dt-bindings: clock: qcom: Add GCC clocks for SDX75
+Content-Language: en-US
+To:     Taniya Das <quic_tdas@quicinc.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, jkona@quicinc.com,
+        quic_rohiagar@quicinc.com
+References: <20230512122347.1219-1-quic_tdas@quicinc.com>
+ <20230512122347.1219-3-quic_tdas@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230512122347.1219-3-quic_tdas@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Xia,
+On 12/05/2023 14:23, Taniya Das wrote:
+> From: Imran Shaik <quic_imrashai@quicinc.com>
+> 
+> Add support for qcom global clock controller bindings for SDX75 platform.
+> 
+> Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
+> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> ---
 
-kernel test robot noticed the following build errors:
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-[auto build test ERROR on driver-core/driver-core-testing]
-[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.4-rc1 next-20230512]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Best regards,
+Krzysztof
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Xia-Fukun/kobject-Fix-global-out-of-bounds-in-kobject_action_type/20230512-183414
-base:   driver-core/driver-core-testing
-patch link:    https://lore.kernel.org/r/20230512103029.183852-1-xiafukun%40huawei.com
-patch subject: [PATCH v4] kobject: Fix global-out-of-bounds in kobject_action_type()
-config: hexagon-buildonly-randconfig-r004-20230510 (https://download.01.org/0day-ci/archive/20230513/202305130029.EtJLG9kz-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/4d1d5546395a3bf45324f25b5e77b90fe6cfe8df
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Xia-Fukun/kobject-Fix-global-out-of-bounds-in-kobject_action_type/20230512-183414
-        git checkout 4d1d5546395a3bf45324f25b5e77b90fe6cfe8df
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305130029.EtJLG9kz-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from lib/kobject_uevent.c:23:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from lib/kobject_uevent.c:23:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from lib/kobject_uevent.c:23:
-   In file included from include/linux/skbuff.h:17:
-   In file included from include/linux/bvec.h:10:
-   In file included from include/linux/highmem.h:12:
-   In file included from include/linux/hardirq.h:11:
-   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
-   In file included from include/asm-generic/hardirq.h:17:
-   In file included from include/linux/irq.h:20:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> lib/kobject_uevent.c:90:11: error: call to undeclared function 'kobject_action'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           action = kobject_action(i);
-                    ^
-   lib/kobject_uevent.c:67:9: warning: variable 'count_first' set but not used [-Wunused-but-set-variable]
-           size_t count_first;
-                  ^
-   7 warnings and 1 error generated.
-
-
-vim +/kobject_action +90 lib/kobject_uevent.c
-
-    61	
-    62	static int kobject_action_type(const char *buf, size_t count,
-    63				       enum kobject_action *type,
-    64				       const char **args)
-    65	{
-    66		enum kobject_action action;
-    67		size_t count_first;
-    68		const char *args_start;
-    69		int i, ret = -EINVAL;
-    70	
-    71		if (count && (buf[count-1] == '\n' || buf[count-1] == '\0'))
-    72			count--;
-    73	
-    74		if (!count)
-    75			goto out;
-    76	
-    77		args_start = strnchr(buf, count, ' ');
-    78		if (args_start) {
-    79			count_first = args_start - buf;
-    80			args_start = args_start + 1;
-    81		} else
-    82			count_first = count;
-    83	
-    84		/* Use sysfs_match_string() to replace the fragile and convoluted loop */
-    85		i = sysfs_match_string(kobject_actions, buf);
-    86	
-    87		if (i < 0)
-    88			return ret;
-    89	
-  > 90		action = kobject_action(i);
-    91	
-    92		if (args)
-    93			*args = args_start;
-    94	
-    95		*type = action;
-    96		ret = 0;
-    97	
-    98	out:
-    99		return ret;
-   100	}
-   101	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
