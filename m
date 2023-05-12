@@ -2,154 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B3756FFDE8
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 02:31:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 291496FFE0D
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 02:38:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239605AbjELAbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 20:31:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
+        id S239565AbjELAii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 20:38:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjELAbx (ORCPT
+        with ESMTP id S229654AbjELAig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 20:31:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 567F255AC
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 17:31:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683851467;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=GadWHwp50KH9hxb9lEESltKioaCu8cw3tBG7j+NI1MU=;
-        b=bi6qAr9GuWIyuG+j1CiPwuKJqvA98vklEQD/QWWJcsEhCUF9MmjskXUc4Gm6Aynt1da5z1
-        yp37wfNKpOHfFHO9exzo+NVrktlutvXHsFwtZnx7QHuP33CmgCN7x1Xe4XJP+OCEb/7M5J
-        VPlc6g200uPAtKWD7rbtI0fVk+BHt3k=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-673-SuA8UH45OsaiXJVRmf4XDw-1; Thu, 11 May 2023 20:31:06 -0400
-X-MC-Unique: SuA8UH45OsaiXJVRmf4XDw-1
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-74e23e33f80so96671785a.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 17:31:06 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683851465; x=1686443465;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=GadWHwp50KH9hxb9lEESltKioaCu8cw3tBG7j+NI1MU=;
-        b=fk5eM8HifheCEp8zhWJsmV1A+jWssqUBAKMzEanQAQ7ZRi5n39A4jRMangtFf+tr5i
-         zm+k08THoZBdnHgDzB2X+aGnYCoYeWgq3qACT+FJGQ7QGiipA9Ad8nNKavyff51Z16vA
-         4ijTtRQyQTFjtQvLfm/GKtUoHmlS2b4FvKd/3HG3CMcjApF1KvzhK8zipgTFX9ZB3sZ6
-         HZoRcdcLxarXsYoEcnbgHcefhSU35z8YOEr3606AMg4+N7LDhCOf3GFAK1rXehkWuJH0
-         k8j/EzstEJN8APooCld0VLXo8Ij3jjWN/X21vkoKdnWhHwvlba/XHBhdOYBEeYv29xVs
-         TJ7Q==
-X-Gm-Message-State: AC+VfDznqKsu7NEqBPlgSXQ3Tb/QzrFgiNQ6sMIw30gUXJfUjowkiIFX
-        loC59e3TaBWZQHTCuJapFsA+MQVCBNKQJRsVSnPrMV5sE+Bc7FCPcHF691qON2tISUBqLdHE2kw
-        j1CmY5854bIRT8h4/AKf6Bya+f1f0JyK+
-X-Received: by 2002:ac8:5c91:0:b0:3f2:38d:5c84 with SMTP id r17-20020ac85c91000000b003f2038d5c84mr38416138qta.4.1683851464974;
-        Thu, 11 May 2023 17:31:04 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ4GZ+IEWUFzTh92wkKNXuxaRW1/gPh6xOqwEBKdblJQ8DEN9s4K+2av9EFrKk0/m7CHKrQMlQ==
-X-Received: by 2002:ac8:5c91:0:b0:3f2:38d:5c84 with SMTP id r17-20020ac85c91000000b003f2038d5c84mr38416117qta.4.1683851464664;
-        Thu, 11 May 2023 17:31:04 -0700 (PDT)
-Received: from x1n.. (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
-        by smtp.gmail.com with ESMTPSA id v21-20020a05622a189500b003ef38277445sm1498590qtc.16.2023.05.11.17.31.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 17:31:04 -0700 (PDT)
-From:   Peter Xu <peterx@redhat.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Lorenzo Stoakes <lstoakes@gmail.com>, peterx@redhat.com,
-        David Hildenbrand <david@redhat.com>
-Subject: [PATCH] mm/gup: Fixes FOLL_UNLOCKABLE against FOLL_NOWAIT
-Date:   Thu, 11 May 2023 20:31:02 -0400
-Message-Id: <20230512003102.3149737-1-peterx@redhat.com>
-X-Mailer: git-send-email 2.39.1
+        Thu, 11 May 2023 20:38:36 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6742459D0;
+        Thu, 11 May 2023 17:38:35 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QHVHX1Dn9z4x4k;
+        Fri, 12 May 2023 10:38:32 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1683851914;
+        bh=My2tDJ8+k3Zx2VnVNOEnNcWKiimgFTnpNXvSNUsAFzk=;
+        h=Date:From:To:Cc:Subject:From;
+        b=b07awEOvIwNjEgI8mYHtiYB07uNIcIQlQv/Kk5QuiYgB0pbJC6u7cNi8jbWoDg6NK
+         NuUNN6fEDwmd01Kvbbv9TrowtHP5tbSUURHjIFDHzS1hrSVfRibl/Y4P1/uRY60y+c
+         FSb0yOZ4b4Zq+tCAyyqgFwyI6ZL3JkNmFlb+1d5DFp6xYMKlEC4+HIC8W9QlsTg89s
+         kR6edLTjnMMWU0TYwVe78Xmam8SP9x7ZYtQE8n1y8MnfCqtRDSDkwS4OkakQJA37fe
+         T7sN14bZfb3Io+7/9LWzOmSek+eFycrLGVuYNSXGl6tFkEE3gWQ92epgQA8XTuBUmz
+         uwv2fLDXPJRpg==
+Date:   Fri, 12 May 2023 10:38:29 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        Hamza Mahfooz <hamza.mahfooz@amd.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Huacai Chen <chenhuacai@loongson.cn>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Dave Airlie <airlied@redhat.com>,
+        DRI <dri-devel@lists.freedesktop.org>
+Subject: linux-next: manual merge of the amdgpu tree with Linus' tree
+Message-ID: <20230512103829.4136c741@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/7aoyIV5=co.LNCbJp15662H";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a follow up on f04740f54594 ("mm/gup: add FOLL_UNLOCKABLE").
+--Sig_/7aoyIV5=co.LNCbJp15662H
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-FOLL_NOWAIT is the gup alias of FAULT_FLAG_RETRY_NOWAIT, which means when
-FOLL_NOWAIT is set we definitely don't want to release the mmap read lock
-when faulting.  It's against the meaning of the newly introduced flag
-FOLL_UNLOCKABLE.
+Hi all,
 
-E.g., with current code we could at last have FAULT_FLAG_RETRY_NOWAIT set
-even if with a FOLL_UNLOCKABLE gup which doesn't make a lot of sense.
+Today's linux-next merge of the amdgpu tree got a conflict in:
 
-Code-wise, it _seems_ all still fine, because when NOWAIT+UNLOCKABLE both
-set it'll be the same as old NOWAIT plus FAULT_FLAG_KILLABLE (since luckily
-both of them leverage ALLOW_RETRY OTOH), which I don't see a major issue so
-far.  So not copying stable or attaching fixes, as there's no immediate
-issue found.  Still better clarify the use.
+  drivers/gpu/drm/amd/display/Kconfig
 
-Since at it, the same commit added unconditional FOLL_UNLOCKABLE in
-faultin_vma_page_range(), which is code-wise correct becuase the helper
-only has one user right now and it always has "locked" set.  However it can
-be abused if someone reuse faultin_vma_page_range() in other call sites in
-the future.  Add a sanity check for that, also add the missing comment for
-UNLOCKABLE.
+between commits:
 
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
+  78f0929884d4 ("powerpc/64: Always build with 128-bit long double")
+  70cc1b5307e8 ("Merge tag 'powerpc-6.4-1' of git://git.kernel.org/pub/scm/=
+linux/kernel/git/powerpc/linux")
 
-This is something I found when I was reading the code alongside only.  I
-hope I didn't miss something.
----
- mm/gup.c | 11 +++++++++--
- 1 file changed, 9 insertions(+), 2 deletions(-)
+from Linus' tree and commit:
 
-diff --git a/mm/gup.c b/mm/gup.c
-index 90d9b65ff35c..202097627667 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -1621,6 +1621,9 @@ long faultin_vma_page_range(struct vm_area_struct *vma, unsigned long start,
- 	VM_BUG_ON_VMA(end > vma->vm_end, vma);
- 	mmap_assert_locked(mm);
- 
-+	/* We'll do unconditional FOLL_UNLOCKABLE */
-+	VM_WARN_ON_ONCE(!locked);
-+
- 	/*
- 	 * FOLL_TOUCH: Mark page accessed and thereby young; will also mark
- 	 *	       the page dirty with FOLL_WRITE -- which doesn't make a
-@@ -1629,6 +1632,7 @@ long faultin_vma_page_range(struct vm_area_struct *vma, unsigned long start,
- 	 * FOLL_HWPOISON: Return -EHWPOISON instead of -EFAULT when we hit
- 	 *		  a poisoned page.
- 	 * !FOLL_FORCE: Require proper access permissions.
-+	 * FOLL_UNLOCKABLE: Allow the fault to unlock mmap read lock
- 	 */
- 	gup_flags = FOLL_TOUCH | FOLL_HWPOISON | FOLL_UNLOCKABLE;
- 	if (write)
-@@ -2334,10 +2338,13 @@ EXPORT_SYMBOL(get_user_pages);
- long get_user_pages_unlocked(unsigned long start, unsigned long nr_pages,
- 			     struct page **pages, unsigned int gup_flags)
- {
-+	unsigned int extra = FOLL_TOUCH;
- 	int locked = 0;
- 
--	if (!is_valid_gup_args(pages, NULL, NULL, &gup_flags,
--			       FOLL_TOUCH | FOLL_UNLOCKABLE))
-+	if (!(gup_flags & FOLL_NOWAIT))
-+		extra |= FOLL_UNLOCKABLE;
-+
-+	if (!is_valid_gup_args(pages, NULL, NULL, &gup_flags, extra))
- 		return -EINVAL;
- 
- 	return __get_user_pages_locked(current->mm, start, nr_pages, pages,
--- 
-2.39.1
+  d3295311e589 ("drm/amdgpu/display: Enable DC_FP for LoongArch")
 
+from the amdgpu tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/gpu/drm/amd/display/Kconfig
+index 2d8e55e29637,b015c7d19531..000000000000
+--- a/drivers/gpu/drm/amd/display/Kconfig
++++ b/drivers/gpu/drm/amd/display/Kconfig
+@@@ -8,7 -8,7 +8,7 @@@ config DRM_AMD_D
+  	depends on BROKEN || !CC_IS_CLANG || X86_64 || SPARC64 || ARM64
+  	select SND_HDA_COMPONENT if SND_HDA_CORE
+  	# !CC_IS_CLANG: https://github.com/ClangBuiltLinux/linux/issues/1752
+- 	select DRM_AMD_DC_FP if (X86 || (PPC64 && ALTIVEC) || (ARM64 && KERNEL_M=
+ODE_NEON && !CC_IS_CLANG))
+ -	select DRM_AMD_DC_FP if (X86 || LOONGARCH || PPC64 || (ARM64 && KERNEL_M=
+ODE_NEON && !CC_IS_CLANG))
+++	select DRM_AMD_DC_FP if (X86 || LOONGARCH || (PPC64 && ALTIVEC) || (ARM6=
+4 && KERNEL_MODE_NEON && !CC_IS_CLANG))
+  	help
+  	  Choose this option if you want to use the new display engine
+  	  support for AMDGPU. This adds required support for Vega and
+
+--Sig_/7aoyIV5=co.LNCbJp15662H
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRdioUACgkQAVBC80lX
+0Gw9UQf+Mh+RtHJTlV+ldpdC9D86sraukz0JrSnxLzz7iKO9K4IxD6078JYTYLFk
+2RoTTI8Yo5qXhdTZoMQmkoCrFXUVtU4CqqWDtrEtzTEPN1BEJ++SccWSGdXM1l9+
+LIqandQQ94qSRHhrBXlsa5Fa5Cp7SamKd/OLk4y/OqnlR/IhXipllvg4notliwpR
+vPfMfEiSpaaeJWNFCJyOc2ZpD0hOMVhbDP6sTf7KOxdB68wNCFMEMl+/wLLknx1d
+UGogaDbKUx+Zj3CUUEgNsRfOylHtM/etEclegQZ/KTydP/YA09SNkzgOle9iRTZ0
+ZHEsjutAaykA64e0NsrYOoMoucV0Mw==
+=VxGd
+-----END PGP SIGNATURE-----
+
+--Sig_/7aoyIV5=co.LNCbJp15662H--
