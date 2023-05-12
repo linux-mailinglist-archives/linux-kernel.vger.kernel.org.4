@@ -2,271 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2DB170011F
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 09:11:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F111B700124
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 09:12:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240200AbjELHL2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 03:11:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
+        id S240284AbjELHMH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 03:12:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240171AbjELHK5 (ORCPT
+        with ESMTP id S240155AbjELHLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 03:10:57 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC7A311567
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 00:08:44 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-33117143894so64467075ab.3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 00:08:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683875324; x=1686467324;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fw+iTBd++BdghLB5KrjvmaOtGJ8PeVVwlEXkInTdymA=;
-        b=ZhSYtO40a/Bk3I6kXa25hRqCkjPhqRhiDEzceqfklcPnWq/AIQ7Bq8Kgj5cN6IgnEL
-         Nq7z3WWQJYMrdSVMxg1hRCsQJ2c+6STmLdHHFo530fshLnHxI2A3UIoQqs6MkV2csXpU
-         INrG4Z4kmZnpetznrCRYo6ZDgcxNNHk8yXjH2jWkwR90muX/TfZ2R1mUQBVJtK3NvCcv
-         n+oEwEZun4oG0V8zoYuLhP+RDzAeXJhE4b6HDl/QkcQ+o+/VfXTeRxDLNmipJkC8Yy9c
-         gcVfZ+LxKihsscpWR0zC3fl0as1KbbzIwKQNYdLdgcgHi/Iq63/m38CqrxK/P5Wqjx/z
-         Ogyw==
-X-Gm-Message-State: AC+VfDwlyQuVmTQTR1/k0K0u26uAB12lLwV4b3xr+60K3aOQ47cq0bq7
-        3ud2+arapnQ/pq+Ya8uAKoCw/k5b97aHtZMWUjlTc2//jYy8
-X-Google-Smtp-Source: ACHHUZ55p5GBzJaVAo9gbuEtNkBLab4DOOECD+iWkGVtwzCPd95QfeAb6eXgBfZDE7IiZYtvScB+xyndTuyFNk5RDRbqqxpiUBW1
+        Fri, 12 May 2023 03:11:22 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01olkn2057.outbound.protection.outlook.com [40.92.53.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2964111B55;
+        Fri, 12 May 2023 00:09:19 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=jOest2PxPbkUOm7LaehBFxw6OCdkyMMZi0ztv1iRCECNeaNHPMjBB9YCpik81s61IKcC9RMeWpd8rtPsAijRWuraFQEOD6ZjHJo7W3jw4nFf+q+hKDACYPR6JRNyRHhq32qra6u8B0LweeybzpU8tnr5QfEb0PGeZd+bEE8xrCwmT4PaPoHTcQGSl1eWnPIVuYhB4eVclOMtceQqs982trgr6WztPrOyJiewKQ9oUMKqIDcDbKLuqqL13s55HAbMSU01FTuge3FW+dM6CgOK7+1/d6K1XeuoU/x5x+JYzpMn7UErj9nHUJ5dw3CXGPk9aZj40ti8zgl2KfUsFm4m5w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=B8fszxikWujlNqHtePraER4cs9gGBf+1rpVwkgOwCz4=;
+ b=YFTYQzZmK617ECVx448+b9UoRo0rnCcNaQxT+eBO5PM8cW4bEwUDwkUA4izBfjRCeXEFJHQ52SYwXt9Tz6Xtl9i+cASZ+IoPOYAtjnBrhpJmrfcTjZIfp+i21jr4tT8fgx9kYn9NXguXj0xYN/Nf/e08cSi4CKF1XJfkxGDxCKjhOT1OzkeTNCL4XH8AZ7DUEKdhrjZ9TL7YjXkn4RepeIwPbA83NWSz29UoX3RuqePGvHYQhNol/+ib2lPdiAfJo8WQUjIwCYNvuBIclXc3NCzy06yY8ef6yVzZVNgZ2bgYRteKwuQwIli+7XlNWfkTFkdFWnlrOIUIHwND9r/PNQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=B8fszxikWujlNqHtePraER4cs9gGBf+1rpVwkgOwCz4=;
+ b=b9dgr+WFKQ69ZvwjPxKoBTSfDNadXZ8MYO688HnYipaCtPGkxmmplKhYum+dTBVExQ5lYb5Z3UbLj5S8KZIMJcB4jquQ40KGjdCkuC0sWzb8jbM50DBbuyv+gbYdDft68VTA6Ns0EWE2AhYNGdvkCm43T9IaK+/Jy+qb6k/oKGf5urEHEmkeUrtYWpsdFlEA2gzXT+ZitQuuYaAbyBZmhGellq3r0HjHykrCJnhLNqGuuvBF+qqh/wTREhMcSzoDC7ASzLYmQaKD1XeG8siSvS8UYLMmdnERPipIlJCQGT+Cd8hWjxIMDUK29RWqtlXXJ3c5nRVpMxIseSSbcjgBbw==
+Received: from KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ (2603:1096:820:9a::12) by KL1PR01MB5447.apcprd01.prod.exchangelabs.com
+ (2603:1096:820:c7::8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.19; Fri, 12 May
+ 2023 07:09:14 +0000
+Received: from KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ ([fe80::93cb:1631:4c4c:1821]) by KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ ([fe80::93cb:1631:4c4c:1821%4]) with mapi id 15.20.6387.018; Fri, 12 May 2023
+ 07:09:14 +0000
+From:   Yan Wang <rk.code@outlook.com>
+To:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk
+Cc:     Yan Wang <rk.code@outlook.com>
+Subject: [PATCH v5] net: mdiobus: Add a function to deassert reset
+Date:   Fri, 12 May 2023 15:08:53 +0800
+Message-ID: <KL1PR01MB54486A247214CC72CAB5A433E6759@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+X-Mailer: git-send-email 2.17.1
+Content-Type: text/plain
+X-TMN:  [lmqzzkbq0J9/RHf2sCJ9RDt73yXy8RKp]
+X-ClientProxiedBy: SG2PR02CA0001.apcprd02.prod.outlook.com
+ (2603:1096:3:17::13) To KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ (2603:1096:820:9a::12)
+X-Microsoft-Original-Message-ID: <20230512070853.7980-1-rk.code@outlook.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:234b:0:b0:418:733f:513c with SMTP id
- u72-20020a02234b000000b00418733f513cmr825328jau.2.1683875323826; Fri, 12 May
- 2023 00:08:43 -0700 (PDT)
-Date:   Fri, 12 May 2023 00:08:43 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000085d81d05fb79c667@google.com>
-Subject: [syzbot] [fs?] [mm?] BUG: sleeping function called from invalid
- context in mempool_alloc
-From:   syzbot <syzbot+5a5f3b3df8fc04673151@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        syzkaller-bugs@googlegroups.com, willy@infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: KL1PR01MB5448:EE_|KL1PR01MB5447:EE_
+X-MS-Office365-Filtering-Correlation-Id: 725310bf-64bd-4594-5644-08db52b7caf8
+X-MS-Exchange-SLBlob-MailProps: AZnQBsB9Xmr6PcyLpofOFOY3OlYay91H39wmy5h7TMSd0wqER6AK4YGfr5csbks1rf+GbIoJLgE8XBkvGWRV6de4p/o8AgjF0bn/bT5CNMjYsAxRgFK7UErMPwPGRWBEVGa8gQ95Z/4EkvRHIri8Dn+oyy5n2ySF8q0y4jPb2/tAArkVkeKFRacyrB4bnzD5JKcbCc9uNcHSIoJ4LyXA1ayGSPs4tTfIQwPahat5Fnss9WjlAbwrqaiFIZDw6udZED6j4s6bNUOpkb3oPp8qSYOFGZcjK7I6Tc6Nf01HHHQKQbxzYGjStIATTsn7QrDCk6qpccCGF/mcC0qnjep2w7SEs1M51xGc4rDgDW9zqzyNfr5YIRbeb6L1Ui2h5NKaURBFt2MUihuro7RdGkURDOqPYlRcPHFLv+qxTjRp4Wl981U5fQH2Wrqkcsm5n9/8hyarwfWhAnHnrH/zZE0815+z0A1HF5vrk/D5TimJMYFpy2EdsQUv16/iq6hfjzQ5ucGuFFifSOrugwfDyQkcXP5wAQUp5z4Tw3/+om78ITAv2S6AhkRFfoeN9+7Pk1UpJ08iDy5+sbSIVSGL9DDXuZr1CKFySO5Tp1ONLAxEABCg6IxN1JUcNKYLsJMWWNIGbzksyCayu/BWGqNL+61kIfQcq8Eu4J1d5MR9Nf77jnyffX42MVnFJvmCqFlLnjXj/pynvr8pqBFCarns4uAE4IJFUhFhnGXSy79Mkj4cA4M5T4uqC/2TwVkw68LEE8/5LjXE12Kqox4=
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: /kMY17lFNqC1LTErI6Dz4g9RQbo037erHLsR1OVsf0py4XfIj493gMYlufiruOzeaePOWGmQsIfKgi6l8+2Y6XF7hT75yUH5lvKetskQaGFyivb/hl7/13Gq6e7cnnnX4JMiMxJ+xc+Ph2ltgf38cvxHzDSPXUiEcw5Y1szFkUUAI4CKTkVTStv935h3O1uptGFIJQXhRkFbzBJau/NZU5dW6HP7eQ+iwUsvIPGeBR6s28Uh6SPaJ+2BsjWqx8gG1vYyh+uBoiBw7Lp2v7A7mZsVc49lvTbZsBTvWIFqPf5lIImxJvCbF0M7bPlalgyToeMLa3k6BE73pnHCNAYpno5nCMXwQo+37gW4e0JluoATKs4vMFlSOdMVgybAS82u1zzEHxQme65CxkEzmDVC+oWw9B7wbf2DSfSCpVtIswl5X3Y/K0NZbWLvMB3ybG7joyIgWbKKB7qQE9kvNQW+fW2f+pMhlRhyOwrftRHxfKKcJAjOmpGiZuhute9hjS6GrKrdesYLh8Abjc7rTNSXYVG4dMeSXzG86d6Vm4F7vqwudQ7cTBM33/OOcmIpMYr4PPVV9czBQzk8M0VqLIdEIKBE7wGBQ1SHBapBevUnhe9tziVgSUz81xPWThXtZ6F4cGrbjpIq3W5OSo/LfU8+9g==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PzUR6VqOoTO6p32ob9CJiwvzy9aPQq0tZ6GWjeWfNDc845skRfiqFV1i8QsU?=
+ =?us-ascii?Q?IXSfemocVgYsmHna2kl/9Vh3hOXFaAH/gsn0+hsAHmLDwaJJpmFl8c+jYLI2?=
+ =?us-ascii?Q?0YM40L4bzhmnoLtmYhsiW72FKoG+ke21sBxTZjaqjbV92DxqSwMMqklFAgAv?=
+ =?us-ascii?Q?4TsJPKHYVTqiz8+4oFBkPQCrtOBu6wH6RMnDZdK6oqcV8c06QBizbllq7Phk?=
+ =?us-ascii?Q?xcZix5uq7W5aTXEYekUZYoOA7FfhpFNh4jrkEoUUp+HhsGrXa6TQmQqkNWKJ?=
+ =?us-ascii?Q?nKy+rJrlOXeWItviwoy14j8gRfkgL9U7kHcIyfKA62mzbP974cTN6daOVeHj?=
+ =?us-ascii?Q?eoT2da/DuMzIJoYJ7GVLzTea3HMxb0hf/Iu5HBvZOiYmJ4/S5ZW0MdrWezM2?=
+ =?us-ascii?Q?8Qm4QbViVgRB3GQl39k/dqmVj8CLiW7eu112NIekVxbJGqbjvHgxzufmuHsK?=
+ =?us-ascii?Q?LWqAB4gqnLDf8astlMqCpOUWFajox1ruFDzYLsQVzJIurUT0By/4n4GqozKT?=
+ =?us-ascii?Q?jPZXd2gwU0I+Jyk3dBwWaHiWnnQyLHhtogChiMbd8SvKZ3uNMJ8ZuzQR57We?=
+ =?us-ascii?Q?WzGX9Zy7ewlLv4kznmipC8/ExRB69kJ4giTb8EH8uT5eJ+dfR1eOVdlHui3M?=
+ =?us-ascii?Q?S4SOupX6EfWqEdXejLypgzxJKrUgoBUbOzZZTcSQMaZl/qSiy5R1liyl7Ror?=
+ =?us-ascii?Q?k2gFcXnp7D/bSA4+F7bayjLf7obzSLyAQFQiv7Ojd8FMlHYZ1gv+faeONWrc?=
+ =?us-ascii?Q?r8qsIJ+faakvILhyRkVW+JRkUT3J48rWR6oW89UE++iUhVXmSAv4sfg/2Egy?=
+ =?us-ascii?Q?4K7Bo69L0k5OkoqX2u6LuMvnZQUWptxsh8YLtk/yZXNiZgygpSMPS5XQu7/5?=
+ =?us-ascii?Q?cyZv8uEEcEgs8VeccWhLqCtgbRKVT8HO0h2VyvMA71UzAstbtvWukIq+SG4B?=
+ =?us-ascii?Q?gf9eHRmQbtMkFHvcRBatUySfiBSRDGeLHCH58VocAmDdpAvi6uQrBfL04Cq5?=
+ =?us-ascii?Q?Uo4pGTgimX4IB/bgaWNz9AN0J6idTZ8OIsvmKg1pc5k1ticvSgtwGa9K4D2s?=
+ =?us-ascii?Q?vnGSa3n6i3TwjVN6LqzXl7OQAkJH9wlhsFcOyxGy+3qmKCLIBjyxZ07XSwUQ?=
+ =?us-ascii?Q?Ir/kUmTH16c5ilCVuKPnhYo4hWSDOJ4Ezi8eMLNzBA2qlIQ4IBCxjvawYgVB?=
+ =?us-ascii?Q?eJNbj92cfHVUBNIzZ2KFesSUMy1LjlrVZANHmg=3D=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 725310bf-64bd-4594-5644-08db52b7caf8
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 07:09:14.3866
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: KL1PR01MB5447
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+It is possible to mount multiple sub-devices on the mido bus.
+The hardware power-on does not necessarily reset these devices.
+The device may be in an uncertain state, causing the device's ID
+to not be scanned.
 
-syzbot found the following issue on:
+So,before adding a reset to the scan, make sure the device is in
+normal working mode.
 
-HEAD commit:    578215f3e21c Add linux-next specific files for 20230510
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=17fa43b6280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=bb5a64fc61c29c5f
-dashboard link: https://syzkaller.appspot.com/bug?extid=5a5f3b3df8fc04673151
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/61ae2512b5cb/disk-578215f3.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/e16190a5b183/vmlinux-578215f3.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/04000a0b9ddf/bzImage-578215f3.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+5a5f3b3df8fc04673151@syzkaller.appspotmail.com
-
-BUG: sleeping function called from invalid context at include/linux/sched/mm.h:306
-in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 21075, name: udevd
-preempt_count: 0, expected: 0
-RCU nest depth: 1, expected: 0
-2 locks held by udevd/21075:
- #0: ffff88801a8829b0 (mapping.invalidate_lock#2){.+.+}-{3:3}, at: filemap_invalidate_lock_shared include/linux/fs.h:830 [inline]
- #0: ffff88801a8829b0 (mapping.invalidate_lock#2){.+.+}-{3:3}, at: page_cache_ra_unbounded+0x153/0x5e0 mm/readahead.c:226
- #1: ffffffff8c7991c0 (rcu_read_lock){....}-{1:2}, at: lru_gen_refault mm/workingset.c:293 [inline]
- #1: ffffffff8c7991c0 (rcu_read_lock){....}-{1:2}, at: workingset_refault+0x175/0x11e0 mm/workingset.c:528
-CPU: 1 PID: 21075 Comm: udevd Not tainted 6.4.0-rc1-next-20230510-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
- __might_resched+0x358/0x580 kernel/sched/core.c:10148
- might_alloc include/linux/sched/mm.h:306 [inline]
- mempool_alloc+0x1c4/0x360 mm/mempool.c:388
- bio_alloc_bioset+0x41e/0x900 block/bio.c:543
- bio_alloc include/linux/bio.h:427 [inline]
- do_mpage_readpage+0xe8c/0x1960 fs/mpage.c:298
- mpage_readahead+0x344/0x580 fs/mpage.c:382
- read_pages+0x1a2/0xd40 mm/readahead.c:161
- page_cache_ra_unbounded+0x477/0x5e0 mm/readahead.c:270
- do_page_cache_ra mm/readahead.c:300 [inline]
- force_page_cache_ra+0x333/0x470 mm/readahead.c:331
- page_cache_sync_ra+0x105/0x200 mm/readahead.c:705
- page_cache_sync_readahead include/linux/pagemap.h:1211 [inline]
- filemap_get_pages+0x28d/0x1620 mm/filemap.c:2598
- filemap_read+0x35e/0xc70 mm/filemap.c:2693
- blkdev_read_iter+0x3eb/0x760 block/fops.c:609
- call_read_iter include/linux/fs.h:1862 [inline]
- new_sync_read fs/read_write.c:389 [inline]
- vfs_read+0x4b1/0x8a0 fs/read_write.c:470
- ksys_read+0x12b/0x250 fs/read_write.c:613
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f1805316b6a
-Code: 00 3d 00 00 41 00 75 0d 50 48 8d 3d 2d 08 0a 00 e8 ea 7d 01 00 31 c0 e9 07 ff ff ff 64 8b 04 25 18 00 00 00 85 c0 75 1b 0f 05 <48> 3d 00 f0 ff ff 76 6c 48 8b 15 8f a2 0d 00 f7 d8 64 89 02 48 83
-RSP: 002b:00007ffccfcc4668 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f1805316b6a
-RDX: 0000000000000400 RSI: 000055ca7c932ca8 RDI: 0000000000000009
-RBP: 0000000000000400 R08: 000055ca7c932c80 R09: 0000000000000008
-R10: 0000000000000051 R11: 0000000000000246 R12: 000055ca7c932c80
-R13: 000055ca7c932c98 R14: 000055ca7c92c118 R15: 000055ca7c92c0c0
- </TASK>
-
-=============================
-[ BUG: Invalid wait context ]
-6.4.0-rc1-next-20230510-syzkaller #0 Tainted: G        W         
------------------------------
-udevd/21075 is trying to lock:
-ffff88801a8829b0
- (mapping.invalidate_lock#2){.+.+}-{3:3}, at: filemap_invalidate_lock_shared include/linux/fs.h:830 [inline]
- (mapping.invalidate_lock#2){.+.+}-{3:3}, at: filemap_update_page mm/filemap.c:2474 [inline]
- (mapping.invalidate_lock#2){.+.+}-{3:3}, at: filemap_get_pages+0x743/0x1620 mm/filemap.c:2622
-other info that might help us debug this:
-context-{4:4}
-1 lock held by udevd/21075:
- #0: ffffffff8c7991c0 (rcu_read_lock){....}-{1:2}, at: lru_gen_refault mm/workingset.c:293 [inline]
- #0: ffffffff8c7991c0 (rcu_read_lock){....}-{1:2}, at: workingset_refault+0x175/0x11e0 mm/workingset.c:528
-stack backtrace:
-CPU: 1 PID: 21075 Comm: udevd Tainted: G        W          6.4.0-rc1-next-20230510-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_lock_invalid_wait_context kernel/locking/lockdep.c:4729 [inline]
- check_wait_context kernel/locking/lockdep.c:4799 [inline]
- __lock_acquire+0x15d5/0x5f30 kernel/locking/lockdep.c:5038
- lock_acquire.part.0+0x11c/0x370 kernel/locking/lockdep.c:5705
- down_read+0x3d/0x50 kernel/locking/rwsem.c:1520
- filemap_invalidate_lock_shared include/linux/fs.h:830 [inline]
- filemap_update_page mm/filemap.c:2474 [inline]
- filemap_get_pages+0x743/0x1620 mm/filemap.c:2622
- filemap_read+0x35e/0xc70 mm/filemap.c:2693
- blkdev_read_iter+0x3eb/0x760 block/fops.c:609
- call_read_iter include/linux/fs.h:1862 [inline]
- new_sync_read fs/read_write.c:389 [inline]
- vfs_read+0x4b1/0x8a0 fs/read_write.c:470
- ksys_read+0x12b/0x250 fs/read_write.c:613
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f1805316b6a
-Code: 00 3d 00 00 41 00 75 0d 50 48 8d 3d 2d 08 0a 00 e8 ea 7d 01 00 31 c0 e9 07 ff ff ff 64 8b 04 25 18 00 00 00 85 c0 75 1b 0f 05 <48> 3d 00 f0 ff ff 76 6c 48 8b 15 8f a2 0d 00 f7 d8 64 89 02 48 83
-RSP: 002b:00007ffccfcc4668 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f1805316b6a
-RDX: 0000000000000400 RSI: 000055ca7c932ca8 RDI: 0000000000000009
-RBP: 0000000000000400 R08: 000055ca7c932c80 R09: 0000000000000008
-R10: 0000000000000051 R11: 0000000000000246 R12: 000055ca7c932c80
-R13: 000055ca7c932c98 R14: 000055ca7c92c118 R15: 000055ca7c92c0c0
- </TASK>
-BUG: sleeping function called from invalid context at lib/iov_iter.c:535
-in_atomic(): 0, irqs_disabled(): 0, non_block: 0, pid: 21075, name: udevd
-preempt_count: 0, expected: 0
-RCU nest depth: 1, expected: 0
-INFO: lockdep is turned off.
-CPU: 0 PID: 21075 Comm: udevd Tainted: G        W          6.4.0-rc1-next-20230510-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
- __might_resched+0x358/0x580 kernel/sched/core.c:10148
- __might_fault+0x79/0x190 mm/memory.c:5732
- _copy_to_iter+0x328/0x1360 lib/iov_iter.c:535
- copy_page_to_iter lib/iov_iter.c:742 [inline]
- copy_page_to_iter+0x125/0x1e0 lib/iov_iter.c:727
- copy_folio_to_iter include/linux/uio.h:197 [inline]
- filemap_read+0x682/0xc70 mm/filemap.c:2745
- blkdev_read_iter+0x3eb/0x760 block/fops.c:609
- call_read_iter include/linux/fs.h:1862 [inline]
- new_sync_read fs/read_write.c:389 [inline]
- vfs_read+0x4b1/0x8a0 fs/read_write.c:470
- ksys_read+0x12b/0x250 fs/read_write.c:613
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f1805316b6a
-Code: 00 3d 00 00 41 00 75 0d 50 48 8d 3d 2d 08 0a 00 e8 ea 7d 01 00 31 c0 e9 07 ff ff ff 64 8b 04 25 18 00 00 00 85 c0 75 1b 0f 05 <48> 3d 00 f0 ff ff 76 6c 48 8b 15 8f a2 0d 00 f7 d8 64 89 02 48 83
-RSP: 002b:00007ffccfcc4668 EFLAGS: 00000246 ORIG_RAX: 0000000000000000
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f1805316b6a
-RDX: 0000000000000400 RSI: 000055ca7c932ca8 RDI: 0000000000000009
-RBP: 0000000000000400 R08: 000055ca7c932c80 R09: 0000000000000008
-R10: 0000000000000051 R11: 0000000000000246 R12: 000055ca7c932c80
-R13: 000055ca7c932c98 R14: 000055ca7c92c118 R15: 000055ca7c92c0c0
- </TASK>
-------------[ cut here ]------------
-Voluntary context switch within RCU read-side critical section!
-WARNING: CPU: 0 PID: 21075 at kernel/rcu/tree_plugin.h:320 rcu_note_context_switch+0xbb9/0x1800 kernel/rcu/tree_plugin.h:320
-Modules linked in:
-CPU: 0 PID: 21075 Comm: udevd Tainted: G        W          6.4.0-rc1-next-20230510-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
-RIP: 0010:rcu_note_context_switch+0xbb9/0x1800 kernel/rcu/tree_plugin.h:320
-Code: fd 04 68 00 4c 8b 4c 24 30 8b 4c 24 28 48 8b 54 24 20 e9 8f 03 00 00 48 c7 c7 c0 2a 4e 8a c6 05 93 44 f6 0c 01 e8 17 b5 dc ff <0f> 0b e9 4c f5 ff ff 81 e5 ff ff ff 7f 0f 84 d7 f6 ff ff 65 48 8b
-RSP: 0018:ffffc900094f7938 EFLAGS: 00010086
-RAX: 0000000000000000 RBX: ffff8880b983d4c0 RCX: 0000000000000000
-RDX: ffff88802211bb80 RSI: ffffffff814bc477 RDI: 0000000000000001
-RBP: ffff88802211bb80 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 216e6f6974636573 R12: 0000000000000000
-R13: ffff88802211bb80 R14: ffffffff8e7b4130 R15: ffff8880b983c5c0
-FS:  00007f18056c2c80(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000c00024b000 CR3: 00000000ace41000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- __schedule+0x276/0x5790 kernel/sched/core.c:6569
- schedule+0xde/0x1a0 kernel/sched/core.c:6745
- schedule_hrtimeout_range_clock+0x45d/0x4b0 kernel/time/hrtimer.c:2298
- ep_poll fs/eventpoll.c:1925 [inline]
- do_epoll_wait+0x1210/0x1900 fs/eventpoll.c:2322
- __do_sys_epoll_wait fs/eventpoll.c:2334 [inline]
- __se_sys_epoll_wait fs/eventpoll.c:2329 [inline]
- __x64_sys_epoll_wait+0x15c/0x280 fs/eventpoll.c:2329
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f1805323457
-Code: 73 01 c3 48 8b 0d d1 d9 0c 00 f7 d8 64 89 01 48 83 c8 ff c3 41 89 ca 64 8b 04 25 18 00 00 00 85 c0 75 20 b8 e8 00 00 00 0f 05 <48> 3d 00 f0 ff ff 76 76 48 8b 15 a2 d9 0c 00 f7 d8 64 89 02 48 83
-RSP: 002b:00007ffccfcc9bf8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e8
-RAX: ffffffffffffffda RBX: 0000000000000000 RCX: 00007f1805323457
-RDX: 0000000000000004 RSI: 00007ffccfcc9c38 RDI: 0000000000000004
-RBP: 000055ca7c92cd00 R08: 0000000000000007 R09: 9f790a821dee0ced
-R10: 00000000ffffffff R11: 0000000000000246 R12: 000055ca7c915af0
-R13: 00007ffccfcc9c38 R14: 0000000000000008 R15: 000055ca7c90b910
- </TASK>
-
-
+Reported-by: kernel test robot <lkp@intel.com>
+Link: https://lore.kernel.org/oe-kbuild-all/202305101702.4xW6vT72-lkp@intel.com/
+Signed-off-by: Yan Wang <rk.code@outlook.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+v5:
+  - fixed code style.
+  - Add fwnode_property_read_u32()'s return value processing.
+v4: https://lore.kernel.org/all/KL1PR01MB54480925428513803DF3D03AE6749@KL1PR01MB5448.apcprd01.prod.exchangelabs.com/
+  - Get pulse width and settling time from the device tree
+  - Add logic for processing (PTR_ERR(reset) == -EPROBE_DEFER)
+  - included <linux/goio/consumer.h>
+  - fixed commit message
+v3: https://lore.kernel.org/all/KL1PR01MB5448A33A549CDAD7D68945B9E6779@KL1PR01MB5448.apcprd01.prod.exchangelabs.com/
+  - fixed commit message
+v2: https://lore.kernel.org/all/KL1PR01MB54482416A8BE0D80EA27223CE6779@KL1PR01MB5448.apcprd01.prod.exchangelabs.com/
+  - fixed commit message
+  - Using gpiod_ replace gpio_
+v1: https://lore.kernel.org/all/KL1PR01MB5448631F2D6F71021602117FE6769@KL1PR01MB5448.apcprd01.prod.exchangelabs.com/
+  - Incorrect description of commit message.
+  - The gpio-api too old
+---
+ drivers/net/mdio/fwnode_mdio.c | 48 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 48 insertions(+)
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+diff --git a/drivers/net/mdio/fwnode_mdio.c b/drivers/net/mdio/fwnode_mdio.c
+index 1183ef5e203e..02e89e25c23d 100644
+--- a/drivers/net/mdio/fwnode_mdio.c
++++ b/drivers/net/mdio/fwnode_mdio.c
+@@ -11,6 +11,7 @@
+ #include <linux/of.h>
+ #include <linux/phy.h>
+ #include <linux/pse-pd/pse.h>
++#include <linux/gpio/consumer.h>
+ 
+ MODULE_AUTHOR("Calvin Johnson <calvin.johnson@oss.nxp.com>");
+ MODULE_LICENSE("GPL");
+@@ -57,6 +58,51 @@ fwnode_find_mii_timestamper(struct fwnode_handle *fwnode)
+ 	return register_mii_timestamper(arg.np, arg.args[0]);
+ }
+ 
++static void fwnode_mdiobus_pre_enable_phy(struct fwnode_handle *fwnode)
++{
++	unsigned int reset_deassert_delay;
++	unsigned int reset_assert_delay;
++	struct gpio_desc *reset;
++	int ret;
++
++	ret = fwnode_property_read_u32(fwnode, "reset-assert-us",
++				       &reset_assert_delay);
++	if (ret) {
++		pr_err("%pOFn: %s : The reset-assert-us property missing\n",
++		       to_of_node(fwnode), __func__);
++		return;
++	}
++
++	ret = fwnode_property_read_u32(fwnode, "reset-deassert-us",
++				       &reset_deassert_delay);
++	if (ret) {
++		pr_err("%pOFn: %s : The reset-deassert-us property missing\n",
++		       to_of_node(fwnode), __func__);
++		return;
++	}
++
++	reset = fwnode_gpiod_get_index(fwnode, "reset", 0, GPIOD_OUT_LOW, NULL);
++	if (IS_ERR(reset)) {
++		if (PTR_ERR(reset) == -EPROBE_DEFER)
++			pr_debug("%pOFn: %s: GPIOs not yet available, retry later\n",
++				 to_of_node(fwnode), __func__);
++		else
++			pr_err("%pOFn: %s: Can't get reset line property\n",
++			       to_of_node(fwnode), __func__);
++
++		return;
++	}
++
++	gpiod_set_value_cansleep(reset, gpiod_is_active_low(reset));
++	fsleep(reset_assert_delay);
++	gpiod_set_value_cansleep(reset, !gpiod_is_active_low(reset));
++	fsleep(reset_deassert_delay);
++	/*Release phy's reset line, mdiobus_register_gpiod() need to
++	 *request it
++	 */
++	gpiod_put(reset);
++}
++
+ int fwnode_mdiobus_phy_device_register(struct mii_bus *mdio,
+ 				       struct phy_device *phy,
+ 				       struct fwnode_handle *child, u32 addr)
+@@ -119,6 +165,8 @@ int fwnode_mdiobus_register_phy(struct mii_bus *bus,
+ 	u32 phy_id;
+ 	int rc;
+ 
++	fwnode_mdiobus_pre_enable_phy(child);
++
+ 	psec = fwnode_find_pse_control(child);
+ 	if (IS_ERR(psec))
+ 		return PTR_ERR(psec);
+-- 
+2.17.1
 
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
