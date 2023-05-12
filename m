@@ -2,114 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CDAA700B85
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 17:26:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8491E700B9C
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 17:28:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241856AbjELP0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 11:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43106 "EHLO
+        id S241742AbjELP2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 11:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241793AbjELPZ5 (ORCPT
+        with ESMTP id S231637AbjELP2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 11:25:57 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 332F9170F
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 08:25:56 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50b9ef67f35so17837311a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 08:25:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683905154; x=1686497154;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8tAvOql5lp6FWkpzgWQiK30SNN35QkWi8X6zAAtYsbE=;
-        b=evUjakgZfiWHOeaGTxTvfwse8uA7XL2gV7DSxc6/YHDPwIZl9h7joIgg5+ImdcVlHJ
-         fjWqIG7H3/sjSQsQ7t1gM5Hub04ClnfGFAaVoYXpNUQI7u/H9G+Fi7bzsO7Go4cy5T4L
-         0Czmo/a7u4d6cG2iPg1iT5UX3DtQezAD51OF21qH9ae5xIRttV0uN8WO+7yNAUP8ncrH
-         qJoWmqK9TDkZq5JsM9TC4GwylZtD/8H1Ml7c7hwcPu/ayDsACxOrU6uEF71ZoajKP/C4
-         ka22BMTKAmKmwVokU68coV0y6EK15f8XkZDstTj/HBoOwy4VGXHL9nACxplBZHIq64lO
-         Gcxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683905154; x=1686497154;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8tAvOql5lp6FWkpzgWQiK30SNN35QkWi8X6zAAtYsbE=;
-        b=bPOdFtm9zT+vlUIzonxt11DTY+lgZQ7cTX86jKgyJcN5EauKE8mWs5ZyU4OUQEO6y2
-         9eijPN1M3waViAMPnlInNBVLATpxrfnCfDXjRCg7kbfaRjBWhHpURsTliwtnJMDRxc8l
-         XRsXJ13TY33TkxsHXAwd8hphjS0LDQiFbDct+exYwerwy5/LRaMCa8QlBjs/MJ3tl/Ls
-         REZxNLcKzgCwfRvIcb3aAxQX+ZN/wRN3wjhqy4JPz9LBiULEQMNxq/TeVR89xGrNeIED
-         ep413I9s4bJ2QewmOKuMyAPUu2IzlwgqWj1q7Ngj9pTtXVjGtuCnuIGsvCCu59BnnKg0
-         s2/w==
-X-Gm-Message-State: AC+VfDxXIJp180CB8dMPl8XlXKmVvTNSZBzq4vVaZRSmERiBqdvdN6OS
-        s1M8QZt9IA+EX3XqtKchDaXGaw==
-X-Google-Smtp-Source: ACHHUZ6VLH5TEFcmhdJSIdLisEJz4f2jKiPaq4t5hSh2saBPH6sCMNzCPOVC3ciAXYocEELNXOGVhg==
-X-Received: by 2002:a05:6402:1a48:b0:50c:d5d:c960 with SMTP id bf8-20020a0564021a4800b0050c0d5dc960mr20446684edb.38.1683905154708;
-        Fri, 12 May 2023 08:25:54 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:7ede:fc7b:2328:3883? ([2a02:810d:15c0:828:7ede:fc7b:2328:3883])
-        by smtp.gmail.com with ESMTPSA id x14-20020aa7d38e000000b0050c0d651fb1sm4031539edq.75.2023.05.12.08.25.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 08:25:54 -0700 (PDT)
-Message-ID: <5969fe82-69cd-34d6-edd1-d16ea741d9cb@linaro.org>
+        Fri, 12 May 2023 11:28:33 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D4812A;
+        Fri, 12 May 2023 08:28:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683905312; x=1715441312;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=AEHmn3N8eoQi8YuZE7vwKcyyiqTTaYlvbYO6EcoCop8=;
+  b=nNUNzJ7nr5CdvAzQDnBtw2Tb9BHPQ4HTE7oWft9oXHVMHptO+/98sXb6
+   XNskRFcfeMlQy8cZgnJNyci4QiSkYEA9IBwN9XN+Jdnuz2wbUiXQGMpIK
+   HovC9JMoVT+ffaWActPWv7B8mxFscU6vvXbbqi+0qNfsYcnwme4qxceVM
+   8iNOdrTzChIvooNHhOGcMiBa8yVAxOmXtN4s8z6xEy8c7JDYIJGTjQZ4b
+   oLgDPThYtX2IOqrFwB38EGd/bzw9XNCA0OFZk62Ur0GC13qlJluqrp4hw
+   FANT0qaHmmJ1BxKynIijNlrb9mc96yqaUnoOytjTEF8o5AZc7phSPt47a
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="349653187"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="349653187"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 08:28:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="1030124377"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="1030124377"
+Received: from irvmail002.ir.intel.com ([10.43.11.120])
+  by fmsmga005.fm.intel.com with ESMTP; 12 May 2023 08:28:27 -0700
+Received: from lincoln.igk.intel.com (lincoln.igk.intel.com [10.102.21.235])
+        by irvmail002.ir.intel.com (Postfix) with ESMTP id 4277835FB7;
+        Fri, 12 May 2023 16:28:25 +0100 (IST)
+From:   Larysa Zaremba <larysa.zaremba@intel.com>
+To:     bpf@vger.kernel.org
+Cc:     Larysa Zaremba <larysa.zaremba@intel.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        Anatoly Burakov <anatoly.burakov@intel.com>,
+        Jesper Dangaard Brouer <brouer@redhat.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Magnus Karlsson <magnus.karlsson@gmail.com>,
+        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
+        netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND bpf-next 00/15] new kfunc XDP hints and ice implementation
 Date:   Fri, 12 May 2023 17:25:52 +0200
+Message-Id: <20230512152607.992209-1-larysa.zaremba@intel.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 05/10] dt-bindings: mfd: cirrus,cs42l43: Add initial DT
- binding
-Content-Language: en-US
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
-        lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, linus.walleij@linaro.org,
-        vkoul@kernel.org
-Cc:     lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com,
-        sanyog.r.kale@intel.com, pierre-louis.bossart@linux.intel.com,
-        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
-        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
- <20230512122838.243002-6-ckeepax@opensource.cirrus.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230512122838.243002-6-ckeepax@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2023 14:28, Charles Keepax wrote:
-> The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
-> (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
-> for portable applications. It provides a high dynamic range, stereo
-> DAC for headphone output, two integrated Class D amplifiers for
+This series introduces XDP hints support into ice driver and adds new kfunc
+hints that utilize hardware capabilities.
 
-...
+- patches 01-04 refactors driver descriptor to skb fields processing code,
+  making it more reusable without changing any behavior.
 
-> +
-> +  interrupt-controller: true
-> +
-> +  '#interrupt-cells':
-> +    const: 2
+- patches 05-08 add support add support for existing hints (timestamp and 
+  hash) in ice driver.
 
-Hm, are you sure? Who is the consumer/user of this interrupt controller?
+- patches 09-12 introduce new kfunc hints, namely 2 VLAN tag hints 
+  (ctag & stag separately) and "checksum level", which is basically
+  a CHECKSUM_UNNECESSARY indicator. Then those hints are implemented in
+  ice driver.
 
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  '#sound-dai-cells':
-> +    const: 1
-> +
-> +  clocks:
+- patches 13-15 adjust xdp_hw_metadata to account for new hints.
 
+- in particular, patch 14 lifts the limitation on data_meta size to be
+  32 or lower, because all the information that needs to be passed into
+  AF_XDP from XDP in xdp_hw_metadata no longer fits into 32 bytes.
 
-Best regards,
-Krzysztof
+Aleksander Lobakin (1):
+  net, xdp: allow metadata > 32
+
+Larysa Zaremba (14):
+  ice: make RX hash reading code more reusable
+  ice: make RX HW timestamp reading code more reusable
+  ice: make RX checksum checking code more reusable
+  ice: Make ptype internal to descriptor info processing
+  ice: Introduce ice_xdp_buff
+  ice: Support HW timestamp hint
+  ice: Support RX hash XDP hint
+  ice: Support XDP hints in AF_XDP ZC mode
+  xdp: Add VLAN tag hint
+  ice: Implement VLAN tag hint
+  xdp: Add checksum level hint
+  ice: Implement checksum level hint
+  selftests/bpf: Allow VLAN packets in xdp_hw_metadata
+  selftests/bpf: Add flags and new hints to xdp_hw_metadata
+
+ Documentation/networking/xdp-rx-metadata.rst  |  14 +-
+ drivers/net/ethernet/intel/ice/ice.h          |   2 +
+ .../net/ethernet/intel/ice/ice_lan_tx_rx.h    | 412 +++++++++---------
+ drivers/net/ethernet/intel/ice/ice_main.c     |   1 +
+ drivers/net/ethernet/intel/ice/ice_ptp.c      |  23 +-
+ drivers/net/ethernet/intel/ice/ice_ptp.h      |  18 +-
+ drivers/net/ethernet/intel/ice/ice_txrx.c     |  13 +-
+ drivers/net/ethernet/intel/ice/ice_txrx.h     |  23 +-
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.c | 311 +++++++++++--
+ drivers/net/ethernet/intel/ice/ice_txrx_lib.h |  13 +-
+ drivers/net/ethernet/intel/ice/ice_xsk.c      |  16 +-
+ include/linux/netdevice.h                     |   3 +
+ include/linux/skbuff.h                        |  13 +-
+ include/net/xdp.h                             |  16 +-
+ kernel/bpf/offload.c                          |   6 +
+ net/core/xdp.c                                |  36 ++
+ .../selftests/bpf/progs/xdp_hw_metadata.c     |  49 ++-
+ tools/testing/selftests/bpf/xdp_hw_metadata.c |  29 +-
+ tools/testing/selftests/bpf/xdp_metadata.h    |  36 +-
+ 19 files changed, 738 insertions(+), 296 deletions(-)
+
+-- 
+2.35.3
 
