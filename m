@@ -2,109 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6313700192
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 09:36:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 633BF700196
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 09:37:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240176AbjELHgW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 03:36:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45774 "EHLO
+        id S240205AbjELHhF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 03:37:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239965AbjELHgU (ORCPT
+        with ESMTP id S239965AbjELHhC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 03:36:20 -0400
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4086C30F1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 00:36:19 -0700 (PDT)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-55a44a2637bso141870377b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 00:36:19 -0700 (PDT)
+        Fri, 12 May 2023 03:37:02 -0400
+Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B71C8A56;
+        Fri, 12 May 2023 00:37:01 -0700 (PDT)
+Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1aafa03f541so93073765ad.0;
+        Fri, 12 May 2023 00:37:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683876978; x=1686468978;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tncq8rfyUORTEsPTT3s+fxb4TbHZLX39y7YOezqrzs0=;
-        b=fL3tkpkY3e7x9wRiZaKP69lP/XH/CkvQXuknKF1weIZyaprC1jdHBaFpHdwBdJvDre
-         jGLDvxXIFbizwtpTftLiNpX69nau/Q1K4PrCyTc17PG6qclSaKeBwaPKzHk4ySkBuZTO
-         48sDt977LNwmmWi3wyorLUvr0h1CR6i4yGdqZycwiu/57CpKnbuiFsjmRWrljd4dOyFE
-         xbCJocOc2aAATilkd2Akea7ZsEhQ4Ilav0HkAOI8pw34riGDwk6KEa9C22ygZmRbRZoz
-         aQ7/LX6WazuUhXRw3ufkfLePclrQbEQtwMckpwCc/8t0fyQC5Nu2RoP3TNWKWuehchyM
-         w86g==
+        d=gmail.com; s=20221208; t=1683877021; x=1686469021;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GZimun0Oi9tvlN9nCzCVCWURk/2Es/WbATqfStJw7Jk=;
+        b=kxs4IocopkMFPeOzAqh0c+U3O9F108JkJjL9TX43hJjYO0opTg8f5s9H4zMQoNHeSq
+         fuPpaklCw5aCrrUJzpFE+8tHaPT7BjUlxZm53R94zSDQGnRzQ0yK9ne5UD/0RUrklhHv
+         kqAOzZUb84a1VSYp0Su+9f92FtW/6/25eWhjA2ejPaRC/z5zElxsB6XkHjznoMEbVxVL
+         RVP5bxMaWZn+bBSik4ajyBI7CTi8+5l/BiN/g1TFHlmKD+i8d3+fOr9XcVFAGyYvZuNR
+         gdWWDUA/vPbbiYGalpn1HTQvmYt9OSeffvZCyq7lSC1WBPgj5NRbj4aenaabFObwTUhv
+         lnRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683876978; x=1686468978;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Tncq8rfyUORTEsPTT3s+fxb4TbHZLX39y7YOezqrzs0=;
-        b=Gb6oDCtcr6aXVX5Ia0KfaguqiWjMADY5Ut7IXF2zHmCuaYdW+9fh6N0to8FFL5/6i6
-         75WGFdHBZXargBQrCglXh3DILgYVphHWXjERkjizh1nHAvfUSSiHygQTfLt8FgTXJEW7
-         0XNeng2/EuY/aui+4Dc3aqsnPDsyYuHxEwzy3wF53rBmWq4bA2FcAOifusR6uWKJiusw
-         0UomotrficYdt6sJZbVMtJOzTe3M2Ndrn6x9/OJ0upu4Nev3Tx85pm0LHZ+/zf5iPtq5
-         yw0X2bwcafyF/isbrQF8wWUvP99pvE3q9KXIibn9AKfjWAhmEeqORWcBBXQycDp4/Vfo
-         SLig==
-X-Gm-Message-State: AC+VfDxb4nWZNW9eEnkm+JI/FVjrVuXR8dQwG86xVa8590/0ElR/wanA
-        oo4epMhPqUNgzHdttt2t0A3y0LV2dvgg2GMqlUXoOQ==
-X-Google-Smtp-Source: ACHHUZ59nmfYULt99BcAd1fsiRehSxiNwq4WR0XL7rzfga36xwxlT8G2hlKjI4WZ7FjamYLHleaRunmdnysnlp+tB1A=
-X-Received: by 2002:a81:c24c:0:b0:55a:6e23:1a82 with SMTP id
- t12-20020a81c24c000000b0055a6e231a82mr22237820ywg.52.1683876978444; Fri, 12
- May 2023 00:36:18 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683877021; x=1686469021;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GZimun0Oi9tvlN9nCzCVCWURk/2Es/WbATqfStJw7Jk=;
+        b=QGvLMeipEtiimwi5nvKAv48w+39P5fAX/ODwmeHo7kVjLbrkwUp1vYuFxayavwiLsR
+         2IGg4cZf4XpCgDCwphC6BWJWqg1mnbALcA0WO33h0doDMAnL62EiC1SB0gOM/VMBED9F
+         uZiJ/hzY7gnv66IqNVAS4jCXa4afIcGVdZztY+/jmgquOpO+ERO4ixj5+MGBtR47Rmln
+         G2LGShqolVouT1bFSfIaEeD1gAwL/CDo81y9o8y6UBYw3RIbL+eE8kaZeUUlk4xlsjmR
+         jQ4PLmLcF3jUKdst2kN0uS9GfT/IEbAiCKmr1eNm7gn/R+nddmF0UeCGPhXIAY51su3C
+         N6zg==
+X-Gm-Message-State: AC+VfDzgyjh/WxlrGLRy/TWv3e1Ll3bpzt5CiKKIdevUkClkF0bS33pL
+        8etHi6kYpWu92wJubekSBaA=
+X-Google-Smtp-Source: ACHHUZ7atOYol5kKY9Mk5vvRPtiy8+WipTXuh4BTYp1JmLN8R9SHKkypxIthE7X2Q8U/yx9kTlHzMQ==
+X-Received: by 2002:a17:902:d304:b0:1a9:21bc:65f8 with SMTP id b4-20020a170902d30400b001a921bc65f8mr24987876plc.11.1683877020733;
+        Fri, 12 May 2023 00:37:00 -0700 (PDT)
+Received: from debian.me (subs32-116-206-28-8.three.co.id. [116.206.28.8])
+        by smtp.gmail.com with ESMTPSA id iy3-20020a170903130300b001ab1cdb4295sm7168669plb.130.2023.05.12.00.36.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 00:37:00 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id AC7A6106AFF; Fri, 12 May 2023 14:36:57 +0700 (WIB)
+Date:   Fri, 12 May 2023 14:36:57 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Sven-Haegar Koch <haegar@sdinet.de>
+Cc:     Greg Ungerer <gerg@linux-m68k.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Diederik de Haas <didi.debian@cknow.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        David Airlie <airlied@redhat.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
+        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Tom Rix <trix@redhat.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Minghao Chi <chi.minghao@zte.com.cn>,
+        Kalle Valo <kvalo@kernel.org>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Deepak R Varma <drv@mailo.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Jacob Keller <jacob.e.keller@intel.com>,
+        Gaosheng Cui <cuigaosheng1@huawei.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Archana <craechal@gmail.com>,
+        "David A . Hinds" <dahinds@users.sourceforge.net>,
+        Donald Becker <becker@scyld.com>,
+        Peter De Schrijver <p2@mind.be>
+Subject: Re: [PATCH 04/10] net: ethernet: 8390: Replace GPL boilerplate with
+ SPDX identifier
+Message-ID: <ZF3smZ4TaIc0RHuO@debian.me>
+References: <20230511133406.78155-1-bagasdotme@gmail.com>
+ <20230511133406.78155-5-bagasdotme@gmail.com>
+ <1eb3b5cb-5906-4776-74a2-820b5b05949c@linux-m68k.org>
+ <2738e88d-16e9-15c7-37ea-4c2dc4f69181@sdinet.de>
 MIME-Version: 1.0
-References: <79137159a833c164ea8ea3f05d8d6d9537db2f42.1683747334.git.limings@nvidia.com>
-In-Reply-To: <79137159a833c164ea8ea3f05d8d6d9537db2f42.1683747334.git.limings@nvidia.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 12 May 2023 09:35:42 +0200
-Message-ID: <CAPDyKFrD5HihGzH17HHd9NP5SoH73prmsuK1NCHg-a62dbH_fA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] mmc: sdhci-of-dwcmshc: Add runtime PM operations
- for BlueField-3
-To:     Liming Sun <limings@nvidia.com>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>,
-        David Thompson <davthompson@nvidia.com>,
-        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Ec7AyP+SLumfMJiE"
+Content-Disposition: inline
+In-Reply-To: <2738e88d-16e9-15c7-37ea-4c2dc4f69181@sdinet.de>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 May 2023 at 21:03, Liming Sun <limings@nvidia.com> wrote:
->
-> This commit implements the runtime PM operations for BlueField-3 SoC
-> to disable eMMC card clock when idle.
->
-> Reviewed-by: David Thompson <davthompson@nvidia.com>
-> Signed-off-by: Liming Sun <limings@nvidia.com>
-> ---
->  drivers/mmc/host/sdhci-of-dwcmshc.c | 76 ++++++++++++++++++++++++++++-
->  1 file changed, 74 insertions(+), 2 deletions(-)
->
-> diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
-> index e68cd87998c8..19ce058fc5f0 100644
-> --- a/drivers/mmc/host/sdhci-of-dwcmshc.c
-> +++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
-> @@ -15,6 +15,7 @@
->  #include <linux/module.h>
->  #include <linux/of.h>
->  #include <linux/of_device.h>
-> +#include <linux/pm_runtime.h>
->  #include <linux/reset.h>
->  #include <linux/sizes.h>
->
-> @@ -542,8 +543,10 @@ static int dwcmshc_probe(struct platform_device *pdev)
->         }
->
->  #ifdef CONFIG_ACPI
-> -       if (pltfm_data == &sdhci_dwcmshc_bf3_pdata)
-> +       if (pltfm_data == &sdhci_dwcmshc_bf3_pdata) {
->                 sdhci_enable_v4_mode(host);
-> +               pm_runtime_enable(dev);
 
-Why make this ACPI specific? Wouldn't other platforms benefit from
-this change too?
+--Ec7AyP+SLumfMJiE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[...]
+On Fri, May 12, 2023 at 08:57:15AM +0200, Sven-Haegar Koch wrote:
+> On Fri, 12 May 2023, Greg Ungerer wrote:
+>=20
+> > On 11/5/23 23:34, Bagas Sanjaya wrote:
+> > > Replace GPL boilerplate notice on remaining files with appropriate SP=
+DX
+> > > tag. For files mentioning COPYING, use GPL 2.0; otherwise GPL 1.0+.
+>=20
+> > > --- a/drivers/net/ethernet/8390/hydra.c
+> > > +++ b/drivers/net/ethernet/8390/hydra.c
+> > > @@ -1,10 +1,8 @@
+> > > +/* SPDX-License-Identifier: GPL-1.0-only */
+> > > +
+> > >   /* New Hydra driver using generic 8390 core */
+> > >   /* Based on old hydra driver by Topi Kanerva (topi@susanna.oulu.fi)=
+ */
+> > >   -/* This file is subject to the terms and conditions of the GNU Gen=
+eral
+> > > */
+> > > -/* Public License.  See the file COPYING in the main directory of the
+> > > */
+> > > -/* Linux distribution for more details.
+> > > */
+> > > -
+> > >   /* Peter De Schrijver (p2@mind.be) */
+> > >   /* Oldenburg 2000 */
+>=20
+> GPL-1.0-only does not sound correct.
 
-Kind regards
-Uffe
+Oops, my oversight. The boilerplate above should have meant GPL 2.0
+only.
+
+Thanks for reminder!
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--Ec7AyP+SLumfMJiE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZF3smQAKCRD2uYlJVVFO
+o0XAAP9sSAxXCqJpY7WStnzCXInOHEmRK2OZtGvoTaZXwWCpaAEAnq2zSjsqzwNZ
+iabPwEj1X1Sr4N5lUmOwqkfwt//g1A0=
+=a0Gi
+-----END PGP SIGNATURE-----
+
+--Ec7AyP+SLumfMJiE--
