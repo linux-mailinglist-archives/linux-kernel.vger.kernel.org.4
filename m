@@ -2,116 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF250700498
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 230F870027F
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 10:28:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240738AbjELKBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53740 "EHLO
+        id S239992AbjELI2y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 04:28:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240627AbjELKA5 (ORCPT
+        with ESMTP id S239964AbjELI2w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:00:57 -0400
-Received: from out-16.mta1.migadu.com (out-16.mta1.migadu.com [IPv6:2001:41d0:203:375::10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9446E11DBA
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:00:14 -0700 (PDT)
-Message-ID: <fecc63de-9477-cad4-79f3-bdb1f1e3ab5f@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1683885592;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=n0JL1nhvy2ngw84v1yQfJqMPUYFftdCNHh/mrNVJuFQ=;
-        b=VDZwyA0YGJ/KFhQoo2GxCv9LWe6GedDa244Vnxy7pKf6QEG79Gt2/sr6tAxJrwxzZcNPWs
-        QDt/mNnzz+oKFvV7NGkJ8SX0kjUYCzDYmspt8qaTPfv9nvEcUrNeuOJh2kbyKy7tt7dS3n
-        RzyAvowXz/3bqX6dDj5/n2CPMr2Kpc4=
-Date:   Fri, 12 May 2023 17:59:43 +0800
+        Fri, 12 May 2023 04:28:52 -0400
+Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56E511154A;
+        Fri, 12 May 2023 01:28:41 -0700 (PDT)
+Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2ac770a99e2so103589141fa.3;
+        Fri, 12 May 2023 01:28:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683880119; x=1686472119;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=h0STyvDKOt/jPA6CkWmo5ah+D/XtsYoBFrU3Alj5ZsU=;
+        b=EFXVT/a30g4w+NUlOkvBYSmMYZuq+2UkSXSY7L5VI9FXK9h6p9sebFV1ZG1n9iAdRo
+         TE2TV5vJYHPQv601eshefRx655Pm8ALANm+hIPOzlm/A4ndvayojYfATi8NRrY2f+FSH
+         GqoGt18ApNwKW/Wf7YMBhyBFe5+Fe1mIFLoD3TyqDJPdRPjcuF5YAbpvI/sXWv1iEYjI
+         tZdfRX7ArJcMrNr3rqZ3OFOlaB8HvZqJEa4Sw53nwwSTBiVQIe43Bh1SIp2IMzaZBHQO
+         LeoJ/qvyOspp90dSrlC67d5gCtDbvEFFwR8TfNVNaGDb39JV5w5Jj48XPk1XEnlBmiX8
+         YQ7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683880119; x=1686472119;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=h0STyvDKOt/jPA6CkWmo5ah+D/XtsYoBFrU3Alj5ZsU=;
+        b=gzmKGew0M0+tt54OkODf7pfniomrLzNj4JSvZ5/vGJL4t4I7MQDHnJlAbdTTGoEha8
+         re5sXuPXl+fIXRI8wym4wN2DoxHKS7a85HR8qNZauUnzW/hZgGSoTvQbGGTFMgnh9n86
+         1U4/q/FJMrWPNGsBWmOhlfxrFxvCTxkIxoARWQFE3lJ12Of/iIubTxoGueOFFeB+cxKo
+         DQUdsOnu2zHatC8f7yrz/Jzaq9MxmcoEJ/6IXLf1prhhTy+inMxaYpsWBhtDcP6rQfq0
+         UEm5ulMswOW00mQDE+Fi9OL+tRGYsJtV0tUs09giPdh0vAth6Mo8VevGZLKlGqnXKCFd
+         mD/A==
+X-Gm-Message-State: AC+VfDzJRYENvB+NdHQ4eziMx5oz2X2UM+PlgDu1eIo1ozC0S46y2xMs
+        qhvUHF6QhhdllmhgSxOG7H0=
+X-Google-Smtp-Source: ACHHUZ6vsL+DKF6BXISXrfmfcFw38us7u5JV3h9YJmohdhzUI31GzrrgI9YuuOkIONqSb4FxiCgvFw==
+X-Received: by 2002:a2e:9942:0:b0:2ad:8f4a:4ed5 with SMTP id r2-20020a2e9942000000b002ad8f4a4ed5mr3646719ljj.37.1683880119229;
+        Fri, 12 May 2023 01:28:39 -0700 (PDT)
+Received: from [100.119.7.139] (95-31-186-77.broadband.corbina.ru. [95.31.186.77])
+        by smtp.gmail.com with ESMTPSA id y23-20020a05651c021700b002a8b9570403sm2720044ljn.31.2023.05.12.01.28.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 01:28:38 -0700 (PDT)
+Message-ID: <be85bef7e144ebe08f422bf53bb81b59a130cb29.camel@gmail.com>
+Subject: Re: [PATCH v2 3/5] dt-bindings: net: add mac-address-increment
+ option
+From:   Ivan Mikhaylov <fr0st61te@gmail.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Paul Fertser <fercerpav@gmail.com>
+Date:   Fri, 12 May 2023 11:28:37 +0000
+In-Reply-To: <8de01e81-43dc-71af-f56f-4fba957b0b0b@linaro.org>
+References: <20230509143504.30382-1-fr0st61te@gmail.com>
+         <20230509143504.30382-4-fr0st61te@gmail.com>
+         <6b5be71e-141e-c02a-8cba-a528264b26c2@linaro.org>
+         <fc3dae42f2dfdf046664d964bae560ff6bb32f69.camel@gmail.com>
+         <8de01e81-43dc-71af-f56f-4fba957b0b0b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.1 
 MIME-Version: 1.0
-Subject: Re: [PATCH -next v2 1/6] blk-wbt: fix that wbt can't be disabled by
- default
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     hch@lst.de, tj@kernel.org, josef@toxicpanda.com, axboe@kernel.dk,
-        yukuai3@huawei.com, lukas.bulwahn@gmail.com,
-        cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com
-References: <20230512093554.911753-1-yukuai1@huaweicloud.com>
- <20230512093554.911753-2-yukuai1@huaweicloud.com>
-Content-Language: en-US
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Chengming Zhou <chengming.zhou@linux.dev>
-In-Reply-To: <20230512093554.911753-2-yukuai1@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/12 17:35, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
-> 
-> commit b11d31ae01e6 ("blk-wbt: remove unnecessary check in
-> wbt_enable_default()") removes the checking of CONFIG_BLK_WBT_MQ by
-> mistake, which is used to control enable or disable wbt by default.
-> 
-> Fix the problem by adding back the checking. This patch also do a litter
-> cleanup to make related code more readable.
-> 
-> Fixes: b11d31ae01e6 ("blk-wbt: remove unnecessary check in wbt_enable_default()")
-> Reported-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
-> Link: https://lore.kernel.org/lkml/CAKXUXMzfKq_J9nKHGyr5P5rvUETY4B-fxoQD4sO+NYjFOfVtZA@mail.gmail.com/t/
-> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> ---
->  block/blk-wbt.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
-> 
-> diff --git a/block/blk-wbt.c b/block/blk-wbt.c
-> index e49a48684532..9ec2a2f1eda3 100644
-> --- a/block/blk-wbt.c
-> +++ b/block/blk-wbt.c
-> @@ -730,14 +730,16 @@ void wbt_enable_default(struct gendisk *disk)
->  {
->  	struct request_queue *q = disk->queue;
->  	struct rq_qos *rqos;
-> -	bool disable_flag = q->elevator &&
-> -		    test_bit(ELEVATOR_FLAG_DISABLE_WBT, &q->elevator->flags);
-> +	bool enable = IS_ENABLED(CONFIG_BLK_WBT_MQ);
-> +
-> +	if (q->elevator &&
-> +	    test_bit(ELEVATOR_FLAG_DISABLE_WBT, &q->elevator->flags))
-> +		enable = false;
+On Fri, 2023-05-12 at 08:22 +0200, Krzysztof Kozlowski wrote:
+> On 11/05/2023 01:31, Ivan Mikhaylov wrote:
+> > On Wed, 2023-05-10 at 16:48 +0200, Krzysztof Kozlowski wrote:
+> > > On 09/05/2023 16:35, Ivan Mikhaylov wrote:
+> > > > Add the mac-address-increment option for specify MAC address
+> > > > taken
+> > > > by
+> > > > any other sources.
+> > > >=20
+> > > > Signed-off-by: Paul Fertser <fercerpav@gmail.com>
+> > > > Signed-off-by: Ivan Mikhaylov <fr0st61te@gmail.com>
+> > > > ---
+> > > > =C2=A0.../devicetree/bindings/net/ethernet-controller.yaml=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 | 8
+> > > > ++++++++
+> > > > =C2=A01 file changed, 8 insertions(+)
+> > > >=20
+> > > > diff --git a/Documentation/devicetree/bindings/net/ethernet-
+> > > > controller.yaml
+> > > > b/Documentation/devicetree/bindings/net/ethernet-
+> > > > controller.yaml
+> > > > index 00be387984ac..6900098c5105 100644
+> > > > --- a/Documentation/devicetree/bindings/net/ethernet-
+> > > > controller.yaml
+> > > > +++ b/Documentation/devicetree/bindings/net/ethernet-
+> > > > controller.yaml
+> > > > @@ -34,6 +34,14 @@ properties:
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0 minItems: 6
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0 maxItems: 6
+> > > > =C2=A0
+> > > > +=C2=A0 mac-address-increment:
+> > > > +=C2=A0=C2=A0=C2=A0 $ref: /schemas/types.yaml#/definitions/int32
+> > > > +=C2=A0=C2=A0=C2=A0 description:
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Specifies the MAC address increment=
+ to be added to the
+> > > > MAC
+> > > > address.
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Should be used in cases when there =
+is a need to use MAC
+> > > > address
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 different from one obtained by any =
+other level, like u-
+> > > > boot
+> > > > or the
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 NC-SI stack.
+> > >=20
+> > > We don't store MAC addresses in DT, but provide simple
+> > > placeholder
+> > > for
+> > > firmware or bootloader. Why shall we store static "increment"
+> > > part of
+> > > MAC address? Can't the firmware give you proper MAC address?
+> > >=20
+> > > Best regards,
+> > > Krzysztof
+> > >=20
+> >=20
+> > Krzysztof, maybe that's a point to make commit message with better
+> > explanation from my side. At current time there is at least two
+> > cases
+> > where I see it's possible to be used:
+> >=20
+> > 1. NC-SI
+> > 2. embedded
+> >=20
+> > At NC-SI level there is Get Mac Address command which provides to
+> > BMC
+> > mac address from the host which is same as host mac address, it
+> > happens
+> > at runtime and overrides old one.
+> >=20
+> > Also, this part was also to be discussed 2 years ago in this
+> > thread:
+> > https://lore.kernel.org/all/OF8E108F72.39D22E89-ON00258765.001E46EB-002=
+58765.00251157@ibm.com/
+>=20
+> Which was not sent to Rob though...
+>=20
+>=20
+> >=20
+> > Where Milton provided this information:
+> >=20
+> > DTMF spec DSP0222 NC-SI (network controller sideband interface)
+> > is a method to provide a BMC (Baseboard management controller)
+> > shared
+> > access to an external ethernet port for comunication to the
+> > management
+> > network in the outside world.=C2=A0 The protocol describes ethernet
+> > packets=20
+> > that control selective bridging implemented in a host network
+> > controller
+> > to share its phy.=C2=A0 Various NIC OEMs have added a query to find out
+> > the=20
+> > address the host is using, and some vendors have added code to
+> > query
+> > host
+> > nic and set the BMC mac to a fixed offset (current hard coded +1
+> > from
+> > the host value).=C2=A0 If this is compiled in the kernel, the NIC OEM i=
+s
+> > recognised and the BMC doesn't miss the NIC response the address is
+> > set
+> > once each time the NCSI stack reinitializes.=C2=A0 This mechanism
+> > overrides
+> > any mac-address or local-mac-address or other assignment.
+> >=20
+> > DSP0222
+> > https://www.dmtf.org/documents/pmci/network-controller-sideband-interfa=
+ce-nc-si-specification-110
+> >=20
+> >=20
+> > In embedded case, sometimes you have different multiple ethernet
+> > interfaces which using one mac address which increments or
+> > decrements
+> > for particular interface, just for better explanation, there is
+> > patch
+> > with explanation which providing them such way of work:
+> > https://github.com/openwrt/openwrt/blob/master/target/linux/generic/pen=
+ding-5.15/682-of_net-add-mac-address-increment-support.patch
+> >=20
+> > In their rep a lot of dts using such option.
+>=20
+> None of these explain why this is property of the hardware. I
+> understand
+> that this is something you want Linux to do, but DT is not for that
+> purpose. Do not encode system policies into DT and what above commit
+> says is a policy.
+>=20
 
-Why not just early return, so "enable" is not needed at all?
-
-I have another question that CONFIG_BLK_WBT_MQ is not much flexible, can we
-just get rid of it? (I'm not sure when to disable it in the config)
+Krzysztof, okay then to which DT subsystem it should belong? To
+ftgmac100 after conversion?
 
 Thanks.
-
->  
->  	/* Throttling already enabled? */
->  	rqos = wbt_rq_qos(q);
->  	if (rqos) {
-> -		if (!disable_flag &&
-> -		    RQWB(rqos)->enable_state == WBT_STATE_OFF_DEFAULT)
-> +		if (enable && RQWB(rqos)->enable_state == WBT_STATE_OFF_DEFAULT)
->  			RQWB(rqos)->enable_state = WBT_STATE_ON_DEFAULT;
->  		return;
->  	}
-> @@ -746,7 +748,7 @@ void wbt_enable_default(struct gendisk *disk)
->  	if (!blk_queue_registered(q))
->  		return;
->  
-> -	if (queue_is_mq(q) && !disable_flag)
-> +	if (queue_is_mq(q) && enable)
->  		wbt_init(disk);
->  }
->  EXPORT_SYMBOL_GPL(wbt_enable_default);
