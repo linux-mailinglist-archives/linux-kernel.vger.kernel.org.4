@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71EC2700AD8
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:58:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 69ABD700ADB
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:58:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241230AbjELO6N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 10:58:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45276 "EHLO
+        id S241621AbjELO6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 10:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241613AbjELO6D (ORCPT
+        with ESMTP id S241616AbjELO6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 10:58:03 -0400
+        Fri, 12 May 2023 10:58:05 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 645B73A86
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:58:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB7FF3A86
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:58:03 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 09FCE65735
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 14:58:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CEA8C4339B;
-        Fri, 12 May 2023 14:57:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 54A3561137
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 14:58:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 057B2C433EF;
+        Fri, 12 May 2023 14:57:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683903479;
-        bh=nJDJ9NE+3mcyJNnGkZl+cobDBvPDump2PA8ld/F5o/w=;
+        s=k20201202; t=1683903482;
+        bh=TbHgG2w0XhFAPXkR+9W7hs3AnwbEfk/0KY6kqBQIJeI=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UkPLrlyFezs3jORrA3aROLm9iXC6Kr9vZjNIJzD6TiCZIqDJsxH49o0Pu+gEOK/gU
-         VQeKq8IgWZHG4gxyuGcDrQwf0pp5Ti0KFT8is/rChRqO0i3zkfDEZmL9fQi/Yrx6Wj
-         gHPD02kEB1754XbX7Dra6eV9gfEWk+l0+gyV+8AtChmvojBDWyWK4jNMnQ6wv8Ytdv
-         W7YJLyXvLt9mx73HO6vwf+V0/FvXaM4esp+YR7xgUlVMxUGXnkUQ0kiaiaLLtHbtN/
-         QB9T/Gofz00zxK9cWCo+6XUlba0SMqDf2WOJ/jm6328ZydxnvV7MKyLnlDsJQZIFjQ
-         M+xECs9iopGtA==
+        b=rWaW1yO4zoG2gWhzY8P7BBZ0myq/alPhT7G9vRjXjVAcXidr8fdCS6X5CaHFGusk7
+         qjVS7b8XygHKs5JocjZwRQDxE+2oIuGJdZK09eCTMn0jLx8sOjkhFdpD3WL7S+BBgX
+         r4z2SQVi2ZV24FFoPCpEtzWv+8VokXA3/LhdoSwVI7mcsZQJ/GkKl2yHLw+2PwlzvI
+         8GE3RPwss0CYTl9KkCRlDemA4GHpeMZ15fFn4z7MXRJg1TGizz45LBk1tMwq4mOHkO
+         9ILUr0Iz6q6JnHnIL/zxOMu9dQ/j4NYpc9GZAgm4PtOIR5ohWNiccDnmE/1e2KtNht
+         3fAZL7Z6pcaJA==
 From:   =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@kernel.org>
 To:     Paul Walmsley <paul.walmsley@sifive.com>,
         Palmer Dabbelt <palmer@dabbelt.com>,
@@ -43,9 +43,9 @@ Cc:     =?UTF-8?q?Bj=C3=B6rn=20T=C3=B6pel?= <bjorn@rivosinc.com>,
         Oscar Salvador <osalvador@suse.de>,
         virtualization@lists.linux-foundation.org, linux@rivosinc.com,
         Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: [PATCH 1/7] riscv: mm: Pre-allocate PGD leaves to avoid synchronization
-Date:   Fri, 12 May 2023 16:57:31 +0200
-Message-Id: <20230512145737.985671-2-bjorn@kernel.org>
+Subject: [PATCH 2/7] riscv: mm: Change attribute from __init to __meminit for page functions
+Date:   Fri, 12 May 2023 16:57:32 +0200
+Message-Id: <20230512145737.985671-3-bjorn@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230512145737.985671-1-bjorn@kernel.org>
 References: <20230512145737.985671-1-bjorn@kernel.org>
@@ -64,160 +64,219 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Björn Töpel <bjorn@rivosinc.com>
 
-The RISC-V port copies PGD from init_mm to all userland pages-tables,
-which means that when the PGD level of the init_mm table is changed,
-other page-tables has to be updated.
+Prepare for memory hot add/remove support by changing from __init to
+__meminit for the page-table functions that are used by the upcoming
+arch specific callbacks.
 
-One way to avoid synchronizing page-tables is to pre-allocate the
-pages that are copied (need to be synchronized). For memory
-hotswapping builds, prefer to waste some pages, rather than do
-explicit synchronization.
-
-Prepare the RISC-V port for memory add/remove, by getting rid of PGD
-synchronization. Pre-allocate vmemmap, and direct map pages. This will
-roughly waste ~128 worth of 4K pages.
-
-Note that this is only done for memory hotswap enabled configuration.
+Changing the __init attribute to __meminit, avoids that the functions
+are removed after init. __meminit keeps the functions after init, if
+memory hotplugging is enabled for the build.
 
 Signed-off-by: Björn Töpel <bjorn@rivosinc.com>
 ---
- arch/riscv/include/asm/kasan.h |  4 +-
- arch/riscv/mm/init.c           | 86 ++++++++++++++++++++++++++++++++++
- 2 files changed, 88 insertions(+), 2 deletions(-)
+ arch/riscv/include/asm/mmu.h     |  2 +-
+ arch/riscv/include/asm/pgtable.h |  2 +-
+ arch/riscv/mm/init.c             | 49 ++++++++++++++------------------
+ 3 files changed, 24 insertions(+), 29 deletions(-)
 
-diff --git a/arch/riscv/include/asm/kasan.h b/arch/riscv/include/asm/kasan.h
-index 0b85e363e778..e6a0071bdb56 100644
---- a/arch/riscv/include/asm/kasan.h
-+++ b/arch/riscv/include/asm/kasan.h
-@@ -6,8 +6,6 @@
+diff --git a/arch/riscv/include/asm/mmu.h b/arch/riscv/include/asm/mmu.h
+index 0099dc116168..9e5d4f37ba2e 100644
+--- a/arch/riscv/include/asm/mmu.h
++++ b/arch/riscv/include/asm/mmu.h
+@@ -22,7 +22,7 @@ typedef struct {
+ #endif
+ } mm_context_t;
  
- #ifndef __ASSEMBLY__
+-void __init create_pgd_mapping(pgd_t *pgdp, uintptr_t va, phys_addr_t pa,
++void __meminit create_pgd_mapping(pgd_t *pgdp, uintptr_t va, phys_addr_t pa,
+ 			       phys_addr_t sz, pgprot_t prot);
+ #endif /* __ASSEMBLY__ */
  
--#ifdef CONFIG_KASAN
--
- /*
-  * The following comment was copied from arm64:
-  * KASAN_SHADOW_START: beginning of the kernel virtual addresses.
-@@ -34,6 +32,8 @@
-  */
- #define KASAN_SHADOW_START	((KASAN_SHADOW_END - KASAN_SHADOW_SIZE) & PGDIR_MASK)
- #define KASAN_SHADOW_END	MODULES_LOWEST_VADDR
-+
-+#ifdef CONFIG_KASAN
- #define KASAN_SHADOW_OFFSET	_AC(CONFIG_KASAN_SHADOW_OFFSET, UL)
+diff --git a/arch/riscv/include/asm/pgtable.h b/arch/riscv/include/asm/pgtable.h
+index 2258b27173b0..a4cdcb689959 100644
+--- a/arch/riscv/include/asm/pgtable.h
++++ b/arch/riscv/include/asm/pgtable.h
+@@ -147,7 +147,7 @@ struct pt_alloc_ops {
+ #endif
+ };
  
- void kasan_init(void);
+-extern struct pt_alloc_ops pt_ops __initdata;
++extern struct pt_alloc_ops pt_ops __meminitdata;
+ 
+ #ifdef CONFIG_MMU
+ /* Number of PGD entries that a user-mode program can use */
 diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 747e5b1ef02d..d2595cc33a1c 100644
+index d2595cc33a1c..e974ff6ef036 100644
 --- a/arch/riscv/mm/init.c
 +++ b/arch/riscv/mm/init.c
-@@ -31,6 +31,7 @@
- #include <asm/io.h>
- #include <asm/ptdump.h>
- #include <asm/numa.h>
-+#include <asm/kasan.h>
- 
- #include "../kernel/head.h"
- 
-@@ -156,6 +157,90 @@ static void __init print_vm_layout(void)
- static void print_vm_layout(void) { }
- #endif /* CONFIG_DEBUG_VM */
- 
-+#ifdef CONFIG_MEMORY_HOTPLUG
-+/*
-+ * Pre-allocates page-table pages for a specific area in the kernel
-+ * page-table. Only the level which needs to be synchronized between
-+ * all page-tables is allocated because the synchronization can be
-+ * expensive.
-+ */
-+static void __init preallocate_pgd_pages_range(unsigned long start, unsigned long end,
-+					       const char *area)
-+{
-+	unsigned long addr;
-+	const char *lvl;
-+
-+	for (addr = start; addr < end; addr = ALIGN(addr + 1, PGDIR_SIZE)) {
-+		pgd_t *pgd = pgd_offset_k(addr);
-+		p4d_t *p4d;
-+		pud_t *pud;
-+		pmd_t *pmd;
-+
-+		lvl = "p4d";
-+		p4d = p4d_alloc(&init_mm, pgd, addr);
-+		if (!p4d)
-+			goto failed;
-+
-+		if (pgtable_l5_enabled)
-+			continue;
-+
-+		/*
-+		 * The goal here is to allocate all possibly required
-+		 * hardware page tables pointed to by the top hardware
-+		 * level.
-+		 *
-+		 * On 4-level systems, the P4D layer is folded away
-+		 * and the above code does no preallocation.  Below,
-+		 * go down to the pud _software_ level to ensure the
-+		 * second hardware level is allocated on 4-level
-+		 * systems too.
-+		 */
-+		lvl = "pud";
-+		pud = pud_alloc(&init_mm, p4d, addr);
-+		if (!pud)
-+			goto failed;
-+
-+		if (pgtable_l4_enabled)
-+			continue;
-+		/*
-+		 * The goal here is to allocate all possibly required
-+		 * hardware page tables pointed to by the top hardware
-+		 * level.
-+		 *
-+		 * On 3-level systems, the PUD layer is folded away
-+		 * and the above code does no preallocation.  Below,
-+		 * go down to the pmd _software_ level to ensure the
-+		 * second hardware level is allocated on 3-level
-+		 * systems too.
-+		 */
-+		lvl = "pmd";
-+		pmd = pmd_alloc(&init_mm, pud, addr);
-+		if (!pmd)
-+			goto failed;
-+	}
-+
-+	return;
-+
-+failed:
-+
-+	/*
-+	 * The pages have to be there now or they will be missing in
-+	 * process page-tables later.
-+	 */
-+	panic("Failed to pre-allocate %s pages for %s area\n", lvl, area);
-+}
-+
-+#define PAGE_END KASAN_SHADOW_START
-+#endif
-+
-+static void __init prepare_memory_hotplug(void)
-+{
-+#ifdef CONFIG_MEMORY_HOTPLUG
-+	preallocate_pgd_pages_range(VMEMMAP_START, VMEMMAP_END, "vmemmap");
-+	preallocate_pgd_pages_range(PAGE_OFFSET, PAGE_END, "direct map");
-+#endif
-+}
-+
- void __init mem_init(void)
- {
- #ifdef CONFIG_FLATMEM
-@@ -164,6 +249,7 @@ void __init mem_init(void)
- 
- 	swiotlb_init(max_pfn > PFN_DOWN(dma32_phys_limit), SWIOTLB_VERBOSE);
- 	memblock_free_all();
-+	prepare_memory_hotplug();
- 
- 	print_vm_layout();
+@@ -356,7 +356,7 @@ static void __init setup_bootmem(void)
  }
+ 
+ #ifdef CONFIG_MMU
+-struct pt_alloc_ops pt_ops __initdata;
++struct pt_alloc_ops pt_ops __meminitdata;
+ 
+ pgd_t swapper_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
+ pgd_t trampoline_pg_dir[PTRS_PER_PGD] __page_aligned_bss;
+@@ -418,7 +418,7 @@ static inline pte_t *__init get_pte_virt_fixmap(phys_addr_t pa)
+ 	return (pte_t *)set_fixmap_offset(FIX_PTE, pa);
+ }
+ 
+-static inline pte_t *__init get_pte_virt_late(phys_addr_t pa)
++static inline pte_t *__meminit get_pte_virt_late(phys_addr_t pa)
+ {
+ 	return (pte_t *) __va(pa);
+ }
+@@ -437,7 +437,7 @@ static inline phys_addr_t __init alloc_pte_fixmap(uintptr_t va)
+ 	return memblock_phys_alloc(PAGE_SIZE, PAGE_SIZE);
+ }
+ 
+-static phys_addr_t __init alloc_pte_late(uintptr_t va)
++static phys_addr_t __meminit alloc_pte_late(uintptr_t va)
+ {
+ 	unsigned long vaddr;
+ 
+@@ -447,9 +447,8 @@ static phys_addr_t __init alloc_pte_late(uintptr_t va)
+ 	return __pa(vaddr);
+ }
+ 
+-static void __init create_pte_mapping(pte_t *ptep,
+-				      uintptr_t va, phys_addr_t pa,
+-				      phys_addr_t sz, pgprot_t prot)
++static void __meminit create_pte_mapping(pte_t *ptep, uintptr_t va, phys_addr_t pa, phys_addr_t sz,
++					 pgprot_t prot)
+ {
+ 	uintptr_t pte_idx = pte_index(va);
+ 
+@@ -503,7 +502,7 @@ static pmd_t *__init get_pmd_virt_fixmap(phys_addr_t pa)
+ 	return (pmd_t *)set_fixmap_offset(FIX_PMD, pa);
+ }
+ 
+-static pmd_t *__init get_pmd_virt_late(phys_addr_t pa)
++static pmd_t *__meminit get_pmd_virt_late(phys_addr_t pa)
+ {
+ 	return (pmd_t *) __va(pa);
+ }
+@@ -520,7 +519,7 @@ static phys_addr_t __init alloc_pmd_fixmap(uintptr_t va)
+ 	return memblock_phys_alloc(PAGE_SIZE, PAGE_SIZE);
+ }
+ 
+-static phys_addr_t __init alloc_pmd_late(uintptr_t va)
++static phys_addr_t __meminit alloc_pmd_late(uintptr_t va)
+ {
+ 	unsigned long vaddr;
+ 
+@@ -530,9 +529,8 @@ static phys_addr_t __init alloc_pmd_late(uintptr_t va)
+ 	return __pa(vaddr);
+ }
+ 
+-static void __init create_pmd_mapping(pmd_t *pmdp,
+-				      uintptr_t va, phys_addr_t pa,
+-				      phys_addr_t sz, pgprot_t prot)
++static void __meminit create_pmd_mapping(pmd_t *pmdp, uintptr_t va, phys_addr_t pa, phys_addr_t sz,
++					 pgprot_t prot)
+ {
+ 	pte_t *ptep;
+ 	phys_addr_t pte_phys;
+@@ -568,7 +566,7 @@ static pud_t *__init get_pud_virt_fixmap(phys_addr_t pa)
+ 	return (pud_t *)set_fixmap_offset(FIX_PUD, pa);
+ }
+ 
+-static pud_t *__init get_pud_virt_late(phys_addr_t pa)
++static pud_t *__meminit get_pud_virt_late(phys_addr_t pa)
+ {
+ 	return (pud_t *)__va(pa);
+ }
+@@ -586,7 +584,7 @@ static phys_addr_t __init alloc_pud_fixmap(uintptr_t va)
+ 	return memblock_phys_alloc(PAGE_SIZE, PAGE_SIZE);
+ }
+ 
+-static phys_addr_t alloc_pud_late(uintptr_t va)
++static phys_addr_t __meminit alloc_pud_late(uintptr_t va)
+ {
+ 	unsigned long vaddr;
+ 
+@@ -606,7 +604,7 @@ static p4d_t *__init get_p4d_virt_fixmap(phys_addr_t pa)
+ 	return (p4d_t *)set_fixmap_offset(FIX_P4D, pa);
+ }
+ 
+-static p4d_t *__init get_p4d_virt_late(phys_addr_t pa)
++static p4d_t *__meminit get_p4d_virt_late(phys_addr_t pa)
+ {
+ 	return (p4d_t *)__va(pa);
+ }
+@@ -624,7 +622,7 @@ static phys_addr_t __init alloc_p4d_fixmap(uintptr_t va)
+ 	return memblock_phys_alloc(PAGE_SIZE, PAGE_SIZE);
+ }
+ 
+-static phys_addr_t alloc_p4d_late(uintptr_t va)
++static phys_addr_t __meminit alloc_p4d_late(uintptr_t va)
+ {
+ 	unsigned long vaddr;
+ 
+@@ -633,9 +631,8 @@ static phys_addr_t alloc_p4d_late(uintptr_t va)
+ 	return __pa(vaddr);
+ }
+ 
+-static void __init create_pud_mapping(pud_t *pudp,
+-				      uintptr_t va, phys_addr_t pa,
+-				      phys_addr_t sz, pgprot_t prot)
++static void __meminit create_pud_mapping(pud_t *pudp, uintptr_t va, phys_addr_t pa, phys_addr_t sz,
++					 pgprot_t prot)
+ {
+ 	pmd_t *nextp;
+ 	phys_addr_t next_phys;
+@@ -660,9 +657,8 @@ static void __init create_pud_mapping(pud_t *pudp,
+ 	create_pmd_mapping(nextp, va, pa, sz, prot);
+ }
+ 
+-static void __init create_p4d_mapping(p4d_t *p4dp,
+-				      uintptr_t va, phys_addr_t pa,
+-				      phys_addr_t sz, pgprot_t prot)
++static void __meminit create_p4d_mapping(p4d_t *p4dp, uintptr_t va, phys_addr_t pa, phys_addr_t sz,
++					 pgprot_t prot)
+ {
+ 	pud_t *nextp;
+ 	phys_addr_t next_phys;
+@@ -718,9 +714,8 @@ static void __init create_p4d_mapping(p4d_t *p4dp,
+ #define create_pmd_mapping(__pmdp, __va, __pa, __sz, __prot) do {} while(0)
+ #endif /* __PAGETABLE_PMD_FOLDED */
+ 
+-void __init create_pgd_mapping(pgd_t *pgdp,
+-				      uintptr_t va, phys_addr_t pa,
+-				      phys_addr_t sz, pgprot_t prot)
++void __meminit create_pgd_mapping(pgd_t *pgdp, uintptr_t va, phys_addr_t pa, phys_addr_t sz,
++				  pgprot_t prot)
+ {
+ 	pgd_next_t *nextp;
+ 	phys_addr_t next_phys;
+@@ -745,7 +740,7 @@ void __init create_pgd_mapping(pgd_t *pgdp,
+ 	create_pgd_next_mapping(nextp, va, pa, sz, prot);
+ }
+ 
+-static uintptr_t __init best_map_size(phys_addr_t base, phys_addr_t size)
++static uintptr_t __meminit best_map_size(phys_addr_t base, phys_addr_t size)
+ {
+ 	if (!(base & (PGDIR_SIZE - 1)) && size >= PGDIR_SIZE)
+ 		return PGDIR_SIZE;
+@@ -778,7 +773,7 @@ asmlinkage void __init __copy_data(void)
+ #endif
+ 
+ #ifdef CONFIG_STRICT_KERNEL_RWX
+-static __init pgprot_t pgprot_from_va(uintptr_t va)
++static __meminit pgprot_t pgprot_from_va(uintptr_t va)
+ {
+ 	if (is_va_kernel_text(va))
+ 		return PAGE_KERNEL_READ_EXEC;
+@@ -805,7 +800,7 @@ void mark_rodata_ro(void)
+ 	debug_checkwx();
+ }
+ #else
+-static __init pgprot_t pgprot_from_va(uintptr_t va)
++static __meminit pgprot_t pgprot_from_va(uintptr_t va)
+ {
+ 	if (IS_ENABLED(CONFIG_64BIT) && !is_kernel_mapping(va))
+ 		return PAGE_KERNEL;
 -- 
 2.39.2
 
