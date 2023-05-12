@@ -2,112 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3D506FFEEF
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 04:23:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D8D46FFEDA
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 04:22:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239832AbjELCWo convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Thu, 11 May 2023 22:22:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58190 "EHLO
+        id S239761AbjELCVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 22:21:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239784AbjELCWX (ORCPT
+        with ESMTP id S231799AbjELCVw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 22:22:23 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0DE5BA9;
-        Thu, 11 May 2023 19:22:20 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 36DD824E290;
-        Fri, 12 May 2023 10:22:19 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 12 May
- 2023 10:22:19 +0800
-Received: from localhost.localdomain (113.72.146.187) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 12 May
- 2023 10:22:18 +0800
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Conor Dooley <conor@kernel.org>,
-        "Emil Renner Berthing" <kernel@esmil.dk>
-CC:     Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        Xingyu Wu <xingyu.wu@starfivetech.com>,
-        William Qiu <william.qiu@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-Subject: [PATCH v4 7/7] riscv: dts: starfive: jh7110: Add PLL clock node and modify syscrg node
-Date:   Fri, 12 May 2023 10:20:36 +0800
-Message-ID: <20230512022036.97987-8-xingyu.wu@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230512022036.97987-1-xingyu.wu@starfivetech.com>
-References: <20230512022036.97987-1-xingyu.wu@starfivetech.com>
+        Thu, 11 May 2023 22:21:52 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB625E58
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 19:21:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683858065;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=S2ASvXOHh//KO9isgRlvw058BiPsYFCZ13CsWljUXCc=;
+        b=Fy0VI96iBeqw5FiI/EJAm3XL0PwfQzZaac7PX6Bc7zK2byhEOrwlyAj24QHvMLoY1nsSpW
+        3Rj0r/lfTOHoUUESRmSwJlSgM/IoBUL0OPUhx6/qR3oIzottljsC0S7d3+oNEF17KDNQOO
+        76szQ3/pBn0xadqno7MPJ4UUdwB+xjk=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-142-BU2L4NjVMHO2Z5E5ny88wQ-1; Thu, 11 May 2023 22:21:03 -0400
+X-MC-Unique: BU2L4NjVMHO2Z5E5ny88wQ-1
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-3f4f80a5dd4so1045251cf.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 19:21:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683858062; x=1686450062;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S2ASvXOHh//KO9isgRlvw058BiPsYFCZ13CsWljUXCc=;
+        b=kx56eOZAQR25+UgWThcbpZkI4B5YJ3ncLLcX50ICuNo9pWFRX/KFer+lNYd1XncI1U
+         EfU/VnJiSBiCVppCbcbWVHufdqZNjBEVQ5IEOnrL3bbFuTaV6a6o5TGO7lV7VncCZ3tC
+         Mg4NzFaY3HSGJLk8Jdm8xGFiKfjp5/DEGzbDxtU7M8kPKDVvqF0TmejOt65om3gLExTV
+         RPCX8QSonA0xzc5mbyzGEKvmYEl1+km5B6Mw17k9S7Mdgey7fovYTWW5I++5njqQl2JO
+         nwKqIk+hX22KjL+q4Ubg/gMMWT5V7z85pT9iLEErNFpFE6pOduhU6QwACGGc4n5DUG92
+         PEeA==
+X-Gm-Message-State: AC+VfDwIynT/kwNYGdg6uY05xSiTAQAbqTp/SW4ULrfNnntqh9phDfW2
+        s15tJW9QSkijy1HuoltVM2JIG5L5jJqHYZfWVOS488jHDvRFca+vqsNMMZBS0m2LsSj7L8WExFI
+        WLzxe3Tpy7SyVmB8tV0Xi2w9S
+X-Received: by 2002:ac8:5f8c:0:b0:3f3:69ea:274d with SMTP id j12-20020ac85f8c000000b003f369ea274dmr37963350qta.45.1683858062733;
+        Thu, 11 May 2023 19:21:02 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ5h9im6TSSFHfcaLq7bYhakNAfyf+yFqLviD20jBFS9fCqbB5UvXh3OkOYI11U6Ho5kn0bb9Q==
+X-Received: by 2002:ac8:5f8c:0:b0:3f3:69ea:274d with SMTP id j12-20020ac85f8c000000b003f369ea274dmr37963339qta.45.1683858062342;
+        Thu, 11 May 2023 19:21:02 -0700 (PDT)
+Received: from treble ([2600:1700:6e32:6c00::3e])
+        by smtp.gmail.com with ESMTPSA id f10-20020a05622a114a00b003f4e1cf23easm1240158qty.73.2023.05.11.19.21.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 11 May 2023 19:21:02 -0700 (PDT)
+Date:   Thu, 11 May 2023 19:20:59 -0700
+From:   Josh Poimboeuf <jpoimboe@redhat.com>
+To:     David Laight <David.Laight@ACULAB.COM>
+Cc:     'Josh Poimboeuf' <jpoimboe@kernel.org>,
+        Oleg Nesterov <oleg@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Vernon Lovejoy <vlovejoy@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] x86/show_trace_log_lvl: ensure stack pointer is aligned,
+ again
+Message-ID: <20230512022059.ltlzs7irvbvoj2cl@treble>
+References: <20230427140054.GA17800@redhat.com>
+ <20230428043158.r5omehiaqawcac2y@treble>
+ <20230428065513.GA22111@redhat.com>
+ <20230428235747.b5smutdttv5eeopi@treble>
+ <aa8537d81dc747a097e9e30491b5081b@AcuMS.aculab.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [113.72.146.187]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <aa8537d81dc747a097e9e30491b5081b@AcuMS.aculab.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the PLL clock node for the Starfive JH7110 SoC and
-modify the SYSCRG node to add PLL clocks input.
+On Sun, Apr 30, 2023 at 11:59:17AM +0000, David Laight wrote:
+> From: Josh Poimboeuf
+> > Sent: 29 April 2023 00:58
+> > 
+> > On Fri, Apr 28, 2023 at 08:55:13AM +0200, Oleg Nesterov wrote:
+> > > On 04/27, Josh Poimboeuf wrote:
+> > > >
+> > > > On Thu, Apr 27, 2023 at 04:00:54PM +0200, Oleg Nesterov wrote:
+> > > > > +	stack = PTR_ALIGN(stack, sizeof(long));
+> > > > >  	for ( ; stack; stack = PTR_ALIGN(stack_info.next_sp, sizeof(long))) {
+> > > > >  		const char *stack_name;
+> > > >
+> > > > Seems reasonable, though 'stack' is already initialized a few lines
+> > > > above this, so it would be cleaner to do the PTR_ALIGN then.  Or even
+> > > > better, just move it all to the for loop:
+> > > >
+> > > > 	for (stack = PTR_ALIGN(stack ? : get_stack_pointer(task, regs));
+> > > > 	     stack;
+> > > > 	     stack = PTR_ALIGN(stack_info.next_sp, sizeof(long))) {
+> > >
+> > > We decided to make the simplest one-liner fix, but I was thinking about
+> > >
+> > > 	for ( stack = stack ? : get_stack_pointer(task, regs);
+> > > 	     (stack = PTR_ALIGN(stack, sizeof(long)));
+> > > 	      stack = stack_info.next_sp)
+> > > 	{
+> > > 		...
+> > >
+> > > to factout out the annoying PTR_ALIGN(). Will it work for you?
+> > 
+> > I'd rather not, that's a little *too* clever, IMO.
+> 
+> I'd leave the initialisation outside the loop and move
+> the PTR_ALIGN() into the loop so that the 'for' fits on one line:
+> 	if (!stack)
+> 		stack = get_stack_pointer(task, regs);
+> 	for (; stack; stack = stack_info.next_sp) {
+> 		const char ...
+> 		stack = PTR_ALIGN(stack, sizeof(long));
 
-Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
----
- arch/riscv/boot/dts/starfive/jh7110.dtsi | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+I do like that better, except... put the initialization in the 'for':
 
-diff --git a/arch/riscv/boot/dts/starfive/jh7110.dtsi b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-index fa27fd4169a8..cdfd036a0e6c 100644
---- a/arch/riscv/boot/dts/starfive/jh7110.dtsi
-+++ b/arch/riscv/boot/dts/starfive/jh7110.dtsi
-@@ -452,12 +452,16 @@ syscrg: clock-controller@13020000 {
- 				 <&gmac1_rgmii_rxin>,
- 				 <&i2stx_bclk_ext>, <&i2stx_lrck_ext>,
- 				 <&i2srx_bclk_ext>, <&i2srx_lrck_ext>,
--				 <&tdm_ext>, <&mclk_ext>;
-+				 <&tdm_ext>, <&mclk_ext>,
-+				 <&pllclk JH7110_CLK_PLL0_OUT>,
-+				 <&pllclk JH7110_CLK_PLL1_OUT>,
-+				 <&pllclk JH7110_CLK_PLL2_OUT>;
- 			clock-names = "osc", "gmac1_rmii_refin",
- 				      "gmac1_rgmii_rxin",
- 				      "i2stx_bclk_ext", "i2stx_lrck_ext",
- 				      "i2srx_bclk_ext", "i2srx_lrck_ext",
--				      "tdm_ext", "mclk_ext";
-+				      "tdm_ext", "mclk_ext",
-+				      "pll0_out", "pll1_out", "pll2_out";
- 			#clock-cells = <1>;
- 			#reset-cells = <1>;
- 		};
-@@ -465,6 +469,12 @@ syscrg: clock-controller@13020000 {
- 		sys_syscon: syscon@13030000 {
- 			compatible = "starfive,jh7110-sys-syscon", "syscon", "simple-mfd";
- 			reg = <0x0 0x13030000 0x0 0x1000>;
-+
-+			pllclk: clock-controller {
-+				compatible = "starfive,jh7110-pll";
-+				clocks = <&osc>;
-+				#clock-cells = <1>;
-+			};
- 		};
- 
- 		sysgpio: pinctrl@13040000 {
+	for (stack = stack ? : get_stack_pointer(task, regs);
+	     stack;
+	     stack = stack_info.next_sp) {
+		const char ...
+		stack = PTR_ALIGN(stack, sizeof(long));
+
+A multi-line 'for' is fine, it's better to put the initialization in the
+conventional spot.
+
 -- 
-2.25.1
+Josh
 
