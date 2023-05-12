@@ -2,122 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A864700D8F
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 19:01:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B099700DB5
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 19:11:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237741AbjELRBg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 13:01:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51310 "EHLO
+        id S237784AbjELRK5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 13:10:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237723AbjELRBa (ORCPT
+        with ESMTP id S233644AbjELRKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 13:01:30 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63FFAA272
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 10:01:28 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so91341983a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 10:01:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683910887; x=1686502887;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WgyCZc0+du4N+dTZkKE4PbFdEgp5xlJtk0+36+OFtLs=;
-        b=aq1mpL/CYYPyVxxuT1synoTadOINqfKrW4ajIyM2WqaRyGAkJGBxsYYe/2Y2cQ97Yh
-         UWUYdRoH2SuCArWPH8YMFDrus8laLXbW3HNV/AAO/tdION23+5QleTt9IsGGvVHYkAlJ
-         beTwgJ5WwjCdlCb4/warYmKtSammHAffCzLoEVeFj57dvbn1PZ5p21FxSKiBTTUGeIvu
-         V+Z+/4/o6lotQ6wygwrus+wbKRQFc2xnD5hx46LWCiVHYkcSQbgkvkS8VV6dWZuXMa1j
-         rg0/SZJvig9ulJ9NP5vM78uqaQizjpCrBC0ku4t2rM4YwS+JGOMAlH0LjyEDJDfh/3TO
-         aFGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683910887; x=1686502887;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WgyCZc0+du4N+dTZkKE4PbFdEgp5xlJtk0+36+OFtLs=;
-        b=SbI7Ybr0Te/uiYjO8bL8wiwDeHLUDeob9p9DsZw3Ip5466sgLLpVQaVkUf5CfOGs8i
-         Ub1sFr3veGPVwYIVnLv2ay0fD9j/NkygM7dBJeqC9r59b1fGqrHeygRBzbvkEqTubGDb
-         gvOv90hnMZHQnzIsI0CKMPh1KIF2s20s3w/FYNtoI5Yz2ri14klfqyytgRIrL6p4yz3v
-         XHEGRELlfnbQAqvpbL2YWuLfYZkb7vF9eXC7x1dty5uxbvnfCaDU3uBZL3gRTNItmo8V
-         761er5SUf5VsBiiSczONpg/0QWIndvz6PsB1H/bWOWs77MSYQJc8im8Wu6cFu9og8+O3
-         4sWQ==
-X-Gm-Message-State: AC+VfDxJtzaWXTdy12PxBrSbU9N+45DmooW5KigxnmI0GCZv5q3AxvJg
-        X5auRxo2loZkk+pVLnrREcniOQ==
-X-Google-Smtp-Source: ACHHUZ5uUqEBoBhIS5B1WUsaCYWCtvoNEX8tDn3L5tF8EV6C9KWlEcA+qH+cE9OxMmohcdB6Kr5Ifw==
-X-Received: by 2002:a17:906:db04:b0:960:175a:3af7 with SMTP id xj4-20020a170906db0400b00960175a3af7mr20987144ejb.19.1683910886814;
-        Fri, 12 May 2023 10:01:26 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:7ede:fc7b:2328:3883? ([2a02:810d:15c0:828:7ede:fc7b:2328:3883])
-        by smtp.gmail.com with ESMTPSA id hy25-20020a1709068a7900b0096607baaf19sm5635497ejc.101.2023.05.12.10.01.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 10:01:26 -0700 (PDT)
-Message-ID: <68f9bee2-5a5b-2962-6c3d-e73ade371545@linaro.org>
-Date:   Fri, 12 May 2023 19:01:24 +0200
+        Fri, 12 May 2023 13:10:55 -0400
+X-Greylist: delayed 484 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 12 May 2023 10:10:51 PDT
+Received: from out-29.mta0.migadu.com (out-29.mta0.migadu.com [IPv6:2001:41d0:1004:224b::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCEC9728D
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 10:10:51 -0700 (PDT)
+Date:   Fri, 12 May 2023 17:02:38 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683910963;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=sODTyDv5L5PcXKxq0ByU2ty1JyyzAf4TEsGxAx4S/Kk=;
+        b=wLQHdgkjIl3VGsRv1Hh6QjgfeOSxabsRa36OxyVZst7jQZNdxWCojHsM6ILzlp0BgNiTld
+        vq0YTbY3+uPgZ18oxcEsbxXqyjoqNsW8fv7mYQ7sekHxJvZOA7r9DbhV5Nxo35rnAGH77i
+        qZvp+8t6N7mE0AgDSfEQ1E3V/QbxSZ8=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Raghavendra Rao Ananta <rananta@google.com>
+Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jing Zhang <jingzhangos@google.com>,
+        Colton Lewis <coltonlewis@google.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
+Subject: Re: [PATCH v3 7/7] KVM: arm64: Use TLBI range-based intructions for
+ unmap
+Message-ID: <ZF5xLrr2tEYdLL1i@linux.dev>
+References: <20230414172922.812640-1-rananta@google.com>
+ <20230414172922.812640-8-rananta@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 04/10] nvmem: qfprom: Add support for secure reading on
- QDU1000/QRU1000
-Content-Language: en-US
-To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230512122134.24339-1-quic_kbajaj@quicinc.com>
- <20230512122134.24339-5-quic_kbajaj@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230512122134.24339-5-quic_kbajaj@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230414172922.812640-8-rananta@google.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2023 14:21, Komal Bajaj wrote:
-> Add qfprom driver support for QDU1000/QRU1000 SOCs.
+Hi Raghavendra,
+
+On Fri, Apr 14, 2023 at 05:29:22PM +0000, Raghavendra Rao Ananta wrote:
+> The current implementation of the stage-2 unmap walker traverses
+> the given range and, as a part of break-before-make, performs
+> TLB invalidations with a DSB for every PTE. A multitude of this
+> combination could cause a performance bottleneck.
 > 
-> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
+> Hence, if the system supports FEAT_TLBIRANGE, defer the TLB
+> invalidations until the entire walk is finished, and then
+> use range-based instructions to invalidate the TLBs in one go.
+> Condition this upon S2FWB in order to avoid walking the page-table
+> again to perform the CMOs after issuing the TLBI.
+> 
+> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
+> Suggested-by: Oliver Upton <oliver.upton@linux.dev>
 > ---
->  drivers/nvmem/qfprom.c | 5 +++++
->  1 file changed, 5 insertions(+)
+>  arch/arm64/kvm/hyp/pgtable.c | 33 +++++++++++++++++++++++++++++----
+>  1 file changed, 29 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/nvmem/qfprom.c b/drivers/nvmem/qfprom.c
-> index 20662e2d3732..12a7981a8a71 100644
-> --- a/drivers/nvmem/qfprom.c
-> +++ b/drivers/nvmem/qfprom.c
-> @@ -109,6 +109,10 @@ struct qfprom_soc_compatible_data {
->  	bool secure;
->  };
-> 
-> +static const struct qfprom_soc_compatible_data qdu1000_qfprom = {
-> +	.secure = true
+> diff --git a/arch/arm64/kvm/hyp/pgtable.c b/arch/arm64/kvm/hyp/pgtable.c
+> index 3f136e35feb5e..bcb748e3566c7 100644
+> --- a/arch/arm64/kvm/hyp/pgtable.c
+> +++ b/arch/arm64/kvm/hyp/pgtable.c
+> @@ -987,10 +987,16 @@ int kvm_pgtable_stage2_set_owner(struct kvm_pgtable *pgt, u64 addr, u64 size,
+>  	return ret;
+>  }
+>  
+> +struct stage2_unmap_data {
+> +	struct kvm_pgtable *pgt;
+> +	bool skip_pte_tlbis;
 > +};
 > +
->  static const struct nvmem_keepout sc7180_qfprom_keepout[] = {
->  	{.start = 0x128, .end = 0x148},
->  	{.start = 0x220, .end = 0x228}
-> @@ -490,6 +494,7 @@ static int qfprom_probe(struct platform_device *pdev)
+>  static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
+>  			       enum kvm_pgtable_walk_flags visit)
+>  {
+> -	struct kvm_pgtable *pgt = ctx->arg;
+> +	struct stage2_unmap_data *unmap_data = ctx->arg;
+> +	struct kvm_pgtable *pgt = unmap_data->pgt;
+>  	struct kvm_s2_mmu *mmu = pgt->mmu;
+>  	struct kvm_pgtable_mm_ops *mm_ops = ctx->mm_ops;
+>  	kvm_pte_t *childp = NULL;
+> @@ -1018,7 +1024,7 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
+>  	 * block entry and rely on the remaining portions being faulted
+>  	 * back lazily.
+>  	 */
+> -	stage2_put_pte(ctx, mmu, mm_ops, false);
+> +	stage2_put_pte(ctx, mmu, mm_ops, unmap_data->skip_pte_tlbis);
+>  
+>  	if (need_flush && mm_ops->dcache_clean_inval_poc)
+>  		mm_ops->dcache_clean_inval_poc(kvm_pte_follow(ctx->old, mm_ops),
+> @@ -1032,13 +1038,32 @@ static int stage2_unmap_walker(const struct kvm_pgtable_visit_ctx *ctx,
+>  
+>  int kvm_pgtable_stage2_unmap(struct kvm_pgtable *pgt, u64 addr, u64 size)
+>  {
+> +	int ret;
+> +	struct stage2_unmap_data unmap_data = {
+> +		.pgt = pgt,
+> +		/*
+> +		 * If FEAT_TLBIRANGE is implemented, defer the individial PTE
+> +		 * TLB invalidations until the entire walk is finished, and
+> +		 * then use the range-based TLBI instructions to do the
+> +		 * invalidations. Condition this upon S2FWB in order to avoid
+> +		 * a page-table walk again to perform the CMOs after TLBI.
+> +		 */
+> +		.skip_pte_tlbis = system_supports_tlb_range() &&
+> +					stage2_has_fwb(pgt),
+
+Why can't the underlying walker just call these two helpers directly?
+There are static keys behind these...
+
+> +	};
+>  	struct kvm_pgtable_walker walker = {
+>  		.cb	= stage2_unmap_walker,
+> -		.arg	= pgt,
+> +		.arg	= &unmap_data,
+>  		.flags	= KVM_PGTABLE_WALK_LEAF | KVM_PGTABLE_WALK_TABLE_POST,
+>  	};
+>  
+> -	return kvm_pgtable_walk(pgt, addr, size, &walker);
+> +	ret = kvm_pgtable_walk(pgt, addr, size, &walker);
+> +	if (unmap_data.skip_pte_tlbis)
+> +		/* Perform the deferred TLB invalidations */
+> +		kvm_call_hyp(__kvm_tlb_flush_vmid_range, pgt->mmu,
+> +				addr, addr + size);
+> +
+> +	return ret;
+>  }
+>  
+>  struct stage2_attr_data {
+> -- 
+> 2.40.0.634.g4ca3ef3211-goog
 > 
->  static const struct of_device_id qfprom_of_match[] = {
->  	{ .compatible = "qcom,qfprom",},
-> +	{ .compatible = "qcom,qdu1000-qfprom", .data = &qdu1000_qfprom},
->  	{ .compatible = "qcom,sc7180-qfprom", .data = &sc7180_qfprom},
 
-I have doubts that this is still compatible with qcom,qfprom. It uses
-entirely different read method. That's why generic fallbacks are bad,
-one more case to my growing list of awesome examples. :)
-
-Best regards,
-Krzysztof
-
+-- 
+Thanks,
+Oliver
