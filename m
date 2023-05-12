@@ -2,171 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69D7C700F03
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 20:42:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 51084700F05
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 20:45:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239122AbjELSmI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 14:42:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56618 "EHLO
+        id S239119AbjELSpw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 14:45:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58342 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239089AbjELSmE (ORCPT
+        with ESMTP id S238273AbjELSpv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 14:42:04 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89F9E213E;
-        Fri, 12 May 2023 11:42:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19C8965820;
-        Fri, 12 May 2023 18:42:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B174C4339C;
-        Fri, 12 May 2023 18:42:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683916922;
-        bh=Pq2Zl78fHF+iybz1ucVV+ms6hOlmw/fWkMnXUi1HQok=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=kjQdzayRNeUAGNmE6MvoP07CVFUYjxx3QgA6k9B68O3oyqdh0XCyD6sLSjUWEXg13
-         NPucCNV8BkdwqHsDPjAHiwunVmPK4AYE4SvTcPHb/R9oaA9lLVJWEAsM9gkH+Dvf1Z
-         +561PWUS0AS2g8q9EDrsjpIOuPW93tIuk18mptyBG+norUCcEpUYTxpOY3GB7oRLAE
-         puVVl08r9/gsVitagmySs3LDaQTYMHnREgkW/gMyKB7Zoi4LADGJXyTnLQLECLWjJ0
-         Dxm+2RBumVs2QIbLw2wYl7vhbm7EmjZGrRbyQAJR42TvFKUU2AktttZohzdLeiv6CE
-         fm4VL4ArKUgNg==
-Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
-        id 01882CE0CCF; Fri, 12 May 2023 11:42:01 -0700 (PDT)
-Date:   Fri, 12 May 2023 11:42:01 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org, akiyks@gmail.com,
-        linux-doc@vger.kernel.org, kernel-team@meta.com,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH locking/atomic 18/19] locking/atomic: Refrain from
- generating duplicate fallback kernel-doc
-Message-ID: <e767dcc6-ea63-4ed8-9a15-9e5bb133fafc@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <19135936-06d7-4705-8bc8-bb31c2a478ca@paulmck-laptop>
- <20230510181717.2200934-18-paulmck@kernel.org>
- <ZF0haDfyL3At3Ijw@FVFF77S0Q05N.cambridge.arm.com>
- <2a8b310c-3145-462b-a4c4-a130939da862@paulmck-laptop>
- <ZF48uBYKczItubrU@FVFF77S0Q05N>
- <b5498819-c2d4-414d-ba01-5373e749dc52@paulmck-laptop>
- <ZF5xXuPsrZEgAEEE@FVFF77S0Q05N>
+        Fri, 12 May 2023 14:45:51 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637821FF6
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:45:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1683917134; i=w_armin@gmx.de;
+        bh=+eTiMBMEYCQmTIVOXXB3t4eOtrkdVUr1eVgLYUzYkj4=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=KtBsBY+orvFPSjbDjFOEFVrtblOjpOIYob9bSUEjVKfcbJ+fCdfPtiGS1H+89TtD4
+         np1U/Ry9TG+js6EtLB7rOMSMOF193Q6n3p11r/oipazpmLWjxZjpuncYkNDgG+IGqs
+         9YQ1BZLNfaPs+g6azmvQcWrULX18qntJfzJMh98lI728NMHI0yyBNkfCxq8fzWBc5Q
+         pr/M4fWuDZL9l1p7OiMHBUcvuQHd0oeFU7rdATkQ3gUY016CB2VRktq2G18worKQFk
+         K782cIl8f60+YErr8x4J82k/45gBkDon91BuhPUTXJ1Lho77Xd1cMiVrz9ut6u3Z/+
+         TBh1WVq3l+Tqw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from esprimo-mx.users.agdsn.de ([141.30.226.129]) by mail.gmx.net
+ (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
+ 1MjS9I-1qcgLs376o-00kz94; Fri, 12 May 2023 20:45:34 +0200
+From:   Armin Wolf <W_Armin@gmx.de>
+To:     linux@dominikbrodowski.net
+Cc:     logang@deltatee.com, gregkh@linuxfoundation.org, rafael@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] pcmcia: rsrc_nonstatic: Fix memory leak in nonstatic_release_resource_db()
+Date:   Fri, 12 May 2023 20:45:29 +0200
+Message-Id: <20230512184529.5094-1-W_Armin@gmx.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZF5xXuPsrZEgAEEE@FVFF77S0Q05N>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:bwpWglXSi456kA93f1yP0W0SEIWl5d5lWj4CdveJSIjyvgA6iHQ
+ TGK6apcrUligWDGiJStxzUCTowgmYFdopmT6MzhykyOT8B4aED//I19KUvprja43uRal3+b
+ vNWwfkKWT2ctPA8I5S3Ju7C78cVepS0e8KmYz8t0eI9z82nEqi+jLOS2KHh93zt/T4DYkCE
+ g7d2t3/CfFllc9elR5NYQ==
+UI-OutboundReport: notjunk:1;M01:P0:FXyfl2Ke9V8=;RjMkDwHamgIoJLMcvzeGhis8UEq
+ KTmBRrj2KZQnHGhf9P6ZZwnmxVk/foKaH8+/3ufxh7VrXwUfS30ORS4sRxGwXeS1IdVsxGuxS
+ I/MAUD1c6Sv0J2vkvp5pQTnxavjje/b+Pa7pHIqmAvxlJnj37d+JD6XkmiTRMNDMfNPUDOqN8
+ pRcDxKDDt38d2EZYgVLg9+maV5kv9iW7klrHbWZg7bbgMmozFMxtwyYpsweYkbfNgfCrq5Jvs
+ xD87p91YYulVIw0biJ0TgiL2Yg4hvRdbyjW3UkgqdaEFUDV5x5zitO9w/XJ2NAtqF5ABIny23
+ lUtsFO/DqsQHuadoye1YizfBwjtrjHcMPPNmv29sJBfARs2nbkMPY9lZ7iSIrrl3Qfgzm4kSP
+ LG0skV/McvjB9xW29ZMbSVgst0EBWvqiaT+CkA+u35Sjt01kHtzURVzw66qv2XY+k4XuzaBk7
+ c/PeVKKtzmnzpEilPRJKS8jEg7ZWvrKnUfy6cTGgqIY0H3mQ9IhlJmL5eHBudQPxdtQFB5MLn
+ Llwsmol3DCV5Lk9w+qy7StfIG7r3Kd88AfJ+u9paJWwgXhgpOjKQR9cWXYmjIW5Q+CDWBbNIA
+ kgdRZmd13imgCMZd87C9eb1szrh3d0PnYJ1UDZOHSNBSGY5bir/unl7bOzXgffgIli3fkH26o
+ fEav834mg+z44IQ7CvyS6ycLTXdH72PKo+GxsDH3CeaT9o0WOtmVph6QsyBz+/PDmUOH8oCsE
+ AZwknpbjAkmaAjMOwuRZLIO8jplJYQZwj31IzJRx8PpeM33G7RzCC73tC4Ni4PtxNcBPGLoOh
+ 87bsqPiSV82bAfswbFdm9Tc2hpvuP6crKmV6hbBmGOjnZnNfZ5uO34AYUgqY7DSKhLY6bN8SR
+ iyKclBHcwTiGaOv2gZYJtwd4uk3NDMnLfx6F6j92O4ytl5fXs4Z9rDXmzxYo1KIsjjEEKVYoZ
+ wZeFRlsUVtn1f22PIltBgw4uOXw=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 06:03:26PM +0100, Mark Rutland wrote:
-> On Fri, May 12, 2023 at 09:01:27AM -0700, Paul E. McKenney wrote:
-> > On Fri, May 12, 2023 at 02:18:48PM +0100, Mark Rutland wrote:
-> > > On Thu, May 11, 2023 at 12:12:16PM -0700, Paul E. McKenney wrote:
-> > > > On Thu, May 11, 2023 at 06:10:00PM +0100, Mark Rutland wrote:
-> > > > > I think that we can restructure the ifdeffery so that each ordering variant
-> > > > > gets its own ifdeffery, and then we could place the kerneldoc immediately above
-> > > > > that, e.g.
-> > > > > 
-> > > > > 	/**
-> > > > > 	 * arch_atomic_inc_return_release()
-> > > > > 	 *
-> > > > > 	 * [ full kerneldoc block here ]
-> > > > > 	 */
-> > > > > 	#if defined(arch_atomic_inc_return_release)
-> > > > > 	/* defined in arch code */
-> > > > > 	#elif defined(arch_atomic_inc_return_relaxed)
-> > > > > 	[ define in terms of arch_atomic_inc_return_relaxed ]
-> > > > > 	#elif defined(arch_atomic_inc_return)
-> > > > > 	[ define in terms of arch_atomic_inc_return ]
-> > > > > 	#else
-> > > > > 	[ define in terms of arch_atomic_fetch_inc_release ]
-> > > > > 	#endif
-> > > > > 
-> > > > > ... with similar for the mandatory ops that each arch must provide, e.g.
-> > > > > 
-> > > > > 	/**
-> > > > > 	 * arch_atomic_or()
-> > > > > 	 *
-> > > > > 	 * [ full kerneldoc block here ]
-> > > > > 	 */
-> > > > > 	/* arch_atomic_or() is mandatory -- architectures must define it! */
-> > > > > 
-> > > > > I had a go at that restructuring today, and while local build testing indicates
-> > > > > I haven't got it quite right, I think it's possible:
-> > > > > 
-> > > > >   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=atomics/fallback-rework
-> > > > > 
-> > > > > Does that sound ok to you?
-> > > > 
-> > > > At first glance, it appears that your "TODO" locations have the same
-> > > > information that I was using, so it should not be hard for me to adapt the
-> > > > current kernel-doc generation to your new scheme.  (Famous last words!)
-> > > 
-> > > Great!
-> > > 
-> > > > Plus having the kernel-doc generation all in one place does have some
-> > > > serious attractions.
-> > > 
-> > > :)
-> > > 
-> > > > I will continue maintaining my current stack, but would of course be
-> > > > happy to port it on top of your refactoring.  If it turns out that
-> > > > the refactoring will take a long time, we can discuss what to do in
-> > > > the meantime.  But here is hoping that the refactoring goes smoothly!
-> > > > That would be easier all around.  ;-)
-> > > 
-> > > FWIW, I think that's working now; every cross-build I've tried works.
-> > > 
-> > > I've updated the branch at:
-> > > 
-> > >   https://git.kernel.org/pub/scm/linux/kernel/git/mark/linux.git/log/?h=atomics/fallback-rework
-> > > 
-> > > Tagged as:
-> > > 
-> > >   atomics-fallback-rework-20230512
-> > 
-> > Thank you very much!
-> > 
-> > I expect to send v2 of my original late today on the perhaps unlikely
-> > off-chance that someone might be interested in reviewing the verbiage.
-> 
-> I'll be more than happy to, though I suspect "late today" is far too late today
-> for me in UK time terms, so I probably won't look until Monday.
+When nonstatic_release_resource_db() frees all resources associated
+with an PCMCIA socket, it forgets to free socket_data too, causing
+a memory leak observable with kmemleak:
 
-Works for me!
+unreferenced object 0xc28d1000 (size 64):
+  comm "systemd-udevd", pid 297, jiffies 4294898478 (age 194.484s)
+  hex dump (first 32 bytes):
+    00 00 00 00 00 00 00 00 f0 85 0e c3 00 00 00 00  ................
+    00 00 00 00 0c 10 8d c2 00 00 00 00 00 00 00 00  ................
+  backtrace:
+    [<ffda4245>] __kmem_cache_alloc_node+0x2d7/0x4a0
+    [<7e51f0c8>] kmalloc_trace+0x31/0xa4
+    [<d52b4ca0>] nonstatic_init+0x24/0x1a4 [pcmcia_rsrc]
+    [<a2f13e08>] pcmcia_register_socket+0x200/0x35c [pcmcia_core]
+    [<a728be1b>] yenta_probe+0x4d8/0xa70 [yenta_socket]
+    [<c48fac39>] pci_device_probe+0x99/0x194
+    [<84b7c690>] really_probe+0x181/0x45c
+    [<8060fe6e>] __driver_probe_device+0x75/0x1f4
+    [<b9b76f43>] driver_probe_device+0x28/0xac
+    [<648b766f>] __driver_attach+0xeb/0x1e4
+    [<6e9659eb>] bus_for_each_dev+0x61/0xb4
+    [<25a669f3>] driver_attach+0x1e/0x28
+    [<d8671d6b>] bus_add_driver+0x102/0x20c
+    [<df0d323c>] driver_register+0x5b/0x120
+    [<942cd8a4>] __pci_register_driver+0x44/0x4c
+    [<e536027e>] __UNIQUE_ID___addressable_cleanup_module188+0x1c/0xfffff0=
+00 [iTCO_vendor_support]
 
-> > More to the point, I have started porting my changes on top of your
-> > stack.  My thought is to have a separate "."-included script that does
-> > the kernel-doc work.
-> 
-> I was thinking that we'd have a gen_kerneldoc(...) shell function (probably in
-> atomic-tbl.sh), but that's an easy thing to refactor after v2, so either way is
-> fine for now!
+Fix this by freeing socket_data too.
 
-Good point, will make that happen.  Easy to move the code, so might
-as well be v1.  ;-)
+Tested on a Acer Travelmate 4002WLMi by manually binding/unbinding
+the yenta_cardbus driver (yenta_socket).
 
-> > I am also thinking in terms of putting the kernel-doc generation into
-> > an "else" clause to the "is mandatory" check, and leaving the kernel-doc
-> > for the mandatory functions in arch/x86/include/asm/atomic.h.
-> 
-> My thinking was that all the kernel-doc bits should live in the common header
-> so that they're all easy to find when looking at the source code, and since if
-> feels a bit weird to have to look into arch/x86/ to figure out the semantics of
-> a function on !x86.
-> 
-> That said, if that's painful for some reason, please go with the easiest option
-> for now and we can figure out how to attack it for v3. :)
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/pcmcia/rsrc_nonstatic.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-I will give it a shot.
+diff --git a/drivers/pcmcia/rsrc_nonstatic.c b/drivers/pcmcia/rsrc_nonstat=
+ic.c
+index 471e0c5815f3..bf9d070a4496 100644
+=2D-- a/drivers/pcmcia/rsrc_nonstatic.c
++++ b/drivers/pcmcia/rsrc_nonstatic.c
+@@ -1053,6 +1053,8 @@ static void nonstatic_release_resource_db(struct pcm=
+cia_socket *s)
+ 		q =3D p->next;
+ 		kfree(p);
+ 	}
++
++	kfree(data);
+ }
 
-							Thanx, Paul
+
+=2D-
+2.30.2
+
