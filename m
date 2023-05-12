@@ -2,109 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10B55700927
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:24:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3EA0270092C
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240659AbjELNYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 09:24:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
+        id S241185AbjELNZv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 09:25:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240965AbjELNYH (ORCPT
+        with ESMTP id S240646AbjELNZu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 09:24:07 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F231715;
-        Fri, 12 May 2023 06:24:06 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683897845;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EGpiykIbZrzhClWEawyzh/+46DdyV3m0l/aogql4GLM=;
-        b=t4zuosmBFyYyCvcFt4CogxekyLnafjtx8UdgZrID9B7MkOZFFbFZUGHMqQ4w/49f+dprnT
-        PlH4xsuf9SnZUOj7+doXTmxlro1g3dwnvALxgbiT8zqrKR4AJUen8DhiEMHG4VUhgD4slv
-        C9X56nGsqINm+67cMkF7EU6EiQxHU/23YN7VvK9EXvyfvLTW68S7L4dUwXmA35Ei9TL036
-        gu+4asg1Taks0CJq2S+2OB9lkYShGaLJrhnbaqnWk9mEnRuWFWa0Oz6nGQs8cOSPyCJwEi
-        c2jvlBPs3mnLU2prsZbpx8tLhNGXy5wbGzwLrxlQo7WZLAontnM3cRvFOEMokA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683897845;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=EGpiykIbZrzhClWEawyzh/+46DdyV3m0l/aogql4GLM=;
-        b=R8wbDPOZoeZXva36wF885TESy/aZyCr3jMp5vxQyYINiluGTuOY4gRqy+MdP5jxH24QHtN
-        tWf4/obwdQJm8xBQ==
-To:     Matthew Garrett <mjg59@srcf.ucam.org>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
-        dpsmith@apertussolutions.com, mingo@redhat.com, bp@alien8.de,
-        hpa@zytor.com, James.Bottomley@hansenpartnership.com,
-        luto@amacapital.net, nivedita@alum.mit.edu,
-        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
-Subject: Re: [PATCH v6 06/14] x86: Add early SHA support for Secure Launch
- early measurements
-In-Reply-To: <20230512112847.GF14461@srcf.ucam.org>
-References: <20230504145023.835096-1-ross.philipson@oracle.com>
- <20230504145023.835096-7-ross.philipson@oracle.com>
- <20230510012144.GA1851@quark.localdomain>
- <20230512110455.GD14461@srcf.ucam.org>
- <CAMj1kXE8m5jCH3vW54ys=dE2-Vf_gnnueR6_g4Rq-LSJ5BqRjA@mail.gmail.com>
- <20230512112847.GF14461@srcf.ucam.org>
-Date:   Fri, 12 May 2023 15:24:04 +0200
-Message-ID: <87pm75bs3v.ffs@tglx>
+        Fri, 12 May 2023 09:25:50 -0400
+Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA0EF199E
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:25:48 -0700 (PDT)
+Received: by mail-qt1-x82c.google.com with SMTP id d75a77b69052e-3ef34c49cb9so1010301cf.1
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:25:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683897948; x=1686489948;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mbwZn6wbb6AWyMrRGtCopiudSvQ/zU2/r+76z+7YvMg=;
+        b=eqxzVZCdywYF0MYeWxFkG9lVsVh+8ezrwXRSbPQqcbObWjSMtIbdxXAJaATeelqNO3
+         kmQsm63IkVz+TmGXAIweWz3t3YM+kJY/J6jA0pysT+mIGOgHZHOyIEdUBK39F0eTkrCL
+         hFpPr3ZtfpZWqov9IUJgWSm9Bg2a2JrAspjbOtvSoKaWUE5z74jecRSviQ9DGqoBVjLh
+         q+Scc1LFgpxP2+vhaQcIzd0m1TNNbILCqN/jb2kyfPPveTP4yAfd9S1V8jcS7zpY8qTL
+         PAjM2A0Ypu2Oz2L+QOWXiIloSg/9Vum1GEaspiTa/S8rxrOxTRnDbbQmtHZKLBvxtMLS
+         8GAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683897948; x=1686489948;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mbwZn6wbb6AWyMrRGtCopiudSvQ/zU2/r+76z+7YvMg=;
+        b=XUSi5TcLoaBTRoGuSmTSfrRJ5Pwga2WLkoEIeo+hKnDc/J4pB650bcXnt0nTpzRAu5
+         VPkdUhX5fk51Niqpi/IdT/y5+pcgoARWeWdCLwELgWCRwvVD6E1N+1jF+GMZxDMnl/AM
+         Tszs7SOVJ4oN7m6tvBh7UurVrpscgVndh22/xjTfjdBWnpIHIBMfEbmrvzhrJ2jUjWju
+         t85HVDYK3G+YzZ9tNmobhkGdSVbop2LDlPDqO+dK8hCdVEP6pZMPCfg417dmhyOgvrDA
+         DWhKJ8I5TtzAUg123u1gtyLPIyWT5WwPPaUVFku1s9lRdYdiFKdowmn1rrRCuEumtlCY
+         Gtog==
+X-Gm-Message-State: AC+VfDyIQgwSEZ3z+QnbWPIuNsK3Utcwti5Nf1SDWRkleiY36r5u7us8
+        JHBt70BkeGsvIjq1YnjOyEd+/S6gJqpWiBmuFmoa9w==
+X-Google-Smtp-Source: ACHHUZ6+1Nm2+X+9izGUHhc03e9MUXIkYFVBOa4gSfMOj6ABOozZ5qNSfQ096qd3bSQHuSVeoxUnYrxbFQXx+9CMy1w=
+X-Received: by 2002:a05:622a:c3:b0:3db:1c01:9d95 with SMTP id
+ p3-20020a05622a00c300b003db1c019d95mr382182qtw.4.1683897947838; Fri, 12 May
+ 2023 06:25:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230421141723.2405942-1-peternewman@google.com>
+ <20230421141723.2405942-4-peternewman@google.com> <38b9e6df-cccd-a745-da4a-1d1a0ec86ff3@intel.com>
+In-Reply-To: <38b9e6df-cccd-a745-da4a-1d1a0ec86ff3@intel.com>
+From:   Peter Newman <peternewman@google.com>
+Date:   Fri, 12 May 2023 15:25:37 +0200
+Message-ID: <CALPaoCg76nUsJ7eYcU61gied8WBuAAmqy0Pqpsq5=Z-S52Qg6w@mail.gmail.com>
+Subject: Re: [PATCH v1 3/9] x86/resctrl: Add resctrl_mbm_flush_cpu() to
+ collect CPUs' MBM events
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     Fenghua Yu <fenghua.yu@intel.com>, Babu Moger <babu.moger@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Stephane Eranian <eranian@google.com>,
+        James Morse <james.morse@arm.com>,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12 2023 at 12:28, Matthew Garrett wrote:
-> On Fri, May 12, 2023 at 01:18:45PM +0200, Ard Biesheuvel wrote:
->> On Fri, 12 May 2023 at 13:04, Matthew Garrett <mjg59@srcf.ucam.org> wrote:
->> >
->> > On Tue, May 09, 2023 at 06:21:44PM -0700, Eric Biggers wrote:
->> >
->> > > SHA-1 is insecure.  Why are you still using SHA-1?  Don't TPMs support SHA-2
->> > > now?
->> >
->> > TXT is supported on some TPM 1.2 systems as well. TPM 2 systems are also
->> > at the whim of the firmware in terms of whether the SHA-2 banks are
->> > enabled. But even if the SHA-2 banks are enabled, if you suddenly stop
->> > extending the SHA-1 banks, a malicious actor can later turn up and
->> > extend whatever they want into them and present a SHA-1-only
->> > attestation. Ideally whatever is handling that attestation should know
->> > whether or not to expect an attestation with SHA-2, but the easiest way
->> > to maintain security is to always extend all banks.
->> >
->> 
->> Wouldn't it make more sense to measure some terminating event into the
->> SHA-1 banks instead?
+Hi Reinette,
+
+On Thu, May 11, 2023 at 11:37=E2=80=AFPM Reinette Chatre
+<reinette.chatre@intel.com> wrote:
+> On 4/21/2023 7:17 AM, Peter Newman wrote:
+> > Implement resctrl_mbm_flush_cpu(), which collects a domain's current MB=
+M
+> > event counts into its current software RMID. The delta for each CPU is
+> > determined by tracking the previous event counts in per-CPU data.  The
+> > software byte counts reside in the arch-independent mbm_state
+> > structures.
 >
-> Unless we assert that SHA-1 events are unsupported, it seems a bit odd 
-> to force a policy on people who have both banks enabled. People with 
-> mixed fleets are potentially going to be dealing with SHA-1 measurements 
-> for a while yet, and while there's obviously a security benefit in using 
-> SHA-2 instead it'd be irritating to have to maintain two attestation 
-> policies.
+> Could you elaborate why the arch-independent mbm_state was chosen?
 
-Why?
+It largely had to do with how many soft RMIDs to implement. For our
+own needs, we were mainly concerned with getting back to the number of
+monitoring groups the hardware claimed to support, so there wasn't
+much internal motivation to support an unbounded number of soft RMIDs.
 
-If you have a mixed fleet then it's not too much asked to provide two
-data sets. On a TPM2 system you can enforce SHA-2 and only fallback to
-SHA-1 on TPM 1.2 hardware. No?
+However, breaking this artificial connection between supported HW and
+SW RMIDs to support arbitrarily-many monitoring groups could make the
+implementation conceptually cleaner. If you agree,  I would be happy
+to give it a try in the next series.
 
-Thanks,
 
-        tglx
+> > +     /* cache occupancy events are disabled in this mode */
+> > +     WARN_ON(!is_mbm_event(evtid));
+>
+> If this is hit it would trigger a lot, perhaps WARN_ON_ONCE?
+
+Ok
+
+>
+> > +
+> > +     if (evtid =3D=3D QOS_L3_MBM_LOCAL_EVENT_ID) {
+> > +             counter =3D &state->local;
+> > +     } else {
+> > +             WARN_ON(evtid !=3D QOS_L3_MBM_TOTAL_EVENT_ID);
+> > +             counter =3D &state->total;
+> > +     }
+> > +
+> > +     /*
+> > +      * Propagate the value read from the hw_rmid assigned to the curr=
+ent CPU
+> > +      * into the "soft" rmid associated with the current task or CPU.
+> > +      */
+> > +     m =3D get_mbm_state(d, soft_rmid, evtid);
+> > +     if (!m)
+> > +             return;
+> > +
+> > +     if (resctrl_arch_rmid_read(r, d, hw_rmid, evtid, &val))
+> > +             return;
+> > +
+>
+> This all seems unsafe to run without protection. The code relies on
+> the rdt_domain but a CPU hotplug event could result in the domain
+> disappearing underneath this code. The accesses to the data structures
+> also appear unsafe to me. Note that resctrl_arch_rmid_read() updates
+> the architectural MBM state and this same state can be updated concurrent=
+ly
+> in other code paths without appropriate locking.
+
+The domain is supposed to always be the current one, but I see that
+even a get_domain_from_cpu(smp_processor_id(), ...) call needs to walk
+a resource's domain list to find a matching entry, which could be
+concurrently modified when other domains are added/removed.
+
+Similarly, when soft RMIDs are enabled, it should not be possible to
+call resctrl_arch_rmid_read() outside of on the current CPU's HW RMID.
+
+I'll need to confirm whether it's safe to access the current CPU's
+rdt_domain in an atomic context. If it isn't, I assume I would have to
+arrange all of the state used during flush to be per-CPU.
+
+I expect the constraints on what data can be safely accessed where is
+going to constrain how the state is ultimately arranged, so I will
+need to settle this before I can come back to the other questions
+about mbm_state.
+
+>
+> > +     /* Count bandwidth after the first successful counter read. */
+> > +     if (counter->initialized) {
+> > +             /* Assume that mbm_update() will prevent double-overflows=
+. */
+> > +             if (val !=3D counter->prev_bytes)
+> > +                     atomic64_add(val - counter->prev_bytes,
+> > +                                  &m->soft_rmid_bytes);
+> > +     } else {
+> > +             counter->initialized =3D true;
+> > +     }
+> > +
+> > +     counter->prev_bytes =3D val;
+>
+> I notice a lot of similarities between the above and the software control=
+ler,
+> see mbm_bw_count().
+
+Thanks for pointing this out, I'll take a look.
+
+>
+> > +}
+> > +
+> > +/*
+> > + * Called from context switch code __resctrl_sched_in() when the curre=
+nt soft
+> > + * RMID is changing or before reporting event counts to user space.
+> > + */
+> > +void resctrl_mbm_flush_cpu(void)
+> > +{
+> > +     struct rdt_resource *r =3D &rdt_resources_all[RDT_RESOURCE_L3].r_=
+resctrl;
+> > +     int cpu =3D smp_processor_id();
+> > +     struct rdt_domain *d;
+> > +
+> > +     d =3D get_domain_from_cpu(cpu, r);
+> > +     if (!d)
+> > +             return;
+> > +
+> > +     if (is_mbm_local_enabled())
+> > +             __mbm_flush(QOS_L3_MBM_LOCAL_EVENT_ID, r, d);
+> > +     if (is_mbm_total_enabled())
+> > +             __mbm_flush(QOS_L3_MBM_TOTAL_EVENT_ID, r, d);
+> > +}
+>
+> This (potentially) adds two MSR writes and two MSR reads to what could po=
+ssibly
+> be quite slow MSRs if it was not designed to be used in context switch. D=
+o you
+> perhaps have data on how long these MSR reads/writes take on these system=
+s to get
+> an idea about the impact on context switch? I think this data should feat=
+ure
+> prominently in the changelog.
+
+I can probably use ftrace to determine the cost of an __rmid_read()
+call on a few implementations.
+
+To understand the overall impact to context switch, I can put together
+a scenario where I can control whether the context switches being
+measured result in change of soft RMID to prevent the data from being
+diluted by non-flushing switches.
+
+
+Thank you for looking over these changes!
+
+-Peter
