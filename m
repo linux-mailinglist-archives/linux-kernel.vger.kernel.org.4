@@ -2,203 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3467B700672
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:14:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE94700674
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:14:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241044AbjELLO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 07:14:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39764 "EHLO
+        id S241050AbjELLO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 07:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241036AbjELLOY (ORCPT
+        with ESMTP id S241028AbjELLO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 07:14:24 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9220311B6C
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:14:21 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bc4ba28cbso17337986a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:14:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fairphone.com; s=fair; t=1683890060; x=1686482060;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ubvb9p88+qXd6VOrp401GthxX4aOEOtnz4kgi/kUzHM=;
-        b=0DxQHN51nTkhDMihJi78b3ohzJMoM2rXRuga1g6tw0P6qNiVS4sVaDavvwMIT5/iJ0
-         Gyd4AtWdLZ5WJxMYmdxWl1sgVyeT/fA1AVb4pnZesPs4GAjkzKCCdzj13wDF3ZGCLXgP
-         /cwdnqPJKz2mPmZYNAhyABgUXcoDYYThXQVYyJUox8JCl4sX4QDb29r863JZZN2x5CeK
-         RKkhhEXl7XohTbmdb9Cms9xaWPK4UYp4HK4gfhE8VTjVlxxug2tdQhjIM10LhFv5XJkL
-         XI+ANWqOR1T7qPIYvtmfC7JKuEzDCWvGXQ5LA0LBl7zQmc0N7GhgzmlhRA3//yPTDNA3
-         znnw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683890060; x=1686482060;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=ubvb9p88+qXd6VOrp401GthxX4aOEOtnz4kgi/kUzHM=;
-        b=XuYdF0Ei+MoWdx5SiDLEBSn1f5fxZbgqQ/naW31Q8Q98oBoC1mzRIofaIZUyh/kfpK
-         aiiXZUVeEJclMh3OvGUiStdsgVsFj7DJOVuYwsyCil3UWp9OkJqMUd2LAfMkYe7PXIEr
-         g5QL/pJoG0JWHHKN+jmX+dXIottHt9BZRV+hlUZi0oaUl2xA9YsVqJh5p4hKTd7phpDr
-         uEK0pFTjYB2V2AGvHHXzzgFBarO6P8aYRJxHHjOgmSkSlfayjXoStsNfUM9DuqT116rN
-         ITct9lH4dSH29BCIXBa/3QErv6jJ4NdT3RT6c2B9M0hR5GAQStRvpAGOanYfZDW5Qxrl
-         r7xg==
-X-Gm-Message-State: AC+VfDwdNlUPiGPseAyY6EBhftGQY79ijsnDRd7iraePyrGEFLGWuWa8
-        mM+qjy/jVl1YR3GgPWuizYVWOg==
-X-Google-Smtp-Source: ACHHUZ52Czgk88thyOAzAK6r5gc3rGC6RgqVtFaULcxPliXgWW8mW3g/7ugZKJeeCj8A5U/8Lh8yPw==
-X-Received: by 2002:a17:907:a0e:b0:94e:e6b9:fef2 with SMTP id bb14-20020a1709070a0e00b0094ee6b9fef2mr20395577ejc.67.1683890060020;
-        Fri, 12 May 2023 04:14:20 -0700 (PDT)
-Received: from localhost (144-178-202-138.static.ef-service.nl. [144.178.202.138])
-        by smtp.gmail.com with ESMTPSA id l21-20020a1709062a9500b00969f44bbef3sm4734097eje.11.2023.05.12.04.14.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 04:14:19 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 12 May 2023 13:14:18 +0200
-Message-Id: <CSK97HK2XBSR.1Q5K7TUE55HH7@otso>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        "Balakrishna Godavarthi" <bgodavar@codeaurora.org>,
-        "Rocky Liao" <rjliao@codeaurora.org>,
-        "Marcel Holtmann" <marcel@holtmann.org>,
-        "Johan Hedberg" <johan.hedberg@gmail.com>,
-        "Luiz Augusto von Dentz" <luiz.dentz@gmail.com>,
-        "Andy Gross" <agross@kernel.org>,
-        "Bjorn Andersson" <andersson@kernel.org>,
-        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
-        <~postmarketos/upstreaming@lists.sr.ht>,
-        <phone-devel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-bluetooth@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>
-Subject: Re: [PATCH RFC 2/4] Bluetooth: btqca: Add WCN3988 support
-From:   "Luca Weiss" <luca.weiss@fairphone.com>
-To:     "Simon Horman" <simon.horman@corigine.com>
-X-Mailer: aerc 0.15.1
-References: <20230421-fp4-bluetooth-v1-0-0430e3a7e0a2@fairphone.com>
- <20230421-fp4-bluetooth-v1-2-0430e3a7e0a2@fairphone.com>
- <ZE+6e7ZxJ2s9DHI1@corigine.com>
-In-Reply-To: <ZE+6e7ZxJ2s9DHI1@corigine.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 12 May 2023 07:14:27 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 237D2120B5
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:14:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683890066; x=1715426066;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=b2bSeUNs7PpWjC5QOLRCXQ3B+M8q/ixInf2CByxcbkc=;
+  b=U91Ynp/5Lb0nHj2X1c/O6nvQx/KaIdRh8xkMxAaG52WLt1c8h/WwjzMy
+   SxzpXki5m1ZUljcr82cLlZ6st3ITrBkyLBnL6foOesaEzbJBrflpR1b08
+   myficAyS8BqOpcChnz5ySNCRifgtGP2G3FGxOn7+uQUXrYd9izg3QUk37
+   yXm4d4GNgL09l5GYmuvREHtygs5j6hxUY+L0tGhmzzPcL10B4mZhcHhup
+   L9PFfF6qsagPUITGsUG08nEVUmTUj+4/YXuqf3V7dMoIh9440ehMYE1Tw
+   b669dTnyHw6T8PWh/IqRXFrf9G3++uVd5ygJg5GbqwbOI4eBnUFe/MJv6
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="378900272"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="378900272"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 04:14:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="730785709"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="730785709"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga008.jf.intel.com with ESMTP; 12 May 2023 04:14:22 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pxQj5-0004b6-3D;
+        Fri, 12 May 2023 14:14:19 +0300
+Date:   Fri, 12 May 2023 14:14:19 +0300
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Lucas De Marchi <lucas.demarchi@intel.com>
+Cc:     intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Kevin Brodsky <kevin.brodsky@arm.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>
+Subject: Re: [PATCH 2/3] linux/bits.h: Add fixed-width GENMASK and BIT macros
+Message-ID: <ZF4fi5B7PPlgZBOI@smile.fi.intel.com>
+References: <20230509051403.2748545-1-lucas.demarchi@intel.com>
+ <20230509051403.2748545-3-lucas.demarchi@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230509051403.2748545-3-lucas.demarchi@intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Simon,
+On Mon, May 08, 2023 at 10:14:02PM -0700, Lucas De Marchi wrote:
+> Add GENMASK_U32(), GENMASK_U16() and GENMASK_U8()  macros to create
+> masks for fixed-width types and also the corresponding BIT_U32(),
+> BIT_U16() and BIT_U8().
 
-On Mon May 1, 2023 at 3:11 PM CEST, Simon Horman wrote:
-> On Fri, Apr 21, 2023 at 04:11:39PM +0200, Luca Weiss wrote:
-> > Add support for the Bluetooth chip codenamed APACHE which is part of
-> > WCN3988.
-> >=20
-> > The firmware for this chip has a slightly different naming scheme
-> > compared to most others. For ROM Version 0x0200 we need to use
-> > apbtfw10.tlv + apnv10.bin and for ROM version 0x201 apbtfw11.tlv +
-> > apnv11.bin
-> >=20
-> > Signed-off-by: Luca Weiss <luca.weiss@fairphone.com>
-> > ---
-> >  drivers/bluetooth/btqca.c   | 13 +++++++++++--
-> >  drivers/bluetooth/btqca.h   | 12 ++++++++++--
-> >  drivers/bluetooth/hci_qca.c | 12 ++++++++++++
-> >  3 files changed, 33 insertions(+), 4 deletions(-)
-> >=20
-> > diff --git a/drivers/bluetooth/btqca.c b/drivers/bluetooth/btqca.c
-> > index fd0941fe8608..3ee1ef88a640 100644
-> > --- a/drivers/bluetooth/btqca.c
-> > +++ b/drivers/bluetooth/btqca.c
-> > @@ -594,14 +594,20 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t =
-baudrate,
-> >  	/* Firmware files to download are based on ROM version.
-> >  	 * ROM version is derived from last two bytes of soc_ver.
-> >  	 */
-> > -	rom_ver =3D ((soc_ver & 0x00000f00) >> 0x04) | (soc_ver & 0x0000000f)=
-;
-> > +	if (soc_type =3D=3D QCA_WCN3988)
-> > +		rom_ver =3D ((soc_ver & 0x00000f00) >> 0x05) | (soc_ver & 0x0000000f=
-);
-> > +	else
-> > +		rom_ver =3D ((soc_ver & 0x00000f00) >> 0x04) | (soc_ver & 0x0000000f=
-);
->
-> Hi Luca,
->
-> perhaps it's just me. But I was wondering if this can be improved on a li=
-ttle.
->
-> * Move the common portion outside of the conditional
-> * And also, I think it's normal to use decimal for shift values.
->
-> e.g.
-> 	unsigned shift;
-> 	...
->
-> 	shift =3D soc_type =3D=3D QCA_WCN3988 ? 5 : 4;
-> 	rom_ver =3D ((soc_ver & 0x00000f00) >> shift) | (soc_ver & 0x0000000f);
->
-> Using some helpers such as GENMASK and FIELD_PREP might also be nice.
+Why?
 
-While I'm not opposed to the idea, I'm not sure it's worth making
-beautiful macros for this since - to my eyes - how the mapping of
-soc_ver to firmware name works is rather obscure since the sources from
-Qualcomm just have a static lookup table of soc_ver to firmware name so
-doing this dynamically like here is different.
+> All of those depend on a new "U" suffix added to the integer constant.
+> Due to naming clashes it's better to call the macro U32. Since C doesn't
+> have a proper suffix for short and char types, the U16 and U18 variants
+> just use U32 with one additional check in the BIT_* macros to make
+> sure the compiler gives an error when the those types overflow.
+> The BIT_U16() and BIT_U8() need the help of GENMASK_INPUT_CHECK(),
+> as otherwise they would allow an invalid bit to be passed. Hence
+> implement them in include/linux/bits.h rather than together with
+> the other BIT* variants.
 
-And I haven't looked at other chips that are covered there to see if
-there's a pattern to this, for the most part it seems the original
-formula works for most chips and the one I added works for WCN3988 (and
-the other "APACHE" chips, whatever they are).
+So, we have _Generic() in case you still wish to implement this.
 
-If a third way is added then I would say for sure this line should be
-made nicer but for now I think it's easier to keep this as I sent it
-because we don't know what the future will hold.
+-- 
+With Best Regards,
+Andy Shevchenko
 
->
-> > =20
-> >  	if (soc_type =3D=3D QCA_WCN6750)
-> >  		qca_send_patch_config_cmd(hdev);
-> > =20
-> >  	/* Download rampatch file */
-> >  	config.type =3D TLV_TYPE_PATCH;
-> > -	if (qca_is_wcn399x(soc_type)) {
-> > +	if (soc_type =3D=3D QCA_WCN3988) {
-> > +		snprintf(config.fwname, sizeof(config.fwname),
-> > +			 "qca/apbtfw%02x.tlv", rom_ver);
-> > +	} else if (qca_is_wcn399x(soc_type)) {
-> >  		snprintf(config.fwname, sizeof(config.fwname),
-> >  			 "qca/crbtfw%02x.tlv", rom_ver);
-> >  	} else if (soc_type =3D=3D QCA_QCA6390) {
-> > @@ -636,6 +642,9 @@ int qca_uart_setup(struct hci_dev *hdev, uint8_t ba=
-udrate,
-> >  	if (firmware_name)
-> >  		snprintf(config.fwname, sizeof(config.fwname),
-> >  			 "qca/%s", firmware_name);
-> > +	else if (soc_type =3D=3D QCA_WCN3988)
-> > +		snprintf(config.fwname, sizeof(config.fwname),
-> > +			 "qca/apnv%02x.bin", rom_ver);
-> >  	else if (qca_is_wcn399x(soc_type)) {
-> >  		if (ver.soc_id =3D=3D QCA_WCN3991_SOC_ID) {
->
-> Not strictly related to this patch, but while reviewing this I noticed th=
-at
-> ver.soc_id is __le32 but QCA_WCN3991_SOC_ID is in host byteorder.
->
-> Perhaps a cpu_to_le32() or le32_to_cpu() call is in order here?
-
-Good catch, as you've seen I sent a patch separately to fix that. :)
-
-Regards
-Luca
-
->
-> >  			snprintf(config.fwname, sizeof(config.fwname),
->
-> ...
 
