@@ -2,146 +2,537 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2A7F7005E7
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:46:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 675407005F6
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:48:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240725AbjELKqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:46:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45554 "EHLO
+        id S240498AbjELKs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 06:48:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240831AbjELKq3 (ORCPT
+        with ESMTP id S240694AbjELKsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:46:29 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2875C10E6D;
-        Fri, 12 May 2023 03:46:26 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-3075e802738so8875904f8f.1;
-        Fri, 12 May 2023 03:46:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683888384; x=1686480384;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oo67O9FRX0GyvAWrdRm6agPjzPmEBmkG90/e6PxM5KQ=;
-        b=JCRV1/NQyGX6dw30BOLJmllahdmyGUPU53QIi9FLiR5Vfnxd/uxH57HFPSk2aiYmXs
-         Lwb7Qy3ApHZfdD8luXPgw+oPKlxgc2wRL1wd92LiLKvvrCJe9INCIriCfJXnWkAO19l/
-         kasDE6ZhNNTv8R8qVQhXsVjD+0Pf0CBGWWOyhOeIW7RLZnfeBxOiGNtz0pqqUFgqfY0l
-         J0JW80xxDmkPygm6LCo7LzDgPQOnKoFh35Rj3+iSTA9CtTrnMcqwV9YNV9RmRfVcP86H
-         /nCUaDxSjynHnQx/rk7tXbMkQMzkDE3L0xn8uZCFZH9ojCzgZQdUT8WX4RksSCGlQtKp
-         DCgw==
+        Fri, 12 May 2023 06:48:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB9E419B4
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:47:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683888451;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=riIz/mdmgBf7go86AOXjeLguHwLri3Q8p4giCirS1hc=;
+        b=ZDQhSXPH1iyy1+r7vk/cghp+s/6EvHQvCfTPf7WIDICR5WuWJZXuNY7B21qV2G5XGo4rwq
+        pq2CyU62JrIQa34IRqTSmZ5+EfOMdv9zVGEwg25f2NUaBf7bRyZ/VVYiuz22RryTxTcCrF
+        Um0f6aLZHmBywMkyl+x2tYN8MUaKa88=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-10-Y4_Te7oVOMeo5DTkD-O8Lw-1; Fri, 12 May 2023 06:47:28 -0400
+X-MC-Unique: Y4_Te7oVOMeo5DTkD-O8Lw-1
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-307cea53cf4so1062101f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:47:28 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683888384; x=1686480384;
-        h=in-reply-to:references:to:from:subject:cc:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=oo67O9FRX0GyvAWrdRm6agPjzPmEBmkG90/e6PxM5KQ=;
-        b=S1eV9H5/I6w8K+xYOxztiHrGdb9mZE8XoXwhcIm5nlYVi5x7gEbO37KxijoUBLxrl3
-         iFC0nS0gCMYQC+PrA2MIcWgWIx8wBKg1wMsfP1wIozoOcJNjzCypmXNAaN167AxfwrG1
-         Yyr2y0f+cOQdW6JD7/CVnviSLr34U+5vi9yhu0Awea9FQvNo415O0jroEXRUuvlKzaAA
-         SWfiOuPUQFejsNyqUCL2bW3zMkdFNWZPnl3FRjDmqC80+MR4BppTm5qjDDBFiy11SeO8
-         9DC8+NLibWpjGtQwO0oiOtyuEFCwjkHdcV/Iha2qMCutlmiofViVfKEEQGU99D2mPxGr
-         HcWw==
-X-Gm-Message-State: AC+VfDymSPqGariRpYJkLgnBtHIdQnHTAgtFpCkk3xR0IsCtngxrW13L
-        nNrldsNYJwUDv+jj9663LdE=
-X-Google-Smtp-Source: ACHHUZ7cQ6lAGWPK6qsZqTOzReZDoPCdV311+gW5FWzcfuzQiOK30bhW8w9cTIRqHdDCML34gprPCg==
-X-Received: by 2002:a5d:5011:0:b0:307:8a39:5568 with SMTP id e17-20020a5d5011000000b003078a395568mr17093589wrt.7.1683888384189;
-        Fri, 12 May 2023 03:46:24 -0700 (PDT)
-Received: from localhost ([146.70.133.78])
-        by smtp.gmail.com with ESMTPSA id f12-20020a7bc8cc000000b003f4e4b5713esm5650587wml.37.2023.05.12.03.46.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 03:46:23 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 12 May 2023 12:46:21 +0200
-Message-Id: <CSK8M39MQL2C.3S7JO031H0BA2@vincent-arch>
-Cc:     <linux-pci@vger.kernel.org>, <robh@kernel.org>, <heiko@sntech.de>,
-        <kw@linux.com>, <shawn.lin@rock-chips.com>,
-        <linux-kernel@vger.kernel.org>, <lgirdwood@gmail.com>,
-        <linux-rockchip@lists.infradead.org>, <broonie@kernel.org>,
-        <bhelgaas@google.com>,
-        <linux-kernel-mentees@lists.linuxfoundation.org>,
-        <lpieralisi@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-        "Dan Johansen" <strit@manjaro.org>
-Subject: Re: [PATCH v1] drivers: pci: introduce configurable delay for
- Rockchip PCIe bus scan
-From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
-To:     "Peter Geis" <pgwipeout@gmail.com>,
-        "Bjorn Helgaas" <helgaas@kernel.org>
-X-Mailer: aerc 0.15.1
-References: <CAMdYzYp6=mYSoUHN3TEXVSMbRt1HpRm0X_4RMez09V0XzQewaw@mail.gmail.com> <ZFwC/seTfSoaLn0v@bhelgaas> <CAMdYzYoa8dhmBx5MUG0yBPwVVXPXHrYNnR0QvKHXvV=JaKuMfw@mail.gmail.com>
-In-Reply-To: <CAMdYzYoa8dhmBx5MUG0yBPwVVXPXHrYNnR0QvKHXvV=JaKuMfw@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1683888447; x=1686480447;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=riIz/mdmgBf7go86AOXjeLguHwLri3Q8p4giCirS1hc=;
+        b=AjP6C2R3p3zoR8oc95BK0HmYkLWXzD9KZzDxSOjcw7AU9PhAKjkd0T4W9oXViWEp+a
+         ubvoAWve3IlDmLXayKAOnv1aSOQ1OjowypNuFZYg7fCbp9+jybReuv4zYJBvThx0Y9pZ
+         8iuoIVvrHshCPajMzAul4izbk0KLqvDxvLZApbn6oLKpc8MlcV1lSiwPJtcnj/XrhMKS
+         bg7SYR0TMBhdzVUl3GmuYOjLcRFZGkVjaXcNMe2VBywyOsfnGhcgQiJjgQRosnXjFDIR
+         oUk4y6HIO4IFkkTvKYTTdMOp3ac2hl11YHKSS7rrpaLesZZiFF7qGmswdCyoVsoeabxD
+         UztQ==
+X-Gm-Message-State: AC+VfDzLY25gsBlGFY9A4aeWgx/3Lf32vFzcnwrD7kRxV2v/nOUhYlzK
+        WyYXZrn58C5cRMEvfTWTjgQ5Xk0birIViVhmyeTIU+oOeRqNezNHD2cmniTZzbxxTxnUtaoPWgX
+        Ss2O6/qQ1rRL2Lai7wDsOG9ci
+X-Received: by 2002:a5d:658c:0:b0:306:4442:4c7a with SMTP id q12-20020a5d658c000000b0030644424c7amr16080542wru.33.1683888446950;
+        Fri, 12 May 2023 03:47:26 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ4TOwkWC4FjA/8zdmyTp7sSjjk70W8G4KNRP13UW0Djf/bttuf0wZZlrdcWBR28gPc/zM7jWA==
+X-Received: by 2002:a5d:658c:0:b0:306:4442:4c7a with SMTP id q12-20020a5d658c000000b0030644424c7amr16080525wru.33.1683888446512;
+        Fri, 12 May 2023 03:47:26 -0700 (PDT)
+Received: from redhat.com ([31.187.78.61])
+        by smtp.gmail.com with ESMTPSA id e15-20020a5d594f000000b0030771c6e443sm22873683wri.42.2023.05.12.03.47.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 03:47:25 -0700 (PDT)
+Date:   Fri, 12 May 2023 06:47:22 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     zhenwei pi <pizhenwei@bytedance.com>
+Cc:     stefanha@redhat.com, jasowang@redhat.com,
+        xuanzhuo@linux.alibaba.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] tools/virtio: implement virtqueue in test
+Message-ID: <20230512064628-mutt-send-email-mst@kernel.org>
+References: <20230512094618.433707-1-pizhenwei@bytedance.com>
+ <20230512094618.433707-3-pizhenwei@bytedance.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512094618.433707-3-pizhenwei@bytedance.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > > Many years ago we ran that issue to ground and with Robin Murphy's
-> > > help we found that while it's possible to gracefully handle that
-> > > condition it required hijacking the entire arm64 error handling
-> > > routine. Not exactly scalable for just one SoC.
-> >
-> > Do you have a pointer to that discussion?  The URL might save
-> > repeating the whole exercise and could be useful for the commit log
-> > when we try to resolve this.
->
-> The link to the patch email is here, the full discussion is pretty
-> easy to follow:
-> https://lore.kernel.org/linux-pci/2a381384-9d47-a7e2-679c-780950cd862d@ro=
-ck-chips.com/
-> Also:
-> https://lore.kernel.org/linux-rockchip/1f180d4b-9e5d-c829-555b-c975094036=
-1e@web.de/T/#m9c9d4a28a0d3aa064864f188b8ee3b16ce107aff
+On Fri, May 12, 2023 at 05:46:18PM +0800, zhenwei pi wrote:
+> virtqueue related functions has been removed from virtio_ring.c since
+> commit("virtio: abstract virtqueue related methods"), rather than
+> compiling with drivers/virtio/virtio.c, implement virtqueue functions
+> here.
+> 
+> Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
 
+Why? Costs us 400 LOC to maintain this, and will often be out of date.
 
-I have some concerns about the patch proposed in the email that you share. =
-It seems like=20
-it is quite extensive (code that is it not just related to the HW) just to =
-fix a hardware=20
-issue. I would have expected the code to fix the bug to be integrated into =
-the driver itself,=20
-so that if the hardware will died at some point in the future, I would expe=
-ct that also the=20
-buddy code will died with it.
+> ---
+>  tools/virtio/Makefile       |   4 +-
+>  tools/virtio/linux/virtio.h |  30 +++
+>  tools/virtio/virtqueue.c    | 367 ++++++++++++++++++++++++++++++++++++
+>  3 files changed, 399 insertions(+), 2 deletions(-)
+>  create mode 100644 tools/virtio/virtqueue.c
+> 
+> diff --git a/tools/virtio/Makefile b/tools/virtio/Makefile
+> index 7b7139d97d74..a98d409aae7c 100644
+> --- a/tools/virtio/Makefile
+> +++ b/tools/virtio/Makefile
+> @@ -1,8 +1,8 @@
+>  # SPDX-License-Identifier: GPL-2.0
+>  all: test mod
+>  test: virtio_test vringh_test
+> -virtio_test: virtio_ring.o virtio_test.o
+> -vringh_test: vringh_test.o vringh.o virtio_ring.o
+> +virtio_test: virtio_ring.o virtio_test.o virtqueue.o
+> +vringh_test: vringh_test.o vringh.o virtio_ring.o virtqueue.o
+>  
+>  CFLAGS += -g -O2 -Werror -Wno-maybe-uninitialized -Wall -I. -I../include/ -I ../../usr/include/ -Wno-pointer-sign -fno-strict-overflow -fno-strict-aliasing -fno-common -MMD -U_FORTIFY_SOURCE -include ../../include/linux/kconfig.h -mfunction-return=thunk -fcf-protection=none -mindirect-branch-register
+>  CFLAGS += -pthread
+> diff --git a/tools/virtio/linux/virtio.h b/tools/virtio/linux/virtio.h
+> index 5d3440f474dd..cb27a1105552 100644
+> --- a/tools/virtio/linux/virtio.h
+> +++ b/tools/virtio/linux/virtio.h
+> @@ -17,6 +17,35 @@ struct virtio_device {
+>  	const struct virtio_config_ops *config;
+>  };
+>  
+> +struct virtqueue;
+> +
+> +/**
+> + * struct virtqueue_ops - abstract operations for a virtqueue.
+> + *
+> + * Descriptions of each field see the comments in virtio.c
+> + */
+> +struct virtqueue_ops {
+> +	int (*add_sgs)(struct virtqueue *vq, struct scatterlist *sgs[],
+> +		       unsigned int total_sg,
+> +		       unsigned int out_sgs, unsigned int in_sgs,
+> +		       void *data, void *ctx, gfp_t gfp);
+> +	bool (*kick_prepare)(struct virtqueue *vq);
+> +	bool (*notify)(struct virtqueue *vq);
+> +	unsigned int (*enable_cb_prepare)(struct virtqueue *vq);
+> +	bool (*enable_cb)(struct virtqueue *vq);
+> +	bool (*enable_cb_delayed)(struct virtqueue *vq);
+> +	void (*disable_cb)(struct virtqueue *vq);
+> +	bool (*poll)(struct virtqueue *vq, unsigned int idx);
+> +	void *(*get_buf_ctx)(struct virtqueue *vq, unsigned int *len, void **ctx);
+> +	void *(*detach_unused_buf)(struct virtqueue *vq);
+> +	unsigned int (*get_vring_size)(const struct virtqueue *vq);
+> +	int (*resize)(struct virtqueue *vq, u32 num,
+> +		      void (*recycle)(struct virtqueue *vq, void *buf));
+> +	void (*__break)(struct virtqueue *vq);
+> +	void (*__unbreak)(struct virtqueue *vq);
+> +	bool (*is_broken)(const struct virtqueue *vq);
+> +};
+> +
+>  struct virtqueue {
+>  	struct list_head list;
+>  	void (*callback)(struct virtqueue *vq);
+> @@ -27,6 +56,7 @@ struct virtqueue {
+>  	unsigned int num_max;
+>  	void *priv;
+>  	bool reset;
+> +	struct virtqueue_ops *ops;
+>  };
+>  
+>  /* Interfaces exported by virtio_ring. */
+> diff --git a/tools/virtio/virtqueue.c b/tools/virtio/virtqueue.c
+> new file mode 100644
+> index 000000000000..1f86a414f628
+> --- /dev/null
+> +++ b/tools/virtio/virtqueue.c
+> @@ -0,0 +1,367 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +#include <linux/export.h>
+> +#include <linux/virtio.h>
+> +#include <linux/virtio_ring.h>
+> +
+> +/**
+> + * virtqueue_add_sgs - expose buffers to other end
+> + * @vq: the struct virtqueue we're talking about.
+> + * @sgs: array of terminated scatterlists.
+> + * @out_sgs: the number of scatterlists readable by other side
+> + * @in_sgs: the number of scatterlists which are writable (after readable ones)
+> + * @data: the token identifying the buffer.
+> + * @gfp: how to do memory allocations (if necessary).
+> + *
+> + * Caller must ensure we don't call this with other virtqueue operations
+> + * at the same time (except where noted).
+> + *
+> + * Returns zero or a negative error (ie. ENOSPC, ENOMEM, EIO).
+> + */
+> +int virtqueue_add_sgs(struct virtqueue *vq, struct scatterlist *sgs[],
+> +		      unsigned int out_sgs, unsigned int in_sgs,
+> +		      void *data, gfp_t gfp)
+> +{
+> +	unsigned int i, total_sg = 0;
+> +
+> +	/* Count them first. */
+> +	for (i = 0; i < out_sgs + in_sgs; i++) {
+> +		struct scatterlist *sg;
+> +
+> +		for (sg = sgs[i]; sg; sg = sg_next(sg))
+> +			total_sg++;
+> +	}
+> +	return vq->ops->add_sgs(vq, sgs, total_sg, out_sgs, in_sgs,
+> +				data, NULL, gfp);
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_add_sgs);
+> +
+> +/**
+> + * virtqueue_add_outbuf - expose output buffers to other end
+> + * @vq: the struct virtqueue we're talking about.
+> + * @sg: scatterlist (must be well-formed and terminated!)
+> + * @num: the number of entries in @sg readable by other side
+> + * @data: the token identifying the buffer.
+> + * @gfp: how to do memory allocations (if necessary).
+> + *
+> + * Caller must ensure we don't call this with other virtqueue operations
+> + * at the same time (except where noted).
+> + *
+> + * Returns zero or a negative error (ie. ENOSPC, ENOMEM, EIO).
+> + */
+> +int virtqueue_add_outbuf(struct virtqueue *vq, struct scatterlist *sg,
+> +			 unsigned int num, void *data, gfp_t gfp)
+> +{
+> +	return vq->ops->add_sgs(vq, &sg, num, 1, 0, data, NULL, gfp);
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_add_outbuf);
+> +
+> +/**
+> + * virtqueue_add_inbuf - expose input buffers to other end
+> + * @vq: the struct virtqueue we're talking about.
+> + * @sg: scatterlist (must be well-formed and terminated!)
+> + * @num: the number of entries in @sg writable by other side
+> + * @data: the token identifying the buffer.
+> + * @gfp: how to do memory allocations (if necessary).
+> + *
+> + * Caller must ensure we don't call this with other virtqueue operations
+> + * at the same time (except where noted).
+> + *
+> + * Returns zero or a negative error (ie. ENOSPC, ENOMEM, EIO).
+> + */
+> +int virtqueue_add_inbuf(struct virtqueue *vq, struct scatterlist *sg,
+> +			unsigned int num, void *data, gfp_t gfp)
+> +{
+> +	return vq->ops->add_sgs(vq, &sg, num, 0, 1, data, NULL, gfp);
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_add_inbuf);
+> +
+> +/**
+> + * virtqueue_add_inbuf_ctx - expose input buffers to other end
+> + * @vq: the struct virtqueue we're talking about.
+> + * @sg: scatterlist (must be well-formed and terminated!)
+> + * @num: the number of entries in @sg writable by other side
+> + * @data: the token identifying the buffer.
+> + * @ctx: extra context for the token
+> + * @gfp: how to do memory allocations (if necessary).
+> + *
+> + * Caller must ensure we don't call this with other virtqueue operations
+> + * at the same time (except where noted).
+> + *
+> + * Returns zero or a negative error (ie. ENOSPC, ENOMEM, EIO).
+> + */
+> +int virtqueue_add_inbuf_ctx(struct virtqueue *vq, struct scatterlist *sg,
+> +			    unsigned int num, void *data, void *ctx, gfp_t gfp)
+> +{
+> +	return vq->ops->add_sgs(vq, &sg, num, 0, 1, data, ctx, gfp);
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_add_inbuf_ctx);
+> +
+> +/**
+> + * virtqueue_kick_prepare - first half of split virtqueue_kick call.
+> + * @vq: the struct virtqueue
+> + *
+> + * Instead of virtqueue_kick(), you can do:
+> + *	if (virtqueue_kick_prepare(vq))
+> + *		virtqueue_notify(vq);
+> + *
+> + * This is sometimes useful because the virtqueue_kick_prepare() needs
+> + * to be serialized, but the actual virtqueue_notify() call does not.
+> + */
+> +bool virtqueue_kick_prepare(struct virtqueue *vq)
+> +{
+> +	return vq->ops->kick_prepare(vq);
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_kick_prepare);
+> +
+> +/**
+> + * virtqueue_notify - second half of split virtqueue_kick call.
+> + * @vq: the struct virtqueue
+> + *
+> + * This does not need to be serialized.
+> + *
+> + * Returns false if host notify failed or queue is broken, otherwise true.
+> + */
+> +bool virtqueue_notify(struct virtqueue *vq)
+> +{
+> +	return vq->ops->notify(vq);
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_notify);
+> +
+> +/**
+> + * virtqueue_kick - update after add_buf
+> + * @vq: the struct virtqueue
+> + *
+> + * After one or more virtqueue_add_* calls, invoke this to kick
+> + * the other side.
+> + *
+> + * Caller must ensure we don't call this with other virtqueue
+> + * operations at the same time (except where noted).
+> + *
+> + * Returns false if kick failed, otherwise true.
+> + */
+> +bool virtqueue_kick(struct virtqueue *vq)
+> +{
+> +	if (virtqueue_kick_prepare(vq))
+> +		return virtqueue_notify(vq);
+> +	return true;
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_kick);
+> +
+> +/**
+> + * virtqueue_enable_cb_prepare - restart callbacks after disable_cb
+> + * @vq: the struct virtqueue we're talking about.
+> + *
+> + * This re-enables callbacks; it returns current queue state
+> + * in an opaque unsigned value. This value should be later tested by
+> + * virtqueue_poll, to detect a possible race between the driver checking for
+> + * more work, and enabling callbacks.
+> + *
+> + * Caller must ensure we don't call this with other virtqueue
+> + * operations at the same time (except where noted).
+> + */
+> +unsigned int virtqueue_enable_cb_prepare(struct virtqueue *vq)
+> +{
+> +	return vq->ops->enable_cb_prepare(vq);
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_enable_cb_prepare);
+> +
+> +/**
+> + * virtqueue_enable_cb - restart callbacks after disable_cb.
+> + * @vq: the struct virtqueue we're talking about.
+> + *
+> + * This re-enables callbacks; it returns "false" if there are pending
+> + * buffers in the queue, to detect a possible race between the driver
+> + * checking for more work, and enabling callbacks.
+> + *
+> + * Caller must ensure we don't call this with other virtqueue
+> + * operations at the same time (except where noted).
+> + */
+> +bool virtqueue_enable_cb(struct virtqueue *vq)
+> +{
+> +	unsigned int val = vq->ops->enable_cb_prepare(vq);
+> +
+> +	return !vq->ops->poll(vq, val);
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_enable_cb);
+> +
+> +/**
+> + * virtqueue_enable_cb_delayed - restart callbacks after disable_cb.
+> + * @vq: the struct virtqueue we're talking about.
+> + *
+> + * This re-enables callbacks but hints to the other side to delay
+> + * interrupts until most of the available buffers have been processed;
+> + * it returns "false" if there are many pending buffers in the queue,
+> + * to detect a possible race between the driver checking for more work,
+> + * and enabling callbacks.
+> + *
+> + * Caller must ensure we don't call this with other virtqueue
+> + * operations at the same time (except where noted).
+> + */
+> +bool virtqueue_enable_cb_delayed(struct virtqueue *vq)
+> +{
+> +	return vq->ops->enable_cb_delayed(vq);
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_enable_cb_delayed);
+> +
+> +/**
+> + * virtqueue_disable_cb - disable callbacks
+> + * @vq: the struct virtqueue we're talking about.
+> + *
+> + * Note that this is not necessarily synchronous, hence unreliable and only
+> + * useful as an optimization.
+> + *
+> + * Unlike other operations, this need not be serialized.
+> + */
+> +void virtqueue_disable_cb(struct virtqueue *vq)
+> +{
+> +	vq->ops->disable_cb(vq);
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_disable_cb);
+> +
+> +/**
+> + * virtqueue_poll - query pending used buffers
+> + * @vq: the struct virtqueue we're talking about.
+> + * @last_used_idx: virtqueue state (from call to virtqueue_enable_cb_prepare).
+> + *
+> + * Returns "true" if there are pending used buffers in the queue.
+> + *
+> + * This does not need to be serialized.
+> + */
+> +bool virtqueue_poll(struct virtqueue *vq, unsigned int idx)
+> +{
+> +	return vq->ops->poll(vq, idx);
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_poll);
+> +
+> +/**
+> + * virtqueue_get_buf_ctx - get the next used buffer
+> + * @vq: the struct virtqueue we're talking about.
+> + * @len: the length written into the buffer
+> + * @ctx: extra context for the token
+> + *
+> + * If the device wrote data into the buffer, @len will be set to the
+> + * amount written.  This means you don't need to clear the buffer
+> + * beforehand to ensure there's no data leakage in the case of short
+> + * writes.
+> + *
+> + * Caller must ensure we don't call this with other virtqueue
+> + * operations at the same time (except where noted).
+> + *
+> + * Returns NULL if there are no used buffers, or the "data" token
+> + * handed to virtqueue_add_*().
+> + */
+> +void *virtqueue_get_buf_ctx(struct virtqueue *vq, unsigned int *len,
+> +			    void **ctx)
+> +{
+> +	return vq->ops->get_buf_ctx(vq, len, ctx);
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_get_buf_ctx);
+> +
+> +void *virtqueue_get_buf(struct virtqueue *vq, unsigned int *len)
+> +{
+> +	return vq->ops->get_buf_ctx(vq, len, NULL);
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_get_buf);
+> +
+> +/**
+> + * virtqueue_detach_unused_buf - detach first unused buffer
+> + * @vq: the struct virtqueue we're talking about.
+> + *
+> + * Returns NULL or the "data" token handed to virtqueue_add_*().
+> + * This is not valid on an active queue; it is useful for device
+> + * shutdown or the reset queue.
+> + */
+> +void *virtqueue_detach_unused_buf(struct virtqueue *vq)
+> +{
+> +	return vq->ops->detach_unused_buf(vq);
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_detach_unused_buf);
+> +
+> +/**
+> + * virtqueue_get_vring_size - return the size of the virtqueue's vring
+> + * @vq: the struct virtqueue containing the vring of interest.
+> + *
+> + * Returns the size of the vring.  This is mainly used for boasting to
+> + * userspace.  Unlike other operations, this need not be serialized.
+> + */
+> +unsigned int virtqueue_get_vring_size(const struct virtqueue *vq)
+> +{
+> +	return vq->ops->get_vring_size(vq);
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_get_vring_size);
+> +
+> +/**
+> + * virtqueue_resize - resize the vring of vq
+> + * @vq: the struct virtqueue we're talking about.
+> + * @num: new ring num
+> + * @recycle: callback for recycle the useless buffer
+> + *
+> + * When it is really necessary to create a new vring, it will set the current vq
+> + * into the reset state. Then call the passed callback to recycle the buffer
+> + * that is no longer used. Only after the new vring is successfully created, the
+> + * old vring will be released.
+> + *
+> + * Caller must ensure we don't call this with other virtqueue operations
+> + * at the same time (except where noted).
+> + *
+> + * Returns zero or a negative error.
+> + * 0: success.
+> + * -ENOMEM: Failed to allocate a new ring, fall back to the original ring size.
+> + *  vq can still work normally
+> + * -EBUSY: Failed to sync with device, vq may not work properly
+> + * -ENOENT: Transport or device not supported
+> + * -E2BIG/-EINVAL: num error
+> + * -EPERM: Operation not permitted
+> + *
+> + */
+> +int virtqueue_resize(struct virtqueue *vq, u32 num,
+> +		     void (*recycle)(struct virtqueue *vq, void *buf))
+> +{
+> +	if (vq->ops->resize)
+> +		return vq->ops->resize(vq, num, recycle);
+> +
+> +	return -ENOENT;
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_resize);
+> +
+> +bool virtqueue_is_broken(const struct virtqueue *vq)
+> +{
+> +	return vq->ops->is_broken(vq);
+> +}
+> +EXPORT_SYMBOL_GPL(virtqueue_is_broken);
+> +
+> +/*
+> + * This should prevent the device from being used, allowing drivers to
+> + * recover.  You may need to grab appropriate locks to flush.
+> + */
+> +void virtio_break_device(struct virtio_device *dev)
+> +{
+> +	struct virtqueue *vq;
+> +
+> +	spin_lock(&dev->vqs_list_lock);
+> +	list_for_each_entry(vq, &dev->vqs, list) {
+> +		vq->ops->__break(vq);
+> +	}
+> +	spin_unlock(&dev->vqs_list_lock);
+> +}
+> +EXPORT_SYMBOL_GPL(virtio_break_device);
+> +
+> +/*
+> + * This should allow the device to be used by the driver. You may
+> + * need to grab appropriate locks to flush the write to
+> + * vq->broken. This should only be used in some specific case e.g
+> + * (probing and restoring). This function should only be called by the
+> + * core, not directly by the driver.
+> + */
+> +void __virtio_unbreak_device(struct virtio_device *dev)
+> +{
+> +	struct virtqueue *vq;
+> +
+> +	spin_lock(&dev->vqs_list_lock);
+> +	list_for_each_entry(vq, &dev->vqs, list) {
+> +		vq->ops->__unbreak(vq);
+> +	}
+> +	spin_unlock(&dev->vqs_list_lock);
+> +}
+> +EXPORT_SYMBOL_GPL(__virtio_unbreak_device);
+> +
+> -- 
+> 2.20.1
 
-However, it is possible that I may have missed something in the patch,=20
-and my thoughts could be wrong.
-
-> >
-> > > The configurable waits allow us to program reasonable times for
-> > > 90% of the endpoints that come up in the normal amount of time, while
-> > > being able to adjust it for the other 10% that do not. Some require
-> > > multiple seconds before they return without error. Part of the reason
-> > > we don't want to hardcode the wait time is because the probe isn't
-> > > handled asynchronously, so the kernel appears to hang while waiting
-> > > for the timeout.
-> >
-> > Is there some way for users to figure out that they would need this
-> > property?  Or is it just "if your kernel panics on boot, try
-> > adding or increasing "bus-scan-delay-ms" in your DT?
->
-> There's a listing of tested cards at:
-> https://wiki.pine64.org/wiki/ROCKPro64_Hardware_compatibility
->
-> Most cards work fine that don't require a large BAR. PCIe switches are
-> completely dead without the above hack patch. Cards that lie in the
-> middle are ones that expect BIOS / EFI support to initialize, or ones
-> that have complex boot roms and don't initialize quickly.
-> But yes, it's unfortunately going to be "if you panic, increase the
-> delay" unless a more complete database of cards can be generated.
-
-This is really unfortunate because as mentioned in some previous emails,=20
-using sleep time slows down the kernel. Is there any way to tell the kernel=
-=20
-to tell the kernel "hey we need some more time here", or in computer scienc=
-e=20
-terms, load a driver asynchronously?
-
-Thanks.
-
-Vincent.
