@@ -2,152 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2CA72700509
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:15:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F2AF470050B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:15:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240396AbjELKPW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:15:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43894 "EHLO
+        id S240097AbjELKPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 06:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240321AbjELKPT (ORCPT
+        with ESMTP id S240509AbjELKPi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:15:19 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDD7106CC
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:14:56 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f42c865535so41932545e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:14:56 -0700 (PDT)
+        Fri, 12 May 2023 06:15:38 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C50083DC;
+        Fri, 12 May 2023 03:15:23 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f450815d0bso34299125e9.0;
+        Fri, 12 May 2023 03:15:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683886494; x=1686478494;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YHnhA3bsFZjXjI2KBvdNTkEA6cTI4PkTEh92A9BH1zM=;
-        b=S8PGo4cc5Tz3LuPdUzGu4UWFwpneiq8+NePyuExEpbZppz9MgmNbLXYf33dvKz0YLo
-         d4/qmKqyLjzw6a3BU2WKQvlqXn4gifQN24rDWez4wTBHJ2tapij7WUx7/4cvj6mF/M5b
-         ZB532RByd26rQWs4+HeLmm2+QloO6j/7mklzHVfrD4m+iRGkphjlUfGTX/bTlDqAZwwp
-         2ao3ae5gelXdnq99DEPoH2kEqq7TGn38vRmQprgTbA87YYp/8JoiwvleLwhOcvKQBy6O
-         j/godrhrygCcvOf8aX0UW2wMgNx4vQr0eOin1sGzJ07L7h+HnHohC8jMDV0Mve0tQ0MQ
-         LjEw==
+        d=gmail.com; s=20221208; t=1683886521; x=1686478521;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=RuCdgK342xaUwQZ9bEdkQrH7w9PMG+n2cBtPbMJhyNs=;
+        b=Xj6TOfNNbRUHBoDKz/x5f2lnRt9RCEtAThiGG67jFq60ZH1pHy76jlcaoQF/RjFjn1
+         CF+XcpBjIuoncOb39gObCNWiqbxj1SabmnEFuGh1d9WjqdKWQwvZm9fyLkz6YNmsmu1/
+         qALou3K0XZwyMjR4DBxcIeHmYCKfeVxcxIOA8kkvQjzgT7La4lf253yejcCPocw1C+NC
+         uzzzl6QhXqJE7gv06hEpuvciKylTpTNiMTslco9fobV6EKiu19FV882H+E/7nuSs4h7y
+         hk6EAEUHqinRRdELLAJImVCJd+kmD0fbh+9TGCqQDe+tjeElDcgy0IPj0G593W6ahr7x
+         3N+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683886494; x=1686478494;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YHnhA3bsFZjXjI2KBvdNTkEA6cTI4PkTEh92A9BH1zM=;
-        b=I0GjvSMIJGbVDPLdFZixxyHiozUu1f4zuFI3JhBGMz/E+dp1/5bXbSsXW6GDOB60Ay
-         0tW+V1+YZ9hTVsJeVH3v+ZCslvXBTwz4BWuvKWWMEL51G+rA/r6i0o+Kvi9r0CcRbIkY
-         I4RfQ4FeV4gA6dVWJIW+3mLFF/Ufw12q35UY4aGBwBBj6s/Etsg5NU5CSCkp/CxZRMBV
-         zxti5xWRgfDpm/cg+HrJ8UCo/CuBl76crA/hc60O7OMrHwTnEwoyDKs7rYJEnZVbpSTi
-         c4PXOB4TvotLKUTGU0DF1grlLFGNhS4Soz9SY85KhYXWUD6Pho1V+ge9NEI9YhvJI2Ye
-         JKvg==
-X-Gm-Message-State: AC+VfDxwB8OaWbNtrzrD7DKZxswSCisvQv8SW2FhrB3/2PFgRX0pCBVT
-        UrzXkgL3lB4/R683Za7lgEngEw==
-X-Google-Smtp-Source: ACHHUZ6SwFMkMNcp6yW+rNENGPX7CBBWtFxzW+G296zfPURSmofZ5GhZUA/Pxczsz5Ob23whxcz/rA==
-X-Received: by 2002:a05:6000:1191:b0:306:462a:b78d with SMTP id g17-20020a056000119100b00306462ab78dmr15388534wrx.53.1683886494530;
-        Fri, 12 May 2023 03:14:54 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id h8-20020a1ccc08000000b003f17eaae2c9sm28317794wmb.1.2023.05.12.03.14.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 03:14:53 -0700 (PDT)
-Message-ID: <68aa0f6d-db89-8e01-264d-95d3839fb648@linaro.org>
-Date:   Fri, 12 May 2023 11:14:51 +0100
+        d=1e100.net; s=20221208; t=1683886521; x=1686478521;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RuCdgK342xaUwQZ9bEdkQrH7w9PMG+n2cBtPbMJhyNs=;
+        b=RyOMZGzz3RiOdQNYwhzAgwnXPGqmVTxqtejR++HyIK/Rwz08ahWCbNk4LH/OkrYUip
+         JXsHf8N32WOIK0fbXPnXGDLkTo0cGdCgpDBoQsroYluCAE3Km0HsSkhvuBCM3rsqu7lX
+         NjGGAMGkacX7wCe7zY6EOj40Spa+0x+3vnPkzPTr07EDwOARqylLvB8QkBkCtL1IGzd5
+         Up5QGisSsVNTCZWJmWKSDrr0QqTHJIhbtG+ddy+CNNCPxjqN53WulKRTO9TfTeyDvIBy
+         pKZE1kTHkNL3vixmfvc4Y7PpIMtdIxXz5C5E09s6Upx1Tjpbu3Czb2zeCyzrJ2mFBw2J
+         MRcQ==
+X-Gm-Message-State: AC+VfDz3OTg8gjNcRdejn/BoeAwW0H1us+xZiw9CNjbXNqJhh65caUvi
+        hfoIqi2FX2qvVqKH3Bg5agd0tIfnjG2Msw==
+X-Google-Smtp-Source: ACHHUZ7WTfo0kI8boL1/5KTBFc5GcZeyUf/+fYCLuGrerAEaU0gBoRuOLycwW+wmAv70oKSxlIQMrQ==
+X-Received: by 2002:a1c:7712:0:b0:3f4:1dd9:e9e0 with SMTP id t18-20020a1c7712000000b003f41dd9e9e0mr14641577wmi.7.1683886521079;
+        Fri, 12 May 2023 03:15:21 -0700 (PDT)
+Received: from localhost.localdomain ([2a02:2f0a:b207:af00::b5e])
+        by smtp.gmail.com with ESMTPSA id g14-20020adff3ce000000b00300aee6c9cesm23130059wrp.20.2023.05.12.03.15.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 03:15:20 -0700 (PDT)
+From:   Alexandru Sorodoc <ealex95@gmail.com>
+To:     Corentin Chary <corentin.chary@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>
+Cc:     acpi4asus-user@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexandru Sorodoc <ealex95@gmail.com>
+Subject: [PATCH] platform/x86: asus-wmi: Ignore WMI events with codes 0x7B, 0xC0
+Date:   Fri, 12 May 2023 13:15:17 +0300
+Message-Id: <20230512101517.47416-1-ealex95@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH V2 1/3] dt-bindings: nvmem: brcm,nvram: add
- #nvmem-cell-cells for MACs
-Content-Language: en-US
-To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        bcm-kernel-feedback-list@broadcom.com,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>,
-        Rob Herring <robh@kernel.org>
-References: <20230421084312.27932-1-zajec5@gmail.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20230421084312.27932-1-zajec5@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On ASUS GU604V the key 0x7B is issued when the charger is connected or
+disconnected, and key 0xC0 is issued when an external display is
+connected or disconnected.
 
+This commit maps them to KE_IGNORE to slience kernel messages about
+unknown keys, such as:
 
-On 21/04/2023 09:43, Rafał Miłecki wrote:
-> From: Rafał Miłecki <rafal@milecki.pl>
-> 
-> Broadcom's NVRAM contains MACs for Ethernet interfaces. Those MACs are
-> usually base addresses that are also used for calculating other MACs.
-> 
-> For example if a router vendor decided to use gmac0 it most likely
-> programmed NVRAM of each unit with a proper "et0macaddr" value. That is
-> a base.
-> 
-> Ethernet interface is usually connected to switch port. Switch usually
-> includes few LAN ports and a WAN port. MAC of WAN port gets calculated
-> as relative address to the interface one. Offset varies depending on
-> device model.
-> 
-> Wireless MACs may also need to be calculated using relevant offsets.
-> 
-> To support all those scenarios let MAC NVMEM cells be referenced with an
-> index specifying MAC offset. Disallow additionalProperties while at it.
-> 
-> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> ---
+    kernel: asus_wmi: Unknown key code 0x7b
 
-Applied thanks,
+Signed-off-by: Alexandru Sorodoc <ealex95@gmail.com>
+---
+I'm not sure what those keys events actually mean. I assume they are
+some redundant notifications because no laptop functionality seems to
+depend on them.
 
---srini
-> V2: Add additionalProperties: false
-> ---
->   .../devicetree/bindings/nvmem/brcm,nvram.yaml     | 15 +++++++++++++++
->   1 file changed, 15 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-> index 36def7128fca..13412af7f046 100644
-> --- a/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-> +++ b/Documentation/devicetree/bindings/nvmem/brcm,nvram.yaml
-> @@ -36,14 +36,29 @@ properties:
->     et0macaddr:
->       type: object
->       description: First Ethernet interface's MAC address
-> +    properties:
-> +      "#nvmem-cell-cells":
-> +        description: The first argument is a MAC address offset.
-> +        const: 1
-> +    additionalProperties: false
->   
->     et1macaddr:
->       type: object
->       description: Second Ethernet interface's MAC address
-> +    properties:
-> +      "#nvmem-cell-cells":
-> +        description: The first argument is a MAC address offset.
-> +        const: 1
-> +    additionalProperties: false
->   
->     et2macaddr:
->       type: object
->       description: Third Ethernet interface's MAC address
-> +    properties:
-> +      "#nvmem-cell-cells":
-> +        description: The first argument is a MAC address offset.
-> +        const: 1
-> +    additionalProperties: false
->   
->   unevaluatedProperties: false
->   
+If there is anything I can check or investigate please let me know.
+
+Thanks,
+Alex
+
+ drivers/platform/x86/asus-nb-wmi.c | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/drivers/platform/x86/asus-nb-wmi.c b/drivers/platform/x86/asus-nb-wmi.c
+index e2c9a68d12df..fdf7da06af30 100644
+--- a/drivers/platform/x86/asus-nb-wmi.c
++++ b/drivers/platform/x86/asus-nb-wmi.c
+@@ -555,6 +555,7 @@ static const struct key_entry asus_nb_wmi_keymap[] = {
+ 	{ KE_KEY, 0x71, { KEY_F13 } }, /* General-purpose button */
+ 	{ KE_IGNORE, 0x79, },  /* Charger type dectection notification */
+ 	{ KE_KEY, 0x7a, { KEY_ALS_TOGGLE } }, /* Ambient Light Sensor Toggle */
++	{ KE_IGNORE, 0x7B, }, /* Charger connect/disconnect notification */
+ 	{ KE_KEY, 0x7c, { KEY_MICMUTE } },
+ 	{ KE_KEY, 0x7D, { KEY_BLUETOOTH } }, /* Bluetooth Enable */
+ 	{ KE_KEY, 0x7E, { KEY_BLUETOOTH } }, /* Bluetooth Disable */
+@@ -584,6 +585,7 @@ static const struct key_entry asus_nb_wmi_keymap[] = {
+ 	{ KE_KEY, 0xAE, { KEY_FN_F5 } }, /* Fn+F5 fan mode on 2020+ */
+ 	{ KE_KEY, 0xB3, { KEY_PROG4 } }, /* AURA */
+ 	{ KE_KEY, 0xB5, { KEY_CALC } },
++	{ KE_IGNORE, 0xC0, }, /* External display connect/disconnect notification */
+ 	{ KE_KEY, 0xC4, { KEY_KBDILLUMUP } },
+ 	{ KE_KEY, 0xC5, { KEY_KBDILLUMDOWN } },
+ 	{ KE_IGNORE, 0xC6, },  /* Ambient Light Sensor notification */
+-- 
+2.40.1
+
