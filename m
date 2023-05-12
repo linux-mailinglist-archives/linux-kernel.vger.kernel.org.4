@@ -2,119 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2AF470050B
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:15:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 431D970050E
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:16:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240097AbjELKPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44102 "EHLO
+        id S240608AbjELKQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 06:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240509AbjELKPi (ORCPT
+        with ESMTP id S240321AbjELKQd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:15:38 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C50083DC;
-        Fri, 12 May 2023 03:15:23 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f450815d0bso34299125e9.0;
-        Fri, 12 May 2023 03:15:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683886521; x=1686478521;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RuCdgK342xaUwQZ9bEdkQrH7w9PMG+n2cBtPbMJhyNs=;
-        b=Xj6TOfNNbRUHBoDKz/x5f2lnRt9RCEtAThiGG67jFq60ZH1pHy76jlcaoQF/RjFjn1
-         CF+XcpBjIuoncOb39gObCNWiqbxj1SabmnEFuGh1d9WjqdKWQwvZm9fyLkz6YNmsmu1/
-         qALou3K0XZwyMjR4DBxcIeHmYCKfeVxcxIOA8kkvQjzgT7La4lf253yejcCPocw1C+NC
-         uzzzl6QhXqJE7gv06hEpuvciKylTpTNiMTslco9fobV6EKiu19FV882H+E/7nuSs4h7y
-         hk6EAEUHqinRRdELLAJImVCJd+kmD0fbh+9TGCqQDe+tjeElDcgy0IPj0G593W6ahr7x
-         3N+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683886521; x=1686478521;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RuCdgK342xaUwQZ9bEdkQrH7w9PMG+n2cBtPbMJhyNs=;
-        b=RyOMZGzz3RiOdQNYwhzAgwnXPGqmVTxqtejR++HyIK/Rwz08ahWCbNk4LH/OkrYUip
-         JXsHf8N32WOIK0fbXPnXGDLkTo0cGdCgpDBoQsroYluCAE3Km0HsSkhvuBCM3rsqu7lX
-         NjGGAMGkacX7wCe7zY6EOj40Spa+0x+3vnPkzPTr07EDwOARqylLvB8QkBkCtL1IGzd5
-         Up5QGisSsVNTCZWJmWKSDrr0QqTHJIhbtG+ddy+CNNCPxjqN53WulKRTO9TfTeyDvIBy
-         pKZE1kTHkNL3vixmfvc4Y7PpIMtdIxXz5C5E09s6Upx1Tjpbu3Czb2zeCyzrJ2mFBw2J
-         MRcQ==
-X-Gm-Message-State: AC+VfDz3OTg8gjNcRdejn/BoeAwW0H1us+xZiw9CNjbXNqJhh65caUvi
-        hfoIqi2FX2qvVqKH3Bg5agd0tIfnjG2Msw==
-X-Google-Smtp-Source: ACHHUZ7WTfo0kI8boL1/5KTBFc5GcZeyUf/+fYCLuGrerAEaU0gBoRuOLycwW+wmAv70oKSxlIQMrQ==
-X-Received: by 2002:a1c:7712:0:b0:3f4:1dd9:e9e0 with SMTP id t18-20020a1c7712000000b003f41dd9e9e0mr14641577wmi.7.1683886521079;
-        Fri, 12 May 2023 03:15:21 -0700 (PDT)
-Received: from localhost.localdomain ([2a02:2f0a:b207:af00::b5e])
-        by smtp.gmail.com with ESMTPSA id g14-20020adff3ce000000b00300aee6c9cesm23130059wrp.20.2023.05.12.03.15.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 03:15:20 -0700 (PDT)
-From:   Alexandru Sorodoc <ealex95@gmail.com>
-To:     Corentin Chary <corentin.chary@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>
-Cc:     acpi4asus-user@lists.sourceforge.net,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexandru Sorodoc <ealex95@gmail.com>
-Subject: [PATCH] platform/x86: asus-wmi: Ignore WMI events with codes 0x7B, 0xC0
-Date:   Fri, 12 May 2023 13:15:17 +0300
-Message-Id: <20230512101517.47416-1-ealex95@gmail.com>
-X-Mailer: git-send-email 2.40.1
+        Fri, 12 May 2023 06:16:33 -0400
+Received: from out-45.mta0.migadu.com (out-45.mta0.migadu.com [IPv6:2001:41d0:1004:224b::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63EF21B9
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:16:31 -0700 (PDT)
+Message-ID: <5eacf66d-053e-d82b-1e73-c808fb4c8aad@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683886589;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=W6Wem/v3s40IpU/4vM3KdBYaIHM33/erB6EQnTE0H+w=;
+        b=ugB2fatRP3xgDY9Igh9H5noqrVuta25yPnVcmps7CyaQhAsCjfXXLrvJuV1ibevR3kLG8C
+        JafTC10bd3NXCvTPhLM30BQ4g/jBTRRt4vEl4FMGuNYyMl90TX9IQfmchQ2Y8nR8Mi4LdO
+        M92KqdPIaEUKouhfLXWGuDH5MdF075s=
+Date:   Fri, 12 May 2023 18:16:26 +0800
 MIME-Version: 1.0
+Subject: Re: [syzbot] [rdma?] KASAN: slab-use-after-free Read in
+ siw_query_port
+Content-Language: en-US
+To:     syzbot <syzbot+79f283f1f4ccc6e8b624@syzkaller.appspotmail.com>,
+        bmt@zurich.ibm.com, jgg@ziepe.ca, leon@kernel.org,
+        linux-kernel@vger.kernel.org, linux-rdma@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+References: <0000000000001f992805fb79ce97@google.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Guoqing Jiang <guoqing.jiang@linux.dev>
+In-Reply-To: <0000000000001f992805fb79ce97@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On ASUS GU604V the key 0x7B is issued when the charger is connected or
-disconnected, and key 0xC0 is issued when an external display is
-connected or disconnected.
 
-This commit maps them to KE_IGNORE to slience kernel messages about
-unknown keys, such as:
 
-    kernel: asus_wmi: Unknown key code 0x7b
+On 5/12/23 15:10, syzbot wrote:
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    16a8829130ca nfs: fix another case of NULL/IS_ERR confusio..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=162c0566280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=8bc832f563d8bf38
+> dashboard link: https://syzkaller.appspot.com/bug?extid=79f283f1f4ccc6e8b624
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+>
+> Unfortunately, I don't have any reproducer for this issue yet.
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/f8c18a31ba47/disk-16a88291.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/03a18f29b7e7/vmlinux-16a88291.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/1db2407ade1e/bzImage-16a88291.xz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+79f283f1f4ccc6e8b624@syzkaller.appspotmail.com
+>
+> xfrm0 speed is unknown, defaulting to 1000
+> ==================================================================
+> BUG: KASAN: slab-use-after-free in siw_query_port+0x37b/0x3e0 drivers/infiniband/sw/siw/siw_verbs.c:177
+> Read of size 4 at addr ffff888034efa0e8 by task kworker/1:4/24211
+>
+> CPU: 1 PID: 24211 Comm: kworker/1:4 Not tainted 6.4.0-rc1-syzkaller-00012-g16a8829130ca #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+> Workqueue: infiniband ib_cache_event_task
+> Call Trace:
+>   <TASK>
+>   __dump_stack lib/dump_stack.c:88 [inline]
+>   dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
+>   print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:351
+>   print_report mm/kasan/report.c:462 [inline]
+>   kasan_report+0x11c/0x130 mm/kasan/report.c:572
+>   siw_query_port+0x37b/0x3e0 drivers/infiniband/sw/siw/siw_verbs.c:177
+>   iw_query_port drivers/infiniband/core/device.c:2049 [inline]
+>   ib_query_port drivers/infiniband/core/device.c:2090 [inline]
+>   ib_query_port+0x3c4/0x8f0 drivers/infiniband/core/device.c:2082
+>   ib_cache_update.part.0+0xcf/0x920 drivers/infiniband/core/cache.c:1487
+>   ib_cache_update drivers/infiniband/core/cache.c:1561 [inline]
+>   ib_cache_event_task+0x1b1/0x270 drivers/infiniband/core/cache.c:1561
+>   process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
+>   worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
+>   kthread+0x344/0x440 kernel/kthread.c:379
+>   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+>   </TASK>
 
-Signed-off-by: Alexandru Sorodoc <ealex95@gmail.com>
----
-I'm not sure what those keys events actually mean. I assume they are
-some redundant notifications because no laptop functionality seems to
-depend on them.
+This might be similar as 390d3fdcae2d,  let me play with syzbot a bit 😉
 
-If there is anything I can check or investigate please let me know.
+#syz test: git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git 
+for-rc
 
-Thanks,
-Alex
+diff --git a/drivers/infiniband/core/device.c 
+b/drivers/infiniband/core/device.c
+index a666847bd714..9dd59f8d5f05 100644
+--- a/drivers/infiniband/core/device.c
++++ b/drivers/infiniband/core/device.c
+@@ -2016,6 +2016,7 @@static int iw_query_port(struct ib_device *device,
+{
+        struct in_device *inetdev;
+        struct net_device *netdev;
++int ret;
 
- drivers/platform/x86/asus-nb-wmi.c | 2 ++
- 1 file changed, 2 insertions(+)
+        memset(port_attr, 0, sizeof(*port_attr));
 
-diff --git a/drivers/platform/x86/asus-nb-wmi.c b/drivers/platform/x86/asus-nb-wmi.c
-index e2c9a68d12df..fdf7da06af30 100644
---- a/drivers/platform/x86/asus-nb-wmi.c
-+++ b/drivers/platform/x86/asus-nb-wmi.c
-@@ -555,6 +555,7 @@ static const struct key_entry asus_nb_wmi_keymap[] = {
- 	{ KE_KEY, 0x71, { KEY_F13 } }, /* General-purpose button */
- 	{ KE_IGNORE, 0x79, },  /* Charger type dectection notification */
- 	{ KE_KEY, 0x7a, { KEY_ALS_TOGGLE } }, /* Ambient Light Sensor Toggle */
-+	{ KE_IGNORE, 0x7B, }, /* Charger connect/disconnect notification */
- 	{ KE_KEY, 0x7c, { KEY_MICMUTE } },
- 	{ KE_KEY, 0x7D, { KEY_BLUETOOTH } }, /* Bluetooth Enable */
- 	{ KE_KEY, 0x7E, { KEY_BLUETOOTH } }, /* Bluetooth Disable */
-@@ -584,6 +585,7 @@ static const struct key_entry asus_nb_wmi_keymap[] = {
- 	{ KE_KEY, 0xAE, { KEY_FN_F5 } }, /* Fn+F5 fan mode on 2020+ */
- 	{ KE_KEY, 0xB3, { KEY_PROG4 } }, /* AURA */
- 	{ KE_KEY, 0xB5, { KEY_CALC } },
-+	{ KE_IGNORE, 0xC0, }, /* External display connect/disconnect notification */
- 	{ KE_KEY, 0xC4, { KEY_KBDILLUMUP } },
- 	{ KE_KEY, 0xC5, { KEY_KBDILLUMDOWN } },
- 	{ KE_IGNORE, 0xC6, },  /* Ambient Light Sensor notification */
--- 
-2.40.1
+@@ -2045,8 +2046,9 @@static int iw_query_port(struct ib_device *device,
+                rcu_read_unlock();
+        }
 
++ret = device->ops.query_port(device, port_num, port_attr);
+        dev_put(netdev);
+-       return device->ops.query_port(device, port_num, port_attr);
++return ret;
+}
+
+static int __ib_query_port(struct ib_device *device,
