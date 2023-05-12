@@ -2,278 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9923F7007CB
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 14:25:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AF8A7007DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 14:28:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240584AbjELMZl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 08:25:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54332 "EHLO
+        id S239781AbjELM2D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 08:28:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240928AbjELMZW (ORCPT
+        with ESMTP id S240096AbjELM2B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 08:25:22 -0400
-Received: from esa4.hc3370-68.iphmx.com (esa4.hc3370-68.iphmx.com [216.71.155.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E13413C3F;
-        Fri, 12 May 2023 05:24:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=citrix.com; s=securemail; t=1683894299;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=UmsEamxoc0B1TyBlzn36bzSgEOHu5n79eY42u9u1d7s=;
-  b=K5v65wr9UXE9N4FCzt+jdp+k8awOC7dWPAd5Qtzs5PMfoNSqYwC5lLsD
-   setu2I5gQjO5p/whYu318RorPXh679Yo1RAZi8avoUrMfOTpg77VJ4xCs
-   dWS5BwIq3dN1LgUQKA4VSh4FJaFFMyRGpLQ1GBiyzFFQsbvErxsfWp6iN
-   E=;
-X-IronPort-RemoteIP: 104.47.59.172
-X-IronPort-MID: 111265528
-X-IronPort-Reputation: None
-X-IronPort-Listener: OutboundMail
-X-IronPort-SenderGroup: RELAY_O365
-X-IronPort-MailFlowPolicy: $RELAYED
-IronPort-Data: A9a23:qv4ZUq92haV/uTv/sqR4DrUDl3mTJUtcMsCJ2f8bNWPcYEJGY0x3y
- jAfUGGCMqqLZ2qkc49yPIy09R8HvJfSmtZkGQtprXg8E34SpcT7XtnIdU2Y0wF+jCHgZBk+s
- 5hBMImowOQcFCK0SsKFa+C5xZVE/fjUAOG6UKicYXoZqTZMEE8JkQhkl/MynrlmiN24BxLlk
- d7pqojUNUTNNwRcawr40Ire7kI+1BjOkGlA5AdmOKkR5AW2e0Q9V/rzG4ngdxMUfaEMdgKKb
- 76r5K20+Grf4yAsBruN+losWhRXKlJ6FVHmZkt+A8BOsDAbzsAB+v9T2M4nQVVWk120c+VZk
- 72hg3ASpTABZcUgkMxFO/VR/roX0aduoNcrKlDn2SCfItGvn9IBDJyCAWlvVbD09NqbDkle+
- NUiGG0nNizbuPqGwaCJT8J+meU8eZyD0IM34hmMzBn/JNN/G9XvZvuP4tVVmjAtmspJAPDSI
- dIDbiZiZwjBZBsJPUoLDJU5n6GjgXyXnz9w8QrJ4/ZopTWCilUuitABM/KMEjCObexTklyVu
- STt+GPhDwtBHNee1SCE4jSngeqncSbTAdtLTuPlq6Q66LGV7lALIzpOUGKendTniWyPfuBQD
- X0Q3wN7+MDe82TuFLERRSaQqWSItDYfVsBWHul87xuCooLS4hiUCmkYRxZIbMEj8so3WXon2
- kLht9f0GTtHubicQnuF96udqXW0NDR9BU0LYCIfCyEC/8XkpYU+nzrPR9B4Haith8fpHzzq2
- DCLtG41gLB7pc4T3o2p7EzAmXSnoZ2hZgQtzgzTX2+jvkV1aeaNYo2u5l/z9/tMLI+FCFKGu
- RAsh8ea/MgKDJeQiDaKRuQdWr2kj96JKCbZgEJvN5A5+i6x5mW4eoRN/DB5IlwvOcEBERftY
- UnOqUZc6p57InSnd+l0bpi3BsBsyrLvffzmW+DZZfJKY4Ntb0mG+i90bEKd1myrl1Ij+Yk+P
- pKebO6oDG0GEuJjzTyrV6IT1qItyikixGTVA5fhwHyP1buYeW7QQq0UKEeJRv424bnCowjP9
- dtbccyQxH13VOz4fzmS/YkYBU4FIGJ9Bp3srcFTMOmZLWJOHGAnFu+UwLU9doN/nrhEvvnH8
- 2v7WUJCzlf7w3rdJm2ieiA9QLDiR5ByqTQ8JyNEFVKp3WUzJIWi9qESc7MpcrQ9su9u1/h5S
- 78CYcroKu5IUS+B4zQcaZjlt4tkXBOxjAmKMmyuZz1XV5NqRgPG98X/Vgji7i8DCmywr8RWi
- 7ii2V6KaYEZTAokEc3fbbSo1VzZlXsUnv5yGUTIK8VJcUfx2I9wIif1g7k8JMRkAQnZyz2R1
- wyRBgtdqeTTrosd/97OiqSJoJ2uDvNlWEFdGgHmAa2eMCDb+i+vxNFGWePRJzTFDjqrouOle
- PlfyOz6PLsfhlFWvoFgErFti6Uj+9/ooLwcxQNhdJnWU2mW5npbCiHu9aFyWmdln+8xVdeeM
- q5XxuRnBA==
-IronPort-HdrOrdr: A9a23:RGj2RaOxvZvjZsBcT1T155DYdb4zR+YMi2TDiHoddfUFSKalfp
- 6V98jzjSWE8wr4WBkb6LO90dq7MAnhHP9OkMIs1NKZMDUO11HYS72KgbGC/9SkIVyHygc/79
- YrT0EdMqyXMbESt6+Tj2eF+pQbsaC6GcuT9IXjJgJWPGVXgtZbnmJE42igcnFedU1jP94UBZ
- Cc7s1Iq36LYnIMdPm2AXEDQqzqu8DLvIiOW29LOzcXrC21yR+44r/zFBaVmj0EVSlU/Lsk+W
- /Z1yTk+6SYte2hwBO07R6d030Woqqu9jJwPr3NtiEnEESutu+cXvUhZ1TNhkF2nAjl0idWrD
- CFmWZdAy000QKdQoj9m2qS5+HtvQxelEPK2BuWh2Durtf+Qy9/A81dhZhBeh+c8EY4uspguZ
- g7qV5xmqAneS8oph6NkOTgRlVvjA65sHAimekcgzhWVpYfcqZYqcga8FlOGJkNESrm4MR/ed
- MeRP309bJTaxeXfnrZtm5gzJilWWkyBA6PRgwHttaO2zZbkXhlxw8TxdAZnH0H6JUhIqM0rt
- jsI+BtjvVDX8UWZaVyCKMIRta2EHXERVbWPGebMT3cZdQ60rL22uzKCZkOlZKXkcYzveoPcb
- z6ISNliVI=
-X-Talos-CUID: =?us-ascii?q?9a23=3AHmGGtWtEoXuRrUYd+ehBrp9W6Is1f1Tn/Cr6e3P?=
- =?us-ascii?q?gNn5ZSa+nTHSC54J7xp8=3D?=
-X-Talos-MUID: 9a23:Khd7egqjlmEd9HBGXOEezw16H+Aw5p2LNG1Tkrc3nvuLEx10Hh7I2Q==
-X-IronPort-AV: E=Sophos;i="5.99,269,1677560400"; 
-   d="scan'208";a="111265528"
-Received: from mail-dm6nam12lp2172.outbound.protection.outlook.com (HELO NAM12-DM6-obe.outbound.protection.outlook.com) ([104.47.59.172])
-  by ob1.hc3370-68.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 12 May 2023 08:24:33 -0400
+        Fri, 12 May 2023 08:28:01 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2073.outbound.protection.outlook.com [40.107.223.73])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AF5F12EB8;
+        Fri, 12 May 2023 05:27:20 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Mwv2QhtLbOsbsbSScyTnTcTu5Py9mAvtO1S4bjagXBNZ8lrUEbTg7wYDTL8m8uoaBg2iftqyO0KzyevJBcwjtWWFjVqnR0xEfrNI6ZAPveYP6haQ0TD+fIYt4VmDs+c1xPFRsC5AGVF7EKc+wtoLU00NWprcbkpPpRrgg8DwYSPf9v3yrMHAY4+SSiWrP9xkETet8djRvH6vpu+3sNsVHIdcNdb/TJ14ESVmXNgux0+rL02rN9M+FwslKJM049oxs0iAO02W3mh5WV1M5WsezDh5n0QkqKDCNlP7FT0HoqP0EAqixVvPT6IDgo8G0NfT7gYbhb1SovfaI+nR4B60CQ==
+ b=EIXRwv60MuGfh1vdMkG/7zpadtGRvWkpdc1CWql+2LUredUGAoDMrJoOndg1HUV01QMtlPr1zm4S/4Ap3GmNCFzJTDAx5cg+t4FLxgJuI3q3T1ehhhVbDiPGEEG7DwJ167PmGTTRWrVSigzKfAzNLD1IZ3uTcV8LdUhdrrigoSWNEJU0id9kfZhtBcbVqZnLmNoMd7GG70V2Mrl+9jZnIHbnRRyOJGy/5kY60YqTVJ41xSfisF7shrTm7B/KJbRFxwynj0Eyfa0Xr8FD+fZok63suq2mnIOzo/aenNbukWM/UcQlV/yeuL+dqmmFcxrQuCAjeJNh4GClzyo84wyWZw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1AOCv6rjmFmUyxkqUQ3e61ak3IqWeoqc1+8UjjvCA7U=;
- b=LY9elv8jRZIeXwiXWfODG5lbATt3pKFchDhqb34YLnao2AC35SAT2q5nSZASEQ9AS422aUCOw8P+MEjt/MAcWXAeEo6akDFrd5Ox00ueO5fMvdSivXxlfogQ3FoNFN5oWUmvD8LwwfsZxrVs1a8os0aYUlDWO8XtOf9DJ2pdvWB8SWGMUyjX6N7uL04la9EKrUFHNuxBfZDLBYQbAefJDOo3Nxvk9u89hblLJrMvaT4e/l+7KFP3Z36h2H+7PIcX2rRCBaQrqRM8cCPAT54ukTNLWIxsXx/QUTPwuArcyt6q0130ikrULeU0dyC0FuskbcB9aqWP/Pyjw5Jecb+miQ==
+ bh=ToFXQ6NTnu9riPp2zcm+7r52i/p7O+GKSK9Rl6zcVaA=;
+ b=hG9tchGtHUjlkAhpOUqUIXdFqoqL9Ra0uOYqHgPZ4J/SGq6extXS5RM6IbcMIhq+DJTaulYkjpSxhVdU3EXHDCEhm+E3eqkkq6V1dtc59ztaHMn1XLwTRvYh19/TyJKU86dWN6MWQ6OJM3A5rmtpmvb4Tzyw1WGDLizjzySRUzu1nv6D0cYEzjJNrbjhLnkMyXoxwkerEzzBNHIn1+4Gf5W7OEcWG6MoQDhHYEl8JkSjZfMwhAZdd0P2CjJJB19Vb6AGOE5hiSmtdIUYW5TScezk3HzMXTA3I7XfC2i2bfY8/0s1y7xJLqgl9h30zIIkfsK3V7UmKX3iFOUuGcKulw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=citrix.com; dmarc=pass action=none header.from=citrix.com;
- dkim=pass header.d=citrix.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=citrix.onmicrosoft.com; s=selector2-citrix-onmicrosoft-com;
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1AOCv6rjmFmUyxkqUQ3e61ak3IqWeoqc1+8UjjvCA7U=;
- b=QA9hsk4ICGdTBqdLSrnmuTFtYhV9QhdvWEf/f9nMQd2itFNFGESbq+u+JhzEcCLRedDMx3/7BH8TCLeNvzbcqbB6eDUjNXuis8SVa6kKlQqYjAqJYZSe3nKeuUujbpVwjPmW8aqKtiQvM+9WuLmOAIlrtR0BVoBPq3MKhldfLfk=
+ bh=ToFXQ6NTnu9riPp2zcm+7r52i/p7O+GKSK9Rl6zcVaA=;
+ b=QlRVfCVzk8IhsJsjwalWeqCpFHy065U+pskUZ/oKtTwnn7DzX8sHdu1lTYDSEdATVkQJZULMEUdHu/jCzO96pKuJRvp0hwx14C323QGssXmdRl9r96aDah5b23Mx8FOhK+wd5Zvqv+r+f7LbZ8WU4n32ixroJ+zTZHRLLFd1rg0=
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=citrix.com;
-Received: from BYAPR03MB3623.namprd03.prod.outlook.com (2603:10b6:a02:aa::12)
- by DS7PR03MB5416.namprd03.prod.outlook.com (2603:10b6:5:2c7::8) with
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com (2603:10b6:a03:1a7::26)
+ by IA1PR12MB8080.namprd12.prod.outlook.com (2603:10b6:208:3fd::6) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.20; Fri, 12 May
- 2023 12:24:31 +0000
-Received: from BYAPR03MB3623.namprd03.prod.outlook.com
- ([fe80::4fc:e616:1cf0:57bb]) by BYAPR03MB3623.namprd03.prod.outlook.com
- ([fe80::4fc:e616:1cf0:57bb%4]) with mapi id 15.20.6363.033; Fri, 12 May 2023
- 12:24:31 +0000
-Message-ID: <4acf414e-67e7-c964-566b-a5e657e9d1bb@citrix.com>
-Date:   Fri, 12 May 2023 13:24:22 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v6 06/14] x86: Add early SHA support for Secure Launch
- early measurements
-Content-Language: en-GB
-To:     Ard Biesheuvel <ardb@kernel.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>
-Cc:     Eric Biggers <ebiggers@kernel.org>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
-        dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, James.Bottomley@hansenpartnership.com,
-        luto@amacapital.net, nivedita@alum.mit.edu,
-        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
-References: <20230504145023.835096-1-ross.philipson@oracle.com>
- <20230504145023.835096-7-ross.philipson@oracle.com>
- <20230510012144.GA1851@quark.localdomain>
- <20230512110455.GD14461@srcf.ucam.org>
- <CAMj1kXE8m5jCH3vW54ys=dE2-Vf_gnnueR6_g4Rq-LSJ5BqRjA@mail.gmail.com>
- <20230512112847.GF14461@srcf.ucam.org>
- <CAMj1kXFUDUbH4avVs37uLkS=BfSFB1F60e5Ei5_m2aWxOYOGPw@mail.gmail.com>
-From:   Andrew Cooper <andrew.cooper3@citrix.com>
-In-Reply-To: <CAMj1kXFUDUbH4avVs37uLkS=BfSFB1F60e5Ei5_m2aWxOYOGPw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO2P123CA0063.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:1::27) To BYAPR03MB3623.namprd03.prod.outlook.com
- (2603:10b6:a02:aa::12)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.23; Fri, 12 May
+ 2023 12:26:25 +0000
+Received: from BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::f4d6:1b23:560d:4022]) by BY5PR12MB3876.namprd12.prod.outlook.com
+ ([fe80::f4d6:1b23:560d:4022%3]) with mapi id 15.20.6363.033; Fri, 12 May 2023
+ 12:26:25 +0000
+Date:   Fri, 12 May 2023 17:56:08 +0530
+From:   Wyes Karny <wyes.karny@amd.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>
+Cc:     ray.huang@amd.com, viresh.kumar@linaro.org,
+        srinivas.pandruvada@linux.intel.com, lenb@kernel.org,
+        mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        joel@joelfernandes.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] cpufreq/schedutil: Remove fast_switch_possible
+ flag if driver doesn't set fast_switch
+Message-ID: <ZF4wYIgmFCbo1Kx+@BLR-5CG13462PL.amd.com>
+References: <20230509180503.739208-1-wyes.karny@amd.com>
+ <20230509180503.739208-2-wyes.karny@amd.com>
+ <CAJZ5v0hN7AxkSf7=8-xP1Pb_7bA2Ba6nGUiK45q01uo_MFa1qQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0hN7AxkSf7=8-xP1Pb_7bA2Ba6nGUiK45q01uo_MFa1qQ@mail.gmail.com>
+X-ClientProxiedBy: PN2PR01CA0235.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:eb::13) To BY5PR12MB3876.namprd12.prod.outlook.com
+ (2603:10b6:a03:1a7::26)
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR03MB3623:EE_|DS7PR03MB5416:EE_
-X-MS-Office365-Filtering-Correlation-Id: d11d132f-9ea7-43bc-4013-08db52e3d628
+X-MS-TrafficTypeDiagnostic: BY5PR12MB3876:EE_|IA1PR12MB8080:EE_
+X-MS-Office365-Filtering-Correlation-Id: 26b79041-c360-4694-b859-08db52e41a05
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RIWKTKYLglULnAJF2lE/iGKiHSRYsqJujzewL5823MtgyRxh6T4eNiQ0ByhxdN3hNzzLR+eTAW/SrkkawXys+gI6Wk00vklvdRHywmiTkSj4KWOjRnMM3k+O662+eQj+GUObjBV9K10WMEt3Mvq3Kw8KrrHKVJWk6DNzGluZaSDt04bLKqlsoK1/YvjA1fYQWkRN9ytdN7pScYX99k+AI4vW0iluYuY+hvyyFCP6QGmk/j0TAvxNif1z3T1IdtgwBp72/ycS8cUrXHzrgPPvIE0j9lJ+pkELjWuub0m9/DR118yLRhGlfwW23h8azhJodkxfP+CiCT+pW315V1XMRNe92vP0fUxKOttWplEaza6s4a7R+FmRYywukZO5mMhSXyV0gWeYU1YHbeVIuRetafYfzEVgTbfPimI081TENuDQMRPPPQinpiQh8RXFwZH3eGClSKroF6vXw26R/94/nxGXIqKO30KtsAPUOb4NLm+Dpm/3Sa45C+QpXUEJm1MIBR1UQCq+/XCGrWZW4+HsYZi6jf4Ls5uhdnCvIKjdcd7cukAl+pqsJBqCsfqDrMa4h5r1unUltChaM/ircZ11mzfAwmuO/K3vcaIf7kIMvm6jiL0iKl4r1tIHtKpGe2gt1zFy5+XIHWdo4zCMsTyHGw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR03MB3623.namprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(376002)(39860400002)(346002)(396003)(451199021)(6486002)(6666004)(66556008)(4326008)(36756003)(54906003)(110136005)(66476007)(82960400001)(2906002)(7416002)(31696002)(41300700001)(38100700002)(8936002)(86362001)(5660300002)(316002)(66946007)(8676002)(31686004)(66899021)(478600001)(6512007)(53546011)(6506007)(186003)(2616005)(83380400001)(26005)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: pki2o48OR5ziW4isnyDBHJLqWY3A1FrLbzc/HGZAJwI19zeYquCTiY5MlmUnxd3v5mIhSK5DIcXYKbypy9nbElwvcMDDy9UZd0XuFAs7SLpd9q3wHN3ZhsWSdgEhDATEB3BGbBRQOZOZKbVOT8cGBp/iIVf6AokHRipJ01XlX86WKY0vKd1gpYiKiW3s586epoi4v1a+a2AW5qVToBK4zhknvFNVfxR9JiAdF6e7EBpldn+yl/DarQzl9ctikaWoJuurfW+Eoyhznc30DjNQXEklgrTJmtrKsMniVSu/W56cnIfgLqH1GvlKC4Bj1s5+EmPIUawo2WlzD5Wd1P/HROtWTVEMrc4ojtA1NLGqIrseh9ExqJtrcx51RTpnmOvD/ICIoodxR9jBq0Wy5QiPaXw+S9L+KNVPTOsh38rAsZj82FBz0Qi8cM7MamQOArgD1EWYjkTmt43XpX1gIz9z+Piz2dt/N34zTQL6P2L9BO2idBhVbqPh3AwWtGBSgfDZJMMswl6K1wiIDWlruaAB/hylSJzwFhDrMB2eQbdwrQDkRnUVtBcfdA3ufm1TowvMNG2LXKXGZeMzLG1bPOLzkbJvaaL7jWqwA7+Q3HkYwsWU6yKzF4jShF8Z6/JMytnW
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR12MB3876.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(396003)(136003)(376002)(366004)(451199021)(53546011)(5660300002)(26005)(6512007)(83380400001)(186003)(38100700002)(6506007)(2906002)(44832011)(8676002)(7416002)(8936002)(478600001)(6486002)(6666004)(41300700001)(316002)(86362001)(66556008)(4326008)(66476007)(66946007)(6916009)(309714004);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?THR0TVk5RnBXTTYwVFQ4M2YvSTVyeGdTS0FtZ2YvbGRMb2xXbTBSMW9yRGtD?=
- =?utf-8?B?NzZNUng5N0ZOc0VWY2JwUGhJb2ZGb3FGV2dkWWNoWEhBWTY1R1VJV2tLM1g2?=
- =?utf-8?B?UFZrNU01TzUxeDM2SmJHTEZDeEtoZjk4WitJZGRiKzlTVjBhNWpoSjAxVnBq?=
- =?utf-8?B?YVdZaEdlR2tpN1puOWNIalpmK1dzalpaMzg2b004TDdaUG5WNWkzaXZFVk9q?=
- =?utf-8?B?TzhaL0NtSElZWFJlSURFQWdtc002S3JUS1A4QUhXNTEwLzZ6SytuZU9kaHhu?=
- =?utf-8?B?citTTlZPaXBmOXpaWWptNHIwQ1RDajN6OHA4TmxzOGs2QjRmTFBjL0w3UnpN?=
- =?utf-8?B?RnJ3eERjTGZWSGVBL3QzbHArTFA5aVdtclJRV2FialBsdDVybWVGOUppSVMv?=
- =?utf-8?B?aGs2OStmOXJnS1hXNGlrRzlJRzEwVXE5SmROS0Z1ZGpFOXBWNW8yeFhIMHR2?=
- =?utf-8?B?RmdKWVVjeGQ0MTRDSi8yQ3lRWEIzNUxFdVp6T3QwdGMzaVVYYk1qWlJ2L3ky?=
- =?utf-8?B?b0JZTTFVU3NHcWxqOGxVOGVDU0ZBYmIvUkRVM1JPM09tUzFNR0thMTc3cVN1?=
- =?utf-8?B?NG1OY3N2RzFDeEE4bms0NE03azk5ZUpFTlpjczBEM1AxVS9iOHRjaFl3QjVa?=
- =?utf-8?B?dm9rYlAxblRjT2tSTFloZWFuaXVBcWxtQUhTblZiRkZFV0J2N1cwYWw3R3BL?=
- =?utf-8?B?SjgxblRkZUczeFliaVpFek5seDRjMXRVNytkUlNuNTBldEF2ZWc3SVQ1YzFn?=
- =?utf-8?B?bkR6WU1vWFd3ZnFLcTRiMEV6M3MxUStFYmZNblZvcDUzTzQ2NGtXSVRISk5x?=
- =?utf-8?B?cmhFYUU0RVh6cUpoVVk2am51dFVXalNGYlVEcVdhaVI1Zm4vZHZtbDBDT2Yz?=
- =?utf-8?B?LzJ6SlFINGE1THF0RE1HMnpVN3Z5ZHFjbDNBcDlrV0VXdnBmci9va2hMdmMz?=
- =?utf-8?B?N3kvMERiQTJEa2xSYjB5SlM5WXpXY1VxRWJlSXVoWWdHMmtZRnFGNzBCenpy?=
- =?utf-8?B?RG5lRE1vc1JYVzRuOXAwUTArWXlISGVNcWlHY2s2eE94YjROZFloNnB5RThY?=
- =?utf-8?B?MUNlNUZuc2VrWDNTQmd4UHdxaVlraS81Vjd5REFjUlYrVElENExjajgrR2xi?=
- =?utf-8?B?U3pqOVBSeXUyVHlIRlJsaXRNNlE1ODUwaTdhbms2czdvaWRYNFhjQTE2VDEv?=
- =?utf-8?B?ZEVHWHp4Z0NlNkgvdGFQdmtFRXpsWVBkWjJiK3EzK1VYV2pwQVpPdkdBRkt2?=
- =?utf-8?B?NnFLMGdtR3BzdXZvSzJpeDBpcW1aVUt6VHQyeVErb015TjN4UDdtUlFzSzhU?=
- =?utf-8?B?Tm82NWFZdjN1ek80UURwL0t6dWMvejk2YlRPSUV2UUxuZDdDZFBnb1BrK3pZ?=
- =?utf-8?B?RTcxakNMRDd2TTYvNjNLSFVZOWhJUlJ6SEUrWTBVTFIxOGxuV0VOa00yMkpS?=
- =?utf-8?B?NVAxRUFTYzlBWE5LQStsb3psSUhOZTZTdHJjSG9HNG5Ebmhjeko3d1ZDOGhs?=
- =?utf-8?B?MkUwNEJnd0xCUmdOUzIwT3hwMXZPTm1IUkQvSHhnT3ZZMXhMRkV5OFFwLy96?=
- =?utf-8?B?VnRBZVFSNUE0YmVEK2tEY1ZtUDMrTjc3NWtSdEVWS1hOTVpZL2FvWFZEbEJs?=
- =?utf-8?B?VUgrTTd6TTZYdWttOHJPQ2hFOVluY1RKbEpoN3VYWjlRMzJFb3lGTDhTV056?=
- =?utf-8?B?RE9sRHNNa2hBQ0JwTlNHbER5b05DdlQ4SnFYQVdlK1oveGRiN21KYXUrVzVo?=
- =?utf-8?B?YUdkdjhaSjZQNy9JcXQrV0t6VFM1NmkwZkw3L21lOTFVTURmckpIYW14ZmRX?=
- =?utf-8?B?SG00dmtadWpwMjc0QWR1Nm8zVWZ5aEpSS05PSWNPdGQ1SERTaEM1RHYySld5?=
- =?utf-8?B?ZEUvR0xFZUhiUDVDYWdOY3JOb1VRRGg4d3had1p4Ri81ZnE4Z2FrNkExNVkz?=
- =?utf-8?B?dzlPdFhkR1ZpYmNoRWFINDB3cTRJN2FkcnlpMW5ZbXpsSytGU2VqMDZsWmJY?=
- =?utf-8?B?eXowYVRsUmV0L0ZJeFVreUNudEJ6VkY1T1drWFVwdEVrMXM3YTBHUjhxNDNw?=
- =?utf-8?B?bUhrZnJUZE01Q0ZvK01zVEY4QWJPZkNpbGtOYk1tNjZJRThrSk40c2NVZmp2?=
- =?utf-8?B?dk10bUpXSDljbm9jaGo0RFNHc0xuL3gwcnlMbUk0WTdYbTlJL3BESmVLUGJa?=
- =?utf-8?B?T0E9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?RFpiTjJmSzdZR3FOZVJIVUFtaXRYVHNLZ0RJWDhRWWRINjdGeURDTXI4c1dF?=
- =?utf-8?B?TkZ4WWluemw3dERvYXdOYkFNTFhnVlB1UHhTZEFmN01hUmhWRFd0Y240VUcw?=
- =?utf-8?B?NWNTeGZ0R2FLZWRQVS9WRDcyYkYySmh4SGNsb0x0VmF1Z3hOSTJzWFdlU1M1?=
- =?utf-8?B?VzRXNUNrRElLb1lIRnhEdW5TUTg4djV6STFQYktuU0dzN2N6Yy9KSjgwZElH?=
- =?utf-8?B?YTMwaXhYNjZ1dzdWOWlzb0JjdnVlZmN0K2tRRmk4RVg5VkJlb1MvK1NiZHJB?=
- =?utf-8?B?ME9BWGZkd1R1T05wclhKNndkZlI5ZjJ2YXVLU2UvVFF1N3lHdngvOUFSK1Fl?=
- =?utf-8?B?aUZRbDRlZEpOVEZCQ21kQjJIYS9WMFVja0Nob05ROHRlWlJWY29GZkk2SWhl?=
- =?utf-8?B?VXhwVmNhRjBGNk0waVMzN2VhekhLQ250RlJhK1BtcUFlNEpTbnp2ak01U2gw?=
- =?utf-8?B?dUl3bHJZUTVVMi84K1czcVBJNFErbUxqVUUzNXpJY2xiSEtqaUkxelczVVY3?=
- =?utf-8?B?Y00yV254eWdsdEtNUnp6ZXh3RmlHTHljaFpmbkFVK2lTdWRSTFBYcjhhNllV?=
- =?utf-8?B?TVFFRTBTY1hpZVV0SmFVclFOVUdYY0ptMjIzUERCc3VxcnhreHRuTTZuWmhI?=
- =?utf-8?B?dzd5Rlhxd0JNQURUUi96ZUFWYmFoaTF0MEVNSG5VT3NEYmdBb0xvL3dBZ0t3?=
- =?utf-8?B?dE1nRi9ObmhwWDRnQUdDNktNeFJxc21nZHNnaDJ1Qm1kK0l2R0NsU2IxcTQx?=
- =?utf-8?B?bFlKVUl1QjhtRVVlOEkrYjArMS8xR0k5Zlp0emJIdVlMbWEvNU5CUW9kdWpl?=
- =?utf-8?B?L1RkalljRnhsME1HYWFCNExhM0Q0Rm0xYmt1TTNqUEZaMGhOcXkvRnVESmRt?=
- =?utf-8?B?K2d1SlBvWWcxRWdWR0lUeXJFZEhSRkZtTEF1MDFGUWNMRTQ4RnlBdExCcGFH?=
- =?utf-8?B?WXdFWkhPaU00K2g4cVczcm9IVHBjTWw5b2dXRnovQUJNVjFGVWdIYmZOR0Fz?=
- =?utf-8?B?bE4yN0lCWGdVNG84eFlkT1ZJSDFkOWtFSmNLM3daaXNBOVJwaHpNWXJZUHBO?=
- =?utf-8?B?OXVXVEExL3hHNEh2dnYxNDZKcElKTUtRTHJNNURRbStyaVVtOVJvMXU5T2hP?=
- =?utf-8?B?TnhERHNBeTNiQmFNaEtsUTRzUjZDcGpIcXNFYWE2c2txeHc3N1pYbEFkQkh4?=
- =?utf-8?B?NzEzOTNMaE5Ec0dwdkdYU0tScG5wTTFSUXdZWHBubUxUa3VIZ1pPRUlJd2VT?=
- =?utf-8?B?akhmN0Nja0puTHU5NytRT0JQdGFjU0JaSGhDbTF2d2ZqTk1NZ05yN3ZtVStE?=
- =?utf-8?B?V0JsVFhtUDJHTEVOdXJSN2VjbUNvSGh2bkx3TkFGSUVESitmeDRScE54aC9P?=
- =?utf-8?B?MDd3YWJPTzUrdVMrRmQwbmsxWHhhZU1Ja0pSa2o2QUI5RldQMi8rb3M1QnE4?=
- =?utf-8?B?N1N0dXNVU3FkNXoxcXhXYWZDNFBoQlNGSVREbXlUUDVWbTVrYmZHYitoWEQ2?=
- =?utf-8?B?UDhTbW9pQTN1d0FiS3NCWHdqeklmNkRqNFVHQmpXcWQzZm1POXpLMitybThx?=
- =?utf-8?B?dklzNTFBeFZnWndzOUo3cm5Uak9kSmRxTUsrbDU4ZTdydy9UWGVaUWtrR0Na?=
- =?utf-8?B?YXZ2WnIyaXhwOFg3QWlVVjhyV1pTTWZ0TUh4OU82czIvYWVRcU9kQmFFUmFT?=
- =?utf-8?B?aGZicE11dTVRUEZHWDRKSnk2d3JGMEhITVI3VEhOL0tOUGpuajhpYVVJY1pn?=
- =?utf-8?B?VHl5akhqdjI3UUc4cjBmKzZtQnpnODRIY2xWeDVIYkFDZ0Z2V0NIb0cxVDho?=
- =?utf-8?B?aUZ4b1Y3RFJKYUt0ei9YZz09?=
-X-OriginatorOrg: citrix.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d11d132f-9ea7-43bc-4013-08db52e3d628
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR03MB3623.namprd03.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RHc0OTZpZ004eW9SOCsvZmJIbmRXRDVaaXA0R0JVU3lQYzROK0FoZmhRMVZH?=
+ =?utf-8?B?bzliYmpQYWdGWGM1TmVDQ3hyZjNNSVZaMGNETkY3V05BdkNTQ3YvdkdYZDVw?=
+ =?utf-8?B?dUpMZ3A0UXVmVlNVTTJyVjg4VDZsRGszb1FvYlZrYkNxUzViUFVKbU1Qb1kw?=
+ =?utf-8?B?eFVQdzBuQ2lDekVYcGtYK3A4MEE4TDJ2SUEwdDZBaHpQckFjZ0xPc3NEamRs?=
+ =?utf-8?B?eWVYendYUCtmZ2dwS2Z1bjJvdGo1cjVhWFdoNitGM0dHM0EycUxqQjhMbVN1?=
+ =?utf-8?B?Q0c4aGlnbWxQcEI3R08vSnhtVmxKVkVOTlpsSmkvT0d0TnJJR3FnM29ralhx?=
+ =?utf-8?B?V3A4aXR4dW1CNnZQNnBTOUtWNHJQVWY3UTdJNHpmemN6MVF5cTFBM09DSXY1?=
+ =?utf-8?B?cVJzczJlQXdJaVRQVWhJd0NzeUJkejJVZ2VCT05iY0xNVFJvMGZHcWpzTE9Q?=
+ =?utf-8?B?TDRZcEEvU2U2b2wzNXlGVXV1azl4MGdtb0dWK1BQbm5FYlFEOFFOWktVeUpP?=
+ =?utf-8?B?TjR1RUlCTEVpVGJRNjJ3SVpwNkJUR2NpRkoyUnBzdVFqM0tEdGN2Q2dMQnlD?=
+ =?utf-8?B?aEJkOTZhcmJkMG5pUVFIRDNod1pyWmlJZjhLU0g5cXJYSm5laGFkbStGbXNT?=
+ =?utf-8?B?Um9LTTJZMnFQMUYyZTlEUmpPR3pCN1RIcjVWWmlrSWZrVUFxdVF1UjllY0Z5?=
+ =?utf-8?B?TSs4V2JsNk5ZZXBpL1J1UEdNSkV0c0wwQ2pkSGExeGJMWEZ3dEs4Ri9jY2V0?=
+ =?utf-8?B?bW8ycU04YUpzbDJENHdCb1Y3MGxDTCs5MVVmVysreGNMNzhVeGJpcmFPRXpG?=
+ =?utf-8?B?S3lQaUd5czR2N0RmcVJIblhUTlZTVk1Ja2Y2SFdBQTZIWW5HTmZtS3ZpOU5k?=
+ =?utf-8?B?d1RoQ1B3SDhVb0JLSTZrYW5PUkpkdUM3Nk85SmlQMnd2RzJZcWF6SXluTGkw?=
+ =?utf-8?B?OUJtWTdzaVhwMzRSdDkzOWdlTEZ6c1puRXJSSnNlaXZKSnRXb0R5NzFtWGpO?=
+ =?utf-8?B?U21WK2RxWnRJT29xWTE2UXU0ODRnQ0xzd1RMc0o0MTFOZ2Y3TVNNM0phMy9P?=
+ =?utf-8?B?enozK0xEcTlpMmZtMXFpYlhSL0NVZTJ6Um1SeW1oZnZsbnhQclliZ0R0LzZn?=
+ =?utf-8?B?U3pLdFRONWpISDZETXVoVm9mQlBuSkMrd295LzMwSjdiaVQxeER4YWtjOENG?=
+ =?utf-8?B?cVVKWjlsdUphN21pRWplcTROck92bnc0MXFpbURDZmVvd0l5bXdUdnlKSHY3?=
+ =?utf-8?B?V0l5OWRPYnZiaWFqZjVtdGRQMFNlZGp2OG9tU292Q2ppK1hzWVlqNHJKWW9u?=
+ =?utf-8?B?dGlFTGpUSDVKb3FrQlVuREpFbU1mSGhYNGdSYy9HMmtHYnBZbWo3bnBISVpn?=
+ =?utf-8?B?c1VEK3NRZXVzZ0tOM2phMUpqcVc3K0ljS3RFTGwwemREbUc3Q1BWR3ZOU2Jo?=
+ =?utf-8?B?MTV4ajBFKzNMeXF1R3Vhd1pWSmtBQm1kdXovbzJ4U29SdjZwTUQ2Y0h4OG15?=
+ =?utf-8?B?eVZ6UmNRTnZJVjI2d2ozWnJNVUZxQzA1ODJaUnV6VnhidFo3UmY0QkJkRE9D?=
+ =?utf-8?B?SDJISEhDYUE2NjFEa2I0RTNYancrOWpnSFlXbXRLMTJpMzV2K0phSVRZM1ZY?=
+ =?utf-8?B?VjhYRmliRW1NVVoxWTh6cVFhTlFxVEVJZzBXQkdNcGFwU0lJOTNSakxDSjND?=
+ =?utf-8?B?M1BuaGRqN0Q1S3NKTkdDVW04dnZjczZzejlEdFlUN2lhYWd6WU1rdkNTQVJB?=
+ =?utf-8?B?dWhsTUFnWVFkc0RWcXRUQ2JiNXNxNHphMU5XZUpnd2VweWNpdDYxQjVIUzh2?=
+ =?utf-8?B?ZXMwanBZdFNJK0NGOVZKN3ZxNXROUUNoUXV4WlNVYmZNUU1hejY3V2FYa29w?=
+ =?utf-8?B?NzJyVi9ZSndPUERhTWNMSEcrZmFZOTIzaFJScTNuRW9mT250RlF5NnYzVU5j?=
+ =?utf-8?B?cnhkb1h2WjJpaGduNkJaZG1NSTROMm1JZll6TVBJSEU2L3A5WldjM3VRTExR?=
+ =?utf-8?B?dTkwMURTTnNFdngzY01FUnhiTTEzdVNkbWpaUXpOMGVpL0xONVZudkxXbk0w?=
+ =?utf-8?B?aHdNZVNyY2JGM2dmNnkwNnVrcGIyc1NBcTdzdXpFekxkdzdMNm44aEpXTS9N?=
+ =?utf-8?Q?shJAwgwUea3fzrquIMA1dtkqq?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 26b79041-c360-4694-b859-08db52e41a05
+X-MS-Exchange-CrossTenant-AuthSource: BY5PR12MB3876.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 12:24:31.0223
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 12:26:24.8436
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 335836de-42ef-43a2-b145-348c2ee9ca5b
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dg1dsbT/WVUuAyF0QmBy8LiiJpii/+psWFmdrQb/xQDke4NjX1UBR4bf/IDrncyFece0hlsCIzZcWngzlh2N7yH+eE5+sNZaq1GpFJ5X6cY=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR03MB5416
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-UserPrincipalName: hcPRIHsD0bKekgH4xyQFPoz88+MnWmMkeEP3VOWTtlxBy1+O4o2Nw5cIsprZw8dQWrOAYE3i6HogASflF3nToA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB8080
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2023 12:58 pm, Ard Biesheuvel wrote:
-> On Fri, 12 May 2023 at 13:28, Matthew Garrett <mjg59@srcf.ucam.org> wrote:
->> On Fri, May 12, 2023 at 01:18:45PM +0200, Ard Biesheuvel wrote:
->>> On Fri, 12 May 2023 at 13:04, Matthew Garrett <mjg59@srcf.ucam.org> wrote:
->>>> On Tue, May 09, 2023 at 06:21:44PM -0700, Eric Biggers wrote:
->>>>
->>>>> SHA-1 is insecure.  Why are you still using SHA-1?  Don't TPMs support SHA-2
->>>>> now?
->>>> TXT is supported on some TPM 1.2 systems as well. TPM 2 systems are also
->>>> at the whim of the firmware in terms of whether the SHA-2 banks are
->>>> enabled. But even if the SHA-2 banks are enabled, if you suddenly stop
->>>> extending the SHA-1 banks, a malicious actor can later turn up and
->>>> extend whatever they want into them and present a SHA-1-only
->>>> attestation. Ideally whatever is handling that attestation should know
->>>> whether or not to expect an attestation with SHA-2, but the easiest way
->>>> to maintain security is to always extend all banks.
->>>>
->>> Wouldn't it make more sense to measure some terminating event into the
->>> SHA-1 banks instead?
->> Unless we assert that SHA-1 events are unsupported, it seems a bit odd
->> to force a policy on people who have both banks enabled. People with
->> mixed fleets are potentially going to be dealing with SHA-1 measurements
->> for a while yet, and while there's obviously a security benefit in using
->> SHA-2 instead it'd be irritating to have to maintain two attestation
->> policies.
-> I understand why that matters from an operational perspective.
->
-> However, we are dealing with brand new code being proposed for Linux
-> mainline, and so this is our only chance to push back on this, as
-> otherwise, we will have to maintain it for a very long time.
->
-> IOW, D-RTM does not exist today in Linux, and it is up to us to define
-> what it will look like. From that perspective, it is downright
-> preposterous to even consider supporting SHA-1, given that SHA-1 by
-> itself gives none of the guarantees that D-RTM aims to provide. If
-> reducing your TCB is important enough to warrant switching to this
-> implementation of D-RTM, surely you can upgrade your attestation
-> policies as well.
+Hi Rafael,
 
-You're suggesting that because Linux has been slow to take D-RTM over
-the past decade, you're going to intentionally break people with older
-hardware just because you don't feel like using an older algorithm?
+On 09 May 20:18, Rafael J. Wysocki wrote:
+> On Tue, May 9, 2023 at 8:06 PM Wyes Karny <wyes.karny@amd.com> wrote:
+> >
+> > The set value of `fast_switch_enabled` indicates that fast_switch
+> > callback is set. For some drivers such as amd_pstate and intel_pstate,
+> > the adjust_perf callback is used but it still sets
+> > `fast_switch_possible` flag. This is because this flag also decides
+> > whether schedutil governor selects adjust_perf function for frequency
+> > update. This condition in the schedutil governor forces the scaling
+> > driver to set the `fast_switch_possible` flag.
+> >
+> > Remove `fast_switch_enabled` check when schedutil decides to select
+> > adjust_perf function for frequency update. Thus removing this drivers
+> > are now free to remove `fast_switch_possible` flag if they don't use
+> > fast_switch callback.
+> >
+> > This issue becomes apparent when aperf/mperf overflow occurs.  When this
+> > happens, kernel disables frequency invariance calculation which causes
+> > schedutil to fallback to sugov_update_single_freq which currently relies
+> > on the fast_switch callback.
+> >
+> > Normal flow:
+> >   sugov_update_single_perf
+> >     cpufreq_driver_adjust_perf
+> >       cpufreq_driver->adjust_perf
+> >
+> > Error case flow:
+> >   sugov_update_single_perf
+> >     sugov_update_single_freq  <-- This is chosen because the freq invariant is disabled due to aperf/mperf overflow
+> >       cpufreq_driver_fast_switch
+> >          cpufreq_driver->fast_switch <-- Here NULL pointer dereference is happening, because fast_switch is not set
+> 
+> So you need to set fast_switch.
+> 
+> Please read the comment in sugov_update_single_perf().  It explains
+> why adjust_perf is not used when scale invariance is not enabled: the
+> mapping between the performance levels and frequency are not generally
+> defined in that case and it is up to the driver to figure out what
+> perf level to use to get the given frequency.  And this is exactly why
+> fast_switch is not optional: because scale invariance may be disabled.
+> 
+> Please feel free to update the documentation to clarify this, but the
+> way to fix the issue is to implement fast_switch in the driver.
 
-That's about the worst possible reason to not take support.
+Thanks for clarifying that fast_swich is not optional as frequency
+invariance could be disabled in runtime and this would cause to select
+fast_switch. I'll make those changes.
 
-There really are people in the world with older TPM 1.2 systems where
-this D-RTM using SHA1 only is an improvement over using the incumbent tboot.
+Thanks,
+Wyes
 
-~Andrew
+> 
+> > Fixes: a61dec744745 ("cpufreq: schedutil: Avoid missing updates for one-CPU policies")
+> > Signed-off-by: Wyes Karny <wyes.karny@amd.com>
+> >
+> > Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+> > Cc: stable@vger.kernel.org
+> > ---
+> >  drivers/cpufreq/amd-pstate.c     | 10 +++++++---
+> >  drivers/cpufreq/cpufreq.c        | 20 +++++++++++++++++++-
+> >  drivers/cpufreq/intel_pstate.c   |  3 +--
+> >  include/linux/cpufreq.h          |  1 +
+> >  kernel/sched/cpufreq_schedutil.c |  2 +-
+> >  5 files changed, 29 insertions(+), 7 deletions(-)
+> >
+> > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> > index 5a3d4aa0f45a..007bfe724a6a 100644
+> > --- a/drivers/cpufreq/amd-pstate.c
+> > +++ b/drivers/cpufreq/amd-pstate.c
+> > @@ -671,8 +671,14 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+> >         /* It will be updated by governor */
+> >         policy->cur = policy->cpuinfo.min_freq;
+> >
+> > +       /**
+> > +        * For shared memory system frequency update takes time that's why
+> > +        * do this in deferred kthread context.
+> > +        */
+> >         if (boot_cpu_has(X86_FEATURE_CPPC))
+> > -               policy->fast_switch_possible = true;
+> > +               current_pstate_driver->adjust_perf = amd_pstate_adjust_perf;
+> > +       else
+> > +               current_pstate_driver->adjust_perf = NULL;
+> >
+> >         ret = freq_qos_add_request(&policy->constraints, &cpudata->req[0],
+> >                                    FREQ_QOS_MIN, policy->cpuinfo.min_freq);
+> > @@ -697,8 +703,6 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+> >         policy->driver_data = cpudata;
+> >
+> >         amd_pstate_boost_init(cpudata);
+> > -       if (!current_pstate_driver->adjust_perf)
+> > -               current_pstate_driver->adjust_perf = amd_pstate_adjust_perf;
+> >
+> >         return 0;
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 6b52ebe5a890..366747012104 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -501,6 +501,13 @@ void cpufreq_enable_fast_switch(struct cpufreq_policy *policy)
+> >         if (!policy->fast_switch_possible)
+> >                 return;
+> >
+> > +       /**
+> > +        * It's not expected driver's fast_switch callback is not set
+> > +        * even fast_switch_possible is true.
+> > +        */
+> > +       if (WARN_ON(!cpufreq_driver_has_fast_switch()))
+> > +               return;
+> > +
+> >         mutex_lock(&cpufreq_fast_switch_lock);
+> >         if (cpufreq_fast_switch_count >= 0) {
+> >                 cpufreq_fast_switch_count++;
+> > @@ -2143,6 +2150,17 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
+> >  }
+> >  EXPORT_SYMBOL_GPL(cpufreq_driver_fast_switch);
+> >
+> > +/**
+> > + * cpufreq_driver_has_fast_switch - Check "fast switch" callback.
+> > + *
+> > + * Return 'true' if the ->fast_switch callback is present for the
+> > + * current driver or 'false' otherwise.
+> > + */
+> > +bool cpufreq_driver_has_fast_switch(void)
+> > +{
+> > +       return !!cpufreq_driver->fast_switch;
+> > +}
+> > +
+> >  /**
+> >   * cpufreq_driver_adjust_perf - Adjust CPU performance level in one go.
+> >   * @cpu: Target CPU.
+> > @@ -2157,7 +2175,7 @@ EXPORT_SYMBOL_GPL(cpufreq_driver_fast_switch);
+> >   * and it is expected to select a suitable performance level equal to or above
+> >   * @min_perf and preferably equal to or below @target_perf.
+> >   *
+> > - * This function must not be called if policy->fast_switch_enabled is unset.
+> > + * By default this function takes the fast frequency update path.
+> >   *
+> >   * Governors calling this function must guarantee that it will never be invoked
+> >   * twice in parallel for the same CPU and that it will never be called in
+> > diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstate.c
+> > index 2548ec92faa2..007893514c87 100644
+> > --- a/drivers/cpufreq/intel_pstate.c
+> > +++ b/drivers/cpufreq/intel_pstate.c
+> > @@ -2698,8 +2698,6 @@ static int __intel_pstate_cpu_init(struct cpufreq_policy *policy)
+> >
+> >         intel_pstate_init_acpi_perf_limits(policy);
+> >
+> > -       policy->fast_switch_possible = true;
+> > -
+> >         return 0;
+> >  }
+> >
+> > @@ -2955,6 +2953,7 @@ static int intel_cpufreq_cpu_init(struct cpufreq_policy *policy)
+> >         if (ret)
+> >                 return ret;
+> >
+> > +       policy->fast_switch_possible = true;
+> >         policy->cpuinfo.transition_latency = INTEL_CPUFREQ_TRANSITION_LATENCY;
+> >         /* This reflects the intel_pstate_get_cpu_pstates() setting. */
+> >         policy->cur = policy->cpuinfo.min_freq;
+> > diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> > index 26e2eb399484..7a32cfca26c9 100644
+> > --- a/include/linux/cpufreq.h
+> > +++ b/include/linux/cpufreq.h
+> > @@ -604,6 +604,7 @@ struct cpufreq_governor {
+> >  /* Pass a target to the cpufreq driver */
+> >  unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
+> >                                         unsigned int target_freq);
+> > +bool cpufreq_driver_has_fast_switch(void);
+> >  void cpufreq_driver_adjust_perf(unsigned int cpu,
+> >                                 unsigned long min_perf,
+> >                                 unsigned long target_perf,
+> > diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> > index e3211455b203..f993ecf731a9 100644
+> > --- a/kernel/sched/cpufreq_schedutil.c
+> > +++ b/kernel/sched/cpufreq_schedutil.c
+> > @@ -776,7 +776,7 @@ static int sugov_start(struct cpufreq_policy *policy)
+> >
+> >         if (policy_is_shared(policy))
+> >                 uu = sugov_update_shared;
+> > -       else if (policy->fast_switch_enabled && cpufreq_driver_has_adjust_perf())
+> > +       else if (cpufreq_driver_has_adjust_perf())
+> >                 uu = sugov_update_single_perf;
+> >         else
+> >                 uu = sugov_update_single_freq;
+> > --
+> > 2.34.1
+> >
