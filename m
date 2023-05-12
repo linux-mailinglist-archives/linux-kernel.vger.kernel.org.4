@@ -2,147 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B13727005A1
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:33:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B7D9E700581
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:30:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240449AbjELKdk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:33:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58994 "EHLO
+        id S240262AbjELKaz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 06:30:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240641AbjELKcD (ORCPT
+        with ESMTP id S239935AbjELKax (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:32:03 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8FC3D06C
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:31:53 -0700 (PDT)
-Received: from kwepemi500009.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QHlMF4bbFzqSJm;
-        Fri, 12 May 2023 18:27:37 +0800 (CST)
-Received: from huawei.com (10.67.175.85) by kwepemi500009.china.huawei.com
- (7.221.188.199) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Fri, 12 May
- 2023 18:31:51 +0800
-From:   Xia Fukun <xiafukun@huawei.com>
-To:     <gregkh@linuxfoundation.org>, <prajnoha@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>, <xiafukun@huawei.com>
-Subject: [PATCH v4] kobject: Fix global-out-of-bounds in kobject_action_type()
-Date:   Fri, 12 May 2023 18:30:29 +0800
-Message-ID: <20230512103029.183852-1-xiafukun@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Fri, 12 May 2023 06:30:53 -0400
+Received: from the.earth.li (the.earth.li [IPv6:2a00:1098:86:4d:c0ff:ee:15:900d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36899FD;
+        Fri, 12 May 2023 03:30:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=earth.li;
+        s=the; h=In-Reply-To:Content-Transfer-Encoding:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=XO4oiI1WNZCBGXID74Maj061GJZrrhbmIDz22HJ58gU=; b=wBAyUpI+5/KekxytWPe3rJjhGr
+        GnFgPUT2WkeD4vrpjTvrRLSlb+mVCIVoqQ5/uSIKIk75LIUmbZhQDsrMh5D6yrxXDaYNG0mNd7Bsi
+        3kyhEDKXkZO6QOQKt/7rMjV9FkRm9ABhR8PQM5K+fUGSCwlW4OYxg+5juPqokJJMXz4RryO3gUnZZ
+        yd2yClocyD3omuW3VwwxhiCA+gxonVCejBEbipm8VRU8TSItJH0vCfnL6v2HFEenbtcvnqQQ/whmP
+        njSw0sBxqCiK9aMV0lH2JgLtXILMqL2t3s6kJkkDQp2htNEzaXxLK088p/3Mb7kEETiadBHSkohpD
+        DHKB7Ssw==;
+Received: from noodles by the.earth.li with local (Exim 4.94.2)
+        (envelope-from <noodles@earth.li>)
+        id 1pxQ2i-00AGrY-Rx; Fri, 12 May 2023 11:30:32 +0100
+Date:   Fri, 12 May 2023 11:30:32 +0100
+From:   Jonathan McDowell <noodles@earth.li>
+To:     Jernej =?utf-8?Q?=C5=A0krabec?= <jernej.skrabec@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] ARM: dts: axp209: Add iio-hwmon node for internal
+ temperature
+Message-ID: <ZF4VSCxvb6ihw9JL@earth.li>
+References: <cover.1681580558.git.noodles@earth.li>
+ <cover.1683719613.git.noodles@earth.li>
+ <2a9bd53a65c4a154cccba622c60cbffcdceaeb95.1683719613.git.noodles@earth.li>
+ <3421275.QJadu78ljV@jernej-laptop>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.175.85]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemi500009.china.huawei.com (7.221.188.199)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <3421275.QJadu78ljV@jernej-laptop>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following c language code can trigger KASAN's global variable
-out-of-bounds access error in kobject_action_type():
+On Thu, May 11, 2023 at 06:11:49PM +0200, Jernej Škrabec wrote:
+> Dne sreda, 10. maj 2023 ob 14:02:28 CEST je Jonathan McDowell napisal(a):
+> > This adds a DT node to hook up the internal temperature ADC to the
+> > iio-hwmon driver. The various voltage + current ADCs are consumed and
+> > exposed by their respective drivers, but this is not and is always
+> > available. Naming chosen to match the axp20x_ prefix the power sensors
+> > use.
+> 
+> Sorry for maybe obvious thing, but where are other ADC channels exposed?
 
-int main() {
-    int fd;
-    char *filename = "/sys/block/ram12/uevent";
-    char str[86] = "offline";
-    int len = 86;
+In the associated power drivers; e.g. axp20x_ac_power, axp20x_usb_power
++ axp20x_battery. The internal temperature is the only one that
+logically belongs to the chip as a whole rather than one of the
+subfunctions.
 
-    fd = open(filename, O_WRONLY);
-    if (fd == -1) {
-        printf("open");
-        exit(1);
-    }
+root@chip:~# sensors
+axp20x_battery-isa-0000
+Adapter: ISA adapter
+in0:           0.00 V
+curr1:         0.00 A
 
-    if (write(fd, str, len) == -1) {
-        printf("write");
-        exit(1);
-    }
+pmic_temp-isa-0000
+Adapter: ISA adapter
+temp1:        +42.5°C
 
-    close(fd);
-    return 0;
-}
+axp20x_ac-isa-0000
+Adapter: ISA adapter
+in0:           0.00 V
+curr1:         0.00 A
 
-Function kobject_action_type() receives the input parameters buf and count,
-where count is the length of the string buf.
+axp20x_usb-isa-0000
+Adapter: ISA adapter
+in0:           4.93 V  (min =  +4.00 V)
+curr1:       330.00 mA (max =  +0.00 A)
 
-In the use case we provided, count is 86, the count_first is 85.
-Buf points to a string with a length of 86, and its first seven
-characters are "offline".
-In line 87 of the code, kobject_actions[action] is the string "offline"
-with the length of 7,an out-of-boundary access will appear:
+> > Signed-off-by: Jonathan McDowell <noodles@earth.li>
+> > ---
+> >  arch/arm/boot/dts/axp209.dtsi | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> > 
+> > diff --git a/arch/arm/boot/dts/axp209.dtsi b/arch/arm/boot/dts/axp209.dtsi
+> > index ca240cd6f6c3..469d0f7d5185 100644
+> > --- a/arch/arm/boot/dts/axp209.dtsi
+> > +++ b/arch/arm/boot/dts/axp209.dtsi
+> > @@ -48,6 +48,13 @@
+> >   * http://dl.linux-sunxi.org/AXP/AXP209%20Datasheet%20v1.0_cn.pdf
+> >   */
+> > 
+> > +/ {
+> > +	pmic-temp {
+> > +		compatible = "iio-hwmon";
+> > +		io-channels = <&axp_adc 4>; /* Internal temperature */
+> > +	};
+> > +};
+> > +
+> >  &axp209 {
+> >  	compatible = "x-powers,axp209";
+> >  	interrupt-controller;
 
-kobject_actions[action][85].
+J.
 
-Use sysfs_match_string() to replace the fragile and convoluted loop.
-This function is well-tested for parsing sysfs inputs. Moreover, this
-modification will not cause any functional changes.
-
-Fixes: f36776fafbaa ("kobject: support passing in variables for synthetic uevents")
-Signed-off-by: Xia Fukun <xiafukun@huawei.com>
----
-v3 -> v4:
-- refactor the function to be more obviously correct and readable
-
-v2 -> v3:
-- only declare that it is the latest version of the patch, no change
-
-v1 -> v2:
-- modify the matching logic
-
- lib/kobject_uevent.c | 27 +++++++++++++++------------
- 1 file changed, 15 insertions(+), 12 deletions(-)
-
-diff --git a/lib/kobject_uevent.c b/lib/kobject_uevent.c
-index 7c44b7ae4c5c..59f835f5f870 100644
---- a/lib/kobject_uevent.c
-+++ b/lib/kobject_uevent.c
-@@ -66,7 +66,7 @@ static int kobject_action_type(const char *buf, size_t count,
- 	enum kobject_action action;
- 	size_t count_first;
- 	const char *args_start;
--	int ret = -EINVAL;
-+	int i, ret = -EINVAL;
- 
- 	if (count && (buf[count-1] == '\n' || buf[count-1] == '\0'))
- 		count--;
-@@ -81,17 +81,20 @@ static int kobject_action_type(const char *buf, size_t count,
- 	} else
- 		count_first = count;
- 
--	for (action = 0; action < ARRAY_SIZE(kobject_actions); action++) {
--		if (strncmp(kobject_actions[action], buf, count_first) != 0)
--			continue;
--		if (kobject_actions[action][count_first] != '\0')
--			continue;
--		if (args)
--			*args = args_start;
--		*type = action;
--		ret = 0;
--		break;
--	}
-+	/* Use sysfs_match_string() to replace the fragile and convoluted loop */
-+	i = sysfs_match_string(kobject_actions, buf);
-+
-+	if (i < 0)
-+		return ret;
-+
-+	action = kobject_action(i);
-+
-+	if (args)
-+		*args = args_start;
-+
-+	*type = action;
-+	ret = 0;
-+
- out:
- 	return ret;
- }
 -- 
-2.17.1
-
+/-\                             |  Synonym: word used when you can't
+|@/  Debian GNU/Linux Developer |       spell the one you want
+\-                              |
