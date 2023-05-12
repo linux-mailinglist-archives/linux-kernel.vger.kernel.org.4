@@ -2,69 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94A09700BE5
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 17:33:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46EAC700C0C
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 17:38:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241957AbjELPdO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 11:33:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51216 "EHLO
+        id S241756AbjELPi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 11:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241954AbjELPc6 (ORCPT
+        with ESMTP id S231788AbjELPiz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 11:32:58 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12E7BD07A
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 08:32:38 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f4ad71b00eso22192855e9.2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 08:32:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1683905556; x=1686497556;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zdRjXwoE3aSQA5gXBX6EnGzJ4k23uXOffiYXMsRnd04=;
-        b=xlPB94hVfrwAP/mRQrLn9uGgGz9detJ9DWZGhx1hIdhbqQCyXtocp+2KLR6Oa0Xvfo
-         KZdPPFJ4NR0q+bezU+CpXTL4g0uhwLoeJyOsIw/Of0KWKq0TOUA3TOvQD2kKpa8909q8
-         SBPk1MPHiT51IZxM/F670pM6lNEayPdMu6MA9gsv1g+wma3RPgL8Gez6+SdynsnUd8qp
-         YvmoxA0xzOXZ0wc3oBBHWfLnAUR6fan2WljH1RiinqkvQa2hD+mXLAS+A7K7yH3QZseO
-         X2IMIsxvuAWdcSYQnvRSyV1K9/cPpEXugXGLfSver/u17s5EHN5+E3Y8A17WdRsw8HZr
-         zi2A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683905556; x=1686497556;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=zdRjXwoE3aSQA5gXBX6EnGzJ4k23uXOffiYXMsRnd04=;
-        b=aXrIfx2rovSb0S11xB97kpEVOhJpr1hCQRPd/16Q5eOAtmCpvFDBQX9Mrx+lDIs4mA
-         JQUyCqHaIDQvTPTa+TKA1kz5ZvEzgNLGPhG/1LiNJHWwWOx/PslvfdVYuoaD/kvNJdjo
-         32HsWk8QnihYHI6qJZt5DWPZfeR3d3AZZjxlxU9V/XWADS7mrhyc8mke1iUzX6GLc5uV
-         JaxrUm/mX7QxcXOaUpGBXqIanQ33FxUJlM1Wj+lL6NXAqVpT0IslFEa+AsnJPgTamVjH
-         ZggcIIXppbb4nx/jn5nFkVwUF5UIBgpbtNk79/Xa4LrdXAj2BqmBlp3KNHlmGXHv63sM
-         I5lg==
-X-Gm-Message-State: AC+VfDzvq/RDJSUsNat8MKElg3LTPsqTu9CZBoUUxWCi9+eEO2vVxwFF
-        dhl2/Tsl+gQxJ/c4NwUEd6FzBQ==
-X-Google-Smtp-Source: ACHHUZ4+TVYFirpywkjwvQlmpE6BN6sbv1BJPlU7VMtoyaA5BYkDpyoEx9z6K7EPZxOX7qmc3EbXXQ==
-X-Received: by 2002:a5d:594e:0:b0:307:8691:1eae with SMTP id e14-20020a5d594e000000b0030786911eaemr14249014wri.20.1683905555624;
-        Fri, 12 May 2023 08:32:35 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:4c87:5cb4:6fba:6a65])
-        by smtp.gmail.com with ESMTPSA id z8-20020adfec88000000b003062675d4c9sm23636458wrn.39.2023.05.12.08.32.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 08:32:34 -0700 (PDT)
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-To:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH] pinctrl: qcom: sa8775p: add the wakeirq map
-Date:   Fri, 12 May 2023 17:32:32 +0200
-Message-Id: <20230512153232.92450-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.39.2
+        Fri, 12 May 2023 11:38:55 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA4135A7;
+        Fri, 12 May 2023 08:38:54 -0700 (PDT)
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CFEbaO014439;
+        Fri, 12 May 2023 15:38:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=97f9UGa5HYz+f/llJQR7fEEzPzbWJk+BZt5ibp0YWDM=;
+ b=WeFaTjADdhzS9A5BNggScNVT/oPrAwAgqjSwEFvdTBB/qNdOgMyYyF8TqdH9jGmY2Vqw
+ bnsO15MeCw4EIgLRiR4C9jQ0L9GI8ZDTL8oUchsdEH8MRvkM4eNaynBL+OjmiWoWdIeN
+ q34PMozL2UWJP3pdTYxskpdybtuBIqV+lsW5JeYguLCiU8mnF9c6wPB9I/Zq5FV4bqVg
+ 2xT9+BoM4+dplJ3ZocNDyAGZH7ij4O+P4w9hZkDPrKHNiCGG082ZqWtsUsrKCHBLDxgh
+ 69blp+JNdEOhJaZjZynIFA58mm1RxAVUU3SLi3RAHYEU9M3eNPYN3/7F2vR/ilZ94lyg 4Q== 
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qhk83247k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 15:38:48 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34CE8TcD003948;
+        Fri, 12 May 2023 15:34:28 GMT
+Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
+        by ppma03fra.de.ibm.com (PPS) with ESMTPS id 3qf7s8j0ad-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 15:34:28 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34CFYOZF46268684
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 12 May 2023 15:34:24 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id B2D862004B;
+        Fri, 12 May 2023 15:34:24 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1CD8420040;
+        Fri, 12 May 2023 15:34:24 +0000 (GMT)
+Received: from osiris (unknown [9.179.20.70])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri, 12 May 2023 15:34:24 +0000 (GMT)
+Date:   Fri, 12 May 2023 17:34:22 +0200
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Janosch Frank <frankja@linux.ibm.com>
+Cc:     Steffen Eiden <seiden@linux.ibm.com>, kvm@vger.kernel.org,
+        linux-s390@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Viktor Mihajlovski <mihajlov@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Nico Boehr <nrb@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Hendrik Brueckner <brueckner@linux.ibm.com>
+Subject: Re: [PATCH 5/5] s390/uv: Update query for secret-UVCs
+Message-ID: <ZF5cfisjdpiFX/L7@osiris>
+References: <20230512093153.206378-1-seiden@linux.ibm.com>
+ <20230512093153.206378-6-seiden@linux.ibm.com>
+ <ZF42vescJsAtK9pL@osiris>
+ <b826b914-a3dc-488d-b4d8-23dbfee29e58@linux.ibm.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b826b914-a3dc-488d-b4d8-23dbfee29e58@linux.ibm.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: Ykx9P2LUQ-KUQE1GgLeNXXfL0uFQqFe_
+X-Proofpoint-GUID: Ykx9P2LUQ-KUQE1GgLeNXXfL0uFQqFe_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-12_09,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxlogscore=842 lowpriorityscore=0 mlxscore=0 bulkscore=0
+ malwarescore=0 phishscore=0 adultscore=0 suspectscore=0 spamscore=0
+ clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305120129
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,53 +90,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Fri, May 12, 2023 at 03:27:52PM +0200, Janosch Frank wrote:
+> On 5/12/23 14:53, Heiko Carstens wrote:
+> > On Fri, May 12, 2023 at 11:31:53AM +0200, Steffen Eiden wrote:
+> > > Update the query struct such that secret-UVC related
+> > > information can be parsed.
+> > > Add sysfs files for these new values.
+> > > 
+> > > Signed-off-by: Steffen Eiden <seiden@linux.ibm.com>
+> > > ---
+> > >   arch/s390/boot/uv.c        |  4 ++++
+> > >   arch/s390/include/asm/uv.h | 11 ++++++++++-
+> > >   arch/s390/kernel/uv.c      | 40 ++++++++++++++++++++++++++++++++++++++
+> > >   3 files changed, 54 insertions(+), 1 deletion(-)
+> > ...
+> > > +static ssize_t uv_query_supp_add_secret_req_ver(struct kobject *kobj,
+> > > +						struct kobj_attribute *attr, char *page)
+> > > +{
+> > > +	return scnprintf(page, PAGE_SIZE, "%lx\n", uv_info.supp_add_secret_req_ver);
+> > > +}
+> > 
+> > FWIW, another minor thing: all of these should be sysfs_emit() instead.
+> 
+> Do you want us to move all of them to sysfs_emit() eventually or should we
+> keep the scnprintfs() which are already in uv.c ?
 
-The SA8775P TLMM driver is missing the GPIO-to-wakeup-pin mapping. This
-adds it.
-
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- drivers/pinctrl/qcom/pinctrl-sa8775p.c | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
-
-diff --git a/drivers/pinctrl/qcom/pinctrl-sa8775p.c b/drivers/pinctrl/qcom/pinctrl-sa8775p.c
-index 2ae7cdca65d3..422d72ed1012 100644
---- a/drivers/pinctrl/qcom/pinctrl-sa8775p.c
-+++ b/drivers/pinctrl/qcom/pinctrl-sa8775p.c
-@@ -1491,6 +1491,23 @@ static const struct msm_pingroup sa8775p_groups[] = {
- 	[153] = SDC_QDSD_PINGROUP(sdc1_data, 0x199000, 9, 0),
- };
- 
-+static const struct msm_gpio_wakeirq_map sa8775p_pdc_map[] = {
-+	{ 0, 169 }, { 1, 174 }, { 2, 170 }, { 3, 175 }, { 4, 171 }, { 5, 173 },
-+	{ 6, 172 }, { 7, 182 }, { 10, 220 }, { 11, 213 }, { 12, 221 },
-+	{ 16, 230 }, { 19, 231 }, { 20, 232 }, { 23, 233 }, { 24, 234 },
-+	{ 26, 223 }, { 27, 235 }, { 28, 209 }, { 29, 176 }, { 39, 200 },
-+	{ 31, 201 }, { 32, 212 }, { 35, 177 }, { 36, 178 }, { 39, 184 },
-+	{ 40, 185 }, { 41, 227 }, { 42, 186 }, { 43, 228 }, { 45, 187 },
-+	{ 47, 188 }, { 48, 194 }, { 51, 195 }, { 52, 196 }, { 55, 197 },
-+	{ 56, 198 }, { 57, 236 }, { 58, 192 }, { 59, 193 }, { 72, 179 },
-+	{ 73, 180 }, { 74, 181 }, { 75, 202 }, { 76, 183 }, { 77, 189 },
-+	{ 78, 190 }, { 79, 191 }, { 80, 199 }, { 83, 204 }, { 84, 205 },
-+	{ 85, 229 }, { 86, 206 }, { 89, 207 }, { 91, 208 }, { 94, 214 },
-+	{ 95, 215 }, { 96, 237 }, { 97, 216 }, { 98, 238 }, { 99, 217 },
-+	{ 100, 239 }, { 105, 219 }, { 106, 210 }, { 107, 211 }, { 108, 222 },
-+	{ 109, 203 }, { 145, 225 }, { 146, 226 },
-+};
-+
- static const struct msm_pinctrl_soc_data sa8775p_pinctrl = {
- 	.pins = sa8775p_pins,
- 	.npins = ARRAY_SIZE(sa8775p_pins),
-@@ -1499,6 +1516,8 @@ static const struct msm_pinctrl_soc_data sa8775p_pinctrl = {
- 	.groups = sa8775p_groups,
- 	.ngroups = ARRAY_SIZE(sa8775p_groups),
- 	.ngpios = 150,
-+	.wakeirq_map = sa8775p_pdc_map,
-+	.nwakeirq_map = ARRAY_SIZE(sa8775p_pdc_map),
- };
- 
- static int sa8775p_pinctrl_probe(struct platform_device *pdev)
--- 
-2.39.2
-
+I'd convert the existing ones as well.
