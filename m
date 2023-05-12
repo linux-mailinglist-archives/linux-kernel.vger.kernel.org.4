@@ -2,81 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50BD270124E
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 01:03:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E0B701250
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 01:05:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239561AbjELXDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 19:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
+        id S240154AbjELXFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 19:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238195AbjELXDH (ORCPT
+        with ESMTP id S240007AbjELXFK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 19:03:07 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 920961FC8;
-        Fri, 12 May 2023 16:03:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683932585; x=1715468585;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=FomQx5g+caJEuw8Rc81IGxLvjLOMBltYdVeWZa89Wjs=;
-  b=hYypEaIX/H/bSTiyzWxeIXoV+bUq+A+6mGnUpAOdp+8PMcL9Q7tSDzcP
-   YLHIVtYx2Bm1ji/7U5zMv5DQToPJqJ59PAeLjeWLr/UeNAxHd8njS1aBi
-   qLMjiDgr4yRkkoeV9OvAarOAxH1R4b3Prp4Cejk/9kIsH013BJx2kxJui
-   Aq6kd94FJ5lxHcICwhf7d2c6KIZRWO22rcG0CTVvUi2PfnLsQasLWi4LQ
-   DiJ77qekgQtwA/WmZDYA0H0PNxBq9cvJNgH7km6ilzSeNjWfftHfU5MSW
-   KOSe5DqBB3ATtkmRLiQasjDDCJ/CsZnZkiRNK3w+6+iG7xvLGuyKNoUFY
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="340227013"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="340227013"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 16:03:03 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="650791514"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="650791514"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 12 May 2023 16:02:58 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pxbms-0005A8-0W;
-        Fri, 12 May 2023 23:02:58 +0000
-Date:   Sat, 13 May 2023 07:02:34 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dmitry Safonov <dima@arista.com>, linux-kernel@vger.kernel.org,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
-        Dmitry Safonov <dima@arista.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        Dan Carpenter <error27@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Francesco Ruggeri <fruggeri05@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Ivan Delalande <colona@arista.com>,
-        Leonard Crestez <cdleonard@gmail.com>,
-        Salam Noureddine <noureddine@arista.com>
-Subject: Re: [PATCH v6 07/21] net/tcp: Add tcp_parse_auth_options()
-Message-ID: <202305130600.uZymcUzw-lkp@intel.com>
-References: <20230512202311.2845526-8-dima@arista.com>
+        Fri, 12 May 2023 19:05:10 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87D5B211F
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:05:08 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-6436e004954so10915428b3a.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:05:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1683932708; x=1686524708;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zDjWjICi5dfHeJD8jjNAckygSSqWC7cZ1U4u8cLgo+8=;
+        b=b+EkQMOovJD4q+RcqhdM5THPiaQnOoMQQmQUdAE1/5C5yoRdmjd826KH8hDHBymbl8
+         oTKPyKWnnE2Q8lhIrIzJX7M8P5+4hMyo47M4rsXMASW0xbYt3MRYU7ITvyOoZaMPvSde
+         ON6uo1KLHh8/1tghvnn80GZjlNEOciBO+yztiz9QJlBGlQvJFcBw4ELc2HMNisiz3BHg
+         8u6RZAmSUxGwfHYI4QVnEnYu5gpI67i2mCxOmlOytbCuMyYtoi7zgy7Tv+TrSdmoAxH7
+         +Co8ydCoFrcpStr9Rm/F1zLjpM6u3RUhH3KADEfDbDhRoeX4vCJ/VAQSDQ1gxLm63Qv+
+         TIUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683932708; x=1686524708;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zDjWjICi5dfHeJD8jjNAckygSSqWC7cZ1U4u8cLgo+8=;
+        b=Axzfa/vVQdQljF07Pm5Y3Du5+D62J9T7MC+5GjpPeWepKidR1f9HG3anp/1ZY31FWX
+         Xo+SCMwNtOHMN5R8rzTw1pJHqpvS4egNp6QCu1KfCDtBdAk1kNMth6g5fG5hXU20Yf+M
+         ZLf36hx7A70eStIGfZka9j2ZS6IafMd4RRzYfCX+XUVfLcSS03K13e8tUAdvYLb8u4Dj
+         sfhqQAV2y7TYxjpECaii6deEoxeFuMQqds43DrHq3iHY55C7rGBlR2wSlJp5g1TCGC5E
+         xaw0Yn2053qrS/HCgeoF+beq/3QRhiiuYrxFM3fiqlqzGZCOaQS6GT4usAIwTRZBNzYl
+         bdUA==
+X-Gm-Message-State: AC+VfDwHWrnX4x/auUNcWPXZPgmU0e46HX35JlDjwFr6gNX0al2e76Mi
+        byIeowcbBFRsX7xJPx8flK0v/Q==
+X-Google-Smtp-Source: ACHHUZ6PYFc8acpfxUTxuuQj7QEQwrfqqFf+HV9VDYlbLP/6n+FJTlDvLm4ftm/f8U07EhaVuDWFWQ==
+X-Received: by 2002:a05:6a21:789c:b0:100:607:b986 with SMTP id bf28-20020a056a21789c00b001000607b986mr26046294pzc.56.1683932707867;
+        Fri, 12 May 2023 16:05:07 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
+        by smtp.gmail.com with ESMTPSA id t23-20020a62ea17000000b0062cf75a9e6bsm7540715pfh.131.2023.05.12.16.05.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 16:05:07 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pxbou-00Ea0E-Ko; Sat, 13 May 2023 09:05:04 +1000
+Date:   Sat, 13 May 2023 09:05:04 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Oliver Sang <oliver.sang@intel.com>
+Cc:     Dave Chinner <dchinner@redhat.com>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, linux-kernel@vger.kernel.org,
+        "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
+        ying.huang@intel.com, feng.tang@intel.com, fengwei.yin@intel.com
+Subject: Re: [linus:master] [xfs]  2edf06a50f:  fsmark.files_per_sec -5.7%
+ regression
+Message-ID: <20230512230504.GF3223426@dread.disaster.area>
+References: <202305090905.aff4e0e6-oliver.sang@intel.com>
+ <20230509065433.GT3223426@dread.disaster.area>
+ <20230509071053.GE2651828@dread.disaster.area>
+ <ZF3uXe+cjAsfCLic@xsang-OptiPlex-9020>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230512202311.2845526-8-dima@arista.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZF3uXe+cjAsfCLic@xsang-OptiPlex-9020>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,123 +82,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+On Fri, May 12, 2023 at 03:44:29PM +0800, Oliver Sang wrote:
+> hi, Dave Chinner,
+> 
+> On Tue, May 09, 2023 at 05:10:53PM +1000, Dave Chinner wrote:
+> > On Tue, May 09, 2023 at 04:54:33PM +1000, Dave Chinner wrote:
+> > > On Tue, May 09, 2023 at 10:13:19AM +0800, kernel test robot wrote:
+> > > > 
+> > > > 
+> > > > Hello,
+> > > > 
+> > > > kernel test robot noticed a -5.7% regression of fsmark.files_per_sec on:
+> > > > 
+> > > > 
+> > > > commit: 2edf06a50f5bbe664283f3c55c480fc013221d70 ("xfs: factor xfs_alloc_vextent_this_ag() for  _iterate_ags()")
+> > > > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> > > 
+> > > This is just a refactoring patch and doesn't change any logic.
+> > > Hence I'm sceptical that it actually resulted in a performance
+> > > regression. Indeed, the profile indicates a significant change of
+> > > behaviour in the allocator and I can't see how the commit above
+> > > would cause anything like that.
+> > > 
+> > > Was this a result of a bisect? If so, what were the original kernel
+> > > versions where the regression was detected?
+> > 
+> > Oh, CONFIG_XFS_DEBUG=y, which means:
+> > 
+> > static int
+> > xfs_alloc_ag_vextent_lastblock(
+> >         struct xfs_alloc_arg    *args,
+> >         struct xfs_alloc_cur    *acur,
+> >         xfs_agblock_t           *bno,
+> >         xfs_extlen_t            *len,
+> >         bool                    *allocated)
+> > {
+> >         int                     error;
+> >         int                     i;
+> > 
+> > #ifdef DEBUG
+> >         /* Randomly don't execute the first algorithm. */
+> >         if (get_random_u32_below(2))
+> >                 return 0;
+> > #endif
+> > 
+> > We randomly chose a near block allocation strategy to use to improve
+> > code coverage, not the optimal one for IO performance. Hence the CPU
+> > usage and allocation patterns that impact IO performance are simply
+> > not predictable or reproducable from run to run. So, yeah, trying to
+> > bisect a minor difference in performance as a result of this
+> > randomness will not be reliable....
+> 
+> Thanks a lot for guidance!
+> 
+> we plan to disable XFS_DEBUG (as well as XFS_WARN) in our performance tests.
+> want to consult with you if this is the correct thing to do?
 
-kernel test robot noticed the following build warnings:
+You can use XFS_WARN=y with performance tests - that elides all the
+debug specific code that changes behaviour but leaves all the
+ASSERT-based correctness checks in the code.
 
-[auto build test WARNING on 47a2ee5d4a0bda05decdda7be0a77e792cdb09a3]
+> and I guess we should still keep them in functional tests, am I right?
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Safonov/net-tcp-Prepare-tcp_md5sig_pool-for-TCP-AO/20230513-042734
-base:   47a2ee5d4a0bda05decdda7be0a77e792cdb09a3
-patch link:    https://lore.kernel.org/r/20230512202311.2845526-8-dima%40arista.com
-patch subject: [PATCH v6 07/21] net/tcp: Add tcp_parse_auth_options()
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230513/202305130600.uZymcUzw-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/16d692b101c65ae6a5a60530a3461c512f3bc312
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dmitry-Safonov/net-tcp-Prepare-tcp_md5sig_pool-for-TCP-AO/20230513-042734
-        git checkout 16d692b101c65ae6a5a60530a3461c512f3bc312
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash net/ipv4/
+Yes.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305130600.uZymcUzw-lkp@intel.com/
+> BTW, regarding this case, we tested again with disabling XFS_DEBUG (as well as
+> XFS_WARN), kconfig is attached, only diff with last time is:
+> -CONFIG_XFS_DEBUG=y
+> -CONFIG_XFS_ASSERT_FATAL=y
+> +# CONFIG_XFS_WARN is not set
+> +# CONFIG_XFS_DEBUG is not set
+> 
+> but we still observed similar regression:
+> 
+> ecd788a92460eef4 2edf06a50f5bbe664283f3c55c4
+> ---------------- ---------------------------
+>          %stddev     %change         %stddev
+>              \          |                \
+>    8176057 ± 15%      +4.7%    8558110        fsmark.app_overhead
+>      14484            -6.3%      13568        fsmark.files_per_sec
 
-All warnings (new ones prefixed by >>):
+So the application spent 5% more CPU time in userspace, and the rate
+the kernel processed IO went down by 6%. Seems to me like
+everything is running slower, not just the kernel code....
 
-   net/ipv4/tcp.c: In function 'tcp_inbound_md5_hash':
->> net/ipv4/tcp.c:4506:24: warning: implicit conversion from 'enum <anonymous>' to 'enum skb_drop_reason' [-Wenum-conversion]
-    4506 |                 return true;
-         |                        ^~~~
+>     100.50 ±  5%      +0.3%     100.83        turbostat.Avg_MHz
+>       5.54 ± 11%      +0.3        5.82        turbostat.Busy%
+>       1863 ± 19%      -6.9%       1733        turbostat.Bzy_MHz
 
+Evidence that the CPU is running at a 7% lower clock rate when the
+results are 6% slower is a bit suspicious to me. Shouldn't the CPU
+clock rate be fixed to the same value for A-B performance regression
+testing?
 
-vim +4506 net/ipv4/tcp.c
+Cheers,
 
-  4477	
-  4478	/* Called with rcu_read_lock() */
-  4479	enum skb_drop_reason
-  4480	tcp_inbound_md5_hash(const struct sock *sk, const struct sk_buff *skb,
-  4481			     const void *saddr, const void *daddr,
-  4482			     int family, int dif, int sdif)
-  4483	{
-  4484		/*
-  4485		 * This gets called for each TCP segment that arrives
-  4486		 * so we want to be efficient.
-  4487		 * We have 3 drop cases:
-  4488		 * o No MD5 hash and one expected.
-  4489		 * o MD5 hash and we're not expecting one.
-  4490		 * o MD5 hash and its wrong.
-  4491		 */
-  4492		const __u8 *hash_location = NULL;
-  4493		struct tcp_md5sig_key *hash_expected;
-  4494		const struct tcphdr *th = tcp_hdr(skb);
-  4495		const struct tcp_sock *tp = tcp_sk(sk);
-  4496		int genhash, l3index;
-  4497		u8 newhash[16];
-  4498	
-  4499		/* sdif set, means packet ingressed via a device
-  4500		 * in an L3 domain and dif is set to the l3mdev
-  4501		 */
-  4502		l3index = sdif ? dif : 0;
-  4503	
-  4504		hash_expected = tcp_md5_do_lookup(sk, l3index, saddr, family);
-  4505		if (tcp_parse_auth_options(th, &hash_location, NULL))
-> 4506			return true;
-  4507	
-  4508		/* We've parsed the options - do we have a hash? */
-  4509		if (!hash_expected && !hash_location)
-  4510			return SKB_NOT_DROPPED_YET;
-  4511	
-  4512		if (hash_expected && !hash_location) {
-  4513			NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPMD5NOTFOUND);
-  4514			return SKB_DROP_REASON_TCP_MD5NOTFOUND;
-  4515		}
-  4516	
-  4517		if (!hash_expected && hash_location) {
-  4518			NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPMD5UNEXPECTED);
-  4519			return SKB_DROP_REASON_TCP_MD5UNEXPECTED;
-  4520		}
-  4521	
-  4522		/* Check the signature.
-  4523		 * To support dual stack listeners, we need to handle
-  4524		 * IPv4-mapped case.
-  4525		 */
-  4526		if (family == AF_INET)
-  4527			genhash = tcp_v4_md5_hash_skb(newhash,
-  4528						      hash_expected,
-  4529						      NULL, skb);
-  4530		else
-  4531			genhash = tp->af_specific->calc_md5_hash(newhash,
-  4532								 hash_expected,
-  4533								 NULL, skb);
-  4534	
-  4535		if (genhash || memcmp(hash_location, newhash, 16) != 0) {
-  4536			NET_INC_STATS(sock_net(sk), LINUX_MIB_TCPMD5FAILURE);
-  4537			if (family == AF_INET) {
-  4538				net_info_ratelimited("MD5 Hash failed for (%pI4, %d)->(%pI4, %d)%s L3 index %d\n",
-  4539						saddr, ntohs(th->source),
-  4540						daddr, ntohs(th->dest),
-  4541						genhash ? " tcp_v4_calc_md5_hash failed"
-  4542						: "", l3index);
-  4543			} else {
-  4544				net_info_ratelimited("MD5 Hash %s for [%pI6c]:%u->[%pI6c]:%u L3 index %d\n",
-  4545						genhash ? "failed" : "mismatch",
-  4546						saddr, ntohs(th->source),
-  4547						daddr, ntohs(th->dest), l3index);
-  4548			}
-  4549			return SKB_DROP_REASON_TCP_MD5FAILURE;
-  4550		}
-  4551		return SKB_NOT_DROPPED_YET;
-  4552	}
-  4553	EXPORT_SYMBOL(tcp_inbound_md5_hash);
-  4554	
-
+Dave.
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Dave Chinner
+david@fromorbit.com
