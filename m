@@ -2,138 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78703701281
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 01:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B89D701283
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 01:33:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240857AbjELXbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 19:31:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42308 "EHLO
+        id S240689AbjELXdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 19:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240782AbjELXbf (ORCPT
+        with ESMTP id S240427AbjELXda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 19:31:35 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9F130F1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:31:34 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id 41be03b00d2f7-518d6f87a47so5257044a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:31:34 -0700 (PDT)
+        Fri, 12 May 2023 19:33:30 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D7C1718
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:33:17 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id d2e1a72fcca58-643ac91c51fso6706161b3a.1
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:33:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683934293; x=1686526293;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=wcH/IZQt2fpKxWmdOflRc9OWLwVhjYgy+bCX1XDE93g=;
-        b=4v83TGIas+wfJjaWLCOjPTDFSf5eI0rTg2hOJnaAcwUhGubuB/XMefrzo/70cdPHs7
-         2qaVG9FFRFrrWuA1ch2mD8R4vANQ3Jz3nCMrzvZL0iWOP4dnahrvsSnasp3AStseMnli
-         rgmbk09ghFEHQUAHCkGmU4u7FWympmB7VW8JOn548sLMsS9hGc7lp6VtWMLlA0tgQ2Kz
-         NUo3Hp2V0aQJU/fe5wxt9V43OBF9EodvkmL7m7XGnUC0Z3cqtyVB9kmSoK8AJVw5WF7Z
-         gLH0mc1P5/CzJt6NLPLOzREmR25cB3/2DNJss8i8VU9bLcWJ8eQ9iPX/k78+NRi1c9yG
-         QLRA==
+        d=google.com; s=20221208; t=1683934397; x=1686526397;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cvwQaaZ0+K9jxsdyvnDNJYbJcMSYJ8VZ+taENeCZRIA=;
+        b=QZCKL/pBsTs6F+tWSP5H/zei428DLnLdg/MB/c8OqWTueXHbJIYngJctjVmMl6QqeL
+         JmhBqmgGpNhq6DMd9Ti9RXZfCzWUkg6SRlAcbS/r0XW2aZdppaClgul2aEZQKmpn8gMz
+         3991nMsXu1JI+WamivSybu83hBgEhhmsWuOQcTcUjsggBIJXjsJ0DpmaqzpbLpoHdDrL
+         OfjbPNmXTAIndHDQdaJedfbyrgfwvZ1VAkiPG6km3LjpyHMxEel693Y1jtDtQfqAK9cQ
+         nmJ4EltPuOBOijhOx+827gjITvMbdoPtOs9wOKCXAWqU/FP6YO2snBs+T9Ws/f9TR576
+         +iJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683934293; x=1686526293;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wcH/IZQt2fpKxWmdOflRc9OWLwVhjYgy+bCX1XDE93g=;
-        b=YI4tH48XeOTf5Slez16KqLwCl1W9NkIBDLYz3LXpaUc5l41a2e12N9YGyxYMXqX0gq
-         RlORo9yN9aBq4ZaJWd7Yynzl0xVyE5rJ0fZ0QM0f1hvLLxzqDStNvvgyVlatFSfvD4Oq
-         MW46J0/NrA+gjRUSpN72PVng48XJnJB5+ls7DE91xbSq64D72uLmCGfmNuKSGtd3ou2b
-         9CEE3Ma5aIMFw7MdTsRvKrfBfhJxBEEELIWLUP0ybnRRDHrykMHiERhbwDEuarfo+so5
-         avW9prU3vKoe8EtTPvim7tH3btEclNv4AFT1U0TqnIhO6841qEp+bO1oO63/a4qgs2Fn
-         Qprw==
-X-Gm-Message-State: AC+VfDw3ZD0Sk4rVLFi3j1phr94aGPgQ+8CRmjvKsxbNse3e7VgsuiyJ
-        ZZF6yJewxOZ4Bs0vZXmLu+UbVpjWKxM=
-X-Google-Smtp-Source: ACHHUZ5UNjKC3Mr05CVuFrOytcZXmJ4jNvPP0Z/3ZNzFBXbNdnsGA19Lumkans0gS6XeDtr0V3XVeltLARk=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:2b04:0:b0:521:62ef:9b38 with SMTP id
- r4-20020a632b04000000b0052162ef9b38mr7261719pgr.3.1683934293773; Fri, 12 May
- 2023 16:31:33 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 12 May 2023 16:31:27 -0700
-In-Reply-To: <20230512233127.804012-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20230512233127.804012-1-seanjc@google.com>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Message-ID: <20230512233127.804012-3-seanjc@google.com>
-Subject: [PATCH v2 2/2] KVM: Don't enable hardware after a restart/shutdown is initiated
-From:   Sean Christopherson <seanjc@google.com>
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Marc Zyngier <maz@kernel.org>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        kvm-riscv@lists.infradead.org,
-        Sean Christopherson <seanjc@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1683934397; x=1686526397;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cvwQaaZ0+K9jxsdyvnDNJYbJcMSYJ8VZ+taENeCZRIA=;
+        b=hXdACotlKKa3I4/NFD4YRFxksVBscAtBTSpMpOmw3JLMW3kKkFpYKub8oHEh6/8Q67
+         ThWZzgQVrE0pyLbyVsiSapet+L+Of3HOGUA2q3fTMHyOhVUS6lJgzmu6UeyfFwLtQLZO
+         4IXim2k6TqnWqa7S/gDBCYasqzhsYsqH9ElDbYuv483xrgv6HAbYoBJ7SDXeskSVRnbg
+         1Z+ZjDqwVdu5cnCHhab0V5YwluwTTyG79DTmwR/ZBuPXzg9HsZ9pW2YijGBA8xOt9fCP
+         qhgTZDsFDoKksYuCaa6GDvb1O/oLmPbfRy4pcLyqOM377oMEwfajcqiGxRzxv6mUYos2
+         ZB9Q==
+X-Gm-Message-State: AC+VfDwIIki0QZb73vNZ+gHpM4O+tId4i7NY7K3e0DXWjfXSsBvc5jTg
+        B/ZBP0Me07Ls0RTi891WqjV1cw==
+X-Google-Smtp-Source: ACHHUZ6m6bPe9z3yKqGIZtPb8lpr4oDwO5tYzBU1w4Bstq53YIb0YfHv6Qn3ESxsxMeG8q7dvI+x3Q==
+X-Received: by 2002:a17:903:247:b0:1ab:16cd:51a3 with SMTP id j7-20020a170903024700b001ab16cd51a3mr35719112plh.10.1683934396877;
+        Fri, 12 May 2023 16:33:16 -0700 (PDT)
+Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
+        by smtp.gmail.com with ESMTPSA id c2-20020a170902d90200b001a9bfd4c5dfsm8500870plz.147.2023.05.12.16.33.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 16:33:16 -0700 (PDT)
+Date:   Fri, 12 May 2023 16:33:12 -0700
+From:   David Matlack <dmatlack@google.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mingwei Zhang <mizhang@google.com>,
+        Jim Mattson <jmattson@google.com>
+Subject: Re: [PATCH 6/9] KVM: x86/mmu: Bug the VM if a vCPU ends up in long
+ mode without PAE enabled
+Message-ID: <ZF7MuDGp9MvPNwFh@google.com>
+References: <20230511235917.639770-1-seanjc@google.com>
+ <20230511235917.639770-7-seanjc@google.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511235917.639770-7-seanjc@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reject hardware enabling, i.e. VM creation, if a restart/shutdown has
-been initiated to avoid re-enabling hardware between kvm_reboot() and
-machine_{halt,power_off,restart}().  The restart case is especially
-problematic (for x86) as enabling VMX (or clearing GIF in KVM_RUN on
-SVM) blocks INIT, which results in the restart/reboot hanging as BIOS
-is unable to wake and rendezvous with APs.
+On Thu, May 11, 2023 at 04:59:14PM -0700, Sean Christopherson wrote:
+> Promote the ASSERT(), which is quite dead code in KVM, into a KVM_BUG_ON()
+> for KVM's sanity check that CR4.PAE=1 if the vCPU is in long mode when
+> performing a walk of guest page tables.  The sanity is quite cheap since
+> neither EFER nor CR4.PAE requires a VMREAD, especially relative to the
+> cost of walking the guest page tables.
+> 
+> More importantly, the sanity check would have prevented the true badness
+> fixed by commit 112e66017bff ("KVM: nVMX: add missing consistency checks
+> for CR0 and CR4").  The missed consistency check resulted in some versions
+> of KVM corrupting the on-stack guest_walker structure due to KVM thinking
+> there are 4/5 levels of page tables, but wiring up the MMU hooks to point
+> at the paging32 implementation, which only allocates space for two levels
+> of page tables in "struct guest_walker32".
+> 
+> Queue a page fault for injection if the assertion fails, as the sole
+> caller, FNAME(gva_to_gpa), assumes that walker.fault contains sane info
 
-Note, this bug, and the original issue that motivated the addition of
-kvm_reboot(), is effectively limited to a forced reboot, e.g. `reboot -f`.
-In a "normal" reboot, userspace will gracefully teardown userspace before
-triggering the kernel reboot (modulo bugs, errors, etc), i.e. any process
-that might do ioctl(KVM_CREATE_VM) is long gone.
+FNAME(page_fault)->FNAME(walk_addr)->FNAME(walk_addr_generic) is another
+caller but I think the same reasoning here applies.
 
-Fixes: 8e1c18157d87 ("KVM: VMX: Disable VMX when system shutdown")
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- virt/kvm/kvm_main.c | 17 ++++++++++++++++-
- 1 file changed, 16 insertions(+), 1 deletion(-)
+> on a walk failure, i.e. avoid making the situation worse between the time
+> the assertion fails and when KVM kicks the vCPU out to userspace (because
+> the VM is bugged).
+> 
+> Move the check below the initialization of "pte_access" so that the
+> aforementioned to-be-injected page fault doesn't consume uninitialized
+> stack data.  The information _shouldn't_ reach the guest or userspace,
+> but there's zero downside to being paranoid in this case.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/kvm/mmu/paging_tmpl.h | 5 ++++-
+>  1 file changed, 4 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/x86/kvm/mmu/paging_tmpl.h b/arch/x86/kvm/mmu/paging_tmpl.h
+> index a3fc7c1a7f8d..f297e9311dcd 100644
+> --- a/arch/x86/kvm/mmu/paging_tmpl.h
+> +++ b/arch/x86/kvm/mmu/paging_tmpl.h
+> @@ -338,7 +338,6 @@ static int FNAME(walk_addr_generic)(struct guest_walker *walker,
+>  	}
+>  #endif
+>  	walker->max_level = walker->level;
+> -	ASSERT(!(is_long_mode(vcpu) && !is_pae(vcpu)));
+>  
+>  	/*
+>  	 * FIXME: on Intel processors, loads of the PDPTE registers for PAE paging
+> @@ -348,6 +347,10 @@ static int FNAME(walk_addr_generic)(struct guest_walker *walker,
+>  	nested_access = (have_ad ? PFERR_WRITE_MASK : 0) | PFERR_USER_MASK;
+>  
+>  	pte_access = ~0;
+> +
+> +	if (KVM_BUG_ON(is_long_mode(vcpu) && !is_pae(vcpu), vcpu->kvm))
+> +		goto error;
 
-diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-index e771b6a013c9..cc36a7fc8a86 100644
---- a/virt/kvm/kvm_main.c
-+++ b/virt/kvm/kvm_main.c
-@@ -5182,7 +5182,20 @@ static void hardware_disable_all(void)
- static int hardware_enable_all(void)
- {
- 	atomic_t failed = ATOMIC_INIT(0);
--	int r = 0;
-+	int r;
-+
-+	/*
-+	 * Do not enable hardware virtualization if the system is going down.
-+	 * If userspace initiated a forced reboot, e.g. reboot -f, then it's
-+	 * possible for an in-flight KVM_CREATE_VM to trigger hardware enabling
-+	 * after kvm_reboot() is called.  Note, this relies on system_state
-+	 * being set _before_ kvm_reboot(), which is why KVM uses a syscore ops
-+	 * hook instead of registering a dedicated reboot notifier (the latter
-+	 * runs before system_state is updated).
-+	 */
-+	if (system_state == SYSTEM_HALT || system_state == SYSTEM_POWER_OFF ||
-+	    system_state == SYSTEM_RESTART)
-+		return -EBUSY;
- 
- 	/*
- 	 * When onlining a CPU, cpu_online_mask is set before kvm_online_cpu()
-@@ -5195,6 +5208,8 @@ static int hardware_enable_all(void)
- 	cpus_read_lock();
- 	mutex_lock(&kvm_lock);
- 
-+	r = 0;
-+
- 	kvm_usage_count++;
- 	if (kvm_usage_count == 1) {
- 		on_each_cpu(hardware_enable_nolock, &failed, 1);
--- 
-2.40.1.606.ga4b1b128d6-goog
+This if() deserves a comment since it's queueing a page fault for what
+is likely a KVM bug. As a reader that'd be pretty jarring to see.
 
+> +
+>  	++walker->level;
+>  
+>  	do {
+> -- 
+> 2.40.1.606.ga4b1b128d6-goog
+> 
