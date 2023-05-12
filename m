@@ -2,148 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970E7700EDA
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 20:31:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36236700EE3
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 20:32:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238918AbjELSbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 14:31:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
+        id S238929AbjELScl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 14:32:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238793AbjELSbI (ORCPT
+        with ESMTP id S238860AbjELScj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 14:31:08 -0400
-Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6A71BF4
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:30:26 -0700 (PDT)
-Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-55b7630a736so152917767b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:30:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683916224; x=1686508224;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8pKQb+0xYXxOucpnQzXDi3qX8jDqCIpUeJjG+K7ITys=;
-        b=ha15g8FNo/FKZNrF+fIFFhPoe8LUpkxENpBqAGkhlgIIw6RpVsD4q25DcY6gKzpOoa
-         oE9ce0ibbeel8jUFuWC+GQF5KKxHreoW5ikWUjYRb9sdWI3OXNmus3V4iKZ9vHKqd6sg
-         VFxLljBA8G2zdnOjAu+Z1Js/XYXeyUQEJmoaoCuOqG5pxckNIdYrzW1VBharM7ZexDzO
-         MAvtpzlCA1HLpSyajO6KSxrLNGQLfJ014MnGrNCn3ihPSv6NXEv3zvSt8gPoc6j9guXQ
-         hzvsSormsrqNGJQpht3s+lGzNwHuhUoybeKRwb9mn3F+7sDGqIeAxlIvHtB2hx9i0mfI
-         yYCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683916224; x=1686508224;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8pKQb+0xYXxOucpnQzXDi3qX8jDqCIpUeJjG+K7ITys=;
-        b=UW6kYnG9ubHVnF8s/J4HsILM//G0IoiUP5H/PtZxMPBxFLnOzf5D4NyVkQaWyBcnKn
-         /P+YEnihOi95A+HRL1iKT8lY3LhuOQbwmjH+/+XR0Du/tacjlS2lY3g981jQ13fxrzIz
-         1Az0GuEPc6ZC9zSx9XOIKYLs9PkHRjIKZ6wO4k1gYzRvRsBThJ0DfapUS8E4jfAVwquE
-         aTscnSMFAB+sC89LX0gj40XF3bOzsV9V8XZ/2NP4Fj+hgHJ3W9q2v2JzKSFPyFlW5Tnf
-         M1hFi978mvkxN5ruB2kduqKkpsslNzZWr5WnHLNyhrunChPsI+jrwsl7w/YQuRY/9ApO
-         u0Zg==
-X-Gm-Message-State: AC+VfDwFUggZGJizXi2FV6McW0jhWgFPiS4/g1/chpyERm5giacdv23H
-        qWJXBrW9q/TMgp7BUf22IqA6vfjQNLpilzc8q/qlTA==
-X-Google-Smtp-Source: ACHHUZ4EpK0beeyEKKSqeEK5dUk6rdIl9cp/YnF8Y+QPICHcuW1M4nZMXaaPITctbhAOfsn7vuAk2CWoax7noIg8REs=
-X-Received: by 2002:a05:6902:70d:b0:ba7:50d4:d914 with SMTP id
- k13-20020a056902070d00b00ba750d4d914mr259939ybt.5.1683916224054; Fri, 12 May
- 2023 11:30:24 -0700 (PDT)
+        Fri, 12 May 2023 14:32:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F03A1BF4;
+        Fri, 12 May 2023 11:32:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0FC75657B6;
+        Fri, 12 May 2023 18:31:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68219C43443;
+        Fri, 12 May 2023 18:31:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683916279;
+        bh=QNtq+dSxf9S4yKVS21hk0h0xMTBN4aqiD72KDFJyBk8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=S3eckV/pl26k1JlgpYv0R7kzza2puVetV/PeBl8/OL+6nvWP/BO5PEXTygIWRKUWV
+         xbSja4rYBbpwOG/7GKAJtle5TcPVb/r7fk8oyYwhys+yS3TyDTWNyhg8hbS5DHI3O/
+         Rm8hlKJn+y/qS4hJ8aZZsSxe640f32ldjp0qCY1273MnyRul8tDEwL9sF5g9CQZTHo
+         51DuqmZ/1EaPhWY4C8Rr0p5qdOPHiqMhdKa84V5azCajimUcER8gcTU3ccAbd0ZxLR
+         wvLMS3pAr6k5gpBegrqX6caWeLBajjSiv+obtkeZw48No4aSrsVmEEeZH2AlbtwNkt
+         si0W2yVltrr0g==
+Date:   Fri, 12 May 2023 11:31:18 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
+Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Brian Foster <bfoster@redhat.com>,
+        Theodore Ts'o <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Bart Van Assche <bvanassche@google.com>,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v6 1/5] block: Don't invalidate pagecache for invalid
+ falloc modes
+Message-ID: <20230512183118.GD858791@frogsfrogsfrogs>
+References: <20230420004850.297045-1-sarthakkukreti@chromium.org>
+ <20230506062909.74601-1-sarthakkukreti@chromium.org>
+ <20230506062909.74601-2-sarthakkukreti@chromium.org>
 MIME-Version: 1.0
-References: <1683750665-8764-1-git-send-email-quic_khsieh@quicinc.com>
- <1683750665-8764-2-git-send-email-quic_khsieh@quicinc.com>
- <CAA8EJprtQF0x_LCOTrt5bvRnJ+xRz6QxLF6QAP-4Pff6V5TJ2g@mail.gmail.com>
- <20230511155331.2jmfe7xcs5tihdgb@ripper> <5ef83699-01de-d062-6239-9bb834c70458@linaro.org>
- <8ac0b5f5-27da-2b28-8f10-b2fca447511a@quicinc.com> <CAA8EJpokAoGni7vNwuijs7EvmjCweO3pgChij3Qx3OUkVTVpiQ@mail.gmail.com>
- <CAE-0n51SHQhUJiY=BJp8CQQ1aTAOxeMDr2+NX_vpmjN_cyJJrA@mail.gmail.com>
-In-Reply-To: <CAE-0n51SHQhUJiY=BJp8CQQ1aTAOxeMDr2+NX_vpmjN_cyJJrA@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Fri, 12 May 2023 21:30:13 +0300
-Message-ID: <CAA8EJprynCeTdYk5PH2aKcjoZZa5kh_iJRpXUua2jqhtMD5B=Q@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] drm/msm/dp: enable HDP plugin/unplugged interrupts
- to hpd_enable/disable
-To:     Stephen Boyd <swboyd@chromium.org>
-Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, dianders@chromium.org, vkoul@kernel.org,
-        daniel@ffwll.ch, airlied@gmail.com, agross@kernel.org,
-        quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
-        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230506062909.74601-2-sarthakkukreti@chromium.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 12 May 2023 at 21:03, Stephen Boyd <swboyd@chromium.org> wrote:
->
-> Quoting Dmitry Baryshkov (2023-05-11 17:54:19)
-> > On Fri, 12 May 2023 at 03:16, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
-> > > 1) DP with GPIO: No downstream drm_bridge are connected, is_edp = false
-> > > and internal HPD-logic is in used (internal_hpd = true). Power needs to
-> > > be on at all times etc.
-> > >
-> > > 2) DP without GPIO: Downstream drm_bridge connected, is_edp = false and
-> > > internal HPD-logic should not be used/enabled (internal_hpd = false).
-> > > Power doesn't need to be on unless hpd_notify is invoked to tell us that
-> > > there's something connected...
-> > >
-> > > - dp_bridge_hpd_notify(). What is the point of this check? <== i have
-> > > below two questions,
-> > >
-> > > 1) can you explain when/what this dp_bridge_hpd_notify() will be called?
-> >
-> > The call chain is drm_bridge_hpd_notify() ->
-> > drm_bridge_connector_hpd_notify() -> .hpd_notify() for all drm_bridge
-> > in chain
-> >
-> > One should add a call to drm_bridge_hpd_notify() when the hotplug
-> > event has been detected.
-> >
-> > Also please note the patch https://patchwork.freedesktop.org/patch/484432/
-> >
-> > >
-> > > 2) is dp_bridge_hpd_notify() only will be called at above case #2? and
-> > > it will not be used by case #1?
-> >
-> > Once the driver calls drm_bridge_hpd_notify() in the hpd path, the
-> > hpd_notify callbacks will be called in case#1 too.
-> >
-> > BTW: I don't see drm_bridge_hpd_notify() or
-> > drm_kms_{,connector_}_hotplug_event() HPD notifications in the DP
-> > driver at all. This should be fixed.
-> >
->
-> Is dp_bridge_hpd_notify() being called by
-> drm_helper_probe_single_connector_modes() when the connectors are
-> detected?
->
-> I see drm_helper_probe_detect() calls connector->funcs->detect() which I
-> think calls
-> drm_bridge_connector_funcs::drm_bridge_connector_hpd_notify() but I
-> haven't confirmed yet. The 'detect' bridge is the DP bridge in msm
-> driver
->
->          if (!dp_display->is_edp) {
->                 bridge->ops =
->                         DRM_BRIDGE_OP_DETECT |
->
-> so if the bridge_connector is being used then I think when fill_modes()
-> is called we'll run the detect cycle and call the hpd_notify callbacks
-> on the bridge chain.
+On Fri, May 05, 2023 at 11:29:05PM -0700, Sarthak Kukreti wrote:
+> Only call truncate_bdev_range() if the fallocate mode is
+> supported. This fixes a bug where data in the pagecache
+> could be invalidated if the fallocate() was called on the
+> block device with an invalid mode.
+> 
+> Fixes: 25f4c41415e5 ("block: implement (some of) fallocate for block devices")
+> Cc: stable@vger.kernel.org
+> Reported-by: Darrick J. Wong <djwong@kernel.org>
+> Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
 
-Yes. This call chain is correct.
-drm_helper_probe_single_connector_modes() ->
-drm_bridge_connector_detect() -> drm_bridge_connector_hpd_notify().
+Ideally you'd only take filemap_invalidate_lock for valid modes, but eh
+who cares about efficiency for the EOPNOTSUPP case, let's move on. :)
 
-However on HPD events the DP driver doesn't call into the drm core
-(which I believe should be fixed).
+Reviewed-by: Darrick J. Wong <djwong@kernel.org>
 
--- 
-With best wishes
-Dmitry
+--D
+
+> ---
+>  block/fops.c | 21 ++++++++++++++++-----
+>  1 file changed, 16 insertions(+), 5 deletions(-)
+> 
+> diff --git a/block/fops.c b/block/fops.c
+> index d2e6be4e3d1c..4c70fdc546e7 100644
+> --- a/block/fops.c
+> +++ b/block/fops.c
+> @@ -648,24 +648,35 @@ static long blkdev_fallocate(struct file *file, int mode, loff_t start,
+>  
+>  	filemap_invalidate_lock(inode->i_mapping);
+>  
+> -	/* Invalidate the page cache, including dirty pages. */
+> -	error = truncate_bdev_range(bdev, file->f_mode, start, end);
+> -	if (error)
+> -		goto fail;
+> -
+> +	/*
+> +	 * Invalidate the page cache, including dirty pages, for valid
+> +	 * de-allocate mode calls to fallocate().
+> +	 */
+>  	switch (mode) {
+>  	case FALLOC_FL_ZERO_RANGE:
+>  	case FALLOC_FL_ZERO_RANGE | FALLOC_FL_KEEP_SIZE:
+> +		error = truncate_bdev_range(bdev, file->f_mode, start, end);
+> +		if (error)
+> +			goto fail;
+> +
+>  		error = blkdev_issue_zeroout(bdev, start >> SECTOR_SHIFT,
+>  					     len >> SECTOR_SHIFT, GFP_KERNEL,
+>  					     BLKDEV_ZERO_NOUNMAP);
+>  		break;
+>  	case FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE:
+> +		error = truncate_bdev_range(bdev, file->f_mode, start, end);
+> +		if (error)
+> +			goto fail;
+> +
+>  		error = blkdev_issue_zeroout(bdev, start >> SECTOR_SHIFT,
+>  					     len >> SECTOR_SHIFT, GFP_KERNEL,
+>  					     BLKDEV_ZERO_NOFALLBACK);
+>  		break;
+>  	case FALLOC_FL_PUNCH_HOLE | FALLOC_FL_KEEP_SIZE | FALLOC_FL_NO_HIDE_STALE:
+> +		error = truncate_bdev_range(bdev, file->f_mode, start, end);
+> +		if (error)
+> +			goto fail;
+> +
+>  		error = blkdev_issue_discard(bdev, start >> SECTOR_SHIFT,
+>  					     len >> SECTOR_SHIFT, GFP_KERNEL);
+>  		break;
+> -- 
+> 2.40.1.521.gf1e218fcd8-goog
+> 
