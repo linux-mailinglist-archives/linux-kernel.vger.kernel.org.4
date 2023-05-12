@@ -2,231 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABF7F700F47
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 21:24:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D8E5700F4A
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 21:26:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238862AbjELTYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 15:24:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43572 "EHLO
+        id S238990AbjELT0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 15:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230322AbjELTYC (ORCPT
+        with ESMTP id S237012AbjELT0W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 15:24:02 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E51F611D;
-        Fri, 12 May 2023 12:24:00 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CEHNO9024991;
-        Fri, 12 May 2023 19:23:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=CE0GBCM0M20fvuT9XadoI7r4ryawyDopuUlc13afYpo=;
- b=mkwD1zNWLdpiHnxl58sPoqX4JfkFCVuHEi899rUIr6tHLbMc0nwNUUxEfEGwfVHsmhzi
- SwwWgLbuYnOw1GFG6D3w6uve0TKaZKFqVm+RQlF7FQL2PNa2LWbzuqOpxMLx8Tjtn7or
- jcSAJVDxSfZ8GrYW+bA/jpqVvtbJz/St0FpHJ/dKZXPklYGTMXHRWAqHnU+HmzV8+UNg
- WoHOalcIgc3n/AsIEVhD617wcjsZYSJrDMU9I5//i3bZ1AaGwcW+ovE7h+Ru5AuLnhs/
- JrEGvRP4uPxTYyODw7LoN6fQb62Z5ULKjJtPUYdbKXXG1bDjUysG0mb1eXCebE2qocag qQ== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qhh391gqu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 19:23:58 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34CJNvtb009743
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 19:23:57 GMT
-Received: from [10.216.49.187] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 12 May
- 2023 12:23:54 -0700
-Message-ID: <9bd626de-fecb-c789-4b18-a2bf6e4eb427@quicinc.com>
-Date:   Sat, 13 May 2023 00:53:50 +0530
+        Fri, 12 May 2023 15:26:22 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EB8911D
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 12:26:21 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id d9443c01a7336-1aad55244b7so79595305ad.2
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 12:26:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683919581; x=1686511581;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Yz4DYKSNmBeEVN5VVceILj1aZ1bLp7+YNm7+Yoele00=;
+        b=GdGO7tJ4IIUXweKlz+dCEQNC4Jf9giqrZ6IQWsiG1yctoFoJUmWBZf1pDY+NSPN5EF
+         8QHk5X08ZDhLvo1aTU9OeDLX7TNJt7TYJiZn3Ddz38fWq//zCdSzINTj/mdDUd0ryo43
+         kpyAnVNpeI6uFrEAFnQkIrmNluVRMi8FDSTuho8UK8nD02zBM1GLG78rAVDqdqzhvlBj
+         TTlB554DoFhi6MzAJYNLUUDhY9H6/IoYnPKa1GwkYcZteDq0Ae0iVRqpkkyOLY2cYk1c
+         hjH8FdKRI9UuLEhJPsWUzT/CmUi0ThL8rox40SCNkRv4N87OV8bbNKARNFVU0A3Mb77a
+         lllw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683919581; x=1686511581;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Yz4DYKSNmBeEVN5VVceILj1aZ1bLp7+YNm7+Yoele00=;
+        b=D7Pyh6x3h5rCMeTfUtvogN46p7if1yTNGeexH5laMwgMZplS11p1+5gqNw8WDNhMu3
+         hm5tzO2OoUmSxTdGvLSInOMBzrC6kzgwjCyxMW/mhTakzlXioVyd59hQoJLkkTf66IyM
+         wH10XJyUE8QwVYEdpMRDwqbLJVnrq/2oV75EUJ4UyV+HV73VxWTYZ5+bWPHQxnoJ2HwM
+         hjg5gDWd9NJHPVYVIFDPO2qtGYVWlcFWUy3H0KkdpRLzoHbaZ1/dHs+WvHacpZK+/TfL
+         OCyoMeUQXGdeup135QQibjZu0b6QuyQRrmfrkuVnZd6eUqHG0MX40DQE0qH8rLd/Qveu
+         lY6A==
+X-Gm-Message-State: AC+VfDz0TNbu2TIZsPKksHPM9HDZETBMrKJLdtdYl/AmioIYWVFqOe6I
+        4wyb/rEnAwrFrTdEI2L4y1vIN+oAMhFLESZN
+X-Google-Smtp-Source: ACHHUZ4oAT/GxHasWc1+hnu5yWxpHeEJ05uQYZwgtlcpevP5ZF9ks5XZ87fIDTRvaTXgidAuos4Pww==
+X-Received: by 2002:a17:902:e54b:b0:1ac:712d:2032 with SMTP id n11-20020a170902e54b00b001ac712d2032mr25367398plf.50.1683919580676;
+        Fri, 12 May 2023 12:26:20 -0700 (PDT)
+Received: from yoga ([2400:1f00:13:5d8c:29b4:3ace:81ca:10f])
+        by smtp.gmail.com with ESMTPSA id x1-20020a63f701000000b0051b8172fa68sm7171336pgh.38.2023.05.12.12.26.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 12:26:20 -0700 (PDT)
+Date:   Sat, 13 May 2023 00:56:13 +0530
+From:   Anup Sharma <anupnewsmail@gmail.com>
+To:     Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] gpu: drm: nouveau: nvkm: engine: gr: Remove Unneeded
+ semicolon
+Message-ID: <ZF6S1bg2AzuBjhxW@yoga>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [RFC] usb: dwc3: core: set force_gen1 bit in USB31 devices if max
- speed is SS
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <20230512170107.18821-1-quic_kriskura@quicinc.com>
- <20230512184630.2kt4xgneiovb3vac@synopsys.com>
- <989832ad-e9b4-7c59-f157-6a9239c1b5eb@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <989832ad-e9b4-7c59-f157-6a9239c1b5eb@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: UawGu08IxymVWRKcZmfAIlOeQcDFJjQr
-X-Proofpoint-ORIG-GUID: UawGu08IxymVWRKcZmfAIlOeQcDFJjQr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-12_12,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- priorityscore=1501 malwarescore=0 lowpriorityscore=0 phishscore=0
- suspectscore=0 clxscore=1015 mlxscore=0 impostorscore=0 mlxlogscore=999
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305120163
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Remove the extra semicolon at end. Issue identified using
+semicolon.cocci Coccinelle semantic patch.
+Warning:
+drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c:423:31-32: Unneeded semicolon
 
+Signed-off-by: Anup Sharma <anupnewsmail@gmail.com>
+---
+ drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On 5/13/2023 12:45 AM, Krishna Kurapati PSSNV wrote:
-> Hi Thinh,
-> 
-> On 5/13/2023 12:16 AM, Thinh Nguyen wrote:
->> On Fri, May 12, 2023, Krishna Kurapati wrote:
->>> Currently for dwc3_usb31 devices, if maximum_speed is limited to
->>
->> We usually call the controller dwc_usb3, dwc_usb31, or dwc_usb32.
->>
->>> super-speed in DT, then device mode is limited to SS, but host mode
->>> still works in SSP.
->>>
->>> The documentation for max-speed property is as follows:
->>>
->>> "Tells USB controllers we want to work up to a certain speed.
->>> Incase  this isn't passed via DT, USB controllers should default to
->>> their maximum HW capability."
->>>
->>> It doesn't specify that the property is only for device mode.
->>
->> Since this isn't really a fix, can we rephrase the lines below
->>
->>> Fix this by forcing controller supported max speed to Gen1 by
->>> setting LLUCTL.Force_Gen1 bit if controller is DWC3_USB31 and
->>> max speed is mentioned as SS in DT.
->>
->> As follow:
->> There are cases where we need to limit the host's maximum speed to
->> SuperSpeed only. Use this property for host mode to contrain host's
->> speed to SuperSpeed.
->>
->>
-> Sure, will rephrase it accordingly. Thanks for the suggestion.
->>>
->>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->>> ---
->>> Discussion regarding the same at:
->>> https://urldefense.com/v3/__https://lore.kernel.org/all/e465c69c-3a9d-cbdb-d44e-96b99cfa1a92@quicinc.com/__;!!A4F2R9G_pg!YiQpjZIJAw-yu6gEwbKqb5nusjnKQ9dQJrulx39lQP-7JMhcNA2xd8uLJoZ_HE8SuG4Rm2uvhJTSdQ2k0fJVAxU2RWYHHg$
->>>
->>>   drivers/usb/dwc3/core.c | 13 +++++++++++++
->>>   drivers/usb/dwc3/core.h |  4 ++++
->>>   2 files changed, 17 insertions(+)
->>>
->>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->>> index 0beaab932e7d..989dc76ecbca 100644
->>> --- a/drivers/usb/dwc3/core.c
->>> +++ b/drivers/usb/dwc3/core.c
->>> @@ -116,6 +116,18 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
->>>       dwc->current_dr_role = mode;
->>>   }
->>> +static void dwc3_configure_host_speed(struct dwc3 *dwc)
->>> +{
->>> +    u32 reg;
->>> +
->>> +    if (DWC3_IP_IS(DWC31) &&
->>> +       (dwc->maximum_speed == USB_SPEED_SUPER)) {
->>> +        reg = dwc3_readl(dwc->regs, DWC3_LLUCTL);
->>> +        reg |= DWC3_LLUCTL_FORCE_GEN1;
->>> +        dwc3_writel(dwc->regs, DWC3_LLUCTL, reg);
->>> +    }
->>> +}
->>> +
->>>   static void __dwc3_set_mode(struct work_struct *work)
->>>   {
->>>       struct dwc3 *dwc = work_to_dwc(work);
->>> @@ -194,6 +206,7 @@ static void __dwc3_set_mode(struct work_struct 
->>> *work)
->>>       switch (desired_dr_role) {
->>>       case DWC3_GCTL_PRTCAP_HOST:
->>> +        dwc3_configure_host_speed(dwc);
->>  > The LLUCTL doesn't change until there's a Vcc reset. Let's just> 
-> initialize it once during dwc3_core_init() if the GHWPARAM indicates the
->> controller is DRD or host only.
->>
-> 
-> I thought GCTL Core soft reset might clear this bit. That is why I 
-> placed it here. For device mode gadget.c takes care of limiting speed. 
-> So wanted to do this setting only for host mode, before we invoke host 
-> init.
-> 
-> Thanks for letting know that only VCC reset affects this. Will move this 
-> check to core init.
-> 
-> Regards,
-> Krishna,
-> 
+diff --git a/drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c b/drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c
+index 5f20079c3660..204516891ece 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c
++++ b/drivers/gpu/drm/nouveau/nvkm/engine/gr/gf100.c
+@@ -420,7 +420,7 @@ gf100_gr_chan_new(struct nvkm_gr *base, struct nvkm_fifo_chan *fifoch,
+ 			return ret;
+ 	} else {
+ 		ret = nvkm_memory_map(gr->attrib_cb, 0, chan->vmm, chan->attrib_cb,
+-				      &args, sizeof(args));;
++				      &args, sizeof(args));
+ 		if (ret)
+ 			return ret;
+ 	}
+-- 
+2.34.1
 
-In fact, The following snippet from programming guide is why I thought 
-GCTL reset can affect this register: ( the below is from usb3 prog 
-guide, I assume this would be applicable for usb31 as well)
-
-Fields for Register: GCTL
-Core Soft Reset (CoreSoftReset)
-■ 1'b0 - No soft reset
-■ 1'b1 - Soft reset to controller
-
-  Clears the interrupts and all the CSRs except the following
-registers:
-■ GCTL
-■ GUCTL
-■ GSTS
-■ GSNPSID
-■ GGPIO
-■ GUID
-■ GUSB2PHYCFGn registers
-■ GUSB3PIPECTLn registers
-■ DCFG
-■ DCTL
-■ DEVTEN
-■ DSTS
-
-If so, don't we need to do this setting after every GCTL core soft reset ?
-
-Regards,
-Krishna,
-
->>>           ret = dwc3_host_init(dwc);
->>>           if (ret) {
->>>               dev_err(dwc->dev, "failed to initialize host\n");
->>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
->>> index d56457c02996..29b780a58dc6 100644
->>> --- a/drivers/usb/dwc3/core.h
->>> +++ b/drivers/usb/dwc3/core.h
->>> @@ -121,6 +121,10 @@
->>>   #define DWC3_GPRTBIMAP_FS0    0xc188
->>>   #define DWC3_GPRTBIMAP_FS1    0xc18c
->>>   #define DWC3_GUCTL2        0xc19c
->>> +#define DWC3_LLUCTL        0xd024
->>
->> Please place the register according to its offset order.
->>
->>> +
->>> +/* Force Gen1 speed on Gen2 link */
->>> +#define DWC3_LLUCTL_FORCE_GEN1    BIT(10)
->>>   #define DWC3_VER_NUMBER        0xc1a0
->>>   #define DWC3_VER_TYPE        0xc1a4
->>> -- 
->>> 2.40.0
->>>
->>
->> Thanks,
->> Thinh
