@@ -2,156 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19B1C700528
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 787D170053E
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:25:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240654AbjELKXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
+        id S240438AbjELKYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 06:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240670AbjELKXT (ORCPT
+        with ESMTP id S240488AbjELKYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:23:19 -0400
-Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602F212E;
-        Fri, 12 May 2023 03:23:17 -0700 (PDT)
-Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2ac82b07eb3so98657001fa.1;
-        Fri, 12 May 2023 03:23:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683886995; x=1686478995;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z23Yys1p+WjW6kez7AKqzscsQbDlp8fVQx68w5qJUf0=;
-        b=QLxxlk7MAaNJPed+IR4tg9xzx6vEcv8gKoLQ6ByxBWOcNZ9jyZ30AS++w3IpXEGLoR
-         fRsPFHc1ruZI15eGdoeG3wMZxlAwlijYfl+2ZW/JaGUwmqne1y7+EHzOlD+WGcq3GSdP
-         Cnf6R1q30GjdiH0o9r1gzP+JceFDwLmUIMg4fRJLAXY9qyncDjkGgUqVrhOiXQNkaWdC
-         sxDoqzeSXepMiqWuUb/LdYSjVQ0ocITH/GiIVFGXEh+Mp0QwXzROvF99IS3Htxv2PlLO
-         MlaHTilNWlMSN0cPjactSPfSy7+Z15kkiKpRoWIQC77P53yfvfT6hnAaGxyG4HK1WcaV
-         Ww8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683886995; x=1686478995;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=z23Yys1p+WjW6kez7AKqzscsQbDlp8fVQx68w5qJUf0=;
-        b=DWCgwlVQ6y3IopMWUZo6a6LrYdhL+/vaRvjWxpnLIuty46IG05tXsqhtY9oLoiLUCf
-         DX07Onn8xawh+XcUAfhJEZtRmlXnGPyvB3k4YACjOHiCtymAgAvNu4VZrhz9GCTrmqJ4
-         HN4LVZCqNnCkD8olHFGkpE+/yg9J8NOd7UXIUIiLof0VsEV1eSiG4wwru9l+8Y01vF2M
-         7fwD1jswOQPztfaN6gijrPbY+9EVyiCUb1Tu6xRwt0rMoiRyD3cu4rpNyg92XlOPWH43
-         CVo8X0hfVoJ9RwHzq1oWd68IKI3b6TxcoU9QM3rjE2jCzThKdjyBcF+q7Q3sCG+ouFFq
-         T5KQ==
-X-Gm-Message-State: AC+VfDwh18X8orLll2DbuAhWFXTwuiCyFFv2WZEFF+mOaAPdMYC1lA1P
-        pZasvMpqpfCAHxlqkr3o7ofnfynd9pBYvg==
-X-Google-Smtp-Source: ACHHUZ5K0zQw3IvYCqgKgG7ihj2MX8VyXEJ28EGTiVj+V+XjGCuXuPDxUGlINZ4EwJUydXsHR99biA==
-X-Received: by 2002:a2e:9f14:0:b0:2a8:d103:dc8 with SMTP id u20-20020a2e9f14000000b002a8d1030dc8mr3596263ljk.2.1683886995331;
-        Fri, 12 May 2023 03:23:15 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id o6-20020a2e90c6000000b002adaacdb900sm1299548ljg.42.2023.05.12.03.23.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 03:23:14 -0700 (PDT)
-Date:   Fri, 12 May 2023 13:23:12 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Cai Huoqing <cai.huoqing@linux.dev>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Rob Herring <robh@kernel.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RESEND v5 01/14] PCI: dwc: Fix erroneous version type
- test helper
-Message-ID: <20230512102312.urrh2gwagopizn44@mobilestation>
-References: <20230511190902.28896-1-Sergey.Semin@baikalelectronics.ru>
- <20230511190902.28896-2-Sergey.Semin@baikalelectronics.ru>
- <TYBPR01MB53411830C969326CDA5E9DF5D8759@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+        Fri, 12 May 2023 06:24:48 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83EA412E;
+        Fri, 12 May 2023 03:24:47 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 35D2A204C2;
+        Fri, 12 May 2023 10:24:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1683887086; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=LvUwBboi0H3N9oCb4kHUnspUTtsBX5ToYf54pqYwoc0=;
+        b=ayJyq9X4JZd83mQcLb0mVxus4cJGmOEfqfj26veoYFxC934flqBGXQCm90UdcEwS4rw1oZ
+        bV87LXoN4+ufKW06v29jrR+uN6wR8uPmZMhj6EetKqxR0Ov/Z8DVXUxqjeBSHl4LRctw8/
+        Bi2RExJ5pe04umfAdsBn74QbTBuyvdY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1683887086;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=LvUwBboi0H3N9oCb4kHUnspUTtsBX5ToYf54pqYwoc0=;
+        b=g49G2zJ/oYKfwx/Psn9XQPDBVUTA01HvJBYiW/4m1vehdVDsV0nl3QJcxIRENLx1torkpi
+        vuBesKhdJozStMAQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BE59213466;
+        Fri, 12 May 2023 10:24:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id u2yjLe0TXmS5XwAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Fri, 12 May 2023 10:24:45 +0000
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+To:     deller@gmx.de, geert@linux-m68k.org, javierm@redhat.com,
+        daniel@ffwll.ch, vgupta@kernel.org, chenhuacai@kernel.org,
+        kernel@xen0n.name, davem@davemloft.net,
+        James.Bottomley@HansenPartnership.com, arnd@arndb.de,
+        sam@ravnborg.org, suijingfeng@loongson.cn
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-parisc@vger.kernel.org,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: [PATCH v7 0/7] fbdev: Move framebuffer I/O helpers to <asm/fb.h>
+Date:   Fri, 12 May 2023 12:24:37 +0200
+Message-Id: <20230512102444.5438-1-tzimmermann@suse.de>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <TYBPR01MB53411830C969326CDA5E9DF5D8759@TYBPR01MB5341.jpnprd01.prod.outlook.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Yoshihiro
+Fbdev provides helpers for framebuffer I/O, such as fb_readl(),
+fb_writel() or fb_memcpy_to_fb(). The implementation of each helper
+depends on the architecture, but they are all equivalent to regular
+I/O functions of similar names. So use regular functions instead and
+move all helpers into <asm-generic/fb.h>
 
-On Fri, May 12, 2023 at 09:55:42AM +0000, Yoshihiro Shimoda wrote:
-> Hi Serge,
-> 
-> > From: Serge Semin, Sent: Friday, May 12, 2023 4:09 AM
-> > 
-> > Due to an unfortunate mistake the macro function actually checks the
-> > IP-core version instead of the IP-core version type which isn't what
-> > originally implied. Fix it by introducing a new helper
-> > __dw_pcie_ver_type_cmp() with the same semantic as the __dw_pcie_ver_cmp()
-> > counterpart except it refers to the dw_pcie.type field in order to perform
-> > the passed comparison operation.
-> > 
-> > Fixes: 0b0a780d52ad ("PCI: dwc: Add macros to compare Synopsys IP core versions")
-> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> 
-> I'm not sure whether my review is useful or not, but anyway,
-> 
-> Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+The first two patch are driver cleanups.
 
-It's always useful. Thanks for looking into it.
+Until now, <linux/fb.h> contained an include of <asm/io.h>. As this
+will go away, patches 3 to 5 prepare include statements in the various
+drivers. Source files that use regular I/O helpers, such as readl(),
+now include <linux/io.h>. Source files that use framebuffer I/O
+helpers, such as fb_readl(), now include <linux/fb.h>.
 
-Regards
--Serge(y)
+Patch 6 replaces the architecture-based if-else branching in 
+<linux/fb.h> by helpers in <asm-generic/fb.h>. All helpers use Linux'
+existing I/O functions.
 
-> 
-> Best regards,
-> Yoshihiro Shimoda
-> 
-> > ---
-> >  drivers/pci/controller/dwc/pcie-designware.h | 7 +++++--
-> >  1 file changed, 5 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
-> > index 79713ce075cc..adad0ea61799 100644
-> > --- a/drivers/pci/controller/dwc/pcie-designware.h
-> > +++ b/drivers/pci/controller/dwc/pcie-designware.h
-> > @@ -37,17 +37,20 @@
-> >  #define __dw_pcie_ver_cmp(_pci, _ver, _op) \
-> >  	((_pci)->version _op DW_PCIE_VER_ ## _ver)
-> > 
-> > +#define __dw_pcie_ver_type_cmp(_pci, _type, _op) \
-> > +	((_pci)->type _op DW_PCIE_VER_TYPE_ ## _type)
-> > +
-> >  #define dw_pcie_ver_is(_pci, _ver) __dw_pcie_ver_cmp(_pci, _ver, ==)
-> > 
-> >  #define dw_pcie_ver_is_ge(_pci, _ver) __dw_pcie_ver_cmp(_pci, _ver, >=)
-> > 
-> >  #define dw_pcie_ver_type_is(_pci, _ver, _type) \
-> >  	(__dw_pcie_ver_cmp(_pci, _ver, ==) && \
-> > -	 __dw_pcie_ver_cmp(_pci, TYPE_ ## _type, ==))
-> > +	 __dw_pcie_ver_type_cmp(_pci, _type, ==))
-> > 
-> >  #define dw_pcie_ver_type_is_ge(_pci, _ver, _type) \
-> >  	(__dw_pcie_ver_cmp(_pci, _ver, ==) && \
-> > -	 __dw_pcie_ver_cmp(_pci, TYPE_ ## _type, >=))
-> > +	 __dw_pcie_ver_type_cmp(_pci, _type, >=))
-> > 
-> >  /* DWC PCIe controller capabilities */
-> >  #define DW_PCIE_CAP_REQ_RES		0
-> > --
-> > 2.40.0
-> > 
-> 
+Patch 7 harmonizes naming among fbdev and existing I/O functions.
+
+The patchset has been built for a variety of platforms, such as x86-64,
+arm, aarch64, ppc64, parisc, m64k, mips and sparc.
+
+v7:
+	* fix hitfb build warnings (kernel test robot)
+v6:
+	* fix build on 64-bit mips (kernel test robot)
+	* update fb_io_fops.c
+v5:
+	* fix build on s390
+v4:
+	* keep fb_mem*() as-is on ia64, loongarch, sparc64 (Arnd)
+	* don't include <asm/fb.h> (Sam)
+v3:
+	* add the new helpers in <asm-generic/fb.h>
+	* support reordering and native byte order (Geert, Arnd)
+v2:
+	* use Linux I/O helpers (Sam, Arnd)
+
+Thomas Zimmermann (7):
+  fbdev/hitfb: Cast I/O offset to address
+  fbdev/matrox: Remove trailing whitespaces
+  ipu-v3: Include <linux/io.h>
+  fbdev: Include <linux/io.h> in various drivers
+  fbdev: Include <linux/fb.h> instead of <asm/fb.h>
+  fbdev: Move framebuffer I/O helpers into <asm/fb.h>
+  fbdev: Rename fb_mem*() helpers
+
+ arch/ia64/include/asm/fb.h                  |  20 ++++
+ arch/loongarch/include/asm/fb.h             |  21 ++++
+ arch/mips/include/asm/fb.h                  |  22 ++++
+ arch/parisc/video/fbdev.c                   |   3 +-
+ arch/sparc/include/asm/fb.h                 |  20 ++++
+ arch/sparc/video/fbdev.c                    |   1 -
+ arch/x86/video/fbdev.c                      |   2 -
+ drivers/gpu/ipu-v3/ipu-prv.h                |   1 +
+ drivers/staging/sm750fb/sm750.c             |   2 +-
+ drivers/video/fbdev/arcfb.c                 |   1 +
+ drivers/video/fbdev/aty/atyfb.h             |   2 +
+ drivers/video/fbdev/aty/mach64_cursor.c     |   2 +-
+ drivers/video/fbdev/chipsfb.c               |   2 +-
+ drivers/video/fbdev/core/fb_io_fops.c       |   4 +-
+ drivers/video/fbdev/core/fbcon.c            |   1 -
+ drivers/video/fbdev/core/fbmem.c            |   2 -
+ drivers/video/fbdev/hitfb.c                 | 122 +++++++++++---------
+ drivers/video/fbdev/kyro/fbdev.c            |   2 +-
+ drivers/video/fbdev/matrox/matroxfb_accel.c |   6 +-
+ drivers/video/fbdev/matrox/matroxfb_base.h  |   4 +-
+ drivers/video/fbdev/pvr2fb.c                |   2 +-
+ drivers/video/fbdev/sstfb.c                 |   2 +-
+ drivers/video/fbdev/stifb.c                 |   4 +-
+ drivers/video/fbdev/tdfxfb.c                |   2 +-
+ drivers/video/fbdev/wmt_ge_rops.c           |   2 +
+ include/asm-generic/fb.h                    | 102 ++++++++++++++++
+ include/linux/fb.h                          |  55 +--------
+ 27 files changed, 279 insertions(+), 130 deletions(-)
+
+-- 
+2.40.1
+
