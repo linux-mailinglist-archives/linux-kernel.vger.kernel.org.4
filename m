@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6745701066
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 23:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8ECAB70106C
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 23:08:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240105AbjELVIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 17:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
+        id S239987AbjELVIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 17:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239964AbjELVHy (ORCPT
+        with ESMTP id S239975AbjELVHz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 17:07:54 -0400
+        Fri, 12 May 2023 17:07:55 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78873A25F;
-        Fri, 12 May 2023 14:07:27 -0700 (PDT)
-Message-ID: <20230512205256.316417181@linutronix.de>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEB2AE71A;
+        Fri, 12 May 2023 14:07:28 -0700 (PDT)
+Message-ID: <20230512205256.369512093@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683925643;
+        s=2020; t=1683925644;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=DlXLIimSUyDsLnpaLCie3XUbsPcjE+B3Y5/np73/syk=;
-        b=0n8XyUqdMKHvhCV5NvBs8uq0bkyvVXbfLtaGYG0ApQJEOyilZiFp81ncYSBr6upR2FGS65
-        C/nM69M5fEGpiISmkmAowedNeMh8stJLEoOo7kEL2Yn2+06PaBevfLVashkK38xEMls2k0
-        f/2djYvKqyUSewvgr/tLWZAR3cGWoQ2BFlZWa6eUYCxL/R/BBbwHpxF3oihmcCNqrcO5vL
-        DdSUgTidw3Y3j0rys0Ztwy/cnS3zHqjKWZhecFMnqr4ICUwW5Yz4Fvu/UCxs3vooavSjLb
-        kpbMhzb9bUAKVmUd7V7KcFTAjo4mQTSyfyHcI0YMf+BOz6gUP+32KRGIcgecpA==
+         references:references; bh=PMK22/HxoxSZKsTx+MtkiiSihvL00YPGs/TFPEL6TlU=;
+        b=okTigxEmoNFjuISzZ3w6/Y2KcJueXtK98ysR49cIhhmzWitrnTsrr30PPjCUMPXry4xftP
+        J52lH1DVgnpuG/Rfq4wLyAmr6aBgTzg3Kcpzk53VYvl1lEluUMhVlu3W9w3D8aZ28W1fnU
+        FYwd2Sfv1zxIrxvZkgBRqufQ3iNj4eO+ry/ohM+Ld/vwoFregiASpdqfC0/pYtJYsd1OgL
+        Vlb3BzT7+3vJnR5zuW45X4PcDsWr4so0XRPW7RLUs94CbintoxNd6G1JVdbZNrIt24RqAz
+        6rW20AhO6LWDKJUuEPLhETfdZ7aGAlZBRDu8S8t35nsN64xoJdMY+fi5MrLE5Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683925643;
+        s=2020e; t=1683925644;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=DlXLIimSUyDsLnpaLCie3XUbsPcjE+B3Y5/np73/syk=;
-        b=NxwadJuaL5bNYJvtkxpDH+oWBvMqBd0ae6N3DUYGY2xW3p33/XvIRC9MwzW0Aq6/9Tjy03
-        UcA8T+Ga+8Z9ZeBg==
+         references:references; bh=PMK22/HxoxSZKsTx+MtkiiSihvL00YPGs/TFPEL6TlU=;
+        b=6Ab3fDB1sVd28x5lyL9nkWKGbymDr5R+6KRuErqPsWXwifdYJwrujMAzLpyfU/ZQhUUikY
+        XNL6casob2M1EbBA==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
@@ -68,11 +68,11 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
         Ross Philipson <ross.philipson@oracle.com>
-Subject: [patch V4 16/37] x86/smpboot: Remove wait for cpu_online()
+Subject: [patch V4 17/37] x86/xen/smp_pv: Remove wait for CPU online
 References: <20230512203426.452963764@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 12 May 2023 23:07:22 +0200 (CEST)
+Date:   Fri, 12 May 2023 23:07:24 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -88,60 +88,35 @@ From: Thomas Gleixner <tglx@linutronix.de>
 Now that the core code drops sparse_irq_lock after the idle thread
 synchronized, it's pointless to wait for the AP to mark itself online.
 
+Whether the control CPU runs in a wait loop or sleeps in the core code
+waiting for the online operation to complete makes no difference.
+
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Tested-by: Michael Kelley <mikelley@microsoft.com>
 ---
- arch/x86/kernel/smpboot.c |   26 ++------------------------
- 1 file changed, 2 insertions(+), 24 deletions(-)
+ arch/x86/xen/smp_pv.c |   10 +++++-----
+ 1 file changed, 5 insertions(+), 5 deletions(-)
 
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -275,7 +275,6 @@ static void notrace start_secondary(void
- 	 * half valid vector space.
- 	 */
- 	lock_vector_lock();
--	/* Sync point with do_wait_cpu_online() */
- 	set_cpu_online(smp_processor_id(), true);
- 	lapic_online();
- 	unlock_vector_lock();
-@@ -1104,20 +1103,6 @@ static int wait_cpu_initialized(unsigned
+
+--- a/arch/x86/xen/smp_pv.c
++++ b/arch/x86/xen/smp_pv.c
+@@ -340,11 +340,11 @@ static int xen_pv_cpu_up(unsigned int cp
+ 
+ 	xen_pmu_init(cpu);
+ 
+-	rc = HYPERVISOR_vcpu_op(VCPUOP_up, xen_vcpu_nr(cpu), NULL);
+-	BUG_ON(rc);
+-
+-	while (cpu_report_state(cpu) != CPU_ONLINE)
+-		HYPERVISOR_sched_op(SCHEDOP_yield, NULL);
++	/*
++	 * Why is this a BUG? If the hypercall fails then everything can be
++	 * rolled back, no?
++	 */
++	BUG_ON(HYPERVISOR_vcpu_op(VCPUOP_up, xen_vcpu_nr(cpu), NULL));
+ 
  	return 0;
  }
- 
--/*
-- * Bringup step three: Wait for the target AP to reach set_cpu_online() in
-- * start_secondary().
-- */
--static void wait_cpu_online(unsigned int cpu)
--{
--	/*
--	 * Wait for the AP to mark itself online, so the core caller
--	 * can drop sparse_irq_lock.
--	 */
--	while (!cpu_online(cpu))
--		schedule();
--}
--
- static int native_kick_ap(unsigned int cpu, struct task_struct *tidle)
- {
- 	int apicid = apic->cpu_present_to_apicid(cpu);
-@@ -1164,16 +1149,9 @@ int native_cpu_up(unsigned int cpu, stru
- 	int ret;
- 
- 	ret = native_kick_ap(cpu, tidle);
--	if (ret)
--		goto out;
--
--	ret = wait_cpu_initialized(cpu);
--	if (ret)
--		goto out;
--
--	wait_cpu_online(cpu);
-+	if (!ret)
-+		ret = wait_cpu_initialized(cpu);
- 
--out:
- 	/* Cleanup possible dangling ends... */
- 	if (x86_platform.legacy.warm_reset)
- 		smpboot_restore_warm_reset_vector();
+
+
 
