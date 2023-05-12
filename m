@@ -2,250 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 657586FFFC6
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 06:57:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D7EB26FFFC8
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 07:00:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239682AbjELE5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 00:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52138 "EHLO
+        id S239783AbjELFAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 01:00:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjELE5M (ORCPT
+        with ESMTP id S229885AbjELFAc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 00:57:12 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E939171E
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 21:57:11 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50bc075d6b2so17393539a12.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 21:57:10 -0700 (PDT)
+        Fri, 12 May 2023 01:00:32 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E4319B5
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 22:00:30 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-559e317eef1so139659627b3.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 22:00:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683867429; x=1686459429;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=35gdnVPixa4iKPZedkPNUnZFbG4+0zQuHU9UMu15v94=;
-        b=kB4PdKzV8bAwlSSksBXwtDmw+fv17kWnegyfSEIXqy6towfTcYXU6YufakGhJusode
-         2A7o39PRBtACpB6a/PIAkPcYIfSO08F3B+9SYNCLuw9NMf15DjS0ORakiNVN7m1FRZRB
-         T2wHi/IfooBgpTYNPTXJjYRXKP5Xb22XSDXdWFBFCzZRcvZsb9huVGH0ziVexZ4f0TRq
-         9gMHnPn9uQLnb29szQ9t8mtBnJjVNyb52qU8kkSo0CbWksCH1mCJ0yLV1e8fQVWF7oG+
-         0e6cDl65o/IzycTItG7sTarc3Z2DVamT2B7CNhyhB7uJPgYtdpbSAgHa00zk5TNF8tLS
-         eBgw==
+        d=joelfernandes.org; s=google; t=1683867629; x=1686459629;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+G0YQVid8BAUmDK4avXBWV3q8tHjdbwoFwpJ8dCo55c=;
+        b=LSyQ73u1cO9ubO87ZHj25fnF1p8pwVA2g0Mk76uJfyrdc6DdZ4B37SuS4VIiOLfJk/
+         37yMNZeOxw4a1QG4l2aBLnZys4v0vkMzue+WqsIF/beFFtXhqA5TFCJU18R/YmaV22Se
+         sTj1DU3lNZqtAHBTxwm9vbEGJlJHZirIQEVYQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683867429; x=1686459429;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=35gdnVPixa4iKPZedkPNUnZFbG4+0zQuHU9UMu15v94=;
-        b=LMBHNSwYLcLyo3Nv38cJvSybL4NHwMDcl73R+0T2hz3KDU3JS503Gj/wXyOCStL26d
-         Qcs6oeS7lqujSRnD+4b6LfZEh0KJwy390azcq7k5azeJvsBJHj4xh5gJBynBv4Di7f51
-         uA5e18TTbSyoHzb8/809CjutD9lyN8myhJOv70aX0Ue2X6JV07BUckWpevfxnaVG0Jqd
-         jDn0aqakvrlXcFNDEUnsy8HgC62UpHyCZYrLIFwxgoqL3B3PveD9nBIxvN0DFTr4dFTz
-         u/++j79pM3olWjOA4873YDgSsxNIeVJSv9LsvdTk3k0iyK4o9/Bu9Ujnb+Qedjsc+Sih
-         oB2w==
-X-Gm-Message-State: AC+VfDxAIZOis7lTbhnR1PwDMz9K9Lu8sAOqx4m+lJ/15QeQVg3aBnIY
-        8mcnMEVsfoaiuMQpYKYS2vFeNQE2zQC9op0IhA++ew==
-X-Google-Smtp-Source: ACHHUZ6UmXarJw2q1KAMNPFRzUE3yStbqMICaW4X3HcZDvLVeVmsAiopQX5+/od6KK7inYLAWK1oBRn2NyTtd3/69y4=
-X-Received: by 2002:a17:906:9b89:b0:96a:6939:11af with SMTP id
- dd9-20020a1709069b8900b0096a693911afmr3968370ejc.50.1683867429483; Thu, 11
- May 2023 21:57:09 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683867629; x=1686459629;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+G0YQVid8BAUmDK4avXBWV3q8tHjdbwoFwpJ8dCo55c=;
+        b=cEY3PhTkcGJ5GkD0oVREdP9o1FHkVKHEdY/taL5nEjINsousKfmw6kFTVebSI0WfUE
+         OVjkmPG2uWx6R0+Mgsc+MTg7SjJmlyD/vh/BhYiK0VFaIhZ5rgANeB3tB4Fb8DLGN+Da
+         TAagRsMnQBm451PUSUeXxBfVWiuXCR73DqWEyctomDG7cJP8Q5zXKvvojMqb10ocHI4u
+         Qi6t/+jptNHriUV7U1rbPvlJ30EN1x4eUiilKcjvVZPZUYlcxNJZVesE41Q1jnG+wPCQ
+         Z5d06YUSqnmllDVQ70llS1fc2HklXbKkgj6JAhqzpsVDhI+CbXAR5eAFMduSygMfEJG/
+         aIog==
+X-Gm-Message-State: AC+VfDyNXYwlPKNes9QSxVhAuvO2I3TbUfji4uXhwRVGbdpxj5OWAcoJ
+        5qckYrCsb3pfnMqqsfQU6GxKIvxBh1hk8HHeYCii3A==
+X-Google-Smtp-Source: ACHHUZ6MLhbi5iBf/nXMLBN3mawFSRCoMhV1RHc31ogXUDbs6hd3pzeO2VCHa5DliqCbriCdIqWu32xLtao+ibFfYDo=
+X-Received: by 2002:a81:4e4e:0:b0:55a:a90c:ecb8 with SMTP id
+ c75-20020a814e4e000000b0055aa90cecb8mr24912252ywb.15.1683867629436; Thu, 11
+ May 2023 22:00:29 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230505173012.881083-1-etienne.carriere@linaro.org>
- <20230505173012.881083-3-etienne.carriere@linaro.org> <CAFA6WYN4yjjedmsS4nAgR5L7OOTRAcKs7STW0YjCC7XsdfYzkA@mail.gmail.com>
- <CAN5uoS8eSfeu-BaV5dhbB15q_iGjcd9BKDpp_hEBaBdb4_qbAg@mail.gmail.com>
- <CAN5uoS99hfjE404_UCm+F4bdVgSfB6Eg_3d1JvHCc2GgSzdUog@mail.gmail.com>
- <CAFA6WYPUWjK97H5DL-eOT2bjsa79Zrvk4wet2AW0Qb0NOVqt7Q@mail.gmail.com>
- <CAN5uoS8HF5ymsjkLthFnoQxBHQ3TOVonycTH3g5K76qKzUniuA@mail.gmail.com> <CAFA6WYMBoUom6yr-BGzfJKLsuQLPEkkcS021mf-KjCfkt-ejJw@mail.gmail.com>
-In-Reply-To: <CAFA6WYMBoUom6yr-BGzfJKLsuQLPEkkcS021mf-KjCfkt-ejJw@mail.gmail.com>
-From:   Etienne Carriere <etienne.carriere@linaro.org>
-Date:   Fri, 12 May 2023 06:56:58 +0200
-Message-ID: <CAN5uoS8mj35qXdhHaHVsiuEJ4PtZWCRn=OmNUDrQM=JjFc7P0w@mail.gmail.com>
-Subject: Re: [PATCH v6 3/4] tee: optee: support tracking system threads
-To:     Sumit Garg <sumit.garg@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        op-tee@lists.trustedfirmware.org,
-        Jens Wiklander <jens.wiklander@linaro.org>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Cristian Marussi <cristian.marussi@arm.com>
+References: <7ffd4a5d-61e9-4b4c-a312-a85bcde08c39@paulmck-laptop>
+ <20230510171238.2189921-5-paulmck@kernel.org> <CAEXW_YQNRQuPP8GzHMZXWPoLmbpK3rB_+eVXmiRu6RrsihrEpQ@mail.gmail.com>
+ <0146f6ad-9a2c-4a28-8992-e054afade42c@paulmck-laptop>
+In-Reply-To: <0146f6ad-9a2c-4a28-8992-e054afade42c@paulmck-laptop>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Thu, 11 May 2023 22:00:18 -0700
+Message-ID: <CAEXW_YQ0o8f-J3QqQKur7GkY+kxOvtANpFH4uajMGe6ioFErvw@mail.gmail.com>
+Subject: Re: [PATCH rcu 5/6] doc/rcutorture: Add description of rcutorture.stall_cpu_block
+To:     paulmck@kernel.org
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-team@meta.com, rostedt@goodmis.org,
+        Zqiang <qiang1.zhang@intel.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 May 2023 at 13:31, Sumit Garg <sumit.garg@linaro.org> wrote:
+On Thu, May 11, 2023 at 11:11=E2=80=AFAM Paul E. McKenney <paulmck@kernel.o=
+rg> wrote:
 >
-> On Thu, 11 May 2023 at 13:49, Etienne Carriere
-> <etienne.carriere@linaro.org> wrote:
+> On Wed, May 10, 2023 at 10:47:36PM -0700, Joel Fernandes wrote:
+> > On Wed, May 10, 2023 at 10:12=E2=80=AFAM Paul E. McKenney <paulmck@kern=
+el.org> wrote:
+> > >
+> > > From: Zqiang <qiang1.zhang@intel.com>
+> > >
+> > > If you build a kernel with CONFIG_PREEMPTION=3Dn and CONFIG_PREEMPT_C=
+OUNT=3Dy,
+> > > then run the rcutorture tests specifying stalls as follows:
+> > >
+> > > runqemu kvm slirp nographic qemuparams=3D"-m 1024 -smp 4" \
+> > >         bootparams=3D"console=3DttyS0 rcutorture.stall_cpu=3D30 \
+> > >         rcutorture.stall_no_softlockup=3D1 rcutorture.stall_cpu_block=
+=3D1" -d
+> > >
+> > > The tests will produce the following splat:
+> > >
+> > > [   10.841071] rcu-torture: rcu_torture_stall begin CPU stall
+> > > [   10.841073] rcu_torture_stall start on CPU 3.
+> > > [   10.841077] BUG: scheduling while atomic: rcu_torture_sta/66/0x000=
+0000
+> > > ....
+> > > [   10.841108] Call Trace:
+> > > [   10.841110]  <TASK>
+> > > [   10.841112]  dump_stack_lvl+0x64/0xb0
+> > > [   10.841118]  dump_stack+0x10/0x20
+> > > [   10.841121]  __schedule_bug+0x8b/0xb0
+> > > [   10.841126]  __schedule+0x2172/0x2940
+> > > [   10.841157]  schedule+0x9b/0x150
+> > > [   10.841160]  schedule_timeout+0x2e8/0x4f0
+> > > [   10.841192]  schedule_timeout_uninterruptible+0x47/0x50
+> > > [   10.841195]  rcu_torture_stall+0x2e8/0x300
+> > > [   10.841199]  kthread+0x175/0x1a0
+> > > [   10.841206]  ret_from_fork+0x2c/0x50
 > >
-> > On Thu, 11 May 2023 at 09:27, Sumit Garg <sumit.garg@linaro.org> wrote:
-> > > (snip)
-> > > > > > >
-> > > > > > > +bool optee_cq_inc_sys_thread_count(struct optee_call_queue *cq)
-> > > > > > > +{
-> > > > > > > +       bool rc = false;
-> > > > > > > +
-> > > > > > > +       mutex_lock(&cq->mutex);
-> > > > > > > +
-> > > > > > > +       /* Leave at least 1 normal (non-system) thread */
-> > > > > >
-> > > > > > IMO, this might be counter productive. As most kernel drivers open a
-> > > > > > session during driver probe which are only released in the driver
-> > > > > > release method.
-> > > > >
-> > > > > It is always the case?
-> > > >
-> > > > This answer of mine is irrelevant. Sorry,
-> > > > Please read only the below comments of mine, especially:
-> > > > | Note that an OP-TEE thread is not bound to a TEE session but rather
-> > > > | bound to a yielded call to OP-TEE.
-> > > >
-> > > > >
-> > > > > > If the kernel driver is built-in then the session is
-> > > > > > never released. Now with system threads we would reserve an OP-TEE
-> > > > > > thread for that kernel driver as well which will never be available to
-> > > > > > regular user-space clients.
-> > > > >
-> > > > > That is not true. No driver currently requests their TEE thread to be
-> > > > > a system thread.
-> > > > > Only SCMI does because it needs to by construction.
-> > > > >
-> > >
-> > > Yes that's true but what prevents future/current kernel TEE drivers
-> > > from requesting a system thread once we have this patch-set landed.
+> > Another way to get rid of the warning would be to replace the
+> > cur_ops->readlock() with rcu_read_lock(). Though perhaps that will not
+> > test whether the particular RCU flavor under testing is capable of
+> > causing a stall :-).
+>
+> Exactly!
+>
+> > >         rcutorture.stall_cpu_block=3D [KNL]
+> > >                         Sleep while stalling if set.  This will resul=
+t
+> > > -                       in warnings from preemptible RCU in addition
+> > > -                       to any other stall-related activity.
+> > > +                       in warnings from preemptible RCU in addition =
+to
+> > > +                       any other stall-related activity.  Note that
+> > > +                       in kernels built with CONFIG_PREEMPTION=3Dn a=
+nd
+> > > +                       CONFIG_PREEMPT_COUNT=3Dy, this parameter will
+> > > +                       cause the CPU to pass through a quiescent sta=
+te.
+> > > +                       Any such quiescent states will suppress RCU C=
+PU
+> > > +                       stall warnings, but the time-based sleep will
+> > > +                       also result in scheduling-while-atomic splats=
+.
 > >
-> > Only clients really needing this system_thread attribute should request it.
-> > If they really need, the OP-TEE firmware in secure world should
-> > provision sufficient thread context.
+> > Could change last part to "but may also result in
+> > scheduling-while-atomic splats as preemption might be disabled for
+> > certain RCU flavors in order to cause the stall".
 >
-> How do we quantify it? We definitely need a policy here regarding
-> normal vs system threads.
->
-> One argument in favor of kernel clients requiring system threads could
-> be that we don't want to compete with user-space for OP-TEE threads.
+> Is that needed given the earlier "in kernels built with
+> CONFIG_PREEMPTION=3Dn and CONFIG_PREEMPT_COUNT=3Dy"?
 
-Sorry I don't understand. What do you mean qualifying this?
-In an ideal situation, we would have OP-TEE provisioned with largely
-sufficient thread contexts. However there are systems with constraints
-memory resource that do lower at most the number of OP-TEE thread
-contexts.
-
-
+Hmm, I guess is not clear to the reader without code reading about why
+preempt got disabled. So I would add that last part I mentioned, but I
+am Ok either way, it is just a suggestion.
 
 >
+> > > +                       Which might or might not be what you want.
+> > > +
 > >
-> > >
-> > > > >
-> > > > > > So I would rather suggest we only allow a
-> > > > > > single system thread to be reserved as a starting point which is
-> > > > > > relevant to this critical SCMI service. We can also make this upper
-> > > > > > bound for system threads configurable with default value as 1 if
-> > > > > > needed.
-> > > >
-> > > > Note that SCMI server can expose several SCMI channels (at most 1 per
-> > > > SCMI protocol used) and each of them will need to request a
-> > > > system_thread to TEE driver.
-> > > >
-> > > > Etienne
-> > > >
-> > > > >
-> > > > > Reserving one or more system threads depends on the number of thread
-> > > > > context provisioned by the TEE.
-> > > > > Note that the implementation proposed here prevents Linux kernel from
-> > > > > exhausting TEE threads so user space always has at least a TEE thread
-> > > > > context left available.
-> > >
-> > > Yeah but on the other hand user-space clients which are comparatively
-> > > larger in number than kernel clients. So they will be starved for
-> > > OP-TEE thread availability. Consider a user-space client which needs
-> > > to serve a lot of TLS connections just waiting for OP-TEE thread
-> > > availability.
-> >
-> > Note that OP-TEE default configuration provisions (number of CPUs + 1)
-> > thread context, so the situation is already present before these
-> > changes on systems that embedded an OP-TEE without a properly tuned
-> > configuration. As I said above, Linux kernel cannot be responsible for
-> > the total number of thread contexts provisioned in OP-TEE. If the
-> > overall system requires a lot of TEE thread contexts, one should embed
-> > a suitable OP-TEE firmware.
+> > Suggest drop this line ;-).
 >
-> Wouldn't the SCMI deadlock problem be solved with just having a lot of
-> OP-TEE threads? But we are discussing the system threads solution here
-> to make efficient use of OP-TEE threads. The total number of OP-TEE
-> threads is definitely in control of OP-TEE but the control of how to
-> schedule and efficiently use them lies with the Linux OP-TEE driver.
+> OK, I will bite.  ;-)
 >
-> So, given our overall discussion in this thread, how about the upper
-> bound for system threads being 50% of the total number of OP-TEE
-> threads?
+> What is your concern with this line?
 
-What would be a shame if the system does not use any Linux kernel
-client sessions, only userland clients. This information cannot be
-knwon be the linux optee driver.
-Instead of leaving at least 1 TEE thread context for regular session,
-what if this change enforce 2? or 3? Which count?
-I think 1 is a fair choice: it allows to support OP-TEE firmwares with
-a very small thread context pool (when running in small secure
-memory), embedding only 2 or 3 contextes.
+It is not needed IMO.
 
->
-> >
-> > >
-> > > > >
-> > > > > Note that an OP-TEE thread is not bound to a TEE session but rather
-> > > > > bound to a yielded call to OP-TEE.
-> > >
-> > > tee_client_open_session()
-> > >   -> optee_open_session()
-> > >
-> > > tee_client_system_session()
-> > >   -> optee_system_session()
-> > >     -> optee_cq_inc_sys_thread_count()       <- At this point you
-> > > reserve a system thread corresponding to a particular kernel client
-> > > session
-> > >
-> > > All tee_client_invoke_func() invocations with a system thread capable
-> > > session will use that reserved thread.
-> > >
-> > > tee_client_close_session()
-> > >   -> optee_close_session()
-> > >     -> optee_close_session_helper()
-> > >       -> optee_cq_dec_sys_thread_count()    <- At this point the
-> > > reserved system thread is released
-> > >
-> > > Haven't this tied the system thread to a particular TEE session? Or am
-> > > I missing something?
-> >
-> > These changes do not define an overall single system thread.
-> > If several sessions requests reservation of TEE system thread, has
-> > many will be reserved.
-> > Only the very sessions with its sys_thread attribute set will use a
-> > reserved thread. If such a kernel client issues several concurrent
-> > calls to OP-TEE over that session, it will indeed consume more
-> > reserved system threads than what is actually reserved. Here I think
-> > it is the responsibility of such client to open as many sessions as
-> > requests. This is what scmi/optee driver does (see patch v6 4/4). An
-> > alternative would be to have a ref count of sys_thread in session
-> > contexts rather than a boolean value. I don't think it's worth it.
->
-> Ah, I missed that during the review. The invocations with system
-> threads should be limited by res_sys_thread_count in a similar manner
-> as we do with normal threads via free_normal_thread_count. Otherwise,
-> it's unfair for normal thread scheduling.
->
-> I suppose there isn't any interdependency among SCMI channels itself
-> such that a particular SCMI invocation can wait until the other SCMI
-> invocation has completed.
+thanks,
 
-I think that would over complexify the logic.
+ - Joel
 
-Note I will send a patch v8 series but feel free to continue the discussion.
-It will at least address other comments you shared.
 
-Best regards,
-Etienne
-
->
-> -Sumit
+> > >         rcutorture.stall_cpu_holdoff=3D [KNL]
+> > >                         Time to wait (s) after boot before inducing s=
+tall.
+> > > --
+> > > 2.40.1
+> > >
