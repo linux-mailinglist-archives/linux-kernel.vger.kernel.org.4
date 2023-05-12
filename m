@@ -2,129 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9679F6FFF41
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 05:25:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AF026FFF4D
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 05:30:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239750AbjELDZ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 23:25:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51994 "EHLO
+        id S239859AbjELD3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 23:29:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239158AbjELDZx (ORCPT
+        with ESMTP id S239846AbjELD3m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 23:25:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABFE51BC9;
-        Thu, 11 May 2023 20:25:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3608264DA2;
-        Fri, 12 May 2023 03:25:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95252C433D2;
-        Fri, 12 May 2023 03:25:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683861950;
-        bh=cTBnLy3eQku5I3kq4VRmAiy3V6kmgt0B+3aiC8bEzrs=;
-        h=From:Date:Subject:To:Cc:From;
-        b=N0YskMbCr/s51e6Run2XBWc60UFbGTLquAPlTV1KT+TKezFxBUYwV+K1noDlWjukv
-         JjzxSGFF94c2t0IcYM0YPyu8cZYyF+AHNd5c7CBpSgemiJI/Kpqz9qH6WFnuzR4v2K
-         dh3Dopyxmyh4VsfExbTlSVCBGzSWtlVBf91NYJAO1d4j+rOT3tr4HkRpTBd1dEPPHT
-         ie6qoKQ6llzGrGtCH2dmNt6pQjTmYwTFWbWkg8486WtB3MPtk+Fzwug1FTzPF1bk3W
-         JTIUepOMDsFSdjkPK2E2WDOk1z5BtcaBN61ni/7t6MfRZpzpOLzdHrgQLobe0vowym
-         DcvMQWndQ6MGA==
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-394690088acso350527b6e.0;
-        Thu, 11 May 2023 20:25:50 -0700 (PDT)
-X-Gm-Message-State: AC+VfDy2kP0SjKDWGY89dAiND3ht0q8a/caEn9cRq0lHZzh7wIKY11UY
-        PPL6M2JnY5cxMlh7WMLC63wrk6j5xTlVG1rd51g=
-X-Google-Smtp-Source: ACHHUZ7FKGH/MsHNwX2k2oJZmwSIuQOC62sHk5vs1GTkT0CfeaKv4ffQvjUNa9A+b87YK+Txa9pnVkHv0iZu86Zh6gE=
-X-Received: by 2002:a05:6808:23c2:b0:394:65f4:f146 with SMTP id
- bq2-20020a05680823c200b0039465f4f146mr1762400oib.5.1683861949904; Thu, 11 May
- 2023 20:25:49 -0700 (PDT)
+        Thu, 11 May 2023 23:29:42 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4108A468A;
+        Thu, 11 May 2023 20:29:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683862181; x=1715398181;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=OvzogAHeqtJArkfFrwuVlPlMN6TAJPqwHgCuw/bj4WA=;
+  b=c6LQ9iptNz7poXlfU857/mw5migFLWOgH3Q5k3sLB8MBuokCIU48J0qg
+   TaJiVwdjJt2KX3zGarfCYhQcHxy3tkyIPYNG4zoFFPtL36rT1SAClG7Uk
+   D2S5DKA22Y4RDL04unylJosz5ud/jytAM45+R1bUIyeAPbw+lYkAFo2bE
+   ejnB8ed3h1dVRCqXqhp/HxCFrLWTKu90SodyC5tNA6SV3CBwt8oFKVLOI
+   SZUE8Kfsihpa98FK1IZ4FjxvkYcApRuuSr2W/7dCn+FJxW/LjRkFA+qVJ
+   rjKA9kFp3L/MpaR3yJqvaPlbuq+C2j/652WDX0PuQDMyj6+p+VidEuLhE
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="335209095"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="335209095"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 20:29:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="844244718"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="844244718"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 11 May 2023 20:29:34 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pxJTK-0004S8-0W;
+        Fri, 12 May 2023 03:29:34 +0000
+Date:   Fri, 12 May 2023 11:28:55 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Staging Drivers <linux-staging@lists.linux.dev>,
+        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
+        Linux Kernel Actions <linux-actions@lists.infradead.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Diederik de Haas <didi.debian@cknow.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        David Airlie <airlied@redhat.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Tom Rix <trix@redhat.com>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH 02/10] mISDN: Replace GPL notice boilerplate with SPDX
+ identifier
+Message-ID: <202305121151.UPlaFk6c-lkp@intel.com>
+References: <20230511133406.78155-3-bagasdotme@gmail.com>
 MIME-Version: 1.0
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Fri, 12 May 2023 12:25:13 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATrFbr7kT9HEFgYO6ZstaSx1FB+Q4SQrAX+D8VwG5K0dQ@mail.gmail.com>
-Message-ID: <CAK7LNATrFbr7kT9HEFgYO6ZstaSx1FB+Q4SQrAX+D8VwG5K0dQ@mail.gmail.com>
-Subject: [RFC] [kbuild test robot] random-order parallel building
-To:     kernel test robot <lkp@intel.com>
-Cc:     Linux Kbuild mailing list <linux-kbuild@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511133406.78155-3-bagasdotme@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello, maintainers of the kbuild test robot.
+Hi Bagas,
 
-I have a proposal for the 0day tests.
+kernel test robot noticed the following build warnings:
 
+[auto build test WARNING on ac9a78681b921877518763ba0e89202254349d1b]
 
-GNU Make traditionally processes the dependency from left to right.
+url:    https://github.com/intel-lab-lkp/linux/commits/Bagas-Sanjaya/agp-amd64-Remove-GPL-distribution-notice/20230511-214307
+base:   ac9a78681b921877518763ba0e89202254349d1b
+patch link:    https://lore.kernel.org/r/20230511133406.78155-3-bagasdotme%40gmail.com
+patch subject: [PATCH 02/10] mISDN: Replace GPL notice boilerplate with SPDX identifier
+reproduce:
+        scripts/spdxcheck.py
 
-For example, if you have dependency like this:
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305121151.UPlaFk6c-lkp@intel.com/
 
-     all: foo bar baz
+spdxcheck warnings: (new ones prefixed by >>)
+>> drivers/isdn/mISDN/dsp_audio.c: 1:28 Invalid License ID: GPL-1.0-or-later
+>> drivers/isdn/mISDN/dsp_blowfish.c: 1:28 Invalid License ID: GPL-1.0-or-later
+>> drivers/isdn/mISDN/dsp_cmx.c: 1:28 Invalid License ID: GPL-1.0-or-later
+>> drivers/isdn/mISDN/dsp_core.c: 1:28 Invalid License ID: GPL-1.0-or-later
+>> drivers/isdn/mISDN/dsp_dtmf.c: 1:28 Invalid License ID: GPL-1.0-or-later
+>> drivers/isdn/mISDN/dsp_tones.c: 1:28 Invalid License ID: GPL-1.0-or-later
 
-GNU Make builds foo, bar, baz, in this order.
-
-
-Some projects that are not capable of parallel builds
-rely on that behavior implicitly.
-
-Kbuild, however, is intended to work well in parallel.
-(As the maintainer, I really care about it.)
-
-
-From time to time, people add "just worked for me" code,
-but apparently that lacks proper dependency.
-Sometimes it requires an expensive CPU to reproduce
-parallel build issues.
-
-
-For example, see this report,
-  https://lkml.org/lkml/2016/11/30/587
-
-The report says 'make -j112' reproduces the broken parallel build.
-Most people do not have such a build machine that comes with 112 cores.
-It is difficult to reproduce it (or even notice it).
-
-(Some time later, it was root-caused by 07a422bb213a)
-
-
-
-GNU Make 4.4 got this option.
-
-  --shuffle[={SEED|random|reverse|none}]
-       Perform shuffle of prerequisites and goals.
-
-
-
-'make --shuffle=reverse' will build in reverse order.
-In the example above, baz, bar, foo.
-
-'make --shuffle' will randomize the build order.
-
-
-If there exists a missing dependency among foo, bar, baz,
-it will fail to build.
-
-
-
-We already perform the randconfig daily basis.
-So, random-order parallel building is a similar idea.
-
-Perhaps, it makes sense to add the "--shuffle=SEED" option
-but it requires GNU Make 4.4.  (or GNU Make 4.4.1)
-Is this too new?
-
-
-
---
-Best Regards
-Masahiro Yamada
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
