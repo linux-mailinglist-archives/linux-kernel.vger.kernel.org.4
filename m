@@ -2,161 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85A12700780
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 14:13:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 37BA4700786
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 14:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240608AbjELMN0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 08:13:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47334 "EHLO
+        id S240558AbjELMS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 08:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240362AbjELMNX (ORCPT
+        with ESMTP id S240338AbjELMSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 08:13:23 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2104.outbound.protection.outlook.com [40.107.113.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E203C39;
-        Fri, 12 May 2023 05:13:21 -0700 (PDT)
+        Fri, 12 May 2023 08:18:23 -0400
+Received: from mx0a-0039f301.pphosted.com (mx0a-0039f301.pphosted.com [148.163.133.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAFA7DA2;
+        Fri, 12 May 2023 05:18:22 -0700 (PDT)
+Received: from pps.filterd (m0174676.ppops.net [127.0.0.1])
+        by mx0a-0039f301.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CBVsbl005889;
+        Fri, 12 May 2023 12:18:08 GMT
+Received: from eur03-am7-obe.outbound.protection.outlook.com (mail-am7eur03lp2234.outbound.protection.outlook.com [104.47.51.234])
+        by mx0a-0039f301.pphosted.com (PPS) with ESMTPS id 3qh6u0ar62-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 12:18:08 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=XJr2w5Ob6hB29IfTCLtCk/NneHMv6sC0QQopnga/HPZpaQozK95LziNGS4wj97SpgFnB0fN47z51zwOP+O2eVZXspLlrQcPfm4EWw8+lDjyKiIZtbBVZ5jY8bqcd+CXbLb4cm2jOLihgFRJhVIe4gluSSKjK8+jUsdAQwlOJTiE+FoHKJRQNrXsxkc3HN1qI96jKUvLTzRd2SwKTGj2s86BRiQywEjo+gbP1FM8No3mMlIkqvBaeZ/GVSvUq6P5C/pcQHP5HKNhuKlC770pZHtWliV7iiJczmQFHLBzAg6O3yRN8HPLVNoAYVL1LC72tO2oM50coeFMS+R7/UAaTJg==
+ b=Uxi4poFl7M3S0SAreiB2ulQIKJNmy0xtf+chy4Mdj8E/GoLfIwV74RufYeMssMXKIpwpuA9IZGioygT6DaZOwst2I5bXdq6fnC46AsdJne5F5SRSKL45h+oBeRQxZw2aiPfvBj2aOJ8O80enaEfdZAYC7n5fuFznRL2vRUq6TNC9E/3+mKphV2BbmrKZLYPk0pC0S94AwOVMfdJPzMKsQ26G0DPyJfOzj37Qn9MURzN9e/7gTMWlAJfJlQKwFPFe3b/UJr1h4HFNLX6FXPdT9d1vmevBqaY67bIO16fWmN0Un+ozElTRyfEvCFVSouJVqCbJD4tIgkMQblxFtO1GKw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=OuKkBBS8r/DjZ8HtApXhceTe6oXlki0EkKl7teAidRM=;
- b=gtm/4uXAMT21MbU5cKmVNh5500Qb0fdl7BCeficcPG8HTCbh0fdxMw2clC74bz4XUgjSgEHzQqsQWo+jGW/UuYmS0eZ4ePyh/jmyjvuJsHM65ZC/Hf8wlHyDzfGTQ7Nv+ttS/53hXuakDVypByAZ390/gSOuqfny0hiXvnqh4LRAEgmPVftamJw9Kt0K2u0nDLSpj1TROnh7CblOxdm6Li4paE5rSAIznifFKbJUFeTdrNE743/0jQ3wnb5cxMqqUtyeVGbUlpfPoKkn50J8JIzpTqAIwbFylWQenBymHGpBrj8LRmrG7bTQdQapOahPrATpGJhKa7aDyBcsCiQ12g==
+ bh=caO53I9T6uU4/1sKhh+YHtxHJBZXQOqTPwrfdFRCTfs=;
+ b=Zs5YuCcWpYr8vqGbnncniXmUNwMdDe0tZmCexumKiKkGfluL03jzrKFf06gSPU/x9G56LFwIUc8X8/KzL0V70V3YHjkFt7p2yotb2WV4VpRBt//a6R4JybZvGCAvDknGdd4kxPyMbjW4wHdZrUYE5zXV0BXGWwX3RWAszKS+Wf46gtgXkhyNjeWkKZ7AO2T5Jkyy4Wrg4+0GNzXj1ayL2NcQLgCz73gzVFjHm+T0nWMg9qofXONvrH9SdYNXwPY+L61y74SDDD/6tt6fXKhwtf9zEZN8PzH3E3LPfiqSgu1lxY5Q1uvIFmdOovylrzjUa4ZeF5vR1icATBH7DzGzCQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
- dkim=pass header.d=renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
- s=selector1;
+ smtp.mailfrom=epam.com; dmarc=pass action=none header.from=epam.com;
+ dkim=pass header.d=epam.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=epam.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=OuKkBBS8r/DjZ8HtApXhceTe6oXlki0EkKl7teAidRM=;
- b=gqiuOPL7jvpVLZIRH5KnYf7KIHOrFEhTpqUEGFvXMjyKvTXY16HqUGmRrlB+h6fJ8y2wzJ+VgYU34USzKhKh0Alg6AMUtGm7YAi33JEHrsv38haPiOBGTpKGsV8CC3kSjV37+uhTOoRNjqgq/6LyF8K145VjOqXtzvXoBRQUdyU=
-Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
- (2603:1096:404:8028::13) by TYYPR01MB8000.jpnprd01.prod.outlook.com
- (2603:1096:400:f9::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.23; Fri, 12 May
- 2023 12:13:17 +0000
-Received: from TYBPR01MB5341.jpnprd01.prod.outlook.com
- ([fe80::5198:fdcf:d9b1:6003]) by TYBPR01MB5341.jpnprd01.prod.outlook.com
- ([fe80::5198:fdcf:d9b1:6003%7]) with mapi id 15.20.6387.023; Fri, 12 May 2023
- 12:13:17 +0000
-From:   Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-To:     Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: RE: [PATCH RFT v3 0/3] drivers/thermal/rcar_gen3_thermal: add Gen4
- fuse support
-Thread-Topic: [PATCH RFT v3 0/3] drivers/thermal/rcar_gen3_thermal: add Gen4
- fuse support
-Thread-Index: AQHZhD3ysbOIiRq6BkyZmSYQ5SIz169WjPmw
-Date:   Fri, 12 May 2023 12:13:17 +0000
-Message-ID: <TYBPR01MB5341AF3D9EB0F9A074283341D8759@TYBPR01MB5341.jpnprd01.prod.outlook.com>
-References: <20230511192220.7523-1-wsa+renesas@sang-engineering.com>
-In-Reply-To: <20230511192220.7523-1-wsa+renesas@sang-engineering.com>
-Accept-Language: ja-JP, en-US
-Content-Language: ja-JP
+ bh=caO53I9T6uU4/1sKhh+YHtxHJBZXQOqTPwrfdFRCTfs=;
+ b=UYRzGNkSO95ZaFkd32x8UKBmeYGbBlYZjEFDc3nc6IVAuNL4WIqLFTaUmiWfaJf1Iu7l5eNMtEj8rii59JLAiS9xbFOJB/RMLqf0LevXPvMEsuus1S9uFSwGz64/cSG/6/FWVycey9s1HXBjo+R8zAAUFeXMebOoTxkQJT3ii12exBjalZBPRAe/bOdUQ1bRZagW1tRFcYd8PQYNjqkn5z1ZIpy5yGXSHIwRVwhfj3IDXiFcVJ+8EjLkYpCLNgtJREYuJmKMbz9XkzkshWEkeAa08ShykK+KyDThuIq2jkBd0mjG/M6EydwuQ5ayCkhpnb21tWnghI1rCd+5M5HfcA==
+Received: from PA4PR03MB7136.eurprd03.prod.outlook.com (2603:10a6:102:ea::23)
+ by DB9PR03MB7785.eurprd03.prod.outlook.com (2603:10a6:10:2ce::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.21; Fri, 12 May
+ 2023 12:18:03 +0000
+Received: from PA4PR03MB7136.eurprd03.prod.outlook.com
+ ([fe80::bcf5:cd14:fd35:1300]) by PA4PR03MB7136.eurprd03.prod.outlook.com
+ ([fe80::bcf5:cd14:fd35:1300%4]) with mapi id 15.20.6387.021; Fri, 12 May 2023
+ 12:18:03 +0000
+From:   Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+To:     Cristian Marussi <cristian.marussi@arm.com>
+CC:     "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
+        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Peng Fan <peng.fan@oss.nxp.com>,
+        Michal Simek <michal.simek@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
+Subject: Re: [RFC v2 2/3] pinctrl: Implementation of the generic scmi-pinctrl
+ driver
+Thread-Topic: [RFC v2 2/3] pinctrl: Implementation of the generic scmi-pinctrl
+ driver
+Thread-Index: AQHZeEK66Y+E4GsA3km+qVBMGvAGK69MMbOAgAjzKoCAAUwwgIAANgSA
+Date:   Fri, 12 May 2023 12:18:03 +0000
+Message-ID: <20230512121801.GA3494263@EPUAKYIW0A6A>
+References: <cover.1682513390.git.oleksii_moisieiev@epam.com>
+ <812ae71d017b115c55648dbf0a4c3502715b1955.1682513390.git.oleksii_moisieiev@epam.com>
+ <ZFVoiWnvq7UXSBBw@surfacebook>
+ <152bbad1-a759-df18-1efa-4e25c54847d9@epam.com>
+ <ZF4BKZkbLr2mKN0s@e120937-lin>
+In-Reply-To: <ZF4BKZkbLr2mKN0s@e120937-lin>
+Accept-Language: en-US
+Content-Language: en-US
 X-MS-Has-Attach: 
 X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=renesas.com;
 x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: TYBPR01MB5341:EE_|TYYPR01MB8000:EE_
-x-ms-office365-filtering-correlation-id: 5f824e8a-54d9-4f10-e23c-08db52e2451e
+x-ms-traffictypediagnostic: PA4PR03MB7136:EE_|DB9PR03MB7785:EE_
+x-ms-office365-filtering-correlation-id: edd7a8f8-9552-460e-26d4-08db52e2ef1e
 x-ms-exchange-senderadcheck: 1
 x-ms-exchange-antispam-relay: 0
 x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: qkBebTNMPV0jBce6Sw+n65O/ZQJhvYzsATwl7//wwkSo/ep6nlQ5Ow2CEjL4Z2IIhSvnImZoUEyoLOIQGpKPL1F3xKACDWYeLFQEDQ7zfVjhXHk1p7zgnHoDr0onJJxwD89V50GZJYKokYmputO4rDtYWTW4A9+UcNR3b9As2q5f5iZ0w3yNbtD5qHpwQE5H9knQoe1PKq3n5eG+joDbyAwu3lQ2+YTxgZ9WsEt7rxRfw80BGzkI88HnUrtboUuIxA/x00E8QH7YcUC+XgS79Gm5PfPmUYj7kEJvzxgFJjx4oq0uPtFsL/QJt7aB1k+PXneWXmr27QeXYB75j1GqzEGdtVcnMJiJGmu6A8m9vqM80gcB9pPztr+6Df+SfT5pGk2O4+qglLTrQf8gQOiKT3iornl/mKak8eSKr9s9MXrRg7C2GShasAMjJ4Q8rsFH7R/WXbEkFDB1td/orzdZFi7q50+xUKodfueYZxplO6aRgTgwsKsl3r8j1VefEt/e3CicMUOoAk3JFGvLz4DzHcfP7Ygd4xEZ8cLhmjjDOJOepSk+FbIgID2JKn0ieHHFsZf3LPYNkzSlMD71larFdxEOmFXbbEN7xMc5fsMWOJgQKII5/Oxzw8WDCGsOZz2v
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:TYBPR01MB5341.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(376002)(39860400002)(366004)(346002)(396003)(136003)(451199021)(7696005)(71200400001)(83380400001)(38100700002)(33656002)(86362001)(38070700005)(55016003)(6506007)(186003)(26005)(9686003)(122000001)(5660300002)(54906003)(2906002)(478600001)(76116006)(110136005)(316002)(4326008)(52536014)(66446008)(66476007)(8676002)(66556008)(41300700001)(8936002)(66946007)(64756008);DIR:OUT;SFP:1102;
+x-microsoft-antispam-message-info: W2BMKhPoGv1RKdR5Yv2WAoi+gceXu9TVriyAROQmg3lV/OBe3wkXZO5jtw44CwLJUHMHCcxFftDO+JoUGIt6mcpoHdZPDQj113mOXozk5bwHKlbCIsD2SKGQpSzmkdiw4cF0VINgCB9NcConeikQhi42fjgqSumLMoLMauNVsNglkevBUn3r6ckfiWbqQiCOHhcM1vjcevq9ptdiGBzWLVpNJQ/m3dMEPAXsHDyT0cXMQDEW73NT/cyXZs2Uh05HDOkWIydJEcxZdeJ+IZY9cXsizF/qsNKXsaBaEolNdZcNRalDwf9/kXAh0HozbQC0rZN01yBU7W8zGM0bLSy6r2FqifRuhNM60juwvjHHqwigObVk8z+OVIjI9gj6xgkEYEOZKUNquEmoxmEMNYp4ahWSFHfSGbCg4EJPPbIXBTjuESmGOqA3i2BiIpgvQLnPozGtq/2E8Ip/2QtK87yk5XOmwvvsQUL+WkJCrMHViRIDzINKBze20OGecJIU/qP7aIzbumgIs5HkIHqPjhEiE+BS6SPYxEc+echZmt3SQJy3PYmvMA4sEBMrDvNtCTgN9aJ5EAhv+nWMqjf2pAb5ut0l6zBlH01rnC0E2XXcOF5nr/otC7bjVhG6ga5B5I1mwa9ZtFdJi03DX+NYuFUemQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR03MB7136.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(136003)(366004)(396003)(346002)(376002)(39860400002)(451199021)(66946007)(66446008)(66476007)(6916009)(66556008)(4326008)(91956017)(6486002)(76116006)(64756008)(478600001)(54906003)(316002)(86362001)(33656002)(83380400001)(186003)(26005)(1076003)(6512007)(9686003)(53546011)(6506007)(8676002)(41300700001)(33716001)(5660300002)(8936002)(38100700002)(38070700005)(122000001)(2906002)(71200400001)(41533002);DIR:OUT;SFP:1101;
 x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?YmdsZmpmKzh3UkVVRXlack9kQklIM1o1MWsyRmE2UTAvc1llSjJ0MG9iRlpO?=
- =?utf-8?B?VmRYZVNKRzh2NCtObzVrUGZJQ2QyNHBVR3lVenRXQlg5Y1IzdFN1aE9zM2gv?=
- =?utf-8?B?c01aT1czbGN1YjhtZ25sWVNuMU1NT3VSQVpGTVc0TmhRL1lNdnlURjhiT1lu?=
- =?utf-8?B?b3A4bURJUXlSUjZCNnd3cEpQbDlRL1UxZnRScjdacEo4aC93aGNqcFRWdkV0?=
- =?utf-8?B?dDA3R3lFRTIzK0N1NGZNZlMyV3NtNnAvODJ3UXZhZTVZUFJ5dHZFZHV6a29h?=
- =?utf-8?B?WnhuQXNaSGxqa2R6cnJsTmkxblByZVEwUVV5OUFLbzY4TVNERUV6NTBCVlZO?=
- =?utf-8?B?Y3ozZGJuaXJaZWdXMUFNdVBzOEZKL3RBNHpzK1dVMWU1WHRHOGdBcEx3bjF2?=
- =?utf-8?B?VDByVjY5RWN1eVJyZzdFWTVob1NvR3RLTFF5VmUyOGhuaHBDQlJpemJ4UHR5?=
- =?utf-8?B?a0FSVjhnQW05OFg3YzFBZFJXZVVSK0JwVnN4YVQ5dmhMWUpRb0g5ZGt4SmdR?=
- =?utf-8?B?WG13dXBoYjhlTlYwRGs5bmRHS2pvdkJ6anpDNHVERnlFMGx6VkJBd2FQS0ZG?=
- =?utf-8?B?SG9RMTl0OFkyM1BCaDRlbEFjOUgrZUFtamJIUlUwZmxEMjJhWGo3MzR3aHJ5?=
- =?utf-8?B?bnZjTERjWUZaZ2pIdzZ1Yk1xYzVjS1JRSXU0clRhN0NYL1hsZVdCVzhJL3Fx?=
- =?utf-8?B?Q2JmSXMrTkkwdEVRR0k0L09ndmF5NUpDUEdicm9hV1dxYnIwbnh0Q1hLWkR4?=
- =?utf-8?B?aWxrN3lYdnV6SGw1Z0tCOHFXNTN3endrTWVPN0lCK0FiZlRDRlJ1Vkh2ZGlt?=
- =?utf-8?B?aHdNY3hsS0J6VldnS3BlR2tiL3lBMnNjODY4YmkrVk5naDZ3d3NFWXJsS25y?=
- =?utf-8?B?RVVuaEp0RmVBQkovN2kxd1B6dXRBbEpWNm1HYkhDbDFicng1VXh1M1pBTW9R?=
- =?utf-8?B?WUcvYzNUK1ppV0xQejRCL2c1aFpRSTJIenNsU2cvTmJkeUhySVp0a0VqU0ZU?=
- =?utf-8?B?dEY3R2VnWUN4aWFnSm44UlIxVkNpVGplL0M1VDNSTStRV3kxSTBBQVV5Zkd3?=
- =?utf-8?B?eE5HeFNkbjVwNlZxRmZLMlhFZG5WM25sTlA1VUFHeHNndVpZMDhvYlI2OVZV?=
- =?utf-8?B?UmxoQkpSQlNwc2IwamYwV3lGQ0NhUkloQXN0T01QNlRoRnlvTGxacTROWlNZ?=
- =?utf-8?B?U1lrS05FMHBqWDZxUU02dmlrZzlCaVZYUjVud0lmVkVuRjFDZklOeG9ydFZ1?=
- =?utf-8?B?NzRVUUFrQldQYTVldGlHTTZ3ajJ0NHhNUGJQOXhybHFhMisyc01Ic3krVmY3?=
- =?utf-8?B?dENhWmdMT3RWTXNFR21ocXJlRUR3MUVwM2hUOUVnaGQxSmR0Wm4xM3lRNzBO?=
- =?utf-8?B?UUZ3TUtFSGplYUMwNXBMbFBiQW54M1VJS2VUUkRNclBwY1NkQ0NhTmJhUHBT?=
- =?utf-8?B?UWR2SkE4YnFEMTFuVEMvTmhPU2NUcm5hUkowbjg5bm5CZkgrNDRlTWs3UUZk?=
- =?utf-8?B?L0pLTlFLNG1yejlnMlZ4TytaMTdXaUxxTVR5SjJMN1N3dkhMSmFLNjYrUXBC?=
- =?utf-8?B?NlVEVXJjaXRONWl0TzQvQ0xqMlphZHBrZHhZazZQWE1vWTg5QUJFcFdJekYv?=
- =?utf-8?B?MVo0UlN4NExGQW9PNm5oMm9BeU9WZHh1MFFKdlJQZVhQVGF0eWw1UmMzSmsw?=
- =?utf-8?B?K2NPMmx6MkJTS0dYM203Yys2VDhhZlBJVkhFYmZURjlxZndQMGNMNW5VNU5J?=
- =?utf-8?B?V2xnNDVudDFqQ0FiRSs3VkdBVXZZbkcreU8yQ3R1QytKNEU5VG1RT0o0S21W?=
- =?utf-8?B?SGo3VTlBRnc0ckU4cCtmZ29XeUtSZFZERnkvNUVPc3R6OHRxWlJPNVU5YTZ0?=
- =?utf-8?B?K29OdXdWYUxadTN0c0xDNFdDTk5nZzhPVWxNRnkzR0g3WHZQeXh6T2RxdmhF?=
- =?utf-8?B?QVA1T0lrM2c2dWVCQ2hBNkhkVUFYRzFUMFMwQ1AyTUQybGpRa3ZSaHdtQWRx?=
- =?utf-8?B?N25HaVg1eTArVVpwQjJLRlcyVzFsSzhPRHNYZ3c5eFE2U3pSaVBEUk16NHM0?=
- =?utf-8?B?Nk1xQ29QOG5NakNzL0JoVWM2UklnR1QrSnZsd0VPU3NacmJPSGNQUjVHZUIv?=
- =?utf-8?B?bkFiWGYrMEF5Zi83a3I2Sm5ZaDZKWkJlRFhmQ25oK3BZQzBBdUtpMk5xR3dw?=
- =?utf-8?B?VVE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Hi958AhsHXAVgU6brw8RVJGJeIp3tRqk8NkOhXiXzfSLV+DKpveQt6msx8UU?=
+ =?us-ascii?Q?CFouLBZJ+nR5H/4Eo3d9+wU/VepdNdU4UGERBik5057JJrYaQhVkIozrUwlB?=
+ =?us-ascii?Q?GhS9wYjFMv4pUkj++4wF8rEg0KNJRAnM8ZCLZT1eFZFEetiRC+YYMugKmHm4?=
+ =?us-ascii?Q?faXWGXPx6apif0zESRFNPM3T+FXMP+h8WD1sKjIEK1N0bjBb9xusGadxxs+S?=
+ =?us-ascii?Q?N7uE1H9BxHzY4zR2XlZgeUciOsTrBSN4WPiBBvDIC7FEbQPYmp2cwxCUWgdW?=
+ =?us-ascii?Q?I1DlLxGjYUC3F3D6/KwZtz9lcTpz+KWJ792YSH+8qjHCCVhct+iChMb8C6DF?=
+ =?us-ascii?Q?zQ80Mq/jGP+J87nyGx+xVqr+tSCfgdd8QDYkor3aq5MtHc91P1WVUJX29IGm?=
+ =?us-ascii?Q?AlaZ4HHJk4aWhZ84/OcMabMlyuBiLuLZHniGz56BeJYROtqntS5MZx6/yPgf?=
+ =?us-ascii?Q?rG31VLZG17BGHedRZHRl9jkMvjZ78ydDQYP7WWANIn9IGJLHV28NGViGDyM8?=
+ =?us-ascii?Q?GYfYFMQ90VDwHsoHCoPECmsrgHH8i9ArNtAo3bA5puGMzhEaRnQ0FsBAAhI8?=
+ =?us-ascii?Q?0ZmLMvjNs7rbu9IDE+2SWStBOUSFABzlR0n9ZlWkB+YvhOkwD/HTkdKUViHu?=
+ =?us-ascii?Q?sjuvVgKbKqqEfVLo5u8Vg0FBdzujBvLY0e4fBgn+m6HcxkBZxttjWUfmpCSf?=
+ =?us-ascii?Q?reHdlAlxrFM9SeYrum01Vlfu0vVsZmxvuonp28uWiGb1Nywl8mwXB8Ase7Ee?=
+ =?us-ascii?Q?+X6JfJLT/92vq643dGwwI11cztAq646P/RtiQGH0NTg//eih3Za85YdTV3kj?=
+ =?us-ascii?Q?y95Mb9q3HX0Ks6TM0HuXOR+vTs59EK6zwm+cZoozCdnT8kUA2OL27+OWfZ98?=
+ =?us-ascii?Q?ca9dIohHsVICQk2DMm3a17pOfnERUX0eJLUxEJIianN2F1BIGcMbWLZVHltL?=
+ =?us-ascii?Q?E8Zju5AiRxQyBuUBvNfZkFZTt0a+EvkjmF4A+mvrTElBAZQkuKz61CtikUBd?=
+ =?us-ascii?Q?K/PmYajKTM7VIRhGSxRbrMRzX2neRNHrT1CCU0DIzfXbTHQ5vVhDzxdYRKEx?=
+ =?us-ascii?Q?hwz9/p37uca5OVruK4WMVFgQBmokgtjNGNmtTgrwSmBrHp0wPP4L4L6wehCJ?=
+ =?us-ascii?Q?XgpE4pYgsN6b373jWDZH4McSEamXisLGk4evzexjccMCHbHy3x34Gp3DcTjs?=
+ =?us-ascii?Q?ncPX6WyPAjn1SIkQFNZl15VG6CpBLzntVG7Q9Vk0xH5GiFXXHtxfEXLMlZvZ?=
+ =?us-ascii?Q?FsY9kW2hy7FSRu6RFzckJbm76WZWg3kLXLvmtti3y+VyxjDoTy6yPhUIzFRD?=
+ =?us-ascii?Q?4PR0w/eRrW4ONnIEmDfZeaA+FF2WNnauoxdipyAYFAPhZtL0/AAxrpLgReUu?=
+ =?us-ascii?Q?lO2ONKvmmQX/RciDqwUDlffzsOybDGuzJpzJTuyZLITduoDJ0y9W3Owf8G6s?=
+ =?us-ascii?Q?SxRObvD4msJBZcAAntJ+pFso1rmOW5Ca8D3yveYFAYk9Ztvn+wrpMtNBvkok?=
+ =?us-ascii?Q?XzuB0oa25d+7hg0JuAoBaevFoYI1fIBCyYA6pmr0vxRufuVAs8f86sIQjNqw?=
+ =?us-ascii?Q?Bb5FuUlxufaV0AGOcJ3tNtmw/aNO725DAOczMg5lBTqkxICvbWDOau941oky?=
+ =?us-ascii?Q?+A=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <D45A78653434314A971D2BBC2A38130A@eurprd03.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-OriginatorOrg: renesas.com
+X-OriginatorOrg: epam.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: TYBPR01MB5341.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5f824e8a-54d9-4f10-e23c-08db52e2451e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 May 2023 12:13:17.8602
+X-MS-Exchange-CrossTenant-AuthSource: PA4PR03MB7136.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: edd7a8f8-9552-460e-26d4-08db52e2ef1e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 May 2023 12:18:03.0739
  (UTC)
 X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-id: b41b72d0-4e9f-4c26-8a69-f949f367c91d
 X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: Pgp5Bef+ild6cSrkr3+flMUNWtV4hh4VkPeeV5ZjtkPb9K2EyUJIXlGXw6a9rn8yhHFuvOjnAssdtXxsZuN8EOTehgO+WrJu+d6gJt46krlBZ91c2zg+qR4WtXV7dOZi
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYYPR01MB8000
+X-MS-Exchange-CrossTenant-userprincipalname: mjXggMTQ3AJ5Egv6W43KbL/UhvI4YOCyK10j5D++xyeazySSe+Qx9CEUwJvKCpQ/iuKB7S3vEIiNj98PXoym232tLnUve3u3S9HB5jlVdks=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR03MB7785
+X-Proofpoint-ORIG-GUID: F_qENu-SenMNONOB45BD_DwBoIn7fqwI
+X-Proofpoint-GUID: F_qENu-SenMNONOB45BD_DwBoIn7fqwI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-12_08,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
+ phishscore=0 impostorscore=0 priorityscore=1501 adultscore=0 bulkscore=0
+ lowpriorityscore=0 mlxscore=0 spamscore=0 mlxlogscore=978 suspectscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305120102
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SGVsbG8gV29sZnJhbS1zYW4sDQoNCj4gRnJvbTogV29sZnJhbSBTYW5nLCBTZW50OiBGcmlkYXks
-IE1heSAxMiwgMjAyMyA0OjIyIEFNDQo+IA0KPiBSLUNhciBHZW40IGhhcyB0aGUgZnVzZSByZWdp
-c3RlcnMgYXQgZGlmZmVyZW50IGxvY2F0aW9ucyBhbmQgd2l0aA0KPiBkaWZmZXJlbnQgbmFtZXMs
-IGJ1dCB3aXRoIHRoZSBzYW1lIHB1cnBvc2UuIFNvLCBmaXJzdCByZWZhY3RvciBJUCBjb3JlDQo+
-IGRpZmZlcmVuY2VzIGludG8gYSAnaW5mbycgc3RydWN0LCB0aGVuIGFkZCB0aGUgZnVzZV9yZWFk
-IGNhbGxiYWNrIHRvIGl0Lg0KPiANCj4gQ2hhbmdlcyBzaW5jZSBSRlQgdjI6DQo+ICogSW4gcGF0
-Y2ggMywgSSBtaXhlZCB1cCB0aGUgUFRBVCBhbmQgVEhDT0RFIHJlZ2lzdGVycy4gRml4ZWQgbm93
-Lg0KPiAgIChUaGFua3MsIFNoaW1vZGEtc2FuISkNCj4gKiBwYXRjaGVzIGFyZSByZWJhc2VkIHRv
-IDYuNC1yYzENCj4gDQo+IFRoZXkgaGF2ZSBiZWVuIHRlc3RlZCBvbiBSLUNhciBIMyBFUzIuMCBh
-bmQgTTMtTiBhZ2FpbnN0IHJlZ3Jlc3Npb25zLg0KPiBBY3R1YWwgdGVzdGluZyBvZiB0aGUgbmV3
-IGZ1c2VzIG9uIEdlbjQgc3RpbGwgbmVlZHMgdG8gYmUgZG9uZSBiZWNhdXNlIEkNCj4gZG9uJ3Qg
-aGF2ZSBhY2Nlc3MgdG8gc3VjaCBIVy4NCj4gDQo+IEBTaGltb2RhLXNhbjogbWF5YmUgdGhlIEJT
-UCB0ZWFtIG9yIFRlc3QgdGVhbSBjYW4gdGVzdCB0aGVzZSBwYXRjaGVzPw0KPiBBIGJyYW5jaCBm
-b3IgdGVzdGluZyBjYW4gYmUgZm91bmQgaGVyZToNCj4gZ2l0Oi8vZ2l0Lmtlcm5lbC5vcmcvcHVi
-L3NjbS9saW51eC9rZXJuZWwvZ2l0L3dzYS9saW51eC5naXQgcmVuZXNhcy9mb3ItdGhlcm1hbA0K
-PiANCj4gTG9va2luZyBmb3J3YXJkIHRvIG90aGVyIHJldmlldyBjb21tZW50cywgdG9vLCBvZiBj
-b3Vyc2UuDQoNClRoYW5rIHlvdSBmb3IgdGhlIHBhdGNoZXMhDQpJIGNoZWNrZWQgdGhlIHBhdGNo
-ZXMuIFNvOg0KDQpSZXZpZXdlZC1ieTogWW9zaGloaXJvIFNoaW1vZGEgPHlvc2hpaGlyby5zaGlt
-b2RhLnVoQHJlbmVzYXMuY29tPg0KDQpBbmQsIEkgdGVzdGVkIG9uIFItQ2FyIEgzIEVTMy4wIGFu
-ZCBSLUNhciBTNCBhbmQgaXQgd29ya2VkLiBTbywNCg0KVGVzdGVkLWJ5OiBZb3NoaWhpcm8gU2hp
-bW9kYSA8eW9zaGloaXJvLnNoaW1vZGEudWhAcmVuZXNhcy5jb20+DQoNCkJlc3QgcmVnYXJkcywN
-Cllvc2hpaGlybyBTaGltb2RhDQoNCj4gSGFwcHkgaGFja2luZywNCj4gDQo+ICAgIFdvbGZyYW0N
-Cj4gDQo+IA0KPiBXb2xmcmFtIFNhbmcgKDMpOg0KPiAgIGRyaXZlcnMvdGhlcm1hbC9yY2FyX2dl
-bjNfdGhlcm1hbDogaW50cm9kdWNlICdpbmZvJyBzdHJ1Y3R1cmUNCj4gICBkcml2ZXJzL3RoZXJt
-YWwvcmNhcl9nZW4zX3RoZXJtYWw6IHJlZmFjdG9yIHJlYWRpbmcgZnVzZXMgaW50bw0KPiAgICAg
-c2VwcmFyYXRlIGZ1bmN0aW9uDQo+ICAgZHJpdmVycy90aGVybWFsL3JjYXJfZ2VuM190aGVybWFs
-OiBhZGQgcmVhZGluZyBmdXNlcyBmb3IgR2VuNA0KPiANCj4gIGRyaXZlcnMvdGhlcm1hbC9yY2Fy
-X2dlbjNfdGhlcm1hbC5jIHwgMTQxICsrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0NCj4gIDEg
-ZmlsZSBjaGFuZ2VkLCAxMDIgaW5zZXJ0aW9ucygrKSwgMzkgZGVsZXRpb25zKC0pDQo+IA0KPiAt
-LQ0KPiAyLjM1LjENCg0K
+Hello Cristian,
+
+On Fri, May 12, 2023 at 10:04:41AM +0100, Cristian Marussi wrote:
+> On Thu, May 11, 2023 at 01:15:46PM +0000, Oleksii Moisieiev wrote:
+> > Hello Andy,
+> >=20
+> > On 05.05.23 23:35, andy.shevchenko@gmail.com wrote:
+> > > Wed, Apr 26, 2023 at 01:26:37PM +0000, Oleksii Moisieiev kirjoitti:
+> > >> scmi-pinctrl driver implements pinctrl driver interface and using
+> > >> SCMI protocol to redirect messages from pinctrl subsystem SDK to
+> > >> SCP firmware, which does the changes in HW.
+> > >>
+> > >> This setup expects SCP firmware (or similar system, such as ATF)
+> > >> to be installed on the platform, which implements pinctrl driver
+> > >> for the specific platform.
+> > >>
+> > >> SCMI-Pinctrl driver should be configured from the device-tree and us=
+es
+> > >> generic device-tree mappings for the configuration.
+> > >=20
+> > > ...
+> > >=20
+> > >> +#include <linux/device.h>
+> > >> +#include <linux/err.h>
+> > >=20
+> > >> +#include <linux/of.h>
+> > >=20
+> > > I do not see any user of this header. Do you?
+> > >=20
+> > Yes, thanks. Removing
+> >=20
+> > >> +#include <linux/module.h>
+> > >> +#include <linux/seq_file.h>
+> > >> +
+> > >> +#include <linux/pinctrl/machine.h>
+> > >> +#include <linux/pinctrl/pinconf.h>
+> > >> +#include <linux/pinctrl/pinconf-generic.h>
+> > >> +#include <linux/pinctrl/pinctrl.h>
+> > >> +#include <linux/pinctrl/pinmux.h>
+> > >=20
+> > >> +#include <linux/scmi_protocol.h>
+> > >> +#include <linux/slab.h>
+> > >=20
+> > > Please, move these two to the upper group of the generic headers.
+> > >=20
+> > Thanks, fixed.
+> >=20
+> > >> +struct scmi_pinctrl_funcs {
+> > >> +	unsigned int num_groups;
+> > >> +	const char **groups;
+> > >> +};
+> > >=20
+> > > Please, use struct pinfunction.
+> > >
+> > I can't use pincfunction here because it has the following groups=20
+> > definition:
+> > const char * const *groups;
+> >=20
+> > Which is meant to be constantly allocated.
+> > So I when I try to gather list of groups in=20
+> > pinctrl_scmi_get_function_groups I will receive compilation error.
+> >=20
+>=20
+> Maybe this is a further signal that we should re-evaluate the benefits of
+> the lazy allocations you now perform during protocol initialization
+> instead of querying and allocating statically all the info structs about
+> existing resources.
+>=20
+> Not saying that is necessarily bad, I understood your points about reduci=
+ng
+> the number of SCMI queries during boot and let pinctrl subsystem trigger =
+only
+> the strictly needed one, just saying maybe good to reason a bit more abou=
+t this
+> once V3 is posted. (i.e. I could bother you more :P ..)
+>=20
+> Thanks,
+> Cristian
+>=20
+> P.S. [off-topic]: remember to use get_maintainer.pl as advised elsewhere
+> to include proper maintainers (and their bots)
+
+That's a good point to think about. Actually, functions are the only
+thing that should be cached on pinctrl side. And we need it specifically
+because groups in each function are presented by names, not selectors.
+Maybe It's better to move this caching to pinctrl scmi driver. But, from
+the other side - storing group names for each function is Linux Kernel
+specific implementation and we probably don't want to add some specific
+case to the Generic protocol driver.
+
+I think I would leave it as in V3 so we can continue discussion.
+
+Oleksii.=
