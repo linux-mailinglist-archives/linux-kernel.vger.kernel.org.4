@@ -2,109 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C23EB700A53
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:31:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C3EE0700A56
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:32:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241229AbjELObU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 10:31:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57458 "EHLO
+        id S241197AbjELOc3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 10:32:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241481AbjELObK (ORCPT
+        with ESMTP id S240646AbjELOc1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 10:31:10 -0400
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D9D81492C;
-        Fri, 12 May 2023 07:30:47 -0700 (PDT)
-Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-307c040797bso2125980f8f.3;
-        Fri, 12 May 2023 07:30:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683901846; x=1686493846;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=bjyeGw2WZYmUelORXDy/YgHPMeeEb+Ki3snagjKtzwk=;
-        b=SZ/p3LMZeCOzwb0h7K/rj1SbxcKSmaes73fo3RvmcgNWV6nFUflsKAy4D95c2zCUmr
-         Mjl1dUG10Uoy81idKGmnX4tbqiuG3DcZEfsdzccLP2PDKG6siDh0h4wBT36eUUqbuOxJ
-         6Yne0w1txmBMWtCVqzZAqc2h/G+ftUtP2Tpr7CYQCZOA1vFUAkLjPd3r4/LbKWULi0Xl
-         ypiY1KmgDYqZjqWHhB6X5BhQX/wMaauCiyeKrsl48lLrloXTwa/DHBBnQgHQXzPAzQ+9
-         b6pk5cffcrHBwV2WZi934BGyPuCz9TwNgcvWukTuICfcS2mEKem3cs6HvzdXw6ZOYOGU
-         HwbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683901846; x=1686493846;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bjyeGw2WZYmUelORXDy/YgHPMeeEb+Ki3snagjKtzwk=;
-        b=LiIQU2N3OCek1xdFhUCT+s3T7GzlonosHRqBsrSIh/nMDjKKd0PkWqccknHtMXfQwy
-         j7sSGVOLUfxEgGOBF6GSzhy6f08nHJstKTCrl9C+m2Q95d5xzHZqTYZF14dw3P3U5OWR
-         5tLDOSF62v5VaA0dyPn+DwKm7wEaCFfvYRvU2bLRH37ks+w59adDS40WzP9ESrM847FT
-         FaAl1Z5kKQPo2DW1QcsgtGhcjJKLiTNl+P4XRpZevBSMhkPNZU1KBFOoqUHVzaXv+V2l
-         YFXvFL5MRdetB3VHrcKpf48qF9ds/MnnMKqy0iPuJdij7WnKRj7cnlkuMvSJHdLDUu/J
-         Nihg==
-X-Gm-Message-State: AC+VfDziZ7lw1N4bFE5rFjFOgIch/1kLIRzQ+4JWIhKAxRT33o+y6Q/9
-        BozY/9bJfZXMEClnQiNSZHp8kSZDBXukgT+m0GY=
-X-Google-Smtp-Source: ACHHUZ5BxevE+YysvQ4ix6pOjzCc7Qs6fIlpr3Y0zSfuNDJC2QcmYauzrH7Xw6bHEAg/cLA8oqWrGoFvu3pF1AcDC40=
-X-Received: by 2002:a05:6000:100a:b0:304:77a0:4ccb with SMTP id
- a10-20020a056000100a00b0030477a04ccbmr16985112wrx.2.1683901845416; Fri, 12
- May 2023 07:30:45 -0700 (PDT)
+        Fri, 12 May 2023 10:32:27 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D42AAE45
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:32:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1683901943;
+        bh=kzZZ/3c9LS8Et5uPA4pKEd5d8sC2DDkUchvN0t9U9Uc=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=AwDxp5r7Qp5oBwcd1x7jfgdCs0ZD+x0zcP9ppgiLiYoDrN5oz0RKzCBhHJ3E15zay
+         p5PjCS8izxY6GBr1UfywBLQzs7G2VOh7vM1/dj7Rqwpns75Dbx98IOy/eL9I41gxNm
+         JEwNBe42Z6OkClY9HrIxZlWvrwX2t2ddbfx41GwyZNs8t6xgze3j/XVuc7qLSGR0Dq
+         6nOKa0CdIZ/d7jzUD4DW5/RQwpPZbucA6GnF106uOCTgIe8fLMuK7N7BTPLZevbccN
+         kFl5ssuxD63ZkbTFCKsFhLECwMaQiK5AAbdQuh68d0UWjOA2hrH5uwOCeMdAJ945xU
+         9jXBvsWyO7b7g==
+Received: from [172.16.0.99] (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QHrng1jYvz12ZQ;
+        Fri, 12 May 2023 10:32:23 -0400 (EDT)
+Message-ID: <57f86cba-72f1-2573-3c5a-388614d8415a@efficios.com>
+Date:   Fri, 12 May 2023 10:32:27 -0400
 MIME-Version: 1.0
-References: <20230510220952.3507366-1-azeemshaikh38@gmail.com>
- <72239648-C807-4CDD-8DA7-18440C83384E@oracle.com> <202305110927.12508719D2@keescook>
-In-Reply-To: <202305110927.12508719D2@keescook>
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-Date:   Fri, 12 May 2023 10:30:34 -0400
-Message-ID: <CADmuW3UbHBWN0JzXMYX667hkXyWJY8_88K1sJfRnKNg7_u38=A@mail.gmail.com>
-Subject: Re: [PATCH] NFSD: Replace all non-returning strlcpy with strscpy
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Chuck Lever III <chuck.lever@oracle.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Jeff Layton <jlayton@kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH 05/13] list.h: Fix parentheses around macro pointer
+ parameter use
+Content-Language: en-US
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        David Howells <dhowells@redhat.com>,
+        Ricardo Martinez <ricardo.martinez@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+References: <20230504200527.1935944-1-mathieu.desnoyers@efficios.com>
+ <20230504200527.1935944-6-mathieu.desnoyers@efficios.com>
+ <ZFjoJqbDn/BL1GQT@smile.fi.intel.com>
+ <6971bfd0-b200-6cb8-7cd8-9973b72ef9ba@efficios.com>
+ <ZF4crs8iKBGH3lJe@smile.fi.intel.com>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <ZF4crs8iKBGH3lJe@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Chuck and Kees for the review.
+On 2023-05-12 07:02, Andy Shevchenko wrote:
+> On Mon, May 08, 2023 at 09:46:40AM -0400, Mathieu Desnoyers wrote:
+>> On 2023-05-08 08:16, Andy Shevchenko wrote:
+> 
+> ...
+> 
+>> The only use I found that would break is as follows:
+>>
+>> LIST_HEAD(testlist);
+>>
+>> int f2(void)
+>> {
+>>          return 1;
+>> }
+>>
+>> #define eval(...)       __VA_ARGS__
+>>
+>> void f(void)
+>> {
+>>     struct list_head *pos;
+>>
+>>     list_for_each(pos, eval(f2(), &testlist)) {
+>>             //...
+>>     }
+>> }
+>>
+>> Because "eval()" will evaluate "f(), &testlist" with comma and all, without
+>> enclosing parentheses.
+>>
+>> So the question is: do we want to support this kind-of-odd macro evaluation,
+>> considering that it requires adding parentheses around pretty much all macro
+>> parameters when used as expressions between commas?
+> 
+> Similar question can be asked for your initial motivation to support indirect
+> pointers. I found the double pointer as weird as this macro case. But it can be
+> only me. Hence I left this to the more experienced developers to express their
+> opinions.
+> 
 
-> > Actually netid should use the __string() and __assign_str()
-> > macros rather than open-coding a string copy, I think.
+The main motivation behind my changes is to make macro code consistent, 
+and to eliminate classes of issues that can arise from unexpected 
+operator precedence around use of macro arguments that lack parentheses.
 
-Do you mean something like this?
+The examples I provide in the commit messages are just instances showing 
+how the lack of parentheses can lead to unexpected effects due to 
+operator precedence.
 
-diff --git a/fs/nfsd/trace.h b/fs/nfsd/trace.h
-index 4183819ea082..72a906a053dc 100644
---- a/fs/nfsd/trace.h
-+++ b/fs/nfsd/trace.h
-@@ -1365,19 +1365,19 @@ TRACE_EVENT(nfsd_cb_setup,
-                __field(u32, cl_id)
-                __field(unsigned long, authflavor)
-                __sockaddr(addr, clp->cl_cb_conn.cb_addrlen)
--               __array(unsigned char, netid, 8)
-+               __string(netid, netid)
-        ),
-        TP_fast_assign(
-                __entry->cl_boot = clp->cl_clientid.cl_boot;
-                __entry->cl_id = clp->cl_clientid.cl_id;
--               strlcpy(__entry->netid, netid, sizeof(__entry->netid));
-+               __assign_str(netid, netid);
-                __entry->authflavor = authflavor;
-                __assign_sockaddr(addr, &clp->cl_cb_conn.cb_addr,
-                                  clp->cl_cb_conn.cb_addrlen)
-        ),
-        TP_printk("addr=%pISpc client %08x:%08x proto=%s flavor=%s",
-                __get_sockaddr(addr), __entry->cl_boot, __entry->cl_id,
--               __entry->netid, show_nfsd_authflavor(__entry->authflavor))
-+               __get_str(netid), show_nfsd_authflavor(__entry->authflavor))
- );
+My end goal is not to "support" specific use-cases. My goal is to 
+eliminate inconsistency, increase robustness of the kernel macros, and 
+lessen the cognitive burden that comes with using and maintaining those 
+macros.
 
-> > Fixes: 3c92fba557c6 ("NFSD: Enhance the nfsd_cb_setup tracepoint")
+I hope that we can spend less time figuring out operator precedence 
+corner-cases and more brain power thinking about and documenting things 
+that really matter like memory barriers and synchronization.
 
-Ack.
+Thanks,
+
+Mathieu
+
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
+
