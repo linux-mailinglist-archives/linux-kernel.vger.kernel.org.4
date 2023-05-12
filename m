@@ -2,121 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C255E70020A
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 10:00:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6422D70020B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 10:00:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240072AbjELIAD convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 12 May 2023 04:00:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60966 "EHLO
+        id S240275AbjELIAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 04:00:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240067AbjELH74 (ORCPT
+        with ESMTP id S240134AbjELIAB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 03:59:56 -0400
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 327B01BCA;
-        Fri, 12 May 2023 00:59:49 -0700 (PDT)
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-b9d8b2e1576so12446999276.2;
-        Fri, 12 May 2023 00:59:49 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683878388; x=1686470388;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YtW83Y+m5xLXXaQjQs9WIAKFJ8f7EcydpaDqhfcPeeY=;
-        b=kAdvvmcZephp/4Ct2GQ7iMra27TJxNA5OidUfsexF86L4ZnIy2+xIOAL1Z+ZOZ1LlF
-         S9NPwBwsSiMVZfK25k7Rs9/wCZXSV8f5v8IXkBnb5Mnmwg0EouljsYqNzjDynhQrX/bw
-         fVms2n1TBG5p0uNJLWhB2MK8YyOEn3Tqrfn2uH1d4nA8s4FDPZr7fWMmYFC/JQoROT4m
-         x7KEdHxdXfW8A5+gDSYG5ppC81NJsVUB1Snu2X+Z66r15XMrCoI2RcaGmFYM3ggrFJop
-         Ieoyp2lGcYeidI+RsdjqeIwPIxBzmGYnAiGZZqZykdsXoQXt8kjw13/l1RUyLDtsDVK3
-         Dhjw==
-X-Gm-Message-State: AC+VfDw61OyBf0fPAb+UTEs85yj1oWAim0tu2Z91fip0P5rjbhEvtpOX
-        BtUDQxbIp11cofPL2KVG5+TBbBFg+TKEY1dE
-X-Google-Smtp-Source: ACHHUZ5gJ6pS5BzG1V6rCRbA8+uRAtCvqZnXa2PjQB6N94o2VTsGaaqpDxLdiEHSo1RGg1cucuzYZg==
-X-Received: by 2002:a25:ad19:0:b0:b9e:6c59:aa0b with SMTP id y25-20020a25ad19000000b00b9e6c59aa0bmr21082448ybi.13.1683878388016;
-        Fri, 12 May 2023 00:59:48 -0700 (PDT)
-Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com. [209.85.128.180])
-        by smtp.gmail.com with ESMTPSA id y187-20020a0dd6c4000000b0054fdb1dad0fsm5478024ywd.43.2023.05.12.00.59.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 00:59:47 -0700 (PDT)
-Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-55af4277904so146186797b3.1;
-        Fri, 12 May 2023 00:59:47 -0700 (PDT)
-X-Received: by 2002:a0d:d643:0:b0:561:1812:4d11 with SMTP id
- y64-20020a0dd643000000b0056118124d11mr1532909ywd.3.1683878386953; Fri, 12 May
- 2023 00:59:46 -0700 (PDT)
+        Fri, 12 May 2023 04:00:01 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820AC1BCA;
+        Fri, 12 May 2023 00:59:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1683878398; x=1715414398;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=umOcZNydYWMkIf5mbEUP8/J6HKiH1xlOF3VU6GTvq9Q=;
+  b=GoCKd/Z5FyFXbnjWFdXIN8ATYMDTFwIZ+pQXY4LbVs3m5Pto25jAYVpS
+   shQDooZeD+mGFUZDFNLQF9SumoJThXHMWhRSYZf2Ep9zsYEcrAE26WcKd
+   S6PowUNULF9D6wvhRex4toxAxivzqGMANuo5InAOMug8jcnKt/SCxweko
+   6xn2i3l7Y7Mgj3NB0KpQF1ZtnyOZ1TPi7KtSQ8BZMgIN2ltB0/ugYYr3f
+   VmczkzUzUr1jRsNiKfeW/qnGcUzkSWzk4Hm/3l52I/9NEzmtAQ5KtgUwr
+   AbXYM/P7Ko/lWbF1sdS5dM13qoprPBpJ2xf0CpA6oNhUQ3VNwJ5sBmBGF
+   A==;
+X-IronPort-AV: E=Sophos;i="5.99,269,1677538800"; 
+   d="scan'208";a="30870394"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 12 May 2023 09:59:56 +0200
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Fri, 12 May 2023 09:59:56 +0200
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Fri, 12 May 2023 09:59:56 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1683878396; x=1715414396;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=umOcZNydYWMkIf5mbEUP8/J6HKiH1xlOF3VU6GTvq9Q=;
+  b=dj6TTamwow7wlhhjaudDKc/UlUfbtW78wjIKMMDnIMZ4stG7qVfqmkH2
+   zgwfHXbXxK5lLI2e92paY6xa+YzT69beReMdf9i/Wqmvoew5XrlTaLG0X
+   aAuKXFBCDk7VkR1wpcdJzbJZ9B//Y9ZdrDF1L7+A/BpYW+XJF7Yt06wRZ
+   EW8J6ehKESLKzDJaQI5NjfqQVNb03giy/IFUI/0gugBKANjeDkWIRnacD
+   rcyf5c4iBI1MWOQNKI+SQPBg1JfPjBIOU6+5qIDydjFdgj//ZR5zODP5Y
+   pFVYK8vIXQQRsy9FWA7vqhuQTFu+Pa+HTKSc1UJ8LVCKsHTKtwGbizYJ4
+   w==;
+X-IronPort-AV: E=Sophos;i="5.99,269,1677538800"; 
+   d="scan'208";a="30870393"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 12 May 2023 09:59:56 +0200
+Received: from steina-w.localnet (unknown [10.123.53.21])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id E0C33280056;
+        Fri, 12 May 2023 09:59:55 +0200 (CEST)
+From:   Alexander Stein <alexander.stein@ew.tq-group.com>
+To:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux@armlinux.org.uk, Yan Wang <rk.code@outlook.com>
+Cc:     Yan Wang <rk.code@outlook.com>
+Subject: Re: [PATCH v4] net: mdiobus: Add a function to deassert reset
+Date:   Fri, 12 May 2023 09:59:56 +0200
+Message-ID: <1858925.CQOukoFCf9@steina-w>
+Organization: TQ-Systems GmbH
+In-Reply-To: <KL1PR01MB54480925428513803DF3D03AE6749@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+References: <KL1PR01MB54480925428513803DF3D03AE6749@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
 MIME-Version: 1.0
-References: <000000000000da2a8505fb71d81b@google.com>
-In-Reply-To: <000000000000da2a8505fb71d81b@google.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 12 May 2023 09:59:35 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdVVsWdwaAUZ4DTiLFxgVEETx=YwOnrZ6qeOyBWE8=tKQw@mail.gmail.com>
-Message-ID: <CAMuHMdVVsWdwaAUZ4DTiLFxgVEETx=YwOnrZ6qeOyBWE8=tKQw@mail.gmail.com>
-Subject: Re: [syzbot] upstream boot error: BUG: unable to handle kernel NULL
- pointer dereference in gic_eoi_irq
-To:     syzbot <syzbot+afc1d968649e7e851562@syzkaller.appspotmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        magnus.damm@gmail.com, maz@kernel.org,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        syzkaller@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 11:41 PM syzbot
-<syzbot+afc1d968649e7e851562@syzkaller.appspotmail.com> wrote:
-> syzbot found the following issue on:
->
-> HEAD commit:    ac9a78681b92 Linux 6.4-rc1
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=102a3f6a280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=cc86fee67199911d
-> dashboard link: https://syzkaller.appspot.com/bug?extid=afc1d968649e7e851562
-> compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: arm
->
-> Downloadable assets:
-> disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/c35b5b2731d2/non_bootable_disk-ac9a7868.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/c04bec59d77d/vmlinux-ac9a7868.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/070113b307f3/zImage-ac9a7868.xz
->
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+afc1d968649e7e851562@syzkaller.appspotmail.com
->
-> 8<--- cut here ---
-> Unable to handle kernel NULL pointer dereference at virtual address 000005f4 when read
-> [000005f4] *pgd=80000080004003, *pmd=00000000
-> Internal error: Oops: 207 [#1] PREEMPT SMP ARM
-> Modules linked in:
-> CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.4.0-rc1-syzkaller #0
-> Hardware name: ARM-Versatile Express
-> PC is at gic_eoi_irq+0x64/0x70 drivers/irqchip/irq-gic.c:228
+Am Donnerstag, 11. Mai 2023, 08:59:09 CEST schrieb Yan Wang:
+> It is possible to mount multiple sub-devices on the mido bus.
+> The hardware power-on does not necessarily reset these devices.
+> The device may be in an uncertain state, causing the device's ID
+> to not be scanned.
+>=20
+> So,before adding a reset to the scan, make sure the device is in
 
-Why is this sent to the renesas-soc maintainers?
+'So, before'. One space after ,
 
-> If you want to change bug's subsystems, reply with:
-> #syz set subsystems: new-subsystem
-> (See the list of subsystem names on the web dashboard)
+> normal working mode.
+>=20
+> Reported-by: kernel test robot <lkp@intel.com>
+> Link:
+> https://lore.kernel.org/oe-kbuild-all/202305101702.4xW6vT72-lkp@intel.com/
+> Signed-off-by: Yan Wang <rk.code@outlook.com>
+> ---
+> v4:
+>   - Get pulse width and settling time from the device tree
+>   - Add logic for processing (PTR_ERR(reset) =3D=3D -EPROBE_DEFER)
+>   - included <linux/goio/consumer.h>
+>   - fixed commit message
+> v3:
+> https://lore.kernel.org/all/KL1PR01MB5448A33A549CDAD7D68945B9E6779@KL1PR0=
+1M
+> B5448.apcprd01.prod.exchangelabs.com/ - fixed commit message
+> v2:
+> https://lore.kernel.org/all/KL1PR01MB54482416A8BE0D80EA27223CE6779@KL1PR0=
+1M
+> B5448.apcprd01.prod.exchangelabs.com/ - fixed commit message
+>   - Using gpiod_ replace gpio_
+> v1:
+> https://lore.kernel.org/all/KL1PR01MB5448631F2D6F71021602117FE6769@KL1PR0=
+1M
+> B5448.apcprd01.prod.exchangelabs.com/ - Incorrect description of commit
+> message.
+>   - The gpio-api too old
+> ---
+>  drivers/net/mdio/fwnode_mdio.c | 32 ++++++++++++++++++++++++++++++++
+>  1 file changed, 32 insertions(+)
+>=20
+> diff --git a/drivers/net/mdio/fwnode_mdio.c b/drivers/net/mdio/fwnode_mdi=
+o.c
+> index 1183ef5e203e..9d7df6393059 100644
+> --- a/drivers/net/mdio/fwnode_mdio.c
+> +++ b/drivers/net/mdio/fwnode_mdio.c
+> @@ -11,6 +11,7 @@
+>  #include <linux/of.h>
+>  #include <linux/phy.h>
+>  #include <linux/pse-pd/pse.h>
+> +#include <linux/gpio/consumer.h>
 
-While I see the list of subsystems there, how do I find out the (wrong?)
-current bug's subsystem?
+Please sort alphabetically.
+>=20
+>  MODULE_AUTHOR("Calvin Johnson <calvin.johnson@oss.nxp.com>");
+>  MODULE_LICENSE("GPL");
+> @@ -57,6 +58,35 @@ fwnode_find_mii_timestamper(struct fwnode_handle *fwno=
+de)
+> return register_mii_timestamper(arg.np, arg.args[0]);
+>  }
+>=20
+> +static void fwnode_mdiobus_pre_enable_phy(struct fwnode_handle *fwnode)
+> +{
+> +	struct gpio_desc *reset;
+> +	unsigned int reset_assert_delay;
+> +	unsigned int reset_deassert_delay;
+> +
+> +	reset =3D fwnode_gpiod_get_index(fwnode, "reset", 0, GPIOD_OUT_LOW,=20
+NULL);
+> +	if (IS_ERR(reset)) {
+> +		if (PTR_ERR(reset) =3D=3D -EPROBE_DEFER)
+> +			pr_debug("%pOFn: %s: GPIOs not yet available,=20
+retry later\n",
+> +				 to_of_node(fwnode), __func__);
 
-Thanks for fixing!
+You are not dealing with this error at all. pr_debug is (mostly) not even=20
+printed in kernel log, despite the code registering the PHY ignoring the=20
+deferral completely.
 
-Gr{oetje,eeting}s,
+> +		else
+> +			pr_err("%pOFn: %s: Can't get reset line=20
+property\n",
+> +			       to_of_node(fwnode), __func__);
+> +
 
-                        Geert
+This error also gets ignored.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> +		return;
+> +	}
+> +	fwnode_property_read_u32(fwnode, "reset-assert-us",
+> +				 &reset_assert_delay);
+> +	fwnode_property_read_u32(fwnode, "reset-deassert-us",
+> +				 &reset_deassert_delay);
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+These are currently read in fwnode_mdiobus_phy_device_register(). There is =
+no=20
+need to read them twice. It should be moved to a location where it just nee=
+d=20
+to be read once.
+
+Regards,
+Alexander
+
+> +	gpiod_set_value_cansleep(reset, 1);
+> +	fsleep(reset_assert_delay);
+> +	gpiod_set_value_cansleep(reset, 0);
+> +	fsleep(reset_deassert_delay);
+> +	/*Release phy's reset line, mdiobus_register_gpiod() need to request=20
+it*/
+> +	gpiod_put(reset);
+> +}
+> +
+>  int fwnode_mdiobus_phy_device_register(struct mii_bus *mdio,
+>  				       struct phy_device *phy,
+>  				       struct fwnode_handle *child,=20
+u32 addr)
+> @@ -119,6 +149,8 @@ int fwnode_mdiobus_register_phy(struct mii_bus *bus,
+>  	u32 phy_id;
+>  	int rc;
+>=20
+> +	fwnode_mdiobus_pre_enable_phy(child);
+> +
+>  	psec =3D fwnode_find_pse_control(child);
+>  	if (IS_ERR(psec))
+>  		return PTR_ERR(psec);
+
+
+=2D-=20
+TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
+Amtsgericht M=FCnchen, HRB 105018
+Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
+http://www.tq-group.com/
+
+
