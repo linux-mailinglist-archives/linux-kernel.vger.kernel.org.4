@@ -2,239 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF9E370024F
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 10:11:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7161D700254
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 10:12:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239781AbjELILe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 04:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41682 "EHLO
+        id S239999AbjELIMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 04:12:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239902AbjELIK6 (ORCPT
+        with ESMTP id S232659AbjELIMX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 04:10:58 -0400
-Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2132.outbound.protection.outlook.com [40.107.113.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F251156C;
-        Fri, 12 May 2023 01:10:54 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bnkVt9rCyRt9iATlqZIsEJ+Aax4yhKR8oaBTv+OHn9LSaF2AS5zqUDsS0UHoQf1AjPOd1Ov1OrC4D+r1YeADgSYsH2aoNpGKids+H1G3O3VEXZqgrlkFUXlcuUkLImyqeDPdUe79toih4LX6qbCB6iruwCvH/SzT/jpS9gK1hiLqiuKtytT6sOaSOrDpTbyMX2qZG/19fVWzVEx02T7UJv4TFkSkZQgQA/Qt9aIXCwAyRN7/Y1HcpDSLpZOcmmOJ+E+6ZHgVLvr0CSO0HsKNJ+eG/WiICBTKPP1K1nPzWfoDbL/sU1/2FIgzIU0xheascYGOLgr0EkUTpbUNTyK8QQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JYzzT2Dyw/bgcEmn/be+tg2uPA4kQ28yCeCPAssDGEU=;
- b=W3lJook//xkOWvX/MtE6vVtN0bHy7X1V32Q3/rUQu18FSI7vhfiq12EtKHV54UEnffvTL9hdFwX1VdHtIwIo38POfupdfXD90KFkMBQIVM5W648sAuy54OS3fQ2hAUfZ+EHgG+xX4he9OvYh+U7241VaW3jRAVc2/gMrIlYWN0B4ANot3mNy+2O5Y38clRkYkGUIM+VXBtOjqeRZAXl716iznSpwrFYfIvQeQvkSKPhfE2WZZ55btdwqXyE3sFrB0Fhgv3UyG6HiLz2wiEyCUIaBAKWSudte57RE6LTy9rJ0AIDC1+feC7+kR/bezeqUSEsnWOVMICKynSpz/AeraA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=dm.renesas.com; dmarc=pass action=none
- header.from=dm.renesas.com; dkim=pass header.d=dm.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dm.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JYzzT2Dyw/bgcEmn/be+tg2uPA4kQ28yCeCPAssDGEU=;
- b=BjNXLa5BRQb4//NGufDbyWKb77tlNKPej8Hou2B+CYZAyYZqrJkZjgQezfda9js18tX4oSY8/Hksy/XAQvX63NQU2lWjCNs/Er+WswvMFfTBQowDTrVlB8kYv16ToTfIO57c9puqLBfbP6PLAfwoMiuIzJNoprYb25MzyKm49xk=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=dm.renesas.com;
-Received: from OS3PR01MB6641.jpnprd01.prod.outlook.com (2603:1096:604:10b::11)
- by TYCPR01MB10680.jpnprd01.prod.outlook.com (2603:1096:400:294::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Fri, 12 May
- 2023 08:10:51 +0000
-Received: from OS3PR01MB6641.jpnprd01.prod.outlook.com
- ([fe80::2de2:b2ee:d931:157]) by OS3PR01MB6641.jpnprd01.prod.outlook.com
- ([fe80::2de2:b2ee:d931:157%6]) with mapi id 15.20.6387.023; Fri, 12 May 2023
- 08:10:51 +0000
-From:   David Rau <David.Rau.opensource@dm.renesas.com>
-To:     broonie@kernel.org
-Cc:     support.opensource@diasemi.com, lgirdwood@gmail.com,
-        perex@perex.cz, tiwai@suse.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org,
-        David Rau <David.Rau.opensource@dm.renesas.com>
-Subject: [PATCH] ASoC: da7219: Add Jack insertion detection polarity selection
-Date:   Fri, 12 May 2023 08:10:30 +0000
-Message-Id: <20230512081030.5138-1-David.Rau.opensource@dm.renesas.com>
-X-Mailer: git-send-email 2.17.1
-Content-Type: text/plain
-X-ClientProxiedBy: SG2PR04CA0182.apcprd04.prod.outlook.com
- (2603:1096:4:14::20) To OS3PR01MB6641.jpnprd01.prod.outlook.com
- (2603:1096:604:10b::11)
+        Fri, 12 May 2023 04:12:23 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A62538F;
+        Fri, 12 May 2023 01:12:21 -0700 (PDT)
+Received: from loongson.cn (unknown [10.20.42.35])
+        by gateway (Coremail) with SMTP id _____8Bxa+rj9F1k3g0IAA--.13603S3;
+        Fri, 12 May 2023 16:12:19 +0800 (CST)
+Received: from [10.20.42.35] (unknown [10.20.42.35])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Cx08Tg9F1kpixXAA--.23647S3;
+        Fri, 12 May 2023 16:12:17 +0800 (CST)
+Subject: Re: [PATCH v9 2/2] spi: loongson: add bus driver for the loongson spi
+ controller
+To:     Andy Shevchenko <andy.shevchenko@gmail.com>,
+        Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
+        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
+        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
+References: <20230426071045.20753-1-zhuyinbo@loongson.cn>
+ <20230426071045.20753-3-zhuyinbo@loongson.cn> <ZFkPZhF8QqScXAmH@surfacebook>
+ <ZFnOZptCM7JDFTQz@finisterre.sirena.org.uk>
+ <CAHp75VcqQR0fFdkWG2QgXG0+SnKDs6_Zze6GMt+pHHEdE+8hkg@mail.gmail.com>
+From:   zhuyinbo <zhuyinbo@loongson.cn>
+Message-ID: <f03977b9-884c-93a1-d1cf-81e6fcf51dfc@loongson.cn>
+Date:   Fri, 12 May 2023 16:12:16 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: OS3PR01MB6641:EE_|TYCPR01MB10680:EE_
-X-MS-Office365-Filtering-Correlation-Id: 06a8c278-2d62-4f90-b463-08db52c066cb
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: +Hf9aNW+5lF5aOOeyG3TFqgJIx0KOyGvJ/AtHLK0nwl3KWyhDB3aQRUZey73J48gAefCvVtAktl5uCfkZf1pldCpkn22DC8gJ/h3K+Wyra36sQb+d/DMjFskYlVS7EyzPTbI9sR/G74EBNdxXRuGEufy/S+vFFq5pLYs1IzHUi3dc2psG1U5N/wbOsBI1k6c0sONck59ECec9lQTZ/tF//ULXMffQHwINKaKnY7GB9atAUECrJr7+pwO4dzE6FvRnhzNaDeRbUFX4fc9VGcbaMHBop6eGCLw1RsLkyDHWc8xDXq6kx1GyOJofABm3EOlirIVH2n2CzudpJlFga0QSlvRICo2Nf4hiNiU90R2VtMotVBfmVqBSts6xv9uFP0OkLG/pS/WQk2wiixtc8q7+6/R8xVqxkY3+Ipf5HMbkVp8yP+f9IcMhdlpJsSJOnq2kKmWwCFmu9qYt6cnKO8cUDJ+0a6SzBuzK63vw3KKSdwJH82h98haZ0ZPMlL84smCfU02nsJnD6+p9jvOKVw7MGpEzBvREOXq37mmMCZH85sz/tKU5Bt8bPXvh1d9a4ooT1XjYx7mEaEiUytP9CpqB5ZFhw2A8O2JPJ2MBNqAFNyhL8/8qL7hUhId2HV78VjE
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB6641.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(39860400002)(136003)(376002)(396003)(346002)(451199021)(103116003)(478600001)(2616005)(1076003)(186003)(6512007)(6506007)(26005)(52116002)(107886003)(6666004)(6486002)(83380400001)(6916009)(66476007)(66946007)(38100700002)(66556008)(38350700002)(5660300002)(4326008)(41300700001)(8936002)(8676002)(316002)(2906002)(7416002)(86362001)(40140700001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qx2ddfLuRUfqwgZiOUXjxtseIDShxlQXuhRGPACO7OJSnSXplCdOdgsKNmTx?=
- =?us-ascii?Q?8gVvpP5gl4emSBRyuaQ44L+xA47As6j20+EP7vBR0fBWb/+2DuyuQP6Wb44q?=
- =?us-ascii?Q?J5XLBYxRIqPX4lztqLDJ26hH6Zr+u/PIsSh8ho62aAm0hSEVkzxNJd7aAzbm?=
- =?us-ascii?Q?iGG1c+JDsJrQuLodks+drjSyPd/yOuhEQvKVDkyu6I4Q1XjkYz9dEsDfFmH/?=
- =?us-ascii?Q?XFdmu/XYb0aYPwLsUUhVjz1wl7k5GbPyeE82ps6iu99YhInhoAqyrCLj1Roo?=
- =?us-ascii?Q?yKSN8cFDcbfNe+2pcbMx8KYAM1ayWcDIEDAbecaNiSjswFJeK6D3fZ+w4BMv?=
- =?us-ascii?Q?9pFEkDVJnyIk2jsr4CebnRVwljNNMXiPAAAeiaOW5+cguAb/pZQtF1W0epaE?=
- =?us-ascii?Q?hwO8c8EYzzDZ0Rnen+BB2wyUeWxA+lcsH6uIbKAUXp41firLaPuD3CvK+MGZ?=
- =?us-ascii?Q?/5yRpdTtZN0oDVmLJNzSEAA5ArTlxhOnJh3UuOdKQRJ11+2A9Bg+o7ica9J8?=
- =?us-ascii?Q?5LAjrMEJjFuM3GNlYEzBBhQF1VMk/3etHXThcr5LU1BKqy1F5ps/gspqVClQ?=
- =?us-ascii?Q?fyXeMsLPvCuZZCSJ7LDkKl7DMrIZNyoNpoPOfjtMBgUmNJm5AVIzsBvV8z2n?=
- =?us-ascii?Q?qZx2G63sBMUN8icVsipGaqCREze2bEqmqVtZHsfUclQIUf271VYRni7PZ710?=
- =?us-ascii?Q?bREgO067X+i6i2oZtyqFEOp9kDPGoaCcksRXFiXS89S1gmLQfXbtfXc+KAwi?=
- =?us-ascii?Q?mDzw+WNWIzcpOAhudTsDjVjSYZ9gmOPSRwgEsIyNUsqu4sHvsFtE6UJm2XC9?=
- =?us-ascii?Q?+4AtpzumRmR8WwTfUCBVKEUZHUHDhTX5TL6S70PmdOI8Rs+4FbU0a5l5RZse?=
- =?us-ascii?Q?x3C39knmTBYwPJCnIcWkX+7pNC10+PdDLcb4/lQsBqD34PjT7pnmdwsYHhCY?=
- =?us-ascii?Q?G0DezNdwYlRn7Mtunop8CO2qHTie64LUZ6zUyUxcxwRhGGOZix3sdaD/i/kY?=
- =?us-ascii?Q?n/ka9osOaf6zOwvqmBjviQE1dJk8VQlIH2oGjYzrChMUS07w2hACYkvhMt3v?=
- =?us-ascii?Q?ZSit1jyAmzlUaEQkPkk/nW7sNSQ8kjNABg/sjq32j9N75gzjWSYSvMUiLTQ/?=
- =?us-ascii?Q?VZHRiHYQLMS7+TKiPQn5xmd2gEJIS8o5py66Vz9u+Ul/JiB80I/yWZS6iolf?=
- =?us-ascii?Q?+obow7auPMLtdY1IDAbsajg77wuHNXqw8rPIL0sRkMD67B0yh5j66uO3Yk/k?=
- =?us-ascii?Q?k8PSE/0PrG82r4y4UcbkodAb2dpGykxxyNZ7WAb+QskWtl0mY1Tj1GgY9x/v?=
- =?us-ascii?Q?k6G8CVoblCU3bjCl8FAbzyfm1ea7P+anIL9lKpNsQ8SWZzkhav9o089/iNfO?=
- =?us-ascii?Q?HRkqiuZs6PzqjcGShYqPaGjaa1LYaZV0nYpoylTsMc3nRcKNym3MRKbjp6HL?=
- =?us-ascii?Q?cH606rLVp6brbAPMqDOW4Ho0O/mSxP9qOIbxl/6+pN/BToJVcxTHq4JFNsQE?=
- =?us-ascii?Q?qjXI5dTwiTik1z1eoydFrdRsY4aT0tgkmfMfaLg3pW2522wriyCZfGA8yqKy?=
- =?us-ascii?Q?3UrUN/CRx8shjT1+UiA12yfEXMkLojKn4sBbVF7QaLFuXVyHIsJqCj5op9SE?=
- =?us-ascii?Q?9Q=3D=3D?=
-X-OriginatorOrg: dm.renesas.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 06a8c278-2d62-4f90-b463-08db52c066cb
-X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB6641.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 08:10:51.7386
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: L2roCBfE/DC9oO3StffIzu95thbWOSxD61mEs2Vlxl8agODO49J9BOFRprmsSxLMTub9e5o6lX3hrf2CMpyOYdaSqD2JGDWXQPWg94WSQjs=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYCPR01MB10680
-X-Spam-Status: No, score=1.0 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAHp75VcqQR0fFdkWG2QgXG0+SnKDs6_Zze6GMt+pHHEdE+8hkg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Cx08Tg9F1kpixXAA--.23647S3
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoWxXry5Aw48XrW3XrWxAF4DCFg_yoW5Xw47pF
+        4avw15KF1Sy34xZrn5Ar93WF1jvry3GFnrXFZFvr4Uta98Xw1Iq345WF1xCrWayF98ZF1r
+        uFW8urWkGFn5uaUanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        bxxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r1j6r4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0
+        Y48IcVAKI48JMxk0xIA0c2IEe2xFo4CEbIxvr21l42xK82IYc2Ij64vIr41l42xK82IY6x
+        8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4l
+        x2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrw
+        CI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI
+        42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z2
+        80aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUzgAwDUUUU
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DA7219 can support 2 kinds of insertion detection polarity
-- Default polarity (Low)
-- Inverted polarity (High)
 
-This patch adds support for selecting insertion detection
-polarity to the DT binding.
 
-Signed-off-by: David Rau <David.Rau.opensource@dm.renesas.com>
----
- .../devicetree/bindings/sound/da7219.txt      |  3 ++
- include/sound/da7219-aad.h                    |  6 ++++
- sound/soc/codecs/da7219-aad.c                 | 34 +++++++++++++++++++
- 3 files changed, 43 insertions(+)
+在 2023/5/10 下午3:03, Andy Shevchenko 写道:
+> 
+> _original_
+> 
+>         const char rdiv[12] = {0, 1, 4, 2, 3, 5, 6, 7, 8, 9, 10, 11};
+> 
+>                 div = DIV_ROUND_UP_ULL(loongson_spi->clk_rate, hz);
+>                 if (div < 2)
+>                         div = 2;
+>                 if (div > 4096)
+>                         div = 4096;
+> 
+>                 bit = fls(div) - 1;
+>                 if ((1<<bit) == div)
+>                         bit--;
+>                 div_tmp = rdiv[bit];
+> 
+>                 loongson_spi->spcr = div_tmp & 3;
+>                 loongson_spi->sper = (div_tmp >> 2) & 3;
+> 
+> _proposed_
+> 
+>         const char rdiv[12] = {0, 1, 4, 2, 3, 5, 6, 7, 8, 9, 10, 11};
+> 
+> // as far as I understood the above table
+> 00 00  [0]  <= 2
+> 00 01  [1]  <= 4
+> 01 00  [2]  <= 8
+> 00 10  [3]  <= 16
+> 00 11  [4]  <= 32
+> 01 01  [5]  <= 64
+> 01 10  [6]  <= 128
+> 01 11  [7]  <= 256
+> 10 00  [8]  <= 512
+> 10 01  [9]  <= 1024
+> 10 10  [10]  <= 2048
+> 10 11  [11]  <= 4096
+> 
+>                 div =
+> clamp_val(DIV_ROUND_UP_ULL(loongson_spi->clk_rate, hz), 2, 4096);
+>                 div_tmp = rdiv[fls(div - 1)];
+> 
+>                 loongson_spi->spcr = (div_tmp & GENMASK(1, 0)) >> 0;
+>                 loongson_spi->sper = (div_tmp & GENMASK(3, 2)) >> 2;
+> 
+> But TBH I would expect the author to think about it more.
 
-diff --git a/Documentation/devicetree/bindings/sound/da7219.txt b/Documentation/devicetree/bindings/sound/da7219.txt
-index add1caf26ac2..357d1f61de1d 100644
---- a/Documentation/devicetree/bindings/sound/da7219.txt
-+++ b/Documentation/devicetree/bindings/sound/da7219.txt
-@@ -52,6 +52,8 @@ Optional properties:
- 	[<200>, <500>, <750>, <1000>]
- - dlg,jack-ins-deb : Debounce time for jack insertion (ms)
- 	[<5>, <10>, <20>, <50>, <100>, <200>, <500>, <1000>]
-+- dlg,jack-ins-det-pty : Polarity for jack insertion detection
-+	["low", "high"]
- - dlg,jack-det-rate: Jack type detection latency (3/4 pole)
- 	["32ms_64ms", "64ms_128ms", "128ms_256ms", "256ms_512ms"]
- - dlg,jack-rem-deb : Debounce time for jack removal (ms)
-@@ -98,6 +100,7 @@ Example:
- 			dlg,btn-cfg = <50>;
- 			dlg,mic-det-thr = <500>;
- 			dlg,jack-ins-deb = <20>;
-+			dlg,jack-ins-det-pty = "low";
- 			dlg,jack-det-rate = "32ms_64ms";
- 			dlg,jack-rem-deb = <1>;
- 
-diff --git a/include/sound/da7219-aad.h b/include/sound/da7219-aad.h
-index 24ee7baa2589..41320522daa2 100644
---- a/include/sound/da7219-aad.h
-+++ b/include/sound/da7219-aad.h
-@@ -44,6 +44,11 @@ enum da7219_aad_jack_ins_deb {
- 	DA7219_AAD_JACK_INS_DEB_1S,
- };
- 
-+enum da7219_aad_jack_ins_det_pty {
-+	DA7219_AAD_JACK_INS_DET_PTY_LOW = 0,
-+	DA7219_AAD_JACK_INS_DET_PTY_HIGH,
-+};
-+
- enum da7219_aad_jack_det_rate {
- 	DA7219_AAD_JACK_DET_RATE_32_64MS = 0,
- 	DA7219_AAD_JACK_DET_RATE_64_128MS,
-@@ -80,6 +85,7 @@ struct da7219_aad_pdata {
- 	enum da7219_aad_btn_cfg btn_cfg;
- 	enum da7219_aad_mic_det_thr mic_det_thr;
- 	enum da7219_aad_jack_ins_deb jack_ins_deb;
-+	enum da7219_aad_jack_ins_det_pty jack_ins_det_pty;
- 	enum da7219_aad_jack_det_rate jack_det_rate;
- 	enum da7219_aad_jack_rem_deb jack_rem_deb;
- 
-diff --git a/sound/soc/codecs/da7219-aad.c b/sound/soc/codecs/da7219-aad.c
-index 993a0d00bc48..a61dc965f4fc 100644
---- a/sound/soc/codecs/da7219-aad.c
-+++ b/sound/soc/codecs/da7219-aad.c
-@@ -571,6 +571,19 @@ static enum da7219_aad_jack_ins_deb
- 	}
- }
- 
-+static enum da7219_aad_jack_ins_det_pty
-+	da7219_aad_fw_jack_ins_det_pty(struct device *dev, const char *str)
-+{
-+	if (!strcmp(str, "low")) {
-+		return DA7219_AAD_JACK_INS_DET_PTY_LOW;
-+	} else if (!strcmp(str, "high")) {
-+		return DA7219_AAD_JACK_INS_DET_PTY_HIGH;
-+	} else {
-+		dev_warn(dev, "Invalid jack insertion detection polarity");
-+		return DA7219_AAD_JACK_INS_DET_PTY_LOW;
-+	}
-+}
-+
- static enum da7219_aad_jack_det_rate
- 	da7219_aad_fw_jack_det_rate(struct device *dev, const char *str)
- {
-@@ -688,6 +701,12 @@ static struct da7219_aad_pdata *da7219_aad_fw_to_pdata(struct device *dev)
- 	else
- 		aad_pdata->jack_ins_deb = DA7219_AAD_JACK_INS_DEB_20MS;
- 
-+	if (!fwnode_property_read_string(aad_np, "dlg,jack-ins-det-pty", &fw_str))
-+		aad_pdata->jack_ins_det_pty =
-+			da7219_aad_fw_jack_ins_det_pty(dev, fw_str);
-+	else
-+		aad_pdata->jack_ins_det_pty = DA7219_AAD_JACK_INS_DET_PTY_LOW;
-+
- 	if (!fwnode_property_read_string(aad_np, "dlg,jack-det-rate", &fw_str))
- 		aad_pdata->jack_det_rate =
- 			da7219_aad_fw_jack_det_rate(dev, fw_str);
-@@ -849,6 +868,21 @@ static void da7219_aad_handle_pdata(struct snd_soc_component *component)
- 			mask |= DA7219_ADC_1_BIT_REPEAT_MASK;
- 		}
- 		snd_soc_component_update_bits(component, DA7219_ACCDET_CONFIG_7, mask, cfg);
-+
-+		switch (aad_pdata->jack_ins_det_pty) {
-+		case DA7219_AAD_JACK_INS_DET_PTY_LOW:
-+			snd_soc_component_write(component, 0xF0, 0x8B);
-+			snd_soc_component_write(component, 0x75, 0x80);
-+			snd_soc_component_write(component, 0xF0, 0x00);
-+			break;
-+		case DA7219_AAD_JACK_INS_DET_PTY_HIGH:
-+			snd_soc_component_write(component, 0xF0, 0x8B);
-+			snd_soc_component_write(component, 0x75, 0x00);
-+			snd_soc_component_write(component, 0xF0, 0x00);
-+			break;
-+		default:
-+			break;
-+		}
- 	}
- }
- 
--- 
-2.17.1
+
+In previous code, if mode need to be updated but clk not to be updated
+then the clk settting code will be also run.  so, I think it is better
+to confiure clk and mode separately.
+
+if (hz && loongson_spi->hz != hz) {
+        div = clamp_val(DIV_ROUND_UP_ULL(loongson_spi->clk_rate, hz), 2,
+                       4096);
+        div_tmp = rdiv[fls(div - 1)];
+        loongson_spi->spcr = (div_tmp & GENMASK(1, 0)) >> 0;
+        loongson_spi->sper = (div_tmp & GENMASK(3, 2)) >> 2;
+        val = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPCR_REG);
+        loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPCR_REG,
+			(val & ~3) | loongson_spi->spcr);
+        val = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPER_REG);
+        loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPER_REG,
+                        (val & ~3) |loongson_spi->sper);
+         loongson_spi->hz = hz;
+}
+
+if ((spi->mode ^ loongson_spi->mode) & SPI_MODE_X_MASK) {
+        val = loongson_spi_read_reg(loongson_spi, LOONGSON_SPI_SPCR_REG);
+        val &= ~(LOONGSON_SPI_SPCR_CPOL | LOONGSON_SPI_SPCR_CPHA);
+        if (spi->mode & SPI_CPOL)
+		val |= LOONGSON_SPI_SPCR_CPOL;
+        if (spi->mode & SPI_CPHA)
+		val |= LOONGSON_SPI_SPCR_CPHA;
+        loongson_spi_write_reg(loongson_spi, LOONGSON_SPI_SPCR_REG, val);
+        loongson_spi->mode |= spi->mode;
+}
+
+> 
+> Also the check can be modified to have less indented code:
+> 
+>         if (hz && loongson_spi->hz == hz)
+>            return 0;
+> 
+>         if (!((spi->mode ^ loongson_spi->mode) & SPI_MODE_X_MASK))
+>            return 0;
+
+The setting register about clk and mode was the same SPCR register, so
+only the clk and mode don't need to be updated in the same, then return 
+0, so the code seems to be as follows. But setting clk and mode 
+separately doesn't require follows judgement.
+
+         if ((hz && loongson_spi->hz == hz) &&
+             !((spi->mode ^ loongson_spi->mode) & SPI_MODE_X_MASK))
+                 return 0;
+
+Thanks.
+
+> 
+> 
+> 
 
