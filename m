@@ -2,200 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46218701256
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 01:12:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 961AC70125C
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 01:15:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240477AbjELXMz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 19:12:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33870 "EHLO
+        id S240547AbjELXPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 19:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240400AbjELXMw (ORCPT
+        with ESMTP id S230202AbjELXPS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 19:12:52 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363F97695
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:12:50 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-55a40d32a6bso115966067b3.2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:12:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683933169; x=1686525169;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tROVMxD+wvr9Y37+JVktpX9DU9Q3as8dJoLtqpcc4T0=;
-        b=RALdbsOhos+ByDWKzKVujlqUCzIvZgeqF3NEA/CjV0hB7BxbA1EkfglTIgnc8JkeaA
-         lOGPedhVRZ9D+4JdDT8/LSGndu6BdRa4QKqV7QdESgewzIewSJRJGSxxZXshm3kQCob+
-         SmAikhVqOUlOSfDYM5yY+QLXvbZG9LH/ktp5slyQhnb1MHiJpLTHMuv/sIRAQQTkeilR
-         h7Ul7reXi7I+fTMGGkNP5GukPAI6ejYA76YO35UVaIlKQiq/G3bM8+ZF/XVR4EJrijU8
-         WBCfzZeHhH3npv4axO4nZ9eXUKsUlpk80yzNs5gKe1/jYdkCalilzgm7WysxOUqAqPly
-         4gHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683933169; x=1686525169;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tROVMxD+wvr9Y37+JVktpX9DU9Q3as8dJoLtqpcc4T0=;
-        b=JVZe/n1idbkSPHVBLtIPD635WdwSdRk1NoB2B+p8W2tSfqE9Ul5KK6VI3tXkBVpgG3
-         zIugX9dJXlwXt+066Bm6DNmMPn0DQ/eqMAT8LkEtz0AfQG/6SKQ0IKoXk3S1YXLPXCt+
-         Vkf7XfVDhRdhtDpL2CYsfw9NjMCDBM6e9bapWt0Xs/QAfgG6sfGXrfc4Rnny3GYnfpxc
-         1GDlR6ok31AktDpFvtf61euUYge4qZtFCVP8n8i7gcaKML3aEGrOvwCKCWiyHFJfqflP
-         S2GLRkLwZv7vRC+RxUCJAt6410oQFdKd9sAwrARovskTo3jpFXiVIQDlv5zL9hYVitdp
-         NxiA==
-X-Gm-Message-State: AC+VfDwq7fj6omFxgAt2sG36E789CaRu8nwU57oO7r9YNasxHTigrzxJ
-        xfwyIoi0qasres+jeBeIX1CQAJPtT18=
-X-Google-Smtp-Source: ACHHUZ6o6mh7AYkUxxlfeMrJUR4eohO5DPS/K9FPNc/BUp4krpFBkxsvfYG+61Iz8/lUmBQRYYFk/m9fcHg=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:441a:0:b0:561:1d3b:af40 with SMTP id
- r26-20020a81441a000000b005611d3baf40mr2105258ywa.1.1683933169412; Fri, 12 May
- 2023 16:12:49 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 12 May 2023 16:10:27 -0700
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Message-ID: <20230512231026.799267-1-seanjc@google.com>
-Subject: [ANNOUNCE / RFC] Periodic Upstream Call for KVM
-From:   Sean Christopherson <seanjc@google.com>
-To:     kvm@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Sagi Shahar <sagis@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Anish Ghulati <aghulati@google.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        James Houghton <jthoughton@google.com>,
-        Anish Moorthy <amoorthy@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Guang Zeng <guang.zeng@intel.com>,
-        Hou Wenlong <houwenlong.hwl@antgroup.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Junaid Shahid <junaids@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Leonardo Bras <leobras@redhat.com>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Li RongQing <lirongqing@baidu.com>,
-        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Michal Luczaj <mhal@rbox.co>,
-        Mingwei Zhang <mizhang@google.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Paul Durrant <pdurrant@amazon.com>,
-        Peng Hao <flyingpenghao@gmail.com>,
-        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
-        Robert Hoo <robert.hu@linux.intel.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Will Deacon <will@kernel.org>, Marc Zyngier <maz@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Fuad Tabba <tabba@google.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        Qinglan Xiang <qinglan.xiang@intel.com>,
-        Kai Svahn <kai.svahn@intel.com>,
-        Margarita Maroto <margarita.maroto@intel.com>,
-        Anil Keshavamurthy <anil.s.keshavamurthy@intel.com>,
-        Nagareddy Reddy <nspreddy@google.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 12 May 2023 19:15:18 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE936EA1
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:15:16 -0700 (PDT)
+Received: from fsav119.sakura.ne.jp (fsav119.sakura.ne.jp [27.133.134.246])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 34CNEgSO017364;
+        Sat, 13 May 2023 08:14:42 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav119.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp);
+ Sat, 13 May 2023 08:14:42 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav119.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 34CNDROl017213
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Sat, 13 May 2023 08:13:27 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <61d7ac52-3352-b7cd-8908-890a29a007d9@I-love.SAKURA.ne.jp>
+Date:   Sat, 13 May 2023 08:13:27 +0900
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] debugobject: don't wake up kswapd from fill_pool()
+Content-Language: en-US
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     syzbot <syzbot+fe0c72f0ccbb93786380@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com, Ingo Molnar <mingo@elte.hu>,
+        linux-kernel@vger.kernel.org, linux-mm <linux-mm@kvack.org>
+References: <000000000000008ddb05fb5e2576@google.com>
+ <6577e1fa-b6ee-f2be-2414-a2b51b1c5e30@I-love.SAKURA.ne.jp>
+ <20230511204458.819f9009d2ef8b46cc163191@linux-foundation.org>
+ <d642e597-cf7d-b410-16ce-22dff483fd8e@I-love.SAKURA.ne.jp>
+ <87v8gxbthf.ffs@tglx>
+ <39c79d27-73ea-06a8-62fe-2b64d0fd8db5@I-love.SAKURA.ne.jp>
+ <87bkipbeyr.ffs@tglx>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <87bkipbeyr.ffs@tglx>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I am "officially" announcing a Periodic Upstream Call for KVM, a.k.a. PUCK.
-The intent of the PUCK is to provide a vehicle for having "in-person" technical
-discussions of features, designs, problems, etc. that are cumbersome to discuss
-asynchronously on-list, e.g. because something is too complex, too large, etc.
+On 2023/05/13 3:07, Thomas Gleixner wrote:
+> On Fri, May 12 2023 at 22:09, Tetsuo Handa wrote:
+>> On 2023/05/12 21:54, Thomas Gleixner wrote:
+>>> On Fri, May 12 2023 at 19:57, Tetsuo Handa wrote:
+>>>> On 2023/05/12 12:44, Andrew Morton wrote:
+>>>>> On Thu, 11 May 2023 22:47:32 +0900 Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp> wrote:
+>>>>>
+>>>>>> syzbot is reporting lockdep warning in fill_pool(), for GFP_ATOMIC is
+>>>>>> (__GFP_HIGH | __GFP_KSWAPD_RECLAIM) which wakes up kswapd.
+>>>>>> Since fill_pool() might be called with arbitrary locks held,
+>>>>>> fill_pool() should not assume that holding pgdat->kswapd_wait is safe.
+>>>
+>>> https://lore.kernel.org/lkml/871qjldbes.ffs@tglx/
+>>
+>> .config says IS_ENABLED(CONFIG_PREEMPT_RT) == false, and lockdep says about
+>> base->lock => pgdat->kswapd_wait => p->pi_lock => rq->__lock => base->lock
+>> dependency but does not say about db->lock.
+>>
+>> How can your patch fix this problem?
+> 
+> It's described in the changelog, no?
 
-Exact details are TBD, and obviously can be adapted as needed.  Proposal:
+I can't find a proof that lookup_object() never returns NULL
+when debug_object_activate() is called.
 
-  Frequency: Weekly
-  Time:      Wednesday, 6:00am Pacific Time
-  Duration:  60 minutes
-  Software:  ???
+> 
+> The main change is to make the refill invocation conditional when the
+> lookup fails. That's how that code has been from day one.
 
-My thinking for weekly versus fortnightly (every other week) is that we can always
-cancel meetings if there are no agenda items, and bump down to fortnightly if we
-are constantly canceling.  On the flip side, if we go with fortnightly, it'd be
-more difficult to clear the backlog if PUCK gets booked out multiple sessions, and
-PUCK would be less useful for discussing urgent issues.
+Making refill conditional helps reducing frequency of doing allocations.
+I want a proof that allocations never happens in the worst scenario.
 
-As for the time, 6am Pacific Time was the least awful (and still quite awful IMO)
-time I could find that gives the majority of the community a reasonable chance of
-attending.  I know we have developers in at least the below time zones (and probably
-more, though I don't think anyone works from Hawaii, and if someone does work from
-Hawaii then they have nothing to complain about :-) ).
+Are you saying that some debugobject function other than debug_object_activate()
+guarantees that memory for that object was already allocated before
+debug_object_activate() is called for the first time for that object,
+_and_ such debugobject function is called without locks held?
 
-  PT   (6am)
-  MT   (7am)
-  CT   (8am)
-  ET   (9am)
-  WET  (2pm)
-  CET  (3pm)
-  EET  (4pm)
-  EST  (5pm)
-  CST  (9pm)
-  NZST (1am)
+> 
+> The patch which closed the race recently wreckaged those refill
+> oportunities and the fix for that introduced this problem.
+> 
+> Thanks,
+> 
+>         tglx
 
-The obvious alternative would be to invert the schedule and have the sync be in
-the evening/night for Pacific Time, but to get 6am for ARM folks, we end up with:
-
-  PT   (10pm)
-  MT   (11pm)
-  CT   (12pm)
-  ET   (1am)
-  WET  (6am)
-  CET  (7am)
-  EET  (8am)
-  EST  (9am)
-  CST  (1pm)
-  NZST (5pm)
-
-which is quite unreasonable for pretty much everyone based in the US.  Earlier
-than 6am for WET is likewise unreasonable and will result in people not attending.
-9pm for China is also unreasonable, but I hope that it's not completely ridiculous
-and is doable enough that people can at least attend on an as-needed basis.  Sorry
-Kai, as the sole representative from New Zealand, you get hosed :-(
-
-Wednesday because holidays and (short) vacations most often land at the beginning
-and end of the week.
-
-60 minutes because I'm not waking up at dawn for anything less, and anything
-more will likely have dimishing returns, especially for folks on the edges of
-the time zone table.
-
-Lastly, the big unknown is which video communication software to use.  My default
-is obviously Google Meet, but I've been told that Meet is unusable in some
-countries. :-/  My only requirements (beyond basic, obvious functionality) are
-that (a) there's a web interface (no install required) and that (b) the calls can
-be recorded.
-
-To kick things off, I am leaning toward a "launch" date of May 24th (Pacific),
-with KVM guest private mem (a.k.a. UPM) as the first topic.
-
-Please chime in with thoughts and ideas!
-
-
-P.S. This is an open invite, feel free to forward at will.  The Cc list is by no
-means intended to be definitive.
