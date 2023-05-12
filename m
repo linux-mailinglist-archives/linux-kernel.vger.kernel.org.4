@@ -2,101 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 819226FFE6D
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 03:32:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D64556FFE71
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 03:34:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239742AbjELBb5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 21:31:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39454 "EHLO
+        id S239753AbjELBeF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 21:34:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239701AbjELBbz (ORCPT
+        with ESMTP id S239616AbjELBeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 21:31:55 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B548C2D4D
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 18:31:54 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QHWT43QdRz4x4k;
-        Fri, 12 May 2023 11:31:52 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1683855113;
-        bh=0gH3VUShNMlqCvDVqctnZgumzzCEoeeUz6JIgUWNCYo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=KaSBY6Rn5PakQCkkjaKKBtgo55uqknuKS8nAfzG8IJlPfh9ZvXL7D0spSe8deT+IK
-         EQWLiOin13xnZDzou/BUKHvuCmMrhQFkOkODW+GdNCy+HVURQlVkEepJxxsGByhAPT
-         vMTz6X6n0rWe62Ve5IPjn+fdCeyT/53fsm4uIZVUL5+u237jAXP7OFyXydASsmbiXt
-         yXEn9432rkmfWvrZlZ7Qt/wQz5E9F5Bp8OdsSNahx3tRe7QwW3wGLpLuVyFCP8MSX1
-         Gb0yk8erKE039jcQDlsIXNJOk+08MrrYftNnSNRR8hRuRS6f1jnx2CLTB9XhuYUYte
-         oB7rZTn1QQ+Ag==
-Date:   Fri, 12 May 2023 11:31:51 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Joe Perches <joe@perches.com>
-Subject: Re: [pseudo-PATCH] sort MAINTAINERS file
-Message-ID: <20230512113151.3a79bf70@canb.auug.org.au>
-In-Reply-To: <CAHk-=wjqkNzpYRzgPAj5hwkYJtwg6UEb+hLUQtUm2OYH93WpfQ@mail.gmail.com>
-References: <fb4fa92a-eabe-10b8-fffd-7ffc8a70404b@infradead.org>
-        <CAHk-=wjqkNzpYRzgPAj5hwkYJtwg6UEb+hLUQtUm2OYH93WpfQ@mail.gmail.com>
+        Thu, 11 May 2023 21:34:03 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5518E30DD;
+        Thu, 11 May 2023 18:34:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683855242; x=1715391242;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=sxb0xXUrKWgZ49MNjGY9j9Ka3JM2Z0cQ2DHEp7tFPxY=;
+  b=i++uYNXRxUHZ6bZ80rZmYk5K4z5RXcb8opNF025QlkewBqy50JwNN9De
+   y4lYd4OXMG5R5LtMhgwM6WRJXW2gQ16GXMKil0RyveRQktXgpJ9xmx5d+
+   mWfrBqR+0Lcl+StHOmhNgUEXhL0Gtqc8ZyEYrY/57BY5Yc5KB8Y0WPBsX
+   zJVH0S7VJRSb7vbcOphnBdWoho2ZuAn2BNh6w8WPfUZds0y8dXxJty2Zc
+   QKrw8BG1HyVg24Lfylkuhv+lLNqebLr12j00z5iSHZIf8xZr3xeN/4eHS
+   FFvM/E48hvpvAz04jpFY3PwC3GYov03Ld0EblUiVo/YAPGkXHtquvrVPf
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="353800259"
+X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
+   d="scan'208";a="353800259"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 18:34:01 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="702980062"
+X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
+   d="scan'208";a="702980062"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.255.30.205]) ([10.255.30.205])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 18:33:59 -0700
+Message-ID: <abbb7938-0615-8578-0072-a96d21df3b4d@linux.intel.com>
+Date:   Fri, 12 May 2023 09:33:57 +0800
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/Gu8nTEC93Y7SYJOFmrDdPjP";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v8 2/6] KVM: x86: Virtualize CR4.LAM_SUP
+To:     "Huang, Kai" <kai.huang@intel.com>
+Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "robert.hu@linux.intel.com" <robert.hu@linux.intel.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "Christopherson,, Sean" <seanjc@google.com>,
+        "Gao, Chao" <chao.gao@intel.com>
+References: <20230510060611.12950-1-binbin.wu@linux.intel.com>
+ <20230510060611.12950-3-binbin.wu@linux.intel.com>
+ <67a20fe2a41fbe99de1470254b14f282f72571c7.camel@intel.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <67a20fe2a41fbe99de1470254b14f282f72571c7.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/Gu8nTEC93Y7SYJOFmrDdPjP
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
 
-On Wed, 10 May 2023 19:59:50 -0500 Linus Torvalds <torvalds@linux-foundatio=
-n.org> wrote:
+On 5/11/2023 8:50 PM, Huang, Kai wrote:
+> On Wed, 2023-05-10 at 14:06 +0800, Binbin Wu wrote:
+>> From: Robert Hoo <robert.hu@linux.intel.com>
+>>
+>> Add support to allow guests to set the new CR4 control bit for guests to enable
+>> the new Intel CPU feature Linear Address Masking (LAM) on supervisor pointers.
+>>
+>> LAM modifies the checking that is applied to 64-bit linear addresses, allowing
+>> software to use of the untranslated address bits for metadata and masks the
+>> metadata bits before using them as linear addresses to access memory. LAM uses
+>> CR4.LAM_SUP (bit 28) to configure LAM for supervisor pointers. LAM also changes
+>> VMENTER to allow the bit to be set in VMCS's HOST_CR4 and GUEST_CR4 for
+>> virtualization.
+>>
+>> Move CR4.LAM_SUP out of CR4_RESERVED_BITS and its reservation depends on vcpu
+>> supporting LAM feature or not. Leave the bit intercepted to avoid vmread every
+>> time when KVM fetches its value, with the expectation that guest won't toggle
+>> the bit frequently.
+>>
+>> Set CR4.LAM_SUP bit in the emulated IA32_VMX_CR4_FIXED1 MSR for guests to allow
+>> guests to enable LAM for supervisor pointers in nested VMX operation.
+>>
+>> Hardware is not required to do TLB flush when CR4.LAM_SUP toggled, KVM doesn't
+>> need to emulate TLB flush based on it.
+>> There's no other features/vmx_exec_controls connection, no other code needed in
+>> {kvm,vmx}_set_cr4().
+>>
+>> Signed-off-by: Robert Hoo <robert.hu@linux.intel.com>
+>> Co-developed-by: Binbin Wu <binbin.wu@linux.intel.com>
+>> Signed-off-by: Binbin Wu <binbin.wu@linux.intel.com>
+>> Reviewed-by: Chao Gao <chao.gao@intel.com>
+>> Tested-by: Xuelian Guo <xuelian.guo@intel.com>
+>> ---
+>>   arch/x86/include/asm/kvm_host.h | 3 ++-
+>>   arch/x86/kvm/vmx/vmx.c          | 3 +++
+>>   arch/x86/kvm/x86.h              | 2 ++
+>>   3 files changed, 7 insertions(+), 1 deletion(-)
+>>
+>> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+>> index fb9d1f2d6136..c6f03d151c31 100644
+>> --- a/arch/x86/include/asm/kvm_host.h
+>> +++ b/arch/x86/include/asm/kvm_host.h
+>> @@ -125,7 +125,8 @@
+>>   			  | X86_CR4_PGE | X86_CR4_PCE | X86_CR4_OSFXSR | X86_CR4_PCIDE \
+>>   			  | X86_CR4_OSXSAVE | X86_CR4_SMEP | X86_CR4_FSGSBASE \
+>>   			  | X86_CR4_OSXMMEXCPT | X86_CR4_LA57 | X86_CR4_VMXE \
+>> -			  | X86_CR4_SMAP | X86_CR4_PKE | X86_CR4_UMIP))
+>> +			  | X86_CR4_SMAP | X86_CR4_PKE | X86_CR4_UMIP \
+>> +			  | X86_CR4_LAM_SUP))
+>>   
+>>   #define CR8_RESERVED_BITS (~(unsigned long)X86_CR8_TPR)
+>>   
+>> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
+>> index 44fb619803b8..362b2dce7661 100644
+>> --- a/arch/x86/kvm/vmx/vmx.c
+>> +++ b/arch/x86/kvm/vmx/vmx.c
+>> @@ -7603,6 +7603,9 @@ static void nested_vmx_cr_fixed1_bits_update(struct kvm_vcpu *vcpu)
+>>   	cr4_fixed1_update(X86_CR4_UMIP,       ecx, feature_bit(UMIP));
+>>   	cr4_fixed1_update(X86_CR4_LA57,       ecx, feature_bit(LA57));
+>>   
+>> +	entry = kvm_find_cpuid_entry_index(vcpu, 0x7, 1);
+>> +	cr4_fixed1_update(X86_CR4_LAM_SUP,    eax, feature_bit(LAM));
+>> +
+>>   #undef cr4_fixed1_update
+>>   }
+>>   
+>> diff --git a/arch/x86/kvm/x86.h b/arch/x86/kvm/x86.h
+>> index c544602d07a3..fe67b641cce4 100644
+>> --- a/arch/x86/kvm/x86.h
+>> +++ b/arch/x86/kvm/x86.h
+>> @@ -529,6 +529,8 @@ bool kvm_msr_allowed(struct kvm_vcpu *vcpu, u32 index, u32 type);
+>>   		__reserved_bits |= X86_CR4_VMXE;        \
+>>   	if (!__cpu_has(__c, X86_FEATURE_PCID))          \
+>>   		__reserved_bits |= X86_CR4_PCIDE;       \
+>> +	if (!__cpu_has(__c, X86_FEATURE_LAM))           \
+>> +		__reserved_bits |= X86_CR4_LAM_SUP;     \
+>>   	__reserved_bits;                                \
+>>   })
+>>   
+> LAM only applies to 64-bit linear address, which means LAM can only be enabled
+> when CPU is in 64-bit mode with either 4-level or 5-level paging enabled.
 >
-> On Wed, May 10, 2023 at 7:01=E2=80=AFPM Randy Dunlap <rdunlap@infradead.o=
-rg> wrote:
-> >
-> > Please run scripts/parse-maintainers.pl to sort the MAINTAINERS file.
-> >
-> > It has gained more than 100 out-of-order entries since it was last sort=
-ed. =20
->=20
-> Ugh. That file causes the most conflicts, and sorting it makes it horrend=
-ous.
->=20
-> But I guess if it should be done, this is about the best time to do it.
+> What's the hardware behaviour if we set CR4.LAM_SUP when CPU isn't in 64-bit
+> mode?  And how does VMENTRY check GUEST_CR4.LAM_SUP and 64-bit mode?
+>
+> Looks they are not clear in the spec you pasted in the cover letter:
+>
+> https://cdrdv2.intel.com/v1/dl/getContent/671368
+>
+> Or I am missing something?
+Yes, it is not clearly described in LAM spec.
+Had some internal discussions and also did some tests in host,
+if the processor supports LAM, CR4.LAM_SUP is allowed to be set even 
+when cpu isn't in 64bit mode.
 
-Just before -rc1 might be even better - a lot of maintainers trees are
-now based on -rc1 :-(
+There was a statement in commit message of the last version, but I 
+missed it in this version. I'll add it back.
+"CR4.LAM_SUP is allowed to be set even not in 64-bit mode, but it will not
+take effect since LAM only applies to 64-bit linear address."
 
---=20
-Cheers,
-Stephen Rothwell
+Also, I will try to ask Intel guys if it's possible to update the document.
 
---Sig_/Gu8nTEC93Y7SYJOFmrDdPjP
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
 
------BEGIN PGP SIGNATURE-----
 
-iQEyBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRdlwcACgkQAVBC80lX
-0Gywxwf4y2sbJtrOrAKLZnAI+e0Q6PyLlGS9lDLEhzAP2yeQFTyUhO9acgGdHtv7
-naphCWVEr4voXkckyIKdf0Gc/E6x6drkpiipVDkEMbA2Xcl7Rv9dSKs9Cjr3ADrQ
-QWoTFSZAT/kmUIGQBAj2df4+xlQE3Z0Vgc93dlxxXMrIL8F0b8+HjKHIOSNly4mv
-+lKok81bLlqG5DyOqkjKbm0RVxFoTnoHisupwlIISGjpyLGiUBgPEWvXCmkvNjGW
-hszbSsCQapWjMvQJVyMOsVkdktz7ha0OBH3LBNN8KabIhDqtdzmENcd5CDneUmpp
-81zaXxvq9kEj4KVi2QtkunFFEbV1
-=g0ls
------END PGP SIGNATURE-----
-
---Sig_/Gu8nTEC93Y7SYJOFmrDdPjP--
