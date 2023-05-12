@@ -2,188 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B70F7006EE
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:36:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDC947006F3
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:38:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240953AbjELLgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 07:36:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
+        id S240728AbjELLi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 07:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240090AbjELLgT (ORCPT
+        with ESMTP id S240230AbjELLiY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 07:36:19 -0400
-Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96738DD9D
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:36:18 -0700 (PDT)
-Received: by mail-ed1-x544.google.com with SMTP id 4fb4d7f45d1cf-50bc394919cso14572557a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:36:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683891377; x=1686483377;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gEDwdtST97OS+wBpCtbRghzZcx+X45D0pw7XrLTdoO0=;
-        b=KeszkQiGl243RBXq+9kUck6yivFXAraoqlEG1yavSWTP7nhrwyHhcWayX9wx/Lmvnq
-         0xHuoAd6ENGRUivyqVVA0Qo9XKD0sf0+OiP/BrjTzvzMwYZKtNEvZv8S545O+rOkPoDd
-         AkbInPDYzSnAfM2A6p4b8yEyIwrrn3X0L683bgm/ECLy8f1KTr6YwaeZGLNnRNPR+mF9
-         sZHaexMDwO4vvxVv3T0HFRCS9/MQwfb0fAFcAdk4BBQ2OO3gfUWio67jE/NhAT+/eOPS
-         CReFpQbXnGV89Rjz0z7z6cjrape32fDKnaNcQtQqOv6WarsdvkPRs3ei9j0W0K6/O7zD
-         maow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683891377; x=1686483377;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gEDwdtST97OS+wBpCtbRghzZcx+X45D0pw7XrLTdoO0=;
-        b=lUtWh3g4Q2ZIGC+UZMAZNkjmS5N5AyriSpxvDPziho6qJMqNtGwlpj/+imXe1lCMRQ
-         5Ydli4gvJYywhRmXRnqm2zm/ZZ1adx3BaMXSY0A1aiBCusPfEVy+JsKdkKxiZYqpR4R9
-         w/SpFmznrXG6qdf3ZL7OTFmwn0fI9yBJbqUlpFoQGZ8Yy4ip7CgHscc0Gez5dDxfc6vr
-         ZKTBS9+jjfG/zzBwfzQcFML9AkVWtfu465AHsKo6SSoKiHgKQHtdL3jO29EscVVeMlJL
-         K9VvpRK55BKuc3s6MqJx37ms+RJDmu+PFjGXxTkayRut1fHdyemfGXgSm1m6JYgaIv95
-         U4EA==
-X-Gm-Message-State: AC+VfDzw5utuI03hr09Q7Eq+phWU4xjoFOouYd95EFNPHXfgdy22++Xa
-        i+6bigcLsiZwHKWpikWyD0Cy3L/TdoKagg==
-X-Google-Smtp-Source: ACHHUZ76BJ4MK//GHr0jhglXPEwwgjMtwhNu2TtRSZMhTUaNdkewZQvmjURqO4j2ushkBK+uxOTuPg==
-X-Received: by 2002:a17:907:9810:b0:969:f677:11b4 with SMTP id ji16-20020a170907981000b00969f67711b4mr12550144ejc.37.1683891376725;
-        Fri, 12 May 2023 04:36:16 -0700 (PDT)
-Received: from [127.0.1.1] (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id h15-20020a1709067ccf00b0094f23480619sm5329722ejp.172.2023.05.12.04.36.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 04:36:16 -0700 (PDT)
-From:   Jakob Koschel <jkl820.git@gmail.com>
-Date:   Fri, 12 May 2023 13:36:10 +0200
-Subject: [PATCH v3] w1: Replace usage of found with dedicated list iterator
- variable
+        Fri, 12 May 2023 07:38:24 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83E20213F;
+        Fri, 12 May 2023 04:38:22 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.nyi.internal (Postfix) with ESMTP id 054B95C041E;
+        Fri, 12 May 2023 07:38:19 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute6.internal (MEProxy); Fri, 12 May 2023 07:38:19 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1683891498; x=1683977898; bh=9q
+        AOuPR81wdPIMJq/ul1Z1ZgLOrwDPtn2FpzZci5EkY=; b=MT5xz0YxP3UruUyKZy
+        7TCEGigykY1e8mQK0VTM7nl0hxMJQpMHFzCEQB4/G//ujbBUpAI5gOuY92oASXKI
+        8/DkHoH9s1k4VmNkc+Dh3Pp2ypodlCV380TnG+4DuUTwoAdm3tEoyTwWIMNC9hjD
+        fonnzyJs56rdFtH3xrURdb46ZRn0eW7Ul/XIHI6y8obdGo/+sms/RR9fSGjHdIxO
+        CvT+5QTwtawEx+X8Qa5uiIS/djx9xPTMJ4tSdCakrzppUrbpYXuzOQAjim4xq+p4
+        EPQ6CiOBl2qIJCuLkhVHCadFEWBaDxCDUTps94MIoV0tXD/nB3YRHDgfKAMoHqua
+        cEEw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1683891498; x=1683977898; bh=9qAOuPR81wdPI
+        MJq/ul1Z1ZgLOrwDPtn2FpzZci5EkY=; b=ScXFSHvxKD4mTOvqnXuUeVuMco5J/
+        Fm5JXG6BzheiBC4zlr4BU5uWzz1O22v06Xn/zZCWxU8WzLJLCoksnrFjjthkfn1g
+        dbQ5rPE6zFV/4inncX+ewq86p6az0uR+5LOSJCig/bIyXKpuExKNt8zgTF/UHaYV
+        yDU+sZKr+xjVf37hD4/V7DgG4RuGXWd/TCrWF4dvYDnk+2rz3nPU9G5rkPab8wA9
+        WAhRaQ6Kd/Ke1c/4Fgyrwh/uDoZFi9HWlnxMSwTestHI5G5CLpriDvTMRAjuZxOU
+        +sav+fiifhtdA+BmlVQoD85rWhZH/JOjyST/qpsbF/Aj2moBDgedWFGbA==
+X-ME-Sender: <xms:KiVeZEGjFkK5WzttluNkyIDvVATUeeKeZ1qKcOyL4tVwjmIf-3sPmA>
+    <xme:KiVeZNUEMqCPX210aEPW2vIuP73O5YTPfDHtX2g8fLcrTl4DNKFLM0CGwY7u6qXEY
+    4h9rBv-dBBVfw>
+X-ME-Received: <xmr:KiVeZOLEX0dF7MUAovzGDPwhPO7Bhb4wcaexgxtcAncTJNULxAAuOkeH_9cOuwCPlyNuqxB6uSIPgZo2fQXsY7b6>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehtddggedvucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgeehue
+    ehgfdtledutdelkeefgeejteegieekheefudeiffdvudeffeelvedttddvnecuffhomhgr
+    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:KiVeZGFM5S-CembPJInGX85HTXRRmj7vm5a5jSzhkQCRFdPB-qOXSw>
+    <xmx:KiVeZKVv8CpYTf1SLUayNkAiWEI80RI8IrP850Q6GF_Awpk6mPBWhA>
+    <xmx:KiVeZJNjsM9qCFytn2KOJE7ivIXiQi-0blqU7vkYCCwg-rmwAwdm2w>
+    <xmx:KiVeZAnAxFPB9NRaNjbyn8O9yj_zXaaVEy8EM-PgrcBvetGVwt2qzA>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
+ 12 May 2023 07:38:17 -0400 (EDT)
+Date:   Fri, 12 May 2023 20:38:11 +0900
+From:   Greg KH <greg@kroah.com>
+To:     Peng Fan <peng.fan@oss.nxp.com>
+Cc:     Peng Fan <peng.fan@nxp.com>,
+        "abelvesa@kernel.org" <abelvesa@kernel.org>,
+        "mturquette@baylibre.com" <mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] clk: imx: imx93: introduce clk_bypassed module parameter
+Message-ID: <2023051224-freezing-dweeb-25b3@gregkh>
+References: <20230504085506.504474-1-peng.fan@oss.nxp.com>
+ <2023050410-rejoin-vocation-8560@gregkh>
+ <DU0PR04MB9417FE67ABF9A2B1EE4DEBA088779@DU0PR04MB9417.eurprd04.prod.outlook.com>
+ <2023051027-wages-feminine-cb5d@gregkh>
+ <28629bcd-d01a-92ab-b27c-0b8ae8bfdaf3@oss.nxp.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230509-w1-replace-usage-of-found-with-tmp-list-iterator-variable-v3-1-e07c9603fd9d@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAKkkXmQC/62OQQ6CMBBFr2K6dgy0YIIr72FcTMtUJgFKphU0h
- LtbOIPLNz//z1tVJGGK6nZaldDMkcOYwZxPynU4vgi4zax0oU1RFw0sJQhNPTqCd8ScBw8+vMc
- WFk4dpGGCnmMCTiSYgsCMwmh7AldfTWO8L4xpVN63GAms4Oi6/cOAMVf2YBLy/DmkHs/MXd4L8
- j0cZ71f/6EzayhB1431pcWqovb+GpD7iwuDem7b9gO9CSvnGwEAAA==
-To:     Evgeniy Polyakov <zbr@ioremap.net>,
-        Krzysztof Kozlowski <krzk@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Jakob Koschel <jkl820.git@gmail.com>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1683891376; l=2996;
- i=jkl820.git@gmail.com; s=20230112; h=from:subject:message-id;
- bh=+UI+tVz26PwhwuM34C+/qr/sCuLSqjgcpHP9rDufqm4=;
- b=6s5lr4qMGmUISgZVjLcPhgtSNyrT9Y3G05LumId2ILyR91ErmJzsDChvW/tMVRDCiPisHpdOom2+
- dMCz8QYfCmOMCz9AG3XFMPXglI1uSGAqtT4i9A89+69zQKZebdtD
-X-Developer-Key: i=jkl820.git@gmail.com; a=ed25519;
- pk=rcRpP90oZXet9udPj+2yOibfz31aYv8tpf0+ZYOQhyA=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <28629bcd-d01a-92ab-b27c-0b8ae8bfdaf3@oss.nxp.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To move the list iterator variable into the list_for_each_entry_*()
-macro in the future it should be avoided to use the list iterator
-variable after the loop body.
+On Thu, May 11, 2023 at 04:54:23PM +0800, Peng Fan wrote:
+> 
+> 
+> On 5/10/2023 5:13 PM, Greg KH wrote:
+> > Caution: This is an external email. Please take care when clicking links or opening attachments. When in doubt, report the message using the 'Report this email' button
+> > 
+> > 
+> > On Wed, May 10, 2023 at 07:49:20AM +0000, Peng Fan wrote:
+> > > 
+> > > > Subject: Re: [PATCH] clk: imx: imx93: introduce clk_bypassed module
+> > > > parameter
+> > > > 
+> > > > On Thu, May 04, 2023 at 04:55:06PM +0800, Peng Fan (OSS) wrote:
+> > > > > From: Peng Fan <peng.fan@nxp.com>
+> > > > > 
+> > > > > With the clk names specified in clk_bypassed module parameter, give
+> > > > > user an option to bypass the clk from managing them by Linux kernel.
+> > > > 
+> > > > As I said on another email, no, please do not add new module parameters
+> > > > for drivers, this is not the 1990s
+> > > 
+> > > After a search of the list,
+> > > https://lore.kernel.org/all/?q=module_param
+> > > 
+> > > I still see many drivers are adding module_param.
+> > 
+> > And they should not be doing so as it is almost always not a good idea
+> > (note, some subsystems, like sound, do require it, as that's the api
+> > they use, so this is not a blanket statement.)
+> > 
+> > > Is this is strict ban that new platform driver should not add
+> > > module_param?
+> > 
+> > You need to really really really justify, and document in the changelog
+> > text, why all of the other methods of configuring a platform driver will
+> > not work in order to have it considered.
+> 
+> I just wanna use the module parateter to give user a choice to choose
+> to bypass some clocks.
 
-To *never* use the list iterator variable after the loop it was
-concluded to use a separate iterator variable instead of a
-found boolean [1].
+That is not what a module paramter is for, a "user" does not use them,
+that would be required to be set at boot time.
 
-This removes the need to use a found variable and simply checking if
-the variable was set, can determine if the break/goto was hit.
+> There are 100+ clocks in the driver. Different user
+> may wanna different configuration. With device tree, it is
+> not flexible.Such as user A may wanna bypass clock X, Y; user B may
+> wanna bypass clock Z.
 
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
----
-Changes in v2:
-  - fix checkpatch intentation issues
+Device tree is supposed to be flexible to handle this.  If not, please
+rework the way your driver handles the device tree information about the
+clocks.
 
-Changes in v3:
-  - actually fix checkpatch intentation issues
+Again, module parameters is not the way to handle this issue, sorry.
+Think about what would happen if all drivers were to attempt to have a
+module parameter like this.  That would be unmaintainable.
 
-Note: I've changed my email address to contributions to
-jkl820.git@gmail.com, I hope that's not an issue since the v1 was still
-on my old email.
----
- drivers/w1/w1.c | 32 +++++++++++++++-----------------
- 1 file changed, 15 insertions(+), 17 deletions(-)
+> With module parameter, I could easily set it in bootargs.
 
-diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
-index 9d199fed9628..a5e18de7a25a 100644
---- a/drivers/w1/w1.c
-+++ b/drivers/w1/w1.c
-@@ -830,49 +830,47 @@ int w1_slave_detach(struct w1_slave *sl)
- 
- struct w1_master *w1_search_master_id(u32 id)
- {
--	struct w1_master *dev;
--	int found = 0;
-+	struct w1_master *dev = NULL, *iter;
- 
- 	mutex_lock(&w1_mlock);
--	list_for_each_entry(dev, &w1_masters, w1_master_entry) {
--		if (dev->id == id) {
--			found = 1;
--			atomic_inc(&dev->refcnt);
-+	list_for_each_entry(iter, &w1_masters, w1_master_entry) {
-+		if (iter->id == id) {
-+			dev = iter;
-+			atomic_inc(&iter->refcnt);
- 			break;
- 		}
- 	}
- 	mutex_unlock(&w1_mlock);
- 
--	return (found)?dev:NULL;
-+	return dev;
- }
- 
- struct w1_slave *w1_search_slave(struct w1_reg_num *id)
- {
- 	struct w1_master *dev;
--	struct w1_slave *sl = NULL;
--	int found = 0;
-+	struct w1_slave *sl = NULL, *iter;
- 
- 	mutex_lock(&w1_mlock);
- 	list_for_each_entry(dev, &w1_masters, w1_master_entry) {
- 		mutex_lock(&dev->list_mutex);
--		list_for_each_entry(sl, &dev->slist, w1_slave_entry) {
--			if (sl->reg_num.family == id->family &&
--					sl->reg_num.id == id->id &&
--					sl->reg_num.crc == id->crc) {
--				found = 1;
-+		list_for_each_entry(iter, &dev->slist, w1_slave_entry) {
-+			if (iter->reg_num.family == id->family &&
-+			    iter->reg_num.id == id->id &&
-+			    iter->reg_num.crc == id->crc) {
-+				sl = iter;
- 				atomic_inc(&dev->refcnt);
--				atomic_inc(&sl->refcnt);
-+				atomic_inc(&iter->refcnt);
- 				break;
- 			}
- 		}
- 		mutex_unlock(&dev->list_mutex);
- 
--		if (found)
-+		if (sl)
- 			break;
- 	}
- 	mutex_unlock(&w1_mlock);
- 
--	return (found)?sl:NULL;
-+	return sl;
- }
- 
- void w1_reconnect_slaves(struct w1_family *f, int attach)
+Users do not set bootargs :)
 
----
-base-commit: cc3c44c9fda264c6d401be04e95449a57c1231c6
-change-id: 20230509-w1-replace-usage-of-found-with-tmp-list-iterator-variable-c56393ff0339
+> But anyway if this is not preferred, I need to find other way.
 
-Best regards,
--- 
-Jakob Koschel <jkl820.git@gmail.com>
+Use device tree please, that is what it is there for.
 
+thanks,
+
+greg k-h
