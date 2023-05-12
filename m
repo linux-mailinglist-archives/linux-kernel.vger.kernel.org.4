@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98BDB7012BB
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 01:52:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8966A7012BC
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 01:52:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240729AbjELXwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 19:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
+        id S240845AbjELXwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 19:52:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240904AbjELXva (ORCPT
+        with ESMTP id S241442AbjELXvb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 19:51:30 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5760AD3F
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:50:51 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-25017576284so5358959a91.3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:50:51 -0700 (PDT)
+        Fri, 12 May 2023 19:51:31 -0400
+Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BD103C18
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:50:53 -0700 (PDT)
+Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9963a72fd9so23006660276.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:50:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683935450; x=1686527450;
+        d=google.com; s=20221208; t=1683935452; x=1686527452;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=LxDcS09oj97Wx6mpqCitfgO/wEihL/zs3WwclzJXVrs=;
-        b=3UXj1nizRj4oLlTnGsYo1jkyfL9mkU7aP/AxzLjzcVWd8MZkQxCNMnS23/8RJLUodw
-         ok0SC36DquJdKQxN0hVH2pSrfB/YpQoZ+CuGE0RKez4/PELDoIiFFBzGqSy72J+ABaaq
-         GWVTkuyWWe6Tawuv1GiXVa+yG8hjXRwVLP72B8xy5qR/7Hdii+1lAGNeR5AzErGSj8m9
-         gwg8AQX2Ds6B/Uah4Wo0jc/YRzmzCj0Cnbuf2MQ8taXsF9E035Mhg+npjUwXrmSfYxXv
-         Diw7E7tGb2lO1KIw4MRr1dv/yBVPkPcpcpc06jetvGRD/CVzjuA/1axT0GN8S+Tn5KGZ
-         rGsw==
+        bh=NGpdato6VaRWPtVy0Xb6XT86ae084/tGO9eQqIWQisY=;
+        b=V2qg6pEosKPgYv3xz41qbCC3jZh3J/DMpqxtXWZWSdb4Ni+x0zZ5vCpcKbqxgfMZsk
+         4/HMGtfVm92qSukpIHjzQLbcctI/0nYPoKDz7u6Xw6EGorFkECXVGzTB42dJ6sl8IDdI
+         GgetN+C74aBQrJerUDzJ8wNjSeIAt9ke2QK9imegSnLDhp6qzZha+dgfpGtZ+wU+5FYm
+         RHZ30Aiz5XnUg6Gs5ATMZpbdAvPVOGrACllSwdAT1QbTvxk+M/ujU7zyw0cGhTi9tf5k
+         d+EN5OCDl2Ox76IMlNw5CZnfSwnJF7sDQBwjp1awamDyJ6L0+AO9U6b6xWGauGtaupRY
+         hb2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683935450; x=1686527450;
+        d=1e100.net; s=20221208; t=1683935452; x=1686527452;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=LxDcS09oj97Wx6mpqCitfgO/wEihL/zs3WwclzJXVrs=;
-        b=XMQt9YVm50ebgQ7FMzr9FYLlZgaJn2gdbJqRmodwi0YEgV/Frw1Ar9lywiYcyG0q85
-         E4g9+fjRBKje5PH7PDE1lHDdz+TIVb4+5h1rWngBVvSe/QrVdPdeNZBIrLmFastsw9+i
-         MXVz+/eQ1HHrEZ0+QfhgK8ubFHr/x7iQ1tfCFQHBv0jUGfuMO+UotyG/R1l5zh/Dyas8
-         PaLVl7T19fN7YMp97uEt7KHQ9fPKNq2t8aF9qNqITVn51YSs51VfPln8733rkrrT7pb4
-         yHO0pAACQEWcGrsrspNBTegBaLqdq+RIZJmLTILALLX8MWtfimrLYAITFNrX0g8Xs5T1
-         koMA==
-X-Gm-Message-State: AC+VfDwU5S4CZIX+/uabBpGnUfz0ce9EZg9/sSTnlkqRFK3HoB+pbnNQ
-        5JgkciLbgvvctb0uKGzQOb+eROHhIhY=
-X-Google-Smtp-Source: ACHHUZ48zczwBDKdvB3sWp2+ob+YdKHROmTh6zcvA3LCitTa2KUmje9WaICS5+vDj+EmmtaYbGyho3TFxQ4=
+        bh=NGpdato6VaRWPtVy0Xb6XT86ae084/tGO9eQqIWQisY=;
+        b=fZcwVAnqNETZ3P//TwssGUX2jy7mPJta3vg736CRyG6HE/73DoO+JsNbSrASgwz0/n
+         NcBhxVpWCoArDZIK9MYKVFCNFL5CcScP5QosH8OuhMr/VLZIqvDWuzisnhd0YaZJHH/7
+         DDHLpVmmsUnujkzdc267VWEga1q3pG5xd2dJDp18wyvYOORMpKwsHR3H35sK/8QiliL9
+         Lk12ruArtM2D66AHTaDmOoIJ4er5AdWNEdf8Lv9pJ68dPqv1v2RpN0HxfjJ8hngGxuln
+         UcmtGDaMO+A95hUVVmiUbyeOlp+W916MQCki9zAdqW1uQyKEnplDyHaWuzcr2IZ3b7iA
+         HwrA==
+X-Gm-Message-State: AC+VfDzAkc5idGzEmSgnTfnDRUQSNMCVIr01U9ekxbntI8xNamDP+WMJ
+        0guwkhdoHTsU3E29D3aTOYPyCC8nzhw=
+X-Google-Smtp-Source: ACHHUZ6rQgl83+ScHZSi2/PDJHLoq1j4+/LxtgMXAergNcCdWFhZr9rrfgNmnsB6NfpnpRo5P74OuUDuLWU=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90b:482:b0:244:9147:ee20 with SMTP id
- bh2-20020a17090b048200b002449147ee20mr8107720pjb.0.1683935450341; Fri, 12 May
- 2023 16:50:50 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a25:32cf:0:b0:ba6:d183:5541 with SMTP id
+ y198-20020a2532cf000000b00ba6d1835541mr3493648yby.5.1683935452176; Fri, 12
+ May 2023 16:50:52 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 12 May 2023 16:50:19 -0700
+Date:   Fri, 12 May 2023 16:50:20 -0700
 In-Reply-To: <20230512235026.808058-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230512235026.808058-1-seanjc@google.com>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Message-ID: <20230512235026.808058-12-seanjc@google.com>
-Subject: [PATCH v3 11/18] KVM: SVM: Make KVM_AMD depend on CPU_SUP_AMD or CPU_SUP_HYGON
+Message-ID: <20230512235026.808058-13-seanjc@google.com>
+Subject: [PATCH v3 12/18] x86/virt: Drop unnecessary check on extended CPUID
+ level in cpu_has_svm()
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -72,33 +73,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make building KVM SVM support depend on support for AMD or Hygon.  KVM
-already effectively restricts SVM support to AMD and Hygon by virtue of
-the vendor string checks in cpu_has_svm(), and KVM VMX supports depends
-on one of its three known vendors (Intel, Centaur, or Zhaoxin).
+Drop the explicit check on the extended CPUID level in cpu_has_svm(), the
+kernel's cached CPUID info will leave the entire SVM leaf unset if said
+leaf is not supported by hardware.  Prior to using cached information,
+the check was needed to avoid false positives due to Intel's rather crazy
+CPUID behavior of returning the values of the maximum supported leaf if
+the specified leaf is unsupported.
 
-Add the CPU_SUP_HYGON clause even though CPU_SUP_HYGON selects CPU_SUP_AMD
-to document that KVM SVM support isn't just for AMD CPUs, and to prevent
-breakage should Hygon support ever become a standalone thing.
-
+Fixes: 682a8108872f ("x86/kvm/svm: Simplify cpu_has_svm()")
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/x86/include/asm/virtext.h | 6 ------
+ 1 file changed, 6 deletions(-)
 
-diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
-index 8e578311ca9d..0d403e9b6a47 100644
---- a/arch/x86/kvm/Kconfig
-+++ b/arch/x86/kvm/Kconfig
-@@ -102,7 +102,7 @@ config X86_SGX_KVM
+diff --git a/arch/x86/include/asm/virtext.h b/arch/x86/include/asm/virtext.h
+index a27801f2bc71..be50c414efe4 100644
+--- a/arch/x86/include/asm/virtext.h
++++ b/arch/x86/include/asm/virtext.h
+@@ -39,12 +39,6 @@ static inline int cpu_has_svm(const char **msg)
+ 		return 0;
+ 	}
  
- config KVM_AMD
- 	tristate "KVM for AMD processors support"
--	depends on KVM
-+	depends on KVM && (CPU_SUP_AMD || CPU_SUP_HYGON)
- 	help
- 	  Provides support for KVM on AMD processors equipped with the AMD-V
- 	  (SVM) extensions.
+-	if (boot_cpu_data.extended_cpuid_level < SVM_CPUID_FUNC) {
+-		if (msg)
+-			*msg = "can't execute cpuid_8000000a";
+-		return 0;
+-	}
+-
+ 	if (!boot_cpu_has(X86_FEATURE_SVM)) {
+ 		if (msg)
+ 			*msg = "svm not available";
 -- 
 2.40.1.606.ga4b1b128d6-goog
 
