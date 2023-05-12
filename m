@@ -2,105 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA5817000B0
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 08:39:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 36E467000B2
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 08:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240145AbjELGjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 02:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
+        id S240000AbjELGkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 02:40:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240144AbjELGjh (ORCPT
+        with ESMTP id S239934AbjELGkA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 02:39:37 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DC3D07A
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 23:39:35 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-96aae59bbd6so40380766b.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 23:39:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683873574; x=1686465574;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CaA+lFdcBUfzX4Iu5oO6523eo15jJCY8SlknFrAoit8=;
-        b=nwI6xlNdHi6QZNe2OWf7VeYw+UcDE7i1k319EYEZrKckv2nvXcjDlk+HGqu0iGzoYT
-         ZvGBbXkEUpjs0nEG+YxPm5T2vgiaFUEO9WtdYE1OELKul2j71V5Xf6krpveoixC4F1fw
-         klkSSldIiiR2z2rZRtsugYdgYrCibL7Ikhbr7SOYHfLDNM7PQfCm+8f/9pZ/CpSClWbP
-         608J7BGSdbJ+xDtISzn+Bw+LMD29iZpPBwPiZWCgz96p6f98u4fa4UtnSff+1JrKQLRd
-         pkAdWhcI4cI64N7M9MDsLfZMa9GmaVWq+6h7OnBxoPvPY3akSdMAjM/6+1FQo8AxL/a1
-         ocYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683873574; x=1686465574;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CaA+lFdcBUfzX4Iu5oO6523eo15jJCY8SlknFrAoit8=;
-        b=MDX5hyhLTTUKCdG6hllFPoqcf6PXlrvercZbnvecoyPGewc7aorjmLf6VWnUWKddLN
-         aQ/Qmx9aNY5Uzvp8Q/D7IzxMy+BHBQLwZvBZWwwzZmquL7bYv1KUahlg/I2cQxaR7Gmh
-         FjPubA1gO1c5QRDBoe/7TtppUlg7kdLlIJQQcnJMWCY0S0WxUnZnQRrp52g2DKFH0KFw
-         VLAyHMCPJqLsxdH1iwtoYKJP4/Yi0RpWE6ty7NdsyB/p87bxJtP5rRt//2P1FfFkQksP
-         +0h2T6SwmI8MOw1IQWeEobeFdzR50FHGnLEQh9huFm0Hnt8/Q/enrW3LPyJVkXpvx7qJ
-         HkAA==
-X-Gm-Message-State: AC+VfDxtR07sPEu43D/N1Xv3RNjJrfJqCkYChTJq/nA7pljkPsM+FZda
-        vio4Q8+0pnDGb5c5uEAvyj0fAw==
-X-Google-Smtp-Source: ACHHUZ67YDCteysRcDpfI04uBiqSBGsNU6w6U0CF+UvvKrDHNRgfXF9ABnk1kdQiSZHpMYAXqQ4w/w==
-X-Received: by 2002:a17:907:d16:b0:966:391b:5b3e with SMTP id gn22-20020a1709070d1600b00966391b5b3emr19227693ejc.55.1683873574137;
-        Thu, 11 May 2023 23:39:34 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:7ede:fc7b:2328:3883? ([2a02:810d:15c0:828:7ede:fc7b:2328:3883])
-        by smtp.gmail.com with ESMTPSA id eq19-20020a170907291300b0096739e10659sm4967204ejc.163.2023.05.11.23.39.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 May 2023 23:39:33 -0700 (PDT)
-Message-ID: <05eba15d-21d5-84af-5ec9-783a3e4afe6c@linaro.org>
-Date:   Fri, 12 May 2023 08:39:32 +0200
+        Fri, 12 May 2023 02:40:00 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9CB9D84C;
+        Thu, 11 May 2023 23:39:54 -0700 (PDT)
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34C6dQad010886;
+        Fri, 12 May 2023 06:39:44 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : mime-version : content-type :
+ in-reply-to; s=pp1; bh=NjhJM1HhhA0VPcFVpNX/0wJVXLUIdOw66qGBc1jz9p8=;
+ b=dZ9pgCUdBtsOvx7KzFcB3HFmGVpgPC+Y4VkUQ/RVXvBuT8MK5tnNB1lFohkzBtzNoybW
+ /8hdKZg76TTjNd58RzoaBc1ZaHsIF6TKt/QOBXBXcmnBhaBAI+VJ7AcZWkxdgD0Rz6/F
+ 8ozhvd/5BX8DptENibYPeOzCphWH2EV3ZGU7YIsLIS7NVm1h6rQ63Ccm8VGbLy6emQfU
+ G3iwHsd1VD6eo39iFj4fzgCNmJGcqG/4CHLvjkaroWnVDB4t5eEOVxmJ1d/sluqH03Uv
+ 3w6jiWxkLZym0QRbfWYKL04sLhu9GRyR7TLuWC6RG4O5kCBFTb6wzR1X6UIXmqD0HnEK KA== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qhg6k8551-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 06:39:44 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34C5bQLr027424;
+        Fri, 12 May 2023 06:39:41 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma04fra.de.ibm.com (PPS) with ESMTPS id 3qf7d1ss62-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 06:39:41 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34C6dceq51052866
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 12 May 2023 06:39:38 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AD0702004D;
+        Fri, 12 May 2023 06:39:38 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 43BCA20040;
+        Fri, 12 May 2023 06:39:37 +0000 (GMT)
+Received: from li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com (unknown [9.43.7.84])
+        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+        Fri, 12 May 2023 06:39:37 +0000 (GMT)
+Date:   Fri, 12 May 2023 12:09:34 +0530
+From:   Ojaswin Mujoo <ojaswin@linux.ibm.com>
+To:     Kemeng Shi <shikemeng@huaweicloud.com>
+Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 11/19] ext4: fix wrong unit use in ext4_mb_new_blocks
+Message-ID: <ZF3fJmzhUe2btLrf@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
+References: <20230417110617.2664129-1-shikemeng@huaweicloud.com>
+ <20230417110617.2664129-12-shikemeng@huaweicloud.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 4/6] dt-bindings: Add support for DRAM MRQ GSCs
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>,
-        Peter De Schrijver <pdeschrijver@nvidia.com>
-Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        devicetree@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-kernel@vger.kernel.org, stefank@nvidia.com
-References: <20230511132048.1122075-1-pdeschrijver@nvidia.com>
- <20230511132048.1122075-5-pdeschrijver@nvidia.com>
- <20230511-carnivore-legend-17206803d713@spud>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230511-carnivore-legend-17206803d713@spud>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230417110617.2664129-12-shikemeng@huaweicloud.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: 64kcRisVdRoP8s2-bPUILrPBB2kslYf_
+X-Proofpoint-GUID: 64kcRisVdRoP8s2-bPUILrPBB2kslYf_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-12_03,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 clxscore=1015 phishscore=0 lowpriorityscore=0
+ mlxscore=0 suspectscore=0 impostorscore=0 mlxlogscore=999 bulkscore=0
+ malwarescore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305120056
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/05/2023 21:21, Conor Dooley wrote:
-> On Thu, May 11, 2023 at 04:20:49PM +0300, Peter De Schrijver wrote:
->> Add bindings for DRAM MRQ GSC support.
->>
->> Co-developed-by: Stefan Kristiansson <stefank@nvidia.com>
->> Signed-off-by: Stefan Kristiansson <stefank@nvidia.com>
->> Signed-off-by: Peter De Schrijver <pdeschrijver@nvidia.com>
+On Mon, Apr 17, 2023 at 07:06:09PM +0800, Kemeng Shi wrote:
+> Function ext4_mb_new_blocks_simple needs count in cluster. Function
+
+So there seems to be a typo in the commit header and commit message. I believe
+you mean ext4_mb_free_blocks() and ext4_mb_free_blocks_simple() ?
+
+If that is the case, once corrected feel free to add:
+
+Reviewed-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
+
+> ext4_mb_new_blocks accepts count in block. Convert count to cluster
+> to fix the mismatch.
 > 
-> Perhaps Krzysztof will disagree, but looks fine to me, with some minor
-> remarks below.
-> Just to note, I didn't get the cover letter & therefore didn't get the
-> changelog :/
-
-Me neither... and in v3 I asked for it or for proper changelog in the patch
-
-> I know you had a back and forth with him about that, *my* €0.02 is that
-> either you put the changelog in the cover & send it to everyone, or you
-> put it in each patch.
-
-
-
-Best regards,
-Krzysztof
-
+> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
+> ---
+>  fs/ext4/mballoc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
+> index 4a345e3c1c78..6d4471fd3049 100644
+> --- a/fs/ext4/mballoc.c
+> +++ b/fs/ext4/mballoc.c
+> @@ -6315,7 +6315,7 @@ void ext4_free_blocks(handle_t *handle, struct inode *inode,
+>  	}
+>  
+>  	if (sbi->s_mount_state & EXT4_FC_REPLAY) {
+> -		ext4_free_blocks_simple(inode, block, count);
+> +		ext4_free_blocks_simple(inode, block, EXT4_NUM_B2C(sbi, count));
+>  		return;
+>  	}
+>  
+> -- 
+> 2.30.0
+> 
