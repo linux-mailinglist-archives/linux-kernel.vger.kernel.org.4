@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72388701091
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 23:10:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FEFC701093
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 23:10:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239890AbjELVJ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 17:09:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
+        id S240335AbjELVJi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 17:09:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239677AbjELVIX (ORCPT
+        with ESMTP id S239949AbjELVI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 17:08:23 -0400
+        Fri, 12 May 2023 17:08:28 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B3ACE73F;
-        Fri, 12 May 2023 14:07:43 -0700 (PDT)
-Message-ID: <20230512205256.859920443@linutronix.de>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FB11100DF;
+        Fri, 12 May 2023 14:07:49 -0700 (PDT)
+Message-ID: <20230512205256.916055844@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683925659;
+        s=2020; t=1683925660;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=4KTNmmFPJXZljDpOFQFSwkn0vJx9v7UbMNIhdACke4E=;
-        b=LDLOAD2i8A3n7wKvyw/OHjYjE9g2++H+Ra6znb14aQBES5w+tCFjEYDcf9R4VTOZvx9n/u
-        aJPKVhpjaAwY/9/gG5nbXzIELvXFhBTj6ik9OFCKp0sTKTUqsxOkjkPU5EOD3pLZJZ4Q08
-        mBjq2r7Ehgaq64GBwCCWKc9urhnQ2OFs9Pi8ZnDO+A9Gy5HJGaINPnYSxBdC6tTcGbRZFa
-        FZhkykTgFM2zztGv9fUkORf1CGPgc7ibQGmtESQXEt7iMvWTsEjR7OCpRCp0F7VavIl+3g
-        BX/UupJRv8rSiDtBIxr6kkKrNs6sYKYM7ptmqJMF/1rd4KRE6ZPzMWlA9jlybw==
+         references:references; bh=3WyGAeXCoINo+ZjbtqDSmG4Uv4XxBoW1eRT13EQq0fk=;
+        b=gCuo784jqFHJl8ajBn8394w4OmHWarWHua689soLfocU0hu6yonNTwuMrKteuZS5UiIuEV
+        qrcv15f4Q6TokbWN0YfdK3MSd6z8xiHfnEZzev7CF61wRptMWuiL7c2cva2fdafmy4x44i
+        QLCrGnHJHlwNB/wrQX3E9sCIWLmnibPYc8f6Fvn0Mhtkx8DzedCkReA25Zy2fK9LabrFWb
+        x1UPFk0hgEJqdWWpnRwgFxJ1i3v5p9suQyaN5MHQM1jUq9DQq3rPXVvibiH0XDHv/RMwo0
+        mWl2Aksb+Mjpq0yv8/Ii5IfUB3vzQQo6B2UpFf/trJXJtP52QvDOQWDArAV10Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683925659;
+        s=2020e; t=1683925660;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=4KTNmmFPJXZljDpOFQFSwkn0vJx9v7UbMNIhdACke4E=;
-        b=Gt2zwUCq7iu8dnyaeJHibD3RPnYUHsIc76G4Lbvo/gsvpFIWUZKRoyxcLE+Vi7t38Qh+jZ
-        on551572+Ltc/RBA==
+         references:references; bh=3WyGAeXCoINo+ZjbtqDSmG4Uv4XxBoW1eRT13EQq0fk=;
+        b=LWXqEciaP4I0I25ywyzxuHHtRRVAY1D7DccVqnOk2GJSZvUntz/BBxlff7vjipNfXjw8l7
+        MDKU/BWHM78qyUDA==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
@@ -67,12 +67,13 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         Mark Rutland <mark.rutland@arm.com>,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Ross Philipson <ross.philipson@oracle.com>
-Subject: [patch V4 26/37] parisc: Switch to hotplug core state synchronization
+        Ross Philipson <ross.philipson@oracle.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [patch V4 27/37] riscv: Switch to hotplug core state synchronization
 References: <20230512203426.452963764@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 12 May 2023 23:07:38 +0200 (CEST)
+Date:   Fri, 12 May 2023 23:07:40 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -90,53 +91,77 @@ mechanim. No functional change intended.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Tested-by: Michael Kelley <mikelley@microsoft.com>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
- arch/parisc/Kconfig          |    1 +
- arch/parisc/kernel/process.c |    4 ++--
- arch/parisc/kernel/smp.c     |    7 +++----
- 3 files changed, 6 insertions(+), 6 deletions(-)
-
-
---- a/arch/parisc/Kconfig
-+++ b/arch/parisc/Kconfig
-@@ -57,6 +57,7 @@ config PARISC
- 	select HAVE_ARCH_SECCOMP_FILTER
- 	select HAVE_ARCH_TRACEHOOK
- 	select HAVE_REGS_AND_STACK_ACCESS_API
+ arch/riscv/Kconfig              |    1 +
+ arch/riscv/include/asm/smp.h    |    2 +-
+ arch/riscv/kernel/cpu-hotplug.c |   14 +++++++-------
+ 3 files changed, 9 insertions(+), 8 deletions(-)
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -122,6 +122,7 @@ config RISCV
+ 	select HAVE_RSEQ
+ 	select HAVE_STACKPROTECTOR
+ 	select HAVE_SYSCALL_TRACEPOINTS
 +	select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
- 	select GENERIC_SCHED_CLOCK
- 	select GENERIC_IRQ_MIGRATION if SMP
- 	select HAVE_UNSTABLE_SCHED_CLOCK if SMP
---- a/arch/parisc/kernel/process.c
-+++ b/arch/parisc/kernel/process.c
-@@ -166,8 +166,8 @@ void __noreturn arch_cpu_idle_dead(void)
+ 	select IRQ_DOMAIN
+ 	select IRQ_FORCED_THREADING
+ 	select KASAN_VMALLOC if KASAN
+--- a/arch/riscv/include/asm/smp.h
++++ b/arch/riscv/include/asm/smp.h
+@@ -70,7 +70,7 @@ asmlinkage void smp_callin(void);
  
- 	local_irq_disable();
+ #if defined CONFIG_HOTPLUG_CPU
+ int __cpu_disable(void);
+-void __cpu_die(unsigned int cpu);
++static inline void __cpu_die(unsigned int cpu) { }
+ #endif /* CONFIG_HOTPLUG_CPU */
  
--	/* Tell __cpu_die() that this CPU is now safe to dispose of. */
--	(void)cpu_report_death();
-+	/* Tell the core that this CPU is now safe to dispose of. */
-+	cpuhp_ap_report_dead();
+ #else
+--- a/arch/riscv/kernel/cpu-hotplug.c
++++ b/arch/riscv/kernel/cpu-hotplug.c
+@@ -8,6 +8,7 @@
+ #include <linux/sched.h>
+ #include <linux/err.h>
+ #include <linux/irq.h>
++#include <linux/cpuhotplug.h>
+ #include <linux/cpu.h>
+ #include <linux/sched/hotplug.h>
+ #include <asm/irq.h>
+@@ -49,17 +50,15 @@ int __cpu_disable(void)
+ 	return ret;
+ }
  
- 	/* Ensure that the cache lines are written out. */
- 	flush_cache_all_local();
---- a/arch/parisc/kernel/smp.c
-+++ b/arch/parisc/kernel/smp.c
-@@ -500,11 +500,10 @@ int __cpu_disable(void)
- void __cpu_die(unsigned int cpu)
++#ifdef CONFIG_HOTPLUG_CPU
+ /*
+- * Called on the thread which is asking for a CPU to be shutdown.
++ * Called on the thread which is asking for a CPU to be shutdown, if the
++ * CPU reported dead to the hotplug core.
+  */
+-void __cpu_die(unsigned int cpu)
++void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
  {
- 	pdc_cpu_rendezvous_lock();
-+}
+ 	int ret = 0;
  
 -	if (!cpu_wait_death(cpu, 5)) {
--		pr_crit("CPU%u: cpu didn't die\n", cpu);
+-		pr_err("CPU %u: didn't die\n", cpu);
 -		return;
 -	}
-+void arch_cpuhp_cleanup_dead_cpu(unsigned int cpu)
-+{
- 	pr_info("CPU%u: is shutting down\n", cpu);
+ 	pr_notice("CPU%u: off\n", cpu);
  
- 	/* set task's state to interruptible sleep */
+ 	/* Verify from the firmware if the cpu is really stopped*/
+@@ -76,9 +75,10 @@ void __noreturn arch_cpu_idle_dead(void)
+ {
+ 	idle_task_exit();
+ 
+-	(void)cpu_report_death();
++	cpuhp_ap_report_dead();
+ 
+ 	cpu_ops[smp_processor_id()]->cpu_stop();
+ 	/* It should never reach here */
+ 	BUG();
+ }
++#endif
 
 
 
