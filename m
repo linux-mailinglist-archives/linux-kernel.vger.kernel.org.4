@@ -2,80 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6097170126A
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 01:24:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7646270126C
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 01:25:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240655AbjELXYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 19:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
+        id S240673AbjELXZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 19:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238913AbjELXYF (ORCPT
+        with ESMTP id S238380AbjELXZS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 19:24:05 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD66273D;
-        Fri, 12 May 2023 16:24:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683933844; x=1715469844;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EmdFu5NhBMF5IU2oYyEi+Wp7+UrFNaOcC8wu11S8aHI=;
-  b=Lhv0E0kWSO0EeA2y9O4DiY4eLqx9EstHinWOZ7+EvCtGpQQDQMnXdHsV
-   tHj1dbmf0IkG2qnKlRjsCtpatWsBuZ3HY4wpKKWW2onOpMayBRwQUVGd6
-   i3yjNSjBT03hMS0tCw/6kal86YouBn7ZmcuHBmvSNoyRqzLd3/TAgpenK
-   pv0Jzhdh5xZDsojqHwUG9ABP5KNVuV1lSLSSjv5ul/qYjVhHWh3rQ16IK
-   mLh1APj6oiRLuL+iZbcravKF8ZsL5QcwZvLTboUDLRAUc9g6ez2CF2BWY
-   6He7zduc8/8GqF9ZG0dIzdFw93pZa9dWwXAXvh1oNZctqUe1F4X1ajoq5
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="349743956"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="349743956"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 16:24:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="789987471"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="789987471"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by FMSMGA003.fm.intel.com with ESMTP; 12 May 2023 16:23:59 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pxc7C-0005Aa-1i;
-        Fri, 12 May 2023 23:23:58 +0000
-Date:   Sat, 13 May 2023 07:23:43 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Dmitry Safonov <dima@arista.com>, linux-kernel@vger.kernel.org,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        netdev@vger.kernel.org, Dmitry Safonov <dima@arista.com>,
-        Andy Lutomirski <luto@amacapital.net>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        Dan Carpenter <error27@gmail.com>,
-        David Laight <David.Laight@aculab.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        "Eric W. Biederman" <ebiederm@xmission.com>,
-        Francesco Ruggeri <fruggeri05@gmail.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Ivan Delalande <colona@arista.com>,
-        Leonard Crestez <cdleonard@gmail.com>,
-        Salam Noureddine <noureddine@arista.com>
-Subject: Re: [PATCH v6 01/21] net/tcp: Prepare tcp_md5sig_pool for TCP-AO
-Message-ID: <202305130722.D7icLQEP-lkp@intel.com>
-References: <20230512202311.2845526-2-dima@arista.com>
+        Fri, 12 May 2023 19:25:18 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F4661B7
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:25:17 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id ada2fe7eead31-43636098581so722679137.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:25:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683933916; x=1686525916;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gJhegFzJphPXuJITxSnVpK02wrtyZSwmP9rCGNGMF8o=;
+        b=gAzw+yJupAesTu0HewVLV1YbHJX9NBfOqEeijURe8cVugA4snUj1PNwp7ZxEnuGdHP
+         6vU7BUDbP5oUUx1Q3AVyulYIJRp5vv6ldouDsrfo8tpZXrUp2BEhvHvJR5YJBqAtJXUF
+         HbEXnzSbZer5Xr4HIOUQAXiwtTF+vSbC8IoveB6vuoi/hTF4oTq+eRO+d3IOsmYiMjbH
+         K4qgqaixEJuPWXDR7K0IiPsLWKEfFyjHAiv2FjU1CTiBP3crKNdPC8WWN9iJjqWWMg9G
+         xbXciRYDbFoA+ey6rFP6lrOE3Q42miptiTMYDnqzBWOgNubmlklWCIjWRQPnIJtbIW9R
+         nWTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683933916; x=1686525916;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gJhegFzJphPXuJITxSnVpK02wrtyZSwmP9rCGNGMF8o=;
+        b=bAJaF+lRVuKBadZw6iDeFR4Lq3ETitNPiKx8FpO2NkVmT9QEBKR5EiFADE0O0Y4PyG
+         6JX+MZB74szdIMSHXhyGj+5OsH1qUfmIoXV+95I3pOkaWSVktC8GLEePcJzERqJpY/6M
+         jnSQ9H1xI9IThGI/M9N9nz62Mt43z9jbunjuQXD2dj3ZLHNx1dPJg+TTtFxUU0OH4L55
+         hEv43SA/OFbN3N5PbpfUPCnghR11lXdE27D1UVb8QxvRauvt4N9MKKva7+cdH17/rb8P
+         BNJX4sz3xH0KQCYqozJ4gOjhx+pp0iH2NyVZKepWL6cEjnlsq9LweYE7SHRFAJc1xHO3
+         Mo8g==
+X-Gm-Message-State: AC+VfDwJyAeoe058RWXhn0OXP02V1s9r+XTMTy9nj/xDlO+5TolbsyFA
+        2GjWCKpVsdJ6x1C2xWkzXvme2LUZ10G2eDhw7NXE2w==
+X-Google-Smtp-Source: ACHHUZ5ZDdv4p+7cTcqWMTSYES8JytA1qvyi+Wjl6gI0PzEXuleOzYI8oMVCABD/ksQy4+pLN17HEcJ1VdfNkv/ZeTY=
+X-Received: by 2002:a67:bb06:0:b0:42e:6748:13d1 with SMTP id
+ m6-20020a67bb06000000b0042e674813d1mr10281491vsn.24.1683933916629; Fri, 12
+ May 2023 16:25:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230512202311.2845526-2-dima@arista.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+References: <20230511235917.639770-1-seanjc@google.com> <20230511235917.639770-6-seanjc@google.com>
+ <ZF7IRQZo8g7Lg46V@google.com> <ZF7JW2huc2MjXZFA@google.com>
+In-Reply-To: <ZF7JW2huc2MjXZFA@google.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Fri, 12 May 2023 16:24:49 -0700
+Message-ID: <CALzav=dRtju+-NaGiy7ok3chB=535bxNOqm8c+vOMCa9QKWHsQ@mail.gmail.com>
+Subject: Re: [PATCH 5/9] KVM: x86/mmu: Convert "runtime" WARN_ON() assertions
+ to WARN_ON_ONCE()
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Mingwei Zhang <mizhang@google.com>,
+        Jim Mattson <jmattson@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -83,108 +73,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dmitry,
+On Fri, May 12, 2023 at 4:18=E2=80=AFPM Sean Christopherson <seanjc@google.=
+com> wrote:
+>
+> On Fri, May 12, 2023, David Matlack wrote:
+> > On Thu, May 11, 2023 at 04:59:13PM -0700, Sean Christopherson wrote:
+> > > Convert all "runtime" assertions, i.e. assertions that can be trigger=
+ed
+> > > while running vCPUs, from WARN_ON() to WARN_ON_ONCE().  Every WARN in=
+ the
+> > > MMU that is tied to running vCPUs, i.e. not contained to loading and
+> > > initializing KVM, is likely to fire _a lot_ when it does trigger.  E.=
+g. if
+> > > KVM ends up with a bug that causes a root to be invalidated before th=
+e
+> > > page fault handler is invoked, pretty much _every_ page fault VM-Exit
+> > > triggers the WARN.
+> > >
+> > > If a WARN is triggered frequently, the resulting spam usually causes =
+a lot
+> > > of damage of its own, e.g. consumes resources to log the WARN and pol=
+lutes
+> > > the kernel log, often to the point where other useful information can=
+ be
+> > > lost.  In many case, the damage caused by the spam is actually worse =
+than
+> > > the bug itself, e.g. KVM can almost always recover from an unexpected=
+ly
+> > > invalid root.
+> > >
+> > > On the flip side, warning every time is rarely helpful for debug and
+> > > triage, i.e. a single splat is usually sufficient to point a debugger=
+ in
+> > > the right direction, and automated testing, e.g. syzkaller, typically=
+ runs
+> > > with warn_on_panic=3D1, i.e. will never get past the first WARN anywa=
+ys.
+> >
+> > On the topic of syzkaller, we should get them to test with
+> > CONFIG_KVM_PROVE_MMU once it's available.
+>
+> +1
+>
+> > > Lastly, when an assertions fails multiple times, the stack traces in =
+KVM
+> > > are almost always identical, i.e. the full splat only needs to be cap=
+tured
+> > > once.  And _if_ there is value in captruing information about the fai=
+led
+> > > assert, a ratelimited printk() is sufficient and less likely to rack =
+up a
+> > > large amount of collateral damage.
+> >
+> > These are all good arguments and I think they apply to KVM_MMU_WARN_ON(=
+)
+> > as well. Should we convert that to _ONCE() too?
+>
+> Already done in this patch :-)  I didn't call it out because that warn al=
+so falls
+> under the "runtime assertions" umbrella.
 
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on 47a2ee5d4a0bda05decdda7be0a77e792cdb09a3]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Safonov/net-tcp-Prepare-tcp_md5sig_pool-for-TCP-AO/20230513-042734
-base:   47a2ee5d4a0bda05decdda7be0a77e792cdb09a3
-patch link:    https://lore.kernel.org/r/20230512202311.2845526-2-dima%40arista.com
-patch subject: [PATCH v6 01/21] net/tcp: Prepare tcp_md5sig_pool for TCP-AO
-config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20230513/202305130722.D7icLQEP-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/20045e7dda43aca6500ad05a899dcf5c59e9f63a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dmitry-Safonov/net-tcp-Prepare-tcp_md5sig_pool-for-TCP-AO/20230513-042734
-        git checkout 20045e7dda43aca6500ad05a899dcf5c59e9f63a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/ipv4/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305130722.D7icLQEP-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
->> net/ipv4/tcp_sigpool.c:161:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
-           return ret;
-                  ^~~
-   net/ipv4/tcp_sigpool.c:110:14: note: initialize the variable 'ret' to silence this warning
-           int cpu, ret;
-                       ^
-                        = 0
-   1 warning generated.
-
-
-vim +/ret +161 net/ipv4/tcp_sigpool.c
-
-   105	
-   106	static int __cpool_alloc_pcp(struct sigpool_entry *e, const char *alg,
-   107				     struct crypto_ahash *cpu0_hash)
-   108	{
-   109		struct crypto_ahash *hash;
-   110		int cpu, ret;
-   111	
-   112		e->spr.pcp_req = alloc_percpu(struct ahash_request *);
-   113		if (!e->spr.pcp_req)
-   114			return -ENOMEM;
-   115	
-   116		hash = cpu0_hash;
-   117		for_each_possible_cpu(cpu) {
-   118			struct ahash_request *req;
-   119	
-   120			/* If ahash has a key - it has to be allocated per-CPU.
-   121			 * In such case re-use for CPU0 hash that just have been
-   122			 * allocated above.
-   123			 */
-   124			if (!hash)
-   125				hash = crypto_alloc_ahash(alg, 0, CRYPTO_ALG_ASYNC);
-   126			if (IS_ERR(hash))
-   127				goto out_free_per_cpu;
-   128	
-   129			req = ahash_request_alloc(hash, GFP_KERNEL);
-   130			if (!req)
-   131				goto out_free_hash;
-   132	
-   133			ahash_request_set_callback(req, 0, NULL, NULL);
-   134	
-   135			*per_cpu_ptr(e->spr.pcp_req, cpu) = req;
-   136	
-   137			if (e->needs_key)
-   138				hash = NULL;
-   139		}
-   140		return 0;
-   141	
-   142	out_free_hash:
-   143		if (hash != cpu0_hash)
-   144			crypto_free_ahash(hash);
-   145	
-   146	out_free_per_cpu:
-   147		for_each_possible_cpu(cpu) {
-   148			struct ahash_request *req = *per_cpu_ptr(e->spr.pcp_req, cpu);
-   149			struct crypto_ahash *pcpu_hash;
-   150	
-   151			if (!req)
-   152				break;
-   153			pcpu_hash = crypto_ahash_reqtfm(req);
-   154			ahash_request_free(req);
-   155			/* hash per-CPU, e->needs_key == true */
-   156			if (pcpu_hash != cpu0_hash)
-   157				crypto_free_ahash(pcpu_hash);
-   158		}
-   159	
-   160		free_percpu(e->spr.pcp_req);
- > 161		return ret;
-   162	}
-   163	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Doh! Indeed. I was expecting to see KVM_MMU_WARN_ON() change to
+KVM_MMU_WARN_ON_ONCE().
