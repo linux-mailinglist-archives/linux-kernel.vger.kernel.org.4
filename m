@@ -2,136 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7646270126C
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 01:25:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D68770126F
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 01:26:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240673AbjELXZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 19:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39250 "EHLO
+        id S240694AbjELX0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 19:26:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238380AbjELXZS (ORCPT
+        with ESMTP id S239441AbjELX0g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 19:25:18 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F4661B7
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:25:17 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id ada2fe7eead31-43636098581so722679137.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:25:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683933916; x=1686525916;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gJhegFzJphPXuJITxSnVpK02wrtyZSwmP9rCGNGMF8o=;
-        b=gAzw+yJupAesTu0HewVLV1YbHJX9NBfOqEeijURe8cVugA4snUj1PNwp7ZxEnuGdHP
-         6vU7BUDbP5oUUx1Q3AVyulYIJRp5vv6ldouDsrfo8tpZXrUp2BEhvHvJR5YJBqAtJXUF
-         HbEXnzSbZer5Xr4HIOUQAXiwtTF+vSbC8IoveB6vuoi/hTF4oTq+eRO+d3IOsmYiMjbH
-         K4qgqaixEJuPWXDR7K0IiPsLWKEfFyjHAiv2FjU1CTiBP3crKNdPC8WWN9iJjqWWMg9G
-         xbXciRYDbFoA+ey6rFP6lrOE3Q42miptiTMYDnqzBWOgNubmlklWCIjWRQPnIJtbIW9R
-         nWTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683933916; x=1686525916;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gJhegFzJphPXuJITxSnVpK02wrtyZSwmP9rCGNGMF8o=;
-        b=bAJaF+lRVuKBadZw6iDeFR4Lq3ETitNPiKx8FpO2NkVmT9QEBKR5EiFADE0O0Y4PyG
-         6JX+MZB74szdIMSHXhyGj+5OsH1qUfmIoXV+95I3pOkaWSVktC8GLEePcJzERqJpY/6M
-         jnSQ9H1xI9IThGI/M9N9nz62Mt43z9jbunjuQXD2dj3ZLHNx1dPJg+TTtFxUU0OH4L55
-         hEv43SA/OFbN3N5PbpfUPCnghR11lXdE27D1UVb8QxvRauvt4N9MKKva7+cdH17/rb8P
-         BNJX4sz3xH0KQCYqozJ4gOjhx+pp0iH2NyVZKepWL6cEjnlsq9LweYE7SHRFAJc1xHO3
-         Mo8g==
-X-Gm-Message-State: AC+VfDwJyAeoe058RWXhn0OXP02V1s9r+XTMTy9nj/xDlO+5TolbsyFA
-        2GjWCKpVsdJ6x1C2xWkzXvme2LUZ10G2eDhw7NXE2w==
-X-Google-Smtp-Source: ACHHUZ5ZDdv4p+7cTcqWMTSYES8JytA1qvyi+Wjl6gI0PzEXuleOzYI8oMVCABD/ksQy4+pLN17HEcJ1VdfNkv/ZeTY=
-X-Received: by 2002:a67:bb06:0:b0:42e:6748:13d1 with SMTP id
- m6-20020a67bb06000000b0042e674813d1mr10281491vsn.24.1683933916629; Fri, 12
- May 2023 16:25:16 -0700 (PDT)
+        Fri, 12 May 2023 19:26:36 -0400
+Received: from out-8.mta1.migadu.com (out-8.mta1.migadu.com [IPv6:2001:41d0:203:375::8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960A7273D
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:26:35 -0700 (PDT)
+Date:   Fri, 12 May 2023 19:26:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683933993;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FaGedLGWEvPuyamMztcKwXedmrC3b4End0hf5ns1ggs=;
+        b=CHAh+FajImSmDanMPXsclmzJzV5qQ+IfWE+JolAMbLsnHd6oQXtRlqrc6HswJGkvHNYxyn
+        QZgOnSygvg4j0c2L8IHl7NHw483Dkj4nO5l6FGGc+AX4QRkU/jjSnm2++sFi0nn86jVeGQ
+        G9G4iSu5WnMDR70q0Ir797HOn1icKLo=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Kent Overstreet <kent.overstreet@linux.dev>
+To:     Jan Engelhardt <jengelh@inai.de>
+Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>
+Subject: Re: [PATCH 04/32] locking: SIX locks (shared/intent/exclusive)
+Message-ID: <ZF7LJdKoHj44KzVu@moria.home.lan>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-5-kent.overstreet@linux.dev>
+ <7233p553-861o-9772-n4nr-rr5424prq1r@vanv.qr>
+ <ZF6oejsUGUC0gnYx@moria.home.lan>
+ <o52660s0-3s6s-9n74-8666-84s2p4qpoq6@vanv.qr>
 MIME-Version: 1.0
-References: <20230511235917.639770-1-seanjc@google.com> <20230511235917.639770-6-seanjc@google.com>
- <ZF7IRQZo8g7Lg46V@google.com> <ZF7JW2huc2MjXZFA@google.com>
-In-Reply-To: <ZF7JW2huc2MjXZFA@google.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Fri, 12 May 2023 16:24:49 -0700
-Message-ID: <CALzav=dRtju+-NaGiy7ok3chB=535bxNOqm8c+vOMCa9QKWHsQ@mail.gmail.com>
-Subject: Re: [PATCH 5/9] KVM: x86/mmu: Convert "runtime" WARN_ON() assertions
- to WARN_ON_ONCE()
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mingwei Zhang <mizhang@google.com>,
-        Jim Mattson <jmattson@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <o52660s0-3s6s-9n74-8666-84s2p4qpoq6@vanv.qr>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 4:18=E2=80=AFPM Sean Christopherson <seanjc@google.=
-com> wrote:
->
-> On Fri, May 12, 2023, David Matlack wrote:
-> > On Thu, May 11, 2023 at 04:59:13PM -0700, Sean Christopherson wrote:
-> > > Convert all "runtime" assertions, i.e. assertions that can be trigger=
-ed
-> > > while running vCPUs, from WARN_ON() to WARN_ON_ONCE().  Every WARN in=
- the
-> > > MMU that is tied to running vCPUs, i.e. not contained to loading and
-> > > initializing KVM, is likely to fire _a lot_ when it does trigger.  E.=
-g. if
-> > > KVM ends up with a bug that causes a root to be invalidated before th=
-e
-> > > page fault handler is invoked, pretty much _every_ page fault VM-Exit
-> > > triggers the WARN.
-> > >
-> > > If a WARN is triggered frequently, the resulting spam usually causes =
-a lot
-> > > of damage of its own, e.g. consumes resources to log the WARN and pol=
-lutes
-> > > the kernel log, often to the point where other useful information can=
- be
-> > > lost.  In many case, the damage caused by the spam is actually worse =
-than
-> > > the bug itself, e.g. KVM can almost always recover from an unexpected=
-ly
-> > > invalid root.
-> > >
-> > > On the flip side, warning every time is rarely helpful for debug and
-> > > triage, i.e. a single splat is usually sufficient to point a debugger=
- in
-> > > the right direction, and automated testing, e.g. syzkaller, typically=
- runs
-> > > with warn_on_panic=3D1, i.e. will never get past the first WARN anywa=
-ys.
+On Sat, May 13, 2023 at 12:39:34AM +0200, Jan Engelhardt wrote:
+> 
+> On Friday 2023-05-12 22:58, Kent Overstreet wrote:
+> >On Thu, May 11, 2023 at 02:14:08PM +0200, Jan Engelhardt wrote:
+> >> >+// SPDX-License-Identifier: GPL-2.0
+> >> 
+> >> The currently SPDX list only knows "GPL-2.0-only" or "GPL-2.0-or-later",
+> >> please edit.
 > >
-> > On the topic of syzkaller, we should get them to test with
-> > CONFIG_KVM_PROVE_MMU once it's available.
->
-> +1
->
-> > > Lastly, when an assertions fails multiple times, the stack traces in =
-KVM
-> > > are almost always identical, i.e. the full splat only needs to be cap=
-tured
-> > > once.  And _if_ there is value in captruing information about the fai=
-led
-> > > assert, a ratelimited printk() is sufficient and less likely to rack =
-up a
-> > > large amount of collateral damage.
-> >
-> > These are all good arguments and I think they apply to KVM_MMU_WARN_ON(=
-)
-> > as well. Should we convert that to _ONCE() too?
->
-> Already done in this patch :-)  I didn't call it out because that warn al=
-so falls
-> under the "runtime assertions" umbrella.
+> >Where is that list?
+> 
+> I just went to spdx.org and then chose "License List" from the
+> horizontal top bar menu.
 
-Doh! Indeed. I was expecting to see KVM_MMU_WARN_ON() change to
-KVM_MMU_WARN_ON_ONCE().
+Do we have anything more official? Quick grep through the source tree
+says I'm following accepted usage.
