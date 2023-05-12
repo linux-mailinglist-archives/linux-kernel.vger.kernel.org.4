@@ -2,123 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08B67011A9
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 23:55:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 272B47011FD
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 00:01:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239340AbjELVz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 17:55:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
+        id S239906AbjELWBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 18:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbjELVzY (ORCPT
+        with ESMTP id S231562AbjELWBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 17:55:24 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7643B7A80
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 14:55:23 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so93443526a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 14:55:23 -0700 (PDT)
+        Fri, 12 May 2023 18:01:41 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FC77D80
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 15:01:39 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-643557840e4so11297188b3a.2
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 15:01:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1683928522; x=1686520522;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6fiE+4tw4ReS6W3aCfl6G3CwoVaQuhNT/4YECYUltEI=;
-        b=OJJr4mO/dcfgE5zhlhhUEXfXNxlmuDngURq/m3HsbWoNM4ajZzUBnlwX2VvgFqtSg2
-         rkmDSQ4Se2maurYnI4ymDN541x414zXYSiQuObhmxHDN889MsAD6KGgilyeaeWsyu1ql
-         cGjhL5ZIsnvuMiaEn91Xo/0ffWdPrBLHGzOV0=
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1683928899; x=1686520899;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tswq+u/7DnQKUWsxaX/TPusQBjaxLqyKXFCG1j3y7qs=;
+        b=aeXAEAA56W6n0qLu8KBmP6FMNpeolNOZVZzCJeUznOjWaq2WwaDBSoC4NoM35QJW0P
+         S6Ydo8TmmOWNnSP7i9cUEVhnSf3XErAs/UM/LYCDYqKDaaxemTxDPmv4wOxQE2eheJx3
+         UctwHZtqKmEIhSLCCY4RQNsUwpigdpdBdkQW1z6L5/42PSi3ewXC7YEiQBFXEgy3qMLk
+         KDkl8BHJH7ey4gJyCqHTAhW5qc5uuMPRANRHl2KSClA6dxbiYrV1PwDej/4HKWqEYn7Z
+         Y7FpjPQy5yxbMTnYzYJFvIiQ458bVEpIC6X2smSH8+8N9DH//62QLEq+0YuJbBaxJFlp
+         IeNg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683928522; x=1686520522;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6fiE+4tw4ReS6W3aCfl6G3CwoVaQuhNT/4YECYUltEI=;
-        b=l9f48Dwj1faWTvRg+4X7hhnTbS0HkcOD8/amUKlVfJkKfe7yZR7izx56e7V9vS262i
-         YfXAtJDl2I9vpGLJCWRTGAMfIhyUtVUXHWtomLlbx5AzYFYWfw+meNUw9ibldtqswmkI
-         WXQOso7QMXQ/xk1FKCC3hjtSh6j5F7+qPVrkQGhl3N17eIpOrWcuuCuEMdJ3OBElVYFy
-         QPPPDqm0lROZurNFZ898h/uE5e0K87OLN18YGMxvNTidk9zoJymG+I2XbCvTI1Qz1fQO
-         takw60eWmfJxz3CAGezsi+00IcH+TqtAGzEpATTA4ULA8QFoTBMuvMtIQ0NaeUo/1GWm
-         t5Ig==
-X-Gm-Message-State: AC+VfDx7LhFnCreP6n2ZmhrFcq8dvdOY7rll1tkpoj/wgYVZToacY8zv
-        LtmQpcjliUQ5y9lLG6P2tOJs6tWZz6yj6S/lFlo=
-X-Google-Smtp-Source: ACHHUZ6k+rsmje8WpqSD4OENNzHUK0l4ICMTGi5kj/yw/dIc34EKVAv4s7pF4jjiOLwVu6VaytSvMQ==
-X-Received: by 2002:a17:907:9306:b0:932:f88c:c2ff with SMTP id bu6-20020a170907930600b00932f88cc2ffmr23046719ejc.34.1683928521765;
-        Fri, 12 May 2023 14:55:21 -0700 (PDT)
-Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
-        by smtp.gmail.com with ESMTPSA id og16-20020a1709071dd000b0096637a19dcasm5944901ejc.4.2023.05.12.14.55.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 14:55:21 -0700 (PDT)
-Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so93443389a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 14:55:20 -0700 (PDT)
-X-Received: by 2002:a17:907:9306:b0:932:f88c:c2ff with SMTP id
- bu6-20020a170907930600b00932f88cc2ffmr23046686ejc.34.1683928520392; Fri, 12
- May 2023 14:55:20 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683928899; x=1686520899;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tswq+u/7DnQKUWsxaX/TPusQBjaxLqyKXFCG1j3y7qs=;
+        b=cYeho698xnfTscMlTVFvjveLsme/fKwU3ZHX9J+j9Q9Nh+RKjteP45l8jy4vTqVREO
+         NYwvs+7unjkq3gXO+F3smJx000Olo/8LTy3YL9lFDkmcXqqf0O3eoD3DMM6FiqO3m5zI
+         W4+xfT0xMBLdsGGaMVPApS0DTTMd5avcybXBP1L8t+EXLI+2Be0DzSCE+3vTPOLUXX8e
+         HjIN14nkOLB74AWxVEpIshdpKIy8SOWydr4W0IdGGX4fchfqZLL1UjlHqgkIkBI0b5pD
+         6DLFgAkiwMmVfNMveBJKkOkHMi0ixACafND3jg50Y9St5y+thdXCTRl6MJOEdui5Fv9k
+         XcLw==
+X-Gm-Message-State: AC+VfDwAwiPVyX4EelZMLRB9p/ZQvKiqe8EE1bamQUUe08kVaMDyLy27
+        A9A5nN+t1EGzSdkHP9bZ/JB80w==
+X-Google-Smtp-Source: ACHHUZ7gpXTI4xiDKS4rdqI8l/6UtG47tQalVy5J0Mz1ARWISM9ZhsPVRya1x5qOWqWPAIlmQ+a+Vw==
+X-Received: by 2002:a05:6a00:cc3:b0:63b:84a4:7b0 with SMTP id b3-20020a056a000cc300b0063b84a407b0mr34888943pfv.30.1683928899318;
+        Fri, 12 May 2023 15:01:39 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
+        by smtp.gmail.com with ESMTPSA id j23-20020aa79297000000b00642e9b3c868sm7482384pfa.59.2023.05.12.15.01.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 15:01:38 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pxapT-00EYwR-20; Sat, 13 May 2023 08:01:35 +1000
+Date:   Sat, 13 May 2023 08:01:35 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Tycho Andersen <tycho@tycho.pizza>
+Cc:     "Darrick J . Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Tycho Andersen <tandersen@netflix.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Subject: Re: [PATCH] xfs: don't do inodgc work if task is exiting
+Message-ID: <20230512220135.GD3223426@dread.disaster.area>
+References: <20230511151702.14704-1-tycho@tycho.pizza>
+ <20230512014547.GA3223426@dread.disaster.area>
+ <ZF5YVNdeVNSoG08p@tycho.pizza>
 MIME-Version: 1.0
-References: <20230424212130.590684-1-dave.hansen@linux.intel.com>
- <CAHk-=whn3F1k263SZNUVQK195tcCMAo5E_WbmjUE0qFC5rWg=w@mail.gmail.com>
- <4433c3595db23f7c779b69b222958151b69ddd70.camel@intel.com>
- <148b3edb-b056-11a0-1684-6273a4a2d39a@intel.com> <CAHk-=wiuVXTfgapmjYQvrEDzn3naF2oYnHuky+feEJSj_G_yFQ@mail.gmail.com>
- <CAHk-=wiB0wy6oXOsPtYU4DSbqJAY8z5iNBKdjdOp2LP23khUoA@mail.gmail.com>
- <4171c4b0-e24b-a7e2-9928-030cc14f1d8d@intel.com> <CAHk-=wiVLvz3RdZiSjLNGKKgR3s-=2goRPnNWg6cbrcwMVvndQ@mail.gmail.com>
- <CAHk-=wg4vpYz+xRtd+PsdmQ9gtNGbXrFKW3ndvXcrLEEDN0hyw@mail.gmail.com> <95c2e669-bce9-3dd5-e197-3faf816c4b45@intel.com>
-In-Reply-To: <95c2e669-bce9-3dd5-e197-3faf816c4b45@intel.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Fri, 12 May 2023 16:55:03 -0500
-X-Gmail-Original-Message-ID: <CAHk-=wjzEA_TO0wWNir0HzAFJ5_tMoQnrL_-8+igqmCZGVGdcw@mail.gmail.com>
-Message-ID: <CAHk-=wjzEA_TO0wWNir0HzAFJ5_tMoQnrL_-8+igqmCZGVGdcw@mail.gmail.com>
-Subject: Re: [GIT PULL] x86/shstk for 6.4
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZF5YVNdeVNSoG08p@tycho.pizza>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 12:34=E2=80=AFPM Dave Hansen <dave.hansen@intel.com=
-> wrote:
->
-> Were you really thinking of mm->count=3D=3D1, or did you mean
-> mm->mm_users=3D=3D1?
+On Fri, May 12, 2023 at 09:16:36AM -0600, Tycho Andersen wrote:
+> On Fri, May 12, 2023 at 11:45:47AM +1000, Dave Chinner wrote:
+> > 
+> > Yeah, this is papering over the observed symptom, not addressing the
+> > root cause of the inodegc flush delay. What do you see when you run
+> > sysrq-w and sysrq-l? Are there inodegc worker threads blocked
+> > performing inodegc?
+> 
+> I will try this next time we encounter this.
+> 
+> > e.g. inodegc flushes could simply be delayed by an unlinked inode
+> > being processed that has millions of extents that need to be freed.
+> > 
+> > In reality, inode reclaim can block for long periods of time
+> > on any filesystem, so the concept of "inode reclaim should
+> > not block when PF_EXITING" is not a behaviour that we guarantee
+> > anywhere or could guarantee across the board.
+> > 
+> > Let's get to the bottom of why inodegc has apparently stalled before
+> > trying to work out how to fix it...
+> 
+> I'm happy to try, but I think it is also worth applying this patch.
+> Like I said in the other thread, having to evac a box to get rid of an
+> unkillable userspace process is annoying.
 
-Yeah, I meant mm_users.
+If inodegc is stuck, then it's only a matter of time before the
+filesystem will completely lock up and you'll have to cycle the
+machine anyway.  This patch merely kicks the can down the road a few
+minutes, it doesn't change anything material.
 
-And I was thinking that if it is 1, then it is stable - kind of like
-how we do our optimization with file descriptors.
-
-But you're right to worry about possibly other users incrementing the
-mm_users count somehow - or just using "mmgrab()" to not increment it,
-but be able to still fault on it etc.
-
-> There's always a race there because mm->mm_users can always get bumped
-> after the fork()er checks it.
-
-Ugh. I was assuming that if they don't already have a reference to the
-mm, they can't get one (becasue the '1' comes from 'current->mm', and
-nobody else has that mm).
-
-But maybe that's just not true. Looking around, we have things like
-
-        pages->source_mm =3D current->mm;
-        mmgrab(pages->source_mm);
-
-that creates a ref to the mm with a grab, and then later it gets used.
-
-So maybe the "no races can happen" is limited to *both* mm_users and
-mm_count being 1. What would increment it in that case, when 'current'
-is obviously busy forking?
-
-That "both are one" might still be the common case for fork(). Hmm?
-
-                Linus
+-Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
