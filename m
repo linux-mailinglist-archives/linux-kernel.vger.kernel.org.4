@@ -2,191 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 483DD700304
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 10:55:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B5D570030B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 10:56:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240135AbjELIy5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 04:54:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58890 "EHLO
+        id S233460AbjELI4U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 04:56:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240099AbjELIyy (ORCPT
+        with ESMTP id S240009AbjELI4S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 04:54:54 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1B1710A2E
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 01:54:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683881690; x=1715417690;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZLf5MT4SG1toK2Ewf11jOOLaMp++8Z7s0AFeltCagdg=;
-  b=TUAUX148n0+7ZnR4iWVH92LO4LadJgYSq7bJuAOQiRNBGRFo5T5ZBFP0
-   7GQlhBIEAt+FWwvixDjl0TWZp77yUgS5ElUEsB1kNSKLNtqEOeJJktyLl
-   5K5Driun9UQPDue/z7L7puovWxsyu8/gvwIaF4RKi2KDM/iueddS1kZfP
-   vacY5yXgfnFJcOn6IEL4gTAmBkL2ITSJZaJBoCGnl/3pYPlOhgn+EYlWW
-   kopy8hDtgZgNAil/7Hl5sJ8NHTptFvisNO5t0XmnAlJWPU3PObZ5lHDNM
-   ce3EJB2yJMlKrKRPfzDd6/zuUKON2ODWhXj5sBDuXd6htdvadaiRH83gN
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="353874490"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="353874490"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 01:54:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="700106937"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="700106937"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga002.jf.intel.com with ESMTP; 12 May 2023 01:54:44 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pxOXz-0004jE-12;
-        Fri, 12 May 2023 08:54:43 +0000
-Date:   Fri, 12 May 2023 16:54:24 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Phillip Lougher <phillip@squashfs.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Philippe Liard <pliard@google.com>, hch@lst.de,
-        linux-kernel@vger.kernel.org, squashfs-devel@lists.sourceforge.net,
-        kernel@axis.com, Vincent Whitchurch <vincent.whitchurch@axis.com>
-Subject: Re: [PATCH] squashfs: cache partial compressed blocks
-Message-ID: <202305121650.kWn3uM2f-lkp@intel.com>
-References: <20230510-squashfs-cache-v1-1-3b6bb0e7d952@axis.com>
+        Fri, 12 May 2023 04:56:18 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8F1ABE43;
+        Fri, 12 May 2023 01:56:16 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 793DEFEC;
+        Fri, 12 May 2023 01:56:41 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB9E63F663;
+        Fri, 12 May 2023 01:55:55 -0700 (PDT)
+Date:   Fri, 12 May 2023 09:55:53 +0100
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
+Cc:     "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Peng Fan <peng.fan@oss.nxp.com>,
+        Michal Simek <michal.simek@amd.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
+Subject: Re: [RFC v2 1/3] firmware: arm_scmi: Add SCMI v3.2 pincontrol
+ protocol basic support
+Message-ID: <ZF3/Ge4b+49ni+e6@e120937-lin>
+References: <cover.1682513390.git.oleksii_moisieiev@epam.com>
+ <b4d60f3408f8fe839933fa3938ecdc9bfceb75d7.1682513390.git.oleksii_moisieiev@epam.com>
+ <ZFVeY3jVNfAkW1G9@e120937-lin>
+ <20230512083805.GA3424996@EPUAKYIW0A6A>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230510-squashfs-cache-v1-1-3b6bb0e7d952@axis.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230512083805.GA3424996@EPUAKYIW0A6A>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vincent,
+On Fri, May 12, 2023 at 08:38:06AM +0000, Oleksii Moisieiev wrote:
+> On Fri, May 05, 2023 at 08:52:03PM +0100, Cristian Marussi wrote:
+> > On Wed, Apr 26, 2023 at 01:26:37PM +0000, Oleksii Moisieiev wrote:
+> > > scmi: Introduce pinctrl SCMI protocol driver
+> > > 
+> > > Add basic implementation of the SCMI v3.2 pincontrol protocol
+> > > excluding GPIO support. All pinctrl related callbacks and operations
+> > > are exposed in the include/linux/scmi_protocol.h
+> > > 
+> > 
+> > Hi Oleksii,
+> > 
+> > Thanks for this.
+> > 
+> > I tried out this in an emulated setup and found just a minor issue from
+> > the spec/functional point of view...then I reworked the extended names
+> > support using a modified hops->extended_name_get helper (as said the core
+> > SCMI support needed a small modification to support PINCTRL): I'll reply
+> > to this mail thread with such core SCMI modification patch, so you can
+> > include this patch of mine in your next V3 and use it in your series.
+> > 
+> > Moreover, given that I wanted to test such rework of mine and a bunch
+> > of other cleanups I did (as detailed down below), and it seemed silly
+> > to throw all away just to then having to detail all to you, I'll also
+> > include in another distinct reply the raw diff of what I changed in
+> > your series to use the new extended_name support and a few other cleanups,
+> > so that, if you want, you can just quickly merge that into your V3 patch
+> > (of course if you like it and tests fine also for you...)...these are
+> > small changes, if you take it, no need to bother with authorship and
+> > attribution from my point of view.
+> > 
+> 
+> Hi Cristian,
+> 
 
-kernel test robot noticed the following build warnings:
+Hi,
 
-[auto build test WARNING on 457391b0380335d5e9a5babdec90ac53928b23b4]
+> Thank you for the patches. I've applied them and tested with powerpc,
+> mx68 and clang environments (as test-robot complained about).
+> 
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Vincent-Whitchurch/squashfs-cache-partial-compressed-blocks/20230512-143553
-base:   457391b0380335d5e9a5babdec90ac53928b23b4
-patch link:    https://lore.kernel.org/r/20230510-squashfs-cache-v1-1-3b6bb0e7d952%40axis.com
-patch subject: [PATCH] squashfs: cache partial compressed blocks
-config: x86_64-randconfig-a014 (https://download.01.org/0day-ci/archive/20230512/202305121650.kWn3uM2f-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/3ca22c93f1faf376ecf133f84d0148497284366a
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Vincent-Whitchurch/squashfs-cache-partial-compressed-blocks/20230512-143553
-        git checkout 3ca22c93f1faf376ecf133f84d0148497284366a
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash fs/squashfs/
+Yes, sure, they were just tentative fixes, needed cleanup.
+I forgot to add the RFC tag on my proposed fixes to avoid triggering the bots.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305121650.kWn3uM2f-lkp@intel.com/
+> > > Signed-off-by: Oleksii Moisieiev <oleksii_moisieiev@epam.com>
+> > > ---
+> > >  MAINTAINERS                           |   6 +
+> 
+> [snip]
+> 
+> > >  SYSTEM RESET/SHUTDOWN DRIVERS
+> > >  M:	Sebastian Reichel <sre@kernel.org>
+> > >  L:	linux-pm@vger.kernel.org
+> > > diff --git a/drivers/firmware/arm_scmi/Makefile b/drivers/firmware/arm_scmi/Makefile
+> > > index b31d78fa66cc..071ac65f22b9 100644
+> > > --- a/drivers/firmware/arm_scmi/Makefile
+> > > +++ b/drivers/firmware/arm_scmi/Makefile
+> > > @@ -3,6 +3,7 @@ scmi-bus-y = bus.o
+> > >  scmi-core-objs := $(scmi-bus-y)
+> > >  
+> > >  scmi-driver-y = driver.o notify.o
+> > > +
+> > 
+> > Do not add spurios lines.
+> > 
+> 
+> Thanks, removed
+> 
+> > >  scmi-driver-$(CONFIG_ARM_SCMI_RAW_MODE_SUPPORT) += raw_mode.o
+> > >  scmi-transport-$(CONFIG_ARM_SCMI_HAVE_SHMEM) = shmem.o
+> > >  scmi-transport-$(CONFIG_ARM_SCMI_TRANSPORT_MAILBOX) += mailbox.o
+> > > @@ -10,7 +11,7 @@ scmi-transport-$(CONFIG_ARM_SCMI_TRANSPORT_SMC) += smc.o
+> > >  scmi-transport-$(CONFIG_ARM_SCMI_HAVE_MSG) += msg.o
+> > >  scmi-transport-$(CONFIG_ARM_SCMI_TRANSPORT_VIRTIO) += virtio.o
+> > >  scmi-transport-$(CONFIG_ARM_SCMI_TRANSPORT_OPTEE) += optee.o
+> > > -scmi-protocols-y = base.o clock.o perf.o power.o reset.o sensors.o system.o voltage.o powercap.o
+> > > +scmi-protocols-y = base.o clock.o perf.o power.o reset.o sensors.o system.o voltage.o powercap.o pinctrl.o
+> > >  scmi-module-objs := $(scmi-driver-y) $(scmi-protocols-y) $(scmi-transport-y)
+> > >  
+> 
+> I've applied patches you provided and made a small fixes. I'm going to
+> make patch:
+> "firmware: arm_scmi: Add optional flags to extended names helper"
+> as a separate and squach "Misc Fixes and refactor" to my changes in V3 if you
+> don't mind.
 
-All warnings (new ones prefixed by >>):
+Sure, that's what I meant: include my general extended fixes at the
+start of your series and just squash the misc_fixes (additionally fixed
+by you :D) in your series.
 
->> fs/squashfs/block.c:168:5: warning: no previous prototype for function 'squashfs_bio_read' [-Wmissing-prototypes]
-   int squashfs_bio_read(struct super_block *sb, u64 index, int length,
-       ^
-   fs/squashfs/block.c:168:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-   int squashfs_bio_read(struct super_block *sb, u64 index, int length,
-   ^
-   static 
-   1 warning generated.
+A small nitpick I noticed later in scmi_protocol_ops Dox comment
 
++ * struct scmi_pinctrl_protocol_ops - represents the various operations provided
 
-vim +/squashfs_bio_read +168 fs/squashfs/block.c
+should be 
+  * struct scmi_pinctrl_proto_ops
 
-   167	
- > 168	int squashfs_bio_read(struct super_block *sb, u64 index, int length,
-   169				     struct bio **biop, int *block_offset)
-   170	{
-   171		struct squashfs_sb_info *msblk = sb->s_fs_info;
-   172		struct inode *cache_inode = msblk->cache_inode;
-   173		struct address_space *cache_mapping = cache_inode ? cache_inode->i_mapping : NULL;
-   174		const u64 read_start = round_down(index, msblk->devblksize);
-   175		const sector_t block = read_start >> msblk->devblksize_log2;
-   176		const u64 read_end = round_up(index + length, msblk->devblksize);
-   177		const sector_t block_end = read_end >> msblk->devblksize_log2;
-   178		int offset = read_start - round_down(index, PAGE_SIZE);
-   179		int total_len = (block_end - block) << msblk->devblksize_log2;
-   180		const int page_count = DIV_ROUND_UP(total_len + offset, PAGE_SIZE);
-   181		int error, i;
-   182		struct bio *bio;
-   183	
-   184		bio = bio_kmalloc(page_count, GFP_NOIO);
-   185		if (!bio)
-   186			return -ENOMEM;
-   187		bio_init(bio, sb->s_bdev, bio->bi_inline_vecs, page_count, REQ_OP_READ);
-   188		bio->bi_iter.bi_sector = block * (msblk->devblksize >> SECTOR_SHIFT);
-   189	
-   190		for (i = 0; i < page_count; ++i) {
-   191			unsigned int len =
-   192				min_t(unsigned int, PAGE_SIZE - offset, total_len);
-   193			struct page *page = NULL;
-   194	
-   195			if (cache_mapping)
-   196				page = find_get_page(cache_mapping,
-   197						     read_start + i * PAGE_SIZE);
-   198			if (!page)
-   199				page = alloc_page(GFP_NOIO);
-   200	
-   201			if (!page) {
-   202				error = -ENOMEM;
-   203				goto out_free_bio;
-   204			}
-   205	
-   206			if (cache_mapping) {
-   207				/*
-   208				 * Use the __ version to avoid merging since we need
-   209				 * each page to be separate when we check for and avoid
-   210				 * cached pages.
-   211				 */
-   212				__bio_add_page(bio, page, len, offset);
-   213			} else if (!bio_add_page(bio, page, len, offset)) {
-   214				error = -EIO;
-   215				goto out_free_bio;
-   216			}
-   217			offset = 0;
-   218			total_len -= len;
-   219		}
-   220	
-   221		if (cache_mapping)
-   222			error = squashfs_bio_read_cached(bio, cache_mapping, index,
-   223							 length, read_start, read_end,
-   224							 page_count);
-   225		else
-   226			error = submit_bio_wait(bio);
-   227		if (error)
-   228			goto out_free_bio;
-   229	
-   230		*biop = bio;
-   231		*block_offset = index & ((1 << msblk->devblksize_log2) - 1);
-   232		return 0;
-   233	
-   234	out_free_bio:
-   235		bio_free_pages(bio);
-   236		bio_uninit(bio);
-   237		kfree(bio);
-   238		return error;
-   239	}
-   240	
+Thanks,
+Cristian
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
