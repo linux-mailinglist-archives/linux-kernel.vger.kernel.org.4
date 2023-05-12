@@ -2,107 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 699EC700F42
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 21:21:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9BE0700F45
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 21:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239225AbjELTVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 15:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42152 "EHLO
+        id S239345AbjELTXO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 15:23:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238509AbjELTVW (ORCPT
+        with ESMTP id S238343AbjELTXM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 15:21:22 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFFF729B;
-        Fri, 12 May 2023 12:21:21 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id 2adb3069b0e04-4eed764a10cso11581181e87.0;
-        Fri, 12 May 2023 12:21:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683919279; x=1686511279;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=MAf9SaDWTdarAzCYCfsyt3lnD/b/cooKNRhsZnbbUbg=;
-        b=VoD1G4nCwO+L9mlhAcZflbvzJ7LWLEWPiWkhPowZEetA74tQvxy1p5njXAeVfuPk+f
-         a0HlF5JKfxenfJxZ7xgTcRL/FfJptBHvBG9bceXXvKhoMLKIUFkseCOMHrYwbhiS8BCI
-         szR2FhS7oyfoQRNifeXIKiFte3clykXmPwMZUrtfX5UJncw/Lf5+leFicIxu+Euh0JVx
-         rYaBHTpCICBmfI+spSoomVLlGhSXZ3tFT7+aGQ+eG7+z0a/yu00qKFnI+RP3kC3yH5H1
-         FK+y3b645KG6hUSOQy58XTtn2aATE5Vi7frC+EIupa8fKUdb/sNv4Z4mZoXu0/zriKcp
-         W8eg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683919279; x=1686511279;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MAf9SaDWTdarAzCYCfsyt3lnD/b/cooKNRhsZnbbUbg=;
-        b=ku+snrvRP0QYvezJafuFej61GAz23hBf38GQPHNOFtfexOEtiGmDVN7WRab2BYs0wv
-         RtvS+/Pb9XSYum7TdRySPaeKbt/n34w/vgPupPKINkl2BqvdzmtqDEu+aF0iLDqkr3Ln
-         XwSJhO14K/djk3kQABlYemHg74JMXZHAKwcA1hDUKveddtt4NBKKd6zSCMQ2MsyKsEui
-         +8dkCyRvsFzWLpoFWHPJud/llLHjcZo8oGGK1wnALBWuOAO17DPNs/HOLitHJgFvcB6V
-         fsYgrI0b7jv8QgKIVRM9vJ9XOXIpjPUaqJCRvaSPHi1n8d5mf35VyRBCaFoaBWCWdECq
-         jtDA==
-X-Gm-Message-State: AC+VfDzgMlgpg4ZIT9512ED3mmmbJKXFcj45Xs3KTXU8sQEdc43eNura
-        mMyKlljZ/QQvaU8wwb2c+6s96mpHDbXENu9guI5caWwvtJ448Q==
-X-Google-Smtp-Source: ACHHUZ4A7muQ9/gC30kZZtHTrCgLOJ5NNDx7XIX3isDaPLR9fSwjxeYZE7pkmSMl3Rekp9FrKT83gcdqgnIzYamF2DE=
-X-Received: by 2002:ac2:4a76:0:b0:4f1:26da:54ab with SMTP id
- q22-20020ac24a76000000b004f126da54abmr4174350lfp.51.1683919278800; Fri, 12
- May 2023 12:21:18 -0700 (PDT)
+        Fri, 12 May 2023 15:23:12 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E5CF11D;
+        Fri, 12 May 2023 12:23:11 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BEA1165832;
+        Fri, 12 May 2023 19:23:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1A37C433D2;
+        Fri, 12 May 2023 19:23:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683919390;
+        bh=rTYX7J2simoeeuACxS0/o1CfhbHwlLtl8PF1xd3jQw0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=s6rJpRKLzf3BRa4o+kRe/k0zi00U/WlB1bfownwWQiMuV9WLZFpOWreEif2/NUyun
+         bXpvuDLWUzr5CIE6rNgJEIAl8Z75opXP3j5Z+3LcVYFR7B0AlnB12NiZYi/ms3Juwh
+         fIFsRB8V9tqb//gktmR7CJKukoaad8i9Z2FHvwumyIWbPORBJtiHl6DyRSxdf5+RqN
+         BnCb976HEIVldWo4MdtSVjf5DaEsizn/65rAl1QURYdZ3oSKu5MftUNK9ZGwv+Er3Y
+         ekeuY1onRnSaNti3Fi2/xkrvfOjQSQ5o6s/EcfWM8+7OCou5jHFElOVViYVKIqfIiy
+         +caQA/AcEy8mQ==
+Date:   Fri, 12 May 2023 14:23:08 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Thippeswamy Havalige <thippeswamy.havalige@amd.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski@linaro.org,
+        bhelgaas@google.com, michals@xilinx.com, robh+dt@kernel.org,
+        nagaradhesh.yeleswarapu@amd.com, bharat.kumar.gogada@amd.com,
+        lorenzo.pieralisi@arm.com
+Subject: Re: [PATCH v2 1/3] Move error interrupt bits to a common header.
+Message-ID: <ZF6SHJ44s4OqPYj4@bhelgaas>
 MIME-Version: 1.0
-From:   Steve French <smfrench@gmail.com>
-Date:   Fri, 12 May 2023 14:21:05 -0500
-Message-ID: <CAH2r5mv21PgfmG7N=mV33QMsAmF4eeV=A77sXrPLNSbMR=79FQ@mail.gmail.com>
-Subject: [GIT PULL] smb3 client fixes
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        CIFS <linux-cifs@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512062725.1208385-2-thippeswamy.havalige@amd.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please pull the following changes since commit
-ac9a78681b921877518763ba0e89202254349d1b:
+Update subject line to follow convention.  Run "git log --oneline
+drivers/pci/controller/pcie-xilinx*" for a sample.  No period at end.
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+On Fri, May 12, 2023 at 11:57:23AM +0530, Thippeswamy Havalige wrote:
+> Moving error interrupt bit macros to a common header file for code
+> reusability.
 
-are available in the Git repository at:
+"Move" as in subject.
 
-  git://git.samba.org/sfrench/cifs-2.6.git tags/6.4-rc1-smb3-client-fixes
-
-for you to fetch changes up to d39fc592ef8ae9a89c5e85c8d9f760937a57d5ba:
-
-  cifs: release leases for deferred close handles when freezing
-(2023-05-10 17:48:30 -0500)
-
-----------------------------------------------------------------
-6 smb3 client fixes, most also for stable
-- fix for copy_file_range bug for very large files that are multiples of rsize
-- do not ignore "isolated transport" flag if set on share
-- set rasize default better
-- three fixes related to shutdown and freezing (fixes 4 xfstests, and
-closes deferred handles faster in some places that were missed)
-----------------------------------------------------------------
-Pawel Witek (1):
-      cifs: fix pcchunk length type in smb2_copychunk_range
-
-Steve French (5):
-      do not reuse connection if share marked as isolated
-      smb3: improve parallel reads of large files
-      SMB3: force unmount was failing to close deferred close files
-      smb3: fix problem remounting a share after shutdown
-      cifs: release leases for deferred close handles when freezing
-
- fs/cifs/cifsfs.c  | 18 +++++++++++++++++-
- fs/cifs/connect.c |  7 +++++++
- fs/cifs/smb2ops.c |  2 +-
- fs/cifs/smb2pdu.c |  3 +++
- 4 files changed, 28 insertions(+), 2 deletions(-)
-
---
-Thanks,
-
-Steve
+Bjorn
