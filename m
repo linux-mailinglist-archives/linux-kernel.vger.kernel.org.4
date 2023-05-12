@@ -2,64 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8627005AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B822C7005B1
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:35:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240641AbjELKek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
+        id S240687AbjELKfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 06:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240716AbjELKea (ORCPT
+        with ESMTP id S240769AbjELKet (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:34:30 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A01AA13293
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:33:49 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f41d087b24so49315935e9.1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:33:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683887621; x=1686479621;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qIwf6Ve86JO74f1ZgVFN46e2HB9rw020mrBkzHhPWA0=;
-        b=IcpEikFY3mIyVfd7wlazQMqfPbtTyZujZaD4jaySk/90clAl/sRZMmQu9+HPHvw09/
-         b5jVwaQP5dcpu5ZiPjPq0O8Z2emozurnH2EuyFAi/VgapO8wlMucjUTIuVNfCf0MukVp
-         gsEgjBl7ewPJsZTeREDld/FswbXPx9T7Ej7qTEpXaiI24jstuOsGl4ylAB6+5MiO4HxW
-         yeZPSws8XTQVlXicRh+ndxxWo3RFGO3K/4qIhxzHqYd5QSM07OYQ2h/W7+zaupt6ZDqq
-         s66vg8mgR1SgDt5FRJGfPXtapD2estnH9Buyy5cwy3V6mliSLBRmaFCHrqjsZDnEqhGM
-         bn9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683887621; x=1686479621;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qIwf6Ve86JO74f1ZgVFN46e2HB9rw020mrBkzHhPWA0=;
-        b=jy/MrcRek7+m2eKElBvbxSQCz14OGirJFdtWr5MnN9QlufviuDd85+klDYkzUFvtBY
-         Eu/hbHFjkWH84KmGicIDeDBqKdPQVHsdWdZ5wt0wEtFNIOKqcdSeXwLKxn+L8XSISmN0
-         dMWhADvJ+vpBeAu23G6ZtEJS8PlI0zGdpasZS7XyMWcEKVkcdZph0nloChxiJKyPgo0z
-         jff+qHKmaFsOrADNAZuHJjGGyNbC7CfG1Tnw5TOW9tsngiKfIkRGHSsOk8ATNOR7Qa7b
-         9+2oc7j0A7s2NJa0D23feLDIYRQeacOwZpt1CtHkdDrU8jzkzwVJvUTlNSvRyOLVXGMa
-         RLSg==
-X-Gm-Message-State: AC+VfDyoJXdGzNbPC14/bP5DnG34wNJykR2hulhSENxsAH/w3r8Effq/
-        gwgV0AFz5EQSBu37H6e/IewkkXE9pA==
-X-Google-Smtp-Source: ACHHUZ6LaCVnP+ZYWNUvbqZQlBlckhAwyog/eT4n+leIY25vHU2MWb1G1M3u6wzshmQRjaLFedBEgg==
-X-Received: by 2002:a05:600c:cf:b0:3f4:29c2:1cd0 with SMTP id u15-20020a05600c00cf00b003f429c21cd0mr8752311wmm.25.1683887620549;
-        Fri, 12 May 2023 03:33:40 -0700 (PDT)
-Received: from p183 ([46.53.254.54])
-        by smtp.gmail.com with ESMTPSA id f8-20020a7bcd08000000b003f42894ebe2sm12464689wmj.23.2023.05.12.03.33.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 03:33:40 -0700 (PDT)
-Date:   Fri, 12 May 2023 13:33:38 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     akpm@linux-foundation.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] add intptr_t
-Message-ID: <ed66b9e4-1fb7-45be-9bb9-d4bc291c691f@p183>
+        Fri, 12 May 2023 06:34:49 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 322AD124B8;
+        Fri, 12 May 2023 03:34:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683887658; x=1715423658;
+  h=message-id:date:mime-version:subject:to:references:from:
+   in-reply-to:content-transfer-encoding;
+  bh=ZU/MmfGodK1m2NfiqWv3lm7ziPRtmRmhkxTgL6YBjT8=;
+  b=HTTtWlvMJcdqzPyEg9+se3gsqG1NENr5RmzLna9YZCvLAy5Tz8RjeluS
+   BNEAjiK5LQDXUFRO4q7ALjYlqJN06eSa+wsqkAASzTQDHsGmVNN1g0O0v
+   DfUZEfV9hkF+lTfZg5NlMeO/A8MPxf1BKjLO3Gi1Mh68aJxtIoCF1eyAM
+   jkH5ro3FmOvr/NcbYl0K9kBXYcPtZuZF9LbgjcMbNN4wq/zjupE0KcWF2
+   EE9zIok0FCOnKM0O0q0aXiuDy/OXHs+Bydu7IAdVZPkPaMj3TIUD3arAa
+   oCNI9oH/uM88fNVeiuZGE56UorgrhdTsf9OBbPXhx8g8b5sMWnQBnZQOg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="335278772"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="335278772"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 03:34:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="765136418"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="765136418"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.249.38.197])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 03:34:10 -0700
+Message-ID: <0be18c9a-ab56-021f-5c51-8b066ead2e1c@intel.com>
+Date:   Fri, 12 May 2023 13:34:06 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.11.0
+Subject: Re: [PATCH v2 3/4] perf tools: Add printing perf_event_attr type
+ symbol in perf_event_attr__fprintf()
+Content-Language: en-US
+To:     Yang Jihong <yangjihong1@huawei.com>, peterz@infradead.org,
+        mingo@redhat.com, acme@kernel.org, mark.rutland@arm.com,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        namhyung@kernel.org, irogers@google.com, anshuman.khandual@arm.com,
+        jesussanp@google.com, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230511075154.240163-1-yangjihong1@huawei.com>
+ <20230511075154.240163-4-yangjihong1@huawei.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20230511075154.240163-4-yangjihong1@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,60 +71,271 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add signed intptr_t given that a) it is standard type and
-b) uintptr_t is in tree.
+On 11/05/23 10:51, Yang Jihong wrote:
+> When printing perf_event_attr, always display perf_event_attr type and its symbol
+> to improve the readability of debugging information.
+> 
+> Before:
+> 
+>   # perf --debug verbose=2 record -e cycles,cpu-clock,sched:sched_switch,branch-load-misses,r101,mem:0x0 -C 0 true
+>   <SNIP>
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     size                             136
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     freq                             1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 5
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             1
+>     size                             136
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     freq                             1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             2
+>     size                             136
+>     config                           0x143
+>     { sample_period, sample_freq }   1
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|RAW|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 7
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             3
+>     size                             136
+>     config                           0x10005
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     freq                             1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 9
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             4
+>     size                             136
+>     config                           0x101
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     freq                             1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 10
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             5
+>     size                             136
+>     { sample_period, sample_freq }   1
+>     sample_type                      IP|TID|TIME|CPU|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>     bp_type                          3
+>     { bp_len, config2 }              0x4
+>   ------------------------------------------------------------
+>   <SNIP>
+> 
+> After:
+> 
+>   # perf --debug verbose=2 record -e cycles,cpu-clock,sched:sched_switch,branch-load-misses,r101,mem:0x0 -C 0 true
+>   <SNIP>
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             0 (PERF_TYPE_HARDWARE)
+>     size                             136
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     freq                             1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 5
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             1 (PERF_TYPE_SOFTWARE)
+>     size                             136
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     freq                             1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             2 (PERF_TYPE_TRACEPOINT)
+>     size                             136
+>     config                           0x143
+>     { sample_period, sample_freq }   1
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|RAW|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 7
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             3 (PERF_TYPE_HW_CACHE)
+>     size                             136
+>     config                           0x10005
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     freq                             1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 9
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             4 (PERF_TYPE_RAW)
+>     size                             136
+>     config                           0x101
+>     { sample_period, sample_freq }   4000
+>     sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     freq                             1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>   ------------------------------------------------------------
+>   sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 10
+>   ------------------------------------------------------------
+>   perf_event_attr:
+>     type                             5 (PERF_TYPE_BREAKPOINT)
+>     size                             136
+>     { sample_period, sample_freq }   1
+>     sample_type                      IP|TID|TIME|CPU|IDENTIFIER
+>     read_format                      ID
+>     disabled                         1
+>     inherit                          1
+>     sample_id_all                    1
+>     exclude_guest                    1
+>     bp_type                          3
+>     { bp_len, config2 }              0x4
+>   ------------------------------------------------------------
+>   <SNIP>
+> 
+> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+> ---
+>  tools/perf/util/perf_event_attr_fprintf.c | 30 ++++++++++++++++++++++-
+>  1 file changed, 29 insertions(+), 1 deletion(-)
+> 
+> diff --git a/tools/perf/util/perf_event_attr_fprintf.c b/tools/perf/util/perf_event_attr_fprintf.c
+> index 433029c6afc5..cd0905d8cb7a 100644
+> --- a/tools/perf/util/perf_event_attr_fprintf.c
+> +++ b/tools/perf/util/perf_event_attr_fprintf.c
+> @@ -71,6 +71,33 @@ static void __p_read_format(char *buf, size_t size, u64 value)
+>  	__p_bits(buf, size, value, bits);
+>  }
+>  
+> +#define ENUM_ID_TO_STR_CASE(x) case x: return (#x);
+> +static const char *stringify_perf_type_id(u64 value)
+> +{
+> +	/* sync with enum perf_type_id in perf_event.h */
 
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
----
+Everything in this file syncs with perf_event.h, so the comment
+does not seem very useful.
 
- arch/mips/include/asm/fw/cfe/cfe_api.h |    3 ---
- include/linux/types.h                  |    1 +
- lib/zstd/common/zstd_deps.h            |   18 ------------------
- 3 files changed, 1 insertion(+), 21 deletions(-)
+> +	switch (value) {
+> +	ENUM_ID_TO_STR_CASE(PERF_TYPE_HARDWARE)
+> +	ENUM_ID_TO_STR_CASE(PERF_TYPE_SOFTWARE)
+> +	ENUM_ID_TO_STR_CASE(PERF_TYPE_TRACEPOINT)
+> +	ENUM_ID_TO_STR_CASE(PERF_TYPE_HW_CACHE)
+> +	ENUM_ID_TO_STR_CASE(PERF_TYPE_RAW)
+> +	ENUM_ID_TO_STR_CASE(PERF_TYPE_BREAKPOINT)
+> +	default:
+> +		return NULL;
+> +	}
+> +}
+> +#undef ENUM_ID_TO_STR_CASE
+> +
+> +static void __p_type_id(char *buf, size_t size, u64 value)
+> +{
+> +	const char *str = stringify_perf_type_id(value);
+> +
+> +	if (str == NULL)
+> +		snprintf(buf, size, "%"PRIu64, value);
+> +	else
+> +		snprintf(buf, size, "%"PRIu64" (%s)", value, str);
 
---- a/arch/mips/include/asm/fw/cfe/cfe_api.h
-+++ b/arch/mips/include/asm/fw/cfe/cfe_api.h
-@@ -17,9 +17,6 @@
- #include <linux/types.h>
- #include <linux/string.h>
- 
--typedef long intptr_t;
--
--
- /*
-  * Constants
-  */
---- a/include/linux/types.h
-+++ b/include/linux/types.h
-@@ -35,6 +35,7 @@ typedef __kernel_uid16_t        uid16_t;
- typedef __kernel_gid16_t        gid16_t;
- 
- typedef unsigned long		uintptr_t;
-+typedef long			intptr_t;
- 
- #ifdef CONFIG_HAVE_UID16
- /* This is defined by include/asm-{arch}/posix_types.h */
---- a/lib/zstd/common/zstd_deps.h
-+++ b/lib/zstd/common/zstd_deps.h
-@@ -105,21 +105,3 @@ static uint64_t ZSTD_div64(uint64_t dividend, uint32_t divisor) {
- 
- #endif /* ZSTD_DEPS_IO */
- #endif /* ZSTD_DEPS_NEED_IO */
--
--/*
-- * Only requested when MSAN is enabled.
-- * Need:
-- * intptr_t
-- */
--#ifdef ZSTD_DEPS_NEED_STDINT
--#ifndef ZSTD_DEPS_STDINT
--#define ZSTD_DEPS_STDINT
--
--/*
-- * The Linux Kernel doesn't provide intptr_t, only uintptr_t, which
-- * is an unsigned long.
-- */
--typedef long intptr_t;
--
--#endif /* ZSTD_DEPS_STDINT */
--#endif /* ZSTD_DEPS_NEED_STDINT */
+These 4 lines end up getting used again about 3 times in the next
+patch, so might as well be a separate function e.g.
+
+	print_id(buf, size, value, stringify_perf_type_id(value));
+
+where:
+
+static void print_id(char *buf, size_t size, u64 value, const char *str)
+{
+	if (str == NULL)
+		snprintf(buf, size, "%"PRIu64, value);
+	else
+		snprintf(buf, size, "%"PRIu64" (%s)", value, str);
+}
+
+> +}
+> +
+>  #define BUF_SIZE		1024
+>  
+>  #define p_hex(val)		snprintf(buf, BUF_SIZE, "%#"PRIx64, (uint64_t)(val))
+> @@ -79,6 +106,7 @@ static void __p_read_format(char *buf, size_t size, u64 value)
+>  #define p_sample_type(val)	__p_sample_type(buf, BUF_SIZE, val)
+>  #define p_branch_sample_type(val) __p_branch_sample_type(buf, BUF_SIZE, val)
+>  #define p_read_format(val)	__p_read_format(buf, BUF_SIZE, val)
+> +#define p_type_id(val)		__p_type_id(buf, BUF_SIZE, val)
+>  
+>  #define PRINT_ATTRn(_n, _f, _p, _a)			\
+>  do {							\
+> @@ -96,7 +124,7 @@ int perf_event_attr__fprintf(FILE *fp, struct perf_event_attr *attr,
+>  	char buf[BUF_SIZE];
+>  	int ret = 0;
+>  
+> -	PRINT_ATTRf(type, p_unsigned);
+> +	PRINT_ATTRn("type", type, p_type_id, true);
+>  	PRINT_ATTRf(size, p_unsigned);
+>  	PRINT_ATTRf(config, p_hex);
+>  	PRINT_ATTRn("{ sample_period, sample_freq }", sample_period, p_unsigned, false);
+
