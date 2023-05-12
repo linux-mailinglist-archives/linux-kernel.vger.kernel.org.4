@@ -2,97 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D72700616
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:56:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F143470061D
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:58:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240917AbjELK4v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:56:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54646 "EHLO
+        id S240932AbjELK5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 06:57:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240880AbjELK4p (ORCPT
+        with ESMTP id S240219AbjELK5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:56:45 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAA1CFE;
-        Fri, 12 May 2023 03:56:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683889004; x=1715425004;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aTme5qDkFV7Mcp0uaOboKBbeV5ze/dqrLO9cBA/tElE=;
-  b=RXB9WXpjC1DvMlJbCHHDAAU+YudODiVQi5nCUUCI8S6qBwG2alUG5t0G
-   FdgMNayGjwIxKv9jVzWaNRENfLBuDWbpR155MyDVLlNqhaae6Xvb9Zet2
-   ICNJZIQgOBm8M2kKwWMOtUkoxyr2TVlS/2f/HRsBgcjSCAuTYpYba913/
-   LayD8z/z5D1/vsIUbnTyeVGyaWtX6iIsWsMTtL8+DNppjRUtf64y3cGxj
-   3JWBvpumkJ25j99MM8FHwtsxdC/LpZQ8ElKNva092BJ5SVlJ4Fe2+bnpw
-   4HaILCrxhJT82KnW2H6sapvFdku/lJop06VVALUZWmbO+u0kgzTzEEPvi
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="414132446"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="414132446"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 03:56:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="812041055"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="812041055"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga002.fm.intel.com with ESMTP; 12 May 2023 03:56:34 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pxQRq-0004Zv-0i;
-        Fri, 12 May 2023 13:56:30 +0300
-Date:   Fri, 12 May 2023 13:56:29 +0300
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org,
-        linux-pci@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        linux-mips@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
-        Andrew Lunn <andrew@lunn.ch>, sparclinux@vger.kernel.org,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-acpi@vger.kernel.org, Miguel Ojeda <ojeda@kernel.org>,
-        xen-devel@lists.xenproject.org, Matt Turner <mattst88@gmail.com>,
-        Anatolij Gustschin <agust@denx.de>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Niklas Schnelle <schnelle@linux.ibm.com>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Juergen Gross <jgross@suse.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        linux-kernel@vger.kernel.org,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-        linux-alpha@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        "David S. Miller" <davem@davemloft.net>,
-        "Maciej W. Rozycki" <macro@orcam.me.uk>
-Subject: Re: [PATCH v8 0/7] Add pci_dev_for_each_resource() helper and update
- users
-Message-ID: <ZF4bXaz2r75dlA5g@smile.fi.intel.com>
-References: <20230404161101.GA3554747@bhelgaas>
- <20230509182122.GA1259567@bhelgaas>
+        Fri, 12 May 2023 06:57:36 -0400
+Received: from www262.sakura.ne.jp (www262.sakura.ne.jp [202.181.97.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3B163592
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:57:33 -0700 (PDT)
+Received: from fsav415.sakura.ne.jp (fsav415.sakura.ne.jp [133.242.250.114])
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTP id 34CAv7ww070055;
+        Fri, 12 May 2023 19:57:07 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Received: from www262.sakura.ne.jp (202.181.97.72)
+ by fsav415.sakura.ne.jp (F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp);
+ Fri, 12 May 2023 19:57:07 +0900 (JST)
+X-Virus-Status: clean(F-Secure/fsigk_smtp/550/fsav415.sakura.ne.jp)
+Received: from [192.168.1.6] (M106072142033.v4.enabler.ne.jp [106.72.142.33])
+        (authenticated bits=0)
+        by www262.sakura.ne.jp (8.15.2/8.15.2) with ESMTPSA id 34CAv6iv070050
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=NO);
+        Fri, 12 May 2023 19:57:06 +0900 (JST)
+        (envelope-from penguin-kernel@I-love.SAKURA.ne.jp)
+Message-ID: <d642e597-cf7d-b410-16ce-22dff483fd8e@I-love.SAKURA.ne.jp>
+Date:   Fri, 12 May 2023 19:57:07 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230509182122.GA1259567@bhelgaas>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] debugobject: don't wake up kswapd from fill_pool()
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     syzbot <syzbot+fe0c72f0ccbb93786380@syzkaller.appspotmail.com>,
+        syzkaller-bugs@googlegroups.com, Ingo Molnar <mingo@elte.hu>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org, linux-mm <linux-mm@kvack.org>
+References: <000000000000008ddb05fb5e2576@google.com>
+ <6577e1fa-b6ee-f2be-2414-a2b51b1c5e30@I-love.SAKURA.ne.jp>
+ <20230511204458.819f9009d2ef8b46cc163191@linux-foundation.org>
+From:   Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>
+In-Reply-To: <20230511204458.819f9009d2ef8b46cc163191@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -100,56 +57,132 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 01:21:22PM -0500, Bjorn Helgaas wrote:
-> On Tue, Apr 04, 2023 at 11:11:01AM -0500, Bjorn Helgaas wrote:
-> > On Thu, Mar 30, 2023 at 07:24:27PM +0300, Andy Shevchenko wrote:
-> > > Provide two new helper macros to iterate over PCI device resources and
-> > > convert users.
+On 2023/05/12 12:44, Andrew Morton wrote:
+> On Thu, 11 May 2023 22:47:32 +0900 Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp> wrote:
 > 
-> > Applied 2-7 to pci/resource for v6.4, thanks, I really like this!
+>> syzbot is reporting lockdep warning in fill_pool(), for GFP_ATOMIC is
+>> (__GFP_HIGH | __GFP_KSWAPD_RECLAIM) which wakes up kswapd.
+>> Since fill_pool() might be called with arbitrary locks held,
+>> fill_pool() should not assume that holding pgdat->kswapd_wait is safe.
 > 
-> This is 09cc90063240 ("PCI: Introduce pci_dev_for_each_resource()")
-> upstream now.
-> 
-> Coverity complains about each use,
+> hm.  But many GFP_ATOMIC allocation attempts are made with locks held. 
+> Why aren't all such callers buggy, by trying to wake kswapd with locks
+> held?  What's special about this one?
 
-It needs more clarification here. Use of reduced variant of the macro or all of
-them? If the former one, then I can speculate that Coverity (famous for false
-positives) simply doesn't understand `for (type var; var ...)` code.
+Because debugobject cannot know what locks are held when fill_pool() does
+GFP_ATOMIC allocation.
 
->	sample below from
-> drivers/pci/vgaarb.c.  I didn't investigate at all, so it might be a
-> false positive; just FYI.
+syzbot is reporting base->lock => pgdat->kswapd_wait dependency
+
+  add_timer() {
+    __mod_timer() {
+      base = lock_timer_base(timer, &flags);
+      new_base = get_target_base(base, timer->flags);
+      if (base != new_base) {
+        raw_spin_unlock(&base->lock);
+        base = new_base;
+        raw_spin_lock(&base->lock);
+      }
+      debug_timer_activate(timer) {
+        debug_object_activate(timer, &timer_debug_descr) {
+          debug_objects_fill_pool() {
+            fill_pool() {
+              kmem_cache_zalloc(GFP_ATOMIC | __GFP_NORETRY | __GFP_NOWARN) {
+                // wakes kswapd
+              }
+            }
+          }
+        }
+      }
+      raw_spin_unlock_irqrestore(&base->lock, flags);
+    }
+  }
+
+when pgdat->kswapd_wait => p->pi_lock dependency
+
+  __alloc_pages() {
+    get_page_from_freelist() {
+      rmqueue() {
+        wakeup_kswapd() {
+          wake_up_interruptible(&pgdat->kswapd_wait) {
+            __wake_up_common_lock() {
+              spin_lock_irqsave(&pgdat->kswapd_wait.lock, flags);
+              __wake_up_common() {
+                autoremove_wake_function() {
+                  try_to_wake_up() {
+                    raw_spin_lock_irqsave(&p->pi_lock, flags);
+                    raw_spin_unlock_irqrestore(&p->pi_lock, flags);
+                  }
+                }
+              }
+              spin_unlock_irqrestore(&pgdat->kswapd_wait.lock, flags);
+            }
+          }
+        }
+      }
+    }
+  }
+
+and p->pi_lock => rq->__lock => base->lock dependency
+
+  wake_up_new_task() {
+    raw_spin_lock_irqsave(&p->pi_lock, rf.flags);
+    rq = __task_rq_lock(p, &rf); // acquires rq->lock
+    activate_task(rq, p, ENQUEUE_NOCLOCK) {
+      enqueue_task() {
+        psi_enqueue() {
+          psi_task_change() {
+            queue_delayed_work_on() {
+              __queue_delayed_work() {
+                add_timer() {
+                  __mod_timer() {
+                    base = lock_timer_base(timer, &flags); // acquires base->lock
+                    debug_timer_activate(timer); // possible base->lock => pgdat->kswapd_wait => p->pi_lock dependency
+                    raw_spin_unlock_irqrestore(&base->lock, flags);
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+    task_rq_unlock(rq, p, &rf);
+  }
+
+exists.
+
+All GFP_ATOMIC allocation users are supposed to be aware of what locks
+are held, and are supposed to explicitly remove __GFP_KSWAPD_RECLAIM
+if waking up kswapd can cause deadlock. But reality is that we can't be
+careful enough to error-free. Who would imagine GFP_ATOMIC allocation
+while base->lock is held can form circular locking dependency?
+
 > 
-> 	  1. Condition screen_info.capabilities & (2U /* 1 << 1 */), taking true branch.
->   556        if (screen_info.capabilities & VIDEO_CAPABILITY_64BIT_BASE)
->   557                base |= (u64)screen_info.ext_lfb_base << 32;
->   558
->   559        limit = base + size;
->   560
->   561        /* Does firmware framebuffer belong to us? */
-> 	  2. Condition __b < PCI_NUM_RESOURCES, taking true branch.
-> 	  3. Condition (r = &pdev->resource[__b]) , (__b < PCI_NUM_RESOURCES), taking true branch.
-> 	  6. Condition __b < PCI_NUM_RESOURCES, taking true branch.
-> 	  7. cond_at_most: Checking __b < PCI_NUM_RESOURCES implies that __b may be up to 16 on the true branch.
-> 	  8. Condition (r = &pdev->resource[__b]) , (__b < PCI_NUM_RESOURCES), taking true branch.
-> 	  11. incr: Incrementing __b. The value of __b may now be up to 17.
-> 	  12. alias: Assigning: r = &pdev->resource[__b]. r may now point to as high as element 17 of pdev->resource (which consists of 17 64-byte elements).
-> 	  13. Condition __b < PCI_NUM_RESOURCES, taking true branch.
-> 	  14. Condition (r = &pdev->resource[__b]) , (__b < PCI_NUM_RESOURCES), taking true branch.
->   562        pci_dev_for_each_resource(pdev, r) {
-> 	  4. Condition resource_type(r) != 512, taking true branch.
-> 	  9. Condition resource_type(r) != 512, taking true branch.
+>> Also, __GFP_NORETRY is pointless for !__GFP_DIRECT_RECLAIM allocation
+
+__GFP_NORETRY is not checked by !__GFP_DIRECT_RECLAIM allocation.
+GFP_ATOMIC - __GFP_KSWAPD_RECLAIM is __GFP_HIGH.
+
+>>
+>> @@ -126,7 +126,7 @@ static const char *obj_states[ODEBUG_STATE_MAX] = {
+>>  
+>>  static void fill_pool(void)
+>>  {
+>> -	gfp_t gfp = GFP_ATOMIC | __GFP_NORETRY | __GFP_NOWARN;
+>> +	gfp_t gfp = __GFP_HIGH | __GFP_NOWARN;
 > 
->   CID 1529911 (#1 of 1): Out-of-bounds read (OVERRUN)
->   15. overrun-local: Overrunning array of 1088 bytes at byte offset 1088 by dereferencing pointer r. [show details]
->   563                if (resource_type(r) != IORESOURCE_MEM)
-> 	  5. Continuing loop.
-> 	  10. Continuing loop.
->   564                        continue;
+> Does this weaken fill_pool()'s allocation attempt more than necessary? 
+> We can still pass __GFP_HIGH?
 
--- 
-With Best Regards,
-Andy Shevchenko
+What do you mean? I think that killing base->lock => pgdat->kswapd_wait
+by removing __GFP_KSWAPD_RECLAIM is the right fix. This weakening is
+needed for avoiding base->lock => pgdat->kswapd_wait dependency from
+debugobject code.
 
+For locking dependency safety, I wish that GFP_ATOMIC / GFP_NOWAIT do not imply
+__GFP_KSWAPD_RECLAIM. Such allocations should not try to allocate as many pages
+as even __GFP_HIGH fails. And if such allocations try to allocate as many pages
+as even __GFP_HIGH fails, they likely already failed before background kswapd
+reclaim finds some reusable pages....
 
