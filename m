@@ -2,162 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB4C700AA3
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:47:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03625700AA5
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:48:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241474AbjELOry (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 10:47:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37750 "EHLO
+        id S241504AbjELOsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 10:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241417AbjELOrw (ORCPT
+        with ESMTP id S241497AbjELOsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 10:47:52 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-vi1eur04on0613.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe0e::613])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B090C30DC;
-        Fri, 12 May 2023 07:47:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CPhIKzc4tnlcnLZFHk4FD797uF/k+zKlUFgRMNby0f8SBGL2NFUbHyAKpo5DoCFkQA4C2LnQ/d751TOtU7VlY14ieZux3sgIRkRHI4JrDD8M3jg3N2mXFHZOspVGWvx0RnsAbZKuG4nx/nY0AZXzpiNg9azbxN6EcKU1j9HDisrnfcRfC5uVsRG5iDDbw/SosalcXKlUx+ldTEkBbVaDe+8o6fsHjWZae5AGEXyZ0sRedajrT5i4Xmemk5QuHZuqXwGA/NFxaifnGb3kRfPtsBPDgNYAqXgJcpo59dX++IQTKfqpoPpNrh62QiJGOF+uvTBQ3pZ4c4O2Ush+ob64BQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kMqY9Zv24IwnKawHLUVSovvN0G5UTPw72PVBbdbuasU=;
- b=JKJJEEtmB24T2K6hKfqqXI8KjltplCxtgIahOfr42H7aumoUcN8r7PB6EytNj0FWNB1cv8S93o6x6G7tcSfFbCyBk5PZv0VjyMS0IYzmUhNLrMswArnfIi3sGKPW4CAeLYjhtJRzFZWTWTy/M5CmkLwj8r70bfr+6lkWvYrCRYFXJQm/jyYEpi/JoClLKNTuAqqVyDWMToGl2X9YJz6X6g/ehjWPLI0McEmsYxt3x7sitd9WxycyUGbnp4aE644SS3FrtTwyL52PJHXam7GQ5gwDONNImpsZFGNTjZO+vhpEI5ImXmnPpH3RECKZAPe9ok1dlMIvMICAq72yEbHp1A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kMqY9Zv24IwnKawHLUVSovvN0G5UTPw72PVBbdbuasU=;
- b=hVymzXRjr3iRNzRKyYrpi1fU8qJqPrN5tveDZYODs2WA/OYMZajSY8StWkZ7z9nptJI7ZoRJbW480ZAl/Y7089RhJlJGpwz4Fa8kc5/GbzvGni+9YMN1mtAtAy19/j0TdoSNjVtmU/My7p2qNnvCUr7p3OT/WH2+UWTK3wrbsRo=
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
- by DB9PR04MB8478.eurprd04.prod.outlook.com (2603:10a6:10:2c4::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.23; Fri, 12 May
- 2023 14:47:46 +0000
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::25d3:de2:ef1:3884]) by AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::25d3:de2:ef1:3884%4]) with mapi id 15.20.6387.023; Fri, 12 May 2023
- 14:47:46 +0000
-From:   Frank Li <frank.li@nxp.com>
-To:     "helgaas@kernel.org" <helgaas@kernel.org>
-CC:     "imx@lists.linux.dev" <imx@lists.linux.dev>,
-        "bhelgaas@google.com" <bhelgaas@google.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "gustavo.pimentel@synopsys.com" <gustavo.pimentel@synopsys.com>,
-        "kw@linux.com" <kw@linux.com>, Leo Li <leoyang.li@nxp.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
-        "lorenzo.pieralisi@arm.com" <lorenzo.pieralisi@arm.com>,
-        "M.H. Lian" <minghuan.lian@nxp.com>,
-        Mingkai Hu <mingkai.hu@nxp.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        Roy Zang <roy.zang@nxp.com>,
-        "shawnguo@kernel.org" <shawnguo@kernel.org>,
-        "Z.Q. Hou" <zhiqiang.hou@nxp.com>
-Subject: RE: [PATCH v3 1/2] PCI: dwc: Implement general suspend/resume
- functionality for L2/L3 transitions
-Thread-Topic: [PATCH v3 1/2] PCI: dwc: Implement general suspend/resume
- functionality for L2/L3 transitions
-Thread-Index: AQHZct3SW2dT9GmC60WQlV8ZXVruY69W24pA
-Date:   Fri, 12 May 2023 14:47:46 +0000
-Message-ID: <AM6PR04MB48383AB3FD2062334ECB66EB88759@AM6PR04MB4838.eurprd04.prod.outlook.com>
-References: <20230419164118.596300-1-Frank.Li@nxp.com>
-In-Reply-To: <20230419164118.596300-1-Frank.Li@nxp.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM6PR04MB4838:EE_|DB9PR04MB8478:EE_
-x-ms-office365-filtering-correlation-id: 4a05b657-85fc-419b-9467-08db52f7d992
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: fVSVjvV518leJvdL86NCfIYlT9K/pNTD4lRk5q+tm2u7qiTBoG6zhs2BINta1K312m/RoCIKZEI8fIq7IbmMsTawCq02MxMtasoxc8eUs85iAmQwW1A0INeREyIrhQr/80Zec7mvZFnb0+BrlPGycm2A8rAaH/DUALV1hCJo40V+LTMzMfd4fD0ynHfCOBcKTORxMDOcWwn0No6KBUJ/kYqseUGT7tFpN16S8nSQJBvVjHrLbDSUM/kZipzX6lnHXreAyo4s04AAbxIDYIMrJU2GFpTiEnts6KNrdpD0iwL73YQ/pmmat5w59WmSwyYwVohnX7OAG8REgPkp0ee3oEdnwxEbmaoJDoV1sdj1geriM/cb7B46cm7nhF1z76Eap3aTmMK67dE1TVNIeN4j6mU04aZvnmnJ/9hBbdDVO/UEbfjGr6Nvf4W+Lq4VbyHXV10LjL1PD0J5zKJ6aVfd615PWKQk2c1l1nW/LRaIu6FaVN0XboU/M39M84cJpG1sLq5XmPCYgoCogpTDSvJWOsEbSFPdcNF26aPww8+50DDz174ZNhtzMDelZDXK+Ls99ZgmcweRFicEkijmxRHuWBMcOcsT+knrNHiPoLUMRDocBNjP4GWzZroqbVBPQBzG
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(346002)(396003)(376002)(366004)(136003)(451199021)(54906003)(26005)(55236004)(186003)(6506007)(9686003)(478600001)(38100700002)(7696005)(55016003)(122000001)(71200400001)(4744005)(2906002)(52536014)(8676002)(7416002)(8936002)(5660300002)(38070700005)(44832011)(41300700001)(66946007)(76116006)(33656002)(66556008)(66446008)(66476007)(64756008)(4326008)(86362001)(6916009)(316002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?PAdN4lrvMBrrbL90iLzAxRvZcELMROCI5m/87prykpsE7y5/9c+cOuBDji3r?=
- =?us-ascii?Q?ZOaBMt2ChGQJ923A2lDg3t+1bu2fziAXwviCPZ3UF+R1BKXpS8YzFpjg+qx2?=
- =?us-ascii?Q?rq55xEuKpTwpZHWWZH2ZeydmyMoLuNiRWN8tiyUUtDZDTAL2iGi3dB+OW9FX?=
- =?us-ascii?Q?EukpqbC8i/vTPa2Jw7BmcNdS9rnKD74jZ724A65YCMoLuhkfmAWOsWpAKAAP?=
- =?us-ascii?Q?bZeWYANri5k9mMZvTjpCq+8yDeqXmWHwcnS8PMSj9qK//zMbRhTxcAFgMXgB?=
- =?us-ascii?Q?L2ROtTcWy7aXiVv2Uml0FLDxxRdapqwlBXS3HBXfDr2l9b1RIxxE2T6jKTSM?=
- =?us-ascii?Q?BUSnANnes2dauhI+Kk4mNPhnWsDZJJe+3k9ojE46lcYT78KC86LonP7NxQc4?=
- =?us-ascii?Q?lD5NXVGakeX9zNKmtmaUH8z2kVHBdCoXDwq/6sBVbhZdAVt4AIghSdGEJgPw?=
- =?us-ascii?Q?yiWRfXu8GPrCI12WFWE50bKwyBxREXQ9UTG4Gu2zEuZL0XPUM40IE5XNHbqK?=
- =?us-ascii?Q?Olr0ZF1qzzJtwTw7voB1eC4D3i7ImbSP86IILxnXzUtMCbnBSsFrFuQgvxFa?=
- =?us-ascii?Q?ar+rT0btWpIavw4wnIcIuSvLjHAxSObRVRQIsXx8ygYIrJeblNLAthEhtH7y?=
- =?us-ascii?Q?LXU+vCyCvsXT7mBf/NfgYnQSMNgKNbdfwno4QSoJEW0RejHO5kzkEc9PZQRZ?=
- =?us-ascii?Q?HdketQsFK4rD5DjOtNF3XJEuGIFQF1Z3G3zzRSvedlP6E4VqpD8qLnTqzdFL?=
- =?us-ascii?Q?bzdtQkOwcbsq2WjxcoSvHVRaGPB/rQeqmJbctTKuzqfIYqKAeJhDfq0gAtGb?=
- =?us-ascii?Q?yGpDZb4jfu52Pbzo1hD5INmIhQJqtmAs0Y92Yotrz1CMeCC0pll6UvkCygtF?=
- =?us-ascii?Q?hRK8jjtedw3NERRJ7zwvJCdZgU5YIH/nfkhxe7p6ryt8zunomf16wVLNLVR+?=
- =?us-ascii?Q?MJJ/GLUAgCAhBw0VGwAemXP0Qqh4tHT7HfUWG6DN8Evd6z3veV9ch5vA7ZII?=
- =?us-ascii?Q?YEaeSup7iyySa9RuXhSZ7tv2jZsC3KKaXf/KpOqpPC0heetyy1QnDnzsKy9T?=
- =?us-ascii?Q?Hpa9wGFPGeJ4zaIJQYP84AFNMS3EDs0C+VJ7EGXiZjgyMeKk4+w+0qyKgwtZ?=
- =?us-ascii?Q?0RjMBQgGXDsRootW4G36/xJi0CLzCXNs8JQ78zcqsvwG2sUa6PjNOwle+ZnZ?=
- =?us-ascii?Q?C0raDgwO8w8r4SOC9G/0gSAsAH5apsPLxlU2GpA+QctPWNlX4C07rWkXGv+1?=
- =?us-ascii?Q?DNmifLoVYyNAdKHQNy1tjzDVRCFHzlL4S9h3aPWxB6QKcXBEO/gzODaYwdd7?=
- =?us-ascii?Q?3ZGClH0RTeSI6bByCeyc4KLn/7H6upSgdcfh9yU56N3hkO8ea2cF6R3qztki?=
- =?us-ascii?Q?A3yec283A9qs3ClXp7XR1NbA4HGO3oX+4j3uNpdUtUcHlqT2otnJqLuPebNk?=
- =?us-ascii?Q?aZQ+OkrbFLeO2L2+lzX8aWV22QRidu/J+Zw+d8iDvNdE5RyhaSnEMNw3c59w?=
- =?us-ascii?Q?rSoKne6vpZfk7v++4YamOH3mYS6hWXCxap3Y2eNkHYkl4NTw44eZykXX+eD1?=
- =?us-ascii?Q?Ti8ISVE1ya+foX2qxXU=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Fri, 12 May 2023 10:48:02 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81DC035BD;
+        Fri, 12 May 2023 07:47:59 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-30644c18072so6777535f8f.2;
+        Fri, 12 May 2023 07:47:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683902878; x=1686494878;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TTWOwvaldOjhH0pQJ19fjebD/f7HM2yIpHGXSGoIMBQ=;
+        b=s0Qk3g8qmpnn3ljcH+Uj+lqL2PcU4a7jlP3kpceUkoABcUYQIoWn5y9H/FfonpSObS
+         A6oikBG4fsw/6msCWVsnmHfNh56khpsc9/wIgbt/AQFlq+gVUrb73L6FhbmYi63dOY5d
+         NWNoAYVZu2U1LVzUTVrRvMuJV+lDwtMsR9T9a9BC5ZGpZ97rJoV8ozKoplnfJ/Oc/A70
+         lsu11EkAo65SdICsX08n7TBR/vsI5JFe9V+xYZ3pDjSttvFc0oea9T1rzYB7oOicHqZ4
+         RTnuJVHg9CpESQ24oMmvlUUNr6DQ0ISvNVBQiXx4Gm5sZS5W7W2v3SZo1XsnlvHAZpb4
+         LH/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683902878; x=1686494878;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TTWOwvaldOjhH0pQJ19fjebD/f7HM2yIpHGXSGoIMBQ=;
+        b=Id4k0EIjA2xbhumw9lsORPAuqBYINl/ePf+oIfNnjvW9w2pmDLxxT44/qyrxqNIk+y
+         tKDNUa+qiztRo2SQl1AHwGRfv5aKvY/VVJaBaNHrcUkGa4tMtcl7UF5WDhjEefFUgYGw
+         zoVZeC468VaTKoOajg3/MFbhn83T6AMLlWpgVtCBmYRiGE4MIemy8qOjq+tQVfN3YcmP
+         +/GmRfZFrwqkj6wEZ/xviJqcPQVAHzSYE1ubBjaFIJsynsXI5NIpGoHKZ4BRKo1xp+Gg
+         /YsGJhksS+/fDWUZt3uob55SOwsarbpwvNhum8NusA1FIKX/eIPhYwh5iWj9QGDniA9y
+         mXvg==
+X-Gm-Message-State: AC+VfDzRRbPBJ1iv4Rmks7rY2wEZy69RkiOUndomkE/QxLi/LekPCggz
+        FdlSaU0/+X6Emx6C9D3vk2CNCN4Q4xRWCcXDf9+mYnPiAdM=
+X-Google-Smtp-Source: ACHHUZ4i8c9vgKonUU+4oTtcbm6xlE6mdGwFTl7WVckAgjVGOTRmy4tKnleal63lPFXY2l2HeyQq6ejgXPhQGX3dRZY=
+X-Received: by 2002:a5d:6401:0:b0:306:2f8e:d259 with SMTP id
+ z1-20020a5d6401000000b003062f8ed259mr15959551wru.57.1683902877799; Fri, 12
+ May 2023 07:47:57 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4a05b657-85fc-419b-9467-08db52f7d992
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 May 2023 14:47:46.3140
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 92wcn2ulQ2rvh1tY8KkAkdvqJ3mC38sOsSuibmTl6lXypFHpdE++EJzqOazoYjbIpsuBn7MZLYZzAkZzUSebuQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR04MB8478
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_PERMERROR,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20230510220952.3507366-1-azeemshaikh38@gmail.com>
+ <72239648-C807-4CDD-8DA7-18440C83384E@oracle.com> <202305110927.12508719D2@keescook>
+ <CADmuW3UbHBWN0JzXMYX667hkXyWJY8_88K1sJfRnKNg7_u38=A@mail.gmail.com> <076418CA-6400-4A92-8634-60F2934F985D@oracle.com>
+In-Reply-To: <076418CA-6400-4A92-8634-60F2934F985D@oracle.com>
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+Date:   Fri, 12 May 2023 10:47:46 -0400
+Message-ID: <CADmuW3W5=pyg5AF5UPbj-+8geyxn7zcjsTkOO+_r4FSpWJq8YQ@mail.gmail.com>
+Subject: Re: [PATCH] NFSD: Replace all non-returning strlcpy with strscpy
+To:     Chuck Lever III <chuck.lever@oracle.com>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Jeff Layton <jlayton@kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->=20
-> Introduced helper function dw_pcie_get_ltssm to retrieve
-> SMLH_LTSS_STATE.
-> Added API pme_turn_off and exit_from_l2 for managing L2/L3 state
-> transitions.
->=20
-> Typical L2 entry workflow:
->=20
-> 1. Transmit PME turn off signal to PCI devices.
-> 2. Await link entering L2_IDLE state.
-> 3. Transition Root complex to D3 state.
->=20
-> Typical L2 exit workflow:
->=20
-> 1. Transition Root complex to D0 state.
-> 2. Issue exit from L2 command.
-> 3. Reinitialize PCI host.
-> 4. Wait for link to become active.
->=20
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
+On Fri, May 12, 2023 at 10:38=E2=80=AFAM Chuck Lever III <chuck.lever@oracl=
+e.com> wrote:
+>
+>
+>
+> > On May 12, 2023, at 7:30 AM, Azeem Shaikh <azeemshaikh38@gmail.com> wro=
+te:
+> >
+> > Thanks Chuck and Kees for the review.
+> >
+> >>> Actually netid should use the __string() and __assign_str()
+> >>> macros rather than open-coding a string copy, I think.
+> >
+> > Do you mean something like this?
+> >
+> > diff --git a/fs/nfsd/trace.h b/fs/nfsd/trace.h
+> > index 4183819ea082..72a906a053dc 100644
+> > --- a/fs/nfsd/trace.h
+> > +++ b/fs/nfsd/trace.h
+> > @@ -1365,19 +1365,19 @@ TRACE_EVENT(nfsd_cb_setup,
+> >                __field(u32, cl_id)
+> >                __field(unsigned long, authflavor)
+> >                __sockaddr(addr, clp->cl_cb_conn.cb_addrlen)
+> > -               __array(unsigned char, netid, 8)
+> > +               __string(netid, netid)
+> >        ),
+> >        TP_fast_assign(
+> >                __entry->cl_boot =3D clp->cl_clientid.cl_boot;
+> >                __entry->cl_id =3D clp->cl_clientid.cl_id;
+> > -               strlcpy(__entry->netid, netid, sizeof(__entry->netid));
+> > +               __assign_str(netid, netid);
+> >                __entry->authflavor =3D authflavor;
+> >                __assign_sockaddr(addr, &clp->cl_cb_conn.cb_addr,
+> >                                  clp->cl_cb_conn.cb_addrlen)
+> >        ),
+> >        TP_printk("addr=3D%pISpc client %08x:%08x proto=3D%s flavor=3D%s=
+",
+> >                __get_sockaddr(addr), __entry->cl_boot, __entry->cl_id,
+> > -               __entry->netid, show_nfsd_authflavor(__entry->authflavo=
+r))
+> > +               __get_str(netid), show_nfsd_authflavor(__entry->authfla=
+vor))
+> > );
+>
+> Yes. I don't remember why I chose to open-code the string
+> handling in here.
+>
+> I agree with Kees, also: __assign_str() needs to handle
+> the memory accesses properly, and I had assumed it did
+> that already. My bad. That IMO should be handled as a
+> separate patch.
 
-Ping
+Thanks I'll send out a patch with the __assign_str replacement for now.
+I'll wait for Kees and Steve to respond on how to fix the memory
+access in __assign_str.
 
-> Change from v2 to v3:
-> - Basic rewrite whole patch according rob herry suggestion.
->   put common function into dwc, so more soc can share the same logic.
->=20
+> >>> Fixes: 3c92fba557c6 ("NFSD: Enhance the nfsd_cb_setup tracepoint")
+> >
+> > Ack.
+>
+> I agree that it's not a high priority backport. However,
+> I expect those who want to use trace points on KASAN-
+> enabled stable kernels might prefer to have the
+> __assign_str fix in place, along with this one.
+>
+> So, I'm good with including Fixes: or leaving it off. Up
+> to you!
+>
 
+Will include it :)
