@@ -2,37 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5B4A70105C
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 23:08:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 996B9701063
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 23:08:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239902AbjELVIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 17:08:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33748 "EHLO
+        id S239956AbjELVI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 17:08:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239665AbjELVHv (ORCPT
+        with ESMTP id S239762AbjELVHw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 17:07:51 -0400
+        Fri, 12 May 2023 17:07:52 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61FD5DC51;
-        Fri, 12 May 2023 14:07:20 -0700 (PDT)
-Message-ID: <20230512205256.148255496@linutronix.de>
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39D0DE733;
+        Fri, 12 May 2023 14:07:22 -0700 (PDT)
+Message-ID: <20230512205256.206394064@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683925638;
+        s=2020; t=1683925640;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=InZPVVmeEePOxGmqWQGUV6XuxxQh3/m9otIbiRiszwU=;
-        b=uFfds7mph6cSiXSh6HRHOhxz3QiI1I/G0oy4nU6wsamawNsp4y33wqQj2P2/ZZZq5TzErm
-        P87k2m6ViGcmmyQjFqg5ZdG0v1+yc1F5oiwojzlLt2nBOxzNdmBLhT1vTcDTtEXKonfGXr
-        bYpsNXmQl1MSuCdbaM9TtiuEz77gYzdG98tHSIcLcmERpaTowK6K4gPRU+YYaJVv9v5LiL
-        v8epnr0nAY01obW4WKRBIziEyjsoX5x9wxUQ9rvuVeF34k+67u/mdE64pmL1vHsRQ73lvC
-        VrYHgd1WIw63x42ClwSD5+jVlRXy0HbeNAyi4ur5Lncniu66hjKh4gNUmpYBvQ==
+         references:references; bh=sV700lvJEg0dpnky36xy6IzX+5YcmbLPF3iuwfreLQI=;
+        b=paQ53o7/mL5ElBtzALRvm5FWr+aqzidPhADEkGkNnFUgSdXdZKTpQ9LdM20zv3wNd69sIS
+        it6M97+Fbbx8ktP1fteK/FRxSsUJ+d0bN0dEWXHrN+1EXE74+t5yfLHYlX4A2jlo5kaWpy
+        u1Y4a1rKKqdKc7NvKZPW3+05W/WKM4dmC8NnWIBvmIiGSBT0dFtCcrPLjhVylwcQhwWEFh
+        l3HKtTadZMnBQhRy9Lw4oQ4h0oFirsIvEgTyNYGnpZi6RiB0cbK/DRRrBfV3ithiX6HrKL
+        M7rlozY1wPYf1JFhsOIHtY0UQp0uMjycyx8ukit8UWdY1BCjZKlup+pYCxy6HQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683925638;
+        s=2020e; t=1683925640;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=InZPVVmeEePOxGmqWQGUV6XuxxQh3/m9otIbiRiszwU=;
-        b=WGrbLbvy26+fMWG16p8ngiAMfUOAs6HPlstKKf3BN4q4Sg+vviA7h7o2vQ7SLWzvkmFDzQ
-        MTBm5QuQ57VULiAg==
+         references:references; bh=sV700lvJEg0dpnky36xy6IzX+5YcmbLPF3iuwfreLQI=;
+        b=sb9Uqj+LJNN+k1afPutXlTsDK2EI5uKAFco5RBP+AD3FcfTjEj4fGPWwaSSh6It8iDbVO5
+        x1PNGDR7T4lyhTCA==
 From:   Thomas Gleixner <tglx@linutronix.de>
 To:     LKML <linux-kernel@vger.kernel.org>
 Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
@@ -68,11 +68,11 @@ Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
         Sabin Rapan <sabrapan@amazon.com>,
         "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
         Ross Philipson <ross.philipson@oracle.com>
-Subject: [patch V4 13/37] x86/smpboot: Make TSC synchronization function call based
+Subject: [patch V4 14/37] x86/smpboot: Remove cpu_callin_mask
 References: <20230512203426.452963764@linutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 12 May 2023 23:07:17 +0200 (CEST)
+Date:   Fri, 12 May 2023 23:07:19 +0200 (CEST)
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
@@ -85,161 +85,181 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-Spin-waiting on the control CPU until the AP reaches the TSC
-synchronization is just a waste especially in the case that there is no
-synchronization required.
-
-As the synchronization has to run with interrupts disabled the control CPU
-part can just be done from a SMP function call. The upcoming AP issues that
-call async only in the case that synchronization is required.
+Now that TSC synchronization is SMP function call based there is no reason
+to wait for the AP to be set in smp_callin_mask. The control CPU waits for
+the AP to set itself in the online mask anyway.
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Tested-by: Michael Kelley <mikelley@microsoft.com>
 ---
- arch/x86/include/asm/tsc.h |    2 --
- arch/x86/kernel/smpboot.c  |   20 +++-----------------
- arch/x86/kernel/tsc_sync.c |   36 +++++++++++-------------------------
- 3 files changed, 14 insertions(+), 44 deletions(-)
+V4: Rename smp_callin() to ap_starting() - Peter Z.
+---
+ arch/x86/kernel/smpboot.c |   74 +++++++++-------------------------------------
+ 1 file changed, 15 insertions(+), 59 deletions(-)
 
---- a/arch/x86/include/asm/tsc.h
-+++ b/arch/x86/include/asm/tsc.h
-@@ -55,12 +55,10 @@ extern bool tsc_async_resets;
- #ifdef CONFIG_X86_TSC
- extern bool tsc_store_and_check_tsc_adjust(bool bootcpu);
- extern void tsc_verify_tsc_adjust(bool resume);
--extern void check_tsc_sync_source(int cpu);
- extern void check_tsc_sync_target(void);
- #else
- static inline bool tsc_store_and_check_tsc_adjust(bool bootcpu) { return false; }
- static inline void tsc_verify_tsc_adjust(bool resume) { }
--static inline void check_tsc_sync_source(int cpu) { }
- static inline void check_tsc_sync_target(void) { }
- #endif
- 
 --- a/arch/x86/kernel/smpboot.c
 +++ b/arch/x86/kernel/smpboot.c
-@@ -275,11 +275,7 @@ static void notrace start_secondary(void
- 	 */
- 	smp_callin();
+@@ -104,7 +104,6 @@ EXPORT_PER_CPU_SYMBOL(cpu_info);
+ /* All of these masks are initialized in setup_cpu_local_masks() */
+ static cpumask_var_t cpu_initialized_mask;
+ static cpumask_var_t cpu_callout_mask;
+-static cpumask_var_t cpu_callin_mask;
+ /* Representing CPUs for which sibling maps can be computed */
+ static cpumask_var_t cpu_sibling_setup_mask;
  
+@@ -161,38 +160,30 @@ static inline void smpboot_restore_warm_
+ 
+ }
+ 
+-/*
+- * Report back to the Boot Processor during boot time or to the caller processor
+- * during CPU online.
+- */
+-static void smp_callin(void)
++/* Run the next set of setup steps for the upcoming CPU */
++static void ap_starting(void)
+ {
+-	int cpuid;
+-
 -	/*
--	 * Check TSC synchronization with the control CPU, which will do
--	 * its part of this from wait_cpu_online(), making it an implicit
--	 * synchronization point.
+-	 * If waken up by an INIT in an 82489DX configuration
+-	 * cpu_callout_mask guarantees we don't get here before
+-	 * an INIT_deassert IPI reaches our local APIC, so it is
+-	 * now safe to touch our local APIC.
 -	 */
-+	/* Check TSC synchronization with the control CPU. */
- 	check_tsc_sync_target();
+-	cpuid = smp_processor_id();
++	int cpuid = smp_processor_id();
  
  	/*
-@@ -1141,21 +1137,11 @@ static void wait_cpu_callin(unsigned int
+-	 * the boot CPU has finished the init stage and is spinning
+-	 * on callin_map until we finish. We are free to set up this
+-	 * CPU, first the APIC. (this is probably redundant on most
+-	 * boards)
++	 * If woken up by an INIT in an 82489DX configuration
++	 * cpu_callout_mask guarantees the CPU does not reach this point
++	 * before an INIT_deassert IPI reaches the local APIC, so it is now
++	 * safe to touch the local APIC.
++	 *
++	 * Set up this CPU, first the APIC, which is probably redundant on
++	 * most boards.
+ 	 */
+ 	apic_ap_setup();
+ 
+-	/* Save our processor parameters. */
++	/* Save the processor parameters. */
+ 	smp_store_cpu_info(cpuid);
+ 
+ 	/*
+ 	 * The topology information must be up to date before
+ 	 * notify_cpu_starting().
+ 	 */
+-	set_cpu_sibling_map(raw_smp_processor_id());
++	set_cpu_sibling_map(cpuid);
+ 
+ 	ap_init_aperfmperf();
+ 
+@@ -205,11 +196,6 @@ static void smp_callin(void)
+ 	 * state CPUHP_ONLINE.
+ 	 */
+ 	notify_cpu_starting(cpuid);
+-
+-	/*
+-	 * Allow the master to continue.
+-	 */
+-	cpumask_set_cpu(cpuid, cpu_callin_mask);
+ }
+ 
+ static void ap_calibrate_delay(void)
+@@ -268,12 +254,7 @@ static void notrace start_secondary(void
+ 	rcu_cpu_starting(raw_smp_processor_id());
+ 	x86_cpuinit.early_percpu_clock_init();
+ 
+-	/*
+-	 * Sync point with wait_cpu_callin(). The AP doesn't wait here
+-	 * but just sets the bit to let the controlling CPU (BSP) know that
+-	 * it's got this far.
+-	 */
+-	smp_callin();
++	ap_starting();
+ 
+ 	/* Check TSC synchronization with the control CPU. */
+ 	check_tsc_sync_target();
+@@ -1109,7 +1090,7 @@ static int wait_cpu_cpumask(unsigned int
+  * and thus wait_for_master_cpu(), then set cpu_callout_mask to allow it
+  * to proceed.  The AP will then proceed past setting its 'callin' bit
+  * and end up waiting in check_tsc_sync_target() until we reach
+- * do_wait_cpu_online() to tend to it.
++ * wait_cpu_online() to tend to it.
+  */
+ static int wait_cpu_initialized(unsigned int cpu)
+ {
+@@ -1124,20 +1105,7 @@ static int wait_cpu_initialized(unsigned
  }
  
  /*
-- * Bringup step four: Synchronize the TSC and wait for the target AP
-- * to reach set_cpu_online() in start_secondary().
-+ * Bringup step four: Wait for the target AP to reach set_cpu_online() in
-+ * start_secondary().
+- * Bringup step three: Wait for the target AP to reach smp_callin().
+- * The AP is not waiting for us here so we don't need to parallelise
+- * this step. Not entirely clear why we care about this, since we just
+- * proceed directly to TSC synchronization which is the next sync
+- * point with the AP anyway.
+- */
+-static void wait_cpu_callin(unsigned int cpu)
+-{
+-	while (!cpumask_test_cpu(cpu, cpu_callin_mask))
+-		schedule();
+-}
+-
+-/*
+- * Bringup step four: Wait for the target AP to reach set_cpu_online() in
++ * Bringup step three: Wait for the target AP to reach set_cpu_online() in
+  * start_secondary().
   */
  static void wait_cpu_online(unsigned int cpu)
- {
--	unsigned long flags;
--
--	/*
--	 * Check TSC synchronization with the AP (keep irqs disabled
--	 * while doing so):
--	 */
--	local_irq_save(flags);
--	check_tsc_sync_source(cpu);
--	local_irq_restore(flags);
--
- 	/*
- 	 * Wait for the AP to mark itself online, so the core caller
- 	 * can drop sparse_irq_lock.
---- a/arch/x86/kernel/tsc_sync.c
-+++ b/arch/x86/kernel/tsc_sync.c
-@@ -245,7 +245,6 @@ bool tsc_store_and_check_tsc_adjust(bool
-  */
- static atomic_t start_count;
- static atomic_t stop_count;
--static atomic_t skip_test;
- static atomic_t test_runs;
- 
- /*
-@@ -344,21 +343,14 @@ static inline unsigned int loop_timeout(
- }
- 
- /*
-- * Source CPU calls into this - it waits for the freshly booted
-- * target CPU to arrive and then starts the measurement:
-+ * The freshly booted CPU initiates this via an async SMP function call.
-  */
--void check_tsc_sync_source(int cpu)
-+static void check_tsc_sync_source(void *__cpu)
- {
-+	unsigned int cpu = (unsigned long)__cpu;
- 	int cpus = 2;
+@@ -1167,14 +1135,6 @@ static int native_kick_ap(unsigned int c
+ 	}
  
  	/*
--	 * No need to check if we already know that the TSC is not
--	 * synchronized or if we have no TSC.
+-	 * Already booted CPU?
 -	 */
--	if (unsynchronized_tsc())
--		return;
--
--	/*
- 	 * Set the maximum number of test runs to
- 	 *  1 if the CPU does not provide the TSC_ADJUST MSR
- 	 *  3 if the MSR is available, so the target can try to adjust
-@@ -368,16 +360,9 @@ void check_tsc_sync_source(int cpu)
- 	else
- 		atomic_set(&test_runs, 3);
- retry:
--	/*
--	 * Wait for the target to start or to skip the test:
--	 */
--	while (atomic_read(&start_count) != cpus - 1) {
--		if (atomic_read(&skip_test) > 0) {
--			atomic_set(&skip_test, 0);
--			return;
--		}
-+	/* Wait for the target to start. */
-+	while (atomic_read(&start_count) != cpus - 1)
- 		cpu_relax();
+-	if (cpumask_test_cpu(cpu, cpu_callin_mask)) {
+-		pr_debug("do_boot_cpu %d Already started\n", cpu);
+-		return -ENOSYS;
 -	}
- 
- 	/*
- 	 * Trigger the target to continue into the measurement too:
-@@ -397,14 +382,14 @@ void check_tsc_sync_source(int cpu)
- 	if (!nr_warps) {
- 		atomic_set(&test_runs, 0);
- 
--		pr_debug("TSC synchronization [CPU#%d -> CPU#%d]: passed\n",
-+		pr_debug("TSC synchronization [CPU#%d -> CPU#%u]: passed\n",
- 			smp_processor_id(), cpu);
- 
- 	} else if (atomic_dec_and_test(&test_runs) || random_warps) {
- 		/* Force it to 0 if random warps brought us here */
- 		atomic_set(&test_runs, 0);
- 
--		pr_warn("TSC synchronization [CPU#%d -> CPU#%d]:\n",
-+		pr_warn("TSC synchronization [CPU#%d -> CPU#%u]:\n",
- 			smp_processor_id(), cpu);
- 		pr_warn("Measured %Ld cycles TSC warp between CPUs, "
- 			"turning off TSC clock.\n", max_warp);
-@@ -457,11 +442,12 @@ void check_tsc_sync_target(void)
- 	 * SoCs the TSC is frequency synchronized, but still the TSC ADJUST
- 	 * register might have been wreckaged by the BIOS..
+-
+-	/*
+ 	 * Save current MTRR state in case it was changed since early boot
+ 	 * (e.g. by the ACPI SMI) to initialize new CPUs with MTRRs in sync:
  	 */
--	if (tsc_store_and_check_tsc_adjust(false) || tsc_clocksource_reliable) {
--		atomic_inc(&skip_test);
-+	if (tsc_store_and_check_tsc_adjust(false) || tsc_clocksource_reliable)
- 		return;
--	}
+@@ -1211,7 +1171,6 @@ int native_cpu_up(unsigned int cpu, stru
+ 	if (ret)
+ 		goto out;
  
-+	/* Kick the control CPU into the TSC synchronization function */
-+	smp_call_function_single(cpumask_first(cpu_online_mask), check_tsc_sync_source,
-+				 (unsigned long *)(unsigned long)cpu, 0);
- retry:
- 	/*
- 	 * Register this CPU's participation and wait for the
+-	wait_cpu_callin(cpu);
+ 	wait_cpu_online(cpu);
+ 
+ out:
+@@ -1327,7 +1286,6 @@ void __init smp_prepare_cpus_common(void
+ 	 * Setup boot CPU information
+ 	 */
+ 	smp_store_boot_cpu_info(); /* Final full version of the data */
+-	cpumask_copy(cpu_callin_mask, cpumask_of(0));
+ 	mb();
+ 
+ 	for_each_possible_cpu(i) {
+@@ -1542,7 +1500,6 @@ early_param("possible_cpus", _setup_poss
+ void __init setup_cpu_local_masks(void)
+ {
+ 	alloc_bootmem_cpumask_var(&cpu_initialized_mask);
+-	alloc_bootmem_cpumask_var(&cpu_callin_mask);
+ 	alloc_bootmem_cpumask_var(&cpu_callout_mask);
+ 	alloc_bootmem_cpumask_var(&cpu_sibling_setup_mask);
+ }
+@@ -1606,7 +1563,6 @@ static void remove_cpu_from_maps(int cpu
+ {
+ 	set_cpu_online(cpu, false);
+ 	cpumask_clear_cpu(cpu, cpu_callout_mask);
+-	cpumask_clear_cpu(cpu, cpu_callin_mask);
+ 	/* was set by cpu_init() */
+ 	cpumask_clear_cpu(cpu, cpu_initialized_mask);
+ 	numa_remove_cpu(cpu);
 
