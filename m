@@ -2,139 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 512A9700F5F
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 21:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC49700F67
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 21:42:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239069AbjELTkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 15:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
+        id S238499AbjELTmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 15:42:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbjELTkA (ORCPT
+        with ESMTP id S238467AbjELTmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 15:40:00 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09D911FE4;
-        Fri, 12 May 2023 12:39:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683920399; x=1715456399;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=oYw5r8hR87hJDnq03J6dMbdqVbJIN5U3WktNqH4vWlA=;
-  b=i/Un6Rk5jGdHoyRfaVe+cvCzGQfDQ+TfSggQT3pU19uAEQMf1aS19PAt
-   GmEV9KI2moY9pDW37yYnjndmD6Hbzo7B0d4nZVd5zsTgqFAn3lQwNb3TX
-   NH6atdk6LydjEw1IYthhk5FHvY50rpJvzIG7gKcAvbGsKTev7N7wedUd+
-   vzcrKHjcJHZXmZiEG9B5PWLMBt+CIumduddJKq01G9OZEZAMfsVCCBDOg
-   ijjUK0PLQ5+NhKu+n0c9Jg6gws0gekgf1rcFnaxyQAcya4O3Oz9bVN1k6
-   TseOjxD4G3uKlZ2ecH+wdoLSNPlpKOGNKCbNMPMEkEaxHO+SGLJHZYIwg
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="335394073"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="335394073"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 12:39:58 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="694351039"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="694351039"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 12 May 2023 12:39:55 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pxYcM-00054W-2Q;
-        Fri, 12 May 2023 19:39:54 +0000
-Date:   Sat, 13 May 2023 03:39:10 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev,
-        Komal Bajaj <quic_kbajaj@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 06/10] soc: qcom: Add LLCC support for multi channel
- DDR
-Message-ID: <202305130308.9zOC4OZC-lkp@intel.com>
-References: <20230512122134.24339-7-quic_kbajaj@quicinc.com>
+        Fri, 12 May 2023 15:42:44 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E016A76;
+        Fri, 12 May 2023 12:42:41 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f49bf0223cso35801935e9.1;
+        Fri, 12 May 2023 12:42:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683920559; x=1686512559;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DN2lJwVxCSywQ45Toh9NWXRSKQkBQksDIAdmNfkgPbg=;
+        b=Pz9gZZLJj0bTpnXxFNomhku198dAZLFRV9cNoX36VzMjl1POqEJjByjCx+TOScAYIb
+         3iBkJdxH5ycv111ZXQ9w7h5tkc6P6Ne+UvjU0DctlUE/JiprguiPY3w509PMSPt8tF6z
+         ytunHZ+/UlNq4E3rW3AUAMrjsEZKmnMdcB2tP7BxF3dHO0s0MOncGzB6XsKwEB44Cmji
+         AbA7RoRaC1NUFSuAs7sWmFnh/TCSXajfjoYgev0bXVcYeVaHxuO8Z1E8aT/caQG42it9
+         9xYqhMcpvIdddCJF612T/XiuXecsioCbOv1cG1NVkkUlxpo/Z6UC2sr7Aa0rYOAahIHb
+         Y7qA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683920559; x=1686512559;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DN2lJwVxCSywQ45Toh9NWXRSKQkBQksDIAdmNfkgPbg=;
+        b=YbmunFJuMSbcCxmH/MQI0+Jz4zBE6JRcSTLmHuZ2ggRwCEMifCuhcJwwv6jKYEEZ2j
+         C1ncyfCr35lcNcnrRBf9rHiqSMIwxTIqaM9fw7Nyb1cUHCcMQDEVaTtZXPl/9iregG0B
+         BpOcLugeUeAbKZXyCLOQQ9K7AdCsnQn139PzF8ChEsx7Skl5YmLvG0uw67vlv/EANhFX
+         G4TXebUxORlXzbHxVF9XHtPU/mXC9q9nknvzuj+VHW8r6u2altZeuAYbR22MrHKvpA00
+         pNLLuVv3nO5X1PDx1snGoUl4QqqgS1QohkKOY5ddEfmhv6s2D3YPVlD6NPKJcB7d8JZM
+         sl3g==
+X-Gm-Message-State: AC+VfDz0zEFfp5XdbiXY8o3qAfBLfaPEflrq/ICEsGJhZ53691mQUEPn
+        3dfjhD+fomu99ejNt7UOa24=
+X-Google-Smtp-Source: ACHHUZ7WQC0iGvDme0/M8wQdMxZpP0KeML4RwxJscAaHJ8Z1gcQLji5mEU4q1GgRZuVlj8wSQ4Pbow==
+X-Received: by 2002:a05:600c:2210:b0:3f4:2174:b288 with SMTP id z16-20020a05600c221000b003f42174b288mr14545149wml.4.1683920559237;
+        Fri, 12 May 2023 12:42:39 -0700 (PDT)
+Received: from [10.80.67.26] (default-46-102-197-194.interdsl.co.uk. [46.102.197.194])
+        by smtp.gmail.com with ESMTPSA id n3-20020a5d4003000000b003063176ef0dsm24256011wrp.97.2023.05.12.12.42.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 May 2023 12:42:38 -0700 (PDT)
+Message-ID: <4a8f15b7-2897-e7f5-fe7e-fded3a4130c6@gmail.com>
+Date:   Fri, 12 May 2023 20:42:37 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230512122134.24339-7-quic_kbajaj@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 06/14] x86: Add early SHA support for Secure Launch
+ early measurements
+Content-Language: en-GB
+To:     Matthew Garrett <mjg59@srcf.ucam.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     Ard Biesheuvel <ardb@kernel.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Ross Philipson <ross.philipson@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
+        dpsmith@apertussolutions.com, mingo@redhat.com, bp@alien8.de,
+        hpa@zytor.com, James.Bottomley@hansenpartnership.com,
+        luto@amacapital.net, nivedita@alum.mit.edu,
+        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com,
+        richard@hughsie.com
+References: <20230504145023.835096-1-ross.philipson@oracle.com>
+ <20230504145023.835096-7-ross.philipson@oracle.com>
+ <20230510012144.GA1851@quark.localdomain>
+ <20230512110455.GD14461@srcf.ucam.org>
+ <CAMj1kXE8m5jCH3vW54ys=dE2-Vf_gnnueR6_g4Rq-LSJ5BqRjA@mail.gmail.com>
+ <20230512112847.GF14461@srcf.ucam.org> <87pm75bs3v.ffs@tglx>
+ <20230512161318.GA18400@srcf.ucam.org> <873541bej2.ffs@tglx>
+ <20230512191203.GA21013@srcf.ucam.org>
+From:   Andrew Cooper <andyhhp@gmail.com>
+In-Reply-To: <20230512191203.GA21013@srcf.ucam.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Komal,
+On 12/05/2023 8:12 pm, Matthew Garrett wrote:
+> On Fri, May 12, 2023 at 08:17:21PM +0200, Thomas Gleixner wrote:
+>> On Fri, May 12 2023 at 17:13, Matthew Garrett wrote:
+>>> On Fri, May 12, 2023 at 03:24:04PM +0200, Thomas Gleixner wrote:
+>>>> On Fri, May 12 2023 at 12:28, Matthew Garrett wrote:
+>>>>> Unless we assert that SHA-1 events are unsupported, it seems a bit odd 
+>>>>> to force a policy on people who have both banks enabled. People with 
+>>>>> mixed fleets are potentially going to be dealing with SHA-1 measurements 
+>>>>> for a while yet, and while there's obviously a security benefit in using 
+>>>>> SHA-2 instead it'd be irritating to have to maintain two attestation 
+>>>>> policies.
+>>>> Why?
+>>>>
+>>>> If you have a mixed fleet then it's not too much asked to provide two
+>>>> data sets. On a TPM2 system you can enforce SHA-2 and only fallback to
+>>>> SHA-1 on TPM 1.2 hardware. No?
+>>> No, beause having TPM2 hardware doesn't guarantee that your firmware 
+>>> enables SHA-2 (which also means this is something that could change with 
+>>> firmware updates, which means that refusing to support SHA-1 if the 
+>>> SHA-2 banks are enabled could result in an entirely different policy 
+>>> being required (and plausibly one that isn't implemented in their 
+>>> existing tooling)
+>> It's not rocket science to have both variants supported in tooling,
+>> really.
+> People who are currently using tboot are only getting SHA-1, so there's 
+> no obvious reason for them to have added support yet. *My* tooling all 
+> supports SHA-2 so I'm completely fine here, but either we refuse to 
+> support a bunch of hardware or we have to support SHA-1 anyway, and if 
+> we have to support it the only reason not to implement it even in the 
+> "SHA-2 is supported" case is because we have opinions about how other 
+> people implement their security.
 
-kernel test robot noticed the following build errors:
+The way to deal with this is to merge DRTM support (when it's ready of
+course) so people have an option which isn't tboot.
 
-[auto build test ERROR on linus/master]
-[also build test ERROR on v6.4-rc1 next-20230512]
-[cannot apply to robh/for-next]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Then warn on finding a TPM2 without SHA-2, and make it a failure for
+https://fwupd.github.io/libfwupdplugin/hsi.html#tpm-20-present etc, and
+eventually the vendors will decide that the easiest way to avoid getting
+a cross in their customers UIs is to implement SHA-2 support properly.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Komal-Bajaj/nvmem-qfprom-Add-support-for-secure-reading/20230512-202430
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230512122134.24339-7-quic_kbajaj%40quicinc.com
-patch subject: [PATCH v3 06/10] soc: qcom: Add LLCC support for multi channel DDR
-config: nios2-buildonly-randconfig-r001-20230509 (https://download.01.org/0day-ci/archive/20230513/202305130308.9zOC4OZC-lkp@intel.com/config)
-compiler: nios2-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/52808ee1c4720767ab330b371d356ffbd8fe7235
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Komal-Bajaj/nvmem-qfprom-Add-support-for-secure-reading/20230512-202430
-        git checkout 52808ee1c4720767ab330b371d356ffbd8fe7235
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=nios2 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=nios2 SHELL=/bin/bash drivers/soc/qcom/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305130308.9zOC4OZC-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   drivers/soc/qcom/llcc-qcom.c: In function 'qcom_llcc_get_cfg_index':
->> drivers/soc/qcom/llcc-qcom.c:951:15: error: implicit declaration of function 'nvmem_cell_read_u8'; did you mean 'nvmem_cell_read_u64'? [-Werror=implicit-function-declaration]
-     951 |         ret = nvmem_cell_read_u8(&pdev->dev, "multi_chan_ddr", cfg_index);
-         |               ^~~~~~~~~~~~~~~~~~
-         |               nvmem_cell_read_u64
-   cc1: some warnings being treated as errors
-
-
-vim +951 drivers/soc/qcom/llcc-qcom.c
-
-   946	
-   947	static int qcom_llcc_get_cfg_index(struct platform_device *pdev, u8 *cfg_index)
-   948	{
-   949		int ret = 0;
-   950	
- > 951		ret = nvmem_cell_read_u8(&pdev->dev, "multi_chan_ddr", cfg_index);
-   952		if (ret == -ENOENT) {
-   953			*cfg_index = 0;
-   954			return 0;
-   955		}
-   956	
-   957		return ret;
-   958	}
-   959	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+~Andrew
