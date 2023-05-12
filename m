@@ -2,84 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23E25700F0B
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 20:47:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B441700F0D
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 20:49:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239134AbjELSrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 14:47:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
+        id S239162AbjELSth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 14:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbjELSri (ORCPT
+        with ESMTP id S231327AbjELStf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 14:47:38 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D2A59C5;
-        Fri, 12 May 2023 11:47:37 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CIa9Mw025974;
-        Fri, 12 May 2023 18:47:26 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=xZX91qTnvMf5xn9R3fE5WAUWFylmFh0BCT/WDvoD2EM=;
- b=eyoyEUTgVHxj2R9q2udE+qj1Zjw0PsCsD46fR4nUacOlXMeW0wplCu0sO5zYArPD/5F9
- 3DknKlJaebkdWkFW5GmVRpq/PFIrRfveVGLo86tL+2zRPQ02eK1XevlxeHuVgMzbl0YM
- o9kMXrnfCgBkmY0wx9mb1S5HhTytUufK3x5am5igGNXKggb0zSp3tCCXistGDUlgDeGY
- 2IEd6mluSsBAeyJarDou/rlOCgSaTcY5YofWn4Y47dXZgBLCjgOjWYNqjTcFmcLLMK+A
- cNyv8GSHRWi1m4CifGSS2Mv502TFkaBL9n1QKk/+O0YCT8WJxKuQuAspeLbxOaAv27YG 9w== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qh8hm2d3c-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 18:47:25 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34CIlPNi016529
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 18:47:25 GMT
-Received: from [10.110.82.209] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 12 May
- 2023 11:47:24 -0700
-Message-ID: <5319b87a-9a4c-1786-9ea9-b9015ee56357@quicinc.com>
-Date:   Fri, 12 May 2023 11:47:23 -0700
+        Fri, 12 May 2023 14:49:35 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6EC5585
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:49:34 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pxXpX-0004Ty-Ri; Fri, 12 May 2023 20:49:27 +0200
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pxXpW-0031s5-UK; Fri, 12 May 2023 20:49:26 +0200
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pxXpV-003odu-IK; Fri, 12 May 2023 20:49:25 +0200
+Date:   Fri, 12 May 2023 20:49:25 +0200
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de
+Subject: Re: [PATCH] driver core: Call pm_runtime_put_sync() only after
+ device_remove()
+Message-ID: <20230512184925.d7w3j4r7oajtpsxi@pengutronix.de>
+References: <20230511073428.10264-1-u.kleine-koenig@pengutronix.de>
+ <CAJZ5v0gNPt=rq+pQtmoGL5nxzDQboOK4d6h7=NoY=LueVhZjAQ@mail.gmail.com>
+ <20230511103923.hvibdyo5ges4bab2@pengutronix.de>
+ <ZFzWCey825wSlr2v@hovoldconsulting.com>
+ <CAJZ5v0jvJT4JkHtO3RCUEzkfawxLCwR=QO2Y2CsL=cYN9s4hXw@mail.gmail.com>
+ <ZF3tUQFTeILXV_VT@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v8 6/8] drm/msm/dpu: separate DSC flush update out of
- interface
-Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>
-CC:     <quic_jesszhan@quicinc.com>, <quic_sbillaka@quicinc.com>,
-        <marijn.suijten@somainline.org>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1683914423-17612-1-git-send-email-quic_khsieh@quicinc.com>
- <1683914423-17612-7-git-send-email-quic_khsieh@quicinc.com>
- <91f63678-aade-2f42-1311-1bc706ebdc91@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <91f63678-aade-2f42-1311-1bc706ebdc91@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: UC13_L96ritK1d27sqdmHohmdxV6LtbF
-X-Proofpoint-ORIG-GUID: UC13_L96ritK1d27sqdmHohmdxV6LtbF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-12_11,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 mlxscore=0 malwarescore=0 bulkscore=0 suspectscore=0
- phishscore=0 mlxlogscore=829 spamscore=0 adultscore=0 impostorscore=0
- clxscore=1015 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305120157
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="nbpmey6zhsjg25lq"
+Content-Disposition: inline
+In-Reply-To: <ZF3tUQFTeILXV_VT@hovoldconsulting.com>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -89,186 +61,78 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--nbpmey6zhsjg25lq
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On 5/12/2023 11:21 AM, Dmitry Baryshkov wrote:
-> On 12/05/2023 21:00, Kuogee Hsieh wrote:
->> Current DSC flush update is piggyback inside dpu_hw_ctl_intf_cfg_v1().
->> This patch separates DSC flush away from dpu_hw_ctl_intf_cfg_v1() by
->> adding dpu_hw_ctl_update_pending_flush_dsc_v1() to handle both per
->> DSC engine and DSC flush bits at same time to make it consistent with
->> the location of flush programming of other dpu sub blocks.
->>
->> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> ---
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 14 ++++++++++++--
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c  | 22 ++++++++++++++++------
->>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h  | 10 ++++++++++
->>   3 files changed, 38 insertions(+), 8 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->> index ffa6f04..5cae70e 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->> @@ -1834,12 +1834,18 @@ dpu_encoder_dsc_initial_line_calc(struct 
->> drm_dsc_config *dsc,
->>       return DIV_ROUND_UP(total_pixels, dsc->slice_width);
->>   }
->> -static void dpu_encoder_dsc_pipe_cfg(struct dpu_hw_dsc *hw_dsc,
->> +static void dpu_encoder_dsc_pipe_cfg(struct dpu_encoder_virt *dpu_enc,
->> +                     struct dpu_hw_dsc *hw_dsc,
->>                        struct dpu_hw_pingpong *hw_pp,
->>                        struct drm_dsc_config *dsc,
->>                        u32 common_mode,
->>                        u32 initial_lines)
->>   {
->> +    struct dpu_encoder_phys *cur_master = dpu_enc->cur_master;
->> +    struct dpu_hw_ctl *ctl;
->> +
->> +    ctl = cur_master->hw_ctl;
-> 
-> Just for my understanding: if we have a bonded DSI @ sdm845, should both 
-> flashes go to the master CTL or each flush should go to the 
-> corresponding CTL?
-> 
+On Fri, May 12, 2023 at 09:40:01AM +0200, Johan Hovold wrote:
+> On Thu, May 11, 2023 at 04:44:25PM +0200, Rafael J. Wysocki wrote:
+> > On Thu, May 11, 2023 at 1:48=E2=80=AFPM Johan Hovold <johan@kernel.org>=
+ wrote:
+>=20
+> > > No, this seems like very bad idea and even violates the documentation
+> > > which clearly states that the usage counter is balanced before calling
+> > > remove() so that drivers can use pm_runtime_suspend() to put devices
+> > > into suspended state.
+> >=20
+> > I missed that, sorry.
+> >=20
+> > > There's is really no good reason to even try to change as this is in =
+no
+> > > way a fast path.
+> >=20
+> > Still, I think that while the "put" part needs to be done before
+> > device_remove(), the actual state change can be carried out later.
+> >=20
+> > So something like
+> >=20
+> >     pm_runtime_put_noidle(dev);
+> >=20
+> >     device_remove(dev);
+> >=20
+> >     pm_runtime_suspend(dev);
+> >=20
+> > would generally work, wouldn't it?
+>=20
+> No, as drivers typically disable runtime pm in their remove callbacks,
+> that pm_runtime_suspend() would amount to a no-op (and calling the
+> driver pm ops post unbind and the driver having freed its data would
+> not work either).
 
-Is this question for DSC or just general question about flush?
+However if a driver author also cares for the CONFIG_PM=3Dn case, calling
+pm_runtime_suspend() doesn't have the intended effect and so it's
+unfortunately complicated to rely on runtime-pm to power down your
+device and you have to do it by hand anyhow (unless you let your driver
+depend on CONFIG_PM). So I'm not convinced that "A driver can call
+pm_runtime_suspend() to power down" is a useful thing to have.
 
-I dont see an explicit DSC flush needed in sdm845 at the ctl level.
+In the end something like 72362dcdf654 ("can: mcp251xfd:
+mcp251xfd_unregister(): simplify runtime PM handling") might be an
+approach. But IMHO it's more complicated than it should be and honestly
+I'm not sure if it's safe and correct this way.
 
-If the question is about general flush involving two control paths, we 
-need to combine the flushes and they goto the master only. Please refer 
-to below part in sde_encoder.c
+Best regards
+Uwe
 
-4243 	/* for split flush, combine pending flush masks and send to master */
-4244 	if (pending_flush.pending_flush_mask && sde_enc->cur_master) {
-4245 		ctl = sde_enc->cur_master->hw_ctl;
-4246 		if (config_changed && ctl->ops.reg_dma_flush)
-4247 			ctl->ops.reg_dma_flush(ctl, is_regdma_blocking);
-4248 		_sde_encoder_trigger_flush(&sde_enc->base, sde_enc->cur_master,
-4249 						&pending_flush,
-4250 						config_changed);
-4251 	}
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
+   |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
 
+--nbpmey6zhsjg25lq
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> I'm going to send patches that utilize single CTL for sm8150+ after the 
-> DSC lands, so I'd like to understand this part.
-> 
->> +
->>       if (hw_dsc->ops.dsc_config)
->>           hw_dsc->ops.dsc_config(hw_dsc, dsc, common_mode, 
->> initial_lines);
->> @@ -1854,6 +1860,9 @@ static void dpu_encoder_dsc_pipe_cfg(struct 
->> dpu_hw_dsc *hw_dsc,
->>       if (hw_pp->ops.enable_dsc)
->>           hw_pp->ops.enable_dsc(hw_pp);
->> +
->> +    if (ctl->ops.update_pending_flush_dsc)
->> +        ctl->ops.update_pending_flush_dsc(ctl, hw_dsc->idx);
->>   }
->>   static void dpu_encoder_prep_dsc(struct dpu_encoder_virt *dpu_enc,
->> @@ -1898,7 +1907,8 @@ static void dpu_encoder_prep_dsc(struct 
->> dpu_encoder_virt *dpu_enc,
->>       initial_lines = dpu_encoder_dsc_initial_line_calc(dsc, enc_ip_w);
->>       for (i = 0; i < MAX_CHANNELS_PER_ENC; i++)
->> -        dpu_encoder_dsc_pipe_cfg(hw_dsc[i], hw_pp[i], dsc, 
->> dsc_common_mode, initial_lines);
->> +        dpu_encoder_dsc_pipe_cfg(dpu_enc, hw_dsc[i], hw_pp[i], dsc,
->> +                     dsc_common_mode, initial_lines);
->>   }
->>   void dpu_encoder_prepare_for_kickoff(struct drm_encoder *drm_enc)
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
->> index 4f7cfa9..f3a50cc 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
->> @@ -139,6 +139,11 @@ static inline void 
->> dpu_hw_ctl_trigger_flush_v1(struct dpu_hw_ctl *ctx)
->>                   CTL_DSPP_n_FLUSH(dspp - DSPP_0),
->>                   ctx->pending_dspp_flush_mask[dspp - DSPP_0]);
->>           }
->> +
->> +    if (ctx->pending_flush_mask & BIT(DSC_IDX))
->> +        DPU_REG_WRITE(&ctx->hw, CTL_DSC_FLUSH,
->> +                  ctx->pending_dsc_flush_mask);
->> +
->>       DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, ctx->pending_flush_mask);
->>   }
->> @@ -285,6 +290,13 @@ static void 
->> dpu_hw_ctl_update_pending_flush_merge_3d_v1(struct dpu_hw_ctl *ctx,
->>       ctx->pending_flush_mask |= BIT(MERGE_3D_IDX);
->>   }
->> +static void dpu_hw_ctl_update_pending_flush_dsc_v1(struct dpu_hw_ctl 
->> *ctx,
->> +                           enum dpu_dsc dsc_num)
->> +{
->> +    ctx->pending_dsc_flush_mask |= BIT(dsc_num - DSC_0);
->> +    ctx->pending_flush_mask |= BIT(DSC_IDX);
->> +}
->> +
->>   static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl 
->> *ctx,
->>       enum dpu_dspp dspp, u32 dspp_sub_blk)
->>   {
->> @@ -502,9 +514,6 @@ static void dpu_hw_ctl_intf_cfg_v1(struct 
->> dpu_hw_ctl *ctx,
->>       if ((test_bit(DPU_CTL_VM_CFG, &ctx->caps->features)))
->>           mode_sel = CTL_DEFAULT_GROUP_ID  << 28;
->> -    if (cfg->dsc)
->> -        DPU_REG_WRITE(&ctx->hw, CTL_DSC_FLUSH, cfg->dsc);
->> -
->>       if (cfg->intf_mode_sel == DPU_CTL_MODE_SEL_CMD)
->>           mode_sel |= BIT(17);
->> @@ -524,10 +533,8 @@ static void dpu_hw_ctl_intf_cfg_v1(struct 
->> dpu_hw_ctl *ctx,
->>       if (cfg->merge_3d)
->>           DPU_REG_WRITE(c, CTL_MERGE_3D_ACTIVE,
->>                     BIT(cfg->merge_3d - MERGE_3D_0));
->> -    if (cfg->dsc) {
->> -        DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
->> +    if (cfg->dsc)
->>           DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
->> -    }
->>   }
->>   static void dpu_hw_ctl_intf_cfg(struct dpu_hw_ctl *ctx,
->> @@ -630,6 +637,9 @@ static void _setup_ctl_ops(struct dpu_hw_ctl_ops 
->> *ops,
->>           ops->update_pending_flush_merge_3d =
->>               dpu_hw_ctl_update_pending_flush_merge_3d_v1;
->>           ops->update_pending_flush_wb = 
->> dpu_hw_ctl_update_pending_flush_wb_v1;
->> +
->> +        ops->update_pending_flush_dsc =
->> +            dpu_hw_ctl_update_pending_flush_dsc_v1;
->>       } else {
->>           ops->trigger_flush = dpu_hw_ctl_trigger_flush;
->>           ops->setup_intf_cfg = dpu_hw_ctl_intf_cfg;
->> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h 
->> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
->> index 6292002..d4869a0 100644
->> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
->> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
->> @@ -158,6 +158,15 @@ struct dpu_hw_ctl_ops {
->>           enum dpu_dspp blk, u32 dspp_sub_blk);
->>       /**
->> +     * OR in the given flushbits to the cached pending_(dsc_)flush_mask
->> +     * No effect on hardware
->> +     * @ctx       : ctl path ctx pointer
->> +     * @blk       : interface block index
->> +     */
->> +    void (*update_pending_flush_dsc)(struct dpu_hw_ctl *ctx,
->> +                     enum dpu_dsc blk);
->> +
->> +    /**
->>        * Write the value of the pending_flush_mask to hardware
->>        * @ctx       : ctl path ctx pointer
->>        */
->> @@ -245,6 +254,7 @@ struct dpu_hw_ctl {
->>       u32 pending_wb_flush_mask;
->>       u32 pending_merge_3d_flush_mask;
->>       u32 pending_dspp_flush_mask[DSPP_MAX - DSPP_0];
->> +    u32 pending_dsc_flush_mask;
->>       /* ops */
->>       struct dpu_hw_ctl_ops ops;
-> 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmReijQACgkQj4D7WH0S
+/k658ggAsjeo7koFj/nx0LObSxTtW1vC0fPsg5HchvVtxqz0ao1nfod+ObPuJiTW
+hLsNGqOClxHV7e3W4zddJBm5dP39jPENLn5AOlCfYx2Z5S597ASE8WO/Rj34/RNq
+v60rAe/FwHq8ymexsT4NFV62YY7PtLM4NLldmoc3uffZfTWzm0vLlQMFHlurXUHe
+bJFBQqwNzQIOqlz0hzb8U4CKPZm+jv9RO6V2DSQKi4Sde/08tK9mY70N86P/cbOV
+9LOAys+3svuHLNzWNk8tXtUFbZVmzCiQ8laI5WKDDNAIo6tTXEB2Oo9yaIv/XVkR
+2fYQFjGfs4P7iBoI37KpcAZ6LM5mzQ==
+=Atyz
+-----END PGP SIGNATURE-----
+
+--nbpmey6zhsjg25lq--
