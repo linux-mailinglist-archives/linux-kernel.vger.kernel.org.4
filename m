@@ -2,371 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5E37005C4
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:38:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7488A7005C5
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:40:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240581AbjELKiU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:38:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38332 "EHLO
+        id S240621AbjELKkd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 06:40:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240555AbjELKiO (ORCPT
+        with ESMTP id S240355AbjELKka (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:38:14 -0400
-Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F1A611D80;
-        Fri, 12 May 2023 03:37:41 -0700 (PDT)
-Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-643557840e4so10478478b3a.2;
-        Fri, 12 May 2023 03:37:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683887860; x=1686479860;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JvtB4ZaRRF7BmNq4bmx+beZGtGWCkhMFyaEsvLCR/zc=;
-        b=W6TKdECpAr8ftr1aWRqKe6c2mfwhQ+fFXJm319nGgrOJfuyCLgPcdXr+qTvO6X+fOn
-         x0D847hNDOKPeZFPyayVeGO8qiW9kgco9OEwlKc7gDnt8smN4pRmExIAEkQL1d9cEhSL
-         0B2fWNDu3s4adZDJ2g5w9IinE+Rpy41x8AN/t5VWQxCAgdfpJT8V7wA9x8VvDmIH3ff8
-         4fZ21+Zm+R8+HG3dzLTedSSkrZMBHS8EO2EIXenNqpFoqCB69yUiMsnzPIB3nPg+UnE9
-         ot2esLKQpHZpq69OxtmmBBlUCNJeEH/2UCfoM8Yc23FUFa5G7fdOV+lYIcHNxsKy3bsv
-         gEbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683887860; x=1686479860;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JvtB4ZaRRF7BmNq4bmx+beZGtGWCkhMFyaEsvLCR/zc=;
-        b=PdKURa+gH1lsOH50G1qo0LrC50MnMKKIJ8AEAsqcenSok2cyhuHy8ozVjUI5VEmy3h
-         vnuzjeKL3u6W0Qlvzo9avxm8P7ehRejJVyRnRdUe0m8BBBQ9WxVjR7I4macgArZLfdgh
-         w+9qiKVqSO8dC9gcxjNqN1MA7Vw2yahXXSa2UyN7wYvJ0IY5NnUfyPy7PC32jT4oaJwp
-         tw4LA8lhBrqI7PMED3McQdo0Ne5H5v+rIBlOM2So+F2w2vDhMR4xAj3Z+UqB7rUTJ8A7
-         E5dNDNHEelQLyWB/UHkN1O7Ob92xzrEVI0ZI8IVUrJx0/ZJ4sD3NM6jgMmRFrzapVGGh
-         7hkA==
-X-Gm-Message-State: AC+VfDzrvFJg85rcigfqttyo6TcumQHe/GwXH+LyB+M0tHSWTO6PsJ38
-        ggruKGy8nr5i2WjDGPw9zvjvVBkpaZLr8Fu0
-X-Google-Smtp-Source: ACHHUZ7TduvNhxsFn52wZmQHK9J4Q4gbGK+4urStXiNzTlhWgcRp3uEKsMcBIcRe21TXNkFOkNL/tA==
-X-Received: by 2002:a05:6a00:1820:b0:64a:ea46:3b7d with SMTP id y32-20020a056a00182000b0064aea463b7dmr1505005pfa.23.1683887860098;
-        Fri, 12 May 2023 03:37:40 -0700 (PDT)
-Received: from kelvin-ThinkPad-L14-Gen-1.lan ([103.184.129.7])
-        by smtp.gmail.com with ESMTPSA id k5-20020aa792c5000000b0063b89300347sm7009485pfa.142.2023.05.12.03.37.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 03:37:39 -0700 (PDT)
-From:   Keguang Zhang <keguang.zhang@gmail.com>
-To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mips@vger.kernel.org
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Keguang Zhang <keguang.zhang@gmail.com>
-Subject: [PATCH v4 3/3] clocksource: loongson1: Move PWM timer to clocksource framework
-Date:   Fri, 12 May 2023 18:37:24 +0800
-Message-Id: <20230512103724.587760-4-keguang.zhang@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230512103724.587760-1-keguang.zhang@gmail.com>
-References: <20230512103724.587760-1-keguang.zhang@gmail.com>
+        Fri, 12 May 2023 06:40:30 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5F1FFA
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:40:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=gJ+bA78d7jWesX/mLHWzb/x8ZRjp6m+KT9TC6A+dNDM=; b=lDVFPjpyOQsVKN3Nw2OOr58yDn
+        ZI4xnV+eYXd40YbGRbr6A/npZR5mTy4/zksJ0VKz5CQN2g/9L0kiCk/S3/Ni9UT/4/u0XtfeDbd2J
+        9qlvYLcNxfs+TpNJqBD2bkzVQiCEZEpe4lEGlr6sw66N49ijDOIlem6lGmsW/Yl9iqut6hkLK6tmW
+        ohbLmSt5ye24eFam7ztwDE+6L48ulfkFJPnhGZSNrMfXz+b6y5bl7GazSCRvp1hFrduMr6LYVNhqc
+        AtaDMoockUa2HWaAUG5P/8TW4Fr/7YFxfeBkg+M1d5wvFI4cl4FISDEck6jn2BtsXhPvpK02GAHSu
+        Z0dZR0ig==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pxQC8-0097md-1I;
+        Fri, 12 May 2023 10:40:16 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 2A73B3000DC;
+        Fri, 12 May 2023 12:40:14 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id E3CFC2C7DB768; Fri, 12 May 2023 12:40:13 +0200 (CEST)
+Date:   Fri, 12 May 2023 12:40:13 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     John Stultz <jstultz@google.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        Arve =?iso-8859-1?B?SGr4bm5lduVn?= <arve@android.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>
+Subject: Re: [PATCH] sched/wait: Fix a kthread_park race with wait_woken()
+Message-ID: <20230512104013.GA2319858@hirez.programming.kicks-ass.net>
+References: <20230406194053.876844-1-arve@android.com>
+ <20230511214144.1924757-1-jstultz@google.com>
+ <20230511223124.GJ2296992@hirez.programming.kicks-ass.net>
+ <CANDhNCp-na5EE2o9furCtnm1Fz_WAaHpWh24e1sbwc-U+=ktog@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CANDhNCp-na5EE2o9furCtnm1Fz_WAaHpWh24e1sbwc-U+=ktog@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch moves most part of arch/mips/loongson32/common/time.c
-into drivers/clocksource.
+On Thu, May 11, 2023 at 05:52:24PM -0700, John Stultz wrote:
+> On Thu, May 11, 2023 at 3:31 PM Peter Zijlstra <peterz@infradead.org> wrote:
+> >
+> > On Thu, May 11, 2023 at 09:41:30PM +0000, John Stultz wrote:
+> > > From: Arve Hjønnevåg <arve@android.com>
+> > >
+> > > kthread_park and wait_woken have a similar race that kthread_stop and
+> > > wait_woken used to have before it was fixed in
+> > > cb6538e740d7543cd989128625cf8cac4b471e0a. Extend that fix to also cover
+> >
+> >   cb6538e740d7 ("sched/wait: Fix a kthread race with wait_woken()")
+> >
+> > > kthread_park.
+> > >
+> > > Cc: Ingo Molnar <mingo@redhat.com>
+> > > Cc: Peter Zijlstra <peterz@infradead.org>
+> > > Cc: Juri Lelli <juri.lelli@redhat.com>
+> > > Cc: Vincent Guittot <vincent.guittot@linaro.org>
+> > > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > > Cc: Ben Segall <bsegall@google.com>
+> > > Cc: Mel Gorman <mgorman@suse.de>
+> > > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> > > Cc: Valentin Schneider <vschneid@redhat.com>
+> > > Signed-off-by: Arve Hjønnevåg <arve@android.com>
+> > > Signed-off-by: John Stultz <jstultz@google.com>
+> > > ---
+> > > This seemingly slipped by, so I wanted to resend it
+> > > for review.
+> > > ---
+> > >  kernel/sched/wait.c | 6 +++---
+> > >  1 file changed, 3 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/kernel/sched/wait.c b/kernel/sched/wait.c
+> > > index 133b74730738..a9cf49da884b 100644
+> > > --- a/kernel/sched/wait.c
+> > > +++ b/kernel/sched/wait.c
+> > > @@ -425,9 +425,9 @@ int autoremove_wake_function(struct wait_queue_entry *wq_entry, unsigned mode, i
+> > >  }
+> > >  EXPORT_SYMBOL(autoremove_wake_function);
+> > >
+> > > -static inline bool is_kthread_should_stop(void)
+> > > +static inline bool is_kthread_should_stop_or_park(void)
+> > >  {
+> > > -     return (current->flags & PF_KTHREAD) && kthread_should_stop();
+> > > +     return (current->flags & PF_KTHREAD) && (kthread_should_stop() || kthread_should_park());
+> > >  }
+> > >
+> > >  /*
+> >
+> > That's a bit sad; that two function calls for checking two consecutive
+> > bits in the same word :-(
+> >
+> > If we move this to kthread.c and write it like:
+> >
+> >         kthread = __to_kthread(current);
+> >         if (!kthread)
+> >                 return false;
+> >
+> >         return test_bit(KTHREAD_SHOULD_STOP, &kthread->flags) ||
+> >                test_bit(KTHREAD_SHOULD_PARK, &kthread->flags);
+> >
+> > Then the compiler should be able to merge the two bits in a single load
+> > and test due to constant_test_bit() -- do check though.
+> 
+> Hrm. Apologies, as it's been awhile since I've looked at disassembled
+> asm, so I may be wrong, but I don't think that's happening here.
+> 
+> With the logic above I'm seeing it build as:
+> 0000000000000a50 <kthread_should_stop_or_park>:
+>      a50:       65 48 8b 14 25 00 00    mov    %gs:0x0,%rdx
+>      a57:       00 00
+>      a59:       48 8b 8a 78 0a 00 00    mov    0xa78(%rdx),%rcx
+>      a60:       31 c0                   xor    %eax,%eax
+>      a62:       48 85 c9                test   %rcx,%rcx
+>      a65:       74 11                   je     a78  <kthread_should_stop_or_park+0x28>
+>      a67:       f6 42 2e 20             testb  $0x20,0x2e(%rdx)
+>      a6b:       74 0b                   je     a78  <kthread_should_stop_or_park+0x28>
+>      a6d:       48 8b 01                mov    (%rcx),%rax
+>      a70:       48 d1 e8                shr    %rax
+>      a73:       83 e0 01                and    $0x1,%eax
+>      a76:       74 05                   je     a7d  <kthread_should_stop_or_park+0x2d>
+>      a78:       e9 00 00 00 00          jmp    a7d  <kthread_should_stop_or_park+0x2d>
+>      a7d:       48 8b 01                mov    (%rcx),%rax
+>      a80:       48 c1 e8 02             shr    $0x2,%rax
+>      a84:       83 e0 01                and    $0x1,%eax
+>      a87:       e9 00 00 00 00          jmp    a8c  <kthread_should_stop_or_park+0x3c>
+>      a8c:       0f 1f 40 00             nopl   0x0(%rax)
 
-Adapt the driver to clocksource framework with devicetree support
-and updates Kconfig/Makefile options.
+Moo, where is that optimization pass when you need it ;-)
 
-Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
----
-V3 -> V4: Change the wildcard compatible string to the specific one
-V2 -> V3: None
-V1 -> V2: None
----
- drivers/clocksource/Kconfig               |   9 +
- drivers/clocksource/Makefile              |   1 +
- drivers/clocksource/timer-loongson1-pwm.c | 236 ++++++++++++++++++++++
- 3 files changed, 246 insertions(+)
- create mode 100644 drivers/clocksource/timer-loongson1-pwm.c
+If we forgo test_bit() and write it plainly it seems to work:
 
-diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
-index 5fc8f0e7fb38..6e37b26d532d 100644
---- a/drivers/clocksource/Kconfig
-+++ b/drivers/clocksource/Kconfig
-@@ -603,6 +603,15 @@ config TIMER_IMX_SYS_CTR
- 	  Enable this option to use i.MX system counter timer as a
- 	  clockevent.
+diff --git a/kernel/kthread.c b/kernel/kthread.c
+index 7e6751b29101..36f94616cae5 100644
+--- a/kernel/kthread.c
++++ b/kernel/kthread.c
+@@ -164,6 +164,15 @@ bool __kthread_should_park(struct task_struct *k)
+ }
+ EXPORT_SYMBOL_GPL(__kthread_should_park);
  
-+config CLKSRC_LOONGSON1_PWM
-+	bool "Clocksource using Loongson1 PWM"
-+	depends on MACH_LOONGSON32 || COMPILE_TEST
-+	select MIPS_EXTERNAL_TIMER
-+	select TIMER_OF
-+	help
-+	  Enable this option to use Loongson1 PWM timer as clocksource
-+	  instead of the performance counter.
-+
- config CLKSRC_ST_LPC
- 	bool "Low power clocksource found in the LPC" if COMPILE_TEST
- 	select TIMER_OF if OF
-diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
-index 64ab547de97b..f969a9eedfca 100644
---- a/drivers/clocksource/Makefile
-+++ b/drivers/clocksource/Makefile
-@@ -88,3 +88,4 @@ obj-$(CONFIG_MICROCHIP_PIT64B)		+= timer-microchip-pit64b.o
- obj-$(CONFIG_MSC313E_TIMER)		+= timer-msc313e.o
- obj-$(CONFIG_GOLDFISH_TIMER)		+= timer-goldfish.o
- obj-$(CONFIG_GXP_TIMER)			+= timer-gxp.o
-+obj-$(CONFIG_CLKSRC_LOONGSON1_PWM)	+= timer-loongson1-pwm.o
-diff --git a/drivers/clocksource/timer-loongson1-pwm.c b/drivers/clocksource/timer-loongson1-pwm.c
-new file mode 100644
-index 000000000000..6335fee03017
---- /dev/null
-+++ b/drivers/clocksource/timer-loongson1-pwm.c
-@@ -0,0 +1,236 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * Clocksource driver for Loongson-1 SoC
-+ *
-+ * Copyright (c) 2023 Keguang Zhang <keguang.zhang@gmail.com>
-+ */
-+
-+#include <linux/clockchips.h>
-+#include <linux/interrupt.h>
-+#include <linux/sizes.h>
-+#include "timer-of.h"
-+
-+/* Loongson-1 PWM Timer Register Definitions */
-+#define PWM_CNTR		0x0
-+#define PWM_HRC			0x4
-+#define PWM_LRC			0x8
-+#define PWM_CTRL		0xc
-+
-+/* PWM Control Register Bits */
-+#define INT_LRC_EN		BIT(11)
-+#define INT_HRC_EN		BIT(10)
-+#define CNTR_RST		BIT(7)
-+#define INT_SR			BIT(6)
-+#define INT_EN			BIT(5)
-+#define PWM_SINGLE		BIT(4)
-+#define PWM_OE			BIT(3)
-+#define CNT_EN			BIT(0)
-+
-+#define CNTR_WIDTH		24
-+
-+DEFINE_RAW_SPINLOCK(ls1x_timer_lock);
-+
-+struct ls1x_clocksource {
-+	void __iomem *reg_base;
-+	unsigned long ticks_per_jiffy;
-+	struct clocksource clksrc;
-+};
-+
-+static inline struct ls1x_clocksource *to_ls1x_clksrc(struct clocksource *c)
++bool kthread_should_stop_or_park(void)
 +{
-+	return container_of(c, struct ls1x_clocksource, clksrc);
++	struct kthread *kthread = __to_kthread(current);
++	if (!kthread)
++		return false;
++
++	return kthread->flags & (BIT(KTHREAD_SHOULD_STOP) | BIT(KTHREAD_SHOULD_PARK));
 +}
 +
-+static inline void ls1x_pwmtimer_set_period(unsigned int period,
-+					    struct timer_of *to)
-+{
-+	writel(period, timer_of_base(to) + PWM_LRC);
-+	writel(period, timer_of_base(to) + PWM_HRC);
-+}
-+
-+static inline void ls1x_pwmtimer_clear(struct timer_of *to)
-+{
-+	writel(0, timer_of_base(to) + PWM_CNTR);
-+}
-+
-+static inline void ls1x_pwmtimer_start(struct timer_of *to)
-+{
-+	writel((INT_EN | PWM_OE | CNT_EN), timer_of_base(to) + PWM_CTRL);
-+}
-+
-+static inline void ls1x_pwmtimer_stop(struct timer_of *to)
-+{
-+	writel(0, timer_of_base(to) + PWM_CTRL);
-+}
-+
-+static inline void ls1x_pwmtimer_irq_ack(struct timer_of *to)
-+{
-+	int val;
-+
-+	val = readl(timer_of_base(to) + PWM_CTRL);
-+	val |= INT_SR;
-+	writel(val, timer_of_base(to) + PWM_CTRL);
-+}
-+
-+static irqreturn_t ls1x_clockevent_isr(int irq, void *dev_id)
-+{
-+	struct clock_event_device *clkevt = dev_id;
-+	struct timer_of *to = to_timer_of(clkevt);
-+
-+	ls1x_pwmtimer_irq_ack(to);
-+	ls1x_pwmtimer_clear(to);
-+	ls1x_pwmtimer_start(to);
-+
-+	clkevt->event_handler(clkevt);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int ls1x_clockevent_set_state_periodic(struct clock_event_device *clkevt)
-+{
-+	struct timer_of *to = to_timer_of(clkevt);
-+
-+	raw_spin_lock(&ls1x_timer_lock);
-+	ls1x_pwmtimer_set_period(timer_of_period(to), to);
-+	ls1x_pwmtimer_clear(to);
-+	ls1x_pwmtimer_start(to);
-+	raw_spin_unlock(&ls1x_timer_lock);
-+
-+	return 0;
-+}
-+
-+static int ls1x_clockevent_tick_resume(struct clock_event_device *clkevt)
-+{
-+	raw_spin_lock(&ls1x_timer_lock);
-+	ls1x_pwmtimer_start(to_timer_of(clkevt));
-+	raw_spin_unlock(&ls1x_timer_lock);
-+
-+	return 0;
-+}
-+
-+static int ls1x_clockevent_set_state_shutdown(struct clock_event_device *clkevt)
-+{
-+	raw_spin_lock(&ls1x_timer_lock);
-+	ls1x_pwmtimer_stop(to_timer_of(clkevt));
-+	raw_spin_unlock(&ls1x_timer_lock);
-+
-+	return 0;
-+}
-+
-+static int ls1x_clockevent_set_next(unsigned long evt,
-+				    struct clock_event_device *clkevt)
-+{
-+	struct timer_of *to = to_timer_of(clkevt);
-+
-+	raw_spin_lock(&ls1x_timer_lock);
-+	ls1x_pwmtimer_set_period(evt, to);
-+	ls1x_pwmtimer_clear(to);
-+	ls1x_pwmtimer_start(to);
-+	raw_spin_unlock(&ls1x_timer_lock);
-+
-+	return 0;
-+}
-+
-+static struct timer_of ls1x_to = {
-+	.flags = TIMER_OF_IRQ | TIMER_OF_BASE | TIMER_OF_CLOCK,
-+	.clkevt = {
-+		.name			= "ls1x-pwmtimer",
-+		.features		= CLOCK_EVT_FEAT_PERIODIC |
-+					  CLOCK_EVT_FEAT_ONESHOT,
-+		.rating			= 300,
-+		.set_next_event		= ls1x_clockevent_set_next,
-+		.set_state_periodic	= ls1x_clockevent_set_state_periodic,
-+		.set_state_oneshot	= ls1x_clockevent_set_state_shutdown,
-+		.set_state_shutdown	= ls1x_clockevent_set_state_shutdown,
-+		.tick_resume		= ls1x_clockevent_tick_resume,
-+	},
-+	.of_irq = {
-+		.handler		= ls1x_clockevent_isr,
-+		.flags			= IRQF_TIMER,
-+	},
-+};
-+
-+/*
-+ * Since the PWM timer overflows every two ticks, its not very useful
-+ * to just read by itself. So use jiffies to emulate a free
-+ * running counter:
-+ */
-+static u64 ls1x_clocksource_read(struct clocksource *cs)
-+{
-+	struct ls1x_clocksource *ls1x_cs = to_ls1x_clksrc(cs);
-+	unsigned long flags;
-+	int count;
-+	u32 jifs;
-+	static int old_count;
-+	static u32 old_jifs;
-+
-+	raw_spin_lock_irqsave(&ls1x_timer_lock, flags);
-+	/*
-+	 * Although our caller may have the read side of xtime_lock,
-+	 * this is now a seqlock, and we are cheating in this routine
-+	 * by having side effects on state that we cannot undo if
-+	 * there is a collision on the seqlock and our caller has to
-+	 * retry.  (Namely, old_jifs and old_count.)  So we must treat
-+	 * jiffies as volatile despite the lock.  We read jiffies
-+	 * before latching the timer count to guarantee that although
-+	 * the jiffies value might be older than the count (that is,
-+	 * the counter may underflow between the last point where
-+	 * jiffies was incremented and the point where we latch the
-+	 * count), it cannot be newer.
-+	 */
-+	jifs = jiffies;
-+	/* read the count */
-+	count = readl(ls1x_cs->reg_base + PWM_CNTR);
-+
-+	/*
-+	 * It's possible for count to appear to go the wrong way for this
-+	 * reason:
-+	 *
-+	 *  The timer counter underflows, but we haven't handled the resulting
-+	 *  interrupt and incremented jiffies yet.
-+	 *
-+	 * Previous attempts to handle these cases intelligently were buggy, so
-+	 * we just do the simple thing now.
-+	 */
-+	if (count < old_count && jifs == old_jifs)
-+		count = old_count;
-+
-+	old_count = count;
-+	old_jifs = jifs;
-+
-+	raw_spin_unlock_irqrestore(&ls1x_timer_lock, flags);
-+
-+	return (u64)(jifs * ls1x_cs->ticks_per_jiffy) + count;
-+}
-+
-+static struct ls1x_clocksource ls1x_clocksource = {
-+	.clksrc = {
-+		.name           = "ls1x-pwmtimer",
-+		.rating		= 300,
-+		.read           = ls1x_clocksource_read,
-+		.mask           = CLOCKSOURCE_MASK(CNTR_WIDTH),
-+		.flags          = CLOCK_SOURCE_IS_CONTINUOUS,
-+	},
-+};
-+
-+static int __init ls1x_pwm_clocksource_init(struct device_node *np)
-+{
-+	struct timer_of *to = &ls1x_to;
-+	int ret;
-+
-+	ret = timer_of_init(np, to);
-+	if (ret)
-+		return ret;
-+
-+	clockevents_config_and_register(&to->clkevt, timer_of_rate(to),
-+					0x1, GENMASK(CNTR_WIDTH - 1, 0));
-+
-+	ls1x_clocksource.reg_base = timer_of_base(to);
-+	ls1x_clocksource.ticks_per_jiffy = timer_of_period(to);
-+
-+	return clocksource_register_hz(&ls1x_clocksource.clksrc,
-+				       timer_of_rate(to));
-+}
-+
-+TIMER_OF_DECLARE(ls1x_pwm_clocksource, "loongson,ls1b-pwmtimer",
-+		 ls1x_pwm_clocksource_init);
--- 
-2.39.2
+ /**
+  * kthread_should_park - should this kthread park now?
+  *
 
+
+0000000000001850 <kthread_should_stop_or_park>:
+    1850:       f3 0f 1e fa             endbr64
+    1854:       65 48 8b 04 25 00 00 00 00      mov    %gs:0x0,%rax     1859: R_X86_64_32S      pcpu_hot
+    185d:       48 8b 88 08 06 00 00    mov    0x608(%rax),%rcx
+    1864:       31 d2                   xor    %edx,%edx
+    1866:       48 85 c9                test   %rcx,%rcx
+    1869:       74 0c                   je     1877 <kthread_should_stop_or_park+0x27>
+    186b:       f6 40 2e 20             testb  $0x20,0x2e(%rax)
+    186f:       74 06                   je     1877 <kthread_should_stop_or_park+0x27>
+    1871:       f6 01 06                testb  $0x6,(%rcx)
+    1874:       0f 95 c2                setne  %dl
+    1877:       89 d0                   mov    %edx,%eax
+    1879:       e9 00 00 00 00          jmp    187e <kthread_should_stop_or_park+0x2e>  187a: R_X86_64_PLT32    __x86_return_thunk-0x4
