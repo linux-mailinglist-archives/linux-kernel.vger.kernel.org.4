@@ -2,223 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02F6B70061A
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47E1170061E
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:58:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230322AbjELK5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55296 "EHLO
+        id S240953AbjELK5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 06:57:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240373AbjELK51 (ORCPT
+        with ESMTP id S240708AbjELK5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:57:27 -0400
-Received: from EUR05-DB8-obe.outbound.protection.outlook.com (mail-db8eur05on2044.outbound.protection.outlook.com [40.107.20.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF0EE72BA;
-        Fri, 12 May 2023 03:57:25 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=App7Rw24gtCWPDZBod1OZHbqa7sKk7+lC2YAzpyc9um4YRjz8Ei0uCXQYY+9/G8SvfFIb+Wavczxi83Km4artyOXaHpVFHpia8KWkHCgSnB4iPqLFAoJDPgPa3pAkwR+7+dOV0hVMJ04rgQMxqElK21y65SVE8I7JKrmIqEeQx5XoAC/hD1i9uwg/Ei545QEi+BkX+5JdQ2nJQBAe90l4svC/IQCeM/abhxf63X0DGR+9VF+6KAQeDGIwCC6zgYi1CIkseFZsd2tpCZYjPBfBMQ+V+niWMu3Uk/x5i9kHkJ4wZ+MRf1ELHHSXLhYDxQm/ApcfmQC34dgMA67SbE1hw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=t1f0FhVGjBOIhbJ7aj28PfDuTLXLA9kWzTmw5ennM6s=;
- b=L+IaPPftGhcxi7lrnKk8UEOpxDY5IQvAA8YJhrvaS+DTUyrAVpjqOiZHoeoXGuRht7/0Y03lpQB1UyUW2msAdvuzGscjzFNgBaE66d+y7gJg3kb36a3XDWwse6aFGgO3ITmSNZIz6MYmPJB5Gt/Ubdc+kiWoJqVeRA819/Nz826h0v1KhqA4g6ofGchQ2UuOu5IVD7F8hB3PJ8JabMJ+fu+K+gWBzCDjc9h8FaluIonhQFA0mC2poWVu2FdTNKbM5+VFJ46mPrg3DWro9iGhmR/kHvKmdVlVeJz22Qz1w9TMJ6cwm2u+qDSHYPyHfkPAl5UEj98HRNkWyJei0nyWDg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=t1f0FhVGjBOIhbJ7aj28PfDuTLXLA9kWzTmw5ennM6s=;
- b=eDx2QmqeL1EnikXh53++xrTUCxO/K648TxGcXic4Xxscb/20Jzu+FAYgkeAJAeFUKtoJpiax/wEVZIuGahTJyXsfvM7wTy0NR4iavzbYMM+ksbUkT2xWklsxDgAwRfuCQ8neSB4ewRrN6UKeFHhOW03gFnggrrIHsyGdeVpsPnw=
-Received: from AM6PR04MB6053.eurprd04.prod.outlook.com (2603:10a6:20b:b9::10)
- by PAXPR04MB8142.eurprd04.prod.outlook.com (2603:10a6:102:1ce::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.21; Fri, 12 May
- 2023 10:57:23 +0000
-Received: from AM6PR04MB6053.eurprd04.prod.outlook.com
- ([fe80::11:5194:1418:6a75]) by AM6PR04MB6053.eurprd04.prod.outlook.com
- ([fe80::11:5194:1418:6a75%6]) with mapi id 15.20.6363.033; Fri, 12 May 2023
- 10:57:23 +0000
-From:   Alice Guo <alice.guo@nxp.com>
-To:     Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Gaurav Jain <gaurav.jain@nxp.com>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>
-CC:     "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        dl-linux-imx <linux-imx@nxp.com>,
-        Aisheng Dong <aisheng.dong@nxp.com>,
-        Horia Geanta <horia.geanta@nxp.com>,
-        Peng Fan <peng.fan@nxp.com>
-Subject: RE: [PATCH] caam: imx: fix the built-in caam driver cannot match
- soc_id
-Thread-Topic: [PATCH] caam: imx: fix the built-in caam driver cannot match
- soc_id
-Thread-Index: AQHZhLXpMVK5RXmzBESb3LpnLeQPia9Wd38w
-Date:   Fri, 12 May 2023 10:57:22 +0000
-Message-ID: <AM6PR04MB60535A5DB643B8A5B07E1C55E2759@AM6PR04MB6053.eurprd04.prod.outlook.com>
-References: <20230512151033.1327643-1-pankaj.gupta@nxp.com>
-In-Reply-To: <20230512151033.1327643-1-pankaj.gupta@nxp.com>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AM6PR04MB6053:EE_|PAXPR04MB8142:EE_
-x-ms-office365-filtering-correlation-id: bad479b2-d855-4839-ffdd-08db52d7aa31
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Xn5F0uQxiQnhUmaiX+HGYDGrXny+NQPxcNa2EOwUrY4wrLAe+MVrfs3NMkvIpZeHfrmkW04v6GGVT2HquatWyC5oEXLZvCv5FLUrgxLFKqehrJ+0uhGyXfCiCYFlsxDDbuM1V1mmrOk2T60CH8hk20oEwTvjFtSh5FO3T1JyPVrjaBvYNL8+sBRAilFuw/mR7lguxHHP6KWmuz0rwOuprMPy3QWc9CHrh5WLeyeqRBWYcaJWNnPUdSb9nW9Bi35TyszwiYPghNbYinWD2Nzj1r1x4gKlzunbKj4hc1InqIZJ8JFSMohljTjGCab/gNXk5qRQ58lfxRN0cMcjk0/lzltsEPcnRg1X7kOXokmViAi865yR8txcc2YzjLvvThBx0qX3zbuw5JqqlFoIccSrkqNwdW/smdnWh60HiMXzwR6Awl8nbhzSTF7gQAITrHfdFtmJ7modJ2nvx6cCo3ZIGJ09rnLMJ+IAg/EkfhHqVWWzjj+/rlj/jA8G6nDkO9HV3tX5qRcLGK4817tqwBAddRzUh/wwleWMBTKpdyoujVC7NJJJVzqdWPDAeXR1S+0gCQ2lcbWNKD7YO18URPvwSvOlNZXM/fjm48UUJvIhiQforffUi8imO7tq7R3jdcq5
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6053.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(396003)(376002)(39860400002)(136003)(346002)(451199021)(55016003)(54906003)(83380400001)(110136005)(86362001)(478600001)(6506007)(26005)(186003)(9686003)(53546011)(71200400001)(8676002)(7696005)(316002)(8936002)(33656002)(44832011)(52536014)(122000001)(5660300002)(41300700001)(38070700005)(38100700002)(2906002)(4326008)(66556008)(66476007)(76116006)(64756008)(66946007)(66446008);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?6ZNfaD+/0gHrU2L1mlZm7SBAEdVnVoVJb0NrZ4Qcr0L3q5Irs4w5Wk8Cni5q?=
- =?us-ascii?Q?dV2vY3+XO0O07H2oPuV+Qlx+OnkRiAdkg9sQW83rMzVtBYR8aJiHA3WE/PEG?=
- =?us-ascii?Q?aOJRUcmgMhItlfhoar2DAjcxiPGlggGDfcwBUKK3l4Fi8Wu2LYucigPlT9JW?=
- =?us-ascii?Q?EU8o38uPh9rBPiKSzF2Lo3cWVL7MFyAq6Vo0r/CkywAltYqcR4XdJInceeG5?=
- =?us-ascii?Q?XXA5L/zrxz+14Z5ALfGit/JyPmjzO6Vw2tgBPdATsoHJqe/LmaowSluhxrTH?=
- =?us-ascii?Q?q+NyFISoLUf7zEXLvSzjGZ7/P8S6BTlwQE+9F4tVE48+xLzaeyX+QN99WDqy?=
- =?us-ascii?Q?MNb6AuNR8z08I8kDdnRypc/+R5gNMN8PfRmrHMvtUEJ7wja/iJseI0yuLv9O?=
- =?us-ascii?Q?iFkvGWMrnMqnJawZ9tKBtEPP4i+tkE2MVWcrUCFgNEAAtX87dleHczfqXNUK?=
- =?us-ascii?Q?ETM4CVgcrOA04fkA2SeKSLSXmT/dBgpP03rW61qzDSPn0ruaO9whAcOoRgSy?=
- =?us-ascii?Q?ViVy60NfKGonT3sHjZxslJpCHwVMEmEe4x6paKd9TJ/Eiuvplw9mRREHb3q1?=
- =?us-ascii?Q?v5inlKbf9GCtHVg118Cd2pEvdSrPLbupVSkH7YyrhpmdXUcHvxx2da/QA+lQ?=
- =?us-ascii?Q?79wqp6YU3mRnpJTgpcEt6CYz82caZuuLjS1TRzcumnFIu+thsh4BOZjDsZF4?=
- =?us-ascii?Q?lTwZM7CThv19WADMRcf/rrHd5zTU6BN2n14stm2RREehqDUX3BJTEjWdFIEh?=
- =?us-ascii?Q?hzbO5E1CLHf/Tc3pwtsKk2LK0ymI91NkwMAoxgnCEOr9B65cxOyikD2fWiPJ?=
- =?us-ascii?Q?ByecL3IBPjBRpTCeRGez8e+DYNvdmkj9kyJtcBfeJe+jt0XEsJGGmcBK+dBy?=
- =?us-ascii?Q?pYQ5TDMJyy+PPd4jbamZcdl2l27cABwrg+Ax79j1G/FLD+M4EC1qIaFNlqs/?=
- =?us-ascii?Q?RXqE+Kku8oVRnJ9KyuszXhQgb8e8FY1onJwPJX/FSiALLOWQs7FVI0myAYI6?=
- =?us-ascii?Q?udwPDesa3PFb6TjTt/oXj9M7eL6ZhNohIhiSF5SLcrSpDKEF2YgDHD6iry3c?=
- =?us-ascii?Q?dw0AX/WCjehlIcRPHJhFpIj2li8SZqjgcQvPy+QwzsNp4wW7SUU901s6Go0c?=
- =?us-ascii?Q?zayeCxIFz9keWporJZGbkIk5KqiF2aAF8BJWOFWxvCY6MOaXaz1pE0yxLEIE?=
- =?us-ascii?Q?jlFiUkK1vMr2LNXKvH3oPaZqwoa0YY0cc8pWhDjQsgIJY+gO3Am6OmoxBaus?=
- =?us-ascii?Q?6DR9M3y4AvVaz4e3p5tQcECt9HSKSux906yYL0xsDmm3LeG764KcH+XF5i/o?=
- =?us-ascii?Q?BH8wOome4ma8JE77ToJOaOG/YFXnOHYaaUB5z/NYofs+FdxyB3mj117iTFdN?=
- =?us-ascii?Q?+OAOgNxbqTmgZHWBEmLswto0u/DdbK5MBEEauK+0z5akXnpDLuT4d4DVaKCD?=
- =?us-ascii?Q?ybfYiaj08Hycwc8QtjKFYYrk/h+ezwdiJfCaRRvo5ELImEJ9gueej8Myr4eq?=
- =?us-ascii?Q?x3KeaAmql4DghmQQ1OYZOp5nYCXrO2JET/+moXvPYHXDb1h9/f0m1cHGfHwt?=
- =?us-ascii?Q?+l3dCzxEBUUGIaZ3aCs=3D?=
-Content-Type: text/plain; charset="us-ascii"
+        Fri, 12 May 2023 06:57:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2212A3C2A;
+        Fri, 12 May 2023 03:57:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5825161A0F;
+        Fri, 12 May 2023 10:57:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BE15C433EF;
+        Fri, 12 May 2023 10:57:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683889053;
+        bh=dg8aubaLyHfwcSh3xXZkMsr1MCu72NyvHKS1EZUNlhE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=LrLKXa7BKZW4ABBMxSYcln3tUQ/g958WFW/RMwLFvt9VCL6UjaMa8JBKgzi4/ZPko
+         oh1QV1QwMYNt7zn/PcmWdk8JLq6ROoo//gqVF7aezuG7bCYfcVmqqh7WcQXRbm19Hh
+         MNM9/6wujUpXXrz+x7vJs4gAzATYxoA97mITr3b9dyfYT65tYAKY84PLh5XisE1UmP
+         iDeXLdoJTSoy5whtsLNNzcItHFXf0El+3xs+izfWfX5L4Hh/I/xHXH64nRnuLD3sdW
+         Mr/sOlMfh3duzGllf2GETLTE9m27IDwdCyPK0V+agIvXigKnOGBxt0hepzLoo3ffpe
+         37ziPplRgDbOA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pxQSp-00EYIH-GD;
+        Fri, 12 May 2023 11:57:31 +0100
+Date:   Fri, 12 May 2023 11:57:31 +0100
+Message-ID: <86pm75n7fo.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     syzbot <syzbot+afc1d968649e7e851562@syzkaller.appspotmail.com>
+Cc:     geert+renesas@glider.be, linux-kernel@vger.kernel.org,
+        linux-renesas-soc@vger.kernel.org, magnus.damm@gmail.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+Subject: Re: [syzbot] upstream boot error: BUG: unable to handle kernel NULL pointer dereference in gic_eoi_irq
+In-Reply-To: <000000000000da2a8505fb71d81b@google.com>
+References: <000000000000da2a8505fb71d81b@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6053.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bad479b2-d855-4839-ffdd-08db52d7aa31
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 May 2023 10:57:22.9425
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: LQw6TopT8/gprDvUxm2hlHGFHtiKuEZHWSPptcWNyAzm/F5Vsue7SNL5swwPgU+Q/8Rm5+D+uiteM8SQmB7ZFw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8142
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: syzbot+afc1d968649e7e851562@syzkaller.appspotmail.com, geert+renesas@glider.be, linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org, magnus.damm@gmail.com, syzkaller-bugs@googlegroups.com, tglx@linutronix.de
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Acked-by: Alice Guo <alice.guo@nxp.com>
+On Thu, 11 May 2023 22:41:11 +0100,
+syzbot <syzbot+afc1d968649e7e851562@syzkaller.appspotmail.com> wrote:
+>=20
+> Hello,
+>=20
+> syzbot found the following issue on:
+>=20
+> HEAD commit:    ac9a78681b92 Linux 6.4-rc1
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=3D102a3f6a280000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Dcc86fee671999=
+11d
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3Dafc1d968649e7e8=
+51562
+> compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, =
+GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: arm
+>=20
+> Downloadable assets:
+> disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/c=
+35b5b2731d2/non_bootable_disk-ac9a7868.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/c04bec59d77d/vmlinu=
+x-ac9a7868.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/070113b307f3/z=
+Image-ac9a7868.xz
+>=20
+> IMPORTANT: if you fix the issue, please add the following tag to the comm=
+it:
+> Reported-by: syzbot+afc1d968649e7e851562@syzkaller.appspotmail.com
+>=20
+> 8<--- cut here ---
+> Unable to handle kernel NULL pointer dereference at virtual address 00000=
+5f4 when read
+> [000005f4] *pgd=3D80000080004003, *pmd=3D00000000
+> Internal error: Oops: 207 [#1] PREEMPT SMP ARM
+> Modules linked in:
+> CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.4.0-rc1-syzkaller #0
+> Hardware name: ARM-Versatile Express
+> PC is at gic_eoi_irq+0x64/0x70 drivers/irqchip/irq-gic.c:228
+> LR is at handle_percpu_devid_irq+0xb8/0x2d4 kernel/irq/chip.c:944
+> pc : [<8087e328>]    lr : [<802bf798>]    psr: 20000193
+> sp : df805f60  ip : df805f78  fp : df805f74
+> r10: 00000000  r9 : 831f4680  r8 : 00000001
+> r7 : 0000001c  r6 : 81b0febc  r5 : 000005f0  r4 : 8309a218
+> r3 : 000005f0  r2 : 0009127a  r1 : ddde8b00  r0 : 8309a218
+> Flags: nzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment none
+> Control: 30c5387d  Table: 84804d80  DAC: 00000000
+> Register r0 information: slab kmalloc-256 start 8309a200 pointer offset 2=
+4 size 256
+> Register r1 information: non-slab/vmalloc memory
+> Register r2 information:
+> 8<--- cut here ---
+> Unable to handle kernel NULL pointer dereference at virtual address 00000=
+1ff when read
+> [000001ff] *pgd=3D80000080004003, *pmd=3D00000000
+> Internal error: Oops: 207 [#2] PREEMPT SMP ARM
+> Modules linked in:
+> CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.4.0-rc1-syzkaller #0
+> Hardware name: ARM-Versatile Express
+> PC is at __find_vmap_area mm/vmalloc.c:841 [inline]
+> PC is at find_vmap_area mm/vmalloc.c:1862 [inline]
+> PC is at find_vm_area mm/vmalloc.c:2623 [inline]
+> PC is at vmalloc_dump_obj+0x38/0xb4 mm/vmalloc.c:4221
+> LR is at __raw_spin_lock include/linux/spinlock_api_smp.h:132 [inline]
+> LR is at _raw_spin_lock+0x18/0x58 kernel/locking/spinlock.c:154
+> pc : [<8047a2ec>]    lr : [<81801fd4>]    psr: 20000193
+> sp : df805df0  ip : df805dd8  fp : df805e04
+> r10: 831f4680  r9 : 8261c9a4  r8 : 8285041c
+> r7 : 60000193  r6 : 00000003  r5 : 00092000  r4 : 00000207
+> r3 : 830e13a0  r2 : 00001dda  r1 : 00000000  r0 : 00000001
+> Flags: nzCv  IRQs off  FIQs on  Mode SVC_32  ISA ARM  Segment none
+> Control: 30c5387d  Table: 84804d80  DAC: 00000000
 
-Best Regards,
-Alice Guo
+[hoping this will be read by a human and not one of these AI]
 
-> -----Original Message-----
-> From: Pankaj Gupta <pankaj.gupta@nxp.com>
-> Sent: Friday, May 12, 2023 11:11 PM
-> To: Gaurav Jain <gaurav.jain@nxp.com>; herbert@gondor.apana.org.au;
-> davem@davemloft.net
-> Cc: linux-crypto@vger.kernel.org; linux-kernel@vger.kernel.org; dl-linux-=
-imx
-> <linux-imx@nxp.com>; Pankaj Gupta <pankaj.gupta@nxp.com>; Alice Guo
-> <alice.guo@nxp.com>; Aisheng Dong <aisheng.dong@nxp.com>; Horia Geanta
-> <horia.geanta@nxp.com>; Peng Fan <peng.fan@nxp.com>
-> Subject: [PATCH] caam: imx: fix the built-in caam driver cannot match soc=
-_id
->=20
-> Since, CAAM driver is probed before soc_device_attribute done as part of:
-> - drivers/soc/imx/soc-imx8m.c   (for i.MX8M)
-> - drivers/firmware/imx/ele_mu.c (EdgeLock Enclave kernel driver, for
-> i.MX8ULP)
->=20
-> It is needed to return -EPROBE_DEFER, after calling soc_device_match() in
-> drivers/crypto/caam/ctrl.c.
->=20
-> soc_device_match returns NULL for:
-> - i.MX8M
-> - i.MX8ULP,
-> can be considered that the SoC device has not been probed yet.
-> Hence, it returns -EPROBE_DEFER directly.
->=20
-> caam: imx: change to use of_match_node in run_descriptor_deco0
->=20
-> Providing imx8m_machine_match to match:
-> - i.MX8M{Q,M,N,P},
-> - i.MX8ULP,
-> so as to start using of_match_node, to simplify the code.
->=20
-> Signed-off-by: Alice Guo <alice.guo@nxp.com>
-> Signed-off-by: Pankaj Gupta <pankaj.gupta@nxp.com>
-> Reviewed-by: Dong Aisheng <aisheng.dong@nxp.com>
-> Reviewed-by: Horia Geanta <horia.geanta@nxp.com>
-> Acked-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  drivers/crypto/caam/ctrl.c | 17 +++++++++++++----
->  1 file changed, 13 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/crypto/caam/ctrl.c b/drivers/crypto/caam/ctrl.c inde=
-x
-> bedcc2ab3a00..d8c528363f10 100644
-> --- a/drivers/crypto/caam/ctrl.c
-> +++ b/drivers/crypto/caam/ctrl.c
-> @@ -79,6 +79,15 @@ static void build_deinstantiation_desc(u32 *desc, int
-> handle)
->  	append_jump(desc, JUMP_CLASS_CLASS1 | JUMP_TYPE_HALT);  }
->=20
-> +static const struct of_device_id imx8m_machine_match[] =3D {
-> +	{ .compatible =3D "fsl,imx8mm", },
-> +	{ .compatible =3D "fsl,imx8mn", },
-> +	{ .compatible =3D "fsl,imx8mp", },
-> +	{ .compatible =3D "fsl,imx8mq", },
-> +	{ .compatible =3D "fsl,imx8ulp", },
-> +	{ }
-> +};
-> +
->  /*
->   * run_descriptor_deco0 - runs a descriptor on DECO0, under direct contr=
-ol
-> of
->   *			  the software (no JR/QI used).
-> @@ -105,10 +114,7 @@ static inline int run_descriptor_deco0(struct device
-> *ctrldev, u32 *desc,
->  	     * Apparently on i.MX8M{Q,M,N,P} it doesn't matter if virt_en =3D=
-=3D 1
->  	     * and the following steps should be performed regardless
->  	     */
-> -	    of_machine_is_compatible("fsl,imx8mq") ||
-> -	    of_machine_is_compatible("fsl,imx8mm") ||
-> -	    of_machine_is_compatible("fsl,imx8mn") ||
-> -	    of_machine_is_compatible("fsl,imx8mp")) {
-> +	    of_match_node(imx8m_machine_match, of_root)) {
->  		clrsetbits_32(&ctrl->deco_rsr, 0, DECORSR_JR0);
->=20
->  		while (!(rd_reg32(&ctrl->deco_rsr) & DECORSR_VALID) && @@
-> -646,6 +652,9 @@ static int caam_probe(struct platform_device *pdev)
->  	nprop =3D pdev->dev.of_node;
->=20
->  	imx_soc_match =3D soc_device_match(caam_imx_soc_table);
-> +	if (!imx_soc_match && of_match_node(imx8m_machine_match, of_root))
-> +		return -EPROBE_DEFER;
-> +
->  	caam_imx =3D (bool)imx_soc_match;
->=20
->  	if (imx_soc_match) {
-> --
-> 2.34.1
+You keep sending me these reports because the GIC is in a
+stacktrace.
 
+But the root cause it probably somewhere else, as the multiple runs of
+the same kernel result in very different exceptions, most of which
+never reach the point where it explodes in your stacktrace. Here's one
+of them:
+
+[    1.572514][    T1] Freeing unused kernel image (initmem) memory: 2048K
+[    1.624529][    T1] Failed to set sysctl parameter 'vm.nr_hugepages=3D4'=
+: parameter not found
+[    1.626239][    T1] Failed to set sysctl parameter 'vm.nr_overcommit_hug=
+epages=3D4': parameter not found
+[    1.628105][    T1] Failed to set sysctl parameter 'max_rcu_stall_to_pan=
+ic=3D1': parameter not found
+[    1.630034][    T1] Run /sbin/init as init process
+[    1.663886][    T0] Insufficient stack space to handle exception!
+[    1.663894][    T0] Task stack:     [0xdf8a0000..0xdf8a2000]
+[    1.666697][    T0] IRQ stack:      [0xdf804000..0xdf806000]
+[    1.668019][    T0] Overflow stack: [0x830eb000..0x830ec000]
+[    1.669327][    T0] Internal error: kernel stack overflow: 0 [#1] PREEMP=
+T SMP ARM
+[    1.671033][    T0] Modules linked in:
+[    1.671894][    T0] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.4.0-rc1-=
+syzkaller #0
+[    1.673749][    T0] Hardware name: =EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BDx=
+=EF=BF=BD=EF=BF=BD=EF=BF=BDdf!=EF=BF=BD=EF=BF=BD`!=EF=BF=BD system
+[    1.675020][    T0] PC is at __dabt_svc+0x14/0x60
+[    1.676176][    T0] LR is at arch_cpu_idle+0x38/0x3c
+[    1.677328][    T0] pc : [<80200a74>]    lr : [<80208eb8>]    psr: 00000=
+193
+[    1.678918][    T0] sp : df8a0010  ip : df8a1f60  fp : df8a1f5c
+[    1.680268][    T0] r10: 00000000  r9 : 827e1666  r8 : 00000000
+[    1.681630][    T0] r7 : 8260c4e0  r6 : 00000001  r5 : 8260c498  r4 : 83=
+1cc680
+[    1.683282][    T0] r3 : 8021b8c0  r2 : 00433fc1  r1 : 81f9d24c  r0 : 82=
+850250
+[    1.684957][    T0] Flags: nzcv  IRQs off  FIQs on  Mode SVC_32  ISA ARM=
+  Segment user
+[    1.686771][    T0] Control: 30c5383d  Table: 80003000  DAC: dbadc0de
+[    1.688354][    T0] Register r0 information:
+[    1.713870][    T0] 8<--- cut here ---
+[    1.715765][    T0] Unhandled fault: unknown 3 (0xa03) at 0xdf8b9004
+[    1.717219][    T0] [df8b9004] *pgd=3D80000080007003, *pmd=3D83097003, *=
+pte=3D802160e8fe83d71f
+[    2.073879][    C0] 8<--- cut here ---
+[    2.074748][    C0] Unable to handle kernel paging request at virtual ad=
+dress 830a2000 when execute
+[    2.076808][    C0] [830a2000] *pgd=3D80000080006003, *pmd=3D40000083000=
+71d(bad)
+[    6.553998][    T0] Insufficient stack space to handle exception!
+[    6.554004][    T0] Task stack:     [0xdf8a4000..0xdf8a6000]
+[    6.556644][    T0] IRQ stack:      [0xdf808000..0xdf80a000]
+[    6.557922][    T0] Overflow stack: [0x830b8000..0x830b9000]
+[   18.824252][    T0] 8<--- cut here ---
+[   18.824265][    C4] 8<--- cut here ---
+[   18.824317][    T0] Insufficient stack space to handle exception!
+[   18.824320][    T0] Task stack:     [0xdf8a8000..0xdf8aa000]
+[   18.824323][    T0] IRQ stack:      [0xdf80c000..0xdf80e000]
+[   18.824326][    T0] Overflow stack: [0x830b9000..0x830ba000]
+[   18.825383][    T0] Unhandled fault: unknown 3 (0xa03) at 0xdf8b1004
+[   18.826484][    C4] Unable to handle kernel paging request at virtual ad=
+dress df84000c when read
+[   18.828182][    T0] [df8b1004] *pgd=3D80000080007003
+[   18.829838][    C4] [df84000c] *pgd=3D80000080007003
+[   18.831330][    T0] , *pmd=3D83097003
+[   18.832710][    C4] , *pmd=3D83097003
+[   18.834800][    T0] , *pte=3D8261d0a8fe83971f
+[   18.836939][    C4] , *pte=3D802160c4
+[   18.838162][    T0]=20
+[   18.843536][    C4]=20
+[    1.663886][    T0] Insufficient stack space to handle exception!
+[    1.663894][    T0] Task stack:     [0xdf8a0000..0xdf8a2000]
+[    1.666697][    T0] IRQ stack:      [0xdf804000..0xdf806000]
+[    1.668019][    T0] Overflow stack: [0x830eb000..0x830ec000]
+[    1.669327][    T0] Internal error: kernel stack overflow: 0 [#1] PREEMP=
+T SMP ARM
+[    1.671033][    T0] Modules linked in:
+[    1.671894][    T0] CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.4.0-rc1-=
+syzkaller #0
+[    1.673749][    T0] Hardware name: =EF=BF=BD=EF=BF=BD=EF=BF=BD=EF=BF=BDx=
+=EF=BF=BD=EF=BF=BD=EF=BF=BDdf!=EF=BF=BD=EF=BF=BD`!=EF=BF=BD system
+[    1.675020][    T0] PC is at __dabt_svc+0x14/0x60
+[    1.676176][    T0] LR is at arch_cpu_idle+0x38/0x3c
+[    1.677328][    T0] pc : [<80200a74>]    lr : [<80208eb8>]    psr: 00000=
+193
+[    1.678918][    T0] sp : df8a0010  ip : df8a1f60  fp : df8a1f5c
+[    1.680268][    T0] r10: 00000000  r9 : 827e1666  r8 : 00000000
+[    1.681630][    T0] r7 : 8260c4e0  r6 : 00000001  r5 : 8260c498  r4 : 83=
+1cc680
+[    1.683282][    T0] r3 : 8021b8c0  r2 : 00433fc1  r1 : 81f9d24c  r0 : 82=
+850250
+[    1.684957][    T0] Flags: nzcv  IRQs off  FIQs on  Mode SVC_32  ISA ARM=
+  Segment user
+[    1.686771][    T0] Control: 30c5383d  Table: 80003000  DAC: dbadc0de
+[    1.688354][    T0] Register r0 information:
+[    1.713870][    T0] 8<--- cut here ---
+[    1.715765][    T0] Unhandled fault: unknown 3 (0xa03) at 0xdf8b9004
+[    1.717219][    T0] [df8b9004] *pgd=3D80000080007003, *pmd=3D83097003, *=
+pte=3D802160e8fe83d71f
+[    2.073879][    C0] 8<--- cut here ---
+[    2.074748][    C0] Unable to handle kernel paging request at virtual ad=
+dress 830a2000 when execute
+[    2.076808][    C0] [830a2000] *pgd=3D80000080006003, *pmd=3D40000083000=
+71d(bad)
+[    6.553998][    T0] Insufficient stack space to handle exception!
+[    6.554004][    T0] Task stack:     [0xdf8a4000..0xdf8a6000]
+[    6.556644][    T0] IRQ stack:      [0xdf808000..0xdf80a000]
+[    6.557922][    T0] Overflow stack: [0x830b8000..0x830b9000]
+[   18.824252][    T0] 8<--- cut here ---
+[   18.824265][    C4] 8<--- cut here ---
+[   18.824317][    T0] Insufficient stack space to handle exception!
+[   18.824320][    T0] Task stack:     [0xdf8a8000..0xdf8aa000]
+[   18.824323][    T0] IRQ stack:      [0xdf80c000..0xdf80e000]
+[   18.824326][    T0] Overflow stack: [0x830b9000..0x830ba000]
+[   18.825383][    T0] Unhandled fault: unknown 3 (0xa03) at 0xdf8b1004
+[   18.826484][    C4] Unable to handle kernel paging request at virtual ad=
+dress df84000c when read
+[   18.828182][    T0] [df8b1004] *pgd=3D80000080007003
+[   18.829838][    C4] [df84000c] *pgd=3D80000080007003
+[   18.831330][    T0] , *pmd=3D83097003
+[   18.832710][    C4] , *pmd=3D83097003
+[   18.834800][    T0] , *pte=3D8261d0a8fe83971f
+[   18.836939][    C4] , *pte=3D802160c4
+[   18.838162][    T0]=20
+[   18.843536][    C4]=20
+
+So not much to do with the GIC, but more to do with general stack
+overflow/corruption. I'd appreciate it if you could stop barking up
+the wrong tree and get someone who is still interested in 32bit ARM to
+look into it.
+
+Thanks,
+
+	M.
+
+--=20
+Without deviation from the norm, progress is not possible.
