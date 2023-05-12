@@ -2,359 +2,245 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 597FC701245
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 00:51:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 60F5F701249
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 00:54:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240007AbjELWuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 18:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54784 "EHLO
+        id S240145AbjELWyV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 18:54:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjELWux (ORCPT
+        with ESMTP id S240021AbjELWyU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 18:50:53 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07C54EDD
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 15:50:50 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-333eb36e510so58771755ab.1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 15:50:50 -0700 (PDT)
+        Fri, 12 May 2023 18:54:20 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C95C559B
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 15:54:18 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so8908363b3a.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 15:54:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20221208.gappssmtp.com; s=20221208; t=1683932058; x=1686524058;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=xw4RNP6p9BVSOpDZtwoCjXs6A4xbd0WgFJaBNB3t0SU=;
+        b=4H8vTWWjgP8YgYqL3CI3Cx/tH7ktwTvsFj+5vOj+pjBVPrkPf0bYMqP4/kMiaoSp4g
+         EH2Q36FLDUpaem9VTjfDS0elq9JxQaZp1eJbW3WjHBeP05+FZIG2GZw2tKpfhcMPQbVz
+         9qMAm6hhKsSaIR3+tKrjBrVYctAdzqNqVI5eAqX9NZdNHrZesf//hTObCHrNvamj+Jvb
+         ppQiEt/VJ3jxojcfVx9ZSj4ertqnikTXkW059vLK1JBADRxxdh8PbWyPLHVid0OHfDPW
+         tZ3wvzpme0S+JLfeOezH4PC8dS/EV4jnr31njQCjdSHcHzTB+Ai6LozEd+zOau31D32P
+         n68Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683931850; x=1686523850;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9XW1v84MCiE6HB/1T4rDTcZlViKTP1TqQBq0bOy7GQE=;
-        b=jGtynI4c0ySwpz73oBupfaW6GVeypFWc9QUZ4/GZ2AKAXVFuwsqSsO3z7ZwckN/PfI
-         2aLDZ7Oooz6HPuIubOeLPB+2XxfmVlGmD4b3ZCJSurTY9TVAuNlB3AGi78ixtCjbCaFz
-         r8oUbY7gAhWZf1eYmm5oTlgGUIbZFNPhACYksxxIFDE8OXjy2aWug9e2pAW/sCPo9DvT
-         oZXwPk8WmqaXG4OeyLPL+jon+e+9cN3xGLw36iWRIbB38QHRP+ALz4p3BGyVMQf5eZgJ
-         1DwmLzNui27lxEeyZJyx0yYw23LP8pMvWdd3rYUxefYmhObC3GJZ5cMRtvjZJ7w5AT4U
-         9FEA==
-X-Gm-Message-State: AC+VfDygz5p7kKQVD5f0DyHNYBC8i8il+lyiXeih94FvaRjbcsRBEPYv
-        JznNP9pLLxZhkF6ho5u6sCvtQpoKwNuZwWoMcLeS8UN1MM/S
-X-Google-Smtp-Source: ACHHUZ5Tw/ef0/e+MEymVteq4J21oKS+teNkn1kKMsDqkVB6KnVYawdOyMRZ8eSNytXGWXPKzfObXrD24k2xrsMQkuuPZPyOltP+
+        d=1e100.net; s=20221208; t=1683932058; x=1686524058;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xw4RNP6p9BVSOpDZtwoCjXs6A4xbd0WgFJaBNB3t0SU=;
+        b=mE8wMJTVFacxfbgyqFKsthcBwbpjjiToSinI3DeKnojZVYQGmvl3F6sdOQN/1mrVvG
+         KitN8IsJNRMMR7P2dmYhcx8ymVDjTXacmFNdGw5KQybhry7abmQAlE5crT/rer9aiAJH
+         crLTkqxEgN+nsIqYS7ee0W8LZe0IJggmjRLz8n/QHvK6akxwqqZwPJqyKnD/jBXTOd5z
+         HI6pwDiMs0JiezW8kLc255Nv8bVApespStgmQ8QZcH5WoqqiOOtyYp1TU4J2v1ttw6FA
+         jSq6VwfF9aLADgohcTm5898q4Zo6kEUEisUhZNa6m1o44R55YHjXhYoq0xyU8gtzHQvs
+         aMNw==
+X-Gm-Message-State: AC+VfDzz7rcSUBo1EdaMyFRAqdRCWc7Nb1mPg3EZjzal3Fz18wyoNODe
+        malojG1WnHb6jkaYn8uXSUL5bQ==
+X-Google-Smtp-Source: ACHHUZ7IQF8tj7PMuEYgsCQZlAe0r/sNb1zkwWw9hK0qHO6sRng86j+Z7QU4KwoL8PxpvzCjcuRBsA==
+X-Received: by 2002:a05:6a00:3028:b0:643:a841:887a with SMTP id ay40-20020a056a00302800b00643a841887amr30197988pfb.4.1683932057868;
+        Fri, 12 May 2023 15:54:17 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-88-204.pa.nsw.optusnet.com.au. [49.181.88.204])
+        by smtp.gmail.com with ESMTPSA id f14-20020aa78b0e000000b0063d666566d1sm7559518pfd.72.2023.05.12.15.54.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 15:54:17 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pxbeQ-00EZh4-IM; Sat, 13 May 2023 08:54:14 +1000
+Date:   Sat, 13 May 2023 08:54:14 +1000
+From:   Dave Chinner <david@fromorbit.com>
+To:     Tycho Andersen <tycho@tycho.pizza>
+Cc:     "Darrick J. Wong" <djwong@kernel.org>, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Tycho Andersen <tandersen@netflix.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Subject: Re: [PATCH] xfs: don't do inodgc work if task is exiting
+Message-ID: <20230512225414.GE3223426@dread.disaster.area>
+References: <20230511151702.14704-1-tycho@tycho.pizza>
+ <20230512000724.GH858799@frogsfrogsfrogs>
+ <ZF5X/8RQSzGMn3aZ@tycho.pizza>
 MIME-Version: 1.0
-X-Received: by 2002:a02:9547:0:b0:406:35e8:51e6 with SMTP id
- y65-20020a029547000000b0040635e851e6mr7240095jah.1.1683931849937; Fri, 12 May
- 2023 15:50:49 -0700 (PDT)
-Date:   Fri, 12 May 2023 15:50:49 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000bdd6c305fb86ef53@google.com>
-Subject: [syzbot] [net?] KASAN: slab-out-of-bounds Read in taprio_dequeue_from_txq
-From:   syzbot <syzbot+04afcb3d2c840447559a@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, jhs@mojatatu.com,
-        jiri@resnulli.us, kuba@kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, pabeni@redhat.com,
-        syzkaller-bugs@googlegroups.com, vinicius.gomes@intel.com,
-        xiyou.wangcong@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZF5X/8RQSzGMn3aZ@tycho.pizza>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, May 12, 2023 at 09:15:11AM -0600, Tycho Andersen wrote:
+> INFO: task java:3546393 blocked for more than 1912 seconds.
+>       Tainted: G           OE     5.15.35netflix-g54efd87a8576 #1
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:skyframe-evalua state:D stack:    0 pid:3546393 ppid:3532734 flags:0x00000220
+> Call Trace:
+>  <TASK>
+>  __schedule+0x2c5/0x8d0
+>  schedule+0x3a/0xa0
+>  schedule_timeout+0x115/0x280
+>  ? xfs_buf_read_map+0x52/0x2e0 [xfs]
+>  ? xfs_da_read_buf+0xcf/0x120 [xfs]
+>  __down+0x90/0xe0
+>  ? down+0x43/0x60
+>  down+0x43/0x60
+>  xfs_buf_lock+0x29/0xa0 [xfs]
+>  xfs_buf_find.isra.34+0x1fd/0x610 [xfs]
+>  xfs_buf_get_map+0x4c/0x400 [xfs]
+>  xfs_buf_read_map+0x52/0x2e0 [xfs]
+>  ? xfs_read_agi+0x8c/0x120 [xfs]
+>  xfs_trans_read_buf_map+0x223/0x2d0 [xfs]
+>  ? xfs_read_agi+0x8c/0x120 [xfs]
+>  xfs_read_agi+0x8c/0x120 [xfs]
+>  xfs_ialloc_read_agi+0x2a/0x90 [xfs]
+>  xfs_dialloc+0x1ab/0x680 [xfs]
+>  ? xfs_trans_reserve_quota_icreate+0x32/0x40 [xfs]
+>  ? xfs_trans_alloc_icreate+0x75/0xf0 [xfs]
+>  xfs_create+0x39e/0x5b0 [xfs]
+>  xfs_generic_create+0x129/0x380 [xfs]
+>  ? generic_permission+0x27/0x200
+>  vfs_create+0x12b/0x1c0
+>  ovl_create_real+0xd7/0x220 [overlay]
+>  ovl_create_or_link+0x166/0x670 [overlay]
 
-syzbot found the following issue on:
+Lots of stuff blocked on the AGI lock doing inode allocation. Kinda
+what I expected to see...
 
-HEAD commit:    cc3c44c9fda2 Merge tag 'drm-fixes-2023-05-12' of git://ano..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=1207804a280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=4340592eb0a0a7c5
-dashboard link: https://syzkaller.appspot.com/bug?extid=04afcb3d2c840447559a
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=153c01dc280000
+> INFO: task kworker/66:1:3548191 blocked for more than 1912 seconds.
+>       Tainted: G           OE     5.15.35netflix-g54efd87a8576 #1
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:kworker/66:1    state:D stack:    0 pid:3548191 ppid:     2 flags:0x00004000
+> Workqueue: xfs-inodegc/nvme1n1 xfs_inodegc_worker [xfs]
+> Call Trace:
+>  <TASK>
+>  __schedule+0x2c5/0x8d0
+>  schedule+0x3a/0xa0
+>  schedule_timeout+0x115/0x280
+>  __down+0x90/0xe0
+>  ? down+0x43/0x60
+>  down+0x43/0x60
+>  xfs_buf_lock+0x29/0xa0 [xfs]
+>  xfs_buf_find.isra.34+0x1fd/0x610 [xfs]
+>  xfs_buf_get_map+0x4c/0x400 [xfs]
+>  xfs_buf_read_map+0x52/0x2e0 [xfs]
+>  ? xfs_read_agi+0x8c/0x120 [xfs]
+>  xfs_trans_read_buf_map+0x223/0x2d0 [xfs]
+>  ? xfs_read_agi+0x8c/0x120 [xfs]
+>  xfs_read_agi+0x8c/0x120 [xfs]
+>  xfs_iunlink_remove+0x5a/0x220 [xfs]
+>  xfs_ifree+0x7a/0x4c0 [xfs]
+>  ? xfs_trans_alloc+0xec/0x1e0 [xfs]
+>  xfs_inactive_ifree+0xa1/0x1a0 [xfs]
+>  xfs_inactive+0xf1/0x170 [xfs]
+>  xfs_inodegc_worker+0x76/0x100 [xfs]
+>  process_one_work+0x200/0x3d0
+>  worker_thread+0x2d/0x3e0
+>  ? process_one_work+0x3d0/0x3d0
+>  kthread+0x11a/0x140
+>  ? set_kthread_struct+0x40/0x40
+>  ret_from_fork+0x22/0x30
+>  </TASK>
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/d2c24de9e223/disk-cc3c44c9.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/53f62666288b/vmlinux-cc3c44c9.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/5ebe93c20d75/bzImage-cc3c44c9.xz
+Yup, there's the stuck inodegc worker - also trying to get the AGI
+lock doing inode unlink. I'm not surprised at all by this - working
+out why this worker is stuck here is the goal because that is what
+is causing all your flush problems.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+04afcb3d2c840447559a@syzkaller.appspotmail.com
+It also gives me a better idea of what the likely issue is, too.
 
-==================================================================
-BUG: KASAN: slab-out-of-bounds in taprio_dequeue_from_txq+0x835/0x940 net/sched/sch_taprio.c:714
-Read of size 8 at addr ffff88807b55da80 by task syz-executor.5/8955
+> INFO: task bazelenv:3548683 blocked for more than 1912 seconds.
+>       Tainted: G           OE     5.15.35netflix-g54efd87a8576 #1
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:bazelenv        state:D stack:    0 pid:3548683 ppid:3435211 flags:0x00000220
+> Call Trace:
+>  <TASK>
+>  __schedule+0x2c5/0x8d0
+>  schedule+0x3a/0xa0
+>  schedule_timeout+0x115/0x280
+>  __down+0x90/0xe0
+>  ? down+0x43/0x60
+>  down+0x43/0x60
+>  xfs_buf_lock+0x29/0xa0 [xfs]
+>  xfs_buf_find.isra.34+0x1fd/0x610 [xfs]
+>  xfs_buf_get_map+0x4c/0x400 [xfs]
+>  xfs_buf_read_map+0x52/0x2e0 [xfs]
+>  ? xfs_read_agf+0x84/0x100 [xfs]
+>  xfs_trans_read_buf_map+0x223/0x2d0 [xfs]
+>  ? xfs_read_agf+0x84/0x100 [xfs]
+>  xfs_read_agf+0x84/0x100 [xfs]
+>  xfs_alloc_read_agf+0x3a/0x1b0 [xfs]
+>  xfs_alloc_fix_freelist+0x434/0x500 [xfs]
+>  ? __kmalloc+0x3c0/0x400
+>  ? xfs_dquot_to_disk+0xfe/0x110 [xfs]
+>  ? xfs_qm_dquot_logitem_format+0x89/0x150 [xfs]
+>  xfs_free_extent_fix_freelist+0x61/0xa0 [xfs]
+>  __xfs_free_extent+0x6a/0x1c0 [xfs]
+>  xfs_trans_free_extent+0x3b/0xd0 [xfs]
+>  xfs_extent_free_finish_item+0x23/0x40 [xfs]
+>  xfs_defer_finish_noroll+0x24b/0x5a0 [xfs]
+>  xfs_defer_finish+0x13/0x80 [xfs]
+>  xfs_itruncate_extents_flags+0x13b/0x220 [xfs]
+>  xfs_setattr_size+0x35c/0x3d0 [xfs]
+>  ? aa_compute_fperms+0x16f/0x190
+>  xfs_vn_setattr+0xf7/0x110 [xfs]
 
-CPU: 0 PID: 8955 Comm: syz-executor.5 Not tainted 6.4.0-rc1-syzkaller-00109-gcc3c44c9fda2 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
-Call Trace:
- <IRQ>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
- print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:351
- print_report mm/kasan/report.c:462 [inline]
- kasan_report+0x11c/0x130 mm/kasan/report.c:572
- taprio_dequeue_from_txq+0x835/0x940 net/sched/sch_taprio.c:714
- taprio_dequeue_tc_priority+0x277/0x450 net/sched/sch_taprio.c:795
- taprio_dequeue+0x12c/0x5e0 net/sched/sch_taprio.c:862
- dequeue_skb net/sched/sch_generic.c:292 [inline]
- qdisc_restart net/sched/sch_generic.c:397 [inline]
- __qdisc_run+0x1b2/0x1780 net/sched/sch_generic.c:415
- __dev_xmit_skb net/core/dev.c:3868 [inline]
- __dev_queue_xmit+0x2215/0x3b10 net/core/dev.c:4210
- dev_queue_xmit include/linux/netdevice.h:3085 [inline]
- neigh_hh_output include/net/neighbour.h:528 [inline]
- neigh_output include/net/neighbour.h:542 [inline]
- ip6_finish_output2+0xfbd/0x1560 net/ipv6/ip6_output.c:134
- __ip6_finish_output net/ipv6/ip6_output.c:195 [inline]
- ip6_finish_output+0x69a/0x1170 net/ipv6/ip6_output.c:206
- NF_HOOK_COND include/linux/netfilter.h:292 [inline]
- ip6_output+0x1f1/0x540 net/ipv6/ip6_output.c:227
- dst_output include/net/dst.h:458 [inline]
- NF_HOOK include/linux/netfilter.h:303 [inline]
- ndisc_send_skb+0xa63/0x1850 net/ipv6/ndisc.c:508
- ndisc_send_rs+0x132/0x6f0 net/ipv6/ndisc.c:718
- addrconf_rs_timer+0x3f1/0x870 net/ipv6/addrconf.c:3936
- call_timer_fn+0x1a0/0x580 kernel/time/timer.c:1700
- expire_timers+0x29b/0x4b0 kernel/time/timer.c:1751
- __run_timers kernel/time/timer.c:2022 [inline]
- __run_timers kernel/time/timer.c:1995 [inline]
- run_timer_softirq+0x326/0x910 kernel/time/timer.c:2035
- __do_softirq+0x1d4/0x905 kernel/softirq.c:571
- invoke_softirq kernel/softirq.c:445 [inline]
- __irq_exit_rcu+0x114/0x190 kernel/softirq.c:650
- irq_exit_rcu+0x9/0x20 kernel/softirq.c:662
- sysvec_apic_timer_interrupt+0x97/0xc0 arch/x86/kernel/apic/apic.c:1106
- </IRQ>
- <TASK>
- asm_sysvec_apic_timer_interrupt+0x1a/0x20 arch/x86/include/asm/idtentry.h:645
-RIP: 0010:__raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:152 [inline]
-RIP: 0010:_raw_spin_unlock_irqrestore+0x3c/0x70 kernel/locking/spinlock.c:194
-Code: 74 24 10 e8 c6 6f 53 f7 48 89 ef e8 ee dd 53 f7 81 e3 00 02 00 00 75 25 9c 58 f6 c4 02 75 2d 48 85 db 74 01 fb bf 01 00 00 00 <e8> 3f b2 45 f7 65 8b 05 50 24 f2 75 85 c0 74 0a 5b 5d c3 e8 ac 6a
-RSP: 0018:ffffc900063a7258 EFLAGS: 00000206
-RAX: 0000000000000006 RBX: 0000000000000200 RCX: 1ffffffff22a44de
-RDX: 0000000000000000 RSI: 0000000000000001 RDI: 0000000000000001
-RBP: ffff888016b945b8 R08: 0000000000000001 R09: ffffffff9151cd0f
-R10: 0000000000000001 R11: 0000000000000000 R12: 1ffff92000c74e50
-R13: 0000000000000000 R14: ffff88807721f040 R15: ffff88807721f048
- spin_unlock_irqrestore include/linux/spinlock.h:405 [inline]
- ref_tracker_free+0x367/0x820 lib/ref_tracker.c:151
- netdev_tracker_free include/linux/netdevice.h:4090 [inline]
- netdev_put include/linux/netdevice.h:4107 [inline]
- netdev_put include/linux/netdevice.h:4103 [inline]
- qdisc_destroy+0x163/0x450 net/sched/sch_generic.c:1066
- qdisc_put+0xd1/0xf0 net/sched/sch_generic.c:1082
- taprio_destroy+0x2e6/0x710 net/sched/sch_taprio.c:2033
- qdisc_create+0xa33/0x1040 net/sched/sch_api.c:1331
- tc_modify_qdisc+0x488/0x1aa0 net/sched/sch_api.c:1682
- rtnetlink_rcv_msg+0x43d/0xd50 net/core/rtnetlink.c:6395
- netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2546
- netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
- netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
- netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1913
- sock_sendmsg_nosec net/socket.c:724 [inline]
- sock_sendmsg+0xde/0x190 net/socket.c:747
- ____sys_sendmsg+0x71c/0x900 net/socket.c:2503
- ___sys_sendmsg+0x110/0x1b0 net/socket.c:2557
- __sys_sendmsg+0xf7/0x1c0 net/socket.c:2586
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fbfb208c169
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007fbfb2e55168 EFLAGS: 00000246 ORIG_RAX: 000000000000002e
-RAX: ffffffffffffffda RBX: 00007fbfb21abf80 RCX: 00007fbfb208c169
-RDX: 0000000000000000 RSI: 00000000200007c0 RDI: 0000000000000008
-RBP: 00007fbfb20e7ca1 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffde123676f R14: 00007fbfb2e55300 R15: 0000000000022000
- </TASK>
+And that confirms the suspicions I have - another process blocked on
+an AGF lock. That might be IO it's blocking on here, but combined
+with the inode unlink being stuck in inodegc, I have a suspicion
+that this is an AGF - AGI - inode buffer lock ordering issue.
 
-Allocated by task 8955:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- kasan_set_track+0x25/0x30 mm/kasan/common.c:52
- ____kasan_kmalloc mm/kasan/common.c:374 [inline]
- ____kasan_kmalloc mm/kasan/common.c:333 [inline]
- __kasan_kmalloc+0xa3/0xb0 mm/kasan/common.c:383
- kasan_kmalloc include/linux/kasan.h:196 [inline]
- __do_kmalloc_node mm/slab_common.c:966 [inline]
- __kmalloc+0x5e/0x190 mm/slab_common.c:979
- kmalloc_array include/linux/slab.h:596 [inline]
- kcalloc include/linux/slab.h:627 [inline]
- taprio_init+0x319/0x940 net/sched/sch_taprio.c:2086
- qdisc_create+0x4d1/0x1040 net/sched/sch_api.c:1297
- tc_modify_qdisc+0x488/0x1aa0 net/sched/sch_api.c:1682
- rtnetlink_rcv_msg+0x43d/0xd50 net/core/rtnetlink.c:6395
- netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2546
- netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
- netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
- netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1913
- sock_sendmsg_nosec net/socket.c:724 [inline]
- sock_sendmsg+0xde/0x190 net/socket.c:747
- ____sys_sendmsg+0x71c/0x900 net/socket.c:2503
- ___sys_sendmsg+0x110/0x1b0 net/socket.c:2557
- __sys_sendmsg+0xf7/0x1c0 net/socket.c:2586
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+There's been a heap of work done in this space since 5.15, and I'd
+suggest that almost none of it is trivially backportable as it's
+deeply intertwined with relatively complex algorithm changes.
 
-Last potentially related work creation:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- __kasan_record_aux_stack+0x7b/0x90 mm/kasan/generic.c:491
- kvfree_call_rcu+0x70/0xad0 kernel/rcu/tree.c:3332
- kernfs_unlink_open_file+0x3a4/0x4a0 fs/kernfs/file.c:633
- kernfs_fop_release+0xeb/0x1e0 fs/kernfs/file.c:805
- __fput+0x27c/0xa90 fs/file_table.c:321
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
- exit_to_user_mode_prepare+0x210/0x240 kernel/entry/common.c:204
- __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
- syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
- do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+I also recently found evidence of another AGI -> inode buffer -> AGF
+-> inode buffer deadlock issue debugging another hang from a machine
+making heavy use of O_TMPFILEs via OVL.  Without a kernel code to
+examine in intricate detail, I can't say if this is what you are
+seeing.
 
-Second to last potentially related work creation:
- kasan_save_stack+0x22/0x40 mm/kasan/common.c:45
- __kasan_record_aux_stack+0x7b/0x90 mm/kasan/generic.c:491
- kvfree_call_rcu+0x70/0xad0 kernel/rcu/tree.c:3332
- kernfs_unlink_open_file+0x3a4/0x4a0 fs/kernfs/file.c:633
- kernfs_fop_release+0xeb/0x1e0 fs/kernfs/file.c:805
- __fput+0x27c/0xa90 fs/file_table.c:321
- task_work_run+0x16f/0x270 kernel/task_work.c:179
- resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
- exit_to_user_mode_loop kernel/entry/common.c:171 [inline]
- exit_to_user_mode_prepare+0x210/0x240 kernel/entry/common.c:204
- __syscall_exit_to_user_mode_work kernel/entry/common.c:286 [inline]
- syscall_exit_to_user_mode+0x1d/0x50 kernel/entry/common.c:297
- do_syscall_64+0x46/0xb0 arch/x86/entry/common.c:86
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+I also don't have a fix for that yet because, well, it's complex and
+I can really only accomodate one complex high priority bug at a time
+in my head and it hasn't been my highiest priority. As it is, I
+don't think the fix for it will be trivially backportable to 5.15,
+either....
 
-The buggy address belongs to the object at ffff88807b55da00
- which belongs to the cache kmalloc-128 of size 128
-The buggy address is located 0 bytes to the right of
- allocated 128-byte region [ffff88807b55da00, ffff88807b55da80)
+> INFO: task journalctl:3549038 blocked for more than 1912 seconds.
+>       Tainted: G           OE     5.15.35netflix-g54efd87a8576 #1
+> "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> task:journalctl      state:D stack:    0 pid:3549038 ppid:469330 flags:0x00000224
+> Call Trace:
+>  <TASK>
+>  __schedule+0x2c5/0x8d0
+>  schedule+0x3a/0xa0
+>  schedule_timeout+0x115/0x280
+>  ? __traceiter_sched_wakeup+0x29/0x40
+>  ? ttwu_do_wakeup+0x106/0x170
+>  wait_for_completion+0x9f/0x100
+>  __flush_work+0x161/0x1f0
+>  ? worker_detach_from_pool+0xb0/0xb0
+>  xfs_inodegc_flush.part.25+0x4f/0xa0 [xfs]
+>  xfs_fs_statfs+0x35/0x1e0 [xfs]
+>  statfs_by_dentry+0x67/0x90
+>  vfs_statfs+0x16/0xd0
+>  ovl_statfs+0x40/0x70 [overlay]
 
-The buggy address belongs to the physical page:
-page:ffffea0001ed5740 refcount:1 mapcount:0 mapping:0000000000000000 index:0x0 pfn:0x7b55d
-flags: 0xfff00000000200(slab|node=0|zone=1|lastcpupid=0x7ff)
-page_type: 0x10()
-raw: 00fff00000000200 ffff888012440400 ffffea0001dccb10 ffffea0000844350
-raw: 0000000000000000 ffff88807b55d000 0000000100000010 0000000000000000
-page dumped because: kasan: bad access detected
-page_owner tracks the page as allocated
-page last allocated via order 0, migratetype Unmovable, gfp_mask 0x3420c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_COMP|__GFP_HARDWALL|__GFP_THISNODE), pid 5023, tgid 5023 (udevd), ts 303630964026, free_ts 303272122010
- set_page_owner include/linux/page_owner.h:31 [inline]
- post_alloc_hook+0x2db/0x350 mm/page_alloc.c:1731
- prep_new_page mm/page_alloc.c:1738 [inline]
- get_page_from_freelist+0xf41/0x2c00 mm/page_alloc.c:3502
- __alloc_pages+0x1cb/0x4a0 mm/page_alloc.c:4768
- __alloc_pages_node include/linux/gfp.h:237 [inline]
- kmem_getpages mm/slab.c:1360 [inline]
- cache_grow_begin+0x9b/0x3b0 mm/slab.c:2569
- cache_alloc_refill+0x27f/0x380 mm/slab.c:2942
- ____cache_alloc mm/slab.c:3018 [inline]
- ____cache_alloc mm/slab.c:3001 [inline]
- __do_cache_alloc mm/slab.c:3201 [inline]
- slab_alloc_node mm/slab.c:3249 [inline]
- __kmem_cache_alloc_node+0x360/0x3f0 mm/slab.c:3540
- kmalloc_trace+0x26/0xe0 mm/slab_common.c:1057
- kmalloc include/linux/slab.h:559 [inline]
- kzalloc include/linux/slab.h:680 [inline]
- kernfs_get_open_node fs/kernfs/file.c:572 [inline]
- kernfs_fop_open+0xaea/0xe70 fs/kernfs/file.c:740
- do_dentry_open+0x6cc/0x13f0 fs/open.c:920
- do_open fs/namei.c:3636 [inline]
- path_openat+0x1baa/0x2750 fs/namei.c:3791
- do_filp_open+0x1ba/0x410 fs/namei.c:3818
- do_sys_openat2+0x16d/0x4c0 fs/open.c:1356
- do_sys_open fs/open.c:1372 [inline]
- __do_sys_openat fs/open.c:1388 [inline]
- __se_sys_openat fs/open.c:1383 [inline]
- __x64_sys_openat+0x143/0x1f0 fs/open.c:1383
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-page last free stack trace:
- reset_page_owner include/linux/page_owner.h:24 [inline]
- free_pages_prepare mm/page_alloc.c:1302 [inline]
- free_unref_page_prepare+0x62e/0xcb0 mm/page_alloc.c:2564
- free_unref_page+0x33/0x370 mm/page_alloc.c:2659
- slab_destroy mm/slab.c:1612 [inline]
- slabs_destroy+0x85/0xc0 mm/slab.c:1632
- cache_flusharray mm/slab.c:3360 [inline]
- ___cache_free+0x2ae/0x3d0 mm/slab.c:3423
- qlink_free mm/kasan/quarantine.c:166 [inline]
- qlist_free_all+0x4f/0x1a0 mm/kasan/quarantine.c:185
- kasan_quarantine_reduce+0x195/0x220 mm/kasan/quarantine.c:292
- __kasan_slab_alloc+0x63/0x90 mm/kasan/common.c:305
- kasan_slab_alloc include/linux/kasan.h:186 [inline]
- slab_post_alloc_hook mm/slab.h:711 [inline]
- slab_alloc_node mm/slab.c:3256 [inline]
- slab_alloc mm/slab.c:3265 [inline]
- __kmem_cache_alloc_lru mm/slab.c:3442 [inline]
- kmem_cache_alloc+0x1bd/0x3f0 mm/slab.c:3451
- getname_flags.part.0+0x50/0x4f0 fs/namei.c:140
- getname_flags+0x9e/0xe0 include/linux/audit.h:321
- vfs_fstatat+0x77/0xb0 fs/stat.c:275
- __do_sys_newfstatat+0x8a/0x110 fs/stat.c:446
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Fixed by commit 5e672cd69f0a ("xfs: introduce xfs_inodegc_push()")
+which also means that the commits Darrick suggested you try aren't
+relevant. The mod_delayed_work() issues they address weren't
+introduced until commit 7cf2b0f9611b ("xfs: bound maximum wait time
+for inodegc work") which has a direct dependency on 5e672cd69f0a
+being present....
 
-Memory state around the buggy address:
- ffff88807b55d980: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
- ffff88807b55da00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->ffff88807b55da80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-                   ^
- ffff88807b55db00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
- ffff88807b55db80: fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc fc
-==================================================================
-----------------
-Code disassembly (best guess), 1 bytes skipped:
-   0:	24 10                	and    $0x10,%al
-   2:	e8 c6 6f 53 f7       	callq  0xf7536fcd
-   7:	48 89 ef             	mov    %rbp,%rdi
-   a:	e8 ee dd 53 f7       	callq  0xf753ddfd
-   f:	81 e3 00 02 00 00    	and    $0x200,%ebx
-  15:	75 25                	jne    0x3c
-  17:	9c                   	pushfq
-  18:	58                   	pop    %rax
-  19:	f6 c4 02             	test   $0x2,%ah
-  1c:	75 2d                	jne    0x4b
-  1e:	48 85 db             	test   %rbx,%rbx
-  21:	74 01                	je     0x24
-  23:	fb                   	sti
-  24:	bf 01 00 00 00       	mov    $0x1,%edi
-* 29:	e8 3f b2 45 f7       	callq  0xf745b26d <-- trapping instruction
-  2e:	65 8b 05 50 24 f2 75 	mov    %gs:0x75f22450(%rip),%eax        # 0x75f22485
-  35:	85 c0                	test   %eax,%eax
-  37:	74 0a                	je     0x43
-  39:	5b                   	pop    %rbx
-  3a:	5d                   	pop    %rbp
-  3b:	c3                   	retq
-  3c:	e8                   	.byte 0xe8
-  3d:	ac                   	lods   %ds:(%rsi),%al
-  3e:	6a                   	.byte 0x6a
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
