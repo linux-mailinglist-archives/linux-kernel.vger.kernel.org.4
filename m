@@ -2,127 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F4C700EFC
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 20:40:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9BB700EFE
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 20:41:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239014AbjELSkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 14:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55138 "EHLO
+        id S239027AbjELSl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 14:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55768 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238514AbjELSkD (ORCPT
+        with ESMTP id S238514AbjELSlW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 14:40:03 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2EC31BE1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:39:52 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1a950b982d4so533945ad.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:39:52 -0700 (PDT)
+        Fri, 12 May 2023 14:41:22 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A60BEC
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:41:21 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id 98e67ed59e1d1-24ded4b33d7so7104099a91.3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:41:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683916792; x=1686508792;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LxNeqg6Grq2YNGnd0knd3lPwc/gWH4WprNL3yZRCSlc=;
-        b=lp1Oy3BhdQeeC6JznyjC8cBtFOeNbflFpysHr1GQrN0z/RDcUwp19X8dIn53f44vUU
-         H6iorDT8qheOoQg95Fu6GGi2b6yvR5MviYTnbz2V7XHJkGJBV6gsqCJRm3fqOkwHQAnH
-         ShE6LHl4PKFR+g/210rb3bjvWRSlBMjSPomzjrvTXlqYyGud2RYS0DB1w/u6mJAlPq+K
-         olPKd8cPOmPVrMHiWMXqvvY/x/JzSid+UfiuEo/l/PJ/cH5hyaZn+fgCcrSmxUbTqteB
-         3DhYxfh+iVRcv3HeKAmRSVq6ZPJ0uU4rT9GO5+vLPcvHUBFo1aVN4GSNzLvp6Zs+3ojy
-         s2qA==
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1683916880; x=1686508880;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/koMj+9kCWnn+HpYnU02beKNw32OHAll5JRoBttwWow=;
+        b=UIhGNBCTmqrch9vZbwJdVHFCubylnX3lcJyBGWavwa7JY8D/CttT9kGCDbOafsAU5t
+         vRGkZetPBOTBep0hAclU+TvrJrsGAcm/cmzfx87RHZxbSOm/1zOHCe1nI8Z1CWv1Ps9D
+         D952EwlqaD3t3yacv+04O0gQbGqwleDPiwJAfoDvrdUT6jNeoX47UMmTa5Nhrxp9KLTu
+         JlBCktj76+eSbrUIG9171EIYm1HesTFO1GehE0SGP7Zz4cud4wCc0eSKdVsUSQ1gmH6f
+         qpkn9CtmJbzw5p3uYmUZ0UnZpWrgxx2rYRHTfZBYjywgnOZqECdRQJFMHKa48i7ms19Q
+         y94g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683916792; x=1686508792;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=1e100.net; s=20221208; t=1683916880; x=1686508880;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LxNeqg6Grq2YNGnd0knd3lPwc/gWH4WprNL3yZRCSlc=;
-        b=g8OeAZlMTti0XMe/dPJhNYRxqdKQdZrMewkC0TQHZN2BKF8g4IB16ERR1nFtlAytpH
-         xL03Pe3tYZjfPNM+iqQ+6320wKU4jphm4Y2CDXP1cNm5+15b5igDnpS2I5bMsvaZidm7
-         bvM4ciqpkDR9ke7ZKQKJPA/OQ9CdzRPOh8OdHu15W65wz6skqQwYVdEUPeRnsFE2E1jH
-         Mdj15kmtE/J7lwCdz3bbfHLio/oWpQGdEllz+xRd1U3yaxc78WK1uMKYcubGVQg48Tfm
-         tQizYdW4kAnmhVZPRoZA0RcUREpZ8dJUGmmabLVilqOzP6To4jpEDbOnHUHLS31MxKa2
-         Q7BA==
-X-Gm-Message-State: AC+VfDxbren4aRLQ/UsIzIuRvfNvu7fgkNNAtPFTcb+4rv1on7MHaRDA
-        +MmmE0TGVFA9Kps9ZHtKaPm+0Q==
-X-Google-Smtp-Source: ACHHUZ6aomZXGlc1Nc6ucUjpY7UMr453DjWUnt0izCabu5fBIrS8LJlevVdVes9dZNx3ZSW0bw23jQ==
-X-Received: by 2002:a17:903:1cb:b0:1a6:6a2d:18f0 with SMTP id e11-20020a17090301cb00b001a66a2d18f0mr271059plh.9.1683916791741;
-        Fri, 12 May 2023 11:39:51 -0700 (PDT)
-Received: from google.com (25.11.145.34.bc.googleusercontent.com. [34.145.11.25])
-        by smtp.gmail.com with ESMTPSA id q8-20020a170902dac800b001ac618a6d55sm8215718plx.242.2023.05.12.11.39.50
+        bh=/koMj+9kCWnn+HpYnU02beKNw32OHAll5JRoBttwWow=;
+        b=JKm2A/4plMiMu9xMtg4BNydT3AYfSXcO251i168B6UNfXTRFVG3xOlIkS9RtML56sY
+         jkgwbhs2vshNPY3CnjZ7rrR5m0aj7F9+plawwaj+N6IbTe6Dc6pHmvoaV/dNYd2+ecOG
+         198NanzEswVUO5Y1NPOEBVDamnx0j/Yli9YAXy8ow9dPCAyPV0zcW/IeVRbH2L67dkn3
+         rBXsHeoNoPLf14OEMT44VA/eIwXbPYcgS+8Wfha+wqEpY4JiIXcDUxNGN9LjHJsF36dh
+         8Skj7sWm1psRjJWDKauYneiSNHXDGc7smmHOJ3YXGBpyvwBMar+NJ7/DoJQkAG7csGqm
+         VPdw==
+X-Gm-Message-State: AC+VfDxBJ/oFiTn1hKjV6/N/H4+2znaD2jvFo0yCgvEo4JlPwVX/qw8P
+        ziuv8uq9R0roB+RopZxFzxPtSQ==
+X-Google-Smtp-Source: ACHHUZ7tzMVQBdyjPy08WAKw09bAKD7sofw01RBIRabRo3XqbykGfqUcjR5vOU1bPn+AEZQv0/dWSA==
+X-Received: by 2002:a17:90a:ea90:b0:24d:ee3f:b682 with SMTP id h16-20020a17090aea9000b0024dee3fb682mr24863163pjz.35.1683916880378;
+        Fri, 12 May 2023 11:41:20 -0700 (PDT)
+Received: from localhost ([50.221.140.188])
+        by smtp.gmail.com with ESMTPSA id c3-20020a17090a020300b00250c1392ed3sm6500634pjc.55.2023.05.12.11.41.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 11:39:50 -0700 (PDT)
-Date:   Fri, 12 May 2023 18:39:47 +0000
-From:   Fangrui Song <maskray@google.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>, linux-fsdevel@vger.kernel.org,
-        kexec@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] coredump, vmcore: Set p_align to 4 for PT_NOTE
-Message-ID: <20230512183947.jvaslvmuhy7gndix@google.com>
-References: <20230512022528.3430327-1-maskray@google.com>
- <202305121126.E5AD334AA3@keescook>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <202305121126.E5AD334AA3@keescook>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 12 May 2023 11:41:19 -0700 (PDT)
+Date:   Fri, 12 May 2023 11:41:19 -0700 (PDT)
+X-Google-Original-Date: Fri, 12 May 2023 11:40:58 PDT (-0700)
+Subject:     Re: [PATCH v8 1/3] riscv: Introduce CONFIG_RELOCATABLE
+In-Reply-To: <87ttwi91g0.fsf@igel.home>
+CC:     alex@ghiti.fr, alexghiti@rivosinc.com, mpe@ellerman.id.au,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        aou@eecs.berkeley.edu, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     schwab@linux-m68k.org
+Message-ID: <mhng-c528747d-5f47-4e42-b6db-f9db4e756ff9@palmer-ri-x1c9a>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-12, Kees Cook wrote:
->On Fri, May 12, 2023 at 02:25:28AM +0000, Fangrui Song wrote:
->> Tools like readelf/llvm-readelf use p_align to parse a PT_NOTE program
->> header as an array of 4-byte entries or 8-byte entries. Currently, there
->> are workarounds[1] in place for Linux to treat p_align==0 as 4. However,
->> it would be more appropriate to set the correct alignment so that tools
->> do not have to rely on guesswork. FreeBSD coredumps set p_align to 4 as
->> well.
+On Thu, 11 May 2023 11:18:23 PDT (-0700), schwab@linux-m68k.org wrote:
+> On Mai 09 2023, Alexandre Ghiti wrote:
+>
+>> On 5/9/23 21:07, Andreas Schwab wrote:
+>>> That does not work with UEFI booting:
+>>>
+>>> Loading Linux 6.4.0-rc1-1.g668187d-default ...
+>>> Loading initial ramdisk ...
+>>> Unhandled exception: Instruction access fault
+>>> EPC: ffffffff80016d56 RA: 000000008020334e TVAL: 0000007f80016d56
+>>> EPC: ffffffff002d1d56 RA: 00000000004be34e reloc adjusted
+>>> Unhandled exception: Load access fault
+>>> EPC: 00000000fff462d4 RA: 00000000fff462d0 TVAL: ffffffff80016d56
+>>> EPC: 00000000802012d4 RA: 00000000802012d0 reloc adjusted
+>>>
+>>> Code: c825 8e0d 05b3 40b4 d0ef 0636 7493 ffe4 (d783 0004)
+>>> UEFI image [0x00000000fe65e000:0x00000000fe6e3fff] '/efi\boot\bootriscv64.efi'
+>>> UEFI image [0x00000000daa82000:0x00000000dcc2afff]
+>>>
 >>
->> [1]: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=82ed9683ec099d8205dc499ac84febc975235af6
+>> I need more details please, as I have a UEFI bootflow and it works great
+>> (KASLR is based on a relocatable kernel and works fine in UEFI too).
 >
->The interesting bit from here is:
->
->  /* NB: Some note sections may have alignment value of 0 or 1.  gABI
->     specifies that notes should be aligned to 4 bytes in 32-bit
->     objects and to 8 bytes in 64-bit objects.  As a Linux extension,
->     we also support 4 byte alignment in 64-bit objects.  If section
->     alignment is less than 4, we treate alignment as 4 bytes.   */
->  if (align < 4)
->    align = 4;
->  else if (align != 4 && align != 8)
->    {
->      warn (_("Corrupt note: alignment %ld, expecting 4 or 8\n"),
->           (long) align);
->      return FALSE;
->    }
->
->Should Linux use 8 for 64-bit processes to avoid the other special case?
->
->(And do we need to make some changes to make sure we are actually
->aligned?)
->
->-Kees
+> It also crashes without UEFI.  Disabling CONFIG_RELOCATABLE fixes that.
+> This was tested on the HiFive Unmatched board.
+> The kernel image I tested is available from
+> <https://download.opensuse.org/repositories/Kernel:/HEAD/RISCV/>.  The
+> same kernel with CONFIG_RELOCATABLE disabled is available from
+> <https://download.opensuse.org/repositories/home:/Andreas_Schwab:/riscv:/kernel/standard/>.
 
-64-bit objects should use 8-byte entries and naturally the 8-byte alignment.
-Unfortunately, many systems including Solaris, *BSD, and Linux use
-4-byte entries for SHT_NOTE/PT_NOTE, and changing this will create
-a large compatibility problem (see tcmalloc that I recently
-updated[1])
+Sorry I missed this earlier, there's been some other reports of boot 
+failures on rc1 showing up but those were all a lot more vague.  Just 
+setting CONFIG_RELOCATABLE=y doesn't manifest a boot failure on QEMU on 
+my end and I don't have an UNmatched floating around.
 
-Linux introduced 8-byte alignment note sections (.note.gnu.property) a
-while ago, so the ecosystem has to deal with notes of mixed alignments.
-The resolution is to use the note alignment to decide whether it should
-be parsed as 4-byte entries or 8-byte entries.
-I think that just setting `p_align = 4` on the kernel side should be
-good enough:)
-
-[1]:
-https://github.com/google/tcmalloc/commit/c33cb2d8935002f8ba942028a1f0871d075345a1
+Alex says he's going to look into it (and IIRC he has my Unmatched...).
