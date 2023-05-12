@@ -2,125 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16F4F6FFF6D
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 05:50:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EB46F6FFF70
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 05:52:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239752AbjELDu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 23:50:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59980 "EHLO
+        id S239861AbjELDwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 23:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbjELDuW (ORCPT
+        with ESMTP id S230325AbjELDwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 23:50:22 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59A3249F9
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 20:50:19 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 6ECD82C0405;
-        Fri, 12 May 2023 15:50:06 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1683863406;
-        bh=83GyqPLN+YuXrLcamGd08y0UPBixW/uxDKMNvZerhSE=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=CCMfgnxqI6yVkrQ5iZuLDBVePNEHxem5ZMd4dl2E2oR+QZBPRpgOP8QnaP4FvAgxf
-         2S/tFqIgB9yDfJW0VEkuFO+s3MuClQQiBkBVCZMhpUuoY8VN6zArLocDAkmoJXZJxB
-         nVsGQ+2V+2ws4QGMEaHI5qYEr4jTLS2o/a/FQgmLm9VszsCSPfnNzV3laXaO4z5U0t
-         NG8F2Ja3F2BA1bbJv8U12dn9yPxgshE80taOHUdU4gd5Po5ZcmUtwafNZ0ZclVOWvx
-         sa1zZr101ORlUhzHId+14MCUVECDywDXhkH8I076uEBbRwDH8Z42KQsOkjQVrEUDsm
-         UQd+l/NTeM8Qg==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B645db76e0001>; Fri, 12 May 2023 15:50:06 +1200
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.1118.26; Fri, 12 May 2023 15:50:06 +1200
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with Microsoft
- SMTP Server (TLS) id 15.0.1497.48; Fri, 12 May 2023 15:50:05 +1200
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1118.026; Fri, 12 May 2023 15:50:05 +1200
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Linus Walleij <linus.walleij@linaro.org>
-CC:     "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "brgl@bgdev.pl" <brgl@bgdev.pl>,
-        Ben Brown <Ben.Brown@alliedtelesis.co.nz>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Subject: Re: [PATCH] gpiolib: Don't implicitly disable irq when masking
-Thread-Topic: [PATCH] gpiolib: Don't implicitly disable irq when masking
-Thread-Index: AQHZgtQLyOA2wo5swkyuf0Vo3SyOl69SVxQAgADekoCAALj2gIAA0wsAgAB5M4A=
-Date:   Fri, 12 May 2023 03:50:05 +0000
-Message-ID: <334a8efc-003b-3971-41bc-4783a6fa5e30@alliedtelesis.co.nz>
-References: <20230510001151.3946931-1-chris.packham@alliedtelesis.co.nz>
- <ZFtK3DydE24Qijle@surfacebook>
- <760ae58f-cb0b-dfe6-9e24-664310651e18@alliedtelesis.co.nz>
- <CACRpkdb1UFQ=1gePeBBEQ3ODu+6m0dHBqaxdtOF9Qc01WytMEQ@mail.gmail.com>
- <ab62b83e-0074-4c71-11d7-9aa6846a1eee@alliedtelesis.co.nz>
-In-Reply-To: <ab62b83e-0074-4c71-11d7-9aa6846a1eee@alliedtelesis.co.nz>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.33.22.30]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <BE8062AF8B871F438F07F9274E6E35D6@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Thu, 11 May 2023 23:52:40 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02E985248;
+        Thu, 11 May 2023 20:52:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683863558; x=1715399558;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=zxt7hPB2+ztJ+OYn+X/DEVpHycbofSJLgMlLpvez+So=;
+  b=NGCNEXBDtxmCW/Y3AvOr//At/1EdOntXcEn7muuRj5/YB3Y4No6rkxR3
+   j7KyeNsKmJcVROfyczdoaadRRMOARO01HlTXywlZaeNZF2ZFursLMJb5b
+   g6OjI8aFN25ANyyM+Z5MaoASXS6w9PTESce7E9QvuMAjgw/yGFP4XJ2ZV
+   6ZuCby1dVO4k8gu/Zfc7f28QBnnK1F1/J1uGrrZEXjTo2F93V7OcDJIiL
+   sPfDPAw9exwFogroC6yFw4MSOl26VtPcYTAU6AlEUkPFKpbdYCW31s8tf
+   JOBlOCTpMBV+T7blP3FCdsnwg4JLjtsLw1Txnz0/Z8uCoBBWT01bDIalj
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="437027737"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="437027737"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 20:52:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="769629428"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="769629428"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga004.fm.intel.com with ESMTP; 11 May 2023 20:52:35 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pxJpa-0004TG-2G;
+        Fri, 12 May 2023 03:52:34 +0000
+Date:   Fri, 12 May 2023 11:52:20 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Peter Xu <peterx@redhat.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     oe-kbuild-all@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        Andrew Lutomirski <luto@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-fsdevel@vger.kernel.org, Dan Carpenter <error27@gmail.com>,
+        syzbot+48011b86c8ea329af1b9@syzkaller.appspotmail.com,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH 1/3] mm: handle_mm_fault_one()
+Message-ID: <202305121115.gTte4W7A-lkp@intel.com>
+References: <ZF2E6i4pqJr7m436@x1n>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=cLieTWWN c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=P0xRbXHiH_UA:10 a=5Ip8V5-vLxe71PKaftUA:9 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZF2E6i4pqJr7m436@x1n>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiAxMi8wNS8yMyAwODozNiwgQ2hyaXMgUGFja2hhbSB3cm90ZToNCj4gSGkgTGludXMsDQo+
-DQo+IE9uIDExLzA1LzIzIDIwOjAwLCBMaW51cyBXYWxsZWlqIHdyb3RlOg0KPj4gT24gV2VkLCBN
-YXkgMTAsIDIwMjMgYXQgMTA6NTnigK9QTSBDaHJpcyBQYWNraGFtDQo+PiA8Q2hyaXMuUGFja2hh
-bUBhbGxpZWR0ZWxlc2lzLmNvLm56PiB3cm90ZToNCj4+DQo+Pj4gVGhlIGNvdXBsaW5nIG9mIGdw
-aW9jaGlwX2lycV9tYXNrKCkvZ3Bpb2NoaXBfaXJxX3VubWFzaygpIHdpdGgNCj4+PiBncGlvY2hp
-cF9kaXNhYmxlX2lycSgpL2dwaW9jaGlwX2VuYWJsZV9pcnEoKSBnb2VzIGJhY2sgdG8gdGhlIHNh
-bWUNCj4+PiBjb21taXQgYTgxNzM4MjBmNDQxICgiZ3BpbzogZ3Bpb2xpYjogQWxsb3cgR1BJTyBJ
-UlFzIHRvIGxhenkgZGlzYWJsZSIpLg0KPj4+IEl0J3Mgbm90IGltbWVkaWF0ZWx5IG9idmlvdXMg
-dG8gbWUgd2h5IHRoZSBjb3VwbGluZyBpcyBuZWVkZWQuDQo+PiBUaGF0IGlzIGp1c3QgYSByZWZh
-Y3RvcmluZyBvZiB3aGF0IGV4aXN0ZWQgYmVmb3JlLg0KPj4NCj4+IFRoZSB1c2UgY2FzZSBpcyBo
-ZXJlOg0KPj4gZHJpdmVycy9tZWRpYS9jZWMvcGxhdGZvcm0vY2VjLWdwaW8vY2VjLWdwaW8uYw0K
-Pj4NCj4+IFRoZSBkcml2ZXIgbmVlZHMgdG8gc3dpdGNoLCBhdCBydW50aW1lLCBiZXR3ZWVuIGFj
-dGl2ZWx5IGRyaXZpbmcgYSBHUElPDQo+PiBsaW5lIHdpdGggZ3Bpb2Rfc2V0X3ZhbHVlKCksIGFu
-ZCBzZXR0aW5nIHRoZSBzYW1lIGxpbmUgaW50byBpbnB1dCBtb2RlDQo+PiBhbmQgbGlzdGVuaW5n
-IGZvciBzaWduYWxsaW5nIHRyaWdnZXJpbmcgSVJRcyBvbiBpdCwgYW5kIHRoZW4gYmFjayB0bw0K
-Pj4gb3V0cHV0IG1vZGUgYW5kIGRyaXZpbmcgdGhlIGxpbmUgYWdhaW4uIEl0J3MgYSBiaWRpcmVj
-dGlvbmFsIEdQSU8gbGluZS4NCj4+IFRoaXMgdXNlIGNhc2UgeWllbGRzIGEgaGlnaCBuZWVkIG9m
-IGNvbnRyb2wuDQo+Pg0KPj4+IEkgd2FzDQo+Pj4gaG9waW5nIHRoYXQgc29tZW9uZSBzZWVpbmcg
-bXkgcGF0Y2ggd291bGQgY29uZmlybSB0aGF0IGl0J3Mgbm90IG5lZWRlZA0KPj4+IG9yIHNheSB3
-aHkgaXQncyBuZWVkZWQgc3VnZ2VzdCBhbiBhbHRlcm5hdGl2ZSBhcHByb2FjaC4NCj4+IFdoaWNo
-IElSUS1lbmFibGVkIGdwaW9jaGlwIGlzIHRoaXM/IEhhcyBpdCBiZWVuIGNvbnZlcnRlZCB0byBi
-ZSANCj4+IGltbXV0YWJsZT8NCj4+IEkgdGhpbmsgdGhhdCBjb3VsZCBiZSBwYXJ0IG9mIHRoZSBw
-cm9ibGVtLg0KPg0KPiBGb3IgbWUgaXQncyBhIHBjYTk1NTUuIEkgc3BlbnQgeWVzdGVyZGF5IHRy
-eWluZyB0byBkZW1vbnN0cmF0ZSB0aGUgDQo+IHByb2JsZW0gb24gYSBuZXdlciBrZXJuZWwuIFNv
-bWUgdGVldGhpbmcgaXNzdWVzIGFzaWRlIEkgY2FuIHRyaWdnZXIgDQo+IHRoZSB3YXJuaW5nIGlm
-IEkgaGF2ZSBhIGdwaW8tYnV0dG9uIHVzaW5nIG9uZSBvZiB0aGUgcGNhOTU1NSBwaW5zIGFzIA0K
-PiBhbiBpbnRlcnJ1cHQgYW5kIHRoZW4gSSBleHBvcnQgc29tZSBvZiB0aGUgb3RoZXIgcGlucyB2
-aWEgc3lzZnMuDQo+DQo+IEludGVyZXN0aW5nbHkgdGhlIHdhcm5pbmcgaXNuJ3QgdHJpZ2dlcmVk
-IGlmIEkgdXNlIGEgZ3Bpby1ob2cgaW5zdGVhZCANCj4gb2YgZXhwb3J0aW5nIHRoZSBwaW5zLiBJ
-IGhhdmVuJ3QgZmlndXJlZCBvdXQgd2h5IHRoYXQgaXMgYnV0IEknbSANCj4gYXNzdW1pbmcgaXQn
-cyBzb21ldGhpbmcgdG8gZG8gd2l0aCB0aGUgaG9nZ2VkIHBpbnMgYmVpbmcgZXhjbHVkZWQgZnJv
-bSANCj4gdGhlIGlycSBkb21haW4gYmVmb3JlIGl0IGlzIHJlZ2lzdGVyZWQuDQoNCkknbSBzdGFy
-dGluZyB0byB1bmRlcnN0YW5kIHRoaW5ncy4NCg0KV2hlbiB0aGUgZ3BpbyBpcyBleHBvcnRlZCB0
-byB1c2VybGFuZCB0aGUgaXJxX2Rlc2MgaXMgY3JlYXRlZCB2aWEgDQpkZXZpY2VfYWRkKCkvZ3Bp
-b19pc192aXNpYmxlKCkvZ3Bpb2RfdG9faXJxKCkvZ3Bpb2NoaXBfdG9faXJxKCkuIEkgdGhpbmsg
-DQp0aGF0IG1pZ2h0IGJlIGEgYnVnIGJlY2F1c2UgaWYgdGhlIHVzZXIgd2FudGVkIGFuIGludGVy
-cnVwdCB0aGV5IHdvdWxkIA0KaGF2ZSBzYWlkIHNvIHZpYSBlZGdlX3N0b3JlKCkgd2hpY2ggYWxz
-byBkb2VzIHRoZSBncGlvZF90b19pcnEoKSB0aGF0IA0KdWx0aW1hdGVseSBjcmVhdGVzIHRoZSBp
-cnFfZGVzYy4gSGF2aW5nIHRoZSBncGlvIHR1cm5lZCBpbnRvIGFuIA0KaW50ZXJydXB0IHNlZW1z
-IGxpa2UgYW4gb2RkIHNpZGUtZWZmZWN0IG9mIGdwaW9faXNfdmlzaWJsZSgpLg0K
+Hi Peter,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on akpm-mm/mm-everything]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Xu/mm-handle_mm_fault_one/20230512-081554
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
+patch link:    https://lore.kernel.org/r/ZF2E6i4pqJr7m436%40x1n
+patch subject: [PATCH 1/3] mm: handle_mm_fault_one()
+config: x86_64-randconfig-a013 (https://download.01.org/0day-ci/archive/20230512/202305121115.gTte4W7A-lkp@intel.com/config)
+compiler: gcc-11 (Debian 11.3.0-12) 11.3.0
+reproduce (this is a W=1 build):
+        # https://github.com/intel-lab-lkp/linux/commit/0a03a4870c8a62e3ba52a0f9b50b307f509acb2b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Peter-Xu/mm-handle_mm_fault_one/20230512-081554
+        git checkout 0a03a4870c8a62e3ba52a0f9b50b307f509acb2b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        make W=1 O=build_dir ARCH=x86_64 olddefconfig
+        make W=1 O=build_dir ARCH=x86_64 prepare
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305121115.gTte4W7A-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/memcontrol.h:20,
+                    from include/linux/swap.h:9,
+                    from include/linux/suspend.h:5,
+                    from arch/x86/kernel/asm-offsets.c:14:
+   include/linux/mm.h: In function 'mm_should_release_mmap':
+>> include/linux/mm.h:2371:13: error: 'fault' undeclared (first use in this function)
+    2371 |         if (fault & (VM_FAULT_RETRY | VM_FAULT_COMPLETED))
+         |             ^~~~~
+   include/linux/mm.h:2371:13: note: each undeclared identifier is reported only once for each function it appears in
+   include/linux/mm.h: In function 'handle_mm_fault_one':
+>> include/linux/mm.h:2396:34: error: 'mm' undeclared (first use in this function); did you mean 'tm'?
+    2396 |                 mmap_read_unlock(mm);
+         |                                  ^~
+         |                                  tm
+   make[2]: *** [scripts/Makefile.build:114: arch/x86/kernel/asm-offsets.s] Error 1
+   make[2]: Target 'prepare' not remade because of errors.
+   make[1]: *** [Makefile:1287: prepare0] Error 2
+   make[1]: Target 'prepare' not remade because of errors.
+   make: *** [Makefile:226: __sub-make] Error 2
+   make: Target 'prepare' not remade because of errors.
+
+
+vim +/fault +2371 include/linux/mm.h
+
+  2362	
+  2363	static inline bool
+  2364	mm_should_release_mmap(unsigned long flags, vm_fault_t retval)
+  2365	{
+  2366		/* The caller explicitly requested to keep the mmap read lock */
+  2367		if (flags & FAULT_FLAG_RETRY_NOWAIT)
+  2368			return false;
+  2369	
+  2370		/* If the mmap read lock is already released, we're all good */
+> 2371		if (fault & (VM_FAULT_RETRY | VM_FAULT_COMPLETED))
+  2372			return false;
+  2373	
+  2374		/* Otherwise always release it */
+  2375		return true;
+  2376	}
+  2377	
+  2378	/*
+  2379	 * This is mostly handle_mm_fault(), but it also take care of releasing
+  2380	 * mmap or vma read lock as long as possible (e.g. when !RETRY_NOWAIT).
+  2381	 *
+  2382	 * Normally it's the case when we got a hardware page fault, where we want
+  2383	 * to release the lock right after the page fault. And it's not for case
+  2384	 * like GUP where it can fault a range of pages continuously with mmap lock
+  2385	 * being held during the process.
+  2386	 */
+  2387	static inline vm_fault_t
+  2388	handle_mm_fault_one(struct vm_area_struct *vma, unsigned long address,
+  2389			    unsigned int flags, struct pt_regs *regs)
+  2390	{
+  2391		vm_fault_t retval = handle_mm_fault(vma, address, flags, regs);
+  2392	
+  2393		if (flags & FAULT_FLAG_VMA_LOCK)
+  2394			vma_end_read(vma);
+  2395		else if (mm_should_release_mmap(flags, retval))
+> 2396			mmap_read_unlock(mm);
+  2397	
+  2398		return retval;
+  2399	}
+  2400	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
