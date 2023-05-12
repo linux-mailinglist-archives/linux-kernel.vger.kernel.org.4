@@ -2,233 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7C77006EF
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:36:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B70F7006EE
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:36:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240972AbjELLgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 07:36:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56886 "EHLO
+        id S240953AbjELLgV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 07:36:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241002AbjELLge (ORCPT
+        with ESMTP id S240090AbjELLgT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 07:36:34 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 919E2D05E
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:35:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1683891345;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=j18moFQtAZJOXAEp0m2FgLJK8fZ33JwPBzg3lwc/CJE=;
-        b=a9mM06xte0O46XHwgrS0fuclFVakFry3L9looip9QRNM7oGmR3zPT1o8xHJPVReyD5/nZ+
-        Pwmn/gF1rjQNHCAVMrMYgBpq/Ac/SxdC268rG9mdDD+IEi7CPTaTfhHjKzHwoOJFSRBxut
-        v9GWrJdd5vk9lPr4If6jtJYgk+GmCY0=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-313-JT90t_kVNO2p3chHUun2iA-1; Fri, 12 May 2023 07:35:44 -0400
-X-MC-Unique: JT90t_kVNO2p3chHUun2iA-1
-Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-3f42bcef2acso17999775e9.2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:35:43 -0700 (PDT)
+        Fri, 12 May 2023 07:36:19 -0400
+Received: from mail-ed1-x544.google.com (mail-ed1-x544.google.com [IPv6:2a00:1450:4864:20::544])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96738DD9D
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:36:18 -0700 (PDT)
+Received: by mail-ed1-x544.google.com with SMTP id 4fb4d7f45d1cf-50bc394919cso14572557a12.2
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:36:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683891377; x=1686483377;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=gEDwdtST97OS+wBpCtbRghzZcx+X45D0pw7XrLTdoO0=;
+        b=KeszkQiGl243RBXq+9kUck6yivFXAraoqlEG1yavSWTP7nhrwyHhcWayX9wx/Lmvnq
+         0xHuoAd6ENGRUivyqVVA0Qo9XKD0sf0+OiP/BrjTzvzMwYZKtNEvZv8S545O+rOkPoDd
+         AkbInPDYzSnAfM2A6p4b8yEyIwrrn3X0L683bgm/ECLy8f1KTr6YwaeZGLNnRNPR+mF9
+         sZHaexMDwO4vvxVv3T0HFRCS9/MQwfb0fAFcAdk4BBQ2OO3gfUWio67jE/NhAT+/eOPS
+         CReFpQbXnGV89Rjz0z7z6cjrape32fDKnaNcQtQqOv6WarsdvkPRs3ei9j0W0K6/O7zD
+         maow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683891342; x=1686483342;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j18moFQtAZJOXAEp0m2FgLJK8fZ33JwPBzg3lwc/CJE=;
-        b=du4tgxtGudZW91D+gepC8kOClhc5SNalXdgFfr41gE1fYZNHdgJFQQLSlKKdtip77r
-         GP1b4OZYbF7cDUTQSx2GbfBSenWbA9zHEf4ZHVaPIZUsWQGoxharasORz2mNljnyicAE
-         ouXFP80f4dGGcerBd+fvLeycm37ZV+tbtAq7KtH7KtnQ+4Mis10M2NSw/j8wqjP9T/ek
-         ITh/MlDULe3h41mGzfDR6WCusSMvNUDLQqB/l3GKirD6C5CYl/bLzFKJYh6WtMZn3EdK
-         hTJhrFXdxq31Si7u1RzmzKoA5qXl2u11bB+ZKxqVPwCQSW23GdXwjfOON7BnTc/KaPrF
-         cuLg==
-X-Gm-Message-State: AC+VfDyxUyI2wp27nF3Kv3c+b6J6cBF4Yhlw9bsrDqUAvr4h91RKbJq6
-        pRb9dE71t3FiVZeAMpzK2wLZ+Y/SnHBax4TyFQbZPv0xxayE4gwZ5btOEuSgbNE9qKiUhn2Q9KO
-        4wlZdPU9rkm9nQoMwHMuujJmxglKXGZni
-X-Received: by 2002:a05:600c:2049:b0:3f4:1a97:ab09 with SMTP id p9-20020a05600c204900b003f41a97ab09mr13430044wmg.25.1683891342403;
-        Fri, 12 May 2023 04:35:42 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6YB4LXWmzvSc+5lRdqj+LiZFKU35Efug5kWk4jSDBQmNqs3qd3YKp0Pv/Uo3j0j/ZndKbByw==
-X-Received: by 2002:a05:600c:2049:b0:3f4:1a97:ab09 with SMTP id p9-20020a05600c204900b003f41a97ab09mr13430031wmg.25.1683891342071;
-        Fri, 12 May 2023 04:35:42 -0700 (PDT)
-Received: from redhat.com ([31.187.78.61])
-        by smtp.gmail.com with ESMTPSA id j15-20020a05600c1c0f00b003f1738d0d13sm15639639wms.1.2023.05.12.04.35.40
+        d=1e100.net; s=20221208; t=1683891377; x=1686483377;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=gEDwdtST97OS+wBpCtbRghzZcx+X45D0pw7XrLTdoO0=;
+        b=lUtWh3g4Q2ZIGC+UZMAZNkjmS5N5AyriSpxvDPziho6qJMqNtGwlpj/+imXe1lCMRQ
+         5Ydli4gvJYywhRmXRnqm2zm/ZZ1adx3BaMXSY0A1aiBCusPfEVy+JsKdkKxiZYqpR4R9
+         w/SpFmznrXG6qdf3ZL7OTFmwn0fI9yBJbqUlpFoQGZ8Yy4ip7CgHscc0Gez5dDxfc6vr
+         ZKTBS9+jjfG/zzBwfzQcFML9AkVWtfu465AHsKo6SSoKiHgKQHtdL3jO29EscVVeMlJL
+         K9VvpRK55BKuc3s6MqJx37ms+RJDmu+PFjGXxTkayRut1fHdyemfGXgSm1m6JYgaIv95
+         U4EA==
+X-Gm-Message-State: AC+VfDzw5utuI03hr09Q7Eq+phWU4xjoFOouYd95EFNPHXfgdy22++Xa
+        i+6bigcLsiZwHKWpikWyD0Cy3L/TdoKagg==
+X-Google-Smtp-Source: ACHHUZ76BJ4MK//GHr0jhglXPEwwgjMtwhNu2TtRSZMhTUaNdkewZQvmjURqO4j2ushkBK+uxOTuPg==
+X-Received: by 2002:a17:907:9810:b0:969:f677:11b4 with SMTP id ji16-20020a170907981000b00969f67711b4mr12550144ejc.37.1683891376725;
+        Fri, 12 May 2023 04:36:16 -0700 (PDT)
+Received: from [127.0.1.1] (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id h15-20020a1709067ccf00b0094f23480619sm5329722ejp.172.2023.05.12.04.36.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 04:35:41 -0700 (PDT)
-Date:   Fri, 12 May 2023 07:35:37 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     zhenwei pi <pizhenwei@bytedance.com>
-Cc:     stefanha@redhat.com, jasowang@redhat.com,
-        xuanzhuo@linux.alibaba.com,
-        virtualization@lists.linux-foundation.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: Re: [PATCH 1/2] virtio: abstract virtqueue related methods
-Message-ID: <20230512072819-mutt-send-email-mst@kernel.org>
-References: <20230512094618.433707-1-pizhenwei@bytedance.com>
- <20230512094618.433707-2-pizhenwei@bytedance.com>
- <20230512064305-mutt-send-email-mst@kernel.org>
- <37a5e7dc-160d-51d2-7631-196ad9e21da7@bytedance.com>
+        Fri, 12 May 2023 04:36:16 -0700 (PDT)
+From:   Jakob Koschel <jkl820.git@gmail.com>
+Date:   Fri, 12 May 2023 13:36:10 +0200
+Subject: [PATCH v3] w1: Replace usage of found with dedicated list iterator
+ variable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <37a5e7dc-160d-51d2-7631-196ad9e21da7@bytedance.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230509-w1-replace-usage-of-found-with-tmp-list-iterator-variable-v3-1-e07c9603fd9d@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAKkkXmQC/62OQQ6CMBBFr2K6dgy0YIIr72FcTMtUJgFKphU0h
+ LtbOIPLNz//z1tVJGGK6nZaldDMkcOYwZxPynU4vgi4zax0oU1RFw0sJQhNPTqCd8ScBw8+vMc
+ WFk4dpGGCnmMCTiSYgsCMwmh7AldfTWO8L4xpVN63GAms4Oi6/cOAMVf2YBLy/DmkHs/MXd4L8
+ j0cZ71f/6EzayhB1431pcWqovb+GpD7iwuDem7b9gO9CSvnGwEAAA==
+To:     Evgeniy Polyakov <zbr@ioremap.net>,
+        Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Jakob Koschel <jkl820.git@gmail.com>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1683891376; l=2996;
+ i=jkl820.git@gmail.com; s=20230112; h=from:subject:message-id;
+ bh=+UI+tVz26PwhwuM34C+/qr/sCuLSqjgcpHP9rDufqm4=;
+ b=6s5lr4qMGmUISgZVjLcPhgtSNyrT9Y3G05LumId2ILyR91ErmJzsDChvW/tMVRDCiPisHpdOom2+
+ dMCz8QYfCmOMCz9AG3XFMPXglI1uSGAqtT4i9A89+69zQKZebdtD
+X-Developer-Key: i=jkl820.git@gmail.com; a=ed25519;
+ pk=rcRpP90oZXet9udPj+2yOibfz31aYv8tpf0+ZYOQhyA=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 07:09:40PM +0800, zhenwei pi wrote:
-> On 5/12/23 18:46, Michael S. Tsirkin wrote:
-> > On Fri, May 12, 2023 at 05:46:17PM +0800, zhenwei pi wrote:
-> > > There is already a virtqueue abstract structure in virtio subsystem
-> > > (see struct virtqueue in include/linux/virtio.h), however the vring
-> > > based virtqueue is used only in the past years, the virtqueue related
-> > > methods mix much with vring(just look like the codes, virtqueue_xxx
-> > > functions are implemented in virtio_ring.c).
-> > > 
-> > > Abstract virtqueue related methods(see struct virtqueue_ops), and
-> > > separate virtqueue_xxx symbols from vring. This allows a non-vring
-> > > based transport in the future. With this change, the following symbols
-> > > are exported from virtio.ko instead of virtio_ring.ko:
-> > >    virtqueue_add_sgs
-> > >    virtqueue_add_outbuf
-> > >    virtqueue_add_inbuf
-> > >    virtqueue_add_inbuf_ctx
-> > >    virtqueue_kick_prepare
-> > >    virtqueue_notify
-> > >    virtqueue_kick
-> > >    virtqueue_enable_cb_prepare
-> > >    virtqueue_enable_cb
-> > >    virtqueue_enable_cb_delayed
-> > >    virtqueue_disable_cb
-> > >    virtqueue_poll
-> > >    virtqueue_get_buf_ctx
-> > >    virtqueue_get_buf
-> > >    virtqueue_detach_unused_buf
-> > >    virtqueue_get_vring_size
-> > >    virtqueue_resize
-> > >    virtqueue_is_broken
-> > >    virtio_break_device
-> > >    __virtio_unbreak_device
-> > > 
-> > > Cc: Stefan Hajnoczi <stefanha@redhat.com>
-> > > Signed-off-by: zhenwei pi <pizhenwei@bytedance.com>
-> > > ---
-> > >   drivers/virtio/virtio.c      | 362 +++++++++++++++++++++++++++++++++++
-> > >   drivers/virtio/virtio_ring.c | 282 +++++----------------------
-> > >   include/linux/virtio.h       |  29 +++
-> > >   3 files changed, 443 insertions(+), 230 deletions(-)
-> > > 
-> > > diff --git a/drivers/virtio/virtio.c b/drivers/virtio/virtio.c
-> > > index 3893dc29eb26..8d8715a10f26 100644
-> > > --- a/drivers/virtio/virtio.c
-> > > +++ b/drivers/virtio/virtio.c
-> > > @@ -553,6 +553,368 @@ int virtio_device_restore(struct virtio_device *dev)
-> > >   EXPORT_SYMBOL_GPL(virtio_device_restore);
-> > >   #endif
-> > > +/**
-> > > + * virtqueue_add_sgs - expose buffers to other end
-> > > + * @vq: the struct virtqueue we're talking about.
-> > > + * @sgs: array of terminated scatterlists.
-> > > + * @out_sgs: the number of scatterlists readable by other side
-> > > + * @in_sgs: the number of scatterlists which are writable (after readable ones)
-> > > + * @data: the token identifying the buffer.
-> > > + * @gfp: how to do memory allocations (if necessary).
-> > > + *
-> > > + * Caller must ensure we don't call this with other virtqueue operations
-> > > + * at the same time (except where noted).
-> > > + *
-> > > + * Returns zero or a negative error (ie. ENOSPC, ENOMEM, EIO).
-> > > + */
-> > > +int virtqueue_add_sgs(struct virtqueue *vq, struct scatterlist *sgs[],
-> > > +		      unsigned int out_sgs, unsigned int in_sgs,
-> > > +		      void *data, gfp_t gfp)
-> > > +{
-> > > +	unsigned int i, total_sg = 0;
-> > > +
-> > > +	/* Count them first. */
-> > > +	for (i = 0; i < out_sgs + in_sgs; i++) {
-> > > +		struct scatterlist *sg;
-> > > +
-> > > +		for (sg = sgs[i]; sg; sg = sg_next(sg))
-> > > +			total_sg++;
-> > > +	}
-> > > +	return vq->ops->add_sgs(vq, sgs, total_sg, out_sgs, in_sgs,
-> > > +				data, NULL, gfp);
-> > > +}
-> > > +EXPORT_SYMBOL_GPL(virtqueue_add_sgs);
-> > 
-> > 
-> > Hmm this kind of indirection on data path is going to be costly
-> > performance-wise especially when retpolines are in place.
-> > 
-> > Any data on this?
-> > 
-> 
-> Hi,
-> 
-> 1, What about moving these functions into virtio.h and declare them as
-> static inline?
+To move the list iterator variable into the list_for_each_entry_*()
+macro in the future it should be avoided to use the list iterator
+variable after the loop body.
 
-This will do nothing to remove indirection.
+To *never* use the list iterator variable after the loop it was
+concluded to use a separate iterator variable instead of a
+found boolean [1].
 
-> 2, what about moving method fields into struct virtqueue?
+This removes the need to use a found variable and simply checking if
+the variable was set, can determine if the break/goto was hit.
 
-This gets rid of one level of indirection but the big problem
-is indirect function call due to retpolines, this remains.
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+---
+Changes in v2:
+  - fix checkpatch intentation issues
 
+Changes in v3:
+  - actually fix checkpatch intentation issues
 
-> Then we have struct like:
-> struct virtqueue {
-> 	struct list_head list;
-> 	...
-> 	void *priv;
-> 
-> 	/* virtqueue specific operations */
->         int (*add_sgs)(struct virtqueue *vq, struct scatterlist *sgs[],
->                        unsigned int total_sg,
->                        unsigned int out_sgs, unsigned int in_sgs,
->                        void *data, void *ctx, gfp_t gfp);
-> 	...
-> }
-> 
-> and functions like:
-> static inline int virtqueue_add_sgs(...)
-> {
->         unsigned int i, total_sg = 0;
-> 
->         /* Count them first. */
->         for (i = 0; i < out_sgs + in_sgs; i++) {
->                 struct scatterlist *sg;
-> 
->                 for (sg = sgs[i]; sg; sg = sg_next(sg))
->                         total_sg++;
->         }
->         return vq->add_sgs(vq, sgs, total_sg, out_sgs, in_sgs,
->                            data, NULL, gfp);
-> }
+Note: I've changed my email address to contributions to
+jkl820.git@gmail.com, I hope that's not an issue since the v1 was still
+on my old email.
+---
+ drivers/w1/w1.c | 32 +++++++++++++++-----------------
+ 1 file changed, 15 insertions(+), 17 deletions(-)
 
-Maybe a flag in vq: 
-	bool abstract; /* use ops to add/get bufs and kick */
-and then
-	if (unlikely(vq->abstract))
-		 return vq->ops->add_sgs(vq, sgs, total_sg, out_sgs, in_sgs,
-				    	 data, NULL, gfp);
+diff --git a/drivers/w1/w1.c b/drivers/w1/w1.c
+index 9d199fed9628..a5e18de7a25a 100644
+--- a/drivers/w1/w1.c
++++ b/drivers/w1/w1.c
+@@ -830,49 +830,47 @@ int w1_slave_detach(struct w1_slave *sl)
+ 
+ struct w1_master *w1_search_master_id(u32 id)
+ {
+-	struct w1_master *dev;
+-	int found = 0;
++	struct w1_master *dev = NULL, *iter;
+ 
+ 	mutex_lock(&w1_mlock);
+-	list_for_each_entry(dev, &w1_masters, w1_master_entry) {
+-		if (dev->id == id) {
+-			found = 1;
+-			atomic_inc(&dev->refcnt);
++	list_for_each_entry(iter, &w1_masters, w1_master_entry) {
++		if (iter->id == id) {
++			dev = iter;
++			atomic_inc(&iter->refcnt);
+ 			break;
+ 		}
+ 	}
+ 	mutex_unlock(&w1_mlock);
+ 
+-	return (found)?dev:NULL;
++	return dev;
+ }
+ 
+ struct w1_slave *w1_search_slave(struct w1_reg_num *id)
+ {
+ 	struct w1_master *dev;
+-	struct w1_slave *sl = NULL;
+-	int found = 0;
++	struct w1_slave *sl = NULL, *iter;
+ 
+ 	mutex_lock(&w1_mlock);
+ 	list_for_each_entry(dev, &w1_masters, w1_master_entry) {
+ 		mutex_lock(&dev->list_mutex);
+-		list_for_each_entry(sl, &dev->slist, w1_slave_entry) {
+-			if (sl->reg_num.family == id->family &&
+-					sl->reg_num.id == id->id &&
+-					sl->reg_num.crc == id->crc) {
+-				found = 1;
++		list_for_each_entry(iter, &dev->slist, w1_slave_entry) {
++			if (iter->reg_num.family == id->family &&
++			    iter->reg_num.id == id->id &&
++			    iter->reg_num.crc == id->crc) {
++				sl = iter;
+ 				atomic_inc(&dev->refcnt);
+-				atomic_inc(&sl->refcnt);
++				atomic_inc(&iter->refcnt);
+ 				break;
+ 			}
+ 		}
+ 		mutex_unlock(&dev->list_mutex);
+ 
+-		if (found)
++		if (sl)
+ 			break;
+ 	}
+ 	mutex_unlock(&w1_mlock);
+ 
+-	return (found)?sl:NULL;
++	return sl;
+ }
+ 
+ void w1_reconnect_slaves(struct w1_family *f, int attach)
 
-transport then just sets the ops if it wants abstract vqs,
-and core then skips the vring.
+---
+base-commit: cc3c44c9fda264c6d401be04e95449a57c1231c6
+change-id: 20230509-w1-replace-usage-of-found-with-tmp-list-iterator-variable-c56393ff0339
 
-
-> If [1] is acceptable, we can also reduce changes in patch 'tools/virtio:
-> implement virtqueue in test'.
-
-Yea that one shouldn't be there.
-
-> -- 
-> zhenwei pi
+Best regards,
+-- 
+Jakob Koschel <jkl820.git@gmail.com>
 
