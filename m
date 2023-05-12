@@ -2,71 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E094E700A2C
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:18:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AD9AF700A32
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:20:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241554AbjELOSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 10:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51080 "EHLO
+        id S241460AbjELOUl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 10:20:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241529AbjELOSR (ORCPT
+        with ESMTP id S240862AbjELOUk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 10:18:17 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16FF11491C
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:18:02 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id ffacd0b85a97d-30789a4c537so5068410f8f.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:18:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1683901080; x=1686493080;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jYBbWm3irWODUNPdvcgiTkaOSvr8VWosximVQ0F6Mhg=;
-        b=2XDg/kvFQpTlF/XO6N2R0bFscvdYj4ADoPCyLjmjmG8KrPhGvWV9I9OdDcbyAJhrJJ
-         XrTmnH/DDIXv4VgkhV83O0ptG+Ch383gBczr9u4K6Nya0SQBwo9JKUcAtHkZtM4L+P2f
-         Bu5FvNGpomdR8nhT9FxC8PaAvZr5BITnHrhA/LPLBUXNPpcW0E/NuQzu4WHQ8R8UKETc
-         7ZTrC5o8SpjR3b5YDIYfeYBGKynCFAkcv0cO6IoKLF4vtFrzQSIQUa0zy5+8xulYxnKo
-         MlpIWQbIH2PBlGca5CSw8fmkFs1gTHMx7hKSVijeDNgnOtnN5Jn1s0ZRzcdVYLuJViYe
-         25Jg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683901080; x=1686493080;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jYBbWm3irWODUNPdvcgiTkaOSvr8VWosximVQ0F6Mhg=;
-        b=Up/oRJkVeFPaVbcDv2u69/ygWu9iXhQxHB5UbKVH6JDFebHcEFnZq9GkvhIueObeGW
-         fdJ1FmxWWmkD3XboNxIk/avp6cdjRJJyVaF4JoQ30VjpOw7I+4oTIk+MwkRG7y8VHymq
-         2mfEeqwzm0e3s+vjbacLL5t7/c9Wl1QukAl1UMw4XjclxalsXDoR4xBl1op1VokWWKJj
-         U19vo1udXppE96UGt/otX7pr2RZ5TyQfajGxSJvCBYKLtuseZVPDrYFgmyXmvMeCVItY
-         ENpftXy7KOfi3EAj6ohbwQvl/WV5JUwaPU6dbyb5sYr4wpYufayvN4J1QJzx+OvY6FOz
-         PQrw==
-X-Gm-Message-State: AC+VfDzC8W+KDExW5WrOb99/X4Rb18rKA9PMKUarraRpxeArGy4ju/Nf
-        3finyvt66hfA1HvZhIz+aMI4QA==
-X-Google-Smtp-Source: ACHHUZ4X1Lpn1GebHOX2xVcV3rCwI6kYh6252tDJGqC7padXG8r+ecdGwIWwctqO8efZB3W+oGFcRA==
-X-Received: by 2002:a5d:4d4f:0:b0:306:3da7:f33c with SMTP id a15-20020a5d4d4f000000b003063da7f33cmr15359601wru.63.1683901080472;
-        Fri, 12 May 2023 07:18:00 -0700 (PDT)
-Received: from localhost.localdomain ([2a01:e0a:28d:66d0:c0c4:a67e:f152:1413])
-        by smtp.gmail.com with ESMTPSA id r12-20020a5d494c000000b003077f3dfcc8sm22819982wrs.32.2023.05.12.07.17.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 07:18:00 -0700 (PDT)
-From:   Esteban Blanc <eblanc@baylibre.com>
-To:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        a.zummo@towertech.it, alexandre.belloni@bootlin.com
-Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
-        jneanne@baylibre.com, aseketeli@baylibre.com, eblanc@baylibre.com,
-        sterzik@ti.com, u-kumar1@ti.com
-Subject: [PATCH v4 3/3] regulator: tps6594-regulator: Add driver for TI TPS6594 regulators
-Date:   Fri, 12 May 2023 16:17:55 +0200
-Message-Id: <20230512141755.1712358-4-eblanc@baylibre.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230512141755.1712358-1-eblanc@baylibre.com>
-References: <20230512141755.1712358-1-eblanc@baylibre.com>
-MIME-Version: 1.0
+        Fri, 12 May 2023 10:20:40 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8A42681;
+        Fri, 12 May 2023 07:20:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683901239; x=1715437239;
+  h=date:from:to:cc:subject:message-id:references:
+   content-transfer-encoding:in-reply-to:mime-version;
+  bh=QZH4gfC+cJfW1sueDY1bjWs1ku3z29RXWX/9qU5KVvw=;
+  b=ZCPTo04s1bcC8abpwxqctFGbhnb9Y6hmutLAp4z082vdJULlgMdtBkNo
+   SobweWUsdl5FQ4vDagBFv5ceQrOo2qKFRyVFrRYyfQ9BPN7FrIGGyDNBI
+   NtnhvGs0cUsxkbqDTkgkun6A2btJnfIkgiGRB86BLnGsYmvkzrrL5QCKd
+   bIEcnEV1MlSBNWzXW6BnK4eYf5Az3CB4WdsUyXtPMwUaDOj+O1Fc2/v50
+   BZ8TYog8/Zgt+nlk2VtJfIBB6JL3H/Z4qK8bYAfSfmI0xccWPEPcuk+Uv
+   NP2wbImgwUQslMWWo4KoyWM5VuK1qyXUVWzPZfZv1E42aW0c1t9ffTGop
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="340113272"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="340113272"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 07:20:38 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="733063545"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="733063545"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga001.jf.intel.com with ESMTP; 12 May 2023 07:20:38 -0700
+Received: from fmsmsx602.amr.corp.intel.com (10.18.126.82) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 12 May 2023 07:20:37 -0700
+Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Fri, 12 May 2023 07:20:37 -0700
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.168)
+ by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Fri, 12 May 2023 07:20:37 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fvHdYpAJkky5LfG0y96PT3oMtrq905e0QagpZZkAhaETR2sk0kD/uwT9bHIyf7hlKNDjyG3SXxiox4Fbbde217TFGpVqT0fPH3WPFrRvSu5FoXcTaWiYZcpB1T7zk2tFU99CaChgp67IVjZk3LFBEMfXVN7/BeEhzYG10Nr7ydzAvtNJYsrAdKAk+bX4wEFaH60Va00ydhoK1PhmyAlGHSBouPbKdeqXFpfmyoUUhydmu7pWGIBuKgrtsDtn1B8P2naGFyAVh7nqUQhjF55toqIjqli7V/cgCiSd1N0eqbCOaSHDt/1T9GU95bah59Lokr/MPNLs9KaN4ew6HfnswA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VuEzK5NWXGXhERQ22UVq8ELy58R6faNZM8dGPLlGPo0=;
+ b=Gpci2i6AP+SznR69uQzECRffO6Zt+Y/VwxKeqysFY2VrS+qV4rLPK6EuaQ0FqxqeeY3UPOqCKwNvmZOUV6QFPpZEnep9KKrtvUYofAGtbZhiZHwWUuR364Oumoq3+cBu6CepunCyTXlodhnyuRU+uiXLy2qYRoyh/IuLhN16zZj2rHhan8tPt3BwA2rBJFhaNIjM2st0x8faGNM/oCxtw3oHYmDhoeBOqayeMYpz9SCY/FXwYpWRhA6tsD7kmnEMhHZPfHgbcjO5eY2oMxGJqx2DLNzaV8em/tOQgtYPwDs3ojkFU7PElxhmeu4ZHVK2QG8AF7aqyJDBnzfDG08F8g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB7471.namprd11.prod.outlook.com (2603:10b6:510:28a::13)
+ by PH0PR11MB4917.namprd11.prod.outlook.com (2603:10b6:510:32::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.20; Fri, 12 May
+ 2023 14:20:36 +0000
+Received: from PH0PR11MB7471.namprd11.prod.outlook.com
+ ([fe80::ee76:10c6:9f42:9ed9]) by PH0PR11MB7471.namprd11.prod.outlook.com
+ ([fe80::ee76:10c6:9f42:9ed9%4]) with mapi id 15.20.6387.024; Fri, 12 May 2023
+ 14:20:36 +0000
+Date:   Fri, 12 May 2023 16:20:15 +0200
+From:   Piotr Raczynski <piotr.raczynski@intel.com>
+To:     "alexis.lothore@bootlin.com" <alexis.lothore@bootlin.com>
+CC:     "andrew@lunn.ch" <andrew@lunn.ch>,
+        "f.fainelli@gmail.com" <f.fainelli@gmail.com>,
+        "olteanv@gmail.com" <olteanv@gmail.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "linux-renesas-soc@vger.kernel.org" 
+        <linux-renesas-soc@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "thomas.petazzoni@bootlin.com" <thomas.petazzoni@bootlin.com>,
+        "herve.codina@bootlin.com" <herve.codina@bootlin.com>,
+        "miquel.raynal@bootlin.com" <miquel.raynal@bootlin.com>,
+        "milan.stevanovic@se.com" <milan.stevanovic@se.com>,
+        "jimmy.lalande@se.com" <jimmy.lalande@se.com>,
+        "pascal.eberhard@se.com" <pascal.eberhard@se.com>
+Subject: Re: [PATCH net v3 1/3] net: dsa: rzn1-a5psw: enable management
+ frames for CPU port
+Message-ID: <ZF5LH91XDIh9ArfG@nimitz>
+References: <20230512072712.82694-1-alexis.lothore@bootlin.com>
+ <20230512072712.82694-2-alexis.lothore@bootlin.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+In-Reply-To: <20230512072712.82694-2-alexis.lothore@bootlin.com>
+X-ClientProxiedBy: LO4P265CA0161.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:2c7::8) To PH0PR11MB7471.namprd11.prod.outlook.com
+ (2603:10b6:510:28a::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB7471:EE_|PH0PR11MB4917:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8f046833-2c82-4e9a-c9ee-08db52f40d9b
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zkkw3AeblKn0u+LykrgiL3KiWVTYVoUFs/o/kon7vunhtN5NAcm/f0MF6W0meFaS0MYbgHZj7SLBTFDbpkVmVTrPxLTXMbGDHsli0ZY7ZfQqvV4glsIP70uRzRa5uuPWPwqRs68TY5oViLEX8eEJSxSx7g99KNarjlNgr5u6de+4uRBumIz9Ae8EtGAA1HSjDaNjgst+uM4AT72L0EZahoPJVaVSzwKEgw4QeRIh5ktMKeB7MCWb7W1yBfbaNfQUlP5/75WgE4msuPcvK0XYF7DyCbhO82eiT5qUo+XZn36/34Jqh4T4cHZ8fr28W02IPUwgzjfpIRwguC0LtLMYEtlBlzT1MP2vGwIhgrSv0AZRkEJ3FG7FMXwQevJmB1+a1Vklf4AX6Hfhwhi0LEM/FBic7Dg3APy17B1EZk6I9A/awNvQOOv5tUgOZcIyawOV0z7U/s9wX5zmjTfLu6vHyq40jQfn0jTz/HKmuH5CYfoyKu1Hl+WziwJvKeUI1MKZxgqMKYNoBC9HOfMJS0NTOLEtBgWPqpq3BWUcPEyeDB96Tb0yMWBXwOlqAi31RCQb
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB7471.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(376002)(366004)(136003)(346002)(396003)(451199021)(66574015)(186003)(2906002)(83380400001)(4744005)(33716001)(38100700002)(86362001)(82960400001)(8936002)(8676002)(6486002)(316002)(6666004)(41300700001)(44832011)(7416002)(5660300002)(478600001)(54906003)(66556008)(66946007)(66476007)(4326008)(6916009)(6512007)(9686003)(26005)(6506007);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?iso-8859-1?Q?+4bkuwDWUqrRziSjqBM2PSFvNWDTWONBY11aPhBfpIMG4umBcWaNa9L3Fe?=
+ =?iso-8859-1?Q?8mxofxBpA3udk2Pb4FwbxfQg3F0tPR7OgGkXbFabW6RFPMMExt5tg6xdnH?=
+ =?iso-8859-1?Q?Og9LKPkJhEjbGgvh5FECPBXBWd8jQiM3+PVjN/snVNvpIvX8OfPVbdBCOv?=
+ =?iso-8859-1?Q?fmt9M0pSpDsnf14DflzcZi+VGEw7X1jJ5eqB6ddp+cSK/q7i3ffdnxvlQp?=
+ =?iso-8859-1?Q?Fxu9ZxqBwDGZw2H5qJeUcUiV8looihjvW8rYdq4wXKGQZxxHOGYZqaNw8Z?=
+ =?iso-8859-1?Q?jKavx3i1m7ZDMZCfVj9GkIF5kq0Fj777rrejlrefG8elsSQM9iuMZv8DwH?=
+ =?iso-8859-1?Q?97Wbkj+Xp5cPoUE7E39cNAixnCnQfCg/18Q8nHU9dakaml3uDwAeeaj2mB?=
+ =?iso-8859-1?Q?dFmwbnJV5GO3LYPsHOPG+rRE4vU5LIDnpx564OyDuvLT9aSYaq50/02kgh?=
+ =?iso-8859-1?Q?OQxYlD0d11Zy9k7ThoqN8k89GfKf6jDPPXyywF0D8d8s88XkEIkL4FgIp8?=
+ =?iso-8859-1?Q?9PBM+Doa3RCc3tuiaK0+vwLfVi7Csqj/yX9DxeKgU7dt+l0w8d4oXlcjin?=
+ =?iso-8859-1?Q?d+Gr4bY9YXmlNiyt/ay6srjNbqSvOvWMqCd8xvuUa2kG9yoOAztBiqt7NW?=
+ =?iso-8859-1?Q?d9d6dggnrvEoIZEiKwwAnuh//e94liTwQqb/qQpB7c8/MDM9nzLwc3P6zi?=
+ =?iso-8859-1?Q?f07kXLCS1m0dF/aOPIYhmwm5RST1tR5IwhSZ/BQ+WgyWLJ6Ui3LEON48AZ?=
+ =?iso-8859-1?Q?rQMJ/wCTxrFm8qv1O2/XbC7GjSoFZZGfcn8lXtviTnCwROLj+eFj3i9NXa?=
+ =?iso-8859-1?Q?30UfjehEl8H/qgXyXD4rzjMR10N1AeSqF+VKc0WE9spLULNvEHtF7Q41EY?=
+ =?iso-8859-1?Q?8MhHboipJCwkw2nAlqgycdz7IvmixPalvHWmAUIyWlVvP6DdwFZWUoasYt?=
+ =?iso-8859-1?Q?x+zTLmeYnClAuOQ7ND2qhLQ5axdmIOWJhgel37uHx49A3ufwmpcD/y9Lyy?=
+ =?iso-8859-1?Q?kNSxNrv6CcQfiN3BNkxOFLzPiFti+PL99DejxjpA/TnCKBG1Gu/S/UulhQ?=
+ =?iso-8859-1?Q?E7HyrE258NC9/Iu2vCbb5tm/vVAZ0mXCD7wDSkyVooEnLWBY3KR6SCaSCw?=
+ =?iso-8859-1?Q?A8KBGAaXfnhZDwT7t5rQnhM1CG2bDwbZ/4HfhaK/kwJPivoRZRDKfDSDr+?=
+ =?iso-8859-1?Q?xFoFJCg+Dux8Nl1/sxGAcf5jJJbR38RmcgnM+pBXGP5qEW1R9UNGePFQGR?=
+ =?iso-8859-1?Q?O1lQP+KaCiIpDNgvmxFhT5aHv1mBaeEEXgzY8NWATUTn8NkfhUFWDGuOyY?=
+ =?iso-8859-1?Q?Ggb1MMfaTe2HmY7/zkB1ylzl04tFpIr1cuWlzxd4figGn6xejb0oeKMIpe?=
+ =?iso-8859-1?Q?9kZDQX1VtoE/b5rwGn/cqIGEjo25fzEPyPWXGFC0ADe9lnQd+605zGejZA?=
+ =?iso-8859-1?Q?d9vnPw3HrqUMswqpQ02jnwMqDGTSyZBCzLTpLCknn1bDccoVfrlAGIvfUn?=
+ =?iso-8859-1?Q?hnFqF9Tms+i94eK9+8gkBTmgihz82a6OMVZJUa/39X4JJ+EMHJqqyGJMxb?=
+ =?iso-8859-1?Q?AFPj4UHk3biidzJ58GjCrwk7Mqso5lupaqxKoNiqMvtj3Oir+s1FKkBNid?=
+ =?iso-8859-1?Q?6r6O61QXNv9l89UKnwURlJhD+JvwZOqfR7rHMZIBn94UDfdC6sZjKZEg?=
+ =?iso-8859-1?Q?=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8f046833-2c82-4e9a-c9ee-08db52f40d9b
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB7471.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 14:20:35.9881
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: zR7fbpAAhOJc9STJfSNNJlBB6bjJz5AD860EjY04aXtM9P/jknHjrkXj7ILIV7VY/o01L2F8883Tz0J71hCStlm3L8KlsktlZnYFUJGJBdo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB4917
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,685 +165,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jerome Neanne <jneanne@baylibre.com>
-
-This patch adds support for TPS6594 regulators (bucks and LDOs).
-The output voltages are configurable and are meant to supply power
-to the main processor and other components.
-Bucks can be used in single or multiphase mode, depending on PMIC
-part number.
-
-Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
-Signed-off-by: Esteban Blanc <eblanc@baylibre.com>
----
- drivers/regulator/Kconfig             |  13 +
- drivers/regulator/Makefile            |   1 +
- drivers/regulator/tps6594-regulator.c | 620 ++++++++++++++++++++++++++
- 3 files changed, 634 insertions(+)
- create mode 100644 drivers/regulator/tps6594-regulator.c
-
-diff --git a/drivers/regulator/Kconfig b/drivers/regulator/Kconfig
-index e5f3613c15fa..b832702dcb2c 100644
---- a/drivers/regulator/Kconfig
-+++ b/drivers/regulator/Kconfig
-@@ -1463,6 +1463,19 @@ config REGULATOR_TPS65219
- 	  voltage regulators. It supports software based voltage control
- 	  for different voltage domains.
- 
-+config REGULATOR_TPS6594
-+	tristate "TI TPS6594 Power regulators"
-+	depends on MFD_TPS6594 && OF
-+	default MFD_TPS6594
-+	help
-+	  This driver supports TPS6594 voltage regulator chips.
-+	  TPS6594 series of PMICs have 5 BUCKs and 4 LDOs
-+	  voltage regulators.
-+	  BUCKs 1,2,3,4 can be used in single phase or multiphase mode.
-+	  Part number defines which single or multiphase mode is i used.
-+	  It supports software based voltage control
-+	  for different voltage domains.
-+
- config REGULATOR_TPS6524X
- 	tristate "TI TPS6524X Power regulators"
- 	depends on SPI
-diff --git a/drivers/regulator/Makefile b/drivers/regulator/Makefile
-index 58dfe0147cd4..8bbead39cceb 100644
---- a/drivers/regulator/Makefile
-+++ b/drivers/regulator/Makefile
-@@ -174,6 +174,7 @@ obj-$(CONFIG_REGULATOR_TPS6524X) += tps6524x-regulator.o
- obj-$(CONFIG_REGULATOR_TPS6586X) += tps6586x-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65910) += tps65910-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65912) += tps65912-regulator.o
-+obj-$(CONFIG_REGULATOR_TPS6594) += tps6594-regulator.o
- obj-$(CONFIG_REGULATOR_TPS65132) += tps65132-regulator.o
- obj-$(CONFIG_REGULATOR_TPS68470) += tps68470-regulator.o
- obj-$(CONFIG_REGULATOR_TWL4030) += twl-regulator.o twl6030-regulator.o
-diff --git a/drivers/regulator/tps6594-regulator.c b/drivers/regulator/tps6594-regulator.c
-new file mode 100644
-index 000000000000..fa113d475593
---- /dev/null
-+++ b/drivers/regulator/tps6594-regulator.c
-@@ -0,0 +1,620 @@
-+// SPDX-License-Identifier: GPL-2.0
-+//
-+// Regulator driver for tps6594 PMIC
-+//
-+// Copyright (C) 2023 BayLibre Incorporated - https://www.baylibre.com/
-+
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/init.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/regulator/driver.h>
-+#include <linux/regulator/machine.h>
-+#include <linux/regulator/of_regulator.h>
-+
-+#include <linux/mfd/tps6594.h>
-+
-+#define BUCK_NB		5
-+#define LDO_NB		4
-+#define MULTI_PHASE_NB	4
-+#define REGS_INT_NB	4
-+
-+enum tps6594_regulator_id {
-+	/* DCDC's */
-+	TPS6594_BUCK_1,
-+	TPS6594_BUCK_2,
-+	TPS6594_BUCK_3,
-+	TPS6594_BUCK_4,
-+	TPS6594_BUCK_5,
-+
-+	/* LDOs */
-+	TPS6594_LDO_1,
-+	TPS6594_LDO_2,
-+	TPS6594_LDO_3,
-+	TPS6594_LDO_4,
-+};
-+
-+enum tps6594_multi_regulator_id {
-+	/* Multi-phase DCDC's */
-+	TPS6594_BUCK_12,
-+	TPS6594_BUCK_34,
-+	TPS6594_BUCK_123,
-+	TPS6594_BUCK_1234,
-+};
-+
-+struct tps6594_regulator_irq_type {
-+	const char *irq_name;
-+	const char *regulator_name;
-+	const char *event_name;
-+	unsigned long event;
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_ext_regulator_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_VCCA_OV, "VCCA", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_VCCA_UV, "VCCA", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_VMON1_OV, "VMON1", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_VMON1_UV, "VMON1", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_VMON1_RV, "VMON1", "residual voltage",
-+	  REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_VMON2_OV, "VMON2", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_VMON2_UV, "VMON2", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_VMON2_RV, "VMON2", "residual voltage",
-+	  REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+};
-+
-+struct tps6594_regulator_irq_data {
-+	struct device *dev;
-+	struct tps6594_regulator_irq_type *type;
-+	struct regulator_dev *rdev;
-+};
-+
-+struct tps6594_ext_regulator_irq_data {
-+	struct device *dev;
-+	struct tps6594_regulator_irq_type *type;
-+};
-+
-+#define TPS6594_REGULATOR(_name, _of, _id, _type, _ops, _n, _vr, _vm, _er, \
-+			   _em, _cr, _cm, _lr, _nlr, _delay, _fuv, \
-+			   _ct, _ncl, _bpm) \
-+	{								\
-+		.name			= _name,			\
-+		.of_match		= _of,				\
-+		.regulators_node	= of_match_ptr("regulators"),	\
-+		.supply_name		= _of,				\
-+		.id			= _id,				\
-+		.ops			= &(_ops),			\
-+		.n_voltages		= _n,				\
-+		.type			= _type,			\
-+		.owner			= THIS_MODULE,			\
-+		.vsel_reg		= _vr,				\
-+		.vsel_mask		= _vm,				\
-+		.csel_reg		= _cr,				\
-+		.csel_mask		= _cm,				\
-+		.curr_table		= _ct,				\
-+		.n_current_limits	= _ncl,				\
-+		.enable_reg		= _er,				\
-+		.enable_mask		= _em,				\
-+		.volt_table		= NULL,				\
-+		.linear_ranges		= _lr,				\
-+		.n_linear_ranges	= _nlr,				\
-+		.ramp_delay		= _delay,			\
-+		.fixed_uV		= _fuv,				\
-+		.bypass_reg		= _vr,				\
-+		.bypass_mask		= _bpm,				\
-+	}								\
-+
-+static const struct linear_range bucks_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(300000, 0x0, 0xe, 20000),
-+	REGULATOR_LINEAR_RANGE(600000, 0xf, 0x72, 5000),
-+	REGULATOR_LINEAR_RANGE(1100000, 0x73, 0xaa, 10000),
-+	REGULATOR_LINEAR_RANGE(1660000, 0xab, 0xff, 20000),
-+};
-+
-+static const struct linear_range ldos_1_2_3_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(600000, 0x4, 0x3a, 50000),
-+};
-+
-+static const struct linear_range ldos_4_ranges[] = {
-+	REGULATOR_LINEAR_RANGE(1200000, 0x20, 0x74, 25000),
-+};
-+
-+/* Operations permitted on BUCK1/2/3/4/5 */
-+static const struct regulator_ops tps6594_bucks_ops = {
-+	.is_enabled		= regulator_is_enabled_regmap,
-+	.enable			= regulator_enable_regmap,
-+	.disable		= regulator_disable_regmap,
-+	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
-+	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
-+	.list_voltage		= regulator_list_voltage_linear_range,
-+	.map_voltage		= regulator_map_voltage_linear_range,
-+	.set_voltage_time_sel	= regulator_set_voltage_time_sel,
-+
-+};
-+
-+/* Operations permitted on LDO1/2/3 */
-+static const struct regulator_ops tps6594_ldos_1_2_3_ops = {
-+	.is_enabled		= regulator_is_enabled_regmap,
-+	.enable			= regulator_enable_regmap,
-+	.disable		= regulator_disable_regmap,
-+	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
-+	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
-+	.list_voltage		= regulator_list_voltage_linear_range,
-+	.map_voltage		= regulator_map_voltage_linear_range,
-+	.set_bypass		= regulator_set_bypass_regmap,
-+	.get_bypass		= regulator_get_bypass_regmap,
-+};
-+
-+/* Operations permitted on LDO4 */
-+static const struct regulator_ops tps6594_ldos_4_ops = {
-+	.is_enabled		= regulator_is_enabled_regmap,
-+	.enable			= regulator_enable_regmap,
-+	.disable		= regulator_disable_regmap,
-+	.get_voltage_sel	= regulator_get_voltage_sel_regmap,
-+	.set_voltage_sel	= regulator_set_voltage_sel_regmap,
-+	.list_voltage		= regulator_list_voltage_linear_range,
-+	.map_voltage		= regulator_map_voltage_linear_range,
-+};
-+
-+static const struct regulator_desc buck_regs[] = {
-+	TPS6594_REGULATOR("BUCK1", "buck1", TPS6594_BUCK_1,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(0),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(0),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 0, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK2", "buck2", TPS6594_BUCK_2,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(1),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(1),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 0, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK3", "buck3", TPS6594_BUCK_3,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(2),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(2),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 0, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK4", "buck4", TPS6594_BUCK_4,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(3),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(3),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 0, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK5", "buck5", TPS6594_BUCK_5,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(4),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(4),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 0, 0, NULL, 0, 0),
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_buck1_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_BUCK1_OV, "BUCK1", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_BUCK1_UV, "BUCK1", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_BUCK1_SC, "BUCK1", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_BUCK1_ILIM, "BUCK1", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_buck2_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_BUCK2_OV, "BUCK2", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_BUCK2_UV, "BUCK2", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_BUCK2_SC, "BUCK2", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_BUCK2_ILIM, "BUCK2", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_buck3_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_BUCK3_OV, "BUCK3", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_BUCK3_UV, "BUCK3", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_BUCK3_SC, "BUCK3", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_BUCK3_ILIM, "BUCK3", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_buck4_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_BUCK4_OV, "BUCK4", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_BUCK4_UV, "BUCK4", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_BUCK4_SC, "BUCK4", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_BUCK4_ILIM, "BUCK4", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_buck5_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_BUCK5_OV, "BUCK5", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_BUCK5_UV, "BUCK5", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_BUCK5_SC, "BUCK5", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_BUCK5_ILIM, "BUCK5", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_ldo1_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_LDO1_OV, "LDO1", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_LDO1_UV, "LDO1", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_LDO1_SC, "LDO1", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_LDO1_ILIM, "LDO1", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_ldo2_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_LDO2_OV, "LDO2", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_LDO2_UV, "LDO2", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_LDO2_SC, "LDO2", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_LDO2_ILIM, "LDO2", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_ldo3_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_LDO3_OV, "LDO3", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_LDO3_UV, "LDO3", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_LDO3_SC, "LDO3", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_LDO3_ILIM, "LDO3", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type tps6594_ldo4_irq_types[] = {
-+	{ TPS6594_IRQ_NAME_LDO4_OV, "LDO4", "overvoltage", REGULATOR_EVENT_OVER_VOLTAGE_WARN },
-+	{ TPS6594_IRQ_NAME_LDO4_UV, "LDO4", "undervoltage", REGULATOR_EVENT_UNDER_VOLTAGE },
-+	{ TPS6594_IRQ_NAME_LDO4_SC, "LDO4", "short circuit", REGULATOR_EVENT_REGULATION_OUT },
-+	{ TPS6594_IRQ_NAME_LDO4_ILIM, "LDO4", "reach ilim, overcurrent",
-+	  REGULATOR_EVENT_OVER_CURRENT },
-+};
-+
-+static struct tps6594_regulator_irq_type *tps6594_bucks_irq_types[] = {
-+	tps6594_buck1_irq_types,
-+	tps6594_buck2_irq_types,
-+	tps6594_buck3_irq_types,
-+	tps6594_buck4_irq_types,
-+	tps6594_buck5_irq_types,
-+};
-+
-+static struct tps6594_regulator_irq_type *tps6594_ldos_irq_types[] = {
-+	tps6594_ldo1_irq_types,
-+	tps6594_ldo2_irq_types,
-+	tps6594_ldo3_irq_types,
-+	tps6594_ldo4_irq_types,
-+};
-+
-+static const struct regulator_desc multi_regs[] = {
-+	TPS6594_REGULATOR("BUCK12", "buck12", TPS6594_BUCK_1,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(1),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(1),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 4000, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK34", "buck34", TPS6594_BUCK_3,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(3),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(3),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 0, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK123", "buck123", TPS6594_BUCK_1,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(1),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(1),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 4000, 0, NULL, 0, 0),
-+	TPS6594_REGULATOR("BUCK1234", "buck1234", TPS6594_BUCK_1,
-+			  REGULATOR_VOLTAGE, tps6594_bucks_ops, TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_VOUT_1(1),
-+			  TPS6594_MASK_BUCKS_VSET,
-+			  TPS6594_REG_BUCKX_CTRL(1),
-+			  TPS6594_BIT_BUCK_EN, 0, 0, bucks_ranges,
-+			  4, 4000, 0, NULL, 0, 0),
-+};
-+
-+static const struct regulator_desc ldo_regs[] = {
-+	TPS6594_REGULATOR("LDO1", "ldo1", TPS6594_LDO_1,
-+			  REGULATOR_VOLTAGE, tps6594_ldos_1_2_3_ops, TPS6594_MASK_LDO123_VSET,
-+			  TPS6594_REG_LDOX_VOUT(0),
-+			  TPS6594_MASK_LDO123_VSET,
-+			  TPS6594_REG_LDOX_CTRL(0),
-+			  TPS6594_BIT_LDO_EN, 0, 0, ldos_1_2_3_ranges,
-+			  1, 0, 0, NULL, 0, TPS6594_BIT_LDO_BYPASS),
-+	TPS6594_REGULATOR("LDO2", "ldo2", TPS6594_LDO_2,
-+			  REGULATOR_VOLTAGE, tps6594_ldos_1_2_3_ops, TPS6594_MASK_LDO123_VSET,
-+			  TPS6594_REG_LDOX_VOUT(1),
-+			  TPS6594_MASK_LDO123_VSET,
-+			  TPS6594_REG_LDOX_CTRL(1),
-+			  TPS6594_BIT_LDO_EN, 0, 0, ldos_1_2_3_ranges,
-+			  1, 0, 0, NULL, 0, TPS6594_BIT_LDO_BYPASS),
-+	TPS6594_REGULATOR("LDO3", "ldo3", TPS6594_LDO_3,
-+			  REGULATOR_VOLTAGE, tps6594_ldos_1_2_3_ops, TPS6594_MASK_LDO123_VSET,
-+			  TPS6594_REG_LDOX_VOUT(2),
-+			  TPS6594_MASK_LDO123_VSET,
-+			  TPS6594_REG_LDOX_CTRL(2),
-+			  TPS6594_BIT_LDO_EN, 0, 0, ldos_1_2_3_ranges,
-+			  1, 0, 0, NULL, 0, TPS6594_BIT_LDO_BYPASS),
-+	TPS6594_REGULATOR("LDO4", "ldo4", TPS6594_LDO_4,
-+			  REGULATOR_VOLTAGE, tps6594_ldos_4_ops, TPS6594_MASK_LDO4_VSET >> 1,
-+			  TPS6594_REG_LDOX_VOUT(3),
-+			  TPS6594_MASK_LDO4_VSET,
-+			  TPS6594_REG_LDOX_CTRL(3),
-+			  TPS6594_BIT_LDO_EN, 0, 0, ldos_4_ranges,
-+			  1, 0, 0, NULL, 0, 0),
-+};
-+
-+static irqreturn_t tps6594_regulator_irq_handler(int irq, void *data)
-+{
-+	struct tps6594_regulator_irq_data *irq_data = data;
-+
-+	if (irq_data->type->event_name[0] == '\0') {
-+		/* This is the timeout interrupt no specific regulator */
-+		dev_err(irq_data->dev,
-+			"System was put in shutdown due to timeout during an active or standby transition.\n");
-+		return IRQ_HANDLED;
-+	}
-+
-+	dev_err(irq_data->dev, "Error IRQ trap %s for %s\n",
-+		irq_data->type->event_name, irq_data->type->regulator_name);
-+
-+	regulator_notifier_call_chain(irq_data->rdev,
-+				      irq_data->type->event, NULL);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static int tps6594_request_reg_irqs(struct platform_device *pdev,
-+				    struct regulator_dev *rdev,
-+				    struct tps6594_regulator_irq_data *irq_data,
-+				    struct tps6594_regulator_irq_type *tps6594_regs_irq_types,
-+				    int *irq_idx)
-+{
-+	struct tps6594_regulator_irq_type *irq_type;
-+	struct tps6594 *tps = dev_get_drvdata(pdev->dev.parent);
-+	int j;
-+	int irq;
-+	int error;
-+
-+	for (j = 0; j < REGS_INT_NB; j++) {
-+		irq_type = &tps6594_regs_irq_types[j];
-+		irq = platform_get_irq_byname(pdev, irq_type->irq_name);
-+		if (irq < 0)
-+			return -EINVAL;
-+
-+		irq_data[*irq_idx + j].dev = tps->dev;
-+		irq_data[*irq_idx + j].type = irq_type;
-+		irq_data[*irq_idx + j].rdev = rdev;
-+
-+		error = devm_request_threaded_irq(tps->dev, irq, NULL,
-+						  tps6594_regulator_irq_handler,
-+						  IRQF_ONESHOT,
-+						  irq_type->irq_name,
-+						  &irq_data[*irq_idx]);
-+		(*irq_idx)++;
-+		if (error) {
-+			dev_err(tps->dev, "tps6594 failed to request %s IRQ %d: %d\n",
-+				irq_type->irq_name, irq, error);
-+			return error;
-+		}
-+	}
-+	return 0;
-+}
-+
-+static int tps6594_regulator_probe(struct platform_device *pdev)
-+{
-+	struct tps6594 *tps = dev_get_drvdata(pdev->dev.parent);
-+	struct regulator_dev *rdev;
-+	struct device_node *np = NULL;
-+	struct device_node *np_pmic_parent = NULL;
-+	struct regulator_config config = {};
-+	struct tps6594_regulator_irq_data *irq_data;
-+	struct tps6594_ext_regulator_irq_data *irq_ext_reg_data;
-+	struct tps6594_regulator_irq_type *irq_type;
-+	u8 buck_configured[BUCK_NB] = { 0 };
-+	u8 buck_multi[MULTI_PHASE_NB] = { 0 };
-+	static const char * const multiphases[] = {"buck12", "buck123", "buck1234", "buck34"};
-+	static const char *npname;
-+	int error, i, irq, multi, delta;
-+	int irq_idx = 0;
-+	int buck_idx = 0;
-+	int ext_reg_irq_nb = 2;
-+
-+	enum {
-+	MULTI_BUCK12,
-+	MULTI_BUCK123,
-+	MULTI_BUCK1234,
-+	MULTI_BUCK12_34,
-+	MULTI_FIRST = MULTI_BUCK12,
-+	MULTI_LAST = MULTI_BUCK12_34,
-+	MULTI_NUM = MULTI_LAST - MULTI_FIRST + 1
-+	};
-+
-+	config.dev = tps->dev;
-+	config.driver_data = tps;
-+	config.regmap = tps->regmap;
-+
-+	/*
-+	 * Switch case defines different possible multi phase config
-+	 * This is based on dts buck node name.
-+	 * Buck node name must be chosen accordingly.
-+	 * Default case is no Multiphase buck.
-+	 * In case of Multiphase configuration, value should be defined for
-+	 * buck_configured to avoid creating bucks for every buck in multiphase
-+	 */
-+	for (multi = MULTI_FIRST ; multi < MULTI_NUM ; multi++) {
-+		np = of_find_node_by_name(tps->dev->of_node, multiphases[multi]);
-+		npname = of_node_full_name(np);
-+		np_pmic_parent = of_get_parent(of_get_parent(np));
-+		if (strcmp((of_node_full_name(np_pmic_parent)), tps->dev->of_node->full_name))
-+			continue;
-+		delta = strcmp(npname, multiphases[multi]);
-+		if (!delta) {
-+			switch (multi) {
-+			case MULTI_BUCK12:
-+				buck_multi[0] = 1;
-+				buck_configured[0] = 1;
-+				buck_configured[1] = 1;
-+				break;
-+			/* multiphase buck34 is supported only with buck12 */
-+			case MULTI_BUCK12_34:
-+				buck_multi[0] = 1;
-+				buck_configured[0] = 1;
-+				buck_configured[1] = 1;
-+				buck_multi[1] = 1;
-+				buck_configured[2] = 1;
-+				buck_configured[3] = 1;
-+				break;
-+			case MULTI_BUCK123:
-+				buck_multi[2] = 1;
-+				buck_configured[0] = 1;
-+				buck_configured[1] = 1;
-+				buck_configured[2] = 1;
-+				break;
-+			case MULTI_BUCK1234:
-+				buck_multi[3] = 1;
-+				buck_configured[0] = 1;
-+				buck_configured[1] = 1;
-+				buck_configured[2] = 1;
-+				buck_configured[3] = 1;
-+				break;
-+			}
-+		}
-+	}
-+
-+	if (tps->chip_id == LP8764)
-+		/* There is only 4 buck on LP8764 */
-+		buck_configured[4] = 1;
-+
-+	irq_data = devm_kmalloc(tps->dev,
-+				ARRAY_SIZE(tps6594_bucks_irq_types) *
-+				REGS_INT_NB *
-+				sizeof(struct tps6594_regulator_irq_data) +
-+				ARRAY_SIZE(tps6594_ldos_irq_types) *
-+				REGS_INT_NB *
-+				sizeof(struct tps6594_regulator_irq_data),
-+				GFP_KERNEL);
-+	if (!irq_data)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < MULTI_PHASE_NB; i++) {
-+		if (buck_multi[i] == 0)
-+			continue;
-+
-+		rdev = devm_regulator_register(&pdev->dev, &multi_regs[i], &config);
-+		if (IS_ERR(rdev)) {
-+			dev_err(tps->dev, "failed to register %s regulator\n",
-+				pdev->name);
-+			return PTR_ERR(rdev);
-+		}
-+		/* config multiphase buck12+buck34 */
-+		if (i == 1)
-+			buck_idx = 2;
-+		error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-+						 tps6594_bucks_irq_types[buck_idx], &irq_idx);
-+		if (error)
-+			return error;
-+		error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-+						 tps6594_bucks_irq_types[buck_idx + 1], &irq_idx);
-+		if (error)
-+			return error;
-+
-+		if (i == 2 || i == 3) {
-+			error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-+							 tps6594_bucks_irq_types[buck_idx + 2],
-+							 &irq_idx);
-+			if (error)
-+				return error;
-+		}
-+		if (i == 3) {
-+			error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-+							 tps6594_bucks_irq_types[buck_idx + 3],
-+							 &irq_idx);
-+			if (error)
-+				return error;
-+		}
-+	}
-+
-+	for (i = 0; i < BUCK_NB; i++) {
-+		if (buck_configured[i] == 1)
-+			continue;
-+
-+		rdev = devm_regulator_register(&pdev->dev, &buck_regs[i], &config);
-+		if (IS_ERR(rdev)) {
-+			dev_err(tps->dev, "failed to register %s regulator\n",
-+				pdev->name);
-+			return PTR_ERR(rdev);
-+		}
-+		error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-+						 tps6594_bucks_irq_types[i], &irq_idx);
-+		if (error)
-+			return error;
-+	}
-+
-+	/* LP8764 dosen't have LDO */
-+	if (tps->chip_id != LP8764) {
-+		for (i = 0; i < ARRAY_SIZE(ldo_regs); i++) {
-+			rdev = devm_regulator_register(&pdev->dev, &ldo_regs[i], &config);
-+			if (IS_ERR(rdev)) {
-+				dev_err(tps->dev,
-+					"failed to register %s regulator\n",
-+					pdev->name);
-+				return PTR_ERR(rdev);
-+			}
-+			error = tps6594_request_reg_irqs(pdev, rdev, irq_data,
-+							 tps6594_ldos_irq_types[i],
-+							 &irq_idx);
-+			if (error)
-+				return error;
-+		}
-+	}
-+
-+	if (tps->chip_id == LP8764)
-+		ext_reg_irq_nb = ARRAY_SIZE(tps6594_ext_regulator_irq_types);
-+
-+	irq_ext_reg_data = devm_kmalloc(tps->dev,
-+					ext_reg_irq_nb *
-+					sizeof(struct tps6594_ext_regulator_irq_data),
-+					GFP_KERNEL);
-+	if (!irq_ext_reg_data)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < ext_reg_irq_nb; ++i) {
-+		irq_type = &tps6594_ext_regulator_irq_types[i];
-+
-+		irq = platform_get_irq_byname(pdev, irq_type->irq_name);
-+		if (irq < 0)
-+			return -EINVAL;
-+
-+		irq_ext_reg_data[i].dev = tps->dev;
-+		irq_ext_reg_data[i].type = irq_type;
-+
-+		error = devm_request_threaded_irq(tps->dev, irq, NULL,
-+						  tps6594_regulator_irq_handler,
-+						  IRQF_ONESHOT,
-+						  irq_type->irq_name,
-+						  &irq_ext_reg_data[i]);
-+		if (error) {
-+			dev_err(tps->dev, "failed to request %s IRQ %d: %d\n",
-+				irq_type->irq_name, irq, error);
-+			return error;
-+		}
-+	}
-+	return 0;
-+}
-+
-+static struct platform_driver tps6594_regulator_driver = {
-+	.driver = {
-+		.name = "tps6594-regulator",
-+	},
-+	.probe = tps6594_regulator_probe,
-+};
-+
-+module_platform_driver(tps6594_regulator_driver);
-+
-+MODULE_ALIAS("platform:tps6594-regulator");
-+MODULE_AUTHOR("Jerome Neanne <jneanne@baylibre.com>");
-+MODULE_DESCRIPTION("TPS6594 voltage regulator driver");
-+MODULE_LICENSE("GPL");
--- 
-2.39.2
-
+On Fri, May 12, 2023 at 09:27:10AM +0200, alexis.lothore@bootlin.com wrote:
+> From: Clément Léger <clement.leger@bootlin.com>
+> 
+> Currently, management frame were discarded before reaching the CPU port due
+> to a misconfiguration of the MGMT_CONFIG register. Enable them by setting
+> the correct value in this register in order to correctly receive management
+> frame and handle STP.
+> 
+> Fixes: 888cdb892b61 ("net: dsa: rzn1-a5psw: add Renesas RZ/N1 advanced 5 port switch driver")
+> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
+> Signed-off-by: Alexis Lothoré <alexis.lothore@bootlin.com>
+> ---
+> Changes since v2:
+> - move A5PSW_MGMT_CFG_ENABLE definition in this commit
+> ---
+Looks OK, thanks.
+Reviewed-by: Piotr Raczynski <piotr.raczynski@intel.com>
