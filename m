@@ -2,52 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A613700FF2
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 22:50:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 647B3700FF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 22:50:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238948AbjELUuC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 16:50:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53988 "EHLO
+        id S239375AbjELUuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 16:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238363AbjELUt7 (ORCPT
+        with ESMTP id S238989AbjELUuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 16:49:59 -0400
-Received: from out-26.mta0.migadu.com (out-26.mta0.migadu.com [IPv6:2001:41d0:1004:224b::1a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A8BE26B9
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 13:49:58 -0700 (PDT)
-Date:   Fri, 12 May 2023 16:49:51 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1683924595;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FMT90UCMn0fWFglADEopgULejFhzB6Tyuu4ibJ17nuA=;
-        b=h2bIEs/YC7cca86id1A0bf5FA55jjfYAwFBk6uWfgO2um8uM0euOLviTbpIEmTHSEDvdOK
-        5vWkQiX6uf5Kh9fB4wb/MtyID916vfvV/VfLBFvQGLdgqxsr4F7mONqYab7f+IMRZVzsuL
-        F6ZZg8gYYEqyvQuEpZnGMAJkq+0miEc=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org, Ingo Molnar <mingo@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH 03/32] locking/lockdep: lockdep_set_no_check_recursion()
-Message-ID: <ZF6mbxpjN4cSdn/1@moria.home.lan>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-4-kent.overstreet@linux.dev>
- <20230509193147.GC2148518@hirez.programming.kicks-ass.net>
- <ZFqqsyDpatgb77Vh@moria.home.lan>
- <20230510085905.GJ4253@hirez.programming.kicks-ass.net>
+        Fri, 12 May 2023 16:50:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A568A5E;
+        Fri, 12 May 2023 13:50:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 40DEB61585;
+        Fri, 12 May 2023 20:50:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DEC1C433EF;
+        Fri, 12 May 2023 20:50:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683924614;
+        bh=/Mn4L+a1/bgxrze0zB5CbsA1BiqgmzfxAOiw6lAL/JU=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=QhMSm/GbIBE//aSYVXOIvzEU+a6W4bv+7cB9Q65hpH5Vy5D5DSz7cdwVw7LTbncVt
+         6trrJEGFYSkrnK9xkm4BU7VV/pz0VffkF8gtwWho6aQyBHyBPKPzOuhxhwErvKecGu
+         qhFvJ7TmiO3ntSrn4hueZkgjIRPoqezim3V1BqEOLS6KBwDTCRGqVTICWfgxHftMxQ
+         fOGNgFcUCNXOybrmRsxPOLUc04IgvzshZ+fdXV+90cM9pUMqvZht5Uhvhg4lt2L2iU
+         LAItQ/NI7koE+f7MN7XCfT6XP+3CTiPUIwzj/7ArhgxC2KnQElN6CrBpZUI/OqgWl2
+         LnEyB/i+OL0Og==
+Message-ID: <a54a4634fd5e161a1ac2697a388018db.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230510085905.GJ4253@hirez.programming.kicks-ass.net>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230506090856.3599035-1-peng.fan@oss.nxp.com>
+References: <20230506090856.3599035-1-peng.fan@oss.nxp.com>
+Subject: Re: [PATCH] clk: imx: drop imx_unregister_clocks
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-imx@nxp.com, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+To:     Peng Fan (OSS) <peng.fan@oss.nxp.com>, abelvesa@kernel.org,
+        festevam@gmail.com, kernel@pengutronix.de, mturquette@baylibre.com,
+        s.hauer@pengutronix.de, shawnguo@kernel.org
+Date:   Fri, 12 May 2023 13:50:12 -0700
+User-Agent: alot/0.10
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,52 +58,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, May 10, 2023 at 10:59:05AM +0200, Peter Zijlstra wrote:
-> On Tue, May 09, 2023 at 04:18:59PM -0400, Kent Overstreet wrote:
-> > On Tue, May 09, 2023 at 09:31:47PM +0200, Peter Zijlstra wrote:
-> > > On Tue, May 09, 2023 at 12:56:28PM -0400, Kent Overstreet wrote:
-> > > > This adds a method to tell lockdep not to check lock ordering within a
-> > > > lock class - but to still check lock ordering w.r.t. other lock types.
-> > > > 
-> > > > This is for bcachefs, where for btree node locks we have our own
-> > > > deadlock avoidance strategy w.r.t. other btree node locks (cycle
-> > > > detection), but we still want lockdep to check lock ordering w.r.t.
-> > > > other lock types.
-> > > > 
-> > > 
-> > > ISTR you had a much nicer version of this where you gave a custom order
-> > > function -- what happend to that?
-> > 
-> > Actually, I spoke too soon; this patch and the other series with the
-> > comparison function solve different problems.
-> > 
-> > For bcachefs btree node locks, we don't have a defined lock ordering at
-> > all - we do full runtime cycle detection, so we don't want lockdep
-> > checking for self deadlock because we're handling that but we _do_ want
-> > lockdep checking lock ordering of btree node locks w.r.t. other locks in
-> > the system.
-> 
-> Have you read the ww_mutex code? If not, please do so, it does similar
-> things.
-> 
-> The way it gets around the self-nesting check is by using the nest_lock
-> annotation, the acquire context itself also has a dep_map for this
-> purpose.
+Quoting Peng Fan (OSS) (2023-05-06 02:08:56)
+> From: Peng Fan <peng.fan@nxp.com>
+>=20
+> There is no user using imx_unregister_clocks, so drop it.
+>=20
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
 
-So, spent some time plumbing this through the six lock code and seeing
-how it'd work.
-
-I like it in theory, it's got the right semantics and it would allow for
-lockdep to check that we're not taking locks with more than one
-btree_trans in the same thread. Unfortunately, we've got code paths that
-are meant to be called from contexts that may or may not have a
-btree_trans - and this is fine right now, because they just use
-trylock(), but having to plumb nest_lock through is going to make a mess
-of things.
-
-(The relevant codepaths include shrinker callbacks, where we definitely
-can not just init a new btree_trans, and also the btree node write path
-which can be kicked off from all sorts of places).
-
-Can we go with lockdep_set_no_check_recursion() for now? It's a pretty
-small addition to the lockdep code.
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
