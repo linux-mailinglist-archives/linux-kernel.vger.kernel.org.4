@@ -2,207 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D880B700522
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:23:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B1C700528
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:23:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240544AbjELKXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:23:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
+        id S240654AbjELKXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 06:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240652AbjELKXI (ORCPT
+        with ESMTP id S240670AbjELKXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:23:08 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320BB83DC
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:23:03 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-3063433fa66so6355281f8f.3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:23:03 -0700 (PDT)
+        Fri, 12 May 2023 06:23:19 -0400
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 602F212E;
+        Fri, 12 May 2023 03:23:17 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id 38308e7fff4ca-2ac82b07eb3so98657001fa.1;
+        Fri, 12 May 2023 03:23:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1683886981; x=1686478981;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2+Wf8mVZDbx31shCs97RQqyKh5s1MqwXoRc+dmnhzU4=;
-        b=Ij9QKWpIoMZsXOQZ5zF+5uXiCfMBJ1ntLurb/gL5AOk3hPXrAjZOLK/aOnzYMkhpN0
-         mkHUUoUPwadC8WJE+yBPzRFO1HynAAwLHK6+RkXi/KlsDXq8STd54YL89WXRUSOafSa0
-         LbXzOe6Kj2bCrZRYNuj+gfFOsDl27rNLmIDAUTCIIL32qNe8aBu/CSVP0FffwVRXUk/n
-         gXyXiq91G6P11C73oEp2Wz9X5vYuc+/zv0FFq23ah1VS928QgBnityP3Cl7gBEsEEFyN
-         js7o3eNeAGRZOMMSyBGdiE5Y6PKoKKI9HTcZxgU7zz/KGa1pmzgJFWE9tZ4pXo/R2s2d
-         9c2g==
+        d=gmail.com; s=20221208; t=1683886995; x=1686478995;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=z23Yys1p+WjW6kez7AKqzscsQbDlp8fVQx68w5qJUf0=;
+        b=QLxxlk7MAaNJPed+IR4tg9xzx6vEcv8gKoLQ6ByxBWOcNZ9jyZ30AS++w3IpXEGLoR
+         fRsPFHc1ruZI15eGdoeG3wMZxlAwlijYfl+2ZW/JaGUwmqne1y7+EHzOlD+WGcq3GSdP
+         Cnf6R1q30GjdiH0o9r1gzP+JceFDwLmUIMg4fRJLAXY9qyncDjkGgUqVrhOiXQNkaWdC
+         sxDoqzeSXepMiqWuUb/LdYSjVQ0ocITH/GiIVFGXEh+Mp0QwXzROvF99IS3Htxv2PlLO
+         MlaHTilNWlMSN0cPjactSPfSy7+Z15kkiKpRoWIQC77P53yfvfT6hnAaGxyG4HK1WcaV
+         Ww8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683886981; x=1686478981;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2+Wf8mVZDbx31shCs97RQqyKh5s1MqwXoRc+dmnhzU4=;
-        b=XD2vseuwtUn5nS7hNdS7T6wEpTH3L1Q0HOM0aHjFgRWqmAZ1vp3cBWV/eoYYOxoFGJ
-         ln9N7iEZ/UFkLLyl7EMyZdom9s51XzZebTHtwIMteofRk0hM8bbQ2KieCyfXTKvjGuKx
-         p8H1xxuAeF0f83REtqvgBm866AlePHiSAuBROkLW7jqcFJhUvdSMf945RS1cobEMCRoZ
-         85O7NtMcDrjBZE1nhkIb6ZG2GkViRQ20a14QLH3xe+QW5oeVq8jJjOlsgrDji8HsYL/b
-         +58QDFsVaKvVtihFOCywuWe4KTEn8MpXV47rQEef2fqETSbNOqts335xmxUsylEk2XK9
-         P8cQ==
-X-Gm-Message-State: AC+VfDzAMAGFlzWmspppKj/2Ar4B/kAb2b69dQozQ7kj36eyoDgKGrTk
-        Yc1izNJslVTUD6bo0eB+cn5E4w==
-X-Google-Smtp-Source: ACHHUZ6eFgiIinI+xrrQTlKNRhpy1XQdvL75E0orbqUI1w21D4W374Pc4XROzGpwYNO1E9giUFs5vg==
-X-Received: by 2002:adf:dbc8:0:b0:307:8b3e:2858 with SMTP id e8-20020adfdbc8000000b003078b3e2858mr13745375wrj.45.1683886981570;
-        Fri, 12 May 2023 03:23:01 -0700 (PDT)
-Received: from ?IPV6:2a02:8011:e80c:0:a162:20e4:626a:dd? ([2a02:8011:e80c:0:a162:20e4:626a:dd])
-        by smtp.gmail.com with ESMTPSA id k9-20020a05600c1c8900b003f4283f5c1bsm16930478wms.2.2023.05.12.03.23.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 03:23:01 -0700 (PDT)
-Message-ID: <dd7a4bec-c0d0-4ffe-3bb8-e4d7ab4a01b8@isovalent.com>
-Date:   Fri, 12 May 2023 11:23:00 +0100
+        d=1e100.net; s=20221208; t=1683886995; x=1686478995;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=z23Yys1p+WjW6kez7AKqzscsQbDlp8fVQx68w5qJUf0=;
+        b=DWCgwlVQ6y3IopMWUZo6a6LrYdhL+/vaRvjWxpnLIuty46IG05tXsqhtY9oLoiLUCf
+         DX07Onn8xawh+XcUAfhJEZtRmlXnGPyvB3k4YACjOHiCtymAgAvNu4VZrhz9GCTrmqJ4
+         HN4LVZCqNnCkD8olHFGkpE+/yg9J8NOd7UXIUIiLof0VsEV1eSiG4wwru9l+8Y01vF2M
+         7fwD1jswOQPztfaN6gijrPbY+9EVyiCUb1Tu6xRwt0rMoiRyD3cu4rpNyg92XlOPWH43
+         CVo8X0hfVoJ9RwHzq1oWd68IKI3b6TxcoU9QM3rjE2jCzThKdjyBcF+q7Q3sCG+ouFFq
+         T5KQ==
+X-Gm-Message-State: AC+VfDwh18X8orLll2DbuAhWFXTwuiCyFFv2WZEFF+mOaAPdMYC1lA1P
+        pZasvMpqpfCAHxlqkr3o7ofnfynd9pBYvg==
+X-Google-Smtp-Source: ACHHUZ5K0zQw3IvYCqgKgG7ihj2MX8VyXEJ28EGTiVj+V+XjGCuXuPDxUGlINZ4EwJUydXsHR99biA==
+X-Received: by 2002:a2e:9f14:0:b0:2a8:d103:dc8 with SMTP id u20-20020a2e9f14000000b002a8d1030dc8mr3596263ljk.2.1683886995331;
+        Fri, 12 May 2023 03:23:15 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id o6-20020a2e90c6000000b002adaacdb900sm1299548ljg.42.2023.05.12.03.23.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 03:23:14 -0700 (PDT)
+Date:   Fri, 12 May 2023 13:23:12 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Rob Herring <robh@kernel.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "dmaengine@vger.kernel.org" <dmaengine@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH RESEND v5 01/14] PCI: dwc: Fix erroneous version type
+ test helper
+Message-ID: <20230512102312.urrh2gwagopizn44@mobilestation>
+References: <20230511190902.28896-1-Sergey.Semin@baikalelectronics.ru>
+ <20230511190902.28896-2-Sergey.Semin@baikalelectronics.ru>
+ <TYBPR01MB53411830C969326CDA5E9DF5D8759@TYBPR01MB5341.jpnprd01.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH bpf-next] bpftool: specify XDP Hints ifname when loading
- program
-Content-Language: en-GB
-To:     Larysa Zaremba <larysa.zaremba@intel.com>
-Cc:     Stanislav Fomichev <sdf@google.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@corigine.com>
-References: <20230511151345.7529-1-larysa.zaremba@intel.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <20230511151345.7529-1-larysa.zaremba@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <TYBPR01MB53411830C969326CDA5E9DF5D8759@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2023-05-11 17:13 UTC+0200 ~ Larysa Zaremba <larysa.zaremba@intel.com>
-> Add ability to specify a network interface used to resolve
-> XDP Hints kfuncs when loading program through bpftool.
+Hello Yoshihiro
+
+On Fri, May 12, 2023 at 09:55:42AM +0000, Yoshihiro Shimoda wrote:
+> Hi Serge,
 > 
-> Usage:
-> bpftool prog load <bpf_obj_path> <pin_path> dev xdpmeta <ifname>
+> > From: Serge Semin, Sent: Friday, May 12, 2023 4:09 AM
+> > 
+> > Due to an unfortunate mistake the macro function actually checks the
+> > IP-core version instead of the IP-core version type which isn't what
+> > originally implied. Fix it by introducing a new helper
+> > __dw_pcie_ver_type_cmp() with the same semantic as the __dw_pcie_ver_cmp()
+> > counterpart except it refers to the dw_pcie.type field in order to perform
+> > the passed comparison operation.
+> > 
+> > Fixes: 0b0a780d52ad ("PCI: dwc: Add macros to compare Synopsys IP core versions")
+> > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+> > Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> 
+> I'm not sure whether my review is useful or not, but anyway,
+> 
+> Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
-Thanks for this patch!
+It's always useful. Thanks for looking into it.
 
-Regarding the command-line syntax, I'm not a big fan of the optional
-sub-keyword for the device for XDP hints. I must admit I had not
-anticipated other another use for the "dev" keyword. Instead, have you
-considered one of the following:
-
-1) Adding a different keyword ("xdpmeta_dev"?) and making it
-incompatible with "dev"
-
-2) Another alternative would be adding a sub-keyword for offload too:
-
-    bpftool p l [...] dev <[offload <ifname> | xdpmeta <ifname>]>
-
-If the ifname is provided with no sub-keyword, we would consider it for
-offload for legacy support, possibly warn that the syntax is deprecated.
-
-What do you think?
+Regards
+-Serge(y)
 
 > 
-> Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
-> ---
->  tools/bpf/bpftool/prog.c | 28 +++++++++++++++++++++-------
->  1 file changed, 21 insertions(+), 7 deletions(-)
+> Best regards,
+> Yoshihiro Shimoda
 > 
-> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
-> index 91b6075b2db3..a9cb96d99277 100644
-> --- a/tools/bpf/bpftool/prog.c
-> +++ b/tools/bpf/bpftool/prog.c
-> @@ -1517,12 +1517,13 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
->  	struct bpf_program *prog = NULL, *pos;
->  	unsigned int old_map_fds = 0;
->  	const char *pinmaps = NULL;
-> +	__u32 offload_ifindex = 0;
->  	bool auto_attach = false;
-> +	__u32 meta_ifindex = 0;
->  	struct bpf_object *obj;
->  	struct bpf_map *map;
->  	const char *pinfile;
->  	unsigned int i, j;
-> -	__u32 ifindex = 0;
->  	const char *file;
->  	int idx, err;
->  
-> @@ -1614,17 +1615,25 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
->  			map_replace[old_map_fds].fd = fd;
->  			old_map_fds++;
->  		} else if (is_prefix(*argv, "dev")) {
-> +			__u32 *cur_ifindex;
-> +
->  			NEXT_ARG();
->  
-> -			if (ifindex) {
-> -				p_err("offload device already specified");
-> +			if (offload_ifindex || meta_ifindex) {
-> +				p_err("device already specified");
-
-I'd add a note to tell somehow that offload and XDP hints are mutually
-exclusive. I suspect not all users understand these well.
-
->  				goto err_free_reuse_maps;
->  			}
-> +			if (is_prefix(*argv, "xdpmeta")) {
-> +				cur_ifindex = &meta_ifindex;
-> +				NEXT_ARG();
-> +			} else {
-> +				cur_ifindex = &offload_ifindex;
-> +			}
->  			if (!REQ_ARGS(1))
->  				goto err_free_reuse_maps;
->  
-> -			ifindex = if_nametoindex(*argv);
-> -			if (!ifindex) {
-> +			*cur_ifindex = if_nametoindex(*argv);
-> +			if (!(*cur_ifindex)) {
->  				p_err("unrecognized netdevice '%s': %s",
->  				      *argv, strerror(errno));
->  				goto err_free_reuse_maps;
-> @@ -1671,7 +1680,12 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
->  				goto err_close_obj;
->  		}
->  
-> -		bpf_program__set_ifindex(pos, ifindex);
-> +		if (prog_type == BPF_PROG_TYPE_XDP && meta_ifindex) {
-> +			bpf_program__set_flags(pos, BPF_F_XDP_DEV_BOUND_ONLY);
-> +			bpf_program__set_ifindex(pos, meta_ifindex);
-> +		} else {
-> +			bpf_program__set_ifindex(pos, offload_ifindex);
-> +		}
->  		if (bpf_program__type(pos) != prog_type)
->  			bpf_program__set_type(pos, prog_type);
->  		bpf_program__set_expected_attach_type(pos, expected_attach_type);
-> @@ -1709,7 +1723,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
->  	idx = 0;
->  	bpf_object__for_each_map(map, obj) {
->  		if (bpf_map__type(map) != BPF_MAP_TYPE_PERF_EVENT_ARRAY)
-> -			bpf_map__set_ifindex(map, ifindex);
-> +			bpf_map__set_ifindex(map, offload_ifindex);
->  
->  		if (j < old_map_fds && idx == map_replace[j].idx) {
->  			err = bpf_map__reuse_fd(map, map_replace[j++].fd);
-
-Could you please also update the following items:
-
-- The usage message for "bpftool prog load" near the end of prog.c
-
-- The related doc in Documentation/bpftool-prog.rst (command summary
-near the top, and detailed description later in the doc)
-
-- Bash completion (for keyword "dev", look for "_sysfs_get_netdevs" in
-bash-completion/bpftool). I'm happy to help with this one if necessary.
-
-Thanks,
-Quentin
+> > ---
+> >  drivers/pci/controller/dwc/pcie-designware.h | 7 +++++--
+> >  1 file changed, 5 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/drivers/pci/controller/dwc/pcie-designware.h b/drivers/pci/controller/dwc/pcie-designware.h
+> > index 79713ce075cc..adad0ea61799 100644
+> > --- a/drivers/pci/controller/dwc/pcie-designware.h
+> > +++ b/drivers/pci/controller/dwc/pcie-designware.h
+> > @@ -37,17 +37,20 @@
+> >  #define __dw_pcie_ver_cmp(_pci, _ver, _op) \
+> >  	((_pci)->version _op DW_PCIE_VER_ ## _ver)
+> > 
+> > +#define __dw_pcie_ver_type_cmp(_pci, _type, _op) \
+> > +	((_pci)->type _op DW_PCIE_VER_TYPE_ ## _type)
+> > +
+> >  #define dw_pcie_ver_is(_pci, _ver) __dw_pcie_ver_cmp(_pci, _ver, ==)
+> > 
+> >  #define dw_pcie_ver_is_ge(_pci, _ver) __dw_pcie_ver_cmp(_pci, _ver, >=)
+> > 
+> >  #define dw_pcie_ver_type_is(_pci, _ver, _type) \
+> >  	(__dw_pcie_ver_cmp(_pci, _ver, ==) && \
+> > -	 __dw_pcie_ver_cmp(_pci, TYPE_ ## _type, ==))
+> > +	 __dw_pcie_ver_type_cmp(_pci, _type, ==))
+> > 
+> >  #define dw_pcie_ver_type_is_ge(_pci, _ver, _type) \
+> >  	(__dw_pcie_ver_cmp(_pci, _ver, ==) && \
+> > -	 __dw_pcie_ver_cmp(_pci, TYPE_ ## _type, >=))
+> > +	 __dw_pcie_ver_type_cmp(_pci, _type, >=))
+> > 
+> >  /* DWC PCIe controller capabilities */
+> >  #define DW_PCIE_CAP_REQ_RES		0
+> > --
+> > 2.40.0
+> > 
+> 
