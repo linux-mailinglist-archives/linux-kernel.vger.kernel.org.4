@@ -2,122 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA47170119A
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 23:52:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F08B67011A9
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 23:55:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239825AbjELVwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 17:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36874 "EHLO
+        id S239340AbjELVz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 17:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231562AbjELVvj (ORCPT
+        with ESMTP id S231562AbjELVzY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 17:51:39 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0CF92682
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 14:51:38 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-643a1656b79so7429021b3a.3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 14:51:38 -0700 (PDT)
+        Fri, 12 May 2023 17:55:24 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7643B7A80
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 14:55:23 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so93443526a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 14:55:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1683928298; x=1686520298;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C/lBxOTCtayU+JLx1ARgdopct5AoQPf5/nXVYl+V+5s=;
-        b=IgE8zU4bBemiV39/zUOWBZJL2A/jnGIdxPytgtf4R3zOUA+LBb17N/QqBYFScneUDH
-         /hNOqngcBgimvMvcMJ3bexwDxfaz9WopJXK+f1FyJyyQMK0qO86rPCtCShZuMN8ZnTeK
-         hnpEgR6Eum2VTgO2yCv4MO7Conx724Q6BlrdAjWIvXNBa67Auv5APfpqqVdGq1XHp++y
-         4gCtVnjdoU3BP6Y97Mgz2Rl752kC4JaIJVI6s+xn3FipkrkSxHmvypaufFwFYXAsI6TG
-         mVPny6EVJkw7u1mDpa17gFeq1Ang2/uXHMP8zHl8Yz12yQoWw/+bRiBLYyHcMf4g+bmb
-         dTSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683928298; x=1686520298;
-        h=content-transfer-encoding:mime-version:message-id:to:from:cc
-         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+        d=linux-foundation.org; s=google; t=1683928522; x=1686520522;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=C/lBxOTCtayU+JLx1ARgdopct5AoQPf5/nXVYl+V+5s=;
-        b=eq6X2bJodSLNm908rl6PmKEPseL/qr8IwYNqMLBA5aL2WL/3DdQvcqjZ8eBrUqxuMa
-         iBYE3Rcddehl1VEHj8z3PENF/1hVpLEGJQPj5eIbuSZNLZFz28j3pJwC0CdYjrcweaj4
-         vZcFReSvu+sbHEuUTNND3HKpyQWCGO5dr/42bp9xZOpQV6JxxMsiqOGwEJzRazV4DOLf
-         uID00b6tFhItGNoS8RuyexFssTfnmbTB1weoLFzatC0E/pYoi1TO8UG30YhUQXSaUl1Y
-         AlXBUR6cOgJB3hl07C0gbprjxc+TAdC5qrMC+ZMBYYg4cKHCYn523/FZdMAndAicaMaN
-         Dcog==
-X-Gm-Message-State: AC+VfDxkKoncbQAzDLndhxxfMrVtItdczzf9fiHevJqXHtuW6cPUVGB5
-        JjN9+P3lk1PE3r1zE5U/pGNKnA==
-X-Google-Smtp-Source: ACHHUZ5CVA8A5BGqRPsBKfzaN6VwEM3v78qVong9m0e97ZCqeK0n/GAVy4p72AK2pLMzCeNCxqwOsw==
-X-Received: by 2002:a05:6a00:801:b0:648:d20c:37dd with SMTP id m1-20020a056a00080100b00648d20c37ddmr11988601pfk.18.1683928298029;
-        Fri, 12 May 2023 14:51:38 -0700 (PDT)
-Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id z14-20020aa785ce000000b0062a56e51fd7sm7485555pfn.188.2023.05.12.14.51.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 14:51:37 -0700 (PDT)
-Date:   Fri, 12 May 2023 14:51:37 -0700 (PDT)
-X-Google-Original-Date: Fri, 12 May 2023 14:51:36 PDT (-0700)
-Subject:     Re: [PATCH 0/3] riscv: sbi: Switch to the sys-off handler API
-In-Reply-To: <mhng-1895c1c0-4bc8-4156-909e-c20fa66e82fd@palmer-ri-x1c9>
-CC:     samuel@sholland.org, dmitry.osipenko@collabora.com,
-        rafael.j.wysocki@intel.com, aou@eecs.berkeley.edu,
-        apatel@ventanamicro.com, Atish Patra <atishp@rivosinc.com>,
-        geert@linux-m68k.org, heiko@sntech.de, kai.heng.feng@canonical.com,
-        mcgrof@kernel.org, paulmck@kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>, pmladek@suse.com,
-        yuehaibing@huawei.com, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, tangmeng@uniontech.com
-From:   Palmer Dabbelt <palmer@dabbelt.com>
-To:     Conor Dooley <conor@kernel.org>
-Message-ID: <mhng-d2f84d38-65fe-48bd-8328-328072326991@palmer-ri-x1c9>
-Mime-Version: 1.0 (MHng)
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        bh=6fiE+4tw4ReS6W3aCfl6G3CwoVaQuhNT/4YECYUltEI=;
+        b=OJJr4mO/dcfgE5zhlhhUEXfXNxlmuDngURq/m3HsbWoNM4ajZzUBnlwX2VvgFqtSg2
+         rkmDSQ4Se2maurYnI4ymDN541x414zXYSiQuObhmxHDN889MsAD6KGgilyeaeWsyu1ql
+         cGjhL5ZIsnvuMiaEn91Xo/0ffWdPrBLHGzOV0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683928522; x=1686520522;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6fiE+4tw4ReS6W3aCfl6G3CwoVaQuhNT/4YECYUltEI=;
+        b=l9f48Dwj1faWTvRg+4X7hhnTbS0HkcOD8/amUKlVfJkKfe7yZR7izx56e7V9vS262i
+         YfXAtJDl2I9vpGLJCWRTGAMfIhyUtVUXHWtomLlbx5AzYFYWfw+meNUw9ibldtqswmkI
+         WXQOso7QMXQ/xk1FKCC3hjtSh6j5F7+qPVrkQGhl3N17eIpOrWcuuCuEMdJ3OBElVYFy
+         QPPPDqm0lROZurNFZ898h/uE5e0K87OLN18YGMxvNTidk9zoJymG+I2XbCvTI1Qz1fQO
+         takw60eWmfJxz3CAGezsi+00IcH+TqtAGzEpATTA4ULA8QFoTBMuvMtIQ0NaeUo/1GWm
+         t5Ig==
+X-Gm-Message-State: AC+VfDx7LhFnCreP6n2ZmhrFcq8dvdOY7rll1tkpoj/wgYVZToacY8zv
+        LtmQpcjliUQ5y9lLG6P2tOJs6tWZz6yj6S/lFlo=
+X-Google-Smtp-Source: ACHHUZ6k+rsmje8WpqSD4OENNzHUK0l4ICMTGi5kj/yw/dIc34EKVAv4s7pF4jjiOLwVu6VaytSvMQ==
+X-Received: by 2002:a17:907:9306:b0:932:f88c:c2ff with SMTP id bu6-20020a170907930600b00932f88cc2ffmr23046719ejc.34.1683928521765;
+        Fri, 12 May 2023 14:55:21 -0700 (PDT)
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
+        by smtp.gmail.com with ESMTPSA id og16-20020a1709071dd000b0096637a19dcasm5944901ejc.4.2023.05.12.14.55.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 May 2023 14:55:21 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so93443389a12.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 14:55:20 -0700 (PDT)
+X-Received: by 2002:a17:907:9306:b0:932:f88c:c2ff with SMTP id
+ bu6-20020a170907930600b00932f88cc2ffmr23046686ejc.34.1683928520392; Fri, 12
+ May 2023 14:55:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230424212130.590684-1-dave.hansen@linux.intel.com>
+ <CAHk-=whn3F1k263SZNUVQK195tcCMAo5E_WbmjUE0qFC5rWg=w@mail.gmail.com>
+ <4433c3595db23f7c779b69b222958151b69ddd70.camel@intel.com>
+ <148b3edb-b056-11a0-1684-6273a4a2d39a@intel.com> <CAHk-=wiuVXTfgapmjYQvrEDzn3naF2oYnHuky+feEJSj_G_yFQ@mail.gmail.com>
+ <CAHk-=wiB0wy6oXOsPtYU4DSbqJAY8z5iNBKdjdOp2LP23khUoA@mail.gmail.com>
+ <4171c4b0-e24b-a7e2-9928-030cc14f1d8d@intel.com> <CAHk-=wiVLvz3RdZiSjLNGKKgR3s-=2goRPnNWg6cbrcwMVvndQ@mail.gmail.com>
+ <CAHk-=wg4vpYz+xRtd+PsdmQ9gtNGbXrFKW3ndvXcrLEEDN0hyw@mail.gmail.com> <95c2e669-bce9-3dd5-e197-3faf816c4b45@intel.com>
+In-Reply-To: <95c2e669-bce9-3dd5-e197-3faf816c4b45@intel.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Fri, 12 May 2023 16:55:03 -0500
+X-Gmail-Original-Message-ID: <CAHk-=wjzEA_TO0wWNir0HzAFJ5_tMoQnrL_-8+igqmCZGVGdcw@mail.gmail.com>
+Message-ID: <CAHk-=wjzEA_TO0wWNir0HzAFJ5_tMoQnrL_-8+igqmCZGVGdcw@mail.gmail.com>
+Subject: Re: [GIT PULL] x86/shstk for 6.4
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "akpm@linux-foundation.org" <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 12 May 2023 14:50:17 PDT (-0700), Palmer Dabbelt wrote:
-> On Wed, 28 Dec 2022 10:30:11 PST (-0800), Conor Dooley wrote:
->> Hey Samuel,
->>
->> On Wed, Dec 28, 2022 at 10:19:12AM -0600, Samuel Holland wrote:
->>> I want to convert the axp20x PMIC poweroff handler to use the sys-off
->>> API, so it can be used as a fallback for if the SBI poweroff handler
->>> is unavailable. But the SBI poweroff handler still uses pm_power_off, so
->>> done alone, this would cause the axp20x callback to be called first,
->>> before the SBI poweroff handler has a chance to run.
->>>
->>> In order to prevent this change in behavior, the SBI poweroff handler
->>> needs to be converted to the sys-off API first, at a higher priority.
->>>
->>> This series performs the conversion, after accounting for the fact that
->>> the SBI poweroff handler is registered quite early during boot.
->>>
->>> The first patch is a dependency for both this series and the PSCI
->>> series[1], so I would like to get at least patch 1 merged soon.
->>>
->>> [1]: https://lore.kernel.org/lkml/20221105214841.7828-1-samuel@sholland.org/
->>>
->>>
->>> Samuel Holland (3):
->>>   kernel/reboot: Use the static sys-off handler for any priority
->>>   riscv: sbi: Share the code for unsupported extension warnings
->>>   riscv: sbi: Switch to the sys-off handler API
->>
->> Not what other stuff has reboot support, so I gave it a whirl on
->> PolarFire SoC & it seemed to work as expected:
->> Tested-by: Conor Dooley <conor.dooley@microchip.com>
+On Fri, May 12, 2023 at 12:34=E2=80=AFPM Dave Hansen <dave.hansen@intel.com=
+> wrote:
 >
-> Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
->
-> in case the reboot folks want to take these.  I'm also happy to take the
-> reboot change through the RISC-V tree with an Ack.  There's some
-> discussion about this in the previous patches.
+> Were you really thinking of mm->count=3D=3D1, or did you mean
+> mm->mm_users=3D=3D1?
 
-sorry, this is the old version -- I just got lost...
+Yeah, I meant mm_users.
 
->
->>
->> Thanks,
->> Conor.
+And I was thinking that if it is 1, then it is stable - kind of like
+how we do our optimization with file descriptors.
+
+But you're right to worry about possibly other users incrementing the
+mm_users count somehow - or just using "mmgrab()" to not increment it,
+but be able to still fault on it etc.
+
+> There's always a race there because mm->mm_users can always get bumped
+> after the fork()er checks it.
+
+Ugh. I was assuming that if they don't already have a reference to the
+mm, they can't get one (becasue the '1' comes from 'current->mm', and
+nobody else has that mm).
+
+But maybe that's just not true. Looking around, we have things like
+
+        pages->source_mm =3D current->mm;
+        mmgrab(pages->source_mm);
+
+that creates a ref to the mm with a grab, and then later it gets used.
+
+So maybe the "no races can happen" is limited to *both* mm_users and
+mm_count being 1. What would increment it in that case, when 'current'
+is obviously busy forking?
+
+That "both are one" might still be the common case for fork(). Hmm?
+
+                Linus
