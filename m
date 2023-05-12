@@ -2,161 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6F36700D20
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:37:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BBE8700D25
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:38:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236375AbjELQhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 12:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33614 "EHLO
+        id S236394AbjELQiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 12:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229812AbjELQhO (ORCPT
+        with ESMTP id S229812AbjELQiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 12:37:14 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3D78A7D;
-        Fri, 12 May 2023 09:37:13 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so91145864a12.1;
-        Fri, 12 May 2023 09:37:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683909431; x=1686501431;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QTY/iNPhSxqsOYVuVF5oPridnajCISLwpvB33cCStX4=;
-        b=mQXoys12JvgdLa62LLYJLDzvL+tsH1KN3YfXhC27Z2LXWBDAyL4sAy6E0hG/t0xXtB
-         AVAog6/+PYoXEq+ed3XdJqz2/jZ8xKjBID+qoLIW+tYcw+Nkkg9YeANhRjmh6ykQKPS7
-         VGwn/KRajhXuvvdVaZ+xxI0jS9XS9zHsVX0eLKfyGJrLjlsuUmGxgmKGJ0FOVrHh9Qg3
-         7qWI7PndkHVQAUgwyEduQJNWq5Uumwh06tB8TiJFMq6BwnRxIqhlKq4qs2Qi1WOwub6L
-         FYybZIBV92FE15seZ946u1LrhcO/nVQIi7+XOAQWc4VbaUpVvfzWHH/Bkcnj5ESK9jEY
-         IW8w==
+        Fri, 12 May 2023 12:38:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41DD39EFA
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 09:37:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1683909442;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=ryX5sovAmXV6c1qawtyVZ+Us+777l7mLCNx8VtBdO6Q=;
+        b=hoCXdYOPUQTg06VOHQ5yjR06PEvZm+5DhkzATuRImfy301yS/g0JgIqc7dzjpQ7mW51Bgs
+        xZOK6H2ZHXruNmUrTwzAAY8ysi7FUkFw1JpPSxmzh1Caj3kp4rnTq6Y9SW79YQr8wpXCKy
+        xacftroShC78Q8axV9MREo/rJJV3Kak=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-675-UMmcAnhmPLSkacL0mHo7CQ-1; Fri, 12 May 2023 12:37:19 -0400
+X-MC-Unique: UMmcAnhmPLSkacL0mHo7CQ-1
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-3f39fc06b1aso27462871cf.3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 09:37:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683909431; x=1686501431;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QTY/iNPhSxqsOYVuVF5oPridnajCISLwpvB33cCStX4=;
-        b=P038aNADXZJfWX34r/tahcjvAdMvprrWC202dfJEKhsjcIixLfgCcnaxK6Qd+h+UlQ
-         lFW58Ey6r4J8tSXKxpIGlXnrLsQss8h2K6RFLZuvATnWCTC+pdItLEslYGilzolcLmkr
-         ZTsF8ZAy7z9oTGsHs088UNH75o4oXX0TFwGw1NPZeeR0/cEa2kdIc6yTpH6Was4m2YG2
-         qx0eYk2ERzeOgvSYVgthOF5hTvF9HhS4+hQMBP7JdobOSUbm8MM/1JegcpPZ0NgDkFDU
-         tErmYHl4NPlutGfqoG0yIZyoCzzblHZznSZogsAu45kQiF/JJmWB2sWoM0fZEPXXEfaI
-         QGsw==
-X-Gm-Message-State: AC+VfDxv0SJwv0exDizJzk1HeCgHHcY+oQlZ6lttRVJCGnM29u1ZZ5PH
-        bnorG7JUaKKm3h/TkylY7lW2DNChES+9zQ==
-X-Google-Smtp-Source: ACHHUZ6oEr96mBEftUGvQgedCvHzktnamXm3QY6YaaVsVAMNVUmfiCMwnVR7gm8jofdWN5YF0zwLWA==
-X-Received: by 2002:a17:907:3e2a:b0:966:4973:b35 with SMTP id hp42-20020a1709073e2a00b0096649730b35mr17510063ejc.22.1683909431229;
-        Fri, 12 May 2023 09:37:11 -0700 (PDT)
-Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
-        by smtp.gmail.com with ESMTPSA id gv28-20020a1709072bdc00b00965cfc209d5sm5619198ejc.8.2023.05.12.09.37.09
+        d=1e100.net; s=20221208; t=1683909438; x=1686501438;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ryX5sovAmXV6c1qawtyVZ+Us+777l7mLCNx8VtBdO6Q=;
+        b=KGm9XI9hrzWuzIR6gwOaVZzsdQklhHnHX4LGRoWNUxi1DmWmgDjI38kV6xLWSKZEkf
+         iaXr2MMh4galiz2PBYAmzyMvEvXUS2teEp93Gya2V6sP0rSrEipqseGzDK4qJdQsdnNl
+         +/Xq3Y5p+buIR7WHC/Zcbkm5ImYHD/d/F23Q+PReWdo/pDf21PeQsUSVlhz94fLbNvaf
+         c02JaHXOYb25GsxDwV+pL0UwcNnio61frJ2QSM4UIJue4d9B4FP8bZgBCOAgSOANfxsv
+         9kMvTakivSXImszZ13UgS0eevd40hgnk5UI/0sguAbYWrFil5+S38SY5/xIPk2xAuE/P
+         6U6g==
+X-Gm-Message-State: AC+VfDwili96iKJX6nO2ZpKh4GJbs3sVqedxr10HZQ8JF8nFzmar9dJp
+        pXgQdADEriNeT9gOHp/l/tK8AGjbjb3z60oUrze/R8geT8HP7I5/ef/l7WF4m/TEI6L4DlxPPTO
+        yqY2/b0/UMT4jpvG0YHWZtQz6
+X-Received: by 2002:a05:622a:1441:b0:3e6:4b7b:250 with SMTP id v1-20020a05622a144100b003e64b7b0250mr38562985qtx.25.1683909438725;
+        Fri, 12 May 2023 09:37:18 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6o892SUq2q7IoDztPxxSs8dPIhgSg2bX0bcnDACuZVhTgium0mRlZboNQGlt/vZAlhkyMFew==
+X-Received: by 2002:a05:622a:1441:b0:3e6:4b7b:250 with SMTP id v1-20020a05622a144100b003e64b7b0250mr38562954qtx.25.1683909438451;
+        Fri, 12 May 2023 09:37:18 -0700 (PDT)
+Received: from redhat.com ([37.19.196.5])
+        by smtp.gmail.com with ESMTPSA id l12-20020ac8078c000000b003e9c6a4a381sm3184802qth.54.2023.05.12.09.37.15
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 09:37:10 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Jonathan McDowell <noodles@earth.li>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v2 5/5] ARM: dts: axp209: Add iio-hwmon node for internal
- temperature
-Date:   Fri, 12 May 2023 18:37:09 +0200
-Message-ID: <2679706.mvXUDI8C0e@jernej-laptop>
-In-Reply-To: <ZF4VSCxvb6ihw9JL@earth.li>
-References: <cover.1681580558.git.noodles@earth.li> <3421275.QJadu78ljV@jernej-laptop>
- <ZF4VSCxvb6ihw9JL@earth.li>
+        Fri, 12 May 2023 09:37:18 -0700 (PDT)
+Date:   Fri, 12 May 2023 12:37:12 -0400
+From:   "Michael S. Tsirkin" <mst@redhat.com>
+To:     Feng Liu <feliu@nvidia.com>
+Cc:     virtualization@lists.linux-foundation.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        Jason Wang <jasowang@redhat.com>,
+        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
+        Simon Horman <simon.horman@corigine.com>,
+        Bodong Wang <bodong@nvidia.com>, Jiri Pirko <jiri@nvidia.com>,
+        William Tu <witu@nvidia.com>
+Subject: Re: [PATCH net v6] virtio_net: Fix error unwinding of XDP
+ initialization
+Message-ID: <20230512123705-mutt-send-email-mst@kernel.org>
+References: <20230512151812.1806-1-feliu@nvidia.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512151812.1806-1-feliu@nvidia.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 12. maj 2023 ob 12:30:32 CEST je Jonathan McDowell napisal(a):
-> On Thu, May 11, 2023 at 06:11:49PM +0200, Jernej =C5=A0krabec wrote:
-> > Dne sreda, 10. maj 2023 ob 14:02:28 CEST je Jonathan McDowell napisal(a=
-):
-> > > This adds a DT node to hook up the internal temperature ADC to the
-> > > iio-hwmon driver. The various voltage + current ADCs are consumed and
-> > > exposed by their respective drivers, but this is not and is always
-> > > available. Naming chosen to match the axp20x_ prefix the power sensors
-> > > use.
-> >=20
-> > Sorry for maybe obvious thing, but where are other ADC channels exposed?
->=20
-> In the associated power drivers; e.g. axp20x_ac_power, axp20x_usb_power
-> + axp20x_battery. The internal temperature is the only one that
-> logically belongs to the chip as a whole rather than one of the
-> subfunctions.
->=20
-> root@chip:~# sensors
-> axp20x_battery-isa-0000
-> Adapter: ISA adapter
-> in0:           0.00 V
-> curr1:         0.00 A
->=20
-> pmic_temp-isa-0000
-> Adapter: ISA adapter
-> temp1:        +42.5=C2=B0C
->=20
-> axp20x_ac-isa-0000
-> Adapter: ISA adapter
-> in0:           0.00 V
-> curr1:         0.00 A
->=20
-> axp20x_usb-isa-0000
-> Adapter: ISA adapter
-> in0:           4.93 V  (min =3D  +4.00 V)
-> curr1:       330.00 mA (max =3D  +0.00 A)
+On Fri, May 12, 2023 at 11:18:12AM -0400, Feng Liu wrote:
+> When initializing XDP in virtnet_open(), some rq xdp initialization
+> may hit an error causing net device open failed. However, previous
+> rqs have already initialized XDP and enabled NAPI, which is not the
+> expected behavior. Need to roll back the previous rq initialization
+> to avoid leaks in error unwinding of init code.
+> 
+> Also extract helper functions of disable and enable queue pairs.
+> Use newly introduced disable helper function in error unwinding and
+> virtnet_close. Use enable helper function in virtnet_open.
+> 
+> Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
+> Signed-off-by: Feng Liu <feliu@nvidia.com>
+> Reviewed-by: Jiri Pirko <jiri@nvidia.com>
+> Reviewed-by: William Tu <witu@nvidia.com>
 
-Right.
+Acked-by: Michael S. Tsirkin <mst@redhat.com>
 
-Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Best regards,
-Jernej
-
->=20
-> > > Signed-off-by: Jonathan McDowell <noodles@earth.li>
-> > > ---
-> > >=20
-> > >  arch/arm/boot/dts/axp209.dtsi | 7 +++++++
-> > >  1 file changed, 7 insertions(+)
-> > >=20
-> > > diff --git a/arch/arm/boot/dts/axp209.dtsi
-> > > b/arch/arm/boot/dts/axp209.dtsi
-> > > index ca240cd6f6c3..469d0f7d5185 100644
-> > > --- a/arch/arm/boot/dts/axp209.dtsi
-> > > +++ b/arch/arm/boot/dts/axp209.dtsi
-> > > @@ -48,6 +48,13 @@
-> > >=20
-> > >   * http://dl.linux-sunxi.org/AXP/AXP209%20Datasheet%20v1.0_cn.pdf
-> > >   */
-> > >=20
-> > > +/ {
-> > > +	pmic-temp {
-> > > +		compatible =3D "iio-hwmon";
-> > > +		io-channels =3D <&axp_adc 4>; /* Internal temperature */
-> > > +	};
-> > > +};
-> > > +
-> > >=20
-> > >  &axp209 {
-> > > =20
-> > >  	compatible =3D "x-powers,axp209";
-> > >  	interrupt-controller;
->=20
-> J.
-
-
-
+> ---
+> v5 -> v6
+> feedbacks from Xuan Zhuo
+> - add disable_delayed_refill and cancel_delayed_work_sync
+> 
+> v4 -> v5
+> feedbacks from Michael S. Tsirkin
+> - rename helper as virtnet_disable_queue_pair
+> - rename helper as virtnet_enable_queue_pair
+> 
+> v3 -> v4
+> feedbacks from Jiri Pirko
+> - Add symmetric helper function virtnet_enable_qp to enable queues.
+> - Error handle:  cleanup current queue pair in virtnet_enable_qp,
+>   and complete the reset queue pairs cleanup in virtnet_open.
+> - Fix coding style.
+> feedbacks from Parav Pandit
+> - Remove redundant debug message and white space.
+> 
+> v2 -> v3
+> feedbacks from Michael S. Tsirkin
+> - Remove redundant comment.
+> 
+> v1 -> v2
+> feedbacks from Michael S. Tsirkin
+> - squash two patches together.
+> 
+> ---
+>  drivers/net/virtio_net.c | 61 +++++++++++++++++++++++++++++-----------
+>  1 file changed, 44 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
+> index a12ae26db0e2..56ca1d270304 100644
+> --- a/drivers/net/virtio_net.c
+> +++ b/drivers/net/virtio_net.c
+> @@ -1868,6 +1868,38 @@ static int virtnet_poll(struct napi_struct *napi, int budget)
+>  	return received;
+>  }
+>  
+> +static void virtnet_disable_queue_pair(struct virtnet_info *vi, int qp_index)
+> +{
+> +	virtnet_napi_tx_disable(&vi->sq[qp_index].napi);
+> +	napi_disable(&vi->rq[qp_index].napi);
+> +	xdp_rxq_info_unreg(&vi->rq[qp_index].xdp_rxq);
+> +}
+> +
+> +static int virtnet_enable_queue_pair(struct virtnet_info *vi, int qp_index)
+> +{
+> +	struct net_device *dev = vi->dev;
+> +	int err;
+> +
+> +	err = xdp_rxq_info_reg(&vi->rq[qp_index].xdp_rxq, dev, qp_index,
+> +			       vi->rq[qp_index].napi.napi_id);
+> +	if (err < 0)
+> +		return err;
+> +
+> +	err = xdp_rxq_info_reg_mem_model(&vi->rq[qp_index].xdp_rxq,
+> +					 MEM_TYPE_PAGE_SHARED, NULL);
+> +	if (err < 0)
+> +		goto err_xdp_reg_mem_model;
+> +
+> +	virtnet_napi_enable(vi->rq[qp_index].vq, &vi->rq[qp_index].napi);
+> +	virtnet_napi_tx_enable(vi, vi->sq[qp_index].vq, &vi->sq[qp_index].napi);
+> +
+> +	return 0;
+> +
+> +err_xdp_reg_mem_model:
+> +	xdp_rxq_info_unreg(&vi->rq[qp_index].xdp_rxq);
+> +	return err;
+> +}
+> +
+>  static int virtnet_open(struct net_device *dev)
+>  {
+>  	struct virtnet_info *vi = netdev_priv(dev);
+> @@ -1881,22 +1913,20 @@ static int virtnet_open(struct net_device *dev)
+>  			if (!try_fill_recv(vi, &vi->rq[i], GFP_KERNEL))
+>  				schedule_delayed_work(&vi->refill, 0);
+>  
+> -		err = xdp_rxq_info_reg(&vi->rq[i].xdp_rxq, dev, i, vi->rq[i].napi.napi_id);
+> +		err = virtnet_enable_queue_pair(vi, i);
+>  		if (err < 0)
+> -			return err;
+> -
+> -		err = xdp_rxq_info_reg_mem_model(&vi->rq[i].xdp_rxq,
+> -						 MEM_TYPE_PAGE_SHARED, NULL);
+> -		if (err < 0) {
+> -			xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
+> -			return err;
+> -		}
+> -
+> -		virtnet_napi_enable(vi->rq[i].vq, &vi->rq[i].napi);
+> -		virtnet_napi_tx_enable(vi, vi->sq[i].vq, &vi->sq[i].napi);
+> +			goto err_enable_qp;
+>  	}
+>  
+>  	return 0;
+> +
+> +err_enable_qp:
+> +	disable_delayed_refill(vi);
+> +	cancel_delayed_work_sync(&vi->refill);
+> +
+> +	for (i--; i >= 0; i--)
+> +		virtnet_disable_queue_pair(vi, i);
+> +	return err;
+>  }
+>  
+>  static int virtnet_poll_tx(struct napi_struct *napi, int budget)
+> @@ -2305,11 +2335,8 @@ static int virtnet_close(struct net_device *dev)
+>  	/* Make sure refill_work doesn't re-enable napi! */
+>  	cancel_delayed_work_sync(&vi->refill);
+>  
+> -	for (i = 0; i < vi->max_queue_pairs; i++) {
+> -		virtnet_napi_tx_disable(&vi->sq[i].napi);
+> -		napi_disable(&vi->rq[i].napi);
+> -		xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
+> -	}
+> +	for (i = 0; i < vi->max_queue_pairs; i++)
+> +		virtnet_disable_queue_pair(vi, i);
+>  
+>  	return 0;
+>  }
+> -- 
+> 2.37.1 (Apple Git-137.1)
 
