@@ -2,103 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3677F6FFE74
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 03:35:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4717E6FFE7D
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 03:42:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239763AbjELBff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 21:35:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40926 "EHLO
+        id S239771AbjELBm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 21:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239616AbjELBfd (ORCPT
+        with ESMTP id S229763AbjELBmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 21:35:33 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 914C330DD;
-        Thu, 11 May 2023 18:35:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683855332; x=1715391332;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=zvIqFCHm6xH47/drlZNFCS7fRujt9qMuMUEtrPtwEfs=;
-  b=BUsLHKl5plLKFZc6EfZYM7QJMkM0JCnB33eAA4aWmmIyi6Af4MI1JrpW
-   tZpDzNxke2KJ75lJ5WNRZ+qdHcEIq9GRr+j+h2G4J0IRvD54P8X82tknx
-   ChzbudMCD3KAzL0KV9Iiyooctdw4grwSKHeYI8JftWEk5YCRoJJYytEjG
-   revJeSuhimOCgVxiBdiOeXRR1MY/F8hD3sSc+NIZrUoazKQ5YaOdFyhts
-   z5XohjMbnxSSkkJJNVo1qX2Xnr0mL0VoaIXFlAu1mF3nQ/sefFAkaJX7Z
-   mUBKOWeMK0ByKK/Gxt9aVMAFWX0wByH7GLW/8J/tZJP/RaaM+yT68/JUz
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="416301440"
-X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
-   d="scan'208";a="416301440"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 18:35:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="677477968"
-X-IronPort-AV: E=Sophos;i="5.99,268,1677571200"; 
-   d="scan'208";a="677477968"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.255.30.205]) ([10.255.30.205])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 18:35:29 -0700
-Message-ID: <bbb3e5ac-1b51-abdf-c7ce-372af548f26b@linux.intel.com>
-Date:   Fri, 12 May 2023 09:35:27 +0800
+        Thu, 11 May 2023 21:42:25 -0400
+Received: from mail.nfschina.com (unknown [42.101.60.195])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id EED0C3C02;
+        Thu, 11 May 2023 18:42:23 -0700 (PDT)
+Received: from localhost.localdomain (unknown [180.167.10.98])
+        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 7DEA9180022049;
+        Fri, 12 May 2023 09:42:01 +0800 (CST)
+X-MD-Sfrom: suhui@nfschina.com
+X-MD-SrcIP: 180.167.10.98
+From:   Su Hui <suhui@nfschina.com>
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Andy Walls <awalls@md.metrocast.net>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, Su Hui <suhui@nfschina.com>
+Subject: [PATCH] media: pci: remove unnecessary (void*) conversions
+Date:   Fri, 12 May 2023 09:41:59 +0800
+Message-Id: <20230512014159.30770-1-suhui@nfschina.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v8 1/6] KVM: x86: Consolidate flags for __linearize()
-To:     David Laight <David.Laight@ACULAB.COM>,
-        Chao Gao <chao.gao@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kai.huang@intel.com" <kai.huang@intel.com>,
-        "robert.hu@linux.intel.com" <robert.hu@linux.intel.com>
-References: <20230510060611.12950-1-binbin.wu@linux.intel.com>
- <20230510060611.12950-2-binbin.wu@linux.intel.com>
- <ZFtK/NS8rzCx9Mus@chao-email>
- <68a5df32-82de-1f07-5ea2-52ecf1c17e63@linux.intel.com>
- <ccf245b17d7140099ad89628635a04ef@AcuMS.aculab.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <ccf245b17d7140099ad89628635a04ef@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+No need cast (void*) to (struct dst_state *),
+(struct cx18_stream *), (struct saa7164_port *)
+or (struct budget *).
 
+Signed-off-by: Su Hui <suhui@nfschina.com>
+---
+ drivers/media/pci/bt8xx/dst_ca.c        | 2 +-
+ drivers/media/pci/cx18/cx18-dvb.c       | 4 ++--
+ drivers/media/pci/saa7164/saa7164-dvb.c | 4 ++--
+ drivers/media/pci/ttpci/budget-core.c   | 4 ++--
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-On 5/11/2023 5:58 PM, David Laight wrote:
-> From: Binbin Wu
->> Sent: 11 May 2023 02:26
-> ...
->>>> 	unsigned max_size;
->>>> -	return __linearize(ctxt, addr, &max_size, size, write, false,
->>>> +	u32 flags = 0;
->>>> +
->>>> +	if (write)
->>>> +		flags |= X86EMUL_F_WRITE;
->>> this can be more dense:
->>>
->>> 	u32 flags = write ? X86EMUL_F_WRITE : 0;
->> Thanks, will update it.
-> You can also dispense with the extra local variable and
-> put the ?: into the parameter list.
->
-> Even more so with the other calls sites.
-Thanks, I will check whether they are better to be put in the parameter 
-list directly instead of using a local variable.
-
->
-> 	David
->
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
+diff --git a/drivers/media/pci/bt8xx/dst_ca.c b/drivers/media/pci/bt8xx/dst_ca.c
+index 85fcdc59f0d1..d234a0f404d6 100644
+--- a/drivers/media/pci/bt8xx/dst_ca.c
++++ b/drivers/media/pci/bt8xx/dst_ca.c
+@@ -534,7 +534,7 @@ static long dst_ca_ioctl(struct file *file, unsigned int cmd, unsigned long ioct
+ 
+ 	mutex_lock(&dst_ca_mutex);
+ 	dvbdev = file->private_data;
+-	state = (struct dst_state *)dvbdev->priv;
++	state = dvbdev->priv;
+ 	p_ca_message = kmalloc(sizeof (struct ca_msg), GFP_KERNEL);
+ 	p_ca_slot_info = kmalloc(sizeof (struct ca_slot_info), GFP_KERNEL);
+ 	p_ca_caps = kmalloc(sizeof (struct ca_caps), GFP_KERNEL);
+diff --git a/drivers/media/pci/cx18/cx18-dvb.c b/drivers/media/pci/cx18/cx18-dvb.c
+index 33e5a5b5fab4..cf82360a503d 100644
+--- a/drivers/media/pci/cx18/cx18-dvb.c
++++ b/drivers/media/pci/cx18/cx18-dvb.c
+@@ -234,7 +234,7 @@ static int dvb_register(struct cx18_stream *stream);
+ static int cx18_dvb_start_feed(struct dvb_demux_feed *feed)
+ {
+ 	struct dvb_demux *demux = feed->demux;
+-	struct cx18_stream *stream = (struct cx18_stream *) demux->priv;
++	struct cx18_stream *stream = demux->priv;
+ 	struct cx18 *cx;
+ 	int ret;
+ 	u32 v;
+@@ -305,7 +305,7 @@ static int cx18_dvb_start_feed(struct dvb_demux_feed *feed)
+ static int cx18_dvb_stop_feed(struct dvb_demux_feed *feed)
+ {
+ 	struct dvb_demux *demux = feed->demux;
+-	struct cx18_stream *stream = (struct cx18_stream *)demux->priv;
++	struct cx18_stream *stream = demux->priv;
+ 	struct cx18 *cx;
+ 	int ret = -EINVAL;
+ 
+diff --git a/drivers/media/pci/saa7164/saa7164-dvb.c b/drivers/media/pci/saa7164/saa7164-dvb.c
+index 24421c116b0b..3eb749db1ca7 100644
+--- a/drivers/media/pci/saa7164/saa7164-dvb.c
++++ b/drivers/media/pci/saa7164/saa7164-dvb.c
+@@ -280,7 +280,7 @@ static int saa7164_dvb_start_port(struct saa7164_port *port)
+ static int saa7164_dvb_start_feed(struct dvb_demux_feed *feed)
+ {
+ 	struct dvb_demux *demux = feed->demux;
+-	struct saa7164_port *port = (struct saa7164_port *) demux->priv;
++	struct saa7164_port *port = demux->priv;
+ 	struct saa7164_dvb *dvb = &port->dvb;
+ 	struct saa7164_dev *dev = port->dev;
+ 	int ret = 0;
+@@ -307,7 +307,7 @@ static int saa7164_dvb_start_feed(struct dvb_demux_feed *feed)
+ static int saa7164_dvb_stop_feed(struct dvb_demux_feed *feed)
+ {
+ 	struct dvb_demux *demux = feed->demux;
+-	struct saa7164_port *port = (struct saa7164_port *) demux->priv;
++	struct saa7164_port *port = demux->priv;
+ 	struct saa7164_dvb *dvb = &port->dvb;
+ 	struct saa7164_dev *dev = port->dev;
+ 	int ret = 0;
+diff --git a/drivers/media/pci/ttpci/budget-core.c b/drivers/media/pci/ttpci/budget-core.c
+index 5d5796f24469..710595987522 100644
+--- a/drivers/media/pci/ttpci/budget-core.c
++++ b/drivers/media/pci/ttpci/budget-core.c
+@@ -308,7 +308,7 @@ int ttpci_budget_debiwrite(struct budget *budget, u32 config, int addr,
+ static int budget_start_feed(struct dvb_demux_feed *feed)
+ {
+ 	struct dvb_demux *demux = feed->demux;
+-	struct budget *budget = (struct budget *) demux->priv;
++	struct budget *budget = demux->priv;
+ 	int status = 0;
+ 
+ 	dprintk(2, "budget: %p\n", budget);
+@@ -327,7 +327,7 @@ static int budget_start_feed(struct dvb_demux_feed *feed)
+ static int budget_stop_feed(struct dvb_demux_feed *feed)
+ {
+ 	struct dvb_demux *demux = feed->demux;
+-	struct budget *budget = (struct budget *) demux->priv;
++	struct budget *budget = demux->priv;
+ 	int status = 0;
+ 
+ 	dprintk(2, "budget: %p\n", budget);
+-- 
+2.30.2
 
