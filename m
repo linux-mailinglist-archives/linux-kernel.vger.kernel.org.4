@@ -2,85 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBF87700A84
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:43:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0CA4700A88
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:43:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241366AbjELOmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 10:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34600 "EHLO
+        id S241230AbjELOnG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 10:43:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240471AbjELOmh (ORCPT
+        with ESMTP id S241514AbjELOmt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 10:42:37 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 597261FEB
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:42:36 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so90118063a12.1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:42:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683902555; x=1686494555;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tn/vJXIMWCoSAtelKQZexwzcMfgGyT+seXXih0qAcsg=;
-        b=j81H5AUq3OfT7e51/P1rD4IL2gyoGTPooiZ6kvhebSkJunR7kVgw7AtpMJpOj839Uk
-         8NdFIGzHt3+pa8evbWBnNVcIqDSvQSU1bkuRceaS9gHUKdN1ZzZMA/Fb4gGS+C1SWp1L
-         rXQ94q4mB0royGy2fudeBCDqReWz0h2v1jjMfmv7QF8Ps/a5gX2umiICRM0LbHwl16kj
-         2sXsy6j/9gU6fnNuKFjY3EOccjongY059MakcyL4lFmgQGVOaNWXni25Iafjs/Eng139
-         Cwnb2sBmlQh7+X5ZZsB+nPgKfHe1wyYXIKSGZjuENp2iKwu8HilpXH6AnvXjieplG00O
-         RL5A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683902555; x=1686494555;
-        h=content-transfer-encoding:to:subject:message-id:date:from
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Tn/vJXIMWCoSAtelKQZexwzcMfgGyT+seXXih0qAcsg=;
-        b=ZUr7n+d7r0viuPt5Q8Y565Ob+FAcBR++zSaJ2IjYq0ozv/K/B0CZd440Ya6cRuZT7N
-         kKtAx/wBDxnUEXBMoMBiBRyZvmyLLEXbNXoXqUABT/AVck1cyvsxISXcI1fOudeNRk3Z
-         bbE8LpC0XPKBCQMvtoHSfkr5KOloyHqGJFl1/fRQck+0EUFf+3CBuEuhydm+sOPpqR5F
-         zejtQdlV38C4X8HBLQwOhPiIDuO9qxG+4oPYOcBJZ8r3h1LoHnGy3WLnfWaH/HPk7i+/
-         JtNvzhAdj2zTjiECMEjOR2Qq5vESwdzDKNkA3zkyhQ+NgWXl1Pdv5g0eQEIty6oImmRU
-         197Q==
-X-Gm-Message-State: AC+VfDx/v3luuX4D+Sn3xbON3/GKPYIFRrOxJVj+8lPPPOFmnVWQrM6t
-        tSZFcghClYETyFEND4AkilrJhQXNiLvuvlT0n+k=
-X-Google-Smtp-Source: ACHHUZ7Z+9snQFnPB4Psct1K+M6+0Emkfo9N6IZLGMlcSE5m6KlpXCePs5+hoo5mZWThetKxw8aLKa3X8P0Q2fEvFik=
-X-Received: by 2002:a17:906:4792:b0:965:f23f:ac04 with SMTP id
- cw18-20020a170906479200b00965f23fac04mr22496606ejc.17.1683902554449; Fri, 12
- May 2023 07:42:34 -0700 (PDT)
+        Fri, 12 May 2023 10:42:49 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 977072683
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:42:46 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34C79TbQ025224;
+        Fri, 12 May 2023 09:42:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=ZcdklHf7gFBbvSHt4aqfeF7+CyANm3zTqWNEbRQXzG4=;
+ b=iRRoyX4jveKFbAI+ViJsN0vYmdKh9UxXcLKoncjkx0RXXCfQ3PaxsYlr9Q9KZt666KtX
+ 0ZmhbFCNlO7mGnvwyj/RnYPke4PbZZGwtTa8cO9ZwkwhdUbroFJoEOSCkHVc2vSMb7ar
+ budIfzYSdJ9OowPPiBk4gtSKVU07WtDynHLHdKKoQum19tHZ7umNn/Zx3gzUKGnPj9PV
+ iooD5exIw2sO2/1VXXt4j0Rgx8/3WEp+8bPMTAcq/HuikW+cWaZSx822Oo2KmfoPG3Qj
+ +ApMnKz9iVHn3vC8oG0mkuJXa0dQW4jbgY0fI2i7v8BJklfxchHGQLtik8jnxMzavbCe qA== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3qf7s46j73-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 09:42:39 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Fri, 12 May
+ 2023 09:42:37 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 12 May 2023 09:42:37 -0500
+Received: from edi-sw-dsktp-006.ad.cirrus.com (edi-sw-dsktp-006.ad.cirrus.com [198.90.251.127])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 2C52C45;
+        Fri, 12 May 2023 14:42:37 +0000 (UTC)
+From:   Richard Fitzgerald <rf@opensource.cirrus.com>
+To:     <broonie@kernel.org>
+CC:     <alsa-devel@alsa-project.org>, <linux-kernel@vger.kernel.org>,
+        <patches@opensource.cirrus.com>,
+        Simon Trimmer <simont@opensource.cirrus.com>,
+        Richard Fitzgerald <rf@opensource.cirrus.com>
+Subject: [PATCH] ASoC: cs35l56: Prevent unbalanced pm_runtime in dsp_work() on SoundWire
+Date:   Fri, 12 May 2023 15:42:37 +0100
+Message-ID: <20230512144237.739000-1-rf@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-From:   Luzy Mark <onesalesdatlist@gmail.com>
-Date:   Fri, 12 May 2023 20:12:23 +0530
-Message-ID: <CALs8NgbXxdQJ1mebh9=pUDVNyqOVwzmwKj=WCRc=Q+iZZGJQ4Q@mail.gmail.com>
-Subject: RE: NRPA Attendees Email List-2023
-To:     Luzy Mark <onesalesdatlist@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_05,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FILL_THIS_FORM,
-        FILL_THIS_FORM_LONG,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-ORIG-GUID: mqAveudk8OufYnpDhtsyE9Jgo6oG-_H1
+X-Proofpoint-GUID: mqAveudk8OufYnpDhtsyE9Jgo6oG-_H1
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Simon Trimmer <simont@opensource.cirrus.com>
 
-Would you be interested in acquiring The National Recreation and Park
-Association Attendees Email List 2023?
+Flush the SoundWire interrupt handler work instead of cancelling it.
 
-List Includes: Company Name, First Name, Last Name, Full Name, Contact
-Job Title, Verified Email Address, Website URL, Mailing address, Phone
-number, Industry and many more=E2=80=A6
+When a SoundWire interrupt is triggered the pm_runtime is held
+until the work has completed. It's therefore unsafe to cancel
+the work, it must be flushed.
 
-Number of Contacts : 8,642
-Cost : $ 1,421
+Signed-off-by: Simon Trimmer <simont@opensource.cirrus.com>
+Signed-off-by: Richard Fitzgerald <rf@opensource.cirrus.com>
+---
+ sound/soc/codecs/cs35l56.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-If you=E2=80=99re interested please let me know I will assist you with furt=
-her details.
+diff --git a/sound/soc/codecs/cs35l56.c b/sound/soc/codecs/cs35l56.c
+index 46762f7f1449..d1677d76d018 100644
+--- a/sound/soc/codecs/cs35l56.c
++++ b/sound/soc/codecs/cs35l56.c
+@@ -852,10 +852,11 @@ static void cs35l56_dsp_work(struct work_struct *work)
+ 	 */
+ 	if (cs35l56->sdw_peripheral) {
+ 		cs35l56->sdw_irq_no_unmask = true;
+-		cancel_work_sync(&cs35l56->sdw_irq_work);
++		flush_work(&cs35l56->sdw_irq_work);
+ 		sdw_write_no_pm(cs35l56->sdw_peripheral, CS35L56_SDW_GEN_INT_MASK_1, 0);
+ 		sdw_read_no_pm(cs35l56->sdw_peripheral, CS35L56_SDW_GEN_INT_STAT_1);
+ 		sdw_write_no_pm(cs35l56->sdw_peripheral, CS35L56_SDW_GEN_INT_STAT_1, 0xFF);
++		flush_work(&cs35l56->sdw_irq_work);
+ 	}
+ 
+ 	ret = cs35l56_mbox_send(cs35l56, CS35L56_MBOX_CMD_SHUTDOWN);
+-- 
+2.30.2
 
-Kind Regards,
-Luzy Mark
-Marketing Coordinators
