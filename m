@@ -2,137 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 973517009FA
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:08:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B18DC7009FF
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:12:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241304AbjELOIw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 10:08:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44752 "EHLO
+        id S241321AbjELOMa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 10:12:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241006AbjELOIt (ORCPT
+        with ESMTP id S240932AbjELOM2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 10:08:49 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2091.outbound.protection.outlook.com [40.107.92.91])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F044C0C;
-        Fri, 12 May 2023 07:08:47 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=oWvPyHjnONG2YSTc5pC6Hk0HlAbuNdqyq7fiu1W4MkYzL7rUlS3v0yrrhgwTChuBPzB6OXpBLGJSH3Az8mY4rgmQ4WTmtRmyTxjMPGqeAsRB58ucCsyxQ1CVPyfNqT/Fu7sYTCMn+gF2yRO0WpHuCIIn2rp6AJ4ftwXL6zO+nAbCCJW6LP8L1wX9EV21y1tD4wL9hHabgJyeHWAzvz5e2yE8EKu6CkgQM21hfg8UegxX6ZCIATG5XvxS9C8K19teJy3g8auzYkh0ZnKzZeko48A2Alr9nldqSc3S7EvE7/l6qyo+sgZBqfryOT9lyRTBfF1yoAliPGz+yDcUUdMmow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mSG6vBdSMbohx5Bw++s6I0tNK3HDz2DMBrBKlFhPBRI=;
- b=BLe2fmq1MnZbY93SWnBZqMbIhDxF60C5FJXxd9lIhbnzIHUwhYuJJA5qnxkpkgsioPwDrYPT9YxarI6/YVyAAGV7Zqpt+hHgmKqmOZgXbcVZikRm+SofaVpsxdSlSsvBPLSPBbWyKwKfkeCuhG++6N0pUcEFh2MbzRclvsuyo2XLdWVVUDQYkMPT+2ujp3MC0SdUf9MFfPniTFcvEtNJywtBm8BUbSAZ1FlG30p47DZMsd/IsuNleFlDlNprg5fbfAES7qPz6IiYK3+Bsv+29X8MyVsVvJc+5hEWUwwi3uNjpDoovjtfU44Jt5ulFfXv7e97idIGj0JITNZROxe3wg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mSG6vBdSMbohx5Bw++s6I0tNK3HDz2DMBrBKlFhPBRI=;
- b=QYEkRFuCey65JC9kBOs++xjfqXXtj89VWSKEdMLkj9a6Z8Ay3pI8Gdm+BwKub65Rmp1kxV0Rcx49YbtlB4FkWdPqvVwUNKfBRhKdXLL/en9dL/MDSK7OHem1idAb30TLKEWZf+M6jkxGOWOTn7qLuhiJge2oMsqFFp6tY6TM/m0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by CO1PR13MB4808.namprd13.prod.outlook.com (2603:10b6:303:d9::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.24; Fri, 12 May
- 2023 14:08:43 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.024; Fri, 12 May 2023
- 14:08:42 +0000
-Date:   Fri, 12 May 2023 16:08:36 +0200
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Stephen Hemminger <stephen@networkplumber.org>
-Cc:     Yang Li <yang.lee@linux.alibaba.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: Re: [PATCH] ipvlan: Remove NULL check before dev_{put, hold}
-Message-ID: <ZF5IZIlUwncUXBHS@corigine.com>
-References: <20230511072119.72536-1-yang.lee@linux.alibaba.com>
- <20230511085453.25ef33fc@hermes.local>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511085453.25ef33fc@hermes.local>
-X-ClientProxiedBy: AS4P195CA0048.EURP195.PROD.OUTLOOK.COM
- (2603:10a6:20b:65a::23) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Fri, 12 May 2023 10:12:28 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3089786BE;
+        Fri, 12 May 2023 07:12:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683900747; x=1715436747;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=rHSFEe9c+dXfKqcqMswTurt+PWDKv+CkZ1d0is5SzCk=;
+  b=NOgpYsKBssYW0c8Mqxtx0COP6ehcUYwGBse0BkpmRGR9251C+LR8ZhnB
+   5zEgswaKgWk0e9p2I+CU88FLW0Q027DQQtcIHJTfKRcm7+V1EvM5+yQ+v
+   GSx8wf8lNKpL00+FXqnyxGYEIB+MxXWhbAGZrIFqA3NIsHGb/LqNvHtYH
+   IbgHQsTNIGsuIEq6AR2nIHcUeJ1yVutjwMO6OsVaheBztLz6lfQYwAaVH
+   oYsXBjNC5eWRJGHIufWm/27AcdcjUVmpd4Lx81jAMBoR31vzF8z6phz98
+   DDiXoqm/CgaQ2cojunmCM6IrW8Q7+OFA3fHGSguFn3ZoSyyDviWpzDwQY
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="350819676"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="350819676"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 07:12:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="694248833"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="694248833"
+Received: from ralbanes-mobl.ger.corp.intel.com ([10.252.40.108])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 07:12:17 -0700
+Date:   Fri, 12 May 2023 17:12:14 +0300 (EEST)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Jorge Lopez <jorgealtxwork@gmail.com>
+cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>, thomas@t-8ch.de
+Subject: Re: [PATCH v12 11/13] HP BIOSCFG driver - surestart-attributes
+In-Reply-To: <CAOOmCE9rNSJDbhoMgyEenog1CG6xG_cRoPNtYp--37DAi4iqsg@mail.gmail.com>
+Message-ID: <a8d1a232-d0f0-16ab-57a8-28e3b2f84@linux.intel.com>
+References: <20230505220043.39036-1-jorge.lopez2@hp.com> <20230505220043.39036-12-jorge.lopez2@hp.com> <ef445e78-5751-bd8f-44ce-d9beaebaac6@linux.intel.com> <CAOOmCE_dRivApf46KO1Cq-vHGsHVXNVCqbqF2NV4Y6SVpYx6hA@mail.gmail.com> <79db2a99-5cd7-19c0-212d-9e28869a6a18@linux.intel.com>
+ <CAOOmCE9rNSJDbhoMgyEenog1CG6xG_cRoPNtYp--37DAi4iqsg@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CO1PR13MB4808:EE_
-X-MS-Office365-Filtering-Correlation-Id: f9b952c7-68ef-4853-c606-08db52f2646e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: t+3n9gK+S0SYpL/Htv6UfO5YNmR9ZSSXpRXiXD0MRWSmhmXm7YmqA0gmgTrHUqco5kGuYSS77ymcT3irj322KpFCf9Q7nx9/Y71aseX/RRCnRNv8FduF2WhisQlEY8Y5Z++0WxTVobPLN7YwWkyUyzGlDohYjcupg/up+Og1Gvv3v3mbUzhtpJtak8XT48ZUs8/58zHam1Xl3fH4/hcHOWg7xPcXz7wZMy+sh6zBZScPNPvm+I/pbqgg0TD/kpqtwPp34BsnNcCEehA7P0nZTjN0kVhPvXiN0YeUXsz5htFSkckl//G7PAmDObUtdEizL0b0jPBD+Zw5eWEIKXKm7zGofaT+1T94FlrnaMycJFXYERnfmjdjyXiZOVoK0BY5a1Rb8CJF276x0kEmu+9NJ1MGLU8iTpJo+zqqFhE5S+I+YkQlBbhaYz+RpwlHdnZ8cFdVY1RUCruPh7jDfebQ+Dht+tPHm8qO0t8UdXOh2rt6gexQCgx50AiMAnvaEdXnl8IOSZ8pxmDm5hPOGzUJBhse84IpHwBdMRBAs/lrluO/3ukwLN75Jv5U0+suZ+tTwCVwqa2tSjD8ajLfw8QpdUpfelZGGlvoTkRB0765dXk=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(376002)(136003)(396003)(39840400004)(366004)(451199021)(6486002)(54906003)(316002)(41300700001)(6666004)(4326008)(36756003)(478600001)(86362001)(66476007)(66946007)(66556008)(6916009)(6512007)(6506007)(83380400001)(966005)(2616005)(186003)(38100700002)(5660300002)(8676002)(8936002)(44832011)(4744005)(2906002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ZRUj2p/LSMBENEOOf69qdtn6m0LEiYIOz1K40nIH6h2wRQKSzPDyeLacKP38?=
- =?us-ascii?Q?dHnv89vjYaYUM73lgpkTS0qQxKtc87h3ObmS/Thkgs3jnEQAkCoFZQpH/uS1?=
- =?us-ascii?Q?jZ0xpel/kL987WiC11OwaGtpMV2hUI3ZXZtbBw+WLVNjFnszZK/X0GD0MxtZ?=
- =?us-ascii?Q?uB3sWlp3Ntyaxlf3aZ9BktmM22A/HNKd/mltl8ITEKC/eRCqPoaQWeEk9MsF?=
- =?us-ascii?Q?gOLaKtzxxopLrCWAn+bmnHfxJgGX2e6DXwZe4Ric+NJoHdfD+7NNt+0Hmk5k?=
- =?us-ascii?Q?6ngYKy7TpRts0f1Ax2WcIL1BOLiRX4i3zmiar9kBWPrtjkVR/mH+HCeBv0y+?=
- =?us-ascii?Q?DvexHzme+ghsi6jzPzSgpx1vhnwykoXHmIENW26wZ/VAcKTQMsBra45yPKQr?=
- =?us-ascii?Q?6WKzrAMei1eVlq3T9fAnYUuT8thQvKRioaBBR7nrCh/PznhWehAQ28L+hdjW?=
- =?us-ascii?Q?LLHaig0ouWrCXTwsLn4CEEPemWcvvMDXXa2ri0HKrjPlfnF8yUYlxY673TgP?=
- =?us-ascii?Q?ym7ik3zCmVWGZptEv+Xs7fHWe5ro29+IITmqzKodiMO3p/61lMHoIEq3bn0O?=
- =?us-ascii?Q?5NQ69RsnGD+jWytwSH/GCdKuKtJqa17IcNSJ56clLOdy3YpIPLmADcaSyuZ1?=
- =?us-ascii?Q?Zd/dy9ldSlnSO1aYQDECsaNOR3ynYrXkLpmwrPsbd9vS6teLKuUW7k+qgrDr?=
- =?us-ascii?Q?3RKTwHIGK+gY5WBFvLbVCc3S6wD9FQxyqnh4w0knPFBjj3Y7i2A0eeDpMwIl?=
- =?us-ascii?Q?xYVwO9rE/nZxFFfWAkLkONTOknTBd/+gBZ26DAoYir2F1bIcCUF4jhB3TcBb?=
- =?us-ascii?Q?SoNvHOxd/mOuTV+hCFKQPMvVYpKYvJuwipGzf3q3s81VGDkx1VFG9JOCpnd+?=
- =?us-ascii?Q?8yP1YBFyxe1Q5NjoebUtbWZYlctamYK4GMRiCGR/E2BmKnMYFk9fqXCH35uH?=
- =?us-ascii?Q?XW+Ke8cmKB5fnrTYD66HFNcRK1SJoxFL+jJalXrPpCf31kvTnRxYx84mMa27?=
- =?us-ascii?Q?MARdP3Emp90NFsq/Bvk+GME64+r2KcuZjP15XqQJe1Tt9U/jlCrShtyuZF1Z?=
- =?us-ascii?Q?z2P7oLRMsxhr1jFTLEPA1YP1fNXnSz/oLB9Z5y8hao5QNcSYR9jCy8byBGhP?=
- =?us-ascii?Q?gJT/DF3Twd5ZuWvuVqOjGd+2m/BnFvQ/WKorWCCXOe1AXh2XMNx3AP2K+OHz?=
- =?us-ascii?Q?kiuKffm+Ka2SN98Ut09XmQSkMRJgI/m1jDdTGOjqQYplpbYwO+JwjfPzBaF4?=
- =?us-ascii?Q?OlysVg2CNxko+BuUmaBpeUNojXNOuvghGOWj4MUTN6ycdOg97Csj/JvYZr0I?=
- =?us-ascii?Q?dgPazlsBTkamI2qdehO88l1M786zYEcS4G/vWgNZwqEmlm6HSqlm9JBzF3Q1?=
- =?us-ascii?Q?MuqJArl+s9qGFKw8zREU3ibi/Gq9GVItrZWi2+Z6gd0zMyo1znnT/o+Xm3Ou?=
- =?us-ascii?Q?/J1Xly23t/fAqLRcKyPoPUkH3VR6Mnoyk256pcrTl4gm1RN8Ytkvfn0qRXtY?=
- =?us-ascii?Q?3xnxJOROIwpddEaWC7EHvYD8FoM5Kk++CzRTC7SSvvhAv6Qj8ViPpx4wEh7A?=
- =?us-ascii?Q?WixlVELHHfR3sCJIDg/7msZfjQ1dKEa5l+uJF+GmQ7mzRLv2nh7g93l08I2D?=
- =?us-ascii?Q?LJ9TcQFtK/JjfJyQlAozeroUcgFbklhoHEyUOXt64228HXLIZaOYHH4kYEDe?=
- =?us-ascii?Q?aWBPqA=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f9b952c7-68ef-4853-c606-08db52f2646e
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 14:08:42.8089
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AJwakeaf2GVdKS8psXRIaG2Ny6ecaV85jHnt28Cw9KPalvw+M+DoE3WfVCdpQa0Kipjq9twW7r48r83W183H5koYvkaqZNqkT0c318hte/Y=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR13MB4808
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/mixed; boundary="8323329-1516034528-1683900741=:1742"
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 08:54:53AM -0700, Stephen Hemminger wrote:
-> On Thu, 11 May 2023 15:21:19 +0800
-> Yang Li <yang.lee@linux.alibaba.com> wrote:
-> 
-> > The call netdev_{put, hold} of dev_{put, hold} will check NULL,
-> > so there is no need to check before using dev_{put, hold},
-> > remove it to silence the warning:
-> > 
-> > ./drivers/net/ipvlan/ipvlan_core.c:559:3-11: WARNING: NULL check before dev_{put, hold} functions is not needed.
-> > 
-> > Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> > Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4930
-> > Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
-> 
-> Maybe add new coccinelle script for this? scripts/free/dev_hold.cocci?
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-FWIIW, I observe that Coccinelle flags this problem as per the log above.
-But perhaps I am missing your point.
+--8323329-1516034528-1683900741=:1742
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+
+On Fri, 12 May 2023, Jorge Lopez wrote:
+
+> On Thu, May 11, 2023 at 4:32 AM Ilpo Järvinen
+> <ilpo.jarvinen@linux.intel.com> wrote:
+> >
+> > On Wed, 10 May 2023, Jorge Lopez wrote:
+> >
+> > > On Tue, May 9, 2023 at 8:57 AM Ilpo Järvinen
+> > > <ilpo.jarvinen@linux.intel.com> wrote:
+> > > >
+> > > > On Fri, 5 May 2023, Jorge Lopez wrote:
+> > > >
+> > > > > HP BIOS Configuration driver purpose is to provide a driver supporting
+> > > > > the latest sysfs class firmware attributes framework allowing the user
+> > > > > to change BIOS settings and security solutions on HP Inc.’s commercial
+> > > > > notebooks.
+> > > > >
+> > > > > Many features of HP Commercial notebooks can be managed using Windows
+> > > > > Management Instrumentation (WMI). WMI is an implementation of Web-Based
+> > > > > Enterprise Management (WBEM) that provides a standards-based interface
+> > > > > for changing and monitoring system settings. HP BIOSCFG driver provides
+> > > > > a native Linux solution and the exposed features facilitates the
+> > > > > migration to Linux environments.
+> > > > >
+> > > > > The Linux security features to be provided in hp-bioscfg driver enables
+> > > > > managing the BIOS settings and security solutions via sysfs, a virtual
+> > > > > filesystem that can be used by user-mode applications. The new
+> > > > > documentation cover HP-specific firmware sysfs attributes such Secure
+> > > > > Platform Management and Sure Start. Each section provides security
+> > > > > feature description and identifies sysfs directories and files exposed
+> > > > > by the driver.
+> > > > >
+> > > > > Many HP Commercial notebooks include a feature called Secure Platform
+> > > > > Management (SPM), which replaces older password-based BIOS settings
+> > > > > management with public key cryptography. PC secure product management
+> > > > > begins when a target system is provisioned with cryptographic keys
+> > > > > that are used to ensure the integrity of communications between system
+> > > > > management utilities and the BIOS.
+> > > > >
+> > > > > HP Commercial notebooks have several BIOS settings that control its
+> > > > > behaviour and capabilities, many of which are related to security.
+> > > > > To prevent unauthorized changes to these settings, the system can
+> > > > > be configured to use a cryptographic signature-based authorization
+> > > > > string that the BIOS will use to verify authorization to modify the
+> > > > > setting.
+> > > > >
+> > > > > Linux Security components are under development and not published yet.
+> > > > > The only linux component is the driver (hp bioscfg) at this time.
+> > > > > Other published security components are under Windows.
+> > > > >
+> > > > > Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
+> > > > >
+> > > > > ---
+> > > > > Based on the latest platform-drivers-x86.git/for-next
+> > > > > ---
+
+> > > > > +      */
+> > > > > +     if (count * LOG_ENTRY_SIZE > PAGE_SIZE)
+> > > > > +             return -EIO;
+> > > > > +
+> > > > > +     /*
+> > > > > +      * We are guaranteed the buffer is 4KB so today all the event
+> > > > > +      * logs will fit
+> > > > > +      */
+> > > > > +     for (i = 0; i < count; i++) {
+> > > > > +             audit_log_buffer[0] = (i + 1);
+> > > > > +
+> > > > > +             /*
+> > > > > +              * read audit log entry at a time. 'buf' input value
+> > > > > +              * provides  the audit log entry to be read.  On
+> > > > > +              * input, Byte 0 = Audit Log entry number from
+> > > > > +              * beginning (1..254)
+> > > > > +              * Entry number 1 is the newest entry whereas the
+> > > > > +              * highest entry number (number of entries) is the
+> > > > > +              * oldest entry.
+> > > > > +              */
+> > > > > +             ret = hp_wmi_perform_query(HPWMI_SURESTART_GET_LOG,
+> > > > > +                                        HPWMI_SURESTART,
+> > > > > +                                        audit_log_buffer, 1, 128);
+> > > > > +
+> > > > > +             if (ret >= 0 && (LOG_ENTRY_SIZE * i) < PAGE_SIZE) {
+> > > >
+> > > > Can the second condition ever fail?
+> > > >
+> > > Only in the event BIOS data is corrupted.
+> >
+> > i runs from 0 to count - 1 and you prevented count * LOG_ENTRY_SIZE >
+> > PAGE_SIZE above. So what does the BIOS data have to do with that?
+> 
+> BIOS guarantees the number of audit logs * LOG_ENTRY_SIZE will be less
+> than 4K (PAGE_SIZE)
+> Because Linux kernel trusts no one, we are checking that BIOS does not
+> report more events than it should.
+
+I know you're checking that.
+
+What I'm trying to say that even after that check, your own code does not 
+trust that when i < count holds (as per the for loop termination 
+condition), i * LOG_ENTRY_SIZE < count * LOG_ENTRY_SIZE.
+
+So what I'm trying to say is that this check:
+		&& (LOG_ENTRY_SIZE * i) < PAGE_SIZE
+...is always true (and therefore unnecessary).
+
+> WMI expects the input buffer to include the current audit log number
+> (audit_log_buffer[0] = (i + 1);) which is i+1.
+
+I don't see how this is relevant to what I was asking.
+
+> > > > > +                     memcpy(buf, audit_log_buffer, LOG_ENTRY_SIZE);
+> > > > > +                     buf += LOG_ENTRY_SIZE;
+> > > > > +             } else {
+> > > > > +                     /*
+> > > > > +                      * Encountered a failure while reading
+> > > > > +                      * individual logs. Only a partial list of
+> > > > > +                      * audit log will be returned.
+> > > > > +                      */
+> > > > > +                     count = i + 1;
+> > > > > +                     break;
+> > > > > +             }
+> > > >
+> > > > Reverse order, do error handling with break first.
+> > > Done!
+> > > >
+> > > > Why not return i * LOG_ENTRY_SIZE directly (or at the end), no need to
+> > > > tweak count?
+> > >
+> > > Done!
+> > > >
+> > > > > +     }
+> > > > > +
+> > > > > +     return count * LOG_ENTRY_SIZE;
+> > > > > +}
+
+-- 
+ i.
+
+--8323329-1516034528-1683900741=:1742--
