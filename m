@@ -2,166 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A40700D7A
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:56:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C9C700D5E
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:51:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237672AbjELQ4w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 12:56:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48458 "EHLO
+        id S237479AbjELQvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 12:51:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232260AbjELQ4v (ORCPT
+        with ESMTP id S229589AbjELQvG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 12:56:51 -0400
-X-Greylist: delayed 389 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 12 May 2023 09:56:49 PDT
-Received: from out-7.mta1.migadu.com (out-7.mta1.migadu.com [IPv6:2001:41d0:203:375::7])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B602F1704
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 09:56:49 -0700 (PDT)
-Date:   Fri, 12 May 2023 16:50:13 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1683910218;
+        Fri, 12 May 2023 12:51:06 -0400
+Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C1235A4;
+        Fri, 12 May 2023 09:51:05 -0700 (PDT)
+Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
+        id 0A01D1C0ABB; Fri, 12 May 2023 18:51:04 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
+        t=1683910264;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=4PTfi/CRVlLihpd7NcDHa6MiGARrs9Gf4ZlSXwZztBQ=;
-        b=ckABoCJOeT0cC23Vyy/T4xUiN0xAN6xQgiRXdD6yuo+EBlCRorITYgG/ly/qJ18Yy0GQOM
-        GrCipZfeifTYjPmrN3BL6rW5I6uQt7PCrHtPoD0n5q9KQ8oSo1TnUK/8j5sWv7fE8qDgGP
-        m6Fn/pjyPHTYKARNHPZP6QgODuzooAc=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Raghavendra Rao Ananta <rananta@google.com>
-Cc:     Marc Zyngier <maz@kernel.org>, James Morse <james.morse@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jing Zhang <jingzhangos@google.com>,
-        Colton Lewis <coltonlewis@google.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: Re: [PATCH v3 2/7] KVM: arm64: Implement
-  __kvm_tlb_flush_vmid_range()
-Message-ID: <ZF5uRWtvhhqZSQCa@linux.dev>
-References: <20230414172922.812640-1-rananta@google.com>
- <20230414172922.812640-3-rananta@google.com>
+        bh=XM8NBb2coBJF2GqQ8RcwtfKaTsDoZEMiql19jU2Efmw=;
+        b=FFVOOe2KbUsF14ijfQM5zGuMlcXbAHuV9ubM3mcFtnsRs9KlzaPRkypol93Ch8an60Do2x
+        ttgQ0xh863bm6ta0Z3qhmaj8Hq8Gx3d0CDiduyTB7EAfTNVlOMDWx9o2E76g/fqIbFbzE7
+        jCwgbenqj5EI6Fsvi5/1MiksMClco/I=
+Date:   Fri, 12 May 2023 18:51:03 +0200
+From:   Pavel Machek <pavel@ucw.cz>
+To:     Yi-De Wu <yi-de.wu@mediatek.com>
+Cc:     Yingshiuan Pan <yingshiuan.pan@mediatek.com>,
+        Ze-Yu Wang <ze-yu.wang@mediatek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-arch@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        David Bradil <dbrazdil@google.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Jade Shih <jades.shih@mediatek.com>,
+        Miles Chen <miles.chen@mediatek.com>,
+        Ivan Tseng <ivan.tseng@mediatek.com>,
+        My Chuang <my.chuang@mediatek.com>,
+        Shawn Hsiao <shawn.hsiao@mediatek.com>,
+        PeiLun Suei <peilun.suei@mediatek.com>,
+        Liju Chen <liju-clr.chen@mediatek.com>
+Subject: Re: [PATCH v2 1/7] docs: geniezone: Introduce GenieZone hypervisor
+Message-ID: <ZF5ud9CedwBnWXBN@localhost>
+References: <20230428103622.18291-1-yi-de.wu@mediatek.com>
+ <20230428103622.18291-2-yi-de.wu@mediatek.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230414172922.812640-3-rananta@google.com>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <20230428103622.18291-2-yi-de.wu@mediatek.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Raghavendra,
+Hi!
 
-On Fri, Apr 14, 2023 at 05:29:17PM +0000, Raghavendra Rao Ananta wrote:
-> Define  __kvm_tlb_flush_vmid_range() (for VHE and nVHE)
-> to flush a range of stage-2 page-tables using IPA in one go.
-> If the system supports FEAT_TLBIRANGE, the following patches
-> would conviniently replace global TLBI such as vmalls12e1is
-> in the map, unmap, and dirty-logging paths with ripas2e1is
-> instead.
-> 
-> Signed-off-by: Raghavendra Rao Ananta <rananta@google.com>
-> ---
->  arch/arm64/include/asm/kvm_asm.h   |  3 +++
->  arch/arm64/kvm/hyp/nvhe/hyp-main.c | 11 +++++++++
->  arch/arm64/kvm/hyp/nvhe/tlb.c      | 39 ++++++++++++++++++++++++++++++
->  arch/arm64/kvm/hyp/vhe/tlb.c       | 35 +++++++++++++++++++++++++++
->  4 files changed, 88 insertions(+)
-> 
-> diff --git a/arch/arm64/include/asm/kvm_asm.h b/arch/arm64/include/asm/kvm_asm.h
-> index 43c3bc0f9544d..33352d9399e32 100644
-> --- a/arch/arm64/include/asm/kvm_asm.h
-> +++ b/arch/arm64/include/asm/kvm_asm.h
-> @@ -79,6 +79,7 @@ enum __kvm_host_smccc_func {
->  	__KVM_HOST_SMCCC_FUNC___pkvm_init_vm,
->  	__KVM_HOST_SMCCC_FUNC___pkvm_init_vcpu,
->  	__KVM_HOST_SMCCC_FUNC___pkvm_teardown_vm,
-> +	__KVM_HOST_SMCCC_FUNC___kvm_tlb_flush_vmid_range,
->  };
->  
->  #define DECLARE_KVM_VHE_SYM(sym)	extern char sym[]
-> @@ -225,6 +226,8 @@ extern void __kvm_flush_vm_context(void);
->  extern void __kvm_flush_cpu_context(struct kvm_s2_mmu *mmu);
->  extern void __kvm_tlb_flush_vmid_ipa(struct kvm_s2_mmu *mmu, phys_addr_t ipa,
->  				     int level);
-> +extern void __kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
-> +					phys_addr_t start, phys_addr_t end);
->  extern void __kvm_tlb_flush_vmid(struct kvm_s2_mmu *mmu);
->  
->  extern void __kvm_timer_set_cntvoff(u64 cntvoff);
-> diff --git a/arch/arm64/kvm/hyp/nvhe/hyp-main.c b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
-> index 728e01d4536b0..81d30737dc7c9 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/hyp-main.c
-> +++ b/arch/arm64/kvm/hyp/nvhe/hyp-main.c
-> @@ -125,6 +125,16 @@ static void handle___kvm_tlb_flush_vmid_ipa(struct kvm_cpu_context *host_ctxt)
->  	__kvm_tlb_flush_vmid_ipa(kern_hyp_va(mmu), ipa, level);
->  }
->  
-> +static void
-> +handle___kvm_tlb_flush_vmid_range(struct kvm_cpu_context *host_ctxt)
-> +{
-> +	DECLARE_REG(struct kvm_s2_mmu *, mmu, host_ctxt, 1);
-> +	DECLARE_REG(phys_addr_t, start, host_ctxt, 2);
-> +	DECLARE_REG(phys_addr_t, end, host_ctxt, 3);
-> +
-> +	__kvm_tlb_flush_vmid_range(kern_hyp_va(mmu), start, end);
-> +}
-> +
->  static void handle___kvm_tlb_flush_vmid(struct kvm_cpu_context *host_ctxt)
->  {
->  	DECLARE_REG(struct kvm_s2_mmu *, mmu, host_ctxt, 1);
-> @@ -315,6 +325,7 @@ static const hcall_t host_hcall[] = {
->  	HANDLE_FUNC(__kvm_vcpu_run),
->  	HANDLE_FUNC(__kvm_flush_vm_context),
->  	HANDLE_FUNC(__kvm_tlb_flush_vmid_ipa),
-> +	HANDLE_FUNC(__kvm_tlb_flush_vmid_range),
->  	HANDLE_FUNC(__kvm_tlb_flush_vmid),
->  	HANDLE_FUNC(__kvm_flush_cpu_context),
->  	HANDLE_FUNC(__kvm_timer_set_cntvoff),
-> diff --git a/arch/arm64/kvm/hyp/nvhe/tlb.c b/arch/arm64/kvm/hyp/nvhe/tlb.c
-> index d296d617f5896..d2504df9d38b6 100644
-> --- a/arch/arm64/kvm/hyp/nvhe/tlb.c
-> +++ b/arch/arm64/kvm/hyp/nvhe/tlb.c
-> @@ -109,6 +109,45 @@ void __kvm_tlb_flush_vmid_ipa(struct kvm_s2_mmu *mmu,
->  	__tlb_switch_to_host(&cxt);
->  }
->  
-> +void __kvm_tlb_flush_vmid_range(struct kvm_s2_mmu *mmu,
-> +				phys_addr_t start, phys_addr_t end)
-> +{
-> +	struct tlb_inv_context cxt;
-> +	unsigned long pages, stride;
-> +
-> +	/*
-> +	 * Since the range of addresses may not be mapped at
-> +	 * the same level, assume the worst case as PAGE_SIZE
-> +	 */
-> +	stride = PAGE_SIZE;
-> +	start = round_down(start, stride);
-> +	end = round_up(end, stride);
-> +	pages = (end - start) >> PAGE_SHIFT;
-> +
-> +	if (!system_supports_tlb_range() || pages >= MAX_TLBI_RANGE_PAGES) {
-> +		__kvm_tlb_flush_vmid(mmu);
-> +		return;
-> +	}
-> +
-> +	dsb(ishst);
+> GenieZone is MediaTek proprietary hypervisor solution, and it is running
+> in EL2 stand alone as a type-I hypervisor. It is a pure EL2
+> implementation which implies it does not rely any specific host VM, and
+> this behavior improves GenieZone's security as it limits its interface.
 
-Due to some concerns w.r.t. the imprecision of the architecture for
-synchronizing with the table walkers, these preamble barriers were
-upgraded to dsb(ish) in commit 7e1b2329c205 ("KVM: arm64: nvhe:
-Synchronise with page table walker on TLBI"). Good news is, the magic is
-behind __tlb_switch_to_guest(), so just drop these barriers when you
-rebase the series onto a 6.4 rc.
+> +++ b/Documentation/virt/geniezone/introduction.rst
+> @@ -0,0 +1,34 @@
+
+> +Platform Virtualization
+> +=======================
+> +We leverages arm64's timer virtualization and gic virtualization for timer and
+> +interrupts controller.
+
+'interrupt'.
+
+> +Device Virtualizaton
+> +====================
+> +We adopts VMM's virtio devices emulations by passing io trap to
+> VMM, and virtio
+
+'adopt', 'device emulation'
+
+> +is a well-known and widely used virtual device implementation.
+> +
+
+Plus, I'd expect documentation to be more detailed or have pointer
+where
+to learn more.
+
+BR,							Pavel
 
 -- 
-Thanks,
-Oliver
