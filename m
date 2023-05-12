@@ -2,125 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7750F700342
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 11:02:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9978700341
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 11:02:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240346AbjELJCj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 05:02:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38882 "EHLO
+        id S240310AbjELJCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 05:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240337AbjELJCb (ORCPT
+        with ESMTP id S240351AbjELJCb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 12 May 2023 05:02:31 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB30D106D1;
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFB5100FD;
         Fri, 12 May 2023 02:02:20 -0700 (PDT)
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34C8F7Um008053;
-        Fri, 12 May 2023 09:02:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=q+WZoz+DZsgB/7N1UzCMfAS06EPg6+8iO2IO/aD/RSA=;
- b=OZOXcjeXU30vli1/PP7uloDILo0LWXKEy9Hqnv1Ka0UkY3y9dmYh9ptwXQs0Fug1NKiQ
- MFK8hHloq1XM0Foo5ec56C0U/kyu0ZPjVCSfuPhTuOdy8Pa0obOaCr7V9y9RNJ4Ky/WE
- fFXysT0MW91oh/N5JWjkM2pMWfGHsi5+FMZgiNBldaEhN0Ap//zXvETpI+ffIhRmxwYn
- AOKzB3QCBn5rU9jdJVLuGOiBEB8GgGAF6bt+bXMm7/TFcKbPRPAFoB+T9uU9FJGMxxG1
- b8Lry+AiHCgLv4UUHdKDhKk+0oVqzapy3XDCW1PJ+6rV4yxk2dYPH5F8TiDXE6aAfBMr Ug== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qhh3905nf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 09:02:15 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34C92Deu001205
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 09:02:13 GMT
-Received: from anusha-linux.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 12 May 2023 02:02:07 -0700
-From:   Anusha Rao <quic_anusha@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <konrad.dybcio@linaro.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <p.zabel@pengutronix.de>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-clk@vger.kernel.org>
-CC:     <quic_srichara@quicinc.com>, <quic_gokulsri@quicinc.com>,
-        <quic_sjaganat@quicinc.com>, <quic_kathirav@quicinc.com>,
-        <quic_arajkuma@quicinc.com>, <quic_poovendh@quicinc.com>
-Subject: [PATCH 2/2] arm64: dts: qcom: ipq9574: Enable crypto nodes
-Date:   Fri, 12 May 2023 14:31:34 +0530
-Message-ID: <20230512090134.9811-3-quic_anusha@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20230512090134.9811-1-quic_anusha@quicinc.com>
-References: <20230512090134.9811-1-quic_anusha@quicinc.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=Mggnu95n/RU6DeRgS9ZUs2b/avyHGbZvVWNqilcNijI=; b=MDA2vJcmlGYWbAYVWlbKScMTRY
+        vF42WVOhOikWSi9jWbuFHQ1JtHvU+8G0TGE1XfkmCbjSEXOLHOVHrIJ0VnEFagkOI1H6/No9N+j4O
+        bWS5qIDeN9+7jVQqNBdeLLEQV9cJTPdrn4oc3QMb1vAo1q3WAOb/RI8dV//oqci/88ItYS0mRLrbH
+        +M7Lf+sPQWMHsM3p8dndw1zrdtj6CtRmEQiaKmgMd2CouTyywvldb1/ivBWaaqPCMiFY/9Knc1vbG
+        PprqPQeiksn1ahH0l/mpmcEBqq2Fmy6SrZeBdJJkTGwCi3hUQyxwK6WBxkmKQ1Fn44mlmFlEfHbeg
+        WP/aYyOQ==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35578)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pxOfA-00081X-H1; Fri, 12 May 2023 10:02:08 +0100
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pxOf7-0004vy-PP; Fri, 12 May 2023 10:02:05 +0100
+Date:   Fri, 12 May 2023 10:02:05 +0100
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Yan Wang <rk.code@outlook.com>
+Cc:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5] net: mdiobus: Add a function to deassert reset
+Message-ID: <ZF4AjX6csKkVJzht@shell.armlinux.org.uk>
+References: <KL1PR01MB54486A247214CC72CAB5A433E6759@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: P2s7Oc3PYeDBxdodIOzt7v02-U30Ooe5
-X-Proofpoint-ORIG-GUID: P2s7Oc3PYeDBxdodIOzt7v02-U30Ooe5
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-12_06,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- priorityscore=1501 malwarescore=0 lowpriorityscore=0 phishscore=0
- suspectscore=0 clxscore=1015 mlxscore=0 impostorscore=0 mlxlogscore=837
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305120075
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <KL1PR01MB54486A247214CC72CAB5A433E6759@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable crypto support for ipq9574.
+On Fri, May 12, 2023 at 03:08:53PM +0800, Yan Wang wrote:
+> +	gpiod_set_value_cansleep(reset, gpiod_is_active_low(reset));
+> +	fsleep(reset_assert_delay);
+> +	gpiod_set_value_cansleep(reset, !gpiod_is_active_low(reset));
 
-Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
----
- arch/arm64/boot/dts/qcom/ipq9574.dtsi | 20 ++++++++++++++++++++
- 1 file changed, 20 insertions(+)
+Andrew, one of the phylib maintainers and thus is responsible for code
+in the area you are touching. Andrew has complained about the above
+which asserts and then deasserts reset on two occasions now, explained
+why it is wrong, but still the code persists in doing this.
 
-diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-index fea15f3cf910..3cda5aa8d03c 100644
---- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-+++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-@@ -123,6 +123,26 @@
- 			clock-names = "core";
- 		};
- 
-+		cryptobam: dma-controller@704000 {
-+			compatible = "qcom,bam-v1.7.0";
-+			reg = <0x00704000 0x20000>;
-+			interrupts = <GIC_SPI 207 IRQ_TYPE_LEVEL_HIGH>;
-+			#dma-cells = <1>;
-+			qcom,ee = <1>;
-+			qcom,controlled-remotely;
-+		};
-+
-+		crypto: crypto@73a000 {
-+			compatible = "qcom,crypto-v5.1";
-+			reg = <0x0073a000 0x6000>;
-+			clocks = <&gcc GCC_CRYPTO_AHB_CLK>,
-+				 <&gcc GCC_CRYPTO_AXI_CLK>,
-+				 <&gcc GCC_CRYPTO_CLK>;
-+			clock-names = "iface", "bus", "core";
-+			dmas = <&cryptobam 2>, <&cryptobam 3>;
-+			dma-names = "rx", "tx";
-+		};
-+
- 		tlmm: pinctrl@1000000 {
- 			compatible = "qcom,ipq9574-tlmm";
- 			reg = <0x01000000 0x300000>;
+I am going to add my voice as another phylib maintainer to this and say
+NO to this code, for the exact same reasons that Andrew has given.
+
+You now have two people responsible for the code in question telling
+you that this is the wrong approach.
+
+Until this is addressed in some way, it is pointless you posting
+another version of this patch.
+
+Thanks.
+
 -- 
-2.17.1
-
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
