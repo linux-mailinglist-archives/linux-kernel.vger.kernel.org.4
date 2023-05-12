@@ -2,255 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8069C700AA9
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:49:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 11BDE700AAE
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:51:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241497AbjELOtc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 10:49:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38980 "EHLO
+        id S241381AbjELOvc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 10:51:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241173AbjELOt3 (ORCPT
+        with ESMTP id S241173AbjELOv3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 10:49:29 -0400
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::222])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F3D126B7
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:49:26 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id A7DD940004;
-        Fri, 12 May 2023 14:49:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1683902964;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=T11KFjvYkfD8qqoG3QDNCPlKzoJSbUbz1uBV/ZOWT+k=;
-        b=aFy09QW+nnEe9aRPOo6NtinLBEPbG4iJcAVG6iWMokefz04jlcVltyqKb0AMmmzOAUdhh2
-        YMYqaZLPMxBslRIfP6WGa94g9FAaTBxkTqJn0sB/m8rU2GC4do6xfWJImPHlYqbOX+YQr0
-        5ocIh8v7WTyhKC7QMy6g5i11LczTUu8sWl1RdxprwA07GVwDJpb3Q14mJLEaP/BL1p7PlB
-        JP8pCV9Cpxfz9XPE6t3zwrW2j4NvKpZTbZ06uOeRXD/d9LdKOdKjaLzeiEvdC68f8G9uCq
-        2/rxm4pQJC8ixiX0RhrBqfadS3ELEl3Wef6ZBhBqCKFhOMql3E+nKoxqSa59ig==
-Date:   Fri, 12 May 2023 16:49:18 +0200
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Liang Yang <liang.yang@amlogic.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yixun Lan <yixun.lan@amlogic.com>, <oxffffaa@gmail.com>,
-        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, Michael Walle <michael@walle.cc>,
-        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
-Subject: Re: [PATCH v3 6/6] mtd: rawnand: meson: rename node for chip select
-Message-ID: <20230512164918.59f8965f@xps-13>
-In-Reply-To: <0b0bb315-8e5c-fb30-7786-34824b8d385d@sberdevices.ru>
-References: <20230510110835.26115-1-AVKrasnov@sberdevices.ru>
-        <20230510110835.26115-7-AVKrasnov@sberdevices.ru>
-        <CAFBinCAbTuNGEG13f71F8vhN3yGce+kkYJ7PHMpZbh8DzSapJg@mail.gmail.com>
-        <20230510225359.061c2df6@xps-13>
-        <6918ed54-3929-4832-1e93-6eb55b75c82b@sberdevices.ru>
-        <20230511111204.0b0b3d70@xps-13>
-        <dd25efa3-e46a-e857-d355-53330a8a4181@sberdevices.ru>
-        <4561f558-1d34-a7a9-2a05-f6453b0ed9a9@sberdevices.ru>
-        <20230511141114.04cbd9f1@xps-13>
-        <0b0bb315-8e5c-fb30-7786-34824b8d385d@sberdevices.ru>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Fri, 12 May 2023 10:51:29 -0400
+Received: from EUR03-DBA-obe.outbound.protection.outlook.com (mail-dbaeur03on2085.outbound.protection.outlook.com [40.107.104.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC0926B7;
+        Fri, 12 May 2023 07:51:28 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cmPJ366+RZLB7QMowUvQzr8+m0GZKsuDwheAsIWlb02HjzjFipl5PWtDirTWck/Bye2HGViGeok8QpojRFeH1++MwTkCKwai4rkO78bORWNWVClmohiHZJfShzQuA3LeM+SiVRg5w+gDZgl6htANsr8LdWlq1i6CDKLbeL3YDNAA7IrtJ4Q1f5cL5VskFdL7w2awSy4L30Pd+uXHo/LU3RD2Dmti+sWh1YgV6Hf1+yCrOCMd9DLGTzBAsfljV7ZRR5tVz5JBYG7rAxbw1ojzRAZTl+C271PTqlFVSxSKPhPGjx5C1zZnw/RLPTSL4OrsXmIrlAEmEQYns+DEPy3rwg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=C9OHJlMkGgW3nOwbTlrD0NNQ8za9X/p+8vQ8xQWpFRQ=;
+ b=ggCUXe0TQbiEkZO3c6ZxRXq6RiMwKT9GLTKq5Dm1H5q6emLS91YHrTmx+GlJ/Gdm1LDFauZTpuxvlSpnveMB+Dmz8nKZJS4vQJr9zl8c/HARKcsyBSxk0vrD6iop9dSkZ+t0SWByHcrpi2iiZbmqO2uoz3l5SYuEA+mLg54L+O4hlCWkI7mWJllxEeaJlCUs97/he1ikMNhbCOwrXi1NEhd3nWuQVvpNBFTE/EFHgngNEdOeKQnaYzkHC2+k3PD904ox8MrxTjNJn7/bPVMaw4Gh4xhXyeW70nrmq56MvRlx/7dmyMl2GSMC73gG0Vo89CZ03HUQfGSmM68KSmJdGA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=C9OHJlMkGgW3nOwbTlrD0NNQ8za9X/p+8vQ8xQWpFRQ=;
+ b=plgF0Gli32QUg6fuI5BIz2ebzUJEVVeQQM5M50BluV/Z4VAMz6ZreYRVyn/Riiq1Xo+zouIVdMFgiNCBBlZTY6wqk/gbwsn+l9gCtTjf1U93zcDMNjKQOzfCF0XIQ+YxdNyRmTBwANZGKb5BmZ4eYqWhOr4A9Ahbf78ETLOL+eU=
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
+ by PAXPR04MB9519.eurprd04.prod.outlook.com (2603:10a6:102:22e::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.23; Fri, 12 May
+ 2023 14:51:26 +0000
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::25d3:de2:ef1:3884]) by AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::25d3:de2:ef1:3884%4]) with mapi id 15.20.6387.023; Fri, 12 May 2023
+ 14:51:26 +0000
+From:   Frank Li <frank.li@nxp.com>
+To:     Manivannan Sadhasivam <mani@kernel.org>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>
+CC:     "allenbh@gmail.com" <allenbh@gmail.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "dave.jiang@intel.com" <dave.jiang@intel.com>,
+        "helgaas@kernel.org" <helgaas@kernel.org>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>,
+        "jdmason@kudzu.us" <jdmason@kudzu.us>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "ntb@lists.linux.dev" <ntb@lists.linux.dev>
+Subject: RE: [EXT] Re: [PATCH 1/1] PCI: endpoint: pci-epf-vntb: fix typo span
+ in comments
+Thread-Topic: [EXT] Re: [PATCH 1/1] PCI: endpoint: pci-epf-vntb: fix typo span
+ in comments
+Thread-Index: AQHZD+C/PN18RSdcf02dRof7zAQM1K8h24EAgBHFQkCAJAGbwA==
+Date:   Fri, 12 May 2023 14:51:26 +0000
+Message-ID: <AM6PR04MB483811AF4DE87D78412053B788759@AM6PR04MB4838.eurprd04.prod.outlook.com>
+References: <20221214172254.668282-1-Frank.Li@nxp.com>
+ <20230408093644.GG11124@thinkpad>
+ <AM6PR04MB48382B6FDA347EE8A0E65F7B88629@AM6PR04MB4838.eurprd04.prod.outlook.com>
+In-Reply-To: <AM6PR04MB48382B6FDA347EE8A0E65F7B88629@AM6PR04MB4838.eurprd04.prod.outlook.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM6PR04MB4838:EE_|PAXPR04MB9519:EE_
+x-ms-office365-filtering-correlation-id: 1e63dce5-5be6-4986-fd1d-08db52f85ca7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: fDsleTzkVcihQrnU+U04RWjdtr/LyiocI8l02tuXjojT4m3575U7Ajaz6WmHstp0hH0LBTp8TbailkqgXSbSQLQ0mdy6VLnyuIOGeOHNK2BBzVJlM3sTvd+zO1NpsNTuCwcugiVof8AHggtA75gn8b+vTx1r3ygQwy4YlJt78o+ATJtSnyKKp2hfTLnzkk0vCGsqq8mKHdm6JABmAs/9+Nt36JJVkvyfAuVoubH6eeh+Lcpqrw50DrM2VcYBy/6ltNL5/fQLqe49Hx0TVklCVeRDYO4LaMIcVAhrhqZrEBc8+iuhd9uDwrhfF2CHRxMtRzjgpAafxdcZPxlAru0m2oxI8JvH7UfSl0nTvAd85Hc7URC+PN0L7iq6P79PIRbvEKb0+au5SR0vVyQHqyajV5rwLz+S6fvNgyjf7Hqcv+LR7vLncx/UiF+BgMUM3cDR36xvd87QRydU3/Cyv2F9CQMSJrxapt1nz1wwAb3/sKJoaLlfO+hHcpS6r4EDdHn04BIbyb4sggZ4cdb0S8Vi3HdfgOsRj+HR9apUESKBVbp3nzEzMeDcNG1Wv2djDKDsCkXKB/cxOTHecnzU8FgTsY13kFpncvxzF4SZlfS2RRhm/8LiR/wUF6Krao018c6Y
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(39860400002)(376002)(366004)(136003)(451199021)(186003)(55016003)(66476007)(66446008)(4326008)(64756008)(66556008)(66946007)(38070700005)(41300700001)(52536014)(5660300002)(7416002)(8936002)(122000001)(76116006)(44832011)(8676002)(26005)(316002)(6506007)(55236004)(9686003)(54906003)(86362001)(478600001)(71200400001)(33656002)(7696005)(558084003)(110136005)(38100700002)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?NTRiREdzYnllbEdmdTJHdUlUbTdmSE0rNlJMd1lZNUdaSENmVEZXKzZLc3BN?=
+ =?utf-8?B?cUVvWFdFWWpWVDhISWpYaitXcEhBNXoya2VlcE93eEtlS2lucXYrODJMa1Vq?=
+ =?utf-8?B?dTZBdHVZT3VEampDNGoxdU05Z29RZ2szYjNkTkk2Y1prMlB1Qi8xTFpZK3BW?=
+ =?utf-8?B?c2FXT280THUwZDhSOVpxamVzT242KzZxM1pxN3dPU1IvNW5JR3NVaFlhS0RL?=
+ =?utf-8?B?NWRiR3JhbXVDQ0hnS09hOEpMbXprUnJIMStrdFRvQVNvL3NYQ0IyQTR4Y3dw?=
+ =?utf-8?B?RkdSRWRrengxQTY2L0xEZmhyMjNjSzE5U2dNbk9hWFRrTWFrbkxlTGUvbFlP?=
+ =?utf-8?B?dzNobFlaQWpMUkFlWFoybGI1OFFETDdZdU1jQ0ZiSGNuT2lrQVZkS0hsaWRa?=
+ =?utf-8?B?Q2pzU09YMXc1OWpyNzZJZW1sY3pEellHNS9aTGNBejk3QlBxTnArTGZyVTY2?=
+ =?utf-8?B?am9zVEZ3V1JtRkovWmwzVEt3cUNlQUNqMUdKdDdQNU5hR3h5OEJYMGRnNWwy?=
+ =?utf-8?B?Sm5sN2ZWSkl0Q0lWSFBmZWRlK3QrWlNpcTd5VjZBMGNZZnNmWUd0ODlOUUhK?=
+ =?utf-8?B?ZVZXeGdVeVJxMElSRnhQaWtoVmFrSjNiOHFOM3JtVGN3c2hvYk9Cem5jbmx5?=
+ =?utf-8?B?U1ZlVXczVFNJUDRhQ3p3aS9PZk8vSkx6NzVxck13b1lqYjlrU1lxeGJIVDFY?=
+ =?utf-8?B?eFZUK0lKeXNvVmduQThiT3dOSnFEcUtCV0RjZG0zMFZxYitqekFORFFScVZk?=
+ =?utf-8?B?WHZ6TEFCVCt1aGhMV2pBM28rNGMvTVVEVGNSaFZPdUxxVGhMaGYyT2ovOUJS?=
+ =?utf-8?B?YzMyeUJPUkREeEpCZDlHQkRBblRhR05CVXFPMGZnend4UkFzYTZSaU0yVVli?=
+ =?utf-8?B?MTh5SmRjK1ZhaGtrVFBGR3N6RUx2M2VUMmFhWldNS1VITXVISkpKRk9uZXhJ?=
+ =?utf-8?B?aURuTGtGZXNON2NHQ2ZhV0paRWNYOFFsUnRrM2RhMWs3amN2emlyQTFQS2Iy?=
+ =?utf-8?B?WmtqRzFERlNUL04vZnFqVldXMGQ2WXhiWnJPNi84b2gvZTRxKzNNaHh3V2Vn?=
+ =?utf-8?B?VmZWN2MzT3pJZitDdVJTMkVOTGw1T0hxK2ZTT3hLYm9aM3pyQVZDUFZ1d1BY?=
+ =?utf-8?B?R0o4VkM5UXZuaXVId0lDU2kwMll6L2dPVFpXMUxMVk0rRnJmbnExTW1idjJG?=
+ =?utf-8?B?Slh2S3Qra0VwdXZ0cVZGSWxHV1JCRlFSQjdiOC85RGNkdjEwU2I0N1NPK0M1?=
+ =?utf-8?B?MnIxUzBKbEhIUUo1WVQwRThrYitQdlpQRUFOYURHNEdHN2hieGtKME5aaWF5?=
+ =?utf-8?B?QnE4NGxzdEs2UWgwdW1wdTRVbXhpSnhQemdyNGcyQTRXYXZiODVWQ0xxb3FN?=
+ =?utf-8?B?TUkxSGl2WlF0d2VPRWFEVmNsdDBUOHpSdy8rSXNpYmwyRVBGV3pNL0t5eDlk?=
+ =?utf-8?B?U3ByRmJKZzB2emFpRUJmM2U3aXFLcVFEbk9ISHU0WjlCbktQMkFpeitUQWtD?=
+ =?utf-8?B?UW1pOWY3ZmwvVEtOb0cweVBHSE5OU25pSkh3WlFPRjlURUlQQTNiSiszMVhZ?=
+ =?utf-8?B?ZTFCQzhlVHl1RXpOdTUwTUd5cmt6ajR5WURqTUt2ZWwzNW5SL3c1MDhUVDJP?=
+ =?utf-8?B?ZFU1Yk5sTWFSOEVHWXhXeGkvSTQ0Qm5pbktSdDlUQ1l1QWh5MmdlN3lGMjlT?=
+ =?utf-8?B?eWlFdE9QeS9IbDVQZlFXNFhRcXM4YUd3bkU4S0ZHazQ1K3dVN0h4QkUvY25K?=
+ =?utf-8?B?S1ZHTkhKMVl2RXVwNW1sc3pMUk9jOWV6Um5HMTYxM0FzUk1xbFpwdUNzL1Nt?=
+ =?utf-8?B?dTNNZkVOM1FkT1NqNmVNMnJ6aDl5Z3ZGdTUyYk9YWTcrT0k1Y3pEelY3Sm5w?=
+ =?utf-8?B?RHJ1cWZhRUVsL3FFUUwzT2pZOGgyWkJlakVVcFExRTlPT3NHekVRRlZmaEo4?=
+ =?utf-8?B?bEtnb3l5OFFmMlZrYnpsQXJBd2hwU2xkbnU5Q3A2dXNDZDV0Vk1adExpVW1l?=
+ =?utf-8?B?dUhFWGRoQkRXR3J3dnQ0ZVNibWgwZWNsN0dXSWJObUU1SnFuNHZoUnlHVlp0?=
+ =?utf-8?B?T0swd2dxYU1GZmtqRmNFYjJXd0NPeFVJekMzWnlaZmc3aW4ySVdmOGNUcVBx?=
+ =?utf-8?Q?c0uw=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1e63dce5-5be6-4986-fd1d-08db52f85ca7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 May 2023 14:51:26.2537
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: D4+DumWRPk3d/pCc4UxqGsAPzf5MOagMOvwo30Tvp3cyVkx9qSpgSuRyLvFNKlZiKv0tqMhDgpd5yPx2VbiC4A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9519
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arseniy,
-
-I'm adding Rafa=C5=82 & Michael: any idea what could be wrong? The behavior
-below does not look expected at all, but I thought we (=3D Rafa=C5=82, main=
-ly)
-already sorted this out?
-
-> >>>>>>> On Wed, May 10, 2023 at 1:13=E2=80=AFPM Arseniy Krasnov
-> >>>>>>> <AVKrasnov@sberdevices.ru> wrote:     =20
-> >>>>>>>>
-> >>>>>>>> This renames node with values for chip select from "reg" to "cs"=
-. It is
-> >>>>>>>> needed because when OTP access is enabled on the attached storag=
-e, MTD
-> >>>>>>>> subsystem registers this storage in the NVMEM subsystem. NVMEM i=
-n turn
-> >>>>>>>> tries to use "reg" node in its own manner, supposes that it has =
-another
-> >>>>>>>> layout. All of this leads to device initialization failure.     =
-  =20
-> >>>>>>> In general: if we change the device-tree interface (in this case:
-> >>>>>>> replacing a "reg" with a "cs" property) the dt-bindings have to be
-> >>>>>>> updated as well.     =20
-> >>>>>>
-> >>>>>> True, and I would add, bindings should not be broken.     =20
-> >>>>>
-> >>>>> I see, that's true. That is bad way to change bindings.
-> >>>>>   =20
-> >>>>>>      =20
-> >>>>>>> Documentation/devicetree/bindings/mtd/nand-controller.yaml and
-> >>>>>>> Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml show
-> >>>>>>> that the chip select of a NAND chip is specified with a "reg"
-> >>>>>>> property.     =20
-> >>>>>>
-> >>>>>> All NAND controller binding expect the chip-select to be in the
-> >>>>>> 'reg' property, very much like a spi device would use reg to store=
- the
-> >>>>>> cs as well: the reg property tells you how you address the device.
-> >>>>>>
-> >>>>>> I also fully agree with Martin's comments below. Changing reg is l=
-ikely
-> >>>>>> a wrong approach :)
-> >>>>>>      =20
-> >>>>>>> Also the code has to be backwards compatible with old .dtbs.
-> >>>>>>>     =20
-> >>>>>>>> Example:
-> >>>>>>>>
-> >>>>>>>> [...] nvmem mtd0-user-otp: nvmem: invalid reg on /soc/bus@ffe000=
-00/...
-> >>>>>>>> [...] mtd mtd0: Failed to register OTP NVMEM device
-> >>>>>>>> [...] meson-nand ffe07800.nfc: failed to register MTD device: -22
-> >>>>>>>> [...] meson-nand ffe07800.nfc: failed to init NAND chips
-> >>>>>>>> [...] meson-nand: probe of ffe07800.nfc failed with error -22   =
-    =20
-> >>>>>>> This is odd - can you please share your definition of the &nfc no=
-de?     =20
-> >>>>>
-> >>>>> Sure, here it is:
-> >>>>>
-> >>>>> mtd_nand: nfc@7800 {                           =20
-> >>>>> 	compatible =3D "amlogic,meson-axg-nfc";
-> >>>>> 	...
-> >>>>> 	nand@0 {                               =20
-> >>>>>         	reg =3D <0>;
-> >>>>>         };
-> >>>>> }
-> >>>>>
-> >>>>> I checked, that 'nand_set_flash_node()' is called with 'nand@0' and=
- i suppose
-> >>>>> that it is correct (as You mentioned below). But, 'nvmem_add_cells_=
-from_of()' is called
-> >>>>> with parent: 'nfc@7800', then it iterates over its childs, e.g. 'na=
-nd@0' and thus i get such
-> >>>>> situation. I guess, that 'nvmem_add_cells_from_of()' must be called=
- with 'nand@0' ?   =20
-> >>>>
-> >>>> We recently had issues with nvmem parsing, but I believe a mainline
-> >>>> kernel should now be perfectly working on this regard. What version =
-of
-> >>>> the Linux kernel are you using?   =20
-> >>>
-> >>> My current version is:
-> >>>
-> >>> VERSION =3D 6                                                        =
-    =20
-> >>> PATCHLEVEL =3D 2                                                     =
-    =20
-> >>> SUBLEVEL =3D 0                                                       =
-    =20
-> >>> EXTRAVERSION =3D -rc8=20
-> >>>
-> >>> Fix was in drivers/nvmem/* ?
-> >>>
-> >>> Thanks, Arseniy   =20
-> >>
-> >> Upd: I resolved problem in the following way:
-> >>
-> >> nand@0 {                               =20
-> >> 	reg =3D <0>;//chip select
-> >> =20
-> > 	partitions {
-> > 		compatible =3D ...
-> >  =20
-> >> 	otp@0 {                        =20
-> >> 		#address-cells =3D <2>;  =20
-> >> 		#size-cells =3D <0>;       =20
-> >=20
-> > #address/size-cells is not needed here
-> >  =20
-> >> 		compatible =3D "user-otp";
-> >> 		reg =3D <A B>;           =20
-> >> 	};                             =20
-> >> 	otp@1 {                        =20
-> >> 		#address-cells =3D <2>;  =20
-> >> 		#size-cells =3D <0>;       =20
-> >=20
-> > Ditto
-> >  =20
-> >> 		compatible =3D "factory-otp";
-> >> 		reg =3D <C D>;           =20
-> >> 	};                               =20
-> >=20
-> > 	};
-> >  =20
-> >> };
-> >>
-> >> Now nvmem subsystem parses 'otp@0' and 'otp@1' and error is gone. 'com=
-patible' values are
-> >> the same as in drivers/mtd/mtdcore.c:mtd_otp_nvmem_add(). 'reg' in 'na=
-nd@0' is used as
-> >> chip select as supposed. =20
-> >=20
-> > I don't fully get it. The parsing on the nvmem side should not fail if
-> > there is no subpartition/otp-region defined. Can you confirm an empty
-> > NAND device node works? Because your last e-mail suggested the opposite=
-. =20
->=20
-> Ok, so i'll describe what happens in my case. Let's NAND node be like thi=
-s (IIUC this is
-> considered as empty NAND device):
->=20
-> mtd_nand: nfc@7800 {                           =20
-> 	compatible =3D "amlogic,meson-axg-nfc";
-> 	...
-> 	nand@0 {                               =20
-> 	       	reg =3D <0>;
-> 	};
-> }
->=20
-> I see, that
->=20
-> 1) 'mtd_otp_nvmem_add()' calls 'mtd_otp_nvmem_register()' twice for two t=
-ypes of
->    OTP memory "user-otp" and "factory-otp". Let's take a look only on "us=
-er-otp".
-> 2) 'mtd_otp_nvmem_register()' tries to lookup for node in 'nand@0' which =
-is compatible with
->    "user-otp" and then passes found (or not found, e.g. NULL) node to  'n=
-vmem_register()'.
-> 3) 'nvmem_register()' uses this node iterating over its childs and search=
-ing value "reg" in
->    each child. If "user-otp" node is not found in 2), 'nvmem_register()' =
-uses node 'nfc@7800'
->    also looking for "reg" value in each of its child. In this case it fou=
-nd "reg" in 'nand@0'
->    and fails.
->=20
-> Now, if i add "compatible =3D "user-otp";" to 'nand@0', in step 2) search=
- will be successful,
-> and "reg" value will be used from this new node (or we remove "reg" from =
-it - nothing happens
-> as You wrote). So, problem is that nvmem tries to parse node with invalid=
- "reg" value.
->=20
-> Also I see, that 'nvmem_register()' is called earlier in 'mtd_nvmem_add()=
-', but with no effect.
-> I think, that it is not related with enabled OTP feature.
->=20
-> Thanks, Arseniy
+PiA+IE9uIFdlZCwgRGVjIDE0LCAyMDIyIGF0IDEyOjIyOjU0UE0gLTA1MDAsIEZyYW5rIExpIHdy
+b3RlOg0KPiA+ID4gUmVwbGFjZSBzcGFuIHdpdGggc3BhZC4NCj4gPiA+DQo+ID4gPiBTaWduZWQt
+b2ZmLWJ5OiBGcmFuayBMaSA8RnJhbmsuTGlAbnhwLmNvbT4NCj4gPg0KPiA+IFJldmlld2VkLWJ5
+OiBNYW5pdmFubmFuIFNhZGhhc2l2YW0gPG1hbmlAa2VybmVsLm9yZz4NCj4gDQo+IFtGcmFuayBM
+aV0gRnJpZW5kbHkgUGluZywganVzdCBjb21tZW50cyBjaGFuZ2UuDQoNCldoeSBubyBwaWNrdXAg
+dGhpcyBwYXRjaD8gSnVzdCBmaXhlZCBjb21tZW50cyENCg0KPiANCj4gPg0KPiA+IC0gTWFuaQ0K
+PiA+DQo+ID4gPiAtLS0NCg0K
