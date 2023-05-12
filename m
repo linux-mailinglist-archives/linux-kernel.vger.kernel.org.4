@@ -2,102 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9373D701180
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 23:48:09 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 96842701192
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 23:50:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239839AbjELVsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 17:48:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35480 "EHLO
+        id S239602AbjELVuW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 17:50:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239602AbjELVsD (ORCPT
+        with ESMTP id S229808AbjELVuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 17:48:03 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6BAF658E;
-        Fri, 12 May 2023 14:48:02 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id af79cd13be357-7577ef2fa31so2084258485a.0;
-        Fri, 12 May 2023 14:48:02 -0700 (PDT)
+        Fri, 12 May 2023 17:50:20 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C54312682
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 14:50:18 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-6436dfa15b3so7084174b3a.1
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 14:50:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683928082; x=1686520082;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ktA0DPNP5CNQIjFJf+YrLVaDtly7+JfQEYIY1aBuK2A=;
-        b=EpptMN9+Uga6hAcxAo2XzkvGGde8U7iZgqSZwup4gFk7ua2rwfBFWm657rBr2tzbl8
-         alDpTk4rP4SwxS0++WAmPE4FdQWVm4/enEJ2mQ3J7ahbm+q5NhFo7RUTs7wUOrscZMox
-         45eupQg0KhJwmEmfQY80h//uPbuUrGvgy+2S/kMV3ur3MjhthaKdkBj5g/zXWCaAa42F
-         nlBJ5ENELKGgHvDXJ6O1MgCI5TkNz2MkLRmOh4ivwQL0KVMfgjcXf0CAUWx2Kaefsg2L
-         rPMZHV59fzGHCt/miNVdcAi7XITRfBOYPKnI+nTBEP2ciUF+hg8YN/lZWQD5Nj0f53m5
-         YpxQ==
+        d=dabbelt-com.20221208.gappssmtp.com; s=20221208; t=1683928218; x=1686520218;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HXshd51fH2+G3epdXCEAiwTlwyZiu61NCKXGF8cY8aI=;
+        b=hijUWW7YGEiY7G1Qeg4PABKlij9oIFKh1iXUlbGTJjd4I+SL5j3NCzvgEQ8zoZT4aT
+         wy192rGcvymwNscv/Tr+wKES91UJhfykzelovxv/OzgMvslZurtTmUk98kmx9aEDqPQ6
+         jVublaFURukhXJqmbDLw4rC5OpSRojatblM3MW3l71zW9MQbcNeimQNcLs81fBxSj5nx
+         26wlq4DQjCF38eIM11yBQYPYvPf0u+stV5IxKTsaR3e1OmkK/I2MZnCJcxrJNpocMEoy
+         +8lVR/tWKaoFKAjL1FumNIGrc4eA22kUifLMAg+Vu0MDmCU0PgvX8UucR2n2o0bnTOFX
+         BciA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683928082; x=1686520082;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ktA0DPNP5CNQIjFJf+YrLVaDtly7+JfQEYIY1aBuK2A=;
-        b=i36IYFiU0ytePZ7pcIjov0x2AkeeuPbz7ORnwIOzT1owKwqt7rCp1nCSkJYqRTktgw
-         S8PmdJIdpLOD6jK+FQp9ojTYZoeAuEn6XFqZyV4zS19CqXvPrCr2txjNvHPwaq9DFlQj
-         l35lZy43rS7Q6mR46qgznqXKMLu0JZctdIIsQrQJYVCFgnUn+RQf5IBIsbrmzneEgObD
-         hubIOgho6mndHB+e0nSCNY4c0gsC8jGFFF3HyQ6jXszlhtM71pZBYZiXoIwnt8Qhwsdx
-         Fdq7pCPNFieRf/nj1UYY6aO2T84VW8/40lPlzgmbl/9hAhrhzjGF63ebv9nEm22qRPrN
-         pKcA==
-X-Gm-Message-State: AC+VfDxTMalHDRjfBc3zmUPIwk3ztahqCC0qpNWpSVdHqsM2xUv2Jdxh
-        nuDrxA55bvMJik5eP5FkJpB/K4Xh3ylpg8eZFGk=
-X-Google-Smtp-Source: ACHHUZ6Ds4tgg3tY2HwzC7rc3PEkzb8YK+RMc5PzxH8b2x7aIR5D0EBt3CAybWSjFJTCM+nRvm71yFLpXl19En8supA=
-X-Received: by 2002:a05:6214:519a:b0:621:65de:f600 with SMTP id
- kl26-20020a056214519a00b0062165def600mr10970695qvb.1.1683928081711; Fri, 12
- May 2023 14:48:01 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230510195806.2902878-1-nphamcs@gmail.com> <20230511092843.3896327-1-nphamcs@gmail.com>
- <ZF4YEjiTOeu3jx+5@arm.com> <20230512141510.20075825899e3c869c5358ca@linux-foundation.org>
-In-Reply-To: <20230512141510.20075825899e3c869c5358ca@linux-foundation.org>
-From:   Nhat Pham <nphamcs@gmail.com>
-Date:   Fri, 12 May 2023 14:47:50 -0700
-Message-ID: <CAKEwX=P2VW_UfdxgLfYGOq1Bho+AtHt5pci+A7r95qJSSAEFtg@mail.gmail.com>
-Subject: Re: [PATCH] arm64: wire up cachestat for arm64
-To:     Andrew Morton <akpm@linux-foundation.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-api@vger.kernel.org, kernel-team@meta.com,
-        linux-arch@vger.kernel.org, hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, arnd@arndb.de, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1683928218; x=1686520218;
+        h=content-transfer-encoding:mime-version:message-id:to:from:cc
+         :in-reply-to:subject:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HXshd51fH2+G3epdXCEAiwTlwyZiu61NCKXGF8cY8aI=;
+        b=LSCFpnpoO6v/9q4E1J3GUVMG1a7wNRGFt+iVZikLWPIJT4tV1JXmc5/TyjALjwSUdp
+         ht1Sln2PBHN/uGFAB7ochIlqbR3iBitJtzFyujHQLHrSv21h2GOGvZWv/PBlxEyypf18
+         KDkt0/DLuMdT9p7MYfKRha6kR4n+ieiwinvhitcnrRhBDSnnJ5Fmrm2r0rWnKh7c38+j
+         fUcduL/lSqWO3dNrrtgLTeGy8jZT/IyPUFI1GGBWrDReUD0QbOumXVNhLIpFYu+/MfWX
+         7bxf6q71wtYjzpfz6fEw5uRqGlNMduCX/pgMjtLrcNlKxJB+KCiacAZOt3V32bgWykjs
+         vWkg==
+X-Gm-Message-State: AC+VfDwdnKa0/Bb7JDc3r6w+8T0YAAwOWxA9tybXvM1BpGt3iXY0QbOY
+        8ksdgWVtYCKoIGiDEJDkXRhr8g==
+X-Google-Smtp-Source: ACHHUZ6QnDiLUa2/w2yCFZmwe7mkNFnoMETOFiVkUsq9LBgtSgJJRl8p+zso0mUoALLTMQiq9XEUWA==
+X-Received: by 2002:a05:6a20:3d95:b0:101:36b8:f077 with SMTP id s21-20020a056a203d9500b0010136b8f077mr18764616pzi.28.1683928218180;
+        Fri, 12 May 2023 14:50:18 -0700 (PDT)
+Received: from localhost ([135.180.227.0])
+        by smtp.gmail.com with ESMTPSA id 21-20020aa79115000000b006348cb791f4sm7503301pfh.192.2023.05.12.14.50.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 14:50:17 -0700 (PDT)
+Date:   Fri, 12 May 2023 14:50:17 -0700 (PDT)
+X-Google-Original-Date: Fri, 12 May 2023 14:50:14 PDT (-0700)
+Subject:     Re: [PATCH 0/3] riscv: sbi: Switch to the sys-off handler API
+In-Reply-To: <Y6yLMwhSypqp5+Ir@spud>
+CC:     samuel@sholland.org, dmitry.osipenko@collabora.com,
+        rafael.j.wysocki@intel.com, aou@eecs.berkeley.edu,
+        apatel@ventanamicro.com, Atish Patra <atishp@rivosinc.com>,
+        geert@linux-m68k.org, heiko@sntech.de, kai.heng.feng@canonical.com,
+        mcgrof@kernel.org, paulmck@kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>, pmladek@suse.com,
+        yuehaibing@huawei.com, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org, tangmeng@uniontech.com
+From:   Palmer Dabbelt <palmer@dabbelt.com>
+To:     Conor Dooley <conor@kernel.org>
+Message-ID: <mhng-1895c1c0-4bc8-4156-909e-c20fa66e82fd@palmer-ri-x1c9>
+Mime-Version: 1.0 (MHng)
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 2:15=E2=80=AFPM Andrew Morton <akpm@linux-foundatio=
-n.org> wrote:
+On Wed, 28 Dec 2022 10:30:11 PST (-0800), Conor Dooley wrote:
+> Hey Samuel,
 >
-> On Fri, 12 May 2023 11:42:26 +0100 Catalin Marinas <catalin.marinas@arm.c=
-om> wrote:
+> On Wed, Dec 28, 2022 at 10:19:12AM -0600, Samuel Holland wrote:
+>> I want to convert the axp20x PMIC poweroff handler to use the sys-off
+>> API, so it can be used as a fallback for if the SBI poweroff handler
+>> is unavailable. But the SBI poweroff handler still uses pm_power_off, so
+>> done alone, this would cause the axp20x callback to be called first,
+>> before the SBI poweroff handler has a chance to run.
+>> 
+>> In order to prevent this change in behavior, the SBI poweroff handler
+>> needs to be converted to the sys-off API first, at a higher priority.
+>> 
+>> This series performs the conversion, after accounting for the fact that
+>> the SBI poweroff handler is registered quite early during boot.
+>> 
+>> The first patch is a dependency for both this series and the PSCI
+>> series[1], so I would like to get at least patch 1 merged soon.
+>> 
+>> [1]: https://lore.kernel.org/lkml/20221105214841.7828-1-samuel@sholland.org/
+>> 
+>> 
+>> Samuel Holland (3):
+>>   kernel/reboot: Use the static sys-off handler for any priority
+>>   riscv: sbi: Share the code for unsupported extension warnings
+>>   riscv: sbi: Switch to the sys-off handler API
 >
-> > On Thu, May 11, 2023 at 02:28:43AM -0700, Nhat Pham wrote:
-> > > cachestat is a new syscall that was previously wired in for most
-> > > architectures:
-> > >
-> > > https://lore.kernel.org/lkml/20230503013608.2431726-1-nphamcs@gmail.c=
-om/
-> > > https://lore.kernel.org/linux-mm/20230510195806.2902878-1-nphamcs@gma=
-il.com/
-> > >
-> > > However, those patches miss arm64, which has its own syscall table in=
- arch/arm64.
-> > > This patch wires cachestat in for arm64.
-> >
-> > You may want to clarify that this is for compat support on arm64,
-> > otherwise native support uses the generic syscall numbers already.
->
-> Thanks, I updated the changelog thusly.  Note that this patch is
-> transitory - it will be squashed into "cachestat: wire up cachestat for
-> other architectures".
+> Not what other stuff has reboot support, so I gave it a whirl on
+> PolarFire SoC & it seemed to work as expected:
+> Tested-by: Conor Dooley <conor.dooley@microchip.com>
 
-It's my expectation too - it makes sense to squash it to the other patch.
-Thanks, Andrew!
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+
+in case the reboot folks want to take these.  I'm also happy to take the 
+reboot change through the RISC-V tree with an Ack.  There's some 
+discussion about this in the previous patches.
+
+>
+> Thanks,
+> Conor.
