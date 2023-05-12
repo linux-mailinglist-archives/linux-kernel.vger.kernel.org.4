@@ -2,102 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D84700502
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:14:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B718E7006D7
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:30:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240572AbjELKOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:14:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
+        id S240792AbjELLaT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 07:30:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240474AbjELKOG (ORCPT
+        with ESMTP id S240333AbjELLaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:14:06 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F351BE1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:13:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683886417; x=1715422417;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=NzqTguvFSjV2kCOcUZD87BdAd11HK9QDEusrkoTQGlo=;
-  b=XpZXa9Dz72XUjEvOL3zM0Wn4o5FGjFSBvSyUh+xiFNRhksVnNYmdA4mX
-   riJ1BcStEdu8C20UhoE4vLCazdc2f2Q6lunEan7Iafsl6RRqn3fQkGS1p
-   fA3XHesxw2+2dmn7FURJ4QFyGxn/ZnVtjSWW6HzWDepqIdmiRebEsi1uR
-   036ZZpcUECko9aBBf743sXFqnZiEMcl45jB3G4hqL3UawYDLjPcETe2kF
-   YW/vXWZel6N3YZMK9GfUNtsR+WvoUxZEIq25SQ9UWWV/A8y16TUQ/vNEJ
-   +JQ0T7/iBNclGqAELG2M7fStZeUE9rhq4rB3DDPvwFiOY182UIbrrl5Qz
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="416386434"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="416386434"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 03:12:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="824309039"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="824309039"
-Received: from nhanph1x-mobl.amr.corp.intel.com (HELO [10.249.38.84]) ([10.249.38.84])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 03:12:55 -0700
-Message-ID: <12e47cb1-0744-6470-d79b-af1aeea86f9a@linux.intel.com>
-Date:   Fri, 12 May 2023 13:13:49 +0300
+        Fri, 12 May 2023 07:30:17 -0400
+X-Greylist: delayed 2388 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 12 May 2023 04:30:16 PDT
+Received: from proxmox1.postmarketos.org (proxmox1.postmarketos.org [213.239.216.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CDBDBE0;
+        Fri, 12 May 2023 04:30:15 -0700 (PDT)
+Received: from [192.168.20.2] (unknown [77.239.252.99])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by proxmox1.postmarketos.org (Postfix) with ESMTPSA id 3CA4D140721;
+        Fri, 12 May 2023 10:14:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=postmarketos.org;
+        s=donut; t=1683886470;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WI5E/TsaFWtEJQz7t3z2GxRm12SujK+7+YwNkKkKtWc=;
+        b=PNej8A2subGSVMWllP3l27bMrGnF1v0/K/JFYmhq4//GDzE0+uYA6/e9TXPrBp+EJ8KU4Q
+        bSAl4jf+X4LclqQSkpPAK8i8sHHXawMLUa79DtqgvtPW8pM2bk9Dv6lT0QQYfvaSWBMleW
+        U+fF5GjINJri1MPitveFyePvZpyELUA=
+Message-ID: <ee580939-8334-4d86-e01b-54c6fd0b2f42@postmarketos.org>
+Date:   Fri, 12 May 2023 13:14:29 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.1
-Subject: Re: [PATCH] ASoC: SOF: Simplify the calculation of variables
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] arm64: dts: qcom: Add BLSP DMAs for I2C
 Content-Language: en-US
-To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        pierre-louis.bossart@linux.intel.com
-Cc:     lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com,
-        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
-        daniel.baluta@nxp.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, sound-open-firmware@alsa-project.org,
-        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
-        Abaci Robot <abaci@linux.alibaba.com>
-References: <20230512064225.75358-1-jiapeng.chong@linux.alibaba.com>
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
-In-Reply-To: <20230512064225.75358-1-jiapeng.chong@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+To:     Luca Weiss <luca@z3ntu.xyz>, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230422-msm8953-blsp-dma-v1-1-0024801bb587@z3ntu.xyz>
+From:   Alexey Minnekhanov <alexeymin@postmarketos.org>
+In-Reply-To: <20230422-msm8953-blsp-dma-v1-1-0024801bb587@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12/05/2023 09:42, Jiapeng Chong wrote:
-> ./sound/soc/sof/pcm.c:372:27-29: WARNING !A || A && B is equivalent to !A || B.
-
-This is correct.
-
-Reviewed-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
-
-> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4938
-> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-> ---
->  sound/soc/sof/pcm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+On 22.04.2023 14:39, Luca Weiss wrote:
+> MSM8953 has two DMA controllers for the various I2C, SPI and UART
+> busses. Add the nodes and configure all the I2C nodes so that the driver
+> can use the DMA.
 > 
-> diff --git a/sound/soc/sof/pcm.c b/sound/soc/sof/pcm.c
-> index 567db32173a8..d14e7fd2c2ee 100644
-> --- a/sound/soc/sof/pcm.c
-> +++ b/sound/soc/sof/pcm.c
-> @@ -369,7 +369,7 @@ static int sof_pcm_trigger(struct snd_soc_component *component,
->  	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
->  	case SNDRV_PCM_TRIGGER_STOP:
->  		/* invoke platform trigger to stop DMA even if pcm_ops isn't set or if it failed */
-> -		if (!pcm_ops || (pcm_ops && !pcm_ops->platform_stop_during_hw_free))
-> +		if (!pcm_ops || !pcm_ops->platform_stop_during_hw_free)
->  			snd_sof_pcm_platform_trigger(sdev, substream, cmd);
->  		break;
->  	default:
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+>   arch/arm64/boot/dts/qcom/msm8953.dtsi | 48 +++++++++++++++++++++++++++++++++++
+>   1 file changed, 48 insertions(+)
+> 
+
+Hello,
+
+ > arm64: dts: qcom: Add BLSP DMAs for I2C
+
+to all qcom boards? Or only for msm8953? Commit title is unclear.
 
 -- 
-Péter
+Regards
+Alexey Minnekhanov
+
