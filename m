@@ -2,191 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6720700E4F
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 20:01:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3CDFD700E52
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 20:02:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238316AbjELSBe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 14:01:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50798 "EHLO
+        id S238029AbjELSCD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 14:02:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238189AbjELSAz (ORCPT
+        with ESMTP id S238296AbjELSBw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 14:00:55 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EA6E1B4;
-        Fri, 12 May 2023 11:00:54 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CDhka5007081;
-        Fri, 12 May 2023 18:00:46 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=0GCtZqMJbHB9WSz+xlE/2FHQ6DTJ+rDjKtLKoU03nC0=;
- b=AdqJEuB1imGuCW/q9Q4sL3OIym7xCSB8C1WAzHegNQSxKMX+UB9N7iINeDtRcpjPhKn5
- Mv4lun1/ILbcPySPR3yqldXI77yb3EAM2gpnYG/wMOF6VJfevPlzk+9dx3VJyiejXb+n
- QoO+ZFnWXOabDU08uob8WLFroQ4NLNhNRSZ0uINwB2h5bRdyMTv0Kb98qOy6Hv1an0Qt
- lobV18asFxi1uLoyO9aDqX6XD9fjUQThD0W8GkBc2gpJkJp/0GrhADc7smVh7PaCtWpp
- uJs1Z1d+CGhnmdxbqwvZufPyClInzqac2XElTKHqRGOnh3aRp0ItJp84A7DAb5DkxjNI TA== 
-Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qhes21nyw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 18:00:46 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34CI0jZj005990
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 18:00:45 GMT
-Received: from khsieh-linux1.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.42; Fri, 12 May 2023 11:00:44 -0700
-From:   Kuogee Hsieh <quic_khsieh@quicinc.com>
-To:     <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>
-CC:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <quic_abhinavk@quicinc.com>, <quic_jesszhan@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <marijn.suijten@somainline.org>,
-        <freedreno@lists.freedesktop.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v8 8/8] drm/msm/dpu: tear down DSC data path when DSC disabled
-Date:   Fri, 12 May 2023 11:00:23 -0700
-Message-ID: <1683914423-17612-9-git-send-email-quic_khsieh@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1683914423-17612-1-git-send-email-quic_khsieh@quicinc.com>
-References: <1683914423-17612-1-git-send-email-quic_khsieh@quicinc.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: mYH_mqU_RCiB2YgPgiP6_KqLgw4mY88a
-X-Proofpoint-GUID: mYH_mqU_RCiB2YgPgiP6_KqLgw4mY88a
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-12_10,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 clxscore=1015
- impostorscore=0 lowpriorityscore=0 spamscore=0 bulkscore=0 adultscore=0
- mlxscore=0 suspectscore=0 mlxlogscore=975 phishscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305120150
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 12 May 2023 14:01:52 -0400
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625ED9023
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:01:12 -0700 (PDT)
+Received: by mail-pf1-x44a.google.com with SMTP id d2e1a72fcca58-643fdfb437aso36782217b3a.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:01:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683914472; x=1686506472;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z/RyvdhRSuvZsZhvfHUuTowaban3YDaGtW+c8hQBLj0=;
+        b=IJUktVCGqDdARLcamFDMEGSu8Z3sEjpHgueFS689K9Sln+F1ZGXbN/RSV+LQ3Dw8iH
+         1POCGYUyEgMXCbp1UoBZNPItAbqDglVKm5aWwVriowPVm3/AMSe0QeSQn2CfIgWFYpM+
+         rwDcXZo/18l663XXEP4qehDysj6U7SqreJc/HM5j4K6KgrZgxyOQtItkOmKecWap8eKL
+         k8bFwDCsTjB9oGGwIz4EDUpqhwcPoF9TUPFHWbmu7gbNxjoriwITGY3+xm/TogF/AYcM
+         0kr1jp+FwqqLYYG/ing9cEa7NxSFX9x9t0wBcM+quZH+7NQkWvDzvrTnimYk6JemPdEN
+         g/vA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683914472; x=1686506472;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z/RyvdhRSuvZsZhvfHUuTowaban3YDaGtW+c8hQBLj0=;
+        b=bpDqjn5px6xDE0ZDB2pg5RVyRwirqMBmsWdVc7Djafe8s/kcaOgGxVWBrZebRniRnC
+         0WNcB+Yqwo5wYXWC4gpYgfLQmuO7IzUUYNY5iFiLaJ7LSYoXGiqGIb0JARR9mwx9VRhY
+         pQjkZIiJQvBhoROggpztcphwNztZS1Jslz8Hvyi7/7OKlf4Uz7a0EOjfJUGcwyGOb61t
+         kmI5g28suwl/wJ78XFBi6QrfLxA+Z4OJztj9O5fky06l/Wq0QvfzVfa2E/ZMz8uakx37
+         /GxWCysX4ktpmlY7OGhfxCbE+ZYp7KfimB18NTQTyaExNjEmUzQOJ7RwDCIiFxo3YdWT
+         qIVw==
+X-Gm-Message-State: AC+VfDwG6K/u7GkVatvoDhgD0frCGDT4/OD0SGCpqzv5zXKBk5xlhJ7B
+        mpX79YBvDy7p2kmVBd4dZDxDiWk0rIE=
+X-Google-Smtp-Source: ACHHUZ6oEKN9QtM/X1xSAjt1bTyG5mjGAb2SF6yxjS3NMaTWMLy0GKhsobVe8roxJleXWQIy9F0G7Q5iU20=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:288d:b0:1ad:b459:a7e8 with SMTP id
+ ku13-20020a170903288d00b001adb459a7e8mr2366446plb.1.1683914471769; Fri, 12
+ May 2023 11:01:11 -0700 (PDT)
+Date:   Fri, 12 May 2023 11:01:10 -0700
+In-Reply-To: <20230512002124.3sap3kzxpegwj3n2@amd.com>
+Mime-Version: 1.0
+References: <ZD1oevE8iHsi66T2@google.com> <658018f9-581c-7786-795a-85227c712be0@redhat.com>
+ <ZD12htq6dWg0tg2e@google.com> <1ed06a62-05a1-ebe6-7ac4-5b35ba272d13@redhat.com>
+ <ZD2bBB00eKP6F8kz@google.com> <9efef45f-e9f4-18d1-0120-f0fc0961761c@redhat.com>
+ <ZD86E23gyzF6Q7AF@google.com> <5869f50f-0858-ab0c-9049-4345abcf5641@redhat.com>
+ <ZEM5Zq8oo+xnApW9@google.com> <20230512002124.3sap3kzxpegwj3n2@amd.com>
+Message-ID: <ZF5+5g5hI7xyyIAS@google.com>
+Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
+ KVM: mm: fd-based approach for supporting KVM)
+From:   Sean Christopherson <seanjc@google.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     David Hildenbrand <david@redhat.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
+        tabba@google.com, wei.w.wang@intel.com,
+        Mike Rapoport <rppt@kernel.org>,
+        Liam Merwick <liam.merwick@oracle.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Ackerley Tng <ackerleytng@google.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unset DSC_ACTIVE bit at dpu_hw_ctl_reset_intf_cfg_v1(),
-dpu_encoder_unprep_dsc() and dpu_encoder_dsc_pipe_clr() functions
-to tear down DSC data path if DSC data path was setup previous.
+On Thu, May 11, 2023, Michael Roth wrote:
+> On Fri, Apr 21, 2023 at 06:33:26PM -0700, Sean Christopherson wrote:
+> > 
+> > Code is available here if folks want to take a look before any kind of formal
+> > posting:
+> > 
+> > 	https://github.com/sean-jc/linux.git x86/kvm_gmem_solo
+> 
+> Hi Sean,
+> 
+> I've been working on getting the SNP patches ported to this but I'm having
+> some trouble working out a reasonable scheme for how to work the
+> RMPUPDATE hooks into the proposed design.
+> 
+> One of the main things is kvm_gmem_punch_hole(): this is can free pages
+> back to the host whenever userspace feels like it. Pages that are still
+> marked private in the RMP table will blow up the host if they aren't returned
+> to the normal state before handing them back to the kernel. So I'm trying to
+> add a hook, orchestrated by kvm_arch_gmem_invalidate(), to handle that,
+> e.g.:
+> 
+>   static long kvm_gmem_punch_hole(struct file *file, int mode, loff_t offset,
+>                                   loff_t len)
+>   {
+>           struct kvm_gmem *gmem = file->private_data;
+>           pgoff_t start = offset >> PAGE_SHIFT;
+>           pgoff_t end = (offset + len) >> PAGE_SHIFT;
+>           struct kvm *kvm = gmem->kvm;
+>   
+>           /*
+>            * Bindings must stable across invalidation to ensure the start+end
+>            * are balanced.
+>            */
+>           filemap_invalidate_lock(file->f_mapping);
+>           kvm_gmem_invalidate_begin(kvm, gmem, start, end);
+>   
+>           /* Handle arch-specific cleanups before releasing pages */
+>           kvm_arch_gmem_invalidate(kvm, gmem, start, end);
+>           truncate_inode_pages_range(file->f_mapping, offset, offset + len);
+>   
+>           kvm_gmem_invalidate_end(kvm, gmem, start, end);
+>           filemap_invalidate_unlock(file->f_mapping);
+>   
+>           return 0;
+>   }
+> 
+> But there's another hook, kvm_arch_gmem_set_mem_attributes(), needed to put
+> the page in its intended state in the RMP table prior to mapping it into the
+> guest's NPT.
 
-Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 43 +++++++++++++++++++++++++++++
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c  |  7 +++++
- 2 files changed, 50 insertions(+)
+IMO, this approach is wrong.  kvm->mem_attr_array is the source of truth for whether
+userspace wants _guest_ physical pages mapped private vs. shared, but the attributes
+array has zero insight into the _host_ physical pages.  I.e. SNP shouldn't hook
+kvm_mem_attrs_changed(), because operating on the RMP from that code is fundamentally
+wrong.
 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-index 5cae70e..ee999ce 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-@@ -1214,6 +1214,44 @@ static void dpu_encoder_virt_atomic_enable(struct drm_encoder *drm_enc,
- 	mutex_unlock(&dpu_enc->enc_lock);
- }
- 
-+static void dpu_encoder_dsc_pipe_clr(struct dpu_encoder_virt *dpu_enc,
-+				     struct dpu_hw_dsc *hw_dsc,
-+				     struct dpu_hw_pingpong *hw_pp)
-+{
-+	struct dpu_encoder_phys *cur_master = dpu_enc->cur_master;
-+	struct dpu_hw_ctl *ctl;
-+
-+	ctl = cur_master->hw_ctl;
-+
-+	if (hw_dsc->ops.dsc_disable)
-+		hw_dsc->ops.dsc_disable(hw_dsc);
-+
-+	if (hw_pp->ops.disable_dsc)
-+		hw_pp->ops.disable_dsc(hw_pp);
-+
-+	if (hw_dsc->ops.dsc_bind_pingpong_blk)
-+		hw_dsc->ops.dsc_bind_pingpong_blk(hw_dsc, PINGPONG_NONE);
-+
-+	if (ctl->ops.update_pending_flush_dsc)
-+		ctl->ops.update_pending_flush_dsc(ctl, hw_dsc->idx);
-+}
-+
-+static void dpu_encoder_unprep_dsc(struct dpu_encoder_virt *dpu_enc)
-+{
-+	/* coding only for 2LM, 2enc, 1 dsc config */
-+	struct dpu_hw_dsc *hw_dsc[MAX_CHANNELS_PER_ENC];
-+	struct dpu_hw_pingpong *hw_pp[MAX_CHANNELS_PER_ENC];
-+	int i;
-+
-+	for (i = 0; i < MAX_CHANNELS_PER_ENC; i++) {
-+		hw_pp[i] = dpu_enc->hw_pp[i];
-+		hw_dsc[i] = dpu_enc->hw_dsc[i];
-+
-+		if (hw_pp[i] && hw_dsc[i])
-+			dpu_encoder_dsc_pipe_clr(dpu_enc, hw_dsc[i], hw_pp[i]);
-+	}
-+}
-+
- static void dpu_encoder_virt_atomic_disable(struct drm_encoder *drm_enc,
- 					struct drm_atomic_state *state)
- {
-@@ -2090,6 +2128,9 @@ void dpu_encoder_helper_phys_cleanup(struct dpu_encoder_phys *phys_enc)
- 					phys_enc->hw_pp->merge_3d->idx);
- 	}
- 
-+	if (dpu_enc->dsc)
-+		dpu_encoder_unprep_dsc(dpu_enc);
-+
- 	intf_cfg.stream_sel = 0; /* Don't care value for video mode */
- 	intf_cfg.mode_3d = dpu_encoder_helper_get_3d_blend_mode(phys_enc);
- 
-@@ -2101,6 +2142,8 @@ void dpu_encoder_helper_phys_cleanup(struct dpu_encoder_phys *phys_enc)
- 	if (phys_enc->hw_pp->merge_3d)
- 		intf_cfg.merge_3d = phys_enc->hw_pp->merge_3d->idx;
- 
-+	intf_cfg.dsc = dpu_encoder_helper_get_dsc(phys_enc);
-+
- 	if (ctl->ops.reset_intf_cfg)
- 		ctl->ops.reset_intf_cfg(ctl, &intf_cfg);
- 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-index f3a50cc..aec3b08 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-@@ -577,6 +577,7 @@ static void dpu_hw_ctl_reset_intf_cfg_v1(struct dpu_hw_ctl *ctx,
- 	u32 intf_active = 0;
- 	u32 wb_active = 0;
- 	u32 merge3d_active = 0;
-+	u32 dsc_active;
- 
- 	/*
- 	 * This API resets each portion of the CTL path namely,
-@@ -606,6 +607,12 @@ static void dpu_hw_ctl_reset_intf_cfg_v1(struct dpu_hw_ctl *ctx,
- 		wb_active &= ~BIT(cfg->wb - WB_0);
- 		DPU_REG_WRITE(c, CTL_WB_ACTIVE, wb_active);
- 	}
-+
-+	if (cfg->dsc) {
-+		dsc_active = DPU_REG_READ(c, CTL_DSC_ACTIVE);
-+		dsc_active &= ~cfg->dsc;
-+		DPU_REG_WRITE(c, CTL_DSC_ACTIVE, dsc_active);
-+	}
- }
- 
- static void dpu_hw_ctl_set_fetch_pipe_active(struct dpu_hw_ctl *ctx,
--- 
-2.7.4
+A good analogy is moving a memslot (ignoring that AFAIK no VMM actually moves
+memslots, but it's a good analogy for KVM internals).  KVM needs to zap all mappings
+for the old memslot gfn, but KVM does not create mappings for the new memslot gfn.
+Same for changing attributes; unmap, but never map.
 
+As for the unmapping side of things, kvm_unmap_gfn_range() will unmap all relevant
+NPT entries, and the elevated mmu_invalidate_in_progress will prevent KVM from
+establishing a new NPT mapping.  And mmu_invalidate_in_progress will reach '0' only
+after both truncation _and_ kvm_vm_ioctl_set_mem_attributes() complete, i.e. KVM
+can create new mappings only when both kvm->mem_attr_array and any relevant
+guest_mem bindings have reached steady state.
+
+That leaves the question of when/where to do RMP updates.  Off the cuff, I think
+RMP updates (and I _think_ also TDX page conversions) should _always_ be done in
+the context of either (a) file truncation (make host owned due, a.k.a. TDX reclaim)
+or (b) allocating a new page/folio in guest_mem, a.k.a. kvm_gmem_get_folio().
+Under the hood, even though the gfn is the same, the backing pfn is different, i.e.
+installing a shared mapping should _never_ need to touch the RMP because pages
+common from the normal (non-guest_mem) pool must already be host owned.
+
+> Currently I'm calling that hook via kvm_vm_ioctl_set_mem_attributes(), just
+> after kvm->mem_attr_array is updated based on the ioctl. The reasoning there
+> is that KVM MMU can then rely on the existing mmu_invalidate_seq logic to
+> ensure both the state in the mem_attr_array and the RMP table are in sync and
+> up-to-date once MMU lock is acquired and MMU is ready to map it, or retry
+> #NPF otherwise.
+> 
+> But for kvm_gmem_punch_hole(), kvm_vm_ioctl_set_mem_attributes() can potentially
+> result in something like the following sequence if I implement things as above:
+> 
+>   CPU0: kvm_gmem_punch_hole():
+>           kvm_gmem_invalidate_begin()
+>           kvm_arch_gmem_invalidate()         // set pages to default/shared state in RMP table before free'ing
+>   CPU1: kvm_vm_ioctl_set_mem_attributes():
+>           kvm_arch_gmem_set_mem_attributes() // maliciously set pages to private in RMP table
+>   CPU0:   truncate_inode_pages_range()       // HOST BLOWS UP TOUCHING PRIVATE PAGES
+>           kvm_arch_gmem_invalidate_end()
+> 
+> One quick and lazy solution is to rely on the fact that
+> kvm_vm_ioctl_set_mem_attributes() holds the kvm->slots_lock throughout the
+> entire begin()/end() portion of the invalidation sequence, and to similarly
+> hold the kvm->slots_lock throughout the begin()/end() sequence in
+> kvm_gmem_punch_hole() to prevent any interleaving.
+> 
+> But I'd imagine overloading kvm->slots_lock is not the proper approach. But
+> would introducing a similar mutex to keep these operations grouped/atomic be
+> a reasonable approach to you, or should we be doing something else entirely
+> here?
+> 
+> Keep in mind that RMP updates can't be done while holding KVM->mmu_lock
+> spinlock, because we also need to unmap pages from the directmap, which can
+> lead to scheduling-while-atomic BUG()s[1], so that's another constraint we
+> need to work around.
+> 
+> Thanks!
+> 
+> -Mike
+> 
+> [1] https://lore.kernel.org/linux-coco/20221214194056.161492-7-michael.roth@amd.com/T/#m45a1af063aa5ac0b9314d6a7d46eecb1253bba7a
+> 
+> > 
+> > [1] https://lore.kernel.org/all/ff5c5b97-acdf-9745-ebe5-c6609dd6322e@google.com
+> > [2] https://lore.kernel.org/all/20230418-anfallen-irdisch-6993a61be10b@brauner
+> > [3] https://lore.kernel.org/linux-mm/20200522125214.31348-1-kirill.shutemov@linux.intel.com
