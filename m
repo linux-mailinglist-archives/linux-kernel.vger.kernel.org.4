@@ -2,125 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C19170075E
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:58:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CC7BC700765
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:58:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240997AbjELL6W convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 12 May 2023 07:58:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41924 "EHLO
+        id S241069AbjELL6z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 07:58:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240701AbjELL6T (ORCPT
+        with ESMTP id S240813AbjELL6x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 07:58:19 -0400
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78EFB1387B;
-        Fri, 12 May 2023 04:57:48 -0700 (PDT)
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-559e2051d05so141794487b3.3;
-        Fri, 12 May 2023 04:57:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683892667; x=1686484667;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yN/Va2a/0XZpcu/J5nl0GO9ah+0DnnvqSR5PD5GVAJs=;
-        b=OH8CiS14wtPcHGAm6uof5P7Pz3CNMXdYSPSmfdOhidI0sNwgo5TQWr0wmdj8I1OYWP
-         WyE0WZCfZ+YbUrJOFty5dqLRxPkzhklP8iP7S494aKvUk3EUKI72JT/6tRHXn4gBbkbb
-         IxOuL9ee39y+08Uc+XmG2fayYscKXpit2Tb2TMUSNH6kQe6/CvqrtiPolfuLD/1eCnxK
-         m7V5PxBCwQc+Re6mmVjUP9xDiRzX7rt0syxyxCp5WAJGFo8ih4uafEiAyGqVWj8pPEoW
-         eLTg+ft0IYMDovARsYjCes58X0uPO6aF9F3doUAwAT7yul/5zlrcSP36uv6d0D+yDOZ0
-         lqeg==
-X-Gm-Message-State: AC+VfDzyOAfA6+eLogXIeukETgH3b5FEBY5jRXN0j+LjOqnaf5ww6Jzj
-        xet0hD/Ier342EmfS55MVEA5uj04hm/Dzw==
-X-Google-Smtp-Source: ACHHUZ7QbS7jniiZcnzeHwLxORtjZcFRXQiJCVkEpekYWQrOFmm1n7iChBtLiVsUnyNZX//7JOU8XA==
-X-Received: by 2002:a81:a091:0:b0:55d:1c72:e1de with SMTP id x139-20020a81a091000000b0055d1c72e1demr24701409ywg.37.1683892667428;
-        Fri, 12 May 2023 04:57:47 -0700 (PDT)
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
-        by smtp.gmail.com with ESMTPSA id x186-20020a81a0c3000000b0054eff15530asm5635577ywg.90.2023.05.12.04.57.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 04:57:46 -0700 (PDT)
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-b9d8e8898eeso12442332276.1;
-        Fri, 12 May 2023 04:57:46 -0700 (PDT)
-X-Received: by 2002:a81:b409:0:b0:541:694a:4c69 with SMTP id
- h9-20020a81b409000000b00541694a4c69mr24961103ywi.52.1683892666294; Fri, 12
- May 2023 04:57:46 -0700 (PDT)
+        Fri, 12 May 2023 07:58:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E871435C;
+        Fri, 12 May 2023 04:58:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F8CB655D8;
+        Fri, 12 May 2023 11:58:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07AE7C433EF;
+        Fri, 12 May 2023 11:58:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683892712;
+        bh=kBhJdbyF6NKdOXxRSKL9gtjCpg8g2as7soVqRjtDJis=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=WIQ4MS7o0Hqbi+1MvcqYhXbhBRPuD8I/plsTbVMLgMyq/fwWG1/cxYKX8JqskFdH0
+         3d1pox/z3YlrpEX0Fn7gDOiw4fBdxxsEPo5CYjDGr6oz8D0TU6+hIGnJ99JQpbdt5r
+         hwG/bjBfaph2oFB82BAuNQ4mhtfWYQnHvSYnXgew1tQQavYHG8twGfMI5LdyHg0e5l
+         SG8PthdYX6PLxq/F6G2VLSjFWF37KrS0OzjQp8oD+cUXLcxSjNmSe8NvCCElWe8m5K
+         hi5JmDxMFALwra/9HPthOJ2ZJX2UfBVIGOz4PqEbS1FMmEvoa5glDKGMpb7sgCFLfk
+         qoHgzEC7dn6vQ==
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-4f13c577e36so11015285e87.1;
+        Fri, 12 May 2023 04:58:31 -0700 (PDT)
+X-Gm-Message-State: AC+VfDy5n8RP9FHZfDFfGGn/AAaNkksZaxUMgN5cXKZFwY6g2fM1KTFN
+        kTHJhhMxOpXO1PWqcT+hhj3G2a3tm5Kv02Cu2AY=
+X-Google-Smtp-Source: ACHHUZ4lN3kGWU0INu3Ag5oHbIJY8Yq+UgbBBSxtAi2XEj4awDEsVBTTDIqxI0QgVndMh10ixrl6vNC24Nn+1nyHsx8=
+X-Received: by 2002:ac2:5ecc:0:b0:4f0:2e3:740f with SMTP id
+ d12-20020ac25ecc000000b004f002e3740fmr4072413lfq.54.1683892710012; Fri, 12
+ May 2023 04:58:30 -0700 (PDT)
 MIME-Version: 1.0
-References: <000000000000da2a8505fb71d81b@google.com> <CAMuHMdVVsWdwaAUZ4DTiLFxgVEETx=YwOnrZ6qeOyBWE8=tKQw@mail.gmail.com>
- <CANp29Y44p1GCe+NC_KhGGGNB+N2v0MHB+onHZ2rzP52AfZahDQ@mail.gmail.com>
-In-Reply-To: <CANp29Y44p1GCe+NC_KhGGGNB+N2v0MHB+onHZ2rzP52AfZahDQ@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 12 May 2023 13:57:35 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUzcWjyx8xmjQwJh7r27RS-2p__X1cUFUWJVKmJM=AgeQ@mail.gmail.com>
-Message-ID: <CAMuHMdUzcWjyx8xmjQwJh7r27RS-2p__X1cUFUWJVKmJM=AgeQ@mail.gmail.com>
-Subject: Re: [syzbot] upstream boot error: BUG: unable to handle kernel NULL
- pointer dereference in gic_eoi_irq
-To:     Aleksandr Nogikh <nogikh@google.com>
-Cc:     syzbot <syzbot+afc1d968649e7e851562@syzkaller.appspotmail.com>,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        magnus.damm@gmail.com, maz@kernel.org,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de,
-        syzkaller@googlegroups.com
+References: <20230504145023.835096-1-ross.philipson@oracle.com>
+ <20230504145023.835096-7-ross.philipson@oracle.com> <20230510012144.GA1851@quark.localdomain>
+ <20230512110455.GD14461@srcf.ucam.org> <CAMj1kXE8m5jCH3vW54ys=dE2-Vf_gnnueR6_g4Rq-LSJ5BqRjA@mail.gmail.com>
+ <20230512112847.GF14461@srcf.ucam.org>
+In-Reply-To: <20230512112847.GF14461@srcf.ucam.org>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Fri, 12 May 2023 13:58:18 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXFUDUbH4avVs37uLkS=BfSFB1F60e5Ei5_m2aWxOYOGPw@mail.gmail.com>
+Message-ID: <CAMj1kXFUDUbH4avVs37uLkS=BfSFB1F60e5Ei5_m2aWxOYOGPw@mail.gmail.com>
+Subject: Re: [PATCH v6 06/14] x86: Add early SHA support for Secure Launch
+ early measurements
+To:     Matthew Garrett <mjg59@srcf.ucam.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Ross Philipson <ross.philipson@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
+        dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, hpa@zytor.com, James.Bottomley@hansenpartnership.com,
+        luto@amacapital.net, nivedita@alum.mit.edu,
+        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aleksandr,
-
-On Fri, May 12, 2023 at 1:30 PM Aleksandr Nogikh <nogikh@google.com> wrote:
-> On Fri, May 12, 2023 at 9:59 AM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
-> > On Thu, May 11, 2023 at 11:41 PM syzbot
-> > <syzbot+afc1d968649e7e851562@syzkaller.appspotmail.com> wrote:
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    ac9a78681b92 Linux 6.4-rc1
-> > > git tree:       upstream
-> > > console output: https://syzkaller.appspot.com/x/log.txt?x=102a3f6a280000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=cc86fee67199911d
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=afc1d968649e7e851562
-> > > compiler:       arm-linux-gnueabi-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> > > userspace arch: arm
-> > >
-> > > Downloadable assets:
-> > > disk image (non-bootable): https://storage.googleapis.com/syzbot-assets/c35b5b2731d2/non_bootable_disk-ac9a7868.raw.xz
-> > > vmlinux: https://storage.googleapis.com/syzbot-assets/c04bec59d77d/vmlinux-ac9a7868.xz
-> > > kernel image: https://storage.googleapis.com/syzbot-assets/070113b307f3/zImage-ac9a7868.xz
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> > > Reported-by: syzbot+afc1d968649e7e851562@syzkaller.appspotmail.com
-> > >
-> > > 8<--- cut here ---
-> > > Unable to handle kernel NULL pointer dereference at virtual address 000005f4 when read
-> > > [000005f4] *pgd=80000080004003, *pmd=00000000
-> > > Internal error: Oops: 207 [#1] PREEMPT SMP ARM
-> > > Modules linked in:
-> > > CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.4.0-rc1-syzkaller #0
-> > > Hardware name: ARM-Versatile Express
-> > > PC is at gic_eoi_irq+0x64/0x70 drivers/irqchip/irq-gic.c:228
-> >
-> > Why is this sent to the renesas-soc maintainers?
+On Fri, 12 May 2023 at 13:28, Matthew Garrett <mjg59@srcf.ucam.org> wrote:
 >
-> The report was attributed to `drivers/irqchip/irq-gic.c` and
-> `./scripts/get_maintainer.pl -f drivers/irqchip/irq-gic.c` gives
-> linux-renesas-soc@vger.kernel.org (open list:ARM/RISC-V/RENESAS ARCHITECTURE)
-> as one of the output results.
+> On Fri, May 12, 2023 at 01:18:45PM +0200, Ard Biesheuvel wrote:
+> > On Fri, 12 May 2023 at 13:04, Matthew Garrett <mjg59@srcf.ucam.org> wrote:
+> > >
+> > > On Tue, May 09, 2023 at 06:21:44PM -0700, Eric Biggers wrote:
+> > >
+> > > > SHA-1 is insecure.  Why are you still using SHA-1?  Don't TPMs support SHA-2
+> > > > now?
+> > >
+> > > TXT is supported on some TPM 1.2 systems as well. TPM 2 systems are also
+> > > at the whim of the firmware in terms of whether the SHA-2 banks are
+> > > enabled. But even if the SHA-2 banks are enabled, if you suddenly stop
+> > > extending the SHA-1 banks, a malicious actor can later turn up and
+> > > extend whatever they want into them and present a SHA-1-only
+> > > attestation. Ideally whatever is handling that attestation should know
+> > > whether or not to expect an attestation with SHA-2, but the easiest way
+> > > to maintain security is to always extend all banks.
+> > >
+> >
+> > Wouldn't it make more sense to measure some terminating event into the
+> > SHA-1 banks instead?
+>
+> Unless we assert that SHA-1 events are unsupported, it seems a bit odd
+> to force a policy on people who have both banks enabled. People with
+> mixed fleets are potentially going to be dealing with SHA-1 measurements
+> for a while yet, and while there's obviously a security benefit in using
+> SHA-2 instead it'd be irritating to have to maintain two attestation
+> policies.
 
-Oh, right, there's a small quirk for renesas,emev in the GIC driver.
+I understand why that matters from an operational perspective.
 
-Gr{oetje,eeting}s,
+However, we are dealing with brand new code being proposed for Linux
+mainline, and so this is our only chance to push back on this, as
+otherwise, we will have to maintain it for a very long time.
 
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+IOW, D-RTM does not exist today in Linux, and it is up to us to define
+what it will look like. From that perspective, it is downright
+preposterous to even consider supporting SHA-1, given that SHA-1 by
+itself gives none of the guarantees that D-RTM aims to provide. If
+reducing your TCB is important enough to warrant switching to this
+implementation of D-RTM, surely you can upgrade your attestation
+policies as well.
