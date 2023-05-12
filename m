@@ -2,248 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C301700B37
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 17:18:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC7A700B71
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 17:24:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241776AbjELPSo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 11:18:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34556 "EHLO
+        id S241437AbjELPX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 11:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241765AbjELPSm (ORCPT
+        with ESMTP id S241787AbjELPXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 11:18:42 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2068.outbound.protection.outlook.com [40.107.223.68])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ECB0FC;
-        Fri, 12 May 2023 08:18:41 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=OGowVkK+U79IOHKlR7uOx+6jixV/W9rtut4QoaUBHT7kRkizfHCFCj3OX7oryAe7nc9hjDbnuVS8igkvhho7VrYf7PT41MTlvKRpqQDRMeEHW8HmuUCqV71rET3F0dQzYPvPvL5/FAMKSBdpHMTpJmGpwGXz78DMQ47LVHYcknXnN/jqkbZ2dtlfChjD/e/4HR79CVnvhDWjqHuncXrEG5CfH0hrR/li6ZCAK9udfgC1Lapt0N1fgkJQoFiNyqsmxnaTCq+nt2OSVtCKAItvq6y7wvGg7BXIRsRHQO+6P1AavHidPSLdqAQdUD38hsHl+Bo0+9jYnSZzoszaRpSB7Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=FjS8hJirtxE8DujZ9biIWSKVU6I+7HSSRAiwm61m8Ms=;
- b=DHIIhm2XuUSgs1/VfBL5J01yaZoiIh1oA0rA8vDiZO+Cvn564KF/tKsBsJ5Kx/Y4PQXm8JsLvpaPtZ1Fq87e+QspjVb+zBMog5epTEh8IFH6soyAcvs3P7LO4cD4xfQR9aeEsRf7mozY5MSjLH8HWNvz3PqsD6QQ63THA6lwZjnITCpLDx4S02HRwnycAXWVC9688pBbnH6W1PuDsJ0fs9H+UNLOnyzjwkxr8FXzAfd5rNIh937tlUYf6sDJe92ausoPo1ToL/qAxjt6TdKAHT2pI8ROCmIYbrhbKMWXhWhM1jX0t8S6yvtiZgiao6kzB1H5188AguBYZForeGtdYA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=lists.linux-foundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=FjS8hJirtxE8DujZ9biIWSKVU6I+7HSSRAiwm61m8Ms=;
- b=rRbOefNZNs06QcJEwhvK7nJztcZVSMJdvG9UCqUHpv1w85vBrrr+1ALSCb3ChoR/LL2FMSq9mpSqP7XPaBoIMpemj9Zci9WZ2UAFdoBnuo4zakbBGfy6+hHSvRBdIH6FeF2tgAM+kaF0uWfh4sBLq6yUVBgaQQH+/UFHNQV15nYgpC599wcU/aklw+a+lsDBfnglkfBqO+wYMbHpLPZebxicLJ1YosrA3YU/KgE6IvJBbcWHWpzjHp2IS0SSFy31CV0GqDMY0v70NZ8FbkYsOWdAwgRUPqLJrpFZuQmpxtW9MAuuwOXbFzkbg3dAOlde+swSveDcxhKeXhtmfGWyDQ==
-Received: from BL0PR03CA0026.namprd03.prod.outlook.com (2603:10b6:208:2d::39)
- by CO6PR12MB5491.namprd12.prod.outlook.com (2603:10b6:303:13b::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.24; Fri, 12 May
- 2023 15:18:39 +0000
-Received: from BL02EPF000100D0.namprd05.prod.outlook.com
- (2603:10b6:208:2d:cafe::5c) by BL0PR03CA0026.outlook.office365.com
- (2603:10b6:208:2d::39) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.24 via Frontend
- Transport; Fri, 12 May 2023 15:18:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- BL02EPF000100D0.mail.protection.outlook.com (10.167.241.204) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6411.11 via Frontend Transport; Fri, 12 May 2023 15:18:37 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 12 May 2023
- 08:18:19 -0700
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 12 May
- 2023 08:18:18 -0700
-Received: from vdi.nvidia.com (10.127.8.10) by mail.nvidia.com (10.129.68.9)
- with Microsoft SMTP Server id 15.2.986.37 via Frontend Transport; Fri, 12 May
- 2023 08:18:15 -0700
-From:   Feng Liu <feliu@nvidia.com>
-To:     <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>
-CC:     Jason Wang <jasowang@redhat.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Xuan Zhuo <xuanzhuo@linux.alibaba.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Bodong Wang <bodong@nvidia.com>, Feng Liu <feliu@nvidia.com>,
-        Jiri Pirko <jiri@nvidia.com>, William Tu <witu@nvidia.com>
-Subject: [PATCH net v6] virtio_net: Fix error unwinding of XDP initialization
-Date:   Fri, 12 May 2023 11:18:12 -0400
-Message-ID: <20230512151812.1806-1-feliu@nvidia.com>
-X-Mailer: git-send-email 2.37.1 (Apple Git-137.1)
+        Fri, 12 May 2023 11:23:49 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E5A5B83
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 08:23:27 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-94a342f7c4cso1812436766b.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 08:23:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683905004; x=1686497004;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=FfQ9FxtPdpC851oVhzEAGMTkMIl0aMvmC/2RqbAkd2s=;
+        b=nyMdsmlw1ScV6BDNUHPLdOeR/G1neobRp00csc6jItIUmYyHpHzaaX2gjuNOvj2jON
+         6N9b2oykZspNcDSnv0v2eM6lYcdaD7FNLqnFk11MUw9uEyGOaimUPCuxeTvcxg0V2vCh
+         DCRn+aBQj7t+XHTZpb2E4b4p2sFomNWVEYrXE3IfTycXl4wTEoOTNACP0EmwQZDSCUD6
+         mqYB7v8Keh2Eo1sJlYuYIAQu6MMx5m19l2TExvBFBte+7wNJb+As9vZg82gZQuIQbyIz
+         2WRyTXIarLVRJYNqovEYHdcw9xTHSeHeMY6W6jp9/nvIpv4WtbcFl6lzS6QdUhoyEvYY
+         5UdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683905004; x=1686497004;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FfQ9FxtPdpC851oVhzEAGMTkMIl0aMvmC/2RqbAkd2s=;
+        b=VhCVeVFXCMHlo0VrXmGcAikJEQ8vLmhpqUoiaaHVPmsFlcveik8hhKdjGkGGg0KTOj
+         5DrKkQTXILv01KRp96ebW+FP7QHJhgQowOocBL8Wud0P3YO3/72B9ireyJfa4cBMv5bP
+         SERDSDbVKaKlpJrbLVMI7RuveGGQao7N0EOUvWqzggAohbBTjfw9jpB+JqmeLnPtkZND
+         IMAHHFPe3lHN7sYy7GfqVqf81FHXgUTbkcrTXeo0ZiXi7zgDrUZBSgcxXTx+4ULC/R9n
+         5wrWH5pFfk+35RxdMsN4QpfxYsxskEX0J+tNE3elQ1lvV4v4F+UwmADfX+TjvLVJlJf/
+         T8XQ==
+X-Gm-Message-State: AC+VfDy129M49ePFQ2V5O2mzTNXarulfJUAddwhNyTTOYtz02l9xOLfu
+        pT7NdZhhdzofUps1Y99PxgoQdg==
+X-Google-Smtp-Source: ACHHUZ6nZMMkDDiDxKJfcjw7N3HVq2iQ7vtBFGa+8tadn1RArRXANKKvEhVj4w7QzX4+UHuzGd+Gnw==
+X-Received: by 2002:a17:907:80e:b0:94e:9a73:1637 with SMTP id wv14-20020a170907080e00b0094e9a731637mr20678495ejb.75.1683905004574;
+        Fri, 12 May 2023 08:23:24 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:7ede:fc7b:2328:3883? ([2a02:810d:15c0:828:7ede:fc7b:2328:3883])
+        by smtp.gmail.com with ESMTPSA id ml17-20020a170906cc1100b009661484e84esm5554723ejb.191.2023.05.12.08.23.23
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 May 2023 08:23:24 -0700 (PDT)
+Message-ID: <25c92476-7bca-90c4-9130-cb765495a783@linaro.org>
+Date:   Fri, 12 May 2023 17:23:22 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF000100D0:EE_|CO6PR12MB5491:EE_
-X-MS-Office365-Filtering-Correlation-Id: bcac59ac-fc41-49b7-baa2-08db52fc2927
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: s6Z0yxdX19ClBccAWFgtQAFobpvrTF6kmn0SWkxMIN2OLfxtl8xprAhtMuPBBl0Cx3sr1cRNO2TU5eT/uWFxPFFCUkWuhq5lrGjjrpouFA+v9ihRTeabAwp5iC4D5kr28Iy3Uv76z+1Od3K9zQzFJR1JAYt+QkRxOZz5qvoK2DC7rgA1MWGNWcOjXHXs64j33OaEQxO4JuDUyJRCSNH96zvUgBil9I4q9jdezwohqEGEM9GZcrGLbBX0ts/WWvJEo2ofoL75wECdw+JbzDXETOIknOHC/q4uaicfYoLfxSa/9a29bEYSPO0Q/t4xF9xYno2i4VMVGMz6S9GNzpYcBeK++9l3f1bUsjx1c/Jx1Rv3L87rBUdY9q9n0GJVYWhWkMbdh6Z6glq1ZQDruuWMFYYhPeOfEuOJcw4E+bnxqZJmgFhp7OWTyuxgTVTb2Er7eDAuNVIcX9KbEi9L7+CAPxqcv9PZE90+fgYLCNmEYBlAcnWANt/vzXZAxlv2BCrptyHMFB380eq/10sa8dX4R6IiBXkCJIh2t/Mro0YmtRQMzvGaxiKYvbje4tzVhJf8Ob4uP3sqbgW2DpZGv315HpI/m2/YhcSCBlpkJUsv12lS23fYvyUxJghgAo5bx2aVE9m+FIEMhd+Bz4Sms2R4dYAmTuVAA3OENEee3bUrUNvZzrts6YtMR51Keo7MnhJdjnuxMKcP4vD3Cw8dzJR9SL2hqOgs0Z9dRsT+StdwV3kZu2bjybQKnZyEpsOq5FXq
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(136003)(376002)(396003)(451199021)(36840700001)(46966006)(40470700004)(40460700003)(83380400001)(2616005)(336012)(426003)(186003)(2906002)(47076005)(36756003)(86362001)(82310400005)(7636003)(82740400003)(356005)(36860700001)(40480700001)(316002)(70206006)(70586007)(4326008)(54906003)(7696005)(6666004)(41300700001)(5660300002)(8676002)(8936002)(26005)(1076003)(110136005)(107886003)(478600001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 15:18:37.6887
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: bcac59ac-fc41-49b7-baa2-08db52fc2927
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000100D0.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR12MB5491
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 05/10] dt-bindings: mfd: cirrus,cs42l43: Add initial DT
+ binding
+Content-Language: en-US
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
+        lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        tglx@linutronix.de, maz@kernel.org, linus.walleij@linaro.org,
+        vkoul@kernel.org
+Cc:     lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com,
+        sanyog.r.kale@intel.com, pierre-louis.bossart@linux.intel.com,
+        alsa-devel@alsa-project.org, patches@opensource.cirrus.com,
+        devicetree@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
+ <20230512122838.243002-6-ckeepax@opensource.cirrus.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230512122838.243002-6-ckeepax@opensource.cirrus.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When initializing XDP in virtnet_open(), some rq xdp initialization
-may hit an error causing net device open failed. However, previous
-rqs have already initialized XDP and enabled NAPI, which is not the
-expected behavior. Need to roll back the previous rq initialization
-to avoid leaks in error unwinding of init code.
+On 12/05/2023 14:28, Charles Keepax wrote:
+> The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
+> (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
+> for portable applications. It provides a high dynamic range, stereo
+> DAC for headphone output, two integrated Class D amplifiers for
+> loudspeakers, and two ADCs for wired headset microphone input or
+> stereo line input. PDM inputs are provided for digital microphones.
+> 
+> Add a YAML DT binding document for this device.
+> 
+> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> ---
+>  .../bindings/mfd/cirrus,cs42l43.yaml          | 212 ++++++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  2 files changed, 213 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/cirrus,cs42l43.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/mfd/cirrus,cs42l43.yaml b/Documentation/devicetree/bindings/mfd/cirrus,cs42l43.yaml
+> new file mode 100644
+> index 0000000000000..e1fd70e0a3467
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mfd/cirrus,cs42l43.yaml
+> @@ -0,0 +1,212 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mfd/cirrus,cs42l43.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cirrus Logic CS42L43 Audio CODEC
 
-Also extract helper functions of disable and enable queue pairs.
-Use newly introduced disable helper function in error unwinding and
-virtnet_close. Use enable helper function in virtnet_open.
+That's audio codec, so it should be in sound, not MFD.
 
-Fixes: 754b8a21a96d ("virtio_net: setup xdp_rxq_info")
-Signed-off-by: Feng Liu <feliu@nvidia.com>
-Reviewed-by: Jiri Pirko <jiri@nvidia.com>
-Reviewed-by: William Tu <witu@nvidia.com>
----
-v5 -> v6
-feedbacks from Xuan Zhuo
-- add disable_delayed_refill and cancel_delayed_work_sync
+> +
+> +maintainers:
+> +  - patches@opensource.cirrus.com
+> +
+> +description: |
+> +  The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
+> +  (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
+> +  for portable applications. It provides a high dynamic range, stereo
+> +  DAC for headphone output, two integrated Class D amplifiers for
+> +  loudspeakers, and two ADCs for wired headset microphone input or
+> +  stereo line input. PDM inputs are provided for digital microphones.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - VDD_P-supply
+> +  - VDD_A-supply
+> +  - VDD_D-supply
+> +  - VDD_IO-supply
+> +  - VDD_CP-supply
 
-v4 -> v5
-feedbacks from Michael S. Tsirkin
-- rename helper as virtnet_disable_queue_pair
-- rename helper as virtnet_enable_queue_pair
+lowercase, no underscores in all property names.
 
-v3 -> v4
-feedbacks from Jiri Pirko
-- Add symmetric helper function virtnet_enable_qp to enable queues.
-- Error handle:  cleanup current queue pair in virtnet_enable_qp,
-  and complete the reset queue pairs cleanup in virtnet_open.
-- Fix coding style.
-feedbacks from Parav Pandit
-- Remove redundant debug message and white space.
+> +
+> +additionalProperties: false
 
-v2 -> v3
-feedbacks from Michael S. Tsirkin
-- Remove redundant comment.
+This order is quite unexpected... please do not invent your own layout.
+Use example-schema as your starting point. I suspect there will be many
+things to fix, so limited review follows (not complete).
 
-v1 -> v2
-feedbacks from Michael S. Tsirkin
-- squash two patches together.
 
----
- drivers/net/virtio_net.c | 61 +++++++++++++++++++++++++++++-----------
- 1 file changed, 44 insertions(+), 17 deletions(-)
+Missing ref to dai-common
 
-diff --git a/drivers/net/virtio_net.c b/drivers/net/virtio_net.c
-index a12ae26db0e2..56ca1d270304 100644
---- a/drivers/net/virtio_net.c
-+++ b/drivers/net/virtio_net.c
-@@ -1868,6 +1868,38 @@ static int virtnet_poll(struct napi_struct *napi, int budget)
- 	return received;
- }
- 
-+static void virtnet_disable_queue_pair(struct virtnet_info *vi, int qp_index)
-+{
-+	virtnet_napi_tx_disable(&vi->sq[qp_index].napi);
-+	napi_disable(&vi->rq[qp_index].napi);
-+	xdp_rxq_info_unreg(&vi->rq[qp_index].xdp_rxq);
-+}
-+
-+static int virtnet_enable_queue_pair(struct virtnet_info *vi, int qp_index)
-+{
-+	struct net_device *dev = vi->dev;
-+	int err;
-+
-+	err = xdp_rxq_info_reg(&vi->rq[qp_index].xdp_rxq, dev, qp_index,
-+			       vi->rq[qp_index].napi.napi_id);
-+	if (err < 0)
-+		return err;
-+
-+	err = xdp_rxq_info_reg_mem_model(&vi->rq[qp_index].xdp_rxq,
-+					 MEM_TYPE_PAGE_SHARED, NULL);
-+	if (err < 0)
-+		goto err_xdp_reg_mem_model;
-+
-+	virtnet_napi_enable(vi->rq[qp_index].vq, &vi->rq[qp_index].napi);
-+	virtnet_napi_tx_enable(vi, vi->sq[qp_index].vq, &vi->sq[qp_index].napi);
-+
-+	return 0;
-+
-+err_xdp_reg_mem_model:
-+	xdp_rxq_info_unreg(&vi->rq[qp_index].xdp_rxq);
-+	return err;
-+}
-+
- static int virtnet_open(struct net_device *dev)
- {
- 	struct virtnet_info *vi = netdev_priv(dev);
-@@ -1881,22 +1913,20 @@ static int virtnet_open(struct net_device *dev)
- 			if (!try_fill_recv(vi, &vi->rq[i], GFP_KERNEL))
- 				schedule_delayed_work(&vi->refill, 0);
- 
--		err = xdp_rxq_info_reg(&vi->rq[i].xdp_rxq, dev, i, vi->rq[i].napi.napi_id);
-+		err = virtnet_enable_queue_pair(vi, i);
- 		if (err < 0)
--			return err;
--
--		err = xdp_rxq_info_reg_mem_model(&vi->rq[i].xdp_rxq,
--						 MEM_TYPE_PAGE_SHARED, NULL);
--		if (err < 0) {
--			xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
--			return err;
--		}
--
--		virtnet_napi_enable(vi->rq[i].vq, &vi->rq[i].napi);
--		virtnet_napi_tx_enable(vi, vi->sq[i].vq, &vi->sq[i].napi);
-+			goto err_enable_qp;
- 	}
- 
- 	return 0;
-+
-+err_enable_qp:
-+	disable_delayed_refill(vi);
-+	cancel_delayed_work_sync(&vi->refill);
-+
-+	for (i--; i >= 0; i--)
-+		virtnet_disable_queue_pair(vi, i);
-+	return err;
- }
- 
- static int virtnet_poll_tx(struct napi_struct *napi, int budget)
-@@ -2305,11 +2335,8 @@ static int virtnet_close(struct net_device *dev)
- 	/* Make sure refill_work doesn't re-enable napi! */
- 	cancel_delayed_work_sync(&vi->refill);
- 
--	for (i = 0; i < vi->max_queue_pairs; i++) {
--		virtnet_napi_tx_disable(&vi->sq[i].napi);
--		napi_disable(&vi->rq[i].napi);
--		xdp_rxq_info_unreg(&vi->rq[i].xdp_rxq);
--	}
-+	for (i = 0; i < vi->max_queue_pairs; i++)
-+		virtnet_disable_queue_pair(vi, i);
- 
- 	return 0;
- }
--- 
-2.37.1 (Apple Git-137.1)
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - cirrus,cs42l43
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  VDD_P-supply:
+> +    description:
+> +      Power supply for the high voltage interface.
+> +
+> +  VDD_A-supply:
+> +    description:
+> +      Power supply for internal analog circuits.
+> +
+> +  VDD_D-supply:
+> +    description:
+> +      Power supply for internal digital circuits.
+> +
+> +  VDD_IO-supply:
+> +    description:
+> +      Power supply for external interface and internal digital logic.
+> +
+> +  VDD_CP-supply:
+> +    description:
+> +      Power supply for the amplifier 3 and 4 charge pump.
+> +
+> +  VDD_AMP-supply:
+> +    description:
+> +      Power supply for amplifier 1 and 2.
+> +
+> +  reset-gpios:
+> +    maxItems: 1
+> +
+> +  gpio-controller: true
+> +
+> +  '#gpio-cells':
+> +    const: 2
+> +
+> +  gpio-ranges:
+> +    items:
+> +      - description: A phandle to the CODEC pinctrl node
+> +        minimum: 0
+> +      - const: 0
+> +      - const: 0
+> +      - const: 3
+> +
+> +  interrupt-controller: true
+> +
+> +  '#interrupt-cells':
+> +    const: 2
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  '#sound-dai-cells':
+> +    const: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: Synchronous audio clock provided on mclk_in.
+> +
+> +  clock-names:
+> +    const: mclk
+> +
+> +  pinctrl:
+> +    type: object
+
+additionalProperties: false
+
+> +
+> +    allOf:
+> +      - $ref: "../pinctrl/pinctrl.yaml#"
+
+No quotes, absolute path, so /schemas/pinctrl/....
+
+> +
+> +    properties:
+> +      pin-settings:
+
+What's this node about? pinctrl/pinctrl/pins? One level too much.
+
+> +        type: object
+> +
+> +        additionalProperties: false
+> +
+> +        patternProperties:
+> +          '-pins$':
+> +            type: object
+> +
+> +            allOf:
+> +              - $ref: "../pinctrl/pincfg-node.yaml#"
+> +              - $ref: "../pinctrl/pinmux-node.yaml#"
+
+Same comments.
+
+> +
+> +            oneOf:
+> +              - required: [ groups ]
+> +              - required: [ pins ]
+> +
+> +            unevaluatedProperties: false
+> +
+> +            properties:
+> +              groups:
+> +                enum: [ gpio1, gpio2, gpio3, asp, pdmout2, pdmout1, i2c, spi ]
+> +
+> +              pins:
+> +                enum: [ gpio1, gpio2, gpio3,
+> +                        asp_dout, asp_fsync, asp_bclk,
+> +                        pdmout2_clk, pdmout2_data, pdmout1_clk, pdmout1_data,
+> +                        i2c_sda, i2c_scl,
+> +                        spi_miso, spi_sck, spi_ssb ]
+> +
+> +              function:
+> +                enum: [ gpio, spdif, irq, mic-shutter, spk-shutter ]
+> +
+> +              drive-strength:
+> +                description: Set drive strength in mA
+> +                enum: [ 1, 2, 4, 8, 9, 10, 12, 16 ]
+> +
+> +              input-debounce:
+> +                description: Set input debounce in uS
+> +                enum: [ 0, 85 ]
+> +
+> +  spi:
+> +    type: object
+> +
+> +    allOf:
+> +      - $ref: "../spi/spi-controller.yaml#"
+
+Same comments.
+> +
+> +    unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    i2c@e0004000 {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +        reg = <0xe0004000 0x1000>;
+
+Drop, just i2c
+
+> +
+> +        cs42l43: codec@1a {
+> +            compatible = "cirrus,cs42l43";
+> +            reg = <0x1a>;
+> +
+> +            VDD_P-supply = <&vdd5v0>;
+> +            VDD_D-supply = <&vdd1v8>;
+> +            VDD_A-supply = <&vdd1v8>;
+> +            VDD_IO-supply = <&vdd1v8>;
+> +            VDD_CP-supply = <&vdd1v8>;
+> +            VDD_AMP-supply = <&vdd5v0>;
+> +
+> +            reset-gpios = <&gpio 0>;
+
+Use proper defines for flags.
+
+
+Best regards,
+Krzysztof
 
