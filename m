@@ -2,130 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3458700D1B
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D6F36700D20
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:37:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235775AbjELQgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 12:36:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
+        id S236375AbjELQhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 12:37:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235448AbjELQgA (ORCPT
+        with ESMTP id S229812AbjELQhO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 12:36:00 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B22CAD1A
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 09:35:43 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-530a5ad74e0so271111a12.2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 09:35:43 -0700 (PDT)
+        Fri, 12 May 2023 12:37:14 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C3D78A7D;
+        Fri, 12 May 2023 09:37:13 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so91145864a12.1;
+        Fri, 12 May 2023 09:37:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683909343; x=1686501343;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fJVtsVgkJ9xPeAAGT/C87CXV1IF/qgXHBdnwAFzyB8I=;
-        b=1VNxtdKQHKbcU7lqUQORqeDfbAmE33Jz9JeTk4gPQ3CVa5kpsaJ5Mxv3KG0KO1ro3u
-         Ccl5UAMIEsghYui3h7vbtdCJ5jhhcGcKmHs4g0sXYlJiln3detNGXE0ei4phyk79HYAn
-         bWdrdat13IaSNS4qnYv0WtA5jwzRudQvvRdHVyJYKhgTu+mlmaJ+KAxOsxHklg8VKEGR
-         fNaBGNtbiOmR50W8rwor0ixLVLi9We7DMgFzhtwgk0/Iwu+kcvrhHkEC0EJSCnpyVZwy
-         7VNR5RO2oNREIgvrTU82m/vsv5hVhj55J7RzM8caBxLBHwD8h63w2LxKqYa7c7RueDgB
-         PMcg==
+        d=gmail.com; s=20221208; t=1683909431; x=1686501431;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QTY/iNPhSxqsOYVuVF5oPridnajCISLwpvB33cCStX4=;
+        b=mQXoys12JvgdLa62LLYJLDzvL+tsH1KN3YfXhC27Z2LXWBDAyL4sAy6E0hG/t0xXtB
+         AVAog6/+PYoXEq+ed3XdJqz2/jZ8xKjBID+qoLIW+tYcw+Nkkg9YeANhRjmh6ykQKPS7
+         VGwn/KRajhXuvvdVaZ+xxI0jS9XS9zHsVX0eLKfyGJrLjlsuUmGxgmKGJ0FOVrHh9Qg3
+         7qWI7PndkHVQAUgwyEduQJNWq5Uumwh06tB8TiJFMq6BwnRxIqhlKq4qs2Qi1WOwub6L
+         FYybZIBV92FE15seZ946u1LrhcO/nVQIi7+XOAQWc4VbaUpVvfzWHH/Bkcnj5ESK9jEY
+         IW8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683909343; x=1686501343;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fJVtsVgkJ9xPeAAGT/C87CXV1IF/qgXHBdnwAFzyB8I=;
-        b=h9Rj7XKFcb8+1s1glWXPyc4CYa6ELuy5LUfgmyqrWGDrs8TJq4NmLjX2q+URW5CqNA
-         21562jvRr5OAvTVxKKgYK11LH3jAedsaQPlq1bHGbYaijl/bIKyCqN0+LLDQFw+lbTUf
-         UYnGQH4PnKdkfAe2TLRPv4vIIT7cWSkafT/awxwGxbA6e7Lqd7IM5S48RMXzldEU9u6s
-         Q0gGnRnIjUBtb8l0dddW+LqjiZZcjRYZE3ArOJMz9WSoUnID8QIdpZ06qJx52sebesrC
-         gKlAE848xzuzaxm22hU/lIhvXq9Tzjq054ZrvMWIrvWT2NvFIhm70BPWCEZAydTPljta
-         vLCQ==
-X-Gm-Message-State: AC+VfDySedIh67Svw8MrBXOxCVh/+50vYFBewviyqDeyqjVVUKCSRmbW
-        Td7pem0ljYU2zozM/c372pocqQ0QxFE=
-X-Google-Smtp-Source: ACHHUZ4CBKc6IL7gAYfIPzaLSvqPSjfRZ59HmgdGmTz8eILgng02sq5+DVlkeY/SKMuvIZOE1knm71X5xdI=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:2d5:0:b0:52c:bf59:f4f2 with SMTP id
- 204-20020a6302d5000000b0052cbf59f4f2mr6269326pgc.1.1683909343049; Fri, 12 May
- 2023 09:35:43 -0700 (PDT)
-Date:   Fri, 12 May 2023 09:35:40 -0700
-In-Reply-To: <ecbcfb6ca243cf587eb6e61c6e852b4f474a36d7.camel@intel.com>
-Mime-Version: 1.0
-References: <20230511233351.635053-1-seanjc@google.com> <20230511233351.635053-6-seanjc@google.com>
- <ecbcfb6ca243cf587eb6e61c6e852b4f474a36d7.camel@intel.com>
-Message-ID: <ZF5qnQQYa6OAI0Hy@google.com>
-Subject: Re: [PATCH v2 5/8] KVM: x86: Use MTRR macros to define possible MTRR
- MSR ranges
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "guoke@uniontech.com" <guoke@uniontech.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "haiwenyao@uniontech.com" <haiwenyao@uniontech.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1683909431; x=1686501431;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QTY/iNPhSxqsOYVuVF5oPridnajCISLwpvB33cCStX4=;
+        b=P038aNADXZJfWX34r/tahcjvAdMvprrWC202dfJEKhsjcIixLfgCcnaxK6Qd+h+UlQ
+         lFW58Ey6r4J8tSXKxpIGlXnrLsQss8h2K6RFLZuvATnWCTC+pdItLEslYGilzolcLmkr
+         ZTsF8ZAy7z9oTGsHs088UNH75o4oXX0TFwGw1NPZeeR0/cEa2kdIc6yTpH6Was4m2YG2
+         qx0eYk2ERzeOgvSYVgthOF5hTvF9HhS4+hQMBP7JdobOSUbm8MM/1JegcpPZ0NgDkFDU
+         tErmYHl4NPlutGfqoG0yIZyoCzzblHZznSZogsAu45kQiF/JJmWB2sWoM0fZEPXXEfaI
+         QGsw==
+X-Gm-Message-State: AC+VfDxv0SJwv0exDizJzk1HeCgHHcY+oQlZ6lttRVJCGnM29u1ZZ5PH
+        bnorG7JUaKKm3h/TkylY7lW2DNChES+9zQ==
+X-Google-Smtp-Source: ACHHUZ6oEr96mBEftUGvQgedCvHzktnamXm3QY6YaaVsVAMNVUmfiCMwnVR7gm8jofdWN5YF0zwLWA==
+X-Received: by 2002:a17:907:3e2a:b0:966:4973:b35 with SMTP id hp42-20020a1709073e2a00b0096649730b35mr17510063ejc.22.1683909431229;
+        Fri, 12 May 2023 09:37:11 -0700 (PDT)
+Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
+        by smtp.gmail.com with ESMTPSA id gv28-20020a1709072bdc00b00965cfc209d5sm5619198ejc.8.2023.05.12.09.37.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 09:37:10 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Jonathan McDowell <noodles@earth.li>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org
+Subject: Re: [PATCH v2 5/5] ARM: dts: axp209: Add iio-hwmon node for internal
+ temperature
+Date:   Fri, 12 May 2023 18:37:09 +0200
+Message-ID: <2679706.mvXUDI8C0e@jernej-laptop>
+In-Reply-To: <ZF4VSCxvb6ihw9JL@earth.li>
+References: <cover.1681580558.git.noodles@earth.li> <3421275.QJadu78ljV@jernej-laptop>
+ <ZF4VSCxvb6ihw9JL@earth.li>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023, Kai Huang wrote:
-> On Thu, 2023-05-11 at 16:33 -0700, Sean Christopherson wrote:
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index e7f78fe79b32..8b356c9d8a81 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -3700,8 +3700,9 @@ int kvm_set_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
-> >  			return 1;
-> >  		}
-> >  		break;
-> > -	case 0x200 ... MSR_IA32_MC0_CTL2 - 1:
-> > -	case MSR_IA32_MCx_CTL2(KVM_MAX_MCE_BANKS) ... 0x2ff:
-> > +	case MSR_IA32_CR_PAT:
-> > +	case MTRRphysBase_MSR(0) ... MSR_MTRRfix4K_F8000:
-> > +	case MSR_MTRRdefType:
-> >  		return kvm_mtrr_set_msr(vcpu, msr, data);
-> >  	case MSR_IA32_APICBASE:
-> >  		return kvm_set_apic_base(vcpu, msr_info);
-> > @@ -4108,9 +4109,10 @@ int kvm_get_msr_common(struct kvm_vcpu *vcpu, struct msr_data *msr_info)
-> >  		msr_info->data = kvm_scale_tsc(rdtsc(), ratio) + offset;
-> >  		break;
-> >  	}
-> > +	case MSR_IA32_CR_PAT:
-> >  	case MSR_MTRRcap:
-> 
-> ... Should we put MSR_IA32_CR_PAT after MSR_MTRRcap so it can be symmetric to
-> kvm_set_msr_common()?
-> 
-> Looks there's no reason to put it before MSR_MTRRcap.
+Dne petek, 12. maj 2023 ob 12:30:32 CEST je Jonathan McDowell napisal(a):
+> On Thu, May 11, 2023 at 06:11:49PM +0200, Jernej =C5=A0krabec wrote:
+> > Dne sreda, 10. maj 2023 ob 14:02:28 CEST je Jonathan McDowell napisal(a=
+):
+> > > This adds a DT node to hook up the internal temperature ADC to the
+> > > iio-hwmon driver. The various voltage + current ADCs are consumed and
+> > > exposed by their respective drivers, but this is not and is always
+> > > available. Naming chosen to match the axp20x_ prefix the power sensors
+> > > use.
+> >=20
+> > Sorry for maybe obvious thing, but where are other ADC channels exposed?
+>=20
+> In the associated power drivers; e.g. axp20x_ac_power, axp20x_usb_power
+> + axp20x_battery. The internal temperature is the only one that
+> logically belongs to the chip as a whole rather than one of the
+> subfunctions.
+>=20
+> root@chip:~# sensors
+> axp20x_battery-isa-0000
+> Adapter: ISA adapter
+> in0:           0.00 V
+> curr1:         0.00 A
+>=20
+> pmic_temp-isa-0000
+> Adapter: ISA adapter
+> temp1:        +42.5=C2=B0C
+>=20
+> axp20x_ac-isa-0000
+> Adapter: ISA adapter
+> in0:           0.00 V
+> curr1:         0.00 A
+>=20
+> axp20x_usb-isa-0000
+> Adapter: ISA adapter
+> in0:           4.93 V  (min =3D  +4.00 V)
+> curr1:       330.00 mA (max =3D  +0.00 A)
 
-No, it's above MTRRcap for two reasons:
+Right.
 
- 1. When PAT is moved out of mtrr.c, PAT doesn't get bunded with the other MTRRs
-    and so would just need to be hoisted back up.  The end code looks like:
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-	case MSR_IA32_CR_PAT:
-		msr_info->data = vcpu->arch.pat;
-		break;
-	case MSR_MTRRcap:
-	case MTRRphysBase_MSR(0) ... MSR_MTRRfix4K_F8000:
-	case MSR_MTRRdefType:
-		return kvm_mtrr_get_msr(vcpu, msr_info->index, &msr_info->data);
- 
- 2. There is no MSR_MTRRcap case statement in kvm_set_msr_common() because it's
-    a read-only MSR, i.e. the two can't be symmetric :-)
+Best regards,
+Jernej
 
-> > -	case 0x200 ... MSR_IA32_MC0_CTL2 - 1:
-> > -	case MSR_IA32_MCx_CTL2(KVM_MAX_MCE_BANKS) ... 0x2ff:
-> > +	case MTRRphysBase_MSR(0) ... MSR_MTRRfix4K_F8000:
-> > +	case MSR_MTRRdefType:
-> >  		return kvm_mtrr_get_msr(vcpu, msr_info->index, &msr_info->data);
-> >  	case 0xcd: /* fsb frequency */
-> >  		msr_info->data = 3;
-> > -- 
-> > 2.40.1.606.ga4b1b128d6-goog
-> > 
-> 
+>=20
+> > > Signed-off-by: Jonathan McDowell <noodles@earth.li>
+> > > ---
+> > >=20
+> > >  arch/arm/boot/dts/axp209.dtsi | 7 +++++++
+> > >  1 file changed, 7 insertions(+)
+> > >=20
+> > > diff --git a/arch/arm/boot/dts/axp209.dtsi
+> > > b/arch/arm/boot/dts/axp209.dtsi
+> > > index ca240cd6f6c3..469d0f7d5185 100644
+> > > --- a/arch/arm/boot/dts/axp209.dtsi
+> > > +++ b/arch/arm/boot/dts/axp209.dtsi
+> > > @@ -48,6 +48,13 @@
+> > >=20
+> > >   * http://dl.linux-sunxi.org/AXP/AXP209%20Datasheet%20v1.0_cn.pdf
+> > >   */
+> > >=20
+> > > +/ {
+> > > +	pmic-temp {
+> > > +		compatible =3D "iio-hwmon";
+> > > +		io-channels =3D <&axp_adc 4>; /* Internal temperature */
+> > > +	};
+> > > +};
+> > > +
+> > >=20
+> > >  &axp209 {
+> > > =20
+> > >  	compatible =3D "x-powers,axp209";
+> > >  	interrupt-controller;
+>=20
+> J.
+
+
+
+
