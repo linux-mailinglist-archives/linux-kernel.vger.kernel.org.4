@@ -2,127 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 291496FFE0D
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 02:38:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E5036FFE11
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 02:40:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239565AbjELAii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 20:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
+        id S239597AbjELAkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 20:40:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjELAig (ORCPT
+        with ESMTP id S229654AbjELAkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 20:38:36 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6742459D0;
-        Thu, 11 May 2023 17:38:35 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QHVHX1Dn9z4x4k;
-        Fri, 12 May 2023 10:38:32 +1000 (AEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1683851914;
-        bh=My2tDJ8+k3Zx2VnVNOEnNcWKiimgFTnpNXvSNUsAFzk=;
-        h=Date:From:To:Cc:Subject:From;
-        b=b07awEOvIwNjEgI8mYHtiYB07uNIcIQlQv/Kk5QuiYgB0pbJC6u7cNi8jbWoDg6NK
-         NuUNN6fEDwmd01Kvbbv9TrowtHP5tbSUURHjIFDHzS1hrSVfRibl/Y4P1/uRY60y+c
-         FSb0yOZ4b4Zq+tCAyyqgFwyI6ZL3JkNmFlb+1d5DFp6xYMKlEC4+HIC8W9QlsTg89s
-         kR6edLTjnMMWU0TYwVe78Xmam8SP9x7ZYtQE8n1y8MnfCqtRDSDkwS4OkakQJA37fe
-         T7sN14bZfb3Io+7/9LWzOmSek+eFycrLGVuYNSXGl6tFkEE3gWQ92epgQA8XTuBUmz
-         uwv2fLDXPJRpg==
-Date:   Fri, 12 May 2023 10:38:29 +1000
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        Hamza Mahfooz <hamza.mahfooz@amd.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Huacai Chen <chenhuacai@loongson.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Dave Airlie <airlied@redhat.com>,
-        DRI <dri-devel@lists.freedesktop.org>
-Subject: linux-next: manual merge of the amdgpu tree with Linus' tree
-Message-ID: <20230512103829.4136c741@canb.auug.org.au>
+        Thu, 11 May 2023 20:40:10 -0400
+Received: from mail-ua1-x936.google.com (mail-ua1-x936.google.com [IPv6:2607:f8b0:4864:20::936])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA3BF59ED
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 17:40:08 -0700 (PDT)
+Received: by mail-ua1-x936.google.com with SMTP id a1e0cc1a2514c-780bb3b96e0so4401949241.0
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 17:40:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1683852008; x=1686444008;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CH4ppR/YImqXRCtEui/eyufHAaFxL08S2yugceeQpQw=;
+        b=aUcCBc3nacUromPCYUcTOUffpMJtnLw224rrn4TS6Bcw/VWfT1LggqJ1FJ16Eefj3R
+         Epw0k+jGFP1KZt2HLS8D204u5xiUqSVKTVq+scEZovCd4mdI0XKHTHnJVtEY6/oONSDH
+         2qiPekrL4qh6monUKwvmU6uhhq7jN9ycdfBRA=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683852008; x=1686444008;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CH4ppR/YImqXRCtEui/eyufHAaFxL08S2yugceeQpQw=;
+        b=c3nam1BzOVT1xmkKEO4dagAD20wqS/FKmM1eDzexarFSbyvJGnPn2nxjs+TnYQk4Bc
+         UwoVpMPyRnVigwMgA3RnKzwK7e04QUs6n1YORLOo+ZKnqiJWccqWsabrwK+stntcJEQ2
+         YoJU+iDDXARSjjTvUfTzpe6Chs6BI4izZHbegvYffEZCLrpu8bc7cknA98hqBC3hbg/A
+         T9cY9VivhFbdxcc6NEE7uOArICJcqITrfc1UEElRdEB8jo1DX9PyrySCMcDtoJhhOafd
+         q54Yd3/4nqpbgQx072dIYwi1Vw5xdAud/S3/BknajdEQ1AG7H05K3Fqs+XwWINLdg189
+         pU5g==
+X-Gm-Message-State: AC+VfDwzUesTDC2TEdsRJGdc4mP6Cp12QYvdMSV5eJr66vbqgHZfOoSK
+        /csZVRieyK+PKetZEqd8qPIQK7gw8wzGDdHigj2OOQ==
+X-Google-Smtp-Source: ACHHUZ7CJRLkBoOoXB2ebsy/eMzziU9dqHDjIi6dtiQ/z9qVxlIHckT/so67HALGLdwGNm/ISSZScafI9Zz3gusQTLs=
+X-Received: by 2002:a1f:5f46:0:b0:440:8b67:dba6 with SMTP id
+ t67-20020a1f5f46000000b004408b67dba6mr9468363vkb.4.1683852007778; Thu, 11 May
+ 2023 17:40:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/7aoyIV5=co.LNCbJp15662H";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230509021214.17105-1-gehao@kylinos.cn>
+In-Reply-To: <20230509021214.17105-1-gehao@kylinos.cn>
+From:   Chen-Yu Tsai <wenst@chromium.org>
+Date:   Fri, 12 May 2023 09:39:56 +0900
+Message-ID: <CAGXv+5Gvw0QsOa-7E==61WUiJ-q=9qAqN9E0L9hsmk+t12RJ9A@mail.gmail.com>
+Subject: Re: [PATCH] mediatek/clk-mt8173-apmixedsys: use devm_of_iomap to
+ avoid resource leak in clk_mt8173_apmixed_probe
+To:     Hao Ge <gehao@kylinos.cn>
+Cc:     mturquette@baylibre.com, sboyd@kernel.org, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, gehao618@163.com,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/7aoyIV5=co.LNCbJp15662H
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, May 9, 2023 at 11:12=E2=80=AFAM Hao Ge <gehao@kylinos.cn> wrote:
+>
+> Use devm_platform_ioremap_resource to take the place of of_iomap for
+> avoid that we don't called iounmap when return some error or remove
+> device.
+>
+> Fixes: 4c02c9af3cb9 ("clk: mediatek: mt8173: Break down clock drivers and=
+ allow module build")
+> Signed-off-by: Hao Ge <gehao@kylinos.cn>
+> ---
+>  drivers/clk/mediatek/clk-mt8173-apmixedsys.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/clk/mediatek/clk-mt8173-apmixedsys.c b/drivers/clk/m=
+ediatek/clk-mt8173-apmixedsys.c
+> index 8c2aa8b0f39e..8a2a88c63d15 100644
+> --- a/drivers/clk/mediatek/clk-mt8173-apmixedsys.c
+> +++ b/drivers/clk/mediatek/clk-mt8173-apmixedsys.c
+> @@ -146,8 +146,8 @@ static int clk_mt8173_apmixed_probe(struct platform_d=
+evice *pdev)
+>         struct clk_hw *hw;
+>         int r;
+>
+> -       base =3D of_iomap(node, 0);
+> -       if (!base)
+> +       base =3D devm_of_iomap(&pdev->dev, node, 0, NULL);
+> +       if (IS_ERR(base))
 
-Hi all,
+From lib/devres.c:
 
-Today's linux-next merge of the amdgpu tree got a conflict in:
+ * Please Note: This is not a one-to-one replacement for of_iomap() because=
+ the
+ * of_iomap() function does not track whether the region is already mapped.=
+  If
+ * two drivers try to map the same memory, the of_iomap() function will suc=
+ceed
+ * but the devm_of_iomap() function will return -EBUSY.
 
-  drivers/gpu/drm/amd/display/Kconfig
+The register range for apmixedsys given in mt8173.dtsi overlaps with
+the HDMI phy. I'm concerned that would cause issues.
 
-between commits:
+ChenYu
 
-  78f0929884d4 ("powerpc/64: Always build with 128-bit long double")
-  70cc1b5307e8 ("Merge tag 'powerpc-6.4-1' of git://git.kernel.org/pub/scm/=
-linux/kernel/git/powerpc/linux")
-
-from Linus' tree and commit:
-
-  d3295311e589 ("drm/amdgpu/display: Enable DC_FP for LoongArch")
-
-from the amdgpu tree.
-
-I fixed it up (see below) and can carry the fix as necessary. This
-is now fixed as far as linux-next is concerned, but any non trivial
-conflicts should be mentioned to your upstream maintainer when your tree
-is submitted for merging.  You may also want to consider cooperating
-with the maintainer of the conflicting tree to minimise any particularly
-complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
-diff --cc drivers/gpu/drm/amd/display/Kconfig
-index 2d8e55e29637,b015c7d19531..000000000000
---- a/drivers/gpu/drm/amd/display/Kconfig
-+++ b/drivers/gpu/drm/amd/display/Kconfig
-@@@ -8,7 -8,7 +8,7 @@@ config DRM_AMD_D
-  	depends on BROKEN || !CC_IS_CLANG || X86_64 || SPARC64 || ARM64
-  	select SND_HDA_COMPONENT if SND_HDA_CORE
-  	# !CC_IS_CLANG: https://github.com/ClangBuiltLinux/linux/issues/1752
-- 	select DRM_AMD_DC_FP if (X86 || (PPC64 && ALTIVEC) || (ARM64 && KERNEL_M=
-ODE_NEON && !CC_IS_CLANG))
- -	select DRM_AMD_DC_FP if (X86 || LOONGARCH || PPC64 || (ARM64 && KERNEL_M=
-ODE_NEON && !CC_IS_CLANG))
-++	select DRM_AMD_DC_FP if (X86 || LOONGARCH || (PPC64 && ALTIVEC) || (ARM6=
-4 && KERNEL_MODE_NEON && !CC_IS_CLANG))
-  	help
-  	  Choose this option if you want to use the new display engine
-  	  support for AMDGPU. This adds required support for Vega and
-
---Sig_/7aoyIV5=co.LNCbJp15662H
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRdioUACgkQAVBC80lX
-0Gw9UQf+Mh+RtHJTlV+ldpdC9D86sraukz0JrSnxLzz7iKO9K4IxD6078JYTYLFk
-2RoTTI8Yo5qXhdTZoMQmkoCrFXUVtU4CqqWDtrEtzTEPN1BEJ++SccWSGdXM1l9+
-LIqandQQ94qSRHhrBXlsa5Fa5Cp7SamKd/OLk4y/OqnlR/IhXipllvg4notliwpR
-vPfMfEiSpaaeJWNFCJyOc2ZpD0hOMVhbDP6sTf7KOxdB68wNCFMEMl+/wLLknx1d
-UGogaDbKUx+Zj3CUUEgNsRfOylHtM/etEclegQZ/KTydP/YA09SNkzgOle9iRTZ0
-ZHEsjutAaykA64e0NsrYOoMoucV0Mw==
-=VxGd
------END PGP SIGNATURE-----
-
---Sig_/7aoyIV5=co.LNCbJp15662H--
+>                 return PTR_ERR(base);
+>
+>         clk_data =3D mtk_alloc_clk_data(CLK_APMIXED_NR_CLK);
+> --
+> 2.25.1
+>
+>
+> No virus found
+>                 Checked by Hillstone Network AntiVirus
