@@ -2,93 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A985F70095E
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:42:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EA7B700960
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241163AbjELNmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 09:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54868 "EHLO
+        id S241217AbjELNn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 09:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240443AbjELNml (ORCPT
+        with ESMTP id S240443AbjELNn2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 09:42:41 -0400
-Received: from mailrelay1-1.pub.mailoutpod2-cph3.one.com (mailrelay1-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:400::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5567A132AB
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:42:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=rsa1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=kCbfSGhpx6BG3Y85FCM7+ZWFiOvGH/+ky4jCu6U8rM8=;
-        b=s0IRJNcYvQ6w806hURAZZNVic53VTPtnlhMCq3SmRiB82VvY97R/PK2RaV+HtWp6mxT/9ckMydHh8
-         RTZBZDTVPeQBiyqAJazFeXS227KwSw2jm96+6cvacB6EKm8E0snGNQn8BdpM6Jq7LgWBq/GzcuEaZ2
-         3Uo7yYEmUDEIo/EJvipJqyuECDUPT6/EZcLDI4syUeeNxTRbADIJJh1zHQjrlyPHPfImXcGMv37QiD
-         qJwzJjhxJ3he7CYTvpM1D/Dd/1yLQ/hpZZ0+jtRohgxAsnd/h0HcjkY48PFtJpJPJ4GyFXGwLZ3gWr
-         J3vyeT2nP0sInEHvg/tINR/n1yeUFqQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
-        d=ravnborg.org; s=ed1;
-        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-         from:date:from;
-        bh=kCbfSGhpx6BG3Y85FCM7+ZWFiOvGH/+ky4jCu6U8rM8=;
-        b=/MvE5WN6gXd8lqokL8jrjuWlDFgzBG8+aHqtOtq0tyY6hVZjoaRtTfRdSvjGX0hYhq7wd0OeWn7DV
-         YBbbtTHDw==
-X-HalOne-ID: db3af462-f0ca-11ed-9c06-99461c6a3fe8
-Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
-        by mailrelay1 (Halon) with ESMTPSA
-        id db3af462-f0ca-11ed-9c06-99461c6a3fe8;
-        Fri, 12 May 2023 13:42:38 +0000 (UTC)
-Date:   Fri, 12 May 2023 15:42:37 +0200
-From:   Sam Ravnborg <sam@ravnborg.org>
-To:     Javier Martinez Canillas <javierm@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: Re: [PATCH] drm/ssd130x: Fix include guard name
-Message-ID: <20230512134237.GB1395037@ravnborg.org>
-References: <20230512120232.304603-1-javierm@redhat.com>
+        Fri, 12 May 2023 09:43:28 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F784132B2;
+        Fri, 12 May 2023 06:43:27 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 6171D68AA6; Fri, 12 May 2023 15:43:23 +0200 (CEST)
+Date:   Fri, 12 May 2023 15:43:23 +0200
+From:   "hch@lst.de" <hch@lst.de>
+To:     Jinyoung CHOI <j-young.choi@samsung.com>
+Cc:     "axboe@kernel.dk" <axboe@kernel.dk>,
+        "kbusch@kernel.org" <kbusch@kernel.org>, "hch@lst.de" <hch@lst.de>,
+        "sagi@grimberg.me" <sagi@grimberg.me>,
+        "jejb@linux.ibm.com" <jejb@linux.ibm.com>,
+        "martin.petersen@oracle.com" <martin.petersen@oracle.com>,
+        "johannes.thumshirn@wdc.com" <johannes.thumshirn@wdc.com>,
+        "kch@nvidia.com" <kch@nvidia.com>,
+        "willy@infradead.org" <willy@infradead.org>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v2 02/14] block: bio-integrity: modify
+ bio_integrity_add_page()
+Message-ID: <20230512134323.GA32242@lst.de>
+References: <20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p1> <CGME20230510084407epcms2p123f17696d3c30c749897eeaf2c4de684@epcms2p7> <20230510084854epcms2p756a3e1055399ead6bf539d3419c74c3e@epcms2p7>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230512120232.304603-1-javierm@redhat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230510084854epcms2p756a3e1055399ead6bf539d3419c74c3e@epcms2p7>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 02:02:31PM +0200, Javier Martinez Canillas wrote:
-> This is a leftover from an early iteration of the driver when it was still
-> named ssd1307 instead of ssd130x. Change it for consistency with the rest.
-> 
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-Reviewed-by: Sam Ravnborg <sam@ravnborg.org>
-> ---
-> 
->  drivers/gpu/drm/solomon/ssd130x.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/solomon/ssd130x.h b/drivers/gpu/drm/solomon/ssd130x.h
-> index 03038c1b6476..db03ee5db392 100644
-> --- a/drivers/gpu/drm/solomon/ssd130x.h
-> +++ b/drivers/gpu/drm/solomon/ssd130x.h
-> @@ -10,8 +10,8 @@
->   * Copyright 2012 Free Electrons
->   */
->  
-> -#ifndef __SSD1307X_H__
-> -#define __SSD1307X_H__
-> +#ifndef __SSD130X_H__
-> +#define __SSD130X_H__
->  
->  #include <drm/drm_connector.h>
->  #include <drm/drm_crtc.h>
-> @@ -94,4 +94,4 @@ struct ssd130x_device *ssd130x_probe(struct device *dev, struct regmap *regmap);
->  void ssd130x_remove(struct ssd130x_device *ssd130x);
->  void ssd130x_shutdown(struct ssd130x_device *ssd130x);
->  
-> -#endif /* __SSD1307X_H__ */
-> +#endif /* __SSD130X_H__ */
-> -- 
-> 2.40.1
+Hi Jinyoung,
+
+can you work a bit on the commit log and especially the subject line?
+
+I'd word this as something like:
+
+"Subject: bio-integrity: create multi-page bvecs in bio_integrity_add_page()
+
+Allow bio_integrity_add_page to create multi-page bvecs, just like
+the bio payloads.  This simplifies adding larger payloads, and fixes
+support for non-tiny workloads with nvme, which stopped using scatterlist
+for metadata a while ago"
+
+It should probably also mentioned somewhere that you did an audit to
+ensure all drivers and the core code is fine with these multi-page
+segments.  If it's not, this patch should only be added after that
+has been made the case.
+
+I think the extra arguments struct is a bit overcompliated, and mostly
+due to me making the existing code to weird things in the low-level
+helpers.  With the "rationalize the flow in bio_add_page and friends"
+series I just sent out, I think we can drop the previous patch and
+simplify this one down to:
+
+diff --git a/block/bio-integrity.c b/block/bio-integrity.c
+index 4533eb49166109..85d70dc723f0ed 100644
+--- a/block/bio-integrity.c
++++ b/block/bio-integrity.c
+@@ -118,26 +118,44 @@ void bio_integrity_free(struct bio *bio)
+  * @len:	number of bytes of integrity metadata in page
+  * @offset:	start offset within page
+  *
+- * Description: Attach a page containing integrity metadata to bio.
++ * Add a page containing integrity metadata to a bio while respecting
++ * the hardware max_sectors, max_segment and gap limitations.
+  */
+ int bio_integrity_add_page(struct bio *bio, struct page *page,
+ 			   unsigned int len, unsigned int offset)
+ {
++	struct request_queue *q = bdev_get_queue(bio->bi_bdev);
+ 	struct bio_integrity_payload *bip = bio_integrity(bio);
+ 
+-	if (bip->bip_vcnt >= bip->bip_max_vcnt) {
+-		printk(KERN_ERR "%s: bip_vec full\n", __func__);
++	if (((bip->bip_iter.bi_size + len) >> SECTOR_SHIFT) >
++	    queue_max_hw_sectors(q))
+ 		return 0;
+-	}
+ 
+-	if (bip->bip_vcnt &&
+-	    bvec_gap_to_prev(&bdev_get_queue(bio->bi_bdev)->limits,
+-			     &bip->bip_vec[bip->bip_vcnt - 1], offset))
+-		return 0;
++	if (bip->bip_vcnt > 0) {
++		struct bio_vec *bv = &bip->bip_vec[bip->bip_vcnt - 1];
++		bool same_page = false;
++
++		if (bvec_try_merge_hw_page(q, bv, page, len, offset,
++				&same_page)) {
++			bip->bip_iter.bi_size += len;
++			return len;
++		}
++
++		if (bip->bip_vcnt >=
++		    min(bip->bip_max_vcnt, queue_max_integrity_segments(q)))
++			return 0;
++
++		/*
++		 * If the queue doesn't support SG gaps and adding this segment
++		 * would create a gap, disallow it.
++		 */
++		if (bvec_gap_to_prev(&q->limits, bv, offset))
++			return 0;
++	}
+ 
+ 	bvec_set_page(&bip->bip_vec[bip->bip_vcnt], page, len, offset);
+ 	bip->bip_vcnt++;
+-
++	bip->bip_iter.bi_size += len;
+ 	return len;
+ }
+ EXPORT_SYMBOL(bio_integrity_add_page);
+@@ -249,7 +267,6 @@ bool bio_integrity_prep(struct bio *bio)
+ 	}
+ 
+ 	bip->bip_flags |= BIP_BLOCK_INTEGRITY;
+-	bip->bip_iter.bi_size = len;
+ 	bip_set_seed(bip, bio->bi_iter.bi_sector);
+ 
+ 	if (bi->flags & BLK_INTEGRITY_IP_CHECKSUM)
+diff --git a/block/bio.c b/block/bio.c
+index 79e8aa600ddbe2..050b57e09ac362 100644
+--- a/block/bio.c
++++ b/block/bio.c
+@@ -934,7 +934,7 @@ static bool bvec_try_merge_page(struct bio_vec *bv, struct page *page,
+  * size limit.  This is not for normal read/write bios, but for passthrough
+  * or Zone Append operations that we can't split.
+  */
+-static bool bvec_try_merge_hw_page(struct request_queue *q, struct bio_vec *bv,
++bool bvec_try_merge_hw_page(struct request_queue *q, struct bio_vec *bv,
+ 		struct page *page, unsigned len, unsigned offset,
+ 		bool *same_page)
+ {
+diff --git a/block/blk.h b/block/blk.h
+index 45547bcf111938..1e67f738b52191 100644
+--- a/block/blk.h
++++ b/block/blk.h
+@@ -486,4 +486,8 @@ static inline int req_ref_read(struct request *req)
+ 	return atomic_read(&req->ref);
+ }
+ 
++bool bvec_try_merge_hw_page(struct request_queue *q, struct bio_vec *bv,
++		struct page *page, unsigned len, unsigned offset,
++		bool *same_page);
++
+ #endif /* BLK_INTERNAL_H */
+-- 
+2.39.2
+
