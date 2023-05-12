@@ -2,136 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6FE0700573
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:28:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3B6970056E
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:28:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240780AbjELK2W convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 12 May 2023 06:28:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52592 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240545AbjELK2B (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S240100AbjELK2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Fri, 12 May 2023 06:28:01 -0400
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF92E14E69;
-        Fri, 12 May 2023 03:26:57 -0700 (PDT)
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-559e53d1195so140909517b3.2;
-        Fri, 12 May 2023 03:26:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683887188; x=1686479188;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=t7oE+wnAwx9lWj1Dzx32p5gbR9ZsZdOiJLOsGIhtwMM=;
-        b=Gdw89S0d94MLMQTfu+rWI0A/Vb9SX75M6/1QmlaWIQyxRWKvm7PNjbzgj6QxSieNm+
-         fC2cSbrKeYTQ3k/pHPMp/x3DvtcAemMcW4FQuPfKxVCleSWVPnKdy4scY+OyO8XD2AtS
-         ilFqpEGVkYgkmPoyu2+RuewMwfp0764V12vFeLbwo3KEpECSgv+UZ6v59eWrPV3teDv6
-         W4lEgmP2C6RFnLvOakKGE7+z6N2Tgx4gtPj930OZtvvJL2LWuBrsJTi5lbAkTXA1V5bL
-         YraVM9d0eggOhhTJUw2cOYkBJa8hYWVXK2z17BoJRTPXR4wGRU+bSi3Bmmk+drUQH2fE
-         yjBA==
-X-Gm-Message-State: AC+VfDwrXpAc3/P6ATfWX8R3BOMaPgihiO3iQ95GCL6yI7I1l3SUXLOz
-        FZIa+rrHPLmBWFQdlxeYAuOpC5cYj6V+KQ==
-X-Google-Smtp-Source: ACHHUZ5jCOqID/Xnrtcckf3j3udYN3KPPbW9smGWfnbOkI53lZyZYT3UXadPEbpFxOIWeB1hJsKojA==
-X-Received: by 2002:a81:7586:0:b0:54f:b244:fef9 with SMTP id q128-20020a817586000000b0054fb244fef9mr23977199ywc.0.1683887187840;
-        Fri, 12 May 2023 03:26:27 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id b133-20020a81678b000000b00557027bf788sm5584201ywc.74.2023.05.12.03.26.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 03:26:26 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-559de1d36a9so140726217b3.1;
-        Fri, 12 May 2023 03:26:26 -0700 (PDT)
-X-Received: by 2002:a0d:c281:0:b0:536:cb48:9059 with SMTP id
- e123-20020a0dc281000000b00536cb489059mr25024547ywd.50.1683887185987; Fri, 12
- May 2023 03:26:25 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52572 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S240584AbjELK1m (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Fri, 12 May 2023 06:27:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E325F1491C
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:26:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2418561554
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 10:26:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86F9CC433D2;
+        Fri, 12 May 2023 10:26:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683887183;
+        bh=9BDmfoZuBPkbK1ZCLt7rh0uIS2qGSlS805RbZ3+nNas=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SHSt9d04W7mzK7GDELDQmwV2Qq4lp4vZlys2gQQ4hj3Zd8ANgnfXxWXicgHadPJvz
+         l/YfYeioKj8/6euHdWmprwDRDVs7hPxBocqGj8JSyZ/P3jG36Fsly3adLB1JcvkBdA
+         rIsFl37pduSjrYK8QM2TF9Wj2jpvtGoNXN05vcubd4RuVig3Nh8msV+rpCsbW1J0XE
+         iHrvGfSNnSNnCjl57GHsYzVoSt9d5NfxMVGBUsmanhXCvD5rA47DnDMfcwVjotRDu/
+         WBaMilAfu4Vs5o/nbQ9ra1KwdJoMcDhktvOZBRAIF+XLDa36DhnV2yuDBLfsLeMNHa
+         LVE9L/RdX03Fg==
+Message-ID: <12a57688-6e9a-a21d-41cb-978a274c8b2b@kernel.org>
+Date:   Fri, 12 May 2023 12:26:19 +0200
 MIME-Version: 1.0
-References: <20230503-virt-to-pfn-v6-4-rc1-v1-0-6c4698dcf9c8@linaro.org>
- <20230503-virt-to-pfn-v6-4-rc1-v1-2-6c4698dcf9c8@linaro.org> <CAMuHMdVJjjo9TMeow1-i27ybpQOu9-VZYnTkY5p8p_Cm6sW_GA@mail.gmail.com>
-In-Reply-To: <CAMuHMdVJjjo9TMeow1-i27ybpQOu9-VZYnTkY5p8p_Cm6sW_GA@mail.gmail.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Fri, 12 May 2023 12:26:14 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdV5Aukxx+XyC-s2=CDa2BYqvc3uRvWBhD6ri5j09tXj3A@mail.gmail.com>
-Message-ID: <CAMuHMdV5Aukxx+XyC-s2=CDa2BYqvc3uRvWBhD6ri5j09tXj3A@mail.gmail.com>
-Subject: Re: [PATCH 02/12] m68k: Pass a pointer to virt_to_pfn() virt_to_page()
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Vineet Gupta <vgupta@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Russell King <linux@armlinux.org.uk>,
-        Greg Ungerer <gerg@linux-m68k.org>,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-snps-arc@lists.infradead.org, linux-fsdevel@vger.kernel.org,
-        linux-cifs@vger.kernel.org, samba-technical@lists.samba.org,
-        linux-arm-kernel@lists.infradead.org, linux-arch@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] w1: Replace usage of found with dedicated list
+ iterator variable
+To:     Jakob Koschel <jkl820.git@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Evgeniy Polyakov <zbr@ioremap.net>, linux-kernel@vger.kernel.org
+References: <20230509-w1-replace-usage-of-found-with-tmp-list-iterator-variable-v2-1-259bf1ba44ed@gmail.com>
+ <c626e464-64e2-3cdb-7cf3-c76770feb1f0@linaro.org>
+ <xxs6zv5j7s6zmko5b5idhynzotx4nnyjktj35sdvelr6ha4aeh@w52ylfmwguva>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <xxs6zv5j7s6zmko5b5idhynzotx4nnyjktj35sdvelr6ha4aeh@w52ylfmwguva>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 11:55 AM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
-> On Thu, May 11, 2023 at 1:59 PM Linus Walleij <linus.walleij@linaro.org> wrote:
-> > Functions that work on a pointer to virtual memory such as
-> > virt_to_pfn() and users of that function such as
-> > virt_to_page() are supposed to pass a pointer to virtual
-> > memory, ideally a (void *) or other pointer. However since
-> > many architectures implement virt_to_pfn() as a macro,
-> > this function becomes polymorphic and accepts both a
-> > (unsigned long) and a (void *).
-> >
-> > Fix up the offending calls in arch/m68k with explicit casts.
-> >
-> > Signed-off-by: Linus Walleij <linus.walleij@linaro.org>
-> > ---
-> > ChangeLog v1->v2:
-> > - Add an extra parens around the page argument to the
-> >   PD_PTABLE() macro, as is normally required.
->
-> Thanks for the update!
->
-> To build sun3_defconfig and m5475evb_defconfig cleanly, you need to
-> include the (Gmail-whitespace-damaged) changes below.
-> These were compile-tested only.
+On 12/05/2023 12:19, Jakob Koschel wrote:
+> How strange, I just checked and my checkpatch doesn't complain.
+> 
+> I also redownloaded and double checked 
+> (b4 am 20230509-w1-replace-usage-of-found-with-tmp-list-iterator-variable-v2-1-259bf1ba44ed@gmail.com).
+> 
+> What's the exact issue you are seeing?
 
-> --- a/arch/m68k/include/asm/sun3_pgtable.h
-> +++ b/arch/m68k/include/asm/sun3_pgtable.h
-> @@ -109,9 +109,9 @@ static inline void pte_clear (struct mm_struct
-> *mm, unsigned long addr, pte_t *p
->  #define pfn_pte(pfn, pgprot) \
->  ({ pte_t __pte; pte_val(__pte) = pfn | pgprot_val(pgprot); __pte; })
->
-> -#define pte_page(pte)          virt_to_page(__pte_page(pte))
-> +#define pte_page(pte)          virt_to_page((void *)__pte_page(pte))
+  ✓ [PATCH v2] w1: Replace usage of found with dedicated list iterator
+variable
+    + Link:
+https://lore.kernel.org/r/20230509-w1-replace-usage-of-found-with-tmp-list-iterator-variable-v2-1-259bf1ba44ed@gmail.com
+    + Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+  ---
+  ✗ No key: ed25519/jkl820.git@gmail.com
+  ✓ Signed: DKIM/gmail.com
+---
+Total patches: 1
+---
+ Base: using specified base-commit eeac8ede17557680855031c6f305ece2378af326
+Applying: w1: Replace usage of found with dedicated list iterator variable
+[Checking commit]  12b61e664c29 w1: Replace usage of found with
+dedicated list iterator variable
+[Checkpatch]
+CHECK: Alignment should match open parenthesis
+#70: FILE: drivers/w1/w1.c:849:
++			if (iter->reg_num.family == id->family &&
++					iter->reg_num.id == id->id &&
 
-Much simpler to drop the cast in __pte_page() instead:
 
-@@ -91,7 +91,7 @@ static inline pte_t pte_modify(pte_t pte, pgprot_t newprot)
- #define pmd_set(pmdp,ptep) do {} while (0)
 
- #define __pte_page(pte) \
--((unsigned long) __va ((pte_val (pte) & SUN3_PAGE_PGNUM_MASK) << PAGE_SHIFT))
-+        (__va ((pte_val (pte) & SUN3_PAGE_PGNUM_MASK) << PAGE_SHIFT))
+Best regards,
+Krzysztof
 
- static inline unsigned long pmd_page_vaddr(pmd_t pmd)
- {
-
->  #define pmd_pfn(pmd)           (pmd_val(pmd) >> PAGE_SHIFT)
-> -#define pmd_page(pmd)          virt_to_page(pmd_page_vaddr(pmd))
-> +#define pmd_page(pmd)          virt_to_page((void *)pmd_page_vaddr(pmd))
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
