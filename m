@@ -2,204 +2,265 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9BD5700D0C
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:31:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39DDD700D0B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:30:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232984AbjELQa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 12:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58364 "EHLO
+        id S231358AbjELQaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 12:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231736AbjELQaz (ORCPT
+        with ESMTP id S230200AbjELQaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 12:30:55 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 651E6900E
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 09:30:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683909054; x=1715445054;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=mHdciVTtWgzpe9Hh5XKR9paSZU9nTIfOkAvtqgDUoYk=;
-  b=CiL2FfCekgog3tNRfQabuZyH7jW8JA2BGdoXoEVgUCty+AH391UlSQr6
-   aVQNFBK/rkc4H8FaPmlevwo5oEbjC2hat/yFTrU21rnjcceYnpAM2SeNS
-   WfKMA10EORXrA2sfkyorrvVYpFPFKkLUKYUz55AhSa8h4KUSVV+Ze4+gD
-   Umyhexj/rGtMAIw/6MEr0d3I3fFSx0Yt9p8tLIpYPeLT5F9klg6F1imTG
-   n7P/OlmmxqTGWDaP2+RnUAHoTHMuaX3ygHE+XpF+lWbQMyrq30R71JbW9
-   2C4B46/kOHFSWoHOXitPNjYGyPW8uZGisBL7xuLqN2MEWkWpr5LvJ3U3i
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="330445632"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="330445632"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 09:29:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="694287361"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="694287361"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga007.jf.intel.com with ESMTP; 12 May 2023 09:29:28 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Fri, 12 May 2023 09:29:28 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Fri, 12 May 2023 09:29:28 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.100)
- by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Fri, 12 May 2023 09:29:28 -0700
+        Fri, 12 May 2023 12:30:23 -0400
+Received: from APC01-SG2-obe.outbound.protection.outlook.com (mail-sgaapc01olkn20812.outbound.protection.outlook.com [IPv6:2a01:111:f400:feab::812])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D713C900E;
+        Fri, 12 May 2023 09:30:20 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W94HBxPREO2mz7+UHDpknzjKCtfZm+ZSoLGel2aNY+t5fYOCzObqax22J1DiINALMUwlOyQjEnR6dp3BnMHvEw8LWnqyzjr2ecyuYOvNjgvvqO0lL4MF0KCZ0SrBLOs56GyrDiYsiI4Vov+kfBWvxMVwnxDT+HzCLvcmeK40i+y45F49147heEz7nAVDOPq5Dnn7EOjBC47shyhc4YL1aAe+vjk3/zA9bh4eqURL3Jg60qI7PtNtuhaulRNkGk/84kqgRyUrpAZXmgwiriV+1zsENS+BY2CnYgxExAs5Wi+C6OngfgmoQR3jGFegYym/Sk4rVZsnmcca4IFol3W2WA==
+ b=DMDfkDowk3NQllBwI3yfp8qmyp9gczgy9d7LP0smSfVtxfhCScKtHDCw97LFYT67FgutB2vBoMYi2dbZFkhpb2LANYJ9iTLwIKzP0RRM7efR3iSFvFvh641Sh28BZpL9gGqZXABI9Y8QMy5O9mALLNcLFvZM9U5Igi/KprVDEZbJgYCDbNXkKde/BOuYNTL5fFTIjA2/QdfbUorFZ5QZpAhMve4S32BrLmfYhxlizgApSzxhc0mxFn1i9FLOKIm9+ZQjQM/tuWHsoPDF9j81/mhNkAQrhWS47qEPdIJGUDjecaCdwLFZxXTEjtAt4eB2daBaFuiPPtzOjXmnlQSTcQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=BEgQVeX56SyEmbcE18l6IGk6MIboAJzPS0ke2I+qt2U=;
- b=K4pTQLYlFzfWJimjHUTY0LCrp4LYNhtJiLIIxNS3t1I+1GiiOxygc2IEl8SZt0DhGWLBKj4Hn6ymkkVn/16rfogyHrKqdvFvr31jB+ewUjjyjjnHMURpTnUTn0X1aMGLarGa/Fkp3BQxgrKm1GuvOJTxbEA59L89yn92IzWvh7bGwDNnmsdNynVay8eG2dWaehE5CrtosxmwGDsyhDwFXqSPxhgV82yM7POepW9uOSUjpUskr4yvYKuYXTPF764XH4l/K89Cq8UDJww3GTUjIUU9JFRifnJ+1SBU578+wPRvHhfBpvfZCIeorZKzfyQgL3YF9qxne0qaxmAbnuK+YQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by DM6PR11MB4738.namprd11.prod.outlook.com (2603:10b6:5:2a3::18) with
- Microsoft SMTP Server (version=TLS1_2,
+ bh=BxZ+UIvvtKvwwW9MLQiOdIb96ph0o6/4WGeOVuVPTo8=;
+ b=jpN3cM70EhSYH5DqK/3Ij92RB3zihW0tnfOsDKOs2QZYy54ZP0MHiVEmGUnYZQIo8v8QKtG+dxFQjbwg27iON4g5EVpl0bRdWA49IPax20BKOPM4wMjHa3snULz4cDfoM6JizuEnLVZQ2r3EXVOOf+0NQ+Vb5kWd41xe/ka9XzOzYeMtC0jEVXMay0sqbGXwGf8hvTRzGjHQ54ONe5R0WS2NFFz3KhdE3RlvqhlDKj+Qz7h9TdnJtApnv5rxHXdyNxzua4kDv34sClmmoV6x3bHPba30y2p6O5BBQ382zk6YaL6heGM4Il1unGo7u9a4VOfm5jzsRQPcLdM/I4QCwQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BxZ+UIvvtKvwwW9MLQiOdIb96ph0o6/4WGeOVuVPTo8=;
+ b=EqEQJ/erVayoOD9MEkiuJ8wim/1ktDts9ahfwLeuxWvaqbv0vUSlZVTyYxVaDa9aAqTQN7JZwbNMS+qjcqrKmYUoxkZw79MKfo/yN53mBkoS8RSKCMoMmDXyeCjN4IWO/D6nQVnh8DFpsxuUH6h1806ADqiZSx278nZEcO9HtD/s7k2VKENPyHi6te9q/+iQ77rQkiywDZHea+ynqnRgxeXHQY+rbfqVcVxci5Xy4ZNBAlIwbxNugtZJquBcOkebQZpwRxPzGzFcIzxZ7mkOSkTuTcQOseTfYb8eAbWyUfzYb3ViCICdVcsnMxln+Q97uiys3h61qRb35BmEwETiMA==
+Received: from KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ (2603:1096:820:9a::12) by SI2PR01MB3899.apcprd01.prod.exchangelabs.com
+ (2603:1096:4:109::6) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.21; Fri, 12 May
- 2023 16:29:26 +0000
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::44e7:c479:62f4:3eb4]) by CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::44e7:c479:62f4:3eb4%3]) with mapi id 15.20.6387.024; Fri, 12 May 2023
- 16:29:26 +0000
-Date:   Fri, 12 May 2023 09:29:23 -0700
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-CC:     <intel-gfx@lists.freedesktop.org>,
-        <intel-xe@lists.freedesktop.org>,
-        <dri-devel@lists.freedesktop.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        <linux-kernel@vger.kernel.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?utf-8?B?S8O2bmln?= <christian.koenig@amd.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>
-Subject: Re: [PATCH 2/3] linux/bits.h: Add fixed-width GENMASK and BIT macros
-Message-ID: <5wfbihhliddinlvsh23dejbuffiz45ecs3wb37qcwyqd3hjfcm@wyhqnobiiu22>
-References: <20230509051403.2748545-1-lucas.demarchi@intel.com>
- <20230509051403.2748545-3-lucas.demarchi@intel.com>
- <ZF4fi5B7PPlgZBOI@smile.fi.intel.com>
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <ZF4fi5B7PPlgZBOI@smile.fi.intel.com>
-X-ClientProxiedBy: SJ0PR05CA0189.namprd05.prod.outlook.com
- (2603:10b6:a03:330::14) To CY5PR11MB6139.namprd11.prod.outlook.com
- (2603:10b6:930:29::17)
+ 2023 16:30:14 +0000
+Received: from KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ ([fe80::93cb:1631:4c4c:1821]) by KL1PR01MB5448.apcprd01.prod.exchangelabs.com
+ ([fe80::93cb:1631:4c4c:1821%4]) with mapi id 15.20.6387.018; Fri, 12 May 2023
+ 16:30:14 +0000
+Content-Type: text/plain;
+        charset=utf-8
+Subject: Re: [PATCH v5] net: mdiobus: Add a function to deassert reset
+From:   Yan Wang <rk.code@outlook.com>
+In-Reply-To: <1828875.atdPhlSkOF@steina-w>
+Date:   Sat, 13 May 2023 00:30:09 +0800
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Andrew Lunn <andrew@lunn.ch>, hkallweit1@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-ID: <KL1PR01MB5448242DBD4EA7170341A418E6759@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+References: <KL1PR01MB54486A247214CC72CAB5A433E6759@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+ <KL1PR01MB54488021E5650ED8A203057FE6759@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+ <ZF4J1VqEqbnE6JG9@shell.armlinux.org.uk> <1828875.atdPhlSkOF@steina-w>
+To:     Alexander Stein <alexander.stein@ew.tq-group.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.2)
+X-TMN:  [8WJ+SISt6ablb+TglZSJmt/+fX51PQ767qlILcmympQ=]
+X-ClientProxiedBy: SGBP274CA0018.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::30)
+ To KL1PR01MB5448.apcprd01.prod.exchangelabs.com (2603:1096:820:9a::12)
+X-Microsoft-Original-Message-ID: <9AE749AC-1734-4A63-8421-7EA487887B7E@outlook.com>
 MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|DM6PR11MB4738:EE_
-X-MS-Office365-Filtering-Correlation-Id: 400a301f-eb12-429c-c2d9-08db53060d60
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
+X-MS-TrafficTypeDiagnostic: KL1PR01MB5448:EE_|SI2PR01MB3899:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0dc8561b-df9e-4105-ce37-08db530629c9
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /mbaJnhkUC82DSjxKk52VUJZaHGdTWHuiqm80pe3qN5OE91t4LGsL7myTHJDpZY7X5WxR8vrqfR2a6bxiOAbl8Rd//S7GVQ6HwJGyDX+VQEqPx63CtIuxEhZPrEwO+pjaAKKuTsUJeoPPYsWzRPI59dnysjC7TCBud6fFP5gCREMglPzSAAQ8CrAPDx31CG4qY2xNTHU+bOfuDiwSWLAW4XxjdR+1cJq76qnSdRl/enNLHzpJDDMrmqwJ5HUfZK3rqc1+sNCsEQyRcih+gyvE90s3Ol4kO5+3JOFFlARKlOJRpblU7BCpbRZQbhFc8CEofBRCoVKSqErfl5A8HV8UA9BuIbT14NPNujfYmtlseczhO2zNOdOKz/m3SItdmHd9Uo0v3rZzDRFrtjuKC7ck3Mn3BqoBVYQo8uaYRcbuR1vEyd3wgqvuP0mdnsL9atWDbUwiJAyzjYfsFVkIUdber7vjf4fY3qwimdCTnkYbc+57xtpBFs3QeFrHuuJnM5H
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(366004)(376002)(39860400002)(396003)(136003)(346002)(451199021)(8936002)(6916009)(478600001)(54906003)(7416002)(5660300002)(8676002)(33716001)(2906002)(86362001)(66476007)(4326008)(66556008)(82960400001)(66946007)(316002)(41300700001)(38100700002)(6666004)(186003)(6486002)(6512007)(9686003)(6506007)(26005);DIR:OUT;SFP:1102;
+X-Microsoft-Antispam-Message-Info: hljr2TlVm9zMi5owLUpRuaLzksu/Un2nMETJ9tDV3L4HfElgd5RqV3ieRmLGaqaKvg2bPx+Sb6s6yR0BajhjcKS7dufIJam1mn4XXhOXVetLK8Y/RmNeo+F4wxSvSwAo7uomvhTIUCPwGSECGfh/ZwIask86LySudRct6h14mPYKMLFXlterVSzadgKLC9OUDcJ8Asxgcju3gYNWARtRlIob3FnV90dJWy2ZuPIVHPFO6nAaZyogB5tFNuNSunU1SFjkk4o8k+ej9EbWFdWFb4H6IyqNmhXhyenBUQwMBriItElXr2NAwjOIQq1XvNp+dStlR4q/PbdX9gcHHmN/Lldtk/y5u8qrmnv+u51TUeQJATwfVDzGYHrae4C4WzEchmPwQMcWe/MPbyAYLm4Oto6YJsKidzUNLwodQ+6sOkp71iJypVqT1Xi/hk1nCtyM3ozcxlZYSiHuxrBM0IkdRNhD6jwWExuE14VnqBsplF1LPCzHyGPP2r1bxihlN7m2tjdszKofTNTKxhgNxwWAXqNnLc/RBfZxZQXeYxOJ/sTpJt6EG1w8oUmpkiy7SqTAVa8RK/fU4E+i2EClbALKd+OmV1aJnxBOidYphZjghrs=
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?PY4OxDbnXz9cf65N0jqle6g/iZzEeN/9PBiyho2JpeQ5er/EG1AyTHL3G0M3?=
- =?us-ascii?Q?BkR4Tyo7Gz3PYZsEZlbXfV8Y+jfCwKD2ZnZYGXAgEPfEPgQWfvBVi9+XKI+w?=
- =?us-ascii?Q?8Z7XbFuUKYgscWmQf7PrO/1Im5txOMN21OmMy50gRc+fgO6zTrDUXNiBbjLf?=
- =?us-ascii?Q?GC6v44/nH49fh8dxfbqfzWvvZB6x707N0WtBEkMZXsMqkIzXAo6S6nAZLCKo?=
- =?us-ascii?Q?XcNH//DST/+HrfWIus989z6t3oefPC0Me8KGn6WKFUoRtVitdMMTO5KPrYjq?=
- =?us-ascii?Q?KItHZcygzPyxqXx5X9YE3zDDCDkA+Ih/AIPitMdZQWuA+L8jUaODRb1Oenoq?=
- =?us-ascii?Q?YIcAeTzZWNje2ezg15XFz0BhiugHbpDg6PF04PdW9RyI8FCFBnUOrBHeWcnS?=
- =?us-ascii?Q?kEI3WE2BrAWEMMI8098VzYQbiV7DNlMKhYIla25kd6Dr+b9GnMholdoabXkf?=
- =?us-ascii?Q?luvolmYmIkS00PN3enPwbPoEQAra5oGysnIlL1rXFmrYzI5iErVDfIs6oQje?=
- =?us-ascii?Q?NcoCt7yGXu/YhnzxsmWML8h5Eh/VOt3eTzYHv5kAKVhNhLSvpGZFsPLrC3Vf?=
- =?us-ascii?Q?nQ5LFAh5QHMQx6KtRZn1HMJeTmMJ9jgt6jUoKjP7A9oHRzxESTtCGCA6G1TC?=
- =?us-ascii?Q?jcjQsXqzbIi8c3SmJsMJwVzJWOzdEbxCtZKA/MVWhKTHI0hJKpWuSQ99MRWG?=
- =?us-ascii?Q?4qbTJyMDG3oqku1IFULHXoV3FRlQRKER4tLmb0kEtqd/oK72QDJjCTuVgj1/?=
- =?us-ascii?Q?tZFSCirZatcEeY32d0c6tErzDyMkRxJERjubo+PQL+GC24gluvrIQuR+AWVz?=
- =?us-ascii?Q?7/ETMdgYVMWF1Y1OCC+L1yUyPqO94umQHL21iFo3caSib+fSSiASudBdPnD8?=
- =?us-ascii?Q?Fp4JLhJXn7UjRk7NkWYia4kQoPiuduJTbOHjAwkKVT2QeSMmTll3WZI08Gwo?=
- =?us-ascii?Q?NSTNTA3H85B4HWe6tZ1dW2+7IaufxyYrxsomwDnjsBG9MUrwCPf0VVlp9mPP?=
- =?us-ascii?Q?05VFzaFBynaMHlFpKDPvl4Vhq8ykOn+r7/YqcrjhlLHrTZ6kHCFF+MCjQ6D0?=
- =?us-ascii?Q?2Ou6bGeCWHm/pHZVJ25d4p7XOQnHgxoTBS80P5PJPlo4eDnwnCHzJCfbb/gM?=
- =?us-ascii?Q?3CrnggEi0BGq1obD+7HHPitqzov3cENf7sLPpRzmPW9QLceZpJdJ35XUIAVj?=
- =?us-ascii?Q?/XktKj7oKFiU4goj39BSXJfc2JevvUfoABYFjGkHP4YIrJYIQna0lpRNlzmr?=
- =?us-ascii?Q?hqc4m4jj+0dLv5C1FcakfCHdbWXuWp/wIxR1uNZswKe5E0K49hepTE+oLguA?=
- =?us-ascii?Q?R0zdrYpXV0NchDn/B/ivbIISKXmQejr7Omyw2YfN4LsSa8lzEoV209WfZ/OR?=
- =?us-ascii?Q?d/KlDwXwTJ8/Ah7CY/t7R36yWM63EX+wjPFNyxJX5b3tdyKtRW0REMhF0m2R?=
- =?us-ascii?Q?vttEW4KcFgUg3MaFxv4eSsIBIbOfbNZPiR1C4QWBAVaJwre4Ziz7MaV9e+R3?=
- =?us-ascii?Q?EOdhEsgw5PmBx/5zS5M0KiMBl9OPQomIgdp/mYUnc0/3Wik5Uvv+n30/mVib?=
- =?us-ascii?Q?GFTNIOzQIruZIxGuiFI92R502Tl4u35XkUYoKASotfPJgKbSan4olZsx/zvj?=
- =?us-ascii?Q?4g=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 400a301f-eb12-429c-c2d9-08db53060d60
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NldBVTg1TUtkRDFMTUd2SWVpRzYvVk1nUG9lQ0VsTVNYeDVRbk5aSUFCUzFv?=
+ =?utf-8?B?OElsaEllWnJkMmN2b3VEcElnY3lSZFg5L3k4SWprSmszSkVveEhmRkNGSEhn?=
+ =?utf-8?B?WmpmSXlxOEJweWJsb2k2ZDA2UUhCdFhLYTVGWkRxenlTNzlINW5MY0VGVnRu?=
+ =?utf-8?B?R1M3emxEaWRMbVRZbDR4cURGdFlaTWpPQ3FBVU5mRkFmcjQ3RlVwdHJXbEp5?=
+ =?utf-8?B?TXRtSmxQRTB3NElvQzFNQXpaTk5vR01SZUZWaWRlb2xSVHpxblY1WTZOUE4x?=
+ =?utf-8?B?elExeHI3WnhYUXZIZHAza2lXUVdCSzI3R3NlSTZrdzNJalJKUnZTYzBxNDVB?=
+ =?utf-8?B?ZEdSWDdZR1BOdG9KK3h2QWZiSDl0NGZFODZyYisxc0gxWHBud0J2KzExTE1a?=
+ =?utf-8?B?MUhoNUxlYmUxT0Uzek5Bd0NyYnZFUVFuV1BZRElaaTNJUW9oNFdRa1N1TEl5?=
+ =?utf-8?B?bEIveFFnVVYzQmVqNk1nQ0VIWEluOFZEa2oyQStwOTVub21DNm1pUzZGYmVu?=
+ =?utf-8?B?bTYrV3JUeERrbzVHeDA3d2tNRlk4K0VELy9wWW85UEl1NFRIUmtYZ2NJRjJ4?=
+ =?utf-8?B?dG1sZGpaRlpROXRkbUV5eGlTSnBnVmMvb3pkenprODl2ZnNyMWU2MXZuNTVo?=
+ =?utf-8?B?aHUvMXMzUm9KMGlINmJoTkpPZHJmMUxTT1pqUHlwUTVSeVlMT3VsaXlucFg1?=
+ =?utf-8?B?WEU4QVhKVmx4d2J1RHBBRGpCSnhPWVFSUEZBcE4vZDZtOFBXYXdCN1BrTHJ4?=
+ =?utf-8?B?c0ZQWjMzeDZyeFUzQjdlYlZ0SmU4aHVFQlBuekNDUXZFbU80aVdlWmZOTmxL?=
+ =?utf-8?B?UWpmWmsyRnRkZUtWZTFjbDZkcGJFbExKK3ExaEwxMHhtYW0rM1BMVVJ1T002?=
+ =?utf-8?B?U3JvNVlPeFFRbDNCYlVUL0ltNHJhV3hSREFTUFY5UDM5ekNUZjEwSFpjQVFt?=
+ =?utf-8?B?djEvSVBLYjVpT1Vha0NESlU0b2Y1VW9oclNVWmhaeVo4Wk5jZXdHVXErc0pM?=
+ =?utf-8?B?VURwL0pSV0hSZHdOZGpMSjhwWU5ObE9OSmw2TXFCOG5SWjE2cGd2Z0VGbHNo?=
+ =?utf-8?B?T3UwLzlTUmVzQVJFMGJDUS9HV1YrUVl5S05vS1E2NmZXOGM4YWlydzNQanE2?=
+ =?utf-8?B?eDgxL2dXczhHK1lkQnMwMm9EbjI3eEJMU3BxT2pxOGF6ZFhSUFR0ZjU4aFRM?=
+ =?utf-8?B?SXZOWStmbEtaWGVuODN2WFEveUN1aE1JVzNSaTJMNUNzM2RQVWZRSTVCVktl?=
+ =?utf-8?B?ZWFDT0dCK3hENmNNTG1MWXI0eEYrNWtydGtYeGtON2c2dkkxV1hKYURYN2J5?=
+ =?utf-8?B?WEFXTDIxVU03eFlpWVE1N201RUs0c0J0Vmh4NWFtcCtSM1ZiOVdXWEYzNkR5?=
+ =?utf-8?B?Rkhxam8waFpqSXpweUNmNGE3SXFxMzZ6TnVxRU5ZWFdwUVRSU2kzeXhoYTd6?=
+ =?utf-8?B?aVJ6M1RLZkxtSDBLaE9ZN2M2am5KY1NHQlNWWUdGcVM1ZW5lQ1FwZ2Q0RE1m?=
+ =?utf-8?B?czRGQ05Ib3ZqWVNFdGZnYWM2WXJ4ZzRxNzJJZXZnRHNnOHNRL1c4dG1Gd2pS?=
+ =?utf-8?B?LzBGMUJWRmJwOExaMzhBcVNXRTQ2cjdTV0FuOUFiQXRCd2wrVEpyc1dmejlo?=
+ =?utf-8?B?OENWUFkvVEk1NmovQ2E2UTRuellodmc9PQ==?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0dc8561b-df9e-4105-ce37-08db530629c9
+X-MS-Exchange-CrossTenant-AuthSource: KL1PR01MB5448.apcprd01.prod.exchangelabs.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 16:29:26.5306
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 16:30:14.1827
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6c38i+HvNUW/mdconMRBbgwT/BWZAjDuirGwmll5lw7HnVCDGTp0KFzpBNMSoMTEByS0Skgl2dONzaP/5l57rLQ7isTAcH6Ih1ceF2d+PPM=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR11MB4738
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SI2PR01MB3899
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 02:14:19PM +0300, Andy Shevchenko wrote:
->On Mon, May 08, 2023 at 10:14:02PM -0700, Lucas De Marchi wrote:
->> Add GENMASK_U32(), GENMASK_U16() and GENMASK_U8()  macros to create
->> masks for fixed-width types and also the corresponding BIT_U32(),
->> BIT_U16() and BIT_U8().
->
->Why?
-
-to create the masks/values for device registers that are
-of a certain width, preventing mistakes like:
-
-	#define REG1		0x10
-	#define REG1_ENABLE	BIT(17)
-	#define REG1_FOO	GENMASK(16, 15);
-
-	register_write(REG1_ENABLE, REG1);
 
 
-... if REG1 is a 16bit register for example. There were mistakes in the
-past in the i915 source leading to the creation of the REG_* variants on
-top of normal GENMASK/BIT (see last patch and commit 09b434d4f6d2
-("drm/i915: introduce REG_BIT() and REG_GENMASK() to define register
-contents")
+> On May 12, 2023, at 21:37, Alexander Stein <alexander.stein@ew.tq-group.c=
+om> wrote:
+>=20
+> Hi Russel,
+>=20
+> Am Freitag, 12. Mai 2023, 11:41:41 CEST schrieb Russell King (Oracle):
+>> On Fri, May 12, 2023 at 05:28:47PM +0800, Yan Wang wrote:
+>>> On 5/12/2023 5:02 PM, Russell King (Oracle) wrote:
+>>>> On Fri, May 12, 2023 at 03:08:53PM +0800, Yan Wang wrote:
+>>>>> +	gpiod_set_value_cansleep(reset, gpiod_is_active_low(reset));
+>>>>> +	fsleep(reset_assert_delay);
+>>>>> +	gpiod_set_value_cansleep(reset, !gpiod_is_active_low(reset));
+>>>>=20
+>>>> Andrew, one of the phylib maintainers and thus is responsible for code
+>>>> in the area you are touching. Andrew has complained about the above
+>>>> which asserts and then deasserts reset on two occasions now, explained
+>>>> why it is wrong, but still the code persists in doing this.
+>>>>=20
+>>>> I am going to add my voice as another phylib maintainer to this and sa=
+y
+>>>> NO to this code, for the exact same reasons that Andrew has given.
+>>>>=20
+>>>> You now have two people responsible for the code in question telling
+>>>> you that this is the wrong approach.
+>>>>=20
+>>>> Until this is addressed in some way, it is pointless you posting
+>>>> another version of this patch.
+>>>>=20
+>>>> Thanks.
+>>>=20
+>>> I'm very sorry, I didn't have their previous intention.
+>>> The meaning of the two assertions is reset and reset release.
+>>> If you believe this is the wrong method, please ignore it.
+>>=20
+>> As Andrew has told you twice:
+>>=20
+>> We do not want to be resetting the PHY while we are probing the bus,
+>> and he has given one reason for it.
+>>=20
+>> The reason Andrew gave is that hardware resetting a PHY that was not
+>> already in reset means that any link is immediately terminated, and
+>> the PHY has to renegotiate with its link partner when your code
+>> subsequently releases the reset signal. This is *not* the behaviour
+>> that phylib maintainers want to see.
+>>=20
+>> The second problem that Andrew didn't mention is that always hardware
+>> resetting the PHY will clear out any firmware setup that has happened
+>> before the kernel has been booted. Again, that's a no-no.
+>=20
+> I am a bit confused by your statement regarding always resetting a PHY is=
+ a=20
+> no-no. Isn't mdiobus_register_device() exactly doing this for PHYs? Using=
+=20
+> either a GPIO or reset-controller.
+> Thats's also what I see on our boards. During startup while device probin=
+g=20
+> there is a PHY reset, including the link reset.
+> And yes, that clears settings done by the firmware, e.g. setting PHY's LE=
+D=20
+> configuration.
+>=20
 
-We are preparing another driver (xe), still to be merged but already
-open (https://gitlab.freedesktop.org/drm/xe/kernel), that has
-similar requirements.
 
 
->
->> All of those depend on a new "U" suffix added to the integer constant.
->> Due to naming clashes it's better to call the macro U32. Since C doesn't
->> have a proper suffix for short and char types, the U16 and U18 variants
->> just use U32 with one additional check in the BIT_* macros to make
->> sure the compiler gives an error when the those types overflow.
->> The BIT_U16() and BIT_U8() need the help of GENMASK_INPUT_CHECK(),
->> as otherwise they would allow an invalid bit to be passed. Hence
->> implement them in include/linux/bits.h rather than together with
->> the other BIT* variants.
->
->So, we have _Generic() in case you still wish to implement this.
+What he expressed is that the phy has been linked before the kernel has bee=
+n booted,=20
+and at this point, resetting the phy hardware will lose its original config=
+uration.=20
+The main focus is on fast links, resetting phy, and renegotiate
 
-humn... how would a _Generic() help here? The input is 1 or 2 integer
-literals (h and l) so the compiler can check it is correct at build
-time.  See example above.
+I am not sure if my statement is correct
 
-Lucas De Marchi
+the mdiobus_ register_ Device (), I didn't understand it either In the foll=
+owing example,=20
+I submitted a patch and did the same thing.
+
+int phy_device_register(struct phy_device *phydev)
+{
+	int err;
+
+	*err =3D mdiobus_register_device(&phydev->mdio);*
+	if (err)
+		return err;
+
+	/* Deassert the reset signal */
+	*phy_device_reset(phydev, 0);*
+
+	/* Run all of the fixups for this PHY */
+	err =3D phy_scan_fixups(phydev);
+	if (err) {
+		phydev_err(phydev, "failed to initialize\n");
+		goto out;
+	}
+
+	err =3D device_add(&phydev->mdio.dev);
+	if (err) {
+		phydev_err(phydev, "failed to add\n");
+		goto out;
+	}
+
+	return 0;
+
+ out:
+	/* Assert the reset signal */
+	phy_device_reset(phydev, 1);
+
+	mdiobus_unregister_device(&phydev->mdio);
+	return err;
+}
+
+Firstly, I think this operation is too late.
+
+Secondly, it was in the boot program that I did not reset my phy and was un=
+able to detect it,=20
+so I submitted a patch, which caused trouble for maintenance personnel.
+
+
+> Best
+> Alexander
+>=20
+>> The final issue I have is that your patch is described as "add a
+>> function do *DEASSERT* reset" not "add a function to *ALWAYS* *RESET*"
+>> which is what you are actually doing here. So the commit message and
+>> the code disagree with what's going on - the summary line is at best
+>> misleading.
+>>=20
+>> If your hardware case is that the PHY is already in reset, then of
+>> course you don't see any of the above as a problem, but that is not
+>> universally true - and that is exactly why Andrew is bringing this
+>> up. There are platforms out there where the reset is described in
+>> the firmware hardware description, *but* when the kernel boots, the
+>> reset signal is already deasserted. Raising it during kernel boot as
+>> you are doing will terminate the PHY's link with the remote end,
+>> and then deasserting it will cause it to renegotiate.
+>>=20
+>> Thanks.
+>=20
+>=20
+> --=20
+> TQ-Systems GmbH | M=C3=BChlstra=C3=9Fe 2, Gut Delling | 82229 Seefeld, Ge=
+rmany
+> Amtsgericht M=C3=BCnchen, HRB 105018
+> Gesch=C3=A4ftsf=C3=BChrer: Detlef Schneider, R=C3=BCdiger Stahl, Stefan S=
+chneider
+> http://www.tq-group.com/
+
