@@ -2,217 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C231700A1C
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:16:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B58B700A1E
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:16:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241495AbjELOQB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 10:16:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
+        id S241517AbjELOQt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 10:16:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241506AbjELOPx (ORCPT
+        with ESMTP id S241501AbjELOQr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 10:15:53 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1F0D14E4C
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:15:32 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-b9a7553f95dso19610777276.2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:15:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683900932; x=1686492932;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ghbGq9THJREEhkrSIStzO+A3rtDBCJPDalH7s9571pA=;
-        b=vF0Us9UlMXGLXLj1s1tWk3AyVw8tBCXUEnr9XNTtQ8N7JaOIqkdLiflH0w9EI9IaKU
-         6scnMtkiKb8kdFRAbRJ8uxb3wv8c6l6s7HCInpDhGo+HHup+aVHJfh4DVLtoEXs8+qni
-         31D/glRmakh4+sRhXNpuME3k1C7c6RRwKOgO3Ge3+dpvH6Q/HAPQnxd2uQd/C0VpSRN8
-         uX7KyG2x8Krb+3eoDO31JgPReMPbtHBoNpgSOMel1zh64Cr/kYop3aOITI3teaPF++Vz
-         /HbNprO+LkKJ90JAZ3vjXe1sy8vKkJEPoTgkCpGzg2tNwx4lnwcWwdQFQYzSE446QO5S
-         QX3Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683900932; x=1686492932;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ghbGq9THJREEhkrSIStzO+A3rtDBCJPDalH7s9571pA=;
-        b=UFg4OyfejL4EQ9FGOX8Ae3AaDSRZ1SzkXqoC8YniMJ+4ePF7aVeD0XmrPG6tD8hkES
-         3QULpFGp8LD2MelutHpDQnyk/KttK/bql4K/pTIIXmkEA/rywty2EDADr33B23GKbe0Z
-         xI2WTeTJC2nIqcjhUN6r8zsZ45Be3YL/bIVek/M4BOeuKhmlukFz6KPQe072CXYZ4rKM
-         sMwp4SZLudDswyr1sLwQVyRMHS8hUOYz1sYtmtC7Yf4RILirV8zav9gYx3Dy/a3yHxIm
-         4kkoIjlRr9YHI5juaZ5CvKzW+lfzUXbSMl3BS9pJn1WbMHK0k6R3VoMWLZbtV0IUYhlX
-         iLUg==
-X-Gm-Message-State: AC+VfDyeyIliehzRDYp2LkBcQcquRzSpufM4jLfiovKN0cqoJ6oxXDpJ
-        Gw1qqySkoZO2zMEWsWQO+MMnBwDW/+h8Ww==
-X-Google-Smtp-Source: ACHHUZ5n4GOwp+yXNZiY6lRiLp1LINyIY9W5VlLM4zkXtJJ0m6OA3RidwExCa/CyBYADnz8F1YZwsAkCUT1AKw==
-X-Received: from joychakr.c.googlers.com ([fda3:e722:ac3:cc00:4f:4b78:c0a8:6ea])
- (user=joychakr job=sendgmr) by 2002:a25:c7d0:0:b0:ba7:1cea:ee12 with SMTP id
- w199-20020a25c7d0000000b00ba71ceaee12mr954256ybe.12.1683900931853; Fri, 12
- May 2023 07:15:31 -0700 (PDT)
-Date:   Fri, 12 May 2023 14:14:45 +0000
-In-Reply-To: <20230512141445.2026660-1-joychakr@google.com>
-Mime-Version: 1.0
-References: <20230512141445.2026660-1-joychakr@google.com>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Message-ID: <20230512141445.2026660-7-joychakr@google.com>
-Subject: [PATCH v2 6/6] dmaengine: pl330: Use dma singles for peripheral _dregs
-From:   Joy Chakraborty <joychakr@google.com>
-To:     Vinod Koul <vkoul@kernel.org>
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, manugautam@google.com,
-        danielmentz@google.com, sjadavani@google.com,
-        Joy Chakraborty <joychakr@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Fri, 12 May 2023 10:16:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B5314E49;
+        Fri, 12 May 2023 07:16:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 317E765706;
+        Fri, 12 May 2023 14:16:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AFB2C433D2;
+        Fri, 12 May 2023 14:16:21 +0000 (UTC)
+From:   Clark Williams <williams@redhat.com>
+Subject: [ANNOUNCE] 6.1.27-rt9
+Date:   Fri, 12 May 2023 14:15:02 -0000
+Message-ID: <168390090272.147280.13621705967225649837@demetrius>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users <linux-rt-users@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Carsten Emde <C.Emde@osadl.org>,
+        John Kacur <jkacur@redhat.com>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Daniel Wagner <daniel.wagner@suse.com>,
+        Tom Zanussi <tom.zanussi@linux.intel.com>,
+        Clark Williams <williams@redhat.com>,
+        Pavel Machek <pavel@denx.de>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,HK_RANDOM_ENVFROM,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use DMA singles in a loop to load/store data to the peripheral for
-the remaining bytes left after chucks of bursts are done, which is
-handled by the _dregs() function.
+Hello RT-list!
 
-If the transfer length is not a multiple of (AxLen*AxSize) then the
-_dregs function takes care of setting up CCR with residual burst
-required to complete the transaction. It does so by changing the
-AxLen in CCR and 1 burst of Load and Store.
-But some peripherals might not set the burst request signal to the DMA
-controller since the number of bytes to transfer is less then the
-initial size of burst requested i.e. AxLen*AxSize leading to a forever
-wait.
+I'm pleased to announce the 6.1.27-rt9 stable release. This update is just the merge
+of the 6.1.27 stable release into the RT tree.
 
-Example of such a case :
-    Considering a peripheral having an RX FIFO of n bytes and a sw
-    configurable threshold level logic which drives the RX burst req
-    signal to PL330 i.e. when data in the RX fifo crosses the threshold
-    value the peripheral asserts the RX burst request to PL330 to copy
-    data from the fifo in bursts.
-    Taking an example say the Rx Fifo is 256 bytes in depth, the max
-    AxLen is 16, max AxSize is 4bytes and 304 bytes had to copied from
-    peripheral to memory.
-    In this case the peripheral SW driver would configure the threshold
-    to the maximum possible burst size (AxLen*AxSize) i.e. 64 bytes and
-    pass the same to pl330 driver using src/dst_maxburst variable.
-    PL330 would copy the first 256 bytes with 4 burst transactions and
-    the 48 remaining bytes would be handled by _dregs().
-    Currently _dregs() would setup a burst for AxLen=3 and AxSize=16 to
-    copy the 48bytes but since 48bytes is below the threshold configured
-    at the peripheral the Rx burst request signal would not get set
-    leading to a forever wait and timeout.
-    This logic will copy the remaining 48bytes using single transactions
-    of 4bytes each which would not depend on the burst req signal from
-    the peripheral.
+You can get this release via the git tree at:
 
-Instructions generated for above example with logic change:
-    DMAMOV CCR 0xbd0239
-    DMAMOV SAR 0xffffe000
-    DMAMOV DAR 0xffffc860
-    DMALP_1 3
-    DMAFLUSHP 0
-    DMAWFPB 0
-    DMALDB
-    DMASTPB 0
-    DMALPENDA_1 bjmpto_7
-    DMAMOV CCR 0xad0229
-    DMALDA
-    DMALP_0 11
-    DMAFLUSHP 0
-    DMAWFPS 0
-    DMASTPS 0
-    DMALPENDA_0 bjmpto_6
-    DMASEV 3
-    DMAEND
+  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
 
-Signed-off-by: Joy Chakraborty <joychakr@google.com>
----
- drivers/dma/pl330.c | 65 +++++++++++++++++++++++++++++++++++++++++++--
- 1 file changed, 63 insertions(+), 2 deletions(-)
+  branch: v6.1-rt
+  Head SHA1: 8a72c94cf9268600047e3ab9461cc40f7afc9c6b
 
-diff --git a/drivers/dma/pl330.c b/drivers/dma/pl330.c
-index 46e254fd4007..2145f601939e 100644
---- a/drivers/dma/pl330.c
-+++ b/drivers/dma/pl330.c
-@@ -1208,6 +1208,67 @@ static inline int _ldst_peripheral(struct pl330_dmac *pl330,
- 	return off;
- }
- 
-+/*
-+ * Sets up transfers to peripheral using DMA Singles instead of Bursts.
-+ * Data is moved between fifo and memory in bursts following which it is
-+ * loaded/stored to peripheral using Loops of DMA singles based on
-+ * transfer direction.
-+ */
-+static inline int _ldst_periph_single_dregs(struct pl330_dmac *pl330,
-+					    unsigned int dry_run, u8 buf[],
-+					    const struct _xfer_spec *pxs,
-+					    int src_length, int dst_length)
-+{
-+	int off = 0;
-+	unsigned int ljmp, lpcnt;
-+	struct _arg_LPEND lpend;
-+	enum dma_transfer_direction direction = pxs->desc->rqtype;
-+
-+	if (direction == DMA_MEM_TO_DEV) {
-+		off += _emit_load(dry_run, &buf[off], ALWAYS, direction,
-+				  pxs->desc->peri);
-+		lpcnt = dst_length;
-+	} else {
-+		lpcnt = src_length;
-+	}
-+
-+	/*
-+	 * Use Loop Cnt 0 to load/store from/to peripheral in single transactions
-+	 * since Burst Req might not be set as pending transfer length maybe less
-+	 * size of bytes to burst (AxSize * AxLen).
-+	 */
-+	off += _emit_LP(dry_run, &buf[off], 0, lpcnt);
-+	ljmp = off;
-+
-+	/*
-+	 * do FLUSHP at beginning to clear any stale dma requests before the
-+	 * first WFP.
-+	 */
-+	if (!(pl330->quirks & PL330_QUIRK_BROKEN_NO_FLUSHP))
-+		off += _emit_FLUSHP(dry_run, &buf[off], pxs->desc->peri);
-+
-+	off += _emit_WFP(dry_run, &buf[off], SINGLE, pxs->desc->peri);
-+
-+	if (direction == DMA_MEM_TO_DEV)
-+		off += _emit_store(dry_run, &buf[off], SINGLE, direction,
-+				   pxs->desc->peri);
-+	else
-+		off += _emit_load(dry_run, &buf[off], SINGLE, direction,
-+				  pxs->desc->peri);
-+
-+	lpend.cond = ALWAYS;
-+	lpend.forever = false;
-+	lpend.loop = 0;
-+	lpend.bjump = off - ljmp;
-+	off += _emit_LPEND(dry_run, &buf[off], &lpend);
-+
-+	if (direction == DMA_DEV_TO_MEM)
-+		off += _emit_store(dry_run, &buf[off], ALWAYS, direction,
-+				   pxs->desc->peri);
-+
-+	return off;
-+}
-+
- static int _bursts(struct pl330_dmac *pl330, unsigned dry_run, u8 buf[],
- 		const struct _xfer_spec *pxs, int cyc)
- {
-@@ -1273,8 +1334,8 @@ static int _dregs(struct pl330_dmac *pl330, unsigned int dry_run, u8 buf[],
- 	case DMA_MEM_TO_DEV:
- 	case DMA_DEV_TO_MEM:
- 		off += _emit_MOV(dry_run, &buf[off], CCR, dregs_ccr);
--		off += _ldst_peripheral(pl330, dry_run, &buf[off], pxs, 1,
--					BURST);
-+		off += _ldst_periph_single_dregs(pl330, dry_run, &buf[off],
-+							 pxs, src_length, dst_length);
- 		break;
- 
- 	case DMA_MEM_TO_MEM:
--- 
-2.40.1.606.ga4b1b128d6-goog
+Or to build 6.1.27-rt9 directly, the following patches should be applied:
 
+  https://www.kernel.org/pub/linux/kernel/v6.x/linux-6.1.tar.xz
+
+  https://www.kernel.org/pub/linux/kernel/v6.x/patch-6.1.27.xz
+
+  https://www.kernel.org/pub/linux/kernel/projects/rt/6.1/patch-6.1.27-rt9.patch.xz
+
+
+Enjoy!
+Clark
