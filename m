@@ -2,105 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBD9A7007E1
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 14:28:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8F9700804
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 14:30:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240684AbjELM20 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 08:28:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58016 "EHLO
+        id S240979AbjELMaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 08:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240096AbjELM2X (ORCPT
+        with ESMTP id S240855AbjELM3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 08:28:23 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2050.outbound.protection.outlook.com [40.107.93.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D53611DB3;
-        Fri, 12 May 2023 05:27:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eC68EnGDe5jb9CeUVwNDXZ8ktIabeHTgRRtoFyvOtXKZpJQ7V52Tn6J9bczC029TqVLHzpvjpMm7HiL365wrzhxLQ3NyMKR9TgmQ/Vo6v4hoV3LB28Hm1Z03fUjBgLzmUK7w8iHxE6PPZlwUbaChz8Cj/h47ma/ZV05eX0yP23962Zu81Kj3GFa+yBqYV4VzJkVaE9dtmnZ/pl/UFt9fdMSnabcIVPRS/0NMmIt5SutHBIdoU8qnhviy5XwTNZky4yjaAluTx1zjrKgl0c7HJItBS0hWlUpJPl4y8irdmZ3J8/Nu+zLli0GuEuuB6dS4+Dn2l67okfl1wQcoPeAolw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=5XbEIJDk0X+Le9usaka27pFIyefAOzKUWuosEUJ4N7A=;
- b=OKmi1SHzmwnxn9ufW6wT2gxgWh8/jIoeNVNenS9gWjfO4qgL4kxfGKXRYExji+TxXlKJ3vaOi1HRnG8SpvoeKby+14CnO26+glPsnwvLNi/CLm8Xk6LrNvGEMpk9lEQe1+zzZ0NxKGJIpxu25wlODv5Q/kTo7y5NGhm09D2ck9xHMff53i1BDU7bMuHOmWNDp3iop1RrFR0rYI12FqOWLMEDdD3gPu50PPAzebV9keS89sNlZ4SEsv68IlfFHkcrl94ZE+S+7zloXOocDwnq4YAOHBuh6/7yFeKOkLo4lnSDQZ8WswO2OPP3Qs4emcEDkq8kiGCjZfJUV9XHYWu4ZQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=5XbEIJDk0X+Le9usaka27pFIyefAOzKUWuosEUJ4N7A=;
- b=EW9n0pRQvDO+p8zmUgntVFtlbIlYptrhOIeP2yH6YzznUizDgWijSNMcortQtFnLVUukPRMlR60XMoMhk5NTGNtsjG1gYibkE2jRmJYm5FAPSdK4RBlzesbl11eyc61E1fl82nqVZA5ZMJfLYdNGzfSjXqnRevyOa8rQEJUBKnpXw0qPfO9IESC1mWA5IkSBMoh1kAYokkRt74tgD093SEnfwjAwz+RTgC43VO+qPY27+yqDKOW/6AXEdb7pcggaf7sO9xYyxbjhMaPtdZH/5nSRachzZpZuN2UolF7pI6EPk5PBrRhDimb7Tq9DgsRqBkHzflp/t970chhkvO+9dg==
-Received: from SJ0PR13CA0197.namprd13.prod.outlook.com (2603:10b6:a03:2c3::22)
- by CY8PR12MB7658.namprd12.prod.outlook.com (2603:10b6:930:9e::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.18; Fri, 12 May
- 2023 12:27:05 +0000
-Received: from CO1NAM11FT006.eop-nam11.prod.protection.outlook.com
- (2603:10b6:a03:2c3:cafe::94) by SJ0PR13CA0197.outlook.office365.com
- (2603:10b6:a03:2c3::22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.10 via Frontend
- Transport; Fri, 12 May 2023 12:27:04 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT006.mail.protection.outlook.com (10.13.174.246) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6387.24 via Frontend Transport; Fri, 12 May 2023 12:27:04 +0000
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 12 May 2023
- 05:26:54 -0700
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail203.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 12 May
- 2023 05:26:53 -0700
-Received: from vdi.nvidia.com (10.127.8.12) by mail.nvidia.com (10.129.68.6)
- with Microsoft SMTP Server id 15.2.986.37 via Frontend Transport; Fri, 12 May
- 2023 05:26:52 -0700
-From:   Liming Sun <limings@nvidia.com>
-To:     Adrian Hunter <adrian.hunter@intel.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        David Thompson <davthompson@nvidia.com>,
-        Shawn Lin <shawn.lin@rock-chips.com>
-CC:     Liming Sun <limings@nvidia.com>, <linux-mmc@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v3] mmc: sdhci-of-dwcmshc: Add runtime PM operations
-Date:   Fri, 12 May 2023 08:26:48 -0400
-Message-ID: <20230512122648.223974-1-limings@nvidia.com>
-X-Mailer: git-send-email 2.30.1
-In-Reply-To: <79137159a833c164ea8ea3f05d8d6d9537db2f42.1683747334.git.limings@nvidia.com>
-References: <79137159a833c164ea8ea3f05d8d6d9537db2f42.1683747334.git.limings@nvidia.com>
+        Fri, 12 May 2023 08:29:53 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F247423A;
+        Fri, 12 May 2023 05:29:18 -0700 (PDT)
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CCOUoo001858;
+        Fri, 12 May 2023 07:28:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=PODMain02222019;
+ bh=hhGbqr5I8d1WarBJ8Z9M0P99KfkmGBTeVHbqv5amikE=;
+ b=Ap4aiG0ah8RcwsjPABIbFRIg+kASR6fLmS8xzdDwefldHDuurFAMk4B5MfWBens19A7F
+ XqsvNcGVbfOhOxcWYXKecIBFrSAgJO74wrYn38mIIYAqkA+X+UMxc03E8T/lEUpD8yhz
+ HVs7zEEjJChOknZT4gTqALpDXKTALyzYgJpOoIrcvncv/aHU0brRHDfxiy+qK4D6xEtN
+ /8J3fSPbHlZJTfGzFpEaAlAmujCaALpN9h42TVooNfelT5aaGs1vYsptfCKgDbU3KUrc
+ TBhEdHiK2ZUazkqXvaa+9uON8sgTPRKUvfF8YuVAvSywjrOI919HQNSjPYsYwbkiTgeQ xQ== 
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3qf7nb5dqx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 07:28:40 -0500
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Fri, 12 May
+ 2023 07:28:38 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Fri, 12 May 2023 07:28:38 -0500
+Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 24FD345;
+        Fri, 12 May 2023 12:28:38 +0000 (UTC)
+From:   Charles Keepax <ckeepax@opensource.cirrus.com>
+To:     <broonie@kernel.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
+        <tglx@linutronix.de>, <maz@kernel.org>, <linus.walleij@linaro.org>,
+        <vkoul@kernel.org>
+CC:     <lgirdwood@gmail.com>, <yung-chuan.liao@linux.intel.com>,
+        <sanyog.r.kale@intel.com>, <pierre-louis.bossart@linux.intel.com>,
+        <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
+        <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH 00/10] Add cs42l43 PC focused SoundWire CODEC
+Date:   Fri, 12 May 2023 13:28:28 +0100
+Message-ID: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT006:EE_|CY8PR12MB7658:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3b9b2f3d-1ced-4cf2-5efa-08db52e431e7
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 7v8zETP90kyQVj606kOd4lMMeEdyZboPVbf1pnkqswS0uEujWZ4DiirITkH2X/L+cbVxhzB6pvPiSm7Cc8RTUccqtJEbscZlrBgCPugohU6eHEnQtNgOxk1NlXkN82g4NEUd9PcAhMjt6eGHSruvGfKNVbuoBzpELdDnVLaHe4tptl7v62ipUXOR3b7LOCm46wwVb5oK6Qw/1TQDZ8wQDZHq37arOH1vQ++52rWQQ+96R0FNioZW7f/muGmgGOULUuqJBIvDiF9zERF/pZEOzy2VPCyT3a55ZkNL0HfeMbdcenOsn7Hcn5pifAkYmteFHXM9z/gB7V4SwqhjgkpSoJujyy31bccyoqgAlX8EDCR/udbr6J8FYQMzRszOZSSAZGRmq0a68fBh9efS5W5mPyLfr/fHhJjGeni2PWFZnH4DCyjAVPDxz60JgKaGrGC6EFJSaU8u/Yr+X1BunnLXDKLnLnQ+4Q50THVumfNMgVv25anuidBjnDhwXFP3hB6ynSgH9OgbcBNiAzke2OXX4G54l/1TRnWyzcTYskofZ+MWFvl6ZcRq+r2bl4xR6TLloxzEGG9Xw27JdOApVAS9rKa+cBSsN09xxAzdDuWmztLrznJcCKJ95WeGrZZsfCKF2JXzs6bIVcgi8zS0iVrda7uRWS7UVM8jMSUI/vSSxqGM5Y4klNdIdYcAimzwil7dqTb2KAzI8WUYNBTTahGKzVtLbJPj3Z6WSzS21u409Wr69ZgVjBL4s+EYIaTuooBFvoQ7ccrVn6GVqaFcTUlDVQ==
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(376002)(136003)(346002)(39860400002)(396003)(451199021)(36840700001)(46966006)(40470700004)(336012)(2616005)(40460700003)(426003)(186003)(83380400001)(47076005)(2906002)(82740400003)(36860700001)(82310400005)(86362001)(36756003)(7636003)(356005)(40480700001)(6666004)(8936002)(8676002)(5660300002)(70206006)(4326008)(70586007)(478600001)(41300700001)(7696005)(316002)(54906003)(26005)(110136005)(1076003)(133343001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 12:27:04.5231
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3b9b2f3d-1ced-4cf2-5efa-08db52e431e7
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT006.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7658
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+X-Proofpoint-ORIG-GUID: 8-OvAxXkBH6wUG2stbtfU7YbBv3HFIV3
+X-Proofpoint-GUID: 8-OvAxXkBH6wUG2stbtfU7YbBv3HFIV3
+X-Proofpoint-Spam-Reason: safe
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -108,103 +71,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This commit implements the runtime PM operations to disable eMMC
-card clock when idle.
+This patch chain adds support for the Cirrus Logic cs42l43 PC focused
+SoundWire CODEC. Some supporting work is included in the chain,
+including adding an ASoC control notification helper function and
+adding support for IRQs generated by the in-band SoundWire alert
+mechanism.
 
-Reviewed-by: David Thompson <davthompson@nvidia.com>
-Signed-off-by: Liming Sun <limings@nvidia.com>
----
-v2->v3:
-    - Revise the commit message;
-v1->v2:
-    Updates for comments from Ulf:
-    - Make the runtime PM logic generic for sdhci-of-dwcmshc;
-v1: Initial version.
----
- drivers/mmc/host/sdhci-of-dwcmshc.c | 56 ++++++++++++++++++++++++++++-
- 1 file changed, 55 insertions(+), 1 deletion(-)
+The chain is currently based of v6.4-rc1 because I am not 100% sure
+which tree we want to send everything through. The CODEC support
+has a build dependency on both the SoundWire change and the ASoC
+soc-component change.
 
-diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
-index e68cd87998c8..a3277f4d250d 100644
---- a/drivers/mmc/host/sdhci-of-dwcmshc.c
-+++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
-@@ -15,6 +15,7 @@
- #include <linux/module.h>
- #include <linux/of.h>
- #include <linux/of_device.h>
-+#include <linux/pm_runtime.h>
- #include <linux/reset.h>
- #include <linux/sizes.h>
- 
-@@ -546,6 +547,8 @@ static int dwcmshc_probe(struct platform_device *pdev)
- 		sdhci_enable_v4_mode(host);
- #endif
- 
-+	pm_runtime_enable(dev);
-+
- 	host->mmc->caps |= MMC_CAP_WAIT_WHILE_BUSY;
- 
- 	err = sdhci_setup_host(host);
-@@ -646,7 +649,58 @@ static int dwcmshc_resume(struct device *dev)
- }
- #endif
- 
--static SIMPLE_DEV_PM_OPS(dwcmshc_pmops, dwcmshc_suspend, dwcmshc_resume);
-+#ifdef CONFIG_PM
-+
-+#ifdef CONFIG_ACPI
-+static void dwcmshc_enable_card_clk(struct sdhci_host *host)
-+{
-+	u16 ctrl;
-+
-+	ctrl = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
-+	ctrl |= SDHCI_CLOCK_CARD_EN;
-+	sdhci_writew(host, ctrl, SDHCI_CLOCK_CONTROL);
-+}
-+
-+static void dwcmshc_disable_card_clk(struct sdhci_host *host)
-+{
-+	u16 ctrl;
-+
-+	ctrl = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
-+	ctrl &= ~SDHCI_CLOCK_CARD_EN;
-+	sdhci_writew(host, ctrl, SDHCI_CLOCK_CONTROL);
-+}
-+#endif
-+
-+static int dwcmshc_runtime_suspend(struct device *dev)
-+{
-+	struct sdhci_host *host = dev_get_drvdata(dev);
-+	int ret = 0;
-+
-+	ret = sdhci_runtime_suspend_host(host);
-+	if (!ret)
-+		dwcmshc_disable_card_clk(host);
-+
-+	return ret;
-+}
-+
-+static int dwcmshc_runtime_resume(struct device *dev)
-+{
-+	struct sdhci_host *host = dev_get_drvdata(dev);
-+	int ret = 0;
-+
-+	dwcmshc_enable_card_clk(host);
-+	ret = sdhci_runtime_resume_host(host, 0);
-+
-+	return ret;
-+}
-+
-+#endif
-+
-+static const struct dev_pm_ops dwcmshc_pmops = {
-+	SET_SYSTEM_SLEEP_PM_OPS(dwcmshc_suspend, dwcmshc_resume)
-+	SET_RUNTIME_PM_OPS(dwcmshc_runtime_suspend,
-+			   dwcmshc_runtime_resume, NULL)
-+};
- 
- static struct platform_driver sdhci_dwcmshc_driver = {
- 	.driver	= {
+Thanks,
+Charles
+
+Charles Keepax (8):
+  ASoC: soc-component: Add notify control helper function
+  ASoC: ak4118: Update to use new component control notify helper
+  ASoC: wm_adsp: Update to use new component control notify helepr
+  dt-bindings: mfd: cirrus,cs42l43: Add initial DT binding
+  mfd: cs42l43: Add support for cs42l43 core driver
+  irqchip/cs42l43: Add support for the cs42l43 IRQs
+  pinctrl: cs42l43: Add support for the cs42l43
+  ASoC: cs42l43: Add support for the cs42l43
+
+Lucas Tanure (2):
+  soundwire: bus: Allow SoundWire peripherals to register IRQ handlers
+  spi: cs42l43: Add SPI controller support
+
+ .../bindings/mfd/cirrus,cs42l43.yaml          |  212 ++
+ MAINTAINERS                                   |    7 +
+ drivers/irqchip/Kconfig                       |    9 +
+ drivers/irqchip/Makefile                      |    1 +
+ drivers/irqchip/irq-cs42l43.c                 |  170 ++
+ drivers/mfd/Kconfig                           |   23 +
+ drivers/mfd/Makefile                          |    3 +
+ drivers/mfd/cs42l43-i2c.c                     |   86 +
+ drivers/mfd/cs42l43-sdw.c                     |  210 ++
+ drivers/mfd/cs42l43.c                         | 1044 ++++++++
+ drivers/mfd/cs42l43.h                         |   23 +
+ drivers/pinctrl/cirrus/Kconfig                |   11 +
+ drivers/pinctrl/cirrus/Makefile               |    2 +
+ drivers/pinctrl/cirrus/pinctrl-cs42l43.c      |  614 +++++
+ drivers/soundwire/bus.c                       |   31 +
+ drivers/soundwire/bus_type.c                  |   12 +
+ drivers/spi/Kconfig                           |    7 +
+ drivers/spi/Makefile                          |    1 +
+ drivers/spi/spi-cs42l43.c                     |  287 +++
+ include/linux/irqchip/cs42l43.h               |   61 +
+ include/linux/mfd/cs42l43-regs.h              | 1172 +++++++++
+ include/linux/mfd/cs42l43.h                   |   50 +
+ include/linux/soundwire/sdw.h                 |    9 +
+ include/sound/cs42l43.h                       |   84 +
+ include/sound/soc-component.h                 |    4 +
+ sound/soc/codecs/Kconfig                      |   16 +
+ sound/soc/codecs/Makefile                     |    4 +
+ sound/soc/codecs/ak4118.c                     |   11 +-
+ sound/soc/codecs/cs42l43-jack.c               |  946 +++++++
+ sound/soc/codecs/cs42l43-sdw.c                |   75 +
+ sound/soc/codecs/cs42l43.c                    | 2270 +++++++++++++++++
+ sound/soc/codecs/cs42l43.h                    |  117 +
+ sound/soc/codecs/wm_adsp.c                    |   20 +-
+ sound/soc/soc-component.c                     |   22 +
+ 34 files changed, 7586 insertions(+), 28 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mfd/cirrus,cs42l43.yaml
+ create mode 100644 drivers/irqchip/irq-cs42l43.c
+ create mode 100644 drivers/mfd/cs42l43-i2c.c
+ create mode 100644 drivers/mfd/cs42l43-sdw.c
+ create mode 100644 drivers/mfd/cs42l43.c
+ create mode 100644 drivers/mfd/cs42l43.h
+ create mode 100644 drivers/pinctrl/cirrus/pinctrl-cs42l43.c
+ create mode 100644 drivers/spi/spi-cs42l43.c
+ create mode 100644 include/linux/irqchip/cs42l43.h
+ create mode 100644 include/linux/mfd/cs42l43-regs.h
+ create mode 100644 include/linux/mfd/cs42l43.h
+ create mode 100644 include/sound/cs42l43.h
+ create mode 100644 sound/soc/codecs/cs42l43-jack.c
+ create mode 100644 sound/soc/codecs/cs42l43-sdw.c
+ create mode 100644 sound/soc/codecs/cs42l43.c
+ create mode 100644 sound/soc/codecs/cs42l43.h
+
 -- 
-2.30.1
+2.30.2
 
