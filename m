@@ -2,125 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E89F700422
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 11:43:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 453EE70042A
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 11:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240558AbjELJnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 05:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40332 "EHLO
+        id S240337AbjELJn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 05:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240618AbjELJmT (ORCPT
+        with ESMTP id S240673AbjELJnQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 05:42:19 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D98811DAF;
-        Fri, 12 May 2023 02:41:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=7IRubd/9LUDaS7AZzS9MSSlrTD+Lz1RxX42jUzfFNis=; b=qZECOHXy4PsT+NcZQUsq6/3ZQH
-        MOKcOYAQDHgL5BDNC7W37CmfNq82INs3FUVzxmJO9ofFepVuA/lmdd7B27ea+TrqCEDXOiesozFCZ
-        HmEFwmCTtrSuoSMt8rGMCmVGI4WHY2600Dlpz88KW2NEEHdNS3lSkhvEfX3VGOEIwWFRDzyEFU/gD
-        kNiDYQI+essXwyQRc/DqfbO0cIZNGVLvXD/9xOsGFf5Ett8di61JhVhbqio9hfLm01Wk1Oh1XdgHT
-        1RA11imCbi4fCSxusHES6zHE5odbSJ6sZRiFiVu7nwvhMo2yY3XDewd+M0xmXM48qt3oMc869nL4X
-        5mO9qzKw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60252)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pxPHT-00085g-GI; Fri, 12 May 2023 10:41:43 +0100
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pxPHR-0004y9-Oq; Fri, 12 May 2023 10:41:41 +0100
-Date:   Fri, 12 May 2023 10:41:41 +0100
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Yan Wang <rk.code@outlook.com>
-Cc:     andrew@lunn.ch, hkallweit1@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5] net: mdiobus: Add a function to deassert reset
-Message-ID: <ZF4J1VqEqbnE6JG9@shell.armlinux.org.uk>
-References: <KL1PR01MB54486A247214CC72CAB5A433E6759@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
- <ZF4AjX6csKkVJzht@shell.armlinux.org.uk>
- <KL1PR01MB54488021E5650ED8A203057FE6759@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
+        Fri, 12 May 2023 05:43:16 -0400
+Received: from out-18.mta0.migadu.com (out-18.mta0.migadu.com [IPv6:2001:41d0:1004:224b::12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5413D12E95
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 02:42:36 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1683884548;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=+3Cj7WM/5H/yN4K+1lxE1r8ARjSog11gtcnlJ0Ke9Cs=;
+        b=LoyWQci7E7aehvM7RvdT5fPZDShGQ0N3hNobaGAYqQcwfBmJdJo6pX3oyMFuEuj73ybj1D
+        kvJRMx80dPfs9ElFWf5o/QxBLIG4as4augYHlH0kmV7lyvL3hJrGCYfvR0m1Joc4JYGGif
+        tnnA3xwaUSyksPgKlMMz11sZeCuICQY=
+From:   Yajun Deng <yajun.deng@linux.dev>
+To:     corbet@lwn.net, catalin.marinas@arm.com, will@kernel.org,
+        hch@lst.de, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        paulmck@kernel.org, bp@suse.de, akpm@linux-foundation.org,
+        peterz@infradead.org, rdunlap@infradead.org, kim.phillips@amd.com,
+        rostedt@goodmis.org, thunder.leizhen@huawei.com, ardb@kernel.org,
+        bhe@redhat.com, anshuman.khandual@arm.com,
+        song.bao.hua@hisilicon.com
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        Yajun Deng <yajun.deng@linux.dev>
+Subject: [PATCH] dma-contiguous: support per-numa CMA for all architectures
+Date:   Fri, 12 May 2023 17:42:10 +0800
+Message-Id: <20230512094210.141540-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <KL1PR01MB54488021E5650ED8A203057FE6759@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 05:28:47PM +0800, Yan Wang wrote:
-> 
-> 
-> On 5/12/2023 5:02 PM, Russell King (Oracle) wrote:
-> > On Fri, May 12, 2023 at 03:08:53PM +0800, Yan Wang wrote:
-> > > +	gpiod_set_value_cansleep(reset, gpiod_is_active_low(reset));
-> > > +	fsleep(reset_assert_delay);
-> > > +	gpiod_set_value_cansleep(reset, !gpiod_is_active_low(reset));
-> > Andrew, one of the phylib maintainers and thus is responsible for code
-> > in the area you are touching. Andrew has complained about the above
-> > which asserts and then deasserts reset on two occasions now, explained
-> > why it is wrong, but still the code persists in doing this.
-> > 
-> > I am going to add my voice as another phylib maintainer to this and say
-> > NO to this code, for the exact same reasons that Andrew has given.
-> > 
-> > You now have two people responsible for the code in question telling
-> > you that this is the wrong approach.
-> > 
-> > Until this is addressed in some way, it is pointless you posting
-> > another version of this patch.
-> > 
-> > Thanks.
-> > 
-> I'm very sorry, I didn't have their previous intention.
-> The meaning of the two assertions is reset and reset release.
-> If you believe this is the wrong method, please ignore it.
+In the commit b7176c261cdb ("dma-contiguous: provide the ability to
+reserve per-numa CMA"), Barry adds DMA_PERNUMA_CMA for ARM64.
 
-As Andrew has told you twice:
+But this feature is architecture independent, so support per-numa CMA
+for all architectures, and enable it by default if NUMA.
 
-We do not want to be resetting the PHY while we are probing the bus,
-and he has given one reason for it.
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
+---
+ Documentation/admin-guide/kernel-parameters.txt | 2 +-
+ arch/arm64/mm/init.c                            | 2 --
+ include/linux/dma-map-ops.h                     | 6 ------
+ kernel/dma/Kconfig                              | 6 +++---
+ kernel/dma/contiguous.c                         | 8 +++++++-
+ 5 files changed, 11 insertions(+), 13 deletions(-)
 
-The reason Andrew gave is that hardware resetting a PHY that was not
-already in reset means that any link is immediately terminated, and
-the PHY has to renegotiate with its link partner when your code
-subsequently releases the reset signal. This is *not* the behaviour
-that phylib maintainers want to see.
-
-The second problem that Andrew didn't mention is that always hardware
-resetting the PHY will clear out any firmware setup that has happened
-before the kernel has been booted. Again, that's a no-no.
-
-The final issue I have is that your patch is described as "add a
-function do *DEASSERT* reset" not "add a function to *ALWAYS* *RESET*"
-which is what you are actually doing here. So the commit message and
-the code disagree with what's going on - the summary line is at best
-misleading.
-
-If your hardware case is that the PHY is already in reset, then of
-course you don't see any of the above as a problem, but that is not
-universally true - and that is exactly why Andrew is bringing this
-up. There are platforms out there where the reset is described in
-the firmware hardware description, *but* when the kernel boots, the
-reset signal is already deasserted. Raising it during kernel boot as
-you are doing will terminate the PHY's link with the remote end,
-and then deasserting it will cause it to renegotiate.
-
-Thanks.
-
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index 56d9458276a6..ac0002b2e323 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -692,7 +692,7 @@
+ 			kernel/dma/contiguous.c
+ 
+ 	cma_pernuma=nn[MG]
+-			[ARM64,KNL,CMA]
++			[KNL,CMA]
+ 			Sets the size of kernel per-numa memory area for
+ 			contiguous memory allocations. A value of 0 disables
+ 			per-numa CMA altogether. And If this option is not
+diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+index 66e70ca47680..d560aef6aafa 100644
+--- a/arch/arm64/mm/init.c
++++ b/arch/arm64/mm/init.c
+@@ -410,8 +410,6 @@ void __init bootmem_init(void)
+ 	arm64_hugetlb_cma_reserve();
+ #endif
+ 
+-	dma_pernuma_cma_reserve();
+-
+ 	kvm_hyp_reserve();
+ 
+ 	/*
+diff --git a/include/linux/dma-map-ops.h b/include/linux/dma-map-ops.h
+index 31f114f486c4..7af9949828ff 100644
+--- a/include/linux/dma-map-ops.h
++++ b/include/linux/dma-map-ops.h
+@@ -168,12 +168,6 @@ static inline void dma_free_contiguous(struct device *dev, struct page *page,
+ }
+ #endif /* CONFIG_DMA_CMA*/
+ 
+-#ifdef CONFIG_DMA_PERNUMA_CMA
+-void dma_pernuma_cma_reserve(void);
+-#else
+-static inline void dma_pernuma_cma_reserve(void) { }
+-#endif /* CONFIG_DMA_PERNUMA_CMA */
+-
+ #ifdef CONFIG_DMA_DECLARE_COHERENT
+ int dma_declare_coherent_memory(struct device *dev, phys_addr_t phys_addr,
+ 		dma_addr_t device_addr, size_t size);
+diff --git a/kernel/dma/Kconfig b/kernel/dma/Kconfig
+index 6677d0e64d27..79f83091e3a2 100644
+--- a/kernel/dma/Kconfig
++++ b/kernel/dma/Kconfig
+@@ -140,10 +140,10 @@ if  DMA_CMA
+ 
+ config DMA_PERNUMA_CMA
+ 	bool "Enable separate DMA Contiguous Memory Area for each NUMA Node"
+-	default NUMA && ARM64
++	default NUMA
+ 	help
+-	  Enable this option to get pernuma CMA areas so that devices like
+-	  ARM64 SMMU can get local memory by DMA coherent APIs.
++	  Enable this option to get pernuma CMA areas so that NUMA devices
++	  can get local memory by DMA coherent APIs.
+ 
+ 	  You can set the size of pernuma CMA by specifying "cma_pernuma=size"
+ 	  on the kernel's command line.
+diff --git a/kernel/dma/contiguous.c b/kernel/dma/contiguous.c
+index 6ea80ae42622..26a8e5365fcd 100644
+--- a/kernel/dma/contiguous.c
++++ b/kernel/dma/contiguous.c
+@@ -128,7 +128,7 @@ static inline __maybe_unused phys_addr_t cma_early_percent_memory(void)
+ #endif
+ 
+ #ifdef CONFIG_DMA_PERNUMA_CMA
+-void __init dma_pernuma_cma_reserve(void)
++static void __init dma_pernuma_cma_reserve(void)
+ {
+ 	int nid;
+ 
+@@ -153,6 +153,10 @@ void __init dma_pernuma_cma_reserve(void)
+ 			(unsigned long long)pernuma_size_bytes / SZ_1M, nid);
+ 	}
+ }
++#else
++static inline void __init dma_pernuma_cma_reserve(void)
++{
++}
+ #endif
+ 
+ /**
+@@ -171,6 +175,8 @@ void __init dma_contiguous_reserve(phys_addr_t limit)
+ 	phys_addr_t selected_limit = limit;
+ 	bool fixed = false;
+ 
++	dma_pernuma_cma_reserve();
++
+ 	pr_debug("%s(limit %08lx)\n", __func__, (unsigned long)limit);
+ 
+ 	if (size_cmdline != -1) {
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+2.25.1
+
