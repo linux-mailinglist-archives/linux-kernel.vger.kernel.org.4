@@ -2,51 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 423F66FFF67
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 05:45:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7FB996FFF68
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 05:45:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239880AbjELDp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 23:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58130 "EHLO
+        id S239887AbjELDp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 23:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239887AbjELDpW (ORCPT
+        with ESMTP id S239902AbjELDpr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 23:45:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0DF559F
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 20:45:20 -0700 (PDT)
+        Thu, 11 May 2023 23:45:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA435581
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 20:45:39 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CBF5C64EA6
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:45:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CDC8C433D2;
-        Fri, 12 May 2023 03:45:19 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 450AB60DC0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:45:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 843E0C433D2;
+        Fri, 12 May 2023 03:45:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
-        s=korg; t=1683863119;
-        bh=LwXFBCIUn0qm0zeQk1M2Kj8pN5JJyhizS0k2YqjjrOI=;
+        s=korg; t=1683863138;
+        bh=aIainonip+qTHVAfBQeJ+FebP9eJUCWa2fFmARG9MoA=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=xKEZx2tzEI51buUGGzKH5QJ7PBGdG992TJmfpaxnYgMAMzaZ3FpNcs3PZkXbqm4M/
-         /HR/cZNsnu3ldz5pcncGMlOV6OuZK72I3TEDHWbROxv+jS+IOJjGjpZewksm/bxplS
-         uIwzeTnp9fq09Q5OQzXCY0N+Q+TPmqnc9Ank+EaE=
-Date:   Thu, 11 May 2023 20:45:18 -0700
+        b=Wat+W9u7v76FAeSneppv2rF+l0B07wJ5+3MKSB7M8HkAYZ9iLOEgX5wgJgL8LWbJ4
+         1cswwltkjvb94Tn+euoP2V3uzaXZ61/Zaef7zezZCCQ5Na0uxnoJmMYTsOLqh4Iex1
+         JhXLZJT+iiugLjtWFLVawpl7DNjW9JCJmNjw2V7U=
+Date:   Thu, 11 May 2023 20:45:32 -0700
 From:   Andrew Morton <akpm@linux-foundation.org>
-To:     Heiko Carstens <hca@linux.ibm.com>
-Cc:     Ilya Leoshkevich <iii@linux.ibm.com>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        linux-kernel@vger.kernel.org, Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>
-Subject: Re: [PATCH 0/2] statfs: Enforce statfs[64] structure intialization
-Message-Id: <20230511204518.eba10b4cbf9568a24d1d428b@linux-foundation.org>
-In-Reply-To: <ZFz9I5bhRh2wH14i@osiris>
-References: <20230504144021.808932-1-iii@linux.ibm.com>
-        <ZFz9I5bhRh2wH14i@osiris>
+To:     Khalid Aziz <khalid.aziz@oracle.com>
+Cc:     willy@infradead.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org,
+        Steve Sistare <steven.sistare@oracle.com>
+Subject: Re: [PATCH] mm, compaction: Skip all pinned pages during scan
+Message-Id: <20230511204532.ceaf7adba0bc95d65372af07@linux-foundation.org>
+In-Reply-To: <20230511165516.77957-1-khalid.aziz@oracle.com>
+References: <20230511165516.77957-1-khalid.aziz@oracle.com>
 X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-9.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -55,28 +53,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 May 2023 16:35:15 +0200 Heiko Carstens <hca@linux.ibm.com> wrote:
+On Thu, 11 May 2023 10:55:16 -0600 Khalid Aziz <khalid.aziz@oracle.com> wrote:
 
-> On Thu, May 04, 2023 at 04:40:19PM +0200, Ilya Leoshkevich wrote:
-> > This series fixes copying of uninitialized memory to userspace by
-> > do_statfs_native() and do_statfs64() on s390.
-> > 
-> > Patch 1 fixes the problem by making the code similar to
-> > put_compat_statfs() and put_compat_statfs64().
-> > 
-> > Patch 2 gets rid of the padding which caused the issue; even though it
-> > may be considered redundant, it documents that s390 de-facto has an
-> > extra f_spare array element.
-> > 
-> > Ilya Leoshkevich (2):
-> >   statfs: Enforce statfs[64] structure intialization
-> >   s390/uapi: Cover statfs padding by growing f_spare
-> > 
-> >  arch/s390/include/asm/compat.h      | 2 +-
-> >  arch/s390/include/uapi/asm/statfs.h | 4 ++--
-> >  fs/statfs.c                         | 4 ++--
-> >  3 files changed, 5 insertions(+), 5 deletions(-)
+> Pinned pages can not be migrated. Currently as
+> isolate_migratepages_block() scans pages for compaction, it skips
+> any pinned anonymous pages. All pinned pages should be skipped and
+> not just the anonymous pinned pages. This patch adds a check for
+> pinned page by comparing its refcount with mapcount and accounts for
+> possible extra refcounts. This was seen as a real issue on a
+> customer workload where a large number of pages were pinned by vfio
+> on the host and any attempts to allocate hugepages resulted in
+> significant amount of cpu time spent in either direct compaction or
+> in kcompatd scanning vfio pinned pages over and over again that can
+> not be migrated.
 > 
-> Al, Andrew, should this go via the s390 tree?
+> Signed-off-by: Khalid Aziz <khalid.aziz@oracle.com>
+> Suggested-by: Steve Sistare <steven.sistare@oracle.com>
+> ---
+>  mm/compaction.c | 33 +++++++++++++++++++++++++++++----
+>  1 file changed, 29 insertions(+), 4 deletions(-)
+> 
+> diff --git a/mm/compaction.c b/mm/compaction.c
+> index 5a9501e0ae01..d1371fd75391 100644
+> --- a/mm/compaction.c
+> +++ b/mm/compaction.c
+> @@ -764,6 +764,32 @@ static bool too_many_isolated(pg_data_t *pgdat)
+>  	return too_many;
+>  }
+>  
+> +/*
+> + * Check if this base page should be skipped from isolation because
+> + * it is pinned. This function is called for regular pages only, and not
+> + * for THP or hugetlbfs pages. This code is inspired by similar code
+> + * in migrate_vma_check_page(), can_split_folio() and
+> + * folio_migrate_mapping()
+> + */
+> +static inline bool is_pinned_page(struct page *page)
+> +{
+> +	unsigned long extra_refs;
+> +
+> +	/* anonymous page can have extra ref from page cache */
 
-I'd say so.
+"from swapcache"?
+
+> +	if (page_mapping(page))
+> +		extra_refs = 1 + page_has_private(page);
+> +	else
+> +		extra_refs = PageSwapCache(page) ? 1 : 0;
+> +
+> +	/*
+> +	 * This is an admittedly racy check but good enough to determine
+> +	 * if a page should be isolated
+
+"cannot be migrated"?
+
+> +	 */
+> +	if ((page_count(page) - extra_refs) > page_mapcount(page))
+> +		return true;
+> +	return false;
+> +}
+> +
+>  /**
+>   * isolate_migratepages_block() - isolate all migrate-able pages within
+>   *				  a single pageblock
+> @@ -992,12 +1018,11 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
+>  			goto isolate_fail;
+>  
+>  		/*
+> -		 * Migration will fail if an anonymous page is pinned in memory,
+> -		 * so avoid taking lru_lock and isolating it unnecessarily in an
+> -		 * admittedly racy check.
+> +		 * Migration will fail if a page is pinned in memory,
+> +		 * so avoid taking lru_lock and isolating it unnecessarily
+>  		 */
+>  		mapping = page_mapping(page);
+> -		if (!mapping && (page_count(page) - 1) > total_mapcount(page))
+> +		if (is_pinned_page(page))
+>  			goto isolate_fail_put;
+>  
+>  		/*
+> -- 
+> 2.37.2
