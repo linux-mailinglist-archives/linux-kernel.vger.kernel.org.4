@@ -2,142 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5680770096E
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:49:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EA18700978
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:50:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241324AbjELNtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 09:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57912 "EHLO
+        id S240987AbjELNt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 09:49:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240963AbjELNtA (ORCPT
+        with ESMTP id S241325AbjELNty (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 09:49:00 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEC1B12EA9
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:48:58 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f4c6c4b51eso31157515e9.2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:48:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683899337; x=1686491337;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=67+i61jguyp+ViZ9g6BdKZA7MoS8H9z+3IWq9oh/QL4=;
-        b=OwLBvsSCAL4IKqngbyeoNx/oUbfIXwpu3OvJhWUAlVCiT6A9dVvRwxpOuPJqfIbT/6
-         PrRcyqgLS3++Foa3bBtNBv/pj2lvZa83iigcr+fC8lrKrUMNsAQzjyEy+PMw5OMm/Mhf
-         xF0yyGQzDsuSOMbxKBHHyAFAEKrz+LS4Fyu3wgjp0bEG6ZAZ6d6zsvotf2t02PXSwHRW
-         FfnDosgrkDUWBd8K4VTIE+ETIO+fdaZ1mayOHMPSoB8rpU8IPhOHJYHvOjr5iMGiPkQF
-         8qstkH9p0C0OucOJviu7r6yDgaQ9C5Z5Y9EfGtbIHXO5xfXzDSrQ5BQ6gaa5O1McMXua
-         2pOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683899337; x=1686491337;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=67+i61jguyp+ViZ9g6BdKZA7MoS8H9z+3IWq9oh/QL4=;
-        b=FXTYfKzsRFPOA9O3cQKzGFvM1+Bz7t4dAgmCJKxTXcRgvXGtfirs0ctotJqr15iRhh
-         lx1NshdEP6Tu9782ZrD/j5lOSfj6wswuX9w7Dy52VBcbo43uqVJtMlvOp6j4pVxlaq7P
-         WqwbnK/FBI1xqV0xPvfMXoG4+t7anaX51JPXu6R3i67tWtxlYn5CUG5BuZ0I6QTqKEEF
-         1DUnFmUfnTy/Nv0dTW8bhfhmle/IsYcz7WsijnBU1slNp5ty6iWUQatcZCm7tZZl/ECR
-         f7bepQSr4u50abI7Bv/UJdrAyh1nAbXH5UpPB1pwcFusLSrcLdQPtHYVwt8yBUNQ7I8n
-         SO+Q==
-X-Gm-Message-State: AC+VfDxGlFNjwpNvkeN7vxt/UpiAx4gwLAHzElJZ3NxGo3vYAMBg4zOy
-        yjLsZo0FopWVe0ankAaFAHGGxg==
-X-Google-Smtp-Source: ACHHUZ587vmfUkFwUYJByiVpeFrZ7RH44sF7IGxP8ERhwrP7uly1qe+BtE/g9t78xP4zh4ZmSj7afw==
-X-Received: by 2002:a05:600c:2198:b0:3f4:253b:92a9 with SMTP id e24-20020a05600c219800b003f4253b92a9mr11929533wme.30.1683899337069;
-        Fri, 12 May 2023 06:48:57 -0700 (PDT)
-Received: from aspen.lan (aztw-34-b2-v4wan-166919-cust780.vm26.cable.virginm.net. [82.37.195.13])
-        by smtp.gmail.com with ESMTPSA id k14-20020a7bc40e000000b003f4272c2d0csm13894413wmi.36.2023.05.12.06.48.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 06:48:56 -0700 (PDT)
-Date:   Fri, 12 May 2023 14:48:53 +0100
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Douglas Anderson <dianders@chromium.org>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Sumit Garg <sumit.garg@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>, ito-yuichi@fujitsu.com,
-        kgdb-bugreport@lists.sourceforge.net, Chen-Yu Tsai <wens@csie.org>,
-        Masayoshi Mizuma <msys.mizuma@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Stephen Boyd <swboyd@chromium.org>,
-        Lecopzer Chen <lecopzer.chen@mediatek.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-perf-users@vger.kernel.org,
-        Jason Wessel <jason.wessel@windriver.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 07/10] kgdb: Expose default CPUs roundup fallback
- mechanism
-Message-ID: <20230512134853.GA216623@aspen.lan>
-References: <20230419225604.21204-1-dianders@chromium.org>
- <20230419155341.v8.7.I21d92f8974c8e4001a5982fea6c98da1bed33ef5@changeid>
+        Fri, 12 May 2023 09:49:54 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 301EF12EA9;
+        Fri, 12 May 2023 06:49:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1683899393; x=1715435393;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=DuNeysYSTXy/mIZofYnY1xvzASlALFjZdE92szRAONc=;
+  b=jalO+Qu1oHnS0FfJgzVsS84HrwTnpOqII992QLCJf1te4pfzAhqA71d3
+   e5/JPXViiWgCfUhnR1J8CEAy42yukDc1X8TG9bMnApgnas6oN3W7KPSs5
+   aqKulDjLCCr9BwzuQgnKEf3Q+yOZ77FTq/igFZJIqzuGcbxg5Y70gfAXc
+   R9TBX7K9THPlkWmm19EqasQavHFWsCmib+rQ/QgBlk4Df4PXoSNonSRZ4
+   r8vc+ZblUVm24cUoemNfMgv3K9olZfevenckc+Z1EJtbsCapoMLG8tn0a
+   3ggUMw88eYK9udVQOx7CmfL2EywPiQSKajicXRKFVDn8P307pNzHHIEY6
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.99,269,1677567600"; 
+   d="asc'?scan'208";a="210975138"
+X-Amp-Result: UNKNOWN
+X-Amp-Original-Verdict: FILE UNKNOWN
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 May 2023 06:49:52 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Fri, 12 May 2023 06:49:50 -0700
+Received: from wendy (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
+ Transport; Fri, 12 May 2023 06:49:48 -0700
+Date:   Fri, 12 May 2023 14:49:27 +0100
+From:   Conor Dooley <conor.dooley@microchip.com>
+To:     Xingyu Wu <xingyu.wu@starfivetech.com>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        William Qiu <william.qiu@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: Re: [PATCH v4 3/7] dt-bindings: clock: jh7110-syscrg: Add PLL clock
+ inputs
+Message-ID: <20230512-traffic-popsicle-5c3423b37fab@wendy>
+References: <20230512022036.97987-1-xingyu.wu@starfivetech.com>
+ <20230512022036.97987-4-xingyu.wu@starfivetech.com>
+ <20230512-uproar-external-49a9e793fbc4@wendy>
+ <91e4fd3c-20cb-724b-c9a8-e038600aabb7@starfivetech.com>
+ <20230512-backlit-radiated-ded0b38b4a94@wendy>
+ <be85aa2a-c72c-5272-ee40-f1265768e7b3@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="qj/PZxe9T53Afs5A"
 Content-Disposition: inline
-In-Reply-To: <20230419155341.v8.7.I21d92f8974c8e4001a5982fea6c98da1bed33ef5@changeid>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <be85aa2a-c72c-5272-ee40-f1265768e7b3@starfivetech.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Apr 19, 2023 at 03:56:01PM -0700, Douglas Anderson wrote:
-> From: Sumit Garg <sumit.garg@linaro.org>
->
-> Add a new API kgdb_smp_call_nmi_hook() to expose default CPUs roundup
-> mechanism to a particular archichecture as a runtime fallback if it
-> detects to not support NMI roundup.
->
-> Currently such an architecture example is arm64 supporting pseudo NMIs
-> feature which is only available on platforms which have support for GICv3
-> or later version.
->
-> Signed-off-by: Sumit Garg <sumit.garg@linaro.org>
-> Tested-by: Chen-Yu Tsai <wens@csie.org>
-> Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> ---
->
-> (no changes since v1)
->
->  include/linux/kgdb.h      | 12 ++++++++++++
->  kernel/debug/debug_core.c |  8 +++++++-
->  2 files changed, 19 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/kgdb.h b/include/linux/kgdb.h
-> index 258cdde8d356..87713bd390f3 100644
-> --- a/include/linux/kgdb.h
-> +++ b/include/linux/kgdb.h
-> @@ -199,6 +199,18 @@ kgdb_arch_handle_qxfer_pkt(char *remcom_in_buffer,
->
->  extern void kgdb_call_nmi_hook(void *ignored);
->
-> +/**
-> + *	kgdb_smp_call_nmi_hook - Provide default fallback mechanism to
-> + *				 round-up CPUs
-> + *
-> + *	If you're using the default implementation of kgdb_roundup_cpus()
-> + *	this function will be called.  And if an arch detects at runtime to
-> + *	not support NMI based roundup then it can fallback to default
-> + *	mechanism using this API.
-> + */
-> +
-> +extern void kgdb_smp_call_nmi_hook(void);
+--qj/PZxe9T53Afs5A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Concept looks sensible but this is a terrible name for aa command to
-round up the CPUs using smp_call... functions. Whilst it is true it that
-kgdb_roundup_cpus() does use kgdb_call_nmi_hook() internally that
-doesn't mean we should name functions after it. They should be named
-after what they are do, not how they do it.
+On Fri, May 12, 2023 at 05:56:16PM +0800, Xingyu Wu wrote:
+> On 2023/5/12 17:35, Conor Dooley wrote:
+> > On Fri, May 12, 2023 at 04:07:47PM +0800, Xingyu Wu wrote:
+> >> On 2023/5/12 14:47, Conor Dooley wrote:
+> >> > On Fri, May 12, 2023 at 10:20:32AM +0800, Xingyu Wu wrote:
+> >> >> Add PLL clock inputs from PLL clock generator.
+> >> >>=20
+> >> >> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >> >> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+> >> >> ---
+> >> >>  .../clock/starfive,jh7110-syscrg.yaml         | 20 +++++++++++++++=
+++--
+> >> >>  1 file changed, 18 insertions(+), 2 deletions(-)
+> >> >=20
+> >> > /tmp/tmp.KDlzwQM5ma/arch/riscv/boot/dts/starfive/jh7110-starfive-vis=
+ionfive-2-v1.3b.dtb: clock-controller@13020000: clocks: 'oneOf' conditional=
+ failed, one must be fixed:
+> >> > 	[[19], [20], [21], [22], [23], [24], [25], [26], [27]] is too short
+> >> > 	From schema: /Documentation/devicetree/bindings/clock/starfive,jh71=
+10-syscrg.yaml
+> >> > /tmp/tmp.KDlzwQM5ma/arch/riscv/boot/dts/starfive/jh7110-starfive-vis=
+ionfive-2-v1.3b.dtb: clock-controller@13020000: clock-names: 'oneOf' condit=
+ional failed, one must be fixed:
+> >> > 	['osc', 'gmac1_rmii_refin', 'gmac1_rgmii_rxin', 'i2stx_bclk_ext', '=
+i2stx_lrck_ext', 'i2srx_bclk_ext', 'i2srx_lrck_ext', 'tdm_ext', 'mclk_ext']=
+ is too short
+> >> > 	'i2stx_bclk_ext' was expected
+> >> > 	'i2stx_lrck_ext' was expected
+> >> > 	'i2srx_bclk_ext' was expected
+> >> > 	'i2srx_lrck_ext' was expected
+> >> > 	'tdm_ext' was expected
+> >> > 	'mclk_ext' was expected
+> >> > 	'pll0_out' was expected
+> >> > 	From schema: /Documentation/devicetree/bindings/clock/starfive,jh71=
+10-syscrg.yaml
+> >> > /tmp/tmp.KDlzwQM5ma/arch/riscv/boot/dts/starfive/jh7110-starfive-vis=
+ionfive-2-v1.2a.dtb: clock-controller@13020000: clocks: 'oneOf' conditional=
+ failed, one must be fixed:
+> >> > 	[[19], [20], [21], [22], [23], [24], [25], [26], [27]] is too short
+> >> > 	From schema: Documentation/devicetree/bindings/clock/starfive,jh711=
+0-syscrg.yaml
+> >> > /tmp/tmp.KDlzwQM5ma/arch/riscv/boot/dts/starfive/jh7110-starfive-vis=
+ionfive-2-v1.2a.dtb: clock-controller@13020000: clock-names: 'oneOf' condit=
+ional failed, one must be fixed:
+> >> > 	['osc', 'gmac1_rmii_refin', 'gmac1_rgmii_rxin', 'i2stx_bclk_ext', '=
+i2stx_lrck_ext', 'i2srx_bclk_ext', 'i2srx_lrck_ext', 'tdm_ext', 'mclk_ext']=
+ is too short
+> >> > 	'i2stx_bclk_ext' was expected
+> >> > 	'i2stx_lrck_ext' was expected
+> >> > 	'i2srx_bclk_ext' was expected
+> >> > 	'i2srx_lrck_ext' was expected
+> >> > 	'tdm_ext' was expected
+> >> > 	'mclk_ext' was expected
+> >> > 	'pll0_out' was expected
+> >> > 	Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
+> >> >=20
+> >> > This binding change is incompatible with the existing devicetrees for
+> >> > the visionfive 2.
+> >>=20
+> >> This looks like less clocks about PLL in SYSCRG node. And I add this i=
+n patch 7.
+> >=20
+> > The existing devicetree is a valid, albeit limited, description of the
+> > hardware.
+> > After your changes to the clock driver in this series, but *without* the
+> > changes to the devicetrees, does the system still function?
+> > From a quick check of 4/7, it looks like it will not?
+>=20
+> I just tested it on the board and the system still worked without the cha=
+nges
+> about devicetree. But these clocks' rate were 0 because these could not g=
+et
+> the PLL clocks from devicetree.
 
-Something more like kgdb_roundup_cpus_with_smp_call() would be a much
-better name.
+Hmm, that sounds like an issue to me. If all of the clock rates are
+computed based off of parents that incorrectly report 0, are we not in
+for trouble?
+Should the fixed-factor clocks be retained as a fallback for the sake of
+compatibility?
+Emil, Stephen?
 
+--qj/PZxe9T53Afs5A
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Daniel.
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZF5D5wAKCRB4tDGHoIJi
+0ls8AQDZMoyMjXuX37lw7BCSWsU9Gxef0TEiBYOlGG+R1S9i9gEAlqR+XYcFjG8B
+9nGwVdlLV70d09Xp6IjHrhusCQ2QSA4=
+=fsw/
+-----END PGP SIGNATURE-----
+
+--qj/PZxe9T53Afs5A--
