@@ -2,149 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0C9570051E
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:22:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D880B700522
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:23:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240759AbjELKWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:22:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49460 "EHLO
+        id S240544AbjELKXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 06:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240745AbjELKWf (ORCPT
+        with ESMTP id S240652AbjELKXI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:22:35 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC2D7CE;
-        Fri, 12 May 2023 03:22:23 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id 7A34424E22D;
-        Fri, 12 May 2023 18:22:22 +0800 (CST)
-Received: from EXMBX171.cuchost.com (172.16.6.91) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 12 May
- 2023 18:22:22 +0800
-Received: from [192.168.125.108] (113.72.146.187) by EXMBX171.cuchost.com
- (172.16.6.91) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 12 May
- 2023 18:22:21 +0800
-Message-ID: <d4de3b1b-31b6-c257-29a5-f404ff0fbe99@starfivetech.com>
-Date:   Fri, 12 May 2023 18:22:21 +0800
+        Fri, 12 May 2023 06:23:08 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 320BB83DC
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:23:03 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id ffacd0b85a97d-3063433fa66so6355281f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:23:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=isovalent.com; s=google; t=1683886981; x=1686478981;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2+Wf8mVZDbx31shCs97RQqyKh5s1MqwXoRc+dmnhzU4=;
+        b=Ij9QKWpIoMZsXOQZ5zF+5uXiCfMBJ1ntLurb/gL5AOk3hPXrAjZOLK/aOnzYMkhpN0
+         mkHUUoUPwadC8WJE+yBPzRFO1HynAAwLHK6+RkXi/KlsDXq8STd54YL89WXRUSOafSa0
+         LbXzOe6Kj2bCrZRYNuj+gfFOsDl27rNLmIDAUTCIIL32qNe8aBu/CSVP0FffwVRXUk/n
+         gXyXiq91G6P11C73oEp2Wz9X5vYuc+/zv0FFq23ah1VS928QgBnityP3Cl7gBEsEEFyN
+         js7o3eNeAGRZOMMSyBGdiE5Y6PKoKKI9HTcZxgU7zz/KGa1pmzgJFWE9tZ4pXo/R2s2d
+         9c2g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683886981; x=1686478981;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2+Wf8mVZDbx31shCs97RQqyKh5s1MqwXoRc+dmnhzU4=;
+        b=XD2vseuwtUn5nS7hNdS7T6wEpTH3L1Q0HOM0aHjFgRWqmAZ1vp3cBWV/eoYYOxoFGJ
+         ln9N7iEZ/UFkLLyl7EMyZdom9s51XzZebTHtwIMteofRk0hM8bbQ2KieCyfXTKvjGuKx
+         p8H1xxuAeF0f83REtqvgBm866AlePHiSAuBROkLW7jqcFJhUvdSMf945RS1cobEMCRoZ
+         85O7NtMcDrjBZE1nhkIb6ZG2GkViRQ20a14QLH3xe+QW5oeVq8jJjOlsgrDji8HsYL/b
+         +58QDFsVaKvVtihFOCywuWe4KTEn8MpXV47rQEef2fqETSbNOqts335xmxUsylEk2XK9
+         P8cQ==
+X-Gm-Message-State: AC+VfDzAMAGFlzWmspppKj/2Ar4B/kAb2b69dQozQ7kj36eyoDgKGrTk
+        Yc1izNJslVTUD6bo0eB+cn5E4w==
+X-Google-Smtp-Source: ACHHUZ6eFgiIinI+xrrQTlKNRhpy1XQdvL75E0orbqUI1w21D4W374Pc4XROzGpwYNO1E9giUFs5vg==
+X-Received: by 2002:adf:dbc8:0:b0:307:8b3e:2858 with SMTP id e8-20020adfdbc8000000b003078b3e2858mr13745375wrj.45.1683886981570;
+        Fri, 12 May 2023 03:23:01 -0700 (PDT)
+Received: from ?IPV6:2a02:8011:e80c:0:a162:20e4:626a:dd? ([2a02:8011:e80c:0:a162:20e4:626a:dd])
+        by smtp.gmail.com with ESMTPSA id k9-20020a05600c1c8900b003f4283f5c1bsm16930478wms.2.2023.05.12.03.23.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 May 2023 03:23:01 -0700 (PDT)
+Message-ID: <dd7a4bec-c0d0-4ffe-3bb8-e4d7ab4a01b8@isovalent.com>
+Date:   Fri, 12 May 2023 11:23:00 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: cdns,usb3: Add clock and reset
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Roger Quadros <rogerq@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Pawel Laszczak <pawell@cadence.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Peter Chen <peter.chen@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>
-CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>
-References: <20230510132816.108820-1-minda.chen@starfivetech.com>
- <20230510132816.108820-2-minda.chen@starfivetech.com>
- <9cf5965a-8290-dfff-9f92-07ed2df66650@linaro.org>
- <05057f6d-cb38-8e4a-5d30-82863e0cda44@kernel.org>
- <028fb8ac-d6cc-6fee-f50b-b965e69e7d0c@linaro.org>
-From:   Minda Chen <minda.chen@starfivetech.com>
-In-Reply-To: <028fb8ac-d6cc-6fee-f50b-b965e69e7d0c@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH bpf-next] bpftool: specify XDP Hints ifname when loading
+ program
+Content-Language: en-GB
+To:     Larysa Zaremba <larysa.zaremba@intel.com>
+Cc:     Stanislav Fomichev <sdf@google.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Jiri Olsa <jolsa@kernel.org>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@corigine.com>
+References: <20230511151345.7529-1-larysa.zaremba@intel.com>
+From:   Quentin Monnet <quentin@isovalent.com>
+In-Reply-To: <20230511151345.7529-1-larysa.zaremba@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.146.187]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX171.cuchost.com
- (172.16.6.91)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2023/5/11 22:49, Krzysztof Kozlowski wrote:
-> On 11/05/2023 14:16, Roger Quadros wrote:
->> 
->> 
->> On 11/05/2023 12:26, Krzysztof Kozlowski wrote:
->>> On 10/05/2023 15:28, Minda Chen wrote:
->>>> To support generic clock and reset init in Cadence USBSS
->>>> controller, add clock and reset dts configuration.
->>>>
->>>> Signed-off-by: Minda Chen <minda.chen@starfivetech.com>
->>>> ---
->>>>  .../devicetree/bindings/usb/cdns,usb3.yaml         | 14 ++++++++++++++
->>>>  1 file changed, 14 insertions(+)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
->>>> index cae46c4982ad..623c6b34dee3 100644
->>>> --- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
->>>> +++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
->>>> @@ -42,6 +42,18 @@ properties:
->>>>        - const: otg
->>>>        - const: wakeup
->>>>  
->>>> +  clocks:
->>>> +    minItems: 1
->>>> +    maxItems: 8
->>>> +    description:
->>>> +      USB controller clocks.
->>>
->>> You need to list the items. And why is it variable? Your clock choice in
->>> the example is poor, I doubt it is real.
->>>
->>>> +
->>>> +  resets:
->>>> +    minItems: 1
->>>> +    maxItems: 8
->>>> +    description:
->>>> +      USB controller generic resets.
->>>
->>> Here as well.
->>>
->>> You had one clock last time, thus the review was - drop the names. Now
->>> you changed it to 8 clocks... I don't understand.
->>>
->> 
->> Different platforms may have different number of clocks/resets or none.
->> So I don't think minItems/maxItems should be specified.
+2023-05-11 17:13 UTC+0200 ~ Larysa Zaremba <larysa.zaremba@intel.com>
+> Add ability to specify a network interface used to resolve
+> XDP Hints kfuncs when loading program through bpftool.
 > 
-> Yeah, but we want the clocks to be specific per platform. Not anything
-> anywhere.
+> Usage:
+> bpftool prog load <bpf_obj_path> <pin_path> dev xdpmeta <ifname>
+
+Thanks for this patch!
+
+Regarding the command-line syntax, I'm not a big fan of the optional
+sub-keyword for the device for XDP hints. I must admit I had not
+anticipated other another use for the "dev" keyword. Instead, have you
+considered one of the following:
+
+1) Adding a different keyword ("xdpmeta_dev"?) and making it
+incompatible with "dev"
+
+2) Another alternative would be adding a sub-keyword for offload too:
+
+    bpftool p l [...] dev <[offload <ifname> | xdpmeta <ifname>]>
+
+If the ifname is provided with no sub-keyword, we would consider it for
+offload for legacy support, possibly warn that the syntax is deprecated.
+
+What do you think?
+
 > 
-> Best regards,
-> Krzysztof
+> Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+> ---
+>  tools/bpf/bpftool/prog.c | 28 +++++++++++++++++++++-------
+>  1 file changed, 21 insertions(+), 7 deletions(-)
 > 
+> diff --git a/tools/bpf/bpftool/prog.c b/tools/bpf/bpftool/prog.c
+> index 91b6075b2db3..a9cb96d99277 100644
+> --- a/tools/bpf/bpftool/prog.c
+> +++ b/tools/bpf/bpftool/prog.c
+> @@ -1517,12 +1517,13 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+>  	struct bpf_program *prog = NULL, *pos;
+>  	unsigned int old_map_fds = 0;
+>  	const char *pinmaps = NULL;
+> +	__u32 offload_ifindex = 0;
+>  	bool auto_attach = false;
+> +	__u32 meta_ifindex = 0;
+>  	struct bpf_object *obj;
+>  	struct bpf_map *map;
+>  	const char *pinfile;
+>  	unsigned int i, j;
+> -	__u32 ifindex = 0;
+>  	const char *file;
+>  	int idx, err;
+>  
+> @@ -1614,17 +1615,25 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+>  			map_replace[old_map_fds].fd = fd;
+>  			old_map_fds++;
+>  		} else if (is_prefix(*argv, "dev")) {
+> +			__u32 *cur_ifindex;
+> +
+>  			NEXT_ARG();
+>  
+> -			if (ifindex) {
+> -				p_err("offload device already specified");
+> +			if (offload_ifindex || meta_ifindex) {
+> +				p_err("device already specified");
 
-I can change like these. Are these changes can be approved?
-lpm , bus clock and "pwrup" reset can be specific cases. (The changes are from snps,dwc3.yaml.)
+I'd add a note to tell somehow that offload and XDP hints are mutually
+exclusive. I suspect not all users understand these well.
 
-  clocks:
-    description:
-      In general the core supports two types of clocks. bus is a SoC Bus
-      Clock(AHB/AXI/APB). lpm is a link power management clock. But particular
-      cases may differ from that having less or more clock sources with
-      another names.
+>  				goto err_free_reuse_maps;
+>  			}
+> +			if (is_prefix(*argv, "xdpmeta")) {
+> +				cur_ifindex = &meta_ifindex;
+> +				NEXT_ARG();
+> +			} else {
+> +				cur_ifindex = &offload_ifindex;
+> +			}
+>  			if (!REQ_ARGS(1))
+>  				goto err_free_reuse_maps;
+>  
+> -			ifindex = if_nametoindex(*argv);
+> -			if (!ifindex) {
+> +			*cur_ifindex = if_nametoindex(*argv);
+> +			if (!(*cur_ifindex)) {
+>  				p_err("unrecognized netdevice '%s': %s",
+>  				      *argv, strerror(errno));
+>  				goto err_free_reuse_maps;
+> @@ -1671,7 +1680,12 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+>  				goto err_close_obj;
+>  		}
+>  
+> -		bpf_program__set_ifindex(pos, ifindex);
+> +		if (prog_type == BPF_PROG_TYPE_XDP && meta_ifindex) {
+> +			bpf_program__set_flags(pos, BPF_F_XDP_DEV_BOUND_ONLY);
+> +			bpf_program__set_ifindex(pos, meta_ifindex);
+> +		} else {
+> +			bpf_program__set_ifindex(pos, offload_ifindex);
+> +		}
+>  		if (bpf_program__type(pos) != prog_type)
+>  			bpf_program__set_type(pos, prog_type);
+>  		bpf_program__set_expected_attach_type(pos, expected_attach_type);
+> @@ -1709,7 +1723,7 @@ static int load_with_options(int argc, char **argv, bool first_prog_only)
+>  	idx = 0;
+>  	bpf_object__for_each_map(map, obj) {
+>  		if (bpf_map__type(map) != BPF_MAP_TYPE_PERF_EVENT_ARRAY)
+> -			bpf_map__set_ifindex(map, ifindex);
+> +			bpf_map__set_ifindex(map, offload_ifindex);
+>  
+>  		if (j < old_map_fds && idx == map_replace[j].idx) {
+>  			err = bpf_map__reuse_fd(map, map_replace[j++].fd);
 
-  clock-names:
-    contains:
-      anyOf:
-        - enum: [bus, lpm]
-        - true
+Could you please also update the following items:
 
-  resets:
-    description:
-      In general the core supports controller power-up reset. Also clock and
-      other resets can be added. Particular cases may differ from that having
-      less or more resets with another names.
+- The usage message for "bpftool prog load" near the end of prog.c
 
-  reset-names:
-    contains:
-      anyOf:
-        - const: pwrup
-        - true
+- The related doc in Documentation/bpftool-prog.rst (command summary
+near the top, and detailed description later in the doc)
+
+- Bash completion (for keyword "dev", look for "_sysfs_get_netdevs" in
+bash-completion/bpftool). I'm happy to help with this one if necessary.
+
+Thanks,
+Quentin
