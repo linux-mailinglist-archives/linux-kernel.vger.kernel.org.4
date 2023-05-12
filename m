@@ -2,306 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A011070109E
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 23:10:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F3097010BC
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 23:11:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239949AbjELVKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 17:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34700 "EHLO
+        id S240033AbjELVLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 17:11:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239784AbjELVJg (ORCPT
+        with ESMTP id S240451AbjELVKm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 17:09:36 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4EA10A02;
-        Fri, 12 May 2023 14:08:08 -0700 (PDT)
-Message-ID: <20230512205257.467571745@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683925677;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=09Gybl6gLYxqPWfBolvGD2u6nN/UgRkwP/RVYSeb51U=;
-        b=lkhHN5ucCzBQq4wHtTdIuPxWfT+KaR8us2Fnqu6Cr5tOLNAYFJwbAjX6Z3ePYw7xBU5Rf+
-        wiXaKi5wbkSJ0yiBL+vVDSE9lfXClJ13wICCfbrPv8NwRfgYgJmKsCHdwkitagDFT4Sy53
-        3Mn9Rphq4Lwr1hRrlQYSh8G4siyYtpt76AklUE92TaBdwOhGU7rVMLqFcMcy15TW5md2c+
-        3IsfJN76Y4Qt83mJf/v41gRvRUGzZI3ou8Af+vq5cz1lXYtnQvn0+VVBR6/3GVBOS0fRX9
-        A3vvjzTjc3WS06TbYvPMJ2fPNMriQpu62Vf8hta3kuH4x12rVzRveCh1dJ+U4w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683925677;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=09Gybl6gLYxqPWfBolvGD2u6nN/UgRkwP/RVYSeb51U=;
-        b=gsCVGrEF63u0kv3H/7VlEi7kjZ9EJYo14dXRVQK78ZLNGfUDOAVfm+otcHx6OPKkcYxyVn
-        b0t3Yyn3VI1q72DQ==
-From:   Thomas Gleixner <tglx@linutronix.de>
-To:     LKML <linux-kernel@vger.kernel.org>
-Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Brian Gerst <brgerst@gmail.com>,
-        Arjan van de Veen <arjan@linux.intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Paul McKenney <paulmck@kernel.org>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Oleksandr Natalenko <oleksandr@natalenko.name>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Piotr Gorski <lucjan.lucjanov@gmail.com>,
-        Usama Arif <usama.arif@bytedance.com>,
-        Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        xen-devel@lists.xenproject.org,
-        Russell King <linux@armlinux.org.uk>,
-        Arnd Bergmann <arnd@arndb.de>,
-        linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-        linux-csky@vger.kernel.org,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org,
-        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-        Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Sabin Rapan <sabrapan@amazon.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        Ross Philipson <ross.philipson@oracle.com>
-Subject: [patch V4 37/37] x86/smpboot/64: Implement
- arch_cpuhp_init_parallel_bringup() and enable it
-References: <20230512203426.452963764@linutronix.de>
+        Fri, 12 May 2023 17:10:42 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDD01154D
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 14:09:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683925745; x=1715461745;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=c7/w2GSUNPQtr1NqPzulFsKRqRIZKxttDY+A5PRq23Y=;
+  b=EcvE2YFrFr6fIjVQhRFVDWmGsXF4p/nvNsNXuqQtzTs167tT/l/byIXw
+   yCH2TihIAgbXs+mqHgPZpkgKUn6pC1LpvNibjuWX1eMGLYeFyLFjD3xIg
+   ZsFLX4bS2IyU2ZtGEutaXe6Cp5rmNy8c1N8WJAIfL12NteT4q7p/hr+o/
+   kBGQliEXmUuvcUwQsEFEQtgDTo3JWWvW8lJP4Y1zHcZn71oxRKTPQ5ZQ4
+   lMXlx+0ibq4INnBUVB+q4kwROTmpSWTuI8CCRVn1OwzRRZIpD98eYzrM7
+   X4NZ5jQj66O4JdBjVYal737HWOIxEdfvwzWvDvFGzTEKhfCnr2pgOC8iL
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="349726536"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="349726536"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 14:08:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="789959350"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="789959350"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 May 2023 14:08:43 -0700
+Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 12 May 2023 14:08:43 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Fri, 12 May 2023 14:08:43 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23 via Frontend Transport; Fri, 12 May 2023 14:08:43 -0700
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.103)
+ by edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.23; Fri, 12 May 2023 14:08:43 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=gIM0Zyi3krOHw3kXIGY4PP4zKWS6fTksynZX4TTfXNIt9j0DkKyLfVFXqRIuvO7LtBgPwAFsvOuZHBIAK339uVqgAMLVi1aVY3iCNSwEqjcrVqj6e9/7wc77UxRha1KVvjzKong+2CRpk+rDwz54Ksgz+RD4CeFfrBsO1IbtNKwpTJya5nFA5rtZpXn4YGbbxb3Mu0LefQoUQk0b2D6UTLR+R5pa7gBjqgTgosSJoH/em7uI2yvR56gj7s8Bh1+hcpzy4hWgiQXZOkwktQBpWNcLwwg/29FO2YxBhfq088+mVax0QE7Cnds4yFiwRJ87mHPDj2xmgOf3LQzhIgcY/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=xpCCT4uc5kIGTNgf3y3LLtKqrWGFnMc7GP4f3N5EDhU=;
+ b=h7oEMa3Ipowov8fbLwBB3nLnrR+Z8my0XQ7A7SFsCeGBt6F8WhGOnaiySLGDWTgzCwmHkfrFN7l02f0+nvRhS9TFFTniInhBqgda8WUWnaegAyMyBjWof2kMIaZPA2srjzz+YTlbxf6BJvDKMko5KPfUcKE27yhef/7lZ4oBnpfYQGm3ikzlwIOnPMIIpU5pamNp0/cfrVTu1PJmmWiWeSwcX8ii/vIGtEi8buRXR6oOLx519bmdMSGLPvXOOCWOedbYMG0AhgMIsUz5SlieLSdBjYIj29C5uitlbUGyj65Bhd5SJfY5GTL36lqKAN92qaTC+YI9/6U6A8XQDyCYJg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com (2603:10b6:a03:4d2::10)
+ by MN6PR11MB8102.namprd11.prod.outlook.com (2603:10b6:208:46d::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.21; Fri, 12 May
+ 2023 21:08:41 +0000
+Received: from SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::591f:4873:fd80:9a6d]) by SJ2PR11MB7573.namprd11.prod.outlook.com
+ ([fe80::591f:4873:fd80:9a6d%6]) with mapi id 15.20.6363.032; Fri, 12 May 2023
+ 21:08:40 +0000
+Message-ID: <1c3545d6-3687-a380-9e63-87be9e8b1305@intel.com>
+Date:   Fri, 12 May 2023 14:08:38 -0700
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.1
+Subject: Re: [RFC PATCH 0/7] Add driver registration i/f to resctrl
+Content-Language: en-US
+To:     "Luck, Tony" <tony.luck@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Shaopeng Tan <tan.shaopeng@fujitsu.com>,
+        Jamie Iles <quic_jiles@quicinc.com>,
+        James Morse <james.morse@arm.com>,
+        "Babu Moger" <babu.moger@amd.com>
+CC:     "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230420220636.53527-1-tony.luck@intel.com>
+ <c0755752-ce84-b5f9-6ac6-97812e98b8c3@intel.com>
+ <SJ1PR11MB60832074F3140B38C1B08596FC719@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <237603b3-f553-2ede-5725-239b65626c69@intel.com>
+ <SJ1PR11MB6083CFFA8CBDD296E966EC85FC769@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <SJ1PR11MB6083031582F2A61A7D24ABAFFC749@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <b35c1b06-4236-15dc-6aed-ece8a0331c8c@intel.com>
+ <SJ1PR11MB6083CB61BDCABA2930155C2AFC759@SJ1PR11MB6083.namprd11.prod.outlook.com>
+From:   Reinette Chatre <reinette.chatre@intel.com>
+In-Reply-To: <SJ1PR11MB6083CB61BDCABA2930155C2AFC759@SJ1PR11MB6083.namprd11.prod.outlook.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SJ0PR13CA0118.namprd13.prod.outlook.com
+ (2603:10b6:a03:2c5::33) To SJ2PR11MB7573.namprd11.prod.outlook.com
+ (2603:10b6:a03:4d2::10)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Date:   Fri, 12 May 2023 23:07:56 +0200 (CEST)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SJ2PR11MB7573:EE_|MN6PR11MB8102:EE_
+X-MS-Office365-Filtering-Correlation-Id: 66f2949a-7c07-4221-9729-08db532d0fc3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NMDkC2h2W3Pwb0rt3nFuqrhZlRMJyiDj2GEDVmYM+38LpjP+BLxDTyyUQIeUsqIITJkR3wYf9dYoc31CmKNdrNyti/+ffvJmSmGcQCibzgsFsGVTDfQ/K9Rdok8FD+YpUJwS2SEmH2c+yAisRfYFfRja4i0x/KaG5GoLXeLY3XsQDCLkvXhCYgoesKL6DiLWG52YztHbGYrtRF8S3TeNb80K3oY3piB1rDfOU+4UJojT24QEffLQBxnrUv1/99H8Ha2Ra9lv+ZntbcKlhyDuE9SAO/dctgbEFjaR/XnsJ5lQ/FlGA8rwicfPm3YqqzfxNnbzszlev8Hx8UDmPO8L0F95few8X5Fdc3VkTODLWV98lPkK746OoAlPFF5WMxZ9z2aKlBqswPmKS/kcelbuGbQtM8R9FblFGk7btWAy4tpHfm2lxVbHleT/u++5liPdAdHy6M2MbdBmveBV96isu7V0fYu0rBkZwIjM7WFGkHPds7A9BW2vOZst2hFqWWZbzEEaT6Q9pg6Tosnr4sY3VbiNcqF5N8lcbMAUYN4mAbfEJkvx9wKoTGlxIHHM0wdkKLGMmWb3Au4bUyb6VctFu0BAjZG0sZbC/Yt5yP/KZ/K0wJw0cj9H2LdRJ5jMRmabNaYNVSCWhY1Fn0pYfwMdDTne6245h20yzdK7cbGRW6Y=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ2PR11MB7573.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(346002)(396003)(39860400002)(366004)(376002)(136003)(451199021)(966005)(8676002)(5660300002)(38100700002)(6486002)(54906003)(8936002)(44832011)(7416002)(36756003)(66946007)(82960400001)(66556008)(316002)(66476007)(4326008)(478600001)(110136005)(921005)(41300700001)(31696002)(186003)(26005)(2906002)(86362001)(31686004)(83380400001)(2616005)(6506007)(6512007)(53546011)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?MHhlUkwreGt1SjJDcjdrVEtGaWUxRmd3THpaWXhoL0RuVmZZY0diOG4yL0ZJ?=
+ =?utf-8?B?S2pmUUFiY0s1L2dHdkZoeFZDMnpzMXhidEExVVVyYkxRaEZGRkwyaUYrdGZi?=
+ =?utf-8?B?SXRxaTQ3RVlSdnVFUUJFcnh1c1l1QVJKeTlmY1BzSjBJZm9xMjA1TnVmREo2?=
+ =?utf-8?B?NlZSa0VHa21PVVZsOEdHWmFqS0NyU0pSVXFkcTd2elo2cUt3QWhDZU1KUUZh?=
+ =?utf-8?B?amVkM1drS0M0UXU3UWlzUEpZTW9WOXFLZ3B4Yk5SeTVKZVFobERLNGdhVHBr?=
+ =?utf-8?B?ZGdXcHRBQ1doL3k1bm1weHprQlFhdGIvSjJGUjh5TWNGbXdIcC9IZ09WMm9T?=
+ =?utf-8?B?cmJ3M3NXSXowUFFjVFNpK09aQjViRDFrdkdaNDFiWVNhNUxWOEdwcFBZdHVW?=
+ =?utf-8?B?OE0rbUlIQTRXY2h0M01sa2hwZ3BTQldpUXNrdUhBbmtvWjh4RS9pdXR4YWtl?=
+ =?utf-8?B?aVYxSUlnUDVjdjdTeDRpc3BRL09CTHY1K1hRa0h5dGVnMjhsR1ovSzJ1aFpP?=
+ =?utf-8?B?YVR2VUxTZVdKYlQ0Nkxka3pkVmxCSlFGaGZFcWNxZGU1Z3d2UTN6TjJGTjVQ?=
+ =?utf-8?B?dWptRUszajZxZGswSXRaS1B2M0JmQlZrajBiK2svTWgwcUt0T3FwSm9sdVll?=
+ =?utf-8?B?L05ZbnBnbDkvWFE4dWl5K2I1ZDdFUmdyZzVKUUtVYXRyT0NmRFZ0c1U0SXBJ?=
+ =?utf-8?B?bm1qQ2haanExOUlCbWswUHRTNU9hYUFyR1Ryb25TM29BRXRSK0IyK3M4bVp5?=
+ =?utf-8?B?a1Y1SGcwK1pSb2hNRWdRTTdyQUo0aDNURmxjdmNVR2YvQmZXcHRseUtkYUdm?=
+ =?utf-8?B?eXRCcXo0YmhNSjZnZkZJWWd6R1BXM0V0Z3dsalM5NmZGSkNNQTlkcU1GNFVH?=
+ =?utf-8?B?Z3dDR1FkVGVWVzQzMnhENU9yQlIvWjFyNGVWSUpZRU43dUNEbDc5alhEU2RS?=
+ =?utf-8?B?Y211UDlpeFMxT0VQQ2phd0RTVXNDLy85TzhLY1JCSnF0anlaZFVLYUcwT0I3?=
+ =?utf-8?B?dFVHMDRkRzA0Q1ZHUnp4cUc1cnpDcUxlTndXdzV3YmZ6K2xXKzRpSU1aTEFn?=
+ =?utf-8?B?K2FMQTZtN0c3bnBBdjRVakVvYjloUGowQ21EeU9FYUVYUXhzYWVTNUhvUUFL?=
+ =?utf-8?B?Mk5FYnBxYXUrRElEdCsyRHAzWFJXcTF1cFpXMEZWSFFDcXFIbGZQZDVjcmZz?=
+ =?utf-8?B?cVpCaUVzVjRzK3FVSXZOTURpbVZmS3Yxb2hyY0s3UEprT082VFdnZU1lazJZ?=
+ =?utf-8?B?a1BhMmlRakx0Y0REZXdGdzhXeGg3eithemJQdytLMXU5ckN0VXN3b2JPd2Ju?=
+ =?utf-8?B?NlBaU25FU2hTam5TRmp4UDhwWUFEM05IamNUUVdjRmpiWWZyZmsrMFJ3azY2?=
+ =?utf-8?B?Y3J1UGxPTVZXR2ttTzNoVXFPVHQ0bDl5R3o4Vk55V2tMaW5ETDdHSUNjNE9h?=
+ =?utf-8?B?Y1hsNXUveEhTUlllTnJhQ0h6dnZneFRCVTc5RHBxMXBncVBTUXNNaHQwd0xh?=
+ =?utf-8?B?Snp2d1lFbXRLY1FMNUVaWkZaU3pwRW1QMFFxa01yWEtiankzVGZpOEpnaFJM?=
+ =?utf-8?B?S3dKSW5aWU5STzNOemlldlRWUndjNmo0eDcxL3JHWlRrbHlkbS9ILytQdC9N?=
+ =?utf-8?B?eU9HaEJJT3ZRZ2hNZVJtTFdWa2xTWWJYMXFtbWY1U1lrT1d2UTRlS2xqbDll?=
+ =?utf-8?B?UVczSExDSEVaS05jR2REWkdNWTRzUnNTb29aMTAycHoxaGtoUkE0QW5JVUhR?=
+ =?utf-8?B?bXU4b0Y1VmVsYXlKMUNNK2FnWVRjOVF5ZXRnOGU5b2lVY0x3UE03bnF4eVp6?=
+ =?utf-8?B?eWNJb2hwdFlYSjcvaTk1S0RVT0J5dnhPVjlLbjk2c25Vbmo3UHMzdUVBREhv?=
+ =?utf-8?B?dzI3Y2toaE9wYVBkSzA1QzJPR0lHaVVJbkh0TStIRm9KTjhPTTluTlA4MWJi?=
+ =?utf-8?B?OTg0QU9tQStsTWhEckFxVnFlYWZRbG4rek1xbVJtLzlLa3pXT0xqcHp4bE5S?=
+ =?utf-8?B?YlQ2NU8zMWk2bkZTemJSeUpESHd5SDBLTGQ5SVgyNzZodkxWeEFoVHpoOURs?=
+ =?utf-8?B?eCthclMzZmpEOE9lcjcvUEc3Z2V4ZGllSEVTTkNYaTE1ZE0yZlNKWXhUNXhQ?=
+ =?utf-8?B?MVZ1TTcyZkdBNi9kVS84OHRkTzBMRDRvbmQ0aTJ2Rk5mYXB0YVBvcFF3bjY4?=
+ =?utf-8?B?WUE9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 66f2949a-7c07-4221-9729-08db532d0fc3
+X-MS-Exchange-CrossTenant-AuthSource: SJ2PR11MB7573.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 21:08:40.8316
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: fySI//jCvZy7e3TUMhP5z9P3YmKed+bXr349G3zdIkAVAX8WsRHR7LVuD9AQcW6CX2R8cRnTjcxYdALink8leU3qVBBdfCs8O/1R3mnGIBQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN6PR11MB8102
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Gleixner <tglx@linutronix.de>
+Hi Tony,
 
-Implement the validation function which tells the core code whether
-parallel bringup is possible.
+On 5/12/2023 1:35 PM, Luck, Tony wrote:
 
-The only condition for now is that the kernel does not run in an encrypted
-guest as these will trap the RDMSR via #VC, which cannot be handled at that
-point in early startup.
+>>> The driver provides a way to set param1, param2, param3 for each of
+>>> the A, B, C, D instances.
+>>
+>> Seems like these could be some new RFTYPE_RES_XYZ files?
+> 
+> In my current implementation the driver can make some/all of the files added
+> under the info/ directory writable. So this XYZ driver uses info/XYZ/param* files
+> as the interface for the user to set the parameters.
 
-There was an earlier variant for AMD-SEV which used the GHBC protocol for
-retrieving the APIC ID via CPUID, but there is no guarantee that the
-initial APIC ID in CPUID is the same as the real APIC ID. There is no
-enforcement from the secure firmware and the hypervisor can assign APIC IDs
-as it sees fit as long as the ACPI/MADT table is consistent with that
-assignment.
+It sounds as though you are concerned about making info/* files writable?
+I am not sure because whether the files are made writable via the core or
+a driver does not matter since it will still be writable from the user
+interface perspective.
 
-Unfortunately there is no RDMSR GHCB protocol at the moment, so enabling
-AMD-SEV guests for parallel startup needs some more thought.
+Please note that there already are a few info files that are writable:
+info/L3_MON/max_threshold_occupancy
+info/L3_MON/mbm_total_bytes_config
+info/L3_MON/mbm_local_bytes_config
 
-Intel-TDX provides a secure RDMSR hypercall, but supporting that is outside
-the scope of this change.
+It thus seems appropriate to use the info/* files as global resource
+configuration and files within the resource groups handling local
+configurations.
 
-Fixup announce_cpu() as e.g. on Hyper-V CPU1 is the secondary sibling of
-CPU0, which makes the @cpu == 1 logic in announce_cpu() fall apart.
+>> On the model specific motivation topic: If the goal of the driver
+>> interface is to support model specific changes to resctrl there is a
+>> publicly available use case for consideration:
+>> https://lore.kernel.org/lkml/20230421141723.2405942-1-peternewman@google.com/
+>>
+>> It is not obvious to me how that model specific problem could be solved
+>> with this driver interface. Your insight here would be appreciated but it
+>> seems to me that we will have to keep accommodating model specific code
+>> in resctrl.
+> 
+> All my drivers are currently related to the control features of resctrl rather than the
+> monitor features. I don't see a way for a model specific driver to step in and mitigate
+> that particular problem that Peter has.
+> 
+> Seems quite hacky though. The trick with the "hard" RMID per core is going to miscount
+> LLC eviction traffic. If a core is switching rapidly between tasks with different RMIDs
+> that could be a significant difference from actual values.
 
-[ mikelley: Reported the announce_cpu() fallout
+The submission is upfront about this and indeed disables LLC occupancy 
+when "soft RMIDs" are enabled.
+Please do provide direct feedback to that submission.
 
-Originally-by: David Woodhouse <dwmw@amazon.co.uk>
-Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-Tested-by: Michael Kelley <mikelley@microsoft.com>
----
-V2: Fixup announce_cpu() - Michael Kelley
-V3: Fixup announce_cpu() for real - Michael Kelley
----
- arch/x86/Kconfig             |    3 -
- arch/x86/kernel/cpu/common.c |    6 --
- arch/x86/kernel/smpboot.c    |   87 +++++++++++++++++++++++++++++++++++--------
- 3 files changed, 75 insertions(+), 21 deletions(-)
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -274,8 +274,9 @@ config X86
- 	select HAVE_UNSTABLE_SCHED_CLOCK
- 	select HAVE_USER_RETURN_NOTIFIER
- 	select HAVE_GENERIC_VDSO
-+	select HOTPLUG_PARALLEL			if SMP && X86_64
- 	select HOTPLUG_SMT			if SMP
--	select HOTPLUG_SPLIT_STARTUP		if SMP
-+	select HOTPLUG_SPLIT_STARTUP		if SMP && X86_32
- 	select IRQ_FORCED_THREADING
- 	select NEED_PER_CPU_EMBED_FIRST_CHUNK
- 	select NEED_PER_CPU_PAGE_FIRST_CHUNK
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -2128,11 +2128,7 @@ static inline void setup_getcpu(int cpu)
- }
- 
- #ifdef CONFIG_X86_64
--static inline void ucode_cpu_init(int cpu)
--{
--	if (cpu)
--		load_ucode_ap();
--}
-+static inline void ucode_cpu_init(int cpu) { }
- 
- static inline void tss_setup_ist(struct tss_struct *tss)
- {
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -58,6 +58,7 @@
- #include <linux/overflow.h>
- #include <linux/stackprotector.h>
- #include <linux/cpuhotplug.h>
-+#include <linux/mc146818rtc.h>
- 
- #include <asm/acpi.h>
- #include <asm/cacheinfo.h>
-@@ -75,7 +76,7 @@
- #include <asm/fpu/api.h>
- #include <asm/setup.h>
- #include <asm/uv/uv.h>
--#include <linux/mc146818rtc.h>
-+#include <asm/microcode.h>
- #include <asm/i8259.h>
- #include <asm/misc.h>
- #include <asm/qspinlock.h>
-@@ -128,7 +129,6 @@ int arch_update_cpu_topology(void)
- 	return retval;
- }
- 
--
- static unsigned int smpboot_warm_reset_vector_count;
- 
- static inline void smpboot_setup_warm_reset_vector(unsigned long start_eip)
-@@ -226,16 +226,43 @@ static void notrace start_secondary(void
- 	 */
- 	cr4_init();
- 
--#ifdef CONFIG_X86_32
--	/* switch away from the initial page table */
--	load_cr3(swapper_pg_dir);
--	__flush_tlb_all();
--#endif
-+	/*
-+	 * 32-bit specific. 64-bit reaches this code with the correct page
-+	 * table established. Yet another historical divergence.
-+	 */
-+	if (IS_ENABLED(CONFIG_X86_32)) {
-+		/* switch away from the initial page table */
-+		load_cr3(swapper_pg_dir);
-+		__flush_tlb_all();
-+	}
-+
- 	cpu_init_exception_handling();
- 
- 	/*
--	 * Synchronization point with the hotplug core. Sets the
--	 * synchronization state to ALIVE and waits for the control CPU to
-+	 * 32-bit systems load the microcode from the ASM startup code for
-+	 * historical reasons.
-+	 *
-+	 * On 64-bit systems load it before reaching the AP alive
-+	 * synchronization point below so it is not part of the full per
-+	 * CPU serialized bringup part when "parallel" bringup is enabled.
-+	 *
-+	 * That's even safe when hyperthreading is enabled in the CPU as
-+	 * the core code starts the primary threads first and leaves the
-+	 * secondary threads waiting for SIPI. Loading microcode on
-+	 * physical cores concurrently is a safe operation.
-+	 *
-+	 * This covers both the Intel specific issue that concurrent
-+	 * microcode loading on SMT siblings must be prohibited and the
-+	 * vendor independent issue`that microcode loading which changes
-+	 * CPUID, MSRs etc. must be strictly serialized to maintain
-+	 * software state correctness.
-+	 */
-+	if (IS_ENABLED(CONFIG_X86_64))
-+		load_ucode_ap();
-+
-+	/*
-+	 * Synchronization point with the hotplug core. Sets this CPUs
-+	 * synchronization state to ALIVE and spin-waits for the control CPU to
- 	 * release this CPU for further bringup.
- 	 */
- 	cpuhp_ap_sync_alive();
-@@ -918,9 +945,9 @@ static int wakeup_secondary_cpu_via_init
- /* reduce the number of lines printed when booting a large cpu count system */
- static void announce_cpu(int cpu, int apicid)
- {
-+	static int width, node_width, first = 1;
- 	static int current_node = NUMA_NO_NODE;
- 	int node = early_cpu_to_node(cpu);
--	static int width, node_width;
- 
- 	if (!width)
- 		width = num_digits(num_possible_cpus()) + 1; /* + '#' sign */
-@@ -928,10 +955,10 @@ static void announce_cpu(int cpu, int ap
- 	if (!node_width)
- 		node_width = num_digits(num_possible_nodes()) + 1; /* + '#' */
- 
--	if (cpu == 1)
--		printk(KERN_INFO "x86: Booting SMP configuration:\n");
--
- 	if (system_state < SYSTEM_RUNNING) {
-+		if (first)
-+			pr_info("x86: Booting SMP configuration:\n");
-+
- 		if (node != current_node) {
- 			if (current_node > (-1))
- 				pr_cont("\n");
-@@ -942,11 +969,11 @@ static void announce_cpu(int cpu, int ap
- 		}
- 
- 		/* Add padding for the BSP */
--		if (cpu == 1)
-+		if (first)
- 			pr_cont("%*s", width + 1, " ");
-+		first = 0;
- 
- 		pr_cont("%*s#%d", width - num_digits(cpu), " ", cpu);
--
- 	} else
- 		pr_info("Booting Node %d Processor %d APIC 0x%x\n",
- 			node, cpu, apicid);
-@@ -1236,6 +1263,36 @@ void __init smp_prepare_cpus_common(void
- 	set_cpu_sibling_map(0);
- }
- 
-+#ifdef CONFIG_X86_64
-+/* Establish whether parallel bringup can be supported. */
-+bool __init arch_cpuhp_init_parallel_bringup(void)
-+{
-+	/*
-+	 * Encrypted guests require special handling. They enforce X2APIC
-+	 * mode but the RDMSR to read the APIC ID is intercepted and raises
-+	 * #VC or #VE which cannot be handled in the early startup code.
-+	 *
-+	 * AMD-SEV does not provide a RDMSR GHCB protocol so the early
-+	 * startup code cannot directly communicate with the secure
-+	 * firmware. The alternative solution to retrieve the APIC ID via
-+	 * CPUID(0xb), which is covered by the GHCB protocol, is not viable
-+	 * either because there is no enforcement of the CPUID(0xb)
-+	 * provided "initial" APIC ID to be the same as the real APIC ID.
-+	 *
-+	 * Intel-TDX has a secure RDMSR hypercall, but that needs to be
-+	 * implemented seperately in the low level startup ASM code.
-+	 */
-+	if (cc_platform_has(CC_ATTR_GUEST_STATE_ENCRYPT)) {
-+		pr_info("Parallel CPU startup disabled due to guest state encryption\n");
-+		return false;
-+	}
-+
-+	smpboot_control = STARTUP_READ_APICID;
-+	pr_debug("Parallel CPU startup enabled: 0x%08x\n", smpboot_control);
-+	return true;
-+}
-+#endif
-+
- /*
-  * Prepare for SMP bootup.
-  * @max_cpus: configured maximum number of CPUs, It is a legacy parameter
+> But requests for some model specific quirks to work around h/w limitations doesn't
+> mean that we shouldn't create a driver layer for cases where it is possible to
+> separate s/w into layers.
 
+Some of my questions were trimmed from replies without answers
+so I am still trying to understand the driver interface motivation that
+something being model specific is hard to integrate.
+
+Reinette
