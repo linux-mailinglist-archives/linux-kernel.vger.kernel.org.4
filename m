@@ -2,554 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F28C7008E9
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:16:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 241037008F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:16:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241136AbjELNPu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 09:15:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37202 "EHLO
+        id S241210AbjELNQT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 09:16:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241074AbjELNPp (ORCPT
+        with ESMTP id S241197AbjELNQL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 09:15:45 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39EC114E51;
-        Fri, 12 May 2023 06:15:04 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id A0726229E6;
-        Fri, 12 May 2023 13:14:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1683897292; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g3I2dAT8366+ROozP6HDSUhQz0IesKX8ZgohOghL0xU=;
-        b=HMLHUxosusDuQL2j9yv1XWG1J3diNcF4W+naepqPV+3uHnZqDTsA0XNbsmlI+xI0xSBk1W
-        lU0CEa60y+pWI1g3PLe6OkDtan+B1sjsk6Qh4LS3sglRYQ33pow/OI3CJZBcipsjtFV9rz
-        bavjV1CN9EUz6p5rmCs8iklNM2ZYk5o=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1683897292;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=g3I2dAT8366+ROozP6HDSUhQz0IesKX8ZgohOghL0xU=;
-        b=yVZMrjrrh4WMVLz8+6Hcyn23gGLFeRPU1vNjmyNl8+SYgYxE7JEX3wauwXTGx4HwPRdBqd
-        gR+dobFmSCILXjCA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7B91313466;
-        Fri, 12 May 2023 13:14:52 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id BbMeHsw7XmT0NwAAMHmgww
-        (envelope-from <jack@suse.cz>); Fri, 12 May 2023 13:14:52 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 17D85A0754; Fri, 12 May 2023 15:14:52 +0200 (CEST)
-Date:   Fri, 12 May 2023 15:14:52 +0200
-From:   Jan Kara <jack@suse.cz>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Linux DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Staging Drivers <linux-staging@lists.linux.dev>,
-        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
-        Linux Kernel Actions <linux-actions@lists.infradead.org>,
-        Diederik de Haas <didi.debian@cknow.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        David Airlie <airlied@redhat.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
-        Andreas =?utf-8?Q?F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Kalle Valo <kvalo@kernel.org>,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Deepak R Varma <drv@mailo.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Dan Carpenter <error27@gmail.com>, Archana <craechal@gmail.com>
-Subject: Re: [PATCH 09/10] udf: Replace license notice with SPDX identifier
-Message-ID: <20230512131452.q3sj77h54qqec355@quack3>
-References: <20230511133406.78155-1-bagasdotme@gmail.com>
- <20230511133406.78155-10-bagasdotme@gmail.com>
+        Fri, 12 May 2023 09:16:11 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5B714E4B
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:15:45 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id e9e14a558f8ab-33539445684so220665315ab.1
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:15:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683897344; x=1686489344;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dG2eApiQtw6EgBiB77e39j8L4/16nv2XSt+vqnLbeIk=;
+        b=afB0SxcmXhu9obrl1O3dvQdwDV9OfVPghmzfhfn4xMMi56Ke973QLvRVrfTZG49Bkx
+         pW+pY+iaSZryfl1CEGh53pooYk/gk/pI2T+SSdGxiZV31kjKOeOEWEtSN+GWpgMsRGEm
+         aWNdMSfAk2f51kNVR6OSjwpv0BOf0ubsQdGkOgeHAdpQMc9k8ETKvtg0x7T5VrGlqs+K
+         N89s23e0WlIw7Cf4b12Kg4Am8A+FadWk+dTyn8FxYW2Rs6DPLw5pIelTtzhbNYbf5r6e
+         4N2QSjk/p6LUhRC3594NBq4LpxHVbEmkMcHZu2Gp/CiuFlAhWIEq4RJv0xU8Gm6vjK2i
+         O9Jw==
+X-Gm-Message-State: AC+VfDxBFGBA/pJAE4CLXcQSja5JQWPOii1xGwWu6y3nOyig/XuMrEB9
+        3wFwXGfw4OsscPjcaIDcz6doiOgaJ8Ev5q8GdlvC68uAz/Kz
+X-Google-Smtp-Source: ACHHUZ6lHUXFAvY3XmXJ5lxtlioqhGUNNrWs+dFObehrOfT4vuBYpMN/DzDPG77CXi7LeNN4wM01Cqu2bMych2sAdQHDkH0TnZ0F
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230511133406.78155-10-bagasdotme@gmail.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:3546:0:b0:40f:8f07:e28e with SMTP id
+ y6-20020a023546000000b0040f8f07e28emr7462886jae.1.1683897344175; Fri, 12 May
+ 2023 06:15:44 -0700 (PDT)
+Date:   Fri, 12 May 2023 06:15:44 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000009b58d05fb7ee7ad@google.com>
+Subject: [syzbot] [ext4?] general protection fault in ext4_acquire_dquot
+From:   syzbot <syzbot+e633c79ceaecbf479854@syzkaller.appspotmail.com>
+To:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu 11-05-23 20:34:05, Bagas Sanjaya wrote:
-> Except Kconfig and Makefile, all source files for UDF filesystem doesn't
-> bear SPDX license identifier. Add appropriate license identifier while
-> replacing boilerplates.
-> 
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  fs/udf/balloc.c    |  6 +-----
->  fs/udf/dir.c       |  6 +-----
->  fs/udf/directory.c |  6 +-----
->  fs/udf/ecma_167.h  | 24 +-----------------------
->  fs/udf/file.c      |  6 +-----
->  fs/udf/ialloc.c    |  6 +-----
->  fs/udf/inode.c     |  6 +-----
->  fs/udf/lowlevel.c  |  6 +-----
->  fs/udf/misc.c      |  6 +-----
->  fs/udf/namei.c     |  6 +-----
->  fs/udf/osta_udf.h  | 24 +-----------------------
->  fs/udf/partition.c |  6 +-----
->  fs/udf/super.c     |  6 +-----
->  fs/udf/symlink.c   |  6 +-----
->  fs/udf/truncate.c  |  6 +-----
->  fs/udf/udftime.c   | 19 +------------------
->  fs/udf/unicode.c   |  6 +-----
->  17 files changed, 17 insertions(+), 134 deletions(-)
-> 
-> diff --git a/fs/udf/balloc.c b/fs/udf/balloc.c
-> index 14b9db4c80f03f..a56eb6975d19c8 100644
-> --- a/fs/udf/balloc.c
-> +++ b/fs/udf/balloc.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * balloc.c
->   *
-> @@ -5,11 +6,6 @@
->   *	Block allocation handling routines for the OSTA-UDF(tm) filesystem.
->   *
->   * COPYRIGHT
-> - *	This file is distributed under the terms of the GNU General Public
-> - *	License (GPL). Copies of the GPL can be obtained from:
-> - *		ftp://prep.ai.mit.edu/pub/gnu/GPL
-> - *	Each contributing author retains all rights to their own work.
-> - *
->   *  (C) 1999-2001 Ben Fennema
->   *  (C) 1999 Stelias Computing Inc
->   *
+Hello,
 
-So the explicit copyright speaks about GPL license but your SPDX identifier
-speaks about GPLv2 only. I don't think we can change the license like this?
-It applies also to some other UDF files you convert...
+syzbot found the following issue on:
 
-								Honza
+HEAD commit:    14f8db1c0f9a Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=13c79eca280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a837a8ba7e88bb45
+dashboard link: https://syzkaller.appspot.com/bug?extid=e633c79ceaecbf479854
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=130464fa280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13134234280000
 
-> diff --git a/fs/udf/dir.c b/fs/udf/dir.c
-> index 212393b12c2266..015e17382f975e 100644
-> --- a/fs/udf/dir.c
-> +++ b/fs/udf/dir.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * dir.c
->   *
-> @@ -5,11 +6,6 @@
->   *  Directory handling routines for the OSTA-UDF(tm) filesystem.
->   *
->   * COPYRIGHT
-> - *	This file is distributed under the terms of the GNU General Public
-> - *	License (GPL). Copies of the GPL can be obtained from:
-> - *		ftp://prep.ai.mit.edu/pub/gnu/GPL
-> - *	Each contributing author retains all rights to their own work.
-> - *
->   *  (C) 1998-2004 Ben Fennema
->   *
->   * HISTORY
-> diff --git a/fs/udf/directory.c b/fs/udf/directory.c
-> index 654536d2b60976..3b65d5dc70b008 100644
-> --- a/fs/udf/directory.c
-> +++ b/fs/udf/directory.c
-> @@ -1,14 +1,10 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * directory.c
->   *
->   * PURPOSE
->   *	Directory related functions
->   *
-> - * COPYRIGHT
-> - *	This file is distributed under the terms of the GNU General Public
-> - *	License (GPL). Copies of the GPL can be obtained from:
-> - *		ftp://prep.ai.mit.edu/pub/gnu/GPL
-> - *	Each contributing author retains all rights to their own work.
->   */
->  
->  #include "udfdecl.h"
-> diff --git a/fs/udf/ecma_167.h b/fs/udf/ecma_167.h
-> index de17a97e866742..961e7bf5cb5c00 100644
-> --- a/fs/udf/ecma_167.h
-> +++ b/fs/udf/ecma_167.h
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: BSD-2-Clause OR GPL-1.0-only */
->  /*
->   * ecma_167.h
->   *
-> @@ -8,29 +9,6 @@
->   * Copyright (c) 2017-2019  Pali Rohár <pali@kernel.org>
->   * All rights reserved.
->   *
-> - * Redistribution and use in source and binary forms, with or without
-> - * modification, are permitted provided that the following conditions
-> - * are met:
-> - * 1. Redistributions of source code must retain the above copyright
-> - *    notice, this list of conditions, and the following disclaimer,
-> - *    without modification.
-> - * 2. The name of the author may not be used to endorse or promote products
-> - *    derived from this software without specific prior written permission.
-> - *
-> - * Alternatively, this software may be distributed under the terms of the
-> - * GNU Public License ("GPL").
-> - *
-> - * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-> - * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-> - * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-> - * ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR
-> - * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-> - * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-> - * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-> - * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-> - * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-> - * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-> - * SUCH DAMAGE.
->   */
->  
->  /**
-> diff --git a/fs/udf/file.c b/fs/udf/file.c
-> index 8238f742377bab..a13622121a63c5 100644
-> --- a/fs/udf/file.c
-> +++ b/fs/udf/file.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * file.c
->   *
-> @@ -5,11 +6,6 @@
->   *  File handling routines for the OSTA-UDF(tm) filesystem.
->   *
->   * COPYRIGHT
-> - *  This file is distributed under the terms of the GNU General Public
-> - *  License (GPL). Copies of the GPL can be obtained from:
-> - *    ftp://prep.ai.mit.edu/pub/gnu/GPL
-> - *  Each contributing author retains all rights to their own work.
-> - *
->   *  (C) 1998-1999 Dave Boynton
->   *  (C) 1998-2004 Ben Fennema
->   *  (C) 1999-2000 Stelias Computing Inc
-> diff --git a/fs/udf/ialloc.c b/fs/udf/ialloc.c
-> index 8d50121778a57d..67a869cbf5987b 100644
-> --- a/fs/udf/ialloc.c
-> +++ b/fs/udf/ialloc.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * ialloc.c
->   *
-> @@ -5,11 +6,6 @@
->   *	Inode allocation handling routines for the OSTA-UDF(tm) filesystem.
->   *
->   * COPYRIGHT
-> - *	This file is distributed under the terms of the GNU General Public
-> - *	License (GPL). Copies of the GPL can be obtained from:
-> - *		ftp://prep.ai.mit.edu/pub/gnu/GPL
-> - *	Each contributing author retains all rights to their own work.
-> - *
->   *  (C) 1998-2001 Ben Fennema
->   *
->   * HISTORY
-> diff --git a/fs/udf/inode.c b/fs/udf/inode.c
-> index 1e71e04ae8f6b9..7c1e083223211c 100644
-> --- a/fs/udf/inode.c
-> +++ b/fs/udf/inode.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * inode.c
->   *
-> @@ -5,11 +6,6 @@
->   *  Inode handling routines for the OSTA-UDF(tm) filesystem.
->   *
->   * COPYRIGHT
-> - *  This file is distributed under the terms of the GNU General Public
-> - *  License (GPL). Copies of the GPL can be obtained from:
-> - *    ftp://prep.ai.mit.edu/pub/gnu/GPL
-> - *  Each contributing author retains all rights to their own work.
-> - *
->   *  (C) 1998 Dave Boynton
->   *  (C) 1998-2004 Ben Fennema
->   *  (C) 1999-2000 Stelias Computing Inc
-> diff --git a/fs/udf/lowlevel.c b/fs/udf/lowlevel.c
-> index c87ed942d07653..28fc91f12da911 100644
-> --- a/fs/udf/lowlevel.c
-> +++ b/fs/udf/lowlevel.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * lowlevel.c
->   *
-> @@ -5,11 +6,6 @@
->   *  Low Level Device Routines for the UDF filesystem
->   *
->   * COPYRIGHT
-> - *	This file is distributed under the terms of the GNU General Public
-> - *	License (GPL). Copies of the GPL can be obtained from:
-> - *		ftp://prep.ai.mit.edu/pub/gnu/GPL
-> - *	Each contributing author retains all rights to their own work.
-> - *
->   *  (C) 1999-2001 Ben Fennema
->   *
->   * HISTORY
-> diff --git a/fs/udf/misc.c b/fs/udf/misc.c
-> index 3777468d06ce58..c0eaad4d0d86ff 100644
-> --- a/fs/udf/misc.c
-> +++ b/fs/udf/misc.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * misc.c
->   *
-> @@ -5,11 +6,6 @@
->   *	Miscellaneous routines for the OSTA-UDF(tm) filesystem.
->   *
->   * COPYRIGHT
-> - *	This file is distributed under the terms of the GNU General Public
-> - *	License (GPL). Copies of the GPL can be obtained from:
-> - *		ftp://prep.ai.mit.edu/pub/gnu/GPL
-> - *	Each contributing author retains all rights to their own work.
-> - *
->   *  (C) 1998 Dave Boynton
->   *  (C) 1998-2004 Ben Fennema
->   *  (C) 1999-2000 Stelias Computing Inc
-> diff --git a/fs/udf/namei.c b/fs/udf/namei.c
-> index fd20423d3ed24c..6d6cd24c7c2536 100644
-> --- a/fs/udf/namei.c
-> +++ b/fs/udf/namei.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * namei.c
->   *
-> @@ -5,11 +6,6 @@
->   *      Inode name handling routines for the OSTA-UDF(tm) filesystem.
->   *
->   * COPYRIGHT
-> - *      This file is distributed under the terms of the GNU General Public
-> - *      License (GPL). Copies of the GPL can be obtained from:
-> - *              ftp://prep.ai.mit.edu/pub/gnu/GPL
-> - *      Each contributing author retains all rights to their own work.
-> - *
->   *  (C) 1998-2004 Ben Fennema
->   *  (C) 1999-2000 Stelias Computing Inc
->   *
-> diff --git a/fs/udf/osta_udf.h b/fs/udf/osta_udf.h
-> index 157de0ec0cd530..85a5924873aeb5 100644
-> --- a/fs/udf/osta_udf.h
-> +++ b/fs/udf/osta_udf.h
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: BSD-2-Clause OR GPL-1.0-only */
->  /*
->   * osta_udf.h
->   *
-> @@ -8,29 +9,6 @@
->   * Copyright (c) 2017-2019  Pali Rohár <pali@kernel.org>
->   * All rights reserved.
->   *
-> - * Redistribution and use in source and binary forms, with or without
-> - * modification, are permitted provided that the following conditions
-> - * are met:
-> - * 1. Redistributions of source code must retain the above copyright
-> - *    notice, this list of conditions, and the following disclaimer,
-> - *    without modification.
-> - * 2. The name of the author may not be used to endorse or promote products
-> - *    derived from this software without specific prior written permission.
-> - *
-> - * Alternatively, this software may be distributed under the terms of the
-> - * GNU Public License ("GPL").
-> - *
-> - * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
-> - * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-> - * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-> - * ARE DISCLAIMED. IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE FOR
-> - * ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
-> - * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
-> - * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
-> - * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
-> - * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
-> - * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
-> - * SUCH DAMAGE.
->   */
->  
->  /**
-> diff --git a/fs/udf/partition.c b/fs/udf/partition.c
-> index 5bcfe78d5cabe9..7d78be28929906 100644
-> --- a/fs/udf/partition.c
-> +++ b/fs/udf/partition.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * partition.c
->   *
-> @@ -5,11 +6,6 @@
->   *      Partition handling routines for the OSTA-UDF(tm) filesystem.
->   *
->   * COPYRIGHT
-> - *      This file is distributed under the terms of the GNU General Public
-> - *      License (GPL). Copies of the GPL can be obtained from:
-> - *              ftp://prep.ai.mit.edu/pub/gnu/GPL
-> - *      Each contributing author retains all rights to their own work.
-> - *
->   *  (C) 1998-2001 Ben Fennema
->   *
->   * HISTORY
-> diff --git a/fs/udf/super.c b/fs/udf/super.c
-> index 6304e3c5c3d969..80bee18ec6e1f4 100644
-> --- a/fs/udf/super.c
-> +++ b/fs/udf/super.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * super.c
->   *
-> @@ -15,11 +16,6 @@
->   *    https://www.iso.org/
->   *
->   * COPYRIGHT
-> - *  This file is distributed under the terms of the GNU General Public
-> - *  License (GPL). Copies of the GPL can be obtained from:
-> - *    ftp://prep.ai.mit.edu/pub/gnu/GPL
-> - *  Each contributing author retains all rights to their own work.
-> - *
->   *  (C) 1998 Dave Boynton
->   *  (C) 1998-2004 Ben Fennema
->   *  (C) 2000 Stelias Computing Inc
-> diff --git a/fs/udf/symlink.c b/fs/udf/symlink.c
-> index a34c8c4e6d2109..0b91b2c92bddb8 100644
-> --- a/fs/udf/symlink.c
-> +++ b/fs/udf/symlink.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * symlink.c
->   *
-> @@ -5,11 +6,6 @@
->   *	Symlink handling routines for the OSTA-UDF(tm) filesystem.
->   *
->   * COPYRIGHT
-> - *	This file is distributed under the terms of the GNU General Public
-> - *	License (GPL). Copies of the GPL can be obtained from:
-> - *		ftp://prep.ai.mit.edu/pub/gnu/GPL
-> - *	Each contributing author retains all rights to their own work.
-> - *
->   *  (C) 1998-2001 Ben Fennema
->   *  (C) 1999 Stelias Computing Inc
->   *
-> diff --git a/fs/udf/truncate.c b/fs/udf/truncate.c
-> index 2e7ba234bab8b8..3fb6c2abb4dc34 100644
-> --- a/fs/udf/truncate.c
-> +++ b/fs/udf/truncate.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * truncate.c
->   *
-> @@ -5,11 +6,6 @@
->   *	Truncate handling routines for the OSTA-UDF(tm) filesystem.
->   *
->   * COPYRIGHT
-> - *	This file is distributed under the terms of the GNU General Public
-> - *	License (GPL). Copies of the GPL can be obtained from:
-> - *		ftp://prep.ai.mit.edu/pub/gnu/GPL
-> - *	Each contributing author retains all rights to their own work.
-> - *
->   *  (C) 1999-2004 Ben Fennema
->   *  (C) 1999 Stelias Computing Inc
->   *
-> diff --git a/fs/udf/udftime.c b/fs/udf/udftime.c
-> index fce4ad976c8c29..d525ea68725f1c 100644
-> --- a/fs/udf/udftime.c
-> +++ b/fs/udf/udftime.c
-> @@ -1,21 +1,4 @@
-> -/* Copyright (C) 1993, 1994, 1995, 1996, 1997 Free Software Foundation, Inc.
-> -   This file is part of the GNU C Library.
-> -   Contributed by Paul Eggert (eggert@twinsun.com).
-> -
-> -   The GNU C Library is free software; you can redistribute it and/or
-> -   modify it under the terms of the GNU Library General Public License as
-> -   published by the Free Software Foundation; either version 2 of the
-> -   License, or (at your option) any later version.
-> -
-> -   The GNU C Library is distributed in the hope that it will be useful,
-> -   but WITHOUT ANY WARRANTY; without even the implied warranty of
-> -   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-> -   Library General Public License for more details.
-> -
-> -   You should have received a copy of the GNU Library General Public
-> -   License along with the GNU C Library; see the file COPYING.LIB.  If not,
-> -   write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-> -   Boston, MA 02111-1307, USA.  */
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  
->  /*
->   * dgb 10/02/98: ripped this from glibc source to help convert timestamps
-> diff --git a/fs/udf/unicode.c b/fs/udf/unicode.c
-> index 622569007b530b..5d6b66e15fcded 100644
-> --- a/fs/udf/unicode.c
-> +++ b/fs/udf/unicode.c
-> @@ -1,3 +1,4 @@
-> +/* SPDX-License-Identifier: GPL-2.0-only */
->  /*
->   * unicode.c
->   *
-> @@ -11,11 +12,6 @@
->   *	UTF-8 is explained in the IETF RFC XXXX.
->   *		ftp://ftp.internic.net/rfc/rfcxxxx.txt
->   *
-> - * COPYRIGHT
-> - *	This file is distributed under the terms of the GNU General Public
-> - *	License (GPL). Copies of the GPL can be obtained from:
-> - *		ftp://prep.ai.mit.edu/pub/gnu/GPL
-> - *	Each contributing author retains all rights to their own work.
->   */
->  
->  #include "udfdecl.h"
-> -- 
-> An old man doll... just what I always wanted! - Clara
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ad6ce516eed3/disk-14f8db1c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1f38c2cc7667/vmlinux-14f8db1c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d795115eee39/Image-14f8db1c.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/aa1d3602f38e/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+e633c79ceaecbf479854@syzkaller.appspotmail.com
+
+Unable to handle kernel paging request at virtual address dfff800000000005
+KASAN: null-ptr-deref in range [0x0000000000000028-0x000000000000002f]
+Mem abort info:
+  ESR = 0x0000000096000006
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x06: level 2 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000006
+  CM = 0, WnR = 0
+[dfff800000000005] address between user and kernel address ranges
+Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 6080 Comm: syz-executor747 Not tainted 6.3.0-rc7-syzkaller-g14f8db1c0f9a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : ext4_acquire_dquot+0x1d4/0x398 fs/ext4/super.c:6766
+lr : dquot_to_inode fs/ext4/super.c:6740 [inline]
+lr : ext4_acquire_dquot+0x1ac/0x398 fs/ext4/super.c:6766
+sp : ffff80001eb27280
+x29: ffff80001eb27280 x28: 1fffe0001c3c01fc x27: ffff800015d705b0
+x26: ffff0000dd93c000 x25: ffff0000dd93e000 x24: 1fffe0001c3c021c
+x23: dfff800000000000 x22: 0000000000000049 x21: 0000000000000028
+x20: 0000000000000000 x19: ffff0000e1e00fc0 x18: ffff0001b426cca8
+x17: 0000000000000000 x16: ffff8000089669b0 x15: 0000000000000001
+x14: 1ffff00002bae0b0 x13: dfff800000000000 x12: 0000000000000001
+x11: 0000000000000000 x10: 0000000000000000 x9 : 0000000000000000
+x8 : 0000000000000005 x7 : ffff800008c11f68 x6 : 0000000000000000
+x5 : 0000000000000000 x4 : 0000000000000001 x3 : ffff800012441b4c
+x2 : 0000000000000001 x1 : 0000000000000001 x0 : 0000000000000003
+Call trace:
+ ext4_acquire_dquot+0x1d4/0x398 fs/ext4/super.c:6766
+ dqget+0x844/0xc48 fs/quota/dquot.c:914
+ __dquot_initialize+0x2cc/0xb54 fs/quota/dquot.c:1492
+ dquot_initialize fs/quota/dquot.c:1550 [inline]
+ dquot_file_open+0x90/0xc8 fs/quota/dquot.c:2181
+ ext4_file_open+0x230/0x590 fs/ext4/file.c:903
+ do_dentry_open+0x724/0xf90 fs/open.c:920
+ vfs_open+0x7c/0x90 fs/open.c:1051
+ do_open fs/namei.c:3560 [inline]
+ path_openat+0x1f2c/0x27f8 fs/namei.c:3715
+ do_filp_open+0x1bc/0x3cc fs/namei.c:3742
+ do_sys_openat2+0x128/0x3d8 fs/open.c:1348
+ do_sys_open fs/open.c:1364 [inline]
+ __do_sys_openat fs/open.c:1380 [inline]
+ __se_sys_openat fs/open.c:1375 [inline]
+ __arm64_sys_openat+0x1f0/0x240 fs/open.c:1375
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+Code: 97e8a7df f94002a8 9100a115 d343fea8 (38776908) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	97e8a7df 	bl	0xffffffffffa29f7c
+   4:	f94002a8 	ldr	x8, [x21]
+   8:	9100a115 	add	x21, x8, #0x28
+   c:	d343fea8 	lsr	x8, x21, #3
+* 10:	38776908 	ldrb	w8, [x8, x23] <-- trapping instruction
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
