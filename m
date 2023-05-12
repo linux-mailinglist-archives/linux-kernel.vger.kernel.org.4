@@ -2,98 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D52E700B01
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 17:05:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AC2D700B09
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 17:09:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232739AbjELPFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 11:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53444 "EHLO
+        id S241718AbjELPJP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 11:09:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241713AbjELPFh (ORCPT
+        with ESMTP id S241200AbjELPJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 11:05:37 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25414100E8
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 08:05:22 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-6438d95f447so7086222b3a.3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 08:05:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20221208.gappssmtp.com; s=20221208; t=1683903921; x=1686495921;
-        h=message-id:to:from:cc:subject:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=QrSKXQMrxZy3B2xcqbpKyp9JfcjpHClnhEvXrHIQx28=;
-        b=swn0xzMao9c+7wrFYVIGTExuBibZc6aUZAGfyeRYhTp3aZXqqRNaof4AjCvfETX9V5
-         YVvP2yfwG/AQUbdBkHmnHm200r3rHSfwrcCx2k9mxADy118J5re3bfA9WTgDSlvodFLS
-         XI91/xIlACifIiItrxtMuZ098pEluhpiEXdk/zk87MmN2MxROEgcKJupCTS3GdX0BuUe
-         eNDT3TPWLXc+ERsUTgLVuQc9XS/lZMsSgtz0U4Rws3HUZmRrAAqdLld1w2d0PDUsR4E8
-         oBmIIxo8bZwaKIe4kxIm+2Ry3p72SwgJC7pFCXtd744yUwidLo3l4bLdOtgZOopo/Yib
-         0BWQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683903921; x=1686495921;
-        h=message-id:to:from:cc:subject:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QrSKXQMrxZy3B2xcqbpKyp9JfcjpHClnhEvXrHIQx28=;
-        b=Jgxv7nI9sRonPZ534rw7Qivd1sskDQ/k0zUVbOihyPKhS/bqI6YPcUGFOgG4mdzQOo
-         iIi3C0QmCsLSu3mQkyoLjtoEhOJ1mAK/hm9eb8cSQsvgqIGM3jb0TAlKGLoAfMYnfyHB
-         EElGYiHRAklc2b7d4DrPu7PNj1E+c3l+HymqQMJqSGmg2HsgeS/mLaWlWNHJO9zt3AjM
-         43DQLEhw2U9dot1jnv0njzVBfTnYOJeFVEXtX8gO1T8zwr9g/GCkqxJB7T1Icq8UK+AR
-         FE79I2oxFpzfiWN5mLNMUT4aBtxuNDvWafbOoGLuTm8HEoBCOcapwXFe4RGwCF0JRi9/
-         NwRw==
-X-Gm-Message-State: AC+VfDyIUltS7VVL1PrniOiTihSqOJjJXEJLLZj/FoYhhPzIuNsx32sj
-        tUPK9elMFGu39s6txLg8kgiOLHOX/N2UbKySKfA=
-X-Google-Smtp-Source: ACHHUZ7quZ/W/3oBQEaRf/HYdJB9y9lDWuJfi0McS7LZztm4C7a7wfdb5/pX6q0IS1pfwSYdHzYviQ==
-X-Received: by 2002:a05:6a20:8e03:b0:104:2226:1b96 with SMTP id y3-20020a056a208e0300b0010422261b96mr6492368pzj.22.1683903921429;
-        Fri, 12 May 2023 08:05:21 -0700 (PDT)
-Received: from localhost ([135.180.227.0])
-        by smtp.gmail.com with ESMTPSA id l5-20020a17090a408500b0024c1ac09394sm17325869pjg.19.2023.05.12.08.05.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 08:05:20 -0700 (PDT)
-Date:   Fri, 12 May 2023 08:05:20 -0700 (PDT)
-X-Google-Original-Date: Fri, 12 May 2023 08:05:12 PDT (-0700)
-Subject: [GIT PULL] RISC-V Fix for 6.4-rc2
-CC:         linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-From:   Palmer Dabbelt <palmer@rivosinc.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Message-ID: <mhng-f7f97b7f-e3aa-4fff-abc7-19439d1720fe@palmer-ri-x1c9>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        Fri, 12 May 2023 11:09:13 -0400
+Received: from mx2.securetransport.de (mx2.securetransport.de [IPv6:2a03:4000:13:6c7::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E2D5F5BA5;
+        Fri, 12 May 2023 08:09:08 -0700 (PDT)
+Received: from mail.dh-electronics.com (unknown [77.24.89.57])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mx2.securetransport.de (Postfix) with ESMTPSA id D3F8E5E85C;
+        Fri, 12 May 2023 17:08:27 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=dh-electronics.com;
+        s=dhelectronicscom; t=1683904108;
+        bh=mVNuMFQVfDKbGZ53v1bHBsJOGKRreCNyAVxU+AsY7a0=;
+        h=From:To:CC:Subject:Date:From;
+        b=LT5l4SC/dNI9XJjlIn9+Lb8w0goX2Fg9z4rIBVsVUGcD3h2xTrAf7kO3Ibo8R8Jvx
+         rDrYc55F9xuCUhAQg7aM85SjWQ5b4DsCAoqUU14dD8E95viwM25XssHTuaB6PWWkcs
+         jgz8LS0F0Z87Ip/S8AhOZzDBYgbtXfJXd+aaGoV0knlbvY+NtF7Ghes+jFPvh4BJ6l
+         CFhRr5jcVqc1NosImLvzq0DLVdLYOtGZYx+9hudiGIpJVdPuDgZmqcZ9ubkvao7PTq
+         bsrE7PLnt4ED7OvGNpZvneY2aCUdTo0ixMhW8M4xPMlmvppJj5io6rQuCZ+kcTB+KI
+         JxAds+/O99l/g==
+Received: from DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Fri, 12 May 2023 17:08:25 +0200
+Received: from localhost.localdomain (172.16.51.5) by
+ DHPWEX01.DH-ELECTRONICS.ORG (10.64.2.30) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26 via Frontend Transport; Fri, 12 May 2023 17:08:24 +0200
+From:   Christoph Niedermaier <cniedermaier@dh-electronics.com>
+To:     <linux-arm-kernel@lists.infradead.org>
+CC:     Christoph Niedermaier <cniedermaier@dh-electronics.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Marek Vasut <marex@denx.de>,
+        Fabio Estevam <festevam@denx.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH V2] cpufreq: imx6q: No warning output when disabling a non-existing frequency of the OPP
+Date:   Fri, 12 May 2023 17:07:11 +0200
+Message-ID: <20230512150711.106854-1-cniedermaier@dh-electronics.com>
+X-Mailer: git-send-email 2.11.0
+X-klartext: yes
+MIME-Version: 1.0
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
+It is confusing if a warning is given for disabling a non-existent
+frequency of the operating performance points (OPP). In this case
+the function dev_pm_opp_disable() returns -ENODEV. Check the return
+value and avoid the output of a warning in this case. Avoid code
+duplication by using a separate function.
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+Signed-off-by: Christoph Niedermaier <cniedermaier@dh-electronics.com>
+---
+Cc: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Shawn Guo <shawnguo@kernel.org>
+Cc: Marek Vasut <marex@denx.de>
+Cc: Fabio Estevam <festevam@denx.de>
+Cc: NXP Linux Team <linux-imx@nxp.com>
+Cc: linux-pm@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+To: linux-arm-kernel@lists.infradead.org
+---
+ drivers/cpufreq/imx6q-cpufreq.c | 30 ++++++++++++++++--------------
+ 1 file changed, 16 insertions(+), 14 deletions(-)
 
-are available in the Git repository at:
+diff --git a/drivers/cpufreq/imx6q-cpufreq.c b/drivers/cpufreq/imx6q-cpufreq.c
+index 48e1772e98fd..9fb1501033bb 100644
+--- a/drivers/cpufreq/imx6q-cpufreq.c
++++ b/drivers/cpufreq/imx6q-cpufreq.c
+@@ -209,6 +209,14 @@ static struct cpufreq_driver imx6q_cpufreq_driver = {
+ 	.suspend = cpufreq_generic_suspend,
+ };
+ 
++static void imx6x_disable_freq_in_opp(struct device *dev, unsigned long freq)
++{
++	int ret = dev_pm_opp_disable(dev, freq);
++
++	if (ret < 0 && ret != -ENODEV)
++		dev_warn(dev, "failed to disable %ldMHz OPP\n", freq / 1000000);
++}
++
+ #define OCOTP_CFG3			0x440
+ #define OCOTP_CFG3_SPEED_SHIFT		16
+ #define OCOTP_CFG3_SPEED_1P2GHZ		0x3
+@@ -254,17 +262,15 @@ static int imx6q_opp_check_speed_grading(struct device *dev)
+ 	val &= 0x3;
+ 
+ 	if (val < OCOTP_CFG3_SPEED_996MHZ)
+-		if (dev_pm_opp_disable(dev, 996000000))
+-			dev_warn(dev, "failed to disable 996MHz OPP\n");
++		imx6x_disable_freq_in_opp(dev, 996000000);
+ 
+ 	if (of_machine_is_compatible("fsl,imx6q") ||
+ 	    of_machine_is_compatible("fsl,imx6qp")) {
+ 		if (val != OCOTP_CFG3_SPEED_852MHZ)
+-			if (dev_pm_opp_disable(dev, 852000000))
+-				dev_warn(dev, "failed to disable 852MHz OPP\n");
++			imx6x_disable_freq_in_opp(dev, 852000000);
++
+ 		if (val != OCOTP_CFG3_SPEED_1P2GHZ)
+-			if (dev_pm_opp_disable(dev, 1200000000))
+-				dev_warn(dev, "failed to disable 1.2GHz OPP\n");
++			imx6x_disable_freq_in_opp(dev, 1200000000);
+ 	}
+ 
+ 	return 0;
+@@ -316,20 +322,16 @@ static int imx6ul_opp_check_speed_grading(struct device *dev)
+ 	val >>= OCOTP_CFG3_SPEED_SHIFT;
+ 	val &= 0x3;
+ 
+-	if (of_machine_is_compatible("fsl,imx6ul")) {
++	if (of_machine_is_compatible("fsl,imx6ul"))
+ 		if (val != OCOTP_CFG3_6UL_SPEED_696MHZ)
+-			if (dev_pm_opp_disable(dev, 696000000))
+-				dev_warn(dev, "failed to disable 696MHz OPP\n");
+-	}
++			imx6x_disable_freq_in_opp(dev, 696000000);
+ 
+ 	if (of_machine_is_compatible("fsl,imx6ull")) {
+ 		if (val != OCOTP_CFG3_6ULL_SPEED_792MHZ)
+-			if (dev_pm_opp_disable(dev, 792000000))
+-				dev_warn(dev, "failed to disable 792MHz OPP\n");
++			imx6x_disable_freq_in_opp(dev, 792000000);
+ 
+ 		if (val != OCOTP_CFG3_6ULL_SPEED_900MHZ)
+-			if (dev_pm_opp_disable(dev, 900000000))
+-				dev_warn(dev, "failed to disable 900MHz OPP\n");
++			imx6x_disable_freq_in_opp(dev, 900000000);
+ 	}
+ 
+ 	return ret;
+-- 
+2.11.0
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git tags/riscv-for-linus-6.4-rc2
-
-for you to fetch changes up to 3b90b09af5be42491a8a74a549318cfa265b3029:
-
-  riscv: Fix orphan section warnings caused by kernel/pi (2023-05-09 18:20:23 -0700)
-
-----------------------------------------------------------------
-RISC-V Fix for 6.4-rc2
-
-* A fix to the linker script to avoid orpahaned sections in kernel/pi.
-
-----------------------------------------------------------------
-Just a single fix this week for a build issue.  That'd usually be a good sign,
-but we've started to get some reports of boot failures on some
-hardware/bootloader configurations.  Nothing concrete yet, but I've got a funny
-feeling that's where much of the bug hunting is going right now.
-
-Nothing's reproducing on my end, though, and this fixes some pretty concrete
-issues so I figured there's no reason to delay it.
-
-----------------------------------------------------------------
-Alexandre Ghiti (1):
-      riscv: Fix orphan section warnings caused by kernel/pi
-
- arch/riscv/kernel/pi/Makefile   | 2 +-
- arch/riscv/kernel/vmlinux.lds.S | 7 ++-----
- 2 files changed, 3 insertions(+), 6 deletions(-)
