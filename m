@@ -2,114 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A3477009BA
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:00:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92E5870099E
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:59:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240832AbjELOAJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 10:00:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36902 "EHLO
+        id S241337AbjELN64 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 09:58:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241428AbjELN7i (ORCPT
+        with ESMTP id S240855AbjELN6y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 09:59:38 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C139C13C2E;
-        Fri, 12 May 2023 06:59:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1683899972; x=1715435972;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=RgLBvhgm2odiQ2SzAp4nOs61NsPOgBYkIG0oBcKhByU=;
-  b=GVSUzRfFY5YYiWXPfcAo6iwrCosOKSgjUkT76TiU9XbpSJiLnbxW6UJ+
-   GUzlqgkvcambJp4qB8YS6HJq3fjXs/V71+EaJltxM4+aIOvXawbUlP6Jz
-   5hFI4uzrkT2SuXWYoDiLoDMWWj9Y8SCaGy0GHLjwvMVxKNNkGHtE2nHPI
-   2r5FeRcJiw9DFSsc4aUkemV4n3rpmIF1A6AC612/6+b9jQ5TyhxMs9H/a
-   GI0uxm7dh8Ss7yg01Irv/zeLD0fNqIGvpmPV82iPgd2yJxTWbsEqAbmu9
-   6Bzj0H9JOFoJKNV0xwta8lGPX5suFUFZgVrrnMSwgNpIJBoA1hYRVx4rG
-   g==;
-X-IronPort-AV: E=Sophos;i="5.99,269,1677567600"; 
-   d="asc'?scan'208";a="151755680"
-X-Amp-Result: UNKNOWN
-X-Amp-Original-Verdict: FILE UNKNOWN
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 May 2023 06:59:12 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.87.72) by
- chn-vm-ex02.mchp-main.com (10.10.87.72) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 12 May 2023 06:59:11 -0700
-Received: from wendy (10.10.115.15) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21 via Frontend
- Transport; Fri, 12 May 2023 06:59:10 -0700
-Date:   Fri, 12 May 2023 14:58:49 +0100
-From:   Conor Dooley <conor.dooley@microchip.com>
-To:     Jisheng Zhang <jszhang@kernel.org>
-CC:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnd Bergmann <arnd@arndb.de>,
-        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arch@vger.kernel.org>
-Subject: Re: [PATCH 4/4] riscv: enable HAVE_LD_DEAD_CODE_DATA_ELIMINATION
-Message-ID: <20230512-spouse-pang-87f2e579baa2@wendy>
-References: <20230511141211.2418-1-jszhang@kernel.org>
- <20230511141211.2418-5-jszhang@kernel.org>
+        Fri, 12 May 2023 09:58:54 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBE502729
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:58:52 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id e9e14a558f8ab-3357ea1681fso1943475ab.1
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:58:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20221208.gappssmtp.com; s=20221208; t=1683899932; x=1686491932;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yH2xnek6VdQOUwfJmdky94/blHNCWWMuO8qXfq6pSwM=;
+        b=pYEPobvpjc6Ad0FDHAkvFWzH9s642aXV2PRSLgRt5Fr7X7gH0L2+2JPWdjTn3kys9R
+         WIvgvfeuLJtXEvEObwAIEbWUicn9ICg7Fw2550TzupQBqYYqEVcBOa8RLkKY06fGDG8B
+         fSs49eIiSxTn5lKuPcVk3UHxIrSyVWL072oKXPQNCDKggPbELhEHSWaP2PxgBnKdwkhN
+         qzU8+uh+ClWfMuW65Z+eetpNKovEsK+aXpc8v6u31XWQAFoVVoo8XcLyHN2+dvOakCz5
+         Y8oncoNuCwBQapvbzyZTONx0SjaZwI+JMwqQpJB3emXcgzC3zesbQGH5FFmkdgKa2K4F
+         cuUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683899932; x=1686491932;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yH2xnek6VdQOUwfJmdky94/blHNCWWMuO8qXfq6pSwM=;
+        b=AYgjqoq7uVhncQ7cNOV8PVW4dNp8qzJySqQWv47gnrZ4vOxSLrmne34R1/EQ0y6bI6
+         jDxnoZUEqiKYyW+RZt5h30XMbi6C0/XCDSM3Hej377Dzff1ukHRFudKzEBp62x8/b9rC
+         +HFCpxnagSYnVpZOB4lez3NXw28LiQVRVjr0Hq+bbRGHC6S4jHb5gVHuYTtbdgojnoq3
+         dy0sgE4uOeuo6TrNSeOmQF0zu6xwAqwYx7Aqnp/xi+TKDqL6VGIYBVl1XPUB7HLDOfCV
+         ACmwLZlNswME1Tbb8s4WzTNwO2vsVSLy3NvFEevUaktw3Eo7H9aPDmkjrvlPXYYS2Cjx
+         4zgg==
+X-Gm-Message-State: AC+VfDxxXuS5LoVSyIS4Ys5vRaGFYB0Ol0c1GUlgoTk4ubStaNdaO5SA
+        rlwaw4n2cUivG7B/jTTnc3ybYw==
+X-Google-Smtp-Source: ACHHUZ4D6Eq74NNkD7IfpXh7o0iMVJF9lCDFxSiZeDr+LdBgJIfNJ7BThe8l0SQ2M4ns+Mo++OxWrQ==
+X-Received: by 2002:a5e:a808:0:b0:76c:7342:dde6 with SMTP id c8-20020a5ea808000000b0076c7342dde6mr4175223ioa.0.1683899932100;
+        Fri, 12 May 2023 06:58:52 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id d11-20020a0566380d4b00b0040f91b773d2sm4714418jak.35.2023.05.12.06.58.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 May 2023 06:58:51 -0700 (PDT)
+Message-ID: <13383a9d-2bf0-1542-bc05-cfa00975e921@kernel.dk>
+Date:   Fri, 12 May 2023 07:58:50 -0600
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="aCJ58t5/KMUTtFbc"
-Content-Disposition: inline
-In-Reply-To: <20230511141211.2418-5-jszhang@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] Subject: io_uring: Fix bug in io_fallback_req_func that
+ can cause deadlock
+Content-Language: en-US
+To:     luhongfei <luhongfei@vivo.com>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        "open list:IO_URING" <io-uring@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     opensource.kernel@vivo.com
+References: <20230512095655.8968-1-luhongfei@vivo.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <20230512095655.8968-1-luhongfei@vivo.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---aCJ58t5/KMUTtFbc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 5/12/23 3:56?AM, luhongfei wrote:
+> There was a bug in io_fallback_req_func that can cause deadlocks
+> because uring_lock was not released when return.
+> This patch releases the uring_lock before return.
+> 
+> Signed-off-by: luhongfei <luhongfei@vivo.com>
+> ---
+>  io_uring/io_uring.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>  mode change 100644 => 100755 io_uring/io_uring.c
+> 
+> diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
+> index 3bca7a79efda..1af793c7b3da
+> --- a/io_uring/io_uring.c
+> +++ b/io_uring/io_uring.c
+> @@ -252,8 +252,10 @@ static __cold void io_fallback_req_func(struct work_struct *work)
+>  	mutex_lock(&ctx->uring_lock);
+>  	llist_for_each_entry_safe(req, tmp, node, io_task_work.node)
+>  		req->io_task_work.func(req, &ts);
+> -	if (WARN_ON_ONCE(!ts.locked))
+> +	if (WARN_ON_ONCE(!ts.locked)) {
+> +		mutex_unlock(&ctx->uring_lock);
+>  		return;
+> +	}
+>  	io_submit_flush_completions(ctx);
+>  	mutex_unlock(&ctx->uring_lock);
+>  }
 
-On Thu, May 11, 2023 at 10:12:11PM +0800, Jisheng Zhang wrote:
+I'm guessing you found this by reading the code, and didn't actually hit
+it? Because it looks fine as-is. We lock the ctx->uring_lock, and set
+ts.locked == true. If ts.locked is false, then someone unlocked the ring
+further down, which is unexpected (hence the WARN_ON_ONCE()). But if
+that did happen, then we definitely don't want to unlock it again.
 
-> diff --git a/arch/riscv/kernel/vmlinux.lds.S b/arch/riscv/kernel/vmlinux.=
-lds.S
-> index e5f9f4677bbf..492dd4b8f3d6 100644
-> --- a/arch/riscv/kernel/vmlinux.lds.S
-> +++ b/arch/riscv/kernel/vmlinux.lds.S
-> @@ -85,11 +85,11 @@ SECTIONS
->  	INIT_DATA_SECTION(16)
-> =20
->  	.init.pi : {
-> -		*(.init.pi*)
-> +		KEEP(*(.init.pi*))
->  	}
+Because of that, I don't think you're patch is correct.
 
-This section no longer exists in v6.4-rc1, it is now:
-	/* Those sections result from the compilation of kernel/pi/string.c */
-	.init.pidata : {
-		*(.init.srodata.cst8*)
-		*(.init__bug_table*)
-		*(.init.sdata*)
-	}
+-- 
+Jens Axboe
 
-Cheers,
-Conor.
-
---aCJ58t5/KMUTtFbc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZF5GGQAKCRB4tDGHoIJi
-0qYyAQCRMo5iM+rBTlmU5brSvMFm+H9q1MMggt56ESxJdUM5owEA1Rux0WE9Ky3q
-wRiS5v6F7DGyWjBZXjvhP+7kcWDqfQM=
-=O/cE
------END PGP SIGNATURE-----
-
---aCJ58t5/KMUTtFbc--
