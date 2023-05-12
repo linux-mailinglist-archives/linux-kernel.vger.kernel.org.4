@@ -2,119 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF28670067D
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:16:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E181700683
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:17:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241060AbjELLQn convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 12 May 2023 07:16:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41324 "EHLO
+        id S241075AbjELLRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 07:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241028AbjELLQi (ORCPT
+        with ESMTP id S241025AbjELLRf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 07:16:38 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60EE81162B
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:16:35 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-249-VSjj4jpZOom7AJRUgPGuWQ-1; Fri, 12 May 2023 12:16:32 +0100
-X-MC-Unique: VSjj4jpZOom7AJRUgPGuWQ-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.48; Fri, 12 May
- 2023 12:16:30 +0100
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.048; Fri, 12 May 2023 12:16:30 +0100
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Thomas Zimmermann' <tzimmermann@suse.de>,
-        "deller@gmx.de" <deller@gmx.de>,
-        "geert@linux-m68k.org" <geert@linux-m68k.org>,
-        "javierm@redhat.com" <javierm@redhat.com>,
-        "daniel@ffwll.ch" <daniel@ffwll.ch>,
-        "vgupta@kernel.org" <vgupta@kernel.org>,
-        "chenhuacai@kernel.org" <chenhuacai@kernel.org>,
-        "kernel@xen0n.name" <kernel@xen0n.name>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "James.Bottomley@HansenPartnership.com" 
-        <James.Bottomley@HansenPartnership.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "sam@ravnborg.org" <sam@ravnborg.org>,
-        "suijingfeng@loongson.cn" <suijingfeng@loongson.cn>
-CC:     "linux-fbdev@vger.kernel.org" <linux-fbdev@vger.kernel.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "linux-snps-arc@lists.infradead.org" 
-        <linux-snps-arc@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-ia64@vger.kernel.org" <linux-ia64@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-m68k@lists.linux-m68k.org" <linux-m68k@lists.linux-m68k.org>,
-        "sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-parisc@vger.kernel.org" <linux-parisc@vger.kernel.org>,
-        kernel test robot <lkp@intel.com>,
-        "Artur Rojek" <contact@artur-rojek.eu>
-Subject: RE: [PATCH v7 1/7] fbdev/hitfb: Cast I/O offset to address
-Thread-Topic: [PATCH v7 1/7] fbdev/hitfb: Cast I/O offset to address
-Thread-Index: AQHZhLwIoJOHAKlHvkaeoWR92INTOa9We4fw
-Date:   Fri, 12 May 2023 11:16:30 +0000
-Message-ID: <c25758dd7b4a4563b0d33c751da8cf6d@AcuMS.aculab.com>
-References: <20230512102444.5438-1-tzimmermann@suse.de>
- <20230512102444.5438-2-tzimmermann@suse.de>
-In-Reply-To: <20230512102444.5438-2-tzimmermann@suse.de>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Fri, 12 May 2023 07:17:35 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A38563C03
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:17:34 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id 4fb4d7f45d1cf-50bceaf07b8so17932677a12.3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:17:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683890253; x=1686482253;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=la+fU2HN57fy5NqcmBRrWOV92Qmjel405DCY2wpFx28=;
+        b=E+18OA3F+sv+u28eqJ5RrjkD0H3Ljp+M2m9qfcbcowLCGM1xQcgkPS7xUL1g3ah+LE
+         lqopUC/1xyz8DTNv3zz88w3SZ6AZ0ASub/D2dO3asfCKKwsLIaB7cg0FhcqpXRHRxj1u
+         02o18DTcoBRAsKjU8trfwgk8jKFXk7Yplq+w53Gu+Iq6UMo84vRGKVku3cQFfXStO5cW
+         jx6MSX1GBRj02wWpZDC7D4kKxZoFH5W2Drwotv+3D2Tpe4UDtLg2fj+4XYDrns0pHnlH
+         awyuGd5z85YL2P7bowHAPnd54Iubu+xm2MYwBdXnHr1n1BA5BafEVI0TeXE0hZO/kMbS
+         aeEg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683890253; x=1686482253;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=la+fU2HN57fy5NqcmBRrWOV92Qmjel405DCY2wpFx28=;
+        b=h7le0w0HvJpVulUmlpJmhJu16vCdsFRJOqdA6cAssVfpDEsxxHbbpxHhOhqDFbQB9S
+         9lbi5auOtqEgl9MM0NrfFYLQ27/MmQMldGH/IC1ruo6m9YtT1/vI12vgOvFlYyTnYsOQ
+         4XOTYcPMQJtd1+wmNyInOCcx0rfuUhXojDcO97DjUD6I1EzITHCVBiW8bFrGknBKxe3A
+         yefDBMvjjIAVcF+AOQHUjP29yS6VtXQeKogavtVuGyCf/mAopf50Aj4WC0T5a3co+8Un
+         AleJkQYfkL6pulG9HgfPpXLfrucftdYVWce8YYNgAVAl/dyLm7Mv2JYqaqiZ3fvRg8G1
+         Oa+Q==
+X-Gm-Message-State: AC+VfDxzNgrdmtwz/59yUGCfQ1nI/I80KjrODnHK/ctLnUKiUGM99vnY
+        Z/nuEYnkXkJgfABMr+HidoE=
+X-Google-Smtp-Source: ACHHUZ6bLdDzkZAVBYeA6MEFOCmKTdw1OkPrN5E6YazdHNkS5hzuhb9xlav5E97kN7Wn8CSMVZg79Q==
+X-Received: by 2002:a17:907:3e05:b0:94e:988d:acc5 with SMTP id hp5-20020a1709073e0500b0094e988dacc5mr23002155ejc.46.1683890252936;
+        Fri, 12 May 2023 04:17:32 -0700 (PDT)
+Received: from localhost (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.gmail.com with ESMTPSA id my11-20020a1709065a4b00b0096650f46004sm5262342ejc.56.2023.05.12.04.17.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 04:17:32 -0700 (PDT)
+Date:   Fri, 12 May 2023 13:17:29 +0200
+From:   Jakob Koschel <jkl820.git@gmail.com>
+To:     Krzysztof Kozlowski <krzk@kernel.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Evgeniy Polyakov <zbr@ioremap.net>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] w1: Replace usage of found with dedicated list
+ iterator variable
+Message-ID: <kxms6scr4unumfbj4ru4t5khxvx3654vucjgczwf7rgxgvmjo6@hvvd4rqioius>
+References: <20230509-w1-replace-usage-of-found-with-tmp-list-iterator-variable-v2-1-259bf1ba44ed@gmail.com>
+ <c626e464-64e2-3cdb-7cf3-c76770feb1f0@linaro.org>
+ <xxs6zv5j7s6zmko5b5idhynzotx4nnyjktj35sdvelr6ha4aeh@w52ylfmwguva>
+ <12a57688-6e9a-a21d-41cb-978a274c8b2b@kernel.org>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <12a57688-6e9a-a21d-41cb-978a274c8b2b@kernel.org>
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Thomas Zimmermann
-> Sent: 12 May 2023 11:25
+On 23/05/12 12:26PM, Krzysztof Kozlowski wrote:
+> On 12/05/2023 12:19, Jakob Koschel wrote:
+> > How strange, I just checked and my checkpatch doesn't complain.
+> > 
+> > I also redownloaded and double checked 
+> > (b4 am 20230509-w1-replace-usage-of-found-with-tmp-list-iterator-variable-v2-1-259bf1ba44ed@gmail.com).
+> > 
+> > What's the exact issue you are seeing?
 > 
-> Cast I/O offsets to pointers to use them with I/O functions. The I/O
-> functions expect pointers of type 'volatile void __iomem *', but the
-> offsets are plain integers. Build warnings are
+>   ✓ [PATCH v2] w1: Replace usage of found with dedicated list iterator
+> variable
+>     + Link:
+> https://lore.kernel.org/r/20230509-w1-replace-usage-of-found-with-tmp-list-iterator-variable-v2-1-259bf1ba44ed@gmail.com
+>     + Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>   ---
+>   ✗ No key: ed25519/jkl820.git@gmail.com
+>   ✓ Signed: DKIM/gmail.com
+> ---
+> Total patches: 1
+> ---
+>  Base: using specified base-commit eeac8ede17557680855031c6f305ece2378af326
+> Applying: w1: Replace usage of found with dedicated list iterator variable
+> [Checking commit]  12b61e664c29 w1: Replace usage of found with
+> dedicated list iterator variable
+> [Checkpatch]
+> CHECK: Alignment should match open parenthesis
+> #70: FILE: drivers/w1/w1.c:849:
+> +			if (iter->reg_num.family == id->family &&
+> +					iter->reg_num.id == id->id &&
+
+I tried a bunch of things but I can't see this message. I tried with 'checkpatch.pl' from different kernel commits.
+
+I did:
+
+  b4 am 20230509-w1-replace-usage-of-found-with-tmp-list-iterator-variable-v2-1-259bf1ba44ed@gmail.com
+  scripts/checkpatch.pl ./v2_20230510_jkl820_git_w1_replace_usage_of_found_with_dedicated_list_iterator_variable.mbx
+
+and always get:
+
+  total: 0 errors, 0 warnings, 64 lines checked
+
+  ./v2_20230510_jkl820_git_w1_replace_usage_of_found_with_dedicated_list_iterator_variable.mbx has no obvious style problems and is ready for submission.
+
+I'm out of ideas...
+
 > 
->   ../drivers/video/fbdev/hitfb.c: In function 'hitfb_accel_wait':
->   ../arch/x86/include/asm/hd64461.h:18:33: warning: passing argument 1 of 'fb_readw' makes pointer
-> from integer without a cast [-Wint-conversion]
->    18 | #define HD64461_IO_OFFSET(x)    (HD64461_IOBASE + (x))
->       |                                 ^~~~~~~~~~~~~~~~~~~~~~
-...
->    52 | static inline u16 fb_readw(const volatile void __iomem *addr)
->       |                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~
 > 
-> This patch only fixes the build warnings. It's not clear if the I/O
-> offsets can legally be passed to the I/O helpers. It was apparently
-> broken in 2007 when custom inw()/outw() helpers got removed by
-> commit 34a780a0afeb ("sh: hp6xx pata_platform support."). Fixing the
-> driver would require setting the I/O base address.
-
-Did you try changing the definition of HD64461_IOBASE to include
-a (volatile void __iomem *) cast?
-A lot less churn...
-
-I'm guessing that 'sh' deosn't have in/out instructions so this
-is something that is always mapped at a fixed kernel virtual address?
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+> 
+> Best regards,
+> Krzysztof
+> 
