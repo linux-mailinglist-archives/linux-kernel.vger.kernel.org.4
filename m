@@ -2,104 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 575C37006DB
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:32:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B466F7006DF
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:32:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240864AbjELLcJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 07:32:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
+        id S241005AbjELLcx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 07:32:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240422AbjELLcH (ORCPT
+        with ESMTP id S240422AbjELLcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 07:32:07 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A23CCD059;
-        Fri, 12 May 2023 04:32:06 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id 5b1f17b1804b1-3f42c865535so42695485e9.1;
-        Fri, 12 May 2023 04:32:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683891125; x=1686483125;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yiqqflnIDT5zW02DCqAL89wuz3kC3M5MrYziUX0JLbc=;
-        b=hmNW3GPWhcb3KKkcveW0KfRlmGKxwkNiv4RiebqLGQHxlFHuAZvvcJMIlJzc0ln4yU
-         tzEKsFdAATSMBTgSx93OouI0hbp52mBHOPkE8K0ueyPFkocGEyf8KdHAwkrNJBVmhIT0
-         3JzumVD6A5iBs3oI37Scg4/ZUONWJt7Dfs734CuQiXN8WcIkMBDWY/EJfGHTeKMCLkg1
-         Ed+jEnRZIispEHySuZTvVy5rVosHhB0ULsjR2K1naB+H7bwjFpr8MT7SvxQJyCwcLffG
-         HP4nU10Hd6xAlWtbn3s820JPdwG//mvOkpao/9HAbyGwikm7qPDadiBeJCwK8Lf4gAyL
-         dCDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683891125; x=1686483125;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yiqqflnIDT5zW02DCqAL89wuz3kC3M5MrYziUX0JLbc=;
-        b=M2i8vgbSjm4YdorwVkaFOn2nDg6M2HcnCebuSbJ+XQO2R8/8br1czp8RXVwm25P58g
-         anzcacCz1KELpzipRTSLhAnQtioCEAPJtfIAL3W6Q2+JfuyFVxyqUWX3lE6E2tA6ecf4
-         p1WaDjPGDAHICggFiPCUtyvrn5P1ImN6d4XVTXJ4jgcVzgvdbKXaagP/a2SuJ0kXW190
-         jPfvvEbKhEPQFlGQS1JxOQCXUhHt8xX7RuMRIcjK/6bSYpy49aKf/dX5XWFawVXR5kgo
-         t15crXJ9WMuzqp0BZK9+Va+wF6IA4BV60XpZBBAZR0VUe2XNFIySI3U8xOTZMLf01pbG
-         3Ekw==
-X-Gm-Message-State: AC+VfDzJuQwSotTfuyZ0GDphqJaGvH7AjAZi+ZAeHCWNaI4B+QuGwCGm
-        9pn07yAbwBz+74O47mbhYRA=
-X-Google-Smtp-Source: ACHHUZ7+5L5xW9tJPCOpere/SZxgTKKOoJ8T0EuxolXCIbyUPaKaY9fkdLq1/SKO5pJZmkOp4ZrxLw==
-X-Received: by 2002:a7b:ca51:0:b0:3f4:2174:b27d with SMTP id m17-20020a7bca51000000b003f42174b27dmr13085546wml.39.1683891124853;
-        Fri, 12 May 2023 04:32:04 -0700 (PDT)
-Received: from [192.168.2.177] ([207.188.167.132])
-        by smtp.gmail.com with ESMTPSA id e19-20020a05600c219300b003f173419e7asm28079750wme.43.2023.05.12.04.32.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 04:32:03 -0700 (PDT)
-Message-ID: <cdcf000e-d1f4-d420-3151-0c8fe1b534d5@gmail.com>
-Date:   Fri, 12 May 2023 13:32:01 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 1/6] dt-bindings: interrupt-controller: arm,gic-v3: Add
- quirk for Mediatek SoCs w/ broken FW
-Content-Language: en-US, ca-ES, es-ES
-To:     Julius Werner <jwerner@chromium.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     Marc Zyngier <maz@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        wenst@chromium.org, Eddie Huang <eddie.huang@mediatek.com>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Ben Ho <Ben.Ho@mediatek.com>, Weiyi Lu <weiyi.lu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Tinghan Shen <tinghan.shen@mediatek.com>,
-        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
-        yidilin@chromium.org, Seiya Wang <seiya.wang@mediatek.com>,
-        Conor Dooley <conor+dt@kernel.org>,
+        Fri, 12 May 2023 07:32:48 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72684D05E
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:32:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=fr5RqDNuP9UAJWvYniAU4zJwVuLlQEbB7PDS1yiTKlw=; b=eZ+p05ttQr/MYRdZJx+VXIgKyq
+        BJMDMK+r919KyMi66mcLxIflfDMrEmaq7DdDituZ3R44cUQcQWPXKSMv7PVeBK+75s8jbqZJh2H3W
+        bNFBGQmQgCUt+NI4Ju/r/wq2iaieBbPu6LzUvTKgaZ80i6PJNxcrWSm3QNmi9i3bzaLNSxbGsMk3Y
+        5qevhzHWI/8Y4ziZM/86GTX3D1QN/C9VAzZAXlWaZODODakZnppu98mM8TW7HSUA8X8xS9ck5vmRB
+        O7Noc805CYBykbrLHzynCjIIMoP1oONbAmHU655D0awnWYdi8y/nO8uGV3KZJLRwZNzOuSl0gdTqL
+        DBiLL83w==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pxR0k-000ecj-16; Fri, 12 May 2023 11:32:34 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id E3495300338;
+        Fri, 12 May 2023 13:32:32 +0200 (CEST)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id C22D02C8B6AAE; Fri, 12 May 2023 13:32:32 +0200 (CEST)
+Date:   Fri, 12 May 2023 13:32:32 +0200
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc:     Ingo Molnar <mingo@kernel.org>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Qais Yousef <qyousef@layalina.io>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Vincent Donnefort <vdonnefort@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
         linux-kernel@vger.kernel.org
-References: <20230511150539.6.Ia0b6ebbaa351e3cd67e201355b9ae67783c7d718@changeid>
- <20230511150539.1.Iabe67a827e206496efec6beb5616d5a3b99c1e65@changeid>
- <CAODwPW8TqhArafCK3RvBdxyiav3WL=0MU6x=QyBOFP-h8bQrWw@mail.gmail.com>
-From:   Matthias Brugger <matthias.bgg@gmail.com>
-In-Reply-To: <CAODwPW8TqhArafCK3RvBdxyiav3WL=0MU6x=QyBOFP-h8bQrWw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 2/2] sched/fair, cpufreq: Introduce 'runnable boosting'
+Message-ID: <20230512113232.GX4253@hirez.programming.kicks-ass.net>
+References: <20230512101029.342823-1-dietmar.eggemann@arm.com>
+ <20230512101029.342823-3-dietmar.eggemann@arm.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512101029.342823-3-dietmar.eggemann@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Julius,
+On Fri, May 12, 2023 at 12:10:29PM +0200, Dietmar Eggemann wrote:
 
-On 12/05/2023 00:37, Julius Werner wrote:
-> Reviewed-by: Julius Werner <jwerner@chromium.org>
+> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
+> index e3211455b203..3b902f533214 100644
+> --- a/kernel/sched/cpufreq_schedutil.c
+> +++ b/kernel/sched/cpufreq_schedutil.c
+> @@ -155,10 +155,11 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
+>  
+>  static void sugov_get_util(struct sugov_cpu *sg_cpu)
+>  {
+> +	unsigned long util = cpu_util_cfs(sg_cpu->cpu, 1);
+>  	struct rq *rq = cpu_rq(sg_cpu->cpu);
+>  
+>  	sg_cpu->bw_dl = cpu_bw_dl(rq);
+> -	sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu),
+> +	sg_cpu->util = effective_cpu_util(sg_cpu->cpu, util,
+>  					  FREQUENCY_UTIL, NULL);
+>  }
+>  
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index 1220cfbee258..3a10fe5988d6 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
 
-For the future please don't delete the patch itself if you give a tag, just 
-leave it as it is (and don't top-post your tag :) )
+> @@ -7355,7 +7362,7 @@ eenv_pd_max_util(struct energy_env *eenv, struct cpumask *pd_cpus,
+>  
+>  	for_each_cpu(cpu, pd_cpus) {
+>  		struct task_struct *tsk = (cpu == dst_cpu) ? p : NULL;
+> -		unsigned long util = cpu_util(cpu, p, dst_cpu);
+> +		unsigned long util = cpu_util(cpu, p, dst_cpu, 1);
+>  		unsigned long cpu_util;
+>  
+>  		/*
 
-Regards,
-Matthias
+> @@ -10561,7 +10568,7 @@ static struct rq *find_busiest_queue(struct lb_env *env,
+>  			break;
+>  
+>  		case migrate_util:
+> -			util = cpu_util_cfs(i);
+> +			util = cpu_util_cfs(i, 1);
+>  
+>  			/*
+>  			 * Don't try to pull utilization from a CPU with one
+
+When you move that comment from cpu_util_cfs() to cpu_util() please also
+add a paragraph about why boost=1 and why these locations, because I'm
+sure we're going to be asking ouselves that at some point.
+
+
