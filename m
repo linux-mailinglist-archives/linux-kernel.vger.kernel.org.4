@@ -2,206 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14F767001E6
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 09:55:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CFF377001E3
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 09:54:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240207AbjELHzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 03:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56304 "EHLO
+        id S240348AbjELHyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 03:54:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240338AbjELHyh (ORCPT
+        with ESMTP id S240351AbjELHyJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 03:54:37 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2AF9A11619
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 00:54:13 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-55a10577911so139313697b3.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 00:54:13 -0700 (PDT)
+        Fri, 12 May 2023 03:54:09 -0400
+Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03907100CE;
+        Fri, 12 May 2023 00:53:51 -0700 (PDT)
+Received: by mail-lj1-x22e.google.com with SMTP id 38308e7fff4ca-2ac8091351eso101835801fa.2;
+        Fri, 12 May 2023 00:53:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683878051; x=1686470051;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bYNwvt4ygEmwWz8bQkGTZsHwBw2LQJ0FGs8uf5nofMA=;
-        b=ictDbm8V1jhuniWNoQbZT3Yyb8YlucqQ1F9qBEzbqNsoBVWt6eNz47yTDwe+3WrbAi
-         iTvKhFbbp9a1nKzyY4ifqeyi1V9ZRU6y/pjmjN0XphCa/Oo6ceVtWdjvrF+rGYqGNCRh
-         jmTkiqNfcpOgYrly6IkZK1YTOM9zje1fDPDnS6Yfo6ZNa4PZ+kvXpenHfoWUytNAAswQ
-         rtYTMtLLYZ0W1xwlGdZ4bUGTxpnbYq33qLlR0HT5vroBaRlzlwX4b1b6wxB5CQRv6qPf
-         isZxJC5u3iBtqInc1/WGSQGryWK5+ayL95sA5NPmyCoAZROCHdIzlmFwO6N9kTlTXOZZ
-         tFhQ==
+        d=gmail.com; s=20221208; t=1683878025; x=1686470025;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UamIyRZFBw0Clb1Qm1i1FDtoVxcrvBBxLqTrmWJ4kUM=;
+        b=D8Nfc850hE+XcwHJJnodIg9lQCxPABMpNE8TbL4p2gx6vCBNNWMD8mRzuXKu3uG2lT
+         f4r2EKd8yuMjEtM6VavfoemsphC2bhF5K4RGoWXRQLyl+niVwqjfRlnGj6ZxvDLQuncQ
+         qa5oK5QtZQ3gOOAEiDNccDJpahMSkHZa3c0BQ/UGwVl5sYXQnFpKp64dJoKuNwhdSy//
+         7yQIpoMWbISAjtGPlOR3pO/7Yv8cKtNV8jZP8rAxer3yrSlgXHbyDJYI5Png6/rPcBkn
+         GYP3I0sgq5Als22F3lvCfZ0c5Iqgbzo2Fi5pe84Maoq2Oek4A9xuMWa5c1a9vttTHb/r
+         Qf0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683878051; x=1686470051;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bYNwvt4ygEmwWz8bQkGTZsHwBw2LQJ0FGs8uf5nofMA=;
-        b=LtD5ME46OQQscaql8EX8q8utJivNLtbWCMfEhpMtlnRJ/911qWkWJk3ioxxfHf1TUC
-         zLyZcDGECwNi7FdJEAQhfYp38DdXdghJhP8dvbCzgZx+nuokquCJXspVIrrh9/d3nfOV
-         /35ECOEO2iB9yx3JSlGiyA8UKZL0TPFafu1+9tmxfFtAcLJAjuuvsf3hjJMETKuDMiEU
-         Gk7y2lf99MMp11P7v67Vs5agwfnOhnXKMS6tYyRCNGCiMtpPlMjQjvVvnB3tW8be/ZyT
-         3K8v5MPJCNV/qoS/lMZEo8YwLzEcqm6gLJ/M02ljZzGz8kOROeBKiUiF3Gr8C1R7s5k3
-         CT/Q==
-X-Gm-Message-State: AC+VfDz8Wgpax3fQn0J9etWyILMTEqAQB3tmtlFKFIyAMq9vDLKAo6TO
-        vS6jUH3w/4GLnXoFJQ/oTfiyDkcIT7GQ/TsjJo4sWw==
-X-Google-Smtp-Source: ACHHUZ4f5mzgwJ9scRqmDDAqQE6kFZyey+kWWc+0gd28idNHti6TeOtCDSeRcD4t1elHGRr8qxBvJlt2bB5qbh4nkrQ=
-X-Received: by 2002:a0d:c281:0:b0:536:cb48:9059 with SMTP id
- e123-20020a0dc281000000b00536cb489059mr24762932ywd.50.1683878051035; Fri, 12
- May 2023 00:54:11 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683878025; x=1686470025;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UamIyRZFBw0Clb1Qm1i1FDtoVxcrvBBxLqTrmWJ4kUM=;
+        b=HrgYkHBmww4Wmkxj06QpYj7knbbg9ZYiQUwxaop5usWRqoa+VJmjqyAVunvYct4K/I
+         XxVivNqhQ55cPtZ857MS5LG6Cv5v6DaYNCQmAITsVebAyjfGfGGle9arHfZ8l0D3vAKr
+         7UqMOLl1TUZ4urDueCAF809eY0PkdhFpU4mEGewTHmJ329sYxFCXBzjoL0QcgB3Imyaq
+         Qq7IHQf9KEAmAo4Ela1SPt61xsfC/HhgxTvC821LhawwN8FmrsMS4A3Pkurp8xjXl5wz
+         M02VLvAvWWAY41va9RpXvaS+i2KBcj/OlRmx5uIjyXLk0pdP5H8hzaO9YWnGJXYjzLfQ
+         OYXg==
+X-Gm-Message-State: AC+VfDxqBjiH+NirDAgTP93jOucNerRmUf+B9Radpshy3xeX+QLFm6LY
+        Xr3SfdBfiBi3qn6yiGhfXgc=
+X-Google-Smtp-Source: ACHHUZ5tTAE/td2qUR/2Oxfo7q0tt4popK4haev3B//DkXySakT8sBeWAwj/t8s7JKOp5UNIAK2d7A==
+X-Received: by 2002:a2e:3211:0:b0:2a8:ba15:eb6f with SMTP id y17-20020a2e3211000000b002a8ba15eb6fmr3979864ljy.6.1683878024857;
+        Fri, 12 May 2023 00:53:44 -0700 (PDT)
+Received: from fedora (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
+        by smtp.gmail.com with ESMTPSA id z12-20020a19f70c000000b004db3d57c3a8sm1383610lfe.96.2023.05.12.00.53.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 00:53:44 -0700 (PDT)
+Date:   Fri, 12 May 2023 10:53:41 +0300
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org
+Subject: [PATCH v3 3/3] iio: kx022a fix irq getting
+Message-ID: <b45b4b638db109c6078d243252df3a7b0485f7d5.1683875389.git.mazziesaccount@gmail.com>
+References: <cover.1683875389.git.mazziesaccount@gmail.com>
 MIME-Version: 1.0
-References: <cover.1683722688.git.geert+renesas@glider.be> <8db63020d18fc22e137e4a8f0aa15e6b9949a6f6.1683722688.git.geert+renesas@glider.be>
- <CAPDyKFoTJFoDtSdPcXXQN_zi+TCQwr3UjLYu5jMCq_1sCnnG3Q@mail.gmail.com> <CAMuHMdV6e84fbbm6m1Rn6f-1xdS10VkHaj5jOB0Sy1uKfacnNw@mail.gmail.com>
-In-Reply-To: <CAMuHMdV6e84fbbm6m1Rn6f-1xdS10VkHaj5jOB0Sy1uKfacnNw@mail.gmail.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Fri, 12 May 2023 09:53:34 +0200
-Message-ID: <CAPDyKFr0o_GYauvxorBwg_0uEPYzt4YztohTAHHnYVPtgM4W=Q@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] iopoll: Do not use timekeeping in read_poll_timeout_atomic()
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Stephen Boyd <sboyd@kernel.org>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Dejin Zheng <zhengdejin5@gmail.com>,
-        Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Russell King <linux@armlinux.org.uk>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Tony Lindgren <tony@atomide.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="6Xa8OXPmvG4fszxi"
+Content-Disposition: inline
+In-Reply-To: <cover.1683875389.git.mazziesaccount@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 May 2023 at 14:44, Geert Uytterhoeven <geert@linux-m68k.org> wro=
-te:
->
-> Hi Ulf,
->
-> On Thu, May 11, 2023 at 12:27=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.=
-org> wrote:
-> > On Wed, 10 May 2023 at 15:23, Geert Uytterhoeven
-> > <geert+renesas@glider.be> wrote:
-> > > read_poll_timeout_atomic() uses ktime_get() to implement the timeout
-> > > feature, just like its non-atomic counterpart.  However, there are
-> > > several issues with this, due to its use in atomic contexts:
-> > >
-> > >   1. When called in the s2ram path (as typically done by clock or PM
-> > >      domain drivers), timekeeping may be suspended, triggering the
-> > >      WARN_ON(timekeeping_suspended) in ktime_get():
-> > >
-> > >         WARNING: CPU: 0 PID: 654 at kernel/time/timekeeping.c:843 kti=
-me_get+0x28/0x78
-> > >
-> > >      Calling ktime_get_mono_fast_ns() instead of ktime_get() would ge=
-t
-> > >      rid of that warning.  However, that would break timeout handling=
-,
-> > >      as (at least on systems with an ARM architectured timer), the ti=
-me
-> > >      returned by ktime_get_mono_fast_ns() does not advance while
-> > >      timekeeping is suspended.
-> > >      Interestingly, (on the same ARM systems) the time returned by
-> > >      ktime_get() does advance while timekeeping is suspended, despite
-> > >      the warning.
-> >
-> > Interesting, looks like we should spend some time to further
-> > investigate this behaviour.
->
-> Probably, I was a bit surprised by this behavior, too.
->
-> > >   2. Depending on the actual clock source, and especially before a
-> > >      high-resolution clocksource (e.g. the ARM architectured timer)
-> > >      becomes available, time may not advance in atomic contexts, thus
-> > >      breaking timeout handling.
-> > >
-> > > Fix this by abandoning the idea that one can rely on timekeeping to
-> > > implement timeout handling in all atomic contexts, and switch from a
-> > > global time-based to a locally-estimated timeout handling.  In most
-> > > (all?) cases the timeout condition is exceptional and an error
-> > > condition, hence any additional delays due to underestimating wall cl=
-ock
-> > > time are irrelevant.
-> >
-> > I wonder if this isn't an oversimplification of the situation. Don't
-> > we have timeout-error-conditions that we expected to happen quite
-> > frequently?
->
-> We may have some.  But they definitely do not happen when time
-> does not advance, or they would have been mitigated long ago
-> (the loop would never terminate).
 
-Right, I was merely thinking of the case when ktime isn't suspended,
-which of course is the most common case.
+--6Xa8OXPmvG4fszxi
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->
-> > If so, in these cases, we really don't want to continue looping longer
-> > than actually needed, as then we will remain in the atomic context
-> > longer than necessary.
-> >
-> > I guess some information about how big these additional delays could
-> > be, would help to understand better. Of course, it's not entirely easy
-> > to get that data, but did you run some tests to see how this changes?
->
-> I did some timings (when timekeeping is available), and the differences
-> are rather minor.  The delay and timeout parameters are in =C2=B5s, and
-> 1 =C2=B5s is already a few orders of magnitude larger than the cycle time
-> of a contemporary CPU.
+The fwnode_irq_get_byname() was returning 0 at device-tree mapping
+error. If this occurred, the KX022A driver did abort the probe but
+errorneously directly returned the return value from
+fwnode_irq_get_byname() from probe. In case of a device-tree mapping
+error this indicated success.
 
-Ohh, I was certainly expecting a bigger spread. If it's in that
-ballpark we should certainly be fine.
+The fwnode_irq_get_byname() has since been fixed to not return zero on
+error so the check for fwnode_irq_get_byname() can be relaxed to only
+treat negative values as errors. This will also do decent fix even when
+backported to branches where fwnode_irq_get_byname() can still return
+zero on error because KX022A probe should later fail at IRQ requesting
+and a prober error handling should follow.
 
-I will run some tests at my side too, as I am curious to see the
-behaviour. I will let you know, whatever the result is, of course.
+Relax the return value check for fwnode_irq_get_byname() to only treat
+negative values as errors.
 
->
-> Under-estimates are due to the time spent in op() (depends on the
-> user, typical use is a hardware device register read), udelay()
-> (architecture/platform-dependent accuracy), and general loop overhead.
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Closes: https://lore.kernel.org/r/202305110245.MFxC9bUj-lkp@intel.com/
+Link: https://lore.kernel.org/r/202305110245.MFxC9bUj-lkp@intel.com/
+Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Fixes: 7c1d1677b322 ("iio: accel: Support Kionix/ROHM KX022A accelerometer")
+---
+ drivers/iio/accel/kionix-kx022a.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes, you are right. My main concern is the accuracy of the udelay, but
-I may be totally wrong here.
+diff --git a/drivers/iio/accel/kionix-kx022a.c b/drivers/iio/accel/kionix-k=
+x022a.c
+index f98393d74666..b8636fa8eaeb 100644
+--- a/drivers/iio/accel/kionix-kx022a.c
++++ b/drivers/iio/accel/kionix-kx022a.c
+@@ -1048,7 +1048,7 @@ int kx022a_probe_internal(struct device *dev)
+ 		data->ien_reg =3D KX022A_REG_INC4;
+ 	} else {
+ 		irq =3D fwnode_irq_get_byname(fwnode, "INT2");
+-		if (irq <=3D 0)
++		if (irq < 0)
+ 			return dev_err_probe(dev, irq, "No suitable IRQ\n");
+=20
+ 		data->inc_reg =3D KX022A_REG_INC5;
+--=20
+2.40.1
 
->
-> > > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > > ---
-> > > Alternatively, one could use a mixed approach (use both
-> > > ktime_get_mono_fast_ns() and a local (under)estimate, and timeout on =
-the
-> > > earliest occasion), but I think that would complicate things without
-> > > much gain.
-> >
-> > Another option could be to provide two different polling APIs for the
-> > atomic use-case.
-> >
-> > One that keeps using ktime, which is more accurate and generally
-> > favourable - and another, along the lines of what you propose, that
-> > should be used by those that can't rely on timekeeping.
->
-> At the risk of people picking the wrong one, leading to hard to
-> find bugs?
 
-I agree, If we don't need two APIs, it's certainly better to stick with one=
-.
+--=20
+Matti Vaittinen, Linux device drivers
+ROHM Semiconductors, Finland SWDC
+Kiviharjunlenkki 1E
+90220 OULU
+FINLAND
 
-My main point is that we should not sacrifice "performance" for the
-most common case, just to keep things simple, right?
+~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
+Simon says - in Latin please.
+~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
+Thanks to Simon Glass for the translation =3D]=20
 
-Kind regards
-Uffe
+--6Xa8OXPmvG4fszxi
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmRd8IQACgkQeFA3/03a
+ocVELQf+L8qn+fDoOikmGkAkEd5YHCTzMA0lR7U4izBd2okzfB0yNHNScFafCv75
+YA5yeTb8IIoUsUwyigjEZ6cNFAaIStnhTbX4zjTekhrD5NVDvWwA2coqpheAlpCc
+k3jyi+W1JftnH/z1CTpDZp2jQBn7Bounm5l+ZE/H41qGVdWsSB5upcMmfKllzpl+
+yWU+vqJu+PhRefmisl+YHVhd91/olg4V3L/etM31Qf3GoNpZMvWfPKmFwkjoz/q3
+x1X9TwTXfKi1bY1QFxWiS8MmQIogsYpm64iJF4LzuYGQl8OkP/GZ66m9kXCTcM8l
+3ChtzSsZ84w2Ha0WiW0MwjUUIxGQtA==
+=Cws9
+-----END PGP SIGNATURE-----
+
+--6Xa8OXPmvG4fszxi--
