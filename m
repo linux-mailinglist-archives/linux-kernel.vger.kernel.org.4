@@ -2,117 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1336A70038C
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 11:22:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D40C9700389
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 11:22:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240232AbjELJWJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 05:22:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51138 "EHLO
+        id S240195AbjELJWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 05:22:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240120AbjELJWF (ORCPT
+        with ESMTP id S239963AbjELJWE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 05:22:05 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9836AE702
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 02:22:03 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50db7f0a1b4so6947896a12.3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 02:22:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683883322; x=1686475322;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XaOFds0l5Ck5Fhtl3tYvXoHE2wUSuYWOUmGFdptZZRc=;
-        b=a9VGDSrb5b1a1+bIIcNmj26BHuadFcyooeqionjk9XEDea6C1JjuXB7vB00CAprK4p
-         e/ZbVtsVDvP9QjDY3BgbW5Ru2RqfZlHRggwBJ4msTbxFPzy1+Pl+nA6Y3PHbbtaLpkxw
-         LhUggjpJVYfG+T+Oe2e5AgoW5XPrrR4PRETN/TskrOhUFSGzWcStCwOvBiXoyhhcbc/e
-         d8AD90ZeJ4v273YsCO+j/24EEf8MTcTts9ME71RV0/UgYjAuQzou9ri/0cQEAsvUvvPw
-         Jh3vyCj9PK941+bkrBI5CWyPmXUi3YsJBWgXP10aQU1xddSR+BUiJqJzApcM1jDYauKG
-         jCgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683883322; x=1686475322;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XaOFds0l5Ck5Fhtl3tYvXoHE2wUSuYWOUmGFdptZZRc=;
-        b=hU/kJdyFmqcQLKxIJ/2Ley2FwMY+q/wxvGA4iInxtje3HL5rr7sHw8zgnkIpT3AI6B
-         8I7QVJVM71OwSXuEjfTCiHGDLNUo6BcSgRKF+XUAD39QUVrwDBGzzC4wk/6Ew5Sl5jyI
-         46TA29xhFQToTmnXe8XzJMCFW14dMRIrDGWFZAjwQKwujNVVznStl7xkCFq+fbsbU/FD
-         mRuVRoCnJ7ueEq1x1DFTa54Od3SxaEfNS0lu65KYFqo0sOp4VIoYataiugZDiobFvyW3
-         zm4F3FM9UYPe/B9s/Pn7ujrH158XpNoEq2vYUGi7VsFEfqowg6amz83UCh9RbOhr9JlM
-         Vjbg==
-X-Gm-Message-State: AC+VfDwoTKe/xJrC+Jq5eTuLGbarcj0ZiWTw0qcULjnYe038IPED+jNq
-        +2nyppVgVXp7LMPA9FLqOQirVg==
-X-Google-Smtp-Source: ACHHUZ7/NX1sqJLN2Di5caAqGxSNFPbL55veYHgJv7MDjiIqNglR1DvFCYW35GTFq02CS7EjI+F3TQ==
-X-Received: by 2002:a17:907:934a:b0:958:772e:e926 with SMTP id bv10-20020a170907934a00b00958772ee926mr21059260ejc.24.1683883322001;
-        Fri, 12 May 2023 02:22:02 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:7ede:fc7b:2328:3883? ([2a02:810d:15c0:828:7ede:fc7b:2328:3883])
-        by smtp.gmail.com with ESMTPSA id mm30-20020a170906cc5e00b0096595cc87cesm5166105ejb.132.2023.05.12.02.22.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 02:22:01 -0700 (PDT)
-Message-ID: <845fc080-154f-6799-65e3-a62fc8652b80@linaro.org>
-Date:   Fri, 12 May 2023 11:22:00 +0200
+        Fri, 12 May 2023 05:22:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA87DDA6;
+        Fri, 12 May 2023 02:22:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E5CC365440;
+        Fri, 12 May 2023 09:22:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E743FC433EF;
+        Fri, 12 May 2023 09:22:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683883322;
+        bh=R04Are6haFhQwucOhj2F4qhuwwMNUbEeyjwYPt/f22M=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=shRIZB9hp7oiDFvvFrhaDsw6O4deS791uNEke8YVMdPgxCCG6xXZUAChxhB82JK93
+         8yOdKwvT50V103s1samccfrt0zVl0Jx4vaJS+hyoGvSOf3F34yOPQRAlRrDiZHTHoA
+         Th6Q7xMOYDOLDgTOeZcz6NA1NLyA4uFP+x6x4HzsCxowh63GMRogBg9zx/eo0OaZSQ
+         byqe1ERrbksuMII2dy662LCvCrUUFQjeqeSsDEpBO9rEFSU6ymjOyoMtLvqY8r9spU
+         Cy8OGlthwwI9UOa3Xjuk3XhuJNw0YtkrNAR0mHVa6z6IxASDqEoxYdby3smB1yIqtN
+         ZZc/eNTYnkNxw==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1pxOyq-0002uv-HM; Fri, 12 May 2023 11:22:29 +0200
+Date:   Fri, 12 May 2023 11:22:28 +0200
+From:   Johan Hovold <johan@kernel.org>
+To:     Bjorn Andersson <quic_bjorande@quicinc.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Abel Vesa <abel.vesa@linaro.org>,
+        Steev Klimaszewski <steev@kali.org>,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: Re: [PATCH v2 4/8] phy: qcom-qmp-combo: Introduce orientation
+ variable
+Message-ID: <ZF4FVBcnWlvKF_DP@hovoldconsulting.com>
+References: <20230510031930.1996020-1-quic_bjorande@quicinc.com>
+ <20230510031930.1996020-5-quic_bjorande@quicinc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 2/2] arm64: dts: qcom: ipq9574: Enable crypto nodes
-Content-Language: en-US
-To:     Anusha Rao <quic_anusha@quicinc.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        mturquette@baylibre.com, sboyd@kernel.org, p.zabel@pengutronix.de,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Cc:     quic_srichara@quicinc.com, quic_gokulsri@quicinc.com,
-        quic_sjaganat@quicinc.com, quic_kathirav@quicinc.com,
-        quic_arajkuma@quicinc.com, quic_poovendh@quicinc.com
-References: <20230512090134.9811-1-quic_anusha@quicinc.com>
- <20230512090134.9811-3-quic_anusha@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230512090134.9811-3-quic_anusha@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230510031930.1996020-5-quic_bjorande@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2023 11:01, Anusha Rao wrote:
-> Enable crypto support for ipq9574.
+On Tue, May 09, 2023 at 08:19:26PM -0700, Bjorn Andersson wrote:
+> In multiple places throughout the driver code has been written in
+> prepration for handling of orientation switching.
 > 
-> Signed-off-by: Anusha Rao <quic_anusha@quicinc.com>
+> Introduce a typec_orientation in qmp_combo and fill out the various
+> "placeholders" with the associated logic. By initializing the
+> orientation to "normal" this change has no functional impact, but
+> reduces the size of the upcoming introduction of dynamic orientation
+> switching.
+> 
+> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+> Tested-by: Abel Vesa <abel.vesa@linaro.org>
+> Tested-by: Steev Klimaszewski <steev@kali.org>
+> Tested-by: Neil Armstrong <neil.armstrong@linaro.org> # on HDK8450
+> Tested-by: Johan Hovold <johan+linaro@kernel.org>	# X13s
 > ---
->  arch/arm64/boot/dts/qcom/ipq9574.dtsi | 20 ++++++++++++++++++++
->  1 file changed, 20 insertions(+)
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/ipq9574.dtsi b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> index fea15f3cf910..3cda5aa8d03c 100644
-> --- a/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/ipq9574.dtsi
-> @@ -123,6 +123,26 @@
->  			clock-names = "core";
->  		};
->  
-> +		cryptobam: dma-controller@704000 {
-> +			compatible = "qcom,bam-v1.7.0";
-> +			reg = <0x00704000 0x20000>;
-> +			interrupts = <GIC_SPI 207 IRQ_TYPE_LEVEL_HIGH>;
-> +			#dma-cells = <1>;
-> +			qcom,ee = <1>;
-> +			qcom,controlled-remotely;
-> +		};
-> +
-> +		crypto: crypto@73a000 {
-> +			compatible = "qcom,crypto-v5.1";
+> Changes since v1:
+> - X-mas in qmp_combo_configure_dp_mode()
+> 
+>  drivers/phy/qualcomm/phy-qcom-qmp-combo.c | 54 +++++++++++++----------
+>  1 file changed, 30 insertions(+), 24 deletions(-)
+ 
+>  static bool qmp_combo_configure_dp_mode(struct qmp_combo *qmp)
+>  {
+> +	bool reverse = qmp->orientation == TYPEC_ORIENTATION_REVERSE;
 
-This compatible is deprecated. Take a look at the bindings - I think you
-miss bindings for your SoC, which you should then use here.
+Nit: I still think parentheses around the right-hand side would improve
+readability.
 
-Best regards,
-Krzysztof
+> +	const struct phy_configure_opts_dp *dp_opts = &qmp->dp_opts;
+>  	u32 val;
+> -	bool reverse = false;
 
+> @@ -2235,7 +2236,7 @@ static int qmp_v4_configure_dp_phy(struct qmp_combo *qmp)
+>  {
+>  	const struct phy_configure_opts_dp *dp_opts = &qmp->dp_opts;
+>  	u32 bias0_en, drvr0_en, bias1_en, drvr1_en;
+> -	bool reverse = false;
+> +	bool reverse = qmp->orientation == TYPEC_ORIENTATION_REVERSE;
+
+Same here and below.
+
+And maintaining reverse xmas style throughout the driver would be nice
+for consistency too.
+
+>  	u32 status;
+>  	int ret;
+
+Looks good otherwise:
+
+Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+
+Johan
