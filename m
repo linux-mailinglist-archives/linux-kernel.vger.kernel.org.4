@@ -2,39 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9DED6FFFFC
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 07:45:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A686700002
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 07:48:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239890AbjELFpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 01:45:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
+        id S239873AbjELFss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 01:48:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239720AbjELFpS (ORCPT
+        with ESMTP id S239720AbjELFsq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 01:45:18 -0400
-Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C57A1731;
-        Thu, 11 May 2023 22:45:17 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0ViNqtb._1683870298;
-Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0ViNqtb._1683870298)
-          by smtp.aliyun-inc.com;
-          Fri, 12 May 2023 13:45:14 +0800
-From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
-To:     clm@fb.com
-Cc:     josef@toxicpanda.com, dsterba@suse.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
-        Abaci Robot <abaci@linux.alibaba.com>
-Subject: [PATCH] btrfs: scrub: Remove some unused functions
-Date:   Fri, 12 May 2023 13:44:57 +0800
-Message-Id: <20230512054457.43501-1-jiapeng.chong@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Fri, 12 May 2023 01:48:46 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 804504202;
+        Thu, 11 May 2023 22:48:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683870525; x=1715406525;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/zR9C5mWoNpqSw0olILmob7az1hEmUXJdSo3156BTBk=;
+  b=LmtYgB6o0Vx4HzxJgFkCe4OaLpPvfSuR0/agJeSkh3czJEcCxCsTHmPQ
+   k+MC48ZVtp25GUhl1UrnVvhTJa3OT/yr9wm9WV5R6z9Vgc8liwgDoz3tT
+   pcGmVgv4mp6aP6nOecp+Sm/R78EAj7bE3uYRt9YOKrTVN84IKcjwjogM/
+   MlUF6srcxMoF5cplaYLQHzzlPhiwUQ+cuhXOsIv0vPatmZh08xWT79DX+
+   Rn6XLkazo8yMpW0W8JWvlqE5xcHsdoxHhpRP70RoSYJtUAzeGDvgXFY3B
+   B7E+CrPJljsEUeQUz4agw7NS6ySLpbZkrMTfHSYCFaZesb9dqQje23QP3
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="378844762"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="378844762"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 22:48:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="789667557"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="789667557"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 11 May 2023 22:48:38 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pxLdt-0004ZR-2Y;
+        Fri, 12 May 2023 05:48:37 +0000
+Date:   Fri, 12 May 2023 13:47:40 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Staging Drivers <linux-staging@lists.linux.dev>,
+        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
+        Linux Kernel Actions <linux-actions@lists.infradead.org>
+Cc:     oe-kbuild-all@lists.linux.dev,
+        Diederik de Haas <didi.debian@cknow.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        David Airlie <airlied@redhat.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Tom Rix <trix@redhat.com>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH 09/10] udf: Replace license notice with SPDX identifier
+Message-ID: <202305121334.gIY8h2Oe-lkp@intel.com>
+References: <20230511133406.78155-10-bagasdotme@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511133406.78155-10-bagasdotme@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,72 +93,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-These functions are defined in the scrub.c file, but not called
-elsewhere, so delete these unused functions.
+Hi Bagas,
 
-fs/btrfs/scrub.c:553:20: warning: unused function 'scrub_stripe_index_and_offset'.
-fs/btrfs/scrub.c:543:19: warning: unused function 'scrub_nr_raid_mirrors'.
+kernel test robot noticed the following build warnings:
 
-Reported-by: Abaci Robot <abaci@linux.alibaba.com>
-Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4937
-Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
----
- fs/btrfs/scrub.c | 42 ------------------------------------------
- 1 file changed, 42 deletions(-)
+[auto build test WARNING on ac9a78681b921877518763ba0e89202254349d1b]
 
-diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
-index 836725a19661..6fd90c8fd64a 100644
---- a/fs/btrfs/scrub.c
-+++ b/fs/btrfs/scrub.c
-@@ -540,48 +540,6 @@ static void scrub_print_common_warning(const char *errstr, struct btrfs_device *
- 	btrfs_free_path(path);
- }
- 
--static inline int scrub_nr_raid_mirrors(struct btrfs_io_context *bioc)
--{
--	if (bioc->map_type & BTRFS_BLOCK_GROUP_RAID5)
--		return 2;
--	else if (bioc->map_type & BTRFS_BLOCK_GROUP_RAID6)
--		return 3;
--	else
--		return (int)bioc->num_stripes;
--}
--
--static inline void scrub_stripe_index_and_offset(u64 logical, u64 map_type,
--						 u64 full_stripe_logical,
--						 int nstripes, int mirror,
--						 int *stripe_index,
--						 u64 *stripe_offset)
--{
--	int i;
--
--	if (map_type & BTRFS_BLOCK_GROUP_RAID56_MASK) {
--		const int nr_data_stripes = (map_type & BTRFS_BLOCK_GROUP_RAID5) ?
--					    nstripes - 1 : nstripes - 2;
--
--		/* RAID5/6 */
--		for (i = 0; i < nr_data_stripes; i++) {
--			const u64 data_stripe_start = full_stripe_logical +
--						(i * BTRFS_STRIPE_LEN);
--
--			if (logical >= data_stripe_start &&
--			    logical < data_stripe_start + BTRFS_STRIPE_LEN)
--				break;
--		}
--
--		*stripe_index = i;
--		*stripe_offset = (logical - full_stripe_logical) &
--				 BTRFS_STRIPE_LEN_MASK;
--	} else {
--		/* The other RAID type */
--		*stripe_index = mirror;
--		*stripe_offset = 0;
--	}
--}
--
- static int fill_writer_pointer_gap(struct scrub_ctx *sctx, u64 physical)
- {
- 	int ret = 0;
+url:    https://github.com/intel-lab-lkp/linux/commits/Bagas-Sanjaya/agp-amd64-Remove-GPL-distribution-notice/20230511-214307
+base:   ac9a78681b921877518763ba0e89202254349d1b
+patch link:    https://lore.kernel.org/r/20230511133406.78155-10-bagasdotme%40gmail.com
+patch subject: [PATCH 09/10] udf: Replace license notice with SPDX identifier
+reproduce:
+        scripts/spdxcheck.py
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305121334.gIY8h2Oe-lkp@intel.com/
+
+spdxcheck warnings: (new ones prefixed by >>)
+   drivers/pcmcia/cirrus.h: 1:44 Invalid License ID: MPL
+   drivers/pcmcia/pd6729.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/watchdog/ibmasr.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/watchdog/sb_wdog.c: 1:28 Invalid License ID: GPL-1.0
+>> fs/udf/ecma_167.h: 1:44 Invalid License ID: GPL-1.0-only
+>> fs/udf/osta_udf.h: 1:44 Invalid License ID: GPL-1.0-only
+   include/net/bonding.h: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/isdn/mISDN/dsp_audio.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/isdn/mISDN/dsp_blowfish.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/isdn/mISDN/dsp_cmx.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/isdn/mISDN/dsp_core.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/isdn/mISDN/dsp_dtmf.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/isdn/mISDN/dsp_tones.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/bonding/bond_main.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/bonding/bonding_priv.h: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/8390.h: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/apne.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/axnet_cs.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/hydra.c: 1:28 Invalid License ID: GPL-1.0-only
+   drivers/net/ethernet/8390/lib8390.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/mac8390.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/ne.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/ne2k-pci.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/pcnet_cs.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/smc-ultra.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/8390/wd.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/i825xx/82596.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/i825xx/lasi_82596.c: 1:28 Invalid License ID: GPL-1.0-or-later
+   drivers/net/ethernet/i825xx/lib82596.c: 1:28 Invalid License ID: GPL-1.0-or-later
+
 -- 
-2.20.1.7.g153144c
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
