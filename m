@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 516666FFE99
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 03:57:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B25B6FFE9B
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 03:57:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239710AbjELB5o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 21:57:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47662 "EHLO
+        id S239562AbjELB5t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 21:57:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239665AbjELB5j (ORCPT
+        with ESMTP id S239701AbjELB5m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 21:57:39 -0400
+        Thu, 11 May 2023 21:57:42 -0400
 Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 15AD85276;
-        Thu, 11 May 2023 18:57:37 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D6B4C55B1;
+        Thu, 11 May 2023 18:57:40 -0700 (PDT)
 Received: from loongson.cn (unknown [113.200.148.30])
-        by gateway (Coremail) with SMTP id _____8AxnOoRnV1kT_kHAA--.13389S3;
-        Fri, 12 May 2023 09:57:37 +0800 (CST)
+        by gateway (Coremail) with SMTP id _____8DxRukSnV1kW_kHAA--.13368S3;
+        Fri, 12 May 2023 09:57:38 +0800 (CST)
 Received: from localhost.localdomain (unknown [113.200.148.30])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxXrMMnV1kocdWAA--.23198S3;
-        Fri, 12 May 2023 09:57:36 +0800 (CST)
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxXrMMnV1kocdWAA--.23198S4;
+        Fri, 12 May 2023 09:57:37 +0800 (CST)
 From:   Qing Zhang <zhangqing@loongson.cn>
 To:     Andrey Ryabinin <ryabinin.a.a@gmail.com>,
         Jonathan Corbet <corbet@lwn.net>,
@@ -35,33 +35,33 @@ Cc:     Alexander Potapenko <glider@google.com>,
         kasan-dev@googlegroups.com, linux-doc@vger.kernel.org,
         linux-mm@kvack.org, loongarch@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v3 1/4] kasan: Add __HAVE_ARCH_SHADOW_MAP to support arch specific mapping
-Date:   Fri, 12 May 2023 09:57:28 +0800
-Message-Id: <20230512015731.23787-2-zhangqing@loongson.cn>
+Subject: [PATCH v3 2/4] kasan: Add (pmd|pud)_init for LoongArch zero_(pud|p4d)_populate process
+Date:   Fri, 12 May 2023 09:57:29 +0800
+Message-Id: <20230512015731.23787-3-zhangqing@loongson.cn>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20230512015731.23787-1-zhangqing@loongson.cn>
 References: <20230512015731.23787-1-zhangqing@loongson.cn>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxXrMMnV1kocdWAA--.23198S3
+X-CM-TRANSID: AQAAf8DxXrMMnV1kocdWAA--.23198S4
 X-CM-SenderInfo: x2kd0wptlqwqxorr0wxvrqhubq/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7tF1rKFWxtry3KFyUKr43Awb_yoW8tFW5pF
-        ZrGFyxtrs7tFy0ga43Cr4UZr15JrnavF4UtrsIgw4fCFyUWa1vqF1q9F9Yvr1xWr47tFyY
-        vwn2vFZ8Jr45t3DanT9S1TB71UUUUb7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+X-Coremail-Antispam: 1Uk129KBjvJXoW7ArW5Zry3GF4fXry5Ar1UJrb_yoW8AF47pF
+        WUK3W0qw47XanrXws3Jr1vgry7Jan3K3W7Kay2kr1rJ345XrWUXFy8Jr1q9rs8AFWkZFyS
+        yan3Kr9xC3WDJaDanT9S1TB71UUUUb7qnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
         qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bSxYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
+        bSkYFVCjjxCrM7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s
         1l1IIY67AEw4v_Jrv_JF1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xv
-        wVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4
-        x0Y4vEx4A2jsIE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1l
-        n4kS14v26r1q6r43M2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6x
-        ACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E
-        87Iv67AKxVW8JVWxJwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxV
-        Aaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxY
-        O2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGV
-        WUWwC2zVAF1VAY17CE14v26r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_
-        Xr0_Ar1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rV
-        WUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWxJwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4U
-        JbIYCTnIWIevJa73UjIFyTuYvjxUstxhDUUUU
+        wVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1l84
+        ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1U
+        M2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07AIYIkI8VC2zV
+        CFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWrXVW3AwAv7VC2
+        z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I
+        0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMxCI
+        bckI1I0E14v26r1q6r43MI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_Jr
+        I_JrWlx4CE17CEb7AF67AKxVW8ZVWrXwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v2
+        6ryj6F1UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj4
+        0_Jr0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8
+        JrUvcSsGvfC2KfnxnUUI43ZEXa7IUnLID5UUUUU==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
         SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
@@ -71,69 +71,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-MIPS, LoongArch and some other architectures have many holes between
-different segments and the valid address space (256T available) is
-insufficient to map all these segments to kasan shadow memory with the
-common formula provided by kasan core. So we need architecture specific
-mapping formulas to ensure different segments are mapped individually,
-and only limited space lengths of those specific segments are mapped to
-shadow.
-
-Therefore, when the incoming address is converted to a shadow, we need
-to add a condition to determine whether it is valid.
+LoongArch populates pmd/pud with invalid_pmd_table/invalid_pud_table in
+pagetable_init, So pmd_init/pud_init(p) is required, define them as __weak
+in mm/kasan/init.c, like mm/sparse-vmemmap.c.
 
 Reviewed-by: Andrey Konovalov <andreyknvl@gmail.com>
 Signed-off-by: Qing Zhang <zhangqing@loongson.cn>
 ---
- include/linux/kasan.h | 2 ++
- mm/kasan/kasan.h      | 6 ++++++
- 2 files changed, 8 insertions(+)
+ mm/kasan/init.c | 18 ++++++++++++++----
+ 1 file changed, 14 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/kasan.h b/include/linux/kasan.h
-index f7ef70661ce2..3b91b941873d 100644
---- a/include/linux/kasan.h
-+++ b/include/linux/kasan.h
-@@ -54,11 +54,13 @@ extern p4d_t kasan_early_shadow_p4d[MAX_PTRS_PER_P4D];
- int kasan_populate_early_shadow(const void *shadow_start,
- 				const void *shadow_end);
- 
-+#ifndef __HAVE_ARCH_SHADOW_MAP
- static inline void *kasan_mem_to_shadow(const void *addr)
- {
- 	return (void *)((unsigned long)addr >> KASAN_SHADOW_SCALE_SHIFT)
- 		+ KASAN_SHADOW_OFFSET;
- }
-+#endif
- 
- int kasan_add_zero_shadow(void *start, unsigned long size);
- void kasan_remove_zero_shadow(void *start, unsigned long size);
-diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
-index a61eeee3095a..033335c13b25 100644
---- a/mm/kasan/kasan.h
-+++ b/mm/kasan/kasan.h
-@@ -291,16 +291,22 @@ struct kasan_stack_ring {
- 
- #if defined(CONFIG_KASAN_GENERIC) || defined(CONFIG_KASAN_SW_TAGS)
- 
-+#ifndef __HAVE_ARCH_SHADOW_MAP
- static inline const void *kasan_shadow_to_mem(const void *shadow_addr)
- {
- 	return (void *)(((unsigned long)shadow_addr - KASAN_SHADOW_OFFSET)
- 		<< KASAN_SHADOW_SCALE_SHIFT);
- }
-+#endif
- 
- static __always_inline bool addr_has_metadata(const void *addr)
- {
-+#ifdef __HAVE_ARCH_SHADOW_MAP
-+	return (kasan_mem_to_shadow((void *)addr) != NULL);
-+#else
- 	return (kasan_reset_tag(addr) >=
- 		kasan_shadow_to_mem((void *)KASAN_SHADOW_START));
-+#endif
+diff --git a/mm/kasan/init.c b/mm/kasan/init.c
+index cc64ed6858c6..a7fa223b96e4 100644
+--- a/mm/kasan/init.c
++++ b/mm/kasan/init.c
+@@ -139,6 +139,10 @@ static int __ref zero_pmd_populate(pud_t *pud, unsigned long addr,
+ 	return 0;
  }
  
- /**
++void __weak __meminit pmd_init(void *addr)
++{
++}
++
+ static int __ref zero_pud_populate(p4d_t *p4d, unsigned long addr,
+ 				unsigned long end)
+ {
+@@ -166,8 +170,9 @@ static int __ref zero_pud_populate(p4d_t *p4d, unsigned long addr,
+ 				if (!p)
+ 					return -ENOMEM;
+ 			} else {
+-				pud_populate(&init_mm, pud,
+-					early_alloc(PAGE_SIZE, NUMA_NO_NODE));
++				p = early_alloc(PAGE_SIZE, NUMA_NO_NODE);
++				pmd_init(p);
++				pud_populate(&init_mm, pud, p);
+ 			}
+ 		}
+ 		zero_pmd_populate(pud, addr, next);
+@@ -176,6 +181,10 @@ static int __ref zero_pud_populate(p4d_t *p4d, unsigned long addr,
+ 	return 0;
+ }
+ 
++void __weak __meminit pud_init(void *addr)
++{
++}
++
+ static int __ref zero_p4d_populate(pgd_t *pgd, unsigned long addr,
+ 				unsigned long end)
+ {
+@@ -207,8 +216,9 @@ static int __ref zero_p4d_populate(pgd_t *pgd, unsigned long addr,
+ 				if (!p)
+ 					return -ENOMEM;
+ 			} else {
+-				p4d_populate(&init_mm, p4d,
+-					early_alloc(PAGE_SIZE, NUMA_NO_NODE));
++				p = early_alloc(PAGE_SIZE, NUMA_NO_NODE);
++				pud_init(p);
++				p4d_populate(&init_mm, p4d, p);
+ 			}
+ 		}
+ 		zero_pud_populate(p4d, addr, next);
 -- 
 2.36.0
 
