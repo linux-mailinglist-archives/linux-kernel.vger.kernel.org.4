@@ -2,79 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0565700ECD
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 20:30:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 970E7700EDA
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 20:31:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238600AbjELSaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 14:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
+        id S238918AbjELSbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 14:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239291AbjELSaM (ORCPT
+        with ESMTP id S238793AbjELSbI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 14:30:12 -0400
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C83572D40
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:29:31 -0700 (PDT)
-Received: by mail-yb1-xb4a.google.com with SMTP id 3f1490d57ef6-ba6388faf79so4790837276.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:29:31 -0700 (PDT)
+        Fri, 12 May 2023 14:31:08 -0400
+Received: from mail-yw1-x112b.google.com (mail-yw1-x112b.google.com [IPv6:2607:f8b0:4864:20::112b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6A71BF4
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:30:26 -0700 (PDT)
+Received: by mail-yw1-x112b.google.com with SMTP id 00721157ae682-55b7630a736so152917767b3.1
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 11:30:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683916126; x=1686508126;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=g1YHZI5wWoilGiErbtfwlJ8t+YURSptBI7L1u7j3vVM=;
-        b=K9UDN4B/R3ogwJmxTjdrEokIDh2/U9Ke5kzESmbqsjepMS+MzvNKwdyEGaOh8hfyYz
-         VcQYpY3OPiM7e6Xqm14UIE3Wcrh3rautsuytlTioEMN+DimMMZ7G42wrPlH8x4ZVc8Sz
-         fuo+/gxpvp/KUvo9o514Oztnpkdh1qkembXoIYCYH5jYJm5NQ5ZZIZQC00b7uVeGlNv7
-         Gp/auxM9y4+WXLnOv9rj6MuMOL7vu0Unc1FhgmSmZgCB3jZjWWwZAeGMNqUty7PUZ1dv
-         FbMgxDgd/CxxOU9sa0vqLh26yG4Mqg4eeJNw0QhTDkmuoXHoxl1Of7BF9DPmWUVWh94b
-         Oh7g==
+        d=linaro.org; s=google; t=1683916224; x=1686508224;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8pKQb+0xYXxOucpnQzXDi3qX8jDqCIpUeJjG+K7ITys=;
+        b=ha15g8FNo/FKZNrF+fIFFhPoe8LUpkxENpBqAGkhlgIIw6RpVsD4q25DcY6gKzpOoa
+         oE9ce0ibbeel8jUFuWC+GQF5KKxHreoW5ikWUjYRb9sdWI3OXNmus3V4iKZ9vHKqd6sg
+         VFxLljBA8G2zdnOjAu+Z1Js/XYXeyUQEJmoaoCuOqG5pxckNIdYrzW1VBharM7ZexDzO
+         MAvtpzlCA1HLpSyajO6KSxrLNGQLfJ014MnGrNCn3ihPSv6NXEv3zvSt8gPoc6j9guXQ
+         hzvsSormsrqNGJQpht3s+lGzNwHuhUoybeKRwb9mn3F+7sDGqIeAxlIvHtB2hx9i0mfI
+         yYCw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683916126; x=1686508126;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=g1YHZI5wWoilGiErbtfwlJ8t+YURSptBI7L1u7j3vVM=;
-        b=AnnNWkoONyMoHKtN/S5IHfnyEif6Dc/jsT9eqbqcTWt0cGk3p4gjV8CC6PeQSA9Oi2
-         a79MJ1fAsYOAk1hx6TD7CvLNMQFSPjJSR75GqRa4l1AMGEV0MdHT5K+qsOd0C/OVJutV
-         gI/Fzqu5S7FX/QxQ2IT9Vrw6emXILNAraZbPzPzUNhuMH8lOR7hjPEH75pvI5uFMHZsM
-         RRO70dZojgtAxBnHe+7Z8ErS8zf+UkxrtPqd/PP7DnUeygOIAFK5BAILe3PhawiColFm
-         ym7nIoF1fHHt03lH5jAyVEcWQgbSqBCohKAYny6m1y7lCbi3lZKkYZ3Hf9V4rH9oe7rF
-         Ow6Q==
-X-Gm-Message-State: AC+VfDyrEtZM5k4CIsZ2H6H/8aQ7HqtmTmIcY/fiDNhKh+ckV323VbCr
-        MQcQNry6jV4TtmqyiEK5BQtoLio=
-X-Google-Smtp-Source: ACHHUZ61qwr3BdPrPsjBchwqa5bp7Ymx46T3C17hhoEYce9/vXT91ouNeraL6bIM1/UVWg+lWqm0LXw=
-X-Received: from sdf.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5935])
- (user=sdf job=sendgmr) by 2002:a25:874f:0:b0:b9d:fe66:a424 with SMTP id
- e15-20020a25874f000000b00b9dfe66a424mr16098075ybn.2.1683916126382; Fri, 12
- May 2023 11:28:46 -0700 (PDT)
-Date:   Fri, 12 May 2023 11:28:44 -0700
-In-Reply-To: <20230512152607.992209-10-larysa.zaremba@intel.com>
-Mime-Version: 1.0
-References: <20230512152607.992209-1-larysa.zaremba@intel.com> <20230512152607.992209-10-larysa.zaremba@intel.com>
-Message-ID: <ZF6FXNglntreqIgW@google.com>
-Subject: Re: [PATCH RESEND bpf-next 09/15] xdp: Add VLAN tag hint
-From:   Stanislav Fomichev <sdf@google.com>
-To:     Larysa Zaremba <larysa.zaremba@intel.com>
-Cc:     bpf@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>, xdp-hints@xdp-project.net,
-        netdev@vger.kernel.org, intel-wired-lan@lists.osuosl.org,
+        d=1e100.net; s=20221208; t=1683916224; x=1686508224;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8pKQb+0xYXxOucpnQzXDi3qX8jDqCIpUeJjG+K7ITys=;
+        b=UW6kYnG9ubHVnF8s/J4HsILM//G0IoiUP5H/PtZxMPBxFLnOzf5D4NyVkQaWyBcnKn
+         /P+YEnihOi95A+HRL1iKT8lY3LhuOQbwmjH+/+XR0Du/tacjlS2lY3g981jQ13fxrzIz
+         1Az0GuEPc6ZC9zSx9XOIKYLs9PkHRjIKZ6wO4k1gYzRvRsBThJ0DfapUS8E4jfAVwquE
+         aTscnSMFAB+sC89LX0gj40XF3bOzsV9V8XZ/2NP4Fj+hgHJ3W9q2v2JzKSFPyFlW5Tnf
+         M1hFi978mvkxN5ruB2kduqKkpsslNzZWr5WnHLNyhrunChPsI+jrwsl7w/YQuRY/9ApO
+         u0Zg==
+X-Gm-Message-State: AC+VfDwFUggZGJizXi2FV6McW0jhWgFPiS4/g1/chpyERm5giacdv23H
+        qWJXBrW9q/TMgp7BUf22IqA6vfjQNLpilzc8q/qlTA==
+X-Google-Smtp-Source: ACHHUZ4EpK0beeyEKKSqeEK5dUk6rdIl9cp/YnF8Y+QPICHcuW1M4nZMXaaPITctbhAOfsn7vuAk2CWoax7noIg8REs=
+X-Received: by 2002:a05:6902:70d:b0:ba7:50d4:d914 with SMTP id
+ k13-20020a056902070d00b00ba750d4d914mr259939ybt.5.1683916224054; Fri, 12 May
+ 2023 11:30:24 -0700 (PDT)
+MIME-Version: 1.0
+References: <1683750665-8764-1-git-send-email-quic_khsieh@quicinc.com>
+ <1683750665-8764-2-git-send-email-quic_khsieh@quicinc.com>
+ <CAA8EJprtQF0x_LCOTrt5bvRnJ+xRz6QxLF6QAP-4Pff6V5TJ2g@mail.gmail.com>
+ <20230511155331.2jmfe7xcs5tihdgb@ripper> <5ef83699-01de-d062-6239-9bb834c70458@linaro.org>
+ <8ac0b5f5-27da-2b28-8f10-b2fca447511a@quicinc.com> <CAA8EJpokAoGni7vNwuijs7EvmjCweO3pgChij3Qx3OUkVTVpiQ@mail.gmail.com>
+ <CAE-0n51SHQhUJiY=BJp8CQQ1aTAOxeMDr2+NX_vpmjN_cyJJrA@mail.gmail.com>
+In-Reply-To: <CAE-0n51SHQhUJiY=BJp8CQQ1aTAOxeMDr2+NX_vpmjN_cyJJrA@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Fri, 12 May 2023 21:30:13 +0300
+Message-ID: <CAA8EJprynCeTdYk5PH2aKcjoZZa5kh_iJRpXUua2jqhtMD5B=Q@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] drm/msm/dp: enable HDP plugin/unplugged interrupts
+ to hpd_enable/disable
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, dianders@chromium.org, vkoul@kernel.org,
+        daniel@ffwll.ch, airlied@gmail.com, agross@kernel.org,
+        quic_abhinavk@quicinc.com, quic_jesszhan@quicinc.com,
+        quic_sbillaka@quicinc.com, marijn.suijten@somainline.org,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="utf-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,122 +80,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/12, Larysa Zaremba wrote:
-> Implement functionality that enables drivers to expose VLAN tag
-> to XDP code.
-> 
-> Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
+On Fri, 12 May 2023 at 21:03, Stephen Boyd <swboyd@chromium.org> wrote:
+>
+> Quoting Dmitry Baryshkov (2023-05-11 17:54:19)
+> > On Fri, 12 May 2023 at 03:16, Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+> > > 1) DP with GPIO: No downstream drm_bridge are connected, is_edp = false
+> > > and internal HPD-logic is in used (internal_hpd = true). Power needs to
+> > > be on at all times etc.
+> > >
+> > > 2) DP without GPIO: Downstream drm_bridge connected, is_edp = false and
+> > > internal HPD-logic should not be used/enabled (internal_hpd = false).
+> > > Power doesn't need to be on unless hpd_notify is invoked to tell us that
+> > > there's something connected...
+> > >
+> > > - dp_bridge_hpd_notify(). What is the point of this check? <== i have
+> > > below two questions,
+> > >
+> > > 1) can you explain when/what this dp_bridge_hpd_notify() will be called?
+> >
+> > The call chain is drm_bridge_hpd_notify() ->
+> > drm_bridge_connector_hpd_notify() -> .hpd_notify() for all drm_bridge
+> > in chain
+> >
+> > One should add a call to drm_bridge_hpd_notify() when the hotplug
+> > event has been detected.
+> >
+> > Also please note the patch https://patchwork.freedesktop.org/patch/484432/
+> >
+> > >
+> > > 2) is dp_bridge_hpd_notify() only will be called at above case #2? and
+> > > it will not be used by case #1?
+> >
+> > Once the driver calls drm_bridge_hpd_notify() in the hpd path, the
+> > hpd_notify callbacks will be called in case#1 too.
+> >
+> > BTW: I don't see drm_bridge_hpd_notify() or
+> > drm_kms_{,connector_}_hotplug_event() HPD notifications in the DP
+> > driver at all. This should be fixed.
+> >
+>
+> Is dp_bridge_hpd_notify() being called by
+> drm_helper_probe_single_connector_modes() when the connectors are
+> detected?
+>
+> I see drm_helper_probe_detect() calls connector->funcs->detect() which I
+> think calls
+> drm_bridge_connector_funcs::drm_bridge_connector_hpd_notify() but I
+> haven't confirmed yet. The 'detect' bridge is the DP bridge in msm
+> driver
+>
+>          if (!dp_display->is_edp) {
+>                 bridge->ops =
+>                         DRM_BRIDGE_OP_DETECT |
+>
+> so if the bridge_connector is being used then I think when fill_modes()
+> is called we'll run the detect cycle and call the hpd_notify callbacks
+> on the bridge chain.
 
-Acked-by: Stanislav Fomichev <sdf@google.com>
+Yes. This call chain is correct.
+drm_helper_probe_single_connector_modes() ->
+drm_bridge_connector_detect() -> drm_bridge_connector_hpd_notify().
 
-> ---
->  Documentation/networking/xdp-rx-metadata.rst | 11 ++++++++-
->  include/linux/netdevice.h                    |  2 ++
->  include/net/xdp.h                            |  4 ++++
->  kernel/bpf/offload.c                         |  4 ++++
->  net/core/xdp.c                               | 24 ++++++++++++++++++++
->  5 files changed, 44 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentation/networking/xdp-rx-metadata.rst
-> index 25ce72af81c2..73a78029c596 100644
-> --- a/Documentation/networking/xdp-rx-metadata.rst
-> +++ b/Documentation/networking/xdp-rx-metadata.rst
-> @@ -18,7 +18,16 @@ Currently, the following kfuncs are supported. In the future, as more
->  metadata is supported, this set will grow:
->  
->  .. kernel-doc:: net/core/xdp.c
-> -   :identifiers: bpf_xdp_metadata_rx_timestamp bpf_xdp_metadata_rx_hash
-> +   :identifiers: bpf_xdp_metadata_rx_timestamp
-> +
-> +.. kernel-doc:: net/core/xdp.c
-> +   :identifiers: bpf_xdp_metadata_rx_hash
-> +
-> +.. kernel-doc:: net/core/xdp.c
-> +   :identifiers: bpf_xdp_metadata_rx_ctag
-> +
-> +.. kernel-doc:: net/core/xdp.c
-> +   :identifiers: bpf_xdp_metadata_rx_stag
->  
->  An XDP program can use these kfuncs to read the metadata into stack
->  variables for its own consumption. Or, to pass the metadata on to other
-> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> index 08fbd4622ccf..fdae37fe11f5 100644
-> --- a/include/linux/netdevice.h
-> +++ b/include/linux/netdevice.h
-> @@ -1655,6 +1655,8 @@ struct xdp_metadata_ops {
->  	int	(*xmo_rx_timestamp)(const struct xdp_md *ctx, u64 *timestamp);
->  	int	(*xmo_rx_hash)(const struct xdp_md *ctx, u32 *hash,
->  			       enum xdp_rss_hash_type *rss_type);
-> +	int	(*xmo_rx_ctag)(const struct xdp_md *ctx, u16 *vlan_tag);
-> +	int	(*xmo_rx_stag)(const struct xdp_md *ctx, u16 *vlan_tag);
->  };
->  
->  /**
-> diff --git a/include/net/xdp.h b/include/net/xdp.h
-> index 6381560efae2..2db7439fc60f 100644
-> --- a/include/net/xdp.h
-> +++ b/include/net/xdp.h
-> @@ -389,6 +389,10 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
->  			   bpf_xdp_metadata_rx_timestamp) \
->  	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_HASH, \
->  			   bpf_xdp_metadata_rx_hash) \
-> +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CTAG, \
-> +			   bpf_xdp_metadata_rx_ctag) \
-> +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_STAG, \
-> +			   bpf_xdp_metadata_rx_stag) \
->  
->  enum {
->  #define XDP_METADATA_KFUNC(name, _) name,
-> diff --git a/kernel/bpf/offload.c b/kernel/bpf/offload.c
-> index d9c9f45e3529..2c6b6e82cfac 100644
-> --- a/kernel/bpf/offload.c
-> +++ b/kernel/bpf/offload.c
-> @@ -848,6 +848,10 @@ void *bpf_dev_bound_resolve_kfunc(struct bpf_prog *prog, u32 func_id)
->  		p = ops->xmo_rx_timestamp;
->  	else if (func_id == bpf_xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_HASH))
->  		p = ops->xmo_rx_hash;
-> +	else if (func_id == bpf_xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_CTAG))
-> +		p = ops->xmo_rx_ctag;
-> +	else if (func_id == bpf_xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_STAG))
-> +		p = ops->xmo_rx_stag;
->  out:
->  	up_read(&bpf_devs_lock);
->  
-> diff --git a/net/core/xdp.c b/net/core/xdp.c
-> index 41e5ca8643ec..eff21501609f 100644
-> --- a/net/core/xdp.c
-> +++ b/net/core/xdp.c
-> @@ -738,6 +738,30 @@ __bpf_kfunc int bpf_xdp_metadata_rx_hash(const struct xdp_md *ctx, u32 *hash,
->  	return -EOPNOTSUPP;
->  }
->  
-> +/**
-> + * bpf_xdp_metadata_rx_ctag - Read XDP packet inner vlan tag.
-> + * @ctx: XDP context pointer.
-> + * @vlan_tag: Return value pointer.
-> + *
-> + * Returns 0 on success or ``-errno`` on error.
-> + */
-> +__bpf_kfunc int bpf_xdp_metadata_rx_ctag(const struct xdp_md *ctx, u16 *vlan_tag)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +
-> +/**
-> + * bpf_xdp_metadata_rx_stag - Read XDP packet outer vlan tag.
-> + * @ctx: XDP context pointer.
-> + * @vlan_tag: Return value pointer.
-> + *
-> + * Returns 0 on success or ``-errno`` on error.
-> + */
-> +__bpf_kfunc int bpf_xdp_metadata_rx_stag(const struct xdp_md *ctx, u16 *vlan_tag)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +
->  __diag_pop();
->  
->  BTF_SET8_START(xdp_metadata_kfunc_ids)
-> -- 
-> 2.35.3
-> 
+However on HPD events the DP driver doesn't call into the drm core
+(which I believe should be fixed).
+
+-- 
+With best wishes
+Dmitry
