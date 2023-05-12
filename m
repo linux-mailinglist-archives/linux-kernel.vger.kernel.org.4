@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3F7B700812
+	by mail.lfdr.de (Postfix) with ESMTP id 33882700810
 	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 14:31:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241111AbjELMaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 08:30:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59874 "EHLO
+        id S241159AbjELMai (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 08:30:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240923AbjELM3z (ORCPT
+        with ESMTP id S240789AbjELMaB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 08:29:55 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1D6B1386E;
-        Fri, 12 May 2023 05:29:18 -0700 (PDT)
-Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
-        by mx0a-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CCOUor001858;
+        Fri, 12 May 2023 08:30:01 -0400
+Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D114A12E;
+        Fri, 12 May 2023 05:29:27 -0700 (PDT)
+Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
+        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34C5eUjB031128;
         Fri, 12 May 2023 07:28:43 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=from : to : cc :
  subject : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding : content-type; s=PODMain02222019;
- bh=raLUE1r/+MZGwXGgjOqNmbbdT+5cBvFrw6NX5OKkxec=;
- b=GAo9EEBgVMuDcQMfR9hMzLBMQjN+GFpSUSGskbztVtCyd3fnJap6sDBvqBf3hdYPikY5
- bwsXrWuLFR9//1s6en4g7tmANEEWx8WanpafL11YG42PkOlzTL2lBrn1UVOGRNhVQ3dt
- C2wkvYjJTm+N6fGKcvUNUr6oaGmaoDFh+P6RNaqUZ895MwdDOp2O4T5yrxnI0e+NycWs
- sqrw+9+iK9R/AGA13qLzmVfKyFOJ14SuVKYAPdnM97Gz+EOheM+3L7hm0G2nE8MlBTK+
- POtKQCITXev37Cb8dKt+FkprdiGBoV8oI/iNeNgQWutaLJ+hM3KheOTLhjRpkvnowAnb Hw== 
-Received: from ediex02.ad.cirrus.com ([84.19.233.68])
-        by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 3qf7nb5dqx-4
+ bh=gotkwLKTMLQsUf6AuzWX0q6cc+UqRx5fEt3lUKF+HZA=;
+ b=m6nDLZOuz9OXe499SDt/QZUglxYnsQrZJyVZqMAEFjpB29lLIh5ckRAwQrP0bT1JUbEG
+ i9fWsz0KeYZXXVJ8OHjS8Lfohdg/eUy3s3gPSoyYqu9rP1jCxU6q3iTepp5H6KLs6LLu
+ ieFZ4mH8KY2wm6iZ6ZJm2ReAc7o1TeJX9W0kJUttPVkRcU9KJB7pK/GCAuDy3TrHS42q
+ 6CWWhmU+yJYuXmVakefZaU7UtRufKO8c/zAhBmJpDouxaa3DDdQgxwRf4TzL2gfI0Z5V
+ h6zcz3nkOYVTRcuzm+y6RNg8dTMFoqO2WqIpFO0edVMmfWdDLW6gY8M5CDuaTM8eLJZt cg== 
+Received: from ediex01.ad.cirrus.com ([84.19.233.68])
+        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3qf7s46b2x-5
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
         Fri, 12 May 2023 07:28:43 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
- (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+Received: from ediex01.ad.cirrus.com (198.61.84.80) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.26; Fri, 12 May
- 2023 07:28:38 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.26 via Frontend Transport; Fri, 12 May 2023 07:28:38 -0500
+ 2023 07:28:39 -0500
+Received: from ediswmail.ad.cirrus.com (198.61.86.93) by ediex01.ad.cirrus.com
+ (198.61.84.80) with Microsoft SMTP Server id 15.2.1118.26 via Frontend
+ Transport; Fri, 12 May 2023 07:28:39 -0500
 Received: from algalon.ad.cirrus.com (algalon.ad.cirrus.com [198.90.251.122])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id DC3E845;
+        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id F04C311A8;
         Fri, 12 May 2023 12:28:38 +0000 (UTC)
 From:   Charles Keepax <ckeepax@opensource.cirrus.com>
 To:     <broonie@kernel.org>, <lee@kernel.org>, <robh+dt@kernel.org>,
@@ -51,17 +51,17 @@ CC:     <lgirdwood@gmail.com>, <yung-chuan.liao@linux.intel.com>,
         <alsa-devel@alsa-project.org>, <patches@opensource.cirrus.com>,
         <devicetree@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
         <linux-spi@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH 07/10] irqchip/cs42l43: Add support for the cs42l43 IRQs
-Date:   Fri, 12 May 2023 13:28:35 +0100
-Message-ID: <20230512122838.243002-8-ckeepax@opensource.cirrus.com>
+Subject: [PATCH 08/10] pinctrl: cs42l43: Add support for the cs42l43
+Date:   Fri, 12 May 2023 13:28:36 +0100
+Message-ID: <20230512122838.243002-9-ckeepax@opensource.cirrus.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
 References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Eor36xOpC61mpC-Gp0R8Hdn4XbpTUO8w
-X-Proofpoint-GUID: Eor36xOpC61mpC-Gp0R8Hdn4XbpTUO8w
+X-Proofpoint-ORIG-GUID: x64qM1_Ssyqv7FHOUhjKWOTZCkHr2_PB
+X-Proofpoint-GUID: x64qM1_Ssyqv7FHOUhjKWOTZCkHr2_PB
 X-Proofpoint-Spam-Reason: safe
 X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,
@@ -80,173 +80,596 @@ DAC for headphone output, two integrated Class D amplifiers for
 loudspeakers, and two ADCs for wired headset microphone input or
 stereo line input. PDM inputs are provided for digital microphones.
 
-The IRQ chip provides IRQ functionality both to other parts of the
-cs42l43 device and to external devices that wish to use its IRQs.
+Add a basic pinctrl driver which supports driver strength for the
+various pins, gpios, and pinmux for the 2 multi-function pins.
 
 Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 ---
- MAINTAINERS                     |   2 +
- drivers/irqchip/Kconfig         |   9 ++
- drivers/irqchip/Makefile        |   1 +
- drivers/irqchip/irq-cs42l43.c   | 170 ++++++++++++++++++++++++++++++++
- include/linux/irqchip/cs42l43.h |  61 ++++++++++++
- 5 files changed, 243 insertions(+)
- create mode 100644 drivers/irqchip/irq-cs42l43.c
- create mode 100644 include/linux/irqchip/cs42l43.h
+ MAINTAINERS                              |   1 +
+ drivers/pinctrl/cirrus/Kconfig           |  11 +
+ drivers/pinctrl/cirrus/Makefile          |   2 +
+ drivers/pinctrl/cirrus/pinctrl-cs42l43.c | 614 +++++++++++++++++++++++
+ 4 files changed, 628 insertions(+)
+ create mode 100644 drivers/pinctrl/cirrus/pinctrl-cs42l43.c
 
 diff --git a/MAINTAINERS b/MAINTAINERS
-index 8d2076941ff36..13945ee6cdcfe 100644
+index 13945ee6cdcfe..2890f54f70afc 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -4928,8 +4928,10 @@ L:	patches@opensource.cirrus.com
- S:	Maintained
- F:	Documentation/devicetree/bindings/mfd/cirrus,cs*
+@@ -4930,6 +4930,7 @@ F:	Documentation/devicetree/bindings/mfd/cirrus,cs*
  F:	Documentation/devicetree/bindings/sound/cirrus,cs*
-+F:	drivers/irqchip/irq-cs42l43*
+ F:	drivers/irqchip/irq-cs42l43*
  F:	drivers/mfd/cs42l43*
++F:	drivers/pinctrl/cirrus/pinctrl-cs42l43*
  F:	include/dt-bindings/sound/cs*
-+F:	include/linux/irqchip/cs42l43*
+ F:	include/linux/irqchip/cs42l43*
  F:	include/linux/mfd/cs42l43*
- F:	include/sound/cs*
- F:	sound/pci/hda/cs*
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index 09e422da482ff..05f58015749e3 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -138,6 +138,15 @@ config BRCMSTB_L2_IRQ
- 	select GENERIC_IRQ_CHIP
- 	select IRQ_DOMAIN
- 
-+config IRQ_CS42L43
-+	tristate "Cirrus Logic CS42L43 IRQ Controller"
+diff --git a/drivers/pinctrl/cirrus/Kconfig b/drivers/pinctrl/cirrus/Kconfig
+index 530426a74f751..d6318cb57aff2 100644
+--- a/drivers/pinctrl/cirrus/Kconfig
++++ b/drivers/pinctrl/cirrus/Kconfig
+@@ -1,4 +1,15 @@
+ # SPDX-License-Identifier: GPL-2.0-only
++config PINCTRL_CS42L43
++	tristate "Cirrus Logic CS42L43 Pinctrl Driver"
 +	depends on MFD_CS42L43
-+	select REGMAP_IRQ
++	select GPIOLIB
++	select PINMUX
++	select PINCONF
++	select GENERIC_PINCONF
 +	help
-+	  Select this to support the IRQ functions of the Cirrus Logic
-+	  CS42L43 PC CODEC, note the IRQs are required for most other
-+	  functions of the device.
++	  Select this to support the GPIO/Pinctrl functions of the Cirrus
++	  Logic CS42L43 PC CODEC.
 +
- config DAVINCI_CP_INTC
- 	bool
- 	select GENERIC_IRQ_CHIP
-diff --git a/drivers/irqchip/Makefile b/drivers/irqchip/Makefile
-index ffd945fe71aa2..d00330c1b0b95 100644
---- a/drivers/irqchip/Makefile
-+++ b/drivers/irqchip/Makefile
-@@ -66,6 +66,7 @@ obj-$(CONFIG_BCM6345_L1_IRQ)		+= irq-bcm6345-l1.o
- obj-$(CONFIG_BCM7038_L1_IRQ)		+= irq-bcm7038-l1.o
- obj-$(CONFIG_BCM7120_L2_IRQ)		+= irq-bcm7120-l2.o
- obj-$(CONFIG_BRCMSTB_L2_IRQ)		+= irq-brcmstb-l2.o
-+obj-$(CONFIG_IRQ_CS42L43)		+= irq-cs42l43.o
- obj-$(CONFIG_KEYSTONE_IRQ)		+= irq-keystone.o
- obj-$(CONFIG_MIPS_GIC)			+= irq-mips-gic.o
- obj-$(CONFIG_ARCH_MEDIATEK)		+= irq-mtk-sysirq.o irq-mtk-cirq.o
-diff --git a/drivers/irqchip/irq-cs42l43.c b/drivers/irqchip/irq-cs42l43.c
+ config PINCTRL_LOCHNAGAR
+ 	tristate "Cirrus Logic Lochnagar pinctrl driver"
+ 	depends on MFD_LOCHNAGAR
+diff --git a/drivers/pinctrl/cirrus/Makefile b/drivers/pinctrl/cirrus/Makefile
+index a484518c840e3..9b618d7669071 100644
+--- a/drivers/pinctrl/cirrus/Makefile
++++ b/drivers/pinctrl/cirrus/Makefile
+@@ -1,5 +1,7 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ # Cirrus Logic pinctrl drivers
++obj-$(CONFIG_PINCTRL_CS42L43)	+= pinctrl-cs42l43.o
++
+ obj-$(CONFIG_PINCTRL_LOCHNAGAR)	+= pinctrl-lochnagar.o
+ 
+ pinctrl-madera-objs		:= pinctrl-madera-core.o
+diff --git a/drivers/pinctrl/cirrus/pinctrl-cs42l43.c b/drivers/pinctrl/cirrus/pinctrl-cs42l43.c
 new file mode 100644
-index 0000000000000..fc55cbdc08647
+index 0000000000000..df5bae1cefcd7
 --- /dev/null
-+++ b/drivers/irqchip/irq-cs42l43.c
-@@ -0,0 +1,170 @@
++++ b/drivers/pinctrl/cirrus/pinctrl-cs42l43.c
+@@ -0,0 +1,614 @@
 +// SPDX-License-Identifier: GPL-2.0
 +//
-+// CS42L43 IRQ driver
++// CS42L43 Pinctrl and GPIO driver
 +//
-+// Copyright (C) 2022-2023 Cirrus Logic, Inc. and
-+//                         Cirrus Logic International Semiconductor Ltd.
++// Copyright (c) 2023 Cirrus Logic, Inc. and
++//                    Cirrus Logic International Semiconductor Ltd.
 +
-+#include <linux/device.h>
++#include <linux/bits.h>
++#include <linux/build_bug.h>
++#include <linux/err.h>
 +#include <linux/errno.h>
-+#include <linux/interrupt.h>
-+#include <linux/irq.h>
-+#include <linux/irqchip/cs42l43.h>
++#include <linux/gpio/driver.h>
 +#include <linux/mfd/cs42l43.h>
 +#include <linux/mfd/cs42l43-regs.h>
 +#include <linux/module.h>
++#include <linux/of.h>
++#include <linux/pinctrl/consumer.h>
++#include <linux/pinctrl/pinctrl.h>
++#include <linux/pinctrl/pinmux.h>
++#include <linux/pinctrl/pinconf.h>
++#include <linux/pinctrl/pinconf-generic.h>
 +#include <linux/platform_device.h>
 +#include <linux/pm_runtime.h>
 +#include <linux/regmap.h>
 +
-+#define CS42L43_IRQ_OFFSET(reg) ((CS42L43_##reg##_INT) - CS42L43_DECIM_INT)
++#include "../pinctrl-utils.h"
 +
-+#define CS42L43_IRQ_REG(name, reg) REGMAP_IRQ_REG(CS42L43_##name, \
-+						  CS42L43_IRQ_OFFSET(reg), \
-+						  CS42L43_##name##_INT_MASK)
++#define CS42L43_NUM_GPIOS 3
 +
-+static const struct regmap_irq cs42l43_regmap_irqs[] = {
-+	CS42L43_IRQ_REG(PLL_LOST_LOCK,				PLL),
-+	CS42L43_IRQ_REG(PLL_READY,				PLL),
-+
-+	CS42L43_IRQ_REG(HP_STARTUP_DONE,			MSM),
-+	CS42L43_IRQ_REG(HP_SHUTDOWN_DONE,			MSM),
-+	CS42L43_IRQ_REG(HSDET_DONE,				MSM),
-+	CS42L43_IRQ_REG(TIPSENSE_UNPLUG_DB,			MSM),
-+	CS42L43_IRQ_REG(TIPSENSE_PLUG_DB,			MSM),
-+	CS42L43_IRQ_REG(RINGSENSE_UNPLUG_DB,			MSM),
-+	CS42L43_IRQ_REG(RINGSENSE_PLUG_DB,			MSM),
-+	CS42L43_IRQ_REG(TIPSENSE_UNPLUG_PDET,			MSM),
-+	CS42L43_IRQ_REG(TIPSENSE_PLUG_PDET,			MSM),
-+	CS42L43_IRQ_REG(RINGSENSE_UNPLUG_PDET,			MSM),
-+	CS42L43_IRQ_REG(RINGSENSE_PLUG_PDET,			MSM),
-+
-+	CS42L43_IRQ_REG(HS2_BIAS_SENSE,				ACC_DET),
-+	CS42L43_IRQ_REG(HS1_BIAS_SENSE,				ACC_DET),
-+	CS42L43_IRQ_REG(DC_DETECT1_FALSE,			ACC_DET),
-+	CS42L43_IRQ_REG(DC_DETECT1_TRUE,			ACC_DET),
-+	CS42L43_IRQ_REG(HSBIAS_CLAMPED,				ACC_DET),
-+	CS42L43_IRQ_REG(HS3_4_BIAS_SENSE,			ACC_DET),
-+
-+	CS42L43_IRQ_REG(AMP2_CLK_STOP_FAULT,			CLASS_D_AMP),
-+	CS42L43_IRQ_REG(AMP1_CLK_STOP_FAULT,			CLASS_D_AMP),
-+	CS42L43_IRQ_REG(AMP2_VDDSPK_FAULT,			CLASS_D_AMP),
-+	CS42L43_IRQ_REG(AMP1_VDDSPK_FAULT,			CLASS_D_AMP),
-+	CS42L43_IRQ_REG(AMP2_SHUTDOWN_DONE,			CLASS_D_AMP),
-+	CS42L43_IRQ_REG(AMP1_SHUTDOWN_DONE,			CLASS_D_AMP),
-+	CS42L43_IRQ_REG(AMP2_STARTUP_DONE,			CLASS_D_AMP),
-+	CS42L43_IRQ_REG(AMP1_STARTUP_DONE,			CLASS_D_AMP),
-+	CS42L43_IRQ_REG(AMP2_THERM_SHDN,			CLASS_D_AMP),
-+	CS42L43_IRQ_REG(AMP1_THERM_SHDN,			CLASS_D_AMP),
-+	CS42L43_IRQ_REG(AMP2_THERM_WARN,			CLASS_D_AMP),
-+	CS42L43_IRQ_REG(AMP1_THERM_WARN,			CLASS_D_AMP),
-+	CS42L43_IRQ_REG(AMP2_SCDET,				CLASS_D_AMP),
-+	CS42L43_IRQ_REG(AMP1_SCDET,				CLASS_D_AMP),
-+
-+	CS42L43_IRQ_REG(GPIO3_FALL,				GPIO),
-+	CS42L43_IRQ_REG(GPIO3_RISE,				GPIO),
-+	CS42L43_IRQ_REG(GPIO2_FALL,				GPIO),
-+	CS42L43_IRQ_REG(GPIO2_RISE,				GPIO),
-+	CS42L43_IRQ_REG(GPIO1_FALL,				GPIO),
-+	CS42L43_IRQ_REG(GPIO1_RISE,				GPIO),
-+
-+	CS42L43_IRQ_REG(HP_ILIMIT,				HPOUT),
-+	CS42L43_IRQ_REG(HP_LOADDET_DONE,			HPOUT),
-+};
-+
-+static const struct regmap_irq_chip cs42l43_irq_chip = {
-+	.name = "cs42l43",
-+
-+	.status_base = CS42L43_DECIM_INT,
-+	.mask_base = CS42L43_DECIM_MASK,
-+	.num_regs = 16,
-+
-+	.irqs = cs42l43_regmap_irqs,
-+	.num_irqs = ARRAY_SIZE(cs42l43_regmap_irqs),
-+
-+	.runtime_pm = true,
-+};
-+
-+struct cs42l43_irq {
++struct cs42l43_pin {
 +	struct device *dev;
++	struct regmap *regmap;
++	bool shutters_locked;
 +
-+	struct regmap_irq_chip irq_chip;
-+	struct regmap_irq_chip_data *irq_data;
++	struct gpio_chip gpio_chip;
++	struct pinctrl_gpio_range range;
 +};
 +
-+static int cs42l43_irq_probe(struct platform_device *pdev)
++struct cs42l43_pin_data {
++	unsigned int reg;
++	unsigned int shift;
++	unsigned int mask;
++};
++
++#define CS42L43_PIN(_number, _name, _reg, _field) { \
++	.number = _number, .name = _name, \
++	.drv_data = &((struct cs42l43_pin_data){ \
++		.reg = CS42L43_##_reg, \
++		.shift = CS42L43_##_field##_DRV_SHIFT, \
++		.mask = CS42L43_##_field##_DRV_MASK, \
++	}), \
++}
++
++static const struct pinctrl_pin_desc cs42l43_pin_pins[] = {
++	CS42L43_PIN(0,	"gpio1",	DRV_CTRL4,	GPIO1),
++	CS42L43_PIN(1,	"gpio2",	DRV_CTRL4,	GPIO2),
++	CS42L43_PIN(2,	"gpio3",	DRV_CTRL4,	GPIO3),
++	CS42L43_PIN(3,	"asp_dout",	DRV_CTRL1,	ASP_DOUT),
++	CS42L43_PIN(4,	"asp_fsync",	DRV_CTRL1,	ASP_FSYNC),
++	CS42L43_PIN(5,	"asp_bclk",	DRV_CTRL1,	ASP_BCLK),
++	CS42L43_PIN(6,	"pdmout2_clk",	DRV_CTRL3,	PDMOUT2_CLK),
++	CS42L43_PIN(7,	"pdmout2_data",	DRV_CTRL3,	PDMOUT2_DATA),
++	CS42L43_PIN(8,	"pdmout1_clk",	DRV_CTRL3,	PDMOUT1_CLK),
++	CS42L43_PIN(9,	"pdmout1_data",	DRV_CTRL3,	PDMOUT1_DATA),
++	CS42L43_PIN(10,	"i2c_sda",	DRV_CTRL3,	I2C_SDA),
++	CS42L43_PIN(11,	"i2c_scl",	DRV_CTRL_5,	I2C_SCL),
++	CS42L43_PIN(12,	"spi_miso",	DRV_CTRL3,	SPI_MISO),
++	CS42L43_PIN(13,	"spi_sck",	DRV_CTRL_5,	SPI_SCK),
++	CS42L43_PIN(14,	"spi_ssb",	DRV_CTRL_5,	SPI_SSB),
++};
++
++static const unsigned int cs42l43_pin_gpio1_pins[] = { 0 };
++static const unsigned int cs42l43_pin_gpio2_pins[] = { 1 };
++static const unsigned int cs42l43_pin_gpio3_pins[] = { 2 };
++static const unsigned int cs42l43_pin_asp_pins[] = { 3, 4, 5 };
++static const unsigned int cs42l43_pin_pdmout2_pins[] = { 6, 7 };
++static const unsigned int cs42l43_pin_pdmout1_pins[] = { 8, 9 };
++static const unsigned int cs42l43_pin_i2c_pins[] = { 10, 11 };
++static const unsigned int cs42l43_pin_spi_pins[] = { 12, 13, 14 };
++
++#define CS42L43_PINGROUP(_name) \
++(struct pingroup){				\
++	.name = #_name, \
++	.pins = cs42l43_pin_##_name##_pins, \
++	.npins = ARRAY_SIZE(cs42l43_pin_##_name##_pins) \
++}
++
++static const struct pingroup cs42l43_pin_groups[] = {
++	CS42L43_PINGROUP(gpio1),
++	CS42L43_PINGROUP(gpio2),
++	CS42L43_PINGROUP(gpio3),
++	CS42L43_PINGROUP(asp),
++	CS42L43_PINGROUP(pdmout2),
++	CS42L43_PINGROUP(pdmout1),
++	CS42L43_PINGROUP(i2c),
++	CS42L43_PINGROUP(spi),
++};
++
++static int cs42l43_pin_get_groups_count(struct pinctrl_dev *pctldev)
++{
++	return ARRAY_SIZE(cs42l43_pin_groups);
++}
++
++static const char *cs42l43_pin_get_group_name(struct pinctrl_dev *pctldev,
++					      unsigned int group_idx)
++{
++	return cs42l43_pin_groups[group_idx].name;
++}
++
++static int cs42l43_pin_get_group_pins(struct pinctrl_dev *pctldev,
++				      unsigned int group_idx,
++				      const unsigned int **pins,
++				      unsigned int *num_pins)
++{
++	*pins = cs42l43_pin_groups[group_idx].pins;
++	*num_pins = cs42l43_pin_groups[group_idx].npins;
++
++	return 0;
++}
++
++static const struct pinctrl_ops cs42l43_pin_group_ops = {
++	.get_groups_count = cs42l43_pin_get_groups_count,
++	.get_group_name = cs42l43_pin_get_group_name,
++	.get_group_pins = cs42l43_pin_get_group_pins,
++#if IS_ENABLED(CONFIG_OF)
++	.dt_node_to_map = pinconf_generic_dt_node_to_map_all,
++	.dt_free_map = pinconf_generic_dt_free_map,
++#endif
++};
++
++enum cs42l43_pin_funcs {
++	CS42L43_FUNC_GPIO,
++	CS42L43_FUNC_SPDIF,
++	CS42L43_FUNC_IRQ,
++	CS42L43_FUNC_MIC_SHT,
++	CS42L43_FUNC_SPK_SHT,
++	CS42L43_FUNC_MAX,
++};
++
++static const char * const cs42l43_pin_funcs[] = {
++	"gpio", "spdif", "irq", "mic-shutter", "spk-shutter"
++};
++
++static const char * const cs42l43_pin_gpio_groups[] = { "gpio1", "gpio3" };
++static const char * const cs42l43_pin_spdif_groups[] = { "gpio3" };
++static const char * const cs42l43_pin_irq_groups[] = { "gpio1" };
++static const char * const cs42l43_pin_shutter_groups[] = { "gpio1", "gpio2", "gpio3" };
++
++struct cs42l43_pin_func_group {
++	const char * const *groups;
++	unsigned int ngroups;
++};
++
++static const struct cs42l43_pin_func_group cs42l43_pin_func_groups[] = {
++	{ cs42l43_pin_gpio_groups,	ARRAY_SIZE(cs42l43_pin_gpio_groups) },
++	{ cs42l43_pin_spdif_groups,	ARRAY_SIZE(cs42l43_pin_spdif_groups) },
++	{ cs42l43_pin_irq_groups,	ARRAY_SIZE(cs42l43_pin_irq_groups) },
++	{ cs42l43_pin_shutter_groups,	ARRAY_SIZE(cs42l43_pin_shutter_groups) },
++	{ cs42l43_pin_shutter_groups,	ARRAY_SIZE(cs42l43_pin_shutter_groups) },
++};
++
++static int cs42l43_pin_get_func_count(struct pinctrl_dev *pctldev)
++{
++	BUILD_BUG_ON(ARRAY_SIZE(cs42l43_pin_funcs) != CS42L43_FUNC_MAX);
++	BUILD_BUG_ON(ARRAY_SIZE(cs42l43_pin_func_groups) != CS42L43_FUNC_MAX);
++
++	return ARRAY_SIZE(cs42l43_pin_funcs);
++}
++
++static const char *cs42l43_pin_get_func_name(struct pinctrl_dev *pctldev,
++					     unsigned int func_idx)
++{
++	return cs42l43_pin_funcs[func_idx];
++}
++
++static int cs42l43_pin_get_func_groups(struct pinctrl_dev *pctldev,
++				       unsigned int func_idx,
++				       const char * const **groups,
++				       unsigned int * const num_groups)
++{
++	*groups = cs42l43_pin_func_groups[func_idx].groups;
++	*num_groups = cs42l43_pin_func_groups[func_idx].ngroups;
++
++	return 0;
++}
++
++static int cs42l43_pin_set_mux(struct pinctrl_dev *pctldev,
++			       unsigned int func_idx, unsigned int group_idx)
++{
++	struct cs42l43_pin *priv = pinctrl_dev_get_drvdata(pctldev);
++	unsigned int reg, mask, val;
++
++	dev_dbg(priv->dev, "Setting %s to %s\n",
++		cs42l43_pin_groups[group_idx].name, cs42l43_pin_funcs[func_idx]);
++
++	switch (func_idx) {
++	case CS42L43_FUNC_MIC_SHT:
++		reg = CS42L43_SHUTTER_CONTROL;
++		mask = CS42L43_MIC_SHUTTER_CFG_MASK;
++		val = 0x2 << (group_idx + CS42L43_MIC_SHUTTER_CFG_SHIFT);
++		break;
++	case CS42L43_FUNC_SPK_SHT:
++		reg = CS42L43_SHUTTER_CONTROL;
++		mask = CS42L43_SPK_SHUTTER_CFG_MASK;
++		val = 0x2 << (group_idx + CS42L43_SPK_SHUTTER_CFG_SHIFT);
++		break;
++	default:
++		reg = CS42L43_GPIO_FN_SEL;
++		mask = BIT(group_idx + CS42L43_GPIO1_FN_SEL_SHIFT);
++		val = (func_idx == CS42L43_FUNC_GPIO) <<
++				(group_idx + CS42L43_GPIO1_FN_SEL_SHIFT);
++		break;
++	}
++
++	if (priv->shutters_locked && reg == CS42L43_SHUTTER_CONTROL) {
++		dev_err(priv->dev, "Shutter configuration not available\n");
++		return -EPERM;
++	}
++
++	return regmap_update_bits(priv->regmap, reg, mask, val);
++}
++
++static int cs42l43_gpio_set_direction(struct pinctrl_dev *pctldev,
++				      struct pinctrl_gpio_range *range,
++				      unsigned int offset, bool input)
++{
++	struct cs42l43_pin *priv = pinctrl_dev_get_drvdata(pctldev);
++	unsigned int shift = offset + CS42L43_GPIO1_DIR_SHIFT;
++	int ret;
++
++	dev_dbg(priv->dev, "Setting gpio%d to %s\n",
++		offset + 1, input ? "input" : "output");
++
++	ret = pm_runtime_resume_and_get(priv->dev);
++	if (ret) {
++		dev_err(priv->dev, "Failed to resume for direction: %d\n", ret);
++		return ret;
++	}
++
++	ret = regmap_update_bits(priv->regmap, CS42L43_GPIO_CTRL1,
++				 BIT(shift), !!input << shift);
++	if (ret)
++		dev_err(priv->dev, "Failed to set gpio%d direction: %d\n",
++			offset + 1, ret);
++
++	pm_runtime_put(priv->dev);
++
++	return ret;
++}
++
++static int cs42l43_gpio_request_enable(struct pinctrl_dev *pctldev,
++				       struct pinctrl_gpio_range *range,
++				       unsigned int offset)
++{
++	return cs42l43_pin_set_mux(pctldev, 0, offset);
++}
++
++static void cs42l43_gpio_disable_free(struct pinctrl_dev *pctldev,
++				      struct pinctrl_gpio_range *range,
++				      unsigned int offset)
++{
++	cs42l43_gpio_set_direction(pctldev, range, offset, true);
++}
++
++static const struct pinmux_ops cs42l43_pin_mux_ops = {
++	.get_functions_count	= cs42l43_pin_get_func_count,
++	.get_function_name	= cs42l43_pin_get_func_name,
++	.get_function_groups	= cs42l43_pin_get_func_groups,
++
++	.set_mux		= cs42l43_pin_set_mux,
++
++	.gpio_request_enable	= cs42l43_gpio_request_enable,
++	.gpio_disable_free	= cs42l43_gpio_disable_free,
++	.gpio_set_direction	= cs42l43_gpio_set_direction,
++
++	.strict			= true,
++};
++
++static const unsigned int cs42l43_pin_drv_str_ma[] = { 1, 2, 4, 8, 9, 10, 12, 16 };
++
++static inline int cs42l43_pin_get_drv_str(struct cs42l43_pin *priv, unsigned int pin)
++{
++	const struct cs42l43_pin_data *pdat = cs42l43_pin_pins[pin].drv_data;
++	unsigned int val;
++	int ret;
++
++	ret = regmap_read(priv->regmap, pdat->reg, &val);
++	if (ret)
++		return ret;
++
++	return cs42l43_pin_drv_str_ma[(val & pdat->mask) >> pdat->shift];
++}
++
++static inline int cs42l43_pin_set_drv_str(struct cs42l43_pin *priv, unsigned int pin,
++					  unsigned int ma)
++{
++	const struct cs42l43_pin_data *pdat = cs42l43_pin_pins[pin].drv_data;
++	int i;
++
++	for (i = 0; i < ARRAY_SIZE(cs42l43_pin_drv_str_ma); i++) {
++		if (ma == cs42l43_pin_drv_str_ma[i]) {
++			if ((i << pdat->shift) > pdat->mask)
++				goto err;
++
++			dev_dbg(priv->dev, "Set drive strength for %s to %d mA\n",
++				cs42l43_pin_pins[pin].name, ma);
++
++			return regmap_update_bits(priv->regmap, pdat->reg,
++						  pdat->mask, i << pdat->shift);
++		}
++	}
++
++err:
++	dev_err(priv->dev, "Invalid drive strength for %s: %d mA\n",
++		cs42l43_pin_pins[pin].name, ma);
++	return -EINVAL;
++}
++
++static inline int cs42l43_pin_get_db(struct cs42l43_pin *priv, unsigned int pin)
++{
++	unsigned int val;
++	int ret;
++
++	if (pin >= CS42L43_NUM_GPIOS)
++		return -ENOTSUPP;
++
++	ret = regmap_read(priv->regmap, CS42L43_GPIO_CTRL2, &val);
++	if (ret)
++		return ret;
++
++	if (val & (CS42L43_GPIO1_DEGLITCH_BYP_MASK << pin))
++		return 0;
++	else
++		return 85; // Debounce is roughly 85uS
++}
++
++static inline int cs42l43_pin_set_db(struct cs42l43_pin *priv, unsigned int pin,
++				     unsigned int us)
++{
++	if (pin >= CS42L43_NUM_GPIOS)
++		return -ENOTSUPP;
++
++	dev_dbg(priv->dev, "Set debounce %s for %s\n",
++		us ? "on" : "off", cs42l43_pin_pins[pin].name);
++
++	return regmap_update_bits(priv->regmap, CS42L43_GPIO_CTRL2,
++				  CS42L43_GPIO1_DEGLITCH_BYP_MASK << pin,
++				  !!us << pin);
++}
++
++static int cs42l43_pin_config_get(struct pinctrl_dev *pctldev,
++				  unsigned int pin, unsigned long *config)
++{
++	struct cs42l43_pin *priv = pinctrl_dev_get_drvdata(pctldev);
++	unsigned int param = pinconf_to_config_param(*config);
++	int ret;
++
++	switch (param) {
++	case PIN_CONFIG_DRIVE_STRENGTH:
++		ret = cs42l43_pin_get_drv_str(priv, pin);
++		if (ret < 0)
++			return ret;
++		break;
++	case PIN_CONFIG_INPUT_DEBOUNCE:
++		ret = cs42l43_pin_get_db(priv, pin);
++		if (ret < 0)
++			return ret;
++		break;
++	default:
++		return -ENOTSUPP;
++	}
++
++	*config = pinconf_to_config_packed(param, ret);
++
++	return 0;
++}
++
++static int cs42l43_pin_config_set(struct pinctrl_dev *pctldev, unsigned int pin,
++				  unsigned long *configs, unsigned int num_configs)
++{
++	struct cs42l43_pin *priv = pinctrl_dev_get_drvdata(pctldev);
++	unsigned int val;
++	int ret;
++
++	while (num_configs) {
++		val = pinconf_to_config_argument(*configs);
++
++		switch (pinconf_to_config_param(*configs)) {
++		case PIN_CONFIG_DRIVE_STRENGTH:
++			ret = cs42l43_pin_set_drv_str(priv, pin, val);
++			if (ret)
++				return ret;
++			break;
++		case PIN_CONFIG_INPUT_DEBOUNCE:
++			ret = cs42l43_pin_set_db(priv, pin, val);
++			if (ret)
++				return ret;
++			break;
++		default:
++			return -ENOTSUPP;
++		}
++
++		++configs;
++		--num_configs;
++	}
++
++	return 0;
++}
++
++static int cs42l43_pin_config_group_get(struct pinctrl_dev *pctldev,
++					unsigned int selector, unsigned long *config)
++{
++	int i, ret;
++
++	for (i = 0; i < cs42l43_pin_groups[selector].npins; ++i) {
++		ret = cs42l43_pin_config_get(pctldev,
++					     cs42l43_pin_groups[selector].pins[i],
++					     config);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
++static int cs42l43_pin_config_group_set(struct pinctrl_dev *pctldev,
++					unsigned int selector,
++					unsigned long *configs,
++					unsigned int num_configs)
++{
++	int i, ret;
++
++	for (i = 0; i < cs42l43_pin_groups[selector].npins; ++i) {
++		ret = cs42l43_pin_config_set(pctldev,
++					     cs42l43_pin_groups[selector].pins[i],
++					     configs, num_configs);
++		if (ret)
++			return ret;
++	}
++
++	return 0;
++}
++
++static const struct pinconf_ops cs42l43_pin_conf_ops = {
++	.is_generic		= true,
++
++	.pin_config_get		= cs42l43_pin_config_get,
++	.pin_config_set		= cs42l43_pin_config_set,
++	.pin_config_group_get	= cs42l43_pin_config_group_get,
++	.pin_config_group_set	= cs42l43_pin_config_group_set,
++};
++
++static struct pinctrl_desc cs42l43_pin_desc = {
++	.name		= "cs42l43-pinctrl",
++	.owner		= THIS_MODULE,
++
++	.pins		= cs42l43_pin_pins,
++	.npins		= ARRAY_SIZE(cs42l43_pin_pins),
++
++	.pctlops	= &cs42l43_pin_group_ops,
++	.pmxops		= &cs42l43_pin_mux_ops,
++	.confops	= &cs42l43_pin_conf_ops,
++};
++
++static int cs42l43_gpio_get(struct gpio_chip *chip, unsigned int offset)
++{
++	struct cs42l43_pin *priv = gpiochip_get_data(chip);
++	unsigned int val;
++	int ret;
++
++	ret = pm_runtime_resume_and_get(priv->dev);
++	if (ret) {
++		dev_err(priv->dev, "Failed to resume for get: %d\n", ret);
++		return ret;
++	}
++
++	ret = regmap_read(priv->regmap, CS42L43_GPIO_STS, &val);
++	if (ret)
++		dev_err(priv->dev, "Failed to get gpio%d: %d\n", offset + 1, ret);
++	else
++		ret = !!(val & BIT(offset + CS42L43_GPIO1_STS_SHIFT));
++
++	pm_runtime_put(priv->dev);
++
++	return ret;
++}
++
++static void cs42l43_gpio_set(struct gpio_chip *chip, unsigned int offset, int value)
++{
++	struct cs42l43_pin *priv = gpiochip_get_data(chip);
++	unsigned int shift = offset + CS42L43_GPIO1_LVL_SHIFT;
++	int ret;
++
++	dev_dbg(priv->dev, "Setting gpio%d to %s\n",
++		offset + 1, value ? "high" : "low");
++
++	ret = pm_runtime_resume_and_get(priv->dev);
++	if (ret) {
++		dev_err(priv->dev, "Failed to resume for set: %d\n", ret);
++		return;
++	}
++
++	ret = regmap_update_bits(priv->regmap, CS42L43_GPIO_CTRL1,
++				 BIT(shift), value << shift);
++	if (ret)
++		dev_err(priv->dev, "Failed to set gpio%d: %d\n", offset + 1, ret);
++
++	pm_runtime_put(priv->dev);
++}
++
++static int cs42l43_gpio_direction_in(struct gpio_chip *chip, unsigned int offset)
++{
++	return pinctrl_gpio_direction_input(chip->base + offset);
++}
++
++static int cs42l43_gpio_direction_out(struct gpio_chip *chip,
++				      unsigned int offset, int value)
++{
++	cs42l43_gpio_set(chip, offset, value);
++
++	return pinctrl_gpio_direction_output(chip->base + offset);
++}
++
++static int cs42l43_pin_probe(struct platform_device *pdev)
 +{
 +	struct cs42l43 *cs42l43 = dev_get_drvdata(pdev->dev.parent);
-+	struct cs42l43_irq *priv;
-+	struct irq_data *irq_data;
-+	unsigned long irq_flags;
++	struct cs42l43_pin *priv;
++	struct pinctrl_dev *pctldev;
 +	int ret;
 +
 +	priv = devm_kzalloc(&pdev->dev, sizeof(*priv), GFP_KERNEL);
@@ -254,136 +677,85 @@ index 0000000000000..fc55cbdc08647
 +		return -ENOMEM;
 +
 +	priv->dev = &pdev->dev;
-+	priv->irq_chip = cs42l43_irq_chip;
-+	priv->irq_chip.irq_drv_data = priv;
++	priv->regmap = cs42l43->regmap;
 +
-+	irq_data = irq_get_irq_data(cs42l43->irq);
-+	if (!irq_data) {
-+		dev_err(priv->dev, "Invalid IRQ: %d\n", cs42l43->irq);
-+		return -EINVAL;
++	priv->shutters_locked = cs42l43->hw_lock;
++
++	priv->gpio_chip.request = gpiochip_generic_request;
++	priv->gpio_chip.free = gpiochip_generic_free;
++	priv->gpio_chip.direction_input = cs42l43_gpio_direction_in;
++	priv->gpio_chip.direction_output = cs42l43_gpio_direction_out;
++	priv->gpio_chip.get = cs42l43_gpio_get;
++	priv->gpio_chip.set = cs42l43_gpio_set;
++	priv->gpio_chip.label = dev_name(priv->dev);
++	priv->gpio_chip.parent = priv->dev;
++	priv->gpio_chip.can_sleep = true;
++	priv->gpio_chip.base = -1;
++	priv->gpio_chip.ngpio = CS42L43_NUM_GPIOS;
++	priv->gpio_chip.fwnode = dev_fwnode(cs42l43->dev);
++
++	if (is_of_node(dev_fwnode(cs42l43->dev))) {
++		device_set_node(priv->dev,
++				fwnode_get_named_child_node(dev_fwnode(cs42l43->dev),
++							    "pinctrl"));
++	} else {
++		device_set_node(priv->dev, dev_fwnode(cs42l43->dev));
 +	}
-+
-+	irq_flags = irqd_get_trigger_type(irq_data);
-+	switch (irq_flags) {
-+	case IRQF_TRIGGER_LOW:
-+	case IRQF_TRIGGER_HIGH:
-+	case IRQF_TRIGGER_RISING:
-+	case IRQF_TRIGGER_FALLING:
-+		break;
-+	case IRQ_TYPE_NONE:
-+	default:
-+		irq_flags = IRQF_TRIGGER_LOW;
-+		break;
-+	}
-+
-+	irq_flags |= IRQF_ONESHOT;
 +
 +	pm_runtime_enable(priv->dev);
 +	pm_runtime_idle(priv->dev);
 +
-+	ret = devm_regmap_add_irq_chip(priv->dev, cs42l43->regmap,
-+				       cs42l43->irq, irq_flags, 0,
-+				       &priv->irq_chip, &priv->irq_data);
-+	if (ret) {
-+		dev_err(priv->dev, "Failed to add IRQ chip: %d\n", ret);
-+		pm_runtime_disable(priv->dev);
-+		return ret;
++	pctldev = devm_pinctrl_register(priv->dev, &cs42l43_pin_desc, priv);
++	if (IS_ERR(pctldev)) {
++		ret = PTR_ERR(pctldev);
++		dev_err(priv->dev, "Failed to register pinctrl: %d\n", ret);
++		goto err_pm;
 +	}
 +
-+	dev_dbg(priv->dev, "Configured IRQ %d with flags 0x%lx\n",
-+		cs42l43->irq, irq_flags);
++	ret = devm_gpiochip_add_data(priv->dev, &priv->gpio_chip, priv);
++	if (ret) {
++		dev_err(priv->dev, "Failed to register gpiochip: %d\n", ret);
++		goto err_pm;
++	}
++
++	if (!of_property_read_bool(dev_of_node(cs42l43->dev), "gpio-ranges")) {
++		ret = gpiochip_add_pin_range(&priv->gpio_chip, priv->gpio_chip.label,
++					     0, 0, CS42L43_NUM_GPIOS);
++		if (ret) {
++			dev_err(priv->dev, "Failed to add GPIO pin range: %d\n", ret);
++			goto err_pm;
++		}
++	}
 +
 +	return 0;
++
++err_pm:
++	pm_runtime_disable(priv->dev);
++
++	return ret;
 +}
 +
-+static int cs42l43_irq_remove(struct platform_device *pdev)
++static int cs42l43_pin_remove(struct platform_device *pdev)
 +{
 +	pm_runtime_disable(&pdev->dev);
 +
 +	return 0;
 +}
 +
-+static struct platform_driver cs42l43_irq_driver = {
++static struct platform_driver cs42l43_pin_driver = {
 +	.driver = {
-+		.name	= "cs42l43-irq",
++		.name	= "cs42l43-pinctrl",
 +	},
 +
-+	.probe		= cs42l43_irq_probe,
-+	.remove		= cs42l43_irq_remove,
++	.probe		= cs42l43_pin_probe,
++	.remove		= cs42l43_pin_remove,
 +};
-+module_platform_driver(cs42l43_irq_driver);
++module_platform_driver(cs42l43_pin_driver);
 +
-+MODULE_DESCRIPTION("CS42L43 IRQ Driver");
++MODULE_DESCRIPTION("CS42L43 Pinctrl Driver");
 +MODULE_AUTHOR("Charles Keepax <ckeepax@opensource.cirrus.com>");
 +MODULE_LICENSE("GPL");
-+MODULE_ALIAS("platform:cs42l43-irq");
-diff --git a/include/linux/irqchip/cs42l43.h b/include/linux/irqchip/cs42l43.h
-new file mode 100644
-index 0000000000000..99ce0dbc96a77
---- /dev/null
-+++ b/include/linux/irqchip/cs42l43.h
-@@ -0,0 +1,61 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * CS42L43 IRQ driver external data
-+ *
-+ * Copyright (C) 2022-2023 Cirrus Logic, Inc. and
-+ *                         Cirrus Logic International Semiconductor Ltd.
-+ */
-+
-+#ifndef CS42L43_IRQ_EXT_H
-+#define CS42L43_IRQ_EXT_H
-+
-+enum cs42l43_irq_numbers {
-+	CS42L43_PLL_LOST_LOCK,
-+	CS42L43_PLL_READY,
-+
-+	CS42L43_HP_STARTUP_DONE,
-+	CS42L43_HP_SHUTDOWN_DONE,
-+	CS42L43_HSDET_DONE,
-+	CS42L43_TIPSENSE_UNPLUG_DB,
-+	CS42L43_TIPSENSE_PLUG_DB,
-+	CS42L43_RINGSENSE_UNPLUG_DB,
-+	CS42L43_RINGSENSE_PLUG_DB,
-+	CS42L43_TIPSENSE_UNPLUG_PDET,
-+	CS42L43_TIPSENSE_PLUG_PDET,
-+	CS42L43_RINGSENSE_UNPLUG_PDET,
-+	CS42L43_RINGSENSE_PLUG_PDET,
-+
-+	CS42L43_HS2_BIAS_SENSE,
-+	CS42L43_HS1_BIAS_SENSE,
-+	CS42L43_DC_DETECT1_FALSE,
-+	CS42L43_DC_DETECT1_TRUE,
-+	CS42L43_HSBIAS_CLAMPED,
-+	CS42L43_HS3_4_BIAS_SENSE,
-+
-+	CS42L43_AMP2_CLK_STOP_FAULT,
-+	CS42L43_AMP1_CLK_STOP_FAULT,
-+	CS42L43_AMP2_VDDSPK_FAULT,
-+	CS42L43_AMP1_VDDSPK_FAULT,
-+	CS42L43_AMP2_SHUTDOWN_DONE,
-+	CS42L43_AMP1_SHUTDOWN_DONE,
-+	CS42L43_AMP2_STARTUP_DONE,
-+	CS42L43_AMP1_STARTUP_DONE,
-+	CS42L43_AMP2_THERM_SHDN,
-+	CS42L43_AMP1_THERM_SHDN,
-+	CS42L43_AMP2_THERM_WARN,
-+	CS42L43_AMP1_THERM_WARN,
-+	CS42L43_AMP2_SCDET,
-+	CS42L43_AMP1_SCDET,
-+
-+	CS42L43_GPIO3_FALL,
-+	CS42L43_GPIO3_RISE,
-+	CS42L43_GPIO2_FALL,
-+	CS42L43_GPIO2_RISE,
-+	CS42L43_GPIO1_FALL,
-+	CS42L43_GPIO1_RISE,
-+
-+	CS42L43_HP_ILIMIT,
-+	CS42L43_HP_LOADDET_DONE,
-+};
-+
-+#endif /* CS42L43_IRQ_EXT_H */
++MODULE_ALIAS("platform:cs42l43-pinctrl");
 -- 
 2.30.2
 
