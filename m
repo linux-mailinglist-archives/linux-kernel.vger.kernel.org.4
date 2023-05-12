@@ -2,255 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1AD406FFE1A
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 02:43:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 092BE6FFE1F
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 02:47:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239609AbjELAni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 20:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47264 "EHLO
+        id S239609AbjELAq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 20:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229654AbjELAnf (ORCPT
+        with ESMTP id S239605AbjELAqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 20:43:35 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 909BF2101;
-        Thu, 11 May 2023 17:43:33 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-b8bf64a4999so1420489276.1;
-        Thu, 11 May 2023 17:43:33 -0700 (PDT)
+        Thu, 11 May 2023 20:46:55 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C4E65BB4
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 17:46:53 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id d9443c01a7336-1aae90f5ebcso430485ad.1
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 17:46:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683852213; x=1686444213;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xA9GTBUaLlTL5Dbrc7x2OWFAgSUirYMQNpAhJ3u77zc=;
-        b=H6aBAxY3wFF6Kt5Q/Y8uQ7NlsoJyI40Fa4BBxOhfdK+6FQIjv7OWSZ0IWj4xWsGTv/
-         m6RgetZqbEuwK/8+DAisyYV+yLEnhVqT01ChTlllvMTndZI1mCZjIOfPwxDvgHo7XNm4
-         ffuRw2hS698UDlRVNfZGdg+gPq5aRJZ9FLkxxm3b9Z6hNMB+mrVSAoHaywADN4LMpjbW
-         WIUIYNdkM2iPx4LSaWDfGk41QJPjOo7RPlWiyNsBHLGGBc8QwwxSy8R0BUl3jYFGi1HJ
-         Y8OkEDMLwKN7e2srUMI6gNo7sAQsqYWcAXR8WXS2cQG82RQcv+H1hetKvVORqzNDGOJQ
-         ZyNg==
+        d=google.com; s=20221208; t=1683852413; x=1686444413;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=T10+eZtv1P+sem5SVFeRBdSEdRHCp+2rjVXG+IX1VZU=;
+        b=gIHAFdeEe1rnnfoFGIl/9aXpKSDBFR9XdszD8qHiGqo2Kshj+VfKQZUvxSBhs23kVg
+         wNyv9TldElL0ea4PE82pLgbczZDxEKtOZ1oaIfl4YT3q3Oq4drZpUuHBHWhbdeUTLWkx
+         O5DzckwPk2Ta4BXxUomEHQnbHOrQBGYXcy6M9GyAUBEbi6YFDSu6lD5mUp4sNxBAzU2c
+         Q4aiDwwHkV/SSEQZfpPJDZ8wdNXCjvyO+otiUiWU8a/gPuMT+524O7S0eCPfSQGblDj6
+         CW3aoqYZNERuloOxNEfq/787dzrcMaDPh3+Bei/HEVtFVYrU1qiGXGXQoxBPhqOAUB6d
+         O1Rg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683852213; x=1686444213;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xA9GTBUaLlTL5Dbrc7x2OWFAgSUirYMQNpAhJ3u77zc=;
-        b=clzgGGSG/g1iR7HUz/URka4pdrGxHZOC13myn79ooNFCYUjkUCwNWTgGadKaz1o1Cz
-         Z3vtJjgRaonOXfMU9TxOiU0S2Z8bSAK7D8IxJkOPE5yu6oFHEJ3RvywxWzhmLtsr8V7N
-         JSi1ouJHkP+pCK5cevxaoio2yVbDlJGaWntvEypeZpiRRrZVVGoYhz2GP2Fh8jt8TsNE
-         33SEndhMP2QGL10aNWpoJxC8XYHMi+zI2OIjNHFCjd/NP3vFNdorAKxI4qRCGgBtc3uw
-         kH8LHpEs7nc9xM1KzZkeKf4ueBEne0n6jBMWsShcHnadJN8k1cV6dRfDf1Q1e10rh5O6
-         Pmhg==
-X-Gm-Message-State: AC+VfDz1JM61VGnue1Y/7k8lv+jYFtxWB5LYqNxtR6ntLf0LKvZ5tmxO
-        ve0ljTxJ05RayJH6mWPnps8=
-X-Google-Smtp-Source: ACHHUZ7lIqTYfEZVb6Rcz5y0htJbbqBQfSC+qrZdesnQVQbgeZE5eKfJD2KZM2NkkjD1OO0o6+hf/g==
-X-Received: by 2002:a81:1ad7:0:b0:55d:9a9c:f19e with SMTP id a206-20020a811ad7000000b0055d9a9cf19emr21949258ywa.0.1683852212629;
-        Thu, 11 May 2023 17:43:32 -0700 (PDT)
-Received: from ?IPV6:2604:2d80:4d87:cd00:e2d5:5eff:fe88:4a55? ([2604:2d80:4d87:cd00:e2d5:5eff:fe88:4a55])
-        by smtp.gmail.com with ESMTPSA id l62-20020a0de241000000b00560c2e3ec63sm2377401ywe.77.2023.05.11.17.43.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 May 2023 17:43:32 -0700 (PDT)
-Message-ID: <e25468f4-e3a3-bcf7-c2c0-826edb0600c2@gmail.com>
-Date:   Thu, 11 May 2023 19:43:28 -0500
+        d=1e100.net; s=20221208; t=1683852413; x=1686444413;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T10+eZtv1P+sem5SVFeRBdSEdRHCp+2rjVXG+IX1VZU=;
+        b=Qhgfq18BTArPJlJyXOMTKcUjvhhMy2qUt6RLSVb0Wg5651Jr6gqlxVvr5rSrN0Oi2L
+         ubMkyu1WOjtNDa26ZQUXQMSfswhtNdDV0R1Q10nkouqXY03XlZFbiEoe1CPY4Qi3J4Px
+         vzIQJNmmIU/WEjFmq5SgS4n0lFkeNHHd2yjhb7zBA5UZtu9+GuKH0zJ3hWiHx14bTZXf
+         YMwP1rUP9WOdTf0z0Ued7XVzT/aNd69PvL+A1q0tqk8cXaW7uMnW+gN/ibELm770X6gQ
+         IvG1RDBi0eSYS3xYMxSV9093wuSILBdoVnLSROhPgLp9Dhcik1a7WJVnX/Ah6uWRzsZ9
+         E28w==
+X-Gm-Message-State: AC+VfDxcrfRmmhGTlXQ3r0yYzfYglTjl8CtqDEYH30P5BZn9k6gAg7fN
+        JKNo2oAhp1VbjPViRXbAXkpr0b7nPpKn6a3JB+c8NA==
+X-Google-Smtp-Source: ACHHUZ6C90xQqot7Pn5snLVCYUAcVqM4UmA6opiCWqzhJzBIjgxyvC/9CH3mnuUtcd3S6uVRB9XzCnGt/fID8eiOS0Q=
+X-Received: by 2002:a17:902:dacd:b0:1ac:8835:b890 with SMTP id
+ q13-20020a170902dacd00b001ac8835b890mr117014plx.14.1683852412825; Thu, 11 May
+ 2023 17:46:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Thunderbird Daily
-Subject: Re: [PATCH v3 2/5] Input: add driver for Focaltech FTS touchscreen
-To:     Jeff LaBundy <jeff@labundy.com>
-Cc:     Caleb Connolly <caleb@connolly.tech>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
+References: <20221227204528.1899863-1-abel.vesa@linaro.org>
+ <ebc257025ebd641e624ef506ea09c800.sboyd@kernel.org> <Y/OV3CF0ootyooDJ@linaro.org>
+ <Y/OfjbxI1tHYJHNv@linaro.org> <CAGETcx_mD3pbAmT5FDZaVAsKb_2PAnrHL8B_6gSR=+a0O4kHfQ@mail.gmail.com>
+ <Y/PALlrQpwPlum9M@linaro.org> <CAGETcx_TZN3=GKrEf5fy_tA=JnOfw7m-N=+hD=qhe_yRRpngPw@mail.gmail.com>
+ <ZFzmaavGYy4isU7J@linaro.org>
+In-Reply-To: <ZFzmaavGYy4isU7J@linaro.org>
+From:   Saravana Kannan <saravanak@google.com>
+Date:   Thu, 11 May 2023 17:46:16 -0700
+Message-ID: <CAGETcx8_maXSCmQcU_UE499pwJRLY4E7yydWsxbU91==vgCoFw@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] clk: Add generic sync_state callback for disabling
+ unused clocks
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Henrik Rydberg <rydberg@bitmath.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Jean Delvare <jdelvare@suse.de>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Job Noorman <job@noorman.info>,
-        Alistair Francis <alistair@alistair23.me>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20230415020222.216232-1-joelselvaraj.oss@gmail.com>
- <20230415020222.216232-3-joelselvaraj.oss@gmail.com>
- <ZEXr1hC+Q5Bo/3Tc@nixie71>
-Content-Language: en-US
-From:   Joel Selvaraj <joelselvaraj.oss@gmail.com>
-In-Reply-To: <ZEXr1hC+Q5Bo/3Tc@nixie71>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mike Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, mka@chromium.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jeff LaBundy,
+On Thu, May 11, 2023 at 5:58=E2=80=AFAM Abel Vesa <abel.vesa@linaro.org> wr=
+ote:
+>
+> On 23-02-21 11:58:24, Saravana Kannan wrote:
+> > On Mon, Feb 20, 2023 at 10:47 AM Abel Vesa <abel.vesa@linaro.org> wrote=
+:
+> > >
+> > > On 23-02-20 09:51:55, Saravana Kannan wrote:
+> > > > On Mon, Feb 20, 2023 at 8:28 AM Abel Vesa <abel.vesa@linaro.org> wr=
+ote:
+> > > > >
+> > > > > On 23-02-20 17:46:36, Abel Vesa wrote:
+> > > > > > On 23-02-17 21:38:22, Stephen Boyd wrote:
+> > > > > > > Quoting Abel Vesa (2022-12-27 12:45:27)
+> > > > > > > > There are unused clocks that need to remain untouched by cl=
+k_disable_unused,
+> > > > > > > > and most likely could be disabled later on sync_state. So p=
+rovide a generic
+> > > > > > > > sync_state callback for the clock providers that register s=
+uch clocks.
+> > > > > > > > Then, use the same mechanism as clk_disable_unused from tha=
+t generic
+> > > > > > > > callback, but pass the device to make sure only the clocks =
+belonging to
+> > > > > > > > the current clock provider get disabled, if unused. Also, d=
+uring the
+> > > > > > > > default clk_disable_unused, if the driver that registered t=
+he clock has
+> > > > > > > > the generic clk_sync_state_disable_unused callback set for =
+sync_state,
+> > > > > > > > skip disabling its clocks.
+> > > >
+> > > > Hi Abel,
+> > > >
+> > > > We have the day off today, so I'll respond more later. Also, please=
+ cc
+> > > > me on all sync_state() related patches in the future.
+> > > >
+> > >
+> > > Sure thing.
+> > >
+> > > > I haven't taken a close look at your series yet, but at a glance it
+> > > > seems incomplete.
+> > > >
+> > > > Any reason you didn't just try to revive my series[1] or nudge me?
+> > > > [1]- https://lore.kernel.org/lkml/20210407034456.516204-3-saravanak=
+@google.com/
+> > >
+> > > This patchset is heavily reworked and much more simpler as it relies
+> > > strictly on the sync_state being registered by the clock provider.
+> >
+> > It's simpler because it's not complete. It for sure doesn't handle
+> > orphan-reparenting. It also doesn't make a lot of sense for only some
+> > clock providers registering for sync_state(). If CC-A is feeding a
+> > clock signal that's used as a root for clocks in CC-B, then what
+> > happens if only CC-B implements sync_state() but CC-A doesn't. The
+> > clocks from CC-B are still going to turn off when CC-A turns off its
+> > PLL before CC-B registers.
+>
+> I gave your patchset a try and it breaks the uart for qcom platforms.
+> That is because your patchset enables the clock on __clk_core_init and
+> does not take into account the fact that 'boot enabled' clocks should be
+> left untouched.
 
-On 4/23/23 21:39, Jeff LaBundy wrote:
-> Hi Joel,
-> 
-> Great work so far! It's coming along nicely. Please find my latest
-> feedback below.
+Those are probably just hacks when we didn't have sync_state(). But
+sure, we can make sure existing drivers aren't broken if the flag is
+set.
 
-Sorry for the late reply, university semester end got me hooked up.
-I have a sad kind of good news... As pointed out by Hans de Goede, the 
-edt-ft5x06 driver works out of the box for the fts8719 touchscreen in my 
-device. So I think this patch series is no longer needed. I did have a 
-look at the driver once when working on this patch series, but it looked 
-different/not compatible at that time. After mentioned by Hans de Goede, 
-I had a more closer look and the main touch buffer handling seems to be 
-the same.
+> This also means the orphan-reparenting enabling should
+> be dropped as well.
 
-I am sorry as we put some considerable time in this patch series. I 
-should have noted more carefully. Thank you though as I learnt things 
-working on this patch series.
+No, maybe for boot enabled clocks, but not for all clocks in general.
+You need this for sync_state() to work correctly for clocks left on at
+boot but "boot enabled" isn't set.
 
-I guess I will send a different patch to add the compatible data to the 
-existing edt-ft5x06 driver and dts changes to include that driver to my 
-device.
+> As for the second part, related to providers that might not have a
+> registered sync_state(), your patchset sets the clock core generic
+> one. This is also wrong because it doesn't take into account the fact
+> that there might be providers that need to do their own stuff on
+> sync_state() and should do that by registering their own implementation
+> of it.
 
-> On Fri, Apr 14, 2023 at 09:02:19PM -0500, Joel Selvaraj wrote:
->> The Focaltech FTS driver supports several variants of focaltech
->> touchscreens found in ~2018 era smartphones including variants found on
->> the PocoPhone F1 and the SHIFT6mq which are already present in mainline.
->> This driver is loosely based on the original driver from Focaltech
->> but has been simplified and largely reworked.
->>
->> Co-developed-by: Caleb Connolly <caleb@connolly.tech>
->> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
->> Signed-off-by: Joel Selvaraj <joelselvaraj.oss@gmail.com>
->> ---
->>   MAINTAINERS                                   |   8 +
->>   drivers/input/touchscreen/Kconfig             |  12 +
->>   drivers/input/touchscreen/Makefile            |   1 +
->>   drivers/input/touchscreen/focaltech_fts5452.c | 432 ++++++++++++++++++
->>   4 files changed, 453 insertions(+)
->>   create mode 100644 drivers/input/touchscreen/focaltech_fts5452.c
->>
->> diff --git a/MAINTAINERS b/MAINTAINERS
->> index 7ec4ce64f66d..1a3ea61e1f52 100644
->> --- a/MAINTAINERS
->> +++ b/MAINTAINERS
->> @@ -8028,6 +8028,14 @@ L:	linux-input@vger.kernel.org
->>   S:	Maintained
->>   F:	drivers/input/joystick/fsia6b.c
->>   
->> +FOCALTECH FTS5452 TOUCHSCREEN DRIVER
->> +M:	Joel Selvaraj <joelselvaraj.oss@gmail.com>
->> +M:	Caleb Connolly <caleb@connolly.tech>
->> +L:	linux-input@vger.kernel.org
->> +S:	Maintained
->> +F:	Documentation/devicetree/bindings/input/touchscreen/focaltech,fts5452.yaml
->> +F:	drivers/input/touchscreen/focaltech_fts5452.c
->> +
->>   FOCUSRITE SCARLETT GEN 2/3 MIXER DRIVER
->>   M:	Geoffrey D. Bennett <g@b4.vu>
->>   L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
->> diff --git a/drivers/input/touchscreen/Kconfig b/drivers/input/touchscreen/Kconfig
->> index 1feecd7ed3cb..11af91504969 100644
->> --- a/drivers/input/touchscreen/Kconfig
->> +++ b/drivers/input/touchscreen/Kconfig
->> @@ -388,6 +388,18 @@ config TOUCHSCREEN_EXC3000
->>   	  To compile this driver as a module, choose M here: the
->>   	  module will be called exc3000.
->>   
->> +config TOUCHSCREEN_FOCALTECH_FTS5452
->> +	tristate "Focaltech FTS Touchscreen"
->> +	depends on I2C
->> +	help
->> +	  Say Y here to enable support for I2C connected Focaltech FTS
->> +	  based touch panels, including the 5452 and 8917 panels.
-> 
-> This language is a bit misleading, as it seems to suggest three or more
-> models are supported. It seems the title should simply be "FocalTech
-> FTS5452 touchscreen controller" with the description as "...FocalTech
-> FTS5452 and compatible touchscreen controllers."
-> 
-> As more are found to be compatible (e.g. FTS8917), the compatible strings
-> can simply be appended.
-> 
->> +
->> +	  If unsure, say N.
->> +
->> +	  To compile this driver as a module, choose M here: the
->> +	  module will be called focaltech_fts.
->> +
->>   config TOUCHSCREEN_FUJITSU
->>   	tristate "Fujitsu serial touchscreen"
->>   	select SERIO
->> diff --git a/drivers/input/touchscreen/Makefile b/drivers/input/touchscreen/Makefile
->> index 159cd5136fdb..47d78c9cff21 100644
->> --- a/drivers/input/touchscreen/Makefile
->> +++ b/drivers/input/touchscreen/Makefile
->> @@ -45,6 +45,7 @@ obj-$(CONFIG_TOUCHSCREEN_ELO)		+= elo.o
->>   obj-$(CONFIG_TOUCHSCREEN_EGALAX)	+= egalax_ts.o
->>   obj-$(CONFIG_TOUCHSCREEN_EGALAX_SERIAL)	+= egalax_ts_serial.o
->>   obj-$(CONFIG_TOUCHSCREEN_EXC3000)	+= exc3000.o
->> +obj-$(CONFIG_TOUCHSCREEN_FOCALTECH_FTS5452)	+= focaltech_fts5452.o
->>   obj-$(CONFIG_TOUCHSCREEN_FUJITSU)	+= fujitsu_ts.o
->>   obj-$(CONFIG_TOUCHSCREEN_GOODIX)	+= goodix_ts.o
->>   obj-$(CONFIG_TOUCHSCREEN_HIDEEP)	+= hideep.o
->> diff --git a/drivers/input/touchscreen/focaltech_fts5452.c b/drivers/input/touchscreen/focaltech_fts5452.c
->> new file mode 100644
->> index 000000000000..abf8a2f271ca
->> --- /dev/null
->> +++ b/drivers/input/touchscreen/focaltech_fts5452.c
->> @@ -0,0 +1,432 @@
->> +// SPDX-License-Identifier: GPL-2.0-only
->> +/*
->> + * FocalTech touchscreen driver.
->> + *
->> + * Copyright (c) 2010-2017, FocalTech Systems, Ltd., all rights reserved.
->> + * Copyright (C) 2018 XiaoMi, Inc.
->> + * Copyright (c) 2021 Caleb Connolly <caleb@connolly.tech>
->> + * Copyright (c) 2023 Joel Selvaraj <joelselvaraj.oss@gmail.com>
->> + */
+Right, in which case, they can set theirs or they get the default one.
 
-[skip]
+> Therefore, I'll respin your patchset and use only the skipping of
+> disabling the unused clocks, but I'll drop all the enable on init and orp=
+han
+> reparenting changes.
 
->> +static const struct of_device_id fts_of_match[] = {
->> +	{ .compatible = "focaltech,fts5452", .data = &fts5452_chip_data },
->> +	{ .compatible = "focaltech,fts8719", .data = &fts8719_chip_data },
->> +	{ /* sentinel */ }
->> +};
->> +
->> +MODULE_DEVICE_TABLE(of, fts_of_match);
->> +
->> +static struct i2c_driver fts_ts_driver = {
->> +	.probe_new = fts_ts_probe,
->> +	.id_table = fts_i2c_id,
->> +	.driver = {
->> +		.name = FTS_DRIVER_NAME,
->> +		.pm = pm_sleep_ptr(&fts_dev_pm_ops),
->> +		.of_match_table = fts_of_match,
->> +	},
->> +};
->> +module_i2c_driver(fts_ts_driver);
->> +
->> +MODULE_AUTHOR("Joel Selvaraj <joelselvaraj.oss@gmail.com>");
->> +MODULE_AUTHOR("Caleb Connolly <caleb@connolly.tech>");
->> +MODULE_DESCRIPTION("Focaltech Touchscreen Driver");
-> 
-> Nit: mixing 'FocalTech' and 'Focaltech' throughout.
-> 
->> +MODULE_LICENSE("GPL");
->> -- 
->> 2.40.0
->>
-> 
-> Kind regards,
-> Jeff LaBundy
+I think it'll result in a broken patch.
 
-Thank you,
-Joel Selvaraj
+Sorry, I've been a bit busy with some other work and I haven't been
+able to get to the clk_sync_state(). I'll try to rebase it soon and
+send it out too.
+
+-Saravana
