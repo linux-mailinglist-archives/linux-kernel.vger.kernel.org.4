@@ -2,55 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D8FB70082F
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 14:40:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 16D75700836
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 14:40:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240726AbjELMjw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 08:39:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40818 "EHLO
+        id S240581AbjELMkj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 08:40:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239781AbjELMjt (ORCPT
+        with ESMTP id S240499AbjELMkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 08:39:49 -0400
-Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF2AC10E6
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 05:39:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
-        date:from:to:cc:subject:message-id:references:mime-version
-        :content-type:in-reply-to; s=k1; bh=s2NZcg55unREGVI0OwhK9zry2exN
-        8BKg42mDXxE31HQ=; b=0IeA5ymnNhDMyF3AOSSpQbc46bGkZJnHH9S6IQ2HmYnb
-        jp5MBGGT+A8H0kaMlYI9OB+vUN2RnW7C1iuy6yYYlkquvtDTsG8Re++3XC48Mpvm
-        laO2wl87s8jve736KiR7bPqYh0Cbz5YmPgBGt6ooSjYWgniTCAkmo/3sohSBA9c=
-Received: (qmail 3191189 invoked from network); 12 May 2023 14:39:42 +0200
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 12 May 2023 14:39:42 +0200
-X-UD-Smtp-Session: l3s3148p1@GMU0Zn77qqMujnsI
-Date:   Fri, 12 May 2023 14:39:42 +0200
-From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
-To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Cc:     "linux-renesas-soc@vger.kernel.org" 
-        <linux-renesas-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH RFT v3 0/3] drivers/thermal/rcar_gen3_thermal: add Gen4
- fuse support
-Message-ID: <ZF4zjmkoE/njjG4x@ninjato>
-Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        "linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
-References: <20230511192220.7523-1-wsa+renesas@sang-engineering.com>
- <TYBPR01MB5341AF3D9EB0F9A074283341D8759@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+        Fri, 12 May 2023 08:40:36 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E89A265A4
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 05:40:17 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f4271185daso57506375e9.2
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 05:40:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683895216; x=1686487216;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wYBrXrkZvtGUdnl+T9M4zNPAIaDpUkdt7BFmY49m2ZI=;
+        b=ZbgA8DY0DZ+xjn65/9QBCA6eVuMjDzEnT5SLZASnCeknNfA1Dz4gRIdPiZAAVpRD8H
+         xJfTgCW62q81Dc7rOigwzeBngfPdRC4Tv013c8bgBNY4jX4x9d5eovBz4OceFNH4NSM0
+         Radzx9jDmt4AQKEWSQfoN4t2cK0VmnKMA3Alw5EOpgFHCAH/MZjcQkTBZszOVutv92q9
+         iLy/3zBfXhFtvC3byTILlU8TKz/sYpm3944ZOmr9DUXtoIjShZnkIKhdzhfprgCP4RNZ
+         SGgYQdZW1cnkzux80fPTKSSLUJjxgcto0akvwtpNqpSxXzn0sMC1hVCpwjltSGOJOKlX
+         ChHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683895216; x=1686487216;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=wYBrXrkZvtGUdnl+T9M4zNPAIaDpUkdt7BFmY49m2ZI=;
+        b=hMLuSrCpS29K+VVf8VFZbFTTuRZ0W0yYZrdxN5g2fetvVYI35k0ftXZGlelADaNWWl
+         DVfo23QGr53HIfbWdaIkfsiIKd9z+kistlf2d+Kf/mJb5LxZWxIn1Ev8dfH+j4wtFHl4
+         i7wx5jViqIIytCET7AL1jRWk5dUBnsBXtG7yhthAC6Dh+y1xR+i0GMn/8b9Jton/Wfxm
+         XfL0IaOsYMFjy8WrkhgwLWwGUowUTwnWZGy9j4DVUSQrpVAr7WrKCkcgJVqUHTeSgc/f
+         HMNWmcycBW6wGgytiFDAhBqEtwSEDwOD3wsGy2tw0uh3rj9FEjInYUrrNAWDwK5YMey4
+         J2GA==
+X-Gm-Message-State: AC+VfDwUBycyAFzI5fAdwphibqQ6Q83h0nOtwMt/GsZL3GfsNDjHYwfD
+        Wu6Ev1/0AvG9WCF10IXwlBoC9w==
+X-Google-Smtp-Source: ACHHUZ6L5DJx65fZeuAyJ0+FoXdXQimFZJ5rIaK75cbLRr5ODhrE9mGnAkA+JLhc30QRmyWi5WfFbQ==
+X-Received: by 2002:a05:600c:22ca:b0:3f4:2158:2895 with SMTP id 10-20020a05600c22ca00b003f421582895mr12882808wmg.3.1683895216317;
+        Fri, 12 May 2023 05:40:16 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id 21-20020a05600c029500b003f42d8dd7d1sm9274290wmk.7.2023.05.12.05.40.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 May 2023 05:40:15 -0700 (PDT)
+Message-ID: <c6f903e6-ccf2-701f-cfe3-34abacde278b@linaro.org>
+Date:   Fri, 12 May 2023 13:40:14 +0100
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="tZvcxKU0LyhGLxNP"
-Content-Disposition: inline
-In-Reply-To: <TYBPR01MB5341AF3D9EB0F9A074283341D8759@TYBPR01MB5341.jpnprd01.prod.outlook.com>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v1] misc: fastrpc: Reassign memory ownership only for
+ remote heap
+Content-Language: en-US
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     Ekansh Gupta <quic_ekangupt@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, ekangupt@qti.qualcomm.com,
+        linux-kernel@vger.kernel.org, bkumar@qti.qualcomm.com,
+        fastrpc.upstream@qti.qualcomm.com, stable <stable@kernel.org>
+References: <1679394100-27119-1-git-send-email-quic_ekangupt@quicinc.com>
+ <17185edd-aa6f-386b-4252-0c6eac1ddcfc@linaro.org>
+ <ZCQOaMcObl0vYqlg@kroah.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <ZCQOaMcObl0vYqlg@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -58,42 +81,45 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---tZvcxKU0LyhGLxNP
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+
+On 29/03/2023 11:09, Greg KH wrote:
+> On Tue, Mar 21, 2023 at 08:53:33PM +0000, Srinivas Kandagatla wrote:
+>>
+>>
+>> On 21/03/2023 10:21, Ekansh Gupta wrote:
+>>> The userspace map request for remote heap allocates CMA memory.
+>>> The ownership of this memory needs to be reassigned to proper
+>>> owners to allow access from the protection domain running on
+>>> DSP. This reassigning of ownership is not correct if done for
+>>> any other supported flags.
+>>>
+>>> When any other flag is requested from userspace, fastrpc is
+>>> trying to reassign the ownership of memory and this reassignment
+>>> is getting skipped for remote heap request which is incorrect.
+>>> Add proper flag check to reassign the memory only if remote heap
+>>> is requested.
+>>>
+>>> Fixes: 532ad70c6d44 ("misc: fastrpc: Add mmap request assigning for static PD pool")
+>>> Cc: stable <stable@kernel.org>
+>>> Tested-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
+>>> Signed-off-by: Ekansh Gupta <quic_ekangupt@quicinc.com>
+>>
+>> Thanks for fixing this,  without this fix the code inside if condition was a
+>> dead code.
+>>
+>>
+>> Reviewed-by: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+> 
+> Are you going to be collecting these and sending them on?  If not,
+> please do.
+Sorry for long delay,
+I will take care of collecting fastrpc patches and send it.
+
+--srini
 
 
-> Thank you for the patches!
-> I checked the patches. So:
->=20
-> Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
->=20
-> And, I tested on R-Car H3 ES3.0 and R-Car S4 and it worked. So,
->=20
-> Tested-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
 
-Awesome, thank you Shimoda-san!
-
-
---tZvcxKU0LyhGLxNP
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmReM4oACgkQFA3kzBSg
-KbaR7Q//Y5e1EGDljIopLMY2e9FsTCgBG/ZHzSWpV3DnGgBLdm3IxkexqVP9IcNI
-DE1Kd9nxdDLnKVik5IFEe7Lh6k1BAdA4FJzsqvcsGXqm6VS6a5RaWYmcluTqqZ/O
-q6TaDbROSftcAvcV1+T11dhGpBVXYxfkPw3jZmFM66p+ITUKp2ha998eAlbEbP+C
-zd97yZRZC+VgGAPWYHIoXMPHr+pyuteU9rgPOparWtzp8nj8BzoEAEoAzMjnln5k
-6xxObgrzxOHJZA1Dc9JcparuA7qZgATiNvOtanEH3kIBg/cbf9HaQ0TRBGIEQw7z
-VSsQxakdadrakyKVstu/0bdP3SmGpJQRSEwzKCYmYTp1qNpasOi4wj/wkpM9L3m3
-8bxeOqsnD0skvnJTpL2NPKq3jz/PF1PJQyqFW5aFraVMGqansGufzeuU1JS1uksk
-qxjysMWUSvWhIRAvtBj/CvZkPPsSWO8y7L3c4BzH7tZcRq7jmwWGme92vkjAvC69
-nx3cwiqmngVn8ghYKXR6orvR60RPNELZl+2BQXBEK05uGzV8CetnNExzFIrZhEOq
-KGbTDBvK+TTagA0jTsuyA4g+idacnySmDCHFLxTEVp6Zjb4NGUvvUHEIV3YCHUkT
-Gx6p3JmS1Fa5InmuZIG7ANXww8AVM8/+oxhwAhCyJ4YaIkAmc+s=
-=ZnvZ
------END PGP SIGNATURE-----
-
---tZvcxKU0LyhGLxNP--
+> 
+> thanks,
+> 
+> greg k-h
