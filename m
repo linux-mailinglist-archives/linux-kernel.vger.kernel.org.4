@@ -2,71 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33F397004B3
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:06:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 958A97004C0
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:07:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240635AbjELKGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:06:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
+        id S240482AbjELKHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 06:07:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240639AbjELKGT (ORCPT
+        with ESMTP id S240363AbjELKHC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:06:19 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB7611DAD
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:06:05 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f41dceb9c9so48935425e9.3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:06:05 -0700 (PDT)
+        Fri, 12 May 2023 06:07:02 -0400
+Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8912A40E5;
+        Fri, 12 May 2023 03:07:00 -0700 (PDT)
+Received: by mail-pg1-x531.google.com with SMTP id 41be03b00d2f7-52c30fa5271so5090127a12.0;
+        Fri, 12 May 2023 03:07:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google; t=1683885964; x=1686477964;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eRiOAb/9csqhYTIFyp1pXoHEquerHMt4RcBHag6qrzA=;
-        b=FtnfcAiPQBflolkUTJAEGWO8NbifJuTY2DfUmyZKzawcND8rUBbNphH5LHn/GcuCl9
-         hw+XAzWoW+qzwKOplZAsLVdAigNEKLglK8DqSybALmT+uDVraCDYhZgn8PTiyWgChhIO
-         fjcKvvrG5Ds+tqIFynzyAn/6Sl5EhfdBPNEU54fmbNmUiIxdTak4hBkP3u7bRp6wFFja
-         /Ai+NSPJfybgtVYn7lbYnvVehtJM8d3FIe+UFmk0ikvVQURHRJL6XjuEo5BUVKCnWxOg
-         D0Xvef1dlNf0/iliMj+yASQBt+6bT4RpTw99iK07PKEGgwnJy/4WpMIRr/XoqdqYTBeS
-         J+0g==
+        d=gmail.com; s=20221208; t=1683886020; x=1686478020;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=MF1kClHwqeIfcYl89hzofL9vZWLuExWhfi4hFZftNQc=;
+        b=OcUcPzMZPjhSctBLIUIJJQCgYOzU04AKhWQr9M5X5E2GKoXeofLGVSOfGNKkoSsuN8
+         2Hn8RB6mk66r9DOH8GJq0TmL2FSoEN9ljvskjp9erxdT+L8nsW1pVdVKUvVbqOHECJuk
+         7aDSaRe96lAx+THfaH8yCaiTyV3fYDYHwUHP8dGcfsqz+IHvxbkBKzQXouy1fI6BfD+0
+         K9tqc3j7FCyLXWsSncoupm8V7bnHAHSmTTuF6NPosxTX2EN9ilHKTtT7nbSobIbRcwRo
+         DYXicNpXe5y4OhBS4/HSAObZKVpfwJ1sWijsHQ+z8oztzT6fNLUGlljPIdz9ZHYK3/O+
+         rQPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683885964; x=1686477964;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eRiOAb/9csqhYTIFyp1pXoHEquerHMt4RcBHag6qrzA=;
-        b=bpR9/xinMW2MBb7SdZlDkbB9twmGg7bpZF6z1omP3HFUDu+r/CdR9mel9KLEv3+APd
-         fEvC/2G05FXLgIQDOWBBL92Dg3cH7VvtVioOwo0/FdMR9/eDQNPec60pOzYePJoV7gQ9
-         gmwSTHo9ncvCkGahWoF9n+eAC6FK2BSQWYHbeNiE4OdMpmDIubPde4fMsKsBtv9koB+u
-         liYY47bkauA3ABav5IiYs/eQ0ZbTZHHRSVU8091WKxWkDF5HP8ISU/HiKK7b6EKlqASV
-         imNaZJT3eQVImPuUWxbeohWtZa8DpIuA4ulj+cHCvSbniLnQSSXHZvcpcTWMWWwvYcLa
-         EE1g==
-X-Gm-Message-State: AC+VfDxzigY0ngEEfQUzsG32aKRKXKtFM7VKd7ii6HNWfntkez0adJYm
-        uRblrG3f/ZzeelOltWkbOIp6ww==
-X-Google-Smtp-Source: ACHHUZ41RiKQE8KrlkMU/mH9eDmaYqmoUwJppNHdh4NZvMMR1RzeE2dRK3wifot4GUmdO1dKVaRWSg==
-X-Received: by 2002:a05:600c:2195:b0:3f4:e4cd:f6e with SMTP id e21-20020a05600c219500b003f4e4cd0f6emr4312945wme.17.1683885964259;
-        Fri, 12 May 2023 03:06:04 -0700 (PDT)
-Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
-        by smtp.gmail.com with ESMTPSA id a6-20020a1cf006000000b003f0aefcc457sm28146577wmb.45.2023.05.12.03.06.03
+        d=1e100.net; s=20221208; t=1683886020; x=1686478020;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MF1kClHwqeIfcYl89hzofL9vZWLuExWhfi4hFZftNQc=;
+        b=ZVlGl/xh5CQCl0+qIJU9r54yupEkH+RIsfGZ7sp26OWX5AFlTugqmrGDuVU+GJu8YG
+         1DqWB36oc4nFzjRHNW35Y4KtPnDY3w9lvp3ZU4ESYqKkspd+Y3OWYFyBc2TvC3Vf2eR3
+         Bk+E+YI1TpDTezTwPv2dGpiG2rDPa+yHl4zIPAIk9CJfIpiAQoeba/T3HaXNpWsgt1bN
+         rw4unfzSxKa62rvTbJFiACPmFHWN8lNsuUuaPfIlCe7AyNrnk+VwiZjDRVeiTx0KTHIc
+         k0dHtKmqVEOvyCjEfilzNVAiS9Sw/LOjiPoX3ViIBnSW3hi222cjCc07FkuRq8KCWAho
+         uu2g==
+X-Gm-Message-State: AC+VfDw/XguwQkdgqK723bz559NRsifikILC4fqC21LsRGc5VmDmqZPV
+        OhFc8E6iq4y2VCZwwRcQGWk=
+X-Google-Smtp-Source: ACHHUZ50IUxu1FhvLcpiZZIKLIroOklQP/UisO3FYeKOr7ewmmJz8X2IVf1EqqtbwW8nYPw9TSpqfw==
+X-Received: by 2002:a17:902:7407:b0:1a6:3ffb:8997 with SMTP id g7-20020a170902740700b001a63ffb8997mr26433375pll.42.1683886019859;
+        Fri, 12 May 2023 03:06:59 -0700 (PDT)
+Received: from debian.me (subs28-116-206-12-58.three.co.id. [116.206.12.58])
+        by smtp.gmail.com with ESMTPSA id q14-20020a17090311ce00b001a24e2eec75sm7527379plh.193.2023.05.12.03.06.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 03:06:03 -0700 (PDT)
-Date:   Fri, 12 May 2023 12:06:02 +0200
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Amma Lee <lixiaoyun@binary-semi.com>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, conor@kernel.org,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        xiezx@binary-semi.com
-Subject: Re: [PATCH v2] riscv: optimize ELF relocation function in riscv
-Message-ID: <20230512-a9128942f5c09108bd0c4ec3@orel>
-References: <1683881513-18730-1-git-send-email-lixiaoyun@binary-semi.com>
- <20230512-a73001a0f4cfcf5f0e68d898@orel>
+        Fri, 12 May 2023 03:06:59 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 80D44106B32; Fri, 12 May 2023 17:06:54 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
+        Linux DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Staging Drivers <linux-staging@lists.linux.dev>,
+        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
+        Linux Kernel Actions <linux-actions@lists.infradead.org>
+Cc:     Diederik de Haas <didi.debian@cknow.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Philippe Ombredanne <pombredanne@nexb.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Airlie <airlied@redhat.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
+        =?UTF-8?q?Andreas=20F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Bagas Sanjaya <bagasdotme@gmail.com>
+Subject: [PATCH v2 00/10] Treewide GPL SPDX conversion and cleanup (in response to Didi's GPL full name fixes)
+Date:   Fri, 12 May 2023 17:06:11 +0700
+Message-Id: <20230512100620.36807-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230512-a73001a0f4cfcf5f0e68d898@orel>
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=7996; i=bagasdotme@gmail.com; h=from:subject; bh=b4eQ13BRmR9+v89nmhYi5AatdBClhH8kt45zmkpWvis=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDClx/H0mZ5eHqLJFfnnzs/0426p5G19/O9LL36j1XktHn vnm74cWHaUsDGJcDLJiiiyTEvmaTu8yErnQvtYRZg4rE8gQBi5OAZiIxzOG/wXa07+I2XO8LdGS flltLnyw4grDC09VpeI9jkp/0y8pBTMyXCp4bmSRqS6UuFXk373N708uORazIPyqyM5MlwtGH02 usgIA
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,168 +101,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 12:04:13PM +0200, Andrew Jones wrote:
-> On Fri, May 12, 2023 at 04:51:53PM +0800, Amma Lee wrote:
-> > The patch can optimize the running times of "insmod" command by modify ELF
-> > relocation function.
-> > When install the riscv ELF driver which contains multiple
-> > symbol table items to be relocated, kernel takes a lot of time to
-> > execute the relocation. For example, we install a 3+MB driver need 180+s.
-> > We focus on the riscv kernel handle R_RISCV_HI20 and R_RISCV_LO12 type
-> > items relocation function and find that there are two for-loops in this
-> > function. If we modify the begin number in the second for-loops iteration,
-> > we could save significant time for installation. We install the 3+MB
-> > driver could just need 2s.
-> > 
-> > Signed-off-by: Amma Lee <lixiaoyun@binary-semi.com>
-> > Reviewed-by: Conor Dooley <conor@kernel.org>
-> > 
-> > ---
-> >  arch/riscv/kernel/module.c | 53 ++++++++++++++++++++++++++++++----------------
-> >  1 file changed, 35 insertions(+), 18 deletions(-)
-> > 
-> > diff --git a/arch/riscv/kernel/module.c b/arch/riscv/kernel/module.c
-> > index 55507b0..1683c1d 100755
-> > --- a/arch/riscv/kernel/module.c
-> > +++ b/arch/riscv/kernel/module.c
-> > @@ -385,9 +385,17 @@ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
-> >  
-> >  		if (type == R_RISCV_PCREL_LO12_I || type == R_RISCV_PCREL_LO12_S) {
-> >  			unsigned int j;
-> > -			/*Modify the j for-loops begin number from last iterates end value*/
-> > +
-> > +			/*
-> 
-> whitespace issue here
-> 
-> > +			* In the second for-loops, each traversal for j is
-> > +			* starts from 0 to the symbol table item index which
-> > +			* is detected. By the tool "readelf", we find that all
-> > +			* the symbol table items about R_RISCV_PCREL_HI20 type
-> > +			* are incrementally added in order. It means that we
-> > +			* could interate the j with the previous loop end
-> > +			* value(j_idx) as the begin number in the next loop;
-> > +			*/
-> >  			for (j = j_idx; j < sechdrs[relsec].sh_size / sizeof(*rel); j++) {
-> > -			/* Modify end */
-> >  				unsigned long hi20_loc =
-> >  					sechdrs[sechdrs[relsec].sh_info].sh_addr
-> >  					+ rel[j].r_offset;
-> > @@ -420,22 +428,30 @@ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
-> >  					break;
-> >  				}
-> >  			}
-> > +
-> >  			if (j == sechdrs[relsec].sh_size / sizeof(*rel)) {
-> > -				if(j_idx == 0){
-> > +				if (j_idx == 0) {
-> >  					pr_err(
-> >  						"%s: Can not find HI20 relocation information\n",
-> >  						me->name);
-> >  					return -EINVAL;
-> >  				}
-> > -				
-> > -				
-> > -				for (j = 0; j < j_idx; j++){ 
-> > +
-> > +				/*
-> 
-> also here
-> 
-> > +				* If the last j-loop have been traversed to the
-> > +				* maximum value but never match the
-> > +				* corresponding symbol relocation item, the
-> > +				* j-loop will execute the second loop which
-> > +				* is begin from 0 to the prerious index (j_idx)
-> 
-> previous
-> 
-> > +				* unless the previous j_idx == 0;
-> > +				*/
-> > +				for (j = 0; j < j_idx; j++) {
-> >  					unsigned long hi20_loc =
-> >  						sechdrs[sechdrs[relsec].sh_info].sh_addr
-> >  						+ rel[j].r_offset;
-> >  					u32 hi20_type = ELF_RISCV_R_TYPE(rel[j].r_info);
-> > -				
-> > -				
-> > +
-> > +
-> 
-> While fixing this whitespace, we could remove the redundant blank line too.
-> 
-> >  					/* Find the corresponding HI20 relocation entry */
-> >  					if (hi20_loc == sym->st_value
-> >  						&& (hi20_type == R_RISCV_PCREL_HI20
-> > @@ -447,36 +463,37 @@ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
-> >  						unsigned long hi20_sym_val =
-> >  							hi20_sym->st_value
-> >  							+ rel[j].r_addend;
-> > -					
-> > -				
-> > +
-> > +
-> 
-> also here
-> 
-> >  						/* Calculate lo12 */
-> >  						size_t offset = hi20_sym_val - hi20_loc;
-> > +						/* Calculate lo12 */
-> 
-> stray copy+pasted line?
-> 
-> >  						if (IS_ENABLED(CONFIG_MODULE_SECTIONS)
-> >  							&& hi20_type == R_RISCV_GOT_HI20) {
-> >  							offset = module_emit_got_entry(
-> >  								me, hi20_sym_val);
-> >  							offset = offset - hi20_loc;
-> > -				
-> > +
-> 
-> need to just remove this blank line
-> 
-> >  						}
-> >  						hi20 = (offset + 0x800) & 0xfffff000;
-> >  						lo12 = offset - hi20;
-> >  						v = lo12;
-> > -					
-> > +
-> 
-> same here
-> 
-> >  						break;
-> >  					}
-> >  				}
-> > -				
-> > -				if (j == j_idx)
-> > -				{
-> > +
-> > +				if (j == j_idx) {
-> >  					pr_err(
-> >  						"%s: Can not find HI20 relocation information\n",
-> >  						me->name);
-> >  					return -EINVAL;
-> >  				}
-> > -				
-> > -				
-> > +
-> > +
-> 
-> should just remove both the blank lines above
-> 
-> >  			}
-> > -			
-> > +
-> > +			/* Record the previous j-loop end index */
-> >  			j_idx = j;
-> 
-> Huh... what did I miss? I went through the whole patch but only see
-> formatting changes (and more opportunity for formatting changes).
-> Where's the actual change?
+I trigger this patch series as a response to Didi's GPL full name fix
+patches [1], for which all of them had been NAKed. In many cases, the
+appropriate correction is to use SPDX license identifier instead.
 
-It's best to do formatting ("no functional change") changes separately
-from the functional changes to help reviewers see that, too. Please
-separate the formatting into its own patch.
+Often, when replacing license notice boilerplates with their equivalent
+SPDX identifier, the notice doesn't mention explicit GPL version. Greg
+[2] replied this question by falling back to GPL 1.0 (more precisely
+GPL 1.0+ in order to be compatible with GPL 2.0 used by Linux kernel),
+although there are exceptions (mostly resolved by inferring from
+older patches covering similar situation).
 
-Thanks,
-drew
+The series covers the same directories touched as Didi's ones, minus
+Documentation/ (as should have been inferred by SPDX tags on respective
+docs).
+
+Changes since v1 ([3]):
+  * Cc: additional original authors that are missed in v1
+  * Pick up Reviewed-by: and Acked-by: tags from review
+  * Fix spdxcheck and SPDX-related checkpatch warnings
+  * Fix a few tag oversights.
+
+[1]: https://lore.kernel.org/all/?q=f%3A%22didi.debian%40cknow.org%22+AND+s%3A%22GPL%22+AND+NOT+s%3A%22Re%3A%22
+[2]: https://lore.kernel.org/all/20181028112728.GD8826@kroah.com/ 
+[3]: https://lore.kernel.org/netdev/20230511133406.78155-1-bagasdotme@gmail.com/
+
+Bagas Sanjaya (10):
+  agp/amd64: Remove GPL distribution notice
+  mISDN: Replace GPL notice boilerplate with SPDX identifier
+  net: bonding: Add SPDX identifier to remaining files
+  net: ethernet: 8390: Replace GPL boilerplate with SPDX identifier
+  net: ethernet: i825xx: Replace GPL boilerplate with SPDX identifier
+  pcmcia: Add SPDX identifier
+  drivers: staging: wlan-ng: Remove GPL/MPL boilerplate
+  drivers: watchdog: Replace GPL license notice with SPDX identifier
+  udf: Replace license notice with SPDX identifier
+  include: synclink: Replace GPL license notice with SPDX identifier
+
+ drivers/char/agp/amd64-agp.c               |  1 -
+ drivers/isdn/mISDN/dsp_audio.c             |  4 +---
+ drivers/isdn/mISDN/dsp_blowfish.c          |  4 +---
+ drivers/isdn/mISDN/dsp_cmx.c               |  4 +---
+ drivers/isdn/mISDN/dsp_core.c              |  3 +--
+ drivers/isdn/mISDN/dsp_dtmf.c              |  4 +---
+ drivers/isdn/mISDN/dsp_tones.c             |  4 +---
+ drivers/net/bonding/bond_main.c            |  3 ++-
+ drivers/net/bonding/bonding_priv.h         |  4 +---
+ drivers/net/ethernet/8390/8390.h           |  2 ++
+ drivers/net/ethernet/8390/apne.c           |  7 +------
+ drivers/net/ethernet/8390/axnet_cs.c       |  6 +++---
+ drivers/net/ethernet/8390/hydra.c          |  6 ++----
+ drivers/net/ethernet/8390/lib8390.c        |  5 ++---
+ drivers/net/ethernet/8390/mac8390.c        |  6 ++----
+ drivers/net/ethernet/8390/mcf8390.c        |  4 +---
+ drivers/net/ethernet/8390/ne.c             |  4 +---
+ drivers/net/ethernet/8390/ne2k-pci.c       |  8 +-------
+ drivers/net/ethernet/8390/pcnet_cs.c       |  5 ++---
+ drivers/net/ethernet/8390/smc-ultra.c      |  4 +---
+ drivers/net/ethernet/8390/stnic.c          |  5 +----
+ drivers/net/ethernet/8390/wd.c             |  4 +---
+ drivers/net/ethernet/8390/zorro8390.c      |  7 +------
+ drivers/net/ethernet/i825xx/82596.c        |  5 ++---
+ drivers/net/ethernet/i825xx/lasi_82596.c   |  5 ++---
+ drivers/net/ethernet/i825xx/lib82596.c     |  5 ++---
+ drivers/net/ethernet/i825xx/sun3_82586.c   |  4 +---
+ drivers/net/ethernet/i825xx/sun3_82586.h   |  4 +---
+ drivers/pcmcia/bcm63xx_pcmcia.c            |  5 +----
+ drivers/pcmcia/cirrus.h                    | 21 +------------------
+ drivers/pcmcia/i82365.c                    | 22 +-------------------
+ drivers/pcmcia/i82365.h                    | 21 +------------------
+ drivers/pcmcia/o2micro.h                   | 21 +------------------
+ drivers/pcmcia/pd6729.c                    |  3 +--
+ drivers/pcmcia/pxa2xx_base.h               |  1 +
+ drivers/pcmcia/ricoh.h                     | 21 +------------------
+ drivers/pcmcia/sa1100_generic.c            | 22 +-------------------
+ drivers/pcmcia/sa11xx_base.c               | 22 +-------------------
+ drivers/pcmcia/sa11xx_base.h               | 22 +-------------------
+ drivers/pcmcia/soc_common.c                | 22 +-------------------
+ drivers/pcmcia/tcic.c                      | 22 +-------------------
+ drivers/pcmcia/tcic.h                      | 21 +------------------
+ drivers/pcmcia/ti113x.h                    | 21 +------------------
+ drivers/pcmcia/topic.h                     | 23 +--------------------
+ drivers/pcmcia/vg468.h                     | 21 +------------------
+ drivers/staging/wlan-ng/hfa384x.h          | 21 -------------------
+ drivers/staging/wlan-ng/hfa384x_usb.c      | 21 -------------------
+ drivers/staging/wlan-ng/p80211conv.c       | 21 -------------------
+ drivers/staging/wlan-ng/p80211conv.h       | 21 -------------------
+ drivers/staging/wlan-ng/p80211hdr.h        | 21 -------------------
+ drivers/staging/wlan-ng/p80211ioctl.h      | 21 -------------------
+ drivers/staging/wlan-ng/p80211metadef.h    | 21 -------------------
+ drivers/staging/wlan-ng/p80211metastruct.h | 21 -------------------
+ drivers/staging/wlan-ng/p80211mgmt.h       | 21 -------------------
+ drivers/staging/wlan-ng/p80211msg.h        | 21 -------------------
+ drivers/staging/wlan-ng/p80211netdev.c     | 21 -------------------
+ drivers/staging/wlan-ng/p80211netdev.h     | 21 -------------------
+ drivers/staging/wlan-ng/p80211req.c        | 21 -------------------
+ drivers/staging/wlan-ng/p80211req.h        | 21 -------------------
+ drivers/staging/wlan-ng/p80211types.h      | 21 -------------------
+ drivers/staging/wlan-ng/p80211wep.c        | 21 -------------------
+ drivers/staging/wlan-ng/prism2fw.c         | 21 -------------------
+ drivers/staging/wlan-ng/prism2mgmt.c       | 21 -------------------
+ drivers/staging/wlan-ng/prism2mgmt.h       | 21 -------------------
+ drivers/staging/wlan-ng/prism2mib.c        | 21 -------------------
+ drivers/staging/wlan-ng/prism2sta.c        | 21 -------------------
+ drivers/watchdog/ep93xx_wdt.c              |  5 +----
+ drivers/watchdog/ibmasr.c                  |  3 +--
+ drivers/watchdog/m54xx_wdt.c               |  4 +---
+ drivers/watchdog/max63xx_wdt.c             |  5 +----
+ drivers/watchdog/moxart_wdt.c              |  4 +---
+ drivers/watchdog/octeon-wdt-nmi.S          |  5 +----
+ drivers/watchdog/orion_wdt.c               |  4 +---
+ drivers/watchdog/rtd119x_wdt.c             |  2 +-
+ drivers/watchdog/sb_wdog.c                 |  5 +----
+ drivers/watchdog/sbc_fitpc2_wdt.c          |  4 +---
+ drivers/watchdog/ts4800_wdt.c              |  4 +---
+ drivers/watchdog/ts72xx_wdt.c              |  4 +---
+ fs/udf/balloc.c                            |  6 +-----
+ fs/udf/dir.c                               |  6 +-----
+ fs/udf/directory.c                         |  6 +-----
+ fs/udf/ecma_167.h                          | 24 +---------------------
+ fs/udf/file.c                              |  6 +-----
+ fs/udf/ialloc.c                            |  6 +-----
+ fs/udf/inode.c                             |  6 +-----
+ fs/udf/lowlevel.c                          |  6 +-----
+ fs/udf/misc.c                              |  6 +-----
+ fs/udf/namei.c                             |  6 +-----
+ fs/udf/osta_udf.h                          | 24 +---------------------
+ fs/udf/partition.c                         |  6 +-----
+ fs/udf/super.c                             |  6 +-----
+ fs/udf/symlink.c                           |  6 +-----
+ fs/udf/truncate.c                          |  6 +-----
+ fs/udf/udftime.c                           | 19 +----------------
+ fs/udf/unicode.c                           |  6 +-----
+ include/linux/synclink.h                   |  3 +--
+ include/net/bonding.h                      |  4 +---
+ 97 files changed, 86 insertions(+), 1000 deletions(-)
+
+
+base-commit: ac9a78681b921877518763ba0e89202254349d1b
+-- 
+An old man doll... just what I always wanted! - Clara
+
