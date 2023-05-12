@@ -2,119 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D53B700ABA
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:54:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E64587009E8
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:05:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241437AbjELOy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 10:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40910 "EHLO
+        id S241444AbjELOFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 10:05:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241510AbjELOyY (ORCPT
+        with ESMTP id S241404AbjELOFF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 10:54:24 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A6410CC;
-        Fri, 12 May 2023 07:54:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683903263; x=1715439263;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=uGW19VCfL7GXY1Mq1+j9cRUyiM2wju2JbHUARR1lJbw=;
-  b=OeDQ3lXyICa0IZUfp3HISW1EQRo2dZmkNj9dtn2twHC6szLd8E1WWJhE
-   vD6jpwnhP0PG7TAvuJZz+XmAkIbb/lM6BtC70lmPbeppY7stSWj7pWJ1G
-   a4bJAjAHuCwErdD4HzYtauS8a1hmXTAATO1R1FtEKmdacbUDdIHRBErTq
-   wiHN0eYOOl8o9/bAwEm3PjlzLrcB+6mUAC77gow0tuMNz0Vl+vop/xi7q
-   JJP/L/JuCcPpyD5AgUF+Iff7J/MA2zaJaEnNhkfzjcpmiXd1RILZYI45m
-   pgU0uFGLmlGNb7Iv3Iq19fJSCsNVOLkLMBQ3Z2vQyTeTBLjdw+u4SYAm9
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="437140412"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="437140412"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 07:54:23 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="844441294"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="844441294"
-Received: from winkelru-mobl.amr.corp.intel.com (HELO [10.212.144.249]) ([10.212.144.249])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 07:54:22 -0700
-Message-ID: <138e5c73-c33b-806a-b64e-5c93aaefb140@linux.intel.com>
-Date:   Fri, 12 May 2023 08:48:40 -0500
-MIME-Version: 1.0
+        Fri, 12 May 2023 10:05:05 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2064.outbound.protection.outlook.com [40.107.93.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D52197
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:05:03 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Xwrm0XcPUwN3WaXifgR3riA9V7/+9iVG6Wb+aKJHTqeHPA4DdCLhm7b8kqg5ITEzHhyP/F6d7zBS1hdHD0jFYRfdPqSyx8IJluO/pxVmmKyUd/JmeNX/QqqEkUdCMJtfvG/vkqrML3MRH19pUmNbxZK8xJdwQ/TxU+H0qkcfABL6XXNectza3APrKN/JTq+Mu2yyJJzE9UjTQAM5Fwh2zdgOB8w5pgtQwksgawV2cUZbyUg+Dj82OdQVcHolG3V3XZKMrkoIbwpNy2pgqaek4mZY8jjhuSsVETDU0YVkpePOARDFBj7o3BdVGf7suwimHmKr9CB19wi+9WCbw8RK6g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=iU431ZtbxpDZfJrChTWCnC/JfKirkpMX9gAnnMiElpg=;
+ b=V5CC0WcfKGTEb5EKJL84VYLxZSqqLPMy4yrjXWdoBrmhuQYw/PgdLU/v7QCeEjqeBM5ZLcVETiyac2pKBm4PaSndp3vpi9TeQeEeOsVttxbCWa57paGOEB/v/+XMp//5TZvAmroxyoTS49xLgKpElTssuVKffaQCJMez0Ss7pZgc/xrlHiJKSUQKgVeY8x1ccwK7Z+bCuFURp2WZAzXYmB+9eXO/Ht3f358vlYH6qYdkTjXegk2RkGMgxYjAuWm3sFZtI3PFYc38jhttoE0SnLAeONp3w0HZ7p11M+J39CfoUCHpaChh7vyCkmxZRVXE2bTNJy/kW7qlT8SnNg4qUA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=iU431ZtbxpDZfJrChTWCnC/JfKirkpMX9gAnnMiElpg=;
+ b=plxgzaZeCir5tC4mubGGFF9hyT+BhT8tCs0JLFaizS3EGgLkmBbJ5zW6coKkp9Smr8YNzRQuCetCav0veh023/VUO/F6pTZDjweRg9/Rz9A7LQ9yDPzPwZeOPfL6OQzlTCuFwec+eLoibsC90gAyitiOyby0t30waltFVjd2etw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
+ DS0PR12MB7702.namprd12.prod.outlook.com (2603:10b6:8:130::13) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6387.20; Fri, 12 May 2023 14:05:01 +0000
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::fe53:2742:10f9:b8f1]) by DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::fe53:2742:10f9:b8f1%6]) with mapi id 15.20.6387.018; Fri, 12 May 2023
+ 14:05:01 +0000
+Message-ID: <9dd68975-b8a0-b7ec-3556-c0d7e16ac585@amd.com>
+Date:   Fri, 12 May 2023 10:04:57 -0400
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.10.0
-Subject: Re: [PATCH 03/10] ASoC: ak4118: Update to use new component control
- notify helper
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] drm/amd/display: Simplify the calculation of variables
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        harry.wentland@amd.com
+Cc:     sunpeng.li@amd.com, Abaci Robot <abaci@linux.alibaba.com>,
+        Xinhui.Pan@amd.com, Rodrigo.Siqueira@amd.com,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, daniel@ffwll.ch,
+        alexander.deucher@amd.com, airlied@gmail.com,
+        christian.koenig@amd.com
+References: <20230512070451.107372-1-jiapeng.chong@linux.alibaba.com>
 Content-Language: en-US
-To:     Charles Keepax <ckeepax@opensource.cirrus.com>, broonie@kernel.org,
-        lee@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
-        tglx@linutronix.de, maz@kernel.org, linus.walleij@linaro.org,
-        vkoul@kernel.org
-Cc:     lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com,
-        sanyog.r.kale@intel.com, alsa-devel@alsa-project.org,
-        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
- <20230512122838.243002-4-ckeepax@opensource.cirrus.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230512122838.243002-4-ckeepax@opensource.cirrus.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+In-Reply-To: <20230512070451.107372-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: YQBPR0101CA0010.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c00::23) To DM4PR12MB6280.namprd12.prod.outlook.com
+ (2603:10b6:8:a2::11)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|DS0PR12MB7702:EE_
+X-MS-Office365-Filtering-Correlation-Id: 680f5503-8fd8-4150-b145-08db52f1e03c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 8QZFOSxaIhPQ8w4HUgTjdXuAql1z6v31SkWE7g5jw9Y7mHi8Rdfd+gNQuvhpvQbBBqu5Xdi26DrIyPIcRrq8Z8s7T0jxrSs7VcKeroytiOSGP+urmU7a6iZ7rUlLxSVkQ7gjk5Av6iEEy/GXes9Sd8eOmtt6B2TmgNSjs2YRgdrLVxUO3CetswNmMO85bc516l6j/Ga+rHx2o25Hi7CwR0QP+bkWu778Uvsm06R0zqmkXWUA76t8zq7k+mtWKmWx5obZymuytNfoRkt+/gdbwav4/rDKjrYLcfiPz7rXtSriEY3oPgq+kpzrTiSpSb0UB5hZ2OPl4bebFEoTL7AnATeL9bJ5XFC+jQPaxgvPSy+Me5pLmwVWjjz80L1oAsWKiovOAGLdUsOuibGrXD41iYT8m39DID0YL/exM0Uz0V9z4ms0FD8yQAuXL6pyYQIhGRJfKNi4Lnqbcn3zuzVMzVsu2L+owVZzsHqnuyowid2KhV72+QO6pZbVxnteI2FuqEcQHVrQJssazwoCy8sr/m09GOckhJzhsFFyWquRZOZSm8+14zxa7toaI08F7mBcbdowi/nkj0aEy87DDz1PLa1EH8aznvqQRjubf8u319aigc7yqzMjyZksyyObLzm3
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(376002)(396003)(39860400002)(346002)(451199021)(5660300002)(38100700002)(6486002)(6506007)(186003)(2616005)(6512007)(53546011)(2906002)(83380400001)(26005)(8936002)(44832011)(8676002)(41300700001)(966005)(478600001)(36756003)(316002)(6666004)(31696002)(66946007)(4326008)(66556008)(66476007)(6636002)(86362001)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d0o1Q2QzVllubjBocG03RmlkKzd2djk0aGM2NSsvOVhhR2EwREZuSnpGR2Fw?=
+ =?utf-8?B?MDRMSzBhSEJjMlV3S3h2L2g2dmk1NVdna0MwZmxmc3BmT0RDZWJXRk1sc3pP?=
+ =?utf-8?B?VjhYcDV2QThKdUt6VldUdTJJQmV5Q2lWOER5dU5DeTdXdmpLd2VTa3dnV0FR?=
+ =?utf-8?B?dHAzSEZ2UEsvUzQ3MHZuSWF1VDZITzJoWXFTQUYrcWppTy80Q1phMVczRG1E?=
+ =?utf-8?B?YWNwVWtWSDR5TzdzbzFRdkNIRmt4R1d3UnZPQkJWT2FtL1lpUGFSbGo3WHls?=
+ =?utf-8?B?VFJtb3pNSGwyejB1Y3ovRUxqTE5CdlhKYmluWWdsOHFyTlpsajVOUkV1L01m?=
+ =?utf-8?B?eUhNOG03U0VuVzJva2ozNmNEOCs0dFMwQ2xIYi8vQnEwWWordmZ2S2Z3dDBC?=
+ =?utf-8?B?TDlwMkJwTFhEZmxlQTRiMTFKMG9uOHVZblVmRm1ZaXRxY2lSdFRSR2hMMy9C?=
+ =?utf-8?B?U3F1MXI4VWkwQ05SaWtMRk9MQ3hkZG84Vm9qWXY2WkZ6bkhWbVBjNVVsVkVI?=
+ =?utf-8?B?WXV0TzZqQUFNclhNMjI1RFh2emhmUFRhbStLWDFsTEhDREkzM3B2cnZsMjJa?=
+ =?utf-8?B?OWUxSmRkSHNYV09IaVBhd3BGRmZBOEZkUkl1MllPcU5VRzJ6bzkvVG1zd3d0?=
+ =?utf-8?B?bXpMR0c4QW5sYXZlMzRObkpGR2NIQ2VyK3V0a0c4U3Q2NlQ5L21kZVNuRklx?=
+ =?utf-8?B?U3E3SW5EY2NRVkVsUWNkQTZMVk1YZVFqOHptQ2MzK25pSVJzdi9KNlNLS2dG?=
+ =?utf-8?B?MDJLUEl2VEEwSEF4dVZKeW5XclF6WnFaR05mMFZSSjNsOVdMYUk3endwdVZh?=
+ =?utf-8?B?TnBUOHluOS9QTnE2TjF6c3JXaktjUjZSdXQ3KzN3YXBQM09jdWQxZ0pSOXla?=
+ =?utf-8?B?MTNUMnlCRHdMMXpQRWNFMFVuSklUcGhhL2VhYXZ4MDZrd3hwa2c5TnVyQitS?=
+ =?utf-8?B?cTFPMmNXNDBheHRmTmdQVGxvWFIzVWVSY09tSi90ZFJRY3hmNDJqSFJPTGsw?=
+ =?utf-8?B?bHcvOUJLSlhrdTVPMFBaUmNsa0F6Z3hoQ2RHNkhvajd3aFRSRHJodEZKTkwz?=
+ =?utf-8?B?VXlCYnZUcGZTL0VhKzlHMU85Vy82SkxsakNseDJaTTNndG8xb0JDYWZWbFJp?=
+ =?utf-8?B?RXZJY09Zc1IvRWtSUnhnMFkwYVhEWGVGMC9TQnluKy95TmlQc0hzSEtOU2dm?=
+ =?utf-8?B?T240OVlTQ2RFb1RrZS9UTDlxYm9sNjVaUWt2TjNnRVFMdW15M2R0S3Q3TXhk?=
+ =?utf-8?B?N2RJZDA0TlNaQ3V3c29IajZtL0l1YnFDV0Vzd0N0NklJV0RTN1YreVNoMUp1?=
+ =?utf-8?B?UjNvOTZWdENldk5BVDZ4NFhrVHl0ak9ZTk5UUjZkaEVNK3lYR1ZOc1Y0QTNr?=
+ =?utf-8?B?akhVc0xPRmhhM1ZhNUtIYVRZdjBTZVBxNlFCWUlOZ2pXSERDSWk1N3B3MTVI?=
+ =?utf-8?B?ZTRkNkVteEppcFc0MzBwVkVEV2NIWkd0TGdtMWVYUU1hWGJSeHRwTm1yY250?=
+ =?utf-8?B?MVl5NlUrdzJXdHlCZ1dadXdqUmF3VHJmWEVoN01sNitxVXQvWHBLRTBpaVdj?=
+ =?utf-8?B?Mys0L214V1FFdE9DeW9SR3lhU21PbkNBd28ycjBIN21waUV1ak5iOWhnVHlB?=
+ =?utf-8?B?Q0MrMTVuTW9lUWoxMEgxMWpPQ0tHd2RLZjJxV0VUQmQ2QzdzVklHYjd6Tjha?=
+ =?utf-8?B?L3N4RG1rV1RwRjRseXRmZlExWUpMczJxalc5OFllVHVZMWRxMzVFbG9ieGRV?=
+ =?utf-8?B?OWdjdndGY043c2doMVc3RzdrOWhtT29tQW1WVXdNWk9FOHQrb08wWnZ0SmNP?=
+ =?utf-8?B?azlyUys3WFp3YkFlQ3E4UDN4OWFzaHkzM25IR1hBdHlDZDk1TzM0UkFkRGxx?=
+ =?utf-8?B?RVVpQzhNMWpQUUdBSnlwc2lYRTBWV1lZRDVEVDFCRE1LSHAxRHVqSEU0TVQ3?=
+ =?utf-8?B?ckZiZm4vbWZFZFZFM0tMQmNVYVIxdEJGeXJxKysvQVV3eGN6a1o4R2NSWEwv?=
+ =?utf-8?B?Q0tqMHNlQmNDdlBNNXBHZFEyVXFid0ExVmhUeFJkNytVYy8zN1VialBkMU9V?=
+ =?utf-8?B?UWZLYzEyM0lNNG85U2pJNHJCdEVpYVZqVXR4YlRRSXNmRXZHZkdpQTlsSGhl?=
+ =?utf-8?Q?nYV7rBan9toTxTS1Cul03c9i9?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 680f5503-8fd8-4150-b145-08db52f1e03c
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 14:05:00.8281
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: i/6Oa2eJyPTeOAKV6H/HBwwLUu4Jt8KK0c8OjEeHo9bBhJ3wJGLRDg4XLXaEfIcE2pn39sjaE2zxxp6iqFVkvg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR12MB7702
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/12/23 07:28, Charles Keepax wrote:
-> Update the driver to use the new ASoC core control notify helper.
-> This also fixes a bug where the control would not be found if the
-> CODEC was given a name prefix.
+On 5/12/23 03:04, Jiapeng Chong wrote:
+> ./drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c:586:37-39: WARNING !A || A && B is equivalent to !A || B.
+> ./drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c:595:37-39: WARNING !A || A && B is equivalent to !A || B.
 > 
-> Signed-off-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4941
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+
+Applied, thanks!
+
 > ---
->  sound/soc/codecs/ak4118.c | 11 ++---------
->  1 file changed, 2 insertions(+), 9 deletions(-)
+>   drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/sound/soc/codecs/ak4118.c b/sound/soc/codecs/ak4118.c
+> diff --git a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c
+> index 4950eaa4406b..2de910e0ce75 100644
+> --- a/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c
+> +++ b/drivers/gpu/drm/amd/display/dc/dcn32/dcn32_hwseq.c
+> @@ -583,8 +583,8 @@ void dcn32_update_force_pstate(struct dc *dc, struct dc_state *context)
+>   		struct pipe_ctx *pipe = &context->res_ctx.pipe_ctx[i];
+>   		struct hubp *hubp = pipe->plane_res.hubp;
+>   
+> -		if (!pipe->stream || (pipe->stream && !(pipe->stream->mall_stream_config.type == SUBVP_MAIN ||
+> -						pipe->stream->fpo_in_use))) {
+> +		if (!pipe->stream || !(pipe->stream->mall_stream_config.type == SUBVP_MAIN ||
+> +		    pipe->stream->fpo_in_use)) {
+>   			if (hubp && hubp->funcs->hubp_update_force_pstate_disallow)
+>   				hubp->funcs->hubp_update_force_pstate_disallow(hubp, false);
+>   		}
+> @@ -592,7 +592,7 @@ void dcn32_update_force_pstate(struct dc *dc, struct dc_state *context)
+>   		/* Today only FPO uses cursor P-State force. Only clear cursor P-State force
+>   		 * if it's not FPO.
+>   		 */
+> -		if (!pipe->stream || (pipe->stream && !pipe->stream->fpo_in_use)) {
+> +		if (!pipe->stream || !pipe->stream->fpo_in_use) {
+>   			if (hubp && hubp->funcs->hubp_update_force_cursor_pstate_disallow)
+>   				hubp->funcs->hubp_update_force_cursor_pstate_disallow(hubp, false);
+>   		}
+-- 
+Hamza
 
-should patches 2, 3, 4 be part of a separate series, they really have
-nothing to do with the Cirrus CS32L43?
-
-> index b6d9a10bdccdc..74ccfb0d921d6 100644
-> --- a/sound/soc/codecs/ak4118.c
-> +++ b/sound/soc/codecs/ak4118.c
-> @@ -264,8 +264,6 @@ static irqreturn_t ak4118_irq_handler(int irq, void *data)
->  	struct ak4118_priv *ak4118 = data;
->  	struct snd_soc_component *component = ak4118->component;
->  	struct snd_kcontrol_new *kctl_new;
-> -	struct snd_kcontrol *kctl;
-> -	struct snd_ctl_elem_id *id;
->  	unsigned int i;
->  
->  	if (!component)
-> @@ -273,13 +271,8 @@ static irqreturn_t ak4118_irq_handler(int irq, void *data)
->  
->  	for (i = 0; i < ARRAY_SIZE(ak4118_iec958_controls); i++) {
->  		kctl_new = &ak4118_iec958_controls[i];
-> -		kctl = snd_soc_card_get_kcontrol(component->card,
-> -						 kctl_new->name);
-> -		if (!kctl)
-> -			continue;
-> -		id = &kctl->id;
-> -		snd_ctl_notify(component->card->snd_card,
-> -			       SNDRV_CTL_EVENT_MASK_VALUE, id);
-> +
-> +		snd_soc_component_notify_control(component, kctl_new->name);
->  	}
->  
->  	return IRQ_HANDLED;
