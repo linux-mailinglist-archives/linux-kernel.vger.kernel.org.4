@@ -2,25 +2,25 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70AEB700492
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:00:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 90E6C700494
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:00:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240558AbjELKAM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:00:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53550 "EHLO
+        id S240726AbjELKAV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 06:00:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240654AbjELJ7a (ORCPT
+        with ESMTP id S240751AbjELJ7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 05:59:30 -0400
+        Fri, 12 May 2023 05:59:50 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 47F5811DB4;
-        Fri, 12 May 2023 02:59:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 09ABB12E90;
+        Fri, 12 May 2023 02:59:10 -0700 (PDT)
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 2E08D1684;
-        Fri, 12 May 2023 02:59:30 -0700 (PDT)
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 27D9B16F2;
+        Fri, 12 May 2023 02:59:33 -0700 (PDT)
 Received: from e123648.arm.com (unknown [10.57.22.28])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E19C93F5A1;
-        Fri, 12 May 2023 02:58:42 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DEB273F5A1;
+        Fri, 12 May 2023 02:58:45 -0700 (PDT)
 From:   Lukasz Luba <lukasz.luba@arm.com>
 To:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
         rafael@kernel.org
@@ -29,9 +29,9 @@ Cc:     lukasz.luba@arm.com, dietmar.eggemann@arm.com, rui.zhang@intel.com,
         daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
         len.brown@intel.com, pavel@ucw.cz, Pierre.Gondois@arm.com,
         ionela.voinescu@arm.com, rostedt@goodmis.org, mhiramat@kernel.org
-Subject: [PATCH v2 16/17] Documentation: EM: Add example with driver modifying the EM
-Date:   Fri, 12 May 2023 10:57:42 +0100
-Message-Id: <20230512095743.3393563-17-lukasz.luba@arm.com>
+Subject: [PATCH v2 17/17] Documentation: EM: Describe the API of runtime modifications
+Date:   Fri, 12 May 2023 10:57:43 +0100
+Message-Id: <20230512095743.3393563-18-lukasz.luba@arm.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230512095743.3393563-1-lukasz.luba@arm.com>
 References: <20230512095743.3393563-1-lukasz.luba@arm.com>
@@ -46,82 +46,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The Energy Model (EM) support runtime modifications. Add description
-with example driver code which updates EM.
+Describe the Energy Model runtime modification API and how it can
+be used.
 
 Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
 ---
- Documentation/power/energy-model.rst | 53 ++++++++++++++++++++++++++--
- 1 file changed, 51 insertions(+), 2 deletions(-)
+ Documentation/power/energy-model.rst | 31 ++++++++++++++++++++++++++--
+ 1 file changed, 29 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/power/energy-model.rst b/Documentation/power/energy-model.rst
-index 64c2462dc9a6..a6ceeeb72868 100644
+index a6ceeeb72868..2fd6e82a8124 100644
 --- a/Documentation/power/energy-model.rst
 +++ b/Documentation/power/energy-model.rst
-@@ -225,8 +225,11 @@ or in Section 3.4
-    :export:
+@@ -213,10 +213,37 @@ CPUfreq governor is in use in case of CPU device. Currently this calculation is
+ not provided for other type of devices.
+ 
+ More details about the above APIs can be found in ``<linux/energy_model.h>``
+-or in Section 3.4
++or in Section 3.5
  
  
--4. Example driver
-------------------
-+4. Examples
-+-----------
+-3.4 Description details of this API
++3.4 Runtime modifications
++^^^^^^^^^^^^^^^^^^^^^^^^^
 +
-+4.1 Example driver with EM registration
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
- 
- The CPUFreq framework supports dedicated callback for registering
- the EM for a given CPU(s) 'policy' object: cpufreq_driver::register_em().
-@@ -280,3 +283,49 @@ EM framework::
-   39	static struct cpufreq_driver foo_cpufreq_driver = {
-   40		.register_em = foo_cpufreq_register_em,
-   41	};
++Drivers willing to modify the EM at runtime should use the following API::
 +
 +
-+4.2 Example driver with EM modification
-+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
++  int em_dev_update_perf_domain(struct device *dev,
++			struct em_data_callback *cb, void *priv);
 +
-+This section provides a simple example of a thermal driver modifying the EM.
-+The driver implements a foo_mod_power() function to be provided to the
-+EM framework. The driver is woken up periodically to check the temperature
-+and modify the EM data if needed::
++Drivers must provide a callback .update_power() returning power value for each
++performance state. The callback function provided by the driver is free
++to fetch data from any relevant location (DT, firmware, ...) or sensor.
++The .update_power() callback is called by the EM for each performance state to
++provide new power value. In the Section 4.2 there is an example driver
++which shows simple implementation of this mechanism. The callback can be
++declared with EM_UPDATE_CB() macro. The caller of that callback also passes
++a private void pointer back to the driver which tries to update EM.
++It is useful and helps to maintain the consistent context for all performance
++state calls for a given EM.
++The artificial EM also supports runtime modifications. For this type of EM
++there is a need to provide one more callback: .get_cost(). The .get_cost()
++returns the cost value for each performance state, which better reflects the
++efficiency of the CPUs which use artificial EM. Those two callbacks:
++.update_power() and get .get_cost() can be declared with one macro
++EM_ADV_UPDATE_CB() and then passed to the em_dev_update_perf_domain().
 +
-+  -> drivers/thermal/foo_thermal.c
 +
-+  01	static int foo_mod_power(struct device *dev, unsigned long freq,
-+  02			unsigned long *power, void *priv)
-+  03	{
-+  04		struct foo_context *ctx = priv;
-+  05
-+  06		/* Estimate power for the given frequency and temperature */
-+  07		*power = foo_estimate_power(dev, freq, ctx->temperature);
-+  08		if (*power >= EM_MAX_POWER);
-+  09			return -EINVAL;
-+  10
-+  11		return 0;
-+  12	}
-+  13
-+  14	/*
-+  15	 * Function called periodically to check the temperature and
-+  16	 * update the EM if needed
-+  17	 */
-+  18	static void foo_thermal_em_update(struct foo_context *ctx)
-+  19	{
-+  20		struct em_data_callback em_cb = EM_UPDATE_CB(mod_power);
-+  21		struct cpufreq_policy *policy = ctx->policy;
-+  22		struct device *cpu_dev;
-+  23
-+  24		cpu_dev = get_cpu_device(cpumask_first(policy->cpus));
-+  25
-+  26		ctx->temperature = foo_get_temp(cpu_dev, ctx);
-+  27		if (ctx->temperature < FOO_EM_UPDATE_TEMP_THRESHOLD)
-+  28			return;
-+  29
-+  30		/* Update EM for the CPUs' performance domain */
-+  31		ret = em_dev_update_perf_domain(cpu_dev, &em_cb, ctx);
-+  32		if (ret)
-+  33			pr_warn("foo_thermal: EM update failed\n");
-+  34	}
++3.5 Description details of this API
+ ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+ .. kernel-doc:: include/linux/energy_model.h
+    :internal:
 -- 
 2.25.1
 
