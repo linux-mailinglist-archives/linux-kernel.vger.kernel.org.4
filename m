@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4739B6FFDDA
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 02:18:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5D446FFDDB
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 02:18:49 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239675AbjELASh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 20:18:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
+        id S239576AbjELASo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 20:18:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239657AbjELAS0 (ORCPT
+        with ESMTP id S239666AbjELAS2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 20:18:26 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479D772A4;
-        Thu, 11 May 2023 17:18:25 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 41be03b00d2f7-528cdc9576cso6354174a12.0;
-        Thu, 11 May 2023 17:18:25 -0700 (PDT)
+        Thu, 11 May 2023 20:18:28 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDBDF659C;
+        Thu, 11 May 2023 17:18:26 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id d9443c01a7336-1ab14cb3aaeso66502695ad.2;
+        Thu, 11 May 2023 17:18:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683850704; x=1686442704;
+        d=gmail.com; s=20221208; t=1683850706; x=1686442706;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HGlXat0EtJJBtaak2uCMBVeJwYvrV5UtPoFSqHWuZ/k=;
-        b=PAjqlBvpAb5ZeFLkWolJVFg4/mZG3UvU5pKRJhh7J1P8LRbU6oS3vOiisaFST+GShU
-         VEX7CKtIALgy7mDq32phfTao0UQPErcx9OvLefQGvdD01s453zXSXiavJBWVKx0AKc4q
-         MayVm750yoW0LxCaWmAupmtCOM2XOikdn9uigV3HA4caf61euQrTLHRCa8//kLNHum9d
-         K3av+0EqA7ikc2nzYoRrYiAKryPbpmxrbpr4xqv2vnlSblDd+ukqIC6uiHn78qbTC+6q
-         q28Ct7FRj798aXM+cVhJVNEwrhmpClGFrGtMAL/47g3CPvMdN18bdi61yFuIQpvlilat
-         N5kA==
+        bh=3AmXM8Nw8W3m9nSsQzdTt/ndXawpxM/cZvvmq+1bgsw=;
+        b=N//IhBz+EmhD39v50VoSAPlobOMAQXxtUUG3ZsdVDvpKN6l3oy13UoDq/pJK3Jb/wD
+         KJ57Tbx5eU+e7jxiToWi0H1Dds646XbRuQcit4lNmtpHcZ6W8xDYMWjAVZVRKScXMnzq
+         oYe6fiDie0HQeqjKh4YKTcx/wW9jFVFOFYVfImcZwt+nwphAJhEhPhZ8CU+F62iVA33H
+         TODGQY9XUQWv3pnMDxIpkpr+/sjh9HqEEHg0BA5btATBx68EBtmy1tG3slz+HXfxpxxU
+         XyZKSHGjt4q1/tYogzpGqClkEhEtWAqJYg5QcByW83VyndehMop0Lb8sc/EDpkrl72hp
+         BMrg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683850704; x=1686442704;
+        d=1e100.net; s=20221208; t=1683850706; x=1686442706;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HGlXat0EtJJBtaak2uCMBVeJwYvrV5UtPoFSqHWuZ/k=;
-        b=dRqvPptWKN07Pt3kP31+TrPrYG5X7gQUnu6kuXBMrcPJacp85I3BsBzrj1cSovU5/h
-         oFCOrXm7fD68E3HaV+3Zuv8Nx5cTHSxXPBBwYE0N3wfxSD4Z4OaVKvsA1tdG6wJ6Cnno
-         I5YLvg1uOXBCYusocU1QQrRTyhyVgSokQjeAnlQHVngHzimmZkK7PaSEJi5tJhVD9pAh
-         oqKf/PFRMfFjTt0b+6W7WxGed9peHReH4khr17rco0C632pzhLpQrNG2OBKrH0SArQmT
-         v7WTZFSl4DEREy9W1bJ67ANvfAHdzCGFzZ7vtRtQw5ncbTaQr6yeKO3wos11l1tfF4Yh
-         CEww==
-X-Gm-Message-State: AC+VfDzWOXxrWpeaQujHYdgdZjJcY10DuCToQGeVEr7ZJpX2nFWWbhqe
-        +l7c1ekazCuzgGiivuS1FNs=
-X-Google-Smtp-Source: ACHHUZ6a1+ZWiKa6vjexnagahRo4FYtbiR0UoQuUcRn1HxjJsSeW/sCbksafCTvmnlxvV0Dag306ZA==
-X-Received: by 2002:a17:902:a9c4:b0:1ac:8def:db2a with SMTP id b4-20020a170902a9c400b001ac8defdb2amr11506158plr.0.1683850704537;
-        Thu, 11 May 2023 17:18:24 -0700 (PDT)
+        bh=3AmXM8Nw8W3m9nSsQzdTt/ndXawpxM/cZvvmq+1bgsw=;
+        b=iOdEg0kNPxeZesXgxKUw0aFj3oqywW1gcB8a4zlAc6tJDMLxHowtK2uPPpF4Nks2SO
+         y5TEZymuaFIN9LFhqW+U5vg76piUBgQTTjo1GZ4jxSV0sigma8tHjAgQiQdiNXHMz0yO
+         u76Y1nKkZ5yPFc9sBuvpbSdPxl3QK7Fw0oZ6pFXy+Nj8oD9MJp2Bxe6qxaU1PTbORVXX
+         0Fjk6DfjXweLFygxCXJeCQu9myhuEcvzqWZ5f04Kn+AjeMHAqEED2QFG9R0tXmlhenTw
+         S48FO7QxPD6u//7pBB4vYAnkwjt7XH0JuIORuloDDAUV9TKk5aoJeOWNjyoMZFNbMBTP
+         6hYg==
+X-Gm-Message-State: AC+VfDzUf8sBjByJ84c9D3vQrd+rI09A6nZZ2k4nO3z39m68J3HYeP1e
+        3dNc/ZBRNeP3M9Gw9O/iVARfqUp0Eaw=
+X-Google-Smtp-Source: ACHHUZ5xtmMPSMy3URma36O7T3rcQKVbBtifE7t1Kmfw83Aufka+zoMwzYmUfd4dJqSxRv2sfokSEw==
+X-Received: by 2002:a17:902:a417:b0:19e:e001:6a75 with SMTP id p23-20020a170902a41700b0019ee0016a75mr1472763plq.6.1683850706224;
+        Thu, 11 May 2023 17:18:26 -0700 (PDT)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:53f7:c9da:338e:6206])
-        by smtp.gmail.com with ESMTPSA id q16-20020a170902b11000b001ab016ea3f9sm6537409plr.21.2023.05.11.17.18.22
+        by smtp.gmail.com with ESMTPSA id q16-20020a170902b11000b001ab016ea3f9sm6537409plr.21.2023.05.11.17.18.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 11 May 2023 17:18:23 -0700 (PDT)
+        Thu, 11 May 2023 17:18:25 -0700 (PDT)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Hans de Goede <hdegoede@redhat.com>
 Cc:     Mark Gross <markgross@kernel.org>,
         platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/4] platform/x86: x86-android-tablets: convert wm1502 devices to GPIO references
-Date:   Thu, 11 May 2023 17:18:12 -0700
-Message-ID: <20230512001815.591817-4-dmitry.torokhov@gmail.com>
+Subject: [PATCH 4/4] platform/x86: x86-android-tablets: convert gpio_keys devices to GPIO references
+Date:   Thu, 11 May 2023 17:18:13 -0700
+Message-ID: <20230512001815.591817-5-dmitry.torokhov@gmail.com>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
 In-Reply-To: <20230512001815.591817-1-dmitry.torokhov@gmail.com>
 References: <20230512001815.591817-1-dmitry.torokhov@gmail.com>
@@ -76,120 +76,250 @@ Now that gpiolib supports software nodes to describe GPIOs, switch the
 driver away from using GPIO lookup tables for wm1502 devices to using
 PROPERTY_ENTRY_GPIO().
 
+With that we can remove support for gpiod_lookup_tables from the driver.
+
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- drivers/platform/x86/x86-android-tablets.c | 64 +++++++++++++++++-----
- 1 file changed, 50 insertions(+), 14 deletions(-)
+ drivers/platform/x86/x86-android-tablets.c | 117 ++++++++++++---------
+ 1 file changed, 69 insertions(+), 48 deletions(-)
 
 diff --git a/drivers/platform/x86/x86-android-tablets.c b/drivers/platform/x86/x86-android-tablets.c
-index f7f80237cfa9..02ee793a934e 100644
+index 02ee793a934e..878b2b72d214 100644
 --- a/drivers/platform/x86/x86-android-tablets.c
 +++ b/drivers/platform/x86/x86-android-tablets.c
-@@ -874,19 +874,37 @@ static const struct platform_device_info lenovo_yoga_tab2_830_1050_pdevs[] __ini
+@@ -16,7 +16,6 @@
+ #include <linux/gpio_keys.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/gpio/driver.h>
+-#include <linux/gpio/machine.h>
+ #include <linux/gpio/property.h>
+ #include <linux/i2c.h>
+ #include <linux/input.h>
+@@ -29,6 +28,7 @@
+ #include <linux/platform_data/lp855x.h>
+ #include <linux/platform_device.h>
+ #include <linux/power/bq24190_charger.h>
++#include <linux/property.h>
+ #include <linux/reboot.h>
+ #include <linux/rmi.h>
+ #include <linux/serdev.h>
+@@ -174,7 +174,6 @@ struct x86_dev_info {
+ 	char *invalid_aei_gpiochip;
+ 	const char * const *modules;
+ 	const struct software_node *bat_swnode;
+-	struct gpiod_lookup_table * const *gpiod_lookup_tables;
+ 	const struct x86_i2c_client_info *i2c_client_info;
+ 	const struct platform_device_info *pdev_info;
+ 	const struct x86_serdev_info *serdev_info;
+@@ -269,79 +268,102 @@ static const char * const bq24190_modules[] __initconst = {
+  * which is not described in the ACPI tables in anyway.
+  * Use the x86-android-tablets infra to create a gpio-button device for this.
+  */
+-static struct gpio_keys_button advantech_mica_071_button = {
+-	.code = KEY_PROG1,
+-	/* .gpio gets filled in by advantech_mica_071_init() */
+-	.active_low = true,
+-	.desc = "prog1_key",
+-	.type = EV_KEY,
+-	.wakeup = false,
+-	.debounce_interval = 50,
+-};
+-
+-static const struct gpio_keys_platform_data advantech_mica_071_button_pdata __initconst = {
+-	.buttons = &advantech_mica_071_button,
+-	.nbuttons = 1,
++static const struct software_node advantech_mica_071_gpio_keys_node = {
+ 	.name = "prog1_key",
+ };
  
- #define LENOVO_YOGA_TAB2_830_1050_CODEC_NAME "spi-10WM5102:00"
- 
--static struct gpiod_lookup_table lenovo_yoga_tab2_830_1050_codec_gpios = {
--	.dev_id = LENOVO_YOGA_TAB2_830_1050_CODEC_NAME,
--	.table = {
--		GPIO_LOOKUP("gpio_crystalcove", 3, "reset", GPIO_ACTIVE_HIGH),
--		GPIO_LOOKUP("INT33FC:01", 23, "wlf,ldoena", GPIO_ACTIVE_HIGH),
--		GPIO_LOOKUP("arizona", 2, "wlf,spkvdd-ena", GPIO_ACTIVE_HIGH),
--		GPIO_LOOKUP("arizona", 4, "wlf,micd-pol", GPIO_ACTIVE_LOW),
--		{ }
--	},
-+static const struct software_node lenovo_yoga_tab2_830_1050_crystalcove = {
-+	.name = "gpio_crystalcove",
-+};
-+
-+static const struct software_node lenovo_yoga_tab2_830_1050_arizona = {
-+	.name = "arizona",
-+};
-+
-+static const struct property_entry lenovo_yoga_tab2_830_1050_wm1502_props[] = {
-+	PROPERTY_ENTRY_GPIO("reset-gpios",
-+			    &lenovo_yoga_tab2_830_1050_crystalcove,
-+			    3, GPIO_ACTIVE_HIGH),
-+	PROPERTY_ENTRY_GPIO("wlf,ldoena-gpios",
-+			     &int33fc_gpiochip_nodes[1], 23, GPIO_ACTIVE_HIGH),
-+	PROPERTY_ENTRY_GPIO("wlf,spkvdd-ena-gpios",
-+			    &lenovo_yoga_tab2_830_1050_arizona,
-+			    2, GPIO_ACTIVE_HIGH),
-+	PROPERTY_ENTRY_GPIO("wlf,micd-pol-gpios",
-+			    &lenovo_yoga_tab2_830_1050_arizona,
-+			    4, GPIO_ACTIVE_HIGH),
+-static const struct platform_device_info advantech_mica_071_pdevs[] __initconst = {
++static const struct property_entry advantech_mica_071_prog1_key_props[] = {
++	PROPERTY_ENTRY_U32("linux,code", KEY_PROG1),
++	PROPERTY_ENTRY_STRING("label", "prog1_key"),
++	PROPERTY_ENTRY_GPIO("gpios",
++			    &int33fc_gpiochip_nodes[0], 2, GPIO_ACTIVE_LOW),
++	PROPERTY_ENTRY_U32("debounce-interval", 50),
 +	{ }
 +};
 +
-+static const struct software_node lenovo_yoga_tab2_830_1050_wm5102 = {
-+	.properties = lenovo_yoga_tab2_830_1050_wm1502_props,
++static const struct software_node advantech_mica_071_prog1_key_node = {
++	.parent = &advantech_mica_071_gpio_keys_node,
++	.properties = advantech_mica_071_prog1_key_props,
++};
++
++static const struct software_node *advantech_mica_071_swnodes[] = {
++	&advantech_mica_071_gpio_keys_node,
++	&advantech_mica_071_prog1_key_node,
++	NULL
++};
++
++static struct platform_device_info advantech_mica_071_pdevs[] = {
+ 	{
+ 		.name = "gpio-keys",
+ 		.id = PLATFORM_DEVID_AUTO,
+-		.data = &advantech_mica_071_button_pdata,
+-		.size_data = sizeof(advantech_mica_071_button_pdata),
++		/* .fwnode will be filled by advantech_mica_071_init() */
+ 	},
  };
  
--static struct gpiod_lookup_table * const lenovo_yoga_tab2_830_1050_gpios[] = {
--	&lenovo_yoga_tab2_830_1050_codec_gpios,
-+static const struct software_node *lenovo_yoga_tab2_830_1050_swnodes[] = {
-+	&lenovo_yoga_tab2_830_1050_crystalcove,
-+	&lenovo_yoga_tab2_830_1050_arizona,
-+	&lenovo_yoga_tab2_830_1050_wm5102,
- 	NULL
+ static int __init advantech_mica_071_init(void)
+ {
+-	struct gpio_desc *gpiod;
+ 	int ret;
+ 
+-	ret = x86_android_tablet_get_gpiod("INT33FC:00", 2, &gpiod);
++	ret = software_node_register_node_group(advantech_mica_071_swnodes);
+ 	if (ret < 0)
+ 		return ret;
+-	advantech_mica_071_button.gpio = desc_to_gpio(gpiod);
++
++	advantech_mica_071_pdevs[0].fwnode =
++			software_node_fwnode(advantech_mica_071_swnodes[0]);
+ 
+ 	return 0;
+ }
+ 
++static void __exit advantech_mica_071_exit(void)
++{
++	software_node_unregister_node_group(advantech_mica_071_swnodes);
++}
++
+ static const struct x86_dev_info advantech_mica_071_info __initconst = {
+ 	.pdev_info = advantech_mica_071_pdevs,
+ 	.pdev_count = ARRAY_SIZE(advantech_mica_071_pdevs),
+ 	.init = advantech_mica_071_init,
++	.exit = advantech_mica_071_exit,
  };
  
-@@ -898,7 +916,6 @@ static struct x86_dev_info lenovo_yoga_tab2_830_1050_info __initdata = {
- 	/* i2c_client_count gets set by lenovo_yoga_tab2_830_1050_init() */
- 	.pdev_info = lenovo_yoga_tab2_830_1050_pdevs,
- 	.pdev_count = ARRAY_SIZE(lenovo_yoga_tab2_830_1050_pdevs),
--	.gpiod_lookup_tables = lenovo_yoga_tab2_830_1050_gpios,
- 	.bat_swnode = &generic_lipo_hv_4v35_battery_node,
+ /* Asus ME176C and TF103C tablets shared data */
+-static struct gpio_keys_button asus_me176c_tf103c_lid = {
+-	.code = SW_LID,
+-	/* .gpio gets filled in by asus_me176c_tf103c_init() */
+-	.active_low = true,
+-	.desc = "lid_sw",
+-	.type = EV_SW,
+-	.wakeup = true,
+-	.debounce_interval = 50,
+-};
+-
+-static const struct gpio_keys_platform_data asus_me176c_tf103c_lid_pdata __initconst = {
+-	.buttons = &asus_me176c_tf103c_lid,
+-	.nbuttons = 1,
++static const struct software_node asus_me176c_tf103c_gpio_keys_node = {
+ 	.name = "lid_sw",
+ };
+ 
++static const struct property_entry asus_me176c_tf103c_lid_props[] = {
++	PROPERTY_ENTRY_U32("linux,input-type", EV_SW),
++	PROPERTY_ENTRY_U32("linux,code", SW_LID),
++	PROPERTY_ENTRY_STRING("label", "lid_sw"),
++	PROPERTY_ENTRY_GPIO("gpios",
++			    &int33fc_gpiochip_nodes[2], 2, GPIO_ACTIVE_LOW),
++	PROPERTY_ENTRY_U32("debounce-interval", 50),
++	PROPERTY_ENTRY_BOOL("wakeup-source"),
++	{ }
++};
++
++static const struct software_node asus_me176c_tf103c_lid_node = {
++	.parent = &asus_me176c_tf103c_gpio_keys_node,
++	.properties = asus_me176c_tf103c_lid_props,
++};
++
++static const struct software_node *asus_me176c_tf103c_lid_swnodes[] = {
++	&asus_me176c_tf103c_gpio_keys_node,
++	&asus_me176c_tf103c_lid_node,
++	NULL
++};
++
+ static const struct property_entry asus_me176c_tf103c_int3496_props[] = {
+ 	PROPERTY_ENTRY_GPIO("id-gpios",
+ 			    &int33fc_gpiochip_nodes[2], 22, GPIO_ACTIVE_HIGH),
+ 	{ }
+ };
+ 
+-static const struct platform_device_info asus_me176c_tf103c_pdevs[] __initconst = {
++static struct platform_device_info asus_me176c_tf103c_pdevs[] = {
+ 	{
+ 		.name = "gpio-keys",
+ 		.id = PLATFORM_DEVID_AUTO,
+-		.data = &asus_me176c_tf103c_lid_pdata,
+-		.size_data = sizeof(asus_me176c_tf103c_lid_pdata),
++		/* .fwnode will be filled by asus_me176c_tf103c_init() */
+ 	},
+ 	{
+ 		/* For micro USB ID pin handling */
+@@ -353,17 +375,22 @@ static const struct platform_device_info asus_me176c_tf103c_pdevs[] __initconst
+ 
+ static int __init asus_me176c_tf103c_init(void)
+ {
+-	struct gpio_desc *gpiod;
+ 	int ret;
+ 
+-	ret = x86_android_tablet_get_gpiod("INT33FC:02", 12, &gpiod);
++	ret = software_node_register_node_group(asus_me176c_tf103c_lid_swnodes);
+ 	if (ret < 0)
+ 		return ret;
+-	asus_me176c_tf103c_lid.gpio = desc_to_gpio(gpiod);
++
++	asus_me176c_tf103c_pdevs[0].fwnode =
++			software_node_fwnode(asus_me176c_tf103c_lid_swnodes[0]);
+ 
+ 	return 0;
+ }
+ 
++static void __exit asus_me176c_tf103c_exit(void)
++{
++	software_node_unregister_node_group(asus_me176c_tf103c_lid_swnodes);
++}
+ 
+ /* Asus ME176C tablets have an Android factory img with everything hardcoded */
+ static const char * const asus_me176c_accel_mount_matrix[] = {
+@@ -504,6 +531,7 @@ static const struct x86_dev_info asus_me176c_info __initconst = {
  	.modules = bq24190_modules,
  	.invalid_aei_gpiochip = "INT33FC:02",
-@@ -955,6 +972,7 @@ static const struct pinctrl_map lenovo_yoga_tab2_830_1050_codec_pinctrl_map =
- 	PIN_MAP_MUX_GROUP(LENOVO_YOGA_TAB2_830_1050_CODEC_NAME, "codec_32khz_clk",
- 			  "INT33FC:02", "pmu_clk2_grp", "pmu_clk");
+ 	.init = asus_me176c_tf103c_init,
++	.exit = asus_me176c_tf103c_exit,
+ };
  
-+static struct device *lenovo_yoga_tab2_830_1050_codec_dev;
- static struct pinctrl *lenovo_yoga_tab2_830_1050_codec_pinctrl;
- static struct sys_off_handler *lenovo_yoga_tab2_830_1050_sys_off_handler;
+ /* Asus TF103C tablets have an Android factory img with everything hardcoded */
+@@ -641,6 +669,7 @@ static const struct x86_dev_info asus_tf103c_info __initconst = {
+ 	.modules = bq24190_modules,
+ 	.invalid_aei_gpiochip = "INT33FC:02",
+ 	.init = asus_me176c_tf103c_init,
++	.exit = asus_me176c_tf103c_exit,
+ };
  
-@@ -981,12 +999,24 @@ static int __init lenovo_yoga_tab2_830_1050_init_codec(void)
- 		goto err_unregister_mappings;
+ /*
+@@ -1583,7 +1612,6 @@ static int serdev_count;
+ static struct i2c_client **i2c_clients;
+ static struct platform_device **pdevs;
+ static struct serdev_device **serdevs;
+-static struct gpiod_lookup_table * const *gpiod_lookup_tables;
+ static const struct software_node *bat_swnode;
+ static void (*exit_handler)(void);
+ 
+@@ -1706,9 +1734,6 @@ static void x86_android_tablet_cleanup(void)
+ 	if (exit_handler)
+ 		exit_handler();
+ 
+-	for (i = 0; gpiod_lookup_tables && gpiod_lookup_tables[i]; i++)
+-		gpiod_remove_lookup_table(gpiod_lookup_tables[i]);
+-
+ 	software_node_unregister(bat_swnode);
+ 	software_node_unregister_node_group(int33fc_gpiochip_node_group);
+ }
+@@ -1760,10 +1785,6 @@ static __init int x86_android_tablet_init(void)
+ 		}
  	}
  
--	/* We're done with the codec_dev now */
--	put_device(codec_dev);
-+	ret = software_node_register_node_group(lenovo_yoga_tab2_830_1050_swnodes);
-+	if (ret) {
-+		ret = dev_err_probe(codec_dev, ret, "registering software nodes\n");
-+		goto err_unregister_mappings;
-+	}
- 
-+	ret = device_add_software_node(codec_dev, &lenovo_yoga_tab2_830_1050_wm5102);
-+	if (ret) {
-+		ret = dev_err_probe(codec_dev, ret, "adding software node\n");
-+		goto err_unregister_swnodes;
-+	}
-+
-+	lenovo_yoga_tab2_830_1050_codec_dev = codec_dev;
- 	lenovo_yoga_tab2_830_1050_codec_pinctrl = pinctrl;
- 	return 0;
- 
-+err_unregister_swnodes:
-+	software_node_unregister_node_group(lenovo_yoga_tab2_830_1050_swnodes);
- err_unregister_mappings:
- 	pinctrl_unregister_mappings(&lenovo_yoga_tab2_830_1050_codec_pinctrl_map);
- err_put_device:
-@@ -1034,6 +1064,12 @@ static void lenovo_yoga_tab2_830_1050_exit(void)
- {
- 	unregister_sys_off_handler(lenovo_yoga_tab2_830_1050_sys_off_handler);
- 
-+	if (lenovo_yoga_tab2_830_1050_codec_dev) {
-+		device_remove_software_node(lenovo_yoga_tab2_830_1050_codec_dev);
-+		put_device(lenovo_yoga_tab2_830_1050_codec_dev);
-+		software_node_unregister_node_group(lenovo_yoga_tab2_830_1050_swnodes);
-+	}
-+
- 	if (lenovo_yoga_tab2_830_1050_codec_pinctrl) {
- 		pinctrl_put(lenovo_yoga_tab2_830_1050_codec_pinctrl);
- 		pinctrl_unregister_mappings(&lenovo_yoga_tab2_830_1050_codec_pinctrl_map);
+-	gpiod_lookup_tables = dev_info->gpiod_lookup_tables;
+-	for (i = 0; gpiod_lookup_tables && gpiod_lookup_tables[i]; i++)
+-		gpiod_add_lookup_table(gpiod_lookup_tables[i]);
+-
+ 	if (dev_info->init) {
+ 		ret = dev_info->init();
+ 		if (ret < 0) {
 -- 
 2.40.1.606.ga4b1b128d6-goog
 
