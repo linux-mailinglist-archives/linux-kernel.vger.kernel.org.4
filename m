@@ -2,102 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A4D257006B7
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:25:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ECAB7006BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 13:25:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241112AbjELLZ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 07:25:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48316 "EHLO
+        id S241122AbjELLZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 07:25:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240546AbjELLZ1 (ORCPT
+        with ESMTP id S240546AbjELLZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 07:25:27 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B059129
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:25:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1683890726; x=1715426726;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=DLcxuGg90W0qpFb37T2Z/r5Za1skwRRI/1oJiKzq3+Y=;
-  b=iuOCP06S3ZDrVCk0w2Oe8o+EIJ85iryjnf1BbFj/VouM8FdMjWJbH/vR
-   AUZC1IcIdRWkai4QdMIgDj0Hn9yrup1+IOZMdBStvCmofcoHv+JvjCH2z
-   aZIJ0Ge/+vv32+o1mYrZ0RwC14PFoDJVqFy38Rx8RQj0lA79x3+lK66oJ
-   GgsxGf28B4bNJ4k1vMgcomrXY7XNKld1NBjvKka85Rodpv5nRTu77oJDH
-   1hLl74TnRPHQ2eb8+JhLwYK2r406iV+ySiEa+NL6fJYXGN/diFa5iduW9
-   Oh3ufhr2nuNNs3YDPaxcbLVyz2FHxyn5KAA9oFrJLwoQRa7U7ABOWZGqL
-   g==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="335287276"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="335287276"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 04:25:25 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="824331254"
-X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
-   d="scan'208";a="824331254"
-Received: from tsavina-mobl2.ger.corp.intel.com (HELO localhost) ([10.252.63.51])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 04:25:21 -0700
-From:   Jani Nikula <jani.nikula@linux.intel.com>
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Lucas De Marchi <lucas.demarchi@intel.com>
-Cc:     intel-gfx@lists.freedesktop.org, intel-xe@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Kevin Brodsky <kevin.brodsky@arm.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?utf-8?Q?K=C3=B6nig?= <christian.koenig@amd.com>
-Subject: Re: [PATCH 2/3] linux/bits.h: Add fixed-width GENMASK and BIT macros
-In-Reply-To: <ZF4fi5B7PPlgZBOI@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20230509051403.2748545-1-lucas.demarchi@intel.com>
- <20230509051403.2748545-3-lucas.demarchi@intel.com>
- <ZF4fi5B7PPlgZBOI@smile.fi.intel.com>
-Date:   Fri, 12 May 2023 14:25:18 +0300
-Message-ID: <87pm75kd0h.fsf@intel.com>
+        Fri, 12 May 2023 07:25:52 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC56129
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:25:51 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-307c040797bso1964678f8f.3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:25:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683890750; x=1686482750;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CYeMvzhacTAsEhRnGaiSXOklc6JbdbjUEO+PqKj86EM=;
+        b=dfv2IP6dc/J7G7LCOD6YdSjkGbLk6Ym2enw4dsh2izhdZq4S3jUNgmbNkoOZTGgpVG
+         Vxz4fEDBwar1w40gWofnY1aY1isxVn6EGJviIbfXtsZQScLqUBK5QD1TAtEPdLBg4xpo
+         Cc+7ftFm93pLinp+H+dhQGhU77O4h3oqQ2AF/3x+EoHMPACSlSQCNNbv3VqPU0qJWymA
+         YtvpWoBvdwjOvZ8h7n+H1jgaxhAzlDUg9wd22N2+OIW3YVgNS05lHWaRa5uyL7n1fybQ
+         bmzReIiEy51m8sdNhp6QdFc5dPPKIf9B9uNv7bNVDBUM4Jt3bJ134ACU5AQvVPhSvtHF
+         hWCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683890750; x=1686482750;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CYeMvzhacTAsEhRnGaiSXOklc6JbdbjUEO+PqKj86EM=;
+        b=lQkruFDeQ0bVrcQ1euFqGwXSWVq67y8DNhU2kRnJVzfgc5IGnvlh1As6hkHAvCZ7Rx
+         +E+Rg0HHmz7ulFwGBBlOoJWGuKkMZQX/TIOpbzu5SY1Yds8jO6d29s0E79Jlb4Ke0dc4
+         OBkwd/JA24ipaKRKcvcvU3yOGM5UkW+BurHPd0yzkBfLPGXlpLNbra6mUSXSwYTuo/N2
+         JLsksaOOW6BghaAc+9XmLxk+FRTLXkQjogp4NZdPOniTOf09AZuSEFmfQXg53zzqfGGp
+         Mq5EKH526ZwuBU8lR+F8Ax/JjjJMuQMHciOySp8y0j0QILPbVk7GXVLjSLvAbAJ6o161
+         XxFg==
+X-Gm-Message-State: AC+VfDySLPAprQ+w4I1tti/ErZ6N0cLd97+bxRmKrPiLvcJLFRMGP9iY
+        RbZZ4VtX1CPyKoE0arxm5WkPbA==
+X-Google-Smtp-Source: ACHHUZ5/M3ZTfApneO2t4X8QYio6oz00ANSzZfjIz5Npz04E29FdhAnsPQlbM01TQYxvdJJfOHEG8g==
+X-Received: by 2002:a05:6000:510:b0:306:2fab:1f81 with SMTP id a16-20020a056000051000b003062fab1f81mr18570217wrf.21.1683890749922;
+        Fri, 12 May 2023 04:25:49 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.gmail.com with ESMTPSA id u19-20020a7bc053000000b003f09d7b6e20sm28284207wmc.2.2023.05.12.04.25.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 04:25:49 -0700 (PDT)
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Vincent Shih <vincent.sunplus@gmail.com>,
+        Anson Huang <Anson.Huang@nxp.com>,
+        Kumar Thella <sthella@codeaurora.org>,
+        Keiji Hayashibara <hayashibara.keiji@socionext.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Peng Fan <peng.fan@oss.nxp.com>
+In-Reply-To: <20230505120814.1057152-1-krzysztof.kozlowski@linaro.org>
+References: <20230505120814.1057152-1-krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 1/5] dt-bindings: nvmem: mxs-ocotp: drop unneeded
+ address/size-cells
+Message-Id: <168389074843.55515.5646738672764702598.b4-ty@linaro.org>
+Date:   Fri, 12 May 2023 12:25:48 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 12 May 2023, Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
-> On Mon, May 08, 2023 at 10:14:02PM -0700, Lucas De Marchi wrote:
->> Add GENMASK_U32(), GENMASK_U16() and GENMASK_U8()  macros to create
->> masks for fixed-width types and also the corresponding BIT_U32(),
->> BIT_U16() and BIT_U8().
->
-> Why?
 
-The main reason is that GENMASK() and BIT() size varies for 32/64 bit
-builds.
+On Fri, 05 May 2023 14:08:10 +0200, Krzysztof Kozlowski wrote:
+> Referenced nvmem.yaml schema already defines address/size-cells, so
+> remove redundant entries and use unevaluatedProperties: false.
+> 
+> 
 
+Applied, thanks!
 
-BR,
-Jani.
+[1/5] dt-bindings: nvmem: mxs-ocotp: drop unneeded address/size-cells
+      commit: 6c1eb69485752935580226a2e39d366625d0fc2a
+[2/5] dt-bindings: nvmem: qcom,qfprom: drop unneeded address/size-cells
+      commit: 426b30ed585c09b9bc6c3d615ed264b2f8d6c56c
+[3/5] dt-bindings: nvmem: qcom,spmi-sdam: drop unneeded address/size-cells
+      commit: 2881bbe70740e663ab29ce7da80d5fb0b9cd9518
+[4/5] dt-bindings: nvmem: socionext,uniphier-efuse: drop unneeded address/size-cells
+      commit: bb7a2f40d77337d9fc5a6e0bf12cc89620b62241
+[5/5] dt-bindings: nvmem: sunplus,sp7021-ocotp: drop unneeded address/size-cells
+      commit: 103066fdb0dedd2dcccd1e0fa4255b9b46b46be5
 
->
->> All of those depend on a new "U" suffix added to the integer constant.
->> Due to naming clashes it's better to call the macro U32. Since C doesn't
->> have a proper suffix for short and char types, the U16 and U18 variants
->> just use U32 with one additional check in the BIT_* macros to make
->> sure the compiler gives an error when the those types overflow.
->> The BIT_U16() and BIT_U8() need the help of GENMASK_INPUT_CHECK(),
->> as otherwise they would allow an invalid bit to be passed. Hence
->> implement them in include/linux/bits.h rather than together with
->> the other BIT* variants.
->
-> So, we have _Generic() in case you still wish to implement this.
-
+Best regards,
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+
