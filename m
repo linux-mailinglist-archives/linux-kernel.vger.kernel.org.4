@@ -2,144 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9999E70050F
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:16:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F065700514
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:18:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240611AbjELKQj convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 12 May 2023 06:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
+        id S240614AbjELKR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 06:17:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240388AbjELKQe (ORCPT
+        with ESMTP id S240111AbjELKR5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:16:34 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F961E43
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:16:31 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id e9e14a558f8ab-33539445684so215718075ab.1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:16:31 -0700 (PDT)
+        Fri, 12 May 2023 06:17:57 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F0410FA
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:17:55 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-3062db220a3so6362177f8f.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:17:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683886674; x=1686478674;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=14BJIVNMULvhbAa0IJTwVfQ7hLurTBIHPZW7PjkOaVo=;
+        b=m2GjFHJp3L+cd9d3hGN4nHKQtF447dleqW6dVU0mLF5QhG6X7nDyRw9/ubCErmyDoW
+         C4qeM2JSjRv/MA+gXisM1hgky1EumqjImqb2SsWwySSCLEfTFyqp/2zg2z6wfoQbo9Sw
+         dxu5dhk+afgKtozHKPFxG9zMWdfMVsmG62SAZSrmKuRy5LrMd41GHRK1E0LE0IFT9gU9
+         JrRuvAaeKdvKywhK6LmI2bWVdKqPWeszpVSFaFJ6GKDsEBk4Xv0rlYZO3ewsXQbVsZvx
+         VK1FKPc1S8arPxXdMgLjOcYHE/psbNSC34JarSN7vp+PdnJM8OLVA2c37kD5ByYOML1I
+         7mdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683886591; x=1686478591;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:in-reply-to
-         :date:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PrGsn1wkvvej6F1uGfKqQ1+kOvoEwa4kM6TBw7EXxes=;
-        b=ZMg1hnsLrBFNvhVmCGA13G5iho3ueLbNIIzmiLK/npNvreEoXmEzjkiQ5q9tT/YnlH
-         EN7hRkpTshJLSDg4NeQZPu4FEOhobC0l5e23BjbbZ5TCGs0z6/gmIf33r4aYkf8vnTMd
-         gBCv4a98B16OHfGmbq9TW+cGGY1q3T4YsVk0Cji68HnQRVZEcyBp2jrqlbcX3Mven6nT
-         qsH+lpM5PqTQLl1Ao1LvhT8SdjzD1VoqPX2maq1HwrqXSfmwZYgRvhuMJv/icVJj1E8i
-         zxNkl2eaZ6CA3Jqdc0C1k/3Kzgz5XOTl2kFJcCBzZbUFPGjey8dPnSd1jvRryat9mns5
-         M1lg==
-X-Gm-Message-State: AC+VfDzWTxbKUAGmLMx13RYwATKWVxXou5vlxEPOR6aH+f0MdSLci4CC
-        /f2U2NarpxLxQYcOaO94rMvk2DBDhG7BJlUbk+xEKwAQrG1e
-X-Google-Smtp-Source: ACHHUZ7DwFRweg692XVZEIoGmVNAj9tG+MvoZmlV9xrn87oIubM9X54AOiWBpP6Pc50Q1breiX7GuRVrcYXUUWdiLK9u6rw8VkoH
+        d=1e100.net; s=20221208; t=1683886674; x=1686478674;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=14BJIVNMULvhbAa0IJTwVfQ7hLurTBIHPZW7PjkOaVo=;
+        b=O3U9fSr3XhKAOXJVe49TRJmmcZM/7RPxUXkG+AwBkymvSX3PadNvkkv5roPAh6gqy3
+         il3ETB9s7MHEaZUvQxicNitgiBWItFCxS5aMDAHtyt4knwSF25cVus3CkNSBkpEwKmxN
+         yh2Qf354U3XMThGIaOBLHSFz5H7bG3YtJCtd/MIlhz9r0ysbN4ZQP6G92fZUh9kSIYqg
+         ZBfun+35SKphf9mLEkWhuJS2QlD54K9jCWWQRaObDxqttAA3UFBH6nT55ukvkYKwpZ90
+         ILp5Ta3jC9/V3UedMuIL1ZhjTHkdaQYQLkVQH1WGHZqaR4ttTTjwipYGCq9GD74Lz1CP
+         Dtnw==
+X-Gm-Message-State: AC+VfDykXxSy15cdCoC+fC1WQem522ESF2X8TwHQiXfJFJys1/tUN4jU
+        KNfixNYUPNM8oWUiW+5R4xDHUQ==
+X-Google-Smtp-Source: ACHHUZ7Nl4tlDQMNUHZVBv7fk43XYLJwOflZ3jsWjnvqzd5OWriCsZwDUTX6lXf5yUaigorw8h9FXQ==
+X-Received: by 2002:a5d:5503:0:b0:306:2d3d:a108 with SMTP id b3-20020a5d5503000000b003062d3da108mr17239296wrv.11.1683886674383;
+        Fri, 12 May 2023 03:17:54 -0700 (PDT)
+Received: from [192.168.1.195] ([5.133.47.210])
+        by smtp.googlemail.com with ESMTPSA id k1-20020a7bc301000000b003eddc6aa5fasm28401011wmj.39.2023.05.12.03.17.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 May 2023 03:17:53 -0700 (PDT)
+Message-ID: <3c98ed14-11cc-a4ba-16b9-1aea1c7ba255@linaro.org>
+Date:   Fri, 12 May 2023 11:17:51 +0100
 MIME-Version: 1.0
-X-Received: by 2002:a6b:c8d5:0:b0:76c:52f2:1a7a with SMTP id
- y204-20020a6bc8d5000000b0076c52f21a7amr8463170iof.2.1683886590834; Fri, 12
- May 2023 03:16:30 -0700 (PDT)
-Date:   Fri, 12 May 2023 03:16:30 -0700
-In-Reply-To: <5eacf66d-053e-d82b-1e73-c808fb4c8aad@linux.dev>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000016c3a005fb7c66f3@google.com>
-Subject: Re: [syzbot] [rdma?] KASAN: slab-use-after-free Read in siw_query_port
-From:   syzbot <syzbot+79f283f1f4ccc6e8b624@syzkaller.appspotmail.com>
-To:     guoqing.jiang@linux.dev
-Cc:     bmt@zurich.ibm.com, guoqing.jiang@linux.dev, jgg@ziepe.ca,
-        leon@kernel.org, linux-kernel@vger.kernel.org,
-        linux-rdma@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH V2 2/3] nvmem: brcm_nvram: add .read_post_process() for
+ MACs
+Content-Language: en-US
+To:     =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        bcm-kernel-feedback-list@broadcom.com,
+        linux-kernel@vger.kernel.org,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20230421084312.27932-1-zajec5@gmail.com>
+ <20230421084312.27932-2-zajec5@gmail.com>
+From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+In-Reply-To: <20230421084312.27932-2-zajec5@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->
->
-> On 5/12/23 15:10, syzbot wrote:
->> Hello,
->>
->> syzbot found the following issue on:
->>
->> HEAD commit:    16a8829130ca nfs: fix another case of NULL/IS_ERR confusio..
->> git tree:       upstream
->> console output: https://syzkaller.appspot.com/x/log.txt?x=162c0566280000
->> kernel config:  https://syzkaller.appspot.com/x/.config?x=8bc832f563d8bf38
->> dashboard link: https://syzkaller.appspot.com/bug?extid=79f283f1f4ccc6e8b624
->> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
->>
->> Unfortunately, I don't have any reproducer for this issue yet.
->>
->> Downloadable assets:
->> disk image: https://storage.googleapis.com/syzbot-assets/f8c18a31ba47/disk-16a88291.raw.xz
->> vmlinux: https://storage.googleapis.com/syzbot-assets/03a18f29b7e7/vmlinux-16a88291.xz
->> kernel image: https://storage.googleapis.com/syzbot-assets/1db2407ade1e/bzImage-16a88291.xz
->>
->> IMPORTANT: if you fix the issue, please add the following tag to the commit:
->> Reported-by: syzbot+79f283f1f4ccc6e8b624@syzkaller.appspotmail.com
->>
->> xfrm0 speed is unknown, defaulting to 1000
->> ==================================================================
->> BUG: KASAN: slab-use-after-free in siw_query_port+0x37b/0x3e0 drivers/infiniband/sw/siw/siw_verbs.c:177
->> Read of size 4 at addr ffff888034efa0e8 by task kworker/1:4/24211
->>
->> CPU: 1 PID: 24211 Comm: kworker/1:4 Not tainted 6.4.0-rc1-syzkaller-00012-g16a8829130ca #0
->> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
->> Workqueue: infiniband ib_cache_event_task
->> Call Trace:
->>   <TASK>
->>   __dump_stack lib/dump_stack.c:88 [inline]
->>   dump_stack_lvl+0xd9/0x150 lib/dump_stack.c:106
->>   print_address_description.constprop.0+0x2c/0x3c0 mm/kasan/report.c:351
->>   print_report mm/kasan/report.c:462 [inline]
->>   kasan_report+0x11c/0x130 mm/kasan/report.c:572
->>   siw_query_port+0x37b/0x3e0 drivers/infiniband/sw/siw/siw_verbs.c:177
->>   iw_query_port drivers/infiniband/core/device.c:2049 [inline]
->>   ib_query_port drivers/infiniband/core/device.c:2090 [inline]
->>   ib_query_port+0x3c4/0x8f0 drivers/infiniband/core/device.c:2082
->>   ib_cache_update.part.0+0xcf/0x920 drivers/infiniband/core/cache.c:1487
->>   ib_cache_update drivers/infiniband/core/cache.c:1561 [inline]
->>   ib_cache_event_task+0x1b1/0x270 drivers/infiniband/core/cache.c:1561
->>   process_one_work+0x99a/0x15e0 kernel/workqueue.c:2405
->>   worker_thread+0x67d/0x10c0 kernel/workqueue.c:2552
->>   kthread+0x344/0x440 kernel/kthread.c:379
->>   ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
->>   </TASK>
->
-> This might be similar as 390d3fdcae2d,  let me play with syzbot a bit 😉
->
-> #syz test: git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git 
 
-This crash does not have a reproducer. I cannot test it.
 
-> for-rc
->
-> diff --git a/drivers/infiniband/core/device.c 
-> b/drivers/infiniband/core/device.c
-> index a666847bd714..9dd59f8d5f05 100644
-> --- a/drivers/infiniband/core/device.c
-> +++ b/drivers/infiniband/core/device.c
-> @@ -2016,6 +2016,7 @@static int iw_query_port(struct ib_device *device,
-> {
->         struct in_device *inetdev;
->         struct net_device *netdev;
-> +int ret;
->
->         memset(port_attr, 0, sizeof(*port_attr));
->
-> @@ -2045,8 +2046,9 @@static int iw_query_port(struct ib_device *device,
->                 rcu_read_unlock();
->         }
->
-> +ret = device->ops.query_port(device, port_num, port_attr);
->         dev_put(netdev);
-> -       return device->ops.query_port(device, port_num, port_attr);
-> +return ret;
-> }
->
-> static int __ib_query_port(struct ib_device *device,
+On 21/04/2023 09:43, Rafał Miłecki wrote:
+> From: Rafał Miłecki <rafal@milecki.pl>
+> 
+> 1. Parse ASCII MAC format into byte based
+> 2. Calculate relative addresses based on index argument
+> 
+> Signed-off-by: Rafał Miłecki <rafal@milecki.pl>
+> ---
+
+Applied thanks,
+
+--srini
+>   drivers/nvmem/Kconfig      |  1 +
+>   drivers/nvmem/brcm_nvram.c | 28 ++++++++++++++++++++++++++++
+>   2 files changed, 29 insertions(+)
+> 
+> diff --git a/drivers/nvmem/Kconfig b/drivers/nvmem/Kconfig
+> index b291b27048c7..688b70ba4826 100644
+> --- a/drivers/nvmem/Kconfig
+> +++ b/drivers/nvmem/Kconfig
+> @@ -55,6 +55,7 @@ config NVMEM_BRCM_NVRAM
+>   	tristate "Broadcom's NVRAM support"
+>   	depends on ARCH_BCM_5301X || COMPILE_TEST
+>   	depends on HAS_IOMEM
+> +	select GENERIC_NET_UTILS
+>   	help
+>   	  This driver provides support for Broadcom's NVRAM that can be accessed
+>   	  using I/O mapping.
+> diff --git a/drivers/nvmem/brcm_nvram.c b/drivers/nvmem/brcm_nvram.c
+> index 39aa27942f28..4567c597c87f 100644
+> --- a/drivers/nvmem/brcm_nvram.c
+> +++ b/drivers/nvmem/brcm_nvram.c
+> @@ -4,6 +4,8 @@
+>    */
+>   
+>   #include <linux/bcm47xx_nvram.h>
+> +#include <linux/etherdevice.h>
+> +#include <linux/if_ether.h>
+>   #include <linux/io.h>
+>   #include <linux/mod_devicetable.h>
+>   #include <linux/module.h>
+> @@ -42,6 +44,25 @@ static int brcm_nvram_read(void *context, unsigned int offset, void *val,
+>   	return 0;
+>   }
+>   
+> +static int brcm_nvram_read_post_process_macaddr(void *context, const char *id, int index,
+> +						unsigned int offset, void *buf, size_t bytes)
+> +{
+> +	u8 mac[ETH_ALEN];
+> +
+> +	if (bytes != 3 * ETH_ALEN - 1)
+> +		return -EINVAL;
+> +
+> +	if (!mac_pton(buf, mac))
+> +		return -EINVAL;
+> +
+> +	if (index)
+> +		eth_addr_add(mac, index);
+> +
+> +	ether_addr_copy(buf, mac);
+> +
+> +	return 0;
+> +}
+> +
+>   static int brcm_nvram_add_cells(struct brcm_nvram *priv, uint8_t *data,
+>   				size_t len)
+>   {
+> @@ -75,6 +96,13 @@ static int brcm_nvram_add_cells(struct brcm_nvram *priv, uint8_t *data,
+>   		priv->cells[idx].offset = value - (char *)data;
+>   		priv->cells[idx].bytes = strlen(value);
+>   		priv->cells[idx].np = of_get_child_by_name(dev->of_node, priv->cells[idx].name);
+> +		if (!strcmp(var, "et0macaddr") ||
+> +		    !strcmp(var, "et1macaddr") ||
+> +		    !strcmp(var, "et2macaddr")) {
+> +			priv->cells[idx].raw_len = strlen(value);
+> +			priv->cells[idx].bytes = ETH_ALEN;
+> +			priv->cells[idx].read_post_process = brcm_nvram_read_post_process_macaddr;
+> +		}
+>   	}
+>   
+>   	return 0;
