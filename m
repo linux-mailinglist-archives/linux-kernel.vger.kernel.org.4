@@ -2,99 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92549700D28
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:38:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 783BB700D2C
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:40:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236807AbjELQim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 12:38:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
+        id S236972AbjELQkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 12:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232182AbjELQik (ORCPT
+        with ESMTP id S231256AbjELQkK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 12:38:40 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D8B8A7E
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 09:38:34 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so6969794b3a.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 09:38:34 -0700 (PDT)
+        Fri, 12 May 2023 12:40:10 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84BC6900E;
+        Fri, 12 May 2023 09:40:07 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f41d087b3bso73356915e9.0;
+        Fri, 12 May 2023 09:40:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683909514; x=1686501514;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20221208; t=1683909606; x=1686501606;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=DI3VClWXDuKTFGWdg3vQHVn8mYYEQYaV3Uoj0tZUhr8=;
-        b=rtNlldmsz3ctSPubKMZIs9MSHIgEjW+zWdMumyfKBtQa33xEAw8RKJWeJ2DGLaoOBK
-         WGKHOpufyc6MSqWqHlJv9SzUeIBxzz72WSgqejMFt9CDZgPTdKUMX+LhBs+0MJWYO/5a
-         JIDkP3LE4sFEbglJdH6kN1QmYtn78//5j77HPybCI4D7ojcRoB5fZEBYtO/Lwm+DWZT2
-         ps5XFQ6cGjiBbrzbQRqKN5f50mm4ByXgBcU8uZ13NycPg+8LCsTcVXD5byqU4qQdvpuZ
-         S7objJdTGXnGzRWkpoTBgr2BNUTZzsc3Dp12Y+BJKTuqYfj9g32UU8Ea4oJ0iPDHUEiO
-         6+OQ==
+        bh=gOPr8RiZNSgqggpmzVuoRlbviV7C/s+3BUUqAAb6inU=;
+        b=DOCSZD3R4gA0NV+uJmIYMvCPKGm8d9kpASOgAAz+Pf4S+bC0zfZIpDVA6j4pA5/G9z
+         2pv/aZk9u0O0KFrGIRGMFN5sxS4S/44ucOrDp+w9VpWR4uuZvwDTzUhBQBhBZ8S1Tz3B
+         A5RVjIX26Ua+r+QGuGgXEYRPOaEK2M0bQL6s3XxHIXuZRKLWM+xfN3SpYRT0P92uopQt
+         CkJRyCOBuJ4vl5d6ZVUxN/FPuTayqcbUDbcbnkY8KA6iyaI8vGfTnKQJuxTpkgX780tb
+         2n2REXdeuXT4AOACppzPbHWgY1hFyp1P5fqnXt0Bz0wOeGEDCNuAqXOkQ+hG5w5ExObO
+         OR2g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683909514; x=1686501514;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DI3VClWXDuKTFGWdg3vQHVn8mYYEQYaV3Uoj0tZUhr8=;
-        b=P1qMrpa5BRQEOymOJDkIWm84m8DCIP8nldF9XudH8F9dADL/g3+hUy4ElNKNlcgJpG
-         qWEj2CVhLog9jmb3n9IyAQmYrXEto7LOWKMZsK7ZDkB6AH20FR8ftuk1boIYIJ+4XfUQ
-         DRd7SQrpMeCHOLeH3lYCK0gcE+c3qMM0T5jVdf+bR65zxMvmyQTrmgQD79Jjueptad91
-         wkiF0TBFd+DkZ6PSm+rmnPuoaQyYtv59kZglX+d46q8SyK6IEj9tyf3M8P4XS5tT96sS
-         sLkwRjiqiMSP0pQ9vCEKQnUlYRNeu/qZiVy292WTwhWqQkf2s2B2OQSXhuD/RMnJbZGs
-         UpoA==
-X-Gm-Message-State: AC+VfDxLXlQNhGURtEg3g2wij31kRiQI10v7nkDodkt4vHehh3PnCJb7
-        qeVkH+8qV1B/qeCS58JGAnvDwKXLIEKRZ2eQCXA=
-X-Google-Smtp-Source: ACHHUZ6GWMdYadfeRV/qZ24bVy+eXwpBauXEuaI7sUETSLNb7cFw5fkqX+OZ4FeF59Wg9oTW7cKjs4y8H/suDYvU2iw=
-X-Received: by 2002:a17:90a:9f87:b0:24e:201e:dcbd with SMTP id
- o7-20020a17090a9f8700b0024e201edcbdmr30692013pjp.21.1683909513955; Fri, 12
- May 2023 09:38:33 -0700 (PDT)
-MIME-Version: 1.0
-References: <cover.1683892665.git.christophe.leroy@csgroup.eu> <a6834980e58c5e2cdf25b3db061f34975de46437.1683892665.git.christophe.leroy@csgroup.eu>
-In-Reply-To: <a6834980e58c5e2cdf25b3db061f34975de46437.1683892665.git.christophe.leroy@csgroup.eu>
-From:   Max Filippov <jcmvbkbc@gmail.com>
-Date:   Fri, 12 May 2023 09:38:21 -0700
-Message-ID: <CAMo8BfLYp6yKC6o8Z8qSYQq3BhBmHfQ32F_ShsgqRbfVepkv1g@mail.gmail.com>
-Subject: Re: [PATCH 3/3] xtensa: Remove 64 bits atomic builtins stubs
-To:     Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc:     Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Chris Zankel <chris@zankel.net>, linux-kernel@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kasan-dev@googlegroups.com,
-        Rohan McLure <rmclure@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
+        d=1e100.net; s=20221208; t=1683909606; x=1686501606;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=gOPr8RiZNSgqggpmzVuoRlbviV7C/s+3BUUqAAb6inU=;
+        b=HQCfSbIea/CxUIZwbbqW3T94c+9721kUxZ2mxLjkgQs94a3pKSjWSFEVER8m5ZL7J+
+         rdUMpG+hyVlr+XQ6KX24vJ4EXJZf/0LK+dRdpJRssMThitn/vQ7BqBaaUWru/aOrkUEA
+         +NcNRbmmd0fXH8w3lRxZgg60PdqSaE43Kg4er1ChiLhjnNQW8D4lAfM2cdkUf+4wiNz+
+         YwXehIM7JPsXyIZMgZaVAuL5pSkscxdk4/CTjOqN5iHDGLR0kePiqUDGH5xFfwWRwEAR
+         ekBSAvJgp0P+9mwVHSDRxHn5Xc+Rba4b0hLaRXuxSxlvMpn7OiUPw3TXsvk1PB2ewmA2
+         8EiQ==
+X-Gm-Message-State: AC+VfDyr4+3Pd8OUOwLrOPt5p4GnL2Jqo6weUpMQbrKBjbXZzGmETMg6
+        jurtTXugS2nHWj23gT7wnbh9a9axkh4RIsxIMvY=
+X-Google-Smtp-Source: ACHHUZ5yxbWW2Bv6DZDq5gkRtNdoEDpV2I3JPwHvYv23gd+IPRTMx71bA/LG2dz5CkgOQTwYpkRxhA==
+X-Received: by 2002:a5d:5968:0:b0:2c9:e585:84b0 with SMTP id e40-20020a5d5968000000b002c9e58584b0mr16128939wri.1.1683909605667;
+        Fri, 12 May 2023 09:40:05 -0700 (PDT)
+Received: from localhost ([146.70.133.78])
+        by smtp.gmail.com with ESMTPSA id v13-20020a05600c214d00b003f42461ac75sm16140195wml.12.2023.05.12.09.40.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 12 May 2023 09:40:05 -0700 (PDT)
+Mime-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 12 May 2023 18:40:03 +0200
+Message-Id: <CSKG4WDA4MVH.1RVYIN4NYH4EA@vincent-arch>
+Cc:     <linux-pci@vger.kernel.org>, <robh@kernel.org>, <heiko@sntech.de>,
+        <kw@linux.com>, <shawn.lin@rock-chips.com>,
+        <linux-kernel@vger.kernel.org>, <lgirdwood@gmail.com>,
+        <linux-rockchip@lists.infradead.org>, <broonie@kernel.org>,
+        <bhelgaas@google.com>,
+        <linux-kernel-mentees@lists.linuxfoundation.org>,
+        <lpieralisi@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        "Dan Johansen" <strit@manjaro.org>
+Subject: Re: [PATCH v1] drivers: pci: introduce configurable delay for
+ Rockchip PCIe bus scan
+From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
+To:     "Bjorn Helgaas" <helgaas@kernel.org>
+X-Mailer: aerc 0.15.1
+References: <20230509153912.515218-1-vincenzopalazzodev@gmail.com>
+ <20230509211902.GA1270901@bhelgaas>
+In-Reply-To: <20230509211902.GA1270901@bhelgaas>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        FROM_LOCAL_NOVOWEL,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 8:31=E2=80=AFAM Christophe Leroy
-<christophe.leroy@csgroup.eu> wrote:
 >
-> The stubs were provided by commit 725aea873261 ("xtensa: enable KCSAN")
-> to make linker happy allthought they are not meant to be used at all.
+> Thanks for raising this issue.  Let's see what we can do to address
+> it.
 >
-> KCSAN core has been fixed to not require them anymore on
-> 32 bits architectures.
+> On Tue, May 09, 2023 at 05:39:12PM +0200, Vincenzo Palazzo wrote:
+> > Add a configurable delay to the Rockchip PCIe driver to address
+> > crashes that occur on some old devices, such as the Pine64 RockPro64.
+> >=20
+> > This issue is affecting the ARM community, but there is no
+> > upstream solution for it yet.
 >
-> Then they can be removed.
+> It sounds like this happens with several endpoints, right?  And I
+> assume the endpoints work fine in other non-Rockchip systems?  If
+> that's the case, my guess is the problem is with the Rockchip host
+> controller and how it's initialized, not with the endpoints.
 >
-> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
->  arch/xtensa/lib/Makefile      |  2 --
->  arch/xtensa/lib/kcsan-stubs.c | 54 -----------------------------------
->  2 files changed, 56 deletions(-)
->  delete mode 100644 arch/xtensa/lib/kcsan-stubs.c
+> The only delays and timeouts I see in the driver now are in
+> rockchip_pcie_host_init_port(), where it waits for link training to
+> complete.  I assume the link training did completely successfully
+> since you don't mention either a gen1 or gen2 timeout (although the
+> gen2 message is a dev_dbg() that normally wouldn't go to the console).
+>
+> I don't know that the spec contains a retrain timeout value.  Several
+> other drivers use 1 second, while rockchip uses 500ms (for example,
+> see LINK_RETRAIN_TIMEOUT and LINK_UP_TIMEOUT).
+>
+> I think we need to understand the issue better before adding a DT
+> property and a module parameter.  Those are hard for users to deal
+> with.  If we can figure out a value that works for everybody, it would
+> be better to just hard-code it in the driver and use that all the
+> time.
+>
+> A few minor style/formatting comments below just for future reference:
 
-Acked-by: Max Filippov <jcmvbkbc@gmail.com>
+Due the recent email I think it is worth make a version 2 of this
+patch with your suggestion? and iterate over it another time?
 
---=20
-Thanks.
--- Max
+Cheers!
+
+Vincent.
