@@ -2,138 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42A6B6FFEF6
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 04:25:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E738D6FFEFA
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 04:35:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239619AbjELCZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 11 May 2023 22:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33544 "EHLO
+        id S239658AbjELCdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 11 May 2023 22:33:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239158AbjELCZj (ORCPT
+        with ESMTP id S239158AbjELCda (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 11 May 2023 22:25:39 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7ECB359D0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 19:25:37 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba6939e78a0so10147748276.0
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 19:25:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683858336; x=1686450336;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=dVrdsQc/biAwpt188V4iZWfS19eaXCE07QPOY9kbdyc=;
-        b=GQ8UVH9IygDETvgeENJQeoTFRl8IK6C71cn0eEf8SRe+fcNkVbogqZTEV5spZj3AYl
-         QZY1fCTKrPPA3LJqQI2S73wLreGYzUHXWf6jF0T3V0Qu2J4n42ehYtbxn6HfNim8BzQ1
-         XB9T4j5TtAct937a1GogPDZ/VyvmPySCrq9ascVSC6HrVysL7S+Dup0RfS+TdHzyffYu
-         +BWPKv5kR//I9uGLkkmM1C3DClzHSfgrHLothXTbfzQ5CPksh3m7s891AsCXvqTXm/Y2
-         A1ieQSQhQR+UsriiFUS5QNIen/0Zzln7A3aNqNaK8dDOFZlLywHR3jGaZiAOcllmGMaW
-         5X+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683858336; x=1686450336;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dVrdsQc/biAwpt188V4iZWfS19eaXCE07QPOY9kbdyc=;
-        b=Q8S6U8Ljxy8eJo0tqVo6JzgJD/McSSiBTZZpvvgltDMAQ5ZmjyJmbLCoXp8tAGlrvQ
-         k+YxpJNJ0rcdghSJb06rFiiF/ePIwlliHrUSzBaGo9AZP6sTgid9M08pteQwhkB5wK3j
-         GBQpxU/wWFL7E2BmrihYAJ1LRuqhn1Y3+VNfmM3F6w6NozQpg2wOD3sZiTKAjkRUTHF2
-         fuVhT5u/pMEsu8HGmUZAhlLtj2bSkOhFPtSlkvfYz4xBUPgjjpYog/s23s9icEW5I4Uh
-         SnujS2kGGAdpER1RvQk9n0W0PnuVdNKu51Vlt7mrq7HphvkWJF42XOGciPfLXvHXhyyf
-         EJKg==
-X-Gm-Message-State: AC+VfDzePwuAnW37aEVexvUFtIr6XEm9BoA/MN6jcXUAh4MTRqZkInwM
-        TmsywJcCz0OEvEC3z3HSbljrES93AJhG
-X-Google-Smtp-Source: ACHHUZ6PjgAnQ4yHVTWsepQlN0qPo9uDN+LDYTHYcGjsv2wb8UltmdJTc0fhG08ccIWbq0MSRLcoxeq80x19
-X-Received: from meowing-l.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3eba])
- (user=maskray job=sendgmr) by 2002:a05:690c:10c:b0:55c:a5db:869 with SMTP id
- bd12-20020a05690c010c00b0055ca5db0869mr19325168ywb.4.1683858336753; Thu, 11
- May 2023 19:25:36 -0700 (PDT)
-Date:   Fri, 12 May 2023 02:25:28 +0000
-Mime-Version: 1.0
-Message-ID: <20230512022528.3430327-1-maskray@google.com>
-Subject: [PATCH] coredump, vmcore: Set p_align to 4 for PT_NOTE
-From:   Fangrui Song <maskray@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>,
-        Eric Biederman <ebiederm@xmission.com>,
-        Kees Cook <keescook@chromium.org>, Baoquan He <bhe@redhat.com>,
-        Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>, linux-fsdevel@vger.kernel.org,
-        kexec@lists.infradead.org
-Cc:     linux-kernel@vger.kernel.org, Fangrui Song <maskray@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Thu, 11 May 2023 22:33:30 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EE2055A2
+        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 19:33:28 -0700 (PDT)
+Received: from [192.168.2.193] (109-252-144-198.dynamic.spd-mgts.ru [109.252.144.198])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dmitry.osipenko)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 80068660574C;
+        Fri, 12 May 2023 03:33:25 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1683858806;
+        bh=QPRjKnSsSd+hW6g+3RQUwtjoMbBDMKZF34astvPh9W8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=BCb3xAg/AC2JGzZowjaB8rdbHD1gvPnoZpy+TVxWrHxezto2SsU8a/T0/jPQekpcT
+         tLfa/Jk99tBSsvmpommhiZrv7yZxr/AzDzAq3PyT8xTuloGE/UTu8WOmQOZ8uZjbqK
+         kx7zZhCEQZ68RqPp1aUE+QPaw8XUEgc/lztu8MSxl1HJqt3HpIFxQ04Oq0ZFluyKIz
+         EyN3vDEjqoh5smFKleMPtHoF8X4SPU/R2mQhN+p6aTsR4O3tMrzOBg6xYa+24EcKIo
+         idi/Mf8I4K3wmUZgz5XOH0P0uau3T7IatG1CJJYZehswRULTIfCb15EpPvEIjMFXph
+         ymQ0I0WFXUA+A==
+Message-ID: <a453d562-7e93-aef3-a533-171f572b6ee3@collabora.com>
+Date:   Fri, 12 May 2023 05:33:22 +0300
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 0/3] Add sync object UAPI support to VirtIO-GPU driver
+To:     Gurchetan Singh <gurchetansingh@chromium.org>,
+        Rob Clark <robdclark@gmail.com>
+Cc:     Gerd Hoffmann <kraxel@redhat.com>, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        virtualization@lists.linux-foundation.org,
+        David Airlie <airlied@redhat.com>,
+        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
+        =?UTF-8?B?TWFyZWsgT2zFocOhaw==?= <maraeo@gmail.com>,
+        Pierre-Eric Pelloux-Prayer <pierre-eric.pelloux-prayer@amd.com>,
+        Emil Velikov <emil.velikov@collabora.com>
+References: <20230416115237.798604-1-dmitry.osipenko@collabora.com>
+ <141b928d-6165-f282-b8e6-f140cb09333d@collabora.com>
+ <CAAfnVBnrUotph4TYJVu9Bohqv3m80t90V34TNhh-Tspxwsj-ZQ@mail.gmail.com>
+ <CAF6AEGs4fuq4i8UJdO5hvgHTNhzFMKGZ87+w1oyvL0LAqWio6A@mail.gmail.com>
+ <CAAfnVBkLhYVaSG3U_QUZwXLFv-XT=9F2v2pgrCDQQBgNZ3MSWA@mail.gmail.com>
+Content-Language: en-US
+From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
+In-Reply-To: <CAAfnVBkLhYVaSG3U_QUZwXLFv-XT=9F2v2pgrCDQQBgNZ3MSWA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Tools like readelf/llvm-readelf use p_align to parse a PT_NOTE program
-header as an array of 4-byte entries or 8-byte entries. Currently, there
-are workarounds[1] in place for Linux to treat p_align==0 as 4. However,
-it would be more appropriate to set the correct alignment so that tools
-do not have to rely on guesswork. FreeBSD coredumps set p_align to 4 as
-well.
+On 5/12/23 03:17, Gurchetan Singh wrote:
+...
+> Can we get one of the Mesa MRs reviewed first?  There's currently no
+> virtio-intel MR AFAICT, and the amdgpu one is marked as "Draft:".
+> 
+> Even for the amdgpu, Pierre suggests the feature "will be marked as
+> experimental both in Mesa and virglrenderer" and we can revise as needed.
+> The DRM requirements seem to warn against adding an UAPI too hastily...
+> 
+> You can get the deqp-vk 1.2 tests to pass with the current UAPI, if you
+> just change your mesa <--> virglrenderer protocol a little.  Perhaps that
+> way is even better, since you plumb the in sync-obj into host-side command
+> submission.
+> 
+> Without inter-context sharing of the fence, this MR really only adds guest
+> kernel syntactic sugar.
+> 
+> Note I'm not against syntactic sugar, but I just want to point out that you
+> can likely merge the native context work without any UAPI changes, in case
+> it's not clear.
+> 
+> If this was for the core drm syncobj implementation, and not just
+>> driver ioctl parsing and wiring up the core helpers, I would agree
+>> with you.
+>>
+> 
+> There are several possible and viable paths to get the features in question
+> (VK1.2 syncobjs, and inter-context fence sharing).  There are paths
+> entirely without the syncobj, paths that only use the syncobj for the
+> inter-context fence sharing case and create host syncobjs for VK1.2, paths
+> that also use guest syncobjs in every proxied command submission.
+> 
+> It's really hard to tell which one is better.  Here's my suggestion:
+> 
+> 1) Get the native contexts reviewed/merged in Mesa/virglrenderer using the
+> current UAPI.  Options for VK1.2 include: pushing down the syncobjs to the
+> host, and simulating the syncobj (as already done).  It's fine to mark
+> these contexts as "experimental" like msm-experimental.  That will allow
+> you to experiment with the protocols, come up with tests, and hopefully
+> determine an answer to the host versus guest syncobj question.
+> 
+> 2) Once you've completed (1), try to add UAPI changes for features that are
+> missing or things that are suboptimal with the knowledge gained from doing
+> (2).
+> 
+> WDYT?
 
-[1]: https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=82ed9683ec099d8205dc499ac84febc975235af6
-[2]: https://reviews.llvm.org/D150022
----
- fs/binfmt_elf.c       | 2 +-
- fs/binfmt_elf_fdpic.c | 2 +-
- fs/proc/vmcore.c      | 4 ++--
- 3 files changed, 4 insertions(+), 4 deletions(-)
+Having syncobj support available by DRM driver is a mandatory
+requirement for native contexts because userspace (Mesa) relies on sync
+objects support presence. In particular, Intel Mesa driver checks
+whether DRM driver supports sync objects to decide which features are
+available, ANV depends on the syncobj support.
 
-diff --git a/fs/binfmt_elf.c b/fs/binfmt_elf.c
-index 1033fbdfdbec..44b4c42ab8e8 100644
---- a/fs/binfmt_elf.c
-+++ b/fs/binfmt_elf.c
-@@ -1517,7 +1517,7 @@ static void fill_elf_note_phdr(struct elf_phdr *phdr, int sz, loff_t offset)
- 	phdr->p_filesz = sz;
- 	phdr->p_memsz = 0;
- 	phdr->p_flags = 0;
--	phdr->p_align = 0;
-+	phdr->p_align = 4;
- }
- 
- static void fill_note(struct memelfnote *note, const char *name, int type,
-diff --git a/fs/binfmt_elf_fdpic.c b/fs/binfmt_elf_fdpic.c
-index 05a1471d5283..d76ad3d4f676 100644
---- a/fs/binfmt_elf_fdpic.c
-+++ b/fs/binfmt_elf_fdpic.c
-@@ -1269,7 +1269,7 @@ static inline void fill_elf_note_phdr(struct elf_phdr *phdr, int sz, loff_t offs
- 	phdr->p_filesz = sz;
- 	phdr->p_memsz = 0;
- 	phdr->p_flags = 0;
--	phdr->p_align = 0;
-+	phdr->p_align = 4;
- 	return;
- }
- 
-diff --git a/fs/proc/vmcore.c b/fs/proc/vmcore.c
-index 03f5963914a1..cb80a7703d58 100644
---- a/fs/proc/vmcore.c
-+++ b/fs/proc/vmcore.c
-@@ -877,7 +877,7 @@ static int __init merge_note_headers_elf64(char *elfptr, size_t *elfsz,
- 	phdr.p_offset  = roundup(note_off, PAGE_SIZE);
- 	phdr.p_vaddr   = phdr.p_paddr = 0;
- 	phdr.p_filesz  = phdr.p_memsz = phdr_sz;
--	phdr.p_align   = 0;
-+	phdr.p_align   = 4;
- 
- 	/* Add merged PT_NOTE program header*/
- 	tmp = elfptr + sizeof(Elf64_Ehdr);
-@@ -1068,7 +1068,7 @@ static int __init merge_note_headers_elf32(char *elfptr, size_t *elfsz,
- 	phdr.p_offset  = roundup(note_off, PAGE_SIZE);
- 	phdr.p_vaddr   = phdr.p_paddr = 0;
- 	phdr.p_filesz  = phdr.p_memsz = phdr_sz;
--	phdr.p_align   = 0;
-+	phdr.p_align   = 4;
- 
- 	/* Add merged PT_NOTE program header*/
- 	tmp = elfptr + sizeof(Elf32_Ehdr);
+I'm not familiar with a history of Venus and its limitations. Perhaps
+the reason it's using host-side syncobjs is to have 1:1 Vulkan API
+mapping between guest and host. Not sure if Venus could use guest
+syncobjs instead or there are problems with that.
+
+When syncobj was initially added to kernel, it was done from the needs
+of supporting Vulkan wait API. For Venus the actual Vulkan driver is on
+host side, while for native contexts it's on guest side. Native contexts
+don't need syncobj on host side, it will be unnecessary overhead for
+every nctx to have it on host. Hence, if there is no good reason for
+host-side syncobjs, then why do that?
+
+Native contexts pass deqp synchronization tests, they use sync objects
+universally for both GL and VK. Games work, piglit/deqp passing. What
+else you're wanting to test? Turnip?
+
+The AMDGPU code has been looked and it looks good. It's a draft for now
+because of the missing sync objects UAPI and other virglrender/Qemu
+changes required to get KMS working. Maybe it will be acceptable to
+merge the Mesa part once kernel will get sync objects supported, will
+need to revisit it.
+
+I'm not opening MR for virtio-intel because it has open questions that
+need to be resolved first.
+
 -- 
-2.40.1.606.ga4b1b128d6-goog
+Best regards,
+Dmitry
 
