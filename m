@@ -2,99 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332106FFFA0
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 06:19:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E48B86FFFA3
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 06:20:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239918AbjELETo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 00:19:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40722 "EHLO
+        id S239562AbjELEUH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 00:20:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239878AbjELETe (ORCPT
+        with ESMTP id S239846AbjELET7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 00:19:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5915F5FDD
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 21:19:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E66C64FA5
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 04:19:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A40EC433EF;
-        Fri, 12 May 2023 04:19:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683865166;
-        bh=Ss0d/YlpNBJa+gq9dsQPpsQfi1oSiK4LQ3MruNXU5xQ=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=F5dR0xeYaI/MotfZ4qBTqT2TgpnvhwnliULLdjjbnBOHvJ5ckyDslH+1VsszLTSvg
-         sW7Utit1l35f7p0gb1AqkGeeQGC7Y1rpSkD8gl40JU1eFn7cPwhL9Ds45lxrcg5jJp
-         WxLWdC9ZQ8RWZsT+fG1/OC4unDgZifozoi+jRt1DV6NIPgDA4H15B7EC3TFSVaEUpX
-         4iZ/ZWSgmbba5pdn7pIu6ADP1W9W6q5bG5xoD3/evBdXDZ8xdQpQDiAaz1g+qXvzb1
-         34Yi6bDHJ9D8sEbehHJDrijnIxU9MyDPS9PRUiPLCyzZb3xEP/ZJrt/uPrxfRpV5eR
-         PsssHvFTf+zIA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Maxime Chevallier <maxime.chevallier@bootlin.com>
-Cc:     linux-kernel@vger.kernel.org, thomas.petazzoni@bootlin.com,
-        alexis.lothore@bootlin.com
-In-Reply-To: <20230511142735.316445-1-maxime.chevallier@bootlin.com>
-References: <20230511142735.316445-1-maxime.chevallier@bootlin.com>
-Subject: Re: [PATCH] regmap: mmio: Allow passing an empty
- config->reg_stride
-Message-Id: <168386516384.353123.11293244589798997385.b4-ty@kernel.org>
-Date:   Fri, 12 May 2023 13:19:23 +0900
+        Fri, 12 May 2023 00:19:59 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F023C7D97;
+        Thu, 11 May 2023 21:19:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683865181; x=1715401181;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9fVYCoUOkPrB/HD+rOqjJUl91Xym0VZzb1G18ctyUJc=;
+  b=aDpX778/IEoSKW/eem7BoBzF+GeFlgYXDBm7M7wwiWUszEAcJUO76V6t
+   lv7/vmPJ7JCh7JU1FraY9vWmfkCPhtlpn0v3/FPfItLiRwQJLXIxwMb2l
+   sbDpcXjR6QrLq9njRBqVUhtL4sXTP3Ym+fsGGKlf5Z6vAjabP+vScQ1tC
+   L5m5SSaB0EbVRqkAc+GNlkHOTAQtjZ4J86LlsP/K/ExkU8su1j6Gbmy4P
+   s9uRFueuTMwe6+dcPP9DhfBm+cwE/Pu6DsGB6O3VnAZvd7hoP8XTW6EIE
+   j+iDI0sgUiq+eyXPhdky7MwfMEoOvt8msXADVTIUTzvh1JP0CBTbtGzaw
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="340007294"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="340007294"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 May 2023 21:19:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="789650891"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="789650891"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 11 May 2023 21:19:36 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pxKFj-0004V8-1t;
+        Fri, 12 May 2023 04:19:35 +0000
+Date:   Fri, 12 May 2023 12:19:30 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     alexis.lothore@bootlin.com, andrew@lunn.ch, f.fainelli@gmail.com,
+        olteanv@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     oe-kbuild-all@lists.linux.dev, linux-renesas-soc@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        thomas.petazzoni@bootlin.com, herve.codina@bootlin.com,
+        miquel.raynal@bootlin.com, milan.stevanovic@se.com,
+        jimmy.lalande@se.com, pascal.eberhard@se.com
+Subject: Re: [PATCH net v2 1/3] net: dsa: rzn1-a5psw: enable management
+ frames for CPU port
+Message-ID: <202305121153.NMzdkguI-lkp@intel.com>
+References: <20230511170202.742087-2-alexis.lothore@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511170202.742087-2-alexis.lothore@bootlin.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 May 2023 16:27:35 +0200, Maxime Chevallier wrote:
-> Regmap's stride is used for MMIO regmaps to check the correctness of
-> reg_width. However, it's acceptable to pass an empty config->reg_stride,
-> in that case the actual stride used is 1.
-> 
-> There are valid cases now to pass an empty stride, when using
-> down/upshifting of register address. In this case, the stride value
-> loses its sense, so ignore the reg_width when the stride isn't set.
-> 
-> [...]
+Hi,
 
-Applied to
+kernel test robot noticed the following build errors:
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regmap.git for-next
+[auto build test ERROR on net/main]
 
-Thanks!
+url:    https://github.com/intel-lab-lkp/linux/commits/alexis-lothore-bootlin-com/net-dsa-rzn1-a5psw-enable-management-frames-for-CPU-port/20230512-010530
+base:   net/main
+patch link:    https://lore.kernel.org/r/20230511170202.742087-2-alexis.lothore%40bootlin.com
+patch subject: [PATCH net v2 1/3] net: dsa: rzn1-a5psw: enable management frames for CPU port
+config: arm-allyesconfig (https://download.01.org/0day-ci/archive/20230512/202305121153.NMzdkguI-lkp@intel.com/config)
+compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/1a3acdd4d7ad50be9d4df989592327668610b13a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review alexis-lothore-bootlin-com/net-dsa-rzn1-a5psw-enable-management-frames-for-CPU-port/20230512-010530
+        git checkout 1a3acdd4d7ad50be9d4df989592327668610b13a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash
 
-[1/1] regmap: mmio: Allow passing an empty config->reg_stride
-      commit: e12ff28764937dd58c8613f16065da60da149048
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305121153.NMzdkguI-lkp@intel.com/
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+All errors (new ones prefixed by >>):
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+   drivers/net/dsa/rzn1_a5psw.c: In function 'a5psw_setup':
+>> drivers/net/dsa/rzn1_a5psw.c:676:32: error: 'A5PSW_MGMT_CFG_ENABLE' undeclared (first use in this function); did you mean 'A5PSW_MGMT_TAG_CFG_ENABLE'?
+     676 |         reg = A5PSW_CPU_PORT | A5PSW_MGMT_CFG_ENABLE;
+         |                                ^~~~~~~~~~~~~~~~~~~~~
+         |                                A5PSW_MGMT_TAG_CFG_ENABLE
+   drivers/net/dsa/rzn1_a5psw.c:676:32: note: each undeclared identifier is reported only once for each function it appears in
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+vim +676 drivers/net/dsa/rzn1_a5psw.c
 
-Thanks,
-Mark
+   659	
+   660	static int a5psw_setup(struct dsa_switch *ds)
+   661	{
+   662		struct a5psw *a5psw = ds->priv;
+   663		int port, vlan, ret;
+   664		struct dsa_port *dp;
+   665		u32 reg;
+   666	
+   667		/* Validate that there is only 1 CPU port with index A5PSW_CPU_PORT */
+   668		dsa_switch_for_each_cpu_port(dp, ds) {
+   669			if (dp->index != A5PSW_CPU_PORT) {
+   670				dev_err(a5psw->dev, "Invalid CPU port\n");
+   671				return -EINVAL;
+   672			}
+   673		}
+   674	
+   675		/* Configure management port */
+ > 676		reg = A5PSW_CPU_PORT | A5PSW_MGMT_CFG_ENABLE;
+   677		a5psw_reg_writel(a5psw, A5PSW_MGMT_CFG, reg);
+   678	
+   679		/* Set pattern 0 to forward all frame to mgmt port */
+   680		a5psw_reg_writel(a5psw, A5PSW_PATTERN_CTRL(A5PSW_PATTERN_MGMTFWD),
+   681				 A5PSW_PATTERN_CTRL_MGMTFWD);
+   682	
+   683		/* Enable port tagging */
+   684		reg = FIELD_PREP(A5PSW_MGMT_TAG_CFG_TAGFIELD, ETH_P_DSA_A5PSW);
+   685		reg |= A5PSW_MGMT_TAG_CFG_ENABLE | A5PSW_MGMT_TAG_CFG_ALL_FRAMES;
+   686		a5psw_reg_writel(a5psw, A5PSW_MGMT_TAG_CFG, reg);
+   687	
+   688		/* Enable normal switch operation */
+   689		reg = A5PSW_LK_ADDR_CTRL_BLOCKING | A5PSW_LK_ADDR_CTRL_LEARNING |
+   690		      A5PSW_LK_ADDR_CTRL_AGEING | A5PSW_LK_ADDR_CTRL_ALLOW_MIGR |
+   691		      A5PSW_LK_ADDR_CTRL_CLEAR_TABLE;
+   692		a5psw_reg_writel(a5psw, A5PSW_LK_CTRL, reg);
+   693	
+   694		ret = readl_poll_timeout(a5psw->base + A5PSW_LK_CTRL, reg,
+   695					 !(reg & A5PSW_LK_ADDR_CTRL_CLEAR_TABLE),
+   696					 A5PSW_LK_BUSY_USEC_POLL, A5PSW_CTRL_TIMEOUT);
+   697		if (ret) {
+   698			dev_err(a5psw->dev, "Failed to clear lookup table\n");
+   699			return ret;
+   700		}
+   701	
+   702		/* Reset learn count to 0 */
+   703		reg = A5PSW_LK_LEARNCOUNT_MODE_SET;
+   704		a5psw_reg_writel(a5psw, A5PSW_LK_LEARNCOUNT, reg);
+   705	
+   706		/* Clear VLAN resource table */
+   707		reg = A5PSW_VLAN_RES_WR_PORTMASK | A5PSW_VLAN_RES_WR_TAGMASK;
+   708		for (vlan = 0; vlan < A5PSW_VLAN_COUNT; vlan++)
+   709			a5psw_reg_writel(a5psw, A5PSW_VLAN_RES(vlan), reg);
+   710	
+   711		/* Reset all ports */
+   712		dsa_switch_for_each_port(dp, ds) {
+   713			port = dp->index;
+   714	
+   715			/* Reset the port */
+   716			a5psw_reg_writel(a5psw, A5PSW_CMD_CFG(port),
+   717					 A5PSW_CMD_CFG_SW_RESET);
+   718	
+   719			/* Enable only CPU port */
+   720			a5psw_port_enable_set(a5psw, port, dsa_port_is_cpu(dp));
+   721	
+   722			if (dsa_port_is_unused(dp))
+   723				continue;
+   724	
+   725			/* Enable egress flooding for CPU port */
+   726			if (dsa_port_is_cpu(dp))
+   727				a5psw_flooding_set_resolution(a5psw, port, true);
+   728	
+   729			/* Enable management forward only for user ports */
+   730			if (dsa_port_is_user(dp))
+   731				a5psw_port_mgmtfwd_set(a5psw, port, true);
+   732		}
+   733	
+   734		return 0;
+   735	}
+   736	
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
