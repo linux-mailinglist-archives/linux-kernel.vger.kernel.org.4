@@ -2,145 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1CAC700D72
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:55:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 98A08700D76
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:55:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237560AbjELQza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 12:55:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46952 "EHLO
+        id S237634AbjELQzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 12:55:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232659AbjELQz3 (ORCPT
+        with ESMTP id S237581AbjELQzq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 12:55:29 -0400
-Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0DB54C3D;
-        Fri, 12 May 2023 09:55:21 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id 5b1f17b1804b1-3f427118644so60437795e9.0;
-        Fri, 12 May 2023 09:55:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683910520; x=1686502520;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IVTgoVGLmfiSnDYvanbFiLjHDZAEOgfT7L1XJHgPDs4=;
-        b=Yy2XpG9W+CgUdhqpRnqt8p7ojoszi7SHmsuXn84K2qqr6Kgeqd8FJDMONlvMHiIROg
-         42MibeR0AYOtv/dB1jEVlmpiaczW+ZZ87VmxR/UXZW32x0vof3jQtA9Mo8ZKZpvIUvA9
-         a20w2j6El4yk8q0q39WxvUvKbrzAA9nQbrSB692jaFoGeOnJZuIzLPGj9bYQXwVbFbbT
-         FpajdDAQpUOeysQbSgmovY+srcMZeKj6s5lEkhqEz18kKYMiBWzuzfMTyu05UZhv2YDG
-         noL8f3cyDUPoqffypu5n7mc3/jJ9iaBHwogPqClLitQ7SPbnPPzt6eYHhSocXpzBTGR7
-         5cnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683910520; x=1686502520;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IVTgoVGLmfiSnDYvanbFiLjHDZAEOgfT7L1XJHgPDs4=;
-        b=jZ+Xb8p9I/QA851LI07YrKOFl78kZ0cdb+OQMpOT6uMPvZd5wFf/BKA3E3hlUeTQJs
-         nHdHxAJelYNRT7jgdPu3RpVy44Al5QDo/etWoiA9MUgGTJnGGu748ELnZYgXphO+9709
-         oalIcxxL5YZ8myEyaJoeM8w4uWPa5srAJZLBGPeQODkGYBCHKn1hdb+fxGa3wlHz+5Eu
-         029xFh4+wzuJfnJRseq0n+VXPk8A+r54dsr9Wd51a/PTsVMKTAUZ7xJ/tWEeGT9mNxCp
-         coZ5AslelUnpRgaL2+b6SqG30tsFFmVNn1QcLgu/Fq1F0tzhGAPTN8DEM37JtBkKR/ZF
-         rwRQ==
-X-Gm-Message-State: AC+VfDy2AAvrUKJ3G7n/RCWbxN0noFc7jmddUHm7vQNlca42wePfwkP2
-        zkoOQM9NOxhyMgXoAN8UsWGlSLnJUROZ6c+7kA==
-X-Google-Smtp-Source: ACHHUZ4FnsBU6iMCQ52SbGMbgjldPfuXW4a9zBtcb/Ps6zGdodTUrDUANz8UXtOOVnSLnNYGK6OiCXnzLUGabMvWnRE=
-X-Received: by 2002:a1c:cc0e:0:b0:3ef:622c:26d3 with SMTP id
- h14-20020a1ccc0e000000b003ef622c26d3mr20385705wmb.35.1683910520000; Fri, 12
- May 2023 09:55:20 -0700 (PDT)
+        Fri, 12 May 2023 12:55:46 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A25FA5F8;
+        Fri, 12 May 2023 09:55:41 -0700 (PDT)
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CFmlxn013426;
+        Fri, 12 May 2023 16:55:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=lhOZ/2oeK/GzhajdlT28ZnFZVcUORQeus79WVFMsRe8=;
+ b=pJHdfZxzg1bu3lEHergll7r16yk1vYwKJZ3qbQpwP8OJQs6+0ra/cJGYaw9fok4x+Pi8
+ Bp8WVb3CQr8JreF6HNqdKHg8TmqUTK23sejvz01oZLj24LofAxKY346vrbuKrh7QKBTp
+ Sr270liz5hRYSINna6VECE5whNNlfKae4hHBmD2uCOCIuOTRxoQAZRrSpi9vCC/VL6bt
+ 524m80DV1E1iuoh5Tlc7+hSv6HmyBBoOIqi6umLZVI7b1wpM3iR3wy5F51UB0oduc/sx
+ BcIR1M9mKIk6ZzIJ8p0BbQdi/efgacBLHb9/Svj6oj8y2WZAK5YQB70Et4OVD18fcMLc ww== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qhrdsg575-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 16:55:30 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34CGtT0C013555
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 16:55:30 GMT
+Received: from hu-bjorande-lv.qualcomm.com (10.49.16.6) by
+ nalasex01c.na.qualcomm.com (10.47.97.35) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Fri, 12 May 2023 09:55:29 -0700
+From:   Bjorn Andersson <quic_bjorande@quicinc.com>
+To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
+        "Anjelique Melendez" <quic_amelende@quicinc.com>
+CC:     =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>, "Luca Weiss" <luca@z3ntu.xyz>,
+        <linux-leds@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>
+Subject: [PATCH] leds: qcom-lpg: Fix PWM period limits
+Date:   Fri, 12 May 2023 09:55:24 -0700
+Message-ID: <20230512165524.3367443-1-quic_bjorande@quicinc.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CAH2-hcJYVpBNwnMS6qUp4=MW8kSryDAz7G5cNA8R00QabC9bjg@mail.gmail.com>
- <20230503153231.1136114-1-tomas.mudrunka@gmail.com> <ZFMN5nmqLAX170SE@nixie71>
- <ZF19yOojiaSbo3vS@google.com>
-In-Reply-To: <ZF19yOojiaSbo3vS@google.com>
-From:   =?UTF-8?B?VG9tw6HFoSBNdWRydcWIa2E=?= <tomas.mudrunka@gmail.com>
-Date:   Fri, 12 May 2023 18:55:08 +0200
-Message-ID: <CAH2-hcJ8XxK060O-QCCBz+=cKk1HbT-aOKQH2EOY=D=xttvz7A@mail.gmail.com>
-Subject: Re: [PATCH v5] Fix freeze in lm8333 i2c keyboard driver
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Cc:     Jeff LaBundy <jeff@labundy.com>, linux-input@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.49.16.6]
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 3ChKbdQx5m952mOgKS35nGwEALo8L5k6
+X-Proofpoint-GUID: 3ChKbdQx5m952mOgKS35nGwEALo8L5k6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-12_10,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ phishscore=0 mlxlogscore=797 suspectscore=0 spamscore=0 malwarescore=0
+ adultscore=0 mlxscore=0 priorityscore=1501 clxscore=1011 bulkscore=0
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305120141
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> So this is still racy, isn't it? The interrupt may come after read is
-> done, but before we register the handler.
+The introduction of high resolution PWM support moved the parenthesis of
+the divisions in the calculation of min and max period. The result in
+both divisions is in most cases truncation to 0, which limits the period
+to the range of [0, 0].
 
-Well. It is. But please see the rest of the thread, where we've
-already discussed this.
+Both numerators (and denominators) are within 64 bits, so the whole
+expression can be put directly into the div64_u64, instead of doing it
+partially.
 
-Every time the interrupt handler runs, the interrupt is disabled and
-then reenabled after i2c communication is done. Which means this exact
-thing happens on each keypress anyway. So i don't think it's a
-necessarily huge deal. It might not be perfect solution, but it makes
-things much better. window in which the deadlock condition can happen
-is now in range of few ms (or us), instead of ~10 seconds (previously
-it included bootloader and basicaly any moment from power up to driver
-load)
+Fixes: b00d2ed37617 ("leds: rgb: leds-qcom-lpg: Add support for high resolution PWM")
+Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+---
 
-Another solution would be to trigger on LOW instead of FALLING as
-proposed in initial version of the patch. That would be safer in terms
-of lm8333 deadlock, but Jeff was concerned about possibility of
-interrupt storm taking down whole system in case the IRQ line gets
-stuck in LOW for some reason...
+This fixes the regression in v6.4-rc1.
 
-Tom
+ drivers/leds/rgb/leds-qcom-lpg.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-p=C3=A1 12. 5. 2023 v 1:44 odes=C3=ADlatel Dmitry Torokhov
-<dmitry.torokhov@gmail.com> napsal:
->
-> On Wed, May 03, 2023 at 08:44:06PM -0500, Jeff LaBundy wrote:
-> > Hi Tomas,
-> >
-> > On Wed, May 03, 2023 at 05:32:31PM +0200, Tomas Mudrunka wrote:
-> > > LM8333 uses gpio interrupt line which is triggered by falling edge.
-> > > When button is pressed before driver is loaded,
-> > > driver will miss the edge and never respond again.
-> > > To fix this we run the interrupt handler before registering IRQ
-> > > to clear the interrupt via i2c command.
-> > >
-> > > Signed-off-by: Tomas Mudrunka <tomas.mudrunka@gmail.com>
-> > > ---
-> >
-> > Reviewed-by: Jeff LaBundy <jeff@labundy.com>
-> >
-> > >  drivers/input/keyboard/lm8333.c | 2 ++
-> > >  1 file changed, 2 insertions(+)
-> > >
-> > > diff --git a/drivers/input/keyboard/lm8333.c b/drivers/input/keyboard=
-/lm8333.c
-> > > index 7457c3220..52108c370 100644
-> > > --- a/drivers/input/keyboard/lm8333.c
-> > > +++ b/drivers/input/keyboard/lm8333.c
-> > > @@ -178,6 +178,8 @@ static int lm8333_probe(struct i2c_client *client=
-)
-> > >                     dev_warn(&client->dev, "Unable to set active time=
-\n");
-> > >     }
-> > >
-> > > +   lm8333_irq_thread(client->irq, lm8333);
->
-> So this is still racy, isn't it? The interrupt may come after read is
-> done, but before we register the handler.
->
-> > > +
-> > >     err =3D request_threaded_irq(client->irq, NULL, lm8333_irq_thread=
-,
-> > >                                IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
-> > >                                "lm8333", lm8333);
-> > > --
-> > > 2.40.1
-> >
->
-> Thanks.
->
-> --
-> Dmitry
+diff --git a/drivers/leds/rgb/leds-qcom-lpg.c b/drivers/leds/rgb/leds-qcom-lpg.c
+index c9cea797a697..7287fadc00df 100644
+--- a/drivers/leds/rgb/leds-qcom-lpg.c
++++ b/drivers/leds/rgb/leds-qcom-lpg.c
+@@ -312,14 +312,14 @@ static int lpg_calc_freq(struct lpg_channel *chan, uint64_t period)
+ 		max_res = LPG_RESOLUTION_9BIT;
+ 	}
+ 
+-	min_period = (u64)NSEC_PER_SEC *
+-			div64_u64((1 << pwm_resolution_arr[0]), clk_rate_arr[clk_len - 1]);
++	min_period = div64_u64((u64)NSEC_PER_SEC * (1 << pwm_resolution_arr[0]),
++			       clk_rate_arr[clk_len - 1]);
+ 	if (period <= min_period)
+ 		return -EINVAL;
+ 
+ 	/* Limit period to largest possible value, to avoid overflows */
+-	max_period = (u64)NSEC_PER_SEC * max_res * LPG_MAX_PREDIV *
+-			div64_u64((1 << LPG_MAX_M), 1024);
++	max_period = div64_u64((u64)NSEC_PER_SEC * max_res * LPG_MAX_PREDIV * (1 << LPG_MAX_M),
++			       1024);
+ 	if (period > max_period)
+ 		period = max_period;
+ 
+-- 
+2.25.1
+
