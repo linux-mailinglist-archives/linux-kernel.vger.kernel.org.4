@@ -2,139 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F8B0700004
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 07:50:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DE77700009
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 07:53:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239932AbjELFt7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 01:49:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36678 "EHLO
+        id S239938AbjELFxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 01:53:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239603AbjELFt5 (ORCPT
+        with ESMTP id S239603AbjELFxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 01:49:57 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D844423A
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 22:49:56 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id 2adb3069b0e04-4f2510b2b98so6520357e87.3
-        for <linux-kernel@vger.kernel.org>; Thu, 11 May 2023 22:49:56 -0700 (PDT)
+        Fri, 12 May 2023 01:53:22 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A6CB30E1;
+        Thu, 11 May 2023 22:53:21 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50bc4ba28cbso16829188a12.0;
+        Thu, 11 May 2023 22:53:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683870594; x=1686462594;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=dR0nPo0wLXJGUhsmXk+iF/iV8x3IujL7+cKIQfngnOU=;
-        b=i0sxN/sx8ja2FZljN9NZ10+XdTRyx7TVXS3XfBfK+T5XnYeoQATiWpyzGVwwQoV7Rh
-         ou2JuvRLHczboNQzh7ytXb/iJhLsDOqiXOAg5Eg3KTiD6TsfZe7Qsb6auRw9iEt9aHPb
-         qXrKwLRV5Q6GiY6YnueJ9qDNFSkEiWmntCsj3ztOHJhDlF880ld+kbZHJ3H6CSJ7WjUb
-         qKcnsRjk7I9k18xWhdJQL6+LY+jJ/u7woDjRPnb3ibZY9Ksdmlox5qB1k7X3crDmo12r
-         ZLY+kB4j+Sva8WpyGOt4xYL9sWdgYZJUjj09kRcfvU0F52vgYlhs8aBfO//0HWw8j3Ic
-         Mdhg==
+        d=gmail.com; s=20221208; t=1683870800; x=1686462800;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=zxEocq0cfbYqCnvqhVYRjwnXYTxjRtW9m6JsKrCrFjQ=;
+        b=brIEtQeiBhOcopDhT/dmPSOsg8BwWq0rrYoH3l62MzdBqpGWO1YOtQ252k+4PnaIH/
+         RjuoYyyi+cqmj7otFmPpRIx//Oz8yLLfoBe9RwC6a8BnQ+KYG0CqElWKfLuMa6cHw0fG
+         WEVRhrfiwTnxtNYxz3BBVC2/dE29DSmpdQwmL9pJm5qbXIVC+YQhX1D4KUngrIA9u1bK
+         /nkwJ6459gqfHyhYrOFbQ16vrGtjnjgNFzLgLkVoRhRvRwb6o9q/R5882wOXRxPhnP+u
+         Wg/OIsFjRfbL5r8Il93oFcpV9oYjpIWu5w3Ysptvk4jFMmprBh+T5B8zIKiU5HQxnXgN
+         +j6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683870594; x=1686462594;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dR0nPo0wLXJGUhsmXk+iF/iV8x3IujL7+cKIQfngnOU=;
-        b=C6d2vT/MJ2j6TcHJoOUnCs8TC8TtaJN+RW0t4Ore+NQKUnhI11o+HAXhKvGz9JhFHU
-         Xr/ExuAGKaVOcS4e/1pvFueivPq4mMfRDPXloPl9IIrSPSI2fYxof9qRA4oG7yY+4QCc
-         NHLvFTiEhrrl0ftoKDAvquzhLqOVJDS5ZmcRR5Ry9rjlewiG43D9F2kQPlJ2uOb5iVFq
-         dO/P92BBxwlaYZJgL2M8fh/kvVMgm5dgZKm8F0zITb5jEnUjIp2cGHNsBnGDI8nZf19X
-         MpDFMIgmqkhfL1ur9nE2BNFPXfZ8avSwypXYW8Nj+1xAvsXUYZiV4uYJhnfbjncGQ2nt
-         dVQg==
-X-Gm-Message-State: AC+VfDyM9ACahajOIi0BJvrvjpN8XBP+nEYZmMWc9lTuHnB1B0t97V1C
-        I95tRy/0oj1S8zI0oeqcIik=
-X-Google-Smtp-Source: ACHHUZ43V0as7o8VwI49xZcuvNvWFSSEekkE+KpkYu8hWeWT0AjKq8aHqvDUeYmVV0l16OsvGj3u1A==
-X-Received: by 2002:ac2:5d6e:0:b0:4d6:d0a0:8313 with SMTP id h14-20020ac25d6e000000b004d6d0a08313mr3178160lft.10.1683870594149;
-        Thu, 11 May 2023 22:49:54 -0700 (PDT)
-Received: from [192.168.1.126] (62-78-225-252.bb.dnainternet.fi. [62.78.225.252])
-        by smtp.gmail.com with ESMTPSA id z10-20020a19f70a000000b004f00189e1dcsm1344831lfe.117.2023.05.11.22.49.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 May 2023 22:49:53 -0700 (PDT)
-Message-ID: <f4ed65a9-4d7f-0b76-1b04-b0c85fabd8cd@gmail.com>
-Date:   Fri, 12 May 2023 08:49:52 +0300
+        d=1e100.net; s=20221208; t=1683870800; x=1686462800;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zxEocq0cfbYqCnvqhVYRjwnXYTxjRtW9m6JsKrCrFjQ=;
+        b=ht9UYXWHNn5friLaUg4wbY25AsNbnEfVwOduo4QfhZZ9lLSNA/Pu7Lld9pIU5S+FVM
+         kgpFy8eKtR/fqlW/HmU74l1oUXkjhFX9UpRV5bZSSQjBMFZUDrc2RYu4ZcdlRdpc499C
+         fcHxVekctKAyuJNxI5VQrhinKJyaU+9zXdAqODhaatuLCgJZVdUoCXEEW5vkZDx1iHHx
+         keUHiNmkSSBivkPyYsd0bXnYGNy294b9oGHvlShAaFucW+EXSD25e9Z5cnICtQUrRkuc
+         McxLdAN37J36XzWfRfS5iRnaxgawoYnz+7mGMszquGJlGM0CgpMNdusRkoknRkaqGapt
+         XliA==
+X-Gm-Message-State: AC+VfDx2Km/VJ0DhtkIVQImnW133/ET6ztdgBMFN2bAjWccQaEYB200s
+        Yttabku+b2AD7px1yDkL6sOOmPZj2fPA6+cZDI5cXKWU4f9xfQ==
+X-Google-Smtp-Source: ACHHUZ4FynjIPPaRLICd8flpj3EVm6gbWqtiVTs85jGrlqaTN3rWa9GbkNK5KELWuXPd1X32nxP0j7kzOPHLSIIlAg4=
+X-Received: by 2002:aa7:c546:0:b0:4be:b39b:ea8f with SMTP id
+ s6-20020aa7c546000000b004beb39bea8fmr17653998edr.2.1683870799671; Thu, 11 May
+ 2023 22:53:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US, en-GB
-To:     Dan Carpenter <dan.carpenter@linaro.org>
-Cc:     oe-kbuild@lists.linux.dev,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <46296e39-dbc1-4f27-b89c-af6f08d9f318@kili.mountain>
- <a1ad0e10-23d2-a860-e9a1-2680313d643f@gmail.com>
- <f5f669fc-ebb4-46df-8957-84c714481ace@kili.mountain>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: drivers/iio/accel/kionix-kx022a.c:1053 kx022a_probe_internal()
- warn: passing zero to 'dev_err_probe'
-In-Reply-To: <f5f669fc-ebb4-46df-8957-84c714481ace@kili.mountain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230510122045.2259-1-zegao@tencent.com> <6308b8e0-8a54-e574-a312-0a97cfbf810c@meta.com>
+ <ZFvUH+p0ebcgnwEg@krava>
+In-Reply-To: <ZFvUH+p0ebcgnwEg@krava>
+From:   Ze Gao <zegao2021@gmail.com>
+Date:   Fri, 12 May 2023 13:53:08 +0800
+Message-ID: <CAD8CoPC_=d+Aocp8pnSi9cbU6HWBNc697bKUS1UydtB-4DFzrA@mail.gmail.com>
+Subject: Re: [PATCH] bpf: reject blacklisted symbols in kprobe_multi to avoid
+ recursive trap
+To:     Jiri Olsa <olsajiri@gmail.com>
+Cc:     Yonghong Song <yhs@meta.com>, Song Liu <song@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ze Gao <zegao@tencent.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/12/23 08:41, Dan Carpenter wrote:
-> On Fri, May 12, 2023 at 08:16:02AM +0300, Matti Vaittinen wrote:
->>> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1046  	irq = fwnode_irq_get_byname(fwnode, "INT1");
->>> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1047  	if (irq > 0) {
->>> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1048  		data->inc_reg = KX022A_REG_INC1;
->>> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1049  		data->ien_reg = KX022A_REG_INC4;
->>> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1050  	} else {
->>> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1051  		irq = fwnode_irq_get_byname(fwnode, "INT2");
->>> 7c1d1677b3227c Matti Vaittinen 2022-10-24  1052  		if (irq <= 0)
->>>                                                                       ^^^^^^^^
->>> This code assumes fwnode_irq_get_byname() can return zero.
->>>
->>> 7c1d1677b3227c Matti Vaittinen 2022-10-24 @1053  			return dev_err_probe(dev, irq, "No suitable IRQ\n");
->>>
->>> But fortunately, it can't otherwise this would return success.
->>>
->>
->> Ouch. Actually, the fwnode_irq_get_byname() can return zero on device-tree
->> mapping error. I did actually send a patch to address this some time ago:
->> https://lore.kernel.org/lkml/cover.1666710197.git.mazziesaccount@gmail.com/
->>
-> 
-> Ah.  I just went by the documentation instead of looking at the code.
-> 
-> Originally a bunch of irq functions return NO_IRQ on error which was a
-> design mistake...  irq_of_parse_and_map() still returns zero on error
-> instead of negative error codes.  I wrote a check for that yesterday.
-> 
-> drivers/gpu/drm/msm/dsi/dsi_host.c:1949 msm_dsi_host_init() warn: irq_of_parse_and_map() returns zero on failure
-> drivers/dma/ti/edma.c:2405 edma_probe() warn: irq_of_parse_and_map() returns zero on failure
-> drivers/dma/ti/edma.c:2421 edma_probe() warn: irq_of_parse_and_map() returns zero on failure
-> drivers/net/ethernet/xilinx/ll_temac_main.c:1570 temac_probe() warn: irq_of_parse_and_map() returns zero on failure
-> drivers/net/ethernet/xilinx/ll_temac_main.c:1573 temac_probe() warn: irq_of_parse_and_map() returns zero on failure
-> drivers/ata/sata_mv.c:4094 mv_platform_probe() warn: irq_of_parse_and_map() returns zero on failure
-> 
-> It would be good if we could apply your patch, otherwise I could create
-> an explicit check for fwnode_irq_get_byname() returns.
+Yes, Jiri. Thanks for pointing it out. It's true that not all probe
+blacklisted functions should be banned from bpf_kprobe.
 
-I guess I can re-spin the series. Let's see if there is some good 
-suggestion(s) on how to fix the i2c-smbus.
+I tried some of them, and all kprobe blacklisted symbols I hooked
+works fine except preempt_count_{sub, add}.
+so the takeaway here is preempt_cout_{sub, add} must be rejected at
+least for now since kprobe_multi_link_prog_run
+( i.e., the fprobe handler) and rethook_trampoline_handler( i.e. the
+rethook handler) calls preempt_cout_{sub, add}.
 
-> Ideally, everything would just return negative error codes on error.
+I'm considering providing a general  fprobe_blacklist framework just
+like what kprobe does to allow others to mark
+functions used inside fprobe handler or rethook handler as NOFPROBE to
+avoid potential stack recursion. But only after
+I figure out how ftrace handles recursion problems currently and why
+it fails in the case I ran into.
 
-I definitely agree.
+Thanks
+Ze
 
-
-Yours,
-	-- Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+On Thu, May 11, 2023 at 1:28=E2=80=AFAM Jiri Olsa <olsajiri@gmail.com> wrot=
+e:
+>
+> On Wed, May 10, 2023 at 07:13:58AM -0700, Yonghong Song wrote:
+> >
+> >
+> > On 5/10/23 5:20 AM, Ze Gao wrote:
+> > > BPF_LINK_TYPE_KPROBE_MULTI attaches kprobe programs through fprobe,
+> > > however it does not takes those kprobe blacklisted into consideration=
+,
+> > > which likely introduce recursive traps and blows up stacks.
+> > >
+> > > this patch adds simple check and remove those are in kprobe_blacklist
+> > > from one fprobe during bpf_kprobe_multi_link_attach. And also
+> > > check_kprobe_address_safe is open for more future checks.
+> > >
+> > > note that ftrace provides recursion detection mechanism, but for kpro=
+be
+> > > only, we can directly reject those cases early without turning to ftr=
+ace.
+> > >
+> > > Signed-off-by: Ze Gao <zegao@tencent.com>
+> > > ---
+> > >   kernel/trace/bpf_trace.c | 37 +++++++++++++++++++++++++++++++++++++
+> > >   1 file changed, 37 insertions(+)
+> > >
+> > > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > > index 9a050e36dc6c..44c68bc06bbd 100644
+> > > --- a/kernel/trace/bpf_trace.c
+> > > +++ b/kernel/trace/bpf_trace.c
+> > > @@ -2764,6 +2764,37 @@ static int get_modules_for_addrs(struct module=
+ ***mods, unsigned long *addrs, u3
+> > >     return arr.mods_cnt;
+> > >   }
+> > > +static inline int check_kprobe_address_safe(unsigned long addr)
+> > > +{
+> > > +   if (within_kprobe_blacklist(addr))
+> > > +           return -EINVAL;
+> > > +   else
+> > > +           return 0;
+> > > +}
+> > > +
+> > > +static int check_bpf_kprobe_addrs_safe(unsigned long *addrs, int num=
+)
+> > > +{
+> > > +   int i, cnt;
+> > > +   char symname[KSYM_NAME_LEN];
+> > > +
+> > > +   for (i =3D 0; i < num; ++i) {
+> > > +           if (check_kprobe_address_safe((unsigned long)addrs[i])) {
+> > > +                   lookup_symbol_name(addrs[i], symname);
+> > > +                   pr_warn("bpf_kprobe: %s at %lx is blacklisted\n",=
+ symname, addrs[i]);
+> >
+> > So user request cannot be fulfilled and a warning is issued and some
+> > of user requests are discarded and the rest is proceeded. Does not
+> > sound a good idea.
+> >
+> > Maybe we should do filtering in user space, e.g., in libbpf, check
+> > /sys/kernel/debug/kprobes/blacklist and return error
+> > earlier? bpftrace/libbpf-tools/bcc-tools all do filtering before
+> > requesting kprobe in the kernel.
+>
+> also fprobe uses ftrace drectly without paths in kprobe, so I wonder
+> some of the kprobe blacklisted functions are actually safe
+>
+> jirka
+>
+> >
+> > > +                   /* mark blacklisted symbol for remove */
+> > > +                   addrs[i] =3D 0;
+> > > +           }
+> > > +   }
+> > > +
+> > > +   /* remove blacklisted symbol from addrs */
+> > > +   for (i =3D 0, cnt =3D 0; i < num; ++i) {
+> > > +           if (addrs[i])
+> > > +                   addrs[cnt++]  =3D addrs[i];
+> > > +   }
+> > > +
+> > > +   return cnt;
+> > > +}
+> > > +
+> > >   int bpf_kprobe_multi_link_attach(const union bpf_attr *attr, struct=
+ bpf_prog *prog)
+> > >   {
+> > >     struct bpf_kprobe_multi_link *link =3D NULL;
+> > > @@ -2859,6 +2890,12 @@ int bpf_kprobe_multi_link_attach(const union b=
+pf_attr *attr, struct bpf_prog *pr
+> > >     else
+> > >             link->fp.entry_handler =3D kprobe_multi_link_handler;
+> > > +   cnt =3D check_bpf_kprobe_addrs_safe(addrs, cnt);
+> > > +   if (!cnt) {
+> > > +           err =3D -EINVAL;
+> > > +           goto error;
+> > > +   }
+> > > +
+> > >     link->addrs =3D addrs;
+> > >     link->cookies =3D cookies;
+> > >     link->cnt =3D cnt;
