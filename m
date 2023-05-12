@@ -2,178 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62EEE700920
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:23:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 10B55700927
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:24:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241215AbjELNXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 09:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45146 "EHLO
+        id S240659AbjELNYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 09:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241028AbjELNXj (ORCPT
+        with ESMTP id S240965AbjELNYH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 09:23:39 -0400
-Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE901199E
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:23:36 -0700 (PDT)
-Received: by mail-qt1-x834.google.com with SMTP id d75a77b69052e-3f396606ab0so1054761cf.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:23:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683897816; x=1686489816;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HPuUjEoje+/x3LJYWD5ZpBVMggT1RgV3pBWK7hnLfIM=;
-        b=e8vn/ZqlpU5mZ4QkijvRWWTpKCtMaMyG1FPD3SUt2t2Dti6Zp009XklhScn2rs2yLO
-         TfI7OMWT2SFe7gMWWm+qZXKG7Bx5wnwrEESUtXer1VssU0bMmjSQhyPF97sqEPzaF/ok
-         Awx38FCWLm9/TnPUGjTTc56VZkXXIbuQyZM1dSaDUO5uOn6lyT/qUSXY+3nJjudGECgr
-         bPDtWCtrFvLaknbIPDDus7YBJzxyOJnVEFAdTaYgUcdRRScV4HbfL18i1Tv34s6Kg5yh
-         c9TzEAkmBpNuBSjmsjcmE8Ma6HuyWeJgBF8DZEws+jwSsJMxzVugrOyQmo+679e6IlEu
-         20xA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683897816; x=1686489816;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HPuUjEoje+/x3LJYWD5ZpBVMggT1RgV3pBWK7hnLfIM=;
-        b=LXKzOcM9tSjJ6iKY0XQj5nN38VhtJ7VxOWgxAAm4SlYrj1DCTt1T4L2jM9r4a76EXp
-         lNcLOlLWDv/i3oI7UeFj6235QpuzeNeyLT880+l4988R3/BfdtLYxQBcQwQXnAnW+vpc
-         r+GgiiNd6lIio4PX3GRmYWqAGUB7nHDOlJasPC3x29yaUZmcO4L04B+kXlORxKFhf5Gu
-         bGM4ydb5Skq8/91LkQRYygiA53EpyjiS3dplnXWkiP7YqNLSsOp5WC4JU2a0lzTZsbIO
-         wMdXpAwO+7rYxSiu7w1/PX8UDy/qTMloAwchiTG0hG0ktjwKl1zCYjZyGnZBDj9LtKCy
-         u93g==
-X-Gm-Message-State: AC+VfDx02A9ZyrfKmJrqUThThhbXqr0nGNoS7mqT6/eKmDZIjAq9oFdN
-        uH0WpxKGYetrlLL0imc1hwELJ0sZVBym4gp3J7UcLg==
-X-Google-Smtp-Source: ACHHUZ4LFBoo6M5Sy4lh6dNFZ3J5WlpWwe5Z9jZ3gFM8kpxjGDsYjCQ0D8R3gvkHcwowoSS6PBIYP7/Tbb7CgRUiW/o=
-X-Received: by 2002:a05:622a:1812:b0:3ef:1c85:5b5e with SMTP id
- t18-20020a05622a181200b003ef1c855b5emr248121qtc.19.1683897815844; Fri, 12 May
- 2023 06:23:35 -0700 (PDT)
+        Fri, 12 May 2023 09:24:07 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8F231715;
+        Fri, 12 May 2023 06:24:06 -0700 (PDT)
+From:   Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1683897845;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EGpiykIbZrzhClWEawyzh/+46DdyV3m0l/aogql4GLM=;
+        b=t4zuosmBFyYyCvcFt4CogxekyLnafjtx8UdgZrID9B7MkOZFFbFZUGHMqQ4w/49f+dprnT
+        PlH4xsuf9SnZUOj7+doXTmxlro1g3dwnvALxgbiT8zqrKR4AJUen8DhiEMHG4VUhgD4slv
+        C9X56nGsqINm+67cMkF7EU6EiQxHU/23YN7VvK9EXvyfvLTW68S7L4dUwXmA35Ei9TL036
+        gu+4asg1Taks0CJq2S+2OB9lkYShGaLJrhnbaqnWk9mEnRuWFWa0Oz6nGQs8cOSPyCJwEi
+        c2jvlBPs3mnLU2prsZbpx8tLhNGXy5wbGzwLrxlQo7WZLAontnM3cRvFOEMokA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1683897845;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=EGpiykIbZrzhClWEawyzh/+46DdyV3m0l/aogql4GLM=;
+        b=R8wbDPOZoeZXva36wF885TESy/aZyCr3jMp5vxQyYINiluGTuOY4gRqy+MdP5jxH24QHtN
+        tWf4/obwdQJm8xBQ==
+To:     Matthew Garrett <mjg59@srcf.ucam.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>,
+        Ross Philipson <ross.philipson@oracle.com>,
+        linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
+        dpsmith@apertussolutions.com, mingo@redhat.com, bp@alien8.de,
+        hpa@zytor.com, James.Bottomley@hansenpartnership.com,
+        luto@amacapital.net, nivedita@alum.mit.edu,
+        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
+Subject: Re: [PATCH v6 06/14] x86: Add early SHA support for Secure Launch
+ early measurements
+In-Reply-To: <20230512112847.GF14461@srcf.ucam.org>
+References: <20230504145023.835096-1-ross.philipson@oracle.com>
+ <20230504145023.835096-7-ross.philipson@oracle.com>
+ <20230510012144.GA1851@quark.localdomain>
+ <20230512110455.GD14461@srcf.ucam.org>
+ <CAMj1kXE8m5jCH3vW54ys=dE2-Vf_gnnueR6_g4Rq-LSJ5BqRjA@mail.gmail.com>
+ <20230512112847.GF14461@srcf.ucam.org>
+Date:   Fri, 12 May 2023 15:24:04 +0200
+Message-ID: <87pm75bs3v.ffs@tglx>
 MIME-Version: 1.0
-References: <20230421141723.2405942-1-peternewman@google.com>
- <20230421141723.2405942-3-peternewman@google.com> <242db225-8ddc-968e-a754-6aaefd1b7da9@intel.com>
-In-Reply-To: <242db225-8ddc-968e-a754-6aaefd1b7da9@intel.com>
-From:   Peter Newman <peternewman@google.com>
-Date:   Fri, 12 May 2023 15:23:25 +0200
-Message-ID: <CALPaoCg1Z4ucYibv4STe+DjB32o-ckuWm5PL4CmWwCgNWchoUg@mail.gmail.com>
-Subject: Re: [PATCH v1 2/9] x86/resctrl: Hold a spinlock in __rmid_read() on AMD
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>, Babu Moger <babu.moger@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Stephane Eranian <eranian@google.com>,
-        James Morse <james.morse@arm.com>,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Reinette,
-
-On Thu, May 11, 2023 at 11:36=E2=80=AFPM Reinette Chatre
-<reinette.chatre@intel.com> wrote:
-> On 4/21/2023 7:17 AM, Peter Newman wrote:
-> > From: Stephane Eranian <eranian@google.com>
-> >
-> > In AMD PQoS Versions 1.0 and 2.0, IA32_QM_EVTSEL MSR is shared by all
-> > processors in a QOS domain.  So there's a chance it can read a differen=
-t
-> > event when two processors are reading the counter concurrently.  Add a
-> > spinlock to prevent this race.
+On Fri, May 12 2023 at 12:28, Matthew Garrett wrote:
+> On Fri, May 12, 2023 at 01:18:45PM +0200, Ard Biesheuvel wrote:
+>> On Fri, 12 May 2023 at 13:04, Matthew Garrett <mjg59@srcf.ucam.org> wrote:
+>> >
+>> > On Tue, May 09, 2023 at 06:21:44PM -0700, Eric Biggers wrote:
+>> >
+>> > > SHA-1 is insecure.  Why are you still using SHA-1?  Don't TPMs support SHA-2
+>> > > now?
+>> >
+>> > TXT is supported on some TPM 1.2 systems as well. TPM 2 systems are also
+>> > at the whim of the firmware in terms of whether the SHA-2 banks are
+>> > enabled. But even if the SHA-2 banks are enabled, if you suddenly stop
+>> > extending the SHA-1 banks, a malicious actor can later turn up and
+>> > extend whatever they want into them and present a SHA-1-only
+>> > attestation. Ideally whatever is handling that attestation should know
+>> > whether or not to expect an attestation with SHA-2, but the easiest way
+>> > to maintain security is to always extend all banks.
+>> >
+>> 
+>> Wouldn't it make more sense to measure some terminating event into the
+>> SHA-1 banks instead?
 >
-> This is unclear to me. As I understand it this changelog is written as
-> though there is a race that is being fixed. I believe that rdtgroup_mutex
-> currently protects against such races. I thus at first thought that
-> this is a prep patch for the introduction of the new soft RMID feature,
-> but instead this new spinlock is used independent of the soft RMID featur=
-e.
->
-> I think the spinlock is unnecessary when the soft RMID feature is disable=
-d.
+> Unless we assert that SHA-1 events are unsupported, it seems a bit odd 
+> to force a policy on people who have both banks enabled. People with 
+> mixed fleets are potentially going to be dealing with SHA-1 measurements 
+> for a while yet, and while there's obviously a security benefit in using 
+> SHA-2 instead it'd be irritating to have to maintain two attestation 
+> policies.
 
-My understanding was that the race would happen a lot more when
-simultaneously IPI'ing all CPUs in a domain, but I had apparently
-overlooked that all of the counter reads were already serialized.
+Why?
 
+If you have a mixed fleet then it's not too much asked to provide two
+data sets. On a TPM2 system you can enforce SHA-2 and only fallback to
+SHA-1 on TPM 1.2 hardware. No?
 
-> > + * @lock:    serializes counter reads when QM_EVTSEL MSR is shared per=
--domain
-> >   *
-> >   * Members of this structure are accessed via helpers that provide abs=
-traction.
-> >   */
-> > @@ -333,6 +334,7 @@ struct rdt_hw_domain {
-> >       u32                             *ctrl_val;
-> >       struct arch_mbm_state           *arch_mbm_total;
-> >       struct arch_mbm_state           *arch_mbm_local;
-> > +     raw_spinlock_t                  evtsel_lock;
-> >  };
->
-> Please note the difference between the member name in the struct ("evtsel=
-_lock")
-> and its description ("lock").
+Thanks,
 
-Will fix, thanks.
-
-
-> > -static int __rmid_read(u32 rmid, enum resctrl_event_id eventid, u64 *v=
-al)
-> > +static int __rmid_read(struct rdt_hw_domain *hw_dom, u32 rmid,
-> > +                    enum resctrl_event_id eventid, u64 *val)
-> >  {
-> > +     unsigned long flags;
-> >       u64 msr_val;
-> >
-> > +     if (static_branch_likely(&rmid_read_locked))
->
-> Why static_branch_likely() as opposed to static_branch_unlikely()?
-
-I read the documentation for static branches and I agree that unlikely
-would make more sense so that the non-locked case is less impacted.
-
-This instance apparently confused my understanding of static branches
-and I will need to re-visit all uses of them in this patch series.
-
->
-> > +             raw_spin_lock_irqsave(&hw_dom->evtsel_lock, flags);
-> > +
-> >       /*
-> >        * As per the SDM, when IA32_QM_EVTSEL.EvtID (bits 7:0) is config=
-ured
-> >        * with a valid event code for supported resource type and the bi=
-ts
-> > @@ -161,6 +166,9 @@ static int __rmid_read(u32 rmid, enum resctrl_event=
-_id eventid, u64 *val)
-> >       wrmsr(MSR_IA32_QM_EVTSEL, eventid, rmid);
-> >       rdmsrl(MSR_IA32_QM_CTR, msr_val);
-> >
-> > +     if (static_branch_likely(&rmid_read_locked))
-> > +             raw_spin_unlock_irqrestore(&hw_dom->evtsel_lock, flags);
-> > +
->
-> If the first "if (static_branch_likely(&rmid_read_locked))" was taken the=
-n the second
-> if branch _has_ to be taken. It should not be optional to release a lock =
-if it was taken. I
-> think it would be more robust if a single test of the static key decides =
-whether the
-> spinlock should be used.
-
-Is the concern that the branch value could change concurrently and
-result in a deadlock?
-
-I'm curious as to whether this case is performance critical enough to
-justify using a static branch. It's clear that we should be using them
-in the context switch path, but I'm confused about other places
-they're used when there are also memory flags.
-
--Peter
+        tglx
