@@ -2,230 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68656700217
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 10:01:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87F3E70021A
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 10:02:46 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240032AbjELIBu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 04:01:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34470 "EHLO
+        id S240097AbjELICn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 04:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239930AbjELIBp (ORCPT
+        with ESMTP id S239915AbjELICl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 04:01:45 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFC5FE709;
-        Fri, 12 May 2023 01:01:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1683878504; x=1715414504;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ajWaCQwEk/326TqmtMr3s5MnclnzjZmm203gVg+Ed5k=;
-  b=VQDVUyUvxraaP0s1iV7aPF0hRT9Tgx8Zs1mokMtEpnrzbDnAOXfWGHUq
-   bg4EE2a5hBU6Q9G8FPeCqSvV/xKD74qkfaAOQtIteXtjW06rczMIrzMVz
-   j/1cjWR4PRXvTaUsXTzaMzXZfxKmln8sY2ExFSthakiSz9dyV9HDCwVSt
-   fW9+nP+9Y5H+sT92akwlapq8gdYg57WCefU7q24TQ+G87YYKx0q7xRIAE
-   QcyNGiRZFG8Zl5CWbVZeDT7x05R20QqMFKrmO/ByrkO0YplbAKFvmeZXL
-   ore74vLgQ1pOO9IW3HUgDD97pbe4lY6yqQhbauja45KlOV6Xg6mcMxJaO
-   w==;
-X-IronPort-AV: E=Sophos;i="5.99,269,1677538800"; 
-   d="scan'208";a="30870499"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 12 May 2023 10:01:42 +0200
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Fri, 12 May 2023 10:01:42 +0200
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Fri, 12 May 2023 10:01:42 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1683878502; x=1715414502;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ajWaCQwEk/326TqmtMr3s5MnclnzjZmm203gVg+Ed5k=;
-  b=JEsWPmY78EGOncUCqWxqN/9nJW3qYYNo3tyhETttj3/PRjc3RWL5/8vc
-   m7t1/QwftVV+Vr/jARIkjxm7ICuGXDTmU8rDS/2u89KHJVawPx6hOtPFA
-   MjepEEl9wQ7OJyBZVgZO52MCIniKsM6+HigESecdhuPNlwgLTbaJ8tb6G
-   YcgYdSQi5hnQ3a1ce2zTdYq6nXH7sHY0jZ3nStm4uf7ytdRjacbeyQlcN
-   O9VK+q20VfskWbyTvst5V0HC4j4h475tcQnheT5ybi02PcuQHlftDO78I
-   3fa/lHSBbmjltbhjxhasjae7UuczfBvJ56qQxXfyC3waLM6hxZLc5UgBD
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.99,269,1677538800"; 
-   d="scan'208";a="30870498"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 12 May 2023 10:01:41 +0200
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        Fri, 12 May 2023 04:02:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB6881B1;
+        Fri, 12 May 2023 01:02:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 8434D280056;
-        Fri, 12 May 2023 10:01:41 +0200 (CEST)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     andrew@lunn.ch, Yan Wang <rk.code@outlook.com>
-Cc:     Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "open list:ETHERNET PHY LIBRARY" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2] net: mdiobus: Add a function to deassert reset
-Date:   Fri, 12 May 2023 10:01:41 +0200
-Message-ID: <2561676.Lt9SDvczpP@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <KL1PR01MB54486E8738DC81E062BA2D0EE6749@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
-References: <96a1b95e-d05e-40f0-ada9-1956f43010e0@lunn.ch> <9107661.CDJkKcVGEf@steina-w> <KL1PR01MB54486E8738DC81E062BA2D0EE6749@KL1PR01MB5448.apcprd01.prod.exchangelabs.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5749B653B7;
+        Fri, 12 May 2023 08:02:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A449FC433EF;
+        Fri, 12 May 2023 08:02:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683878558;
+        bh=TpLd8uvfhqYZkikF7ov+Xf8tJE9kPo4VVe2Awm40Ty4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=B6JQGiicfw/ZwQL3DL4gjeCoA8Ar/1S5qecbqddyYqp7tmV3boCpWBZT9a5v/HMpw
+         hw8bjCTAZhP+idODWaXi54kb6LAxehzVpVfRU/nc3NoNSTZynT1tBNwL8dH8zsz9/8
+         dgYVrKqeirSCutUR3iCpxw5tK+YipDkOolnZ0rrEyZlOSpNdJ0/i0YEp2b35i0WKzn
+         63o3bYJ5iyj1EVZFJHRpil8g4Q3tSiMfdl2g6lpJIcLE6S3h4RCoSJ49U0x0nAkunN
+         rftpu9HXhrtgCSYZlkGGpxGIvvqj/jOJrl2Qb0iUPrMqmJBQJZUrw8ajxVyJoYLeOa
+         Hmb9GTOCQHN9A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pxNjY-00EVpi-BC;
+        Fri, 12 May 2023 09:02:36 +0100
+Date:   Fri, 12 May 2023 09:02:35 +0100
+Message-ID: <86v8gym0ys.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Douglas Anderson <dianders@chromium.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        wenst@chromium.org, Eddie Huang <eddie.huang@mediatek.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Ben Ho <Ben.Ho@mediatek.com>, Weiyi Lu <weiyi.lu@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Tinghan Shen <tinghan.shen@mediatek.com>, jwerner@chromium.org,
+        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
+        yidilin@chromium.org, Seiya Wang <seiya.wang@mediatek.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/6] dt-bindings: interrupt-controller: arm,gic-v3: Add quirk for Mediatek SoCs w/ broken FW
+In-Reply-To: <20230511150539.1.Iabe67a827e206496efec6beb5616d5a3b99c1e65@changeid>
+References: <20230511150539.6.Ia0b6ebbaa351e3cd67e201355b9ae67783c7d718@changeid>
+        <20230511150539.1.Iabe67a827e206496efec6beb5616d5a3b99c1e65@changeid>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/28.2
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: dianders@chromium.org, tglx@linutronix.de, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com, devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org, wenst@chromium.org, eddie.huang@mediatek.com, allen-kh.cheng@mediatek.com, Ben.Ho@mediatek.com, weiyi.lu@mediatek.com, angelogioacchino.delregno@collabora.com, linux-arm-kernel@lists.infradead.org, tinghan.shen@mediatek.com, jwerner@chromium.org, hsin-hsiung.wang@mediatek.com, yidilin@chromium.org, seiya.wang@mediatek.com, conor+dt@kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am Donnerstag, 11. Mai 2023, 05:16:52 CEST schrieb Yan Wang:
-> On 5/10/2023 7:55 PM, Alexander Stein wrote:
-> > Am Mittwoch, 10. Mai 2023, 10:02:52 CEST schrieb Yan Wang:
-> >> It is possible to mount multiple sub-devices on the mido bus.
-> >=20
-> > mdio bus
->=20
-> Yes, misspelled.
->=20
-> >> The hardware power-on does not necessarily reset these devices.
-> >> The device may be in an uncertain state, causing the device's ID
-> >> to be scanned.
-> >>=20
-> >> So, before adding a reset to the scan, make sure the device is in
-> >> normal working mode.
-> >>=20
-> >> I found that the subsequent drive registers the reset pin into the
-> >> structure of the sub-device to prevent conflicts, so release the
-> >> reset pin.
-> >>=20
-> >> Signed-off-by: Yan Wang <rk.code@outlook.com>
-> >=20
-> > We had similar cases where the (single) PHY was in reset during Linux
-> > boot.
-> > Should you be able to make this work by using a "ethernet-phy-id%4x.%4x"
-> > compatible? See also [1]
-> >=20
-> > [1] https://lkml.org/lkml/2020/10/28/1139
->=20
-> Well, I've seen the [1] before, this method may mask some issues. For
-> example ,if I use
-> another type of phy ,I have to modify the DT, Is it very cumbersome?
+On Thu, 11 May 2023 23:05:35 +0100,
+Douglas Anderson <dianders@chromium.org> wrote:
+> 
+> When trying to turn on the "pseudo NMI" kernel feature in Linux, it
+> was discovered that all Mediatek-based Chromebooks that ever shipped
+> (at least ones with GICv3) had a firmware bug where they wouldn't save
+> certain GIC "GICR" registers properly. If a processor ever entered a
+> suspend/idle mode where the GICR registers lost state then they'd be
+> reset to their default state.
+> 
+> As a result of the bug, if you try to enable "pseudo NMIs" on the
+> affected devices then certain interrupts will unexpectedly get
+> promoted to be "pseudo NMIs" and cause crashes / freezes / general
+> mayhem.
+> 
+> ChromeOS is looking to start turning on "pseudo NMIs" in production to
+> make crash reports more actionable. To do so, we will release firmware
+> updates for at least some of the affected Mediatek Chromebooks.
+> However, even when we update the firmware of a Chromebook it's always
+> possible that a user will end up booting with old firmware. We need to
+> be able to detect when we're running with firmware that will crash and
+> burn if pseudo NMIs are enabled.
+> 
+> The current plan is:
+> * Update the device trees of all affected Chromebooks to include the
+>   'mediatek,gicr-save-quirk' property. The kernel can use this to know
+>   not to enable certain features like "pseudo NMI". NOTE: device trees
+>   for Chromebooks are never baked into the firmware but are bundled
+>   with the kernel. A kernel will never be configured to use "pseudo
+>   NMIs" and be bundled with an old device tree.
+> * When we get a fixed firmware for one of these Chromebooks, it will
+>   patch the device tree to remove this property.
 
-You have to change the reset timings and possibly other properties as well =
-if=20
-you change the PHY, so a DT change is necessary anyway.
+Since you're in control of distributing the FW together with the
+kernel, I assume you're also in control of the command line. Why can't
+that firmware pass the option enabling the pseudo-NMI support,
+dispensing ourselves from all of this?
 
-Regards,
-Alexander
+> 
+> For some details, you can also see the public bug
+> <https://issuetracker.google.com/281831288>
+> 
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+> 
+>  .../bindings/interrupt-controller/arm,gic-v3.yaml           | 6 ++++++
+>  1 file changed, 6 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml b/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
+> index 92117261e1e1..8c251caae537 100644
+> --- a/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
+> +++ b/Documentation/devicetree/bindings/interrupt-controller/arm,gic-v3.yaml
+> @@ -166,6 +166,12 @@ properties:
+>    resets:
+>      maxItems: 1
+>  
+> +  mediatek,gicr-save-quirk:
 
->=20
-> >> ---
-> >>=20
-> >> v2:
-> >>    - fixed commit message
-> >>    - Using gpiod_ replace gpio_
-> >>=20
-> >> v1:
-> >> https://lore.kernel.org/all/KL1PR01MB5448631F2D6F71021602117FE6769@KL1=
-PR0
-> >> 1M
-> >> B5448.apcprd01.prod.exchangelabs.com/ - Incorrect description of commit
-> >> message.
-> >>=20
-> >>    - The gpio-api too old
-> >>=20
-> >> ---
-> >>=20
-> >>   drivers/net/mdio/fwnode_mdio.c | 16 ++++++++++++++++
-> >>   1 file changed, 16 insertions(+)
-> >>=20
-> >> diff --git a/drivers/net/mdio/fwnode_mdio.c
-> >> b/drivers/net/mdio/fwnode_mdio.c index 1183ef5e203e..6695848b8ef2 1006=
-44
-> >> --- a/drivers/net/mdio/fwnode_mdio.c
-> >> +++ b/drivers/net/mdio/fwnode_mdio.c
-> >> @@ -57,6 +57,20 @@ fwnode_find_mii_timestamper(struct fwnode_handle
-> >> *fwnode) return register_mii_timestamper(arg.np, arg.args[0]);
-> >>=20
-> >>   }
-> >>=20
-> >> +static void fwnode_mdiobus_pre_enable_phy(struct fwnode_handle *fwnod=
-e)
-> >> +{
-> >> +	struct gpio_desc *reset;
-> >> +
-> >> +	reset =3D fwnode_gpiod_get_index(fwnode, "reset", 0, GPIOD_OUT_HIGH,
-> >=20
-> > NULL);
-> >=20
-> >> +	if (IS_ERR(reset) && PTR_ERR(reset) !=3D -EPROBE_DEFER)
-> >=20
-> > How are you dealing with EPROBE_DEFER if the reset line is e.g. attached
-> > to an i2c expander, which is to be probed later on?
->=20
-> Thank you ,The logic is wrong,trying to fix it.
->=20
-> >> +		return;
-> >> +
-> >> +	usleep_range(100, 200);
-> >=20
-> > How do you know a PHY's reset pulse width?
-> >=20
-> >> +	gpiod_set_value_cansleep(reset, 0);
-> >=20
-> > What about post-reset stabilization times before MDIO access is allowed?
->=20
-> yes,I need to get reset pulse width and post-reset stabilization times
-> from reset-assert-us and  reset-deassert-us. right?
->=20
-> >> +	/*Release the reset pin,it needs to be registered with the PHY.*/
-> >=20
-> > /* Release [...] PHY. */
-> >=20
-> > Best regards,
-> > Alexander
->=20
-> Thank you for your support.
->=20
-> >> +	gpiod_put(reset);
-> >> +}
-> >> +
-> >>=20
-> >>   int fwnode_mdiobus_phy_device_register(struct mii_bus *mdio,
-> >>  =20
-> >>   				       struct phy_device *phy,
-> >>   				       struct fwnode_handle *child,
-> >=20
-> > u32 addr)
-> >=20
-> >> @@ -119,6 +133,8 @@ int fwnode_mdiobus_register_phy(struct mii_bus *bu=
-s,
-> >>=20
-> >>   	u32 phy_id;
-> >>   	int rc;
-> >>=20
-> >> +	fwnode_mdiobus_pre_enable_phy(child);
-> >> +
-> >>=20
-> >>   	psec =3D fwnode_find_pse_control(child);
-> >>   	if (IS_ERR(psec))
-> >>   =09
-> >>   		return PTR_ERR(psec);
+I think this deserves something *much* stronger that outlines what is
+wrong, because this is not just a quirk. This is a failure to even
+remotely grasp the requirements of the architecture (and to use
+standard, public code that would have done it correctly). Something
+like "mediatek,broken-save-restore-fw" would be more adequate.
 
+> +    type: boolean
+> +    description:
+> +      Asserts that the firmware on this device has issues saving and restoring
+> +      GICR registers when CPUs are powered off.
 
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
+Nit: not the the CPUs, but the GIC redistributors.
 
+Thanks,
 
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
