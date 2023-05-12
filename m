@@ -2,120 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6387004AD
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:05:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33F397004B3
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:06:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240624AbjELKFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60668 "EHLO
+        id S240635AbjELKGw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 06:06:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240559AbjELKFS (ORCPT
+        with ESMTP id S240639AbjELKGT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:05:18 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ED391160F;
-        Fri, 12 May 2023 03:04:57 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailnew.nyi.internal (Postfix) with ESMTP id 35DA05803BB;
-        Fri, 12 May 2023 06:04:57 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute3.internal (MEProxy); Fri, 12 May 2023 06:04:57 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1683885897; x=1683893097; bh=Sy9HnHCUR0wgx
-        XvXSub8VPhHbi3glugACk+bWVmVgIc=; b=WhVQmtMRWmrKfxLLyfJfFe1tMkKp7
-        g6eq0i3azbYbNCGWf+UMTGhcfp6yhbpptBIs4OqEAtA4vGLMFHBgeMZ94UwEy1/Q
-        frKlmEBriuLTrWnQ2Zy4Tp/dXSYwpun1+4Yl9lHF77De6XwTJqxU0pcwSSrriFEw
-        yGSrY7ACNFxiIciWY0lnexIltUq/sgF2oTYXOhWeqBkSnJZlOy0hvX+5SdfF5iP4
-        lLpBuBDXP58/5HFV2w9nifKxszItYlsFk7aULlJfIJCUzOBdSps4bdVQDparXGg8
-        HQRYSsVcF/3WNSaPigWgAJKd+HcUzPk3A8wtldh0Zv9fOY2cXUATQBdzw==
-X-ME-Sender: <xms:Rw9eZN4u3iw-extBaYZWahWQIPn2TyHW_-Tr2mANrdjf7MvkMDA4Zw>
-    <xme:Rw9eZK6EU7nC4b3LD3PHu-kTmrubf5DuKNExHZZD1mncoiuA0TMips9BZxL_yVjTb
-    v4xRqLxBxsAJa__lQ4>
-X-ME-Received: <xmr:Rw9eZEcqjB2aT9_uW8KK8InceO94NMww_1B_vB-QKARGge1inQuJyxOwqOjxo5WEY23XzEeXPb5je35qF9lx2nuV_yKH05nwAg8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehtddgvdefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevufgjkfhfgggtsehttdertddttddvnecuhfhrohhmpefhihhnnhcu
-    vfhhrghinhcuoehfthhhrghinheslhhinhhugidqmheikehkrdhorhhgqeenucggtffrrg
-    htthgvrhhnpeelueehleehkefgueevtdevteejkefhffekfeffffdtgfejveekgeefvdeu
-    heeuleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hfthhhrghinheslhhinhhugidqmheikehkrdhorhhg
-X-ME-Proxy: <xmx:Rw9eZGI2AVN261Gh5tsyKTOl-BDY9RqG_dZkG6P7jvBKjRMncxs_eQ>
-    <xmx:Rw9eZBL4-8ibaIgszFf3DoCpMiQxiYir7_v9MLCz_ETSUaNtIWk4QQ>
-    <xmx:Rw9eZPxnp8EZedlf1COCSe4CgtYjyh2lxNRLIn1Hgaj6Fm0hhsA8gw>
-    <xmx:SQ9eZJLRHRSCwZK28BFKNsWtPD-yftzvlsnR-XMW0AqnAUxKarRGRA>
-Feedback-ID: i58a146ae:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Fri,
- 12 May 2023 06:04:54 -0400 (EDT)
-Date:   Fri, 12 May 2023 20:04:48 +1000 (AEST)
-From:   Finn Thain <fthain@linux-m68k.org>
-To:     Thomas Zimmermann <tzimmermann@suse.de>
-cc:     Helge Deller <deller@gmx.de>, Sui Jingfeng <15330273260@189.cn>,
-        geert@linux-m68k.org, javierm@redhat.com, daniel@ffwll.ch,
-        vgupta@kernel.org, chenhuacai@kernel.org, kernel@xen0n.name,
-        davem@davemloft.net, arnd@arndb.de, sam@ravnborg.org,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-arch@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-ia64@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
-        sparclinux@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-parisc@vger.kernel.org
-Subject: Re: [PATCH v6 1/6] fbdev/matrox: Remove trailing whitespaces
-In-Reply-To: <e7bd021c-1a6b-6e47-143a-36ae2fd2fe6b@suse.de>
-Message-ID: <7c2a6687-9c4e-efed-5e25-774b582e9a27@linux-m68k.org>
-References: <20230510110557.14343-1-tzimmermann@suse.de> <20230510110557.14343-2-tzimmermann@suse.de> <0e13efbf-9a48-6e70-fdf3-8290f28c6dc7@189.cn> <a2315b9a-0747-1f0f-1f0a-1c6773931db4@suse.de> <15fe1489-f0fa-bbf6-ec08-a270bd4f1559@gmx.de>
- <e7bd021c-1a6b-6e47-143a-36ae2fd2fe6b@suse.de>
+        Fri, 12 May 2023 06:06:19 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB7611DAD
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:06:05 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id 5b1f17b1804b1-3f41dceb9c9so48935425e9.3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:06:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1683885964; x=1686477964;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=eRiOAb/9csqhYTIFyp1pXoHEquerHMt4RcBHag6qrzA=;
+        b=FtnfcAiPQBflolkUTJAEGWO8NbifJuTY2DfUmyZKzawcND8rUBbNphH5LHn/GcuCl9
+         hw+XAzWoW+qzwKOplZAsLVdAigNEKLglK8DqSybALmT+uDVraCDYhZgn8PTiyWgChhIO
+         fjcKvvrG5Ds+tqIFynzyAn/6Sl5EhfdBPNEU54fmbNmUiIxdTak4hBkP3u7bRp6wFFja
+         /Ai+NSPJfybgtVYn7lbYnvVehtJM8d3FIe+UFmk0ikvVQURHRJL6XjuEo5BUVKCnWxOg
+         D0Xvef1dlNf0/iliMj+yASQBt+6bT4RpTw99iK07PKEGgwnJy/4WpMIRr/XoqdqYTBeS
+         J+0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683885964; x=1686477964;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=eRiOAb/9csqhYTIFyp1pXoHEquerHMt4RcBHag6qrzA=;
+        b=bpR9/xinMW2MBb7SdZlDkbB9twmGg7bpZF6z1omP3HFUDu+r/CdR9mel9KLEv3+APd
+         fEvC/2G05FXLgIQDOWBBL92Dg3cH7VvtVioOwo0/FdMR9/eDQNPec60pOzYePJoV7gQ9
+         gmwSTHo9ncvCkGahWoF9n+eAC6FK2BSQWYHbeNiE4OdMpmDIubPde4fMsKsBtv9koB+u
+         liYY47bkauA3ABav5IiYs/eQ0ZbTZHHRSVU8091WKxWkDF5HP8ISU/HiKK7b6EKlqASV
+         imNaZJT3eQVImPuUWxbeohWtZa8DpIuA4ulj+cHCvSbniLnQSSXHZvcpcTWMWWwvYcLa
+         EE1g==
+X-Gm-Message-State: AC+VfDxzigY0ngEEfQUzsG32aKRKXKtFM7VKd7ii6HNWfntkez0adJYm
+        uRblrG3f/ZzeelOltWkbOIp6ww==
+X-Google-Smtp-Source: ACHHUZ41RiKQE8KrlkMU/mH9eDmaYqmoUwJppNHdh4NZvMMR1RzeE2dRK3wifot4GUmdO1dKVaRWSg==
+X-Received: by 2002:a05:600c:2195:b0:3f4:e4cd:f6e with SMTP id e21-20020a05600c219500b003f4e4cd0f6emr4312945wme.17.1683885964259;
+        Fri, 12 May 2023 03:06:04 -0700 (PDT)
+Received: from localhost (cst2-173-16.cust.vodafone.cz. [31.30.173.16])
+        by smtp.gmail.com with ESMTPSA id a6-20020a1cf006000000b003f0aefcc457sm28146577wmb.45.2023.05.12.03.06.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 03:06:03 -0700 (PDT)
+Date:   Fri, 12 May 2023 12:06:02 +0200
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Amma Lee <lixiaoyun@binary-semi.com>
+Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, conor@kernel.org,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        xiezx@binary-semi.com
+Subject: Re: [PATCH v2] riscv: optimize ELF relocation function in riscv
+Message-ID: <20230512-a9128942f5c09108bd0c4ec3@orel>
+References: <1683881513-18730-1-git-send-email-lixiaoyun@binary-semi.com>
+ <20230512-a73001a0f4cfcf5f0e68d898@orel>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512-a73001a0f4cfcf5f0e68d898@orel>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 May 2023, Thomas Zimmermann wrote:
-
-> But I'd really like to see most of these drivers being moved into 
-> staging and deleted soon afterwards. Users will complain about those 
-> drivers that are really still required. Those might be worth to spend 
-> effort on.
+On Fri, May 12, 2023 at 12:04:13PM +0200, Andrew Jones wrote:
+> On Fri, May 12, 2023 at 04:51:53PM +0800, Amma Lee wrote:
+> > The patch can optimize the running times of "insmod" command by modify ELF
+> > relocation function.
+> > When install the riscv ELF driver which contains multiple
+> > symbol table items to be relocated, kernel takes a lot of time to
+> > execute the relocation. For example, we install a 3+MB driver need 180+s.
+> > We focus on the riscv kernel handle R_RISCV_HI20 and R_RISCV_LO12 type
+> > items relocation function and find that there are two for-loops in this
+> > function. If we modify the begin number in the second for-loops iteration,
+> > we could save significant time for installation. We install the 3+MB
+> > driver could just need 2s.
+> > 
+> > Signed-off-by: Amma Lee <lixiaoyun@binary-semi.com>
+> > Reviewed-by: Conor Dooley <conor@kernel.org>
+> > 
+> > ---
+> >  arch/riscv/kernel/module.c | 53 ++++++++++++++++++++++++++++++----------------
+> >  1 file changed, 35 insertions(+), 18 deletions(-)
+> > 
+> > diff --git a/arch/riscv/kernel/module.c b/arch/riscv/kernel/module.c
+> > index 55507b0..1683c1d 100755
+> > --- a/arch/riscv/kernel/module.c
+> > +++ b/arch/riscv/kernel/module.c
+> > @@ -385,9 +385,17 @@ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
+> >  
+> >  		if (type == R_RISCV_PCREL_LO12_I || type == R_RISCV_PCREL_LO12_S) {
+> >  			unsigned int j;
+> > -			/*Modify the j for-loops begin number from last iterates end value*/
+> > +
+> > +			/*
 > 
+> whitespace issue here
+> 
+> > +			* In the second for-loops, each traversal for j is
+> > +			* starts from 0 to the symbol table item index which
+> > +			* is detected. By the tool "readelf", we find that all
+> > +			* the symbol table items about R_RISCV_PCREL_HI20 type
+> > +			* are incrementally added in order. It means that we
+> > +			* could interate the j with the previous loop end
+> > +			* value(j_idx) as the begin number in the next loop;
+> > +			*/
+> >  			for (j = j_idx; j < sechdrs[relsec].sh_size / sizeof(*rel); j++) {
+> > -			/* Modify end */
+> >  				unsigned long hi20_loc =
+> >  					sechdrs[sechdrs[relsec].sh_info].sh_addr
+> >  					+ rel[j].r_offset;
+> > @@ -420,22 +428,30 @@ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
+> >  					break;
+> >  				}
+> >  			}
+> > +
+> >  			if (j == sechdrs[relsec].sh_size / sizeof(*rel)) {
+> > -				if(j_idx == 0){
+> > +				if (j_idx == 0) {
+> >  					pr_err(
+> >  						"%s: Can not find HI20 relocation information\n",
+> >  						me->name);
+> >  					return -EINVAL;
+> >  				}
+> > -				
+> > -				
+> > -				for (j = 0; j < j_idx; j++){ 
+> > +
+> > +				/*
+> 
+> also here
+> 
+> > +				* If the last j-loop have been traversed to the
+> > +				* maximum value but never match the
+> > +				* corresponding symbol relocation item, the
+> > +				* j-loop will execute the second loop which
+> > +				* is begin from 0 to the prerious index (j_idx)
+> 
+> previous
+> 
+> > +				* unless the previous j_idx == 0;
+> > +				*/
+> > +				for (j = 0; j < j_idx; j++) {
+> >  					unsigned long hi20_loc =
+> >  						sechdrs[sechdrs[relsec].sh_info].sh_addr
+> >  						+ rel[j].r_offset;
+> >  					u32 hi20_type = ELF_RISCV_R_TYPE(rel[j].r_info);
+> > -				
+> > -				
+> > +
+> > +
+> 
+> While fixing this whitespace, we could remove the redundant blank line too.
+> 
+> >  					/* Find the corresponding HI20 relocation entry */
+> >  					if (hi20_loc == sym->st_value
+> >  						&& (hi20_type == R_RISCV_PCREL_HI20
+> > @@ -447,36 +463,37 @@ int apply_relocate_add(Elf_Shdr *sechdrs, const char *strtab,
+> >  						unsigned long hi20_sym_val =
+> >  							hi20_sym->st_value
+> >  							+ rel[j].r_addend;
+> > -					
+> > -				
+> > +
+> > +
+> 
+> also here
+> 
+> >  						/* Calculate lo12 */
+> >  						size_t offset = hi20_sym_val - hi20_loc;
+> > +						/* Calculate lo12 */
+> 
+> stray copy+pasted line?
+> 
+> >  						if (IS_ENABLED(CONFIG_MODULE_SECTIONS)
+> >  							&& hi20_type == R_RISCV_GOT_HI20) {
+> >  							offset = module_emit_got_entry(
+> >  								me, hi20_sym_val);
+> >  							offset = offset - hi20_loc;
+> > -				
+> > +
+> 
+> need to just remove this blank line
+> 
+> >  						}
+> >  						hi20 = (offset + 0x800) & 0xfffff000;
+> >  						lo12 = offset - hi20;
+> >  						v = lo12;
+> > -					
+> > +
+> 
+> same here
+> 
+> >  						break;
+> >  					}
+> >  				}
+> > -				
+> > -				if (j == j_idx)
+> > -				{
+> > +
+> > +				if (j == j_idx) {
+> >  					pr_err(
+> >  						"%s: Can not find HI20 relocation information\n",
+> >  						me->name);
+> >  					return -EINVAL;
+> >  				}
+> > -				
+> > -				
+> > +
+> > +
+> 
+> should just remove both the blank lines above
+> 
+> >  			}
+> > -			
+> > +
+> > +			/* Record the previous j-loop end index */
+> >  			j_idx = j;
+> 
+> Huh... what did I miss? I went through the whole patch but only see
+> formatting changes (and more opportunity for formatting changes).
+> Where's the actual change?
 
-That strategy is not going to find out what functionality is required. 
-Instead it will find out which beneficiaries are capable of overcoming all 
-of the hurdles to reverting deletion:
+It's best to do formatting ("no functional change") changes separately
+from the functional changes to help reviewers see that, too. Please
+separate the formatting into its own patch.
 
- - Find out how to report a regression correctly.
- - Gather all the necessary information.
- - Obtain buy-in from a sympathetic developer.
- - Build a patched kernel, test it and provide the results. (And possibly 
-   repeat the same until neglected code becomes accepted.)
- - Wait for the relevant distro to release the relevant kernel update. 
-
-Developers tend to overlook the burden of process because it's ostensibly 
-done to raise code quality. But it seems to me that affected users are 
-more likely to seek a workaround than undertake the process.
-
-So deletion doesn't discover end-user requirements. What it does is 
-advertise a vacancy for an unpaid adoptive maintainer, somehow presumed to 
-be found amongst a very well remunerated and very small pool of talent.
-
-The way I look at it, the maintainence of old code is the price of a 
-so-called "right to repair". But there ain't no free lunch and if we want 
-that right we should seek ways to reduce that price. For example, by 
-making a larger talent pool more effective, by re-using more code and by 
-improving the tooling and automation.
-
-The code I'd delete first wouldn't be a small amount of old code in need 
-of sponsorship. Or even the most buggy code. The first to go would be that 
-code which will never find an actual end user because some portion of the 
-code required to actually use certain platforms was never mainlined by the 
-vendor -- and never will be without some push-back.
+Thanks,
+drew
