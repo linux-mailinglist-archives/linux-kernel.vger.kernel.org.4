@@ -2,201 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 980DA701007
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 23:01:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2BD4701009
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 23:02:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235912AbjELVBx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 17:01:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58566 "EHLO
+        id S236366AbjELVCh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 17:02:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59360 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjELVBt (ORCPT
+        with ESMTP id S236116AbjELVCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 17:01:49 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2060.outbound.protection.outlook.com [40.107.223.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B6BB1FEA;
-        Fri, 12 May 2023 14:01:48 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lkknudLHyJTJYONBQe8tbgkV9QhKi/92iXXLRQffVJAZuqAJOyM2TJJftj+W9o91lacVF6A3keOwH1VzOG5RJ9J4Ut+UK/wWG3mczme9jVgM/jYChY2N52TyRKPXKWzhwSNTYayXa7bI1tJl3NPydUCyUBzEc+jKVeQEVpf32VHkFjlCVNHVOosBVOEedHRqIbfqb4L9r7cPlBl7O0qm0ksdpiSS4qq4U/h8Bdhh+N0ijhiGMSjPrMaVTwn7QZB+Cpsl/wt8TIguw544Q9s2eNBIcVC+RjLXJGAeIMr68KYU8DJniktT7QO8GT+maUqp5lNUEzwfP1OmmW61J6oX0w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=VEpJ+RI4BMrGuDZySQ74Bd/DsKJWAZMaf2vCOyRJLCs=;
- b=e2MqWaFD+9UINXqXESwk8+cP2C3ZrLqW22YiZGPTN2DvYAttVv32w+eGUlQlgzHyr9FkqQFYoLhKXHOH7hqP7fHbZMCRnHuwO3RT9P2Hz3G1vpumppNDlwPRTRY3lx5a3cm7r4RF74OV94oqJfbmVuqAMLZ0MoAl4OwmLAYTEX3zzV7nS06gP2GJPNxU47bHGepS39ObyZASFPp5fTVKlXGNwarBTUgCm0Qnb+pHd2y+1p9xMNdiftwWtmYBM2HrFBokOo3oiGqbaSWu6qxL25vZhnOucmooLiLSPwW5juwu5//FWVsTrAyJ6cXu3KeySpt+rD2y/2ct2YDiFq2vsA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=VEpJ+RI4BMrGuDZySQ74Bd/DsKJWAZMaf2vCOyRJLCs=;
- b=AP9TgtkVuYCyvH8lMlJnGF0Mx/c2KQ+v8rF9GIhuLd+UXucfkLiUS622PXkqhnpE6H5dmFTwk4jqERncSuWeqbFm+3tKc7tIwgnyi+4eJ8KpctVvlx5esoFkJwgrfIy3wJiuJ+ldqSO5d/cUfi42NTTMhPdKQCiRg08mNwTuvCFuqhFiEm5yDYgc9xeBFysL6yGtSBMPjdHrU8ovDECSwLB7oWMzSWuri4tiypDdm+pW8XAydQcd5Rg1oW16pfZtx0wwN6gNbRiGgQLhHpDudQDJjbspFY9SoEIHiTlwZryc4vooCxKJ1BGOzF5L2j5Gbja+9J20yJ7mAmFUZ/DpEg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
- by MN0PR12MB5857.namprd12.prod.outlook.com (2603:10b6:208:378::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.22; Fri, 12 May
- 2023 21:01:45 +0000
-Received: from LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab]) by LV2PR12MB5869.namprd12.prod.outlook.com
- ([fe80::f7a7:a561:87e9:5fab%6]) with mapi id 15.20.6387.021; Fri, 12 May 2023
- 21:01:45 +0000
-Date:   Fri, 12 May 2023 18:01:42 -0300
-From:   Jason Gunthorpe <jgg@nvidia.com>
-To:     "Tian, Kevin" <kevin.tian@intel.com>
-Cc:     Baolu Lu <baolu.lu@linux.intel.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        Nicolin Chen <nicolinc@nvidia.com>,
-        "Lu, Baolu" <baolu.lu@intel.com>
-Subject: Re: vPASID capability for VF
-Message-ID: <ZF6pNjFCBgLt4phV@nvidia.com>
-References: <BN9PR11MB52764BE569672A02FE2A8CCA8C769@BN9PR11MB5276.namprd11.prod.outlook.com>
- <20230510112449.4d766f6f.alex.williamson@redhat.com>
- <BN9PR11MB52769ABFE779CE1D8838A7A78C749@BN9PR11MB5276.namprd11.prod.outlook.com>
- <49063f2e-4ab5-1e20-093d-e1a0b3c15481@linux.intel.com>
- <BL1PR11MB5271F073616B5869E380DD208C759@BL1PR11MB5271.namprd11.prod.outlook.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BL1PR11MB5271F073616B5869E380DD208C759@BL1PR11MB5271.namprd11.prod.outlook.com>
-X-ClientProxiedBy: MW2PR16CA0031.namprd16.prod.outlook.com (2603:10b6:907::44)
- To LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+        Fri, 12 May 2023 17:02:34 -0400
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 061AB3A84
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 14:02:29 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230512210227euoutp024f2fdcabdfeb4b59aa56c58d278a8583~egS6EUjBH1824918249euoutp02b
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 21:02:27 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230512210227euoutp024f2fdcabdfeb4b59aa56c58d278a8583~egS6EUjBH1824918249euoutp02b
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1683925347;
+        bh=snYc3AaUnMxozrOKWE2koPU90RtCRf+1sDe5897xL1I=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=lWGPKarD3uqVcSItshPBXVFEKINSdjcrzSzY0viuAWXBEcjkI6Ao2e6pKxgLWAWve
+         ILUWNlIrruRln5DnkcPfKixsv2++NiLt5veQnw4znHrwdP7g/e/GNhr5OA42n5l0ua
+         1Tb3HjIl9S2mqqdDKEQ0dULZLOaGbmeqBgDPx2zg=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20230512210226eucas1p197f78c33383550b74ca3e04056887013~egS5Zo6Pi1153111531eucas1p1D;
+        Fri, 12 May 2023 21:02:26 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+        eusmges2new.samsung.com (EUCPMTA) with SMTP id E7.9A.35386.269AE546; Fri, 12
+        May 2023 22:02:26 +0100 (BST)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20230512210225eucas1p1709c154945bfbcaf221eef18dec31672~egS4qR6Sx0341103411eucas1p1I;
+        Fri, 12 May 2023 21:02:25 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20230512210225eusmtrp2667401bccef92188a70c106e5d8480b8~egS4pnHqY0884508845eusmtrp2N;
+        Fri, 12 May 2023 21:02:25 +0000 (GMT)
+X-AuditID: cbfec7f4-cc9ff70000028a3a-29-645ea96269d0
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms2.samsung.com (EUCPMTA) with SMTP id 8C.5E.14344.169AE546; Fri, 12
+        May 2023 22:02:25 +0100 (BST)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20230512210225eusmtip28124dbb9b691ef97b4f38d8e161ca1a8~egS33gBNB0166201662eusmtip2C;
+        Fri, 12 May 2023 21:02:25 +0000 (GMT)
+Message-ID: <7a83b8c1-88ff-0ae6-9c3b-d49fc08c7ac0@samsung.com>
+Date:   Fri, 12 May 2023 23:02:25 +0200
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|MN0PR12MB5857:EE_
-X-MS-Office365-Filtering-Correlation-Id: bad72617-5317-4ae5-dad2-08db532c17e2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: spjb9aRKJ6G0KYcza9GPSuAiO0EjPDxa2TH1XXUuSFkQbO2PPZP8evc13xuZRXkYZ8Vdi5ByiZAtffvdkbJDOECyFHwAZn6Io6dScWOyFm9yk5A1GY2n42RYAXBjhrvsuIvRuWU4MM40fBNG691AfDzTRPSeGjJSn8kZ8uRwzC6YoHQ6jk3JlyqymYyzloE70+w2QYYm8D5Xjtd8BXNGW6ijwJskOClJHK4pKeYWXEikizSw1wiCX030Wi0IqMIXA5BoC6NHWkqRMXZfNdEshoD5qmWPywYxlAu4BM0VPAv9eky/BVKlwPt8qNbiU4YyIX+Y7KmMhXG8zHuzrr/lKKE96HdfGez/YG3UkXde8/waXqicbfQeCHvRdtuM6wiOmwqVBKbuVf85qJTaORzcNAPnoXAGGHBfuX866L5L87TpjtLnlAN1ch47H6n0QqJVfOs7S0tk6XDaLrWRkZu4aPvq0cSDuqLgvrxbpXL3dRMCU6iQatBX3OmrjBVBMWYRum7HPH095q9f0Dl84XTtuKdgLc7OU79JhToBZaSJyCyVV+hhDSxhGJjeb32q0+BA
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(366004)(346002)(396003)(136003)(39860400002)(376002)(451199021)(5660300002)(186003)(8936002)(8676002)(2906002)(36756003)(2616005)(38100700002)(83380400001)(3480700007)(86362001)(66946007)(26005)(6512007)(6506007)(4326008)(316002)(66556008)(54906003)(66476007)(6916009)(6486002)(478600001)(53546011)(41300700001)(6666004);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ao8jG51LAKIFgDGLguthxoXxDZ+RjFAO/Gx2ecJEvqZ+LzRESIjyXzrCYSPZ?=
- =?us-ascii?Q?/mGi/n+QnIsdqYob3pQseezeUXh1xSKGLro77iJ/g7p+CPcO3XrcmYckN664?=
- =?us-ascii?Q?aDh/o8tAkqOCepgDQnfZZTSV4VKqZNmebT2yk6ZtwIA2mFRdRWyBKKqhSCEq?=
- =?us-ascii?Q?wFmDT68SSCqMyo/3VKtkz3y7hYJZRQAlT5LaeVWZuF4u0WXyMUQL7R4TtHv+?=
- =?us-ascii?Q?xwfopCjI3jg1z3SvTRS67+TJWxJDKrVzY4zGvLW7rtWbJeVQClfY3NdkMekB?=
- =?us-ascii?Q?5B8u2POZ1nfPjfoTXNPhldRvIROuOVQB1+Lowb3IAMbDBGgX/hrUBRgCpdXa?=
- =?us-ascii?Q?aoCxAJD2RinGKCiqSoIFIFvPourDvaaAec6+sYX1XPsgqYGq4Xd/Lun/O7k8?=
- =?us-ascii?Q?vQPKGOSPx7MQXWb6kb0CU2eFlAHn1ySt4lH9aXmKLDZYuTMj7Xu1lAD9TBXC?=
- =?us-ascii?Q?YZMKwpSGvDRMFSsOlYbKJFFOZBcbbnt+mx2Ux2aaKoNjFaHTVsb3gIYdSI4h?=
- =?us-ascii?Q?a1gFilMjSkJeNJbXULcWJ1TKBPIANhfzHkIRciYPm5jXqp2IgrZ8kbjZwHxs?=
- =?us-ascii?Q?tFKnJ0jEGeUHURGxmcVpvdegcHf8hmbTFj2FSBkdUBoUg9N4T3AQWkIh/mTS?=
- =?us-ascii?Q?yGlxpHwA1BrqM6aFr5/whw7GvBT5cgetGuxaLBlCYWY8zhm/YOhrn3bOvLzV?=
- =?us-ascii?Q?Qgc2GwCSKRHK/H2Op+VlmxMPpSqYUBVe12FDxCBJCzOR8OLWJiLd0/GN+aTp?=
- =?us-ascii?Q?q09WmQThnOyJbYAK8zbBpey2DRIMby2HmAmEpL/rApRo/mt9GKHJcGn0qs+d?=
- =?us-ascii?Q?9dRBVrB5oazfntge97ZS3NVMZO26khBuv/zTuOzE4z8okQkr7clvB/XWrxwc?=
- =?us-ascii?Q?yaJvPlSyr58jH1By0R7/zAnCx5NeZzB6FdYKB16OJcizcxwvfgmtKFEVbqZV?=
- =?us-ascii?Q?Mz15Hl0aetLu6DKC7u2LbYZ4XKEKZkZpvCQokeBcaedvYeapA4gCmCaCexE3?=
- =?us-ascii?Q?OXMZPM7R/DEgd1RXxIkcFrmJtreMHVJhu3jHgHyloFKEaSitUKqy0b/l1GBk?=
- =?us-ascii?Q?ImzcCb/GA2wBnhfjcafRdkY9xuJoxrLKoyKIj9d6BYpRrKYXP8qAoA5zgcT8?=
- =?us-ascii?Q?7wWwtrsmOqe4YXm7oqYr8JJzf20d2lzvv9nL1S+5+rHZWWGSycuqOfa90Koh?=
- =?us-ascii?Q?oMAgWQFRzJSKbXgR3gk8maBChNynx2mQrhcTqKG3eWRSCxN22Qj6s0IwPGn7?=
- =?us-ascii?Q?Czcyi8xpU2+DWOU2fM8+hm1eqEoDeeo3uvd431KbCkBhGw5by2OhQKobc8lj?=
- =?us-ascii?Q?e7iS7i+qA0FLeINZRPWucKk0UiYwo7pBYg7UcaBc/PqrBXkyaBf0ab0sNafj?=
- =?us-ascii?Q?CGJdO++7HBso7bbap0yZ5ieQKgX6SXGgs5wCWOUxBc7mnWwS+q/0OY8e+Rrv?=
- =?us-ascii?Q?VKQ6w1AW34HUnHcYDy7uYizizfCmxu9Vn+JXDek0C45cUoloFubOMcxqNN7+?=
- =?us-ascii?Q?gnCwgFIsKNj7+ToUmdEBuxjZRbW2v6ken38v+xFfeu7mEQOqT+ZAiZQyAk9L?=
- =?us-ascii?Q?nPRlVPZ6nCtrl3jz6YY=3D?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bad72617-5317-4ae5-dad2-08db532c17e2
-X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 21:01:44.9054
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: IycKh5u8SHlRARKLgnxxOomW8TlBiz0pHtHqh2V0pyZLqGArrWR2E1F1jFdGv8Ya
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR12MB5857
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
+        Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [PATCH V5 5/6] drm: bridge: samsung-dsim: Dynamically configure
+ DPHY timing
+Content-Language: en-US
+To:     Adam Ford <aford173@gmail.com>,
+        Lucas Stach <l.stach@pengutronix.de>
+Cc:     dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>, aford@beaconembedded.com,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Jagan Teki <jagan@amarulasolutions.com>
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <CAHCN7xKq_hZXWZVMG0xFK_zGfm18ag48a83BtL5OyE6VJ3FMTA@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrFKsWRmVeSWpSXmKPExsWy7djP87pJK+NSDPY/UbO4c/s0s8Xuq93s
+        FvcXf2axuPL1PZtF79JzrBZfNk1gs3g+fx2jxck3V1ksHsy9yWTROXEJu8XlXXPYLN60NTJa
+        vD29gd3i/c5bjBaT5t1ktZjRdpnVQcBj7cf7rB4vlzcwe8xuuMjiMW/WCRaPnbPusnvM7pjJ
+        6rF4z0smj02rOtk8jlxdzOpxYsIlJo871/awedzvPs7k0f/XwOPzJjmPA3tb2AL4o7hsUlJz
+        MstSi/TtErgyNl8/yVbwWKBi+uOwBsbFvF2MnBwSAiYSu57uY+1i5OIQEljBKHFs/2MmCOcL
+        o8STs7fYQaqEBD4zSixapAXTcXDyHzaI+HJGifYmfYiGj4wSa3+8YAZJ8ArYSbx+d4cJxGYR
+        UJV49m42O0RcUOLkzCcsILaoQKrEqs0XweqFBaIkDn5cCTaUWUBc4taT+WC9IgIeEgeOXGQB
+        WcAsMJtF4sHZZWCD2AQMJbredgE1cHBwCgRK7LjKDdErL9G8dTYzSL2EwCtOiZlbP7FDXO0i
+        seXDekYIW1ji1fEtUHEZif875zNBNLQzSiz4fR/KmcAo0fD8FlSHtcSdc7/AtjELaEqs36UP
+        EXaU2H2rCSwsIcAnceOtIMQRfBKTtk1nhgjzSnS0CUFUq0nMOr4Obu3BC5eYJzAqzUIKlllI
+        3p+F5J1ZCHsXMLKsYhRPLS3OTU8tNspLLdcrTswtLs1L10vOz93ECEyep/8d/7KDcfmrj3qH
+        GJk4GA8xSnAwK4nwvl0SnSLEm5JYWZValB9fVJqTWnyIUZqDRUmcV9v2ZLKQQHpiSWp2ampB
+        ahFMlomDU6qBKUuoRttYXVGqL9C2/CLLr0ezmY97dXqUNTocqjIM+jvROF92+5q7KU13eZY2
+        p/FsMDZoYrdyXHvGyiHjnOxd6Ye7D+sJ74865Z98tu2QabYW+9m5jJO0kldclnmlv95qWa7T
+        3pvG7lGLO1RUdy6WO86gtytYd7USg+zKZya9zeyb3jyRdfjY/0hge0t/238l9WqNiu0N99U/
+        uD5lnsJxeP3fK60VP0584Tv64evVnvDqeds5t3kap603/F9Zfiny0Yd6t9tf4ot0/Wb869vj
+        c69a0Xal4m7dO0+D/r1o6ru33Cdu09lOG+OD502fnlx28Uzha/f5ojNq8m75J+zJevekZtqm
+        8FndN0982OC0UImlOCPRUIu5qDgRABSc87MNBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFuplleLIzCtJLcpLzFFi42I5/e/4Pd3ElXEpBtfuGlrcuX2a2WL31W52
+        i/uLP7NYXPn6ns2id+k5VosvmyawWTyfv47R4uSbqywWD+beZLLonLiE3eLyrjlsFm/aGhkt
+        3p7ewG7xfuctRotJ826yWsxou8zqIOCx9uN9Vo+XyxuYPWY3XGTxmDfrBIvHzll32T1md8xk
+        9Vi85yWTx6ZVnWweR64uZvU4MeESk8eda3vYPO53H2fy6P9r4PF5k5zHgb0tbAH8UXo2Rfml
+        JakKGfnFJbZK0YYWRnqGlhZ6RiaWeobG5rFWRqZK+nY2Kak5mWWpRfp2CXoZm6+fZCt4LFAx
+        /XFYA+Ni3i5GTg4JAROJg5P/sHUxcnEICSxllDjY0c4OkZCRODmtgRXCFpb4c60Lqug9o8Tq
+        x+tZQBK8AnYSr9/dYQKxWQRUJZ69m80OEReUODnzCViNqECqxMmlN8BsYYEoiYMfV7KB2MwC
+        4hK3nswH6xUR8JA4cOQiC8gCZoG5LBIN67cxgySEBI4wSWyZnghiswkYSnS9BbmCg4NTIFBi
+        x1VuiDlmEl1buxghbHmJ5q2zmScwCs1CcsYsJOtmIWmZhaRlASPLKkaR1NLi3PTcYiO94sTc
+        4tK8dL3k/NxNjMB0se3Yzy07GFe++qh3iJGJg/EQowQHs5II79sl0SlCvCmJlVWpRfnxRaU5
+        qcWHGE2BYTGRWUo0OR+YsPJK4g3NDEwNTcwsDUwtzYyVxHk9CzoShQTSE0tSs1NTC1KLYPqY
+        ODilGpjyLQ5zd558PEOtRSIi6MDdrVnqxQ/+hf2bF3zkhdTsfOuIepddH5vdn6g/X27ps4GL
+        V3m76T5+5v1PHdx6+D/P/TVv4ccip9nbXvFKXDS8ZePsUhMccit6C7Pp0i/xm3df7DKaVvPI
+        UJExZ1+DxOXPfVb+UbUzrr510ttTt2FN+d98JZYucavo5r+bxLMvG398euKzaMW/33qfN2pP
+        OPlCtCn4rk+7dGzTRNHeq8lzPL6FP2FjPvhgM6OT1L9WvzUFmZmWCZnKwbfqdXe8Pd/b/yJS
+        qNr3zXIOyyNPfv0QTj/+amqJvSa735SSZTFZc4WlKrTPfpnz1b8vVnhRb9ycH+GmPy23mj2b
+        E6T7Z4YSS3FGoqEWc1FxIgDzNsHCoAMAAA==
+X-CMS-MailID: 20230512210225eucas1p1709c154945bfbcaf221eef18dec31672
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20230512200115eucas1p180198d430c17b044e34d66b7246d4a7b
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20230512200115eucas1p180198d430c17b044e34d66b7246d4a7b
+References: <20230506192453.725621-1-aford173@gmail.com>
+        <20230506192453.725621-6-aford173@gmail.com>
+        <275064c0e6c814d8e8fda6bcf70d6e8c3bdc3011.camel@pengutronix.de>
+        <CGME20230512200115eucas1p180198d430c17b044e34d66b7246d4a7b@eucas1p1.samsung.com>
+        <CAHCN7xKq_hZXWZVMG0xFK_zGfm18ag48a83BtL5OyE6VJ3FMTA@mail.gmail.com>
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 02:59:40AM +0000, Tian, Kevin wrote:
-> > From: Baolu Lu <baolu.lu@linux.intel.com>
-> > Sent: Thursday, May 11, 2023 7:34 PM
-> > 
-> > On 5/11/23 3:27 PM, Tian, Kevin wrote:
-> > >> From: Alex Williamson<alex.williamson@redhat.com>
-> > >> Sent: Thursday, May 11, 2023 1:25 AM
-> > >>
-> > >> On Tue, 9 May 2023 08:34:53 +0000
-> > >> "Tian, Kevin"<kevin.tian@intel.com>  wrote:
-> > >>
-> > >>> According to PCIe spec (7.8.9 PASID Extended Capability Structure):
-> > >>>
-> > >>>    The PASID configuration of the single non-VF Function representing
-> > >>>    the device is also used by all VFs in the device. A PF is permitted
-> > >>>    to implement the PASID capability, but VFs must not implement it.
-> > >>>
-> > >>> To enable PASID on VF then one open is where to locate the PASID
-> > >>> capability in VF's vconfig space. vfio-pci doesn't know which offset
-> > >>> may contain VF specific config registers. Finding such offset must
-> > >>> come from a device specific knowledge.
-> > >> Backup for a moment, VFs are governed by the PASID capability on the
-> > >> PF.  The PASID capability exposes control registers that imply the
-> > >> ability to manage various feature enable bits.  The VF owner does not
-> > >> have privileges to manipulate those bits.  For example, the PASID Enable
-> > >> bit should restrict the endpoint from sending TLPs with a PASID prefix,
-> > >> but this can only be changed at the PF level for all associated VFs.
-> > >>
-> > >> The protocol specified in 7.8.9.3 defines this enable bit as RW.  How do
-> > >> we virtualize that?  Either it's virtualized to be read-only and we
-> > >> violate the spec or we allow it to be read-write and it has no effect,
-> > >> which violates the spec.
-> > >>
-> > > Currently the PASID cap is enabled by default when a device is probed
-> > > by iommu driver. Leaving it enabled in PF while guest wants it disabled
-> > > in VF is harmless. W/o proper setup in iommu side the VF cannot
-> > > do real work with PASID.
-> > 
-> > [sorry for partial reply]
-> > 
-> > I am attempting to move PASID enabling/disabling out of the iommu
-> > driver and give its control to the device driver. One puzzle thing is
-> > that PCI spec requires PASID control bits not changed once the ATS is
-> > is enabled. So I also need to add iommu interfaces to enable/disable
-> > ATS on devices.
-> > 
-> > By default, the ATS is enabled by the iommu subsystem to utilize the
-> > device TLB, the device driver needs to disable it before change the
-> > PASID control bits and re-enable it afterwards.
-> > 
-> 
-> ATS is also relied on by PRS. Not sure how that will be affected when
-> ATS is dynamically turned on/off. and PRS is not tied to PASID.
-> 
-> Jason, is it still a strong requirement to have driver-opt model for
-> pasid enabling? iirc it's first raised in a discussion for an AMD GPU
-> scenario [1]
+On 12.05.2023 22:00, Adam Ford wrote:
+> On Fri, May 12, 2023 at 2:37 PM Lucas Stach <l.stach@pengutronix.de> wrote:
+>> Am Samstag, dem 06.05.2023 um 14:24 -0500 schrieb Adam Ford:
+>>> The DPHY timings are currently hard coded. Since the input
+>>> clock can be variable, the phy timings need to be variable
+>>> too.  Add an additional variable to the driver data to enable
+>>> this feature to prevent breaking boards that don't support it.
+>>>
+>>> The phy_mipi_dphy_get_default_config function configures the
+>>> DPHY timings in pico-seconds, and a small macro converts those
+>>> timings into clock cycles based on the pixel clock rate.
+>>>
+>> This week I finally had some time to take a deeper look at this series
+>> and test it on some of my systems.
+> Thanks for testing this!
+>> This patch causes issues when the burst clock rate is fixed by
+>> supplying the DT entry. Instead of describing the issue below, I'm
+>> attaching the patch that makes things work on my system.
+> Oops, sorry about that.
+>
+>> I would appreciate if you could test this one on your side. Feel free
+>> to squash it into yours if you find it working properly.
+> I reviewed your patch, and it looks like it makes a lot of sense.
+> If it works, I'll squash them together and add your name to the sign-off.
+>
+>> Also I would almost bet that dynamic_dphy is working on the Exynos
+>> boards with that fix added. So if anyone with access to those boards
+>> would like to give it a shot, we may be able to get rid of the
+>> hardcoded PHY parameters altogether, which would be a nice cleanup.
+> I wondered the same thing, but I didn't want to create more work for
+> Marek S and since there was so much churn getting the original driver
+> ported, I thought it would be the safest thing to try to give the
+> imx8m m/n/p the features without breaking the Exynos.
+>
+> Marek S - Do you want me to post this file without the extra checks to
+> see if it still works with Exynos?
 
-It is sounding worse and worse as we go along..
+Feel free to send me patches to test or just point to your 
+work-in-progress git repo.
 
-AMD and ARM both have the issue that the iommu settings and domain
-types depend on if the driver intends to use PASID or not. There is
-some small performance win if PASID is not used and the iommu driver
-knows it is not used.
 
-We also get into some trouble with groups, I think, where it will be
-hard for the iommu driver to know which mode to use when creating a
-domain..
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
-But, if the PASID control for a VF is on the PF then I think it is
-hopeless. The iommu or PCI layers need to make these decisions and
-drivers have to live with it. No PASID support unless the iommu turned
-it on.
-
-This still suggests there would be some driver call to the iommu side
-to check that PASID is setup.
-
-Jason
