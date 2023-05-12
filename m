@@ -2,173 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B015F700E10
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 19:43:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CD341700E12
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 19:44:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236812AbjELRnV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 13:43:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44602 "EHLO
+        id S238118AbjELRoA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 13:44:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237840AbjELRnQ (ORCPT
+        with ESMTP id S231128AbjELRn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 13:43:16 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6D88A60;
-        Fri, 12 May 2023 10:43:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1E95C655A2;
-        Fri, 12 May 2023 17:43:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 281FCC433D2;
-        Fri, 12 May 2023 17:43:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683913392;
-        bh=8dnEAPYSaM02SPoSf8y4owLG82vWOcV/xnoeR97sfyk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=jGZXxrtBpXH+FlPyX750QDcQSG5gCO5NIaf3MV5P87ApMc+KRqbmU4qs6TnxfouXD
-         y+0Hqmi9LDK3lvkq0Sl09zQo9kx/DBzLqcFiLd4XREXJ+CafFw65P0jxQLnuz7HOBp
-         2jw8PQAGGKJaiyXfUPiqSyicXNKSFQSE5bDa7B5TtIpyu5ht7PIaocaoLxBJkERG6I
-         7VOFkiDlk9Ny2TEpKtG87YcWLl5HbrEfrAHnkW2X41g1YGFt4ap6GSOF+qGEUNhjNq
-         Le86qjlsYanzZ9azPFxg3rUtyy0cmSXd5D/0o0iod8dXIDWVWz+iVWufsYXzJ8SU//
-         j09X9fP+RpnRA==
-Date:   Fri, 12 May 2023 12:43:08 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Thippeswamy Havalige <thippeswamy.havalige@amd.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, krzysztof.kozlowski@linaro.org,
-        bhelgaas@google.com, michals@xilinx.com, robh+dt@kernel.org,
-        nagaradhesh.yeleswarapu@amd.com, bharat.kumar.gogada@amd.com,
-        lorenzo.pieralisi@arm.com
-Subject: Re: [PATCH v2 3/3] PCI: xilinx-xdma: Add Xilinx XDMA Root Port driver
-Message-ID: <ZF56rHL+4Cv7VOuN@bhelgaas>
+        Fri, 12 May 2023 13:43:56 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CCAC8A4B;
+        Fri, 12 May 2023 10:43:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683913435; x=1715449435;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=Pjbrs8OPQjNCdOcArcy7VvF6XymjWQoxulO2nMIv+oM=;
+  b=J1LJRHMQ0Y91AnxR9Dc+0TyeorYjqhA1tH4pmSoZUDzHl6rToVzAh+7M
+   W1IDc6S0htkBptXzig254QaJc0OTLz60ssgqq2zSdzKFAMwn5BbV0xV8p
+   lVXFPcGkejysJ70DIJH8nQnvfy/asRmpshu/2TwD17Al/V91t4+5piyX0
+   LpVBBS/3RPt/YSMYJ8xGvXkUE9zem7ZdBcXxcNM9lIkHUST25DIVCFage
+   gZGqgmL0Ds/MXiu2+P5S42tSiqcyen1LX8Kso0dsprDljq1fyqegrDNrN
+   TQrHo5sLjyAfZds4AkxnSHCKDe/+/7vxfid7XqnxaVdYw5Z9Uu07UKh9r
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="331212404"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="331212404"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 10:43:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="694314695"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="694314695"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 12 May 2023 10:43:52 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pxWo4-00050q-0e;
+        Fri, 12 May 2023 17:43:52 +0000
+Date:   Sat, 13 May 2023 01:43:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Liming Sun <limings@nvidia.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        David Thompson <davthompson@nvidia.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>
+Cc:     oe-kbuild-all@lists.linux.dev, Liming Sun <limings@nvidia.com>,
+        linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] mmc: sdhci-of-dwcmshc: Add runtime PM operations
+Message-ID: <202305130116.ynGq0pC5-lkp@intel.com>
+References: <20230512122648.223974-1-limings@nvidia.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230512062725.1208385-4-thippeswamy.havalige@amd.com>
+In-Reply-To: <20230512122648.223974-1-limings@nvidia.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 11:57:25AM +0530, Thippeswamy Havalige wrote:
-> Add support for Xilinx XDMA Soft IP core as Root Port.
-> 
-> The Zynq UltraScale+ MPSoCs devices support XDMA soft IP module in
-> programmable logic.
-> 
-> The integrated XDMA soft IP block has integrated bridge function that
-> can act as PCIe Root Port.
+Hi Liming,
 
-> +config PCIE_XILINX_DMA
-> +	bool "Xilinx DMA PL PCIe host bridge support"
+kernel test robot noticed the following build errors:
 
-Whatever name/text you settle on, make sure it's in alpha order in the
-config menu seen by users.  As-is, this patch would make it:
+[auto build test ERROR on ulf-hansson-mmc-mirror/next]
+[also build test ERROR on linus/master v6.4-rc1 next-20230512]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-  Xilinx AXI PCIe controller
-  Xilinx NWL PCIe controller
-  Xilinx Versal CPM PCI controller
-  Xilinx DMA PL PCIe host bridge support
+url:    https://github.com/intel-lab-lkp/linux/commits/Liming-Sun/mmc-sdhci-of-dwcmshc-Add-runtime-PM-operations/20230512-202948
+base:   https://git.linaro.org/people/ulf.hansson/mmc-mirror.git next
+patch link:    https://lore.kernel.org/r/20230512122648.223974-1-limings%40nvidia.com
+patch subject: [PATCH v3] mmc: sdhci-of-dwcmshc: Add runtime PM operations
+config: arc-allyesconfig (https://download.01.org/0day-ci/archive/20230513/202305130116.ynGq0pC5-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/eb5d4c0702ce24630f3d82a37f39437f52607cbb
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Liming-Sun/mmc-sdhci-of-dwcmshc-Add-runtime-PM-operations/20230512-202948
+        git checkout eb5d4c0702ce24630f3d82a37f39437f52607cbb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
-which is not in alpha order.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305130116.ynGq0pC5-lkp@intel.com/
 
-> +	  Say 'Y' here if you want kernel to enable support for the
-> +	  XILINX PL PCIe host bridge support, this PCIe controller
-> +	  includes DMA PL component.
+All errors (new ones prefixed by >>):
 
-> +obj-$(CONFIG_PCIE_XILINX_DMA) += pcie-xdma-pl.o
+   drivers/mmc/host/sdhci-of-dwcmshc.c: In function 'dwcmshc_runtime_suspend':
+>> drivers/mmc/host/sdhci-of-dwcmshc.c:674:17: error: implicit declaration of function 'dwcmshc_disable_card_clk' [-Werror=implicit-function-declaration]
+     674 |                 dwcmshc_disable_card_clk(host);
+         |                 ^~~~~~~~~~~~~~~~~~~~~~~~
+   drivers/mmc/host/sdhci-of-dwcmshc.c: In function 'dwcmshc_runtime_resume':
+>> drivers/mmc/host/sdhci-of-dwcmshc.c:684:9: error: implicit declaration of function 'dwcmshc_enable_card_clk' [-Werror=implicit-function-declaration]
+     684 |         dwcmshc_enable_card_clk(host);
+         |         ^~~~~~~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-I think this filename needs to include xilinx somehow, not just "xdma".
 
-Since the probe function calls pci_host_probe() in addition to the DMA
-setup, I guess this is a fourth Xilinx host bridge, a peer of AXI,
-CPM, and NWL, and independent of them?
+vim +/dwcmshc_disable_card_clk +674 drivers/mmc/host/sdhci-of-dwcmshc.c
 
-Is the "xdma" or ("DMA PL" as used in Kconfig) name also a peer to
-"CPM" and "NWL"?  The Kconfig text, especially, should use names that
-users will recognize.  "DMA" or "XDMA" seems a little generic.  The
-commit log mentions "Zynq" and "Ultrascale+", neither of which appears
-in Kconfig, so there are a lot of names in play here, which is
-confusing.
+   666	
+   667	static int dwcmshc_runtime_suspend(struct device *dev)
+   668	{
+   669		struct sdhci_host *host = dev_get_drvdata(dev);
+   670		int ret = 0;
+   671	
+   672		ret = sdhci_runtime_suspend_host(host);
+   673		if (!ret)
+ > 674			dwcmshc_disable_card_clk(host);
+   675	
+   676		return ret;
+   677	}
+   678	
+   679	static int dwcmshc_runtime_resume(struct device *dev)
+   680	{
+   681		struct sdhci_host *host = dev_get_drvdata(dev);
+   682		int ret = 0;
+   683	
+ > 684		dwcmshc_enable_card_clk(host);
+   685		ret = sdhci_runtime_resume_host(host, 0);
+   686	
+   687		return ret;
+   688	}
+   689	
 
-> +struct xilinx_pcie_dma {
-
-git grep "^struct .*pcie.*" drivers/pci/controller/ says the typical
-names are "<driver>_pcie".  Please do the same.
-
-> +	void __iomem			*reg_base;
-> +	u32				irq;
-> +	struct pci_config_window	*cfg;
-> +	struct device			*dev;
-
-Please use typical order, i.e., "dev" first, followed by "reg_base",
-etc.  Look at other drivers and make this similar.  No need to be
-creatively different.
-
-> +static inline bool xilinx_pcie_dma_linkup(struct xilinx_pcie_dma *port)
-
-Please use the *_pcie_link_up() naming scheme used elsewhere in
-drivers/pci/controller/.
-
-> +static bool xilinx_pcie_dma_valid_device(struct pci_bus *bus, unsigned int devfn)
-
-Similarly, *_pcie_valid_device().  Lots more instances below.  Don't
-split the "pcie" from the rest of the generic parts of the name.
-
-> +static struct pci_ecam_ops xilinx_pcie_dma_ops = {
-
-const *_ecam_ops
-
-> +static void xilinx_mask_leg_irq(struct irq_data *data)
-> +static void xilinx_unmask_leg_irq(struct irq_data *data)
-> +static struct irq_chip xilinx_leg_irq_chip = {
-> +	.name           = "INTx",
-> +	.irq_mask       = xilinx_mask_leg_irq,
-> +	.irq_unmask     = xilinx_unmask_leg_irq,
-> +};
-
-You use "intx" in the names below.  Please also use "intx" instead of
-"leg" in the names above.  No need for two different names for the
-same concept.
-
-> +static const struct irq_domain_ops intx_domain_ops = {
-> +	.map = xilinx_pcie_dma_intx_map,
-
-> +	/* Enable the Bridge enable bit */
-
-"Set the ... enable bit"
-
-> +	pcie_write(port, pcie_read(port, XILINX_PCIE_DMA_REG_RPSC) |
-
-> +static int xilinx_pcie_dma_parse_dt(struct xilinx_pcie_dma *port,
-> +				    struct resource *bus_range)
-> +{
-> +	struct device *dev = port->dev;
-> +	int err;
-> +	struct platform_device *pdev = to_platform_device(dev);
-> +	struct resource *res;
-
-Weird ordering.  Suggest order of use:
-
-  struct device *dev = port->dev;
-  struct platform_device *pdev = to_platform_device(dev);
-  struct resource *res;
-  int err;
-
-> +static int xilinx_pcie_dma_probe(struct platform_device *pdev)
-> +{
-> +	struct xilinx_pcie_dma *port;
-> +	struct device *dev = &pdev->dev;
-> +	struct pci_host_bridge *bridge;
-> +	struct resource_entry *bus;
-> +	int err;
-
-Would order "struct device *dev" first.
-
-Bjorn
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
