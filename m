@@ -2,54 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DD70700F58
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 21:37:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF10F700F60
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 21:40:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238791AbjELThf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 15:37:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48562 "EHLO
+        id S239194AbjELTkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 15:40:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230443AbjELThe (ORCPT
+        with ESMTP id S238859AbjELTkB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 15:37:34 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B59B2108
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 12:37:32 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <l.stach@pengutronix.de>)
-        id 1pxYZr-0000Ys-SS; Fri, 12 May 2023 21:37:19 +0200
-Message-ID: <275064c0e6c814d8e8fda6bcf70d6e8c3bdc3011.camel@pengutronix.de>
-Subject: Re: [PATCH V5 5/6] drm: bridge: samsung-dsim: Dynamically configure
- DPHY timing
-From:   Lucas Stach <l.stach@pengutronix.de>
-To:     Adam Ford <aford173@gmail.com>, dri-devel@lists.freedesktop.org
-Cc:     Marek Vasut <marex@denx.de>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>, aford@beaconembedded.com,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Jagan Teki <jagan@amarulasolutions.com>
-Date:   Fri, 12 May 2023 21:37:11 +0200
-In-Reply-To: <20230506192453.725621-6-aford173@gmail.com>
-References: <20230506192453.725621-1-aford173@gmail.com>
-         <20230506192453.725621-6-aford173@gmail.com>
-Content-Type: multipart/mixed; boundary="=-vlyej8fJXiDn+C7Q6nI9"
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Fri, 12 May 2023 15:40:01 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31E8E2108;
+        Fri, 12 May 2023 12:40:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683920400; x=1715456400;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=oLlJPch9Ytj6zBQioqD0gTcP99Inly/ST53TUTG0mAA=;
+  b=iCixv7495tlWeVsodeh9ynI0yBr8UmBX5xeIRq294TlXxFMiOf4yUzTS
+   gME9gsSS9vyESbmwsMbmGY5d/Y6/UHwp7Azwxr1AD0B8k0Ya5HzFlJFWX
+   KbQGVda+Wa9cJB8O027W3QiYF58D5PINYHUtoer2gV2Wc8HP/aNnAFL26
+   4uyu1TdtVjZ9OOs4EhOw1yFi2uoY+nsBS4pQkHc/9x+CBTEOVKSl3IGWs
+   0mE8Vo/22YipzFCzaw1Qe56k3ZvekM8Ck1/kmCDjgbc/0+vn7zZFwBIBF
+   IC7yUjwQ/HCJFRhDWAVrniEyWy9NDB8TrkLiBhHJbBlFNwEApb5SvuMIF
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="335394077"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="335394077"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 12:39:58 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="694351036"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="694351036"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga007.jf.intel.com with ESMTP; 12 May 2023 12:39:55 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pxYcM-00054a-2V;
+        Fri, 12 May 2023 19:39:54 +0000
+Date:   Sat, 13 May 2023 03:39:09 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        Komal Bajaj <quic_kbajaj@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCH v3 06/10] soc: qcom: Add LLCC support for multi channel
+ DDR
+Message-ID: <202305130303.wwdZb5hy-lkp@intel.com>
+References: <20230512122134.24339-7-quic_kbajaj@quicinc.com>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512122134.24339-7-quic_kbajaj@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,267 +75,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---=-vlyej8fJXiDn+C7Q6nI9
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Hi Komal,
 
-Hi Adam,
+kernel test robot noticed the following build errors:
 
-Am Samstag, dem 06.05.2023 um 14:24 -0500 schrieb Adam Ford:
-> The DPHY timings are currently hard coded. Since the input
-> clock can be variable, the phy timings need to be variable
-> too.  Add an additional variable to the driver data to enable
-> this feature to prevent breaking boards that don't support it.
->=20
-> The phy_mipi_dphy_get_default_config function configures the
-> DPHY timings in pico-seconds, and a small macro converts those
-> timings into clock cycles based on the pixel clock rate.
->=20
-This week I finally had some time to take a deeper look at this series
-and test it on some of my systems.
+[auto build test ERROR on linus/master]
+[also build test ERROR on v6.4-rc1 next-20230512]
+[cannot apply to robh/for-next]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-This patch causes issues when the burst clock rate is fixed by
-supplying the DT entry. Instead of describing the issue below, I'm
-attaching the patch that makes things work on my system.
+url:    https://github.com/intel-lab-lkp/linux/commits/Komal-Bajaj/nvmem-qfprom-Add-support-for-secure-reading/20230512-202430
+base:   linus/master
+patch link:    https://lore.kernel.org/r/20230512122134.24339-7-quic_kbajaj%40quicinc.com
+patch subject: [PATCH v3 06/10] soc: qcom: Add LLCC support for multi channel DDR
+config: riscv-randconfig-r042-20230509 (https://download.01.org/0day-ci/archive/20230513/202305130303.wwdZb5hy-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install riscv cross compiling tool for clang build
+        # apt-get install binutils-riscv64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/52808ee1c4720767ab330b371d356ffbd8fe7235
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Komal-Bajaj/nvmem-qfprom-Add-support-for-secure-reading/20230512-202430
+        git checkout 52808ee1c4720767ab330b371d356ffbd8fe7235
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=riscv SHELL=/bin/bash drivers/soc/qcom/
 
-I would appreciate if you could test this one on your side. Feel free
-to squash it into yours if you find it working properly.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305130303.wwdZb5hy-lkp@intel.com/
 
-Also I would almost bet that dynamic_dphy is working on the Exynos
-boards with that fix added. So if anyone with access to those boards
-would like to give it a shot, we may be able to get rid of the
-hardcoded PHY parameters altogether, which would be a nice cleanup.
+All errors (new ones prefixed by >>):
 
-Regards,
-Lucas
-
-> Signed-off-by: Adam Ford <aford173@gmail.com>
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> Tested-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> Reviewed-by: Frieder Schrempf <frieder.schrempf@kontron.de>
-> Tested-by: Michael Walle <michael@walle.cc>
-> ---
->  drivers/gpu/drm/bridge/samsung-dsim.c | 74 ++++++++++++++++++++++++---
->  include/drm/bridge/samsung-dsim.h     |  1 +
->  2 files changed, 68 insertions(+), 7 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/bridge/samsung-dsim.c b/drivers/gpu/drm/brid=
-ge/samsung-dsim.c
-> index 08266303c261..d19a5c87b749 100644
-> --- a/drivers/gpu/drm/bridge/samsung-dsim.c
-> +++ b/drivers/gpu/drm/bridge/samsung-dsim.c
-> @@ -218,6 +218,8 @@
-> =20
->  #define OLD_SCLK_MIPI_CLK_NAME		"pll_clk"
-> =20
-> +#define PS_TO_CYCLE(ps, hz) DIV64_U64_ROUND_CLOSEST(((ps) * (hz)), 10000=
-00000000ULL)
-> +
->  static const char *const clk_names[5] =3D {
->  	"bus_clk",
->  	"sclk_mipi",
-> @@ -487,6 +489,7 @@ static const struct samsung_dsim_driver_data imx8mm_d=
-si_driver_data =3D {
->  	.m_min =3D 64,
->  	.m_max =3D 1023,
->  	.min_freq =3D 1050,
-> +	.dynamic_dphy =3D 1,
->  };
-> =20
->  static const struct samsung_dsim_driver_data *
-> @@ -698,13 +701,50 @@ static void samsung_dsim_set_phy_ctrl(struct samsun=
-g_dsim *dsi)
->  	const struct samsung_dsim_driver_data *driver_data =3D dsi->driver_data=
-;
->  	const unsigned int *reg_values =3D driver_data->reg_values;
->  	u32 reg;
-> +	struct drm_display_mode *m =3D &dsi->mode;
-> +	int bpp =3D mipi_dsi_pixel_format_to_bpp(dsi->format);
-> +	struct phy_configure_opts_mipi_dphy cfg;
-> +	int clk_prepare, lpx, clk_zero, clk_post, clk_trail;
-> +	int hs_exit, hs_prepare, hs_zero, hs_trail;
-> +	unsigned long long clock_in_hz =3D m->clock * 1000;
-> =20
->  	if (driver_data->has_freqband)
->  		return;
-> =20
-> +	/* The dynamic_phy has the ability to adjust PHY Timing settings */
-> +	if (driver_data->dynamic_dphy) {
-> +		phy_mipi_dphy_get_default_config(clock_in_hz, bpp, dsi->lanes, &cfg);
-> +
-> +		/*
-> +		 * TODO:
-> +		 * The tech reference manual for i.MX8M Mini/Nano/Plus
-> +		 * doesn't state what the definition of the PHYTIMING
-> +		 * bits are beyond their address and bit position.
-> +		 * After reviewing NXP's downstream code, it appears
-> +		 * that the various PHYTIMING registers take the number
-> +		 * of cycles and use various dividers on them.  This
-> +		 * calculation does not result in an exact match to the
-> +		 * downstream code, but it is very close, and it appears
-> +		 * to sync at a variety of resolutions. If someone
-> +		 * can get a more accurate mathematical equation needed
-> +		 * for these registers, this should be updated.
-> +		 */
-> +
-> +		lpx =3D PS_TO_CYCLE(cfg.lpx, clock_in_hz);
-> +		hs_exit =3D PS_TO_CYCLE(cfg.hs_exit, clock_in_hz);
-> +		clk_prepare =3D PS_TO_CYCLE(cfg.clk_prepare, clock_in_hz);
-> +		clk_zero =3D PS_TO_CYCLE(cfg.clk_zero, clock_in_hz);
-> +		clk_post =3D PS_TO_CYCLE(cfg.clk_post, clock_in_hz);
-> +		clk_trail =3D PS_TO_CYCLE(cfg.clk_trail, clock_in_hz);
-> +		hs_prepare =3D PS_TO_CYCLE(cfg.hs_prepare, clock_in_hz);
-> +		hs_zero =3D PS_TO_CYCLE(cfg.hs_zero, clock_in_hz);
-> +		hs_trail =3D PS_TO_CYCLE(cfg.hs_trail, clock_in_hz);
-> +	}
-> +
->  	/* B D-PHY: D-PHY Master & Slave Analog Block control */
->  	reg =3D reg_values[PHYCTRL_ULPS_EXIT] | reg_values[PHYCTRL_VREG_LP] |
->  		reg_values[PHYCTRL_SLEW_UP];
-> +
->  	samsung_dsim_write(dsi, DSIM_PHYCTRL_REG, reg);
-> =20
->  	/*
-> @@ -712,7 +752,11 @@ static void samsung_dsim_set_phy_ctrl(struct samsung=
-_dsim *dsi)
->  	 * T HS-EXIT: Time that the transmitter drives LP-11 following a HS
->  	 *	burst
->  	 */
-> -	reg =3D reg_values[PHYTIMING_LPX] | reg_values[PHYTIMING_HS_EXIT];
-> +	if (driver_data->dynamic_dphy)
-> +		reg  =3D DSIM_PHYTIMING_LPX(lpx) | DSIM_PHYTIMING_HS_EXIT(hs_exit);
-> +	else
-> +		reg =3D reg_values[PHYTIMING_LPX] | reg_values[PHYTIMING_HS_EXIT];
-> +
->  	samsung_dsim_write(dsi, DSIM_PHYTIMING_REG, reg);
-> =20
->  	/*
-> @@ -728,10 +772,17 @@ static void samsung_dsim_set_phy_ctrl(struct samsun=
-g_dsim *dsi)
->  	 * T CLK-TRAIL: Time that the transmitter drives the HS-0 state after
->  	 *	the last payload clock bit of a HS transmission burst
->  	 */
-> -	reg =3D reg_values[PHYTIMING_CLK_PREPARE] |
-> -		reg_values[PHYTIMING_CLK_ZERO] |
-> -		reg_values[PHYTIMING_CLK_POST] |
-> -		reg_values[PHYTIMING_CLK_TRAIL];
-> +	if (driver_data->dynamic_dphy) {
-> +		reg =3D DSIM_PHYTIMING1_CLK_PREPARE(clk_prepare)	|
-> +		      DSIM_PHYTIMING1_CLK_ZERO(clk_zero)	|
-> +		      DSIM_PHYTIMING1_CLK_POST(clk_post)	|
-> +		      DSIM_PHYTIMING1_CLK_TRAIL(clk_trail);
-> +	} else {
-> +		reg =3D reg_values[PHYTIMING_CLK_PREPARE] |
-> +		      reg_values[PHYTIMING_CLK_ZERO] |
-> +		      reg_values[PHYTIMING_CLK_POST] |
-> +		      reg_values[PHYTIMING_CLK_TRAIL];
-> +	}
-> =20
->  	samsung_dsim_write(dsi, DSIM_PHYTIMING1_REG, reg);
-> =20
-> @@ -744,8 +795,17 @@ static void samsung_dsim_set_phy_ctrl(struct samsung=
-_dsim *dsi)
->  	 * T HS-TRAIL: Time that the transmitter drives the flipped differentia=
-l
->  	 *	state after last payload data bit of a HS transmission burst
->  	 */
-> -	reg =3D reg_values[PHYTIMING_HS_PREPARE] | reg_values[PHYTIMING_HS_ZERO=
-] |
-> -		reg_values[PHYTIMING_HS_TRAIL];
-> +
-> +	if (driver_data->dynamic_dphy) {
-> +		reg =3D DSIM_PHYTIMING2_HS_PREPARE(hs_prepare) |
-> +		      DSIM_PHYTIMING2_HS_ZERO(hs_zero) |
-> +		      DSIM_PHYTIMING2_HS_TRAIL(hs_trail);
-> +	} else {
-> +		reg =3D reg_values[PHYTIMING_HS_PREPARE] |
-> +		      reg_values[PHYTIMING_HS_ZERO] |
-> +		      reg_values[PHYTIMING_HS_TRAIL];
-> +	}
-> +
->  	samsung_dsim_write(dsi, DSIM_PHYTIMING2_REG, reg);
->  }
-> =20
-> diff --git a/include/drm/bridge/samsung-dsim.h b/include/drm/bridge/samsu=
-ng-dsim.h
-> index a1a5b2b89a7a..76ea8a1720cc 100644
-> --- a/include/drm/bridge/samsung-dsim.h
-> +++ b/include/drm/bridge/samsung-dsim.h
-> @@ -62,6 +62,7 @@ struct samsung_dsim_driver_data {
->  	const unsigned int *reg_values;
->  	u16 m_min;
->  	u16 m_max;
-> +	bool dynamic_dphy;
->  };
-> =20
->  struct samsung_dsim_host_ops {
+>> drivers/soc/qcom/llcc-qcom.c:951:8: error: call to undeclared function 'nvmem_cell_read_u8'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           ret = nvmem_cell_read_u8(&pdev->dev, "multi_chan_ddr", cfg_index);
+                 ^
+   1 error generated.
 
 
---=-vlyej8fJXiDn+C7Q6nI9
-Content-Disposition: attachment;
-	filename*0=0001-drm-bridge-samsung-dsim-use-HS-clock-to-calculate-PH.pat;
-	filename*1=ch
-Content-Type: text/x-patch;
-	name="0001-drm-bridge-samsung-dsim-use-HS-clock-to-calculate-PH.patch";
-	charset="UTF-8"
-Content-Transfer-Encoding: base64
+vim +/nvmem_cell_read_u8 +951 drivers/soc/qcom/llcc-qcom.c
 
-RnJvbSAyNTk4NmJmYjYwZDM1MGEzZmM2Yzg2NWZjNjIyNTVkYWUzZTAwMzZlIE1vbiBTZXAgMTcg
-MDA6MDA6MDAgMjAwMQpGcm9tOiBMdWNhcyBTdGFjaCA8bC5zdGFjaEBwZW5ndXRyb25peC5kZT4K
-RGF0ZTogRnJpLCAxMiBNYXkgMjAyMyAyMToyMDowMyArMDIwMApTdWJqZWN0OiBbUEFUQ0hdIGRy
-bTogYnJpZGdlOiBzYW1zdW5nLWRzaW06IHVzZSBIUyBjbG9jayB0byBjYWxjdWxhdGUgUEhZCiB0
-aW1pbmdzCgpUaGUgY3VycmVudCBQSFkgdGltaW5nIGNhbGN1bGF0aW9uIGFzc3VtZXMgdGhhdCB0
-aGUgSFMgY2xvY2sgaXMgc2NhbGVkCndpdGggdGhlIG1vZGUgcGl4ZWxjbG9jaywgd2hpY2ggaXNu
-J3QgYWx3YXlzIHRoZSBjYXNlLiBVc2UgdGhlIEhTIGNsb2NrCmRpcmVjdGx5IHRvIGNhbGN1bGF0
-ZSB0aGUgdGltaW5nIHBhcmFtZXRlcnMuCgpBbHNvIGl0IGRvZXNuJ3QgbWFrZSBtdWNoIHNlbnNl
-IHRvIHNjYWxlIHRoZSB0aW1pbmdzIGJ5IGRpdmlkaW5nCmJ5IHRoZSBtb2RlIHBpeGVsIGNsb2Nr
-LCBhcyB0aGUgUEhZIG5ldmVyIGdldHMgdG8gc2VlIHRoaXMgY2xvY2suClVzZSB0aGUgYnl0ZWNs
-b2NrIGluc3RlYWQsIHdoaWNoIHNlZW1zIG11Y2ggbW9yZSBsaWtlbHkgdG8gYmUgdGhlCmNvcnJl
-Y3Qgc291cmNlIGRyaXZpbmcgdGhvc2UgY291bnRlcnMuCgpTaWduZWQtb2ZmLWJ5OiBMdWNhcyBT
-dGFjaCA8bC5zdGFjaEBwZW5ndXRyb25peC5kZT4KLS0tCiBkcml2ZXJzL2dwdS9kcm0vYnJpZGdl
-L3NhbXN1bmctZHNpbS5jIHwgMjUgKysrKysrKysrKysrLS0tLS0tLS0tLS0tLQogMSBmaWxlIGNo
-YW5nZWQsIDEyIGluc2VydGlvbnMoKyksIDEzIGRlbGV0aW9ucygtKQoKZGlmZiAtLWdpdCBhL2Ry
-aXZlcnMvZ3B1L2RybS9icmlkZ2Uvc2Ftc3VuZy1kc2ltLmMgYi9kcml2ZXJzL2dwdS9kcm0vYnJp
-ZGdlL3NhbXN1bmctZHNpbS5jCmluZGV4IGNhY2FkMTMwY2ZiMDUuLmFiMzRhZGI3OWMxNTggMTAw
-NjQ0Ci0tLSBhL2RyaXZlcnMvZ3B1L2RybS9icmlkZ2Uvc2Ftc3VuZy1kc2ltLmMKKysrIGIvZHJp
-dmVycy9ncHUvZHJtL2JyaWRnZS9zYW1zdW5nLWRzaW0uYwpAQCAtNzEzLDE5ICs3MTMsMTggQEAg
-c3RhdGljIHZvaWQgc2Ftc3VuZ19kc2ltX3NldF9waHlfY3RybChzdHJ1Y3Qgc2Ftc3VuZ19kc2lt
-ICpkc2kpCiAJY29uc3Qgc3RydWN0IHNhbXN1bmdfZHNpbV9kcml2ZXJfZGF0YSAqZHJpdmVyX2Rh
-dGEgPSBkc2ktPmRyaXZlcl9kYXRhOwogCWNvbnN0IHVuc2lnbmVkIGludCAqcmVnX3ZhbHVlcyA9
-IGRyaXZlcl9kYXRhLT5yZWdfdmFsdWVzOwogCXUzMiByZWc7Ci0Jc3RydWN0IGRybV9kaXNwbGF5
-X21vZGUgKm0gPSAmZHNpLT5tb2RlOwotCWludCBicHAgPSBtaXBpX2RzaV9waXhlbF9mb3JtYXRf
-dG9fYnBwKGRzaS0+Zm9ybWF0KTsKIAlzdHJ1Y3QgcGh5X2NvbmZpZ3VyZV9vcHRzX21pcGlfZHBo
-eSBjZmc7CiAJaW50IGNsa19wcmVwYXJlLCBscHgsIGNsa196ZXJvLCBjbGtfcG9zdCwgY2xrX3Ry
-YWlsOwogCWludCBoc19leGl0LCBoc19wcmVwYXJlLCBoc196ZXJvLCBoc190cmFpbDsKLQl1bnNp
-Z25lZCBsb25nIGxvbmcgY2xvY2tfaW5faHogPSBtLT5jbG9jayAqIDEwMDA7CisJdW5zaWduZWQg
-bG9uZyBsb25nIGJ5dGVfY2xvY2sgPSBkc2ktPmhzX2Nsb2NrIC8gODsKIAogCWlmIChkcml2ZXJf
-ZGF0YS0+aGFzX2ZyZXFiYW5kKQogCQlyZXR1cm47CiAKIAkvKiBUaGUgZHluYW1pY19waHkgaGFz
-IHRoZSBhYmlsaXR5IHRvIGFkanVzdCBQSFkgVGltaW5nIHNldHRpbmdzICovCiAJaWYgKGRyaXZl
-cl9kYXRhLT5keW5hbWljX2RwaHkpIHsKLQkJcGh5X21pcGlfZHBoeV9nZXRfZGVmYXVsdF9jb25m
-aWcoY2xvY2tfaW5faHosIGJwcCwgZHNpLT5sYW5lcywgJmNmZyk7CisJCXBoeV9taXBpX2RwaHlf
-Z2V0X2RlZmF1bHRfY29uZmlnX2Zvcl9oc2Nsayhkc2ktPmhzX2Nsb2NrLAorCQkJCQkJCSAgIGRz
-aS0+bGFuZXMsICZjZmcpOwogCiAJCS8qCiAJCSAqIFRPRE86CkBAIC03NDIsMTUgKzc0MSwxNSBA
-QCBzdGF0aWMgdm9pZCBzYW1zdW5nX2RzaW1fc2V0X3BoeV9jdHJsKHN0cnVjdCBzYW1zdW5nX2Rz
-aW0gKmRzaSkKIAkJICogZm9yIHRoZXNlIHJlZ2lzdGVycywgdGhpcyBzaG91bGQgYmUgdXBkYXRl
-ZC4KIAkJICovCiAKLQkJbHB4ID0gUFNfVE9fQ1lDTEUoY2ZnLmxweCwgY2xvY2tfaW5faHopOwot
-CQloc19leGl0ID0gUFNfVE9fQ1lDTEUoY2ZnLmhzX2V4aXQsIGNsb2NrX2luX2h6KTsKLQkJY2xr
-X3ByZXBhcmUgPSBQU19UT19DWUNMRShjZmcuY2xrX3ByZXBhcmUsIGNsb2NrX2luX2h6KTsKLQkJ
-Y2xrX3plcm8gPSBQU19UT19DWUNMRShjZmcuY2xrX3plcm8sIGNsb2NrX2luX2h6KTsKLQkJY2xr
-X3Bvc3QgPSBQU19UT19DWUNMRShjZmcuY2xrX3Bvc3QsIGNsb2NrX2luX2h6KTsKLQkJY2xrX3Ry
-YWlsID0gUFNfVE9fQ1lDTEUoY2ZnLmNsa190cmFpbCwgY2xvY2tfaW5faHopOwotCQloc19wcmVw
-YXJlID0gUFNfVE9fQ1lDTEUoY2ZnLmhzX3ByZXBhcmUsIGNsb2NrX2luX2h6KTsKLQkJaHNfemVy
-byA9IFBTX1RPX0NZQ0xFKGNmZy5oc196ZXJvLCBjbG9ja19pbl9oeik7Ci0JCWhzX3RyYWlsID0g
-UFNfVE9fQ1lDTEUoY2ZnLmhzX3RyYWlsLCBjbG9ja19pbl9oeik7CisJCWxweCA9IFBTX1RPX0NZ
-Q0xFKGNmZy5scHgsIGJ5dGVfY2xvY2spOworCQloc19leGl0ID0gUFNfVE9fQ1lDTEUoY2ZnLmhz
-X2V4aXQsIGJ5dGVfY2xvY2spOworCQljbGtfcHJlcGFyZSA9IFBTX1RPX0NZQ0xFKGNmZy5jbGtf
-cHJlcGFyZSwgYnl0ZV9jbG9jayk7CisJCWNsa196ZXJvID0gUFNfVE9fQ1lDTEUoY2ZnLmNsa196
-ZXJvLCBieXRlX2Nsb2NrKTsKKwkJY2xrX3Bvc3QgPSBQU19UT19DWUNMRShjZmcuY2xrX3Bvc3Qs
-IGJ5dGVfY2xvY2spOworCQljbGtfdHJhaWwgPSBQU19UT19DWUNMRShjZmcuY2xrX3RyYWlsLCBi
-eXRlX2Nsb2NrKTsKKwkJaHNfcHJlcGFyZSA9IFBTX1RPX0NZQ0xFKGNmZy5oc19wcmVwYXJlLCBi
-eXRlX2Nsb2NrKTsKKwkJaHNfemVybyA9IFBTX1RPX0NZQ0xFKGNmZy5oc196ZXJvLCBieXRlX2Ns
-b2NrKTsKKwkJaHNfdHJhaWwgPSBQU19UT19DWUNMRShjZmcuaHNfdHJhaWwsIGJ5dGVfY2xvY2sp
-OwogCX0KIAogCS8qIEIgRC1QSFk6IEQtUEhZIE1hc3RlciAmIFNsYXZlIEFuYWxvZyBCbG9jayBj
-b250cm9sICovCi0tIAoyLjQwLjAKCg==
+   946	
+   947	static int qcom_llcc_get_cfg_index(struct platform_device *pdev, u8 *cfg_index)
+   948	{
+   949		int ret = 0;
+   950	
+ > 951		ret = nvmem_cell_read_u8(&pdev->dev, "multi_chan_ddr", cfg_index);
+   952		if (ret == -ENOENT) {
+   953			*cfg_index = 0;
+   954			return 0;
+   955		}
+   956	
+   957		return ret;
+   958	}
+   959	
 
-
---=-vlyej8fJXiDn+C7Q6nI9--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
