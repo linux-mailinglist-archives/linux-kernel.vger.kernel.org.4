@@ -2,148 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80810700354
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 11:06:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 469B370035A
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 11:06:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240357AbjELJGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 05:06:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
+        id S240390AbjELJGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 05:06:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240026AbjELJGJ (ORCPT
+        with ESMTP id S240371AbjELJGx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 05:06:09 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81C08DD96;
-        Fri, 12 May 2023 02:06:08 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-64395e741fcso10010587b3a.2;
-        Fri, 12 May 2023 02:06:08 -0700 (PDT)
+        Fri, 12 May 2023 05:06:53 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32E90AD36
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 02:06:52 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id 98e67ed59e1d1-24decf5cc03so6730984a91.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 02:06:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683882368; x=1686474368;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BUkwR5dAglmPcY5nHDbrbDUmEm/Czvqol0O0KFuiob8=;
-        b=EsOpvrz8oFiaamtTwXnlCFLbdqUpYc15ryzTzPnULkAUJ5PsxIC2FamepHTQ9vxJUo
-         7hiFmErMgyPGoSAse+smqWasoWMlfVSh9GD2osKdeABJHg67mA/iS8vuIoGsYTfrBRPr
-         5WH6Dw5j5eH+bxMRz4bxS0CwpwjCN4Qqw/CB/ON2fcHX3iht/v64JwKi8JHqb2vltP3z
-         LogBmtroPw5FGg3+H9+h0WXdJKJsbQaY6sUo8vQkr+LpWZmk7bZT0gatzGfQFcbJiJo9
-         k1j0c1nZZLck2LHRMCfiuE+xDGZtdcpoZubsCR3JCv27zPXiBadfozdQhAc1w7smV2PR
-         uBZQ==
+        d=gmail.com; s=20221208; t=1683882411; x=1686474411;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G7upYASidmeqEEydII3qqc7RD6bnaXjO6ELYE2uwAgE=;
+        b=qE6GzOtYW281GDhq/AEJaReNIL7xesJkaPMjmmgLXzESt3ZWS8IkTXhsGKWaxAla4A
+         8U4xMJpvJBKcm53nIjU8V7H3U+Lf6RgWWrQ6F4oXVrz4Sqa5kZssynQR8qGGousiWCrG
+         l/7/uLaBRyjLqmqnu8DcB6C8gOYVCPXlHsYXKjWJSbwUDQtL/r7dctbTe0p9m915GU2o
+         Wu7fZdGmTM2V8w44N2mWI+0k0HlFUXSnEkzcjufRSC+1N+Lr8wJQnm0dh68eSjlKDbRi
+         g1duGz9fV7afSzWtXPpe5+38qdWrIZ974oTeLom0wk08rf2urhdeev+N1hxz57yKacxD
+         ds9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683882368; x=1686474368;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1683882411; x=1686474411;
+        h=to:subject:message-id:date:from:reply-to:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BUkwR5dAglmPcY5nHDbrbDUmEm/Czvqol0O0KFuiob8=;
-        b=AcSi5q0oB/RB7LaAxDD20nksQ1eoG15vksts1oMpPMTIz3d8OmKWcT4x8mUr8/WJVN
-         fbM2ud1chLMyZkzPidQCtx3M7Wtrgi+WADUhZitFUNlFwg0YoleCpZ9K/20ImaVXaJpV
-         0Rc78uw20q33+uijGfBAXxnELRw+A6zItHAG28dYVeQhZSd6p6LseFSkxoufFKFjlQvV
-         /XWfwNYTgF64Dfs4oRT+6L68PyfdGVsvG3XF1XUIvxG+hFcj6WFVSF7KYv2ldcmvIVU+
-         Q84bwNLUTeyfWcslWutjhjMqNHdrPC3nOvaj4y1fCtW9QXYUC3jk4C1zhTwwe0j6CcN+
-         LLXQ==
-X-Gm-Message-State: AC+VfDy9GrhhDrUGt3G+Ob5/GT8/4M7ZKGK+CcMaIzy6XhHVOLF7kGl9
-        uPGAn4esmSX3FmliP2T41Jw=
-X-Google-Smtp-Source: ACHHUZ4DD4qzlVtl1MATp+SSQ4wN/DopjFHr357B6Org73qjEYGN3SP7rZVm5nzvAwWRUD4DmIZ0jQ==
-X-Received: by 2002:a05:6a00:1747:b0:644:ad29:fd5a with SMTP id j7-20020a056a00174700b00644ad29fd5amr27781559pfc.21.1683882367855;
-        Fri, 12 May 2023 02:06:07 -0700 (PDT)
-Received: from [192.168.43.80] (subs32-116-206-28-8.three.co.id. [116.206.28.8])
-        by smtp.gmail.com with ESMTPSA id a4-20020a62bd04000000b006413d1dc4adsm6584368pff.110.2023.05.12.02.05.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 02:06:07 -0700 (PDT)
-Message-ID: <2883e834-eccd-937e-0f3e-2d787994d4cf@gmail.com>
-Date:   Fri, 12 May 2023 16:05:52 +0700
+        bh=G7upYASidmeqEEydII3qqc7RD6bnaXjO6ELYE2uwAgE=;
+        b=NG2jcph0ddmENsatCVcOq84N6z/9p1qDwAjzTaPZb9dRpwyP7qD/IsPTzTiVz6Iiek
+         B2sJ4TqR16n8675d1Qi4ZtjMFaBVnGkKkVuulAMFF3aaL0mSa/1zQr9fY2qdV/GC8KXr
+         pnzn8KfNSathiXRaDUHnQYBNzTQgzgok93lT44KzIWxsR1vz1ZUnxKYYcGWpFOEBsye1
+         nYfQlmEWDs72235m6hYRioCBEtjhEwh5Fwvz8m4DhRA8KpuCNnSLfXNBoMTstVIwpkpi
+         Wl0WMHVUCdp6khUh28aarOwRXwZ1Zw0yWwfp8UIn2VhXDG8WF+s4MU9vWn7IM9HgkYef
+         7TQQ==
+X-Gm-Message-State: AC+VfDz/gOxPZVaVuOWYgmdHpU2KucE2l8pYIV39w5+tjzI8UkBBt6De
+        PG3R0nItodbnihk8oYdU6xFRYK6YeiTfoGYfoaQ=
+X-Google-Smtp-Source: ACHHUZ5L+56qjRoZ0ElPbLz96Y8prJs+A7z3h1CfGaJWbQppb/OiQwN+Y3aGqssmGYqHiK4mtNI85ATilRgYXaBmHZc=
+X-Received: by 2002:a17:90a:82:b0:252:8f70:c807 with SMTP id
+ a2-20020a17090a008200b002528f70c807mr5057071pja.12.1683882411291; Fri, 12 May
+ 2023 02:06:51 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 08/10] drivers: watchdog: Replace GPL license notice with
- SPDX identifier
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Linux DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Staging Drivers <linux-staging@lists.linux.dev>,
-        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
-        Linux Kernel Actions <linux-actions@lists.infradead.org>,
-        Diederik de Haas <didi.debian@cknow.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        David Airlie <airlied@redhat.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jan Kara <jack@suse.com>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Tom Rix <trix@redhat.com>,
-        Simon Horman <simon.horman@corigine.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        "Steven Rostedt (Google)" <rostedt@goodmis.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        Minghao Chi <chi.minghao@zte.com.cn>,
-        Kalle Valo <kvalo@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Deepak R Varma <drv@mailo.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Jacob Keller <jacob.e.keller@intel.com>,
-        Gaosheng Cui <cuigaosheng1@huawei.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Archana <craechal@gmail.com>, Ray Lehtiniemi <rayl@mail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andrey Panin <pazke@donpac.ru>, Oleg Drokin <green@crimea.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Jonas Jensen <jonas.jensen@gmail.com>,
-        Sylver Bruneau <sylver.bruneau@googlemail.com>,
-        Andrew Sharp <andy.sharp@lsi.com>,
-        Denis Turischev <denis@compulab.co.il>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>
-References: <20230511133406.78155-1-bagasdotme@gmail.com>
- <20230511133406.78155-9-bagasdotme@gmail.com>
- <46c263f6-dd9c-408c-b3e0-bfb2676c6505@roeck-us.net>
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <46c263f6-dd9c-408c-b3e0-bfb2676c6505@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:6a10:c64b:b0:47b:66fa:94f3 with HTTP; Fri, 12 May 2023
+ 02:06:50 -0700 (PDT)
+Reply-To: mariamkouame.info@myself.com
+From:   Mariam Kouame <mariamkouame002@gmail.com>
+Date:   Fri, 12 May 2023 02:06:50 -0700
+Message-ID: <CAA_std6YN-M4ETaSbwqQ+ymi4dMszMnn6y2e2ETQEXeAgobzUw@mail.gmail.com>
+Subject: from mariam kouame
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/11/23 22:08, Guenter Roeck wrote:
->> +/* SPDX-License-Identifier: GPL-2.0-only */
-> 
-> This was supposed to be a C++ style comment for C source files.
-> Has the rule changed ?
-> 
+Dear,
 
-Oops, I don't see checkpatch. Will fix.
+Please grant me permission to share a very crucial discussion with
+you.I am looking forward to hearing from you at your earliest
+convenience.
 
->> +/* SPDX-License-Identifier: GPL-2.0-only */
-> 
-> The text below suggests that this should be GPL1+.
-> 
-
-OK, will fix.
-
-Thanks for review!
-
--- 
-An old man doll... just what I always wanted! - Clara
-
+Mrs. Mariam Kouame
