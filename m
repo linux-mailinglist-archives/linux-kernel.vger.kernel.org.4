@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3962670036C
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 11:10:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F3C71700378
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 11:16:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240428AbjELJKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 05:10:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45862 "EHLO
+        id S240298AbjELJQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 05:16:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240416AbjELJK3 (ORCPT
+        with ESMTP id S231767AbjELJQF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 05:10:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6607D11602;
-        Fri, 12 May 2023 02:10:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB55865422;
-        Fri, 12 May 2023 09:10:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 252CBC433AC;
-        Fri, 12 May 2023 09:10:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683882627;
-        bh=kUiWU6lZcVcCsvBfK0GM03OeHi8GVKMv4D/U9jZXzF8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UdaUzy4bLYXxpoevkE7hgsxmdHDrXE0lz6npy1lCRiSVzZ5p3FZfrKoBYb4gBSg5s
-         qTtNH6dC6+GHQERSnAZ/ArJeX1y3Qw3vZI42MUKvTDkH7XZg6g6x7NrhaPKS0mUFZm
-         WnPZWF7m9co+oPCq0fcTXKQcBHp1wJxAlp1bZhEhgSVVhJK/cWyfNXV+cSAP+xsDCI
-         X5kKY/C2UEmDBInVTBgAv8WoElXXahZYa8KQ4K6cxXINglTj9jA78X7/3KufQtpvAD
-         +UCtzT14GdXJ6Ohk1f4ReTbL4px1jVLnud/wCXPBTt7cmBj0nNf4B6GOy6Yx96PWKC
-         uQ+MHkOMJfxpw==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pxOne-0002j6-JQ; Fri, 12 May 2023 11:10:54 +0200
-Date:   Fri, 12 May 2023 11:10:54 +0200
-From:   Johan Hovold <johan@kernel.org>
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/8] phy: qcom-qmp-combo: Extend phy_mutex to all
- phy_ops
-Message-ID: <ZF4Cnl9n_bntLKf7@hovoldconsulting.com>
-References: <20230510031930.1996020-1-quic_bjorande@quicinc.com>
- <20230510031930.1996020-4-quic_bjorande@quicinc.com>
+        Fri, 12 May 2023 05:16:05 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706412721
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 02:16:04 -0700 (PDT)
+Received: from [192.168.88.20] (91-154-35-171.elisa-laajakaista.fi [91.154.35.171])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 3361B2D8;
+        Fri, 12 May 2023 11:15:52 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1683882953;
+        bh=8aj3gkZp6VDWp4PUGeLKxpnkIoSmqes4md/485PvAn0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=kt4q7hr3Votllg0InPdSLsBr00s8bqAP8YwqlaiSKPbOK6Nq1YZimlPDhBZNEfaQi
+         65CpfaNHB3EfNCVxUtuDRdf3bAw1NIat7ki1GqsCWFeViCjKah0YkmwzmgHc3kqVsl
+         y0U9QyscePQ28eNJZOqoijXNK+pgB6Iu4TjW7kp0=
+Message-ID: <db9b4117-b030-49a7-3732-2fc39d089ee2@ideasonboard.com>
+Date:   Fri, 12 May 2023 12:15:57 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230510031930.1996020-4-quic_bjorande@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 3/8] drm/bridge: mhdp8546: Add minimal format
+ negotiation
+Content-Language: en-US
+To:     Aradhya Bhatia <a-bhatia1@ti.com>, Jyri Sarha <jyri.sarha@iki.fi>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Rahul T R <r-ravikumar@ti.com>,
+        Swapnil Jakhade <sjakhade@cadence.com>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        Francesco Dolcini <francesco@dolcini.it>
+Cc:     DRI Development List <dri-devel@lists.freedesktop.org>,
+        Linux Kernel List <linux-kernel@vger.kernel.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Devarsh Thakkar <devarsht@ti.com>,
+        Jayesh Choudhary <j-choudhary@ti.com>
+References: <20230509093036.3303-1-a-bhatia1@ti.com>
+ <20230509093036.3303-4-a-bhatia1@ti.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20230509093036.3303-4-a-bhatia1@ti.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,16 +68,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 08:19:25PM -0700, Bjorn Andersson wrote:
-> The phy core ensures mutual exclusion across the ops for a given phy,
-> but the upcoming introduction of USB Type-C orientation switching might
-> race with the DisplayPort phy operations. So extend the mutual exclusion
-> to cover the remaining ops as well, to avoid concurrent reconfiguration
-> of the hardware.
+On 09/05/2023 12:30, Aradhya Bhatia wrote:
+> From: Nikhil Devshatwar <nikhil.nd@ti.com>
 > 
-> Reported-by: Johan Hovold <johan@kernel.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> With new connector model, mhdp bridge will not create the connector and
+> SoC driver will rely on format negotiation to setup the encoder format.
+> 
+> Support minimal format negotiations hooks in the drm_bridge_funcs.
+> Complete format negotiation can be added based on EDID data.
+> This patch adds the minimal required support to avoid failure
+> after moving to new connector model.
+> 
+> Signed-off-by: Nikhil Devshatwar <nikhil.nd@ti.com>
+> Reviewed-by: Tomi Valkeinen <tomi.valkeinen@ti.com>
 
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
+You need to add your SoB to this and the other patches.
 
-Johan
+> ---
+> 
+> Notes:
+> 
+>      changes from v1:
+>      * cosmetic fixes, commit message update.
+> 
+>      changes from v5:
+>      * dropped the default_bus_format variable and directly assigned
+>        MEDIA_BUS_FMT_RGB121212_1X36 to input_fmts.
+> 
+>   .../drm/bridge/cadence/cdns-mhdp8546-core.c   | 25 +++++++++++++++++++
+>   1 file changed, 25 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+> index f6822dfa3805..623e4235c94f 100644
+> --- a/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+> +++ b/drivers/gpu/drm/bridge/cadence/cdns-mhdp8546-core.c
+> @@ -2146,6 +2146,30 @@ cdns_mhdp_bridge_atomic_reset(struct drm_bridge *bridge)
+>   	return &cdns_mhdp_state->base;
+>   }
+>   
+> +static u32 *cdns_mhdp_get_input_bus_fmts(struct drm_bridge *bridge,
+> +					 struct drm_bridge_state *bridge_state,
+> +					 struct drm_crtc_state *crtc_state,
+> +					 struct drm_connector_state *conn_state,
+> +					 u32 output_fmt,
+> +					 unsigned int *num_input_fmts)
+> +{
+> +	u32 *input_fmts;
+> +
+> +	*num_input_fmts = 0;
+> +
+> +	if (output_fmt != MEDIA_BUS_FMT_FIXED)
+> +		return NULL;
+
+The tfp410 and sii902x drivers don't have the above check. Why does mhdp 
+need it? Or the other way, why don't tfp410 and sii902x need it?
+
+I guess at the moment we always do get MEDIA_BUS_FMT_FIXED as the out 
+fmt (in all three bridge drivers), don't we?
+
+  Tomi
+
