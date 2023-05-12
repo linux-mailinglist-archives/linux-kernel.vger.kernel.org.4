@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E23D7012BA
+	by mail.lfdr.de (Postfix) with ESMTP id 98BDB7012BB
 	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 01:52:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241556AbjELXwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 19:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52466 "EHLO
+        id S240729AbjELXwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 19:52:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51874 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241342AbjELXv3 (ORCPT
+        with ESMTP id S240904AbjELXva (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 19:51:29 -0400
-Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63F97D876
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:50:50 -0700 (PDT)
-Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-517baf1bc93so9671582a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:50:50 -0700 (PDT)
+        Fri, 12 May 2023 19:51:30 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5760AD3F
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:50:51 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id 98e67ed59e1d1-25017576284so5358959a91.3
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:50:51 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683935448; x=1686527448;
+        d=google.com; s=20221208; t=1683935450; x=1686527450;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=hI6HUK88ajDFBZywtDFlInISuvBrIM7YiPfSco4ddZU=;
-        b=S3ZOGuBgFCPTdkJqL5D1ohiGQSYto1Citkxnx7iZrwQ1O+OKJrEBBJZDjc4CDp/g9y
-         lw0wbED+SW3RlJm//T51IFB1tlAMVJdQkFXEAgQBM7CwLfi7gLbTPm/YgMf/GYgQf6JA
-         nhLjgqxOwdRP9PRZJzFwRmHte0XjKgLUjze9N6+toz53zCc1n7TZGtdivlHnjYrTO0h4
-         QjYtwcucRhyLA/TQV39bIC+Gsrg2V55+xHR7WE38i8WLHmEXUOYX0Zu1WZGlZw6QIr8G
-         ESAV0nMFZSCI4XW+MK//mEH68yMqkMNNxGnrnlk5sFO8lf2uyxogXVyUTtKD+KdRiMh1
-         dufA==
+        bh=LxDcS09oj97Wx6mpqCitfgO/wEihL/zs3WwclzJXVrs=;
+        b=3UXj1nizRj4oLlTnGsYo1jkyfL9mkU7aP/AxzLjzcVWd8MZkQxCNMnS23/8RJLUodw
+         ok0SC36DquJdKQxN0hVH2pSrfB/YpQoZ+CuGE0RKez4/PELDoIiFFBzGqSy72J+ABaaq
+         GWVTkuyWWe6Tawuv1GiXVa+yG8hjXRwVLP72B8xy5qR/7Hdii+1lAGNeR5AzErGSj8m9
+         gwg8AQX2Ds6B/Uah4Wo0jc/YRzmzCj0Cnbuf2MQ8taXsF9E035Mhg+npjUwXrmSfYxXv
+         Diw7E7tGb2lO1KIw4MRr1dv/yBVPkPcpcpc06jetvGRD/CVzjuA/1axT0GN8S+Tn5KGZ
+         rGsw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683935448; x=1686527448;
+        d=1e100.net; s=20221208; t=1683935450; x=1686527450;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=hI6HUK88ajDFBZywtDFlInISuvBrIM7YiPfSco4ddZU=;
-        b=B/C8nwlYSQvJbwiIGUhz/hOdfXcuwT//ufLEfVZurXWwaNJFSpz6EzrBpI2mWPOHbM
-         oDlCB+qhBoq7SVZIUTP/VCH5PZlV46AyQXzxPlVzD0AL4eyhjk6IVWak+Y/w0tiQvtBz
-         pbYZjh3c5Gn6XIbT2BuxWCFJjERv+2gRjVtjiPMqxb45Wn+dxzRFNqu7ONWE4FRGyhNJ
-         pzN0jjUjyN9I39K/UpA05p5V4K8OpMT+0qAc3OfH6v00cxqC58mC3Bnbowakj1croYf/
-         cbQFOcf913lPlJ/CnTHYqai2bB3jp2ViyYkcIGFOYIcFYzJD4EyywOh/0vQzq3ur4WG+
-         +DCA==
-X-Gm-Message-State: AC+VfDxc69JEb3EY34xVMqN2BFJN0UvR1R0YUyFujCTMAXhckGqJsSXU
-        LwuUpRfUNYEIPwLlVy9vgGpZsOHVLLA=
-X-Google-Smtp-Source: ACHHUZ6849GFR+yGj04lZIuGIWx0Nl8Ife/1fJ2YqWbkKfswx9jtop//tY1IpFOQw/i0I6AjVK2NN+Cu8YA=
+        bh=LxDcS09oj97Wx6mpqCitfgO/wEihL/zs3WwclzJXVrs=;
+        b=XMQt9YVm50ebgQ7FMzr9FYLlZgaJn2gdbJqRmodwi0YEgV/Frw1Ar9lywiYcyG0q85
+         E4g9+fjRBKje5PH7PDE1lHDdz+TIVb4+5h1rWngBVvSe/QrVdPdeNZBIrLmFastsw9+i
+         MXVz+/eQ1HHrEZ0+QfhgK8ubFHr/x7iQ1tfCFQHBv0jUGfuMO+UotyG/R1l5zh/Dyas8
+         PaLVl7T19fN7YMp97uEt7KHQ9fPKNq2t8aF9qNqITVn51YSs51VfPln8733rkrrT7pb4
+         yHO0pAACQEWcGrsrspNBTegBaLqdq+RIZJmLTILALLX8MWtfimrLYAITFNrX0g8Xs5T1
+         koMA==
+X-Gm-Message-State: AC+VfDwU5S4CZIX+/uabBpGnUfz0ce9EZg9/sSTnlkqRFK3HoB+pbnNQ
+        5JgkciLbgvvctb0uKGzQOb+eROHhIhY=
+X-Google-Smtp-Source: ACHHUZ48zczwBDKdvB3sWp2+ob+YdKHROmTh6zcvA3LCitTa2KUmje9WaICS5+vDj+EmmtaYbGyho3TFxQ4=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:902:fe8b:b0:1ac:a39a:135a with SMTP id
- x11-20020a170902fe8b00b001aca39a135amr4433453plm.11.1683935448368; Fri, 12
- May 2023 16:50:48 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a17:90b:482:b0:244:9147:ee20 with SMTP id
+ bh2-20020a17090b048200b002449147ee20mr8107720pjb.0.1683935450341; Fri, 12 May
+ 2023 16:50:50 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 12 May 2023 16:50:18 -0700
+Date:   Fri, 12 May 2023 16:50:19 -0700
 In-Reply-To: <20230512235026.808058-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230512235026.808058-1-seanjc@google.com>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Message-ID: <20230512235026.808058-11-seanjc@google.com>
-Subject: [PATCH v3 10/18] x86/virt: KVM: Move VMXOFF helpers into KVM VMX
+Message-ID: <20230512235026.808058-12-seanjc@google.com>
+Subject: [PATCH v3 11/18] KVM: SVM: Make KVM_AMD depend on CPU_SUP_AMD or CPU_SUP_HYGON
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -65,138 +65,40 @@ Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that VMX is disabled in emergencies via the virt callbacks, move the
-VMXOFF helpers into KVM, the only remaining user.
+Make building KVM SVM support depend on support for AMD or Hygon.  KVM
+already effectively restricts SVM support to AMD and Hygon by virtue of
+the vendor string checks in cpu_has_svm(), and KVM VMX supports depends
+on one of its three known vendors (Intel, Centaur, or Zhaoxin).
 
-No functional change intended.
+Add the CPU_SUP_HYGON clause even though CPU_SUP_HYGON selects CPU_SUP_AMD
+to document that KVM SVM support isn't just for AMD CPUs, and to prevent
+breakage should Hygon support ever become a standalone thing.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/include/asm/virtext.h | 42 ----------------------------------
- arch/x86/kvm/vmx/vmx.c         | 29 ++++++++++++++++++++---
- 2 files changed, 26 insertions(+), 45 deletions(-)
+ arch/x86/kvm/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/x86/include/asm/virtext.h b/arch/x86/include/asm/virtext.h
-index b1171a5ad452..a27801f2bc71 100644
---- a/arch/x86/include/asm/virtext.h
-+++ b/arch/x86/include/asm/virtext.h
-@@ -19,48 +19,6 @@
- #include <asm/svm.h>
- #include <asm/tlbflush.h>
+diff --git a/arch/x86/kvm/Kconfig b/arch/x86/kvm/Kconfig
+index 8e578311ca9d..0d403e9b6a47 100644
+--- a/arch/x86/kvm/Kconfig
++++ b/arch/x86/kvm/Kconfig
+@@ -102,7 +102,7 @@ config X86_SGX_KVM
  
--/*
-- * VMX functions:
-- */
--/**
-- * cpu_vmxoff() - Disable VMX on the current CPU
-- *
-- * Disable VMX and clear CR4.VMXE (even if VMXOFF faults)
-- *
-- * Note, VMXOFF causes a #UD if the CPU is !post-VMXON, but it's impossible to
-- * atomically track post-VMXON state, e.g. this may be called in NMI context.
-- * Eat all faults as all other faults on VMXOFF faults are mode related, i.e.
-- * faults are guaranteed to be due to the !post-VMXON check unless the CPU is
-- * magically in RM, VM86, compat mode, or at CPL>0.
-- */
--static inline int cpu_vmxoff(void)
--{
--	asm_volatile_goto("1: vmxoff\n\t"
--			  _ASM_EXTABLE(1b, %l[fault])
--			  ::: "cc", "memory" : fault);
--
--	cr4_clear_bits(X86_CR4_VMXE);
--	return 0;
--
--fault:
--	cr4_clear_bits(X86_CR4_VMXE);
--	return -EIO;
--}
--
--static inline int cpu_vmx_enabled(void)
--{
--	return __read_cr4() & X86_CR4_VMXE;
--}
--
--/** Disable VMX if it is enabled on the current CPU
-- */
--static inline void __cpu_emergency_vmxoff(void)
--{
--	if (cpu_vmx_enabled())
--		cpu_vmxoff();
--}
--
--
- /*
-  * SVM functions:
-  */
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index f44f93772b4f..e00dba166a9e 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -47,7 +47,6 @@
- #include <asm/mshyperv.h>
- #include <asm/mwait.h>
- #include <asm/spec-ctrl.h>
--#include <asm/virtext.h>
- #include <asm/vmx.h>
- 
- #include "capabilities.h"
-@@ -744,6 +743,29 @@ static int vmx_set_guest_uret_msr(struct vcpu_vmx *vmx,
- 	return ret;
- }
- 
-+/*
-+ * Disable VMX and clear CR4.VMXE (even if VMXOFF faults)
-+ *
-+ * Note, VMXOFF causes a #UD if the CPU is !post-VMXON, but it's impossible to
-+ * atomically track post-VMXON state, e.g. this may be called in NMI context.
-+ * Eat all faults as all other faults on VMXOFF faults are mode related, i.e.
-+ * faults are guaranteed to be due to the !post-VMXON check unless the CPU is
-+ * magically in RM, VM86, compat mode, or at CPL>0.
-+ */
-+static int kvm_cpu_vmxoff(void)
-+{
-+	asm_volatile_goto("1: vmxoff\n\t"
-+			  _ASM_EXTABLE(1b, %l[fault])
-+			  ::: "cc", "memory" : fault);
-+
-+	cr4_clear_bits(X86_CR4_VMXE);
-+	return 0;
-+
-+fault:
-+	cr4_clear_bits(X86_CR4_VMXE);
-+	return -EIO;
-+}
-+
- static void vmx_emergency_disable(void)
- {
- 	int cpu = raw_smp_processor_id();
-@@ -753,7 +775,8 @@ static void vmx_emergency_disable(void)
- 			    loaded_vmcss_on_cpu_link)
- 		vmcs_clear(v->vmcs);
- 
--	__cpu_emergency_vmxoff();
-+	if (__read_cr4() & X86_CR4_VMXE)
-+		kvm_cpu_vmxoff();
- }
- 
- static void __loaded_vmcs_clear(void *arg)
-@@ -2821,7 +2844,7 @@ static void vmx_hardware_disable(void)
- {
- 	vmclear_local_loaded_vmcss();
- 
--	if (cpu_vmxoff())
-+	if (kvm_cpu_vmxoff())
- 		kvm_spurious_fault();
- 
- 	hv_reset_evmcs();
+ config KVM_AMD
+ 	tristate "KVM for AMD processors support"
+-	depends on KVM
++	depends on KVM && (CPU_SUP_AMD || CPU_SUP_HYGON)
+ 	help
+ 	  Provides support for KVM on AMD processors equipped with the AMD-V
+ 	  (SVM) extensions.
 -- 
 2.40.1.606.ga4b1b128d6-goog
 
