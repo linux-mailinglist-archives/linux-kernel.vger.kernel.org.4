@@ -2,83 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746907004F4
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:12:01 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 718B7700603
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:51:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240407AbjELKL5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:11:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39202 "EHLO
+        id S240916AbjELKvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 06:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240382AbjELKLp (ORCPT
+        with ESMTP id S240603AbjELKvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:11:45 -0400
-X-Greylist: delayed 1080 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 12 May 2023 03:11:15 PDT
-Received: from m126.mail.126.com (m126.mail.126.com [220.181.12.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 00C758A7F
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:11:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=drjOJ
-        bwh5sf32KtIIWZtrKWoSs9PXWg/V8+XkmqGqRc=; b=bJVPB44O42qSlopt9UMEG
-        9gl8vDPwNEQhM+V5fOH5sGnsAPuT8gdc726KgMj4H03OF3RpOeQHW+r+gRGjrvAO
-        SHl0mJwSiLnJJtKlLwabsVQ5IA3NL6O9UYn/Rf4yZfduQ2X9UgGM+LyZwEq5tWQ6
-        3EvgOCccLXu7e12o33koYU=
-Received: from fedora.. (unknown [123.52.27.102])
-        by zwqz-smtp-mta-g5-1 (Coremail) with SMTP id _____wCHjgbDC15kU7ClAg--.37485S2;
-        Fri, 12 May 2023 17:49:56 +0800 (CST)
-From:   zhaomzhao@126.com
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org,
-        Zhao Mengmeng <zhaomengmeng@kylinos.cn>
-Subject: [PATCH v1] sched/numa: init numa_scan_period with sysctl_numa_balancing_scan_period_min
-Date:   Fri, 12 May 2023 05:49:46 -0400
-Message-Id: <20230512094946.2639893-1-zhaomzhao@126.com>
-X-Mailer: git-send-email 2.38.1
+        Fri, 12 May 2023 06:51:08 -0400
+X-Greylist: delayed 3615 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 12 May 2023 03:50:44 PDT
+Received: from stargate.chelsio.com (stargate.chelsio.com [12.32.117.8])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A12DB1FCE
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:50:44 -0700 (PDT)
+Received: from localhost (venkateshellapu.asicdesigners.com [10.193.177.158] (may be forged))
+        by stargate.chelsio.com (8.14.7/8.14.7) with ESMTP id 34C9oF2c021181;
+        Fri, 12 May 2023 02:50:16 -0700
+Date:   Fri, 12 May 2023 15:20:15 +0530
+From:   Rahul Lakkireddy <rahul.lakkireddy@chelsio.com>
+To:     linux-firmware@kernel.org
+Cc:     linux-kernel@vger.kernel.org, jwboyer@kernel.org,
+        rahul.lakkireddy@chelsio.com
+Subject: pull request: linux-firmware: update cxgb4 firmware to 1.27.3.0
+Message-ID: <ZF4L1/RVZXJKhTx0@chelsio.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wCHjgbDC15kU7ClAg--.37485S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrZFWxtr1fur47Kw4xCryxGrg_yoWDCwb_u3
-        4kZr13tr4Iqrn0q3s3Gw43WFy5KFsFqa93C3WxG3y3trnYqa4kJFZ5AFWrJrnxJF4UGFs0
-        yF1DXFyjqrsxZjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7IU8DfHUUUUUU==
-X-Originating-IP: [123.52.27.102]
-X-CM-SenderInfo: 52kd0zp2kd0qqrswhudrp/1tbi6Ahtd2IxmSeRWwAAsd
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
+Please pull the new Chelsio firmware from the following URL.
 
-As the name suggests, sysctl_numa_balancing_scan_delay is a "delay"
-mainly used by numa_next_scan, it has nothing to do with scan period. So
-init numa_scan_period with sysctl_numa_balancing_scan_period_min.
+ http://git.chelsio.net/pub/git/linux-firmware.git for-upstream
 
-Signed-off-by: Zhao Mengmeng <zhaomengmeng@kylinos.cn>
----
- kernel/sched/fair.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thanks,
+Rahul
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 373ff5f55884..9b7d4f3a3d50 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -3149,7 +3149,7 @@ void init_numa_balancing(unsigned long clone_flags, struct task_struct *p)
- 	}
- 	p->node_stamp			= 0;
- 	p->numa_scan_seq		= mm ? mm->numa_scan_seq : 0;
--	p->numa_scan_period		= sysctl_numa_balancing_scan_delay;
-+	p->numa_scan_period		= sysctl_numa_balancing_scan_period_min;
- 	p->numa_migrate_retry		= 0;
- 	/* Protect against double add, see task_tick_numa and task_numa_work */
- 	p->numa_work.next		= &p->numa_work;
--- 
-2.38.1
 
+The following changes since commit 6c9e0ed5362ff9fd74c11a2b9552a9223371f04a:
+
+  check_whence: error on directory listed as File (2023-05-08 08:38:18 -0400)
+
+are available in the Git repository at:
+
+  http://git.chelsio.net/pub/git/linux-firmware.git for-upstream
+
+for you to fetch changes up to a0146258f1b44913f763eec95168ceb1baa5f4a3:
+
+  cxgb4: Update firmware to revision 1.27.3.0 (2023-05-12 08:55:06 +0000)
+
+----------------------------------------------------------------
+Rahul Lakkireddy (1):
+      cxgb4: Update firmware to revision 1.27.3.0
+
+ WHENCE                                         |  12 ++++++------
+ cxgb4/{t4fw-1.27.1.0.bin => t4fw-1.27.3.0.bin} | Bin 570880 -> 570880 bytes
+ cxgb4/{t5fw-1.27.1.0.bin => t5fw-1.27.3.0.bin} | Bin 678400 -> 678912 bytes
+ cxgb4/{t6fw-1.27.1.0.bin => t6fw-1.27.3.0.bin} | Bin 730112 -> 730624 bytes
+ 4 files changed, 6 insertions(+), 6 deletions(-)
+ rename cxgb4/{t4fw-1.27.1.0.bin => t4fw-1.27.3.0.bin} (59%)
+ rename cxgb4/{t5fw-1.27.1.0.bin => t5fw-1.27.3.0.bin} (50%)
+ rename cxgb4/{t6fw-1.27.1.0.bin => t6fw-1.27.3.0.bin} (59%)
