@@ -2,44 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42E8D6FFFFA
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 07:44:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A9DED6FFFFC
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 07:45:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239783AbjELFop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 01:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34550 "EHLO
+        id S239890AbjELFpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 01:45:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231652AbjELFoo (ORCPT
+        with ESMTP id S239720AbjELFpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 01:44:44 -0400
-Received: from mg.richtek.com (mg.richtek.com [220.130.44.152])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 43A23172A;
-        Thu, 11 May 2023 22:44:40 -0700 (PDT)
-X-MailGates: (flag:4,DYNAMIC,BADHELO,RELAY,NOHOST:PASS)(compute_score:DE
-        LIVER,40,3)
-Received: from 192.168.10.47
-        by mg.richtek.com with MailGates ESMTP Server V5.0(20700:0:AUTH_RELAY)
-        (envelope-from <chiaen_wu@richtek.com>); Fri, 12 May 2023 13:44:26 +0800 (CST)
-Received: from ex3.rt.l (192.168.10.46) by ex4.rt.l (192.168.10.47) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.25; Fri, 12 May
- 2023 13:44:25 +0800
-Received: from linuxcarl2.richtek.com (192.168.10.154) by ex3.rt.l
- (192.168.10.45) with Microsoft SMTP Server id 15.2.1118.25 via Frontend
- Transport; Fri, 12 May 2023 13:44:25 +0800
-From:   ChiaEn Wu <chiaen_wu@richtek.com>
-To:     <sre@kernel.org>, <dan.carpenter@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <peterwu.pub@gmail.com>, <cy_huang@richtek.com>,
-        ChiaEn Wu <chiaen_wu@richtek.com>
-Subject: [PATCH] power: supply: rt9467: Fix passing zero to 'dev_err_probe'
-Date:   Fri, 12 May 2023 13:44:23 +0800
-Message-ID: <33c598f3655db56eed13a5b46a1468379f69349c.1683863629.git.chiaen_wu@richtek.com>
-X-Mailer: git-send-email 1.8.3.1
+        Fri, 12 May 2023 01:45:18 -0400
+Received: from out30-133.freemail.mail.aliyun.com (out30-133.freemail.mail.aliyun.com [115.124.30.133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C57A1731;
+        Thu, 11 May 2023 22:45:17 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=jiapeng.chong@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0ViNqtb._1683870298;
+Received: from localhost(mailfrom:jiapeng.chong@linux.alibaba.com fp:SMTPD_---0ViNqtb._1683870298)
+          by smtp.aliyun-inc.com;
+          Fri, 12 May 2023 13:45:14 +0800
+From:   Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+To:     clm@fb.com
+Cc:     josef@toxicpanda.com, dsterba@suse.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        Abaci Robot <abaci@linux.alibaba.com>
+Subject: [PATCH] btrfs: scrub: Remove some unused functions
+Date:   Fri, 12 May 2023 13:44:57 +0800
+Message-Id: <20230512054457.43501-1-jiapeng.chong@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
+        URIBL_BLOCKED,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -47,30 +42,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix passing zero to 'dev_err_probe()' in 'rt9467_request_interrupt()'
+These functions are defined in the scrub.c file, but not called
+elsewhere, so delete these unused functions.
 
-Fixes: 6f7f70e3a8dd ("power: supply: rt9467: Add Richtek RT9467 charger driver")
-Reported-by: kernel test robot <lkp@intel.com>
-Reported-by: Dan Carpenter <error27@gmail.com>
-Link: https://lore.kernel.org/r/202305111228.bHLWU6bq-lkp@intel.com/
-Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+fs/btrfs/scrub.c:553:20: warning: unused function 'scrub_stripe_index_and_offset'.
+fs/btrfs/scrub.c:543:19: warning: unused function 'scrub_nr_raid_mirrors'.
+
+Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4937
+Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
 ---
- drivers/power/supply/rt9467-charger.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ fs/btrfs/scrub.c | 42 ------------------------------------------
+ 1 file changed, 42 deletions(-)
 
-diff --git a/drivers/power/supply/rt9467-charger.c b/drivers/power/supply/rt9467-charger.c
-index 73f744a..ea33693 100644
---- a/drivers/power/supply/rt9467-charger.c
-+++ b/drivers/power/supply/rt9467-charger.c
-@@ -1023,7 +1023,7 @@ static int rt9467_request_interrupt(struct rt9467_chg_data *data)
- 	for (i = 0; i < num_chg_irqs; i++) {
- 		virq = regmap_irq_get_virq(data->irq_chip_data, chg_irqs[i].hwirq);
- 		if (virq <= 0)
--			return dev_err_probe(dev, virq, "Failed to get (%s) irq\n",
-+			return dev_err_probe(dev, -EINVAL, "Failed to get (%s) irq\n",
- 					     chg_irqs[i].name);
+diff --git a/fs/btrfs/scrub.c b/fs/btrfs/scrub.c
+index 836725a19661..6fd90c8fd64a 100644
+--- a/fs/btrfs/scrub.c
++++ b/fs/btrfs/scrub.c
+@@ -540,48 +540,6 @@ static void scrub_print_common_warning(const char *errstr, struct btrfs_device *
+ 	btrfs_free_path(path);
+ }
  
- 		ret = devm_request_threaded_irq(dev, virq, NULL, chg_irqs[i].handler,
+-static inline int scrub_nr_raid_mirrors(struct btrfs_io_context *bioc)
+-{
+-	if (bioc->map_type & BTRFS_BLOCK_GROUP_RAID5)
+-		return 2;
+-	else if (bioc->map_type & BTRFS_BLOCK_GROUP_RAID6)
+-		return 3;
+-	else
+-		return (int)bioc->num_stripes;
+-}
+-
+-static inline void scrub_stripe_index_and_offset(u64 logical, u64 map_type,
+-						 u64 full_stripe_logical,
+-						 int nstripes, int mirror,
+-						 int *stripe_index,
+-						 u64 *stripe_offset)
+-{
+-	int i;
+-
+-	if (map_type & BTRFS_BLOCK_GROUP_RAID56_MASK) {
+-		const int nr_data_stripes = (map_type & BTRFS_BLOCK_GROUP_RAID5) ?
+-					    nstripes - 1 : nstripes - 2;
+-
+-		/* RAID5/6 */
+-		for (i = 0; i < nr_data_stripes; i++) {
+-			const u64 data_stripe_start = full_stripe_logical +
+-						(i * BTRFS_STRIPE_LEN);
+-
+-			if (logical >= data_stripe_start &&
+-			    logical < data_stripe_start + BTRFS_STRIPE_LEN)
+-				break;
+-		}
+-
+-		*stripe_index = i;
+-		*stripe_offset = (logical - full_stripe_logical) &
+-				 BTRFS_STRIPE_LEN_MASK;
+-	} else {
+-		/* The other RAID type */
+-		*stripe_index = mirror;
+-		*stripe_offset = 0;
+-	}
+-}
+-
+ static int fill_writer_pointer_gap(struct scrub_ctx *sctx, u64 physical)
+ {
+ 	int ret = 0;
 -- 
-2.7.4
+2.20.1.7.g153144c
 
