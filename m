@@ -2,195 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9761E700947
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:38:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13B58700949
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 15:39:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241297AbjELNiM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 09:38:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51954 "EHLO
+        id S241295AbjELNjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 09:39:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241281AbjELNiI (ORCPT
+        with ESMTP id S240996AbjELNjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 09:38:08 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED2B13849
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:38:06 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so5655935b3a.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 06:38:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683898686; x=1686490686;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XNxZTNO7D9ObZ8vOcMXVGazHEEVb2c+NF1aDFDFH7DM=;
-        b=YKPlD/uCoqEk3zob/jbIjUOVuiyBL4crRQbBjz/7JDAHYOVEpFZnmH6rHuxs4jbwoG
-         1qtYfpef/TcWtY4pTcsw5jL585W0toJQ3WtYlcEjQ62OeCfdNjeihwa5xBZbqeVSkMuu
-         Fgzr2t4VnhHBZzdhHAxZLbpTm+3qtlszLbzJKzo03e11wYkfWLp01Si+5EcHqQV/hml/
-         LuGuEEzzxkBXMGUxofWdK/exeWZuVEjvn/3kHdAwcFDO9E4qO6qoDuzR+ebYiUHVWLp0
-         yJB3U8GY1GA+CLexyHvS7qFKhlhT+uQhLmUUcx/VESw6bBnqBLdKPQv/Mq3hij6HGOXm
-         7RSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683898686; x=1686490686;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XNxZTNO7D9ObZ8vOcMXVGazHEEVb2c+NF1aDFDFH7DM=;
-        b=a7aO762JZCKl8Ck+sDZNkMmh4AM+jOhpZwWAQ9cxHFuz/MU4qY3aX3LyPVlpdGJeXn
-         eGjbpmZPo74cGjtCqFiaKbgPaei478L4NcitC6GIQwBkrAmJxWO3s6d2+uiXtP6H5lz+
-         x8ZFZ+1zYnlKk2yNAB5cGD6rJgjTeH4djWZpCJVJvB2JX4bU916Jqq38pKozfwbdBg/l
-         a5lj1jDYm4bhdBJRwtBSUl79WG/rIFOCpbvyzDiy+8Hml49he3HgE/yi5R4vSIm7iSN1
-         t6rGKlF2fGXQQ1L6GvKAcXsWnxK+Gj/yfht+WCjXxAlZFae2nIPWwmQDhiWgcI0h4yqU
-         F9EQ==
-X-Gm-Message-State: AC+VfDxMucowP3OsIdNJOn0qhu4eHpzfm2O/pm3wgI/d7N5vnj/26jPI
-        SN46HfUXdgRPU42RzQcCxHZDYQUakYmUlA0Xj2G/Yg==
-X-Google-Smtp-Source: ACHHUZ5x5rNNHXImOFnMBQaOPcrvO1ueMVR3kvli10xvSUMTslM0qxwiHUW2eerJJ+LJVDEQ476Yb+lv9+Kc9ELSv78=
-X-Received: by 2002:a17:902:ea08:b0:1ad:e2b6:d2a0 with SMTP id
- s8-20020a170902ea0800b001ade2b6d2a0mr2832259plg.11.1683898686185; Fri, 12 May
- 2023 06:38:06 -0700 (PDT)
+        Fri, 12 May 2023 09:39:05 -0400
+Received: from EUR01-DB5-obe.outbound.protection.outlook.com (mail-db5eur01on2082.outbound.protection.outlook.com [40.107.15.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1748A11DAB;
+        Fri, 12 May 2023 06:39:04 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iL250IhjW9+tZCbxKXpnXOlmZXEhyg9EnFkYah/W2P4KRdfhwOzXHo2aL8jVoolaR3qyNFfkHFrbCwyMnrcncUM7UVDPXni/nG0W/5XZvEkT8NU0Q/1j24bAOd1COpus5Ge2Gqqfr1xHnuzlIBUUOFMcM0Xgjdq0xUSe7ipjv7dH94oqb//bNB84ryi55MaRpYK+d3Z12yGf11yrdN7NY1C2BIKct0czz6hDBZ0RfZYfRN2TbebTjsV3MYYLU81OwZ3i+HkB2Qhds5VCF9nD9pv3JZI+VtuA47HOeW7bO7b44cafhkUlAC91mw9k/y+MN9KIPdpmoyD8LmU5VYKNzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=7o1olkSVX7f7WMt24WHnKppcpCJKudMgi/Q8/GkPu1c=;
+ b=kUumWRD2rEDNxZ92CpSx9NINnjqEI53JEt48Ied1fPKCc9K0VepQmrH/omL6vwWEP3NIPD5J8yuWxbny1ZW44YhKSWnkF+rQV0691bKSqir86GBJ+ELmunGfFKYYxMnvCM45kvzWVtQMWNRmXRzC0sKjptGWDYriHoe6FC1BwinMi3pMdzrEUwf2fiIZAFMsLDFKC2P9FSm7ThXtKo046C0jLEufjPdrZOATBcKV772pTbsuWJ+dJkdJwOCKNxHqJZtT4UJ6xYxkr6NA6z1YbKrAkTk31qsPjG2kJybcqG4TDqK5n6BOmtdVjxOpd4QokxGmeUoGCicSgvJZrnQomw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=7o1olkSVX7f7WMt24WHnKppcpCJKudMgi/Q8/GkPu1c=;
+ b=YQ5S+vmcnwxkrr2pFcXIe1nvOhN9ANbH/LNHjHhZLR/yR9lToNctHNevLGIb58gtyUjOdzr7xf7STXbtPfbM3b6fYZ7Sj5F0beqfssj2m50szhelk13kKdvMsbKm8waQOSmgVF5xBBlK2DSwypBVkKriyM3CqFvb0bdK0VgjyyM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9185.eurprd04.prod.outlook.com (2603:10a6:102:231::11)
+ by AM0PR04MB6803.eurprd04.prod.outlook.com (2603:10a6:208:187::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.21; Fri, 12 May
+ 2023 13:39:00 +0000
+Received: from PAXPR04MB9185.eurprd04.prod.outlook.com
+ ([fe80::28fb:82ec:7a6:62f3]) by PAXPR04MB9185.eurprd04.prod.outlook.com
+ ([fe80::28fb:82ec:7a6:62f3%5]) with mapi id 15.20.6387.020; Fri, 12 May 2023
+ 13:39:00 +0000
+From:   Shenwei Wang <shenwei.wang@nxp.com>
+To:     Wei Fang <wei.fang@nxp.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Simon Horman <horms@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, imx@lists.linux.dev
+Subject: [PATCH net] net: fec: remove the xdp_return_frame when lack of tx BDs
+Date:   Fri, 12 May 2023 08:38:43 -0500
+Message-Id: <20230512133843.1358661-1-shenwei.wang@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR05CA0047.namprd05.prod.outlook.com
+ (2603:10b6:a03:33f::22) To PAXPR04MB9185.eurprd04.prod.outlook.com
+ (2603:10a6:102:231::11)
 MIME-Version: 1.0
-References: <20230512023933.961-1-hejunhao3@huawei.com>
-In-Reply-To: <20230512023933.961-1-hejunhao3@huawei.com>
-From:   Mike Leach <mike.leach@linaro.org>
-Date:   Fri, 12 May 2023 14:37:54 +0100
-Message-ID: <CAJ9a7VgX+mf-J6jipQgJY7=F2vJzLhF9XcBxHAV7pCwiqPdbnw@mail.gmail.com>
-Subject: Re: [PATCH] coresight: etm4x: fix trctraceid sysfs always invisible
-To:     Junhao He <hejunhao3@huawei.com>
-Cc:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
-        leo.yan@linaro.org, jonathan.cameron@huawei.com,
-        coresight@lists.linaro.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
-        linuxarm@huawei.com, yangyicong@huawei.com, shenyang39@huawei.com,
-        prime.zeng@hisilicon.com
-Content-Type: text/plain; charset="UTF-8"
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9185:EE_|AM0PR04MB6803:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4cd2ab4b-ec52-49f5-86d5-08db52ee3e04
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: oP5mzx5YYz3l7It6dHbmu7Npxlqp1Ggd24gxfHN067x5N/yjiz2IiCzUF+xgPTlzPy8UHey27eSC25H0QWuomE3O0SgeaR9QsNPpB+gFa6YMZyB9q7HxaqJfXHFBdKNDNg/WKyxdZNkLoN/8D0Wn8IP5uZ8y5AsotWvcVkEzuDicYJnoVaxA1iP+uP6cRVB8DliDoNvqYmrsoUOrdTKbOsCiL9Qen3sxbOIfaGuxaV9RVhniIXEcT4JBDzk820PK49iuMMZfEj56pcP8yvnlSWHC0MivXwx4dihbxGCkedhxbTSkjAiCIJwqvpzL/L2/N45+qlofexa9O3GX8LZdTV+8gXhkDMPz0oKp+QSuh0bjHkq0F3zBNwpZhh+KLP62dpbyz13AsdSX0Ce6QNX1Qp10EaPqKT5tJMt8c014N3pfcju2nidKpFCau4wTtawb89WlryHGPJlrkqYBKM9SR8pgpYPycFQjSbO5jDOlt48PxI6QfDQQvWvEh4OHMUzitbUpI5N36obsSTCMMc8SvwWbdPF0jSnX5v8CjRSbJUj4N+l6gTcpGoaRVGGNRzmofEmiuUdZstA5cYGx/h0c4ykvD5StsbPqLAQ6MB8L++rmQEJWXfnXBNuNWPNlcXRs
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9185.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(39860400002)(366004)(136003)(376002)(451199021)(7416002)(41300700001)(6666004)(6512007)(38350700002)(44832011)(5660300002)(55236004)(6506007)(26005)(38100700002)(1076003)(8936002)(8676002)(6486002)(2616005)(83380400001)(186003)(2906002)(4744005)(52116002)(86362001)(66476007)(316002)(478600001)(36756003)(66556008)(54906003)(66946007)(4326008)(110136005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?vgfHDpayGZQFKKr1q7H3kSNKLny/GM9Q4+Of//U7LLuxCwUM7GmHj1FjUC//?=
+ =?us-ascii?Q?+82FHJE8/hx37y3ELi4lQqug/BCUPfPsJygQ8PafMjlbd/6eKVrl/gxf7rSo?=
+ =?us-ascii?Q?TNXUSx1e0IcMWfYZO7re5ljTRq6Rx1fiHD3xYjIruhqxsCGR2vEH/YxDNnKU?=
+ =?us-ascii?Q?MJUWKAG48CoEDTS2Mdtf5gvigQIkI++O9+PYduZ0m9tw3AcoD67ga+rSMi5U?=
+ =?us-ascii?Q?mKS5sfrQW8/GyXSHvuOEh4CZddSB1RDY4tgcKxJKYRJxeo6RO1YV1zpDA9cq?=
+ =?us-ascii?Q?V+KrQYJn+p7ibFXo/fcICVFKCAuasm6xBox2b0RBDJcbTzc5MGOLiay7IW8x?=
+ =?us-ascii?Q?9aVrGV4vHgVcpt0j6Z7VN9M1EB9aVhZyiYx1YwZDXcFZkQbI8VS4Q1+UAnZU?=
+ =?us-ascii?Q?QJaArD2uSBh0nM1ZMo7tQYsKf5vhANFJs2i0VzOvuu2McCzJN942rDoqAqXh?=
+ =?us-ascii?Q?ou4QwrjDoPIASmpDk0tf1GetrfWuIkRE5tevz7J2WTxRcznnmnThKPBqkhng?=
+ =?us-ascii?Q?GCTDtkWMHrcGmSVbdYZ9tz3FtP3uzhfre/hldav3eFmjoQN/tDVIlNSPN4rc?=
+ =?us-ascii?Q?FoslTNlfj8a9IQqAjjjshAdipBXYmYT7cgy3IIuojc8l4c8yiAkZWYMzL9gR?=
+ =?us-ascii?Q?R4YR5ZwQaxNxTwHniwlT8w9v64CR0V8IdVWTFLunLfFidZIkUIP2NZ5dlqOm?=
+ =?us-ascii?Q?LfD2zzXr2qb4litYlV9j5bHun+Xe34N/PzgauHCrLnGNBnhBHlvE2qABL84b?=
+ =?us-ascii?Q?3Dph/8Nrd/xp1Ge6dxNBuGTUcB8/Cjp9s2t9pT6ci0A2YpTrEu7APjRRF6gE?=
+ =?us-ascii?Q?cmBAQvkQ3tFWIbqjsgeoTXIPNVwzH4YieokxtIjVZzUGrAucnp0HltRI68fj?=
+ =?us-ascii?Q?NzOltBOMiAbcCJNTwsQaXKcMHVw8HEvx8JxA/ZhQf6lpIxis6GF6a8k5siKe?=
+ =?us-ascii?Q?FFTKznANvKDbHeHDms3IK5lzGZKYcNpn/CN9qlKsz9xJyFndvPGiz4QDXflr?=
+ =?us-ascii?Q?PHo58ZHVyyi+zBtHjzc7MhlS9rp2uSh67e53XR9uyKBk6COpVz4U83bbHB24?=
+ =?us-ascii?Q?2XXz1CK4CmjasP1F8G/9L+NkGThwzROD0VHioGiGJOuUNe43z9WCo65lKl4L?=
+ =?us-ascii?Q?8MsyQp8//Mk1488PH2dDf+02ReW+yBWbpfGaeqtSVj8qmArOYmyzws5r6C69?=
+ =?us-ascii?Q?MijmvK+OktZelNY5eNfwGUH9e3fV3kvrNP/8uLSad+8d8+Z83WU8EvXcSqGE?=
+ =?us-ascii?Q?eUgLNpoMFN82RteO9zD/yVnCRlARQ2uAZLA8NCjY5RmTidnoR8UeQjbdA+7n?=
+ =?us-ascii?Q?C5QVf+z7GiL2xzmtOaQ4fCVXh0NEzAsm2DgByrIQWw/flcSIM57iPfcTWf1E?=
+ =?us-ascii?Q?CNjjGJhEBS45yVcw70dC5acBJdor2LMU+Y38qOwGGex85wgiZ2T8Ew13bZHX?=
+ =?us-ascii?Q?PHtkc/pkH45V8Sb4sf8FAxZ07ywQj8bI6yeF3MdSYV0pxdYHx/FzEtpA27O5?=
+ =?us-ascii?Q?9Oe/tuhOMeBVK/c/uHJ6yq+Y/xTikC8P42mrX/zoq3rj43bM2jBY6ignVoIx?=
+ =?us-ascii?Q?NQInbHQralbDRVUY4nV4kQgit9EUgoHTlhhoGzmH?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4cd2ab4b-ec52-49f5-86d5-08db52ee3e04
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9185.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 13:39:00.2357
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DI801lf9p7pjeC1mLgO8IGM/ei+M9WpuPDH3H+qfiMSHJc1ly0OUb2kwJGM2aaidWpunCEtqy7BNZA8PTY52iw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6803
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi
+In the implementation, the sent_frame count does not increment when
+transmit errors occur. Therefore, bq_xmit_all() will take care of
+returning the XDP frames.
 
-Thanks for spotting this and supplying a patch.
+Fixes: 26312c685ae0 ("net: fec: correct the counting of XDP sent frames")
+Signed-off-by: Shenwei Wang <shenwei.wang@nxp.com>
+---
+ drivers/net/ethernet/freescale/fec_main.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Unfortunately, this solution moving the location of the file alters
-the published ABI
-(/Documents/ABI/testing/sysfs-bus-coresight-devices-etm4x), which is
-generally not permitted
+diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
+index 42ec6ca3bf03..2a3e8b69b70a 100644
+--- a/drivers/net/ethernet/freescale/fec_main.c
++++ b/drivers/net/ethernet/freescale/fec_main.c
+@@ -3798,7 +3798,6 @@ static int fec_enet_txq_xmit_frame(struct fec_enet_private *fep,
+ 	entries_free = fec_enet_get_free_txdesc_num(txq);
+ 	if (entries_free < MAX_SKB_FRAGS + 1) {
+ 		netdev_err(fep->netdev, "NOT enough BD for SG!\n");
+-		xdp_return_frame(frame);
+ 		return NETDEV_TX_BUSY;
+ 	}
 
-The file is associated with a register - TRCTRACIDR - so to fix this
-we need a solution to ensure the offset is correctly set in the
-attribute.
+--
+2.34.1
 
-The first few versions of the Trace ID set that you reference did do
-this correctly, but some code change after a review in a later version
-introduced the error which we did not then notice.
-
-Based on that earlier work have sent a fix patch that restores the
-visibility of this register in the mgmt/ directory.
-
-Thanks and regards
-
-Mike
-
-On Fri, 12 May 2023 at 03:41, Junhao He <hejunhao3@huawei.com> wrote:
->
-> The trctraceid sysfs interface is current in etm4x mgmt group.
-> Each attr in the mgmt group will call the function is_visible()
-> to check whether the register is implemented. However the trctraceid
-> does not bound to any register. So the trctraceid sysfs will
-> always be invisible.
->
-> Move it to etmv4 group to fix that.
->
-> Fixes: df4871204e5d ("coresight: etm4x: Update ETM4 driver to use Trace ID API")
-> Signed-off-by: Junhao He <hejunhao3@huawei.com>
-> ---
->  .../coresight/coresight-etm4x-sysfs.c         | 42 +++++++++----------
->  1 file changed, 21 insertions(+), 21 deletions(-)
->
-> diff --git a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> index 5e62aa40ecd0..0ea71de0f56b 100644
-> --- a/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> +++ b/drivers/hwtracing/coresight/coresight-etm4x-sysfs.c
-> @@ -2335,6 +2335,26 @@ static ssize_t ts_source_show(struct device *dev,
->  }
->  static DEVICE_ATTR_RO(ts_source);
->
-> +/*
-> + * Trace ID allocated dynamically on enable - but also allocate on read
-> + * in case sysfs or perf read before enable to ensure consistent metadata
-> + * information for trace decode
-> + */
-> +static ssize_t trctraceid_show(struct device *dev,
-> +                              struct device_attribute *attr,
-> +                              char *buf)
-> +{
-> +       int trace_id;
-> +       struct etmv4_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> +
-> +       trace_id = etm4_read_alloc_trace_id(drvdata);
-> +       if (trace_id < 0)
-> +               return trace_id;
-> +
-> +       return sysfs_emit(buf, "0x%x\n", trace_id);
-> +}
-> +static DEVICE_ATTR_RO(trctraceid);
-> +
->  static struct attribute *coresight_etmv4_attrs[] = {
->         &dev_attr_nr_pe_cmp.attr,
->         &dev_attr_nr_addr_cmp.attr,
-> @@ -2390,29 +2410,10 @@ static struct attribute *coresight_etmv4_attrs[] = {
->         &dev_attr_vmid_masks.attr,
->         &dev_attr_cpu.attr,
->         &dev_attr_ts_source.attr,
-> +       &dev_attr_trctraceid.attr,
->         NULL,
->  };
->
-> -/*
-> - * Trace ID allocated dynamically on enable - but also allocate on read
-> - * in case sysfs or perf read before enable to ensure consistent metadata
-> - * information for trace decode
-> - */
-> -static ssize_t trctraceid_show(struct device *dev,
-> -                              struct device_attribute *attr,
-> -                              char *buf)
-> -{
-> -       int trace_id;
-> -       struct etmv4_drvdata *drvdata = dev_get_drvdata(dev->parent);
-> -
-> -       trace_id = etm4_read_alloc_trace_id(drvdata);
-> -       if (trace_id < 0)
-> -               return trace_id;
-> -
-> -       return sysfs_emit(buf, "0x%x\n", trace_id);
-> -}
-> -static DEVICE_ATTR_RO(trctraceid);
-> -
->  struct etmv4_reg {
->         struct coresight_device *csdev;
->         u32 offset;
-> @@ -2549,7 +2550,6 @@ static struct attribute *coresight_etmv4_mgmt_attrs[] = {
->         coresight_etm4x_reg(trcpidr3, TRCPIDR3),
->         coresight_etm4x_reg(trcoslsr, TRCOSLSR),
->         coresight_etm4x_reg(trcconfig, TRCCONFIGR),
-> -       &dev_attr_trctraceid.attr,
->         coresight_etm4x_reg(trcdevarch, TRCDEVARCH),
->         NULL,
->  };
-> --
-> 2.33.0
->
-> _______________________________________________
-> CoreSight mailing list -- coresight@lists.linaro.org
-> To unsubscribe send an email to coresight-leave@lists.linaro.org
-
-
-
--- 
-Mike Leach
-Principal Engineer, ARM Ltd.
-Manchester Design Centre. UK
