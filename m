@@ -2,131 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 194D9700500
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:13:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B9D84700502
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 12:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240558AbjELKNw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 06:13:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
+        id S240572AbjELKOS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 06:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240477AbjELKNk (ORCPT
+        with ESMTP id S240474AbjELKOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 06:13:40 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CA7F124B3;
-        Fri, 12 May 2023 03:13:10 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-6436e075166so7343994b3a.0;
-        Fri, 12 May 2023 03:13:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683886389; x=1686478389;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=R5FsU0vvdQKuTXYmnQb/fKvraHaaia5fjLFwaOpzG0E=;
-        b=gKopIC0Ejr48prllIgxRsCQpmc0UCbbE0J/p/JeQsDMnu5wwSkuLm5jJtN1x3aGEHv
-         cf/5UKnsMWXmF6gZVZ+1xrR4MF5siAKKTPM4lWwCFJJAUPO7ksT5n1CrW+5m0aS2PlxF
-         MAZ8nUhFUZMvni4AqwbBF9Jmmm1x2iyqIC8dSyT3L/n+7EbqeYDhib4olC/n92hzcJKv
-         /y2ORWqodoipIrbSefE3VXRIy+6mkZNWtncp7U/YqsfphOV+nTpwnSPklWexR7tq7zoe
-         kpH5gAqmvw2mDopFV+Qf9i8LfdeNgSJgEIOmGLtQH4ULyL2YbHojZOKrVZIIQ35q9gbu
-         YsDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683886389; x=1686478389;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=R5FsU0vvdQKuTXYmnQb/fKvraHaaia5fjLFwaOpzG0E=;
-        b=ApJizOSo4R2YLf9H/e9uZUIK5z1Yyur0o6/2H6M7ID/lZG+0oC/jmyVY7kwbf4S2YE
-         LuEQPxTJ7a5+GV4We6iHbyeOV15W6AhzAfcdni8VhEKOHIr1jcwrpdQfqTlgJ5SoHqke
-         M41FQlCjozLdQxeO5W/0tRcBNuXnLil7EhL4yWE1Y4Xy5W0t4JDvTyZhsnmDqGs4rXIk
-         3Ra5tNFz0JzrlMhXldIv8TQ4TfZNm4mYYaBdip83+fXSO9blXRu6LumbhyTYygOxRpq2
-         815Ua99v9N3FK9oNn+0etje/db725wgPIUy4QKYGaSEvsA1OBh/QFPhNgJ4XUIsPs+6v
-         1DpQ==
-X-Gm-Message-State: AC+VfDyHWjJKNOjOCM8k7jIOlcpqpGoNd1v2p/Fck4U0G+7HztWqCNu+
-        mlLc5LBe7G80o6RBerDB0BxWpcYAqliQJUMUduM=
-X-Google-Smtp-Source: ACHHUZ61fMQpTF3gL5Pk8bJT/AuFGjVhuC2bfNcjv1mV+HWWVXLBYLqf/jxgByLJsBHmn85Z2xXgWxcIlfP9BlcgaEk=
-X-Received: by 2002:a05:6a00:248d:b0:626:29ed:941f with SMTP id
- c13-20020a056a00248d00b0062629ed941fmr33453173pfv.5.1683886388780; Fri, 12
- May 2023 03:13:08 -0700 (PDT)
+        Fri, 12 May 2023 06:14:06 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31F351BE1
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 03:13:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683886417; x=1715422417;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=NzqTguvFSjV2kCOcUZD87BdAd11HK9QDEusrkoTQGlo=;
+  b=XpZXa9Dz72XUjEvOL3zM0Wn4o5FGjFSBvSyUh+xiFNRhksVnNYmdA4mX
+   riJ1BcStEdu8C20UhoE4vLCazdc2f2Q6lunEan7Iafsl6RRqn3fQkGS1p
+   fA3XHesxw2+2dmn7FURJ4QFyGxn/ZnVtjSWW6HzWDepqIdmiRebEsi1uR
+   036ZZpcUECko9aBBf743sXFqnZiEMcl45jB3G4hqL3UawYDLjPcETe2kF
+   YW/vXWZel6N3YZMK9GfUNtsR+WvoUxZEIq25SQ9UWWV/A8y16TUQ/vNEJ
+   +JQ0T7/iBNclGqAELG2M7fStZeUE9rhq4rB3DDPvwFiOY182UIbrrl5Qz
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="416386434"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="416386434"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 03:12:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10707"; a="824309039"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="824309039"
+Received: from nhanph1x-mobl.amr.corp.intel.com (HELO [10.249.38.84]) ([10.249.38.84])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 03:12:55 -0700
+Message-ID: <12e47cb1-0744-6470-d79b-af1aeea86f9a@linux.intel.com>
+Date:   Fri, 12 May 2023 13:13:49 +0300
 MIME-Version: 1.0
-References: <20230511151444.162882-1-Mikhail.Golubev-Ciuchea@opensynergy.com> <ZF0MXKkK1tEN6QyV@corigine.com>
-In-Reply-To: <ZF0MXKkK1tEN6QyV@corigine.com>
-From:   Vincent Mailhol <vincent.mailhol@gmail.com>
-Date:   Fri, 12 May 2023 19:12:57 +0900
-Message-ID: <CAMZ6Rq+6vv34Ps0G2SpB-9LHXYiD=esi604rm2tCE5Crp3QLvA@mail.gmail.com>
-Subject: Re: [RFC PATCH v3] can: virtio: Initial virtio CAN driver.
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     Mikhail Golubev-Ciuchea <Mikhail.Golubev-Ciuchea@opensynergy.com>,
-        virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        virtualization@lists.linux-foundation.org,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Marc Kleine-Budde <mkl@pengutronix.de>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Michael S . Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Damir Shaikhutdinov <Damir.Shaikhutdinov@opensynergy.com>,
-        Harald Mommer <harald.mommer@opensynergy.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.10.1
+Subject: Re: [PATCH] ASoC: SOF: Simplify the calculation of variables
+Content-Language: en-US
+To:     Jiapeng Chong <jiapeng.chong@linux.alibaba.com>,
+        pierre-louis.bossart@linux.intel.com
+Cc:     lgirdwood@gmail.com, yung-chuan.liao@linux.intel.com,
+        ranjani.sridharan@linux.intel.com, kai.vehmanen@linux.intel.com,
+        daniel.baluta@nxp.com, broonie@kernel.org, perex@perex.cz,
+        tiwai@suse.com, sound-open-firmware@alsa-project.org,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org,
+        Abaci Robot <abaci@linux.alibaba.com>
+References: <20230512064225.75358-1-jiapeng.chong@linux.alibaba.com>
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@linux.intel.com>
+In-Reply-To: <20230512064225.75358-1-jiapeng.chong@linux.alibaba.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Simon,
 
-On Fri. 12 May 2023 at 00:45, Simon Horman <simon.horman@corigine.com> wrote:
-> On Thu, May 11, 2023 at 05:14:44PM +0200, Mikhail Golubev-Ciuchea wrote:
 
-[...]
+On 12/05/2023 09:42, Jiapeng Chong wrote:
+> ./sound/soc/sof/pcm.c:372:27-29: WARNING !A || A && B is equivalent to !A || B.
 
-> > +static u8 virtio_can_send_ctrl_msg(struct net_device *ndev, u16 msg_type)
-> > +{
-> > +     struct virtio_can_priv *priv = netdev_priv(ndev);
-> > +     struct device *dev = &priv->vdev->dev;
-> > +     struct virtqueue *vq = priv->vqs[VIRTIO_CAN_QUEUE_CONTROL];
-> > +     struct scatterlist sg_out[1];
-> > +     struct scatterlist sg_in[1];
-> > +     struct scatterlist *sgs[2];
-> > +     int err;
-> > +     unsigned int len;
->
-> nit: For networking code please arrange local variables in reverse xmas
->      tree order - longest line to shortest.
+This is correct.
 
-Sorry for my curiosity, but where is it documented that the networking
-code is using reverse christmas tree style?
+Reviewed-by: Peter Ujfalusi <peter.ujfalusi@linux.intel.com>
 
-I already inquired in the past here:
+> Reported-by: Abaci Robot <abaci@linux.alibaba.com>
+> Link: https://bugzilla.openanolis.cn/show_bug.cgi?id=4938
+> Signed-off-by: Jiapeng Chong <jiapeng.chong@linux.alibaba.com>
+> ---
+>  sound/soc/sof/pcm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/sound/soc/sof/pcm.c b/sound/soc/sof/pcm.c
+> index 567db32173a8..d14e7fd2c2ee 100644
+> --- a/sound/soc/sof/pcm.c
+> +++ b/sound/soc/sof/pcm.c
+> @@ -369,7 +369,7 @@ static int sof_pcm_trigger(struct snd_soc_component *component,
+>  	case SNDRV_PCM_TRIGGER_PAUSE_PUSH:
+>  	case SNDRV_PCM_TRIGGER_STOP:
+>  		/* invoke platform trigger to stop DMA even if pcm_ops isn't set or if it failed */
+> -		if (!pcm_ops || (pcm_ops && !pcm_ops->platform_stop_during_hw_free))
+> +		if (!pcm_ops || !pcm_ops->platform_stop_during_hw_free)
+>  			snd_sof_pcm_platform_trigger(sdev, substream, cmd);
+>  		break;
+>  	default:
 
-  https://lore.kernel.org/linux-can/CAMZ6Rq+zsC4F-mNhjKvqgPQuLhnnX1y79J=qOT8szPvkHY86VQ@mail.gmail.com/
-
-but did not get an answer.
-
->      You can check this using: https://github.com/ecree-solarflare/xmastree
-
-If we have to check for that, then please have this patch revived and merged:
-
-  https://lore.kernel.org/lkml/1478242438.1924.31.camel@perches.com/
-
-Personally, I am not willing to apply an out of tree linter for one
-single use case.
-
->      In this case I think it would be:
->
->         struct virtio_can_priv *priv = netdev_priv(ndev);
->         struct device *dev = &priv->vdev->dev;
->         struct scatterlist sg_out[1];
->         struct scatterlist sg_in[1];
->         struct scatterlist *sgs[2];
->         struct virtqueue *vq;
->         unsigned int len;
->         int err;
->
->         vq = priv->vqs[VIRTIO_CAN_QUEUE_CONTROL];
+-- 
+Péter
