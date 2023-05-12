@@ -2,198 +2,317 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A435700F37
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 21:15:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74149700F3D
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 21:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237999AbjELTPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 15:15:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40012 "EHLO
+        id S238750AbjELTTU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 15:19:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjELTPm (ORCPT
+        with ESMTP id S230006AbjELTTS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 15:15:42 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9B666E89;
-        Fri, 12 May 2023 12:15:40 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CCm2TW027653;
-        Fri, 12 May 2023 19:15:38 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=msJvFmBMRESXvxsoSn+HqjI7LHXCYr9128ys7dQyalc=;
- b=a6GVh1QwDt8VYpP2YmCwJQNpIZ2UmqIiq5EhwXrPQ5JnFwB6+zXNeisJBNbCprLNlEKo
- LvFa/trx8K4I3wDpdJdEojx90vgS6puLeMJj4EWvWW3vvEdjBDUcPoMMzgZefz9Xn9Fz
- fCR2KDgLGAeb7ZOru1hov0aN8RO4zsejeXcdr0qkwlp6co+OqQwJ0nKOwVdLjSpx2JM3
- oEv+IAr6fNeL/KxJhYOqfKFNr8fewH2ZA8rlRHxs0nUvykzvsb8Od8jYSuIEq2HqbCqH
- xiY7rUmGUjMJD58OkpyZ4IT86FFJ6uPvaIbhwfaZDeQc7Lv9TQ+HfS+ZL1raYZ7X9lMP rw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qhayt277a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 19:15:38 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34CJFbul018969
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 19:15:37 GMT
-Received: from [10.216.49.187] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 12 May
- 2023 12:15:35 -0700
-Message-ID: <989832ad-e9b4-7c59-f157-6a9239c1b5eb@quicinc.com>
-Date:   Sat, 13 May 2023 00:45:31 +0530
+        Fri, 12 May 2023 15:19:18 -0400
+Received: from fgw22-7.mail.saunalahti.fi (fgw22-7.mail.saunalahti.fi [62.142.5.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 769257685
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 12:19:17 -0700 (PDT)
+Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
+        by fgw22.mail.saunalahti.fi (Halon) with ESMTP
+        id e1e3206d-f0f9-11ed-a9de-005056bdf889;
+        Fri, 12 May 2023 22:19:15 +0300 (EEST)
+From:   andy.shevchenko@gmail.com
+Date:   Fri, 12 May 2023 22:19:14 +0300
+To:     Charles Keepax <ckeepax@opensource.cirrus.com>
+Cc:     broonie@kernel.org, lee@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, conor+dt@kernel.org,
+        tglx@linutronix.de, maz@kernel.org, linus.walleij@linaro.org,
+        vkoul@kernel.org, lgirdwood@gmail.com,
+        yung-chuan.liao@linux.intel.com, sanyog.r.kale@intel.com,
+        pierre-louis.bossart@linux.intel.com, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, devicetree@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 08/10] pinctrl: cs42l43: Add support for the cs42l43
+Message-ID: <ZF6RMqElYZVMpWRt@surfacebook>
+References: <20230512122838.243002-1-ckeepax@opensource.cirrus.com>
+ <20230512122838.243002-9-ckeepax@opensource.cirrus.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [RFC] usb: dwc3: core: set force_gen1 bit in USB31 devices if max
- speed is SS
-To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
-        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
-        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>
-References: <20230512170107.18821-1-quic_kriskura@quicinc.com>
- <20230512184630.2kt4xgneiovb3vac@synopsys.com>
-Content-Language: en-US
-From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
-In-Reply-To: <20230512184630.2kt4xgneiovb3vac@synopsys.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 3d59z5dPqzupkNnnIP-K6MqLbMkFd-Gh
-X-Proofpoint-GUID: 3d59z5dPqzupkNnnIP-K6MqLbMkFd-Gh
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-12_12,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- phishscore=0 priorityscore=1501 suspectscore=0 spamscore=0 adultscore=0
- impostorscore=0 bulkscore=0 malwarescore=0 clxscore=1015
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305120162
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512122838.243002-9-ckeepax@opensource.cirrus.com>
+X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
+        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Thinh,
+Fri, May 12, 2023 at 01:28:36PM +0100, Charles Keepax kirjoitti:
+> The CS42L43 is an audio CODEC with integrated MIPI SoundWire interface
+> (Version 1.2.1 compliant), I2C, SPI, and I2S/TDM interfaces designed
+> for portable applications. It provides a high dynamic range, stereo
+> DAC for headphone output, two integrated Class D amplifiers for
+> loudspeakers, and two ADCs for wired headset microphone input or
+> stereo line input. PDM inputs are provided for digital microphones.
+> 
+> Add a basic pinctrl driver which supports driver strength for the
+> various pins, gpios, and pinmux for the 2 multi-function pins.
 
-On 5/13/2023 12:16 AM, Thinh Nguyen wrote:
-> On Fri, May 12, 2023, Krishna Kurapati wrote:
->> Currently for dwc3_usb31 devices, if maximum_speed is limited to
-> 
-> We usually call the controller dwc_usb3, dwc_usb31, or dwc_usb32.
-> 
->> super-speed in DT, then device mode is limited to SS, but host mode
->> still works in SSP.
->>
->> The documentation for max-speed property is as follows:
->>
->> "Tells USB controllers we want to work up to a certain speed.
->> Incase  this isn't passed via DT, USB controllers should default to
->> their maximum HW capability."
->>
->> It doesn't specify that the property is only for device mode.
-> 
-> Since this isn't really a fix, can we rephrase the lines below
-> 
->> Fix this by forcing controller supported max speed to Gen1 by
->> setting LLUCTL.Force_Gen1 bit if controller is DWC3_USB31 and
->> max speed is mentioned as SS in DT.
-> 
-> As follow:
-> There are cases where we need to limit the host's maximum speed to
-> SuperSpeed only. Use this property for host mode to contrain host's
-> speed to SuperSpeed.
-> 
-> 
-Sure, will rephrase it accordingly. Thanks for the suggestion.
->>
->> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
->> ---
->> Discussion regarding the same at:
->> https://urldefense.com/v3/__https://lore.kernel.org/all/e465c69c-3a9d-cbdb-d44e-96b99cfa1a92@quicinc.com/__;!!A4F2R9G_pg!YiQpjZIJAw-yu6gEwbKqb5nusjnKQ9dQJrulx39lQP-7JMhcNA2xd8uLJoZ_HE8SuG4Rm2uvhJTSdQ2k0fJVAxU2RWYHHg$
->>
->>   drivers/usb/dwc3/core.c | 13 +++++++++++++
->>   drivers/usb/dwc3/core.h |  4 ++++
->>   2 files changed, 17 insertions(+)
->>
->> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
->> index 0beaab932e7d..989dc76ecbca 100644
->> --- a/drivers/usb/dwc3/core.c
->> +++ b/drivers/usb/dwc3/core.c
->> @@ -116,6 +116,18 @@ void dwc3_set_prtcap(struct dwc3 *dwc, u32 mode)
->>   	dwc->current_dr_role = mode;
->>   }
->>   
->> +static void dwc3_configure_host_speed(struct dwc3 *dwc)
->> +{
->> +	u32 reg;
->> +
->> +	if (DWC3_IP_IS(DWC31) &&
->> +	   (dwc->maximum_speed == USB_SPEED_SUPER)) {
->> +		reg = dwc3_readl(dwc->regs, DWC3_LLUCTL);
->> +		reg |= DWC3_LLUCTL_FORCE_GEN1;
->> +		dwc3_writel(dwc->regs, DWC3_LLUCTL, reg);
->> +	}
->> +}
->> +
->>   static void __dwc3_set_mode(struct work_struct *work)
->>   {
->>   	struct dwc3 *dwc = work_to_dwc(work);
->> @@ -194,6 +206,7 @@ static void __dwc3_set_mode(struct work_struct *work)
->>   
->>   	switch (desired_dr_role) {
->>   	case DWC3_GCTL_PRTCAP_HOST:
->> +		dwc3_configure_host_speed(dwc);
->  > The LLUCTL doesn't change until there's a Vcc reset. Let's just> 
-initialize it once during dwc3_core_init() if the GHWPARAM indicates the
-> controller is DRD or host only.
-> 
+...
 
-I thought GCTL Core soft reset might clear this bit. That is why I 
-placed it here. For device mode gadget.c takes care of limiting speed. 
-So wanted to do this setting only for host mode, before we invoke host init.
+> +#include <linux/pinctrl/consumer.h>
+> +#include <linux/pinctrl/pinctrl.h>
+> +#include <linux/pinctrl/pinmux.h>
+> +#include <linux/pinctrl/pinconf.h>
+> +#include <linux/pinctrl/pinconf-generic.h>
 
-Thanks for letting know that only VCC reset affects this. Will move this 
-check to core init.
+Can you order them and split into a separate group that goes...
 
-Regards,
-Krishna,
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/regmap.h>
+> +
 
->>   		ret = dwc3_host_init(dwc);
->>   		if (ret) {
->>   			dev_err(dwc->dev, "failed to initialize host\n");
->> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
->> index d56457c02996..29b780a58dc6 100644
->> --- a/drivers/usb/dwc3/core.h
->> +++ b/drivers/usb/dwc3/core.h
->> @@ -121,6 +121,10 @@
->>   #define DWC3_GPRTBIMAP_FS0	0xc188
->>   #define DWC3_GPRTBIMAP_FS1	0xc18c
->>   #define DWC3_GUCTL2		0xc19c
->> +#define DWC3_LLUCTL		0xd024
-> 
-> Please place the register according to its offset order.
-> 
->> +
->> +/* Force Gen1 speed on Gen2 link */
->> +#define DWC3_LLUCTL_FORCE_GEN1	BIT(10)
->>   
->>   #define DWC3_VER_NUMBER		0xc1a0
->>   #define DWC3_VER_TYPE		0xc1a4
->> -- 
->> 2.40.0
->>
-> 
-> Thanks,
-> Thinh
+...here?
+
+> +#include "../pinctrl-utils.h"
+
+...
+
+> +struct cs42l43_pin {
+> +	struct device *dev;
+> +	struct regmap *regmap;
+> +	bool shutters_locked;
+
+> +	struct gpio_chip gpio_chip;
+
+If you move this to be the first member you might save a few bytes of code.
+
+> +	struct pinctrl_gpio_range range;
+
+Is it really needed here?
+
+> +};
+
+...
+
+> +#define CS42L43_PIN(_number, _name, _reg, _field) { \
+> +	.number = _number, .name = _name, \
+> +	.drv_data = &((struct cs42l43_pin_data){ \
+> +		.reg = CS42L43_##_reg, \
+> +		.shift = CS42L43_##_field##_DRV_SHIFT, \
+> +		.mask = CS42L43_##_field##_DRV_MASK, \
+> +	}), \
+
+Do you need this to be GCC extention for the value evaluation?
+I mean the compound literal, IIRC, can be used directly as
+
+	.foo = &(struct foo){ ... },
+
+Am I mistaken?
+
+> +}
+
+...
+
+> +#define CS42L43_PINGROUP(_name) \
+
+Use PINCTRL_PINGROUP() instead of open coded.
+
+> +(struct pingroup){				\
+> +	.name = #_name, \
+> +	.pins = cs42l43_pin_##_name##_pins, \
+> +	.npins = ARRAY_SIZE(cs42l43_pin_##_name##_pins) \
+> +}
+
+...
+
+> +enum cs42l43_pin_funcs {
+> +	CS42L43_FUNC_GPIO,
+> +	CS42L43_FUNC_SPDIF,
+> +	CS42L43_FUNC_IRQ,
+> +	CS42L43_FUNC_MIC_SHT,
+> +	CS42L43_FUNC_SPK_SHT,
+
+> +	CS42L43_FUNC_MAX,
+
+No comma for the terminator entry
+
+> +};
+
+...
+
+> +static const char * const cs42l43_pin_funcs[] = {
+> +	"gpio", "spdif", "irq", "mic-shutter", "spk-shutter"
+
+I would keep trailing comma.
+
+> +};
+
+...
+
+> +struct cs42l43_pin_func_group {
+> +	const char * const *groups;
+> +	unsigned int ngroups;
+> +};
+
+We have struct pinfunction.
+
+> +static const struct cs42l43_pin_func_group cs42l43_pin_func_groups[] = {
+> +	{ cs42l43_pin_gpio_groups,	ARRAY_SIZE(cs42l43_pin_gpio_groups) },
+> +	{ cs42l43_pin_spdif_groups,	ARRAY_SIZE(cs42l43_pin_spdif_groups) },
+> +	{ cs42l43_pin_irq_groups,	ARRAY_SIZE(cs42l43_pin_irq_groups) },
+> +	{ cs42l43_pin_shutter_groups,	ARRAY_SIZE(cs42l43_pin_shutter_groups) },
+> +	{ cs42l43_pin_shutter_groups,	ARRAY_SIZE(cs42l43_pin_shutter_groups) },
+
+We have PINCTRL_PINFUNCTION().
+
+> +};
+
+...
+
+> +static int cs42l43_pin_get_func_count(struct pinctrl_dev *pctldev)
+> +{
+> +	BUILD_BUG_ON(ARRAY_SIZE(cs42l43_pin_funcs) != CS42L43_FUNC_MAX);
+> +	BUILD_BUG_ON(ARRAY_SIZE(cs42l43_pin_func_groups) != CS42L43_FUNC_MAX);
+
+Use static_assert() in the global scope instead.
+
+> +
+> +	return ARRAY_SIZE(cs42l43_pin_funcs);
+> +}
+
+...
+
+> +	default:
+> +		reg = CS42L43_GPIO_FN_SEL;
+> +		mask = BIT(group_idx + CS42L43_GPIO1_FN_SEL_SHIFT);
+> +		val = (func_idx == CS42L43_FUNC_GPIO) <<
+> +				(group_idx + CS42L43_GPIO1_FN_SEL_SHIFT);
+
+This would be better as ternary.
+
+> +		break;
+> +	}
+
+...
+
+> +	dev_dbg(priv->dev, "Setting gpio%d to %s\n",
+> +		offset + 1, input ? "input" : "output");
+
+How ' + 1' part won't be confusing?
+
+...
+
+> +static inline int cs42l43_pin_get_db(struct cs42l43_pin *priv, unsigned int pin)
+> +{
+> +	unsigned int val;
+> +	int ret;
+> +
+> +	if (pin >= CS42L43_NUM_GPIOS)
+> +		return -ENOTSUPP;
+> +
+> +	ret = regmap_read(priv->regmap, CS42L43_GPIO_CTRL2, &val);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (val & (CS42L43_GPIO1_DEGLITCH_BYP_MASK << pin))
+> +		return 0;
+
+> +	else
+
+Redundant.
+
+> +		return 85; // Debounce is roughly 85uS
+
+	// Debounce is roughly 85uS
+	return 85;
+
+> +}
+
+...
+
+> +	dev_dbg(priv->dev, "Set debounce %s for %s\n",
+> +		us ? "on" : "off", cs42l43_pin_pins[pin].name);
+
+str_on_off()
+
+...
+
+> +		++configs;
+> +		--num_configs;
+
+Why preincrements?
+
+...
+
+> +	if (is_of_node(dev_fwnode(cs42l43->dev))) {
+> +		device_set_node(priv->dev,
+> +				fwnode_get_named_child_node(dev_fwnode(cs42l43->dev),
+> +							    "pinctrl"));
+> +	} else {
+> +		device_set_node(priv->dev, dev_fwnode(cs42l43->dev));
+> +	}
+
+This can be called once after if.
+
+...
+
+> +	pctldev = devm_pinctrl_register(priv->dev, &cs42l43_pin_desc, priv);
+> +	if (IS_ERR(pctldev)) {
+> +		ret = PTR_ERR(pctldev);
+> +		dev_err(priv->dev, "Failed to register pinctrl: %d\n", ret);
+
+		ret = dev_err_probe();
+
+Same for other similar cases.
+
+> +		goto err_pm;
+> +	}
+
+> +	if (!of_property_read_bool(dev_of_node(cs42l43->dev), "gpio-ranges")) {
+> +		ret = gpiochip_add_pin_range(&priv->gpio_chip, priv->gpio_chip.label,
+> +					     0, 0, CS42L43_NUM_GPIOS);
+> +		if (ret) {
+> +			dev_err(priv->dev, "Failed to add GPIO pin range: %d\n", ret);
+> +			goto err_pm;
+> +		}
+> +	}
+
+Besides the fact that we have a callback for this, why GPIO library can't
+handle this for you already?
+
+...
+
+> +static int cs42l43_pin_remove(struct platform_device *pdev)
+> +{
+> +	pm_runtime_disable(&pdev->dev);
+
+This is simply wrong order because it's a mix of non-devm_*() followed by
+devm_*() calls in the probe.
+
+> +	return 0;
+> +}
+
+...
+
+> +static struct platform_driver cs42l43_pin_driver = {
+> +	.driver = {
+> +		.name	= "cs42l43-pinctrl",
+> +	},
+
+> +
+
+Redundant blank line.
+
+> +	.probe		= cs42l43_pin_probe,
+> +	.remove		= cs42l43_pin_remove,
+> +};
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
