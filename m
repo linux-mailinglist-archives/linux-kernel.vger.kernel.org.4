@@ -2,56 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7A8700161
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 09:23:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E41B700169
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 09:25:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240047AbjELHX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 03:23:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37576 "EHLO
+        id S240133AbjELHZz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 03:25:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240037AbjELHXz (ORCPT
+        with ESMTP id S239970AbjELHZw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 03:23:55 -0400
-Received: from mx5.didiglobal.com (mx5.didiglobal.com [111.202.70.122])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 37C0794;
-        Fri, 12 May 2023 00:23:51 -0700 (PDT)
-Received: from mail.didiglobal.com (unknown [10.79.65.15])
-        by mx5.didiglobal.com (Maildata Gateway V2.8) with ESMTPS id C970DB0057605;
-        Fri, 12 May 2023 15:23:49 +0800 (CST)
-Received: from ZJY01-ACTMBX-06.didichuxing.com (10.79.64.19) by
- ZJY02-ACTMBX-05.didichuxing.com (10.79.65.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Fri, 12 May 2023 15:23:49 +0800
-Received: from ZJY01-ACTMBX-06.didichuxing.com ([10.79.64.19]) by
- ZJY01-ACTMBX-06.didichuxing.com ([10.79.64.19]) with mapi id 15.01.2507.021;
- Fri, 12 May 2023 15:23:49 +0800
-X-MD-Sfrom: houweitao@didiglobal.com
-X-MD-SrcIP: 10.79.65.15
-From:   =?gb2312?B?uu7OsMzSIFZpbmNlbnQgSG91?= <houweitao@didiglobal.com>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-CC:     "akpm@linux-foudation.org" <akpm@linux-foudation.org>,
-        "xupengfei@nfschina.com" <xupengfei@nfschina.com>,
-        "brauner@kernel.org" <brauner@kernel.org>,
-        "dchinner@redhat.com" <dchinner@redhat.com>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        =?gb2312?B?wO6raOL5IFJveSBMaQ==?= <royliyueyi@didiglobal.com>
-Subject: RE: [PATCH] fs: hfsplus: fix uninit-value bug in hfsplus_listxattr
-Thread-Topic: [PATCH] fs: hfsplus: fix uninit-value bug in hfsplus_listxattr
-Thread-Index: AQHZguapG/YHtD2mm0OuOOYj9kHN5a9T+EQAgAJF/cA=
-Date:   Fri, 12 May 2023 07:23:49 +0000
-Message-ID: <556689d43bf8472697d26fe8c801649b@didiglobal.com>
-In-Reply-To: <20230511043602.GG3390869@ZenIV>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [10.79.64.102]
-Content-Type: text/plain; charset="gb2312"
-Content-Transfer-Encoding: base64
+        Fri, 12 May 2023 03:25:52 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BFEE171C;
+        Fri, 12 May 2023 00:25:51 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id C42DA24E2CF;
+        Fri, 12 May 2023 15:25:48 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 12 May
+ 2023 15:25:48 +0800
+Received: from [192.168.125.131] (113.72.146.187) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 12 May
+ 2023 15:25:47 +0800
+Message-ID: <ebc3a1e9-06cd-7316-8cf3-945bec910a7c@starfivetech.com>
+Date:   Fri, 12 May 2023 15:24:12 +0800
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 5/7] dt-bindings: soc: starfive: Add StarFive syscon
+ module
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>
+CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Conor Dooley <conor@kernel.org>,
+        "Emil Renner Berthing" <kernel@esmil.dk>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        William Qiu <william.qiu@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+References: <20230512022036.97987-1-xingyu.wu@starfivetech.com>
+ <20230512022036.97987-6-xingyu.wu@starfivetech.com>
+ <2fb8c88a-dab5-791b-eefe-c983decad5e8@linaro.org>
+ <20230512-brewery-spouse-86350c9664d8@wendy>
+ <b0133bcb-9c46-643a-5eda-dfdd816296fa@linaro.org>
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+In-Reply-To: <b0133bcb-9c46-643a-5eda-dfdd816296fa@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [113.72.146.187]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,43 +72,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-U29ycnksIEkgd2lsbCB1cGRhdGUgcGF0Y2ggVjIgd2l0aCBuZXcgY29tbWVudCBsYXRlci4NCg0K
-LS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IEFsIFZpcm8gPHZpcm9AZnRwLmxpbnV4
-Lm9yZy51az4gT24gQmVoYWxmIE9mIEFsIFZpcm8NClNlbnQ6IFRodXJzZGF5LCBNYXkgMTEsIDIw
-MjMgMTI6MzYgUE0NClRvOiC67s6wzNIgVmluY2VudCBIb3UgPGhvdXdlaXRhb0BkaWRpZ2xvYmFs
-LmNvbT4NCkNjOiBha3BtQGxpbnV4LWZvdWRhdGlvbi5vcmc7IHh1cGVuZ2ZlaUBuZnNjaGluYS5j
-b207IGJyYXVuZXJAa2VybmVsLm9yZzsgZGNoaW5uZXJAcmVkaGF0LmNvbTsgbGludXgtZnNkZXZl
-bEB2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmc7IMDuq2ji+SBS
-b3kgTGkgPHJveWxpeXVleWlAZGlkaWdsb2JhbC5jb20+DQpTdWJqZWN0OiBSZTogW1BBVENIXSBm
-czogaGZzcGx1czogZml4IHVuaW5pdC12YWx1ZSBidWcgaW4gaGZzcGx1c19saXN0eGF0dHINCg0K
-T24gV2VkLCBNYXkgMTAsIDIwMjMgYXQgMTA6MjU6MTVBTSArMDgwMCwgaG91d2VpdGFvIHdyb3Rl
-Og0KPiBCVUc6IEtNU0FOOiB1bmluaXQtdmFsdWUgaW4gc3RybmNtcCsweDExZS8weDE4MCBsaWIv
-c3RyaW5nLmM6MzA3DQo+ICBzdHJuY21wKzB4MTFlLzB4MTgwIGxpYi9zdHJpbmcuYzozMDcNCj4g
-IGlzX2tub3duX25hbWVzcGFjZSBmcy9oZnNwbHVzL3hhdHRyLmM6NDUgW2lubGluZV0gIG5hbWVf
-bGVuIA0KPiBmcy9oZnNwbHVzL3hhdHRyLmM6Mzk3IFtpbmxpbmVdDQo+ICBoZnNwbHVzX2xpc3R4
-YXR0cisweGU2MS8weDFhYTAgZnMvaGZzcGx1cy94YXR0ci5jOjc0NiAgdmZzX2xpc3R4YXR0ciAN
-Cj4gZnMveGF0dHIuYzo0NzMgW2lubGluZV0NCj4gIGxpc3R4YXR0cisweDcwMC8weDc4MCBmcy94
-YXR0ci5jOjgyMA0KPiAgcGF0aF9saXN0eGF0dHIgZnMveGF0dHIuYzo4NDQgW2lubGluZV0gIF9f
-ZG9fc3lzX2xsaXN0eGF0dHIgDQo+IGZzL3hhdHRyLmM6ODYyIFtpbmxpbmVdICBfX3NlX3N5c19s
-bGlzdHhhdHRyIGZzL3hhdHRyLmM6ODU5IFtpbmxpbmVdDQo+ICBfX2lhMzJfc3lzX2xsaXN0eGF0
-dHIrMHgxNzEvMHgzMDAgZnMveGF0dHIuYzo4NTkgIA0KPiBkb19zeXNjYWxsXzMyX2lycXNfb24g
-YXJjaC94ODYvZW50cnkvY29tbW9uLmM6MTEyIFtpbmxpbmVdDQo+ICBfX2RvX2Zhc3Rfc3lzY2Fs
-bF8zMisweGEyLzB4MTAwIGFyY2gveDg2L2VudHJ5L2NvbW1vbi5jOjE3OA0KPiAgZG9fZmFzdF9z
-eXNjYWxsXzMyKzB4MzcvMHg4MCBhcmNoL3g4Ni9lbnRyeS9jb21tb24uYzoyMDMNCj4gIGRvX1NZ
-U0VOVEVSXzMyKzB4MWYvMHgzMCBhcmNoL3g4Ni9lbnRyeS9jb21tb24uYzoyNDYNCj4gIGVudHJ5
-X1NZU0VOVEVSX2NvbXBhdF9hZnRlcl9od2ZyYW1lKzB4NzAvMHg4Mg0KPiANCj4gUmVwb3J0ZWQt
-Ynk6IHN5emJvdCANCj4gPHN5emJvdCs5MmVmOWVlNDE5ODAzODcxMDIwZUBzeXprYWxsZXIuYXBw
-c3BvdG1haWwuY29tPg0KPiBMaW5rOiBodHRwczovL3N5emthbGxlci5hcHBzcG90LmNvbS9idWc/
-ZXh0aWQ9OTJlZjllZTQxOTgwMzg3MTAyMGUNCj4gU2lnbmVkLW9mZi1ieTogaG91d2VpdGFvIDxo
-b3V3ZWl0YW9AZGlkaWdsb2JhbC5jb20+DQoNCldoeSBkb2VzIGl0IGFjdHVhbGx5IGZpeCBhbnl0
-aGluZz8gIE90aGVyIHRoYW4gbWFraW5nIEtNU0FOIFNURlUsIHRoYXQgaXMuLi4NCg0KIkZpbGwg
-aXQgd2l0aCB6ZXJvZXMiIG1pZ2h0IG9yIG1pZ2h0IG5vdCBiZSBhIGZpeCBpbiB0aGlzIHBhcnRp
-Y3VsYXIgY2FzZSwgYnV0IGl0IHJlYWxseSBuZWVkcyBtb3JlIGRldGFpbGVkIHByb29mLg0KDQpZ
-b3UgbWlnaHQgaGF2ZSBmaWd1cmVkIGl0IG91dCwgYnV0IGhvdyBkbyBJIChvciBhbnlib2R5IGVs
-c2UpIGV2ZW4gYmVnaW4gdG8gcmVhc29uIGFib3V0IHRoZSBjb3JyZWN0bmVzcyBvZiB0aGF0IGZp
-eD8gIEJ5IHJlZG9pbmcgdGhlIGFuYWx5c2lzIGZyb20gc2NyYXRjaCwgc3RhcnRpbmcgd2l0aCAi
-aW4gc29tZSBjb25kaXRpb25zIHRoaXMgc3RhY2sgdHJhY2UgbWlnaHQgZW5kIHVwIHJlYWRpbmcg
-dW5pbml0aWFsaXplZCBkYXRhIGluIHN0cmJ1ZiI/DQoNCk5BSy4gICpJRiogeW91IGhhdmUgYW4g
-ZXhwbGFuYXRpb24gb2Ygd2hhdCdzIGdvaW5nIG9uIGFuZCB3aHkgdGhpcyBjaGFuZ2UgcmVhbGx5
-IGZpeGVzIHRoaW5ncywgcGxlYXNlIHJlcG9zdCB3aXRoIHVzZWZ1bCBjb21taXQgbWVzc2FnZS4N
-Cg==
+On 2023/5/12 14:50, Krzysztof Kozlowski wrote:
+> On 12/05/2023 08:43, Conor Dooley wrote:
+>> On Fri, May 12, 2023 at 08:35:43AM +0200, Krzysztof Kozlowski wrote:
+>>> On 12/05/2023 04:20, Xingyu Wu wrote:
+>>>> From: William Qiu <william.qiu@starfivetech.com>
+>> 
+>>>> +  "#power-domain-cells":
+>>>> +    const: 1
+>>>
+>>> Add it to the existing examples.
+>>>
+>>> This part confuses me... why aon appeared here?  Why power-controller
+>>> disappeared? I don't think that Rob or me proposed any of this.
+>> 
+>> Rob did actually suggest this, as the power-controller child node had no
+>> properties other than #power-domain-cells.
+> 
+> He suggested it for aon, but not for stg or sys... aon is not a child of
+> sys, is it? Then why power-controller disappeared from sys?
+> 
+
+The power-controller is only for aon, but now just use power-domain-cells instead.
+The sys only have the clock-controller child node not power-controller.
+And stg has neither.
+
+Best regards,
+Xingyu Wu
+
