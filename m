@@ -2,239 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 37BA4700786
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 14:18:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F76E70078D
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 14:21:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240558AbjELMS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 08:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48604 "EHLO
+        id S240614AbjELMVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 08:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240338AbjELMSX (ORCPT
+        with ESMTP id S240338AbjELMVT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 08:18:23 -0400
-Received: from mx0a-0039f301.pphosted.com (mx0a-0039f301.pphosted.com [148.163.133.242])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BAFA7DA2;
-        Fri, 12 May 2023 05:18:22 -0700 (PDT)
-Received: from pps.filterd (m0174676.ppops.net [127.0.0.1])
-        by mx0a-0039f301.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CBVsbl005889;
-        Fri, 12 May 2023 12:18:08 GMT
-Received: from eur03-am7-obe.outbound.protection.outlook.com (mail-am7eur03lp2234.outbound.protection.outlook.com [104.47.51.234])
-        by mx0a-0039f301.pphosted.com (PPS) with ESMTPS id 3qh6u0ar62-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 12:18:08 +0000
+        Fri, 12 May 2023 08:21:19 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2079.outbound.protection.outlook.com [40.107.244.79])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF1578A7F;
+        Fri, 12 May 2023 05:21:17 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Uxi4poFl7M3S0SAreiB2ulQIKJNmy0xtf+chy4Mdj8E/GoLfIwV74RufYeMssMXKIpwpuA9IZGioygT6DaZOwst2I5bXdq6fnC46AsdJne5F5SRSKL45h+oBeRQxZw2aiPfvBj2aOJ8O80enaEfdZAYC7n5fuFznRL2vRUq6TNC9E/3+mKphV2BbmrKZLYPk0pC0S94AwOVMfdJPzMKsQ26G0DPyJfOzj37Qn9MURzN9e/7gTMWlAJfJlQKwFPFe3b/UJr1h4HFNLX6FXPdT9d1vmevBqaY67bIO16fWmN0Un+ozElTRyfEvCFVSouJVqCbJD4tIgkMQblxFtO1GKw==
+ b=bCK5JNWKbX2NVD5QB6gMD61rcA6ZNcrJVF6S+I25AMrXTBzUYVEA+HU750LnpVK6Fd966s4k9bm0hMCp/fPdKZoNXXVaHa2V6pTm8qPZR8MBUud+AEQDB3GQ2qexi5PEROsDNuauwsa0LvgXZQCiwhNEew9r6sD6IPVNaqDwAAa526FBm7TgcXt/JxRtCQNhZz1y6OY7vlWl1Scfweppclv3EIcXpAjNU2O3wyPqHCf5DM3gODTUjCFzkUbHn0QQfUqlmCdzqlulLV4697mDKnqAed3mP7He9VzdJdDmfiQadWJoLoGX2X6NBq5ivxKUnqzFlGVSo10VFfthmz4iBQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=caO53I9T6uU4/1sKhh+YHtxHJBZXQOqTPwrfdFRCTfs=;
- b=Zs5YuCcWpYr8vqGbnncniXmUNwMdDe0tZmCexumKiKkGfluL03jzrKFf06gSPU/x9G56LFwIUc8X8/KzL0V70V3YHjkFt7p2yotb2WV4VpRBt//a6R4JybZvGCAvDknGdd4kxPyMbjW4wHdZrUYE5zXV0BXGWwX3RWAszKS+Wf46gtgXkhyNjeWkKZ7AO2T5Jkyy4Wrg4+0GNzXj1ayL2NcQLgCz73gzVFjHm+T0nWMg9qofXONvrH9SdYNXwPY+L61y74SDDD/6tt6fXKhwtf9zEZN8PzH3E3LPfiqSgu1lxY5Q1uvIFmdOovylrzjUa4ZeF5vR1icATBH7DzGzCQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=epam.com; dmarc=pass action=none header.from=epam.com;
- dkim=pass header.d=epam.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=epam.com; s=selector2;
+ bh=B20a5gzSh43AMXrj0HIWHEThmg4z6S/3NF7Eau3L5jE=;
+ b=QI99OhsuYGbKa98OuwtzrvLx3nts1SIc+IZc02vJb0jfOc9g0Ds7JYnqVEAXG3h2AQLf2r5wf1fTp8n5+xE/1HfbUHDxSJUPdysr7MoXhjtG3loaZP3HtrJtlHQR2SglfSYFS0hzID3Nvl4Zi9vKSvVp7uPuNpGz5kiEbgMTMI/OxlIBcmpc6tdDcmR0OpR/LdF4jjhxkCvDr/tXJ2wGejXi0amkOrh6Skk78f04lvfciAexK3ipNiDZi+vcmYmjEcFRHMn/b6sjrXQVL8dHLDf89kekkCQBvAZryOmKt5MFUJhKLk4M731xno8YNM8JAM0zEPTwuUerVW+mrdA6WA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=intel.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=caO53I9T6uU4/1sKhh+YHtxHJBZXQOqTPwrfdFRCTfs=;
- b=UYRzGNkSO95ZaFkd32x8UKBmeYGbBlYZjEFDc3nc6IVAuNL4WIqLFTaUmiWfaJf1Iu7l5eNMtEj8rii59JLAiS9xbFOJB/RMLqf0LevXPvMEsuus1S9uFSwGz64/cSG/6/FWVycey9s1HXBjo+R8zAAUFeXMebOoTxkQJT3ii12exBjalZBPRAe/bOdUQ1bRZagW1tRFcYd8PQYNjqkn5z1ZIpy5yGXSHIwRVwhfj3IDXiFcVJ+8EjLkYpCLNgtJREYuJmKMbz9XkzkshWEkeAa08ShykK+KyDThuIq2jkBd0mjG/M6EydwuQ5ayCkhpnb21tWnghI1rCd+5M5HfcA==
-Received: from PA4PR03MB7136.eurprd03.prod.outlook.com (2603:10a6:102:ea::23)
- by DB9PR03MB7785.eurprd03.prod.outlook.com (2603:10a6:10:2ce::11) with
+ bh=B20a5gzSh43AMXrj0HIWHEThmg4z6S/3NF7Eau3L5jE=;
+ b=t0TKrCVztkm2kzS/fQOXGkQ3t6kmMwNCUSxfM7h1GcnWptFzwxgTK/JIBaSdPVoistqTCZBJGXrrlhKZueAncHN/Ov9SP6u4Daj2bI8WcpnqfG1SS/4IfYdL3ZkRGQVmvFEAlJ/CzT8Lfg+uiNRzi2a8Fy1SnY8px2u2bqMf69MVeS8f5rql7boPiHs9FRdPfLbykusa0ySywvU23fG/YSwV3PF6ofOPTpnJ9gY2qTKi0cEjtX6itWvWQ/Rjx4cH/rEbhIFbBA0LfVUO8ZAObeUelIDRvQy9TXB+nndkK9N6maliOYV4QXgTan9a1/EFYLVdDTe+DCCRaeINRjdEZQ==
+Received: from MW4PR04CA0047.namprd04.prod.outlook.com (2603:10b6:303:6a::22)
+ by CH3PR12MB9217.namprd12.prod.outlook.com (2603:10b6:610:195::10) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.21; Fri, 12 May
- 2023 12:18:03 +0000
-Received: from PA4PR03MB7136.eurprd03.prod.outlook.com
- ([fe80::bcf5:cd14:fd35:1300]) by PA4PR03MB7136.eurprd03.prod.outlook.com
- ([fe80::bcf5:cd14:fd35:1300%4]) with mapi id 15.20.6387.021; Fri, 12 May 2023
- 12:18:03 +0000
-From:   Oleksii Moisieiev <Oleksii_Moisieiev@epam.com>
-To:     Cristian Marussi <cristian.marussi@arm.com>
-CC:     "andy.shevchenko@gmail.com" <andy.shevchenko@gmail.com>,
-        "sudeep.holla@arm.com" <sudeep.holla@arm.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Peng Fan <peng.fan@oss.nxp.com>,
-        Michal Simek <michal.simek@amd.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-gpio@vger.kernel.org" <linux-gpio@vger.kernel.org>
-Subject: Re: [RFC v2 2/3] pinctrl: Implementation of the generic scmi-pinctrl
- driver
-Thread-Topic: [RFC v2 2/3] pinctrl: Implementation of the generic scmi-pinctrl
- driver
-Thread-Index: AQHZeEK66Y+E4GsA3km+qVBMGvAGK69MMbOAgAjzKoCAAUwwgIAANgSA
-Date:   Fri, 12 May 2023 12:18:03 +0000
-Message-ID: <20230512121801.GA3494263@EPUAKYIW0A6A>
-References: <cover.1682513390.git.oleksii_moisieiev@epam.com>
- <812ae71d017b115c55648dbf0a4c3502715b1955.1682513390.git.oleksii_moisieiev@epam.com>
- <ZFVoiWnvq7UXSBBw@surfacebook>
- <152bbad1-a759-df18-1efa-4e25c54847d9@epam.com>
- <ZF4BKZkbLr2mKN0s@e120937-lin>
-In-Reply-To: <ZF4BKZkbLr2mKN0s@e120937-lin>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PA4PR03MB7136:EE_|DB9PR03MB7785:EE_
-x-ms-office365-filtering-correlation-id: edd7a8f8-9552-460e-26d4-08db52e2ef1e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: W2BMKhPoGv1RKdR5Yv2WAoi+gceXu9TVriyAROQmg3lV/OBe3wkXZO5jtw44CwLJUHMHCcxFftDO+JoUGIt6mcpoHdZPDQj113mOXozk5bwHKlbCIsD2SKGQpSzmkdiw4cF0VINgCB9NcConeikQhi42fjgqSumLMoLMauNVsNglkevBUn3r6ckfiWbqQiCOHhcM1vjcevq9ptdiGBzWLVpNJQ/m3dMEPAXsHDyT0cXMQDEW73NT/cyXZs2Uh05HDOkWIydJEcxZdeJ+IZY9cXsizF/qsNKXsaBaEolNdZcNRalDwf9/kXAh0HozbQC0rZN01yBU7W8zGM0bLSy6r2FqifRuhNM60juwvjHHqwigObVk8z+OVIjI9gj6xgkEYEOZKUNquEmoxmEMNYp4ahWSFHfSGbCg4EJPPbIXBTjuESmGOqA3i2BiIpgvQLnPozGtq/2E8Ip/2QtK87yk5XOmwvvsQUL+WkJCrMHViRIDzINKBze20OGecJIU/qP7aIzbumgIs5HkIHqPjhEiE+BS6SPYxEc+echZmt3SQJy3PYmvMA4sEBMrDvNtCTgN9aJ5EAhv+nWMqjf2pAb5ut0l6zBlH01rnC0E2XXcOF5nr/otC7bjVhG6ga5B5I1mwa9ZtFdJi03DX+NYuFUemQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PA4PR03MB7136.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(7916004)(136003)(366004)(396003)(346002)(376002)(39860400002)(451199021)(66946007)(66446008)(66476007)(6916009)(66556008)(4326008)(91956017)(6486002)(76116006)(64756008)(478600001)(54906003)(316002)(86362001)(33656002)(83380400001)(186003)(26005)(1076003)(6512007)(9686003)(53546011)(6506007)(8676002)(41300700001)(33716001)(5660300002)(8936002)(38100700002)(38070700005)(122000001)(2906002)(71200400001)(41533002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?Hi958AhsHXAVgU6brw8RVJGJeIp3tRqk8NkOhXiXzfSLV+DKpveQt6msx8UU?=
- =?us-ascii?Q?CFouLBZJ+nR5H/4Eo3d9+wU/VepdNdU4UGERBik5057JJrYaQhVkIozrUwlB?=
- =?us-ascii?Q?GhS9wYjFMv4pUkj++4wF8rEg0KNJRAnM8ZCLZT1eFZFEetiRC+YYMugKmHm4?=
- =?us-ascii?Q?faXWGXPx6apif0zESRFNPM3T+FXMP+h8WD1sKjIEK1N0bjBb9xusGadxxs+S?=
- =?us-ascii?Q?N7uE1H9BxHzY4zR2XlZgeUciOsTrBSN4WPiBBvDIC7FEbQPYmp2cwxCUWgdW?=
- =?us-ascii?Q?I1DlLxGjYUC3F3D6/KwZtz9lcTpz+KWJ792YSH+8qjHCCVhct+iChMb8C6DF?=
- =?us-ascii?Q?zQ80Mq/jGP+J87nyGx+xVqr+tSCfgdd8QDYkor3aq5MtHc91P1WVUJX29IGm?=
- =?us-ascii?Q?AlaZ4HHJk4aWhZ84/OcMabMlyuBiLuLZHniGz56BeJYROtqntS5MZx6/yPgf?=
- =?us-ascii?Q?rG31VLZG17BGHedRZHRl9jkMvjZ78ydDQYP7WWANIn9IGJLHV28NGViGDyM8?=
- =?us-ascii?Q?GYfYFMQ90VDwHsoHCoPECmsrgHH8i9ArNtAo3bA5puGMzhEaRnQ0FsBAAhI8?=
- =?us-ascii?Q?0ZmLMvjNs7rbu9IDE+2SWStBOUSFABzlR0n9ZlWkB+YvhOkwD/HTkdKUViHu?=
- =?us-ascii?Q?sjuvVgKbKqqEfVLo5u8Vg0FBdzujBvLY0e4fBgn+m6HcxkBZxttjWUfmpCSf?=
- =?us-ascii?Q?reHdlAlxrFM9SeYrum01Vlfu0vVsZmxvuonp28uWiGb1Nywl8mwXB8Ase7Ee?=
- =?us-ascii?Q?+X6JfJLT/92vq643dGwwI11cztAq646P/RtiQGH0NTg//eih3Za85YdTV3kj?=
- =?us-ascii?Q?y95Mb9q3HX0Ks6TM0HuXOR+vTs59EK6zwm+cZoozCdnT8kUA2OL27+OWfZ98?=
- =?us-ascii?Q?ca9dIohHsVICQk2DMm3a17pOfnERUX0eJLUxEJIianN2F1BIGcMbWLZVHltL?=
- =?us-ascii?Q?E8Zju5AiRxQyBuUBvNfZkFZTt0a+EvkjmF4A+mvrTElBAZQkuKz61CtikUBd?=
- =?us-ascii?Q?K/PmYajKTM7VIRhGSxRbrMRzX2neRNHrT1CCU0DIzfXbTHQ5vVhDzxdYRKEx?=
- =?us-ascii?Q?hwz9/p37uca5OVruK4WMVFgQBmokgtjNGNmtTgrwSmBrHp0wPP4L4L6wehCJ?=
- =?us-ascii?Q?XgpE4pYgsN6b373jWDZH4McSEamXisLGk4evzexjccMCHbHy3x34Gp3DcTjs?=
- =?us-ascii?Q?ncPX6WyPAjn1SIkQFNZl15VG6CpBLzntVG7Q9Vk0xH5GiFXXHtxfEXLMlZvZ?=
- =?us-ascii?Q?FsY9kW2hy7FSRu6RFzckJbm76WZWg3kLXLvmtti3y+VyxjDoTy6yPhUIzFRD?=
- =?us-ascii?Q?4PR0w/eRrW4ONnIEmDfZeaA+FF2WNnauoxdipyAYFAPhZtL0/AAxrpLgReUu?=
- =?us-ascii?Q?lO2ONKvmmQX/RciDqwUDlffzsOybDGuzJpzJTuyZLITduoDJ0y9W3Owf8G6s?=
- =?us-ascii?Q?SxRObvD4msJBZcAAntJ+pFso1rmOW5Ca8D3yveYFAYk9Ztvn+wrpMtNBvkok?=
- =?us-ascii?Q?XzuB0oa25d+7hg0JuAoBaevFoYI1fIBCyYA6pmr0vxRufuVAs8f86sIQjNqw?=
- =?us-ascii?Q?Bb5FuUlxufaV0AGOcJ3tNtmw/aNO725DAOczMg5lBTqkxICvbWDOau941oky?=
- =?us-ascii?Q?+A=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <D45A78653434314A971D2BBC2A38130A@eurprd03.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.23; Fri, 12 May
+ 2023 12:21:15 +0000
+Received: from CO1NAM11FT055.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:6a:cafe::44) by MW4PR04CA0047.outlook.office365.com
+ (2603:10b6:303:6a::22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.24 via Frontend
+ Transport; Fri, 12 May 2023 12:21:15 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1NAM11FT055.mail.protection.outlook.com (10.13.175.129) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6387.24 via Frontend Transport; Fri, 12 May 2023 12:21:14 +0000
+Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 12 May 2023
+ 05:21:03 -0700
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by rnnvmail203.nvidia.com
+ (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 12 May
+ 2023 05:21:03 -0700
+Received: from vdi.nvidia.com (10.127.8.12) by mail.nvidia.com (10.129.68.10)
+ with Microsoft SMTP Server id 15.2.986.37 via Frontend Transport; Fri, 12 May
+ 2023 05:21:02 -0700
+From:   Liming Sun <limings@nvidia.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        David Thompson <davthompson@nvidia.com>,
+        Shawn Lin <shawn.lin@rock-chips.com>
+CC:     Liming Sun <limings@nvidia.com>, <linux-mmc@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] mmc: sdhci-of-dwcmshc: Add runtime PM operations for BlueField-3
+Date:   Fri, 12 May 2023 08:20:56 -0400
+Message-ID: <20230512122056.223677-1-limings@nvidia.com>
+X-Mailer: git-send-email 2.30.1
+In-Reply-To: <79137159a833c164ea8ea3f05d8d6d9537db2f42.1683747334.git.limings@nvidia.com>
+References: <79137159a833c164ea8ea3f05d8d6d9537db2f42.1683747334.git.limings@nvidia.com>
 MIME-Version: 1.0
-X-OriginatorOrg: epam.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PA4PR03MB7136.eurprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: edd7a8f8-9552-460e-26d4-08db52e2ef1e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 May 2023 12:18:03.0739
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT055:EE_|CH3PR12MB9217:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3e7bd378-e386-4d93-64af-08db52e36118
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Bm29y2dr5JbiYJiWxV8tYyxZIzZDTq8I6trEhBkCQnA9Bc7ManAX5IQPNzO2GeGc7jqCmY4FLEniPdem/dHRIrUxPLy7m2porM4375J5WeoMVvX6+OmV+I5/mjEuYAHaPldxuGcg0hBnzxMzbME0fJ/r3TSMBf7xREYbgmnqhnc+UmLneGx6600YWD2z+UMIgWp+YjtMLAaO7qawK3BFisJqdzAkTwokBQSvNrByCByXNePsNMp0mW+MMfwuIEQRKP9tvvaOvdSMfzOhf6xaeHbTxCAWwN+0lQDUbxvARp6OLM7trArSZ73XujZs70G9pime6RVa/EtJ/R3EsXrFzJ5vv3TaI340JvGAJkTu7udQjtvViTT0bO7Y4E3tWdCQHIje4U6fCGuXk6yTqZxVh3MrE3KvnliN8Mtm3r0IQtxajI2DjfFWqzq4LHm+E2ouoppAmyq+uJa9O1G+y7EVz2lHI6s3HWniEuI5YkMVfdZwiuR6nGjxYukUFUxbXkODvJS0f4iA/imx0x7dpFDtdQzi4dw+bjtPsDJsGLIPDKBBqTZPbdLfl7M2sh/frlC4GTDoZmw1kibisKh6fIPksJD/3DMrZfCTxqhyHEyAa+aUWX+22BYG6xAEM7/eDY3ey9YRioOCq+J/e1xzEmjnneukHv1y5QgeLIAfiHejwVo/hhn7HTXiuBiuOkU4OnrzZZmOkZECYAip2B3YOleIn1tHkBu9GcEQ2p/IQHyxppcekKh2B5aNye/SC5NESG2hmqy7OX66IpRi7KyNRyhSWg==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(136003)(346002)(376002)(39860400002)(451199021)(40470700004)(36840700001)(46966006)(8676002)(5660300002)(47076005)(2616005)(82310400005)(83380400001)(70586007)(336012)(36860700001)(70206006)(426003)(8936002)(36756003)(54906003)(86362001)(316002)(4326008)(41300700001)(110136005)(6666004)(186003)(1076003)(356005)(26005)(7696005)(478600001)(40460700003)(7636003)(2906002)(82740400003)(40480700001)(133343001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 May 2023 12:21:14.2162
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b41b72d0-4e9f-4c26-8a69-f949f367c91d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: mjXggMTQ3AJ5Egv6W43KbL/UhvI4YOCyK10j5D++xyeazySSe+Qx9CEUwJvKCpQ/iuKB7S3vEIiNj98PXoym232tLnUve3u3S9HB5jlVdks=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB9PR03MB7785
-X-Proofpoint-ORIG-GUID: F_qENu-SenMNONOB45BD_DwBoIn7fqwI
-X-Proofpoint-GUID: F_qENu-SenMNONOB45BD_DwBoIn7fqwI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-12_08,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 malwarescore=0
- phishscore=0 impostorscore=0 priorityscore=1501 adultscore=0 bulkscore=0
- lowpriorityscore=0 mlxscore=0 spamscore=0 mlxlogscore=978 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305120102
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3e7bd378-e386-4d93-64af-08db52e36118
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT055.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9217
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Cristian,
+This commit implements the runtime PM operations for BlueField-3 SoC
+to disable eMMC card clock when idle.
 
-On Fri, May 12, 2023 at 10:04:41AM +0100, Cristian Marussi wrote:
-> On Thu, May 11, 2023 at 01:15:46PM +0000, Oleksii Moisieiev wrote:
-> > Hello Andy,
-> >=20
-> > On 05.05.23 23:35, andy.shevchenko@gmail.com wrote:
-> > > Wed, Apr 26, 2023 at 01:26:37PM +0000, Oleksii Moisieiev kirjoitti:
-> > >> scmi-pinctrl driver implements pinctrl driver interface and using
-> > >> SCMI protocol to redirect messages from pinctrl subsystem SDK to
-> > >> SCP firmware, which does the changes in HW.
-> > >>
-> > >> This setup expects SCP firmware (or similar system, such as ATF)
-> > >> to be installed on the platform, which implements pinctrl driver
-> > >> for the specific platform.
-> > >>
-> > >> SCMI-Pinctrl driver should be configured from the device-tree and us=
-es
-> > >> generic device-tree mappings for the configuration.
-> > >=20
-> > > ...
-> > >=20
-> > >> +#include <linux/device.h>
-> > >> +#include <linux/err.h>
-> > >=20
-> > >> +#include <linux/of.h>
-> > >=20
-> > > I do not see any user of this header. Do you?
-> > >=20
-> > Yes, thanks. Removing
-> >=20
-> > >> +#include <linux/module.h>
-> > >> +#include <linux/seq_file.h>
-> > >> +
-> > >> +#include <linux/pinctrl/machine.h>
-> > >> +#include <linux/pinctrl/pinconf.h>
-> > >> +#include <linux/pinctrl/pinconf-generic.h>
-> > >> +#include <linux/pinctrl/pinctrl.h>
-> > >> +#include <linux/pinctrl/pinmux.h>
-> > >=20
-> > >> +#include <linux/scmi_protocol.h>
-> > >> +#include <linux/slab.h>
-> > >=20
-> > > Please, move these two to the upper group of the generic headers.
-> > >=20
-> > Thanks, fixed.
-> >=20
-> > >> +struct scmi_pinctrl_funcs {
-> > >> +	unsigned int num_groups;
-> > >> +	const char **groups;
-> > >> +};
-> > >=20
-> > > Please, use struct pinfunction.
-> > >
-> > I can't use pincfunction here because it has the following groups=20
-> > definition:
-> > const char * const *groups;
-> >=20
-> > Which is meant to be constantly allocated.
-> > So I when I try to gather list of groups in=20
-> > pinctrl_scmi_get_function_groups I will receive compilation error.
-> >=20
->=20
-> Maybe this is a further signal that we should re-evaluate the benefits of
-> the lazy allocations you now perform during protocol initialization
-> instead of querying and allocating statically all the info structs about
-> existing resources.
->=20
-> Not saying that is necessarily bad, I understood your points about reduci=
-ng
-> the number of SCMI queries during boot and let pinctrl subsystem trigger =
-only
-> the strictly needed one, just saying maybe good to reason a bit more abou=
-t this
-> once V3 is posted. (i.e. I could bother you more :P ..)
->=20
-> Thanks,
-> Cristian
->=20
-> P.S. [off-topic]: remember to use get_maintainer.pl as advised elsewhere
-> to include proper maintainers (and their bots)
+Signed-off-by: Liming Sun <limings@nvidia.com>
+---
+v1->v2:
+    Updates for comments from Ulf:
+    - Make the runtime PM logic generic for sdhci-of-dwcmshc;
+v1: Initial version.
+---
+ drivers/mmc/host/sdhci-of-dwcmshc.c | 56 ++++++++++++++++++++++++++++-
+ 1 file changed, 55 insertions(+), 1 deletion(-)
 
-That's a good point to think about. Actually, functions are the only
-thing that should be cached on pinctrl side. And we need it specifically
-because groups in each function are presented by names, not selectors.
-Maybe It's better to move this caching to pinctrl scmi driver. But, from
-the other side - storing group names for each function is Linux Kernel
-specific implementation and we probably don't want to add some specific
-case to the Generic protocol driver.
+diff --git a/drivers/mmc/host/sdhci-of-dwcmshc.c b/drivers/mmc/host/sdhci-of-dwcmshc.c
+index e68cd87998c8..a3277f4d250d 100644
+--- a/drivers/mmc/host/sdhci-of-dwcmshc.c
++++ b/drivers/mmc/host/sdhci-of-dwcmshc.c
+@@ -15,6 +15,7 @@
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_device.h>
++#include <linux/pm_runtime.h>
+ #include <linux/reset.h>
+ #include <linux/sizes.h>
+ 
+@@ -546,6 +547,8 @@ static int dwcmshc_probe(struct platform_device *pdev)
+ 		sdhci_enable_v4_mode(host);
+ #endif
+ 
++	pm_runtime_enable(dev);
++
+ 	host->mmc->caps |= MMC_CAP_WAIT_WHILE_BUSY;
+ 
+ 	err = sdhci_setup_host(host);
+@@ -646,7 +649,58 @@ static int dwcmshc_resume(struct device *dev)
+ }
+ #endif
+ 
+-static SIMPLE_DEV_PM_OPS(dwcmshc_pmops, dwcmshc_suspend, dwcmshc_resume);
++#ifdef CONFIG_PM
++
++#ifdef CONFIG_ACPI
++static void dwcmshc_enable_card_clk(struct sdhci_host *host)
++{
++	u16 ctrl;
++
++	ctrl = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
++	ctrl |= SDHCI_CLOCK_CARD_EN;
++	sdhci_writew(host, ctrl, SDHCI_CLOCK_CONTROL);
++}
++
++static void dwcmshc_disable_card_clk(struct sdhci_host *host)
++{
++	u16 ctrl;
++
++	ctrl = sdhci_readw(host, SDHCI_CLOCK_CONTROL);
++	ctrl &= ~SDHCI_CLOCK_CARD_EN;
++	sdhci_writew(host, ctrl, SDHCI_CLOCK_CONTROL);
++}
++#endif
++
++static int dwcmshc_runtime_suspend(struct device *dev)
++{
++	struct sdhci_host *host = dev_get_drvdata(dev);
++	int ret = 0;
++
++	ret = sdhci_runtime_suspend_host(host);
++	if (!ret)
++		dwcmshc_disable_card_clk(host);
++
++	return ret;
++}
++
++static int dwcmshc_runtime_resume(struct device *dev)
++{
++	struct sdhci_host *host = dev_get_drvdata(dev);
++	int ret = 0;
++
++	dwcmshc_enable_card_clk(host);
++	ret = sdhci_runtime_resume_host(host, 0);
++
++	return ret;
++}
++
++#endif
++
++static const struct dev_pm_ops dwcmshc_pmops = {
++	SET_SYSTEM_SLEEP_PM_OPS(dwcmshc_suspend, dwcmshc_resume)
++	SET_RUNTIME_PM_OPS(dwcmshc_runtime_suspend,
++			   dwcmshc_runtime_resume, NULL)
++};
+ 
+ static struct platform_driver sdhci_dwcmshc_driver = {
+ 	.driver	= {
+-- 
+2.30.1
 
-I think I would leave it as in V3 so we can continue discussion.
-
-Oleksii.=
