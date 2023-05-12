@@ -2,104 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62C9C700D5E
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:51:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA3B7700D60
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 18:52:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237479AbjELQvI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 12:51:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43410 "EHLO
+        id S237489AbjELQv6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 12:51:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229589AbjELQvG (ORCPT
+        with ESMTP id S229589AbjELQv4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 12:51:06 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C1235A4;
-        Fri, 12 May 2023 09:51:05 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 0A01D1C0ABB; Fri, 12 May 2023 18:51:04 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1683910264;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XM8NBb2coBJF2GqQ8RcwtfKaTsDoZEMiql19jU2Efmw=;
-        b=FFVOOe2KbUsF14ijfQM5zGuMlcXbAHuV9ubM3mcFtnsRs9KlzaPRkypol93Ch8an60Do2x
-        ttgQ0xh863bm6ta0Z3qhmaj8Hq8Gx3d0CDiduyTB7EAfTNVlOMDWx9o2E76g/fqIbFbzE7
-        jCwgbenqj5EI6Fsvi5/1MiksMClco/I=
-Date:   Fri, 12 May 2023 18:51:03 +0200
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Yi-De Wu <yi-de.wu@mediatek.com>
-Cc:     Yingshiuan Pan <yingshiuan.pan@mediatek.com>,
-        Ze-Yu Wang <ze-yu.wang@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-arch@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        David Bradil <dbrazdil@google.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Jade Shih <jades.shih@mediatek.com>,
-        Miles Chen <miles.chen@mediatek.com>,
-        Ivan Tseng <ivan.tseng@mediatek.com>,
-        My Chuang <my.chuang@mediatek.com>,
-        Shawn Hsiao <shawn.hsiao@mediatek.com>,
-        PeiLun Suei <peilun.suei@mediatek.com>,
-        Liju Chen <liju-clr.chen@mediatek.com>
-Subject: Re: [PATCH v2 1/7] docs: geniezone: Introduce GenieZone hypervisor
-Message-ID: <ZF5ud9CedwBnWXBN@localhost>
-References: <20230428103622.18291-1-yi-de.wu@mediatek.com>
- <20230428103622.18291-2-yi-de.wu@mediatek.com>
+        Fri, 12 May 2023 12:51:56 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C9AF3C06
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 09:51:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683910314; x=1715446314;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ZSyuKKhgjP3if26/69yZAX/EwR/5beZlAyQ6qOl09tI=;
+  b=PH3pWrlvWmiRTennN+fWK35euPSRS2lOtDWGg4pM91lgtgVcClWwjVY7
+   o5dAPZYYtzpqX0oiRSa3ASvU/5EoAt8K7bEYIHy1XIYZM3oFRy/+7iyEs
+   pYbCsRu3mBfw0qCaVZNc5kISGwpLC/lnnLRELsP7MMH+NwfBvvwj2WjLg
+   baIn9XbnW3j2fB+Kt+mu8jqY2rJhIewMdKuYMSYDXe0CgJm4kfZOmcs0E
+   J4nzI0mW3GXSnUA0cw1WifnFttn+OJgG2OGiQBNfvDyRdqF9NW4UPfi8j
+   eXZcQ42NyAVUiWBVWnZn8yQNUJEHDsnKTnYJOOq8L/2smtPLSlsbEGkSe
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="437171215"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="437171215"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 09:51:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="700246820"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="700246820"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga002.jf.intel.com with ESMTP; 12 May 2023 09:51:51 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pxVzj-0004yi-0J;
+        Fri, 12 May 2023 16:51:51 +0000
+Date:   Sat, 13 May 2023 00:51:14 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Xia Fukun <xiafukun@huawei.com>, gregkh@linuxfoundation.org,
+        prajnoha@redhat.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, xiafukun@huawei.com
+Subject: Re: [PATCH v4] kobject: Fix global-out-of-bounds in
+ kobject_action_type()
+Message-ID: <202305130029.EtJLG9kz-lkp@intel.com>
+References: <20230512103029.183852-1-xiafukun@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230428103622.18291-2-yi-de.wu@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230512103029.183852-1-xiafukun@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi!
+Hi Xia,
 
-> GenieZone is MediaTek proprietary hypervisor solution, and it is running
-> in EL2 stand alone as a type-I hypervisor. It is a pure EL2
-> implementation which implies it does not rely any specific host VM, and
-> this behavior improves GenieZone's security as it limits its interface.
+kernel test robot noticed the following build errors:
 
-> +++ b/Documentation/virt/geniezone/introduction.rst
-> @@ -0,0 +1,34 @@
+[auto build test ERROR on driver-core/driver-core-testing]
+[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.4-rc1 next-20230512]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> +Platform Virtualization
-> +=======================
-> +We leverages arm64's timer virtualization and gic virtualization for timer and
-> +interrupts controller.
+url:    https://github.com/intel-lab-lkp/linux/commits/Xia-Fukun/kobject-Fix-global-out-of-bounds-in-kobject_action_type/20230512-183414
+base:   driver-core/driver-core-testing
+patch link:    https://lore.kernel.org/r/20230512103029.183852-1-xiafukun%40huawei.com
+patch subject: [PATCH v4] kobject: Fix global-out-of-bounds in kobject_action_type()
+config: hexagon-buildonly-randconfig-r004-20230510 (https://download.01.org/0day-ci/archive/20230513/202305130029.EtJLG9kz-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/4d1d5546395a3bf45324f25b5e77b90fe6cfe8df
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Xia-Fukun/kobject-Fix-global-out-of-bounds-in-kobject_action_type/20230512-183414
+        git checkout 4d1d5546395a3bf45324f25b5e77b90fe6cfe8df
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash
 
-'interrupt'.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305130029.EtJLG9kz-lkp@intel.com/
 
-> +Device Virtualizaton
-> +====================
-> +We adopts VMM's virtio devices emulations by passing io trap to
-> VMM, and virtio
+All errors (new ones prefixed by >>):
 
-'adopt', 'device emulation'
+   In file included from lib/kobject_uevent.c:23:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __raw_readb(PCI_IOBASE + addr);
+                             ~~~~~~~~~~ ^
+   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
+   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
+                                                     ^
+   In file included from lib/kobject_uevent.c:23:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
+                                                           ~~~~~~~~~~ ^
+   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
+   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
+                                                     ^
+   In file included from lib/kobject_uevent.c:23:
+   In file included from include/linux/skbuff.h:17:
+   In file included from include/linux/bvec.h:10:
+   In file included from include/linux/highmem.h:12:
+   In file included from include/linux/hardirq.h:11:
+   In file included from ./arch/hexagon/include/generated/asm/hardirq.h:1:
+   In file included from include/asm-generic/hardirq.h:17:
+   In file included from include/linux/irq.h:20:
+   In file included from include/linux/io.h:13:
+   In file included from arch/hexagon/include/asm/io.h:334:
+   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writeb(value, PCI_IOBASE + addr);
+                               ~~~~~~~~~~ ^
+   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
+           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
+                                                         ~~~~~~~~~~ ^
+>> lib/kobject_uevent.c:90:11: error: call to undeclared function 'kobject_action'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+           action = kobject_action(i);
+                    ^
+   lib/kobject_uevent.c:67:9: warning: variable 'count_first' set but not used [-Wunused-but-set-variable]
+           size_t count_first;
+                  ^
+   7 warnings and 1 error generated.
 
-> +is a well-known and widely used virtual device implementation.
-> +
 
-Plus, I'd expect documentation to be more detailed or have pointer
-where
-to learn more.
+vim +/kobject_action +90 lib/kobject_uevent.c
 
-BR,							Pavel
+    61	
+    62	static int kobject_action_type(const char *buf, size_t count,
+    63				       enum kobject_action *type,
+    64				       const char **args)
+    65	{
+    66		enum kobject_action action;
+    67		size_t count_first;
+    68		const char *args_start;
+    69		int i, ret = -EINVAL;
+    70	
+    71		if (count && (buf[count-1] == '\n' || buf[count-1] == '\0'))
+    72			count--;
+    73	
+    74		if (!count)
+    75			goto out;
+    76	
+    77		args_start = strnchr(buf, count, ' ');
+    78		if (args_start) {
+    79			count_first = args_start - buf;
+    80			args_start = args_start + 1;
+    81		} else
+    82			count_first = count;
+    83	
+    84		/* Use sysfs_match_string() to replace the fragile and convoluted loop */
+    85		i = sysfs_match_string(kobject_actions, buf);
+    86	
+    87		if (i < 0)
+    88			return ret;
+    89	
+  > 90		action = kobject_action(i);
+    91	
+    92		if (args)
+    93			*args = args_start;
+    94	
+    95		*type = action;
+    96		ret = 0;
+    97	
+    98	out:
+    99		return ret;
+   100	}
+   101	
 
 -- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
