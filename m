@@ -2,114 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD6CF700C6A
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 17:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DABF700C6C
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 17:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241640AbjELP6E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 11:58:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39334 "EHLO
+        id S241808AbjELP6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 11:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241557AbjELP6B (ORCPT
+        with ESMTP id S241557AbjELP6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 11:58:01 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE82B2703;
-        Fri, 12 May 2023 08:58:00 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id e9e14a558f8ab-335394455ecso45769035ab.1;
-        Fri, 12 May 2023 08:58:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683907080; x=1686499080;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=sHwPboqB1nqzl1kjx9zTJePYQXkxcLvuHwgoOC8pDRY=;
-        b=SSKVUnADLZfHx6pqdz6uabK6cdQhsDEBPggP1x1T69bgGGJ3hJtoP6qEg7vSWPKn24
-         mVKmWQjw4w1yEA+Axz5cDuk+647LW4X0Mb88WKaaoJhm7FPNA4yPysx9193NOLYCM2Ey
-         oyhya9k/kAsCKc612Ioj57qS/GzPqlAVqv6qvLfggLRCI6hTU7Ok+wlD/fHR0om4TuBL
-         mU1tsE08CaZmAaBWIWqg3VODl+RPnwSzORjpFQutZyMLrb10SNScxq1QVK0K7N27UXrg
-         HLZ+2otQ6urj0bi9UjwaweFUFuYKggvQzaPQQjkeWN5A4/ry8Mrh8E+bgzKzUT/89E0c
-         jMXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683907080; x=1686499080;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sHwPboqB1nqzl1kjx9zTJePYQXkxcLvuHwgoOC8pDRY=;
-        b=islguDPX9ZO6mk/bOX82+KfDYjSsfxSmx0t/at390prUV18SxbUInGutxzS/M46eMB
-         g6HyVxiiZxsKnBKRAmUJxwqqlLaTC/CYkhcGancTdHdesKnah99e2iZO4OIJkj15rEDb
-         ugqec6ZlNh6RpcDe2LXuhHzZzaPKQ+d6IA8d/I3q0+Qw8BiBRWz6rd/KA7HyFGAMzWaY
-         8jNx6cgbnT25nsPDk19aeKwRC/29xY8rVrcpP7JT3Hz8Twc5kL9WGt0rsI2x+izp1VSg
-         Bvq/vG4vOJQ03wdo1us/oFd5xMitJ1tphkZ+TENEARd1vqulul+eOCfsCFEujHWuKgjx
-         FvyA==
-X-Gm-Message-State: AC+VfDyn5t7POX7cdy/JxGpSZGHYjilb3sT9v32AmgyFbyW6Kw+T1E1I
-        hqPf6bDNjXcK/Xfp3Eoqs1o=
-X-Google-Smtp-Source: ACHHUZ6/OlNTy3CccjqM+V82eYYo4ZWPc1zfHCaAezC2DpM52VZ+IQFuoz8LHCWDRvJyhCHLxUTuZQ==
-X-Received: by 2002:a92:c682:0:b0:331:3fe3:d111 with SMTP id o2-20020a92c682000000b003313fe3d111mr17233361ilg.25.1683907079924;
-        Fri, 12 May 2023 08:57:59 -0700 (PDT)
-Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
-        by smtp.gmail.com with ESMTPSA id q7-20020a92c007000000b0032b54912651sm5033741ild.5.2023.05.12.08.57.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 08:57:59 -0700 (PDT)
-From:   Azeem Shaikh <azeemshaikh38@gmail.com>
-To:     Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>
-Cc:     linux-hardening@vger.kernel.org,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] NFS: Prefer strscpy over strlcpy calls
-Date:   Fri, 12 May 2023 15:57:49 +0000
-Message-ID: <20230512155749.1356958-1-azeemshaikh38@gmail.com>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+        Fri, 12 May 2023 11:58:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8522D26BF;
+        Fri, 12 May 2023 08:58:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12E5060B0D;
+        Fri, 12 May 2023 15:58:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42B23C433EF;
+        Fri, 12 May 2023 15:58:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683907083;
+        bh=FK7Hhby4JLOW4/fgG5Gk6nA2uWpoAGql5tWqRblv8eU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=BSWPjv/GAP3zWbwvgdAm8+zU+A+AkJD/D+SJgAUBW9grkDR/WHgbaBuoHijj4XXKr
+         Xpfeqh2ty0xgqjue9XZqKpSzFk9IdmUySOneoENbqmjn8Q7sSrcbaodvBq2NpHreyU
+         UXX7gAgMfLuq0QlySgCkiCcfDaEqM/+/pgTx7xYI/Bnrt16tjMJNV9VrP5bszB2LOh
+         SZVk1WKSduqoZByaPzr1KTkFukwHP1VzKwAQ63X6dfYZChqegjtCu7prw7qcQWCOax
+         /q+GIQfl/BtvYcXsU6XNC7S3oTFZv7MSuLtGlJAq98/nIJFhg5xaiBM6eX9vyiSmbY
+         ZlhohKSGtnjQQ==
+Date:   Fri, 12 May 2023 08:58:01 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        manivannan.sadhasivam@linaro.org,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [PATCH v2] soc: qcom: Rename ice to qcom_ice to avoid module
+ name conflict
+Message-ID: <20230512155801.GA610@quark.localdomain>
+References: <20230512123632.3024857-1-abel.vesa@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512123632.3024857-1-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-strlcpy() reads the entire source buffer first.
-This read may exceed the destination size limit.
-This is both inefficient and can lead to linear read
-overflows if a source string is not NUL-terminated [1].
-Check for strscpy()'s return value of -E2BIG on truncate for safe
-replacement with strlcpy().
+On Fri, May 12, 2023 at 03:36:32PM +0300, Abel Vesa wrote:
+> The following error was reported when building x86_64 allmodconfig:
+> 
+> error: the following would cause module name conflict:
+>   drivers/soc/qcom/ice.ko
+>   drivers/net/ethernet/intel/ice/ice.ko
+> 
+> Seems the 'ice' module name is already used by some Intel ethernet
+> driver, so lets rename the Qualcomm Inline Crypto Engine (ICE) from
+> 'ice' to 'qcom_ice' to avoid any kind of errors/confusions.
+> 
+> Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
+> Fixes: 2afbf43a4aec ("soc: qcom: Make the Qualcomm UFS/SDCC ICE a dedicated driver")
+> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
+> ---
+> 
+> Changes since v1:
+>  * changed filename from qcom-ice.c to qcom_ice.c (with underscore)
+>    to be in line with other Qcom SoC drivers.
+> 
+>  drivers/soc/qcom/Makefile              | 2 +-
+>  drivers/soc/qcom/{ice.c => qcom_ice.c} | 0
+>  2 files changed, 1 insertion(+), 1 deletion(-)
+>  rename drivers/soc/qcom/{ice.c => qcom_ice.c} (100%)
 
-This is part of a tree-wide cleanup to remove the strlcpy() function
-entirely from the kernel [2].
+I'd also prefer that the filename stayed ice.c and just the module was renamed,
+given that this is already in the drivers/soc/qcom/ directory.
 
-[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
-[2] https://github.com/KSPP/linux/issues/89
-
-Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
----
-Note to reviewers: the one case where this patch would modify existing behavior
-is when strlen(src)==destlen==0. Current behavior returns 0, with this patch it
-would return -1.
-
-Not sure what the implication of this updated behavior would be,
-so bringing it to your attention.
-
- fs/nfs/nfsroot.c |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/fs/nfs/nfsroot.c b/fs/nfs/nfsroot.c
-index 620329b7e6ae..7600100ba26f 100644
---- a/fs/nfs/nfsroot.c
-+++ b/fs/nfs/nfsroot.c
-@@ -164,7 +164,7 @@ __setup("nfsroot=", nfs_root_setup);
- static int __init root_nfs_copy(char *dest, const char *src,
- 				     const size_t destlen)
- {
--	if (strlcpy(dest, src, destlen) > destlen)
-+	if (strscpy(dest, src, destlen) == -E2BIG)
- 		return -1;
- 	return 0;
- }
--- 
-2.40.1.606.ga4b1b128d6-goog
-
-
+- Eric
