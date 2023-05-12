@@ -2,115 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9680F700864
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 14:49:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A54DD700867
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 14:49:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240854AbjELMtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 08:49:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48220 "EHLO
+        id S240907AbjELMt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 08:49:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229630AbjELMtQ (ORCPT
+        with ESMTP id S240881AbjELMtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 08:49:16 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 879FB198E
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 05:49:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=hGgFm+JrBl0d+9jKBbLJqj0nl+O+HgOWypxGVAGqUgI=; b=Jmb5bPsXieu8Vc7IIGoifS826t
-        vvpUV4BwcIuzLvi/Eh0jahngUFSeAltY7W5lzzySCj1nDDNsnJPBEEfrmuW4ErW4HZiKBZqNbRfEw
-        zZOsCw2Kwpxg0+VsjpLeActVLuPBUC/VjW/lJ6ByDn5ZkHIhbIN/TjQfFvEssQND9xmCasihA0CCJ
-        2mMtPSmpnwegbZepanv87QnfcyfX7Inmtm/AuJfBUZp36XV/mYaVi1XGidv6pKzr4QnCbtCee0afV
-        jnLKnoJfrPU+a4fdrMQHcmsqX6hvkBf3AbjqYD9gLaXdUNDv/V8LhJsEjbeZcLak1TcO91LCzUufq
-        Y3TMtxAw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pxSCu-00995I-0G;
-        Fri, 12 May 2023 12:49:12 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B29A3300451;
-        Fri, 12 May 2023 14:49:11 +0200 (CEST)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 9A8A12C8D25C7; Fri, 12 May 2023 14:49:11 +0200 (CEST)
-Date:   Fri, 12 May 2023 14:49:11 +0200
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Borislav Petkov <bp@alien8.de>
-Cc:     X86 ML <x86@kernel.org>, LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] x86/alternative: Optimize returns patching
-Message-ID: <20230512124911.GZ4253@hirez.programming.kicks-ass.net>
-References: <20230512120952.7924-1-bp@alien8.de>
+        Fri, 12 May 2023 08:49:24 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D96314356;
+        Fri, 12 May 2023 05:49:23 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1aaf706768cso76155825ad.0;
+        Fri, 12 May 2023 05:49:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683895762; x=1686487762;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=T4Bwu1/m+mf+/AYH3YMI2am9lWYECxCgwTG6fxXqnDM=;
+        b=Mu6B2Vvx/likXVwX5YSuCzcOyDhO3nyIbg5DJAFv4Fh6jqbdmg/ukbC0//k395sBq/
+         zVK+X/GG2r5Zm6ZyZ2JxbaCx/rUZaCr7KVsSsrT6KC5jSfYNuZuxfCHeG35Vhvc4Do2e
+         HPsmgPNlHgGU+b1IHVepxDytxTHrhHw+ik87sxTJtVk4E0v08GlUHENGtbK6TvDnAiTr
+         yLbe6CXu1c0z8pJq0TrNYPohEzWnU0+YTl8XG8FOsVsM2KV7G+Ooyrj1KM+ReEmsVoDZ
+         p2y7O1CDheFOJkuoQN8OZPPJmSCJdpdz5Hy07XkF0K0C7bCoeMpZXxj/4VryZjvx3ol4
+         rNKQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683895762; x=1686487762;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=T4Bwu1/m+mf+/AYH3YMI2am9lWYECxCgwTG6fxXqnDM=;
+        b=jrebNVBvJUJ8glTQVvj+qYjulSsbvwIeTKmcbxKqm56pI/p0Bw2YxBxMnK67JMnJON
+         mQL/caPTVjuj0w2ycspOyaQmzuKGgjJpLdkj5LxHUdqEqyzAgmODEc/xazjfebl7tmnN
+         mChEg8jbv7pOW1hPmE0vZq23RQZ1/VTxQu2BPfrBf7IURCxv4GgcFfJdZ0Jo5yulbo35
+         iASerfvk0Zx8rrOgLwrxwZVXPDGZHj9YaZYDHJoLPgoTbc1V0dJIEJtTfrFMWOCKWT/O
+         MUrbGtD9Xkl4NCym1MkFXLUaaXQBg+kWdaJO3Pr5uRiqRC6r+UsWInXV6s9kpaEnJ+ag
+         jfOQ==
+X-Gm-Message-State: AC+VfDzu1Otey0wcGWRnpl7Ne30+yHcrvrsM9ZfhmX4jF8jTzfw7xMlw
+        Lo+k30uolUt+nL8LJu6y29k=
+X-Google-Smtp-Source: ACHHUZ4QC7nOkGyG6InsWHZK7DO6lQ0Qk5Iwug1SSjWnugCY3MVofbA1+NsVDZnCTOxusMijiERaQg==
+X-Received: by 2002:a17:902:d34b:b0:1a6:386f:39a3 with SMTP id l11-20020a170902d34b00b001a6386f39a3mr26966779plk.31.1683895762478;
+        Fri, 12 May 2023 05:49:22 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id n13-20020a170903110d00b001ac741db80csm7882876plh.88.2023.05.12.05.49.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 05:49:22 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 12 May 2023 05:49:20 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
+        Linux DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Staging Drivers <linux-staging@lists.linux.dev>,
+        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
+        Linux Kernel Actions <linux-actions@lists.infradead.org>,
+        Diederik de Haas <didi.debian@cknow.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Philippe Ombredanne <pombredanne@nexb.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Airlie <airlied@redhat.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Jan Kara <jack@suse.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Ray Lehtiniemi <rayl@mail.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Andrey Panin <pazke@donpac.ru>, Oleg Drokin <green@crimea.edu>,
+        Marc Zyngier <maz@kernel.org>,
+        Jonas Jensen <jonas.jensen@gmail.com>,
+        Sylver Bruneau <sylver.bruneau@googlemail.com>,
+        Andrew Sharp <andy.sharp@lsi.com>,
+        Denis Turischev <denis@compulab.co.il>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Alan Cox <alan@linux.intel.com>,
+        Simon Horman <simon.horman@corigine.com>
+Subject: Re: [PATCH v2 08/10] drivers: watchdog: Replace GPL license notice
+ with SPDX identifier
+Message-ID: <08b5be32-0da5-4614-9c3c-b3a821492397@roeck-us.net>
+References: <20230512100620.36807-1-bagasdotme@gmail.com>
+ <20230512100620.36807-9-bagasdotme@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230512120952.7924-1-bp@alien8.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230512100620.36807-9-bagasdotme@gmail.com>
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 02:09:52PM +0200, Borislav Petkov wrote:
-> From: "Borislav Petkov (AMD)" <bp@alien8.de>
+On Fri, May 12, 2023 at 05:06:19PM +0700, Bagas Sanjaya wrote:
+> Many watchdog drivers's source files has already SPDX license
+> identifier, while some remaining doesn't.
 > 
-> Instead of decoding each instruction in the return sites range only to
-> realize that that return site is a jump to the default return thunk
-> which is needed - X86_FEATURE_RETHUNK is enabled - lift that check
-> before the loop and get rid of that loop overhead.
+> Convert notices on remaining files to SPDX identifier. While at it,
+> also move SPDX identifier for drivers/watchdog/rtd119x_wdt.c to the
+> top of file (as in other files).
 > 
-> Add comments about what gets patched, while at it.
-> 
-> Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
-
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-
+> Cc: Ray Lehtiniemi <rayl@mail.com>
+> Cc: Alessandro Zummo <a.zummo@towertech.it>
+> Cc: Andrey Panin <pazke@donpac.ru>
+> Cc: Oleg Drokin <green@crimea.edu>
+> Cc: Marc Zyngier <maz@kernel.org>
+> Cc: Jonas Jensen <jonas.jensen@gmail.com>
+> Cc: Sylver Bruneau <sylver.bruneau@googlemail.com>
+> Cc: Andrew Sharp <andy.sharp@lsi.com>
+> Cc: Denis Turischev <denis@compulab.co.il>
+> Cc: Mika Westerberg <mika.westerberg@linux.intel.com>
+> Cc: Alan Cox <alan@linux.intel.com>
+> Reviewed-by: Simon Horman <simon.horman@corigine.com>
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 > ---
->  arch/x86/kernel/alternative.c | 13 ++++++++++---
->  1 file changed, 10 insertions(+), 3 deletions(-)
+>  drivers/watchdog/ep93xx_wdt.c     | 5 +----
+>  drivers/watchdog/ibmasr.c         | 3 +--
+>  drivers/watchdog/m54xx_wdt.c      | 4 +---
+>  drivers/watchdog/max63xx_wdt.c    | 5 +----
+>  drivers/watchdog/moxart_wdt.c     | 4 +---
+>  drivers/watchdog/octeon-wdt-nmi.S | 5 +----
+>  drivers/watchdog/orion_wdt.c      | 4 +---
+>  drivers/watchdog/rtd119x_wdt.c    | 2 +-
+>  drivers/watchdog/sb_wdog.c        | 5 +----
+>  drivers/watchdog/sbc_fitpc2_wdt.c | 4 +---
+>  drivers/watchdog/ts4800_wdt.c     | 4 +---
+>  drivers/watchdog/ts72xx_wdt.c     | 4 +---
+>  12 files changed, 12 insertions(+), 37 deletions(-)
 > 
-> diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
-> index b78d55f0dfad..3bb0a5f61e8c 100644
-> --- a/arch/x86/kernel/alternative.c
-> +++ b/arch/x86/kernel/alternative.c
-> @@ -693,13 +693,12 @@ static int patch_return(void *addr, struct insn *insn, u8 *bytes)
->  {
->  	int i = 0;
->  
-> +	/* Patch the custom return thunks... */
->  	if (cpu_feature_enabled(X86_FEATURE_RETHUNK)) {
-> -		if (x86_return_thunk == __x86_return_thunk)
-> -			return -1;
-> -
->  		i = JMP32_INSN_SIZE;
->  		__text_gen_insn(bytes, JMP32_INSN_OPCODE, addr, x86_return_thunk, i);
->  	} else {
-> +		/* ... or patch them out if not needed. */
->  		bytes[i++] = RET_INSN_OPCODE;
->  	}
->  
-> @@ -712,6 +711,14 @@ void __init_or_module noinline apply_returns(s32 *start, s32 *end)
->  {
->  	s32 *s;
->  
-> +	/*
-> +	 * Do not patch out the default return thunks if those needed are the
-> +	 * ones generated by the compiler.
-> +	 */
-> +	if (cpu_feature_enabled(X86_FEATURE_RETHUNK) &&
-> +	    (x86_return_thunk == __x86_return_thunk))
-> +		return;
-> +
->  	for (s = start; s < end; s++) {
->  		void *dest = NULL, *addr = (void *)s + *s;
->  		struct insn insn;
-> -- 
-> 2.35.1
-> 
+[ ... ]
+
+> diff --git a/drivers/watchdog/sb_wdog.c b/drivers/watchdog/sb_wdog.c
+> index 504be461f992a9..822bf8905bf3ce 100644
+> --- a/drivers/watchdog/sb_wdog.c
+> +++ b/drivers/watchdog/sb_wdog.c
+> @@ -1,3 +1,4 @@
+> +// SPDX-License-Identifier: GPL-1.0+
+
+This would include GPL 3, but the text below explicitly excludes that.
+No idea how to handle that.
+
+Guenter
+
+>  /*
+>   * Watchdog driver for SiByte SB1 SoCs
+>   *
+> @@ -38,10 +39,6 @@
+>   *	(c) Copyright 1996 Alan Cox <alan@lxorguk.ukuu.org.uk>,
+>   *						All Rights Reserved.
+>   *
+> - *	This program is free software; you can redistribute it and/or
+> - *	modify it under the terms of the GNU General Public License
+> - *	version 1 or 2 as published by the Free Software Foundation.
+> - *
+>   */
