@@ -2,72 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82438701267
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 01:23:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6097170126A
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 01:24:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232010AbjELXXe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 19:23:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38032 "EHLO
+        id S240655AbjELXYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 19:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240275AbjELXXc (ORCPT
+        with ESMTP id S238913AbjELXYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 19:23:32 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D892273D
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:23:31 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id d2e1a72fcca58-643465067d1so7876553b3a.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:23:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683933811; x=1686525811;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=W8ljHnrY6VdN7PYdreXu26+ii27Kp3emVsixsuksMV4=;
-        b=1AcbTCG9to2+VB/AW4VUY/jUl5B6kV/vGeEKSZuYfBfpFOKACrD2ld1bfbB5ibzUXe
-         XRiY4Dq0oV4bQM86oSZLHKmZ+J5j67QbDFzyLEaLY86co4PhiypJYjSZIgMeyAqtQ+WD
-         Rz8zkt0aYmeGCC87auXIgg6O4KZoTAb1yuZpusUiHxQiZCWAnCo+QoOyxbwjYVf8lfbi
-         PABPYcsFinm6Z56fiHkxxxP6zrb7NoiXdDEAET086BE4T9F9tSEYNkjYnPu9dccMF/Wc
-         LAu1ckS75VjcWmgbC+sAAa9KIrsU0+bMH8RkGJ24AOl/mB+cgDtBT7799Z7cm7ntuH1p
-         8Igw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683933811; x=1686525811;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W8ljHnrY6VdN7PYdreXu26+ii27Kp3emVsixsuksMV4=;
-        b=CNQ/SLD1K7HePdYy4PYM1HYE6hhOlBiBU1ms9NWWe9K8yyO1edG2hKHRveSEra3zv0
-         viDRBc+z5kMUYUJ7Ym78y9PIWOUOZxs6JCHAFaprIIohjAholEr7Qp/AhOVQmjSwKCJM
-         o2Cl+etxGeisteqVVTlG36VW4raxGGR048c9KH929ZPBQhZhQ9VQGaX4Fh13On00MT6z
-         MURcEgbCGsrjWRsnXm+bgIAdPoiOMyXxFwX93sMzSpbR4ZrsckXbWgbomgmrODm8itCX
-         yNygeYNxAsJn62ToDpqRTXy6hM9k+uN6FJHO+WMhGnSCy62mCBVEEOc9OUz+WBYxuYy7
-         zp2w==
-X-Gm-Message-State: AC+VfDwbUJ+LobYvRRZkFwwUqY+sP0Q/PTVB4qy772DzH1HLU4CGW0Yj
-        kWs+rdwonSsrZvizWdTO1JZhKg==
-X-Google-Smtp-Source: ACHHUZ5e81OK9etD7uBNfIwbII9YSC8SBz0Ovo0Hxd6lnAZfH0vM51CSW9NnPZw5kvcWLKpim+Kr6g==
-X-Received: by 2002:a05:6a20:8e19:b0:f3:67da:9db5 with SMTP id y25-20020a056a208e1900b000f367da9db5mr30909564pzj.38.1683933810925;
-        Fri, 12 May 2023 16:23:30 -0700 (PDT)
-Received: from google.com (223.103.125.34.bc.googleusercontent.com. [34.125.103.223])
-        by smtp.gmail.com with ESMTPSA id c25-20020a62e819000000b0063f172b1c47sm1353990pfi.35.2023.05.12.16.23.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 16:23:30 -0700 (PDT)
-Date:   Fri, 12 May 2023 16:23:26 -0700
-From:   David Matlack <dmatlack@google.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Mingwei Zhang <mizhang@google.com>,
-        Jim Mattson <jmattson@google.com>
-Subject: Re: [PATCH 4/9] KVM: x86/mmu: Rename MMU_WARN_ON() to
- KVM_MMU_WARN_ON()
-Message-ID: <ZF7KbsCXBQHnOv7g@google.com>
-References: <20230511235917.639770-1-seanjc@google.com>
- <20230511235917.639770-5-seanjc@google.com>
+        Fri, 12 May 2023 19:24:05 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABD66273D;
+        Fri, 12 May 2023 16:24:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683933844; x=1715469844;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=EmdFu5NhBMF5IU2oYyEi+Wp7+UrFNaOcC8wu11S8aHI=;
+  b=Lhv0E0kWSO0EeA2y9O4DiY4eLqx9EstHinWOZ7+EvCtGpQQDQMnXdHsV
+   tHj1dbmf0IkG2qnKlRjsCtpatWsBuZ3HY4wpKKWW2onOpMayBRwQUVGd6
+   i3yjNSjBT03hMS0tCw/6kal86YouBn7ZmcuHBmvSNoyRqzLd3/TAgpenK
+   pv0Jzhdh5xZDsojqHwUG9ABP5KNVuV1lSLSSjv5ul/qYjVhHWh3rQ16IK
+   mLh1APj6oiRLuL+iZbcravKF8ZsL5QcwZvLTboUDLRAUc9g6ez2CF2BWY
+   6He7zduc8/8GqF9ZG0dIzdFw93pZa9dWwXAXvh1oNZctqUe1F4X1ajoq5
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="349743956"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="349743956"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 16:24:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="789987471"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="789987471"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 12 May 2023 16:23:59 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pxc7C-0005Aa-1i;
+        Fri, 12 May 2023 23:23:58 +0000
+Date:   Sat, 13 May 2023 07:23:43 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Dmitry Safonov <dima@arista.com>, linux-kernel@vger.kernel.org,
+        David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        netdev@vger.kernel.org, Dmitry Safonov <dima@arista.com>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Bob Gilligan <gilligan@arista.com>,
+        Dan Carpenter <error27@gmail.com>,
+        David Laight <David.Laight@aculab.com>,
+        Eric Biggers <ebiggers@kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        Francesco Ruggeri <fruggeri05@gmail.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Ivan Delalande <colona@arista.com>,
+        Leonard Crestez <cdleonard@gmail.com>,
+        Salam Noureddine <noureddine@arista.com>
+Subject: Re: [PATCH v6 01/21] net/tcp: Prepare tcp_md5sig_pool for TCP-AO
+Message-ID: <202305130722.D7icLQEP-lkp@intel.com>
+References: <20230512202311.2845526-2-dima@arista.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230511235917.639770-5-seanjc@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+In-Reply-To: <20230512202311.2845526-2-dima@arista.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,27 +83,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 04:59:12PM -0700, Sean Christopherson wrote:
-> Rename MMU_WARN_ON() to make it super obvious that the assertions are
-> all about KVM's MMU, not the primary MMU.
+Hi Dmitry,
 
-I think adding KVM is a step in the right direction but I have 2
-remaining problems with KVM_MMU_WARN_ON():
+kernel test robot noticed the following build warnings:
 
- - Reminds me of VM_WARN_ON(), which toggles between WARN_ON() and
-   BUG_ON(), whereas KVM_MMU_WARN_ON() toggles between no-op and
-   WARN_ON().
+[auto build test WARNING on 47a2ee5d4a0bda05decdda7be0a77e792cdb09a3]
 
- - It's not obvious from the name that it's a no-op most of the time.
+url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Safonov/net-tcp-Prepare-tcp_md5sig_pool-for-TCP-AO/20230513-042734
+base:   47a2ee5d4a0bda05decdda7be0a77e792cdb09a3
+patch link:    https://lore.kernel.org/r/20230512202311.2845526-2-dima%40arista.com
+patch subject: [PATCH v6 01/21] net/tcp: Prepare tcp_md5sig_pool for TCP-AO
+config: x86_64-randconfig-a005 (https://download.01.org/0day-ci/archive/20230513/202305130722.D7icLQEP-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/20045e7dda43aca6500ad05a899dcf5c59e9f63a
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Dmitry-Safonov/net-tcp-Prepare-tcp_md5sig_pool-for-TCP-AO/20230513-042734
+        git checkout 20045e7dda43aca6500ad05a899dcf5c59e9f63a
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash net/ipv4/
 
-Naming is hard so I might just make things worse by trying but...
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305130722.D7icLQEP-lkp@intel.com/
 
-How about KVM_MMU_PROVE(condition). That directly pairs it with the new
-CONFIG_KVM_PROVE_MMU(), makes it sufficiently different from
-VM_WARN_ON() and WARN_ON() that readers will not make assumptions about
-what's happening under the hood. Also "PROVE" sounds like a high bar
-which conveys this might not always be enabled.
+All warnings (new ones prefixed by >>):
 
-That also will allow us to convert this to a WARN_ON_ONCE() (my
-suggestion on the other patch) without having to make the name any
-longer.
+>> net/ipv4/tcp_sigpool.c:161:9: warning: variable 'ret' is uninitialized when used here [-Wuninitialized]
+           return ret;
+                  ^~~
+   net/ipv4/tcp_sigpool.c:110:14: note: initialize the variable 'ret' to silence this warning
+           int cpu, ret;
+                       ^
+                        = 0
+   1 warning generated.
+
+
+vim +/ret +161 net/ipv4/tcp_sigpool.c
+
+   105	
+   106	static int __cpool_alloc_pcp(struct sigpool_entry *e, const char *alg,
+   107				     struct crypto_ahash *cpu0_hash)
+   108	{
+   109		struct crypto_ahash *hash;
+   110		int cpu, ret;
+   111	
+   112		e->spr.pcp_req = alloc_percpu(struct ahash_request *);
+   113		if (!e->spr.pcp_req)
+   114			return -ENOMEM;
+   115	
+   116		hash = cpu0_hash;
+   117		for_each_possible_cpu(cpu) {
+   118			struct ahash_request *req;
+   119	
+   120			/* If ahash has a key - it has to be allocated per-CPU.
+   121			 * In such case re-use for CPU0 hash that just have been
+   122			 * allocated above.
+   123			 */
+   124			if (!hash)
+   125				hash = crypto_alloc_ahash(alg, 0, CRYPTO_ALG_ASYNC);
+   126			if (IS_ERR(hash))
+   127				goto out_free_per_cpu;
+   128	
+   129			req = ahash_request_alloc(hash, GFP_KERNEL);
+   130			if (!req)
+   131				goto out_free_hash;
+   132	
+   133			ahash_request_set_callback(req, 0, NULL, NULL);
+   134	
+   135			*per_cpu_ptr(e->spr.pcp_req, cpu) = req;
+   136	
+   137			if (e->needs_key)
+   138				hash = NULL;
+   139		}
+   140		return 0;
+   141	
+   142	out_free_hash:
+   143		if (hash != cpu0_hash)
+   144			crypto_free_ahash(hash);
+   145	
+   146	out_free_per_cpu:
+   147		for_each_possible_cpu(cpu) {
+   148			struct ahash_request *req = *per_cpu_ptr(e->spr.pcp_req, cpu);
+   149			struct crypto_ahash *pcpu_hash;
+   150	
+   151			if (!req)
+   152				break;
+   153			pcpu_hash = crypto_ahash_reqtfm(req);
+   154			ahash_request_free(req);
+   155			/* hash per-CPU, e->needs_key == true */
+   156			if (pcpu_hash != cpu0_hash)
+   157				crypto_free_ahash(pcpu_hash);
+   158		}
+   159	
+   160		free_percpu(e->spr.pcp_req);
+ > 161		return ret;
+   162	}
+   163	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
