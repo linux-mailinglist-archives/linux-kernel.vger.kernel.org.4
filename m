@@ -2,77 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0F14700840
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 14:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C936A700851
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 14:45:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240231AbjELMmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 08:42:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43082 "EHLO
+        id S240424AbjELMpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 08:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240382AbjELMmL (ORCPT
+        with ESMTP id S240332AbjELMpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 08:42:11 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A57E171F
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 05:42:10 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1aad5245571so68729065ad.1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 05:42:10 -0700 (PDT)
+        Fri, 12 May 2023 08:45:18 -0400
+Received: from mail-vk1-xa2c.google.com (mail-vk1-xa2c.google.com [IPv6:2607:f8b0:4864:20::a2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A68C1701
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 05:45:17 -0700 (PDT)
+Received: by mail-vk1-xa2c.google.com with SMTP id 71dfb90a1353d-44fd6524c36so3076316e0c.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 05:45:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683895330; x=1686487330;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Qu/58O+9pf0u9+V9v8oS+vJYZNsaPk6xzd+mj1JOqFQ=;
-        b=drUCX9L1rNzpL99T066bzQ1ykR+zm9d4HaTIie5pcv/T2mw5Ob9YeHWALcaqvyJipm
-         YbYg6nOkOr/TKqy9VdNSVeef0wxc7wz6MZqksJJJS1lHnM+TT3uqokc1v1lJo1qZRl1w
-         M00+XxB9j8d3UdiHW/qg0glG01JlDsNSyYTj4baj+RVgYXG6kbaoOIPq83DQjHqPJkv3
-         D26OZlxwl2Etzse2yz9sn+CBOhgz+iG4c/poStueJ0wddzXn9zB5fFRCgFe9S8+TmX7H
-         h+/AVI2MHgQVyfbzdbyWyIGDJKbcScJpCaD/MAqgqNggRxARF5+Z8eGd84vfB/0DoikW
-         6Oyg==
+        d=linaro.org; s=google; t=1683895515; x=1686487515;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=uEVJBPg36YfGHVd65N+50ADOheZJS8325x8ke0EcSFQ=;
+        b=Rka/vwNDjAZcFmepxUZJEm2gmaUqid2ccxZkzhXApRIz/DUJIIT2tZIjUKCmneYsBo
+         vpvy3zv+ePa6yqzHD9w1HMAHt8Pj5FFZXtSgpGGjxI0ZY851O4MYXiWkZcpxmX6wqQXz
+         mYc1rYbIaYzj+qOnjbg6qeoMnJ3jz34768wwTF9gxu8gC4Vc+aM9DWlKzFf9XEEuLqCi
+         KPMbQmsz80S7hjLneO0zM6EzfLRmS0zV+ex/XltsvZyNWDEY9+iNN8K1OUs7EGrixaOE
+         vSPoE4NpQbJ/fvSzPlEuCVbciRMj2l6CpjTp/FM9VOL7EgwvOgFjypH2lAvA2jVa456I
+         WA2w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683895330; x=1686487330;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qu/58O+9pf0u9+V9v8oS+vJYZNsaPk6xzd+mj1JOqFQ=;
-        b=LHY2x5HCNn0gR5pQ1j8cqnk8E1r/ncTTOFYUaeeebJKrQ62pWamPxpr7T73c4J5yRE
-         jbV5BPxHkc/H5OZJcUCthpJ/HWHaBl0f7hpZSPw4pLBN7KiZp3NO0UuUEKOS/e4lwNm9
-         69AkwmSpg1ziONq6KROF1UT9bu1dbywNS7Nfbn/haP0Q4G9hR80rfIrEO6rHW5RH//Nx
-         Zn4+iB/pPNImD2rNmgJKzaPoRG8Tfd41OrPUz6ysWHfA6gql74yq7lGb6ftxuQ/0B457
-         OAPExOMSstX6UDiM2T3ji1u3R0+ssDN7QfRZx5B4M2ESwfKzWFsuHqDnmpu4Nk3x0kro
-         R6bw==
-X-Gm-Message-State: AC+VfDwPSsG7lgWwxXDZEpXkm5c93bvS2MbLJnMhcnoRKL39vM6YFzOV
-        Phu7IkVtBQS9JFApUD//kjoi
-X-Google-Smtp-Source: ACHHUZ7QsZqjOg1/Tz1AHBUSyhMYiIoxZXlvNXvnn6SZwWdImt8AJZ6Qwj6TxHJeOv6Sv04r4SlEZQ==
-X-Received: by 2002:a17:902:f547:b0:1ab:bfb:4b6e with SMTP id h7-20020a170902f54700b001ab0bfb4b6emr33563395plf.31.1683895329810;
-        Fri, 12 May 2023 05:42:09 -0700 (PDT)
-Received: from thinkpad ([117.202.185.214])
-        by smtp.gmail.com with ESMTPSA id f10-20020a17090274ca00b001ab28f620d0sm7826980plt.290.2023.05.12.05.42.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 05:42:09 -0700 (PDT)
-Date:   Fri, 12 May 2023 18:12:03 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH] soc: qcom: Rename ice to qcom-ice to avoid module name
- conflict
-Message-ID: <20230512124203.GA13620@thinkpad>
-References: <20230510074404.3520340-1-abel.vesa@linaro.org>
- <20230510082555.GA7268@thinkpad>
- <ZF4otoqwH4sNwF6o@linaro.org>
+        d=1e100.net; s=20221208; t=1683895515; x=1686487515;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uEVJBPg36YfGHVd65N+50ADOheZJS8325x8ke0EcSFQ=;
+        b=L1RgWCvnug/I7AS3tCbvwkUnjQn1SsXIV03AJvrnWARBzzm4q+gF8D1WBgLb8F3sFQ
+         MXte428ey1TUANWAMi6qzasyStTDNSR6nEflfAFs5TpfSFeqeNVV0tY8vNxS1W0M6rPI
+         MUlwx+Hoqzo2mXH4vlv0ZN652Qqu0t75+Vcn0em+F+tHde+xJhetMuC7G6FEKeKKvttm
+         8EatE5emkHkkxRm8tnBlUOWIbhFQNVkxbI/UNnW/WYz/12+LfN1mvgbMa4yF0HPoKvXM
+         G0m2vExvpcVrLOtFveqBdCvjIM1fwl7sFHYaEVpzz/veyng9GGeQO9tz+WcQYKbO0oWm
+         pzIw==
+X-Gm-Message-State: AC+VfDympRZgh7N16mO+VfErPYijjzWd9IdGn5nggnZCj3EPuINJbdMr
+        9EH2X1Y5Nn5jlQAQry1rTmOsFInB7BkR1TZc+S6Yd2YnWjwyjInVsRGFTw==
+X-Google-Smtp-Source: ACHHUZ48d5rla9GpWmzSqilWl0jFbiS/LtGjBUbEtNtWXGw4wydsM7nFsR/GMHNx6lWAOHKxapP4uJeNku137M7/SO0=
+X-Received: by 2002:a1f:c583:0:b0:436:597e:2c85 with SMTP id
+ v125-20020a1fc583000000b00436597e2c85mr363322vkf.2.1683895515382; Fri, 12 May
+ 2023 05:45:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZF4otoqwH4sNwF6o@linaro.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Fri, 12 May 2023 18:15:04 +0530
+Message-ID: <CA+G9fYvVcMLqif7f3yayN_WZduZrf_86xc2ruVDDR7yphLC=wQ@mail.gmail.com>
+Subject: next: WARNING: CPU: 0 PID: 1200 at mm/page_alloc.c:4744 __alloc_pages+0x2e8/0x3a0
+To:     open list <linux-kernel@vger.kernel.org>,
+        linux-mm <linux-mm@kvack.org>,
+        kasan-dev <kasan-dev@googlegroups.com>,
+        kunit-dev@googlegroups.com, lkft-triage@lists.linaro.org
+Cc:     Marco Elver <elver@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Andrey Ryabinin <aryabinin@virtuozzo.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
@@ -83,78 +70,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 02:53:26PM +0300, Abel Vesa wrote:
-> On 23-05-10 13:55:55, Manivannan Sadhasivam wrote:
-> > On Wed, May 10, 2023 at 10:44:04AM +0300, Abel Vesa wrote:
-> > > The following error was reported when building x86_64 allmodconfig:
-> > > 
-> > > error: the following would cause module name conflict:
-> > >   drivers/soc/qcom/ice.ko
-> > >   drivers/net/ethernet/intel/ice/ice.ko
-> > > 
-> > > Seems the 'ice' module name is already used by some Intel ethernet
-> > > driver, so lets rename the Qualcomm Inline Crypto Engine (ICE) from
-> > > 'ice' to 'qcom-ice' to avoid any kind of errors/confusions.
-> > > 
-> > > Reported-by: Stephen Rothwell <sfr@canb.auug.org.au>
-> > > Fixes: 2afbf43a4aec ("soc: qcom: Make the Qualcomm UFS/SDCC ICE a dedicated driver")
-> > > Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> > > ---
-> > > 
-> > > The build failure was reported here:
-> > > https://lore.kernel.org/all/20230510111833.17810885@canb.auug.org.au/
-> > > 
-> > >  drivers/soc/qcom/Makefile              | 2 +-
-> > >  drivers/soc/qcom/{ice.c => qcom-ice.c} | 0
-> > >  2 files changed, 1 insertion(+), 1 deletion(-)
-> > >  rename drivers/soc/qcom/{ice.c => qcom-ice.c} (100%)
-> > > 
-> > 
-> > You can just rename the module name to "qcom-ice" and still keep the driver name
-> > as "ice" as it is already under "qcom" subdirectory.
-> > 
-> > We do it for other drivers as well.
-> 
-> Yes, but in this case, it is not worth keeping the file name as is.
-> 
+Following kernel warning has been noticed on qemu-arm64 while running kunit
+tests while booting Linux 6.4.0-rc1-next-20230512 and It was started from
+6.3.0-rc7-next-20230420.
 
-Since you already have "qcom" as the parent directory name, I don't know how
-adding "qcom" prefix for the drivers in child directory helps. It is required
-for the module name but not for the driver name.
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-If you look at current qcom soc drivers, then most of them are without prefix
-but _some_ are with prefix. And the later ones doesn't make sense to me,
+This is always reproducible on qemu-arm64, qemu-arm, qemu-x86 and qemu-i386.
+Is this expected warning as a part of kunit tests ?
 
-But I'll leave it to Bjorn to take the call.
+Crash log:
+-----------
 
-- Mani
+[  663.530868]     KTAP version 1
+[  663.531545]     # Subtest: Handshake API tests
+[  663.533521]     1..11
+[  663.534424]         KTAP version 1
+[  663.535406]         # Subtest: req_alloc API fuzzing
+[  663.542460]         ok 1 handshake_req_alloc NULL proto
+[  663.550345]         ok 2 handshake_req_alloc CLASS_NONE
+[  663.558041]         ok 3 handshake_req_alloc CLASS_MAX
+[  663.565790]         ok 4 handshake_req_alloc no callbacks
+[  663.573882]         ok 5 handshake_req_alloc no done callback
+[  663.580284] ------------[ cut here ]------------
+[  663.582129] WARNING: CPU: 0 PID: 1200 at mm/page_alloc.c:4744
+__alloc_pages+0x2e8/0x3a0
+[  663.585675] Modules linked in:
+[  663.587808] CPU: 0 PID: 1200 Comm: kunit_try_catch Tainted: G
+          N 6.4.0-rc1-next-20230512 #1
+[  663.589817] Hardware name: linux,dummy-virt (DT)
+[  663.591426] pstate: 22400005 (nzCv daif +PAN -UAO +TCO -DIT -SSBS BTYPE=--)
+[  663.592978] pc : __alloc_pages+0x2e8/0x3a0
+[  663.594236] lr : __kmalloc_large_node+0xbc/0x160
+[  663.595548] sp : ffff80000a317bc0
+[  663.596577] x29: ffff80000a317bc0 x28: 0000000000000000 x27: 0000000000000000
+[  663.598863] x26: ffff0000c8925b20 x25: 0000000000000000 x24: 0000000000000015
+[  663.601098] x23: 0000000000040dc0 x22: ffffbf424e7420c8 x21: ffffbf424e7420c8
+[  663.603100] x20: 1ffff00001462f88 x19: 0000000000040dc0 x18: 0000000078b4155a
+[  663.605582] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+[  663.607328] x14: 0000000000000000 x13: 6461657268745f68 x12: ffff60001913bc5a
+[  663.609355] x11: 1fffe0001913bc59 x10: ffff60001913bc59 x9 : 1fffe0001913bc59
+[  663.611004] x8 : 0000000041b58ab3 x7 : ffff700001462f88 x6 : dfff800000000000
+[  663.613556] x5 : 00000000f1f1f1f1 x4 : 00000000f2f2f200 x3 : 0000000000000000
+[  663.615364] x2 : 0000000000000000 x1 : 0000000000000001 x0 : ffffbf42516818e2
+[  663.617753] Call trace:
+[  663.618486]  __alloc_pages+0x2e8/0x3a0
+[  663.619613]  __kmalloc_large_node+0xbc/0x160
+[  663.621454]  __kmalloc+0x84/0x94
+[  663.622551]  handshake_req_alloc+0x74/0xe8
+[  663.623801]  handshake_req_alloc_case+0xa0/0x170
+[  663.625467]  kunit_try_run_case+0x7c/0x100
+[  663.626592]  kunit_generic_run_threadfn_adapter+0x30/0x4c
+[  663.628998]  kthread+0x1d4/0x1e4
+[  663.629715]  ret_from_fork+0x10/0x20
+[  663.631094] ---[ end trace 0000000000000000 ]---
+[  663.643101]         ok 6 handshake_req_alloc excessive privsize
+[  663.649446]         ok 7 handshake_req_alloc all good
+[  663.651032]     # req_alloc API fuzzing: pass:7 fail:0 skip:0 total:7
+[  663.653941]     ok 1 req_alloc API fuzzing
+[  663.665951]     ok 2 req_submit NULL req arg
+[  663.674278]     ok 3 req_submit NULL sock arg
+[  663.682968]     ok 4 req_submit NULL sock->file
+[  663.694323]     ok 5 req_lookup works
+[  663.703604]     ok 6 req_submit max pending
+[  663.714655]     ok 7 req_submit multiple
+[  663.725174]     ok 8 req_cancel before accept
+[  663.733780]     ok 9 req_cancel after accept
+[  663.742528]     ok 10 req_cancel after done
+[  663.750637]     ok 11 req_destroy works
+[  663.751884] # Handshake API tests: pass:11 fail:0 skip:0 total:11
+[  663.753579] # Totals: pass:17 fail:0 skip:0 total:17
 
-> I'll send another version of this patch with the filename as qcom_ice.c
-> in order to be inline with the other ones.
-> 
-> > 
-> > - Mani
-> > 
-> > > diff --git a/drivers/soc/qcom/Makefile b/drivers/soc/qcom/Makefile
-> > > index 0f43a88b4894..30219c164cb0 100644
-> > > --- a/drivers/soc/qcom/Makefile
-> > > +++ b/drivers/soc/qcom/Makefile
-> > > @@ -32,4 +32,4 @@ obj-$(CONFIG_QCOM_RPMHPD) += rpmhpd.o
-> > >  obj-$(CONFIG_QCOM_RPMPD) += rpmpd.o
-> > >  obj-$(CONFIG_QCOM_KRYO_L2_ACCESSORS) +=	kryo-l2-accessors.o
-> > >  obj-$(CONFIG_QCOM_ICC_BWMON)	+= icc-bwmon.o
-> > > -obj-$(CONFIG_QCOM_INLINE_CRYPTO_ENGINE)	+= ice.o
-> > > +obj-$(CONFIG_QCOM_INLINE_CRYPTO_ENGINE)	+= qcom-ice.o
-> > > diff --git a/drivers/soc/qcom/ice.c b/drivers/soc/qcom/qcom-ice.c
-> > > similarity index 100%
-> > > rename from drivers/soc/qcom/ice.c
-> > > rename to drivers/soc/qcom/qcom-ice.c
-> > > -- 
-> > > 2.34.1
-> > > 
-> > 
-> > -- 
-> > மணிவண்ணன் சதாசிவம்
+links:
+------
 
--- 
-மணிவண்ணன் சதாசிவம்
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230512/testrun/16901289/suite/log-parser-boot/test/check-kernel-exception/log
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230512/testrun/16901289/suite/log-parser-boot/tests/
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230420/testrun/16385677/suite/log-parser-boot/test/check-kernel-warning-ac79d2ca0f443d407d9749244f1738c9a2b123c609820f82d9e8907c756f5340/log
+ - https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230512/testrun/16901289/suite/log-parser-boot/test/check-kernel-warning-ac79d2ca0f443d407d9749244f1738c9a2b123c609820f82d9e8907c756f5340/history/
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
