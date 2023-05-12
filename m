@@ -2,116 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0FB7009EA
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:05:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3017009F0
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:06:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241404AbjELOFS convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 12 May 2023 10:05:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41996 "EHLO
+        id S241392AbjELOGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 10:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241454AbjELOFO (ORCPT
+        with ESMTP id S241171AbjELOGi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 10:05:14 -0400
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899303C23
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:05:12 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-50a20bfe366so2549089a12.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:05:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683900311; x=1686492311;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/hAl6gNGfhK2E+/GN178/0RT+nmB4QgOANVUnLmUqRU=;
-        b=gQFoVt7RhooowNkAp14o/9vrlzVcpBX4aVfouRrNglOQh+q46EwfR/UJF+IUdFvJl3
-         81HVUxMA93EJQ08Ylk9JFoXOOMswNNvRJJRifahIL7kNVfdBQd2jfHlZuuVwNAyOhaWY
-         Xt7OdymmKZ4coIiMxW2N8Xl+OTfKCVRT3WNTpnY3iGCexQci17lZIE12AQeL3D5UiVyS
-         VQYTQdn5UscPbebV3D7u3AUe2p94MwbicNitGhxgYS5yfisit94mxYgbEOrxBYCSIyUt
-         YZWEG/TF84E1Qh6/xTqogE88wrm4kvvBX3ldy6kAIwxh6EDKIQbZTZd6Wis7s25lFIBk
-         ZuZw==
-X-Gm-Message-State: AC+VfDwTHikmUdLCs0PQH1CjCXLGOaZMxwXqKTYRhxlgTY5S7TbhmsC1
-        ct3mwVsCLsjDK5YKA42COcpAEtc5u+N1G7pIGYRQDuhA
-X-Google-Smtp-Source: ACHHUZ59HvLuKZfwShYmbYxj9Ay/fX1o+MWwyxmhEh3ZmiDo7yac/kFc6cDoAFPE2VmJFCR7vd4nsHwIdJ6yOKMhV28=
-X-Received: by 2002:a17:906:72cd:b0:965:d4a0:85bc with SMTP id
- m13-20020a17090672cd00b00965d4a085bcmr18738119ejl.3.1683900310660; Fri, 12
- May 2023 07:05:10 -0700 (PDT)
+        Fri, 12 May 2023 10:06:38 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5A1B8;
+        Fri, 12 May 2023 07:06:35 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 51F475FD7F;
+        Fri, 12 May 2023 17:06:32 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1683900392;
+        bh=Wty4lPdUl1Ry9LEa9KvWzRRPn/a18yqNQKacXZMS6oc=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=MQu3fETnqRD++Dvd5Edd/wJkzKTcTtmlgHgxPWSvbZqyZ050kPpnx4O7g+08Rc0ph
+         0KJ15CGO4YcM15Vvj9wTAuPujliJtd2tWOKhmdY99+ypLXLbhsgZ2Sq/lzlilebmmw
+         qdm9r+r2JbGrLrmnfnJsl1e7f0hdozXXHOm0SzpCVslCeTaWjk/+L+ukC8aiU6J022
+         J9IcGEFJjvnwsQHukaeim0kpRilczpixzAPoS0Kl/AEg3bJhuYhpdMcQA72MGmc96q
+         PnHXIn7O9lU++x6+dE5EPDZvVDs1T8rZDO2UXH/87lOpX+cKA+mY/RVzTpQKKQiA72
+         jw6M2QhHYphDQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Fri, 12 May 2023 17:06:31 +0300 (MSK)
+Date:   Fri, 12 May 2023 17:06:30 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <khilman@baylibre.com>, <jian.hu@amlogic.com>,
+        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>
+Subject: Re: [PATCH v14 6/6] clk: meson: a1: add Amlogic A1 Peripherals clock
+ controller driver
+Message-ID: <20230512140630.qd33rwzaalmadpmk@CAB-WSD-L081021>
+References: <20230426095805.15338-1-ddrokosov@sberdevices.ru>
+ <20230426095805.15338-7-ddrokosov@sberdevices.ru>
+ <CAFBinCA2OhtVaCJDi8ZfAFLSE4oUgxYBDScaP_WW63curEK8Mg@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230511073428.10264-1-u.kleine-koenig@pengutronix.de>
- <CAJZ5v0gNPt=rq+pQtmoGL5nxzDQboOK4d6h7=NoY=LueVhZjAQ@mail.gmail.com>
- <20230511103923.hvibdyo5ges4bab2@pengutronix.de> <ZFzWCey825wSlr2v@hovoldconsulting.com>
- <CAJZ5v0jvJT4JkHtO3RCUEzkfawxLCwR=QO2Y2CsL=cYN9s4hXw@mail.gmail.com> <ZF3tUQFTeILXV_VT@hovoldconsulting.com>
-In-Reply-To: <ZF3tUQFTeILXV_VT@hovoldconsulting.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Fri, 12 May 2023 16:04:59 +0200
-Message-ID: <CAJZ5v0gRcaL5y4nyDcFYfnH8sNYOHSHZN1qwcv+Z7yu4jhSiMA@mail.gmail.com>
-Subject: Re: [PATCH] driver core: Call pm_runtime_put_sync() only after device_remove()
-To:     Johan Hovold <johan@kernel.org>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org, kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAFBinCA2OhtVaCJDi8ZfAFLSE4oUgxYBDScaP_WW63curEK8Mg@mail.gmail.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/12 11:36:00 #21269061
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 9:39 AM Johan Hovold <johan@kernel.org> wrote:
->
-> On Thu, May 11, 2023 at 04:44:25PM +0200, Rafael J. Wysocki wrote:
-> > On Thu, May 11, 2023 at 1:48 PM Johan Hovold <johan@kernel.org> wrote:
->
-> > > No, this seems like very bad idea and even violates the documentation
-> > > which clearly states that the usage counter is balanced before calling
-> > > remove() so that drivers can use pm_runtime_suspend() to put devices
-> > > into suspended state.
-> >
-> > I missed that, sorry.
-> >
-> > > There's is really no good reason to even try to change as this is in no
-> > > way a fast path.
-> >
-> > Still, I think that while the "put" part needs to be done before
-> > device_remove(), the actual state change can be carried out later.
-> >
-> > So something like
-> >
-> >     pm_runtime_put_noidle(dev);
-> >
-> >     device_remove(dev);
-> >
-> >     pm_runtime_suspend(dev);
-> >
-> > would generally work, wouldn't it?
->
-> No, as drivers typically disable runtime pm in their remove callbacks,
+Hello Martin,
 
-What exactly do you mean by "typically"?  None of the PCI drivers
-should do that, for instance.
+On Mon, May 01, 2023 at 09:06:24PM +0200, Martin Blumenstingl wrote:
+> Hi Dmitry,
+> 
+> overall this looks pretty good.
 
-> that pm_runtime_suspend() would amount to a no-op (and calling the
-> driver pm ops post unbind and the driver having freed its data would
-> not work either).
+Thank you! Please find my thoughts about RTC clock below.
 
-Well, not really.
+> 
+> +Cc Heiner
+> 
+> On Wed, Apr 26, 2023 at 11:58 AM Dmitry Rokosov
+> <ddrokosov@sberdevices.ru> wrote:
+> [...]
+> > +static struct clk_regmap pwm_a_sel = {
+> > +       .data = &(struct clk_regmap_mux_data){
+> > +               .offset = PWM_CLK_AB_CTRL,
+> > +               .mask = 0x1,
+> > +               .shift = 9,
+> > +       },
+> > +       .hw.init = &(struct clk_init_data){
+> > +               .name = "pwm_a_sel",
+> > +               .ops = &clk_regmap_mux_ops,
+> > +               .parent_data = pwm_abcd_parents,
+> > +               .num_parents = ARRAY_SIZE(pwm_abcd_parents),
+> > +               /* For more information, please refer to rtc clock */
+> > +               .flags = CLK_SET_RATE_NO_REPARENT,
+> Heiner is working on a series that adds common clock support to the
+> PWM driver [0].
+> I think his plans for a next step are adding support for SoCs where
+> the PWM clocks are part of the peripheral clock controller (instead of
+> being part of the PWM controller registers).
+> 
 
-There are drivers and there are bus types/PM domains.  Drivers need
-not disable PM-runtime in their "remove" callbacks if they know that
-the bus type/PM domain will take care of handling PM-runtime properly
-after the driver's remove callback has run and the bus type/PM domain
-may very well want its PM-runtime suspend callback to run then (for
-example, to remove power from the unused device).  Arguably it can
-invoke runtime_suspend() from its "remove" callback, so it's not like
-this is a big deal, but IMO it helps if the most general case is
-considered.
+Yes, I'm keeping up with this review and staying informed. It's worth
+noting that the peripheral clock driver already includes PWM clocks,
+with an important remark about reparenting being switched off. It's
+described below.
 
-Anyway, the question here really is: Does it make sense to carry out a
-runtime suspend immediately before device_remove()?  Honestly, I'm not
-sure about that.
+> Have you considered removing CLK_SET_RATE_PARENT from the &rtc clock
+> so downstream clocks won't change the rtc clock rate by accident?
+> Then we could drop the CLK_SET_RATE_NO_REPARENT flag from the PWM
+> clocks to allow them to pick the best available parent (whether that's
+> the rtc clock, xtal or sys_pll).
+> That said, it would require managing the CLKID_RTC_32K_SEL clock (or
+> it's parents) using assigned-clocks instead of doing so with the PWM
+> (and other) clocks. Whether this would cause problems: I'm not sure,
+> so I'm hoping that you can share some insights.
+> 
+> 
+
+Allow me to share my thoughts on this matter. From my understanding,
+Amlogic provides an RTC clock that is both accurate and power-effective
+in achieving a 32KHz signal from an internal xtal of 24MHz. However,
+this requires a complex RTC divider with four parameters (m1, m2, n1,
+n2), as it cannot be accomplished with a single divider. Our team has
+measured the RTC clock using an oscilloscope on the GEN CLK pin and
+found that it provides a stable 32KHz signal with acceptable jitter. On
+the other hand, other approaches, such as the PWM way, yield less stable
+and less accurate 32KHz signals with greater jitter.
+
+Additionally, the CCF determines the best ancestor based on how close
+its rate is to the given one, based on arithmetic calculations. However,
+we have independent knowledge that a certain clock would be better, with
+less jitter and fewer intermediaries, which will likely improve energy
+efficiency. Sadly, the CCF cannot take this into account.
+
+Given the advantages of the RTC clock, we wish to be able to control the
+RTC as a parent for specific leaf clocks. This is achievable with the
+'assigned-clocks' feature of CCF OF, but it poses a significant
+architectural problem. The 'assigned-clocks' node does not lock/pin the
+parent, and a simple clk_set_rate() call can change the parent during
+rate propagation. In my opinion, an ideal solution to this problem would
+be an additional patch to the CCF core that provides this locking
+capability. As a board DTS developer, I know which clock I want to use
+as the parent and have a strong reason for doing so, and I do not wish
+to open up my parent muxing to other drivers. But until the behavior of
+'assigned-clocks' is not available, we will simply label all RTC
+children with the CLK_SET_RATE_NO_REPARENT flag.
+
+> Best regards,
+> Martin
+> 
+> 
+> [0] https://lore.kernel.org/linux-amlogic/9faca2e6-b7a1-4748-7eb0-48f8064e323e@gmail.com/
+
+-- 
+Thank you,
+Dmitry
