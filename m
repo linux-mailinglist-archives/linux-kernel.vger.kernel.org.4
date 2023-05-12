@@ -2,57 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84DDB7012DC
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 01:58:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EEAE57012DF
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 01:59:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241173AbjELX6v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 19:58:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60850 "EHLO
+        id S241258AbjELX7B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 19:59:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240973AbjELX6n (ORCPT
+        with ESMTP id S241005AbjELX6s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 19:58:43 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF2035A6
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:58:16 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-560def4d06dso70288487b3.3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:58:16 -0700 (PDT)
+        Fri, 12 May 2023 19:58:48 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A69DB40F2
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:58:22 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-b8f324b3ef8so13026032276.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 16:58:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683935895; x=1686527895;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LVFc+Brp/nv5bcVUuCiFrcDkBMn4WnVlAUQLAdw9K1k=;
-        b=f5hclik/Ew6KC4whYAG5VntaAWwKmaBWXX4bCpgRdYjBpbSj5Apr3PkSoK7/QAJd0N
-         RpHxTIRW/bLimRvcbUmZjobDE/Eutpj6tvgC/Rdg9nOt+ZvW2UeGjSSNnpNfchKgE9qV
-         bfsrP2dthFHNMRT6c5aCQw0Ff/JTyx0DIAtRow1fvLqu2M2UZFqFRteLQ4IPrCBhdwYv
-         ZUWPKO0rlZI6hiVGzQF5WVmuVs1EGnbfoUeE09/HLSnj37gvPWFw6+cmVnJFfHK5WbAH
-         YWYFfgDih13LoVhaHD+4rYuds+BE6rKkLJ/AoCA0fp0U2j35styXF7xvUDDBUZNd5sjd
-         vJuw==
+        d=google.com; s=20221208; t=1683935897; x=1686527897;
+        h=content-transfer-encoding:cc:to:from:subject:references
+         :mime-version:message-id:in-reply-to:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XwMV83qzB00xUe1xka9Kex2X8Ec2jkmSilor+2INk6I=;
+        b=xk2Ibde3e8u/s1FXz5MjnaikjmFzTVuGbTz673xLExz96TfA9SY9JBEhrH4pDcD4kc
+         lJcaoTYG0RcJgWFZFSCaY33HyZj2N01rZHV90M6ATudVtPlhyiI8LL94cSLE8hlDZsK1
+         ohmUhbm4cTQwXS7bDVKRWaW81vYw/Zs2XgvQtpjyOpS39KbdeTP0PlNP0LVOEJX0BiKd
+         Gp/2PGuqyiqk4rIboKMupJ2lV3A59cCft+4hG9Pnr7dP/E1pUxUHHsAIktr3S1az7xY9
+         Y7C7SJ3J766Sa8Y3zSYkAveN2OM091uDtEnFY90+chuUo5dWOIKtYgSwr2SEMxwfaVJk
+         l+/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683935895; x=1686527895;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LVFc+Brp/nv5bcVUuCiFrcDkBMn4WnVlAUQLAdw9K1k=;
-        b=TbtE1shXhTgYQqgtGw3JnujLVp6gsuE93Ypym+2/MU6oI4QMHVk+Pj/lYhAMfxcKfC
-         0a277DIEk5MkdmXPrzRK/jBQ9Jgbzcyw+M4Vmtns5PHV1mu42vFq49oO349536OVeDey
-         tfzSmfQ6x9JrVSR/6s+oteridDCpNfJtV18KeZrhnWYtXfnLDbDX3woiRKrEybp7QOzy
-         TXzwQXTjMbJLodW7bm7rZctqW71jcWaqeTVfoRTTlb1q40TxT+LUw2J6PAr95GNJL16Q
-         KQQAfV7GrIp/3ldwvrrdNabg8f+MDT7lQXccSjF04zYXstsuQaL4tbJXstILq4vzioJg
-         k6fg==
-X-Gm-Message-State: AC+VfDyUX5PtylCgjMh/fE8IeE9mq1mCdTV7a5uD62RaB5YPwLGDRcn9
-        PrqyK/gJJyIbxhnFLx1dpGSOLoU=
-X-Google-Smtp-Source: ACHHUZ7VMsxVospQ1XLBd1n7/FkUbi+qPyj+Q+Eihu+tg6ttj97Cmt/cOaDOuPcaz9q0znnK8MBI35s=
+        d=1e100.net; s=20221208; t=1683935897; x=1686527897;
+        h=content-transfer-encoding:cc:to:from:subject:references
+         :mime-version:message-id:in-reply-to:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=XwMV83qzB00xUe1xka9Kex2X8Ec2jkmSilor+2INk6I=;
+        b=VSNaepKceXMIdZTLUTCkL6YsH4hLOKPwp9+Mks7qrlANAMWOJTogFdPKkB677t5mX7
+         dm+kGAk2E47sN2vt1VZDgKMVYWB9XUXaJ/WOugoJO1Ur5ie0zNMGJMMq54uvFH/wy3pS
+         x5FrvZXF2ja5yx9L+ZITfn3wDwjPL/RjxPC6OFi0L9cTUakr/znkZugKa3bWk3zJMTw6
+         hqqWjZU4gRiK3SVDe/G/lxeeu2RIG1G/8ADrbsSCjskBRTzaaDjbY1maSHNnqvDdzLc3
+         iXZgQjCiID4F2VAbKBcgldhceFOsbs1+eyL+Sgn7QyRAi4/vXfTIakatbMAlS2VdbE6w
+         PHpQ==
+X-Gm-Message-State: AC+VfDyx3sVa55KpTf76ADUOqF504xwKKndEPy3hYFMoHi+56+nXD94n
+        7vB6vsNwjOcEklW3XNu9+NWO+Hc=
+X-Google-Smtp-Source: ACHHUZ5fNzBCdsm//w4GJKGotggr/NOqYy/clxbht/ilkykWu8XfrBS2AXyT1QiZkNq0D7bzCiaesqo=
 X-Received: from pcc-desktop.svl.corp.google.com ([2620:15c:2d3:205:ff6:108b:739d:6a1c])
- (user=pcc job=sendgmr) by 2002:a81:b285:0:b0:559:f1b0:6eb with SMTP id
- q127-20020a81b285000000b00559f1b006ebmr16091480ywh.4.1683935894947; Fri, 12
- May 2023 16:58:14 -0700 (PDT)
-Date:   Fri, 12 May 2023 16:57:50 -0700
+ (user=pcc job=sendgmr) by 2002:a25:d18a:0:b0:ba7:29a9:a471 with SMTP id
+ i132-20020a25d18a000000b00ba729a9a471mr1565248ybg.0.1683935897117; Fri, 12
+ May 2023 16:58:17 -0700 (PDT)
+Date:   Fri, 12 May 2023 16:57:51 -0700
 In-Reply-To: <20230512235755.1589034-1-pcc@google.com>
-Message-Id: <20230512235755.1589034-2-pcc@google.com>
+Message-Id: <20230512235755.1589034-3-pcc@google.com>
 Mime-Version: 1.0
 References: <20230512235755.1589034-1-pcc@google.com>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Subject: [PATCH 1/3] mm: Move arch_do_swap_page() call to before swap_free()
+Subject: [PATCH 2/3] mm: Call arch_swap_restore() from arch_do_swap_page() and
+ deprecate the latter
 From:   Peter Collingbourne <pcc@google.com>
 To:     Catalin Marinas <catalin.marinas@arm.com>
 Cc:     Peter Collingbourne <pcc@google.com>,
@@ -74,6 +77,7 @@ Cc:     Peter Collingbourne <pcc@google.com>,
         eugenis@google.com, Steven Price <steven.price@arm.com>,
         stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
@@ -84,91 +88,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit c145e0b47c77 ("mm: streamline COW logic in do_swap_page()") moved
-the call to swap_free() before the call to set_pte_at(), which meant that
-the MTE tags could end up being freed before set_pte_at() had a chance
-to restore them. One other possibility was to hook arch_do_swap_page(),
-but this had a number of problems:
+The previous patch made it possible for MTE to restore tags before they
+are freed by hooking arch_do_swap_page().
 
-- The call to the hook was also after swap_free().
+However, the arch_do_swap_page() hook API is incompatible with swap
+restoration in circumstances where we do not have an mm or a vma,
+such as swapoff with swapped out shmem, and I expect that ADI will
+currently fail to restore tags in these circumstances. This implies that
+arch-specific metadata stores ought to be indexed by swap index, as MTE
+does, rather than by mm and vma, as ADI does, and we should discourage
+hooking arch_do_swap_page(), preferring to hook arch_swap_restore()
+instead, as MTE already does.
 
-- The call to the hook was after the call to set_pte_at(), so there was a
-  racy window where uninitialized metadata may be exposed to userspace.
-  This likely also affects SPARC ADI, which implements this hook to
-  restore tags.
+Therefore, instead of directly hooking arch_do_swap_page() for
+MTE, deprecate that hook, change its default implementation to call
+arch_swap_restore() and rely on the existing implementation of the latter
+for MTE.
 
-- As a result of commit 1eba86c096e3 ("mm: change page type prior to
-  adding page table entry"), we were also passing the new PTE as the
-  oldpte argument, preventing the hook from knowing the swap index.
-
-Fix all of these problems by moving the arch_do_swap_page() call before
-the call to free_page(), and ensuring that we do not set orig_pte until
-after the call.
-
+Fixes: c145e0b47c77 ("mm: streamline COW logic in do_swap_page()")
+Link: https://linux-review.googlesource.com/id/Id2f1ad76eaf606ae210e1d2dd0b=
+7fe287e5f7d87
 Signed-off-by: Peter Collingbourne <pcc@google.com>
-Suggested-by: Catalin Marinas <catalin.marinas@arm.com>
-Link: https://linux-review.googlesource.com/id/I6470efa669e8bd2f841049b8c61020c510678965
+Reported-by: Qun-wei Lin (=E6=9E=97=E7=BE=A4=E5=B4=B4) <Qun-wei.Lin@mediate=
+k.com>
+Link: https://lore.kernel.org/all/5050805753ac469e8d727c797c2218a9d780d434.=
+camel@mediatek.com/
 Cc: <stable@vger.kernel.org> # 6.1
-Fixes: ca827d55ebaa ("mm, swap: Add infrastructure for saving page metadata on swap")
-Fixes: 1eba86c096e3 ("mm: change page type prior to adding page table entry")
 ---
- mm/memory.c | 26 +++++++++++++-------------
+ include/linux/pgtable.h | 26 +++++++++++++-------------
  1 file changed, 13 insertions(+), 13 deletions(-)
 
-diff --git a/mm/memory.c b/mm/memory.c
-index 01a23ad48a04..83268d287ff1 100644
---- a/mm/memory.c
-+++ b/mm/memory.c
-@@ -3914,19 +3914,7 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
- 		}
- 	}
- 
--	/*
--	 * Remove the swap entry and conditionally try to free up the swapcache.
--	 * We're already holding a reference on the page but haven't mapped it
--	 * yet.
--	 */
--	swap_free(entry);
--	if (should_try_to_free_swap(folio, vma, vmf->flags))
--		folio_free_swap(folio);
--
--	inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
--	dec_mm_counter(vma->vm_mm, MM_SWAPENTS);
- 	pte = mk_pte(page, vma->vm_page_prot);
--
- 	/*
- 	 * Same logic as in do_wp_page(); however, optimize for pages that are
- 	 * certainly not shared either because we just allocated them without
-@@ -3946,8 +3934,21 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
- 		pte = pte_mksoft_dirty(pte);
- 	if (pte_swp_uffd_wp(vmf->orig_pte))
- 		pte = pte_mkuffd_wp(pte);
-+	arch_do_swap_page(vma->vm_mm, vma, vmf->address, pte, vmf->orig_pte);
- 	vmf->orig_pte = pte;
- 
-+	/*
-+	 * Remove the swap entry and conditionally try to free up the swapcache.
-+	 * We're already holding a reference on the page but haven't mapped it
-+	 * yet.
-+	 */
-+	swap_free(entry);
-+	if (should_try_to_free_swap(folio, vma, vmf->flags))
-+		folio_free_swap(folio);
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index c63cd44777ec..fc0259cf60fb 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -740,6 +740,12 @@ static inline int pgd_same(pgd_t pgd_a, pgd_t pgd_b)
+ 	set_pgd(pgdp, pgd); \
+ })
+=20
++#ifndef __HAVE_ARCH_SWAP_RESTORE
++static inline void arch_swap_restore(swp_entry_t entry, struct folio *foli=
+o)
++{
++}
++#endif
 +
-+	inc_mm_counter(vma->vm_mm, MM_ANONPAGES);
-+	dec_mm_counter(vma->vm_mm, MM_SWAPENTS);
-+
- 	/* ksm created a completely new copy */
- 	if (unlikely(folio != swapcache && swapcache)) {
- 		page_add_new_anon_rmap(page, vma, vmf->address);
-@@ -3959,7 +3960,6 @@ vm_fault_t do_swap_page(struct vm_fault *vmf)
- 	VM_BUG_ON(!folio_test_anon(folio) ||
- 			(pte_write(pte) && !PageAnonExclusive(page)));
- 	set_pte_at(vma->vm_mm, vmf->address, vmf->pte, pte);
--	arch_do_swap_page(vma->vm_mm, vma, vmf->address, pte, vmf->orig_pte);
- 
- 	folio_unlock(folio);
- 	if (folio != swapcache && swapcache) {
--- 
+ #ifndef __HAVE_ARCH_DO_SWAP_PAGE
+ /*
+  * Some architectures support metadata associated with a page. When a
+@@ -748,14 +754,14 @@ static inline int pgd_same(pgd_t pgd_a, pgd_t pgd_b)
+  * processors support an ADI (Application Data Integrity) tag for the
+  * page as metadata for the page. arch_do_swap_page() can restore this
+  * metadata when a page is swapped back in.
++ *
++ * This hook is deprecated. Architectures should hook arch_swap_restore()
++ * instead, because this hook is not called on all code paths that can
++ * swap in a page, particularly those where mm and vma are not available
++ * (e.g. swapoff for shmem pages).
+  */
+-static inline void arch_do_swap_page(struct mm_struct *mm,
+-				     struct vm_area_struct *vma,
+-				     unsigned long addr,
+-				     pte_t pte, pte_t oldpte)
+-{
+-
+-}
++#define arch_do_swap_page(mm, vma, addr, pte, oldpte) \
++	arch_swap_restore(pte_to_swp_entry(oldpte), page_folio(pte_page(pte)))
+ #endif
+=20
+ #ifndef __HAVE_ARCH_UNMAP_ONE
+@@ -798,12 +804,6 @@ static inline void arch_swap_invalidate_area(int type)
+ }
+ #endif
+=20
+-#ifndef __HAVE_ARCH_SWAP_RESTORE
+-static inline void arch_swap_restore(swp_entry_t entry, struct folio *foli=
+o)
+-{
+-}
+-#endif
+-
+ #ifndef __HAVE_ARCH_PGD_OFFSET_GATE
+ #define pgd_offset_gate(mm, addr)	pgd_offset(mm, addr)
+ #endif
+--=20
 2.40.1.606.ga4b1b128d6-goog
 
