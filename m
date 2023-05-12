@@ -2,94 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E19A70013F
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 09:18:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21AA6700140
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 09:18:56 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239945AbjELHS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 03:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60478 "EHLO
+        id S240212AbjELHSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 03:18:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240225AbjELHR6 (ORCPT
+        with ESMTP id S239969AbjELHR6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 12 May 2023 03:17:58 -0400
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2961100FA;
-        Fri, 12 May 2023 00:17:33 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id B68FD24E287;
-        Fri, 12 May 2023 15:17:26 +0800 (CST)
-Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 12 May
- 2023 15:17:26 +0800
-Received: from [192.168.125.131] (113.72.146.187) by EXMBX061.cuchost.com
- (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Fri, 12 May
- 2023 15:17:25 +0800
-Message-ID: <0463378b-60d8-ee05-2a2e-1e709b882bae@starfivetech.com>
-Date:   Fri, 12 May 2023 15:15:50 +0800
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D79D172A;
+        Fri, 12 May 2023 00:17:48 -0700 (PDT)
+Received: from pps.filterd (m0353724.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34C7Cwid026960;
+        Fri, 12 May 2023 07:17:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=419PI9ii7wYLMCwqWWspXkyI2AU/Mq/kR7TE3trVSrI=;
+ b=laOkuLY+mnYee+g9KSPFDRmzL9Irn456nAvdy1gt6D5m0sHCcVlZs8Ou/zJ64taw88T6
+ oyv+x6oR8L7tRoAjZfpCjRn/yiwCI3qlW5vTsJinuS+mxS67nbD0VGf6m0CPlcTmnCAG
+ W7xo3e5cNSmEjI9sUfvFSvtLBDsrYbVvX4CN/nUgS9tnrVB1WAEUCC8yTfn3v4w63hE7
+ mxAZzCPof4T3z2F1/bORWiZJqsPWGS3Y7j1wnakBADvB3CPloN9+jFSgOrzQxGRML1cW
+ tdMlyB5rPGFFNEKKW+fx8jy0aFQIEh7OlI3zmfRkY+r/dEHdOe2rjhuAewKopCN6AvXE bw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qhgn40bgk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 07:17:47 +0000
+Received: from m0353724.ppops.net (m0353724.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34C7DSlX027843;
+        Fri, 12 May 2023 07:17:46 GMT
+Received: from ppma03ams.nl.ibm.com (62.31.33a9.ip4.static.sl-reverse.com [169.51.49.98])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qhgn40bfr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 07:17:46 +0000
+Received: from pps.filterd (ppma03ams.nl.ibm.com [127.0.0.1])
+        by ppma03ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34C1dXp5020585;
+        Fri, 12 May 2023 07:17:44 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+        by ppma03ams.nl.ibm.com (PPS) with ESMTPS id 3qf84ea6eb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Fri, 12 May 2023 07:17:44 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+        by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34C7Hd0P63308156
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Fri, 12 May 2023 07:17:39 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 3258F20040;
+        Fri, 12 May 2023 07:17:39 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id AACA520043;
+        Fri, 12 May 2023 07:17:38 +0000 (GMT)
+Received: from [9.171.66.102] (unknown [9.171.66.102])
+        by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Fri, 12 May 2023 07:17:38 +0000 (GMT)
+Message-ID: <627fa79b-cc39-1146-13fa-ff5cabbdf57d@linux.ibm.com>
+Date:   Fri, 12 May 2023 09:17:38 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v4 7/7] riscv: dts: starfive: jh7110: Add PLL clock node
- and modify syscrg node
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/1] KVM: s390: vsie: fix the length of APCB bitmap
+To:     Pierre Morel <pmorel@linux.ibm.com>, david@redhat.com
+Cc:     kvm@vger.kernel.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org, borntraeger@de.ibm.com,
+        cohuck@redhat.com, thuth@redhat.com, imbrenda@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com, svens@linux.ibm.com
+References: <20230511094719.9691-1-pmorel@linux.ibm.com>
+ <20230511094719.9691-2-pmorel@linux.ibm.com>
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Conor Dooley <conor@kernel.org>
-CC:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        "Philipp Zabel" <p.zabel@pengutronix.de>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        "Hal Feng" <hal.feng@starfivetech.com>,
-        William Qiu <william.qiu@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
-References: <20230512022036.97987-1-xingyu.wu@starfivetech.com>
- <20230512022036.97987-8-xingyu.wu@starfivetech.com>
- <c432c26b-27d3-80dc-fe6b-457996234871@linaro.org>
-From:   Xingyu Wu <xingyu.wu@starfivetech.com>
-In-Reply-To: <c432c26b-27d3-80dc-fe6b-457996234871@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+From:   Janosch Frank <frankja@linux.ibm.com>
+In-Reply-To: <20230511094719.9691-2-pmorel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [113.72.146.187]
-X-ClientProxiedBy: EXCAS062.cuchost.com (172.16.6.22) To EXMBX061.cuchost.com
- (172.16.6.61)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: dOLmY-JlVbMAE6LZp5XUZz0qHh-2gwgF
+X-Proofpoint-GUID: O80FuNflja7YimqOzW7Jh1d8y4CfaXTT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-12_04,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1015
+ adultscore=0 priorityscore=1501 spamscore=0 malwarescore=0 suspectscore=0
+ phishscore=0 mlxlogscore=687 lowpriorityscore=0 mlxscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
+ definitions=main-2305120059
+X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/5/12 14:37, Krzysztof Kozlowski wrote:
-> On 12/05/2023 04:20, Xingyu Wu wrote:
->> Add the PLL clock node for the Starfive JH7110 SoC and
->> modify the SYSCRG node to add PLL clocks input.
+On 5/11/23 11:47, Pierre Morel wrote:
+> bit_and() uses the count of bits as the woking length.
+> Fix the previous implementation and effectively use
+> the right bitmap size.
 > 
+> Fixes: 19fd83a64718 ("KVM: s390: vsie: allow CRYCB FORMAT-1")
+> Fixes: 56019f9aca22 ("KVM: s390: vsie: Allow CRYCB FORMAT-2")
 > 
->> @@ -465,6 +469,12 @@ syscrg: clock-controller@13020000 {
->>  		sys_syscon: syscon@13030000 {
->>  			compatible = "starfive,jh7110-sys-syscon", "syscon", "simple-mfd";
->>  			reg = <0x0 0x13030000 0x0 0x1000>;
->> +
->> +			pllclk: clock-controller {
->> +				compatible = "starfive,jh7110-pll";
->> +				clocks = <&osc>;
->> +				#clock-cells = <1>;
-> 
-> This should be part of previous patch. You just added that node. Don't
-> add half of devices but entire device.
-> 
+> Signed-off-by: Pierre Morel <pmorel@linux.ibm.com>
 
-So do I merge the patch 6 and patch 7 into one patch and add syscon and
-clock-controller together?
+Please push this to devel
 
-Best regards,
-Xingyu Wu
+Reviewed-by: Janosch Frank <frankja@linux.ibm.com>
+
