@@ -2,87 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C95700F2A
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 21:05:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B19A2700F2D
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 21:08:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239291AbjELTFr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 15:05:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37428 "EHLO
+        id S238359AbjELTIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 15:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbjELTFq (ORCPT
+        with ESMTP id S229901AbjELTII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 15:05:46 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFE952724;
-        Fri, 12 May 2023 12:05:44 -0700 (PDT)
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34CI1Cos012522;
-        Fri, 12 May 2023 19:05:34 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=jEtN/tDjrIlbzPkhas7R2ZIqBheXt8OE6EPlEKEa16o=;
- b=R/fuD4MG5mRTKwb0T13uMMFvtvzsSCXwOZBuYj04BsB11pQrZDUnv/SciAQhkAcR+4lV
- +9Xs3Uh3tIER178kjSdnUMm9mNUuJly71FJraiyPpkjf7JkpEL7SqratDkyDALzYti2a
- CQPlkTBMsR4Q4XwHDQ3wguWe1xKazairaZaPGBvObovls3HHo2Jj0vAcpc0NpwF/sTzU
- N5YA6uFUTSULFS4sKrlOcFMiWlbmqMV04585GT10oeCPbYpOTtv9x/wypW+oktMDuGh0
- bpZgNztNBHadZ98htFdAnCaRApFJZ0aGKyj2JwbKnEDS+fOVN/00gvSFNIRURE9wPlIO kw== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qhcj1t255-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 19:05:34 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34CJ5XAU005680
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 12 May 2023 19:05:33 GMT
-Received: from [10.110.82.209] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Fri, 12 May
- 2023 12:05:32 -0700
-Message-ID: <411b27d1-6c1d-fa7e-111a-ab8f02ab3981@quicinc.com>
-Date:   Fri, 12 May 2023 12:05:32 -0700
+        Fri, 12 May 2023 15:08:08 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9136B59ED;
+        Fri, 12 May 2023 12:08:06 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 4B3E26016E;
+        Fri, 12 May 2023 21:08:05 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1683918485; bh=olPRuHD47Mn/7ru/A/AU2wqJbQyl0hcJAZoJt24S8b0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=n0amUuwxKfyl6u3w9Up9M9WEW8L1ktwEBk4ZeY9RHI0yfOMyO09yJAORw9idWWHe+
+         Mj1/nwQuBysv8K42RqLjpGAYA45j+wnl/swlarBnb6Xn1vJa2FieUtklZv3iVOUYB8
+         MOSuyD28Cu4G2js7K3z7Leac91uew8n2EahpaJQ9Bisc0vjRwa3pu5f2dFYT0s9IwU
+         TYQ3NTo5Ee5RwqSchxC8GtxeW4ms8UGwosDqa/z0DpDK7UkCsVxoBJASNleVsJvLGn
+         tMZCJqyor7hajgsyPBB005xqTLCgYiNsxFFD9rtoCSxzHoq9ro4W6O01MA25nBv4ni
+         oy/+ZGyxJJTRg==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id wjCYGLiUAO0z; Fri, 12 May 2023 21:08:02 +0200 (CEST)
+Received: from [192.168.1.6] (unknown [77.237.113.62])
+        by domac.alu.hr (Postfix) with ESMTPSA id 57AF66015F;
+        Fri, 12 May 2023 21:08:02 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1683918482; bh=olPRuHD47Mn/7ru/A/AU2wqJbQyl0hcJAZoJt24S8b0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=SlNPyqe9ANF2mDBCUgIKRo9twyZ4/8XFVaX+KNR7gKreruAfFNpPK2+57LLLfj2Ly
+         LIVwhjXd7elXMIgns87Yxl9plUphLoUgg9xrgqMCQSJ4/5dmeTffBLaC7sYgC9pVEe
+         QRZm2oPPzux1FnqXuiUBke7Zdft7PmMutlE9hehTJW28dO1N1GNp9jErm0wADmDCHe
+         rRfmOuvGKBnr0Giz61tpAHROwNApjSx/qExm87KwLJ7vrHSWcV0yJ14uLIbXkDd2/m
+         J34+EEXp+iYaQAOBH8hBJYPeakVebJDKeIhKGay4wL3GCU0uQ0dr4hMs9qbsd9lIR3
+         gebW6z6h4gdrA==
+Message-ID: <32dc44cd-b559-78eb-56ef-f651a598b6fc@alu.unizg.hr>
+Date:   Fri, 12 May 2023 21:08:02 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v8 6/8] drm/msm/dpu: separate DSC flush update out of
- interface
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [BUG] Kmemleak, possibly hiddev_connect(), in 6.3.0+ torvalds
+ tree commit gfc4354c6e5c2
 Content-Language: en-US
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <andersson@kernel.org>
-CC:     <quic_sbillaka@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <marijn.suijten@somainline.org>,
-        <quic_jesszhan@quicinc.com>, <freedreno@lists.freedesktop.org>
-References: <1683914423-17612-1-git-send-email-quic_khsieh@quicinc.com>
- <1683914423-17612-7-git-send-email-quic_khsieh@quicinc.com>
- <91f63678-aade-2f42-1311-1bc706ebdc91@linaro.org>
- <5319b87a-9a4c-1786-9ea9-b9015ee56357@quicinc.com>
- <e3579cea-1764-26ff-ba9d-6eb23a0aaef0@linaro.org>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <e3579cea-1764-26ff-ba9d-6eb23a0aaef0@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-input@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
+        Jiri Kosina <jikos@kernel.org>
+References: <f64b17fa-d509-ad30-6e8d-e4c979818047@alu.unizg.hr>
+ <2023050824-juiciness-catching-9290@gregkh>
+ <2023050854-collage-dreamt-660c@gregkh>
+ <c73471aa-522a-83a4-5614-506581604301@alu.unizg.hr>
+ <2023050958-precut-vividly-94bf@gregkh>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <2023050958-precut-vividly-94bf@gregkh>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: nP_9G0c-X7y2JpuvKzZLrSBYDJ7ix7hJ
-X-Proofpoint-ORIG-GUID: nP_9G0c-X7y2JpuvKzZLrSBYDJ7ix7hJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-12_12,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- lowpriorityscore=0 mlxscore=0 adultscore=0 malwarescore=0 mlxlogscore=932
- priorityscore=1501 bulkscore=0 spamscore=0 clxscore=1015 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2304280000
- definitions=main-2305120160
-X-Spam-Status: No, score=-4.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        T_FILL_THIS_FORM_SHORT,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,84 +76,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi, Greg,
 
-
-On 5/12/2023 11:50 AM, Dmitry Baryshkov wrote:
-> On 12/05/2023 21:47, Abhinav Kumar wrote:
+On 09. 05. 2023. 04:59, Greg Kroah-Hartman wrote:
+> On Tue, May 09, 2023 at 01:51:35AM +0200, Mirsad Goran Todorovac wrote:
 >>
 >>
->> On 5/12/2023 11:21 AM, Dmitry Baryshkov wrote:
->>> On 12/05/2023 21:00, Kuogee Hsieh wrote:
->>>> Current DSC flush update is piggyback inside dpu_hw_ctl_intf_cfg_v1().
->>>> This patch separates DSC flush away from dpu_hw_ctl_intf_cfg_v1() by
->>>> adding dpu_hw_ctl_update_pending_flush_dsc_v1() to handle both per
->>>> DSC engine and DSC flush bits at same time to make it consistent with
->>>> the location of flush programming of other dpu sub blocks.
+>> On 08. 05. 2023. 16:01, Greg Kroah-Hartman wrote:
+>>> On Mon, May 08, 2023 at 08:51:55AM +0200, Greg Kroah-Hartman wrote:
+>>>> On Mon, May 08, 2023 at 08:30:07AM +0200, Mirsad Goran Todorovac wrote:
+>>>>> Hi,
+>>>>>
+>>>>> There seems to be a kernel memory leak in the USB keyboard driver.
+>>>>>
+>>>>> The leaked memory allocs are 96 and 512 bytes.
+>>>>>
+>>>>> The platform is Ubuntu 22.04 LTS on a assembled AMD Ryzen 9 with X670E PG
+>>>>> Lightning mobo,
+>>>>> and Genius SlimStar i220 GK-080012 keyboard.
+>>>>>
+>>>>> (Logitech M100 HID mouse is not affected by the bug.)
+>>>>>
+>>>>> BIOS is:
+>>>>>
+>>>>>        *-firmware
+>>>>>             description: BIOS
+>>>>>             vendor: American Megatrends International, LLC.
+>>>>>             physical id: 0
+>>>>>             version: 1.21
+>>>>>             date: 04/26/2023
+>>>>>             size: 64KiB
+>>>>>
+>>>>> The kernel is 6.3.0-torvalds-<id>-13466-gfc4354c6e5c2.
+>>>>>
+>>>>> The keyboard is recognised as Chicony:
+>>>>>
+>>>>>                    *-usb
+>>>>>                         description: Keyboard
+>>>>>                         product: CHICONY USB Keyboard
+>>>>>                         vendor: CHICONY
+>>>>>                         physical id: 2
+>>>>>                         bus info: usb@5:2
+>>>>>                         logical name: input35
+>>>>>                         logical name: /dev/input/event4
+>>>>>                         logical name: input35::capslock
+>>>>>                         logical name: input35::numlock
+>>>>>                         logical name: input35::scrolllock
+>>>>>                         logical name: input36
+>>>>>                         logical name: /dev/input/event5
+>>>>>                         logical name: input37
+>>>>>                         logical name: /dev/input/event6
+>>>>>                         logical name: input38
+>>>>>                         logical name: /dev/input/event8
+>>>>>                         version: 2.30
+>>>>>                         capabilities: usb-2.00 usb
+>>>>>                         configuration: driver=usbhid maxpower=100mA
+>>>>> speed=1Mbit/s
+>>>>>
+>>>>> The bug is easily reproduced by unplugging the USB keyboard, waiting about a
+>>>>> couple of seconds,
+>>>>> and then reconnect and scan for memory leaks twice.
+>>>>>
+>>>>> The kmemleak log is as follows [edited privacy info]:
+>>>>>
+>>>>> root@hostname:/home/username# cat /sys/kernel/debug/kmemleak
+>>>>> unreferenced object 0xffff8dd020037c00 (size 96):
+>>>>>     comm "systemd-udevd", pid 435, jiffies 4294892550 (age 8909.356s)
+>>>>>     hex dump (first 32 bytes):
+>>>>>       5d 8e 4e b9 ff ff ff ff 00 00 00 00 00 00 00 00 ].N.............
+>>>>>       00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 ................
+>>>>>     backtrace:
+>>>>>       [<ffffffffb81a74be>] __kmem_cache_alloc_node+0x22e/0x2b0
+>>>>>       [<ffffffffb8127b6e>] kmalloc_trace+0x2e/0xa0
+>>>>>       [<ffffffffb87543d9>] class_create+0x29/0x80
+>>>>>       [<ffffffffb8880d24>] usb_register_dev+0x1d4/0x2e0
 >>>>
->>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->>>> ---
->>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 14 ++++++++++++--
->>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c  | 22 
->>>> ++++++++++++++++------
->>>>   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h  | 10 ++++++++++
->>>>   3 files changed, 38 insertions(+), 8 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c 
->>>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->>>> index ffa6f04..5cae70e 100644
->>>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->>>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
->>>> @@ -1834,12 +1834,18 @@ dpu_encoder_dsc_initial_line_calc(struct 
->>>> drm_dsc_config *dsc,
->>>>       return DIV_ROUND_UP(total_pixels, dsc->slice_width);
->>>>   }
->>>> -static void dpu_encoder_dsc_pipe_cfg(struct dpu_hw_dsc *hw_dsc,
->>>> +static void dpu_encoder_dsc_pipe_cfg(struct dpu_encoder_virt *dpu_enc,
->>>> +                     struct dpu_hw_dsc *hw_dsc,
->>>>                        struct dpu_hw_pingpong *hw_pp,
->>>>                        struct drm_dsc_config *dsc,
->>>>                        u32 common_mode,
->>>>                        u32 initial_lines)
->>>>   {
->>>> +    struct dpu_encoder_phys *cur_master = dpu_enc->cur_master;
->>>> +    struct dpu_hw_ctl *ctl;
->>>> +
->>>> +    ctl = cur_master->hw_ctl;
+>>>> As the call to class_create() in this path is now gone in 6.4-rc1, can
+>>>> you retry that release to see if this is still there or not?
 >>>
->>> Just for my understanding: if we have a bonded DSI @ sdm845, should 
->>> both flashes go to the master CTL or each flush should go to the 
->>> corresponding CTL?
+>>> No, wait, it's still there, I was looking at a development branch of
+>>> mine that isn't sent upstream yet.  And syzbot just reported the same
+>>> thing:
+>>> 	https://lore.kernel.org/r/00000000000058d15f05fb264013@google.com
 >>>
+>>> So something's wrong here, let me dig into it tomorrow when I get a
+>>> chance...
 >>
->> Is this question for DSC or just general question about flush?
+>> If this could help, here is the bisect of the bug (I could not discern what
+>> could possibly be wrong):
 >>
->> I dont see an explicit DSC flush needed in sdm845 at the ctl level.
->>
->> If the question is about general flush involving two control paths, we 
->> need to combine the flushes and they goto the master only. Please 
->> refer to below part in sde_encoder.c
-> And this is because we have a single CTL to flush on sm8150+, isn't it?
+>> user@host:~/linux/kernel/linux_torvalds$ git bisect log
+>> git bisect start
+>> # bad: [ac9a78681b921877518763ba0e89202254349d1b] Linux 6.4-rc1
+>> git bisect bad ac9a78681b921877518763ba0e89202254349d1b
+>> # good: [c9c3395d5e3dcc6daee66c6908354d47bf98cb0c] Linux 6.2
+>> git bisect good c9c3395d5e3dcc6daee66c6908354d47bf98cb0c
+>> # good: [85496c9b3bf8dbe15e2433d3a0197954d323cadc] Merge branch
+>> 'net-remove-some-rcu_bh-cruft'
+>> git bisect good 85496c9b3bf8dbe15e2433d3a0197954d323cadc
+>> # good: [b68ee1c6131c540a62ecd443be89c406401df091] Merge tag 'scsi-misc' of
+>> git://git.kernel.org/pub/scm/linux/kernel/git/jejb/scsi
+>> git bisect good b68ee1c6131c540a62ecd443be89c406401df091
+>> # bad: [888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0] Merge tag 'sysctl-6.4-rc1'
+>> of git://git.kernel.org/pub/scm/linux/kernel/git/mcgrof/linux
+>> git bisect bad 888d3c9f7f3ae44101a3fd76528d3dd6f96e9fd0
+>> # good: [34b62f186db9614e55d021f8c58d22fc44c57911] Merge tag
+>> 'pci-v6.4-changes' of git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci
+>> git bisect good 34b62f186db9614e55d021f8c58d22fc44c57911
+>> # good: [34da76dca4673ab1819830b4924bb5b436325b26] Merge tag
+>> 'for-linus-2023042601' of
+>> git://git.kernel.org/pub/scm/linux/kernel/git/hid/hid
+>> git bisect good 34da76dca4673ab1819830b4924bb5b436325b26
+>> # good: [97b2ff294381d05e59294a931c4db55276470cb5] Merge tag
+>> 'staging-6.4-rc1' of
+>> git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/staging
+>> git bisect good 97b2ff294381d05e59294a931c4db55276470cb5
+>> # good: [2025b2ca8004c04861903d076c67a73a0ec6dfca] mcb-lpc: Reallocate
+>> memory region to avoid memory overlapping
+>> git bisect good 2025b2ca8004c04861903d076c67a73a0ec6dfca
+>> # bad: [d06f5a3f7140921ada47d49574ae6fa4de5e2a89] cdx: fix build failure due
+>> to sysfs 'bus_type' argument needing to be const
+>> git bisect bad d06f5a3f7140921ada47d49574ae6fa4de5e2a89
+>> # good: [dcfbb67e48a2becfce7990386e985b9c45098ee5] driver core: class: use
+>> lock_class_key already present in struct subsys_private
+>> git bisect good dcfbb67e48a2becfce7990386e985b9c45098ee5
+>> # bad: [6f14c02220c791d5c46b0f965b9340c58f3d503d] driver core: create
+>> class_is_registered()
+>> git bisect bad 6f14c02220c791d5c46b0f965b9340c58f3d503d
+>> # good: [2f9e87f5a2941b259336c7ea6c5a1499ede4554a] driver core: Add a
+>> comment to set_primary_fwnode() on nullifying
+>> git bisect good 2f9e87f5a2941b259336c7ea6c5a1499ede4554a
+>> # bad: [02fe26f25325b547b7a31a65deb0326c04bb5174] firmware_loader: Add debug
+>> message with checksum for FW file
+>> git bisect bad 02fe26f25325b547b7a31a65deb0326c04bb5174
+>> # good: [884f8ce42ccec9d0bf11d8bf9f111e5961ca1c82] driver core: class:
+>> implement class_get/put without the private pointer.
+>> git bisect good 884f8ce42ccec9d0bf11d8bf9f111e5961ca1c82
+>> # bad: [3f84aa5ec052dba960baca4ab8a352d43d47028e] base: soc: populate
+>> machine name in soc_device_register if empty
+>> git bisect bad 3f84aa5ec052dba960baca4ab8a352d43d47028e
+>> # bad: [7b884b7f24b42fa25e92ed724ad82f137610afaf] driver core: class.c:
+>> convert to only use class_to_subsys
+>> git bisect bad 7b884b7f24b42fa25e92ed724ad82f137610afaf
+>> # first bad commit: [7b884b7f24b42fa25e92ed724ad82f137610afaf] driver core:
+>> class.c: convert to only use class_to_subsys
+>> user@host:~/linux/kernel/linux_torvalds$
 > 
-
-For sm8150+, yes there will be only a single CTL to flush even in bonded 
-DSI mode so only one will be flushed.
-
-So, in general, you can refer to the function 
-sde_encoder_phys_needs_single_flush() to decide if it needs 2 flushes or 
-one. That accounts for the DPU rev as well.
-
->>
->> 4243     /* for split flush, combine pending flush masks and send to 
->> master */
->> 4244     if (pending_flush.pending_flush_mask && sde_enc->cur_master) {
->> 4245         ctl = sde_enc->cur_master->hw_ctl;
->> 4246         if (config_changed && ctl->ops.reg_dma_flush)
->> 4247             ctl->ops.reg_dma_flush(ctl, is_regdma_blocking);
->> 4248         _sde_encoder_trigger_flush(&sde_enc->base, 
->> sde_enc->cur_master,
->> 4249                         &pending_flush,
->> 4250                         config_changed);
->> 4251     }
+> This helps a lot, thanks.  I got the reference counting wrong somewhere
+> in here, I thought I tested this better, odd it shows up now...
 > 
+> I'll try to work on it this week.
 > 
+> thanks,
+> 
+> greg k-h
+
+Not at all!
+
+I hope you had better luck because this part of code still looks to me 
+like hieroglyphs.
+
+Linux kernel rose to 10.9M lines, and it would take me thirty years to
+just read it once, 1000 lines a day ... 6.7M lines are "just drivers".
+
+# find . -name '*.c' -o -name '*.h' -print0 | wc --files0-from -
+10913623 35587483 631377958 total
+# find drivers -name '*.c' -o -name '*.h' -print0 | wc --files0-from -
+6705084 19985060 495162001 total
+
+Best regards,
+Mirsad
