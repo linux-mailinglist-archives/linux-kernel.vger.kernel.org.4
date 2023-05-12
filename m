@@ -2,140 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C48700DEA
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 19:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 65053700DF4
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 19:35:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236972AbjELRdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 13:33:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39950 "EHLO
+        id S238096AbjELRe7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 13:34:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231327AbjELRda (ORCPT
+        with ESMTP id S238007AbjELRey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 13:33:30 -0400
-Received: from mail-qk1-f169.google.com (mail-qk1-f169.google.com [209.85.222.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58F9DE79
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 10:32:43 -0700 (PDT)
-Received: by mail-qk1-f169.google.com with SMTP id af79cd13be357-7576eb88a46so636207985a.3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 10:32:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683912762; x=1686504762;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6V0M3WHsM/CbP7GPo2jgrowLKKxSm62sS3psQx8zXQg=;
-        b=TCpwlrJXbOHFG3/rRaqUSXigw3wIVtkbFPe2SAcbbW8ThAcBOQoxa5PwxJgxd/Jgv+
-         aFRMxfiKT3vFr7QqyS4FQbraXF+coSB8j7uwuFQtPJBEqAVu8fPPRx8OpSelM5w1GwDu
-         7NqU0LffQDsoFocYDeknQW0mrtfKbGOZgGt/O+4YKuQKYqOGeIZOlUEIrmITVhPGR+1O
-         LU6e/MYKpze3P5FE4KUR9C21dntLIsMa4mcti8ISYUlGkZNbYOaes5ediKAXy+wtBWcg
-         eKtd8iZc0xw1EXaiEE1B9PRAzh2dZvPXdLVghuiDQlayd7alTThcvIpiH0gzUhB35rla
-         k53Q==
-X-Gm-Message-State: AC+VfDyOeLTAgGMAb3Rx1/bzp3cGl4bU8K8hGofaMUSm8UQlCXDwTVLB
-        hrqVHDAJ7sy3CxFqHFZ0fBbk
-X-Google-Smtp-Source: ACHHUZ5jRqBe5V3qEMe4Dw+z/UN5rDNtGltRsfG7pSdt3oaD03wHbynKxPl194sOY+kaYveH3Enm2A==
-X-Received: by 2002:ad4:5ae5:0:b0:621:1b1d:7dde with SMTP id c5-20020ad45ae5000000b006211b1d7ddemr38554895qvh.8.1683912762375;
-        Fri, 12 May 2023 10:32:42 -0700 (PDT)
-Received: from localhost (pool-68-160-166-30.bstnma.fios.verizon.net. [68.160.166.30])
-        by smtp.gmail.com with ESMTPSA id h10-20020a0cf20a000000b0061b5c45f970sm3137246qvk.74.2023.05.12.10.32.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 12 May 2023 10:32:41 -0700 (PDT)
-Date:   Fri, 12 May 2023 13:32:40 -0400
-From:   Mike Snitzer <snitzer@kernel.org>
-To:     Sarthak Kukreti <sarthakkukreti@chromium.org>
-Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Jason Wang <jasowang@redhat.com>,
-        Bart Van Assche <bvanassche@google.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andreas Dilger <adilger.kernel@dilger.ca>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        Brian Foster <bfoster@redhat.com>,
-        Alasdair Kergon <agk@redhat.com>
-Subject: Re: [PATCH v6 4/5] dm-thin: Add REQ_OP_PROVISION support
-Message-ID: <ZF54OH8hZTTko4c3@redhat.com>
-References: <20230420004850.297045-1-sarthakkukreti@chromium.org>
- <20230506062909.74601-1-sarthakkukreti@chromium.org>
- <20230506062909.74601-5-sarthakkukreti@chromium.org>
+        Fri, 12 May 2023 13:34:54 -0400
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63B7B1B8;
+        Fri, 12 May 2023 10:34:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683912892; x=1715448892;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RlQBSfntHBk1nqp0ze9EW68bwkY9Vs1fRrq9Wz1jlWA=;
+  b=RYKODYs75f89Ckj9akCrT4wVK6RXtHYi8ybDuERwD8sZgnBCOIdiV2eA
+   jl6ytiHXCGhyL6UmG0ZLlGo7qq/HUfHDxSlCyGwjfhKITlXy95L7TaqCS
+   S5OjnPVYN+6ohjzfeu84Pu4vWc5INJyUH5C4MSJiog1F8owJpNbrYT/Zi
+   sNoBkq1QOUuE8c+/Dbxf/R3oEUWJA8G1h7pPvj8dvPam2eiBa5xrv3Hlg
+   FW3ZxoxWRc9HVBGTVu/2K7b31oh5KEHL9RAZd8pm1vs0QOL2s7yIlRw6Y
+   /NeTeBHEt8JEOBV5rf3NbjJL6wbkGL09HG60FGiTAarxLd8MQjTT6Sfmx
+   A==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="331209083"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="331209083"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 10:33:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="677749721"
+X-IronPort-AV: E=Sophos;i="5.99,269,1677571200"; 
+   d="scan'208";a="677749721"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga006.jf.intel.com with ESMTP; 12 May 2023 10:33:52 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pxWeN-00050W-3A;
+        Fri, 12 May 2023 17:33:51 +0000
+Date:   Sat, 13 May 2023 01:33:03 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Rohit Agarwal <quic_rohiagar@quicinc.com>, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        linus.walleij@linaro.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, richardcochran@gmail.com,
+        manivannan.sadhasivam@linaro.org, andy.shevchenko@gmail.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Rohit Agarwal <quic_rohiagar@quicinc.com>
+Subject: Re: [PATCH 1/2] pinctrl: qcom: Remove the msm_function struct
+Message-ID: <202305130111.lKmkjiDs-lkp@intel.com>
+References: <1683892553-19882-2-git-send-email-quic_rohiagar@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230506062909.74601-5-sarthakkukreti@chromium.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1683892553-19882-2-git-send-email-quic_rohiagar@quicinc.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 06 2023 at  2:29P -0400,
-Sarthak Kukreti <sarthakkukreti@chromium.org> wrote:
+Hi Rohit,
 
-> dm-thinpool uses the provision request to provision
-> blocks for a dm-thin device. dm-thinpool currently does not
-> pass through REQ_OP_PROVISION to underlying devices.
-> 
-> For shared blocks, provision requests will break sharing and copy the
-> contents of the entire block. Additionally, if 'skip_block_zeroing'
-> is not set, dm-thin will opt to zero out the entire range as a part
-> of provisioning.
-> 
-> Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
-> ---
->  drivers/md/dm-thin.c | 70 +++++++++++++++++++++++++++++++++++++++++---
->  1 file changed, 66 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/md/dm-thin.c b/drivers/md/dm-thin.c
-> index 2b13c949bd72..3f94f53ac956 100644
-> --- a/drivers/md/dm-thin.c
-> +++ b/drivers/md/dm-thin.c
-...
-> @@ -4114,6 +4171,8 @@ static void pool_io_hints(struct dm_target *ti, struct queue_limits *limits)
->  	 * The pool uses the same discard limits as the underlying data
->  	 * device.  DM core has already set this up.
->  	 */
-> +
-> +	limits->max_provision_sectors = pool->sectors_per_block;
+kernel test robot noticed the following build errors:
 
-Just noticed that setting limits->max_provision_sectors needs to move
-above pool_io_hints code that sets up discards -- otherwise the early
-return from if (!pt->adjusted_pf.discard_enabled) will cause setting
-max_provision_sectors to be skipped.
+[auto build test ERROR on linusw-pinctrl/devel]
+[also build test ERROR on linusw-pinctrl/for-next linus/master v6.4-rc1 next-20230512]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Here is a roll up of the fixes that need to be folded into this patch:
+url:    https://github.com/intel-lab-lkp/linux/commits/Rohit-Agarwal/pinctrl-qcom-Remove-the-msm_function-struct/20230512-195910
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git devel
+patch link:    https://lore.kernel.org/r/1683892553-19882-2-git-send-email-quic_rohiagar%40quicinc.com
+patch subject: [PATCH 1/2] pinctrl: qcom: Remove the msm_function struct
+config: arm64-buildonly-randconfig-r006-20230511 (https://download.01.org/0day-ci/archive/20230513/202305130111.lKmkjiDs-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project b0fb98227c90adf2536c9ad644a74d5e92961111)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm64 cross compiling tool for clang build
+        # apt-get install binutils-aarch64-linux-gnu
+        # https://github.com/intel-lab-lkp/linux/commit/3d2ada4f090f8ebd3b604ccb917394e8b30e23f8
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Rohit-Agarwal/pinctrl-qcom-Remove-the-msm_function-struct/20230512-195910
+        git checkout 3d2ada4f090f8ebd3b604ccb917394e8b30e23f8
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/pinctrl/qcom/
 
-diff --git a/drivers/md/dm-thin.c b/drivers/md/dm-thin.c
-index 3f94f53ac956..90c8e36cb327 100644
---- a/drivers/md/dm-thin.c
-+++ b/drivers/md/dm-thin.c
-@@ -4151,6 +4151,8 @@ static void pool_io_hints(struct dm_target *ti, struct queue_limits *limits)
- 		blk_limits_io_opt(limits, pool->sectors_per_block << SECTOR_SHIFT);
- 	}
- 
-+	limits->max_provision_sectors = pool->sectors_per_block;
-+
- 	/*
- 	 * pt->adjusted_pf is a staging area for the actual features to use.
- 	 * They get transferred to the live pool in bind_control_target()
-@@ -4171,8 +4173,6 @@ static void pool_io_hints(struct dm_target *ti, struct queue_limits *limits)
- 	 * The pool uses the same discard limits as the underlying data
- 	 * device.  DM core has already set this up.
- 	 */
--
--	limits->max_provision_sectors = pool->sectors_per_block;
- }
- 
- static struct target_type pool_target = {
-@@ -4349,6 +4349,7 @@ static int thin_ctr(struct dm_target *ti, unsigned int argc, char **argv)
- 
- 	ti->num_provision_bios = 1;
- 	ti->provision_supported = true;
-+	ti->max_provision_granularity = true;
- 
- 	mutex_unlock(&dm_thin_pool_table.mutex);
- 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305130111.lKmkjiDs-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/pinctrl/qcom/pinctrl-sm7150.c:969:50: error: array has incomplete element type 'const struct msm_function'
+   static const struct msm_function sm7150_functions[] = {
+                                                    ^
+   drivers/pinctrl/qcom/pinctrl-sm7150.c:969:21: note: forward declaration of 'struct msm_function'
+   static const struct msm_function sm7150_functions[] = {
+                       ^
+   1 error generated.
+
+
+vim +969 drivers/pinctrl/qcom/pinctrl-sm7150.c
+
+b915395c9e0436 Danila Tikhonov 2023-03-12   968  
+b915395c9e0436 Danila Tikhonov 2023-03-12  @969  static const struct msm_function sm7150_functions[] = {
+b915395c9e0436 Danila Tikhonov 2023-03-12   970  	FUNCTION(gpio),
+b915395c9e0436 Danila Tikhonov 2023-03-12   971  	FUNCTION(adsp_ext),
+b915395c9e0436 Danila Tikhonov 2023-03-12   972  	FUNCTION(agera_pll),
+b915395c9e0436 Danila Tikhonov 2023-03-12   973  	FUNCTION(aoss_cti),
+b915395c9e0436 Danila Tikhonov 2023-03-12   974  	FUNCTION(atest_char),
+b915395c9e0436 Danila Tikhonov 2023-03-12   975  	FUNCTION(atest_tsens),
+b915395c9e0436 Danila Tikhonov 2023-03-12   976  	FUNCTION(atest_tsens2),
+b915395c9e0436 Danila Tikhonov 2023-03-12   977  	FUNCTION(atest_usb1),
+b915395c9e0436 Danila Tikhonov 2023-03-12   978  	FUNCTION(atest_usb2),
+b915395c9e0436 Danila Tikhonov 2023-03-12   979  	FUNCTION(cam_mclk),
+b915395c9e0436 Danila Tikhonov 2023-03-12   980  	FUNCTION(cci_async),
+b915395c9e0436 Danila Tikhonov 2023-03-12   981  	FUNCTION(cci_i2c),
+b915395c9e0436 Danila Tikhonov 2023-03-12   982  	FUNCTION(cci_timer0),
+b915395c9e0436 Danila Tikhonov 2023-03-12   983  	FUNCTION(cci_timer1),
+b915395c9e0436 Danila Tikhonov 2023-03-12   984  	FUNCTION(cci_timer2),
+b915395c9e0436 Danila Tikhonov 2023-03-12   985  	FUNCTION(cci_timer3),
+b915395c9e0436 Danila Tikhonov 2023-03-12   986  	FUNCTION(cci_timer4),
+b915395c9e0436 Danila Tikhonov 2023-03-12   987  	FUNCTION(dbg_out),
+b915395c9e0436 Danila Tikhonov 2023-03-12   988  	FUNCTION(ddr_bist),
+b915395c9e0436 Danila Tikhonov 2023-03-12   989  	FUNCTION(ddr_pxi0),
+b915395c9e0436 Danila Tikhonov 2023-03-12   990  	FUNCTION(ddr_pxi1),
+b915395c9e0436 Danila Tikhonov 2023-03-12   991  	FUNCTION(ddr_pxi2),
+b915395c9e0436 Danila Tikhonov 2023-03-12   992  	FUNCTION(ddr_pxi3),
+b915395c9e0436 Danila Tikhonov 2023-03-12   993  	FUNCTION(edp_hot),
+b915395c9e0436 Danila Tikhonov 2023-03-12   994  	FUNCTION(edp_lcd),
+b915395c9e0436 Danila Tikhonov 2023-03-12   995  	FUNCTION(gcc_gp1),
+b915395c9e0436 Danila Tikhonov 2023-03-12   996  	FUNCTION(gcc_gp2),
+b915395c9e0436 Danila Tikhonov 2023-03-12   997  	FUNCTION(gcc_gp3),
+b915395c9e0436 Danila Tikhonov 2023-03-12   998  	FUNCTION(gp_pdm0),
+b915395c9e0436 Danila Tikhonov 2023-03-12   999  	FUNCTION(gp_pdm1),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1000  	FUNCTION(gp_pdm2),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1001  	FUNCTION(gps_tx),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1002  	FUNCTION(jitter_bist),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1003  	FUNCTION(ldo_en),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1004  	FUNCTION(ldo_update),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1005  	FUNCTION(m_voc),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1006  	FUNCTION(mdp_vsync),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1007  	FUNCTION(mdp_vsync0),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1008  	FUNCTION(mdp_vsync1),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1009  	FUNCTION(mdp_vsync2),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1010  	FUNCTION(mdp_vsync3),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1011  	FUNCTION(mss_lte),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1012  	FUNCTION(nav_pps_in),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1013  	FUNCTION(nav_pps_out),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1014  	FUNCTION(pa_indicator),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1015  	FUNCTION(pci_e),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1016  	FUNCTION(phase_flag),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1017  	FUNCTION(pll_bist),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1018  	FUNCTION(pll_bypassnl),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1019  	FUNCTION(pll_reset),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1020  	FUNCTION(pri_mi2s),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1021  	FUNCTION(pri_mi2s_ws),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1022  	FUNCTION(prng_rosc),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1023  	FUNCTION(qdss_cti),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1024  	FUNCTION(qdss),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1025  	FUNCTION(qlink_enable),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1026  	FUNCTION(qlink_request),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1027  	FUNCTION(qua_mi2s),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1028  	FUNCTION(qup00),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1029  	FUNCTION(qup01),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1030  	FUNCTION(qup02),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1031  	FUNCTION(qup03),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1032  	FUNCTION(qup04),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1033  	FUNCTION(qup10),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1034  	FUNCTION(qup11),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1035  	FUNCTION(qup12),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1036  	FUNCTION(qup13),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1037  	FUNCTION(qup14),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1038  	FUNCTION(qup15),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1039  	FUNCTION(sd_write),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1040  	FUNCTION(sdc40),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1041  	FUNCTION(sdc41),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1042  	FUNCTION(sdc42),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1043  	FUNCTION(sdc43),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1044  	FUNCTION(sdc4_clk),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1045  	FUNCTION(sdc4_cmd),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1046  	FUNCTION(sec_mi2s),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1047  	FUNCTION(ter_mi2s),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1048  	FUNCTION(tgu_ch0),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1049  	FUNCTION(tgu_ch1),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1050  	FUNCTION(tgu_ch2),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1051  	FUNCTION(tgu_ch3),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1052  	FUNCTION(tsif1_clk),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1053  	FUNCTION(tsif1_data),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1054  	FUNCTION(tsif1_en),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1055  	FUNCTION(tsif1_error),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1056  	FUNCTION(tsif1_sync),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1057  	FUNCTION(tsif2_clk),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1058  	FUNCTION(tsif2_data),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1059  	FUNCTION(tsif2_en),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1060  	FUNCTION(tsif2_error),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1061  	FUNCTION(tsif2_sync),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1062  	FUNCTION(uim1_clk),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1063  	FUNCTION(uim1_data),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1064  	FUNCTION(uim1_present),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1065  	FUNCTION(uim1_reset),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1066  	FUNCTION(uim2_clk),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1067  	FUNCTION(uim2_data),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1068  	FUNCTION(uim2_present),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1069  	FUNCTION(uim2_reset),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1070  	FUNCTION(uim_batt),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1071  	FUNCTION(usb_phy),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1072  	FUNCTION(vfr_1),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1073  	FUNCTION(vsense_trigger),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1074  	FUNCTION(wlan1_adc0),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1075  	FUNCTION(wlan1_adc1),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1076  	FUNCTION(wlan2_adc0),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1077  	FUNCTION(wlan2_adc1),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1078  	FUNCTION(wsa_clk),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1079  	FUNCTION(wsa_data),
+b915395c9e0436 Danila Tikhonov 2023-03-12  1080  };
+b915395c9e0436 Danila Tikhonov 2023-03-12  1081  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
