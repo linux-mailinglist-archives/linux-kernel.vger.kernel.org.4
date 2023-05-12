@@ -2,158 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BACE3700A1D
-	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:16:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A14F700A25
+	for <lists+linux-kernel@lfdr.de>; Fri, 12 May 2023 16:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241255AbjELOQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 10:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48666 "EHLO
+        id S241523AbjELOSO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 10:18:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241018AbjELOQZ (ORCPT
+        with ESMTP id S241244AbjELOSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 10:16:25 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A15613C02
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:15:56 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id e9e14a558f8ab-3352b8b9b70so64404875ab.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:15:56 -0700 (PDT)
+        Fri, 12 May 2023 10:18:13 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 201661385F
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:17:59 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id ffacd0b85a97d-3063208beedso9557291f8f.1
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:17:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1683900954; x=1686492954;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kFiBEzqnUEk+6sTrPSpLHjEFJM2vHqqsIpaf2EaeOcM=;
-        b=X5G/DP5NCCgDLszF2RNRyjcsxPMMC7fXDno2nviHR5RNymZa2KGp4mNpVhQzJJSAVK
-         wB22ZhaAyIp37axpo58k2WVR8R65CPM6QpHDGfOC26CveBbs/iGBSrEyAB4/9I9jLYky
-         O95+J7riNRPv821ae68G74Kp4rxO+fxunbzQA=
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1683901077; x=1686493077;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rrJxMU8vIMHm/TMwdpWrRCixZQfDd4ErxxMWxBnxsIw=;
+        b=xsWSJes1/LDFaZJmw5SGhHwYE3xlBrAEX7eqH6b8Gsbuof6UB2KjGVk1gNwLXvNMUZ
+         y757ReyoLYsWKwMnCITiGnkPSvyqXS9H3TG8rUxuOTR+2dI9goQdiiyVT32XZon2F8oG
+         AWpFJt8CfCw9DK9VGT1PXZVxijHEpGuxaqCpGmklOnA1bE49qNdjDRth5NbYp0kqyA21
+         eNm1/b68d0+wg96IClikVvcqJSwB6FTj0AaeSKdkwQO6sv1zqpemPIFNR7fmFBPr+NZi
+         tZqt8rlQEzqXtq6xfAIBfJFhFeLJIhcEJW6WVIOAU2EQrzemVvMyvHcbCxBgn35AKw9s
+         q7Og==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683900954; x=1686492954;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=kFiBEzqnUEk+6sTrPSpLHjEFJM2vHqqsIpaf2EaeOcM=;
-        b=DMX5gz3NBGWsIApVz3BnKibfehVu01Ata84r9EKiZG2Al46UCw/Ab588kuyedBpgcz
-         XDV7Ewj+LNztzU0ggBIdpdpXFeuMyMRgBBtC45WJohk+vpt6nikAVUsjz+kHaVjpkgy9
-         rMNjgTj3fhELKXlfNlwu4fzkFHykoqdzLhwGESVhwHZLHe813u64kxjeTYWXcODeRHt5
-         qdekF3aM4E0WiuKcTg6hs2Y4PaD68Yq+V7XvWUEVMggH2yec02dr/h4/irx+1pR9Swhe
-         okbpIMahD9+6Xo8wuD7Nyn/ZjbNJyj6po1/B9F6kd7YLnCunY5prX8wKrz6GHSFaVSpG
-         lWSw==
-X-Gm-Message-State: AC+VfDxn5+OWYW+yG88tU4/jMG5NB9U2TrRbTtb7ZUc+wu71SRdn4Uli
-        nxnl7+7dz7nJhGfwPujimfdlkklSywUMspkg6Sg=
-X-Google-Smtp-Source: ACHHUZ7vsXNkIEoAe45Sb+bBs/gykGWEfIa4DEF014pK3ZGxuo8JJQUVb0ESaDKbevNk6Llo9gbibA==
-X-Received: by 2002:a92:3652:0:b0:335:b2b2:6710 with SMTP id d18-20020a923652000000b00335b2b26710mr6562476ilf.15.1683900954501;
-        Fri, 12 May 2023 07:15:54 -0700 (PDT)
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com. [209.85.166.181])
-        by smtp.gmail.com with ESMTPSA id f5-20020a02a805000000b00411a1373aa5sm4873218jaj.155.2023.05.12.07.15.54
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 12 May 2023 07:15:54 -0700 (PDT)
-Received: by mail-il1-f181.google.com with SMTP id e9e14a558f8ab-33164ec77ccso709495ab.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 07:15:54 -0700 (PDT)
-X-Received: by 2002:a05:622a:1188:b0:3ef:a55:7f39 with SMTP id
- m8-20020a05622a118800b003ef0a557f39mr473643qtk.12.1683900932805; Fri, 12 May
- 2023 07:15:32 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683901077; x=1686493077;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rrJxMU8vIMHm/TMwdpWrRCixZQfDd4ErxxMWxBnxsIw=;
+        b=as5hHRyu66aKQbkTvGy1XthqRD8MIQNzx9e2v9406J9gkrXRTC7Fui1/v2I1fp3uam
+         bnZ1xyrsHIs1L+QEqjoT40ggl2xjcEMeeglpSVdjdvRfT9dtDCebTV52qNnMeonoJu7W
+         JRVJzy7k8o4+rjGZOA3T54NAMe3zHeUeQDRDw868kFMNmqzF153mKsVKY7eY2AzmvjTB
+         LFPTu/r5GGv92ROR96DaE3G404mvNrliHJ1E6Wvzqo7hxsG8+YQCgQn2AlTeQ/jRTtNF
+         YUS3DHJaH8d5akUQ8FICih6aQaCS++nYUzKMFhjKCBST0NsYbFn04TXGfGulvSjwuFCl
+         wofg==
+X-Gm-Message-State: AC+VfDyXWmE9EUJdMr9e+B0S1OHr1gX139wlH5C76oteqXgp1v3728tE
+        iO8Uh4M+LqA+kLr997jN3NDQMA==
+X-Google-Smtp-Source: ACHHUZ5Dam+p3j2mO7hOPDi7EwOapz3Q9dzuaFpo1CqgC96qPBKIszszLRwntx88jEu+00Gim4jxxA==
+X-Received: by 2002:a5d:6dce:0:b0:306:db7b:bb2d with SMTP id d14-20020a5d6dce000000b00306db7bbb2dmr17042012wrz.38.1683901077543;
+        Fri, 12 May 2023 07:17:57 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:28d:66d0:c0c4:a67e:f152:1413])
+        by smtp.gmail.com with ESMTPSA id r12-20020a5d494c000000b003077f3dfcc8sm22819982wrs.32.2023.05.12.07.17.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 07:17:57 -0700 (PDT)
+From:   Esteban Blanc <eblanc@baylibre.com>
+To:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
+        a.zummo@towertech.it, alexandre.belloni@bootlin.com
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-rtc@vger.kernel.org, jpanis@baylibre.com,
+        jneanne@baylibre.com, aseketeli@baylibre.com, eblanc@baylibre.com,
+        sterzik@ti.com, u-kumar1@ti.com
+Subject: [PATCH v4 0/3] TI TPS6594 PMIC support (RTC, pinctrl, regulators)
+Date:   Fri, 12 May 2023 16:17:52 +0200
+Message-Id: <20230512141755.1712358-1-eblanc@baylibre.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230511150539.6.Ia0b6ebbaa351e3cd67e201355b9ae67783c7d718@changeid>
- <20230511150539.3.I525a2ed4260046d43c885ee1275e91707743df1c@changeid> <86ttwim0h9.wl-maz@kernel.org>
-In-Reply-To: <86ttwim0h9.wl-maz@kernel.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Fri, 12 May 2023 07:15:21 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=U63oWO+jSdSPN9ruRyyaFKQOMPOGHwio5+6j4vvygS-Q@mail.gmail.com>
-Message-ID: <CAD=FV=U63oWO+jSdSPN9ruRyyaFKQOMPOGHwio5+6j4vvygS-Q@mail.gmail.com>
-Subject: Re: [PATCH 3/6] arm64: dts: mediatek: mt8183: Add mediatek,gicr-save-quirk
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        wenst@chromium.org, Eddie Huang <eddie.huang@mediatek.com>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Ben Ho <Ben.Ho@mediatek.com>, Weiyi Lu <weiyi.lu@mediatek.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Tinghan Shen <tinghan.shen@mediatek.com>, jwerner@chromium.org,
-        Hsin-Hsiung Wang <hsin-hsiung.wang@mediatek.com>,
-        yidilin@chromium.org, Seiya Wang <seiya.wang@mediatek.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+TPS6594 is a Power Management IC which provides regulators and others
+features like GPIOs, RTC, watchdog, ESMs (Error Signal Monitor), and
+PFSM (Pre-configurable Finite State Machine). The SoC and the PMIC can
+communicate through the I2C or SPI interfaces.
+TPS6594 is the super-set device while TPS6593 and LP8764 are derivatives.
 
-On Fri, May 12, 2023 at 1:13=E2=80=AFAM Marc Zyngier <maz@kernel.org> wrote=
-:
->
-> On Thu, 11 May 2023 23:05:37 +0100,
-> Douglas Anderson <dianders@chromium.org> wrote:
-> >
-> > Firmware shipped on mt8183 Chromebooks is affected by the GICR
-> > save/restore issue as described by the patch ("dt-bindings:
-> > interrupt-controller: arm,gic-v3: Add quirk for Mediatek SoCs w/
-> > broken FW"). Add the quirk property.
-> >
-> > Fixes: e526c9bc11f8 ("arm64: dts: Add Mediatek SoC MT8183 and evaluatio=
-n board dts and Makefile")
-> > Signed-off-by: Douglas Anderson <dianders@chromium.org>
-> > ---
-> >
-> >  arch/arm64/boot/dts/mediatek/mt8183.dtsi | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/mediatek/mt8183.dtsi b/arch/arm64/boot=
-/dts/mediatek/mt8183.dtsi
-> > index 5169779d01df..39545172fce5 100644
-> > --- a/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > +++ b/arch/arm64/boot/dts/mediatek/mt8183.dtsi
-> > @@ -709,6 +709,7 @@ gic: interrupt-controller@c000000 {
-> >                             <0 0x0c400000 0 0x2000>,   /* GICC */
-> >                             <0 0x0c410000 0 0x1000>,   /* GICH */
-> >                             <0 0x0c420000 0 0x2000>;   /* GICV */
-> > +                     mediatek,gicr-save-quirk;
->
-> Is that something you can safely generalise at the SoC level? Are
-> these SoC solely used on Chromebooks, and/or
+This series adds support to TI TPS6594 PMIC and its derivatives.
 
-Hmmm, I thought I checked to make sure that the only users of these
-upstream were Chromebooks, but I just double-checked and I obviously
-was blind yesterday. You're right that I need to fix this. I will move
-these to:
+This should be applied on top of other patch series:
+- https://lore.kernel.org/all/20230406075622.8990-1-jpanis@baylibre.com/
+  For core MFD driver
 
-mt8195-cherry.dtsi
-mt8192-asurada.dtsi
-mt8183-kukui.dtsi
+The features implemented in this series are:
+- RTC (child device)
+- Pinmux/GPIO (child device)
+- Regulator (child device)
 
-...it looks as if the common "baseboard" dtsi for mt8186 Chromebooks
-hasn't been upstreamed yet, so we'll have to keep an eye on that and
-make sure it gets the property.
+RTC description:
+The TPS6594 family has an RTC built-in, except for LP8764.
+It provides time and an alarm.
 
-When I spin this series early next week I'll make that change.
+Pinmux/GPIO:
+TPS6594 family has 11 GPIOs. Those GPIO can also serve different
+functions such as I2C or SPI interface, watchdog disable functions.
+The driver provides both pinmuxing for the functions and GPIO capability.
 
+Regulator:
+TPS6594/TPS6593: 5 BUCKs and 4LDOs
+LP8764: 4 BUCKs and no LDO
+Bucks can be used in multipahse mode.
 
-> without any hope of
-> seeing any alternative FW being already in use?
+Changes since v1:
+https://lore.kernel.org/all/20230224133129.887203-1-eblanc@baylibre.com/
+Rtc:
+- Removed struct tps6594_rtc.
+- Removed some dev_err messages.
+- Removed some comments.
+- Remove some whitespaces in comments and error messages.
+- Check if RTC is running before reading a timestamp in read_rtc.
+- Stop RTC at the end of probe to wait for a timestamp to be set.
+- Add default MFD_TPS6594 to Kconfig.
 
-I haven't seen anyone try to fully replace the firmware of a
-Chromebook in the past. It would be a lot of work, certainly. More
-common, I'd think, would be someone chaining an extra level of loader
-between the existing firmware and the OS. I _think_ I've seen people
-use a stripped down U-Boot for this. However, the "resident" firmware
-would still be the one that the Chromebook ships with.
+Pinctrl:
+- Removed #define DEBUG.
+- Add default MFD_TPS6594 to Kconfig.
+- Fix typo and reword help message of Kconfig.
 
-Certainly someone could prove me wrong and re-implement the firmware
-on one of these Chromebooks. That person would need to follow the same
-convention or accept that their kernel won't be enabling pseudoNMIs.
+Regulators:
+Further to Mark Brown review:
+- File header whole block C++ style.
+- Configuring modes not supported: omit all mode operations
+- Log the error before notifying.
+- Request the interrupts while registering the regulators (then remove
+  the lookup function).
+Further to Matti review:
+- Postponed: devm_regulator_irq_helper() and
+  regulator_irq_map_event_simple() can probably be used but code.
+  refactoring is not so trivial. This can be done later as an enhancement
+  after this patch list is merged.
+Buck Multi phase management:
+- Multiphase property can take an array when 2 multi phase buck, buck12
+  and buck34.
+- Configuration multi phase buck34 without multiphase buck12 is not
+  supported (when only one multiphase, must be buck12). Not clear from the
+  spec but confirmed by TI.
+- Supported multiphase conficurations: buck12, buck123, buck1234,
+  buck12 + buck34.
+- All interrupts are attached to the multiphase buck (ie: for regulator
+  buck12, buck1 & buck2 interrupts are registered).
 
--Doug
+Changes since v2:
+https://lore.kernel.org/all/20230328091448.648452-1-eblanc@baylibre.com/
+Rtc:
+- Add logic to avoid reinitializing a working clock.
+- Fix some multiline comments format.
+
+Regulators:
+Further to Mark Brown review:
+- Log the error before notifying.
+- Request the interrupts while registering the regulators.
+Further to Krzysztof Kozlowski:
+https://lore.kernel.org/all/75f0a18d-aed9-8610-2925-4e604b4b0241@baylibre.com/
+- Remove ti, multi-phase-id property which is redundant with buck dts naming
+  rules.
+
+Changes since v3:
+https://lore.kernel.org/lkml/20230414101217.1342891-1-eblanc@baylibre.com/
+RTC:
+- Add wakeup source
+
+Pinctrl:
+- Switch to GPIO_REGMAP framework
+
+Esteban Blanc (2):
+  rtc: tps6594: Add driver for TPS6594 RTC
+  pinctrl: tps6594: Add driver for TPS6594 pinctrl and GPIOs
+
+Jerome Neanne (1):
+  regulator: tps6594-regulator: Add driver for TI TPS6594 regulators
+
+ drivers/pinctrl/Kconfig               |  31 ++
+ drivers/pinctrl/Makefile              |   2 +
+ drivers/pinctrl/pinctrl-tps6594.c     | 301 +++++++++++++
+ drivers/regulator/Kconfig             |  13 +
+ drivers/regulator/Makefile            |   1 +
+ drivers/regulator/tps6594-regulator.c | 620 ++++++++++++++++++++++++++
+ drivers/rtc/Kconfig                   |   9 +
+ drivers/rtc/Makefile                  |   1 +
+ drivers/rtc/rtc-tps6594.c             | 479 ++++++++++++++++++++
+ include/linux/mfd/tps6594.h           |   3 +-
+ 10 files changed, 1459 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/pinctrl/pinctrl-tps6594.c
+ create mode 100644 drivers/regulator/tps6594-regulator.c
+ create mode 100644 drivers/rtc/rtc-tps6594.c
+
+-- 
+2.39.2
+
