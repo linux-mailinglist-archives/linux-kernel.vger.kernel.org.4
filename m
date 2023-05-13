@@ -2,141 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 496F27016D4
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 15:14:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6526670170B
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 15:27:45 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232713AbjEMNOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 09:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52650 "EHLO
+        id S234642AbjEMN1l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 09:27:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57000 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230149AbjEMNOY (ORCPT
+        with ESMTP id S229910AbjEMN1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 09:14:24 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 456363C39
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 06:14:23 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f41d087b24so56914355e9.1
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 06:14:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683983661; x=1686575661;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KScg4ydCaUpShKuw7MCg69AXYFIohUjFbKBvL+ntZ4c=;
-        b=fru4WBJFozuJiW7li8qmMR6SqWTExWH9KYH9ot9EMkzBgywJGHGPAYTXhcVjfJ0wn/
-         8iDLYVxJf0YME4AHr9WfrySF9zZyuNYVOKJczQiqZ/KnzzJTBvWUKzOzmzY3pbRhcyM2
-         5BJpoIeWehf1zOH8M26AjCMq1HpJe1cVuhmHvYXxDaNue4GIg4/RKjV53xMPd7P5BVKb
-         6RisXKsCRPnd98WlzEq1U6/FAmzagUxVvF8JKsOPX5ky++/5Psgoeotx4gLU7xCD0SCf
-         beAhH7mHuFmr3asVygACGMJz9yIrp4g+H4btpTXqNh7mHr5ns2F/FcoaMyaWUhO6pFm+
-         yt5g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683983661; x=1686575661;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KScg4ydCaUpShKuw7MCg69AXYFIohUjFbKBvL+ntZ4c=;
-        b=YMcC0Z/rbyMFvY6XaIOF725ldXCAojASMu+aStv78loIavyPYgpaCXrfRvMvKHF/mg
-         hQg31L60GXTJ7J6UNGpJq09cEfCnVL3FC4rMVg1NzMKNOqAHwictxkgOaNVeBsoPb5k6
-         wkZBggg+8f7nKr7JtfK3kM/DW6xS84aZ/DfmhtJWaWUN4rNOXAIWsKr6yPn6TS6NYM6N
-         l6C54t35P5Jai4LBtYIRHdjDR9bA6I6tFDdXZn5IICxNVC0LK+rYNfN+hujxeh9AqKNz
-         KDRoGq8IK3MokupNjajm3smi75Qo9mNBDXisOnh/i39cPYgPfLGWJCnlxsgljBc9WCB6
-         9U5w==
-X-Gm-Message-State: AC+VfDyrYGjrhoetxoNEYlvNfCQNeKNZoQN5VLN5EQ6JaS/CwoN2AFXl
-        V9k36Nf4LzTMhFHz4tGrNT4=
-X-Google-Smtp-Source: ACHHUZ6GzE4EtDYDWvxFIutm/k122S95nAwJ4sg8r+G2b7K9rajmoRg+0Exa9qsZwr3ZRfT2MnPrCQ==
-X-Received: by 2002:a7b:c4c3:0:b0:3f1:75ae:1cfe with SMTP id g3-20020a7bc4c3000000b003f175ae1cfemr19040929wmk.7.1683983661254;
-        Sat, 13 May 2023 06:14:21 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id f8-20020a7bcd08000000b003f42894ebe2sm15878056wmj.23.2023.05.13.06.14.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 May 2023 06:14:19 -0700 (PDT)
-Date:   Sat, 13 May 2023 14:14:18 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Ryan Roberts <ryan.roberts@arm.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        "Matthew Wilcox (Oracle)" <willy@infradead.org>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        SeongJae Park <sj@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, damon@lists.linux.dev,
-        Christoph Hellwig <hch@infradead.org>,
-        Uladzislau Rezki <urezki@gmail.com>
-Subject: Re: [RESEND PATCH v1 1/5] mm: vmalloc must set pte via arch code
-Message-ID: <db1b8b8f-c3ac-4dbb-8b15-125c0929856a@lucifer.local>
-References: <20230511132113.80196-1-ryan.roberts@arm.com>
- <20230511132113.80196-2-ryan.roberts@arm.com>
+        Sat, 13 May 2023 09:27:38 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B5A519B4
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 06:27:32 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 0405E5FD1A;
+        Sat, 13 May 2023 16:27:29 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1683984449;
+        bh=6s5t1h5bNWHI3YCWI4siWjtZBnr+VzeI83m2ZwBqCms=;
+        h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+        b=kUELyJhDMFZkdvk948EyayBbGbwsD50k5oy5acdZqr84v8Q8HXQQ9kpWG8cRcvCUb
+         BV09ulczuwqkhTnpTR9aGShyjPcQh+Pvip6bHcOMifsbramB4xu0OUHPLnnpuP/2bY
+         noJlZ72GgUTtltqRnGMxZ1Ui6/WxvmrJPqwSk3hiKYu5hOuttUG4EtdEKt3ZbXLmqx
+         ljhH06Id8+Lnih60cAGscwvVDeGXIap20c5E6g1GdvCuDvzXZ4o4TZFWQse51/pn+E
+         D8y8V+KQtW4/yFVydHTl4OvXYb1wI94fhlwdXxa6tyrNizmiZ5rxJbQ/bYfporS46g
+         RMr8JJuBprUBA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Sat, 13 May 2023 16:27:26 +0300 (MSK)
+Message-ID: <59d2c9d1-dc68-2427-5ff4-ca22bc51d5b3@sberdevices.ru>
+Date:   Sat, 13 May 2023 16:22:41 +0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511132113.80196-2-ryan.roberts@arm.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 6/6] mtd: rawnand: meson: rename node for chip select
+Content-Language: en-US
+To:     Miquel Raynal <miquel.raynal@bootlin.com>
+CC:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        Yixun Lan <yixun.lan@amlogic.com>, <oxffffaa@gmail.com>,
+        <kernel@sberdevices.ru>, <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, Michael Walle <michael@walle.cc>,
+        =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <rafal@milecki.pl>
+References: <20230510110835.26115-1-AVKrasnov@sberdevices.ru>
+ <20230510110835.26115-7-AVKrasnov@sberdevices.ru>
+ <CAFBinCAbTuNGEG13f71F8vhN3yGce+kkYJ7PHMpZbh8DzSapJg@mail.gmail.com>
+ <20230510225359.061c2df6@xps-13>
+ <6918ed54-3929-4832-1e93-6eb55b75c82b@sberdevices.ru>
+ <20230511111204.0b0b3d70@xps-13>
+ <dd25efa3-e46a-e857-d355-53330a8a4181@sberdevices.ru>
+ <4561f558-1d34-a7a9-2a05-f6453b0ed9a9@sberdevices.ru>
+ <20230511141114.04cbd9f1@xps-13>
+ <0b0bb315-8e5c-fb30-7786-34824b8d385d@sberdevices.ru>
+ <20230512164918.59f8965f@xps-13>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+In-Reply-To: <20230512164918.59f8965f@xps-13>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/13 07:34:00 #21275929
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-You've not cc'd the vmalloc reviewers, including the author of 3e9a9e256b1e
-whose patch you purport to fix. Please remember to run get_maintainers.pl
-on all files you patch and cc them at least on relevant patches.
 
-Have added Christoph + Uladzislau as cc.
 
-You'll definitely want an ack from Christoph on this!
+On 12.05.2023 17:49, Miquel Raynal wrote:
+> Hi Arseniy,
+> 
+> I'm adding Rafał & Michael: any idea what could be wrong? The behavior
+> below does not look expected at all, but I thought we (= Rafał, mainly)
+> already sorted this out?
+> 
 
-On Thu, May 11, 2023 at 02:21:09PM +0100, Ryan Roberts wrote:
-> It is bad practice to directly set pte entries within a pte table.
-> Instead all modifications must go through arch-provided helpers such as
-> set_pte_at() to give the arch code visibility and allow it to validate
-> (and potentially modify) the operation.
+Hi Miquel, thanks for help!
 
-This does make sense, and I see for example in xtensa that an arch-specific
-instruction is issued under certain circumstances so I do suspect we should
-do this.
+just to clarify an expected behaviour: if i have the following layout in the device tree
 
-As for validation, the function never indicates an error, so only in the
-sense that a WARN_ON() could _in theory_ trigger is it being
-validated. This might be quite a nitty point :) as set_pte_at() has no
-means of indicating an error. But maybe to be pedantic 'check' rather than
-'validate'?
+mtd_nand: nfc@7800 {                            
+ 	compatible = "amlogic,meson-axg-nfc";
+ 	...
+ 	nand@0 {                                
+         	reg = <0>;
+         };
+}
 
->
-> Fixes: 3e9a9e256b1e ("mm: add a vmap_pfn function")
+node used by 'nvmem_add_cells_from_of()' must be NULL? or 'nand@0'?
 
-Not sure if this is really 'fixing' anything, I mean ostensibly, but not
-sure if the tag is relevant here, that is more so for a bug being
-introduced, and unless an issue has arisen not sure if it's
-appropriate. But this might be a nit, again!
+I guess, that in above dts I have node 'nfc@7800' in use, because 'mtd_otp_nvmem_register()' uses
+the following device before passing 'config' to 'nvmem_register()':
 
-> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
-> ---
->  mm/vmalloc.c | 5 ++++-
->  1 file changed, 4 insertions(+), 1 deletion(-)
->
-> diff --git a/mm/vmalloc.c b/mm/vmalloc.c
-> index 9683573f1225..d8d2fe797c55 100644
-> --- a/mm/vmalloc.c
-> +++ b/mm/vmalloc.c
-> @@ -2899,10 +2899,13 @@ struct vmap_pfn_data {
->  static int vmap_pfn_apply(pte_t *pte, unsigned long addr, void *private)
->  {
->  	struct vmap_pfn_data *data = private;
-> +	pte_t ptent;
->
->  	if (WARN_ON_ONCE(pfn_valid(data->pfns[data->idx])))
->  		return -EINVAL;
-> -	*pte = pte_mkspecial(pfn_pte(data->pfns[data->idx++], data->prot));
-> +
-> +	ptent = pte_mkspecial(pfn_pte(data->pfns[data->idx++], data->prot));
-> +	set_pte_at(&init_mm, addr, pte, ptent);
+        /* OTP nvmem will be registered on the physical device */       
+        config.dev = mtd->dev.parent;
 
-While we're refactoring, it'd be nice to stash data->pfns[data->idx] into a
-local pfn variable.
+'mtd->dev.parent' is 'nfc@7800'.
 
->  	return 0;
->  }
->
-> --
-> 2.25.1
->
+May be 'mtd_otp_nvmem_register()' must initialize 'no_of_node' field of 'config' like in 'mtd_nvmem_add()' ?
+This field is documented as:
+
+* @no_of_node:	Device should not use the parent's of_node even if it's !NULL.
+
+In this case node passed to 'nvmem_add_cells_from_of()' will be NULL.
+
+Thanks, Arseniy
+
+>>>>>>>>> On Wed, May 10, 2023 at 1:13 PM Arseniy Krasnov
+>>>>>>>>> <AVKrasnov@sberdevices.ru> wrote:      
+>>>>>>>>>>
+>>>>>>>>>> This renames node with values for chip select from "reg" to "cs". It is
+>>>>>>>>>> needed because when OTP access is enabled on the attached storage, MTD
+>>>>>>>>>> subsystem registers this storage in the NVMEM subsystem. NVMEM in turn
+>>>>>>>>>> tries to use "reg" node in its own manner, supposes that it has another
+>>>>>>>>>> layout. All of this leads to device initialization failure.        
+>>>>>>>>> In general: if we change the device-tree interface (in this case:
+>>>>>>>>> replacing a "reg" with a "cs" property) the dt-bindings have to be
+>>>>>>>>> updated as well.      
+>>>>>>>>
+>>>>>>>> True, and I would add, bindings should not be broken.      
+>>>>>>>
+>>>>>>> I see, that's true. That is bad way to change bindings.
+>>>>>>>    
+>>>>>>>>       
+>>>>>>>>> Documentation/devicetree/bindings/mtd/nand-controller.yaml and
+>>>>>>>>> Documentation/devicetree/bindings/mtd/amlogic,meson-nand.yaml show
+>>>>>>>>> that the chip select of a NAND chip is specified with a "reg"
+>>>>>>>>> property.      
+>>>>>>>>
+>>>>>>>> All NAND controller binding expect the chip-select to be in the
+>>>>>>>> 'reg' property, very much like a spi device would use reg to store the
+>>>>>>>> cs as well: the reg property tells you how you address the device.
+>>>>>>>>
+>>>>>>>> I also fully agree with Martin's comments below. Changing reg is likely
+>>>>>>>> a wrong approach :)
+>>>>>>>>       
+>>>>>>>>> Also the code has to be backwards compatible with old .dtbs.
+>>>>>>>>>      
+>>>>>>>>>> Example:
+>>>>>>>>>>
+>>>>>>>>>> [...] nvmem mtd0-user-otp: nvmem: invalid reg on /soc/bus@ffe00000/...
+>>>>>>>>>> [...] mtd mtd0: Failed to register OTP NVMEM device
+>>>>>>>>>> [...] meson-nand ffe07800.nfc: failed to register MTD device: -22
+>>>>>>>>>> [...] meson-nand ffe07800.nfc: failed to init NAND chips
+>>>>>>>>>> [...] meson-nand: probe of ffe07800.nfc failed with error -22        
+>>>>>>>>> This is odd - can you please share your definition of the &nfc node?      
+>>>>>>>
+>>>>>>> Sure, here it is:
+>>>>>>>
+>>>>>>> mtd_nand: nfc@7800 {                            
+>>>>>>> 	compatible = "amlogic,meson-axg-nfc";
+>>>>>>> 	...
+>>>>>>> 	nand@0 {                                
+>>>>>>>         	reg = <0>;
+>>>>>>>         };
+>>>>>>> }
+>>>>>>>
+>>>>>>> I checked, that 'nand_set_flash_node()' is called with 'nand@0' and i suppose
+>>>>>>> that it is correct (as You mentioned below). But, 'nvmem_add_cells_from_of()' is called
+>>>>>>> with parent: 'nfc@7800', then it iterates over its childs, e.g. 'nand@0' and thus i get such
+>>>>>>> situation. I guess, that 'nvmem_add_cells_from_of()' must be called with 'nand@0' ?    
+>>>>>>
+>>>>>> We recently had issues with nvmem parsing, but I believe a mainline
+>>>>>> kernel should now be perfectly working on this regard. What version of
+>>>>>> the Linux kernel are you using?    
+>>>>>
+>>>>> My current version is:
+>>>>>
+>>>>> VERSION = 6                                                             
+>>>>> PATCHLEVEL = 2                                                          
+>>>>> SUBLEVEL = 0                                                            
+>>>>> EXTRAVERSION = -rc8 
+>>>>>
+>>>>> Fix was in drivers/nvmem/* ?
+>>>>>
+>>>>> Thanks, Arseniy    
+>>>>
+>>>> Upd: I resolved problem in the following way:
+>>>>
+>>>> nand@0 {                                
+>>>> 	reg = <0>;//chip select
+>>>>  
+>>> 	partitions {
+>>> 		compatible = ...
+>>>   
+>>>> 	otp@0 {                         
+>>>> 		#address-cells = <2>;   
+>>>> 		#size-cells = <0>;        
+>>>
+>>> #address/size-cells is not needed here
+>>>   
+>>>> 		compatible = "user-otp";
+>>>> 		reg = <A B>;            
+>>>> 	};                              
+>>>> 	otp@1 {                         
+>>>> 		#address-cells = <2>;   
+>>>> 		#size-cells = <0>;        
+>>>
+>>> Ditto
+>>>   
+>>>> 		compatible = "factory-otp";
+>>>> 		reg = <C D>;            
+>>>> 	};                                
+>>>
+>>> 	};
+>>>   
+>>>> };
+>>>>
+>>>> Now nvmem subsystem parses 'otp@0' and 'otp@1' and error is gone. 'compatible' values are
+>>>> the same as in drivers/mtd/mtdcore.c:mtd_otp_nvmem_add(). 'reg' in 'nand@0' is used as
+>>>> chip select as supposed.  
+>>>
+>>> I don't fully get it. The parsing on the nvmem side should not fail if
+>>> there is no subpartition/otp-region defined. Can you confirm an empty
+>>> NAND device node works? Because your last e-mail suggested the opposite.  
+>>
+>> Ok, so i'll describe what happens in my case. Let's NAND node be like this (IIUC this is
+>> considered as empty NAND device):
+>>
+>> mtd_nand: nfc@7800 {                            
+>> 	compatible = "amlogic,meson-axg-nfc";
+>> 	...
+>> 	nand@0 {                                
+>> 	       	reg = <0>;
+>> 	};
+>> }
+>>
+>> I see, that
+>>
+>> 1) 'mtd_otp_nvmem_add()' calls 'mtd_otp_nvmem_register()' twice for two types of
+>>    OTP memory "user-otp" and "factory-otp". Let's take a look only on "user-otp".
+>> 2) 'mtd_otp_nvmem_register()' tries to lookup for node in 'nand@0' which is compatible with
+>>    "user-otp" and then passes found (or not found, e.g. NULL) node to  'nvmem_register()'.
+>> 3) 'nvmem_register()' uses this node iterating over its childs and searching value "reg" in
+>>    each child. If "user-otp" node is not found in 2), 'nvmem_register()' uses node 'nfc@7800'
+>>    also looking for "reg" value in each of its child. In this case it found "reg" in 'nand@0'
+>>    and fails.
+>>
+>> Now, if i add "compatible = "user-otp";" to 'nand@0', in step 2) search will be successful,
+>> and "reg" value will be used from this new node (or we remove "reg" from it - nothing happens
+>> as You wrote). So, problem is that nvmem tries to parse node with invalid "reg" value.
+>>
+>> Also I see, that 'nvmem_register()' is called earlier in 'mtd_nvmem_add()', but with no effect.
+>> I think, that it is not related with enabled OTP feature.
+>>
+>> Thanks, Arseniy
