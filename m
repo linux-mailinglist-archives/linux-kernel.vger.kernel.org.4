@@ -2,64 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7386B701881
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 19:36:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B74D37018A3
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 19:54:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231686AbjEMRgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 13:36:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55760 "EHLO
+        id S232267AbjEMRym (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 13:54:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjEMRgj (ORCPT
+        with ESMTP id S229473AbjEMRyk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 13:36:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A242686;
-        Sat, 13 May 2023 10:36:37 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5ECF1601DB;
-        Sat, 13 May 2023 17:36:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74121C433D2;
-        Sat, 13 May 2023 17:36:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683999396;
-        bh=Up3kRvV2utStQ+dNNUIlZUZeRXb35QvlSL9rahOYgKI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=SOyhOemMlsKTzAJWuSChiWXJKvqLR0iGhozNoq/El3xAyrGsW8Us1DpqUV+biuLvv
-         oGvHtE2rrzkCTpuW+seXAFtnsYQIhXOdL6AEgv17KT2bJAIVkYVA1pUN4YBEjgPrRp
-         oxGTNAjD57Svw/sR/Fz/q4w8tzhXCxLu2LCjvFiSBfM8iXS0eH7civkQs+t1ajVI6O
-         s6rJ8HrPZjF1lDAFusLAROsw0MOixEW7ycB6qayfoDAh6H4bjqqeAJlpMGuabezIC5
-         hWYxTHcgpr9XbBpGQyVuPdQHCdZXFCAqjbc9F/umTFNK6WsEJIqiyjcqZQWNUR1rRC
-         9+WZXdDkPPhYQ==
-Date:   Sat, 13 May 2023 18:52:36 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 4/5] iio: light: ROHM BU27008 color sensor
-Message-ID: <20230513185236.39bbface@jic23-huawei>
-In-Reply-To: <dca5df2f-b7c0-b5af-f374-7cc5ef854cdb@gmail.com>
-References: <cover.1683105758.git.mazziesaccount@gmail.com>
-        <6d1e37f95dd039d9c96a992b1855fd193bdded40.1683105758.git.mazziesaccount@gmail.com>
-        <20230507155434.3d05daa5@jic23-huawei>
-        <dca5df2f-b7c0-b5af-f374-7cc5ef854cdb@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 13 May 2023 13:54:40 -0400
+Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA70226B6;
+        Sat, 13 May 2023 10:54:37 -0700 (PDT)
+Received: from local
+        by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pxtRv-0003sj-26;
+        Sat, 13 May 2023 17:54:31 +0000
+Date:   Sat, 13 May 2023 19:52:42 +0200
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Andrew Lunn <andrew@lunn.ch>, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH net-next 0/8] Improvements for RealTek 2.5G Ethernet PHYs
+Message-ID: <ZF_Oato0B3d-apVv@pidgin.makrotopia.org>
+References: <cover.1683756691.git.daniel@makrotopia.org>
+ <55c11fd9-54cf-4460-a10c-52ff62b46a4c@lunn.ch>
+ <ZF0iiDIZQzR8vMvm@pidgin.makrotopia.org>
+ <ZF0mUeKjdvZNG44q@shell.armlinux.org.uk>
+ <ZF0vXAzWg44GT+fA@shell.armlinux.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZF0vXAzWg44GT+fA@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,254 +54,200 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 8 May 2023 09:32:28 +0300
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+Hi Russell,
 
-> Hi Jonathan,
-> 
-> On 5/7/23 17:54, Jonathan Cameron wrote:
-> > On Wed, 3 May 2023 12:50:14 +0300
-> > Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> >   
-> >> The ROHM BU27008 is a sensor with 5 photodiodes (red, green, blue, clear
-> >> and IR) with four configurable channels. Red and green being always
-> >> available and two out of the rest three (blue, clear, IR) can be
-> >> selected to be simultaneously measured. Typical application is adjusting
-> >> LCD backlight of TVs, mobile phones and tablet PCs.
-> >>
-> >> Add initial support for the ROHM BU27008 color sensor.
-> >>   - raw_read() of RGB and clear channels
-> >>   - triggered buffer w/ DRDY interrtupt
-> >>
-> >> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> >>  
-> > Mostly stuff that you asked about in response to earlier version but
-> > which I hadn't replied to until today.
+thank you for valuable your input and suggestions.
+
+On Thu, May 11, 2023 at 07:09:32PM +0100, Russell King (Oracle) wrote:
+> On Thu, May 11, 2023 at 06:30:57PM +0100, Russell King (Oracle) wrote:
+> > On Thu, May 11, 2023 at 07:14:48PM +0200, Daniel Golle wrote:
+> > > On Thu, May 11, 2023 at 02:28:15AM +0200, Andrew Lunn wrote:
+> > > > On Thu, May 11, 2023 at 12:53:22AM +0200, Daniel Golle wrote:
+> > > > > Improve support for RealTek 2.5G Ethernet PHYs (RTL822x series).
+> > > > > The PHYs can operate with Clause-22 and Clause-45 MDIO.
+> > > > > 
+> > > > > When using Clause-45 it is desireable to avoid rate-adapter mode and
+> > > > > rather have the MAC interface mode follow the PHY speed. The PHYs
+> > > > > support 2500Base-X for 2500M, and Cisco SGMII for 1000M/100M/10M.
+> > > > 
+> > > > I don't see what clause-45 has to do with this. The driver knows that
+> > > > both C22 and C45 addresses spaces exists in the hardware. It can do
+> > > > reads/writes on both. If the bus master does not support C45, C45 over
+> > > > C22 will be performed by the core.
+> > > 
+> > > My understanding is/was that switching the SerDes interface mode is only
+> > > intended with Clause-45 PHYs, derived from this comment and code:
+> > > 
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/phy/phylink.c#n1661
 > > 
-> > Upshot, don't need the manual irq handling in here.
+> > It's only because:
 > > 
-> > Whilst you aren't setting IRQF_ONESHOT for the pollfunc side of the trigger
-> > (the downstream IRQ / IRQ thread) the IIO utility functions are.  
-> 
-> I tried doing:
-> 
-> static int bu27008_setup_trigger(struct bu27008_data *data, struct 
-> iio_dev *idev)
-> {
-> 	struct iio_trigger *itrig;
-> 	char *name;
-> 	int ret;
-> 
-> 	ret = devm_iio_triggered_buffer_setup(data->dev, idev,
-> 					      &iio_pollfunc_store_time,
-> 					      bu27008_trigger_handler,
-> 					      &bu27008_buffer_ops);
-> 	if (ret)
-> 		return dev_err_probe(data->dev, ret,
-> 			     "iio_triggered_buffer_setup_ext FAIL\n");
-> 
-> 	itrig = devm_iio_trigger_alloc(data->dev, "%sdata-rdy-dev%d",
-> 				       idev->name, iio_device_id(idev));
-> 	if (!itrig)
-> 		return -ENOMEM;
-> 
-> 	data->trig = itrig;
-> 
-> 	itrig->ops = &bu27008_trigger_ops;
-> 	iio_trigger_set_drvdata(itrig, data);
-> 
-> 	name = devm_kasprintf(data->dev, GFP_KERNEL, "%s-bu27008",
-> 			      dev_name(data->dev));
-> 
-> 	ret = devm_request_irq(data->dev, data->irq,
-> 				/* No IRQ disabling */
-> 			       &iio_trigger_generic_data_rdy_poll,
-> 			       0, name, itrig);
-> 	if (ret)
-> 		return dev_err_probe(data->dev, ret, "Could not request IRQ\n");
-> 
-> 	ret = devm_iio_trigger_register(data->dev, itrig);
-> 	if (ret)
-> 		return dev_err_probe(data->dev, ret,
-> 				     "Trigger registration failed\n");
-> 
-> 	/* set default trigger */
-> 	idev->trig = iio_trigger_get(itrig);
-> 
-> 	return 0;
-> }
-> 
-> It seems to me we get IRQ storm out of it, bu27008_trigger_handler never 
-> being called. My assumption is that as soon as the IRQ handling code 
-> exits the iio_trigger_generic_data_rdy_poll, it re-enables the IRQ - and 
-> because we have level active IRQ and because the 
-> bu27008_trigger_handler() has not yet had a chance to read the VALID bit 
-> which restores the IRQ-line - we will immediately enter back to the IRQ 
-> handling.
-
-Ah. I'd miss understood what was going on here. I thought we were talking
-race conditions only - not a level interrupt. Sorry for confusion / being
-half asleep. If it has an Ack like this I'd argue this is really an edge
-interrupt but that would require a guaranteed drop in the signal.
-I am assuming the sensor merrily carries on grabbing data, whether or
-not anyone reads it and so if we treated this as an edge interrupt then
-the clear to set cycle could be very short (and hence not detected).
-If it instead doesn't read new data until previous has been read, then things
-are much simpler.
-
-Hmm. How to make this work cleanly assuming it's case 1. It might be that your
-current approach is the best though it would be nice to do something in the
-IIO code (with risk of breaking everyone  :()  I don't think we can though
-as we have no way from the trigger implementation side to know if we might
-get threaded interrupt handling or not on the downstream side.
-
-We have reference counting to reenable a trigger that actually has a hardware
-mask at the device end when all consumers are done - that should be used for
-the reenable, not do it in the pollfunc handler.  As it's a level interrupt
-you avoid need to do a bonus read in there I think (sometimes that's necessary
-because of an edge trigger and a slow read back on a possible unrelated device).
-
-The subtle difference between IRQF_ONESHOT and irq_disable is one uses
-the irq_mask / unmask callbacks on the irq chip and the other is using
-the enable / disable ones.  That may make no practical difference - I'm not
-entirely sure.  A quick glance at some drivers suggests masking is usually
-lighter weight as less state is rewrite on reenable.
-
-So in short, move the irq_enable() into the iio_trig->reenable() callback.
-
-
-> 
-> This problem does not occur when I use bu27008_data_rdy_poll() (which is 
-> the same but disables the IRQ) instead of 
-> iio_trigger_generic_data_rdy_poll(), and re-enable the IRQ only after 
-> the handler bu27008_trigger_handler() has restored the IRQ line.
-> 
-> Does the sequence above (bu27008_setup_trigger()) look sane?
-> 
+> > 1) Clause 22 PHYs haven't done this.
+> > 2) There is currently no way to know what set of interfaces a PHY would
+> >    make use of - and that affects what ethtool linkmodes are possible.
 > > 
-> >   
-> >> +static irqreturn_t bu27008_trigger_handler(int irq, void *p)
-> >> +{
-> >> +	struct iio_poll_func *pf = p;
-> >> +	struct iio_dev *idev = pf->indio_dev;
-> >> +	struct bu27008_data *data = iio_priv(idev);
-> >> +	struct {
-> >> +		__le16 chan[BU27008_NUM_HW_CHANS];
-> >> +		s64 ts __aligned(8);
-> >> +	} raw;
-> >> +	int ret, dummy;
-> >> +
-> >> +	memset(&raw, 0, sizeof(raw));
-> >> +
-> >> +	/*
-> >> +	 * After some measurements, it seems reading the
-> >> +	 * BU27008_REG_MODE_CONTROL3 debounces the IRQ line
-> >> +	 */
-> >> +	ret = regmap_read(data->regmap, BU27008_REG_MODE_CONTROL3, &dummy);
-> >> +	if (ret < 0)
-> >> +		goto err_read;
-> >> +
-> >> +	ret = regmap_bulk_read(data->regmap, BU27008_REG_DATA0_LO, &raw.chan,
-> >> +			       sizeof(raw.chan));
-> >> +	if (ret < 0)
-> >> +		goto err_read;
-> >> +
-> >> +	iio_push_to_buffers_with_timestamp(idev, &raw, pf->timestamp);
-> >> +err_read:
-> >> +	iio_trigger_notify_done(idev->trig);
-> >> +
-> >> +	enable_irq(data->irq);  
+> > What you point to is nothing more than a hack to make Clause 45 PHYs
+> > work with the code that we currently have.
+
+As this status-quo has been unchanged for several years now, we could
+as well consider it having evolved into a convention...?
+
 > > 
-> > As below. This shouldn't be needed (and if it was it should be in the
-> > reenable path that is ultimately a result of that notify_done above and
-> > some reference counting fun).  
-> 
-> I will see the reenable callback, thanks!
-
-Great
-
-> 
-> >   
-> >> +
-> >> +	return IRQ_HANDLED;
-> >> +}
-> >> +
-> >> +static int bu27008_buffer_preenable(struct iio_dev *idev)
-> >> +{
-> >> +	struct bu27008_data *data = iio_priv(idev);
-> >> +	int chan_sel, ret;
-> >> +
-> >> +	/* Configure channel selection */
-> >> +	if (test_bit(BU27008_BLUE, idev->active_scan_mask)) {
-> >> +		if (test_bit(BU27008_CLEAR, idev->active_scan_mask))
-> >> +			chan_sel = BU27008_BLUE2_CLEAR3;
-> >> +		else
-> >> +			chan_sel = BU27008_BLUE2_IR3;
-> >> +	} else {
-> >> +		chan_sel = BU27008_CLEAR2_IR3;
-> >> +	}
-> >> +
-> >> +	chan_sel = FIELD_PREP(BU27008_MASK_CHAN_SEL, chan_sel);
-> >> +
-> >> +	ret = regmap_update_bits(data->regmap, BU27008_REG_MODE_CONTROL3,
-> >> +				 BU27008_MASK_CHAN_SEL, chan_sel);
-> >> +	if (ret)
-> >> +		return ret;  
+> > To sort this properly, we need PHY drivers to tell phylink what
+> > interfaces they are going to switch between once they have been
+> > attached to the network interface. This is what these patches in my
+> > net-queue branch are doing:
 > > 
-> > Hmm. I'd missed this before but. This is in the wrong place really
-> > (though it probably doesn't make much difference), stuff related to
-> > enabling particular channels should be in iio_info->update_scan_mode()  
-> 
-> Oh. I'll check this out as well.
-> 
+> > net: phy: add possible interfaces
+> > net: phy: marvell10g: fill in possible_interfaces
+> > net: phy: bcm84881: fill in possible_interfaces
+> > net: phylink: split out PHY validation from phylink_bringup_phy()
+> > net: phylink: validate only used interfaces for c45 PHYs
 > > 
-> > It's arguable that the actual measurement mode setting might come
-> > in the postenable callback (after the update_scan_mode() call which
-> > in turn follows the preenable callback).
+> > Why only C45 PHYs again? Because the two PHY drivers that I've added
+> > support for "possible_interfaces" to are both C45. There's no reason
+> > we can't make that work for C22 PHYs as well.
+
+Are you planning to re-submit or merge those changes any time in the
+near future?
+
 > > 
-> > All these callbacks have become a bit blurry over time as we end
-> > up with devices that need to do nasty thing in one place.  In this
-> > particular case it's pretty simple though, so nicer to move
-> > the scan mask stuff to the callback that is given the active_scan
-> > mask as a parameter.
-> >   
-> >> +
-> >> +	return bu27008_meas_set(data, BU27008_MEAS_EN);
-> >> +}
-> >> +
-> >> +static int bu27008_buffer_postdisable(struct iio_dev *idev)
-> >> +{
-> >> +	struct bu27008_data *data = iio_priv(idev);
-> >> +
-> >> +	return bu27008_meas_set(data, BU27008_MEAS_DIS);
-> >> +}
-> >> +
-> >> +static const struct iio_buffer_setup_ops bu27008_buffer_ops = {
-> >> +	.preenable = bu27008_buffer_preenable,
-> >> +	.postdisable = bu27008_buffer_postdisable,
-> >> +};
-> >> +
-> >> +static irqreturn_t bu27008_data_rdy_poll(int irq, void *private)
-> >> +{
-> >> +	/*
-> >> +	 * The BU27008 keeps IRQ asserted until we read the VALID bit from
-> >> +	 * a register. We need to keep the IRQ disabled until this
-> >> +	 */
-> >> +	disable_irq_nosync(irq);  
+> > We could probably make it work for C22 PHYs out of the box by setting
+> > the appropriate bit for the supplied interface in "possible_interfaces"
+> > inside phy_attach_direct() after the call to phy_init_hw() if
+> > "possible_interfaces" is still empty, which means that if a PHY driver
+> > isn't updated to setup "possible_interfaces" then we get basically
+> > whatever interface mode we're attaching with there.
 > > 
-> > As per my late reply to your question on this, shouldn't be needed
-> > as IRQF_ONESHOT is ultimately set for the interrupts nested below this
-> > so they'll get the resulting queuing on the threads which is fine.  
+> > There may be a problem if phy_attach_direct() gets called with
+> > PHY_INTERFACE_MODE_NA (which I believe is possible with DSA.)
 > 
-> I see an IRQ storm if I omit this. The threaded trigger handler which 
-> 'ACKs' the IRQ gets never ran. I'll see the reenable though! Thanks!
+> Maybe something like the below on top of those patches I've pointed
+> to above? Note that this requires all MAC users of phylink to fill
+> in the supported_interfaces bitmap. One of the other patches in my
+> net-queue is:
+> 
+> net: phylink: require supported_interfaces to be filled
 
-As you probably figured, I was wrong. Reenable bit stands though!.
+I've picked up the patches above and also that one from your tree
+git://git.armlinux.org.uk/~rmk/linux-arm net-queue. Together with
+your suggestion below this will solve part of the problem in a much
+more clean way because we explicitely state the supported interface
+modes instead of implictely assuming that switching to Cisco SGMII for
+10M/100M/1000M is supported by the MAC in case 2500Base-X is used
+for 2500M.
 
-Jonathan
+Regarding .get_rate_matching I understand that Linux currently just
+reads from the PHY whether rate matching is going to be performed.
+I assume the PHY should enable rate matching in case the MAC doesn't
+support lower-speed interface modes?
+In the marvell10g and aquantia PHY drivers I see that the bootloader (?)
+is probably supposed to have already done that, as there is no code to
+enable or disable rate adapter mode depending on the MACs
+capabilities. So this problem (having to decides whether or not it is
+feasable to use rate-adapter mode of the PHY; I've 'abused' is_c45 to
+decide that...) is not being adressed by your patchset either, or did I
+miss something?
+
+Anyway. In case you are submitting or merging that set of changes I can
+re-submit my series on top of it.
 
 > 
-> Yours,
-> 	-- Matti
-> 
+> which comes before the above patches. I think that's a reasonable
+> expectation today but needs testing and review of all users (esp.
+> the DSA drivers.)
 
+I can see that it should work fine with mt7530 which is the only DSA
+driver I have been dealing with and have hardware to test.
+
+> 
+> diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
+> index af070be717ec..1cfa101960b9 100644
+> --- a/drivers/net/phy/phylink.c
+> +++ b/drivers/net/phy/phylink.c
+> @@ -1787,8 +1787,26 @@ static int phylink_validate_phy(struct phylink *pl, struct phy_device *phy,
+>  	 */
+>  	state->rate_matching = phy_get_rate_matching(phy, state->interface);
+>  
+> -	/* If this is a clause 22 PHY or is using rate matching, it only
+> -	 * operates in a single mode.
+> +	/* If the PHY provides a bitmap of the interfaces it will be using,
+> +	 * use this to validate the PHY. This can be used for both clause 22
+> +	 * and clause 45 PHYs.
+> +	 */
+> +	if (!phy_interface_empty(phy->possible_interfaces)) {
+> +		/* Calculate the union of the interfaces the PHY supports in
+> +		 * its configured state, and the host's supported interfaces.
+> +		 * We never want an interface that isn't supported by the host.
+> +		 */
+> +		phy_interface_and(interfaces, phy->possible_interfaces,
+> +				  pl->config->supported_interfaces);
+> +
+> +		return phylink_validate_mask(pl, mode, supported, state,
+> +					     interfaces);
+> +	}
+> +
+> +	/* If the PHY doesn't provide it a bitmap of the interfaces it will
+> +	 * be using, or is a traditional clause 22 PHY driver that doesn't
+> +	 * set ->possible_interfaces, or if we're using rate matching, then
+> +	 * we're operating in a single mode.
+>  	 */
+>  	if (!phy->is_c45 || state->rate_matching != RATE_MATCH_NONE)
+>  		return phylink_validate(pl, mode, supported, state);
+> @@ -1797,28 +1815,18 @@ static int phylink_validate_phy(struct phylink *pl, struct phy_device *phy,
+>  	 * modes according to the negotiated media speed. For example, the
+>  	 * interface may switch between 10GBASE-R, 5GBASE-R, 2500BASE-X and
+>  	 * SGMII.
+> +	 *
+> +	 * If we're operating in such a mode, but haven't been provided a
+> +	 * possible_interfaces bitmap, then we need to validate all possible
+> +	 * interfaces.
+>  	 */
+> -
+> -	/* Backwards compatibility for those MAC drivers that don't set
+> -	 * their supported_interfaces, or PHY drivers that don't set
+> -	 * their possible_interfaces.
+> -	 */
+> -	if (phy_interface_empty(phy->possible_interfaces) &&
+> +	if (phy->is_c45 &&
+>  	    state->interface != PHY_INTERFACE_MODE_RXAUI &&
+>  	    state->interface != PHY_INTERFACE_MODE_XAUI &&
+> -	    state->interface != PHY_INTERFACE_MODE_USXGMII) {
+> +	    state->interface != PHY_INTERFACE_MODE_USXGMII)
+>  		state->interface = PHY_INTERFACE_MODE_NA;
+> -		return phylink_validate(pl, mode, supported, state);
+> -	}
+> -
+> -	/* Calculate the union of the interfaces the PHY supports in
+> -	 * its configured state, and the host's supported interfaces.
+> -	 * We never want an interface that isn't supported by the host.
+> -	 */
+> -	phy_interface_and(interfaces, phy->possible_interfaces,
+> -			  pl->config->supported_interfaces);
+>  
+> -	return phylink_validate_mask(pl, mode, supported, state, interfaces);
+> +	return phylink_validate(pl, mode, supported, state);
+>  }
+>  
+>  static int phylink_bringup_phy(struct phylink *pl, struct phy_device *phy,
+> diff --git a/include/linux/phy.h b/include/linux/phy.h
+> index 4e0db4a14f30..b54aa9e8c122 100644
+> --- a/include/linux/phy.h
+> +++ b/include/linux/phy.h
+> @@ -178,6 +178,11 @@ static inline bool phy_interface_empty(const unsigned long *intf)
+>  	return bitmap_empty(intf, PHY_INTERFACE_MODE_MAX);
+>  }
+>  
+> +static inline unsigned int phy_interface_weight(const unsigned long *intf)
+> +{
+> +	return bitmap_weight(intf, PHY_INTERFACE_MODE_MAX);
+> +}
+> +
+>  static inline void phy_interface_and(unsigned long *dst, const unsigned long *a,
+>  				     const unsigned long *b)
+>  {
+> 
+> -- 
+> RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+> FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+> 
