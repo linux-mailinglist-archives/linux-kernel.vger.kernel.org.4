@@ -2,63 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB2207013D9
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 04:04:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 509D17013DD
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 04:06:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241699AbjEMCEF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 22:04:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45356 "EHLO
+        id S241215AbjEMCGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 22:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbjEMCEC (ORCPT
+        with ESMTP id S229507AbjEMCGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 22:04:02 -0400
-Received: from dggsgout12.his.huawei.com (dggsgout12.his.huawei.com [45.249.212.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13F141718;
-        Fri, 12 May 2023 19:03:59 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout12.his.huawei.com (SkyGuard) with ESMTP id 4QJ87Y308Zz4f3mLC;
-        Sat, 13 May 2023 10:03:53 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP4 (Coremail) with SMTP id gCh0CgAHvbAH8F5k1m9UJQ--.37479S3;
-        Sat, 13 May 2023 10:03:52 +0800 (CST)
-Subject: Re: [PATCH -next v2 0/7] limit the number of plugged bio
-To:     Song Liu <song@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     akpm@osdl.org, neilb@suse.de, linux-raid@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-References: <20230426082031.1299149-1-yukuai1@huaweicloud.com>
- <a7246f63-b499-8b26-e27a-3d16abc18ced@huaweicloud.com>
- <CAPhsuW4ZVs0QbWhHibL4A4LG72Q9bPabjCY7ZZkcshTYf+vhbg@mail.gmail.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <88d2b016-376c-d65d-ef04-d9cdf5d7b096@huaweicloud.com>
-Date:   Sat, 13 May 2023 10:03:50 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Fri, 12 May 2023 22:06:34 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2051.outbound.protection.outlook.com [40.107.92.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9797B1BEF;
+        Fri, 12 May 2023 19:06:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=iLJw9/Yrsia6eTM6roCz56CHSHn8V7HDsY4NaCS/TdH+/IVNaWGWntlGzju3VSqLPh39Di72TyfnzWuxBB4XNcYLi9P+HAdvsNmmkvCTlNeQBWucN+nlqSu8ngAGl//ATVDQqBmoTw620ANLCeluXASNWuq0khe+G/2HQn0u4BMRt3oQLVRwbJJfVp/UBLEHvg+cOcm0Pn8UPd14UfTsReGl41TB0kO2qhGpV6+6FdxOIwFCQJP7Nyho6bazQFVkoD/6DyKTjH+tEWVkFZrGnh3XBUtvktUAP1TdEG4OjpJAllxPyW3ukEO03yGABp/79QU2PxqVtronuhOnfI74+g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oG7JYvn61Q12HdENJ4dw7LrDt1HRLBd+mOyfbd1FJsY=;
+ b=WTgqBLR+RixfLUm0IoOqc1PigR5RFFhIt5Be//4ggrwI3Zix2XXK/XUF8c5Xvb6nAPrNGcuqvPy5snFsE+uMzVE6qndd17zaEBF/Gf1v+LDS6yVByuDPBlwY/jo5Rk6jwe2QuNANjXF+qonYuPnV1SmcUhb5I1/aUnI5OAsjnm3C+tfh3AGrW/78IyNyGW4cuuwxM5Cwk6dmWv6KUfw8ZlaDyVhtjY0NEznW7A+axW7aCIIYJVlWuDxGSWOA0O8FCg3OYT6Vjp6tEQqP7WAVS6AwPWSeD3VxoPcTG/7vgyuXzfX6cM6Ib8SLjaQRqfYa2pydkcbW+2ybuyKUujVWRw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=kernel.org smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oG7JYvn61Q12HdENJ4dw7LrDt1HRLBd+mOyfbd1FJsY=;
+ b=Y2GjO6ZTahdtYqIXvfiEddqgPnIW5iiNr3KqQ3toZUU1nfdsQ4VGgeUe530qd/MSUXRwVjkV76vmlOGNLIZUymiyzwfhP3oe1lPUdnR5jxbxYPqWzZN0VCEHJyFegYAdBAUSj8Z/bbw2rsClMLcpDxlrgGKDow4WndqUoiX1fp8x7GcgfKLaKEvtykZBuyXZVBx5dOXkHvAyeTaRg9yyl7JSVXe59JKc1T2e9FeS/YpI9HUORp6rXfBYC0u5PW8rLrLedyHN2NR6G+rq8JXLzH5/QxwizsctGcN5E5aT7kPw2D/mRYh6kbXTkCVQcLHHcJMsg9UsEUdU18VtpNie0Q==
+Received: from MW4PR04CA0205.namprd04.prod.outlook.com (2603:10b6:303:86::30)
+ by SN7PR12MB7371.namprd12.prod.outlook.com (2603:10b6:806:29a::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.22; Sat, 13 May
+ 2023 02:06:30 +0000
+Received: from CO1NAM11FT034.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:86:cafe::d1) by MW4PR04CA0205.outlook.office365.com
+ (2603:10b6:303:86::30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.25 via Frontend
+ Transport; Sat, 13 May 2023 02:06:30 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1NAM11FT034.mail.protection.outlook.com (10.13.174.248) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6387.27 via Frontend Transport; Sat, 13 May 2023 02:06:29 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 12 May 2023
+ 19:06:17 -0700
+Received: from [10.110.48.28] (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 12 May
+ 2023 19:06:16 -0700
+Message-ID: <dbea2e8b-41ea-565c-a78e-61105e23fc08@nvidia.com>
+Date:   Fri, 12 May 2023 19:06:15 -0700
 MIME-Version: 1.0
-In-Reply-To: <CAPhsuW4ZVs0QbWhHibL4A4LG72Q9bPabjCY7ZZkcshTYf+vhbg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgAHvbAH8F5k1m9UJQ--.37479S3
-X-Coremail-Antispam: 1UD129KBjvJXoW7uFyfXF48Kr18JFWUCry5twb_yoW8XF1rpa
-        y3GanYkF4kArnrAws2yF4xWry0ka1fJr4UXrn8KryxCF98WFyxWF1xKw45Kwn2vr93W3W2
-        9ayUt3s7KFyvyFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUkG14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
-        1l84ACjcxK6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
-        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCYjI0SjxkI62AI1cAE67vI
-        Y487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI
-        0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y
-        0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxV
-        WUJVW8JwCI42IY6xAIw20EY4v20xvaj40_WFyUJVCq3wCI42IY6I8E87Iv67AKxVWUJVW8
-        JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x0JUdHUDUUU
-        UU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] arm64/mm: don't WARN when alloc/free-ing device private
+ pages
+Content-Language: en-US
+To:     Ard Biesheuvel <ardb@kernel.org>
+CC:     Andrew Morton <akpm@linux-foundation.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Anshuman Khandual <anshuman.khandual@arm.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Feiyang Chen <chenfeiyang@loongson.cn>,
+        Alistair Popple <apopple@nvidia.com>,
+        Ralph Campbell <rcampbell@nvidia.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        LKML <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
+        <stable@vger.kernel.org>
+References: <20230406040515.383238-1-jhubbard@nvidia.com>
+ <CAMj1kXHxyntweiq76CdW=ov2_CkEQUbdPekGNDtFp7rBCJJE2w@mail.gmail.com>
+ <a421b96a-ed4b-ae7d-2fe9-ed5f5f8deacf@nvidia.com>
+ <CAMj1kXGtFyugzi9MZW=4_oVTy==eAF6283fwvX9fdZhO98ZA3g@mail.gmail.com>
+ <8dd0e252-8d8b-a62d-8836-f9f26bc12bc7@nvidia.com>
+ <90505ef2-9250-d791-e05d-dbcb7672e4c4@nvidia.com>
+ <CAMj1kXFZ=4hLL1w6iCV5O5uVoVLHAJbc0rr40j24ObenAjXe9w@mail.gmail.com>
+From:   John Hubbard <jhubbard@nvidia.com>
+In-Reply-To: <CAMj1kXFZ=4hLL1w6iCV5O5uVoVLHAJbc0rr40j24ObenAjXe9w@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail201.nvidia.com (10.129.68.8) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT034:EE_|SN7PR12MB7371:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0dc4b180-bd07-444d-1376-08db5356aac6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ofkLTJzhw6xT4ycMzyQCbOJSgxI1u9UrGLbNRz6bS7j8BdCw/vndZtwDKNy/DAviUBfVY4HpQbhWK1/lVBI1nUQ9bd817zH/VXhOoStMaYmoAISW3IiBexwfa9Y/hLZPpoo+0w9eGcyS/2dT6xilTOVO5pD2iqxHbxv1WHSnTSAl9MMkuygr/4DTbNnoV2YOPDivz2pjTJJuhiONKMpzebWw/6791NWXe/juvFBLoyzAnwksP4Fo1QqyL+dPkA6flNXSOicasPmlxT+VDU+L2eyIJZIZY36mROrhXgUfGchE0ve0GW200qZfO3EN+H4RbQhMk3TJrtXSCjrgKIPMaSqfuh78YtEJp1gt8gBfUwwl2gibuPWGfXFRkrVygSNWyPITXNTRBTiwemEk2ggzS90r3qfFDFGcv1kOXUEIDityIBpf0BrQd6jMvmKfxbJ9F1+XfG6U2SsuN5VBpMCPPiUud8GtSw30RrPeFxRzWnRWS1yGPyDwDzjVexuZ75G79QF4Wlq/L3MUPQPwCSjMOsiSp8Uc+9diMQ+lrXEbj3klWkf4TpommI8mkci10BNK6W2MSzb1Pidweq1xiKYv4qSz66UAs4kcUHe+ZQ5E8qpK/IAQQoKlsz/MEubOjIeVgxDOnatt9y7JiPtXXR+6iCL3GtQZuzgC6t51+QaOKxOs67baoiPZWo8tACsKIXiIE6MwHqLtk1cShr3UwiuG5fqNgBaDwNS/XyIy3xDWcC8ujVrHgrufUMgESOHE/oxa+ZXwjrHxJ66HiT+8IrzNag==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(39860400002)(376002)(136003)(451199021)(46966006)(36840700001)(40470700004)(36756003)(478600001)(86362001)(31696002)(54906003)(6916009)(4326008)(16576012)(70586007)(70206006)(316002)(82310400005)(40480700001)(7416002)(2906002)(8676002)(5660300002)(8936002)(4744005)(2616005)(82740400003)(41300700001)(356005)(7636003)(16526019)(186003)(36860700001)(53546011)(336012)(426003)(47076005)(26005)(31686004)(40460700003)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 May 2023 02:06:29.9520
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0dc4b180-bd07-444d-1376-08db5356aac6
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT034.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7371
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,54 +124,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-在 2023/05/13 8:50, Song Liu 写道:
-> On Fri, May 12, 2023 at 2:43 AM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+On 5/12/23 07:42, Ard Biesheuvel wrote:
+>> I'm still not sure of how to make room, but working on it.
 >>
->> Hi,
->>
->> 在 2023/04/26 16:20, Yu Kuai 写道:
->>> From: Yu Kuai <yukuai3@huawei.com>
->>>
->>> Changes in v2:
->>>    - remove the patch to rename raid1-10.c
->>>
->>> This patchset tries to limit the number of plugged bio for raid1 and
->>> raid10, which is done in the last patch, other patches are some refactor
->>> and optimizations.
->>>
->>> This patchset is tested with a new test [1], this test triggers dirty
->>> pages writeback for 10s, and in the meantime checks disk inflight.
->>>
->>> Before this patchset, test will fail because inflight exceed threshold
->>> (threshold is set to 4096 in the test, in theory this can be mutch
->>>    greater as long as there are enough dirty pages and memory).
->>>
->>> After this patchset, inflight is within 96 (MAX_PLUG_BIO * copies).
->>>
->>> [1] https://lore.kernel.org/linux-raid/20230426073447.1294916-1-yukuai1@huaweicloud.com/
->>
->> Friendly ping...
 > 
-> I am sorry for the delay.
+> The assumption that only the linear map needs to be covered by struct
+> pages is rather fundamental to the arm64 mm code, as far as I am
+> aware.
 > 
-> The set looks good overall, but I will need some more time to take a closer
-> look. A few comments/questions:
-> 
-> 1. For functions in raid1-10.c, let's prefix them with raid1_ instead of md_*.
-Ok, I'll change that in v3.
+> Given that these device memory regions have no direct correspondence
+> with the linear map at all, couldn't we simply vmalloc() a range of
+> memory for struct pages for such a region and wire that up in the
+> existing code? That seems far more maintainable to me than
+> reorganizing the entire kernel VA space, and only for some choices for
+> the dimensions.
 
-> 2. Do we need unplug_wq to be per-bitmap? Would a shared queue work?
+The vmalloc approach does sound like it should Just Work, yes. I'll try it out.
 
-I think this can work, the limitation is that global workqueue can
-support 256 queued work at a time, but this should be enough.
+And now I'm trying to remember why Jerome didn't use that approach for x86
+originally. If this fixes HMM on arm64, I'll revisit that question too.
 
-Thanks,
-Kuai
-> 
-> Thanks,
-> Song
-> .
-> 
+Really appreciate the help and advice here.
+
+
+thanks,
+-- 
+John Hubbard
+NVIDIA
 
