@@ -2,92 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21CE170159D
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 11:24:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FA967015A1
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 11:25:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237488AbjEMJY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 05:24:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58996 "EHLO
+        id S237634AbjEMJZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 05:25:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231446AbjEMJYX (ORCPT
+        with ESMTP id S233605AbjEMJZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 05:24:23 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98B2540FB;
-        Sat, 13 May 2023 02:24:19 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pxlTx-0005lU-9d; Sat, 13 May 2023 11:24:05 +0200
-Message-ID: <10dfcc33-b3f9-57f7-1693-dd850f3adc6e@leemhuis.info>
-Date:   Sat, 13 May 2023 11:24:04 +0200
+        Sat, 13 May 2023 05:25:12 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CBFE40FB;
+        Sat, 13 May 2023 02:25:11 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1aaea43def7so75178055ad.2;
+        Sat, 13 May 2023 02:25:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1683969911; x=1686561911;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SlCH0G2m8kRJpvkxVEbC2XIL/mZruz0Jkv7EOy6aMxk=;
+        b=fhQmRZtAHOH36wyJU2rlLs/w4OhknwgCOTsAGH2bgx5fytY08pzzIFphrFGUASWOq4
+         OJdOATuTGchZKM4Uo+PM0gi4v5ssEvxQhbP9KKE13C8v98wtMD+0EMeZmXHJisssn9sc
+         7wGGpl0vvH/oFaYAgkHUwbLvVLaE0veCNt8KAH1NSlY0Ed94HnOpf02KjqHMKTPNVWsf
+         lMUUQdgfMZhaDM5dvZ4gH8K/KW3Wyksje5KN4bUk6rttnH8+qeZslb3Bvhz7270CMq2l
+         WdoKImJ+rRYO0op8mHBawLeEcMBCh9GypjQC/Wdr3VxZSQh9TBvdN/qnGyyB1EcUBmob
+         2ZRQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683969911; x=1686561911;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SlCH0G2m8kRJpvkxVEbC2XIL/mZruz0Jkv7EOy6aMxk=;
+        b=g228uvaO4KlmzKLuE+CgCyUcJdPdUXJ/dlnVzinhJqjrwlG9/HsEhM65oqmR4OJMrK
+         195b0u7NokxwWWtmyLAPGc6YdXCBQHBARHAcUCvl2B3D6f1JgwKmdi7yBL2dOG8luT2a
+         gkkZPDH2Z7TqlK8409QlP+me3gHBH41o4BYoL3voGei2UiK1jTzgdblE0Bx9JYDKlZt5
+         BkoaZh/T0NyGAFIKzP089aFyyuEyk4IKSisAX8R6RomU+kiI9bJd716Lipbxgs4zQnc1
+         t55ntGEa4+Gv6/2Tv1TRwkKxIq0JqTjx6bT9TCimLVHws3hS2Zcc3zajN+Dc77EX9Lwi
+         If0A==
+X-Gm-Message-State: AC+VfDw/SaT3vcnPX1VweePkOqmkTNV6EfAJe0TiCCoXRF8igwBs7ijl
+        R76CRu2TmwUki2h67xXSuuw=
+X-Google-Smtp-Source: ACHHUZ7LknF76h0kIjVXmGlmqNXZ+WVcST0A5b/F7jca+bKv9M+VoFiYWPkLa51Ng/PS0qu7yYpFQg==
+X-Received: by 2002:a17:903:338e:b0:1a9:8ba4:d0d3 with SMTP id kb14-20020a170903338e00b001a98ba4d0d3mr24277429plb.8.1683969911004;
+        Sat, 13 May 2023 02:25:11 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-69.three.co.id. [180.214.232.69])
+        by smtp.gmail.com with ESMTPSA id d13-20020a170902728d00b001a217a7a11csm6335741pll.131.2023.05.13.02.25.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 13 May 2023 02:25:10 -0700 (PDT)
+Message-ID: <e53ccc96-49f5-6e01-6edf-d44b1cff405f@gmail.com>
+Date:   Sat, 13 May 2023 16:25:01 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.10.0
-Content-Language: en-US, de-DE
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Jonathan Corbet <corbet@lwn.net>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rong Tao <rtoax@foxmail.com>,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        Zhangfei Gao <zhangfei.gao@foxmail.com>,
-        linux-doc@vger.kernel.org, linux-hardening@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230510183423.never.877-kees@kernel.org>
- <6c1f853b-b051-c390-267e-1ea1741e8537@leemhuis.info>
- <202305111135.D65457C24@keescook>
-From:   Thorsten Leemhuis <linux@leemhuis.info>
-Subject: Re: [PATCH] docs: submitting-patches: Discuss interleaved replies
-In-Reply-To: <202305111135.D65457C24@keescook>
+Subject: Re: [PATCH v2 00/10] Treewide GPL SPDX conversion and cleanup (in
+ response to Didi's GPL full name fixes)
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
+        Linux DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Staging Drivers <linux-staging@lists.linux.dev>,
+        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
+        Linux Kernel Actions <linux-actions@lists.infradead.org>,
+        Diederik de Haas <didi.debian@cknow.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Philippe Ombredanne <pombredanne@nexb.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Airlie <airlied@redhat.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>
+References: <20230512100620.36807-1-bagasdotme@gmail.com>
+ <2023051243-bunch-goliath-7380@gregkh>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <2023051243-bunch-goliath-7380@gregkh>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1683969859;5f7505f3;
-X-HE-SMSGID: 1pxlTx-0005lU-9d
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.05.23 20:37, Kees Cook wrote:
-> On Thu, May 11, 2023 at 11:21:36AM +0200, Thorsten Leemhuis wrote:
->> On 10.05.23 20:34, Kees Cook wrote:
->>> Top-posting has been strongly discouraged in Linux development, but this
->>> was actually not written anywhere in the common documentation about
->>> sending patches and replying to reviews. Add a section about trimming
->>> and interleaved replies.
->>
->> Thx for doing this.
->>
->>> [...]
->>> ---
->>>  Documentation/process/submitting-patches.rst | 23 ++++++++++++++++++++
->>>  1 file changed, 23 insertions(+)
->>
->> For some reason we have duplicate code^w documentation for this, hence
->> I'd say the same or a similar text should also be added to one of the
->> filed in Documentation/process/[0-9].*rst ; from a quick
->> Documentation/process/6.Followthrough.rst might be the best one.
->>
->> Maybe in fact the text should move there and submitting-patches.rst
->> should have a much shorter version, as it's meant to be the terser of
->> the two docs about this.
+On 5/12/23 18:23, Greg Kroah-Hartman wrote:
+> I'm glad to take these types of changes through the SPDX tree, but
+> please break them up into smaller changes that show the justification
+> for each type of change in each subsystem, so that we can evaluate them
+> on an individual basis.  As you did here, you are lumping things
+> together only by the existance of the file in the tree, not by the
+> logical type of change happening, which isn't ok.
 > 
-> Hm, The place where it is mentioned is even shorter,
+> Also, you can send them as subsystem-specific series, so as to not have
+> to cross-post all of the changes all over the place.  I doubt the drm
+> developers care about ethernet driver license issues :)
+> 
 
-Ohh, it is mentioned there already? I briefly looked, but had missed it.
-Sorry. :-/
+OK, thanks!
 
-> so I kind of like
-> it in submittingpatches. But, I'm open to whatever seems best.
+-- 
+An old man doll... just what I always wanted! - Clara
 
-Guess that is Jonathan's call to make. Your v2 patch to me looks a bit
-like adding quite a bit of new and slow code to the fast path while
-adjusting faster code in the slow path.
-
-But the relation and interaction between those two texts in a bit messy
-already, so maybe it doesn't matter that much.
-
-Ciao, Thorsten
