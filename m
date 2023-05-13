@@ -2,117 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8549B701651
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 13:09:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17069701645
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 13:05:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237914AbjEMLJU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 07:09:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47152 "EHLO
+        id S235208AbjEMLFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 07:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233804AbjEMLJR (ORCPT
+        with ESMTP id S232557AbjEMLFU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 07:09:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F3440E3;
-        Sat, 13 May 2023 04:09:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 87CD760B73;
-        Sat, 13 May 2023 11:09:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E93D2C433D2;
-        Sat, 13 May 2023 11:09:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1683976154;
-        bh=uXFoiR1SWFtZOtGgV5o4WxStrNeNIyIJxeYxRx+a7hQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=t5xMjIXx3kXmI5AGZ+OV2hLCDwdg5B4Io7eigd84X5cC9TCmNGEWkD3eFWtpwqfsN
-         IHavtVhWBzvBtYoyMy8qruC3SpuVVoE0fQfF6XwMuzTWqNzIjRYD2Numx1NTD5MZTQ
-         PubhhDESdtazxWt29zBxdGxLLKnhefo0yeOXkqkw=
-Date:   Sat, 13 May 2023 20:04:40 +0900
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     James Clark <james.clark@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
-        michal.simek@amd.com, Jonathan.Cameron@huawei.com,
-        Jonathan Corbet <corbet@lwn.net>,
-        Jean Delvare <jdelvare@suse.com>,
-        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
-        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] devres: Provide krealloc_array
-Message-ID: <2023051340-sinuous-darkroom-2497@gregkh>
-References: <20230509094942.396150-1-james.clark@arm.com>
- <20230509094942.396150-2-james.clark@arm.com>
+        Sat, 13 May 2023 07:05:20 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 715D83C25;
+        Sat, 13 May 2023 04:05:19 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pxn3s-0005a8-PR; Sat, 13 May 2023 13:05:16 +0200
+Message-ID: <09d649a7-6245-2689-7791-ba173e8ac852@leemhuis.info>
+Date:   Sat, 13 May 2023 13:05:15 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230509094942.396150-2-james.clark@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [regression] Bug 217122 - "Transfer event TRB DMA ptr not part of
+ current TD" messages since 6.1
+Content-Language: en-US, de-DE
+From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     Linux kernel regressions list <regressions@lists.linux.dev>
+Cc:     "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Mathias Nyman <mathias.nyman@intel.com>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>,
+          Linux regressions mailing list 
+          <regressions@lists.linux.dev>
+References: <72579321-2cc9-2de1-d28c-0c56562f3a28@leemhuis.info>
+In-Reply-To: <72579321-2cc9-2de1-d28c-0c56562f3a28@leemhuis.info>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1683975919;f3d4928a;
+X-HE-SMSGID: 1pxn3s-0005a8-PR
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 10:49:38AM +0100, James Clark wrote:
-> There is no krealloc_array equivalent in devres. Users would have to
-> do their own multiplication overflow check so provide one.
+[TLDR: This mail in primarily relevant for Linux kernel regression
+tracking. See link in footer if these mails annoy you.]
+
+On 05.03.23 10:18, Linux regression tracking (Thorsten Leemhuis) wrote:
+
+> I noticed a regression report in bugzilla.kernel.org. As many (most?)
+> kernel developer don't keep an eye on it, I decided to forward it by
+> mail. Quoting from https://bugzilla.kernel.org/show_bug.cgi?id=217122 :
 > 
-> Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-> Signed-off-by: James Clark <james.clark@arm.com>
-> ---
->  Documentation/driver-api/driver-model/devres.rst |  1 +
->  include/linux/device.h                           | 11 +++++++++++
->  2 files changed, 12 insertions(+)
-> 
-> diff --git a/Documentation/driver-api/driver-model/devres.rst b/Documentation/driver-api/driver-model/devres.rst
-> index 4249eb4239e0..8be086b3f829 100644
-> --- a/Documentation/driver-api/driver-model/devres.rst
-> +++ b/Documentation/driver-api/driver-model/devres.rst
-> @@ -364,6 +364,7 @@ MEM
->    devm_kmalloc_array()
->    devm_kmemdup()
->    devm_krealloc()
-> +  devm_krealloc_array()
->    devm_kstrdup()
->    devm_kstrdup_const()
->    devm_kvasprintf()
-> diff --git a/include/linux/device.h b/include/linux/device.h
-> index 472dd24d4823..58f4f5948edb 100644
-> --- a/include/linux/device.h
-> +++ b/include/linux/device.h
-> @@ -223,6 +223,17 @@ static inline void *devm_kcalloc(struct device *dev,
->  {
->  	return devm_kmalloc_array(dev, n, size, flags | __GFP_ZERO);
->  }
-> +static inline __realloc_size(3, 4) void * __must_check
+>>  Jürgen Herrmann 2023-03-03 19:53:55 UTC
+>>
+>> Created attachment 303837 [details]
+>> collection of txt files with various hardware/software states
+>>
+>> Occasionally this error happens:
+>>
+>> [94467.984745] xhci_hcd 0000:05:00.4: ERROR Transfer event TRB DMA ptr not part of current TD ep_index 3 comp_code 1
+>> [94467.984751] xhci_hcd 0000:05:00.4: Looking for event-dma 000000010f10c730 trb-start 000000010f10c740 trb-end 000000010f10c740 seg-start 000000010f10
+>> c000 seg-end 000000010f10cff0
 
-Shouldn't you have a blank line before this one?
+#regzbot introduced: b006c439d58d
+#regzbot fix: f1324bbc401
+#regzbot ignore-activity
 
-> +devm_krealloc_array(struct device *dev, void *p, size_t new_n, size_t new_size, gfp_t flags)
-> +{
-> +	size_t bytes;
-> +
-> +	if (unlikely(check_mul_overflow(new_n, new_size, &bytes)))
-> +		return NULL;
-> +
-> +	return devm_krealloc(dev, p, bytes, flags);
-> +}
+For details see bugzilla
 
-I dislike how we have to keep copying the "real" functions (i.e.
-krealloc_array) into something like this, but I can't think of a better
-way to do it.
-
-thanks,
-
-greg k-h
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
