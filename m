@@ -2,135 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C91B37019EF
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 23:00:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F4187019F4
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 23:02:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234083AbjEMVAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 17:00:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45078 "EHLO
+        id S235718AbjEMVCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 17:02:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjEMVA2 (ORCPT
+        with ESMTP id S231190AbjEMVCc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 17:00:28 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC0AB2D62;
-        Sat, 13 May 2023 14:00:26 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f13ef4ad91so13161194e87.3;
-        Sat, 13 May 2023 14:00:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684011625; x=1686603625;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=zV8NgaKI21AYQDcwSfLTQKxLM+XHKCDcxx81oVOTUWw=;
-        b=Jytbx05Cm4hRTOEvxNhKpkt2EycSPOAApYX5iEcq1PaJuvy6ICXIOO9Db6B51iIxY4
-         VY5Yqc35txmob86hBt2gP1ryznD2AQ4DiAkSqscaosGywE9/Ph9/tRXfFMd/Qs1SHfOR
-         YETIirJvPgjmShxeiMhmTNAAKbSrBOgWuVoC63XvbrHsV76QKFzjXG8E7wkTmdrBAb0J
-         mSBE5PrfXG1/f+Ode8WFbFkNDeZeREiXMrkaYfChmihjannARS01AbzBkJHAAH9Ny4W4
-         VYAe4lgrla69MbHTPurn3FzG80xSLa7GdVzjHEd364HSVJCITe9a0CNEuIQPtOJD3vUt
-         LimQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684011625; x=1686603625;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zV8NgaKI21AYQDcwSfLTQKxLM+XHKCDcxx81oVOTUWw=;
-        b=a24D8R6ZtleWxqbyYu060snWsH0mdwHmIiN355WdnwMKAAJEdKnhFt/S03nUbdoJuT
-         TBZwBwcZxH5aakQsKelGIqh5wf1qbQ7DksXXU+RmB+6a5AdUrAf+09sUi2M8FfEZ724J
-         lXUGfuWiDJy6xbrs2f1oglesT9N8DG2iY1TPYg6T9har3GJq3bN435Z0NhfwAF3L4NI6
-         ZmkhuTxpxoEtdy85w3/9942qVKqHFi7elOcoTJZ7TaqcsvM6iyAv1W33jQnYYi6WNWES
-         nPIrGMY7yqyp8CRI+U4jeeP3EmHqLwsOvdUGxC3NT9/DLWkNx43iLpNQllDu9ewF+2yg
-         B3Eg==
-X-Gm-Message-State: AC+VfDyZksvA9MpWELaECvqJy/zEn51Y4mDc3H7QVuT8gujSrYFVlWYL
-        K+gZLcT7RXEMbPjGFcl+q5c=
-X-Google-Smtp-Source: ACHHUZ490C1IMSfYMBIJPIBdjHu0hQd16yeY8REgzrulETc0r/zO1YtaBnR0pzf3SHx8vnFcg/YI2Q==
-X-Received: by 2002:ac2:5d2d:0:b0:4e9:bf83:11a4 with SMTP id i13-20020ac25d2d000000b004e9bf8311a4mr4392216lfb.7.1684011624891;
-        Sat, 13 May 2023 14:00:24 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id o1-20020a05651238a100b004d8546456c6sm1927815lft.195.2023.05.13.14.00.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 May 2023 14:00:24 -0700 (PDT)
-Date:   Sun, 14 May 2023 00:00:21 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-Cc:     Damien Le Moal <dlemoal@kernel.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>,
-        "open list:LIBATA SUBSYSTEM" <linux-ide@vger.kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-tegra@vger.kernel.org
-Subject: Re: [PATCH] ata: libata: Make ata_platform_remove_one return void
-Message-ID: <20230513210021.gver7ibozrmmbm4j@mobilestation>
-References: <20230512204646.137746-1-u.kleine-koenig@pengutronix.de>
+        Sat, 13 May 2023 17:02:32 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABA1E30C4;
+        Sat, 13 May 2023 14:02:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1684011649; i=deller@gmx.de;
+        bh=S8BdFQeWXnw0k7xb/Pd2AhJXn5drG2VSOAIP2nWf5C4=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=mcUG47eX0Gn5veG6Ma/ul80RdUo6bsI8PVfZz0zKmUflnHrmh7e47BPa5vNQH5AE5
+         xN8t8csT87bACHCqA8OsuJ2hWYdHBaim0kPYxyJPyGV+wdFIZqdMZ2KWJkGpMA71P/
+         egT+C+AIP++kGZ4bJ4izMXA5xAwpUSXSFsk26PUoT8kKqTDoQAx1/dB+6F6qtKXT3r
+         GvfRk5+vnzNiG67CzR+x13ghBN34jZ4cPRgxhCtav+HMxKP6wiojHtau4ptA6nVxv6
+         cehya8971oTBpuL9wmCK7IO8pT5+JyFocI4nxvSEkGnCMrJGyPpXH1ZFrtHGaJENlu
+         oDzqQ+ljsk/Dw==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.158.250]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1M1Ygz-1puuDq2TVb-0036k5; Sat, 13
+ May 2023 23:00:49 +0200
+Message-ID: <f918a8af-5a9b-1309-e19a-4f3f09ebab7f@gmx.de>
+Date:   Sat, 13 May 2023 23:00:45 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230512204646.137746-1-u.kleine-koenig@pengutronix.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [patch V4 00/37] cpu/hotplug, x86: Reworked parallel CPU bringup
+Content-Language: en-US
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     x86@kernel.org, David Woodhouse <dwmw2@infradead.org>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Brian Gerst <brgerst@gmail.com>,
+        Arjan van de Veen <arjan@linux.intel.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Paul McKenney <paulmck@kernel.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
+        Piotr Gorski <lucjan.lucjanov@gmail.com>,
+        Usama Arif <usama.arif@bytedance.com>,
+        Juergen Gross <jgross@suse.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        xen-devel@lists.xenproject.org,
+        Russell King <linux@armlinux.org.uk>,
+        Arnd Bergmann <arnd@arndb.de>,
+        linux-arm-kernel@lists.infradead.org,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        linux-csky@vger.kernel.org,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        linux-mips@vger.kernel.org,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        linux-parisc@vger.kernel.org,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sabin Rapan <sabrapan@amazon.com>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
+        Ross Philipson <ross.philipson@oracle.com>,
+        Oleksandr Natalenko <oleksandr@natalenko.name>
+References: <20230512203426.452963764@linutronix.de>
+ <12207466.O9o76ZdvQC@natalenko.name>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <12207466.O9o76ZdvQC@natalenko.name>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:RpgEId2B9D5HBcL9fBRb+3JWwwhOteIZ1nytZcasaTAmfarvNwn
+ fMFgkrHHFQUTus1MzALvRPziABh8c3qvbp7zrAUgbDN6l4imCV7IS4gxdfOdNFI3zgs3XcO
+ 11oz6jBIU+1Ra6lyKd+YTydDGuvPMiAY0/gQGWH75WYI+9H8qnSK0e5rvRvnBk3gV+e2mh4
+ /Iype0ZePC7XiPoEhVRJQ==
+UI-OutboundReport: notjunk:1;M01:P0:ea8O6TsDxRo=;lqMJCETSNInGwiqOiM4sQMSPd/7
+ etoWsuDh2oxQRCTcOm6dNI+74udQOMfHHsm5ViBWq91/zE7BHjEibpBxtH5P3frWwqkILGDJY
+ 77TFvDyNXPxd7F47SPcZN1Y3tC0PxkAf8D2O4cXgxGzfXcqh6ZU5OdAWofsVnHmYksoaSdtQK
+ /sdWCcq3GNm8Op/iz5sawvt5qV1caIjxirPF8NcX0+HOQDWTmdrgC3KQzahSNe6sgpUYU6A0L
+ mj7+P2ZJAxwQSxuoPapXn3E9fK1sETKVzH5EkA2MRPR0BSWfZGm58+nvXtGRoh46V31D9fD3Q
+ NgyF0MBkq1h5MMqm1cehrsOqM2fbQUc0mMtImW91/3B0tJVWvww1nAEia9y/XTCE6oKIP/2gr
+ +84+DVNsM/OlplgxXAFgsPN0eCrTWdSERofcLepJeNo96NsytLDtOEC7en5zvPV0KkUQe00QS
+ 7rl6hFiJ2MYRqfAsgTAw+jmhG8FlpDZPBv8Qq+5EkCGTbFJhfELHNgSJGuuUlUFEGFIKg7jXn
+ TbfcaEF6rc4H+WtmaiTMOKNj/SAINwPT+rP+dvyLp2D+729pu0fnQ5k2EkmED+YwXds8vE225
+ wFJ3/ZTMghskjLsZVfA+2lbtPTtpXWJ2p2zBBziSEqo2Kk1sKdgS8zq+73wIqibIA4jML/dNg
+ OjnqB1D1UaKpKshMSbg63O+5KVXRw0oSgTABWdEzITLhLZrpla6aYa+4BT2wx4mVopNigTidP
+ 6HmdhUQpPsfRRdKs/r4DivnIBsaKGWFyGuHjs39P1LTXCnQY+bq7LDx/BcQ49EV022T0FmVHP
+ KfxdeSRzDf8VaI7h0Pu+Db96WH9ssPLUVoP+CljJisx2W/IBROPWWx2uhxuL/WIb5UkL14enC
+ X/qSeD3BduOA1I9b5VZJterCRzLCiAvjZkN8LbeJOzVdVWMV4EDWlFIivJLXJf7C5BFFtiTfU
+ ffX/dDZ8QuTU2qdmz3lPDMkbZx0=
+X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 10:46:46PM +0200, Uwe Kleine-König wrote:
-> The function returned zero unconditionally, so the function returning an
-> int is something between useless and irritating. With the goal to make
-> platform drivers' remove function return void, it's helpful to convert
-> the function accordingly. This converts several drivers to the new
-> .remove_new callback that was introduced to smoothen the platform driver
-> conversion.
-> 
-> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
-> ---
+Hi Thomas,
+> On p=C3=A1tek 12. kv=C4=9Btna 2023 23:06:56 CEST Thomas Gleixner wrote:
+>> This is version 4 of the reworked parallel bringup series. Version 3 ca=
+n be
+>> found here:
+>>
+>>     https://lore.kernel.org/lkml/20230508181633.089804905@linutronix.de
+>> ...
+>>
+>> Other than that there are no changes and the other details are all the =
+same
+>> as in V3 and V2.
+>>
+>> It's also available from git:
+>>
+>>      git://git.kernel.org/pub/scm/linux/kernel/git/tglx/devel.git hotpl=
+ug
 
-[...]
+I tested your series on the parisc architecture just to make sure that it =
+still works
+with your patch applied.
+On parisc the CPU bringup happens later in the boot process (after the inv=
+entory),
+so your patch won't have an direct impact anyway.
+But at least everything still works, incl. manual CPU enable/disable.
 
->  drivers/ata/ahci_dwc.c         | 2 +-
+So, you may add
+Tested-by: Helge Deller <deller@gmx.de> # parisc
 
-[...]
-
-> diff --git a/drivers/ata/ahci_dwc.c b/drivers/ata/ahci_dwc.c
-> index 4bfbb09cdc02..9604a2f6ed48 100644
-> --- a/drivers/ata/ahci_dwc.c
-> +++ b/drivers/ata/ahci_dwc.c
-> @@ -478,7 +478,7 @@ MODULE_DEVICE_TABLE(of, ahci_dwc_of_match);
->  
->  static struct platform_driver ahci_dwc_driver = {
->  	.probe = ahci_dwc_probe,
-> -	.remove = ata_platform_remove_one,
-> +	.remove_new = ata_platform_remove_one,
->  	.shutdown = ahci_platform_shutdown,
->  	.driver = {
->  		.name = DRV_NAME,
-
-For DWC AHCI SATA
-Acked-by: Serge Semin <fancer.lancer@gmail.com>
-
--Serge(y)
-
-[...]
-
-> -- 
-> 2.39.2
-> 
+Thanks!
+Helge
