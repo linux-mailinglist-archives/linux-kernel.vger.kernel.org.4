@@ -2,98 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A89E27017F7
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 17:02:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D6B7017F9
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 17:05:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238952AbjEMPCT convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 13 May 2023 11:02:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54312 "EHLO
+        id S238990AbjEMPF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 11:05:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230133AbjEMPCR (ORCPT
+        with ESMTP id S230133AbjEMPFY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 11:02:17 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADD9B213C;
-        Sat, 13 May 2023 08:02:16 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pxql8-003KcP-I7; Sat, 13 May 2023 17:02:10 +0200
-Received: from dynamic-077-013-140-028.77.13.pool.telefonica.de ([77.13.140.28] helo=[192.168.1.11])
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pxql8-000zVB-BP; Sat, 13 May 2023 17:02:10 +0200
-Message-ID: <6977d52a797af5dfa3a863ac32bee8a9553bf86a.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 1/2] sh: dma: fix `dmaor_read_reg`/`dmaor_write_reg`
- macros
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Artur Rojek <contact@artur-rojek.eu>
-Cc:     Geert Uytterhoeven <geert@linux-m68k.org>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        Rafael Ignacio Zurita <rafaelignacio.zurita@gmail.com>,
-        linux-sh@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Sat, 13 May 2023 17:02:09 +0200
-In-Reply-To: <0ea0b05e99f63edf05ef9a0afe410fc1@artur-rojek.eu>
-References: <20230506141703.65605-1-contact@artur-rojek.eu>
-         <20230506141703.65605-2-contact@artur-rojek.eu>
-         <65f873585db0cd9f79a84eb48707413775a9ba5b.camel@physik.fu-berlin.de>
-         <2f73b2ac1ec15a6b0f78d8d3a7f12266@artur-rojek.eu>
-         <CAMuHMdXFFaRqPxvUqgJCtZG1B5gpULL-N4VpNPyPF=_+mtn7Dg@mail.gmail.com>
-         <309305917494c5a6c7cfb7ecb8bbf766@artur-rojek.eu>
-         <750f11848a647831ccfd1284ad0a8dd540c8f886.camel@physik.fu-berlin.de>
-         <0ea0b05e99f63edf05ef9a0afe410fc1@artur-rojek.eu>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.48.1 
+        Sat, 13 May 2023 11:05:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7139C2684;
+        Sat, 13 May 2023 08:05:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0A01E60F53;
+        Sat, 13 May 2023 15:05:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 68332C433EF;
+        Sat, 13 May 2023 15:05:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683990322;
+        bh=c85IViv6QwewReUtlp/L4CrdzRU/fQhVYnG5tMWoEmM=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=M6XJKNmg3f02SB3GbQ37ctu+aHA9Vwpl0Ke4BLPEo6qBRa6CjNb6OWDOx84nr7U9d
+         KRQ19fK1vGUodzb6Ju3mj3IGb8aSKnMAoJHZ62D6voi5fAs+XZiRDCjPDtDyrvKQr0
+         Vo1KPjtWyh0Kj4hXbVKtP+ArxCtXxFoLYIXAclJRnyln5MdlahknuuCt/p23dCMrOZ
+         iGV7IcwDnJU/B4DKWpDlQuAgIZ7NrSSqC6pCFVQbjrskeD55MhgXcjPOP/P/4zcoha
+         M3NV3UsmcnUfQoxbeAHzEZu4UIeTA6S5LUe5QoPocSEXCc1IGXiy/rfrZN8z9kdcgs
+         06GHIwxOCgCCg==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id EEBA5CE001B; Sat, 13 May 2023 08:05:21 -0700 (PDT)
+Date:   Sat, 13 May 2023 08:05:21 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+Cc:     Joel Fernandes <joel@joelfernandes.org>,
+        "rcu@vger.kernel.org" <rcu@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kernel-team@meta.com" <kernel-team@meta.com>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>
+Subject: Re: [PATCH rcu 3/6] rcu/rcuscale: Move rcu_scale_*() after
+ kfree_scale_cleanup()
+Message-ID: <527de9fa-1ec6-4ba7-8bce-b0447e751c07@paulmck-laptop>
+Reply-To: paulmck@kernel.org
+References: <IA1PR11MB6171B1AD7716B95B0B2C683889759@IA1PR11MB6171.namprd11.prod.outlook.com>
+ <30F06C03-6950-4E2B-B3CE-3939B3CDD295@joelfernandes.org>
+ <4d508096-300c-4d16-9c39-18598d00b500@paulmck-laptop>
+ <IA1PR11MB6171866D6AEE79DD3413157E897A9@IA1PR11MB6171.namprd11.prod.outlook.com>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 77.13.140.28
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <IA1PR11MB6171866D6AEE79DD3413157E897A9@IA1PR11MB6171.namprd11.prod.outlook.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Artur!
-
-On Sat, 2023-05-13 at 16:57 +0200, Artur Rojek wrote:
-> > Maybe you're also interested in the clean-up that Geert suggested in 
-> > this
-> > thread (ordering of the CPU subtypes and capitalization issues)?
-> 
-> Sure, why not - the more clean-up we do, the better :)
-
-Great, thanks a lot!
-
-> > Also, can you write "processor manual" instead of "PM" in the other 
-> > patch
-> > as well as don't use backticks for the macro names? In fact, I would 
-> > suggest
-> > retitling the subject to:
+On Sat, May 13, 2023 at 09:52:46AM +0000, Zhuo, Qiuxu wrote:
+> > From: Paul E. McKenney <paulmck@kernel.org>
+> > ...
+> > > >>>> I wish diff was better at showing what really changed. The meld
+> > > >>>> tool can help but its gui...
+> > > >>>>
+> > > >>>> Should I run meld later (I'm out at a conference so no access to
+> > > >>>> meld-capable
+> > > >>>> machines) or are we sufficiently confident that the lines were
+> > > >>>> moved as-is ? :)
+> > > >>>>
+> > > >>>
+> > > >>> Thank you, Joel for this concern. Good to know the meld diff GUI tool.
+> > > >>> I just run the command below and confirmed that the lines were
+> > > >>> moved
+> > > >>> as-is: rcu_scale_{cleanup,shutdown}() follows kfree_scale_cleanup().
+> > > >>> You may double check it ;-).
+> > > >>>
+> > > >>>      meld --diff ./rcuscale.c.before ./rcuscale.c.after
+> > > >>
+> > > >> Nice, thank you both!
+> > > >>
+> > > >> Another option is to check out the commit corresponding to this
+> > > >> patch, then do "git blame -M kernel/rcu/rcuscale.c".  Given a
+> > > >> move-only commit, there should be no line tagged with this commit's
+> > SHA-1.
+> > > >
+> > > > Just had a good experiment with the "git blame -M" option:
+> > > > - Used this option to prove a move-only commit quickly (no line tagged
+> > with that commit) (the fastest method to me).
+> > > > - Then just only needed to quickly check the positions of the moved code
+> > chunk by myself (easy).
+> > > >
+> > > > Thank you, Paul for sharing this. It's very useful to me.
+> > >
+> > > Looks good to me as well and thank you both for sharing the tips.
 > > 
-> > 	sh: dma: Fix dmaor_read_reg() and dmaor_write_reg() macros
+> > Here is one way to script this, where "SHA" identifies the commit to be
+> > checked and PATHS the affected pathnames:
 > > 
+> > 	git checkout SHA^
+> > 	git show SHA | git apply -
+> > 	git blame -M PATHS | grep '^0* '
 > 
-> Of course.
-> On a side note, it was supposed to be "programming manual", however I
-> now see that Renesas named that document as "hardware manual", so that's
-> what I'll put into the commit description, if you don't mind.
+> Cool ~. Thank you, Paul.  
+> I took them and made them into a script below for future use ;-)
 
-Absolutely not! Looking forward to your v2 series and please take your time!
+Nice!!!
 
-Adrian
+> #!/bin/bash
+> 
+> SHA=$1
+> 
+> if [ -z "$SHA" ]; then
+>     echo "Usage: $0 <commit-id>"
+>     exit 1
+> fi
+> 
+> if ! git cat-file -t "$SHA" &> /dev/null; then
+>         echo "$SHA does not exist in the repository"
+>         exit 1
+> fi
 
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+You might want to record the current position so that you can return
+to it automatically.  One approach is to parse the output of
+"git status".
+
+> git checkout ${SHA}^ &> /dev/null
+> git show ${SHA} | git apply - &> /dev/null
+> 
+> PATHS=`git status| grep "modified:" | cut -d: -f2 | xargs`
+
+The '--porcelain' argument makes 'git status' is a bit easier to parse
+robustly.
+
+> for P in ${PATHS}; do
+>         R=`git blame -M $P | grep '^0* '`
+
+You can avoid any bash-variable length limitations by using
+'grep -q' and capturing the exit status using "$?".
+
+							Thanx, Paul
+
+>         if test -n "$R"; then
+>                 echo "$SHA is NOT a move-only commit"
+>                 exit 1
+>         fi
+> done
+> 
+> echo "$SHA is a move-only commit"
+> 
+> > If there is no output, there were no non-move changes.
+> > 
+> > Or just do the "git blame -M PATHS | grep '^0* '" before doing the checking.
+> > 
+> > And yes, you can derive PATHS using "git status" if you want.  ;-)
+> > 							Thanx, Paul
