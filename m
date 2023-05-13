@@ -2,54 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71C607018B6
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 19:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02D5D7018D1
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 19:58:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236017AbjEMR6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 13:58:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36068 "EHLO
+        id S237326AbjEMR6d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 13:58:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232868AbjEMR5t (ORCPT
+        with ESMTP id S233149AbjEMR5u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 13:57:49 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F8EC2D47;
+        Sat, 13 May 2023 13:57:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 010881727;
         Sat, 13 May 2023 10:57:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4387561BD4;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 65CEA61C2A;
         Sat, 13 May 2023 17:57:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31992C433A7;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3974AC433A4;
         Sat, 13 May 2023 17:57:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1684000666;
-        bh=J1xoW9gW0spcZlEaPWtrphQr2z//OomZ0xML5nO1YK0=;
+        bh=IIMCf/miL10vsMshEbVANxAXddzcrgVpTcdSmeKpZHk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=raff74dCv9qtXOKIad6sxVVbphnmh3fiAjDaMlT7px1upF5vwUl+g4cBd2kdpDCtD
-         LgDe9/mbg4/3UJt/MTz+Y33ZoORcye+jrvhIrPWoNmxf7EXV2/CdFJp6anMHt9p3Jc
-         /JggJ8JJnF6D/cD/E7R2AbJAbB+Tds/eGJVOUiheqT2el2UJy06mMwkeKpjh5uHJVH
-         7Hx2l2ktiFCq/EbPUJoiplvBBu3NjWZWZwdwVrRoRGCZwg1uYk8xrIJOmnscbBjC4p
-         YbDMJST5zP2vZlhGs4C0VPkbx18kJ2ArFXdLuwVVHt85xy/3ZMSJ1b+yq6ZlyQw3GZ
-         i5Ly+Af/c0fOw==
+        b=ngsmn7oFxiA3OG+Ap7idnFCNjmCf2BtXuXoo7iQz8Q30O0NdMfZRy0sY1Uv2BYdvf
+         qdj/ChUFigOaadsEd0LMtgso555UePJo7eCO29k1TdPXdVSspkYB2/eQ5WprJkBCI/
+         klR8GQRuc8cE4lNTnwTjhfLiIJK+0NK9QztTAUIDTLxPHZHIft0CSljLSiVQ8SxoxM
+         cVl2wkQi2HLPwFjPoLT3XHDCJGW27HRMaa+vYzbnUPObULw1S9M/+LQ6yRDEYpWtqI
+         zbo5ky17SSmpUEs4FRQQ/P2A7qpTa+cawQi6ESE7PovgllgvgxW/whbHjGSS9NOQ+b
+         i+bSlWvOizCJw==
 Received: from mchehab by mail.kernel.org with local (Exim 4.96)
         (envelope-from <mchehab@kernel.org>)
-        id 1pxtV1-001txz-1T;
+        id 1pxtV1-001ty2-1X;
         Sat, 13 May 2023 18:57:43 +0100
 From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Hyunwoo Kim <imv4bel@gmail.com>,
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
-Subject: [PATCH 12/24] media: ttusb-dec: fix memory leak in ttusb_dec_exit_dvb()
-Date:   Sat, 13 May 2023 18:57:29 +0100
-Message-Id: <e17bdefa7cb067127338a655a0ba6d972926c667.1684000646.git.mchehab@kernel.org>
+Subject: [PATCH 13/24] media: mn88443x: fix !CONFIG_OF error by drop of_match_ptr from ID table
+Date:   Sat, 13 May 2023 18:57:30 +0100
+Message-Id: <9af01d8b5a1dacb369dc966e6c52fe968337098c.1684000646.git.mchehab@kernel.org>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
 References: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,38 +60,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Hyunwoo Kim <imv4bel@gmail.com>
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Since dvb_frontend_detach() is not called in ttusb_dec_exit_dvb(),
-which is called when the device is disconnected, dvb_frontend_free()
-is not finally called.
+The driver will match mostly by DT table (even thought there is regular
+ID table) so there is little benefit in of_match_ptr (this also allows
+ACPI matching via PRP0001, even though it might not be relevant here).
+This also fixes !CONFIG_OF error:
 
-This causes a memory leak just by repeatedly plugging and
-unplugging the device.
+  drivers/media/dvb-frontends/mn88443x.c:782:34: error: ‘mn88443x_of_match’ defined but not used [-Werror=unused-const-variable=]
 
-Fix this issue by adding dvb_frontend_detach() to ttusb_dec_exit_dvb().
-
-Link: https://lore.kernel.org/linux-media/20221117045925.14297-5-imv4bel@gmail.com
-Signed-off-by: Hyunwoo Kim <imv4bel@gmail.com>
+Link: https://lore.kernel.org/linux-media/20230312131318.351173-28-krzysztof.kozlowski@linaro.org
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
 ---
- drivers/media/usb/ttusb-dec/ttusb_dec.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/media/dvb-frontends/mn88443x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/usb/ttusb-dec/ttusb_dec.c b/drivers/media/usb/ttusb-dec/ttusb_dec.c
-index 38822cedd93a..c4474d4c44e2 100644
---- a/drivers/media/usb/ttusb-dec/ttusb_dec.c
-+++ b/drivers/media/usb/ttusb-dec/ttusb_dec.c
-@@ -1544,8 +1544,7 @@ static void ttusb_dec_exit_dvb(struct ttusb_dec *dec)
- 	dvb_dmx_release(&dec->demux);
- 	if (dec->fe) {
- 		dvb_unregister_frontend(dec->fe);
--		if (dec->fe->ops.release)
--			dec->fe->ops.release(dec->fe);
-+		dvb_frontend_detach(dec->fe);
- 	}
- 	dvb_unregister_adapter(&dec->adapter);
- }
+diff --git a/drivers/media/dvb-frontends/mn88443x.c b/drivers/media/dvb-frontends/mn88443x.c
+index 1f1753f2ab1a..0782f8377eb2 100644
+--- a/drivers/media/dvb-frontends/mn88443x.c
++++ b/drivers/media/dvb-frontends/mn88443x.c
+@@ -798,7 +798,7 @@ MODULE_DEVICE_TABLE(i2c, mn88443x_i2c_id);
+ static struct i2c_driver mn88443x_driver = {
+ 	.driver = {
+ 		.name = "mn88443x",
+-		.of_match_table = of_match_ptr(mn88443x_of_match),
++		.of_match_table = mn88443x_of_match,
+ 	},
+ 	.probe_new = mn88443x_probe,
+ 	.remove   = mn88443x_remove,
 -- 
 2.40.1
 
