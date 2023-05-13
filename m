@@ -2,89 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00D05701A1A
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 23:42:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B642B701A79
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 00:04:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231664AbjEMVmH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 17:42:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53884 "EHLO
+        id S230186AbjEMWEh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 18:04:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjEMVmG (ORCPT
+        with ESMTP id S229464AbjEMWEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 17:42:06 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807482720;
-        Sat, 13 May 2023 14:42:05 -0700 (PDT)
-Received: from fpc.intra.ispras.ru (unknown [10.10.165.8])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 9E12E44C1012;
-        Sat, 13 May 2023 21:42:03 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 9E12E44C1012
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1684014123;
-        bh=6rJLFQzTqQuln9eGYgx3BvQDSlEIAh0h1G71nSAdqhM=;
-        h=From:To:Cc:Subject:Date:From;
-        b=k9KSWGlIEpOYLlMwhxUF82/VVZlhZ+BvdDYsi8ZAyB9O8IUdFKawCuVsHX/evAMBT
-         shuB4nuBRMXGU4o11FN4sppoCgMcDfm7mt553lgz2Ep0Ek6rmJnVczZtPAvQw4WcSl
-         2xp01YsVkoD7ZL6Fb+bkxHewqHBpoNKoPW9Mg9c4=
-From:   Fedor Pchelkin <pchelkin@ispras.ru>
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Takeshi Misawa <jeliantsurux@gmail.com>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org,
-        syzbot+b68fbebe56d8362907e8@syzkaller.appspotmail.com
-Subject: [PATCH] wifi: ath9k: don't allow to overwrite ENDPOINT0 attributes
-Date:   Sun, 14 May 2023 00:41:46 +0300
-Message-Id: <20230513214146.120963-1-pchelkin@ispras.ru>
-X-Mailer: git-send-email 2.34.1
+        Sat, 13 May 2023 18:04:36 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE7392D4D;
+        Sat, 13 May 2023 15:04:33 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id 3f1490d57ef6-ba78626a362so106319276.1;
+        Sat, 13 May 2023 15:04:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684015472; x=1686607472;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=1V0rCHfQsNAxq8rG9fvNacE7vU9SPMILyZfexQ811dg=;
+        b=GAQC+FFYJE9OnqH98L/sJFInJE7WXQWWkrBSww4AmIuhsuNXu1aR9gWt3vSINuiTJO
+         BCBkwRChtr2lnks6QIHBP0D0vC60LxW0Y627GzlidQG9sVrxdn0I3cbjB+3guMP0pLzJ
+         h0ugftZ3LHGsvZ8gYZR4/RSy/ZBB16lwwmZ5Gnx5z3q3dS5Wk7VLgktg7HjqW/kfHmHs
+         ifv26ngYGFFugiqoz61r0WdkAZGnDfQOBtJR3mrAvRas4/h724XcZBwE4rn4mTJNQmRd
+         dMnYa46LkWMbirDRqabNLUdT3bGLBAh65qo0+YEDubdq31m/qpzuBZAFFPugxyHUacWY
+         x2TQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684015472; x=1686607472;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=1V0rCHfQsNAxq8rG9fvNacE7vU9SPMILyZfexQ811dg=;
+        b=CV+f1KQ3Shz5NBdrz6eC9UQs65imCd3IqF2thrC6/WzJDP0ozCTL5dEp1eeld1/Gsa
+         VRZFfNtXGO6DDsHaIHHi5Rt9LvkqpdqPmnisUWSIBB3aFHL8bjjGkIlbjTb7tIm1WlmE
+         HFCGdjaGeisD6oY+KoFh3FTMusUKhpBjf/oOUF6NwsYz6d/ktDtYnBbc1V9TFcWsLmVE
+         5d+ZbIBrMYmLZ4bZkOjW+xXk7nfCR33BrrikRXA+awktAFsDCKB7OjtDm4J5W2whtGZw
+         sl8gshw2x6MEPTskmyntN1EgecIdcFW4V9mFXyo4YjdsRBy3FOwdlCFFyKv3uDnkWCsH
+         kEjQ==
+X-Gm-Message-State: AC+VfDyZKFC6VoxAzJNVNB52aGHKvWzCU5ZlYhHAxJTQHp9uX8DNW5B/
+        ILKGoB+9y4LBRAO26Pu/tJ/FSr7O8IFwh7tnXT53DelxrTvCqA==
+X-Google-Smtp-Source: ACHHUZ5T519ROLrZla143VAUQQbQZPCiNULj4TyktxRu93pBgary7zGRpLncod7M+Guu1zyVdo93JLX8rAQiCh4D/o0=
+X-Received: by 2002:a25:abce:0:b0:ba7:918d:bf3f with SMTP id
+ v72-20020a25abce000000b00ba7918dbf3fmr787961ybi.1.1684015472489; Sat, 13 May
+ 2023 15:04:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   Askar Safin <safinaskar@gmail.com>
+Date:   Sun, 14 May 2023 01:03:56 +0300
+Message-ID: <CAPnZJGDWUT0D7cT_kWa6W9u8MHwhG8ZbGpn=uY4zYRWJkzZzjA@mail.gmail.com>
+Subject: Re: [PATCH 0/6] vfs: provide automatic kernel freeze / resume
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A bad USB device is able to construct a service connection response
-message with target endpoint being ENDPOINT0 which is reserved for
-HTC_CTRL_RSVD_SVC and should not be modified to be used for any other
-services.
+Will this patch fix a long-standing fuse vs suspend bug? (
+https://bugzilla.kernel.org/show_bug.cgi?id=34932 )
 
-Reject such service connection responses.
+Please, CC when answering
 
-Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
-
-Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
-Reported-by: syzbot+b68fbebe56d8362907e8@syzkaller.appspotmail.com
-Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
----
- drivers/net/wireless/ath/ath9k/htc_hst.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/wireless/ath/ath9k/htc_hst.c b/drivers/net/wireless/ath/ath9k/htc_hst.c
-index fe62ff668f75..a15d8d80df87 100644
---- a/drivers/net/wireless/ath/ath9k/htc_hst.c
-+++ b/drivers/net/wireless/ath/ath9k/htc_hst.c
-@@ -114,7 +114,7 @@ static void htc_process_conn_rsp(struct htc_target *target,
- 
- 	if (svc_rspmsg->status == HTC_SERVICE_SUCCESS) {
- 		epid = svc_rspmsg->endpoint_id;
--		if (epid < 0 || epid >= ENDPOINT_MAX)
-+		if (epid <= 0 || epid >= ENDPOINT_MAX)
- 			return;
- 
- 		service_id = be16_to_cpu(svc_rspmsg->service_id);
 -- 
-2.34.1
-
+Askar Safin
