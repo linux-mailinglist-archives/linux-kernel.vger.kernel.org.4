@@ -2,120 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7419C7016C0
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 14:36:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5177016C2
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 14:40:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237639AbjEMMgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 08:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44480 "EHLO
+        id S238193AbjEMMkE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 08:40:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232713AbjEMMgJ (ORCPT
+        with ESMTP id S232757AbjEMMkC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 08:36:09 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA1CD44A9;
-        Sat, 13 May 2023 05:35:39 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34DCZM3j088989;
-        Sat, 13 May 2023 07:35:22 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683981322;
-        bh=xvqahp41WmH/454iKL1t3iUZ5evTQtMfif9PkjQpEMs=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=uFDaWmxDcEiQvfKPlO4QJ2i1Go9hDJV7VLnlY/ugn77we65CfJKZOFQ5NsMUJTNGp
-         0MqtBsEhNrisyXK6GOZEnpW42ybT7h7fyf0CQcRBvQiqIlHg92SowVQjZ4NiaQrsz/
-         dMd5VaPDRdQAdAUr4WR6Ipl06wpPu/U00vhVqQ4E=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34DCZMD0067312
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 13 May 2023 07:35:22 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Sat, 13
- May 2023 07:35:22 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Sat, 13 May 2023 07:35:22 -0500
-Received: from [10.24.69.141] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34DCZJwv098749;
-        Sat, 13 May 2023 07:35:19 -0500
-Message-ID: <ddf22223-f8af-72ec-e8cf-76563f86b7fa@ti.com>
-Date:   Sat, 13 May 2023 18:05:18 +0530
+        Sat, 13 May 2023 08:40:02 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9AB268E
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 05:40:00 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pxoXG-0000NV-2p; Sat, 13 May 2023 14:39:42 +0200
+Message-ID: <48842e92-835e-bc3f-7118-48b8f415f532@leemhuis.info>
+Date:   Sat, 13 May 2023 14:39:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.2
-Subject: Re: [PATCH 0/4] arm64: dts: ti: j721e: Add HyperFlash support
-Content-Language: en-US
-To:     <nm@ti.com>, <afd@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>
-CC:     <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <u-kumar1@ti.com>
-References: <20230505141407.15134-1-vaishnav.a@ti.com>
-From:   Vaishnav Achath <vaishnav.a@ti.com>
-In-Reply-To: <20230505141407.15134-1-vaishnav.a@ti.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+ Thunderbird/102.10.0
+To:     Mike Christie <michael.christie@oracle.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        nicolas.dichtel@6wind.com, Christian Brauner <brauner@kernel.org>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+Cc:     hch@infradead.org, stefanha@redhat.com, jasowang@redhat.com,
+        mst@redhat.com, sgarzare@redhat.com,
+        virtualization@lists.linux-foundation.org, ebiederm@xmission.com,
+        konrad.wilk@oracle.com, linux-kernel@vger.kernel.org
+References: <20230202232517.8695-1-michael.christie@oracle.com>
+ <20230202232517.8695-9-michael.christie@oracle.com>
+ <aba6cca4-e66c-768f-375c-b38c8ba5e8a8@6wind.com>
+ <CAHk-=wgadfsCnKHLON7op=Qs5t3w3PVz5ZDbvbKsfb=yBg=yjQ@mail.gmail.com>
+ <78c5e150-26cf-7724-74ee-4a0b16b944b1@oracle.com>
+Content-Language: en-US, de-DE
+From:   Thorsten Leemhuis <linux@leemhuis.info>
+Subject: Re: [PATCH v11 8/8] vhost: use vhost_tasks for worker threads
+In-Reply-To: <78c5e150-26cf-7724-74ee-4a0b16b944b1@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;linux@leemhuis.info;1683981600;e9bb33e9;
+X-HE-SMSGID: 1pxoXG-0000NV-2p
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+[CCing the regression list]
 
-On 05/05/23 19:44, Vaishnav Achath wrote:
-> This series adds hyperflash support for J721E. J721E SoC has HyperBus
-> and OSPI controller muxed within the FSS subsystem and the J721E SoM
-> has a 64 MiB S28 OSPI flash and a 64 MiB Hyperflash present which is
-> muxed externally also.
+On 06.05.23 00:37, Mike Christie wrote:
+> On 5/5/23 1:22 PM, Linus Torvalds wrote:
+>> On Fri, May 5, 2023 at 6:40 AM Nicolas Dichtel
+>> <nicolas.dichtel@6wind.com> wrote:
+>>>
+>>> Is this an intended behavior?
+>>> This breaks some of our scripts.
 
-I have sent a v2 of this series with feedback addressed from a similar
-series and also adding the hyperflash partitions:
+Jumping in here, as I found another problem with that patch: it broke
+s2idle on my laptop when a qemu-kvm VM is running, as freezing user
+space processes now fails for me:
 
-https://lore.kernel.org/all/20230513123313.11462-1-vaishnav.a@ti.com/
+```
+ [  195.442949] PM: suspend entry (s2idle)
+ [  195.641271] Filesystems sync: 0.198 seconds
+ [  195.833828] Freezing user space processes
+ [  215.841084] Freezing user space processes failed after 20.007
+seconds (1 tasks refusing to freeze, wq_busy=0):
+ [  215.841255] task:vhost-3221      state:R stack:0     pid:3250
+ppid:3221   flags:0x00004006
+ [  215.841264] Call Trace:
+ [  215.841266]  <TASK>
+ [  215.841270]  ? update_rq_clock+0x39/0x270
+ [  215.841283]  ? _raw_spin_unlock+0x19/0x40
+ [  215.841290]  ? __schedule+0x3f/0x1510
+ [  215.841296]  ? sysvec_apic_timer_interrupt+0xaf/0xd0
+ [  215.841306]  ? schedule+0x61/0xe0
+ [  215.841313]  ? vhost_worker+0x87/0xb0 [vhost]
+ [  215.841329]  ? vhost_task_fn+0x1a/0x30
+ [  215.841336]  ? __pfx_vhost_task_fn+0x10/0x10
+ [  215.841341]  ? ret_from_fork+0x2c/0x50
+ [  215.841352]  </TASK>
+ [  215.841936] OOM killer enabled.
+ [  215.841938] Restarting tasks ... done.
+ [  215.844204] random: crng reseeded on system resumption
+ [  215.957095] PM: suspend exit
+ [  215.957185] PM: suspend entry (s2idle)
+ [  215.967646] Filesystems sync: 0.010 seconds
+ [  215.971326] Freezing user space processes
+ [  235.974400] Freezing user space processes failed after 20.003
+seconds (1 tasks refusing to freeze, wq_busy=0):
+ [  235.974574] task:vhost-3221      state:R stack:0     pid:3250
+ppid:3221   flags:0x00004806
+ [  235.974583] Call Trace:
+ [  235.974586]  <TASK>
+ [  235.974593]  ? __schedule+0x184/0x1510
+ [  235.974605]  ? sysvec_apic_timer_interrupt+0xaf/0xd0
+ [  235.974616]  ? schedule+0x61/0xe0
+ [  235.974624]  ? vhost_worker+0x87/0xb0 [vhost]
+ [  235.974648]  ? vhost_task_fn+0x1a/0x30
+ [  235.974656]  ? __pfx_vhost_task_fn+0x10/0x10
+ [  235.974662]  ? ret_from_fork+0x2c/0x50
+ [  235.974673]  </TASK>
+ [  235.975190] OOM killer enabled.
+ [  235.975192] Restarting tasks ... done.
+ [  235.978131] random: crng reseeded on system resumption
+ [  236.091219] PM: suspend exit
+```
 
-Thanks and Regards,
-Vaishnav
+After running into the problem I booted 6.3.1-rc1 again and there s2idle
+still worked. Didn't do a bisection, just looked at the vhost commits
+during the latest merge window; 6e890c5d502 ("vhost: use vhost_tasks for
+worker threads") looked suspicious, so I reverted it on top of latest
+mainline and then things work again. Through a search on lore I arrived
+in this thread and found below patch from Mike. Gave it a try on top of
+latest mainline, but it didn't help.
 
+Ciao, Thorsten
+
+> [...]
+> If it's ok to change the behavior of "ps -u root", then we can do this patch:
+> (Nicolas, I confirmed it fixes the 'ps a' case, but couldn't replicate the 'ps'
+> case. If you could test the ps only case or give me info on what /usr/bin/example
+> was doing I can replicate and test here):
 > 
-> * Patch 1/4 adds the hyperbus controller nodes and fixes DT compile
-> warnings.
-> * Patch 2/4 adds the hyperflash support in the SoM DTS.
-> * Patch 3 and 4/4 enables the pinmux for external mux that selects
-> between hyperflash or OSPI NOR flash, this is done for J7200 and 
-> J721E platforms since it is required in U-Boot and helps keep the
-> DT in sync.
 > 
-> Patch 1/4 depends on the following patch:
-> https://lore.kernel.org/all/20230424184810.29453-1-afd@ti.com/
-> 
-> Patch 3 depends on the below fix for pinmux offsets in J7200:
-> https://lore.kernel.org/all/20230419040007.3022780-2-u-kumar1@ti.com/
-> 
-> Bootlog and basic hyperflash erase-write-read test:
-> https://gist.github.com/vaishnavachath/be652108f3e360f1e2d41b499df844ef
-> 
-> Thanks and Regards,
-> Vaishnav
-> 
-> Vaishnav Achath (4):
->   arm64: dts: ti: k3-j721e-mcu-wakeup: Add HyperBus node
->   arm64: dts: ti: k3-j721e-som-p0: Add HyperFlash node
->   arm64: dts: ti: k3-j7200-common-proc-board: Add OSPI/Hyperflash select
->     pinmux
->   arm64: dts: ti: k3-j721e-common-proc-board: Add OSPI/Hyperflash select
->     pinmux
-> 
->  .../dts/ti/k3-j7200-common-proc-board.dts     | 11 ++++++
->  .../dts/ti/k3-j721e-common-proc-board.dts     | 11 ++++++
->  .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      | 25 +++++++++++--
->  arch/arm64/boot/dts/ti/k3-j721e-som-p0.dtsi   | 35 +++++++++++++++++++
->  4 files changed, 80 insertions(+), 2 deletions(-)
-> 
+> diff --git a/kernel/fork.c b/kernel/fork.c
+> index ed4e01daccaa..eb9ffc58e211 100644
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -2269,8 +2269,14 @@ __latent_entropy struct task_struct *copy_process(
+>  	/*
+>  	 * Thread groups must share signals as well, and detached threads
+>  	 * can only be started up within the thread group.
+> +	 *
+> +	 * A userworker's parent thread will normally have a signal handler
+> +	 * that performs management operations, but the worker will not
+> +	 * because the parent will handle the signal then user a worker
+> +	 * specific interface to manage the thread and related resources.
+>  	 */
+> -	if ((clone_flags & CLONE_THREAD) && !(clone_flags & CLONE_SIGHAND))
+> +	if ((clone_flags & CLONE_THREAD) && !(clone_flags & CLONE_SIGHAND) &&
+> +	    !args->user_worker && !args->ignore_signals)
+>  		return ERR_PTR(-EINVAL);
+>  
+>  	/*
+> diff --git a/kernel/vhost_task.c b/kernel/vhost_task.c
+> index b7cbd66f889e..3700c21ea39d 100644
+> --- a/kernel/vhost_task.c
+> +++ b/kernel/vhost_task.c
+> @@ -75,7 +78,8 @@ struct vhost_task *vhost_task_create(int (*fn)(void *), void *arg,
+>  				     const char *name)
+>  {
+>  	struct kernel_clone_args args = {
+> -		.flags		= CLONE_FS | CLONE_UNTRACED | CLONE_VM,
+> +		.flags		= CLONE_FS | CLONE_THREAD | CLONE_VM |
+> +				  CLONE_UNTRACED,
+>  		.exit_signal	= 0,
+>  		.fn		= vhost_task_fn,
+>  		.name		= name
