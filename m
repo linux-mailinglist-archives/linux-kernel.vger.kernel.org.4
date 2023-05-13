@@ -2,97 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FCDD701666
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 13:29:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BA84701667
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 13:30:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237910AbjEML3V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 07:29:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
+        id S238077AbjEML3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 07:29:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53072 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231736AbjEML3T (ORCPT
+        with ESMTP id S238046AbjEML3i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 07:29:19 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F3532D5A
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 04:29:18 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id a640c23a62f3a-966287b0f72so1575002066b.0
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 04:29:18 -0700 (PDT)
+        Sat, 13 May 2023 07:29:38 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6406D3C0F
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 04:29:37 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so97014655a12.0
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 04:29:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683977357; x=1686569357;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rNewWpP+GvEj2PXHB6K/3b6wTSDIQG0EkEwU6jgQeQo=;
-        b=q+zz4WuFUeDnQ814WpwLd5PeEwSdt9wDOQLQg6oc3OAn4TsEcOFt8joc7p4D2oVdr9
-         RGCtgpYuadZinGs/FbPCNIaIVa19Ttw7K9e0ESB6BME3SEVT2sVZnTwULS52lAVhGXBP
-         D8ztSp7SDf25ag4Ng+e6vYPvORuUlyJj7ovRHv8J02er5jCRJTJBEYXACGeUOdB41889
-         rXO5d4ABvFxc9H7e271eDdeIUYQiji5ztGQ0VUSZj98J1jpXWtrIIImAU5UJl1QfJbWL
-         rr7tpiimtNT0sWw7cI45lHjijZ36qCxSoKrc07MPp9N4psD1Inm9gep95oVsMInHy6LZ
-         emjg==
+        d=linaro.org; s=google; t=1683977376; x=1686569376;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=dw8wPKVLlAIKAMysuZNl/3ACPQu4RWpxUdT8LT4hWo0=;
+        b=BANXOOpT30CoBj7RkcqtZKO5BBKhLQ++YG+7Cuo/9l72d+cZP/5oTwPU9flVqa8Iiv
+         vbS2gilvw8hHA2m5ll9pB3x1SMMW0aYzOD68TO1LkbxpGmtAYq58u/fVGvKu2HjpIuMW
+         2zT/mWfNVgPPledpOMI0zncFj7b80KN0rwroBGUM/zMZcSS2fz/zSA4H4wIfq6XS6dJs
+         /aadrDje9R/AGlgAThuQUL9+j6/fS1DmL9ommyb3n6pmPxv2jkZ1O4p3Pc3lJ1xkHCjX
+         xr4sprhofemVkyWzpulyAJNE3jPCKqZiduiClUs1A1kIItcJUeH3Qj27D+GO0ikxK0LD
+         GzJQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683977357; x=1686569357;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rNewWpP+GvEj2PXHB6K/3b6wTSDIQG0EkEwU6jgQeQo=;
-        b=bIfw46OZ+DdxEpK96bV8GgsrfT9MzIlmmrqtF6Gz0POgBTvAR3l3uApXFZ/GwL+yUu
-         M1fK4v+/+STGrLSGqqxRRSR6U+1h7ZbfbFgRCioIGIts0T6SbJa6GM8YamjFIv8Qsdlh
-         ykvF0uvVa8chiawOCf9Xuz2glsGInuzxcrtu5TFjRaTPHg4xIPTpkD6LswgIQUQLnVQi
-         1CQNsmEjmkMHif9Kpr/kwCSsDRxw5mCdNzVLIYrLeEQARsh5/QlN/aDAsVV5qadUX0U2
-         fl0+PMew4bruISStW7yhDlRLW82wVALWvIduP2SDXSuLJMrASDuoFr7PqFK88VoXs6cz
-         Dc1w==
-X-Gm-Message-State: AC+VfDyBrH8I3/P+SvwrazD2VFYs/5mw9ysvoTqUQK4JbdKBi6fWYerJ
-        2UjzpS8+MasnvOl3rcGrve9G4w==
-X-Google-Smtp-Source: ACHHUZ4zxTbmxyFC1jvKbWdjOOk7lP2nWP61ZL3CmZygSjUd1zsFpqf7tj69dL7vqjJEi+vOaHK3Ig==
-X-Received: by 2002:a17:907:d1c:b0:966:5912:c4b with SMTP id gn28-20020a1709070d1c00b0096659120c4bmr20162276ejc.76.1683977356798;
-        Sat, 13 May 2023 04:29:16 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1683977376; x=1686569376;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dw8wPKVLlAIKAMysuZNl/3ACPQu4RWpxUdT8LT4hWo0=;
+        b=CWZ1N5qz8y9kZ4/OTsx2GLCmtAm6o1X3g7IP4BHqkfeI0QeWBtNEH1NQxxgvvnqqDL
+         YNDQZYrbSAVBAtmjgm/kjwFuOg+eXt4CO69lV4QBW7q/BK+AXN3n2oFn5AGbmc1NuX1x
+         OOWVAvU+A65GsM7WC/ASBXlccQRYva/zn53OwP4YrTE55dmuZSZRmTUJL2Bc6aPHNs3y
+         Q52k9QMH4Z1oBm65G3Me4PXPhym3bHyoC/ChZU9Ur4S3v1MS9Vv0sXq9f1NWaO9SExa0
+         cVANj873QAc86dcdRjh4TyF4BCHe4Hb8kqsspxXs7VRQdycIWyE9N8opJVfuaRsBjOrM
+         AZ8Q==
+X-Gm-Message-State: AC+VfDzX+rMFnDXgK6G0yoeDUrJDAoFKqYvF1E1XiKd4lFE/YAOqqc7M
+        Zs94r4U5wHw2mxjsTtuoGCIn363zoGaTB+W9byW8iA==
+X-Google-Smtp-Source: ACHHUZ7RsnAcXLRAUe1ZwlxGBMjTDSgbQ4INisOCyvhoD2O+W2et0AUEoIcxkZ1VVcGrLgqcozDTlw==
+X-Received: by 2002:a05:6402:2711:b0:50d:8bc9:41c8 with SMTP id y17-20020a056402271100b0050d8bc941c8mr23187153edd.13.1683977375908;
+        Sat, 13 May 2023 04:29:35 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:a3aa:fd4:f432:676b])
-        by smtp.gmail.com with ESMTPSA id k10-20020a1709067aca00b0096a1ba4e0d1sm5063946ejo.32.2023.05.13.04.29.15
+        by smtp.gmail.com with ESMTPSA id r9-20020aa7c149000000b00509d1c6dcefsm4806493edp.13.2023.05.13.04.29.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 May 2023 04:29:16 -0700 (PDT)
+        Sat, 13 May 2023 04:29:35 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] soc: qcom: rpmh-rsc: drop redundant unsigned >=0 comparision
-Date:   Sat, 13 May 2023 13:29:13 +0200
-Message-Id: <20230513112913.176009-1-krzysztof.kozlowski@linaro.org>
+To:     Markus Mayer <mmayer@broadcom.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] memory: brcmstb_dpfe: fix testing array offset after use
+Date:   Sat, 13 May 2023 13:29:31 +0200
+Message-Id: <20230513112931.176066-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Unsigned int "minor" is always >= 0 as reported by Smatch:
+Code should first check for valid value of array offset, then use it as
+the index.  Fixes smatch warning:
 
-  drivers/soc/qcom/rpmh-rsc.c:1076 rpmh_rsc_probe() warn: always true condition '(drv->ver.minor >= 0) => (0-u32max >= 0)'
+  drivers/memory/brcmstb_dpfe.c:443 __send_command() error: testing array offset 'cmd' after use.
 
+Fixes: 2f330caff577 ("memory: brcmstb: Add driver for DPFE")
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/soc/qcom/rpmh-rsc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/memory/brcmstb_dpfe.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
-index f93544f6d796..0dd4363ebac8 100644
---- a/drivers/soc/qcom/rpmh-rsc.c
-+++ b/drivers/soc/qcom/rpmh-rsc.c
-@@ -1073,7 +1073,7 @@ static int rpmh_rsc_probe(struct platform_device *pdev)
- 	drv->ver.minor = rsc_id & (MINOR_VER_MASK << MINOR_VER_SHIFT);
- 	drv->ver.minor >>= MINOR_VER_SHIFT;
+diff --git a/drivers/memory/brcmstb_dpfe.c b/drivers/memory/brcmstb_dpfe.c
+index 76c82e9c8fce..9339f80b21c5 100644
+--- a/drivers/memory/brcmstb_dpfe.c
++++ b/drivers/memory/brcmstb_dpfe.c
+@@ -434,15 +434,17 @@ static void __finalize_command(struct brcmstb_dpfe_priv *priv)
+ static int __send_command(struct brcmstb_dpfe_priv *priv, unsigned int cmd,
+ 			  u32 result[])
+ {
+-	const u32 *msg = priv->dpfe_api->command[cmd];
+ 	void __iomem *regs = priv->regs;
+ 	unsigned int i, chksum, chksum_idx;
++	const u32 *msg;
+ 	int ret = 0;
+ 	u32 resp;
  
--	if (drv->ver.major == 3 && drv->ver.minor >= 0)
-+	if (drv->ver.major == 3)
- 		drv->regs = rpmh_rsc_reg_offset_ver_3_0;
- 	else
- 		drv->regs = rpmh_rsc_reg_offset_ver_2_7;
+ 	if (cmd >= DPFE_CMD_MAX)
+ 		return -1;
+ 
++	msg = priv->dpfe_api->command[cmd];
++
+ 	mutex_lock(&priv->lock);
+ 
+ 	/* Wait for DCPU to become ready */
 -- 
 2.34.1
 
