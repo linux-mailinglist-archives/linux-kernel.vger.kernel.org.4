@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CABC701618
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 12:14:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 66E6A701614
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 12:14:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238916AbjEMKOd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 06:14:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55766 "EHLO
+        id S234136AbjEMKOH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 06:14:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238676AbjEMKOM (ORCPT
+        with ESMTP id S237502AbjEMKOE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 06:14:12 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF6CA59F1;
-        Sat, 13 May 2023 03:14:10 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34DADjNm049618;
-        Sat, 13 May 2023 05:13:45 -0500
+        Sat, 13 May 2023 06:14:04 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B98CA4EC9;
+        Sat, 13 May 2023 03:14:00 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34DADl8D041495;
+        Sat, 13 May 2023 05:13:47 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1683972825;
-        bh=VZiGaSRwfxQ1m1Ftgi42TfZjHfxaE9EtRyEDoM9SDZg=;
-        h=From:To:CC:Subject:Date;
-        b=vn2VUgVLUy3P6P/Tl78U4uG3nTDgyBxdEgLlROt8cFYcxYMLDpN5XKGyCHUlqYDhg
-         O/TPglQjxb1ShDBnxNOpvpPIWY2jJgOINMWE2LE7ezu8bnYqrZmSDHlnLy1/XYKQ1D
-         lBtgcA+vUHDEiULBIVd5n+KjMT79b5a2G+9/L5E4=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34DADjZE039606
+        s=ti-com-17Q1; t=1683972827;
+        bh=0pxgKDR9xXJVaGLLBSKo+uFW3+UqrWs3UKUezHnn7nM=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=PTrxko8in0fdYKs+tJzQ3T5by//rq6IfmnwdmaEi01s+ZUmlhG6YFv6lpZTaqkWnQ
+         VLlZe/u988nylYSjmEVX3+SEADFa/L464ic3BFubRgbqCeyZlYLiD8irhXI8k9x6l/
+         BUAwh8+VTJSbMEL2rMJgZuRKt0l/z9UM17/PXA9U=
+Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34DADlsH008043
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 13 May 2023 05:13:45 -0500
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+        Sat, 13 May 2023 05:13:47 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE107.ent.ti.com
+ (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Sat, 13
- May 2023 05:13:45 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ May 2023 05:13:47 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Sat, 13 May 2023 05:13:45 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34DADiWO096468;
-        Sat, 13 May 2023 05:13:44 -0500
+ Frontend Transport; Sat, 13 May 2023 05:13:47 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34DADjBx019442;
+        Sat, 13 May 2023 05:13:46 -0500
 From:   Vaishnav Achath <vaishnav.a@ti.com>
 To:     <vigneshr@ti.com>, <nm@ti.com>, <kristo@kernel.org>,
         <krzysztof.kozlowski+dt@linaro.org>, <afd@ti.com>
@@ -47,10 +47,12 @@ CC:     <vaishnav.a@ti.com>, <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, <robh+dt@kernel.org>,
         <u-kumar1@ti.com>
-Subject: [PATCH v3 0/2] arm64: dts: ti: k3-j7200: Fixes for various dtbs_checks warnings
-Date:   Sat, 13 May 2023 15:43:41 +0530
-Message-ID: <20230513101343.785-1-vaishnav.a@ti.com>
+Subject: [PATCH v3 1/2] arm64: dts: ti: k3-j7200-mcu-wakeup: Switch mcu_syscon to ti,j721e-system-controller
+Date:   Sat, 13 May 2023 15:43:42 +0530
+Message-ID: <20230513101343.785-2-vaishnav.a@ti.com>
 X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20230513101343.785-1-vaishnav.a@ti.com>
+References: <20230513101343.785-1-vaishnav.a@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
@@ -64,51 +66,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Nishanth Menon <nm@ti.com>
 
-Few fixups for j7200 dtbs_check warnings.
+Use ti,j721e-system-controller to be explicit about the syscon node we
+are using.
 
-This is V3 for the following series with the feedback addressed,
+Signed-off-by: Nishanth Menon <nm@ti.com>
+Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
+---
 
-V2 : https://lore.kernel.org/all/20230505115858.7391-1-vaishnav.a@ti.com/
-V1 : https://lore.kernel.org/all/20230424173623.477577-1-nm@ti.com/
+No changes since V1.
 
-Bootlog with basic hyperflash testing:
-https://gist.github.com/vaishnavachath/f7265e932725fd992dbc4e48b993e9c0
+ arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-NOTE: lets see the discussion summary of [1] to see where to take this
-series, but, will put it out here in the list for discussion anyways.
-
-Patch 2/2 depends on the following patch under review which enables reg-mux
-to be used when parent node is not syscon :
-https://lore.kernel.org/all/20230424184810.29453-1-afd@ti.com/
-
-Changelog:
-
-V2->V3:
-  * Drop pinctrl fix patch as the fix [2]  is already merged to next.
-  * Keep register regions unchanged as it is correct according to memory
-  map, update commit message.
-
-V1->V2:
- * Address feedback as recommended in [3].
- * Address feedback from Udit to limit the FSS register region size as
- per TRM.
- * Use reg-mux changes in [4] to simplify the hbmc-mux modelling   
-
-[1] https://lore.kernel.org/all/76da0b98-3274-b047-db11-ecabc117ae11@ti.com/
-[2] https://lore.kernel.org/all/20230510091850.28881-1-tony@atomide.com/
-[3] https://lore.kernel.org/all/20230503115130.c7m4a7crub7kmfjw@gluten/
-[4] https://lore.kernel.org/all/20230424184810.29453-1-afd@ti.com/
-
-Nishanth Menon (2):
-  arm64: dts: ti: k3-j7200-mcu-wakeup: Switch mcu_syscon to
-    ti,j721e-system-controller
-  arm64: dts: ti: k3-j7200-mcu-wakeup: Update fss node and hbmc_mux
-
- arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi | 11 ++++++-----
- 1 file changed, 6 insertions(+), 5 deletions(-)
-
+diff --git a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+index 674e695ef844..b58a31371bf3 100644
+--- a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
+@@ -35,7 +35,7 @@
+ 	};
+ 
+ 	mcu_conf: syscon@40f00000 {
+-		compatible = "syscon", "simple-mfd";
++		compatible = "ti,j721e-system-controller", "syscon", "simple-mfd";
+ 		reg = <0x00 0x40f00000 0x00 0x20000>;
+ 		#address-cells = <1>;
+ 		#size-cells = <1>;
 -- 
 2.17.1
 
