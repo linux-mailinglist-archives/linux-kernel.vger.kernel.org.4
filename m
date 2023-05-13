@@ -2,169 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0D527014A4
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 08:35:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 709AD7014AF
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 08:38:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232858AbjEMGez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 02:34:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
+        id S233666AbjEMGiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 02:38:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229506AbjEMGew (ORCPT
+        with ESMTP id S229527AbjEMGiD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 02:34:52 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FD42D5B
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 23:34:51 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba71ed074ceso7158931276.0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 23:34:51 -0700 (PDT)
+        Sat, 13 May 2023 02:38:03 -0400
+Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2C252D48;
+        Fri, 12 May 2023 23:38:01 -0700 (PDT)
+Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-965cc5170bdso1630071866b.2;
+        Fri, 12 May 2023 23:38:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683959690; x=1686551690;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=0p8d1w/pe9O+QCnFcGkr2LKxroB31jvE11GGSxuYfLg=;
-        b=qeqhVVaqhMOViKbS7qJ+qBk3zWVdmuAad2hhyaH2tMjSExiybH8pRXhEhr/IWJoL9j
-         iwjyoCGBbyGMaPAfQgGCNsancR1+2aFQ2h/PH1i1yt9igf1ryzmhs2QNSnEArhH0O1ny
-         GcDOCgl1miurXs6uruHEBe1qE89qVsjxRpl5/EMwFnvzl85rkT5Dz6oI5/BfHQYNh51X
-         3lSCPxkrMFe8bQx5jkAjKuP70PEIry1HS4hSGIAOUBAYLYYUg9e0k2WqGQPN6fGlY3mE
-         UdSdal1aQ8qQYyWKabHmRgRGPtlKFwBDdyGvUAtmY8QilF9cr+F3uzKwkloKjSEUl41M
-         koeA==
+        d=gmail.com; s=20221208; t=1683959880; x=1686551880;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pJAHS0Zaj0yVKhfNHhf5jx/XvjbWQe6dR3+gBFASJBU=;
+        b=YFD59SfNwI80NXatbYx+VnyB6F8bgTWYF5cM6l+/+0MBybE4ati0s2sJJIOR2Dql7+
+         p1amTvshUKIr2n/XCcTaSELHndPCCWo+owGMRBQcF/Dqmp+vlOOYoDOxZRpsvEpdJTTt
+         uUWxOlqz2ZYWlYXn3eE74ooL2nOXT5Ihsd3l/9W6ncaGvgy3lVfZ82Ck9LaTltNt5dzg
+         lJRmt1J1fdlgtxYrkXdL/DEI7/7ui+2QBZi4T4g0e30hckViwFx3A7ksKyFnKHVWrPK9
+         jVMcj+eSseJrZuT5YwPN3F/Fco1dfu1OckFwiEsVHkkT4aZx7GvkIUR0MCgOw0J9PThd
+         O3QA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683959690; x=1686551690;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=0p8d1w/pe9O+QCnFcGkr2LKxroB31jvE11GGSxuYfLg=;
-        b=MqpeOcC5VH++ur06I14e1zPk35NOSVicggjaRaOQdTELOI/cfKOm1m5z4YbXCjNkAN
-         itYMDPsesOUOzINiFPJvJJ1CqTV759PlHhhkwkXwkKwAxBxi8UnCst8o7DUd2i05VA0K
-         1C3aFJxNl7c9gmbj5RBAnLAvz8T+LtXZ7DVmnczLLNp/EwRY99ITfGLfnpy0sNWS/SER
-         JZoj+46ANvHwztqxuCPee1+R+0vO8mrGEigsYnqMeXBoFoIp6gcfPaAkaavIislXvz4X
-         l0E/C0Womn/SW257PLle+FHrRopdOyEKedGTo/IMVIjc51+KHv5bDMekBHKTdRflmEVC
-         cx8g==
-X-Gm-Message-State: AC+VfDz4ds6W4ZgSqfhp6Diz+jxMeaJc3pYT9+mcaipxLQpiZVPwecCn
-        9pubI27cHEkhT+kZcXQjebssUlkQYfVi
-X-Google-Smtp-Source: ACHHUZ7zQYUHC2aQiVksyfSm70YyYLEyQCRWIdlqJZLEGQdW1oVWL/HLq0/4j++8+vJPvEbqMGSQnLecNCJl
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:9575:f2a2:614d:d082])
- (user=irogers job=sendgmr) by 2002:a25:5e55:0:b0:ba2:58d2:bd86 with SMTP id
- s82-20020a255e55000000b00ba258d2bd86mr13886743ybb.5.1683959690694; Fri, 12
- May 2023 23:34:50 -0700 (PDT)
-Date:   Fri, 12 May 2023 23:34:47 -0700
-Message-Id: <20230513063447.464691-1-irogers@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Subject: [PATCH v1] perf test: Add cputype testing to perf stat
-From:   Ian Rogers <irogers@google.com>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Ahmad Yasin <ahmad.yasin@intel.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Stephane Eranian <eranian@google.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Perry Taylor <perry.taylor@intel.com>,
-        Samantha Alt <samantha.alt@intel.com>,
-        Caleb Biggers <caleb.biggers@intel.com>,
-        Weilin Wang <weilin.wang@intel.com>,
-        Edward Baker <edward.baker@intel.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        Rob Herring <robh@kernel.org>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        Sumanth Korikkar <sumanthk@linux.ibm.com>,
-        Thomas Richter <tmricht@linux.ibm.com>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Kang Minchul <tegongkang@gmail.com>,
-        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=1e100.net; s=20221208; t=1683959880; x=1686551880;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pJAHS0Zaj0yVKhfNHhf5jx/XvjbWQe6dR3+gBFASJBU=;
+        b=IBhZdPh07+EvYI3Zdr1zz0x9ur6rWbMt2GcafERLsqhcCxrjsEI6nBeQ3eUwRIBr40
+         xupvIZ+RQogVbpIVcXcQyrLGfLf6ehqE3a9/9+UQx+MQKE+nUAoxlcrysUARCWVUPdfb
+         8As4/w9Y3pF/Q+SniaccT8qaEsRkF1hGjGtfMqzGcBSjvTInbNByHKHMlz+akTzZxN+g
+         N/WtLmWnO8f373vi/0Ghl+vpanrsOi72QGOOQfOOmXO3ZMZdNvozYV7W82NOL9FIlnmd
+         t5/xqlw1KsDrbcPtuumfy0O7HRUH7+Vo6ekv8uONx1jxmUVQ+3aiGZANSMlgV8DcuUgi
+         TtBQ==
+X-Gm-Message-State: AC+VfDz4N2aywPAJ9Hm8qW7N5qV1ZhODS5M4SIwGZkh25NwXzsZI5rwe
+        0ktc4Zrixdx8As4QzzMwv4w=
+X-Google-Smtp-Source: ACHHUZ6ItNQrDwZ3aO2IHbDnGlrK+eX28iXA7zT5j5NaZuSZ7J3VBuL20juqQ/09jGy+jwM+MI5cag==
+X-Received: by 2002:a17:906:5d0f:b0:96a:ec5c:687b with SMTP id g15-20020a1709065d0f00b0096aec5c687bmr248946ejt.64.1683959880013;
+        Fri, 12 May 2023 23:38:00 -0700 (PDT)
+Received: from jernej-laptop.localnet (89-212-118-115.static.t-2.net. [89.212.118.115])
+        by smtp.gmail.com with ESMTPSA id b16-20020a170906195000b0094e96e46cc0sm6371733eje.69.2023.05.12.23.37.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 12 May 2023 23:37:59 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Damien Le Moal <dlemoal@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Uwe =?ISO-8859-1?Q?Kleine=2DK=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>,
+        "open list:LIBATA SUBSYSTEM" <linux-ide@vger.kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-tegra@vger.kernel.org
+Subject: Re: [PATCH] ata: libata: Make ata_platform_remove_one return void
+Date:   Sat, 13 May 2023 08:37:58 +0200
+Message-ID: <4827684.31r3eYUQgx@jernej-laptop>
+In-Reply-To: <20230512204646.137746-1-u.kleine-koenig@pengutronix.de>
+References: <20230512204646.137746-1-u.kleine-koenig@pengutronix.de>
+MIME-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Check a bogus PMU fails and that a known PMU succeeds. Limit to PMUs
-known cpu, cpu_atom and armv8_pmuv3_0 ones.
+Dne petek, 12. maj 2023 ob 22:46:46 CEST je Uwe Kleine-K=F6nig napisal(a):
+> The function returned zero unconditionally, so the function returning an
+> int is something between useless and irritating. With the goal to make
+> platform drivers' remove function return void, it's helpful to convert
+> the function accordingly. This converts several drivers to the new
+> .remove_new callback that was introduced to smoothen the platform driver
+> conversion.
+>=20
+> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/ata/ahci_brcm.c        | 6 +++---
+>  drivers/ata/ahci_ceva.c        | 2 +-
+>  drivers/ata/ahci_da850.c       | 2 +-
+>  drivers/ata/ahci_dm816.c       | 2 +-
+>  drivers/ata/ahci_dwc.c         | 2 +-
+>  drivers/ata/ahci_imx.c         | 2 +-
+>  drivers/ata/ahci_mtk.c         | 2 +-
+>  drivers/ata/ahci_mvebu.c       | 2 +-
+>  drivers/ata/ahci_platform.c    | 2 +-
+>  drivers/ata/ahci_qoriq.c       | 2 +-
+>  drivers/ata/ahci_seattle.c     | 2 +-
+>  drivers/ata/ahci_st.c          | 2 +-
+>  drivers/ata/ahci_sunxi.c       | 2 +-
 
-Signed-off-by: Ian Rogers <irogers@google.com>
----
- tools/perf/tests/shell/stat.sh | 44 ++++++++++++++++++++++++++++++++++
- 1 file changed, 44 insertions(+)
+=46or sunxi:
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-diff --git a/tools/perf/tests/shell/stat.sh b/tools/perf/tests/shell/stat.sh
-index b154fbb15d54..3f1e67795490 100755
---- a/tools/perf/tests/shell/stat.sh
-+++ b/tools/perf/tests/shell/stat.sh
-@@ -103,10 +103,54 @@ test_topdown_weak_groups() {
-   echo "Topdown weak groups test [Success]"
- }
- 
-+test_cputype() {
-+  # Test --cputype argument.
-+  echo "cputype test"
-+
-+  # Bogus PMU should fail.
-+  if perf stat --cputype="123" -e instructions true > /dev/null 2>&1
-+  then
-+    echo "cputype test [Bogus PMU didn't fail]"
-+    err=1
-+    return
-+  fi
-+
-+  # Find a known PMU for cputype.
-+  pmu=""
-+  for i in cpu cpu_atom armv8_pmuv3_0
-+  do
-+    if test -d "/sys/devices/$i"
-+    then
-+      pmu="$i"
-+      break
-+    fi
-+    if perf stat -e "$i/instructions/" true > /dev/null 2>&1
-+    then
-+      pmu="$i"
-+      break
-+    fi
-+  done
-+  if test "x$pmu" = "x"
-+  then
-+    echo "cputype test [Skipped known PMU not found]"
-+    return
-+  fi
-+
-+  # Test running with cputype produces output.
-+  if ! perf stat --cputype="$pmu" -e instructions true 2>&1 | grep -E -q "instructions"
-+  then
-+    echo "cputype test [Failed count missed with given filter]"
-+    err=1
-+    return
-+  fi
-+  echo "cputype test [Success]"
-+}
-+
- test_default_stat
- test_stat_record_report
- test_stat_record_script
- test_stat_repeat_weak_groups
- test_topdown_groups
- test_topdown_weak_groups
-+test_cputype
- exit $err
--- 
-2.40.1.606.ga4b1b128d6-goog
+Best regards,
+Jernej
+
+>  drivers/ata/ahci_tegra.c       | 2 +-
+>  drivers/ata/ahci_xgene.c       | 2 +-
+>  drivers/ata/libata-core.c      | 4 +---
+>  drivers/ata/pata_ixp4xx_cf.c   | 2 +-
+>  drivers/ata/pata_of_platform.c | 2 +-
+>  drivers/ata/pata_platform.c    | 2 +-
+>  drivers/ata/sata_highbank.c    | 2 +-
+>  include/linux/libata.h         | 2 +-
+
+
 
