@@ -2,81 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C8F701594
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 11:22:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5BA701595
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 11:22:34 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232997AbjEMJWW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 05:22:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56944 "EHLO
+        id S237569AbjEMJWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 05:22:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbjEMJWU (ORCPT
+        with ESMTP id S231273AbjEMJW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 05:22:20 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECF8A40FA
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 02:22:18 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id 4fb4d7f45d1cf-50bc070c557so20218227a12.0
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 02:22:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683969737; x=1686561737;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X/AyN+pSX6V+W2W3DFmYrRbubSg9FzRGpPpoe+UxihQ=;
-        b=pHCu4vLr1CqNxmg5sdDSTwYmGk2BlttdYTi0UKE8iFDEyy0ccWrZ2bwGJVHLJ9f4+0
-         gDBYAxx/MJlhzFkojrIpcYdHa1+z5iBM5+zwlxRaUZ7bYLIf88mG3LVslI709qc62clr
-         8mDvFgwL8lUBRkt+u8c3w19F7tg1qm4SE9dMw3F7U1VOAPCMQiR9q6sLBCtYsA4AoKeg
-         OiuALSCcwqe1V20SXGYn7lLv+lVg1GeeF7rMjmVHlhtULOoO0MoX/WsU1zkYBSfFkOvV
-         M7HlIlWmSxBFdXMQlRSifBoH8LPytqD0qpu9eePOZ7j8rc798vnCsvOay/KHXPn09Xwa
-         p3FQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683969737; x=1686561737;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X/AyN+pSX6V+W2W3DFmYrRbubSg9FzRGpPpoe+UxihQ=;
-        b=FioqOYmcXeoxUzjpxJSezXh8bxuN5qvlUqL5GdhBhLNVmT/RIGEpMtqBpBV0ZmrD8x
-         XPqefN6cSD/YqZg1JgM91us/RKPrruYsFD4D36+EBzOmi11d3mluA4WZ0CGTl8EpsJTD
-         zLkH3uWXqEXHfE1+1hQ+nKfy0zi+4pj1LKV+f+Znr/CcrC7Jw8ox7G1LsTE8ioE3vcXq
-         C+/Sy+mRkBkzGvrVDCk0rMuNrYq3atvkkfm4jwJVWsbJ9UnV+xGpLLRh6/Qbr5xdZK3P
-         10JPWzxf31MnsbzprSxsMdknAfJVHG83YjFduOo0mY4tW1z3TdNKFHjHaJ6CkwRuYxse
-         XpCQ==
-X-Gm-Message-State: AC+VfDyN1rBwUAWfcJXjHe7InHQ3f1FBzQOftObEipKbTAELf7wMk3RV
-        NhemlLuegMxWZXPoAi9Rt/RU/w==
-X-Google-Smtp-Source: ACHHUZ5aG0BoNuZuL5bKtYiF+NSrux0Sek8SQj9YSzB/DxrgPCqs5mpDLxny2uhcnVV8MZwJRjJu6g==
-X-Received: by 2002:aa7:dd0f:0:b0:50c:4b1:8912 with SMTP id i15-20020aa7dd0f000000b0050c04b18912mr23189219edv.15.1683969737479;
-        Sat, 13 May 2023 02:22:17 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:1d0:810a:586c:c5ba? ([2a02:810d:15c0:828:1d0:810a:586c:c5ba])
-        by smtp.gmail.com with ESMTPSA id h10-20020a50ed8a000000b004c2158e87e6sm4733883edr.97.2023.05.13.02.22.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 May 2023 02:22:17 -0700 (PDT)
-Message-ID: <6a1bdc48-a65f-43c3-0a41-bd45c0c3b0aa@linaro.org>
-Date:   Sat, 13 May 2023 11:22:16 +0200
+        Sat, 13 May 2023 05:22:29 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 249E3448A
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 02:22:24 -0700 (PDT)
+X-UUID: a9e0c230f16f11ed9cb5633481061a41-20230513
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=5Kkxf3BPerLuhz2Tiv7w0gG5pbHJwAtXbjBqeS8LbOE=;
+        b=iRxb/Qkb2jdO0DTfQiPrY0Y6ScFY4yazVQ12kneqSybw/ADJq43Vt4ZfwoTLsY27rAyBrXQcnBbxySLF2Ob7t2mOsMUJ3B2sMFWowvSqO7LOSP23YvMa+YvgAoLFQ51Uz4WQZG0A2x0f3ejclb1EI3Maj5BSM9NFkMVEoXqVBfo=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.24,REQID:9d5e97db-597b-4fdc-b15c-a8ab692da25b,IP:0,U
+        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
+        N:release,TS:100
+X-CID-INFO: VERSION:1.1.24,REQID:9d5e97db-597b-4fdc-b15c-a8ab692da25b,IP:0,URL
+        :0,TC:0,Content:0,EDM:0,RT:0,SF:100,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
+        N:quarantine,TS:100
+X-CID-META: VersionHash:178d4d4,CLOUDID:7410b7c0-e32c-4c97-918d-fbb3fc224d4e,B
+        ulkID:230513172222B47BHOAL,BulkQuantity:0,Recheck:0,SF:17|19|48|29|28,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+        ,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-CID-BAS: 0,NGT,0,_
+X-UUID: a9e0c230f16f11ed9cb5633481061a41-20230513
+Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
+        (envelope-from <chunfeng.yun@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 794918871; Sat, 13 May 2023 17:22:21 +0800
+Received: from mtkmbs11n1.mediatek.inc (172.21.101.185) by
+ mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.26; Sat, 13 May 2023 17:22:19 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs11n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.26 via Frontend Transport; Sat, 13 May 2023 17:22:19 +0800
+From:   Chunfeng Yun <chunfeng.yun@mediatek.com>
+To:     Vinod Koul <vkoul@kernel.org>
+CC:     Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <linux-phy@lists.infradead.org>, <linux-kernel@vger.kernel.org>
+Subject: [PATCH RESEND v9 1/2] phy: core: add debugfs files
+Date:   Sat, 13 May 2023 17:22:17 +0800
+Message-ID: <20230513092218.21139-1-chunfeng.yun@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] arm64: dts: imx8mq-mnt-reform2: drop simple-panel
- compatible
-Content-Language: en-US
-To:     Dario Binacchi <dario.binacchi@amarulasolutions.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Conor Dooley <conor+dt@kernel.org>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230512204627.3304342-1-dario.binacchi@amarulasolutions.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230512204627.3304342-1-dario.binacchi@amarulasolutions.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SCC_BODY_TEXT_LINE,T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,20 +71,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2023 22:46, Dario Binacchi wrote:
-> The "simple-panel" compatible is not documented and nothing in Linux
-> kernel binds to it.
-> 
-> Signed-off-by: Dario Binacchi <dario.binacchi@amarulasolutions.com>
-> ---
-> 
->  arch/arm64/boot/dts/freescale/imx8mq-mnt-reform2.dts | 2 +-
+Add a debugfs root for phy class, and create a debugfs directory under
+the root when create phy, then phy drivers can add debugfs files.
 
-I already sent it:
+Signed-off-by: Chunfeng Yun <chunfeng.yun@mediatek.com>
+---
+v9: create a 'phy' debugfs root, add a debugfs entry in struct phy suggested by Vinod;
 
-https://lore.kernel.org/all/20230326204502.80794-1-krzysztof.kozlowski@linaro.org/
+No v8 sent out;
 
+v2~v7: no changes
+---
+ drivers/phy/phy-core.c  | 14 ++++++++++++++
+ include/linux/phy/phy.h |  2 ++
+ 2 files changed, 16 insertions(+)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/phy/phy-core.c b/drivers/phy/phy-core.c
+index 6464dcb56d56..96a0b1e111f3 100644
+--- a/drivers/phy/phy-core.c
++++ b/drivers/phy/phy-core.c
+@@ -11,6 +11,7 @@
+ #include <linux/export.h>
+ #include <linux/module.h>
+ #include <linux/err.h>
++#include <linux/debugfs.h>
+ #include <linux/device.h>
+ #include <linux/slab.h>
+ #include <linux/of.h>
+@@ -20,6 +21,7 @@
+ #include <linux/regulator/consumer.h>
+ 
+ static struct class *phy_class;
++static struct dentry *phy_debugfs_root;
+ static DEFINE_MUTEX(phy_provider_mutex);
+ static LIST_HEAD(phy_provider_list);
+ static LIST_HEAD(phys);
+@@ -996,6 +998,8 @@ struct phy *phy_create(struct device *dev, struct device_node *node,
+ 		pm_runtime_no_callbacks(&phy->dev);
+ 	}
+ 
++	phy->debugfs = debugfs_create_dir(dev_name(&phy->dev), phy_debugfs_root);
++
+ 	return phy;
+ 
+ put_dev:
+@@ -1226,6 +1230,7 @@ static void phy_release(struct device *dev)
+ 
+ 	phy = to_phy(dev);
+ 	dev_vdbg(dev, "releasing '%s'\n", dev_name(dev));
++	debugfs_remove_recursive(phy->debugfs);
+ 	regulator_put(phy->pwr);
+ 	ida_simple_remove(&phy_ida, phy->id);
+ 	kfree(phy);
+@@ -1242,6 +1247,15 @@ static int __init phy_core_init(void)
+ 
+ 	phy_class->dev_release = phy_release;
+ 
++	phy_debugfs_root = debugfs_create_dir("phy", NULL);
++
+ 	return 0;
+ }
+ device_initcall(phy_core_init);
++
++static void __exit phy_core_exit(void)
++{
++	debugfs_remove_recursive(phy_debugfs_root);
++	class_destroy(phy_class);
++}
++module_exit(phy_core_exit);
+diff --git a/include/linux/phy/phy.h b/include/linux/phy/phy.h
+index 3a570bc59fc7..f6d607ef0e80 100644
+--- a/include/linux/phy/phy.h
++++ b/include/linux/phy/phy.h
+@@ -148,6 +148,7 @@ struct phy_attrs {
+  * @power_count: used to protect when the PHY is used by multiple consumers
+  * @attrs: used to specify PHY specific attributes
+  * @pwr: power regulator associated with the phy
++ * @debugfs: debugfs directory
+  */
+ struct phy {
+ 	struct device		dev;
+@@ -158,6 +159,7 @@ struct phy {
+ 	int			power_count;
+ 	struct phy_attrs	attrs;
+ 	struct regulator	*pwr;
++	struct dentry		*debugfs;
+ };
+ 
+ /**
+-- 
+2.18.0
 
