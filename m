@@ -2,94 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 858EE701496
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 08:16:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D527014A4
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 08:35:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232713AbjEMGQP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 02:16:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60822 "EHLO
+        id S232858AbjEMGez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 02:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjEMGQO (ORCPT
+        with ESMTP id S229506AbjEMGew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 02:16:14 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2A6B1BD3;
-        Fri, 12 May 2023 23:16:10 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.35])
-        by gateway (Coremail) with SMTP id _____8DxyOkoK19khmkIAA--.14525S3;
-        Sat, 13 May 2023 14:16:08 +0800 (CST)
-Received: from [10.20.42.35] (unknown [10.20.42.35])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8Bxi7YnK19kOG1ZAA--.26362S3;
-        Sat, 13 May 2023 14:16:07 +0800 (CST)
-Subject: Re: [PATCH v9 2/2] spi: loongson: add bus driver for the loongson spi
- controller
-To:     Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jianmin Lv <lvjianmin@loongson.cn>,
-        wanghongliang@loongson.cn, Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn, zhuyinbo@loongson.cn
-References: <20230426071045.20753-1-zhuyinbo@loongson.cn>
- <20230426071045.20753-3-zhuyinbo@loongson.cn> <ZFkPZhF8QqScXAmH@surfacebook>
- <ZFnOZptCM7JDFTQz@finisterre.sirena.org.uk>
- <CAHp75VcqQR0fFdkWG2QgXG0+SnKDs6_Zze6GMt+pHHEdE+8hkg@mail.gmail.com>
- <f03977b9-884c-93a1-d1cf-81e6fcf51dfc@loongson.cn>
- <CAHp75VeUiR_V0P6QhhqKGcoJKHviCC8wJZf+3KVBtWj+4q-=ig@mail.gmail.com>
-From:   zhuyinbo <zhuyinbo@loongson.cn>
-Message-ID: <c965a906-952c-2592-dad6-9d4eb3dffa66@loongson.cn>
-Date:   Sat, 13 May 2023 14:16:07 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
-MIME-Version: 1.0
-In-Reply-To: <CAHp75VeUiR_V0P6QhhqKGcoJKHviCC8wJZf+3KVBtWj+4q-=ig@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8Bxi7YnK19kOG1ZAA--.26362S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7KY7
-        ZEXasCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29K
-        BjDU0xBIdaVrnRJUUUv01xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4
-        v_JrI_Jryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY
-        67AKxVWUJVWUCwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwA2z4x0Y4vEx4A2js
-        IE14v26r4UJVWxJr1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY
-        6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrV
-        C2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7V
-        AKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02
-        F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GF
-        ylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7Cj
-        xVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r
-        1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU1VW
-        lDUUUUU==
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 13 May 2023 02:34:52 -0400
+Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86FD42D5B
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 23:34:51 -0700 (PDT)
+Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba71ed074ceso7158931276.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 23:34:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1683959690; x=1686551690;
+        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=0p8d1w/pe9O+QCnFcGkr2LKxroB31jvE11GGSxuYfLg=;
+        b=qeqhVVaqhMOViKbS7qJ+qBk3zWVdmuAad2hhyaH2tMjSExiybH8pRXhEhr/IWJoL9j
+         iwjyoCGBbyGMaPAfQgGCNsancR1+2aFQ2h/PH1i1yt9igf1ryzmhs2QNSnEArhH0O1ny
+         GcDOCgl1miurXs6uruHEBe1qE89qVsjxRpl5/EMwFnvzl85rkT5Dz6oI5/BfHQYNh51X
+         3lSCPxkrMFe8bQx5jkAjKuP70PEIry1HS4hSGIAOUBAYLYYUg9e0k2WqGQPN6fGlY3mE
+         UdSdal1aQ8qQYyWKabHmRgRGPtlKFwBDdyGvUAtmY8QilF9cr+F3uzKwkloKjSEUl41M
+         koeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683959690; x=1686551690;
+        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0p8d1w/pe9O+QCnFcGkr2LKxroB31jvE11GGSxuYfLg=;
+        b=MqpeOcC5VH++ur06I14e1zPk35NOSVicggjaRaOQdTELOI/cfKOm1m5z4YbXCjNkAN
+         itYMDPsesOUOzINiFPJvJJ1CqTV759PlHhhkwkXwkKwAxBxi8UnCst8o7DUd2i05VA0K
+         1C3aFJxNl7c9gmbj5RBAnLAvz8T+LtXZ7DVmnczLLNp/EwRY99ITfGLfnpy0sNWS/SER
+         JZoj+46ANvHwztqxuCPee1+R+0vO8mrGEigsYnqMeXBoFoIp6gcfPaAkaavIislXvz4X
+         l0E/C0Womn/SW257PLle+FHrRopdOyEKedGTo/IMVIjc51+KHv5bDMekBHKTdRflmEVC
+         cx8g==
+X-Gm-Message-State: AC+VfDz4ds6W4ZgSqfhp6Diz+jxMeaJc3pYT9+mcaipxLQpiZVPwecCn
+        9pubI27cHEkhT+kZcXQjebssUlkQYfVi
+X-Google-Smtp-Source: ACHHUZ7zQYUHC2aQiVksyfSm70YyYLEyQCRWIdlqJZLEGQdW1oVWL/HLq0/4j++8+vJPvEbqMGSQnLecNCJl
+X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:9575:f2a2:614d:d082])
+ (user=irogers job=sendgmr) by 2002:a25:5e55:0:b0:ba2:58d2:bd86 with SMTP id
+ s82-20020a255e55000000b00ba258d2bd86mr13886743ybb.5.1683959690694; Fri, 12
+ May 2023 23:34:50 -0700 (PDT)
+Date:   Fri, 12 May 2023 23:34:47 -0700
+Message-Id: <20230513063447.464691-1-irogers@google.com>
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
+Subject: [PATCH v1] perf test: Add cputype testing to perf stat
+From:   Ian Rogers <irogers@google.com>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Ahmad Yasin <ahmad.yasin@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Samantha Alt <samantha.alt@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Weilin Wang <weilin.wang@intel.com>,
+        Edward Baker <edward.baker@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Rob Herring <robh@kernel.org>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Ian Rogers <irogers@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED,
+        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Check a bogus PMU fails and that a known PMU succeeds. Limit to PMUs
+known cpu, cpu_atom and armv8_pmuv3_0 ones.
 
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/perf/tests/shell/stat.sh | 44 ++++++++++++++++++++++++++++++++++
+ 1 file changed, 44 insertions(+)
 
-在 2023/5/12 下午5:40, Andy Shevchenko 写道:
-> On Fri, May 12, 2023 at 11:12 AM zhuyinbo <zhuyinbo@loongson.cn> wrote:
->> 在 2023/5/10 下午3:03, Andy Shevchenko 写道:
-> 
-> ...
-> 
->> so, I think it is better
->> to confiure clk and mode separately.
-> 
-> Agree, but at the same time you can split the conditional bodies to
-> the separate functions. In this case the indentation of each of them
-> can be decreased.
-
-
-okay, I got it.
-
-Thanks.
-> 
+diff --git a/tools/perf/tests/shell/stat.sh b/tools/perf/tests/shell/stat.sh
+index b154fbb15d54..3f1e67795490 100755
+--- a/tools/perf/tests/shell/stat.sh
++++ b/tools/perf/tests/shell/stat.sh
+@@ -103,10 +103,54 @@ test_topdown_weak_groups() {
+   echo "Topdown weak groups test [Success]"
+ }
+ 
++test_cputype() {
++  # Test --cputype argument.
++  echo "cputype test"
++
++  # Bogus PMU should fail.
++  if perf stat --cputype="123" -e instructions true > /dev/null 2>&1
++  then
++    echo "cputype test [Bogus PMU didn't fail]"
++    err=1
++    return
++  fi
++
++  # Find a known PMU for cputype.
++  pmu=""
++  for i in cpu cpu_atom armv8_pmuv3_0
++  do
++    if test -d "/sys/devices/$i"
++    then
++      pmu="$i"
++      break
++    fi
++    if perf stat -e "$i/instructions/" true > /dev/null 2>&1
++    then
++      pmu="$i"
++      break
++    fi
++  done
++  if test "x$pmu" = "x"
++  then
++    echo "cputype test [Skipped known PMU not found]"
++    return
++  fi
++
++  # Test running with cputype produces output.
++  if ! perf stat --cputype="$pmu" -e instructions true 2>&1 | grep -E -q "instructions"
++  then
++    echo "cputype test [Failed count missed with given filter]"
++    err=1
++    return
++  fi
++  echo "cputype test [Success]"
++}
++
+ test_default_stat
+ test_stat_record_report
+ test_stat_record_script
+ test_stat_repeat_weak_groups
+ test_topdown_groups
+ test_topdown_weak_groups
++test_cputype
+ exit $err
+-- 
+2.40.1.606.ga4b1b128d6-goog
 
