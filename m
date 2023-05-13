@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBD38701359
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 02:37:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C0F970135C
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 02:37:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240871AbjEMAhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 20:37:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44066 "EHLO
+        id S241754AbjEMAhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 20:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241685AbjEMAgy (ORCPT
+        with ESMTP id S241736AbjEMAg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 20:36:54 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916EC6199
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 17:36:32 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-55d9a9d19c9so154150937b3.1
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 17:36:32 -0700 (PDT)
+        Fri, 12 May 2023 20:36:56 -0400
+Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB71FD2D2
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 17:36:38 -0700 (PDT)
+Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-559f48c530eso172383017b3.0
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 17:36:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683938192; x=1686530192;
+        d=google.com; s=20221208; t=1683938194; x=1686530194;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=OZEggBbNblRsi2erSP3Gdfhqb5e/8lV2CB/rQrFchS8=;
-        b=4Igpt6TW9x4CyyUHgTyI0EJQh8OQLuCfDSzR+F/zcP5RMAUiMHo/cBjjxlYPZiOvhM
-         l6EastCXgINOTBF6qg6msAVseFMbGgaxTzYYNK8z3nnqlGpxKRNNrk4f0un4E0WTW0k/
-         bXYje+HsRbWsfEdjspnxU/HKpZR4p+S7IRQ+7gy2T3MFPfs/ZPE3HR0ZMCR0ZFyLdY34
-         lziPt3Vo9sPl9mzf5Gcri32A+lbht/j8S27dICw2kk9xXd1S4hCNxcqRnoY84+22qeR8
-         qu/bW0EoI5luvX0Jd6iL5ZfGf8LYhK6TeBzFNxYPHaHOZEzfX8sggfZxSyGzwDpOfArT
-         7TPg==
+        bh=ppmpPnvYH2liION2C18+4wtZokm3fkaR+RkN6Z/HLA4=;
+        b=45UXT9+SktxePZpw2T3kVWDruDvjmvEtVDBKj9cD13lxzc+wcDHTX1vfWSxxwD74Q5
+         RkCQv8COWyYfaup3oymSJZNKJOF09mKoC3BDy8v/rvLfKkHYICZQ+z5io7IBdiOa+ro7
+         pLsKJKBn4GtdpqxqnOOWFsQZAZob2rn2K1hmGq5qSndnyviQsbmFx2RMjk9VpLmrFVdc
+         EtrmzT72ZwUTG2/nLbUY9/41N1zuDT7bo7FxLVHZPG196vNcbU/uoYh4rFAlqZVh1ook
+         O6qy8LI9LxKiBA457PiKeZO0WZuUXPtezPe8yrINQ4yJ5DfAcSjqhxDgdV6/hPIqVIpr
+         HbNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683938192; x=1686530192;
+        d=1e100.net; s=20221208; t=1683938194; x=1686530194;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=OZEggBbNblRsi2erSP3Gdfhqb5e/8lV2CB/rQrFchS8=;
-        b=W+OUpngK9mM3KzYo6RmBw1aJUI0Y82I962rz9M3QdNEbqPHSR19WbQF294J6n6BA+n
-         4DsPKUisIR1ZaBb/zy8rGy87fQHL1DcgoLqsoo16gIBZ9ZVnG3nHt/gVa+3TFHoal3Y0
-         tHTqzfcQqCFL+GZXX/1v5CCOFFgr69TUrTlrqP146GVOYgVreLPUGPi1gYQPsScEszKQ
-         OAFpMKJBpwfRHE1KPONKna9r+/fcZoTK8CYANe5zj6ZbP3rNSleYYB5hHAtP8qCIlWpf
-         IZ2r/rHA2cBM01mXR+hRGa+jKE0Q4vZVk9zBrZI6o3/CrKY+9BCuzWIPUJ3atSeuNHAi
-         MKxw==
-X-Gm-Message-State: AC+VfDyktPe0cBttGME6Yu6tQJIqojLOFCIKcS3FZ/bfVvfoJb/RFU+j
-        +qgzKWIPchpbfnQj1XiroqtCFAjW6oA=
-X-Google-Smtp-Source: ACHHUZ5IL0mxanQb+3z0FkMZEYHAxx8lR74ouUyEdydLk2Ld178r8tywT4lRuzG7g2edgClIvXW+7Wli+8Q=
+        bh=ppmpPnvYH2liION2C18+4wtZokm3fkaR+RkN6Z/HLA4=;
+        b=LX9pLyvooc52q1FGcHif+2s7Cbzr1z7n2brFl1vRSIHH3TjeScP9ZhrW0wJR5p1hrr
+         ErTIn5aOnJA6yLO9nFK0eDAoroE/43vfu1du5vFyI+tjq3JHoS+112QCNjkRevP7vwpe
+         ebHKjnlm2r/MmTdfe5iyj1oIycTjs1l+Wei0SJi1Iwe+FwIEL6K4yYefLnfzcfltVYMJ
+         ewsZkblyNxBKod5NlGnlYB1C4LMMFwge4U+SMNsnbMnN+8xtx5OiiYZUxgM9UFZbfIi6
+         KZQO/9ZsmYa5VBSCsdcMUI5jAlo4WyUBrNhUsrsAnEHAMSXszZpsfwU1Ol66mF38LOCX
+         cuVg==
+X-Gm-Message-State: AC+VfDx/M0kjwiTCBaSAlZjPC/vwyePWpJaKNdO5ET+7K7mjSDG72988
+        osnNQMX1EUWbi8RMPtL4EkdgbK0kZ5c=
+X-Google-Smtp-Source: ACHHUZ68Gfp2L3qA4yBtJO4pZIg9ly481TsVhQlG6aCEVrcslKa5xgUsBbKar1DsGwUseLixH3Iyb891DOQ=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a81:ae65:0:b0:55d:f921:6bfa with SMTP id
- g37-20020a81ae65000000b0055df9216bfamr11964813ywk.5.1683938192252; Fri, 12
- May 2023 17:36:32 -0700 (PDT)
+ (user=seanjc job=sendgmr) by 2002:a81:4509:0:b0:561:244d:c40 with SMTP id
+ s9-20020a814509000000b00561244d0c40mr1686825ywa.5.1683938194315; Fri, 12 May
+ 2023 17:36:34 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 12 May 2023 17:35:46 -0700
+Date:   Fri, 12 May 2023 17:35:47 -0700
 In-Reply-To: <20230513003600.818142-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230513003600.818142-1-seanjc@google.com>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Message-ID: <20230513003600.818142-15-seanjc@google.com>
-Subject: [PATCH v3 14/28] KVM: drm/i915/gvt: Drop @vcpu from KVM's
- ->track_write() hook
+Message-ID: <20230513003600.818142-16-seanjc@google.com>
+Subject: [PATCH v3 15/28] KVM: x86: Reject memslot MOVE operations if KVMGT is attached
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
@@ -76,80 +75,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Drop @vcpu from KVM's ->track_write() hook provided for external users of
-the page-track APIs now that KVM itself doesn't use the page-track
-mechanism.
+Disallow moving memslots if the VM has external page-track users, i.e. if
+KVMGT is being used to expose a virtual GPU to the guest, as KVMGT doesn't
+correctly handle moving memory regions.
+
+Note, this is potential ABI breakage!  E.g. userspace could move regions
+that aren't shadowed by KVMGT without harming the guest.  However, the
+only known user of KVMGT is QEMU, and QEMU doesn't move generic memory
+regions.  KVM's own support for moving memory regions was also broken for
+multiple years (albeit for an edge case, but arguably moving RAM is
+itself an edge case), e.g. see commit edd4fa37baa6 ("KVM: x86: Allocate
+new rmap and large page tracking when moving memslot").
 
 Reviewed-by: Yan Zhao <yan.y.zhao@intel.com>
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/include/asm/kvm_page_track.h |  5 ++---
- arch/x86/kvm/mmu/page_track.c         |  2 +-
- drivers/gpu/drm/i915/gvt/kvmgt.c      | 10 ++++------
- 3 files changed, 7 insertions(+), 10 deletions(-)
+ arch/x86/include/asm/kvm_page_track.h | 3 +++
+ arch/x86/kvm/mmu/page_track.c         | 5 +++++
+ arch/x86/kvm/x86.c                    | 7 +++++++
+ 3 files changed, 15 insertions(+)
 
 diff --git a/arch/x86/include/asm/kvm_page_track.h b/arch/x86/include/asm/kvm_page_track.h
-index eb186bc57f6a..8c4d216e3b2b 100644
+index 8c4d216e3b2b..f744682648e7 100644
 --- a/arch/x86/include/asm/kvm_page_track.h
 +++ b/arch/x86/include/asm/kvm_page_track.h
-@@ -26,14 +26,13 @@ struct kvm_page_track_notifier_node {
- 	 * It is called when guest is writing the write-tracked page
- 	 * and write emulation is finished at that time.
- 	 *
--	 * @vcpu: the vcpu where the write access happened.
- 	 * @gpa: the physical address written by guest.
- 	 * @new: the data was written to the address.
- 	 * @bytes: the written length.
- 	 * @node: this node
- 	 */
--	void (*track_write)(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
--			    int bytes, struct kvm_page_track_notifier_node *node);
-+	void (*track_write)(gpa_t gpa, const u8 *new, int bytes,
-+			    struct kvm_page_track_notifier_node *node);
- 	/*
- 	 * It is called when memory slot is being moved or removed
- 	 * users can drop write-protection for the pages in that memory slot
+@@ -75,4 +75,7 @@ kvm_page_track_unregister_notifier(struct kvm *kvm,
+ void kvm_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
+ 			  int bytes);
+ void kvm_page_track_flush_slot(struct kvm *kvm, struct kvm_memory_slot *slot);
++
++bool kvm_page_track_has_external_user(struct kvm *kvm);
++
+ #endif
 diff --git a/arch/x86/kvm/mmu/page_track.c b/arch/x86/kvm/mmu/page_track.c
-index 23088c90d2fd..891e5cc52b45 100644
+index 891e5cc52b45..e6de9638e560 100644
 --- a/arch/x86/kvm/mmu/page_track.c
 +++ b/arch/x86/kvm/mmu/page_track.c
-@@ -272,7 +272,7 @@ void kvm_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
- 	hlist_for_each_entry_srcu(n, &head->track_notifier_list, node,
- 				srcu_read_lock_held(&head->track_srcu))
- 		if (n->track_write)
--			n->track_write(vcpu, gpa, new, bytes, n);
-+			n->track_write(gpa, new, bytes, n);
+@@ -303,3 +303,8 @@ void kvm_page_track_flush_slot(struct kvm *kvm, struct kvm_memory_slot *slot)
+ 			n->track_flush_slot(kvm, slot, n);
  	srcu_read_unlock(&head->track_srcu, idx);
- 
- 	kvm_mmu_track_write(vcpu, gpa, new, bytes);
-diff --git a/drivers/gpu/drm/i915/gvt/kvmgt.c b/drivers/gpu/drm/i915/gvt/kvmgt.c
-index 0785f9cb2c20..aaebb44c139f 100644
---- a/drivers/gpu/drm/i915/gvt/kvmgt.c
-+++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
-@@ -106,9 +106,8 @@ struct gvt_dma {
- #define vfio_dev_to_vgpu(vfio_dev) \
- 	container_of((vfio_dev), struct intel_vgpu, vfio_device)
- 
--static void kvmgt_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa,
--		const u8 *val, int len,
--		struct kvm_page_track_notifier_node *node);
-+static void kvmgt_page_track_write(gpa_t gpa, const u8 *val, int len,
-+				   struct kvm_page_track_notifier_node *node);
- static void kvmgt_page_track_flush_slot(struct kvm *kvm,
- 		struct kvm_memory_slot *slot,
- 		struct kvm_page_track_notifier_node *node);
-@@ -1602,9 +1601,8 @@ int intel_gvt_page_track_remove(struct intel_vgpu *info, u64 gfn)
- 	return 0;
  }
- 
--static void kvmgt_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa,
--		const u8 *val, int len,
--		struct kvm_page_track_notifier_node *node)
-+static void kvmgt_page_track_write(gpa_t gpa, const u8 *val, int len,
-+				   struct kvm_page_track_notifier_node *node)
++
++bool kvm_page_track_has_external_user(struct kvm *kvm)
++{
++	return hlist_empty(&kvm->arch.track_notifier_head.track_notifier_list);
++}
+diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+index b2d9c5979df7..c6bbd8ffd8c8 100644
+--- a/arch/x86/kvm/x86.c
++++ b/arch/x86/kvm/x86.c
+@@ -12588,6 +12588,13 @@ int kvm_arch_prepare_memory_region(struct kvm *kvm,
+ 				   struct kvm_memory_slot *new,
+ 				   enum kvm_mr_change change)
  {
- 	struct intel_vgpu *info =
- 		container_of(node, struct intel_vgpu, track_node);
++	/*
++	 * KVM doesn't support moving memslots when there are external page
++	 * trackers attached to the VM, i.e. if KVMGT is in use.
++	 */
++	if (change == KVM_MR_MOVE && kvm_page_track_has_external_user(kvm))
++		return -EINVAL;
++
+ 	if (change == KVM_MR_CREATE || change == KVM_MR_MOVE) {
+ 		if ((new->base_gfn + new->npages - 1) > kvm_mmu_max_gfn())
+ 			return -EINVAL;
 -- 
 2.40.1.606.ga4b1b128d6-goog
 
