@@ -2,313 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 308237013E9
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 04:15:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ED75C7013EF
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 04:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241005AbjEMCPR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 22:15:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48160 "EHLO
+        id S241290AbjEMCVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 22:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231547AbjEMCPP (ORCPT
+        with ESMTP id S231547AbjEMCVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 22:15:15 -0400
-X-Greylist: delayed 165 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 12 May 2023 19:15:12 PDT
-Received: from p3plwbeout22-02.prod.phx3.secureserver.net (p3plsmtp22-02-2.prod.phx3.secureserver.net [68.178.252.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4020C59C5
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 19:15:12 -0700 (PDT)
-Received: from mailex.mailcore.me ([94.136.40.141])
-        by :WBEOUT: with ESMTP
-        id xekDpR1m7owqlxekEpHSEc; Fri, 12 May 2023 19:12:26 -0700
-X-CMAE-Analysis: v=2.4 cv=JPb+D+Gb c=1 sm=1 tr=0 ts=645ef20a
- a=bheWAUFm1xGnSTQFbH9Kqg==:117 a=84ok6UeoqCVsigPHarzEiQ==:17
- a=ggZhUymU-5wA:10 a=IkcTkHD0fZMA:10 a=P0xRbXHiH_UA:10 a=3-RhneuVAAAA:8
- a=FXvPX3liAAAA:8 a=VwQbUJbxAAAA:8 a=HEUgJizi0IQopOyZ0BIA:9 a=QEXdDO2ut3YA:10
- a=VLVLkjT_5ZicWzSuYqSo:22 a=UObqyxdv-6Yh2QiB9mM_:22 a=AjGcO6oz07-iQ99wixmX:22
-X-SECURESERVER-ACCT: phillip@squashfs.org.uk  
-X-SID:  xekDpR1m7owql
-Received: from 82-69-79-175.dsl.in-addr.zen.co.uk ([82.69.79.175] helo=[192.168.178.87])
-        by smtp11.mailcore.me with esmtpa (Exim 4.94.2)
-        (envelope-from <phillip@squashfs.org.uk>)
-        id 1pxekD-000150-2w; Sat, 13 May 2023 03:12:26 +0100
-Message-ID: <da96ff78-db3f-903c-cf8c-e1cfd430a4e8@squashfs.org.uk>
-Date:   Sat, 13 May 2023 03:12:23 +0100
+        Fri, 12 May 2023 22:21:48 -0400
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D5D91;
+        Fri, 12 May 2023 19:21:45 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.153])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QJ8X40J4Pz4f3kKb;
+        Sat, 13 May 2023 10:21:40 +0800 (CST)
+Received: from [10.174.176.73] (unknown [10.174.176.73])
+        by APP4 (Coremail) with SMTP id gCh0CgD3rLAz9F5kn05VJQ--.55330S3;
+        Sat, 13 May 2023 10:21:41 +0800 (CST)
+Subject: Re: [PATCH v2 3/4] md/raid10: fix wrong setting of
+ max_corr_read_errors
+To:     Song Liu <song@kernel.org>, Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     linan666@huaweicloud.com, neilb@suse.de, Rob.Becker@riverbed.com,
+        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linan122@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
+        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
+References: <20230506012315.3370489-1-linan666@huaweicloud.com>
+ <20230506012315.3370489-4-linan666@huaweicloud.com>
+ <ddec947c-d2b9-e4fe-30e6-02c76f162ab3@huaweicloud.com>
+ <CAPhsuW6zSN86vGO9rd-oTq4TuCYLc+ftrAO6mo6UE7qCNJaCUw@mail.gmail.com>
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+Message-ID: <5db8b619-7eac-79be-10e4-1292a44b943b@huaweicloud.com>
+Date:   Sat, 13 May 2023 10:21:39 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] squashfs: cache partial compressed blocks
-To:     Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Philippe Liard <pliard@google.com>, hch@lst.de,
-        linux-kernel@vger.kernel.org, squashfs-devel@lists.sourceforge.net,
-        kernel@axis.com
-References: <20230510-squashfs-cache-v2-1-42a501a17569@axis.com>
-Content-Language: en-GB
-From:   Phillip Lougher <phillip@squashfs.org.uk>
-In-Reply-To: <20230510-squashfs-cache-v2-1-42a501a17569@axis.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+In-Reply-To: <CAPhsuW6zSN86vGO9rd-oTq4TuCYLc+ftrAO6mo6UE7qCNJaCUw@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Mailcore-Auth: 439999529
-X-Mailcore-Domain: 1394945
-X-123-reg-Authenticated:  phillip@squashfs.org.uk  
-X-Originating-IP: 82.69.79.175
-X-CMAE-Envelope: MS4xfBiWo7Kr4KDfFtu854gcOVIa1n/GtO9PVkjCIeFJz2IX4r9VGRgp5Cs3ELeAHRVodC8PrSKdIbtEYSw9rRc7hMWC+UMZuu7YI2ad8+0oDclvyqz+d2ZV
- 25qcAox2fnkMi/BhpUqfab1o+zU935LbF8rP1v/Nz8x0FTK/J2oBywr68XAhARxZ7gQhoqjaUrnoQA02DX/XTBGlHPGznU7rSFg=
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: gCh0CgD3rLAz9F5kn05VJQ--.55330S3
+X-Coremail-Antispam: 1UD129KBjvJXoWxCF4fGr43Kr4DGr45KFy5CFg_yoW5Ary5pw
+        4kAas0vr4UJ34UCr9rtryq9a4FyrySyrW0kry8Jw4fX3sxtr9xta48Ga4jgr1kWr1fK3W3
+        XFWDKrZrAa18tF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUU9F14x267AKxVW8JVW5JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26F1j6w1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4j
+        6r4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
+        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
+        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
+        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
+        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Wr1j6rW3
+        Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcS
+        sGvfC2KfnxnUUI43ZEXa7VUbXdbUUUUUU==
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2023 14:18, Vincent Whitchurch wrote:
-> Before commit 93e72b3c612adcaca1 ("squashfs: migrate from ll_rw_block
-> usage to BIO"), compressed blocks read by squashfs were cached in the
-> page cache, but that is not the case after that commit.  That has lead
-> to squashfs having to re-read a lot of sectors from disk/flash.
+Hi,
 
-Good catch.  I wasn't aware of that regression.
+在 2023/05/13 9:08, Song Liu 写道:
+> On Fri, May 5, 2023 at 7:02 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>>
+>> Hi,
+>>
+>> 在 2023/05/06 9:23, linan666@huaweicloud.com 写道:
+>>> From: Li Nan <linan122@huawei.com>
+>>>
+>>> max_corr_read_errors should not be negative number. Change it to
+>>> unsigned int where use it.
+>>>
+>>
+>> Looks good, feel free to add:
+>>
+>> Reviewed-by: Yu Kuai <yukuai3@huawei.com>
+>>
+>>> Fixes: 1e50915fe0bb ("raid: improve MD/raid10 handling of correctable read errors.")
+>>> Signed-off-by: Li Nan <linan122@huawei.com>
+> 
+> Hmm.. Does the current code break in any cases?
 
-> For example, the first sectors of every metadata block need to be read
-> twice from the disk.  Once partially to read the length, and a
-> second time to read the block itself.  Also, in linear reads of large
-> files, the last sectors of one data block are re-read from disk when
-> reading the next data block, since the compressed blocks are of variable
-> sizes and not aligned to device blocks.  This extra I/O results in a
-> degrade in read performance of, for example, ~16% in one scenario on my
-> ARM platform using squashfs with dm-verity and NAND.
->
-> Since the decompressed data is cached in the page cache or squashfs'
-> internal metadata and fragment caches, caching _all_ compressed pages
-> would lead to a lot of double caching and is undesirable.  But make the
-> code cache any disk blocks which were only partially requested, since
-> these are the ones likely to include data which is needed by other file
-> system blocks.  This restores read performance in my test scenario.
->
-> The compressed block caching is only applied when the disk block size is
-> equal to the page size, to avoid having to deal with caching sub-page
-> reads.
->
-> Signed-off-by: Vincent Whitchurch <vincent.whitchurch@axis.com>
+The problem is that somewhere use unsigned value, and somewhere use
+signed value, and I thinsk the only functional change is in
+fix_read_error(), if max_read_errors is negative, the judgement will
+always pass before this patch:
 
-Patch looks good.
+if (atomic_read(&rdev->read_errors) > max_read_errors)
 
-Reviewed-by: Phillip Lougher <phillip@squashfs.org.uk>
+Thanks,
+Kuai
+> 
+> Thanks,
+> Song
+> 
+>>> ---
+>>>    drivers/md/md.c     | 2 +-
+>>>    drivers/md/raid10.c | 5 +++--
+>>>    2 files changed, 4 insertions(+), 3 deletions(-)
+>>>
+>>> diff --git a/drivers/md/md.c b/drivers/md/md.c
+>>> index fd5c3babcd6d..4a1e566d6bdc 100644
+>>> --- a/drivers/md/md.c
+>>> +++ b/drivers/md/md.c
+>>> @@ -4486,7 +4486,7 @@ __ATTR_PREALLOC(array_state, S_IRUGO|S_IWUSR, array_state_show, array_state_stor
+>>>
+>>>    static ssize_t
+>>>    max_corrected_read_errors_show(struct mddev *mddev, char *page) {
+>>> -     return sprintf(page, "%d\n",
+>>> +     return sprintf(page, "%u\n",
+>>>                       atomic_read(&mddev->max_corr_read_errors));
+>>>    }
+>>>
+>>> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+>>> index 4fcfcb350d2b..4d615fcc6a50 100644
+>>> --- a/drivers/md/raid10.c
+>>> +++ b/drivers/md/raid10.c
+>>> @@ -2727,7 +2727,8 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
+>>>        int sect = 0; /* Offset from r10_bio->sector */
+>>>        int sectors = r10_bio->sectors;
+>>>        struct md_rdev *rdev;
+>>> -     int max_read_errors = atomic_read(&mddev->max_corr_read_errors);
+>>> +     unsigned int max_read_errors =
+>>> +                     atomic_read(&mddev->max_corr_read_errors);
+>>>        int d = r10_bio->devs[r10_bio->read_slot].devnum;
+>>>
+>>>        /* still own a reference to this rdev, so it cannot
+>>> @@ -2743,7 +2744,7 @@ static void fix_read_error(struct r10conf *conf, struct mddev *mddev, struct r10
+>>>        check_decay_read_errors(mddev, rdev);
+>>>        atomic_inc(&rdev->read_errors);
+>>>        if (atomic_read(&rdev->read_errors) > max_read_errors) {
+>>> -             pr_notice("md/raid10:%s: %pg: Raid device exceeded read_error threshold [cur %d:max %d]\n",
+>>> +             pr_notice("md/raid10:%s: %pg: Raid device exceeded read_error threshold [cur %u:max %u]\n",
+>>>                          mdname(mddev), rdev->bdev,
+>>>                          atomic_read(&rdev->read_errors), max_read_errors);
+>>>                pr_notice("md/raid10:%s: %pg: Failing raid device\n",
+>>>
+>>
+> .
+> 
 
-
-> ---
-> Changes in v2:
-> - Do not remove static from squashfs_bio_read()
-> - Link to v1: https://lore.kernel.org/r/20230510-squashfs-cache-v1-1-3b6bb0e7d952@axis.com
-> ---
->   fs/squashfs/block.c          | 116 +++++++++++++++++++++++++++++++++++++++++--
->   fs/squashfs/squashfs_fs_sb.h |   1 +
->   fs/squashfs/super.c          |  12 +++++
->   3 files changed, 126 insertions(+), 3 deletions(-)
->
-> diff --git a/fs/squashfs/block.c b/fs/squashfs/block.c
-> index bed3bb8b27fa..d750f72711fa 100644
-> --- a/fs/squashfs/block.c
-> +++ b/fs/squashfs/block.c
-> @@ -76,10 +76,101 @@ static int copy_bio_to_actor(struct bio *bio,
->   	return copied_bytes;
->   }
->   
-> +static int squashfs_bio_read_cached(struct bio *fullbio, struct address_space *cache_mapping,
-> +				    u64 index, int length, u64 read_start, u64 read_end,
-> +				    int page_count)
-> +{
-> +	struct page *head_to_cache = NULL, *tail_to_cache = NULL;
-> +	struct block_device *bdev = fullbio->bi_bdev;
-> +	struct bvec_iter_all iter_all;
-> +	struct bio *bio = NULL;
-> +	int prev_io_idx = -1;
-> +	struct bio_vec *bv;
-> +	int idx = 0;
-> +	int err = 0;
-> +
-> +	bio_for_each_segment_all(bv, fullbio, iter_all) {
-> +		struct page *page = bv->bv_page;
-> +		int retlen;
-> +
-> +		if (page->mapping == cache_mapping && PageUptodate(page)) {
-> +			idx++;
-> +			continue;
-> +		}
-> +
-> +		/*
-> +		 * We only use this when the device block size is the same as
-> +		 * the page size, so read_start and read_end cover full pages.
-> +		 *
-> +		 * Compare these to the original required index and length to
-> +		 * only cache pages which were requested partially, since these
-> +		 * are the ones which are likely to be needed when reading
-> +		 * adjacent blocks.
-> +		 */
-> +		if (idx == 0 && index != read_start)
-> +			head_to_cache = page;
-> +		else if (idx == page_count - 1 && index + length != read_end)
-> +			tail_to_cache = page;
-> +
-> +		if (!bio || idx != prev_io_idx + 1) {
-> +			unsigned int remaining_pages;
-> +			unsigned int this_nr_pages;
-> +
-> +submit_and_retry:
-> +			remaining_pages = page_count - idx;
-> +			this_nr_pages = min(remaining_pages, BIO_MAX_VECS);
-> +			bio = blk_next_bio(bio, bdev, this_nr_pages, REQ_OP_READ,
-> +					   GFP_NOIO);
-> +			bio->bi_iter.bi_sector = fullbio->bi_iter.bi_sector +
-> +						 idx * (PAGE_SIZE / SECTOR_SIZE);
-> +		}
-> +
-> +		retlen = bio_add_page(bio, bv->bv_page, bv->bv_len, bv->bv_offset);
-> +		if (retlen != bv->bv_len)
-> +			goto submit_and_retry;
-> +
-> +		prev_io_idx = idx;
-> +		idx++;
-> +	}
-> +
-> +	if (bio) {
-> +		err = submit_bio_wait(bio);
-> +		bio_put(bio);
-> +	}
-> +
-> +	if (err)
-> +		return err;
-> +
-> +	if (head_to_cache) {
-> +		int ret = add_to_page_cache_lru(head_to_cache, cache_mapping,
-> +						read_start, GFP_NOIO);
-> +
-> +		if (!ret) {
-> +			SetPageUptodate(head_to_cache);
-> +			unlock_page(head_to_cache);
-> +		}
-> +
-> +	}
-> +
-> +	if (tail_to_cache) {
-> +		int ret = add_to_page_cache_lru(tail_to_cache, cache_mapping,
-> +						read_end - PAGE_SIZE, GFP_NOIO);
-> +
-> +		if (!ret) {
-> +			SetPageUptodate(tail_to_cache);
-> +			unlock_page(tail_to_cache);
-> +		}
-> +	}
-> +
-> +	return 0;
-> +}
-> +
->   static int squashfs_bio_read(struct super_block *sb, u64 index, int length,
->   			     struct bio **biop, int *block_offset)
->   {
->   	struct squashfs_sb_info *msblk = sb->s_fs_info;
-> +	struct inode *cache_inode = msblk->cache_inode;
-> +	struct address_space *cache_mapping = cache_inode ? cache_inode->i_mapping : NULL;
->   	const u64 read_start = round_down(index, msblk->devblksize);
->   	const sector_t block = read_start >> msblk->devblksize_log2;
->   	const u64 read_end = round_up(index + length, msblk->devblksize);
-> @@ -99,13 +190,27 @@ static int squashfs_bio_read(struct super_block *sb, u64 index, int length,
->   	for (i = 0; i < page_count; ++i) {
->   		unsigned int len =
->   			min_t(unsigned int, PAGE_SIZE - offset, total_len);
-> -		struct page *page = alloc_page(GFP_NOIO);
-> +		struct page *page = NULL;
-> +
-> +		if (cache_mapping)
-> +			page = find_get_page(cache_mapping,
-> +					     read_start + i * PAGE_SIZE);
-> +		if (!page)
-> +			page = alloc_page(GFP_NOIO);
->   
->   		if (!page) {
->   			error = -ENOMEM;
->   			goto out_free_bio;
->   		}
-> -		if (!bio_add_page(bio, page, len, offset)) {
-> +
-> +		if (cache_mapping) {
-> +			/*
-> +			 * Use the __ version to avoid merging since we need
-> +			 * each page to be separate when we check for and avoid
-> +			 * cached pages.
-> +			 */
-> +			__bio_add_page(bio, page, len, offset);
-> +		} else if (!bio_add_page(bio, page, len, offset)) {
->   			error = -EIO;
->   			goto out_free_bio;
->   		}
-> @@ -113,7 +218,12 @@ static int squashfs_bio_read(struct super_block *sb, u64 index, int length,
->   		total_len -= len;
->   	}
->   
-> -	error = submit_bio_wait(bio);
-> +	if (cache_mapping)
-> +		error = squashfs_bio_read_cached(bio, cache_mapping, index,
-> +						 length, read_start, read_end,
-> +						 page_count);
-> +	else
-> +		error = submit_bio_wait(bio);
->   	if (error)
->   		goto out_free_bio;
->   
-> diff --git a/fs/squashfs/squashfs_fs_sb.h b/fs/squashfs/squashfs_fs_sb.h
-> index 72f6f4b37863..dfee65845d48 100644
-> --- a/fs/squashfs/squashfs_fs_sb.h
-> +++ b/fs/squashfs/squashfs_fs_sb.h
-> @@ -47,6 +47,7 @@ struct squashfs_sb_info {
->   	struct squashfs_cache			*block_cache;
->   	struct squashfs_cache			*fragment_cache;
->   	struct squashfs_cache			*read_page;
-> +	struct inode				*cache_inode;
->   	int					next_meta_index;
->   	__le64					*id_table;
->   	__le64					*fragment_index;
-> diff --git a/fs/squashfs/super.c b/fs/squashfs/super.c
-> index e090fae48e68..64d6bc95950b 100644
-> --- a/fs/squashfs/super.c
-> +++ b/fs/squashfs/super.c
-> @@ -329,6 +329,16 @@ static int squashfs_fill_super(struct super_block *sb, struct fs_context *fc)
->   		goto failed_mount;
->   	}
->   
-> +	if (msblk->devblksize == PAGE_SIZE) {
-> +		msblk->cache_inode = new_inode(sb);
-> +		if (msblk->cache_inode == NULL)
-> +			goto failed_mount;
-> +
-> +		set_nlink(msblk->cache_inode, 1);
-> +		msblk->cache_inode->i_size = OFFSET_MAX;
-> +		mapping_set_gfp_mask(msblk->cache_inode->i_mapping, GFP_NOFS);
-> +	}
-> +
->   	msblk->stream = squashfs_decompressor_setup(sb, flags);
->   	if (IS_ERR(msblk->stream)) {
->   		err = PTR_ERR(msblk->stream);
-> @@ -454,6 +464,7 @@ static int squashfs_fill_super(struct super_block *sb, struct fs_context *fc)
->   	squashfs_cache_delete(msblk->block_cache);
->   	squashfs_cache_delete(msblk->fragment_cache);
->   	squashfs_cache_delete(msblk->read_page);
-> +	iput(msblk->cache_inode);
->   	msblk->thread_ops->destroy(msblk);
->   	kfree(msblk->inode_lookup_table);
->   	kfree(msblk->fragment_index);
-> @@ -572,6 +583,7 @@ static void squashfs_put_super(struct super_block *sb)
->   		squashfs_cache_delete(sbi->block_cache);
->   		squashfs_cache_delete(sbi->fragment_cache);
->   		squashfs_cache_delete(sbi->read_page);
-> +		iput(sbi->cache_inode);
->   		sbi->thread_ops->destroy(sbi);
->   		kfree(sbi->id_table);
->   		kfree(sbi->fragment_index);
->
-> ---
-> base-commit: 457391b0380335d5e9a5babdec90ac53928b23b4
-> change-id: 20230510-squashfs-cache-7a3b9e7355c1
->
-> Best regards,
