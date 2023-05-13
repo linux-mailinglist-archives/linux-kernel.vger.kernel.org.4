@@ -2,59 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 137D970198A
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 21:45:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CA11A701993
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 21:57:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229611AbjEMTmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 15:42:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50254 "EHLO
+        id S230337AbjEMT5D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 15:57:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjEMTmx (ORCPT
+        with ESMTP id S229763AbjEMT5B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 15:42:53 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DEBD1BC7
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 12:42:53 -0700 (PDT)
+        Sat, 13 May 2023 15:57:01 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C0AA2D63
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 12:56:59 -0700 (PDT)
 From:   Thomas Gleixner <tglx@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684006971;
+        s=2020; t=1684007817;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=xhIUhkm/3QxY0cQ35omU8A+ztIuN9wN4GJw2r9D9N8c=;
-        b=4j5yDWsZaysSy25nQ55wrWrPJWnm9WFsLnteMJ92iU+X5vqMz9/sgIOgPPvscoCmFxAPlT
-        xGfKRi0hHldOz9J/TvQaTfle2Bv5h8nra2WAiAi3BtCuT9nHAt1DRCXaV6ZNoSiwKNplq2
-        b/SJXx4cpr4wgmI8ESC0x/5uCwASHEvIdILO6MKFEeLy1YZY1KD3gs5z0cxENJDCzLNZzu
-        FxRCtgCg9stdEZdWfd2F8PUJMl+V0LPdJeW03wq8+oPqzHdmeHIccIhUMjU2sPY0LkJqJH
-        cOnKrhRXBCXB8IMhJNoIkm654+v3PSaqPeCOW5g/a5aMBNgKWi9OELsi6P+t/w==
+        bh=QkxD4jDFwjLSBHfJ/c7FKLTS33arAD1vzMDqCSf5Pqw=;
+        b=WecT/scqjLIK4s1VjLSGGyFo6Jr1XXzXXa7ew7a08lM3Cc2LHE+s4zmMPCPIvNECejz+09
+        87fbFNALX/Zp+UJRamTk9VK8yhJr+tFbUFAlSdpMq6+uNqrfb6Pxl8tTlZf5YXh6iTKo+f
+        TWLO/fAsZChUP7p2Ke4ZEC50klOeE1NBd8F8IdQ+f42jv/Ri4LXiAAZerNVFEuO0f0OTAP
+        49SNHsfXxg7npfLUnrb3cg3yme5cB6bsNk9EJ0P5TDYVdftfjG8QemHEHV1r9IdMKbgoSp
+        cuiem2FT9GMotBK2ZTViDARfY+e5A+bTiwA6e3hr1Rdw1c88Odvy6BIG1UPpsQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684006971;
+        s=2020e; t=1684007817;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=xhIUhkm/3QxY0cQ35omU8A+ztIuN9wN4GJw2r9D9N8c=;
-        b=FuUB6NJJ8piz48iH2rmyp4RMcQPrmrPihGRisRlSDu9P0zpwEuq2dlrdvoje3pqAVOz17d
-        9Exm3eB02HcJtSAA==
-To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     syzbot <syzbot+fe0c72f0ccbb93786380@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com, Ingo Molnar <mingo@elte.hu>,
-        linux-kernel@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH] debugobject: don't wake up kswapd from fill_pool()
-In-Reply-To: <aaff0a39-3dd1-5efb-bb7b-c2c241ac9c06@I-love.SAKURA.ne.jp>
-References: <000000000000008ddb05fb5e2576@google.com>
- <6577e1fa-b6ee-f2be-2414-a2b51b1c5e30@I-love.SAKURA.ne.jp>
- <20230511204458.819f9009d2ef8b46cc163191@linux-foundation.org>
- <d642e597-cf7d-b410-16ce-22dff483fd8e@I-love.SAKURA.ne.jp>
- <87v8gxbthf.ffs@tglx>
- <39c79d27-73ea-06a8-62fe-2b64d0fd8db5@I-love.SAKURA.ne.jp>
- <87bkipbeyr.ffs@tglx>
- <61d7ac52-3352-b7cd-8908-890a29a007d9@I-love.SAKURA.ne.jp>
- <87lehsaavo.ffs@tglx>
- <aaff0a39-3dd1-5efb-bb7b-c2c241ac9c06@I-love.SAKURA.ne.jp>
-Date:   Sat, 13 May 2023 21:42:51 +0200
-Message-ID: <87fs809fwk.ffs@tglx>
+        bh=QkxD4jDFwjLSBHfJ/c7FKLTS33arAD1vzMDqCSf5Pqw=;
+        b=SUX0/ToMzEcB41KnS0g0Ax0kdf6JxQPb/f2pebxSdCW+QrA33POroMty+gImglWABdG5dz
+        NygQwc3rBZelmEAQ==
+To:     Matthew Wilcox <willy@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Darren Hart <dvhart@infradead.org>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        =?utf-8?Q?Andr=C3=A9?= Almeida <andrealmeid@igalia.com>
+Cc:     linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
+        linux-mm@kvack.org
+Subject: Re: Futexes & Folios
+In-Reply-To: <ZF+3xpmouwur4sVE@casper.infradead.org>
+References: <ZF+3xpmouwur4sVE@casper.infradead.org>
+Date:   Sat, 13 May 2023 21:56:56 +0200
+Message-ID: <87cz349f93.ffs@tglx>
 MIME-Version: 1.0
 Content-Type: text/plain
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -67,27 +60,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 13 2023 at 18:33, Tetsuo Handa wrote:
-> On 2023/05/13 17:33, Thomas Gleixner wrote:
->> Now I just stared at __alloc_pages_slowpath() and looked at the
->> condition for wakeup_all_kswapds(). ALLOC_KSWAPD is set because
->> debugobject uses GFP_ATOMIC which contains __GFP_KSWAPD_RECLAIM.
->> 
->> So debug objects needs to have s/GFP_ATOMIC/__GFP_HIGH/ to prevent that
->> wakeup path.
+On Sat, May 13 2023 at 17:16, Matthew Wilcox wrote:
+
+> Here's a patch which converts the futex code from using pages to using
+> folios.  I do have some questions.
 >
-> Yes. That is exactly what my patch does.
+>  - I assume we really do want to base the key on the page offset of the
+>    futex in the file.  That is, it's not good enough to base the key
+>    on the folio's index because the folio can be split after setting up
+>    the key, and if it is we'd then fail to find the futex later.
 
-Indeed. For some reason your patch (though you cc'ed me) did not show up
-in my inbox. I've grabbed it from lore so no need to resend.
+Correct.
 
-Actually we want both changes.
+>  - In hugetlbfs, it doesn't matter whether the pgoff is based on base
+>    pages or huge page size -- as long as it's consistent between
+>    invocations, everything will work
 
-  - Your's to fix the underlying ancient problem.
+Yes.
 
-  - The one I did which restores the performance behaviour
+The patch looks sane, but I need to have a look with brain more awake
 
 Thanks,
 
         tglx
-
