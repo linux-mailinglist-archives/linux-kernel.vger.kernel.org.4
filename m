@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C5027019C4
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 22:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C2187019C7
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 22:45:59 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233666AbjEMUpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 16:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34500 "EHLO
+        id S233472AbjEMUp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 16:45:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232224AbjEMUpe (ORCPT
+        with ESMTP id S232064AbjEMUpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 16:45:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41BF640C0;
-        Sat, 13 May 2023 13:45:26 -0700 (PDT)
+        Sat, 13 May 2023 16:45:39 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04C53C1B;
+        Sat, 13 May 2023 13:45:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6DBF61575;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1358561560;
+        Sat, 13 May 2023 20:45:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D4CCC433EF;
         Sat, 13 May 2023 20:45:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10FF9C433D2;
-        Sat, 13 May 2023 20:45:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684010725;
-        bh=jbC/dpcVk49KvymLiywF5ReeRJJkXEV051g5YJJC5YE=;
+        s=k20201202; t=1684010727;
+        bh=Sr1ACpmB4VMo9mQd8LPvpsqLdM7Qav5Pbz5xK//K3hU=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=LOGVVn/huwh5EJh+5hBCjxdYZGaO28s47XCzj2SV8i1exxuPW9EYFSi2O2v9uxSKN
-         8xNFrYaRTrWA71r2cXqDi5wdGXNxeZAdszNkBbiAnm/2q6LNDzf6uB0bzhugQbwfGK
-         9LqJACFLg+ksyl52Sv4UuMSgnwld+MHRkQQpm0sld7Ftk01hKaqJn2J7Dynvke1aAD
-         ThuVkX1966auNxYoRm0Fuw+FeAITkyVyaOo5wErDbQWMg23R0j8MCrm9pqIfQm4fkV
-         dU7G/W+VcPY04Nt3c/Sti9DkxEIN4lAWbT8Ry5lFA5YL+3bGx8/mr0kwxvQxoNZBuF
-         10U2O/c+zA3Xg==
+        b=G5ywJR/TLYTx7IJRyDK8xhvxfOlb5zRIM724OWkQvCpWrO0wS9LfsIqddx345ZssL
+         UR11qJ5+M1sti/0XgA8yPZIdy0caBnbhxsn6pn9AMQiUqMJq+ULMS8o8xxvls7H0hq
+         ZIN1KOJ79nxKAnPdkZkuTxavrY0GoGtllHbvH9en5pUqVsz/7k3brxbNOxDLbWiDk9
+         LEVIff2wCAYT2oWWt1KgD+tYC99UoeJnkATyXwpAze5JT33NABBz2GsPWF5VYoP4C2
+         8ysRQrWsiS0Ed0hHEYa9x+e8vb4bwHZJ8cd67GAU287TqGfowmHuQ6kKycPV6uu7nF
+         4Y0psjp7htR5Q==
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -40,16 +40,16 @@ Cc:     linux-kernel@vger.kernel.org,
         Nicolas Pitre <npitre@baylibre.com>,
         Nicolas Schier <nicolas@fjasle.eu>,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v4 06/21] modpost: clean up is_executable_section()
-Date:   Sun, 14 May 2023 05:44:47 +0900
-Message-Id: <20230513204502.1593923-7-masahiroy@kernel.org>
+Subject: [PATCH v4 07/21] modpost: squash extable_mismatch_handler() into default_mismatch_handler()
+Date:   Sun, 14 May 2023 05:44:48 +0900
+Message-Id: <20230513204502.1593923-8-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230513204502.1593923-1-masahiroy@kernel.org>
 References: <20230513204502.1593923-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,54 +58,142 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SHF_EXECINSTR is a bit flag (#define SHF_EXECINSTR 0x4).
-Compare the masked flag to '!= 0'.
-
-There is no good reason to stop modpost immediately even if a special
-section index is given. You will get a section mismatch error anyway.
-
-Also, change the return type to bool.
+Merging these two reduces several lines of code. The extable section
+mismatch is already distinguished by EXTABLE_TO_NON_TEXT.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- scripts/mod/modpost.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+ scripts/mod/modpost.c | 84 ++++++++++++++-----------------------------
+ 1 file changed, 26 insertions(+), 58 deletions(-)
 
 diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index bb7d1d87bae7..0bda2f22c985 100644
+index 0bda2f22c985..49357a716519 100644
 --- a/scripts/mod/modpost.c
 +++ b/scripts/mod/modpost.c
-@@ -1207,6 +1207,14 @@ static Elf_Sym *find_elf_symbol2(struct elf_info *elf, Elf_Addr addr,
- 	return near;
- }
+@@ -881,27 +881,14 @@ enum mismatch {
+  * targeting sections in this array (white-list).  Can be empty.
+  *
+  * @mismatch: Type of mismatch.
+- *
+- * @handler: Specific handler to call when a match is found.  If NULL,
+- * default_mismatch_handler() will be called.
+- *
+  */
+ struct sectioncheck {
+ 	const char *fromsec[20];
+ 	const char *bad_tosec[20];
+ 	const char *good_tosec[20];
+ 	enum mismatch mismatch;
+-	void (*handler)(const char *modname, struct elf_info *elf,
+-			const struct sectioncheck* const mismatch,
+-			Elf_Rela *r, Elf_Sym *sym, const char *fromsec);
+-
+ };
  
-+static bool is_executable_section(struct elf_info *elf, unsigned int secndx)
-+{
-+	if (secndx > elf->num_sections)
-+		return false;
+-static void extable_mismatch_handler(const char *modname, struct elf_info *elf,
+-				     const struct sectioncheck* const mismatch,
+-				     Elf_Rela *r, Elf_Sym *sym,
+-				     const char *fromsec);
+-
+ static const struct sectioncheck sectioncheck[] = {
+ /* Do not reference init/exit code/data from
+  * normal code and data
+@@ -974,7 +961,6 @@ static const struct sectioncheck sectioncheck[] = {
+ 	.bad_tosec = { ".altinstr_replacement", NULL },
+ 	.good_tosec = {ALL_TEXT_SECTIONS , NULL},
+ 	.mismatch = EXTABLE_TO_NON_TEXT,
+-	.handler = extable_mismatch_handler,
+ }
+ };
+ 
+@@ -1255,60 +1241,42 @@ static void default_mismatch_handler(const char *modname, struct elf_info *elf,
+ 		     modname, tosym, tosec);
+ 		break;
+ 	case EXTABLE_TO_NON_TEXT:
+-		fatal("There's a special handler for this mismatch type, we should never get here.\n");
++		warn("%s(%s+0x%lx): Section mismatch in reference to the %s:%s\n",
++		     modname, fromsec, (long)r->r_offset, tosec, tosym);
 +
-+	return (elf->sechdrs[secndx].sh_flags & SHF_EXECINSTR) != 0;
-+}
-+
- static void default_mismatch_handler(const char *modname, struct elf_info *elf,
- 				     const struct sectioncheck* const mismatch,
- 				     Elf_Rela *r, Elf_Sym *sym, const char *fromsec)
-@@ -1252,14 +1260,6 @@ static void default_mismatch_handler(const char *modname, struct elf_info *elf,
++		if (match(tosec, mismatch->bad_tosec))
++			fatal("The relocation at %s+0x%lx references\n"
++			      "section \"%s\" which is black-listed.\n"
++			      "Something is seriously wrong and should be fixed.\n"
++			      "You might get more information about where this is\n"
++			      "coming from by using scripts/check_extable.sh %s\n",
++			      fromsec, (long)r->r_offset, tosec, modname);
++		else if (is_executable_section(elf, get_secindex(elf, sym)))
++			warn("The relocation at %s+0x%lx references\n"
++			     "section \"%s\" which is not in the list of\n"
++			     "authorized sections.  If you're adding a new section\n"
++			     "and/or if this reference is valid, add \"%s\" to the\n"
++			     "list of authorized sections to jump to on fault.\n"
++			     "This can be achieved by adding \"%s\" to\n"
++			     "OTHER_TEXT_SECTIONS in scripts/mod/modpost.c.\n",
++			     fromsec, (long)r->r_offset, tosec, tosec, tosec);
++		else
++			error("%s+0x%lx references non-executable section '%s'\n",
++			      fromsec, (long)r->r_offset, tosec);
+ 		break;
  	}
  }
  
--static int is_executable_section(struct elf_info* elf, unsigned int section_index)
+-static void extable_mismatch_handler(const char* modname, struct elf_info *elf,
+-				     const struct sectioncheck* const mismatch,
+-				     Elf_Rela* r, Elf_Sym* sym,
+-				     const char *fromsec)
 -{
--	if (section_index > elf->num_sections)
--		fatal("section_index is outside elf->num_sections!\n");
+-	const char* tosec = sec_name(elf, get_secindex(elf, sym));
+-	Elf_Sym *tosym = find_elf_symbol(elf, r->r_addend, sym);
+-	const char *tosym_name = sym_name(elf, tosym);
 -
--	return ((elf->sechdrs[section_index].sh_flags & SHF_EXECINSTR) == SHF_EXECINSTR);
+-	sec_mismatch_count++;
+-
+-	warn("%s(%s+0x%lx): Section mismatch in reference to the %s:%s\n",
+-	     modname, fromsec, (long)r->r_offset, tosec, tosym_name);
+-
+-	if (match(tosec, mismatch->bad_tosec))
+-		fatal("The relocation at %s+0x%lx references\n"
+-		      "section \"%s\" which is black-listed.\n"
+-		      "Something is seriously wrong and should be fixed.\n"
+-		      "You might get more information about where this is\n"
+-		      "coming from by using scripts/check_extable.sh %s\n",
+-		      fromsec, (long)r->r_offset, tosec, modname);
+-	else if (is_executable_section(elf, get_secindex(elf, sym)))
+-		warn("The relocation at %s+0x%lx references\n"
+-		     "section \"%s\" which is not in the list of\n"
+-		     "authorized sections.  If you're adding a new section\n"
+-		     "and/or if this reference is valid, add \"%s\" to the\n"
+-		     "list of authorized sections to jump to on fault.\n"
+-		     "This can be achieved by adding \"%s\" to\n"
+-		     "OTHER_TEXT_SECTIONS in scripts/mod/modpost.c.\n",
+-		     fromsec, (long)r->r_offset, tosec, tosec, tosec);
+-	else
+-		error("%s+0x%lx references non-executable section '%s'\n",
+-		      fromsec, (long)r->r_offset, tosec);
 -}
 -
- static void extable_mismatch_handler(const char* modname, struct elf_info *elf,
- 				     const struct sectioncheck* const mismatch,
- 				     Elf_Rela* r, Elf_Sym* sym,
+ static void check_section_mismatch(const char *modname, struct elf_info *elf,
+ 				   Elf_Rela *r, Elf_Sym *sym, const char *fromsec)
+ {
+ 	const char *tosec = sec_name(elf, get_secindex(elf, sym));
+ 	const struct sectioncheck *mismatch = section_mismatch(fromsec, tosec);
+ 
+-	if (mismatch) {
+-		if (mismatch->handler)
+-			mismatch->handler(modname, elf,  mismatch,
+-					  r, sym, fromsec);
+-		else
+-			default_mismatch_handler(modname, elf, mismatch,
+-						 r, sym, fromsec);
+-	}
++	if (!mismatch)
++		return;
++
++	default_mismatch_handler(modname, elf, mismatch, r, sym, fromsec);
+ }
+ 
+ static unsigned int *reloc_location(struct elf_info *elf,
 -- 
 2.39.2
 
