@@ -2,122 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 836037019AE
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 22:36:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 06B4D7019AF
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 22:37:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230085AbjEMUgX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 16:36:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58998 "EHLO
+        id S229447AbjEMUhc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 16:37:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjEMUgV (ORCPT
+        with ESMTP id S229688AbjEMUha (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 16:36:21 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70A52D40;
-        Sat, 13 May 2023 13:36:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684010178; x=1715546178;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=onYFYVldXP9dx3srsdPLwnPSsSURVschs6xcAcd8kOI=;
-  b=dqgoAdcFBsE57M6yFgLQCN/dBTgay6qW5QHwe+Mj3ZoI9NK4Ievdlbxg
-   vNxkoFwqIkSsC1bVtIgs07m9TWmfbZ0iInWEdwfSw1Ijy/3/GNZ7CTLES
-   muH9wOfDmsArPjHHXAmVvA6+bv0K2JNg0yty6FGwOifvck22zbrh7A6eT
-   V6Kb5BSfxay++1qxP/MdRoqAAe/flVEd4vkUn7/HLnPDTAVWSIJLLl8Wb
-   j1ezRPBSqmhFpuqzo4Sc16J1WqbS/nOlkTlBxVz3t7sCbpiFm16Ti6i9B
-   T5sVD9zWT/MITRPp/6HSdL+qyCJ73Q8LybeM7kPT/s+IzQjGjHV0/e2cq
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="348480329"
-X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
-   d="scan'208";a="348480329"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 13:36:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="844772599"
-X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
-   d="scan'208";a="844772599"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga001.fm.intel.com with ESMTP; 13 May 2023 13:36:16 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pxvyR-0005fe-35;
-        Sat, 13 May 2023 20:36:15 +0000
-Date:   Sun, 14 May 2023 04:35:55 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Genjian <zhanggenjian123@gmail.com>, tsbogend@alpha.franken.de,
-        rdunlap@infradead.org
-Cc:     oe-kbuild-all@lists.linux.dev, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org, zhanggenjian123@gmail.com,
-        Genjian Zhang <zhanggenjian@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-Subject: Re: [PATCH v2] fix ___SYNC () build error when PROFILE_ALL_BRANCHES
- is enabled
-Message-ID: <202305140443.2830m30j-lkp@intel.com>
-References: <20230427150332.2978867-1-zhanggenjian@kylinos.cn>
+        Sat, 13 May 2023 16:37:30 -0400
+Received: from maynard.decadent.org.uk (maynard.decadent.org.uk [95.217.213.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCBAB2D48;
+        Sat, 13 May 2023 13:37:29 -0700 (PDT)
+Received: from [213.219.167.32] (helo=deadeye)
+        by maynard with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ben@decadent.org.uk>)
+        id 1pxvzZ-0008Qd-19; Sat, 13 May 2023 22:37:25 +0200
+Received: from ben by deadeye with local (Exim 4.96)
+        (envelope-from <ben@decadent.org.uk>)
+        id 1pxvzY-007dj4-1N;
+        Sat, 13 May 2023 22:37:24 +0200
+Date:   Sat, 13 May 2023 22:37:24 +0200
+From:   Ben Hutchings <ben@decadent.org.uk>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Salvatore Bonaccorso <carnil@debian.org>
+Subject: [PATCH v2 1/2] perf doc: Define man page date when using asciidoctor
+Message-ID: <ZF/1BOahN/i6xbBx@decadent.org.uk>
+References: <ZF/0jJkAOXxzGAMc@decadent.org.uk>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="GQDwKrGXSBPfpPFg"
 Content-Disposition: inline
-In-Reply-To: <20230427150332.2978867-1-zhanggenjian@kylinos.cn>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ZF/0jJkAOXxzGAMc@decadent.org.uk>
+X-SA-Exim-Connect-IP: 213.219.167.32
+X-SA-Exim-Mail-From: ben@decadent.org.uk
+X-SA-Exim-Scanned: No (on maynard); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Genjian,
 
-kernel test robot noticed the following build warnings:
+--GQDwKrGXSBPfpPFg
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-[auto build test WARNING on linus/master]
-[also build test WARNING on v6.4-rc1 next-20230512]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+=46rom: Ben Hutchings <benh@debian.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Genjian/fix-___SYNC-build-error-when-PROFILE_ALL_BRANCHES-is-enabled/20230427-230626
-base:   linus/master
-patch link:    https://lore.kernel.org/r/20230427150332.2978867-1-zhanggenjian%40kylinos.cn
-patch subject: [PATCH v2] fix ___SYNC () build error when PROFILE_ALL_BRANCHES is enabled
-config: mips-decstation_defconfig (https://download.01.org/0day-ci/archive/20230514/202305140443.2830m30j-lkp@intel.com/config)
-compiler: mipsel-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/6eb50851d61ca808629a062e0545704eba5be950
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Genjian/fix-___SYNC-build-error-when-PROFILE_ALL_BRANCHES-is-enabled/20230427-230626
-        git checkout 6eb50851d61ca808629a062e0545704eba5be950
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash arch/mips/mm/
+When building perf documentation with asciidoc, we use "git log" to
+find the last commit date of each doc source and pass that to asciidoc
+to use as the man page date.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305140443.2830m30j-lkp@intel.com/
+When using asciidoctor, however, the current date is always used
+instead.  Defining perf_date like we do for asciidoc also doesn't
+work because we're not using DocBook as an intermediate format.
+The asciidoctor man page backend looks for the variable "docdate",
+so set that instead.
 
-All warnings (new ones prefixed by >>):
+Signed-off-by: Ben Hutchings <benh@debian.org>
+---
+ tools/perf/Documentation/Makefile | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
 
-   arch/mips/mm/c-r3k.c:28:15: warning: no previous prototype for 'r3k_cache_size' [-Wmissing-prototypes]
-      28 | unsigned long r3k_cache_size(unsigned long ca_flags)
-         |               ^~~~~~~~~~~~~~
-   arch/mips/mm/c-r3k.c:63:15: warning: no previous prototype for 'r3k_cache_lsize' [-Wmissing-prototypes]
-      63 | unsigned long r3k_cache_lsize(unsigned long ca_flags)
-         |               ^~~~~~~~~~~~~~~
-   arch/mips/mm/c-r3k.c:286:6: warning: no previous prototype for 'r3k_cache_init' [-Wmissing-prototypes]
-     286 | void r3k_cache_init(void)
-         |      ^~~~~~~~~~~~~~
-   {standard input}: Assembler messages:
-   {standard input}:422: Error: non-constant expression in ".if" statement
-   {standard input}: Error: end of file inside conditional
-   {standard input}:422: Error: here is the start of the unterminated conditional
->> {standard input}: Warning: missing .end at end of assembly
+diff --git a/tools/perf/Documentation/Makefile b/tools/perf/Documentation/M=
+akefile
+index ba5d942e4c6a..8a7d7078e386 100644
+--- a/tools/perf/Documentation/Makefile
++++ b/tools/perf/Documentation/Makefile
+@@ -250,11 +250,16 @@ $(MAN_HTML): $(OUTPUT)%.html : %.txt
+ 		$(ASCIIDOC_EXTRA) -aperf_version=3D$(PERF_VERSION) -o $@+ $< && \
+ 	mv $@+ $@
+=20
++# Generate date from git log of the doc input file
++PERF_DATE =3D $(shell git log -1 --pretty=3D"format:%cd" \
++                --date=3Dshort --no-show-signature $<)
++
+ ifdef USE_ASCIIDOCTOR
+ $(OUTPUT)%.1 $(OUTPUT)%.5 $(OUTPUT)%.7 : %.txt
+ 	$(QUIET_ASCIIDOC)$(RM) $@+ $@ && \
+ 	$(ASCIIDOC) -b manpage -d manpage \
+-		$(ASCIIDOC_EXTRA) -aperf_version=3D$(PERF_VERSION) -o $@+ $< && \
++		$(ASCIIDOC_EXTRA) -aperf_version=3D$(PERF_VERSION) \
++		-adocdate=3D$(PERF_DATE) -o $@+ $< && \
+ 	mv $@+ $@
+ endif
+=20
+@@ -266,9 +271,7 @@ $(OUTPUT)%.xml : %.txt
+ 	$(QUIET_ASCIIDOC)$(RM) $@+ $@ && \
+ 	$(ASCIIDOC) -b docbook -d manpage \
+ 		$(ASCIIDOC_EXTRA) -aperf_version=3D$(PERF_VERSION) \
+-		-aperf_date=3D$(shell git log -1 --pretty=3D"format:%cd" \
+-				--date=3Dshort --no-show-signature $<) \
+-		-o $@+ $< && \
++		-aperf_date=3D$(PERF_DATE) -o $@+ $< && \
+ 	mv $@+ $@
+=20
+ XSLT =3D docbook.xsl
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+
+--GQDwKrGXSBPfpPFg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmRf9QQACgkQ57/I7JWG
+EQlFgw/9FpCiJxb7vvzCjpbR1D3CBp5rfos5ZP7YIqNVLRWyQXjTLpjOFMvDO0C9
+mvHzGVkZneDYA8cEoyI5PqhINwbJGqz30uI5dLTjI6dDdm72Jj885gs93OUUpWun
+h7hJ1iFxUvuylBrjTb0YV5bMJdJKhSUcRh63B2RU/LRK6kodz2kJ8le0eK2WW1qe
+9LA23rN8t0WCizLHsCggmNfZv0rthKmCSlhxVwdgC3OYfALRfQpajj2q5ps7/UoN
+e+zd5WcA8N2prLj0cnoy0UAh6I446+dwPClpph+0tReAe37Bzh2a96ZOLQ2MrlxK
+smvCr5ZtMtgyoHpCDjNRcpXyoQxyNejNZSMMzC/EjaXyuW68r63OdPFEopKS6O5C
+tAXAlEydxn/saAFmtsh1lhQKS09tKZVUgjm4yPyWIsWM/zVLEgA/iG2AUaieD4lv
+Mc1OHtoLv64nIbe4yJwMsEsho6Md+wTxGk1U6yteCayXRVU3RbbWYcCYflJObyTm
+GkS9PaXyuEu0YAsaxysbvICGpaVHbwebFrvHpd9HQckavu83LPwunDzJncodnxWE
+pfxdcxuFrKvt8dKQPPA2/w/Yr9yAJPqEzCx5wR5LORs3UnO2b3HMKuuCTqXQSn3O
+O/wexisu8SA4saDaJk8/OSn8pUTwBzgaYBPyKtTlsg/r4mGu0nk=
+=D6XO
+-----END PGP SIGNATURE-----
+
+--GQDwKrGXSBPfpPFg--
