@@ -2,74 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B386701819
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 17:57:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF45701810
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 17:33:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238375AbjEMP5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 11:57:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34960 "EHLO
+        id S239561AbjEMPdn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 11:33:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjEMP5c (ORCPT
+        with ESMTP id S230133AbjEMPdl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 11:57:32 -0400
-X-Greylist: delayed 498 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 13 May 2023 08:57:29 PDT
-Received: from lizimbra02.cittadellasalute.to.it (lizimbra02.cittadellasalute.to.it [109.69.144.62])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 2585519B3;
-        Sat, 13 May 2023 08:57:28 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by lizimbra02.cittadellasalute.to.it (Postfix) with ESMTP id 5AFF740AFB25;
-        Sat, 13 May 2023 17:49:10 +0200 (CEST)
-Received: from lizimbra02.cittadellasalute.to.it ([127.0.0.1])
-        by localhost (lizimbra02.cittadellasalute.to.it [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id etH2UU8TRHDt; Sat, 13 May 2023 17:49:09 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-        by lizimbra02.cittadellasalute.to.it (Postfix) with ESMTP id 93AF9418D7EC;
-        Sat, 13 May 2023 17:49:09 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at lizimbra02.cittadellasalute.to.it
-Received: from lizimbra02.cittadellasalute.to.it ([127.0.0.1])
-        by localhost (lizimbra02.cittadellasalute.to.it [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id n92-61ra9tbe; Sat, 13 May 2023 17:49:09 +0200 (CEST)
-Received: from lizimbra07.cittadellasalute.to.it (lizimbra07.cittadellasalute.to.it [172.19.100.53])
-        by lizimbra02.cittadellasalute.to.it (Postfix) with ESMTPS id 5D95540AE5FE;
-        Sat, 13 May 2023 17:49:09 +0200 (CEST)
-Received: from lizimbra07.cittadellasalute.to.it (localhost [127.0.0.1])
-        by lizimbra07.cittadellasalute.to.it (Postfix) with ESMTP id 4QJTmR4JtvzMwRnJ;
-        Sat, 13 May 2023 17:18:31 +0200 (CEST)
-Date:   Sat, 13 May 2023 17:18:31 +0200 (CEST)
-From:   Account principale <vbiondo@cittadellasalute.to.it>
-Reply-To: bbirseas@gmail.com
-Message-ID: <71985948.15296757.1683991111543.JavaMail.zimbra@cittadellasalute.to.it>
-Subject: Re: blessed deal!
+        Sat, 13 May 2023 11:33:41 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E4D630C2
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 08:33:40 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-33117143894so73762655ab.3
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 08:33:40 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683992019; x=1686584019;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aAgvi+hKTLEvn6404KesPduiFToAEOmz//Bkp7rH+nU=;
+        b=SS6j7TKFsws/ML5xu3UKVtujGYPBkO1ISy8NBYaZBtYZskMqUvoxA3LaAiOOaOgLxl
+         bfVIedvP1HUUZvEmMg81R3cIsok9yRl9T/IZS5iKefkuCA4bZwIWQKjXXE5Fh7WSQwiS
+         FMxp0tIEblOf3wGm2lK6wUQ5GaaWJzhmpfh3frndgygwQCrbj1Pk0ZoxfZGtXUWgjXdx
+         OKh0Nke2W2zjEN1sA4OT+3KZvdo58zP0Cd+YFoKUQcVHJZJA65M7ZfDnxO6DKatZ6iEn
+         O+UZ1Q9dNjd7GobVjtsX97Xt99t3NTDcwCkAGNAA8/RoAyfvbHg+OHxoDCRqLcehP53g
+         nM0A==
+X-Gm-Message-State: AC+VfDwz7YftPgcAWxdlUqCZCkH02X6v7hZg2a471/8M38up+m6klZ8r
+        l5oDS7V2pJKDBA4OdYZxNR72y3jpGfrWe+upjgTQuYi+hSji
+X-Google-Smtp-Source: ACHHUZ7WytFWQeobYVerIwdatJX6lGAhpMCO3F93mqFX77Q584A1/EoJwZsBLR6NU652JTvQTVBGlBEyM2Q/pNhB7E0NLqW9KtKB
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [156.146.41.20, 172.19.100.208]
-X-Mailer: Zimbra 8.8.15_GA_4481 (zclient/8.8.15_GA_4481)
-Thread-Index: THXAiHqbTGqRvMcR4kuhNtUVtzj2YQ==
-Thread-Topic: blessed deal!
-X-Spam-Status: Yes, score=5.5 required=5.0 tests=BAYES_50,
-        FREEMAIL_FORGED_REPLYTO,MISSING_HEADERS,REPLYTO_WITHOUT_TO_CC,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.4997]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  1.0 MISSING_HEADERS Missing To: header
-        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
-        *  1.6 REPLYTO_WITHOUT_TO_CC No description available.
-        *  2.1 FREEMAIL_FORGED_REPLYTO Freemail in Reply-To, but not From
-X-Spam-Level: *****
+X-Received: by 2002:a92:b106:0:b0:335:ba2a:c3d with SMTP id
+ t6-20020a92b106000000b00335ba2a0c3dmr6483049ilh.5.1683992019328; Sat, 13 May
+ 2023 08:33:39 -0700 (PDT)
+Date:   Sat, 13 May 2023 08:33:39 -0700
+In-Reply-To: <00000000000013dee605f4fedf8b@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000001de64005fb94f2f1@google.com>
+Subject: Re: [syzbot] [jfs?] KASAN: null-ptr-deref Read in txBegin
+From:   syzbot <syzbot+f1faa20eec55e0c8644c@syzkaller.appspotmail.com>
+To:     jfs-discussion@lists.sourceforge.net,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mirimmad17@gmail.com, mirimmad@outlook.com, shaggy@kernel.org,
+        skhan@linuxfoundation.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+syzbot has found a reproducer for the following issue on:
+
+HEAD commit:    14f8db1c0f9a Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=12f5764e280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a837a8ba7e88bb45
+dashboard link: https://syzkaller.appspot.com/bug?extid=f1faa20eec55e0c8644c
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15b9e24e280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=105d3e46280000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ad6ce516eed3/disk-14f8db1c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1f38c2cc7667/vmlinux-14f8db1c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d795115eee39/Image-14f8db1c.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/014681b264cc/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+f1faa20eec55e0c8644c@syzkaller.appspotmail.com
+
+WARNING: The mand mount option has been deprecated and
+         and is ignored by this kernel. Remove the mand
+         option from the mount to silence this warning.
+=======================================================
+Unable to handle kernel paging request at virtual address dfff800000000008
+KASAN: null-ptr-deref in range [0x0000000000000040-0x0000000000000047]
+Mem abort info:
+  ESR = 0x0000000096000006
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x06: level 2 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000006
+  CM = 0, WnR = 0
+[dfff800000000008] address between user and kernel address ranges
+Internal error: Oops: 0000000096000006 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 5926 Comm: syz-executor228 Not tainted 6.3.0-rc7-syzkaller-g14f8db1c0f9a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : generic_test_bit include/asm-generic/bitops/generic-non-atomic.h:128 [inline]
+pc : txBegin+0x138/0x5e0 fs/jfs/jfs_txnmgr.c:366
+lr : txBegin+0x104/0x5e0 fs/jfs/jfs_txnmgr.c:357
+sp : ffff80001eb37660
+x29: ffff80001eb37680 x28: dfff800000000000 x27: dfff800000000000
+x26: ffff800016308bc8 x25: 0000000000000040 x24: 0000000000000000
+x23: ffff800016306520 x22: ffff0000d6a57c30 x21: 0000000000000150
+x20: 0000000000000008 x19: 0000000000000000 x18: ffff80001eb37360
+x17: ffff800008ad82e4 x16: ffff80000831ae40 x15: 000000000000bb8c
+x14: 000000003eb35159 x13: dfff800000000000 x12: ffff700003d66eb4
+x11: 0000000000000001 x10: 0000000000000000 x9 : 0000000000000000
+x8 : 1ffff00002c5f670 x7 : 0000000000000000 x6 : 0000000000000000
+x5 : ffff800019238f80 x4 : 0000000000000008 x3 : ffff80000831af70
+x2 : 0000000000000001 x1 : 0000000000000000 x0 : 0000000000000000
+Call trace:
+ txBegin+0x138/0x5e0 fs/jfs/jfs_txnmgr.c:362
+ __jfs_xattr_set+0xc8/0x190 fs/jfs/xattr.c:915
+ jfs_xattr_set+0x58/0x70 fs/jfs/xattr.c:941
+ __vfs_setxattr+0x3d8/0x400 fs/xattr.c:203
+ __vfs_setxattr_noperm+0x110/0x528 fs/xattr.c:237
+ __vfs_setxattr_locked+0x1ec/0x218 fs/xattr.c:298
+ vfs_setxattr+0x1a8/0x344 fs/xattr.c:324
+ do_setxattr fs/xattr.c:609 [inline]
+ setxattr+0x208/0x29c fs/xattr.c:632
+ path_setxattr+0x17c/0x258 fs/xattr.c:651
+ __do_sys_setxattr fs/xattr.c:667 [inline]
+ __se_sys_setxattr fs/xattr.c:663 [inline]
+ __arm64_sys_setxattr+0xbc/0xd8 fs/xattr.c:663
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+Code: 9400012e aa1703e0 95954bf6 350002f8 (387c6a88) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	9400012e 	bl	0x4b8
+   4:	aa1703e0 	mov	x0, x23
+   8:	95954bf6 	bl	0x6552fe0
+   c:	350002f8 	cbnz	w24, 0x68
+* 10:	387c6a88 	ldrb	w8, [x20, x28] <-- trapping instruction
 
 
-Hello!
-Did you see my blessed deal message???
-From the United States Marine Corps (USMC)
-Sgt Irene
+---
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
