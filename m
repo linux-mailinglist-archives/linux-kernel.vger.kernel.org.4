@@ -2,71 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777997015A5
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 11:26:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F3297015AB
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 11:29:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237777AbjEMJ0u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 05:26:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60602 "EHLO
+        id S237852AbjEMJ3S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 05:29:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232192AbjEMJ0t (ORCPT
+        with ESMTP id S232959AbjEMJ3P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 05:26:49 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF3D10D5
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 02:26:47 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id 2adb3069b0e04-4f1411e8111so12202088e87.1
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 02:26:47 -0700 (PDT)
+        Sat, 13 May 2023 05:29:15 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 697C53582
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 02:29:14 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-96a2b6de3cbso731656366b.1
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 02:29:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683970006; x=1686562006;
+        d=linaro.org; s=google; t=1683970153; x=1686562153;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2F71NeKdPntAy3Z+ybix75zHfY0YIpg6kv622GJFXbM=;
-        b=kIB5yKWaX6ZaCvUKn3kXUrjMYUF88HJaMXHgVi2t3hQ3JTo5HnpCt14+OuQb+b4vRX
-         J+nsWQ88vatV/5dehwNGRTZQa3qFh+FcpuHXXzJ5f0p6S0aVlRJwOeO3j3kfXc6z+p0c
-         pvLytz7PGqC5TOD+xDD55tJvTYCujKFIiaLxGqc7OrDRqdQ/Yyl/B3XX+g/dKUalwFCr
-         dNFjzPfJvRLaOIkYEUKqTGRL0WLey4gkM0KdV058ooXgfHA5pZgAI8zZ3kUGJ/jcYVXi
-         FxuxPg13WjebERx/pQVOcCAk2coAPVVFYLTdBxvSDA7E9PBqQFiWgIcoH4WzwQGsL/sB
-         wzVA==
+        bh=/ZFPzkUq5fjkT/XAwddhc7FJwecr3Vxjb2F6rFeEitA=;
+        b=D8OkNtQFNmFXcFrQ6E+pgBGiQnwpyxXyE33DVSKsPoQ6Ypj0zKvfhKfyk3tv8OppeY
+         Y+U/NIeN369Su9Mihuxk6yqlSn/2e6iloeZ/82ywbhzFbUdiKPT8MWnXRFzVTBhx4q+M
+         fNQs3nCW9xpNHwYhFHcTxth2HoVVOyROG2xR60VMGit46t8lnwxRLXrxIDslAxzPmG89
+         Zy1LdJsbJ1Y9XQmD0WesRgUknxQBTVd9Q84/O51YnuF2uFhvNnEdEiLUSet8WtDcQgzc
+         LjWQlBzF8dQTfikKvHpCR2O+486GtjCf21DpHwYX+wEwcYMR4ASj0rIBGyV7icj2zCnQ
+         BoxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683970006; x=1686562006;
+        d=1e100.net; s=20221208; t=1683970153; x=1686562153;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2F71NeKdPntAy3Z+ybix75zHfY0YIpg6kv622GJFXbM=;
-        b=KSJpDtm7FAZ5QgIohA10lcsHb6nKiaLj13+VYg3KZPpmCWz65CBC4x8e7+4Oeo5HFY
-         +2mv/r0PQ9zL1ny5bdZMkG2KLUcQCo1PBAAxt7gdjikWr4+k0Uo39fDYg6hHfr8ZSm6Q
-         I95JRLXUOYU6Cy2rZh2DJmEI/gBMb70R+6zAEAs1VUE0gMku1QQK5TcHuQlQx173t0l8
-         F+KlSAOdwquVgBUE1zZgs3CJ5Kfd0HgBkmuS1kT3k5neYnBfV6azCyS38Op1MHxsYwt1
-         HH7dqXO8OIVccs2g2eRxg7zU/pGxGQJNV+/gcG1vs4P43mr1UU8SnE7gKYql9UOTy5ks
-         IMYQ==
-X-Gm-Message-State: AC+VfDzVf9JjzO/+8iow/Sh9MYUj6C8r0t/oFjXtfJ/iqtVfuSBcBoXQ
-        BOfbxjppyu7zpGNKpHJ8nWbht3cAQVmIY5Q9gZM=
-X-Google-Smtp-Source: ACHHUZ4IdptFTHvQTAPgHe+AFQmfte3OSLwL1OE2oj7TahT+Pg06PNqiQBcQ8sIHgGgpBlxTuXKK/g==
-X-Received: by 2002:a05:6512:3907:b0:4f1:dcd2:ab6d with SMTP id a7-20020a056512390700b004f1dcd2ab6dmr3841495lfu.28.1683970005801;
-        Sat, 13 May 2023 02:26:45 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id e28-20020ac2547c000000b004f13634da05sm1772978lfn.180.2023.05.13.02.26.44
+        bh=/ZFPzkUq5fjkT/XAwddhc7FJwecr3Vxjb2F6rFeEitA=;
+        b=b5CclG3+RRkwQgZRb4tnjmqmmtkkxfkNmtIgOObIppmST9ysaZAE4vqMSz2Mk9zUAG
+         M0dZ6R6kAOvIIsvjdbgUtbQakirTOP1OJQHL7Yy/EmbDfGehUx9XsvAsH265KyUNzvin
+         VeD1vlZSfRN5iV3PVdX1vJ1FyuQ0jewKuTxApdQAiHbUTJV2tIwEOVo+uwBnzwNqNf2G
+         NImyAg5OPxE7GIM84L+cI4R9FyagmJPeJMbVH+wr8vQhurGXqWdoD8yaxoYEhJJ+qUth
+         OjeFAQujigZzGSNQbN+J2JVJieVnVFJ6zmGLsp8fWIC3cSQQAxaDueV7GyoMbMNP3E2c
+         RL3Q==
+X-Gm-Message-State: AC+VfDxbpVWwzd57wVPQOnGoekWBtc/vxhLPYId2fnzWuvfskxUHOD+m
+        uLAXa+lUyzLbxLgoDjeDS6jnpg==
+X-Google-Smtp-Source: ACHHUZ7IA9rSCrcG3EzFbtg+41tbzkCdq4ssKuHHqr3GcPR+vSFA+AhYi4T6PVtMxBJFhlKXqwYmRQ==
+X-Received: by 2002:a17:907:744:b0:953:83a2:c813 with SMTP id xc4-20020a170907074400b0095383a2c813mr20551069ejb.32.1683970152914;
+        Sat, 13 May 2023 02:29:12 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:1d0:810a:586c:c5ba? ([2a02:810d:15c0:828:1d0:810a:586c:c5ba])
+        by smtp.gmail.com with ESMTPSA id n17-20020a170906725100b0096a6bf89259sm3202087ejk.167.2023.05.13.02.29.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 May 2023 02:26:45 -0700 (PDT)
-Message-ID: <7738357b-801c-e1a7-8ea9-28d8a3d3d997@linaro.org>
-Date:   Sat, 13 May 2023 11:26:43 +0200
+        Sat, 13 May 2023 02:29:12 -0700 (PDT)
+Message-ID: <c9e37cb2-75f7-e335-05ac-01197a9ba14c@linaro.org>
+Date:   Sat, 13 May 2023 11:29:11 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] pinctrl: qcom: sa8775p: add the wakeirq map
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 07/10] dt-bindings: arm: msm: Add LLCC compatible for
+ QDU1000/QRU1000
 Content-Language: en-US
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
-        Bjorn Andersson <andersson@kernel.org>,
+To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
         Andy Gross <agross@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20230512153232.92450-1-brgl@bgdev.pl>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230512153232.92450-1-brgl@bgdev.pl>
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230512122134.24339-1-quic_kbajaj@quicinc.com>
+ <20230512122134.24339-8-quic_kbajaj@quicinc.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230512122134.24339-8-quic_kbajaj@quicinc.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -79,66 +84,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 12.05.2023 17:32, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 12/05/2023 14:21, Komal Bajaj wrote:
+> Add LLCC compatible for QDU1000/QRU1000 SoCs.
 > 
-> The SA8775P TLMM driver is missing the GPIO-to-wakeup-pin mapping. This
-> adds it.
-> 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
-This almost matches
+> Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
 
-https://git.codelinaro.org/clo/la/kernel/msm-5.15/-/commit/d7af4a14603957d414e931b5f175f36f3537ae34
+Use subject prefixes matching the subsystem (which you can get for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching). In this case - cache: qcom,llcc: - and drop
+redundant parts in subject.
 
-minus one diff:
+With subject fixes:
 
-< { 39, 200 },
----
-> { 30, 200 },
 
-please consult which one is correct with qc folks
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Konrad
->  drivers/pinctrl/qcom/pinctrl-sa8775p.c | 19 +++++++++++++++++++
->  1 file changed, 19 insertions(+)
-> 
-> diff --git a/drivers/pinctrl/qcom/pinctrl-sa8775p.c b/drivers/pinctrl/qcom/pinctrl-sa8775p.c
-> index 2ae7cdca65d3..422d72ed1012 100644
-> --- a/drivers/pinctrl/qcom/pinctrl-sa8775p.c
-> +++ b/drivers/pinctrl/qcom/pinctrl-sa8775p.c
-> @@ -1491,6 +1491,23 @@ static const struct msm_pingroup sa8775p_groups[] = {
->  	[153] = SDC_QDSD_PINGROUP(sdc1_data, 0x199000, 9, 0),
->  };
->  
-> +static const struct msm_gpio_wakeirq_map sa8775p_pdc_map[] = {
-> +	{ 0, 169 }, { 1, 174 }, { 2, 170 }, { 3, 175 }, { 4, 171 }, { 5, 173 },
-> +	{ 6, 172 }, { 7, 182 }, { 10, 220 }, { 11, 213 }, { 12, 221 },
-> +	{ 16, 230 }, { 19, 231 }, { 20, 232 }, { 23, 233 }, { 24, 234 },
-> +	{ 26, 223 }, { 27, 235 }, { 28, 209 }, { 29, 176 }, { 39, 200 },
-> +	{ 31, 201 }, { 32, 212 }, { 35, 177 }, { 36, 178 }, { 39, 184 },
-> +	{ 40, 185 }, { 41, 227 }, { 42, 186 }, { 43, 228 }, { 45, 187 },
-> +	{ 47, 188 }, { 48, 194 }, { 51, 195 }, { 52, 196 }, { 55, 197 },
-> +	{ 56, 198 }, { 57, 236 }, { 58, 192 }, { 59, 193 }, { 72, 179 },
-> +	{ 73, 180 }, { 74, 181 }, { 75, 202 }, { 76, 183 }, { 77, 189 },
-> +	{ 78, 190 }, { 79, 191 }, { 80, 199 }, { 83, 204 }, { 84, 205 },
-> +	{ 85, 229 }, { 86, 206 }, { 89, 207 }, { 91, 208 }, { 94, 214 },
-> +	{ 95, 215 }, { 96, 237 }, { 97, 216 }, { 98, 238 }, { 99, 217 },
-> +	{ 100, 239 }, { 105, 219 }, { 106, 210 }, { 107, 211 }, { 108, 222 },
-> +	{ 109, 203 }, { 145, 225 }, { 146, 226 },
-> +};
-> +
->  static const struct msm_pinctrl_soc_data sa8775p_pinctrl = {
->  	.pins = sa8775p_pins,
->  	.npins = ARRAY_SIZE(sa8775p_pins),
-> @@ -1499,6 +1516,8 @@ static const struct msm_pinctrl_soc_data sa8775p_pinctrl = {
->  	.groups = sa8775p_groups,
->  	.ngroups = ARRAY_SIZE(sa8775p_groups),
->  	.ngpios = 150,
-> +	.wakeirq_map = sa8775p_pdc_map,
-> +	.nwakeirq_map = ARRAY_SIZE(sa8775p_pdc_map),
->  };
->  
->  static int sa8775p_pinctrl_probe(struct platform_device *pdev)
+Best regards,
+Krzysztof
+
