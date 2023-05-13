@@ -2,117 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 032647013FC
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 04:37:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EE9A3701407
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 04:46:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241215AbjEMChC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 22:37:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52618 "EHLO
+        id S241485AbjEMCpG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 22:45:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240845AbjEMCg7 (ORCPT
+        with ESMTP id S229449AbjEMCpF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 22:36:59 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6948D4687
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 19:36:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=Wk+ym5kpqN+r2McL+81J+S8O6L6Yg4SLALm7z013ufw=; b=YNLxI+8pEZoIU8g8Iqkpm8l0sq
-        pxMwCe9lvQxlpIKUCdrZD4WC3Z5SkoopIjksgYIz0uo7XHHnYZFTmwVnzJJAuIdzoiyz6CnbG5ydB
-        0ONsqb4uPPZVt8Dv0XKYO1ogJMlHcacvmVpOwOJJJqJjMXxerx+mvW8NfBXc7vzEmT53WPGJO6sjx
-        0JgVSGoy6b6le+YRdnNWtWcp9cNiCleF2+BhzAlrRDlLI8fHZUOs4k5FNxvx9jjvw9afqGo0IYtOL
-        62Klht7dMYx1oX/WtCiWFrazXXFXNufpTOABdaafGYX/ljLzciVVxGdwzF9NlAAsVmGx94EtEDP2D
-        G9xZWRRw==;
-Received: from [2601:1c2:980:9ec0::2764]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pxf7m-00DXnw-1B;
-        Sat, 13 May 2023 02:36:46 +0000
-Message-ID: <e933e663-9bf6-dd20-c55a-17a88bc86201@infradead.org>
-Date:   Fri, 12 May 2023 19:36:45 -0700
+        Fri, 12 May 2023 22:45:05 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8490440ED
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 19:45:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683945903; x=1715481903;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=t9y5NMDgKLxpqMC+a3N7vhg2o2xZ0Qi1RUbFC87UuTU=;
+  b=cRgaSVpW9t6L5hjKGrUnDjpvZlvYM/0CiLiJZvOKKlNX3ZHaHlwZgGCW
+   +S86MdKDcpXlhCwsHoqPbgoDox9ApDp5QrFhEs3CwK/YcbBaLaJ7wcJpt
+   Fe/GR/+gFpkU5htKWb3IhZTBCcRX4Myloi5eJceeqccC8rIeTuojevKDd
+   4fH3Dhx4PZZD+B+WtbP7DlFqvKP63ul58UL/rTB+t9CRBrNbFvN54jinn
+   Jm/Yr9PWASMRM6TsJ59e8LTk1knrAMjSDa8Yg0w+Iy1t5dq594bLKTQee
+   hQY7uzXeOZH5Q6GbMGhvlzZyAPZRvGyzyRVCeBMy46fPMZzhnZuptzN1X
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="379062708"
+X-IronPort-AV: E=Sophos;i="5.99,271,1677571200"; 
+   d="scan'208";a="379062708"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 May 2023 19:45:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="812292459"
+X-IronPort-AV: E=Sophos;i="5.99,271,1677571200"; 
+   d="scan'208";a="812292459"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga002.fm.intel.com with ESMTP; 12 May 2023 19:45:01 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pxfFl-0005GA-0D;
+        Sat, 13 May 2023 02:45:01 +0000
+Date:   Sat, 13 May 2023 10:44:18 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lior Nahmanson <liorna@nvidia.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Raed Salem <raeds@nvidia.com>,
+        Saeed Mahameed <saeedm@nvidia.com>
+Subject: drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1183:13:
+ sparse: sparse: restricted __be64 degrades to integer
+Message-ID: <202305131057.dT7B9vjJ-lkp@intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2] soc/fsl/qe: fix usb.c build errors
-Content-Language: en-US
-To:     linux-kernel@vger.kernel.org
-Cc:     kernel test robot <lkp@intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Leo Li <leoyang.li@nxp.com>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Kumar Gala <galak@kernel.crashing.org>
-References: <20230410011254.25675-1-rdunlap@infradead.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <20230410011254.25675-1-rdunlap@infradead.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Any comments on this patch?
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   9a48d604672220545d209e9996c2a1edbb5637f6
+commit: 3b20949cb21bac26d50cdcc58896802a890cfe15 net/mlx5e: Add MACsec RX steering rules
+date:   8 months ago
+config: parisc-randconfig-s041-20230513 (https://download.01.org/0day-ci/archive/20230513/202305131057.dT7B9vjJ-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=3b20949cb21bac26d50cdcc58896802a890cfe15
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 3b20949cb21bac26d50cdcc58896802a890cfe15
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=parisc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=parisc SHELL=/bin/bash drivers/infiniband/hw/vmw_pvrdma/ drivers/net/ethernet/mellanox/mlx5/core/
 
-I am still seeing this build error.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305131057.dT7B9vjJ-lkp@intel.com/
 
-On 4/9/23 18:12, Randy Dunlap wrote:
-> Fix build errors in soc/fsl/qe/usb.c when QUICC_ENGINE is not set.
-> This happens when PPC_EP88XC is set, which selects CPM1 & CPM.
-> When CPM is set, USB_FSL_QE can be set without QUICC_ENGINE
-> being set. When USB_FSL_QE is set, QE_USB deafults to y, which
-> causes build errors when QUICC_ENGINE is not set. Making
-> QE_USB depend on QUICC_ENGINE prevents QE_USB from defaulting to y.
-> 
-> Fixes these build errors:
-> 
-> drivers/soc/fsl/qe/usb.o: in function `qe_usb_clock_set':
-> usb.c:(.text+0x1e): undefined reference to `qe_immr'
-> powerpc-linux-ld: usb.c:(.text+0x2a): undefined reference to `qe_immr'
-> powerpc-linux-ld: usb.c:(.text+0xbc): undefined reference to `qe_setbrg'
-> powerpc-linux-ld: usb.c:(.text+0xca): undefined reference to `cmxgcr_lock'
-> powerpc-linux-ld: usb.c:(.text+0xce): undefined reference to `cmxgcr_lock'
-> 
-> Fixes: 5e41486c408e ("powerpc/QE: add support for QE USB clocks routing")
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Link: https://lore.kernel.org/all/202301101500.pillNv6R-lkp@intel.com/
-> Suggested-by: Michael Ellerman <mpe@ellerman.id.au>
-> Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-> Cc: Leo Li <leoyang.li@nxp.com>
-> Cc: Masahiro Yamada <masahiroy@kernel.org>
-> Cc: Nicolas Schier <nicolas@fjasle.eu>
-> Cc: Qiang Zhao <qiang.zhao@nxp.com>
-> Cc: linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: Kumar Gala <galak@kernel.crashing.org>
-> ---
-> v2: drop Anton Vorontsov <avorontsov@ru.mvista.com>; rebase/resend
-> 
->  drivers/soc/fsl/qe/Kconfig |    1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff -- a/drivers/soc/fsl/qe/Kconfig b/drivers/soc/fsl/qe/Kconfig
-> --- a/drivers/soc/fsl/qe/Kconfig
-> +++ b/drivers/soc/fsl/qe/Kconfig
-> @@ -62,6 +62,7 @@ config QE_TDM
->  
->  config QE_USB
->  	bool
-> +	depends on QUICC_ENGINE
->  	default y if USB_FSL_QE
->  	help
->  	  QE USB Controller support
+sparse warnings: (new ones prefixed by >>)
+>> drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c:1183:13: sparse: sparse: restricted __be64 degrades to integer
+
+vim +1183 drivers/net/ethernet/mellanox/mlx5/core/en_accel/macsec_fs.c
+
+  1105	
+  1106	static union mlx5e_macsec_rule *
+  1107	macsec_fs_rx_add_rule(struct mlx5e_macsec_fs *macsec_fs,
+  1108			      const struct macsec_context *macsec_ctx,
+  1109			      struct mlx5_macsec_rule_attrs *attrs,
+  1110			      u32 fs_id)
+  1111	{
+  1112		u8 action[MLX5_UN_SZ_BYTES(set_add_copy_action_in_auto)] = {};
+  1113		struct mlx5e_macsec_rx *rx_fs = macsec_fs->rx_fs;
+  1114		struct net_device *netdev = macsec_fs->netdev;
+  1115		struct mlx5_modify_hdr *modify_hdr = NULL;
+  1116		struct mlx5_flow_destination dest = {};
+  1117		struct mlx5e_macsec_tables *rx_tables;
+  1118		union mlx5e_macsec_rule *macsec_rule;
+  1119		struct mlx5e_macsec_rx_rule *rx_rule;
+  1120		struct mlx5_flow_act flow_act = {};
+  1121		struct mlx5e_flow_table *ft_crypto;
+  1122		struct mlx5_flow_handle *rule;
+  1123		struct mlx5_flow_spec *spec;
+  1124		int err = 0;
+  1125	
+  1126		spec = kvzalloc(sizeof(*spec), GFP_KERNEL);
+  1127		if (!spec)
+  1128			return NULL;
+  1129	
+  1130		err = macsec_fs_rx_ft_get(macsec_fs);
+  1131		if (err)
+  1132			goto out_spec;
+  1133	
+  1134		macsec_rule = kzalloc(sizeof(*macsec_rule), GFP_KERNEL);
+  1135		if (!macsec_rule) {
+  1136			macsec_fs_rx_ft_put(macsec_fs);
+  1137			goto out_spec;
+  1138		}
+  1139	
+  1140		rx_rule = &macsec_rule->rx_rule;
+  1141		rx_tables = &rx_fs->tables;
+  1142		ft_crypto = &rx_tables->ft_crypto;
+  1143	
+  1144		/* Set bit[31 - 30] macsec marker - 0x01 */
+  1145		/* Set bit[3-0] fs id */
+  1146		MLX5_SET(set_action_in, action, action_type, MLX5_ACTION_TYPE_SET);
+  1147		MLX5_SET(set_action_in, action, field, MLX5_ACTION_IN_FIELD_METADATA_REG_B);
+  1148		MLX5_SET(set_action_in, action, data, fs_id | BIT(30));
+  1149		MLX5_SET(set_action_in, action, offset, 0);
+  1150		MLX5_SET(set_action_in, action, length, 32);
+  1151	
+  1152		modify_hdr = mlx5_modify_header_alloc(macsec_fs->mdev, MLX5_FLOW_NAMESPACE_KERNEL_RX_MACSEC,
+  1153						      1, action);
+  1154		if (IS_ERR(modify_hdr)) {
+  1155			err = PTR_ERR(modify_hdr);
+  1156			netdev_err(netdev, "fail to alloc MACsec set modify_header_id err=%d\n", err);
+  1157			modify_hdr = NULL;
+  1158			goto err;
+  1159		}
+  1160		rx_rule->meta_modhdr = modify_hdr;
+  1161	
+  1162		/* Rx crypto table with SCI rule */
+  1163		macsec_fs_rx_setup_fte(spec, &flow_act, attrs, true);
+  1164	
+  1165		flow_act.modify_hdr = modify_hdr;
+  1166		flow_act.action = MLX5_FLOW_CONTEXT_ACTION_FWD_DEST |
+  1167				  MLX5_FLOW_CONTEXT_ACTION_CRYPTO_DECRYPT |
+  1168				  MLX5_FLOW_CONTEXT_ACTION_MOD_HDR;
+  1169	
+  1170		dest.type = MLX5_FLOW_DESTINATION_TYPE_FLOW_TABLE;
+  1171		dest.ft = rx_tables->ft_check;
+  1172		rule = mlx5_add_flow_rules(ft_crypto->t, spec, &flow_act, &dest, 1);
+  1173		if (IS_ERR(rule)) {
+  1174			err = PTR_ERR(rule);
+  1175			netdev_err(netdev,
+  1176				   "Failed to add SA with SCI rule to Rx crypto rule, err=%d\n",
+  1177				   err);
+  1178			goto err;
+  1179		}
+  1180		rx_rule->rule[0] = rule;
+  1181	
+  1182		/* Rx crypto table without SCI rule */
+> 1183		if (cpu_to_be64((__force u64)attrs->sci) & ntohs(MACSEC_PORT_ES)) {
+  1184			memset(spec, 0, sizeof(struct mlx5_flow_spec));
+  1185			memset(&dest, 0, sizeof(struct mlx5_flow_destination));
+  1186			memset(&flow_act, 0, sizeof(flow_act));
+  1187	
+  1188			macsec_fs_rx_setup_fte(spec, &flow_act, attrs, false);
+  1189	
+  1190			flow_act.modify_hdr = modify_hdr;
+  1191			flow_act.action = MLX5_FLOW_CONTEXT_ACTION_FWD_DEST |
+  1192					  MLX5_FLOW_CONTEXT_ACTION_CRYPTO_DECRYPT |
+  1193					  MLX5_FLOW_CONTEXT_ACTION_MOD_HDR;
+  1194	
+  1195			dest.type = MLX5_FLOW_DESTINATION_TYPE_FLOW_TABLE;
+  1196			dest.ft = rx_tables->ft_check;
+  1197			rule = mlx5_add_flow_rules(ft_crypto->t, spec, &flow_act, &dest, 1);
+  1198			if (IS_ERR(rule)) {
+  1199				err = PTR_ERR(rule);
+  1200				netdev_err(netdev,
+  1201					   "Failed to add SA without SCI rule to Rx crypto rule, err=%d\n",
+  1202					   err);
+  1203				goto err;
+  1204			}
+  1205			rx_rule->rule[1] = rule;
+  1206		}
+  1207	
+  1208		return macsec_rule;
+  1209	
+  1210	err:
+  1211		macsec_fs_rx_del_rule(macsec_fs, rx_rule);
+  1212		macsec_rule = NULL;
+  1213	out_spec:
+  1214		kvfree(spec);
+  1215		return macsec_rule;
+  1216	}
+  1217	
 
 -- 
-~Randy
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
