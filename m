@@ -2,60 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 88F057013A8
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 03:08:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7AC7013BA
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 03:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241446AbjEMBIt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 21:08:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
+        id S241522AbjEMBYp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 21:24:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240720AbjEMBIr (ORCPT
+        with ESMTP id S230048AbjEMBYn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 21:08:47 -0400
+        Fri, 12 May 2023 21:24:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB879E;
-        Fri, 12 May 2023 18:08:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6120140ED;
+        Fri, 12 May 2023 18:24:42 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9927664F81;
-        Sat, 13 May 2023 01:08:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 081F6C433D2;
-        Sat, 13 May 2023 01:08:45 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E26A063EFA;
+        Sat, 13 May 2023 01:24:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F15BFC433D2;
+        Sat, 13 May 2023 01:24:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683940125;
-        bh=q31HKbymA1nbLCbAxsLflc0enmVgPpKA/A51o6w6Bkw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=lPIUl9/E1pDDw8u76k3kxKL8nfTTy1PJU4cOSwZ6QrdrcMuGec4AfmyDpDTxagC6b
-         zCd2aFT7/lXuCZiolvzsliNh0kNpPArlwzft/Dcxg5ICg5lhu/vuFEZANDI3AzxZxg
-         LnJhGqE//GlF6MB0YHaLyGMzMxSKH6gOKdqRlbSyw8eEoxWOISRJ2riI8s0fdIFl0u
-         cDi3mGO06C0his9okyH9MWoFwjsoQBoFnl58GX7hzeOHea/2mNE3MJ/qGWWKVQjFjx
-         hQjeKeURzrgg0+OCkz7GpWsFl3o6wIXR65XOfSaObQJ0KRhGdPBot5O9T4FrZqhwle
-         A8zNYKmeroVHw==
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-4f2510b2b98so7731215e87.3;
-        Fri, 12 May 2023 18:08:44 -0700 (PDT)
-X-Gm-Message-State: AC+VfDzMDRQGMPewct6mCbUKrEH7cmevc0H3lS6v3//0rVcWHIpyMBXT
-        knadPX6lskN2bEbS2jq71tCIAc9F5ADRg4vcyp0=
-X-Google-Smtp-Source: ACHHUZ4A54avAIK/pGlfJV2rLfsYsI/N5dnnr7E1kSN+B0gX62qbhdHdNjJKbDzAZE8n5cL3RsR5od788Ti1E7W1rMU=
-X-Received: by 2002:ac2:5623:0:b0:4eb:30f9:eed7 with SMTP id
- b3-20020ac25623000000b004eb30f9eed7mr4911328lff.22.1683940123041; Fri, 12 May
- 2023 18:08:43 -0700 (PDT)
+        s=k20201202; t=1683941081;
+        bh=ufptWhk0BbCBOlRE0pk1y6y1XcHSouNAvlan/zSTrAY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=sxtJ8CfHTCeAo0D9/++DN1TpfPp54rd4Bjo9/cVcNl+dpoRXUItLhHO5gRcwq/76H
+         iG2T612DUkjnlkyelE9eD2HgVSk04mxeWbB0MU+5ARtEwZw1qO4cyCfiHmHjmGZvH1
+         nDgF5O5vp+wv35xUsBBE8WZaXp3awA3WiHOajXq++DOBOGEEF7LKHnbMDxrj4WqF+Q
+         O+3N4Vm1dRMOBRBmrKN/f+e07pyMPCq7HDKGhx1ySipqxRfIZJme8kOOTfOjO6rJ8b
+         ogh0CxwXsoQHtYEWTf8j2mjN7gAEPM4vUsAqY6xRymjRUSmPw989oheJkEI1Qy1xl7
+         2SRbEcfq/u5IQ==
+Date:   Fri, 12 May 2023 20:24:38 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+Cc:     Peter Geis <pgwipeout@gmail.com>, kw@linux.com, heiko@sntech.de,
+        robh@kernel.org, linux-pci@vger.kernel.org,
+        shawn.lin@rock-chips.com, linux-kernel@vger.kernel.org,
+        lgirdwood@gmail.com, linux-rockchip@lists.infradead.org,
+        broonie@kernel.org, bhelgaas@google.com,
+        linux-kernel-mentees@lists.linuxfoundation.org,
+        lpieralisi@kernel.org, linux-arm-kernel@lists.infradead.org,
+        Dan Johansen <strit@manjaro.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH v1] drivers: pci: introduce configurable delay for
+ Rockchip PCIe bus scan
+Message-ID: <ZF7m1npzLZmawT8Y@bhelgaas>
 MIME-Version: 1.0
-References: <20230506012315.3370489-1-linan666@huaweicloud.com>
- <20230506012315.3370489-4-linan666@huaweicloud.com> <ddec947c-d2b9-e4fe-30e6-02c76f162ab3@huaweicloud.com>
-In-Reply-To: <ddec947c-d2b9-e4fe-30e6-02c76f162ab3@huaweicloud.com>
-From:   Song Liu <song@kernel.org>
-Date:   Fri, 12 May 2023 18:08:31 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW6zSN86vGO9rd-oTq4TuCYLc+ftrAO6mo6UE7qCNJaCUw@mail.gmail.com>
-Message-ID: <CAPhsuW6zSN86vGO9rd-oTq4TuCYLc+ftrAO6mo6UE7qCNJaCUw@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] md/raid10: fix wrong setting of max_corr_read_errors
-To:     Yu Kuai <yukuai1@huaweicloud.com>
-Cc:     linan666@huaweicloud.com, neilb@suse.de, Rob.Becker@riverbed.com,
-        linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linan122@huawei.com, yi.zhang@huawei.com, houtao1@huawei.com,
-        yangerkun@huawei.com, "yukuai (C)" <yukuai3@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CSK8M39MQL2C.3S7JO031H0BA2@vincent-arch>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -66,78 +63,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 5, 2023 at 7:02=E2=80=AFPM Yu Kuai <yukuai1@huaweicloud.com> wr=
-ote:
->
-> Hi,
->
-> =E5=9C=A8 2023/05/06 9:23, linan666@huaweicloud.com =E5=86=99=E9=81=93:
-> > From: Li Nan <linan122@huawei.com>
-> >
-> > max_corr_read_errors should not be negative number. Change it to
-> > unsigned int where use it.
-> >
->
-> Looks good, feel free to add:
->
-> Reviewed-by: Yu Kuai <yukuai3@huawei.com>
->
-> > Fixes: 1e50915fe0bb ("raid: improve MD/raid10 handling of correctable r=
-ead errors.")
-> > Signed-off-by: Li Nan <linan122@huawei.com>
+[+cc ARM64 folks, in case you have abort handling tips; thread at:
+https://lore.kernel.org/r/20230509153912.515218-1-vincenzopalazzodev@gmail.com]
 
-Hmm.. Does the current code break in any cases?
+Pine64 RockPro64 panics while enumerating some PCIe devices.  Adding a
+delay avoids the panic.  My theory is a PCIe Request Retry Status to a
+Vendor ID config read causes an abort that we don't handle.
 
-Thanks,
-Song
+> On Tue, May 09, 2023 at 05:39:12PM +0200, Vincenzo Palazzo wrote:
+>> ...
+>> [    1.229856] SError Interrupt on CPU4, code 0xbf000002 -- SError
+>> [    1.229860] CPU: 4 PID: 1 Comm: swapper/0 Not tainted 5.9.9-2.0-MANJARO-ARM
+>> #1
+>> [    1.229862] Hardware name: Pine64 RockPro64 v2.1 (DT)
+>> [    1.229864] pstate: 60000085 (nZCv daIf -PAN -UAO BTYPE=--)
+>> [    1.229866] pc : rockchip_pcie_rd_conf+0xb4/0x270
+>> [    1.229868] lr : rockchip_pcie_rd_conf+0x1b4/0x270
+>> ...
+>> [    1.229939] Kernel panic - not syncing: Asynchronous SError Interrupt
+>> ...
+>> [    1.229955]  nmi_panic+0x8c/0x90
+>> [    1.229956]  arm64_serror_panic+0x78/0x84
+>> [    1.229958]  do_serror+0x15c/0x160
+>> [    1.229960]  el1_error+0x84/0x100
+>> [    1.229962]  rockchip_pcie_rd_conf+0xb4/0x270
+>> [    1.229964]  pci_bus_read_config_dword+0x6c/0xd0
+>> [    1.229966]  pci_bus_generic_read_dev_vendor_id+0x34/0x1b0
+>> [    1.229968]  pci_scan_single_device+0xa4/0x144
 
-> > ---
-> >   drivers/md/md.c     | 2 +-
-> >   drivers/md/raid10.c | 5 +++--
-> >   2 files changed, 4 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/md/md.c b/drivers/md/md.c
-> > index fd5c3babcd6d..4a1e566d6bdc 100644
-> > --- a/drivers/md/md.c
-> > +++ b/drivers/md/md.c
-> > @@ -4486,7 +4486,7 @@ __ATTR_PREALLOC(array_state, S_IRUGO|S_IWUSR, arr=
-ay_state_show, array_state_stor
-> >
-> >   static ssize_t
-> >   max_corrected_read_errors_show(struct mddev *mddev, char *page) {
-> > -     return sprintf(page, "%d\n",
-> > +     return sprintf(page, "%u\n",
-> >                      atomic_read(&mddev->max_corr_read_errors));
-> >   }
-> >
-> > diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
-> > index 4fcfcb350d2b..4d615fcc6a50 100644
-> > --- a/drivers/md/raid10.c
-> > +++ b/drivers/md/raid10.c
-> > @@ -2727,7 +2727,8 @@ static void fix_read_error(struct r10conf *conf, =
-struct mddev *mddev, struct r10
-> >       int sect =3D 0; /* Offset from r10_bio->sector */
-> >       int sectors =3D r10_bio->sectors;
-> >       struct md_rdev *rdev;
-> > -     int max_read_errors =3D atomic_read(&mddev->max_corr_read_errors)=
-;
-> > +     unsigned int max_read_errors =3D
-> > +                     atomic_read(&mddev->max_corr_read_errors);
-> >       int d =3D r10_bio->devs[r10_bio->read_slot].devnum;
-> >
-> >       /* still own a reference to this rdev, so it cannot
-> > @@ -2743,7 +2744,7 @@ static void fix_read_error(struct r10conf *conf, =
-struct mddev *mddev, struct r10
-> >       check_decay_read_errors(mddev, rdev);
-> >       atomic_inc(&rdev->read_errors);
-> >       if (atomic_read(&rdev->read_errors) > max_read_errors) {
-> > -             pr_notice("md/raid10:%s: %pg: Raid device exceeded read_e=
-rror threshold [cur %d:max %d]\n",
-> > +             pr_notice("md/raid10:%s: %pg: Raid device exceeded read_e=
-rror threshold [cur %u:max %u]\n",
-> >                         mdname(mddev), rdev->bdev,
-> >                         atomic_read(&rdev->read_errors), max_read_error=
-s);
-> >               pr_notice("md/raid10:%s: %pg: Failing raid device\n",
-> >
->
+On Fri, May 12, 2023 at 12:46:21PM +0200, Vincenzo Palazzo wrote:
+> ... Is there any way to tell the kernel "hey we need some more time
+> here"?
+
+We enumerate PCI devices by trying to read the Vendor ID of every
+possible device address (see pci_scan_slot()).  On PCIe, if a device
+doesn't exist at that address, the Vendor ID config read will be
+terminated with Unsupported Request (UR) status.  This is normal
+and happens every time we enumerate devices.
+
+The crash doesn't happen every time we enumerate, so I don't think
+this UR is the problem.  Also, if it *were* the problem, adding a
+delay would not make any difference.
+
+There *is* a way for a PCIe device to say "I need more time".  It does
+this by responding to that Vendor ID config read with Request Retry
+Status (RRS, aka CRS in older specs), which means "I'm not ready yet,
+but I will be ready in the future."  Adding a delay would definitely
+make a difference here, so my guess is this is what's happening.
+
+Most root complexes return ~0 data to the CPU when a config read
+terminates with UR or RRS.  It sounds like rockchip does this for UR
+but possibly not for RRS.
+
+There is a "RRS Software Visibility" feature, which is supposed to
+turn the RRS into a special value (Vendor ID == 0x0001), but per [1],
+rockchip doesn't support it (lspci calls it "CRSVisible").
+
+But the CPU load instruction corresponding to the config read has to
+complete by reading *something* or else be aborted.  It sounds like
+it's aborted in this case.  I don't know the arm64 details, but if we
+could catch that abort and determine that it was an RRS and not a UR,
+maybe we could fabricate the magic RRS 0x0001 value.
+
+imx6q_pcie_abort_handler() does something like that, although I think
+it's for arm32, not arm64.  But obviously we already catch the abort
+enough to dump the register state and panic, so maybe there's a way to
+extend that?
+
+Bjorn
+
+[1] https://lore.kernel.org/linux-pci/CAMdYzYpOFAVq30N+O2gOxXiRtpoHpakFg3LKq3TEZq4S6Y0y0g@mail.gmail.com/
