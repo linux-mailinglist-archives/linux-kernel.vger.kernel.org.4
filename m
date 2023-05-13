@@ -2,60 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27EE270185C
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 18:57:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C08A701871
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 19:22:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230504AbjEMQ50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 12:57:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
+        id S230369AbjEMRWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 13:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjEMQ5Z (ORCPT
+        with ESMTP id S229482AbjEMRWT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 12:57:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 983D02D68;
-        Sat, 13 May 2023 09:57:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 29EED60A25;
-        Sat, 13 May 2023 16:57:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E55B2C433EF;
-        Sat, 13 May 2023 16:57:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683997042;
-        bh=KNZeIfqal/7YhgXOCqbE8Uiwnic5H94FhrfZg35KWYU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CbyJ1ZL7J57XB8VusspB2KVJ9WgVFG13hYAon/5SnMAWwB/UtjeOxHtYsf8NHW33i
-         XbCHL9boyiunKgQpTGaH4PK9hAVE1km8m89MKIcC6JCSI51Ko2tnpt4jtXkBlhjJ5V
-         CP4Dn49/xcTuIx0KWXOoZbFz1edDacnkmtMc4Mzf19k+MXcGAlboH+Vnje3b9OAp78
-         NP0ldwVVJJ/6XomonRF3pWpRKuNGNG3bCQUjo0oQEY9XvsIq4ChHY135TUYwWkwGSx
-         hmnbdvs53kZbkivltRKFl8a3fwxEOPHlqcboVstVix1aaHLJbL3dSjbziuR4e2Bgqc
-         VD+ByoWNsWwpw==
-Date:   Sat, 13 May 2023 18:13:23 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Mehdi Djait <mehdi.djait.k@gmail.com>
-Cc:     mazziesaccount@gmail.com, krzysztof.kozlowski+dt@linaro.org,
-        andriy.shevchenko@linux.intel.com, robh+dt@kernel.org,
-        lars@metafoo.de, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v3 7/7] iio: accel: Add support for Kionix/ROHM
- KX132-1211 accelerometer
-Message-ID: <20230513181323.165c09f2@jic23-huawei>
-In-Reply-To: <ZFe8N8EhNTOkLO0c@carbian>
-References: <cover.1682373451.git.mehdi.djait.k@gmail.com>
-        <593798a44c8ba45f969b86aa29e172d59065958c.1682373451.git.mehdi.djait.k@gmail.com>
-        <20230501155645.435242f0@jic23-huawei>
-        <ZFVG1cyY/Ge/nXOh@carbian>
-        <20230506174651.5c5740d9@jic23-huawei>
-        <ZFe8N8EhNTOkLO0c@carbian>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 13 May 2023 13:22:19 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B1BD1FEB
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 10:22:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683998537; x=1715534537;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=yCiE+DM/RmCoDfRlV+pV24ATWliUJ51tjtagVjTL+vM=;
+  b=P4UxpQv9cVFwmDgrmpOdnEbaZHTWvVnjLeS+T4lpoidwwBX/epk+mnoU
+   1mRgS/L+xIbStxz2tFdY/MvQ8RQGHD2H68IFaZoHrm60kcMpQP2upfFtM
+   EAXESz2AtLQxs7yswkJxqmOd6k8ZHaTEtjREDGN54k+KjH0bhAg22vZNB
+   1V3OzGJQTFVqbokxrMbRNAQ0uEQgFN63toSm/W2lVFiG5vMRgKCKUqYWD
+   V7Q1UibJhr7JBm/8hZHFoBtT525KgECqrSz3CQzxoxaaZFk0orHR8QJcr
+   YKDeo0u04mjQY8FCjsHODaPfswqF3Y6NiHFv5orbdiLFVZq84Ag6Ba4MW
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="354118133"
+X-IronPort-AV: E=Sophos;i="5.99,272,1677571200"; 
+   d="scan'208";a="354118133"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 10:22:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="824684509"
+X-IronPort-AV: E=Sophos;i="5.99,272,1677571200"; 
+   d="scan'208";a="824684509"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 13 May 2023 10:22:14 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pxswf-0005bA-2H;
+        Sat, 13 May 2023 17:22:13 +0000
+Date:   Sun, 14 May 2023 01:22:06 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     zhenwei pi <pizhenwei@bytedance.com>, stefanha@redhat.com,
+        mst@redhat.com, jasowang@redhat.com
+Cc:     oe-kbuild-all@lists.linux.dev, xuanzhuo@linux.alibaba.com,
+        virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, zhenwei pi <pizhenwei@bytedance.com>
+Subject: Re: [PATCH 1/2] virtio: abstract virtqueue related methods
+Message-ID: <202305140142.c0QQq9wZ-lkp@intel.com>
+References: <20230512094618.433707-2-pizhenwei@bytedance.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512094618.433707-2-pizhenwei@bytedance.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,172 +67,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 7 May 2023 16:56:55 +0200
-Mehdi Djait <mehdi.djait.k@gmail.com> wrote:
+Hi zhenwei,
 
-> Hello Jonathan,
->=20
-> On Sat, May 06, 2023 at 05:46:51PM +0100, Jonathan Cameron wrote:
-> > On Fri, 5 May 2023 20:11:33 +0200
-> > Mehdi Djait <mehdi.djait.k@gmail.com> wrote:
-> >  =20
-> > > Hello Jonathan,
-> > >=20
-> > > On Mon, May 01, 2023 at 03:56:45PM +0100, Jonathan Cameron wrote: =20
-> > > > On Tue, 25 Apr 2023 00:22:27 +0200
-> > > > Mehdi Djait <mehdi.djait.k@gmail.com> wrote:
-> > > >    =20
-> > > > > Kionix KX132-1211 is a tri-axis 16-bit accelerometer that can sup=
-port
-> > > > > ranges from =C2=B12G to =C2=B116G, digital output through I=C2=B2=
-C/SPI.
-> > > > > Add support for basic accelerometer features such as reading acce=
-leration
-> > > > > via IIO using raw reads, triggered buffer (data-ready), or the WM=
-I IRQ.
-> > > > >=20
-> > > > > Datasheet: https://kionixfs.azureedge.net/en/document/KX132-1211-=
-Technical-Reference-Manual-Rev-5.0.pdf
-> > > > > Signed-off-by: Mehdi Djait <mehdi.djait.k@gmail.com>   =20
-> > > >=20
-> > > > Two tiny things inline. =20
-> > > >    =20
-> > > > > +static int kx132_get_fifo_bytes(struct kx022a_data *data)
-> > > > > +{
-> > > > > +	struct device *dev =3D regmap_get_device(data->regmap);
-> > > > > +	__le16 buf_status;
-> > > > > +	int ret, fifo_bytes;
-> > > > > +
-> > > > > +	ret =3D regmap_bulk_read(data->regmap, data->chip_info->buf_sta=
-tus1,
-> > > > > +			       &buf_status, sizeof(buf_status));
-> > > > > +	if (ret) {
-> > > > > +		dev_err(dev, "Error reading buffer status\n");
-> > > > > +		return ret;
-> > > > > +	}
-> > > > > +
-> > > > > +	fifo_bytes =3D le16_to_cpu(buf_status);
-> > > > > +	fifo_bytes &=3D data->chip_info->buf_smp_lvl_mask;   =20
-> > > >=20
-> > > > Slight preference for FIELD_GET() as it saves me checking the mask =
-includes
-> > > > lowest bits.   =20
-> > >=20
-> > > This will mean I have the remove the chip_info member buf_smp_lvl_mask
-> > > and use KX132_MASK_BUF_SMP_LVL directly because otherwise the
-> > > __builtin_constant_p function will cause an error when building.=20
-> > > Check: https://elixir.bootlin.com/linux/latest/source/include/linux/b=
-itfield.h#L65
-> > >=20
-> > > I can change it to FIELD_GET() if you want to. =20
-> >=20
-> > Good point.  You could use le16_get_bits() though which I'm fairly sure=
- will take
-> > a variable just fine.
-> >  =20
->=20
-> I don't think it will work.=20
->=20
-> From the commit log introducing the {type}_get_bits to <linux/bitfield.h>
-> "    Field specification must be a constant; __builtin_constant_p() doesn=
-'t
->     have to be true for it, but compiler must be able to evaluate it at
->     build time.  If it cannot or if the value does not encode any bitfiel=
-d,
->     the build will fail. "
->=20
-> Actually Geert Uytterhoeven tried to solve excatly this issue, but it
-> seems that the patch was not accepted.=20
-> Check: https://lore.kernel.org/linux-iio/3a54a6703879d10f08cf0275a2a69297=
-ebd2b1d4.1637592133.git.geert+renesas@glider.be/
->=20
->=20
-> So which solution would be the best:
->=20
-> 1. Use directly KX132_MASK_BUF_SMP_LVL, the only reason I was trying to
-> avoid this was to make this function generic enough for other chip
-> variants
->=20
-> 2. Copy the field_get() definition from drivers/clk/at91 or from the comm=
-it
-> of Geert and use it in this driver
->=20
-> 3. leave it as it is ?=20
-This fine.  Sorry for the diversion to nowhere!
+kernel test robot noticed the following build warnings:
 
-Jonathan
+[auto build test WARNING on mst-vhost/linux-next]
+[also build test WARNING on linus/master v6.4-rc1 next-20230512]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
->=20
-> 4. another solution ?
->=20
-> > > =20
-> > > >=20
-> > > >    =20
-> > > > > +
-> > > > > +	return fifo_bytes;
-> > > > > +}
-> > > > > +
-> > > > >  static int __kx022a_fifo_flush(struct iio_dev *idev, unsigned in=
-t samples,
-> > > > >  			       bool irq)
-> > > > >  {
-> > > > > @@ -1036,6 +1157,32 @@ const struct kx022a_chip_info kx022a_chip_=
-info =3D {
-> > > > >  };
-> > > > >  EXPORT_SYMBOL_NS_GPL(kx022a_chip_info, IIO_KX022A);
-> > > > > =20
-> > > > > +const struct kx022a_chip_info kx132_chip_info =3D {
-> > > > > +	.name		  =3D "kx132-1211",
-> > > > > +	.regmap_config	  =3D &kx132_regmap_config,
-> > > > > +	.channels	  =3D kx132_channels,
-> > > > > +	.num_channels	  =3D ARRAY_SIZE(kx132_channels),
-> > > > > +	.fifo_length	  =3D KX132_FIFO_LENGTH,
-> > > > > +	.who		  =3D KX132_REG_WHO,
-> > > > > +	.id		  =3D KX132_ID,
-> > > > > +	.cntl		  =3D KX132_REG_CNTL,
-> > > > > +	.cntl2		  =3D KX132_REG_CNTL2,
-> > > > > +	.odcntl		  =3D KX132_REG_ODCNTL,
-> > > > > +	.buf_cntl1	  =3D KX132_REG_BUF_CNTL1,
-> > > > > +	.buf_cntl2	  =3D KX132_REG_BUF_CNTL2,
-> > > > > +	.buf_clear	  =3D KX132_REG_BUF_CLEAR,
-> > > > > +	.buf_status1	  =3D KX132_REG_BUF_STATUS_1,
-> > > > > +	.buf_smp_lvl_mask =3D KX132_MASK_BUF_SMP_LVL,   =20
-> > > >=20
-> > > > There are some things in here (typically where the define isn't used
-> > > > anywhere else) where I think it would be easier to follow if the
-> > > > value was listed here.  Masks and IDs for example.=20
-> > > >    =20
-> > >=20
-> > > After removing buf_smp_lvl_mask, which members will be easier to unde=
-rstand (besides id) ?  =20
-> >=20
-> > I haven't gone through them.  Length seems an obvious one.  It's a numb=
-er not a magic value.
-> > Register addresses might also be simpler if they aren't used elsewhere.
-> >=20
-> > Not really about understanding just about a define that adds nothing if=
- all we do is
-> > assign it to a variable of the same name. =20
->=20
-> Do you have a strong opinion about this ?=20
->=20
-> I would really prefer to leave it like this, for the following reasons:
->=20
-> 1. If I directly use values here, I have to do it also in the previous
-> patch where I introduce the chip_info for the kx022a -> this means I
-> will have defines in the h file which are not used at all -> the defines =
-should
-> be deleted -> the patch will get unnecessarily bigger. I received
-> multiple comments about removing unnecessary changes and reducing of the
-> patch size when possible.
->=20
-> 2. Consistency: having all the defines in one place really seems to be
-> better for understanding IMO. I find the mix of values and defines in=20
-> the chip-info a bit confusing, e.g., I will use the direct value for=20
-> KX132_REG_CNTL but not for KX132_REG_CNTL2 because KX132_REG_CNTL2 is
-> referenced in a regmap_range.=20
->=20
-> --
-> Kind Regards
-> Mehdi Djait
+url:    https://github.com/intel-lab-lkp/linux/commits/zhenwei-pi/virtio-abstract-virtqueue-related-methods/20230512-174928
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git linux-next
+patch link:    https://lore.kernel.org/r/20230512094618.433707-2-pizhenwei%40bytedance.com
+patch subject: [PATCH 1/2] virtio: abstract virtqueue related methods
+reproduce:
+        # https://github.com/intel-lab-lkp/linux/commit/372bc1a0371968752fe0f5ec6e81edee6f9c44dd
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review zhenwei-pi/virtio-abstract-virtqueue-related-methods/20230512-174928
+        git checkout 372bc1a0371968752fe0f5ec6e81edee6f9c44dd
+        make menuconfig
+        # enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS, CONFIG_WARN_ABI_ERRORS
+        make htmldocs
 
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305140142.c0QQq9wZ-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+>> ./drivers/virtio/virtio_ring.c:1: warning: 'virtqueue_add_inbuf' not found
+>> ./drivers/virtio/virtio_ring.c:1: warning: 'virtqueue_add_outbuf' not found
+>> ./drivers/virtio/virtio_ring.c:1: warning: 'virtqueue_add_sgs' not found
+>> ./drivers/virtio/virtio_ring.c:1: warning: 'virtqueue_get_buf_ctx' not found
+>> ./drivers/virtio/virtio_ring.c:1: warning: 'virtqueue_disable_cb' not found
+>> ./drivers/virtio/virtio_ring.c:1: warning: 'virtqueue_enable_cb' not found
+
+vim +/virtqueue_add_inbuf +1 ./drivers/virtio/virtio_ring.c
+
+fd534e9b5fdcf9 Thomas Gleixner     2019-05-23  @1  // SPDX-License-Identifier: GPL-2.0-or-later
+0a8a69dd77ddbd Rusty Russell       2007-10-22   2  /* Virtio ring implementation.
+0a8a69dd77ddbd Rusty Russell       2007-10-22   3   *
+0a8a69dd77ddbd Rusty Russell       2007-10-22   4   *  Copyright 2007 Rusty Russell IBM Corporation
+0a8a69dd77ddbd Rusty Russell       2007-10-22   5   */
+0a8a69dd77ddbd Rusty Russell       2007-10-22   6  #include <linux/virtio.h>
+0a8a69dd77ddbd Rusty Russell       2007-10-22   7  #include <linux/virtio_ring.h>
+e34f87256794b8 Rusty Russell       2008-07-25   8  #include <linux/virtio_config.h>
+0a8a69dd77ddbd Rusty Russell       2007-10-22   9  #include <linux/device.h>
+5a0e3ad6af8660 Tejun Heo           2010-03-24  10  #include <linux/slab.h>
+b5a2c4f1996d1d Paul Gortmaker      2011-07-03  11  #include <linux/module.h>
+e93300b1afc7cd Rusty Russell       2012-01-12  12  #include <linux/hrtimer.h>
+780bc7903a32ed Andy Lutomirski     2016-02-02  13  #include <linux/dma-mapping.h>
+88938359e2dfe1 Alexander Potapenko 2022-09-15  14  #include <linux/kmsan.h>
+f8ce72632fa7ed Michael S. Tsirkin  2021-08-10  15  #include <linux/spinlock.h>
+78fe39872378b0 Andy Lutomirski     2016-02-02  16  #include <xen/xen.h>
+0a8a69dd77ddbd Rusty Russell       2007-10-22  17  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
