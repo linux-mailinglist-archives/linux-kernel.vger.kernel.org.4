@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8A0B7019CC
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 22:46:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 660F47019CE
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 22:46:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232417AbjEMUqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 16:46:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
+        id S235134AbjEMUqX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 16:46:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233239AbjEMUpy (ORCPT
+        with ESMTP id S234013AbjEMUqC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 16:45:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5EAB5244;
-        Sat, 13 May 2023 13:45:35 -0700 (PDT)
+        Sat, 13 May 2023 16:46:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EAAF30DD;
+        Sat, 13 May 2023 13:45:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7BF3061568;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D6C761560;
+        Sat, 13 May 2023 20:45:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74892C433D2;
         Sat, 13 May 2023 20:45:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C3BAC433EF;
-        Sat, 13 May 2023 20:45:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684010733;
-        bh=S8sfGMpcdCc3zG1JWXx9HjEnM+c5xOpRm1043WmmzDA=;
+        s=k20201202; t=1684010736;
+        bh=UBmbLHMdFpSRpFyV2wZhJFy40YVEfPTeOi0mqPgGBZM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=UWnqIErO2n0H2Cb5QoKDjBuibxX8HiMOclrzZf/FDE5xmRftN9b8g1NMdw+Wp8wyo
-         TingOCmn49PBN0A8qRokwH1l1wzIzPxbHPZWI95s3erD+ZNxolysHuA/9L9SINnCnK
-         bTRWK3v68p/kgdKEsrZUOl0h40Cnrn2L0GdSk7KdP3wH/ZDbBhe2JGVsMjcS2Gv3pl
-         58kVZUrAUbOkYyybxegNT9N+iKMLwzLmWZ3Obj5R2jhIibjm6bhbf+ErD6dRXpoWpq
-         eKfxah3KOwkExT0M+2WDsL9FKuGlrmRNBE/wNfufeD7uf/qJsufjaTAGms+wTU+S9Z
-         EEYwlxU+CquEg==
+        b=ralk35dnMK8RRPBgmtUGBCK5Dz2Cqz0JkKMiNTJpuIOZpdQ6Fl6K5ZVZzVz5A9ucx
+         jqvaT2OI45ea17Je2Mhnpb0ZFVytc/54/1NGWshzBDwhBW8bgRKWqT2ih1B8QD0TFN
+         4hVHeveU7QLdBTMXMssx3M7vT6rv9zabvEryKtK8/lTdRVgfMO9Higq1ClPhDWFaB0
+         jI60tZuN3sp0JxBaKQSEgs+ikpuK617mAfJCwLV6w5x/sXy1sKCriD1Jxnq4nt4uST
+         NiNRigqon1SQut2QUbl2Dcl+AckiL8odO04ul04PRr2cmuNrTBSzp9TLV+LAoiiNSy
+         QXUtkcfn8OSKA==
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org,
@@ -40,16 +40,16 @@ Cc:     linux-kernel@vger.kernel.org,
         Nicolas Pitre <npitre@baylibre.com>,
         Nicolas Schier <nicolas@fjasle.eu>,
         Masahiro Yamada <masahiroy@kernel.org>
-Subject: [PATCH v4 10/21] modpost: simplify find_elf_symbol()
-Date:   Sun, 14 May 2023 05:44:51 +0900
-Message-Id: <20230513204502.1593923-11-masahiroy@kernel.org>
+Subject: [PATCH v4 11/21] modpost: rename find_elf_symbol() and find_elf_symbol2()
+Date:   Sun, 14 May 2023 05:44:52 +0900
+Message-Id: <20230513204502.1593923-12-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230513204502.1593923-1-masahiroy@kernel.org>
 References: <20230513204502.1593923-1-masahiroy@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -58,106 +58,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I do not know why commit 157c23c80eed ("kbuild: use simpler section
-mismatch warnings in modpost") is only applicable to find_elf_symbol2().
+find_elf_symbol() and find_elf_symbol2() are not good names.
 
-Simplify find_elf_symbol() based on find_elf_symbol2().
+Rename them to find_better_symbol(), find_nearest_symbol(),
+respectively.
 
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- scripts/mod/modpost.c | 64 +++++++++----------------------------------
- 1 file changed, 13 insertions(+), 51 deletions(-)
+ scripts/mod/modpost.c | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
 diff --git a/scripts/mod/modpost.c b/scripts/mod/modpost.c
-index 3b7b78e69137..b4fa9e0be4d1 100644
+index b4fa9e0be4d1..d2a9c655f6ea 100644
 --- a/scripts/mod/modpost.c
 +++ b/scripts/mod/modpost.c
-@@ -1117,57 +1117,7 @@ static inline int is_valid_name(struct elf_info *elf, Elf_Sym *sym)
- 	return !is_mapping_symbol(name);
+@@ -1118,8 +1118,8 @@ static inline int is_valid_name(struct elf_info *elf, Elf_Sym *sym)
  }
  
--/**
-- * Find symbol based on relocation record info.
-- * In some cases the symbol supplied is a valid symbol so
-- * return refsym. If st_name != 0 we assume this is a valid symbol.
-- * In other cases the symbol needs to be looked up in the symbol table
-- * based on section and address.
-- *  **/
--static Elf_Sym *find_elf_symbol(struct elf_info *elf, Elf64_Sword addr,
--				Elf_Sym *relsym)
--{
--	Elf_Sym *sym;
--	Elf_Sym *near = NULL;
--	Elf64_Sword distance = 20;
--	Elf64_Sword d;
--	unsigned int relsym_secindex;
--
--	if (relsym->st_name != 0)
--		return relsym;
--
--	relsym_secindex = get_secindex(elf, relsym);
--	for (sym = elf->symtab_start; sym < elf->symtab_stop; sym++) {
--		if (get_secindex(elf, sym) != relsym_secindex)
--			continue;
--		if (ELF_ST_TYPE(sym->st_info) == STT_SECTION)
--			continue;
--		if (!is_valid_name(elf, sym))
--			continue;
--		if (sym->st_value == addr)
--			return sym;
--		/* Find a symbol nearby - addr are maybe negative */
--		d = sym->st_value - addr;
--		if (d < 0)
--			d = addr - sym->st_value;
--		if (d < distance) {
--			distance = d;
--			near = sym;
--		}
--	}
--	/* We need a close match */
--	if (distance < 20)
--		return near;
--	else
--		return NULL;
--}
--
--/*
-- * Find symbols before or equal addr and after addr - in the section sec.
-- * If we find two symbols with equal offset prefer one with a valid name.
-- * The ELF format may have a better way to detect what type of symbol
-- * it is, but this works for now.
-- **/
-+/* Look up the nearest symbol based on the section and the address */
- static Elf_Sym *find_elf_symbol2(struct elf_info *elf, Elf_Addr addr,
- 				 unsigned int secndx)
+ /* Look up the nearest symbol based on the section and the address */
+-static Elf_Sym *find_elf_symbol2(struct elf_info *elf, Elf_Addr addr,
+-				 unsigned int secndx)
++static Elf_Sym *find_nearest_symbol(struct elf_info *elf, Elf_Addr addr,
++				    unsigned int secndx)
  {
-@@ -1178,6 +1128,8 @@ static Elf_Sym *find_elf_symbol2(struct elf_info *elf, Elf_Addr addr,
- 	for (sym = elf->symtab_start; sym < elf->symtab_stop; sym++) {
- 		if (get_secindex(elf, sym) != secndx)
- 			continue;
-+		if (ELF_ST_TYPE(sym->st_info) == STT_SECTION)
-+			continue;
- 		if (!is_valid_name(elf, sym))
- 			continue;
- 		if (sym->st_value <= addr && addr - sym->st_value <= distance) {
-@@ -1188,6 +1140,16 @@ static Elf_Sym *find_elf_symbol2(struct elf_info *elf, Elf_Addr addr,
+ 	Elf_Sym *sym;
+ 	Elf_Sym *near = NULL;
+@@ -1140,14 +1140,14 @@ static Elf_Sym *find_elf_symbol2(struct elf_info *elf, Elf_Addr addr,
  	return near;
  }
  
-+static Elf_Sym *find_elf_symbol(struct elf_info *elf, Elf_Addr addr, Elf_Sym *sym)
-+{
-+	/* If the supplied symbol is valid, return it */
-+	if (sym->st_name != 0)
-+		return sym;
-+
-+	/* Otherwise, look up a better symbol */
-+	return find_elf_symbol2(elf, addr, get_secindex(elf, sym));
-+}
-+
- static bool is_executable_section(struct elf_info *elf, unsigned int secndx)
+-static Elf_Sym *find_elf_symbol(struct elf_info *elf, Elf_Addr addr, Elf_Sym *sym)
++static Elf_Sym *find_better_symbol(struct elf_info *elf, Elf_Addr addr, Elf_Sym *sym)
  {
- 	if (secndx > elf->num_sections)
+ 	/* If the supplied symbol is valid, return it */
+ 	if (sym->st_name != 0)
+ 		return sym;
+ 
+ 	/* Otherwise, look up a better symbol */
+-	return find_elf_symbol2(elf, addr, get_secindex(elf, sym));
++	return find_nearest_symbol(elf, addr, get_secindex(elf, sym));
+ }
+ 
+ static bool is_executable_section(struct elf_info *elf, unsigned int secndx)
+@@ -1169,10 +1169,10 @@ static void default_mismatch_handler(const char *modname, struct elf_info *elf,
+ 	const char *tosym;
+ 	const char *fromsym;
+ 
+-	from = find_elf_symbol2(elf, r->r_offset, fsecndx);
++	from = find_nearest_symbol(elf, r->r_offset, fsecndx);
+ 	fromsym = sym_name(elf, from);
+ 
+-	to = find_elf_symbol(elf, r->r_addend, sym);
++	to = find_better_symbol(elf, r->r_addend, sym);
+ 	tosym = sym_name(elf, to);
+ 
+ 	/* check whitelist - we may ignore it */
 -- 
 2.39.2
 
