@@ -2,134 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D96A7019B5
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 22:44:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 83EB170199D
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 22:21:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230369AbjEMUnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 16:43:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33246 "EHLO
+        id S229611AbjEMUVO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 16:21:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjEMUny (ORCPT
+        with ESMTP id S229447AbjEMUVM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 16:43:54 -0400
-Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56ED2D48
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 13:43:52 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id 73B7B140F81;
-        Sat, 13 May 2023 20:43:50 +0000 (UTC)
-Received: from pdx1-sub0-mail-a232.dreamhost.com (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id A4C08140CA3;
-        Sat, 13 May 2023 20:43:49 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1684010629; a=rsa-sha256;
-        cv=none;
-        b=QL5Z2Z4wjD1xaUH0hQmtyC2XzZpoopSmey7O1QaTpfAY9BUzSIaqnMxGPplv4wr68WGmuo
-        AWgGARgwqAc+/o3q4bgbqy2k/FX14GpcoYbnQb4SKmcbTLYr33qtnVEzQRmixBCRjMY+9e
-        YeJGYpVhA9L2YtuGZ2mzY0zMBJPnDu+JlQ8vT5GDRSxG40lbn1fiT6rHev55zXUMj8CToZ
-        6RVsyE0p/V6E6X1A2R5uEYRK6eFrvMX4r1CdVqxmsWJgueJPk4oLCr6okPMffsbkKUnVfm
-        8GHnsDx2movNM0DEuBFAYy5wBcf7abV/YRQzcPaP8KR48oNI+mrZk9L1A7Q3jg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1684010629;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=ehonwRQjo3E8b31rGbigHFuhtd753Uy5ZgwZqWj0E64=;
-        b=aKERXreeEIMFfn5eICwhgUQ3LwAQforBugm8cIukxcepr14D0dbOuh51fYd8fnFwlGeuWf
-        sEPmblsdPQGZxZaOUQpdyJXcuSUadvKJ415iVgHz8J3nhSLhAnBdjX3kVJEFiMDjrPHm3l
-        cOkplcvRu3D8ECnbB4tdnHx1DnRQg2YP54g5Or6D56Dwo+5b/PCkLGSJn9zP2s+tbzadNn
-        I8Xt8zgHPISFTkUbtMNOcgG+OgxH6yOwt6xee1XKp4RKJudoYw+zBM1S0VS4k1bfbJ+R2r
-        oHUq0fCn7C+R3bGCwknMU/rIjzcEv60aoJCOK25O59e0iZUwchXL+LAjEto0Og==
-ARC-Authentication-Results: i=1;
-        rspamd-5cdf8fd7d9-fw8rh;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Reaction-Eight: 274e905d7af27014_1684010630236_2430788493
-X-MC-Loop-Signature: 1684010630236:4012024979
-X-MC-Ingress-Time: 1684010630236
-Received: from pdx1-sub0-mail-a232.dreamhost.com (pop.dreamhost.com
- [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.126.30.61 (trex/6.8.1);
-        Sat, 13 May 2023 20:43:50 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a232.dreamhost.com (Postfix) with ESMTPSA id 4QJczm6Q6Gz30;
-        Sat, 13 May 2023 13:43:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1684010629;
-        bh=ehonwRQjo3E8b31rGbigHFuhtd753Uy5ZgwZqWj0E64=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=XFjqC33YUbOOBqR7qMq7te0o24fAFLDk4JyP8NZf5wSN6fDijoI8lYte2LgAqTtsm
-         ORmfxbJ7H9H9o4697eYugNgd5kTGXlsUNxKh3wLhBXfZ38aFrS74aQsIpQZJ0zAm2h
-         WzEird8Jw23f2537sXsQrrJ3gXNR1xNOKo0MmoHfbcUBeTSnVj/tF6v2AZnouqxBy9
-         9zfB7HRBfiV+4i/FgAgjAZdbTeg6SauPLQlruKJFg2XfeXweBiEWntQ4K4Z430Rrht
-         /BOWSJmTmUo3SENfyvsZ4e5KtZ2vjJmDeDkDNCn4TAmk5TTGqzBEXPBDZGlmDCXKZF
-         Ax0tmpET39d0A==
-Date:   Sat, 13 May 2023 13:10:56 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Darren Hart <dvhart@infradead.org>,
-        =?utf-8?B?QW5kcsOvwr/CvQ==?= Almeida <andrealmeid@igalia.com>,
-        linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
-        linux-mm@kvack.org
-Subject: Re: Futexes & Folios
-Message-ID: <4b5rvoi6w6nhiihmog6xjftoveohd47oooodekqedo5qhflmrt@jemw5ss5xps3>
-Mail-Followup-To: Matthew Wilcox <willy@infradead.org>, 
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-        Peter Zijlstra <peterz@infradead.org>, Darren Hart <dvhart@infradead.org>, 
-        =?utf-8?B?QW5kcsOvwr/CvQ==?= Almeida <andrealmeid@igalia.com>, linux-kernel@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>, 
-        linux-mm@kvack.org
-References: <ZF+3xpmouwur4sVE@casper.infradead.org>
+        Sat, 13 May 2023 16:21:12 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F347626A4;
+        Sat, 13 May 2023 13:21:10 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5068638856dso2583024a12.1;
+        Sat, 13 May 2023 13:21:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684009269; x=1686601269;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pI0vsmpY7mdUr70LiqqOXYMCiqJ/xh4FarR28VDA3tQ=;
+        b=SZ4hSMKsHGaXlLqSku8AD4/x/CeRqwaHcZPywriobqnvKyvivb450tjcJFRpNAplQx
+         ZKkGZ6Lqjt/vAKFOsFwm9bznpX59kYJB6YzxqyLmF5awylrSTXjZzSNgfXJjPvc7nS9/
+         Kt8p97wvKXfucnIIbQdPjEIUb6iV22hbEdFAOT28HuG72UtKb6En97RAbmd5O3EukoaG
+         7dkx5q5T+1oOG8ScWGsZWtox3HC/dF2y7dRLPHjx1zqEy2pNE8tzJLlzGXQYeazEgq1e
+         9WHh9jcz4vQj0NmgmyF2cUfhfD758KbgJ/Tguy+OXnpKQiDz3MxnRz6AmAuSvO833RON
+         I3Lg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684009269; x=1686601269;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pI0vsmpY7mdUr70LiqqOXYMCiqJ/xh4FarR28VDA3tQ=;
+        b=evNqfkBk4R8AHDoNzlLsfQFSRYQTKot/3nfk3vQuCFrQgEaJTfKMApSNHJg7+Gt6wV
+         slQ+nLXXmhYft3vuT7GGKUnoN0KVIvq3bQd1O+/ZXL6KQUuV04zbEX4clNtHwTSwhu4l
+         tVD54f42XIVLY/XU+3bOKz7DV7hOHr53LvpFhPnCiD8W6BEyhjCy3gO6/a7s26/dTmF9
+         1aKKmcgYuC36i39gO91henuC2osHB+em7auPOrj1tD/oWRXbmhOQm5J1yd48xKBObCEz
+         kwiIo5XajZsNk96YsXT9PMMDqYAp/H1eyesMpj6lcErQb28cmRt3OT9IjoVJgkgP++74
+         WDbA==
+X-Gm-Message-State: AC+VfDx8H2soGScL++vtGIP+PGIlEbcyf5ztQV9gbjSQEHuSGc7sb7aM
+        RoRKDsYDpBLd6Wh+rC/iqa0=
+X-Google-Smtp-Source: ACHHUZ625/aVC/WnxBwyH6Dh1+EYRSKpvxQlGTanFoaRhbxtj1LMDThxQmKD1kACZ7pmrqVwVNpu8g==
+X-Received: by 2002:a05:6402:27cd:b0:50c:79f:c693 with SMTP id c13-20020a05640227cd00b0050c079fc693mr26358719ede.1.1684009269048;
+        Sat, 13 May 2023 13:21:09 -0700 (PDT)
+Received: from ivan-B550MH.. ([37.252.94.55])
+        by smtp.gmail.com with ESMTPSA id d14-20020a50fb0e000000b0050bc6d0e880sm5109637edq.61.2023.05.13.13.21.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 May 2023 13:21:08 -0700 (PDT)
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+To:     corbet@lwn.net, akpm@linux-foundation.org, perex@perex.cz,
+        tiwai@suse.com, broonie@kernel.org, skhan@linuxfoundation.org
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
+        linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org,
+        himadrispandya@gmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH 1/3] docs: admin-guide: add valsa driver documentation
+Date:   Sun, 14 May 2023 00:20:35 +0400
+Message-Id: <20230513202037.158777-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <ZF+3xpmouwur4sVE@casper.infradead.org>
-User-Agent: NeoMutt/20230407
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 13 May 2023, Matthew Wilcox wrote:
+Add documentation for the new Virtual ALSA driver. It covers all possible
+usage cases: errors and delay injections, random and pattern-based data
+generation, playback and ioctl redefinition functionalities testing.
 
->Here's a patch which converts the futex code from using pages to using
->folios.  I do have some questions.
->
-> - I assume we really do want to base the key on the page offset of the
->   futex in the file.  That is, it's not good enough to base the key
->   on the folio's index because the folio can be split after setting up
->   the key, and if it is we'd then fail to find the futex later.
-> - In hugetlbfs, it doesn't matter whether the pgoff is based on base
->   pages or huge page size -- as long as it's consistent between
->   invocations, everything will work
+We have a lot of different virtual media drivers, which can be used for
+testing of the userspace applications and media subsystem middle layer.
+However, all of them are aimed at testing the video functionality and
+simulating the video devices. For audio devices we have only snd-dummy
+module, which is good in simulating the correct behavior of an ALSA device.
+I decided to write a tool, which would help to test the userspace ALSA
+programs (and the PCM middle layer as well) under unusual circumstances
+to figure out how they would behave. So I came up with this Virtual ALSA
+Driver.
 
-As tglx already mentioned, yes to both.
+This new Virtual ALSA Driver has several features which can be useful
+during the userspace ALSA applications testing/fuzzing, or testing/fuzzing
+of the PCM middle layer. Not all of them can be implemented using the
+existing virtual drivers (like dummy or loopback). Here is what can this
+driver do:
 
->(I have ideas about a get_user_folio() but those are not represented in
->this patch)
+- Simulate both capture and playback processes
+- Check the playback stream for containing the looped pattern
+- Generate random or pattern-based capture data
+- Inject delays into the playback and capturing processes
+- Inject errors during the PCM callbacks
 
-Btw, regarding some of the concerns about the gup overhead for futexes
-in the physr discussion at lsfmm; 'perf bench futex hash' would be a good
-way of measuring any impact at a micro level and going from there. This
-is only necessary of course for shared futexes, fast/private ones just
-use the address space.
+Also, this driver can check the playback stream for containing the
+predefined pattern, which is used in the corresponding selftest to check
+the PCM middle layer data transferring functionality. Additionally, this
+driver redefines the default RESET ioctl, and the selftest covers this PCM
+API functionality as well.
 
-Thanks,
-Davidlohr
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+---
+ Documentation/admin-guide/index.rst |   1 +
+ Documentation/admin-guide/valsa.rst | 114 ++++++++++++++++++++++++++++
+ 2 files changed, 115 insertions(+)
+ create mode 100644 Documentation/admin-guide/valsa.rst
+
+diff --git a/Documentation/admin-guide/index.rst b/Documentation/admin-guide/index.rst
+index 43ea35613dfc..328cc59275a1 100644
+--- a/Documentation/admin-guide/index.rst
++++ b/Documentation/admin-guide/index.rst
+@@ -131,6 +131,7 @@ configure specific aspects of kernel behavior to your liking.
+    thunderbolt
+    ufs
+    unicode
++   valsa
+    vga-softcursor
+    video-output
+    xfs
+diff --git a/Documentation/admin-guide/valsa.rst b/Documentation/admin-guide/valsa.rst
+new file mode 100644
+index 000000000000..64ffc130fb4c
+--- /dev/null
++++ b/Documentation/admin-guide/valsa.rst
+@@ -0,0 +1,114 @@
++.. SPDX-License-Identifier: GPL-2.0
++
++The Virtual ALSA Driver
++=======================
++
++The Virtual ALSA Driver emulates a generic ALSA device, and can be used for
++testing/fuzzing of the userspace ALSA applications, as well as for testing/fuzzing of
++the ALSA middle layer. Additionally, it can be used for simulating hard to reproduce
++problems with PCM devices.
++
++What can this driver do?
++~~~~~~~~~~~~~~~~~~~~~~~~
++
++At this moment the driver can do the following things:
++	* Simulate both capture and playback processes
++	* Generate random or pattern-based capturing data
++	* Inject delays into the playback and capturing processes
++	* Inject errors during the PCM callbacks
++
++Also, this driver can check the playback stream for containing the
++predefined pattern, which is used in the corresponding selftest (alsa/valsa-test.sh)
++to check the PCM middle layer data transferring functionality. Additionally, this
++driver redefines the default RESET ioctl, and the selftest covers this PCM
++API functionality as well.
++
++Configuration
++-------------
++
++The driver has several parameters besides the common ALSA module parameters:
++
++	* fill_mode (bool) - Buffer fill mode (see below)
++	* inject_delay (int)
++	* inject_hwpars_err (bool)
++	* inject_prepare_err (bool)
++	* inject_trigger_err (bool)
++
++
++Capture Data Generation
++-----------------------
++
++The driver has two modes of data generation: the first (0 in the fill_mode parameter)
++means random data generation, the second (1 in the fill_mode) - pattern-based
++data generation. Let's look at the second mode.
++
++First of all, you may want to specify the pattern for data generation. You can do it
++by writing the pattern to the debugfs file (/sys/kernel/debug/valsa/fill_pattern).
++Like that:
++
++.. code-block:: bash
++
++	echo -n mycoolpattern > /sys/kernel/debug/valsa/fill_pattern
++
++After this, every capture action performed on the 'valsa' device will return
++'mycoolpatternmycoolpatternmycoolpatternmy...' in the capturing buffer.
++
++The pattern itself can be up to 4096 bytes long.
++
++Delay injection
++---------------
++
++The driver has 'inject_delay' parameter, which has very self-descriptive name and
++can be used for time delay/speedup simulations. The parameter has integer type, and
++it means the delay added between module's internal timer ticks.
++
++If the 'inject_delay' value is positive, the buffer will be filled slower, if it is
++negative - faster. You can try it yourself by starting a recording in any
++audiorecording application (like Audacity) and selecting the 'valsa' device as a
++source.
++
++This parameter can be also used for generating a huge amount of sound data in a very
++short period of time (with the negative 'inject_delay' value).
++
++Errors injection
++----------------
++
++This module can be used for injecting errors into the PCM communication process. This
++action can help you to figure out how the userspace ALSA program behaves under unusual
++circumstances.
++
++For example, you can make all 'hw_params' PCM callback calls return EBUSY error by
++writing '1' to the 'inject_hwpars_err' module parameter:
++
++.. code-block:: bash
++
++	echo 1 > /sys/module/snd_valsa/parameters/inject_hwpars_err
++
++Errors can be injected into the following PCM callbacks:
++
++	* hw_params (EBUSY)
++	* prepare (EINVAL)
++	* trigger (EINVAL)
++
++
++Playback test
++-------------
++
++This driver can be also used for the playback functionality testing - every time you
++write the playback data to the 'valsa' PCM device and close it, the driver checks the
++buffer for containing the looped pattern (which is specified in the fill_pattern
++debugfs file). If the playback buffer content represents the looped pattern, 'pc_test'
++debugfs entry is set into '1'. Otherwise, the driver sets it to '0'.
++
++ioctl redefinition test
++-----------------------
++
++The driver redefines the 'reset' ioctl, which is default for all PCM devices. To test
++this functionality, we can trigger the reset ioctl and check the 'ioctl_test' debugfs
++entry:
++
++.. code-block:: bash
++
++	cat /sys/kernel/debug/valsa/ioctl_test
++
++If the ioctl is triggered successfully, this file will contain '1', and '0' otherwise.
+-- 
+2.34.1
+
