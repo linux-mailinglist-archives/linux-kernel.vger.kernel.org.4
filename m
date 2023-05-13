@@ -2,74 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048E67019A3
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 22:21:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE1DB7019AC
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 22:35:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229871AbjEMUVY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 16:21:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55520 "EHLO
+        id S229916AbjEMUff (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 16:35:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjEMUVV (ORCPT
+        with ESMTP id S229502AbjEMUfe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 16:21:21 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50632D6B;
-        Sat, 13 May 2023 13:21:19 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-5068638856dso2583039a12.1;
-        Sat, 13 May 2023 13:21:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684009279; x=1686601279;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=phVfYEyjqUA1/8JzWnwWyJem9HZ6085CTPXJTMUib4g=;
-        b=jfdhvxTIOPKnh+n2ESRxn+iltKq4nh61eRKsxsBV3oW1Ii/X7aBXAv5Nou7cNo3LDK
-         RkQWrcskIMLc2WGI/FXV6llw+fSYLG8RM7SNaurWDObJLBtDDXxaJHfKN/k14P+q0wpT
-         r/R1zhu7SRLCOUKIRIxnvf4WSrTNIEwiGlwlpJnN3XTtUBv87y2s3BfYYYOxyjIO9tCs
-         MJDYr1yzY6cMjC8UXgHF6eC/UOXpuaiXRsfiKCRbj1/Z3s5TV+vNeMW/u1nrNA9I8zOp
-         UrHGgaaaTZOkwa9wtKPliidEM/bI0RQnKBFKIYuLx+/HlLFhzNmVsMa8PGoYxEldKW9c
-         GTrw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684009279; x=1686601279;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=phVfYEyjqUA1/8JzWnwWyJem9HZ6085CTPXJTMUib4g=;
-        b=W4Z4Qez4NnIZpO0oRn4zNddvvBdXJrEtLwCVM9L4Ke385lCIYf1Wi/9U1A5ZYVxDxk
-         527Z0MR8zJEvynRhZrqBzgbooKCTsWn8zz1vtcMXtZxJ1JBvQn+4P/Mn1KHi55iahV/L
-         70qRMm2Tu50iOvibkzbIG7RLg92tUVnwQtZwqm9/DXtutUd/7JbRyU1P+G4+6LKjMwrG
-         Ss7+rp4RROiCWBkv996SyTQw50f4KWdapJNjtFqfau0/STqk1cFhvX2WC5iUqu+rVyas
-         mAlBdf6U5veDdfzhQBHbOCRNtIbrM8e49s4Z9LkohCtnltBfSSCGGVdfOaGUOtT0CV6F
-         AS1Q==
-X-Gm-Message-State: AC+VfDzhcL/K88AKkv1kTlflclpgVXhE6MpPSiG7H6QTyECYmhYCEETg
-        UfFeOZHp5tytcy3oPD8RB6U=
-X-Google-Smtp-Source: ACHHUZ6D50diLOr1mJEybUqQgqdZ/OhjmdX7JuUmJJIFtY8WY3xSxqG/VvvFG+eERIrAaYaD9xdCPg==
-X-Received: by 2002:a05:6402:3482:b0:508:40a5:beb4 with SMTP id v2-20020a056402348200b0050840a5beb4mr28652324edc.3.1684009279137;
-        Sat, 13 May 2023 13:21:19 -0700 (PDT)
-Received: from ivan-B550MH.. ([37.252.94.55])
-        by smtp.gmail.com with ESMTPSA id d14-20020a50fb0e000000b0050bc6d0e880sm5109637edq.61.2023.05.13.13.21.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 May 2023 13:21:18 -0700 (PDT)
-From:   Ivan Orlov <ivan.orlov0322@gmail.com>
-To:     corbet@lwn.net, akpm@linux-foundation.org, perex@perex.cz,
-        tiwai@suse.com, broonie@kernel.org, skhan@linuxfoundation.org
-Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        linux-kselftest@vger.kernel.org, gregkh@linuxfoundation.org,
-        himadrispandya@gmail.com,
-        linux-kernel-mentees@lists.linuxfoundation.org
-Subject: [PATCH 3/3] selftests: ALSA: Add test for the 'valsa' driver
-Date:   Sun, 14 May 2023 00:20:37 +0400
-Message-Id: <20230513202037.158777-3-ivan.orlov0322@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230513202037.158777-1-ivan.orlov0322@gmail.com>
-References: <20230513202037.158777-1-ivan.orlov0322@gmail.com>
+        Sat, 13 May 2023 16:35:34 -0400
+Received: from maynard.decadent.org.uk (maynard.decadent.org.uk [95.217.213.242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C4FF2D40;
+        Sat, 13 May 2023 13:35:33 -0700 (PDT)
+Received: from [213.219.167.32] (helo=deadeye)
+        by maynard with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ben@decadent.org.uk>)
+        id 1pxvxd-0008Pk-Gz; Sat, 13 May 2023 22:35:25 +0200
+Received: from ben by deadeye with local (Exim 4.96)
+        (envelope-from <ben@decadent.org.uk>)
+        id 1pxvxd-007dgZ-03;
+        Sat, 13 May 2023 22:35:25 +0200
+Date:   Sat, 13 May 2023 22:35:24 +0200
+From:   Ben Hutchings <ben@decadent.org.uk>
+To:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Salvatore Bonaccorso <carnil@debian.org>
+Subject: [PATCH v2 0/2] perf doc improvements to man page reproducibility
+Message-ID: <ZF/0jJkAOXxzGAMc@decadent.org.uk>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="3NraPDKjMzW1VfwZ"
+Content-Disposition: inline
+X-SA-Exim-Connect-IP: 213.219.167.32
+X-SA-Exim-Mail-From: ben@decadent.org.uk
+X-SA-Exim-Scanned: No (on maynard); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,108 +49,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This test covers the new Virtual ALSA driver, including the capturing,
-playback and ioctl redefinition functionalities. This test is also helpful
-as an usage example of the 'valsa' driver.
 
-We have a lot of different virtual media drivers, which can be used for
-testing of the userspace applications and media subsystem middle layer.
-However, all of them are aimed at testing the video functionality and
-simulating the video devices. For audio devices we have only snd-dummy
-module, which is good in simulating the correct behavior of an ALSA device.
-I decided to write a tool, which would help to test the userspace ALSA
-programs (and the PCM middle layer as well) under unusual circumstances
-to figure out how they would behave. So I came up with this Virtual ALSA
-Driver.
+--3NraPDKjMzW1VfwZ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This new Virtual ALSA Driver has several features which can be useful
-during the userspace ALSA applications testing/fuzzing, or testing/fuzzing
-of the PCM middle layer. Not all of them can be implemented using the
-existing virtual drivers (like dummy or loopback). Here is what can this
-driver do:
+I previously sent a patch in 2016(!) to make the dates in man pages
+reproducible, with KBUILD_BUILD_TIMESTAMP specifiying the date.  That
+patch partly overlaps with commit d586ac10ce56 "perf docs: Allow man
+page date to be specified", which implemented generation of dates
+based on commit timestamps.
 
-- Simulate both capture and playback processes
-- Generate random or pattern-based capture data
-- Check the playback stream for containing the looped pattern
-- Inject delays into the playback and capturing processes
-- Inject errors during the PCM callbacks
+However, both of those implementations were specific to the original
+asciidoc's DocBook backend and had no effect on asciidoctor's direct
+man page generation.
 
-Also, this driver can check the playback stream for containing the
-predefined pattern, which is used in the corresponding selftest to check
-the PCM middle layer data transferring functionality. Additionally, this
-driver redefines the default RESET ioctl, and the selftest covers this PCM
-API functionality as well.
+This series builds on the current definition of perf_date, adding
+support for asciidoctor and the KBUILD_BUILD_TIMESTAMP variable.
 
-After all, I think this driver would be a good start, and I believe in the
-future we will see more virtual sound drivers.
+Ben.
 
-Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
----
- tools/testing/selftests/alsa/valsa-test.sh | 55 ++++++++++++++++++++++
- 1 file changed, 55 insertions(+)
- create mode 100755 tools/testing/selftests/alsa/valsa-test.sh
+Ben Hutchings (2):
+  perf doc: Define man page date when using asciidoctor
+  perf doc: Add support for KBUILD_BUILD_TIMESTAMP
 
-diff --git a/tools/testing/selftests/alsa/valsa-test.sh b/tools/testing/selftests/alsa/valsa-test.sh
-new file mode 100755
-index 000000000000..872dfac138c2
---- /dev/null
-+++ b/tools/testing/selftests/alsa/valsa-test.sh
-@@ -0,0 +1,55 @@
-+#!/bin/bash
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# Test for the 'valsa' virtual driver. It tests capture and playback functionalities,
-+# as well as the 'reset' ioctl redefinition.
-+
-+uid=$(id -u)
-+if [ $uid -ne 0 ]; then
-+	echo "$0: Must be run as root"
-+	exit 1
-+fi
-+
-+if ! which modprobe > /dev/null 2>&1; then
-+	echo "$0: You need modprobe installed"
-+        exit 4
-+fi
-+
-+if ! modinfo snd-valsa > /dev/null 2>&1; then
-+	echo "$0: You must have the following enabled in your kernel:"
-+	echo "CONFIG_SND_ALSAV=m"
-+	exit 4
-+fi
-+
-+modprobe snd-valsa
-+
-+if [ ! -e /sys/kernel/debug/valsa/pc_test ]; then
-+	mount -t debugfs none /sys/kernel/debug
-+
-+	if [ ! -e /sys/kernel/debug/valsa/pc_test ]; then
-+		echo "$0: Error mounting debugfs"
-+		exit 4
-+	fi
-+fi
-+
-+success="1"
-+arecord -D hw:CARD=valsa,DEV=0 -c 1 --buffer-size=8192 -f S16_LE -r 8000 --duration=4 out.wav
-+
-+if [[ $(< /sys/kernel/debug/valsa/ioctl_test) == "$success" ]]; then
-+	echo "$0: ioctl test: success"
-+else
-+	echo "$0: ioctl test: fail"
-+fi
-+
-+aplay -D hw:CARD=valsa,DEV=0 -c 1 --buffer-size=8192 -f S16_LE -r 8000 out.wav
-+
-+if [[ $(< /sys/kernel/debug/valsa/pc_test) == "$success" ]]; then
-+	echo "$0: playback test: success"
-+else
-+	echo "$0: playback test: fail"
-+fi
-+
-+rm -rf out.wav
-+if ! rmmod snd-valsa > /dev/null 2>&1; then
-+	echo "$0: Can't remove 'valsa' module: disable PulseAudio and unload it manually"
-+fi
--- 
-2.34.1
+ tools/perf/Documentation/Makefile | 15 +++++++++++----
+ 1 file changed, 11 insertions(+), 4 deletions(-)
 
+
+--3NraPDKjMzW1VfwZ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEErCspvTSmr92z9o8157/I7JWGEQkFAmRf9IcACgkQ57/I7JWG
+EQkXhA/+NC0hKNh65HLxO2pw8jYqTv2z+hnTyqWYDeMX8pcibHJgDJpo0ovkvXvT
+D6sa7wlxtFxQogTqmJkpVFOvH3xaUBtFGq1P9kiwr+TVcJE8X5hE8uPBv5F4jShl
+uEaSmHG3GVR+7qIwX/+0QVyth5fFdd2vmIjS8SQWpxULvCKxCHeslmwSqMwAoxpx
+Ql3Ei2IKh+04NfhR2/OJy62o5VFFOoESBlKcQcLYe0L4jKj2mIXn31j3Iy3cJhf5
+yzsgJk3H6uYMCIz14WRqtsX109yTJB6zMcYn1PZnEE6ZjTE7jbLqI/Yj4jPNaDH5
+IKMxCgH0XcDzMzIz5wR+dr9/+ZOzNQYLraXhLr/xyJ9JJsJtAg/ozD32mvh893Iy
+OjTO4cQdgIDpodwPu1ZqWgc+PjH9rbt6OUBoicIOgIttgw1cRct1NNQIikZK5ThB
+PtwkaEV1scUux+1ABI23o/iJOwwMrcFP1ZN5MZ6OhStyTfow04PcF3eOuqQZyfoC
+pj0VUPN03efhbmzLTmgMxnhHspVnPjVZJADZ8vuZx23+6dZ02c1inpa4/4Z+KKy/
++UtHdMvv2z/UZwg4Y5vWXe5N+c1mQy29tRptanSsrxum+ttJVuJ58dIa2gYA5u20
+wdJ7HZavURfbkmrLK6rRSb7fqTW5lW3R8WxEFOUl8osUPuixTwg=
+=vukG
+-----END PGP SIGNATURE-----
+
+--3NraPDKjMzW1VfwZ--
