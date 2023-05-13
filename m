@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEFB6701953
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 20:42:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E5A7701956
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 20:43:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231501AbjEMSm0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 14:42:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35422 "EHLO
+        id S232552AbjEMSns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 14:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231860AbjEMSmY (ORCPT
+        with ESMTP id S230384AbjEMSnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 14:42:24 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C7EF26BB
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 11:42:21 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id a640c23a62f3a-953343581a4so1751572966b.3
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 11:42:20 -0700 (PDT)
+        Sat, 13 May 2023 14:43:46 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9ED8213B
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 11:43:44 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50b383222f7so16580946a12.3
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 11:43:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684003339; x=1686595339;
+        d=linaro.org; s=google; t=1684003423; x=1686595423;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=n+4YRB2fAb6S5ZQss3vm44TC9IZxgw87qep5+W+Me9o=;
-        b=SyH0NzgPiy0IIvqbAedILCHmuD/6u9Wq/iN/NwQxsc6KmxNtiJZilMYP80CWi8o/dv
-         e5CsqPIPy4Uyud4VlYujfC6SMtv6N5HX+LmeUoctoNUe4h7dzC8qDSQ5naT0/Z7M50n0
-         KmUEJBe2VizyU2xyM3Pwcu76aLpGBB9ywCMT3Z1le/eEJ9Jm/rq6dLOitFItqiXP+FGw
-         ig8kE8FMCCI72G+el8MVyLpx5aGKIMtraxvbk4RCM39tVH3tN4sVthWK5ent2JQ+oZS5
-         mOq0ZPueDdyC2jtEUvI7ZbtXV6WEl9qjYjaBdAHgv+yUuC7o+nfZuArb1BdSWQMY+SXB
-         zMow==
+        bh=SIKmkC8PkYUMuXvhvScc2QiWAE9GV9r1KXIulcRXAH8=;
+        b=UzK297MAlDrAcB5KvseNrkyjkh7qqtX5yb3NexbK00a66SN4yP3gJMSx9gHbpDhObZ
+         IELyhkZtWoyNtFNx3l5KzNkig/efTqW2t23NfsSfaRv3lSFO7wc4m6tWTWhdnZP3PmhB
+         IrRaeYMNg0TaK3aR4cqt2nippuAi5ctxrjXWUoZVjGJ7B9DpCqCdzv1UC2JCtthPciYB
+         GnmIqXPaNfMI4kc6jeyD4ykGL2rWCdiYFQiuTxokpoOopxh0I4OXjH2xfuHXM60DlFw6
+         sZdZZPFYipAcP1pNKjtCLhOzUTkyLyUhXXt8BGApxN1TxEzA8NU4L+ebs7RGaljhRiwb
+         p1lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684003339; x=1686595339;
+        d=1e100.net; s=20221208; t=1684003423; x=1686595423;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=n+4YRB2fAb6S5ZQss3vm44TC9IZxgw87qep5+W+Me9o=;
-        b=leJgyzwk/SGxypPv/Df2HxmBUciXugTQvQ0Uvqpu8x5K5cB2Om+RifzhbYH1i+bHCD
-         4XxbEUcuXJ6WHDr6HmKp5OxBvL/zXy/X6o0MMD0GUtP+yGfZaO0Hgszr9UgOKGO13umS
-         TeFfAZcocAW5ixUSB5OG+CI4w3P1jtF85rgTgrmCyAgrczItlicJK4ebTdbrBCRJrYxp
-         qqG+Naq+sLQ3IqJuk2wtgp19FSQtd5qDUSSEOgsXZxDJT4VGg0+eqDYE/fy0r794Cc1W
-         WpA2c57FrhAiyayBqBbexbq7Kt+nV8cW8SbYgajkrFBOfHhBCmqMg38ZFR9YJfkDL9Uz
-         VRUw==
-X-Gm-Message-State: AC+VfDxG+IwYRwuChiCHRLNCCsrDBJle0BfhpT0IdAqFH18ON15KACGZ
-        o1og9K8Pg+sH8fBgiUdGexLacg==
-X-Google-Smtp-Source: ACHHUZ77iaulugNkUAzkaRKxvRt4Umoyd3WapFnrN1bo4XgCe7thSF7VUawmgcobdnnDS8/p3XsuTg==
-X-Received: by 2002:a17:907:9706:b0:965:eb5d:3b26 with SMTP id jg6-20020a170907970600b00965eb5d3b26mr30399521ejc.52.1684003339477;
-        Sat, 13 May 2023 11:42:19 -0700 (PDT)
+        bh=SIKmkC8PkYUMuXvhvScc2QiWAE9GV9r1KXIulcRXAH8=;
+        b=Nk2lIN+nPqUnmqeHxPT/vC79U1Xbh5KJ2bBcHzSFTIgu1ZpimfAH4ovpGDJ6aeiivm
+         Rb8zK4VB2xlIIF8dyjxvB6F2EbPT05efkqEyDqOtEVxLsBH1TVu03qxsq6V3UQqwY3EF
+         FBTNFwTPjY5x0dxW+2wO3xMZcO3LPJYc6CpLIY17XsCLpDS4K/A+3wN74fTIGAwfCYot
+         AsSJnMXOofULtRjc1Ebmk4NWYRmXX5yGLoH//ci2dpC/doltT/rMu0TboACKj8YdnYrq
+         GNYsC437wxKco936oPEShr0W26zJuByA/uo7grWeTaoYYje0DDgxqACwxETKymbVuiYc
+         C/CA==
+X-Gm-Message-State: AC+VfDyMOGQgbD56s8MULwOibzyrwtFx9VhcrYkFx4mUHl+rXXDKGZtL
+        fvC2Nnt6nERUG31jtrpfR7a7IQ==
+X-Google-Smtp-Source: ACHHUZ5jqpHFV2p7aot+5EbJgXSqMf9auQVtjC5iHSUu1sc0uk/8irH6QB1cdep0CArMgZMauALo7A==
+X-Received: by 2002:a05:6402:51:b0:50d:bd2e:6dfa with SMTP id f17-20020a056402005100b0050dbd2e6dfamr10633472edu.17.1684003423301;
+        Sat, 13 May 2023 11:43:43 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:ba68:e5c9:694e:c6e4? ([2a02:810d:15c0:828:ba68:e5c9:694e:c6e4])
-        by smtp.gmail.com with ESMTPSA id p1-20020a170906838100b009662b4230cesm7229864ejx.148.2023.05.13.11.42.18
+        by smtp.gmail.com with ESMTPSA id m26-20020a50ef1a000000b0050690bc07a3sm5294907eds.18.2023.05.13.11.43.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 May 2023 11:42:18 -0700 (PDT)
-Message-ID: <a6aa353c-3de0-9acb-9848-4f37fac0ab2e@linaro.org>
-Date:   Sat, 13 May 2023 20:42:18 +0200
+        Sat, 13 May 2023 11:43:42 -0700 (PDT)
+Message-ID: <c028e0b1-2eff-a6f4-c4c1-83b1a77bd6ba@linaro.org>
+Date:   Sat, 13 May 2023 20:43:41 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
 Subject: Re: [PATCH v2 1/2] dt-bindings: cdns,usb3: Add clock and reset
 Content-Language: en-US
-To:     Minda Chen <minda.chen@starfivetech.com>,
-        Roger Quadros <rogerq@kernel.org>,
+To:     Roger Quadros <rogerq@kernel.org>,
+        Minda Chen <minda.chen@starfivetech.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Pawel Laszczak <pawell@cadence.com>,
@@ -72,9 +72,9 @@ References: <20230510132816.108820-1-minda.chen@starfivetech.com>
  <9cf5965a-8290-dfff-9f92-07ed2df66650@linaro.org>
  <05057f6d-cb38-8e4a-5d30-82863e0cda44@kernel.org>
  <028fb8ac-d6cc-6fee-f50b-b965e69e7d0c@linaro.org>
- <d4de3b1b-31b6-c257-29a5-f404ff0fbe99@starfivetech.com>
+ <40592737-4330-101b-5425-091572e61c6f@kernel.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <d4de3b1b-31b6-c257-29a5-f404ff0fbe99@starfivetech.com>
+In-Reply-To: <40592737-4330-101b-5425-091572e61c6f@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,10 +87,10 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2023 12:22, Minda Chen wrote:
+On 12/05/2023 13:08, Roger Quadros wrote:
 > 
 > 
-> On 2023/5/11 22:49, Krzysztof Kozlowski wrote:
+> On 11/05/2023 17:49, Krzysztof Kozlowski wrote:
 >> On 11/05/2023 14:16, Roger Quadros wrote:
 >>>
 >>>
@@ -140,34 +140,13 @@ On 12/05/2023 12:22, Minda Chen wrote:
 >> Yeah, but we want the clocks to be specific per platform. Not anything
 >> anywhere.
 >>
->> Best regards,
->> Krzysztof
->>
 > 
-> I can change like these. Are these changes can be approved?
-> lpm , bus clock and "pwrup" reset can be specific cases. (The changes are from snps,dwc3.yaml.)
-> 
->   clocks:
->     description:
->       In general the core supports two types of clocks. bus is a SoC Bus
->       Clock(AHB/AXI/APB). lpm is a link power management clock. But particular
->       cases may differ from that having less or more clock sources with
->       another names.
-> 
->   clock-names:
->     contains:
->       anyOf:
->         - enum: [bus, lpm]
->         - true
-> 
+> Agreed. So we don't specify min/maxItems at top level but use conditional
+> constraints per platform?
+> Which means we will need to add platform specific compatibles as well.
 
-No because this does not solve my concern. You allow here anything,
-which is not desired. The device bindings should specify what clocks
-(and resets) you have here. Order is also fixed (with exceptions).
-
-Now, if this is generic IP block used by different SoC vendors and it
-has different clocks in different implementations, it means one
-compatible for all of them is not enough anymore.
+Yes, exactly. This can be done here in this binding or through some
+re-usable common part and then multiple bindings using it and customizing.
 
 Best regards,
 Krzysztof
