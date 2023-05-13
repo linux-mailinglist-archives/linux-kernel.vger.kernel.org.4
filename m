@@ -2,153 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42ED970163C
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 12:53:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A68970163F
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 12:55:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237734AbjEMKxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 06:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41008 "EHLO
+        id S234083AbjEMKza (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 06:55:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbjEMKxG (ORCPT
+        with ESMTP id S230430AbjEMKz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 06:53:06 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B443C38;
-        Sat, 13 May 2023 03:53:05 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id d9443c01a7336-1aafa41116fso74703055ad.1;
-        Sat, 13 May 2023 03:53:05 -0700 (PDT)
+        Sat, 13 May 2023 06:55:28 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4A9626AC
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 03:55:26 -0700 (PDT)
+Received: by mail-wm1-x32d.google.com with SMTP id 5b1f17b1804b1-3f50020e0f8so4492985e9.0
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 03:55:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683975184; x=1686567184;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rzFzuKHL70sf9cOT0w+52R5CvyI+BtqNEu3+iLD0/xM=;
-        b=KiRutVUHBs5oUxLaT6583AIlvZ1wM62Gaibg6ABRHB+EHssWBsNvDmr3LmIXMEoH2N
-         GVGjLZ7kpXcwictVoObqHKVXfmMChFRDZKcFopUdeDWXf+rqctX+fYXExdpK3BwtWNQE
-         6hpIt8QKtWwJBCyna2FR6m1WiSSC1e5F32aLZoUMDZk3T7BaWRH9Ltr6OJmDEdMfWX9s
-         e13QeD3phgr5WfRToH69Bl146cfQyz+4DWY+H9HbLZnjtnYwvns2nITozZ1JLqFg/xAm
-         i/WzWpzEWAIlhXjh/j3xi4q7Ct4F5RD81VSYeF8KwsYRLGEzddH112GszCUM1lHzBxB5
-         wnWw==
+        d=gmail.com; s=20221208; t=1683975325; x=1686567325;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=n9KqRSgAneDCkexvD3zlz5zPC0F9IhJMVwUxz3g/N7Q=;
+        b=MKgtZnhG1dwdo1oIcix+RIpcZ4adAIgFJRDPEeAndoTVTp0U3ku3rOxULHuXbvqYzM
+         6RU9OooYtfamRo7SOT7sNfW1X906yBSRFkZWCVt/H57dMOgso97CWSgdSLInXlRgeRT6
+         5ftIKlCcdphEd1iGmg8NiTCPsXrxEGqxER2BbHmkV+MefC5tsYtl3+nCGfxRKj2SK/0/
+         6zWQ1nCPZogbZ/51+n80GwXkITgMSJ1vOVtbejdshkmHCp0ToNFsbZAS/E4UssiT0oDA
+         cDO3lF3poIum1ifOM/qRKr4CbheiCgpGWD9N6cgjGTVoBc9VLilVs+AX3AUwdaoHWPnf
+         Yp/A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683975184; x=1686567184;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rzFzuKHL70sf9cOT0w+52R5CvyI+BtqNEu3+iLD0/xM=;
-        b=cVhyXuTIpFhYcfp+2yPwKLaRW90d4C5iS0GcTUg7eNSqfH2bdtEE5YGTFh8MWPXQtR
-         K8Z7S5LAjlX7sxchuydvXdGwrT/EAk41nZy/Jozp6dEy+mIncjj/p9bwe9GXFQ7k0wQA
-         aVnI7I8mKZJcRaKcdRfBp9yypjy6mEZo0hV1jptUTO3fsI48A8dzex4QmPfBjqybg6cJ
-         YDHIYUnKH7mNO276+FDzBWHbRJeFnX2fZZ6ekBkBVokz/WAv58E5TG1F/KzjDmXasmRT
-         IJxJynFzMWvVc/DPqSaC+UWhtnRkCZ+cMJyS2ddPKFaQ7aXjtimIMrb0iGhQ/Jn6YpUk
-         QmuA==
-X-Gm-Message-State: AC+VfDyxASBG43X/heW/OFoFLw6YE0XVGN2MGQvsf1PCRomQjiqDNiLa
-        xqtrQbD3x77jTSeMPDinpZ8=
-X-Google-Smtp-Source: ACHHUZ5DBzqowpkp4ezU81PkyI2h2pcFK4NVjpo+XXCJnf4Zf6G4lAY1tlwtETFrSiB8n9wL7y9kbw==
-X-Received: by 2002:a17:902:fa0f:b0:1a9:8ff5:af43 with SMTP id la15-20020a170902fa0f00b001a98ff5af43mr25437354plb.18.1683975184372;
-        Sat, 13 May 2023 03:53:04 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-69.three.co.id. [180.214.232.69])
-        by smtp.gmail.com with ESMTPSA id f12-20020a170902684c00b001ac69bdc9d1sm9637182pln.156.2023.05.13.03.52.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 May 2023 03:53:03 -0700 (PDT)
-Message-ID: <ef31b33f-8e66-4194-37e3-916b53cf7088@gmail.com>
-Date:   Sat, 13 May 2023 17:52:51 +0700
+        d=1e100.net; s=20221208; t=1683975325; x=1686567325;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=n9KqRSgAneDCkexvD3zlz5zPC0F9IhJMVwUxz3g/N7Q=;
+        b=hQdJmgMSjzeOupF3qNkI/O13LaN9i3q4TMTL1m8ecmKCN1/SBJTfmRqo6GVrSUt8H2
+         wu2fXFMpCLruIsLVWJ6sAvA59CtZwozoNkbtQfBpsX6fv9Yb3uwmNTMUF7dWHVQacNqD
+         OG86btczOmiCfqSIQrJftkfUw0Arve7nJUtvLHn7KiTqJPbcpPaLYpfy1fnbkllBiFqx
+         YJIz7kAIDS8lK2riQnuPra8cRHfDcKJvxBdL3cxAEDSUY4sCbKCM3+g/6M05X5+uKLXK
+         jDtHM7EwY8CsFrSDQNctCbZAshcS0p4AeOR3ShvvdlNY1xT33Z5iKUj4pg3HI1zyDnA6
+         4LIw==
+X-Gm-Message-State: AC+VfDwmUk0F/a5JE43wPesXzp0AN3E6+2GE+CtolVKjFy/qrZLnSkRN
+        /ySjX8TUsMDAUBxn7/SSXQijbYE+Gg==
+X-Google-Smtp-Source: ACHHUZ6L/Ha1/UBL3H1zBTRHNQ+yzmhL+/fvG9h4KZO6GuqAn1OE1zLEEFvF4F/JTXQLL4zknmQmZg==
+X-Received: by 2002:a05:600c:46d3:b0:3f4:1848:4dff with SMTP id q19-20020a05600c46d300b003f418484dffmr19008481wmo.7.1683975324929;
+        Sat, 13 May 2023 03:55:24 -0700 (PDT)
+Received: from p183 ([46.53.248.206])
+        by smtp.gmail.com with ESMTPSA id l11-20020a7bc34b000000b003f195d2f1a9sm31211773wmj.15.2023.05.13.03.55.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 May 2023 03:55:24 -0700 (PDT)
+Date:   Sat, 13 May 2023 13:55:22 +0300
+From:   Alexey Dobriyan <adobriyan@gmail.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, wangkefeng.wang@huawei.com,
+        lstoakes@gmail.com, liushixin2@huawei.com, david@redhat.com,
+        bhe@redhat.com, azeemshaikh38@gmail.com, akpm@linux-foundation.org
+Subject: Re: + procfs-replace-all-non-returning-strlcpy-with-strscpy.patch
+ added to mm-nonmm-unstable branch
+Message-ID: <39b334c4-48e3-47ec-ae31-adeff2bf4839@p183>
+References: <20230511043449.99AE6C433EF@smtp.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2 08/10] drivers: watchdog: Replace GPL license notice
- with SPDX identifier
-Content-Language: en-US
-To:     Richard Fontana <rfontana@redhat.com>
-Cc:     Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
-        Linux DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Staging Drivers <linux-staging@lists.linux.dev>,
-        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
-        Linux Kernel Actions <linux-actions@lists.infradead.org>,
-        Diederik de Haas <didi.debian@cknow.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Philippe Ombredanne <pombredanne@nexb.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Airlie <airlied@redhat.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
-        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Ray Lehtiniemi <rayl@mail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andrey Panin <pazke@donpac.ru>, Oleg Drokin <green@crimea.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Jonas Jensen <jonas.jensen@gmail.com>,
-        Sylver Bruneau <sylver.bruneau@googlemail.com>,
-        Andrew Sharp <andy.sharp@lsi.com>,
-        Denis Turischev <denis@compulab.co.il>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Alan Cox <alan@linux.intel.com>,
-        Simon Horman <simon.horman@corigine.com>
-References: <20230512100620.36807-1-bagasdotme@gmail.com>
- <20230512100620.36807-9-bagasdotme@gmail.com>
- <CAC1cPGy=78yo2XcJPNZVvdjBr2-XzSq76JrAinSe42=sNdGv3w@mail.gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <CAC1cPGy=78yo2XcJPNZVvdjBr2-XzSq76JrAinSe42=sNdGv3w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230511043449.99AE6C433EF@smtp.kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/12/23 19:46, Richard Fontana wrote:
-> On Fri, May 12, 2023 at 6:07 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
-> 
-> 
->> diff --git a/drivers/watchdog/sb_wdog.c b/drivers/watchdog/sb_wdog.c
->> index 504be461f992a9..822bf8905bf3ce 100644
->> --- a/drivers/watchdog/sb_wdog.c
->> +++ b/drivers/watchdog/sb_wdog.c
->> @@ -1,3 +1,4 @@
->> +// SPDX-License-Identifier: GPL-1.0+
->>  /*
->>   * Watchdog driver for SiByte SB1 SoCs
->>   *
->> @@ -38,10 +39,6 @@
->>   *     (c) Copyright 1996 Alan Cox <alan@lxorguk.ukuu.org.uk>,
->>   *                                             All Rights Reserved.
->>   *
->> - *     This program is free software; you can redistribute it and/or
->> - *     modify it under the terms of the GNU General Public License
->> - *     version 1 or 2 as published by the Free Software Foundation.
-> 
-> Shouldn't this be
-> // SPDX-License-Identifier: GPL-1.0 OR GPL-2.0
-> (or in current SPDX notation GPL-1.0-only OR GPL-2.0-only) ?
-> 
+On Wed, May 10, 2023 at 09:34:49PM -0700, Andrew Morton wrote:
+> Subject: procfs: replace all non-returning strlcpy with strscpy
+> strlcpy() reads the entire source buffer first.  This read may exceed the
+> destination size limit.
 
-Nope, as it will fail spdxcheck.py. Also, SPDX specification [1]
-doesn't have negation operator (NOT), thus the licensing requirement
-on the above notice can't be expressed reliably in SPDX here.
+> This is both inefficient and can lead to linear read overflows if a source string is not NUL-terminated [1].
 
-[1]: https://spdx.github.io/spdx-spec/v2.3/SPDX-license-expressions/
+This is funny. C strings are always NUL-terminated by definition.
 
--- 
-An old man doll... just what I always wanted! - Clara
+Reviewed-by: Alexey Dobriyan <adobriyan@gmail.com>
 
+> --- a/fs/proc/kcore.c~procfs-replace-all-non-returning-strlcpy-with-strscpy
+> +++ a/fs/proc/kcore.c
+> @@ -419,7 +419,7 @@ static ssize_t read_kcore_iter(struct ki
+>  		char *notes;
+>  		size_t i = 0;
+>  
+> -		strlcpy(prpsinfo.pr_psargs, saved_command_line,
+> +		strscpy(prpsinfo.pr_psargs, saved_command_line,
+>  			sizeof(prpsinfo.pr_psargs));
+>  
+>  		notes = kzalloc(notes_len, GFP_KERNEL);
