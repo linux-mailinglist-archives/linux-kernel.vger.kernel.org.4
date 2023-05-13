@@ -2,92 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF0917012ED
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 02:17:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A73AB7012F7
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 02:26:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240720AbjEMARd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 20:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
+        id S240799AbjEMA0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 20:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239981AbjEMARb (ORCPT
+        with ESMTP id S240657AbjEMA0V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 20:17:31 -0400
-Received: from out-5.mta1.migadu.com (out-5.mta1.migadu.com [IPv6:2001:41d0:203:375::5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 374CD4ED6
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 17:17:28 -0700 (PDT)
-Date:   Fri, 12 May 2023 20:17:23 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1683937047;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=ttMl3GoRsIQ0YRrQbLyOfzRqiL8QgIkkNBy0HJi+tP4=;
-        b=Jlj8jvQrMzOj8HRaOclGGYRDE+ycviRq3z6G8f67Endeg3L2V1BLpLT3rP9PRqmPPUsotr
-        bplaU/zH6tdzWWvuiET7LbTKrh0nvnnasSO5gT7hYLB7z5npiZVyuEzSiSuZfCwRHFytp+
-        /Ox3JZ5RVHFZAiBOriaJYG8xcd9f6CM=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Jan Engelhardt <jengelh@inai.de>, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-bcachefs@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>
-Subject: Re: [PATCH 04/32] locking: SIX locks (shared/intent/exclusive)
-Message-ID: <ZF7XEzTT+liYXEge@moria.home.lan>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-5-kent.overstreet@linux.dev>
- <7233p553-861o-9772-n4nr-rr5424prq1r@vanv.qr>
- <ZF6oejsUGUC0gnYx@moria.home.lan>
- <o52660s0-3s6s-9n74-8666-84s2p4qpoq6@vanv.qr>
- <ZF7LJdKoHj44KzVu@moria.home.lan>
- <d0c0488e-d862-fd4d-1687-5c9fec42ef76@infradead.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d0c0488e-d862-fd4d-1687-5c9fec42ef76@infradead.org>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Fri, 12 May 2023 20:26:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6651B5583
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 17:26:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F1D1A6506F
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 00:26:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C0BCC433EF;
+        Sat, 13 May 2023 00:26:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+        s=korg; t=1683937579;
+        bh=GO3UO5KJn9t64GdS1QfysnlIesFzZertc6nkP94v5WA=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Pb0v1wYdxfS63fntMjF2mCAybc9rQe6uwe1U+5ImJmcN/gPUljpz/TtjyJsH8dLcn
+         HedrJfpRj7YG87SfuwGJxSuGzWsib1aaOBSNRUbVroAbA8FT7vfqSwMkOMKH1E50fz
+         4dYEv2fKWj2UQrXAne/ciH4LlfwrfbIf+mIZzjc4=
+Date:   Fri, 12 May 2023 17:26:18 -0700
+From:   Andrew Morton <akpm@linux-foundation.org>
+To:     Haifeng Xu <haifeng.xu@shopee.com>
+Cc:     luto@kernel.org, bigeasy@linutronix.de, tglx@linutronix.de,
+        bristot@kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fork: optimize memcg_charge_kernel_stack() a bit
+Message-Id: <20230512172618.1120ab4c1e6d3026081c20d9@linux-foundation.org>
+In-Reply-To: <20230508064458.32855-1-haifeng.xu@shopee.com>
+References: <20230508064458.32855-1-haifeng.xu@shopee.com>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 04:49:04PM -0700, Randy Dunlap wrote:
-> 
-> 
-> On 5/12/23 16:26, Kent Overstreet wrote:
-> > On Sat, May 13, 2023 at 12:39:34AM +0200, Jan Engelhardt wrote:
-> >>
-> >> On Friday 2023-05-12 22:58, Kent Overstreet wrote:
-> >>> On Thu, May 11, 2023 at 02:14:08PM +0200, Jan Engelhardt wrote:
-> >>>>> +// SPDX-License-Identifier: GPL-2.0
-> >>>>
-> >>>> The currently SPDX list only knows "GPL-2.0-only" or "GPL-2.0-or-later",
-> >>>> please edit.
-> >>>
-> >>> Where is that list?
-> >>
-> >> I just went to spdx.org and then chose "License List" from the
-> >> horizontal top bar menu.
-> > 
-> > Do we have anything more official? Quick grep through the source tree
-> > says I'm following accepted usage.
-> 
-> Documentation/process/license-rules.rst points to spdx.org for
-> further info.
-> 
-> or LICENSES/preferred/GPL-2.0 contains this:
-> Valid-License-Identifier: GPL-2.0
-> Valid-License-Identifier: GPL-2.0-only
-> Valid-License-Identifier: GPL-2.0+
-> Valid-License-Identifier: GPL-2.0-or-later
-> SPDX-URL: https://spdx.org/licenses/GPL-2.0.html
+On Mon,  8 May 2023 06:44:58 +0000 Haifeng Xu <haifeng.xu@shopee.com> wrote:
 
-Thanks, I'll leave it at GPL-2.0 then.
+> Since commit f1c1a9ee00e4 ("fork: Move memcg_charge_kernel_stack()
+> into CONFIG_VMAP_STACK"), memcg_charge_kernel_stack() has been moved
+> into CONFIG_VMAP_STACK block, so the CONFIG_VMAP_STACK check can be
+> removed.
+> 
+> Furthermore, memcg_charge_kernel_stack() is only invoked by
+> alloc_thread_stack_node() instead of dup_task_struct(). If
+> memcg_kmem_charge_page() fails, the uncharge process is handled in
+> memcg_charge_kernel_stack() itself instead of free_thread_stack(),
+> so remove the incorrect comments.
+> 
+> If memcg_charge_kernel_stack() fails to charge pages used by kernel
+> stack, only charged pages need to be uncharged. It's unnecessary to
+> uncharge those pages which memory cgroup pointer is NULL.
+> 
+> ...
+>
+> --- a/kernel/fork.c
+> +++ b/kernel/fork.c
+> @@ -250,23 +250,20 @@ static int memcg_charge_kernel_stack(struct vm_struct *vm)
+>  {
+>  	int i;
+>  	int ret;
+> +	int nr_charged = 0;
+>  
+> -	BUILD_BUG_ON(IS_ENABLED(CONFIG_VMAP_STACK) && PAGE_SIZE % 1024 != 0);
+> +	BUILD_BUG_ON(PAGE_SIZE % 1024 != 0);
+
+This check now deserves some sort of award.  I'll remove it.
+
+>  	BUG_ON(vm->nr_pages != THREAD_SIZE / PAGE_SIZE);
+>  
+>  	for (i = 0; i < THREAD_SIZE / PAGE_SIZE; i++) {
+>  		ret = memcg_kmem_charge_page(vm->pages[i], GFP_KERNEL, 0);
+>  		if (ret)
+>  			goto err;
+> +		nr_charged++;
+>  	}
+>  	return 0;
+>  err:
+> -	/*
+> -	 * If memcg_kmem_charge_page() fails, page's memory cgroup pointer is
+> -	 * NULL, and memcg_kmem_uncharge_page() in free_thread_stack() will
+> -	 * ignore this page.
+> -	 */
+> -	for (i = 0; i < THREAD_SIZE / PAGE_SIZE; i++)
+> +	for (i = 0; i < nr_charged; i++)
+>  		memcg_kmem_uncharge_page(vm->pages[i], 0);
+>  	return ret;
+
+We don't really need nr_charged - we could just do
+
+	while (--i >= 0)
+
+but nr_charged is straightforward, which is always a good choice.
