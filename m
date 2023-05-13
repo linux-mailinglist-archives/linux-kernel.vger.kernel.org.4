@@ -2,107 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C4CF701895
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 19:42:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B80E7018E5
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 20:01:26 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232683AbjEMRmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 13:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59156 "EHLO
+        id S237741AbjEMSBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 14:01:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbjEMRmX (ORCPT
+        with ESMTP id S233993AbjEMSBC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 13:42:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 420873AA6;
-        Sat, 13 May 2023 10:42:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7B54A61AEF;
-        Sat, 13 May 2023 17:42:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 730D2C4339B;
-        Sat, 13 May 2023 17:42:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1683999740;
-        bh=vPMj4FfP13zlbkAXu5vpdoPMQmngxxSeOtKc5LvkeJk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=iYUseF0hp0THzJcesAPKMkWTtkOXSJ4lALPUXUOA//9x64iibya/y3IcesOvSIEsy
-         AHEASoGPxMuSXXAer2Dx3u5gjLPXvIrM4xIFGLhvseGaqnkmqQjqWrdNAEhCSxVkwj
-         aQ08yEs/Zu+pfZSEKJh9xyO+nUgt2XFw1Dqj9wwWbMIVSeQoUPlFa75KP0CUQ8NrPz
-         jkZtup7nuZ85lTS1DONdBJB3NcII8Ixb+JQxO7b9rlBrXXO442fNtmLvZ7nwYMEOs5
-         k7ajGXloNl8VjpYYF3+QVciFsuLX7O5cEr0YdmYUPzGwkq8XqA7vz/71GGT7kpTvTi
-         pGXSvjJ3gqqKA==
-Date:   Sat, 13 May 2023 18:58:21 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Hermes Zhang <chenhuiz@axis.com>
-Cc:     <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
-        <jmaneyrol@invensense.com>, <linux-iio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@axis.com>
-Subject: Re: [PATCH v3 0/2] Add support for the ICM 20600 IMU
-Message-ID: <20230513185821.122ac3a4@jic23-huawei>
-In-Reply-To: <20230506173717.11d0d311@jic23-huawei>
-References: <20230505054853.2155326-1-chenhuiz@axis.com>
-        <20230506173717.11d0d311@jic23-huawei>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 13 May 2023 14:01:02 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ADD835AC;
+        Sat, 13 May 2023 11:00:23 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34DHwTdY129663;
+        Sat, 13 May 2023 12:58:29 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1684000709;
+        bh=mePJ/RInYE0y486rwBOzi4W43YzL4ZNbENMKuvC0VrQ=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=ER4Zn/Yqprfvj+/F3pwYP12no5AmhVWle7eAm4Xx81m8Ogk5GQla434ZDVuuUx1sw
+         TeQLq9GgZAzpQRIPQMlaaz0BbwwguiyRh+t0tuTxO6lVsHZKgr8A2aGsF6l9tbQjKC
+         c5JgYPUcJLviB5SpyAArIdo0eq5/qM1WrEkgXwe4=
+Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34DHwT0j079199
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Sat, 13 May 2023 12:58:29 -0500
+Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Sat, 13
+ May 2023 12:58:29 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Sat, 13 May 2023 12:58:29 -0500
+Received: from [10.249.131.60] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34DHwMIY020336;
+        Sat, 13 May 2023 12:58:23 -0500
+Message-ID: <3b5d7c3c-164d-0690-c2e8-2c7daec4865c@ti.com>
+Date:   Sat, 13 May 2023 23:28:22 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [EXTERNAL] Re: [PATCH 3/3] arm64: defconfig: enable J721e PCIe
+ controller
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Tom Joseph <tjoseph@cadence.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Wilczy_ski <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        "N_colas F . R . A . Prado" <nfraprado@collabora.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rafa_ Mi_ecki <rafal@milecki.pl>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Nishanth Menon <nm@ti.com>, Milind Parab <mparab@cadence.com>,
+        Swapnil Kashinath Jakhade <sjakhade@cadence.com>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-omap@vger.kernel.org>, achal Verma <a-verma1@ti.com>
+References: <20230512070510.1873171-1-a-verma1@ti.com>
+ <20230512070510.1873171-4-a-verma1@ti.com>
+ <13028434-f68c-cad3-056e-d319c1ec35cf@linaro.org>
+From:   "Verma, Achal" <a-verma1@ti.com>
+In-Reply-To: <13028434-f68c-cad3-056e-d319c1ec35cf@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 6 May 2023 17:37:17 +0100
-Jonathan Cameron <jic23@kernel.org> wrote:
 
-> On Fri, 5 May 2023 13:48:51 +0800
-> Hermes Zhang <chenhuiz@axis.com> wrote:
+Hello Krzysztof,
+On 5/12/2023 12:53 PM, Krzysztof Kozlowski wrote:
+> On 12/05/2023 09:05, Achal Verma wrote:
+>> Enable Cadence PCIe controller and pci-j721e drivers to be built as
+>> kernel modules.
 > 
-> > The Invensense ICM-20600 is a 6-axis MotionTracking device that combines a
-> > 3-axis gyroscope and an 3-axis accelerometer. It is very similar to the
-> > ICM20602 imu which is already supported by the mpu6050 driver. The main
-> > difference is that the ICM-20600 has a different WHOAMI value.
-> > 
-> > Notes:
-> >     v2: require specifying "invensense,icm20602" as a fallback compatible
-> >         in the binding, as suggested
-> >     v3: reorder "invensense,icm20602" entry before icm20608 and add
-> >         Reviewed-by tag from Krzysztof  
+> Why? IOW, who needs them. Please provide rationale in the commit msg. I
+> am pretty sure I asked for this...
 > 
-> Looks good to me.  I want to leave a little more time for Jean-Baptiste to take
-> a look.  If it looks like I've forgotten this in 2 weeks, feel free to give me
-> a poke.
+On TI's J7 SOCs, PCIe is composed of PCIe core from Cadence and TI 
+wrapper. It is desired to have J7 PCIe working on upstream kernel by 
+default. So to enable this I have pushed these defconfig changes.
 
-Series applied to the togreg branch of iio.git and initially pushed out as
-testing for 0-day to take a look and see if we missed anything.
+BTW, I am planning to hold this change until PCIe code changes (rest of 
+the patches in this series) gets merged.
+
+Please let me know if there are more concern to this.
+Sorry, for this time.
 
 Thanks,
-
-Jonathan
-
+Achal Verma
 > 
-> Thanks,
+> Best regards,
+> Krzysztof
 > 
-> Jonathan
-> 
-> 
-> > 
-> > Hermes Zhang (2):
-> >   dt-bindings: iio: imu: mpu6050: Add icm20600 bindings to mpu6050
-> >   iio: imu: mpu6050: Add support for the ICM 20600 IMU
-> > 
-> >  .../bindings/iio/imu/invensense,mpu6050.yaml           |  3 +++
-> >  drivers/iio/imu/inv_mpu6050/Kconfig                    |  4 ++--
-> >  drivers/iio/imu/inv_mpu6050/inv_mpu_core.c             | 10 ++++++++++
-> >  drivers/iio/imu/inv_mpu6050/inv_mpu_i2c.c              |  6 ++++++
-> >  drivers/iio/imu/inv_mpu6050/inv_mpu_iio.h              |  2 ++
-> >  drivers/iio/imu/inv_mpu6050/inv_mpu_spi.c              |  5 +++++
-> >  6 files changed, 28 insertions(+), 2 deletions(-)
-> >   
-> 
-
