@@ -2,76 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F259701682
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 13:51:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A5BE5701684
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 13:52:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238057AbjEMLvT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 07:51:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33130 "EHLO
+        id S238270AbjEMLwK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 07:52:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbjEMLvS (ORCPT
+        with ESMTP id S238172AbjEMLwJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 07:51:18 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB47210D5
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 04:51:15 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-965e93f915aso1890069766b.2
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 04:51:15 -0700 (PDT)
+        Sat, 13 May 2023 07:52:09 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F2BF2690
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 04:52:08 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id 4fb4d7f45d1cf-50bc22805d3so16506096a12.1
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 04:52:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683978674; x=1686570674;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5fXvNM1OOocy1c4XFoMHwhDURnFswe7IlygyhyjI324=;
-        b=WiLE50IRzKyZ1nkD1ZUeB5nK+sPAwg4zi/s5nd5NmRpPqbgYgI46iWOFpZmaMUkB48
-         egNGMh7jf6ZJ8fqBESaZ8ahKEDTfYjXo5giN/Uret9CZINcwndFoEu3PXLAyOHH/DINF
-         xmh0TN1x0FVw+pfgmYpWnAsPsgdxIwbO1bc+rDLmpsHngWUsV0QpvP0aMqktCOuHsZ+Z
-         biWTogXvPQm0/txhqrnVhc/n+cohuitx83L/sGhDr3WIiSzGTSS8FBxCmEKOnIJsjQfN
-         XkkIZF6jNjkNf9VXhsmDqyTSbukcs+oxQqI9pSEzDAkE+zMS1BD3ErvmYY0YyIyCDf6S
-         apAA==
+        d=linaro.org; s=google; t=1683978727; x=1686570727;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=tPaRCdR9znhCSBNCV7Zh/uxMhVYAfQIv0T/cvc7dHOA=;
+        b=LJqiQfQMoppCQZsnl7OLFprYP0Kd1l+UkZSnATNGUlYSEx232Hls0lKeCqmD/UEvhf
+         mcXpGlLVAaNqi2/+XMQlOVQibPEt7nEAcpCWFccnXg8O37i3aFMro80yk/fV0nkCcqQy
+         yVMsD+sU3LHl4lSauac8rd9YCggFgoodhsCGbM5Eh2HoLDIosa8gy3u+Thn/EqFjpg/j
+         FDuHuIgel9KC/esPGWsUpObX7QxW5Y1JKUR7PZvb2PQ28zPXzjQngEz42S3ckpPpWuE8
+         qbKaf2uNxxrUEz0tKdtjhDuxMc8lpHJ3cyX1A5wZxiJiCHY9Gq7nE2LJa7wSG3bVxTg5
+         JjSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683978674; x=1686570674;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5fXvNM1OOocy1c4XFoMHwhDURnFswe7IlygyhyjI324=;
-        b=TQbAIkeko/e2dpU59dhOau+ua/9cUMsx7FLVXTaVXJJs9yGnY8GWjWW3aAUYfgavrw
-         JZP+lsOfS8KZ42SNXjrx4lTn3XlX8KHyE4sQuRX0NU8w8pfFl7miUVYk1H3ZZMN67IWU
-         3U+4rVS+pC6A6nYkc1tp/Nq6sR6hAFzUJF+EjCIKs1Y5XSPQjDK0/GP8VTYU/7Z9yMrm
-         LLrj/WEPkC9kBirLazHjhK21RjIxUtptGPE0vQH5US9LNYjpn5jzWmF7XM8bG90xvvTo
-         0dVnnc0VUyLEpnQiUNdAgkDBCC80h/VDSoSU4j4eRhIhkeN5Z+FVtk6HBEzZ0DQU8BPe
-         SKWA==
-X-Gm-Message-State: AC+VfDx4vpkMWU8GFnbrpO9nasMfUBsioP3/xn9b/EfDp6fYM6JG+3sK
-        /mThmruuiJcVaWIToXMUwVnpuDg/nsBf0dN3Xb5kKw==
-X-Google-Smtp-Source: ACHHUZ5Go78r5pIK8zVmwyH5Y/CpcDgbJebFBwMEwPIUCZD7ZcCeexhq23UboXp8TI3ng0+y5U9IyQ==
-X-Received: by 2002:a17:907:1687:b0:958:cc8:bd55 with SMTP id hc7-20020a170907168700b009580cc8bd55mr27494260ejc.0.1683978674391;
-        Sat, 13 May 2023 04:51:14 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:a3aa:fd4:f432:676b? ([2a02:810d:15c0:828:a3aa:fd4:f432:676b])
-        by smtp.gmail.com with ESMTPSA id x4-20020a1709060a4400b0095ed3befbedsm6699963ejf.54.2023.05.13.04.51.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 May 2023 04:51:13 -0700 (PDT)
-Message-ID: <06bba9db-25ff-a82b-803a-f9ae0519d293@linaro.org>
-Date:   Sat, 13 May 2023 13:51:12 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] nfx: llcp: fix possible use of uninitialized variable in
- nfc_llcp_send_connect()
-Content-Language: en-US
-To:     "David S. Miller" <davem@davemloft.net>,
+        d=1e100.net; s=20221208; t=1683978727; x=1686570727;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tPaRCdR9znhCSBNCV7Zh/uxMhVYAfQIv0T/cvc7dHOA=;
+        b=ONAcZjbfZwbcH1C9Jy9SWMzZdqjQJeWPUDjedudFhfH5ZnKRckH/vC4eKhIZbF5d9s
+         dE85EGJloG11jBwNMuQzPb8q01XQTYbOwSa2GpvrRsag+SKcYJHyVGVhrbcrd3FX/fb7
+         eU2zBbYfLJeFNoL+gCg94A57ARYHcRrxrjGbMPwKqXihjBjEpS+M7l+0tGRcW/CP0kMq
+         wGV3QEJaDCfUOS4364P44SpxzwSUt8HxWqTr6zNWlAtBixhWmoLfHso098gGz4dDqAJ9
+         TK2OH3yjT2deh6FarsFk+edsgbsQ90F6w6usWJTLJFSxr6aqxkYV2kQqqqe/E3Bh8hac
+         cObA==
+X-Gm-Message-State: AC+VfDztjRfmbD0o05M03QVeqafqd1dv9/TcI9CW4WkZmKaeMzI03vzN
+        /PJkSodDTeaTSNwAwsz9tIrPpw==
+X-Google-Smtp-Source: ACHHUZ5dS7Vklfd3PE0jN2aWltMimSAo2leBDSacKryWJyI4F7P4qcPTn9UvNGhqoXUrqvB+DKW/pQ==
+X-Received: by 2002:a17:907:c1f:b0:961:ba6c:e949 with SMTP id ga31-20020a1709070c1f00b00961ba6ce949mr27914478ejc.68.1683978726791;
+        Sat, 13 May 2023 04:52:06 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:a3aa:fd4:f432:676b])
+        by smtp.gmail.com with ESMTPSA id hy25-20020a1709068a7900b0096607baaf19sm6723119ejc.101.2023.05.13.04.52.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 May 2023 04:52:06 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Samuel Ortiz <sameo@linux.intel.com>,
         Thierry Escande <thierry.escande@collabora.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230513114938.179085-1-krzysztof.kozlowski@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230513114938.179085-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Samuel Ortiz <sameo@linux.intel.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v2] nfc: llcp: fix possible use of uninitialized variable in nfc_llcp_send_connect()
+Date:   Sat, 13 May 2023 13:52:04 +0200
+Message-Id: <20230513115204.179437-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,16 +73,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/05/2023 13:49, Krzysztof Kozlowski wrote:
-> If sock->service_name is NULL, the local variable
-> service_name_tlv_length will not be assigned by nfc_llcp_build_tlv(),
-> later leading to using value frmo the stack.  Smatch warning:
-> 
->   net/nfc/llcp_commands.c:442 nfc_llcp_send_connect() error: uninitialized symbol 'service_name_tlv_length'.
+If sock->service_name is NULL, the local variable
+service_name_tlv_length will not be assigned by nfc_llcp_build_tlv(),
+later leading to using value frmo the stack.  Smatch warning:
 
-Eh, typo in subject prefix. V2 in shortly...
+  net/nfc/llcp_commands.c:442 nfc_llcp_send_connect() error: uninitialized symbol 'service_name_tlv_length'.
 
+Fixes: de9e5aeb4f40 ("NFC: llcp: Fix usage of llcp_add_tlv()")
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Best regards,
-Krzysztof
+---
+
+Changes in v2:
+1. Fix typo in subject prefix.
+---
+ net/nfc/llcp_commands.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/net/nfc/llcp_commands.c b/net/nfc/llcp_commands.c
+index 41e3a20c8935..cdb001de0692 100644
+--- a/net/nfc/llcp_commands.c
++++ b/net/nfc/llcp_commands.c
+@@ -390,7 +390,8 @@ int nfc_llcp_send_connect(struct nfc_llcp_sock *sock)
+ 	const u8 *service_name_tlv = NULL;
+ 	const u8 *miux_tlv = NULL;
+ 	const u8 *rw_tlv = NULL;
+-	u8 service_name_tlv_length, miux_tlv_length,  rw_tlv_length, rw;
++	u8 service_name_tlv_length = 0;
++	u8 miux_tlv_length,  rw_tlv_length, rw;
+ 	int err;
+ 	u16 size = 0;
+ 	__be16 miux;
+-- 
+2.34.1
 
