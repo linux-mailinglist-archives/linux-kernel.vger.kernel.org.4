@@ -2,96 +2,181 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C3827015B1
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 11:30:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F34AE7015B6
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 11:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237968AbjEMJap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 05:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34382 "EHLO
+        id S229671AbjEMJbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 05:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237878AbjEMJal (ORCPT
+        with ESMTP id S237959AbjEMJbV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 05:30:41 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 706705FDD
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 02:30:36 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bc22805d3so16382090a12.1
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 02:30:36 -0700 (PDT)
+        Sat, 13 May 2023 05:31:21 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119CF4EEB;
+        Sat, 13 May 2023 02:31:20 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1aad5245571so75094815ad.1;
+        Sat, 13 May 2023 02:31:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683970235; x=1686562235;
+        d=gmail.com; s=20221208; t=1683970279; x=1686562279;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=NhRme26woaE0QLjWxrcWAlz/7S0SNVKgtvSiagJnvc0=;
-        b=GysXJ5S3JWP71IaR2cLteiizuQ68yHsRh9aUhgVnxfaGGMXflReAasQRQsDnV9X6bk
-         vYztN6B9Vrhn3f3WaYVEURw/CppRpi7n2AzeAyyjCZhZCVg4r6/Ye7fRthjm5rcXrabW
-         BQv+fR0fwS9PUaAprkXl+N616pk2xieLI4CiQC6PdxuEjoU+uWp1P0xAdqKgj4lP4WdZ
-         oGHwjwtiIFzY9IsyCNMVqS70SWAdnkUK2xXX4bMLgA67dKhus+1/tBjgXMQ8lYmQNq2s
-         Y5mUY9+lw/8JNNDGgiBvgC8Ww+k163cXRRYnOgSBm+cw4CcziZgePEHEpBEJDsTH6Qks
-         Jn4Q==
+        bh=QAdx92+LmsDn0JJwfNdgz9hGr4Gzf8ZJ/AEJvNY1jf4=;
+        b=jk4zJucSuryHyqGtJk6hs3cLy8JBL2zqWlRTQd2Utvh4M35eSob8TLNZyJsHZ8IkI7
+         fcWXnODhT0eOnQbKNXasKxznuETx6KJCO8P8hM5qC3TSDz4ly9I1sW5NggB+x47x+roh
+         C3f1ZCverMxu/vm0vUlDpQjdW+81zKx9LVawaBES+kSYV4zDx4QOnSPCqz2hpyqHfZU8
+         j6W0IiNMJBl0yQjmZdBGmZI4x7EVelcOzvRix4Kg4R8eiMW3ZkKk7oAhHigDKj3263Q5
+         pwEka3n8dGcsZYuENINMghizDwWJPi7L6A8Ulr3GnjC9F0v9ftiLPTozzksF8H36Ocfm
+         uBSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683970235; x=1686562235;
+        d=1e100.net; s=20221208; t=1683970279; x=1686562279;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NhRme26woaE0QLjWxrcWAlz/7S0SNVKgtvSiagJnvc0=;
-        b=EuZ/wbd0fBPJdl2MkHaF94TpDTrKLEzwdvwBG+UzIVYBa4lcVxC13go5xK70BS2ofY
-         3P2jT7EVR9xPwpyTs7XQnn2FI8D6hK3fbAfSSZuBd7rw6SF/yHFh45ZU2F4xGYD1B7gj
-         93cPPjYosIsKdOVm06IcH6sOUn0b1NEUpoTohbcv/QTXepKDt/vN6RzjFcJftgpopKkR
-         zWkzc8QG5Hdmg9vui1XtykTvADtHwArj5kYdsdKbADgxL1TPUVSFugq9Qdaml+k5mM+H
-         SJHzWOseKBgDBPTu2G2CBKtz3TVkR1A/7LTQR3gSAd69c1q1F3496mp06OWILUihUBpx
-         CIOA==
-X-Gm-Message-State: AC+VfDzY3ZuJomBnkWoutEl4eIk+sez7/mSYYFYCj+2CJGfoO4UEv+T2
-        yjQqh+oayjg0M5iyaW/WpYYjlw==
-X-Google-Smtp-Source: ACHHUZ7XuZam+xQ4Qz3NmieRw8oqJ4cXve9jQjRUs9dnsS5DXTPFnWEy7s2YqOvYmbNCNh7mMvBqTw==
-X-Received: by 2002:a17:906:5d08:b0:96a:ca96:3e49 with SMTP id g8-20020a1709065d0800b0096aca963e49mr2472966ejt.13.1683970234925;
-        Sat, 13 May 2023 02:30:34 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:1d0:810a:586c:c5ba? ([2a02:810d:15c0:828:1d0:810a:586c:c5ba])
-        by smtp.gmail.com with ESMTPSA id qh20-20020a170906ecb400b009655eb8be26sm6597895ejb.73.2023.05.13.02.30.33
+        bh=QAdx92+LmsDn0JJwfNdgz9hGr4Gzf8ZJ/AEJvNY1jf4=;
+        b=hiyHItWLUkGDI1O9q9II7/HR2lydPj9B5caKcxCB0eHC7DCoD6eBJ961/YmjS8va8q
+         hPhylKojuMuLfq7w83InlBlpZ2290fctGKzDVJ/apSDqUq+vMUDEv5ieyGDTRE0IPAdt
+         z3CIYZE9r724ZNcc2c8Fv81sW4SrjivuouV4AaPjn2J0lf4ts40OGeQzT6C9bPuxj1GN
+         u2uLPj/yqwlbBiaN55plAmJPjH6ZrQHUAWgIFKNBJJnSmVBkrdmf4eKyNk3tPcyCiVGR
+         mXEtw54ROYg3gfY0OGnjJIgnzVFoP6TO5IEr66A4Y4MgRLNdLrxtJhmo5tY0Vem1iDq0
+         AHug==
+X-Gm-Message-State: AC+VfDw75tfjOtDUd8PWSz4hjMBRs5XtHVc1toe/dRlvtD9PK0EPrVMc
+        3FtJvVULcK9rVw5jFj0UyHM=
+X-Google-Smtp-Source: ACHHUZ6v0ih3wZYc2Mo8DVX9SfdKV6ex56JOnGaI++f7lQRcblP+yYtZX4/cIdfWc3Wuq98Bj/Q8LA==
+X-Received: by 2002:a17:903:1247:b0:1ac:3605:97ec with SMTP id u7-20020a170903124700b001ac360597ecmr36125090plh.62.1683970279417;
+        Sat, 13 May 2023 02:31:19 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-69.three.co.id. [180.214.232.69])
+        by smtp.gmail.com with ESMTPSA id bc3-20020a170902930300b001aaf92130b2sm9368135plb.115.2023.05.13.02.31.11
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 May 2023 02:30:34 -0700 (PDT)
-Message-ID: <744b499a-36f5-b9da-bb26-56e1616351f4@linaro.org>
-Date:   Sat, 13 May 2023 11:30:33 +0200
+        Sat, 13 May 2023 02:31:19 -0700 (PDT)
+Message-ID: <22b3e6c7-895c-c972-bc3f-9390b9b7fb08@gmail.com>
+Date:   Sat, 13 May 2023 16:31:09 +0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 09/10] arm64: dts: qcom: qdu1000: Add
- LLCC/system-cache-controller
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2 09/10] udf: Replace license notice with SPDX identifier
 Content-Language: en-US
-To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230512122134.24339-1-quic_kbajaj@quicinc.com>
- <20230512122134.24339-10-quic_kbajaj@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230512122134.24339-10-quic_kbajaj@quicinc.com>
+To:     Richard Fontana <rfontana@redhat.com>
+Cc:     Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
+        Linux DRI Development <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Networking <netdev@vger.kernel.org>,
+        Linux ARM <linux-arm-kernel@lists.infradead.org>,
+        Linux Staging Drivers <linux-staging@lists.linux.dev>,
+        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
+        Linux Kernel Actions <linux-actions@lists.infradead.org>,
+        Diederik de Haas <didi.debian@cknow.org>,
+        Kate Stewart <kstewart@linuxfoundation.org>,
+        Philippe Ombredanne <pombredanne@nexb.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        David Airlie <airlied@redhat.com>,
+        Karsten Keil <isdn@linux-pingi.de>,
+        Jay Vosburgh <j.vosburgh@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>, Jan Kara <jack@suse.com>,
+        =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        =?UTF-8?Q?Pali_Roh=c3=a1r?= <pali@kernel.org>,
+        Simon Horman <simon.horman@corigine.com>
+References: <20230512100620.36807-1-bagasdotme@gmail.com>
+ <20230512100620.36807-10-bagasdotme@gmail.com>
+ <CAC1cPGzSpMZC3oJOpzjqiEDvgWUszzSztMri6uxW6vZ7oZtD5w@mail.gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <CAC1cPGzSpMZC3oJOpzjqiEDvgWUszzSztMri6uxW6vZ7oZtD5w@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/05/2023 14:21, Komal Bajaj wrote:
-> Add a DT node for Last level cache (aka. system cache) controller
-> which provides control over the last level cache present on QDU1000
-> and QRU1000 SoCs.
+On 5/12/23 20:21, Richard Fontana wrote:
+> On Fri, May 12, 2023 at 6:07 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
+> 
+>> diff --git a/fs/udf/ecma_167.h b/fs/udf/ecma_167.h
+>> index de17a97e866742..b2b5bca45758df 100644
+>> --- a/fs/udf/ecma_167.h
+>> +++ b/fs/udf/ecma_167.h
+>> @@ -1,3 +1,4 @@
+>> +/* SPDX-License-Identifier: BSD-2-Clause OR GPL-1.0+ */
+>>  /*
+>>   * ecma_167.h
+>>   *
+>> @@ -8,29 +9,6 @@
+>>   * Copyright (c) 2017-2019  Pali Rohár <pali@kernel.org>
+>>   * All rights reserved.
+>>   *
+>> - * Redistribution and use in source and binary forms, with or without
+>> - * modification, are permitted provided that the following conditions
+>> - * are met:
+>> - * 1. Redistributions of source code must retain the above copyright
+>> - *    notice, this list of conditions, and the following disclaimer,
+>> - *    without modification.
+>> - * 2. The name of the author may not be used to endorse or promote products
+>> - *    derived from this software without specific prior written permission.
+>> - *
+> 
+> This is not BSD-2-Clause. Ignoring the interior statement about the
+> GPL, I think the closest SPDX identifier might be
+> https://spdx.org/licenses/BSD-Source-Code.html
+> but it doesn't quite match.
 > 
 
-Must be squashed. It's difficult to spot the changes against original code.
+BSD-2-Clause but the second clause is the third one on BSD-3-Clause.
+Weird...
 
-Best regards,
-Krzysztof
+>> diff --git a/fs/udf/udftime.c b/fs/udf/udftime.c
+>> index fce4ad976c8c29..d0fce5348fd3f3 100644
+>> --- a/fs/udf/udftime.c
+>> +++ b/fs/udf/udftime.c
+>> @@ -1,21 +1,4 @@
+>> -/* Copyright (C) 1993, 1994, 1995, 1996, 1997 Free Software Foundation, Inc.
+>> -   This file is part of the GNU C Library.
+>> -   Contributed by Paul Eggert (eggert@twinsun.com).
+>> -
+>> -   The GNU C Library is free software; you can redistribute it and/or
+>> -   modify it under the terms of the GNU Library General Public License as
+>> -   published by the Free Software Foundation; either version 2 of the
+>> -   License, or (at your option) any later version.
+>> -
+>> -   The GNU C Library is distributed in the hope that it will be useful,
+>> -   but WITHOUT ANY WARRANTY; without even the implied warranty of
+>> -   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+>> -   Library General Public License for more details.
+>> -
+>> -   You should have received a copy of the GNU Library General Public
+>> -   License along with the GNU C Library; see the file COPYING.LIB.  If not,
+>> -   write to the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+>> -   Boston, MA 02111-1307, USA.  */
+>> +// SPDX-License-Identifier: GPL-2.0-only
+> 
+> Shouldn't this be
+> // SPDX-License-Identifier: LGPL-2.0-or-later ?
+> (or are you implicitly using the obscure LGPLv2.x section ... 3 mechanism?)
+> 
+
+That's right. I missed the exact notice above when I submitted this
+series.
+
+Thanks.
+
+-- 
+An old man doll... just what I always wanted! - Clara
 
