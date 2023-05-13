@@ -2,107 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B938D70153A
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 10:18:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E37170153C
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 10:20:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230431AbjEMISd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 04:18:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36608 "EHLO
+        id S230205AbjEMIUx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 04:20:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjEMISb (ORCPT
+        with ESMTP id S229463AbjEMIUt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 04:18:31 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D334E270E;
-        Sat, 13 May 2023 01:18:30 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1ab267e3528so77365685ad.0;
-        Sat, 13 May 2023 01:18:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683965910; x=1686557910;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hxa4rxa1h1xXqvZgIrJ/FdwQTgDs+stW88TIUg6eXhY=;
-        b=SJNnPIeB9h82iR0tlVUJNt0KW7TwWNV2/y7dxWcDwaUx1rRP/XBrywImTgs1RJ6DH+
-         2RaEH3qpmDPQjfcd/qha4tYV5mPRIMp+/tzTi2iU0QXBLPlY5ePv7px0VuUmNhvFjOgq
-         Se2bYk/0hr1aHVWID2g8MLI6EdH7W6mZEcpRAqdovCG7+f1NXqvpXvz+ROZCA8Utu6Q9
-         K2Sa6R/Ks6voIvv4zysGqvRGltjYt+yLJ8mErd9IUvU+92othwIqHNZhhI9CQMd/VVFt
-         Wgj+mxJDJRgWskf17J2mL0xF0Q/fipkTdzpo73t3sM2ucpoVU3jbkm0UjsSt0XOKcDcY
-         43og==
+        Sat, 13 May 2023 04:20:49 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADCE85583
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 01:20:45 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id ca18e2360f4ac-76c3e89c73aso525126139f.1
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 01:20:45 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683965910; x=1686557910;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hxa4rxa1h1xXqvZgIrJ/FdwQTgDs+stW88TIUg6eXhY=;
-        b=VU/mTSbVkEdoNWLowzrg/c65efhMGdyTNF8Ij4vUTUYM2HA0nm6Nwv3WW2r7e+wQho
-         VXzZGCPubzHhc/iUGq1RH6tvBW47YmTaO+2wQRF8ilfDvVI212AkyOtxTGHkLQY1lfwJ
-         HOT9cL3+qJRp0tzGEiLt1CsfrklPB+hm4cLvfsrRZJBEDF6HgCMhKk1mnQeJ4iWSqPXo
-         b49CKRi/ESMRQaBMm7KyrLi30vFxBTQWNUpMtU0n1jyRKLQu3zbxjFScj91jZDQIDNzl
-         tGzXXKx23Uwiw9GjP1skGWRtWtngNM+ej2N7hNYOdkAlBdnNV7q+v87yqJIblSuGuJbG
-         XxBA==
-X-Gm-Message-State: AC+VfDw8GMIzD9r/m+hzAchpCWsbGNa+EYQommnRYflZwVoFzrNE7mXf
-        8z80zO1vD5NDjAOadbDshEaTal/cUhUn4g==
-X-Google-Smtp-Source: ACHHUZ6koZqghO760PzfPP7MBCnirNYhEDdAW61bzbl3IwRrdrevvHTrmiRF2hY++jAz+ZIbC4az4g==
-X-Received: by 2002:a17:903:64c:b0:1ab:107b:c127 with SMTP id kh12-20020a170903064c00b001ab107bc127mr25375943plb.59.1683965910229;
-        Sat, 13 May 2023 01:18:30 -0700 (PDT)
-Received: from localhost.localdomain ([43.132.98.116])
-        by smtp.googlemail.com with ESMTPSA id d23-20020a170902729700b001a216d44440sm9239286pll.200.2023.05.13.01.18.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 May 2023 01:18:29 -0700 (PDT)
-From:   Ze Gao <zegao2021@gmail.com>
-X-Google-Original-From: Ze Gao <zegao@tencent.com>
-To:     Steven Rostedt <rostedt@goodmis.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     Ze Gao <zegao@tencent.com>, linux-kernel@vger.kernel.org,
-        linux-trace-kernel@vger.kernel.org
-Subject: [PATCH] rethook: use preempt_{disable, enable}_notrace in rethook_trampoline_handler
-Date:   Sat, 13 May 2023 16:16:56 +0800
-Message-Id: <20230513081656.375846-1-zegao@tencent.com>
-X-Mailer: git-send-email 2.40.1
+        d=1e100.net; s=20221208; t=1683966045; x=1686558045;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NHsT8aQgofiZEPogCxeuyef7jD7ovpRr7WF45e4OLqo=;
+        b=ee2g/IJlYRE6yPHBOtsv7qRmA/sLWmqBagkM2q1wgRgZ81wHjptwVS10RuJgjdbwD7
+         84J/MAwAEMM2cV1MtiAXC9i5IEXaPyS0R+3NM4+aEIv/LnirNPed0RmSlGcvVZ3QLJcs
+         n9NffCvKGHdCvYKmjA+FN0VlgUl14YZicKLEitM6tFcL++6OqKy8G0cf2JeRJCGCPCuG
+         ZK0X7CIT8FpGcdwPvNVSsrNmF79P5q3XE3K5jE7lWC88yX1PmyidZiS/yduLnNDq5wIL
+         DuE9s/jSMAw9mEzsnMQPOh7Ot2HaXP8OzMjOErBHF/ucHvDfdf5NZgOZXzCA9mvO4UgS
+         nW5A==
+X-Gm-Message-State: AC+VfDwtbc4ET9SXYeCp3IkLRpLIcTXGio/V1OiSgi032jjQVBLcMCku
+        CSWe+eDNfVFzzH3T7F3vHJOuEJIercOolGCJ/5OVPYGVN/F3
+X-Google-Smtp-Source: ACHHUZ4Enq8/ALFZVBHlfZlnhINFRKjOwYgQUHx8KWNaqHXGkJk3PiK03BjwybbZxfQT8C6sV95PHkXToxi1rLc/IHqb3OMoMuzF
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:9387:0:b0:416:7d6c:5e3c with SMTP id
+ z7-20020a029387000000b004167d6c5e3cmr7518342jah.1.1683966044840; Sat, 13 May
+ 2023 01:20:44 -0700 (PDT)
+Date:   Sat, 13 May 2023 01:20:44 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000eaae1e05fb8ee573@google.com>
+Subject: [syzbot] [ntfs3?] WARNING in __virt_to_phys (2)
+From:   syzbot <syzbot+8ca7991ee615756ac1c7@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ntfs3@lists.linux.dev, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch replace preempt_{disable, enable} with its corresponding
-notrace version in rethook_trampoline_handler so worries about stack
-recursion or overflow introduced by preempt_count_{add, sub} under
-fprobe + rethook context.
+Hello,
 
-Signed-off-by: Ze Gao <zegao@tencent.com>
+syzbot found the following issue on:
+
+HEAD commit:    14f8db1c0f9a Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=163d9c98280000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a837a8ba7e88bb45
+dashboard link: https://syzkaller.appspot.com/bug?extid=8ca7991ee615756ac1c7
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11001b7a280000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=131f2e32280000
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ad6ce516eed3/disk-14f8db1c.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/1f38c2cc7667/vmlinux-14f8db1c.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/d795115eee39/Image-14f8db1c.gz.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/f4b6924b0bd8/mount_0.gz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+8ca7991ee615756ac1c7@syzkaller.appspotmail.com
+
+ntfs3: loop0: Different NTFS' sector size (4096) and media sector size (512)
+------------[ cut here ]------------
+virt_to_phys used for non-linear address: 000000005d09f686 (0xdead4ead00000000)
+WARNING: CPU: 1 PID: 5926 at arch/arm64/mm/physaddr.c:15 __virt_to_phys+0x84/0x9c arch/arm64/mm/physaddr.c:17
+Modules linked in:
+CPU: 1 PID: 5926 Comm: syz-executor863 Not tainted 6.3.0-rc7-syzkaller-g14f8db1c0f9a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : __virt_to_phys+0x84/0x9c arch/arm64/mm/physaddr.c:17
+lr : __virt_to_phys+0x80/0x9c arch/arm64/mm/physaddr.c:12
+sp : ffff80001e4a74e0
+x29: ffff80001e4a74e0 x28: 1fffe0001bd60433 x27: dfff800000000000
+x26: 1fffe0001bd60431 x25: dfff800000000000 x24: ffff8000127d6740
+x23: ffff8000096bf414 x22: ffff0000deb020a8 x21: 0000000000040000
+x20: deae4ead00000000 x19: dead4ead00000000 x18: ffff80001e4a6e20
+x17: 6564783028203638 x16: ffff80001236e294 x15: 0000000000000002
+x14: 0000000000000000 x13: 0000000000000001 x12: 0000000000000001
+x11: 0000000000000000 x10: 0000000000000000 x9 : 787ed45d7a14e900
+x8 : ffff800015755000 x7 : 0000000000000001 x6 : 0000000000000001
+x5 : ffff80001e4a6dd8 x4 : ffff800015e4ccc0 x3 : ffff800008584230
+x2 : 0000000000000001 x1 : 0000000100000000 x0 : 0000000000000000
+Call trace:
+ __virt_to_phys+0x84/0x9c arch/arm64/mm/physaddr.c:17
+ virt_to_folio include/linux/mm.h:1057 [inline]
+ kfree+0x7c/0x19c mm/slab_common.c:1011
+ kvfree+0x40/0x50 mm/util.c:649
+ run_close fs/ntfs3/ntfs_fs.h:946 [inline]
+ indx_clear+0x44/0x94 fs/ntfs3/index.c:859
+ ni_clear+0x248/0x4f0 fs/ntfs3/frecord.c:121
+ ntfs_evict_inode+0x90/0xc8 fs/ntfs3/inode.c:1779
+ evict+0x260/0x68c fs/inode.c:665
+ iput_final fs/inode.c:1748 [inline]
+ iput+0x734/0x818 fs/inode.c:1774
+ ntfs_loadlog_and_replay+0x248/0x448 fs/ntfs3/fsntfs.c:325
+ ntfs_fill_super+0x1f7c/0x3b9c fs/ntfs3/super.c:1053
+ get_tree_bdev+0x360/0x54c fs/super.c:1303
+ ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1408
+ vfs_get_tree+0x90/0x274 fs/super.c:1510
+ do_new_mount+0x25c/0x8c8 fs/namespace.c:3042
+ path_mount+0x590/0xe04 fs/namespace.c:3372
+ do_mount fs/namespace.c:3385 [inline]
+ __do_sys_mount fs/namespace.c:3594 [inline]
+ __se_sys_mount fs/namespace.c:3571 [inline]
+ __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3571
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+irq event stamp: 24636
+hardirqs last  enabled at (24635): [<ffff8000083416f0>] __up_console_sem+0x60/0xb4 kernel/printk/printk.c:345
+hardirqs last disabled at (24636): [<ffff800012369e90>] el1_dbg+0x24/0x80 arch/arm64/kernel/entry-common.c:405
+softirqs last  enabled at (24444): [<ffff800008020c1c>] softirq_handle_end kernel/softirq.c:414 [inline]
+softirqs last  enabled at (24444): [<ffff800008020c1c>] __do_softirq+0xac0/0xd54 kernel/softirq.c:600
+softirqs last disabled at (24433): [<ffff80000802a658>] ____do_softirq+0x14/0x20 arch/arm64/kernel/irq.c:80
+---[ end trace 0000000000000000 ]---
+Unable to handle kernel paging request at virtual address 007ab33ab96b8008
+Mem abort info:
+  ESR = 0x0000000096000004
+  EC = 0x25: DABT (current EL), IL = 32 bits
+  SET = 0, FnV = 0
+  EA = 0, S1PTW = 0
+  FSC = 0x04: level 0 translation fault
+Data abort info:
+  ISV = 0, ISS = 0x00000004
+  CM = 0, WnR = 0
+[007ab33ab96b8008] address between user and kernel address ranges
+Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 0 PID: 5926 Comm: syz-executor863 Tainted: G        W          6.3.0-rc7-syzkaller-g14f8db1c0f9a #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/14/2023
+pstate: 60400005 (nZCv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : _compound_head include/linux/page-flags.h:251 [inline]
+pc : virt_to_folio include/linux/mm.h:1059 [inline]
+pc : kfree+0x90/0x19c mm/slab_common.c:1011
+lr : virt_to_folio include/linux/mm.h:1057 [inline]
+lr : kfree+0x7c/0x19c mm/slab_common.c:1011
+sp : ffff80001e4a7500
+x29: ffff80001e4a7500 x28: 1fffe0001bd60433 x27: dfff800000000000
+x26: 1fffe0001bd60431 x25: dfff800000000000 x24: ffff8000127d6740
+x23: ffff8000096bf414 x22: ffff0000deb020a8 x21: 0000000000040000
+x20: ffff8000087e5650 x19: dead4ead00000000 x18: ffff80001e4a6e20
+x17: 6564783028203638 x16: ffff80001236e294 x15: 0000000000000002
+x14: 0000000000000000 x13: 0000000000000001 x12: 0000000000000001
+x11: 0000000000000000 x10: 0000000000000000 x9 : 037ab73ab96b8000
+x8 : fffffc0000000000 x7 : 0000000000000001 x6 : 0000000000000001
+x5 : ffff80001e4a6dd8 x4 : ffff800015e4ccc0 x3 : ffff800008584230
+x2 : 0000000000000001 x1 : 0000000100000000 x0 : 037ab33ab96b8000
+Call trace:
+ virt_to_folio include/linux/mm.h:1057 [inline]
+ kfree+0x90/0x19c mm/slab_common.c:1011
+ kvfree+0x40/0x50 mm/util.c:649
+ run_close fs/ntfs3/ntfs_fs.h:946 [inline]
+ indx_clear+0x44/0x94 fs/ntfs3/index.c:859
+ ni_clear+0x248/0x4f0 fs/ntfs3/frecord.c:121
+ ntfs_evict_inode+0x90/0xc8 fs/ntfs3/inode.c:1779
+ evict+0x260/0x68c fs/inode.c:665
+ iput_final fs/inode.c:1748 [inline]
+ iput+0x734/0x818 fs/inode.c:1774
+ ntfs_loadlog_and_replay+0x248/0x448 fs/ntfs3/fsntfs.c:325
+ ntfs_fill_super+0x1f7c/0x3b9c fs/ntfs3/super.c:1053
+ get_tree_bdev+0x360/0x54c fs/super.c:1303
+ ntfs_fs_get_tree+0x28/0x38 fs/ntfs3/super.c:1408
+ vfs_get_tree+0x90/0x274 fs/super.c:1510
+ do_new_mount+0x25c/0x8c8 fs/namespace.c:3042
+ path_mount+0x590/0xe04 fs/namespace.c:3372
+ do_mount fs/namespace.c:3385 [inline]
+ __do_sys_mount fs/namespace.c:3594 [inline]
+ __se_sys_mount fs/namespace.c:3571 [inline]
+ __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3571
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
+ el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
+ el0_svc+0x4c/0x15c arch/arm64/kernel/entry-common.c:637
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
+ el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
+Code: b25657e8 927acd29 cb151929 8b080120 (f9400408) 
+---[ end trace 0000000000000000 ]---
+----------------
+Code disassembly (best guess):
+   0:	b25657e8 	mov	x8, #0xfffffc0000000000    	// #-4398046511104
+   4:	927acd29 	and	x9, x9, #0x3ffffffffffffc0
+   8:	cb151929 	sub	x9, x9, x21, lsl #6
+   c:	8b080120 	add	x0, x9, x8
+* 10:	f9400408 	ldr	x8, [x0, #8] <-- trapping instruction
+
+
 ---
- kernel/trace/rethook.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/kernel/trace/rethook.c b/kernel/trace/rethook.c
-index 32c3dfdb4d6a..60f6cb2b486b 100644
---- a/kernel/trace/rethook.c
-+++ b/kernel/trace/rethook.c
-@@ -288,7 +288,7 @@ unsigned long rethook_trampoline_handler(struct pt_regs *regs,
- 	 * These loops must be protected from rethook_free_rcu() because those
- 	 * are accessing 'rhn->rethook'.
- 	 */
--	preempt_disable();
-+	preempt_disable_notrace();
- 
- 	/*
- 	 * Run the handler on the shadow stack. Do not unlink the list here because
-@@ -321,7 +321,7 @@ unsigned long rethook_trampoline_handler(struct pt_regs *regs,
- 		first = first->next;
- 		rethook_recycle(rhn);
- 	}
--	preempt_enable();
-+	preempt_enable_notrace();
- 
- 	return correct_ret_addr;
- }
--- 
-2.40.1
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
 
+If the bug is already fixed, let syzbot know by replying with:
+#syz fix: exact-commit-title
+
+If you want syzbot to run the reproducer, reply with:
+#syz test: git://repo/address.git branch-or-commit-hash
+If you attach or paste a git patch, syzbot will apply it before testing.
+
+If you want to change bug's subsystems, reply with:
+#syz set subsystems: new-subsystem
+(See the list of subsystem names on the web dashboard)
+
+If the bug is a duplicate of another bug, reply with:
+#syz dup: exact-subject-of-another-report
+
+If you want to undo deduplication, reply with:
+#syz undup
