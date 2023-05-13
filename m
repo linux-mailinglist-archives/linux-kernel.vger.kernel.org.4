@@ -2,134 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 60EFA701ADF
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 01:46:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 051DA701AE4
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 01:58:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232365AbjEMXqR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 19:46:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49078 "EHLO
+        id S233033AbjEMX6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 19:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjEMXqP (ORCPT
+        with ESMTP id S229447AbjEMX6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 19:46:15 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8780D1FD4;
-        Sat, 13 May 2023 16:46:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1930560EEA;
-        Sat, 13 May 2023 23:46:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3F43C433D2;
-        Sat, 13 May 2023 23:46:11 +0000 (UTC)
-Date:   Sat, 13 May 2023 19:46:09 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Chuck Lever III <chuck.lever@oracle.com>,
-        Azeem Shaikh <azeemshaikh38@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
-        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] NFSD: Replace all non-returning strlcpy with strscpy
-Message-ID: <20230513194609.1b3121f6@rorschach.local.home>
-In-Reply-To: <202305110927.12508719D2@keescook>
-References: <20230510220952.3507366-1-azeemshaikh38@gmail.com>
-        <72239648-C807-4CDD-8DA7-18440C83384E@oracle.com>
-        <202305110927.12508719D2@keescook>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sat, 13 May 2023 19:58:06 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A722130;
+        Sat, 13 May 2023 16:58:05 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6434e65d808so12077445b3a.3;
+        Sat, 13 May 2023 16:58:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684022285; x=1686614285;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S6IPSqQ6NaOSfnUS0GpkC+isDFooikpsFH7l63MYdTo=;
+        b=c6TQoKpeUT/xnus50Ag62eU/c39VunpDNtF/MKoJddF0jD6f3+TYJoIPhfkljoRSUP
+         FsIStrF5AoIypO5VQ0CsJsWEeuRgT/XiSbZJ8vD6oh6tqmSkIZu2eadDaMRs2ytcGuFl
+         /OS2p8h06OVmyhcjP5Jls80loAbw2tPq+mgwDSdO4dI0/Mw5wd8wDn4KHn4Wc/c1o52c
+         T6aRqd3qZog1s0mA47WYKDtPvKsSQ4tBU57NLH6pvGVl8W3noU04rDMAXm+CB2SOopB6
+         VWE+4DRG/fR8pQUmehdiYKkTSqNem72yBbSDgvTcNSbVWGgBXUj0RmRplrnZ8jzAEOSy
+         7d7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684022285; x=1686614285;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S6IPSqQ6NaOSfnUS0GpkC+isDFooikpsFH7l63MYdTo=;
+        b=XyvZFM+A8WCMHylLei52x4Fib/QE36ynI/Xj7Snga2JXmMOpTE1h503mMwmlP1cDbf
+         8K+Wmnf4+uwJgFcouN8pZJ9XcHiJjwJgNTecl4CVpZ/XvKASOA6aAq9Fc7K/KPdK2p4a
+         NrwoSNOm0DbOdLe63fhyW7C9tndYE+mm3xuycEKGdXXHwQkEbl0RLsrMdSJe4D2rbsZx
+         NiBNh+qG4xwpbE5KBak74E8rXdzU4VA7QJXny7UXydmJIFJLA0sOO0jRwU0BFZSjsYq2
+         tcoRxwCDOdc2w7/Xjj17lMjqtw7RLQ2Gdl+UGyO4sf8LHLrxFQ3emWmP+ExXdWIbHIBe
+         wE7w==
+X-Gm-Message-State: AC+VfDwEBv9NJ9wXC66H+sgZJ3qhkfP5/4198tn8kw+0mhMRc36eHjQ1
+        FrWwnHHvufAOycqLXfYMGoA=
+X-Google-Smtp-Source: ACHHUZ40CHAdVD8zkf1r7hESgn2oYYdABf/NG73liqLqpxQ9GuLpKSyt9jFE2/Sst3fK7fVsfse4Ww==
+X-Received: by 2002:a05:6a00:1a92:b0:64a:a1ba:510e with SMTP id e18-20020a056a001a9200b0064aa1ba510emr9413823pfv.27.1684022284858;
+        Sat, 13 May 2023 16:58:04 -0700 (PDT)
+Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
+        by smtp.gmail.com with ESMTPSA id x9-20020aa784c9000000b006475f831838sm8137449pfn.30.2023.05.13.16.58.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 13 May 2023 16:58:04 -0700 (PDT)
+Message-ID: <23195f15-7024-6fde-84f2-4cdd45c9abfc@gmail.com>
+Date:   Sun, 14 May 2023 08:58:00 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH locking/atomic 18/19] locking/atomic: Refrain from
+ generating duplicate fallback kernel-doc
+Content-Language: en-US
+To:     paulmck@kernel.org, Mark Rutland <mark.rutland@arm.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-doc@vger.kernel.org, kernel-team@meta.com,
+        Will Deacon <will@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Akira Yokosawa <akiyks@gmail.com>
+References: <19135936-06d7-4705-8bc8-bb31c2a478ca@paulmck-laptop>
+ <20230510181717.2200934-18-paulmck@kernel.org>
+ <ZF0haDfyL3At3Ijw@FVFF77S0Q05N.cambridge.arm.com>
+ <2a8b310c-3145-462b-a4c4-a130939da862@paulmck-laptop>
+ <ZF48uBYKczItubrU@FVFF77S0Q05N>
+ <b5498819-c2d4-414d-ba01-5373e749dc52@paulmck-laptop>
+ <ZF5xXuPsrZEgAEEE@FVFF77S0Q05N>
+ <e767dcc6-ea63-4ed8-9a15-9e5bb133fafc@paulmck-laptop>
+ <b3956719-d478-4dc6-95fd-ec0744acc662@paulmck-laptop>
+From:   Akira Yokosawa <akiyks@gmail.com>
+In-Reply-To: <b3956719-d478-4dc6-95fd-ec0744acc662@paulmck-laptop>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 11 May 2023 09:32:31 -0700
-Kees Cook <keescook@chromium.org> wrote:
+Hi,
 
-> On Thu, May 11, 2023 at 02:47:54PM +0000, Chuck Lever III wrote:
-> > Hello Azeem -
-> >   
-> > > On May 10, 2023, at 3:09 PM, Azeem Shaikh <azeemshaikh38@gmail.com> wrote:
-> > > 
-> > > strlcpy() reads the entire source buffer first.
-> > > This read may exceed the destination size limit.
-> > > This is both inefficient and can lead to linear read
-> > > overflows if a source string is not NUL-terminated [1].
-> > > In an effort to remove strlcpy() completely [2], replace
-> > > strlcpy() here with strscpy().
-> > > No return values were used, so direct replacement is safe.  
-> > 
-> > Actually netid should use the __string() and __assign_str()
-> > macros rather than open-coding a string copy, I think.  
-> 
-> Ah, hm, yeah, this is tracing wrappers.
-> 
-> Steve, is there a reason __assign_str() is using "strcpy" and not
-> strscpy()?
-
-Yes. Because __assign_str() predates strscpy() ;-)
-
-Note, to use __assign_str(), you first need to do __string(), which
-will do (in all that TRACE_EVENT() macro magic):
-
-#undef __dynamic_array
-#define __dynamic_array(type, item, len)                                \
-        __item_length = (len) * sizeof(type);                           \
-        __data_offsets->item = __data_size +                            \
-                               offsetof(typeof(*entry), __data);        \
-        __data_offsets->item |= __item_length << 16;                    \
-        __data_size += __item_length;
-
-#undef __string
-#define __string(item, src) __dynamic_array(char, item,                 \
-                    strlen((src) ? (const char *)(src) : "(null)") + 1)
-
-In order to save a dynamic size string (or array) it must first
-calculate that size with a strlen(). If the source is not terminated,
-then this will crash there regardless.
-
-The strlen() is to know how much to allocate on the ring buffer, then a
-copy is done to copy it. I guess you could be worried about the size
-"changing" between the time it is allocated and copied. If that's the
-concern then we could do a length copy.
+On Fri, 12 May 2023 19:11:15 -0700, Paul E. McKenney wrote:
+[...]
 
 > 
-> > Fixes: 3c92fba557c6 ("NFSD: Enhance the nfsd_cb_setup tracepoint")  
+> And here is a rough first cut:
 > 
-> Yeah, that works. I was on the fence about adding Fixes for these kinds
-> of refactoring. Like, it's not really _broken_; we're just trying to
-> remove the API.
+> git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/fallback-rework-kernel-doc.2023.05.12a
 > 
-> > > Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
-> > > ---
-> > > fs/nfsd/trace.h |    2 +-
-> > > 1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > diff --git a/fs/nfsd/trace.h b/fs/nfsd/trace.h
-> > > index 4183819ea082..9b32cda54808 100644
-> > > --- a/fs/nfsd/trace.h
-> > > +++ b/fs/nfsd/trace.h
-> > > @@ -1370,7 +1370,7 @@ TRACE_EVENT(nfsd_cb_setup,
-> > > TP_fast_assign(
-> > > __entry->cl_boot = clp->cl_clientid.cl_boot;
-> > > __entry->cl_id = clp->cl_clientid.cl_id;
-> > > - strlcpy(__entry->netid, netid, sizeof(__entry->netid));
-> > > + strscpy(__entry->netid, netid, sizeof(__entry->netid));
-> > > __entry->authflavor = authflavor;
-> > > __assign_sockaddr(addr, &clp->cl_cb_conn.cb_addr,
-> > >  clp->cl_cb_conn.cb_addrlen)  
+> Or via HTML:
 > 
-> Leaving code context for Steve to see...
-> 
+> https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/log/?h=fallback-rework-kernel-doc.2023.05.12a
 
-The above isn't __assign_str(). Not exactly sure what you want me to
-see here.
+Running "./scripts/kernel-doc -none include/linux/atomic/atomic-arch-fallback.h"
+on the tag emits a lot of warnings.
 
--- Steve
+Looks like there are kernel-doc comments who don't have a corresponding
+function signature next to them.
+
+    /**
+     * function_name() - Brief description of function.
+     * @arg1: Describe the first argument.
+     * @arg2: Describe the second argument.
+     *        One can provide multiple line descriptions
+     *        for arguments.
+     *
+     * A longer description, with more discussion of the function function_name()
+     * that might be useful to those using or modifying it. Begins with an
+     * empty comment line, and may include additional embedded empty
+     * comment lines.
+     */
+    int function_name(int arg1, int arg2)  <---
+
+Note that the kernel-doc script ignores #ifdef -- #else.
+
+BTW, I couldn't checkout the tag so downloaded the tar ball via
+HTML.
+
+        Thanks, Akira
+
+> 
+> Thoughts?
+> 
+> In the meantime, enjoy the weekend!
+> 
+> 							Thanx, Paul
