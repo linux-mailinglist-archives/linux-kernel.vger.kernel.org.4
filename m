@@ -2,133 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F6067018F5
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 20:07:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EAEB2701923
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 20:24:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234043AbjEMSHx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 14:07:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46932 "EHLO
+        id S231547AbjEMSYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 14:24:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235216AbjEMSHj (ORCPT
+        with ESMTP id S231636AbjEMSYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 14:07:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38181171E;
-        Sat, 13 May 2023 11:07:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C855661B84;
-        Sat, 13 May 2023 18:07:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F4ACC433EF;
-        Sat, 13 May 2023 18:07:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684001232;
-        bh=/F+5Gn4t4lhKm49bYUfuuizxiZujuf++3EirSVYEsXU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=b9qYkrJWk2lZsb5SYLDaoYSVpNUJ1fMmsf7fR7kroIK6WBv4gz/NPwznAfAWRGDRK
-         1FmKeYWWWbUud95CWbYs8emvEA4LRTaMdCOgA0IpAm+jsN1ZHoLqX1SADMrFFbxbqZ
-         92wY4QH5jtY1fgXR41mYHx0Gznqg3a7nljGZk+7zwyrbGckYIWXt+WoQENcPxVPXui
-         Ds30n0qO/5CPvLhJgX1OF20gtRrOm5iXVl7GuRa+W9iNBhJb0ywXgF7C2Uuay6Uoyq
-         F4JBFO3IHdf0m+EKM3Eycrtb6vVkaIfeYZp96tWbblEkmPF4oj9nX/pleOp0vFV1wG
-         7xuWY+XA1+Pmw==
-Date:   Sat, 13 May 2023 19:23:13 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] iio: bu27034: Ensure reset is written
-Message-ID: <20230513192313.57e1dd21@jic23-huawei>
-In-Reply-To: <ZFjWhbfuN5XcKty+@fedora>
-References: <ZFjWhbfuN5XcKty+@fedora>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 13 May 2023 14:24:23 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E1E2133;
+        Sat, 13 May 2023 11:24:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684002260; x=1715538260;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=5G+5+Etoz27RfboThw2vuGImFntcqFRFw5uuJgUkIag=;
+  b=JUwgelacYqIB3dg3vhrczLoEwY/IJLwYZhBDciMKEJ3S1R5/jWgSuGH8
+   d0X0RLqJVn7h0CzaDPFHH+RiAAltEqJzyGEHe8f7Kx/Scz20eAIkvN/iu
+   LskaVHRMTz01VTApzZfRdBFVuYePcaMz7xuVgkPqPvgtQMZdB2vohDtr/
+   ikip4TpvB1VGoklM5gqLKecgb811aTq7AlfqtFA3Rii2bLtDXZ1pGna+f
+   ETTeER3oPSeLxW9L7rFnV2cd4GfPPJUUZOo/3edJfIdVmVFTARcgW4f3z
+   YdfTjKH3WaVaaBt3FH4TYQGtyZ2D64404Qz6wh184xW/O35uQNw2gfjcj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="351006695"
+X-IronPort-AV: E=Sophos;i="5.99,272,1677571200"; 
+   d="scan'208";a="351006695"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 11:24:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="824694956"
+X-IronPort-AV: E=Sophos;i="5.99,272,1677571200"; 
+   d="scan'208";a="824694956"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga004.jf.intel.com with ESMTP; 13 May 2023 11:24:15 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pxtug-0005dM-2W;
+        Sat, 13 May 2023 18:24:14 +0000
+Date:   Sun, 14 May 2023 02:23:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Harini Katakam <harini.katakam@amd.com>, andrew@lunn.ch,
+        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
+        kuba@kernel.org, edumazet@google.com, pabeni@redhat.com,
+        vladimir.oltean@nxp.com, wsa+renesas@sang-engineering.com,
+        simon.horman@corigine.com, mkl@pengutronix.de
+Cc:     oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, harinikatakamlinux@gmail.com,
+        michal.simek@amd.com, harini.katakam@amd.com,
+        radhey.shyam.pandey@amd.com
+Subject: Re: [PATCH net-next v3 2/3] phy: mscc: Add support for RGMII delay
+ configuration
+Message-ID: <202305140248.lh4LUw2j-lkp@intel.com>
+References: <20230511120808.28646-3-harini.katakam@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230511120808.28646-3-harini.katakam@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 8 May 2023 14:01:25 +0300
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+Hi Harini,
 
-> The reset bit must be always written to the hardware no matter what value
-> is in a cache or register. Ensure this by using regmap_write_bits()
-> instead of the regmap_update_bits(). Furthermore, the SWRESET bit may be
-> self-clearing, so mark the SYSTEM_CONTROL register volatile to guarantee
-> we do also read the right state - should we ever need to read it.
-> 
-> Finally, writing the SWRESET bit will restore the default register
-> values. This can cause register cache to be outdated if there are any
-> register values cached.
-> 
-> Rebuild register cache after SWRESET and use regmap_update_bits() when
-> performing the reset.
-> 
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
-> Fixes: e52afbd61039 ("iio: light: ROHM BU27034 Ambient Light Sensor")
+kernel test robot noticed the following build warnings:
 
-Still unclear to me if we should treat the register as volatile as hitting
-relevant bits causes a reset of the whole device anyway, but meh, it doesn't
-cause any problems and it's your driver.
+[auto build test WARNING on net-next/main]
 
-Applied to the fixes-togreg branch of iio.git
+url:    https://github.com/intel-lab-lkp/linux/commits/Harini-Katakam/phy-mscc-Use-PHY_ID_MATCH_VENDOR-to-minimize-PHY-ID-table/20230511-200935
+base:   net-next/main
+patch link:    https://lore.kernel.org/r/20230511120808.28646-3-harini.katakam%40amd.com
+patch subject: [PATCH net-next v3 2/3] phy: mscc: Add support for RGMII delay configuration
+config: openrisc-randconfig-m041-20230509 (https://download.01.org/0day-ci/archive/20230514/202305140248.lh4LUw2j-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 12.1.0
 
-Thanks,
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305140248.lh4LUw2j-lkp@intel.com/
 
-Jonathan
+smatch warnings:
+drivers/net/phy/mscc/mscc_main.c:1819 vsc85xx_config_init() warn: unsigned 'vsc8531->rx_delay' is never less than zero.
+drivers/net/phy/mscc/mscc_main.c:1829 vsc85xx_config_init() warn: unsigned 'vsc8531->tx_delay' is never less than zero.
 
-> 
-> ---
-> v3: Combined patches:
-> ("iio: bu27034: Ensure reset is written")
-> https://lore.kernel.org/lkml/ZFIw%2FKdApZe1euN8@fedora/
-> ("iio: bu27034: Reinit regmap cache after reset")
-> https://lore.kernel.org/lkml/ZFM7lE4ZuDrUTspH@fedora/
-> ---
->  drivers/iio/light/rohm-bu27034.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/iio/light/rohm-bu27034.c b/drivers/iio/light/rohm-bu27034.c
-> index 25c9b79574a5..f85194fda6b0 100644
-> --- a/drivers/iio/light/rohm-bu27034.c
-> +++ b/drivers/iio/light/rohm-bu27034.c
-> @@ -231,6 +231,9 @@ struct bu27034_result {
->  
->  static const struct regmap_range bu27034_volatile_ranges[] = {
->  	{
-> +		.range_min = BU27034_REG_SYSTEM_CONTROL,
-> +		.range_max = BU27034_REG_SYSTEM_CONTROL,
-> +	}, {
->  		.range_min = BU27034_REG_MODE_CONTROL4,
->  		.range_max = BU27034_REG_MODE_CONTROL4,
->  	}, {
-> @@ -1272,12 +1275,19 @@ static int bu27034_chip_init(struct bu27034_data *data)
->  	int ret, sel;
->  
->  	/* Reset */
-> -	ret = regmap_update_bits(data->regmap, BU27034_REG_SYSTEM_CONTROL,
-> +	ret = regmap_write_bits(data->regmap, BU27034_REG_SYSTEM_CONTROL,
->  			   BU27034_MASK_SW_RESET, BU27034_MASK_SW_RESET);
->  	if (ret)
->  		return dev_err_probe(data->dev, ret, "Sensor reset failed\n");
->  
->  	msleep(1);
-> +
-> +	ret = regmap_reinit_cache(data->regmap, &bu27034_regmap);
-> +	if (ret) {
-> +		dev_err(data->dev, "Failed to reinit reg cache\n");
-> +		return ret;
-> +	}
-> +
->  	/*
->  	 * Read integration time here to ensure it is in regmap cache. We do
->  	 * this to speed-up the int-time acquisition in the start of the buffer
+vim +1819 drivers/net/phy/mscc/mscc_main.c
 
+  1807	
+  1808	static const int vsc8531_internal_delay[] = {200, 800, 1100, 1700, 2000, 2300,
+  1809						     2600, 3400};
+  1810	static int vsc85xx_config_init(struct phy_device *phydev)
+  1811	{
+  1812		int delay_size = ARRAY_SIZE(vsc8531_internal_delay);
+  1813		struct vsc8531_private *vsc8531 = phydev->priv;
+  1814		struct device *dev = &phydev->mdio.dev;
+  1815		int rc, i, phy_id;
+  1816	
+  1817		vsc8531->rx_delay = phy_get_internal_delay(phydev, dev, &vsc8531_internal_delay[0],
+  1818							   delay_size, true);
+> 1819		if (vsc8531->rx_delay < 0) {
+  1820			if (phydev->interface == PHY_INTERFACE_MODE_RGMII_RXID ||
+  1821			    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
+  1822				vsc8531->rx_delay = RGMII_CLK_DELAY_2_0_NS;
+  1823			else
+  1824				vsc8531->rx_delay = RGMII_CLK_DELAY_0_2_NS;
+  1825		}
+  1826	
+  1827		vsc8531->tx_delay = phy_get_internal_delay(phydev, dev, &vsc8531_internal_delay[0],
+  1828							   delay_size, false);
+> 1829		if (vsc8531->tx_delay < 0) {
+  1830			if (phydev->interface == PHY_INTERFACE_MODE_RGMII_TXID ||
+  1831			    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
+  1832				vsc8531->rx_delay = RGMII_CLK_DELAY_2_0_NS;
+  1833			else
+  1834				vsc8531->rx_delay = RGMII_CLK_DELAY_0_2_NS;
+  1835		}
+  1836	
+  1837		rc = vsc85xx_default_config(phydev);
+  1838		if (rc)
+  1839			return rc;
+  1840	
+  1841		rc = vsc85xx_mac_if_set(phydev, phydev->interface);
+  1842		if (rc)
+  1843			return rc;
+  1844	
+  1845		rc = vsc85xx_edge_rate_cntl_set(phydev, vsc8531->rate_magic);
+  1846		if (rc)
+  1847			return rc;
+  1848	
+  1849		phy_id = phydev->drv->phy_id & phydev->drv->phy_id_mask;
+  1850		if (PHY_ID_VSC8531 == phy_id || PHY_ID_VSC8541 == phy_id ||
+  1851		    PHY_ID_VSC8530 == phy_id || PHY_ID_VSC8540 == phy_id) {
+  1852			rc = vsc8531_pre_init_seq_set(phydev);
+  1853			if (rc)
+  1854				return rc;
+  1855		}
+  1856	
+  1857		rc = vsc85xx_eee_init_seq_set(phydev);
+  1858		if (rc)
+  1859			return rc;
+  1860	
+  1861		for (i = 0; i < vsc8531->nleds; i++) {
+  1862			rc = vsc85xx_led_cntl_set(phydev, i, vsc8531->leds_mode[i]);
+  1863			if (rc)
+  1864				return rc;
+  1865		}
+  1866	
+  1867		return 0;
+  1868	}
+  1869	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
