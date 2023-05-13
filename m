@@ -2,123 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C263701949
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 20:39:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A3FA701921
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 20:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230007AbjEMSje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 14:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34188 "EHLO
+        id S231343AbjEMSYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 14:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229508AbjEMSja (ORCPT
+        with ESMTP id S229530AbjEMSYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 14:39:30 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07802213C
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 11:39:29 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id a640c23a62f3a-965ab8ed1fcso2062314766b.2
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 11:39:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684003167; x=1686595167;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tJgRipBTIMb9CKVptB0CK8vcEy1PL4DIIOTmSIIgPL0=;
-        b=iG2e9xty+mu13wsk5ZZM2QaivT8V52G8/Af/PifVYBtLEzIXHIe06u/elBe1sr0Djd
-         aSAji3yS5LgcoFTRpqxzNPwTOm8stv9rdWo/6ANeKzHlZDreAKLVD94/cUt0xVM5gLB8
-         bh7XvLe2HRcyEKASv5Vwswa/IKzWZ5qAGsa72ikRD4XhA6/QbLsuMGoMFSlXLgwpobcS
-         urJPJ8tAzXUdsO8gn+IGWMMXRX6q09fLGsj1T2s9mBTSuGT/efeJ8ugbCVhoFSejB/Tb
-         RpUjM7gZkem4Ep8SQfrahiNgJY90jVtc5ycgRjkbFJsS6zh34P015AyayIO3TXKXcG5W
-         299w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684003167; x=1686595167;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tJgRipBTIMb9CKVptB0CK8vcEy1PL4DIIOTmSIIgPL0=;
-        b=K9/wes5eU7dQng0ehErWS0k881AqWRRNJRazDLRMbRzv4mDva/8OV0G8qFLw4aRFOI
-         lv7tPGT5ZUiyzg3m/tyNs2jSUtmMLU11C+2e2LjCUEAlnUjtOMw9on8KmIaFMy5c0mam
-         we3nBstfByWG7c55kR82y2O1t34xzmsi0Jlnvzy2pRX0vHfNMxA9iF3Kbn/BFlgBdJlH
-         SRLWlUmDNxu0meN50JSR/DcH4vSy0C6SdY4jbCi9o5teBX0BtcW02/JxMHMw6i71RiLP
-         qgP1JVuuGj3ZarHjmFeK0luHaQ6GZqn5cEZJeg3SR7upYdCB6j4wDimwsVLxBtyZSRW0
-         p8Sw==
-X-Gm-Message-State: AC+VfDwzt5fucG3fJTqbE6ccwcJrv5FKDyhtZXFTpKFUmSrtCO17/Vgf
-        tmHuhMXTJWXOQoMOaiCYu3gicg==
-X-Google-Smtp-Source: ACHHUZ7KQIKKSFZzxRVxqQy6v2UvaVPHdQTePpga0/dLKovt2/RDIklcz0rqo0618m3DIDXIpqarsw==
-X-Received: by 2002:a17:906:db0d:b0:94a:35d1:59a with SMTP id xj13-20020a170906db0d00b0094a35d1059amr23656859ejb.14.1684003167395;
-        Sat, 13 May 2023 11:39:27 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:ba68:e5c9:694e:c6e4? ([2a02:810d:15c0:828:ba68:e5c9:694e:c6e4])
-        by smtp.gmail.com with ESMTPSA id k18-20020a17090632d200b009661f07db93sm7049268ejk.223.2023.05.13.11.39.25
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 May 2023 11:39:26 -0700 (PDT)
-Message-ID: <d137b401-5b4a-bab7-ec21-ea267bd07c41@linaro.org>
-Date:   Sat, 13 May 2023 20:39:25 +0200
+        Sat, 13 May 2023 14:24:05 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5FD10EA;
+        Sat, 13 May 2023 11:24:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0853261A60;
+        Sat, 13 May 2023 18:24:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C05DCC433EF;
+        Sat, 13 May 2023 18:24:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684002243;
+        bh=zySctRgeuHKJoCePxU2eLj54iQfYnmD2BGtwZP4qsl4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=u/GvFFOvu6Pi8PJoyzHTddoTsG2aEZ/VDSup+00pHDPevAlX3TRPrrNv2bP5T9w4r
+         Er/KlqiUq68y6VUIzfcuHjJ6VWAgEvO1VUN0z9WbgiEwzMQyWwykZjqcPxEXjLAs5T
+         nqwZUQjPMM5NejZ/IWWZxFs+1gcKv89qSE2rY0KS7gsJYUPjCEFyuPuj20X+P0yWd2
+         w0JQKCCGitR56UdtjIpCqMwxCSnwUHeWQ1mgpFvt9V4L3Ea7fvxh49KNekapCgV6j6
+         f8z/23R0Pgm/Sa4sacA4rwrDGRYJfw/qFTYRGQL72pXxldTCUrSsgJA6fa26rmA956
+         vQtaw8s+mmSng==
+Date:   Sat, 13 May 2023 19:40:03 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Akhil R <akhilrajeev@nvidia.com>, linux-acpi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-iio@vger.kernel.org
+Subject: Re: [PATCH v3 1/3] drivers: fwnode: fix fwnode_irq_get_byname()
+Message-ID: <20230513194003.5a27a841@jic23-huawei>
+In-Reply-To: <9dd75817886fbb2a0cc58e2248dbba52d8a6d908.1683875389.git.mazziesaccount@gmail.com>
+References: <cover.1683875389.git.mazziesaccount@gmail.com>
+        <9dd75817886fbb2a0cc58e2248dbba52d8a6d908.1683875389.git.mazziesaccount@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [EXTERNAL] Re: [PATCH 3/3] arm64: defconfig: enable J721e PCIe
- controller
-Content-Language: en-US
-To:     "Verma, Achal" <a-verma1@ti.com>, Tom Joseph <tjoseph@cadence.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Wilczy_ski <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        "N_colas F . R . A . Prado" <nfraprado@collabora.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rafa_ Mi_ecki <rafal@milecki.pl>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Nishanth Menon <nm@ti.com>, Milind Parab <mparab@cadence.com>,
-        Swapnil Kashinath Jakhade <sjakhade@cadence.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, linux-omap@vger.kernel.org
-References: <20230512070510.1873171-1-a-verma1@ti.com>
- <20230512070510.1873171-4-a-verma1@ti.com>
- <13028434-f68c-cad3-056e-d319c1ec35cf@linaro.org>
- <3b5d7c3c-164d-0690-c2e8-2c7daec4865c@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <3b5d7c3c-164d-0690-c2e8-2c7daec4865c@ti.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/05/2023 19:58, Verma, Achal wrote:
-> 
-> Hello Krzysztof,
-> On 5/12/2023 12:53 PM, Krzysztof Kozlowski wrote:
->> On 12/05/2023 09:05, Achal Verma wrote:
->>> Enable Cadence PCIe controller and pci-j721e drivers to be built as
->>> kernel modules.
->>
->> Why? IOW, who needs them. Please provide rationale in the commit msg. I
->> am pretty sure I asked for this...
->>
-> On TI's J7 SOCs, PCIe is composed of PCIe core from Cadence and TI 
-> wrapper. It is desired to have J7 PCIe working on upstream kernel by 
-> default. So to enable this I have pushed these defconfig changes.
-> 
-> BTW, I am planning to hold this change until PCIe code changes (rest of 
-> the patches in this series) gets merged.
-> 
-> Please let me know if there are more concern to this.
+On Fri, 12 May 2023 10:53:00 +0300
+Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-The concerns are that commit msg does not explain this. Please always
-provide in commit msg answer to "why you are doing this". In case of
-defconfig the answer to "why" is: "board foo bar with SoC baz uses it".
+> The fwnode_irq_get_byname() does return 0 upon device-tree IRQ mapping
+> failure. This is contradicting the function documentation and can
+> potentially be a source of errors like:
+> 
+> int probe(...) {
+> 	...
+> 
+> 	irq = fwnode_irq_get_byname();
+> 	if (irq <= 0)
+> 		return irq;
+> 
+> 	...
+> }
+> 
+> Here we do correctly check the return value from fwnode_irq_get_byname()
+> but the driver probe will now return success. (There was already one
+> such user in-tree).
+> 
+> Change the fwnode_irq_get_byname() to work as documented and according to
+> the common convention and abd always return a negative errno upon failure.
+> 
+> Fixes: ca0acb511c21 ("device property: Add fwnode_irq_get_byname")
+> Suggested-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
+> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-Best regards,
-Krzysztof
+Whilst the docs don't contradict behaviour for fwnode_irq_get()
+unlike the byname() variant, it does seem odd to fix it only in this
+version rather than modifying them both not to return 0.
+
+Is there clear logic why they should be different?
+
+> ---
+>  drivers/base/property.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/base/property.c b/drivers/base/property.c
+> index f6117ec9805c..a3b95d2d781f 100644
+> --- a/drivers/base/property.c
+> +++ b/drivers/base/property.c
+> @@ -1011,7 +1011,7 @@ EXPORT_SYMBOL(fwnode_irq_get);
+>   */
+>  int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name)
+>  {
+> -	int index;
+> +	int index, ret;
+>  
+>  	if (!name)
+>  		return -EINVAL;
+> @@ -1020,7 +1020,12 @@ int fwnode_irq_get_byname(const struct fwnode_handle *fwnode, const char *name)
+>  	if (index < 0)
+>  		return index;
+>  
+> -	return fwnode_irq_get(fwnode, index);
+> +	ret = fwnode_irq_get(fwnode, index);
+> +	/* We treat mapping errors as invalid case */
+> +	if (ret == 0)
+> +		return -EINVAL;
+> +
+> +	return ret;
+>  }
+>  EXPORT_SYMBOL(fwnode_irq_get_byname);
+>  
 
