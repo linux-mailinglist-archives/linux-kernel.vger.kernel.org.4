@@ -2,56 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05992701307
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 02:36:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1611570130D
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 02:36:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240973AbjEMAgL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 12 May 2023 20:36:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43512 "EHLO
+        id S241037AbjEMAgO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 12 May 2023 20:36:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240883AbjEMAgI (ORCPT
+        with ESMTP id S240890AbjEMAgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 12 May 2023 20:36:08 -0400
+        Fri, 12 May 2023 20:36:09 -0400
 Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72E125581
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 17:36:06 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-6439bc1e3aaso6263755b3a.2
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 17:36:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE864EFE
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 17:36:08 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id d2e1a72fcca58-643a9203dc2so5890873b3a.1
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 17:36:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1683938166; x=1686530166;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U1Ge3/d9lA0wDaa4KjBcDxtmuRNcZOWTUCAWw0gE6gI=;
-        b=oetF2r1M5UiBxGIcL8zFJt3KZzPc4fIcwMDdhX/l57bLLJh7cM3X4mNNADBirTiMsw
-         tno7AR+Dvgh3Vw4uuqw6BiGqojcKm9HdP5GJEjmyW5fgNQ3uH9GfWcik8X9l8Il8yj/F
-         JDSdCnCk453r2ImEA+XEqnVZNEGK62kt196UdpjOQTLp5m6ljRH7LbmbsKQcW1JkZLWL
-         eTI/tPiSeCVE0Ra8n1OkKzP9IuDY0/KphXTBaOaj5Ytdy2EoJjClJKVr2vKk22PnetQj
-         TQ1WL518q999Tr/FzyV0uLw0cE55dRKp34tT4WPlBaPORkpnV8W5J1MOW7nmEVxQABm9
-         gj1A==
+        d=google.com; s=20221208; t=1683938167; x=1686530167;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
+        bh=imcOaGkZAhtv0KvByjHYg/L+5O3EycYmRlnN5iZFB4Y=;
+        b=U5+Q5AXJHkAU35wpnGLBPjphoKZTaHkEJDuj5UMIwyqKaq6mJuEU/6neP+0/SWCsb5
+         NFesLARPQGcYZENv7TNTcjy4a5Rawvaq1zSQzjqS85yJCnvRPjQNxUoYKjrUwmWdAwRl
+         ferixHNQ08N4q/G3XE/ZSOUCDOrmMzXMiJzZDM+uJRNzJMQEjPTlaPWvDzhYvfXzI/FM
+         YtLSzbNzKOyKXXtQuh/Ucl+SagOra0HjqcetFJbXHnwTDK4FzH1iQX/RH1iIvX2IqiM+
+         9ggCnY4bYnmh0gVz5Qa+0Nmsu8298HQZMepAoUQTXTaxZ/VoMcpUt+FH6CaI+e7WDf7O
+         4tuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683938166; x=1686530166;
-        h=cc:to:from:subject:message-id:mime-version:date:reply-to
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U1Ge3/d9lA0wDaa4KjBcDxtmuRNcZOWTUCAWw0gE6gI=;
-        b=aoj0SogZy3hjaLQ5VVK4hFgqAED0EeAJNqDwjo5WW3egXWimU5Khi8ZmRoaYpUv6XT
-         DDd4/aTx5gBaGlX415gc8gD+dWE68hAlJyd5/DAI1dKinG4bHnVpJq2QBXtdhxPXFzaO
-         wgr1TSvwFxeJpqsP83M5b7XK9JbJ3MxIzelhtEGDJsPMZksxY1pn/MCrO9z2Wj33MikS
-         KnJgfjFee3CbiLpSvxotCuZhdB1oB6Mg2zgv8L9JDo4vGaffRA0/aT8rqTvwvHFb8hu4
-         zG2gHxCGIqScIdAq6hlorFEpkXw3DpEvOuBPUrK/xIX2jOFYKsTyuHkzGQdQyfNaer7c
-         mAmA==
-X-Gm-Message-State: AC+VfDz/XvkcF+BRBIgB3pzUAoSPT9vg5rdJfDxmBEqb/rXirUUqVCil
-        Bp1QTm9uvoldzz+PH5b5K7ghl9Yctic=
-X-Google-Smtp-Source: ACHHUZ6XSa3OoCY9QC+biOTjnUfwxLBt3mtAiLJDXi5Zo5Z6h8DJwGXJ7iRHgf0PShhQobJeUJ93cGlbS9k=
+        d=1e100.net; s=20221208; t=1683938167; x=1686530167;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=imcOaGkZAhtv0KvByjHYg/L+5O3EycYmRlnN5iZFB4Y=;
+        b=XNkBMYTZcn7jBeUrfWnqZJmZVwgSKORM8VVasNgAjGWkW0/Y9oFwoFHTRVDEgmdsW6
+         iiXw6LkN/EsPN0m2dKxPB7WfTsZNp3E9/H9cG0JkOP+qbzUW45FCTF+NGZ3yKsPQt/fe
+         WzLR4XghsWOh3zqtgXHUvK/NsCzmx2YsqWowkFK4GZVAtRaU0JX7Q52y8HShx6vc1tK9
+         d7Vl/tUMUz70+9ccIjp1Z9Grawv3p3a7VmVM8Hf2IQlb6fqN4R+s2ZZNiY5EOQaC0hpa
+         zY6WdUyvA0zeTWOHjHABlrCd/gwTtTVecsB667VkpLfCwWwdogGXMQOI6ZklgrY0SzLJ
+         CbcA==
+X-Gm-Message-State: AC+VfDxDTAm901SDiy/HavulE0QLLfFDQPcX2ISOiquP3SreQ4WaAUj3
+        +ro14UIkzF7FT6pDX53oznXxIB97vlY=
+X-Google-Smtp-Source: ACHHUZ4ATdqjI09a0zYXv4vbgfOF3+JF1scamk8//exztPkDhizmSIJXd2nKwBguV5wWxX5iDi6+9Cdy+VM=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
  (user=seanjc job=sendgmr) by 2002:a05:6a00:d5a:b0:643:536b:e764 with SMTP id
- n26-20020a056a000d5a00b00643536be764mr7181548pfv.4.1683938166027; Fri, 12 May
- 2023 17:36:06 -0700 (PDT)
+ n26-20020a056a000d5a00b00643536be764mr7181559pfv.4.1683938167743; Fri, 12 May
+ 2023 17:36:07 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 12 May 2023 17:35:32 -0700
+Date:   Fri, 12 May 2023 17:35:33 -0700
+In-Reply-To: <20230513003600.818142-1-seanjc@google.com>
 Mime-Version: 1.0
+References: <20230513003600.818142-1-seanjc@google.com>
 X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-Message-ID: <20230513003600.818142-1-seanjc@google.com>
-Subject: [PATCH v3 00/28] drm/i915/gvt: KVM: KVMGT fixes and page-track cleanups
+Message-ID: <20230513003600.818142-2-seanjc@google.com>
+Subject: [PATCH v3 01/28] drm/i915/gvt: Verify pfn is "valid" before
+ dereferencing "struct page"
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>,
@@ -72,97 +76,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix a variety of found-by-inspection bugs in KVMGT, and overhaul KVM's
-page-track APIs to provide a leaner and cleaner interface.  The motivation
-for this series is to (significantly) reduce the number of KVM APIs that
-KVMGT uses, with a long-term goal of making all kvm_host.h headers
-KVM-internal.
+Check that the pfn found by gfn_to_pfn() is actually backed by "struct
+page" memory prior to retrieving and dereferencing the page.  KVM
+supports backing guest memory with VM_PFNMAP, VM_IO, etc., and so
+there is no guarantee the pfn returned by gfn_to_pfn() has an associated
+"struct page".
 
-As always for this series, the KVMGT changes are compile tested only.
+Fixes: b901b252b6cf ("drm/i915/gvt: Add 2M huge gtt support")
+Reviewed-by: Yan Zhao <yan.y.zhao@intel.com>
+Signed-off-by: Sean Christopherson <seanjc@google.com>
+---
+ drivers/gpu/drm/i915/gvt/gtt.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Based on "git://git.kernel.org/pub/scm/virt/kvm/kvm.git tags/kvm-6.4-1".
-
-v3:
- - Collect reviewed/tested tags (I apologize if I missed any, I manually
-   gathered them this time due to a goof in my workflow). [Yan]
- - Drop check on max KVM paging size from KVMGT. [Yan]
- - Drop the explicit change on THP pages, and instead validate that the
-   pfns (not struct page pointers) are contiguous. [Yan]
- - Fix buggy intel_gvt_dma_map_guest_page() usage by eliminating a helper
-   for shadowing 2MiB GTT entries. [Yan]
- - Move kvm_arch_flush_shadow_{all,memslot}() to mmu.c instead of exposing
-   kvm_mmu_zap_all_fast() outside of mmu.c. [Yan]
- - Fix an alignment goof in hlist_for_each_entry_srcu() usage. [Yan]
- - Wrap full definition of external page track structures with
-   CONFIG_KVM_EXTERNAL_WRITE_TRACKING. [Yan]
-
-v2:
- - https://lore.kernel.org/all/20230311002258.852397-1-seanjc@google.com
- - Reuse vgpu_lock to protect gfn hash instead of introducing a new (and
-   buggy) mutext. [Yan]
- - Remove a spurious return from kvm_page_track_init(). [Yan]
- - Take @kvm directly in the inner __kvm_page_track_write(). [Yan]
- - Delete the gfn sanity check that relies on kvm_is_visible_gfn() instead
-   of providing a dedicated interface. [Yan]
-
-v1: https://lore.kernel.org/lkml/20221223005739.1295925-1-seanjc@google.com
-
-Sean Christopherson (24):
-  drm/i915/gvt: Verify pfn is "valid" before dereferencing "struct page"
-  drm/i915/gvt: Verify hugepages are contiguous in physical address
-    space
-  drm/i915/gvt: Put the page reference obtained by KVM's gfn_to_pfn()
-  drm/i915/gvt: Explicitly check that vGPU is attached before shadowing
-  drm/i915/gvt: Error out on an attempt to shadowing an unknown GTT
-    entry type
-  drm/i915/gvt: Don't rely on KVM's gfn_to_pfn() to query possible 2M
-    GTT
-  drm/i915/gvt: Use an "unsigned long" to iterate over memslot gfns
-  drm/i915/gvt: Drop unused helper intel_vgpu_reset_gtt()
-  drm/i915/gvt: Protect gfn hash table with vgpu_lock
-  KVM: x86/mmu: Move kvm_arch_flush_shadow_{all,memslot}() to mmu.c
-  KVM: x86/mmu: Don't rely on page-track mechanism to flush on memslot
-    change
-  KVM: x86/mmu: Don't bounce through page-track mechanism for guest PTEs
-  KVM: drm/i915/gvt: Drop @vcpu from KVM's ->track_write() hook
-  KVM: x86: Reject memslot MOVE operations if KVMGT is attached
-  drm/i915/gvt: Don't bother removing write-protection on to-be-deleted
-    slot
-  KVM: x86/mmu: Move KVM-only page-track declarations to internal header
-  KVM: x86/mmu: Use page-track notifiers iff there are external users
-  KVM: x86/mmu: Drop infrastructure for multiple page-track modes
-  KVM: x86/mmu: Rename page-track APIs to reflect the new reality
-  KVM: x86/mmu: Assert that correct locks are held for page
-    write-tracking
-  KVM: x86/mmu: Bug the VM if write-tracking is used but not enabled
-  KVM: x86/mmu: Drop @slot param from exported/external page-track APIs
-  KVM: x86/mmu: Handle KVM bookkeeping in page-track APIs, not callers
-  drm/i915/gvt: Drop final dependencies on KVM internal details
-
-Yan Zhao (4):
-  drm/i915/gvt: remove interface intel_gvt_is_valid_gfn
-  KVM: x86: Add a new page-track hook to handle memslot deletion
-  drm/i915/gvt: switch from ->track_flush_slot() to
-    ->track_remove_region()
-  KVM: x86: Remove the unused page-track hook track_flush_slot()
-
- arch/x86/include/asm/kvm_host.h       |  16 +-
- arch/x86/include/asm/kvm_page_track.h |  73 +++-----
- arch/x86/kvm/mmu.h                    |   2 +
- arch/x86/kvm/mmu/mmu.c                |  51 +++--
- arch/x86/kvm/mmu/page_track.c         | 256 +++++++++++++-------------
- arch/x86/kvm/mmu/page_track.h         |  58 ++++++
- arch/x86/kvm/x86.c                    |  22 +--
- drivers/gpu/drm/i915/gvt/gtt.c        | 102 ++--------
- drivers/gpu/drm/i915/gvt/gtt.h        |   1 -
- drivers/gpu/drm/i915/gvt/gvt.h        |   3 +-
- drivers/gpu/drm/i915/gvt/kvmgt.c      | 117 +++++-------
- drivers/gpu/drm/i915/gvt/page_track.c |  10 +-
- 12 files changed, 320 insertions(+), 391 deletions(-)
- create mode 100644 arch/x86/kvm/mmu/page_track.h
-
-
-base-commit: b3c98052d46948a8d65d2778c7f306ff38366aac
+diff --git a/drivers/gpu/drm/i915/gvt/gtt.c b/drivers/gpu/drm/i915/gvt/gtt.c
+index 4ec85308379a..58b9b316ae46 100644
+--- a/drivers/gpu/drm/i915/gvt/gtt.c
++++ b/drivers/gpu/drm/i915/gvt/gtt.c
+@@ -1183,6 +1183,10 @@ static int is_2MB_gtt_possible(struct intel_vgpu *vgpu,
+ 	pfn = gfn_to_pfn(vgpu->vfio_device.kvm, ops->get_pfn(entry));
+ 	if (is_error_noslot_pfn(pfn))
+ 		return -EINVAL;
++
++	if (!pfn_valid(pfn))
++		return -EINVAL;
++
+ 	return PageTransHuge(pfn_to_page(pfn));
+ }
+ 
 -- 
 2.40.1.606.ga4b1b128d6-goog
 
