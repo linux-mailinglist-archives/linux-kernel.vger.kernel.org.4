@@ -2,91 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79D637018D2
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 19:58:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C64187018DE
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 19:59:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237372AbjEMR6g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 13:58:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36096 "EHLO
+        id S231286AbjEMR7Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 13:59:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233538AbjEMR5v (ORCPT
+        with ESMTP id S233805AbjEMR5x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 13:57:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114232D55;
+        Sat, 13 May 2023 13:57:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7F452D4A;
         Sat, 13 May 2023 10:57:50 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8F85661CB6;
-        Sat, 13 May 2023 17:57:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A15AC4331F;
-        Sat, 13 May 2023 17:57:46 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B649B61B86;
+        Sat, 13 May 2023 17:57:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFEB8C433D2;
+        Sat, 13 May 2023 17:57:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684000666;
-        bh=eGtNYpD/XyyRkJDa/Og4mUl11WDE9M+dRjzmaPlkuV4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KuIA5/cO9Tm+H+/t6AZ8omfIsBFLtHlrJWRzUKGbr+bPEFMJ56WP2poDE9Ppj03Dv
-         Tydbuyn5mqtIsJuzAESckgd8lfFFnF30RGrh4kIMHoTlvsewGbzt8TyVp7qWyCTmMc
-         AexQK9OR6+Sb1IJRCAaDph5QRqtKA4aUxDlF7MJxdjvR2S73lvZzJbsJ+6gcfXef7p
-         rgOrvg0hxogtYqAEdAH5xbvEBBJOvP5XqVcKlxuS6cJ3LmWwWHTmtolANovoU6cY1W
-         nmDaW4NliCgozrwvjTyDyY8ckBrAvDbQCPm4VSbkLOyA3U++SyaPoa8KIIQs7le3/f
-         UKfOeKsNU5Baw==
-Received: from mchehab by mail.kernel.org with local (Exim 4.96)
-        (envelope-from <mchehab@kernel.org>)
-        id 1pxtV1-001tya-28;
-        Sat, 13 May 2023 18:57:43 +0100
-From:   Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Athanasios Oikonomou <athoik@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Robert Schlabbach <robert_s@gmx.net>
-Subject: [PATCH 24/24] media: dvb: bump DVB API version
-Date:   Sat, 13 May 2023 18:57:41 +0100
-Message-Id: <1a18c0512de2f4002e8b0084ad28cce662bb57e7.1684000646.git.mchehab@kernel.org>
-X-Mailer: git-send-email 2.40.1
-In-Reply-To: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
-References: <53558de2b5c4f4ee6bfcfbe34e27071c2d0073d5.1684000646.git.mchehab@kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        s=k20201202; t=1684000670;
+        bh=gRyFgLllhpvhpItRhUBvhxIrRN1R6Xc2ZIh/hKJ6AJ0=;
+        h=Date:Cc:Subject:From:To:References:In-Reply-To:From;
+        b=c+uhW+cGqO44l175N8ovEzw61/SzuLM+FLV16m0S7zh2LdVkTZIzhzuGxM8p5ioSl
+         Gf2jzJCXFh9tBbTWyQ/pVtZYuB3fW9jS1JixqU85Y/TNsF/SOnwNxIUV1Fzah2WS40
+         yvmk85xnA4K3mL3UeXxNslnYNbidhH2ctGjCvSIpA0152bkcRsWOuJD6vKsvX9ql3s
+         W7DA8hC7U97gznBEQno1LDJgQXhDcVx1eL3cVMql/4eilf0d/wJyRDpQV5sRzg+YIP
+         ae0mwAKHoRmZ3zrYlExQPCQ/MvHag5AiSjmPT5MFYIRsQOr0shwtElFl6H9rQF0Pez
+         qY+ILtwozmmOQ==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Sat, 13 May 2023 20:57:46 +0300
+Message-Id: <CSLCEYDKKWWE.36POIXVT65SLE@suppilovahvero>
+Cc:     <stable@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] tpm_vtpm_proxy: fix race condition in /dev/vtpmx
+ creation
+From:   "Jarkko Sakkinen" <jarkko@kernel.org>
+To:     "Jarkko Sakkinen" <jarkko.sakkinen@tuni.fi>,
+        <linux-integrity@vger.kernel.org>,
+        "Peter Huewe" <peterhuewe@gmx.de>,
+        "Jason Gunthorpe" <jgg@ziepe.ca>,
+        "Stefan Berger" <stefanb@linux.vnet.ibm.com>
+X-Mailer: aerc 0.14.0
+References: <20230513172818.752712-1-jarkko.sakkinen@tuni.fi>
+In-Reply-To: <20230513172818.752712-1-jarkko.sakkinen@tuni.fi>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Athanasios Oikonomou <athoik@gmail.com>
+On Sat May 13, 2023 at 8:28 PM EEST, Jarkko Sakkinen wrote:
+> /dev/vtpmx is made visible before the workqueue exist, which can lead
+> memory corruption in the worst case, if workqueue is used before it has
+> been fully initialized. Address this by changing the call order.
+>
+> Cc: Stefan Berger <stefanb@linux.vnet.ibm.com>
+> Cc: stable@vger.kernel.org
+> Fixes: 6f99612e2500 ("tpm: Proxy driver for supporting multiple emulated =
+TPMs")
+> Signed-off-by: Jarkko Sakkinen <jarkko.sakkinen@tuni.fi>
+> ---
+>  drivers/char/tpm/tpm_vtpm_proxy.c | 26 ++++++++++----------------
+>  1 file changed, 10 insertions(+), 16 deletions(-)
+>
+> diff --git a/drivers/char/tpm/tpm_vtpm_proxy.c b/drivers/char/tpm/tpm_vtp=
+m_proxy.c
+> index 5c865987ba5c..ef1367cf2f10 100644
+> --- a/drivers/char/tpm/tpm_vtpm_proxy.c
+> +++ b/drivers/char/tpm/tpm_vtpm_proxy.c
+> @@ -50,7 +50,7 @@ struct proxy_dev {
+>  /* all supported flags */
+>  #define VTPM_PROXY_FLAGS_ALL  (VTPM_PROXY_FLAG_TPM2)
+> =20
+> -static struct workqueue_struct *workqueue;
+> +static struct workqueue_struct *vtpm_workqueue;
+> =20
+>  static void vtpm_proxy_delete_device(struct proxy_dev *proxy_dev);
+> =20
+> @@ -478,7 +478,7 @@ static void vtpm_proxy_work_stop(struct proxy_dev *pr=
+oxy_dev)
+>   */
+>  static inline void vtpm_proxy_work_start(struct proxy_dev *proxy_dev)
+>  {
+> -	queue_work(workqueue, &proxy_dev->work);
+> +	queue_work(vtpm_workqueue, &proxy_dev->work);
+>  }
+> =20
+>  /*
+> @@ -697,30 +697,24 @@ static int __init vtpm_module_init(void)
+>  {
+>  	int rc;
+> =20
+> -	rc =3D vtpmx_init();
+> -	if (rc) {
+> -		pr_err("couldn't create vtpmx device\n");
+> +	vtpm_workqueue =3D create_workqueue("tpm-vtpm");
+> +	if (!vtpm_workqueue) {
+> +		rc =3D -ENOMEM;
+>  		return rc;
+>  	}
+> =20
+> -	workqueue =3D create_workqueue("tpm-vtpm");
+> -	if (!workqueue) {
+> -		pr_err("couldn't create workqueue\n");
+> -		rc =3D -ENOMEM;
+> -		goto err_vtpmx_cleanup;
+> +	rc =3D vtpmx_init();
+> +	if (rc) {
+> +		vtpmx_cleanup();
 
-Bump the DVB API version in order userspace to be aware of the changes
-recently implemented in enumerations for DVB-S2(X) and DVB-C2.
+This should be destroy_workqueue(). I'll send a new version.
 
-Related: commit 6508a50fe84f ("media: dvb: add DVB-C2 and DVB-S2X parameter values")
-
-Link: https://lore.kernel.org/linux-media/20230110071421.31498-1-athoik@gmail.com
-Cc: Robert Schlabbach <robert_s@gmx.net>
-Signed-off-by: Athanasios Oikonomou <athoik@gmail.com>
-Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
----
- include/uapi/linux/dvb/version.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/include/uapi/linux/dvb/version.h b/include/uapi/linux/dvb/version.h
-index 1a8cd038aa0b..20bc874de321 100644
---- a/include/uapi/linux/dvb/version.h
-+++ b/include/uapi/linux/dvb/version.h
-@@ -10,6 +10,6 @@
- #define _DVBVERSION_H_
- 
- #define DVB_API_VERSION 5
--#define DVB_API_VERSION_MINOR 11
-+#define DVB_API_VERSION_MINOR 12
- 
- #endif /*_DVBVERSION_H_*/
--- 
-2.40.1
-
+BR, Jarkko
