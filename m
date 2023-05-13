@@ -2,69 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAEB2701923
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 20:24:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1FA6701931
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 20:28:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231547AbjEMSYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 14:24:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57180 "EHLO
+        id S229535AbjEMS2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 14:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231636AbjEMSYX (ORCPT
+        with ESMTP id S230422AbjEMS22 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 14:24:23 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1E1E2133;
-        Sat, 13 May 2023 11:24:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684002260; x=1715538260;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=5G+5+Etoz27RfboThw2vuGImFntcqFRFw5uuJgUkIag=;
-  b=JUwgelacYqIB3dg3vhrczLoEwY/IJLwYZhBDciMKEJ3S1R5/jWgSuGH8
-   d0X0RLqJVn7h0CzaDPFHH+RiAAltEqJzyGEHe8f7Kx/Scz20eAIkvN/iu
-   LskaVHRMTz01VTApzZfRdBFVuYePcaMz7xuVgkPqPvgtQMZdB2vohDtr/
-   ikip4TpvB1VGoklM5gqLKecgb811aTq7AlfqtFA3Rii2bLtDXZ1pGna+f
-   ETTeER3oPSeLxW9L7rFnV2cd4GfPPJUUZOo/3edJfIdVmVFTARcgW4f3z
-   YdfTjKH3WaVaaBt3FH4TYQGtyZ2D64404Qz6wh184xW/O35uQNw2gfjcj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="351006695"
-X-IronPort-AV: E=Sophos;i="5.99,272,1677571200"; 
-   d="scan'208";a="351006695"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 11:24:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="824694956"
-X-IronPort-AV: E=Sophos;i="5.99,272,1677571200"; 
-   d="scan'208";a="824694956"
-Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 13 May 2023 11:24:15 -0700
-Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pxtug-0005dM-2W;
-        Sat, 13 May 2023 18:24:14 +0000
-Date:   Sun, 14 May 2023 02:23:50 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Harini Katakam <harini.katakam@amd.com>, andrew@lunn.ch,
-        hkallweit1@gmail.com, linux@armlinux.org.uk, davem@davemloft.net,
-        kuba@kernel.org, edumazet@google.com, pabeni@redhat.com,
-        vladimir.oltean@nxp.com, wsa+renesas@sang-engineering.com,
-        simon.horman@corigine.com, mkl@pengutronix.de
-Cc:     oe-kbuild-all@lists.linux.dev, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, harinikatakamlinux@gmail.com,
-        michal.simek@amd.com, harini.katakam@amd.com,
-        radhey.shyam.pandey@amd.com
-Subject: Re: [PATCH net-next v3 2/3] phy: mscc: Add support for RGMII delay
- configuration
-Message-ID: <202305140248.lh4LUw2j-lkp@intel.com>
-References: <20230511120808.28646-3-harini.katakam@amd.com>
+        Sat, 13 May 2023 14:28:28 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A039E1BC2
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 11:28:27 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so99296870a12.0
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 11:28:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684002506; x=1686594506;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/skyL1sLWdeVWQOTLH4B/eNUzzrc9hV+v4n2aX70iXk=;
+        b=G0WSmFIDrbVpJnxA9vpq/+boMjF9sbPpuRcq/wRTF+rvSiPClVefSbA/Jm14QEe6PX
+         BXt+NA2Bbavm3P/r6lUp+m42FltmWO2O2Eo+W9Y2YjVaObvHtfcVQeKMGEkhMIP1EvHr
+         RxYaVGxah6XG4y7V8ffKGPej4l7rM/TxK2jSHEWLR6AIplNAhqjjLptXJAfQnbBd6ooD
+         dk71FI55LsAlOFey7nU7iP4DPulUDmZiLTi9pfMSkcXAZ4VYcABlBQM1RiXRIfEy0JJN
+         snHoVzbzI6sxKlgJO4SlWsiBWaJXpjiaSjNi02viIIhOjY7O9QniU+IXRz7CDIAVh2c1
+         n5vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684002506; x=1686594506;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/skyL1sLWdeVWQOTLH4B/eNUzzrc9hV+v4n2aX70iXk=;
+        b=eHjZOvIOP4Y5bAYRFfUu/z4eb9b7UCKGGjbYuD9jjxzmCUY2kJtRDoW0OJfhfh6Xa6
+         22PEwTBQVU71WtzSA2wjnuMudKXPFFCLZsrEEAh+K4GjHvKk27JIVeZ9CtKx/epfioLT
+         69AzQTc77hg7x01xgyFQ6wsN2S728mNgXknG06Q3q5Q15dh/hATqt42w6+JfTOX7emDO
+         E+W4YN4wYRX7V+DKMUVupwCg4PZjl3eodiPEGXmQ8u/aFvWzI0adCwBgsf2zIkpwNxWw
+         I4lLv8Eg6fkEyFfz+fN3mphWs1BfQaiXXG+awm8m0j/pUSP0qtiYgZ/8AUQBdMRp5/Cg
+         Sz8g==
+X-Gm-Message-State: AC+VfDy5oBYKE0SIZXi96cQgGWXToa8CdtSbi2FrF5epiTC0XL+u/e3J
+        pkgG6kasYZOwfKfh8syxlG23xw==
+X-Google-Smtp-Source: ACHHUZ6BZjAGfoNRaV4SZYpzLVlE5wxvvxIlWnwclnXWyUvW+KjYeL4jTHPXBIuhzNmNzRxBc6Fsmw==
+X-Received: by 2002:a17:907:1c8c:b0:965:cac1:53ad with SMTP id nb12-20020a1709071c8c00b00965cac153admr28615039ejc.8.1684002506136;
+        Sat, 13 May 2023 11:28:26 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:ba68:e5c9:694e:c6e4? ([2a02:810d:15c0:828:ba68:e5c9:694e:c6e4])
+        by smtp.gmail.com with ESMTPSA id de9-20020a1709069bc900b0094e6a9c1d24sm7172177ejc.12.2023.05.13.11.28.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 13 May 2023 11:28:25 -0700 (PDT)
+Message-ID: <5cb38be4-a27f-dc1a-cbb9-c195505a9e7c@linaro.org>
+Date:   Sat, 13 May 2023 20:28:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511120808.28646-3-harini.katakam@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 01/13] dt-bindings: clk: g12a-clkc: export VCLK2_SEL
+ and add CTS_ENCL clock ids
+Content-Language: en-US
+To:     Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Sam Ravnborg <sam@ravnborg.org>
+Cc:     Nicolas Belin <nbelin@baylibre.com>,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-phy@lists.infradead.org
+References: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v4-0-2592c29ea263@linaro.org>
+ <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v4-1-2592c29ea263@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230512-amlogic-v6-4-upstream-dsi-ccf-vim3-v4-1-2592c29ea263@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,93 +94,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Harini,
+On 12/05/2023 15:11, Neil Armstrong wrote:
+> Expose VCLK2_SEL clock id and add new ids for the CTS_ENCL and CTS_ENCL_SEL
+> clocks on G12A compatible SoCs.
+> 
+> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
+>  drivers/clk/meson/g12a.h              | 1 -
+>  include/dt-bindings/clock/g12a-clkc.h | 3 +++
+>  2 files changed, 3 insertions(+), 1 deletion(-)
 
-kernel test robot noticed the following build warnings:
+Bindings must be a separate patch from the driver changes. If this
+causes bisectability issues, this means entire solution breaks ABI and
+is not appropriate anyway...
 
-[auto build test WARNING on net-next/main]
+Best regards,
+Krzysztof
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Harini-Katakam/phy-mscc-Use-PHY_ID_MATCH_VENDOR-to-minimize-PHY-ID-table/20230511-200935
-base:   net-next/main
-patch link:    https://lore.kernel.org/r/20230511120808.28646-3-harini.katakam%40amd.com
-patch subject: [PATCH net-next v3 2/3] phy: mscc: Add support for RGMII delay configuration
-config: openrisc-randconfig-m041-20230509 (https://download.01.org/0day-ci/archive/20230514/202305140248.lh4LUw2j-lkp@intel.com/config)
-compiler: or1k-linux-gcc (GCC) 12.1.0
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305140248.lh4LUw2j-lkp@intel.com/
-
-smatch warnings:
-drivers/net/phy/mscc/mscc_main.c:1819 vsc85xx_config_init() warn: unsigned 'vsc8531->rx_delay' is never less than zero.
-drivers/net/phy/mscc/mscc_main.c:1829 vsc85xx_config_init() warn: unsigned 'vsc8531->tx_delay' is never less than zero.
-
-vim +1819 drivers/net/phy/mscc/mscc_main.c
-
-  1807	
-  1808	static const int vsc8531_internal_delay[] = {200, 800, 1100, 1700, 2000, 2300,
-  1809						     2600, 3400};
-  1810	static int vsc85xx_config_init(struct phy_device *phydev)
-  1811	{
-  1812		int delay_size = ARRAY_SIZE(vsc8531_internal_delay);
-  1813		struct vsc8531_private *vsc8531 = phydev->priv;
-  1814		struct device *dev = &phydev->mdio.dev;
-  1815		int rc, i, phy_id;
-  1816	
-  1817		vsc8531->rx_delay = phy_get_internal_delay(phydev, dev, &vsc8531_internal_delay[0],
-  1818							   delay_size, true);
-> 1819		if (vsc8531->rx_delay < 0) {
-  1820			if (phydev->interface == PHY_INTERFACE_MODE_RGMII_RXID ||
-  1821			    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
-  1822				vsc8531->rx_delay = RGMII_CLK_DELAY_2_0_NS;
-  1823			else
-  1824				vsc8531->rx_delay = RGMII_CLK_DELAY_0_2_NS;
-  1825		}
-  1826	
-  1827		vsc8531->tx_delay = phy_get_internal_delay(phydev, dev, &vsc8531_internal_delay[0],
-  1828							   delay_size, false);
-> 1829		if (vsc8531->tx_delay < 0) {
-  1830			if (phydev->interface == PHY_INTERFACE_MODE_RGMII_TXID ||
-  1831			    phydev->interface == PHY_INTERFACE_MODE_RGMII_ID)
-  1832				vsc8531->rx_delay = RGMII_CLK_DELAY_2_0_NS;
-  1833			else
-  1834				vsc8531->rx_delay = RGMII_CLK_DELAY_0_2_NS;
-  1835		}
-  1836	
-  1837		rc = vsc85xx_default_config(phydev);
-  1838		if (rc)
-  1839			return rc;
-  1840	
-  1841		rc = vsc85xx_mac_if_set(phydev, phydev->interface);
-  1842		if (rc)
-  1843			return rc;
-  1844	
-  1845		rc = vsc85xx_edge_rate_cntl_set(phydev, vsc8531->rate_magic);
-  1846		if (rc)
-  1847			return rc;
-  1848	
-  1849		phy_id = phydev->drv->phy_id & phydev->drv->phy_id_mask;
-  1850		if (PHY_ID_VSC8531 == phy_id || PHY_ID_VSC8541 == phy_id ||
-  1851		    PHY_ID_VSC8530 == phy_id || PHY_ID_VSC8540 == phy_id) {
-  1852			rc = vsc8531_pre_init_seq_set(phydev);
-  1853			if (rc)
-  1854				return rc;
-  1855		}
-  1856	
-  1857		rc = vsc85xx_eee_init_seq_set(phydev);
-  1858		if (rc)
-  1859			return rc;
-  1860	
-  1861		for (i = 0; i < vsc8531->nleds; i++) {
-  1862			rc = vsc85xx_led_cntl_set(phydev, i, vsc8531->leds_mode[i]);
-  1863			if (rc)
-  1864				return rc;
-  1865		}
-  1866	
-  1867		return 0;
-  1868	}
-  1869	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
