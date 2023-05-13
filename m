@@ -2,151 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C3D701457
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 06:26:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C717170145A
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 06:34:03 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbjEME0O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 00:26:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42714 "EHLO
+        id S230102AbjEMEbU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 00:31:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjEME0M (ORCPT
+        with ESMTP id S229449AbjEMEbR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 00:26:12 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2345910C0
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 21:26:11 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id d9443c01a7336-1aae5c2423dso103138245ad.3
-        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 21:26:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1683951970; x=1686543970;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7izujv/OASzpQI3cb0P6LLzhvUseZlQhTs3+10fnQcE=;
-        b=gOuMfs9XFHS52bzXmCu1e4dPL5BIJG3/wmyuEAoeeRsGQ0tatDTiVfqABa2YYrRfP4
-         tNfrwtipHYsBOmSzTccyyzzmceCCu9hwjnHMRnQsxB1T8Atjy7qJqZ3bQEIDsDD2woDr
-         pPcnApN9xHpQj6JJNDYCACLMXXJtCLpACzPx+mN1JT1be7r8+u5DtJ0izZRnJzly1dio
-         S7T5ctk43xh7N9MH7OA5RLFOwgGfqOdgaCcxlqobN8SfhXVX2ppDS48Dw2IMPIe1utys
-         CMRZxQGQ1B/Jg7O6heCraWD9I9dlxvaToF9GvYy0NZ/2yUPT+0H4LdxfGuog4x7Ca/XX
-         RmHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683951970; x=1686543970;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7izujv/OASzpQI3cb0P6LLzhvUseZlQhTs3+10fnQcE=;
-        b=g+PkD05kfDrWsaotS7ukga46RAjJ6tjjIVfp/py2uo8/MJAPw65AF1MhAXDQsQmej3
-         dtpu6wimIctMp5S9I6k5tsU+UjEudkTMN2NtQrLNJKCnh/hM+z+ZANZUKmj84P+IHPyC
-         M3pAHknzFLv2npjWflqDwTnt3/8TeABFb+8RyzuQFXU5T4CUrFRl9up2uRigRuXv/Si2
-         A8HeHdobYLsrhhku2U/O5GMVgG2ddPYm9u1Gc8KhEKAngD+lmRpuubB792nZLDRXgrrP
-         mZt8FFxwJyNvSxzaLJTFiB0FGFHxM2AFztD3Q02iJT80DQ0Hlz5BtWB2eUGUXm8/5op0
-         hjRw==
-X-Gm-Message-State: AC+VfDzNw+62TL4sMqFFzR+5HXCUFfScU1fYb61DyBISBowU0Z0ELzJj
-        dwcQB4k3gNtGkBI1eDmHZzaeUhEwm3oto4DGKMtsLJ2vm4o=
-X-Google-Smtp-Source: ACHHUZ6WD21cjxL0KoJtKQ6N/2J3QROhG3Ur+9wu2q0RLzdBfV86BB/taKgwnGg1JDWZQ2SjSW5mBzJx6p71kGs3KmM=
-X-Received: by 2002:a17:902:bb8d:b0:1ad:e2b6:d29c with SMTP id
- m13-20020a170902bb8d00b001ade2b6d29cmr4465906pls.26.1683951970227; Fri, 12
- May 2023 21:26:10 -0700 (PDT)
+        Sat, 13 May 2023 00:31:17 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 289EE3C2F
+        for <linux-kernel@vger.kernel.org>; Fri, 12 May 2023 21:31:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=9Xg26FQraBSMG0MMhYiyu1iEgUv/WTNcURfydXNCXls=; b=yyvAvDUnQwz+z6Jd01AOxRwYei
+        dzNu/pifelAdEo9rFqWbACBBGKEOjIYJDPjfkun8QvrGkTqjVS3Y0WHi3T6SzW0MS5aBYvoIzlXAJ
+        QwWGXL5tjTi+Fa+UGyqLGwvK1tqDWa3ocBdD0gySJ8d5yQnDfsseQ7ZW0HruckgIXdJ0fd7PWn6nK
+        ZK7T080AE5xU3UU8URTFjM23LviQAAWrXN4v3HW47dvrGlXUzugnAUH+H8o1hteyt8W+hmq/Ib1I0
+        xrvBtvr17xaCXAqLrzTZgbJl+kofq+h8hhpHLOny5ltAOoCsFt5oOZG2o1g/e1duLCqB4WUzZXKYP
+        2wuEiTaA==;
+Received: from [2601:1c2:980:9ec0::2764] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pxguW-00Degk-1M;
+        Sat, 13 May 2023 04:31:14 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        linuxppc-dev@lists.ozlabs.org
+Subject: [PATCH v2] powerpc/embedded6xx: select MPC10X_BRIDGE only if PCI is set
+Date:   Fri, 12 May 2023 21:31:11 -0700
+Message-Id: <20230513043111.10550-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-References: <20230506192453.725621-1-aford173@gmail.com> <20230506192453.725621-6-aford173@gmail.com>
- <275064c0e6c814d8e8fda6bcf70d6e8c3bdc3011.camel@pengutronix.de>
- <CGME20230512200115eucas1p180198d430c17b044e34d66b7246d4a7b@eucas1p1.samsung.com>
- <CAHCN7xKq_hZXWZVMG0xFK_zGfm18ag48a83BtL5OyE6VJ3FMTA@mail.gmail.com> <7a83b8c1-88ff-0ae6-9c3b-d49fc08c7ac0@samsung.com>
-In-Reply-To: <7a83b8c1-88ff-0ae6-9c3b-d49fc08c7ac0@samsung.com>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Fri, 12 May 2023 23:25:58 -0500
-Message-ID: <CAHCN7xLZNvMx=U9=Fp=qrG9xaMhU1PS_nQO5FfC2S+XLO8YLXQ@mail.gmail.com>
-Subject: Re: [PATCH V5 5/6] drm: bridge: samsung-dsim: Dynamically configure
- DPHY timing
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>, aford@beaconembedded.com,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Jagan Teki <jagan@amarulasolutions.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 4:02=E2=80=AFPM Marek Szyprowski
-<m.szyprowski@samsung.com> wrote:
->
-> On 12.05.2023 22:00, Adam Ford wrote:
-> > On Fri, May 12, 2023 at 2:37=E2=80=AFPM Lucas Stach <l.stach@pengutroni=
-x.de> wrote:
-> >> Am Samstag, dem 06.05.2023 um 14:24 -0500 schrieb Adam Ford:
-> >>> The DPHY timings are currently hard coded. Since the input
-> >>> clock can be variable, the phy timings need to be variable
-> >>> too.  Add an additional variable to the driver data to enable
-> >>> this feature to prevent breaking boards that don't support it.
-> >>>
-> >>> The phy_mipi_dphy_get_default_config function configures the
-> >>> DPHY timings in pico-seconds, and a small macro converts those
-> >>> timings into clock cycles based on the pixel clock rate.
-> >>>
-> >> This week I finally had some time to take a deeper look at this series
-> >> and test it on some of my systems.
-> > Thanks for testing this!
-> >> This patch causes issues when the burst clock rate is fixed by
-> >> supplying the DT entry. Instead of describing the issue below, I'm
-> >> attaching the patch that makes things work on my system.
-> > Oops, sorry about that.
-> >
-> >> I would appreciate if you could test this one on your side. Feel free
-> >> to squash it into yours if you find it working properly.
-> > I reviewed your patch, and it looks like it makes a lot of sense.
-> > If it works, I'll squash them together and add your name to the sign-of=
-f.
+When CONFIG_SMP is not set, CONFIG_BROKEN_ON_SMP is set, and
+CONFIG_PCI is not set, there can be a kconfig warning:
 
-That worked really well, I'll add it to my WIP directory since Marek S
-said he'd test the other proposal of dropping the dynamic phy flag and
-corresponding check in favor of pushing everyone to the same code.
+WARNING: unmet direct dependencies detected for PPC_INDIRECT_PCI
+  Depends on [n]: PCI [=n]
+  Selected by [y]:
+  - MPC10X_BRIDGE [=y]
 
-> >
-> >> Also I would almost bet that dynamic_dphy is working on the Exynos
-> >> boards with that fix added. So if anyone with access to those boards
-> >> would like to give it a shot, we may be able to get rid of the
-> >> hardcoded PHY parameters altogether, which would be a nice cleanup.
-> > I wondered the same thing, but I didn't want to create more work for
-> > Marek S and since there was so much churn getting the original driver
-> > ported, I thought it would be the safest thing to try to give the
-> > imx8m m/n/p the features without breaking the Exynos.
-> >
-> > Marek S - Do you want me to post this file without the extra checks to
-> > see if it still works with Exynos?
->
-> Feel free to send me patches to test or just point to your
-> work-in-progress git repo.
+To fix that, make the selects of MPC10X_BRIDGE be conditional
+on PCI and use "imply" instead of "select".
 
-Thanks for testing this, Marek S.  My work-in-progress branch is:
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: linuxppc-dev@lists.ozlabs.org
+Suggested-by: Michael Ellerman <mpe@ellerman.id.au> # use "imply"
+---
+v2: use imply instead of select (mpe)
 
-https://github.com/aford173/linux/tree/dsim-updates-wip
+ arch/powerpc/platforms/embedded6xx/Kconfig |    4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-Depending on what you find will determine how I modify the next
-revision of the code I push, so I very much appreciate your feedback.
-Hopefully the suggestion from Lucas will work for your applications
-and we can reduce some of the code complexity.
-
-adam
->
->
-> Best regards
-> --
-> Marek Szyprowski, PhD
-> Samsung R&D Institute Poland
->
+diff -- a/arch/powerpc/platforms/embedded6xx/Kconfig b/arch/powerpc/platforms/embedded6xx/Kconfig
+--- a/arch/powerpc/platforms/embedded6xx/Kconfig
++++ b/arch/powerpc/platforms/embedded6xx/Kconfig
+@@ -10,7 +10,7 @@ config LINKSTATION
+ 	select FSL_SOC
+ 	select PPC_UDBG_16550 if SERIAL_8250
+ 	select DEFAULT_UIMAGE
+-	select MPC10X_BRIDGE
++	imply MPC10X_BRIDGE if PCI
+ 	help
+ 	  Select LINKSTATION if configuring for one of PPC- (MPC8241)
+ 	  based NAS systems from Buffalo Technology. So far only
+@@ -24,7 +24,7 @@ config STORCENTER
+ 	select MPIC
+ 	select FSL_SOC
+ 	select PPC_UDBG_16550 if SERIAL_8250
+-	select MPC10X_BRIDGE
++	imply MPC10X_BRIDGE if PCI
+ 	help
+ 	  Select STORCENTER if configuring for the iomega StorCenter
+ 	  with an 8241 CPU in it.
