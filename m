@@ -2,105 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE3F2701578
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 11:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FD0270157B
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 11:06:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236207AbjEMJCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 05:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49792 "EHLO
+        id S233605AbjEMJGN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 05:06:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbjEMJCk (ORCPT
+        with ESMTP id S229671AbjEMJGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 05:02:40 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 561F14ED7
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 02:02:39 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-96aadfb19d7so283999166b.2
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 02:02:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683968558; x=1686560558;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HXSOlaN4/Bv4YilVOwCC/M+d+MgGbw/gHZ0ONLamDV8=;
-        b=vc7Ye+F6KjYi1P1vwEMBbV3cPmrH6ynQnOLsQ7R7QCKXSaLinreMF0ZgD6bMjEji8V
-         epvXfMgat8BsqAH+NcBWFA6+OxvsoTMIvjqI1hToBTWofTVZe1lB+8W4r8pNra6nILBz
-         rmPfib0MFYhJFHvHpDq5+nTemLpz4nQO5j5mPA487EpXrCqOsrXUvJMdsWL4M3LdCDgE
-         fltXOnDB89luilEPvDsZtOGrEy8OK2/VAlOr90Bqw+KzsFlCVVmFPzMqrYvNeZZafvCF
-         1/jdxZhTXAaAxJq1hyZXVNFpq0uiGgZc+ShOqCJbcePM6xEbAk4CEK1KmVkN8plzkh3r
-         vEmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683968558; x=1686560558;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HXSOlaN4/Bv4YilVOwCC/M+d+MgGbw/gHZ0ONLamDV8=;
-        b=UWLsYf9C8YF/iY23rawuG6JjYPzo0y82MqyNnDR4b9b1eRgSfOH77cBpf23cweeOhN
-         JPARPsOhtcEGk204T3/e1S2S7kpjoUBuceIFto/5QsEpM12nyOscwRRxdzCWgNOP3LfI
-         sBtqeYFrBxe9ZarEK7I/SMMpG8jOswk6Wgv5PjPe9XYqP/k+I1GBbSNL+516iYW+cQDQ
-         c4iXBU1hDIcyKdLfBgRSpwo9OqMBYBBP6ZxMECuny9JKPVVdz68D3y0KCqM/gTQW8e9S
-         YLKtnTy8ZhoPKkCtY2du8gjhC7VBjTaAg4kXbpTXVocL21uzHmRW4yzduGRnvbnN87Ae
-         Mljw==
-X-Gm-Message-State: AC+VfDw44X1B2PCS963/XTI/k+VRSke7juFTunopvNyO5Hvnm1hWJc/w
-        OVweS5Zi8TriMiri1jIrpOd27is750O2pOmVIQmI4g==
-X-Google-Smtp-Source: ACHHUZ67161rnDoLfMuLThXGPyOgzGXRs8UQzENpp+61zaIgMeOcqx8yp7rZWHiV3lazI+uGB7v95g==
-X-Received: by 2002:a17:907:7214:b0:96a:c661:fa1 with SMTP id dr20-20020a170907721400b0096ac6610fa1mr2653328ejc.46.1683968557696;
-        Sat, 13 May 2023 02:02:37 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:1d0:810a:586c:c5ba])
-        by smtp.gmail.com with ESMTPSA id jx26-20020a170907761a00b0096629607bb2sm6504247ejc.98.2023.05.13.02.02.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 May 2023 02:02:37 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     linux-samsung-soc@vger.kernel.org,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        Sat, 13 May 2023 05:06:12 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189934ED7;
+        Sat, 13 May 2023 02:06:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683968771; x=1715504771;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=D70CvXStS43IjD7L5CpDH3KFVNxY0NX2aLgy/4yjULo=;
+  b=M1AApBaPM6C2tSuriPjmNBxawo2ddoYUzyqKltjvN2hx3yBp3iuRf5f8
+   2ygLwh3yFaHvcu4PQkyxVh0vmXB4RdCiLezPhdv/p0eYE5Z++QUJEQ/oD
+   UhUwaVz5JPm4mTQiks+dJn/jgDyWlblgzwdVn+4fHoH4Z+UdLM/ASNpbf
+   yBHor/U63+lzIY0+0uDoxTeIH/sM46a5I0ve54ET0/ZMzdPBbRpnlvp/h
+   tlLWp0+s17EvivPGZfMlIOOukVFoP6Sogn86eTBn2v/1f5To/v9sAPvyz
+   iy/riLVSv5wQ3xOjvnp93fE6TGJof3upnx9WE9nA8flZtEi97LuQ1bYAc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="335468893"
+X-IronPort-AV: E=Sophos;i="5.99,271,1677571200"; 
+   d="scan'208";a="335468893"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 02:06:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="844685129"
+X-IronPort-AV: E=Sophos;i="5.99,271,1677571200"; 
+   d="scan'208";a="844685129"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga001.fm.intel.com with ESMTP; 13 May 2023 02:06:08 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pxlCZ-0005Py-26;
+        Sat, 13 May 2023 09:06:07 +0000
+Date:   Sat, 13 May 2023 17:05:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Yang <mmyangfl@gmail.com>, linux-crypto@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, David Yang <mmyangfl@gmail.com>,
+        Weili Qian <qianweili@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
         linux-kernel@vger.kernel.org
-Cc:     Alim Akhtar <alim.akhtar@samsung.com>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] ASoC: MAINTAINERS: drop Krzysztof Kozlowski from Samsung audio
-Date:   Sat, 13 May 2023 11:02:28 +0200
-Message-Id: <20230513090228.4340-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+Subject: Re: [PATCH v2 2/2] crypto: hisilicon/advca - Add SHA support
+Message-ID: <202305131617.8wrECG3g-lkp@intel.com>
+References: <20230513074339.266879-3-mmyangfl@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230513074339.266879-3-mmyangfl@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove Krzysztof Kozlowski from maintainer of Samsung SoC Audio drivers
-and change the status to maintenance (no one is reality being paid for
-looking at this).
+Hi David,
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- MAINTAINERS | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index c7082004ac55..746ec43ff244 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18581,10 +18581,9 @@ F:	Documentation/admin-guide/LSM/SafeSetID.rst
- F:	security/safesetid/
- 
- SAMSUNG AUDIO (ASoC) DRIVERS
--M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
- M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
- L:	alsa-devel@alsa-project.org (moderated for non-subscribers)
--S:	Supported
-+S:	Maintained
- B:	mailto:linux-samsung-soc@vger.kernel.org
- F:	Documentation/devicetree/bindings/sound/samsung*
- F:	sound/soc/samsung/
+[auto build test WARNING on 9a48d604672220545d209e9996c2a1edbb5637f6]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Yang/crypto-hisilicon-Add-HiSilicon-ADVCA-Subsystem/20230513-154545
+base:   9a48d604672220545d209e9996c2a1edbb5637f6
+patch link:    https://lore.kernel.org/r/20230513074339.266879-3-mmyangfl%40gmail.com
+patch subject: [PATCH v2 2/2] crypto: hisilicon/advca - Add SHA support
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20230513/202305131617.8wrECG3g-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/57ff91a10a13d90fadb0567f9245d9040ce9659e
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Yang/crypto-hisilicon-Add-HiSilicon-ADVCA-Subsystem/20230513-154545
+        git checkout 57ff91a10a13d90fadb0567f9245d9040ce9659e
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=loongarch SHELL=/bin/bash drivers/crypto/hisilicon/advca/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305131617.8wrECG3g-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/crypto/hisilicon/advca/hisi-advca-sha.c: In function 'hica_sha_update':
+>> drivers/crypto/hisilicon/advca/hisi-advca-sha.c:216:26: warning: cast from pointer to integer of different size [-Wpointer-to-int-cast]
+     216 |         bool inplace = !((unsigned int) data & 3);
+         |                          ^
+
+
+vim +216 drivers/crypto/hisilicon/advca/hisi-advca-sha.c
+
+   211	
+   212	static int hica_sha_update(const struct hica_sha_priv *priv, const void *data,
+   213				   unsigned int len, bool may_sleep)
+   214	{
+   215		struct device *dev = priv->dev;
+ > 216		bool inplace = !((unsigned int) data & 3);
+   217		u8 *buf = NULL;
+   218		dma_addr_t addr;
+   219		int ret;
+   220	
+   221		if (!len)
+   222			return 0;
+   223	
+   224		if (WARN_ON(len % SHA_BLOCK_SIZE))
+   225			return -EINVAL;
+   226	
+   227		if (inplace) {
+   228			addr = dma_map_single(dev, (void *) data, len, DMA_TO_DEVICE);
+   229			if (dma_mapping_error(dev, addr)) {
+   230				dev_err(dev, "error mapping src\n");
+   231				return -EIO;
+   232			}
+   233	
+   234			inplace = !(addr & 3);
+   235			if (!inplace)
+   236				dma_unmap_single(dev, addr, len, DMA_TO_DEVICE);
+   237		}
+   238	
+   239		if (!inplace) {
+   240			buf = dma_alloc_attrs(dev, len, &addr,
+   241					      may_sleep ? GFP_KERNEL : GFP_ATOMIC, 0);
+   242			if (!buf)
+   243				return -ENOMEM;
+   244			memcpy(buf, data, len);
+   245		}
+   246	
+   247		dma_sync_single_for_device(dev, addr, len, DMA_TO_DEVICE);
+   248		ret = hica_sha_record(priv, addr, len) ?:
+   249		      hica_sha_wait(priv, SHA_RECORD_READY);
+   250	
+   251		if (!buf)
+   252			dma_unmap_single(dev, addr, len, DMA_TO_DEVICE);
+   253		else {
+   254			memzero_explicit(buf, len);
+   255			dma_free_attrs(dev, len, buf, addr, 0);
+   256		}
+   257	
+   258		pr_debug("%s: read %u\n", __func__, len);
+   259		return ret;
+   260	}
+   261	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
