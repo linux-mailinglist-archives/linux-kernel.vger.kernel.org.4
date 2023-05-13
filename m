@@ -2,105 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06D18701654
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 13:10:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E8FDD70164B
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 13:09:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236911AbjEMLKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 07:10:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47884 "EHLO
+        id S237517AbjEMLJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 07:09:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231736AbjEMLKB (ORCPT
+        with ESMTP id S234083AbjEMLJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 07:10:01 -0400
+        Sat, 13 May 2023 07:09:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9655240CD;
-        Sat, 13 May 2023 04:10:00 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C1421FF7
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 04:09:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 262B560A36;
-        Sat, 13 May 2023 11:10:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EC3EC433D2;
-        Sat, 13 May 2023 11:09:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1683976199;
-        bh=d6U6HY4Y147yLj/hkR4VH4OA5h+IAkhNN7SsSQMVw2Y=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ptS5Mq+PYQvQxKaGII3Bvz7UtKN661n9Mp0jjAtuIlc8ZxaucY2LZnAmWPN+K4QY2
-         vxx17LOmeusIfM8qxE7dQMAI25tOkWga9iC0jvOA27QKXVOEMVn6vpjy9cZTiZ/20w
-         Vle63pCtnK4g3OHW+q8WYUDT4TUagFdwHlA+QlYU=
-Date:   Sat, 13 May 2023 20:07:31 +0900
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Dhruva Gole <d-gole@ti.com>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-omap@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v11 1/1] serial: core: Start managing serial controllers
- to enable runtime PM
-Message-ID: <2023051332-pretended-spoiler-61fc@gregkh>
-References: <20230511065355.47525-1-tony@atomide.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2788A60B73
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 11:09:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B9866C433D2;
+        Sat, 13 May 2023 11:09:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1683976144;
+        bh=eZU2toRUsCc05ABHU0WOvkAv0LyPZ4e+alp6zVRLq+4=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=fXxWU+Dn0+wO2MS66K2cmaXblBkpIeuo8uDydSnSg61pnIqKuZ9a53JssEa0fTtCH
+         WzGKH/LnFI9r7aCyOiBX+vv9S+Oh4RrFLtX8hASKP8FuosIKScWZdLHmJXFAZEAX9w
+         ouiIvVVVYYK5ZBtF59ZBjuJqA03NQcUSe0aS9nuEIIbRO5hQwbM2JrEB9Rtq/I87il
+         NTCZV/DS0JdYk3V0hUmmEyKUj88AShuULxCp5Wcwnaj3npJfPx5ogsDzAeu/Bimgcs
+         rfD5LDdsmKA6DyOA/AVOtEMenrw7H5ghx4UG+A807rZ30tKHO6Y9Yi1w6Il9kDv5Dx
+         EWxqY6Ny1tAiw==
+Message-ID: <168b52bc-830e-f827-10ed-33d5732f4f43@kernel.org>
+Date:   Sat, 13 May 2023 13:09:00 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511065355.47525-1-tony@atomide.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: drivers/soc/qcom/icc-bwmon.c:360 bwmon_probe() warn: passing zero
+ to 'dev_err_probe'
+To:     Dan Carpenter <dan.carpenter@linaro.org>, oe-kbuild@lists.linux.dev
+Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+References: <98e45455-7d5d-48e1-a87e-e0b3a05f1bb0@kili.mountain>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <98e45455-7d5d-48e1-a87e-e0b3a05f1bb0@kili.mountain>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 09:53:51AM +0300, Tony Lindgren wrote:
-> We want to enable runtime PM for serial port device drivers in a generic
-> way. To do this, we want to have the serial core layer manage the
-> registered physical serial controller devices.
+On 13/05/2023 12:14, Dan Carpenter wrote:
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+> head:   9a48d604672220545d209e9996c2a1edbb5637f6
+> commit: b9c2ae6cac403dee3195fda9eb28d8ee733b225b soc: qcom: icc-bwmon: Add bandwidth monitoring driver
+> config: openrisc-randconfig-m031-20230509 (https://download.01.org/0day-ci/archive/20230513/202305131657.76XeHDjF-lkp@intel.com/config)
+> compiler: or1k-linux-gcc (GCC) 12.1.0
 > 
-> To do this, let's set up a struct bus and struct device for the serial
-> core controller as suggested by Greg and Jiri. The serial core controller
-> devices are children of the physical serial port device. The serial core
-> controller device is needed to support multiple different kind of ports
-> connected to single physical serial port device.
+> If you fix the issue, kindly add following tag where applicable
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Reported-by: Dan Carpenter <error27@gmail.com>
+> | Link: https://lore.kernel.org/r/202305131657.76XeHDjF-lkp@intel.com/
 > 
-> Let's also set up a struct device for the serial core port. The serial
-> core port instances are children of the serial core controller device.
+> New smatch warnings:
+> drivers/soc/qcom/icc-bwmon.c:360 bwmon_probe() warn: passing zero to 'dev_err_probe'
 > 
-> With the serial core port device we can now flush pending TX on the
-> runtime PM resume as suggested by Johan.
+> Old smatch warnings:
+> drivers/soc/qcom/icc-bwmon.c:365 bwmon_probe() warn: passing zero to 'dev_err_probe'
+> 
 
-Much better, thanks!
+Thanks, I'll fix it.
 
-One thing jumps out at me though, you are passing around "raw" struct
-device pointers as the serial port structure, why?
+Best regards,
+Krzysztof
 
-Shouldn't:
-
-> @@ -563,7 +564,8 @@ struct uart_port {
->  	unsigned int		minor;
->  	resource_size_t		mapbase;		/* for ioremap */
->  	resource_size_t		mapsize;
-> -	struct device		*dev;			/* parent device */
-> +	struct device		*dev;			/* serial port physical parent device */
-> +	struct device		*port_dev;		/* serial core port device */
-
-port_dev here be something like "struct serial_port" (or some better
-name)?  That way you enforce the type being passed around to the serial
-code in this change which will help catch any type mistakes.
-
-Yes, this structure can just be a "wrapper" around 'struct device' but
-at least it's a unique type.
-
-Or am I missing why this was done this way?
-
-thanks,
-
-greg k-h
