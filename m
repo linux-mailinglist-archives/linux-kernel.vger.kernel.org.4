@@ -2,106 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3903770158D
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 11:19:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D465170158E
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 11:19:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237428AbjEMJTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 05:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55416 "EHLO
+        id S237339AbjEMJTu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 05:19:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230205AbjEMJTG (ORCPT
+        with ESMTP id S237453AbjEMJTq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 05:19:06 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681C53583
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 02:19:05 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id 4fb4d7f45d1cf-50bc25f0c7dso19517534a12.3
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 02:19:05 -0700 (PDT)
+        Sat, 13 May 2023 05:19:46 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5C4A35AD;
+        Sat, 13 May 2023 02:19:45 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id 4fb4d7f45d1cf-50b37f3e664so19049701a12.1;
+        Sat, 13 May 2023 02:19:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1683969544; x=1686561544;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=/pwslOp1fAGewqJeOjahYE75gGMp1KhOblxxR4rZ8Rg=;
-        b=Rt78OHZ7Pe/GbuBHucM4WxbAdD9tqFQYhEWe/bio9wfsVMMVvczlTF8zehIUQlX+X9
-         HzLuqNJWTAIGGMF7ZJf3S+Q9a4zVGlUIiisk6/+yL+Krxn+uiAjVGskO813sAJwm5HaE
-         eSD3T6uhi4yKh9swvF0S/FWk1d/BfRNmLl+NDiQNU/TWKlhC2P4b3A2t+s95l6PlIobc
-         djOVtctx/Og1r4Jyb18rFfAKpivQAwNki2uHn2TNyvXLQ7exBxnvE514wbyGtDNgxLsN
-         vTW2UdBaKh4iyLToFUeVjWlnbqxxCIabfGba89x2DaYOVkNLk4GJQL1Oc57MgpJjqN6E
-         8yCQ==
+        d=gmail.com; s=20221208; t=1683969584; x=1686561584;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V/ffD06cwDqqYw9ZZG01Fo5tfB2NmW+1D8qbzBkTPeA=;
+        b=LmwSMi02wUb7imyTUGCdjBF3bcsZMsz0W7Y+n+AgTjFQ2omGRi0diD5jOswF3DmkgR
+         O5yJygYBDy4gGsW18EBQEtG64HsubWz+WnQlkK4jzdtMSbGcH5qTyf0BUB9ZhwhJxGth
+         Y2XQRrK3Th+PRjNhtggJLt8UNEn60p9KNqG3YjPUewtgcfKnXl4Z7n2YA6V23b+P3LZ4
+         vEaxEmAscJsu41kUQWtUbI17SKsWL9LSK07xuhO9yWrmJkTyUL164RsPcU0o8+PGQMK6
+         6T2GjcPICWuHoaJXMgHSiS6q94qCUv9hRTEfxE/iDLPjL/LvGhqySUCc2XWvUgHb2qBs
+         C/ng==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1683969544; x=1686561544;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/pwslOp1fAGewqJeOjahYE75gGMp1KhOblxxR4rZ8Rg=;
-        b=eM393NElPTrHk5Ds8j7Ful2IJRXXf7OH9OJuVGlH3fzaHou+0vzyTvkiBSySGkeh+z
-         3nOyJrfhFo/wJ2BmNKm8OtVfpYrrrD8uXO/D5Dv6SLhZTos+zELnuhn+WF8i6yxSxqxa
-         KafQ6KsQa8TPt2P0GLUIKgUso4mts5BwdOLSrJ+I6VrJ5OTjMgci+BwmDqdNXDOMonWN
-         9JHwsTdfYiNYyUCaTz9c9Vwq8GtMZ/GJihbxtjs+F6lAgue/D1jwHc9d5m7sy97CQny0
-         ZZ8w6ShQ9da4Z9e042Go+f8o0xA3QowsJtkLq+U/fVbdMft/7AQY9dDCKu2PiMdg1U/P
-         rJpA==
-X-Gm-Message-State: AC+VfDwQgulSx490lVILJkweWAGt5/Mg5aljJm5C1VihFet65ew9C7a8
-        1gOVD81LS2dAwA4xrbXGDWYcpQ==
-X-Google-Smtp-Source: ACHHUZ50SbvUnQQSK4asT+Ddop4n2StwVuTmWGDjFEKe1e3typUUWFWcTe5rvtNXa9yqOpmHnnuTmA==
-X-Received: by 2002:a17:906:db02:b0:94f:128d:63db with SMTP id xj2-20020a170906db0200b0094f128d63dbmr25211619ejb.17.1683969543948;
-        Sat, 13 May 2023 02:19:03 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:1d0:810a:586c:c5ba? ([2a02:810d:15c0:828:1d0:810a:586c:c5ba])
-        by smtp.gmail.com with ESMTPSA id ov17-20020a170906fc1100b0096aa0ca9b5fsm2009519ejb.106.2023.05.13.02.19.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 May 2023 02:19:03 -0700 (PDT)
-Message-ID: <15ac2e1e-819d-9f73-11ab-6e7953913b83@linaro.org>
-Date:   Sat, 13 May 2023 11:19:02 +0200
+        d=1e100.net; s=20221208; t=1683969584; x=1686561584;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V/ffD06cwDqqYw9ZZG01Fo5tfB2NmW+1D8qbzBkTPeA=;
+        b=YcfQr0ZSjpeEQjr3qCAUKK87VqI+gP2StL7TCNyVEtKp6i+3CnWj8YSITZbfIE3jn/
+         Yi+bX1TjCXlkl3kymEXjXcCuYjcwa5OM10ACgnSS0CL+j3nIPqwdsRRmrnOmsyXOc5Sp
+         HFn0gWSjZwsnjmNPYtVTgXkuUM1T+JqrGrNn58yl712HlAH1T7+lvz9o7qbI4q4J2Zxq
+         LAIlohwF102OiNc2JgAdyEPNKGwcJ9gwR96/5NZhtk2LFudsviOweRMivbhSlayWbvWi
+         HhJtacAQ4BkjBn667oatC5w9ILfVMOhpsCZneQ8UYeUt8ikkEs0DXjJI/WtmvCrXFjjg
+         y76w==
+X-Gm-Message-State: AC+VfDwe5votAg5Jxx44AY4JQZ5wf+Vcehbu/8SwSS9S26tKJmql4nXg
+        UFQxeAqlSsyr1qz8R5COsxLjRgA6FpMDAgDcTLWOCA+vWSssqQ==
+X-Google-Smtp-Source: ACHHUZ7DaW4VctCEmtrHbde+hfICyYiY0rVh/EkpovE1xbD08Yhm4ZkW6TZILWDyHTadFqYDWa70SgLN6pjyi7tuWP0=
+X-Received: by 2002:a05:6402:605:b0:50d:91c8:9e10 with SMTP id
+ n5-20020a056402060500b0050d91c89e10mr20037487edv.10.1683969584084; Sat, 13
+ May 2023 02:19:44 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH v3 1/2] dt-bindings: arm: qcom: Add Fxtec Pro1X
-Content-Language: en-US
-To:     Dang Huynh <danct12@riseup.net>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230505-fxtec-pro1x-support-v3-0-0c9c7f58b205@riseup.net>
- <20230505-fxtec-pro1x-support-v3-1-0c9c7f58b205@riseup.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230505-fxtec-pro1x-support-v3-1-0c9c7f58b205@riseup.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230510122045.2259-1-zegao@tencent.com> <6308b8e0-8a54-e574-a312-0a97cfbf810c@meta.com>
+ <ZFvUH+p0ebcgnwEg@krava> <CAD8CoPC_=d+Aocp8pnSi9cbU6HWBNc697bKUS1UydtB-4DFzrA@mail.gmail.com>
+ <ee28e791-b3ab-3dfd-161b-4e7ec055c6ff@meta.com> <20230513001757.75ae0d1b@rorschach.local.home>
+In-Reply-To: <20230513001757.75ae0d1b@rorschach.local.home>
+From:   Ze Gao <zegao2021@gmail.com>
+Date:   Sat, 13 May 2023 17:19:32 +0800
+Message-ID: <CAD8CoPBYfAyb6FtQ8KsqO-f4jfsYXoqe9heWcQkFprX=TQ50PA@mail.gmail.com>
+Subject: Re: [PATCH] bpf: reject blacklisted symbols in kprobe_multi to avoid
+ recursive trap
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Yonghong Song <yhs@meta.com>, Jiri Olsa <olsajiri@gmail.com>,
+        Song Liu <song@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Ze Gao <zegao@tencent.com>, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/05/2023 03:05, Dang Huynh wrote:
-> Document F(x)tec Pro1X as a SM6115 device.
-> 
-> Signed-off-by: Dang Huynh <danct12@riseup.net>
-> ---
->  Documentation/devicetree/bindings/arm/qcom.yaml | 5 +++++
+Exactly, and rethook_trampoline_handler suffers the same problem.
 
-This is a friendly reminder during the review process.
+And I've posted two patches for kprobe and rethook by using the
+notrace verison of preempt_
+{disable, enable} to fix fprobe+rethook.
+[1] https://lore.kernel.org/all/20230513081656.375846-1-zegao@tencent.com/T=
+/#u
+[2] https://lore.kernel.org/all/20230513090548.376522-1-zegao@tencent.com/T=
+/#u
 
-It looks like you received a tag and forgot to add it.
+Even worse, bpf callback introduces more such use cases, which is
+typically organized as follows
+to guard the lifetime of bpf related resources ( per-cpu access or trampoli=
+ne).
 
-If you do not know the process, here is a short explanation:
-Please add Acked-by/Reviewed-by/Tested-by tags when posting new
-versions. However, there's no need to repost patches *only* to add the
-tags. The upstream maintainer will do that for acks received on the
-version they apply.
+migrate_disable()
+rcu_read_lock()
+...
+bpf_prog_run()
+...
+rcu_read_unlock()
+migrate_enable().
 
-https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+But this may need to introduce fprobe_blacklist and
+bpf_kprobe_blacklist to solve such bugs at all,
+just like what Jiri and Yonghong suggested. Since bpf kprobe works on
+a different (higher and
+constrained) level than fprobe and ftrace and we cannot blindly mark
+functions (migrate_disable,
+__rcu_read_lock, etc.) used in tracer callbacks from external
+subsystems in case of semantic breakage.
+And I will try to implement these ideas later.
 
-If a tag was not added on purpose, please state why and what changed.
+Thanks,
+Ze
 
-
-Best regards,
-Krzysztof
-
+On Sat, May 13, 2023 at 12:18=E2=80=AFPM Steven Rostedt <rostedt@goodmis.or=
+g> wrote:
+>
+> On Fri, 12 May 2023 07:29:02 -0700
+> Yonghong Song <yhs@meta.com> wrote:
+>
+> > A fprobe_blacklist might make sense indeed as fprobe and kprobe are
+> > quite different... Thanks for working on this.
+>
+> Hmm, I think I see the problem:
+>
+> fprobe_kprobe_handler() {
+>    kprobe_busy_begin() {
+>       preempt_disable() {
+>          preempt_count_add() {  <-- trace
+>             fprobe_kprobe_handler() {
+>                 [ wash, rinse, repeat, CRASH!!! ]
+>
+> Either the kprobe_busy_begin() needs to use preempt_disable_notrace()
+> versions, or fprobe_kprobe_handle() needs a
+> ftrace_test_recursion_trylock() call.
+>
+> -- Steve
