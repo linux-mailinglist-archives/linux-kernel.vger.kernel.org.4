@@ -2,103 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B6967015CF
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 11:34:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D32A87015D2
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 11:35:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237357AbjEMJec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 05:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38976 "EHLO
+        id S238151AbjEMJfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 05:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231736AbjEMJea (ORCPT
+        with ESMTP id S237425AbjEMJfO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 05:34:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A885BE63
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 02:34:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3B17760DF8
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 09:34:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7C887C433EF;
-        Sat, 13 May 2023 09:34:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1683970468;
-        bh=bTlCpUA7NjNdRUsAWNc+glm1Q0qG6jscwIK4xu6wTNM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HP3j7Yin5lhCTSdKABhJJuJv2YmWMGVMAEpfHETYHpW5minkKV3HigOG2yBZwswVp
-         BZY/CKyIDABImMLjSrFyh0fxlVop0FHX/+JE45oojKBBWt7gp/Jj6kjHgwRXatUjsi
-         g/yOo717mMouNClQKaR3waLqJOqE7GuGkHVviYFQ=
-Date:   Sat, 13 May 2023 18:33:22 +0900
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Xia Fukun <xiafukun@huawei.com>
-Cc:     prajnoha@redhat.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] kobject: Fix global-out-of-bounds in
- kobject_action_type()
-Message-ID: <2023051308-line-curable-6d76@gregkh>
-References: <20230512103029.183852-1-xiafukun@huawei.com>
+        Sat, 13 May 2023 05:35:14 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D9AD35A3
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 02:35:10 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50b9ef67f35so19121845a12.2
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 02:35:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1683970508; x=1686562508;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dY3lFIjNEelBviTPNoPhSs/VKfnEIsYSNc20Ac/BLxs=;
+        b=sPhdxui1UQkP/sVipgBFi2xh03YenL3zBNZkC11lrroV4HiJb4ZEbgpc9wi4SwoKCE
+         HJtcUv82RYi2h0lxOaU8ILbHO+NL0xOfU123prFnqCh9momIkPHqz7rGJe2ApbX63FYy
+         HsqoWBa/l7EGZ7UAgfa6FqddEL053GQP/5m2PBcKTC8kdq5TNQwLZ5fpUSBcedoEsSWe
+         S5++OirIAAv36F+5pmySd2mCKHpIKTUNLo9qwUFIauq9Y7XZreAIoSZpOK7qYHOmr3Dj
+         V/l35gonHGIIECzB1+RoqHgz81JO3ANwMrzZ4RL39C2Xl8XlBGkZ307uuYVCnEg4Aczg
+         ugjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1683970508; x=1686562508;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dY3lFIjNEelBviTPNoPhSs/VKfnEIsYSNc20Ac/BLxs=;
+        b=Vn5843KKT4obI/nTgVroazyZHAHAyjQUXXKWqfhauKKbEPANmY9uTpUVOVUc2NA0C7
+         XrgZNYe2Ibn6ACJhPT9zuu117cxixNJ+UnQnSHTmrodgEU6Z+M4lVcEAVQbEcuIKdbZy
+         2u347Ne1hRm7I4JhJFGweBd4vaz3ptIirldXkcfi0DBUUyfFTa+XzZ7tTZWNYwpowoj7
+         sdYWfSTG9yGux6Mvds9GOPrj4PkR2UzRRb6U7vWJiqDcHYS8yUkafeyKCyIsGfNhsWhH
+         jNSlsI83Y6nxPmqQMvdq9YIyyOzsYmlzICQ5bs7OopM9psTQIvud39xK3Z7GK+8dsChw
+         8M1g==
+X-Gm-Message-State: AC+VfDxoeOM3MYFpd7CyyDh3h1ZV/Kqs2ZHtO3wwPyfwd6jzJBfo7an4
+        2bPi7lh4JWWKjij9OHZdtgF5pw==
+X-Google-Smtp-Source: ACHHUZ40NU1D+qVy8zLkCSmbvvi0b/Togzsd+2MHJ7qzsnk2v20TMfUd86Q1kkNWszT4CZ4sjbw7rw==
+X-Received: by 2002:a17:907:3e82:b0:966:2aab:ae5c with SMTP id hs2-20020a1709073e8200b009662aabae5cmr23533331ejc.38.1683970508457;
+        Sat, 13 May 2023 02:35:08 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:1d0:810a:586c:c5ba? ([2a02:810d:15c0:828:1d0:810a:586c:c5ba])
+        by smtp.gmail.com with ESMTPSA id h9-20020a170906584900b0094e597f0e4dsm6500274ejs.121.2023.05.13.02.35.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 13 May 2023 02:35:07 -0700 (PDT)
+Message-ID: <49543489-b96d-ca45-f806-eec06accc096@linaro.org>
+Date:   Sat, 13 May 2023 11:35:06 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230512103029.183852-1-xiafukun@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v4 2/3] dt-bindings: timer: Add Loongson-1 clocksource
+Content-Language: en-US
+To:     Keguang Zhang <keguang.zhang@gmail.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-mips@vger.kernel.org
+Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Stephen Boyd <sboyd@kernel.org>
+References: <20230512103724.587760-1-keguang.zhang@gmail.com>
+ <20230512103724.587760-3-keguang.zhang@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230512103724.587760-3-keguang.zhang@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 06:30:29PM +0800, Xia Fukun wrote:
-> The following c language code can trigger KASAN's global variable
-> out-of-bounds access error in kobject_action_type():
+On 12/05/2023 12:37, Keguang Zhang wrote:
+> Add devicetree binding document for Loongson-1 clocksource.
 > 
-> int main() {
->     int fd;
->     char *filename = "/sys/block/ram12/uevent";
->     char str[86] = "offline";
->     int len = 86;
-> 
->     fd = open(filename, O_WRONLY);
->     if (fd == -1) {
->         printf("open");
->         exit(1);
->     }
-> 
->     if (write(fd, str, len) == -1) {
->         printf("write");
->         exit(1);
->     }
-> 
->     close(fd);
->     return 0;
-> }
-> 
-> Function kobject_action_type() receives the input parameters buf and count,
-> where count is the length of the string buf.
-> 
-> In the use case we provided, count is 86, the count_first is 85.
-> Buf points to a string with a length of 86, and its first seven
-> characters are "offline".
-> In line 87 of the code, kobject_actions[action] is the string "offline"
-> with the length of 7,an out-of-boundary access will appear:
-> 
-> kobject_actions[action][85].
-> 
-> Use sysfs_match_string() to replace the fragile and convoluted loop.
-> This function is well-tested for parsing sysfs inputs. Moreover, this
-> modification will not cause any functional changes.
-> 
-> Fixes: f36776fafbaa ("kobject: support passing in variables for synthetic uevents")
-> Signed-off-by: Xia Fukun <xiafukun@huawei.com>
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
 > ---
-> v3 -> v4:
-> - refactor the function to be more obviously correct and readable
+> V3 -> V4: Replaced the wildcard compatible string with specific one
+> V2 -> V3: None
+> V1 -> V2: None
 
-How did you test this as it does not even build?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-confused,
+Best regards,
+Krzysztof
 
-greg k-h
