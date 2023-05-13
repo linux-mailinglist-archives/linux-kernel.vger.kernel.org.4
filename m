@@ -2,103 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 621AB701546
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 10:33:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BF7770154A
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 10:43:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232182AbjEMIdy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 04:33:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40408 "EHLO
+        id S232224AbjEMInP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 04:43:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229463AbjEMIdv (ORCPT
+        with ESMTP id S229463AbjEMInN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 04:33:51 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55DE74C25
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 01:33:50 -0700 (PDT)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1683966827;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=upafpHfSofvA8jLog1yJSjP3+mjtBPHf215cSKnKmkw=;
-        b=03JA2DdbUjhdsrNQv/c11zzVIyTbqS2EFOod1SeyF1nm6WYCoe9eorXz77Y1I26w2AvYJ0
-        7O2ooEtxe6DvH0RPJrqAjv8PqIiNVQ6JhmvAl7L2W3NoERrnXf/hb34vzsQT5PFCbk5lNG
-        AQ2BLs1xOM3aZ1vEUQ1E3S6iOUa97iMBVICAcHctYf/q9csZqAe88Ur9Th8lsW2TnLkB+A
-        qaYstRSpO885rD/2tBO0srRYTSA6BP65TZxD9qohHwJINCVOFJRgghzcdsdJDwUd/qF5hM
-        faXXNDIBznlDgZCOgRQ1gYQomUZVz9BSXmn046PJt47hyegl/teKXG09bST63w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1683966827;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=upafpHfSofvA8jLog1yJSjP3+mjtBPHf215cSKnKmkw=;
-        b=v0mb7MEHh3lIRKFWHbNyszMXmH6IlZQO4cEkwxYLXCqCaEB5Ts3inpuBelseosdKwh8+do
-        SjINwuzFW5bOWpCg==
-To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     syzbot <syzbot+fe0c72f0ccbb93786380@syzkaller.appspotmail.com>,
-        syzkaller-bugs@googlegroups.com, Ingo Molnar <mingo@elte.hu>,
-        linux-kernel@vger.kernel.org, linux-mm <linux-mm@kvack.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH] debugobject: don't wake up kswapd from fill_pool()
-In-Reply-To: <61d7ac52-3352-b7cd-8908-890a29a007d9@I-love.SAKURA.ne.jp>
-References: <000000000000008ddb05fb5e2576@google.com>
- <6577e1fa-b6ee-f2be-2414-a2b51b1c5e30@I-love.SAKURA.ne.jp>
- <20230511204458.819f9009d2ef8b46cc163191@linux-foundation.org>
- <d642e597-cf7d-b410-16ce-22dff483fd8e@I-love.SAKURA.ne.jp>
- <87v8gxbthf.ffs@tglx>
- <39c79d27-73ea-06a8-62fe-2b64d0fd8db5@I-love.SAKURA.ne.jp>
- <87bkipbeyr.ffs@tglx>
- <61d7ac52-3352-b7cd-8908-890a29a007d9@I-love.SAKURA.ne.jp>
-Date:   Sat, 13 May 2023 10:33:47 +0200
-Message-ID: <87lehsaavo.ffs@tglx>
+        Sat, 13 May 2023 04:43:13 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F9AC4C10;
+        Sat, 13 May 2023 01:43:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1683967391; x=1715503391;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=+QgOiRaS6uSr1eVJzQcLvEfSxNZaNOBXvZTLLm9zO+E=;
+  b=MryeNSW/TpIAQLasOR5vkHTYbaFfuS/iKhCHDdn0n/At+UZAZ4Pd3lrg
+   1MYq/rxh3ulqhee3OIL7ihhJJSxNrPiblQ2LVXEqDbsvDf7gcxdBfvMiK
+   nVoU3HBo5TQ9cjCE0nCu1kHZG4wxmDkuEDvkWA6B4mk4YGI5KvQ/oRqKr
+   1K9vvZD1b8s4YZbajD8nXEmBgsr3ayxpStwo79Pbne3YNWQNCL8/eJVzY
+   Sspz4Hoc4oei3CmDyMrnNLj2upYEIgm6LSny5gQTKQucFl96z3xUWlQVb
+   uv3wUcPmZ7nOCaHSOU1L5GlVNLPYb0p73sSudjqKswwDENHZdcNFkte1M
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="414322385"
+X-IronPort-AV: E=Sophos;i="5.99,271,1677571200"; 
+   d="scan'208";a="414322385"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 01:43:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10708"; a="790071567"
+X-IronPort-AV: E=Sophos;i="5.99,271,1677571200"; 
+   d="scan'208";a="790071567"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 13 May 2023 01:43:07 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pxkqJ-0005PI-0x;
+        Sat, 13 May 2023 08:43:07 +0000
+Date:   Sat, 13 May 2023 16:42:38 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     David Yang <mmyangfl@gmail.com>, linux-crypto@vger.kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, David Yang <mmyangfl@gmail.com>,
+        Weili Qian <qianweili@huawei.com>,
+        Zhou Wang <wangzhou1@hisilicon.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] crypto: hisilicon - Add HiSilicon ADVCA Subsystem
+Message-ID: <202305131630.Wt74Rpda-lkp@intel.com>
+References: <20230513074339.266879-2-mmyangfl@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230513074339.266879-2-mmyangfl@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 13 2023 at 08:13, Tetsuo Handa wrote:
-> On 2023/05/13 3:07, Thomas Gleixner wrote:
->> The main change is to make the refill invocation conditional when the
->> lookup fails. That's how that code has been from day one.
->
-> Making refill conditional helps reducing frequency of doing allocations.
-> I want a proof that allocations never happens in the worst scenario.
->
-> Are you saying that some debugobject function other than debug_object_activate()
-> guarantees that memory for that object was already allocated before
-> debug_object_activate() is called for the first time for that object,
-> _and_ such debugobject function is called without locks held?
+Hi David,
 
-The point is that the allocation in activate() only happens when the
-tracked entity was not initialized _before_ activate() is invoked.
+kernel test robot noticed the following build warnings:
 
-That's a bug for dynamically allocated entities, but a valid scenario
-for statically initialized entities as they can be activated without
-prior init() obviously.
+[auto build test WARNING on 9a48d604672220545d209e9996c2a1edbb5637f6]
 
-For dynamically allocated entities the init() function takes care of the
-tracking object allocation and that's where the pool is refilled. So for
-those the lookup will never fail.
+url:    https://github.com/intel-lab-lkp/linux/commits/David-Yang/crypto-hisilicon-Add-HiSilicon-ADVCA-Subsystem/20230513-154545
+base:   9a48d604672220545d209e9996c2a1edbb5637f6
+patch link:    https://lore.kernel.org/r/20230513074339.266879-2-mmyangfl%40gmail.com
+patch subject: [PATCH v2 1/2] crypto: hisilicon - Add HiSilicon ADVCA Subsystem
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20230513/202305131630.Wt74Rpda-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/6f6cb7dd5da91063c560d2d252104268ffac785b
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review David-Yang/crypto-hisilicon-Add-HiSilicon-ADVCA-Subsystem/20230513-154545
+        git checkout 6f6cb7dd5da91063c560d2d252104268ffac785b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/crypto/hisilicon/advca/
 
-Now I just stared at __alloc_pages_slowpath() and looked at the
-condition for wakeup_all_kswapds(). ALLOC_KSWAPD is set because
-debugobject uses GFP_ATOMIC which contains __GFP_KSWAPD_RECLAIM.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305131630.Wt74Rpda-lkp@intel.com/
 
-So debug objects needs to have s/GFP_ATOMIC/__GFP_HIGH/ to prevent that
-wakeup path.
+All warnings (new ones prefixed by >>):
 
-Thanks,
+>> drivers/crypto/hisilicon/advca/hisi-advca-muc.c:77:41: warning: unsigned conversion from 'int' to 'unsigned char:2' changes value from '4' to '0' [-Woverflow]
+      77 | #define  MUC_MODE_CTR                   4  /* not for DES */
+         |                                         ^
+   drivers/crypto/hisilicon/advca/hisi-advca-muc.c:1283:25: note: in expansion of macro 'MUC_MODE_CTR'
+    1283 |                 .mode = MUC_MODE_##_MODE, \
+         |                         ^~~~~~~~~
+   drivers/crypto/hisilicon/advca/hisi-advca-muc.c:1298:9: note: in expansion of macro 'hica_muc_tmpl_define'
+    1298 |         hica_muc_tmpl_define(AES, _MODE, aes, _mode, AES_MIN_KEY_SIZE, \
+         |         ^~~~~~~~~~~~~~~~~~~~
+   drivers/crypto/hisilicon/advca/hisi-advca-muc.c:1311:9: note: in expansion of macro 'hica_muc_tmpl_define_aes'
+    1311 |         hica_muc_tmpl_define_aes(CTR, ctr),
+         |         ^~~~~~~~~~~~~~~~~~~~~~~~
 
-        tglx
 
+vim +77 drivers/crypto/hisilicon/advca/hisi-advca-muc.c
 
+    69	
+    70	/* for CTRL reg */
+    71	#define MUC_DECRYPT		BIT(0)
+    72	#define MUC_MODE		GENMASK(3, 1)  /* other: as 0 */
+    73	#define  MUC_MODE_ECB			0
+    74	#define  MUC_MODE_CBC			1
+    75	#define  MUC_MODE_CFB			2
+    76	#define  MUC_MODE_OFB			3
+  > 77	#define  MUC_MODE_CTR			4  /* not for DES */
+    78	#define MUC_ALG			GENMASK(5, 4)  /* other: as 0 */
+    79	#define  MUC_ALG_DES			0
+    80	#define  MUC_ALG_DES3_EDE		1
+    81	#define  MUC_ALG_AES			2
+    82	#define MUC_WIDTH		GENMASK(7, 6)  /* other: as 0 */
+    83	#define  MUC_WIDTH_BLOCK		0
+    84	#define  MUC_WIDTH_8B			1
+    85	#define  MUC_WIDTH_1B			2
+    86	#define MUC_CHAN0_IV_CHANGE	BIT(8)
+    87	#define MUC_KEY			GENMASK(10, 9)  /* other: as 0 */
+    88	#define  MUC_KEY_AES_128B		0
+    89	#define  MUC_KEY_AES_192B		1
+    90	#define  MUC_KEY_AES_256B		2
+    91	#define  MUC_KEY_DES			0
+    92	#define  MUC_KEY_DES3_EDE_3KEY		0
+    93	#define  MUC_KEY_DES3_EDE_2KEY		3
+    94	#define MUC_KEY_FROM_MKL	BIT(13)
+    95	#define MUC_KEY_ID		GENMASK(16, 14)
+    96	#define MUC_WEIGHT		GENMASK(31, 22)
+    97	
 
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
