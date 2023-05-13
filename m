@@ -2,106 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C6B070196B
-	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 20:50:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F66470193C
+	for <lists+linux-kernel@lfdr.de>; Sat, 13 May 2023 20:34:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjEMSuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 14:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39710 "EHLO
+        id S233461AbjEMSeh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 14:34:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjEMSuX (ORCPT
+        with ESMTP id S229506AbjEMSec (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 14:50:23 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 644D29E
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 11:50:22 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so99260367a12.1
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 11:50:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684003821; x=1686595821;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MPztQ4ysSm8CI2wA0uE15k28FITvSfHGliPiFsdgAxY=;
-        b=GFxiA3x12RZw7/KFiB77zyI6i+oO28ferVOUkRzQBkN2czSkTeEvp2OJUxcKqgygC9
-         tMuOl07beoP9i7edYYURBQA6Z7mSpDas1PqwdL+c8OTLko/Oqp0KzbOojmnGS41A8qZA
-         FB1ZzddNAANqCzbqWrbobWl6e/ZxYnJvNCs4PHqK0KfEQEod2mDkUSVAiZOIPXsc8K/h
-         OWa+G84b/9leETthM4DJWkc8zL9DerqpLS5pxD6p6OFVfWp0YiqyX/Z/9VoS1lZNY3/P
-         b1+OrHISjkBWx3X1ywYgpYOlmJWPCAJ12Z5Tw2QAJIejozSUaVF8qXVhpmScHYfWdg9w
-         h9HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684003821; x=1686595821;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MPztQ4ysSm8CI2wA0uE15k28FITvSfHGliPiFsdgAxY=;
-        b=ETpxW9BzYEJz58mvs9V/JO51H+yenZy0G83ZmxNboePTDeRQIS1u/EnpjVADdgo2bV
-         9dvifWOeYsL89TphxOL7gNyoIkzTxaVE73LsjS/4Mg7n3rwUPiPDWdrn+hXKV58Hgvkz
-         ycy4G5/hLJC34QerjsatXVuzI69ImBXEVfTGkq/Eiz72hLJVXKkh0I1O7Ob817ighdSE
-         VIuMSd4VzQI2goCQTONJm/QiPKVACN4IFXOAdgFtxm/llX5gN/y1maht2LMhXvWk23UR
-         WFz1M37c12CJXwqtHUhrOYr57e5iJ2LneCdBbTKPsYbMvIBXgmMSz4C7hWSI4wM9eC1F
-         9O4g==
-X-Gm-Message-State: AC+VfDx0MDe2thSJNGqnJMdapC+27kTKDK3n0CJijJxCizK2kdGvR+uu
-        poF80aBJ2E3qBwkjl+222iLVlA==
-X-Google-Smtp-Source: ACHHUZ7cM/4sDDsWPTlMqC7K237m8lTf25p1JBv3zCY6hwb7iFthgLMbZuJHxqnpO7F/CzUvjQexCg==
-X-Received: by 2002:a17:906:5d13:b0:960:6263:138f with SMTP id g19-20020a1709065d1300b009606263138fmr27091674ejt.27.1684003820858;
-        Sat, 13 May 2023 11:50:20 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:ba68:e5c9:694e:c6e4])
-        by smtp.gmail.com with ESMTPSA id n12-20020a1709065dac00b009663cf5dc2fsm7122023ejv.66.2023.05.13.11.50.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 May 2023 11:50:20 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Tomasz Figa <tomasz.figa@gmail.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Chanho Park <chanho61.park@samsung.com>,
-        David Virag <virag.david003@gmail.com>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        linux-samsung-soc@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sat, 13 May 2023 14:34:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355B81FDA;
+        Sat, 13 May 2023 11:34:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D4FC61D6D;
+        Sat, 13 May 2023 18:34:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4039C433EF;
+        Sat, 13 May 2023 18:34:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684002871;
+        bh=1G6HrXzM7Id2ujGj9Oq8Pmzskf+4RRUT5zQBHJ8W0gw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=caQnOqYsRwRdfuYAs/4x6koWVCac4R4fM8w3ZQCCG3q7t0WBUMAxfqq5BTrK2FMSZ
+         PngBF46Dn0+8zqFiC7mz83QgX26+4PgpqCW/4wewTb/6rurIrS4h1AuSaP591NfZtx
+         l1cEgVItGt5cbgQIxSwx06AMere1SDLrm1ROk5fY2hqjFODQpb5+e65uxiuj/YbD8a
+         azAG8aRxU4zOc0m6eYvgEwN1cMl1cxq1DTFw379J0CE1IvmdZKz/w/8lBcvanQ3obC
+         Db2uCOLaBFdyQ1dRXT9jKLDW2+4OGdaXTvo9Egd1qauK1/E9HEat9bX5y3i3rlsbMT
+         DUd88t1ZWQyDA==
+Date:   Sat, 13 May 2023 19:50:30 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Anup Sharma <anupnewsmail@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Peter Meerwald <pmeerw@pmeerw.net>, broonie@kernel.org,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH 7/7] arm64: dts: exynos: Remove clock from Exynos850 pmu_system_controller
-Date:   Sat, 13 May 2023 20:50:18 +0200
-Message-Id: <168400381592.12030.10842902628648015143.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230308233822.31180-8-semen.protsenko@linaro.org>
-References: <20230308233822.31180-1-semen.protsenko@linaro.org> <20230308233822.31180-8-semen.protsenko@linaro.org>
+Subject: Re: [PATCH] dt-bindings: iio: temperature: Add DT bindings for
+ TMP006
+Message-ID: <20230513195030.57b7939e@jic23-huawei>
+In-Reply-To: <4d18eb55-a44c-4033-93cd-35c02cb179b3@linaro.org>
+References: <ZFvo2TIiPiMFlbXC@yoga>
+        <fc104fdd-3894-aa94-12dc-4c73b26d4159@linaro.org>
+        <ZF08pzGPyReL1uAf@yoga>
+        <4d18eb55-a44c-4033-93cd-35c02cb179b3@linaro.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 12 May 2023 08:28:29 +0200
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-On Wed, 08 Mar 2023 17:38:22 -0600, Sam Protsenko wrote:
-> As described in the corresponding binding documentation for
-> "samsung,exynos850-pmu", the "clocks" property should be used for
-> specifying CLKOUT mux inputs. Therefore, the clock provided to exynos850
-> pmu_system_controller is incorrect and should be removed. Instead of
-> making syscon regmap keep that clock running for PMU accesses, it should
-> be made always running in the clock driver, because the kernel is not
-> the only software accessing PMU registers on Exynos850 platform.
+> On 11/05/2023 21:06, Anup Sharma wrote:
+> > On Thu, May 11, 2023 at 11:28:50AM +0200, Krzysztof Kozlowski wrote:  
+> >> On 10/05/2023 20:56, Anup Sharma wrote:  
+> >>> Add devicetree binding document for TMP006, IR thermopile sensor.  
+> >>
+> >> Why? Where is any user of this? DTS? Driver?
+> >>  
+> > 
+> > The support for TMP006 is available at driver/iio/temperature  
 > 
-> [...]
+> There is no such compatible in the kernel. If you add OF support, you
+> should change the driver.
 
-Applied, thanks!
+(Very) old driver, so it uses the fallback method that i2c provides to bind to
+the compatible with the vendor id dropped via i2c_device_id entry.
 
-[7/7] arm64: dts: exynos: Remove clock from Exynos850 pmu_system_controller
-      https://git.kernel.org/krzk/linux/c/858fd147234dbb66401bc102968a479f92e7ad43
+Having said that, I'd also prefer the addition of an explicit of_device_id table.
+As there is only one supported device in this driver should be trivial.
 
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Thanks,
+
+Jonathan
+
+
+> 
+> 
+> Best regards,
+> Krzysztof
+> 
+
