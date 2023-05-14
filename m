@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44F5470208E
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 00:47:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F23CE702091
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 00:48:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234751AbjENWrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 18:47:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37758 "EHLO
+        id S235149AbjENWsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 18:48:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjENWrq (ORCPT
+        with ESMTP id S234652AbjENWsN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 18:47:46 -0400
+        Sun, 14 May 2023 18:48:13 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 875E710FF;
-        Sun, 14 May 2023 15:47:39 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AA510F0;
+        Sun, 14 May 2023 15:48:07 -0700 (PDT)
 Received: from mercury (unknown [185.209.196.239])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
         (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0D7B4660574D;
-        Sun, 14 May 2023 23:47:38 +0100 (BST)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6066D660574D;
+        Sun, 14 May 2023 23:48:06 +0100 (BST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684104458;
-        bh=m7FaWHC0hcEZ+opoVXS6xLiU5AcgWk6c8qi7kt4a7f4=;
+        s=mail; t=1684104486;
+        bh=Fo3DQnPl5zH+RvFgab/KAI4AhdhkkrrYtnUMGaOiDp0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AMNy42BMf16qchg5vkGDSoBcfNmj+52iI/k6VlbbwocZPlbYU5ahcu3kloZZMfngv
-         d+Lp7wZVRl551b5bcB+ez69FIj76ibqTuNK7LRJOS6RAb39+LnFLhwr4TVUi09O/PU
-         vXSCOZcfkDDyop5GU+UUpz/AtsCna0BmqiYJjwBkSHp0/Cx9wvyMXg53vyUZDkQ7bU
-         iipqopFvPbWB+hBldMB4kCR3A5u5zMV9RUpRLjmyqnyc1hHVavtAu3MFf2kQIP9stz
-         whQ8EFQb4MaOrjgTMQ0wbDUCJcQzMfDPDTcMnggob5KLcLtnNXTkpUpeLU35ljfk83
-         0KoPVy0D8o00A==
+        b=NPUAo7RbdgsTN6fvrFYMtqY7xfzUDClXxp9bFq9+GyY390QnGfa03+DhCIrNdZsLl
+         NeLHkqrIXSCSfip/xVIXurqX2Y+k2cy3ZOkbFlh+JQ3mupS7bAFdFU6bkts82zBDM+
+         HUJKFjmrsFVd85BBfnnAp9qtpuvEKu5pTPwvE89Pc56mLYtDHyv8t1luO/7Vd1Vzlz
+         O9gUReSpZYxDka2mzJ0jkUm4CXAeoZ4ZgLZWGh0665/4lLML0ZtoiqF8g9qxykz3SU
+         giRItxhBpnjhMz/zH+90SSSW2nl1eBxjTpVX44V/5WoBtZfotVBPIjpR0IJz1iich3
+         6tJ4MXVpPnbSw==
 Received: by mercury (Postfix, from userid 1000)
-        id 0D5281061381; Mon, 15 May 2023 00:47:36 +0200 (CEST)
-Date:   Mon, 15 May 2023 00:47:36 +0200
+        id 5B8E11061381; Mon, 15 May 2023 00:48:03 +0200 (CEST)
+Date:   Mon, 15 May 2023 00:48:03 +0200
 From:   Sebastian Reichel <sebastian.reichel@collabora.com>
 To:     Jakob Hauser <jahau@rocketmail.com>
 Cc:     Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
@@ -51,16 +51,16 @@ Cc:     Lee Jones <lee@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
         Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
-Subject: Re: [PATCH v5 07/10] power: supply: rt5033_battery: Move struct
- rt5033_battery to battery driver
-Message-ID: <20230514224736.guld3npymqbr3no4@mercury.elektranox.org>
+Subject: Re: [PATCH v5 08/10] power: supply: rt5033_battery: Adopt status
+ property from charger
+Message-ID: <20230514224803.bm7bid6pl7li5kw7@mercury.elektranox.org>
 References: <20230514123130.41172-1-jahau@rocketmail.com>
- <20230514123130.41172-8-jahau@rocketmail.com>
+ <20230514123130.41172-9-jahau@rocketmail.com>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="w66avb2qq2hrapvz"
+        protocol="application/pgp-signature"; boundary="wnpndftndndgv62m"
 Content-Disposition: inline
-In-Reply-To: <20230514123130.41172-8-jahau@rocketmail.com>
+In-Reply-To: <20230514123130.41172-9-jahau@rocketmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
@@ -71,27 +71,27 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---w66avb2qq2hrapvz
+--wnpndftndndgv62m
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
 Hi,
 
-On Sun, May 14, 2023 at 02:31:27PM +0200, Jakob Hauser wrote:
-> Move struct rt5033_battery from the mfd header into the battery driver be=
-cause
-> it's not used by others.
+On Sun, May 14, 2023 at 02:31:28PM +0200, Jakob Hauser wrote:
+> The rt5033-battery fuelgauge can't get a status by itself. The rt5033-cha=
+rger
+> can, let's get this value.
 >=20
-> Within struct rt5033_battery, remove the line "struct rt5033_dev *rt5033;"
-> because it doesn't get used.
+> To get the charger as a "supplier" from the devicetree, the "of_node" nee=
+ds
+> to be initiated.
 >=20
-> In rt5033.h, remove #include <linux/power_supply.h>, it's not necessary
-> anymore.
->=20
-> In rt5033_battery.c, remove #include <linux/mfd/rt5033.h>, it's not neces=
-sary
-> anymore either. Instead add #include <linux/regmap.h> and
+> Additionally, in the probe function replace dev_err() with dev_err_probe(=
+),
+> this will avoid printing an error for -EPROBE_DEFER when the battery driv=
+er
+> probes before the charger driver.
 >=20
 > Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
 > ---
@@ -100,81 +100,108 @@ Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
 -- Sebastian
 
->  drivers/power/supply/rt5033_battery.c | 9 ++++++++-
->  include/linux/mfd/rt5033.h            | 8 --------
->  2 files changed, 8 insertions(+), 9 deletions(-)
+>  drivers/power/supply/rt5033_battery.c | 29 +++++++++++++++++++++------
+>  1 file changed, 23 insertions(+), 6 deletions(-)
 >=20
 > diff --git a/drivers/power/supply/rt5033_battery.c b/drivers/power/supply=
 /rt5033_battery.c
-> index 5c04cf305219..91e1efd81f69 100644
+> index 91e1efd81f69..94d2dea7ef5e 100644
 > --- a/drivers/power/supply/rt5033_battery.c
 > +++ b/drivers/power/supply/rt5033_battery.c
-> @@ -6,11 +6,18 @@
->   * Author: Beomho Seo <beomho.seo@samsung.com>
->   */
-> =20
-> +#include <linux/i2c.h>
->  #include <linux/module.h>
->  #include <linux/platform_device.h>
->  #include <linux/power_supply.h>
-> +#include <linux/regmap.h>
->  #include <linux/mfd/rt5033-private.h>
-> -#include <linux/mfd/rt5033.h>
-> +
-> +struct rt5033_battery {
-> +	struct i2c_client	*client;
-> +	struct regmap		*regmap;
-> +	struct power_supply	*psy;
-> +};
-> =20
->  static int rt5033_battery_get_capacity(struct i2c_client *client)
->  {
-> diff --git a/include/linux/mfd/rt5033.h b/include/linux/mfd/rt5033.h
-> index 3992fb2ef0a8..bb3d18945d21 100644
-> --- a/include/linux/mfd/rt5033.h
-> +++ b/include/linux/mfd/rt5033.h
-> @@ -12,7 +12,6 @@
->  #include <linux/regulator/consumer.h>
->  #include <linux/i2c.h>
->  #include <linux/regmap.h>
-> -#include <linux/power_supply.h>
-> =20
->  /* RT5033 regulator IDs */
->  enum rt5033_regulators {
-> @@ -32,11 +31,4 @@ struct rt5033_dev {
->  	bool wakeup;
+> @@ -19,6 +19,21 @@ struct rt5033_battery {
+>  	struct power_supply	*psy;
 >  };
 > =20
-> -struct rt5033_battery {
-> -	struct i2c_client	*client;
-> -	struct rt5033_dev	*rt5033;
-> -	struct regmap		*regmap;
-> -	struct power_supply	*psy;
-> -};
-> -
->  #endif /* __RT5033_H__ */
+> +static int rt5033_battery_get_status(struct i2c_client *client)
+> +{
+> +	struct rt5033_battery *battery =3D i2c_get_clientdata(client);
+> +	union power_supply_propval val;
+> +	int ret;
+> +
+> +	ret =3D power_supply_get_property_from_supplier(battery->psy,
+> +						POWER_SUPPLY_PROP_STATUS,
+> +						&val);
+> +	if (ret)
+> +		val.intval =3D POWER_SUPPLY_STATUS_UNKNOWN;
+> +
+> +	return val.intval;
+> +}
+> +
+>  static int rt5033_battery_get_capacity(struct i2c_client *client)
+>  {
+>  	struct rt5033_battery *battery =3D i2c_get_clientdata(client);
+> @@ -91,6 +106,9 @@ static int rt5033_battery_get_property(struct power_su=
+pply *psy,
+>  	case POWER_SUPPLY_PROP_CAPACITY:
+>  		val->intval =3D rt5033_battery_get_capacity(battery->client);
+>  		break;
+> +	case POWER_SUPPLY_PROP_STATUS:
+> +		val->intval =3D rt5033_battery_get_status(battery->client);
+> +		break;
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -103,6 +121,7 @@ static enum power_supply_property rt5033_battery_prop=
+s[] =3D {
+>  	POWER_SUPPLY_PROP_VOLTAGE_OCV,
+>  	POWER_SUPPLY_PROP_PRESENT,
+>  	POWER_SUPPLY_PROP_CAPACITY,
+> +	POWER_SUPPLY_PROP_STATUS,
+>  };
+> =20
+>  static const struct regmap_config rt5033_battery_regmap_config =3D {
+> @@ -124,7 +143,6 @@ static int rt5033_battery_probe(struct i2c_client *cl=
+ient)
+>  	struct i2c_adapter *adapter =3D client->adapter;
+>  	struct power_supply_config psy_cfg =3D {};
+>  	struct rt5033_battery *battery;
+> -	u32 ret;
+> =20
+>  	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE))
+>  		return -EIO;
+> @@ -142,15 +160,14 @@ static int rt5033_battery_probe(struct i2c_client *=
+client)
+>  	}
+> =20
+>  	i2c_set_clientdata(client, battery);
+> +	psy_cfg.of_node =3D client->dev.of_node;
+>  	psy_cfg.drv_data =3D battery;
+> =20
+>  	battery->psy =3D power_supply_register(&client->dev,
+>  					     &rt5033_battery_desc, &psy_cfg);
+> -	if (IS_ERR(battery->psy)) {
+> -		dev_err(&client->dev, "Failed to register power supply\n");
+> -		ret =3D PTR_ERR(battery->psy);
+> -		return ret;
+> -	}
+> +	if (IS_ERR(battery->psy))
+> +		return dev_err_probe(&client->dev, PTR_ERR(battery->psy),
+> +				     "Failed to register power supply\n");
+> =20
+>  	return 0;
+>  }
 > --=20
 > 2.39.2
 >=20
 
---w66avb2qq2hrapvz
+--wnpndftndndgv62m
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRhZQcACgkQ2O7X88g7
-+prJyA/+O1YQSYfVIfUyrW708AKFet4/dTSpu9Y9VZEuKZxWzYVOsvajBQi1vybJ
-+9lJ2FABRwTzwLOpR6tbEsXPBodDSP9WrrAquB35woUlPIMl/UQKsxDmRU4jYdci
-yVneUpa80i+sLBfmIB5zCxIjj9l93xN+JQ174PYfF7OJ7p1fhuKXducqkHgHM3aZ
-Ub33OJy3ArKahI8PQCA04uFoMjMGN8tML4ZPHXB7wfbvGEDfWbicMzb02TWu7D2Q
-uTEDxZgYjQnqeMOeD42J6dDQuVohrHCN9QS+U70glXMSLOS+HYSx99d/0PKhLojD
-ja0QZ4xA9lWxP9KE//kQNxlf34a2W7oawrIjWgoKXK3WXJ9D6vW4pTBdwjdRDQvV
-ZSktIUvvaft4zc9aZ4j5DMKI8lsjk2YI7nuGIS+/Y2Q368YQn+mW/akPHscVp6qK
-7luonWrLqwH6nus3Ly3WPx9kUFZe0XylrQryJIfvxfi4zhsYr21izOIKhjEc7Xdv
-g3zNzYI8tR4MKFhlPMvCBk9JiP8yB+wZUCuHeQBeWWAt/zZuiGJMmiQL0pyonL/V
-0+b+ba8db4DvaaM2DFfksC8/zBhzL4siHfX6NVBi5SUbtz8bcbnFAjUHf6xDdjAN
-zEHjM5iCnV/neMRoOrsSnMAht+y4DjAxbQ5Yt4ryPeYSrJ6h3/M=
-=onLL
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRhZSMACgkQ2O7X88g7
++prXNw/9H+z2/gVY3vA17vyjAK8L2qmHtgWKoRq5zKWW7a0TYNGbPemM1Cu+xmyq
+knztGQF0qjKGUlLI7h93S8frDcq8WLdzuzntvWQE1qhSq/6E1uyJnlrSKqx1MKBY
+OernpgcF3MB9SxJN8qswJ3ri7aQnZWPuphYQQC38F0HzcbsO3ujsovaUTphdx46j
+i2RV0LMViTyeI+6+Av+QFBWKwSKj6So2Hji6H9ophH9qUXRp3DPQVGgnWFLhkDf8
+QocAZEFNTHg1qIr+vOG1rz49OzM8EptIQ65rg1AHKS+ZscoGffd5asn9IDf0RWvK
+tALHtSmk4VTW+3rB1uHr/dbn7/JW57ZZ4lofuiSh1is8KRsTquSLjMxsiWwqligD
+M3Hde3yoy0I3mcTcdwYTqgGPTbRHA6ShLnTD2uxb7d8IbGf19EPIcv3JG8Sushjz
+v6/DkvEf7MTcK9EDdCsDbL20gpLOUoPWlbr0JaHSuVcQudtzjrTikSNjMhy/KjpM
+4JbCtgI/r5vPhnw6EnDBCJiTLd/U4fwX79xkL8Ja9s2gcAHiOUMDVPTEEBgryoOH
+ly8G35som/nYtJFhtg7NSEQWe81DE6nXuKnbVvQMiL+N9r6a3hdlA0aw4cMHZbrW
+6+RRIrC266yMOjzWUppWopOj2HWP/CPNDul039Div7qYFZNV6zo=
+=+NFK
 -----END PGP SIGNATURE-----
 
---w66avb2qq2hrapvz--
+--wnpndftndndgv62m--
