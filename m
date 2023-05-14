@@ -2,167 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87022701FAC
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 23:13:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02E4D701FBF
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 23:26:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235767AbjENVNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 17:13:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
+        id S234865AbjENV0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 17:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjENVNd (ORCPT
+        with ESMTP id S229534AbjENV0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 17:13:33 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA617199;
-        Sun, 14 May 2023 14:13:29 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id 1D14F5C00C2;
-        Sun, 14 May 2023 17:13:29 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Sun, 14 May 2023 17:13:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-transfer-encoding:content-type:content-type
-        :date:date:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to;
-         s=fm2; t=1684098809; x=1684185209; bh=IuSPhPzoKt6SzlFItZmSGd7IF
-        Em9JtR4K2XlTqqjDSg=; b=tRwc6niuBNOVuTKwEyqx9a6VsQIiR8Moy/8NsjRBc
-        MFNzOOBwCeyBwuKH7hfQf2mu11BcHRvW1/sTy4ioyfDuFCfb831tniIUXGJWZLoQ
-        +olt7twOWA1isCCaTiLKvMAj/ObtUl1WhE8iidAq9qKKDFSNBBs2icMa1urfhSyq
-        jzlTGwaNZLVGaG3PN9OieoaRG0lwYWf3/jRkOXymTJ1/5i+FgiZiry1ORlENAWvP
-        dVt+22VdL8RZQszaF5cZNpd0J0NBOlTGSBHTTJf0Ei2WBX/bB/H93NDVbMcFYE6r
-        4kNmCJWwvOPkvJQ5AFuUF/dT08mYqhEeUO5moMzZWR7zQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-        1684098809; x=1684185209; bh=IuSPhPzoKt6SzlFItZmSGd7IFEm9JtR4K2X
-        lTqqjDSg=; b=qAOct1LDQY6g96IN0g+vR8v7cPKjM76ZHfoMUWVWkTj38CppXKb
-        n2qLMtnZjESXKqj5IoGvh+Y2tH2QsKrUUZbixtRlm8ZpZx31hjD/VYngQ5yhM8X0
-        tgSZWUPOBTxLaZ/jfTPnY/TDMO0jDiP5PLOfKyQHRl8VXxPGFW4I5JNL4vJWNt+0
-        v/at5pANurF9eFyKG+s+INq228hVcDUSkq8LXMSucg3Ij7lQFX7hyJlXmKXNyT2e
-        qebGr1GFlQ7bogamkkOa7WznBY6VUnfRPEVmO9g1SE1jaE2YulTGy0cyKKsoN/N7
-        OpmPFn+xFm63xvHzfPl3Xi9SvvJF6PUiDJw==
-X-ME-Sender: <xms:905hZEwNnRihkRdYg1IppfpF8vo443CZSZgXN2NJllWOoxaDq8afSQ>
-    <xme:905hZIQN1wahBceOitOKWZkmDwXaOk3jjKQppfIHlY4cA2DVb8bJYqyQAloOdmmXM
-    NnpFEAfOO9sP01_lcc>
-X-ME-Received: <xmr:905hZGWxxQTBe3OxmEOACoGB9D_jRgtPgEARzA6z7I6oHfHGu_c8HfaiEa7ZWBxTdOSN8w>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehhedgudehlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpeffhffvvefukfhfgggtugfgjgesthektddttddtudenucfhrhhomhepfdfm
-    ihhrihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovh
-    drnhgrmhgvqeenucggtffrrghtthgvrhhnpeetveehleetgeegffejffejtdevgeeugeef
-    tefghffhgfeivefghfeuvefgjeekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:905hZCiyjAnj_6KNeSN0F6O_NLZB6_jSQVnkBZo3yyIzqICtgjngIA>
-    <xmx:905hZGCPG6Lb8T15UCZh4ofkAfw6HkvZcDh3x6st1z5bocz4QE3jAQ>
-    <xmx:905hZDLo8rXNLtX2L-pO6pqr9QvJzl0YAkPubSiE-HXqSbc8BQfO2A>
-    <xmx:-U5hZOu8SfLvzZc6LhBAYNrPOc51oXjVX3-fpAw4XAQ91y9OfBhpnw>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 14 May 2023 17:13:27 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 3DBD910C400; Mon, 15 May 2023 00:13:24 +0300 (+03)
-Date:   Mon, 15 May 2023 00:13:24 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Mika =?utf-8?B?UGVudHRpbMOk?= <mpenttil@redhat.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Joerg Roedel <jroedel@suse.de>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kuppuswamy Sathyanarayanan 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        David Rientjes <rientjes@google.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dario Faggioli <dfaggioli@suse.com>,
-        Mike Rapoport <rppt@kernel.org>,
+        Sun, 14 May 2023 17:26:46 -0400
+Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DFDE10DF
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 14:26:43 -0700 (PDT)
+Received: by mail-wr1-x436.google.com with SMTP id ffacd0b85a97d-3090408e09bso1434198f8f.2
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 14:26:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684099601; x=1686691601;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=+xI8BtlVvvSS6bzTpldJXGD+NpgtGXiB7zWUwN8KDHQ=;
+        b=LgXMgy8wBVUXmrNnUxzO7BBuNMgVdurWq4HLrivFayR7tPolKEJ4dkEQAwF47vo241
+         CtKAUg86vamPAhGSRDmSO3kbs/QlOjjMfP3tMdHM2mqXnwg6y0Ys13vB0Dm/L7FVXmED
+         Bcsioy6QrkdcRx1U7cCoUWkxJp8QGQlqGdAClsYs15hHNRGes1wLcoqRF1ZJ+vhX1ydV
+         IqS4wGsYSAGO2NxmohDbFyELRqaaW6XfTV9RESA2Y0seDcU2t+z3XObXV84yzBrsS7iJ
+         tg9v+2j3H6o58yYkG22LC2gPRdlNfsthY3HF/4MtOnUDgzBX+gumO2goxuXoBGfF2Vph
+         GxEQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684099601; x=1686691601;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+xI8BtlVvvSS6bzTpldJXGD+NpgtGXiB7zWUwN8KDHQ=;
+        b=CQX0WcK7zPsFNQJc++Fy2H75124qnqJxiTf/iy2EXMciUHNvcyGRJyoSlBjMGIMXpC
+         rujXcy4oZ7TzDvcF2oZlxh8uSigXaYoAZjbg2+MoAhWGyp0kHilRMnBxi/VsmGZppS/B
+         I/RSb8YRMr3TmBJPN7gPrnGrovS850bXSR2GTKZMHzNwev4UNESl5OVe0weSHRI4LDR0
+         TQ9Jj1HgAw/5nUiCCkY1+UB6kGKkNAl5DrB1cVCnW8rfhPSn1SmHFpQfeUyC7+aOTa4+
+         2f+po0ATnNeCxs654wpBerHtfdHFmVGEVMywb6K5Dt+/SDbCrKj4HC5wJ81JWZMqyRzR
+         Z4Ow==
+X-Gm-Message-State: AC+VfDzD8i0WGE8KcMJT/YXWuEa9luHorSps2au5xcGFXz9XxS53iJFc
+        gsJ/kZVDy7dmBlJCsLF/1rc=
+X-Google-Smtp-Source: ACHHUZ52CH5q90BjBUE5Abhh6pfOnSlQBaf/6KkgZOD5Mc4aPvKyzCLJOHPxW1EZBW2PbACRUKojTg==
+X-Received: by 2002:adf:f00a:0:b0:306:3286:69a2 with SMTP id j10-20020adff00a000000b00306328669a2mr21663335wro.48.1684099601286;
+        Sun, 14 May 2023 14:26:41 -0700 (PDT)
+Received: from lucifer.home ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
+        by smtp.googlemail.com with ESMTPSA id a24-20020a5d4578000000b003063938bf7bsm30543711wrc.86.2023.05.14.14.26.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 May 2023 14:26:40 -0700 (PDT)
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
         David Hildenbrand <david@redhat.com>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
-        linux-mm@kvack.org, linux-coco@lists.linux.dev,
-        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCHv11 3/9] efi/libstub: Implement support for unaccepted
- memory
-Message-ID: <20230514211324.fymzoa263wx2hs2p@box.shutemov.name>
-References: <20230513220418.19357-1-kirill.shutemov@linux.intel.com>
- <20230513220418.19357-4-kirill.shutemov@linux.intel.com>
- <9549d984-e581-048d-95a3-7c54acd70fb8@redhat.com>
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH v5 0/6] remove the vmas parameter from GUP APIs
+Date:   Sun, 14 May 2023 22:26:35 +0100
+Message-Id: <cover.1684097001.git.lstoakes@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <9549d984-e581-048d-95a3-7c54acd70fb8@redhat.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 14, 2023 at 08:08:07AM +0300, Mika Penttilä wrote:
-> > +	status = efi_bs_call(allocate_pool, EFI_LOADER_DATA,
-> > +			     sizeof(*unaccepted_table) + bitmap_size,
-> > +			     (void **)&unaccepted_table);
-> 
-> 
-> Wonder if EFI_LOADER_DATA guarantees bitmap not to be freed, or should some
-> more persistent type be used. If EFI_LOADER_DATA is enough, maybe a comment
-> why it is safe could be added.
+(pin_/get)_user_pages[_remote]() each provide an optional output parameter
+for an array of VMA objects associated with each page in the input range.
 
-Ughh.. I've lost the hunk that reserves the memory explicitly while
-folding in the patch we discussed with Ard. See below.
+These provide the means for VMAs to be returned, as long as mm->mmap_lock
+is never released during the GUP operation (i.e. the internal flag
+FOLL_UNLOCKABLE is not specified).
 
-But the question is solid.
+In addition, these VMAs can only be accessed with the mmap_lock held and
+become invalidated the moment it is released.
 
-Ard, do we want to allocate the memory as EFI_RUNTIME_SERVICES_DATA (or
-something else?) that got reserved automatically without additional steps?
+The vast majority of invocations do not use this functionality and of those
+that do, all but one case retrieve a single VMA to perform checks upon.
 
-diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
-index e15a2005ed93..d817e7afd266 100644
---- a/drivers/firmware/efi/efi.c
-+++ b/drivers/firmware/efi/efi.c
-@@ -765,6 +765,25 @@ int __init efi_config_parse_tables(const efi_config_table_t *config_tables,
- 		}
- 	}
- 
-+	if (IS_ENABLED(CONFIG_UNACCEPTED_MEMORY) &&
-+	    efi.unaccepted != EFI_INVALID_TABLE_ADDR) {
-+		struct efi_unaccepted_memory *unaccepted;
-+
-+		unaccepted = early_memremap(efi.unaccepted, sizeof(*unaccepted));
-+		if (unaccepted) {
-+			unsigned long size;
-+
-+			if (unaccepted->version == 1) {
-+				size = sizeof(*unaccepted) + unaccepted->size;
-+				memblock_reserve(efi.unaccepted, size);
-+			} else {
-+				efi.unaccepted = EFI_INVALID_TABLE_ADDR;
-+			}
-+
-+			early_memunmap(unaccepted, sizeof(*unaccepted));
-+		}
-+	}
-+
- 	return 0;
- }
- 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+It is not egregious in the single VMA cases to simply replace the operation
+with a vma_lookup(). In these cases we duplicate the (fast) lookup on a
+slow path already under the mmap_lock, abstracted to a new
+get_user_page_vma_remote() inline helper function which also performs error
+checking and reference count maintenance.
+
+The special case is io_uring, where io_pin_pages() specifically needs to
+assert that the VMAs underlying the range do not result in broken long-term
+GUP file-backed mappings.
+
+As GUP now internally asserts that FOLL_LONGTERM mappings are not
+file-backed in a broken fashion (i.e. requiring dirty tracking) - as
+implemented in "mm/gup: disallow FOLL_LONGTERM GUP-nonfast writing to
+file-backed mappings" - this logic is no longer required and so we can
+simply remove it altogether from io_uring.
+
+Eliminating the vmas parameter eliminates an entire class of danging
+pointer errors that might have occured should the lock have been
+incorrectly released.
+
+In addition, the API is simplified and now clearly expresses what it is
+intended for - applying the specified GUP flags and (if pinning) returning
+pinned pages.
+
+This change additionally opens the door to further potential improvements
+in GUP and the possible marrying of disparate code paths.
+
+I have run this series against gup_test with no issues.
+
+This patch series is rebased on mm-unstable as of 12th May.
+
+Thanks to Matthew Wilcox for suggesting this refactoring!
+
+v5:
+- Remove the io_uring open-coded VMA file-backed check, as this is now
+  explicitly disallowed by GUP.
+- Updated the subsequent patch to eliminate the vmas parameter accordingly.
+
+v4:
+- Drop FOLL_SAME_FILE as the complexity costs exceed the benefit of having it
+  for a single case.
+- Update io_pin_pages() to perform VMA lookup directly.
+- Add get_user_page_vma_remote() to perform the single page/VMA lookup with
+  error checks performed correctly.
+https://lore.kernel.org/linux-mm/cover.1681831798.git.lstoakes@gmail.com/
+
+v3:
+- Always explicitly handle !vma cases, feeding back an error to the user if
+  appropriate, indicating the operation did not completely succeed if not
+  and always with a warning since these conditions should be impossible.
+https://lore.kernel.org/linux-mm/cover.1681558407.git.lstoakes@gmail.com/
+
+v2:
+- Only lookup the VMA if the pin succeeded (other than __access_remote_vm()
+  which has different semantics)
+- Be pedantically careful about ensuring that under no circumstances can we
+  fail to unpin a page
+https://lore.kernel.org/linux-mm/cover.1681547405.git.lstoakes@gmail.com/
+
+v1:
+https://lore.kernel.org/linux-mm/cover.1681508038.git.lstoakes@gmail.com/
+
+Lorenzo Stoakes (6):
+  mm/gup: remove unused vmas parameter from get_user_pages()
+  mm/gup: remove unused vmas parameter from pin_user_pages_remote()
+  mm/gup: remove vmas parameter from get_user_pages_remote()
+  io_uring: rsrc: delegate VMA file-backed check to GUP
+  mm/gup: remove vmas parameter from pin_user_pages()
+  mm/gup: remove vmas array from internal GUP functions
+
+ arch/arm64/kernel/mte.c                    |  17 ++--
+ arch/powerpc/mm/book3s64/iommu_api.c       |   2 +-
+ arch/s390/kvm/interrupt.c                  |   2 +-
+ arch/x86/kernel/cpu/sgx/ioctl.c            |   2 +-
+ drivers/gpu/drm/radeon/radeon_ttm.c        |   2 +-
+ drivers/infiniband/hw/qib/qib_user_pages.c |   2 +-
+ drivers/infiniband/hw/usnic/usnic_uiom.c   |   2 +-
+ drivers/infiniband/sw/siw/siw_mem.c        |   2 +-
+ drivers/iommu/iommufd/pages.c              |   4 +-
+ drivers/media/v4l2-core/videobuf-dma-sg.c  |   2 +-
+ drivers/misc/sgi-gru/grufault.c            |   2 +-
+ drivers/vdpa/vdpa_user/vduse_dev.c         |   2 +-
+ drivers/vfio/vfio_iommu_type1.c            |   2 +-
+ drivers/vhost/vdpa.c                       |   2 +-
+ fs/exec.c                                  |   2 +-
+ include/linux/hugetlb.h                    |  10 +-
+ include/linux/mm.h                         |  42 +++++++--
+ io_uring/rsrc.c                            |  34 ++-----
+ kernel/events/uprobes.c                    |  13 +--
+ mm/gup.c                                   | 105 +++++++--------------
+ mm/gup_test.c                              |  14 ++-
+ mm/hugetlb.c                               |  24 ++---
+ mm/memory.c                                |  14 +--
+ mm/process_vm_access.c                     |   2 +-
+ mm/rmap.c                                  |   2 +-
+ net/xdp/xdp_umem.c                         |   2 +-
+ security/tomoyo/domain.c                   |   2 +-
+ virt/kvm/async_pf.c                        |   3 +-
+ virt/kvm/kvm_main.c                        |   2 +-
+ 29 files changed, 138 insertions(+), 178 deletions(-)
+
+--
+2.40.1
