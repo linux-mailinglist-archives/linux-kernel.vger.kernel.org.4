@@ -2,49 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A718701CBC
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 11:46:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EA378701CBF
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 11:50:05 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237195AbjENJqx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 05:46:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52806 "EHLO
+        id S234864AbjENJuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 05:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235602AbjENJqp (ORCPT
+        with ESMTP id S229758AbjENJuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 05:46:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD7E2107
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 02:46:34 -0700 (PDT)
+        Sun, 14 May 2023 05:50:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A36921B6;
+        Sun, 14 May 2023 02:49:59 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1746C61161
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 09:46:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2889C433EF;
-        Sun, 14 May 2023 09:46:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25BED6111E;
+        Sun, 14 May 2023 09:49:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 559DFC433EF;
+        Sun, 14 May 2023 09:49:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684057593;
-        bh=wGeoCKdWcLNGSz8WoWm3Y/aAAFpiDlIXI/v9WFuO9SE=;
+        s=k20201202; t=1684057798;
+        bh=guNSqaaUlESAbLan9+RG8kL1OCMP8ebtJ0mKqjsMlwo=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Mp3GBAf3LzDUamiCidb3P3OlJifz+RcW8MqMVQ51d9JaEDeOIWVYR+xh7/f4e7S+y
-         mEKhgR//b9STacoLXO56B975kgZv1Wr1K26aOpCOUuK20RHnQPkMlPl6wKg09N4s4l
-         N5BbgmyFn2/aLOfArJnewwsr/GR3BnGpRJ7vd3aALF3dGmIEpC5MKz58G384oTJTVr
-         /4EdaN3bCb0ogSPKozZ5h2rm6D9MtNBffpLLc1oi8JDU9nJaJ0DOPW1yCJvHrGtf/L
-         XQ3zpXodU+inOapslWV0Je4cZGTHEiHJo5ogeDnNnobYeYiqTo4xO0hJuSJuQv6Ze+
-         25PFIiRN/Go4Q==
-Date:   Sun, 14 May 2023 12:46:22 +0300
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Claudio Migliorelli <claudio.migliorelli@mail.polimi.it>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Fix some coding style errors in memblock.c
-Message-ID: <ZGCt7hn9D114y0Ps@kernel.org>
-References: <87r0sa7mm8.fsf@mail.polimi.it>
+        b=nlAlSaeN8+EXCybzzrEALb2hrhC2bu60CCiNxgOm1/pbpcXlbfRzCi3V0XN1V2uVm
+         sYd/3l90AhWk+z8jQOxZ1tFURcrgiKPs9OXer92bAGkbtrWwczy77FY0bB2dafbAeU
+         3Fqhi5XUc/JAfKmFR8HUGYHVlT6WkXPHPYeNWzhS+OAbIiyU14FNl2ruMeSUFLCKv1
+         0aecU0EqIHCMzZmDKYgVzyL9kL1clCs1mtX4rXC33UWcxKi6xeMSXZAuUN2GeozJf9
+         /UzpjqhhyvU9u9TmOIvC5OUeZaKMomzTAhT++8kRNii7j+OuJdONS62vRT60B/Fn0B
+         sPSG1uQ9BIwTQ==
+Date:   Sun, 14 May 2023 10:49:53 +0100
+From:   Conor Dooley <conor@kernel.org>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux RISC-V <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Vincent Chen <vincent.chen@sifive.com>,
+        Andy Chiu <andy.chiu@sifive.com>,
+        Greentime Hu <greentime.hu@sifive.com>
+Subject: Re: [PATCH 3/5] Documentation: riscv: vector: Use bullet lists for
+ prctl list
+Message-ID: <20230514-proposal-resort-3ce1beeaa089@spud>
+References: <20230514090432.78217-1-bagasdotme@gmail.com>
+ <20230514090432.78217-4-bagasdotme@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="JFuOQxTC7sdTVyfx"
 Content-Disposition: inline
-In-Reply-To: <87r0sa7mm8.fsf@mail.polimi.it>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230514090432.78217-4-bagasdotme@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -53,42 +65,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Apr 23, 2023 at 03:29:35PM +0200, Claudio Migliorelli wrote:
-> This patch removes the initialization of some static variables to 0 and
-> `false` in the memblock source file, according to the coding style
-> guidelines.
-> 
-> Signed-off-by: Claudio Migliorelli <claudio.migliorelli@mail.polimi.it>
 
-Sorry for the delay.
-Applied, thanks!
+--JFuOQxTC7sdTVyfx
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
->  mm/memblock.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index 25fd0626a9e7..6f0a2eda427c 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -156,10 +156,10 @@ static __refdata struct memblock_type *memblock_memory = &memblock.memory;
->  	} while (0)
->  
->  static int memblock_debug __initdata_memblock;
-> -static bool system_has_some_mirror __initdata_memblock = false;
-> +static bool system_has_some_mirror __initdata_memblock;
->  static int memblock_can_resize __initdata_memblock;
-> -static int memblock_memory_in_slab __initdata_memblock = 0;
-> -static int memblock_reserved_in_slab __initdata_memblock = 0;
-> +static int memblock_memory_in_slab __initdata_memblock;
-> +static int memblock_reserved_in_slab __initdata_memblock;
->  
->  static enum memblock_flags __init_memblock choose_memblock_flags(void)
->  {
-> -- 
-> 2.38.4
-> 
-> 
+Hey Bagas,
 
--- 
-Sincerely yours,
-Mike.
+On Sun, May 14, 2023 at 04:04:30PM +0700, Bagas Sanjaya wrote:
+> The documentation lists two userspace prctl() calls. Use bullet
+> lists for the listing.
+>=20
+> Fixes: 412c68cfeeb178 ("riscv: Add documentation for Vector")
+
+Firstly, these fixes commit hashes would not be stable as this series
+has been applied to riscv/for-next [1]. But also, from this commit
+onwards, things seem like stylistic comments that would be undeserving
+of a Fixes: tag to begin with.
+Perhaps you'd be better off suggesting these changes in response to the
+original thread [2], so that it goes in "correctly" in the first place?
+Andy has to re-submit anyway as there are a few bugs that crept in in
+the most recent revision of his series.
+
+Thanks,
+Conor.
+
+1 - https://git.kernel.org/pub/scm/linux/kernel/git/riscv/linux.git/log/?h=
+=3Dfor-next
+2 - https://lore.kernel.org/linux-riscv/20230509103033.11285-25-andy.chiu@s=
+ifive.com/
+
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> ---
+>  Documentation/riscv/vector.rst | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/Documentation/riscv/vector.rst b/Documentation/riscv/vector.=
+rst
+> index 178b3f3f452462..c7bd701c7963b6 100644
+> --- a/Documentation/riscv/vector.rst
+> +++ b/Documentation/riscv/vector.rst
+> @@ -13,7 +13,7 @@ order to support the use of the RISC-V Vector Extension.
+>  Two new prctl() calls are added to allow programs to manage the enableme=
+nt
+>  status for the use of Vector in userspace:
+> =20
+> -prctl(PR_RISCV_V_SET_CONTROL, unsigned long arg)
+> +* prctl(PR_RISCV_V_SET_CONTROL, unsigned long arg)
+> =20
+>      Sets the Vector enablement status of the calling thread, where the c=
+ontrol
+>      argument consists of two 2-bit enablement statuses and a bit for inh=
+eritance
+> @@ -89,7 +89,7 @@ prctl(PR_RISCV_V_SET_CONTROL, unsigned long arg)
+>          * Every successful call overwrites a previous setting for the ca=
+lling
+>            thread.
+> =20
+> -prctl(PR_RISCV_V_SET_CONTROL)
+> +* prctl(PR_RISCV_V_SET_CONTROL)
+> =20
+>      Gets the same Vector enablement status for the calling thread. Setti=
+ng for
+>      next execve() call and the inheritance bit are all OR-ed together.
+> --=20
+> An old man doll... just what I always wanted! - Clara
+>=20
+
+--JFuOQxTC7sdTVyfx
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGCuvQAKCRB4tDGHoIJi
+0mcyAPwPiBYobd9BA+IWlX6rYlv8XB7W4+mR4nPs6hKmYxYppAEAngC4C5RD+zHf
+HIp7y9wlzNTsI+Lwk3dZR0/6G2oiNwk=
+=qbPL
+-----END PGP SIGNATURE-----
+
+--JFuOQxTC7sdTVyfx--
