@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59EC6701F6F
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 22:11:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A489701F70
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 22:11:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235619AbjENULg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 16:11:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54520 "EHLO
+        id S235181AbjENULj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 16:11:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234567AbjENUL1 (ORCPT
+        with ESMTP id S229635AbjENUL3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 16:11:27 -0400
+        Sun, 14 May 2023 16:11:29 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38EEC10EF;
-        Sun, 14 May 2023 13:11:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13CFA172A;
+        Sun, 14 May 2023 13:11:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1684095086; x=1715631086;
+  t=1684095088; x=1715631088;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=STnQLIfkKtnagaUMNVSTbqiWkD6BvIPnKTtZ917s+5g=;
-  b=I7n54n14X1XANesYfQgO9CMXlV6/xjDTork/ptgvpGBYYQRcW+99Ldv0
-   FHTI7mxxMgqUTvU80OIEr3GJXukgCY2tmckKthTxtO8jX59hRWarjmLCw
-   gygbZzfm7gijwtu4tJDla59cjfuNaiShitWcJAaXyQhQWP3sGWvxmq1yF
-   bswfXG2lL1fSBMMJH2kZ4+ZQk9wOGwfNg5uWqjJSMf2/OP5MZ71I0RAhA
-   ZOhCVB9cyBSlaWj3WQYRl78qirwkItJI1cZQ4Ulthy2086uo4/QwvtamE
-   DvQt4e3lZVoog39acNr28JVZFkv/Mpd8l70UQ3Pmv7IsMeDRlEuliDH7T
-   g==;
+  bh=7YaGTdp9shyBH18xqJKRb7USr12+Fc7HjIoRXdFaCBs=;
+  b=yPGaCH3GjuVByE93C5pc+2aoHEkPSwJZ/SiVzoKLDC/1OaOyqigcl4n6
+   2/yENQtrRoDzvos9+LNe8umgjb45CnS+dVOgbdFjzhmUrKhKchVYBD4Lf
+   wx0119JF2EwGHdxMY3Bfyk/0INpzEiqFw9jiY+FhCsD0mIovlppwONT1K
+   9QxAAdj5N7RWlmQAru317IlqfE3+jq51oDWramqQHmRcztya8jMqP+Gv9
+   fotLaV4pGXrVFRomGDPr+V0FE18htMxKtc/4pV0FXWYI/XdZe5RUhKZkn
+   V+NcpItb+UptKu2BJ38KbI9AKvr+LRtWfx4teen+KwBR8T96Forkjyalx
+   w==;
 X-IronPort-AV: E=Sophos;i="5.99,274,1677567600"; 
-   d="scan'208";a="215325951"
+   d="scan'208";a="151989748"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 May 2023 13:11:25 -0700
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 May 2023 13:11:27 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sun, 14 May 2023 13:11:25 -0700
+ 15.1.2507.21; Sun, 14 May 2023 13:11:27 -0700
 Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.21 via Frontend Transport; Sun, 14 May 2023 13:11:23 -0700
+ 15.1.2507.21 via Frontend Transport; Sun, 14 May 2023 13:11:25 -0700
 From:   Horatiu Vultur <horatiu.vultur@microchip.com>
 To:     <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>
 CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
         <pabeni@redhat.com>, <UNGLinuxDriver@microchip.com>,
         Horatiu Vultur <horatiu.vultur@microchip.com>
-Subject: [PATCH net-next 3/7] net: lan966x: Add support for apptrust
-Date:   Sun, 14 May 2023 22:10:25 +0200
-Message-ID: <20230514201029.1867738-4-horatiu.vultur@microchip.com>
+Subject: [PATCH net-next 4/7] net: lan966x: Add support for offloading dscp table
+Date:   Sun, 14 May 2023 22:10:26 +0200
+Message-ID: <20230514201029.1867738-5-horatiu.vultur@microchip.com>
 X-Mailer: git-send-email 2.38.0
 In-Reply-To: <20230514201029.1867738-1-horatiu.vultur@microchip.com>
 References: <20230514201029.1867738-1-horatiu.vultur@microchip.com>
@@ -64,178 +64,187 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make use of set/getapptrust() to implement per-selector trust
-and trust order.
+Add support for offloading dscp app entries. The dscp values are global
+for all lan966x ports.
 
 Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
 ---
- .../ethernet/microchip/lan966x/lan966x_dcb.c  | 118 +++++++++++++++++-
- 1 file changed, 114 insertions(+), 4 deletions(-)
+ .../ethernet/microchip/lan966x/lan966x_dcb.c  | 61 +++++++++++++++++--
+ .../ethernet/microchip/lan966x/lan966x_main.h |  8 +++
+ .../ethernet/microchip/lan966x/lan966x_port.c | 26 ++++++++
+ 3 files changed, 90 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_dcb.c b/drivers/net/ethernet/microchip/lan966x/lan966x_dcb.c
-index 8ec64336abd5f..c149f905fe9e3 100644
+index c149f905fe9e3..2b518181b7f08 100644
 --- a/drivers/net/ethernet/microchip/lan966x/lan966x_dcb.c
 +++ b/drivers/net/ethernet/microchip/lan966x/lan966x_dcb.c
-@@ -2,7 +2,49 @@
- 
- #include "lan966x_main.h"
- 
--static void lan966x_dcb_app_update(struct net_device *dev, bool enable)
-+enum lan966x_dcb_apptrust_values {
-+	LAN966X_DCB_APPTRUST_EMPTY,
-+	LAN966X_DCB_APPTRUST_DSCP,
-+	LAN966X_DCB_APPTRUST_PCP,
-+	LAN966X_DCB_APPTRUST_DSCP_PCP,
-+	__LAN966X_DCB_APPTRUST_MAX
-+};
-+
-+static const struct lan966x_dcb_apptrust {
-+	u8 selectors[IEEE_8021QAZ_APP_SEL_MAX + 1];
-+	int nselectors;
-+} *lan966x_port_apptrust[NUM_PHYS_PORTS];
-+
-+static const char *lan966x_dcb_apptrust_names[__LAN966X_DCB_APPTRUST_MAX] = {
-+	[LAN966X_DCB_APPTRUST_EMPTY]    = "empty",
-+	[LAN966X_DCB_APPTRUST_DSCP]     = "dscp",
-+	[LAN966X_DCB_APPTRUST_PCP]      = "pcp",
-+	[LAN966X_DCB_APPTRUST_DSCP_PCP] = "dscp pcp"
-+};
-+
-+/* Lan966x supported apptrust policies */
-+static const struct lan966x_dcb_apptrust
-+	lan966x_dcb_apptrust_policies[__LAN966X_DCB_APPTRUST_MAX] = {
-+	/* Empty *must* be first */
-+	[LAN966X_DCB_APPTRUST_EMPTY]    = { { 0 }, 0 },
-+	[LAN966X_DCB_APPTRUST_DSCP]     = { { IEEE_8021QAZ_APP_SEL_DSCP }, 1 },
-+	[LAN966X_DCB_APPTRUST_PCP]      = { { DCB_APP_SEL_PCP }, 1 },
-+	[LAN966X_DCB_APPTRUST_DSCP_PCP] = { { IEEE_8021QAZ_APP_SEL_DSCP,
-+					      DCB_APP_SEL_PCP }, 2 },
-+};
-+
-+static bool lan966x_dcb_apptrust_contains(int portno, u8 selector)
-+{
-+	const struct lan966x_dcb_apptrust *conf = lan966x_port_apptrust[portno];
-+
-+	for (int i = 0; i < conf->nselectors; i++)
-+		if (conf->selectors[i] == selector)
-+			return true;
-+
-+	return false;
-+}
-+
-+static void lan966x_dcb_app_update(struct net_device *dev)
- {
- 	struct lan966x_port *port = netdev_priv(dev);
- 	struct lan966x_port_qos qos = {0};
-@@ -15,7 +57,10 @@ static void lan966x_dcb_app_update(struct net_device *dev, bool enable)
+@@ -57,19 +57,62 @@ static void lan966x_dcb_app_update(struct net_device *dev)
  		qos.pcp.map[i] = dcb_getapp(dev, &app_itr);
  	}
  
--	qos.pcp.enable = enable;
-+	/* Enable use of pcp for queue classification */
-+	if (lan966x_dcb_apptrust_contains(port->chip_port, DCB_APP_SEL_PCP))
-+		qos.pcp.enable = true;
++	/* Get dscp ingress mapping */
++	for (int i = 0; i < ARRAY_SIZE(qos.dscp.map); i++) {
++		app_itr.selector = IEEE_8021QAZ_APP_SEL_DSCP;
++		app_itr.protocol = i;
++		qos.dscp.map[i] = dcb_getapp(dev, &app_itr);
++	}
++
+ 	/* Enable use of pcp for queue classification */
+ 	if (lan966x_dcb_apptrust_contains(port->chip_port, DCB_APP_SEL_PCP))
+ 		qos.pcp.enable = true;
+ 
++	/* Enable use of dscp for queue classification */
++	if (lan966x_dcb_apptrust_contains(port->chip_port, IEEE_8021QAZ_APP_SEL_DSCP))
++		qos.dscp.enable = true;
 +
  	lan966x_port_qos_set(port, &qos);
  }
  
-@@ -52,7 +97,7 @@ static int lan966x_dcb_ieee_delapp(struct net_device *dev, struct dcb_app *app)
- 	if (err < 0)
- 		return err;
- 
--	lan966x_dcb_app_update(dev, false);
-+	lan966x_dcb_app_update(dev);
- 
- 	return 0;
- }
-@@ -79,15 +124,77 @@ static int lan966x_dcb_ieee_setapp(struct net_device *dev, struct dcb_app *app)
- 	if (err)
- 		goto out;
- 
--	lan966x_dcb_app_update(dev, true);
-+	lan966x_dcb_app_update(dev);
- 
- out:
- 	return err;
- }
- 
-+static int lan966x_dcb_apptrust_validate(struct net_device *dev,
-+					 u8 *selectors,
-+					 int nselectors)
++/* DSCP mapping is global for all ports, so set and delete app entries are
++ * replicated for each port.
++ */
++static int lan966x_dcb_ieee_dscp_setdel(struct net_device *dev,
++					struct dcb_app *app,
++					int (*setdel)(struct net_device *,
++						      struct dcb_app *))
 +{
-+	for (int i = 0; i < ARRAY_SIZE(lan966x_dcb_apptrust_policies); i++) {
-+		bool match;
++	struct lan966x_port *port = netdev_priv(dev);
++	struct lan966x *lan966x = port->lan966x;
++	int err;
 +
-+		if (lan966x_dcb_apptrust_policies[i].nselectors != nselectors)
++	for (int i = 0; i < NUM_PHYS_PORTS; i++) {
++		port = lan966x->ports[i];
++		if (!port)
 +			continue;
 +
-+		match = true;
-+		for (int j = 0; j < nselectors; j++) {
-+			if (lan966x_dcb_apptrust_policies[i].selectors[j] !=
-+			    *(selectors + j)) {
-+				match = false;
-+				break;
-+			}
-+		}
-+		if (match)
-+			return i;
++		err = setdel(port->dev, app);
++		if (err)
++			return err;
 +	}
 +
-+	netdev_err(dev, "Valid apptrust configurations are:\n");
-+	for (int i = 0; i < ARRAY_SIZE(lan966x_dcb_apptrust_names); i++)
-+		pr_info("order: %s\n", lan966x_dcb_apptrust_names[i]);
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static int lan966x_dcb_setapptrust(struct net_device *dev,
-+				   u8 *selectors,
-+				   int nselectors)
-+{
-+	struct lan966x_port *port = netdev_priv(dev);
-+	int idx;
-+
-+	idx = lan966x_dcb_apptrust_validate(dev, selectors, nselectors);
-+	if (idx < 0)
-+		return idx;
-+
-+	lan966x_port_apptrust[port->chip_port] = &lan966x_dcb_apptrust_policies[idx];
-+	lan966x_dcb_app_update(dev);
-+
 +	return 0;
 +}
 +
-+static int lan966x_dcb_getapptrust(struct net_device *dev, u8 *selectors,
-+				   int *nselectors)
-+{
-+	struct lan966x_port *port = netdev_priv(dev);
-+	const struct lan966x_dcb_apptrust *trust;
+ static int lan966x_dcb_app_validate(struct net_device *dev,
+ 				    const struct dcb_app *app)
+ {
+ 	int err = 0;
+ 
+ 	switch (app->selector) {
++	/* Dscp checks */
++	case IEEE_8021QAZ_APP_SEL_DSCP:
++		if (app->protocol >= LAN966X_PORT_QOS_DSCP_COUNT)
++			err = -EINVAL;
++		else if (app->priority >= NUM_PRIO_QUEUES)
++			err = -ERANGE;
++		break;
+ 	/* Pcp checks */
+ 	case DCB_APP_SEL_PCP:
+ 		if (app->protocol >= LAN966X_PORT_QOS_PCP_DEI_COUNT)
+@@ -93,8 +136,12 @@ static int lan966x_dcb_ieee_delapp(struct net_device *dev, struct dcb_app *app)
+ {
+ 	int err;
+ 
+-	err = dcb_ieee_delapp(dev, app);
+-	if (err < 0)
++	if (app->selector == IEEE_8021QAZ_APP_SEL_DSCP)
++		err = lan966x_dcb_ieee_dscp_setdel(dev, app, dcb_ieee_delapp);
++	else
++		err = dcb_ieee_delapp(dev, app);
 +
-+	trust = lan966x_port_apptrust[port->chip_port];
++	if (err)
+ 		return err;
+ 
+ 	lan966x_dcb_app_update(dev);
+@@ -117,12 +164,16 @@ static int lan966x_dcb_ieee_setapp(struct net_device *dev, struct dcb_app *app)
+ 	if (prio) {
+ 		app_itr = *app;
+ 		app_itr .priority = prio;
+-		dcb_ieee_delapp(dev, &app_itr);
++		lan966x_dcb_ieee_delapp(dev, &app_itr);
+ 	}
+ 
+-	err = dcb_ieee_setapp(dev, app);
++	if (app->selector == IEEE_8021QAZ_APP_SEL_DSCP)
++		err = lan966x_dcb_ieee_dscp_setdel(dev, app, dcb_ieee_setapp);
++	else
++		err = dcb_ieee_setapp(dev, app);
 +
-+	memcpy(selectors, trust->selectors, trust->nselectors);
-+	*nselectors = trust->nselectors;
+ 	if (err)
+-		goto out;
++		return err;
+ 
+ 	lan966x_dcb_app_update(dev);
+ 
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+index b9ca47ab6e8be..8213440e08672 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_main.h
+@@ -109,6 +109,8 @@
+ #define LAN966X_PORT_QOS_PCP_DEI_COUNT \
+ 	(LAN966X_PORT_QOS_PCP_COUNT + LAN966X_PORT_QOS_DEI_COUNT)
+ 
++#define LAN966X_PORT_QOS_DSCP_COUNT	64
 +
-+	return 0;
-+}
-+
- static const struct dcbnl_rtnl_ops lan966x_dcbnl_ops = {
- 	.ieee_setapp = lan966x_dcb_ieee_setapp,
- 	.ieee_delapp = lan966x_dcb_ieee_delapp,
-+	.dcbnl_setapptrust = lan966x_dcb_setapptrust,
-+	.dcbnl_getapptrust = lan966x_dcb_getapptrust,
+ /* MAC table entry types.
+  * ENTRYTYPE_NORMAL is subject to aging.
+  * ENTRYTYPE_LOCKED is not subject to aging.
+@@ -402,8 +404,14 @@ struct lan966x_port_qos_pcp {
+ 	bool enable;
  };
  
- void lan966x_dcb_init(struct lan966x *lan966x)
-@@ -100,5 +207,8 @@ void lan966x_dcb_init(struct lan966x *lan966x)
- 			continue;
- 
- 		port->dev->dcbnl_ops = &lan966x_dcbnl_ops;
++struct lan966x_port_qos_dscp {
++	u8 map[LAN966X_PORT_QOS_DSCP_COUNT];
++	bool enable;
++};
 +
-+		lan966x_port_apptrust[port->chip_port] =
-+			&lan966x_dcb_apptrust_policies[LAN966X_DCB_APPTRUST_DSCP_PCP];
+ struct lan966x_port_qos {
+ 	struct lan966x_port_qos_pcp pcp;
++	struct lan966x_port_qos_dscp dscp;
+ };
+ 
+ struct lan966x_port {
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_port.c b/drivers/net/ethernet/microchip/lan966x/lan966x_port.c
+index 0cee8127c48eb..11c552e87ee44 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_port.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_port.c
+@@ -418,10 +418,36 @@ static void lan966x_port_qos_pcp_set(struct lan966x_port *port,
  	}
  }
+ 
++static void lan966x_port_qos_dscp_set(struct lan966x_port *port,
++				      struct lan966x_port_qos_dscp *qos)
++{
++	struct lan966x *lan966x = port->lan966x;
++
++	/* Enable/disable dscp for qos classification. */
++	lan_rmw(ANA_QOS_CFG_QOS_DSCP_ENA_SET(qos->enable),
++		ANA_QOS_CFG_QOS_DSCP_ENA,
++		lan966x, ANA_QOS_CFG(port->chip_port));
++
++	/* Map each dscp value to priority and dp */
++	for (int i = 0; i < ARRAY_SIZE(qos->map); i++)
++		lan_rmw(ANA_DSCP_CFG_DP_DSCP_VAL_SET(0) |
++			ANA_DSCP_CFG_QOS_DSCP_VAL_SET(*(qos->map + i)),
++			ANA_DSCP_CFG_DP_DSCP_VAL |
++			ANA_DSCP_CFG_QOS_DSCP_VAL,
++			lan966x, ANA_DSCP_CFG(i));
++
++	/* Set per-dscp trust */
++	for (int i = 0; i <  ARRAY_SIZE(qos->map); i++)
++		lan_rmw(ANA_DSCP_CFG_DSCP_TRUST_ENA_SET(qos->enable),
++			ANA_DSCP_CFG_DSCP_TRUST_ENA,
++			lan966x, ANA_DSCP_CFG(i));
++}
++
+ void lan966x_port_qos_set(struct lan966x_port *port,
+ 			  struct lan966x_port_qos *qos)
+ {
+ 	lan966x_port_qos_pcp_set(port, &qos->pcp);
++	lan966x_port_qos_dscp_set(port, &qos->dscp);
+ }
+ 
+ void lan966x_port_init(struct lan966x_port *port)
 -- 
 2.38.0
 
