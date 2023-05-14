@@ -2,132 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43B5D701EE3
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 20:18:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id ECB1E701EE8
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 20:20:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232859AbjENSSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 14:18:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60900 "EHLO
+        id S233485AbjENSUg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 14:20:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbjENSSW (ORCPT
+        with ESMTP id S229635AbjENSUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 14:18:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59234E7D;
-        Sun, 14 May 2023 11:18:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D834A60C83;
-        Sun, 14 May 2023 18:18:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94EC5C433EF;
-        Sun, 14 May 2023 18:18:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684088300;
-        bh=leEo7DBXpmphECdPPoj0UYJDLVxQHZKhN4OhIJt82Q8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oq8zPLuE2w26xouGORoxbM5b+qODTBQZmAW/0NB3Q31JGa62q+YXAH+9bP6AXzw80
-         odeYEnGouTCPxcSP06EXzfOL5KHK2EqDVpOT2EtEPY4Im3TymWh06oaSA6n8+ZDhe9
-         2AkIJAe4NctKvB8iFfRt/L9WLWEh2kTVyNHDY6YEDE88EXof5ns9O6juvD5zL+1v0p
-         kcXK6VEIWsetUOc3SQlySKITnqKT+5qB0s1iCW91jyN+qIzHCYFzt1JWnxhw9uUtXZ
-         vbJgcVdAW7t9K64vE/PutJqVsw5RUR6pIAoLqZmWZeVDRvXobXfjGvDN1OvDTJ1zs3
-         226vaowByReJQ==
-Date:   Sun, 14 May 2023 11:18:17 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Andrew Cooper <andrew.cooper3@citrix.com>
-Cc:     Ard Biesheuvel <ardb@kernel.org>,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        Ross Philipson <ross.philipson@oracle.com>,
-        linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
-        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
-        dpsmith@apertussolutions.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, hpa@zytor.com, James.Bottomley@hansenpartnership.com,
-        luto@amacapital.net, nivedita@alum.mit.edu,
-        kanth.ghatraju@oracle.com, trenchboot-devel@googlegroups.com
-Subject: Re: [PATCH v6 06/14] x86: Add early SHA support for Secure Launch
- early measurements
-Message-ID: <20230514181817.GA9528@sol.localdomain>
-References: <20230504145023.835096-1-ross.philipson@oracle.com>
- <20230504145023.835096-7-ross.philipson@oracle.com>
- <20230510012144.GA1851@quark.localdomain>
- <20230512110455.GD14461@srcf.ucam.org>
- <CAMj1kXE8m5jCH3vW54ys=dE2-Vf_gnnueR6_g4Rq-LSJ5BqRjA@mail.gmail.com>
- <20230512112847.GF14461@srcf.ucam.org>
- <CAMj1kXFUDUbH4avVs37uLkS=BfSFB1F60e5Ei5_m2aWxOYOGPw@mail.gmail.com>
- <4acf414e-67e7-c964-566b-a5e657e9d1bb@citrix.com>
+        Sun, 14 May 2023 14:20:33 -0400
+Received: from mail-yb1-xb30.google.com (mail-yb1-xb30.google.com [IPv6:2607:f8b0:4864:20::b30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46EF13AA7
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 11:20:31 -0700 (PDT)
+Received: by mail-yb1-xb30.google.com with SMTP id 3f1490d57ef6-b9daef8681fso10177973276.1
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 11:20:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20221208; t=1684088430; x=1686680430;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/w8Ik+B9LqquAVc24RATG4RXaBZs1t11jn/s3N/obhU=;
+        b=3hM1VI6NWGWu8nKjmz4E776n6/tfMkoFz07qqIrs1oaapPZVpFGqRfLcsrD2Q9+aIl
+         lVkR5CaBLhkLbvj6PetC97KquetslVNm4ewYDv3VlmeuHTS81B9LSL8mS5hv5NNIrJ5k
+         qfkEuu9pgy+dtpTd6GHTh0Gi0u67Y0T46ElzOPo7riZGmKUfHA7vSk0Zmd7HgvGJHxab
+         DqbZyXByDthzzyzxr91aGkpWgNkslpXmOPPlerkZVQyLnPVqgNtVTmJy+exwCn44tZ+/
+         VxkE3CJ7HkShwyo4XrVtp449lbAR3UPOjv88P7k+8G1RfjN7YRQ6k8XKtpgdfILs4FOB
+         5kcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684088430; x=1686680430;
+        h=mime-version:references:message-id:in-reply-to:subject:cc:to:from
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/w8Ik+B9LqquAVc24RATG4RXaBZs1t11jn/s3N/obhU=;
+        b=WMLHPj9Z18bXKticzllqD/zU7K+eKlPGMOBt+LDV5nVTn5L3MsdnqYxczf+D1I7GUc
+         zlaMtW3ZImjf3ibfLbDFHY10ofNrV2N4Yr9gk0LcZPNtBDsOrVdGJ9e6cRGtIr2FJn9/
+         Mz/5i7AjJTN1YrMF8i66TZ7OnulUUvcO2uOdHK3iNRDAiid3z6eMOqCGZJ12Rv2Q/zzf
+         2dFu3PXi2ceMSVXVNUH5w2i3EFJyR3zVoen0o+8yYZA3YXR5pXqbGkfzkBGKp04rV5MI
+         bTgl82TjAyKgalfcb3UapjaNjjLZuDLvsM0fRhWqgWcI2xu0x0cigYDUGnStVv5sdf3f
+         87Rg==
+X-Gm-Message-State: AC+VfDyt1u91jjmUCXdyelu/P2oAQs9eQPQXqwhyaSppIRmsggw0RREh
+        V0cOTMf5gy0ffJ7Jmdaez7fX8w==
+X-Google-Smtp-Source: ACHHUZ4uC/iK9slyVYAwsZbskAJfVUMUdzJpIRbgKgSPhKsknTzzPntrNJG85XVm7SRutl/ig2uJ2g==
+X-Received: by 2002:a25:abe5:0:b0:ba1:b539:a39a with SMTP id v92-20020a25abe5000000b00ba1b539a39amr27412446ybi.6.1684088430350;
+        Sun, 14 May 2023 11:20:30 -0700 (PDT)
+Received: from ripple.attlocal.net (172-10-233-147.lightspeed.sntcca.sbcglobal.net. [172.10.233.147])
+        by smtp.gmail.com with ESMTPSA id 192-20020a2503c9000000b00ba73c26f0d6sm1520144ybd.15.2023.05.14.11.20.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 May 2023 11:20:28 -0700 (PDT)
+Date:   Sun, 14 May 2023 11:20:16 -0700 (PDT)
+From:   Hugh Dickins <hughd@google.com>
+X-X-Sender: hugh@ripple.attlocal.net
+To:     Helge Deller <deller@gmx.de>
+cc:     Hugh Dickins <hughd@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>,
+        Suren Baghdasaryan <surenb@google.com>,
+        Qi Zheng <zhengqi.arch@bytedance.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        John David Anglin <dave.anglin@bell.net>,
+        "Aneesh Kumar K.V" <aneesh.kumar@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Alexandre Ghiti <alexghiti@rivosinc.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, x86@kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-ia64@vger.kernel.org,
+        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Subject: Re: [PATCH 08/23] parisc: add pte_unmap() to balance get_ptep()
+In-Reply-To: <ca4ac780-42b0-4818-bd84-e1a4acbb28dd@gmx.de>
+Message-ID: <6de39db5-d9aa-b35a-1652-8bdf90e7df72@google.com>
+References: <77a5d8c-406b-7068-4f17-23b7ac53bc83@google.com> <44ebbf90-5fbb-2815-17c7-fcfe3c87d78e@google.com> <ca4ac780-42b0-4818-bd84-e1a4acbb28dd@gmx.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4acf414e-67e7-c964-566b-a5e657e9d1bb@citrix.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 01:24:22PM +0100, Andrew Cooper wrote:
-> On 12/05/2023 12:58 pm, Ard Biesheuvel wrote:
-> > On Fri, 12 May 2023 at 13:28, Matthew Garrett <mjg59@srcf.ucam.org> wrote:
-> >> On Fri, May 12, 2023 at 01:18:45PM +0200, Ard Biesheuvel wrote:
-> >>> On Fri, 12 May 2023 at 13:04, Matthew Garrett <mjg59@srcf.ucam.org> wrote:
-> >>>> On Tue, May 09, 2023 at 06:21:44PM -0700, Eric Biggers wrote:
-> >>>>
-> >>>>> SHA-1 is insecure.  Why are you still using SHA-1?  Don't TPMs support SHA-2
-> >>>>> now?
-> >>>> TXT is supported on some TPM 1.2 systems as well. TPM 2 systems are also
-> >>>> at the whim of the firmware in terms of whether the SHA-2 banks are
-> >>>> enabled. But even if the SHA-2 banks are enabled, if you suddenly stop
-> >>>> extending the SHA-1 banks, a malicious actor can later turn up and
-> >>>> extend whatever they want into them and present a SHA-1-only
-> >>>> attestation. Ideally whatever is handling that attestation should know
-> >>>> whether or not to expect an attestation with SHA-2, but the easiest way
-> >>>> to maintain security is to always extend all banks.
-> >>>>
-> >>> Wouldn't it make more sense to measure some terminating event into the
-> >>> SHA-1 banks instead?
-> >> Unless we assert that SHA-1 events are unsupported, it seems a bit odd
-> >> to force a policy on people who have both banks enabled. People with
-> >> mixed fleets are potentially going to be dealing with SHA-1 measurements
-> >> for a while yet, and while there's obviously a security benefit in using
-> >> SHA-2 instead it'd be irritating to have to maintain two attestation
-> >> policies.
-> > I understand why that matters from an operational perspective.
+On Sat, 13 May 2023, Helge Deller wrote:
+
+> Hi Hugh,
+> 
+> On 5/10/23 06:52, Hugh Dickins wrote:
+> > To keep balance in future, remember to pte_unmap() after a successful
+> > get_ptep().  And (we might as well) pretend that flush_cache_pages()
+> > really needed a map there, to read the pfn before "unmapping".
 > >
-> > However, we are dealing with brand new code being proposed for Linux
-> > mainline, and so this is our only chance to push back on this, as
-> > otherwise, we will have to maintain it for a very long time.
+> > Signed-off-by: Hugh Dickins <hughd@google.com>
+> > ---
+> >   arch/parisc/kernel/cache.c | 26 +++++++++++++++++++++-----
+> >   1 file changed, 21 insertions(+), 5 deletions(-)
 > >
-> > IOW, D-RTM does not exist today in Linux, and it is up to us to define
-> > what it will look like. From that perspective, it is downright
-> > preposterous to even consider supporting SHA-1, given that SHA-1 by
-> > itself gives none of the guarantees that D-RTM aims to provide. If
-> > reducing your TCB is important enough to warrant switching to this
-> > implementation of D-RTM, surely you can upgrade your attestation
-> > policies as well.
+> > diff --git a/arch/parisc/kernel/cache.c b/arch/parisc/kernel/cache.c
+> > index 1d3b8bc8a623..b0c969b3a300 100644
+> > --- a/arch/parisc/kernel/cache.c
+> > +++ b/arch/parisc/kernel/cache.c
+> > @@ -425,10 +425,15 @@ void flush_dcache_page(struct page *page)
+> >     offset = (pgoff - mpnt->vm_pgoff) << PAGE_SHIFT;
+> >     addr = mpnt->vm_start + offset;
+> >     if (parisc_requires_coherency()) {
+> > +			bool needs_flush = false;
+> >      pte_t *ptep;
+> >
+> >   			ptep = get_ptep(mpnt->vm_mm, addr);
+> > -			if (ptep && pte_needs_flush(*ptep))
+> > +			if (ptep) {
+> > +				needs_flush = pte_needs_flush(*ptep);
+> > +				pte_unmap(ptep);
+> > +			}
+> > +			if (needs_flush)
+> >     		flush_user_cache_page(mpnt, addr);
+> >     } else {
+> >   			/*
+> > @@ -560,14 +565,20 @@ EXPORT_SYMBOL(flush_kernel_dcache_page_addr);
+> >   static void flush_cache_page_if_present(struct vm_area_struct *vma,
+> >   	unsigned long vmaddr, unsigned long pfn)
+> >   {
+> > -	pte_t *ptep = get_ptep(vma->vm_mm, vmaddr);
+> > +	bool needs_flush = false;
+> > +	pte_t *ptep;
+> >
+> >    /*
+> >     * The pte check is racy and sometimes the flush will trigger
+> >     * a non-access TLB miss. Hopefully, the page has already been
+> >     * flushed.
+> >     */
+> > -	if (ptep && pte_needs_flush(*ptep))
+> > +	ptep = get_ptep(vma->vm_mm, vmaddr);
+> > +	if (ptep) {
+> > +		needs_flush = pte_needs_flush(*ptep))
 > 
-> You're suggesting that because Linux has been slow to take D-RTM over
-> the past decade, you're going to intentionally break people with older
-> hardware just because you don't feel like using an older algorithm?
+> ^^^^^
+> One ")" too much and lacks a trailing ";"
+> Should be:
+> 		needs_flush = pte_needs_flush(*ptep);
 > 
-> That's about the worst possible reason to not take support.
-> 
-> There really are people in the world with older TPM 1.2 systems where
-> this D-RTM using SHA1 only is an improvement over using the incumbent tboot.
-> 
-> ~Andrew
+> With that fixed the kernel compiles and boots sucessfully on parisc.
 
-This patchset is proposing a new kernel feature.  So by definition, there are no
-existing users of it that can be broken.
+Urgh! Indeed, thanks a lot Helge: I'll fold that in.
 
-The fact is, SHA-1 is cryptographically broken.  It isn't actually about how
-"old" the algorithm is, or what anyone's "feelings" are.
-
-Maybe a renaming from Secure Launch to simply Launch is in order?
-
-- Eric
+Hugh
