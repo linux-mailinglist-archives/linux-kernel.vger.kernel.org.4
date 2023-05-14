@@ -2,102 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C564701B52
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 05:09:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B015701B53
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 05:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbjENDJJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 23:09:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44712 "EHLO
+        id S230051AbjENDJ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 23:09:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjENDJD (ORCPT
+        with ESMTP id S229763AbjENDJx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 23:09:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0D51BDC
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 20:09:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 987C860989
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 03:09:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CECEC433D2
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 03:09:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684033742;
-        bh=tn/b5nGJCsepGZi2dbYA45zwbk8oczOejMOPqJtpC7Q=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=VOBOZyxJKKyHOmtkUljxhyfXvdzH3+SezeVJLpK1eKjgqkAkkvynaEhr+2qQ/8mTF
-         8M+JXtwOT2gC5DaOU/y2AAQDlMh28y7PH7D9atCL2HntpStS5RZY0Az/WJZXyFixYi
-         zAPDPwUz3MT+kXmO1yoAxnh18Uxv8k9G4Jk+jn/LF0y9Umb05pTTnaHUMCGe4UaaKq
-         nxFMMfk6vaJ1ZfQ7KHvN2OeMa+WtJwe4gLX6srNRl+psJ5uPdanm7kmLAuGJbAPU3Q
-         C+ro9LPv+zGvhotpdLvrO4Xajq00vSQsix8yX1vudaMZ2+4xG1XdRVc4rkF+MMsTC0
-         t7hevlSNfe8YQ==
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-9659443fb56so1793227966b.2
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 20:09:01 -0700 (PDT)
-X-Gm-Message-State: AC+VfDxN6+DXAeiwNjJfs9EMhDqALIIk/awZj6wCGveH0pzluPed70Dn
-        b1VKbt3d1tcJwJ27OmCtDILhhI3NDrdji84Fw1E=
-X-Google-Smtp-Source: ACHHUZ6E4Jt1x4ZkdyPgRQks/D1qMhCbmJDBp7GH1/QQSJgaRyNJOwWuuJ3cDuT6TWOQryBV1SvkOcQcTlNxKjfDj0I=
-X-Received: by 2002:a17:907:97d0:b0:969:7739:2eb7 with SMTP id
- js16-20020a17090797d000b0096977392eb7mr20654208ejc.4.1684033740317; Sat, 13
- May 2023 20:09:00 -0700 (PDT)
+        Sat, 13 May 2023 23:09:53 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD8DB2683
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 20:09:52 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1aaff9c93a5so78087485ad.2
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 20:09:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684033792; x=1686625792;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=i/y2Q9D0CfiPbFjFqVeY6UhKR07Cv8DHbxpO7JqJ2YI=;
+        b=NY3eZzfl62OfyDFlsWmAkeZIOqL8aEQS0lt11umcLuzSUSIOZUtGPpbqwxo1mTLmX2
+         AjhBR7CdzjzqqOxACqzuyoF31PL8ljXafbKf4Ra0Zu36F6qPpGjl3+cnt+e4S77tI0Nb
+         yuSQFU9+lGLaPxaHLi55jemfG5vvAo254w973pURlMoNMzm5M8Lz0ytpq5PxpJJg5DD4
+         iNbX+NtvYPqQrKHkjFVXgCl3OBV3Dvu+0MbnU93qYH6uKBEDhut8InyAzeKAycH6ukPK
+         euY+Kv/Y8rY7//drIuXZjNPY5TaHfL8fUrjMJNvNHf3SYvmNeVqeiAilHPZb+HH/rpck
+         Qthw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684033792; x=1686625792;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=i/y2Q9D0CfiPbFjFqVeY6UhKR07Cv8DHbxpO7JqJ2YI=;
+        b=PXZPf6j+3yS7sxiFJ3jZZVLKYdCGHDqFQoYEVOtaW2miWwECJ7kKnavyBCbolHefDl
+         48Pzdp7S5io68fmjzROHnFjHMn2S9+TaIcEwCAIP2BlXJ0oZVMIc0IFnj91fM584vEIN
+         rtG62do3Jlfm+qeCffYCQ9P9WlydjmmY3EiblbnnIEhuAMzHdDfUoTJyTX9OMP/SH9bD
+         m+FENh++04K2Q3KeKSbcWjRYrkTNOyIumUzHwD/aWgmXCgx4wylHZh0XtZ5jXSrlPOub
+         bU+OvKLclcjtIsQmsyfOPmWoDzIOBpYDBHNKl3iGgMjLEVC0YWlAWdeOIvAM1i/Ca0Zc
+         /p9w==
+X-Gm-Message-State: AC+VfDxy5OZKCp7nuAaVYxRUz1mMbQBPxNvk4Rj6I9uF07ghIyhZDyt7
+        6/UJhqT6AgYCCd52UFIzZIw=
+X-Google-Smtp-Source: ACHHUZ4yzDyb3+1MJW6BO1BvzSA+zsUs6/q4VKM8nhZmLQgEwJoUXDmy5/k027R+RymdbL6dhFb3jA==
+X-Received: by 2002:a17:902:d486:b0:1ad:d2b1:3faf with SMTP id c6-20020a170902d48600b001add2b13fafmr11320550plg.21.1684033792230;
+        Sat, 13 May 2023 20:09:52 -0700 (PDT)
+Received: from localhost.localdomain ([2405:201:682f:3808:354c:21fc:fb33:cae9])
+        by smtp.gmail.com with ESMTPSA id p15-20020a170902b08f00b001add653dba2sm5095575plr.108.2023.05.13.20.09.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 13 May 2023 20:09:51 -0700 (PDT)
+From:   Deepanshu Kartikey <kartikey406@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Deepanshu Kartikey <kartikey406@gmail.com>
+Subject: [PATCH] Staging: rts5208 :rtsx : fixed  a brace coding style issue
+Date:   Sun, 14 May 2023 08:39:40 +0530
+Message-Id: <20230514030940.4820-1-kartikey406@gmail.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <CY5PR12MB64557005ECDAFFC89FC8C7B3C67A9@CY5PR12MB6455.namprd12.prod.outlook.com>
-In-Reply-To: <CY5PR12MB64557005ECDAFFC89FC8C7B3C67A9@CY5PR12MB6455.namprd12.prod.outlook.com>
-From:   Huacai Chen <chenhuacai@kernel.org>
-Date:   Sun, 14 May 2023 11:08:48 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H48t8tDmWoZOSqx06HwwXKY1CR=X+hi0o_ok6gSu6dQSg@mail.gmail.com>
-Message-ID: <CAAhV-H48t8tDmWoZOSqx06HwwXKY1CR=X+hi0o_ok6gSu6dQSg@mail.gmail.com>
-Subject: Re: [PATCH] loongarch: fix debugfs_create_dir error checking
-To:     mirimmad@outlook.com
-Cc:     skhan@linuxfoundation.org, Immad Mir <mirimmad17@gmail.com>,
-        Ivan Orlov <ivan.orlov0322@gmail.com>,
-        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Immad,
+Fixed  a coding style issue
 
-On Sat, May 13, 2023 at 10:46=E2=80=AFPM <mirimmad@outlook.com> wrote:
->
-> From: Immad Mir <mirimmad17@gmail.com>
->
-> The debugfs_create_dir returns ERR_PTR incase of an error and the
-> correct way of checking it by using the IS_ERR inline function, and
-> not the simple null comparision. This patch fixes this.
->
-> Suggested-By: Ivan Orlov <ivan.orlov0322@gmail.com>
-> Signed-off-by: Immad Mir <mirimmad17@gmail.com>
-> ---
->  arch/loongarch/kernel/unaligned.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/arch/loongarch/kernel/unaligned.c b/arch/loongarch/kernel/un=
-aligned.c
-> index bdff825d2..be2a5bdc5 100644
-> --- a/arch/loongarch/kernel/unaligned.c
-> +++ b/arch/loongarch/kernel/unaligned.c
-> @@ -485,7 +485,7 @@ static int __init debugfs_unaligned(void)
->         struct dentry *d;
->
->         d =3D debugfs_create_dir("loongarch", NULL);
-> -       if (!d)
-> +       if (IS_ERR(d))
-Maybe we need IS_ERR_OR_NULL() here?
+Signed-off-by: Deepanshu Kartikey <kartikey406@gmail.com>
+---
+ drivers/staging/rts5208/rtsx.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-Huacai
->                 return -ENOMEM;
->
->         debugfs_create_u32("unaligned_instructions_user",
-> --
-> 2.40.0
->
+diff --git a/drivers/staging/rts5208/rtsx.c b/drivers/staging/rts5208/rtsx.c
+index 2284a96abcff..0ab9355873f7 100644
+--- a/drivers/staging/rts5208/rtsx.c
++++ b/drivers/staging/rts5208/rtsx.c
+@@ -399,10 +399,8 @@ static int rtsx_control_thread(void *__dev)
+ 				chip->srb->device->id,
+ 				(u8)chip->srb->device->lun);
+ 			chip->srb->result = DID_BAD_TARGET << 16;
+-		}
+-
+-		/* we've got a command, let's do it! */
+-		else {
++		} else {
++			//we've got a command, let's do it!
+ 			scsi_show_command(chip);
+ 			rtsx_invoke_transport(chip->srb, chip);
+ 		}
+-- 
+2.25.1
+
