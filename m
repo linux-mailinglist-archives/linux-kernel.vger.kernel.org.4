@@ -2,97 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F43A701C07
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 08:53:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D804701C18
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 09:24:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbjENGwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 02:52:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47912 "EHLO
+        id S230123AbjENHYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 03:24:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjENGwo (ORCPT
+        with ESMTP id S229447AbjENHYA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 02:52:44 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0786E2105
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 23:52:43 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d2e1a72fcca58-64a9335a8e7so13952788b3a.0
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 23:52:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684047162; x=1686639162;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fyq46DYiYFeczNtd5py4N6kycWAKUkPxuVjsobEQu/8=;
-        b=CERCoTYfkyyRChuQXQEGV7ZqIc6UqCzzpaPg367AFt4hA6jofj4+mGeG95BttbwTYg
-         5F7Tdsxlxqj6ETKb5eQMi8S/FmCRLtKG5c3tCknUESHw7+UTtkb+NNMBs/eFeHCYkxVf
-         ODVa6n4sp0Nw+4NhNsQplk1aGg0q37xRfLtmB1sBYReRbzSqlTDLRJ+DRaV5LIj0U1tX
-         npRhfadLTeU9kFDY6RHr9z9dJF66fW6VZ9MxDVXNDz5fAMMePhRjFj5vR/L9NyBcRfx7
-         83cYU1gqXV8IdsKDa9UJ6gKg1gU6ql7Y20TWrU85Ie5iDvlICyxidFVl3jOZhC4tXvsq
-         Wq9g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684047162; x=1686639162;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Fyq46DYiYFeczNtd5py4N6kycWAKUkPxuVjsobEQu/8=;
-        b=kV+cBRHJLIYjBQx4VM7HvVylcwgRCIHoEZ+SvWgh48x4Gm6jy1fi3KZFqhl1ctCiFL
-         v6hsJMFmKd75AwuAvuKW1Ck8UQduFcfMEeHNzot0iYupW6MwI5WV/gdaAT4Ds1DQ2Ao/
-         JHcdGG+fP/mjHYNBTB71wNKTbYsyVU53YNmWyqntmCn7IYlg/6GcmzGMNzYsp+tx5f3y
-         3g4OR2I1Px1qeGC6dR6g2GhUCqNoluZ2/Fab7lgK5uFUpaoX8lxJYF1Rf8Z0GZDBNHi6
-         XpHU54NrrCnibOIkrKKHhByMEFN3zwXsNOgeNH5TXTjEmxyNY/+vEp3rt9rfEr4ko6vx
-         FTjw==
-X-Gm-Message-State: AC+VfDy2KM4u1nB2S1LvZewJ/3mSNR4WKmzY04vSdRRTdu2jNUUwOZzi
-        0ng8pPYicpHn+0nXC2pcVOA=
-X-Google-Smtp-Source: ACHHUZ7QRGKi5O7EJ5OFWTWGUsrkoDk9VuXnjdXKkNCkx4qJGQu7zSG3S6jpSGS8keN/1GWl7wPsZA==
-X-Received: by 2002:a05:6a00:1502:b0:647:157b:cb61 with SMTP id q2-20020a056a00150200b00647157bcb61mr23477519pfu.7.1684047162202;
-        Sat, 13 May 2023 23:52:42 -0700 (PDT)
-Received: from localhost.localdomain ([2405:201:682f:3808:c449:77a9:2cbd:238f])
-        by smtp.gmail.com with ESMTPSA id g17-20020aa78751000000b005aa60d8545esm9569943pfo.61.2023.05.13.23.52.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 13 May 2023 23:52:41 -0700 (PDT)
-From:   Deepanshu Kartikey <kartikey406@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Deepanshu Kartikey <kartikey406@gmail.com>
-Subject: [PATCH] Staging: rts5208: rtsx: fixed unbalanced braces around else statement
-Date:   Sun, 14 May 2023 12:19:36 +0530
-Message-Id: <20230514064936.7895-1-kartikey406@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 14 May 2023 03:24:00 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1C0F199E;
+        Sun, 14 May 2023 00:23:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684049039; x=1715585039;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=npeBkINJGxSpUKevbIGygQlsBP2qc6pkrXvu4pgq/P0=;
+  b=cxCsUnthsil2N/LWw/zopFTfo0uRrDGlaIxYMecg1zSHGRGENx96OmfR
+   yaQ2b+yDwuuL7e3Pvft0IAECx0cLSver+2xoIYFtkduhq6OcKpVFG3yl9
+   M884sFg0y47xXX/mO3+AVAWgWZNnhldC9OBcqmyaeBSsa54WfiadVsdcI
+   o9bGs4622B99q09T7nHNiviEb9W2gAHXPqVBuhW2RU2zwtueo/2InAtt2
+   Tg2HfrKkMXRaYW67nXOiBR4WgmvlXBmczbb13YLrFLfuYJeQ7Tz3PCqn1
+   2jbk9GTxeO0N+ai6ewnqub2WNdi1UHHhWuj8FygdVPNMmtiUvwXEHDBZm
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="354167273"
+X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
+   d="scan'208";a="354167273"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 00:23:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="731262936"
+X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
+   d="scan'208";a="731262936"
+Received: from mply-mobl1.amr.corp.intel.com (HELO skuppusw-desk1.amr.corp.intel.com) ([10.212.130.17])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 00:23:57 -0700
+From:   Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>, Jonathan Corbet <corbet@lwn.net>
+Cc:     "H . Peter Anvin" <hpa@zytor.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Dionna Amalie Glaze <dionnaglaze@google.com>,
+        Chong Cai <chongc@google.com>, Qinkun Bao <qinkun@apache.org>,
+        Guorui Yu <GuoRui.Yu@linux.alibaba.com>,
+        Du Fan <fan.du@intel.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: [PATCH v3 0/3] TDX Guest Quote generation support
+Date:   Sun, 14 May 2023 00:23:43 -0700
+Message-Id: <cover.1684048511.git.sathyanarayanan.kuppuswamy@linux.intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed unbalanced braces around else statement
+Hi All,
 
-Signed-off-by: Deepanshu Kartikey <kartikey406@gmail.com>
----
- drivers/staging/rts5208/rtsx.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+In TDX guest, the attestation process is used to verify the TDX guest
+trustworthiness to other entities before provisioning secrets to the
+guest.
 
-diff --git a/drivers/staging/rts5208/rtsx.c b/drivers/staging/rts5208/rtsx.c
-index 2284a96abcff..0ab9355873f7 100644
---- a/drivers/staging/rts5208/rtsx.c
-+++ b/drivers/staging/rts5208/rtsx.c
-@@ -399,10 +399,8 @@ static int rtsx_control_thread(void *__dev)
- 				chip->srb->device->id,
- 				(u8)chip->srb->device->lun);
- 			chip->srb->result = DID_BAD_TARGET << 16;
--		}
--
--		/* we've got a command, let's do it! */
--		else {
-+		} else {
-+			//we've got a command, let's do it!
- 			scsi_show_command(chip);
- 			rtsx_invoke_transport(chip->srb, chip);
- 		}
+The TDX guest attestation process consists of two steps:
+
+1. TDREPORT generation
+2. Quote generation.
+
+The First step (TDREPORT generation) involves getting the TDX guest
+measurement data in the format of TDREPORT which is further used to
+validate the authenticity of the TDX guest. The second step involves
+sending the TDREPORT to a Quoting Enclave (QE) server to generate a
+remotely verifiable Quote. TDREPORT by design can only be verified on
+the local platform. To support remote verification of the TDREPORT,
+TDX leverages Intel SGX Quoting Enclave to verify the TDREPORT
+locally and convert it to a remotely verifiable Quote. Although
+attestation software can use communication methods like TCP/IP or
+vsock to send the TDREPORT to QE, not all platforms support these
+communication models. So TDX GHCI specification [1] defines a method
+for Quote generation via hypercalls. Please check the discussion from
+Google [2] and Alibaba [3] which clarifies the need for hypercall based
+Quote generation support. This patch set adds this support.
+
+Support for TDREPORT generation already exists in the TDX guest driver. 
+This patchset extends the same driver to add the Quote generation
+support.
+
+Following are the details of the patch set:
+
+Patch 1/3 -> Adds event notification IRQ support.
+Patch 2/3 -> Adds Quote generation support.
+Patch 3/3 -> Adds selftest support for Quote generation feature.
+
+[1] https://cdrdv2.intel.com/v1/dl/getContent/726790, section titled "TDG.VP.VMCALL<GetQuote>".
+[2] https://lore.kernel.org/lkml/CAAYXXYxxs2zy_978GJDwKfX5Hud503gPc8=1kQ-+JwG_kA79mg@mail.gmail.com/
+[3] https://lore.kernel.org/lkml/a69faebb-11e8-b386-d591-dbd08330b008@linux.alibaba.com/
+
+Kuppuswamy Sathyanarayanan (3):
+  x86/tdx: Add TDX Guest event notify interrupt support
+  virt: tdx-guest: Add Quote generation support
+  selftests/tdx: Test GetQuote TDX attestation feature
+
+ Documentation/virt/coco/tdx-guest.rst        |  11 ++
+ arch/x86/coco/tdx/tdx.c                      | 194 +++++++++++++++++++
+ arch/x86/include/asm/tdx.h                   |   8 +
+ drivers/virt/coco/tdx-guest/tdx-guest.c      | 175 ++++++++++++++++-
+ include/uapi/linux/tdx-guest.h               |  44 +++++
+ tools/testing/selftests/tdx/tdx_guest_test.c |  65 ++++++-
+ 6 files changed, 490 insertions(+), 7 deletions(-)
+
 -- 
-2.25.1
+2.34.1
 
