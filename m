@@ -2,271 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81467701DA5
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 15:46:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52CBF701DAC
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 15:56:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232556AbjENNqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 09:46:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52462 "EHLO
+        id S233829AbjENN4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 09:56:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjENNqf (ORCPT
+        with ESMTP id S229635AbjENN4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 09:46:35 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 934CC1732
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 06:46:32 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1ab14cb3aaeso83344945ad.2
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 06:46:32 -0700 (PDT)
+        Sun, 14 May 2023 09:56:07 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B7919AC;
+        Sun, 14 May 2023 06:56:05 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f139de8cefso60571219e87.0;
+        Sun, 14 May 2023 06:56:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684071992; x=1686663992;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Kcb2f4Ev9/MrkBRrwgPUZL/+4rEBt9/dH5HyrPeBpO4=;
-        b=zRRMijhxUqcZNdU5t3A7v0iTTy5sp9JnGXlF+tE6U62rA927JXkfzTcDVK+vQUPhIu
-         2fe42bQ+Vp9ycOqoOi+lm+jpoGCHJkgxHzZsXSX608PBcrSeJQl6d8Rl0MfjOwGtLYyI
-         Uzmt0aHUvNVO02oaFXpSdzGZO5jM/ZBm6VqnrGHvVxTeJ32DCnO29zKE/SGDlnRbgHm7
-         1jdCsAgzRtTP3K8mdfCelYfl3ZzHK/sYCmQCvSJAgChtV+Cy+VLaOKVUZNtuRIQQunSc
-         sWuiV81BZq3SpDsL3VDBGF43CQPwt7pmPZqnZSU32L6A7wZLV39jTGo/7+qXVuElYWt4
-         mC+Q==
+        d=gmail.com; s=20221208; t=1684072564; x=1686664564;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/ZVKIUKzGX05OMg0P/SQC1TBuz/zx2SrEhQdY2C1eVk=;
+        b=e0jL1+x+B+CVF5D5kZvCOlSKlGE+7Pz/TLv0uhcK/uzns0Bh8hero3o8Fo/erRqUCJ
+         PitZDzEqXuKhiXoferofSQxwm1+ZlDLyTDQ9Wtm8fL2MD5Nd8nS2mmp68juxCoACoad7
+         eCKBMLrKglQPGDfshYP4i/xyujCWSCEQxjAKTeZSzTyc5uXpVTkbkKIqAZ6VmYwjo9b6
+         D+2IpuJ/raLjQcDG5x8whLooOicrUw8ENJKD2xmQR8NPmEH1RZ8yMZhYb8Sur8qNM+WC
+         nvna/yVJ9DvOrUp4eXaSwvVEidy5kuDXu5Ipg9O5hWOLCFai3Bpijjkpbf6zaPkE8A5M
+         0fGA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684071992; x=1686663992;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kcb2f4Ev9/MrkBRrwgPUZL/+4rEBt9/dH5HyrPeBpO4=;
-        b=MG9iyMd8Zl2WbFRnVIMDIypHmXctyv9GlUCX2yKDqz7GGL55wER9yQR8lmQ/DzeGK0
-         3Mg56H2sbO9EKA0+Jrh5ro2dzMHvmL+Dcyd3oV5jFJvmYRChKy3vcrnsDseQFbzVAjiD
-         rHr5Itw/Io+pFZOL4doAnypfr+XOi/5yaoMsIP4VuuPlKlF74m18IY54pGzStOsc5H6G
-         ecWnT+oNM7a8sEScyiJ06AWmA3lykdgJaZ4vMznrRw8TuNFrhl6+o4EiogXcZAeEryqX
-         Aw05AqD4/nSUoP90WCobqpPlQQzwcarjKmroFn8SL0+J/Ty0plO5Fr82gOIqvbgCBiT8
-         d6vg==
-X-Gm-Message-State: AC+VfDwRlZAAlzDvMteIh18QqeQxJ90QXtM2HNTxBQQZjpzCEsBPyATC
-        BFhMGPuiYZshTxJLArq4k3Re
-X-Google-Smtp-Source: ACHHUZ4w5jCbkX6MzOxwLVijUmBV55zTb3NrD9AvLOeEjyB4nA4W4gawwMADr5WX8bC0T2xCDrg0YA==
-X-Received: by 2002:a17:902:b7cc:b0:1ac:3ddf:2299 with SMTP id v12-20020a170902b7cc00b001ac3ddf2299mr31094193plz.44.1684071992018;
-        Sun, 14 May 2023 06:46:32 -0700 (PDT)
-Received: from thinkpad ([120.138.12.96])
-        by smtp.gmail.com with ESMTPSA id w14-20020a170902e88e00b001ac591b0500sm4725357plg.134.2023.05.14.06.46.28
+        d=1e100.net; s=20221208; t=1684072564; x=1686664564;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/ZVKIUKzGX05OMg0P/SQC1TBuz/zx2SrEhQdY2C1eVk=;
+        b=Orx5QsZaPkG3VwhWkf25+rbeGZwHjVBqjrG/u45Lp5wzMDIW16TbNzQJvVdcXkjET9
+         I2w3RTnCmvQwAzlofs3x9MnAzhJBpk9CSum7ME6F7Fa/t1YWU99zoBQ8EF/s71mSSJv3
+         Ph3FfDxDm9llvMVq/o1hzbe3UIm5BYzv78G/0FI1IWcfVnmnTcP9FfHkNPOm8do3K8jA
+         SOKzTCcni2VtOWdC2faWzXE0UtWqbR7DC9Vc2gqS0n8HXFeA4ieEFMzJLnjrZxMD0Rqn
+         5IjRPIE0MJ4hi9rd5ZTsk4Fu0239cd8otRDu00ITioWYCe0txjp01l563jSpr6J4lQdM
+         VGqg==
+X-Gm-Message-State: AC+VfDxd/e++HlYpaJcJXpfGsOW0oF8QQ7TxPYVjAoMYiTlPh1QX+/Aa
+        uzZPBribhfBO5RxdqaFerRw=
+X-Google-Smtp-Source: ACHHUZ7mQ7RO6cdlG9W7P4VAMMcMRRu+pFti/c2Y25RROUCnNz6dYcMDHV9/AJDpmEfzZe3BiBUSKw==
+X-Received: by 2002:ac2:47f8:0:b0:4f3:78dd:8e0b with SMTP id b24-20020ac247f8000000b004f378dd8e0bmr928479lfp.32.1684072563576;
+        Sun, 14 May 2023 06:56:03 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id n15-20020ac2490f000000b004efe9a169d2sm2224611lfi.64.2023.05.14.06.56.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 06:46:31 -0700 (PDT)
-Date:   Sun, 14 May 2023 19:16:25 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     Minghuan Lian <minghuan.Lian@nxp.com>,
-        Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
-        <linux-pci@vger.kernel.org>,
-        "moderated list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
-Subject: Re: [PATCH v3 1/1] PCI: layerscape: Add the endpoint linkup notifier
- support
-Message-ID: <20230514134625.GB116991@thinkpad>
-References: <20230508215235.1994348-1-Frank.Li@nxp.com>
+        Sun, 14 May 2023 06:56:03 -0700 (PDT)
+Date:   Sun, 14 May 2023 16:56:01 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     maz@kernel.org, tsbogend@alpha.franken.de, tglx@linutronix.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH 2/2] irqchip/mips-gic: Use raw spinlock for gic_lock
+Message-ID: <20230514135601.5irhslf6tdv4tk5z@mobilestation>
+References: <20230424103156.66753-1-jiaxun.yang@flygoat.com>
+ <20230424103156.66753-3-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230508215235.1994348-1-Frank.Li@nxp.com>
+In-Reply-To: <20230424103156.66753-3-jiaxun.yang@flygoat.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 08, 2023 at 05:52:35PM -0400, Frank Li wrote:
-> Layerscape has PME interrupt, which can be used as linkup notifier.
-> Set CFG_READY bit of PEX_PF0_CONFIG to enable accesses from root complex
-> when linkup detected.
+On Mon, Apr 24, 2023 at 11:31:56AM +0100, Jiaxun Yang wrote:
+> Since we may hold gic_lock in hardirq context, use raw spinlock
+> makes more sense given that it is for low-level interrupt handling
+> routine and the critical section is small.
 > 
-> Signed-off-by: Xiaowei Bao <xiaowei.bao@nxp.com>
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> Fixes BUG:
+> 
+> [    0.426106] =============================
+> [    0.426257] [ BUG: Invalid wait context ]
+> [    0.426422] 6.3.0-rc7-next-20230421-dirty #54 Not tainted
+> [    0.426638] -----------------------------
+> [    0.426766] swapper/0/1 is trying to lock:
+> [    0.426954] ffffffff8104e7b8 (gic_lock){....}-{3:3}, at: gic_set_type+0x30/08
+> 
+> Fixes: 95150ae8b330 ("irqchip: mips-gic: Implement irq_set_type callback")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-One minor comment below. With that fixed,
+LGTM especially in the RT-patch context. Feel free to add:
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
 
-Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Please see a tiny nitpick below.
 
 > ---
-> Change from v2 to v3
->  - align 80 column
->  - clear irq firstly
->  - dev_info to dev_dbg
->  - remove double space
->  - update commit message
+>  drivers/irqchip/irq-mips-gic.c | 30 +++++++++++++++---------------
+>  1 file changed, 15 insertions(+), 15 deletions(-)
 > 
-> Change from v1 to v2
-> - pme -> PME
-> - irq -> IRQ
-> - update dev_info message according to Bjorn's suggestion
-> - remove '.' at error message
-> 
->  .../pci/controller/dwc/pci-layerscape-ep.c    | 102 +++++++++++++++++-
->  1 file changed, 101 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/pci/controller/dwc/pci-layerscape-ep.c b/drivers/pci/controller/dwc/pci-layerscape-ep.c
-> index c640db60edc6..1a431a9be91e 100644
-> --- a/drivers/pci/controller/dwc/pci-layerscape-ep.c
-> +++ b/drivers/pci/controller/dwc/pci-layerscape-ep.c
-> @@ -18,6 +18,20 @@
+> diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
+> index b568d55ef7c5..6d5ecc10a870 100644
+> --- a/drivers/irqchip/irq-mips-gic.c
+> +++ b/drivers/irqchip/irq-mips-gic.c
+> @@ -50,7 +50,7 @@ void __iomem *mips_gic_base;
 >  
->  #include "pcie-designware.h"
+>  static DEFINE_PER_CPU_READ_MOSTLY(unsigned long[GIC_MAX_LONGS], pcpu_masks);
 >  
-> +#define PEX_PF0_CONFIG			0xC0014
-> +#define PEX_PF0_CFG_READY		BIT(0)
-> +
-> +/* PEX PFa PCIE PME and message interrupt registers*/
-> +#define PEX_PF0_PME_MES_DR		0xC0020
-> +#define PEX_PF0_PME_MES_DR_LUD		BIT(7)
-> +#define PEX_PF0_PME_MES_DR_LDD		BIT(9)
-> +#define PEX_PF0_PME_MES_DR_HRD		BIT(10)
-> +
-> +#define PEX_PF0_PME_MES_IER		0xC0028
-> +#define PEX_PF0_PME_MES_IER_LUDIE	BIT(7)
-> +#define PEX_PF0_PME_MES_IER_LDDIE	BIT(9)
-> +#define PEX_PF0_PME_MES_IER_HRDIE	BIT(10)
-> +
->  #define to_ls_pcie_ep(x)	dev_get_drvdata((x)->dev)
+> -static DEFINE_SPINLOCK(gic_lock);
+> +static DEFINE_RAW_SPINLOCK(gic_lock);
+>  static struct irq_domain *gic_irq_domain;
+>  static int gic_shared_intrs;
+>  static unsigned int gic_cpu_pin;
+> @@ -210,7 +210,7 @@ static int gic_set_type(struct irq_data *d, unsigned int type)
 >  
->  struct ls_pcie_ep_drvdata {
-> @@ -30,8 +44,86 @@ struct ls_pcie_ep {
->  	struct dw_pcie			*pci;
->  	struct pci_epc_features		*ls_epc;
->  	const struct ls_pcie_ep_drvdata *drvdata;
-> +	bool				big_endian;
-> +	int				irq;
+>  	irq = GIC_HWIRQ_TO_SHARED(d->hwirq);
+>  
 
-Move bool to the end of struct to avoid holes.
+> -	spin_lock_irqsave(&gic_lock, flags);
+> +	raw_spin_lock_irqsave(&gic_lock, flags);
 
-- Mani
+AFAICS this call can be moved way down to be after the switch-case
+block.
 
->  };
+-Serge(y)
+
+>  	switch (type & IRQ_TYPE_SENSE_MASK) {
+>  	case IRQ_TYPE_EDGE_FALLING:
+>  		pol = GIC_POL_FALLING_EDGE;
+> @@ -250,7 +250,7 @@ static int gic_set_type(struct irq_data *d, unsigned int type)
+>  	else
+>  		irq_set_chip_handler_name_locked(d, &gic_level_irq_controller,
+>  						 handle_level_irq, NULL);
+> -	spin_unlock_irqrestore(&gic_lock, flags);
+> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
 >  
-> +static u32 ls_lut_readl(struct ls_pcie_ep *pcie, u32 offset)
-> +{
-> +	struct dw_pcie *pci = pcie->pci;
-> +
-> +	if (pcie->big_endian)
-> +		return ioread32be(pci->dbi_base + offset);
-> +	else
-> +		return ioread32(pci->dbi_base + offset);
-> +}
-> +
-> +static void ls_lut_writel(struct ls_pcie_ep *pcie, u32 offset, u32 value)
-> +{
-> +	struct dw_pcie *pci = pcie->pci;
-> +
-> +	if (pcie->big_endian)
-> +		iowrite32be(value, pci->dbi_base + offset);
-> +	else
-> +		iowrite32(value, pci->dbi_base + offset);
-> +}
-> +
-> +static irqreturn_t ls_pcie_ep_event_handler(int irq, void *dev_id)
-> +{
-> +	struct ls_pcie_ep *pcie = dev_id;
-> +	struct dw_pcie *pci = pcie->pci;
-> +	u32 val, cfg;
-> +
-> +	val = ls_lut_readl(pcie, PEX_PF0_PME_MES_DR);
-> +	ls_lut_writel(pcie, PEX_PF0_PME_MES_DR, val);
-> +
-> +	if (!val)
-> +		return IRQ_NONE;
-> +
-> +	if (val & PEX_PF0_PME_MES_DR_LUD) {
-> +		cfg = ls_lut_readl(pcie, PEX_PF0_CONFIG);
-> +		cfg |= PEX_PF0_CFG_READY;
-> +		ls_lut_writel(pcie, PEX_PF0_CONFIG, cfg);
-> +		dw_pcie_ep_linkup(&pci->ep);
-> +
-> +		dev_dbg(pci->dev, "Link up\n");
-> +	} else if (val & PEX_PF0_PME_MES_DR_LDD) {
-> +		dev_dbg(pci->dev, "Link down\n");
-> +	} else if (val & PEX_PF0_PME_MES_DR_HRD) {
-> +		dev_dbg(pci->dev, "Hot reset\n");
-> +	}
-> +
-> +	return IRQ_HANDLED;
-> +}
-> +
-> +static int ls_pcie_ep_interrupt_init(struct ls_pcie_ep *pcie,
-> +				     struct platform_device *pdev)
-> +{
-> +	u32 val;
-> +	int ret;
-> +
-> +	pcie->irq = platform_get_irq_byname(pdev, "pme");
-> +	if (pcie->irq < 0) {
-> +		dev_err(&pdev->dev, "Can't get 'pme' IRQ\n");
-> +		return pcie->irq;
-> +	}
-> +
-> +	ret = devm_request_irq(&pdev->dev, pcie->irq, ls_pcie_ep_event_handler,
-> +			       IRQF_SHARED, pdev->name, pcie);
-> +	if (ret) {
-> +		dev_err(&pdev->dev, "Can't register PCIe IRQ\n");
-> +		return ret;
-> +	}
-> +
-> +	/* Enable interrupts */
-> +	val = ls_lut_readl(pcie, PEX_PF0_PME_MES_IER);
-> +	val |=  PEX_PF0_PME_MES_IER_LDDIE | PEX_PF0_PME_MES_IER_HRDIE |
-> +		PEX_PF0_PME_MES_IER_LUDIE;
-> +	ls_lut_writel(pcie, PEX_PF0_PME_MES_IER, val);
-> +
-> +	return 0;
-> +}
-> +
->  static const struct pci_epc_features*
->  ls_pcie_ep_get_features(struct dw_pcie_ep *ep)
->  {
-> @@ -125,6 +217,7 @@ static int __init ls_pcie_ep_probe(struct platform_device *pdev)
->  	struct ls_pcie_ep *pcie;
->  	struct pci_epc_features *ls_epc;
->  	struct resource *dbi_base;
-> +	int ret;
+>  	return 0;
+>  }
+> @@ -268,7 +268,7 @@ static int gic_set_affinity(struct irq_data *d, const struct cpumask *cpumask,
+>  		return -EINVAL;
 >  
->  	pcie = devm_kzalloc(dev, sizeof(*pcie), GFP_KERNEL);
->  	if (!pcie)
-> @@ -144,6 +237,7 @@ static int __init ls_pcie_ep_probe(struct platform_device *pdev)
->  	pci->ops = pcie->drvdata->dw_pcie_ops;
+>  	/* Assumption : cpumask refers to a single CPU */
+> -	spin_lock_irqsave(&gic_lock, flags);
+> +	raw_spin_lock_irqsave(&gic_lock, flags);
 >  
->  	ls_epc->bar_fixed_64bit = (1 << BAR_2) | (1 << BAR_4);
-> +	ls_epc->linkup_notifier = true;
+>  	/* Re-route this IRQ */
+>  	write_gic_map_vp(irq, BIT(mips_cm_vp_id(cpu)));
+> @@ -279,7 +279,7 @@ static int gic_set_affinity(struct irq_data *d, const struct cpumask *cpumask,
+>  		set_bit(irq, per_cpu_ptr(pcpu_masks, cpu));
 >  
->  	pcie->pci = pci;
->  	pcie->ls_epc = ls_epc;
-> @@ -155,9 +249,15 @@ static int __init ls_pcie_ep_probe(struct platform_device *pdev)
+>  	irq_data_update_effective_affinity(d, cpumask_of(cpu));
+> -	spin_unlock_irqrestore(&gic_lock, flags);
+> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
 >  
->  	pci->ep.ops = &ls_pcie_ep_ops;
+>  	return IRQ_SET_MASK_OK;
+>  }
+> @@ -357,12 +357,12 @@ static void gic_mask_local_irq_all_vpes(struct irq_data *d)
+>  	cd = irq_data_get_irq_chip_data(d);
+>  	cd->mask = false;
 >  
-> +	pcie->big_endian = of_property_read_bool(dev->of_node, "big-endian");
-> +
->  	platform_set_drvdata(pdev, pcie);
->  
-> -	return dw_pcie_ep_init(&pci->ep);
-> +	ret = dw_pcie_ep_init(&pci->ep);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return ls_pcie_ep_interrupt_init(pcie, pdev);
+> -	spin_lock_irqsave(&gic_lock, flags);
+> +	raw_spin_lock_irqsave(&gic_lock, flags);
+>  	for_each_online_cpu(cpu) {
+>  		write_gic_vl_other(mips_cm_vp_id(cpu));
+>  		write_gic_vo_rmask(BIT(intr));
+>  	}
+> -	spin_unlock_irqrestore(&gic_lock, flags);
+> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
 >  }
 >  
->  static struct platform_driver ls_pcie_ep_driver = {
+>  static void gic_unmask_local_irq_all_vpes(struct irq_data *d)
+> @@ -375,12 +375,12 @@ static void gic_unmask_local_irq_all_vpes(struct irq_data *d)
+>  	cd = irq_data_get_irq_chip_data(d);
+>  	cd->mask = true;
+>  
+> -	spin_lock_irqsave(&gic_lock, flags);
+> +	raw_spin_lock_irqsave(&gic_lock, flags);
+>  	for_each_online_cpu(cpu) {
+>  		write_gic_vl_other(mips_cm_vp_id(cpu));
+>  		write_gic_vo_smask(BIT(intr));
+>  	}
+> -	spin_unlock_irqrestore(&gic_lock, flags);
+> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
+>  }
+>  
+>  static void gic_all_vpes_irq_cpu_online(void)
+> @@ -393,7 +393,7 @@ static void gic_all_vpes_irq_cpu_online(void)
+>  	unsigned long flags;
+>  	int i;
+>  
+> -	spin_lock_irqsave(&gic_lock, flags);
+> +	raw_spin_lock_irqsave(&gic_lock, flags);
+>  
+>  	for (i = 0; i < ARRAY_SIZE(local_intrs); i++) {
+>  		unsigned int intr = local_intrs[i];
+> @@ -407,7 +407,7 @@ static void gic_all_vpes_irq_cpu_online(void)
+>  			write_gic_vl_smask(BIT(intr));
+>  	}
+>  
+> -	spin_unlock_irqrestore(&gic_lock, flags);
+> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
+>  }
+>  
+>  static struct irq_chip gic_all_vpes_local_irq_controller = {
+> @@ -437,11 +437,11 @@ static int gic_shared_irq_domain_map(struct irq_domain *d, unsigned int virq,
+>  
+>  	data = irq_get_irq_data(virq);
+>  
+> -	spin_lock_irqsave(&gic_lock, flags);
+> +	raw_spin_lock_irqsave(&gic_lock, flags);
+>  	write_gic_map_pin(intr, GIC_MAP_PIN_MAP_TO_PIN | gic_cpu_pin);
+>  	write_gic_map_vp(intr, BIT(mips_cm_vp_id(cpu)));
+>  	irq_data_update_effective_affinity(data, cpumask_of(cpu));
+> -	spin_unlock_irqrestore(&gic_lock, flags);
+> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
+>  
+>  	return 0;
+>  }
+> @@ -533,12 +533,12 @@ static int gic_irq_domain_map(struct irq_domain *d, unsigned int virq,
+>  	if (!gic_local_irq_is_routable(intr))
+>  		return -EPERM;
+>  
+> -	spin_lock_irqsave(&gic_lock, flags);
+> +	raw_spin_lock_irqsave(&gic_lock, flags);
+>  	for_each_online_cpu(cpu) {
+>  		write_gic_vl_other(mips_cm_vp_id(cpu));
+>  		write_gic_vo_map(mips_gic_vx_map_reg(intr), map);
+>  	}
+> -	spin_unlock_irqrestore(&gic_lock, flags);
+> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
+>  
+>  	return 0;
+>  }
 > -- 
 > 2.34.1
 > 
-
--- 
-மணிவண்ணன் சதாசிவம்
