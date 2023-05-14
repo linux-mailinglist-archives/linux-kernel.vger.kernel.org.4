@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3A35701C32
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 09:48:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DF9C701C36
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 09:48:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232904AbjENHr7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 03:47:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54172 "EHLO
+        id S229763AbjENHsN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 03:48:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230496AbjENHr5 (ORCPT
+        with ESMTP id S230496AbjENHsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 03:47:57 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F4A4271C
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 00:47:55 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id 41be03b00d2f7-517bdc9e81dso6058463a12.1
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 00:47:55 -0700 (PDT)
+        Sun, 14 May 2023 03:48:10 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDA62716
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 00:48:04 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id d9443c01a7336-1aaf7067647so78870265ad.0
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 00:48:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=heitbaum.com; s=google; t=1684050475; x=1686642475;
+        d=heitbaum.com; s=google; t=1684050484; x=1686642484;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ay1MPc6F0iyKA9Pf+RpucZR4uy8JJBBnlfw3+ke13QI=;
-        b=c9CtYou5DiDEv6nGqLhstt6vJCSMYNO/S5P96q/XqghzCd/gomUZ/HQlblodvKDIlx
-         Oh7IWEW+tsTEg8LA5W/LzBt/EvuBWmj9hY/hVLGf+YbBIpE79aoUGOMJKxueqM004iu1
-         f1NCXVfpxrDWOYWrCC36+PRLCDmBurqms4Vac=
+        bh=4NnQY8noj1MmR/ModEB4va/hdB07OBevUq7UGZR96Es=;
+        b=aod5o48Q1jn62cAjOkvTdvoY//WwVUxfug/sweWLvAK6jZioFwohpqM4nw4MfakmPr
+         mIrNiQ6murJlHEkO5vbNtMJcJHt3G9u7pPvqIVV6fCw8TSn0VaE7RkUL9cyu1oJqNRFf
+         KzHmYF8j48Oy1wxczJ4k3quxgKvmoRhesw0Qc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684050475; x=1686642475;
+        d=1e100.net; s=20221208; t=1684050484; x=1686642484;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Ay1MPc6F0iyKA9Pf+RpucZR4uy8JJBBnlfw3+ke13QI=;
-        b=ZeY/g2o7+K/GXHKw2HmONAnS7efC6RJg2IoudvFaHlE8p3rZ6YISGOUu4NGcE1/UzL
-         ugQo9fCYZHpK04Fp/y0gR4J5hRk2LZpUvNZQYcDD64qyIYCbwYw9Xb9tB+4dKmC8D0aF
-         AhUKIVZYxjvchFCuCu4/19pM9OPk0vMbxmL/7vF7L4cdW27LmOt5T9gW0pc1x8SIUrK/
-         cOZ9zUhDA6ETxtnJkQhkM16Mkffil7Tt5NOQMfPJ3fKDfJ8feeV9s9fzYS+/usmcTg33
-         ITc3YAUsV9UKGzEBT6Z/o+MDILvCsh+Gd4/kRQaQOSY+hW+pEc+NB9WS4FTl8LrXohJz
-         BgkA==
-X-Gm-Message-State: AC+VfDwoezsl+zqpzlDVPGZq9jvKKWpVnRChmNWXttfOq1szrqHpFeQb
-        JXRG4pq+zeY9auwiiPtl/tJzPQ==
-X-Google-Smtp-Source: ACHHUZ7+GvsJHRM7m26GQl/jq/2g/yljHEAye1w4XghdoWhpKePYcISv5PAzlF6jy9GhkyljLOaE1w==
-X-Received: by 2002:a17:90b:1bc1:b0:24e:2248:31c with SMTP id oa1-20020a17090b1bc100b0024e2248031cmr30507509pjb.22.1684050474747;
-        Sun, 14 May 2023 00:47:54 -0700 (PDT)
+        bh=4NnQY8noj1MmR/ModEB4va/hdB07OBevUq7UGZR96Es=;
+        b=l/ooOU3mZcpoK7Ls+FYHWg1twFMW/lxb5w2y7dfADGPOG6Vth+7FKf7nnHAmqDdiMa
+         vYpK+yF7GaCF5FJWfe8rrne5A7phwsS1eyguG/whelTsVjHu3UGKSPnoCMwZoMUvMD4m
+         jrec3Dm6GhacqywAo+yq1WzwQ0Kv3rk5kwdN9kqqcunWCRpVpWGFkPP+RaeBlaU+JFYi
+         bJJ/1vPaMjEBerdZZgPVBY1kPjhF2BvXHOw5cj150OWyaJ43DRp2O512htpouc85w5Y1
+         20XjoPPShalUNoYiVd5nk0LWoPZgG1rCc0KuMYIyAJNNNDaTxh/V7wrpSsyQD96dtLSW
+         od9w==
+X-Gm-Message-State: AC+VfDwM+bsGKGVSnpbn5dsy0syr+iM5qwUqNgJloBZj+eUD5/dcLiUL
+        mOFY27urYoFE/ovF8Zq4oYi28w==
+X-Google-Smtp-Source: ACHHUZ6Hy/3ldJ/A7WBa+micL+eupJ48zrwm9GfokwyqfxTZ3YFGS6iY6weBheTF0G9Sv5PtCwFFGw==
+X-Received: by 2002:a17:902:6ac3:b0:1ac:93ba:a5ec with SMTP id i3-20020a1709026ac300b001ac93baa5ecmr17497603plt.52.1684050483745;
+        Sun, 14 May 2023 00:48:03 -0700 (PDT)
 Received: from 8add390ca20e.heitbaum.com ([122.199.31.3])
-        by smtp.googlemail.com with ESMTPSA id j4-20020a17090276c400b00194caf3e975sm10903363plt.208.2023.05.14.00.47.48
+        by smtp.googlemail.com with ESMTPSA id j4-20020a17090276c400b00194caf3e975sm10903363plt.208.2023.05.14.00.47.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 00:47:54 -0700 (PDT)
+        Sun, 14 May 2023 00:48:03 -0700 (PDT)
 From:   Rudi Heitbaum <rudi@heitbaum.com>
 To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com, robh+dt@kernel.org,
@@ -58,9 +58,9 @@ Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-sunxi@lists.linux.dev, linux-bluetooth@vger.kernel.org,
         Rudi Heitbaum <rudi@heitbaum.com>
-Subject: [PATCH 1/3] dt-bindings: net: realtek-bluetooth: Add RTL8822BS
-Date:   Sun, 14 May 2023 07:47:29 +0000
-Message-Id: <20230514074731.70614-2-rudi@heitbaum.com>
+Subject: [PATCH 2/3] Bluetooth: btrtl: Add support for RTL8822BS UART
+Date:   Sun, 14 May 2023 07:47:30 +0000
+Message-Id: <20230514074731.70614-3-rudi@heitbaum.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230514074731.70614-1-rudi@heitbaum.com>
 References: <20230514074731.70614-1-rudi@heitbaum.com>
@@ -76,55 +76,71 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add compatible string for RTL8822BS for existing Realtek Bluetooth
-driver.
+Add a RTL8822BS UART with hci_ver = 0x07. This is similar to RTL8822CS
+observed on the Tanix TX6 Android set-top box. But the previous
+generation of chip. The RTL8822BS requires the
+BROKEN_LOCAL_EXT_FEATURES_PAGE_2 quirk.
 
 Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
 ---
- .../devicetree/bindings/net/realtek-bluetooth.yaml  | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ drivers/bluetooth/btrtl.c  | 12 +++++++++++-
+ drivers/bluetooth/hci_h5.c |  6 ++++++
+ 2 files changed, 17 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml b/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml
-index 8cc2b9924680..d2103931fc1c 100644
---- a/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml
-+++ b/Documentation/devicetree/bindings/net/realtek-bluetooth.yaml
-@@ -4,16 +4,16 @@
- $id: http://devicetree.org/schemas/net/realtek-bluetooth.yaml#
- $schema: http://devicetree.org/meta-schemas/core.yaml#
+diff --git a/drivers/bluetooth/btrtl.c b/drivers/bluetooth/btrtl.c
+index 2915c82d719d..b53a4ef88550 100644
+--- a/drivers/bluetooth/btrtl.c
++++ b/drivers/bluetooth/btrtl.c
+@@ -234,7 +234,15 @@ static const struct id_table ic_id_table[] = {
+ 	  .fw_name  = "rtl_bt/rtl8822cu_fw.bin",
+ 	  .cfg_name = "rtl_bt/rtl8822cu_config" },
  
--title: RTL8723BS/RTL8723CS/RTL8821CS/RTL8822CS Bluetooth
-+title: RTL8723BS/RTL8723CS/RTL8821CS/RTL8822BS/RTL8822CS Bluetooth
+-	/* 8822B */
++	/* 8822BS with UART interface */
++	{ IC_INFO(RTL_ROM_LMP_8822B, 0xb, 0x7, HCI_UART),
++	  .config_needed = true,
++	  .has_rom_version = true,
++	  .has_msft_ext = true,
++	  .fw_name  = "rtl_bt/rtl8822bs_fw.bin",
++	  .cfg_name = "rtl_bt/rtl8822bs_config" },
++
++	/* 8822BU with USB interface */
+ 	{ IC_INFO(RTL_ROM_LMP_8822B, 0xb, 0x7, HCI_USB),
+ 	  .config_needed = true,
+ 	  .has_rom_version = true,
+@@ -1182,6 +1190,8 @@ void btrtl_set_quirks(struct hci_dev *hdev, struct btrtl_device_info *btrtl_dev)
  
- maintainers:
-   - Vasily Khoruzhick <anarsoul@gmail.com>
-   - Alistair Francis <alistair@alistair23.me>
+ 		hci_set_aosp_capable(hdev);
+ 		break;
++	case CHIP_ID_8822B:
++		set_bit(HCI_QUIRK_BROKEN_LOCAL_EXT_FEATURES_PAGE_2, &hdev->quirks);
+ 	default:
+ 		rtl_dev_dbg(hdev, "Central-peripheral role not enabled.");
+ 		rtl_dev_dbg(hdev, "WBS supported not enabled.");
+diff --git a/drivers/bluetooth/hci_h5.c b/drivers/bluetooth/hci_h5.c
+index fefc37b98b4a..726b6c7e28b8 100644
+--- a/drivers/bluetooth/hci_h5.c
++++ b/drivers/bluetooth/hci_h5.c
+@@ -1072,6 +1072,10 @@ static struct h5_vnd rtl_vnd = {
+ 	.acpi_gpio_map	= acpi_btrtl_gpios,
+ };
  
- description:
--  RTL8723CS/RTL8723CS/RTL8821CS/RTL8822CS is a WiFi + BT chip. WiFi part
--  is connected over SDIO, while BT is connected over serial. It speaks
--  H5 protocol with few extra commands to upload firmware and change
-+  RTL8723CS/RTL8723CS/RTL8821CS/RTL8822BS/RTL8822CS is a WiFi + BT chip.
-+  WiFi part is connected over SDIO, while BT is connected over serial. It
-+  speaks H5 protocol with few extra commands to upload firmware and change
-   module speed.
++static const struct h5_device_data h5_data_rtl8822bs = {
++	.vnd = &rtl_vnd,
++};
++
+ static const struct h5_device_data h5_data_rtl8822cs = {
+ 	.vnd = &rtl_vnd,
+ };
+@@ -1100,6 +1104,8 @@ static const struct dev_pm_ops h5_serdev_pm_ops = {
  
- properties:
-@@ -23,11 +23,14 @@ properties:
-           - realtek,rtl8723bs-bt
-           - realtek,rtl8723cs-bt
-           - realtek,rtl8723ds-bt
-+          - realtek,rtl8822bs-bt
-           - realtek,rtl8822cs-bt
-       - items:
-           - enum:
-               - realtek,rtl8821cs-bt
--          - const: realtek,rtl8822cs-bt
-+          - const:
-+              - realtek,rtl8822bs-bt
-+              - realtek,rtl8822cs-bt
- 
-   device-wake-gpios:
-     maxItems: 1
+ static const struct of_device_id rtl_bluetooth_of_match[] = {
+ #ifdef CONFIG_BT_HCIUART_RTL
++	{ .compatible = "realtek,rtl8822bs-bt",
++	  .data = (const void *)&h5_data_rtl8822bs },
+ 	{ .compatible = "realtek,rtl8822cs-bt",
+ 	  .data = (const void *)&h5_data_rtl8822cs },
+ 	{ .compatible = "realtek,rtl8723bs-bt",
 -- 
 2.25.1
 
