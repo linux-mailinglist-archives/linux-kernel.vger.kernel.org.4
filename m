@@ -2,62 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4BFD701D29
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 13:57:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 74821701D2D
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 13:58:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237262AbjENL5P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 07:57:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50738 "EHLO
+        id S236252AbjENL6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 07:58:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbjENL5N (ORCPT
+        with ESMTP id S233722AbjENL6X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 07:57:13 -0400
-Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8083173C;
-        Sun, 14 May 2023 04:57:11 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.153])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4QK1FY2Fyzz4f41VV;
-        Sun, 14 May 2023 19:57:05 +0800 (CST)
-Received: from [10.174.178.129] (unknown [10.174.178.129])
-        by APP4 (Coremail) with SMTP id gCh0CgD3kpaRzGBkeTi2JQ--.6929S2;
-        Sun, 14 May 2023 19:57:06 +0800 (CST)
-Subject: Re: [PATCH v3 15/19] ext4: call ext4_mb_mark_group_bb in
- ext4_mb_mark_diskspace_used
-To:     Ojaswin Mujoo <ojaswin@linux.ibm.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230417110617.2664129-1-shikemeng@huaweicloud.com>
- <20230417110617.2664129-16-shikemeng@huaweicloud.com>
- <ZGCr74q8dfqMgq0t@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-From:   Kemeng Shi <shikemeng@huaweicloud.com>
-Message-ID: <daa4430a-bd26-1b0b-eaf7-928b3af9b601@huaweicloud.com>
-Date:   Sun, 14 May 2023 19:57:05 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.5.0
+        Sun, 14 May 2023 07:58:23 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8957210D
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 04:58:21 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bc2feb320so17835959a12.3
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 04:58:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684065499; x=1686657499;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ueNUY+61RC+vr33b4+u6+BrfZ3BJJhhclw2Re6JpY94=;
+        b=HL2l6tFwqcvaksx52yisq7RR0TRrXrwkOo8dOwyznXSYvgZPyuKE52NZ2FSkxurUoY
+         H9hFJg0E1CxzU5GMJwPE8BJUge2Rf5sz5GK6VG+k9+cKf4Ool8T46BE6P3fq+TaJNakx
+         WoyuSJNfRYecVKgg3LCS5/s32OI+xHx5rlbz9TFAhrW80O8mHPNcJsSMNpbnq/WDSHPo
+         IAX5J1ZmsRFHQOEtp8kFZpMpnYuls63XJsesPTcv4zaH+byEB8O3qpiIqFyiyXsx+M5U
+         W6Ph4TKH5qALtwZnjls6KlAQo+dOC/RoOr8NlN8IlZd3KL88uclJN709RtZMOZqxFf3r
+         f3gQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684065499; x=1686657499;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ueNUY+61RC+vr33b4+u6+BrfZ3BJJhhclw2Re6JpY94=;
+        b=CxdiqAc4ZsXAIJnI8X71rbylckjCoIk46Tk+nbB7w+1W1SochMBS3GnmChyaaSE1VP
+         kJ+SV0j0b4LbmlarB0GSM60LkrSkCq4HZ2OHL98F7E3oMcIciFNJv/0NSXHs1Z9krEra
+         J5cH2WYrGSf+l6EgBqJcc99s7U2LhLiWbqv56S3NI5jnY7WWn6CT2ISIFtX0nOLAOjxI
+         PRR27/Kv5LRW36RYmvh1taHf+8GJe/fIVM1rupTcQHNU98yum0HBhHzmFJDObZmyADRg
+         S0NDVBORtLdnBKq/qtM4lpvDP/EkZcJ2QIw5be/8uj06i3s7lKyplmmxGY1BQQT9YY3X
+         yEgg==
+X-Gm-Message-State: AC+VfDzfjV8reyJzT62anDC2LKOEYBN1uAJzB4BhWY9KvlfbBuYjnRUM
+        OUy8ZlbQrAd7rVC52CnQhy/rAw==
+X-Google-Smtp-Source: ACHHUZ7xsDrMn8wajAMkmg1yh4SBoBjpfcp8VcuzhBb/J3uNhg9BgkGqNoFX7nma8bpIZP3t7rtMsA==
+X-Received: by 2002:a17:907:928e:b0:96a:8412:a43d with SMTP id bw14-20020a170907928e00b0096a8412a43dmr8603542ejc.33.1684065498811;
+        Sun, 14 May 2023 04:58:18 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:715f:ddce:f2ba:123b])
+        by smtp.gmail.com with ESMTPSA id i24-20020a1709067a5800b00965aee5be9asm8223005ejo.170.2023.05.14.04.58.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 May 2023 04:58:18 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4] dt-bindings: net: nxp,sja1105: document spi-cpol/cpha
+Date:   Sun, 14 May 2023 13:57:41 +0200
+Message-Id: <20230514115741.40423-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-In-Reply-To: <ZGCr74q8dfqMgq0t@li-bb2b2a4c-3307-11b2-a85c-8fa5c3a69313.ibm.com>
-Content-Type: text/plain; charset=gbk
-Content-Transfer-Encoding: 7bit
-X-CM-TRANSID: gCh0CgD3kpaRzGBkeTi2JQ--.6929S2
-X-Coremail-Antispam: 1UD129KBjvJXoW3Wr48GrykCFWxWFWUWF45ZFb_yoWxGFWfpr
-        9IyF1UCr1fJr1DuFWI9a4qqF10kw48Gw1rJ34xG3WrAFnFkr9xAay8ta48Ca9FkF47A3Z2
-        vF15ZFyUCrs7KrDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUyKb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k2
-        6cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4
-        vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7Cj
-        xVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxV
-        AFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2
-        j2WlYx0E2Ix0cI8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7x
-        kEbVWUJVW8JwACjcxG0xvEwIxGrwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAK
-        I48JMxC20s026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7
-        xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AKxVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xII
-        jxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw2
-        0EY4v20xvaj40_Wr1j6rW3Jr1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY
-        1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjxUzsqWUUUUU
-X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
-        NICE_REPLY_A,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,191 +78,93 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Some boards use SJA1105 Ethernet Switch with SPI CPHA, while ones with
+SJA1110 use SPI CPOL, so document this to fix dtbs_check warnings:
 
+  arch/arm64/boot/dts/freescale/fsl-lx2160a-bluebox3.dtb: ethernet-switch@0: Unevaluated properties are not allowed ('spi-cpol' was unexpected)
 
-on 5/14/2023 5:37 PM, Ojaswin Mujoo wrote:
-> On Mon, Apr 17, 2023 at 07:06:13PM +0800, Kemeng Shi wrote:
->> call ext4_mb_mark_group_bb in ext4_mb_mark_diskspace_used to:
->> 1. remove repeat code to normally update bitmap and group descriptor
->> on disk.
->> 2. call ext4_mb_mark_group_bb instead of only setting bits in block bitmap
->> to fix the bitmap. Function ext4_mb_mark_group_bb will also update
->> checksum of bitmap and other counter along with the bit change to keep
->> the cosistent with bit change or block bitmap will be marked corrupted as
->> checksum of bitmap is in inconsistent state.
->>
->> Signed-off-by: Kemeng Shi <shikemeng@huaweicloud.com>
-> 
-> Looks good, feel free to add:
-> 
-> Reviewed-by: Ojaswin Mujoo <ojaswin@linux.ibm.com>
-> 
-> Just a minor suggestion below:
->> ---
->>  fs/ext4/mballoc.c | 90 +++++++++++++----------------------------------
->>  1 file changed, 24 insertions(+), 66 deletions(-)
->>
->> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
->> index c3e620f6eded..bd440614db76 100644
->> --- a/fs/ext4/mballoc.c
->> +++ b/fs/ext4/mballoc.c
->> @@ -3846,9 +3846,12 @@ static noinline_for_stack int
->>  ext4_mb_mark_diskspace_used(struct ext4_allocation_context *ac,
->>  				handle_t *handle, unsigned int reserv_clstrs)
->>  {
->> -	struct buffer_head *bitmap_bh = NULL;
->> +	struct ext4_mark_context mc = {
->> +		.handle = handle,
->> +		.sb = ac->ac_sb,
->> +		.state = 1,
->> +	};
->>  	struct ext4_group_desc *gdp;
->> -	struct buffer_head *gdp_bh;
->>  	struct ext4_sb_info *sbi;
->>  	struct super_block *sb;
->>  	ext4_fsblk_t block;
->> @@ -3860,32 +3863,13 @@ ext4_mb_mark_diskspace_used(struct ext4_allocation_context *ac,
->>  	sb = ac->ac_sb;
->>  	sbi = EXT4_SB(sb);
->>  
->> -	bitmap_bh = ext4_read_block_bitmap(sb, ac->ac_b_ex.fe_group);
->> -	if (IS_ERR(bitmap_bh)) {
->> -		return PTR_ERR(bitmap_bh);
->> -	}
->> -
->> -	BUFFER_TRACE(bitmap_bh, "getting write access");
->> -	err = ext4_journal_get_write_access(handle, sb, bitmap_bh,
->> -					    EXT4_JTR_NONE);
->> -	if (err)
->> -		goto out_err;
->> -
->> -	err = -EIO;
->> -	gdp = ext4_get_group_desc(sb, ac->ac_b_ex.fe_group, &gdp_bh);
->> +	gdp = ext4_get_group_desc(sb, ac->ac_b_ex.fe_group, NULL);
->>  	if (!gdp)
->> -		goto out_err;
->> -
->> +		return -EIO;
->>  	ext4_debug("using block group %u(%d)\n", ac->ac_b_ex.fe_group,
->>  			ext4_free_group_clusters(sb, gdp));
->>  
->> -	BUFFER_TRACE(gdp_bh, "get_write_access");
->> -	err = ext4_journal_get_write_access(handle, sb, gdp_bh, EXT4_JTR_NONE);
->> -	if (err)
->> -		goto out_err;
->> -
->>  	block = ext4_grp_offs_to_block(sb, &ac->ac_b_ex);
->> -
->>  	len = EXT4_C2B(sbi, ac->ac_b_ex.fe_len);
->>  	if (!ext4_inode_block_valid(ac->ac_inode, block, len)) {
->>  		ext4_error(sb, "Allocating blocks %llu-%llu which overlap "
->> @@ -3894,41 +3878,30 @@ ext4_mb_mark_diskspace_used(struct ext4_allocation_context *ac,
->>  		 * Fix the bitmap and return EFSCORRUPTED
->>  		 * We leak some of the blocks here.
->>  		 */
->> -		ext4_lock_group(sb, ac->ac_b_ex.fe_group);
->> -		mb_set_bits(bitmap_bh->b_data, ac->ac_b_ex.fe_start,
->> -			      ac->ac_b_ex.fe_len);
->> -		ext4_unlock_group(sb, ac->ac_b_ex.fe_group);
->> -		err = ext4_handle_dirty_metadata(handle, NULL, bitmap_bh);
->> +		err = ext4_mb_mark_group_bb(&mc, ac->ac_b_ex.fe_group,
->> +					    ac->ac_b_ex.fe_start,
->> +					    ac->ac_b_ex.fe_len,
->> +					    0);
->>  		if (!err)
->>  			err = -EFSCORRUPTED;
->> -		goto out_err;
->> +		return err;
->>  	}
->>  
->> -	ext4_lock_group(sb, ac->ac_b_ex.fe_group);
->>  #ifdef AGGRESSIVE_CHECK
->> -	{
->> -		int i;
->> -		for (i = 0; i < ac->ac_b_ex.fe_len; i++) {
->> -			BUG_ON(mb_test_bit(ac->ac_b_ex.fe_start + i,
->> -						bitmap_bh->b_data));
->> -		}
->> -	}
->> +	err = ext4_mb_mark_group_bb(&mc, ac->ac_b_ex.fe_group,
->> +				    ac->ac_b_ex.fe_start, ac->ac_b_ex.fe_len,
->> +				    EXT4_MB_BITMAP_MARKED_CHECK);
->> +#else
->> +	err = ext4_mb_mark_group_bb(&mc, ac->ac_b_ex.fe_group,
->> +				    ac->ac_b_ex.fe_start, ac->ac_b_ex.fe_len,
->> +				    0);
->>  #endif
-> 
-> I think, the refactoring the AGGRESSIVE_CHECK as follows makes the
-> intent more obvious and easier to read.
-> 
-> #ifdef AGGRESSIVE_CHECK
-> 
-> flags |= EXT4_MB_BITMAP_MARKED_CHECK;
-> 
-> #endif
-> 
-> err = ext4_mb_mark_group_bb(&mc, ac->ac_b_ex.fe_group,
-> 			    ac->ac_b_ex.fe_start, ac->ac_b_ex.fe_len,
-> 			    flags);
-Although this will add a new flags variable declartion, the AGGRESSIVE_CHECK code
-looks much better. Thanks for the suggestion, I will refactoring AGGRESSIVE_CHECK
-in this way in this patch and patch 16.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> Regards,
-> ojaswin
-> 
->> -	mb_set_bits(bitmap_bh->b_data, ac->ac_b_ex.fe_start,
->> -		      ac->ac_b_ex.fe_len);
->> -	if (ext4_has_group_desc_csum(sb) &&
->> -	    (gdp->bg_flags & cpu_to_le16(EXT4_BG_BLOCK_UNINIT))) {
->> -		gdp->bg_flags &= cpu_to_le16(~EXT4_BG_BLOCK_UNINIT);
->> -		ext4_free_group_clusters_set(sb, gdp,
->> -					     ext4_free_clusters_after_init(sb,
->> -						ac->ac_b_ex.fe_group, gdp));
->> -	}
->> -	len = ext4_free_group_clusters(sb, gdp) - ac->ac_b_ex.fe_len;
->> -	ext4_free_group_clusters_set(sb, gdp, len);
->> -	ext4_block_bitmap_csum_set(sb, gdp, bitmap_bh);
->> -	ext4_group_desc_csum_set(sb, ac->ac_b_ex.fe_group, gdp);
->> +	if (err && mc.changed == 0)
->> +		return err;
->>  
->> -	ext4_unlock_group(sb, ac->ac_b_ex.fe_group);
->> +#ifdef AGGRESSIVE_CHECK
->> +	BUG_ON(mc.changed != ac->ac_b_ex.fe_len);
->> +#endif
->>  	percpu_counter_sub(&sbi->s_freeclusters_counter, ac->ac_b_ex.fe_len);
->>  	/*
->>  	 * Now reduce the dirty block count also. Should not go negative
->> @@ -3938,21 +3911,6 @@ ext4_mb_mark_diskspace_used(struct ext4_allocation_context *ac,
->>  		percpu_counter_sub(&sbi->s_dirtyclusters_counter,
->>  				   reserv_clstrs);
->>  
->> -	if (sbi->s_log_groups_per_flex) {
->> -		ext4_group_t flex_group = ext4_flex_group(sbi,
->> -							  ac->ac_b_ex.fe_group);
->> -		atomic64_sub(ac->ac_b_ex.fe_len,
->> -			     &sbi_array_rcu_deref(sbi, s_flex_groups,
->> -						  flex_group)->free_clusters);
->> -	}
->> -
->> -	err = ext4_handle_dirty_metadata(handle, NULL, bitmap_bh);
->> -	if (err)
->> -		goto out_err;
->> -	err = ext4_handle_dirty_metadata(handle, NULL, gdp_bh);
->> -
->> -out_err:
->> -	brelse(bitmap_bh);
->>  	return err;
->>  }
->>  
->> -- 
->> 2.30.0
->>
-> 
+---
 
+Changes since v3:
+1. Rebase.
+2. Require cpha/cpol properties on respective variants (thus update
+   example).
+
+Changes since v2:
+1. Add allOf:if:then, based on feedback from Vladimir.
+
+Changes since v1:
+1. Add also cpha.
+---
+ .../bindings/net/dsa/nxp,sja1105.yaml         | 32 ++++++++++++++++---
+ 1 file changed, 28 insertions(+), 4 deletions(-)
+
+diff --git a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
+index 9a64ed658745..991448962c93 100644
+--- a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
++++ b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
+@@ -12,10 +12,6 @@ description:
+   cs_sck_delay of 500ns. Ensuring that this SPI timing requirement is observed
+   depends on the SPI bus master driver.
+ 
+-allOf:
+-  - $ref: dsa.yaml#/$defs/ethernet-ports
+-  - $ref: /schemas/spi/spi-peripheral-props.yaml#
+-
+ maintainers:
+   - Vladimir Oltean <vladimir.oltean@nxp.com>
+ 
+@@ -36,6 +32,9 @@ properties:
+   reg:
+     maxItems: 1
+ 
++  spi-cpha: true
++  spi-cpol: true
++
+   # Optional container node for the 2 internal MDIO buses of the SJA1110
+   # (one for the internal 100base-T1 PHYs and the other for the single
+   # 100base-TX PHY). The "reg" property does not have physical significance.
+@@ -109,6 +108,30 @@ $defs:
+        1860, 1880, 1900, 1920, 1940, 1960, 1980, 2000, 2020, 2040, 2060, 2080,
+        2100, 2120, 2140, 2160, 2180, 2200, 2220, 2240, 2260]
+ 
++allOf:
++  - $ref: dsa.yaml#/$defs/ethernet-ports
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
++  - if:
++      properties:
++        compatible:
++          enum:
++            - nxp,sja1105e
++            - nxp,sja1105t
++            - nxp,sja1105p
++            - nxp,sja1105q
++            - nxp,sja1105r
++            - nxp,sja1105s
++    then:
++      properties:
++        spi-cpol: false
++      required:
++        - spi-cpha
++    else:
++      properties:
++        spi-cpha: false
++      required:
++        - spi-cpol
++
+ unevaluatedProperties: false
+ 
+ examples:
+@@ -120,6 +143,7 @@ examples:
+             ethernet-switch@1 {
+                     reg = <0x1>;
+                     compatible = "nxp,sja1105t";
++                    spi-cpha;
+ 
+                     ethernet-ports {
+                             #address-cells = <1>;
 -- 
-Best wishes
-Kemeng Shi
+2.34.1
 
