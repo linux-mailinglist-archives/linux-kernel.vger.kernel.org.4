@@ -2,56 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC672701DD0
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 16:13:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D3CF3701DD6
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 16:24:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237177AbjENONx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 10:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59232 "EHLO
+        id S237428AbjENOY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 10:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236152AbjENONf (ORCPT
+        with ESMTP id S235342AbjENOYW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 10:13:35 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F80A49D0;
-        Sun, 14 May 2023 07:12:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E96B6114E;
-        Sun, 14 May 2023 14:12:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF544C433D2;
-        Sun, 14 May 2023 14:12:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684073573;
-        bh=e0baRLC5eFCQ8zVYahVDYkJYJNuUdwYkQ8MNXIk+Eyc=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GfysKnRpbf3G7jlFKcHZl1268YirT+XUDz0ywXnmuguoo5MS/GOGPmOFRmG7407ch
-         hrYhWjTHaZDls/3wW7Rp7a48Oa9bjtfzrwUGb2VPKwuzL6ouxYKvohoZ/luKX8puP2
-         RDKa/v6XJfr6jCNfelMr6gCfoHMuud+fDlBDoaTD7HFlgO6OEtqZmc4a186Q8tURsr
-         LEE0JHY0tQb6YMOvxsIucccWNgAfqyX1fb7zFnwTChFxpxWTNIsbBsARcippzG7aE5
-         DbqBqe5+9aM61NWfibh41GH7H8mQ6gJUiYO0qmjJkaGOO1BuEkv4jNmSp4SUSbfBsB
-         sUPeqMF3OQYyg==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     linux-trace-kernel@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
-        mhiramat@kernel.org, Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
-Subject: [PATCH v10 11/11] Documentation: tracing/probes: Add fprobe event tracing document
-Date:   Sun, 14 May 2023 23:12:49 +0900
-Message-ID:  <168407356966.941486.2476990983530347754.stgit@mhiramat.roam.corp.google.com>
-X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
-In-Reply-To:  <168407346448.941486.15681419068846125595.stgit@mhiramat.roam.corp.google.com>
-References:  <168407346448.941486.15681419068846125595.stgit@mhiramat.roam.corp.google.com>
-User-Agent: StGit/0.19
-MIME-Version: 1.0
+        Sun, 14 May 2023 10:24:22 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94E941BFE
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 07:24:20 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:5054:ff:feb3:8f48] (helo=regzbot.fritz.box); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id 1pyCe2-0005vl-UA; Sun, 14 May 2023 16:24:19 +0200
+From:   "Regzbot (on behalf of Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Linux regressions report  for mainline [2023-05-14]
+Date:   Sun, 14 May 2023 14:24:18 +0000
+Message-Id: <168407416011.74685.9039980276616254723@leemhuis.info>
+X-Mailer: git-send-email 2.40.1
 Content-Type: text/plain; charset="utf-8"
+MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1684074260;5830079a;
+X-HE-SMSGID: 1pyCe2-0005vl-UA
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,226 +41,193 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Hi Linus. Sorry, I'm a bit behind with staying on top wrt to regressions
+in recent cycles. But for 6.4 there is nothing much to report afaics.
+Yes, there are a few regressions on my radar (see below), but most as of
+now are business as usual (except the iwlwifi one, but I'll poke that
+tomorrow) and not noteworthy.
 
-Add a documentation about fprobe event tracing including
-tracepoint probe event and BTF argument.
+One of the exceptions is a slightly urgent s2idle regression for amd
+family 19h model 78h cpus[1], but you already have a pull request from
+Boris in your inbox with the fixes.
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+[1] https://lore.kernel.org/lkml/20230427053338.16653-1-mario.limonciello@amd.com/
+https://lore.kernel.org/all/MN0PR12MB610132F2277B0F1DB1039A15E2749@MN0PR12MB6101.namprd12.prod.outlook.com/
+
+What I can't see yet though is a pull request from Russell with a fix
+from Ard[2] (in next as 2b951b0efbaa) for boot issues[3] that apparently
+break a lot of arm32 configs, which among others lead to "tons of
+different boot time errors on the syzbot arm32 qemu instance"[4]. That
+sounds like someone that might be worth fixing rather sooner than later,
+but maybe the patch is already on the way to you and I just missed it.
+
+[2] https://lore.kernel.org/all/20230506161325.223362-1-ardb@kernel.org/
+[3] https://lore.kernel.org/lkml/ZFs6DNgzBHNarr6D@euler/
+[4] https://lore.kernel.org/lkml/CANp29Y4Q-VWEWeHmZu0f9tLLik1Va8oDF-s8hAeVkBZbX4K0gg@mail.gmail.com/
+
+HTH, Ciao, Thorsten
+
 ---
-Changes in v10:
- - Fix space before tab.
-Changes in v7:
- - Update about BTF auto type casting for $retval.
----
- Documentation/trace/fprobetrace.rst |  187 +++++++++++++++++++++++++++++++++++
- Documentation/trace/index.rst       |    1 
- 2 files changed, 188 insertions(+)
- create mode 100644 Documentation/trace/fprobetrace.rst
 
-diff --git a/Documentation/trace/fprobetrace.rst b/Documentation/trace/fprobetrace.rst
-new file mode 100644
-index 000000000000..0b0ea2053bce
---- /dev/null
-+++ b/Documentation/trace/fprobetrace.rst
-@@ -0,0 +1,187 @@
-+.. SPDX-License-Identifier: GPL-2.0
-+
-+==========================
-+Fprobe-based Event Tracing
-+==========================
-+
-+.. Author: Masami Hiramatsu <mhiramat@kernel.org>
-+
-+Overview
-+--------
-+
-+Fprobe event is similar to the kprobe event, but limited to probe on
-+the function entry and exit only. It is good enough for many use cases
-+which only traces some specific functions.
-+
-+This document also covers tracepoint probe events (tprobe) since this
-+is also works only on the tracepoint entry. User can trace a part of
-+tracepoint argument, or the tracepoint without trace-event, which is
-+not exposed on tracefs.
-+
-+As same as other dynamic events, fprobe events and tracepoint probe
-+events are defined via `dynamic_events` interface file on tracefs.
-+
-+Synopsis of fprobe-events
-+-------------------------
-+::
-+
-+  f[:[GRP1/][EVENT1]] SYM [FETCHARGS]                       : Probe on function entry
-+  f[MAXACTIVE][:[GRP1/][EVENT1]] SYM%return [FETCHARGS]     : Probe on function exit
-+  t[:[GRP2/][EVENT2]] TRACEPOINT [FETCHARGS]                : Probe on tracepoint
-+
-+ GRP1           : Group name for fprobe. If omitted, use "fprobes" for it.
-+ GRP2           : Group name for tprobe. If omitted, use "tracepoints" for it.
-+ EVENT1         : Event name for fprobe. If omitted, the event name is
-+                  "SYM__entry" or "SYM__exit".
-+ EVENT2         : Event name for tprobe. If omitted, the event name is
-+                  the same as "TRACEPOINT", but if the "TRACEPOINT" starts
-+                  with a digit character, "_TRACEPOINT" is used.
-+ MAXACTIVE      : Maximum number of instances of the specified function that
-+                  can be probed simultaneously, or 0 for the default value
-+                  as defined in Documentation/trace/fprobes.rst
-+
-+ FETCHARGS      : Arguments. Each probe can have up to 128 args.
-+  ARG           : Fetch "ARG" function argument using BTF (only for function
-+                  entry or tracepoint.) (\*1)
-+  @ADDR         : Fetch memory at ADDR (ADDR should be in kernel)
-+  @SYM[+|-offs] : Fetch memory at SYM +|- offs (SYM should be a data symbol)
-+  $stackN       : Fetch Nth entry of stack (N >= 0)
-+  $stack        : Fetch stack address.
-+  $argN         : Fetch the Nth function argument. (N >= 1) (\*2)
-+  $retval       : Fetch return value.(\*3)
-+  $comm         : Fetch current task comm.
-+  +|-[u]OFFS(FETCHARG) : Fetch memory at FETCHARG +|- OFFS address.(\*4)(\*5)
-+  \IMM          : Store an immediate value to the argument.
-+  NAME=FETCHARG : Set NAME as the argument name of FETCHARG.
-+  FETCHARG:TYPE : Set TYPE as the type of FETCHARG. Currently, basic types
-+                  (u8/u16/u32/u64/s8/s16/s32/s64), hexadecimal types
-+                  (x8/x16/x32/x64), "char", "string", "ustring", "symbol", "symstr"
-+                  and bitfield are supported.
-+
-+  (\*1) This is available only when BTF is enabled.
-+  (\*2) only for the probe on function entry (offs == 0).
-+  (\*3) only for return probe.
-+  (\*4) this is useful for fetching a field of data structures.
-+  (\*5) "u" means user-space dereference.
-+
-+For the details of TYPE, see :file:`Documentation/trace/kprobetrace.rst`.
-+
-+BTF arguments
-+-------------
-+BTF (BPF Type Format) argument allows user to trace function and tracepoint
-+parameters by its name instead of `$argN`. This feature is available if the
-+kernel is configured with CONFIG_BPF_SYSCALL and CONFIG_DEBUG_INFO_BTF.
-+If user only specify the BTF argument, the event's argument name is also
-+automatically set by the given name. ::
-+
-+ # echo 'f:myprobe vfs_read count pos' >> dynamic_events
-+ # cat dynamic_events
-+ f:fprobes/myprobe vfs_read count=count pos=pos
-+
-+It also chooses the fetch type from BTF information. For example, in the above
-+example, the `count` is unsigned long, and the `pos` is a pointer. Thus, both
-+are converted to 64bit unsigned long, but only `pos` has `%Lx` print-format ::
-+
-+ # cat events/fprobes/myprobe/format
-+ name: myprobe
-+ ID: 1313
-+ format:
-+	field:unsigned short common_type;	offset:0;	size:2;	signed:0;
-+	field:unsigned char common_flags;	offset:2;	size:1;	signed:0;
-+	field:unsigned char common_preempt_count;	offset:3;	size:1;	signed:0;
-+	field:int common_pid;	offset:4;	size:4;	signed:1;
-+
-+	field:unsigned long __probe_ip;	offset:8;	size:8;	signed:0;
-+	field:u64 count;	offset:16;	size:8;	signed:0;
-+	field:u64 pos;	offset:24;	size:8;	signed:0;
-+
-+ print fmt: "(%lx) count=%Lu pos=0x%Lx", REC->__probe_ip, REC->count, REC->pos
-+
-+If user unsures the name of arguments, `$$args` will be helpful. The `$$args`
-+is expanded to all function arguments of the function or the tracepoint. ::
-+
-+ # echo 'f:myprobe vfs_read $$args' >> dynamic_events
-+ # cat dynamic_events
-+ f:fprobes/myprobe vfs_read file=file buf=buf count=count pos=pos
-+
-+BTF also affects the $retval. If user doesn't set any type, the retval type is
-+automatically picked from the BTF. If the function returns 'void', $retval is
-+rejected.
-+
-+Usage examples
-+--------------
-+Here is an example to add fprobe events on `vfs_read()` function entry
-+and exit, with BTF arguments.
-+::
-+
-+  # echo 'f vfs_read $$args' >> dynamic_events
-+  # echo 'f vfs_read%return $retval' >> dynamic_events
-+  # cat dynamic_events
-+ f:fprobes/vfs_read__entry vfs_read file=file buf=buf count=count pos=pos
-+ f:fprobes/vfs_read__exit vfs_read%return arg1=$retval
-+  # echo 1 > events/fprobes/enable
-+  # head -n 20 trace | tail
-+ #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-+ #              | |         |   |||||     |         |
-+               sh-70      [000] ...1.   335.883195: vfs_read__entry: (vfs_read+0x4/0x340) file=0xffff888005cf9a80 buf=0x7ffef36c6879 count=1 pos=0xffffc900005aff08
-+               sh-70      [000] .....   335.883208: vfs_read__exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=1
-+               sh-70      [000] ...1.   335.883220: vfs_read__entry: (vfs_read+0x4/0x340) file=0xffff888005cf9a80 buf=0x7ffef36c6879 count=1 pos=0xffffc900005aff08
-+               sh-70      [000] .....   335.883224: vfs_read__exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=1
-+               sh-70      [000] ...1.   335.883232: vfs_read__entry: (vfs_read+0x4/0x340) file=0xffff888005cf9a80 buf=0x7ffef36c687a count=1 pos=0xffffc900005aff08
-+               sh-70      [000] .....   335.883237: vfs_read__exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=1
-+               sh-70      [000] ...1.   336.050329: vfs_read__entry: (vfs_read+0x4/0x340) file=0xffff888005cf9a80 buf=0x7ffef36c6879 count=1 pos=0xffffc900005aff08
-+               sh-70      [000] .....   336.050343: vfs_read__exit: (ksys_read+0x75/0x100 <- vfs_read) arg1=1
-+
-+You can see all function arguments and return values are recorded as signed int.
-+
-+Also, here is tracepoint events on `sched_switch` tracepoint. To compare the
-+result, this also enables the `sched_switch` traceevent too.
-+::
-+
-+  # echo 't sched_switch $$args' >> dynamic_events
-+  # echo 1 > events/sched/sched_switch/enable
-+  # echo 1 > events/tracepoints/sched_switch/enable
-+  # echo > trace
-+  # head -n 20 trace | tail
-+ #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-+ #              | |         |   |||||     |         |
-+               sh-70      [000] d..2.  3912.083993: sched_switch: prev_comm=sh prev_pid=70 prev_prio=120 prev_state=S ==> next_comm=swapper/0 next_pid=0 next_prio=120
-+               sh-70      [000] d..3.  3912.083995: sched_switch: (__probestub_sched_switch+0x4/0x10) preempt=0 prev=0xffff88800664e100 next=0xffffffff828229c0 prev_state=1
-+           <idle>-0       [000] d..2.  3912.084183: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_preempt next_pid=16 next_prio=120
-+           <idle>-0       [000] d..3.  3912.084184: sched_switch: (__probestub_sched_switch+0x4/0x10) preempt=0 prev=0xffffffff828229c0 next=0xffff888004208000 prev_state=0
-+      rcu_preempt-16      [000] d..2.  3912.084196: sched_switch: prev_comm=rcu_preempt prev_pid=16 prev_prio=120 prev_state=I ==> next_comm=swapper/0 next_pid=0 next_prio=120
-+      rcu_preempt-16      [000] d..3.  3912.084196: sched_switch: (__probestub_sched_switch+0x4/0x10) preempt=0 prev=0xffff888004208000 next=0xffffffff828229c0 prev_state=1026
-+           <idle>-0       [000] d..2.  3912.085191: sched_switch: prev_comm=swapper/0 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=rcu_preempt next_pid=16 next_prio=120
-+           <idle>-0       [000] d..3.  3912.085191: sched_switch: (__probestub_sched_switch+0x4/0x10) preempt=0 prev=0xffffffff828229c0 next=0xffff888004208000 prev_state=0
-+
-+As you can see, the `sched_switch` trace-event shows *cooked* parameters, on
-+the other hand, the `sched_switch` tracepoint probe event shows *raw*
-+parameters. This means you can dereference any field values in the task
-+structure pointed by the `prev` and `next` arguments.
-+
-+For example, usually `task_struct::start_time` is not traced, but with this
-+traceprobe event, you can trace it as below.
-+::
-+
-+  # echo 't sched_switch comm=+1896(next):string start_time=+1728(next):u64' > dynamic_events
-+  # head -n 20 trace | tail
-+ #           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
-+ #              | |         |   |||||     |         |
-+               sh-70      [000] d..3.  5606.686577: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="rcu_preempt" usage=1 start_time=245000000
-+      rcu_preempt-16      [000] d..3.  5606.686602: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="sh" usage=1 start_time=1596095526
-+               sh-70      [000] d..3.  5606.686637: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="swapper/0" usage=2 start_time=0
-+           <idle>-0       [000] d..3.  5606.687190: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="rcu_preempt" usage=1 start_time=245000000
-+      rcu_preempt-16      [000] d..3.  5606.687202: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="swapper/0" usage=2 start_time=0
-+           <idle>-0       [000] d..3.  5606.690317: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="kworker/0:1" usage=1 start_time=137000000
-+      kworker/0:1-14      [000] d..3.  5606.690339: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="swapper/0" usage=2 start_time=0
-+           <idle>-0       [000] d..3.  5606.692368: sched_switch: (__probestub_sched_switch+0x4/0x10) comm="kworker/0:1" usage=1 start_time=137000000
-+
-+Currently, to find the offset of a specific field in the data structure,
-+you need to build kernel with debuginfo and run `perf probe` command with
-+`-D` option. e.g.
-+::
-+
-+ # perf probe -D "__probestub_sched_switch next->comm:string next->start_time"
-+ p:probe/__probestub_sched_switch __probestub_sched_switch+0 comm=+1896(%cx):string start_time=+1728(%cx):u64
-+
-+And replace the `%cx` with the `next`.
-diff --git a/Documentation/trace/index.rst b/Documentation/trace/index.rst
-index ea25a9220f92..5092d6c13af5 100644
---- a/Documentation/trace/index.rst
-+++ b/Documentation/trace/index.rst
-@@ -13,6 +13,7 @@ Linux Tracing Technologies
-    kprobes
-    kprobetrace
-    uprobetracer
-+   fprobetrace
-    tracepoints
-    events
-    events-kmem
+Hi, this is regzbot, the Linux kernel regression tracking bot.
 
+Currently I'm aware of 9 regressions in linux-mainline. Find the
+current status below and the latest on the web:
+
+https://linux-regtracking.leemhuis.info/regzbot/mainline/
+
+Bye bye, hope to see you soon for the next report.
+   Regzbot (on behalf of Thorsten Leemhuis)
+
+
+======================================================
+current cycle (v6.3.. aka v6.4-rc), culprit identified
+======================================================
+
+
+[ *NEW* ] arm32: tons of different boot time errors
+---------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/ZFs6DNgzBHNarr6D@euler/
+https://lore.kernel.org/lkml/ZFs6DNgzBHNarr6D@euler/
+
+By Colin Foster; 4 days ago; 9 activities, latest 0 days ago.
+Introduced in c76c6c4ecbec (v6.4-rc1)
+
+Fix incoming:
+* ARM: 9297/1: vfp: avoid unbalanced stack on 'success' return path
+  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=2b951b0efbaa6c805854b60c11f08811054d50cd
+
+
+[ *NEW* ] regulator: qcom-rpmh: Dragonboard 845c broken due to asynchronous probe
+---------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com/
+https://lore.kernel.org/lkml/CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com/
+
+By Amit Pundir; 0 days ago; 2 activities, latest 0 days ago.
+Introduced in ad44ac082fd (v6.4-rc1)
+
+Recent activities from: Caleb Connolly (1), Amit Pundir (1)
+
+One patch associated with this regression:
+* Re: [PATCH] regulator: qcom-rpmh: Revert "regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"
+  https://lore.kernel.org/lkml/552345c5-b1e9-41f6-f275-b6eeeb51df25@linaro.org/
+  0 days ago, by Caleb Connolly
+
+
+[ *NEW* ] USB gadget regression on v6.4-rc1 and v6.1.28
+-------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/ZF4BvgsOyoKxdPFF@francesco-nb.int.toradex.com/
+https://lore.kernel.org/stable/ZF4BvgsOyoKxdPFF@francesco-nb.int.toradex.com/
+
+By Francesco Dolcini; 2 days ago; 13 activities, latest 1 days ago.
+Introduced in 0db213ea8eed (v6.4-rc1)
+
+Recent activities from: Francesco Dolcini (9), Bagas Sanjaya (2), Luca
+  Weiss (1), Stephan Gerhold (1)
+
+2 patch postings are associated with this regression, the latest is this:
+* [PATCH v1 2/2] Revert "usb: gadget: udc: core: Invoke usb_gadget_connect only when started"
+  https://lore.kernel.org/stable/20230512131435.205464-3-francesco@dolcini.it/
+  2 days ago, by Francesco Dolcini
+
+Noteworthy links:
+* USB gadget regression on v6.4-rc1 and v6.1.28
+  https://lore.kernel.org/stable/ZF4BvgsOyoKxdPFF@francesco-nb.int.toradex.com/
+  2 days ago, by Francesco Dolcini; thread monitored.
+* [PATCH v1 0/2] usb: gadget: udc: core: fix hang during configuration
+  https://lore.kernel.org/stable/20230512131435.205464-1-francesco@dolcini.it/
+  2 days ago, by Francesco Dolcini; thread monitored.
+
+
+[ *NEW* ] Re: [PATCH 1/2] amd_nb: Add PCI ID for family 19h model 78h
+---------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/7b74c389-97b7-4f56-851b-6ce17950a4d1@roeck-us.net/
+https://lore.kernel.org/lkml/7b74c389-97b7-4f56-851b-6ce17950a4d1@roeck-us.net/
+
+By Guenter Roeck; 8 days ago; 10 activities, latest 2 days ago.
+Introduced in 310e782a99c7 (v6.4-rc1)
+
+Fix incoming:
+* hwmon: (k10temp) Add PCI ID for family 19, model 78h
+  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=7d8accfaa0ab65e4282c8e58950f7d688342cd86
+
+
+[ *NEW* ] ext4: adv test cases of kvm-xfstests fail
+---------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/ZFqO3xVnmhL7zv1x@debian-BULLSEYE-live-builder-AMD64/
+https://lore.kernel.org/linux-ext4/ZFqO3xVnmhL7zv1x@debian-BULLSEYE-live-builder-AMD64/
+
+By Eric Whitney; 4 days ago; 2 activities, latest 4 days ago.
+Introduced in e360c6ed7274 (v6.4-rc1)
+
+Recent activities from: Jan Kara (1), Eric Whitney (1)
+
+
+[ *NEW* ] powerpc: boot issues on PASEMI Nemo board
+---------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/301595ad-0edf-2113-b55f-f5b8051ed24c@xenosoft.de/
+https://lore.kernel.org/linuxppc-dev/301595ad-0edf-2113-b55f-f5b8051ed24c@xenosoft.de/
+
+By Christian Zigotzky; 12 days ago; 20 activities, latest 5 days ago.
+Introduced in e4ab08be5b49 (v6.4-rc1)
+
+Fix incoming:
+* powerpc/isa-bridge: Fix ISA mapping when "ranges" is not present
+  https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/?h=master&id=79de36042eecb684e0f748d17ba52f365fde0d65
+
+
+[ *NEW* ] system hang on start-up (irq or mlx5 problem?)
+--------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/A1E5B427-897B-409E-B8E3-E417678E81F6@oracle.com/
+https://lore.kernel.org/netdev/A1E5B427-897B-409E-B8E3-E417678E81F6@oracle.com/
+
+By Chuck Lever III; 11 days ago; 8 activities, latest 7 days ago.
+Introduced in bbac70c74183 (v6.4-rc1)
+
+Recent activities from: Eli Cohen (3), Chuck Lever III (3), Jason
+  Gunthorpe (1), Leon Romanovsky (1)
+
+
+[ *NEW* ] iwlwifi broken on 6.4 merge window
+--------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/CAAJw_ZueYAHQtM++4259TXcxQ_btcRQKiX93u85WEs2b2p19wA@mail.gmail.com/
+https://lore.kernel.org/lkml/CAAJw_ZueYAHQtM%2B%2B4259TXcxQ_btcRQKiX93u85WEs2b2p19wA@mail.gmail.com/
+
+By Jeff Chua; 15 days ago; 7 activities, latest 13 days ago.
+Introduced in 1ae78a14516b (v6.4-rc1)
+
+Fix incoming:
+* wifi: iwlwifi: mvm: rfi: disable RFI feature
+  https://lore.kernel.org/lkml/b9ab37d2-42bf-cc31-a2c0-a9b604e95530@gmail.com/
+
+
+=============
+End of report
+=============
+
+All regressions marked '[ *NEW* ]' were added since the previous report,
+which can be found here:
+https://lore.kernel.org/r/168226876591.2194644.7877001821155596037@leemhuis.info
+
+Thanks for your attention, have a nice day!
+
+  Regzbot, your hard working Linux kernel regression tracking robot
+
+
+P.S.: Wanna know more about regzbot or how to use it to track regressions
+for your subsystem? Then check out the getting started guide or the
+reference documentation:
+
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The short version: if you see a regression report you want to see
+tracked, just send a reply to the report where you Cc
+regressions@lists.linux.dev with a line like this:
+
+#regzbot introduced: v5.13..v5.14-rc1
+
+If you want to fix a tracked regression, just do what is expected
+anyway: add a 'Link:' tag with the url to the report, e.g.:
+
+Link: https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/
