@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD13D701C67
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 11:04:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 17AEA701C65
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 11:04:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234676AbjENJEy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 05:04:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37342 "EHLO
+        id S234182AbjENJEv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 05:04:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231296AbjENJEo (ORCPT
+        with ESMTP id S232258AbjENJEo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 14 May 2023 05:04:44 -0400
-Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88FF1BE3;
-        Sun, 14 May 2023 02:04:42 -0700 (PDT)
-Received: by mail-pl1-x62d.google.com with SMTP id d9443c01a7336-1aaf91ae451so108644195ad.1;
-        Sun, 14 May 2023 02:04:42 -0700 (PDT)
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4ECE01BE5;
+        Sun, 14 May 2023 02:04:43 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id d2e1a72fcca58-6439b410679so7643161b3a.0;
+        Sun, 14 May 2023 02:04:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684055082; x=1686647082;
+        d=gmail.com; s=20221208; t=1684055083; x=1686647083;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=MlYIG+wyBwHIZ6Ig5rNTc1U+7HEnxpjzPz2HnP+gqKM=;
-        b=sxfLoTD0NF/Oidjt/30xAfQe77E+2H/A1Bt6TqxQY2/6VNOFb0Uyd85NQjRvs0Gag5
-         ejrvn5D290RidtfydaauoUKGO4geu0N0v4EPBJVBS/2JCC7s9OlM++hFr2teuavzTW21
-         ZV38a4rRNxUSnzdANrgTy8cb43irt2nrXWTxTXA1cnSswvilFYTNiRQWaUC9O94aAmVC
-         lsnuAyuWfstUpgoGlSOIE7RjKzp/q39GNYDFqSYH/lHiWVVtzTldV8FA1qIHmtitgb/Z
-         H1jO8rmhRdfuzZAEtY0XTyuQtKvXr1GkSahDS2V2F5V30jwmZRixBETwojLYSyVRTjYu
-         EPzw==
+        bh=tWsNucItL3Ir8RVSxlrmAT54pJTVw6Lt+rodKw+CzPs=;
+        b=FvWwMcL2+nO561GFgxSm3hIVvRbDWjclyM+XprkVWb53HMSCvWLBbQ6PJDhWTynSgt
+         539bfRSH3T9xgYyZfPFiyfxmPfGmqYfdDy6RqsGwy16PcE7Qny9NesyE40zqGYBxffkh
+         g2rSdN3GY7H//g+gBOEvduXkznoyHpiRX8U7JjejquImPn69mKZxY/OCU1u9zgo4rxag
+         OYr2kbUB6kRu8QVgvKwCkJqMsBN+nrIIrTKV5uxHJ4A0zUzScsPlYt7Erhkm9vbAJWGP
+         4K1rwJSlcClcCmSJqpyAYqK/2u6hLNklJeGwvEvGIQuNk/wH3pU9qSuOCMinEgr8/0Lv
+         huoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684055082; x=1686647082;
+        d=1e100.net; s=20221208; t=1684055083; x=1686647083;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=MlYIG+wyBwHIZ6Ig5rNTc1U+7HEnxpjzPz2HnP+gqKM=;
-        b=If+52pfrtTrV+ky/Y3RTSAXIaki+xiROoU2TMamQhWlZaetA3mJosu+4OGM8kLtE02
-         BgL/P4s57EHsZ4YIsj7T+eHt1tLK10Lv0lyq3SvDcRGI15cqUtEBmtajq/RmAvbLXbB/
-         KLGuaP05NgoTthZKWv0V357+mNBTuIHXezwTlyujEsx3ljWKYZfVdFafCA/yPHwf26o5
-         0wbPs1mCTQI2EPts1ugatF87dhEIByuKh9qjjGm5Xq27AlYD8hSQB5BBp+8cHuDrzqsn
-         qHZyckvn0aWo6TM2+r4e/bnxftcrEP2CjfRSG0qW6bKxskwxGJHBImP7PHbNZ3UkdLi8
-         0C9w==
-X-Gm-Message-State: AC+VfDzOgjSTMOPVvORUnQep3mXO2F1MoJtTMnQVGdYrQxY/S1/lrXnc
-        lSLhKvKZIFlWVZz+RWPIKCE=
-X-Google-Smtp-Source: ACHHUZ6wCkJuuI/JM0p/RqMI5Szf/kAYaz3iNpFxdIUUUIOPWbcgZwStiNGZBZC7kIqG3LZRUx/3VQ==
-X-Received: by 2002:a17:903:41d0:b0:1ac:4412:bd9 with SMTP id u16-20020a17090341d000b001ac44120bd9mr37163799ple.3.1684055082288;
+        bh=tWsNucItL3Ir8RVSxlrmAT54pJTVw6Lt+rodKw+CzPs=;
+        b=d+Rcvp0AGtFx12UTV+ocm/817rItOMXWu+zNtGyPJvDiq0tIi+zbAww1JGomopHeg4
+         IYnCUBowbwqz069e9zhiDE6npRK4CDC09TECFCsnqmsBDh5/0BOqJ1Nk0aE69y881MpD
+         C70Ia31L+Bi18VXDNgz5xi1ClDr1rcTHw7lok+gmpaCNV3BrzibEhyi28FWev4mBVqub
+         M/Fjfw0yEIJd2BmYvdlH5RXktem+RO8PNoVLFTwKhGqK3Xe9HvPKQ4K4Ss4+CEQrXItr
+         uHzJamPI6+D3IxgZGkzMmkMZHWKIK8pWl6bFfmzn4PE5Vu0zzYhmcaA5zGmDt1tr8yVh
+         qebA==
+X-Gm-Message-State: AC+VfDymO/HxFwjUnRkO+9T3IK6chZuPQ8jqJAzePWsuZKLIJz8yPSwr
+        A1tkBeGjEpChMan1swi/HHM=
+X-Google-Smtp-Source: ACHHUZ4h2oq0sD6DW1Jn3SJpVqz/5hks4ikFzYyfoO/TD8NhBqG3iYXTurrqa+0pLQikvgf1idsRIA==
+X-Received: by 2002:a17:903:2092:b0:1ac:8e0b:282c with SMTP id d18-20020a170903209200b001ac8e0b282cmr18318011plc.1.1684055082739;
         Sun, 14 May 2023 02:04:42 -0700 (PDT)
 Received: from debian.me (subs02-180-214-232-68.three.co.id. [180.214.232.68])
-        by smtp.gmail.com with ESMTPSA id x11-20020a170902fe8b00b001ac45598b59sm11060546plm.163.2023.05.14.02.04.40
+        by smtp.gmail.com with ESMTPSA id g11-20020a1709026b4b00b001acae973449sm9287867plt.162.2023.05.14.02.04.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 14 May 2023 02:04:41 -0700 (PDT)
 Received: by debian.me (Postfix, from userid 1000)
-        id F099710363C; Sun, 14 May 2023 16:04:36 +0700 (WIB)
+        id 490BD1061D7; Sun, 14 May 2023 16:04:36 +0700 (WIB)
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     Linux Documentation <linux-doc@vger.kernel.org>,
         Linux RISC-V <linux-riscv@lists.infradead.org>,
@@ -64,14 +64,14 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         Vincent Chen <vincent.chen@sifive.com>,
         Andy Chiu <andy.chiu@sifive.com>,
         Greentime Hu <greentime.hu@sifive.com>
-Subject: [PATCH 4/5] Documentation: riscv: vector: Use bullet lists for prctl() return values
-Date:   Sun, 14 May 2023 16:04:31 +0700
-Message-Id: <20230514090432.78217-5-bagasdotme@gmail.com>
+Subject: [PATCH 5/5] Documentation: riscv: vector: Fix bullet list usage on sysctl section
+Date:   Sun, 14 May 2023 16:04:32 +0700
+Message-Id: <20230514090432.78217-6-bagasdotme@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230514090432.78217-1-bagasdotme@gmail.com>
 References: <20230514090432.78217-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2108; i=bagasdotme@gmail.com; h=from:subject; bh=BIcautUtnBxQsDL0RzYa8VBmwL4oBx+HTCFWbrbAgPA=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCkJSxQcJVJWzP9edXyJjjEvl+urG8yqOQaHWeu6mpPXT Yh+YGbWUcrCIMbFICumyDIpka/p9C4jkQvtax1h5rAygQxh4OIUgIu8YvhffPhVyo3d3M3LJhep XqwySe3xXazE+X990PRcvvXXl6vcZPinqrjPJvfnzrcnWx+vfqM8q/P7tacJkhIyZemTP3yYKnC dBQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2953; i=bagasdotme@gmail.com; h=from:subject; bh=GHK5dRGPQCAuWJZz8ukbYwsZAgNOSpPJq12ZuI55/8M=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCkJSxT0N3SHmsulmgt2i2dWNdX237yubfG1afKdzP3vo uclfZvSUcrCIMbFICumyDIpka/p9C4jkQvtax1h5rAygQxh4OIUgIlEhTEyzObe0dG9/OjsqQwy s3Pe3eVmbGUWEONcc9NrpTFrR1HdY4a/4g/fzL8wYbforvQTN69G7p6xbe3v1Z+v+Maf0z34yXK PBxcA
 X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -84,50 +84,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use bullet lists on return values of prctl() calls to follow other
-listings (bit lists and enablement status). This should convey purposes
-of listing things.
+Prose sentences are better written as normal paragraph instead of
+using bullet lists.
+
+Also, use bullet list for list of riscv_v_default_allow values.
 
 Fixes: 412c68cfeeb178 ("riscv: Add documentation for Vector")
 Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- Documentation/riscv/vector.rst | 16 +++++++++-------
- 1 file changed, 9 insertions(+), 7 deletions(-)
+ Documentation/riscv/vector.rst | 27 +++++++++++++--------------
+ 1 file changed, 13 insertions(+), 14 deletions(-)
 
 diff --git a/Documentation/riscv/vector.rst b/Documentation/riscv/vector.rst
-index c7bd701c7963b6..4624e5b9bef4cc 100644
+index 4624e5b9bef4cc..f752826871b0e2 100644
 --- a/Documentation/riscv/vector.rst
 +++ b/Documentation/riscv/vector.rst
-@@ -74,11 +74,12 @@ status for the use of Vector in userspace:
-           PR_RISCV_V_VSTATE_CTRL_NEXT_MASK and PR_RISCV_V_VSTATE_CTRL_INHERIT.
-           This setting persists across changes in the system-wide default value.
- 
--    Return value: return 0 on success, or a negative error value:
--        EINVAL: Vector not supported, invalid enablement status for current or
--                next mask
--        EPERM: Turning off Vector in PR_RISCV_V_VSTATE_CTRL_CUR_MASK if Vector
--                was enabled for the calling thread.
-+    Return value:
-+        * 0 on success;
-+        * EINVAL: Vector not supported, invalid enablement status for current or
-+          next mask;
-+        * EPERM: Turning off Vector in PR_RISCV_V_VSTATE_CTRL_CUR_MASK if Vector
-+          was enabled for the calling thread.
- 
-     On success:
-         * A valid setting for PR_RISCV_V_VSTATE_CTRL_CUR_MASK takes place
-@@ -94,8 +95,9 @@ status for the use of Vector in userspace:
-     Gets the same Vector enablement status for the calling thread. Setting for
-     next execve() call and the inheritance bit are all OR-ed together.
- 
--    Return value: a nonnegative value on success, or a negative error value:
--        EINVAL: Vector not supported.
-+    Return value:
-+        * a nonnegative value on success;
-+        * EINVAL: Vector not supported.
- 
+@@ -102,25 +102,24 @@ status for the use of Vector in userspace:
  2.  System runtime configuration (sysctl)
  -----------------------------------------
+ 
+- * To mitigate the ABI impact of expansion of the signal stack, a
+-   policy mechanism is provided to the administrators, distro maintainers, and
+-   developers to control the default Vector enablement status for userspace
+-   processes:
++To mitigate the ABI impact of expansion of the signal stack, a
++policy mechanism is provided to the administrators, distro maintainers, and
++developers to control the default Vector enablement status for userspace
++processes in form of sysctl knob:
+ 
+-/proc/sys/abi/riscv_v_default_allow
++* /proc/sys/abi/riscv_v_default_allow
+ 
+     Writing the text representation of 0 or 1 to this file sets the default
+-    system enablement status for new starting userspace programs. A valid value
+-    should be:
++    system enablement status for new starting userspace programs. Valid values
++    are:
+ 
+-    0: Do not allow Vector code to be executed as the default for new processes.
+-
+-    1: Allow Vector code to be executed as the default for new processes.
++    * 0: Do not allow Vector code to be executed as the default for new processes.
++    * 1: Allow Vector code to be executed as the default for new processes.
+ 
+     Reading this file returns the current system default enablement status.
+ 
+-* At every execve() call, a new enablement status of the new process is set to
+-  the system default, unless:
++    At every execve() call, a new enablement status of the new process is set to
++    the system default, unless:
+ 
+       * PR_RISCV_V_VSTATE_CTRL_INHERIT is set for the calling process, and the
+         setting in PR_RISCV_V_VSTATE_CTRL_NEXT_MASK is not
+@@ -129,5 +128,5 @@ status for the use of Vector in userspace:
+       * The setting in PR_RISCV_V_VSTATE_CTRL_NEXT_MASK is not
+         PR_RISCV_V_VSTATE_CTRL_DEFAULT.
+ 
+-* Modifying the system default enablement status does not affect the enablement
+-  status of any existing process of thread that do not make an execve() call.
++    Modifying the system default enablement status does not affect the enablement
++    status of any existing process of thread that do not make an execve() call.
 -- 
 An old man doll... just what I always wanted! - Clara
 
