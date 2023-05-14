@@ -2,387 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2901D701EA3
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 19:15:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02524701EBF
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 19:33:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234776AbjENRPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 13:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50280 "EHLO
+        id S237865AbjENRdG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 13:33:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55468 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233939AbjENRPM (ORCPT
+        with ESMTP id S230339AbjENRdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 13:15:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8664330FF;
-        Sun, 14 May 2023 10:15:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 028D160C70;
-        Sun, 14 May 2023 17:15:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E061C433D2;
-        Sun, 14 May 2023 17:15:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684084509;
-        bh=1OtLPktPU2iGr/8GJTdDySlh1ypVjCCfQtoZq83+JcQ=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BCwDRVUUm40tFq/3DxeWyobFYOpn8T+AngWcseaS2XP8NUw9rMvhCr6C8wKUVA2AF
-         3TF6cSXiWZ1LCSA6+BGaHoFhfl0JEMJpvB6ki/epzVvugRdkYi396hy8Ul6Y5IQnwm
-         vFERZOT5mRNuoCXabXpahE3SFVUlYqyvL+Va5U6GYoG9/xuhTOmypIHEl761qm+sRp
-         +UerIDnnJDICd7+ncUu5LRyt6UdAwqIqMn7/WDsivAuZuz+jmaxLikuvFM8oD9k/kZ
-         roxuw2UolCHWo1vIGnw0nzeYlEMCBnCoGOFZyhcVQgrC9Z6gt6dYkHZdadRh826Vwk
-         I1y6jRM2FxWzw==
-Date:   Sun, 14 May 2023 18:31:10 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Astrid Rost <astrid.rost@axis.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>, <linux-iio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <kernel@axis.com>
-Subject: Re: [PATCH v2 4/7] iio: light: vcnl4000: add illumination irq
- vcnl4040/4200
-Message-ID: <20230514183110.3bf94ec3@jic23-huawei>
-In-Reply-To: <20230509140153.3279288-5-astrid.rost@axis.com>
-References: <20230509140153.3279288-1-astrid.rost@axis.com>
-        <20230509140153.3279288-5-astrid.rost@axis.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sun, 14 May 2023 13:33:03 -0400
+Received: from smtp.smtpout.orange.fr (smtp-26.smtpout.orange.fr [80.12.242.26])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84D71BD7
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 10:33:02 -0700 (PDT)
+Received: from [192.168.1.18] ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id yFaYpbyRDlqGTyFaYpLaxw; Sun, 14 May 2023 19:33:00 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1684085580;
+        bh=mtkk84FKtzNu1ujBz4Fu/8kTW/TEwhhK9XrxgsIUZ9k=;
+        h=Date:Subject:To:References:From:In-Reply-To;
+        b=MCHAE2pFRIAIJXayl8wC9MR8rSEQF8rdrCMiSQ5axfxg5a5zpywcOIeL9x1K8KsQ1
+         vsL3e/+mSBQATjSI+QRIrnOd+NR60xLfEONP/XNwwHMafqxPrtS7lXtGh3myxdJH+j
+         pwk+srVORl9FbXxUQ5JFuONke5LGK926HSweYbOsXpRcP2OClinnTEEZhQGdXeeFhp
+         +5WyBZjCvz5Udg5M1/sHwNYnLnkwQ34cINDdKrJel+i3/PSobkhSe4ZKGbo+xh8eGp
+         0v0rFGElNt7P+CEZTjOhZDWHea8GOmSIOXnT8TTRis947JNIxlETfAxKoHIh0Xf1p5
+         Tw0MZM3n2x5aw==
+X-ME-Helo: [192.168.1.18]
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 14 May 2023 19:33:00 +0200
+X-ME-IP: 86.243.2.178
+Message-ID: <61d3dac0-550c-70bd-daf8-352e903de36d@wanadoo.fr>
+Date:   Sun, 14 May 2023 19:32:54 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] thermal/drivers/sun8i: Fix some error handling paths in
+ sun8i_ths_probe()
+Content-Language: fr, en-GB
+To:     =?UTF-8?Q?Ond=c5=99ej_Jirman?= <megi@xff.cz>,
+        Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Maxime Ripard <mripard@kernel.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev
+References: <26f9e3bb3fcd0c12ea24a44c75b7960da993b68b.1684077651.git.christophe.jaillet@wanadoo.fr>
+ <yd37pz2nbs2i5m4a5avonj4w7ili4kx7d7w7fgbiss7z26jnfy@rwytm26i6v7h>
+ <9ae3f111-e13b-cdd7-317d-316585390952@wanadoo.fr>
+ <qatlg75vf4tbugut2xehwbv4722uklprr36lvsgtcdmgoiqwgi@mdsaurbgy6jz>
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <qatlg75vf4tbugut2xehwbv4722uklprr36lvsgtcdmgoiqwgi@mdsaurbgy6jz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 9 May 2023 16:01:50 +0200
-Astrid Rost <astrid.rost@axis.com> wrote:
+Le 14/05/2023 à 19:10, Ondřej Jirman a écrit :
+> On Sun, May 14, 2023 at 07:00:34PM +0200, Christophe JAILLET wrote:
+>>
+>> Le 14/05/2023 à 17:35, Ondřej Jirman a écrit :
+>>> Hello Christophe,
+>>>
+>>> [...]
+>>>
+>>> This changes the recommeded order of reset release/clock enable steps, eg. A64
+>>> manual says:
+>>>
+>>> 	3.3.6.4. Gating and reset
+>>>
+>>> 	Make sure that the reset signal has been released before the release of
+>>> 	module clock gating;
+>>
+>> Ok, so moving reset_control_deassert() (and my proposed
 
-> Add support to configure illumination sensor interrupts and threshold
+                  ^^^^^^^^^^^^^^^^^^^^^^
 
-illuminance? or Ambient light sensor?
-
-Otherwise this looks good to me
-
-Thanks,
-
-Jonathan
-
-
-> limits for vcnl4040 and vcnl4200. If an interrupt is detected an event
-> will be pushed to the event interface.
+>> devm_add_action_or_reset()) just after devm_reset_control_get() should keep
+>> the expected order, right?
 > 
-> Signed-off-by: Astrid Rost <astrid.rost@axis.com>
-> ---
->  drivers/iio/light/vcnl4000.c | 197 ++++++++++++++++++++++++++---------
->  1 file changed, 146 insertions(+), 51 deletions(-)
+> That would be after reset_control_deassert(). devm_reset_control_get() is just
+> resource management, like devm_clk_get().
+
+Not sure to get your point. I think you misunderstood what I tried to say.
+
+
+I propose to move reset_control_deassert() in a v2. And have 
+devm_add_action_or_reset() just after it.
+
+Something like:
+
+	if (tmdev->chip->has_bus_clk_reset) {
+		tmdev->reset = devm_reset_control_get(dev, NULL);
+		if (IS_ERR(tmdev->reset))
+			return PTR_ERR(tmdev->reset);
+
+		ret = reset_control_deassert(tmdev->reset);
+		if (ret)
+			return ret;
+
+		ret = devm_add_action_or_reset(dev, sun8i_ths_reset_control_assert,
+					       tmdev->reset);
+		if (ret)
+			return ret;
+
+		tmdev->bus_clk = devm_clk_get_enabled(&pdev->dev, "bus");
+		if (IS_ERR(tmdev->bus_clk))
+			return PTR_ERR(tmdev->bus_clk);
+	}
+
+	if (tmdev->chip->has_mod_clk) {
+		tmdev->mod_clk = devm_clk_get_enabled(&pdev->dev, "mod");
+		if (IS_ERR(tmdev->mod_clk))
+			return PTR_ERR(tmdev->mod_clk);
+	}
+
+	ret = clk_set_rate(tmdev->mod_clk, 24000000);
+	if (ret)
+		return ret;
+
+
+This would keep the order of operation, still fix the leak in the probe 
+and still save some LoC.
+
+Would it make it?
+
+CJ
+
 > 
-> diff --git a/drivers/iio/light/vcnl4000.c b/drivers/iio/light/vcnl4000.c
-> index d7445b6755fa..68eea686b2dc 100644
-> --- a/drivers/iio/light/vcnl4000.c
-> +++ b/drivers/iio/light/vcnl4000.c
-> @@ -62,6 +62,8 @@
->  #define VCNL4200_PS_CONF1	0x03 /* Proximity configuration */
->  #define VCNL4040_PS_THDL_LM	0x06 /* Proximity threshold low */
->  #define VCNL4040_PS_THDH_LM	0x07 /* Proximity threshold high */
-> +#define VCNL4040_ALS_THDL_LM	0x02 /* Ambient light threshold low */
-> +#define VCNL4040_ALS_THDH_LM	0x01 /* Ambient light threshold high */
->  #define VCNL4200_PS_DATA	0x08 /* Proximity data */
->  #define VCNL4200_AL_DATA	0x09 /* Ambient light data */
->  #define VCNL4040_INT_FLAGS	0x0b /* Interrupt register */
-> @@ -81,11 +83,14 @@
->  
->  #define VCNL4040_ALS_CONF_ALS_SHUTDOWN	BIT(0)
->  #define VCNL4040_ALS_CONF_IT		GENMASK(7, 6) /* Ambient integration time */
-> +#define VCNL4040_ALS_CONF_INT_EN	BIT(1) /* Ambient light Interrupt enable */
->  #define VCNL4040_PS_CONF1_PS_SHUTDOWN	BIT(0)
->  #define VCNL4040_PS_CONF2_PS_IT	GENMASK(3, 1) /* Proximity integration time */
->  #define VCNL4040_PS_CONF2_PS_INT	GENMASK(9, 8) /* Proximity interrupt mode */
->  #define VCNL4040_PS_IF_AWAY		BIT(8) /* Proximity event cross low threshold */
->  #define VCNL4040_PS_IF_CLOSE		BIT(9) /* Proximity event cross high threshold */
-> +#define VCNL4040_ALS_RISING		BIT(12) /* Ambient Light cross high threshold */
-> +#define VCNL4040_ALS_FALLING		BIT(13) /* Ambient Light cross low threshold */
->  
->  /* Bit masks for interrupt registers. */
->  #define VCNL4010_INT_THR_SEL	BIT(0) /* Select threshold interrupt source */
-> @@ -170,6 +175,7 @@ struct vcnl4000_data {
->  	int rev;
->  	int al_scale;
->  	u8 ps_int;		/* proximity interrupt mode */
-> +	u8 als_int;		/* ambient light interrupt mode*/
->  	const struct vcnl4000_chip_spec *chip_spec;
->  	struct mutex vcnl4000_lock;
->  	struct vcnl4200_channel vcnl4200_al;
-> @@ -288,7 +294,7 @@ static int vcnl4200_set_power_state(struct vcnl4000_data *data, bool on)
->  	int ret;
->  
->  	/* Do not power down if interrupts are enabled */
-> -	if (!on && data->ps_int)
-> +	if (!on && (data->ps_int || data->als_int))
->  		return 0;
->  
->  	ret = vcnl4000_write_als_enable(data, on);
-> @@ -333,6 +339,7 @@ static int vcnl4200_init(struct vcnl4000_data *data)
->  
->  	data->rev = (ret >> 8) & 0xf;
->  	data->ps_int = 0;
-> +	data->als_int = 0;
->  
->  	data->vcnl4200_al.reg = VCNL4200_AL_DATA;
->  	data->vcnl4200_ps.reg = VCNL4200_PS_DATA;
-> @@ -975,27 +982,45 @@ static int vcnl4040_read_event(struct iio_dev *indio_dev,
->  			       enum iio_event_info info,
->  			       int *val, int *val2)
->  {
-> -	int ret;
-> +	int ret = -EINVAL;
->  	struct vcnl4000_data *data = iio_priv(indio_dev);
->  
-> -	switch (dir) {
-> -	case IIO_EV_DIR_RISING:
-> -		ret = i2c_smbus_read_word_data(data->client,
-> -					       VCNL4040_PS_THDH_LM);
-> -		if (ret < 0)
-> -			return ret;
-> -		*val = ret;
-> -		return IIO_VAL_INT;
-> -	case IIO_EV_DIR_FALLING:
-> -		ret = i2c_smbus_read_word_data(data->client,
-> -					       VCNL4040_PS_THDL_LM);
-> -		if (ret < 0)
-> -			return ret;
-> -		*val = ret;
-> -		return IIO_VAL_INT;
-> +	switch (chan->type) {
-> +	case IIO_LIGHT:
-> +		switch (dir) {
-> +		case IIO_EV_DIR_RISING:
-> +			ret = i2c_smbus_read_word_data(data->client,
-> +						       VCNL4040_ALS_THDH_LM);
-> +			break;
-> +		case IIO_EV_DIR_FALLING:
-> +			ret = i2c_smbus_read_word_data(data->client,
-> +						       VCNL4040_ALS_THDL_LM);
-> +			break;
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +		break;
-> +	case IIO_PROXIMITY:
-> +		switch (dir) {
-> +		case IIO_EV_DIR_RISING:
-> +			ret = i2c_smbus_read_word_data(data->client,
-> +						       VCNL4040_PS_THDH_LM);
-> +			break;
-> +		case IIO_EV_DIR_FALLING:
-> +			ret = i2c_smbus_read_word_data(data->client,
-> +						       VCNL4040_PS_THDL_LM);
-> +			break;
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +		break;
->  	default:
->  		return -EINVAL;
->  	}
-> +	if (ret < 0)
-> +		return ret;
-> +	*val = ret;
-> +	return IIO_VAL_INT;
->  }
->  
->  static int vcnl4040_write_event(struct iio_dev *indio_dev,
-> @@ -1005,25 +1030,43 @@ static int vcnl4040_write_event(struct iio_dev *indio_dev,
->  				enum iio_event_info info,
->  				int val, int val2)
->  {
-> -	int ret;
-> +	int ret = -EINVAL;
->  	struct vcnl4000_data *data = iio_priv(indio_dev);
-> -
-> -	switch (dir) {
-> -	case IIO_EV_DIR_RISING:
-> -		ret = i2c_smbus_write_word_data(data->client,
-> -						VCNL4040_PS_THDH_LM, val);
-> -		if (ret < 0)
-> -			return ret;
-> -		return IIO_VAL_INT;
-> -	case IIO_EV_DIR_FALLING:
-> -		ret = i2c_smbus_write_word_data(data->client,
-> -						VCNL4040_PS_THDL_LM, val);
-> -		if (ret < 0)
-> -			return ret;
-> -		return IIO_VAL_INT;
-> +	switch (chan->type) {
-> +	case IIO_LIGHT:
-> +		switch (dir) {
-> +		case IIO_EV_DIR_RISING:
-> +			ret = i2c_smbus_write_word_data(
-> +				data->client, VCNL4040_ALS_THDH_LM, val);
-> +			break;
-> +		case IIO_EV_DIR_FALLING:
-> +			ret = i2c_smbus_write_word_data(
-> +				data->client, VCNL4040_ALS_THDL_LM, val);
-> +			break;
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +		break;
-> +	case IIO_PROXIMITY:
-> +		switch (dir) {
-> +		case IIO_EV_DIR_RISING:
-> +			ret = i2c_smbus_write_word_data(
-> +				data->client, VCNL4040_PS_THDH_LM, val);
-> +			break;
-> +		case IIO_EV_DIR_FALLING:
-> +			ret = i2c_smbus_write_word_data(
-> +				data->client, VCNL4040_PS_THDL_LM, val);
-> +			break;
-> +		default:
-> +			return -EINVAL;
-> +		}
-> +		break;
->  	default:
->  		return -EINVAL;
->  	}
-> +	if (ret < 0)
-> +		return ret;
-> +	return IIO_VAL_INT;
->  }
->  
->  static bool vcnl4010_is_thr_enabled(struct vcnl4000_data *data)
-> @@ -1115,16 +1158,28 @@ static int vcnl4040_read_event_config(struct iio_dev *indio_dev,
->  {
->  	int ret;
->  	struct vcnl4000_data *data = iio_priv(indio_dev);
-> +	switch (chan->type) {
-> +	case IIO_LIGHT:
-> +		ret = i2c_smbus_read_word_data(data->client, VCNL4200_AL_CONF);
-> +		if (ret < 0)
-> +			return ret;
->  
-> -	ret = i2c_smbus_read_word_data(data->client, VCNL4200_PS_CONF1);
-> -	if (ret < 0)
-> -		return ret;
-> +		data->als_int = FIELD_GET(VCNL4040_ALS_CONF_INT_EN, ret);
->  
-> -	data->ps_int = FIELD_GET(VCNL4040_PS_CONF2_PS_INT, ret);
-> +		return data->als_int;
-> +	case IIO_PROXIMITY:
-> +		ret = i2c_smbus_read_word_data(data->client, VCNL4200_PS_CONF1);
-> +		if (ret < 0)
-> +			return ret;
-> +
-> +		data->ps_int = FIELD_GET(VCNL4040_PS_CONF2_PS_INT, ret);
->  
-> -	return (dir == IIO_EV_DIR_RISING) ?
-> -		FIELD_GET(VCNL4040_PS_IF_AWAY, ret) :
-> -		FIELD_GET(VCNL4040_PS_IF_CLOSE, ret);
-> +		return (dir == IIO_EV_DIR_RISING) ?
-> +			FIELD_GET(VCNL4040_PS_IF_AWAY, ret) :
-> +			FIELD_GET(VCNL4040_PS_IF_CLOSE, ret);
-> +	default:
-> +		return -EINVAL;
-> +	}
->  }
->  
->  static int vcnl4040_write_event_config(struct iio_dev *indio_dev,
-> @@ -1132,29 +1187,51 @@ static int vcnl4040_write_event_config(struct iio_dev *indio_dev,
->  				       enum iio_event_type type,
->  				       enum iio_event_direction dir, int state)
->  {
-> -	int ret;
-> +	int ret = -EINVAL;
->  	u16 val, mask;
->  	struct vcnl4000_data *data = iio_priv(indio_dev);
->  
->  	mutex_lock(&data->vcnl4000_lock);
->  
-> -	ret = i2c_smbus_read_word_data(data->client, VCNL4200_PS_CONF1);
-> -	if (ret < 0)
-> -		goto out;
-> +	switch (chan->type) {
-> +	case IIO_LIGHT:
-> +		ret = i2c_smbus_read_word_data(data->client, VCNL4200_AL_CONF);
-> +		if (ret < 0)
-> +			goto out;
->  
-> -	if (dir == IIO_EV_DIR_RISING)
-> -		mask = VCNL4040_PS_IF_AWAY;
-> -	else
-> -		mask = VCNL4040_PS_IF_CLOSE;
-> +		mask = VCNL4040_ALS_CONF_INT_EN;
->  
-> -	val = state ? (ret | mask) : (ret & ~mask);
-> +		val = state ? (ret | mask) : (ret & ~mask);
->  
-> -	data->ps_int = FIELD_GET(VCNL4040_PS_CONF2_PS_INT, val);
-> -	ret = i2c_smbus_write_word_data(data->client, VCNL4200_PS_CONF1, val);
-> +		data->als_int = FIELD_GET(VCNL4040_ALS_CONF_INT_EN, val);
-> +		ret = i2c_smbus_write_word_data(data->client, VCNL4200_AL_CONF,
-> +						val);
-> +		break;
-> +	case IIO_PROXIMITY:
-> +
-> +		ret = i2c_smbus_read_word_data(data->client, VCNL4200_PS_CONF1);
-> +		if (ret < 0)
-> +			goto out;
-> +
-> +		if (dir == IIO_EV_DIR_RISING)
-> +			mask = VCNL4040_PS_IF_AWAY;
-> +		else
-> +			mask = VCNL4040_PS_IF_CLOSE;
-> +
-> +		val = state ? (ret | mask) : (ret & ~mask);
-> +
-> +		data->ps_int = FIELD_GET(VCNL4040_PS_CONF2_PS_INT, val);
-> +		ret = i2c_smbus_write_word_data(data->client, VCNL4200_PS_CONF1,
-> +						val);
-> +		break;
-> +	default:
-> +		break;
-> +	}
->  
->  out:
->  	mutex_unlock(&data->vcnl4000_lock);
-> -	data->chip_spec->set_power_state(data, data->ps_int != 0);
-> +	data->chip_spec->set_power_state(data, data->ps_int ||
-> +						data->als_int);
->  
->  	return ret;
->  }
-> @@ -1191,6 +1268,22 @@ static irqreturn_t vcnl4040_irq_thread(int irq, void *p)
->  			       iio_get_time_ns(indio_dev));
->  	}
->  
-> +	if (ret & VCNL4040_ALS_FALLING) {
-> +		iio_push_event(indio_dev,
-> +			       IIO_UNMOD_EVENT_CODE(IIO_LIGHT, 0,
-> +						    IIO_EV_TYPE_THRESH,
-> +						    IIO_EV_DIR_FALLING),
-> +			       iio_get_time_ns(indio_dev));
-> +	}
-> +
-> +	if (ret & VCNL4040_ALS_RISING) {
-> +		iio_push_event(indio_dev,
-> +			       IIO_UNMOD_EVENT_CODE(IIO_LIGHT, 0,
-> +						    IIO_EV_TYPE_THRESH,
-> +						    IIO_EV_DIR_RISING),
-> +			       iio_get_time_ns(indio_dev));
-> +	}
-> +
->  	return IRQ_HANDLED;
->  }
->  
-> @@ -1413,6 +1506,8 @@ static const struct iio_chan_spec vcnl4040_channels[] = {
->  			BIT(IIO_CHAN_INFO_SCALE) |
->  			BIT(IIO_CHAN_INFO_INT_TIME),
->  		.info_mask_separate_available = BIT(IIO_CHAN_INFO_INT_TIME),
-> +		.event_spec = vcnl4000_event_spec,
-> +		.num_event_specs = ARRAY_SIZE(vcnl4000_event_spec),
->  	}, {
->  		.type = IIO_PROXIMITY,
->  		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
+> regards,
+> 	o.
+> 
 
