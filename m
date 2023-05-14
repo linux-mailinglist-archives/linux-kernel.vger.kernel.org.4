@@ -2,113 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB712701CBB
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 11:46:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 601AF701CAE
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 11:40:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236786AbjENJqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 05:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52778 "EHLO
+        id S234058AbjENJkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 05:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235589AbjENJqm (ORCPT
+        with ESMTP id S233557AbjENJkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 05:46:42 -0400
-X-Greylist: delayed 398 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 14 May 2023 02:46:22 PDT
-Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.9])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5EE91FDF
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 02:46:22 -0700 (PDT)
-Received: (wp-smtpd smtp.wp.pl 30791 invoked from network); 14 May 2023 11:39:40 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=1024a;
-          t=1684057180; bh=9X4Aik96rC7qqmmYlE08FycZCCqFGLDNGNT88xeEStE=;
-          h=From:To:Subject;
-          b=eUjJuTeuXiTtdiQAQRm0+804WnQu0nvGYlwfsE3Yr12gCluTBDVQHs3ofLEFeDYqk
-           hOINnJAmPIYXo2skqjhvvYdYeXnjwrTiw93hRjhuFKNWfnURv7BHiY9mwmXBANUI3d
-           TVceNRWDaGk88xylTqIiAT/bPC9SbBkYurMp8fck=
-Received: from 79.184.247.17.ipv4.supernova.orange.pl (HELO LAPTOP-OLEK.home) (olek2@wp.pl@[79.184.247.17])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <miquel.raynal@bootlin.com>; 14 May 2023 11:39:40 +0200
-From:   Aleksander Jan Bajkowski <olek2@wp.pl>
-To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
-        olek2@wp.pl, linux-mtd@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mtd: cfi_cmdset_0001: Disable write buffer functions if FORCE_WORD_WRITE is 1
-Date:   Sun, 14 May 2023 11:39:35 +0200
-Message-Id: <20230514093935.4679-1-olek2@wp.pl>
-X-Mailer: git-send-email 2.30.2
+        Sun, 14 May 2023 05:40:32 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83FDE2107
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 02:40:29 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50bc37e1525so21604290a12.1
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 02:40:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684057228; x=1686649228;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BUW5Igqs7LC8kFWD+gx7NXGPi2rebIGLbHvwwwSiejg=;
+        b=qXXhvc16BjYtVI3RbWOmC2jcpEyJzngGFk7rTOlKurSjGDFWBpYgdEvBtpF7PbvqPk
+         LcF8bPTz/Z2ubuDmYhgV4xpBsUpjue1LmwZElZ5UBB3Ko/KlU8ajA0UnrVTl7a6MrT/R
+         8ZFK0CXEPdUAYwSd9NrcTMyzrHZRaCaEjkk/f8HcdW4jOnbwkRi+iFozOOjGzTn/WjNP
+         EMVB013lxv2F6V1fzPbMtP4n/+dw/vhcALq2AUFAFTngW/dtGKYKjRISLzCtnwDsoa0L
+         rNozicmyV8IeEo9P2/2j3Gntpa75d5DBBMc1QToOBDpLjhFPh5WWT9e59MeOz8xE+zL4
+         1FkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684057228; x=1686649228;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BUW5Igqs7LC8kFWD+gx7NXGPi2rebIGLbHvwwwSiejg=;
+        b=Ptt+5yLP3JQRrZ3bgP/0h9ULisNruSFJBYedI8x2RLLfdBhqJGbPn4f0UzEaBtLmxV
+         hWXD+6X4a82Ycyq8ou/KqtQHB31SQvxJM7wVaL6C88Ig/HapiRsch/zv95uYLkCgGpST
+         /9wSg5rc5D8sPMKLPIhIy6aJUScYfJC8iD6w0+pnoABr4uDXvf8hL1DOsxwTdii6hJIG
+         v8f1Kd8BSvpQdrmuigY/eoM4+m+tVmgAwT0j92PqyToUenx70Ts7fhwHShIK+Y08aEnF
+         b9SwBKKjMX8WzyhKj6f1sZTxck7qA616HUiAFB/8LY7Q7OWcVDZnttohPis3qJWi4fHx
+         BFuA==
+X-Gm-Message-State: AC+VfDxepXa4M3PWow9Dol5FumvpLtu0sDFu/mboPIs+qJcscinbCHit
+        apBV2ItzBiNdfsCTo4KX8F6f5w==
+X-Google-Smtp-Source: ACHHUZ5tvbL4jEsqJPpeimvea31dJCAToYMyDZrxSAb7ema2CejXD77WW74NrQEAUWZyA9z90xWIjA==
+X-Received: by 2002:a17:907:1b29:b0:94f:2d5f:6949 with SMTP id mp41-20020a1709071b2900b0094f2d5f6949mr32171616ejc.42.1684057227954;
+        Sun, 14 May 2023 02:40:27 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:715f:ddce:f2ba:123b? ([2a02:810d:15c0:828:715f:ddce:f2ba:123b])
+        by smtp.gmail.com with ESMTPSA id w10-20020a170907270a00b00965e9a23f2bsm7882998ejk.134.2023.05.14.02.40.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 May 2023 02:40:27 -0700 (PDT)
+Message-ID: <e61d2168-9114-6f95-2607-a553d1046caa@linaro.org>
+Date:   Sun, 14 May 2023 11:40:26 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: 4044979a10be0e33303665ee941e3f2b
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 000000A [QdPk]                               
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v3 1/4] dt-bindings: remoteproc: st,stm32-rproc: Rework
+ reset declarations
+Content-Language: en-US
+To:     Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     devicetree@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230512093926.661509-1-arnaud.pouliquen@foss.st.com>
+ <20230512093926.661509-2-arnaud.pouliquen@foss.st.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230512093926.661509-2-arnaud.pouliquen@foss.st.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some write buffer functions are not used when FORCE_WORD_WRITE is set to 1.
-So the compile warning messages are output if FORCE_WORD_WRITE is 1. To
-resolve this disable the write buffer functions if FORCE_WORD_WRITE is 1.
+On 12/05/2023 11:39, Arnaud Pouliquen wrote:
+> With the introduction of the SCMI (System Control and Management
+> Interface), it is now possible to use the SCMI to handle the
+> hold boot instead of a dedicated SMC call.
+> 
+> As consequence two configurations are possible:
+> - without SCMI server on OP-TEE:
+>   use the Linux rcc reset service and use syscon for the MCU hold boot
+> - With SCMI server on OP-TEE:
+>   use the SCMI reset service for both the MCU reset and the MCU hold boot.
+> 
 
-This is similar fix to: 557c759036fc3976a5358cef23e65a263853b93f.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
----
- drivers/mtd/chips/cfi_cmdset_0001.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/mtd/chips/cfi_cmdset_0001.c b/drivers/mtd/chips/cfi_cmdset_0001.c
-index 54f92d09d9cf..8f7223221db2 100644
---- a/drivers/mtd/chips/cfi_cmdset_0001.c
-+++ b/drivers/mtd/chips/cfi_cmdset_0001.c
-@@ -61,8 +61,10 @@
- 
- static int cfi_intelext_read (struct mtd_info *, loff_t, size_t, size_t *, u_char *);
- static int cfi_intelext_write_words(struct mtd_info *, loff_t, size_t, size_t *, const u_char *);
-+#if !FORCE_WORD_WRITE
- static int cfi_intelext_write_buffers(struct mtd_info *, loff_t, size_t, size_t *, const u_char *);
- static int cfi_intelext_writev(struct mtd_info *, const struct kvec *, unsigned long, loff_t, size_t *);
-+#endif
- static int cfi_intelext_erase_varsize(struct mtd_info *, struct erase_info *);
- static void cfi_intelext_sync (struct mtd_info *);
- static int cfi_intelext_lock(struct mtd_info *mtd, loff_t ofs, uint64_t len);
-@@ -304,6 +306,7 @@ static void fixup_use_point(struct mtd_info *mtd)
- 	}
- }
- 
-+#if !FORCE_WORD_WRITE
- static void fixup_use_write_buffers(struct mtd_info *mtd)
- {
- 	struct map_info *map = mtd->priv;
-@@ -314,6 +317,7 @@ static void fixup_use_write_buffers(struct mtd_info *mtd)
- 		mtd->_writev = cfi_intelext_writev;
- 	}
- }
-+#endif /* !FORCE_WORD_WRITE */
- 
- /*
-  * Some chips power-up with all sectors locked by default.
-@@ -1703,6 +1707,7 @@ static int cfi_intelext_write_words (struct mtd_info *mtd, loff_t to , size_t le
- }
- 
- 
-+#if !FORCE_WORD_WRITE
- static int __xipram do_write_buffer(struct map_info *map, struct flchip *chip,
- 				    unsigned long adr, const struct kvec **pvec,
- 				    unsigned long *pvec_seek, int len)
-@@ -1931,6 +1936,7 @@ static int cfi_intelext_write_buffers (struct mtd_info *mtd, loff_t to,
- 
- 	return cfi_intelext_writev(mtd, &vec, 1, to, retlen);
- }
-+#endif /* !FORCE_WORD_WRITE */
- 
- static int __xipram do_erase_oneblock(struct map_info *map, struct flchip *chip,
- 				      unsigned long adr, int len, void *thunk)
--- 
-2.30.2
+Best regards,
+Krzysztof
 
