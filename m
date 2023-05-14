@@ -2,127 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E5AA701DB3
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 16:01:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C84AA701DB5
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 16:04:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233590AbjENOBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 10:01:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54756 "EHLO
+        id S237524AbjENOEc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 10:04:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjENOBI (ORCPT
+        with ESMTP id S229635AbjENOEa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 10:01:08 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DE91BD5
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 07:00:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684072820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=5XPWFCwn0ec1Bk7N8aYQ4DY3w3ZSXgJSesqW7FrFphE=;
-        b=AxBlYgdtYiyRpm5s+M6zPxXXIDETxpw++AauWnQPBz+s+8D9O/0SDHx4m8nfId4tLsN6m/
-        3TEkOeuwi05NfAMp1vluhln14A7uzXobCClJYj9HUL356EhFhHBZOo/dfyHfbp/I+Qv6Nj
-        Gg+PS3vZ8gD0YXzzmPqluz5n7EcdK5Q=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-286-QoVv7HoJNgaoyT8JVKlNcA-1; Sun, 14 May 2023 10:00:18 -0400
-X-MC-Unique: QoVv7HoJNgaoyT8JVKlNcA-1
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7577727a00eso2845396285a.1
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 07:00:18 -0700 (PDT)
+        Sun, 14 May 2023 10:04:30 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 526DB1BF3;
+        Sun, 14 May 2023 07:04:28 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id 2adb3069b0e04-4f380cd1019so552603e87.1;
+        Sun, 14 May 2023 07:04:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684073066; x=1686665066;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=iuGklFcEx4ogqrncOrMBWjf7nZjLMpfhpMESX9sQcR4=;
+        b=k7agaoeR57haBOVtUviP2mPIXwvl3yDhurydnAnCwIR7gIuo7/UQPSmEMyNTEmLhF1
+         pC7LSIz2o/0l8p+Yuq1vGRO0WgQ5U90JxDy5R1hmvnO2Qz9QEc7vgDZ36P2Teb+4e+AS
+         w5gB2Pc4mR6Qt0mRlV5uZHh6yim3wU5m5HnvRIqq7Akv/SkYOlUEfWgQHZckBP0cTBI2
+         yQkrFhOCJRzQ/SBFa1kXXEBljM+rw/sAJhuHnFco/mxTX5NmAwRpq5ygUbS5w8E7SPnB
+         Z503Toob9fVsM18xzKyGNyRUzLBWOHF47uXKTSOg6+hhU9qKp+scUcyquPZCoL4Qbf7M
+         r3gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684072818; x=1686664818;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5XPWFCwn0ec1Bk7N8aYQ4DY3w3ZSXgJSesqW7FrFphE=;
-        b=WhWTa8AX7mNt9IP/EW4Mzv8ZZtvnXy/ZiEZSJIO+6NB726AxyYj9Yxa+pmJV/xEsmK
-         NrXNu/CYl8YYUoDma7ErsbHV61xmPr2YFNDey9R8pr8OSRIfbGYwLijiQCkyACtPJRLa
-         KY/5S58DSByB+T8yFm85Ci84rP+5LxiCMr+7WyLlT5HMFxhoG/Tlp039/hQkGa9Y2OvL
-         F5LGpxaXLRBnQlx3U13KO/sCTh5wv7KXSX4n07GxDhWFC/Fz0xo3jAz+f6mjJw8DC9KW
-         PczPS1RFGb99tGs6ejO8Z7E7HOWYsiHZ/zsQwcNv3d7uwI1H/woxASxyuzlt/LPkESIe
-         F8vQ==
-X-Gm-Message-State: AC+VfDzXcag4mcu5RE5yq9Nls8zofIGo2izMjIwZEpgKO5NHsY2fIKjo
-        yPUfbUtXRpKQWAic4zsGQCv+LPbtZMZEtO2rt1iszj5YakTfqV6O0zVP9cv0dTGeoee8NGECKL/
-        hj+BJNtpXBkuun65Et4d7TgOc
-X-Received: by 2002:a05:6214:1d26:b0:5ef:d5b0:c33f with SMTP id f6-20020a0562141d2600b005efd5b0c33fmr68583123qvd.2.1684072818272;
-        Sun, 14 May 2023 07:00:18 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6ZxEJVXSJj22FdfeUHUFCbHqGYuIFy6aJ+7s6HEds/c8wbbuyT8d6HxTccrfjHe12gZcWZvw==
-X-Received: by 2002:a05:6214:1d26:b0:5ef:d5b0:c33f with SMTP id f6-20020a0562141d2600b005efd5b0c33fmr68583067qvd.2.1684072817948;
-        Sun, 14 May 2023 07:00:17 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id ev11-20020a0562140a8b00b0061668c4b426sm4304678qvb.59.2023.05.14.07.00.16
+        d=1e100.net; s=20221208; t=1684073066; x=1686665066;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iuGklFcEx4ogqrncOrMBWjf7nZjLMpfhpMESX9sQcR4=;
+        b=glla06MgKV3Ki7VDxUuAS632Cyz5HOSC4Cvi5yMWUyXWYGKgHnbu4HnO6FEisK01/c
+         CreWw0DQ6JwVNsRemUDIeoC8E3VGiZuDP+7K9yvxMSMHV+CWvNdRvSErV7/rIM0z3Hjh
+         T6TbrNl1/1SDI/qvi73yFV9zMASYZHBkWsRrmEZmX6EPP0itLGNWUW9D4U1pqSP9dIw0
+         Kdfyerz/GjjCV2qe15jgLQgENSB3s3Q1SFenarbjYXJAfGJDUt0hWjeOjXtGoYXWwTgn
+         8WlnN+bW/dBIWXcgLb8KEBrI19u9Vfv3d2yySMTMD7w0He8cg7kdYPUtzp7ND5V5GzeD
+         HC8A==
+X-Gm-Message-State: AC+VfDyAsVpre9uWqyDMb3h6IJR3QTqQU6AkkgnwLhRgdQcQD9hm4fsE
+        4DfRCvf54siCPFhi5G5S2p33DkGYw869kA==
+X-Google-Smtp-Source: ACHHUZ73vIq12vZRHgJzDA2lPm9LeJRlziN8yf3RKEMSmOSkYiMhZfduQK9GoarN7Z2bi2UuX0HFHQ==
+X-Received: by 2002:ac2:5deb:0:b0:4ed:d216:8217 with SMTP id z11-20020ac25deb000000b004edd2168217mr5603903lfq.11.1684073066149;
+        Sun, 14 May 2023 07:04:26 -0700 (PDT)
+Received: from mobilestation ([95.79.140.35])
+        by smtp.gmail.com with ESMTPSA id q1-20020a19a401000000b004f24bc0cbf9sm2217231lfc.154.2023.05.14.07.04.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 07:00:17 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     pablo@netfilter.org, kadlec@netfilter.org, fw@strlen.de,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] netfilter: conntrack: define variables exp_nat_nla_policy and any_addr with CONFIG_NF_NAT
-Date:   Sun, 14 May 2023 10:00:10 -0400
-Message-Id: <20230514140010.3399219-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sun, 14 May 2023 07:04:25 -0700 (PDT)
+Date:   Sun, 14 May 2023 17:04:23 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc:     maz@kernel.org, tsbogend@alpha.franken.de, tglx@linutronix.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/2] irqchip/mips-gic fixes
+Message-ID: <20230514140423.vvuoctb7u5uc53c3@mobilestation>
+References: <20230424103156.66753-1-jiaxun.yang@flygoat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230424103156.66753-1-jiaxun.yang@flygoat.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-gcc with W=1 and ! CONFIG_NF_NAT
-net/netfilter/nf_conntrack_netlink.c:3463:32: error:
-  ‘exp_nat_nla_policy’ defined but not used [-Werror=unused-const-variable=]
- 3463 | static const struct nla_policy exp_nat_nla_policy[CTA_EXPECT_NAT_MAX+1] = {
-      |                                ^~~~~~~~~~~~~~~~~~
-net/netfilter/nf_conntrack_netlink.c:2979:33: error:
-  ‘any_addr’ defined but not used [-Werror=unused-const-variable=]
- 2979 | static const union nf_inet_addr any_addr;
-      |                                 ^~~~~~~~
+Hi Jiaxun
 
-These variables use is controlled by CONFIG_NF_NAT, so should their definitions.
+On Mon, Apr 24, 2023 at 11:31:54AM +0100, Jiaxun Yang wrote:
+> Hi all,
+> 
+> This patchset fixes two issues in the MIPS GIC driver that may block
+> booting on some systems.
+> 
+> Please review.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- net/netfilter/nf_conntrack_netlink.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Thanks for the series. Please find some comments sent in the framework
+of the corresponding patches which don't though prevent from having
+the patchset tested. No problems were found on the Baikal-T1 SoC with
+2x MIPS32 P5600 core on board. So feel free to add for the entire
+series:
 
-diff --git a/net/netfilter/nf_conntrack_netlink.c b/net/netfilter/nf_conntrack_netlink.c
-index d40544cd61a6..69c8c8c7e9b8 100644
---- a/net/netfilter/nf_conntrack_netlink.c
-+++ b/net/netfilter/nf_conntrack_netlink.c
-@@ -2976,7 +2976,9 @@ static int ctnetlink_exp_dump_mask(struct sk_buff *skb,
- 	return -1;
- }
- 
-+#if IS_ENABLED(CONFIG_NF_NAT)
- static const union nf_inet_addr any_addr;
-+#endif
- 
- static __be32 nf_expect_get_id(const struct nf_conntrack_expect *exp)
- {
-@@ -3460,10 +3462,12 @@ ctnetlink_change_expect(struct nf_conntrack_expect *x,
- 	return 0;
- }
- 
-+#if IS_ENABLED(CONFIG_NF_NAT)
- static const struct nla_policy exp_nat_nla_policy[CTA_EXPECT_NAT_MAX+1] = {
- 	[CTA_EXPECT_NAT_DIR]	= { .type = NLA_U32 },
- 	[CTA_EXPECT_NAT_TUPLE]	= { .type = NLA_NESTED },
- };
-+#endif
- 
- static int
- ctnetlink_parse_expect_nat(const struct nlattr *attr,
--- 
-2.27.0
+Tested-by: Serge Semin <fancer.lancer@gmail.com>
 
+-Serge(y)
+
+> 
+> Thanks
+> 
+> Jiaxun Yang (2):
+>   irqchip/mips-gic: Don't touch vl_map if a local interrupt is not
+>     routable
+>   irqchip/mips-gic: Use raw spinlock for gic_lock
+> 
+>  drivers/irqchip/irq-mips-gic.c | 32 +++++++++++++++++---------------
+>  1 file changed, 17 insertions(+), 15 deletions(-)
+> 
+> -- 
+> 2.34.1
+> 
