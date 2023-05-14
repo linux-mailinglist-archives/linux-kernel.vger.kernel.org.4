@@ -2,94 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E5E3701E3A
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 18:25:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C18C701E3E
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 18:34:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjENQZS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 12:25:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33934 "EHLO
+        id S232283AbjENQeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 12:34:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjENQZQ (ORCPT
+        with ESMTP id S229585AbjENQeY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 12:25:16 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6A721BE2
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 09:25:15 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-965ac4dd11bso2366435966b.2
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 09:25:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684081514; x=1686673514;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K/4krLSql0Gjrdp6JrkRiPc1flJKbcl3pisqpCHUUFk=;
-        b=eSCC+3txcVCaqY1rjjnIVVTa1W38lCxZeD2RkKBUDykUFYSUCk/lQoTxhnWFqG3+Fi
-         EGOI0eSjsFz7TlBskVBq8wBUGlhithYPsfzzOPsMc+Jes2dwcsB21Zp0I0Wh0OZ5g5pU
-         cxWAqptRMjQtruI16wtNi9KFMgwZz2yNPwfHs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684081514; x=1686673514;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K/4krLSql0Gjrdp6JrkRiPc1flJKbcl3pisqpCHUUFk=;
-        b=P6rUTuzSI8WWd9D9+NgYm8F51TV4iH9sFDQTXAn5/qiB3w8rm3sgl9t8+YMyfiQvpp
-         9bU0ZKtI92Nj/u0eSUPmiUERTEcvS+i7BXxlb1lq0PwtlpIVlt7nLPZ3xLT6iXR28D9v
-         GI5bfluvjMdcUR/UXy6zLhK1458Jn5go+iyJlxqa3frf/4GcDR5BtJBd2UOqV/eej9KN
-         mKPHfvIplgSH9kHYXyz8IVIYKgyFr17c2qvlJDhnRbf6cj4OOsQdCFhZyDlR/GTXhFYu
-         Brn1xznEYuJfU3SJmKzDgzF0maoUDCrOpQYVWTGLORa7vhPeBpMV8Vl92OMSZOz36JdB
-         yvvw==
-X-Gm-Message-State: AC+VfDz88CLohHpk6pfaAuU5dt6PS7k/E8wB399EL4kQA9hXoCrEw3S8
-        6esFJUnwrLZXdvF/d0m9xMVZ613En7GTyBarQorrrQ==
-X-Google-Smtp-Source: ACHHUZ53u0DndPjX2lTQwwMOorxeB3yPZNW27G8+aHb95+Smw4rVhHOsKNxhKfGxDQpC2a9xngtzgg==
-X-Received: by 2002:a17:906:fe42:b0:94f:432f:242f with SMTP id wz2-20020a170906fe4200b0094f432f242fmr27524222ejb.67.1684081513763;
-        Sun, 14 May 2023 09:25:13 -0700 (PDT)
-Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com. [209.85.218.52])
-        by smtp.gmail.com with ESMTPSA id ov17-20020a170906fc1100b0096aa0ca9b5fsm3733834ejb.106.2023.05.14.09.25.13
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 May 2023 09:25:13 -0700 (PDT)
-Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-965ac4dd11bso2366432566b.2
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 09:25:13 -0700 (PDT)
-X-Received: by 2002:a17:907:9496:b0:96a:ff7f:692 with SMTP id
- dm22-20020a170907949600b0096aff7f0692mr2228823ejc.68.1684081512884; Sun, 14
- May 2023 09:25:12 -0700 (PDT)
+        Sun, 14 May 2023 12:34:24 -0400
+Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5309A3AA0;
+        Sun, 14 May 2023 09:34:22 -0700 (PDT)
+Received: from local
+        by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pyEfh-00070J-22;
+        Sun, 14 May 2023 16:34:09 +0000
+Date:   Sun, 14 May 2023 18:32:15 +0200
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Felix Fietkau <nbd@nbd.name>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Shayne Chen <shayne.chen@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Alexander Couzens <lynxis@fe80.eu>,
+        Sujuan Chen <sujuan.chen@mediatek.com>,
+        Bo Jiao <bo.jiao@mediatek.com>,
+        Nicolas Cavallari <nicolas.cavallari@green-communications.fr>,
+        Howard Hsu <howard-yh.hsu@mediatek.com>,
+        MeiChia Chiu <MeiChia.Chiu@mediatek.com>,
+        Peter Chiu <chui-hao.chiu@mediatek.com>,
+        Johannes Berg <johannes.berg@intel.com>,
+        Wang Yufen <wangyufen@huawei.com>,
+        Lorenz Brun <lorenz@brun.one>
+Subject: Re: [PATCH] wifi: mt76: mt7915: add support for MT7981
+Message-ID: <ZGENDwGXkuhrCGFY@pidgin.makrotopia.org>
+References: <ZF-SN-sElZB_g_bA@pidgin.makrotopia.org>
+ <ZGD192iDcUqoUwo3@corigine.com>
 MIME-Version: 1.0
-References: <168407416011.74685.9039980276616254723@leemhuis.info>
-In-Reply-To: <168407416011.74685.9039980276616254723@leemhuis.info>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sun, 14 May 2023 09:24:55 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjVxkvY0n2ZDv=oMB4WSaz1RxQmL1DxUjwFSbBfNiUFgQ@mail.gmail.com>
-Message-ID: <CAHk-=wjVxkvY0n2ZDv=oMB4WSaz1RxQmL1DxUjwFSbBfNiUFgQ@mail.gmail.com>
-Subject: Re: Linux regressions report for mainline [2023-05-14]
-To:     "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGD192iDcUqoUwo3@corigine.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 14, 2023 at 7:24=E2=80=AFAM Regzbot (on behalf of Thorsten
-Leemhuis) <regressions@leemhuis.info> wrote:
->
-> What I can't see yet though is a pull request from Russell with a fix
-> from Ard[2] (in next as 2b951b0efbaa) for boot issues[3] that apparently
-> break a lot of arm32 configs, which among others lead to "tons of
-> different boot time errors on the syzbot arm32 qemu instance"[4].
+Hi Simon,
 
-I have that. You may not have seen it because rmk just cc's the ARM SoC lis=
-t.
+thank you for reviewing!
 
-We also have some vhost regressions due to the move to user worker
-threads (rather than kthreads), they don't seem to be on your list.
-They're being worked on.
+On Sun, May 14, 2023 at 04:53:43PM +0200, Simon Horman wrote:
+> On Sat, May 13, 2023 at 03:35:51PM +0200, Daniel Golle wrote:
+> > From: Alexander Couzens <lynxis@fe80.eu>
+> > 
+> > Add support for the MediaTek MT7981 SoC which is similar to the MT7986
+> > but with a newer IP cores and only 2x ARM Cortex-A53 instead of 4x.
+> > Unlike MT7986 the MT7981 can only connect a single wireless frontend,
+> > usually MT7976 is used for DBDC.
+> > 
+> > Signed-off-by: Alexander Couzens <lynxis@fe80.eu>
+> > Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> 
+> ...
+> 
+> > @@ -489,7 +516,10 @@ static int mt7986_wmac_adie_patch_7976(struct mt7915_dev *dev, u8 adie)
+> >  		rg_xo_01 = 0x1d59080f;
+> >  		rg_xo_03 = 0x34c00fe0;
+> >  	} else {
+> > -		rg_xo_01 = 0x1959f80f;
+> > +		if (is_mt7981(&dev->mt76))
+> > +			rg_xo_01 = 0x1959c80f;
+> > +		else if (is_mt7986(&dev->mt76))
+> > +			rg_xo_01 = 0x1959f80f;
+> 
+> Hi Daniel,
+> 
+> 		rg_xo_01 will be used uninitialised below if we get here
+> 		and neither of the conditions above are true.
+> 
+> 		Can this occur?
 
-               Linus
+No, it cannot occur. Either of is_mt7981() or is_mt7986() will return
+true, as the driver is bound via one of the two compatibles
+'mediatek,mt7986-wmac' or newly added 'mediatek,mt7981-wmac'.
+Based on that the match_data is either 0x7986 or 0x7981, which is then
+used as chip_id, which is used by the is_mt7981() and is_mt7986()
+functions.
+
+> 
+> >  		rg_xo_03 = 0x34d00fe0;
+> >  	}
+> >  
+> 
+> ...
+> 
