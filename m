@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52FE6701E7B
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 19:08:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF8C4701E80
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 19:08:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234997AbjENRIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 13:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
+        id S237407AbjENRIa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 13:08:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232556AbjENRIK (ORCPT
+        with ESMTP id S230281AbjENRIO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 13:08:10 -0400
+        Sun, 14 May 2023 13:08:14 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3876E3C07;
-        Sun, 14 May 2023 10:08:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E88C04220;
+        Sun, 14 May 2023 10:08:12 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5BC5618B0;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 495EC618FA;
+        Sun, 14 May 2023 17:08:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F43BC433EF;
         Sun, 14 May 2023 17:08:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B860BC4339B;
-        Sun, 14 May 2023 17:08:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684084086;
-        bh=8o3w2PNumfMmW1nsxUiJwSK+1Wm7LHqx/wBqf4PFRQY=;
+        s=k20201202; t=1684084089;
+        bh=QsS0GqTEpUgIOl9D4Ma8N/Z521IB8RVwhJGktfvNTz0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=O5ZZbKnsIlXkTLOeI1QacOmEvmEyixkY9kbZWpuTdNWmf4NoMEGTv2jeC1Ps1LjuZ
-         IGdUqraKi0wMpt2OxQI5ohFHgmsRgXqyiJA13e/uwut8x2xMHeFUOobW9+/o5DHP2q
-         ykJLa8RhFZjDFQsXf/7INdH1OsFOGfXnapeBowxXdTEUvQBwRcyIMtMOmgH1IfMyW4
-         wtVEgtYnOBvuxQyvQpgJgqaeeneMKq1U89uNtE0wa3M1M8t/kc3pS2if+R1HuYb6NP
-         yFdTL6QcBBMAwsSc0PLPyXyAR8xWoeuNPE1FmunEAgZ96Q3kvsuPflFpF9Ti5VDFpT
-         ZehySqUGPS9+g==
+        b=YXyhrJbbT/SozDGrfC1Jj3qqZw6mERdNANW6weX6tlGuHGQcj3/hqqSAqhThSyPv2
+         SQ3Nj8WegpEH4uLsa1GzpUAYdmIggVjY5KCYwImIJ3QforBF4bkdKfrRrbHRV3lu5G
+         ItGW5XyY4yZMe17x9uvhItNgB5hqBbOGpgk9ZP5Eh2YcBge/hCBT60pdjUPlDJ3xav
+         Wne+NMUi+u04kS46E/sq8FWyTONJ0en6uA2CRnDE2tIsUcCP7pXuZqhTbHicGjz+5R
+         liPYpb4qqkiP0AmEq6gv4Tm+SLt+bSTPZjhpzKtxHSOuqpZPtf+nZJV+K7yfBdYjCS
+         NHC2SFumzTIqw==
 From:   Jisheng Zhang <jszhang@kernel.org>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
@@ -45,12 +45,10 @@ To:     Thomas Gleixner <tglx@linutronix.de>,
         Jiri Slaby <jirislaby@kernel.org>
 Cc:     Samuel Holland <samuel@sholland.org>, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-serial@vger.kernel.org,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: [PATCH v3 01/10] dt-bindings: vendor-prefixes: add bouffalolab
-Date:   Mon, 15 May 2023 00:56:42 +0800
-Message-Id: <20230514165651.2199-2-jszhang@kernel.org>
+        linux-serial@vger.kernel.org
+Subject: [PATCH v3 02/10] dt-bindings: interrupt-controller: Add bouffalolab bl808 plic
+Date:   Mon, 15 May 2023 00:56:43 +0800
+Message-Id: <20230514165651.2199-3-jszhang@kernel.org>
 X-Mailer: git-send-email 2.40.0
 In-Reply-To: <20230514165651.2199-1-jszhang@kernel.org>
 References: <20230514165651.2199-1-jszhang@kernel.org>
@@ -66,32 +64,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the following commits, we will support bl808 SoC which is from
-Bouffalo Lab Technology (Nanjing) Co., Ltd.
+Add compatible string for bouffalolab bl808 plic.
 
-Add bouffalolab vendor prefix binding.
-
-Link: https://en.bouffalolab.com/
 Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
 ---
- Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
- 1 file changed, 2 insertions(+)
+ .../bindings/interrupt-controller/sifive,plic-1.0.0.yaml         | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-index 82d39ab0231b..3566346f2f9e 100644
---- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-+++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-@@ -200,6 +200,8 @@ patternProperties:
-     description: BOE Technology Group Co., Ltd.
-   "^bosch,.*":
-     description: Bosch Sensortec GmbH
-+  "^bouffalolab,.*":
-+    description: Bouffalo Lab Technology (Nanjing) Co., Ltd.
-   "^boundary,.*":
-     description: Boundary Devices Inc.
-   "^brcm,.*":
+diff --git a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
+index f75736a061af..3f9439b0c163 100644
+--- a/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
++++ b/Documentation/devicetree/bindings/interrupt-controller/sifive,plic-1.0.0.yaml
+@@ -65,6 +65,7 @@ properties:
+       - items:
+           - enum:
+               - allwinner,sun20i-d1-plic
++              - bouffalolab,bl808-plic
+           - const: thead,c900-plic
+       - items:
+           - const: sifive,plic-1.0.0
 -- 
 2.40.0
 
