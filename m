@@ -2,82 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48FB170205E
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 00:06:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DD5E2702068
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 00:18:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233394AbjENWGD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 18:06:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57450 "EHLO
+        id S231540AbjENWSP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 18:18:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjENWGA (ORCPT
+        with ESMTP id S229534AbjENWSN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 18:06:00 -0400
-X-Greylist: delayed 1122 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 14 May 2023 15:05:58 PDT
-Received: from hall.aurel32.net (hall.aurel32.net [IPv6:2001:bc8:30d7:100::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD4210C1;
-        Sun, 14 May 2023 15:05:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=aurel32.net
-        ; s=202004.hall; h=In-Reply-To:Content-Type:MIME-Version:References:
-        Message-ID:Subject:Cc:To:From:Date:Content-Transfer-Encoding:From:Reply-To:
-        Subject:Content-ID:Content-Description:X-Debbugs-Cc;
-        bh=Le/EDFx24rD9UDUsnqI9SxJ9Hh1UhhshlO7B1XJaioE=; b=O5HpHVhGQsxuePlD8N1aIBPW9l
-        XWTN4LRjYLi4I7HVM06cfSX7UvoPTvI8tyVVnwIk5yrYs4bia0UcvjQPMPg937Kat8fkcM/ZkZrE7
-        gymTZ6OXc7j/874dsbvVTwCTl2/gg8HdgbOcxNGgnWKk3Vr54le6KLJoZcbxYMN7TntPJV1Jsfo8l
-        bO1/EOXwNRu6rI507iXCIrUwEhFX9ZID973uB509beemwmfQSFP/uv8VpBChFjTiTFgsasb7t+uXU
-        IAJBRzj6FuBYzGXgt4X7ydhk+QtuFjXhUu1/qN01Bv/0HolOW0iidrBB8TmREmglipTebV9T1TqPa
-        caU+v1dQ==;
-Received: from [2a01:e34:ec5d:a741:8a4c:7c4e:dc4c:1787] (helo=ohm.rr44.fr)
-        by hall.aurel32.net with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1pyJYG-00Ajbr-Sb; Sun, 14 May 2023 23:46:49 +0200
-Received: from aurel32 by ohm.rr44.fr with local (Exim 4.96)
-        (envelope-from <aurelien@aurel32.net>)
-        id 1pyJYG-00AqI7-21;
-        Sun, 14 May 2023 23:46:48 +0200
-Date:   Sun, 14 May 2023 23:46:48 +0200
-From:   Aurelien Jarno <aurelien@aurel32.net>
-To:     Xingyu Wu <xingyu.wu@starfivetech.com>
-Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Conor Dooley <conor@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Subject: Re: [PATCH v5 06/10] clk: starfive: Add StarFive JH7110 Video-Output
- clock driver
-Message-ID: <ZGFWyPbeEOxxqwQK@aurel32.net>
-Mail-Followup-To: Xingyu Wu <xingyu.wu@starfivetech.com>,
-        linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Conor Dooley <conor@kernel.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Rob Herring <robh+dt@kernel.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Hal Feng <hal.feng@starfivetech.com>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-References: <20230424135409.6648-1-xingyu.wu@starfivetech.com>
- <20230424135409.6648-7-xingyu.wu@starfivetech.com>
+        Sun, 14 May 2023 18:18:13 -0400
+Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [IPv6:2001:4b7a:2000:18::170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B662B10EF
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 15:18:10 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id E5AB7201D3;
+        Mon, 15 May 2023 00:18:05 +0200 (CEST)
+Date:   Mon, 15 May 2023 00:18:04 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, dmitry.baryshkov@linaro.org,
+        andersson@kernel.org, quic_abhinavk@quicinc.com,
+        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v8 5/8] drm/msm/dpu: add support for DSC encoder v1.2
+ engine
+Message-ID: <mxdr37vle6x4wvidyh2tc5w77oqve556ogk4nu47efdjbstz6i@vz5hkydgie5g>
+References: <1683914423-17612-1-git-send-email-quic_khsieh@quicinc.com>
+ <1683914423-17612-6-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230424135409.6648-7-xingyu.wu@starfivetech.com>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+In-Reply-To: <1683914423-17612-6-git-send-email-quic_khsieh@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,70 +50,639 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-04-24 21:54, Xingyu Wu wrote:
-> Add driver for the StarFive JH7110 Video-Output clock controller.
-> And these clock controllers should power on and enable the clocks from
-> SYSCRG first before registering.
+On 2023-05-12 11:00:20, Kuogee Hsieh wrote:
 > 
-> Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
+> Add support for DSC 1.2 by providing the necessary hooks to program
+> the DPU DSC 1.2 encoder.
+> 
+> Changes in v3:
+> -- fixed kernel test rebot report that "__iomem *off" is declared but not
+>    used at dpu_hw_dsc_config_1_2()
+> -- unrolling thresh loops
+> 
+> Changes in v4:
+> -- delete DPU_DSC_HW_REV_1_1
+> -- delete off and used real register name directly
+> 
+> Changes in v7:
+> -- replace offset with sblk->enc.base
+> -- replace ss with slice
+> 
+> Changes in v8:
+> -- fixed checkpatch warning
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> ---
+>  drivers/gpu/drm/msm/Makefile                   |   1 +
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  32 ++-
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h     |  14 +-
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c | 382 +++++++++++++++++++++++++
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c         |   7 +-
+>  5 files changed, 432 insertions(+), 4 deletions(-)
+>  create mode 100644 drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c
+> 
+> diff --git a/drivers/gpu/drm/msm/Makefile b/drivers/gpu/drm/msm/Makefile
+> index b814fc8..b9af5e4 100644
+> --- a/drivers/gpu/drm/msm/Makefile
+> +++ b/drivers/gpu/drm/msm/Makefile
+> @@ -65,6 +65,7 @@ msm-$(CONFIG_DRM_MSM_DPU) += \
+>  	disp/dpu1/dpu_hw_catalog.o \
+>  	disp/dpu1/dpu_hw_ctl.o \
+>  	disp/dpu1/dpu_hw_dsc.o \
+> +	disp/dpu1/dpu_hw_dsc_1_2.o \
+>  	disp/dpu1/dpu_hw_interrupts.o \
+>  	disp/dpu1/dpu_hw_intf.o \
+>  	disp/dpu1/dpu_hw_lm.o \
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> index dc0a4da..4eda2cc 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+> @@ -1,6 +1,6 @@
+>  /* SPDX-License-Identifier: GPL-2.0-only */
+>  /*
+> - * Copyright (c) 2022. Qualcomm Innovation Center, Inc. All rights reserved.
+> + * Copyright (c) 2022-2023, Qualcomm Innovation Center, Inc. All rights reserved.
+>   * Copyright (c) 2015-2018, 2020 The Linux Foundation. All rights reserved.
+>   */
+>  
+> @@ -244,12 +244,18 @@ enum {
+>  };
+>  
+>  /**
+> - * DSC features
+> + * DSC sub-blocks/features
+>   * @DPU_DSC_OUTPUT_CTRL       Configure which PINGPONG block gets
+>   *                            the pixel output from this DSC.
+> + * @DPU_DSC_HW_REV_1_2        DSC block supports dsc 1.1 and 1.2
 
-There seems to be something wrong with this patch. Building the kernel
-with the whole series applied and with CONFIG_FORTIFY_SOURCE=y triggers
-the following kernel bug: 
+Nit: dsc -> DSC
 
-[   75.705103] detected buffer overflow in __fortify_strlen
-[   75.710497] ------------[ cut here ]------------
-[   75.715117] kernel BUG at lib/string_helpers.c:1027!
-[   75.720083] Kernel BUG [#1]
-[   75.722879] Modules linked in: clk_starfive_jh7110_vout(+) nvme_fabrics binfmt_misc starfive_wdt jh7110_trng watchdog sfctemp rng_core drm loop fuse drm_panel_orientation_quirks configfs ip_tables x_tables autofs4 ext4 crc32c_generic crc16 mbcache jbd2 dm_mod nvme nvme_core t10_pi crc64_rocksoft crc64 crc_t10dif crct10dif_generic crct10dif_common xhci_pci xhci_hcd mmc_block dwmac_starfive stmmac_platform stmmac usbcore pcs_xpcs of_mdio fixed_phy fwnode_mdio phylink libphy usb_common dw_mmc_starfive dw_mmc_pltfm clk_starfive_jh7110_isp dw_mmc clk_starfive_jh7110_aon ptp phy_starfive_dphy_rx mmc_core pps_core phy_jh7110_pcie i2c_designware_platform clk_starfive_jh7110_stg phy_jh7110_usb i2c_designware_core
-[   75.785411] CPU: 1 PID: 419 Comm: insmod Not tainted 6.3.1+ #1
-[   75.791241] Hardware name: StarFive VisionFive 2 v1.2A (DT)
-[   75.796809] epc : fortify_panic+0x1a/0x1c
-[   75.800828]  ra : fortify_panic+0x1a/0x1c
-[   75.804838] epc : ffffffff80874242 ra : ffffffff80874242 sp : ffffffc80454b6a0
-[   75.812054]  gp : ffffffff8157f008 tp : ffffffd8c1214f80 t0 : 6465746365746564
-[   75.819269]  t1 : 0000000000000064 t2 : 2064657463657465 s0 : ffffffc80454b6b0
-[   75.826483]  s1 : 0000000000000020 a0 : 000000000000002c a1 : ffffffd8fdd63688
-[   75.833697]  a2 : ffffffd8fdd6f8e8 a3 : 0000000000000000 a4 : 0000000000000000
-[   75.840912]  a5 : 0000000000000000 a6 : ffffffff81426a38 a7 : 0000000000000000
-[   75.848126]  s2 : ffffffff80ec4e00 s3 : ffffffd8d9e28008 s4 : 000000000000001f
-[   75.855340]  s5 : 0000000000000000 s6 : ffffffff81580798 s7 : 0000000000ffffff
-[   75.862555]  s8 : ffffffd8d9e29ab0 s9 : 0000000000000011 s10: ffffffff017312a0
-[   75.869770]  s11: ffffffff01731450 t3 : ffffffff81592df7 t4 : ffffffff81592df7
-[   75.876984]  t5 : ffffffff81592df8 t6 : ffffffc80454b4a8
-[   75.882290] status: 0000000200000120 badaddr: 0000000000000000 cause: 0000000000000003
-[   75.890199] [<ffffffff80874242>] fortify_panic+0x1a/0x1c
-[   75.895513] [<ffffffff805c7e20>] auxiliary_match_id+0x70/0xcc
-[   75.901262] [<ffffffff805c7f22>] auxiliary_match+0x1e/0x2a
-[   75.906749] [<ffffffff805bd6b0>] __device_attach_driver+0x2c/0xe4
-[   75.912841] [<ffffffff805bb04e>] bus_for_each_drv+0x70/0xc4
-[   75.918418] [<ffffffff805bdb0a>] __device_attach+0x94/0x198
-[   75.923989] [<ffffffff805bde68>] device_initial_probe+0x1a/0x22
-[   75.929908] [<ffffffff805bc146>] bus_probe_device+0x96/0x98
-[   75.935482] [<ffffffff805b971e>] device_add+0x56a/0x722
-[   75.940710] [<ffffffff805c7fc4>] __auxiliary_device_add+0x40/0x92
-[   75.946803] [<ffffffff80556ff4>] jh7110_reset_controller_register+0x92/0xca
-[   75.953765] [<ffffffff0173034c>] jh7110_voutcrg_probe+0x236/0x2fa [clk_starfive_jh7110_vout]
-[   75.962228] [<ffffffff805bfb40>] platform_probe+0x5e/0xa6
-[   75.967629] [<ffffffff805bd1e6>] really_probe+0xa0/0x342
-[   75.972940] [<ffffffff805bd508>] __driver_probe_device+0x80/0x138
-[   75.979031] [<ffffffff805bd5f8>] driver_probe_device+0x38/0xc4
-[   75.984863] [<ffffffff805bd83a>] __driver_attach+0xd2/0x1a8
-[   75.990436] [<ffffffff805baf92>] bus_for_each_dev+0x6c/0xb8
-[   75.996011] [<ffffffff805bcab6>] driver_attach+0x26/0x2e
-[   76.001325] [<ffffffff805bc384>] bus_add_driver+0x10c/0x1ee
-[   76.006900] [<ffffffff805be5e2>] driver_register+0x52/0xf4
-[   76.012386] [<ffffffff805bf78e>] __platform_driver_register+0x28/0x30
-[   76.018827] [<ffffffff01b72028>] jh7110_voutcrg_driver_init+0x28/0x1000 [clk_starfive_jh7110_vout]
-[   76.027802] [<ffffffff8000281a>] do_one_initcall+0x5c/0x1c8
-[   76.033377] [<ffffffff800a7612>] do_init_module+0x4c/0x1f6
-[   76.038867] [<ffffffff800a9396>] load_module+0x1a6c/0x1ebe
-[   76.044356] [<ffffffff800a99ea>] __do_sys_finit_module+0x9c/0xf8
-[   76.050365] [<ffffffff800a9a82>] sys_finit_module+0x1c/0x24
-[   76.055936] [<ffffffff80003df8>] ret_from_syscall+0x0/0x2
-[   76.061343] Code: 0800 85aa 3517 007a 0513 7ee5 a097 ffff 80e7 fc20 (9002) 7179 
-[   76.068735] ---[ end trace 0000000000000000 ]---
+> + * @DPU_DSC_NATIVE_422_EN     Supports native422 and native420 encoding
 
--- 
-Aurelien Jarno                          GPG: 4096R/1DDD8C9B
-aurelien@aurel32.net                     http://aurel32.net
+NATIVE_42x_EN?
+
+> + * @DPU_DSC_MAX
+>   */
+>  enum {
+>  	DPU_DSC_OUTPUT_CTRL = 0x1,
+> +	DPU_DSC_HW_REV_1_2,
+> +	DPU_DSC_NATIVE_422_EN,
+> +	DPU_DSC_MAX
+>  };
+>  
+>  /**
+> @@ -306,6 +312,14 @@ struct dpu_pp_blk {
+>  };
+>  
+>  /**
+> + * struct dpu_dsc_blk - DSC Encoder sub-blk information
+> + * @info:   HW register and features supported by this sub-blk
+> + */
+> +struct dpu_dsc_blk {
+> +	DPU_HW_SUBBLK_INFO;
+> +};
+> +
+> +/**
+>   * enum dpu_qos_lut_usage - define QoS LUT use cases
+>   */
+>  enum dpu_qos_lut_usage {
+> @@ -452,6 +466,17 @@ struct dpu_pingpong_sub_blks {
+>  };
+>  
+>  /**
+> + * struct dpu_dsc_sub_blks - DSC sub-blks
+> + * @enc: DSC encoder sub block
+> + * @ctl: DSC controller sub block
+
+Nit: sub-block, for both.
+
+> + *
+
+No need for this empty line.
+
+> + */
+> +struct dpu_dsc_sub_blks {
+> +	struct dpu_dsc_blk enc;
+> +	struct dpu_dsc_blk ctl;
+> +};
+> +
+> +/**
+>   * dpu_clk_ctrl_type - Defines top level clock control signals
+>   */
+>  enum dpu_clk_ctrl_type {
+> @@ -605,10 +630,13 @@ struct dpu_merge_3d_cfg  {
+>   * struct dpu_dsc_cfg - information of DSC blocks
+>   * @id                 enum identifying this block
+>   * @base               register offset of this block
+> + * @len:               length of hardware block
+>   * @features           bit mask identifying sub-blocks/features
+> + * @sblk               sub-blocks information
+
+Add trailing colon like you did for @len (we will add it to every other
+field doc in a future fixing pass).
+
+>   */
+>  struct dpu_dsc_cfg {
+>  	DPU_HW_BLK_INFO;
+> +	const struct dpu_dsc_sub_blks *sblk;
+>  };
+>  
+>  /**
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
+> index 138080a..44fd624 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc.h
+> @@ -1,5 +1,8 @@
+>  /* SPDX-License-Identifier: GPL-2.0-only */
+> -/* Copyright (c) 2020-2022, Linaro Limited */
+> +/*
+> + * Copyright (c) 2020-2022, Linaro Limited
+> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved
+> + */
+>  
+>  #ifndef _DPU_HW_DSC_H
+>  #define _DPU_HW_DSC_H
+> @@ -69,6 +72,15 @@ struct dpu_hw_dsc *dpu_hw_dsc_init(const struct dpu_dsc_cfg *cfg,
+>  		void __iomem *addr);
+>  
+>  /**
+> + * dpu_hw_dsc_init_1_2 - initializes the v1.2 DSC hw driver block
+
+Add ()
+
+We recently normalized this to "DSC hw driver object."
+
+> + * @cfg:  DSC catalog entry for which driver object is required
+> + * @addr: Mapped register io address of MDP
+> + * Returns: Error code or allocated dpu_hw_dsc context
+> + */
+> +struct dpu_hw_dsc *dpu_hw_dsc_init_1_2(const struct dpu_dsc_cfg *cfg,
+> +				       void __iomem *addr);
+> +
+> +/**
+>   * dpu_hw_dsc_destroy - destroys dsc driver context
+>   * @dsc:   Pointer to dsc driver context returned by dpu_hw_dsc_init
+>   */
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c
+> new file mode 100644
+> index 00000000..5bd84bd
+> --- /dev/null
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_dsc_1_2.c
+> @@ -0,0 +1,382 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved
+> + */
+> +
+> +#include <drm/display/drm_dsc_helper.h>
+> +
+> +#include "dpu_kms.h"
+> +#include "dpu_hw_catalog.h"
+> +#include "dpu_hwio.h"
+> +#include "dpu_hw_mdss.h"
+> +#include "dpu_hw_dsc.h"
+> +
+> +#define DSC_CMN_MAIN_CNF           0x00
+> +
+> +/* DPU_DSC_ENC register offsets */
+> +#define ENC_DF_CTRL                0x00
+> +#define ENC_GENERAL_STATUS         0x04
+> +#define ENC_HSLICE_STATUS          0x08
+> +#define ENC_OUT_STATUS             0x0C
+> +#define ENC_INT_STAT               0x10
+> +#define ENC_INT_CLR                0x14
+> +#define ENC_INT_MASK               0x18
+> +#define DSC_MAIN_CONF              0x30
+> +#define DSC_PICTURE_SIZE           0x34
+> +#define DSC_SLICE_SIZE             0x38
+> +#define DSC_MISC_SIZE              0x3C
+> +#define DSC_HRD_DELAYS             0x40
+> +#define DSC_RC_SCALE               0x44
+> +#define DSC_RC_SCALE_INC_DEC       0x48
+> +#define DSC_RC_OFFSETS_1           0x4C
+> +#define DSC_RC_OFFSETS_2           0x50
+> +#define DSC_RC_OFFSETS_3           0x54
+> +#define DSC_RC_OFFSETS_4           0x58
+> +#define DSC_FLATNESS_QP            0x5C
+> +#define DSC_RC_MODEL_SIZE          0x60
+> +#define DSC_RC_CONFIG              0x64
+> +#define DSC_RC_BUF_THRESH_0        0x68
+> +#define DSC_RC_BUF_THRESH_1        0x6C
+> +#define DSC_RC_BUF_THRESH_2        0x70
+> +#define DSC_RC_BUF_THRESH_3        0x74
+> +#define DSC_RC_MIN_QP_0            0x78
+> +#define DSC_RC_MIN_QP_1            0x7C
+> +#define DSC_RC_MIN_QP_2            0x80
+> +#define DSC_RC_MAX_QP_0            0x84
+> +#define DSC_RC_MAX_QP_1            0x88
+> +#define DSC_RC_MAX_QP_2            0x8C
+> +#define DSC_RC_RANGE_BPG_OFFSETS_0 0x90
+> +#define DSC_RC_RANGE_BPG_OFFSETS_1 0x94
+> +#define DSC_RC_RANGE_BPG_OFFSETS_2 0x98
+> +
+> +/* DPU_DSC_CTL register offsets */
+> +#define DSC_CTL                    0x00
+> +#define DSC_CFG                    0x04
+> +#define DSC_DATA_IN_SWAP           0x08
+> +#define DSC_CLK_CTRL               0x0C
+> +
+> +static inline int _dsc_calc_ob_max_addr(struct dpu_hw_dsc *hw_dsc, int num_ss)
+
+Can you write out "ob" fully?
+
+These don't need to be marked "inline", same below.
+
+> +{
+> +	int max_addr = 2400 / num_ss;
+
+ss -> slice (or subslice), right?
+
+> +
+> +	if (hw_dsc->caps->features & BIT(DPU_DSC_NATIVE_422_EN))
+> +		max_addr /= 2;
+> +
+> +	return max_addr - 1;
+> +};
+> +
+> +static inline void dpu_hw_dsc_disable_1_2(struct dpu_hw_dsc *hw_dsc)
+> +{
+> +	struct dpu_hw_blk_reg_map *hw;
+> +	const struct dpu_dsc_sub_blks *sblk;
+> +
+> +	if (!hw_dsc)
+> +		return;
+> +
+> +	hw = &hw_dsc->hw;
+> +	sblk = hw_dsc->caps->sblk;
+> +	DPU_REG_WRITE(hw, sblk->ctl.base + DSC_CFG, 0);
+> +
+> +	DPU_REG_WRITE(hw, sblk->enc.base + ENC_DF_CTRL, 0);
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_MAIN_CONF, 0);
+> +}
+> +
+> +static inline void dpu_hw_dsc_config_1_2(struct dpu_hw_dsc *hw_dsc,
+> +					 struct drm_dsc_config *dsc,
+> +					 u32 mode,
+> +					 u32 initial_lines)
+> +{
+> +	struct dpu_hw_blk_reg_map *hw;
+> +	const struct dpu_dsc_sub_blks *sblk;
+> +	u32 data = 0;
+> +	u32 det_thresh_flatness;
+> +	u32 num_active_slice_per_enc;
+> +	u32 bpp;
+> +
+> +	if (!hw_dsc || !dsc)
+> +		return;
+> +
+> +	hw = &hw_dsc->hw;
+> +
+> +	sblk = hw_dsc->caps->sblk;
+> +
+> +	if (mode & DSC_MODE_SPLIT_PANEL)
+> +		data |= BIT(0);
+> +
+> +	if (mode & DSC_MODE_MULTIPLEX)
+> +		data |= BIT(1);
+> +
+> +	num_active_slice_per_enc = dsc->slice_count;
+> +	if (mode & DSC_MODE_MULTIPLEX)
+> +		num_active_slice_per_enc = dsc->slice_count >> 1;
+
+A /2 would be clearer to read, IMO.
+
+> +
+> +	data |= (num_active_slice_per_enc & 0x3) << 7;
+> +
+> +	DPU_REG_WRITE(hw, DSC_CMN_MAIN_CNF, data);
+> +
+> +	data = (initial_lines & 0xff);
+> +
+> +	if (mode & DSC_MODE_VIDEO)
+> +		data |= BIT(9);
+> +
+> +	data |= (_dsc_calc_ob_max_addr(hw_dsc, num_active_slice_per_enc) << 18);
+> +
+> +	DPU_REG_WRITE(hw, sblk->enc.base + ENC_DF_CTRL, data);
+> +
+> +	data = (dsc->dsc_version_minor & 0xf) << 28;
+> +	if (dsc->dsc_version_minor == 0x2) {
+> +		if (dsc->native_422)
+> +			data |= BIT(22);
+> +		if (dsc->native_420)
+> +			data |= BIT(21);
+> +	}
+> +
+> +	bpp = dsc->bits_per_pixel;
+> +	/* as per hw requirement bpp should be programmed
+> +	 * twice the actual value in case of 420 or 422 encoding
+> +	 */
+> +	if (dsc->native_422 || dsc->native_420)
+> +		bpp = 2 * bpp;
+> +	data |= (dsc->block_pred_enable ? 1 : 0) << 20;
+
+Below (e.g. convert_rgb) you just shift the bool without ternary if to 0
+or 1: why here?
+
+Or rewrite this one and convert_rgb to match the above and below:
+
+    if (dsc->block_pred_enable)
+        data |= BIT(20);
+    if (dsc->convert_rgb)
+        data |= BIT(4);
+
+No need to invent multiple different styles within the same file.
+
+> +	data |= bpp << 10;
+
+Why not move this right below the calculation of bpp?  Seems odd to
+intersperse block_pred_enable.
+
+> +	data |= (dsc->line_buf_depth & 0xf) << 6;
+> +	data |= dsc->convert_rgb << 4;
+> +	data |= dsc->bits_per_component & 0xf;
+> +
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_MAIN_CONF, data);
+> +
+> +	data = (dsc->pic_width & 0xffff) |
+> +		((dsc->pic_height & 0xffff) << 16);
+> +
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_PICTURE_SIZE, data);
+> +
+> +	data = (dsc->slice_width & 0xffff) |
+> +		((dsc->slice_height & 0xffff) << 16);
+> +
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_SLICE_SIZE, data);
+> +
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_MISC_SIZE,
+> +		      (dsc->slice_chunk_size) & 0xffff);
+> +
+> +	data = (dsc->initial_xmit_delay & 0xffff) |
+> +		((dsc->initial_dec_delay & 0xffff) << 16);
+> +
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_HRD_DELAYS, data);
+> +
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_SCALE,
+> +		      dsc->initial_scale_value & 0x3f);
+> +
+> +	data = (dsc->scale_increment_interval & 0xffff) |
+> +		((dsc->scale_decrement_interval & 0x7ff) << 16);
+
+Is it correct that increment and decrement have a different amount of
+bits?
+
+> +
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_SCALE_INC_DEC, data);
+> +
+> +	data = (dsc->first_line_bpg_offset & 0x1f) |
+> +		((dsc->second_line_bpg_offset & 0x1f) << 5);
+> +
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_OFFSETS_1, data);
+> +
+> +	data = (dsc->nfl_bpg_offset & 0xffff) |
+> +		((dsc->slice_bpg_offset & 0xffff) << 16);
+> +
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_OFFSETS_2, data);
+> +
+> +	data = (dsc->initial_offset & 0xffff) |
+> +		((dsc->final_offset & 0xffff) << 16);
+> +
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_OFFSETS_3, data);
+> +
+> +	data = (dsc->nsl_bpg_offset & 0xffff) |
+> +		((dsc->second_line_offset_adj & 0xffff) << 16);
+> +
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_OFFSETS_4, data);
+> +
+> +	data = (dsc->flatness_min_qp & 0x1f);
+> +	data |= (dsc->flatness_max_qp & 0x1f) << 5;
+
+Wrap these as a single data= expression to match the above.
+
+> +
+> +	det_thresh_flatness = drm_dsc_calculate_flatness_det_thresh(dsc);
+> +	data |= (det_thresh_flatness & 0xff) << 10;
+
+And fold this line into it, too.
+
+> +
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_FLATNESS_QP, data);
+> +
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_MODEL_SIZE,
+> +		      (dsc->rc_model_size) & 0xffff);
+> +
+> +	data = dsc->rc_edge_factor & 0xf;
+> +	data |= (dsc->rc_quant_incr_limit0 & 0x1f) << 8;
+> +	data |= (dsc->rc_quant_incr_limit1 & 0x1f) << 13;
+> +	data |= (dsc->rc_tgt_offset_high & 0xf) << 20;
+> +	data |= (dsc->rc_tgt_offset_low & 0xf) << 24;
+> +
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_CONFIG, data);
+> +
+> +	/* program the dsc wrapper */
+> +	data = BIT(0); /* encoder enable */
+> +	if (dsc->native_422)
+> +		data |= BIT(8);
+> +	else if (dsc->native_420)
+> +		data |= BIT(9);
+> +	if (!dsc->convert_rgb)
+> +		data |= BIT(10);
+> +	if (dsc->bits_per_component == 8)
+> +		data |= BIT(11);
+> +	if (mode & DSC_MODE_SPLIT_PANEL)
+> +		data |= BIT(12);
+> +	if (mode & DSC_MODE_MULTIPLEX)
+> +		data |= BIT(13);
+> +	if (!(mode & DSC_MODE_VIDEO))
+> +		data |= BIT(17);
+> +
+> +	DPU_REG_WRITE(hw, sblk->ctl.base + DSC_CFG, data);
+> +}
+> +
+> +static inline void dpu_hw_dsc_config_thresh_1_2(struct dpu_hw_dsc *hw_dsc,
+> +						struct drm_dsc_config *dsc)
+> +{
+> +	struct dpu_hw_blk_reg_map *hw;
+> +	const struct dpu_dsc_sub_blks *sblk;
+> +	struct drm_dsc_rc_range_parameters *rc;
+> +
+> +	if (!hw_dsc || !dsc)
+> +		return;
+> +
+> +	hw = &hw_dsc->hw;
+> +
+> +	sblk = hw_dsc->caps->sblk;
+> +
+> +	rc = dsc->rc_range_params;
+> +
+> +	/*
+> +	 * With BUF_THRESH -- 14 in total
+> +	 * each register contains 4 thresh values with the last register
+> +	 * containing only 2 thresh values
+> +	 */
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_BUF_THRESH_0,
+> +		      (dsc->rc_buf_thresh[0] << 0) |
+> +		      (dsc->rc_buf_thresh[1] << 8) |
+> +		      (dsc->rc_buf_thresh[2] << 16) |
+> +		      (dsc->rc_buf_thresh[3] << 24));
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_BUF_THRESH_1,
+> +		      (dsc->rc_buf_thresh[4] << 0) |
+> +		      (dsc->rc_buf_thresh[5] << 8) |
+> +		      (dsc->rc_buf_thresh[6] << 16) |
+> +		      (dsc->rc_buf_thresh[7] << 24));
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_BUF_THRESH_2,
+> +		      (dsc->rc_buf_thresh[8] << 0) |
+> +		      (dsc->rc_buf_thresh[9] << 8) |
+> +		      (dsc->rc_buf_thresh[10] << 16) |
+> +		      (dsc->rc_buf_thresh[11] << 24));
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_BUF_THRESH_3,
+> +		      (dsc->rc_buf_thresh[12] << 0) |
+> +		      (dsc->rc_buf_thresh[13] << 8));
+
+I'm still thrown-off by the fact that rc_buf_thresh is u16, but assumed
+everywhere to only contain 8 valid bits.
+
+Rest of the patch appears okay, but I'll try to test it on actual
+hardware too.
+
+- Marijn
+
+> +
+> +	/*
+> +	 * with min/max_QP -- 5 bits
+> +	 * each register contains 5 min_qp or max_qp for total of 15
+> +	 *
+> +	 * With BPG_OFFSET -- 6 bits
+> +	 * each register contains 5 BPG_offset for total of 15
+> +	 */
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_MIN_QP_0,
+> +		      (rc[0].range_min_qp << 0) |
+> +		      (rc[1].range_min_qp << 5) |
+> +		      (rc[2].range_min_qp << 10) |
+> +		      (rc[3].range_min_qp << 15) |
+> +		      (rc[4].range_min_qp << 20));
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_MAX_QP_0,
+> +		      (rc[0].range_max_qp << 0) |
+> +		      (rc[1].range_max_qp << 5) |
+> +		      (rc[2].range_max_qp << 10) |
+> +		      (rc[3].range_max_qp << 15) |
+> +		      (rc[4].range_max_qp << 20));
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_RANGE_BPG_OFFSETS_0,
+> +		      (rc[0].range_bpg_offset << 0) |
+> +		      (rc[1].range_bpg_offset << 6) |
+> +		      (rc[2].range_bpg_offset << 12) |
+> +		      (rc[3].range_bpg_offset << 18) |
+> +		      (rc[4].range_bpg_offset << 24));
+> +
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_MIN_QP_1,
+> +		      (rc[5].range_min_qp << 0) |
+> +		      (rc[6].range_min_qp << 5) |
+> +		      (rc[7].range_min_qp << 10) |
+> +		      (rc[8].range_min_qp << 15) |
+> +		      (rc[9].range_min_qp << 20));
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_MAX_QP_1,
+> +		      (rc[5].range_max_qp << 0) |
+> +		      (rc[6].range_max_qp << 5) |
+> +		      (rc[7].range_max_qp << 10) |
+> +		      (rc[8].range_max_qp << 15) |
+> +		      (rc[9].range_max_qp << 20));
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_RANGE_BPG_OFFSETS_1,
+> +		      (rc[5].range_bpg_offset << 0) |
+> +		      (rc[6].range_bpg_offset << 6) |
+> +		      (rc[7].range_bpg_offset << 12) |
+> +		      (rc[8].range_bpg_offset << 18) |
+> +		      (rc[9].range_bpg_offset << 24));
+> +
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_MIN_QP_2,
+> +		      (rc[10].range_min_qp << 0) |
+> +		      (rc[11].range_min_qp << 5) |
+> +		      (rc[12].range_min_qp << 10) |
+> +		      (rc[13].range_min_qp << 15) |
+> +		      (rc[14].range_min_qp << 20));
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_MAX_QP_2,
+> +		      (rc[10].range_max_qp << 0) |
+> +		      (rc[11].range_max_qp << 5) |
+> +		      (rc[12].range_max_qp << 10) |
+> +		      (rc[13].range_max_qp << 15) |
+> +		      (rc[14].range_max_qp << 20));
+> +	DPU_REG_WRITE(hw, sblk->enc.base + DSC_RC_RANGE_BPG_OFFSETS_2,
+> +		      (rc[10].range_bpg_offset << 0) |
+> +		      (rc[11].range_bpg_offset << 6) |
+> +		      (rc[12].range_bpg_offset << 12) |
+> +		      (rc[13].range_bpg_offset << 18) |
+> +		      (rc[14].range_bpg_offset << 24));
+> +}
+> +
+> +static inline void dpu_hw_dsc_bind_pingpong_blk_1_2(struct dpu_hw_dsc *hw_dsc,
+> +						    const enum dpu_pingpong pp)
+> +{
+> +	struct dpu_hw_blk_reg_map *hw;
+> +	const struct dpu_dsc_sub_blks *sblk;
+> +	int mux_cfg = 0xf; /* Disabled */
+> +
+> +	hw = &hw_dsc->hw;
+> +
+> +	sblk = hw_dsc->caps->sblk;
+> +
+> +	if (pp)
+> +		mux_cfg = (pp - PINGPONG_0) & 0x7;
+> +
+> +	DPU_REG_WRITE(hw, sblk->ctl.base + DSC_CTL, mux_cfg);
+> +}
+> +
+> +static void _setup_dcs_ops_1_2(struct dpu_hw_dsc_ops *ops,
+> +			       const unsigned long features)
+> +{
+> +	ops->dsc_disable = dpu_hw_dsc_disable_1_2;
+> +	ops->dsc_config = dpu_hw_dsc_config_1_2;
+> +	ops->dsc_config_thresh = dpu_hw_dsc_config_thresh_1_2;
+> +	ops->dsc_bind_pingpong_blk = dpu_hw_dsc_bind_pingpong_blk_1_2;
+> +}
+> +
+> +struct dpu_hw_dsc *dpu_hw_dsc_init_1_2(const struct dpu_dsc_cfg *cfg,
+> +				       void __iomem *addr)
+> +{
+> +	struct dpu_hw_dsc *c;
+> +
+> +	c = kzalloc(sizeof(*c), GFP_KERNEL);
+> +	if (!c)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	c->hw.blk_addr = addr + cfg->base;
+> +	c->hw.log_mask = DPU_DBG_MASK_DSC;
+> +
+> +	c->idx = cfg->id;
+> +	c->caps = cfg;
+> +	_setup_dcs_ops_1_2(&c->ops, c->caps->features);
+> +
+> +	return c;
+> +}
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+> index f0fc704..502dd60 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_rm.c
+> @@ -1,6 +1,7 @@
+>  // SPDX-License-Identifier: GPL-2.0-only
+>  /*
+>   * Copyright (c) 2016-2018, The Linux Foundation. All rights reserved.
+> + * Copyright (c) 2023 Qualcomm Innovation Center, Inc. All rights reserved.
+>   */
+>  
+>  #define pr_fmt(fmt)	"[drm:%s] " fmt, __func__
+> @@ -246,7 +247,11 @@ int dpu_rm_init(struct dpu_rm *rm,
+>  		struct dpu_hw_dsc *hw;
+>  		const struct dpu_dsc_cfg *dsc = &cat->dsc[i];
+>  
+> -		hw = dpu_hw_dsc_init(dsc, mmio);
+> +		if (test_bit(DPU_DSC_HW_REV_1_2, &dsc->features))
+> +			hw = dpu_hw_dsc_init_1_2(dsc, mmio);
+> +		else
+> +			hw = dpu_hw_dsc_init(dsc, mmio);
+> +
+>  		if (IS_ERR_OR_NULL(hw)) {
+>  			rc = PTR_ERR(hw);
+>  			DPU_ERROR("failed dsc object creation: err %d\n", rc);
+> -- 
+> 2.7.4
+> 
