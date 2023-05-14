@@ -2,109 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20C7C701E3F
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 18:37:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DFA13701E43
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 18:43:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233071AbjENQg7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 12:36:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36074 "EHLO
+        id S233548AbjENQn1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 12:43:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjENQg5 (ORCPT
+        with ESMTP id S229585AbjENQnY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 12:36:57 -0400
-Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C80901FFE
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 09:36:55 -0700 (PDT)
-Received: by mail-yb1-xb2f.google.com with SMTP id 3f1490d57ef6-b9dea9d0360so15557797276.1
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 09:36:55 -0700 (PDT)
+        Sun, 14 May 2023 12:43:24 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD9033C02
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 09:43:22 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id a640c23a62f3a-9661a1ff1e9so1476829466b.1
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 09:43:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684082215; x=1686674215;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tBWcP1uPA3OIsbfU1KvktZzrMNra4U71Mvs8rlBQ/PU=;
-        b=osQWDj6WtZHIk7QIInk/8M19Sj6Dp99HNoa66TTLnucIbcmNTREyxbrUtAqVIw1SUH
-         rpPMVd17kdt7HW0CFK2u733H3qM1qZBYGWpOnOmrB3k0/+h06pwBxTgM+KKCiIMh0yp8
-         2Oxf6/TTz6EzdthX8M7bRmoogRtnLB0Fz3BSsHGMGGIpPNl4wOaTckQJ8bJrKmhIN26N
-         oqIRuGzTADUscL2FR9eXnezjjGZEKKJx9xT1YbBfkbskF61GUX/XJeewk0pxwnpM6igS
-         /vDSLxOghMWPYkvjNix/5sNRkb9co4cg9+eTc4nk+oyHO6ocecZyFLwIgXUuNms3bpm2
-         hG1w==
+        d=linaro.org; s=google; t=1684082601; x=1686674601;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4spgMntPB3LCUVqHkhSqU+qO4ZV/kE2zwnApUafRYkg=;
+        b=wnDSe5Eh1EA+khgHLHK6bWcwx6mk/1MFGA0p08W5Mwz1YJyRBppd2MLg73PSsDASFe
+         mj8Icbp6p32t6oMzSkm3S+wKamKURvyA7/RUeq8sxOP96YthFvrZZkblByhqk/GI8Scu
+         p6PVmJJNygjxVStUSFXYzkVTubqi35niAID5iFMvo049WgFwOZVmeGeqs8ZqSjqjOSWu
+         I50MrK2eoA4UgUkeTW0g+53oo8bbv1FdWKCEfzUG4ww1qaj+SJomd5YynDfRQx6JfKs6
+         53QnyRRpgmWV1n0iMeZ7Y69k+T9T+pNuwfq+KVrmRFi/0jXRl6U7Bho+MogixhZ33ic0
+         nn9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684082215; x=1686674215;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tBWcP1uPA3OIsbfU1KvktZzrMNra4U71Mvs8rlBQ/PU=;
-        b=ITglHIh4nI7cBClLG6nqlptRKh5566eM4A7VtqOA5WiJFOjUZsxpLZ/gaM7XDqC4UM
-         hInPMig4+njCn6oJIpQSkHNHoitCSS8hURhNpIRsNWut9/UaW57a25FbtJK71YK97bgg
-         7vAOG73RiNVLJjQ5eQgLAvQeZjBA5C3c36CFBRUIk6Naz3aU3iWsCIn2lzDR309fu9dr
-         coOdQJ6W/TO0HpyiP8ifvVfk7O0382X6ZIPHMLIc6iZcVHnWRFEXrRvj26ie05EJQ/Gh
-         6HLeUkLa1oVldmwfKpEW8XMIlRAhc/Dq1fRuhBKA4uvHhwdpBA3MWxG9Wz4PJxby59Lv
-         u9JQ==
-X-Gm-Message-State: AC+VfDzU4b+OBs2R8w+rH7qLJk2x6+h0kr9hzs+9rQesC5IUokRAqvfx
-        oYJrG//N30qL97jux8Ni0JXrsbIxn8+fNXSSIZw3Iw==
-X-Google-Smtp-Source: ACHHUZ7rqZP7o9VYMvl3Hi6MQfIdV8mVLALhb48EsCVuDSe6zT8UCAR3m4KGYY1WakPqUUCLtwvfp2jYtIB48J2EpVI=
-X-Received: by 2002:a25:dc43:0:b0:b9e:6d83:7bcf with SMTP id
- y64-20020a25dc43000000b00b9e6d837bcfmr27130924ybe.27.1684082214884; Sun, 14
- May 2023 09:36:54 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684082601; x=1686674601;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4spgMntPB3LCUVqHkhSqU+qO4ZV/kE2zwnApUafRYkg=;
+        b=AKcspzVkEGUazH55FYfkn8FyFVoAB/7yFmW/WCo8nISqFtPLIeUVMfiCUdYiehTIAg
+         6IKM6i69+EbKfmDtKjs4WlOVcsbdgNjUKBi4u5ftKxtS0kH32GEbTyNu9+pFygwcFYae
+         VWb/be1g/9I/glW7cUQ0XixR2ne6dUI0ZA6gvY3cXcxWw5E5JBK4STj4jYS6GAXISMoB
+         5nf5Ozo8uWjOyFoKlVy8hGGhiieQbTlZjW0OEVPN42++aOPD2IRwu2dUVJnSh9tZ/9SF
+         A840oCM8zOKru82kWNUw8FhxvceKBmJwcyitFRKdCWbOeZO9LxL8f+9qtB7GJfJUWgoT
+         dVLw==
+X-Gm-Message-State: AC+VfDyPC9GHnvZz0Hj8bUXmmUgmILjosfCc0CSC6D4MPiI/vNt/YVXN
+        ngQPnX0zGrTWRA1kuTyEM0gPAw==
+X-Google-Smtp-Source: ACHHUZ4wKLYVNC10wfemrXflp1NJh60COumq314MHATvysNxMLWA0CUuYlbZZ5GDFvDfcBKLz94RDA==
+X-Received: by 2002:a17:906:58c8:b0:966:168d:8c5 with SMTP id e8-20020a17090658c800b00966168d08c5mr26374950ejs.57.1684082601102;
+        Sun, 14 May 2023 09:43:21 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:a146:6594:d73a:8280? ([2a02:810d:15c0:828:a146:6594:d73a:8280])
+        by smtp.gmail.com with ESMTPSA id fe18-20020a1709072a5200b00968242f8c37sm8341504ejc.50.2023.05.14.09.43.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 May 2023 09:43:20 -0700 (PDT)
+Message-ID: <bd03403e-9246-faad-c23f-89417e31aeda@linaro.org>
+Date:   Sun, 14 May 2023 18:43:18 +0200
 MIME-Version: 1.0
-References: <202305121642367753446@zte.com.cn> <CAJuCfpEC67SBGFSCOD9TykwE_BR2ax5+T4XUKhq_U=qBJttMgw@mail.gmail.com>
- <20230513094508.GC4253@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230513094508.GC4253@hirez.programming.kicks-ass.net>
-From:   Suren Baghdasaryan <surenb@google.com>
-Date:   Sun, 14 May 2023 09:36:43 -0700
-Message-ID: <CAJuCfpGgUdFJfS_NXXDi=mzGJxa7qfNLV_UnV62nepbTzkszoQ@mail.gmail.com>
-Subject: Re: [RESEND PATCH linux-next] sched/psi: avoid resetting the min
- update period when it is unnecessary
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     yang.yang29@zte.com.cn, mingo@redhat.com, axboe@kernel.dk,
-        tj@kernel.org, hannes@cmpxchg.org, linux-kernel@vger.kernel.org,
-        juri.lelli@redhat.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v5 09/10] dt-bindings: power: supply: rt5033-battery: Add
+ power-supplies as a property
+To:     Jakob Hauser <jahau@rocketmail.com>,
+        Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Mark Brown <broonie@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Beomho Seo <beomho.seo@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Raymond Hackley <raymondhackley@protonmail.com>,
+        Pavel Machek <pavel@ucw.cz>, Axel Lin <axel.lin@ingics.com>,
+        ChiYuan Huang <cy_huang@richtek.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Henrik Grimler <henrik@grimler.se>, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+References: <20230514123130.41172-1-jahau@rocketmail.com>
+ <20230514123130.41172-10-jahau@rocketmail.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230514123130.41172-10-jahau@rocketmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 13, 2023 at 2:45=E2=80=AFAM Peter Zijlstra <peterz@infradead.or=
-g> wrote:
->
-> On Fri, May 12, 2023 at 10:56:02AM -0700, Suren Baghdasaryan wrote:
-> > On Fri, May 12, 2023 at 1:42=E2=80=AFAM <yang.yang29@zte.com.cn> wrote:
-> > >
-> > > From: Yang Yang <yang.yang29@zte.com.cn>
-> > >
-> > > Psi_group's poll_min_period is determined by the minimum window size =
-of
-> > > psi_trigger when creating new triggers. While destroying a psi_trigge=
-r, there
-> > > is no need to reset poll_min_period if the psi_trigger being destroye=
-d did not
-> > > have the minimum window size, since in this condition poll_min_period=
- will
-> > > remain the same as before.
-> > >
-> > > Signed-off-by: Yang Yang <yang.yang29@zte.com.cn>
-> > > Acked-by: Suren Baghdasaryan <surenb@google.com>
-> >
-> > Hi Peter,
-> > This is another psi-related patch that slipped through the cracks.
-> > Could you please take it into your tree? The original one [1] had a
-> > different title but the same code.
->
-> It does not cleanly apply to tip/sched/core; could either of you rebase
-> please?
+On 14/05/2023 14:31, Jakob Hauser wrote:
+> Additionally to the already available ref "power-supply.yaml", add
+> "power-supplies" as a property. Otherwise, when referencing rt5033-battery in
+> an example, message "'power-supplies' does not match any of the regexes:
+> 'pinctrl-[0-9]+'" will be returned.
+> 
+> Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
 
-Rebase is posted here:
-https://lore.kernel.org/all/20230514163338.834345-1-surenb@google.com/
-Thanks!
+Instead just change additionalProp->unevaluatedProperties: false.
 
->
-> Thanks!
+Best regards,
+Krzysztof
+
