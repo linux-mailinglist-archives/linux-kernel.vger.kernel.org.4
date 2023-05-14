@@ -2,52 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13E86701CD7
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 12:10:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D4FF0701CDA
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 12:12:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237252AbjENKKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 06:10:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
+        id S237293AbjENKMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 06:12:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjENKKs (ORCPT
+        with ESMTP id S229611AbjENKMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 06:10:48 -0400
-Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7858E171B;
-        Sun, 14 May 2023 03:10:46 -0700 (PDT)
-Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
-         client-signature RSA-PSS (4096 bits) client-digest SHA256)
-        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
-        by bmailout2.hostsharing.net (Postfix) with ESMTPS id E87BB2800C972;
-        Sun, 14 May 2023 12:10:41 +0200 (CEST)
-Received: by h08.hostsharing.net (Postfix, from userid 100393)
-        id DBA204A8C1; Sun, 14 May 2023 12:10:41 +0200 (CEST)
-Date:   Sun, 14 May 2023 12:10:41 +0200
-From:   Lukas Wunner <lukas@wunner.de>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org,
-        Rob Herring <robh@kernel.org>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof Wilczy??ski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 01/17] PCI: Add concurrency safe clear_and_set variants
- for LNKCTL{,2}
-Message-ID: <20230514101041.GA1881@wunner.de>
-References: <20230511131441.45704-2-ilpo.jarvinen@linux.intel.com>
- <ZF0P2hedTFXPv8IK@bhelgaas>
- <20230511202332.GD31598@wunner.de>
- <51577aaa-dc96-d588-2ecf-5bac4b59284@linux.intel.com>
+        Sun, 14 May 2023 06:12:12 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B5D1985;
+        Sun, 14 May 2023 03:12:11 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-504d149839bso2668031a12.1;
+        Sun, 14 May 2023 03:12:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684059130; x=1686651130;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=3yluCXcosZrevjCC2JlavkuAfksHzxF5e6l5bTTacBE=;
+        b=iz+yyxzRQDLWnoppst1CEwUOmQtrnR+WlvFqDNxHCGjAIeYBxb6qPPyCwACmFvCMsC
+         Uyay+Ka36Nybojkh+aNRCqbV3TtPsOyOys25ywg1hMUdPmR2syoQ798Rxs539vYqN85R
+         dPEsGL6CYoLfnmNV3lfNftCjnKh5hBzTby0ZGcS3dlt90oaWJqGVnsvzZUmdOiBAhGcx
+         cH0+uEO+9igr+IDSq85yTogMKAWP1Judjc/QeWoubOiltGwdbvQx+esnEgsuLyComVPu
+         FRS19XpGr1KieeWX8+jraAcOzfBXfZh/EurqECNC853AdiNfIXOyuTn+Wm3pQXS2i+vK
+         HOew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684059130; x=1686651130;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=3yluCXcosZrevjCC2JlavkuAfksHzxF5e6l5bTTacBE=;
+        b=SRgmQkyNXHlsODt7eYY9UMLuxUAEM35kIQE9vUsPXYpRGz5IO/zsXofRwmw84dRFSc
+         p4k3Zf34ZGLK83OJm2Nkx+4lcC0icCfcIsGVTT+6gdjxfqOqfuJywWQ0ri6EMQJ0YFLz
+         e5FG2KbfHsaztuMayNO+DKKA6Rbu0+UCslFUQb+IUc0HZkguafkihbdbohOj+FM8fhSG
+         NLsVWThMn8iyh/tq9ZKDBxjugd/+SpTL5lfeT6RPdSRtAGBfdet5S6wsJhpepKHbsh2e
+         JR8pkZg8V7s+EHSgsZgV+NgrzIr+cWK6mghgWtnMr9Wn3xhfQr0LrOUot7CHIOPecBf/
+         Vlfw==
+X-Gm-Message-State: AC+VfDzWYWxN4ovpsb6V+WbEhc7QX3c8Vw+4FhHSEatdC4nyfIRbQRha
+        1G6NgPADuVEnNSO7HrslWMs=
+X-Google-Smtp-Source: ACHHUZ53jcFiyqFVZaWmZ6BG5QzdtkqPc0CsOZ7DLrne5HaLi/baHvYx5HM2X79dfK8omAPCsAoDUg==
+X-Received: by 2002:a17:906:5185:b0:94e:d5d7:67eb with SMTP id y5-20020a170906518500b0094ed5d767ebmr22162527ejk.5.1684059129775;
+        Sun, 14 May 2023 03:12:09 -0700 (PDT)
+Received: from [192.168.10.10] ([37.252.94.55])
+        by smtp.gmail.com with ESMTPSA id v16-20020a056402185000b0050cc4461fc5sm5617797edy.92.2023.05.14.03.12.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 May 2023 03:12:09 -0700 (PDT)
+Message-ID: <1c4ab661-580c-caf5-f4c5-5a959b410ccb@gmail.com>
+Date:   Sun, 14 May 2023 14:12:07 +0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <51577aaa-dc96-d588-2ecf-5bac4b59284@linux.intel.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 1/3] docs: admin-guide: add valsa driver documentation
+Content-Language: en-US
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     corbet@lwn.net, akpm@linux-foundation.org, perex@perex.cz,
+        tiwai@suse.com, broonie@kernel.org, skhan@linuxfoundation.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        gregkh@linuxfoundation.org, himadrispandya@gmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org
+References: <20230513202037.158777-1-ivan.orlov0322@gmail.com>
+ <877ctb8e0p.wl-tiwai@suse.de>
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+In-Reply-To: <877ctb8e0p.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,58 +80,12 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 11:25:32AM +0300, Ilpo Järvinen wrote:
-> On Thu, 11 May 2023, Lukas Wunner wrote:
-> > On Thu, May 11, 2023 at 10:55:06AM -0500, Bjorn Helgaas wrote:
-> > > I didn't see the prior discussion with Lukas, so maybe this was
-> > > answered there, but is there any reason not to add locking to
-> > > pcie_capability_clear_and_set_word() and friends directly?
-> > > 
-> > > It would be nice to avoid having to decide whether to use the locked
-> > > or unlocked versions.
-> > 
-> > I think we definitely want to also offer lockless accessors which
-> > can be used in hotpaths such as interrupt handlers if the accessed
-> > registers don't need any locking (e.g. because there are no concurrent
-> > accesses).
-> > 
-> > So the relatively lean approach chosen here which limits locking to
-> > Link Control and Link Control 2, but allows future expansion to other
-> > registers as well, seemed reasonable to me.
-> 
-> I went through every single use of these functions in the mainline tree 
-> excluding LNKCTL/LNKCTL2 ones which will be having the lock anyway:
-> 
-> - pcie_capability_clear_and_set_*
-> - pcie_capability_set_*
-> - pcie_capability_clear_*
+On 5/14/23 13:21, Takashi Iwai wrote:
+> We have already subdirectories for the sound stuff
+> (Documentation/sound/*), and this should go to there, I suppose
+> (unless there is somewhere dedicated for each selftest scenario).
 
-We're also performing RMW through pcie_capability_read_word() +
-pcie_capability_write_word() combos, see drivers/pci/hotplug/pciehp_hpc.c
-for examples.
+Alright, I'll move the documentation to the sound subfolder. Thank you!
 
-
-> Do you still feel there's a need to differentiate this per capability 
-> given all the information above?
-
-What I think is unnecessary and counterproductive is to add wholesale
-locking of any access to the PCI Express Capability Structure.
-
-It's fine to have a single spinlock, but I'd suggest only using it
-for registers which are actually accessed concurrently by multiple
-places in the kernel.
-
-
-> spinlock + irq / work drivers/pci/pcie/pme.c: pcie_capability_set_word(dev, PCI_EXP_RTCTL,
-> spinlock + irq / work drivers/pci/pcie/pme.c: pcie_capability_clear_word(dev, PCI_EXP_RTCTL,
-[...]
-> What's more important though, isn't it possible that AER and PME RMW
-> PCI_EXP_RTCTL at the same time so it would need this RMW locking too 
-> despite the pme internal spinlock?
-
-Yes that looks broken, so RTCTL would be another register besides
-LNKCTL and LNKCTL2 that needs protection, good catch.
-
-Thanks,
-
-Lukas
+Kind regards,
+Ivan Orlov.
