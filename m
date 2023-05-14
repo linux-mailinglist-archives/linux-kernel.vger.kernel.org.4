@@ -2,139 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 330B9701DDD
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 16:32:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D50C9701DE0
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 16:32:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232556AbjENOcC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 10:32:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36014 "EHLO
+        id S234322AbjENOcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 10:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230190AbjENOb7 (ORCPT
+        with ESMTP id S229808AbjENOcj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 10:31:59 -0400
-Received: from smtp.smtpout.orange.fr (smtp-29.smtpout.orange.fr [80.12.242.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2376C30CF
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 07:31:56 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.2.178])
-        by smtp.orange.fr with ESMTPA
-        id yClJps2VJKyEByClJpiTwJ; Sun, 14 May 2023 16:31:54 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
-        s=t20230301; t=1684074714;
-        bh=6dTqDvAKG79B/2e2RDgHQKyZvLzcOF4scBFg7nUwea4=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=MI9OJ8Svm31cyT9bP/+QGf/dgGfmyuld8CPIVqfZ3UW+0jNrNwQ9udVp7Z1kq1cQ+
-         veoATUUZ8OEcBQQsbXZcoir1Vvp8o9gMr3MPk1eZhyLjKFE8JGlgsfSGakdUuPlBBi
-         /xwvBBC9O4XI/Si7mmb27L0mfwY6RLcgx4NlwMKlW14I/usuXDA1Q1SyOmsc0NaStG
-         HpiklhZFJwamsYnbr/KkdlgsqGGTDjXSFEN6epIFkC2+cjSfvf5h/nRjWYktpiiOMT
-         WLhCrsTFDGGGCoHIinYCRt1pL+XGWc0fYvEF1kjwmlnV5dX3VtPkBOgqX4d7Ne5cX/
-         AaY8xf3yq8zwQ==
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Sun, 14 May 2023 16:31:54 +0200
-X-ME-IP: 86.243.2.178
-Message-ID: <2e0f37ef-b80c-1a4d-2159-29598ac11156@wanadoo.fr>
-Date:   Sun, 14 May 2023 16:31:49 +0200
+        Sun, 14 May 2023 10:32:39 -0400
+Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85D6F30CF;
+        Sun, 14 May 2023 07:32:36 -0700 (PDT)
+Received: (Authenticated sender: herve.codina@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id E6AC7240004;
+        Sun, 14 May 2023 14:32:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1684074755;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=06LiB1m/4S1iJljwF5Stm/gW1yfN4Sr7PAjYl+bydro=;
+        b=oRX4C2sfa8AW337aNspq7cKxaA35IxPUkIlUxc5b+IPYxoAdgMXsLx6TVB0uiJSGG31X9m
+        1AOErvwKA+JWuz/wGLKlhB3qAZpHWpN/nD1TeUXx2fWZnbPUH5Y83eGh7RGcnmtWFFljqI
+        NioNCWcqchJkeqEdfhmre7AIW23+PCzaTO2LEJrZeTdphz0jpjv0YEFEL6qiE9nynNzvBs
+        OXbs+G2eS7dXLYr5pt4XGn18/EbDqFgMd4KuR+6J/+vDqcM7uUuhVK+uTHbWhKAIWoL0+y
+        XpKjBl5I3CUFqEdqjw7jm7bxWc1Cie7qBG5R2yY3GWuNdJckTcQLqGHTrsoajw==
+Date:   Sun, 14 May 2023 16:32:33 +0200
+From:   Herve Codina <herve.codina@bootlin.com>
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v4 2/3] iio: potentiometer: Add support for the Renesas
+ X9250 potentiometers
+Message-ID: <20230514163233.0c048256@bootlin.com>
+In-Reply-To: <20230513193525.43a4475f@jic23-huawei>
+References: <20230509160852.158101-1-herve.codina@bootlin.com>
+        <20230509160852.158101-3-herve.codina@bootlin.com>
+        <20230513193525.43a4475f@jic23-huawei>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v5 05/10] power: supply: rt5033_charger: Add RT5033
- charger device driver
-Content-Language: fr
-To:     jahau@rocketmail.com
-Cc:     axel.lin@ingics.com, beomho.seo@samsung.com, broonie@kernel.org,
-        cw00.choi@samsung.com, cy_huang@richtek.com,
-        devicetree@vger.kernel.org, henrik@grimler.se,
-        krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        lgirdwood@gmail.com, linus.walleij@linaro.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        pavel@ucw.cz, phone-devel@vger.kernel.org,
-        raymondhackley@protonmail.com, robh+dt@kernel.org, sre@kernel.org,
-        stephan@gerhold.net, ~postmarketos/upstreaming@lists.sr.ht
-References: <20230514123130.41172-1-jahau@rocketmail.com>
- <20230514123130.41172-6-jahau@rocketmail.com>
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20230514123130.41172-6-jahau@rocketmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 14/05/2023 à 14:31, Jakob Hauser a écrit :
-> This patch adds device driver of Richtek RT5033 PMIC. The driver supports
-> switching charger. rt5033 charger provides three charging modes. The charging
-> modes are pre-charge mode, fast charge mode and constant voltage mode. They
-> vary in charge rate, the charge parameters can be controlled by i2c interface.
+Hi Jonathan,
+
+On Sat, 13 May 2023 19:35:25 +0100
+Jonathan Cameron <jic23@kernel.org> wrote:
+
+> On Tue,  9 May 2023 18:08:51 +0200
+> Herve Codina <herve.codina@bootlin.com> wrote:
 > 
-> Cc: Beomho Seo <beomho.seo-Sze3O3UU22JBDgjK7y7TUQ@public.gmane.org>
-> Cc: Chanwoo Choi <cw00.choi-Sze3O3UU22JBDgjK7y7TUQ@public.gmane.org>
-> Tested-by: Raymond Hackley <raymondhackley-g/b1ySJe57IN+BqQ9rBEUg@public.gmane.org>
-> Signed-off-by: Jakob Hauser <jahau-ur4TIblo6goN+BqQ9rBEUg@public.gmane.org>
-> Reviewed-by: Linus Walleij <linus.walleij-QSEj5FYQhm4dnm+yROfE0A@public.gmane.org>
-> ---
->   drivers/power/supply/Kconfig          |   8 +
->   drivers/power/supply/Makefile         |   1 +
->   drivers/power/supply/rt5033_charger.c | 472 ++++++++++++++++++++++++++
->   include/linux/mfd/rt5033.h            |  16 -
->   4 files changed, 481 insertions(+), 16 deletions(-)
->   create mode 100644 drivers/power/supply/rt5033_charger.c
+> > The Renesas X9250 integrates four digitally controlled potentiometers.
+> > On each potentiometer, the X9250T has a 100 kOhms total resistance and
+> > the X9250U has a 50 kOhms total resistance.
+> > 
+> > Signed-off-by: Herve Codina <herve.codina@bootlin.com>  
+> 
+> As I only noticed one trivial thing I made the change whilst applying.
+> diff --git a/drivers/iio/potentiometer/x9250.c b/drivers/iio/potentiometer/x9250.c
+> index 3d4ca18d1f14..7e145d7d14f1 100644
+> --- a/drivers/iio/potentiometer/x9250.c
+> +++ b/drivers/iio/potentiometer/x9250.c
+> @@ -176,10 +176,7 @@ static int x9250_probe(struct spi_device *spi)
+>  
+>         x9250 = iio_priv(indio_dev);
+>         x9250->spi = spi;
+> -       x9250->cfg = device_get_match_data(&spi->dev);
+> -       if (!x9250->cfg)
+> -               x9250->cfg = &x9250_cfg[spi_get_device_id(spi)->driver_data];
+> -
+> +       x9250->cfg = spi_get_device_match_data(spi);
+>         x9250->wp_gpio = devm_gpiod_get_optional(&spi->dev, "wp", GPIOD_OUT_LOW);
+>         if (IS_ERR(x9250->wp_gpio))
+>                 return dev_err_probe(&spi->dev, PTR_ERR(x9250->wp_gpio),
 > 
 
-[...]
+Are you sure about your modification ?
 
-> +static int rt5033_charger_probe(struct platform_device *pdev)
-> +{
-> +	struct rt5033_charger *charger;
-> +	struct power_supply_config psy_cfg = {};
-> +	int ret;
-> +
-> +	charger = devm_kzalloc(&pdev->dev, sizeof(*charger), GFP_KERNEL);
-> +	if (!charger)
-> +		return -ENOMEM;
-> +
-> +	platform_set_drvdata(pdev, charger);
-> +	charger->dev = &pdev->dev;
-> +	charger->regmap = dev_get_regmap(pdev->dev.parent, NULL);
-> +
-> +	psy_cfg.of_node = pdev->dev.of_node;
-> +	psy_cfg.drv_data = charger;
-> +
-> +	charger->psy = devm_power_supply_register(&pdev->dev,
-> +						  &rt5033_charger_desc,
-> +						  &psy_cfg);
-> +	if (IS_ERR(charger->psy))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(charger->psy),
-> +				     "Failed to register power supply\n");
-> +
-> +	charger->chg = rt5033_charger_dt_init(charger);
-> +	if (IS_ERR_OR_NULL(charger->chg))
+I am not sure (maybe I am wrong) that
+  x9250->cfg = spi_get_device_match_data(spi);
+is equivalent to
+  x9250->cfg = &x9250_cfg[spi_get_device_id(spi)->driver_data];
 
-Hi,
+The spi_get_device_id(spi)->driver_data value I used is a simple integer
+(X9250T or X9250U) and not the x9250_cfg item.
+Maybe the x9250_id_table should be modified to replace X9250T by
+&x9250_cfg[X9250T] to have your modification working.
 
-Nit: charger->chg can't be NULL.
+The data defined in the driver are the following:
+--- 8< ---
+static const struct x9250_cfg x9250_cfg[] = {
+	[X9250T] = { .name = "x9250t", .kohms =  100, },
+	[X9250U] = { .name = "x9250u", .kohms =  50, },
+};
 
-> +		return -ENODEV;
+...
 
-Why bother returning specific error code in rt5033_charger_dt_init() if 
-they are eaten here.
+static const struct of_device_id x9250_of_match[] = {
+	{ .compatible = "renesas,x9250t", &x9250_cfg[X9250T]},
+	{ .compatible = "renesas,x9250u", &x9250_cfg[X9250U]},
+	{ }
+};
+MODULE_DEVICE_TABLE(of, x9250_of_match);
 
-return PTR_ERR(charger->chg)?
+static const struct spi_device_id x9250_id_table[] = {
+	{ "x9250t", X9250T },
+	{ "x9250u", X9250U },
+	{ }
+};
+MODULE_DEVICE_TABLE(spi, x9250_id_table);
+
+static struct spi_driver x9250_spi_driver = {
+	.driver  = {
+		.name = "x9250",
+		.of_match_table = x9250_of_match,
+	},
+	.id_table = x9250_id_table,
+	.probe  = x9250_probe,
+};
+--- 8< ---
 
 
-CJ
+Best regards,
+Hervé
 
-> +
-> +	ret = rt5033_charger_reg_init(charger);
-> +	if (ret)
-> +		return ret;
-> +
-> +	return 0;
-> +}
-
-[...]
+-- 
+Hervé Codina, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
