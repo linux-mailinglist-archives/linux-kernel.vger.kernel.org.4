@@ -2,106 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B453701C73
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 11:15:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D266E701C86
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 11:18:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233358AbjENJPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 05:15:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41086 "EHLO
+        id S231493AbjENJS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 05:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjENJPs (ORCPT
+        with ESMTP id S229611AbjENJSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 05:15:48 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16D73268B
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 02:15:45 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id a640c23a62f3a-94f4b911570so1850951466b.0
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 02:15:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684055743; x=1686647743;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ytSK3zVcteIovJ3O/CiV69EyJ8hozhkY9D5B2vV1EBc=;
-        b=wY97dPv/ratrofKZ4zfovMxG7cS+LkfRAbWsUsav+LyEx5LNfrPiH8zE0PnJP+cNLa
-         KvhZf68CTSHf8cHVtL9WMVTmYMgr03wlQyxeZngR4I4FtAiaGircBd4ybqsB0AsIcyCi
-         KwsUAEZkKqpRoBfQOWV1lpZmx+u6py2RkGLFdaP81ybYcBji1dVx1AdkJxuE3pCZtfSY
-         kg7/8IklObQNhYjlrY4kPgM8hYK1b5bJkufFL0mGBwkaukzKjI8aepQeU7qSIHBYtIVG
-         yD7xdgy4UAtYK3M4RTKqrwjegyaAXjP965N3jtz3eohBjMlrV0LrK6Em5pDmAindv/Dp
-         EyAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684055743; x=1686647743;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ytSK3zVcteIovJ3O/CiV69EyJ8hozhkY9D5B2vV1EBc=;
-        b=b8yBo7OjmH8zJYh8MVtFgvd7tRu7r5+DxKulTohZdVSzSXMlEyn7u1u3wwwlLmH9eg
-         hb/3gbpqCAMESUk15qK06kdw8VG6sIeKB0+zRMRG1UHPR8hn8x4gUf8zrQy8r6q9vOXV
-         YNHq03LDlXEfkNzSNXLiAgsxvohrBo545sn+fKqTMijXpeoTvfsmiVHR+jRM6+xGcaby
-         RADg4r92/wOT+F6/tTVIKhK3iCHc+1FOssDcYVomeZDPr0uK9WxFtkTfm4cvPu7P/K58
-         wKVUYfcNvs/Lq25qaZuZI3C07bgRT4smVW1rKrGwvqfb41KCZiy/F3v9spc7pDPVaurm
-         zOUg==
-X-Gm-Message-State: AC+VfDxxZJQE1TMQkv1AoVGapj7vbOCHjuga5OrhmKboaDLQAZKZy8Zc
-        e+CVLGRu9r29/iGSH4IQZqN1+fAnGsHdYdnZGfGyug==
-X-Google-Smtp-Source: ACHHUZ7WPFk/MF2mr9DgAHesxK+A06AsFHKZL8Nzl6XuIAfQU/L7rQhNfuQGBCJTnob8VTZkr2bObQ==
-X-Received: by 2002:a17:907:3602:b0:947:5acb:920c with SMTP id bk2-20020a170907360200b009475acb920cmr25364488ejc.34.1684055743438;
-        Sun, 14 May 2023 02:15:43 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:715f:ddce:f2ba:123b? ([2a02:810d:15c0:828:715f:ddce:f2ba:123b])
-        by smtp.gmail.com with ESMTPSA id r16-20020aa7cfd0000000b0050bd245d39esm5788756edy.6.2023.05.14.02.15.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 May 2023 02:15:42 -0700 (PDT)
-Message-ID: <4c163376-ce89-786d-3c76-4f10ae818e7a@linaro.org>
-Date:   Sun, 14 May 2023 11:15:40 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH] nfx: llcp: fix possible use of uninitialized variable in
- nfc_llcp_send_connect()
-To:     Simon Horman <simon.horman@corigine.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Samuel Ortiz <sameo@linux.intel.com>,
-        Thierry Escande <thierry.escande@collabora.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230513114938.179085-1-krzysztof.kozlowski@linaro.org>
- <06bba9db-25ff-a82b-803a-f9ae0519d293@linaro.org>
- <ZGCb2CNcEDtDtPRR@corigine.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZGCb2CNcEDtDtPRR@corigine.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 14 May 2023 05:18:24 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54458A0;
+        Sun, 14 May 2023 02:18:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 9297D21FF0;
+        Sun, 14 May 2023 09:18:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1684055901; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YbTG3QHxp4xkrUDBC3uMLRB5y/TSfnVZ4mREVa2fxCE=;
+        b=YYzOgtkIKMTo5ApVh3WkkM+zMdRBiHBYGIEQHqaspfVEWEuuJxHfHDRYelInR7fW3ujizU
+        hWBBTFGjbvE6kRCdpsFGU6m2V+IEjJvi56IKO7NyCL5FVwdEsUQpcSNMCLOEBWm/oCGYh8
+        xBYsbKQv9Jtq92G+ahsmj0KKO/XE4RY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1684055901;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YbTG3QHxp4xkrUDBC3uMLRB5y/TSfnVZ4mREVa2fxCE=;
+        b=SUM2jczqVqNtlR26shiac1QIfpQGMBoUdxPlIfI+gXnnxU1iHIBbsLc5qryuKg6PQ51cLi
+        vS/KJrldFTlDp4CA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 41991138F5;
+        Sun, 14 May 2023 09:18:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 8IUQD12nYGTNTwAAMHmgww
+        (envelope-from <tiwai@suse.de>); Sun, 14 May 2023 09:18:21 +0000
+Date:   Sun, 14 May 2023 11:18:20 +0200
+Message-ID: <878rdr8e5f.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Ivan Orlov <ivan.orlov0322@gmail.com>
+Cc:     corbet@lwn.net, akpm@linux-foundation.org, perex@perex.cz,
+        tiwai@suse.com, broonie@kernel.org, skhan@linuxfoundation.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        gregkh@linuxfoundation.org, himadrispandya@gmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [PATCH 2/3] ALSA: Implement the new virtual driver
+In-Reply-To: <20230513202037.158777-2-ivan.orlov0322@gmail.com>
+References: <20230513202037.158777-1-ivan.orlov0322@gmail.com>
+        <20230513202037.158777-2-ivan.orlov0322@gmail.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/05/2023 10:29, Simon Horman wrote:
-> On Sat, May 13, 2023 at 01:51:12PM +0200, Krzysztof Kozlowski wrote:
->> On 13/05/2023 13:49, Krzysztof Kozlowski wrote:
->>> If sock->service_name is NULL, the local variable
->>> service_name_tlv_length will not be assigned by nfc_llcp_build_tlv(),
->>> later leading to using value frmo the stack.  Smatch warning:
->>>
->>>   net/nfc/llcp_commands.c:442 nfc_llcp_send_connect() error: uninitialized symbol 'service_name_tlv_length'.
->>
->> Eh, typo in subject prefix. V2 in shortly...
+On Sat, 13 May 2023 22:20:36 +0200,
+Ivan Orlov wrote:
 > 
-> Also, s/frmo/from/
+> We have a lot of different virtual media drivers, which can be used for
+> testing of the userspace applications and media subsystem middle layer.
+> However, all of them are aimed at testing the video functionality and
+> simulating the video devices. For audio devices we have only snd-dummy
+> module, which is good in simulating the correct behavior of an ALSA device.
+> I decided to write a tool, which would help to test the userspace ALSA
+> programs (and the PCM middle layer as well) under unusual circumstances
+> to figure out how they would behave. So I came up with this Virtual ALSA
+> Driver.
 > 
-> And please consider moving local variables towards reverse xmas tree -
-> longest line to shortest - order for networking code.
+> This new Virtual ALSA Driver has several features which can be useful
+> during the userspace ALSA applications testing/fuzzing, or testing/fuzzing
+> of the PCM middle layer. Not all of them can be implemented using the
+> existing virtual drivers (like dummy or loopback). Here is what can this
+> driver do:
+> 
+> - Simulate both capture and playback processes
+> - Generate random or pattern-based capture data
+> - Inject delays into the playback and capturing processes
+> - Inject errors during the PCM callbacks
+> 
+> Also, this driver can check the playback stream for containing the
+> predefined pattern, which is used in the corresponding selftest to check
+> the PCM middle layer data transferring functionality. Additionally, this
+> driver redefines the default RESET ioctl, and the selftest covers this PCM
+> API functionality as well.
+> 
+> Pattern-based capture stream data generation works in the following way:
+> user can set the pattern by writing to the 'fill_pattern' debugfs file.
+> After that, the capture stream in case of reading will be filled with this
+> pattern (for example, if the pattern is 'abc', the capture stream will
+> contain 'abcabcabc...'). The pattern itself can be up to 4096 bytes long.
+> 
+> After all, I think this driver would be a good start, and I believe in the
+> future we will see more virtual sound drivers.
+> 
+> Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
 
-They were not ordered in the first place, so you prefer me to re-shuffle
-all of them (a bit independent change)?
+The idea is interesting, and it's a definitely good thing to have.
 
-Best regards,
-Krzysztof
+I wonder, though, whether it could be better provided as an extention
+to the existing snd-dummy driver.  The advantage of extending
+snd-dummy driver would be that it already supports different formats,
+etc.  OTOH, if we create an individual driver, the pro side is the
+simpleness of the code.
 
+I'm inclined to go with a separate driver, but I'm open about this.
+Maybe Jaroslav and Mark have some opinions?
+
+About this patch set: the driver name should be a bit more specific,
+as this isn't a generic virtual driver that is used for general
+purpose but it's only for testing.  And it's only for testing PCM.
+So, a name like snd-test-pcm would be more appropriate, IMO.
+
+And, we want the coverage of different formats, channels, rates and
+accesses (interleaved vs non-interleaved).  How can we extend somehow
+more for that?
+
+
+thanks,
+
+Takashi
