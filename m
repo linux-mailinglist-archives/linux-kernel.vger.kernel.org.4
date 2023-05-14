@@ -2,96 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEA38701CE7
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 12:42:06 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 85CDA701CEC
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 12:59:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237497AbjENKl4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 06:41:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
+        id S231640AbjENK7m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 06:59:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235354AbjENKlx (ORCPT
+        with ESMTP id S229548AbjENK7l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 06:41:53 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB3901FC1
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 03:41:48 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-50bc2feb320so17783774a12.3
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 03:41:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684060907; x=1686652907;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gwvE8GNOC0Y0ULH3wWZ0RD6YUfvTg/EgGGBaYirIjjU=;
-        b=X8vX7sb/2ICyD45fHKhcZEvafp0UJUpUyLdrS4617/T11tJ03hIm25+AmlJV8b4SkX
-         0ezvvPbDG/H7FyF8GzXE9VgleFOnawnlxOvMfnYP4H0Hm/4Kmqd9pPdfH1rMas7LAoRb
-         zm2us3n5EzsL0P0Jhe+W7FtgMjBIadSNPohNb6RW4NoprSIsGAQxSLAJKLnKstM+bzX/
-         XB2lWH3zmviWy+Q4+4LVIuIu5ouJWaKk4O0L8115o3Z2p0Opw/SkRmdEtL9eEnTn/yse
-         bzwngs61W3zBYHfrJud9wcXLwM5gTcix/QzmnTo+DG04LxHla+cSljwtBybl0e6jw9D8
-         vR9A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684060907; x=1686652907;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gwvE8GNOC0Y0ULH3wWZ0RD6YUfvTg/EgGGBaYirIjjU=;
-        b=byVFdxq0vRSXxOWjVifMq9lsiCK0bzvBQ47cIj+rYwM7y4mgA/hUjfeKeOGDJ/cz+r
-         SozSdrWyAue4tNEJXFZzgwPJIposfk8BQNHyqPsKIbkkaVoqRNPKFLkk9DTBnG6535Uy
-         RH1vl3y0+LQcEVKSTuGdWIf40hRUvBDprWZItLD+nWv07FueRGhSHag7yyAcdEesvtYG
-         6HjrlP9y8qbDQjU+4mkdCBY4w7sUfWt6+2oyCNs9toBAsIr3qhpKmkqIJf7GgCk5zu2q
-         OLVNzLsZJWnhjHDBmn6WehZ/QRyUGZK1tf70WCrFCGSL4h7MSmTbEWAabiiyRJGHCYFJ
-         osQg==
-X-Gm-Message-State: AC+VfDwn+MTkDfX4UmjXX16DiG7Vql7SlK//+0dymFAL+OVFZEtVRvNT
-        fSNraTiG0JHW1/oVOr3SbkK4eg==
-X-Google-Smtp-Source: ACHHUZ71Wpwgtz5ebkZ+S7SwGCJVQIZ49/lwyvoEEIpUuaCZjlowkuyZuXXdaQeWV8w2n4DxmA/8uw==
-X-Received: by 2002:aa7:d945:0:b0:50b:e1d1:91cb with SMTP id l5-20020aa7d945000000b0050be1d191cbmr23936014eds.8.1684060907378;
-        Sun, 14 May 2023 03:41:47 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:715f:ddce:f2ba:123b? ([2a02:810d:15c0:828:715f:ddce:f2ba:123b])
-        by smtp.gmail.com with ESMTPSA id b13-20020a056402138d00b004af6c5f1805sm5854441edv.52.2023.05.14.03.41.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 May 2023 03:41:46 -0700 (PDT)
-Message-ID: <a032d9e6-6cb5-1856-9eda-28028bf05633@linaro.org>
-Date:   Sun, 14 May 2023 12:41:45 +0200
+        Sun, 14 May 2023 06:59:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF8C8198D;
+        Sun, 14 May 2023 03:59:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D2AC60FEB;
+        Sun, 14 May 2023 10:59:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2DD5C433D2;
+        Sun, 14 May 2023 10:59:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684061978;
+        bh=fWwZ3vYa6O/Gb+7Owes2wmBd6NQXiz+nV9ckH3UmStA=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=sArBdor0LgFtCo6uSy4nn3aGdO7S4R9LqZ5Eb5/JefMe6iT6w69kJsNs2JZr4XSDR
+         d3xqQ7SPIdOquKQ1W3MpwW1lZKnm50olquy8dvy0+qdkQVokt6G3wKlKPaS9AR0gew
+         zbSfNyYSDSw+MsH4weVkTeIP8L0FOOs8uXjuxroTBcpzy60gh7USQUcbmBdHFj1kU+
+         qENFtYfp9uvcVhYhUnOGPm4Zi9CEgEYTyb22opnxd/pb4+yWxe3h7i4/2UtaHu7Khz
+         Eyw8FDpmh0di3VC2b7qZRIH7ReCbjZ8qgNVnMh0cXo2w1+50u13sr2tgwAs1hRbmnv
+         UUygWa3SWkJ2w==
+Message-ID: <55d5ec29-f30f-4596-a3b9-7e5b8adf0582@kernel.org>
+Date:   Sun, 14 May 2023 12:59:32 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.11.0
-Subject: Re: [Patch v8 0/8] Tegra234 Memory interconnect support
+Subject: Re: mainline build failure due to cf21f328fcaf ("media: nxp: Add
+ i.MX8 ISI driver")
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        "Sudip Mukherjee (Codethink)" <sudipm.mukherjee@gmail.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        linux-media@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>
+References: <ZElaVmxDsOkZj2DK@debian>
+ <51cff63a-3a04-acf5-8264-bb19b0bee8a3@leemhuis.info>
+ <CAHk-=wgzU8_dGn0Yg+DyX7ammTkDUCyEJ4C=NvnHRhxKWC7Wpw@mail.gmail.com>
+ <20230510090527.25e26127@sal.lan>
 Content-Language: en-US
-To:     Sumit Gupta <sumitg@nvidia.com>, treding@nvidia.com,
-        dmitry.osipenko@collabora.com, viresh.kumar@linaro.org,
-        rafael@kernel.org, jonathanh@nvidia.com, robh+dt@kernel.org,
-        lpieralisi@kernel.org, helgaas@kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-pci@vger.kernel.org, mmaddireddy@nvidia.com, kw@linux.com,
-        bhelgaas@google.com, vidyas@nvidia.com, sanjayc@nvidia.com,
-        ksitaraman@nvidia.com, ishah@nvidia.com, bbasu@nvidia.com
-References: <20230511173211.9127-1-sumitg@nvidia.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230511173211.9127-1-sumitg@nvidia.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20230510090527.25e26127@sal.lan>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/05/2023 19:32, Sumit Gupta wrote:
-> Hi All,
+On 10/05/2023 10:05, Mauro Carvalho Chehab wrote:
+> And another CI job testing bisect breakages as I receive pull requests,
+> applying patch per patch and using both allyesconfig and allmodconfig,
+> also on x86_64 arch with W=1:
 > 
-> Have incorporated the suggestions in v7. Only changed 'patch 1' in v7
-> to fix possible race when setting 'mc->bpmp' as pointed by Krzysztof.
-> Requesting to merge the patch series.
+> 	https://builder.linuxtv.org/job/patchwork/
 > 
+> The rule is to not merge stuff on media tree if any of those jobs
+> fail. I also fast-forward merging patches whose subject states that
+> the build has failed.
+> 
+> In order to help with that, on normal situation, I usually take one week
+> to merge stuff from media_stage into media_tree, doing rebases at
+> media_stage if needed to avoid git bisect build breakages at media_tree
+> (which is from where I send my update PRs to you).
+> 
+> Unfortunately, currently we don't have resources to do multiple randconfig
 
-Can I apply it since you request it? I asked you long time ago to
-clearly state dependencies or merging limitations. It's v8 and cover
-letter still does not state it. Neither the patches do.
+Hi Mauro,
+
+Is you media staging tree included in LKP (kernel test robot)? You would
+get huge build coverage after every push to your staging repo.
+
+Except of maintainer trees, it is also useful to add there development
+trees. That way for 'free' I can get early warnings about all my patches.
 
 Best regards,
 Krzysztof
