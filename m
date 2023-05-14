@@ -2,63 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FD25701F02
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 20:39:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 156DC701F0C
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 20:43:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234400AbjENSjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 14:39:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37826 "EHLO
+        id S233562AbjENSnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 14:43:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjENSjg (ORCPT
+        with ESMTP id S229539AbjENSna (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 14:39:36 -0400
+        Sun, 14 May 2023 14:43:30 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FE53AA0;
-        Sun, 14 May 2023 11:39:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30921BD3;
+        Sun, 14 May 2023 11:43:28 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 1CBA860DF5;
-        Sun, 14 May 2023 18:39:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 423EFC433EF;
-        Sun, 14 May 2023 18:39:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D73760C90;
+        Sun, 14 May 2023 18:43:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92277C433EF;
+        Sun, 14 May 2023 18:43:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684089574;
-        bh=0qXKkwNgm6r8LyU3fLXnR/zhU9ezOkHvW6g+/vQsORQ=;
+        s=k20201202; t=1684089807;
+        bh=Ml1D73OgB6a09DYGjURU+FXwDDBxN+djnvR7hyV+9F0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZN0yKtHCAVyLMwWTyWR2il5idn3KVri9Dkfgi3FgoqH4LUvPSKfFS3njmzMdJv7bi
-         8GxNaqYWiDext2jk8UEk8IxirT0OfC+aDvAGODzjkSgEZHzoTFVCm3rKw95dG7PLKU
-         07g3QH7ah/bGxGAcrZk0a60PHmHueegY2myFlwP11ze1n6YqqNNQG5t8ozSYZUqfCx
-         LjGtP+5UnDd6Wymf1/Ui7Jc3XcFdIwwPPUr+A/kin8rPf31XRLWkiX+brZbu2TkUio
-         0oWlJoxCH+86JhRe1knEU4z0y0ulqdZoSTpc/J9BVNvbvD6zSE8DTMTfC4p5iCqbNE
-         ZJhcn07dyo2mg==
-Date:   Sun, 14 May 2023 19:39:28 +0100
-From:   Conor Dooley <conor@kernel.org>
-To:     Jisheng Zhang <jszhang@kernel.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-serial@vger.kernel.org,
-        Palmer Dabbelt <palmer@rivosinc.com>
-Subject: Re: [PATCH v3 06/10] dt-bindings: riscv: Add bouffalolab bl808 board
- compatibles
-Message-ID: <20230514-kinetic-backlog-b9573ae06507@spud>
-References: <20230514165651.2199-1-jszhang@kernel.org>
- <20230514165651.2199-7-jszhang@kernel.org>
+        b=A2U/h4UC1lJ+/+TsINJXlcGGXwM2KWKtn7CtMQSjOIVu+yQ/6t6hjWIaG/FAweri7
+         H2RRMav2LKvE+bBx7gW8jBfiJkzwlJ90LQaBX/3CgXwqVL0NHYOB9FJ+q2ylSqt4c9
+         +gTlsaj0svT4NGEIKuwVXXrX1hlgjl7MFr7debe3zFqLm5JmQ4oPbHZc+W5y62XAlu
+         6xX8TwUME2Dcokfpp9+5m5ozGSPIN8Gb5l0+8nXWEtgykcTCwMqwKcaCNE9CsUXZx4
+         nCMgUqNWxyUjChh6D4N9/5G/5ocXTte/QVnvsmqYBgZa1PmHoNpFUHl0XyQAMajrrY
+         sdCAr9023sF2w==
+Date:   Sun, 14 May 2023 11:43:25 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>, linux-mm@kvack.org
+Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
+Message-ID: <20230514184325.GB9528@sol.localdomain>
+References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
+ <20230509165657.1735798-8-kent.overstreet@linux.dev>
+ <ZFqxEWqD19eHe353@infradead.org>
+ <ZFq3SdSBJ_LWsOgd@murray>
+ <ZFq7JhrhyrMTNfd/@moria.home.lan>
+ <20230510064849.GC1851@quark.localdomain>
+ <ZF6HHRDeUWLNtuL7@moria.home.lan>
+ <20230513015752.GC3033@quark.localdomain>
+ <ZGB1eevk/u2ssIBT@moria.home.lan>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="jd7+Ni3EpcRTOoVW"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230514165651.2199-7-jszhang@kernel.org>
+In-Reply-To: <ZGB1eevk/u2ssIBT@moria.home.lan>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
@@ -69,46 +67,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, May 14, 2023 at 01:45:29AM -0400, Kent Overstreet wrote:
+> On Fri, May 12, 2023 at 06:57:52PM -0700, Eric Biggers wrote:
+> > First, I wanted to mention that decoding of variable-length fields has been
+> > extensively studied for decompression algorithms, e.g. for Huffman decoding.
+> > And it turns out that it can be done branchlessly.  The basic idea is that you
+> > have a branchless refill step that looks like the following:
+> > 
+> > #define REFILL_BITS_BRANCHLESS()                    \
+> >         bitbuf |= get_unaligned_u64(p) << bitsleft; \
+> >         p += 7 - ((bitsleft >> 3) & 0x7);           \
+> >         bitsleft |= 56;
+> > 
+> > That branchlessly ensures that 'bitbuf' contains '56 <= bitsleft <= 63' bits.
+> > Then, the needed number of bits can be removed and returned:
+> > 
+> > #define READ_BITS(n)                          \
+> >         REFILL_BITS_BRANCHLESS();             \
+> >         tmp = bitbuf & (((u64)1 << (n)) - 1); \
+> >         bitbuf >>= (n);                       \
+> >         bitsleft -= (n);                      \
+> >         tmp
+> > 
+> > If you're interested, I can give you some references about the above method.
+> 
+> I might be interested in those references, new bit tricks and integer
+> encodings are always fun :)
 
---jd7+Ni3EpcRTOoVW
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+There are some good blog posts by Fabian Giese:
 
-On Mon, May 15, 2023 at 12:56:47AM +0800, Jisheng Zhang wrote:
+* https://fgiesen.wordpress.com/2018/02/19/reading-bits-in-far-too-many-ways-part-1/
+* https://fgiesen.wordpress.com/2018/02/20/reading-bits-in-far-too-many-ways-part-2/
+* https://fgiesen.wordpress.com/2018/09/27/reading-bits-in-far-too-many-ways-part-3/
 
-> +title: Bouffalo Lab Technology SoC-based boards
+And the examples I gave above are basically what I use in libdeflate:
+https://github.com/ebiggers/libdeflate/blob/master/lib/deflate_decompress.c
 
-I know you're only propagating an existing pattern, but the "SoC-based"
-looks rather odd!
+> > But, I really just wanted to mention it for completeness, since I think you'd
+> > actually want to go in a slightly different direction, since (a) you have all
+> > the field widths available from the beginning, as opposed to being interleaved
+> > into the bitstream itself (as is the case in Huffman decoding for example), so
+> > you're not limited to serialized decoding of each field, (b) your fields are up
+> > to 96 bits, and (c) you've selected a bitstream convention that seems to make it
+> > such that your stream *must* be read in aligned units of u64, so I don't think
+> > something like REFILL_BITS_BRANCHLESS() could work for you anyway.
+> > 
+> > What I would suggest instead is preprocessing the list of 6 field lengths to
+> > create some information that can be used to extract all 6 fields branchlessly
+> > with no dependencies between different fields.  (And you clearly *can* add a
+> > preprocessing step, as you already have one -- the dynamic code generator.)
+> > 
+> > So, something like the following:
+> > 
+> >     const struct field_info *info = &format->fields[0];
+> > 
+> >     field0 = (in->u64s[info->word_idx] >> info->shift1) & info->mask;
+> >     field0 |= in->u64s[info->word_idx - 1] >> info->shift2;
+> > 
+> > ... but with the code for all 6 fields interleaved.
+> > 
+> > On modern CPUs, I think that would be faster than your current C code.
+> > 
+> > You could do better by creating variants that are specialized for specific
+> > common sets of parameters.  During "preprocessing", you would select a variant
+> > and set an enum accordingly.  During decoding, you would switch on that enum and
+> > call the appropriate variant.  (This could also be done with a function pointer,
+> > of course, but indirect calls are slow these days...)
+> 
+> testing random btree updates:
+> 
+> dynamically generated unpack:
+> rand_insert: 20.0 MiB with 1 threads in    33 sec,  1609 nsec per iter, 607 KiB per sec
+> 
+> old C unpack:
+> rand_insert: 20.0 MiB with 1 threads in    35 sec,  1672 nsec per iter, 584 KiB per sec
+> 
+> the Eric Biggers special:
+> rand_insert: 20.0 MiB with 1 threads in    35 sec,  1676 nsec per iter, 583 KiB per sec
+> 
+> Tested two versions of your approach, one without a shift value, one
+> where we use a shift value to try to avoid unaligned access - second was
+> perhaps 1% faster
+> 
+> so it's not looking good. This benchmark doesn't even hit on
+> unpack_key() quite as much as I thought, so the difference is
+> significant.
+> 
+> diff --git a/fs/bcachefs/bkey.c b/fs/bcachefs/bkey.c
 
-> +properties:
-> +  $nodename:
-> +    const: '/'
-> +  compatible:
-> +    oneOf:
-> +      - description: Carrier boards for the Sipeed M1s SoM
-> +        items:
-> +          - enum:
-> +              - sipeed,m1s-dock
+I don't know what this patch applies to, so I can't properly review it.
 
-BTW, do you know of any other m1s compatible docks?
-I couldn't find any other ones via Google, so maybe it is just worth
-swapping the enum here for another const.
-Either is fine by me though.
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+I suggest checking the assembly and making sure it is what is expected.
 
-Thanks,
-Conor.
+In general, for this type of thing it's also helpful to put together a userspace
+micro-benchmark program so that it's very fast to evaluate different options.
+Building and booting a kernel and doing some I/O benchmark on a bcachefs sounds
+much more time consuming and less precise.
 
---jd7+Ni3EpcRTOoVW
-Content-Type: application/pgp-signature; name="signature.asc"
+> -struct bkey __bch2_bkey_unpack_key(const struct bkey_format_processed *format_p,
+> +struct bkey __bch2_bkey_unpack_key(const struct bkey_format_processed *format,
+>  				   const struct bkey_packed *in)
+>  {
+> -	const struct bkey_format *format = &format_p->f;
+> -	struct unpack_state state = unpack_state_init(format, in);
+>  	struct bkey out;
+>  
+> -	EBUG_ON(format->nr_fields != BKEY_NR_FIELDS);
+> -	EBUG_ON(in->u64s < format->key_u64s);
+> +	EBUG_ON(format->f.nr_fields != BKEY_NR_FIELDS);
+> +	EBUG_ON(in->u64s < format->f.key_u64s);
+>  	EBUG_ON(in->format != KEY_FORMAT_LOCAL_BTREE);
+> -	EBUG_ON(in->u64s - format->key_u64s + BKEY_U64s > U8_MAX);
+> +	EBUG_ON(in->u64s - format->f.key_u64s + BKEY_U64s > U8_MAX);
+>  
+> -	out.u64s	= BKEY_U64s + in->u64s - format->key_u64s;
+> +	out.u64s	= BKEY_U64s + in->u64s - format->f.key_u64s;
+>  	out.format	= KEY_FORMAT_CURRENT;
+>  	out.needs_whiteout = in->needs_whiteout;
+>  	out.type	= in->type;
+>  	out.pad[0]	= 0;
+>  
+> +	if (likely(format->aligned)) {
+> +#define x(id, field)	out.field = get_aligned_field(format, in, id);
+> +		bkey_fields()
+> +#undef x
+> +	} else {
+> +		struct unpack_state state = unpack_state_init(&format->f, in);
+> +
+>  #define x(id, field)	out.field = get_inc_field(&state, id);
+> -	bkey_fields()
+> +		bkey_fields()
+>  #undef x
+> +	}
 
------BEGIN PGP SIGNATURE-----
+It looks like you didn't change the !aligned case.  How often is the 'aligned'
+case taken?
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZGEq4AAKCRB4tDGHoIJi
-0gALAP9Ok3alh7NIJMaSq8fKkKGEXm45QwG/nxQVUVvv5NFqIQD+NT/UaDdpRQ9b
-AtE7/sESaeGevB6XmhBXdSnfDb6n3Ak=
-=aXIX
------END PGP SIGNATURE-----
+I think it would also help if the generated assembly had the handling of the
+fields interleaved.  To achieve that, it might be necessary to interleave the C
+code.
 
---jd7+Ni3EpcRTOoVW--
+- Eric
