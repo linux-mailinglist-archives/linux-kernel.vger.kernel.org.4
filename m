@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5F4701C62
+	by mail.lfdr.de (Postfix) with ESMTP id BFCF2701C64
 	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 11:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233771AbjENJEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 05:04:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
+        id S233993AbjENJEt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 05:04:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbjENJEn (ORCPT
+        with ESMTP id S230051AbjENJEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 14 May 2023 05:04:43 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703191BDD;
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED2E1BE2;
         Sun, 14 May 2023 02:04:42 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-51b33c72686so7847153a12.1;
+Received: by mail-pg1-x52f.google.com with SMTP id 41be03b00d2f7-5307502146aso2631330a12.1;
         Sun, 14 May 2023 02:04:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20221208; t=1684055082; x=1686647082;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3VswhOVIM6N9lUQ5IbUMqB4CktfYicQQNL7zwxJA2o0=;
-        b=gyDuam61cQhcYHV2PBw+v0qV4xXs/l6wEC2KCFNxFE/FegwP3dNUz5F1uZITuqHFNs
-         syiVQB93aJW0sk3dLTzvIhAtFHwDUqDKv0DxfjPY2LAfiUZREKQetU0o4FtYmcZQHYIs
-         SLz9bvWw+KOJZ9F58insz5q1Q/Skkb5ZBSSqQ4KzVy25ZR4TPjjpJmmxfaW5AkzGCLYU
-         kyC0WR8qHm43CsElKIx+99P5bQhd5JC/WeUgHvZB+8yiE6kpC5wDiHU1qUxnNw8aFVm9
-         vFQy9JA/WrL+zGvFSBJEGZp5u/gEeh+YLvR48s3C3QiNrlZmM8/gWAa2JdPSR7QH4t7v
-         dtTQ==
+        bh=qIanyhJS88Q7RfVNqljO8EtKKIvGna+18p2AMpDpX+U=;
+        b=CgLdpdVKhiQqsKr2AyMNHWm3uR3kk6DMFszCy7EQcABgt28gkiZ1AafbMGbW86JTx+
+         LnizcfPOhbNBU8/9RIfbvviAVLKL1ApA166UNnezr4YyshFLSs+QU908wo51TG06sFUn
+         6vwOI3CzVmcFf9Rtmw2XNfDisol0wwtMnYLSalk8sHyygzfj7RXU2E0S5A3rVNLe39cR
+         P9B3/gSUsU9KGsf+To00d+xpUeEBLJy8bzbwQhFkSQSDjJkM8eLN3QknKrQRTgN3aOg1
+         LLg2u3AUAQJQG1iOcSi9qA9U4jCzF82jq5Jb8ACLvSevx4NBSVdYaSwjhoKG0QHfQPWI
+         C1Kg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20221208; t=1684055082; x=1686647082;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3VswhOVIM6N9lUQ5IbUMqB4CktfYicQQNL7zwxJA2o0=;
-        b=DMNxha7+Ibsrg6NjF1HMPCXFHi56kLfuK565DfX5rrBxS17zN5SDj3YNlhPOQagtGn
-         uhyCk/jjg+/vMmPMrNwO3rFdPVmAnWgSRbEFDEkwjwgoX1U9lhcNi8JMLdQrfA2GVT03
-         B37jkgVgt+UOcRqdBKLY3L5rfT/JSMUM/pZ0zLTcy28U+Y4D2NiRCVXc0NieNv7Ib1Qc
-         iCnATzzF9U9Wyl+2p3aTrfwp9ZLMLUQUPpOJ3bSAa1btj1qT3R2vcQeEdMsO89/AjrrB
-         8cMIRbDh80cSKTRVCXUYifIbu/YzD5td6Vz3MZVYnSo+yyTNf632h77QGLnLPPcv7e2K
-         7Xaw==
-X-Gm-Message-State: AC+VfDxO2APl7cCDReQLCYjPXOxcur2GVKl08fZme69VS5PwmbUHLDZi
-        MKpqhXa1n5teSNfd3+GKtXA=
-X-Google-Smtp-Source: ACHHUZ4pzmq3hWDHq3IlCijrOGJ+N5qc/X55K3MabPDZwyQJR3SxOAkkPZxkiTNzN5IhuNLdSkgMaA==
-X-Received: by 2002:a17:903:483:b0:1aa:dba2:d155 with SMTP id jj3-20020a170903048300b001aadba2d155mr29039425plb.48.1684055081786;
+        bh=qIanyhJS88Q7RfVNqljO8EtKKIvGna+18p2AMpDpX+U=;
+        b=IVTh4R3jtUWvddI4EJDi5QtZnIc09RSZuZkZ139sOmRjryZ0s1Nz+zmcrgwc3xCm7C
+         znZlA1/G2hfx+jgdxtuj9ypOanVE9gGZx7CLr8kWfFCyYTLQp9jadO3ybWQ66i1Nt5c7
+         vBpbCP0Qua1iOqbZiZv/wMlUKif90DGS2fkrbcEmnYHIc8mlg9R07ItqQbRtzKMcg56c
+         k1k/qPu3rB6y14oTraN8dZxJCwbU86JGJIuLNUMBQ6IgR9z27ivmYdMAFeG/mqK5CzDG
+         DOtH38nFlN9qLNp20Ak81q+KV+yKsWOWuybWexPREexfUrRcl/XJZCGlfNTptQTcJlsk
+         U2PQ==
+X-Gm-Message-State: AC+VfDyv8fYYhXybBkvYIbiHI9ICSKouDz39rTcipVt7oGGOEFKSvZHP
+        2IZCGjQ4IHaSpX9kjDxIWjc=
+X-Google-Smtp-Source: ACHHUZ4V5wgMt2YCt4Gb1ub46b4Vak78d55bkX0cYjQkPO8T8Qiv0fPcs8d2tc7YVgqJPIXodP5WAQ==
+X-Received: by 2002:a17:903:22cb:b0:1ac:6e1f:d19c with SMTP id y11-20020a17090322cb00b001ac6e1fd19cmr30176048plg.41.1684055081976;
         Sun, 14 May 2023 02:04:41 -0700 (PDT)
 Received: from debian.me (subs02-180-214-232-68.three.co.id. [180.214.232.68])
-        by smtp.gmail.com with ESMTPSA id l16-20020a170902f69000b001a6d08eb054sm11043270plg.78.2023.05.14.02.04.40
+        by smtp.gmail.com with ESMTPSA id jj3-20020a170903048300b001a9666376a9sm11029564plb.226.2023.05.14.02.04.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Sun, 14 May 2023 02:04:41 -0700 (PDT)
 Received: by debian.me (Postfix, from userid 1000)
-        id 2DC2B1061DC; Sun, 14 May 2023 16:04:36 +0700 (WIB)
+        id 6CA011061DE; Sun, 14 May 2023 16:04:36 +0700 (WIB)
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     Linux Documentation <linux-doc@vger.kernel.org>,
         Linux RISC-V <linux-riscv@lists.infradead.org>,
@@ -63,16 +63,15 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         Bagas Sanjaya <bagasdotme@gmail.com>,
         Vincent Chen <vincent.chen@sifive.com>,
         Andy Chiu <andy.chiu@sifive.com>,
-        Greentime Hu <greentime.hu@sifive.com>,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH 2/5] Documentation: riscv: vector: Wrap control_argument struct definition in code block
-Date:   Sun, 14 May 2023 16:04:29 +0700
-Message-Id: <20230514090432.78217-3-bagasdotme@gmail.com>
+        Greentime Hu <greentime.hu@sifive.com>
+Subject: [PATCH 3/5] Documentation: riscv: vector: Use bullet lists for prctl list
+Date:   Sun, 14 May 2023 16:04:30 +0700
+Message-Id: <20230514090432.78217-4-bagasdotme@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230514090432.78217-1-bagasdotme@gmail.com>
 References: <20230514090432.78217-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1947; i=bagasdotme@gmail.com; h=from:subject; bh=S42igDCO53ZkCWTrexHErxJ8V8JjUUjsuLNH7WukgIk=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCkJS+RzdR/arTB/dyeC+/VO9ajKJbfWaS/eYre5au63m 9852bandZSyMIhxMciKKbJMSuRrOr3LSORC+1pHmDmsTCBDGLg4BWAi14sY/kd1vNPLvh0ZLD/5 +z3mc4mLzqh4tworRzq5Tp3pp3vu1n5Ghv7++/tYF7VvFmVYUlTw9UbKt18FpXt8xcw3v5p2QmO 6JycA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1431; i=bagasdotme@gmail.com; h=from:subject; bh=cZzclkM/zLfkcp8yZSx1IGcKkEsU6t+56HAynF/Kr40=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCkJS+R/RJzdLfV0aWb3xHVc1QXO9/n0mb18FBjuz246V HJDISSxo5SFQYyLQVZMkWVSIl/T6V1GIhfa1zrCzGFlAhnCwMUpABNZl8HIsCvPbkujH3+x3hJt oyKnX5v2sJq/UmgWD6lSrFV/6MfPysiw6g130FSu6xuc+hdWP3zTcr5Vwe9Jyox87rIcya02b6S 4AQ==
 X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -85,51 +84,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kernel test robot reports htmldocs warning:
-
-Documentation/riscv/vector.rst:45: WARNING: Definition list ends without a blank line; unexpected unindent.
-
-The warning is due to definition of control_argument struct, written
-unformatted. Wrap it in code block with C syntax highlighting to fix the
-warning.
+The documentation lists two userspace prctl() calls. Use bullet
+lists for the listing.
 
 Fixes: 412c68cfeeb178 ("riscv: Add documentation for Vector")
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202305141409.bEBvlSY4-lkp@intel.com/
 Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- Documentation/riscv/vector.rst | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ Documentation/riscv/vector.rst | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
 diff --git a/Documentation/riscv/vector.rst b/Documentation/riscv/vector.rst
-index acc97508ccb249..178b3f3f452462 100644
+index 178b3f3f452462..c7bd701c7963b6 100644
 --- a/Documentation/riscv/vector.rst
 +++ b/Documentation/riscv/vector.rst
-@@ -36,14 +36,16 @@ prctl(PR_RISCV_V_SET_CONTROL, unsigned long arg)
-     be interpreted as the following structure, and accessed by 3 masks
-     respectively.
+@@ -13,7 +13,7 @@ order to support the use of the RISC-V Vector Extension.
+ Two new prctl() calls are added to allow programs to manage the enablement
+ status for the use of Vector in userspace:
  
--    struct control_argument {
--        // Located by PR_RISCV_V_VSTATE_CTRL_CUR_MASK
--        int current_enablement_status : 2;
--        // Located by PR_RISCV_V_VSTATE_CTRL_NEXT_MASK
--        int next_enablement_status : 2;
--        // Located by PR_RISCV_V_VSTATE_CTRL_INHERIT
--        bool inherit_mode : 1;
--    }
-+    .. code-block:: c
-+
-+        struct control_argument {
-+            // Located by PR_RISCV_V_VSTATE_CTRL_CUR_MASK
-+            int current_enablement_status : 2;
-+            // Located by PR_RISCV_V_VSTATE_CTRL_NEXT_MASK
-+            int next_enablement_status : 2;
-+            // Located by PR_RISCV_V_VSTATE_CTRL_INHERIT
-+            bool inherit_mode : 1;
-+        }
+-prctl(PR_RISCV_V_SET_CONTROL, unsigned long arg)
++* prctl(PR_RISCV_V_SET_CONTROL, unsigned long arg)
  
-     The 3 masks, PR_RISCV_V_VSTATE_CTRL_CUR_MASK,
-     PR_RISCV_V_VSTATE_CTRL_NEXT_MASK, and PR_RISCV_V_VSTATE_CTRL_INHERIT
+     Sets the Vector enablement status of the calling thread, where the control
+     argument consists of two 2-bit enablement statuses and a bit for inheritance
+@@ -89,7 +89,7 @@ prctl(PR_RISCV_V_SET_CONTROL, unsigned long arg)
+         * Every successful call overwrites a previous setting for the calling
+           thread.
+ 
+-prctl(PR_RISCV_V_SET_CONTROL)
++* prctl(PR_RISCV_V_SET_CONTROL)
+ 
+     Gets the same Vector enablement status for the calling thread. Setting for
+     next execve() call and the inheritance bit are all OR-ed together.
 -- 
 An old man doll... just what I always wanted! - Clara
 
