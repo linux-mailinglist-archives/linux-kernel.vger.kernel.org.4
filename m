@@ -2,136 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 051DA701AE4
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 01:58:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C4EA1701AF4
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 02:29:40 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233033AbjEMX6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 13 May 2023 19:58:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50766 "EHLO
+        id S231664AbjENA3h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 13 May 2023 20:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjEMX6G (ORCPT
+        with ESMTP id S229834AbjENA3e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 13 May 2023 19:58:06 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80A722130;
-        Sat, 13 May 2023 16:58:05 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id d2e1a72fcca58-6434e65d808so12077445b3a.3;
-        Sat, 13 May 2023 16:58:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684022285; x=1686614285;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S6IPSqQ6NaOSfnUS0GpkC+isDFooikpsFH7l63MYdTo=;
-        b=c6TQoKpeUT/xnus50Ag62eU/c39VunpDNtF/MKoJddF0jD6f3+TYJoIPhfkljoRSUP
-         FsIStrF5AoIypO5VQ0CsJsWEeuRgT/XiSbZJ8vD6oh6tqmSkIZu2eadDaMRs2ytcGuFl
-         /OS2p8h06OVmyhcjP5Jls80loAbw2tPq+mgwDSdO4dI0/Mw5wd8wDn4KHn4Wc/c1o52c
-         T6aRqd3qZog1s0mA47WYKDtPvKsSQ4tBU57NLH6pvGVl8W3noU04rDMAXm+CB2SOopB6
-         VWE+4DRG/fR8pQUmehdiYKkTSqNem72yBbSDgvTcNSbVWGgBXUj0RmRplrnZ8jzAEOSy
-         7d7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684022285; x=1686614285;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S6IPSqQ6NaOSfnUS0GpkC+isDFooikpsFH7l63MYdTo=;
-        b=XyvZFM+A8WCMHylLei52x4Fib/QE36ynI/Xj7Snga2JXmMOpTE1h503mMwmlP1cDbf
-         8K+Wmnf4+uwJgFcouN8pZJ9XcHiJjwJgNTecl4CVpZ/XvKASOA6aAq9Fc7K/KPdK2p4a
-         NrwoSNOm0DbOdLe63fhyW7C9tndYE+mm3xuycEKGdXXHwQkEbl0RLsrMdSJe4D2rbsZx
-         NiBNh+qG4xwpbE5KBak74E8rXdzU4VA7QJXny7UXydmJIFJLA0sOO0jRwU0BFZSjsYq2
-         tcoRxwCDOdc2w7/Xjj17lMjqtw7RLQ2Gdl+UGyO4sf8LHLrxFQ3emWmP+ExXdWIbHIBe
-         wE7w==
-X-Gm-Message-State: AC+VfDwEBv9NJ9wXC66H+sgZJ3qhkfP5/4198tn8kw+0mhMRc36eHjQ1
-        FrWwnHHvufAOycqLXfYMGoA=
-X-Google-Smtp-Source: ACHHUZ40CHAdVD8zkf1r7hESgn2oYYdABf/NG73liqLqpxQ9GuLpKSyt9jFE2/Sst3fK7fVsfse4Ww==
-X-Received: by 2002:a05:6a00:1a92:b0:64a:a1ba:510e with SMTP id e18-20020a056a001a9200b0064aa1ba510emr9413823pfv.27.1684022284858;
-        Sat, 13 May 2023 16:58:04 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id x9-20020aa784c9000000b006475f831838sm8137449pfn.30.2023.05.13.16.58.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 May 2023 16:58:04 -0700 (PDT)
-Message-ID: <23195f15-7024-6fde-84f2-4cdd45c9abfc@gmail.com>
-Date:   Sun, 14 May 2023 08:58:00 +0900
+        Sat, 13 May 2023 20:29:34 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B9111BF9
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 17:29:33 -0700 (PDT)
+Received: from letrec.thunk.org ([172.102.11.162])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 34E0TOFT001902
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 13 May 2023 20:29:26 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1684024167; bh=qkec5ADxFO71hl1xH4tF5OmYZz7x8P8jo+KIik1Vq3s=;
+        h=Date:From:To:Cc:Subject;
+        b=Ja79xs+Vw/ltOlz0FkAjV+CvXlOwLW2OAtmIuRXgfNVN0/Yoila+YwhZfzvCk3q+C
+         lxkr7Cv2xtu9B1yPSIEVL7S42cRTGTEOSey0h6iiO40T9Zurt+c1kFDy0hewY1csEw
+         EUHm2D75+I6CylSs2Vqek9I+KP7Y0PPb3KrvLBKpO/fCMiYyS24pF9u8xIutfOv8sN
+         TmKVS2f1w3clMWUI9bXl8xlfdpaeZ7Zzy97IKyEnvGtO1+U3WITV9yg9p2oL6OPXSz
+         8Dvw/+WFieiLXj2KyM7oNxwWCxbl6BGgkRqQzi8S9tLZ4PVqMdO6/LMijp6ZU6mZ+u
+         hzfKk7Em1cm4g==
+Received: by letrec.thunk.org (Postfix, from userid 15806)
+        id C36928C0479; Sat, 13 May 2023 20:28:41 -0400 (EDT)
+Date:   Sat, 13 May 2023 20:28:41 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org
+Subject: [GIT PULL] ext4 fixes for v6.4-rc2
+Message-ID: <ZGArOUgijBkG1y3G@mit.edu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH locking/atomic 18/19] locking/atomic: Refrain from
- generating duplicate fallback kernel-doc
-Content-Language: en-US
-To:     paulmck@kernel.org, Mark Rutland <mark.rutland@arm.com>
-Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
-        linux-doc@vger.kernel.org, kernel-team@meta.com,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Akira Yokosawa <akiyks@gmail.com>
-References: <19135936-06d7-4705-8bc8-bb31c2a478ca@paulmck-laptop>
- <20230510181717.2200934-18-paulmck@kernel.org>
- <ZF0haDfyL3At3Ijw@FVFF77S0Q05N.cambridge.arm.com>
- <2a8b310c-3145-462b-a4c4-a130939da862@paulmck-laptop>
- <ZF48uBYKczItubrU@FVFF77S0Q05N>
- <b5498819-c2d4-414d-ba01-5373e749dc52@paulmck-laptop>
- <ZF5xXuPsrZEgAEEE@FVFF77S0Q05N>
- <e767dcc6-ea63-4ed8-9a15-9e5bb133fafc@paulmck-laptop>
- <b3956719-d478-4dc6-95fd-ec0744acc662@paulmck-laptop>
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <b3956719-d478-4dc6-95fd-ec0744acc662@paulmck-laptop>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The following changes since commit ac9a78681b921877518763ba0e89202254349d1b:
 
-On Fri, 12 May 2023 19:11:15 -0700, Paul E. McKenney wrote:
-[...]
+  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
 
-> 
-> And here is a rough first cut:
-> 
-> git://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git tags/fallback-rework-kernel-doc.2023.05.12a
-> 
-> Or via HTML:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git/log/?h=fallback-rework-kernel-doc.2023.05.12a
+are available in the Git repository at:
 
-Running "./scripts/kernel-doc -none include/linux/atomic/atomic-arch-fallback.h"
-on the tag emits a lot of warnings.
+  https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus_stable
 
-Looks like there are kernel-doc comments who don't have a corresponding
-function signature next to them.
+for you to fetch changes up to 2a534e1d0d1591e951f9ece2fb460b2ff92edabd:
 
-    /**
-     * function_name() - Brief description of function.
-     * @arg1: Describe the first argument.
-     * @arg2: Describe the second argument.
-     *        One can provide multiple line descriptions
-     *        for arguments.
-     *
-     * A longer description, with more discussion of the function function_name()
-     * that might be useful to those using or modifying it. Begins with an
-     * empty comment line, and may include additional embedded empty
-     * comment lines.
-     */
-    int function_name(int arg1, int arg2)  <---
+  ext4: bail out of ext4_xattr_ibody_get() fails for any reason (2023-05-13 18:05:05 -0400)
 
-Note that the kernel-doc script ignores #ifdef -- #else.
+----------------------------------------------------------------
+Some ext4 bug fixes (mostly to address Syzbot reports) for v6.4-rc2.
 
-BTW, I couldn't checkout the tag so downloaded the tar ball via
-HTML.
+----------------------------------------------------------------
+Baokun Li (1):
+      ext4: check iomap type only if ext4_iomap_begin() does not fail
 
-        Thanks, Akira
+Jan Kara (3):
+      ext4: fix lockdep warning when enabling MMP
+      ext4: avoid deadlock in fs reclaim with page writeback
+      ext4: fix data races when using cached status extents
 
-> 
-> Thoughts?
-> 
-> In the meantime, enjoy the weekend!
-> 
-> 							Thanx, Paul
+Theodore Ts'o (10):
+      ext4: allow ext4_get_group_info() to fail
+      ext4: remove a BUG_ON in ext4_mb_release_group_pa()
+      ext4: fix invalid free tracking in ext4_xattr_move_to_block()
+      ext4: don't clear SB_RDONLY when remounting r/w until quota is re-enabled
+      ext4: improve error handling from ext4_dirhash()
+      ext4: improve error recovery code paths in __ext4_remount()
+      ext4: fix deadlock when converting an inline directory in nojournal mode
+      ext4: add indication of ro vs r/w mounts in the mount message
+      ext4: add bounds checking in get_max_inline_xattr_value_size()
+      ext4: bail out of ext4_xattr_ibody_get() fails for any reason
+
+Tudor Ambarus (1):
+      ext4: avoid a potential slab-out-of-bounds in ext4_group_desc_csum
+
+Ye Bin (1):
+      ext4: fix WARNING in mb_find_extent
+
+ fs/ext4/balloc.c         | 43 ++++++++++++++++++++++++++++++++++++++++-
+ fs/ext4/ext4.h           | 39 ++++++++++++++++++++++++-------------
+ fs/ext4/extents_status.c | 30 +++++++++++++----------------
+ fs/ext4/hash.c           |  6 +++++-
+ fs/ext4/ialloc.c         | 12 ++++++++----
+ fs/ext4/inline.c         | 17 ++++++++++++++---
+ fs/ext4/inode.c          | 20 ++++++++++---------
+ fs/ext4/mballoc.c        | 70 +++++++++++++++++++++++++++++++++++++++++++++++++++++++------------
+ fs/ext4/migrate.c        | 11 ++++++-----
+ fs/ext4/mmp.c            | 30 ++++++++++++++++++++---------
+ fs/ext4/namei.c          | 53 ++++++++++++++++++++++++++++++++++----------------
+ fs/ext4/super.c          | 37 +++++++++++++++++++++++------------
+ fs/ext4/xattr.c          |  5 +++--
+ 13 files changed, 269 insertions(+), 104 deletions(-)
