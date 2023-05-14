@@ -2,125 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23B0B70209D
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 00:55:12 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F0F70209B
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 00:55:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235314AbjENWzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 18:55:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234864AbjENWzE (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S234865AbjENWzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sun, 14 May 2023 18:55:04 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608B51BB;
-        Sun, 14 May 2023 15:55:02 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.239])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40808 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229539AbjENWzC (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 14 May 2023 18:55:02 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32ADF1B8;
+        Sun, 14 May 2023 15:55:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 21233660574D;
-        Sun, 14 May 2023 23:55:01 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684104901;
-        bh=DU/1Wu1hqUE0C6lLNhKSAzwm16Syk8IrmHigAsAJxMM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KSvlecfGk+9pSL4CPRCynPATN4gIX2BW5Cgx0XnjeoirIqrINuDPIq0OYxmCtV1Ub
-         +V62BbePkhFwoARybkfAiSZqPXv08gJWEXKRPs70EzeVVe+FL3L2QnTXyfI+kncCqV
-         /zCmabP7PlNDkjC/MUNbMYvlEe195cKmPmC/vPJzxmnNcSUiTFc9nYrNjvHNIDq0eQ
-         s3xyf3xL06UBSNig95vMGCwKTTQsxVIOg3ZZEtb41YV8LhnvSvJg1e2KW261KbyBc3
-         qBwhTuu1TfU2zT/bu94fbsPFQNFscD1Zb7GQsQyzUqYu9t3jvFqAE0JsWHVyk7Cpkp
-         uXfcMNhCk17Jg==
-Received: by mercury (Postfix, from userid 1000)
-        id 646BD1061381; Mon, 15 May 2023 00:54:58 +0200 (CEST)
-Date:   Mon, 15 May 2023 00:54:58 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     ChiaEn Wu <chiaen_wu@richtek.com>
-Cc:     dan.carpenter@linaro.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, peterwu.pub@gmail.com,
-        cy_huang@richtek.com
-Subject: Re: [PATCH] power: supply: rt9467: Fix passing zero to
- 'dev_err_probe'
-Message-ID: <20230514225458.nngl45joh4crunal@mercury.elektranox.org>
-References: <33c598f3655db56eed13a5b46a1468379f69349c.1683863629.git.chiaen_wu@richtek.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BBA2C61280;
+        Sun, 14 May 2023 22:55:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB027C433D2;
+        Sun, 14 May 2023 22:54:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684104900;
+        bh=gC1Ol887rJVXf1gaHxcAempzA9OBc5QCvIG9jl0aZr8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=LW/xgv+q9k9VZjoCnKlX17DQw2mxSnfhmMLcIm2f00K8agzJie6BRJ3zx6APCdPJ0
+         QX5eAF7trc0JdW7Jk/Ar6PdZLSYFEZFmDp0UEHW5VdrKh8PU6x3NehmDRg/+lfWDaO
+         sTT0IkNRMGUMerB6SAEsRIszs7WE9XAN7/0DAzA5qnPwt8pK7X6xo+MBBFRmXVbueA
+         Gqu4ZmksIdMH+rsfI0PPAOxVNhBM9AW/ZtRXW08of5hFlsjfmhZuGeHpHmUuIyCsbR
+         YLh67kkor3ZoEfFlzzh490zrxB2IB2P1jMYgoKQK0Tl717bvla/pNHcSsK7w0zeR0p
+         D8bo3NHaaz/pA==
+Message-ID: <afd5257e-4550-ef9a-19e6-14941a721d55@kernel.org>
+Date:   Mon, 15 May 2023 07:54:59 +0900
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="thiqvn36r3wkqzzv"
-Content-Disposition: inline
-In-Reply-To: <33c598f3655db56eed13a5b46a1468379f69349c.1683863629.git.chiaen_wu@richtek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] ata: libata-core: Simplies if condition
+Content-Language: en-US
+To:     Yahu Gao <yahu.gao@outlook.com>
+Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <OS3P286MB0632FC8C1783241084E41BB79E619@OS3P286MB0632.JPNP286.PROD.OUTLOOK.COM>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <OS3P286MB0632FC8C1783241084E41BB79E619@OS3P286MB0632.JPNP286.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 4/22/23 21:14, Yahu Gao wrote:
+> Changes V1->V2:
+>   Update the patch title.
 
---thiqvn36r3wkqzzv
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-
-Hi,
-
-On Fri, May 12, 2023 at 01:44:23PM +0800, ChiaEn Wu wrote:
-> Fix passing zero to 'dev_err_probe()' in 'rt9467_request_interrupt()'
->=20
-> Fixes: 6f7f70e3a8dd ("power: supply: rt9467: Add Richtek RT9467 charger d=
-river")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://lore.kernel.org/r/202305111228.bHLWU6bq-lkp@intel.com/
-> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
-> ---
-
-Thanks, queued to my fixes branch.
-
--- Sebastian
-
->  drivers/power/supply/rt9467-charger.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/power/supply/rt9467-charger.c b/drivers/power/supply=
-/rt9467-charger.c
-> index 73f744a..ea33693 100644
-> --- a/drivers/power/supply/rt9467-charger.c
-> +++ b/drivers/power/supply/rt9467-charger.c
-> @@ -1023,7 +1023,7 @@ static int rt9467_request_interrupt(struct rt9467_c=
-hg_data *data)
->  	for (i =3D 0; i < num_chg_irqs; i++) {
->  		virq =3D regmap_irq_get_virq(data->irq_chip_data, chg_irqs[i].hwirq);
->  		if (virq <=3D 0)
-> -			return dev_err_probe(dev, virq, "Failed to get (%s) irq\n",
-> +			return dev_err_probe(dev, -EINVAL, "Failed to get (%s) irq\n",
->  					     chg_irqs[i].name);
-> =20
->  		ret =3D devm_request_threaded_irq(dev, virq, NULL, chg_irqs[i].handler,
-> --=20
-> 2.7.4
->=20
-
---thiqvn36r3wkqzzv
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRhZsIACgkQ2O7X88g7
-+poYAQ/+MFGVHXC+3x6i2hhmnmJI7GuTUczxKXd2FeERNJ2Key71XmCOFt9UgxD0
-sq+BhfHzV29tnF/NDVBPdmM8pBfmdphtx7UxTu11aqsc1KaiYP6A1wP0hLHeB++V
-4GP0gyipzK89IqYo06qpTpMaKzf1uM1t6wSIqVy7V+Ojx9EIQjN7bVGgMGaZW0w0
-2ZnI7LG38mSbujxurQWj4aYMyOoibgfCoTNu4+rVbH+y/9aR0PT2Q/iMuYSN9Dnr
-XgfSUzo72KYIEEwTSjThI+dLQ/4Azlec6XXtZSnjF6T+bLQN4yx52nbsS7+z6rlK
-ul+4Vu7/OpbMvyCYeLKERbUV3NCKOaURi29kLE5xQpo/Tbi71PXS1A12SQtMFu31
-/3rF+v4DbJRZZhf7pz1sGeE8mzqD0Pc1ORlNOf/K8ybruWKaPfJnCpFV3jhv6t6a
-bPq/cX+dQ5K0iI7RG5pS2C+SV0pBUUX6NQIN0rqqShmbcp+1KAfd1mhtO0S3mpnT
-zvctcuZASIr6rApckX2U9d9f5eMRXOesq7+7/j2nV/9F3w55iRMK7sX/67t5Qg1u
-w9t4GGUg3dq4kmwjQeN+RUeL+0Ku3xjLN+27tVpJOnSPy70ph3zdrOm/9Ycq8swa
-VgHT7sRNzd7McsJLyeTx5mUm4X5e36ydjEIXEcLPT8DxdKwUCwk=
-=2Hby
------END PGP SIGNATURE-----
-
---thiqvn36r3wkqzzv--
+This is not the correct way of specifying a patch changelog. This should be
+added in the email, between the "---" and the "diff --git a/drivers/ata/..."
+lines after the commit message.
