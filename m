@@ -2,183 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B7FA701E65
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 19:03:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id B3618701EAE
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 19:24:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234322AbjENRDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 13:03:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
+        id S235520AbjENRYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 13:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232122AbjENRDO (ORCPT
+        with ESMTP id S230421AbjENRYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 13:03:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3355F3C07;
-        Sun, 14 May 2023 10:03:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F89361880;
-        Sun, 14 May 2023 17:03:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B4C6C4339C;
-        Sun, 14 May 2023 17:03:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684083792;
-        bh=dLiXJ8klvtan12DVAdAPECTlmGSDJesL1J33oOFSHoE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IloqxDI4jEVQJoTfBhtoqO27fRnpm0lstlfAx+kklSNKb3mqAquLfeTeANJVlI58v
-         hlY6y3FHxvhKPk666U/n+se6+hpb4jLYC7UU7Hxo0fKWRVf6syO5plRPDEEFyqWIZu
-         +4vP1K9MCbQ+dsDf14DnGvUqqG76gEx/TY2+Ppq9dlXBWAsxLMn4UgMEud4iAkSMlP
-         +J84SGOVK5ouHq9lVr7UqAgXULGKcgTG/AtqacHbXRhlN6wd/zbL03c8gitBpMwOoe
-         kUPGIEr4k2DZBpeJ/pefKd/Uzo4tpkh91ftBG9lYFbYii6UOqw1A3UQ1PTIIQlMQJN
-         /970wI/w1eX0g==
-Date:   Sun, 14 May 2023 18:19:12 +0100
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Herve Codina <herve.codina@bootlin.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        Sun, 14 May 2023 13:24:04 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A18231985
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 10:24:03 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id 4fb4d7f45d1cf-510634bba37so4423a12.1
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 10:24:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684085042; x=1686677042;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bhdn8N3vjt5NpRXjd0CXpQ3x1s9gcdBgiJ6kPjy6i+k=;
+        b=ZmAk5vL9yNEtkeODSVlHMUipUbsEG3xzA46o8BdUVqDQlN3FKOxOxR2LMx9Dh682s7
+         5VrOnk2VAhIsNq/cTrRLmgQ4gEhXB4FKbHK92rCi8pnrFZ/sDfDXGSAaiwq/UVlLvhkV
+         wJ6tkyjX8LYHmS8t7bMawnus6kXhMOxQrj8XxCrguUOlECf7OlVomgE+bLbjVW9kDHMT
+         wjMZic4f86Z276EgD0cBUhg6CXHnUtWH5+FvaoSvhpJX+fa5kxizw1WBXnBBLWDnALlP
+         qi08IHgzKHYdsOY+72oUVlyKpFssCiLqNMoHzf6APU4s4VC+haT6QoZiQzuHjt0gPg0V
+         J0tw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684085042; x=1686677042;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Bhdn8N3vjt5NpRXjd0CXpQ3x1s9gcdBgiJ6kPjy6i+k=;
+        b=KaYX3uiXCT9DntwGliu/jkXzSrdqyZHp8wo3B8K3sLahJCOB1ekCBvhoNHmLZuqYsy
+         5vv7g8vr6sOCK6MdjYTCql7j6HWnUiO4Wx/zEZnxNeux7IiN9fGbOeJny4SuN6NpPBDQ
+         MBL+qbaAXuueoi2mat6LI3tmnwoM2hNN52y4f+T41+btH9xAuVqlVLaeL7XVzkXF4gGi
+         /suR64PkVk1fwV6oqXwQD36T/vlpN0PTNhLETlM3ZMWPhjeGtJBE6SMS3BxIOyOYmkgc
+         zoFEXmrZqtzXwYQuEpirCj/6o1VC0BAoeqaeCqO5ZoOuax+mPaaMZo/q6ISscRZqj1m5
+         ajqA==
+X-Gm-Message-State: AC+VfDw9q9LyhvGKgduPMrzmKTttbGH7uN0q9jO+xT/dZ6v0WxbR9+se
+        dJXERRRB4VhNl6KGIo3TYcA=
+X-Google-Smtp-Source: ACHHUZ7V/E1SXJmh0CcocZMAWa/YKLC03nZJyLWERYojD9FXz+CaJzep3o7rHLaWpWdYTH0XHSlZmA==
+X-Received: by 2002:a05:6402:510e:b0:506:c24e:667d with SMTP id m14-20020a056402510e00b00506c24e667dmr29993006edd.4.1684085041883;
+        Sun, 14 May 2023 10:24:01 -0700 (PDT)
+Received: from ivan-HLYL-WXX9.. ([37.252.94.55])
+        by smtp.gmail.com with ESMTPSA id ig13-20020a1709072e0d00b0096623c00727sm8405986ejc.136.2023.05.14.10.24.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 May 2023 10:24:01 -0700 (PDT)
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+To:     gregkh@linuxfoundation.org, rafael@kernel.org
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>,
         linux-kernel@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v4 2/3] iio: potentiometer: Add support for the Renesas
- X9250 potentiometers
-Message-ID: <20230514181912.314ef781@jic23-huawei>
-In-Reply-To: <20230514163233.0c048256@bootlin.com>
-References: <20230509160852.158101-1-herve.codina@bootlin.com>
-        <20230509160852.158101-3-herve.codina@bootlin.com>
-        <20230513193525.43a4475f@jic23-huawei>
-        <20230514163233.0c048256@bootlin.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: [PATCH] debugfs: Correct the 'debugfs_create_str' docs
+Date:   Sun, 14 May 2023 21:23:53 +0400
+Message-Id: <20230514172353.52878-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 14 May 2023 16:32:33 +0200
-Herve Codina <herve.codina@bootlin.com> wrote:
+The documentation of the 'debugfs_create_str' says that the function
+returns a pointer to a dentry created, or an ERR_PTR in case of error.
+Actually, this is not true: this function doesn't return anything at all.
+Correct the documentation correspondingly.
 
-> Hi Jonathan,
->=20
-> On Sat, 13 May 2023 19:35:25 +0100
-> Jonathan Cameron <jic23@kernel.org> wrote:
->=20
-> > On Tue,  9 May 2023 18:08:51 +0200
-> > Herve Codina <herve.codina@bootlin.com> wrote:
-> >  =20
-> > > The Renesas X9250 integrates four digitally controlled potentiometers.
-> > > On each potentiometer, the X9250T has a 100 kOhms total resistance and
-> > > the X9250U has a 50 kOhms total resistance.
-> > >=20
-> > > Signed-off-by: Herve Codina <herve.codina@bootlin.com>   =20
-> >=20
-> > As I only noticed one trivial thing I made the change whilst applying.
-> > diff --git a/drivers/iio/potentiometer/x9250.c b/drivers/iio/potentiome=
-ter/x9250.c
-> > index 3d4ca18d1f14..7e145d7d14f1 100644
-> > --- a/drivers/iio/potentiometer/x9250.c
-> > +++ b/drivers/iio/potentiometer/x9250.c
-> > @@ -176,10 +176,7 @@ static int x9250_probe(struct spi_device *spi)
-> > =20
-> >         x9250 =3D iio_priv(indio_dev);
-> >         x9250->spi =3D spi;
-> > -       x9250->cfg =3D device_get_match_data(&spi->dev);
-> > -       if (!x9250->cfg)
-> > -               x9250->cfg =3D &x9250_cfg[spi_get_device_id(spi)->drive=
-r_data];
-> > -
-> > +       x9250->cfg =3D spi_get_device_match_data(spi);
-> >         x9250->wp_gpio =3D devm_gpiod_get_optional(&spi->dev, "wp", GPI=
-OD_OUT_LOW);
-> >         if (IS_ERR(x9250->wp_gpio))
-> >                 return dev_err_probe(&spi->dev, PTR_ERR(x9250->wp_gpio),
-> >  =20
->=20
-> Are you sure about your modification ?
->=20
-> I am not sure (maybe I am wrong) that
->   x9250->cfg =3D spi_get_device_match_data(spi);
-> is equivalent to
->   x9250->cfg =3D &x9250_cfg[spi_get_device_id(spi)->driver_data];
->=20
-> The spi_get_device_id(spi)->driver_data value I used is a simple integer
-> (X9250T or X9250U) and not the x9250_cfg item.
-> Maybe the x9250_id_table should be modified to replace X9250T by
-> &x9250_cfg[X9250T] to have your modification working.
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+---
+ fs/debugfs/file.c | 9 ---------
+ 1 file changed, 9 deletions(-)
 
-Excellent point.  I'm was  clearly half asleep. The mod should have included
-switching them over to be pointers.
-
->=20
-> The data defined in the driver are the following:
-> --- 8< ---
-> static const struct x9250_cfg x9250_cfg[] =3D {
-> 	[X9250T] =3D { .name =3D "x9250t", .kohms =3D  100, },
-> 	[X9250U] =3D { .name =3D "x9250u", .kohms =3D  50, },
-> };
->=20
-> ...
->=20
-> static const struct of_device_id x9250_of_match[] =3D {
-> 	{ .compatible =3D "renesas,x9250t", &x9250_cfg[X9250T]},
-> 	{ .compatible =3D "renesas,x9250u", &x9250_cfg[X9250U]},
-> 	{ }
-> };
-> MODULE_DEVICE_TABLE(of, x9250_of_match);
->=20
-> static const struct spi_device_id x9250_id_table[] =3D {
-> 	{ "x9250t", X9250T },
-> 	{ "x9250u", X9250U },
-So these should be (kernel_ulong_t)&x9250_cfg[X9250T] etc for the data.
-I've tweaked it so that is now the case. Oops and thanks for sanity checkin=
-g.
-Sometimes we see what we expect to see rather than what is there.
-
-Tweak on top of original tweak is:
-diff --git a/drivers/iio/potentiometer/x9250.c b/drivers/iio/potentiometer/=
-x9250.c
-index 7e145d7d14f1..0cc7f72529be 100644
---- a/drivers/iio/potentiometer/x9250.c
-+++ b/drivers/iio/potentiometer/x9250.c
-@@ -198,8 +198,8 @@ static const struct of_device_id x9250_of_match[] =3D {
- MODULE_DEVICE_TABLE(of, x9250_of_match);
-=20
- static const struct spi_device_id x9250_id_table[] =3D {
--       { "x9250t", X9250T },
--       { "x9250u", X9250U },
-+       { "x9250t", (kernel_ulong_t)&x9250_cfg[X9250T] },
-+       { "x9250u", (kernel_ulong_t)&x9250_cfg[X9250U] },
-        { }
- };
-
-
-Jonathan
-
-> 	{ }
-> };
-> MODULE_DEVICE_TABLE(spi, x9250_id_table);
->=20
-> static struct spi_driver x9250_spi_driver =3D {
-> 	.driver  =3D {
-> 		.name =3D "x9250",
-> 		.of_match_table =3D x9250_of_match,
-> 	},
-> 	.id_table =3D x9250_id_table,
-> 	.probe  =3D x9250_probe,
-> };
-> --- 8< ---
->=20
->=20
-> Best regards,
-> Herv=C3=A9
->=20
+diff --git a/fs/debugfs/file.c b/fs/debugfs/file.c
+index 1f971c880dde..b7711888dd17 100644
+--- a/fs/debugfs/file.c
++++ b/fs/debugfs/file.c
+@@ -940,15 +940,6 @@ static const struct file_operations fops_str_wo = {
+  * This function creates a file in debugfs with the given name that
+  * contains the value of the variable @value.  If the @mode variable is so
+  * set, it can be read from, and written to.
+- *
+- * This function will return a pointer to a dentry if it succeeds.  This
+- * pointer must be passed to the debugfs_remove() function when the file is
+- * to be removed (no automatic cleanup happens if your module is unloaded,
+- * you are responsible here.)  If an error occurs, ERR_PTR(-ERROR) will be
+- * returned.
+- *
+- * If debugfs is not enabled in the kernel, the value ERR_PTR(-ENODEV) will
+- * be returned.
+  */
+ void debugfs_create_str(const char *name, umode_t mode,
+ 			struct dentry *parent, char **value)
+-- 
+2.34.1
 
