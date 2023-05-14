@@ -2,284 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14983701DE1
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 16:42:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E326701DE6
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 16:51:41 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbjENOmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 10:42:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38244 "EHLO
+        id S233574AbjENOvi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 10:51:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjENOms (ORCPT
+        with ESMTP id S229585AbjENOvg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 10:42:48 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D21F30C8;
-        Sun, 14 May 2023 07:42:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684075363; x=1715611363;
-  h=date:from:to:cc:subject:message-id:references:
-   content-transfer-encoding:in-reply-to:mime-version;
-  bh=JNGC1sYmDPZbDXzuzuiX8XcZ3EM0ylR3lLd7riA5jkw=;
-  b=oK5DasyIm5wHgFcPzCJu7Xp3y+hE9aIYZU38tbQy5QeO2KCNXibLVchk
-   VwhFYrRXe6kvUeeZnXYlXlyZ7WhEnSniASL2d0SMuXLBJcGizCcE8cJFj
-   p+ioSsLIaK10LupvW8YWw6zj8DHa6hT/BaybFfIPjK2XccZDInhNyeAih
-   +csd8JBsIeggGr9y7Cnn0JY2Ypxu3UAKvH6vRycDghQ5fb2XsP5ri9IcT
-   7nQZk5lf6mdxcZu2a4B/R/cLTznLX6XwwHBDo3w5xa0cSOu4IIiEO1fCU
-   oTyRCKIi1cJFyliWPcYPlhdiqWLP+2MPa/YXk7etFKS7vmhkUjzW4JVP1
-   Q==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="351075343"
-X-IronPort-AV: E=Sophos;i="5.99,274,1677571200"; 
-   d="scan'208";a="351075343"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 07:42:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="1030628712"
-X-IronPort-AV: E=Sophos;i="5.99,274,1677571200"; 
-   d="scan'208";a="1030628712"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga005.fm.intel.com with ESMTP; 14 May 2023 07:42:43 -0700
-Received: from fmsmsx612.amr.corp.intel.com (10.18.126.92) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sun, 14 May 2023 07:42:42 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx612.amr.corp.intel.com (10.18.126.92) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Sun, 14 May 2023 07:42:42 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Sun, 14 May 2023 07:42:42 -0700
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.44) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+        Sun, 14 May 2023 10:51:36 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8D0230D7;
+        Sun, 14 May 2023 07:51:35 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34EEpWLV015121;
+        Sun, 14 May 2023 14:51:32 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=Coni0niPflmtDmugwFIdUZvxTydtfDWnIgWJ9AfzHUs=;
+ b=S0uDi9TziT55qbcHFJr6LKYZXM3Zs/+pUk0i+GoVwPXILcFVlUQx5va90q/pnqCJKu83
+ xh+ZILYdemkqDuV6ULfh8bhg58F/r4YrA6bLGL0KO5Vc9feBpyXo4ZlDH3I3Y8coHVjV
+ Adekj+ciI17+ywMBGb5kSK6NJTfnMTS82LxolKMNB7TIRDOVro0/pzzWn0vo8xhlAzVV
+ /qh4VPWHmJn2ouzDkWRAKOv9GLyugdMVvSJC5HY8bj/26Ai9f0/u1vAC4rPioCM/MeXl
+ /pkqcImpEUDHwxXUxoi2N3ApeGZwbg5hmHL5I6csOTCiAtPQ+qKKBy2uuNEfZRtCkiag Og== 
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qj1vr1xeh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 14 May 2023 14:51:32 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34EEpV67021727
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 14 May 2023 14:51:31 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Sun, 14 May 2023 07:42:42 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=lSCL7n3Sid0WiHRnKUc3QFybv7Rm9T5oL/6JRL6oLlF0D/H+NddPfAZRZRYNKperSN68FBDpv57spZT6eDKhm2fb4l7fE5azlvp8LyIIER8HHqhv5sjHpWWueiac+8VFSjbspL/wW74rze8fTlxOdFt/OKrL6gdfvLuddgdyW4jeBRNimXaArkHeOVatJ6pHhlYuPd38k+sI2AZr47J9ttrH+MId629WNyK15jQQ9zYRpyPaw8SA5jxfK7pe5BnsZX7FFEWwMZ1tJnrPduC+waF14rp8thIGvVx/t/SqZ3eJsSFF7PdjZmWfyzRGaoQ0+7enmFZhpSqrM5ViwUytBA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=EDwoWOG7qNboWVNc04qD5WQbo3OJb/XFYUosvvg4p2E=;
- b=KEfu5XrxgjeqH4MbtwpER6yO0AKk1eDeKa2K6Dt4dvmuzRAA4Aoc9Yy2mRUHfyo+r8KXbIit3WR6aZ0QhrJyk/4/C1VtWtVYAsPWp75VJvUMqtAB7AW4eTdsh0yrh+weudTwPPhSaAZTGf5SVjFy5oMjNf6lJCq2eJ3D3x7bm4X9rk7IeIhWCrKEfkHz3aqBgTtVs5JlZYpafkBnYjL4FCmD0Jsb42imz6LuefDJa5XZagafDbvx5/ulY/YURrggr6iTCtRThPkyIKsuQ1Uv8dBmDAAGwQAzH56VWJ2C7Oeb6G02W0gPh5543eqAjNw4+tsR1W8kcoU04Qu2f+OnmQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
- by SA1PR11MB8328.namprd11.prod.outlook.com (2603:10b6:806:376::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.29; Sun, 14 May
- 2023 14:42:37 +0000
-Received: from MN0PR11MB6304.namprd11.prod.outlook.com
- ([fe80::a100:94c4:fab4:f14d]) by MN0PR11MB6304.namprd11.prod.outlook.com
- ([fe80::a100:94c4:fab4:f14d%6]) with mapi id 15.20.6387.029; Sun, 14 May 2023
- 14:42:37 +0000
-Date:   Sun, 14 May 2023 22:36:48 +0800
-From:   Feng Tang <feng.tang@intel.com>
-To:     Dave Chinner <david@fromorbit.com>
-CC:     Oliver Sang <oliver.sang@intel.com>,
-        Dave Chinner <dchinner@redhat.com>, <oe-lkp@lists.linux.dev>,
-        <lkp@intel.com>, <linux-kernel@vger.kernel.org>,
-        "Darrick J. Wong" <djwong@kernel.org>, <linux-xfs@vger.kernel.org>,
-        <ying.huang@intel.com>, <fengwei.yin@intel.com>
-Subject: Re: [linus:master] [xfs]  2edf06a50f:  fsmark.files_per_sec -5.7%
- regression
-Message-ID: <ZGDyAOewWqjY5xvJ@feng-clx>
-References: <202305090905.aff4e0e6-oliver.sang@intel.com>
- <20230509065433.GT3223426@dread.disaster.area>
- <20230509071053.GE2651828@dread.disaster.area>
- <ZF3uXe+cjAsfCLic@xsang-OptiPlex-9020>
- <20230512230504.GF3223426@dread.disaster.area>
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230512230504.GF3223426@dread.disaster.area>
-X-ClientProxiedBy: SG2PR04CA0172.apcprd04.prod.outlook.com (2603:1096:4::34)
- To MN0PR11MB6304.namprd11.prod.outlook.com (2603:10b6:208:3c0::7)
+ 15.2.986.42; Sun, 14 May 2023 07:51:28 -0700
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_ppratap@quicinc.com>, <quic_wcheng@quicinc.com>,
+        <quic_jackp@quicinc.com>, <quic_ugoswami@quicinc.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [PATCH v2] usb: dwc3: core: set force_gen1 bit in USB31 devices if max speed is SS
+Date:   Sun, 14 May 2023 20:21:18 +0530
+Message-ID: <20230514145118.20973-1-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR11MB6304:EE_|SA1PR11MB8328:EE_
-X-MS-Office365-Filtering-Correlation-Id: c10ac80d-e7f7-4d57-1a24-08db54897581
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: z6UFFTIEbk7wTl6MKF47KGeBL7VPwHL1HUjqCrbj8sl+Pvyxdkx/ZqIoMdit182vEUd1s3hHQ+0lh2OyuPluJW9JFWTbPmJQ6+VAcCwT8EIU304NEvvCGNWuvT2VMDVYnDQzdx+VCwN6qvQ/MuFT/BwadsFAEKcFdXT9LtyehkI90EOvmTHcyOyDSnUs832XHlhOb5Z4Bmfh6P+EIRcNw5F6TPyp0tQE2K/xDFWNL9mrUGrBoNPR1StnBuZiHUWY6Hr7BWJUxOw2xf5VoEbRPB5m5W3mThr3+LkqiXOw5o5XRg0utfSAekuOeWEdyyK7lwN7sIonEsqHhs0aETShoHItEPa2V/4M6t1sJhIFFbArwNu5DA3LSYUWV8Fl33bCuvgLomQoxPXiYJ5eu+ljZ/DpMH6oVP77b2nD05lm4F0KKLfMAao47GY4qR6xrR2VRsZQyyjbpFQldQ1/O0h6xvWCeKD7rnZ95F1D0WZ3s8qhi+nGnzhVzV4r6sMW0ut8iV1qwX4As8l9qOa9ZMSDj0cJEZB9rUdQM2xO9Y6rgom2R4u1J2Y8ESQ/oynO9Uqh
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR11MB6304.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(366004)(396003)(39860400002)(136003)(376002)(346002)(451199021)(6486002)(86362001)(54906003)(316002)(66556008)(66476007)(6916009)(66946007)(4326008)(478600001)(6666004)(33716001)(8936002)(8676002)(5660300002)(41300700001)(2906002)(44832011)(82960400001)(38100700002)(26005)(107886003)(186003)(9686003)(6512007)(6506007)(83380400001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RXZnaDM2Zzd2d3UxaUVHWit1eFBKcGVyTTdBTEJ3T3BFTVkzZnRDQnlxSW5a?=
- =?utf-8?B?a3NlYW9GV0lHd1B0RytVK0taZFBZRU15UjRCNVNVemY4QitmcGVESS96Q2Jx?=
- =?utf-8?B?VC9sN3dZSmtuYWU4YytkUkxMNTZCUEphZ3BadnhBMk9WMlpVa2NON2UydkJL?=
- =?utf-8?B?bFNEZFozUUFyV2ErRlZRNUxoNkR1WE9wQ1lzYi95cksyeDl0S05CYmVXTDdo?=
- =?utf-8?B?Qm5FU253RHovaUJrZndlQk94TjgyM05HVllBR3Y4QVh6S0Z1NWlIdUY5cm9p?=
- =?utf-8?B?NTZ6NldKM0xJUUlGUWZETmY1NjZvMUVZQ2V2SFpBY0JuOE1xclVoaEcvVldC?=
- =?utf-8?B?SXBBRk5DMit5ayt2UncwQVQwVU1ibm9DV0I3ZjNSMmRBQUN2NzBqOTY3RVRy?=
- =?utf-8?B?UHZBZGhZaVN4QlVDSnhucFF1VHBkQjg5WDRZZzgzaXQ1WlNkczNRMkxOclh2?=
- =?utf-8?B?ZW5Uc2M0cEQrQ1M2Umx5bWpVRzlYa0JNUnhqYnhnWkV6OUxVbEpYalVEOEZH?=
- =?utf-8?B?ZU1RbXppbG10S0tjNVo0aDlrWHJOWVpiNWFnN01mTUtWZzd5aEh4ODhFQllZ?=
- =?utf-8?B?djc1SUJpcFpvbklBaG1sVTJ3SU5vQkkrTUVYSTRIMWRNR1pjb0w3b0ZsKzBO?=
- =?utf-8?B?eUY4V0ZqMjVYbENCcTFEVG92SHlNTmVuVFJWUThOTHJKaEhOdTI1WTNqKy9O?=
- =?utf-8?B?VDhmWkszTm1zQzFSVkJDZzRyUHZMcHpJSUducUhJa2dlWkhkQnJiL3B3eERO?=
- =?utf-8?B?M1lOVDJuRFNiZDFlRGFJaFlGQWgrY3JvSksrTHVjSjRmbm1iTkNwWi9ab1RI?=
- =?utf-8?B?NlI3eXVIb290VlBWNVhieXp5ZGFzK2R0M2JoVythb244cUtmcmwvMTR6aXdB?=
- =?utf-8?B?VWhTaXBGbDRtaTQrTThHYThVTWNmcWhaQnkwaTdKSGI2SE1zdFZTYjMvUlBZ?=
- =?utf-8?B?L0R5T2VrdzB3ejhCMEFLTmduSCtlMmtaR3piT01aOW0yTlphRkJXVnZjaFM5?=
- =?utf-8?B?WlkxRnBTR0cvMU5qTkhhMlEwL2ZNUkN6UjlBaXl5dXpBMmw3S2ZiYUh1R0lC?=
- =?utf-8?B?TXBldGRWRWgrTlZJYkZ1RWN6SzRkRkliaGlEczNHTHpyYmRRb2lTUkwrT2la?=
- =?utf-8?B?Q1h6NGdWK2N6T0FXS2taZWQrclVtdE13bUNKeXZtVDNPMDZwNVRuVlhDY1NZ?=
- =?utf-8?B?VVQxR1dwRGZ6Y2c1Yk1wS214RVdXOTlaTytHWFdVdi9LVDNOYVJjNVp4WlRp?=
- =?utf-8?B?U1RPNlY5V1RjQndrUFo0N0ZKS3lKR2pBbERGYi9Qb3JhNHF3dzZKT25BSzI5?=
- =?utf-8?B?SXFsSE1sendSeVRMMVg4aHlEUG8vMWZVVXNRTjVPSXpiV3A1R2dOZGR2SjN4?=
- =?utf-8?B?UTJjREQycHJ1b0NDMUttcWhsRkc2R005Tks0Q3NUMGh1R0hvVEZFUUYrZXBN?=
- =?utf-8?B?NUFDeFJVOS80elptbEV1NDN5ZUkxRWJlSVgyc0RqUW5vSkpSeWFZNkdrZmMx?=
- =?utf-8?B?Z1hLQ3dEQ3VZRHRMaGtMRzBKRDNsR2c5Q1ZvVWpJNWsyZEFFUDRyRXdlRzVR?=
- =?utf-8?B?cWlPRGsxaGpWOG9GU1lacTlsYnJrWDR4NzJMcW0vZDRheCtBVm9SRzRGYVlM?=
- =?utf-8?B?MW5RUHRhTUpNb3BDRUVzSUQzNndKUkZLNDRHTTJjZ29mcElMZmVnSW5uY3V3?=
- =?utf-8?B?UTJSa3NpUXFZQlVZczJXeWZ4RW9GcDAxdEFwSHZBU2JUQ1RZdEFsWkxWalBG?=
- =?utf-8?B?LzRCekJIL2lXdHlDYnpKWlpNeVRTQTJzeUExWTB5ZWpTN1lzQmR1R1M3WWZ3?=
- =?utf-8?B?TFpJSThCSlJzUUhETVFvREN3Q2UzcHdUOEpYTm55QlRMc25uUWMwMGx4QVlv?=
- =?utf-8?B?aE1XbkR3bzZmTDdIalZzazZtOERSUTlrR0JZbmdjQm54V0E3VTVBbndtbHBQ?=
- =?utf-8?B?dHRwZFEvYTFJOEU4UWlDR3haUUZuVEZtdU9MUVhsdDBOeXh0NUlPVHpUTmN5?=
- =?utf-8?B?ekFKM2hidDZZVnBZSkdkM0JEUjJOUGVZYllpb00yb1ltOFp5NFc5bm5MR0Ix?=
- =?utf-8?B?WjdsaktOSStUbFRUWGJvemc3K2FadkxnRDc3QnlVVDUwd3gyTjdPNDNBZDlU?=
- =?utf-8?Q?Ez4LT+NU6y+lEFpUPNSL+S/Zb?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: c10ac80d-e7f7-4d57-1a24-08db54897581
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR11MB6304.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 May 2023 14:42:36.4222
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: S22MbBJv1DoMcczk7oPB/EHCXXyYjToHMys0j+IuBZequuPvhLDXg3cIsHLiFYBF7HiCJ0wihFAa4jDtbO5BtA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB8328
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: wQKi0G2Rfl0dTJ-rBlPku6ie3qmQy3LQ
+X-Proofpoint-ORIG-GUID: wQKi0G2Rfl0dTJ-rBlPku6ie3qmQy3LQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-14_10,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ adultscore=0 bulkscore=0 clxscore=1015 impostorscore=0 mlxlogscore=983
+ lowpriorityscore=0 malwarescore=0 phishscore=0 suspectscore=0 spamscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305140136
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Dave,
+Currently for dwc3_usb31 controller, if maximum_speed is limited to
+super-speed in DT, then device mode is limited to SS, but host mode
+still works in SSP.
 
-On Sat, May 13, 2023 at 09:05:04AM +1000, Dave Chinner wrote:
-> On Fri, May 12, 2023 at 03:44:29PM +0800, Oliver Sang wrote:
-[...]
-> > Thanks a lot for guidance!
-> > 
-> > we plan to disable XFS_DEBUG (as well as XFS_WARN) in our performance tests.
-> > want to consult with you if this is the correct thing to do?
-> 
-> You can use XFS_WARN=y with performance tests - that elides all the
-> debug specific code that changes behaviour but leaves all the
-> ASSERT-based correctness checks in the code.
-> 
-> > and I guess we should still keep them in functional tests, am I right?
-> 
-> Yes.
-> 
-> > BTW, regarding this case, we tested again with disabling XFS_DEBUG (as well as
-> > XFS_WARN), kconfig is attached, only diff with last time is:
-> > -CONFIG_XFS_DEBUG=y
-> > -CONFIG_XFS_ASSERT_FATAL=y
-> > +# CONFIG_XFS_WARN is not set
-> > +# CONFIG_XFS_DEBUG is not set
-> > 
-> > but we still observed similar regression:
-> > 
-> > ecd788a92460eef4 2edf06a50f5bbe664283f3c55c4
-> > ---------------- ---------------------------
-> >          %stddev     %change         %stddev
-> >              \          |                \
-> >    8176057 ± 15%      +4.7%    8558110        fsmark.app_overhead
-> >      14484            -6.3%      13568        fsmark.files_per_sec
-> 
-> So the application spent 5% more CPU time in userspace, and the rate
-> the kernel processed IO went down by 6%. Seems to me like
-> everything is running slower, not just the kernel code....
-> 
-> >     100.50 ±  5%      +0.3%     100.83        turbostat.Avg_MHz
-> >       5.54 ± 11%      +0.3        5.82        turbostat.Busy%
-> >       1863 ± 19%      -6.9%       1733        turbostat.Bzy_MHz
-> 
-> Evidence that the CPU is running at a 7% lower clock rate when the
-> results are 6% slower is a bit suspicious to me. Shouldn't the CPU
-> clock rate be fixed to the same value for A-B performance regression
-> testing?
+The documentation for max-speed property is as follows:
 
-For commit 2edf06a50f5, it seems to change the semantics a little
-about handling of 'flags' for xfs_alloc_fix_freelist(). With the debug
-below, the performance is restored.
+"Tells USB controllers we want to work up to a certain speed.
+Incase  this isn't passed via DT, USB controllers should default to
+their maximum HW capability."
 
+It doesn't specify that the property is only for device mode.
+There are cases where we need to limit the host's maximum speed to
+SuperSpeed only. Use this property for host mode to contrain host's
+speed to SuperSpeed.
 
-ecd788a92460eef4 2edf06a50f5bbe664283f3c55c4 68721405630744da1c07c9c1c3c 
----------------- --------------------------- --------------------------- 
-
-     14349            -5.7%      13527            +0.6%      14437        fsmark.files_per_sec
-    486.29            +5.8%     514.28            -0.5%     483.70        fsmark.time.elapsed_time
-
-Please help to review if the debug patch miss anything as I don't
-know the internals of xfs, thanks.
-
+Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
 ---
-diff --git a/fs/xfs/libxfs/xfs_alloc.c b/fs/xfs/libxfs/xfs_alloc.c
-index 98defd19e09e..8c85cc68c5f4 100644
---- a/fs/xfs/libxfs/xfs_alloc.c
-+++ b/fs/xfs/libxfs/xfs_alloc.c
-@@ -3246,12 +3246,12 @@ xfs_alloc_vextent_set_fsbno(
-  */
- static int
- __xfs_alloc_vextent_this_ag(
--	struct xfs_alloc_arg	*args)
-+	struct xfs_alloc_arg	*args, int flag)
- {
- 	struct xfs_mount	*mp = args->mp;
- 	int			error;
- 
--	error = xfs_alloc_fix_freelist(args, 0);
-+	error = xfs_alloc_fix_freelist(args, flag);
- 	if (error) {
- 		trace_xfs_alloc_vextent_nofix(args);
- 		return error;
-@@ -3289,7 +3289,7 @@ xfs_alloc_vextent_this_ag(
+Link to v1: https://lore.kernel.org/all/20230512170107.18821-1-quic_kriskura@quicinc.com/
+
+Discussion regarding the same at:
+https://lore.kernel.org/all/e465c69c-3a9d-cbdb-d44e-96b99cfa1a92@quicinc.com/
+
+ drivers/usb/dwc3/core.c | 8 ++++++++
+ drivers/usb/dwc3/core.h | 5 +++++
+ 2 files changed, 13 insertions(+)
+
+diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+index 278cd1c33841..33bc72595e74 100644
+--- a/drivers/usb/dwc3/core.c
++++ b/drivers/usb/dwc3/core.c
+@@ -1262,6 +1262,14 @@ static int dwc3_core_init(struct dwc3 *dwc)
+ 		}
  	}
  
- 	args->pag = xfs_perag_get(mp, args->agno);
--	error = __xfs_alloc_vextent_this_ag(args);
-+	error = __xfs_alloc_vextent_this_ag(args, 0);
++	if ((hw_mode != DWC3_GHWPARAMS0_MODE_GADGET) &&
++	    (DWC3_IP_IS(DWC31)) &&
++	    (dwc->maximum_speed == USB_SPEED_SUPER)) {
++		reg = dwc3_readl(dwc->regs, DWC3_LLUCTL);
++		reg |= DWC3_LLUCTL_FORCE_GEN1;
++		dwc3_writel(dwc->regs, DWC3_LLUCTL, reg);
++	}
++
+ 	return 0;
  
- 	xfs_alloc_vextent_set_fsbno(args, minimum_agno);
- 	xfs_perag_put(args->pag);
-@@ -3329,7 +3329,7 @@ xfs_alloc_vextent_iterate_ags(
- 	args->agno = start_agno;
- 	for (;;) {
- 		args->pag = xfs_perag_get(mp, args->agno);
--		error = __xfs_alloc_vextent_this_ag(args);
-+		error = __xfs_alloc_vextent_this_ag(args, flags);
- 		if (error) {
- 			args->agbno = NULLAGBLOCK;
- 			break;
+ err_power_off_phy:
+diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+index 1968638f29ed..5a251da309d4 100644
+--- a/drivers/usb/dwc3/core.h
++++ b/drivers/usb/dwc3/core.h
+@@ -172,6 +172,8 @@
+ #define DWC3_OEVTEN		0xcc0C
+ #define DWC3_OSTS		0xcc10
+ 
++#define DWC3_LLUCTL		0xd024
++
+ /* Bit fields */
+ 
+ /* Global SoC Bus Configuration INCRx Register 0 */
+@@ -655,6 +657,9 @@
+ #define DWC3_OSTS_VBUSVLD		BIT(1)
+ #define DWC3_OSTS_CONIDSTS		BIT(0)
+ 
++/* Force Gen1 speed on Gen2 link */
++#define DWC3_LLUCTL_FORCE_GEN1		BIT(10)
++
+ /* Structures */
+ 
+ struct dwc3_trb;
+-- 
+2.40.0
 
-
-Also for the turbostat.Bzy_MHz diff, IIUC, 0Day always uses
-'performance' cpufreq governor. And as the test case is running
-32 thread in a platform with 96 CPUs, there are many CPUs in idle
-state in average, and I suspect the Bzy_MHz may be calculated 
-considering those cpufreq and cpuidle factors.
-
-Thanks,
-Feng
-
-> 
-> Cheers,
-> 
-> Dave.
-> -- 
-> Dave Chinner
-> david@fromorbit.com
