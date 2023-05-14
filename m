@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95B3D701D69
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 14:37:33 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 09CE3701D6D
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 14:37:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236816AbjENMha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 08:37:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35170 "EHLO
+        id S236997AbjENMhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 08:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231640AbjENMh2 (ORCPT
+        with ESMTP id S234058AbjENMh3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 08:37:28 -0400
+        Sun, 14 May 2023 08:37:29 -0400
 Received: from sonic314-19.consmr.mail.ir2.yahoo.com (sonic314-19.consmr.mail.ir2.yahoo.com [77.238.177.145])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BFB319A1
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 933D726BB
         for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 05:37:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1684067845; bh=VqIx9LSfStGIwADHV2nx489yoOzekt9YBpjG8dE8w6w=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=qvDNkQPO9K0t6noCETiE2k3jPvB2018MeCDFv5vhHr1B/30OMrcsZHHgzi26lkjifU55eitVjXhZfl0vSwjwytq7+15IZFB7UrzterCBNpmTmihAqil2bO2EnwgB28aml9tVDu5wBfdGYeWURqBR0RzYZHPXuibwqt20QcSYvjT0FEr3l3s/qSTmnnwYdPj/in/DodkLGzl7b6ATuAUR81VCmwKkyl7Kacb1QKe6R/0CthUC4a+uQPkEVTqt9UZ7z34SPreexH7zjJkYY6Ia+1iZn55jOxCegrqknhfav6AWilYgTwk8qqTcG3fQLJHJOjQr0iJm8r/0rZdhqdB/Qw==
-X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1684067845; bh=Awwi1q9aHXuKCeEYu1dy1W4ZCJJwkzQEbd2LjgXvC8r=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=Q7WjNySFufjsKv9sB0B+4rA5l+BWUL5ebe7IUDU+YF1RxqBswIjeKGs4/P3KVtmV28zYP91fxVEq8cMJg4O1I8fgkIQAIq9XKgvD2kh1oOyEN7ZhhGS76W8tSpXvOyRaS7KWbhciwhv6ccIyAoDRR0YmRMfhQRrBNsKWCjQAY9RVZtg8xMSreya0oiI6pmHYq3KJ5BeOgkL12dEH2JeOUpShvaVAZRPzInYW+XGmiKd/vPxuEvL87++GYiiSaqKnzYkB+YELOZ0q8kZfPI6E9TPT++9PfUi3z5r0aL9HKy/XmZwGN43rYvCSLGvShOsb5AHGv4zMCap9JybsUpcD4w==
-X-YMail-OSG: cuHQmTwVM1k4SQHQNYFgZMrSScidaSR_5IEb2Eow3z_uX3iC2o31iS_fLM3feES
- 43vClyWqqziJCkL6rSGX1T0_LjMqaZKQ2GICmjSfijvB2.kyF.F3Iv8C9c5iwET_swr5dwvho94.
- pVc.N3xNdq_6zLllgVDsqtj8.7kJJBrsKrGRfMC_OoN1y.J2xdDTJkvkCjgT09bo_zD0a2_egiS.
- FIc.q6TvvgDDC7T9e1koLbKdJt54ANGSUncbw8_a6JDjoCAKQfM.Efge_CeTLDLQzvfPnYSnaIIW
- xHTx1fClbgCaJqWfwl6UmKCeJEV1I4hwau7yw7Wwbk.RoZg4bosG0fTPDpOzSr67pvFYmi7A0_xI
- wy0yvEd9ZBFsmQ.KBh0.Qdt1QOgy6hzLc1UlLHYLH4RxBYM62qXnTsimaCP4ObjWbTJyrHGeKxzl
- U_lxBdpjsUspmo5o.nqWegpfAnaL3j_X0rWPAtLz0Ig1OpRQmgVdhK_n3kfqDtr6V7J1C75vstMO
- wM4HwoDBTqfMVu60EHjqGW.bMQ5heWj6kZ.DvPWtas4vgT2yg9Ey8lgOm5fXkx4NjEn5GSfqz4EN
- V34FXCaCF.NsDGfNdF1gzJ0GkdO955bZGepnGT5tY7kStKVnbzUOfwgM_fPwRtljW5gZueugi84L
- oeCbjfPxIAF.MwLOSlMoBFesOGG0n0nUJlJt3UWIxLREOsGhfM.BaUP8pT7cI6EggTFV84VXzL41
- aPm4ICVbkErKz7HGLO.v4.WtESgxGQmGyaX1JxKoT5O8go2LJoOF6q.j7eQEgX4XuTklQQUjudG.
- V1y5slezl4Nd4DuNFfKU81SRvejJ1mU080bUjyrKEVsNUBj.t9NC9EUmBUWKuyayIhzO4bHQQ2hk
- n4kgArukKExB7zE9Aj4QRmN_EAhcnqXoDZTwTam8FHcUUQ93vzDYVg.swGwQ7mDP54WbJT94ofPl
- xUMiH6otj.hEfSuMjW.c3eEdizp1rKeJwWo6VYhcE.OgtKuVKD2GqluxhKRgSl9dUZOAv.TNY18S
- oaa8b4_1aWWkoYpIrd_F_n2CVllMpO5vTY_2IsYHPNZ4KhFwGIFH0yHDQEJsO_DSAtqW6LafvD.H
- Hy1HbWcAmnLCCUR224pZPgWv4vkQ45R9HrXVbWnVM6Wj44VeLYtKECBMAk4BMrp2dbRoDMSBs09_
- SsQwJ9p84VgmTYUv.Z_EatV2vR0WnHiw3u3BUSjjg.UYAu1IMMj6Z4O5LoZLucXzQ4Ad51P6cKlc
- aXlFmhAHa65AK1k0rbP.H2tFFrcAfemVn7R7ciuETLGjHBmIh_yO3XAQMvvqU6Vk35ib7DAutzJJ
- W9BFeuYP8.68mL_.ykJbA9kY6lhkPX3YFyuQlWA1MH_49VUyy9kfvZeMYWpPPLL2GpxQv6ebov.W
- pnCcA6LJMJVhfymWWXyP0a_QE0YhKB_YMEk4GH7zRRg1gFSpJacUwOHt4TG2NuqV2VUpfvfRWvtE
- U2a7k92vEQdFScySYEtBw2TztZslUKFBA9zop0pBsn8XCrwxmMjp0IvBfrmvRhAIBgtp9vYU4QBX
- s3ZA7qDqb9LhiUDbhOY6YaSbPlfHvEKjpHhZEZDApSusY4g_vnVcxAl5LJV0trkLuihqD3wZhLDl
- D0TcipUYvoqSBogBDYXPhMaZ8SZx7qMOIrkCR8PRGOLBkhldSi5H3NBL.aKbZMa8gi0UU7xlYUX9
- xkoLADQY75aHdWFYzzwGyisWp4BJER_YJY9LguNSgiMU79MHioyHpzc8oR7jl1bcB9zYuh3jLjqd
- OFFQIgjPjqDD_A8vseq5ixqCRIqh8.wBzrzGMbpuKF5iw3u5ZOJnnYnQ1UGdgnVpdg77tFUAKC52
- .7E0Z1jZXWWIcj2AGJOsHsR47khFsHJATD26749hgiIFb3Ys08NzwjOtaZx_fY7RDqOPvC5ZUFxS
- DVRQc.VurLQjzRT.mWyzZReZv3sG9NYsqzsBJk2McQFHvYEaDPdYKN8qPqnZD6wlYgH6S393dAl0
- iJObruMFUdtH3J63JVoyPtJvejo6F4dDijWgNWqAESZssabT5AaZdaFd3mKZRPh.jJdNR39DExbn
- faNMFCy_qmCNYGr_Pfkkq4R6hhU5GtGF2waq2qrI_7D8RqLqr6L1.Z4SSpI4AOno0cxk4Mb2Z_Pt
- 2800_of4NpIMQ.gufzEPokN2VLBvardPsEteY24xFT1RDGcMi1EikVGUWnRY8piUIK_StMPJcttw
- 3LHINN0krFtHDdjYRTMxwO6CWoiKshekO8VQ_Nqz68LAcS9rtqo9WcV8O9g06VoZE.DNHzzujpkj
- hSFjuNmt8_3qWCRzJFbaIzwSEmE17HQ--
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rocketmail.com; s=s2048; t=1684067845; bh=iR6f3XRVOHcEpdjcnFCif4nNa1shR7J/nAlLWRT5R4w=; h=From:To:Cc:Subject:Date:In-Reply-To:References:From:Subject:Reply-To; b=aNDwZkDhIJzo4X4lCijZaF803UlbasjNKxdPtFrPJjSswTHmICKbz4nGPtmZeMGWBDQfbp+luEfFb6rjlqb59sKKJsLfhCrm4GFuF4shK6rNeIBY751vV5L27gukt7acQyNjIfE7ThqHjH9zs56cE3zw2LHv4zjpox+M5eIPbBTJ0baEFLQA1n/Qd+ITibYbDZ8FJyIKGGxK3oaTds9jXKvRKu7LZoHufuXwhitmHZmAkCIj5lDXiMO9uTGIyneRPKd4jma+H15ZGzUazW8fuHHamtlKD4uhd+SohMW33rI7fbUPqgm05OqXkkx7cx35zfkp9eujLKricCVpHhWYTA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1684067845; bh=RjpbhSDHhQw1UtHbfXMZI6CGElLiocD+Lb9tXb5dZ0m=; h=X-Sonic-MF:From:To:Subject:Date:From:Subject; b=FCvemGMKBWTvJyxVJTyJ3zgb9IT7hTBRsbA+jhZlGN9B4/pTtPGjRjuDHqEoZSK84DKnCUcyNDSpzZiQYjM+/h/7N+FAsdubR/ToMwxn86WCZNWvOp4Zzr9wWGRpfuBXxQ52O2mUUGQ5HlaTNFQ+3xrmhsM4/tUHvn+kidv0XvTQ5EHUL4SChttBU0cFK5RhMFfNo7Do8l+jk3mo9x4XDA7biSWPhNMCd0oyzVdsoZRaXBwteBB7XrwIlwb6Gy8+yoaeJT9aCquw3fYNLeTj+TiHtQE13AsxtDlV3gKo5mxqjRs0uDDQjAIco4sKQWVO8VBtB4pIOGN10faC7RMiyA==
+X-YMail-OSG: mWsgP6UVM1lqWsEsYFxpseFHRosMBuMe61n_Ji4lNO7ELZZRKOqBAc7GPpU2lDU
+ JYVFs1WYQ7FmkCnhPHeOEBtAn5KAcE9crF_o3mu5rFfTnDxwyzw1_cd1PXnqZ3mC_hLwGpg4Xv8t
+ nYfrqJsLosp.jmrunOoPwY0QbS0Nr4xlIxx1N2.MF5LLWPuMvy_FUKDAI_8qqQr18814tt5Jy4n5
+ EjJkfmEXqv0hYg.PlTmaTrR9aQgjwaj5L9u.2xjxMXyu61zxUztX_2TtR.HHLxASFkxc1Fwe2rLx
+ gHtiBmK2Uf0Q3tcqK4k.KLc4PVwz7PhtwephA2C95tdUgbK0j6qYZcL1jazMaCCqfIrTZtS1gsRM
+ 70uM0NHqwIspYtRHcQg3no0TbOHACgS4zD9Xt57_j9V9fCxdfxC.NV30gOnU9X4ZOIZ1XSq40Ibq
+ .ASVKSM_4DfgpPsTd38jUg2IEOXm5SEkhEITqAPgsHhQ_PTTZKRUmn4Zf1LtSHFKgIOtz0K_F8UX
+ 8YwdFJUiuiKSqooUdP47XVLaAfirUJWo4sY1CbGfSGjz0Khh7XA_ExZ6HIT3s3JJrj_P5gWp.Flb
+ Arf9IugQYFKYVxIop00iqnJL7fA6KZlUPgEKkgUESn0Be914UGOWvTFM3ZuONoV7umaOIsqasGsP
+ lPGPbBU63c8EZ9qvkaH8VG3CZsSy1Jn9hhD8.6drAHeoInG0Wjz99RmfXcnHne3JeFiKos6lwN2D
+ pVwG6RyDOzgSeBTc7vZh6i0VjhH1rlYclzmziODbb3oTxv.CndMTYUpOt3l18raL7PLmni.KexlB
+ wDYjvxIqBniCPuL9pB6SpUsREvT2jMsKv6L7y3xOBFhQjkCxgfKHkXWTa6r6.jGYgXLu9L_8yLmC
+ Bju9YET8reLcZaif1mwFBIbdh6oSeb7WwMdOuh3vPtDFNpcV7d9nn46vzBzel1D9EHaATBCk25CK
+ 0Mp__AJ39RGyiJpGVb0i124KTaltKoXYtsFkP.8h93RRT3t2lmd0n0OfcZ5kAdqeFUYVzCkWUfWF
+ qSqwX5wlGOC0K.bvhbcTHYMUTjF0KPr._Nppae4UINc2lvyH.RhwsRzaHKnPXerPc3GwQi4eYyfK
+ 93rjkZW6OunMb4Mr3OOJ6OtQ6kniGKIiuFNIVmjHsBxyH4As0BHvSYus8uP1RvwgfI7a2Mhp8zs3
+ 9P24YJaqNDGpl1jvdX.k7.FoHQJOqVDCd14t2iftdcib.csmFfjssxID.7Dg9.J4UuYUTNOsV9AA
+ OXochnfS1BxIPD3YRy9XlxuFKY1C.nqSUaWTI7sMlYzrgQ.Ki2WD3XkVkuqiVleCHwEHBLOUGy37
+ cqFGIxtEVdJQtcjXMLJIcqVBByjtFNxfqgbxU0RrMY4d2SMGosm6v2NBs9HYfxZcmTz5_PFlF1k2
+ DAvv1rL3vwUwtERExIbqRflvHgcsfimGEsHRXTJTM00CxQF3I7nCWjWoD21oEigk9vJVPDJ6Z4Q9
+ cNofbo8wSPqYWxuP3gJqDBIAukcDihl9fsSzBN5EZPL1dwTeKZnOayT4O.q2AtmX4fKJdTClHi.K
+ .81.aHPLJ7twgIPn6d..4XR5nzpzW.A6J3YH966piemWF7RZnqlUGB45a3XyFP6OBHau41kQ2Wz6
+ jkSqLJvgchRpj9EO3DWBiacNaTLoRuZtmLYxro8kcIE5uYuVUX5luHV0mHD6T3ZyCo3jOziCyvsA
+ WvPb1McXLgUr.0heWZ6f.pIMrFHUiepyaHVMFxu0YSEhUj3LLRyRapbzv1yL0zSF03b62VC48oQ8
+ PIzQup1w9DOWDIaEjyPR0jeFZvA8AufZKyB4vvIz1srSkv0kvqhpZozqmlD4hu.jpXuzZOcEWojm
+ k.pI10d0VT7lNXtzG_xCSkuAV34QBKdZ3SQNL64D_CxOakue3ZtuVHHFkTE2vZZQmnilr8qn.ljV
+ dDu1JXdXWjJcPCDXN5xIuxg1qgzCtlTlrBxfR7t6auJJGk0lt.DyHjhl3e7cKItg9UwXdhq8l6Mw
+ _DfwK_gTXqH.UOom6ruRjHYcQxQXKFCh0yfad.0Ut6qzgNzK0ve1LDMzgvHJWX7e6gaKeyNTS6m8
+ 5dadqfo2jlQhuMe9_Q5sB5_FrtVMiLauXCT46kDyintoH_.b4047XYAgPfKj697O8cVHKam0CBRP
+ 7zWVeTUKXIm1FKg2XjXdHRziInEnytwPYUFnwcWQfgnRwidhmqeMju3pYMB1Rin6ALl3jMn8004p
+ KcV_EFqxSYwTxa7di1P6wehSrapEXM2r17Rz8Z5iuZKjOSFKl_ie41GZuqBwGFGkotQMGMoKvZeB
+ CXls_ki6QIi98d3w27Ns9tXyVu.ih5w--
 X-Sonic-MF: <jahau@rocketmail.com>
-X-Sonic-ID: 3aacc60e-eb6d-4247-8021-2b47a8d10bff
+X-Sonic-ID: 877ba4c0-0451-46bb-a1c2-970c7ffcb540
 Received: from sonic.gate.mail.ne1.yahoo.com by sonic314.consmr.mail.ir2.yahoo.com with HTTP; Sun, 14 May 2023 12:37:25 +0000
 Received: by hermes--production-ir2-7867f454fc-tvsct (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID ec262f708c8ca7d1990bed607fb68ca2;
-          Sun, 14 May 2023 12:37:20 +0000 (UTC)
+          Sun, 14 May 2023 12:37:22 +0000 (UTC)
 From:   Jakob Hauser <jahau@rocketmail.com>
 To:     Sebastian Reichel <sre@kernel.org>, Lee Jones <lee@kernel.org>,
         Liam Girdwood <lgirdwood@gmail.com>,
@@ -71,9 +71,9 @@ Cc:     Beomho Seo <beomho.seo@samsung.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         phone-devel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
         Jakob Hauser <jahau@rocketmail.com>
-Subject: [PATCH v5 07/10] power: supply: rt5033_battery: Move struct rt5033_battery to battery driver
-Date:   Sun, 14 May 2023 14:31:27 +0200
-Message-Id: <20230514123130.41172-8-jahau@rocketmail.com>
+Subject: [PATCH v5 08/10] power: supply: rt5033_battery: Adopt status property from charger
+Date:   Sun, 14 May 2023 14:31:28 +0200
+Message-Id: <20230514123130.41172-9-jahau@rocketmail.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230514123130.41172-1-jahau@rocketmail.com>
 References: <20230514123130.41172-1-jahau@rocketmail.com>
@@ -82,79 +82,101 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Move struct rt5033_battery from the mfd header into the battery driver because
-it's not used by others.
+The rt5033-battery fuelgauge can't get a status by itself. The rt5033-charger
+can, let's get this value.
 
-Within struct rt5033_battery, remove the line "struct rt5033_dev *rt5033;"
-because it doesn't get used.
+To get the charger as a "supplier" from the devicetree, the "of_node" needs
+to be initiated.
 
-In rt5033.h, remove #include <linux/power_supply.h>, it's not necessary
-anymore.
-
-In rt5033_battery.c, remove #include <linux/mfd/rt5033.h>, it's not necessary
-anymore either. Instead add #include <linux/regmap.h> and
+Additionally, in the probe function replace dev_err() with dev_err_probe(),
+this will avoid printing an error for -EPROBE_DEFER when the battery driver
+probes before the charger driver.
 
 Signed-off-by: Jakob Hauser <jahau@rocketmail.com>
 ---
- drivers/power/supply/rt5033_battery.c | 9 ++++++++-
- include/linux/mfd/rt5033.h            | 8 --------
- 2 files changed, 8 insertions(+), 9 deletions(-)
+ drivers/power/supply/rt5033_battery.c | 29 +++++++++++++++++++++------
+ 1 file changed, 23 insertions(+), 6 deletions(-)
 
 diff --git a/drivers/power/supply/rt5033_battery.c b/drivers/power/supply/rt5033_battery.c
-index 5c04cf305219..91e1efd81f69 100644
+index 91e1efd81f69..94d2dea7ef5e 100644
 --- a/drivers/power/supply/rt5033_battery.c
 +++ b/drivers/power/supply/rt5033_battery.c
-@@ -6,11 +6,18 @@
-  * Author: Beomho Seo <beomho.seo@samsung.com>
-  */
- 
-+#include <linux/i2c.h>
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/power_supply.h>
-+#include <linux/regmap.h>
- #include <linux/mfd/rt5033-private.h>
--#include <linux/mfd/rt5033.h>
-+
-+struct rt5033_battery {
-+	struct i2c_client	*client;
-+	struct regmap		*regmap;
-+	struct power_supply	*psy;
-+};
- 
- static int rt5033_battery_get_capacity(struct i2c_client *client)
- {
-diff --git a/include/linux/mfd/rt5033.h b/include/linux/mfd/rt5033.h
-index 3992fb2ef0a8..bb3d18945d21 100644
---- a/include/linux/mfd/rt5033.h
-+++ b/include/linux/mfd/rt5033.h
-@@ -12,7 +12,6 @@
- #include <linux/regulator/consumer.h>
- #include <linux/i2c.h>
- #include <linux/regmap.h>
--#include <linux/power_supply.h>
- 
- /* RT5033 regulator IDs */
- enum rt5033_regulators {
-@@ -32,11 +31,4 @@ struct rt5033_dev {
- 	bool wakeup;
+@@ -19,6 +19,21 @@ struct rt5033_battery {
+ 	struct power_supply	*psy;
  };
  
--struct rt5033_battery {
--	struct i2c_client	*client;
--	struct rt5033_dev	*rt5033;
--	struct regmap		*regmap;
--	struct power_supply	*psy;
--};
--
- #endif /* __RT5033_H__ */
++static int rt5033_battery_get_status(struct i2c_client *client)
++{
++	struct rt5033_battery *battery = i2c_get_clientdata(client);
++	union power_supply_propval val;
++	int ret;
++
++	ret = power_supply_get_property_from_supplier(battery->psy,
++						POWER_SUPPLY_PROP_STATUS,
++						&val);
++	if (ret)
++		val.intval = POWER_SUPPLY_STATUS_UNKNOWN;
++
++	return val.intval;
++}
++
+ static int rt5033_battery_get_capacity(struct i2c_client *client)
+ {
+ 	struct rt5033_battery *battery = i2c_get_clientdata(client);
+@@ -91,6 +106,9 @@ static int rt5033_battery_get_property(struct power_supply *psy,
+ 	case POWER_SUPPLY_PROP_CAPACITY:
+ 		val->intval = rt5033_battery_get_capacity(battery->client);
+ 		break;
++	case POWER_SUPPLY_PROP_STATUS:
++		val->intval = rt5033_battery_get_status(battery->client);
++		break;
+ 	default:
+ 		return -EINVAL;
+ 	}
+@@ -103,6 +121,7 @@ static enum power_supply_property rt5033_battery_props[] = {
+ 	POWER_SUPPLY_PROP_VOLTAGE_OCV,
+ 	POWER_SUPPLY_PROP_PRESENT,
+ 	POWER_SUPPLY_PROP_CAPACITY,
++	POWER_SUPPLY_PROP_STATUS,
+ };
+ 
+ static const struct regmap_config rt5033_battery_regmap_config = {
+@@ -124,7 +143,6 @@ static int rt5033_battery_probe(struct i2c_client *client)
+ 	struct i2c_adapter *adapter = client->adapter;
+ 	struct power_supply_config psy_cfg = {};
+ 	struct rt5033_battery *battery;
+-	u32 ret;
+ 
+ 	if (!i2c_check_functionality(adapter, I2C_FUNC_SMBUS_BYTE))
+ 		return -EIO;
+@@ -142,15 +160,14 @@ static int rt5033_battery_probe(struct i2c_client *client)
+ 	}
+ 
+ 	i2c_set_clientdata(client, battery);
++	psy_cfg.of_node = client->dev.of_node;
+ 	psy_cfg.drv_data = battery;
+ 
+ 	battery->psy = power_supply_register(&client->dev,
+ 					     &rt5033_battery_desc, &psy_cfg);
+-	if (IS_ERR(battery->psy)) {
+-		dev_err(&client->dev, "Failed to register power supply\n");
+-		ret = PTR_ERR(battery->psy);
+-		return ret;
+-	}
++	if (IS_ERR(battery->psy))
++		return dev_err_probe(&client->dev, PTR_ERR(battery->psy),
++				     "Failed to register power supply\n");
+ 
+ 	return 0;
+ }
 -- 
 2.39.2
 
