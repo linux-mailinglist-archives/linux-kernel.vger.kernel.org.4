@@ -2,156 +2,313 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8977701EC3
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 19:33:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F26701EAB
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 19:21:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237971AbjENRdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 13:33:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
+        id S235251AbjENRVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 13:21:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237868AbjENRd3 (ORCPT
+        with ESMTP id S230421AbjENRVt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 13:33:29 -0400
-Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 661B040D0
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 10:33:22 -0700 (PDT)
-Received: by mail-wm1-x332.google.com with SMTP id 5b1f17b1804b1-3f415a90215so95069435e9.0
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 10:33:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684085601; x=1686677601;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3oyPTS4otLOfmn6LYBOukn6SNOD9cL2QMwdCto8rE20=;
-        b=lQlKcKPgMsLJt1PYvRl+VJBA83DYneeWlWGJg1IJdPizzfzTYkVApVfWoN8B+VLA5G
-         iP/3aseJAKUeyqeEZ9fPNo2KGaOeAXdYWwAVDiN2xYqW//TDHyqtjEysFyxEArAElbvH
-         i7TCtYvav2So1Szs8iN5F61bt0tGvWSV17/xOSDZnf8m/ABfvLByeuH5ZShHobckS5Je
-         WtWrXgoY7TD5/Vc4Wy1rA+O97+6H/YW2rH+6rUkydBfVHNDHN7PAtMmu7b4bCiztS3u3
-         CIJDptbypmBHF8ooTmCH/g/p7x4gwjbtsQQBfUtnYPg8mz4qFnWJPT5uNsEomk/15KA6
-         aiqA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684085601; x=1686677601;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3oyPTS4otLOfmn6LYBOukn6SNOD9cL2QMwdCto8rE20=;
-        b=S8stCVOnUzUXWuA54YXds+v8/kwDxJ2tuQAn0Lvhqk4eU6U7S5AbkpiiR6ZvYevuuo
-         XpIhccrAznXzrFGRbcgZR7XnPCgp8vlcpZZdv9lskGErYTdPQfVWDrSsf6v0MbvVHI5l
-         W14+t/alDHwSFdZonCGmzTt0SH5uPpnU8KoxlvnLQtUPcrLkjG///ItX3LfkJSICgHl8
-         WQiiNqWjamY9jVImzH93+6znAb5wl/wggvLsbyaMgBzh2+f+0d/g7QYhndm2YYseZWvP
-         uSsemO7FqwSWXfP5SjBUMMU3UcoL136va2vt4hXebR2O1OYuX5jiOH6hDf80QAOEqzRB
-         uovg==
-X-Gm-Message-State: AC+VfDx24KKrp5Eq1RXy9YSRvgOWegWDHliY4bdSYf36vOH0sE7ZmlTP
-        hIjyRB6JVhAC4kAe1OwAM7M=
-X-Google-Smtp-Source: ACHHUZ6gpXe+/3AAYQBH0swh7QCoG2baZCsxWC+fIQZJKQMa6A3tlGi2eF7LVHATng1qrvpgUbn3Qw==
-X-Received: by 2002:a7b:c8d6:0:b0:3f4:271a:8aaf with SMTP id f22-20020a7bc8d6000000b003f4271a8aafmr14958153wml.38.1684085600479;
-        Sun, 14 May 2023 10:33:20 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id s7-20020a1cf207000000b003f1733feb3dsm34484227wmc.0.2023.05.14.10.33.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 10:33:19 -0700 (PDT)
-Date:   Sun, 14 May 2023 18:33:18 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Mike Rapoport <rppt@kernel.org>
-Cc:     Mark Rutland <mark.rutland@arm.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Peter Xu <peterx@redhat.com>
-Subject: Re: [PATCH] mm/mmap/vma_merge: always check invariants
-Message-ID: <67f638d9-4853-49ed-b2e6-5000e1cea558@lucifer.local>
-References: <df548a6ae3fa135eec3b446eb3dae8eb4227da97.1682885809.git.lstoakes@gmail.com>
- <ZFunF7DmMdK05MoF@FVFF77S0Q05N.cambridge.arm.com>
- <ZFvAnF0DzEUN7F9r@murray>
- <ZFvDrZRV8RnoPR69@FVFF77S0Q05N.cambridge.arm.com>
- <ZFvFoj--H21sxzCQ@murray>
- <20230511180841.GE4135@kernel.org>
+        Sun, 14 May 2023 13:21:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E2F173F;
+        Sun, 14 May 2023 10:21:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AC54760C70;
+        Sun, 14 May 2023 17:21:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 175EEC433EF;
+        Sun, 14 May 2023 17:21:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684084907;
+        bh=TcetyUCI+AsbF+Vy7hr/9FPI2TlWf5ITYIqwxpu/kn0=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=FEczCHQysfyZF6QFJYB9bOho5Z4yTv0QxivlWnoGiU6miNLy5onnZNj37Z0RTD6ns
+         HSEAf3l3t5OHxTN1TRofi+gjKFOYgKLhqxg23pseUfnwtmWrRUHTVfNfgdyIr9vqro
+         PLxKuj+GOzIBkFGbAciwyEgFH1duEBqdrgGk34ckdQW5pWnxAn7+hJBMj+St75JkIz
+         DbAJKTifpHZXnxh0/t0RckQAH0uSMYSk/7Gj9b5JZT5Nmib5Zx+Kx3V52qQ5FN3YZl
+         AURnrQXg4O9V+ToFYkVGBO07IA6WZeuy/sesjMSWCodD0e7t0cjPZQyHLnhulRW1rr
+         epOQD82GBj+eg==
+Date:   Sun, 14 May 2023 18:37:48 +0100
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Astrid Rost <astrid.rost@axis.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>, <linux-iio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@axis.com>
+Subject: Re: [PATCH v2 5/7] iio: light: vcnl4000: Add debounce count for
+ vcnl4040/4200
+Message-ID: <20230514183748.256a210c@jic23-huawei>
+In-Reply-To: <20230509140153.3279288-6-astrid.rost@axis.com>
+References: <20230509140153.3279288-1-astrid.rost@axis.com>
+        <20230509140153.3279288-6-astrid.rost@axis.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230511180841.GE4135@kernel.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 11:08:41AM -0700, Mike Rapoport wrote:
-> (adding Peter)
->
-> On Wed, May 10, 2023 at 09:26:10AM -0700, Lorenzo Stoakes wrote:
-> > On Wed, May 10, 2023 at 05:17:49PM +0100, Mark Rutland wrote:
-> > > On Wed, May 10, 2023 at 09:04:44AM -0700, Lorenzo Stoakes wrote:
-> > > > On Wed, May 10, 2023 at 03:15:51PM +0100, Mark Rutland wrote:
-> > > > > Hi,
-> > > > >
-> > > > > On Sun, Apr 30, 2023 at 09:19:17PM +0100, Lorenzo Stoakes wrote:
-> > > > > > We may still have inconsistent input parameters even if we choose not to
-> > > > > > merge and the vma_merge() invariant checks are useful for checking this
-> > > > > > with no production runtime cost (these are only relevant when
-> > > > > > CONFIG_DEBUG_VM is specified).
-> > > > > >
-> > > > > > Therefore, perform these checks regardless of whether we merge.
-> > > > > >
-> > > > > > This is relevant, as a recent issue (addressed in commit "mm/mempolicy:
-> > > > > > Correctly update prev when policy is equal on mbind") in the mbind logic
-> > > > > > was only picked up in the 6.2.y stable branch where these assertions are
-> > > > > > performed prior to determining mergeability.
-> > > > > >
-> > > > > > Had this remained the same in mainline this issue may have been picked up
-> > > > > > faster, so moving forward let's always check them.
-> > > > > >
-> > > > > > Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-> > > > > > ---
-> > > > > >  mm/mmap.c | 10 +++++-----
-> > > > > >  1 file changed, 5 insertions(+), 5 deletions(-)
-> > > > > >
-> > > > > > diff --git a/mm/mmap.c b/mm/mmap.c
-> > > > > > index 5522130ae606..13678edaa22c 100644
-> > > > > > --- a/mm/mmap.c
-> > > > > > +++ b/mm/mmap.c
-> > > > > > @@ -960,17 +960,17 @@ struct vm_area_struct *vma_merge(struct vma_iterator *vmi, struct mm_struct *mm,
-> > > > > >  		merge_next = true;
-> > > > > >  	}
-> > > > > >
-> > > > > > +	/* Verify some invariant that must be enforced by the caller. */
-> > > > > > +	VM_WARN_ON(prev && addr <= prev->vm_start);
-> > > > > > +	VM_WARN_ON(curr && (addr != curr->vm_start || end > curr->vm_end));
-> > > > > > +	VM_WARN_ON(addr >= end);
-> > > > > > +
-> > > > >
-> > > > > I'm seeing this fire a lot when fuzzing v6.4-rc1 on arm64 using Syzkaller.
-> > > > >
-> > > >
-> > > > Thanks, from the line I suspect addr != curr->vm_start, but need to look
-> > > > into the repro, at lsf/mm so a bit time lagged :)
-> > >
-> > > No problem; FWIW I can confirm your theory, the reproducer is causing:
-> > >
-> > > 	addr > curr->vm_start
-> > >
-> > > ... confirmed the the following hack, log below.
-> >
-> > Awesome thanks for that! Just been firing up qemu to do this.
-> >
-> > Cases 5-8 should really have addr == curr->vm_start, I wonder if it's
-> > another case but curr is being set incorrectly, it should in theory not be
-> > the case.
->
-> AFAIU, it's a case of "adjust vma, but don't merge, because prev is not
-> compatible". Looks like uffd first attempts to merge compatible the newly
-> registered range with adjacent vmas relying on that there won't be no merge
-> when addr != curr->vm_start and only after the merge attempt it splits the
-> edges.
->
-> I think that moving the split in fs/userfaultfd.c:1495 (as of v6.4-rc1)
-> before vma_merge() will be the right fix.
->
+On Tue, 9 May 2023 16:01:51 +0200
+Astrid Rost <astrid.rost@axis.com> wrote:
 
-Indeed it was, patch at
-https://lore.kernel.org/all/20230514172731.134188-1-lstoakes@gmail.com/
+> Add read/write attribute for proximity and illumination debounce-count
+> and read attribute for available debounce-counts.
+> The debounce-count is set in the interrupt persistence flags
+> (PS_PERS and ALS_PERS). An interrupt will not be asserted if the raw
+> value is not over (or lower) than the threshold for the set
+> continued refresh times.
+> This is supported for vcnl4040 vcnl4200.
 
-[snip]
+Why debounce count? That has previously just been used for step detection
+on accelerometers and has a pretty specific definition in
+See Documentation/ABI/testing/sysfs-bus-iio
+
+"
+What:		/sys/.../iio:deviceX/in_steps_debounce_count
+...
+		Specifies the number of steps that must occur within
+		in_steps_filter_debounce_time for the pedometer to decide the
+		consumer is making steps.
+"
+
+What you probably want is period, though that is defined in seconds so
+you may need some unit conversions.  That is defined for events, not for
+a channel so IIO_EV_INFO_PERIOD.
+"
+		Period of time (in seconds) for which the condition must be
+		met before an event is generated. If direction is not
+		specified then this period applies to both directions.
+"
+
+> 
+> Signed-off-by: Astrid Rost <astrid.rost@axis.com>
+> ---
+>  drivers/iio/light/vcnl4000.c | 156 ++++++++++++++++++++++++++++++++++-
+>  1 file changed, 152 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/iio/light/vcnl4000.c b/drivers/iio/light/vcnl4000.c
+> index 68eea686b2dc..b8ce4ed6b0bb 100644
+> --- a/drivers/iio/light/vcnl4000.c
+> +++ b/drivers/iio/light/vcnl4000.c
+> @@ -84,8 +84,10 @@
+>  #define VCNL4040_ALS_CONF_ALS_SHUTDOWN	BIT(0)
+>  #define VCNL4040_ALS_CONF_IT		GENMASK(7, 6) /* Ambient integration time */
+>  #define VCNL4040_ALS_CONF_INT_EN	BIT(1) /* Ambient light Interrupt enable */
+> +#define VCNL4040_ALS_CONF_PERS	GENMASK(3, 2) /* Ambient interrupt persistence setting */
+>  #define VCNL4040_PS_CONF1_PS_SHUTDOWN	BIT(0)
+>  #define VCNL4040_PS_CONF2_PS_IT	GENMASK(3, 1) /* Proximity integration time */
+> +#define VCNL4040_CONF1_PS_PERS	GENMASK(5, 4) /* Proximity interrupt persistence setting */
+>  #define VCNL4040_PS_CONF2_PS_INT	GENMASK(9, 8) /* Proximity interrupt mode */
+>  #define VCNL4040_PS_IF_AWAY		BIT(8) /* Proximity event cross low threshold */
+>  #define VCNL4040_PS_IF_CLOSE		BIT(9) /* Proximity event cross high threshold */
+> @@ -153,6 +155,9 @@ static const int vcnl4200_als_it_times[][2] = {
+>  	{0, 400000},
+>  };
+>  
+> +static const int vcnl4040_als_debounce_count[] = {1, 2, 4, 8};
+> +static const int vcnl4040_ps_debounce_count[] = {1, 2, 3, 4};
+> +
+>  #define VCNL4000_SLEEP_DELAY_MS	2000 /* before we enter pm_runtime_suspend */
+>  
+>  enum vcnl4000_device_ids {
+> @@ -680,6 +685,106 @@ static ssize_t vcnl4040_write_ps_it(struct vcnl4000_data *data, int val)
+>  	return ret;
+>  }
+>  
+> +static ssize_t vcnl4040_read_als_debounce_count(struct vcnl4000_data *data, int *val)
+> +{
+> +	int ret;
+> +
+> +	ret = i2c_smbus_read_word_data(data->client, VCNL4200_AL_CONF);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = FIELD_GET(VCNL4040_ALS_CONF_PERS, ret);
+> +
+> +	if (ret >= ARRAY_SIZE(vcnl4200_als_it_times))
+> +		return -EINVAL;
+> +
+> +	*val = vcnl4040_als_debounce_count[ret];
+> +
+> +	return ret;
+> +}
+> +
+> +static ssize_t vcnl4040_write_als_debounce_count(struct vcnl4000_data *data, int val)
+> +{
+> +	unsigned int i;
+> +	int ret, index = -1;
+> +	u16 regval;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(vcnl4040_als_debounce_count); i++) {
+> +		if (val == vcnl4040_als_debounce_count[i]) {
+> +			index = i;
+> +			break;
+> +		}
+> +	}
+> +
+> +	if (index < 0)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&data->vcnl4000_lock);
+> +
+> +	ret = i2c_smbus_read_word_data(data->client, VCNL4200_AL_CONF);
+> +	if (ret < 0)
+> +		goto out;
+> +
+> +	regval = (ret & ~VCNL4040_ALS_CONF_PERS) |
+> +	    FIELD_PREP(VCNL4040_ALS_CONF_PERS, index);
+> +	ret = i2c_smbus_write_word_data(data->client, VCNL4200_AL_CONF,
+> +					regval);
+> +
+> +out:
+> +	mutex_unlock(&data->vcnl4000_lock);
+> +	return ret;
+> +}
+> +
+> +static ssize_t vcnl4040_read_ps_debounce_count(struct vcnl4000_data *data, int *val)
+> +{
+> +	int ret;
+> +
+> +	ret = i2c_smbus_read_word_data(data->client, VCNL4200_PS_CONF1);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	ret = FIELD_GET(VCNL4040_CONF1_PS_PERS, ret);
+> +
+> +	if (ret >= ARRAY_SIZE(vcnl4200_ps_it_times))
+> +		return -EINVAL;
+> +
+> +	*val = vcnl4040_ps_debounce_count[ret];
+> +
+> +	return ret;
+> +}
+> +
+> +static ssize_t vcnl4040_write_ps_debounce_count(struct vcnl4000_data *data, int val)
+> +{
+> +	unsigned int i;
+> +	int ret, index = -1;
+> +	u16 regval;
+> +
+> +	for (i = 0; i < ARRAY_SIZE(vcnl4040_ps_debounce_count); i++) {
+> +		if (val == vcnl4040_ps_debounce_count[i]) {
+> +			index = i;
+> +			break;
+> +		}
+> +	}
+> +
+> +	if (index < 0)
+> +		return -EINVAL;
+> +
+> +	mutex_lock(&data->vcnl4000_lock);
+> +
+> +	ret = i2c_smbus_read_word_data(data->client, VCNL4200_PS_CONF1);
+> +	if (ret < 0)
+> +		goto out;
+> +
+> +	regval = (ret & ~VCNL4040_CONF1_PS_PERS) |
+> +	    FIELD_PREP(VCNL4040_CONF1_PS_PERS, index);
+> +	ret = i2c_smbus_write_word_data(data->client, VCNL4200_PS_CONF1,
+> +					regval);
+> +
+> +out:
+> +	mutex_unlock(&data->vcnl4000_lock);
+> +	return ret;
+> +}
+> +
+>  static int vcnl4000_read_raw(struct iio_dev *indio_dev,
+>  				struct iio_chan_spec const *chan,
+>  				int *val, int *val2, long mask)
+> @@ -730,6 +835,21 @@ static int vcnl4000_read_raw(struct iio_dev *indio_dev,
+>  		if (ret < 0)
+>  			return ret;
+>  		return IIO_VAL_INT_PLUS_MICRO;
+> +	case IIO_CHAN_INFO_DEBOUNCE_COUNT:
+> +		switch (chan->type) {
+> +		case IIO_LIGHT:
+> +			ret = vcnl4040_read_als_debounce_count(data, val);
+> +			break;
+> +		case IIO_PROXIMITY:
+> +			ret = vcnl4040_read_ps_debounce_count(data, val);
+> +			break;
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +		if (ret < 0)
+> +			return ret;
+> +		return IIO_VAL_INT;
+> +
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -753,6 +873,15 @@ static int vcnl4040_write_raw(struct iio_dev *indio_dev,
+>  		default:
+>  			return -EINVAL;
+>  		}
+> +	case IIO_CHAN_INFO_DEBOUNCE_COUNT:
+> +		switch (chan->type) {
+> +		case IIO_LIGHT:
+> +			return vcnl4040_write_als_debounce_count(data, val);
+> +		case IIO_PROXIMITY:
+> +			return vcnl4040_write_ps_debounce_count(data, val);
+> +		default:
+> +			return -EINVAL;
+> +		}
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -791,6 +920,21 @@ static int vcnl4040_read_avail(struct iio_dev *indio_dev,
+>  		}
+>  		*type = IIO_VAL_INT_PLUS_MICRO;
+>  		return IIO_AVAIL_LIST;
+> +	case IIO_CHAN_INFO_DEBOUNCE_COUNT:
+> +		switch (chan->type) {
+> +		case IIO_LIGHT:
+> +			*vals = (int *)vcnl4040_als_debounce_count;
+> +			*length = ARRAY_SIZE(vcnl4040_als_debounce_count);
+> +			break;
+> +		case IIO_PROXIMITY:
+> +			*vals = (int *)vcnl4040_ps_debounce_count;
+> +			*length = ARRAY_SIZE(vcnl4040_ps_debounce_count);
+> +			break;
+> +		default:
+> +			return -EINVAL;
+> +		}
+> +		*type = IIO_VAL_INT;
+> +		return IIO_AVAIL_LIST;
+>  	default:
+>  		return -EINVAL;
+>  	}
+> @@ -1504,15 +1648,19 @@ static const struct iio_chan_spec vcnl4040_channels[] = {
+>  		.type = IIO_LIGHT,
+>  		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
+>  			BIT(IIO_CHAN_INFO_SCALE) |
+> -			BIT(IIO_CHAN_INFO_INT_TIME),
+> -		.info_mask_separate_available = BIT(IIO_CHAN_INFO_INT_TIME),
+> +			BIT(IIO_CHAN_INFO_INT_TIME) |
+> +			BIT(IIO_CHAN_INFO_DEBOUNCE_COUNT),
+> +		.info_mask_separate_available = BIT(IIO_CHAN_INFO_INT_TIME) |
+> +			BIT(IIO_CHAN_INFO_DEBOUNCE_COUNT),
+>  		.event_spec = vcnl4000_event_spec,
+>  		.num_event_specs = ARRAY_SIZE(vcnl4000_event_spec),
+>  	}, {
+>  		.type = IIO_PROXIMITY,
+>  		.info_mask_separate = BIT(IIO_CHAN_INFO_RAW) |
+> -			BIT(IIO_CHAN_INFO_INT_TIME),
+> -		.info_mask_separate_available = BIT(IIO_CHAN_INFO_INT_TIME),
+> +			BIT(IIO_CHAN_INFO_INT_TIME) |
+> +			BIT(IIO_CHAN_INFO_DEBOUNCE_COUNT),
+> +		.info_mask_separate_available = BIT(IIO_CHAN_INFO_INT_TIME) |
+> +			BIT(IIO_CHAN_INFO_DEBOUNCE_COUNT),
+>  		.ext_info = vcnl4000_ext_info,
+>  		.event_spec = vcnl4040_event_spec,
+>  		.num_event_specs = ARRAY_SIZE(vcnl4040_event_spec),
+
