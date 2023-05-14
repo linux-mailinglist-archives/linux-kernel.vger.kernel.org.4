@@ -2,78 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21E94701CD5
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 12:09:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 13E86701CD7
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 12:10:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237177AbjENKJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 06:09:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58548 "EHLO
+        id S237252AbjENKKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 06:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjENKI7 (ORCPT
+        with ESMTP id S229611AbjENKKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 06:08:59 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC001171B;
-        Sun, 14 May 2023 03:08:57 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50c079eb705so2851915a12.1;
-        Sun, 14 May 2023 03:08:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684058936; x=1686650936;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ie9tiZWx0j0qso2N+/tHJUjGfMip0OumDCuv0l96kj8=;
-        b=WgvlRw8uZZxNk/hWPkNXit0p+MkX0JNCyI7Vzy7yJY+OsvwTCNXVGUhs1wWVsvUX21
-         nXH/U8P2buAlKk/QRUpPPlXwZ6xNSMN6Ie6c/P8o7+U+TpPiXqw9cHPQjufjQaP2oH5Z
-         2ogGG7SzwoCreXK0QZcfN8Vr/5p2DNlO0+EVTN8Ri05js0mr8AoxvR+iELR9nMwsZ3eX
-         0jkh0jQ8AObDYgvzUWBh6JBIamixp/DoIj7xEXrCplepepbHVOhrtVNq1s6jsaAgz15J
-         6aPjtcKnlAQO8J9gHOrvTKum+grQaRuZiDsoQgJQpFsjgWYa2kNloSVD3NMmgFoodj29
-         ZKuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684058936; x=1686650936;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ie9tiZWx0j0qso2N+/tHJUjGfMip0OumDCuv0l96kj8=;
-        b=bHDm9wumCfVyGgQReF+RGNFgmnjl3qnjZwrTy+6aXPeLIedziqqVhXvDghAzA3CaiH
-         Bs2ARKK7oZf3q47zuEewP2K/fKa30Td+gdMNevNpSQOxl7GUBXnqMxY3uey2tEDHFvhm
-         g069sym6jgAKnAhavdpKm3uWhXNhPstXLsnaqUpMefs1OI3NCKbuIDQHFCOsqe8c33+s
-         JSsujAJ1iSb20sGC29HgzoXsvG88WZkTSuu6Y6Ad5UIs2u+pZ3mEtpawrn31gWgATzo3
-         0oaR0FeM7hYGzgL9Wb3ktsKx+SYnpTEIS5b6HQP5xsbjHXWrLdFKK44rpIiPvpW5eo9F
-         hUOA==
-X-Gm-Message-State: AC+VfDxsCgP5mg4Tye2DgKqeJO7n+sIA2qVNaKrSvVSNS0wmyfXF535x
-        nw8CqqdgB96XQHm4nnpLYow=
-X-Google-Smtp-Source: ACHHUZ4Z1zF+di5vZ/CeRoQGRNuzAxlt2n8nf6jgaD78i3qq9gsh34Uq5xlThiik/oqT/cdFYmGmmg==
-X-Received: by 2002:a05:6402:2742:b0:50d:9ba4:52dc with SMTP id z2-20020a056402274200b0050d9ba452dcmr4516415edd.0.1684058935703;
-        Sun, 14 May 2023 03:08:55 -0700 (PDT)
-Received: from [192.168.10.10] ([37.252.94.55])
-        by smtp.gmail.com with ESMTPSA id v17-20020aa7cd51000000b0050daa883545sm5679306edw.64.2023.05.14.03.08.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 May 2023 03:08:55 -0700 (PDT)
-Message-ID: <6f6d09b3-39e7-58b6-221f-6276d3ce213a@gmail.com>
-Date:   Sun, 14 May 2023 14:08:53 +0400
+        Sun, 14 May 2023 06:10:48 -0400
+Received: from bmailout2.hostsharing.net (bmailout2.hostsharing.net [83.223.78.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7858E171B;
+        Sun, 14 May 2023 03:10:46 -0700 (PDT)
+Received: from h08.hostsharing.net (h08.hostsharing.net [83.223.95.28])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+         client-signature RSA-PSS (4096 bits) client-digest SHA256)
+        (Client CN "*.hostsharing.net", Issuer "RapidSSL Global TLS RSA4096 SHA256 2022 CA1" (verified OK))
+        by bmailout2.hostsharing.net (Postfix) with ESMTPS id E87BB2800C972;
+        Sun, 14 May 2023 12:10:41 +0200 (CEST)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+        id DBA204A8C1; Sun, 14 May 2023 12:10:41 +0200 (CEST)
+Date:   Sun, 14 May 2023 12:10:41 +0200
+From:   Lukas Wunner <lukas@wunner.de>
+To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>, linux-pci@vger.kernel.org,
+        Rob Herring <robh@kernel.org>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Krzysztof Wilczy??ski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        LKML <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 01/17] PCI: Add concurrency safe clear_and_set variants
+ for LNKCTL{,2}
+Message-ID: <20230514101041.GA1881@wunner.de>
+References: <20230511131441.45704-2-ilpo.jarvinen@linux.intel.com>
+ <ZF0P2hedTFXPv8IK@bhelgaas>
+ <20230511202332.GD31598@wunner.de>
+ <51577aaa-dc96-d588-2ecf-5bac4b59284@linux.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH 2/3] ALSA: Implement the new virtual driver
-To:     Takashi Iwai <tiwai@suse.de>
-Cc:     corbet@lwn.net, akpm@linux-foundation.org, perex@perex.cz,
-        tiwai@suse.com, broonie@kernel.org, skhan@linuxfoundation.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
-        gregkh@linuxfoundation.org, himadrispandya@gmail.com,
-        linux-kernel-mentees@lists.linuxfoundation.org
-References: <20230513202037.158777-1-ivan.orlov0322@gmail.com>
- <20230513202037.158777-2-ivan.orlov0322@gmail.com>
- <878rdr8e5f.wl-tiwai@suse.de>
-Content-Language: en-US
-From:   Ivan Orlov <ivan.orlov0322@gmail.com>
-In-Reply-To: <878rdr8e5f.wl-tiwai@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <51577aaa-dc96-d588-2ecf-5bac4b59284@linux.intel.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,46 +55,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/14/23 13:18, Takashi Iwai wrote:
-> The idea is interesting, and it's a definitely good thing to have.
+On Fri, May 12, 2023 at 11:25:32AM +0300, Ilpo Järvinen wrote:
+> On Thu, 11 May 2023, Lukas Wunner wrote:
+> > On Thu, May 11, 2023 at 10:55:06AM -0500, Bjorn Helgaas wrote:
+> > > I didn't see the prior discussion with Lukas, so maybe this was
+> > > answered there, but is there any reason not to add locking to
+> > > pcie_capability_clear_and_set_word() and friends directly?
+> > > 
+> > > It would be nice to avoid having to decide whether to use the locked
+> > > or unlocked versions.
+> > 
+> > I think we definitely want to also offer lockless accessors which
+> > can be used in hotpaths such as interrupt handlers if the accessed
+> > registers don't need any locking (e.g. because there are no concurrent
+> > accesses).
+> > 
+> > So the relatively lean approach chosen here which limits locking to
+> > Link Control and Link Control 2, but allows future expansion to other
+> > registers as well, seemed reasonable to me.
 > 
-> I wonder, though, whether it could be better provided as an extention
-> to the existing snd-dummy driver.  The advantage of extending
-> snd-dummy driver would be that it already supports different formats,
-> etc.  OTOH, if we create an individual driver, the pro side is the
-> simpleness of the code.
+> I went through every single use of these functions in the mainline tree 
+> excluding LNKCTL/LNKCTL2 ones which will be having the lock anyway:
 > 
-> I'm inclined to go with a separate driver, but I'm open about this.
-> Maybe Jaroslav and Mark have some opinions?
-> 
-> About this patch set: the driver name should be a bit more specific,
-> as this isn't a generic virtual driver that is used for general
-> purpose but it's only for testing.  And it's only for testing PCM.
-> So, a name like snd-test-pcm would be more appropriate, IMO.
-> 
-> And, we want the coverage of different formats, channels, rates and
-> accesses (interleaved vs non-interleaved).  How can we extend somehow
-> more for that?
-> 
-> 
-> thanks,
-> 
-> Takashi
+> - pcie_capability_clear_and_set_*
+> - pcie_capability_set_*
+> - pcie_capability_clear_*
 
-Hello Takashi! Thank you for your reply. I fully agree with the naming 
-issue, and I'll change it in the future versions of the patch set in 
-case we choose to have it as a separate driver. I also prefer this 
-option because in my opinion the use cases of these drivers are a little 
-bit different. Also, I believe I can extend the driver to support 
-different formats, channels and accesses in the near future.
+We're also performing RMW through pcie_capability_read_word() +
+pcie_capability_write_word() combos, see drivers/pci/hotplug/pciehp_hpc.c
+for examples.
 
-Additionally, implementing these changes would be a perfect task for the 
-end of the Linux Kernel Mentorship program I'm going through :) However, 
-I'm open to other views on this, and I'm ready to move the functionality 
-from my driver to the snd-dummy in case we prefer this option.
 
-Thanks again for considering my changes!
+> Do you still feel there's a need to differentiate this per capability 
+> given all the information above?
 
-Kind regards,
-Ivan Orlov.
+What I think is unnecessary and counterproductive is to add wholesale
+locking of any access to the PCI Express Capability Structure.
 
+It's fine to have a single spinlock, but I'd suggest only using it
+for registers which are actually accessed concurrently by multiple
+places in the kernel.
+
+
+> spinlock + irq / work drivers/pci/pcie/pme.c: pcie_capability_set_word(dev, PCI_EXP_RTCTL,
+> spinlock + irq / work drivers/pci/pcie/pme.c: pcie_capability_clear_word(dev, PCI_EXP_RTCTL,
+[...]
+> What's more important though, isn't it possible that AER and PME RMW
+> PCI_EXP_RTCTL at the same time so it would need this RMW locking too 
+> despite the pme internal spinlock?
+
+Yes that looks broken, so RTCTL would be another register besides
+LNKCTL and LNKCTL2 that needs protection, good catch.
+
+Thanks,
+
+Lukas
