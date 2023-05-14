@@ -2,99 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8001F701C4E
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 10:16:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F344B701C49
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 10:08:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232498AbjENIPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 04:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58910 "EHLO
+        id S231256AbjENIHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 04:07:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjENIPK (ORCPT
+        with ESMTP id S229462AbjENIHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 04:15:10 -0400
-X-Greylist: delayed 600 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 14 May 2023 01:15:07 PDT
-Received: from air.basealt.ru (air.basealt.ru [194.107.17.39])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66002125;
-        Sun, 14 May 2023 01:15:07 -0700 (PDT)
-Received: by air.basealt.ru (Postfix, from userid 490)
-        id 7251D2F20227; Sun, 14 May 2023 07:59:50 +0000 (UTC)
-X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
-        lindbergh.monkeyblade.net
-X-Spam-Level: 
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        Sun, 14 May 2023 04:07:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260FB1FE5
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 01:07:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A8B5960AD9
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 08:07:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36B53C433EF;
+        Sun, 14 May 2023 08:07:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684051642;
+        bh=QQ3nMwGAnsCK6ZrMFJPsS/m9kGhypUyBDVn0s2ymerY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=AuMbiVq03FYnXeHnaW80P+lJBHCjv5Om8XclL3WhesZamp3BCPrZjWejt1egHRbVF
+         RRTO1o05q0DyipdYobDO+fFHNAj0EWHpBKsazhXZsGFqlG9RV9DSwkOmyyll1lUoEk
+         Xtr8JRErbMTdEm9ObL0EQikJR8WsWasmeAtFkJIL5C6KhE2e9MtJnCm8q2nf3nCjMD
+         hxZXOEV3PbCw3fQVrM4w82pydmObqjhAcEn/kjpIoLgqrUgu2kTTonkphz6w6teWb7
+         PZB0MPj/kidIZTDxjOna867QHhv6NETN5lPtkh41lDG4Obc6pXnPhsz6rd9OtsJiU/
+         LTqzh+FA1lZhA==
+From:   Chao Yu <chao@kernel.org>
+To:     jaegeuk@kernel.org
+Cc:     linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, Chao Yu <chao@kernel.org>
+Subject: [PATCH] f2fs: fix potential deadlock due to unpaired node_write lock use
+Date:   Sun, 14 May 2023 16:07:23 +0800
+Message-Id: <20230514080723.17313-1-chao@kernel.org>
+X-Mailer: git-send-email 2.36.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
-Received: from [192.168.120.181] (unknown [176.59.56.94])
-        by air.basealt.ru (Postfix) with ESMTPSA id 52EE52F20226;
-        Sun, 14 May 2023 07:59:46 +0000 (UTC)
-Message-ID: <6894e9f7-7100-255b-b026-5ccf485a7e31@basealt.ru>
-Date:   Sun, 14 May 2023 10:59:44 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.1
-Subject: Re: [PATCH] e1000e: Fix bind network card with ID = 0x0D4F
-To:     "Neftin, Sasha" <sasha.neftin@intel.com>, kovalev@altlinux.org,
-        nickel@altlinux.org, jesse.brandeburg@intel.com,
-        anthony.l.nguyen@intel.com, davem@davemloft.net, kuba@kernel.org,
-        jeffrey.t.kirsher@intel.com, intel-wired-lan@lists.osuosl.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        pabeni@redhat.com, edumazet@google.com,
-        "Ruinskiy, Dima" <dima.ruinskiy@intel.com>,
-        "Fuxbrumer, Devora" <devora.fuxbrumer@intel.com>,
-        "naamax.meir" <naamax.meir@linux.intel.com>
-References: <20230512231944.100501-1-kovalev@altlinux.org>
- <c9ef1c57-3ec5-5cf8-c025-63527280f2fa@intel.com>
-Content-Language: en-US
-From:   =?UTF-8?B?0JLQsNGB0LjQu9C40Lkg0JrQvtCy0LDQu9C10LI=?= 
-        <kovalevvv@basealt.ru>
-In-Reply-To: <c9ef1c57-3ec5-5cf8-c025-63527280f2fa@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
+        lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-14.05.2023 09:00, Neftin, Sasha пишет:
->> Fixes: 914ee9c436cbe9 ("e1000e: Add support for Comet Lake")
->> Signed-off-by: Vasiliy Kovalev <kovalev@altlinux.org>
->> ---
->>   drivers/net/ethernet/intel/e1000e/netdev.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/ethernet/intel/e1000e/netdev.c 
->> b/drivers/net/ethernet/intel/e1000e/netdev.c
->> index db8e06157da29..8b13f19309c39 100644
->> --- a/drivers/net/ethernet/intel/e1000e/netdev.c
->> +++ b/drivers/net/ethernet/intel/e1000e/netdev.c
->> @@ -7887,7 +7887,7 @@ static const struct pci_device_id 
->> e1000_pci_tbl[] = {
->>       { PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_ICP_I219_LM9), 
->> board_pch_cnp },
->>       { PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_ICP_I219_V9), 
->> board_pch_cnp },
->>       { PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_CMP_I219_LM10), 
->> board_pch_cnp },
->> -    { PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_CMP_I219_V10), 
->> board_pch_cnp },
->> +    { PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_CMP_I219_V10), 
->> board_pch_adp },
-> This is wrong approach. (we can not process old board similar as new)
->>       { PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_CMP_I219_LM11), 
->> board_pch_cnp },
->>       { PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_CMP_I219_V11), 
->> board_pch_cnp },
->>       { PCI_VDEVICE(INTEL, E1000_DEV_ID_PCH_CMP_I219_LM12), 
->> board_pch_spt },
-> Looking in commit 639e298f432fb0 (e1000e: Fix packet loss on Tiger 
-> Lake and later) I would suggest to replace the mac->type as follow:
-> "if (mac->type >= e1000_pch_tgp)" with "if (mac->type >= 
-> e1000_pch_cnp)" (more correct) - try it on your side.
+If S_NOQUOTA is cleared from inode during data page writeback of quota
+file, it may miss to unlock node_write lock, result in potential
+deadlock, fix to use the lock in paired.
 
-I checked this variant first of all - the behavior is correct, network 
-packets are not lost. Can I prepare a new patch or will this change be 
-made by you?
+Kworker					Thread
+- writepage
+ if (IS_NOQUOTA())
+   f2fs_down_read(&sbi->node_write);
+					- vfs_cleanup_quota_inode
+					 - inode->i_flags &= ~S_NOQUOTA;
+ if (IS_NOQUOTA())
+   f2fs_up_read(&sbi->node_write);
 
+Fixes: 79963d967b49 ("f2fs: shrink node_write lock coverage")
+Signed-off-by: Chao Yu <chao@kernel.org>
+---
+ fs/f2fs/compress.c | 7 ++++---
+ fs/f2fs/data.c     | 7 ++++---
+ 2 files changed, 8 insertions(+), 6 deletions(-)
+
+diff --git a/fs/f2fs/compress.c b/fs/f2fs/compress.c
+index 11653fa79289..2ec7cf454418 100644
+--- a/fs/f2fs/compress.c
++++ b/fs/f2fs/compress.c
+@@ -1215,6 +1215,7 @@ static int f2fs_write_compressed_pages(struct compress_ctx *cc,
+ 	unsigned int last_index = cc->cluster_size - 1;
+ 	loff_t psize;
+ 	int i, err;
++	bool quota_inode = IS_NOQUOTA(inode);
+ 
+ 	/* we should bypass data pages to proceed the kworker jobs */
+ 	if (unlikely(f2fs_cp_error(sbi))) {
+@@ -1222,7 +1223,7 @@ static int f2fs_write_compressed_pages(struct compress_ctx *cc,
+ 		goto out_free;
+ 	}
+ 
+-	if (IS_NOQUOTA(inode)) {
++	if (quota_inode) {
+ 		/*
+ 		 * We need to wait for node_write to avoid block allocation during
+ 		 * checkpoint. This can only happen to quota writes which can cause
+@@ -1344,7 +1345,7 @@ static int f2fs_write_compressed_pages(struct compress_ctx *cc,
+ 		set_inode_flag(inode, FI_FIRST_BLOCK_WRITTEN);
+ 
+ 	f2fs_put_dnode(&dn);
+-	if (IS_NOQUOTA(inode))
++	if (quota_inode)
+ 		f2fs_up_read(&sbi->node_write);
+ 	else
+ 		f2fs_unlock_op(sbi);
+@@ -1370,7 +1371,7 @@ static int f2fs_write_compressed_pages(struct compress_ctx *cc,
+ out_put_dnode:
+ 	f2fs_put_dnode(&dn);
+ out_unlock_op:
+-	if (IS_NOQUOTA(inode))
++	if (quota_inode)
+ 		f2fs_up_read(&sbi->node_write);
+ 	else
+ 		f2fs_unlock_op(sbi);
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 7165b1202f53..4a0ee9cc43b5 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -2775,6 +2775,7 @@ int f2fs_write_single_data_page(struct page *page, int *submitted,
+ 	loff_t psize = (loff_t)(page->index + 1) << PAGE_SHIFT;
+ 	unsigned offset = 0;
+ 	bool need_balance_fs = false;
++	bool quota_inode = IS_NOQUOTA(inode);
+ 	int err = 0;
+ 	struct f2fs_io_info fio = {
+ 		.sbi = sbi,
+@@ -2832,19 +2833,19 @@ int f2fs_write_single_data_page(struct page *page, int *submitted,
+ 		goto out;
+ 
+ 	/* Dentry/quota blocks are controlled by checkpoint */
+-	if (S_ISDIR(inode->i_mode) || IS_NOQUOTA(inode)) {
++	if (S_ISDIR(inode->i_mode) || quota_inode) {
+ 		/*
+ 		 * We need to wait for node_write to avoid block allocation during
+ 		 * checkpoint. This can only happen to quota writes which can cause
+ 		 * the below discard race condition.
+ 		 */
+-		if (IS_NOQUOTA(inode))
++		if (quota_inode)
+ 			f2fs_down_read(&sbi->node_write);
+ 
+ 		fio.need_lock = LOCK_DONE;
+ 		err = f2fs_do_write_data_page(&fio);
+ 
+-		if (IS_NOQUOTA(inode))
++		if (quota_inode)
+ 			f2fs_up_read(&sbi->node_write);
+ 
+ 		goto done;
 -- 
-Best regards,
-Vasiliy Kovalev
+2.36.1
 
