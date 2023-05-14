@@ -2,144 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7422701B84
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 06:29:32 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D17C701B82
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 06:29:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231664AbjENE3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 00:29:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
+        id S230496AbjENE30 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 00:29:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjENE31 (ORCPT
+        with ESMTP id S229462AbjENE3Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 00:29:27 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD0E1BCF;
-        Sat, 13 May 2023 21:29:25 -0700 (PDT)
+        Sun, 14 May 2023 00:29:24 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC48E1BCF
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 21:29:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684038565; x=1715574565;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vMQva3pTlSExbdM0d9uf24IiN+CfddvAn6rg4NC6ukQ=;
-  b=Emo1W+EoZSibVyqLtV7UYHFnOnbMweeiH9OA9S/k4dBiYvn44kpLvaZc
-   ND38TAV5AsLiWN7t1vTU/hesgCAqWK0bXSa/3T9kXER8TLPmwVmrvsP0V
-   qbMUn16loFT23E84M2mDWESAuv2w0z65G60wQM8NonCZxrnlXyin79vvk
-   L7yO3rCIbVbAqDa9v6w0bukkGIHFj49YEvDaTWuOp/PwF4LWez2+T1hVN
-   mEwFhTFYVoOK34MpWv6uB56J971mhPsgohHRHHAW5azqqtnZP/v9VRLF7
-   F2RMMX+F574qLvsVvzW7ccFr/KEK9JyzcOT/qtR8Q/KLIOpHHhyw2sYcf
+  t=1684038562; x=1715574562;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=1jyo1/+VMGYuqKKg0yEqQ7o13C0Q5YZcJ9AZTxxQcIE=;
+  b=QJ00QxblYOa2G950iLW3tQNI4jxevtGGTVMrI08LMY3LZHYW4gMn9tc2
+   weIglnr+7PsGfRw8Ln/Fh6cswNVIjlUKXVqAykT6WGFNNJYFhgFQ8tmXo
+   vrWXl1VkF994LsgkOZRGikagLhs30nu3tGhi4s3hcmDWRRQ2dbojLDQbm
+   VHUpTE0Yz6499jc6Yxk633uEOZsS5HUW+gb8JsyCBBE2LJYVJJK5kaq3I
+   GlUVY/H3WLPvbWqBHWFTqd8QPcCgIEz3UY0nSNgVd16RY2VxppRhXwOL1
+   5XyjRQmHGB8Zl8x5C0dRQcH9ro8wiK0R9JO1Gaegv8xxfkjpJp8eXTCq2
    w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="354157776"
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="335537083"
 X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
-   d="scan'208";a="354157776"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 21:29:25 -0700
+   d="scan'208";a="335537083"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 21:29:22 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="703585362"
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="694656730"
 X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
-   d="scan'208";a="703585362"
+   d="scan'208";a="694656730"
 Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 13 May 2023 21:29:21 -0700
+  by orsmga007.jf.intel.com with ESMTP; 13 May 2023 21:29:21 -0700
 Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1py3MG-0005pC-1A;
+        id 1py3MG-0005pA-16;
         Sun, 14 May 2023 04:29:20 +0000
 Date:   Sun, 14 May 2023 12:28:23 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rafael@kernel.org
-Cc:     oe-kbuild-all@lists.linux.dev, lukasz.luba@arm.com,
-        dietmar.eggemann@arm.com, rui.zhang@intel.com,
-        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
-        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
-        len.brown@intel.com, pavel@ucw.cz, Pierre.Gondois@arm.com,
-        ionela.voinescu@arm.com, rostedt@goodmis.org, mhiramat@kernel.org
-Subject: Re: [PATCH v2 08/17] PM: EM: Introduce runtime modifiable table
-Message-ID: <202305141200.aaTHzYOJ-lkp@intel.com>
-References: <20230512095743.3393563-9-lukasz.luba@arm.com>
+To:     Stafford Horne <shorne@gmail.com>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: drivers/pci/pci.c:4195 pci_pio_to_address() warn: always true
+ condition '(pio >= (0 - 0)) => (0-u32max >= 0)'
+Message-ID: <202305141227.mVZGYR0O-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230512095743.3393563-9-lukasz.luba@arm.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lukasz,
-
-kernel test robot noticed the following build warnings:
-
-[auto build test WARNING on rafael-pm/linux-next]
-[also build test WARNING on rafael-pm/thermal linus/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Lukasz-Luba/PM-EM-Refactor-em_cpufreq_update_efficiencies-arguments/20230512-180158
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
-patch link:    https://lore.kernel.org/r/20230512095743.3393563-9-lukasz.luba%40arm.com
-patch subject: [PATCH v2 08/17] PM: EM: Introduce runtime modifiable table
-config: arm64-randconfig-s041-20230514 (https://download.01.org/0day-ci/archive/20230514/202305141200.aaTHzYOJ-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://github.com/intel-lab-lkp/linux/commit/d12d8d1010d7b093d6b64c204d77484d6fc268ab
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Lukasz-Luba/PM-EM-Refactor-em_cpufreq_update_efficiencies-arguments/20230512-180158
-        git checkout d12d8d1010d7b093d6b64c204d77484d6fc268ab
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/power/
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   bb7c241fae6228e89c0286ffd6f249b3b0dea225
+commit: ded2ee36313c941f1a12b6f85cde295b575264ae openrisc: Add pci bus support
+date:   10 months ago
+config: openrisc-randconfig-m031-20230509 (https://download.01.org/0day-ci/archive/20230514/202305141227.mVZGYR0O-lkp@intel.com/config)
+compiler: or1k-linux-gcc (GCC) 12.1.0
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202305141200.aaTHzYOJ-lkp@intel.com/
+| Link: https://lore.kernel.org/oe-kbuild-all/202305141227.mVZGYR0O-lkp@intel.com/
 
-sparse warnings: (new ones prefixed by >>)
->> kernel/power/energy_model.c:472:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct em_perf_table *tmp @@     got struct em_perf_table [noderef] __rcu *runtime_table @@
-   kernel/power/energy_model.c:472:13: sparse:     expected struct em_perf_table *tmp
-   kernel/power/energy_model.c:472:13: sparse:     got struct em_perf_table [noderef] __rcu *runtime_table
+smatch warnings:
+drivers/pci/pci.c:4195 pci_pio_to_address() warn: always true condition '(pio >= (0 - 0)) => (0-u32max >= 0)'
+drivers/infiniband/hw/mthca/mthca_memfree.c:720 mthca_init_db_tab() warn: other places set '(struct mthca_db_table)->npages' to 'page' instead of 'array_size'
 
-vim +472 kernel/power/energy_model.c
+vim +4195 drivers/pci/pci.c
 
-   444	
-   445	/**
-   446	 * em_dev_unregister_perf_domain() - Unregister Energy Model (EM) for a device
-   447	 * @dev		: Device for which the EM is registered
-   448	 *
-   449	 * Unregister the EM for the specified @dev (but not a CPU device).
-   450	 */
-   451	void em_dev_unregister_perf_domain(struct device *dev)
-   452	{
-   453		struct em_perf_domain *pd;
-   454		struct em_perf_table *tmp;
-   455	
-   456		if (IS_ERR_OR_NULL(dev) || !dev->em_pd)
-   457			return;
-   458	
-   459		if (_is_cpu_device(dev))
-   460			return;
-   461	
-   462		pd = dev->em_pd;
-   463		/*
-   464		 * The mutex separates all register/unregister requests and protects
-   465		 * from potential clean-up/setup issues in the debugfs directories.
-   466		 * The debugfs directory name is the same as device's name.
-   467		 */
-   468		mutex_lock(&em_pd_mutex);
-   469	
-   470		em_debug_remove_pd(dev);
-   471	
- > 472		tmp = pd->runtime_table;
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4189  
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4190  phys_addr_t pci_pio_to_address(unsigned long pio)
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4191  {
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4192  	phys_addr_t address = (phys_addr_t)OF_BAD_ADDR;
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4193  
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4194  #ifdef PCI_IOBASE
+5745392e0c2b78 Zhichang Yuan  2018-03-15 @4195  	if (pio >= MMIO_UPPER_LIMIT)
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4196  		return address;
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4197  
+5745392e0c2b78 Zhichang Yuan  2018-03-15  4198  	address = logic_pio_to_hwaddr(pio);
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4199  #endif
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4200  
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4201  	return address;
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4202  }
+9cc742078c9a90 Jianjun Wang   2021-04-20  4203  EXPORT_SYMBOL_GPL(pci_pio_to_address);
+c5076cfe768998 Tomasz Nowicki 2016-05-11  4204  
+
+:::::: The code at line 4195 was first introduced by commit
+:::::: 5745392e0c2b78e0d73203281d5c42cbd6993194 PCI: Apply the new generic I/O management on PCI IO hosts
+
+:::::: TO: Zhichang Yuan <yuanzhichang@hisilicon.com>
+:::::: CC: Bjorn Helgaas <helgaas@kernel.org>
 
 -- 
 0-DAY CI Kernel Test Service
