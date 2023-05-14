@@ -2,110 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF76B702098
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 00:53:27 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 23B0B70209D
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 00:55:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233931AbjENWxZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 18:53:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40280 "EHLO
+        id S235314AbjENWzK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 18:55:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229710AbjENWxY (ORCPT
+        with ESMTP id S234864AbjENWzE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 18:53:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DFF61BB;
-        Sun, 14 May 2023 15:53:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 14 May 2023 18:55:04 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 608B51BB;
+        Sun, 14 May 2023 15:55:02 -0700 (PDT)
+Received: from mercury (unknown [185.209.196.239])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D39C261267;
-        Sun, 14 May 2023 22:53:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 930BBC433D2;
-        Sun, 14 May 2023 22:53:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684104802;
-        bh=hhVyC/OAoNTAaTDUMLdOJPMwd8d8UWMVRdN3Lw1WEsw=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=pbm/Xmn7WNwWfLiZpv3qGVDQG9SFqLDVYorUZ/kWU0MzbOQjwwOdvuDSG7TUGcHZ1
-         In9wg3WZ1wlrOJBQ18Ngg2hzQ+tGzlQ/oZZO9TaONmKP0WJK73RKTQDgykr7keO6OB
-         6xtignbQz6DMk1OxB8+1UWzYXW1g2gIXJvU/5sLkJVqxXdIloKjxEChUzscpInTOge
-         IUkleJVRLCrQ1LVGd5/JFFmbuA5KaTpFvmmjqxAOqy6WYAmcDs1bJS4oBspHTp6g2t
-         N1K8p/4xTfqBT9d9iEEvdyF8QuoOWM/K0tZTCqC/IrMgFCaWesm3D4kvDtV3MRwzvA
-         fQvmbYx04Ys/w==
-Message-ID: <b26499be-e8e1-5812-a134-dbeb58118124@kernel.org>
-Date:   Mon, 15 May 2023 07:53:20 +0900
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 21233660574D;
+        Sun, 14 May 2023 23:55:01 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684104901;
+        bh=DU/1Wu1hqUE0C6lLNhKSAzwm16Syk8IrmHigAsAJxMM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KSvlecfGk+9pSL4CPRCynPATN4gIX2BW5Cgx0XnjeoirIqrINuDPIq0OYxmCtV1Ub
+         +V62BbePkhFwoARybkfAiSZqPXv08gJWEXKRPs70EzeVVe+FL3L2QnTXyfI+kncCqV
+         /zCmabP7PlNDkjC/MUNbMYvlEe195cKmPmC/vPJzxmnNcSUiTFc9nYrNjvHNIDq0eQ
+         s3xyf3xL06UBSNig95vMGCwKTTQsxVIOg3ZZEtb41YV8LhnvSvJg1e2KW261KbyBc3
+         qBwhTuu1TfU2zT/bu94fbsPFQNFscD1Zb7GQsQyzUqYu9t3jvFqAE0JsWHVyk7Cpkp
+         uXfcMNhCk17Jg==
+Received: by mercury (Postfix, from userid 1000)
+        id 646BD1061381; Mon, 15 May 2023 00:54:58 +0200 (CEST)
+Date:   Mon, 15 May 2023 00:54:58 +0200
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     ChiaEn Wu <chiaen_wu@richtek.com>
+Cc:     dan.carpenter@linaro.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, peterwu.pub@gmail.com,
+        cy_huang@richtek.com
+Subject: Re: [PATCH] power: supply: rt9467: Fix passing zero to
+ 'dev_err_probe'
+Message-ID: <20230514225458.nngl45joh4crunal@mercury.elektranox.org>
+References: <33c598f3655db56eed13a5b46a1468379f69349c.1683863629.git.chiaen_wu@richtek.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [PATCH v2] ata: libata-core: Simplies if condition
-Content-Language: en-US
-To:     Yahu Gao <yahu.gao@outlook.com>
-Cc:     linux-ide@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yahu Gao <gaoyh12@lenovo.com>, Jiwei Sun <sunjw10@lenovo.com>
-References: <20230422121415.6276-1-yahu.gao@outlook.com>
- <OS3P286MB0632739A614E451725FF697D9E619@OS3P286MB0632.JPNP286.PROD.OUTLOOK.COM>
- <OS0P286MB06283D2E74F02D7C541E46D79E6B9@OS0P286MB0628.JPNP286.PROD.OUTLOOK.COM>
-From:   Damien Le Moal <dlemoal@kernel.org>
-Organization: Western Digital Research
-In-Reply-To: <OS0P286MB06283D2E74F02D7C541E46D79E6B9@OS0P286MB0628.JPNP286.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="thiqvn36r3wkqzzv"
+Content-Disposition: inline
+In-Reply-To: <33c598f3655db56eed13a5b46a1468379f69349c.1683863629.git.chiaen_wu@richtek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 4/28/23 10:53, Yahu Gao wrote:
-> ping ...
-> 
-> 在 2023/4/22 20:14, Yahu Gao 写道:
->> From: Yahu Gao <gaoyh12@lenovo.com>
->>
->> Replace conditions of avoid issuing [P]IDENTIFY to PMP.
 
-Please be a little more descriptive. Something like:
+--thiqvn36r3wkqzzv
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Simplify the condition used in ata_dev_revalidate() to not issue identify
-commands to port multiplier devices.
+Hi,
 
-would be better.
+On Fri, May 12, 2023 at 01:44:23PM +0800, ChiaEn Wu wrote:
+> Fix passing zero to 'dev_err_probe()' in 'rt9467_request_interrupt()'
+>=20
+> Fixes: 6f7f70e3a8dd ("power: supply: rt9467: Add Richtek RT9467 charger d=
+river")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Link: https://lore.kernel.org/r/202305111228.bHLWU6bq-lkp@intel.com/
+> Signed-off-by: ChiaEn Wu <chiaen_wu@richtek.com>
+> ---
 
->>
->> Reviewed-by: Jiwei Sun <sunjw10@lenovo.com>
+Thanks, queued to my fixes branch.
 
-Where does this review come from ? I have never seen an email for it. I cannot
-accept this tag without seeing the email for it.
+-- Sebastian
 
->> Signed-off-by: Yahu Gao <gaoyh12@lenovo.com>
->>
->> diff --git a/drivers/ata/libata-core.c b/drivers/ata/libata-core.c
->> index 14c17c3bda4e..53f65d751189 100644
->> --- a/drivers/ata/libata-core.c
->> +++ b/drivers/ata/libata-core.c
->> @@ -3802,11 +3802,7 @@ int ata_dev_revalidate(struct ata_device *dev, unsigned int new_class,
->>   		return -ENODEV;
->>   
->>   	/* fail early if !ATA && !ATAPI to avoid issuing [P]IDENTIFY to PMP */
->> -	if (ata_class_enabled(new_class) &&
+>  drivers/power/supply/rt9467-charger.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/rt9467-charger.c b/drivers/power/supply=
+/rt9467-charger.c
+> index 73f744a..ea33693 100644
+> --- a/drivers/power/supply/rt9467-charger.c
+> +++ b/drivers/power/supply/rt9467-charger.c
+> @@ -1023,7 +1023,7 @@ static int rt9467_request_interrupt(struct rt9467_c=
+hg_data *data)
+>  	for (i =3D 0; i < num_chg_irqs; i++) {
+>  		virq =3D regmap_irq_get_virq(data->irq_chip_data, chg_irqs[i].hwirq);
+>  		if (virq <=3D 0)
+> -			return dev_err_probe(dev, virq, "Failed to get (%s) irq\n",
+> +			return dev_err_probe(dev, -EINVAL, "Failed to get (%s) irq\n",
+>  					     chg_irqs[i].name);
+> =20
+>  		ret =3D devm_request_threaded_irq(dev, virq, NULL, chg_irqs[i].handler,
+> --=20
+> 2.7.4
+>=20
 
-Please keep the above "ata_class_enabled(new_class) &&" condition:
+--thiqvn36r3wkqzzv
+Content-Type: application/pgp-signature; name="signature.asc"
 
-	if (ata_class_enabled(new_class) && new_class == ATA_DEV_PMP) {
+-----BEGIN PGP SIGNATURE-----
 
-While keeping this condition is logically not necessary, having it makes the
-code easier to understand.
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRhZsIACgkQ2O7X88g7
++poYAQ/+MFGVHXC+3x6i2hhmnmJI7GuTUczxKXd2FeERNJ2Key71XmCOFt9UgxD0
+sq+BhfHzV29tnF/NDVBPdmM8pBfmdphtx7UxTu11aqsc1KaiYP6A1wP0hLHeB++V
+4GP0gyipzK89IqYo06qpTpMaKzf1uM1t6wSIqVy7V+Ojx9EIQjN7bVGgMGaZW0w0
+2ZnI7LG38mSbujxurQWj4aYMyOoibgfCoTNu4+rVbH+y/9aR0PT2Q/iMuYSN9Dnr
+XgfSUzo72KYIEEwTSjThI+dLQ/4Azlec6XXtZSnjF6T+bLQN4yx52nbsS7+z6rlK
+ul+4Vu7/OpbMvyCYeLKERbUV3NCKOaURi29kLE5xQpo/Tbi71PXS1A12SQtMFu31
+/3rF+v4DbJRZZhf7pz1sGeE8mzqD0Pc1ORlNOf/K8ybruWKaPfJnCpFV3jhv6t6a
+bPq/cX+dQ5K0iI7RG5pS2C+SV0pBUUX6NQIN0rqqShmbcp+1KAfd1mhtO0S3mpnT
+zvctcuZASIr6rApckX2U9d9f5eMRXOesq7+7/j2nV/9F3w55iRMK7sX/67t5Qg1u
+w9t4GGUg3dq4kmwjQeN+RUeL+0Ku3xjLN+27tVpJOnSPy70ph3zdrOm/9Ycq8swa
+VgHT7sRNzd7McsJLyeTx5mUm4X5e36ydjEIXEcLPT8DxdKwUCwk=
+=2Hby
+-----END PGP SIGNATURE-----
 
->> -	    new_class != ATA_DEV_ATA &&
->> -	    new_class != ATA_DEV_ATAPI &&
->> -	    new_class != ATA_DEV_ZAC &&
->> -	    new_class != ATA_DEV_SEMB) {
->> +	if (new_class == ATA_DEV_PMP) {
->>   		ata_dev_info(dev, "class mismatch %u != %u\n",
->>   			     dev->class, new_class);
->>   		rc = -ENODEV;
-
+--thiqvn36r3wkqzzv--
