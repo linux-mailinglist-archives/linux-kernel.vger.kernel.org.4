@@ -2,66 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71AD701E4D
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 18:52:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 341A7701E7A
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 19:08:16 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233993AbjENQwM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 12:52:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38956 "EHLO
+        id S234663AbjENRIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 13:08:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230009AbjENQwK (ORCPT
+        with ESMTP id S230281AbjENRII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 12:52:10 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5493F271E;
-        Sun, 14 May 2023 09:52:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1684083115; i=deller@gmx.de;
-        bh=NYdzANhdv5BBLf5RtYD2CTwHtFaSt5mvBTNZdOOnbHo=;
-        h=X-UI-Sender-Class:Date:From:To:Subject;
-        b=GZqehjTMlgIxEy3T0CfeA/4tRDk2YpnrEiEwU1mXQov8ZtUN/LBgSQUQqs/lJoEKk
-         Wo8RkXItba1glhe+KhF7i+FfEPXgkUsra+p4AN8wepoX9jLyD8/vsT4Nbew7J+kCw3
-         P+sbkE4u3CxHSWXPdz1Zb4K4U4JhEyy7tWfuZmyF29zq6V1C7J2euCRNOqTxJaDeJt
-         /ygKwe3ifhYQjKDFqVt/VgruMapN4dbVCnPlscU1NOxaHzDCWC7SLORfoVpYrpjCoy
-         BMnD+yaWRcQ+4TDzSf/HHfoX6LjnvB76+hTe8LhWE8ebJEZqrSA7UvbDZTD6GIZ2wv
-         KNVKpbs42b5EQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from p100 ([94.134.155.91]) by mail.gmx.net (mrgmx004
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MY6Cl-1pfMe73Xnp-00YR92; Sun, 14
- May 2023 18:51:54 +0200
-Date:   Sun, 14 May 2023 18:51:52 +0200
-From:   Helge Deller <deller@gmx.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        John David Anglin <dave.anglin@bell.net>
-Subject: [GIT PULL] parisc architecture fixes for v6.4-rc2
-Message-ID: <ZGERqF1P4VlazwPG@p100>
+        Sun, 14 May 2023 13:08:08 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607F54230;
+        Sun, 14 May 2023 10:08:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E04DB618B8;
+        Sun, 14 May 2023 17:08:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 303B8C433D2;
+        Sun, 14 May 2023 17:07:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684084082;
+        bh=srHAo0Y9b1qf2rL+g1G7GWSxmyN50IIlO+TTLU3U41E=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hhX7qZTcONw+c5MKoJz/MFIzS2L9mGoGHUx01wCjDsf9VjRwGicpXV1a0c+XIoQ2k
+         StCZ2xLDojeV7i0RQTG3/yGXGc8kh+Tp0M2nyUfeFuCLbNlz8sd9LEFqPwzxX6DCZK
+         +qYQ1hgxhy1iRVJbwBCDwSimRsMHXj/cez1MV7k/ZZNX6RhCwmGVom614WnumvF+7n
+         IYbM7tXXu1kEFGVxPXmrxOwlOSjyZNLbKM2ueOB/trhKKEeDzKb1W0o6p9CXeXhk6A
+         FPIcQDTiumYo2Q2i0p5fB1K/mdIop5yHkpvunXwXg1fsEkni5uLSrlsbR8epSfdOQX
+         LcUE/gbPaNmKw==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>
+Cc:     Samuel Holland <samuel@sholland.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
+        linux-serial@vger.kernel.org
+Subject: [PATCH v3 00/10] riscv: add Bouffalolab bl808 support
+Date:   Mon, 15 May 2023 00:56:41 +0800
+Message-Id: <20230514165651.2199-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Provags-ID: V03:K1:GQWN2sGTb1ChSM2ogQQMsGLBY9jvky5S/AY/9dz8B4hADEWwjRE
- G5JiGPv9tyMVaEHXbyNoTqLX0YwHzm55w23lPvkcEJIm5ANrd3uczmnH4sYywatd6aUXsjg
- 3ua3nRy8GDCAhFprO+IOz7kWFPefUTDhkM8vo+r7i3t6SqHbp5iM/0BXMBZHMMHL0x17Dih
- 1YEopunguCvo1Wa00etVQ==
-UI-OutboundReport: notjunk:1;M01:P0:lb8dOl++ufk=;x6FFGw4a8xWUqosE7dR+hZTkiwb
- Y5hQGM5rFOv54mUHM0AtRTuMFPgNDjZRtU2UOHl5K1xRl7tf5ZvHvdMkvf6virqJcIA+7a0iD
- LKwo5vH9Qmk6/yEQojrcBmUs3IVWbXGoR7MDJZ8p4TMllHF6yDMSyyQZmN084gIjn8tB1Cgp4
- U+OGgBXcqabPXydQyKgVp++wTtlTLQKzxlelhmxC0Z8CiOBbekV1aqEMGCBWPQDcTPKlk9vOw
- DVDUFiKQOttwnmZkMz20NLuPtYoxPE3TXaoDAp9F+InNfxqm9ogxW10oV2O4xQcqY854SswbI
- pSXTpp2Oq9wXfMbSEotTDyKS3jIXQOvl/27Y+Ed55KE5l7zJm6yTh8ONtDT4hY1rbQHy1zxhd
- UURqp5M87s6AdrQ/gmVUqIPAV5JKoj1UbjzxvkOETDIr+zDYGvjcZsEcyOAvHk3eY32aCQRBA
- dJY8jnYey7zX/pKSkv8FF2b8e9AtrpPccyNWbeelFRTEJNQw369qi4WrfVzsiz4dMd1fj91VT
- 8s44WdFArk/dwIdTayMVTa35FXQpxZLpkBRZOJmL3Atob5fhFc+N0rY8qc167dfweKXuWLOE1
- lRpEIyejOhIwjEwdVffkuVS74kvfF1rSh8UAiHX9YmdNVn3svi507Oros33k8+bXAVfrUIJxO
- uLpH/4Wx0Zcia2q0HkQLHkkO16DLLIMMcKPeJ3xTHVn3MfAKOvyguEUjMf0gmPH+vHOAwni/Y
- LTp1TZ9zCiIQwBZ6TErPEi0VvwiAHpqAobBwFZ1a3/xAZJYCGUAoNh2hhu2EOzb6N72Uuhaih
- rcvu/wNeudlwO3msbZp85hE4zxiIBMespOHoNGHh5WYncjHPFQVg2G8v6CsWzEqrhjNGvW5x+
- oNPXQA7/R25FEyIvq4y9/ulI+vFeyNDd50uTT0SLl3PAbxo7OJT3u8il7YvfBF4OJudb4rNmw
- GEEzwg==
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -70,45 +62,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+This series adds Bouffalolab uart driver and basic devicetrees for
+Bouffalolab bl808 SoC and Sipeed M1s dock board.
 
-please pull two small fixes for the parisc architecture for 6.4-rc2.
+Since v2:
+  - fix dt_binding_check and dtbs_check warnings
+  - use uart_port_tx_limited() helper in uart driver
+  - collect Acked-by/Reviewed-by tag
+  - uart0 -> uart3
+  - update "riscv,ndev" property
+  - mv vendor prefix binding as the first patch
+  - add compatible string for bouffalolab bl808 plic
 
-Fix the swap entry encoding calculation (tagged for backport) and avoid a
-gcc-12 warning.
+Since v1:
+  - use FIELD_PREP and FIELD_GET macro
+  - rewrite bflb_uart_tx_chars()
+  - add vendor prefix for bouffalolab
+  - add dt binding for bl808 compatibles
+  - enable SOC_BOUFFALOLAB in defconfig
+  - collect Reviewed-by tag
+  - modify commit-msg as suggested
 
-Thanks,
-Helge
 
-=2D--
-The following changes since commit ac9a78681b921877518763ba0e89202254349d1=
-b:
+Jisheng Zhang (10):
+  dt-bindings: vendor-prefixes: add bouffalolab
+  dt-bindings: interrupt-controller: Add bouffalolab bl808 plic
+  dt-bindings: serial: add documentation for Bouffalolab UART Driver
+  serial: bflb_uart: add Bouffalolab UART Driver
+  riscv: add the Bouffalolab SoC family Kconfig option
+  dt-bindings: riscv: Add bouffalolab bl808 board compatibles
+  riscv: dts: bouffalolab: add the bl808 SoC base device tree
+  riscv: dts: bouffalolab: add Sipeed M1s SoM and Dock devicetree
+  MAINTAINERS: riscv: add entry for Bouffalolab SoC
+  riscv: defconfig: enable BOUFFALOLAB SoC
 
-  Linux 6.4-rc1 (2023-05-07 13:34:35 -0700)
+ .../sifive,plic-1.0.0.yaml                    |   1 +
+ .../bindings/riscv/bouffalolab.yaml           |  29 +
+ .../serial/bouffalolab,bl808-uart.yaml        |  47 ++
+ .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
+ MAINTAINERS                                   |   7 +
+ arch/riscv/Kconfig.socs                       |   5 +
+ arch/riscv/boot/dts/Makefile                  |   1 +
+ arch/riscv/boot/dts/bouffalolab/Makefile      |   2 +
+ .../dts/bouffalolab/bl808-sipeed-m1s-dock.dts |  25 +
+ .../dts/bouffalolab/bl808-sipeed-m1s.dtsi     |  21 +
+ arch/riscv/boot/dts/bouffalolab/bl808.dtsi    |  73 +++
+ arch/riscv/configs/defconfig                  |   1 +
+ drivers/tty/serial/Kconfig                    |  18 +
+ drivers/tty/serial/Makefile                   |   1 +
+ drivers/tty/serial/bflb_uart.c                | 586 ++++++++++++++++++
+ include/uapi/linux/serial_core.h              |   3 +
+ 16 files changed, 822 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/riscv/bouffalolab.yaml
+ create mode 100644 Documentation/devicetree/bindings/serial/bouffalolab,bl808-uart.yaml
+ create mode 100644 arch/riscv/boot/dts/bouffalolab/Makefile
+ create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s-dock.dts
+ create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dtsi
+ create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808.dtsi
+ create mode 100644 drivers/tty/serial/bflb_uart.c
 
-are available in the Git repository at:
+-- 
+2.40.0
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git ta=
-gs/parisc-for-6.4-2
-
-for you to fetch changes up to 6f9e98849edaa8aefc4030ff3500e41556e83ff7:
-
-  parisc: Fix encoding of swp_entry due to added SWP_EXCLUSIVE flag (2023-=
-05-14 02:04:27 +0200)
-
-=2D---------------------------------------------------------------
-parisc architecture fixes for kernel v6.4-rc2:
-
-- Fix encoding of swp_entry due to added SWP_EXCLUSIVE flag
-- Include reboot.h to avoid gcc-12 compiler warning
-
-=2D---------------------------------------------------------------
-Helge Deller (1):
-      parisc: Fix encoding of swp_entry due to added SWP_EXCLUSIVE flag
-
-Simon Horman (1):
-      parisc: kexec: include reboot.h
-
- arch/parisc/include/asm/pgtable.h | 8 ++++----
- arch/parisc/kernel/kexec.c        | 2 ++
- 2 files changed, 6 insertions(+), 4 deletions(-)
