@@ -2,79 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82CA9701D76
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 14:41:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CC00701D78
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 14:44:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232258AbjENMl2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 08:41:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37896 "EHLO
+        id S233187AbjENMoN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 08:44:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbjENMl0 (ORCPT
+        with ESMTP id S230009AbjENMoK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 08:41:26 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F0AD171A
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 05:41:25 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id 5b1f17b1804b1-3f4ec041fc3so22506805e9.1
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 05:41:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684068084; x=1686660084;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=cynUrOqdkWITH+5SSziuXYTSPapfq2lw8vhoI55n8Xo=;
-        b=J5GzqF1QT0T7YOO0bd27+68MuQ/9HbiQmzKGgSrtzcna9dWqD5//yCDwtHZZlhsV3W
-         zIUgsGdhIo4aoKmt8456jKo+VwRYv9BVKI/Z2KEnIeBICtX6pXw99ftRMR1kJFObTi+E
-         JjPyyDha2SQrgd78YyMxfOfhkIWs4XQfekRrosuiQ6nYiw6PVWk1UHVfnvGAAj2HIgGG
-         arihh5MjWVohb9RnPMxytD5kDBr6IW12+HWC2bR0NMys4P0o9hGDykFPnH4ZJsSL5Sc+
-         tVi939CyvTSjbuY30Cu1fxj/UzOWd5gPfrIXyQDHTy8C4RJ6lCwKTNx3zmi3a2Buybyp
-         o6HQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684068084; x=1686660084;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cynUrOqdkWITH+5SSziuXYTSPapfq2lw8vhoI55n8Xo=;
-        b=LvMspiC/dInXjdOKVNrYMByd3NQ1xKGxY/kbWCp2gmXzrqzDENqle6Zjo9wrlm5uMU
-         rXgLNgaXjLL0vXg7vnbw907wtubfsOtV3+xtnJANeTBuvHlwj9bXH+e7aopcTzq+KuK5
-         h/DF5F0189Vi75r+SIVj8W2yHMkEs6XAjr7DYrpYZOMNsz0qGC9bhk6IeXMQ4hzYRphe
-         ZphrHpwFunsX8DdOfEIxbDbcw+a7dLgQnOnPSKWJiIFShsaGSQG11x9fqScRTL8XMH/9
-         dADfLw0fS0co4M1Xn9bf+auuYJ35zRNN6eDcW/P+SYZBoUdE+UH/bzTerxEKBM8eUlQG
-         EESA==
-X-Gm-Message-State: AC+VfDzFzMPtixZ5KKpoF3HPKppjxyr+l7DQ/ZDNC5hIr/JDyiELhjsP
-        6c25U0rXD/N49rJ+QPfPvddgnA==
-X-Google-Smtp-Source: ACHHUZ5v2c/Lw+UdKikQE0IAnGR2AyU+5LcRlbP33uYNDyiIM3X4STlCRE4ltv3M4pafF+VlU6Disg==
-X-Received: by 2002:a1c:6a0d:0:b0:3f4:23d4:e48 with SMTP id f13-20020a1c6a0d000000b003f423d40e48mr16977737wmc.23.1684068083830;
-        Sun, 14 May 2023 05:41:23 -0700 (PDT)
-Received: from [192.168.0.15] (cpc76484-cwma10-2-0-cust274.7-3.cable.virginm.net. [82.31.201.19])
-        by smtp.gmail.com with ESMTPSA id i7-20020a05600c290700b003f4ecf1fcbcsm9693192wmd.22.2023.05.14.05.41.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 May 2023 05:41:23 -0700 (PDT)
-Message-ID: <552345c5-b1e9-41f6-f275-b6eeeb51df25@linaro.org>
-Date:   Sun, 14 May 2023 12:41:22 +0000
+        Sun, 14 May 2023 08:44:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2B7171C;
+        Sun, 14 May 2023 05:44:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B6E660B77;
+        Sun, 14 May 2023 12:44:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAA0DC4339E;
+        Sun, 14 May 2023 12:44:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684068248;
+        bh=LJBToeL0tcu0T2KaNfd3KXHteAkpEqZfe7vzNpplhzs=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=jF8IbLaWO+mElb4geNbZT9I4y5tgR2ozycx58nNPydnxMlqdo6Zt+OTUbQHBqAcRK
+         0XMTHBbqPPT9yHMvfygB84RgTrJ9jK0Z213D/SmT9ZWZw+TPK17dedzxdxeE5OLI4n
+         QlXEEwgZNYWAmVN32lU4Y2J2DLMFu3SoB1hu/RczyhXDTPdhsAvCj4nx2sJuZBhj4o
+         pkIrphDmypyoqFIoN/MBuRmjLgILpRfyrnIGhUbhhAntiFsQ0kgaeH6VFgL5KQo52l
+         iFPdtWmpzfdPvctOzGmrS2cxY5i2ZDNHanc2Dn7sEeQf5BhR2ephcl0vk+l+U7Sotj
+         YQ8nx4JCgvp1g==
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-54fba751417so2173658eaf.0;
+        Sun, 14 May 2023 05:44:08 -0700 (PDT)
+X-Gm-Message-State: AC+VfDxLWOjp5Gd/VU1Pvo+Efo0t8Uc0T8KQYzl39JI+GViFAZ0s/tE1
+        SVOj1zYNNaSHGnSxPlWKh47bUgnckVi1yY9WsY8=
+X-Google-Smtp-Source: ACHHUZ6kXkmKU5bNAZiA8dhA5FsxHC9juf99YtM86r+10x66PzO2bClzrbBHGYxKsX4Ri4PUsJTO2kDHFTlkzOuvmIo=
+X-Received: by 2002:a4a:3553:0:b0:54f:810a:160f with SMTP id
+ w19-20020a4a3553000000b0054f810a160fmr8669470oog.2.1684068247998; Sun, 14 May
+ 2023 05:44:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.9.1
-Subject: Re: [PATCH] regulator: qcom-rpmh: Revert "regulator: qcom-rpmh: Use
- PROBE_FORCE_SYNCHRONOUS"
-Content-Language: en-US
-To:     Amit Pundir <amit.pundir@linaro.org>,
-        Douglas Anderson <dianders@chromium.org>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230324063357.1.Ifdf3625a3c5c9467bd87bfcdf726c884ad220a35@changeid>
- <CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com>
-From:   Caleb Connolly <caleb.connolly@linaro.org>
-In-Reply-To: <CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+References: <20230513204502.1593923-1-masahiroy@kernel.org>
+In-Reply-To: <20230513204502.1593923-1-masahiroy@kernel.org>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Sun, 14 May 2023 21:43:31 +0900
+X-Gmail-Original-Message-ID: <CAK7LNASDzy9RERN6+q6WgR4ROYZQue=SBqgbcoYuVePByHtk6Q@mail.gmail.com>
+Message-ID: <CAK7LNASDzy9RERN6+q6WgR4ROYZQue=SBqgbcoYuVePByHtk6Q@mail.gmail.com>
+Subject: Re: [PATCH v4 00/21] Unify <linux/export.h> and <asm/export.h>,
+ remove EXPORT_DATA_SYMBOL(), faster TRIM_UNUSED_KSYMS
+To:     linux-kbuild@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Pitre <npitre@baylibre.com>,
+        Nicolas Schier <nicolas@fjasle.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,99 +67,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun, May 14, 2023 at 5:45=E2=80=AFAM Masahiro Yamada <masahiroy@kernel.o=
+rg> wrote:
+>
+>
+> This patch set refactors modpost first to make it easier to
+> add new code.
+>
+> Main goals:
+>
+>  - Refactors EXPORT_SYMBOL, <linux/export.h> and <asm/export.h>.
+>    You can still put EXPORT_SYMBOL() in *.S file, very close to the defin=
+ition,
+>    but you do not need to care about whether it is a function or a data.
+>    This removes EXPORT_DATA_SYMBOL().
+>
+>  - Re-implement TRIM_UNUSED_KSYMS in one-pass.
+>    This makes the building faster.
+>
+>  - Move the static EXPORT_SYMBOL check to modpost.
+>    This also makes the building faster.
+>
+> Previous version
+> v3: https://lore.kernel.org/all/20220928063947.299333-1-masahiroy@kernel.=
+org/
+>
 
 
-On 13/05/2023 18:08, Amit Pundir wrote:
-> On Fri, 24 Mar 2023 at 19:05, Douglas Anderson <dianders@chromium.org> wrote:
->>
->> This reverts commit 58973046c1bf ("regulator: qcom-rpmh: Use
->> PROBE_FORCE_SYNCHRONOUS"). Further digging into the problems that
->> prompted the us to switch to synchronous probe showed that the root
->> cause was a missing "rootwait" in the kernel command line
->> arguments. Let's reinstate asynchronous probe.
-> 
-> Hi, the asynchronous probe is broken on Dragonboard 845c (SDM845)
-> running AOSP (Android Open Source Project) with v6.4-rc1
-> https://bugs.linaro.org/show_bug.cgi?id=5975.
-> Can we please go back to synchronous probe.
-> 
-> AOSP do not make use of rootwait, IIRC, but it is added by the
-> bootloader anyway. And the device fails to boot AOSP regardless of
-> "rootwait" bootarg being present or not.
 
-Could you try applying this diff to enable some log spam and let me know
-what you get? I'm keen to try and figure this one out. My mail client
-might crunch this a bit so I have pasted it here too
-https://p.calebs.dev/ab74b7@raw
+After more testing, I noticed some issues.
 
-diff --git a/drivers/soc/qcom/rpmh-rsc.c b/drivers/soc/qcom/rpmh-rsc.c
-index f93544f6d796..67859f1bdb28 100644
---- a/drivers/soc/qcom/rpmh-rsc.c
-+++ b/drivers/soc/qcom/rpmh-rsc.c
-@@ -653,11 +653,23 @@ int rpmh_rsc_send_data(struct rsc_drv *drv, const
-struct tcs_request *msg)
 
-        spin_lock_irqsave(&drv->lock, flags);
 
-+       dev_info(drv->dev, "%s: %p tcs->type=%d state=%d, "
-+               "wait_for_compl=%d, num_cmds=%d\n",
-+               __func__, msg, tcs->type, msg->state,
-+               msg->wait_for_compl, msg->num_cmds);
-+       for (int i = 0; i < msg->num_cmds; i++)
-+               dev_info(drv->dev, "%s: %p cmd[%d] "
-+                       "addr=0x%x data=0x%x\n", __func__,
-+                       msg, i, msg->cmds[i].addr, msg->cmds[i].data);
-+
-        /* Wait forever for a free tcs. It better be there eventually! */
-        wait_event_lock_irq(drv->tcs_wait,
-                            (tcs_id = claim_tcs_for_req(drv, tcs, msg))
->= 0,
-                            drv->lock);
 
-+       dev_info(drv->dev, "%s: %px GOT TCS! %d\n",
-+               __func__, msg, tcs_id);
-+
-        tcs->req[tcs_id - tcs->offset] = msg;
-        set_bit(tcs_id, drv->tcs_in_use);
-        if (msg->state == RPMH_ACTIVE_ONLY_STATE && tcs->type !=
-ACTIVE_TCS) {
 
-> 
-> FWIW I do not see this regression on RB5 (QRB5165/SM8250) running the
-> same set of AOSP images.
-> 
-> Regards,
-> Amit Pundir
-> 
-> 
-> 
-> 
->>
->> Fixes: 58973046c1bf ("regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS")
->> Cc: Marek Szyprowski <m.szyprowski@samsung.com>
->> Signed-off-by: Douglas Anderson <dianders@chromium.org>
->> ---
->>
->>  drivers/regulator/qcom-rpmh-regulator.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/regulator/qcom-rpmh-regulator.c b/drivers/regulator/qcom-rpmh-regulator.c
->> index 903032b2875f..4826d60e5d95 100644
->> --- a/drivers/regulator/qcom-rpmh-regulator.c
->> +++ b/drivers/regulator/qcom-rpmh-regulator.c
->> @@ -1462,7 +1462,7 @@ MODULE_DEVICE_TABLE(of, rpmh_regulator_match_table);
->>  static struct platform_driver rpmh_regulator_driver = {
->>         .driver = {
->>                 .name = "qcom-rpmh-regulator",
->> -               .probe_type = PROBE_FORCE_SYNCHRONOUS,
->> +               .probe_type = PROBE_PREFER_ASYNCHRONOUS,
->>                 .of_match_table = of_match_ptr(rpmh_regulator_match_table),
->>         },
->>         .probe = rpmh_regulator_probe,
->> --
->> 2.40.0.348.gf938b09366-goog
->>
+- modpost: simplify find_elf_symbol()
+  has a regression.
+  I will get a wrong name for 'static' symbols.
+  I will fix it or drop it.
 
--- 
-Kind Regards,
-Caleb (they/them)
+- modpost: pass struct module pointer to check_section_mismatch()
+  causes a build error, (but fixed by the next commit)
+
+- kbuild: generate KSYMTAB entries by modpost
+  This causes build errors on ARM.
+  I will fix it.
+
+
+I will send v5.
+
+
+
+>
+> Masahiro Yamada (21):
+>   modpost: remove broken calculation of exception_table_entry size
+>   modpost: remove fromsym info in __ex_table section mismatch warning
+>   modpost: remove get_prettyname()
+>   modpost: squash report_extable_warnings() into
+>     extable_mismatch_handler()
+>   modpost: squash report_sec_mismatch() into default_mismatch_handler()
+>   modpost: clean up is_executable_section()
+>   modpost: squash extable_mismatch_handler() into
+>     default_mismatch_handler()
+>   modpost: pass 'tosec' down to default_mismatch_handler()
+>   modpost: pass section index to find_elf_symbol2()
+>   modpost: simplify find_elf_symbol()
+>   modpost: rename find_elf_symbol() and find_elf_symbol2()
+>   modpost: unify 'sym' and 'to' in default_mismatch_handler()
+>   modpost: replace r->r_offset, r->r_addend with faddr, taddr
+>   modpost: remove is_shndx_special() check from section_rel(a)
+>   modpost: pass struct module pointer to check_section_mismatch()
+>   kbuild: generate KSYMTAB entries by modpost
+>   ia64,export.h: replace EXPORT_DATA_SYMBOL* with EXPORT_SYMBOL*
+>   modpost: check static EXPORT_SYMBOL* by modpost again
+>   modpost: squash sym_update_namespace() into sym_add_exported()
+>   modpost: use null string instead of NULL pointer for default namespace
+>   kbuild: implement CONFIG_TRIM_UNUSED_KSYMS without recursion
+>
+>  .gitignore                        |   1 -
+>  Makefile                          |  19 +-
+>  arch/ia64/include/asm/Kbuild      |   1 +
+>  arch/ia64/include/asm/export.h    |   3 -
+>  arch/ia64/kernel/head.S           |   2 +-
+>  arch/ia64/kernel/ivt.S            |   2 +-
+>  include/asm-generic/export.h      |  83 +----
+>  include/asm-generic/vmlinux.lds.h |   1 +
+>  include/linux/export-internal.h   |  49 +++
+>  include/linux/export.h            | 116 ++-----
+>  include/linux/pm.h                |   8 +-
+>  kernel/module/internal.h          |  12 +
+>  scripts/Makefile.build            |  19 +-
+>  scripts/Makefile.modpost          |   7 +
+>  scripts/adjust_autoksyms.sh       |  73 ----
+>  scripts/basic/fixdep.c            |   3 +-
+>  scripts/check-local-export        |  70 ----
+>  scripts/gen_ksymdeps.sh           |  30 --
+>  scripts/mod/modpost.c             | 534 ++++++++++++------------------
+>  scripts/mod/modpost.h             |   1 +
+>  scripts/remove-stale-files        |   2 +
+>  21 files changed, 317 insertions(+), 719 deletions(-)
+>  delete mode 100644 arch/ia64/include/asm/export.h
+>  delete mode 100755 scripts/adjust_autoksyms.sh
+>  delete mode 100755 scripts/check-local-export
+>  delete mode 100755 scripts/gen_ksymdeps.sh
+>
+> --
+> 2.39.2
+>
+
+
+--=20
+Best Regards
+Masahiro Yamada
