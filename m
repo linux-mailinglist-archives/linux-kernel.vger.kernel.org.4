@@ -2,115 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 479A5701CCC
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 11:55:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 21E94701CD5
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 12:09:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236997AbjENJzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 05:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56462 "EHLO
+        id S237177AbjENKJB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 06:09:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230339AbjENJzr (ORCPT
+        with ESMTP id S229611AbjENKI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 05:55:47 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BABAAC0
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 02:55:45 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id a640c23a62f3a-94f4b911570so1853961966b.0
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 02:55:45 -0700 (PDT)
+        Sun, 14 May 2023 06:08:59 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC001171B;
+        Sun, 14 May 2023 03:08:57 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id 4fb4d7f45d1cf-50c079eb705so2851915a12.1;
+        Sun, 14 May 2023 03:08:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684058144; x=1686650144;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20221208; t=1684058936; x=1686650936;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=DmnCd9zBSpzSRwFsU5TtJIOG/MCBXv4toD2D925k+2k=;
-        b=AWNmy5FBccEuQgwM1II/lH3TjYuI1CWhObctyu4ktSINIKc1QgcniKjKgFNcNakdKm
-         ZE+dHukU5YKKrCfW0AHAmhCxQwHu9NsH+M9YfTgrmdkwblST1Y2w8hXWM2CaMr4W9RHr
-         d7o09e3odUGHjZ5EJDXocOHtyXS0gO9d0PnZM17ZU1xvffirHLPmBvvP8EZgCnRJ5lZh
-         eVMlW+d/Qqdjr/G+MKZjx745hKuSKVgPyRF7ogv5HWhEl6SqK0Jr7FbPz6d1/IvotPOV
-         Jm8WSxsLIS6jJdgINxct2xfQshwY5jy6Ljxfy/fZSNSMfg/Iq/GdOy1uhyDvk1YZbJGk
-         koeg==
+        bh=Ie9tiZWx0j0qso2N+/tHJUjGfMip0OumDCuv0l96kj8=;
+        b=WgvlRw8uZZxNk/hWPkNXit0p+MkX0JNCyI7Vzy7yJY+OsvwTCNXVGUhs1wWVsvUX21
+         nXH/U8P2buAlKk/QRUpPPlXwZ6xNSMN6Ie6c/P8o7+U+TpPiXqw9cHPQjufjQaP2oH5Z
+         2ogGG7SzwoCreXK0QZcfN8Vr/5p2DNlO0+EVTN8Ri05js0mr8AoxvR+iELR9nMwsZ3eX
+         0jkh0jQ8AObDYgvzUWBh6JBIamixp/DoIj7xEXrCplepepbHVOhrtVNq1s6jsaAgz15J
+         6aPjtcKnlAQO8J9gHOrvTKum+grQaRuZiDsoQgJQpFsjgWYa2kNloSVD3NMmgFoodj29
+         ZKuA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684058144; x=1686650144;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20221208; t=1684058936; x=1686650936;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DmnCd9zBSpzSRwFsU5TtJIOG/MCBXv4toD2D925k+2k=;
-        b=Ly2kr2H25Iwr6mlqm3ZcXV7yZZeFzhDOLRfShadJETxJd4EGdyaCBrnNMB7Czu4y68
-         ovZ7PIopzofQN2bpObiOiW1NSwdjJgzhJBgq+Zr8zZWeITJhe3o+twDvDlnqSvb3qDJ4
-         5qyHuIGTr3LXcmIeOFYY67/8JxveV6RSTIg/1gDCBt3uZCK1aBIfqTxoeycjy94HpspH
-         W2jDWbnDKnKTuN6o8JJPygV17nsnDVNwZJKRTeq32v4VXZMebu3+LSBEQvdIESdab7qG
-         P36afCXjN4kN7xLrEnfPha1atGTvZEzhTW3BI/ExzhpY9GuPzMLfwLMprYbjebC6Xx45
-         zgtQ==
-X-Gm-Message-State: AC+VfDykKj0mHKzA6Ui3BdHxyN5IsqK9oQAv5af5HDAfIHzCpA5JVuRC
-        jEcIuR5w67+m0siMOEHT3RGDYQ==
-X-Google-Smtp-Source: ACHHUZ7hRkuoxb1+sQp7/C83yF5sWrBdHlBQlIGqSszE7wlv1cUtZW6L2gB9QqiiPEPzG8C+ePthow==
-X-Received: by 2002:a17:907:9810:b0:96a:861:a2ac with SMTP id ji16-20020a170907981000b0096a0861a2acmr16240193ejc.0.1684058144158;
-        Sun, 14 May 2023 02:55:44 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:715f:ddce:f2ba:123b? ([2a02:810d:15c0:828:715f:ddce:f2ba:123b])
-        by smtp.gmail.com with ESMTPSA id r9-20020aa7cb89000000b005021d210899sm5667044edt.23.2023.05.14.02.55.42
+        bh=Ie9tiZWx0j0qso2N+/tHJUjGfMip0OumDCuv0l96kj8=;
+        b=bHDm9wumCfVyGgQReF+RGNFgmnjl3qnjZwrTy+6aXPeLIedziqqVhXvDghAzA3CaiH
+         Bs2ARKK7oZf3q47zuEewP2K/fKa30Td+gdMNevNpSQOxl7GUBXnqMxY3uey2tEDHFvhm
+         g069sym6jgAKnAhavdpKm3uWhXNhPstXLsnaqUpMefs1OI3NCKbuIDQHFCOsqe8c33+s
+         JSsujAJ1iSb20sGC29HgzoXsvG88WZkTSuu6Y6Ad5UIs2u+pZ3mEtpawrn31gWgATzo3
+         0oaR0FeM7hYGzgL9Wb3ktsKx+SYnpTEIS5b6HQP5xsbjHXWrLdFKK44rpIiPvpW5eo9F
+         hUOA==
+X-Gm-Message-State: AC+VfDxsCgP5mg4Tye2DgKqeJO7n+sIA2qVNaKrSvVSNS0wmyfXF535x
+        nw8CqqdgB96XQHm4nnpLYow=
+X-Google-Smtp-Source: ACHHUZ4Z1zF+di5vZ/CeRoQGRNuzAxlt2n8nf6jgaD78i3qq9gsh34Uq5xlThiik/oqT/cdFYmGmmg==
+X-Received: by 2002:a05:6402:2742:b0:50d:9ba4:52dc with SMTP id z2-20020a056402274200b0050d9ba452dcmr4516415edd.0.1684058935703;
+        Sun, 14 May 2023 03:08:55 -0700 (PDT)
+Received: from [192.168.10.10] ([37.252.94.55])
+        by smtp.gmail.com with ESMTPSA id v17-20020aa7cd51000000b0050daa883545sm5679306edw.64.2023.05.14.03.08.54
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 May 2023 02:55:43 -0700 (PDT)
-Message-ID: <51dbd824-7d90-8a69-902b-d643347abdf3@linaro.org>
-Date:   Sun, 14 May 2023 11:55:42 +0200
+        Sun, 14 May 2023 03:08:55 -0700 (PDT)
+Message-ID: <6f6d09b3-39e7-58b6-221f-6276d3ce213a@gmail.com>
+Date:   Sun, 14 May 2023 14:08:53 +0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 3/3] arm64: dts: allwinner: h6: tanix-tx6: Add compatible
- bluetooth
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 2/3] ALSA: Implement the new virtual driver
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     corbet@lwn.net, akpm@linux-foundation.org, perex@perex.cz,
+        tiwai@suse.com, broonie@kernel.org, skhan@linuxfoundation.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        gregkh@linuxfoundation.org, himadrispandya@gmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org
+References: <20230513202037.158777-1-ivan.orlov0322@gmail.com>
+ <20230513202037.158777-2-ivan.orlov0322@gmail.com>
+ <878rdr8e5f.wl-tiwai@suse.de>
 Content-Language: en-US
-To:     Rudi Heitbaum <rudi@heitbaum.com>, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        conor+dt@kernel.org, wens@csie.org, jernej.skrabec@gmail.com,
-        samuel@sholland.org, marcel@holtmann.org, johan.hedberg@gmail.com,
-        luiz.dentz@gmail.com, anarsoul@gmail.com, alistair@alistair23.me
-Cc:     netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-bluetooth@vger.kernel.org
-References: <20230514074731.70614-1-rudi@heitbaum.com>
- <20230514074731.70614-4-rudi@heitbaum.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230514074731.70614-4-rudi@heitbaum.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+In-Reply-To: <878rdr8e5f.wl-tiwai@suse.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/05/2023 09:47, Rudi Heitbaum wrote:
-> Tanix TX6 comes either with RTL8822BS or RTL8822CS wifi+bt combo module.
-> Add compatible for RTL8822BS as it uses different firmware.
+On 5/14/23 13:18, Takashi Iwai wrote:
+> The idea is interesting, and it's a definitely good thing to have.
 > 
-> Signed-off-by: Rudi Heitbaum <rudi@heitbaum.com>
-> ---
-
-Thank you for your patch. There is something to discuss/improve.
-
->  arch/arm64/boot/dts/allwinner/sun50i-h6-tanix-tx6.dts | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> I wonder, though, whether it could be better provided as an extention
+> to the existing snd-dummy driver.  The advantage of extending
+> snd-dummy driver would be that it already supports different formats,
+> etc.  OTOH, if we create an individual driver, the pro side is the
+> simpleness of the code.
 > 
-> diff --git a/arch/arm64/boot/dts/allwinner/sun50i-h6-tanix-tx6.dts b/arch/arm64/boot/dts/allwinner/sun50i-h6-tanix-tx6.dts
-> index 9a38ff9b3fc7..9460ccbc247d 100644
-> --- a/arch/arm64/boot/dts/allwinner/sun50i-h6-tanix-tx6.dts
-> +++ b/arch/arm64/boot/dts/allwinner/sun50i-h6-tanix-tx6.dts
-> @@ -21,7 +21,7 @@ &uart1 {
->  	status = "okay";
->  
->  	bluetooth {
-> -		compatible = "realtek,rtl8822cs-bt";
-> +		compatible = "realtek,rtl8822bs-bt", "realtek,rtl8822cs-bt";
+> I'm inclined to go with a separate driver, but I'm open about this.
+> Maybe Jaroslav and Mark have some opinions?
+> 
+> About this patch set: the driver name should be a bit more specific,
+> as this isn't a generic virtual driver that is used for general
+> purpose but it's only for testing.  And it's only for testing PCM.
+> So, a name like snd-test-pcm would be more appropriate, IMO.
+> 
+> And, we want the coverage of different formats, channels, rates and
+> accesses (interleaved vs non-interleaved).  How can we extend somehow
+> more for that?
+> 
+> 
+> thanks,
+> 
+> Takashi
 
-This neither matches bindings nor your commit msg. If device has
-different chips, then you should not stuff all of compatibles together.
-Please analyze the case. Maybe you need different boards for different
-revisions?
+Hello Takashi! Thank you for your reply. I fully agree with the naming 
+issue, and I'll change it in the future versions of the patch set in 
+case we choose to have it as a separate driver. I also prefer this 
+option because in my opinion the use cases of these drivers are a little 
+bit different. Also, I believe I can extend the driver to support 
+different formats, channels and accesses in the near future.
 
-Best regards,
-Krzysztof
+Additionally, implementing these changes would be a perfect task for the 
+end of the Linux Kernel Mentorship program I'm going through :) However, 
+I'm open to other views on this, and I'm ready to move the functionality 
+from my driver to the snd-dummy in case we prefer this option.
+
+Thanks again for considering my changes!
+
+Kind regards,
+Ivan Orlov.
 
