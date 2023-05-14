@@ -2,169 +2,314 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74821701D2D
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 13:58:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 953B0701D2F
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 14:04:07 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236252AbjENL6Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 07:58:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51326 "EHLO
+        id S233548AbjENMDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 08:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233722AbjENL6X (ORCPT
+        with ESMTP id S229526AbjENMDs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 07:58:23 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8957210D
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 04:58:21 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50bc2feb320so17835959a12.3
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 04:58:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684065499; x=1686657499;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ueNUY+61RC+vr33b4+u6+BrfZ3BJJhhclw2Re6JpY94=;
-        b=HL2l6tFwqcvaksx52yisq7RR0TRrXrwkOo8dOwyznXSYvgZPyuKE52NZ2FSkxurUoY
-         H9hFJg0E1CxzU5GMJwPE8BJUge2Rf5sz5GK6VG+k9+cKf4Ool8T46BE6P3fq+TaJNakx
-         WoyuSJNfRYecVKgg3LCS5/s32OI+xHx5rlbz9TFAhrW80O8mHPNcJsSMNpbnq/WDSHPo
-         IAX5J1ZmsRFHQOEtp8kFZpMpnYuls63XJsesPTcv4zaH+byEB8O3qpiIqFyiyXsx+M5U
-         W6Ph4TKH5qALtwZnjls6KlAQo+dOC/RoOr8NlN8IlZd3KL88uclJN709RtZMOZqxFf3r
-         f3gQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684065499; x=1686657499;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ueNUY+61RC+vr33b4+u6+BrfZ3BJJhhclw2Re6JpY94=;
-        b=CxdiqAc4ZsXAIJnI8X71rbylckjCoIk46Tk+nbB7w+1W1SochMBS3GnmChyaaSE1VP
-         kJ+SV0j0b4LbmlarB0GSM60LkrSkCq4HZ2OHL98F7E3oMcIciFNJv/0NSXHs1Z9krEra
-         J5cH2WYrGSf+l6EgBqJcc99s7U2LhLiWbqv56S3NI5jnY7WWn6CT2ISIFtX0nOLAOjxI
-         PRR27/Kv5LRW36RYmvh1taHf+8GJe/fIVM1rupTcQHNU98yum0HBhHzmFJDObZmyADRg
-         S0NDVBORtLdnBKq/qtM4lpvDP/EkZcJ2QIw5be/8uj06i3s7lKyplmmxGY1BQQT9YY3X
-         yEgg==
-X-Gm-Message-State: AC+VfDzfjV8reyJzT62anDC2LKOEYBN1uAJzB4BhWY9KvlfbBuYjnRUM
-        OUy8ZlbQrAd7rVC52CnQhy/rAw==
-X-Google-Smtp-Source: ACHHUZ7xsDrMn8wajAMkmg1yh4SBoBjpfcp8VcuzhBb/J3uNhg9BgkGqNoFX7nma8bpIZP3t7rtMsA==
-X-Received: by 2002:a17:907:928e:b0:96a:8412:a43d with SMTP id bw14-20020a170907928e00b0096a8412a43dmr8603542ejc.33.1684065498811;
-        Sun, 14 May 2023 04:58:18 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:715f:ddce:f2ba:123b])
-        by smtp.gmail.com with ESMTPSA id i24-20020a1709067a5800b00965aee5be9asm8223005ejo.170.2023.05.14.04.58.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 04:58:18 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v4] dt-bindings: net: nxp,sja1105: document spi-cpol/cpha
-Date:   Sun, 14 May 2023 13:57:41 +0200
-Message-Id: <20230514115741.40423-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Sun, 14 May 2023 08:03:48 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6EA31BFD;
+        Sun, 14 May 2023 05:03:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684065824; x=1715601824;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=yCOVdGGc/aZqYjzgoV5mk2s2X5cfZ9vAefWO6YSegRs=;
+  b=hhUOm2PsF8J0PkNBYpXUap0wIe+F3mimgow7XCBsnK8EFLy6pUmWRh6w
+   JFeiDtsOYnGfPcO4nWK0vgZ5N8UiVir5PeuJ1qbkRI9kREXsjoY3sQxQH
+   Zj6CwI/A3o4ziBCF++c9bhBINaihAzZDM3Fn4rvESEsZhOUzgTXmujW0L
+   tmNDu4420BkQ15XZ/iNCeF3qc71tTWgkAUd49eYbnKDwDF5S+KHjw4Dzk
+   PJyVc1pleYWDuPYQZqeoKMSQwKPWmjucfnMOng4QLEC5BkD06mmBxUuCl
+   yGII4+JIcc38FO4pFLEzgb6bHyU9KHWn+Urr73yF8Hkm8vROYfcf/N9dx
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="340377950"
+X-IronPort-AV: E=Sophos;i="5.99,274,1677571200"; 
+   d="scan'208";a="340377950"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 May 2023 05:03:43 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="1030596385"
+X-IronPort-AV: E=Sophos;i="5.99,274,1677571200"; 
+   d="scan'208";a="1030596385"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga005.fm.intel.com with ESMTP; 14 May 2023 05:03:42 -0700
+Received: from [10.212.213.15] (kliang2-mobl1.ccr.corp.intel.com [10.212.213.15])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 5E5EB580BE0;
+        Sun, 14 May 2023 05:03:39 -0700 (PDT)
+Message-ID: <b1fb8f09-17d7-45c2-6f8d-0756cd09fe77@linux.intel.com>
+Date:   Sun, 14 May 2023 08:03:38 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v4 00/44] Fix perf on Intel hybrid CPUs
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Ian Rogers <irogers@google.com>
+Cc:     Ahmad Yasin <ahmad.yasin@intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Stephane Eranian <eranian@google.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Perry Taylor <perry.taylor@intel.com>,
+        Samantha Alt <samantha.alt@intel.com>,
+        Caleb Biggers <caleb.biggers@intel.com>,
+        Weilin Wang <weilin.wang@intel.com>,
+        Edward Baker <edward.baker@intel.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        Rob Herring <robh@kernel.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        Sumanth Korikkar <sumanthk@linux.ibm.com>,
+        Thomas Richter <tmricht@linux.ibm.com>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Kang Minchul <tegongkang@gmail.com>,
+        Athira Rajeev <atrajeev@linux.vnet.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230502223851.2234828-1-irogers@google.com>
+ <b8f03c40-d238-2ce9-5b50-bd9e1465be23@linux.intel.com>
+ <ZF6GkU6Le8bxex2O@kernel.org>
+Content-Language: en-US
+From:   "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <ZF6GkU6Le8bxex2O@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some boards use SJA1105 Ethernet Switch with SPI CPHA, while ones with
-SJA1110 use SPI CPOL, so document this to fix dtbs_check warnings:
 
-  arch/arm64/boot/dts/freescale/fsl-lx2160a-bluebox3.dtb: ethernet-switch@0: Unevaluated properties are not allowed ('spi-cpol' was unexpected)
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 2023-05-12 2:33 p.m., Arnaldo Carvalho de Melo wrote:
+> Em Wed, May 03, 2023 at 04:56:36PM -0400, Liang, Kan escreveu:
+>>
+>>
+>> On 2023-05-02 6:38 p.m., Ian Rogers wrote:
+>>> TL;DR: hybrid doesn't crash, json metrics work on hybrid on both PMUs
+>>> or individually, event parsing doesn't always scan all PMUs, more and
+>>> new tests that also run without hybrid, less code.
+>>>
+>>> The first 4 patches are aimed at Linux 6.4 to address issues raised,
+>>> in particular by Kan, on the existing perf stat behavior with json
+>>> metrics. They avoid duplicated events by removing groups. They don't
+>>> hide events and metrics to make event multiplexing obvious. They avoid
+>>> terminating perf when paranoia is higher due to certain events that
+>>> always fail. They avoid rearranging events by PMUs when the events
+>>> aren't in a group.
+>>>
+>>> The next 5 patches avoid grouping events for metrics where they could
+>>> never succeed and were previously posted as:
+>>> "perf vendor events intel: Add xxx metric constraints"
+>>> https://lore.kernel.org/all/20230419005423.343862-1-irogers@google.com/
+>>> In general the generated json is coming from:
+>>> https://github.com/intel/perfmon/pull/73
+>>>
+>>> Next are some general and test improvements.
+>>>
+>>> Next event parsing is rewritten to not scan all PMUs for the benefit
+>>> of raw and legacy cache parsing, instead these are handled by the
+>>> lexer and a new term type. This ultimately removes the need for the
+>>> event parser for hybrid to be recursive as legacy cache can be just a
+>>> term. Tests are re-enabled for events with hyphens, so AMD's
+>>> branch-brs event is now parsable.
+>>>
+>>> The cputype option is made a generic pmu filter flag and is tested
+>>> even on non-hybrid systems.
+>>>
+>>> The final patches address specific json metric issues on hybrid, in
+>>> both the json metrics and the metric code.
+>>>
+>>> The patches add slightly more code than they remove, in areas like
+>>> better json metric constraints and tests, but in the core util code,
+>>> the removal of hybrid is a net reduction:
+>>>  22 files changed, 711 insertions(+), 1016 deletions(-)
+>>>
+>>> Sample output is contained in the v1 patch set:
+>>> https://lore.kernel.org/lkml/bff481ba-e60a-763f-0aa0-3ee53302c480@linux.intel.com/
+>>>
+>>> Tested on Tigerlake, Skylake and Alderlake CPUs.
+>>>
+>>> The v4 patch set:
+>>>  - rebase, 1 of the Linux 6.4 recommended patches are merged leaving:
+>>>    1) perf metric: Change divide by zero and !support events behavior
+>>>    2) perf stat: Introduce skippable evsels
+>>>    3) perf metric: Json flag to not group events if gathering a metric group
+>>>    4) perf parse-events: Don't reorder ungrouped events by pmu
+>>>    whose diffstat is:
+>>>     30 files changed, 326 insertions(+), 33 deletions(-)
+>>>    but without the vendor event updates (the tend to be large as they
+>>>    repeat something per architecture per metric) is just:
+>>>     10 files changed, 90 insertions(+), 32 deletions(-)
+>>
+>> I have tested the 4 patches on top of the perf-tools-next branch on both
+>> Cascade Lake and Raptor Lake. The result looks good to me.
+>>
+>> They address the permission error found in the default mode of perf stat
+>> on the Cascade Lake. Thanks Ian for the fix.
+>>
+>> Arnaldo, could you please consider to back port them for the 6.4?
+> 
+> Yes, its in perf-tools now, will go to Linus next week.
 
----
+Thanks Arnaldo!
 
-Changes since v3:
-1. Rebase.
-2. Require cpha/cpol properties on respective variants (thus update
-   example).
+> 
+> What about the other patches? I saw some you provided your review, what
+> about the others, are you ok with them?
+> 
 
-Changes since v2:
-1. Add allOf:if:then, based on feedback from Vladimir.
+Yes, I'm OK with the patch set. It fixes many issues. Thanks Ian.
+(My tests mainly focus on the area in which the patch set may touch. I
+did the tests on various platforms, ADL (hybrid), Cascade Lake, SPR.)
 
-Changes since v1:
-1. Add also cpha.
----
- .../bindings/net/dsa/nxp,sja1105.yaml         | 32 ++++++++++++++++---
- 1 file changed, 28 insertions(+), 4 deletions(-)
+Tested-by: Kan Liang <kan.liang@linux.intel.com>
 
-diff --git a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
-index 9a64ed658745..991448962c93 100644
---- a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
-+++ b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
-@@ -12,10 +12,6 @@ description:
-   cs_sck_delay of 500ns. Ensuring that this SPI timing requirement is observed
-   depends on the SPI bus master driver.
- 
--allOf:
--  - $ref: dsa.yaml#/$defs/ethernet-ports
--  - $ref: /schemas/spi/spi-peripheral-props.yaml#
--
- maintainers:
-   - Vladimir Oltean <vladimir.oltean@nxp.com>
- 
-@@ -36,6 +32,9 @@ properties:
-   reg:
-     maxItems: 1
- 
-+  spi-cpha: true
-+  spi-cpol: true
-+
-   # Optional container node for the 2 internal MDIO buses of the SJA1110
-   # (one for the internal 100base-T1 PHYs and the other for the single
-   # 100base-TX PHY). The "reg" property does not have physical significance.
-@@ -109,6 +108,30 @@ $defs:
-        1860, 1880, 1900, 1920, 1940, 1960, 1980, 2000, 2020, 2040, 2060, 2080,
-        2100, 2120, 2140, 2160, 2180, 2200, 2220, 2240, 2260]
- 
-+allOf:
-+  - $ref: dsa.yaml#/$defs/ethernet-ports
-+  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-+  - if:
-+      properties:
-+        compatible:
-+          enum:
-+            - nxp,sja1105e
-+            - nxp,sja1105t
-+            - nxp,sja1105p
-+            - nxp,sja1105q
-+            - nxp,sja1105r
-+            - nxp,sja1105s
-+    then:
-+      properties:
-+        spi-cpol: false
-+      required:
-+        - spi-cpha
-+    else:
-+      properties:
-+        spi-cpha: false
-+      required:
-+        - spi-cpol
-+
- unevaluatedProperties: false
- 
- examples:
-@@ -120,6 +143,7 @@ examples:
-             ethernet-switch@1 {
-                     reg = <0x1>;
-                     compatible = "nxp,sja1105t";
-+                    spi-cpha;
- 
-                     ethernet-ports {
-                             #address-cells = <1>;
--- 
-2.34.1
+But there are still some issues. I don't think they are introduced by
+this patch set. We may fix them later separately.
 
+- Segmentation fault with perf stat --topdown on ADL (hybrid) and
+Cascade Lake.
+  It looks like a legacy issue, may not be introduced by this patch set.
+  Here is the backtrace. It looks like there is a NULL metric_group.
+
+(gdb) backtrace
+#0  0x00007ffff73035d1 in __strstr_sse2_unaligned () from /lib64/libc.so.6
+#1  0x00000000004f9019 in metricgroup__topdown_max_level_callback
+(pm=<optimized out>, table=<optimized out>,
+    data=0x7fffffff92f4) at util/metricgroup.c:1722
+#2  0x00000000005e8a31 in pmu_metrics_table_for_each_metric
+(table=0xcb74d0 <pmu_events_map+368>,
+    fn=fn@entry=0x4f8ff0 <metricgroup__topdown_max_level_callback>,
+data=data@entry=0x7fffffff92f4)
+    at pmu-events/pmu-events.c:61123
+#3  0x00000000004fbc3b in metricgroups__topdown_max_level () at
+util/metricgroup.c:1742
+#4  0x000000000042c135 in add_default_attributes () at builtin-stat.c:1845
+#5  cmd_stat (argc=0, argv=0x7fffffffe3e0) at builtin-stat.c:2446
+#6  0x00000000004b922b in run_builtin (p=p@entry=0xd5c530
+<commands+336>, argc=argc@entry=2,
+    argv=argv@entry=0x7fffffffe3e0) at perf.c:323
+#7  0x000000000040e373 in handle_internal_command (argv=0x7fffffffe3e0,
+argc=2) at perf.c:377
+#8  run_argv (argv=<synthetic pointer>, argcp=<synthetic pointer>) at
+perf.c:421
+#9  main (argc=2, argv=0x7fffffffe3e0) at perf.c:537
+(gdb)
+
+Also, the return type is unsigned int, but a bool is given.
+
+unsigned int metricgroups__topdown_max_level(void)
+{
+        unsigned int max_level = 0;
+        const struct pmu_metrics_table *table = pmu_metrics_table__find();
+
+        if (!table)
+                return false;
+
+
+
+- The perf metric and metricgroups fail on different platforms.
+  Ian and I have discussed it. We agree to address it later separately.
+
+  102: perf all metricgroups test
+  ADL (hybrid)
+  103: perf all metrics test
+  ADL (hybrid), Cascade Lake, SPR
+
+- perf list: The [Kernel PMU event] is missed for all the hardware cache
+events.
+  It impacts both hybrid and non-hybrid platforms.
+  It's a user-visible change introduced by the patch set.
+  I don't know if anyone cares whether it's a kernel event or a regular
+event. It doesn't bother me. So I'm OK with it.
+
+cpu:
+  L1-dcache-loads OR cpu/L1-dcache-loads/
+  L1-dcache-load-misses OR cpu/L1-dcache-load-misses/
+  L1-dcache-stores OR cpu/L1-dcache-stores/
+  L1-icache-load-misses OR cpu/L1-icache-load-misses/
+  LLC-loads OR cpu/LLC-loads/
+  LLC-load-misses OR cpu/LLC-load-misses/
+  LLC-stores OR cpu/LLC-stores/
+  LLC-store-misses OR cpu/LLC-store-misses/
+  dTLB-loads OR cpu/dTLB-loads/
+  dTLB-load-misses OR cpu/dTLB-load-misses/
+  dTLB-stores OR cpu/dTLB-stores/
+  dTLB-store-misses OR cpu/dTLB-store-misses/
+  iTLB-load-misses OR cpu/iTLB-load-misses/
+  branch-loads OR cpu/branch-loads/
+  branch-load-misses OR cpu/branch-load-misses/
+  node-loads OR cpu/node-loads/
+  node-load-misses OR cpu/node-load-misses/
+  branch-instructions OR cpu/branch-instructions/    [Kernel PMU event]
+  branch-misses OR cpu/branch-misses/                [Kernel PMU event]
+  bus-cycles OR cpu/bus-cycles/                      [Kernel PMU event]
+  cache-misses OR cpu/cache-misses/                  [Kernel PMU event]
+  cache-references OR cpu/cache-references/          [Kernel PMU event]
+  cpu-cycles OR cpu/cpu-cycles/                      [Kernel PMU event]
+  instructions OR cpu/instructions/                  [Kernel PMU event]
+
+
+- The --cputype only works for the metric in the default mode.
+  I can still see the cpu_atom events with --cputype core
+  It may be something we can improve later.
+
+# ./perf stat --cputype core sleep 2
+
+ Performance counter stats for 'sleep 2':
+
+              0.52 msec task-clock                       #    0.000 CPUs
+utilized
+                 1      context-switches                 #    1.939 K/sec
+                 0      cpu-migrations                   #    0.000 /sec
+                69      page-faults                      #  133.770 K/sec
+         2,569,423      cpu_core/cycles/                 #    4.981 G/sec
+     <not counted>      cpu_atom/cycles/
+                       (0.00%)
+         3,287,691      cpu_core/instructions/           #    6.374 G/sec
+     <not counted>      cpu_atom/instructions/
+                       (0.00%)
+           555,848      cpu_core/branches/               #    1.078 G/sec
+     <not counted>      cpu_atom/branches/
+                       (0.00%)
+             8,398      cpu_core/branch-misses/          #   16.281 M/sec
+     <not counted>      cpu_atom/branch-misses/
+                       (0.00%)
+        15,416,538      cpu_core/TOPDOWN.SLOTS/          #     36.1 %
+tma_backend_bound
+                                                  #     23.9 %  tma_retiring
+                                                  #      5.6 %
+tma_bad_speculation
+                                                  #     34.4 %
+tma_frontend_bound
+         3,687,877      cpu_core/topdown-retiring/
+           846,398      cpu_core/topdown-bad-spec/
+         5,320,217      cpu_core/topdown-fe-bound/
+         5,562,045      cpu_core/topdown-be-bound/
+            14,149      cpu_core/INT_MISC.UOP_DROPPING/  #   27.431 M/sec
+
+
+Thanks,
+Kan
