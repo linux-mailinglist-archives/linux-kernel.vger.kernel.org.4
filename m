@@ -2,159 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A22B701BEA
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 08:18:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E326701C00
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 08:38:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbjENGSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 02:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42644 "EHLO
+        id S231128AbjENGiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 02:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229447AbjENGSc (ORCPT
+        with ESMTP id S229447AbjENGiB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 02:18:32 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0CB2C1FC0;
-        Sat, 13 May 2023 23:18:31 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1004)
-        id 7B06E20EB22D; Sat, 13 May 2023 23:18:28 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7B06E20EB22D
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linuxonhyperv.com;
-        s=default; t=1684045108;
-        bh=mkDSgMixtmxFXZXt8h2/2gvZqMCg8aIpGWf4AZFjQjw=;
-        h=From:To:Cc:Subject:Date:From;
-        b=o3tQbgag6GQZOid6zYnnPELIjRY/dITiZBdzdIRYYIK+RMpGY7myQnUVzTUY1srOJ
-         T93Js7yLO7FYg4tJmMkz03daMN/OAJIKsxVoyE6e+rYNnIHu5CPhDSFER+uAWOtjl8
-         tbFBzDCYUH4kuO01D69S24hKIQxAZYHgbpD29o30=
-From:   longli@linuxonhyperv.com
-To:     Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-        Ajay Sharma <sharmaajay@microsoft.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-rdma@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Long Li <longli@microsoft.com>
-Subject: [PATCH v2] RDMA/mana_ib: Use v2 version of cfg_rx_steer_req to enable RX coalescing
-Date:   Sat, 13 May 2023 23:18:15 -0700
-Message-Id: <1684045095-31228-1-git-send-email-longli@linuxonhyperv.com>
-X-Mailer: git-send-email 1.8.3.1
-X-Spam-Status: No, score=-11.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 14 May 2023 02:38:01 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E45481FEA
+        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 23:37:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79EA360FBB
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 06:37:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9141DC433EF;
+        Sun, 14 May 2023 06:37:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1684046278;
+        bh=E0hJNeluinyMUhmWFoGDbW0eO1GmmRxA0vP/bh4Hrl0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dgLjKAc7YVb0mpnmNxUi9iBOdRoupTW8zcf3gTNmHC296CsPfDfw6i43iCW7bqgSo
+         0w0SkcqJe1JKqe9HJE4bRo1Tt303f44W8VbTDog2lJ2u88igqGUvkSLB+SiGsh6Rjj
+         TjSQrojel24RlT5TI1ro9xGOOjNY4wWuICsXB8m0=
+Date:   Sun, 14 May 2023 08:37:56 +0200
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Prathu Baronia <prathubaronia2011@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] axis-fifo: use devm_kasprintf for device name
+Message-ID: <2023051411-happier-mural-a8ef@gregkh>
+References: <20230513214029.122689-1-prathubaronia2011@gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230513214029.122689-1-prathubaronia2011@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Long Li <longli@microsoft.com>
+On Sun, May 14, 2023 at 03:10:27AM +0530, Prathu Baronia wrote:
+> - Replaces devm_kzalloc and snprintf combo.
+> - Also made the fops alignment proper.
+> 
+> Signed-off-by: Prathu Baronia <prathubaronia2011@gmail.com>
+> ---
+>  drivers/staging/axis-fifo/axis-fifo.c | 16 +++++++---------
+>  1 file changed, 7 insertions(+), 9 deletions(-)
+> 
+> diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
+> index dfd2b357f484..8b46699efb34 100644
+> --- a/drivers/staging/axis-fifo/axis-fifo.c
+> +++ b/drivers/staging/axis-fifo/axis-fifo.c
+> @@ -720,11 +720,11 @@ static int axis_fifo_close(struct inode *inod, struct file *f)
+>  }
+>  
+>  static const struct file_operations fops = {
+> -	.owner = THIS_MODULE,
+> -	.open = axis_fifo_open,
+> +	.owner   = THIS_MODULE,
+> +	.open    = axis_fifo_open,
+>  	.release = axis_fifo_close,
+> -	.read = axis_fifo_read,
+> -	.write = axis_fifo_write
+> +	.read    = axis_fifo_read,
+> +	.write   = axis_fifo_write
+>  };
+>  
+>  /* read named property from the device tree */
+> @@ -820,10 +820,6 @@ static int axis_fifo_probe(struct platform_device *pdev)
+>  	 * ----------------------------
+>  	 */
+>  
+> -	device_name = devm_kzalloc(dev, 32, GFP_KERNEL);
+> -	if (!device_name)
+> -		return -ENOMEM;
+> -
+>  	/* allocate device wrapper memory */
+>  	fifo = devm_kzalloc(dev, sizeof(*fifo), GFP_KERNEL);
+>  	if (!fifo)
+> @@ -861,7 +857,9 @@ static int axis_fifo_probe(struct platform_device *pdev)
+>  	dev_dbg(fifo->dt_device, "remapped memory to 0x%p\n", fifo->base_addr);
+>  
+>  	/* create unique device name */
+> -	snprintf(device_name, 32, "%s_%pa", DRIVER_NAME, &r_mem->start);
+> +	device_name = devm_kasprintf(dev, GFP_KERNEL, "%s_%pa", DRIVER_NAME, &r_mem->start);
+> +	if (!device_name)
+> +		return -ENOMEM;
+>  	dev_dbg(fifo->dt_device, "device name [%s]\n", device_name);
+>  
+>  	/* ----------------------------
+> -- 
+> 2.34.1
+> 
+> 
 
-With RX coalescing, one CQE entry can be used to indicate multiple packets
-on the receive queue. This saves processing time and PCI bandwidth over
-the CQ.
+Hi,
 
-The MANA Ethernet driver also uses the v2 version of the protocol. It
-doesn't use RX coalescing and its behavior is not changed.
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
 
-Signed-off-by: Long Li <longli@microsoft.com>
----
+You are receiving this message because of the following common error(s)
+as indicated below:
 
-Change log
-v2: remove the definition of v1 protocol
+- Your patch did many different things all at once, making it difficult
+  to review.  All Linux kernel patches need to only do one thing at a
+  time.  If you need to do multiple things (such as clean up all coding
+  style issues in a file/driver), do it in a sequence of patches, each
+  one doing only one thing.  This will make it easier to review the
+  patches to ensure that they are correct, and to help alleviate any
+  merge issues that larger patches can cause.
 
- drivers/infiniband/hw/mana/qp.c               | 5 ++++-
- drivers/net/ethernet/microsoft/mana/mana_en.c | 5 ++++-
- include/net/mana/mana.h                       | 4 +++-
- 3 files changed, 11 insertions(+), 3 deletions(-)
+- You did not specify a description of why the patch is needed, or
+  possibly, any description at all, in the email body.  Please read the
+  section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what is needed in
+  order to properly describe the change.
 
-diff --git a/drivers/infiniband/hw/mana/qp.c b/drivers/infiniband/hw/mana/qp.c
-index 54b61930a7fd..4b3b5b274e84 100644
---- a/drivers/infiniband/hw/mana/qp.c
-+++ b/drivers/infiniband/hw/mana/qp.c
-@@ -13,7 +13,7 @@ static int mana_ib_cfg_vport_steering(struct mana_ib_dev *dev,
- 				      u8 *rx_hash_key)
- {
- 	struct mana_port_context *mpc = netdev_priv(ndev);
--	struct mana_cfg_rx_steer_req *req = NULL;
-+	struct mana_cfg_rx_steer_req_v2 *req;
- 	struct mana_cfg_rx_steer_resp resp = {};
- 	mana_handle_t *req_indir_tab;
- 	struct gdma_context *gc;
-@@ -33,6 +33,8 @@ static int mana_ib_cfg_vport_steering(struct mana_ib_dev *dev,
- 	mana_gd_init_req_hdr(&req->hdr, MANA_CONFIG_VPORT_RX, req_buf_size,
- 			     sizeof(resp));
- 
-+	req->hdr.req.msg_version = GDMA_MESSAGE_V2;
-+
- 	req->vport = mpc->port_handle;
- 	req->rx_enable = 1;
- 	req->update_default_rxobj = 1;
-@@ -46,6 +48,7 @@ static int mana_ib_cfg_vport_steering(struct mana_ib_dev *dev,
- 	req->num_indir_entries = MANA_INDIRECT_TABLE_SIZE;
- 	req->indir_tab_offset = sizeof(*req);
- 	req->update_indir_tab = true;
-+	req->cqe_coalescing_enable = 1;
- 
- 	req_indir_tab = (mana_handle_t *)(req + 1);
- 	/* The ind table passed to the hardware must have
-diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
-index 06d6292e09b3..b3fcb767b9ab 100644
---- a/drivers/net/ethernet/microsoft/mana/mana_en.c
-+++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
-@@ -972,7 +972,7 @@ static int mana_cfg_vport_steering(struct mana_port_context *apc,
- 				   bool update_tab)
- {
- 	u16 num_entries = MANA_INDIRECT_TABLE_SIZE;
--	struct mana_cfg_rx_steer_req *req = NULL;
-+	struct mana_cfg_rx_steer_req_v2 *req;
- 	struct mana_cfg_rx_steer_resp resp = {};
- 	struct net_device *ndev = apc->ndev;
- 	mana_handle_t *req_indir_tab;
-@@ -987,6 +987,8 @@ static int mana_cfg_vport_steering(struct mana_port_context *apc,
- 	mana_gd_init_req_hdr(&req->hdr, MANA_CONFIG_VPORT_RX, req_buf_size,
- 			     sizeof(resp));
- 
-+	req->hdr.req.msg_version = GDMA_MESSAGE_V2;
-+
- 	req->vport = apc->port_handle;
- 	req->num_indir_entries = num_entries;
- 	req->indir_tab_offset = sizeof(*req);
-@@ -996,6 +998,7 @@ static int mana_cfg_vport_steering(struct mana_port_context *apc,
- 	req->update_hashkey = update_key;
- 	req->update_indir_tab = update_tab;
- 	req->default_rxobj = apc->default_rxobj;
-+	req->cqe_coalescing_enable = 0;
- 
- 	if (update_key)
- 		memcpy(&req->hashkey, apc->hashkey, MANA_HASH_KEY_SIZE);
-diff --git a/include/net/mana/mana.h b/include/net/mana/mana.h
-index cd386aa7c7cc..1512bd48df81 100644
---- a/include/net/mana/mana.h
-+++ b/include/net/mana/mana.h
-@@ -581,7 +581,7 @@ struct mana_fence_rq_resp {
- }; /* HW DATA */
- 
- /* Configure vPort Rx Steering */
--struct mana_cfg_rx_steer_req {
-+struct mana_cfg_rx_steer_req_v2 {
- 	struct gdma_req_hdr hdr;
- 	mana_handle_t vport;
- 	u16 num_indir_entries;
-@@ -594,6 +594,8 @@ struct mana_cfg_rx_steer_req {
- 	u8 reserved;
- 	mana_handle_t default_rxobj;
- 	u8 hashkey[MANA_HASH_KEY_SIZE];
-+	u8 cqe_coalescing_enable;
-+	u8 reserved2[7];
- }; /* HW DATA */
- 
- struct mana_cfg_rx_steer_resp {
--- 
-2.34.1
+- You did not write a descriptive Subject: for the patch, allowing Greg,
+  and everyone else, to know what this patch is all about.  Please read
+  the section entitled "The canonical patch format" in the kernel file,
+  Documentation/process/submitting-patches.rst for what a proper
+  Subject: line should look like.
 
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
