@@ -2,237 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52CBF701DAC
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 15:56:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E5AA701DB3
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 16:01:14 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233829AbjENN4J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 09:56:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53840 "EHLO
+        id S233590AbjENOBM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 10:01:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229635AbjENN4H (ORCPT
+        with ESMTP id S229635AbjENOBI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 09:56:07 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0B7919AC;
-        Sun, 14 May 2023 06:56:05 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f139de8cefso60571219e87.0;
-        Sun, 14 May 2023 06:56:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684072564; x=1686664564;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/ZVKIUKzGX05OMg0P/SQC1TBuz/zx2SrEhQdY2C1eVk=;
-        b=e0jL1+x+B+CVF5D5kZvCOlSKlGE+7Pz/TLv0uhcK/uzns0Bh8hero3o8Fo/erRqUCJ
-         PitZDzEqXuKhiXoferofSQxwm1+ZlDLyTDQ9Wtm8fL2MD5Nd8nS2mmp68juxCoACoad7
-         eCKBMLrKglQPGDfshYP4i/xyujCWSCEQxjAKTeZSzTyc5uXpVTkbkKIqAZ6VmYwjo9b6
-         D+2IpuJ/raLjQcDG5x8whLooOicrUw8ENJKD2xmQR8NPmEH1RZ8yMZhYb8Sur8qNM+WC
-         nvna/yVJ9DvOrUp4eXaSwvVEidy5kuDXu5Ipg9O5hWOLCFai3Bpijjkpbf6zaPkE8A5M
-         0fGA==
+        Sun, 14 May 2023 10:01:08 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DE91BD5
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 07:00:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684072820;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=5XPWFCwn0ec1Bk7N8aYQ4DY3w3ZSXgJSesqW7FrFphE=;
+        b=AxBlYgdtYiyRpm5s+M6zPxXXIDETxpw++AauWnQPBz+s+8D9O/0SDHx4m8nfId4tLsN6m/
+        3TEkOeuwi05NfAMp1vluhln14A7uzXobCClJYj9HUL356EhFhHBZOo/dfyHfbp/I+Qv6Nj
+        Gg+PS3vZ8gD0YXzzmPqluz5n7EcdK5Q=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-286-QoVv7HoJNgaoyT8JVKlNcA-1; Sun, 14 May 2023 10:00:18 -0400
+X-MC-Unique: QoVv7HoJNgaoyT8JVKlNcA-1
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7577727a00eso2845396285a.1
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 07:00:18 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684072564; x=1686664564;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/ZVKIUKzGX05OMg0P/SQC1TBuz/zx2SrEhQdY2C1eVk=;
-        b=Orx5QsZaPkG3VwhWkf25+rbeGZwHjVBqjrG/u45Lp5wzMDIW16TbNzQJvVdcXkjET9
-         I2w3RTnCmvQwAzlofs3x9MnAzhJBpk9CSum7ME6F7Fa/t1YWU99zoBQ8EF/s71mSSJv3
-         Ph3FfDxDm9llvMVq/o1hzbe3UIm5BYzv78G/0FI1IWcfVnmnTcP9FfHkNPOm8do3K8jA
-         SOKzTCcni2VtOWdC2faWzXE0UtWqbR7DC9Vc2gqS0n8HXFeA4ieEFMzJLnjrZxMD0Rqn
-         5IjRPIE0MJ4hi9rd5ZTsk4Fu0239cd8otRDu00ITioWYCe0txjp01l563jSpr6J4lQdM
-         VGqg==
-X-Gm-Message-State: AC+VfDxd/e++HlYpaJcJXpfGsOW0oF8QQ7TxPYVjAoMYiTlPh1QX+/Aa
-        uzZPBribhfBO5RxdqaFerRw=
-X-Google-Smtp-Source: ACHHUZ7mQ7RO6cdlG9W7P4VAMMcMRRu+pFti/c2Y25RROUCnNz6dYcMDHV9/AJDpmEfzZe3BiBUSKw==
-X-Received: by 2002:ac2:47f8:0:b0:4f3:78dd:8e0b with SMTP id b24-20020ac247f8000000b004f378dd8e0bmr928479lfp.32.1684072563576;
-        Sun, 14 May 2023 06:56:03 -0700 (PDT)
-Received: from mobilestation ([95.79.140.35])
-        by smtp.gmail.com with ESMTPSA id n15-20020ac2490f000000b004efe9a169d2sm2224611lfi.64.2023.05.14.06.56.02
+        d=1e100.net; s=20221208; t=1684072818; x=1686664818;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5XPWFCwn0ec1Bk7N8aYQ4DY3w3ZSXgJSesqW7FrFphE=;
+        b=WhWTa8AX7mNt9IP/EW4Mzv8ZZtvnXy/ZiEZSJIO+6NB726AxyYj9Yxa+pmJV/xEsmK
+         NrXNu/CYl8YYUoDma7ErsbHV61xmPr2YFNDey9R8pr8OSRIfbGYwLijiQCkyACtPJRLa
+         KY/5S58DSByB+T8yFm85Ci84rP+5LxiCMr+7WyLlT5HMFxhoG/Tlp039/hQkGa9Y2OvL
+         F5LGpxaXLRBnQlx3U13KO/sCTh5wv7KXSX4n07GxDhWFC/Fz0xo3jAz+f6mjJw8DC9KW
+         PczPS1RFGb99tGs6ejO8Z7E7HOWYsiHZ/zsQwcNv3d7uwI1H/woxASxyuzlt/LPkESIe
+         F8vQ==
+X-Gm-Message-State: AC+VfDzXcag4mcu5RE5yq9Nls8zofIGo2izMjIwZEpgKO5NHsY2fIKjo
+        yPUfbUtXRpKQWAic4zsGQCv+LPbtZMZEtO2rt1iszj5YakTfqV6O0zVP9cv0dTGeoee8NGECKL/
+        hj+BJNtpXBkuun65Et4d7TgOc
+X-Received: by 2002:a05:6214:1d26:b0:5ef:d5b0:c33f with SMTP id f6-20020a0562141d2600b005efd5b0c33fmr68583123qvd.2.1684072818272;
+        Sun, 14 May 2023 07:00:18 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6ZxEJVXSJj22FdfeUHUFCbHqGYuIFy6aJ+7s6HEds/c8wbbuyT8d6HxTccrfjHe12gZcWZvw==
+X-Received: by 2002:a05:6214:1d26:b0:5ef:d5b0:c33f with SMTP id f6-20020a0562141d2600b005efd5b0c33fmr68583067qvd.2.1684072817948;
+        Sun, 14 May 2023 07:00:17 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id ev11-20020a0562140a8b00b0061668c4b426sm4304678qvb.59.2023.05.14.07.00.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 06:56:03 -0700 (PDT)
-Date:   Sun, 14 May 2023 16:56:01 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc:     maz@kernel.org, tsbogend@alpha.franken.de, tglx@linutronix.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH 2/2] irqchip/mips-gic: Use raw spinlock for gic_lock
-Message-ID: <20230514135601.5irhslf6tdv4tk5z@mobilestation>
-References: <20230424103156.66753-1-jiaxun.yang@flygoat.com>
- <20230424103156.66753-3-jiaxun.yang@flygoat.com>
+        Sun, 14 May 2023 07:00:17 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     pablo@netfilter.org, kadlec@netfilter.org, fw@strlen.de,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     netfilter-devel@vger.kernel.org, coreteam@netfilter.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tom Rix <trix@redhat.com>
+Subject: [PATCH] netfilter: conntrack: define variables exp_nat_nla_policy and any_addr with CONFIG_NF_NAT
+Date:   Sun, 14 May 2023 10:00:10 -0400
+Message-Id: <20230514140010.3399219-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230424103156.66753-3-jiaxun.yang@flygoat.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Apr 24, 2023 at 11:31:56AM +0100, Jiaxun Yang wrote:
-> Since we may hold gic_lock in hardirq context, use raw spinlock
-> makes more sense given that it is for low-level interrupt handling
-> routine and the critical section is small.
-> 
-> Fixes BUG:
-> 
-> [    0.426106] =============================
-> [    0.426257] [ BUG: Invalid wait context ]
-> [    0.426422] 6.3.0-rc7-next-20230421-dirty #54 Not tainted
-> [    0.426638] -----------------------------
-> [    0.426766] swapper/0/1 is trying to lock:
-> [    0.426954] ffffffff8104e7b8 (gic_lock){....}-{3:3}, at: gic_set_type+0x30/08
-> 
-> Fixes: 95150ae8b330 ("irqchip: mips-gic: Implement irq_set_type callback")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+gcc with W=1 and ! CONFIG_NF_NAT
+net/netfilter/nf_conntrack_netlink.c:3463:32: error:
+  ‘exp_nat_nla_policy’ defined but not used [-Werror=unused-const-variable=]
+ 3463 | static const struct nla_policy exp_nat_nla_policy[CTA_EXPECT_NAT_MAX+1] = {
+      |                                ^~~~~~~~~~~~~~~~~~
+net/netfilter/nf_conntrack_netlink.c:2979:33: error:
+  ‘any_addr’ defined but not used [-Werror=unused-const-variable=]
+ 2979 | static const union nf_inet_addr any_addr;
+      |                                 ^~~~~~~~
 
-LGTM especially in the RT-patch context. Feel free to add:
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+These variables use is controlled by CONFIG_NF_NAT, so should their definitions.
 
-Please see a tiny nitpick below.
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ net/netfilter/nf_conntrack_netlink.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-> ---
->  drivers/irqchip/irq-mips-gic.c | 30 +++++++++++++++---------------
->  1 file changed, 15 insertions(+), 15 deletions(-)
-> 
-> diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
-> index b568d55ef7c5..6d5ecc10a870 100644
-> --- a/drivers/irqchip/irq-mips-gic.c
-> +++ b/drivers/irqchip/irq-mips-gic.c
-> @@ -50,7 +50,7 @@ void __iomem *mips_gic_base;
->  
->  static DEFINE_PER_CPU_READ_MOSTLY(unsigned long[GIC_MAX_LONGS], pcpu_masks);
->  
-> -static DEFINE_SPINLOCK(gic_lock);
-> +static DEFINE_RAW_SPINLOCK(gic_lock);
->  static struct irq_domain *gic_irq_domain;
->  static int gic_shared_intrs;
->  static unsigned int gic_cpu_pin;
-> @@ -210,7 +210,7 @@ static int gic_set_type(struct irq_data *d, unsigned int type)
->  
->  	irq = GIC_HWIRQ_TO_SHARED(d->hwirq);
->  
+diff --git a/net/netfilter/nf_conntrack_netlink.c b/net/netfilter/nf_conntrack_netlink.c
+index d40544cd61a6..69c8c8c7e9b8 100644
+--- a/net/netfilter/nf_conntrack_netlink.c
++++ b/net/netfilter/nf_conntrack_netlink.c
+@@ -2976,7 +2976,9 @@ static int ctnetlink_exp_dump_mask(struct sk_buff *skb,
+ 	return -1;
+ }
+ 
++#if IS_ENABLED(CONFIG_NF_NAT)
+ static const union nf_inet_addr any_addr;
++#endif
+ 
+ static __be32 nf_expect_get_id(const struct nf_conntrack_expect *exp)
+ {
+@@ -3460,10 +3462,12 @@ ctnetlink_change_expect(struct nf_conntrack_expect *x,
+ 	return 0;
+ }
+ 
++#if IS_ENABLED(CONFIG_NF_NAT)
+ static const struct nla_policy exp_nat_nla_policy[CTA_EXPECT_NAT_MAX+1] = {
+ 	[CTA_EXPECT_NAT_DIR]	= { .type = NLA_U32 },
+ 	[CTA_EXPECT_NAT_TUPLE]	= { .type = NLA_NESTED },
+ };
++#endif
+ 
+ static int
+ ctnetlink_parse_expect_nat(const struct nlattr *attr,
+-- 
+2.27.0
 
-> -	spin_lock_irqsave(&gic_lock, flags);
-> +	raw_spin_lock_irqsave(&gic_lock, flags);
-
-AFAICS this call can be moved way down to be after the switch-case
-block.
-
--Serge(y)
-
->  	switch (type & IRQ_TYPE_SENSE_MASK) {
->  	case IRQ_TYPE_EDGE_FALLING:
->  		pol = GIC_POL_FALLING_EDGE;
-> @@ -250,7 +250,7 @@ static int gic_set_type(struct irq_data *d, unsigned int type)
->  	else
->  		irq_set_chip_handler_name_locked(d, &gic_level_irq_controller,
->  						 handle_level_irq, NULL);
-> -	spin_unlock_irqrestore(&gic_lock, flags);
-> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
->  
->  	return 0;
->  }
-> @@ -268,7 +268,7 @@ static int gic_set_affinity(struct irq_data *d, const struct cpumask *cpumask,
->  		return -EINVAL;
->  
->  	/* Assumption : cpumask refers to a single CPU */
-> -	spin_lock_irqsave(&gic_lock, flags);
-> +	raw_spin_lock_irqsave(&gic_lock, flags);
->  
->  	/* Re-route this IRQ */
->  	write_gic_map_vp(irq, BIT(mips_cm_vp_id(cpu)));
-> @@ -279,7 +279,7 @@ static int gic_set_affinity(struct irq_data *d, const struct cpumask *cpumask,
->  		set_bit(irq, per_cpu_ptr(pcpu_masks, cpu));
->  
->  	irq_data_update_effective_affinity(d, cpumask_of(cpu));
-> -	spin_unlock_irqrestore(&gic_lock, flags);
-> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
->  
->  	return IRQ_SET_MASK_OK;
->  }
-> @@ -357,12 +357,12 @@ static void gic_mask_local_irq_all_vpes(struct irq_data *d)
->  	cd = irq_data_get_irq_chip_data(d);
->  	cd->mask = false;
->  
-> -	spin_lock_irqsave(&gic_lock, flags);
-> +	raw_spin_lock_irqsave(&gic_lock, flags);
->  	for_each_online_cpu(cpu) {
->  		write_gic_vl_other(mips_cm_vp_id(cpu));
->  		write_gic_vo_rmask(BIT(intr));
->  	}
-> -	spin_unlock_irqrestore(&gic_lock, flags);
-> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
->  }
->  
->  static void gic_unmask_local_irq_all_vpes(struct irq_data *d)
-> @@ -375,12 +375,12 @@ static void gic_unmask_local_irq_all_vpes(struct irq_data *d)
->  	cd = irq_data_get_irq_chip_data(d);
->  	cd->mask = true;
->  
-> -	spin_lock_irqsave(&gic_lock, flags);
-> +	raw_spin_lock_irqsave(&gic_lock, flags);
->  	for_each_online_cpu(cpu) {
->  		write_gic_vl_other(mips_cm_vp_id(cpu));
->  		write_gic_vo_smask(BIT(intr));
->  	}
-> -	spin_unlock_irqrestore(&gic_lock, flags);
-> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
->  }
->  
->  static void gic_all_vpes_irq_cpu_online(void)
-> @@ -393,7 +393,7 @@ static void gic_all_vpes_irq_cpu_online(void)
->  	unsigned long flags;
->  	int i;
->  
-> -	spin_lock_irqsave(&gic_lock, flags);
-> +	raw_spin_lock_irqsave(&gic_lock, flags);
->  
->  	for (i = 0; i < ARRAY_SIZE(local_intrs); i++) {
->  		unsigned int intr = local_intrs[i];
-> @@ -407,7 +407,7 @@ static void gic_all_vpes_irq_cpu_online(void)
->  			write_gic_vl_smask(BIT(intr));
->  	}
->  
-> -	spin_unlock_irqrestore(&gic_lock, flags);
-> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
->  }
->  
->  static struct irq_chip gic_all_vpes_local_irq_controller = {
-> @@ -437,11 +437,11 @@ static int gic_shared_irq_domain_map(struct irq_domain *d, unsigned int virq,
->  
->  	data = irq_get_irq_data(virq);
->  
-> -	spin_lock_irqsave(&gic_lock, flags);
-> +	raw_spin_lock_irqsave(&gic_lock, flags);
->  	write_gic_map_pin(intr, GIC_MAP_PIN_MAP_TO_PIN | gic_cpu_pin);
->  	write_gic_map_vp(intr, BIT(mips_cm_vp_id(cpu)));
->  	irq_data_update_effective_affinity(data, cpumask_of(cpu));
-> -	spin_unlock_irqrestore(&gic_lock, flags);
-> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
->  
->  	return 0;
->  }
-> @@ -533,12 +533,12 @@ static int gic_irq_domain_map(struct irq_domain *d, unsigned int virq,
->  	if (!gic_local_irq_is_routable(intr))
->  		return -EPERM;
->  
-> -	spin_lock_irqsave(&gic_lock, flags);
-> +	raw_spin_lock_irqsave(&gic_lock, flags);
->  	for_each_online_cpu(cpu) {
->  		write_gic_vl_other(mips_cm_vp_id(cpu));
->  		write_gic_vo_map(mips_gic_vx_map_reg(intr), map);
->  	}
-> -	spin_unlock_irqrestore(&gic_lock, flags);
-> +	raw_spin_unlock_irqrestore(&gic_lock, flags);
->  
->  	return 0;
->  }
-> -- 
-> 2.34.1
-> 
