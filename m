@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DBEA701D84
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 15:02:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 59071701D85
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 15:02:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S236252AbjENNCI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 09:02:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43414 "EHLO
+        id S237512AbjENNCQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 09:02:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbjENNCG (ORCPT
+        with ESMTP id S237293AbjENNCL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 09:02:06 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A952C2D4D
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 06:02:04 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id d2e1a72fcca58-6439f186366so7395996b3a.2
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 06:02:04 -0700 (PDT)
+        Sun, 14 May 2023 09:02:11 -0400
+Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A75D30CF
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 06:02:09 -0700 (PDT)
+Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6439e6f5a33so7115351b3a.2
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 06:02:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684069324; x=1686661324;
+        d=gmail.com; s=20221208; t=1684069329; x=1686661329;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=go5sDeHWgIRTWlpjFAmfS/O0gabJcHfa+czJpZGJ7uc=;
-        b=H3jA6TBOe0/k3zwh4ceqX9yAKSFAl74DcDo/vTriw5YFg/OwD1bnoNnMlX4i+Z9f3A
-         EztT3flDJJr2hVVLAJsh3STO7bUmt5WdTyYPONA/4mPLnwYXyzLF1TadnSd2pSlS+miq
-         Opwzzu6KjY3tNs8vf+uZXHFoGj4ijaB9wpVNV3wTcN2km/yxJigRToKpTxTX+Aeirrk+
-         bm8cPaMGBTCtzpbmWKta1F6BzYV3Hat2Afa6mBdjelggK3kf/VNa+5pUbUxwShTBlWul
-         IEfH3GEU5kajcSaO6Zxe//SRjE4wvKjKnQoZr/3picoqS2opCuCnIFH0sG1j0ZoK+37O
-         4D8A==
+        bh=hRndM6dwLyg+CH40gLpw0L0oNCaMTsXiybvOzf1CBdM=;
+        b=UOpBDf/UdqFprkz/RaGVHjIHh4ZVukFEER1c03onGY1QQrIksKTtlCedPjz3MGeWBW
+         KE5nPnSo8fF/vUXXgNYlD9as/unN4tXAnt51PyM3TTV//0RNYGFeHFPdKuRhPD88bQOW
+         Vw2HDSO4KPeSTXai3fv7kCPcEtZfiMyDpBnvFs/R2CZOZ9tccpwjBPndOBNkSF/A+TNr
+         vjCFQV7OVn27eGIet6A0y1tk3TNxOXf+hnv6V2bUJt16hxQEVnL2dNCq1ev5kbL+wcqp
+         5uWM6ucTKa1Zxh9+/JjOrPUojRHYtMp+QTptJEXCZjeAYVBRBZaNAJsHCRfD6/8+896R
+         iYtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684069324; x=1686661324;
+        d=1e100.net; s=20221208; t=1684069329; x=1686661329;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=go5sDeHWgIRTWlpjFAmfS/O0gabJcHfa+czJpZGJ7uc=;
-        b=Ohqtfi2qPTMh3spUQxlOP0Ws77UsA+nkNZdwbVYJ97U/5t7iYh/fDiXk7OdnC6Dl4t
-         Q5mKX6fBAcGDYh4DvruDfO/1EUBrisYRfSN0toSA/RHDQd7SoTdOqFSAMxWx1VYzgOzg
-         SMUvuvtaXwJ/blnWhhcBFQiewQQJ0D4OO3FYqVQy2ANjHKVVn5CK45ALGMrweMnJ7Q0X
-         IDurWmPuFVyqgVgEu9j/GrbeGfLm02yDvGdgszcc08iVMUf/dIpTTBtkmBJvzARdGy45
-         0GHre0iD41DOz3KfUXFw/rM+kn2uDSNL/oUt9C95i+g1vaVr3z/8a04IOeVBiT3EBBgN
-         VgbQ==
-X-Gm-Message-State: AC+VfDye9CVl0EXV/vDkuylN9+3qgvfmzn6wfA61B6YrdsW2cLbTYVpK
-        w46QgXfmCOPw7pcjNcYoEGo=
-X-Google-Smtp-Source: ACHHUZ7L+PNp68VGado16dQgmCiWZZn0n7EfRpzHISPa/LnbdMBBXDgV+ByyV/dt2HBW+29jfi+qHw==
-X-Received: by 2002:a05:6a20:1441:b0:101:8cad:6db9 with SMTP id a1-20020a056a20144100b001018cad6db9mr22684357pzi.47.1684069324095;
-        Sun, 14 May 2023 06:02:04 -0700 (PDT)
+        bh=hRndM6dwLyg+CH40gLpw0L0oNCaMTsXiybvOzf1CBdM=;
+        b=cmZS31ywL5++xD+Mdx61/ryzcTdh7ayFHW3sI9itbYTVnfaNw0QB77faHobSk84bMa
+         3H4MJ6WMW626wh/SHt79i5k9BNM8OKMMHB7DXxZH0hcHZzB9pBRty/N+yKIXNOQD67Ny
+         NNFeTb546Wlp0VYckdBwQAFRQgrvsQelbkMGLmnjOjWZelKeX3XUcvejJYRh8UU8FVGj
+         PlJomE5Jt768mWY5O0FEKxF6HnOhe1MTd9LxfuUpsxqxas7pSpDw1iFzN7bpLyZ6i5p0
+         xUR5nm7sS73BsSUTUD8oXAevYVEmm3d183SMBt2YXlW6KIAn/iPrDyPJhc/Ws6Y89xEz
+         LSIQ==
+X-Gm-Message-State: AC+VfDyanTMMJqgzvCOGs2NrIzsP1kZ9rqHIXexprO495C0nYI5/c12y
+        G62FdPwrcl9ZoMntY5lSeDKp0nIRkTPyGg==
+X-Google-Smtp-Source: ACHHUZ5QJJrM45x8eaWbsW8g7uaVPN75hlKQ2lWbhMYHrZaQFam4iHhjYo8H5t0i31YWv9Nwg+KkyQ==
+X-Received: by 2002:a05:6a20:c701:b0:ef:e589:28a3 with SMTP id hi1-20020a056a20c70100b000efe58928a3mr32710915pzb.16.1684069328625;
+        Sun, 14 May 2023 06:02:08 -0700 (PDT)
 Received: from redkillpc.. ([49.207.202.99])
-        by smtp.gmail.com with ESMTPSA id e35-20020a635463000000b0051b70c8d446sm9766146pgm.73.2023.05.14.06.02.01
+        by smtp.gmail.com with ESMTPSA id e35-20020a635463000000b0051b70c8d446sm9766146pgm.73.2023.05.14.06.02.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 06:02:03 -0700 (PDT)
+        Sun, 14 May 2023 06:02:08 -0700 (PDT)
 From:   Prathu Baronia <prathubaronia2011@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
         prathubaronia2011@gmail.com
-Subject: [PATCH v2 1/2] axis-fifo: use devm_kasprintf() for allocating formatted strings
-Date:   Sun, 14 May 2023 18:31:47 +0530
-Message-Id: <20230514130148.138624-2-prathubaronia2011@gmail.com>
+Subject: [PATCH v2 2/2] axis-fifo: cleanup space issues with fops struct
+Date:   Sun, 14 May 2023 18:31:48 +0530
+Message-Id: <20230514130148.138624-3-prathubaronia2011@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230514130148.138624-1-prathubaronia2011@gmail.com>
 References: <2023051411-happier-mural-a8ef@gregkh>
@@ -73,43 +73,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In various places, string buffers of a fixed size are allocated, and
-filled using snprintf() with the same fixed size, which is error-prone.
-
-Replace this by calling devm_kasprintf() instead, which always uses the
-appropriate size.
+Add required spaces for proper formatting of fops members for better
+readability.
 
 Signed-off-by: Prathu Baronia <prathubaronia2011@gmail.com>
 ---
- drivers/staging/axis-fifo/axis-fifo.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ drivers/staging/axis-fifo/axis-fifo.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
 diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
-index 7a21f2423204..7b3080202b31 100644
+index 7b3080202b31..2692fda89583 100644
 --- a/drivers/staging/axis-fifo/axis-fifo.c
 +++ b/drivers/staging/axis-fifo/axis-fifo.c
-@@ -816,10 +816,6 @@ static int axis_fifo_probe(struct platform_device *pdev)
- 	 * ----------------------------
- 	 */
+@@ -716,11 +716,11 @@ static int axis_fifo_close(struct inode *inod, struct file *f)
+ }
  
--	device_name = devm_kzalloc(dev, 32, GFP_KERNEL);
--	if (!device_name)
--		return -ENOMEM;
--
- 	/* allocate device wrapper memory */
- 	fifo = devm_kzalloc(dev, sizeof(*fifo), GFP_KERNEL);
- 	if (!fifo)
-@@ -857,7 +853,9 @@ static int axis_fifo_probe(struct platform_device *pdev)
- 	dev_dbg(fifo->dt_device, "remapped memory to 0x%p\n", fifo->base_addr);
+ static const struct file_operations fops = {
+-	.owner = THIS_MODULE,
+-	.open = axis_fifo_open,
++	.owner   = THIS_MODULE,
++	.open    = axis_fifo_open,
+ 	.release = axis_fifo_close,
+-	.read = axis_fifo_read,
+-	.write = axis_fifo_write
++	.read    = axis_fifo_read,
++	.write   = axis_fifo_write
+ };
  
- 	/* create unique device name */
--	snprintf(device_name, 32, "%s_%pa", DRIVER_NAME, &r_mem->start);
-+	device_name = devm_kasprintf(dev, GFP_KERNEL, "%s_%pa", DRIVER_NAME, &r_mem->start);
-+	if (!device_name)
-+		return -ENOMEM;
- 	dev_dbg(fifo->dt_device, "device name [%s]\n", device_name);
- 
- 	/* ----------------------------
+ /* read named property from the device tree */
 -- 
 2.34.1
 
