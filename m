@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA825701C68
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 11:05:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F5F4701C62
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 11:04:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234519AbjENJE5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 05:04:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
+        id S233771AbjENJEr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 05:04:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233374AbjENJEq (ORCPT
+        with ESMTP id S229763AbjENJEn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 05:04:46 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7708A1BDD;
-        Sun, 14 May 2023 02:04:45 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6439f186366so7324698b3a.2;
-        Sun, 14 May 2023 02:04:45 -0700 (PDT)
+        Sun, 14 May 2023 05:04:43 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703191BDD;
+        Sun, 14 May 2023 02:04:42 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-51b33c72686so7847153a12.1;
+        Sun, 14 May 2023 02:04:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684055085; x=1686647085;
+        d=gmail.com; s=20221208; t=1684055082; x=1686647082;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=usTUzbJN3/c9qoBFyD+eiQ3LKf9ePyuHk2BoTbJ/pEs=;
-        b=Tw1gGElBkh8bqUaPMfHAAZpRT3Noti9lbtsdwJLRTcytBsUA/i1hG+XMsGkmHnE6NY
-         aHyrQhxtHygbXeK/92udiPG55yV8EGkzNaio9qwQplvUx5sEerv5EeH6u1WMhAdb6N/7
-         M9P2Vlp5GGdsHBrcjmupaObC0zMFXrMAFACphbX4vQ4STofy+TILK02+2UjFMvrnREmj
-         oZ7Yg4pHVIuF5i0TThC/V1EHpb0HqvcLuG6GRJtsj2LflWeJ6PoRT287VJaAgOlCm7Ty
-         EFvBddckDp8Cn1pQrKbTbUvZFzRUb5SaRQdnP0uyk2p3U4gLRu3Oi1Ebc2GGBcaxZTw/
-         Hqrg==
+        bh=3VswhOVIM6N9lUQ5IbUMqB4CktfYicQQNL7zwxJA2o0=;
+        b=gyDuam61cQhcYHV2PBw+v0qV4xXs/l6wEC2KCFNxFE/FegwP3dNUz5F1uZITuqHFNs
+         syiVQB93aJW0sk3dLTzvIhAtFHwDUqDKv0DxfjPY2LAfiUZREKQetU0o4FtYmcZQHYIs
+         SLz9bvWw+KOJZ9F58insz5q1Q/Skkb5ZBSSqQ4KzVy25ZR4TPjjpJmmxfaW5AkzGCLYU
+         kyC0WR8qHm43CsElKIx+99P5bQhd5JC/WeUgHvZB+8yiE6kpC5wDiHU1qUxnNw8aFVm9
+         vFQy9JA/WrL+zGvFSBJEGZp5u/gEeh+YLvR48s3C3QiNrlZmM8/gWAa2JdPSR7QH4t7v
+         dtTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684055085; x=1686647085;
+        d=1e100.net; s=20221208; t=1684055082; x=1686647082;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=usTUzbJN3/c9qoBFyD+eiQ3LKf9ePyuHk2BoTbJ/pEs=;
-        b=llzP2b2bSXgjUICXIjyR8LdnaJuMJKA70y5+HeWqosMt1/V+PCOL4Orbu0mSU653Qw
-         CT2KMOdUoCylgNK3Haf+qT8T80YYgloAP0JEcnaRPJ79MUIvU5RMsLm0g2Y4lNXMiPK0
-         PtrC4BBweLV0nOBgQyF9WK6GfJPa0MHP98PWXJXCNMl6Qy1qBJlK4+gQICyGx496vmUu
-         5ym0Flw+/ZS3aZrdaH0e/Vi6zztsWIRSPZJQc6yo1Y79oitbCp+zNyenUnf9BsJQ5s8h
-         f7j7NIfpdEErjdsqE7N1ze7R/MxuEi8RzbTP+glCHXk+QSTD4PL9GZhLaSNsTOB8Eqsi
-         nRXA==
-X-Gm-Message-State: AC+VfDyIragiTxjxdqZxpseSGsplf+kUsTiQ8qTZUjueGsm+yi+IMwmG
-        yojl2zy+4IxygChplJg+xbk=
-X-Google-Smtp-Source: ACHHUZ4bUWZYUrifcQ0piB59H0YsIlr7vxuuwgc5h7KVvnAMIt651hXEgbblF0+3MbYFblaVCvxnfA==
-X-Received: by 2002:a05:6a20:12ce:b0:104:edde:67b7 with SMTP id v14-20020a056a2012ce00b00104edde67b7mr6862078pzg.27.1684055084819;
-        Sun, 14 May 2023 02:04:44 -0700 (PDT)
+        bh=3VswhOVIM6N9lUQ5IbUMqB4CktfYicQQNL7zwxJA2o0=;
+        b=DMNxha7+Ibsrg6NjF1HMPCXFHi56kLfuK565DfX5rrBxS17zN5SDj3YNlhPOQagtGn
+         uhyCk/jjg+/vMmPMrNwO3rFdPVmAnWgSRbEFDEkwjwgoX1U9lhcNi8JMLdQrfA2GVT03
+         B37jkgVgt+UOcRqdBKLY3L5rfT/JSMUM/pZ0zLTcy28U+Y4D2NiRCVXc0NieNv7Ib1Qc
+         iCnATzzF9U9Wyl+2p3aTrfwp9ZLMLUQUPpOJ3bSAa1btj1qT3R2vcQeEdMsO89/AjrrB
+         8cMIRbDh80cSKTRVCXUYifIbu/YzD5td6Vz3MZVYnSo+yyTNf632h77QGLnLPPcv7e2K
+         7Xaw==
+X-Gm-Message-State: AC+VfDxO2APl7cCDReQLCYjPXOxcur2GVKl08fZme69VS5PwmbUHLDZi
+        MKpqhXa1n5teSNfd3+GKtXA=
+X-Google-Smtp-Source: ACHHUZ4pzmq3hWDHq3IlCijrOGJ+N5qc/X55K3MabPDZwyQJR3SxOAkkPZxkiTNzN5IhuNLdSkgMaA==
+X-Received: by 2002:a17:903:483:b0:1aa:dba2:d155 with SMTP id jj3-20020a170903048300b001aadba2d155mr29039425plb.48.1684055081786;
+        Sun, 14 May 2023 02:04:41 -0700 (PDT)
 Received: from debian.me (subs02-180-214-232-68.three.co.id. [180.214.232.68])
-        by smtp.gmail.com with ESMTPSA id 17-20020aa79251000000b00637b0c719c5sm9662227pfp.201.2023.05.14.02.04.44
+        by smtp.gmail.com with ESMTPSA id l16-20020a170902f69000b001a6d08eb054sm11043270plg.78.2023.05.14.02.04.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 02:04:44 -0700 (PDT)
+        Sun, 14 May 2023 02:04:41 -0700 (PDT)
 Received: by debian.me (Postfix, from userid 1000)
-        id 8522F1061D9; Sun, 14 May 2023 16:04:36 +0700 (WIB)
+        id 2DC2B1061DC; Sun, 14 May 2023 16:04:36 +0700 (WIB)
 From:   Bagas Sanjaya <bagasdotme@gmail.com>
 To:     Linux Documentation <linux-doc@vger.kernel.org>,
         Linux RISC-V <linux-riscv@lists.infradead.org>,
@@ -65,14 +65,14 @@ Cc:     Jonathan Corbet <corbet@lwn.net>,
         Andy Chiu <andy.chiu@sifive.com>,
         Greentime Hu <greentime.hu@sifive.com>,
         kernel test robot <lkp@intel.com>
-Subject: [PATCH 1/5] Documentation: riscv: vector: Separate SPDX license identifier and page title
-Date:   Sun, 14 May 2023 16:04:28 +0700
-Message-Id: <20230514090432.78217-2-bagasdotme@gmail.com>
+Subject: [PATCH 2/5] Documentation: riscv: vector: Wrap control_argument struct definition in code block
+Date:   Sun, 14 May 2023 16:04:29 +0700
+Message-Id: <20230514090432.78217-3-bagasdotme@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230514090432.78217-1-bagasdotme@gmail.com>
 References: <20230514090432.78217-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1012; i=bagasdotme@gmail.com; h=from:subject; bh=6LP5rrObq7wY9XwwQUBOiCWJUloqKCLwe+amTJtxnvQ=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCkJS+RnPnfcu+Hy37mZ1jef+dt2Ptr9+Iufm9XfTywvy 6TDTgtZdpSyMIhxMciKKbJMSuRrOr3LSORC+1pHmDmsTCBDGLg4BWAizt8YGTrnCWsFTL5asDRN +NDv/0Wavgb1J92MZm1fkWfmHfA3/T8jw8po0UlPrOqmBbyVkvrzZ2W9wJTchw3rW89alujLulb 18QMA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1947; i=bagasdotme@gmail.com; h=from:subject; bh=S42igDCO53ZkCWTrexHErxJ8V8JjUUjsuLNH7WukgIk=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCkJS+RzdR/arTB/dyeC+/VO9ajKJbfWaS/eYre5au63m 9852bandZSyMIhxMciKKbJMSuRrOr3LSORC+1pHmDmsTCBDGLg4BWAi14sY/kd1vNPLvh0ZLD/5 +z3mc4mLzqh4tworRzq5Tp3pp3vu1n5Ghv7++/tYF7VvFmVYUlTw9UbKt18FpXt8xcw3v5p2QmO 6JycA
 X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,28 +87,49 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 kernel test robot reports htmldocs warning:
 
-Documentation/riscv/vector.rst:2: WARNING: Explicit markup ends without a blank line; unexpected unindent.
+Documentation/riscv/vector.rst:45: WARNING: Definition list ends without a blank line; unexpected unindent.
 
-Add a blank line separator between SPDX tag and doc title to fix above warning.
+The warning is due to definition of control_argument struct, written
+unformatted. Wrap it in code block with C syntax highlighting to fix the
+warning.
 
 Fixes: 412c68cfeeb178 ("riscv: Add documentation for Vector")
 Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/linux-doc/202305141409.bEBvlSY4-lkp@intel.com/
+Closes: https://lore.kernel.org/oe-kbuild-all/202305141409.bEBvlSY4-lkp@intel.com/
 Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 ---
- Documentation/riscv/vector.rst | 1 +
- 1 file changed, 1 insertion(+)
+ Documentation/riscv/vector.rst | 18 ++++++++++--------
+ 1 file changed, 10 insertions(+), 8 deletions(-)
 
 diff --git a/Documentation/riscv/vector.rst b/Documentation/riscv/vector.rst
-index d4d626721921aa..acc97508ccb249 100644
+index acc97508ccb249..178b3f3f452462 100644
 --- a/Documentation/riscv/vector.rst
 +++ b/Documentation/riscv/vector.rst
-@@ -1,4 +1,5 @@
- .. SPDX-License-Identifier: GPL-2.0
+@@ -36,14 +36,16 @@ prctl(PR_RISCV_V_SET_CONTROL, unsigned long arg)
+     be interpreted as the following structure, and accessed by 3 masks
+     respectively.
+ 
+-    struct control_argument {
+-        // Located by PR_RISCV_V_VSTATE_CTRL_CUR_MASK
+-        int current_enablement_status : 2;
+-        // Located by PR_RISCV_V_VSTATE_CTRL_NEXT_MASK
+-        int next_enablement_status : 2;
+-        // Located by PR_RISCV_V_VSTATE_CTRL_INHERIT
+-        bool inherit_mode : 1;
+-    }
++    .. code-block:: c
 +
- =========================================
- Vector Extension Support for RISC-V Linux
- =========================================
++        struct control_argument {
++            // Located by PR_RISCV_V_VSTATE_CTRL_CUR_MASK
++            int current_enablement_status : 2;
++            // Located by PR_RISCV_V_VSTATE_CTRL_NEXT_MASK
++            int next_enablement_status : 2;
++            // Located by PR_RISCV_V_VSTATE_CTRL_INHERIT
++            bool inherit_mode : 1;
++        }
+ 
+     The 3 masks, PR_RISCV_V_VSTATE_CTRL_CUR_MASK,
+     PR_RISCV_V_VSTATE_CTRL_NEXT_MASK, and PR_RISCV_V_VSTATE_CTRL_INHERIT
 -- 
 An old man doll... just what I always wanted! - Clara
 
