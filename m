@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5AF0A701C93
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 11:23:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BF46F701C90
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 11:23:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S235165AbjENJXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 05:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44508 "EHLO
+        id S233870AbjENJXS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 05:23:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbjENJXR (ORCPT
+        with ESMTP id S232868AbjENJXR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 14 May 2023 05:23:17 -0400
 Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B04231FFE;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8071F1FDE;
         Sun, 14 May 2023 02:23:14 -0700 (PDT)
 Received: from francesco-nb.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        by mail11.truemail.it (Postfix) with ESMTPA id A650B2127F;
-        Sun, 14 May 2023 11:23:10 +0200 (CEST)
+        by mail11.truemail.it (Postfix) with ESMTPA id 2C02A2131E;
+        Sun, 14 May 2023 11:23:11 +0200 (CEST)
 From:   Francesco Dolcini <francesco@dolcini.it>
 To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         devicetree@vger.kernel.org
@@ -32,9 +32,9 @@ Cc:     Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
         Marcel Ziswiler <marcel.ziswiler@toradex.com>,
         Andrejs Cainikovs <andrejs.cainikovs@toradex.com>,
         Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: [PATCH v2 1/4] arm64: dts: colibri-imx8x: fix eval board pin configuration
-Date:   Sun, 14 May 2023 11:22:43 +0200
-Message-Id: <20230514092246.9741-2-francesco@dolcini.it>
+Subject: [PATCH v2 2/4] arm64: dts: colibri-imx8x: move pinctrl property from SoM to eval board
+Date:   Sun, 14 May 2023 11:22:44 +0200
+Message-Id: <20230514092246.9741-3-francesco@dolcini.it>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230514092246.9741-1-francesco@dolcini.it>
 References: <20230514092246.9741-1-francesco@dolcini.it>
@@ -51,48 +51,54 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
 
-Fix pinctrl groups to have SODIMM 75 only in one group.
-Remove configuration of the pin at SoM level because it is normally
-used as CSI_MCLK at camera interface connector.
-Without this fix it is not possible, without redefining iomuxc pinctrl,
-to use CSI_MCLK signal and leads to the following error messages:
+Each carrier board device tree except the eval board one already override
+iomuxc pinctrl property to configure unused pins as gpio.
+So move also the pinctrl property to eval board device tree.
+Leave the pin group definition in imx8x-colibri.dtsi to avoid duplication
+and simplify configuration of gpio.
 
-imx8qxp-pinctrl scu:pinctrl: pin IMX8QXP_CSI_MCLK already requested
-imx8qxp-pinctrl scu:pinctrl: pin-147 (16-003c) status -22
-
-Fixes: 4d2adf738169 ("arm64: dts: colibri-imx8x: Split pinctrl_hog1")
 Signed-off-by: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
 Signed-off-by: Andrejs Cainikovs <andrejs.cainikovs@toradex.com>
 Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 ---
 v2: remove stray newline after Fixes: tag
 ---
- arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ arch/arm64/boot/dts/freescale/imx8x-colibri-eval-v3.dtsi | 6 ++++++
+ arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi         | 4 ----
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
+diff --git a/arch/arm64/boot/dts/freescale/imx8x-colibri-eval-v3.dtsi b/arch/arm64/boot/dts/freescale/imx8x-colibri-eval-v3.dtsi
+index 7264d784ae72..9af769ab8ceb 100644
+--- a/arch/arm64/boot/dts/freescale/imx8x-colibri-eval-v3.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8x-colibri-eval-v3.dtsi
+@@ -33,6 +33,12 @@ rtc_i2c: rtc@68 {
+ 	};
+ };
+ 
++&iomuxc {
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_ext_io0>, <&pinctrl_hog0>, <&pinctrl_hog1>,
++		    <&pinctrl_lpspi2_cs2>;
++};
++
+ /* Colibri SPI */
+ &lpspi2 {
+ 	status = "okay";
 diff --git a/arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi b/arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi
-index 7cad79102e1a..6f88c11f16e1 100644
+index 6f88c11f16e1..b0d6f632622c 100644
 --- a/arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi
-@@ -365,7 +365,7 @@ &usdhc2 {
- &iomuxc {
- 	pinctrl-names = "default";
- 	pinctrl-0 = <&pinctrl_ext_io0>, <&pinctrl_hog0>, <&pinctrl_hog1>,
--		    <&pinctrl_hog2>, <&pinctrl_lpspi2_cs2>;
-+		    <&pinctrl_lpspi2_cs2>;
+@@ -363,10 +363,6 @@ &usdhc2 {
+ /* TODO VPU Encoder/Decoder */
  
+ &iomuxc {
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_ext_io0>, <&pinctrl_hog0>, <&pinctrl_hog1>,
+-		    <&pinctrl_lpspi2_cs2>;
+-
  	/* On-module touch pen-down interrupt */
  	pinctrl_ad7879_int: ad7879intgrp {
-@@ -499,8 +499,7 @@ pinctrl_hog0: hog0grp {
- 	};
- 
- 	pinctrl_hog1: hog1grp {
--		fsl,pins = <IMX8QXP_CSI_MCLK_LSIO_GPIO3_IO01			0x20>,		/* SODIMM  75 */
--			   <IMX8QXP_QSPI0A_SCLK_LSIO_GPIO3_IO16			0x20>;		/* SODIMM  93 */
-+		fsl,pins = <IMX8QXP_QSPI0A_SCLK_LSIO_GPIO3_IO16			0x20>;		/* SODIMM  93 */
- 	};
- 
- 	pinctrl_hog2: hog2grp {
+ 		fsl,pins = <IMX8QXP_MIPI_CSI0_I2C0_SCL_LSIO_GPIO3_IO05	0x21>;
 -- 
 2.25.1
 
