@@ -2,209 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156DC701F0C
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 20:43:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 50946701F12
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 20:46:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233562AbjENSnc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 14:43:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38828 "EHLO
+        id S233108AbjENSq3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 14:46:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjENSna (ORCPT
+        with ESMTP id S232252AbjENSq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 14:43:30 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E30921BD3;
-        Sun, 14 May 2023 11:43:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7D73760C90;
-        Sun, 14 May 2023 18:43:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92277C433EF;
-        Sun, 14 May 2023 18:43:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684089807;
-        bh=Ml1D73OgB6a09DYGjURU+FXwDDBxN+djnvR7hyV+9F0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=A2U/h4UC1lJ+/+TsINJXlcGGXwM2KWKtn7CtMQSjOIVu+yQ/6t6hjWIaG/FAweri7
-         H2RRMav2LKvE+bBx7gW8jBfiJkzwlJ90LQaBX/3CgXwqVL0NHYOB9FJ+q2ylSqt4c9
-         +gTlsaj0svT4NGEIKuwVXXrX1hlgjl7MFr7debe3zFqLm5JmQ4oPbHZc+W5y62XAlu
-         6xX8TwUME2Dcokfpp9+5m5ozGSPIN8Gb5l0+8nXWEtgykcTCwMqwKcaCNE9CsUXZx4
-         nCMgUqNWxyUjChh6D4N9/5G/5ocXTte/QVnvsmqYBgZa1PmHoNpFUHl0XyQAMajrrY
-         sdCAr9023sF2w==
-Date:   Sun, 14 May 2023 11:43:25 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Kent Overstreet <kent.overstreet@linux.dev>
-Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>, linux-mm@kvack.org
-Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
-Message-ID: <20230514184325.GB9528@sol.localdomain>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-8-kent.overstreet@linux.dev>
- <ZFqxEWqD19eHe353@infradead.org>
- <ZFq3SdSBJ_LWsOgd@murray>
- <ZFq7JhrhyrMTNfd/@moria.home.lan>
- <20230510064849.GC1851@quark.localdomain>
- <ZF6HHRDeUWLNtuL7@moria.home.lan>
- <20230513015752.GC3033@quark.localdomain>
- <ZGB1eevk/u2ssIBT@moria.home.lan>
+        Sun, 14 May 2023 14:46:26 -0400
+Received: from smtp.smtpout.orange.fr (smtp-22.smtpout.orange.fr [80.12.242.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D5B63AA7
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 11:46:23 -0700 (PDT)
+Received: from pop-os.home ([86.243.2.178])
+        by smtp.orange.fr with ESMTPA
+        id yGjOpRl6UIsg1yGjOpZsJM; Sun, 14 May 2023 20:46:21 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+        s=t20230301; t=1684089981;
+        bh=Lq4t2RwZUg9fe1YN6jfcFon281FtXbX0H4guo24wo8k=;
+        h=From:To:Cc:Subject:Date;
+        b=hXeuGLKNFeHpsYz+fvzZqeiCvPflHPwRkHXULJ8mRGrX2/heUijF1P8r73TpJx1gZ
+         aqtjB4mpQ2tixtMWiQgqK2069ugLiudfgr/DFS1R99EuQS+AltGot/3LPEpLqtJiw0
+         dO/vfAZA1ojigki+G6qRjyy7MdPPLFULTNnywkBzD6VF7qfQhZX+1iG+qgFsl+JX9N
+         Ykdy4FtAKZe9BJIxjVSTQLxMhSK2DpRRtjp+a8lOhnAJZxHZwOJjbhaVQ6uQ6B8vTZ
+         pe3S28Cq0HnliU4Y0B+pDC8zuVctzlN3DJ0v9i7nfM9JxjvgODMRKb5Smr0qlnBY4j
+         jI1BCynuUTmvw==
+X-ME-Helo: pop-os.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Sun, 14 May 2023 20:46:21 +0200
+X-ME-IP: 86.243.2.178
+From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To:     Vasily Khoruzhick <anarsoul@gmail.com>,
+        Yangtao Li <tiny.windzz@gmail.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Ondrej Jirman <megous@megous.com>,
+        Maxime Ripard <mripard@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev
+Subject: [PATCH v2] thermal/drivers/sun8i: Fix some error handling paths in sun8i_ths_probe()
+Date:   Sun, 14 May 2023 20:46:05 +0200
+Message-Id: <a8ae84bd2dc4b55fe428f8e20f31438bf8bb6762.1684089931.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGB1eevk/u2ssIBT@moria.home.lan>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 14, 2023 at 01:45:29AM -0400, Kent Overstreet wrote:
-> On Fri, May 12, 2023 at 06:57:52PM -0700, Eric Biggers wrote:
-> > First, I wanted to mention that decoding of variable-length fields has been
-> > extensively studied for decompression algorithms, e.g. for Huffman decoding.
-> > And it turns out that it can be done branchlessly.  The basic idea is that you
-> > have a branchless refill step that looks like the following:
-> > 
-> > #define REFILL_BITS_BRANCHLESS()                    \
-> >         bitbuf |= get_unaligned_u64(p) << bitsleft; \
-> >         p += 7 - ((bitsleft >> 3) & 0x7);           \
-> >         bitsleft |= 56;
-> > 
-> > That branchlessly ensures that 'bitbuf' contains '56 <= bitsleft <= 63' bits.
-> > Then, the needed number of bits can be removed and returned:
-> > 
-> > #define READ_BITS(n)                          \
-> >         REFILL_BITS_BRANCHLESS();             \
-> >         tmp = bitbuf & (((u64)1 << (n)) - 1); \
-> >         bitbuf >>= (n);                       \
-> >         bitsleft -= (n);                      \
-> >         tmp
-> > 
-> > If you're interested, I can give you some references about the above method.
-> 
-> I might be interested in those references, new bit tricks and integer
-> encodings are always fun :)
+Should an error occur after calling sun8i_ths_resource_init() in the probe
+function, some resources need to be released, as already done in the
+.remove() function.
 
-There are some good blog posts by Fabian Giese:
+Switch to the devm_clk_get_enabled() helper and add a new devm_action to
+turn sun8i_ths_resource_init() into a fully managed function.
 
-* https://fgiesen.wordpress.com/2018/02/19/reading-bits-in-far-too-many-ways-part-1/
-* https://fgiesen.wordpress.com/2018/02/20/reading-bits-in-far-too-many-ways-part-2/
-* https://fgiesen.wordpress.com/2018/09/27/reading-bits-in-far-too-many-ways-part-3/
+Move the place where reset_control_deassert() is called so that the
+recommended order of reset release/clock enable steps is kept.
+A64 manual states that:
 
-And the examples I gave above are basically what I use in libdeflate:
-https://github.com/ebiggers/libdeflate/blob/master/lib/deflate_decompress.c
+	3.3.6.4. Gating and reset
 
-> > But, I really just wanted to mention it for completeness, since I think you'd
-> > actually want to go in a slightly different direction, since (a) you have all
-> > the field widths available from the beginning, as opposed to being interleaved
-> > into the bitstream itself (as is the case in Huffman decoding for example), so
-> > you're not limited to serialized decoding of each field, (b) your fields are up
-> > to 96 bits, and (c) you've selected a bitstream convention that seems to make it
-> > such that your stream *must* be read in aligned units of u64, so I don't think
-> > something like REFILL_BITS_BRANCHLESS() could work for you anyway.
-> > 
-> > What I would suggest instead is preprocessing the list of 6 field lengths to
-> > create some information that can be used to extract all 6 fields branchlessly
-> > with no dependencies between different fields.  (And you clearly *can* add a
-> > preprocessing step, as you already have one -- the dynamic code generator.)
-> > 
-> > So, something like the following:
-> > 
-> >     const struct field_info *info = &format->fields[0];
-> > 
-> >     field0 = (in->u64s[info->word_idx] >> info->shift1) & info->mask;
-> >     field0 |= in->u64s[info->word_idx - 1] >> info->shift2;
-> > 
-> > ... but with the code for all 6 fields interleaved.
-> > 
-> > On modern CPUs, I think that would be faster than your current C code.
-> > 
-> > You could do better by creating variants that are specialized for specific
-> > common sets of parameters.  During "preprocessing", you would select a variant
-> > and set an enum accordingly.  During decoding, you would switch on that enum and
-> > call the appropriate variant.  (This could also be done with a function pointer,
-> > of course, but indirect calls are slow these days...)
-> 
-> testing random btree updates:
-> 
-> dynamically generated unpack:
-> rand_insert: 20.0 MiB with 1 threads in    33 sec,  1609 nsec per iter, 607 KiB per sec
-> 
-> old C unpack:
-> rand_insert: 20.0 MiB with 1 threads in    35 sec,  1672 nsec per iter, 584 KiB per sec
-> 
-> the Eric Biggers special:
-> rand_insert: 20.0 MiB with 1 threads in    35 sec,  1676 nsec per iter, 583 KiB per sec
-> 
-> Tested two versions of your approach, one without a shift value, one
-> where we use a shift value to try to avoid unaligned access - second was
-> perhaps 1% faster
-> 
-> so it's not looking good. This benchmark doesn't even hit on
-> unpack_key() quite as much as I thought, so the difference is
-> significant.
-> 
-> diff --git a/fs/bcachefs/bkey.c b/fs/bcachefs/bkey.c
+	Make sure that the reset signal has been released before the release of
+	module clock gating;
 
-I don't know what this patch applies to, so I can't properly review it.
+This fixes the issue and removes some LoC at the same time.
 
-I suggest checking the assembly and making sure it is what is expected.
+Fixes: dccc5c3b6f30 ("thermal/drivers/sun8i: Add thermal driver for H6/H5/H3/A64/A83T/R40")
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+Changes in v2:
+   - move reset_control_deassert() next to devm_reset_control_get()
 
-In general, for this type of thing it's also helpful to put together a userspace
-micro-benchmark program so that it's very fast to evaluate different options.
-Building and booting a kernel and doing some I/O benchmark on a bcachefs sounds
-much more time consuming and less precise.
+v1: https://lore.kernel.org/all/26f9e3bb3fcd0c12ea24a44c75b7960da993b68b.1684077651.git.christophe.jaillet@wanadoo.fr/
+---
+ drivers/thermal/sun8i_thermal.c | 55 +++++++++++----------------------
+ 1 file changed, 18 insertions(+), 37 deletions(-)
 
-> -struct bkey __bch2_bkey_unpack_key(const struct bkey_format_processed *format_p,
-> +struct bkey __bch2_bkey_unpack_key(const struct bkey_format_processed *format,
->  				   const struct bkey_packed *in)
->  {
-> -	const struct bkey_format *format = &format_p->f;
-> -	struct unpack_state state = unpack_state_init(format, in);
->  	struct bkey out;
->  
-> -	EBUG_ON(format->nr_fields != BKEY_NR_FIELDS);
-> -	EBUG_ON(in->u64s < format->key_u64s);
-> +	EBUG_ON(format->f.nr_fields != BKEY_NR_FIELDS);
-> +	EBUG_ON(in->u64s < format->f.key_u64s);
->  	EBUG_ON(in->format != KEY_FORMAT_LOCAL_BTREE);
-> -	EBUG_ON(in->u64s - format->key_u64s + BKEY_U64s > U8_MAX);
-> +	EBUG_ON(in->u64s - format->f.key_u64s + BKEY_U64s > U8_MAX);
->  
-> -	out.u64s	= BKEY_U64s + in->u64s - format->key_u64s;
-> +	out.u64s	= BKEY_U64s + in->u64s - format->f.key_u64s;
->  	out.format	= KEY_FORMAT_CURRENT;
->  	out.needs_whiteout = in->needs_whiteout;
->  	out.type	= in->type;
->  	out.pad[0]	= 0;
->  
-> +	if (likely(format->aligned)) {
-> +#define x(id, field)	out.field = get_aligned_field(format, in, id);
-> +		bkey_fields()
-> +#undef x
-> +	} else {
-> +		struct unpack_state state = unpack_state_init(&format->f, in);
-> +
->  #define x(id, field)	out.field = get_inc_field(&state, id);
-> -	bkey_fields()
-> +		bkey_fields()
->  #undef x
-> +	}
+diff --git a/drivers/thermal/sun8i_thermal.c b/drivers/thermal/sun8i_thermal.c
+index 793ddce72132..d4d241686c81 100644
+--- a/drivers/thermal/sun8i_thermal.c
++++ b/drivers/thermal/sun8i_thermal.c
+@@ -319,6 +319,11 @@ static int sun8i_ths_calibrate(struct ths_device *tmdev)
+ 	return ret;
+ }
+ 
++static void sun8i_ths_reset_control_assert(void *data)
++{
++	reset_control_assert(data);
++}
++
+ static int sun8i_ths_resource_init(struct ths_device *tmdev)
+ {
+ 	struct device *dev = tmdev->dev;
+@@ -339,47 +344,35 @@ static int sun8i_ths_resource_init(struct ths_device *tmdev)
+ 		if (IS_ERR(tmdev->reset))
+ 			return PTR_ERR(tmdev->reset);
+ 
+-		tmdev->bus_clk = devm_clk_get(&pdev->dev, "bus");
++		ret = reset_control_deassert(tmdev->reset);
++		if (ret)
++			return ret;
++
++		ret = devm_add_action_or_reset(dev, sun8i_ths_reset_control_assert,
++					       tmdev->reset);
++		if (ret)
++			return ret;
++
++		tmdev->bus_clk = devm_clk_get_enabled(&pdev->dev, "bus");
+ 		if (IS_ERR(tmdev->bus_clk))
+ 			return PTR_ERR(tmdev->bus_clk);
+ 	}
+ 
+ 	if (tmdev->chip->has_mod_clk) {
+-		tmdev->mod_clk = devm_clk_get(&pdev->dev, "mod");
++		tmdev->mod_clk = devm_clk_get_enabled(&pdev->dev, "mod");
+ 		if (IS_ERR(tmdev->mod_clk))
+ 			return PTR_ERR(tmdev->mod_clk);
+ 	}
+ 
+-	ret = reset_control_deassert(tmdev->reset);
+-	if (ret)
+-		return ret;
+-
+-	ret = clk_prepare_enable(tmdev->bus_clk);
+-	if (ret)
+-		goto assert_reset;
+-
+ 	ret = clk_set_rate(tmdev->mod_clk, 24000000);
+ 	if (ret)
+-		goto bus_disable;
+-
+-	ret = clk_prepare_enable(tmdev->mod_clk);
+-	if (ret)
+-		goto bus_disable;
++		return ret;
+ 
+ 	ret = sun8i_ths_calibrate(tmdev);
+ 	if (ret)
+-		goto mod_disable;
++		return ret;
+ 
+ 	return 0;
+-
+-mod_disable:
+-	clk_disable_unprepare(tmdev->mod_clk);
+-bus_disable:
+-	clk_disable_unprepare(tmdev->bus_clk);
+-assert_reset:
+-	reset_control_assert(tmdev->reset);
+-
+-	return ret;
+ }
+ 
+ static int sun8i_h3_thermal_init(struct ths_device *tmdev)
+@@ -530,17 +523,6 @@ static int sun8i_ths_probe(struct platform_device *pdev)
+ 	return 0;
+ }
+ 
+-static int sun8i_ths_remove(struct platform_device *pdev)
+-{
+-	struct ths_device *tmdev = platform_get_drvdata(pdev);
+-
+-	clk_disable_unprepare(tmdev->mod_clk);
+-	clk_disable_unprepare(tmdev->bus_clk);
+-	reset_control_assert(tmdev->reset);
+-
+-	return 0;
+-}
+-
+ static const struct ths_thermal_chip sun8i_a83t_ths = {
+ 	.sensor_num = 3,
+ 	.scale = 705,
+@@ -642,7 +624,6 @@ MODULE_DEVICE_TABLE(of, of_ths_match);
+ 
+ static struct platform_driver ths_driver = {
+ 	.probe = sun8i_ths_probe,
+-	.remove = sun8i_ths_remove,
+ 	.driver = {
+ 		.name = "sun8i-thermal",
+ 		.of_match_table = of_ths_match,
+-- 
+2.34.1
 
-It looks like you didn't change the !aligned case.  How often is the 'aligned'
-case taken?
-
-I think it would also help if the generated assembly had the handling of the
-fields interleaved.  To achieve that, it might be necessary to interleave the C
-code.
-
-- Eric
