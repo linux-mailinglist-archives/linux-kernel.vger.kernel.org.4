@@ -2,326 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3AAD701B76
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 06:12:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 33DF8701B7C
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 06:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbjENELP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 00:11:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51662 "EHLO
+        id S231493AbjENERL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 00:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbjENELN (ORCPT
+        with ESMTP id S229462AbjENERH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 00:11:13 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47E682125;
-        Sat, 13 May 2023 21:11:11 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D04B360C4A;
-        Sun, 14 May 2023 04:11:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A15AAC433EF;
-        Sun, 14 May 2023 04:11:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684037470;
-        bh=coH+ycgDhNeLrUbQ4PqggNWU864JhVnNGqFjWFvR4mw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=pcZ+cFYy656icsxqfpzaja9oT6iF3DIWclH7pDeLp0Uhf+o9o4jl7S/2s0aup5XPj
-         1KGMlP5dd3OeLFE3Q5KMuIU9hSRWrZf04HyHK1Wm01RsGjZED3b19JNq6F/9iA9sOL
-         jMdmkS9hA/LzQnJErLvZ2l8vSM2DXfH3WNBHPsbE5c5AamcBCeWr/Yexjyk9gwyJn6
-         F6RKzVRlMJcx4+T8qJiqrp8hcaLJXxkmiu3LDL5xxlDNoIFPXZ0RwtEa/+oNlxLnDU
-         Fr+VV6AkzsS/h6vDxeThF2j6Pb6FSF7GUtCOA9JkE5QHNZC6McRFNyGHE7I3Wsjgoa
-         fqUKOXsLE/b6A==
-Date:   Sun, 14 May 2023 13:11:06 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Florent Revest <revest@chromium.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Martin KaFai Lau <martin.lau@linux.dev>, bpf@vger.kernel.org
-Subject: Re: [PATCH v9.1 05/11] tracing/probes: Move event parameter
- fetching code to common parser
-Message-Id: <20230514131106.e90758b46eb69faa4f0722be@kernel.org>
-In-Reply-To: <20230505174032.052cbc7c@gandalf.local.home>
-References: <168299383880.3242086.7182498102007986127.stgit@mhiramat.roam.corp.google.com>
-        <168299388376.3242086.1033501163178915960.stgit@mhiramat.roam.corp.google.com>
-        <20230505174032.052cbc7c@gandalf.local.home>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 14 May 2023 00:17:07 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7E1D1702;
+        Sat, 13 May 2023 21:17:06 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34E47Rfs008754;
+        Sun, 14 May 2023 04:16:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=co4vRrnTivwIzFDIwnV3dMAsjHlQ/SjpLfqX2dsGaik=;
+ b=k23QVqg5w4yinxoAw3dYRHeFAfYqVk2BHZuL5zYY0M97waJIKEWDT06DiieWgBqvNeZY
+ FRNQOzA2k9E5t54eO7UkDZYK+iWF23574W2dF2VZrrJics6p9ZxH8XqoAX8yiOOzwY0y
+ Q+5s0UhOvyne4hgbMdT9BiL6wBtOx/4b1uGz8iptAyUMnwnYAm3LYKM7FyM8++tNRnQN
+ STWj4jAMymLRs8peHQ71irPwwpvY/GKG6uW4hTP7FxXfI4FqbT9lABiLp8LocbV5YNpC
+ V2WGE/E/F7djmrtVewkuVL6EGbmZkpPaUmYa+BevAkNgmUBhGjRkvsixTUyyazTXUIMD Bw== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qj257sc73-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 14 May 2023 04:16:34 +0000
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34E4GXxC003508
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 14 May 2023 04:16:33 GMT
+Received: from [10.110.80.184] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Sat, 13 May
+ 2023 21:16:32 -0700
+Message-ID: <a8229e70-dd23-8a48-cf9b-fadc9db7ecdc@quicinc.com>
+Date:   Sat, 13 May 2023 21:16:31 -0700
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.9.0
+Subject: Re: [PATCH v3 04/18] soc: qcom: Add Qualcomm minidump kernel driver
+Content-Language: en-US
+To:     Mukesh Ojha <quic_mojha@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <corbet@lwn.net>,
+        <keescook@chromium.org>, <tony.luck@intel.com>,
+        <gpiccoli@igalia.com>, <catalin.marinas@arm.com>,
+        <will@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <robh+dt@kernel.org>, <linus.walleij@linaro.org>,
+        <linux-gpio@vger.kernel.org>, <srinivas.kandagatla@linaro.org>
+CC:     <linux-arm-msm@vger.kernel.org>,
+        <linux-remoteproc@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-doc@vger.kernel.org>
+References: <1683133352-10046-1-git-send-email-quic_mojha@quicinc.com>
+ <1683133352-10046-5-git-send-email-quic_mojha@quicinc.com>
+ <c6f730b6-f702-91d4-4abd-71546e02f869@linaro.org>
+ <23b493f4-1a01-8d03-fc12-d588b2c6fd74@quicinc.com>
+ <575a422d-6224-06b7-628c-8487b47882e9@linaro.org>
+ <500e5abc-fb71-8468-a6b0-3ced2676b57c@linaro.org>
+ <e714566e-39b7-d46b-13bd-3c0e20e9f944@quicinc.com>
+From:   Trilok Soni <quic_tsoni@quicinc.com>
+In-Reply-To: <e714566e-39b7-d46b-13bd-3c0e20e9f944@quicinc.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 0Zr-_av0jVj5LIrEzqJPzDiF31cnJxEQ
+X-Proofpoint-GUID: 0Zr-_av0jVj5LIrEzqJPzDiF31cnJxEQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-14_02,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ impostorscore=0 mlxlogscore=999 lowpriorityscore=0 clxscore=1011
+ spamscore=0 mlxscore=0 priorityscore=1501 suspectscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305140036
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 5 May 2023 17:40:32 -0400
-Steven Rostedt <rostedt@goodmis.org> wrote:
-
-> On Tue,  2 May 2023 11:18:03 +0900
-> "Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
-> 
-> > --- a/kernel/trace/trace_probe.c
-> > +++ b/kernel/trace/trace_probe.c
-> > @@ -283,27 +283,53 @@ int traceprobe_parse_event_name(const char **pevent, const char **pgroup,
-> >  	return 0;
-> >  }
-> >  
-> > +static int parse_trace_event_arg(char *arg, struct fetch_insn *code,
-> > +				 struct traceprobe_parse_context *ctx)
-> > +{
-> > +	struct ftrace_event_field *field;
-> > +	struct list_head *head;
-> > +
-> > +	head = trace_get_fields(ctx->event);
-> > +	list_for_each_entry(field, head, link) {
-> > +		if (!strcmp(arg, field->name)) {
-> > +			code->op = FETCH_OP_TP_ARG;
-> > +			code->data = field;
-> > +			return 0;
-> > +		}
-> > +	}
-> > +	return -ENOENT;
-> > +}
-> > +
-> >  #define PARAM_MAX_STACK (THREAD_SIZE / sizeof(unsigned long))
-> >  
-> >  static int parse_probe_vars(char *arg, const struct fetch_type *t,
-> > -			struct fetch_insn *code, unsigned int flags, int offs)
-> > +			    struct fetch_insn *code,
-> > +			    struct traceprobe_parse_context *ctx)
-> >  {
-> >  	unsigned long param;
-> >  	int ret = 0;
-> >  	int len;
-> >  
-> > -	if (flags & TPARG_FL_TEVENT) {
-> > +	if (ctx->flags & TPARG_FL_TEVENT) {
-> >  		if (code->data)
-> >  			return -EFAULT;
-> > -		code->data = kstrdup(arg, GFP_KERNEL);
-> > -		if (!code->data)
-> > -			return -ENOMEM;
-> > -		code->op = FETCH_OP_TP_ARG;
-> > -	} else if (strcmp(arg, "retval") == 0) {
-> > -		if (flags & TPARG_FL_RETURN) {
-> > +		ret = parse_trace_event_arg(arg, code, ctx);
-> > +		if (!ret)
-> > +			return 0;
-> > +		if (strcmp(arg, "comm") == 0 || strcmp(arg, "COMM") == 0) {
-> > +			code->op = FETCH_OP_COMM;
-> > +			return 0;
-> > +		}
-> > +		/* backward compatibility */
-> > +		ctx->offset = 0;
-> > +		goto inval_var;
-> > +	}
-> 
-> So this is a bit inconsistent in this function. We have here an if
-> statement that returns 0 on success, and jumps to inval_var if it reaches
-> the end.
-
-Ah, got it. So it repeating the same pattern in this function.
-
-> 
-> The rest of the if statements below, also goes to inval_var, or returns
-> error, or just falls through the if statement to return ret. It's somewhat
-> random.
-
-And here is another pattern.
-
-> 
-> This should be cleaned up (see patch at the end).
-
-OK, I'll take it.
-
-Thanks!
-
-
-
-> 
-> > +
-> > +	if (strcmp(arg, "retval") == 0) {
-> > +		if (ctx->flags & TPARG_FL_RETURN) {
-> >  			code->op = FETCH_OP_RETVAL;
-> >  		} else {
-> > -			trace_probe_log_err(offs, RETVAL_ON_PROBE);
-> > +			trace_probe_log_err(ctx->offset, RETVAL_ON_PROBE);
-> >  			ret = -EINVAL;
-> >  		}
-> >  	} else if ((len = str_has_prefix(arg, "stack"))) {
-> > @@ -313,9 +339,9 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
-> >  			ret = kstrtoul(arg + len, 10, &param);
-> >  			if (ret) {
-> >  				goto inval_var;
-> > -			} else if ((flags & TPARG_FL_KERNEL) &&
-> > +			} else if ((ctx->flags & TPARG_FL_KERNEL) &&
-> >  				    param > PARAM_MAX_STACK) {
-> > -				trace_probe_log_err(offs, BAD_STACK_NUM);
-> > +				trace_probe_log_err(ctx->offset, BAD_STACK_NUM);
-> >  				ret = -EINVAL;
-> >  			} else {
-> >  				code->op = FETCH_OP_STACK;
-> > @@ -326,13 +352,13 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
-> >  	} else if (strcmp(arg, "comm") == 0 || strcmp(arg, "COMM") == 0) {
-> >  		code->op = FETCH_OP_COMM;
-> >  #ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
-> > -	} else if (tparg_is_function_entry(flags) &&
-> > +	} else if (tparg_is_function_entry(ctx->flags) &&
-> >  		   (len = str_has_prefix(arg, "arg"))) {
-> >  		ret = kstrtoul(arg + len, 10, &param);
-> >  		if (ret) {
-> >  			goto inval_var;
-> >  		} else if (!param || param > PARAM_MAX_STACK) {
-> > -			trace_probe_log_err(offs, BAD_ARG_NUM);
-> > +			trace_probe_log_err(ctx->offset, BAD_ARG_NUM);
-> >  			return -EINVAL;
-> >  		}
-> >  		code->op = FETCH_OP_ARG;
-> > @@ -341,7 +367,7 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
-> >  		 * The tracepoint probe will probe a stub function, and the
-> >  		 * first parameter of the stub is a dummy and should be ignored.
-> >  		 */
-> > -		if (flags & TPARG_FL_TPOINT)
-> > +		if (ctx->flags & TPARG_FL_TPOINT)
-> >  			code->param++;
-> >  #endif
-> >  	} else
-> > @@ -350,7 +376,7 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
-> >  	return ret;
-> >  
-> >  inval_var:
-> > -	trace_probe_log_err(offs, BAD_VAR);
-> > +	trace_probe_log_err(ctx->offset, BAD_VAR);
-> >  	return -EINVAL;
-> >  }
-> >  
+On 5/8/2023 12:10 AM, Mukesh Ojha wrote:
 > 
 > 
-> diff --git a/kernel/trace/trace_probe.c b/kernel/trace/trace_probe.c
-> index 84a9f0446390..a30aab8cef7f 100644
-> --- a/kernel/trace/trace_probe.c
-> +++ b/kernel/trace/trace_probe.c
-> @@ -307,6 +307,7 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
->  			    struct traceprobe_parse_context *ctx)
->  {
->  	unsigned long param;
-> +	int err = BAD_VAR;
->  	int ret = 0;
->  	int len;
->  
-> @@ -322,45 +323,61 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
->  		}
->  		/* backward compatibility */
->  		ctx->offset = 0;
-> -		goto inval_var;
-> +		goto inval;
->  	}
->  
->  	if (strcmp(arg, "retval") == 0) {
->  		if (ctx->flags & TPARG_FL_RETURN) {
->  			code->op = FETCH_OP_RETVAL;
-> -		} else {
-> -			trace_probe_log_err(ctx->offset, RETVAL_ON_PROBE);
-> -			ret = -EINVAL;
-> +			return 0;
->  		}
-> -	} else if ((len = str_has_prefix(arg, "stack"))) {
-> +		err = RETVAL_ON_PROBE;
-> +		ret = -EINVAL;
-> +		goto inval;
-> +	}
-> +
-> +	if ((len = str_has_prefix(arg, "stack"))) {
-> +
->  		if (arg[len] == '\0') {
->  			code->op = FETCH_OP_STACKP;
-> -		} else if (isdigit(arg[len])) {
-> +			return 0;
-> +		}
-> +
-> +		if (isdigit(arg[len])) {
->  			ret = kstrtoul(arg + len, 10, &param);
-> -			if (ret) {
-> -				goto inval_var;
-> -			} else if ((ctx->flags & TPARG_FL_KERNEL) &&
-> -				    param > PARAM_MAX_STACK) {
-> -				trace_probe_log_err(ctx->offset, BAD_STACK_NUM);
-> +			if (ret)
-> +				goto inval;
-> +
-> +			if ((ctx->flags & TPARG_FL_KERNEL) &&
-> +			    param > PARAM_MAX_STACK) {
-> +				err = BAD_STACK_NUM;
->  				ret = -EINVAL;
-> -			} else {
-> -				code->op = FETCH_OP_STACK;
-> -				code->param = (unsigned int)param;
-> +				goto inval;
->  			}
-> -		} else
-> -			goto inval_var;
-> -	} else if (strcmp(arg, "comm") == 0 || strcmp(arg, "COMM") == 0) {
-> +			code->op = FETCH_OP_STACK;
-> +			code->param = (unsigned int)param;
-> +			return 0;
-> +		}
-> +		goto inval;
-> +	}
-> +
-> +	if (strcmp(arg, "comm") == 0 || strcmp(arg, "COMM") == 0) {
->  		code->op = FETCH_OP_COMM;
-> +		return 0;
-> +	}
-> +
->  #ifdef CONFIG_HAVE_FUNCTION_ARG_ACCESS_API
-> -	} else if (tparg_is_function_entry(ctx->flags) &&
-> -		   (len = str_has_prefix(arg, "arg"))) {
-> +	if (tparg_is_function_entry(ctx->flags) &&
-> +	    (len = str_has_prefix(arg, "arg"))) {
->  		ret = kstrtoul(arg + len, 10, &param);
-> -		if (ret) {
-> -			goto inval_var;
-> -		} else if (!param || param > PARAM_MAX_STACK) {
-> -			trace_probe_log_err(ctx->offset, BAD_ARG_NUM);
-> -			return -EINVAL;
-> +		if (ret)
-> +			goto inval;
-> +
-> +		if (!param || param > PARAM_MAX_STACK) {
-> +			err = BAD_ARG_NUM;
-> +			goto inval;
->  		}
-> +
->  		code->op = FETCH_OP_ARG;
->  		code->param = (unsigned int)param - 1;
->  		/*
-> @@ -369,14 +386,11 @@ static int parse_probe_vars(char *arg, const struct fetch_type *t,
->  		 */
->  		if (ctx->flags & TPARG_FL_TPOINT)
->  			code->param++;
-> +		return 0;
->  #endif
-> -	} else
-> -		goto inval_var;
-> -
-> -	return ret;
->  
-> -inval_var:
-> -	trace_probe_log_err(ctx->offset, BAD_VAR);
-> +inval:
-> +	trace_probe_log_err(ctx->offset, err);
->  	return -EINVAL;
->  }
->  
+> On 5/4/2023 10:04 PM, Krzysztof Kozlowski wrote:
+>> On 04/05/2023 17:21, Krzysztof Kozlowski wrote:
+>>>>>
+>>>>>> +    ret = qcom_minidump_init_apss_subsystem(md);
+>>>>>> +    if (ret) {
+>>>>>> +        dev_err(&pdev->dev, "apss minidump initialization failed: 
+>>>>>> %d\n", ret);
+>>>>>> +        goto unlock;
+>>>>>> +    }
+>>>>>> +
+>>>>>> +    __md = md;
+>>>>>
+>>>>> No. This is a platform device, so it can have multiple instances.
+>>>>
+>>>> It can have only one instance that is created from SMEM driver probe.
+>>>
+>>> Anyone can instantiate more of them.... how did you solve it?
+>>
+>> To clarify - sprinkling more of singletons makes everything tightly
+>> coupled, difficult to debug and non-portable. You cannot have two
+>> instances, you have to control concurrent initialization by yourself in
+>> each of such singletons.
+>>
+>> I understand sometimes they are unavoidable, for example when this does
+>> not map to hardware property. However here you have the parent - smem -
+>> which can return you valid instance. Thus you avoid entire problem of
+>> file-scope variables.
+> 
+> I get your point, why one's should avoid file scope variables.
+> 
+> 
+> This is infrastructure driver and will not have multiple instances and 
+> even if it happens could be avoided with with the help of global mutex 
+> and protect below function which i am already doing at the moment and 
+> fail the other probe if it is already initialized with proper logging..e.g
 
+Another way to think here is what if you have chiplets? Two SOCs looks 
+like one as a product? How does your driver will behave in those cases?
 
--- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---Trilok Soni
