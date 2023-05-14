@@ -2,106 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD6A5701B80
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 06:23:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7422701B84
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 06:29:32 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjENEXU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 00:23:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
+        id S231664AbjENE3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 00:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55480 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbjENEXR (ORCPT
+        with ESMTP id S229462AbjENE31 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 00:23:17 -0400
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA9291BEF;
-        Sat, 13 May 2023 21:23:16 -0700 (PDT)
-Received: by mail-pl1-x635.google.com with SMTP id d9443c01a7336-1ab1b79d3a7so78945275ad.3;
-        Sat, 13 May 2023 21:23:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684038196; x=1686630196;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4Zp/9b1VdAA+ssxLZiJ214NeBi4l5ENlrua84d31TRE=;
-        b=Ws5yoXtKXitkR4CaOcAY9yc/0aTpRh4kKmOJk136xWrNsQEUenYsQ7mq+ryskdmPNd
-         i/93nQAgqG/kSOuV8Joiaort3uJaaOxGf1N2uFLuSJiswyT/zsadBiAyYDUQibSikicy
-         wkqGYP/QATH4LqMAXjjNYlOe3vapJihCVzYW5e9M/srHkdp0CBfGSWemrDxuWM5Pfc2V
-         E0WTJSwA9DOsqZlF8Q8R0DIWBO3oqEellqGkrcpzGlTyi/AYhTgWAiu6iZcLWyStdcM2
-         JFPwtuRt3XNKIMJ0WpHeWmZxbtW7JIvTCD5xlNiFNFHJehliFDqH27qAjMsavaxZr2EA
-         iDCw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684038196; x=1686630196;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4Zp/9b1VdAA+ssxLZiJ214NeBi4l5ENlrua84d31TRE=;
-        b=fS9pKzu5G65gz56FChlyesieoJqyU+p4GLuZE1gKkbFu9SOelawDzA5VYwWllrENQm
-         NWP2yzqTGPC0l0WFFXreUhHfptFk6tmqqIlf0e46rKsynjBlLjZ9HZzIx7MbOSOi02HM
-         v+O1lheiSNhKVPw+U5XuWuoXZdNFCKDVQvQdQO8TS1oeGG2QXD7kNTMQMmtJ7KxBynWY
-         ahG+eG1gqHrvet5R5/A8/rUU9k5knzl3rfDx+UXz2a/AnnRYu79kGvR9TvTCrycR9gBd
-         FS5WTBlDS6lAWCh/WiDmPaK7LCvRrVgAO2h90YpXvwpgTb6UNgblxxittQC/RuQ01Jpp
-         LlCw==
-X-Gm-Message-State: AC+VfDwgjy8z3ec1s5BGmCQnzqZviFIaeo8A6DBf82bdE96KH1LiwTzm
-        aaqnRAc5qvkbzd8vHgnRvZ6JB2EMua9tSrXuk823b0aC
-X-Google-Smtp-Source: ACHHUZ7EtQOkRCTkq9y0VkJ8t4dAlWdtQLc+ji3+/piFv76tw7DzYFrZK0ExHLZ1ECIiAqyumi83LmCgY9CvaS5VHWE=
-X-Received: by 2002:a17:903:484:b0:1ab:267e:2f2d with SMTP id
- jj4-20020a170903048400b001ab267e2f2dmr28549605plb.48.1684038195944; Sat, 13
- May 2023 21:23:15 -0700 (PDT)
+        Sun, 14 May 2023 00:29:27 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD0E1BCF;
+        Sat, 13 May 2023 21:29:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684038565; x=1715574565;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vMQva3pTlSExbdM0d9uf24IiN+CfddvAn6rg4NC6ukQ=;
+  b=Emo1W+EoZSibVyqLtV7UYHFnOnbMweeiH9OA9S/k4dBiYvn44kpLvaZc
+   ND38TAV5AsLiWN7t1vTU/hesgCAqWK0bXSa/3T9kXER8TLPmwVmrvsP0V
+   qbMUn16loFT23E84M2mDWESAuv2w0z65G60wQM8NonCZxrnlXyin79vvk
+   L7yO3rCIbVbAqDa9v6w0bukkGIHFj49YEvDaTWuOp/PwF4LWez2+T1hVN
+   mEwFhTFYVoOK34MpWv6uB56J971mhPsgohHRHHAW5azqqtnZP/v9VRLF7
+   F2RMMX+F574qLvsVvzW7ccFr/KEK9JyzcOT/qtR8Q/KLIOpHHhyw2sYcf
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="354157776"
+X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
+   d="scan'208";a="354157776"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 May 2023 21:29:25 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10709"; a="703585362"
+X-IronPort-AV: E=Sophos;i="5.99,273,1677571200"; 
+   d="scan'208";a="703585362"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 13 May 2023 21:29:21 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1py3MG-0005pC-1A;
+        Sun, 14 May 2023 04:29:20 +0000
+Date:   Sun, 14 May 2023 12:28:23 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, rafael@kernel.org
+Cc:     oe-kbuild-all@lists.linux.dev, lukasz.luba@arm.com,
+        dietmar.eggemann@arm.com, rui.zhang@intel.com,
+        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        len.brown@intel.com, pavel@ucw.cz, Pierre.Gondois@arm.com,
+        ionela.voinescu@arm.com, rostedt@goodmis.org, mhiramat@kernel.org
+Subject: Re: [PATCH v2 08/17] PM: EM: Introduce runtime modifiable table
+Message-ID: <202305141200.aaTHzYOJ-lkp@intel.com>
+References: <20230512095743.3393563-9-lukasz.luba@arm.com>
 MIME-Version: 1.0
-References: <20230423123513.1346323-1-aford173@gmail.com> <20230514035806.GR727834@dragon>
-In-Reply-To: <20230514035806.GR727834@dragon>
-From:   Adam Ford <aford173@gmail.com>
-Date:   Sat, 13 May 2023 23:23:04 -0500
-Message-ID: <CAHCN7x+evo1mJaBUdx5pe5rnG2A8dkmf4myXJcK7mas7nZMwxg@mail.gmail.com>
-Subject: Re: [PATCH V2] arm64: dts: imx8mn: Fix video clock parents
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, aford@beaconembedded.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Marek Vasut <marex@denx.de>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230512095743.3393563-9-lukasz.luba@arm.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 13, 2023 at 10:58=E2=80=AFPM Shawn Guo <shawnguo@kernel.org> wr=
-ote:
->
-> On Sun, Apr 23, 2023 at 07:35:13AM -0500, Adam Ford wrote:
-> > There are a few clocks whose parents are set in mipi_dsi
-> > and mxsfb nodes, but these clocks are used by the disp_blk_ctrl
-> > power domain which may cause an issue when re-parenting, resuling
-> > in a disp_pixel clock having the wrong parent and wrong rate.
-> >
-> > Fix this by moving the assigned-clock-parents as associate clock
-> > assignments to the power-domain node to setup these clocks before
-> > they are enabled.
-> >
-> > Fixes: d825fb6455d5 ("arm64: dts: imx8mn: Add display pipeline componen=
-ts")
-> > Signed-off-by: Adam Ford <aford173@gmail.com>
->
-> Is it a fix for v6.4-rc or material for -next?
+Hi Lukasz,
 
-The Samsung DSI driver for Nano is in 6.4, and an attempt was made to
-setup the device tree in 6.4.  While I don't think there are users of
-this yet, if people try to add DT entries in their boards, they might
-struggle getting the video working if this isn't applied since the
-disp1_pix clock may be stuck at 24MHz which likely won't sync much if
-any displays.
+kernel test robot noticed the following build warnings:
 
-adam
->
-> Shawn
+[auto build test WARNING on rafael-pm/linux-next]
+[also build test WARNING on rafael-pm/thermal linus/master]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Lukasz-Luba/PM-EM-Refactor-em_cpufreq_update_efficiencies-arguments/20230512-180158
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20230512095743.3393563-9-lukasz.luba%40arm.com
+patch subject: [PATCH v2 08/17] PM: EM: Introduce runtime modifiable table
+config: arm64-randconfig-s041-20230514 (https://download.01.org/0day-ci/archive/20230514/202305141200.aaTHzYOJ-lkp@intel.com/config)
+compiler: aarch64-linux-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://github.com/intel-lab-lkp/linux/commit/d12d8d1010d7b093d6b64c204d77484d6fc268ab
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Lukasz-Luba/PM-EM-Refactor-em_cpufreq_update_efficiencies-arguments/20230512-180158
+        git checkout d12d8d1010d7b093d6b64c204d77484d6fc268ab
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm64 SHELL=/bin/bash kernel/power/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305141200.aaTHzYOJ-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> kernel/power/energy_model.c:472:13: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct em_perf_table *tmp @@     got struct em_perf_table [noderef] __rcu *runtime_table @@
+   kernel/power/energy_model.c:472:13: sparse:     expected struct em_perf_table *tmp
+   kernel/power/energy_model.c:472:13: sparse:     got struct em_perf_table [noderef] __rcu *runtime_table
+
+vim +472 kernel/power/energy_model.c
+
+   444	
+   445	/**
+   446	 * em_dev_unregister_perf_domain() - Unregister Energy Model (EM) for a device
+   447	 * @dev		: Device for which the EM is registered
+   448	 *
+   449	 * Unregister the EM for the specified @dev (but not a CPU device).
+   450	 */
+   451	void em_dev_unregister_perf_domain(struct device *dev)
+   452	{
+   453		struct em_perf_domain *pd;
+   454		struct em_perf_table *tmp;
+   455	
+   456		if (IS_ERR_OR_NULL(dev) || !dev->em_pd)
+   457			return;
+   458	
+   459		if (_is_cpu_device(dev))
+   460			return;
+   461	
+   462		pd = dev->em_pd;
+   463		/*
+   464		 * The mutex separates all register/unregister requests and protects
+   465		 * from potential clean-up/setup issues in the debugfs directories.
+   466		 * The debugfs directory name is the same as device's name.
+   467		 */
+   468		mutex_lock(&em_pd_mutex);
+   469	
+   470		em_debug_remove_pd(dev);
+   471	
+ > 472		tmp = pd->runtime_table;
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
