@@ -2,62 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63DBE701E50
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 18:57:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B7FA701E65
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 19:03:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234400AbjENQ5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 12:57:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39744 "EHLO
+        id S234322AbjENRDT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 13:03:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjENQ5i (ORCPT
+        with ESMTP id S232122AbjENRDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 12:57:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EF1830C1;
-        Sun, 14 May 2023 09:57:37 -0700 (PDT)
+        Sun, 14 May 2023 13:03:14 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3355F3C07;
+        Sun, 14 May 2023 10:03:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 33CE461046;
-        Sun, 14 May 2023 16:57:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73859C433D2;
-        Sun, 14 May 2023 16:57:34 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F89361880;
+        Sun, 14 May 2023 17:03:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B4C6C4339C;
+        Sun, 14 May 2023 17:03:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684083456;
-        bh=azQcBBbPk2rv7omNrITXRAFMi9S9ISRSdQJmPoOQdMo=;
+        s=k20201202; t=1684083792;
+        bh=dLiXJ8klvtan12DVAdAPECTlmGSDJesL1J33oOFSHoE=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=D4J2g+thK9vGflODsaDzELIp517mbQm0fxZHbvwQ+2Rs1H4m/rD71BHKzDXoerC9l
-         +f2JRuhrg2VuN2Z+qEDRA10mhsHs67iT3uRfTImH5ha41P0gHVLyLe+mJrcEZrJ1sA
-         v4FzzkLdbP+WHuIju+D+5fuC6uOydhZWU+52cmTG9cRzQCeA+OYk8qayQRILRhO/xu
-         OmupscVn6fcr+HaXN+MnMGH/IUNkLI6XoPInfHviZ6fuH3gjiu4Z94FLAz45e+NRFl
-         rTP3xx9YRcZJmHpZ4BSuO9v2Rj2UhJGAzjPJgz/v2rplTAxDQq73t3CzoGZKWNkADh
-         u0DuoOXhXKosg==
-Date:   Sun, 14 May 2023 18:13:37 +0100
+        b=IloqxDI4jEVQJoTfBhtoqO27fRnpm0lstlfAx+kklSNKb3mqAquLfeTeANJVlI58v
+         hlY6y3FHxvhKPk666U/n+se6+hpb4jLYC7UU7Hxo0fKWRVf6syO5plRPDEEFyqWIZu
+         +4vP1K9MCbQ+dsDf14DnGvUqqG76gEx/TY2+Ppq9dlXBWAsxLMn4UgMEud4iAkSMlP
+         +J84SGOVK5ouHq9lVr7UqAgXULGKcgTG/AtqacHbXRhlN6wd/zbL03c8gitBpMwOoe
+         kUPGIEr4k2DZBpeJ/pefKd/Uzo4tpkh91ftBG9lYFbYii6UOqw1A3UQ1PTIIQlMQJN
+         /970wI/w1eX0g==
+Date:   Sun, 14 May 2023 18:19:12 +0100
 From:   Jonathan Cameron <jic23@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Conor Dooley <conor@kernel.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
+To:     Herve Codina <herve.codina@bootlin.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Daniel Campello <campello@chromium.org>,
-        Gwendal Grignou <gwendal@chromium.org>,
         linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: iio: st,lsm6dsx: reference common
- schema for mount-matrix
-Message-ID: <20230514181337.5e0cacc0@jic23-huawei>
-In-Reply-To: <b179185a-0aa8-e58c-4fe0-4b83396ef30e@linaro.org>
-References: <20230507173923.263741-1-krzysztof.kozlowski@linaro.org>
-        <20230507-brutishly-underhand-48c2949eb46c@spud>
-        <20230513191355.28cdbb23@jic23-huawei>
-        <b179185a-0aa8-e58c-4fe0-4b83396ef30e@linaro.org>
+        linux-kernel@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v4 2/3] iio: potentiometer: Add support for the Renesas
+ X9250 potentiometers
+Message-ID: <20230514181912.314ef781@jic23-huawei>
+In-Reply-To: <20230514163233.0c048256@bootlin.com>
+References: <20230509160852.158101-1-herve.codina@bootlin.com>
+        <20230509160852.158101-3-herve.codina@bootlin.com>
+        <20230513193525.43a4475f@jic23-huawei>
+        <20230514163233.0c048256@bootlin.com>
 X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,39 +64,121 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 13 May 2023 20:10:40 +0200
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+On Sun, 14 May 2023 16:32:33 +0200
+Herve Codina <herve.codina@bootlin.com> wrote:
 
-> On 13/05/2023 20:13, Jonathan Cameron wrote:
-> > On Sun, 7 May 2023 22:06:56 +0100
-> > Conor Dooley <conor@kernel.org> wrote:
-> >   
-> >> On Sun, May 07, 2023 at 07:39:21PM +0200, Krzysztof Kozlowski wrote:  
-> >>> Reference iio.yaml schema from dtschema to allow already used
-> >>> mount-matrix property:
-> >>>
-> >>>   msm8953-xiaomi-daisy.dtb: imu@6a: Unevaluated properties are not allowed ('mount-matrix' was unexpected)
-> >>>
-> >>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>    
-> >>
-> >> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-> >>
-> >> Thanks,
-> >> Conor.  
-> > 
-> > Krzysztof,
-> > 
-> > These look fine to me, but I guess I should wait for the
-> > dt-schema patch to land before taking them?  
-> 
-> You can grab first patch independently. #2 and #3 should indeed wait a
-> bit for Rob's ack. They do not have any conflicts but they will fix
-> nothing without dtschema patch.
-Applied patch 1.  Thanks,
+> Hi Jonathan,
+>=20
+> On Sat, 13 May 2023 19:35:25 +0100
+> Jonathan Cameron <jic23@kernel.org> wrote:
+>=20
+> > On Tue,  9 May 2023 18:08:51 +0200
+> > Herve Codina <herve.codina@bootlin.com> wrote:
+> >  =20
+> > > The Renesas X9250 integrates four digitally controlled potentiometers.
+> > > On each potentiometer, the X9250T has a 100 kOhms total resistance and
+> > > the X9250U has a 50 kOhms total resistance.
+> > >=20
+> > > Signed-off-by: Herve Codina <herve.codina@bootlin.com>   =20
+> >=20
+> > As I only noticed one trivial thing I made the change whilst applying.
+> > diff --git a/drivers/iio/potentiometer/x9250.c b/drivers/iio/potentiome=
+ter/x9250.c
+> > index 3d4ca18d1f14..7e145d7d14f1 100644
+> > --- a/drivers/iio/potentiometer/x9250.c
+> > +++ b/drivers/iio/potentiometer/x9250.c
+> > @@ -176,10 +176,7 @@ static int x9250_probe(struct spi_device *spi)
+> > =20
+> >         x9250 =3D iio_priv(indio_dev);
+> >         x9250->spi =3D spi;
+> > -       x9250->cfg =3D device_get_match_data(&spi->dev);
+> > -       if (!x9250->cfg)
+> > -               x9250->cfg =3D &x9250_cfg[spi_get_device_id(spi)->drive=
+r_data];
+> > -
+> > +       x9250->cfg =3D spi_get_device_match_data(spi);
+> >         x9250->wp_gpio =3D devm_gpiod_get_optional(&spi->dev, "wp", GPI=
+OD_OUT_LOW);
+> >         if (IS_ERR(x9250->wp_gpio))
+> >                 return dev_err_probe(&spi->dev, PTR_ERR(x9250->wp_gpio),
+> >  =20
+>=20
+> Are you sure about your modification ?
+>=20
+> I am not sure (maybe I am wrong) that
+>   x9250->cfg =3D spi_get_device_match_data(spi);
+> is equivalent to
+>   x9250->cfg =3D &x9250_cfg[spi_get_device_id(spi)->driver_data];
+>=20
+> The spi_get_device_id(spi)->driver_data value I used is a simple integer
+> (X9250T or X9250U) and not the x9250_cfg item.
+> Maybe the x9250_id_table should be modified to replace X9250T by
+> &x9250_cfg[X9250T] to have your modification working.
 
-J
-> 
+Excellent point.  I'm was  clearly half asleep. The mod should have included
+switching them over to be pointers.
+
+>=20
+> The data defined in the driver are the following:
+> --- 8< ---
+> static const struct x9250_cfg x9250_cfg[] =3D {
+> 	[X9250T] =3D { .name =3D "x9250t", .kohms =3D  100, },
+> 	[X9250U] =3D { .name =3D "x9250u", .kohms =3D  50, },
+> };
+>=20
+> ...
+>=20
+> static const struct of_device_id x9250_of_match[] =3D {
+> 	{ .compatible =3D "renesas,x9250t", &x9250_cfg[X9250T]},
+> 	{ .compatible =3D "renesas,x9250u", &x9250_cfg[X9250U]},
+> 	{ }
+> };
+> MODULE_DEVICE_TABLE(of, x9250_of_match);
+>=20
+> static const struct spi_device_id x9250_id_table[] =3D {
+> 	{ "x9250t", X9250T },
+> 	{ "x9250u", X9250U },
+So these should be (kernel_ulong_t)&x9250_cfg[X9250T] etc for the data.
+I've tweaked it so that is now the case. Oops and thanks for sanity checkin=
+g.
+Sometimes we see what we expect to see rather than what is there.
+
+Tweak on top of original tweak is:
+diff --git a/drivers/iio/potentiometer/x9250.c b/drivers/iio/potentiometer/=
+x9250.c
+index 7e145d7d14f1..0cc7f72529be 100644
+--- a/drivers/iio/potentiometer/x9250.c
++++ b/drivers/iio/potentiometer/x9250.c
+@@ -198,8 +198,8 @@ static const struct of_device_id x9250_of_match[] =3D {
+ MODULE_DEVICE_TABLE(of, x9250_of_match);
+=20
+ static const struct spi_device_id x9250_id_table[] =3D {
+-       { "x9250t", X9250T },
+-       { "x9250u", X9250U },
++       { "x9250t", (kernel_ulong_t)&x9250_cfg[X9250T] },
++       { "x9250u", (kernel_ulong_t)&x9250_cfg[X9250U] },
+        { }
+ };
+
+
+Jonathan
+
+> 	{ }
+> };
+> MODULE_DEVICE_TABLE(spi, x9250_id_table);
+>=20
+> static struct spi_driver x9250_spi_driver =3D {
+> 	.driver  =3D {
+> 		.name =3D "x9250",
+> 		.of_match_table =3D x9250_of_match,
+> 	},
+> 	.id_table =3D x9250_id_table,
+> 	.probe  =3D x9250_probe,
+> };
+> --- 8< ---
+>=20
+>=20
 > Best regards,
-> Krzysztof
-> 
+> Herv=C3=A9
+>=20
 
