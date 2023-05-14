@@ -2,315 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B06701BAC
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 07:45:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C93F8701BB1
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 07:49:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232134AbjENFpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 01:45:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35118 "EHLO
+        id S232360AbjENFtu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 01:49:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229526AbjENFpi (ORCPT
+        with ESMTP id S229526AbjENFtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 01:45:38 -0400
-Received: from out-18.mta0.migadu.com (out-18.mta0.migadu.com [91.218.175.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 248741BCF
-        for <linux-kernel@vger.kernel.org>; Sat, 13 May 2023 22:45:36 -0700 (PDT)
-Date:   Sun, 14 May 2023 01:45:29 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1684043134;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Qjw9R07t509s4y9z5LtStC5k9C/e0uq9CvIhkbXJnQc=;
-        b=O+AZ8Mb+2d7xaS2/Gh0spUNLJ9ot0yP8kYnoSU4+o7Lhb7xJ5fQYOv9b7C/5Wfz7SoXD9p
-        YgC1kS5j8+4EAMT6uG7PtwPjb5JHKDnLgZzc0Z11vnbmcNLFHaY0ugHEOF84WYbGz9CnRd
-        6DtNe8XUAt8LpqtqpceWYji9TIp44cU=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Kent Overstreet <kent.overstreet@linux.dev>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-bcachefs@vger.kernel.org,
-        Kent Overstreet <kent.overstreet@gmail.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Uladzislau Rezki <urezki@gmail.com>, linux-mm@kvack.org
-Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
-Message-ID: <ZGB1eevk/u2ssIBT@moria.home.lan>
-References: <20230509165657.1735798-1-kent.overstreet@linux.dev>
- <20230509165657.1735798-8-kent.overstreet@linux.dev>
- <ZFqxEWqD19eHe353@infradead.org>
- <ZFq3SdSBJ_LWsOgd@murray>
- <ZFq7JhrhyrMTNfd/@moria.home.lan>
- <20230510064849.GC1851@quark.localdomain>
- <ZF6HHRDeUWLNtuL7@moria.home.lan>
- <20230513015752.GC3033@quark.localdomain>
+        Sun, 14 May 2023 01:49:49 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19DDB213A;
+        Sat, 13 May 2023 22:49:46 -0700 (PDT)
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34E5gwO0001020;
+        Sun, 14 May 2023 05:49:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=qcppdkim1;
+ bh=8YqZG6HwNyDups7T2i2vG+UcNKbgLfnZ5uWeO9tCUFc=;
+ b=geG9v3qNLf43JzAVSC5ySpgULj70NuKZEsufV7vFGhMBDE31ri3C/YAGD5eYzI3TPtXk
+ jE4jfSiQZx+DbnJ0LSPMTg0t9FU18z+6UkszDmfzovTk6NvPTQhs4IFlnGMGnMUvVuEc
+ H6ybZ8aQOuhTYUqQKwnbkutIj3qEueV7W3aUPzPmXEM2+Iklveh6uapF5pV6+TrXv8Nh
+ ZR5yWg76pgAr+ptTIdBosmP8Cs6sRi2wiY/dz1VkubMAovqVANE7CgwrNc/kJi05UBon
+ TCrHS0S/K7HhuD5r1vcKG8av+4I4ISvIzXEkYvMhXmIV662a7oWU6d6w1DDY7OUzDm4Q mQ== 
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qj1jf1g35-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 14 May 2023 05:49:34 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34E5nXXA028481
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sun, 14 May 2023 05:49:33 GMT
+Received: from hu-kriskura-hyd.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.42; Sat, 13 May 2023 22:49:27 -0700
+From:   Krishna Kurapati <quic_kriskura@quicinc.com>
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        "Andy Gross" <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad Dybcio" <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>
+CC:     <linux-usb@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <quic_pkondeti@quicinc.com>, <quic_ppratap@quicinc.com>,
+        <quic_wcheng@quicinc.com>, <quic_jackp@quicinc.com>,
+        <quic_harshq@quicinc.com>, <ahalaney@redhat.com>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>
+Subject: [PATCH v8 0/9] Add multiport support for DWC3 controllers
+Date:   Sun, 14 May 2023 11:19:08 +0530
+Message-ID: <20230514054917.21318-1-quic_kriskura@quicinc.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230513015752.GC3033@quark.localdomain>
-X-Migadu-Flow: FLOW_OUT
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: idpikrTsf4yyV-6XxM5ma9B7eZoK7x7i
+X-Proofpoint-ORIG-GUID: idpikrTsf4yyV-6XxM5ma9B7eZoK7x7i
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-14_03,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0
+ priorityscore=1501 clxscore=1015 impostorscore=0 suspectscore=0
+ malwarescore=0 spamscore=0 lowpriorityscore=0 mlxscore=0 mlxlogscore=999
+ phishscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305140050
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 06:57:52PM -0700, Eric Biggers wrote:
-> First, I wanted to mention that decoding of variable-length fields has been
-> extensively studied for decompression algorithms, e.g. for Huffman decoding.
-> And it turns out that it can be done branchlessly.  The basic idea is that you
-> have a branchless refill step that looks like the following:
-> 
-> #define REFILL_BITS_BRANCHLESS()                    \
->         bitbuf |= get_unaligned_u64(p) << bitsleft; \
->         p += 7 - ((bitsleft >> 3) & 0x7);           \
->         bitsleft |= 56;
-> 
-> That branchlessly ensures that 'bitbuf' contains '56 <= bitsleft <= 63' bits.
-> Then, the needed number of bits can be removed and returned:
-> 
-> #define READ_BITS(n)                          \
->         REFILL_BITS_BRANCHLESS();             \
->         tmp = bitbuf & (((u64)1 << (n)) - 1); \
->         bitbuf >>= (n);                       \
->         bitsleft -= (n);                      \
->         tmp
-> 
-> If you're interested, I can give you some references about the above method.
+Currently the DWC3 driver supports only single port controller which
+requires at most two PHYs ie HS and SS PHYs. There are SoCs that has
+DWC3 controller with multiple ports that can operate in host mode.
+Some of the port supports both SS+HS and other port supports only HS
+mode.
 
-I might be interested in those references, new bit tricks and integer
-encodings are always fun :)
+This change primarily refactors the Phy logic in core driver to allow
+multiport support with Generic Phy's.
 
-> But, I really just wanted to mention it for completeness, since I think you'd
-> actually want to go in a slightly different direction, since (a) you have all
-> the field widths available from the beginning, as opposed to being interleaved
-> into the bitstream itself (as is the case in Huffman decoding for example), so
-> you're not limited to serialized decoding of each field, (b) your fields are up
-> to 96 bits, and (c) you've selected a bitstream convention that seems to make it
-> such that your stream *must* be read in aligned units of u64, so I don't think
-> something like REFILL_BITS_BRANCHLESS() could work for you anyway.
-> 
-> What I would suggest instead is preprocessing the list of 6 field lengths to
-> create some information that can be used to extract all 6 fields branchlessly
-> with no dependencies between different fields.  (And you clearly *can* add a
-> preprocessing step, as you already have one -- the dynamic code generator.)
-> 
-> So, something like the following:
-> 
->     const struct field_info *info = &format->fields[0];
-> 
->     field0 = (in->u64s[info->word_idx] >> info->shift1) & info->mask;
->     field0 |= in->u64s[info->word_idx - 1] >> info->shift2;
-> 
-> ... but with the code for all 6 fields interleaved.
-> 
-> On modern CPUs, I think that would be faster than your current C code.
-> 
-> You could do better by creating variants that are specialized for specific
-> common sets of parameters.  During "preprocessing", you would select a variant
-> and set an enum accordingly.  During decoding, you would switch on that enum and
-> call the appropriate variant.  (This could also be done with a function pointer,
-> of course, but indirect calls are slow these days...)
+Chananges have been tested on  QCOM SoC SA8295P which has 4 ports (2
+are HS+SS capable and 2 are HS only capable).
 
-testing random btree updates:
+Changes in v8:
+Reorganised code in patch-5
+Fixed nitpicks in code according to comments received on v7
+Fixed indentation in DT patches
+Added drive strength for pinctrl nodes in SA8295 DT
 
-dynamically generated unpack:
-rand_insert: 20.0 MiB with 1 threads in    33 sec,  1609 nsec per iter, 607 KiB per sec
+Changes in v7:
+Added power event irq's for Multiport controller.
+Udpated commit text for patch-9 (adding DT changes for enabling first
+port of multiport controller on sa8540-ride).
+Fixed check-patch warnings for driver code.
+Fixed DT binding errors for changes in snps,dwc3.yaml
+Reabsed code on top of usb-next
 
-old C unpack:
-rand_insert: 20.0 MiB with 1 threads in    35 sec,  1672 nsec per iter, 584 KiB per sec
+Changes in v6:
+Updated comments in code after.
+Updated variables names appropriately as per review comments.
+Updated commit text in patch-2 and added additional info as per review
+comments.
+The patch header in v5 doesn't have "PATHCH v5" notation present. Corrected
+it in this version.
 
-the Eric Biggers special:
-rand_insert: 20.0 MiB with 1 threads in    35 sec,  1676 nsec per iter, 583 KiB per sec
+Changes in v5:
+Added DT support for first port of Teritiary USB controller on SA8540-Ride
+Added support for reading port info from XHCI Extended Params registers.
 
-Tested two versions of your approach, one without a shift value, one
-where we use a shift value to try to avoid unaligned access - second was
-perhaps 1% faster
+Changes in RFC v4:
+Added DT support for SA8295p.
 
-so it's not looking good. This benchmark doesn't even hit on
-unpack_key() quite as much as I thought, so the difference is
-significant.
+Changes in RFC v3:
+Incase any PHY init fails, then clear/exit the PHYs that
+are already initialized.
 
-diff --git a/fs/bcachefs/bkey.c b/fs/bcachefs/bkey.c
-index 6d3a1c096f..128d96766c 100644
---- a/fs/bcachefs/bkey.c
-+++ b/fs/bcachefs/bkey.c
-@@ -7,6 +7,8 @@
- #include "bset.h"
- #include "util.h"
- 
-+#include <asm/unaligned.h>
-+
- #undef EBUG_ON
- 
- #ifdef DEBUG_BKEYS
-@@ -19,9 +21,35 @@ const struct bkey_format bch2_bkey_format_current = BKEY_FORMAT_CURRENT;
- 
- struct bkey_format_processed bch2_bkey_format_postprocess(const struct bkey_format f)
- {
--	return (struct bkey_format_processed) {
--		.f = f,
--	};
-+	struct bkey_format_processed ret = { .f = f, .aligned = true };
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+	unsigned offset = f.key_u64s * 64;
-+#else
-+	unsigned offset = KEY_PACKED_BITS_START;
-+#endif
-+
-+	for (unsigned i = 0; i < BKEY_NR_FIELDS; i++) {
-+		unsigned bits = f.bits_per_field[i];
-+
-+		if (bits & 7) {
-+			ret.aligned = false;
-+			break;
-+		}
-+
-+#if __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
-+		offset -= bits;
-+#endif
-+
-+		ret.shift[i]	= min(offset & 63, 64 - bits);
-+		ret.offset[i]	= (offset - ret.shift[i]) / 8;
-+		ret.mask[i]	= bits ? ~0ULL >> (64 - bits) : 0;
-+
-+#if __BYTE_ORDER__ == __ORDER_BIG_ENDIAN__
-+		offset += bits;
-+#endif
-+	}
-+
-+	return ret;
- }
- 
- void bch2_bkey_packed_to_binary_text(struct printbuf *out,
-@@ -191,6 +219,19 @@ static u64 get_inc_field(struct unpack_state *state, unsigned field)
- 	return v + offset;
- }
- 
-+__always_inline
-+static u64 get_aligned_field(const struct bkey_format_processed *f,
-+			     const struct bkey_packed *in,
-+			     unsigned field_idx)
-+{
-+	u64 v = get_unaligned((u64 *) (((u8 *) in->_data) + f->offset[field_idx]));
-+
-+	v >>= f->shift[field_idx];
-+	v &= f->mask[field_idx];
-+
-+	return v + le64_to_cpu(f->f.field_offset[field_idx]);
-+}
-+
- __always_inline
- static bool set_inc_field(struct pack_state *state, unsigned field, u64 v)
- {
-@@ -269,45 +310,57 @@ bool bch2_bkey_transform(const struct bkey_format *out_f,
- 	return true;
- }
- 
--struct bkey __bch2_bkey_unpack_key(const struct bkey_format_processed *format_p,
-+struct bkey __bch2_bkey_unpack_key(const struct bkey_format_processed *format,
- 				   const struct bkey_packed *in)
- {
--	const struct bkey_format *format = &format_p->f;
--	struct unpack_state state = unpack_state_init(format, in);
- 	struct bkey out;
- 
--	EBUG_ON(format->nr_fields != BKEY_NR_FIELDS);
--	EBUG_ON(in->u64s < format->key_u64s);
-+	EBUG_ON(format->f.nr_fields != BKEY_NR_FIELDS);
-+	EBUG_ON(in->u64s < format->f.key_u64s);
- 	EBUG_ON(in->format != KEY_FORMAT_LOCAL_BTREE);
--	EBUG_ON(in->u64s - format->key_u64s + BKEY_U64s > U8_MAX);
-+	EBUG_ON(in->u64s - format->f.key_u64s + BKEY_U64s > U8_MAX);
- 
--	out.u64s	= BKEY_U64s + in->u64s - format->key_u64s;
-+	out.u64s	= BKEY_U64s + in->u64s - format->f.key_u64s;
- 	out.format	= KEY_FORMAT_CURRENT;
- 	out.needs_whiteout = in->needs_whiteout;
- 	out.type	= in->type;
- 	out.pad[0]	= 0;
- 
-+	if (likely(format->aligned)) {
-+#define x(id, field)	out.field = get_aligned_field(format, in, id);
-+		bkey_fields()
-+#undef x
-+	} else {
-+		struct unpack_state state = unpack_state_init(&format->f, in);
-+
- #define x(id, field)	out.field = get_inc_field(&state, id);
--	bkey_fields()
-+		bkey_fields()
- #undef x
-+	}
- 
- 	return out;
- }
- 
--struct bpos __bkey_unpack_pos(const struct bkey_format_processed *format_p,
-+struct bpos __bkey_unpack_pos(const struct bkey_format_processed *format,
- 			      const struct bkey_packed *in)
- {
--	const struct bkey_format *format = &format_p->f;
--	struct unpack_state state = unpack_state_init(format, in);
- 	struct bpos out;
- 
--	EBUG_ON(format->nr_fields != BKEY_NR_FIELDS);
--	EBUG_ON(in->u64s < format->key_u64s);
-+	EBUG_ON(format->f.nr_fields != BKEY_NR_FIELDS);
-+	EBUG_ON(in->u64s < format->f.key_u64s);
- 	EBUG_ON(in->format != KEY_FORMAT_LOCAL_BTREE);
- 
--	out.inode	= get_inc_field(&state, BKEY_FIELD_INODE);
--	out.offset	= get_inc_field(&state, BKEY_FIELD_OFFSET);
--	out.snapshot	= get_inc_field(&state, BKEY_FIELD_SNAPSHOT);
-+	if (likely(format->aligned)) {
-+		out.inode	= get_aligned_field(format, in, BKEY_FIELD_INODE);
-+		out.offset	= get_aligned_field(format, in, BKEY_FIELD_OFFSET);
-+		out.snapshot	= get_aligned_field(format, in, BKEY_FIELD_SNAPSHOT);
-+	} else {
-+		struct unpack_state state = unpack_state_init(&format->f, in);
-+
-+		out.inode	= get_inc_field(&state, BKEY_FIELD_INODE);
-+		out.offset	= get_inc_field(&state, BKEY_FIELD_OFFSET);
-+		out.snapshot	= get_inc_field(&state, BKEY_FIELD_SNAPSHOT);
-+	}
- 
- 	return out;
- }
-diff --git a/fs/bcachefs/btree_types.h b/fs/bcachefs/btree_types.h
-index 58ce60c37e..38c3ec6852 100644
---- a/fs/bcachefs/btree_types.h
-+++ b/fs/bcachefs/btree_types.h
-@@ -70,6 +70,10 @@ struct btree_bkey_cached_common {
- 
- struct bkey_format_processed {
- 	struct bkey_format	f;
-+	bool			aligned;
-+	u8			offset[6];
-+	u8			shift[6];
-+	u64			mask[6];
- };
- 
- struct btree {
-diff --git a/fs/bcachefs/btree_update_interior.h b/fs/bcachefs/btree_update_interior.h
-index dcfd7ceacc..72aedc1e34 100644
---- a/fs/bcachefs/btree_update_interior.h
-+++ b/fs/bcachefs/btree_update_interior.h
-@@ -181,7 +181,11 @@ static inline void btree_node_reset_sib_u64s(struct btree *b)
- 
- static inline void *btree_data_end(struct bch_fs *c, struct btree *b)
- {
--	return (void *) b->data + btree_bytes(c);
-+	/*
-+	 * __bch2_bkey_unpack_key() may read up to 8 bytes past the end of the
-+	 * input buffer:
-+	 */
-+	return (void *) b->data + btree_bytes(c) - 8;
- }
- 
- static inline struct bkey_packed *unwritten_whiteouts_start(struct bch_fs *c,
+Changes in RFC v2:
+Changed dwc3_count_phys to return the number of PHY Phandles in the node.
+This will be used now in dwc3_extract_num_phys to increment num_usb2_phy 
+and num_usb3_phy.
+
+Added new parameter "ss_idx" in dwc3_core_get_phy_ny_node and changed its
+structure such that the first half is for HS-PHY and second half is for
+SS-PHY.
+
+In dwc3_core_get_phy, for multiport controller, only if SS-PHY phandle is
+present, pass proper SS_IDX else pass -1.
+
+Link to v7: https://lore.kernel.org/all/20230501143445.3851-1-quic_kriskura@quicinc.com/
+Link to v6: https://lore.kernel.org/all/20230405125759.4201-1-quic_kriskura@quicinc.com/
+Link to v5: https://lore.kernel.org/all/20230310163420.7582-1-quic_kriskura@quicinc.com/
+Link to RFC v4: https://lore.kernel.org/all/20230115114146.12628-1-quic_kriskura@quicinc.com/
+Link to RFC v3: https://lore.kernel.org/all/1654709787-23686-1-git-send-email-quic_harshq@quicinc.com/#r
+Link to RFC v2: https://lore.kernel.org/all/1653560029-6937-1-git-send-email-quic_harshq@quicinc.com/#r
+
+Test results:
+
+Bus 3/4 represent multiport controller having 4 HS ports and 2 SS ports.
+
+/ # dmesg |grep hub
+[    0.029029] usbcore: registered new interface driver hub
+[    1.372812] hub 1-0:1.0: USB hub found
+[    1.389142] hub 1-0:1.0: 1 port detected
+[    1.414721] hub 2-0:1.0: USB hub found
+[    1.427669] hub 2-0:1.0: 1 port detected
+[    2.931465] hub 3-0:1.0: USB hub found
+[    2.935340] hub 3-0:1.0: 4 ports detected
+[    2.948721] hub 4-0:1.0: USB hub found
+[    2.952604] hub 4-0:1.0: 2 ports detected
+/ #
+/ # lsusb
+Bus 003 Device 001: ID 1d6b:0002
+Bus 001 Device 001: ID 1d6b:0002
+Bus 003 Device 005: ID 0b0e:0300
+Bus 003 Device 002: ID 046d:c077
+Bus 004 Device 001: ID 1d6b:0003
+Bus 002 Device 001: ID 1d6b:0003
+Bus 003 Device 004: ID 03f0:0024
+Bus 003 Device 003: ID 046d:c016
+
+Krishna Kurapati (9):
+  dt-bindings: usb: qcom,dwc3: Add bindings for SC8280 Multiport
+  dt-bindings: usb: Add bindings for multiport properties on DWC3
+    controller
+  usb: dwc3: core: Access XHCI address space temporarily to read port
+    info
+  usb: dwc3: core: Skip setting event buffers for host only controllers
+  usb: dwc3: core: Refactor PHY logic to support Multiport Controller
+  usb: dwc3: qcom: Add multiport controller support for qcom wrapper
+  arm64: dts: qcom: sc8280xp: Add multiport controller node for SC8280
+  arm64: dts: qcom: sa8295p: Enable tertiary controller and its 4 USB
+    ports
+  arm64: dts: qcom: sa8540-ride: Enable first port of tertiary usb
+    controller
+
+ .../devicetree/bindings/usb/qcom,dwc3.yaml    |  22 +
+ .../devicetree/bindings/usb/snps,dwc3.yaml    |  13 +-
+ arch/arm64/boot/dts/qcom/sa8295p-adp.dts      |  52 +++
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts     |  22 +
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  66 +++
+ drivers/usb/dwc3/core.c                       | 389 +++++++++++++++---
+ drivers/usb/dwc3/core.h                       |  28 +-
+ drivers/usb/dwc3/drd.c                        |  13 +-
+ drivers/usb/dwc3/dwc3-qcom.c                  |  28 +-
+ 9 files changed, 543 insertions(+), 90 deletions(-)
+
+-- 
+2.40.0
+
