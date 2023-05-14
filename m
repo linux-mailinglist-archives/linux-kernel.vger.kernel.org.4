@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 341A7701E7A
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 19:08:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 52FE6701E7B
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 19:08:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S234663AbjENRIN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 13:08:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43808 "EHLO
+        id S234997AbjENRIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 13:08:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbjENRII (ORCPT
+        with ESMTP id S232556AbjENRIK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 13:08:08 -0400
+        Sun, 14 May 2023 13:08:10 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 607F54230;
-        Sun, 14 May 2023 10:08:03 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3876E3C07;
+        Sun, 14 May 2023 10:08:07 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E04DB618B8;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C5BC5618B0;
+        Sun, 14 May 2023 17:08:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B860BC4339B;
         Sun, 14 May 2023 17:08:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 303B8C433D2;
-        Sun, 14 May 2023 17:07:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684084082;
-        bh=srHAo0Y9b1qf2rL+g1G7GWSxmyN50IIlO+TTLU3U41E=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hhX7qZTcONw+c5MKoJz/MFIzS2L9mGoGHUx01wCjDsf9VjRwGicpXV1a0c+XIoQ2k
-         StCZ2xLDojeV7i0RQTG3/yGXGc8kh+Tp0M2nyUfeFuCLbNlz8sd9LEFqPwzxX6DCZK
-         +qYQ1hgxhy1iRVJbwBCDwSimRsMHXj/cez1MV7k/ZZNX6RhCwmGVom614WnumvF+7n
-         IYbM7tXXu1kEFGVxPXmrxOwlOSjyZNLbKM2ueOB/trhKKEeDzKb1W0o6p9CXeXhk6A
-         FPIcQDTiumYo2Q2i0p5fB1K/mdIop5yHkpvunXwXg1fsEkni5uLSrlsbR8epSfdOQX
-         LcUE/gbPaNmKw==
+        s=k20201202; t=1684084086;
+        bh=8o3w2PNumfMmW1nsxUiJwSK+1Wm7LHqx/wBqf4PFRQY=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=O5ZZbKnsIlXkTLOeI1QacOmEvmEyixkY9kbZWpuTdNWmf4NoMEGTv2jeC1Ps1LjuZ
+         IGdUqraKi0wMpt2OxQI5ohFHgmsRgXqyiJA13e/uwut8x2xMHeFUOobW9+/o5DHP2q
+         ykJLa8RhFZjDFQsXf/7INdH1OsFOGfXnapeBowxXdTEUvQBwRcyIMtMOmgH1IfMyW4
+         wtVEgtYnOBvuxQyvQpgJgqaeeneMKq1U89uNtE0wa3M1M8t/kc3pS2if+R1HuYb6NP
+         yFdTL6QcBBMAwsSc0PLPyXyAR8xWoeuNPE1FmunEAgZ96Q3kvsuPflFpF9Ti5VDFpT
+         ZehySqUGPS9+g==
 From:   Jisheng Zhang <jszhang@kernel.org>
 To:     Thomas Gleixner <tglx@linutronix.de>,
         Marc Zyngier <maz@kernel.org>,
@@ -45,11 +45,15 @@ To:     Thomas Gleixner <tglx@linutronix.de>,
         Jiri Slaby <jirislaby@kernel.org>
 Cc:     Samuel Holland <samuel@sholland.org>, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-serial@vger.kernel.org
-Subject: [PATCH v3 00/10] riscv: add Bouffalolab bl808 support
-Date:   Mon, 15 May 2023 00:56:41 +0800
-Message-Id: <20230514165651.2199-1-jszhang@kernel.org>
+        linux-serial@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Palmer Dabbelt <palmer@rivosinc.com>
+Subject: [PATCH v3 01/10] dt-bindings: vendor-prefixes: add bouffalolab
+Date:   Mon, 15 May 2023 00:56:42 +0800
+Message-Id: <20230514165651.2199-2-jszhang@kernel.org>
 X-Mailer: git-send-email 2.40.0
+In-Reply-To: <20230514165651.2199-1-jszhang@kernel.org>
+References: <20230514165651.2199-1-jszhang@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -62,65 +66,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds Bouffalolab uart driver and basic devicetrees for
-Bouffalolab bl808 SoC and Sipeed M1s dock board.
+In the following commits, we will support bl808 SoC which is from
+Bouffalo Lab Technology (Nanjing) Co., Ltd.
 
-Since v2:
-  - fix dt_binding_check and dtbs_check warnings
-  - use uart_port_tx_limited() helper in uart driver
-  - collect Acked-by/Reviewed-by tag
-  - uart0 -> uart3
-  - update "riscv,ndev" property
-  - mv vendor prefix binding as the first patch
-  - add compatible string for bouffalolab bl808 plic
+Add bouffalolab vendor prefix binding.
 
-Since v1:
-  - use FIELD_PREP and FIELD_GET macro
-  - rewrite bflb_uart_tx_chars()
-  - add vendor prefix for bouffalolab
-  - add dt binding for bl808 compatibles
-  - enable SOC_BOUFFALOLAB in defconfig
-  - collect Reviewed-by tag
-  - modify commit-msg as suggested
+Link: https://en.bouffalolab.com/
+Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
+Acked-by: Palmer Dabbelt <palmer@rivosinc.com>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-
-Jisheng Zhang (10):
-  dt-bindings: vendor-prefixes: add bouffalolab
-  dt-bindings: interrupt-controller: Add bouffalolab bl808 plic
-  dt-bindings: serial: add documentation for Bouffalolab UART Driver
-  serial: bflb_uart: add Bouffalolab UART Driver
-  riscv: add the Bouffalolab SoC family Kconfig option
-  dt-bindings: riscv: Add bouffalolab bl808 board compatibles
-  riscv: dts: bouffalolab: add the bl808 SoC base device tree
-  riscv: dts: bouffalolab: add Sipeed M1s SoM and Dock devicetree
-  MAINTAINERS: riscv: add entry for Bouffalolab SoC
-  riscv: defconfig: enable BOUFFALOLAB SoC
-
- .../sifive,plic-1.0.0.yaml                    |   1 +
- .../bindings/riscv/bouffalolab.yaml           |  29 +
- .../serial/bouffalolab,bl808-uart.yaml        |  47 ++
- .../devicetree/bindings/vendor-prefixes.yaml  |   2 +
- MAINTAINERS                                   |   7 +
- arch/riscv/Kconfig.socs                       |   5 +
- arch/riscv/boot/dts/Makefile                  |   1 +
- arch/riscv/boot/dts/bouffalolab/Makefile      |   2 +
- .../dts/bouffalolab/bl808-sipeed-m1s-dock.dts |  25 +
- .../dts/bouffalolab/bl808-sipeed-m1s.dtsi     |  21 +
- arch/riscv/boot/dts/bouffalolab/bl808.dtsi    |  73 +++
- arch/riscv/configs/defconfig                  |   1 +
- drivers/tty/serial/Kconfig                    |  18 +
- drivers/tty/serial/Makefile                   |   1 +
- drivers/tty/serial/bflb_uart.c                | 586 ++++++++++++++++++
- include/uapi/linux/serial_core.h              |   3 +
- 16 files changed, 822 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/riscv/bouffalolab.yaml
- create mode 100644 Documentation/devicetree/bindings/serial/bouffalolab,bl808-uart.yaml
- create mode 100644 arch/riscv/boot/dts/bouffalolab/Makefile
- create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s-dock.dts
- create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808-sipeed-m1s.dtsi
- create mode 100644 arch/riscv/boot/dts/bouffalolab/bl808.dtsi
- create mode 100644 drivers/tty/serial/bflb_uart.c
-
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index 82d39ab0231b..3566346f2f9e 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -200,6 +200,8 @@ patternProperties:
+     description: BOE Technology Group Co., Ltd.
+   "^bosch,.*":
+     description: Bosch Sensortec GmbH
++  "^bouffalolab,.*":
++    description: Bouffalo Lab Technology (Nanjing) Co., Ltd.
+   "^boundary,.*":
+     description: Boundary Devices Inc.
+   "^brcm,.*":
 -- 
 2.40.0
 
