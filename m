@@ -2,172 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78899701D8E
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 15:08:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CAC86701D91
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 15:15:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233939AbjENNIi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 09:08:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45504 "EHLO
+        id S236812AbjENNPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 09:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S236982AbjENNIf (ORCPT
+        with ESMTP id S229942AbjENNPH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 09:08:35 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9342D43;
-        Sun, 14 May 2023 06:08:32 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-643995a47f7so12151962b3a.1;
-        Sun, 14 May 2023 06:08:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684069711; x=1686661711;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y5XEouAH/P1Pc1xR/i0kwTIYjZQ4lEbXoXqgUXs2Qrc=;
-        b=JgFgXkWGfmHspAu7HjxcvhDThdTjCYb1GNamypAn0LCFacWj8H5PF8YNDKsh/tltmv
-         LqdKH0NNZhsyay3GsncvplLD3ClamfUcj0OyLTHNhYu9JaddW/YiogoN5e0ZyVELkp0R
-         KTQ/K5Sn/xBtjAra7xamVhMaa1QU94H6fvOpT4+AqUlfDjFYBsVyt/meC8Jj4tZo1sbR
-         586YES8hrpWNVFyydRbUXQL6dvIElCzLk2YWjgEmqvytADeUUHamD87e09ZifRyBLLio
-         6yfsTPDGlXTuK79WwdedbhKlxetYYbIcNS4hYFQl+hr9HZMGmSmNi+xdUho7RYx/SL60
-         dI2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684069711; x=1686661711;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y5XEouAH/P1Pc1xR/i0kwTIYjZQ4lEbXoXqgUXs2Qrc=;
-        b=K1znHE8W9EnrPS7ut1zKEMetujD6IHsFzzP+j+J+8gHKyb165OgNlTWew68GLMSaHN
-         hack0Ykn08MWTvvsrQTOhIWG+WBf+EdWJQWlk9W8O9Ma2fS9wHfkeD5DKCmloxzf+xyS
-         mt3ypMPVuhZLxd1bkRcbBtbBhJlQD5I98WShrHLN6KNKq1pSJ+2eS3UXjs5P49U8GFl4
-         Fp2NqJWwtRbqL/I5UFAF/a82Iaz1uwrcghWi8fQn7RF37Yxny1i/W1EFq/bMJxwB1cKU
-         YgSj2dBpk0Ua6SffPA1SnYbBj/Hu9VAaQm+oXZO2Dc1L6UuI1iHQZmM09zYGqmTqgrlV
-         jXAQ==
-X-Gm-Message-State: AC+VfDwEHDLRKgMx65pSzTlGS3LabFRMcH0tyijBJSfcWFGJ+Fcg7kwJ
-        Dlfb9O4BBZlWWpdZLQ99NSM=
-X-Google-Smtp-Source: ACHHUZ5ut8+Hg2HyxrT4MXIOvyVb3bS836tjfmXkxs1tJNydk4q379JJXY2tKiMm5x8T7vuA9c0e3w==
-X-Received: by 2002:a05:6a20:3d28:b0:103:9c25:99a3 with SMTP id y40-20020a056a203d2800b001039c2599a3mr18361027pzi.59.1684069711559;
-        Sun, 14 May 2023 06:08:31 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id b30-20020a631b1e000000b0050bd4bb900csm9760255pgb.71.2023.05.14.06.08.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 14 May 2023 06:08:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 14 May 2023 06:08:29 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Richard Fontana <rfontana@redhat.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux SPDX Licenses <linux-spdx@vger.kernel.org>,
-        Linux DRI Development <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Networking <netdev@vger.kernel.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Staging Drivers <linux-staging@lists.linux.dev>,
-        Linux Watchdog Devices <linux-watchdog@vger.kernel.org>,
-        Linux Kernel Actions <linux-actions@lists.infradead.org>,
-        Diederik de Haas <didi.debian@cknow.org>,
-        Kate Stewart <kstewart@linuxfoundation.org>,
-        Philippe Ombredanne <pombredanne@nexb.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        David Airlie <airlied@redhat.com>,
-        Karsten Keil <isdn@linux-pingi.de>,
-        Jay Vosburgh <j.vosburgh@gmail.com>,
-        Andy Gospodarek <andy@greyhouse.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Jan Kara <jack@suse.com>,
-        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Ray Lehtiniemi <rayl@mail.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Andrey Panin <pazke@donpac.ru>, Oleg Drokin <green@crimea.edu>,
-        Marc Zyngier <maz@kernel.org>,
-        Jonas Jensen <jonas.jensen@gmail.com>,
-        Sylver Bruneau <sylver.bruneau@googlemail.com>,
-        Andrew Sharp <andy.sharp@lsi.com>,
-        Denis Turischev <denis@compulab.co.il>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Alan Cox <alan@linux.intel.com>,
-        Simon Horman <simon.horman@corigine.com>
-Subject: Re: [PATCH v2 08/10] drivers: watchdog: Replace GPL license notice
- with SPDX identifier
-Message-ID: <511814a0-0c42-4813-9473-13748d6c6cb0@roeck-us.net>
-References: <20230512100620.36807-1-bagasdotme@gmail.com>
- <20230512100620.36807-9-bagasdotme@gmail.com>
- <CAC1cPGy=78yo2XcJPNZVvdjBr2-XzSq76JrAinSe42=sNdGv3w@mail.gmail.com>
- <ef31b33f-8e66-4194-37e3-916b53cf7088@gmail.com>
- <CAC1cPGzznK8zoLaT1gBjpHP1eKFvTKKi+SW6xuXF3B8aHN27=g@mail.gmail.com>
- <2023051414-headroom-maimed-553c@gregkh>
+        Sun, 14 May 2023 09:15:07 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA6EB26B9
+        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 06:15:04 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pyBYx-0002s7-Ao; Sun, 14 May 2023 15:14:59 +0200
+Message-ID: <f2176adc-cc2f-4752-2c7e-102b73b55696@leemhuis.info>
+Date:   Sun, 14 May 2023 15:14:58 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2023051414-headroom-maimed-553c@gregkh>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Re: Kernel 6.4-rc1 ARM boot fails
+Content-Language: en-US, de-DE
+To:     Colin Foster <colin.foster@in-advantage.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+        Linux kernel regressions list <regressions@lists.linux.dev>
+References: <ZFs6DNgzBHNarr6D@euler>
+From:   "Linux regression tracking #adding (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+In-Reply-To: <ZFs6DNgzBHNarr6D@euler>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1684070104;7292f688;
+X-HE-SMSGID: 1pyBYx-0002s7-Ao
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 14, 2023 at 12:07:28AM +0900, Greg Kroah-Hartman wrote:
-> On Sat, May 13, 2023 at 09:43:39AM -0400, Richard Fontana wrote:
-> > On Sat, May 13, 2023 at 6:53 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
-> > >
-> > > On 5/12/23 19:46, Richard Fontana wrote:
-> > > > On Fri, May 12, 2023 at 6:07 AM Bagas Sanjaya <bagasdotme@gmail.com> wrote:
-> > > >
-> > > >
-> > > >> diff --git a/drivers/watchdog/sb_wdog.c b/drivers/watchdog/sb_wdog.c
-> > > >> index 504be461f992a9..822bf8905bf3ce 100644
-> > > >> --- a/drivers/watchdog/sb_wdog.c
-> > > >> +++ b/drivers/watchdog/sb_wdog.c
-> > > >> @@ -1,3 +1,4 @@
-> > > >> +// SPDX-License-Identifier: GPL-1.0+
-> > > >>  /*
-> > > >>   * Watchdog driver for SiByte SB1 SoCs
-> > > >>   *
-> > > >> @@ -38,10 +39,6 @@
-> > > >>   *     (c) Copyright 1996 Alan Cox <alan@lxorguk.ukuu.org.uk>,
-> > > >>   *                                             All Rights Reserved.
-> > > >>   *
-> > > >> - *     This program is free software; you can redistribute it and/or
-> > > >> - *     modify it under the terms of the GNU General Public License
-> > > >> - *     version 1 or 2 as published by the Free Software Foundation.
-> > > >
-> > > > Shouldn't this be
-> > > > // SPDX-License-Identifier: GPL-1.0 OR GPL-2.0
-> > > > (or in current SPDX notation GPL-1.0-only OR GPL-2.0-only) ?
-> > > >
-> > >
-> > > Nope, as it will fail spdxcheck.py. Also, SPDX specification [1]
-> > > doesn't have negation operator (NOT), thus the licensing requirement
-> > > on the above notice can't be expressed reliably in SPDX here.
-> > >
-> > > [1]: https://spdx.github.io/spdx-spec/v2.3/SPDX-license-expressions/
-> > 
-> > The GPL identifiers in recent versions of SPDX include an `-only` and
-> > an `-or-later` variant.
-> 
-> But Linux does not use the newer versions of SPDX given that we started
-> the conversion before the "-only" variant came out.  Let's stick with
-> the original one please before worrying about converting to a newer
-> version of SPDX and mixing things up.
-> 
+[CCing the regression list, as it should be in the loop for regressions:
+https://docs.kernel.org/admin-guide/reporting-regressions.html]
 
-Either case I'd prefer to have no conversion if there is no means
-to express the original license (ie GPL-1.0 or GPL-2.0 and nothing else)
-in acceptable SPDX form.
+[TLDR: I'm adding this report to the list of tracked Linux kernel
+regressions; the text you find below is based on a few templates
+paragraphs you might have encountered already in similar form.
+See link in footer if these mails annoy you.]
 
-Thanks,
-Guenter
+On 10.05.23 08:30, Colin Foster wrote:
+> 
+> I just wanted to give a heads up. I tested 6.4-rc1 on a Beaglebone Black
+> and kept getting boot hangs. A bisect led me to commit c76c6c4ecbec ("ARM:
+> 9294/2: vfp: Fix broken softirq handling with instrumentation enabled").
+>
+> The dying message is "Run /sbin/init as init process"
+> 
+> I'm not sure if this has already been reported. I was able to revert this
+> patch and confirm things work again.
+> [...]
+
+Thanks for the report. I know a fix is incoming, but to be sure the
+issue doesn't fall through the cracks unnoticed, I'm adding it to
+regzbot, the Linux kernel regression tracking bot:
+
+#regzbot ^introduced c76c6c4ecbec
+#regzbot title arm32: tons of different boot time errors
+#regzbot ignore-activity
+#regzbot monitor:
+https://lore.kernel.org/all/000000000000d3001a05faf979c8@google.com/
+#regzbot fix ARM: 9297/1: vfp: avoid unbalanced stack on 'success'
+return path
+#regzbot monitor:
+https://lore.kernel.org/all/20230506161325.223362-1-ardb@kernel.org/
+
+
+This isn't a regression? This issue or a fix for it are already
+discussed somewhere else? It was fixed already? You want to clarify when
+the regression started to happen? Or point out I got the title or
+something else totally wrong? Then just reply and tell me -- ideally
+while also telling regzbot about it, as explained by the page listed in
+the footer of this mail.
+
+Developers: When fixing the issue, remember to add 'Link:' tags pointing
+to the report (the parent of this mail). See page linked in footer for
+details.
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
