@@ -2,63 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C06BD701FA7
-	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 23:10:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 87022701FAC
+	for <lists+linux-kernel@lfdr.de>; Sun, 14 May 2023 23:13:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237651AbjENVKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 17:10:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42644 "EHLO
+        id S235767AbjENVNf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 17:13:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjENVKp (ORCPT
+        with ESMTP id S229585AbjENVNd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 17:10:45 -0400
-Received: from fgw23-7.mail.saunalahti.fi (fgw23-7.mail.saunalahti.fi [62.142.5.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8136210D7
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 14:10:43 -0700 (PDT)
-Received: from localhost (88-113-26-95.elisa-laajakaista.fi [88.113.26.95])
-        by fgw23.mail.saunalahti.fi (Halon) with ESMTP
-        id c70aa805-f29b-11ed-b972-005056bdfda7;
-        Mon, 15 May 2023 00:10:39 +0300 (EEST)
-From:   andy.shevchenko@gmail.com
-Date:   Mon, 15 May 2023 00:10:39 +0300
-To:     Lizhe <sensor1010@163.com>
-Cc:     linus.walleij@linaro.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] drivers/pinconf.c: Remove redundant check for the
- existence of the member
-Message-ID: <ZGFOT9cWNTzJDXo7@surfacebook>
-References: <20230514165932.251200-1-sensor1010@163.com>
+        Sun, 14 May 2023 17:13:33 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA617199;
+        Sun, 14 May 2023 14:13:29 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 1D14F5C00C2;
+        Sun, 14 May 2023 17:13:29 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Sun, 14 May 2023 17:13:29 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-transfer-encoding:content-type:content-type
+        :date:date:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to;
+         s=fm2; t=1684098809; x=1684185209; bh=IuSPhPzoKt6SzlFItZmSGd7IF
+        Em9JtR4K2XlTqqjDSg=; b=tRwc6niuBNOVuTKwEyqx9a6VsQIiR8Moy/8NsjRBc
+        MFNzOOBwCeyBwuKH7hfQf2mu11BcHRvW1/sTy4ioyfDuFCfb831tniIUXGJWZLoQ
+        +olt7twOWA1isCCaTiLKvMAj/ObtUl1WhE8iidAq9qKKDFSNBBs2icMa1urfhSyq
+        jzlTGwaNZLVGaG3PN9OieoaRG0lwYWf3/jRkOXymTJ1/5i+FgiZiry1ORlENAWvP
+        dVt+22VdL8RZQszaF5cZNpd0J0NBOlTGSBHTTJf0Ei2WBX/bB/H93NDVbMcFYE6r
+        4kNmCJWwvOPkvJQ5AFuUF/dT08mYqhEeUO5moMzZWR7zQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
+        1684098809; x=1684185209; bh=IuSPhPzoKt6SzlFItZmSGd7IFEm9JtR4K2X
+        lTqqjDSg=; b=qAOct1LDQY6g96IN0g+vR8v7cPKjM76ZHfoMUWVWkTj38CppXKb
+        n2qLMtnZjESXKqj5IoGvh+Y2tH2QsKrUUZbixtRlm8ZpZx31hjD/VYngQ5yhM8X0
+        tgSZWUPOBTxLaZ/jfTPnY/TDMO0jDiP5PLOfKyQHRl8VXxPGFW4I5JNL4vJWNt+0
+        v/at5pANurF9eFyKG+s+INq228hVcDUSkq8LXMSucg3Ij7lQFX7hyJlXmKXNyT2e
+        qebGr1GFlQ7bogamkkOa7WznBY6VUnfRPEVmO9g1SE1jaE2YulTGy0cyKKsoN/N7
+        OpmPFn+xFm63xvHzfPl3Xi9SvvJF6PUiDJw==
+X-ME-Sender: <xms:905hZEwNnRihkRdYg1IppfpF8vo443CZSZgXN2NJllWOoxaDq8afSQ>
+    <xme:905hZIQN1wahBceOitOKWZkmDwXaOk3jjKQppfIHlY4cA2DVb8bJYqyQAloOdmmXM
+    NnpFEAfOO9sP01_lcc>
+X-ME-Received: <xmr:905hZGWxxQTBe3OxmEOACoGB9D_jRgtPgEARzA6z7I6oHfHGu_c8HfaiEa7ZWBxTdOSN8w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehhedgudehlecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtugfgjgesthektddttddtudenucfhrhhomhepfdfm
+    ihhrihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovh
+    drnhgrmhgvqeenucggtffrrghtthgvrhhnpeetveehleetgeegffejffejtdevgeeugeef
+    tefghffhgfeivefghfeuvefgjeekfeenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
+    grmhepmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:905hZCiyjAnj_6KNeSN0F6O_NLZB6_jSQVnkBZo3yyIzqICtgjngIA>
+    <xmx:905hZGCPG6Lb8T15UCZh4ofkAfw6HkvZcDh3x6st1z5bocz4QE3jAQ>
+    <xmx:905hZDLo8rXNLtX2L-pO6pqr9QvJzl0YAkPubSiE-HXqSbc8BQfO2A>
+    <xmx:-U5hZOu8SfLvzZc6LhBAYNrPOc51oXjVX3-fpAw4XAQ91y9OfBhpnw>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
+ 14 May 2023 17:13:27 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 3DBD910C400; Mon, 15 May 2023 00:13:24 +0300 (+03)
+Date:   Mon, 15 May 2023 00:13:24 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Mika =?utf-8?B?UGVudHRpbMOk?= <mpenttil@redhat.com>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Joerg Roedel <jroedel@suse.de>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        David Rientjes <rientjes@google.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dario Faggioli <dfaggioli@suse.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        aarcange@redhat.com, peterx@redhat.com, x86@kernel.org,
+        linux-mm@kvack.org, linux-coco@lists.linux.dev,
+        linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCHv11 3/9] efi/libstub: Implement support for unaccepted
+ memory
+Message-ID: <20230514211324.fymzoa263wx2hs2p@box.shutemov.name>
+References: <20230513220418.19357-1-kirill.shutemov@linux.intel.com>
+ <20230513220418.19357-4-kirill.shutemov@linux.intel.com>
+ <9549d984-e581-048d-95a3-7c54acd70fb8@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230514165932.251200-1-sensor1010@163.com>
-X-Spam-Status: No, score=0.7 required=5.0 tests=BAYES_00,DKIM_ADSP_CUSTOM_MED,
-        FORGED_GMAIL_RCVD,FREEMAIL_FROM,NML_ADSP_CUSTOM_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9549d984-e581-048d-95a3-7c54acd70fb8@redhat.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Mon, May 15, 2023 at 12:59:32AM +0800, Lizhe kirjoitti:
-> "pin_config_set" in pinconf_ops.
+On Sun, May 14, 2023 at 08:08:07AM +0300, Mika Penttilä wrote:
+> > +	status = efi_bs_call(allocate_pool, EFI_LOADER_DATA,
+> > +			     sizeof(*unaccepted_table) + bitmap_size,
+> > +			     (void **)&unaccepted_table);
 > 
-> In the function of registering pinctrl_dev, pinctrl_init_controller(),
-> a non-null check has already been performed on the members
-> pin_config_set and pin_config_group_set in the ops structure.
+> 
+> Wonder if EFI_LOADER_DATA guarantees bitmap not to be freed, or should some
+> more persistent type be used. If EFI_LOADER_DATA is enough, maybe a comment
+> why it is safe could be added.
 
-NAK.
+Ughh.. I've lost the hunk that reserves the memory explicitly while
+folding in the patch we discussed with Ard. See below.
 
-Try to analyse what `if (!foo && !bar)` means from the logic perspective and
-deduce from that the problem in your proposal.
+But the question is solid.
 
-P.S. It's not the first wrong proposed change from you. Dunno if you even
-trying to read the code...
+Ard, do we want to allocate the memory as EFI_RUNTIME_SERVICES_DATA (or
+something else?) that got reserved automatically without additional steps?
 
+diff --git a/drivers/firmware/efi/efi.c b/drivers/firmware/efi/efi.c
+index e15a2005ed93..d817e7afd266 100644
+--- a/drivers/firmware/efi/efi.c
++++ b/drivers/firmware/efi/efi.c
+@@ -765,6 +765,25 @@ int __init efi_config_parse_tables(const efi_config_table_t *config_tables,
+ 		}
+ 	}
+ 
++	if (IS_ENABLED(CONFIG_UNACCEPTED_MEMORY) &&
++	    efi.unaccepted != EFI_INVALID_TABLE_ADDR) {
++		struct efi_unaccepted_memory *unaccepted;
++
++		unaccepted = early_memremap(efi.unaccepted, sizeof(*unaccepted));
++		if (unaccepted) {
++			unsigned long size;
++
++			if (unaccepted->version == 1) {
++				size = sizeof(*unaccepted) + unaccepted->size;
++				memblock_reserve(efi.unaccepted, size);
++			} else {
++				efi.unaccepted = EFI_INVALID_TABLE_ADDR;
++			}
++
++			early_memunmap(unaccepted, sizeof(*unaccepted));
++		}
++	}
++
+ 	return 0;
+ }
+ 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+  Kiryl Shutsemau / Kirill A. Shutemov
