@@ -2,121 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B085E702073
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 00:29:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DE056702077
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 00:30:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbjENW3q convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 14 May 2023 18:29:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
+        id S233086AbjENWax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 18:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjENW3o (ORCPT
+        with ESMTP id S229534AbjENWat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 18:29:44 -0400
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2810310F0
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 15:29:41 -0700 (PDT)
-Received: from ip5b412278.dynamic.kabel-deutschland.de ([91.65.34.120] helo=diego.localnet)
-        by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <heiko@sntech.de>)
-        id 1pyKDi-000301-3F; Mon, 15 May 2023 00:29:38 +0200
-From:   Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To:     'Christoph Muellner' <christoph.muellner@vrull.eu>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Philipp Tomsich <philipp.tomsich@vrull.eu>,
-        Aaron Durbin <adurbin@rivosinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Atish Patra <atishp@atishpatra.org>
-Cc:     David Laight <David.Laight@aculab.com>
-Subject: Re: [RFC PATCH v2] riscv: Add Zawrs support for spinlocks
-Date:   Mon, 15 May 2023 00:29:30 +0200
-Message-ID: <2679603.mvXUDI8C0e@diego>
-In-Reply-To: <f04bd42eb93b4c4dbece34236a7b994b@AcuMS.aculab.com>
-References: <20220623152948.1607295-1-christoph.muellner@vrull.eu>
- <f04bd42eb93b4c4dbece34236a7b994b@AcuMS.aculab.com>
+        Sun, 14 May 2023 18:30:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62ADC10EF;
+        Sun, 14 May 2023 15:30:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0036A616F6;
+        Sun, 14 May 2023 22:30:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EFA8C433EF;
+        Sun, 14 May 2023 22:30:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684103447;
+        bh=0Zu+Moxt89SvEkQoekYiB8XJzcCpCjsAEr25gRJ6iX0=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=d7cVgU+Zm+MPP/qJJqUxj2ah0X9nEA/O7JzKezKZwUHapJ7djlAtVPXfdI4Z2Gq2g
+         MPUfcda646V20B+6kGBjxTu6DXqratvXg10/MK9gz0E83VBIKgRvCe6R+rfXDUm5yL
+         1sfQrndSoHzRvZVhbLqF5i/kr7Ya/N8PFzZR5TX/gHZ7+39UwiWtzSeE92Zc+iVLQP
+         w38VQyGP36IxApZyzFfdYXCxrxpgv2iBqMG594hYjH9Wy7shfd2wl5dP75xZoQ+Fxt
+         sRkauTqAo+hu61M7j7c2oyBi4TZggqNpK/q4LHEzWmnA6Q2s0rfaQ7a8h7w6TvOcFX
+         M6wrnXR3Ns3DQ==
+Message-ID: <920892df-9429-d185-d037-d8f22574d91f@kernel.org>
+Date:   Mon, 15 May 2023 07:30:45 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8BIT
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE,T_SPF_HELO_TEMPERROR autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v2] dt-bindings: ata: ahci-ceva: Cover all 4 iommus
+ entries
+Content-Language: en-US
+To:     Michal Simek <michal.simek@amd.com>, linux-kernel@vger.kernel.org,
+        monstr@monstr.eu, michal.simek@xilinx.com, git@xilinx.com
+Cc:     stable@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Piyush Mehta <piyush.mehta@xilinx.com>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-ide@vger.kernel.org
+References: <de594534321417d25d2434db334db075524f61e0.1683892320.git.michal.simek@amd.com>
+From:   Damien Le Moal <dlemoal@kernel.org>
+Organization: Western Digital Research
+In-Reply-To: <de594534321417d25d2434db334db075524f61e0.1683892320.git.michal.simek@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
-
-Am Freitag, 24. Juni 2022, 10:52:40 CEST schrieb David Laight:
-> From: Christoph Muellner
-> > Sent: 23 June 2022 16:30
-> > 
-> > From: Christoph Müllner <christoph.muellner@vrull.eu>
-> > 
-> > The current RISC-V code uses the generic ticket lock implementation,
-> > that calls the macros smp_cond_load_relaxed() and smp_cond_load_acquire().
-> > Currently, RISC-V uses the generic implementation of these macros.
-> > This patch introduces a RISC-V specific implementation, of these
-> > macros, that peels off the first loop iteration and modifies the waiting
-> > loop such, that it is possible to use the WRS.STO instruction of the Zawrs
-> > ISA extension to stall the CPU.
-> > 
-> > The resulting implementation of smp_cond_load_*() will only work for
-> > 32-bit or 64-bit types for RV64 and 32-bit types for RV32.
-> > This is caused by the restrictions of the LR instruction (RISC-V only
-> > has LR.W and LR.D). Compiler assertions guard this new restriction.
-> > 
-> > This patch uses the existing RISC-V ISA extension framework
-> > to detect the presents of Zawrs at run-time.
-> > If available a NOP instruction will be replaced by WRS.NTO or WRS.STO.
-> > 
-> > The whole mechanism is gated by Kconfig setting, which defaults to Y.
-> > 
-> > The Zawrs specification can be found here:
-> > https://github.com/riscv/riscv-zawrs/blob/main/zawrs.adoc
-> > 
-> > Note, that the Zawrs extension is not frozen or ratified yet.
-> > Therefore this patch is an RFC and not intended to get merged.
-> > 
-> > Changes since v1:
-> > * Adding "depends on !XIP_KERNEL" to RISCV_ISA_ZAWRS
-> > * Fixing type checking code in __smp_load_reserved*
-> > * Adjustments according to the specification change
-> > 
-> > Signed-off-by: Christoph Müllner <christoph.muellner@vrull.eu>
-
-I'm only addressing the point here were I don't agree with you :-)
-Everything else will be in the next version.
-
-[...]
-
-> > +
-> > +#define ___smp_load_reservedN(pfx, ptr)					\
-> > +({									\
-> > +	typeof(*ptr) ___p1;						\
-> > +	__asm__ __volatile__ ("lr." pfx "	%[p], %[c]\n"		\
-> > +			      : [p]"=&r" (___p1), [c]"+A"(*ptr));	\
-> > +	___p1;								\
-> > +})
+On 5/12/23 20:52, Michal Simek wrote:
+> Current only one entry is enabled but IP itself is using 4 different IDs
+> which are already listed in zynqmp.dtsi.
 > 
-> Isn't that missing the memory reference?
-> It either needs a extra memory parameter for 'ptr' or
-> a full/partial memory clobber.
+> sata: ahci@fd0c0000 {
+> 	compatible = "ceva,ahci-1v84";
+> 	...
+> 	iommus = <&smmu 0x4c0>, <&smmu 0x4c1>,
+> 		 <&smmu 0x4c2>, <&smmu 0x4c3>;
+> };
+> 
+> Fixes: 8ac47837f0e0 ("arm64: dts: zynqmp: Add missing iommu IDs")
+> Cc: stable@vger.kernel.org # v5.12+
+> Signed-off-by: Michal Simek <michal.simek@amd.com>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Shouldn't the "+A" for *ptr should take care of that?
-
-From the gcc docs [0]:
-	‘+’  Means that this operand is both read and written by the instruction.
-
-
-Heiko
-
-[0] https://gcc.gnu.org/onlinedocs/gcc/Modifiers.html#index-_002b-in-constraint
-
+Applied to for-6.4-fixes. Thanks !
 
 
