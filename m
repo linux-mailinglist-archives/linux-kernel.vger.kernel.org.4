@@ -2,39 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3118270212F
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 03:34:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id CE53F70212D
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 03:34:18 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237973AbjEOBel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 21:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43594 "EHLO
+        id S238079AbjEOBeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 21:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230501AbjEOBei (ORCPT
+        with ESMTP id S229898AbjEOBeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 21:34:38 -0400
-Received: from mail.nfschina.com (unknown [42.101.60.195])
-        by lindbergh.monkeyblade.net (Postfix) with SMTP id 772D7E73;
-        Sun, 14 May 2023 18:34:36 -0700 (PDT)
-Received: from localhost.localdomain (unknown [180.167.10.98])
-        by mail.nfschina.com (Maildata Gateway V2.8.8) with ESMTPA id 5E51618011A402;
-        Mon, 15 May 2023 09:34:32 +0800 (CST)
-X-MD-Sfrom: suhui@nfschina.com
-X-MD-SrcIP: 180.167.10.98
-From:   Su Hui <suhui@nfschina.com>
-To:     Alex Deucher <alexander.deucher@amd.com>, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Su Hui <suhui@nfschina.com>
-Subject: [PATCH] drm/amdgpu: remove unnecessary (void*) conversions
-Date:   Mon, 15 May 2023 09:34:28 +0800
-Message-Id: <20230515013428.38798-1-suhui@nfschina.com>
-X-Mailer: git-send-email 2.30.2
+        Sun, 14 May 2023 21:34:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B201FE6D;
+        Sun, 14 May 2023 18:34:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4EAF461C22;
+        Mon, 15 May 2023 01:34:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AC76C433EF;
+        Mon, 15 May 2023 01:34:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684114453;
+        bh=yEFfMawWA6faS6Ce0SG/FOijcLBaZ/OfoWo2b6rwzE0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=olqq25I2ple0yj35L3gH4mm3gElRgVs8RyvR98YmPiEZXU+kQ6e7RWHtmxsU9qIoU
+         WwfG46xBP6OLXRv0TGMhanLSy0N0gpqQ+6+9CV5bfkQqwZxPMH7SBUWSOo+ICbeXYI
+         WCxrfz4Z3NvY12hvkNsG1qRwk3wvVQ5TdbBG1DCmM5zF+rHFsG7o7HdSMyKH19cIYl
+         7dNCCkQKQpaXxKOSaGP5NeZkPik4faB1Mzgqd8W4kmhc7uipESAPHiXiCB4W3YbDu8
+         BXaENUNoMfPMuOKlhOwsidQeG2fHa4nFqVwi9M7dbKng19zzzb0mSmyTB/rSCASvPA
+         y/Tt2Ur6BHGWA==
+Date:   Sun, 14 May 2023 18:38:06 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] pinctrl: qcom: sc8180x: gracefully handle missing IO
+ memory resource
+Message-ID: <20230515013806.ag2rdswrhdhiahis@ripper>
+References: <20230513113510.177666-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,RDNS_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230513113510.177666-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,105 +58,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-No need cast (void*) to (struct amdgpu_device *).
+On Sat, May 13, 2023 at 01:35:10PM +0200, Krzysztof Kozlowski wrote:
+> If device was probed with incorrect DT or ACPI tables, the IO memory
+> resource would be missing and driver would derefernce NULL pointer in
+> sc8180x_pinctrl_add_tile_resources().  Add simplep check if IO memory
+> resource was provided to silence Smatch warning:
+> 
+>   drivers/pinctrl/qcom/pinctrl-sc8180x.c:1664 sc8180x_pinctrl_add_tile_resources() error: potentially dereferencing uninitialized 'mres'.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: Su Hui <suhui@nfschina.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c | 4 ++--
- drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c   | 2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c     | 2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_ib.c      | 2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c     | 2 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c     | 2 +-
- 6 files changed, 7 insertions(+), 7 deletions(-)
+Reviewed-by: Bjorn Andersson <andersson@kernel.org>
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-index f60753f97ac5..c837e0bf2cfc 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_debugfs.c
-@@ -1470,7 +1470,7 @@ int amdgpu_debugfs_regs_init(struct amdgpu_device *adev)
- 
- static int amdgpu_debugfs_test_ib_show(struct seq_file *m, void *unused)
- {
--	struct amdgpu_device *adev = (struct amdgpu_device *)m->private;
-+	struct amdgpu_device *adev = m->private;
- 	struct drm_device *dev = adev_to_drm(adev);
- 	int r = 0, i;
- 
-@@ -1581,7 +1581,7 @@ static int amdgpu_debugfs_benchmark(void *data, u64 val)
- 
- static int amdgpu_debugfs_vm_info_show(struct seq_file *m, void *unused)
- {
--	struct amdgpu_device *adev = (struct amdgpu_device *)m->private;
-+	struct amdgpu_device *adev = m->private;
- 	struct drm_device *dev = adev_to_drm(adev);
- 	struct drm_file *file;
- 	int r;
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-index f52d0ba91a77..f0615a43b3cc 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_fence.c
-@@ -835,7 +835,7 @@ static const struct dma_fence_ops amdgpu_job_fence_ops = {
- #if defined(CONFIG_DEBUG_FS)
- static int amdgpu_debugfs_fence_info_show(struct seq_file *m, void *unused)
- {
--	struct amdgpu_device *adev = (struct amdgpu_device *)m->private;
-+	struct amdgpu_device *adev = m->private;
- 	int i;
- 
- 	for (i = 0; i < AMDGPU_MAX_RINGS; ++i) {
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-index 863cb668e000..28f79cf8c3fb 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-@@ -948,7 +948,7 @@ int amdgpu_mode_dumb_create(struct drm_file *file_priv,
- #if defined(CONFIG_DEBUG_FS)
- static int amdgpu_debugfs_gem_info_show(struct seq_file *m, void *unused)
- {
--	struct amdgpu_device *adev = (struct amdgpu_device *)m->private;
-+	struct amdgpu_device *adev = m->private;
- 	struct drm_device *dev = adev_to_drm(adev);
- 	struct drm_file *file;
- 	int r;
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ib.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ib.c
-index 4ff348e10e4d..49a4238a120e 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ib.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ib.c
-@@ -436,7 +436,7 @@ int amdgpu_ib_ring_tests(struct amdgpu_device *adev)
- 
- static int amdgpu_debugfs_sa_info_show(struct seq_file *m, void *unused)
- {
--	struct amdgpu_device *adev = (struct amdgpu_device *)m->private;
-+	struct amdgpu_device *adev = m->private;
- 
- 	seq_printf(m, "--------------------- DELAYED --------------------- \n");
- 	amdgpu_sa_bo_dump_debug_info(&adev->ib_pools[AMDGPU_IB_POOL_DELAYED],
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c
-index 0efb38539d70..9f9274249b57 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_kms.c
-@@ -1441,7 +1441,7 @@ void amdgpu_disable_vblank_kms(struct drm_crtc *crtc)
- 
- static int amdgpu_debugfs_firmware_info_show(struct seq_file *m, void *unused)
- {
--	struct amdgpu_device *adev = (struct amdgpu_device *)m->private;
-+	struct amdgpu_device *adev = m->private;
- 	struct drm_amdgpu_info_firmware fw_info;
- 	struct drm_amdgpu_query_fw query_fw;
- 	struct atom_context *ctx = adev->mode_info.atom_context;
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-index 2cd081cbf706..21f340ed4cca 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_ttm.c
-@@ -2164,7 +2164,7 @@ int amdgpu_ttm_evict_resources(struct amdgpu_device *adev, int mem_type)
- 
- static int amdgpu_ttm_page_pool_show(struct seq_file *m, void *unused)
- {
--	struct amdgpu_device *adev = (struct amdgpu_device *)m->private;
-+	struct amdgpu_device *adev = m->private;
- 
- 	return ttm_pool_debugfs(&adev->mman.bdev.pool, m);
- }
--- 
-2.30.2
-
+> ---
+>  drivers/pinctrl/qcom/pinctrl-sc8180x.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pinctrl/qcom/pinctrl-sc8180x.c b/drivers/pinctrl/qcom/pinctrl-sc8180x.c
+> index 704a99d2f93c..2fabec096aae 100644
+> --- a/drivers/pinctrl/qcom/pinctrl-sc8180x.c
+> +++ b/drivers/pinctrl/qcom/pinctrl-sc8180x.c
+> @@ -1630,7 +1630,8 @@ static const struct msm_pinctrl_soc_data sc8180x_acpi_pinctrl = {
+>  static int sc8180x_pinctrl_add_tile_resources(struct platform_device *pdev)
+>  {
+>  	int nres_num = pdev->num_resources + ARRAY_SIZE(sc8180x_tiles) - 1;
+> -	struct resource *mres, *nres, *res;
+> +	struct resource *mres = NULL;
+> +	struct resource *nres, *res;
+>  	int i, ret;
+>  
+>  	/*
+> @@ -1657,6 +1658,9 @@ static int sc8180x_pinctrl_add_tile_resources(struct platform_device *pdev)
+>  			*res++ = *r;
+>  	}
+>  
+> +	if (!mres)
+> +		return -EINVAL;
+> +
+>  	/* Append tile memory resources */
+>  	for (i = 0; i < ARRAY_SIZE(sc8180x_tiles); i++, res++) {
+>  		const struct tile_info *info = &sc8180x_tile_info[i];
+> -- 
+> 2.34.1
+> 
