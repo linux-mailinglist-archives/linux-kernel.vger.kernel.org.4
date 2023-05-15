@@ -2,176 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17CEA702A60
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:20:28 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5401E702A64
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:21:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240188AbjEOKUZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:20:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53206 "EHLO
+        id S240927AbjEOKVW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 06:21:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240789AbjEOKT4 (ORCPT
+        with ESMTP id S241191AbjEOKUv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:19:56 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2914EE56
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:19:41 -0700 (PDT)
-Date:   Mon, 15 May 2023 12:19:36 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1684145978;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pwQ/dte7xGBpT9S/LJ/asraKKUsTrX2pGKwoZVhDWSI=;
-        b=kVOQ5EG86gIP5F9zu2FSUbMvtI4o4Qjr4lR76MnIJLRc5v/aiA8S7/UThkvBn38Q06Z3c5
-        Qyx0wgP+jb2brh1cnrrfWtedpa8pQV4nmrRw4XoEC/hkund0CTcPL13Sxt85KBru++u5FS
-        bMaDYp+D9z0+ZLalFPvNydyLA8YXX5SXLza9FZ2rrBdYOUSQHXO7YqiNf2ZEIcWmQ64Kpg
-        rewyMWe9DXibkNYB9pFDMYnNVuxhGlCm1BUDl5DPrtzFdHbakFtS6yvLl+qsRRqT5mkYv8
-        nyJpLtZvnEvukh9zHpFKXKcXcl6uP8wO7G2nrkOlFXXwF8kgsypCG4+e/nRALQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1684145978;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=pwQ/dte7xGBpT9S/LJ/asraKKUsTrX2pGKwoZVhDWSI=;
-        b=c+A4d45QhFr+nwhq2U8CjmN9PEOSlshc3TCi4NyBsxE3DTLnXuHnx+11b4P4l0/dHNwNB7
-        75pVNuuzZCHxM+AA==
-From:   Sebastian Siewior <bigeasy@linutronix.de>
-To:     Frederic Weisbecker <frederic@kernel.org>
-Cc:     Anna-Maria Behnsen <anna-maria@linutronix.de>,
-        linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        John Stultz <jstultz@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Eric Dumazet <edumazet@google.com>,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        Arjan van de Ven <arjan@infradead.org>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <fweisbec@gmail.com>,
-        Rik van Riel <riel@surriel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Giovanni Gherdovich <ggherdovich@suse.cz>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        "Gautham R . Shenoy" <gautham.shenoy@amd.com>
-Subject: Re: [PATCH v6 19/21] timer: Implement the hierarchical pull model
-Message-ID: <20230515101936.3amAvw0T@linutronix.de>
-References: <20230510072817.116056-1-anna-maria@linutronix.de>
- <20230510072817.116056-20-anna-maria@linutronix.de>
- <ZFty1fNMlnuLk4qF@localhost.localdomain>
+        Mon, 15 May 2023 06:20:51 -0400
+Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A418E49
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:20:28 -0700 (PDT)
+Received: by mail-pl1-x634.google.com with SMTP id d9443c01a7336-1a516fb6523so117574325ad.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:20:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1684146028; x=1686738028;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bVcYbGMTcnCH725Fn9H40mWDeMdYeKHUtwfwgBEqrVs=;
+        b=NUFknoKLINs0CRaF8sgFYTioxUzqdoPQbpm6deM6LbunJlP6nK3LRvmgH31/KF7rOm
+         plxnTbhvqKVathcad8a++qW04F3Xsdw/7TrqRCTRFR4/1bCCaUmczeG5A5ybQN12bnjq
+         ZkKTwXjnWyfiIOyqcS58NIpwUgTOXuLqLOw9Vt2fsBZ6rTRWVozrl8MYzm3WfIPnMBY3
+         Sc/KJ9aMkDeAFbKBP4T8L9b+29I66i0KSBuStbd9khsYdwPFDCyl41lgVQHAEfQauy5e
+         Wm1AgkvrE4u0RyHvz8xTJQNg/oePvQ4uH09Qb5lQBahRQK7COrrAzWienBrTxgHXyXLN
+         UEHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684146028; x=1686738028;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=bVcYbGMTcnCH725Fn9H40mWDeMdYeKHUtwfwgBEqrVs=;
+        b=ZCQ4EZIe7Uu9suqYNxH7FUJc6k2qgL65sDImXJj6u3hXHeXpLEvsLVqJ7JJZyfwo6C
+         eFQH+3ucwKYcqXRAP8hDS8eyeX/bTHgTOBOyRxUWEElMVM1X+UT0G7Tqyk1ADKOkA2iR
+         e9nq+qMN9sl8B+4pnN5nnDcJFUWPII0Pj/s0AacsUTp4zmvx2tW6ievDI8N7S6ip9HFj
+         ARRaJq6Qo8KNYcsZofliipHSoLLuz4kZ4/sMenMwEMvNXIFrEP3estgdZi1k+v+cdcnj
+         SXSBoWZC0gmU9abYquzfZC7frIA4ryMhufOZ49LLPxfhh8cTdYKCyFCo1EN7EZlkVHpR
+         ta/w==
+X-Gm-Message-State: AC+VfDxDv6QNTRJ7y7Mp7HCZXvBmnBOlCz7FyWacAN7aR3AMot9ZEY2h
+        BXj95cZC7IWuPgtDyR2i+CrxDA==
+X-Google-Smtp-Source: ACHHUZ7PCi0pvjly4wa61Bfp0Xu2bwaIKoeBHG0s3217u8aUKvU4Vp5IaMtZFb+a2T7MLiVWFaOZmw==
+X-Received: by 2002:a17:902:cec9:b0:19a:a9d8:e47f with SMTP id d9-20020a170902cec900b0019aa9d8e47fmr47490935plg.36.1684146027973;
+        Mon, 15 May 2023 03:20:27 -0700 (PDT)
+Received: from [10.255.9.129] ([139.177.225.233])
+        by smtp.gmail.com with ESMTPSA id m12-20020a170902db0c00b001adbb8991b3sm9383747plx.89.2023.05.15.03.20.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 03:20:27 -0700 (PDT)
+Message-ID: <bfbfc15f-3d16-f127-0642-d5f78147a58d@bytedance.com>
+Date:   Mon, 15 May 2023 18:20:21 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <ZFty1fNMlnuLk4qF@localhost.localdomain>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: Re: [PATCH] sock: Fix misuse of sk_under_memory_pressure()
+Content-Language: en-US
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230506085903.96133-1-wuyun.abel@bytedance.com>
+ <588689343dcd6c904e7fc142a001043015e5b14e.camel@redhat.com>
+ <d2abfe0c-0152-860c-60f7-2787973c95d0@bytedance.com>
+ <6b355d57-30b4-748d-87f4-d79a50fe5487@bytedance.com>
+ <CANn89iJqzE6r9dm2hoHxgYeLQvStZYvRhCxFVmpV_LczaO-4xw@mail.gmail.com>
+From:   Abel Wu <wuyun.abel@bytedance.com>
+In-Reply-To: <CANn89iJqzE6r9dm2hoHxgYeLQvStZYvRhCxFVmpV_LczaO-4xw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-10 12:32:53 [+0200], Frederic Weisbecker wrote:
-> Le Wed, May 10, 2023 at 09:28:15AM +0200, Anna-Maria Behnsen a =C3=A9crit=
- :
-> > +static u64 tmigr_handle_remote_cpu(unsigned int cpu, u64 now,
-> > +				   unsigned long jif)
-> > +{
-> > +	struct timer_events tevt;
-> > +	struct tmigr_walk data;
-> > +	struct tmigr_cpu *tmc;
-> > +	u64 next =3D KTIME_MAX;
-> > +
-> > +	tmc =3D per_cpu_ptr(&tmigr_cpu, cpu);
-> > +
-> > +	raw_spin_lock_irq(&tmc->lock);
-> > +	/*
-> > +	 * Remote CPU is offline or no longer idle or other cpu handles cpu
-> > +	 * timers already or next event was already expired - return!
-> > +	 */
-> > +	if (!tmc->online || tmc->remote || tmc->cpuevt.ignore ||
-> > +	    now < tmc->cpuevt.nextevt.expires) {
-> > +		raw_spin_unlock_irq(&tmc->lock);
-> > +		return next;
-> > +	}
-> > +
-> > +	tmc->remote =3D 1;
-> > +
-> > +	/* Drop the lock to allow the remote CPU to exit idle */
-> > +	raw_spin_unlock_irq(&tmc->lock);
-> > +
-> > +	if (cpu !=3D smp_processor_id())
-> > +		timer_expire_remote(cpu);
-> > +
-> > +	/*
-> > +	 * Pretend that there is no timer pending if the cpu is offline.
-> > +	 * Possible pending timers will be migrated later to an active cpu.
-> > +	 */
-> > +	if (cpu_is_offline(smp_processor_id())) {
-> > +		raw_spin_lock_irq(&tmc->lock);
-> > +		tevt.local =3D tevt.global =3D KTIME_MAX;
-> > +	} else {
-> > +		/*
-> > +		 * Lock ordering needs to be preserved - timer_base locks
-> > +		 * before tmigr related locks. During fetching the next
-> > +		 * timer interrupt, also tmc->lock needs to be
-> > +		 * held. Otherwise there is a possible race window against
-> > +		 * the CPU itself when it comes out of idle, updates the
-> > +		 * first timer and goes back to idle.
-> > +		 */
-> > +		timer_lock_remote_bases(cpu);
->=20
-> So the return value is ignored here.
->=20
-> In the case of !PREEMPT_RT, I suppose it's impossible for the target
-> CPU to be offline. You checked above tmc->online and in-between the
-> call to timer_lock_remote_bases(), the path is BH-disabled, this prevents
-> stop_machine from running and from setting the CPU as offline.
+On 5/15/23 3:21 PM, Eric Dumazet wrote:>
+> I still do not understand the patch.
+> 
+> If I do not understand the patch and its changelog now in May 2023,
+> how will anyone understand it later
+> when/if a regression is investigated ?
+> 
+> I repeat :
+> 
+> Changelog is evasive, I do not see what practical problem you want to solve.
+> 
+> 
+> sk_has_memory_pressure() is not about memcg, simply the fact that a
+> proto has a non NULL memory_pressure pointer.
 
-I think you refer to the last one invoked from takedown_cpu(). This does
-not matter, see below.
+Yes, it has nothing to do with sk_has_memory_pressure(), this accessor
+is removed only due to it is not used anymore after this fix. I really
+should have put this into a separate patch.
 
-What bothers me is that _current_ CPU is check for cpu_is_offline() and
-not the variable 'cpu'. Before the check timer_expire_remote() is
-invoked on 'cpu' and not on current.
+> 
+> I suggest that you answer these questions, and send a V2 with an
+> updated changelog.
 
-> However in PREEMPT_RT, ksoftirqd (or timersd) is preemptible, so it seems
-> that it could happen in theory. And that could create a locking imbalance.
+OK, I will.
 
-The ksoftirqd thread is part of smpboot_park_threads(). They have to
-stop running and clean up before the machinery continues bringing down
-the CPU (that is before takedown_cpu()). On the way down we have:
-- tmigr_cpu_offline() followed by
-- smpboot_park_threads().
+> 
+> Again, what is the practical problem you want to solve ?
+> What is the behavior of the current stack that you think is a problem ?
 
-So ksoftirqd (preempted or not) finishes before. This is for the
-_target_ CPU.=20
+The status of global tcp_mem pressure is updated when:
 
-After the "tmc->online" check the lock is dropped and this is invoked
-=66rom run_timer_softirq(). That means that _this_ CPU could get preempted
-(by an IRQ for instance) at this point, and once the CPU gets back here,
-the remote CPU (as specified in `cpu') can already be offline by the
-time timer_lock_remote_bases() is invoked.
+   a) __sk_mem_raise_allocated():
 
-So RT or not, this is racy.
+	enter: sk_memory_allocated(sk) >  tcp_mem[1]
+	leave: sk_memory_allocated(sk) <= tcp_mem[0]
 
-> My suggestion would be to unconditionally lock the bases, you already che=
-cked if
-> !tmc->online before. The remote CPU may have gone down since then because=
- the
-> tmc lock has been relaxed but it should be rare enough that you don't care
-> about optimizing with a lockless check. So you can just lock the bases,
-> lock the tmc and check again if tmc->online. If not then you can just ign=
-ore
-> the tmigr_new_timer_up call and propagation.
+   b) __sk_mem_reduce_allocated():
 
-Regardless the previous point, this still looks odd as you pointed out.
-The return code is ignored and the two functions perform lock + unlock
-depending on it.
+	leave: sk_under_memory_pressure(sk) &&
+		sk_memory_allocated(sk) < tcp_mem[0]
 
-> Thanks.
+So the conditions of leaving global pressure are inconstant, which may
+lead to the situation that one pressured memcg prevents the global
+pressure from being cleared when there is indeed no global pressure,
+thus the global constrains are still in effect unexpectedly on the other
+sockets. The patch fixes this by removing the condition of net-memcg's
+pressure in __sk_mem_reduce_allocated().
 
-Sebastian
+As for the changes in __sk_mem_raise_allocated(), I don't think it is
+the right place to check the pressure of the @sk's memcg. That piece of
+code was originally only trying to be fair between all the sockets if
+there is global pressure. And if we really want to forbid the socket
+memory from being raised when the socket's memcg is in pressure, the
+condition should be in the first place inside this function.
+
+So I plan to split this patch into three in v2:
+
+   [1/3] fix inconstant condition in __sk_mem_reduce_allocated()
+   [2/3] remove unrelated check in __sk_mem_raise_allocated()
+   [3/3] remove sk_has_memory_pressure() since it is no longer used
+
+Does this make sense to you?
+
+Thanks & Best,
+	Abel
