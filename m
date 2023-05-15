@@ -2,173 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B198A702B04
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:03:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E5253702B08
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:04:43 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241064AbjEOLD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 07:03:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48166 "EHLO
+        id S241077AbjEOLEm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 07:04:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbjEOLD0 (ORCPT
+        with ESMTP id S232090AbjEOLEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 07:03:26 -0400
-Received: from wnew4-smtp.messagingengine.com (wnew4-smtp.messagingengine.com [64.147.123.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12C1593;
-        Mon, 15 May 2023 04:03:25 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailnew.west.internal (Postfix) with ESMTP id BF1CA2B05E55;
-        Mon, 15 May 2023 07:03:20 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Mon, 15 May 2023 07:03:24 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1684148600; x=
-        1684155800; bh=a/Iydw3E9XYq6OMWXW3TvDHCSGXOvuQLC/4M2+8UgSg=; b=b
-        eqhaz6+aC9XTJDJe/wr3N36+Tj3flpCfHvlOf9y8lXsK+262zaCij702Mejo2+QE
-        Fd2xpeGSZ+xZXcy4D/O2ys6/yeyG+eg9pe7ttAK7rJ4flep8j0NnEuUu/JpgQ2zq
-        +sQYGICk0DOSR7KXB1FGzWMBThhFGROaza2HF5WZTMoyXCpSoGrgyUpv2AwTVyoh
-        MPRAEKadMnnI/sj+LbQEWvTyhwhvfq0KMSmbFHooxdpg4bZ6fN05mjKqs5p5+gMe
-        sDKrBEwm+QstfKvMpg7xfToq9y+QHBotkJ9i3CoJB7tGWQC23VldSFyJYd2XEL4U
-        Gl+2fihoHMbSTuxjVue1g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm1; t=1684148600; x=1684155800; bh=a/Iydw3E9XYq6
-        OMWXW3TvDHCSGXOvuQLC/4M2+8UgSg=; b=HCOKyUCGguRFf1xsGM0olaZPpyE83
-        QUFg57fXwoOwyQLXQfBrzuMoGa6jxavNDy4hgO/KieahDInTa0sH3/uTA04n9PBd
-        pOkNlIQsSrzizEIjBJ9OClefL/E9/wJWOs6W/BHwQZEkVPX/yhJWt9zeo1XJL8yO
-        Dm7ChPssB/erg2Ti3ewsAZ+Qt8Pig5D5DcQN2IwE1zz0yI1+ld7eJeDoy/HbjJp8
-        Fwwn6gnv5N4GzwOjiaZb1+aSt2I9N4jbT6NnDxfZPC4PkwlZwKP41PP0oJSiwruW
-        x9dW25YtqwNwMjBly/giIjtuqcpmWp+sz3+M1OpAnT7+WPfc354OTJLVA==
-X-ME-Sender: <xms:dhFiZEQbnWm3lInkgea7I7q1loI6EFTX6nzXoxo3EDKGBC7aVf78JQ>
-    <xme:dhFiZBzQCYHtsXc_PNzioGz_LirMx3rzOlJKv2j3XQvwtfi9xBh9nIt-NSbn91mDy
-    GGmyxgBoYxOaSQmTHg>
-X-ME-Received: <xmr:dhFiZB0cV9suhDUtQEAuyjbHbnx9BgFWQsl2ctv7O5xUxZYuVwDGbzehTtid6zfg5GjMnQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehjedgfeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutecurdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrd
-    hnrghmvgeqnecuggftrfgrthhtvghrnhepgfdtveeugeethfffffeklefgkeelgfekfedt
-    heeileetuefhkeefleduvddtkeevnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhuthgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:dhFiZIBy-PxGx3tPTgENuB_FWVbnaUYJARgJaIETejlMMBmS1qqMqg>
-    <xmx:dhFiZNiE67YhRxNXKSa-apUdVunXaJs_KQHgaZXyYup4bktoBVqs2w>
-    <xmx:dhFiZEo8qMND9yszOfCAsL6QVxCoJx9tsBa5wX9U-MgZ4JdFPa9D8Q>
-    <xmx:eBFiZLGG797U78ccFpNj3KjzIqU78oAjziYTSAnozz3GqFRyt5wx050guAM>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 15 May 2023 07:03:17 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 55AD0103956; Mon, 15 May 2023 14:03:15 +0300 (+03)
-Date:   Mon, 15 May 2023 14:03:15 +0300
-From:   "Kirill A . Shutemov" <kirill@shutemov.name>
-To:     Lorenzo Stoakes <lstoakes@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-Subject: Re: [PATCH v9 0/3] mm/gup: disallow GUP writing to file-backed
- mappings by default
-Message-ID: <20230515110315.uqifqgqkzcrrrubv@box.shutemov.name>
-References: <cover.1683235180.git.lstoakes@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1683235180.git.lstoakes@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        Mon, 15 May 2023 07:04:40 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2835C93;
+        Mon, 15 May 2023 04:04:39 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id a640c23a62f3a-96adcb66f37so441816166b.1;
+        Mon, 15 May 2023 04:04:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684148677; x=1686740677;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lERUo+WLdZx4JBH1Pw+XtLzFG1CgqVYgHbVRbkTw/zc=;
+        b=MpUkLvhNClhT0+vzP2Wf7eEd6ur5TUAoj+zZSAkek414G63FLBv4no2rTUVduz4l9o
+         qkQRw2DEssURnU9zbv5bHx5vD+nvhTvl8ea3XSimE6AOLO4oY0qpexU4ZSZg8IZ5fJmc
+         fNzTTXcbVeNjkFD7KRdDF47H50mlVHyyX7IsGC3ri3KKZjxHL7CkiYH6MVa4xiDdClQN
+         exzTJ/0ON2HEwQxZ9/vz+uw40MScC4o/fRjspKeyp+5Tfxx75YbqBTrmPWNZkrz2/9GE
+         eyTLzYpJNPOP1M5XMjvE+pUt5Les/zp/XhJ+h1XFmMEDxwJvlILT6ZOd+dQk1qdcI/PQ
+         uRfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684148677; x=1686740677;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=lERUo+WLdZx4JBH1Pw+XtLzFG1CgqVYgHbVRbkTw/zc=;
+        b=SMGNAp+SPRewDvseC7ir4fLCrRHu2XFZPFxbbqrRImP3cwqdr5TlOkafwYPYvNzP/O
+         QEXPN4zXlEp1NxxhTM6abEGTeWZUKVEYEMM9QgingCx8uKf9/JrNvHTxreO5+DQWVBlX
+         7G4cScbj9gxTzDsRgR8Pd/ykMhtLsuFvBPCBNBqK1ofyZ00r/EJieAd1ISmslvjkPfir
+         5r+FFD4O5XK7nq4/TpVA0ZN3dW5mYRz3Vf/dkCtEbSgYs9NS1lp+mVB8qljENa5S0ogY
+         ks2ziz+xR+c8bsvn7SXqtL140aoslrbXZDYftWDXGDv/QCNYhC9SJJ0zkJDAAov7xrX4
+         oEKQ==
+X-Gm-Message-State: AC+VfDwaDX/dYovvLv7xw7Q4RNeHUoTrDBNF+y+kIid2gzaDt3gw8e83
+        NnONQLZC/dIsluxlmsH2r68=
+X-Google-Smtp-Source: ACHHUZ6wMR84Ke6Bj7QUjIoHhVknpSvv7L8BQTIL2uFttHnpEnLdiTBzHPFK9FhK4YNbXf1M57YKrQ==
+X-Received: by 2002:a17:907:7e97:b0:968:4ce9:677a with SMTP id qb23-20020a1709077e9700b009684ce9677amr24562615ejc.38.1684148677324;
+        Mon, 15 May 2023 04:04:37 -0700 (PDT)
+Received: from localhost ([146.70.133.78])
+        by smtp.gmail.com with ESMTPSA id de9-20020a1709069bc900b0094e6a9c1d24sm9520105ejc.12.2023.05.15.04.04.35
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 04:04:36 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 15 May 2023 13:04:34 +0200
+Message-Id: <CSMSVO8Z73NV.3MX3FRNO026T9@vincent-arch>
+Cc:     <kw@linux.com>, <heiko@sntech.de>, <robh@kernel.org>,
+        <linux-pci@vger.kernel.org>, <shawn.lin@rock-chips.com>,
+        <linux-kernel@vger.kernel.org>, <lgirdwood@gmail.com>,
+        <linux-rockchip@lists.infradead.org>, <broonie@kernel.org>,
+        <bhelgaas@google.com>,
+        <linux-kernel-mentees@lists.linuxfoundation.org>,
+        <lpieralisi@kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+        "Dan Johansen" <strit@manjaro.org>,
+        "Catalin Marinas" <catalin.marinas@arm.com>,
+        "Will Deacon" <will@kernel.org>,
+        "Robin Murphy" <robin.murphy@arm.com>
+Subject: Re: [PATCH v1] drivers: pci: introduce configurable delay for
+ Rockchip PCIe bus scan
+From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
+To:     "Peter Geis" <pgwipeout@gmail.com>,
+        "Bjorn Helgaas" <helgaas@kernel.org>
+X-Mailer: aerc 0.15.1
+References: <CSK8M39MQL2C.3S7JO031H0BA2@vincent-arch>
+ <ZF7m1npzLZmawT8Y@bhelgaas>
+ <CAMdYzYqV72=pQa-U3a2N7MZ2ChBNL74QrxHQLbMZJxiftTK9sA@mail.gmail.com>
+In-Reply-To: <CAMdYzYqV72=pQa-U3a2N7MZ2ChBNL74QrxHQLbMZJxiftTK9sA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 10:27:50PM +0100, Lorenzo Stoakes wrote:
-> Writing to file-backed mappings which require folio dirty tracking using
-> GUP is a fundamentally broken operation, as kernel write access to GUP
-> mappings do not adhere to the semantics expected by a file system.
-> 
-> A GUP caller uses the direct mapping to access the folio, which does not
-> cause write notify to trigger, nor does it enforce that the caller marks
-> the folio dirty.
+> >
+> > There *is* a way for a PCIe device to say "I need more time".  It does
+> > this by responding to that Vendor ID config read with Request Retry
+> > Status (RRS, aka CRS in older specs), which means "I'm not ready yet,
+> > but I will be ready in the future."  Adding a delay would definitely
+> > make a difference here, so my guess is this is what's happening.
+> >
+> > Most root complexes return ~0 data to the CPU when a config read
+> > terminates with UR or RRS.  It sounds like rockchip does this for UR
+> > but possibly not for RRS.
+> >
+> > There is a "RRS Software Visibility" feature, which is supposed to
+> > turn the RRS into a special value (Vendor ID =3D=3D 0x0001), but per [1=
+],
+> > rockchip doesn't support it (lspci calls it "CRSVisible").
+> >
+> > But the CPU load instruction corresponding to the config read has to
+> > complete by reading *something* or else be aborted.  It sounds like
+> > it's aborted in this case.  I don't know the arm64 details, but if we
+> > could catch that abort and determine that it was an RRS and not a UR,
+> > maybe we could fabricate the magic RRS 0x0001 value.
+> >
+> > imx6q_pcie_abort_handler() does something like that, although I think
+> > it's for arm32, not arm64.  But obviously we already catch the abort
+> > enough to dump the register state and panic, so maybe there's a way to
+> > extend that?
+>
+> Perhaps a hook mechanism that allows drivers to register with the
+> serror handler and offer to handle specific errors before the generic
+> code causes the system panic?
 
-Okay, problem is clear and the patchset look good to me. But I'm worried
-breaking existing users.
+This sounds to me a good general solution that also help to handle=20
+future HW like this one.
 
-Do we expect the change to be visible to real world users? If yes, are we
-okay to break them?
+So this is a Concept Ack for me.
 
-One thing that came to mind is KVM with "qemu -object memory-backend-file,share=on..."
-It is mostly used for pmem emulation.
+Cheers!
 
-Do we have plan B?
-
-Just a random/crazy/broken idea:
-
- - Allow folio_mkclean() (and folio_clear_dirty_for_io()) to fail,
-   indicating that the page cannot be cleared because it is pinned;
-
- - Introduce a new vm_operations_struct::mkclean() that would be called by
-   page_vma_mkclean_one() before clearing the range and can fail;
-
- - On GUP, create an in-kernel fake VMA that represents the file, but with
-   custom vm_ops. The VMA registered in rmap to get notified on
-   folio_mkclean() and fail it because of GUP.
-
- - folio_clear_dirty_for_io() callers will handle the new failure as
-   indication that the page can be written back but will stay dirty and
-   fs-specific data that is associated with the page writeback cannot be
-   freed.
-
-I'm sure the idea is broken on many levels (I have never looked closely at
-the writeback path). But maybe it is good enough as conversation started?
-
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Vincent.
