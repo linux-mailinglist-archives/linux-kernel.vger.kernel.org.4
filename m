@@ -2,225 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C14C370417E
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 01:47:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 381EA704184
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 01:57:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245313AbjEOXrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 19:47:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39918 "EHLO
+        id S245549AbjEOX5a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 19:57:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234623AbjEOXqz (ORCPT
+        with ESMTP id S234623AbjEOX52 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 19:46:55 -0400
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197386199
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 16:46:54 -0700 (PDT)
-Received: by mail-yb1-xb49.google.com with SMTP id 3f1490d57ef6-ba71ed074ceso1637149276.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 16:46:54 -0700 (PDT)
+        Mon, 15 May 2023 19:57:28 -0400
+Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 336587294
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 16:57:26 -0700 (PDT)
+Received: by mail-il1-x12a.google.com with SMTP id e9e14a558f8ab-33550237f6fso70226575ab.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 16:57:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684194413; x=1686786413;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=hKsIhDAHTI5ZGBx0uDNeQEoycM9HPHgfOdTtTFPu9+s=;
-        b=hWjyFiegM0tb/GaofgR7rRw3hIZNOV9FsPrhVWxTiKhHWqy6v0SUvlAjliF0ErVHJ7
-         Kz36gSecGJfOx5lmd37GnYQIXY/kt0kRwLdgrudskRZUGCpWfbBYEW/aGMIBWFsIIdNf
-         Bv2GFO7D0fLJlIBVO20wFzOmQoSqdIVKUUFDY6qv0gMzhzh6cYjrnbd0laa41ocCHvee
-         fStSOpGtclJAFcmhRcdWCFBM2yx94S5r0pXRzqTLnPqrgVOvUHR9nJoAG13J3sKPm6Vm
-         ss5vrtADrgVIer0DCcDTdGWmk927umJkQYXu71KPAD7Anf9kWBmf6BqmQUqhQINReCVR
-         iLFg==
+        d=gmail.com; s=20221208; t=1684195045; x=1686787045;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=g+O4/ssLgmztN5BM7M82vr66O6jkTSH4ZHyxDa1+Ug8=;
+        b=B0ntmpLUk6eNh3OLIUA7OPQpY3picoLY5XUIesF0KsBU3nYzm6J2yYRc3xOuejaDc/
+         S+W8BWKRAZ/kCmqXfGPxIXokvDQ4TxfEy4jTjbNipS13wQQTbEoTwjVxh6m2wRxj+syH
+         UkGbWSW1zFWIapxkCXXypvndH4UqsX66RqqcaO4xH0NZOL+KNJvniFgYkrAoMJ4Y0IC2
+         1+3202JXtPzxgJZZEcaqDXjcLXQFVVBebj40S3IBPkGuyW6XMeuWtlo2cHJyn60ktKw1
+         S7qT7gNEXtup6ADfN4bi3bvLXbg14+R8Noaqv8NaZ1FEMg36Xnk9yhq3ALCtcWTPzjSP
+         Hmdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684194413; x=1686786413;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=hKsIhDAHTI5ZGBx0uDNeQEoycM9HPHgfOdTtTFPu9+s=;
-        b=iwBm9TdOgXhyEXyQRVeNXAz3Yqo6aP8DrSdrnmvrQEZ5147Ufj8Fy2o5OFHVPmFe89
-         zmZct1TG/R3W/qjNSvY07pHE1IZtew36Y+pTRX1inVKmgut8y1nN2css8HTTE7NUHIHy
-         fTPKHMlknjA9K8o4ntvr9xo730MfXq7gqWngSh/s0CPp+Zwf0m9OmGTXj5bwdsbdR/Ww
-         y0rIktm6N53mOQMkvUn5Ges+rRbWa/jNXn2cSz5lnWDSjGj7hxG11bakcIuqVwc0E/4t
-         XkHLK4wkJSy4D3KsqEaIL1/kdJ+5wzS4nB4YytX/98IrUKicGXC/xoT8UKX/L4/cU4Bl
-         Jvig==
-X-Gm-Message-State: AC+VfDy2kTS0+4J5ms8ZlXATPxCY+c7JDXT3Wn1yXDlYqJe8x88rILYX
-        Odp2YIYkkP8SFpGll/sD1HQGKvGorO8=
-X-Google-Smtp-Source: ACHHUZ5nKlYqg8fqkFRiAsU+szzbdXJrcWjwocU8iSc7OEG0O5T8XFggiMvHTBNDo9CrEEoZ2dw4RNcURAY=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a25:9290:0:b0:ba8:1e5f:8514 with SMTP id
- y16-20020a259290000000b00ba81e5f8514mr184923ybl.5.1684194413294; Mon, 15 May
- 2023 16:46:53 -0700 (PDT)
-Date:   Mon, 15 May 2023 16:46:51 -0700
-In-Reply-To: <ZFWli2/H5M8MZRiY@google.com>
-Mime-Version: 1.0
-References: <ZEM5Zq8oo+xnApW9@google.com> <diqz8re2ftzb.fsf@ackerleytng-ctop.c.googlers.com>
- <ZFWli2/H5M8MZRiY@google.com>
-Message-ID: <ZGLEa2j4wi0t4xLI@google.com>
-Subject: Re: Rename restrictedmem => guardedmem? (was: Re: [PATCH v10 0/9]
- KVM: mm: fd-based approach for supporting KVM)
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ackerley Tng <ackerleytng@google.com>
-Cc:     david@redhat.com, chao.p.peng@linux.intel.com, pbonzini@redhat.com,
-        vkuznets@redhat.com, jmattson@google.com, joro@8bytes.org,
-        mail@maciej.szmigiero.name, vbabka@suse.cz, vannapurve@google.com,
-        yu.c.zhang@linux.intel.com, kirill.shutemov@linux.intel.com,
-        dhildenb@redhat.com, qperret@google.com, tabba@google.com,
-        michael.roth@amd.com, wei.w.wang@intel.com, rppt@kernel.org,
-        liam.merwick@oracle.com, isaku.yamahata@gmail.com,
-        jarkko@kernel.org, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hughd@google.com, brauner@kernel.org
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+        d=1e100.net; s=20221208; t=1684195045; x=1686787045;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g+O4/ssLgmztN5BM7M82vr66O6jkTSH4ZHyxDa1+Ug8=;
+        b=XSYfWntXQV+1jdMmSE+3jjtyaDq6amCKgL+XrK3+zlDNsfvGOcaIlxuO3DVPAL4q6r
+         z7EpOoPfOx88eeh3XASj0qoAHv8PNgoCKlSfVSFVx+5pBnPivkeByrBqJ5WZvmykAJw4
+         UK3zoD5BehT8xBg2cM8GOy/L98VzHqOHdrpTOR9xqbkGEeHInnCuoClcc1FHg08guUQu
+         rxEAnA2obJqchs8RvBNTOGbeASZg5+Ah1WZD+h1VJGnC8qQDC2bNsAM4wMqsrx19m84L
+         sG3boFPV29YmMEwV9rvmrYVCmolVWRjJ3Jsh209P+EjYnY84ZKBzlzVDSzlB8et+s37i
+         ytpA==
+X-Gm-Message-State: AC+VfDziDfSujubbSKDzWxam1dVVWMkKFiMXIUKqhYEQPn75MfmNzwPE
+        OseaRjjh6+eQ2Fj4oSKeodg=
+X-Google-Smtp-Source: ACHHUZ49in19sRs1FqtjrAtNiP3pmQ/Qi2JvTtYVIDz2gKPvpzvDQ8OkDxV0kKIvFptWtbQfPXE5zw==
+X-Received: by 2002:a05:6e02:6c1:b0:335:87f9:50e4 with SMTP id p1-20020a056e0206c100b0033587f950e4mr20972368ils.29.1684195045365;
+        Mon, 15 May 2023 16:57:25 -0700 (PDT)
+Received: from aford-B741.lan ([2601:447:d001:897f:61e0:9fee:1bca:ea3c])
+        by smtp.gmail.com with ESMTPSA id f6-20020a056638112600b00411b5ea8576sm7427851jar.108.2023.05.15.16.57.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 16:57:24 -0700 (PDT)
+From:   Adam Ford <aford173@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     aford@beaconembedded.com, Adam Ford <aford173@gmail.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Inki Dae <inki.dae@samsung.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Frieder Schrempf <frieder.schrempf@kontron.de>,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH V6 0/6] drm: bridge: samsung-dsim: Support variable clocking
+Date:   Mon, 15 May 2023 18:57:07 -0500
+Message-Id: <20230515235713.232939-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023, Sean Christopherson wrote:
-> On Fri, May 05, 2023, Ackerley Tng wrote:
-> > One issue I=E2=80=99ve found so far is that the pointer to kvm (gmem->k=
-vm) is
-> > not cleaned up, and hence it is possible to crash the host kernel in th=
-e
-> > following way
-> >=20
-> > 1. Create a KVM VM
-> > 2. Create a guest mem fd on that VM
-> > 3. Create a memslot with the guest mem fd (hence binding the fd to the
-> >    VM)
-> > 4. Close/destroy the KVM VM
-> > 5. Call fallocate(PUNCH_HOLE) on the guest mem fd, which uses gmem->kvm
-> >    when it tries to do invalidation.
-> >=20
-> > I then tried to clean up the gmem->kvm pointer during unbinding when th=
-e
-> > KVM VM is destroyed.
-> >=20
-> > That works, but then I realized there=E2=80=99s a simpler way to use th=
-e pointer
-> > after freeing:
-> >=20
-> > 1. Create a KVM VM
-> > 2. Create a guest mem fd on that VM
-> > 3. Close/destroy the KVM VM
-> > 4. Call fallocate(PUNCH_HOLE) on the guest mem fd, which uses gmem->kvm
-> >    when it tries to do invalidation.
-> >=20
-> > Perhaps binding should mean setting the gmem->kvm pointer in addition t=
-o
-> > gmem->bindings. This makes binding and unbinding symmetric and avoids
-> > the use-after-frees described above.
->=20
-> Hrm, that would work, though it's a bit convoluted, e.g. would require de=
-tecting
-> when the last binding is being removed.  A similar (also ugly) solution w=
-ould be
-> to nullify gmem->kvm when KVM dies.
->=20
-> I don't love either approach idea because it means a file created in the =
-context
-> of a VM can outlive the VM itself, and then userspace ends up with a file=
- descriptor
-> that it can't do anything with except close().  I doubt that matters in p=
-ractice
-> though, e.g. when the VM dies, all memory can be freed so that the file e=
-nds up
-> being little more than a shell.  And if we go that route, there's no need=
- to grab
-> a reference to the file during bind, KVM can just grab a longterm referen=
-ce when
-> the file is initially created and then drop it when KVM dies (and nullifi=
-es gmem->kvm).
->=20
-> Blech, another wart is that I believe gmem would need to do __module_get(=
-) during
-> file creation to prevent kvm.ko from being unloaded after the last VM die=
-s.  Ah,
-> but that'd also be true if we went with a system-scoped KVM ioctl(), so I=
- suppose
-> it's not _that_ ugly.
->=20
-> Exchanging references (at binding or at creation) doesn't work, because t=
-hat
-> creates a circular dependency, i.e. gmem and KVM would pin each other.=20
->=20
-> A "proper" refcounting approach, where the file pins KVM and not vice ver=
-sa, gets
-> nasty because of how KVM's memslots work.  The least awful approach I can=
- think of
-> would be to delete the associated memslot(s) when the file is released, p=
-ossibly
-> via deferred work to avoid deadlock issues.  Not the prettiest thing ever=
- and in
-> some ways that'd yield an even worse ABI.
+This series fixes the blanking pack size and the PMS calculation.  It then
+adds support to allows the DSIM to dynamically DPHY clocks, and support
+non-burst mode while allowing the removal of the hard-coded clock values
+for the PLL for imx8m mini/nano/plus, and it allows the removal of the
+burst-clock device tree entry when burst-mode isn't supported by connected
+devices like an HDMI brige.  In that event, the HS clock is set to the
+value requested by the bridge chip.
 
-Circling back to this.  Pending testing, the "proper" refcounting approach =
-seems
-to be the way to go.  KVM's existing memslots actually work this way, e.g. =
-if
-userspace does munmap() on an active memslot, KVM zaps any PTEs but the mem=
-slot
-stays alive.  A similar approach can be taken here, the only wrinkle is tha=
-t the
-association between gmem and the memslot is stronger than between VMAs and =
-memslots,
-specifically KVM binds the file and not simply the file descriptor.  This i=
-s
-necessary because not binding to an exact file would let userspace install =
-a
-different file at the file descriptor.
+This has been tested on both an i.MX8M Nano and i.MX8M Plus, and should
+work on i.MX8M Mini as well. Marek Szyprowski has tested it on various
+Exynos boards.
 
-That's solvable without having to delete memslots though, e.g. by protectin=
-g the
-file pointer in the memslot with RCU and directly bumping the refcount in t=
-he two
-places where KVM needs to get at gmem (the file) via the memslot (unbind an=
-d
-faulting in a page).  E.g.
+Adam Ford (5):
+  drm: bridge: samsung-dsim: Fix PMS Calculator on imx8m[mnp]
+  drm: bridge: samsung-dsim: Fetch pll-clock-frequency automatically
+  drm: bridge: samsung-dsim: Select GENERIC_PHY_MIPI_DPHY
+  drm: bridge: samsung-dsim: Dynamically configure DPHY timing
+  drm: bridge: samsung-dsim: Support non-burst mode
 
-  static struct file *kvm_gmem_get_file(struct kvm_memory_slot *slot)
-  {
-	struct file *file;
+Lucas Stach (1):
+  drm: bridge: samsung-dsim: fix blanking packet size calculation
 
-	rcu_read_lock();
+ drivers/gpu/drm/bridge/Kconfig        |   1 +
+ drivers/gpu/drm/bridge/samsung-dsim.c | 143 +++++++++++++++++++++-----
+ include/drm/bridge/samsung-dsim.h     |   4 +
+ 3 files changed, 125 insertions(+), 23 deletions(-)
 
-	file =3D rcu_dereference(slot->gmem.file);
-	if (file && !get_file_rcu(file))
-		file =3D NULL;
-	rcu_read_unlock();
 
-	return file;
-  }
+V6:  Squash-in an additional error fix from Lucas Stach regarding the
+     DPHY calcuations.  Remove the dynamic_dphy variable and let
+     everyone use the new calculations.  Move the hs_clock caching
+     from patch 6 to patch 5 to go along with the DPHY calcuations
+     since they are now based on the recorded hs_clock rate.
+     
+V5:  Update error message to dev_info and change them to indicate
+     what is happening without sounding like an error when optional
+     device tree entries are missing.
 
-The gotcha is that ->release could race with memslot deletion, as kvm_gmem_=
-unbind()
-won't be able to differentiate between "file was deleted" and "file is curr=
-ently
-being deleted".  That's easy enough to deal with though, kvm_gmem_release()=
- can
-take slots_lock to prevent the memslot from going away when nullifying and
-invalidating ranges for the memslot.
+V4:  Undo some accidental whitespace changes, rename PS_TO_CYCLE
+     variables to ps and hz from PS and MHz. Remove if check
+     before the samsung_dsim_set_phy_ctrl call since it's
+     unnecessary.
+     Added additional tested-by and reviewed-by comments.
+     Squash patches 6 and 7 together since the supporting
+     non-burst (patch 6) mode doesn't really work until
+     patch 7 was applied.
 
-> Side topic, there's a second bug (and probably more lurking): kvm_swap_ac=
-tive_memslots()'s
-> call to synchronize_srcu_expedited() is done _before_ the call to kvm_gme=
-m_unbind(),
-> i.e. doesn't wait for readers in kvm_gmem_invalidate_begin() to go away. =
- The easy
-> solution for that one is to add another synchronize_srcu_expedited() afte=
-r unbinding.
+V3:  When checking if the bust-clock is present, only check for it
+     in the device tree, and don't check the presence of the
+     MIPI_DSI_MODE_VIDEO_BURST flag as it breaks an existing Exynos
+     board.
 
-There's a bug here, but not the one I pointed out.  Acquiring kvm->srcu doe=
-sn't
-provide any protection, the binding already has a pointer to the memslot, i=
-.e.
-isn't doing an SRCU-protected lookup in the memslots.  The actual protectio=
-n is
-provided by the filemap invalidate lock, which prevents unbinding a memslot=
- until
-all invalidations complete, i.e. acquiring kvm->srcu in the punch hole path=
- is
-completely unnecessary.
+     Add a new patch to the series to select GENERIC_PHY_MIPI_DPHY in
+     Kconfig otherwise the build breaks on the 32-bit Exynos.
+
+     Change vco_min variable name to min_freq
+
+     Added tested-by from Chen-Yu Tsai
+
+V2:  Instead of using my packet blanking calculation, this integrates
+     on from Lucas Stach which gets modified later in the series to
+     cache the value of the HS-clock instead of having to do the
+     calucations again.
+
+     Instead of completely eliminating the PLL clock frequency from
+     the device tree, this makes it optional to avoid breaking some
+     Samsung devices.  When the samsung,pll-clock-frequency is not
+     found, it reads the value of the clock named "sclk_mipi"
+     This also maintains backwards compatibility with older device
+     trees.
+
+     This also changes the DPHY calcuation from a Look-up table,
+     a reverse engineered algorithm which uses
+     phy_mipi_dphy_get_default_config to determine the standard
+     nominal values and calculates the cycles necessary to update
+     the DPHY timings accordingly.
+     
+-- 
+2.39.2
+
