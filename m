@@ -2,237 +2,307 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BC07702C6C
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:13:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CCAB702C2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:02:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241456AbjEOMNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 08:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41354 "EHLO
+        id S241735AbjEOMCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 08:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241379AbjEOMM4 (ORCPT
+        with ESMTP id S241731AbjEOMCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 08:12:56 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E12C41A6
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:12:54 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BB2EEFEC;
-        Mon, 15 May 2023 04:58:39 -0700 (PDT)
-Received: from e125579.fritz.box (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 7568B3F7BD;
-        Mon, 15 May 2023 04:57:53 -0700 (PDT)
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-To:     Ingo Molnar <mingo@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Qais Yousef <qyousef@layalina.io>,
-        Kajetan Puchalski <kajetan.puchalski@arm.com>,
-        Morten Rasmussen <morten.rasmussen@arm.com>,
-        Vincent Donnefort <vdonnefort@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] sched/fair, cpufreq: Introduce 'runnable boosting'
-Date:   Mon, 15 May 2023 13:57:35 +0200
-Message-Id: <20230515115735.296329-3-dietmar.eggemann@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230515115735.296329-1-dietmar.eggemann@arm.com>
-References: <20230515115735.296329-1-dietmar.eggemann@arm.com>
+        Mon, 15 May 2023 08:02:33 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D78D2120
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:00:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684152042; x=1715688042;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=IcWTA5yQzxTi8fAfRyfAwYBO6PgI8sfmiZgt4T9AoHc=;
+  b=DdF/yeUJB/2WDb0RFz6O3TjWFXL2J8oRRN3Kd6J4BT0Sd/21U/S553GP
+   IbSr/Ob/AEKer5Zhjhbi8/AHfSOPbdw7Aa+Apb/4me5W2KVHQPyJSz0WS
+   lFxgq75bamvC0XCHCZeaeU6PZSTMg2JF+VUH5Pg+3wTANWZtHuoBbDdES
+   EB0aFy/FqBflDITwRgS3KThdGRlfIO8A28hAk1Ya9p00trRm2tdSk97Wh
+   dCQmQKjX3S69Qvpe+rO9IasBZt1v2CMqgMTCCX74lk7Z3MQntzJ9adteF
+   40fbSVXElDPVhG0ZnMRMDxD0oFb/RHihXhv2LMpDiWjSqhHZlHPyu0KyN
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="350019512"
+X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
+   d="scan'208";a="350019512"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 05:00:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="790622965"
+X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
+   d="scan'208";a="790622965"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 15 May 2023 05:00:13 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pyWs8-0006Ks-39;
+        Mon, 15 May 2023 12:00:12 +0000
+Date:   Mon, 15 May 2023 19:59:22 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Vineet Gupta <vgupta@kernel.org>
+Subject: drivers/net/ethernet/marvell/mv643xx_eth.c:1994:28: sparse: sparse:
+ incorrect type in argument 1 (different address spaces)
+Message-ID: <202305151918.9gC99599-lkp@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The responsiveness of the Per Entity Load Tracking (PELT) util_avg in
-mobile devices is still considered too low for utilization changes
-during task ramp-up.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
+commit: c44f15c1c09481d50fd33478ebb5b8284f8f5edb arc: iounmap() arg is volatile
+date:   7 months ago
+config: arc-randconfig-s043-20230515 (https://download.01.org/0day-ci/archive/20230515/202305151918.9gC99599-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 12.1.0
+reproduce:
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # apt-get install sparse
+        # sparse version: v0.6.4-39-gce1a6720-dirty
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=c44f15c1c09481d50fd33478ebb5b8284f8f5edb
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout c44f15c1c09481d50fd33478ebb5b8284f8f5edb
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arc SHELL=/bin/bash drivers/net/ethernet/marvell/
 
-In Android this manifests in the fact that the first frames of a UI
-activity are very prone to be jankframes (a frame which doesn't meet
-the required frame rendering time, e.g. 16ms@60Hz) since the CPU
-frequency is normally low at this point and has to ramp up quickly.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305151918.9gC99599-lkp@intel.com/
 
-The beginning of an UI activity is also characterized by the occurrence
-of CPU contention, especially on little CPUs. Current little CPUs can
-have an original CPU capacity of only ~ 150 which means that the actual
-CPU capacity at lower frequency can even be much smaller.
+sparse warnings: (new ones prefixed by >>)
+   drivers/net/ethernet/marvell/mv643xx_eth.c:1955:35: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct rx_desc *rx_desc_area @@     got void [noderef] __iomem * @@
+   drivers/net/ethernet/marvell/mv643xx_eth.c:1955:35: sparse:     expected struct rx_desc *rx_desc_area
+   drivers/net/ethernet/marvell/mv643xx_eth.c:1955:35: sparse:     got void [noderef] __iomem *
+>> drivers/net/ethernet/marvell/mv643xx_eth.c:1994:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got struct rx_desc *rx_desc_area @@
+   drivers/net/ethernet/marvell/mv643xx_eth.c:1994:28: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/net/ethernet/marvell/mv643xx_eth.c:1994:28: sparse:     got struct rx_desc *rx_desc_area
+   drivers/net/ethernet/marvell/mv643xx_eth.c:2025:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got struct rx_desc *rx_desc_area @@
+   drivers/net/ethernet/marvell/mv643xx_eth.c:2025:28: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/net/ethernet/marvell/mv643xx_eth.c:2025:28: sparse:     got struct rx_desc *rx_desc_area
+   drivers/net/ethernet/marvell/mv643xx_eth.c:2059:35: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected struct tx_desc *tx_desc_area @@     got void [noderef] __iomem * @@
+   drivers/net/ethernet/marvell/mv643xx_eth.c:2059:35: sparse:     expected struct tx_desc *tx_desc_area
+   drivers/net/ethernet/marvell/mv643xx_eth.c:2059:35: sparse:     got void [noderef] __iomem *
+>> drivers/net/ethernet/marvell/mv643xx_eth.c:2114:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got struct tx_desc *tx_desc_area @@
+   drivers/net/ethernet/marvell/mv643xx_eth.c:2114:28: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/net/ethernet/marvell/mv643xx_eth.c:2114:28: sparse:     got struct tx_desc *tx_desc_area
+   drivers/net/ethernet/marvell/mv643xx_eth.c:2132:28: sparse: sparse: incorrect type in argument 1 (different address spaces) @@     expected void const volatile [noderef] __iomem *addr @@     got struct tx_desc *tx_desc_area @@
+   drivers/net/ethernet/marvell/mv643xx_eth.c:2132:28: sparse:     expected void const volatile [noderef] __iomem *addr
+   drivers/net/ethernet/marvell/mv643xx_eth.c:2132:28: sparse:     got struct tx_desc *tx_desc_area
 
-Schedutil maps CPU util_avg into CPU frequency request via:
+vim +1994 drivers/net/ethernet/marvell/mv643xx_eth.c
 
-  util = effective_cpu_util(..., cpu_util_cfs(cpu), ...) ->
-  util = map_util_perf(util) -> freq = map_util_freq(util, ...)
+d0412d967032b9 drivers/net/mv643xx_eth.c                  James Chapman     2006-01-27  1934  
+c9df406f313826 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1935  
+c9df406f313826 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1936  /* rx/tx queue initialisation ***********************************************/
+64da80a29c7455 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-02  1937  static int rxq_init(struct mv643xx_eth_private *mp, int index)
+^1da177e4c3f41 drivers/net/mv643xx_eth.c                  Linus Torvalds    2005-04-16  1938  {
+64da80a29c7455 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-02  1939  	struct rx_queue *rxq = mp->rxq + index;
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1940  	struct rx_desc *rx_desc;
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1941  	int size;
+c9df406f313826 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1942  	int i;
+^1da177e4c3f41 drivers/net/mv643xx_eth.c                  Linus Torvalds    2005-04-16  1943  
+64da80a29c7455 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-02  1944  	rxq->index = index;
+64da80a29c7455 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-02  1945  
+e7d2f4dbd9224b drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2009-02-12  1946  	rxq->rx_ring_size = mp->rx_ring_size;
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1947  
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1948  	rxq->rx_desc_count = 0;
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1949  	rxq->rx_curr_desc = 0;
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1950  	rxq->rx_used_desc = 0;
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1951  
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1952  	size = rxq->rx_ring_size * sizeof(struct rx_desc);
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1953  
+f7981c1c67b53a drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-08-26  1954  	if (index == 0 && size <= mp->rx_desc_sram_size) {
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1955  		rxq->rx_desc_area = ioremap(mp->rx_desc_sram_addr,
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1956  						mp->rx_desc_sram_size);
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1957  		rxq->rx_desc_dma = mp->rx_desc_sram_addr;
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1958  	} else {
+eb0519b5a1cf07 drivers/net/mv643xx_eth.c                  Gabriel Paubert   2009-05-17  1959  		rxq->rx_desc_area = dma_alloc_coherent(mp->dev->dev.parent,
+eb0519b5a1cf07 drivers/net/mv643xx_eth.c                  Gabriel Paubert   2009-05-17  1960  						       size, &rxq->rx_desc_dma,
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1961  						       GFP_KERNEL);
+84dd619e4dc3b0 drivers/net/mv643xx_eth.c                  Dale Farnsworth   2007-03-03  1962  	}
+84dd619e4dc3b0 drivers/net/mv643xx_eth.c                  Dale Farnsworth   2007-03-03  1963  
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1964  	if (rxq->rx_desc_area == NULL) {
+7542db8b1cb88a drivers/net/mv643xx_eth.c                  Joe Perches       2011-03-02  1965  		netdev_err(mp->dev,
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1966  			   "can't allocate rx ring (%d bytes)\n", size);
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1967  		goto out;
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1968  	}
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1969  	memset(rxq->rx_desc_area, 0, size);
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1970  
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1971  	rxq->rx_desc_area_size = size;
+9fa8e980bb0a56 drivers/net/ethernet/marvell/mv643xx_eth.c Lubomir Rintel    2013-06-18  1972  	rxq->rx_skb = kcalloc(rxq->rx_ring_size, sizeof(*rxq->rx_skb),
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1973  				    GFP_KERNEL);
+b2adaca92c63b9 drivers/net/ethernet/marvell/mv643xx_eth.c Joe Perches       2013-02-03  1974  	if (rxq->rx_skb == NULL)
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1975  		goto out_free;
+c9df406f313826 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1976  
+6469933605a3ec drivers/net/ethernet/marvell/mv643xx_eth.c Joe Perches       2012-06-04  1977  	rx_desc = rxq->rx_desc_area;
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1978  	for (i = 0; i < rxq->rx_ring_size; i++) {
+9da7874575468a drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-08-23  1979  		int nexti;
+9da7874575468a drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-08-23  1980  
+9da7874575468a drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-08-23  1981  		nexti = i + 1;
+9da7874575468a drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-08-23  1982  		if (nexti == rxq->rx_ring_size)
+9da7874575468a drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-08-23  1983  			nexti = 0;
+9da7874575468a drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-08-23  1984  
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1985  		rx_desc[i].next_desc_ptr = rxq->rx_desc_dma +
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1986  					nexti * sizeof(struct rx_desc);
+fa3959f457109c drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-04-24  1987  	}
+fa3959f457109c drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-04-24  1988  
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1989  	return 0;
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1990  
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1991  
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1992  out_free:
+f7981c1c67b53a drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-08-26  1993  	if (index == 0 && size <= mp->rx_desc_sram_size)
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01 @1994  		iounmap(rxq->rx_desc_area);
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1995  	else
+eb0519b5a1cf07 drivers/net/mv643xx_eth.c                  Gabriel Paubert   2009-05-17  1996  		dma_free_coherent(mp->dev->dev.parent, size,
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1997  				  rxq->rx_desc_area,
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1998  				  rxq->rx_desc_dma);
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  1999  
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2000  out:
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2001  	return -ENOMEM;
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2002  }
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2003  
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2004  static void rxq_deinit(struct rx_queue *rxq)
+c9df406f313826 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2005  {
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2006  	struct mv643xx_eth_private *mp = rxq_to_mp(rxq);
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2007  	int i;
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2008  
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2009  	rxq_disable(rxq);
+^1da177e4c3f41 drivers/net/mv643xx_eth.c                  Linus Torvalds    2005-04-16  2010  
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2011  	for (i = 0; i < rxq->rx_ring_size; i++) {
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2012  		if (rxq->rx_skb[i]) {
+43cee2d2465cab drivers/net/ethernet/marvell/mv643xx_eth.c Florian Fainelli  2017-08-24  2013  			dev_consume_skb_any(rxq->rx_skb[i]);
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2014  			rxq->rx_desc_count--;
+c9df406f313826 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2015  		}
+c9df406f313826 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2016  	}
+^1da177e4c3f41 drivers/net/mv643xx_eth.c                  Linus Torvalds    2005-04-16  2017  
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2018  	if (rxq->rx_desc_count) {
+7542db8b1cb88a drivers/net/mv643xx_eth.c                  Joe Perches       2011-03-02  2019  		netdev_err(mp->dev, "error freeing rx ring -- %d skbs stuck\n",
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2020  			   rxq->rx_desc_count);
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2021  	}
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2022  
+f7981c1c67b53a drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-08-26  2023  	if (rxq->index == 0 &&
+64da80a29c7455 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-02  2024  	    rxq->rx_desc_area_size <= mp->rx_desc_sram_size)
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2025  		iounmap(rxq->rx_desc_area);
+c9df406f313826 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2026  	else
+eb0519b5a1cf07 drivers/net/mv643xx_eth.c                  Gabriel Paubert   2009-05-17  2027  		dma_free_coherent(mp->dev->dev.parent, rxq->rx_desc_area_size,
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2028  				  rxq->rx_desc_area, rxq->rx_desc_dma);
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2029  
+8a578111e34335 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2030  	kfree(rxq->rx_skb);
+c9df406f313826 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2031  }
+^1da177e4c3f41 drivers/net/mv643xx_eth.c                  Linus Torvalds    2005-04-16  2032  
+3d6b35bc5090cf drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-02  2033  static int txq_init(struct mv643xx_eth_private *mp, int index)
+c9df406f313826 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2034  {
+3d6b35bc5090cf drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-02  2035  	struct tx_queue *txq = mp->txq + index;
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2036  	struct tx_desc *tx_desc;
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2037  	int size;
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2038  	int ret;
+c9df406f313826 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2039  	int i;
+^1da177e4c3f41 drivers/net/mv643xx_eth.c                  Linus Torvalds    2005-04-16  2040  
+3d6b35bc5090cf drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-02  2041  	txq->index = index;
+3d6b35bc5090cf drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-02  2042  
+e7d2f4dbd9224b drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2009-02-12  2043  	txq->tx_ring_size = mp->tx_ring_size;
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2044  
+ee9e49561bdd6d drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2014-05-30  2045  	/* A queue must always have room for at least one skb.
+ee9e49561bdd6d drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2014-05-30  2046  	 * Therefore, stop the queue when the free entries reaches
+ee9e49561bdd6d drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2014-05-30  2047  	 * the maximum number of descriptors per skb.
+ee9e49561bdd6d drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2014-05-30  2048  	 */
+ee9e49561bdd6d drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2014-05-30  2049  	txq->tx_stop_threshold = txq->tx_ring_size - MV643XX_MAX_SKB_DESCS;
+ee9e49561bdd6d drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2014-05-30  2050  	txq->tx_wake_threshold = txq->tx_stop_threshold / 2;
+ee9e49561bdd6d drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2014-05-30  2051  
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2052  	txq->tx_desc_count = 0;
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2053  	txq->tx_curr_desc = 0;
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2054  	txq->tx_used_desc = 0;
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2055  
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2056  	size = txq->tx_ring_size * sizeof(struct tx_desc);
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2057  
+f7981c1c67b53a drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-08-26  2058  	if (index == 0 && size <= mp->tx_desc_sram_size) {
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2059  		txq->tx_desc_area = ioremap(mp->tx_desc_sram_addr,
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2060  						mp->tx_desc_sram_size);
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2061  		txq->tx_desc_dma = mp->tx_desc_sram_addr;
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2062  	} else {
+eb0519b5a1cf07 drivers/net/mv643xx_eth.c                  Gabriel Paubert   2009-05-17  2063  		txq->tx_desc_area = dma_alloc_coherent(mp->dev->dev.parent,
+eb0519b5a1cf07 drivers/net/mv643xx_eth.c                  Gabriel Paubert   2009-05-17  2064  						       size, &txq->tx_desc_dma,
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2065  						       GFP_KERNEL);
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2066  	}
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2067  
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2068  	if (txq->tx_desc_area == NULL) {
+7542db8b1cb88a drivers/net/mv643xx_eth.c                  Joe Perches       2011-03-02  2069  		netdev_err(mp->dev,
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2070  			   "can't allocate tx ring (%d bytes)\n", size);
+99ab08e091df65 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-08-28  2071  		return -ENOMEM;
+c9df406f313826 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2072  	}
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2073  	memset(txq->tx_desc_area, 0, size);
+^1da177e4c3f41 drivers/net/mv643xx_eth.c                  Linus Torvalds    2005-04-16  2074  
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2075  	txq->tx_desc_area_size = size;
+63c9e549148fb9 drivers/net/mv643xx_eth.c                  Dale Farnsworth   2005-09-02  2076  
+6469933605a3ec drivers/net/ethernet/marvell/mv643xx_eth.c Joe Perches       2012-06-04  2077  	tx_desc = txq->tx_desc_area;
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2078  	for (i = 0; i < txq->tx_ring_size; i++) {
+6b368f6859c803 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-07-11  2079  		struct tx_desc *txd = tx_desc + i;
+9da7874575468a drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-08-23  2080  		int nexti;
+9da7874575468a drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-08-23  2081  
+9da7874575468a drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-08-23  2082  		nexti = i + 1;
+9da7874575468a drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-08-23  2083  		if (nexti == txq->tx_ring_size)
+9da7874575468a drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-08-23  2084  			nexti = 0;
+6b368f6859c803 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-07-11  2085  
+6b368f6859c803 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-07-11  2086  		txd->cmd_sts = 0;
+6b368f6859c803 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-07-11  2087  		txd->next_desc_ptr = txq->tx_desc_dma +
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2088  					nexti * sizeof(struct tx_desc);
+c9df406f313826 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2089  	}
+^1da177e4c3f41 drivers/net/mv643xx_eth.c                  Linus Torvalds    2005-04-16  2090  
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2091  	txq->tx_desc_mapping = kcalloc(txq->tx_ring_size, sizeof(char),
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2092  				       GFP_KERNEL);
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2093  	if (!txq->tx_desc_mapping) {
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2094  		ret = -ENOMEM;
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2095  		goto err_free_desc_area;
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2096  	}
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2097  
+3ae8f4e0b98b64 drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2014-05-19  2098  	/* Allocate DMA buffers for TSO MAC/IP/TCP headers */
+3ae8f4e0b98b64 drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2014-05-19  2099  	txq->tso_hdrs = dma_alloc_coherent(mp->dev->dev.parent,
+3ae8f4e0b98b64 drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2014-05-19  2100  					   txq->tx_ring_size * TSO_HEADER_SIZE,
+3ae8f4e0b98b64 drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2014-05-19  2101  					   &txq->tso_hdrs_dma, GFP_KERNEL);
+3ae8f4e0b98b64 drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2014-05-19  2102  	if (txq->tso_hdrs == NULL) {
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2103  		ret = -ENOMEM;
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2104  		goto err_free_desc_mapping;
+3ae8f4e0b98b64 drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2014-05-19  2105  	}
+99ab08e091df65 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-08-28  2106  	skb_queue_head_init(&txq->tx_skb);
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2107  
+99ab08e091df65 drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-08-28  2108  	return 0;
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2109  
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2110  err_free_desc_mapping:
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2111  	kfree(txq->tx_desc_mapping);
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2112  err_free_desc_area:
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2113  	if (index == 0 && size <= mp->tx_desc_sram_size)
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22 @2114  		iounmap(txq->tx_desc_area);
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2115  	else
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2116  		dma_free_coherent(mp->dev->dev.parent, txq->tx_desc_area_size,
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2117  				  txq->tx_desc_area, txq->tx_desc_dma);
+9e911414af8caf drivers/net/ethernet/marvell/mv643xx_eth.c Ezequiel Garcia   2015-01-22  2118  	return ret;
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2119  }
+13d6428538feae drivers/net/mv643xx_eth.c                  Lennert Buytenhek 2008-06-01  2120  
 
-CPU contention for CFS tasks can be detected by 'CPU runnable > CPU
-utililization' in cpu_util_cfs_boost() -> cpu_util(..., boost = 1).
-Schedutil uses 'runnable boosting' by calling cpu_util_cfs_boost().
+:::::: The code at line 1994 was first introduced by commit
+:::::: 8a578111e343350ff8fa75fc3630d4bba5475cae mv643xx_eth: split out rx queue state
 
-To be in sync with schedutil's CPU frequency selection, Energy Aware
-Scheduling (EAS) also calls cpu_util(..., boost = 1) during max util
-detection.
+:::::: TO: Lennert Buytenhek <buytenh@wantstofly.org>
+:::::: CC: Lennert Buytenhek <buytenh@wantstofly.org>
 
-Moreover, 'runnable boosting' is also used in load-balance for busiest
-CPU selection when the migration type is 'migrate_util', i.e. only at
-sched domains which don't have the SD_SHARE_PKG_RESOURCES flag set.
-
-Suggested-by: Vincent Guittot <vincent.guittot@linaro.org>
-Signed-off-by: Dietmar Eggemann <dietmar.eggemann@arm.com>
----
- kernel/sched/cpufreq_schedutil.c |  3 ++-
- kernel/sched/fair.c              | 38 +++++++++++++++++++++++++-------
- kernel/sched/sched.h             |  1 +
- 3 files changed, 33 insertions(+), 9 deletions(-)
-
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index e3211455b203..4492608b7d7f 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -155,10 +155,11 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
- 
- static void sugov_get_util(struct sugov_cpu *sg_cpu)
- {
-+	unsigned long util = cpu_util_cfs_boost(sg_cpu->cpu);
- 	struct rq *rq = cpu_rq(sg_cpu->cpu);
- 
- 	sg_cpu->bw_dl = cpu_bw_dl(rq);
--	sg_cpu->util = effective_cpu_util(sg_cpu->cpu, cpu_util_cfs(sg_cpu->cpu),
-+	sg_cpu->util = effective_cpu_util(sg_cpu->cpu, util,
- 					  FREQUENCY_UTIL, NULL);
- }
- 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 9874e28d5e38..3b5b6186f2b9 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -7150,6 +7150,7 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
-  * @cpu: the CPU to get the utilization for
-  * @p: task for which the CPU utilization should be predicted or NULL
-  * @dst_cpu: CPU @p migrates to, -1 if @p moves from @cpu or @p == NULL
-+ * @boost: 1 to enable boosting, otherwise 0
-  *
-  * The unit of the return value must be the same as the one of CPU capacity
-  * so that CPU utilization can be compared with CPU capacity.
-@@ -7167,6 +7168,12 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
-  * be when a long-sleeping task wakes up. The contribution to CPU utilization
-  * of such a task would be significantly decayed at this point of time.
-  *
-+ * Boosted CPU utilization is defined as max(CPU runnable, CPU utilization).
-+ * CPU contention for CFS tasks can be detected by CPU runnable > CPU
-+ * utilization. Boosting is implemented in cpu_util() so that internal
-+ * users (e.g. EAS) can use it next to external users (e.g. schedutil),
-+ * latter via cpu_util_cfs_boost().
-+ *
-  * CPU utilization can be higher than the current CPU capacity
-  * (f_curr/f_max * max CPU capacity) or even the max CPU capacity because
-  * of rounding errors as well as task migrations or wakeups of new tasks.
-@@ -7177,12 +7184,19 @@ static int select_idle_sibling(struct task_struct *p, int prev, int target)
-  * though since this is useful for predicting the CPU capacity required
-  * after task migrations (scheduler-driven DVFS).
-  *
-- * Return: (Estimated) utilization for the specified CPU.
-+ * Return: (Boosted) (estimated) utilization for the specified CPU.
-  */
--static unsigned long cpu_util(int cpu, struct task_struct *p, int dst_cpu)
-+static unsigned long
-+cpu_util(int cpu, struct task_struct *p, int dst_cpu, int boost)
- {
- 	struct cfs_rq *cfs_rq = &cpu_rq(cpu)->cfs;
- 	unsigned long util = READ_ONCE(cfs_rq->avg.util_avg);
-+	unsigned long runnable;
-+
-+	if (boost) {
-+		runnable = READ_ONCE(cfs_rq->avg.runnable_avg);
-+		util = max(util, runnable);
-+	}
- 
- 	/*
- 	 * If @dst_cpu is -1 or @p migrates from @cpu to @dst_cpu remove its
-@@ -7200,6 +7214,9 @@ static unsigned long cpu_util(int cpu, struct task_struct *p, int dst_cpu)
- 
- 		util_est = READ_ONCE(cfs_rq->avg.util_est.enqueued);
- 
-+		if (boost)
-+			util_est = max(util_est, runnable);
-+
- 		/*
- 		 * During wake-up @p isn't enqueued yet and doesn't contribute
- 		 * to any cpu_rq(cpu)->cfs.avg.util_est.enqueued.
-@@ -7239,7 +7256,12 @@ static unsigned long cpu_util(int cpu, struct task_struct *p, int dst_cpu)
- 
- unsigned long cpu_util_cfs(int cpu)
- {
--	return cpu_util(cpu, NULL, -1);
-+	return cpu_util(cpu, NULL, -1, 0);
-+}
-+
-+unsigned long cpu_util_cfs_boost(int cpu)
-+{
-+	return cpu_util(cpu, NULL, -1, 1);
- }
- 
- /*
-@@ -7261,7 +7283,7 @@ static unsigned long cpu_util_without(int cpu, struct task_struct *p)
- 	if (cpu != task_cpu(p) || !READ_ONCE(p->se.avg.last_update_time))
- 		p = NULL;
- 
--	return cpu_util(cpu, p, -1);
-+	return cpu_util(cpu, p, -1, 0);
- }
- 
- /*
-@@ -7329,7 +7351,7 @@ static inline void eenv_pd_busy_time(struct energy_env *eenv,
- 	int cpu;
- 
- 	for_each_cpu(cpu, pd_cpus) {
--		unsigned long util = cpu_util(cpu, p, -1);
-+		unsigned long util = cpu_util(cpu, p, -1, 0);
- 
- 		busy_time += effective_cpu_util(cpu, util, ENERGY_UTIL, NULL);
- 	}
-@@ -7353,7 +7375,7 @@ eenv_pd_max_util(struct energy_env *eenv, struct cpumask *pd_cpus,
- 
- 	for_each_cpu(cpu, pd_cpus) {
- 		struct task_struct *tsk = (cpu == dst_cpu) ? p : NULL;
--		unsigned long util = cpu_util(cpu, p, dst_cpu);
-+		unsigned long util = cpu_util(cpu, p, dst_cpu, 1);
- 		unsigned long cpu_util;
- 
- 		/*
-@@ -7499,7 +7521,7 @@ static int find_energy_efficient_cpu(struct task_struct *p, int prev_cpu)
- 			if (!cpumask_test_cpu(cpu, p->cpus_ptr))
- 				continue;
- 
--			util = cpu_util(cpu, p, cpu);
-+			util = cpu_util(cpu, p, cpu, 0);
- 			cpu_cap = capacity_of(cpu);
- 
- 			/*
-@@ -10559,7 +10581,7 @@ static struct rq *find_busiest_queue(struct lb_env *env,
- 			break;
- 
- 		case migrate_util:
--			util = cpu_util_cfs(i);
-+			util = cpu_util_cfs_boost(i);
- 
- 			/*
- 			 * Don't try to pull utilization from a CPU with one
-diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-index f78c0f85cc76..5861e236adc6 100644
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -2948,6 +2948,7 @@ static inline unsigned long cpu_util_dl(struct rq *rq)
- 
- 
- extern unsigned long cpu_util_cfs(int cpu);
-+extern unsigned long cpu_util_cfs_boost(int cpu);
- 
- static inline unsigned long cpu_util_rt(struct rq *rq)
- {
 -- 
-2.25.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
