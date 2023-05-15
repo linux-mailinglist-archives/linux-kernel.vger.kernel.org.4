@@ -2,106 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9279703136
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:12:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E604570313E
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:13:52 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239182AbjEOPMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 11:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58010 "EHLO
+        id S242027AbjEOPNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 11:13:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239217AbjEOPMi (ORCPT
+        with ESMTP id S229850AbjEOPNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 11:12:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27F9A8E;
-        Mon, 15 May 2023 08:12:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8AE57625F3;
-        Mon, 15 May 2023 15:12:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AA3FC433D2;
-        Mon, 15 May 2023 15:12:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684163557;
-        bh=W0/Ro3g+UnuQaJT98MLDjMPTmmzKa0SW17mCg2HptuM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qEwtpFA4B/izRqgX0Ybd2/WCOsnAVQoJrCFH/KTc479UYdVLoJ0CCpe6eI64JOn8t
-         1IUMF1n1TH7q3GPEeqE3DxNpZlBFGo4xjAV2N8V/AQpZjs78o85IccISP779XvEB0j
-         uQ2HJPQ8T3w6XH5FsTz+/wcYHQT39jwQU37RQI9xK7+grnrsT8A+1wDt+loetoEtQE
-         kX/E/qdTJRobgxzTV6j0aHTA1+rE8G2HJTsEZymPuCUZCQTepnSwR+L4qLoaMNsfQV
-         fa6j7N1q4xFWI0djfVNyNhnX9akdSQcaKgz0lrGYRdbLLg9ZP7ZeD6UeOIf9O1mnRt
-         nMKXs1lMWu9tQ==
-Date:   Mon, 15 May 2023 17:12:24 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Xiu Jianfeng <xiujianfeng@huawei.com>
-Cc:     gregkh@linuxfoundation.org, rafael@kernel.org,
-        viro@zeniv.linux.org.uk, dhowells@redhat.com, code@tyhicks.com,
-        hirofumi@mail.parknet.co.jp, linkinjeon@kernel.org,
-        sfrench@samba.org, senozhatsky@chromium.org, tom@talpey.com,
-        chuck.lever@oracle.com, jlayton@kernel.org, miklos@szeredi.hu,
-        paul@paul-moore.com, jmorris@namei.org, serge@hallyn.com,
-        stephen.smalley.work@gmail.com, eparis@parisplace.org,
-        casey@schaufler-ca.com, dchinner@redhat.com,
-        john.johansen@canonical.com, mcgrof@kernel.org,
-        mortonm@chromium.org, fred@cloudflare.com, mic@digikod.net,
-        mpe@ellerman.id.au, nathanl@linux.ibm.com, gnoack3000@gmail.com,
-        roberto.sassu@huawei.com, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-cachefs@redhat.com,
-        ecryptfs@vger.kernel.org, linux-cifs@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
-        wangweiyang2@huawei.com
-Subject: Re: [PATCH -next 0/2] lsm: Change inode_setattr() to take struct
-Message-ID: <20230515-nutzen-umgekehrt-eee629a0101e@brauner>
-References: <20230505081200.254449-1-xiujianfeng@huawei.com>
+        Mon, 15 May 2023 11:13:48 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA14A8E;
+        Mon, 15 May 2023 08:13:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
+        :Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=j4FIp2hqSzB7YKizCVfFKv2y9wufpVhksAFO7Qv4a7o=; b=ykCbnADqgm70QNQnTnrkklvLSH
+        /jai0i1bbiF+XMegvmmf87cayl0mig9YXVOLSgM1nglFNmO3E13UuYYD4GAFPIdw82IRwEIWmahTM
+        HmG7Q8zcMXWPDsygFWXDtPOf1VoopK6soltN+Tw16HUg3XCMewm0+2QXu7tI8yCeMd+0hC7F393N0
+        r6GnZU/bn8e0Hoh0Y/lakkYC9pKE4WsH3oqAz6D47P1NKRGV2IcpgYi3VyiBMfDdCvf/lkCDOd2+v
+        Spz4KfN2Mwr4jxl8Y0BwHICiXixU8+0lRxMzatFLxkmLfr1LOqU7One2BJNxAlYEcgWddficn5G+X
+        EL3eokcw==;
+Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1pyZtQ-002WtH-2V;
+        Mon, 15 May 2023 15:13:44 +0000
+Date:   Mon, 15 May 2023 08:13:44 -0700
+From:   Christoph Hellwig <hch@infradead.org>
+To:     Kelvin.Cao@microchip.com
+Cc:     hch@infradead.org, dmaengine@vger.kernel.org, vkoul@kernel.org,
+        George.Ge@microchip.com, linux-kernel@vger.kernel.org,
+        logang@deltatee.com, tglx@linutronix.de,
+        christophe.jaillet@wanadoo.fr
+Subject: Re: [PATCH v4 1/1] dmaengine: switchtec-dma: Introduce Switchtec DMA
+ engine PCI driver
+Message-ID: <ZGJMKFrLfU2zc/2P@infradead.org>
+References: <20230423213717.318655-1-kelvin.cao@microchip.com>
+ <20230423213717.318655-2-kelvin.cao@microchip.com>
+ <ZFH/xhyjm9VTZolE@infradead.org>
+ <50e111a3cfecd0f232508d1b03e02d1e25d9d4a9.camel@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230505081200.254449-1-xiujianfeng@huawei.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <50e111a3cfecd0f232508d1b03e02d1e25d9d4a9.camel@microchip.com>
+X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 04:11:58PM +0800, Xiu Jianfeng wrote:
-> Hi,
+On Fri, May 05, 2023 at 12:31:11AM +0000, Kelvin.Cao@microchip.com wrote:
+> Hi Christoph,
 > 
-> I am working on adding xattr/attr support for landlock [1], so we can
-> control fs accesses such as chmod, chown, uptimes, setxattr, etc.. inside
-> landlock sandbox. the LSM hooks as following are invoved:
-> 1.inode_setattr
-> 2.inode_setxattr
-> 3.inode_removexattr
-> 4.inode_set_acl
-> 5.inode_remove_acl
-> which are controlled by LANDLOCK_ACCESS_FS_WRITE_METADATA.
+> Thanks for the comments. For the tasklet stuff, I guess your opinion is
+> that by default the driver should go with threaded irq instead of
+> tasklet as the former is more efficient, unless there's a good reason
+> of using tasklet. 
 > 
-> and
-> 1.inode_getattr
-> 2.inode_get_acl
-> 3.inode_getxattr
-> 4.inode_listxattr
-> which are controlled by LANDLOCK_ACCESS_FS_READ_METADATA
+> Tasklet is widely used in DMA drivers, not sure if there's a rational
+> reason or people just follow the code structure of the current ones. 
 
-It would be helpful to get the complete, full picture.
+Given that neither nor anyone else from the RT community chimed
+in I'm going to throw the towel on the tasklet use.  It looks fairly
+suboptimal, but I don't want to block the driver on that.
 
-Piecemeal extending vfs helpers with struct path arguments is costly,
-will cause a lot of churn and will require a lot of review time from us.
+> > > +     union {
+> > > +             __le32 saddr_lo;
+> > > +             __le32 widata_lo;
+> > > +     };
+> > > +     union {
+> > > +             __le32 saddr_hi;
+> > > +             __le32 widata_hi;
+> > > +     };
+> > 
+> > What is the point for unions of identical data types?
+> 
+> The same offset could hold either source address or write immediate
+> data in different transactions. Unions used here is to give different
+> names for the same offset. I guess it improves readability when
+> referring to them with proper names.
 
-Please give us the list of all security hooks to which you want to pass
-a struct path (if there are more to come apart from the ones listed
-here). Then please follow all callchains and identify the vfs helpers
-that would need to be updated. Then please figure out where those
-vfs helpers are called from and follow all callchains finding all
-inode_operations that would have to be updated and passed a struct path
-argument. So ultimately we'll end up with a list of vfs helpers and
-inode_operations that would have to be changed.
+I find this rather confusing, especially as some code literally
+switches on the op to fill in either set.
 
-I'm very reluctant to see anything merged without knowing _exactly_ what
-you're getting us into.
+> The CE is little-endian and is filled by hardware. As an error message,
+> I'd like to dump the whole structure. Would the following code look
+> better?
+> 
+> __le32 *p;
+> ...
+> p = (__le32 *)ce;
+> for (i = 0; i < sizeof(*ce)/4; i++) {
+>  dev_err(chan_dev, "CE DW%d: 0x%08x\n", i,
+>  le32_to_cpu(*p));
+>  p++;
+> }
+
+Fine with me.
+
+> > > +#define SWITCHTEC_DMA_DEVICE(device_id) \
+> > > +     { \
+> > > +             .vendor     = PCI_VENDOR_ID_MICROSEMI, \
+> > > +             .device     = device_id, \
+> > > +             .subvendor  = PCI_ANY_ID, \
+> > > +             .subdevice  = PCI_ANY_ID, \
+> > > +             .class      = PCI_CLASS_SYSTEM_OTHER << 8, \
+> > > +             .class_mask = 0xFFFFFFFF, \
+> > > +     }
+> > > +
+> > > +static const struct pci_device_id switchtec_dma_pci_tbl[] = {
+> > > +     SWITCHTEC_DMA_DEVICE(0x4000), /* PFX 100XG4 */
+> > 
+> > This should use the common PCI_DEVICE() macro instead, i.e.
+> > 
+> >         PCI_DEVICE(PCI_VENDOR_ID_MICROSEMI, 0x4000), /* PFX 100XG4 */
+> >         ...
+> 
+> We also need to distinguish the .class as we have devices of other
+> .class with the same vendor/device ID.
+
+Ok, that's roetty weird and probably worth a little comment.
