@@ -2,107 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81A987027D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 11:06:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 288CC7028EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 11:39:00 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239144AbjEOJG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 05:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46138 "EHLO
+        id S240394AbjEOJi5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 05:38:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239134AbjEOJFe (ORCPT
+        with ESMTP id S240577AbjEOJic (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 05:05:34 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB5A3199B
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:05:23 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f423c17bafso343195e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:05:23 -0700 (PDT)
+        Mon, 15 May 2023 05:38:32 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A774E53
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:35:57 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id 5b1f17b1804b1-3f423ac6e2dso60113865e9.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:35:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20221208; t=1684141522; x=1686733522;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tgQznShlcEU/owRXS5pB/bMBA0shOHO8fmj2OZ6DolA=;
-        b=G1EFKyQhvfOB1DU+z3A4aXg+42N7In3liWiZG/Jh9/5e9ZxgZPtgVhnS4LmfVsL3fW
-         3R6OLEaDm5y3mAW/Hc6e7Iau+vS5YtVdWZnAiBrIRNozqWeebVkcb9Bpj2PcmPicTuS5
-         TxOQO70y9WcMN0GQuuG2e6mq72dFlxVQQXORUiLvwI4t2Hkfsxl4E3+nD8J9EP1Zvnpn
-         KMY+sGDUQD7q5dIM9OSAzU6/Sbxg4JdSbHNPckBtJXbJEryjMe0sUBRGwJW+oKeYfFIr
-         lnL67gCkCwkfoOxHT8cIPJvO3szgUVGkdUHW6xe9iVUlG3kfFwgagmE49KY2CND+yuX7
-         yRhw==
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684143351; x=1686735351;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=QWC2hVWzxMHKmiP7bFd1/GNl9QWA/6DrOTG6WDSUnGM=;
+        b=hZK1cRCcwAWJjnEp08UbvM3yYnHbU6+YYpxypZ/VKSjb+Fm8fnIX1oXzoBWfWxL3L/
+         RzDu8R5AgRibMuAQW6IvIFRbe+xPws7vaBdtMd4ELJ/1nfKw5Ujltx7Bh+nWTBbZBgky
+         k0+F+pLAaVJaq94+6i+IcrRF30zI9opSGja9Dsh773EybaWv9hAakHA//0Fz7OQFth/B
+         AELOd0CVGszxsikSE23TUoca9hX5VRhRpDrwdOsL1wfzxK7FgX7N7tfjmWRMGD3FUdIe
+         Xdp9HfzdhX4c5EJm6XAQ5OuYE2rOIibgU6OV8UnUvi7V6Ai2DhMpi7UEvZj3qM3RnrjP
+         y00g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684141522; x=1686733522;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tgQznShlcEU/owRXS5pB/bMBA0shOHO8fmj2OZ6DolA=;
-        b=TicDWsoEyIKHBHrD1HhHE0Nkt41EXwMmkVElVvO3oBY0MZrHuYRNxAEofUl/Y3jqXs
-         iSp/dLREV14gD8SAmvcS5FbdNEJH1lCkNbCjeer+EutTplnws0AiaF1ucMKMgNIFmylu
-         JxsGr9rZXibiw6L0Jf0O+0WVWs/YMak7tYcCiAGnC6glDSmtfLemzAYfm1Iw+pKAagje
-         KetFHV/h9aD8V6XaU6x5Kz8ccbwob70dF6bpzCEWaeI0azDnoP/NBl6CxcdvSTstB56N
-         SBKPGNAnuhQ/cKHKCxDGZIgYdU7ebdHYXPnZTdBzaMyPMdy90MC7cEuuAhu1nEswUWp4
-         ON8Q==
-X-Gm-Message-State: AC+VfDxbxymNXaySiQIYs04Jou3pPnk/2BloIAKECGIggfd1PywId4qh
-        NyAwi0cHdlIWcEE3aZx+STrEwKI+VUozdhSglT4BzA==
-X-Google-Smtp-Source: ACHHUZ6WthzQz9qP/dl9280gK94WV7M4oXkVGcnS1LR3ZqMQqgt/Gt0cR1YOG5/Da/hzd9z/aBElFdN3hT3VqB5a/mI=
-X-Received: by 2002:a05:600c:354a:b0:3f5:f63:d490 with SMTP id
- i10-20020a05600c354a00b003f50f63d490mr40224wmq.5.1684141522281; Mon, 15 May
- 2023 02:05:22 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684143351; x=1686735351;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QWC2hVWzxMHKmiP7bFd1/GNl9QWA/6DrOTG6WDSUnGM=;
+        b=HNyMbBvDg4efGc7RSI+1TpRXNP+cK6CTDJOtYGA+ZUa4p6fLtTnSBPmf5imidHcC7a
+         Pg1Edt8L38LVGwQX/iJj6lyicSdqV2m9CxpHvahpijnhgS7l/Pzo9y8Bd31DrDbvos+H
+         YNYvE7KK6qgJ3JQ3IhVSExK1i66A/3IgXXk4Z/OOqHVL5O2317ahhjWvWN6+krVFNi+7
+         EGR0gfUxl9PfgUBrgGtTjJZHUIOJWDEHzMVFkJ0zFHPb+V4/NIgf/NHOkMUeSeupc5SE
+         a+T3WhRNF9s618bTlkBeJsFSgYBFIQuKwxREBv2Px5B5ZfgMj3iUNdqwDA2qrA+EO1q8
+         9XzQ==
+X-Gm-Message-State: AC+VfDyF3C7TH4gfGnx+8LYZf41WlKhbevJz30avbntMTUhjFOIzNAWz
+        8lSoIt5qUtNCt8H2DZJYxI/LE+5+jd0YiObUcvIxdA==
+X-Google-Smtp-Source: ACHHUZ6BE/4NK3YHHcWl6EMaCJsUPOYAbAUFdxrDuJwCuPnwJVcVddpO9nt3uz2QQDMX9l56Iz2HyQ==
+X-Received: by 2002:a7b:c4c3:0:b0:3f0:7ddf:d8d8 with SMTP id g3-20020a7bc4c3000000b003f07ddfd8d8mr23309590wmk.18.1684143351524;
+        Mon, 15 May 2023 02:35:51 -0700 (PDT)
+Received: from localhost.localdomain ([2a01:e0a:55f:21e0:fd3b:9fed:e621:cc8f])
+        by smtp.gmail.com with ESMTPSA id z22-20020a7bc7d6000000b003f42813b315sm21035451wmk.32.2023.05.15.02.35.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 02:35:51 -0700 (PDT)
+From:   Julien Stephan <jstephan@baylibre.com>
+Cc:     krzysztof.kozlowski@linaro.org, robh@kernel.org,
+        chunkuang.hu@kernel.org, linux-mediatek@lists.infradead.org,
+        Julien Stephan <jstephan@baylibre.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-kernel@vger.kernel.org (open list:ARM/Mediatek SoC support),
+        linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC
+        support)
+Subject: [PATCH v2 0/2] phy: mtk-mipi-csi: add driver for CSI phy
+Date:   Mon, 15 May 2023 11:05:49 +0200
+Message-Id: <20230515090551.1251389-1-jstephan@baylibre.com>
+X-Mailer: git-send-email 2.40.0
 MIME-Version: 1.0
-References: <0000000000001ca8c205f0f3ee00@google.com> <0000000000001f239205fb969174@google.com>
-In-Reply-To: <0000000000001f239205fb969174@google.com>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Mon, 15 May 2023 11:05:10 +0200
-Message-ID: <CANp29Y6G_1hKheTLG9NeSWv4+GYK=zOsUuu_sKCWqEBwGeOYig@mail.gmail.com>
-Subject: Re: [syzbot] [xfs?] KASAN: use-after-free Read in xfs_btree_lookup_get_block
-To:     syzbot <syzbot+7e9494b8b399902e994e@syzkaller.appspotmail.com>
-Cc:     david@fromorbit.com, dchinner@redhat.com, djwong@kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-xfs@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 13, 2023 at 7:29=E2=80=AFPM syzbot
-<syzbot+7e9494b8b399902e994e@syzkaller.appspotmail.com> wrote:
->
-> syzbot suspects this issue was fixed by commit:
->
-> commit 22ed903eee23a5b174e240f1cdfa9acf393a5210
-> Author: Darrick J. Wong <djwong@kernel.org>
-> Date:   Wed Apr 12 05:49:23 2023 +0000
->
->     xfs: verify buffer contents when we skip log replay
->
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=3D12710f7a28=
-0000
-> start commit:   1b929c02afd3 Linux 6.2-rc1
-> git tree:       upstream
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=3D68e0be42c8ee4=
-bb4
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3D7e9494b8b399902=
-e994e
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D172ff2e4480=
-000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D11715ea848000=
-0
->
-> If the result looks correct, please mark the issue as fixed by replying w=
-ith:
->
-> #syz fix: xfs: verify buffer contents when we skip log replay
+Adding a new driver for the MIPI CSI CD-PHY module v 0.5 embedded in
+some Mediatek soc, such as the MT8365
 
-#syz fix: xfs: verify buffer contents when we skip log replay
+This driver was adapted from https://patchwork.kernel.org/project/linux-mediatek/cover/20200708104023.3225-1-louis.kuo@mediatek.com/
 
->
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisect=
-ion
->
+v1 can be found here: https://lore.kernel.org/all/20230403071929.360911-1-jstephan@baylibre.com/
+
+Changelog
+Changes in v2:
+	- fix all comments on bindings
+	- move the binding chunk from driver to binding commit
+	- fix dt_binding_check error (reported by DT_CHECKER_FLAGS)
+	- use a more generic compatible string
+	- add a new dt properties to simplify the driver
+	  "mediatek,is_cdphy"
+	- rename the driver and the corresponding file to include
+	  version
+	- drop of_match_ptr()
+	- use devm_platform_ioremap_resource
+	- use phy-mtk-io.h api instead of regmap
+	- rework the driver to use dt nodes to declare PHY instead of an
+	  array in the driver
+	- remove useless define for unused registers
+	- remove support for CSI0A/B because it cannot be tested, and it
+	  simplifies the driver for a first review
+	- edit commit message and bindings to be more descriptive about the
+	  hardware
+
+
+Florian Sylvestre (1):
+  dt-bindings: phy: add  mediatek mipi csi driver v 0.5
+
+Phi-bang Nguyen (1):
+  phy: mtk-mipi-csi: add driver for CSI phy
+
+ .../phy/mediatek,phy-mipi-csi-0-5.yaml        |  62 +++++
+ MAINTAINERS                                   |   7 +
+ drivers/phy/mediatek/Kconfig                  |   8 +
+ drivers/phy/mediatek/Makefile                 |   2 +
+ .../mediatek/phy-mtk-mipi-csi-0-5-rx-reg.h    |  58 ++++
+ drivers/phy/mediatek/phy-mtk-mipi-csi-0-5.c   | 257 ++++++++++++++++++
+ .../phy/mediatek,phy-mipi-csi-0-5.h           |  15 +
+ 7 files changed, 409 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/mediatek,phy-mipi-csi-0-5.yaml
+ create mode 100644 drivers/phy/mediatek/phy-mtk-mipi-csi-0-5-rx-reg.h
+ create mode 100644 drivers/phy/mediatek/phy-mtk-mipi-csi-0-5.c
+ create mode 100644 include/dt-bindings/phy/mediatek,phy-mipi-csi-0-5.h
+
+--
+2.40.0
