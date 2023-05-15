@@ -2,404 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 005C47031B0
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:37:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 876417031B6
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:37:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242432AbjEOPhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 11:37:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46876 "EHLO
+        id S242450AbjEOPhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 11:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242149AbjEOPhE (ORCPT
+        with ESMTP id S242439AbjEOPhn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 11:37:04 -0400
-Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 915721FC8
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 08:36:58 -0700 (PDT)
-Received: by mail-vs1-xe32.google.com with SMTP id ada2fe7eead31-435fff402d0so6536207137.1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 08:36:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20221208.gappssmtp.com; s=20221208; t=1684165017; x=1686757017;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TDwExbJjZiuUEmbISOKD+F+fLk3AocW2ljrFDFs8fro=;
-        b=nJWSKeJLxXCV+eTC7FJsJvh+GrgqH9XyCo9+rXPiAz69yUvW54TIkZWNqE7IuEmXM6
-         Fb8L915shprDP03v9haDVr03x9nE4KTYy4w00/FERy3lWtS0VTL0fQteupmS/xPsvqNc
-         PHHUegHiHfsEliUrRBzK3qnA3I3StYmdVALJcWl5yamer8bYWTHgMVhXnbLMI9xAemHf
-         u2XU1y2fof9XkkEW+ukRLBAg+esyE86DNYOhw4GNZrRLAxYLPlZ0H7UQuXh2ZTAngt2x
-         m02B16sCxh+OZFZYptssm+0QDKzSWfIj6KtOSWeNx/3R7OYEfrqnNzvRqUAvitxeW1xc
-         G+aQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684165017; x=1686757017;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TDwExbJjZiuUEmbISOKD+F+fLk3AocW2ljrFDFs8fro=;
-        b=MWquRXwVEHk2exbqZroKOMlYvAlcoOksooL+jVnefu/oHsPm9qQ5htJexYl5zUoHQ8
-         EIh/qvVSVce8LDsc6MV1EOgzoVJHGd2rGUHSZUZAzER3waqIaEXO627LMBaNLdH8azw7
-         giB6bv4Mj0cbzEd9gWzkHOS8Jg8PQ/Bphep4b2DcUuoZNKmVMeVTmxPgseYPdHBD9ZcK
-         mr5n19Ob4JevseFTq6/TnQmFyxmsQuKoazQHtQdZzpsrRYP2rdKmxD5M/7nZk1zQpXU8
-         T6H5dMszqg7LwLmRIyei9VZ/ga2ZRIt4HBkOgLul2iw1sre/ou4sjioZErcj0ubECFPG
-         lKeQ==
-X-Gm-Message-State: AC+VfDxlgf5ZXN5ekvElgqNlSasaPaQOMPkR+mFrZgLcldNSWkt57EG+
-        P9ggFV6sJJBxdzPUDj+KceyareUuEa2eQcOLk8tGKg==
-X-Google-Smtp-Source: ACHHUZ5yNKfzYLGZFR2x8B3eZtCJiXZx0tIH74uI1njx8D+WU80tfHstv0o5D0NqwVZM7mSZWXnBILqiOKKoqWEqVvI=
-X-Received: by 2002:a05:6102:3cd:b0:42e:63a5:b711 with SMTP id
- n13-20020a05610203cd00b0042e63a5b711mr14345264vsq.10.1684165017337; Mon, 15
- May 2023 08:36:57 -0700 (PDT)
+        Mon, 15 May 2023 11:37:43 -0400
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2089.outbound.protection.outlook.com [40.107.6.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 045F019BC;
+        Mon, 15 May 2023 08:37:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=WJ8tZbC+OQr86FIHfXsuD7HJ8nb1gSbvEwH/7f5po0id+RnYM21FZ8bY9icYANVF8EOxajyny3lyEH0gxX6lLqtXmyQ7gQidRN/eHVN/Az0fN3NAd9mv4n4qxw1l6MRlq78/ANquCgnf1vL9eM9HUBM/6BxEQWVlbDlUnPOvboFZSL3SDjR5m7ywLlB9/udwJamvqFCEh66fkc7Rs3+Yc68Qyz1qkfG58vjOCtaJF4r8G240qnh+MqR6i8lpd54+PoEWeyZT3Q4kTNaAJ6G3yfF9zti1+gyMe+i0uzG0ABzB+bYmf1kCoOg8mLMErnR9hatt4rLs+tncJVekctLR4g==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YyhdutEfxChnbqgo7yb5kxN7LsM+HotZlDiFdbP3YOQ=;
+ b=LKZ7aA8g8lJ1qJQph3y2GgbvTaC0POOZpXPe8sBOdj9EGa8FBqGRzCGre6ckxKRVyVOyfdJCNoEMCOIeE3hDiGOrTTMJJW1ZlWNJKa0AGunBeXH2eqII2sfD4WUSoKQBcnXO1U/TmSA2omtXzicsKuxom9nYl3YeFcdfym91qL0bGZ263ONUqGVSWHT2rYSzBUo8ANiF4Bl6i3Bynl63GSTp7yqgBXw2Mb47mWonVRYgoD4xSXOr+QQuQO1aArqkcWAHWnA1lBvCcwI1dXSbtcbbkOyUViziqC6OkQvWL/Plg8pArLDYgu15BJIdySY1QEUrf/w6XqHLK4DRPMTKoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YyhdutEfxChnbqgo7yb5kxN7LsM+HotZlDiFdbP3YOQ=;
+ b=Ca8G4g2xl/vCIoLdtET8w+uXic48+D59qPWGiguefh+iVh5scDeU7tCXm38aGcGoL9WQsM0FW3D5oiqi4NhsJY3XKIW/zcPsrkMbWMaR9m3Uw9mwCa5IoJPj0RGXpvfxE41/IQco9WO/oiQSRcQ+dGhmWDW5KkFWc3eU+FHIWC8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
+ by VI1PR04MB6909.eurprd04.prod.outlook.com (2603:10a6:803:13d::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Mon, 15 May
+ 2023 15:37:31 +0000
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::25d3:de2:ef1:3884]) by AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::25d3:de2:ef1:3884%4]) with mapi id 15.20.6387.030; Mon, 15 May 2023
+ 15:37:31 +0000
+From:   Frank Li <Frank.Li@nxp.com>
+To:     shawnguo@kernel.org, Peter Chen <peter.chen@kernel.org>,
+        Pawel Laszczak <pawell@cadence.com>,
+        Roger Quadros <rogerq@kernel.org>,
+        Aswath Govindraju <a-govindraju@ti.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-usb@vger.kernel.org (open list:CADENCE USB3 DRD IP DRIVER),
+        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
+        DEVICE TREE BINDINGS), linux-kernel@vger.kernel.org (open list)
+Cc:     imx@lists.linux.dev
+Subject: [PATCH v2 1/2] dt-binding: cdns,usb3: Fix cdns,on-chip-buff-size type
+Date:   Mon, 15 May 2023 11:37:09 -0400
+Message-Id: <20230515153710.2799008-1-Frank.Li@nxp.com>
+X-Mailer: git-send-email 2.34.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BYAPR06CA0030.namprd06.prod.outlook.com
+ (2603:10b6:a03:d4::43) To AM6PR04MB4838.eurprd04.prod.outlook.com
+ (2603:10a6:20b:4::16)
 MIME-Version: 1.0
-References: <20230511-tps65219-add-gpio-support-v2-0-60feb64d649a@baylibre.com>
- <20230511-tps65219-add-gpio-support-v2-1-60feb64d649a@baylibre.com>
-In-Reply-To: <20230511-tps65219-add-gpio-support-v2-1-60feb64d649a@baylibre.com>
-From:   Bartosz Golaszewski <brgl@bgdev.pl>
-Date:   Mon, 15 May 2023 17:36:46 +0200
-Message-ID: <CAMRc=Md-CzrG3QPtnh0OxYaHTAYZ2aUfMKhkAOeRm2Zn30qE0A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] gpio: tps65219: add GPIO support for TPS65219 PMIC
-To:     Jerome Neanne <jneanne@baylibre.com>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Tony Lindgren <tony@atomide.com>, Lee Jones <lee@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-omap@vger.kernel.org,
-        Jonathan Cormier <jcormier@criticallink.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|VI1PR04MB6909:EE_
+X-MS-Office365-Filtering-Correlation-Id: 40009bc6-bc57-43ab-5e0b-08db555a4bb0
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SyOu2pXIEzaciiJIBtnH+FuP3SxUjyyMTbwnF3vFZdPDMCcoStZMzqtSGKZuVhvF0f2ozE0XUy60oaz6L1ZxZPuinwNV2UTgeScpZxn6Eyhq0ees8ftoTkDJDzGFkcnbTSHy3YeV++f10NMvmCy5UBZCGCFNAB7SULa8VFblImDV9lv1bcpgME5J3touIyvrsIMIQ0V+DG9XOTSgyBIpQG1hXXm0IoS+mw3lLcoo3RmJ0EKSZelm+t/jQn+a8LeLqXHah+081uxq3kTtyU6gBIPenuROI3D/CG9JHAXZr2forYw8kLVmw/xwf2zcLFMts/AegA1fJPTfKGNEtEk1FTYn6E706wBXpj8sPvmhbDt7BAWkV6JjBNSS3w4TmWt3BbHf8mIMUcqetCgdXtshZVME7ZCUcGbIDChzE5vnFyJb8bORlzG/WbsZ+t1HG5pVlT38DBqhheePTwWLu+aVCWd29qgHa4SSzJ/fZYszRKDBItI6aW8PWfWL2SzX1XtO6ksRaZnFVgSjW0Q9h1tvKbyTdcVhGin0b/rZL39BNHZhmMncx6dfrXNrCRbcPcJiTjwa8/xs5JaAnYIRaEKIxcbQhYBteO4owCLUrQUt9lL0MHdyRR91wYKCR2l242cDo45s54SfldCyrbBwwXhJvQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(136003)(366004)(346002)(396003)(376002)(39860400002)(451199021)(83380400001)(66476007)(66556008)(66946007)(2616005)(6486002)(52116002)(1076003)(26005)(6506007)(6512007)(478600001)(110136005)(6666004)(186003)(7416002)(2906002)(5660300002)(4744005)(86362001)(8936002)(8676002)(36756003)(4326008)(316002)(41300700001)(921005)(38100700002)(38350700002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?9wWcVP12nE8lvfGUp24QibKuJ3/sbh3TeN3VCeJA4b4lM15a07rH0920hle1?=
+ =?us-ascii?Q?lyUy6dlvn+21kXJIui+/VkIBA9Vn9lBRTbmnNTNdmOfPlK1h4TS+xU1MwJIX?=
+ =?us-ascii?Q?CTz78N30GH5EP5+F6UtZHOyoCdkY5IM/XsgTfgk/c2MALQq51uds8Fli4eTp?=
+ =?us-ascii?Q?A6AAX4nJ7EKWcE0dhcxsG1zFqx0/wYnIk7htC/+/IPYMNOdbzZKCaH/eXh/G?=
+ =?us-ascii?Q?oybtsSo9hZGCDFr8tCgHM4oolKTYrJhPTabB1ur+IQKF15+Rx5yTxuO0sGU7?=
+ =?us-ascii?Q?IHz5XOPHlwzQtx/vpJNXZykJyoU1bo7VkPZOWklgYKlv4UzwK0FvPcCNCSXV?=
+ =?us-ascii?Q?g6ltxIMqpB3/XaFk5Be1l0u4cEphDAAB7EWnumxcTacjQ3YTLfFJ4vlheN3C?=
+ =?us-ascii?Q?lqpX5cSJP+PVAohUZnFWrZ8aIVlc19jrJy/Px7p48ptkC7sMtQ7xF7oAFXrh?=
+ =?us-ascii?Q?XIhvgqfcd7MR1Gr4+6PSOU5D9YvpmBQK6gXXDWDkdpvoMqrRjjFd9xNmiaLD?=
+ =?us-ascii?Q?MoR9SRQ7dj/gkxnLN4bVSy5pqitMCZ2ddv5BoQZSw63LCfIf7EgSoiSs11tx?=
+ =?us-ascii?Q?R07eW9EmqDJsvIskt1/MdqkRHlOUUGjKwUccx/WhzwkX4HOz4mzotiXHYj6D?=
+ =?us-ascii?Q?Q39TsDdOeThfP4qQgQ5ySxehfRfvWwFayvURHLcLoiRRoiHRaAjPwSueFWYR?=
+ =?us-ascii?Q?XjsZVnOEqnAFg6ktFVhEdK4wqYzxDHsgK1p5WrwS98zKt7fw0zx+fztHDoTg?=
+ =?us-ascii?Q?gZewMNj7S2Cg31tHFPdyOYcLZ6e/TMyfB6oktNg9Dg99tgcyJ27jwHQluFLL?=
+ =?us-ascii?Q?94DvEvZNQukWQC4wkmoEZJKFbCRpgofvcZjZZvI+eUaQzHI4zwDznNvd3OG5?=
+ =?us-ascii?Q?eExBM3MTMmK+VbFFXEz+1qP627kkPyhILtVmabZR6sZG5olGnbS/FIRKpqWG?=
+ =?us-ascii?Q?m//mzKIu9dkcX5U8qkrtPJe0ZZtSk40H31xGwPuY6jJ4CDAPUBm8U0jlE6AT?=
+ =?us-ascii?Q?DrzGuvEANALXve/zREoLPNLW1mpeSelh+/hwlXwQvPW9+SjAF8cR2jmgYEBu?=
+ =?us-ascii?Q?/PU9QPtrIOKvHxjdM9ipH8Cy1O7mm6SArvu7/02D6jE16hYxghBds48TTUM6?=
+ =?us-ascii?Q?QhbstVNyz65rSm0RFr9W9OQbhi+APSnfD+cAKWxoyLZ2fMjCk7JMgSRacoeJ?=
+ =?us-ascii?Q?KK0hQnnTsZlMDp8q5a4LDIPZ6IK4yfoPk3RlfmdLjjsO6t47dB00wK2m5NNF?=
+ =?us-ascii?Q?9P+wCAzBsRnfY8EPhoN/CXcAsXOV6ZBzUtWD9Djjn++XnM3sjhMAlroNDNtE?=
+ =?us-ascii?Q?7HyWI/orY+n30M+UHfodJrcOFmaVSwvzvu0zBQGNm/RAvYgdBh4Zi5jUUeng?=
+ =?us-ascii?Q?0fgZiIOwE4GwXX6fMaDw4DP0oULcWKsLMjNc6WqzYRGjU/UMwX2pgBu54Wvu?=
+ =?us-ascii?Q?ZkK1iG+EOJ0KKgAs5XJNFZmCLXl3mZzZ6R8Ts5ZiB5hLlcGKy7J06io0kKiG?=
+ =?us-ascii?Q?lelGu5SSzVQ3ZzvwSvqUoeVJSYtBsAS/3fwZMeot6Vj5fXIlF1GKqXzTNltu?=
+ =?us-ascii?Q?2oXUWX/J5YPANuc1kSE=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 40009bc6-bc57-43ab-5e0b-08db555a4bb0
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2023 15:37:31.1132
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: r7d3FY/eeeL4JFcX66YXqsH1sAzGEUdaGC2llUUB5qOi6FSb/IOz4qXvCSkreJc/kKLKIrBcraawQaeAxT6nBw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI1PR04MB6909
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 4:09=E2=80=AFPM Jerome Neanne <jneanne@baylibre.com=
-> wrote:
->
-> Add support for TPS65219 PMICs GPIO interface.
->
-> 3 GPIO pins:
-> - GPIO0 only is IO but input mode reserved for MULTI_DEVICE_ENABLE usage
-> - GPIO1 and GPIO2 are Output only and referred as GPO1 and GPO2 in spec
->
-> GPIO0 is statically configured as input or output prior to Linux boot.
-> it is used for MULTI_DEVICE_ENABLE function.
-> This setting is statically configured by NVM.
-> GPIO0 can't be used as a generic GPIO (specification Table 8-34).
-> It's either a GPO when MULTI_DEVICE_EN=3D0,
-> or a GPI when MULTI_DEVICE_EN=3D1.
->
-> Datasheet describes specific usage for non standard GPIO.
-> Link: https://www.ti.com/lit/ds/symlink/tps65219.pdf
->
-> Co-developed-by: Jonathan Cormier <jcormier@criticallink.com>
-> Signed-off-by: Jonathan Cormier <jcormier@criticallink.com>
-> Signed-off-by: Jerome Neanne <jneanne@baylibre.com>
-> ---
->  MAINTAINERS                  |   1 +
->  drivers/gpio/Kconfig         |  17 +++++
->  drivers/gpio/Makefile        |   1 +
->  drivers/gpio/gpio-tps65219.c | 173 +++++++++++++++++++++++++++++++++++++=
-++++++
->  4 files changed, 192 insertions(+)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index c0cde28c62c6..d912b7465e84 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -15398,6 +15398,7 @@ T:      git git://git.kernel.org/pub/scm/linux/ke=
-rnel/git/tmlind/linux-omap.git
->  F:     arch/arm/configs/omap2plus_defconfig
->  F:     arch/arm/mach-omap2/
->  F:     drivers/bus/ti-sysc.c
-> +F:     drivers/gpio/gpio-tps65219.c
->  F:     drivers/i2c/busses/i2c-omap.c
->  F:     drivers/irqchip/irq-omap-intc.c
->  F:     drivers/mfd/*omap*.c
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index 5521f060d58e..f4e37881d01a 100644
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -1440,6 +1440,23 @@ config GPIO_TPS65218
->           Select this option to enable GPIO driver for the TPS65218
->           chip family.
->
-> +config GPIO_TPS65219
-> +       tristate "TPS65219 GPIO"
-> +       depends on MFD_TPS65219
-> +       default MFD_TPS65219
-> +       help
-> +         Select this option to enable GPIO driver for the TPS65219
-> +         chip family.
-> +         GPIO0 is statically configured as input or output prior to Linu=
-x boot.
-> +         it is used for MULTI_DEVICE_ENABLE function.
-> +         This setting is statically configured by NVM.
-> +         GPIO0 can't be used as a generic GPIO.
-> +         It's either a GPO when MULTI_DEVICE_EN=3D0,
-> +         or a GPI when MULTI_DEVICE_EN=3D1.
-> +
-> +         This driver can also be built as a module. If so, the
-> +         module will be called gpio_tps65219.
-> +
->  config GPIO_TPS6586X
->         bool "TPS6586X GPIO"
->         depends on MFD_TPS6586X
-> diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-> index 20036af3acb1..7843b16f5d59 100644
-> --- a/drivers/gpio/Makefile
-> +++ b/drivers/gpio/Makefile
-> @@ -160,6 +160,7 @@ obj-$(CONFIG_GPIO_TN48M_CPLD)               +=3D gpio=
--tn48m.o
->  obj-$(CONFIG_GPIO_TPIC2810)            +=3D gpio-tpic2810.o
->  obj-$(CONFIG_GPIO_TPS65086)            +=3D gpio-tps65086.o
->  obj-$(CONFIG_GPIO_TPS65218)            +=3D gpio-tps65218.o
-> +obj-$(CONFIG_GPIO_TPS65219)            +=3D gpio-tps65219.o
->  obj-$(CONFIG_GPIO_TPS6586X)            +=3D gpio-tps6586x.o
->  obj-$(CONFIG_GPIO_TPS65910)            +=3D gpio-tps65910.o
->  obj-$(CONFIG_GPIO_TPS65912)            +=3D gpio-tps65912.o
-> diff --git a/drivers/gpio/gpio-tps65219.c b/drivers/gpio/gpio-tps65219.c
-> new file mode 100644
-> index 000000000000..42bbd142e4b6
-> --- /dev/null
-> +++ b/drivers/gpio/gpio-tps65219.c
-> @@ -0,0 +1,173 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * GPIO driver for TI TPS65219 PMICs
-> + *
-> + * Copyright (C) 2022 Texas Instruments Incorporated - http://www.ti.com=
-/
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/regmap.h>
-> +
-> +#include <linux/gpio/driver.h>
-> +#include <linux/mfd/tps65219.h>
-> +
+In cdns3-gadget.c, 'cdns,on-chip-buff-size' was read using
+device_property_read_u16(). It resulted in 0 if a 32bit value was used
+in dts. This commit fixes the dt binding doc to declare it as u16.
 
-Please keep all includes together and ordered alphabetically. I see
-you probably wanted to split them thematically but we don't really do
-this.
+Signed-off-by: Frank Li <Frank.Li@nxp.com>
+---
+Change from v1 to v2
+- new patch
 
-> +#define TPS65219_GPIO0_DIR_MASK                BIT(3)
-> +#define TPS65219_GPIO0_OFFSET          2
-> +#define TPS65219_GPIO0_IDX             0
-> +#define TPS65219_GPIO_DIR_IN           1
-> +#define TPS65219_GPIO_DIR_OUT          0
-> +
-> +struct tps65219_gpio {
-> +       struct gpio_chip gpio_chip;
-> +       struct tps65219 *tps;
-> +};
-> +
-> +static int tps65219_gpio_get_direction(struct gpio_chip *gc, unsigned in=
-t offset)
-> +{
-> +       struct tps65219_gpio *gpio =3D gpiochip_get_data(gc);
-> +       int ret, val;
-> +
-> +       if (offset !=3D TPS65219_GPIO0_IDX)
-> +               return GPIO_LINE_DIRECTION_OUT;
-> +
-> +       ret =3D regmap_read(gpio->tps->regmap, TPS65219_REG_MFP_1_CONFIG,=
- &val);
-> +       if (ret)
-> +               return ret;
-> +
-> +       return !!(val & TPS65219_GPIO0_DIR_MASK);
-> +}
-> +
-> +static int tps65219_gpio_get(struct gpio_chip *gc, unsigned int offset)
-> +{
-> +       struct tps65219_gpio *gpio =3D gpiochip_get_data(gc);
-> +       int ret, val;
-> +
-> +       if (offset !=3D TPS65219_GPIO0_IDX) {
-> +               dev_err(gpio->tps->dev,
-> +                       "GPIO%d is output only, cannot get\n",
-> +                       offset);
-> +               return -EOPNOTSUPP;
-> +       }
-> +
-> +       ret =3D regmap_read(gpio->tps->regmap, TPS65219_REG_MFP_CTRL, &va=
-l);
-> +       if (ret)
-> +               return ret;
+ Documentation/devicetree/bindings/usb/cdns,usb3.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Add newline here.
+diff --git a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+index cae46c4982ad..69a93a0722f0 100644
+--- a/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
++++ b/Documentation/devicetree/bindings/usb/cdns,usb3.yaml
+@@ -64,7 +64,7 @@ properties:
+     description:
+       size of memory intended as internal memory for endpoints
+       buffers expressed in KB
+-    $ref: /schemas/types.yaml#/definitions/uint32
++    $ref: /schemas/types.yaml#/definitions/uint16
+ 
+   cdns,phyrst-a-enable:
+     description: Enable resetting of PHY if Rx fail is detected
+-- 
+2.34.1
 
-> +       dev_warn(gpio->tps->dev,
-> +                "GPIO%d =3D %d, used for MULTI_DEVICE_ENABLE, not as sta=
-ndard GPIO\n",
-> +                offset, !!(val & BIT(TPS65219_MFP_GPIO_STATUS_MASK)));
-> +
-> +       /* depends on NVM config return error if dir output else the GPIO=
-0 status bit */
-> +       if (tps65219_gpio_get_direction(gc, offset) =3D=3D TPS65219_GPIO_=
-DIR_OUT)
-> +               return -EOPNOTSUPP;
-
-Add newline here.
-
-> +       return !!(val & BIT(TPS65219_MFP_GPIO_STATUS_MASK));
-> +}
-> +
-> +static void tps65219_gpio_set(struct gpio_chip *gc, unsigned int offset,
-> +                             int value)
-> +{
-> +       struct tps65219_gpio *gpio =3D gpiochip_get_data(gc);
-> +       int v, mask, bit;
-> +
-> +       bit =3D (offset =3D=3D TPS65219_GPIO0_IDX) ? TPS65219_GPIO0_OFFSE=
-T : offset - 1;
-> +
-> +       mask =3D BIT(bit);
-> +       v =3D value ? mask : 0;
-> +
-> +       regmap_update_bits(gpio->tps->regmap,
-> +                          TPS65219_REG_GENERAL_CONFIG,
-> +                          mask, v);
-
-This can fail - I suggest emitting an error message as regmap won't do it.
-
-> +}
-> +
-> +static int tps65219_gpio_change_direction(struct gpio_chip *gc, unsigned=
- int offset,
-> +                                         unsigned int direction)
-> +{
-> +       struct tps65219_gpio *gpio =3D gpiochip_get_data(gc);
-> +
-> +       /* Documentation is stating that GPIO0 direction must not be chan=
-ged in Linux:
-> +        * Table 8-34. MFP_1_CONFIG(3): MULTI_DEVICE_ENABLE,
-> +        * Should only be changed in INITIALIZE state (prior to ON Reques=
-t).
-> +        * Set statically by NVM, changing direction in application can c=
-ause a hang.
-> +        * Below can be used for test purpose only:
-> +        */
-> +
-> +#if 0
-> +       int ret =3D regmap_update_bits(gpio->tps->regmap, TPS65219_REG_MF=
-P_1_CONFIG,
-> +                                TPS65219_GPIO0_DIR_MASK, direction);
-> +       if (ret)
-> +               return ret;
-> +#endif
-
-Agree with Linus here on enabling it for DEBUG.
-
-And a newline here.
-
-> +       dev_err(gpio->tps->dev,
-> +               "GPIO%d direction set by NVM, change to %u failed, not al=
-lowed by specification\n",
-> +                offset, direction);
-
-And before return.
-
-> +       return -EOPNOTSUPP;
-> +}
-> +
-> +static int tps65219_gpio_direction_input(struct gpio_chip *gc, unsigned =
-int offset)
-> +{
-> +       struct tps65219_gpio *gpio =3D gpiochip_get_data(gc);
-> +
-> +       if (offset !=3D TPS65219_GPIO0_IDX) {
-> +               dev_err(gpio->tps->dev,
-> +                       "GPIO%d is output only, cannot change to input\n"=
-,
-> +                       offset);
-> +               return -EOPNOTSUPP;
-> +       }
-
-Newline here.
-
-> +       if (tps65219_gpio_get_direction(gc, offset) =3D=3D TPS65219_GPIO_=
-DIR_IN)
-> +               return 0;
-
-and here.
-
-> +       return tps65219_gpio_change_direction(gc, offset, TPS65219_GPIO_D=
-IR_IN);
-> +}
-> +
-> +static int tps65219_gpio_direction_output(struct gpio_chip *gc, unsigned=
- int offset,
-> +                                         int value)
-> +{
-> +       tps65219_gpio_set(gc, offset, value);
-> +       if (offset !=3D TPS65219_GPIO0_IDX)
-> +               return 0;
-> +
-> +       if (tps65219_gpio_get_direction(gc, offset) =3D=3D TPS65219_GPIO_=
-DIR_OUT)
-> +               return 0;
-
-and here.
-
-> +       return tps65219_gpio_change_direction(gc, offset, TPS65219_GPIO_D=
-IR_OUT);
-> +}
-> +
-> +static const struct gpio_chip tps65219_gpio_chip =3D {
-> +       .label                  =3D "tps65219-gpio",
-> +       .owner                  =3D THIS_MODULE,
-> +       .get_direction          =3D tps65219_gpio_get_direction,
-> +       .direction_input        =3D tps65219_gpio_direction_input,
-> +       .direction_output       =3D tps65219_gpio_direction_output,
-> +       .get                    =3D tps65219_gpio_get,
-> +       .set                    =3D tps65219_gpio_set,
-> +       .base                   =3D -1,
-> +       .ngpio                  =3D 3,
-> +       .can_sleep              =3D true,
-> +};
-> +
-> +static int tps65219_gpio_probe(struct platform_device *pdev)
-> +{
-> +       struct tps65219 *tps =3D dev_get_drvdata(pdev->dev.parent);
-> +       struct tps65219_gpio *gpio;
-> +
-> +       gpio =3D devm_kzalloc(&pdev->dev, sizeof(*gpio), GFP_KERNEL);
-> +       if (!gpio)
-> +               return -ENOMEM;
-> +
-> +       gpio->tps =3D tps;
-> +       gpio->gpio_chip =3D tps65219_gpio_chip;
-
-Aren't you getting any warnings here about dropping the 'const' from
-the global structure?
-
-> +       gpio->gpio_chip.parent =3D tps->dev;
-> +
-> +       return devm_gpiochip_add_data(&pdev->dev, &gpio->gpio_chip, gpio)=
-;
-> +}
-> +
-> +static struct platform_driver tps65219_gpio_driver =3D {
-> +       .driver =3D {
-> +               .name =3D "tps65219-gpio",
-> +       },
-> +       .probe =3D tps65219_gpio_probe,
-> +};
-> +module_platform_driver(tps65219_gpio_driver);
-> +
-> +MODULE_ALIAS("platform:tps65219-gpio");
-> +MODULE_AUTHOR("Jonathan Cormier <jcormier@criticallink.com>");
-> +MODULE_DESCRIPTION("TPS65219 GPIO driver");
-> +MODULE_LICENSE("GPL");
->
-
-Otherwise looks good, just a couple nits.
-
-Bart
-
-> --
-> 2.34.1
->
