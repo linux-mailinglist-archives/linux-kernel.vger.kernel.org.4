@@ -2,376 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 003AC70366F
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:10:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E9C2703698
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:11:53 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243648AbjEORKM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 13:10:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47068 "EHLO
+        id S243689AbjEORLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 13:11:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243662AbjEORJ0 (ORCPT
+        with ESMTP id S243678AbjEORLX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 13:09:26 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8F40AD0E
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:07:56 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64384274895so9247126b3a.2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:07:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684170476; x=1686762476;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=2nHtEWxnGpGcZQSGGCC9iqpPMY8cRtXXTyviVXLj7sE=;
-        b=RfNBq7TDdB2IKmzexzeaLngBcSjUiBcZ76IWWMJjgqNJUzMd+r6cCkMiwv37HGifZ1
-         oUgOU3QJmdlwWc4gCYiUibfRVz/LIKi2erGbGCg0J9x/Am6T/uxzV4hNQJAb9I2pLr4n
-         x7ERVV7Mwoedg3fxwt/WADMRh/cJMOIRIIWa8P0cFY0z4bVpqPONf2iazLAAUT/pNaO8
-         W3cLW8JQPhNRlKzm9JdZlHXzKVG9zlEcuxgS53YlvVkLs3VzTn3CfqPHe0w09VBrRUTx
-         cLr++MTEfSCczuMcgvsvTdPa/Pg/vkKTaXFguNsYbaDZ24W+jjA2W37GpSo6TSjXptd+
-         VKmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684170476; x=1686762476;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2nHtEWxnGpGcZQSGGCC9iqpPMY8cRtXXTyviVXLj7sE=;
-        b=DXGyvtua0nAIQdXIo48RIFJyUZ+C0nv1L4GxZq/Aqp4IgL/c62VEcLsi0f9VTO/Vwq
-         +B7ouSBqZJ6tRNyokgWnglaO9HaZxEkoAVKARpQ3kd9PcCzB226wVzfjtDel5T8FSpYZ
-         rU7nSkqdYA2UabKeZ5xkzLLufVDQyXZShq4ML1VzmTcR+u8FveYGLI8ga/m6FCQit1BH
-         w3jAe3Jc24QhFu+uKHNGuY0EZxaxA4qiUwN9JStn61NG2cFUwsMTrBULF1OqEQiLdhnz
-         i84km+fYHyG8Ga9V7bBNUeEp9bev0Zs1H0PAwjdgi8rWIqqNJUqYMUe1m8AXji1KcMLx
-         R3eg==
-X-Gm-Message-State: AC+VfDxsiZVHXH5yaZDiUl5Du/yR+ulEk2Il0GLXqYpUX8Sjv981iOtD
-        qqzD/hFVpa2mRYRaGYfiyN9se+kRZ1RxcmMgJVQ=
-X-Google-Smtp-Source: ACHHUZ52HZolmtjdAn8T2k4UpZ3HNolbARPshrUQ24xkpbnjgc72ibaTbyTOGYAaZX0FatvS+jMmVg==
-X-Received: by 2002:a05:6a20:12d0:b0:102:f744:a708 with SMTP id v16-20020a056a2012d000b00102f744a708mr24322492pzg.35.1684170475724;
-        Mon, 15 May 2023 10:07:55 -0700 (PDT)
-Received: from p14s ([2604:3d09:148c:c800:d401:af78:6aa0:cf61])
-        by smtp.gmail.com with ESMTPSA id h5-20020a62b405000000b0063f33e216dasm12365831pfn.96.2023.05.15.10.07.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 10:07:55 -0700 (PDT)
-Date:   Mon, 15 May 2023 11:07:52 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     TingHan Shen =?utf-8?B?KOayiOW7t+e/sCk=?= 
-        <TingHan.Shen@mediatek.com>
-Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "conor+dt@kernel.org" <conor+dt@kernel.org>,
-        Project_Global_Chrome_Upstream_Group 
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "andersson@kernel.org" <andersson@kernel.org>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v11 06/11] remoteproc: mediatek: Probe multi-core SCP
-Message-ID: <ZGJm6JaSZ5vm9oYT@p14s>
-References: <20230510063749.5127-1-tinghan.shen@mediatek.com>
- <20230510063749.5127-7-tinghan.shen@mediatek.com>
- <ZF59xilzufy69RZh@p14s>
- <968894ff6a9ed9cfb71cd28eb3552047e4d298a6.camel@mediatek.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Mon, 15 May 2023 13:11:23 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 827F3100C8
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:09:36 -0700 (PDT)
+Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34FH71vX003712;
+        Mon, 15 May 2023 17:08:30 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=vqKnBW1jVpjgvLKVZUfkhbQP0EXBChpJr7Ws0PrkfpE=;
+ b=ZF5m59j5PzTQyhr/0pZtCLJWXjjE5d2pbrA9fvrp6qqEzkxQjgQrqAOQ3MPthPiwLxnd
+ gcGWd8sOK7zrQ52NfMt++5QhH8hFgJ1HNRagClkX+J0hmg0uYI3DrMrjbMHboYyOmpQ1
+ 0mt7xKDb04Pl/yBcGEPYZdUR877cOrXzaHH0PCK/AeDblUserVsGUAmWDSiiyrqXEPo2
+ SwbTOIivDkZS+0VVGGdZIAhBISPO3beSYaxwXHnf4GsLKScY/vw8Rje1f5yxK1tAUNEx
+ GfmR5xZDX+savl31fCtkePtkN5+ou8LYQGCiZOjVvIOuL5V7CVQ/eTR8anWhr9FI2rVl BA== 
+Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qkr70s48h-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 May 2023 17:08:29 +0000
+Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
+        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34F4cDVf008930;
+        Mon, 15 May 2023 17:08:27 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3qj264s0by-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 15 May 2023 17:08:26 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34FH8NH93211900
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 15 May 2023 17:08:23 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5345E20043;
+        Mon, 15 May 2023 17:08:23 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D805B20040;
+        Mon, 15 May 2023 17:08:17 +0000 (GMT)
+Received: from tarunpc.ibmuc.com (unknown [9.43.21.157])
+        by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 15 May 2023 17:08:17 +0000 (GMT)
+From:   Tarun Sahu <tsahu@linux.ibm.com>
+To:     linux-mm@kvack.org
+Cc:     akpm@linux-foundation.org, muchun.song@linux.dev,
+        mike.kravetz@oracle.com, aneesh.kumar@linux.ibm.com,
+        willy@infradead.org, sidhartha.kumar@oracle.com,
+        gerald.schaefer@linux.ibm.com, linux-kernel@vger.kernel.org,
+        jaypatel@linux.ibm.com, tsahu@linux.ibm.com
+Subject: [PATCH v2] mm/folio: Avoid special handling for order value 0 in folio_set_order
+Date:   Mon, 15 May 2023 22:38:09 +0530
+Message-Id: <20230515170809.284680-1-tsahu@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 4-rCbhDpET9mgBonILTZVw_0mH2M3-07
+X-Proofpoint-ORIG-GUID: 4-rCbhDpET9mgBonILTZVw_0mH2M3-07
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <968894ff6a9ed9cfb71cd28eb3552047e4d298a6.camel@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-05-15_15,2023-05-05_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 mlxlogscore=999 clxscore=1011 mlxscore=0 malwarescore=0
+ priorityscore=1501 impostorscore=0 suspectscore=0 spamscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2304280000 definitions=main-2305150143
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 12:31:04PM +0000, TingHan Shen (沈廷翰) wrote:
-> Hi Mathieu,
-> 
-> On Fri, 2023-05-12 at 11:56 -0600, Mathieu Poirier wrote:
-> > External email : Please do not click links or open attachments until you have verified the sender or the content.
-> > 
-> > 
-> > On Wed, May 10, 2023 at 02:37:44PM +0800, Tinghan Shen wrote:
-> > > The difference of single-core SCP and multi-core SCP device tree is
-> > > the presence of child device nodes described SCP cores. The SCP
-> > > driver populates the platform device and checks the child nodes
-> > > to identify whether it's a single-core SCP or a multi-core SCP.
-> > > 
-> > > Add the remoteproc instances of multi-core SCP to the SCP cluster list.
-> > > When the SCP driver is removed, it cleanup resources by walking
-> > > through the cluster list.
-> > > 
-> > > Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> > > ---
-> > >  drivers/remoteproc/mtk_scp.c | 135 ++++++++++++++++++++++++++++++-----
-> > >  1 file changed, 117 insertions(+), 18 deletions(-)
-> > > 
-> > > diff --git a/drivers/remoteproc/mtk_scp.c b/drivers/remoteproc/mtk_scp.c
-> > > index ff73c6dd9637..87215a0e145e 100644
-> > > --- a/drivers/remoteproc/mtk_scp.c
-> > > +++ b/drivers/remoteproc/mtk_scp.c
-> > > @@ -864,7 +864,8 @@ static void scp_remove_rpmsg_subdev(struct mtk_scp *scp)
-> > >  }
-> > > 
-> > >  static struct mtk_scp *scp_rproc_init(struct platform_device *pdev,
-> > > -                                   struct mtk_scp_of_cluster *scp_cluster)
-> > > +                                   struct mtk_scp_of_cluster *scp_cluster,
-> > > +                                   const struct mtk_scp_of_data *of_data)
-> > >  {
-> > >       struct device *dev = &pdev->dev;
-> > >       struct device_node *np = dev->of_node;
-> > > @@ -887,7 +888,7 @@ static struct mtk_scp *scp_rproc_init(struct platform_device *pdev,
-> > >       scp = rproc->priv;
-> > >       scp->rproc = rproc;
-> > >       scp->dev = dev;
-> > > -     scp->data = of_device_get_match_data(dev);
-> > > +     scp->data = of_data;
-> > >       platform_device_add_data(pdev, &scp, sizeof(scp));
-> > > 
-> > >       scp->reg_base = scp_cluster->reg_base;
-> > > @@ -938,10 +939,6 @@ static struct mtk_scp *scp_rproc_init(struct platform_device *pdev,
-> > >               goto remove_subdev;
-> > >       }
-> > > 
-> > > -     ret = rproc_add(rproc);
-> > > -     if (ret)
-> > > -             goto remove_subdev;
-> > > -
-> > 
-> > This should have been done in the previous patch.
-> 
-> Ok.
-> 
-> > 
-> > >       return scp;
-> > > 
-> > >  remove_subdev:
-> > > @@ -956,19 +953,116 @@ static struct mtk_scp *scp_rproc_init(struct platform_device *pdev,
-> > >       return ERR_PTR(ret);
-> > >  }
-> > > 
-> > > +static void scp_rproc_free(struct mtk_scp *scp)
-> > > +{
-> > > +     int i;
-> > > +
-> > > +     scp_remove_rpmsg_subdev(scp);
-> > > +     scp_ipi_unregister(scp, SCP_IPI_INIT);
-> > > +     scp_unmap_memory_region(scp);
-> > > +     for (i = 0; i < SCP_IPI_MAX; i++)
-> > > +             mutex_destroy(&scp->ipi_desc[i].lock);
-> > > +     mutex_destroy(&scp->send_lock);
-> > > +}
-> > > +
-> > > +static int scp_is_single_core(struct platform_device *pdev)
-> > > +{
-> > > +     struct device *dev = &pdev->dev;
-> > > +     struct device_node *np = dev_of_node(dev);
-> > > +     struct device_node *child;
-> > > +
-> > > +     child = of_get_next_available_child(np, NULL);
-> > > +     if (!child)
-> > > +             return dev_err_probe(dev, -ENODEV, "No child node\n");
-> > > +
-> > > +     of_node_put(child);
-> > > +     return of_node_name_eq(child, "cros-ec-rpmsg");
-> > > +}
-> > > +
-> > >  static int scp_cluster_init(struct platform_device *pdev)
-> > >  {
-> > > -     struct mtk_scp *scp;
-> > > +     struct mtk_scp *scp, *temp;
-> > >       struct mtk_scp_of_cluster *scp_cluster = platform_get_drvdata(pdev);
-> > >       struct list_head *cluster = &scp_cluster->mtk_scp_cluster;
-> > > 
-> > > -     scp = scp_rproc_init(pdev, scp_cluster);
-> > > -     if (IS_ERR(scp))
-> > > -             return PTR_ERR(scp);
-> > > +     struct device *dev = &pdev->dev;
-> > > +     struct device_node *np = dev_of_node(dev);
-> > > +     struct platform_device *cpdev;
-> > > +     struct device_node *child;
-> > > +     const struct mtk_scp_of_data **cluster_of_data;
-> > > +     int core_id = 0;
-> > > +     int ret;
-> > > +
-> > > +     ret = scp_is_single_core(pdev);
-> > > +     if (ret < 0)
-> > > +             return ret;
-> > > +
-> > > +     if (ret) {
-> > > +             dev_dbg(dev, "single-core scp\n");
-> > > +
-> > > +             /* When using the SCP node phandle on exported SCP APIs, the drvdata
-> > > +              * is expected to be the mtk_scp object, and as a result, it is intended
-> > > +              * to be overwritten for single-core SCP usage.
-> > > +              */
-> > 
-> > Is this comment still relevant?
-> 
-> No, I'll remove it. 
-> 
-> > 
-> > > +             scp = scp_rproc_init(pdev, scp_cluster, of_device_get_match_data(dev));
-> > > +             if (IS_ERR(scp))
-> > > +                     return PTR_ERR(scp);
-> > > +
-> > > +             list_add_tail(&scp->elem, cluster);
-> > 
-> > This is getting messy.  Please add two new functions, i.e scp_add_single_core()
-> > and scp_add_multi_core().
-> 
-> Ok.
-> 
-> > 
-> > > +     } else {
-> > > +             dev_dbg(dev, "multi-core scp\n");
-> > > +
-> > > +             cluster_of_data = (const struct mtk_scp_of_data **)of_device_get_match_data(dev);
-> > > +
-> > > +             for_each_available_child_of_node(np, child) {
-> > > +                     if (!cluster_of_data[core_id]) {
-> > > +                             ret = -EINVAL;
-> > > +                             dev_err(dev, "Not support core %d\n", core_id);
-> > > +                             of_node_put(child);
-> > > +                             goto init_fail;
-> > > +                     }
-> > > +
-> > > +                     cpdev = of_find_device_by_node(child);
-> > > +                     if (!cpdev) {
-> > > +                             ret = -ENODEV;
-> > > +                             dev_err(dev, "Not found platform device for core %d\n", core_id);
-> > > +                             of_node_put(child);
-> > > +                             goto init_fail;
-> > > +                     }
-> > > +
-> > > +                     scp = scp_rproc_init(cpdev, scp_cluster, cluster_of_data[core_id]);
-> > > +                     if (IS_ERR(scp)) {
-> > > +                             dev_err(dev, "Failed to initialize core %d rproc\n", core_id);
-> > > +                             put_device(&cpdev->dev);
-> > > +                             of_node_put(child);
-> > > +                             goto init_fail;
-> > > +                     }
-> > > +                     list_add_tail(&scp->elem, cluster);
-> > > +                     put_device(&cpdev->dev);
-> > > +
-> > > +                     core_id++;
-> > > +             }
-> > > +     }
-> > > 
-> > > -     list_add_tail(&scp->elem, cluster);
-> > > +     list_for_each_entry_safe_reverse(scp, temp, cluster, elem) {
-> > > +             ret = rproc_add(scp->rproc);
-> > 
-> > Call rproc_add() in the for_each_available_child_of_node() loop above.  That way
-> > it if fails you can call scp_rproc_free() right away and jump to init_fail to
-> > deal with the other cores on the list.
-> 
-> Ok, I'll update it in next version.
-> 
-> > 
-> > > +             if (ret)
-> > > +                     goto add_fail;
-> > > +     }
-> > > 
-> > >       return 0;
-> > > +
-> > > +add_fail:
-> > > +     list_for_each_entry_continue(scp, cluster, elem) {
-> > > +             rproc_del(scp->rproc);
-> > > +     }
-> > > +init_fail:
-> > > +     list_for_each_entry_safe_reverse(scp, temp, cluster, elem) {
-> > > +             list_del(&scp->elem);
-> > > +             scp_rproc_free(scp);
-> > > +     }
-> > > +
-> > 
-> > There are a serious problems with the code in both labels above.  I will let you
-> > think about that and I will stop here for this revision.
-> > 
-> > Mathieu
-> 
-> May be the problem is the possible null access of *scp?
-> Or, the resources bound with cpdev should be released at here?
+folio_set_order(folio, 0) is used in kernel at two places
+__destroy_compound_gigantic_folio and __prep_compound_gigantic_folio.
+Currently, It is called to clear out the folio->_folio_nr_pages and
+folio->_folio_order.
 
-The first problem is related to list processing.  Function
-list_for_each_entry_safe_reverse() starts at the end of the list and stops if an
-error is encountered.  From there we go back the other way with
-list_for_each_entry_continue() and then reverse again for
-list_for_each_entry_safe_reverse().  This back and forth is error prone and very
-hard to maintain.  
+For __destroy_compound_gigantic_folio:
+In past, folio_set_order(folio, 0) was needed because page->mapping used
+to overlap with _folio_nr_pages and _folio_order. So if these fields were
+left uncleared during freeing gigantic hugepages, they were causing
+"BUG: bad page state" due to non-zero page->mapping. Now, After
+Commit a01f43901cfb ("hugetlb: be sure to free demoted CMA pages to
+CMA") page->mapping has explicitly been cleared out for tail pages. Also,
+_folio_order and _folio_nr_pages no longer overlaps with page->mapping.
 
-The second problem is with rproc_del()... Does it need to be there?
+struct page {
+...
+   struct address_space * mapping;  /* 24     8 */
+...
+}
 
-> 
-> 
-> > 
-> > > +     return ret;
-> > >  }
-> > > 
-> > >  static int scp_probe(struct platform_device *pdev)
-> > > @@ -1005,6 +1099,10 @@ static int scp_probe(struct platform_device *pdev)
-> > >       INIT_LIST_HEAD(&scp_cluster->mtk_scp_cluster);
-> > >       platform_set_drvdata(pdev, scp_cluster);
-> > > 
-> > > +     ret = devm_of_platform_populate(dev);
-> > > +     if (ret)
-> > > +             return dev_err_probe(dev, ret, "Failed to populate platform devices\n");
-> > > +
-> > >       ret = scp_cluster_init(pdev);
-> > >       if (ret)
-> > >               return ret;
-> > > @@ -1016,17 +1114,11 @@ static int scp_remove(struct platform_device *pdev)
-> > >  {
-> > >       struct mtk_scp_of_cluster *scp_cluster = platform_get_drvdata(pdev);
-> > >       struct mtk_scp *scp, *temp;
-> > > -     int i;
-> > > 
-> > >       list_for_each_entry_safe_reverse(scp, temp, &scp_cluster->mtk_scp_cluster, elem) {
-> > >               list_del(&scp->elem);
-> > >               rproc_del(scp->rproc);
-> > > -             scp_remove_rpmsg_subdev(scp);
-> > > -             scp_ipi_unregister(scp, SCP_IPI_INIT);
-> > > -             scp_unmap_memory_region(scp);
-> > > -             for (i = 0; i < SCP_IPI_MAX; i++)
-> > > -                     mutex_destroy(&scp->ipi_desc[i].lock);
-> > > -             mutex_destroy(&scp->send_lock);
-> > > +             scp_rproc_free(scp);
-> > >       }
-> > > 
-> > >       return 0;
-> > > @@ -1106,12 +1198,19 @@ static const struct mtk_scp_of_data mt8195_of_data_c1 = {
-> > >       .host_to_scp_int_bit = MT8195_CORE1_HOST_IPC_INT_BIT,
-> > >  };
-> > > 
-> > > +static const struct mtk_scp_of_data *mt8195_of_data_cores[] = {
-> > > +     &mt8195_of_data,
-> > > +     &mt8195_of_data_c1,
-> > > +     NULL
-> > > +};
-> > > +
-> > >  static const struct of_device_id mtk_scp_of_match[] = {
-> > >       { .compatible = "mediatek,mt8183-scp", .data = &mt8183_of_data },
-> > >       { .compatible = "mediatek,mt8186-scp", .data = &mt8186_of_data },
-> > >       { .compatible = "mediatek,mt8188-scp", .data = &mt8188_of_data },
-> > >       { .compatible = "mediatek,mt8192-scp", .data = &mt8192_of_data },
-> > >       { .compatible = "mediatek,mt8195-scp", .data = &mt8195_of_data },
-> > > +     { .compatible = "mediatek,mt8195-scp-dual", .data = &mt8195_of_data_cores },
-> > >       {},
-> > >  };
-> > >  MODULE_DEVICE_TABLE(of, mtk_scp_of_match);
-> > > --
-> > > 2.18.0
-> > > 
-> 
-> -- 
-> Best regards,
-> TingHan
+struct folio {
+...
+    union {
+        struct {
+        	long unsigned int _flags_1;      /* 64    8 */
+        	long unsigned int _head_1;       /* 72    8 */
+        	unsigned char _folio_dtor;       /* 80    1 */
+        	unsigned char _folio_order;      /* 81    1 */
+
+        	/* XXX 2 bytes hole, try to pack */
+
+        	atomic_t   _entire_mapcount;     /* 84    4 */
+        	atomic_t   _nr_pages_mapped;     /* 88    4 */
+        	atomic_t   _pincount;            /* 92    4 */
+        	unsigned int _folio_nr_pages;    /* 96    4 */
+        };                                       /* 64   40 */
+        struct page __page_1 __attribute__((__aligned__(8))); /* 64   64 */
+    }
+...
+}
+
+So, folio_set_order(folio, 0) can be removed from freeing gigantic
+folio path (__destroy_compound_gigantic_folio).
+
+Another place, folio_set_order(folio, 0) is called inside
+__prep_compound_gigantic_folio during error path. Here,
+folio_set_order(folio, 0) can also be removed if we move
+folio_set_order(folio, order) after for loop.
+
+The patch also moves _folio_set_head call in __prep_compound_gigantic_folio()
+such that we avoid clearing them in the error path.
+
+Also, as Mike pointed out:
+"It would actually be better to move the calls _folio_set_head and
+folio_set_order in __prep_compound_gigantic_folio() as suggested here. Why?
+In the current code, the ref count on the 'head page' is still 1 (or more)
+while those calls are made. So, someone could take a speculative ref on the
+page BEFORE the tail pages are set up."
+
+This way, folio_set_order(folio, 0) is no more needed. And it will also
+helps removing the confusion of folio order being set to 0 (as _folio_order
+field is part of first tail page).
+
+Testing: I have run LTP tests, which all passes. and also I have written
+the test in LTP which tests the bug caused by compound_nr and page->mapping
+overlapping.
+
+https://github.com/linux-test-project/ltp/blob/master/testcases/kernel/mem/hugetlb/hugemmap/hugemmap32.c
+
+Running on older kernel ( < 5.10-rc7) with the above bug this fails while
+on newer kernel and, also with this patch it passes.
+
+Signed-off-by: Tarun Sahu <tsahu@linux.ibm.com>
+---
+ mm/hugetlb.c  | 9 +++------
+ mm/internal.h | 8 ++------
+ 2 files changed, 5 insertions(+), 12 deletions(-)
+
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index f154019e6b84..607553445855 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -1489,7 +1489,6 @@ static void __destroy_compound_gigantic_folio(struct folio *folio,
+ 			set_page_refcounted(p);
+ 	}
+ 
+-	folio_set_order(folio, 0);
+ 	__folio_clear_head(folio);
+ }
+ 
+@@ -1951,9 +1950,6 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
+ 	struct page *p;
+ 
+ 	__folio_clear_reserved(folio);
+-	__folio_set_head(folio);
+-	/* we rely on prep_new_hugetlb_folio to set the destructor */
+-	folio_set_order(folio, order);
+ 	for (i = 0; i < nr_pages; i++) {
+ 		p = folio_page(folio, i);
+ 
+@@ -1999,6 +1995,9 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
+ 		if (i != 0)
+ 			set_compound_head(p, &folio->page);
+ 	}
++	__folio_set_head(folio);
++	/* we rely on prep_new_hugetlb_folio to set the destructor */
++	folio_set_order(folio, order);
+ 	atomic_set(&folio->_entire_mapcount, -1);
+ 	atomic_set(&folio->_nr_pages_mapped, 0);
+ 	atomic_set(&folio->_pincount, 0);
+@@ -2017,8 +2016,6 @@ static bool __prep_compound_gigantic_folio(struct folio *folio,
+ 		p = folio_page(folio, j);
+ 		__ClearPageReserved(p);
+ 	}
+-	folio_set_order(folio, 0);
+-	__folio_clear_head(folio);
+ 	return false;
+ }
+ 
+diff --git a/mm/internal.h b/mm/internal.h
+index 68410c6d97ac..c59fe08c5b39 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -425,16 +425,12 @@ int split_free_page(struct page *free_page,
+  */
+ static inline void folio_set_order(struct folio *folio, unsigned int order)
+ {
+-	if (WARN_ON_ONCE(!folio_test_large(folio)))
++	if (WARN_ON_ONCE(!order || !folio_test_large(folio)))
+ 		return;
+ 
+ 	folio->_folio_order = order;
+ #ifdef CONFIG_64BIT
+-	/*
+-	 * When hugetlb dissolves a folio, we need to clear the tail
+-	 * page, rather than setting nr_pages to 1.
+-	 */
+-	folio->_folio_nr_pages = order ? 1U << order : 0;
++	folio->_folio_nr_pages = 1U << order;
+ #endif
+ }
+ 
+-- 
+2.31.1
+
