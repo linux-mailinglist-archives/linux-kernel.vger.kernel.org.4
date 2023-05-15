@@ -2,91 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1472702776
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:42:26 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A61702778
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:42:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232916AbjEOImZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 04:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58470 "EHLO
+        id S237497AbjEOImh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 04:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237303AbjEOImV (ORCPT
+        with ESMTP id S237142AbjEOIm1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 04:42:21 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4B1E49;
-        Mon, 15 May 2023 01:42:13 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E01D321D54;
-        Mon, 15 May 2023 08:42:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1684140131; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iMyogPFU7LyhBaMdBwdBH4OR9+KTNXgm0SUPVyw/cGM=;
-        b=WfEJddmeb+29p4Y3ITjjtW/umMxsj58OkKEX+tSkh64CFkZ6yfmRmHR3mXd/FtHD7ALsc5
-        WnUbc4PsA8EGfZa+5pBI6C+/oFQLFv1V4FbBORqGHuHqoOzNB+OJ2j7OJksC5FB1elRXIS
-        LNLT5yabMKmcgL7bW9cinAbk0r0wRTc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1684140131;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=iMyogPFU7LyhBaMdBwdBH4OR9+KTNXgm0SUPVyw/cGM=;
-        b=EGOT908D3K2uelZ40g+IGjQ4ieCCK3s7Kglhwj1a9/vFOszfrNdYEE9z2lEyuHpN8TYxs/
-        WFpS7rEc2cBcxnAg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BDE02138E5;
-        Mon, 15 May 2023 08:42:11 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Yu+iLWPwYWTYMQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 15 May 2023 08:42:11 +0000
-Message-ID: <ab9c6c47-ef9d-c31f-e789-b70cf72231ce@suse.cz>
-Date:   Mon, 15 May 2023 10:42:11 +0200
+        Mon, 15 May 2023 04:42:27 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7985EC;
+        Mon, 15 May 2023 01:42:25 -0700 (PDT)
+Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4QKXq73GrszLq1c;
+        Mon, 15 May 2023 16:39:31 +0800 (CST)
+Received: from [10.67.111.205] (10.67.111.205) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.23; Mon, 15 May 2023 16:42:23 +0800
+Subject: Re: [PATCH v2 1/4] perf trace-event-info: Add tracepoint_id_to_name()
+ helper
+To:     Adrian Hunter <adrian.hunter@intel.com>, <peterz@infradead.org>,
+        <mingo@redhat.com>, <acme@kernel.org>, <mark.rutland@arm.com>,
+        <alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
+        <namhyung@kernel.org>, <irogers@google.com>,
+        <anshuman.khandual@arm.com>, <jesussanp@google.com>,
+        <linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230511075154.240163-1-yangjihong1@huawei.com>
+ <20230511075154.240163-2-yangjihong1@huawei.com>
+ <14f09d56-d4f1-8602-6a98-5588cbef8c81@intel.com>
+From:   Yang Jihong <yangjihong1@huawei.com>
+Message-ID: <6955e0df-5835-e79b-2ba4-cddc3bb7c976@huawei.com>
+Date:   Mon, 15 May 2023 16:42:22 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.6.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH] net: skbuff: remove special handling for SLOB
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230509071207.28942-1-lukas.bulwahn@gmail.com>
+In-Reply-To: <14f09d56-d4f1-8602-6a98-5588cbef8c81@intel.com>
+Content-Type: text/plain; charset="utf-8"; format=flowed
 Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230509071207.28942-1-lukas.bulwahn@gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.111.205]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 5/9/23 09:12, Lukas Bulwahn wrote:
-> Commit c9929f0e344a ("mm/slob: remove CONFIG_SLOB") removes CONFIG_SLOB.
-> Now, we can also remove special handling for socket buffers with the SLOB
-> allocator. The code with HAVE_SKB_SMALL_HEAD_CACHE=1 is now the default
-> behavior for all allocators.
-> 
-> Remove an unnecessary distinction between SLOB and SLAB/SLUB allocator
-> after the SLOB allocator is gone.
-> 
-> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Hello,
 
-Acked-by: Vlastimil Babka <vbabka@suse.cz>
+On 2023/5/12 18:33, Adrian Hunter wrote:
+> On 11/05/23 10:51, Yang Jihong wrote:
+>> Add tracepoint_id_to_name() helper to search for the trace events directory
+>> by given event id and return the corresponding tracepoint.
+>>
+>> Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+>> ---
+>>   tools/perf/util/trace-event-info.c | 11 +++++++++++
+>>   tools/perf/util/trace-event.h      |  6 ++++++
+>>   2 files changed, 17 insertions(+)
+>>
+>> diff --git a/tools/perf/util/trace-event-info.c b/tools/perf/util/trace-event-info.c
+>> index c24b3a15e319..a5c65cb02a28 100644
+>> --- a/tools/perf/util/trace-event-info.c
+>> +++ b/tools/perf/util/trace-event-info.c
+>> @@ -466,6 +466,17 @@ static struct tracepoint_path *tracepoint_id_to_path(u64 config)
+>>   	return NULL;
+>>   }
+>>   
+>> +char *tracepoint_id_to_name(u64 config)
+>> +{
+>> +	char *buf = NULL;
+>> +	struct tracepoint_path *path = tracepoint_id_to_path(config);
+> 
+> It is considered slightly nicer to put local declarations
+> in descending order of line length. i.e.
+OK, will fix in v3.
+> 
+> 	struct tracepoint_path *path = tracepoint_id_to_path(config);
+> 	char *buf = NULL;
+> 
+>> +
+>> +	if ((path != NULL) && (asprintf(&buf, "%s:%s", path->system, path->name) > 0))
+> 
+> The parentheses are unnecessary and kernel style tends to avoid "!= NULL"
+> i.e.
+OK, will fix in v3.
 
+Thanks,
+Yang
