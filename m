@@ -2,160 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F818702EBC
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:52:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 20990702ECA
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:52:42 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233122AbjEONwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 09:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58522 "EHLO
+        id S237719AbjEONwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 09:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjEONwR (ORCPT
+        with ESMTP id S234266AbjEONwf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 09:52:17 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE0E9E6E;
-        Mon, 15 May 2023 06:52:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684158736; x=1715694736;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=n7yllujFV9tpaRgSKf9uC3OwShqrAhg7NEMdAe9MCgQ=;
-  b=g6tESjPkLMALRrYX909PscO31lXbxAWGFFTlC+C/ZRciWs0TVKYcZXws
-   hWbfdLdozPJ0xFgzqbXcQsEakurWGOGssmdPmMqBAWUvaf/jk3trAO2rf
-   JsCioDgAhfwumk6rojDTXeUIkfv4wRGy2SGwSh+CnLR+OZqPr8uq/m1v+
-   LKgz7vbHH41z+AZd0lVVyUxA0O30a6DTjS789fxaHyyVFQYVGMdu0L/g9
-   yYEPbkPJymIdR2azNCE+TumydiMVAvyxJopmqBg7ihgCNSLxBaUNIvcmu
-   dWRTw6q2T/72lz3EfHfZhSuj/ij/Dm4vuMDwOpqh89yB/5gRTDTmToQzn
-   A==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="331574354"
-X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
-   d="scan'208";a="331574354"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 06:52:16 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10711"; a="765936501"
-X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
-   d="scan'208";a="765936501"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga008.fm.intel.com with ESMTP; 15 May 2023 06:52:15 -0700
-Received: from fmsmsx603.amr.corp.intel.com (10.18.126.83) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 15 May 2023 06:52:14 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx603.amr.corp.intel.com (10.18.126.83) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23 via Frontend Transport; Mon, 15 May 2023 06:52:14 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.108)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.23; Mon, 15 May 2023 06:52:14 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=CJIC5sl6933oO6QRJEpIpdAq97rQndkIdPC7qUcG5uFJ5m4nJ+Bm2ui1zvMPAQu4kRDjY90YN0YAuj5Uw9ZC5gIVBuuoCvXDkx9fdNOjdXPzSvBZwkWQuOURxmIgPRfPHu8sFtQktyCx35i4qAkJSD1qskxrUn1oKVVaKuAOgYPkZQaZABK8VZfzu+nTY8Dcx7IukNJw2YCxBODiyzffAqBM8+m0NYhkCaN9w6EfzG0MdHcCzy6fl/xzPEzAPvuTaI9Dvi+Em4UL/XNSDghLKOdSAc/xFdf67p0i2hIkMeFZCtJ4xF1YAWHfWxGXZIO7fQ3FXol7H+T7i0E5Pg95SA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pvx+i4VEzeLKTatwaIQU+GYJvDB5/nqzXAA3kH7G1rk=;
- b=H2H3tQRRrYvI7exnnsHmygWR/EKZyHpnMXGBOgYVJ1Y92Ggjz2oFCQBpwlS7pxfBnvXx8GkB/6gCKGalBuz3TULpvZTLuKqVR4n8R6iACI1nk2MS2WicF/8pFHJBzUYjowkl4fCqR7qrPxF/z+DHiKnnKeg7vvtMQACxjzsLlJfHenPbW2QntJCnj3wtnebEkHOKY8doIrJ29ple4Y6c/XYAvx5QcsLDKICrsGSQm1f239d1RdNU+0v4ySVMAoXZjijbqw8m/aVBYdhhub4VivoytsxBbN1VhPAjQOxKTWLRzPf2XBrf1snhFbfseI2/fMxKAvvdjf4BMvsobMepqw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM4PR11MB5471.namprd11.prod.outlook.com (2603:10b6:5:39d::10)
- by PH0PR11MB7494.namprd11.prod.outlook.com (2603:10b6:510:283::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.29; Mon, 15 May
- 2023 13:52:10 +0000
-Received: from DM4PR11MB5471.namprd11.prod.outlook.com
- ([fe80::907c:ffaa:352a:8913]) by DM4PR11MB5471.namprd11.prod.outlook.com
- ([fe80::907c:ffaa:352a:8913%6]) with mapi id 15.20.6387.030; Mon, 15 May 2023
- 13:52:10 +0000
-Date:   Mon, 15 May 2023 15:49:29 +0200
-From:   Larysa Zaremba <larysa.zaremba@intel.com>
-To:     Stanislav Fomichev <sdf@google.com>
-CC:     <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
-        "Daniel Borkmann" <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Jiri Olsa <jolsa@kernel.org>,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        "Tony Nguyen" <anthony.l.nguyen@intel.com>,
-        Anatoly Burakov <anatoly.burakov@intel.com>,
-        Jesper Dangaard Brouer <brouer@redhat.com>,
-        Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Magnus Karlsson <magnus.karlsson@gmail.com>,
-        Maryam Tahhan <mtahhan@redhat.com>,
-        <xdp-hints@xdp-project.net>, <netdev@vger.kernel.org>,
-        <intel-wired-lan@lists.osuosl.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH RESEND bpf-next 11/15] xdp: Add checksum level hint
-Message-ID: <ZGI4aS9UUdW4JwZ6@lincoln>
-References: <20230512152607.992209-1-larysa.zaremba@intel.com>
- <20230512152607.992209-12-larysa.zaremba@intel.com>
- <ZF6GrXsA8L0THVFB@google.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ZF6GrXsA8L0THVFB@google.com>
-X-ClientProxiedBy: FR3P281CA0165.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a2::10) To DM4PR11MB5471.namprd11.prod.outlook.com
- (2603:10b6:5:39d::10)
+        Mon, 15 May 2023 09:52:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 760C21FE2;
+        Mon, 15 May 2023 06:52:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ED4CF61E94;
+        Mon, 15 May 2023 13:52:29 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5863C433EF;
+        Mon, 15 May 2023 13:52:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684158749;
+        bh=yLHcOQuMOwKl/TYFo2kdsc0eAYysG+im84RLRDZNBd0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OD90Fnua0tBl6Y7Xa5VYKmP56D3PTecnBZKxd6t/NzIbjyvtkj0FCYMKwSiEtCItm
+         FOJxfFG6M+SqBZePsKLSIR0ZPW4mgn7rQihMwZEGM1Y0LT8x8v3xuCpPtttmUVHYd9
+         Rw0sOkNWawXMm1K7SVGmjFitrrb6QBegfPwUWfECuki7kMZqeg4mKRp/qc7KqWwwCz
+         tjZUf8ReIHUIAhWBk8AC1N5GSMad/pfCSv9nZBGYnK5ilmGWyJV349wbDLPVZPNCE5
+         n1/RcwvhrCrwDX9yTR70NM50k1yHTBCmbwBHvPjfwOPT9Bw5JJoWXNoTDwaV2AHJpO
+         WnSHT0ak+v8pA==
+Date:   Mon, 15 May 2023 15:52:20 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Amir Goldstein <amir73il@gmail.com>
+Cc:     Christian =?utf-8?B?R8O2dHRzY2hl?= <cgzones@googlemail.com>,
+        x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, audit@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        Jan Kara <jack@suse.cz>, jlayton@kernel.org, cyphar@cyphar.com,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: Re: [RFC PATCH v2] fs/xattr: add *at family syscalls
+Message-ID: <20230515-banal-vergab-a7abb53169b5@brauner>
+References: <20230511150802.737477-1-cgzones@googlemail.com>
+ <20230515-kopfgeld-umkurven-f27be4b68a26@brauner>
+ <CAOQ4uxgtxLLfBuVUAT7+N7cox+03wJA3ACGEu76dZd5RqGWXTQ@mail.gmail.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR11MB5471:EE_|PH0PR11MB7494:EE_
-X-MS-Office365-Filtering-Correlation-Id: 6488149f-5c8d-4d52-fc24-08db554b945f
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: txeaj2X04LVyk6bqnVu3dSzOYjaA9boOLl87o+Cdrq3H38u6bXpZvlxRTzo8zgCHwfILdDXY4PsBJCLX+w2LAYVz7bq3hJuaWHeAXTEHBO/VckTO1QGc7Hv7hCyqffaDeWIYoy13dcEnj9Rmh6cUwVV3e1/06KAuJPZRoM89A4r1HfUCzL3SyTg/16rP9MBObyq6s3LnDM7k+zP9Z2EHcXJH51qtLe9U7ZANGQYI3JOhoYxOqwlJ0pk2QNvEm7tkIRK7GStQkODEy4kutkrDHaawo49xPJN4I3m9Rijpl14e4e26QtNeuV+stcTKcsBWYF51t8a0w8QxVnqsjwdwPX5tXNFivJX8R6B2Q3XGKDiwTZ/+W0KkWSDlyC0a8iYuTz0oSmEiCoNhrk+lBdENACsYNovWe1Lbf8Y97Vz5eM/XdKHiXJtg9dG6GIA4SZ806RO2ct0vsJBOquK2lPsHGhgEJRgtgb4zvaELtMRf94A5hLs5HdmRumNPt0zd3URASTkDDCLQSgix+oU98ul82MTtZexitBVOzCwOyPHu7e4ydc96VyqoF+VM+qdI8SaL
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5471.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(7916004)(39860400002)(396003)(366004)(346002)(136003)(376002)(451199021)(86362001)(54906003)(316002)(66476007)(4326008)(6916009)(66946007)(6486002)(66556008)(478600001)(2906002)(33716001)(8936002)(5660300002)(8676002)(41300700001)(44832011)(6666004)(7416002)(38100700002)(82960400001)(9686003)(186003)(26005)(6506007)(83380400001)(6512007);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2sDWlbujWPUffVyiaE5BPmn3JBi/y4A1OgsczZpvEun3BzA5KW0OzVwduNpS?=
- =?us-ascii?Q?RbBjRs/iv2Jnr4Xr4zuBSx7okdzV3+HNASi94JFt0FTZ5YKtM0fwoLGJtceT?=
- =?us-ascii?Q?FnVXmhljXwOssnTlyFjUDaxKpnIvVOcom6GJzAZMgyvws0ZOO7KUNPHQPHTt?=
- =?us-ascii?Q?IjVQ6v8OyL+FUZsrpClOcBhPwe0cirIrvNMLMhC/nzDVB8BN1xMPWVMs5aqf?=
- =?us-ascii?Q?i+ESxXNJurnwPn4pUUwx/pw+9Lh2QaiuUvlVfgGe0WWxhK8U1FHOM77NNtlm?=
- =?us-ascii?Q?SvxjhUQs0lKyXv5OvGhw7ec/b0p5meHYfMpfkgCoMs+nq8Es4d92reI3WxPZ?=
- =?us-ascii?Q?4JWwprls7Ffmdb86yxsrKdhXsfgLUL4LpxY1G8SDAaXATLgu8Z8lQ95sgZE1?=
- =?us-ascii?Q?KdMd0wnnxT54dFfxxFEAraTFOyPdJD9DWqSHtoRd/i34ZlxFJ3AuWDiJi0dH?=
- =?us-ascii?Q?L2lsYtcxM6K5LM9OmXIUZGTNBUnwgZ/qtYDP8e+SHXDnGx9kyaID34nujhA1?=
- =?us-ascii?Q?Uj+qdIL9g0QN9/cYQ2lKolSONJa9nrQCfwigMbvH/3rqNmwzxtE4K/7alAzN?=
- =?us-ascii?Q?eY9P787NIGq4RfqdpyyjgZziW9Yry1TSV4WiAqDQf7c7MK3L8sc+WxbExhOM?=
- =?us-ascii?Q?2zAEZAOPZsTum58f5UjH10imhJkizmHrqB4rCPSz8iHAt5zfX8jdBo027Q5T?=
- =?us-ascii?Q?cJakS1fACw3uCn2RPV5/9J+4gUB2ePxJJaeveGqmzKjzMo7gD8cQ/2vcoc3o?=
- =?us-ascii?Q?2Za62H0Sq8kvldU0qSJ0QrluLLuAMdOPk2/cRQWFtS2VIir3wQEwuTpVXzz6?=
- =?us-ascii?Q?mE/RGVUzO+uV9hR03rcRmxloHT8k4jf9YvUbm4+n0QGRjgAaaLU0zndBaT99?=
- =?us-ascii?Q?PHOsWfNU6/5tJWG1fwEbrudFXhajwjVxOugoqi/EQX/EzpfzYXnwL0r0+YyV?=
- =?us-ascii?Q?b+ERCOnxN10b9rLXZUkTgpyhm5HH+xVRZNRJHBHGvxFHrVx+CYYiU1uYorFK?=
- =?us-ascii?Q?6BeTdHSs7goPOneY3zZaoJNZpGIfZWkpE5wPDuV0lyT1DEZLkDBqNISPkG7h?=
- =?us-ascii?Q?m6do7MqrrNNb+z1ZRr12dqj3mle5ewHJg9htmMwMOPue0KSu+Cdkg+kIImfE?=
- =?us-ascii?Q?Be/rsL6pDePNX+EiHXVjCBl00ADh8HoQxk/QvV1ppulGg4Jo/ph1+fEA25/k?=
- =?us-ascii?Q?70bj02QRQc/c90ORURSt6W9AFqeABLxHWxJLhohYr8It85RqJA8HaLQIUhgl?=
- =?us-ascii?Q?LDZq31l/nU6b+rk9mk2KhfUpRSyJAuaDatGatqsNhbqhAWXzlCzUyusrPy9x?=
- =?us-ascii?Q?0QdnldTQkecdLtxgtHtYY1W8ntK6eT/w6NLESfHAXhq0MLWagGb0e3nRdwR+?=
- =?us-ascii?Q?+3nWupIhnQaiVE/HmBoZ21zVQ6OMY1yDdy52T0DoQmsEveTaX5smXJEDrKrN?=
- =?us-ascii?Q?RmcZbfKFbzXeLCTfcds/ZLik5u049Vkv+hjzvedpxu1vC1BIaBOmy1HD44As?=
- =?us-ascii?Q?9GARcAsS/I9kXUhYjH5+QDZ2ZtkZnSqZRNwHHowzXbUzveK1URThJwzMOuJN?=
- =?us-ascii?Q?0Clsy2HgTVj3FctoJBOJariWLX4GZKONXCK3cTKusEh4WhuT60j6n6pMicq2?=
- =?us-ascii?Q?Ig=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6488149f-5c8d-4d52-fc24-08db554b945f
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5471.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2023 13:52:10.6010
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: dhUlJP/UxbM8+27KVBAfD1htHNsI8M51up/58XFRiS37raiSPqBL5jUykHWp9hU1UgAgjccGPbgsbjsRPWhmmCmY3IOJC9mpHAFZaqotVfc=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR11MB7494
-X-OriginatorOrg: intel.com
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOQ4uxgtxLLfBuVUAT7+N7cox+03wJA3ACGEu76dZd5RqGWXTQ@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -163,103 +67,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 11:34:21AM -0700, Stanislav Fomichev wrote:
-> On 05/12, Larysa Zaremba wrote:
-> > Implement functionality that enables drivers to expose to XDP code,
-> > whether checksums was checked and on what level.
-> > 
-> > Signed-off-by: Larysa Zaremba <larysa.zaremba@intel.com>
-> > ---
-> >  Documentation/networking/xdp-rx-metadata.rst |  3 +++
-> >  include/linux/netdevice.h                    |  1 +
-> >  include/net/xdp.h                            |  2 ++
-> >  kernel/bpf/offload.c                         |  2 ++
-> >  net/core/xdp.c                               | 12 ++++++++++++
-> >  5 files changed, 20 insertions(+)
-> > 
-> > diff --git a/Documentation/networking/xdp-rx-metadata.rst b/Documentation/networking/xdp-rx-metadata.rst
-> > index 73a78029c596..f74f0e283097 100644
-> > --- a/Documentation/networking/xdp-rx-metadata.rst
-> > +++ b/Documentation/networking/xdp-rx-metadata.rst
-> > @@ -29,6 +29,9 @@ metadata is supported, this set will grow:
-> >  .. kernel-doc:: net/core/xdp.c
-> >     :identifiers: bpf_xdp_metadata_rx_stag
-> >  
-> > +.. kernel-doc:: net/core/xdp.c
-> > +   :identifiers: bpf_xdp_metadata_rx_csum_lvl
-> > +
-> >  An XDP program can use these kfuncs to read the metadata into stack
-> >  variables for its own consumption. Or, to pass the metadata on to other
-> >  consumers, an XDP program can store it into the metadata area carried
-> > diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> > index fdae37fe11f5..ddade3a15366 100644
-> > --- a/include/linux/netdevice.h
-> > +++ b/include/linux/netdevice.h
-> > @@ -1657,6 +1657,7 @@ struct xdp_metadata_ops {
-> >  			       enum xdp_rss_hash_type *rss_type);
-> >  	int	(*xmo_rx_ctag)(const struct xdp_md *ctx, u16 *vlan_tag);
-> >  	int	(*xmo_rx_stag)(const struct xdp_md *ctx, u16 *vlan_tag);
-> > +	int	(*xmo_rx_csum_lvl)(const struct xdp_md *ctx, u8 *csum_level);
-> >  };
-> >  
-> >  /**
-> > diff --git a/include/net/xdp.h b/include/net/xdp.h
-> > index 2db7439fc60f..0fbd25616241 100644
-> > --- a/include/net/xdp.h
-> > +++ b/include/net/xdp.h
-> > @@ -393,6 +393,8 @@ void xdp_attachment_setup(struct xdp_attachment_info *info,
-> >  			   bpf_xdp_metadata_rx_ctag) \
-> >  	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_STAG, \
-> >  			   bpf_xdp_metadata_rx_stag) \
-> > +	XDP_METADATA_KFUNC(XDP_METADATA_KFUNC_RX_CSUM_LVL, \
-> > +			   bpf_xdp_metadata_rx_csum_lvl) \
-> >  
-> >  enum {
-> >  #define XDP_METADATA_KFUNC(name, _) name,
-> > diff --git a/kernel/bpf/offload.c b/kernel/bpf/offload.c
-> > index 2c6b6e82cfac..8bd54fb4ac63 100644
-> > --- a/kernel/bpf/offload.c
-> > +++ b/kernel/bpf/offload.c
-> > @@ -852,6 +852,8 @@ void *bpf_dev_bound_resolve_kfunc(struct bpf_prog *prog, u32 func_id)
-> >  		p = ops->xmo_rx_ctag;
-> >  	else if (func_id == bpf_xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_STAG))
-> >  		p = ops->xmo_rx_stag;
-> > +	else if (func_id == bpf_xdp_metadata_kfunc_id(XDP_METADATA_KFUNC_RX_CSUM_LVL))
-> > +		p = ops->xmo_rx_csum_lvl;
-> >  out:
-> >  	up_read(&bpf_devs_lock);
-> >  
-> > diff --git a/net/core/xdp.c b/net/core/xdp.c
-> > index eff21501609f..7dd45fd62983 100644
-> > --- a/net/core/xdp.c
-> > +++ b/net/core/xdp.c
-> > @@ -762,6 +762,18 @@ __bpf_kfunc int bpf_xdp_metadata_rx_stag(const struct xdp_md *ctx, u16 *vlan_tag
-> >  	return -EOPNOTSUPP;
-> >  }
-> >  
-> > +/**
-> > + * bpf_xdp_metadata_rx_csum_lvl - Get depth at which HW has checked the checksum.
-> > + * @ctx: XDP context pointer.
-> > + * @csum_level: Return value pointer.
+On Mon, May 15, 2023 at 04:04:21PM +0300, Amir Goldstein wrote:
+> On Mon, May 15, 2023 at 1:33 PM Christian Brauner <brauner@kernel.org> wrote:
+> >
+> > On Thu, May 11, 2023 at 05:08:02PM +0200, Christian Göttsche wrote:
+> > > Add the four syscalls setxattrat(), getxattrat(), listxattrat() and
+> > > removexattrat().  Those can be used to operate on extended attributes,
+> > > especially security related ones, either relative to a pinned directory
+> > > or on a file descriptor without read access, avoiding a
+> > > /proc/<pid>/fd/<fd> detour, requiring a mounted procfs.
+> > >
+> > > One use case will be setfiles(8) setting SELinux file contexts
+> > > ("security.selinux") without race conditions.
+> > >
+> > > Add XATTR flags to the private namespace of AT_* flags.
+> > >
+> > > Use the do_{name}at() pattern from fs/open.c.
+> > >
+> > > Use a single flag parameter for extended attribute flags (currently
+> > > XATTR_CREATE and XATTR_REPLACE) and *at() flags to not exceed six
+> > > syscall arguments in setxattrat().
+> > >
+> > > Previous approach ("f*xattr: allow O_PATH descriptors"): https://lore.kernel.org/all/20220607153139.35588-1-cgzones@googlemail.com/
+> > > v1 discussion: https://lore.kernel.org/all/20220830152858.14866-2-cgzones@googlemail.com/
+> > >
+> > > Signed-off-by: Christian Göttsche <cgzones@googlemail.com>
+> > > CC: x86@kernel.org
+> > > CC: linux-alpha@vger.kernel.org
+> > > CC: linux-kernel@vger.kernel.org
+> > > CC: linux-arm-kernel@lists.infradead.org
+> > > CC: linux-ia64@vger.kernel.org
+> > > CC: linux-m68k@lists.linux-m68k.org
+> > > CC: linux-mips@vger.kernel.org
+> > > CC: linux-parisc@vger.kernel.org
+> > > CC: linuxppc-dev@lists.ozlabs.org
+> > > CC: linux-s390@vger.kernel.org
+> > > CC: linux-sh@vger.kernel.org
+> > > CC: sparclinux@vger.kernel.org
+> > > CC: linux-fsdevel@vger.kernel.org
+> > > CC: audit@vger.kernel.org
+> > > CC: linux-arch@vger.kernel.org
+> > > CC: linux-api@vger.kernel.org
+> > > CC: linux-security-module@vger.kernel.org
+> > > CC: selinux@vger.kernel.org
+> > > ---
+> >
+> > Fwiw, your header doesn't let me see who the mail was directly sent to
+> > so I'm only able to reply to lists which is a bit pointless...
+> >
+> > > v2:
+> > >   - squash syscall introduction and wire up commits
+> > >   - add AT_XATTR_CREATE and AT_XATTR_REPLACE constants
+> >
+> > > +#define AT_XATTR_CREATE              0x1     /* setxattrat(2): set value, fail if attr already exists */
+> > > +#define AT_XATTR_REPLACE     0x2     /* setxattrat(2): set value, fail if attr does not exist */
+> >
+> > We really shouldn't waste any AT_* flags for this. Otherwise we'll run
+> > out of them rather quickly. Two weeks ago we added another AT_* flag
+> > which is up for merging for v6.5 iirc and I've glimpsed another AT_*
+> > flag proposal in one of the talks at last weeks Vancouver conference
+> > extravaganza.
+> >
+> > Even if we reuse 0x200 for AT_XATTR_CREATE (like we did for AT_EACCESS
+> > and AT_REMOVEDIR) we still need another bit for AT_XATTR_REPLACE.
+> >
+> > Plus, this is really ugly since AT_XATTR_{CREATE,REPLACE} really isn't
+> > in any way related to lookup and we're mixing it in with lookup
+> > modifying flags.
+> >
+> > So my proposal for {g,s}etxattrat() would be:
+> >
+> > struct xattr_args {
+> >         __aligned_u64 value;
+> >         __u32 size;
+> >         __u32 cmd;
+> > };
+> >
+> > So everything's nicely 64bit aligned in the struct. Use the @cmd member
+> > to set either XATTR_REPLACE or XATTR_CREATE and treat it as a proper
+> > enum and not as a flag argument like the old calls did.
+> >
+> > So then we'd have:
+> >
+> > setxattrat(int dfd, const char *path, const char __user *name,
+> >            struct xattr_args __user *args, size_t size, unsigned int flags)
+> > getxattrat(int dfd, const char *path, const char __user *name,
+> >            struct xattr_args __user *args, size_t size, unsigned int flags)
+> >
+> > The current in-kernel struct xattr_ctx would be renamed to struct
+> > kernel_xattr_args and then we do the usual copy_struct_from_user()
+> > dance:
+> >
+> > struct xattr_args args;
+> > err = copy_struct_from_user(&args, sizeof(args), uargs, usize);
+> >
+> > and then go on to handle value/size for setxattrat()/getxattrat()
+> > accordingly.
+> >
+> > getxattr()/setxattr() aren't meaningfully filterable by seccomp already
+> > so there's not point in not using a struct.
+> >
+> > If that isn't very appealing then another option is to add a new flag
+> > namespace just for setxattrat() similar to fspick() and move_mount()
+> > duplicating the needed lookup modifying flags.
+> > Thoughts?
 > 
-> Let's maybe clarify what the level means here? For example, do we start
-> counting from 0 or 1?
+> Here is a thought: I am not sure if I am sorry we did not discuss this API
+> issue in LSFMM or happy that we did not waste our time on this... :-/
+> 
+> I must say that I dislike redefined flag namespace like FSPICK_*
+> just as much as I dislike overloading the AT_* namespace and TBH,
+> I am not crazy about avoiding this problem with xattr_args either.
+> 
+> A more sane solution IMO could have been:
+> - Use lower word of flags for generic AT_ flags
+> - Use the upper word of flags for syscall specific flags
 
-Sure, I'll add a comment that the meaning of level is the same as in skb, 
-counting from 0.
+We'd have 16 lower bits for AT_* flags and upper 16 bits for non-AT_*
+flags. That might be ok but it isn't great because if we ever extend
+AT_* flags into the upper 16 bits that are generally useful for all
+AT_* flag taking system calls we'd not be able to use them. And at the
+rate people keep suggesting new AT_* flags that issue might arise
+quicker than we might think.
+
+And we really don't want 64 bit flag arguments because of 32 bit
+architectures as that gets really ugly to handle cleanly (Arnd has
+talked a lot about issues in this area before).
 
 > 
-> > + *
-> > + * Returns 0 on success (HW has checked the checksum) or ``-errno`` on error.
-> > + */
-> > +__bpf_kfunc int bpf_xdp_metadata_rx_csum_lvl(const struct xdp_md *ctx, u8 *csum_level)
-> > +{
-> > +	return -EOPNOTSUPP;
-> > +}
-> > +
-> >  __diag_pop();
-> >  
-> >  BTF_SET8_START(xdp_metadata_kfunc_ids)
-> > -- 
-> > 2.35.3
-> > 
+> So if it were up to me, I would vote starting this practice:
+> 
+> + /* Start of syscall specific range */
+> + #define AT_XATTR_CREATE       0x10000     /* setxattrat(2): set
+> value, fail if attr already exists */
+> + #define AT_XATTR_REPLACE     0x20000     /* setxattrat(2): set
+> value, fail if attr does not exist */
+> 
+> Which coincidentally happens to be inline with my AT_HANDLE_FID patch...
+
+This is different though. The reason AT_HANDLE_FID is acceptable is
+because we need the ability to extend an existing system call and we're
+reusing a bit that is already used in two other system calls. So we
+avoid adding a new system call just to add another flag argument and
+we're also not using up an additional AT_* bit. This makes it bearable
+imho. But here we're talking about new system calls where we can avoid
+this problem arising in the first place.
+
+> 
+> Sure, we will have some special cases like MOVE_MOUNT_* and
+> legacy pollution to the lower AT_ flags word, but as a generic solution
+> for syscalls that need the common AT_ lookup flags and just a few
+> private flags, that seems like the lesser evil to me.
+
+It is fine to do this in some cases but we shouldn't encourage mixing
+distinct flag namespaces let alone advertising this as a generic
+solution imho. The AT_XATTR_* flags aren't even flags they behave like
+an enum.
