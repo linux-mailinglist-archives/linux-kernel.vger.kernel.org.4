@@ -2,60 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A048B702A0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:07:29 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E3B6A702A0D
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:07:37 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjEOKH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
+        id S240596AbjEOKHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 06:07:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239649AbjEOKHG (ORCPT
+        with ESMTP id S240539AbjEOKHG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 15 May 2023 06:07:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96A8426A5;
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269C826A8
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:06:24 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-96adcb66f37so428480466b.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:06:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684145182; x=1686737182;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=B2hjpXzaWeM8OT7/yysLcClGVQFFFKoxwvBr9CBiXm0=;
+        b=BGiDtiloaV0WzQ3uHy4knefdHmJU85un1qrGqD9miGs79g3shQ31A8PRnGtjJ6S4cL
+         KhzcPGZoA7ABjuSOuh5At7Q39EfK63v7WaL++PrV7t59z5yHPvB/ZklYzLDFfJGnlR+R
+         bpslU+v3kPne8rbftHd71wrEEOeGyDp7z+3vIvcERHc6JNQudKVKNxGA3777Fzt0J0Gg
+         z3mli3vXAubfR6w8aoQyJwYRJcF3XLOuTAoe0a/piJxJttHpAJNRKj2x2wcaLpNoBAHz
+         LuUQSD09m3VF9wON+XX31yp20oiqJV6ypuzQ9BxuonDZnTaOr6nqkuYqT0rmFBFQlWw7
+         bLIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684145182; x=1686737182;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=B2hjpXzaWeM8OT7/yysLcClGVQFFFKoxwvBr9CBiXm0=;
+        b=ZKDkrzlmtGCc4MluhbdJoXZJIM0Sk78dLisoZSScmkYj71/Rv1ZIwCsS6X0DdMCMmZ
+         pJ+iLJP6B2MwLTgdwXgqBfu4X+fv0S0ak4bw9tTuyIW2PhMMgTRdQaquJ9MqyHh5oZGf
+         LWSgPz8OQ2ilzAVwT1QOrKmR6778DyRQXCW2bng/nwZmc/PQNaZkSsEhzJ2OhIT413vl
+         JlfhliBLVlGmdxxNJTPd5AbO/9p8FRzxAeMl5PJCDBgz9GWVPe3Hat1aAQcQFSILj1Ax
+         ueq0Zxv77K7KX3TGk5wHejpbTQXmI5Xu32dp6aH3TQhriqH05yrPhvkVp98aFDKJDeaA
+         kITA==
+X-Gm-Message-State: AC+VfDwAbt2PwiuFi7gl4k+8FW1rwKBP8d2jh2o/eetC+Mbxf9dHBfff
+        24gRcEt0V/DOfctRgMQ5WkeFRg==
+X-Google-Smtp-Source: ACHHUZ4sgPSj3/bY/sz0i8Il1c6eLwrf8kl8HHpsjyXJB0xJi8Gxcu96OyGJ+tDfG3La5Lgd6wWFZA==
+X-Received: by 2002:a17:906:4784:b0:94f:7486:85a7 with SMTP id cw4-20020a170906478400b0094f748685a7mr34326781ejc.31.1684145182522;
         Mon, 15 May 2023 03:06:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2A319621FD;
-        Mon, 15 May 2023 10:06:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E70CBC433D2;
-        Mon, 15 May 2023 10:06:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684145181;
-        bh=8ayaAuYB/kceB1weTjmH44O2MoHflgKCJFCWUHfcFQs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QJFmBO2914iPhBK2y/pzhOn8EsqM4aJVDlSeAie995e5GJqyMiOnO1xylkfUxsxuM
-         Mw5ZVuZp5+y1dqPz5szkFxCI5PfuF7PIz33EQAz2jVPH3c/BHmyY5pSd9DOJeKOV6Z
-         jd1WAmg5kynCKeVjCdMCE+swyrKmolI2pjUFO2+GtCLCmD7XGiYduQQmc8A6p2P+Kw
-         yTMtLfrQbQ0OIKdf9ZOMFfBAZyJRcd2MPf6AaImpaCHqRhl2YGZz0+kbr0xq0H3Vit
-         9x9KhzkN8AmOcWBe7wUCHl/6D4tuPBRXn6mZzWScR9xrbrKViRrwyW5fswxLHhkIrp
-         11WpIBcFgoUKg==
-Date:   Mon, 15 May 2023 11:06:15 +0100
-From:   Lee Jones <lee@kernel.org>
-To:     Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Xu Yilun <yilun.xu@intel.com>, Wu Hao <hao.wu@intel.com>,
-        Tom Rix <trix@redhat.com>, Moritz Fischer <mdf@kernel.org>,
-        linux-fpga@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Russ Weight <russell.h.weight@intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 4/4] mfd: intel-m10-bmc: Manage access to MAX 10 fw
- handshake registers
-Message-ID: <20230515100615.GH8963@google.com>
-References: <20230417092653.16487-1-ilpo.jarvinen@linux.intel.com>
- <20230417092653.16487-5-ilpo.jarvinen@linux.intel.com>
- <20230427150712.GV50521@google.com>
- <dc53f4a2-b91f-e114-6da8-72cac82d508d@linux.intel.com>
+Received: from ?IPV6:2a02:810d:15c0:828:6470:25b8:7c2d:1992? ([2a02:810d:15c0:828:6470:25b8:7c2d:1992])
+        by smtp.gmail.com with ESMTPSA id kz23-20020a17090777d700b009659fed3612sm9193781ejc.24.2023.05.15.03.06.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 03:06:21 -0700 (PDT)
+Message-ID: <4a04ef11-d87d-4464-a907-badc920d595d@linaro.org>
+Date:   Mon, 15 May 2023 12:06:20 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH V8 1/4] dt-bindings: clock: document Amlogic S4 SoC PLL
+ clock controller
+Content-Language: en-US
+To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Cc:     kelvin.zhang@amlogic.com, qi.duan@amlogic.com
+References: <20230515031557.31143-1-yu.tu@amlogic.com>
+ <20230515031557.31143-2-yu.tu@amlogic.com>
+ <590560c9-4da6-bbd4-6aac-de57ab5403ba@linaro.org>
+ <8c6ad0a9-7820-c7a2-bd3b-1eee87d96728@amlogic.com>
+ <33f5ff59-db7b-7576-64cb-972c0dfb0f7b@amlogic.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <33f5ff59-db7b-7576-64cb-972c0dfb0f7b@amlogic.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <dc53f4a2-b91f-e114-6da8-72cac82d508d@linux.intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,42 +90,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 10 May 2023, Ilpo Järvinen wrote:
-
-> On Thu, 27 Apr 2023, Lee Jones wrote:
-> > On Mon, 17 Apr 2023, Ilpo Järvinen wrote:
-> > > On some MAX 10 cards, the BMC firmware is not available to service
-> > > handshake registers during secure update erase and write phases at
-> > > normal speeds. This problem affects at least hwmon driver. When the MAX
-> > > 10 hwmon driver tries to read the sensor values during a secure update,
-> > > the reads are slowed down (e.g., reading all D5005 sensors takes ~24s
-> > > which is magnitudes worse than the normal <0.02s).
-> > > 
-> > > Manage access to the handshake registers using a rw semaphore and a FW
-> > > state variable to prevent accesses during those secure update phases
-> > > and return -EBUSY instead.
-> > > 
-> > > If handshake_sys_reg_nranges == 0, don't update bwcfw_state as it is not
-> > > used. This avoids the locking cost.
-> > > 
-> > > Co-developed-by: Russ Weight <russell.h.weight@intel.com>
-> > > Signed-off-by: Russ Weight <russell.h.weight@intel.com>
-> > > Co-developed-by: Xu Yilun <yilun.xu@intel.com>
-> > > Signed-off-by: Xu Yilun <yilun.xu@intel.com>
-> > > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > > ---
-> > >  drivers/fpga/intel-m10-bmc-sec-update.c | 17 +++++--
-> > >  drivers/mfd/intel-m10-bmc-core.c        | 67 ++++++++++++++++++++++++-
-> > >  drivers/mfd/intel-m10-bmc-spi.c         | 14 ++++++
-> > >  include/linux/mfd/intel-m10-bmc.h       | 28 +++++++++++
-> > >  4 files changed, 121 insertions(+), 5 deletions(-)
-> > 
-> > Applied, thanks
+On 15/05/2023 09:57, Yu Tu wrote:
 > 
-> Did these end up falling throught the cracks as I've not been able to 
-> locate where they were applied?
+> 
+> On 2023/5/15 15:35, Yu Tu wrote:
+>> Hi Krzysztof,
+>>      Thank you for your prompt reply.
+>>
+>> On 2023/5/15 14:32, Krzysztof Kozlowski wrote:
+>>> On 15/05/2023 05:15, Yu Tu wrote:
+>>>> Add the S4 PLL clock controller dt-bindings in the s4 SoC family.
+>>>>
+>>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
+>>>
+>>> This is a friendly reminder during the review process.
+>>>
+>>> It looks like you received a tag and forgot to add it.
+>>>
+>>> If you do not know the process, here is a short explanation:
+>>> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+>>> versions. However, there's no need to repost patches *only* to add the
+>>> tags. The upstream maintainer will do that for acks received on the
+>>> version they apply.
+>>>
+>>> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
+>>>
+>>> If a tag was not added on purpose, please state why and what changed.
+>>
+>> Yes. I don't know the process. So I need to add Reviewed-by: Rob Herring 
+>> <robh@kernel.org>. And resend V8?
+>>
+> 
+> I would like to ask you again by the way. I'm not sure if I can just add 
+> the TAG. Because I actually changed the V8.
 
-They've been in -next for a couple of weeks.
+Your changelog in cover letter does not describe it. It only mentions
+vaguely "change patch series". Describe exactly what changed.
 
--- 
-Lee Jones [李琼斯]
+Best regards,
+Krzysztof
+
