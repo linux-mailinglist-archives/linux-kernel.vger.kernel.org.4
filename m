@@ -2,146 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E77DB703C32
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 20:14:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4100C703C2C
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 20:13:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238810AbjEOSOL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 14:14:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51568 "EHLO
+        id S245159AbjEOSNc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 14:13:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245007AbjEOSNy (ORCPT
+        with ESMTP id S245110AbjEOSNJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 14:13:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFED2225A4
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 11:10:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684174153;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ZtZtSSbwWjXLXKy/6LQdhCrrwRELJrN07bazT1pYPAc=;
-        b=eXXNX+hev1jpK1t7ErGihwI7up/v9darH60WzHAgT8cX4u/gDV3vaNJ9IRRP5SIjbvFjJQ
-        cAizzKrLEmcXuDzyIm/nXj1dBK8V0xxnSaFWLJ/eQ1BNnnnO6bJq/FN56UmRHJe/IAVjg0
-        ALORCFvzS+woeFB1InUuwTxK3+V4h9I=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-133-y5vLRCE1NyywcTxvRONQ0Q-1; Mon, 15 May 2023 14:09:12 -0400
-X-MC-Unique: y5vLRCE1NyywcTxvRONQ0Q-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 34850380665F;
-        Mon, 15 May 2023 18:09:11 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.147])
-        by smtp.corp.redhat.com (Postfix) with SMTP id CCB3235453;
-        Mon, 15 May 2023 18:09:06 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-        oleg@redhat.com; Mon, 15 May 2023 20:08:57 +0200 (CEST)
-Date:   Mon, 15 May 2023 20:08:52 +0200
-From:   Oleg Nesterov <oleg@redhat.com>
-To:     Wander Lairson Costa <wander@redhat.com>
-Cc:     "Christian Brauner (Microsoft)" <brauner@kernel.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Mike Christie <michael.christie@oracle.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Guo Ren <guoren@kernel.org>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        Hu Chunyu <chuhu@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Paul McKenney <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH v8] kernel/fork: beware of __put_task_struct calling
- context
-Message-ID: <20230515180851.GD10759@redhat.com>
-References: <20230515162249.709839-1-wander@redhat.com>
- <20230515164311.GC10759@redhat.com>
- <CAAq0SUkHDf6Tnhrc5ys4rOGWtepFfdv3=d6GiA=BB7yvDUj8vw@mail.gmail.com>
+        Mon, 15 May 2023 14:13:09 -0400
+Received: from mail-yw1-x1141.google.com (mail-yw1-x1141.google.com [IPv6:2607:f8b0:4864:20::1141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDEF18C95
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 11:10:31 -0700 (PDT)
+Received: by mail-yw1-x1141.google.com with SMTP id 00721157ae682-559e53d1195so186803987b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 11:10:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684174196; x=1686766196;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z2awcT+0JgCeSvbodyRK5wx8XefAu35aN26RnKecP3c=;
+        b=II8OM+hqNliPegdvKwjXlWLcMGHQHEa4CfQSk/7BE+V1KwIG7MGi7x/8NukC82M/L5
+         212m7GAOW7PGjlLZPbDSkSrsXnbGRLcAkvIqKOcnp9XPG7+lRjrGLWV2UcOh+TS4xFWK
+         iay2vDb0DJhKXszG4DrjHCclf9N+NDQ2b1QCMoZJzQwMDFwdxNAxt7vroQ5veIJpAbg6
+         MXu951L6wM2pEJbf9Zvndj7Wr6Y7aOT/CP6lAur0498feUfyhvBltC5R5kghUn3A3cKv
+         bzzbHoGDlrQzYtGK4OnJ7QyEuc4PCcSSlhsU82ykdFM3XcCsPyIkNn/DqLJpB/RccuNc
+         I4wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684174196; x=1686766196;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Z2awcT+0JgCeSvbodyRK5wx8XefAu35aN26RnKecP3c=;
+        b=WCbsfQJ0liOgP+heNMPQu/cyPNIcqMwwDL0TqD8lM7B9WxjZFipIvWVg4u0ClRFkHY
+         tZooLvr1zJp0TpWgcrhB9Jbu9aAlYGu9mp4zElcxR1DM9VgBDQLQ0tyxFE0ykRjMvxk2
+         0gggSnfVUa9yhYgFs4CDiBBT5xXGmGAkZ2cMd3Z4cA0mmn+iCQrtYstzn+lado34TDJm
+         iRew037a8me0Uq3gEUry0H+aj/4BqBBzNtzrccWRb5g93cHg4M/eWXGtvn5Xt1f0rQuf
+         RL5zB4MmqWjnYI1zNgp0eaAziYMhUQKggyFfpuINXe+YU6KOi2ghqtGSNGuHMXXLLTmp
+         HI8Q==
+X-Gm-Message-State: AC+VfDxFMKVzfr4cPcQluFBwW4fGLN3PqVV2UMz1zf/U5zQw6rzu4xLb
+        7Fi0OPxAuEcofB2sxEVUANzStIMByfAEGvibT9c=
+X-Google-Smtp-Source: ACHHUZ52YE3TLfouPusUDA2QxJogPtTkZ/kcH5jBj10kLMmZZ+/PiHLTHZ2qTm6whnsebVS4vP51MM2jULqHO9wMRpQ=
+X-Received: by 2002:a81:6e8b:0:b0:561:206a:ee52 with SMTP id
+ j133-20020a816e8b000000b00561206aee52mr8112038ywc.24.1684174196050; Mon, 15
+ May 2023 11:09:56 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAq0SUkHDf6Tnhrc5ys4rOGWtepFfdv3=d6GiA=BB7yvDUj8vw@mail.gmail.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+Received: by 2002:a05:7010:962c:b0:358:16:da29 with HTTP; Mon, 15 May 2023
+ 11:09:53 -0700 (PDT)
+Reply-To: drlisawilliams53@gmail.com
+From:   Dr Lisa Williams <williamsdrlisa@gmail.com>
+Date:   Mon, 15 May 2023 19:09:53 +0100
+Message-ID: <CAJbSCCQyrLrPhY3=+x+2uXoYaZ4iAOhrXVQh=pucw6u-PsxN=w@mail.gmail.com>
+Subject: GOOD MORNING DEAR.
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.0 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        SUBJ_ALL_CAPS,T_SCC_BODY_TEXT_LINE,UNDISC_FREEM autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:1141 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [drlisawilliams53[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [williamsdrlisa[at]gmail.com]
+        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.0 T_SCC_BODY_TEXT_LINE No description available.
+        *  2.7 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/15, Wander Lairson Costa wrote:
-> On Mon, May 15, 2023 at 1:43 PM Oleg Nesterov <oleg@redhat.com> wrote:
-> >
-> > Certainly I have missed something...
-> >
-> > but,
-> >
-> > On 05/15, Wander Lairson Costa wrote:
-> > >
-> > > -extern void __put_task_struct(struct task_struct *t);
-> > > +extern void ___put_task_struct(struct task_struct *t);
-> > > +extern void __put_task_struct_rcu_cb(struct rcu_head *rhp);
-> >
-> > I don't understand these renames, why can't you simply put this fix
-> > into put_task_struct() ?
-> >
->
-> No particular reason, it was just a matter of style and keep the parts simple.
+-- 
+Hi Dear,
 
-Well, to me a single/simple change in put_task_struct() makes more
-sense, but I won't argue.
+My name is Dr Lisa Williams from the United States.I am a French and
+American nationality (dual) living in the U.S and sometimes in France
+for Work Purpose.
 
-	static inline void put_task_struct(struct task_struct *t)
-	{
-		if (!refcount_dec_and_test(...))
-			return;
+I hope you consider my friend request. I will share some of my pics
+and more details about myself when I get your response.
 
-		if (IS_ENABLED(PREEMPT_RT) && ...)
-			return call_rcu(...);
+Thanks
 
-		...
-		__put_task_struct();
-		...
-	}
-
-> > > +static inline void __put_task_struct(struct task_struct *tsk)
-> > > +{
-> > ...
-> > > +     if (IS_ENABLED(CONFIG_PREEMPT_RT) && !preemptible())
-> > > +             call_rcu(&tsk->rcu, __put_task_struct_rcu_cb);
-> > > +     else
-> > > +             ___put_task_struct(tsk);
-> > > +}
-> >
-> > did you see the emails from Peter? In particular, this one:
-> >
-> >         https://lore.kernel.org/lkml/20230505133902.GC38236@hirez.programming.kicks-ass.net/
-> >
->
-> I didn't notice the lock_acquire/lock_release part. However, I tested
-> the patch with CONFIG_PROVE_RAW_LOCK_NESTING and there was no warning.
-
-Hmm. I tend to trust the Sebastian's analysis in
-
-	https://lore.kernel.org/all/Y+zFNrCjBn53%2F+Q2@linutronix.de/
-
-I'll try to look at it later, although I hope Sebastian or Peter
-can explain this before I try ;)
-
-Oleg.
-
+With love
+Lisa
