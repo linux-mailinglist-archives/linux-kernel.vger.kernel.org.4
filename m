@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5EC703D79
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 21:14:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F175B703D84
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 21:14:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244782AbjEOTOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 15:14:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57624 "EHLO
+        id S244633AbjEOTOa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 15:14:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243501AbjEOTNz (ORCPT
+        with ESMTP id S243816AbjEOTN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 15:13:55 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73C4515EDF;
-        Mon, 15 May 2023 12:13:46 -0700 (PDT)
+        Mon, 15 May 2023 15:13:57 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047BE160A1;
+        Mon, 15 May 2023 12:13:48 -0700 (PDT)
 Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34FJDUrr089385;
-        Mon, 15 May 2023 14:13:30 -0500
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34FJDVRF028528;
+        Mon, 15 May 2023 14:13:31 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684178010;
-        bh=ZzKVlyCPHyTxRj4e2SffrTyR2DUIDFnjXsjccSjcXd8=;
+        s=ti-com-17Q1; t=1684178011;
+        bh=DrQHO08GzmuLn6kOKALeYvqXK5SaqhyLHlz/PyXfu0k=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=Cz/n+54sulSrlXCz45tJqjJLnTe5l9kaPmCWhqrytQRBGPsw9TbmrQ0mVZxoG8Vj4
-         ibWDpBt75+RpQW+e0CWYyfFBICkmb32MY5ACX/+gGPsABVTVKwo5gEYQBtwLpPNPW9
-         nPGme5klz+sY7UJHF6Fz2HRN454ErBW1JuVQUefs=
+        b=t2g2blj4bPl7yH+DD2F2KonTTKDX4Y32LcMOurBRSEhOKSOJB6WZGpBgOvw+Up7vq
+         7FhgpVAaD6zk3Ra5VJRnfEs1VsyudbXg8MYCvmlnaPAZe6SI2G7y70YhxoCfdAAHUC
+         eeQWdwNGvUNxbxDN1mJDgF1gHvy+bFAFW7oH77U4=
 Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34FJDUw6097259
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34FJDVml097266
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 15 May 2023 14:13:30 -0500
-Received: from DLEE114.ent.ti.com (157.170.170.25) by DLEE114.ent.ti.com
+        Mon, 15 May 2023 14:13:31 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE114.ent.ti.com
  (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 15
- May 2023 14:13:30 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ May 2023 14:13:31 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
  Frontend Transport; Mon, 15 May 2023 14:13:30 -0500
 Received: from lelv0327.itg.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34FJDSK6005699;
-        Mon, 15 May 2023 14:13:29 -0500
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34FJDSK7005699;
+        Mon, 15 May 2023 14:13:30 -0500
 From:   Andrew Davis <afd@ti.com>
 To:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -51,9 +51,9 @@ To:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
 CC:     <devicetree@vger.kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
         <linux-kernel@vger.kernel.org>, Andrew Davis <afd@ti.com>
-Subject: [PATCH v7 2/9] ARM: dts: nspire: Fix cpu node to conform with DT binding
-Date:   Mon, 15 May 2023 14:13:19 -0500
-Message-ID: <20230515191326.608638-3-afd@ti.com>
+Subject: [PATCH v7 3/9] ARM: dts: nspire: Fix sram node to conform with DT binding
+Date:   Mon, 15 May 2023 14:13:20 -0500
+Message-ID: <20230515191326.608638-4-afd@ti.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230515191326.608638-1-afd@ti.com>
 References: <20230515191326.608638-1-afd@ti.com>
@@ -76,27 +76,31 @@ Should result in no functional change.
 
 Signed-off-by: Andrew Davis <afd@ti.com>
 ---
- arch/arm/boot/dts/nspire.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/arm/boot/dts/nspire.dtsi | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm/boot/dts/nspire.dtsi b/arch/arm/boot/dts/nspire.dtsi
-index 48fbc9d533c3..cb7237051512 100644
+index cb7237051512..f979b28e2576 100644
 --- a/arch/arm/boot/dts/nspire.dtsi
 +++ b/arch/arm/boot/dts/nspire.dtsi
-@@ -11,8 +11,13 @@ / {
- 	interrupt-parent = <&intc>;
- 
- 	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
- 		cpu@0 {
- 			compatible = "arm,arm926ej-s";
-+			device_type = "cpu";
-+			reg = <0>;
- 		};
+@@ -26,8 +26,15 @@ bootrom: bootrom@0 {
  	};
  
+ 	sram: sram@a4000000 {
+-		device = "memory";
+-		reg = <0xa4000000 0x20000>;
++		compatible = "mmio-sram";
++		reg = <0xa4000000 0x20000>; /* 128k */
++		#address-cells = <1>;
++		#size-cells = <1>;
++		ranges = <0 0xa4000000 0x20000>;
++
++		sram@0 {
++			reg = <0x0 0x20000>;
++		};
+ 	};
+ 
+ 	timer_clk: timer_clk {
 -- 
 2.39.2
 
