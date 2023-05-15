@@ -2,59 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE89A702A15
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:08:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 55D6C702A14
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:08:50 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240844AbjEOKIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:08:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40166 "EHLO
+        id S240792AbjEOKIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 06:08:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240422AbjEOKIc (ORCPT
+        with ESMTP id S240413AbjEOKI0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:08:32 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987811FD0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:07:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684145236;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=G8znqVw87JzE/GiUPHNFG+C6yuIz096Ng+G8V1HRe2s=;
-        b=Zp5laAS+YKm5zfkxIeyXzETcG1CxIMJFF0YMutuRY8Uv1PloJAA+MVorO3oZUB0moPxQGz
-        zfEj/fz8soXsbm/fr2QjBrkK3i/9IJuVk3iqkt2ooXDI74RkcjcX6GtzjGqgPSpabXJcsM
-        NJZgmW5z9+Kqej6dpHhE7dOFssokgM8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-639-wcpg3rWqOrmEqBjfNuUdxw-1; Mon, 15 May 2023 06:07:13 -0400
-X-MC-Unique: wcpg3rWqOrmEqBjfNuUdxw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 22CE43C0F22F;
-        Mon, 15 May 2023 10:07:13 +0000 (UTC)
-Received: from localhost (ovpn-12-32.pek2.redhat.com [10.72.12.32])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6B7FF63ABB;
-        Mon, 15 May 2023 10:07:12 +0000 (UTC)
-Date:   Mon, 15 May 2023 18:07:09 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     catalin.marinas@arm.com, will@kernel.org, horms@kernel.org,
-        thunder.leizhen@huawei.com, John.p.donnelly@oracle.com,
-        kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v6 1/2] arm64: kdump: simplify the reservation behaviour
- of crashkernel=,high
-Message-ID: <ZGIETQZWp3scdS/m@MiWiFi-R3L-srv>
-References: <20230515060259.830662-1-bhe@redhat.com>
- <20230515060259.830662-2-bhe@redhat.com>
+        Mon, 15 May 2023 06:08:26 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CD781FE2;
+        Mon, 15 May 2023 03:08:16 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 765DB2F4;
+        Mon, 15 May 2023 03:09:00 -0700 (PDT)
+Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CFD0E3F67D;
+        Mon, 15 May 2023 03:08:12 -0700 (PDT)
+Date:   Mon, 15 May 2023 11:08:10 +0100
+From:   Sudeep Holla <sudeep.holla@arm.com>
+To:     Ayan Kumar Halder <ayankuma@amd.com>
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+        geert+renesas@glider.be, magnus.damm@gmail.com,
+        konrad.dybcio@linaro.org, andersson@kernel.org,
+        mazziesaccount@gmail.com, conor.dooley@microchip.com, j@jannau.net,
+        mailingradian@gmail.com, me@iskren.info, lpieralisi@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org, Julien Grall <julien@xen.org>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Michal Orzel <michal.orzel@amd.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Michal Simek <michal.simek@xilinx.com>
+Subject: Re: Need suggestions for smp related properties in cpus.yaml to
+ support smpboot for cortex-r52 based platform
+Message-ID: <20230515100810.ctebdbqlienbcf7t@bogus>
+References: <c5ed90c7-7126-0757-a0e3-e3d1fcab2ecc@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230515060259.830662-2-bhe@redhat.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c5ed90c7-7126-0757-a0e3-e3d1fcab2ecc@amd.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -63,88 +56,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 05/15/23 at 02:02pm, Baoquan He wrote:
-> On arm64, reservation for 'crashkernel=xM,high' is taken by searching for
-> suitable memory region top down. If the 'xM' of crashkernel high memory
-> is reserved from high memory successfully, it will try to reserve
-> crashkernel low memory later accoringly. Otherwise, it will try to search
-> low memory area for the 'xM' suitable region. Please see the details in
-> Documentation/admin-guide/kernel-parameters.txt.
-> 
-> While we observed an unexpected case where a reserved region crosses the
-> high and low meomry boundary. E.g on a system with 4G as low memory end,
-> user added the kernel parameters like: 'crashkernel=512M,high', it could
-> finally have [4G-126M, 4G+386M], [1G, 1G+128M] regions in running kernel.
-> The crashkernel high region crossing low and high memory boudary will bring
-> issues:
-> 
-> 1) For crashkernel=x,high, if getting crashkernel high region across
-> low and high memory boundary, then user will see two memory regions in
-> low memory, and one memory region in high memory. The two crashkernel
-> low memory regions are confusing as shown in above example.
-> 
-> 2) If people explicityly specify "crashkernel=x,high crashkernel=y,low"
-> and y <= 128M, when crashkernel high region crosses low and high memory
-> boundary and the part of crashkernel high reservation below boundary is
-> bigger than y, the expected crahskernel low reservation will be skipped.
-> But the expected crashkernel high reservation is shrank and could not
-> satisfy user space requirement.
-> 
-> 3) The crossing boundary behaviour of crahskernel high reservation is
-> different than x86 arch. On x86_64, the low memory end is 4G fixedly,
-> and the memory near 4G is reserved by system, e.g for mapping firmware,
-> pci mapping, so the crashkernel reservation crossing boundary never happens.
-> From distros point of view, this brings inconsistency and confusion. Users
-> need to dig into x86 and arm64 system details to find out why.
-> 
-> For kernel itself, the impact of issue 3) could be slight. While issue
-> 1) and 2) cause actual impact because it brings obscure semantics and
-> behaviour to crashkernel=,high reservation.
-> 
-> Here, for crashkernel=xM,high, search the high memory for the suitable
-> region only in high memory. If failed, try reserving the suitable
-> region only in low memory. Like this, the crashkernel high region will
-> only exist in high memory, and crashkernel low region only exists in low
-> memory. The reservation behaviour for crashkernel=,high is clearer and
-> simpler.
-> 
-> Note: RPi4 has different zone ranges than normal memory. Its DMA zone is
-> 0~1G, and DMA32 zone is 1G~4G if CONFIG_ZONE_DMA|DMA32 are enabled by
-> default. The low memory end is 1G in order to validate all devices, high
-> memory starts at 1G memory. However, for being consistent with normla
-> arm64 system, its low memory end is still 1G, while reserving crashkernel
-> high memory from 4G if crashkernel=size,high specified. This will remove
-> confusion.
-> 
-> With above change applied, summary of arm64 crashkernel reservation range:
-> 1)
-> RPi4(zone DMA:0~1G; DMA32:1G~4G):
->  crashkernel=size
->   0~1G: low memory | 1G~top: high memory
-> 
->  crashkernel=size,high
->   0~1G: low memory | 4G~top: high memory
-> 
-> 2)
-> Other normal system:
->  crashkernel=size
->  crashkernel=size,high
->   0~4G: low memory | 4G~top: high memory
-> 
-> 3)
-> Systems w/o zone DMA|DMA32
->  crashkernel=size
->  crashkernel=size,high
->   0~top: low memory
-> 
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> 
-> arm64: kdump: fix warning reported by static checker
-> Signed-off-by: Baoquan He <bhe@redhat.com>
+On Thu, May 11, 2023 at 10:35:37AM +0100, Ayan Kumar Halder wrote:
+> Hi Device Tree engineers,
+>
+> Recently I have ported Xen on Cortex-R52 (AArch32-V8R processor) for our AMD
+> platform.
+>
 
-Sorry, forgot cleaning up this relic of local patch merging, have resent
-one to remove it, and add Catalin's Reviewed-by tag.
+I remember that there was some exploration on feasibility of using PSCI
+here. What happened to that ? Any summary why that was dropped ?
 
-Thanks
-Baoquan
+> I was discussing with xen-devel community about how we can properly support
+> smpboot when I was suggested that this might be the correct forum for
+> discussion.
+>
+> Please refer
+> https://lists.xenproject.org/archives/html/xen-devel/2023-05/msg00224.html
+> and the follow-ups for context.
+>
+>
+> The way smpboot works on our platform is as follows:-
+>
+> 1. core0 writes to register (say regA) the address of the secondary core
+> initialization routine.
+>
+> 2. core0 writes to another register (say regB) the value "0x1" to put the
+> secondary core in reset mode.
+>
+> 3. core0 writes to regB the value "0x0" to pull the secondary core out of
+> reset mode.
+>
+> regA, regB will differ for core1, core2, core3 and so on.
+>
 
+Sounds OK but will you ever need to support power management on these cores ?
+If so, just start with PSCI or provide reasons as why it doesn't fit well
+before exploring and extending the existing spin table bindings.
+
+>
+> Currently, I am trying to bringup core1 only.
+>
+>
+> I am thinking to use "enable-method=spin-table" in the cpu node for core1. 
+> So that I can use "cpu-release-address" for regA.
+>
+> For regB, I am thinking of introducing a new property "amd-cpu-reset-addr"
+> in the cpu node.
+>
+> Please let me know your thoughts on this approach. I am also open to any
+> alternative suggestions.
+>
+>
+> Also I see that in https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/devicetree/bindings/arm/cpus.yaml#L87
+> , "arm,cortex-r52" is missing.
+>
+
+Yes that should be fine IMO.
+
+> Can I submit a patch (a one line change) to add this ?
+>
+
+Of course, it makes it easy to accept or reject rather than this question
+hidden as part of other discussion.
+
+--
+Regards,
+Sudeep
