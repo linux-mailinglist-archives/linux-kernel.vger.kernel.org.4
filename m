@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC6D4702DE4
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:19:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DED07702DE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:19:22 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242283AbjEONTI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 09:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36856 "EHLO
+        id S242326AbjEONTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 09:19:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242126AbjEONTA (ORCPT
+        with ESMTP id S242161AbjEONTB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 09:19:00 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BF5C19AE
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:18:34 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-64ab2a37812so19850730b3a.1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:18:34 -0700 (PDT)
+        Mon, 15 May 2023 09:19:01 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA3B21FC1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:18:36 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d9443c01a7336-1ab1b79d3a7so87373935ad.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:18:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1684156713; x=1686748713;
+        d=bytedance.com; s=google; t=1684156716; x=1686748716;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eE6bxJv4UCRwtMUAfojMihpw2t2wf00Glyx+cFFRLZY=;
-        b=i/UBgAcvtHHk0md0xZxj0CroBxW4tMrmR2bdSTljlwKSLUD37aMCqdoB3xk08hTz8B
-         ufwwpJ4/L8cFSKLhE/WqTszR14LYvDzpcrIs/zqzfddiaq+2m2lw0NJCccNrlxMYyUvJ
-         z+6U/6D/Qxi0hOTLOqKuqc5SYDLXl3MalzJyFHBS690apJ25rDfSJMcS5XNL7Ad4MgoG
-         2ZruXFiyPzOqwMXcHF1dtyY9Ilkr7c+KJiyAfj3qLEGXNCE+n1yWwNIF9IM3kY5B2ipY
-         kRutjohJOwPgYtotGv0CjxTX4YlT2ubdXf6t1Lx3YoAzu+mX2+WJ34qbuIwPJloqSmRd
-         USGg==
+        bh=aUBDvQ6OxE85hUN75/9d6LlRGyHmdnE5erOpWtw5OfM=;
+        b=h6Vztwd3Q0rJzgXIQWj9b7a7rcwv/TKvfWHjSn7rPgPVnAwzRGI2GP2i+o8GYuMB5E
+         aFz5inFtgIpGyz7XUMKZ8NAGKJ2UwZd/ZzAsQAY/TwHMA4dDvZVjhcKJH8cmgzKa5Swx
+         p7DSkm4BzQ79R2MDK7TXkdd1dZguunFOryYbs46vMi+egL28fjmiOO8jIrx4iOF7vr9i
+         OKY+sLoB5kvFPjKxPj9sWkbW/s0CEXb2sziSUikSXgmAk/sgii1jOrPbYFVaMPRcUgCE
+         xd68Wj7Am3v6yO7HSaTtRVlczCvuTvBSSnCmKeycX0FpAHhU7HQbnQ2JhGJPm6fRGUeY
+         drcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684156713; x=1686748713;
+        d=1e100.net; s=20221208; t=1684156716; x=1686748716;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eE6bxJv4UCRwtMUAfojMihpw2t2wf00Glyx+cFFRLZY=;
-        b=f/pnXCjAos5xuHFEOGX1ydddRn6H9dbJzfjsKitgOE9Sgu/86zdG8uFanMrerXk2Dp
-         Juhx34Erm0c57HA7hemJSIcG+gE54CS3MCZV/NoVy/QteBfShOvoUuysJ1eGohxBG8a0
-         lO1QeojkBw1FdxNeF2CfNp0cRFvopbtwEsVcjiI2ABQx6qdG5L8NIaVCK8UT7XecA+3/
-         3KUpuNXJVUE1sU9MKY918NzrNEz/rI/RhIJhS71jmJAi08tGyeup95B8g8xn8l18oqIu
-         0Ldi6vwbIBsONmcrGam2DTRat/gPNZ3y3Uoq1Vq+4GCeYmWTjCEygwgeIg0pd2NI/by9
-         s86g==
-X-Gm-Message-State: AC+VfDwm0mKftVx3yLAR2Nd1FElA6eGXoLvyQgEmcguPGo7ziXtcPDhj
-        rkxEra/s+cyS9wY7Rjg0JkIR1g==
-X-Google-Smtp-Source: ACHHUZ4ax8TBpv+8pqbDdmKnaFXdcM8+Si6LkP9bFQfT0YYvQy8V42QO+LcbU93Ang12fqFYOt+cCQ==
-X-Received: by 2002:a17:90a:bb05:b0:250:af6d:bd7b with SMTP id u5-20020a17090abb0500b00250af6dbd7bmr22794048pjr.24.1684156713588;
-        Mon, 15 May 2023 06:18:33 -0700 (PDT)
+        bh=aUBDvQ6OxE85hUN75/9d6LlRGyHmdnE5erOpWtw5OfM=;
+        b=Edon8czEWICPxWiLwf8eso8JOaeLsbcaxSq7EHN0nh+3zqwNlciC/rTfu1KfPi5H9v
+         WFtCPujSVCfO5mEf1vO6yGpqnNP4UFZOYLvW5eDlD0g/Xp9Tno/PIdk3818tB7Ieg8q0
+         9tiENXLh9ij0D6lieECok3E+XjiuWALn8nMHFoGuzMIUPdyybjuduEq+eeGj5wwRI6Qc
+         ss6b4PNEdCZLan9IVW7e0tM6FWj60w0N5+8EHlVRDA4/04VeS7xGjXDvrP/t7IwcbdMH
+         qh880ygCdixQE1kmJkvOq0w8Cp22McMmXvB2RXuuYUE+veMreUR0PJwyFbTbHX7HVDxu
+         P+mA==
+X-Gm-Message-State: AC+VfDzc0U1Bi8OyLo2CLum50FeQJCqM3YDW9uo4QnTPHJrIfYA2GuMw
+        XmQ/D8CAJf7PXUsWpZtge4s1/g==
+X-Google-Smtp-Source: ACHHUZ6NrR5fyigxrygUBYxmthRBGrO6hqW7vNZiQJ/rNSdTeNHwNJLwR56D8E8MgAQzd/+5PFOylQ==
+X-Received: by 2002:a17:902:dace:b0:1ac:6e1f:d1bd with SMTP id q14-20020a170902dace00b001ac6e1fd1bdmr37436369plx.19.1684156716446;
+        Mon, 15 May 2023 06:18:36 -0700 (PDT)
 Received: from GL4FX4PXWL.bytedance.net ([139.177.225.239])
-        by smtp.gmail.com with ESMTPSA id gl20-20020a17090b121400b0024749e7321bsm14190014pjb.6.2023.05.15.06.18.31
+        by smtp.gmail.com with ESMTPSA id gl20-20020a17090b121400b0024749e7321bsm14190014pjb.6.2023.05.15.06.18.33
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Mon, 15 May 2023 06:18:33 -0700 (PDT)
+        Mon, 15 May 2023 06:18:36 -0700 (PDT)
 From:   Peng Zhang <zhangpeng.00@bytedance.com>
 To:     Liam.Howlett@oracle.com
 Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, maple-tree@lists.infradead.org,
         Peng Zhang <zhangpeng.00@bytedance.com>
-Subject: [PATCH 03/10] maple_tree: Remove __must_hold() which does not work
-Date:   Mon, 15 May 2023 21:17:50 +0800
-Message-Id: <20230515131757.60035-4-zhangpeng.00@bytedance.com>
+Subject: [PATCH 04/10] maple_tree: Simplify mas_is_span_wr()
+Date:   Mon, 15 May 2023 21:17:51 +0800
+Message-Id: <20230515131757.60035-5-zhangpeng.00@bytedance.com>
 X-Mailer: git-send-email 2.37.0 (Apple Git-136)
 In-Reply-To: <20230515131757.60035-1-zhangpeng.00@bytedance.com>
 References: <20230515131757.60035-1-zhangpeng.00@bytedance.com>
@@ -73,42 +73,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The arguments to __must_hold() seem to be wrong so they should not work,
-remove them.
+Make the code for detecting spanning writes more concise.
 
 Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
 ---
- lib/maple_tree.c | 3 ---
- 1 file changed, 3 deletions(-)
+ lib/maple_tree.c | 36 +++++++++---------------------------
+ 1 file changed, 9 insertions(+), 27 deletions(-)
 
 diff --git a/lib/maple_tree.c b/lib/maple_tree.c
-index 49dfe81dfa1b6..43a25d3042c1b 100644
+index 43a25d3042c1b..fbb6efc40e576 100644
 --- a/lib/maple_tree.c
 +++ b/lib/maple_tree.c
-@@ -1752,7 +1752,6 @@ static inline void mas_adopt_children(struct ma_state *mas,
-  * leave the node (true) and handle the adoption and free elsewhere.
-  */
- static inline void mas_replace(struct ma_state *mas, bool advanced)
--	__must_hold(mas->tree->lock)
+@@ -3728,41 +3728,23 @@ static bool mas_is_span_wr(struct ma_wr_state *wr_mas)
  {
- 	struct maple_node *mn = mas_mn(mas);
- 	struct maple_enode *old_enode;
-@@ -1792,7 +1791,6 @@ static inline void mas_replace(struct ma_state *mas, bool advanced)
-  * @child: the maple state to store the child.
-  */
- static inline bool mas_new_child(struct ma_state *mas, struct ma_state *child)
--	__must_hold(mas->tree->lock)
- {
- 	enum maple_type mt;
- 	unsigned char offset;
-@@ -6198,7 +6196,6 @@ EXPORT_SYMBOL_GPL(mas_erase);
-  * Return: true on allocation, false otherwise.
-  */
- bool mas_nomem(struct ma_state *mas, gfp_t gfp)
--	__must_hold(mas->tree->lock)
- {
- 	if (likely(mas->node != MA_ERROR(-ENOMEM))) {
- 		mas_destroy(mas);
+ 	unsigned long max;
+ 	unsigned long last = wr_mas->mas->last;
+-	unsigned long piv = wr_mas->r_max;
+ 	enum maple_type type = wr_mas->type;
+ 	void *entry = wr_mas->entry;
+ 
+-	/* Contained in this pivot */
+-	if (piv > last)
++	max = unlikely(ma_is_leaf(type)) ? wr_mas->mas->max : wr_mas->r_max;
++	if (last < max) {
++		/* Contained in this pivot or this leaf node */
+ 		return false;
+-
+-	max = wr_mas->mas->max;
+-	if (unlikely(ma_is_leaf(type))) {
+-		/* Fits in the node, but may span slots. */
+-		if (last < max)
+-			return false;
+-
+-		/* Writes to the end of the node but not null. */
+-		if ((last == max) && entry)
+-			return false;
+-
++	} else if (last == max) {
+ 		/*
+-		 * Writing ULONG_MAX is not a spanning write regardless of the
+-		 * value being written as long as the range fits in the node.
++		 * The last entry of leaf node cannot be NULL unless it is the
++		 * rightmost node (writing ULONG_MAX), otherwise it spans slots.
++		 * If this is not leaf node, detect spanning store wr walk.
+ 		 */
+-		if ((last == ULONG_MAX) && (last == max))
+-			return false;
+-	} else if (piv == last) {
+-		if (entry)
+-			return false;
+-
+-		/* Detect spanning store wr walk */
+-		if (last == ULONG_MAX)
++		if (entry || last == ULONG_MAX)
+ 			return false;
+ 	}
+-
+-	trace_ma_write(__func__, wr_mas->mas, piv, entry);
+-
++	trace_ma_write(__func__, wr_mas->mas, wr_mas->r_max, entry);
+ 	return true;
+ }
+ 
 -- 
 2.20.1
 
