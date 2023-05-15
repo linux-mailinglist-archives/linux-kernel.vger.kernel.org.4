@@ -2,133 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31209702CAA
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:28:14 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 92916702CB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:29:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241614AbjEOM2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 08:28:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53132 "EHLO
+        id S241558AbjEOM33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 08:29:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240112AbjEOM2G (ORCPT
+        with ESMTP id S240173AbjEOM32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 08:28:06 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C831E4F
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:28:04 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id 2adb3069b0e04-4f13d8f74abso14573561e87.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:28:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684153683; x=1686745683;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yoeAd/K4QIDgkvT3+E4nIpalAbE2Kg0RA7njx4ZUB9o=;
-        b=kkUhFgQBKR3CcOLZ9bFPHYivAdu25L9X8RiIypwoROJyetd8r0Ijm6NwyWGI6W3r45
-         7swiHnN0HK80Quvm4j2vnlTESSyc0CS+V/ury/4G3CoQxRJQw6WvbTOQYc0dJCD529az
-         A/It3iOj1E3njTHUq2RifrNr8b/l5hy4GAtN7grl8o7TEFLOikptTe4KBX2HY5uylhRP
-         fObXZ6Ton5DY1CJmJx5nnLBpL30s8BsK250ocXTFe/5GyKeKiMOHVHDdw6t46PFDxyj1
-         zx1u9vjrxa4F8JOfkE79XQs6jSN+hb8hgzpecphvsL7kFTXSaOzsi/lDbdzcMAknf+sN
-         X7yA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684153683; x=1686745683;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yoeAd/K4QIDgkvT3+E4nIpalAbE2Kg0RA7njx4ZUB9o=;
-        b=ikkSk3fXJ06oJyA01raTdTOvQi2SaVggtP2tUPQTdEqgJ4RlAzf2UoZ5uwYJLmaO/F
-         7NHEZ3lKtK8gRwn3JaZscJinHDV3Xq/AP+Rk91zECad4e3Y+AgsT1CzMpWqReh72pF4M
-         +Rn6FQWsHi7ANsTRWkahi9AOQFnUeQ51xzDtxGNE73v6YVc1OIFc5IHPSHBV1yvOuvVy
-         9cG/DloSwffp666Up86woSRk5loiRhc274yGrxExpAwD84PJPtwYgeKBrSVFNv2WYqcX
-         sFpJBMTpan0lKDoyxqX1/t3sqfH8mn8Rhu9lHW2GqPPaUEbPt2GAbFIqtrVbvSGjCE2+
-         OIIw==
-X-Gm-Message-State: AC+VfDxDRngY/04HYhWgc25EwqVMWqmF40SOTM8wvK95D8y0CgL18b/I
-        65ghj6/MCTmsqsSxD6Ng6IQLkw==
-X-Google-Smtp-Source: ACHHUZ5k7aoY9byMTZ4V9sueHRpljE0/O1NNZq32QU6twxBwfUwsRYGK2AsXbQMLig6sPqvQcM+5Eg==
-X-Received: by 2002:a05:6512:66:b0:4ef:f5fe:bc76 with SMTP id i6-20020a056512006600b004eff5febc76mr6008797lfo.14.1684153682685;
-        Mon, 15 May 2023 05:28:02 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id v3-20020ac25583000000b004f143c11cbcsm2559651lfg.51.2023.05.15.05.28.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 05:28:02 -0700 (PDT)
-Message-ID: <7faf4c16-98ff-f27d-d1fd-3058370c06f5@linaro.org>
-Date:   Mon, 15 May 2023 14:28:00 +0200
+        Mon, 15 May 2023 08:29:28 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8EF96E4F
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:29:26 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 071914B3;
+        Mon, 15 May 2023 05:30:11 -0700 (PDT)
+Received: from [10.57.83.155] (unknown [10.57.83.155])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 778B53F663;
+        Mon, 15 May 2023 05:29:25 -0700 (PDT)
+Message-ID: <3a8ec4a6-625c-ba3e-06aa-f8a30d2170d2@arm.com>
+Date:   Mon, 15 May 2023 13:29:21 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm8550: Add video clock controller
-Content-Language: en-US
-To:     Jagadeesh Kona <quic_jkona@quicinc.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Conor Dooley <conor+dt@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230509161218.11979-1-quic_jkona@quicinc.com>
- <20230509161218.11979-5-quic_jkona@quicinc.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230509161218.11979-5-quic_jkona@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH] perf/arm-cmn: fix compilation issue
+Content-Language: en-GB
+To:     Liming Wu <liming.wu@jaguarmicro.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Cc:     "will@kernel.org" <will@kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230515012930.946-1-liming.wu@jaguarmicro.com>
+ <ZGHt0OyK6ntqwqR6@FVFF77S0Q05N>
+ <PSAPR06MB39429C77A11AA027B2E8EE67E1789@PSAPR06MB3942.apcprd06.prod.outlook.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <PSAPR06MB39429C77A11AA027B2E8EE67E1789@PSAPR06MB3942.apcprd06.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9.05.2023 18:12, Jagadeesh Kona wrote:
-> Add device node for video clock controller on Qualcomm SM8550 platform.
+On 2023-05-15 09:35, Liming Wu wrote:
+>> The kernel builds as gnu11 (i.e. C11 + GNU extensions) since commit:
+>>
+>>    e8c07082a810fbb9 ("Kbuild: move to -std=gnu11")
+>>
+>> ... so that warning shouldn't be happenning.
+>>
+>> How are you triggering this? Have you modified KBUILD_CFLAGS?
 > 
-> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
-> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-> ---
->  arch/arm64/boot/dts/qcom/sm8550.dtsi | 12 ++++++++++++
->  1 file changed, 12 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> index 6e9bad8f6f33..e67e7c69dae6 100644
-> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> @@ -7,6 +7,7 @@
->  #include <dt-bindings/clock/qcom,sm8550-gcc.h>
->  #include <dt-bindings/clock/qcom,sm8550-tcsr.h>
->  #include <dt-bindings/clock/qcom,sm8550-dispcc.h>
-> +#include <dt-bindings/clock/qcom,sm8550-videocc.h>
->  #include <dt-bindings/dma/qcom-gpi.h>
->  #include <dt-bindings/gpio/gpio.h>
->  #include <dt-bindings/interrupt-controller/arm-gic.h>
-> @@ -759,6 +760,17 @@ gcc: clock-controller@100000 {
->  				 <&usb_dp_qmpphy QMP_USB43DP_USB3_PIPE_CLK>;
->  		};
->  
-> +		videocc: clock-controller@aaf0000 {
-This node should be moved down. Nodes with unit addresses
-should be sorted alphanumerically.
+> Thanks for reply.
+> This error occurs for I compiled the arn-cmn module separately.
 
-> +			compatible = "qcom,sm8550-videocc";
-> +			reg = <0 0x0aaf0000 0 0x10000>;
-> +			clocks = <&bi_tcxo_div2>, <&gcc GCC_VIDEO_AHB_CLK>;
-One per line, please
+You're free to build bits of mainline against older kernels if you want 
+to and can make it work, but understand that what you're doing in that 
+case is a backport. It can be expected that some things need adjusting 
+when backporting, and this happens to be one of them; go back far enough 
+and the irq_set_affinity() call would be another, IIRC.
 
-Also, any reason the XO clock does not come from RPMhCC?
+The code in mainline here is correct for the mainline kernel, so there 
+is nothing to fix.
 
-Konrad
-> +			power-domains = <&rpmhpd SM8550_MMCX>;
-> +			required-opps = <&rpmhpd_opp_low_svs>;
-> +			#clock-cells = <1>;
-> +			#reset-cells = <1>;
-> +			#power-domain-cells = <1>;
-> +		};
-> +
->  		ipcc: mailbox@408000 {
->  			compatible = "qcom,sm8550-ipcc", "qcom,ipcc";
->  			reg = <0 0x00408000 0 0x1000>;
+Thanks,
+Robin.
+
+>> -----Original Message-----
+>> From: Mark Rutland <mark.rutland@arm.com>
+>> Sent: Monday, May 15, 2023 4:31 PM
+>> To: Liming Wu <liming.wu@jaguarmicro.com>
+>> Cc: will@kernel.org; linux-arm-kernel@lists.infradead.org; linux-
+>> kernel@vger.kernel.org; robin.murphy@arm.com
+>> Subject: Re: [PATCH] perf/arm-cmn: fix compilation issue
+>>
+>> On Mon, May 15, 2023 at 09:29:30AM +0800, liming.wu@jaguarmicro.com
+>> wrote:
+>>> From: Liming Wu <liming.wu@jaguarmicro.com>
+>>>
+>>> This patch is used to fix following compilation issue with legacy gcc
+>>> and define variables at the beginning of the function
+>>>
+>>> error: ‘for’ loop initial declarations are only allowed in C99 or C11 mode
+>>> 2098 |                 for (int p = 0; p < CMN_MAX_PORTS; p++)
+>>
+>> The kernel builds as gnu11 (i.e. C11 + GNU extensions) since commit:
+>>
+>>    e8c07082a810fbb9 ("Kbuild: move to -std=gnu11")
+>>
+>> ... so that warning shouldn't be happenning.
+>>
+>> How are you triggering this? Have you modified KBUILD_CFLAGS?
+>>
+>>> Signed-off-by: Liming Wu <liming.wu@jaguarmicro.com>
+>>> ---
+>>>   drivers/perf/arm-cmn.c | 13 ++++++++-----
+>>>   1 file changed, 8 insertions(+), 5 deletions(-)
+>>>
+>>> diff --git a/drivers/perf/arm-cmn.c b/drivers/perf/arm-cmn.c index
+>>> 47d359f72957..2299fcde5b4a 100644
+>>> --- a/drivers/perf/arm-cmn.c
+>>> +++ b/drivers/perf/arm-cmn.c
+>>> @@ -2009,8 +2009,11 @@ static int arm_cmn_discover(struct arm_cmn *cmn,
+>> unsigned int rgn_offset)
+>>>   	u16 child_count, child_poff;
+>>>   	u32 xp_offset[CMN_MAX_XPS];
+>>>   	u64 reg;
+>>> -	int i, j;
+>>> +	int i, j, p;
+>>>   	size_t sz;
+>>> +	void __iomem *xp_region;
+>>> +	struct arm_cmn_node *xp;
+>>> +	unsigned int xp_ports;
+>>>
+>>>   	arm_cmn_init_node_info(cmn, rgn_offset, &cfg);
+>>>   	if (cfg.type != CMN_TYPE_CFG)
+>>> @@ -2067,9 +2070,9 @@ static int arm_cmn_discover(struct arm_cmn *cmn,
+>> unsigned int rgn_offset)
+>>>   	cmn->dns = dn;
+>>>   	cmn->dtms = dtm;
+>>>   	for (i = 0; i < cmn->num_xps; i++) {
+>>> -		void __iomem *xp_region = cmn->base + xp_offset[i];
+>>> -		struct arm_cmn_node *xp = dn++;
+>>> -		unsigned int xp_ports = 0;
+>>> +		xp_region = cmn->base + xp_offset[i];
+>>> +		xp = dn++;
+>>> +		xp_ports = 0;
+>>
+>> None of these are for loop initial declarations. Even if we wanted to avoid the
+>> warning, there's no need for these to change.
+>>
+>>>
+>>>   		arm_cmn_init_node_info(cmn, xp_offset[i], xp);
+>>>   		/*
+>>> @@ -2095,7 +2098,7 @@ static int arm_cmn_discover(struct arm_cmn *cmn,
+>> unsigned int rgn_offset)
+>>>   		 * from this, since in that case we will see at least one XP
+>>>   		 * with port 2 connected, for the HN-D.
+>>>   		 */
+>>> -		for (int p = 0; p < CMN_MAX_PORTS; p++)
+>>> +		for (p = 0; p < CMN_MAX_PORTS; p++)
+>>
+>> This shouldn't be necessary given the jernel builds as gnu11.
+>>
+>> Thanks,
+>> Mark.
+>>
+>>>   			if (arm_cmn_device_connect_info(cmn, xp, p))
+>>>   				xp_ports |= BIT(p);
+>>>
+>>> --
+>>> 2.25.1
+>>>
