@@ -2,369 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3B9B703D43
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 21:04:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3A9703D51
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 21:07:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243800AbjEOTEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 15:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53174 "EHLO
+        id S244008AbjEOTHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 15:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbjEOTEb (ORCPT
+        with ESMTP id S236744AbjEOTHg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 15:04:31 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7944811A;
-        Mon, 15 May 2023 12:04:29 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id 38308e7fff4ca-2ac8c0fbb16so128396241fa.2;
-        Mon, 15 May 2023 12:04:29 -0700 (PDT)
+        Mon, 15 May 2023 15:07:36 -0400
+Received: from mail-pg1-x54a.google.com (mail-pg1-x54a.google.com [IPv6:2607:f8b0:4864:20::54a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DB5793C4
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 12:07:35 -0700 (PDT)
+Received: by mail-pg1-x54a.google.com with SMTP id 41be03b00d2f7-528cb2ec137so6694244a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 12:07:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684177468; x=1686769468;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vcyfEm/MvI1SnpRKah1W4G3FNuBTLJiVkEqdQIJ/YrE=;
-        b=QYQj+lWeKNSKeGxOzThWRGa02V16uNQNA6S3Ap2ZMVl+kOVdgsMUd5DxK8mk/f/FUl
-         zEZ64xOF+b80qG7eZbaLG+gV0ievyP/fzNwu+ycp8ja9qPXZxvnmdLv2VDnYotYcgAeP
-         8ONfXma6+aWrumGqEDjOaFASTbYn1EM2KvT+LR1rqnc5MaRJSpRumvL1RhE4KhHQT0YL
-         YjUvLK8i72L+MzFNPb+28fLZPxfeS6FJquzCkKYYaAvCpmcNaEV0s/ta0UBO5/BRJEQK
-         hIKn9Hlu+0gfP2ztR2IJdLUATYCCty0da4PzNdGgNvm3MZ+0Y7mgU+Or7GzxDbsndE9o
-         iUXw==
+        d=google.com; s=20221208; t=1684177654; x=1686769654;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xFQ6BaKkjgdTBjpn34wxJVuNtEcQXtwUwEd7418PjqE=;
+        b=JuYLR5X0h/SijvimdD4P6z8hE52bUlPctx7U3AXULuAYdPapAYdXj4OHLU+jesv1e9
+         MHD8Lj1brV1Npy46pM9iEXGc7wGUTxWx5S45qz+oF49+y23jmGnaSXuWfuvxKy9KlI32
+         Hj3tzhYZW0L7IEI7hrXAP0QK8j1h/iBkzVacQ4G+iCXVlem0u2jrysU5Jy1+pmmQkIiS
+         37u1TKNLXuqkmFNxlKyPYyrXLxlhP+oe0s01snkpX8vow2muHJ/gJ/9E3/Z8g6E6znWq
+         LjYx6A8GjdqjoJArA5vnUgfV49yAKbwmFV4Q/QmYgCdQHL8+QmSU6eGY5cEBbL26CcKy
+         ee8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684177468; x=1686769468;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vcyfEm/MvI1SnpRKah1W4G3FNuBTLJiVkEqdQIJ/YrE=;
-        b=f6fLpQc0CQVRwoVQj/f/Iw9UcZBRJb5m3qXdFCRh3UMQ6fJfPNd0WpijHSr+MMCfnT
-         awuDKci3brDmMcRieQ4KuxZuGYBcZuN4FQet9C8/iRL4iYNAvWmTA+vXTwm10CQ8q4QF
-         E5C4mEUKe/ykEG1Tz7latVlVdEI6Y+DcOLR2eZbKMAVhlY4pyYymjFGzzYlRdXOxaekz
-         sHXSrhhEsLmoy0+HAWw+al7XEqEIs2UqIAyGr/+6PsO+qre0uYa/G/9JNYRPm3++eRqj
-         cjCWrNGRuOJ5TRaTlHpZHqnMul+5fiS9CtYam+H6k7OUCyVyLJWh8Xc3uLlA1jfz5IR9
-         136w==
-X-Gm-Message-State: AC+VfDz5Jx8MXmbitLWE7sfxdfLBXO08GXu7HNeXyiSWmGmT4yF5TiPk
-        zl9cz9J+zex2joiiPuSjZaDDTFyKHdjFtj34zbw=
-X-Google-Smtp-Source: ACHHUZ4hq19K3uFJffYUh18n1PRIDbo6g85w22vyyrpCQNzkBsXGfrvXFpXBOrMprTDQLDogCD+9o4OsHrmdmpkVaG0=
-X-Received: by 2002:a2e:918c:0:b0:2ac:7d78:3465 with SMTP id
- f12-20020a2e918c000000b002ac7d783465mr8813485ljg.15.1684177467372; Mon, 15
- May 2023 12:04:27 -0700 (PDT)
-MIME-Version: 1.0
-References: <cc4ae6f7545cdf0615279890521b11774f062add.1683925801.git.objelf@gmail.com>
- <850ac832598f9d8558996fade7f7db0c0cf73521.1683925801.git.objelf@gmail.com>
-In-Reply-To: <850ac832598f9d8558996fade7f7db0c0cf73521.1683925801.git.objelf@gmail.com>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Mon, 15 May 2023 12:04:15 -0700
-Message-ID: <CABBYNZLxgaNzj3dgPbhsnojVP25OeGLVdbv6vUXdyMhyvkjZGA@mail.gmail.com>
-Subject: Re: [PATCH v6 3/3] Bluetooth: btusb: mediatek: add MediaTek
- devcoredump support
-To:     sean.wang@mediatek.com
-Cc:     marcel@holtmann.org, johan.hedberg@gmail.com,
-        chris.lu@mediatek.com, Soul.Huang@mediatek.com,
-        Leon.Yen@mediatek.com, Deren.Wu@mediatek.com, km.lin@mediatek.com,
-        robin.chiu@mediatek.com, Eddie.Chen@mediatek.com,
-        ch.yeh@mediatek.com, jenhao.yang@mediatek.com,
-        Stella.Chang@mediatek.com, Tom.Chou@mediatek.com,
-        steve.lee@mediatek.com, jsiuda@google.com, frankgor@google.com,
-        abhishekpandit@google.com, michaelfsun@google.com,
-        abhishekpandit@chromium.org, mcchou@chromium.org,
-        shawnku@google.com, linux-bluetooth@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jing Cai <jing.cai@mediatek.com>
-Content-Type: text/plain; charset="UTF-8"
+        d=1e100.net; s=20221208; t=1684177654; x=1686769654;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=xFQ6BaKkjgdTBjpn34wxJVuNtEcQXtwUwEd7418PjqE=;
+        b=E2RSh3CD/MuA4lq3/0nzGicTyKJKkNqs5aFO/YcMxFmucHv7IPaKpKdTd3N3h6qjRz
+         kG+f9i4V3NKdNJ602YuY5ZpjGA0KxlyiWSdkUnYBmAQeCGXJNQX17CQ589v/gKJcvRNE
+         V6F65vBgmEIkFa+jAX5WMHmlzA2AP1LflkF7Dng7HZ9tmMwR8zEvgiJ2fNsfvpGwjde6
+         /Mw5Jt6spsaX5Vm5o2teQmrtcoBtOOWD4jmh747T38QcuSdiNrss4ENJrpKc8sBBbp4A
+         MeOKDWVVpyNZ713tp4pvqsV8c4cvajZYLNyqXUJ1R1Ym46QouplSqSzLtoK3zDnWaGfi
+         ZFvQ==
+X-Gm-Message-State: AC+VfDy2rfnubg0QIQb8Asxrdov+/DFsbWOeZsVLmsgHo0UWgkO4qJsY
+        snNnsJmL1rWw49ANyH3oEy4lfA0B4PU=
+X-Google-Smtp-Source: ACHHUZ4P6L9nc0hf9pk7PqVX9406UpgOTZdsuzGyBat9IwfSmmaZ8nUqj18ulapGHZTegPpSzUo6g677OqY=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:6b4a:0:b0:4fc:2058:fa29 with SMTP id
+ g71-20020a636b4a000000b004fc2058fa29mr9542105pgc.1.1684177654484; Mon, 15 May
+ 2023 12:07:34 -0700 (PDT)
+Date:   Mon, 15 May 2023 12:07:33 -0700
+In-Reply-To: <b61d5999a4fc6d50b7e073cc3c3efa8fe79bbd94.1684097002.git.lstoakes@gmail.com>
+Mime-Version: 1.0
+References: <cover.1684097001.git.lstoakes@gmail.com> <b61d5999a4fc6d50b7e073cc3c3efa8fe79bbd94.1684097002.git.lstoakes@gmail.com>
+Message-ID: <ZGKC9fHoE+kDs0ar@google.com>
+Subject: Re: [PATCH v5 1/6] mm/gup: remove unused vmas parameter from get_user_pages()
+From:   Sean Christopherson <seanjc@google.com>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        David Hildenbrand <david@redhat.com>, x86@kernel.org,
+        linux-sgx@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, kvm@vger.kernel.org,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        "H . Peter Anvin" <hpa@zytor.com>, Xinhui Pan <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Christian Konig <christian.koenig@amd.com>,
+        Jason Gunthorpe <jgg@nvidia.com>
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,USER_IN_DEF_DKIM_WL
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sean,
-
-On Fri, May 12, 2023 at 2:20=E2=80=AFPM <sean.wang@mediatek.com> wrote:
->
-> From: Jing Cai <jing.cai@mediatek.com>
->
-> This patch implement function .coredump() and dmp_hdr() in btusb
-> driver for MediaTek controller.  FW core dump was triggered by FW
-> specific event to show something unexpected happened in the controller.
->
-> The driver would be responsible for collecting and uploading the device
-> core dump pieces in hci driver using core dump API. Once we finished
-> the whole process, the driver would reset the controller to recover the
-> kind of fatal error.
->
-> Co-developed-by: Chris Lu <chris.lu@mediatek.com>
-> Signed-off-by: Chris Lu <chris.lu@mediatek.com>
-> Co-developed-by: Sean Wang <sean.wang@mediatek.com>
-> Signed-off-by: Sean Wang <sean.wang@mediatek.com>
-> Signed-off-by: Jing Cai <jing.cai@mediatek.com>
+On Sun, May 14, 2023, Lorenzo Stoakes wrote:
+> No invocation of get_user_pages() use the vmas parameter, so remove it.
+>=20
+> The GUP API is confusing and caveated. Recent changes have done much to
+> improve that, however there is more we can do. Exporting vmas is a prime
+> target as the caller has to be extremely careful to preclude their use
+> after the mmap_lock has expired or otherwise be left with dangling
+> pointers.
+>=20
+> Removing the vmas parameter focuses the GUP functions upon their primary
+> purpose - pinning (and outputting) pages as well as performing the action=
+s
+> implied by the input flags.
+>=20
+> This is part of a patch series aiming to remove the vmas parameter
+> altogether.
+>=20
+> Suggested-by: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> Acked-by: David Hildenbrand <david@redhat.com>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Acked-by: Christian K=EF=BF=BDnig <christian.koenig@amd.com> (for radeon =
+parts)
+> Acked-by: Jarkko Sakkinen <jarkko@kernel.org>
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
 > ---
-> v2, v3: rebase onto the latest codebase
-> v4: update the newest API usage for the coredump which was already
->     into the upstream
-> v5: support devcoredump on hdev basis
-> v6: reuse the coredump state HCI_DEVCOREDUMP_* in driver
->     and drop the driver name copying
-> ---
->  drivers/bluetooth/btmtk.c | 106 ++++++++++++++++++++++++++++++++++++++
->  drivers/bluetooth/btmtk.h |  27 ++++++++++
->  drivers/bluetooth/btusb.c |  14 +++++
->  3 files changed, 147 insertions(+)
->
-> diff --git a/drivers/bluetooth/btmtk.c b/drivers/bluetooth/btmtk.c
-> index ac2fac7e3c5f..60233afc0a9c 100644
-> --- a/drivers/bluetooth/btmtk.c
-> +++ b/drivers/bluetooth/btmtk.c
-> @@ -53,6 +53,56 @@ struct btmtk_section_map {
->         };
->  } __packed;
->
-> +static void btmtk_coredump(struct hci_dev *hdev)
-> +{
-> +       int err;
-> +
-> +       err =3D __hci_cmd_send(hdev, 0xfd5b, 0, NULL);
-> +       if (err < 0)
-> +               bt_dev_err(hdev, "Coredump failed (%d)", err);
-> +}
-> +
-> +static void btmtk_coredump_hdr(struct hci_dev *hdev, struct sk_buff *skb=
-)
-> +{
-> +       struct btmtk_data *data =3D hci_get_priv(hdev);
-> +       char buf[80];
-> +
-> +       snprintf(buf, sizeof(buf), "Controller Name: 0x%X\n",
-> +                data->cd_info.dev_id);
-> +       skb_put_data(skb, buf, strlen(buf));
-> +
-> +       snprintf(buf, sizeof(buf), "Firmware Version: 0x%X\n",
-> +                data->cd_info.fw_version);
-> +       skb_put_data(skb, buf, strlen(buf));
-> +
-> +       snprintf(buf, sizeof(buf), "Driver: %s\n",
-> +                data->cd_info.driver_name);
-> +       skb_put_data(skb, buf, strlen(buf));
-> +
-> +       snprintf(buf, sizeof(buf), "Vendor: MediaTek\n");
-> +       skb_put_data(skb, buf, strlen(buf));
-> +}
-> +
-> +static void btmtk_coredump_notify(struct hci_dev *hdev, int state)
-> +{
-> +       struct btmtk_data *data =3D hci_get_priv(hdev);
-> +
-> +       switch (state) {
-> +       case HCI_DEVCOREDUMP_IDLE:
-> +               data->cd_info.state =3D HCI_DEVCOREDUMP_IDLE;
-> +               break;
-> +       case HCI_DEVCOREDUMP_ACTIVE:
-> +               data->cd_info.state =3D HCI_DEVCOREDUMP_ACTIVE;
-> +               break;
-> +       case HCI_DEVCOREDUMP_TIMEOUT:
-> +       case HCI_DEVCOREDUMP_ABORT:
-> +       case HCI_DEVCOREDUMP_DONE:
-> +               data->cd_info.state =3D HCI_DEVCOREDUMP_IDLE;
-> +               btmtk_reset_sync(hdev);
-> +               break;
-> +       }
-> +}
-> +
->  int btmtk_setup_firmware_79xx(struct hci_dev *hdev, const char *fwname,
->                               wmt_cmd_sync_func_t wmt_cmd_sync)
+>  arch/x86/kernel/cpu/sgx/ioctl.c     | 2 +-
+>  drivers/gpu/drm/radeon/radeon_ttm.c | 2 +-
+>  drivers/misc/sgi-gru/grufault.c     | 2 +-
+>  include/linux/mm.h                  | 3 +--
+>  mm/gup.c                            | 9 +++------
+>  mm/gup_test.c                       | 5 ++---
+>  virt/kvm/kvm_main.c                 | 2 +-
+>  7 files changed, 10 insertions(+), 15 deletions(-)
+
+Acked-by: Sean Christopherson <seanjc@google.com> (KVM)
+
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index cb5c13eee193..eaa5bb8dbadc 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -2477,7 +2477,7 @@ static inline int check_user_page_hwpoison(unsigned=
+ long addr)
 >  {
-> @@ -295,6 +345,62 @@ void btmtk_reset_sync(struct hci_dev *hdev)
->  }
->  EXPORT_SYMBOL_GPL(btmtk_reset_sync);
->
-> +int btmtk_register_coredump(struct hci_dev *hdev, u32 dev_id,
-> +                            const char *name, u32 fw_version)
-> +{
-> +       struct btmtk_data *data =3D hci_get_priv(hdev);
-> +
-> +       if (!IS_ENABLED(CONFIG_DEV_COREDUMP))
-> +               return -EOPNOTSUPP;
-> +
-> +       data->cd_info.dev_id =3D dev_id;
-> +       data->cd_info.fw_version =3D fw_version;
-> +       data->cd_info.state =3D HCI_DEVCOREDUMP_IDLE;
-> +       data->cd_info.driver_name =3D name;
-> +
-> +       return hci_devcd_register(hdev, btmtk_coredump, btmtk_coredump_hd=
-r,
-> +                                 btmtk_coredump_notify);
-> +}
-> +EXPORT_SYMBOL_GPL(btmtk_register_coredump);
-> +
-> +int btmtk_process_coredump(struct hci_dev *hdev, struct sk_buff *skb)
-> +{
-> +       struct btmtk_data *data =3D hci_get_priv(hdev);
-> +       int err;
-> +
-> +       if (!IS_ENABLED(CONFIG_DEV_COREDUMP))
-> +               return 0;
-> +
-> +       switch (data->cd_info.state) {
-> +       case HCI_DEVCOREDUMP_IDLE:
-> +               err =3D hci_devcd_init(hdev, MTK_COREDUMP_SIZE);
-> +               if (err < 0)
-> +                       break;
-> +               /* It is supposed coredump can be done within 5 seconds *=
-/
-> +               schedule_delayed_work(&hdev->dump.dump_timeout,
-> +                                     msecs_to_jiffies(5000));
-> +               fallthrough;
-> +       case HCI_DEVCOREDUMP_ACTIVE:
-> +       default:
-> +               err =3D hci_devcd_append(hdev, skb);
-> +               if (err < 0)
-> +                       break;
-> +
-> +               if (skb->len > 12 &&
-> +                   !strncmp((char *)&skb->data[skb->len - 13],
-> +                            MTK_COREDUMP_END, 12))
-> +                       hci_devcd_complete(hdev);
+>  	int rc, flags =3D FOLL_HWPOISON | FOLL_WRITE;
+> =20
+> -	rc =3D get_user_pages(addr, 1, flags, NULL, NULL);
+> +	rc =3D get_user_pages(addr, 1, flags, NULL);
+>  	return rc =3D=3D -EHWPOISON;
 
-This is a bad idea, not only it is inefficient since you have to
-compare the end after each append but it also assumes the size of
-MTK_COREDUMP_END to be 12, so Id scrap this code and probably use the
-return of hci_devcd_append or have the code in hci_devcd_append detect
-it has reached the end.
+Unrelated to this patch, I think there's a pre-existing bug here.  If gup()=
+ returns
+a valid page, KVM will leak the refcount and unintentionally pin the page. =
+ That's
+highly unlikely as check_user_page_hwpoison() is called iff get_user_pages_=
+unlocked()
+fails (called by hva_to_pfn_slow()), but it's theoretically possible that u=
+serspace
+could change the VMAs between hva_to_pfn_slow() and check_user_page_hwpoiso=
+n() since
+KVM doesn't hold any relevant locks at this point.
 
-> +
-> +               break;
-> +       }
-> +
-> +       if (err < 0)
-> +               kfree_skb(skb);
-> +
-> +       return err;
-> +}
-> +EXPORT_SYMBOL_GPL(btmtk_process_coredump);
-> +
->  MODULE_AUTHOR("Sean Wang <sean.wang@mediatek.com>");
->  MODULE_AUTHOR("Mark Chen <mark-yw.chen@mediatek.com>");
->  MODULE_DESCRIPTION("Bluetooth support for MediaTek devices ver " VERSION=
-);
-> diff --git a/drivers/bluetooth/btmtk.h b/drivers/bluetooth/btmtk.h
-> index 6245662f6ccb..852a67db8f80 100644
-> --- a/drivers/bluetooth/btmtk.h
-> +++ b/drivers/bluetooth/btmtk.h
-> @@ -21,6 +21,9 @@
->  #define MT7921_DLSTATUS 0x7c053c10
->  #define BT_DL_STATE BIT(1)
->
-> +#define MTK_COREDUMP_SIZE              (1024 * 1000)
-> +#define MTK_COREDUMP_END               "coredump end"
-> +
->  enum {
->         BTMTK_WMT_PATCH_DWNLD =3D 0x1,
->         BTMTK_WMT_TEST =3D 0x2,
-> @@ -119,12 +122,20 @@ struct btmtk_hci_wmt_params {
->         u32 *status;
->  };
->
-> +struct btmtk_coredump_info {
-> +       const char *driver_name;
-> +       u32 dev_id;
-> +       u32 fw_version;
-> +       int state;
-> +};
-> +
->  typedef int (*wmt_cmd_sync_func_t)(struct hci_dev *,
->                                    struct btmtk_hci_wmt_params *);
->
->  typedef int (*btmtk_reset_sync_func_t)(struct hci_dev *, void *);
->
->  struct btmtk_data {
-> +       struct btmtk_coredump_info cd_info;
->         btmtk_reset_sync_func_t reset_sync;
->  };
->
-> @@ -139,6 +150,11 @@ int btmtk_setup_firmware(struct hci_dev *hdev, const=
- char *fwname,
->                          wmt_cmd_sync_func_t wmt_cmd_sync);
->
->  void btmtk_reset_sync(struct hci_dev *hdev);
-> +
-> +int btmtk_register_coredump(struct hci_dev *hdev, u32 dev_id, const char=
- *name,
-> +                            u32 fw_version);
-> +
-> +int btmtk_process_coredump(struct hci_dev *hdev, struct sk_buff *skb);
->  #else
->
->  static inline int btmtk_set_bdaddr(struct hci_dev *hdev,
-> @@ -162,4 +178,15 @@ static int btmtk_setup_firmware(struct hci_dev *hdev=
-, const char *fwname,
->  static void btmtk_reset_sync(struct hci_dev *hdev)
->  {
->  }
-> +
-> +static int btmtk_register_coredump(struct hci_dev *hdev, u32 dev_id, con=
-st char *name,
-> +                            u32 fw_version)
-> +{
-> +       return -EOPNOTSUPP;
-> +}
-> +
-> +static int btmtk_process_coredump(struct hci_dev *hdev, struct sk_buff *=
-skb)
-> +{
-> +       return -EOPNOTSUPP;
-> +}
->  #endif
-> diff --git a/drivers/bluetooth/btusb.c b/drivers/bluetooth/btusb.c
-> index 034edd8ad777..1c2a0cbcf62e 100644
-> --- a/drivers/bluetooth/btusb.c
-> +++ b/drivers/bluetooth/btusb.c
-> @@ -3035,6 +3035,10 @@ static int btusb_mtk_setup(struct hci_dev *hdev)
->         }
->
->         btmtk_data->reset_sync =3D btusb_mtk_reset_work;
-> +       err =3D btmtk_register_coredump(hdev, dev_id, btusb_driver.name,
-> +                               fw_version);
-> +       if (err < 0)
-> +               bt_dev_err(hdev, "Failed to register coredump (%d)", err)=
-;
->
->         switch (dev_id) {
->         case 0x7663:
-> @@ -3189,6 +3193,7 @@ static int btusb_recv_acl_mtk(struct hci_dev *hdev,=
- struct sk_buff *skb)
->  {
->         struct btusb_data *data =3D hci_get_drvdata(hdev);
->         u16 handle =3D le16_to_cpu(hci_acl_hdr(skb)->handle);
-> +       struct sk_buff *skb_cd;
->
->         switch (handle) {
->         case 0xfc6f:            /* Firmware dump from device */
-> @@ -3196,6 +3201,15 @@ static int btusb_recv_acl_mtk(struct hci_dev *hdev=
-, struct sk_buff *skb)
->                  * suspend and thus disable auto-suspend.
->                  */
->                 usb_disable_autosuspend(data->udev);
-> +
-> +               /* We need to forward the diagnostic packet to userspace =
-daemon
-> +                * for backward compatibility, so we have to clone the pa=
-cket
-> +                * extraly for the in-kernel coredump support.
-> +                */
-> +               skb_cd =3D skb_clone(skb, GFP_ATOMIC);
-> +               if (skb_cd)
-> +                       btmtk_process_coredump(hdev, skb_cd);
-> +
->                 fallthrough;
->         case 0x05ff:            /* Firmware debug logging 1 */
->         case 0x05fe:            /* Firmware debug logging 2 */
-> --
-> 2.25.1
->
+E.g. if there's no VMA during hva_to_pfn_{fast,slow}(), npages=3D=3D-EFAULT=
+ and KVM
+will invoke check_user_page_hwpoison().  If userspace installs a valid mapp=
+ing
+after hva_to_pfn_slow() but before KVM acquires mmap_lock, then gup() will =
+find
+a valid page.
 
+I _think_ the fix is to simply delete this code. The bug was introduced by =
+commit
+fafc3dbaac64 ("KVM: Replace is_hwpoison_address with __get_user_pages").  A=
+t that
+time, KVM didn't check for "npages =3D=3D -EHWPOISON" from the first call t=
+o
+get_user_pages_unlocked().  Later on, commit 0857b9e95c1a ("KVM: Enable asy=
+nc page
+fault processing") reworked the caller to be:
 
---=20
-Luiz Augusto von Dentz
+	mmap_read_lock(current->mm);
+	if (npages =3D=3D -EHWPOISON ||
+	      (!async && check_user_page_hwpoison(addr))) {
+		pfn =3D KVM_PFN_ERR_HWPOISON;
+		goto exit;
+	}
+
+where async really means NOWAIT, so that the hwpoison use of gup() didn't s=
+leep.
+
+    KVM: Enable async page fault processing
+   =20
+    If asynchronous hva_to_pfn() is requested call GUP with FOLL_NOWAIT to
+    avoid sleeping on IO. Check for hwpoison is done at the same time,
+    otherwise check_user_page_hwpoison() will call GUP again and will put
+    vcpu to sleep.
+
+There are other potential problems too, e.g. the hwpoison call doesn't hono=
+r
+the recently introduced @interruptible flag.
+
+I don't see any reason to keep check_user_page_hwpoison(), KVM can simply r=
+ely on
+the "npages =3D=3D -EHWPOISON" check.   get_user_pages_unlocked() is guaran=
+teed to be
+called with roughly equivalent flags, and the flags that aren't equivalent =
+are
+arguably bugs in check_user_page_hwpoison(), e.g. assuming FOLL_WRITE is wr=
+ong.
+
+TL;DR: Go ahead with this change, I'll submit a separate patch to delete th=
+e
+buggy KVM code.
