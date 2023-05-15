@@ -2,152 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 555F7704111
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 00:41:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E1CC5704113
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 00:45:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343539AbjEOWlw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 18:41:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45772 "EHLO
+        id S1343528AbjEOWp0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 18:45:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S1343528AbjEOWlv (ORCPT
+        with ESMTP id S229846AbjEOWpX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 18:41:51 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37B9DD052;
-        Mon, 15 May 2023 15:41:49 -0700 (PDT)
-Received: from mercury (unknown [185.254.75.28])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 1F5EA66031CE;
-        Mon, 15 May 2023 23:41:48 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684190508;
-        bh=d4WOHz/itIcllAhUmjL5igj6NblYjaugfAkGrHLzvoU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EZCijq/Hg/aDRMsWxd5pPeUO1hSaUKXSVgLZFch4NrpZlq2KgAWlzx89iK11n++yp
-         sNfQ7AkrvVPVwDKtRsfWA7YwWoFKbpuCWa+9guYNZi/avzrirrwDjkO0m2lLrAbAes
-         iuUpYnZoBgohF+pbF3uUKh8+AGQb/FH9UChCeR+Kn2Ia4XJhln6MZ2KSoa/OqA46Fa
-         gz376SCpbEuxlkejCMR/eos2otMLIPPGRyopPivjMjkPdzq/PaNBRy/8FFYC4I88Ib
-         cxnOXVe/kEtwt7A0lQoplwh28zd11/n2lBvQw7gYO997pZaYN8IH/UnRO3Qw8kiOrF
-         3fmkfCY+P6cXw==
-Received: by mercury (Postfix, from userid 1000)
-        id A1E2E1060F7F; Tue, 16 May 2023 00:41:45 +0200 (CEST)
-Date:   Tue, 16 May 2023 00:41:45 +0200
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Svyatoslav Ryhel <clamor95@gmail.com>
-Cc:     Iskren Chernev <me@iskren.info>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Matheus Castello <matheus@castello.eng.br>,
-        Rob Herring <robh+dt@kernel.org>, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 3/4] power: max17040: add passing props from supplier
-Message-ID: <20230515224145.u2fos4ln3n6hb567@mercury.elektranox.org>
-References: <20230308084419.11934-1-clamor95@gmail.com>
- <20230308084419.11934-4-clamor95@gmail.com>
+        Mon, 15 May 2023 18:45:23 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51F90D052;
+        Mon, 15 May 2023 15:45:22 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id af79cd13be357-757942bd912so431878085a.2;
+        Mon, 15 May 2023 15:45:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684190721; x=1686782721;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RYvc5AJ9ic4v+7Jv0Cue6d/v+WlGvy4SGOuFoUu4yI0=;
+        b=HaiKlOlnX8LcWlPI8Os1Tl+lYf1Kb+bYS4XKTyzFH8UGat1q2Ndu0974KKemJS9c/4
+         077IXP+zU7SUJx9c5FeToKtQ34ZZ2XSYFIjeiSqS9JhTpEPSO/nXtUPU1wPagiEHqy6D
+         PnASpY1/izClxtqP8rzYKAnRIupBl8L+UCJy4mUYI/DTYg7ylKRM1wFy54JdDcrpTrAX
+         upmwxBEjlMYys/WAvO+oVfaDYnLDTGe9S+gwhxon7Zz3RPYJDoSsjHtg/Xt/mG8iFRpY
+         3k6Q1rTVnQqiHAumXM7ZjNMMmMSLV/bYeagRoxT0tHBCZhlgzGK+oUwqdGmE+Y7TIGHk
+         fOwQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684190721; x=1686782721;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RYvc5AJ9ic4v+7Jv0Cue6d/v+WlGvy4SGOuFoUu4yI0=;
+        b=T+wURvocVS6G+Bp7xGVarqeh8Ii9p5eVEhQm6HSVzBNTcTs8XS8D81GHpdD4shHDIV
+         6iOmE1NA11Hbr4nu0ZQb0hOpi9dSbPKCIE9h5KJag7GgJ0dexEkR6Dx7xtqEhdzm8fja
+         8CJIZ+RHtG0J3QuyRSrDKyxdsTBnVr6mWmN/vs3Lv8Plg2YHYRfCrlLJIJHsxtD5m25/
+         vvokYr5phiL+N3NSxMmwNQXtlmNkd5ytOlohTqQtYmuSeij0+VJmepZqOPVpWlFrfHDI
+         18ZyxRmVcmRy+3YgG6FFsIuXDJDA/aHd93qhvBmViXjl8uUu56FBmy2dC+D6TpbUZsBn
+         CHaA==
+X-Gm-Message-State: AC+VfDw6yMrbeNX5NnTA7gpOJEDTTamjapnNSemcu5u4GFLGmsNiMBSm
+        uQgKl/4ao9DGjwFrLwXeyQ==
+X-Google-Smtp-Source: ACHHUZ5cwxDprX2wc4Vs34Xs79euK1IfX+4P9wu6q6zhhCSdqHaXYd9cksut7gu/eQGwPBBJyeTHYQ==
+X-Received: by 2002:ad4:5e88:0:b0:61b:6e28:5c3a with SMTP id jl8-20020ad45e88000000b0061b6e285c3amr58508422qvb.27.1684190721396;
+        Mon, 15 May 2023 15:45:21 -0700 (PDT)
+Received: from C02FL77VMD6R.googleapis.com ([2600:1700:65a5:6400:e9e0:2451:1fdc:4815])
+        by smtp.gmail.com with ESMTPSA id bv24-20020a05622a0a1800b003f3c9754e1dsm5166927qtb.17.2023.05.15.15.45.19
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 15:45:20 -0700 (PDT)
+Date:   Mon, 15 May 2023 15:45:15 -0700
+From:   Peilin Ye <yepeilin.cs@gmail.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Jiri Pirko <jiri@resnulli.us>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jamal Hadi Salim <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>,
+        Peilin Ye <peilin.ye@bytedance.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Vlad Buslov <vladbu@mellanox.com>,
+        Pedro Tammela <pctammela@mojatatu.com>,
+        Hillf Danton <hdanton@sina.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Cong Wang <cong.wang@bytedance.com>
+Subject: Re: [PATCH net 6/6] net/sched: qdisc_destroy() old ingress and
+ clsact Qdiscs before grafting
+Message-ID: <ZGK1+3CJOQucl+Jw@C02FL77VMD6R.googleapis.com>
+References: <cover.1683326865.git.peilin.ye@bytedance.com>
+ <e6c4681dd9205d702ae2e6124e20c6210520e76e.1683326865.git.peilin.ye@bytedance.com>
+ <20230508183324.020f3ec7@kernel.org>
+ <ZFv6Z7hssZ9snNAw@C02FL77VMD6R.googleapis.com>
+ <20230510161559.2767b27a@kernel.org>
+ <ZF1SqomxfPNfccrt@C02FL77VMD6R.googleapis.com>
+ <20230511162023.3651970b@kernel.org>
+ <ZF1+WTqIXfcPAD9Q@C02FL77VMD6R.googleapis.com>
+ <ZF2EK3I2GDB5rZsM@C02FL77VMD6R.googleapis.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="wzu5mul2aofxx4qc"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230308084419.11934-4-clamor95@gmail.com>
+In-Reply-To: <ZF2EK3I2GDB5rZsM@C02FL77VMD6R.googleapis.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, May 11, 2023 at 05:11:23PM -0700, Peilin Ye wrote:
+> > > ->init() may be too early, aren't there any error points which could
+> > > prevent the Qdisc from binding after ->init() was called?
+> >
+> > You're right, it's in qdisc_create(), argh...
+>
+> ->destroy() is called for all error points between ->init() and
+> dev_graft_qdisc().  I'll try handling it in ->destroy().
 
---wzu5mul2aofxx4qc
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Sorry for any confusion: there is no point at all undoing "setting dev
+pointer to b1" in ->destroy() because datapath has already been affected.
 
-Hi,
+To summarize, grafting B mustn't fail after setting dev pointer to b1, so
+->init() is too early, because e.g. if user requested [1] to create a rate
+estimator, gen_new_estimator() could fail after ->init() in
+qdisc_create().
 
-On Wed, Mar 08, 2023 at 10:44:18AM +0200, Svyatoslav Ryhel wrote:
-> Optionally pass status and health from supplier if
-> it supports those props. If cell is online assume it
-> is present as well.
->=20
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+On the other hand, ->attach() is too late because it's later than
+dev_graft_qdisc(), so concurrent filter requests might see uninitialized
+dev pointer in theory.
 
-Charger health might be different from battery health, so it's not
-safe to inherit. Otherwise LGTM.
+Please suggest; is adding another callback (or calling ->attach()) right
+before dev_graft_qdisc() for ingress (clsact) Qdiscs too much for this
+fix?
 
--- Sebastian
+[1] e.g. $ tc qdisc add dev eth0 estimator 1s 8s clsact
 
-> ---
->  drivers/power/supply/max17040_battery.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->=20
-> diff --git a/drivers/power/supply/max17040_battery.c b/drivers/power/supp=
-ly/max17040_battery.c
-> index 2778ed5b5c14..6dfce7b1309e 100644
-> --- a/drivers/power/supply/max17040_battery.c
-> +++ b/drivers/power/supply/max17040_battery.c
-> @@ -390,6 +390,7 @@ static int max17040_get_property(struct power_supply =
-*psy,
-> =20
->  	switch (psp) {
->  	case POWER_SUPPLY_PROP_ONLINE:
-> +	case POWER_SUPPLY_PROP_PRESENT:
->  		val->intval =3D max17040_get_online(chip);
->  		break;
->  	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
-> @@ -402,6 +403,10 @@ static int max17040_get_property(struct power_supply=
- *psy,
->  		val->intval =3D chip->low_soc_alert;
->  		break;
-> =20
-> +	case POWER_SUPPLY_PROP_STATUS:
-> +	case POWER_SUPPLY_PROP_HEALTH:
-> +		power_supply_get_property_from_supplier(psy, psp, val);
-> +		break;
->  	case POWER_SUPPLY_PROP_TECHNOLOGY:
->  		val->intval =3D chip->batt_info->technology;
->  		break;
-> @@ -438,10 +443,13 @@ static const struct regmap_config max17040_regmap =
-=3D {
-> =20
->  static enum power_supply_property max17040_battery_props[] =3D {
->  	POWER_SUPPLY_PROP_ONLINE,
-> +	POWER_SUPPLY_PROP_PRESENT,
->  	POWER_SUPPLY_PROP_VOLTAGE_NOW,
->  	POWER_SUPPLY_PROP_CAPACITY,
->  	POWER_SUPPLY_PROP_CAPACITY_ALERT_MIN,
->  	POWER_SUPPLY_PROP_TECHNOLOGY,
-> +	POWER_SUPPLY_PROP_STATUS,
-> +	POWER_SUPPLY_PROP_HEALTH,
->  	POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN,
->  	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
->  	POWER_SUPPLY_PROP_TEMP_MIN,
-> --=20
-> 2.37.2
->=20
+Thanks,
+Peilin Ye
 
---wzu5mul2aofxx4qc
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmRitSkACgkQ2O7X88g7
-+pq/0A/+I4vXvShMtC+fNF3QMIgpJd9z/K/fBKnBmZUVEp5QaMFjf5tDQNtu5aAi
-Fif/vSRflgryt2E7/W0ijnepA+N+nuRS20M6XT6+UtEW9L93Tby74YA/C8qjJFSz
-ZAKdJnh0rI00yQohehXZLMCQYhJKSiv9LkbDyAihiF/DlKRbj4we1lMdcyNF2pO6
-bizrcDuFBB1uJ87kVJESuOn/Td4ToXECNHXNDjYjM3VSSMAY4JYtL6wDIfwTBX9I
-R9u8f2H2UZXNulwHvpcAt7u7VyATDg2xkXDoTtb9HTOOKaTdhauKLNHyvOK8Yz1G
-r3EJzuHVf2XGivD2YvVqEKD0CHuS0uAfQCkv9TND0GA1tuqonFtdUGs8Xvx0CM5q
-MQT4MLeco6qQkIBa7NyZO8GvKaGOak/Ci50JCjuXaDmehZmieY0mYFbJxkq6GO9E
-EsgoRVXNkMmXaofLIuuaHZJ3PBbRfmatGQNJaq8iWxixxeV4koGcshI2CbF86PEp
-n0CTKzzt1WCLf8xqYnWjssnrWACyycdls+hVI7W+xR5AlyKTYl5vqh5+qxyeDu5D
-WSi9vhMgxMe2P7Ol4FyZdAkKsU9xWw7M3qLBFxAKYdOGuztbcPESWB3TTf/vTrZI
-5DW6jsdKqxptcK2m3kVTdDlbukjVa971k4yXkLfbQ98L52Gxw3A=
-=OzHL
------END PGP SIGNATURE-----
-
---wzu5mul2aofxx4qc--
