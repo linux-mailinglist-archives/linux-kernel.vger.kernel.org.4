@@ -2,254 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E493702F54
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:13:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AAEF7702F56
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:14:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239281AbjEOONH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 10:13:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45736 "EHLO
+        id S239074AbjEOOOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 10:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjEOONE (ORCPT
+        with ESMTP id S237139AbjEOOOM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 10:13:04 -0400
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BD8D1727;
-        Mon, 15 May 2023 07:13:03 -0700 (PDT)
-Received: by mail-lj1-x230.google.com with SMTP id 38308e7fff4ca-2ac82912a59so135948651fa.3;
-        Mon, 15 May 2023 07:13:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684159981; x=1686751981;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=chkZheqYGYzsbUmgQjZR+WqcgawPReoRF0Mt00D+UqA=;
-        b=ZWgwlfvxUB0S1xeKw6ZiyF3zHl+Ipk8aw00WTABAru+4kbJOBcNVp1Sj3CO+7d6u5g
-         HeyfCghJDQ44KYgn4QplEzIuFvahGuj81Z4oVxHyzseIyEZCclcNYM9CDRWqdgefvyEv
-         NOEcgnG/6C6FwlsYlIX5+jXPgp1ofnBj9p7mVVkFpNlYUp3jbB8bJv+ZpN/+jap6aHGR
-         T7mHLQfxij8LU+RwHR4iQ1IXSTBxDI6Algmns6BFaf2PP2L1taRE7KhZdbLHH87wfpgz
-         9QMiOWlotkDY4eYDFhNnkih7JuhydLS9ihxtbK2ljwejc49UZxUkD/ysrHy/UVB2FW9q
-         +eEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684159981; x=1686751981;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=chkZheqYGYzsbUmgQjZR+WqcgawPReoRF0Mt00D+UqA=;
-        b=ahQIH0qbMWSZBMbz1hO6njRt26so77uHp+Kf0XRyvSDdJKvDu4JghxbihJby7rVG6j
-         yJ560xNiQtnS2CH6HTvBYR/IBE6aUgOLijpfusyoWe5t/6WfuhF16qx2I95NA/QPlhqe
-         V14lAVjPuVXMs6IPEv0gnSWKzB1Vyxuuw6/+GB3i8x7ZVVjA2EVHOaH49a8HdJoPrO9o
-         6RY5Xy6jXvlQlD34nAPiTEk+zp+xFUwB8fqtvknFy4jBXBNF3yfinrTS8BREhSBEMIUj
-         7XRU2v/U+KVBC0B6RshzqoCMyY3rHdAQYYUZm3mqxYzgBcOtJ7tIHvIi6WTcWypCmoYK
-         clzw==
-X-Gm-Message-State: AC+VfDz16HPWi8/4NcRhBL1cjV2Hcy4MIdQDJKtsJWYBzzscscQEK1Ke
-        /JXN7Lc/9auPQWwAJSADT6NgEBFssPz9bOm2yHXiF4jO
-X-Google-Smtp-Source: ACHHUZ6ogG8v/77kF7RT8ye9NqI9NsJg8UC/prEmD6zJhXqj2pb8gMpr++4JY6MvW/Q6CLSF4ztDJDD67mkhC7w5iU8=
-X-Received: by 2002:a2e:93d5:0:b0:2ae:d757:4c41 with SMTP id
- p21-20020a2e93d5000000b002aed7574c41mr1649060ljh.23.1684159980843; Mon, 15
- May 2023 07:13:00 -0700 (PDT)
+        Mon, 15 May 2023 10:14:12 -0400
+Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905AB1BC6;
+        Mon, 15 May 2023 07:14:11 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0685A5C0195;
+        Mon, 15 May 2023 10:14:11 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Mon, 15 May 2023 10:14:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:content-type:date:date:from:from
+        :in-reply-to:in-reply-to:message-id:mime-version:references
+        :reply-to:sender:subject:subject:to:to; s=fm2; t=1684160051; x=
+        1684246451; bh=8NJYIEmbiIkpWsu+/ofSKGEy0pPwTx2rBL3P2/pMpTo=; b=Q
+        EJT7kK3SHAjLT3qjXYjWH1VDIAYNnsdCYVrOvC5QsyPBNxbQJfyfr+3G7Je1ro5/
+        f2MbLZ07yj+B8Z76l918KNzgEK3Uz0yy+ClnN44SfrQHdnrk6mlOzwnhdAXYc7BS
+        1tVS1doK829JwQL0HeFCwWbdMMVbR+7v0yKedAMoy5eLal12yajct1w2r/O9OdnW
+        iJr8ET36v7YU72fyRMDbre39KE04VTe51P9PKUW/ZFWIx6O+W1MCwNqPJR37miQl
+        UsO4qlsKZ3oviidexWAYEYEu1TBq/jqur+/QvAbOC0lcQ3dj+D7Naf9QFZyFtzNR
+        sGTWvehN2OL6xlA5AQvjw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684160051; x=1684246451; bh=8NJYIEmbiIkpW
+        su+/ofSKGEy0pPwTx2rBL3P2/pMpTo=; b=pNj8ohMjr5vfiyyDV5hr0NEDMPVUU
+        04yTQmYOuEIEPWLt3XU9yfxeNIFTDeIYKXTGXFEEIvNJ9O7dV/++cegpVkVvQGP3
+        Ys9PnpG0+CioNt4NeJUN2/GgtP0GzbRs1IokAPt2yY7/FmF1ayqHi4F6XSiCWS/S
+        wv9pl/xFZGDpdsbozdRuAwniPmjguY017hhVh+zkdnne0HAnGeqHYomc1bZdXngR
+        nBDYbnpqOdiN3lOYy54Dx6w6k05z/56x7nVaZUmFDkdAvAzTi5ev5PDT9pWgPCO+
+        8KjOcbqNsZqjyrBDwut58uP71FzaqqSRJGXNipybSDN0XajLZE82LQ+yA==
+X-ME-Sender: <xms:Mj5iZBP4c6PhuLXJWmsk6uIpPAUgOn1dsV_IFHpNgyf8HxJQIb7OKw>
+    <xme:Mj5iZD_OuzzIeIsxxvodmiYwE4htvZ6-P3K65OYezaVNjdfW0CN7B5ouexVspyUbE
+    pOisOZJ_-mN6AaoHSc>
+X-ME-Received: <xmr:Mj5iZATDt1LLzwYgJcvWrYbQ5Kzt4X2FsoNXQ3sUpQQWK0oj1gbxEsb-pVqTkLmby0moAw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehjedgjeehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:Mj5iZNsMB9ZnYTROf8BvRtzY9FU__X55xSrlTBoXiIigtXyK4BuQbw>
+    <xmx:Mj5iZJf_tHYYUVJIc53uvXREYTkoRJ6_eVfdIJGVjm0P3pht7zI6Ow>
+    <xmx:Mj5iZJ0ZzToGS79JVNxJiCK_r9G7ywjdgCPBcLV246-eWdhxVEsY1g>
+    <xmx:Mz5iZMAj4YUc2HrT0DGOhO7TGm8CnGLZeHEKwoKzbRiIQ71nxfAh3Q>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 15 May 2023 10:14:10 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 9FE6310D1DE; Mon, 15 May 2023 17:14:08 +0300 (+03)
+Date:   Mon, 15 May 2023 17:14:08 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     linux-efi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Evgeniy Baskov <baskov@ispras.ru>,
+        Borislav Petkov <bp@alien8.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        Gerd Hoffmann <kraxel@redhat.com>,
+        Dave Young <dyoung@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Kees Cook <keescook@chromium.org>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH v2 09/20] x86: efistub: Perform 4/5 level paging switch
+ from the stub
+Message-ID: <20230515141408.37aoipn4jfu5qcdd@box.shutemov.name>
+References: <20230508070330.582131-1-ardb@kernel.org>
+ <20230508070330.582131-10-ardb@kernel.org>
 MIME-Version: 1.0
-References: <20230505220043.39036-1-jorge.lopez2@hp.com> <20230505220043.39036-11-jorge.lopez2@hp.com>
- <4537f210-4a7a-3c11-ecbb-ed4762a1f598@linux.intel.com> <CAOOmCE9m5++_4nBu3C64uWVOeyUQs3afn_Q9AJz9oudGvMHHiQ@mail.gmail.com>
- <4a14de7-58fb-4192-496a-279dd4109b6@linux.intel.com>
-In-Reply-To: <4a14de7-58fb-4192-496a-279dd4109b6@linux.intel.com>
-From:   Jorge Lopez <jorgealtxwork@gmail.com>
-Date:   Mon, 15 May 2023 09:12:30 -0500
-Message-ID: <CAOOmCE-gipT5r1ABCkqkfFCdssKEwHhvz47yYnHa1fy74jAsFQ@mail.gmail.com>
-Subject: Re: [PATCH v12 10/13] HP BIOSCFG driver - spmobj-attributes
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
-        LKML <linux-kernel@vger.kernel.org>, thomas@t-8ch.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230508070330.582131-10-ardb@kernel.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 4:23=E2=80=AFAM Ilpo J=C3=A4rvinen
-<ilpo.jarvinen@linux.intel.com> wrote:
->
-> On Wed, 10 May 2023, Jorge Lopez wrote:
->
-> > On Tue, May 9, 2023 at 8:48=E2=80=AFAM Ilpo J=C3=A4rvinen
-> > <ilpo.jarvinen@linux.intel.com> wrote:
-> > >
-> > > On Fri, 5 May 2023, Jorge Lopez wrote:
-> > >
-> > > > HP BIOS Configuration driver purpose is to provide a driver support=
-ing
-> > > > the latest sysfs class firmware attributes framework allowing the u=
-ser
-> > > > to change BIOS settings and security solutions on HP Inc.=E2=80=99s=
- commercial
-> > > > notebooks.
-> > > >
-> > > > Many features of HP Commercial notebooks can be managed using Windo=
-ws
-> > > > Management Instrumentation (WMI). WMI is an implementation of Web-B=
-ased
-> > > > Enterprise Management (WBEM) that provides a standards-based interf=
-ace
-> > > > for changing and monitoring system settings. HP BIOSCFG driver prov=
-ides
-> > > > a native Linux solution and the exposed features facilitates the
-> > > > migration to Linux environments.
-> > > >
-> > > > The Linux security features to be provided in hp-bioscfg driver ena=
-bles
-> > > > managing the BIOS settings and security solutions via sysfs, a virt=
-ual
-> > > > filesystem that can be used by user-mode applications. The new
-> > > > documentation cover HP-specific firmware sysfs attributes such Secu=
-re
-> > > > Platform Management and Sure Start. Each section provides security
-> > > > feature description and identifies sysfs directories and files expo=
-sed
-> > > > by the driver.
-> > > >
-> > > > Many HP Commercial notebooks include a feature called Secure Platfo=
-rm
-> > > > Management (SPM), which replaces older password-based BIOS settings
-> > > > management with public key cryptography. PC secure product manageme=
-nt
-> > > > begins when a target system is provisioned with cryptographic keys
-> > > > that are used to ensure the integrity of communications between sys=
-tem
-> > > > management utilities and the BIOS.
-> > > >
-> > > > HP Commercial notebooks have several BIOS settings that control its
-> > > > behaviour and capabilities, many of which are related to security.
-> > > > To prevent unauthorized changes to these settings, the system can
-> > > > be configured to use a cryptographic signature-based authorization
-> > > > string that the BIOS will use to verify authorization to modify the
-> > > > setting.
-> > > >
-> > > > Linux Security components are under development and not published y=
-et.
-> > > > The only linux component is the driver (hp bioscfg) at this time.
-> > > > Other published security components are under Windows.
-> > > >
-> > > > Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
-> > > >
-> > > > ---
->
->
-> > > > +     } else {
-> > > > +             /*
-> > > > +              * UTF-16 prefix is append to the * buffer when a BIO=
-S
-> > >
-> > > What is "the * buffer" ?
-> >
-> > It is the data stored in 'buffer' variable which is composed of three
-> > strings concatenated together to be submitted to BIOS via WMI call.
-> > 'Buffer' will looks something as    [size attribute][attribute][size
-> > value][value][auth size][auth payload]
-> > size is the length in bytes,  attribute/value/auth are string represent=
-ed in u16
->
-> Even after this explanation I don't understand why it's called "the *
-> buffer". Is that common terminology in this domain (in which case it's
-> fine, I just haven't come across such term before)?
->
+On Mon, May 08, 2023 at 09:03:19AM +0200, Ard Biesheuvel wrote:
+> In preparation for updating the EFI stub boot flow to avoid the bare
+> metal decompressor code altogether, implement the support code for
+> switching between 4 and 5 levels of paging before jumping to the kernel
+> proper.
+> 
+> This reuses the newly refactored trampoline that the bare metal
+> decompressor uses, but relies on EFI APIs to allocate 32-bit addressable
+> memory and remap it with the appropriate permissions. Given that the
+> bare metal decompressor will no longer call into the trampoline if the
+> number of paging levels is already set correctly, we no longer need to
+> remove NX restrictions from the memory range where this trampoline may
+> end up.
+> 
+> Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
+> ---
+>  drivers/firmware/efi/libstub/efi-stub-helper.c |   4 +
+>  drivers/firmware/efi/libstub/x86-stub.c        | 119 ++++++++++++++++----
+>  2 files changed, 102 insertions(+), 21 deletions(-)
+> 
+> diff --git a/drivers/firmware/efi/libstub/efi-stub-helper.c b/drivers/firmware/efi/libstub/efi-stub-helper.c
+> index 1e0203d74691ffcc..fc5f3b4c45e91401 100644
+> --- a/drivers/firmware/efi/libstub/efi-stub-helper.c
+> +++ b/drivers/firmware/efi/libstub/efi-stub-helper.c
+> @@ -16,6 +16,8 @@
+>  
+>  #include "efistub.h"
+>  
+> +extern bool efi_no5lvl;
+> +
+>  bool efi_nochunk;
+>  bool efi_nokaslr = !IS_ENABLED(CONFIG_RANDOMIZE_BASE);
+>  bool efi_novamap;
+> @@ -73,6 +75,8 @@ efi_status_t efi_parse_options(char const *cmdline)
+>  			efi_loglevel = CONSOLE_LOGLEVEL_QUIET;
+>  		} else if (!strcmp(param, "noinitrd")) {
+>  			efi_noinitrd = true;
+> +		} else if (IS_ENABLED(CONFIG_X86_64) && !strcmp(param, "no5lvl")) {
+> +			efi_no5lvl = true;
+>  		} else if (!strcmp(param, "efi") && val) {
+>  			efi_nochunk = parse_option_str(val, "nochunk");
+>  			efi_novamap |= parse_option_str(val, "novamap");
+> diff --git a/drivers/firmware/efi/libstub/x86-stub.c b/drivers/firmware/efi/libstub/x86-stub.c
+> index a0bfd31358ba97b1..fb83a72ad905ad6e 100644
+> --- a/drivers/firmware/efi/libstub/x86-stub.c
+> +++ b/drivers/firmware/efi/libstub/x86-stub.c
+> @@ -267,32 +267,11 @@ adjust_memory_range_protection(unsigned long start, unsigned long size)
+>  	}
+>  }
+>  
+> -/*
+> - * Trampoline takes 2 pages and can be loaded in first megabyte of memory
+> - * with its end placed between 128k and 640k where BIOS might start.
+> - * (see arch/x86/boot/compressed/pgtable_64.c)
+> - *
+> - * We cannot find exact trampoline placement since memory map
+> - * can be modified by UEFI, and it can alter the computed address.
+> - */
+> -
+> -#define TRAMPOLINE_PLACEMENT_BASE ((128 - 8)*1024)
+> -#define TRAMPOLINE_PLACEMENT_SIZE (640*1024 - (128 - 8)*1024)
+> -
+>  void startup_32(struct boot_params *boot_params);
+>  
+>  static void
+>  setup_memory_protection(unsigned long image_base, unsigned long image_size)
+>  {
+> -	/*
+> -	 * Allow execution of possible trampoline used
+> -	 * for switching between 4- and 5-level page tables
+> -	 * and relocated kernel image.
+> -	 */
+> -
+> -	adjust_memory_range_protection(TRAMPOLINE_PLACEMENT_BASE,
+> -				       TRAMPOLINE_PLACEMENT_SIZE);
+> -
+>  #ifdef CONFIG_64BIT
+>  	if (image_base != (unsigned long)startup_32)
+>  		adjust_memory_range_protection(image_base, image_size);
+> @@ -760,6 +739,96 @@ static efi_status_t exit_boot(struct boot_params *boot_params, void *handle)
+>  	return EFI_SUCCESS;
+>  }
+>  
+> +bool efi_no5lvl;
+> +
+> +static void (*la57_toggle)(void *trampoline, bool enable_5lvl);
+> +
+> +extern void trampoline_32bit_src(void *, bool);
+> +extern const u16 trampoline_ljmp_imm_offset;
+> +
+> +/*
+> + * Enabling (or disabling) 5 level paging is tricky, because it can only be
+> + * done from 32-bit mode with paging disabled. This means not only that the
+> + * code itself must be running from 32-bit addressable physical memory, but
+> + * also that the root page table must be 32-bit addressable, as we cannot
+> + * program a 64-bit value into CR3 when running in 32-bit mode.
+> + */
+> +static efi_status_t efi_setup_5level_paging(void)
+> +{
+> +	u8 tmpl_size = (u8 *)&trampoline_ljmp_imm_offset - (u8 *)&trampoline_32bit_src;
+> +	efi_status_t status;
+> +	u8 *la57_code;
+> +
+> +	if (!efi_is_64bit())
+> +		return EFI_SUCCESS;
+> +
+> +	/* check for 5 level paging support */
+> +	if (native_cpuid_eax(0) < 7 ||
+> +	    !(native_cpuid_ecx(7) & (1 << (X86_FEATURE_LA57 & 31))))
+> +		return EFI_SUCCESS;
+> +
+> +	/* allocate some 32-bit addressable memory for code and a page table */
+> +	status = efi_allocate_pages(2 * PAGE_SIZE, (unsigned long *)&la57_code,
+> +				    U32_MAX);
+> +	if (status != EFI_SUCCESS)
+> +		return status;
+> +
+> +	la57_toggle = memcpy(la57_code, trampoline_32bit_src, tmpl_size);
+> +	memset(la57_code + tmpl_size, 0x90, PAGE_SIZE - tmpl_size);
+> +
+> +	/*
+> +	 * To avoid having to allocate a 32-bit addressable stack, we use a
+> +	 * ljmp to switch back to long mode. However, this takes an absolute
+> +	 * address, so we have to poke it in at runtime.
+> +	 */
+> +	*(u32 *)&la57_code[trampoline_ljmp_imm_offset] += (unsigned long)la57_code;
+> +
+> +	adjust_memory_range_protection((unsigned long)la57_toggle, PAGE_SIZE);
+> +
+> +	return EFI_SUCCESS;
+> +}
+> +
+> +static void efi_5level_switch(void)
+> +{
+> +#ifdef CONFIG_X86_64
+> +	static const struct desc_struct gdt[] = {
+> +		[GDT_ENTRY_KERNEL32_CS] = GDT_ENTRY_INIT(0xc09b, 0, 0xfffff),
+> +		[GDT_ENTRY_KERNEL_CS]   = GDT_ENTRY_INIT(0xa09b, 0, 0xfffff),
+> +	};
+> +
+> +	bool want_la57 = IS_ENABLED(CONFIG_X86_5LEVEL) && !efi_no5lvl;
+> +	bool have_la57 = native_read_cr4() & X86_CR4_LA57;
+> +	bool need_toggle = want_la57 ^ have_la57;
+> +	u64 *pgt = (void *)la57_toggle + PAGE_SIZE;
+> +	u64 *cr3 = (u64 *)__native_read_cr3();
+> +	u64 *new_cr3;
+> +
+> +	if (!la57_toggle || !need_toggle)
+> +		return;
+> +
+> +	if (!have_la57) {
+> +		/*
+> +		 * We are going to enable 5 level paging, so we need to
+> +		 * allocate a root level page from the 32-bit addressable
+> +		 * physical region, and plug the existing hierarchy into it.
+> +		 */
+> +		new_cr3 = memset(pgt, 0, PAGE_SIZE);
+> +		new_cr3[0] = (u64)cr3 | _PAGE_TABLE_NOENC;
+> +	} else {
+> +		// take the new root table pointer from the current entry #0
+> +		new_cr3 = (u64 *)(cr3[0] & PAGE_MASK);
+> +
+> +		// copy the new root level table if it is not 32-bit addressable
+> +		if ((u64)new_cr3 > U32_MAX)
+> +			new_cr3 = memcpy(pgt, new_cr3, PAGE_SIZE);
+> +	}
+> +
+> +	native_load_gdt(&(struct desc_ptr){ sizeof(gdt) - 1, (u64)gdt });
+> +
+> +	la57_toggle(new_cr3, want_la57);
+> +#endif
+> +}
+> +
 
-Point taken.  Replaced 'buffer' variable name to 'authbuf'
+Nit: I would prefer to have the #ifdef around whole function with dummy
+function for !CONFIG_X86_64 case, if IS_ENABLED(CONFIG_X86_64) is not an
+option.
 
-> > > > +              * admin password is configured in BIOS
-> > > > +              */
-> > > > +
->
-> [...snip...]
->
-> > > > +/*
-> > > > + * status_show - Reads SPM status
-> > > > + */
-> > > > +static ssize_t status_show(struct kobject *kobj, struct kobj_attri=
-bute
-> > > > +                 *attr, char *buf)
-> > > > +{
-> > > > +     int ret, i;
-> > > > +     struct secureplatform_provisioning_data data;
-> > > > +
-> > > > +     ret =3D statusbin(kobj, attr, &data);
-> > > > +     if (ret < 0)
-> > > > +             goto status_exit;
-> > >
-> > > Can you calculate strnlen() from buf at this point, or is the result
-> > > garbage? Should you return ret instead here?
-> >
-> > It should return the error instead.
-Done!
+Otherwise:
 
-> > >
-> > > > +
-> > > > +     sysfs_emit(buf, "%s{\n", buf);
-> > > > +     sysfs_emit(buf, "%s\t\"State\": \"%s\",\n", buf,
-> > > > +                spm_state_types[data.state]);
-> > > > +     sysfs_emit(buf, "%s\t\"Version\": \"%d.%d\",\n", buf, data.ve=
-rsion[0],
-> > > > +                data.version[1]);
-> > > > +
-> > > > +     /*
-> > > > +      * state =3D=3D 0 means secure platform management
-> > > > +      * feature is not configured in BIOS.
-> > > > +      */
-> > > > +     if (data.state =3D=3D 0)
-> > > > +             goto status_exit;
-> > > > +
-> > > > +     sysfs_emit(buf, "%s\t\"Nonce\": %d,\n", buf, data.nonce);
-> > > > +     sysfs_emit(buf, "%s\t\"FeaturesInUse\": %d,\n", buf, data.fea=
-tures);
-> > > > +     sysfs_emit(buf, "%s\t\"EndorsementKeyMod\": \"", buf);
-> > > > +
-> > > > +     for (i =3D 255; i >=3D 0; i--)
-> > > > +             sysfs_emit(buf, "%s %u", buf, data.kek_mod[i]);
-> > > > +
-> > > > +     sysfs_emit(buf, "%s \",\n", buf);
-> > > > +     sysfs_emit(buf, "%s\t\"SigningKeyMod\": \"", buf);
-> > > > +
-> > > > +     for (i =3D 255; i >=3D 0; i--)
-> > > > +             sysfs_emit(buf, "%s %u", buf, data.sk_mod[i]);
-> > > > +
-> > > > +     /* Return buf contents */
-> > > > +
-> > > > +     sysfs_emit(buf, "%s \"\n", buf);
-> > > > +     sysfs_emit(buf, "%s}\n", buf);
-> > > > +
-> > > > +status_exit:
-> > > > +     return strnlen(buf, PAGE_SIZE);
-> > > > +}
-> > >
-> > > Emit buf into buf? There's sysfs_emit_at(), however,
-> > >
-> > > while I'm far from sysfs formatting expert, this feels something that
-> > > tries to expose more than one thing over same sysfs file. Shouldn't t=
-hey
-> > > be each in their own files?
-> >
-> > This concern was brought up in earlier reviews but it was decided to
-> > allow returning the information as a single json file.
-> > Because the information is part of the same structure and received in
-> > a single WMI call, separating the components into multiple files can
-> > cause the data read in one field to be stale by the time is read.
->
-> Okay, makes more sense. Maybe add a comment that the return is a json
-> string because that's not very obvious (I only realized now when you told
-> me).
->
-A comment will be added.
-
-> The other point is still valid though, you should keep length in a
-> variable and use sysfs_emit_at() to avoid printing buf into buf on
-> every line.
->
-I will update the function as indicated.
-
->
-> --
->  i.
+	Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+-- 
+  Kiryl Shutsemau / Kirill A. Shutemov
