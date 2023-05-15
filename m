@@ -2,138 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3060702E7C
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:39:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BB05702E64
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:37:12 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242137AbjEONje (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 09:39:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51850 "EHLO
+        id S242116AbjEONhK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 09:37:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241839AbjEONj3 (ORCPT
+        with ESMTP id S242366AbjEONhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 09:39:29 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5791BC;
-        Mon, 15 May 2023 06:39:28 -0700 (PDT)
-Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4QKgNB2K5Gz18LY7;
-        Mon, 15 May 2023 21:35:06 +0800 (CST)
-Received: from huawei.com (10.175.104.67) by kwepemm600013.china.huawei.com
- (7.193.23.68) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.23; Mon, 15 May
- 2023 21:39:23 +0800
-From:   Zhihao Cheng <chengzhihao1@huawei.com>
-To:     <miklos@szeredi.hu>, <amir73il@gmail.com>, <brauner@kernel.org>
-CC:     <linux-unionfs@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <chengzhihao1@huawei.com>
-Subject: [PATCH v2 2/2] ovl: get_acl: Fix null pointer dereference at realinode in rcu-walk mode
-Date:   Mon, 15 May 2023 21:36:29 +0800
-Message-ID: <20230515133629.1974610-3-chengzhihao1@huawei.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230515133629.1974610-1-chengzhihao1@huawei.com>
-References: <20230515133629.1974610-1-chengzhihao1@huawei.com>
+        Mon, 15 May 2023 09:37:06 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859C41BC
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:37:00 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id ffacd0b85a97d-306dbad5182so8388798f8f.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:37:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20221208.gappssmtp.com; s=20221208; t=1684157819; x=1686749819;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=siTWifPxX1aManif72YDrV0r+hmOKzstfDGYR/mGvqU=;
+        b=rLHZSu5M7RzoKDhFsx1ys87yhSCrDbWTxAgMMuBUgps5wawJ0qQvajd4EV/blhJUvk
+         mf5SlkcbLuA8LQevhATGAuZ6wjKw0sknNT/LGwNU5+EfeNKDoO8I3NjrWVIy5NChlcuS
+         9Lbiuf195fFKr6LR39RnmNs01s5xd/KUVGZRE+n9trEW2NK2OXJLc8KoU7wDZGa/G9Pb
+         psPo42k4wG7g5mczy7duZj9mXmPUeOu5pmaTEENyjhV176o+wMZ/TH9J18i8HfN+rxZp
+         Dw1w6WJ9FPpJIGhAiNvGnIB0JqtPz4Ue8rpbx4/nqbRZUXbxK29X0s5Ea9XMNHS67GoL
+         bPkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684157819; x=1686749819;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=siTWifPxX1aManif72YDrV0r+hmOKzstfDGYR/mGvqU=;
+        b=eoDq/5AjtllbYT9egUPqgpDxYCAcVl6kO7I+vBe+IqJ9t7kWmgWsESxobDhVgeXRrB
+         enYPiVaXqXo3D46sWRP7nEt9jLndPhcEWqXDEpMi2btnacRqUGsSYAVj3Y0YrfQfVzLv
+         w0w7SUedu+X09r6toivTPRyob9NwQfPNSGjHhVkDVMoBWtxarIQnbj8ylLYKmpqw4wh1
+         XyRPno4UjE8GvrEWbCaEqI/p0Vd2wK70IdSSljNPDA1PxfwcGSmfPi7zjw4zNtwm18eF
+         hgFJ259J1diIu+dq0phcCXRAoQ/FcZhY9voJO9L5TFvdrrpmm60PH8P6zTzu5pKNu+Xb
+         zPEA==
+X-Gm-Message-State: AC+VfDyhc23cRzmYMG8Q32MDskC4E6K4BHAG1Qy5A4J8QoE+lJZRYO1D
+        4YZr030eUap7caP7Q7RVhbz6FQ==
+X-Google-Smtp-Source: ACHHUZ4Rdql4HTts8WmrVYcQw4kCaOVth/28CmVLcDZlzwc9HN6Pxehp2ST/CdMixqBydRN1GYH6FQ==
+X-Received: by 2002:a5d:4b91:0:b0:306:2a1a:d265 with SMTP id b17-20020a5d4b91000000b003062a1ad265mr23135895wrt.58.1684157818781;
+        Mon, 15 May 2023 06:36:58 -0700 (PDT)
+Received: from localhost ([2a01:e0a:55f:21e0:fd3b:9fed:e621:cc8f])
+        by smtp.gmail.com with ESMTPSA id w3-20020a05600018c300b002fe96f0b3acsm32786586wrq.63.2023.05.15.06.36.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 06:36:58 -0700 (PDT)
+Date:   Mon, 15 May 2023 15:36:57 +0200
+From:   Julien Stephan <jstephan@baylibre.com>
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     krzysztof.kozlowski@linaro.org, robh@kernel.org,
+        chunkuang.hu@kernel.org, linux-mediatek@lists.infradead.org,
+        Phi-bang Nguyen <pnguyen@baylibre.com>,
+        Louis Kuo <louis.kuo@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Andy Hsieh <andy.hsieh@mediatek.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek USB3 PHY DRIVER" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
+        "open list:DRM DRIVERS FOR MEDIATEK" 
+        <dri-devel@lists.freedesktop.org>
+Subject: Re: [PATCH v2 2/2] phy: mtk-mipi-csi: add driver for CSI phy
+Message-ID: <ynrvqt24hjgng25r2xa3hxj35cvgotx7sdfrbqfjcvj3foegmr@4lqhen5yu6fh>
+References: <20230515090551.1251389-1-jstephan@baylibre.com>
+ <20230515090551.1251389-3-jstephan@baylibre.com>
+ <cd6067b2-660a-8f2c-697d-26814a9dc131@collabora.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.67]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemm600013.china.huawei.com (7.193.23.68)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cd6067b2-660a-8f2c-697d-26814a9dc131@collabora.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following process:
-         P1                     P2
- path_openat
-  link_path_walk
-   may_lookup
-    inode_permission(rcu)
-     ovl_permission
-      acl_permission_check
-       check_acl
-        get_cached_acl_rcu
-	 ovl_get_inode_acl
-	  realinode = ovl_inode_real(ovl_inode)
-	                      drop_cache
-		               __dentry_kill(ovl_dentry)
-				iput(ovl_inode)
-		                 ovl_destroy_inode(ovl_inode)
-		                  dput(oi->__upperdentry)
-		                   dentry_kill(upperdentry)
-		                    dentry_unlink_inode
-				     upperdentry->d_inode = NULL
-	    ovl_inode_upper
-	     upperdentry = ovl_i_dentry_upper(ovl_inode)
-	     d_inode(upperdentry) // returns NULL
-	  IS_POSIXACL(realinode) // NULL pointer dereference
-, will trigger an null pointer dereference at realinode:
-  [  205.472797] BUG: kernel NULL pointer dereference, address:
-                 0000000000000028
-  [  205.476701] CPU: 2 PID: 2713 Comm: ls Not tainted
-                 6.3.0-12064-g2edfa098e750-dirty #1216
-  [  205.478754] RIP: 0010:do_ovl_get_acl+0x5d/0x300
-  [  205.489584] Call Trace:
-  [  205.489812]  <TASK>
-  [  205.490014]  ovl_get_inode_acl+0x26/0x30
-  [  205.490466]  get_cached_acl_rcu+0x61/0xa0
-  [  205.490908]  generic_permission+0x1bf/0x4e0
-  [  205.491447]  ovl_permission+0x79/0x1b0
-  [  205.491917]  inode_permission+0x15e/0x2c0
-  [  205.492425]  link_path_walk+0x115/0x550
-  [  205.493311]  path_lookupat.isra.0+0xb2/0x200
-  [  205.493803]  filename_lookup+0xda/0x240
-  [  205.495747]  vfs_fstatat+0x7b/0xb0
+On Mon, May 15, 2023 at 02:22:52PM +0200, AngeloGioacchino Del Regno wrote:
+> Il 15/05/23 11:05, Julien Stephan ha scritto:
+ ..snip..
+> > +	port->is_cdphy = of_property_read_bool(dev->of_node, "mediatek,is_cdphy");
+>
+> This driver doesn't support C-PHY mode, so you either add support for that, or in
+> my opinion you should simply refuse to probe it, as it is *dysfunctional* for the
+> unsupported case (and might even introduce unstabilities).
+>
+> 	/* At the moment, only D-PHY mode is supported */
+> 	if (!port->is_cdphy)
+> 		return -EINVAL;
+>
+> Also, please don't use underscores for devicetree properties: "mediatek,is-cdphy"
+> is fine.
+>
+Hi Angelo,
+You are right this driver does not support C-PHY mode, but some of the
+PHYs themselves support BOTH C-PHY AND D-PHY. The idea of `is_cdphy` variable
+is to know if the CSI port supports BOTH C-PHY AND D-PHY or only DPHY.
+For example mt8365 has 2 PHYs: CSI0 and CSI1. CSI1 support only D-PHY,
+while CSI0 can be configured in C-PHY or D-PHY. Registers for CD-PHY and
+D-PHY are almost identical, except that CD-PHY compatible has some extra
+bitfields to configure properly the mode and the lanes (because supporting
+trios for CD-PHY).
+If C-PHY support is eventually added into the driver, I think we will need
+another variable such as `mode` to know the mode. I was also thinking
+of adding a phy argument to determine if the mode is C-PHY or D-PHY.
 
-Fetch a reproducer in [Link].
+So here, I don't want to stop the probe if `is_cdphy` variable is set to
+true. Does it make sense ?
 
-Fix it by using helper ovl_i_path_realinode() to get realpath and real
-inode after non-nullptr checking.
+Regards
+Julien
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=217404
-Fixes: 332f606b32b6 ("ovl: enable RCU'd ->get_acl()")
-Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
-Suggested-by: Christian Brauner <brauner@kernel.org>
----
- fs/overlayfs/inode.c | 14 ++++++--------
- 1 file changed, 6 insertions(+), 8 deletions(-)
-
-diff --git a/fs/overlayfs/inode.c b/fs/overlayfs/inode.c
-index cc3ef5a6666a..b2021eada8be 100644
---- a/fs/overlayfs/inode.c
-+++ b/fs/overlayfs/inode.c
-@@ -576,20 +576,18 @@ struct posix_acl *do_ovl_get_acl(struct mnt_idmap *idmap,
- 				 struct inode *inode, int type,
- 				 bool rcu, bool noperm)
- {
--	struct inode *realinode = ovl_inode_real(inode);
-+	struct inode *realinode;
- 	struct posix_acl *acl;
- 	struct path realpath;
-+	int err;
-+
-+	err = ovl_i_path_realinode(inode, &realpath, &realinode, rcu);
-+	if (err)
-+		return ERR_PTR(err);
- 
- 	if (!IS_POSIXACL(realinode))
- 		return NULL;
- 
--	/* Careful in RCU walk mode */
--	ovl_i_path_real(inode, &realpath);
--	if (!realpath.dentry) {
--		WARN_ON(!rcu);
--		return ERR_PTR(-ECHILD);
--	}
--
- 	if (rcu) {
- 		/*
- 		 * If the layer is idmapped drop out of RCU path walk
--- 
-2.39.2
-
+.. snip..
+> > +
+> > +	phy = devm_phy_create(dev, NULL, &mtk_dphy_ops);
+> > +	if (IS_ERR(phy)) {
+> > +		dev_err(dev, "Failed to create PHY: %ld\n", PTR_ERR(phy));
+> > +		return PTR_ERR(phy);
+> > +	}
+>
+> Regards,
+> Angelo
+>
