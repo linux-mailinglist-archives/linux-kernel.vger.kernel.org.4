@@ -2,90 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7529A702C7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:16:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2681D702C84
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:17:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241710AbjEOMP5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 08:15:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44812 "EHLO
+        id S241743AbjEOMR2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 08:17:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241639AbjEOMPw (ORCPT
+        with ESMTP id S241567AbjEOMR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 08:15:52 -0400
-Received: from mail.toke.dk (mail.toke.dk [IPv6:2a0c:4d80:42:2001::664])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B09AFE67;
-        Mon, 15 May 2023 05:15:39 -0700 (PDT)
-From:   Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
-        t=1684152937; bh=B3oQ2OEcMjJUqf9Z7HsLCUErh0qFeGxtKEeg9TIzDD4=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=K/3+uLu5F2UC5JKI2cxrO+8KhrjCvZCEpAW7k6sCbyzY/u7pT+LBAYbTo3fG2l1qR
-         Rq6jsTHyXSYgeUAkaiAW3nhwINWXgsMffuKht7kKMYcofcDKNY4KYw33ZbApr5CNRD
-         KK7JAzbCqnUj9BhRlJ6K5jxAhEi3j53nTV5gsxSFMTGVbC1j7QKuamEMymWd71D1Ln
-         bvGM01celoRFDnavLCJMdJnS75k+NpTXaee1YrxmUFT0BeOdizDJkuguScP44wW/49
-         IXinkuzWY9I3AKOq/xD3242GBIQXJje+rbt1vzS2OhMK70pwxO8WM3bmVSdD79vxJt
-         LZ44wVIFvN/Mg==
-To:     Fedor Pchelkin <pchelkin@ispras.ru>, Kalle Valo <kvalo@kernel.org>
-Cc:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Takeshi Misawa <jeliantsurux@gmail.com>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org,
-        syzbot+b68fbebe56d8362907e8@syzkaller.appspotmail.com
-Subject: Re: [PATCH] wifi: ath9k: don't allow to overwrite ENDPOINT0 attributes
-In-Reply-To: <20230513214146.120963-1-pchelkin@ispras.ru>
-References: <20230513214146.120963-1-pchelkin@ispras.ru>
-Date:   Mon, 15 May 2023 14:15:37 +0200
-X-Clacks-Overhead: GNU Terry Pratchett
-Message-ID: <87r0rhdc46.fsf@toke.dk>
+        Mon, 15 May 2023 08:17:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7F801BC;
+        Mon, 15 May 2023 05:17:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4C9F7612E1;
+        Mon, 15 May 2023 12:17:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC3B8C433EF;
+        Mon, 15 May 2023 12:17:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684153044;
+        bh=psCF5o/T20b4f4p5xyBgm+VFMGIPmacOnDTeHqQWNlg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=DV7A8KDiRX7WwTnraCg0WMuXXeMSe9TUv22YdSsAVSKkDRnrRfudnufc/OM9/+ozl
+         obmG+zcn/tFyzRWHecyoilsVCK2W8I6d3Bx40D9R2DvfgBdN+hraamiIZVpmt/DXJ6
+         v8FwPHPGzyqQJldVVKNUsf/5tpH4T01rz3N19EjUHjsQTUHWZXfhgM95gWhJptXt54
+         JRLZJ9DXthn4YHRVmvw/4QgKYjuH+RWYoO/ZLmP3+bIDgVN5EhrgUt5g6CWC86ZBaH
+         X2Eq1nJWrqIpJ/bJ0B0xMUIT5fCmeLDS7qzKiwZC2PnUg6BlBOwGEXCruVVez9Jn2M
+         A99ehA/OFv+Bg==
+Date:   Mon, 15 May 2023 13:17:17 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Pavel Machek <pavel@ucw.cz>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-leds@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v2 0/8] Add PMI632 PMIC and RGB LED on
+ sdm632-fairphone-fp3
+Message-ID: <20230515121717.GC10825@google.com>
+References: <20230414-pmi632-v2-0-98bafa909c36@z3ntu.xyz>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230414-pmi632-v2-0-98bafa909c36@z3ntu.xyz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fedor Pchelkin <pchelkin@ispras.ru> writes:
+On Tue, 18 Apr 2023, Luca Weiss wrote:
 
-> A bad USB device is able to construct a service connection response
-> message with target endpoint being ENDPOINT0 which is reserved for
-> HTC_CTRL_RSVD_SVC and should not be modified to be used for any other
-> services.
->
-> Reject such service connection responses.
->
-> Found by Linux Verification Center (linuxtesting.org) with Syzkaller.
->
-> Fixes: fb9987d0f748 ("ath9k_htc: Support for AR9271 chipset.")
-> Reported-by: syzbot+b68fbebe56d8362907e8@syzkaller.appspotmail.com
-> Signed-off-by: Fedor Pchelkin <pchelkin@ispras.ru>
+> Add support for the PMI632 PMIC in the spmi-gpio & qcom-lpg driver, add
+> the dtsi for the PMIC and enable the notification LED on fairphone-fp3.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 > ---
->  drivers/net/wireless/ath/ath9k/htc_hst.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/net/wireless/ath/ath9k/htc_hst.c b/drivers/net/wireless/ath/ath9k/htc_hst.c
-> index fe62ff668f75..a15d8d80df87 100644
-> --- a/drivers/net/wireless/ath/ath9k/htc_hst.c
-> +++ b/drivers/net/wireless/ath/ath9k/htc_hst.c
-> @@ -114,7 +114,7 @@ static void htc_process_conn_rsp(struct htc_target *target,
->  
->  	if (svc_rspmsg->status == HTC_SERVICE_SUCCESS) {
->  		epid = svc_rspmsg->endpoint_id;
-> -		if (epid < 0 || epid >= ENDPOINT_MAX)
-> +		if (epid <= 0 || epid >= ENDPOINT_MAX)
->  			return;
+> Changes in v2:
+> - Add qcom,pmi632-gpio to all the needed places in yaml
+> - Add patch documenting led path
+> - Pick up tags
+> - Drop vadc pre-scaling patch since it was applied
+> - Link to v1: https://lore.kernel.org/r/20230414-pmi632-v1-0-fe94dc414832@z3ntu.xyz
+> 
+> ---
+> Luca Weiss (8):
+>       dt-bindings: pinctrl: qcom,pmic-gpio: add PMI632
+>       pinctrl: qcom: spmi-gpio: Add PMI632 support
+>       dt-bindings: leds: qcom-lpg: Add compatible for PMI632 LPG block
+>       leds: qcom-lpg: Add support for PMI632 LPG
+>       dt-bindings: mfd: qcom-spmi-pmic: Add PMI632 compatible
+>       arm64: dts: qcom: Add PMI632 PMIC
+>       arm64: dts: qcom: sdm632-fairphone-fp3: Add notification LED
+>       Documentation: leds: Add "rgb:status" path
+> 
+>  .../devicetree/bindings/leds/leds-qcom-lpg.yaml    |   1 +
+>  .../devicetree/bindings/mfd/qcom,spmi-pmic.yaml    |   1 +
+>  .../bindings/pinctrl/qcom,pmic-gpio.yaml           |   3 +
+>  Documentation/leds/well-known-leds.txt             |   1 +
+>  arch/arm64/boot/dts/qcom/pmi632.dtsi               | 165 +++++++++++++++++++++
+>  arch/arm64/boot/dts/qcom/sdm632-fairphone-fp3.dts  |  29 ++++
+>  drivers/leds/rgb/leds-qcom-lpg.c                   |  15 ++
+>  drivers/pinctrl/qcom/pinctrl-spmi-gpio.c           |   1 +
+>  8 files changed, 216 insertions(+)
 
-Hmm, I think we should use the ENDPOINT0 constant here, then, and maybe
-add a comment above explaining that it's reserved?
+Please rebase anything that is yet to be applied and submit a [RESEND].
 
--Toke
+Thank you.
+
+> ---
+> base-commit: 3f49aa65798675341eb9d4f947c40558564b2e6d
+> change-id: 20230414-pmi632-4ae03225ae75
+> 
+> Best regards,
+> -- 
+> Luca Weiss <luca@z3ntu.xyz>
+ 
+
+-- 
+Lee Jones [李琼斯]
