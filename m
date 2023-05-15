@@ -2,115 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59734703195
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:31:17 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E8E9703197
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:32:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242213AbjEOPbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 11:31:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43550 "EHLO
+        id S242408AbjEOPcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 11:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240326AbjEOPbL (ORCPT
+        with ESMTP id S229447AbjEOPcP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 11:31:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4E7319BA;
-        Mon, 15 May 2023 08:31:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 25DAD6224D;
-        Mon, 15 May 2023 15:31:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5874C4339B;
-        Mon, 15 May 2023 15:31:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684164667;
-        bh=TDEwSTLolQvMt4EHNuIwFIk4wEdg1IERZQM09Ze3bf4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=udjI6GHbvobyWeQRDig3BYNl3hGfXA0T0gv9JC3DL5xeSh7F1qstjH26S/xR6euR8
-         1I1UB1fCCSloIr0x6svQWaYIem0Xap9HizBbJqyZSye7xAKcfMWEQOkHBO9pXH7O72
-         yodzUprJMtzbiDGKsJLF3O3ni8s9zdt9DrzhIV+jgo1uhJL9+nEbd2C7Ym4K5L0r1Z
-         jH0LU9w7dUdPdNNINo2YeBg6Bpm+HDxkCf5b1KbB6tN9Vkjrj4EstuPn9gVVYflNQD
-         358K2AJVpS7D9iAjOwKmg22xTYEsDP/swVfhg+5KRKuzdy7quGzOZk1bXd2/tdEyfe
-         poLGS98x6vH/A==
-From:   Mark Brown <broonie@kernel.org>
-To:     lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        Trevor Wu <trevor.wu@mediatek.com>
-Cc:     alsa-devel@alsa-project.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org
-In-Reply-To: <20230510035526.18137-1-trevor.wu@mediatek.com>
-References: <20230510035526.18137-1-trevor.wu@mediatek.com>
-Subject: Re: [PATCH v4 0/9] ASoC: mediatek: mt8188: revise AFE driver
-Message-Id: <168416466452.415808.13353377218867876489.b4-ty@kernel.org>
-Date:   Tue, 16 May 2023 00:31:04 +0900
+        Mon, 15 May 2023 11:32:15 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31D0F13A;
+        Mon, 15 May 2023 08:32:14 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id 4fb4d7f45d1cf-50db7f0a1b4so11812761a12.3;
+        Mon, 15 May 2023 08:32:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684164732; x=1686756732;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=p/xJaRrGicp79wX9w9s9DfNXJxYDEt3Qvdi5M9U6HGU=;
+        b=A0r68nB4CFAXaCaBrrDvie+gu4E0bgetGWIyATwxN2q6MNsJgsiIkuPEJShGRlQ3ZZ
+         citozDCtZk7/trAPGSdloPOgzs7uwokSwh4i9GkQfFor7zMQb7Pz8UOQYCKF7rKbHp0m
+         2lNjqmbFHAEsAfsREuQ9FkTpeQZ2yWmLyQqLWXoRvnlGKKhB1AkLbpUb0Sdwz+ec4hlA
+         D/IPRaXwDNkQV/p2cOcTNdrHkKWlrUgKU+h4ocQBbzv2+wHlJfLMaVI7wxDN1TnV6QKL
+         Z3wF5/xnmpI4Q4C/nRqP2umbUdB+vC151BwBBWRxpSOBJXT8ikNCIvh+sPQ/IKDM7/Ry
+         eI/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684164732; x=1686756732;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=p/xJaRrGicp79wX9w9s9DfNXJxYDEt3Qvdi5M9U6HGU=;
+        b=DcuMAPzXkkyXUwxfDAp68YHM9ZFEkdB2lszX0E+14j00OFFJcMsxbdL1zFcOJVeiGJ
+         2bbXsXC/Xia8GhALPwYJ8VW33R6XF+S59ntusdRwDWnjJG903G6/tpem1nJPOASVQA3c
+         tdE/5uHlj4F5fhm+XxvBSpSLi22l8M3R5AHQEB88iJEoN/T7hj0p7YBWOqPPbyyH8maj
+         Uzn4N2IYZaH+odzclfhOTXjxZ9MR6d+6SvSfdO5HWdEFH8eR/+/TIt8R7pFzBZfsIXNm
+         KVkB79vOBwH1DhlKS9YrHcqL3xUsxkHjYsDtRvOVkoSfnYX74DJqMWCNSBCBc8bdHLMj
+         vBuA==
+X-Gm-Message-State: AC+VfDwxGQpIUl7bPcRWqX0azH1NPy/PmcQnTDVL2XEoghFLoFXIEAY8
+        OPa8qpifpG1U92CkE8U/0a0=
+X-Google-Smtp-Source: ACHHUZ5qkoBH0ut0vUGQgdHs8biS9Z/+zCmWLhGEkvep7Pj1fXfh+WaLm/hgjr4/XvaerXm47mE+oQ==
+X-Received: by 2002:a17:907:a0c:b0:962:582d:89c8 with SMTP id bb12-20020a1709070a0c00b00962582d89c8mr32443545ejc.45.1684164732287;
+        Mon, 15 May 2023 08:32:12 -0700 (PDT)
+Received: from ?IPV6:2620:10d:c096:310::2eef? ([2620:10d:c092:600::2:6366])
+        by smtp.gmail.com with ESMTPSA id ig13-20020a1709072e0d00b0096623c00727sm9742390ejc.136.2023.05.15.08.32.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 08:32:12 -0700 (PDT)
+Message-ID: <994ac583-ea4f-2dca-45df-a76d4957b2b2@gmail.com>
+Date:   Mon, 15 May 2023 16:31:13 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH net-next] net: skbuff: update comment about pfmemalloc
+ propagating
+To:     Yunsheng Lin <linyunsheng@huawei.com>, davem@davemloft.net,
+        kuba@kernel.org, pabeni@redhat.com
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230515050107.46397-1-linyunsheng@huawei.com>
+Content-Language: en-US
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <20230515050107.46397-1-linyunsheng@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bfdf5
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 10 May 2023 11:55:17 +0800, Trevor Wu wrote:
-> The series of patches consists of four major changes.
-> First, remove redundant supply for ADDA DAI dirver. Second, revise ETDM
-> control including APLL dynamic switch via DAPM, so APLL can be enabled
-> when it is really required. Third, update AFE probe function. Bus
-> protection change was dropped at the previous patch because the dependent
-> change was not accepted at that time. Finally, correct some binding errors
-> and add required clocks.
+On 5/15/23 06:01, Yunsheng Lin wrote:
+> __skb_fill_page_desc_noacc() is not doing any pfmemalloc
+> propagating, and yet it has a comment about that, commit
+> 84ce071e38a6 ("net: introduce __skb_fill_page_desc_noacc")
+> may have accidentally moved it to __skb_fill_page_desc_noacc(),
+> so move it back to __skb_fill_page_desc() which is supposed
+> to be doing pfmemalloc propagating.
+
+Looks good,
+
+Reviewed-by: Pavel Begunkov <asml.silence@gmail.com>
+
+
+> Signed-off-by: Yunsheng Lin <linyunsheng@huawei.com>
+> CC: Pavel Begunkov <asml.silence@gmail.com>
+> ---
+> Also maybe we need a better name for 'noacc' or add some
+> comment about that, as 'noacc' seems a little confusing
+> for __skb_fill_page_desc_noacc().
+
+It's a known pattern bur in block/ and should be "noacct",
+but yeah, it can be more specific.
+
+> ---
+>   include/linux/skbuff.h | 10 +++++-----
+>   1 file changed, 5 insertions(+), 5 deletions(-)
 > 
-> [...]
+> diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> index 00e8c435fa1a..4b8d55247198 100644
+> --- a/include/linux/skbuff.h
+> +++ b/include/linux/skbuff.h
+> @@ -2426,11 +2426,6 @@ static inline void __skb_fill_page_desc_noacc(struct skb_shared_info *shinfo,
+>   {
+>   	skb_frag_t *frag = &shinfo->frags[i];
+>   
+> -	/*
+> -	 * Propagate page pfmemalloc to the skb if we can. The problem is
+> -	 * that not all callers have unique ownership of the page but rely
+> -	 * on page_is_pfmemalloc doing the right thing(tm).
+> -	 */
+>   	skb_frag_fill_page_desc(frag, page, off, size);
+>   }
+>   
+> @@ -2463,6 +2458,11 @@ static inline void __skb_fill_page_desc(struct sk_buff *skb, int i,
+>   					struct page *page, int off, int size)
+>   {
+>   	__skb_fill_page_desc_noacc(skb_shinfo(skb), i, page, off, size);
+> +
+> +	/* Propagate page pfmemalloc to the skb if we can. The problem is
+> +	 * that not all callers have unique ownership of the page but rely
+> +	 * on page_is_pfmemalloc doing the right thing(tm).
+> +	 */
+>   	page = compound_head(page);
+>   	if (page_is_pfmemalloc(page))
+>   		skb->pfmemalloc	= true;
 
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-
-Thanks!
-
-[1/9] ASoC: mediatek: mt8188: remove supply AUDIO_HIRES
-      commit: 4db399793c34c72dcad18815d54c0cd23750b8f1
-[2/9] ASoC: mediatek: mt8188: complete set_tdm_slot function
-      commit: 2664c8790cfdcaa81ff8b3b9f649a6635955d636
-[3/9] ASoC: mediatek: mt8188: revise ETDM control flow
-      commit: e5d2bd4103df419fd33131f1aa7a8dea35e3638c
-[4/9] ASoC: mediatek: mt8188: refine APLL control
-      commit: 9be0213a6858d0084a9e800d2b451678f014f337
-[5/9] ASoC: mediatek: mt8188: combine afe component registration
-      commit: e9eab4bed0436a7b7268114ecf55fe4989855d47
-[6/9] ASoC: mediatek: mt8188: add bus protection
-      commit: fb167449cec1d2f34ef4c6d17ff860076ac0fc44
-[7/9] ASoC: mediatek: mt8188: add required clocks
-      commit: 2e5c422a624aa35cefb5a448a2040df6627f505b
-[8/9] ASoC: dt-bindings: mediatek,mt8188-afe: correct clock name
-      commit: 1e4fe75e9746be8e40c57132bb3fba1ce3dd24af
-[9/9] ASoC: dt-bindings: mediatek,mt8188-afe: add audio properties
-      commit: 739ee993c38596d93150f96153f9bb1cfd7733bc
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+-- 
+Pavel Begunkov
