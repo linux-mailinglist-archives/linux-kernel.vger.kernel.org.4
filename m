@@ -2,452 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 432E17027B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:59:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2AC7027AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:57:35 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239047AbjEOI7E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 04:59:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41796 "EHLO
+        id S230007AbjEOI5d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 04:57:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238693AbjEOI6v (ORCPT
+        with ESMTP id S229523AbjEOI5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 04:58:51 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741551994;
-        Mon, 15 May 2023 01:58:46 -0700 (PDT)
-Received: from kwepemm600003.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4QKYC22rWnzsRcl;
-        Mon, 15 May 2023 16:56:46 +0800 (CST)
-Received: from localhost.localdomain (10.67.174.95) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.23; Mon, 15 May 2023 16:58:43 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <peterz@infradead.org>, <mingo@redhat.com>, <acme@kernel.org>,
-        <mark.rutland@arm.com>, <alexander.shishkin@linux.intel.com>,
-        <jolsa@kernel.org>, <namhyung@kernel.org>, <irogers@google.com>,
-        <adrian.hunter@intel.com>, <anshuman.khandual@arm.com>,
-        <jesussanp@google.com>, <linux-perf-users@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH v3 4/4] perf tools: Add printing perf_event_attr config symbol in perf_event_attr__fprintf()
-Date:   Mon, 15 May 2023 08:57:07 +0000
-Message-ID: <20230515085707.124549-5-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
-In-Reply-To: <20230515085707.124549-1-yangjihong1@huawei.com>
-References: <20230515085707.124549-1-yangjihong1@huawei.com>
+        Mon, 15 May 2023 04:57:22 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 711C019A0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 01:57:14 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id d9443c01a7336-1aad6f2be8eso115196455ad.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 01:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684141034; x=1686733034;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=rG1m6/ZUbXcFAUMvzzP6os9D3LqFPw+qOiQ1spcSC0s=;
+        b=qfOwVI1bjES6z8OWoa6aCTHzIcYwMil7bcYQiVp4/zTotErBmf2f5YyD+R0G+HKL9z
+         pjK98sD/k1xhZ2rTLHsmfwsjjpYhe/E8jqBfzMVyzBe4zedvKPn/ypCuZufwupFTdSWH
+         UFJgIiZCfvvcMHZ3zS9X4WdSPXfzDPT2KEj6FJGxNbYolYnFkFzmhlD7ZZSatm+PeKb2
+         97xUWwrNbi8c3HwwzwKHkJaVMRL0V2ecTlOmbfi/C0XjARstt6ISJPlrIxlOHJv+QLol
+         iC5jYUO+hKOXBRbEr68f/tNC/+H94uRutP0vbK0sK+qpDjgAOPiyJilea7HD+nr/STpc
+         kkOQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684141034; x=1686733034;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rG1m6/ZUbXcFAUMvzzP6os9D3LqFPw+qOiQ1spcSC0s=;
+        b=PtqAa2659WW5Wzk1biAznmYgKRBcFcU/JfVdQE54m6J7gBOPpFMtPg12L9nqSpJ93k
+         wAlO5rV5o08NKnj1jRbUxRjseQn1Iz4dYjrM5kpm1pQS+xOnguUp3BjiL1wzu5N37pi6
+         7nAC2MtKHWH+4Xb4QXhDWF7kzFRcEFERINDJylo+xK8SJ0r3u8zzhRpbGRdZs+vNmjWz
+         kBrFyR49vbbpDBQ4fX3YsHJW0L3/Q2uvsHL2nsYFLJYm1rVl2DZCez6JGJ5tVIpWOsht
+         KXFaVcB1czO3dox5SOcSsgjGdL3bcDfMVjscD3Ct+BYyYFlemC1icU/Hjxp+krawECl5
+         U25Q==
+X-Gm-Message-State: AC+VfDzQcWdWWt3YobPE4t+SOcwRektWsVmAL+vC2Z5d07wgp2aglMZV
+        CUJILztODbg8MA8SwAw2xMjB/q450PQ=
+X-Google-Smtp-Source: ACHHUZ7aImgc01WTtJLddcsEZ6YyRvJXxo8TUI4GeVtryV71WHIgEN3syasvE2FR2iNA1o1UY/5JAQ==
+X-Received: by 2002:a17:903:2292:b0:1a1:bff4:49e9 with SMTP id b18-20020a170903229200b001a1bff449e9mr45885771plh.23.1684141033765;
+        Mon, 15 May 2023 01:57:13 -0700 (PDT)
+Received: from [10.150.3.61] ([132.226.22.23])
+        by smtp.gmail.com with ESMTPSA id b11-20020a170902d50b00b001ac84f87b1dsm12994846plg.155.2023.05.15.01.57.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 01:57:13 -0700 (PDT)
+Message-ID: <9460b08a-7740-42bd-8784-d27ea038e87b@gmail.com>
+Date:   Mon, 15 May 2023 17:57:09 +0900
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.95]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH v2] mm/mmap: Regression fix for unmapped_area{_topdown}
+To:     "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
+        Michael Keyes <mgkeyes@vigovproductions.net>,
+        Tad <support@spotco.us>, akpm@linux-foundation.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        rick.p.edgecombe@intel.com
+References: <e6108286ac025c268964a7ead3aab9899f9bc6e9.camel@spotco.us>
+ <90777046-a420-b19f-1847-d353b9938131@vigovproductions.net>
+ <20230502140828.hilf3myxj6kpiunz@revolver>
+ <20230502140907.o7fznev4jthtgp4i@revolver>
+Content-Language: en-US
+From:   Juhyung Park <qkrwngud825@gmail.com>
+In-Reply-To: <20230502140907.o7fznev4jthtgp4i@revolver>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When printing perf_event_attr, always display perf_event_attr config and its symbol
-to improve the readability of debugging information.
+Hi Liam,
 
-Before:
+It's a bit hard to follow this particular issue on v6.1 as there are 
+many email threads related to this.
 
-  # perf --debug verbose=2 record -e cycles,cpu-clock,sched:sched_switch,branch-load-misses,r101,mem:0x0 -C 0 true
-  <SNIP>
-  ------------------------------------------------------------
-  perf_event_attr:
-    size                             136
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 5
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             1
-    size                             136
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             2
-    size                             136
-    config                           0x143
-    { sample_period, sample_freq }   1
-    sample_type                      IP|TID|TIME|CPU|PERIOD|RAW|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 7
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             3
-    size                             136
-    config                           0x10005
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 9
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             4
-    size                             136
-    config                           0x101
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 10
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             5
-    size                             136
-    { sample_period, sample_freq }   1
-    sample_type                      IP|TID|TIME|CPU|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    sample_id_all                    1
-    exclude_guest                    1
-    bp_type                          3
-    { bp_len, config2 }              0x4
-  ------------------------------------------------------------
-  <SNIP>
+I just wanted to ask if whether this is fixed on mainline and v6.1 
+stable yet.
 
-After:
+If there's a new thread tackling this issue, I'd appreciate it if you 
+can link it here.
 
-  # perf --debug verbose=2 record -e cycles,cpu-clock,sched:sched_switch,branch-load-misses,r101,mem:0x0 -C 0 true
-  <SNIP>
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             0 (PERF_TYPE_HARDWARE)
-    size                             136
-    config                           0 (PERF_COUNT_HW_CPU_CYCLES)
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 5
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             1 (PERF_TYPE_SOFTWARE)
-    size                             136
-    config                           0 (PERF_COUNT_SW_CPU_CLOCK)
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 6
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             2 (PERF_TYPE_TRACEPOINT)
-    size                             136
-    config                           323 (sched:sched_switch)
-    { sample_period, sample_freq }   1
-    sample_type                      IP|TID|TIME|CPU|PERIOD|RAW|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 7
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             3 (PERF_TYPE_HW_CACHE)
-    size                             136
-    config                           0x10005 (PERF_COUNT_HW_CACHE_RESULT_MISS | PERF_COUNT_HW_CACHE_OP_READ | PERF_COUNT_HW_CACHE_BPU)
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 9
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             4 (PERF_TYPE_RAW)
-    size                             136
-    config                           0x101
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    freq                             1
-    sample_id_all                    1
-    exclude_guest                    1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 10
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             5 (PERF_TYPE_BREAKPOINT)
-    size                             136
-    config                           0
-    { sample_period, sample_freq }   1
-    sample_type                      IP|TID|TIME|CPU|IDENTIFIER
-    read_format                      ID
-    disabled                         1
-    inherit                          1
-    sample_id_all                    1
-    exclude_guest                    1
-    bp_type                          3
-    { bp_len, config2 }              0x4
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 11
-  ------------------------------------------------------------
-  perf_event_attr:
-    type                             1 (PERF_TYPE_SOFTWARE)
-    size                             136
-    config                           9 (PERF_COUNT_SW_DUMMY)
-    { sample_period, sample_freq }   4000
-    sample_type                      IP|TID|TIME|CPU|PERIOD|IDENTIFIER
-    read_format                      ID
-    inherit                          1
-    mmap                             1
-    comm                             1
-    freq                             1
-    task                             1
-    sample_id_all                    1
-    mmap2                            1
-    comm_exec                        1
-    ksymbol                          1
-    bpf_event                        1
-  ------------------------------------------------------------
-  sys_perf_event_open: pid -1  cpu 0  group_fd -1  flags 0x8 = 12
-  <SNIP>
+Thanks,
+regards
 
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
- tools/perf/util/perf_event_attr_fprintf.c | 137 +++++++++++++++++++++-
- 1 file changed, 136 insertions(+), 1 deletion(-)
-
-diff --git a/tools/perf/util/perf_event_attr_fprintf.c b/tools/perf/util/perf_event_attr_fprintf.c
-index 05e000e310ce..7dac556ec6ca 100644
---- a/tools/perf/util/perf_event_attr_fprintf.c
-+++ b/tools/perf/util/perf_event_attr_fprintf.c
-@@ -1,11 +1,13 @@
- // SPDX-License-Identifier: GPL-2.0
- #include <inttypes.h>
- #include <stdio.h>
-+#include <stdlib.h>
- #include <stdbool.h>
- #include <linux/kernel.h>
- #include <linux/types.h>
- #include <linux/perf_event.h>
- #include "util/evsel_fprintf.h"
-+#include "trace-event.h"
- 
- struct bit_names {
- 	int bit;
-@@ -93,6 +95,80 @@ static const char *stringify_perf_type_id(u64 value)
- 		return NULL;
- 	}
- }
-+
-+static const char *stringify_perf_hw_id(u64 value)
-+{
-+	switch (value) {
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CPU_CYCLES)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_INSTRUCTIONS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_REFERENCES)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_MISSES)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_BRANCH_INSTRUCTIONS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_BRANCH_MISSES)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_BUS_CYCLES)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_STALLED_CYCLES_FRONTEND)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_STALLED_CYCLES_BACKEND)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_REF_CPU_CYCLES)
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+static const char *stringify_perf_hw_cache_id(u64 value)
-+{
-+	switch (value) {
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_L1D)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_L1I)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_LL)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_DTLB)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_ITLB)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_BPU)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_NODE)
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+static const char *stringify_perf_hw_cache_op_id(u64 value)
-+{
-+	switch (value) {
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_OP_READ)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_OP_WRITE)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_OP_PREFETCH)
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+static const char *stringify_perf_hw_cache_op_result_id(u64 value)
-+{
-+	switch (value) {
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_RESULT_ACCESS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_HW_CACHE_RESULT_MISS)
-+	default:
-+		return NULL;
-+	}
-+}
-+
-+static const char *stringify_perf_sw_id(u64 value)
-+{
-+	switch (value) {
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_CPU_CLOCK)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_TASK_CLOCK)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_PAGE_FAULTS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_CONTEXT_SWITCHES)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_CPU_MIGRATIONS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_PAGE_FAULTS_MIN)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_PAGE_FAULTS_MAJ)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_ALIGNMENT_FAULTS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_EMULATION_FAULTS)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_DUMMY)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_BPF_OUTPUT)
-+	ENUM_ID_TO_STR_CASE(PERF_COUNT_SW_CGROUP_SWITCHES)
-+	default:
-+		return NULL;
-+	}
-+}
- #undef ENUM_ID_TO_STR_CASE
- 
- static void __p_type_id(char *buf, size_t size, u64 value)
-@@ -100,6 +176,64 @@ static void __p_type_id(char *buf, size_t size, u64 value)
- 	print_id(buf, size, value, stringify_perf_type_id(value));
- }
- 
-+static void __p_config_hw_id(char *buf, size_t size, u64 value)
-+{
-+	print_id(buf, size, value, stringify_perf_hw_id(value));
-+}
-+
-+static void __p_config_sw_id(char *buf, size_t size, u64 value)
-+{
-+	print_id(buf, size, value, stringify_perf_sw_id(value));
-+}
-+
-+static void __p_config_hw_cache_id(char *buf, size_t size, u64 value)
-+{
-+	const char *hw_cache_str = stringify_perf_hw_cache_id(value & 0xff);
-+	const char *hw_cache_op_str =
-+		stringify_perf_hw_cache_op_id((value & 0xff00) >> 8);
-+	const char *hw_cache_op_result_str =
-+		stringify_perf_hw_cache_op_result_id((value & 0xff0000) >> 16);
-+
-+	if (hw_cache_str == NULL || hw_cache_op_str == NULL ||
-+	    hw_cache_op_result_str == NULL) {
-+		snprintf(buf, size, "%#"PRIx64, value);
-+	} else {
-+		snprintf(buf, size, "%#"PRIx64" (%s | %s | %s)", value,
-+			 hw_cache_op_result_str, hw_cache_op_str, hw_cache_str);
-+	}
-+}
-+
-+#ifdef HAVE_LIBTRACEEVENT
-+static void __p_config_tracepoint_id(char *buf, size_t size, u64 value)
-+{
-+	char *str = tracepoint_id_to_name(value);
-+
-+	print_id(buf, size, value, str);
-+	free(str);
-+}
-+#endif
-+
-+static void __p_config_id(char *buf, size_t size, u32 type, u64 value)
-+{
-+	switch (type) {
-+	case PERF_TYPE_HARDWARE:
-+		return __p_config_hw_id(buf, size, value);
-+	case PERF_TYPE_SOFTWARE:
-+		return __p_config_sw_id(buf, size, value);
-+	case PERF_TYPE_HW_CACHE:
-+		return __p_config_hw_cache_id(buf, size, value);
-+	case PERF_TYPE_TRACEPOINT:
-+#ifdef HAVE_LIBTRACEEVENT
-+		return __p_config_tracepoint_id(buf, size, value);
-+#endif
-+	case PERF_TYPE_RAW:
-+	case PERF_TYPE_BREAKPOINT:
-+	default:
-+		snprintf(buf, size, "%#"PRIx64, value);
-+		return;
-+	}
-+}
-+
- #define BUF_SIZE		1024
- 
- #define p_hex(val)		snprintf(buf, BUF_SIZE, "%#"PRIx64, (uint64_t)(val))
-@@ -109,6 +243,7 @@ static void __p_type_id(char *buf, size_t size, u64 value)
- #define p_branch_sample_type(val) __p_branch_sample_type(buf, BUF_SIZE, val)
- #define p_read_format(val)	__p_read_format(buf, BUF_SIZE, val)
- #define p_type_id(val)		__p_type_id(buf, BUF_SIZE, val)
-+#define p_config_id(val)	__p_config_id(buf, BUF_SIZE, attr->type, val)
- 
- #define PRINT_ATTRn(_n, _f, _p, _a)			\
- do {							\
-@@ -128,7 +263,7 @@ int perf_event_attr__fprintf(FILE *fp, struct perf_event_attr *attr,
- 
- 	PRINT_ATTRn("type", type, p_type_id, true);
- 	PRINT_ATTRf(size, p_unsigned);
--	PRINT_ATTRf(config, p_hex);
-+	PRINT_ATTRn("config", config, p_config_id, true);
- 	PRINT_ATTRn("{ sample_period, sample_freq }", sample_period, p_unsigned, false);
- 	PRINT_ATTRf(sample_type, p_sample_type);
- 	PRINT_ATTRf(read_format, p_read_format);
--- 
-2.30.GIT
-
+On 5/2/23 23:09, Liam R. Howlett wrote:
+> ...Adding Rick to the Cc this time.
+> 
+> * Liam R. Howlett <Liam.Howlett@Oracle.com> [230502 10:08]:
+>> * Michael Keyes <mgkeyes@vigovproductions.net> [230430 18:41]:
+>>> On 29.04.23 15:32, Tad wrote:
+>>>> This reintroduces the issue described in
+>>>> https://lore.kernel.org/linux-mm/cb8dc31a-fef2-1d09-f133-e9f7b9f9e77a@sony.com/
+>>> Yes, I also ran into this (even though I'd somehow missed it the
+>>> previous time).
+>>
+>> Rick Edgecombe reported something similar [1].
+>>
+>> This is probably to do with my stack guard checks I recently added.
+>>
+>>>
+>>> Apparently the issue arises at mm/mmap.c:1582, where low_limit is set to
+>>> vm_end_gap(tmp). Occasionally, this returns a 64-bit address (e.g.
+>>> 0x7fedea581000), which is obviously greater than high_limit for a 32-bit
+>>> mmap, and causes the next call to mas_empty_area() to fail.
+>>>
+>>> I'm not sure why vm_end_gap(tmp) occasionally returns a 64-bit address,
+>>> or if the best solution is to just check for this and skip the retry if
+>>> it occurs…
+>>>
+>>
+>> Thanks for the debugging.  I will look into it.
+>>
+>> I am currently trying to revise how the iterators, prev/next deal with
+>> shifting outside the requested limits.  I suspect it's something to do
+>> with hitting the limit and what someone would assume the next operation
+>> means.
+>>
+>> [1] https://lore.kernel.org/linux-mm/32f156ba80010fd97dbaf0a0cdfc84366608624d.camel@intel.com/
+> 
+> 
