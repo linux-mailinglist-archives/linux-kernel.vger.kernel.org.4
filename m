@@ -2,130 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E604570313E
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:13:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D1113703140
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:14:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242027AbjEOPNu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 11:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58632 "EHLO
+        id S242072AbjEOPO1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 11:14:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229850AbjEOPNs (ORCPT
+        with ESMTP id S229850AbjEOPOZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 11:13:48 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA14A8E;
-        Mon, 15 May 2023 08:13:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Transfer-Encoding
-        :Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=j4FIp2hqSzB7YKizCVfFKv2y9wufpVhksAFO7Qv4a7o=; b=ykCbnADqgm70QNQnTnrkklvLSH
-        /jai0i1bbiF+XMegvmmf87cayl0mig9YXVOLSgM1nglFNmO3E13UuYYD4GAFPIdw82IRwEIWmahTM
-        HmG7Q8zcMXWPDsygFWXDtPOf1VoopK6soltN+Tw16HUg3XCMewm0+2QXu7tI8yCeMd+0hC7F393N0
-        r6GnZU/bn8e0Hoh0Y/lakkYC9pKE4WsH3oqAz6D47P1NKRGV2IcpgYi3VyiBMfDdCvf/lkCDOd2+v
-        Spz4KfN2Mwr4jxl8Y0BwHICiXixU8+0lRxMzatFLxkmLfr1LOqU7One2BJNxAlYEcgWddficn5G+X
-        EL3eokcw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1pyZtQ-002WtH-2V;
-        Mon, 15 May 2023 15:13:44 +0000
-Date:   Mon, 15 May 2023 08:13:44 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Kelvin.Cao@microchip.com
-Cc:     hch@infradead.org, dmaengine@vger.kernel.org, vkoul@kernel.org,
-        George.Ge@microchip.com, linux-kernel@vger.kernel.org,
-        logang@deltatee.com, tglx@linutronix.de,
-        christophe.jaillet@wanadoo.fr
-Subject: Re: [PATCH v4 1/1] dmaengine: switchtec-dma: Introduce Switchtec DMA
- engine PCI driver
-Message-ID: <ZGJMKFrLfU2zc/2P@infradead.org>
-References: <20230423213717.318655-1-kelvin.cao@microchip.com>
- <20230423213717.318655-2-kelvin.cao@microchip.com>
- <ZFH/xhyjm9VTZolE@infradead.org>
- <50e111a3cfecd0f232508d1b03e02d1e25d9d4a9.camel@microchip.com>
+        Mon, 15 May 2023 11:14:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACCE4139;
+        Mon, 15 May 2023 08:14:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4217561AA3;
+        Mon, 15 May 2023 15:14:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B330C433EF;
+        Mon, 15 May 2023 15:14:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684163663;
+        bh=dE9YnPR26TNYmLFla4WyHsacrUjsXOOYKfAvHIZPxD4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Muf2RtzLigRmySKrBo1rC1ATbp4a9sHIS7us2BeTmWNFtyFUafw+ZWb6YgvT5hPWE
+         NZdAx7ZwkdGW11Oaa1/vH4DrVqohKppNleAyNpG7Mu6DRwk+O50eoZFc9Dgoxc611U
+         sshpGPLrcYGA7hO+3nLctgQ4oTw1du64yxbC+WyOxRG7Gg3F0k3WSGB7uHxpi8dYmh
+         jLQqtUH6XgYXW+PzQpQlEbYeaaE2JQTOdbMnXMoNWDDsnoX9CnjuOFdhSrooJd/pg8
+         0W35R7ECcxRueaMpbysJSiXRZgB9fzArYgVzPGZVWtz4R6F6Ns1rDpstGkcPvh0oJY
+         eu3yoJdUSkK4g==
+Date:   Mon, 15 May 2023 16:14:16 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com,
+        Diederik de Haas <didi.debian@cknow.org>,
+        Vincent Legoll <vincent.legoll@gmail.com>
+Subject: Re: [PATCH v8 01/14] clk: RK808: reduce 'struct rk808' usage
+Message-ID: <20230515151416.GM10825@google.com>
+References: <20230504173618.142075-1-sebastian.reichel@collabora.com>
+ <20230504173618.142075-2-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <50e111a3cfecd0f232508d1b03e02d1e25d9d4a9.camel@microchip.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230504173618.142075-2-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 05, 2023 at 12:31:11AM +0000, Kelvin.Cao@microchip.com wrote:
-> Hi Christoph,
+On Thu, 04 May 2023, Sebastian Reichel wrote:
+
+> Reduce usage of 'struct rk808' (driver data of the parent MFD), so
+> that only the chip variant field is still being accessed directly.
+> This allows restructuring the MFD driver to support SPI based
+> PMICs.
 > 
-> Thanks for the comments. For the tasklet stuff, I guess your opinion is
-> that by default the driver should go with threaded irq instead of
-> tasklet as the former is more efficient, unless there's a good reason
-> of using tasklet.†
-> 
-> Tasklet is widely used in DMA drivers, not sure if there's a rational
-> reason or people just follow the code structure of the current ones. 
+> Acked-by: Stephen Boyd <sboyd@kernel.org>
+> Tested-by: Diederik de Haas <didi.debian@cknow.org> # Rock64, Quartz64 Model A + B
+> Tested-by: Vincent Legoll <vincent.legoll@gmail.com> # Pine64 QuartzPro64
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>  drivers/clk/clk-rk808.c | 34 ++++++++++++++++------------------
+>  1 file changed, 16 insertions(+), 18 deletions(-)
 
-Given that neither nor anyone else from the RT community chimed
-in I'm going to throw the towel on the tasklet use.  It looks fairly
-suboptimal, but I don't want to block the driver on that.
+Applied, thanks
 
-> > > +†††† union {
-> > > +†††††††††††† __le32 saddr_lo;
-> > > +†††††††††††† __le32 widata_lo;
-> > > +†††† };
-> > > +†††† union {
-> > > +†††††††††††† __le32 saddr_hi;
-> > > +†††††††††††† __le32 widata_hi;
-> > > +†††† };
-> > 
-> > What is the point for unions of identical data types?
-> 
-> The same offset could hold either source address or write immediate
-> data in different transactions. Unions used here is to give different
-> names for the same offset. I guess it improves readability when
-> referring to them with proper names.
-
-I find this rather confusing, especially as some code literally
-switches on the op to fill in either set.
-
-> The CE is little-endian and is filled by hardware. As an error message,
-> I'd like to dump the whole structure. Would the following code look
-> better?
-> 
-> __le32 *p;
-> ...
-> p = (__le32 *)ce;
-> for (i = 0; i < sizeof(*ce)/4; i++) {
->  dev_err(chan_dev, "CE DW%d: 0x%08x\n", i,
->  le32_to_cpu(*p));
->  p++;
-> }
-
-Fine with me.
-
-> > > +#define SWITCHTEC_DMA_DEVICE(device_id) \
-> > > +†††† { \
-> > > +†††††††††††† .vendor†††† = PCI_VENDOR_ID_MICROSEMI, \
-> > > +†††††††††††† .device†††† = device_id, \
-> > > +†††††††††††† .subvendor† = PCI_ANY_ID, \
-> > > +†††††††††††† .subdevice† = PCI_ANY_ID, \
-> > > +†††††††††††† .class††††† = PCI_CLASS_SYSTEM_OTHER << 8, \
-> > > +†††††††††††† .class_mask = 0xFFFFFFFF, \
-> > > +†††† }
-> > > +
-> > > +static const struct pci_device_id switchtec_dma_pci_tbl[] = {
-> > > +†††† SWITCHTEC_DMA_DEVICE(0x4000), /* PFX 100XG4 */
-> > 
-> > This should use the common PCI_DEVICE() macro instead, i.e.
-> > 
-> > ††††††† PCI_DEVICE(PCI_VENDOR_ID_MICROSEMI, 0x4000), /* PFX 100XG4 */
-> > ††††††† ...
-> 
-> We also need to distinguish the .class as we have devices of other
-> .class with the same vendor/device ID.
-
-Ok, that's roetty weird and probably worth a little comment.
+-- 
+Lee Jones [ÊùéÁêºÊñØ]
