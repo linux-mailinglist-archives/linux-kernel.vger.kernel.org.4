@@ -2,94 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 820EA7020FB
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 03:12:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BDFE4702100
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 03:14:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233813AbjEOBMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 21:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35694 "EHLO
+        id S237280AbjEOBOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 21:14:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbjEOBM3 (ORCPT
+        with ESMTP id S229929AbjEOBOP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 21:12:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DA510E9;
-        Sun, 14 May 2023 18:12:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Sun, 14 May 2023 21:14:15 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BCA310F4;
+        Sun, 14 May 2023 18:14:13 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BF4E261008;
-        Mon, 15 May 2023 01:12:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8BFBDC433EF;
-        Mon, 15 May 2023 01:12:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684113148;
-        bh=f5Xlg+QbTFg0pici3vAmn0EcoPyOE5nAD8GQAZUAmjc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LN94eJqOgHGhjfficjWr9zHQ2cTpdsgWxL0Gp1snEhI+qjQ9ffBAjSVlDWg5QDPUd
-         Bpk/cL4Om2VRqYMerfc/a1qqb0WIpnD/0UewsLIOrwF3yBFshvVMp0Poqp5PcCAecM
-         LWSKuM8H/oz0RBKclz9Rk2AMARTxKZ+EsuLcbErof6EV9QdT6wOX+3bdmtvTSt75+V
-         tkcDqfiwodiQggi0yqUaiY2sOrf0cNrkSn3itarMFie9iy8LlSueQZvDVX24m6l7TC
-         cE3jBLGb0RyQ19GSLKkUav51DTIOU04KM0BKL2HvXFGq8Hcir/pgWPQu+yHrw5q35a
-         VX+zIgRMgajRQ==
-Date:   Mon, 15 May 2023 10:12:24 +0900
-From:   Mark Brown <broonie@kernel.org>
-To:     Amit Pundir <amit.pundir@linaro.org>
-Cc:     Douglas Anderson <dianders@chromium.org>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] regulator: qcom-rpmh: Revert "regulator: qcom-rpmh: Use
- PROBE_FORCE_SYNCHRONOUS"
-Message-ID: <ZGGG+APx1/G5IrgL@finisterre.sirena.org.uk>
-References: <20230324063357.1.Ifdf3625a3c5c9467bd87bfcdf726c884ad220a35@changeid>
- <CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QKLxF4vC7z4x4D;
+        Mon, 15 May 2023 11:14:09 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1684113251;
+        bh=5eO6hmlEDHMYvF+MD1uVdqvOY9u8sSGqBFatZrLOT/I=;
+        h=Date:From:To:Cc:Subject:From;
+        b=U3YG/GL2kYoW7PtMdnzmvyWMHrkmHl7/GfL+3dR8fuO0kVU7UfNi+ipxpJVQddVNO
+         RSv7x97vJ4sSugE5uecZUSKRVfVCZ1NNm2Md9lLh4Ihb4aGO7xyozI15ldIUIQq/2i
+         ZxH3QPvQHkYjFcRnprsRiOc+2dtg7j+tq6o8ioWXHgjX3ro6lBmZzz2m+W1TkJO1Fk
+         Pya5WHkh+mXEepvLujwrN5jB07StbpHGjNRUUIazGkJLs9qKELWYDkcTFRFknoBRVR
+         lL2n7scQAmIMUx5b36oYXCTHXaalLpQtWZPU6anOv7w1fYNDzVD7m0N7u2yg/7nTLI
+         mUTrOZZJtvNaw==
+Date:   Mon, 15 May 2023 11:14:07 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Helge Deller <deller@gmx.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>
+Subject: linux-next: manual merge of the drm-misc tree with Linus' tree
+Message-ID: <20230515111407.493674b3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="vOzonUtVZwvU79d7"
-Content-Disposition: inline
-In-Reply-To: <CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com>
-X-Cookie: Avoid contact with eyes.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/lUWi8Sea6sAsGuu5Z9aCWoO";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+--Sig_/lUWi8Sea6sAsGuu5Z9aCWoO
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
---vOzonUtVZwvU79d7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi all,
 
-On Sat, May 13, 2023 at 11:38:22PM +0530, Amit Pundir wrote:
+Today's linux-next merge of the drm-misc tree got a conflict in:
 
-> Hi, the asynchronous probe is broken on Dragonboard 845c (SDM845)
-> running AOSP (Android Open Source Project) with v6.4-rc1
-> https://bugs.linaro.org/show_bug.cgi?id=5975.
-> Can we please go back to synchronous probe.
+  drivers/video/fbdev/stifb.c
 
-Please submit a patch...
+between commit:
 
---vOzonUtVZwvU79d7
-Content-Type: application/pgp-signature; name="signature.asc"
+  8000425739dc ("fbdev: stifb: Remove trailing whitespaces")
+
+from Linus' tree and commit:
+
+  0d556f1f0e01 ("video: Remove trailing whitespaces")
+
+from the drm-misc tree.
+
+I fixed it up (the changes in the latter included those in the former)
+and can carry the fix as necessary. This is now fixed as far as linux-next
+is concerned, but any non trivial conflicts should be mentioned to your
+upstream maintainer when your tree is submitted for merging.  You may
+also want to consider cooperating with the maintainer of the conflicting
+tree to minimise any particularly complex conflicts.
+
+
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/lUWi8Sea6sAsGuu5Z9aCWoO
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRhhvgACgkQJNaLcl1U
-h9BfEQf/SthD1BTRGduOYD7Q637Ki3vpiR2eq8leJIGRtvmY4LbWCG4zDkC/Eo59
-xzyT++Pa5HLRZo+WxPGTCZmDzSB3qb0ut3LWKHfA69mupx4+IqzE11a3LEKVqUsb
-kUThU0Es/Zd/x/ZyKTZpJiommWXfXQb/XZ98PGkaTPiz9bD6FZZebEMrMLVb1C4r
-2/fH2Sebnz2C1TPacdJWW24rgMD+riu3FUwmVNa93dWpeIckUuvWsUypwgxPGji5
-NiN5B+3hYKEEOcbvf4dxjwHJwICHwGfXkKs3Q/To1gupxp9hjd6+5xI/ZINQK3FO
-6LhisrNhXeqVHa3PnOKn43bDJ7LM9g==
-=2Xlk
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRhh18ACgkQAVBC80lX
+0Gwq3wf9EygXdY6GTEMIzQT76/h5OODPwyMnZzJfF3+QBvLFLQWNRgCTskigN9K4
+l9grkvFxM8tCZJ9W9VgFuTPnRiNLg7r2o6Yzo774RQh0yVB/VFK/Mo2jbDTWSaNu
+vBDryZ1t+uyDM6+Rj/tL/CgQ+nu+H5a0K+BCGWi6RvaysLUDIm3XvLar2aVz1gmw
+M9N9jh7LPh3mHFmhb1FZjXiuq8r/q9NOMDD2M5zf9ly9sSU5wbaR6fJgc+5H8fr2
+Dhg++vlLv0P5k38y8QjM6+lTmLdDANuzqUk1Fh6ONocy1kM9iA3DnePDkXgGR3Wi
+T7OQOCp8AtjZ+2raGIwPXXiETEpoGw==
+=MPnr
 -----END PGP SIGNATURE-----
 
---vOzonUtVZwvU79d7--
+--Sig_/lUWi8Sea6sAsGuu5Z9aCWoO--
