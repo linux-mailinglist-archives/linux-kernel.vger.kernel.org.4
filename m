@@ -2,91 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21730702BEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:55:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2395E702BF7
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:56:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241494AbjEOLzn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 07:55:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
+        id S241468AbjEOLzv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 07:55:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241427AbjEOLzV (ORCPT
+        with ESMTP id S241485AbjEOLzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 07:55:21 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CE102D79
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 04:46:25 -0700 (PDT)
-Received: from pps.filterd (m0353727.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34FBiW0D014659;
-        Mon, 15 May 2023 11:46:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=G1cCigTeBEXMWy/c4bFSZiuVOkMEUGKj8ygFsmJL550=;
- b=SJ51dMeGcIGj3pUKJGxQomCAI3kd9ReY0rplOvRIFSruLHjfzumUQCtc8oNAcXxHGq2o
- 3lQXs+aELZPNX4HSwDuiEecWjAxxy6TRPDuoUKUEUR9cwxsjqPCZu1c394M0ywUtAA7i
- ASNzmPJMazrspqnCyUGOO8Rvw2BFamRVmND6TPTeox5Z0fUCRdG3quFlXtTc2ubY1BVB
- H9280GHXNEin+nStRFP/lkGuIv/d76JjuU0C4TEY1cGSlTa5nv6lPpbdrH1+BtkhqSkM
- ThxRE7mC9pQaFf6fbXyqKRabDuNNrr8RSJ78nd3I5mbgh6mWk709GwzB49bBTymhAwkk yg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qkm4ng2fv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 11:46:09 +0000
-Received: from m0353727.ppops.net (m0353727.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34FBj8gE017541;
-        Mon, 15 May 2023 11:46:08 GMT
-Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qkm4ng2ee-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 11:46:08 +0000
-Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
-        by ppma02fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34F9aOct032315;
-        Mon, 15 May 2023 11:46:06 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-        by ppma02fra.de.ibm.com (PPS) with ESMTPS id 3qj264rv7k-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 11:46:05 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-        by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34FBk3Ek3998296
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 15 May 2023 11:46:03 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6642620043;
-        Mon, 15 May 2023 11:46:03 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 2F28E2004D;
-        Mon, 15 May 2023 11:46:03 +0000 (GMT)
-Received: from localhost.localdomain (unknown [9.171.138.156])
-        by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 15 May 2023 11:46:03 +0000 (GMT)
-From:   Tobias Huschle <huschle@linux.ibm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com,
-        sshegde@linux.vnet.ibm.com, srikar@linux.vnet.ibm.com,
-        linuxppc-dev@lists.ozlabs.org
-Subject: [RFC 1/1] sched/fair: Consider asymmetric scheduler groups in load balancer
-Date:   Mon, 15 May 2023 13:46:01 +0200
-Message-Id: <20230515114601.12737-2-huschle@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230515114601.12737-1-huschle@linux.ibm.com>
-References: <20230515114601.12737-1-huschle@linux.ibm.com>
+        Mon, 15 May 2023 07:55:23 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D167F2D5A;
+        Mon, 15 May 2023 04:46:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684151219; x=1715687219;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=7JX+nvSPyV13JqpPeMxVUanZYrzPdLynyEVuwdjYBS8=;
+  b=i75RpSz4W/v/75efCjAelGAK6alCuGokYv8R1n/+4X1TaR0MnJborNSc
+   ofgtdVSkgqvOcrpaxVpaE85W+oNpWh+EkJCu17gY9z+24aoSkBUEUaWdw
+   /NrV6XanhXk0/lOFpsoydDhgJEB84+hu9tBvFIIpXjxgWuZwUcqcG3EGU
+   RzPzHAGDTu2NsOQkVoCFsKolXAR6E/9ZB3t0YHMJptXwGcp5zNfC1eT7Y
+   WRs4W8RilTVVuePuHIpR081c7QkccAlU5e+CS066xFeBi5OMpng5yYnSD
+   FQFg5RZTKZd2Ejy+GsUz2wEc6HwO/I8mma0YQ5Ok47FPemKC9YIwp3dKj
+   w==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="351212404"
+X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
+   d="scan'208";a="351212404"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 04:46:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="770595971"
+X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
+   d="scan'208";a="770595971"
+Received: from zolayode-mobl.ger.corp.intel.com (HELO [10.213.214.133]) ([10.213.214.133])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 04:46:56 -0700
+Message-ID: <9faeff9b-d0aa-db7a-1bcc-0fe26a974595@linux.intel.com>
+Date:   Mon, 15 May 2023 12:46:54 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: z15x4WqIxXSZoEm-pRfMLGKWndy1Sh8u
-X-Proofpoint-GUID: yZspnh9xaAth65j_Vvfj2UoWSDm6IlGI
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-15_09,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- priorityscore=1501 spamscore=0 bulkscore=0 clxscore=1011 adultscore=0
- malwarescore=0 phishscore=0 mlxscore=0 impostorscore=0 mlxlogscore=999
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305150100
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v3 5/9] drm: Add fdinfo memory stats
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, dri-devel@lists.freedesktop.org
+Cc:     Rob Clark <robdclark@chromium.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+        Emil Velikov <emil.l.velikov@gmail.com>,
+        Christopher Healy <healych@amazon.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        Boris Brezillon <boris.brezillon@collabora.com>,
+        freedreno@lists.freedesktop.org,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+References: <20230501184502.1620335-1-robdclark@gmail.com>
+ <20230501184502.1620335-6-robdclark@gmail.com>
+From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Organization: Intel Corporation UK Plc
+In-Reply-To: <20230501184502.1620335-6-robdclark@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,76 +75,472 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The current load balancer implementation implies that scheduler groups,
-within the same domain, all host the same number of CPUs. This is
-reflected in the condition, that a scheduler group, which is load
-balancing and classified as having spare capacity, should pull work
-from the busiest group, if the local group runs less processes than
-the busiest one. This implies that these two groups should run the
-same number of processes, which is problematic if the groups are not 
-of the same size.
 
-The assumption that scheduler groups within the same scheduler domain
-host the same number of CPUs appears to be true for non-s390 
-architectures. Nevertheless, s390 can have scheduler groups of unequal 
-size.
+On 01/05/2023 19:44, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
+> 
+> Add support to dump GEM stats to fdinfo.
+> 
+> v2: Fix typos, change size units to match docs, use div_u64
+> v3: Do it in core
+> v4: more kerneldoc
+> v5: doc fixes
+> 
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> Reviewed-by: Emil Velikov <emil.l.velikov@gmail.com>
+> Reviewed-by: Daniel Vetter <daniel.vetter@ffwll.ch>
+> ---
+>   Documentation/gpu/drm-usage-stats.rst | 54 +++++++++++----
+>   drivers/gpu/drm/drm_file.c            | 99 ++++++++++++++++++++++++++-
+>   include/drm/drm_file.h                | 28 ++++++++
+>   include/drm/drm_gem.h                 | 30 ++++++++
+>   4 files changed, 198 insertions(+), 13 deletions(-)
+> 
+> diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/drm-usage-stats.rst
+> index 552195fb1ea3..d012eb56885e 100644
+> --- a/Documentation/gpu/drm-usage-stats.rst
+> +++ b/Documentation/gpu/drm-usage-stats.rst
+> @@ -45,37 +45,43 @@ Mandatory fully standardised keys
+>   ---------------------------------
+>   
+>   - drm-driver: <str>
+>   
+>   String shall contain the name this driver registered as via the respective
+>   `struct drm_driver` data structure.
+>   
+>   Optional fully standardised keys
+>   --------------------------------
+>   
+> +Identification
+> +^^^^^^^^^^^^^^
+> +
+>   - drm-pdev: <aaaa:bb.cc.d>
+>   
+>   For PCI devices this should contain the PCI slot address of the device in
+>   question.
+>   
+>   - drm-client-id: <uint>
+>   
+>   Unique value relating to the open DRM file descriptor used to distinguish
+>   duplicated and shared file descriptors. Conceptually the value should map 1:1
+>   to the in kernel representation of `struct drm_file` instances.
+>   
+>   Uniqueness of the value shall be either globally unique, or unique within the
+>   scope of each device, in which case `drm-pdev` shall be present as well.
+>   
+>   Userspace should make sure to not double account any usage statistics by using
+>   the above described criteria in order to associate data to individual clients.
+>   
+> +Utilization
+> +^^^^^^^^^^^
+> +
+>   - drm-engine-<str>: <uint> ns
+>   
+>   GPUs usually contain multiple execution engines. Each shall be given a stable
+>   and unique name (str), with possible values documented in the driver specific
+>   documentation.
+>   
+>   Value shall be in specified time units which the respective GPU engine spent
+>   busy executing workloads belonging to this client.
+>   
+>   Values are not required to be constantly monotonic if it makes the driver
+> @@ -86,32 +92,20 @@ value until a monotonic update is seen.
+>   
+>   - drm-engine-capacity-<str>: <uint>
+>   
+>   Engine identifier string must be the same as the one specified in the
+>   drm-engine-<str> tag and shall contain a greater than zero number in case the
+>   exported engine corresponds to a group of identical hardware engines.
+>   
+>   In the absence of this tag parser shall assume capacity of one. Zero capacity
+>   is not allowed.
+>   
+> -- drm-memory-<str>: <uint> [KiB|MiB]
+> -
+> -Each possible memory type which can be used to store buffer objects by the
+> -GPU in question shall be given a stable and unique name to be returned as the
+> -string here.
+> -
+> -Value shall reflect the amount of storage currently consumed by the buffer
+> -object belong to this client, in the respective memory region.
+> -
+> -Default unit shall be bytes with optional unit specifiers of 'KiB' or 'MiB'
+> -indicating kibi- or mebi-bytes.
+> -
+>   - drm-cycles-<str>: <uint>
+>   
+>   Engine identifier string must be the same as the one specified in the
+>   drm-engine-<str> tag and shall contain the number of busy cycles for the given
+>   engine.
+>   
+>   Values are not required to be constantly monotonic if it makes the driver
+>   implementation easier, but are required to catch up with the previously reported
+>   larger value within a reasonable period. Upon observing a value lower than what
+>   was previously read, userspace is expected to stay with that larger previous
+> @@ -119,20 +113,56 @@ value until a monotonic update is seen.
+>   
+>   - drm-maxfreq-<str>: <uint> [Hz|MHz|KHz]
+>   
+>   Engine identifier string must be the same as the one specified in the
+>   drm-engine-<str> tag and shall contain the maximum frequency for the given
+>   engine.  Taken together with drm-cycles-<str>, this can be used to calculate
+>   percentage utilization of the engine, whereas drm-engine-<str> only reflects
+>   time active without considering what frequency the engine is operating as a
+>   percentage of it's maximum frequency.
+>   
+> +Memory
+> +^^^^^^
+> +
+> +- drm-memory-<region>: <uint> [KiB|MiB]
+> +
+> +Each possible memory type which can be used to store buffer objects by the
+> +GPU in question shall be given a stable and unique name to be returned as the
+> +string here.  The name "memory" is reserved to refer to normal system memory.
+> +
+> +Value shall reflect the amount of storage currently consumed by the buffer
+> +objects belong to this client, in the respective memory region.
+> +
+> +Default unit shall be bytes with optional unit specifiers of 'KiB' or 'MiB'
+> +indicating kibi- or mebi-bytes.
+> +
+> +- drm-shared-<region>: <uint> [KiB|MiB]
+> +
+> +The total size of buffers that are shared with another file (ie. have more
+> +than a single handle).
+> +
+> +- drm-total-<region>: <uint> [KiB|MiB]
+> +
+> +The total size of buffers that including shared and private memory.
+> +
+> +- drm-resident-<region>: <uint> [KiB|MiB]
+> +
+> +The total size of buffers that are resident in the specified region.
+> +
+> +- drm-purgeable-<region>: <uint> [KiB|MiB]
+> +
+> +The total size of buffers that are purgeable.
+> +
+> +- drm-active-<region>: <uint> [KiB|MiB]
+> +
+> +The total size of buffers that are active on one or more engines.
+> +
+>   Implementation Details
+>   ======================
+>   
+>   Drivers should use drm_show_fdinfo() in their `struct file_operations`, and
+>   implement &drm_driver.show_fdinfo if they wish to provide any stats which
+>   are not provided by drm_show_fdinfo().  But even driver specific stats should
+>   be documented above and where possible, aligned with other drivers.
+>   
+>   Driver specific implementations
+>   -------------------------------
+> diff --git a/drivers/gpu/drm/drm_file.c b/drivers/gpu/drm/drm_file.c
+> index 6d5bdd684ae2..9321eb0bf020 100644
+> --- a/drivers/gpu/drm/drm_file.c
+> +++ b/drivers/gpu/drm/drm_file.c
+> @@ -35,20 +35,21 @@
+>   #include <linux/dma-fence.h>
+>   #include <linux/file.h>
+>   #include <linux/module.h>
+>   #include <linux/pci.h>
+>   #include <linux/poll.h>
+>   #include <linux/slab.h>
+>   
+>   #include <drm/drm_client.h>
+>   #include <drm/drm_drv.h>
+>   #include <drm/drm_file.h>
+> +#include <drm/drm_gem.h>
+>   #include <drm/drm_print.h>
+>   
+>   #include "drm_crtc_internal.h"
+>   #include "drm_internal.h"
+>   #include "drm_legacy.h"
+>   
+>   /* from BKL pushdown */
+>   DEFINE_MUTEX(drm_global_mutex);
+>   
+>   bool drm_dev_needs_global_mutex(struct drm_device *dev)
+> @@ -864,23 +865,119 @@ EXPORT_SYMBOL(drm_send_event_locked);
+>   void drm_send_event(struct drm_device *dev, struct drm_pending_event *e)
+>   {
+>   	unsigned long irqflags;
+>   
+>   	spin_lock_irqsave(&dev->event_lock, irqflags);
+>   	drm_send_event_helper(dev, e, 0);
+>   	spin_unlock_irqrestore(&dev->event_lock, irqflags);
+>   }
+>   EXPORT_SYMBOL(drm_send_event);
+>   
+> +static void print_size(struct drm_printer *p, const char *stat,
+> +		       const char *region, size_t sz)
+> +{
+> +	const char *units[] = {"", " KiB", " MiB"};
+> +	unsigned u;
+> +
+> +	for (u = 0; u < ARRAY_SIZE(units) - 1; u++) {
+> +		if (sz < SZ_1K)
+> +			break;
+> +		sz = div_u64(sz, SZ_1K);
+> +	}
+> +
+> +	drm_printf(p, "drm-%s-%s:\t%zu%s\n", stat, region, sz, units[u]);
+> +}
+> +
+> +/**
+> + * drm_print_memory_stats - A helper to print memory stats
+> + * @p: The printer to print output to
+> + * @stats: The collected memory stats
+> + * @supported_status: Bitmask of optional stats which are available
+> + * @region: The memory region
+> + *
+> + */
+> +void drm_print_memory_stats(struct drm_printer *p,
+> +			    const struct drm_memory_stats *stats,
+> +			    enum drm_gem_object_status supported_status,
+> +			    const char *region)
+> +{
+> +	print_size(p, "total", region, stats->private + stats->shared);
+> +	print_size(p, "shared", region, stats->shared);
+> +	print_size(p, "active", region, stats->active);
+> +
+> +	if (supported_status & DRM_GEM_OBJECT_RESIDENT)
+> +		print_size(p, "resident", region, stats->resident);
+> +
+> +	if (supported_status & DRM_GEM_OBJECT_PURGEABLE)
+> +		print_size(p, "purgeable", region, stats->purgeable);
+> +}
+> +EXPORT_SYMBOL(drm_print_memory_stats);
+> +
+> +/**
+> + * drm_show_memory_stats - Helper to collect and show standard fdinfo memory stats
+> + * @p: the printer to print output to
+> + * @file: the DRM file
+> + *
+> + * Helper to iterate over GEM objects with a handle allocated in the specified
+> + * file.
+> + */
+> +void drm_show_memory_stats(struct drm_printer *p, struct drm_file *file)
+> +{
+> +	struct drm_gem_object *obj;
+> +	struct drm_memory_stats status = {};
+> +	enum drm_gem_object_status supported_status;
+> +	int id;
+> +
+> +	spin_lock(&file->table_lock);
+> +	idr_for_each_entry (&file->object_idr, obj, id) {
+> +		enum drm_gem_object_status s = 0;
+> +
+> +		if (obj->funcs && obj->funcs->status) {
+> +			s = obj->funcs->status(obj);
+> +			supported_status = DRM_GEM_OBJECT_RESIDENT |
+> +					DRM_GEM_OBJECT_PURGEABLE;
 
-This introduces a performance degredation in the following scenario:
+I am slightly unsure if instead this mask shouldn't be returned by the 
+driver callback. No action needed.
 
-Consider a system with 8 CPUs, 6 CPUs are located on one CPU socket,
-the remaining 2 are located on another socket:
+> +		}
+> +
+> +		if (obj->handle_count > 1) {
+> +			status.shared += obj->size;
+> +		} else {
+> +			status.private += obj->size;
+> +		}
+> +
+> +		if (s & DRM_GEM_OBJECT_RESIDENT) {
+> +			status.resident += obj->size;
+> +		} else {
+> +			/* If already purged or not yet backed by pages, don't
+> +			 * count it as purgeable:
+> +			 */
+> +			s &= ~DRM_GEM_OBJECT_PURGEABLE;
+> +		}
+> +
+> +		if (!dma_resv_test_signaled(obj->resv, dma_resv_usage_rw(true))) {
+> +			status.active += obj->size;
+> +
+> +			/* If still active, don't count as purgeable: */
+> +			s &= ~DRM_GEM_OBJECT_PURGEABLE;
+> +		}
+> +
+> +		if (s & DRM_GEM_OBJECT_PURGEABLE)
+> +			status.purgeable += obj->size;
+> +	}
+> +	spin_unlock(&file->table_lock);
+> +
+> +	drm_print_memory_stats(p, &status, supported_status, "memory");
+> +}
+> +EXPORT_SYMBOL(drm_show_memory_stats);
+> +
+>   /**
+>    * drm_show_fdinfo - helper for drm file fops
+> - * @seq_file: output stream
+> + * @m: output stream
+>    * @f: the device file instance
+>    *
+>    * Helper to implement fdinfo, for userspace to query usage stats, etc, of a
+>    * process using the GPU.  See also &drm_driver.show_fdinfo.
+>    *
+>    * For text output format description please see Documentation/gpu/drm-usage-stats.rst
+>    */
+>   void drm_show_fdinfo(struct seq_file *m, struct file *f)
+>   {
+>   	struct drm_file *file = f->private_data;
+> diff --git a/include/drm/drm_file.h b/include/drm/drm_file.h
+> index 6de6d0e9c634..f77540b97cd0 100644
+> --- a/include/drm/drm_file.h
+> +++ b/include/drm/drm_file.h
+> @@ -34,20 +34,21 @@
+>   #include <linux/completion.h>
+>   #include <linux/idr.h>
+>   
+>   #include <uapi/drm/drm.h>
+>   
+>   #include <drm/drm_prime.h>
+>   
+>   struct dma_fence;
+>   struct drm_file;
+>   struct drm_device;
+> +struct drm_printer;
+>   struct device;
+>   struct file;
+>   
+>   /*
+>    * FIXME: Not sure we want to have drm_minor here in the end, but to avoid
+>    * header include loops we need it here for now.
+>    */
+>   
+>   /* Note that the order of this enum is ABI (it determines
+>    * /dev/dri/renderD* numbers).
+> @@ -433,15 +434,42 @@ int drm_event_reserve_init(struct drm_device *dev,
+>   			   struct drm_file *file_priv,
+>   			   struct drm_pending_event *p,
+>   			   struct drm_event *e);
+>   void drm_event_cancel_free(struct drm_device *dev,
+>   			   struct drm_pending_event *p);
+>   void drm_send_event_locked(struct drm_device *dev, struct drm_pending_event *e);
+>   void drm_send_event(struct drm_device *dev, struct drm_pending_event *e);
+>   void drm_send_event_timestamp_locked(struct drm_device *dev,
+>   				     struct drm_pending_event *e,
+>   				     ktime_t timestamp);
+> +
+> +/**
+> + * struct drm_memory_stats - GEM object stats associated
+> + * @shared: Total size of GEM objects shared between processes
+> + * @private: Total size of GEM objects
+> + * @resident: Total size of GEM objects backing pages
+> + * @purgeable: Total size of GEM objects that can be purged (resident and not active)
+> + * @active: Total size of GEM objects active on one or more engines
+> + *
+> + * Used by drm_print_memory_stats()
+> + */
+> +struct drm_memory_stats {
+> +	u32 shared;
+> +	u32 private;
+> +	u32 resident;
+> +	u32 purgeable;
+> +	u32 active;
+> +};
 
-Socket   -----1-----    -2-
-CPU      1 2 3 4 5 6    7 8
+u64 for these as agreed.
 
-Placing some workload ( x = one task ) yields the following
-scenarios:
+> +
+> +enum drm_gem_object_status;
+> +
+> +void drm_print_memory_stats(struct drm_printer *p,
+> +			    const struct drm_memory_stats *stats,
+> +			    enum drm_gem_object_status supported_status,
+> +			    const char *region);
+> +
+> +void drm_show_memory_stats(struct drm_printer *p, struct drm_file *file);
+>   void drm_show_fdinfo(struct seq_file *m, struct file *f);
+>   
+>   struct file *mock_drm_getfile(struct drm_minor *minor, unsigned int flags);
+>   
+>   #endif /* _DRM_FILE_H_ */
+> diff --git a/include/drm/drm_gem.h b/include/drm/drm_gem.h
+> index 189fd618ca65..9ebd2820ad1f 100644
+> --- a/include/drm/drm_gem.h
+> +++ b/include/drm/drm_gem.h
+> @@ -35,20 +35,39 @@
+>    */
+>   
+>   #include <linux/kref.h>
+>   #include <linux/dma-resv.h>
+>   
+>   #include <drm/drm_vma_manager.h>
+>   
+>   struct iosys_map;
+>   struct drm_gem_object;
+>   
+> +/**
+> + * enum drm_gem_object_status - bitmask of object state for fdinfo reporting
+> + * @DRM_GEM_OBJECT_RESIDENT: object is resident in memory (ie. not unpinned)
+> + * @DRM_GEM_OBJECT_PURGEABLE: object marked as purgeable by userspace
+> + *
+> + * Bitmask of status used for fdinfo memory stats, see &drm_gem_object_funcs.status
+> + * and drm_show_fdinfo().  Note that an object can DRM_GEM_OBJECT_PURGEABLE if
+> + * it still active or not resident, in which case drm_show_fdinfo() will not
+> + * account for it as purgeable.  So drivers do not need to check if the buffer
+> + * is idle and resident to return this bit.  (Ie. userspace can mark a buffer
+> + * as purgeable even while it is still busy on the GPU.. it does not _actually_
+> + * become puregeable until it becomes idle.  The status gem object func does
+> + * not need to consider this.)
+> + */
+> +enum drm_gem_object_status {
+> +	DRM_GEM_OBJECT_RESIDENT  = BIT(0),
+> +	DRM_GEM_OBJECT_PURGEABLE = BIT(1),
+> +};
+> +
+>   /**
+>    * struct drm_gem_object_funcs - GEM object functions
+>    */
+>   struct drm_gem_object_funcs {
+>   	/**
+>   	 * @free:
+>   	 *
+>   	 * Deconstructor for drm_gem_objects.
+>   	 *
+>   	 * This callback is mandatory.
+> @@ -167,20 +186,31 @@ struct drm_gem_object_funcs {
+>   	/**
+>   	 * @evict:
+>   	 *
+>   	 * Evicts gem object out from memory. Used by the drm_gem_object_evict()
+>   	 * helper. Returns 0 on success, -errno otherwise.
+>   	 *
+>   	 * This callback is optional.
+>   	 */
+>   	int (*evict)(struct drm_gem_object *obj);
+>   
+> +	/**
+> +	 * @status:
+> +	 *
+> +	 * The optional status callback can return additional object state
+> +	 * which determines which stats the object is counted against.  The
+> +	 * callback is called under table_lock.  Racing against object status
+> +	 * change is "harmless", and the callback can expect to not race
+> +	 * against object destruction.
 
-The first 5 tasks are distributed evenly across the two groups.
+Maybe mention the callback is called from drm_show_memory_stats?
 
-Socket   -----1-----    -2-
-CPU      1 2 3 4 5 6    7 8
-         x x x          x x
+> +	 */
+> +	enum drm_gem_object_status (*status)(struct drm_gem_object *obj);
+> +
+>   	/**
+>   	 * @vm_ops:
+>   	 *
+>   	 * Virtual memory operations used with mmap.
+>   	 *
+>   	 * This is optional but necessary for mmap support.
+>   	 */
+>   	const struct vm_operations_struct *vm_ops;
+>   };
+>   
 
-Adding a 6th task yields the following distribution:
+With the u64 stats:
 
-Socket   -----1-----    -2-
-CPU      1 2 3 4 5 6    7 8
-SMT1     x x x          x x
-SMT2                    x
+Acked-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
 
-The task is added to the 2nd scheduler group, as the scheduler has the
-assumption that scheduler groups are of the same size, so they should
-also host the same number of tasks. This makes CPU 7 run into SMT 
-thread, which comes with a performance penalty. This means, that in 
-the window of 6-8 tasks, load balancing is done suboptimally, because 
-SMT is used although there is no reason to do so as fully idle CPUs 
-are still available.
+Regards,
 
-Taking the weight of the scheduler groups into account, ensures that
-a load balancing CPU within a smaller group will not try to pull tasks
-from a bigger group while the bigger group still has idle CPUs
-available.
-
-Signed-off-by: Tobias Huschle <huschle@linux.ibm.com>
----
- kernel/sched/fair.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 48b6f0ca13ac..b1307d7e4065 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -10426,7 +10426,8 @@ static struct sched_group *find_busiest_group(struct lb_env *env)
- 	 * group's child domain.
- 	 */
- 	if (sds.prefer_sibling && local->group_type == group_has_spare &&
--	    busiest->sum_nr_running > local->sum_nr_running + 1)
-+	    busiest->sum_nr_running * local->group_weight >
-+			local->sum_nr_running * busiest->group_weight + 1)
- 		goto force_balance;
- 
- 	if (busiest->group_type != group_overloaded) {
--- 
-2.34.1
-
+Tvrtko
