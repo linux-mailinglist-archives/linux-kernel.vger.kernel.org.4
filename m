@@ -2,62 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD02702AE7
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:51:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C80AB702AEA
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:52:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229492AbjEOKvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:51:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41418 "EHLO
+        id S240215AbjEOKwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 06:52:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239441AbjEOKvO (ORCPT
+        with ESMTP id S235490AbjEOKwh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:51:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF111990;
-        Mon, 15 May 2023 03:51:09 -0700 (PDT)
+        Mon, 15 May 2023 06:52:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEA4710CA;
+        Mon, 15 May 2023 03:52:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52DCE615C4;
-        Mon, 15 May 2023 10:51:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EB75C4339B;
-        Mon, 15 May 2023 10:51:08 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 83809615C4;
+        Mon, 15 May 2023 10:52:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 868DCC433D2;
+        Mon, 15 May 2023 10:52:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684147868;
-        bh=io4J5rFtWRubjfwy7aiwD5CIoNUnGdBdd48t4O4XGbw=;
+        s=k20201202; t=1684147955;
+        bh=ntnzgDAEv/oNp+N4LQBnnPFUGS1SDXZTfvGKB8W+Cgw=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=lPhi5hYEqrh2Bq2YZS6bCRTjHMGCiqPxcEGfOH/RW32uvF2vxqB/EWwBq7cBibMTM
-         1C3BzSbQJH9K2Ovo9G14Nk4ytYtz0/V+2BYs5ahZHB4fldSqWYXk3jcxiGXwAZ2zgD
-         sDqlgOzO7s2wvMiH2vOegNgHeYkg2V/dgJaxOWe9b+OPYBF8JDUNto8AwztpSgqdmJ
-         JvkBWag0E+qGBTVl+l2/XACqvOfPGBp55tGqdaGPw/QV++kA+hNbBCCrh1uTevdBG+
-         7IZmKxGE7EU2H8jQ78uUYiz0FSPGDEl8l/NdyM3aTelGqsrQ7Xz57awJGIJOkgMoGn
-         EM5Xec3sGxmmA==
-Date:   Mon, 15 May 2023 19:51:05 +0900
-From:   Mark Brown <broonie@kernel.org>
-To:     Walker Chen <walker.chen@starfivetech.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Claudiu Beznea <Claudiu.Beznea@microchip.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v4 2/3] ASoC: starfive: Add JH7110 TDM driver
-Message-ID: <ZGIOmWyxPGOuWHx+@finisterre.sirena.org.uk>
-References: <20230511091549.28003-1-walker.chen@starfivetech.com>
- <20230511091549.28003-3-walker.chen@starfivetech.com>
- <21bc5b06-3d3e-5a30-a90d-ea9f7abc6575@starfivetech.com>
+        b=OFEvsmr6Yj6FqUdWldY5+DDq4NZa0Yn1kZGDZaP0TrLrory+JmTb3iZ1I2/GOYTGc
+         LRDIuoqt0LjpZ8UzDfQjx330cvPLM9Uh3rakZ5R1k0/Frtjd6ukSJ3PCpWmz/ZZZLf
+         PhgS6Z94NX1tgZvrG+SnCx8rlLe8KFzfb8T3YYM7/GVHpFHewh2JSWuzQ3/+dz/YD5
+         LoMuRUmlmyHkzf+R8c8aP3/QaISwMbaI46cw0Ma1eXTIeAGWBq0AKs1dSOHkDO3jW0
+         8ylCq63LH7VbUEVhtvnyln8aOkGSTnHMrnarSga2SSnwE2g3fJRmV0znf1pGaEZoA8
+         hJeUaKGUr/1nQ==
+Date:   Mon, 15 May 2023 11:52:29 +0100
+From:   Lee Jones <lee@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Andre Przywara <andre.przywara@arm.com>,
+        Shengyu Qu <wiagn233@outlook.com>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wens@csie.org,
+        lgirdwood@gmail.com, broonie@kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        conor.dooley@microchip.com,
+        Martin Botka <martin.botka@somainline.org>
+Subject: Re: [PATCH v3 2/3] mfd: axp20x: Add support for AXP15060 PMIC
+Message-ID: <20230515105229.GI8963@google.com>
+References: <20230421150816.10513-1-wiagn233@outlook.com>
+ <TY3P286MB261162D57695AC8164ED50E298609@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM>
+ <20230426142740.GN50521@google.com>
+ <20230503120759.6fd6a7a9@donnerap.cambridge.arm.com>
+ <19bccb62-b7e0-855d-fb5f-4fd3dde4f6f0@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nLJs/sEpOhNQJzse"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <21bc5b06-3d3e-5a30-a90d-ea9f7abc6575@starfivetech.com>
-X-Cookie: Avoid contact with eyes.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <19bccb62-b7e0-855d-fb5f-4fd3dde4f6f0@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -66,43 +64,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 04 May 2023, Krzysztof Kozlowski wrote:
 
---nLJs/sEpOhNQJzse
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On 03/05/2023 13:07, Andre Przywara wrote:
+> > On Wed, 26 Apr 2023 15:27:40 +0100
+> > Lee Jones <lee@kernel.org> wrote:
+> > 
+> > Hi Lee,
+> > 
+> > I see this patch in Linus' tree, but something must have gone wrong here,
+> > can you please check? See below ...
+> > 
+> >> On Fri, 21 Apr 2023, Shengyu Qu wrote:
+> >>
+> >>> The AXP15060 is a PMIC chip produced by X-Powers, and could be connected
+> >>> via an I2C bus.
+> >>>
+> >>> Describe the regmap and the MFD bits, along with the registers exposed
+> >>> via I2C. Eventually advertise the device using a new compatible string
+> >>> and add support for power off the system.
+> >>>
+> >>> The driver would disable PEK function if IRQ is not configured in device
+> >>> tree, since some boards (For example, Starfive Visionfive 2) didn't
+> >>> connect IRQ line of PMIC to SOC.
+> >>>
+> >>> GPIO function isn't enabled in this commit, since its configuration
+> >>> operation is different from any existing AXP PMICs and needs
+> >>> logic modification on existing driver. GPIO support might come in later
+> >>> patches.
+> >>>
+> >>> ---  
+> >>
+> >> You must not use these above the tags or Git will drop them.
+> >>
+> >>> Changes since v2:
+> >>>  - Rebase to AXP313a series v10 [1] + newest (20230420) -next branch
+> > 
+> > So this patch was based on the AXP313a series, but I don't see that in
+> > Linus' tree (or in any of your trees, if I have checked correctly).
+> > There must have been a conflict, as this [PATCH v3 2/3] diff actually lists
+> > the axp313a entry in the context lines.
+> > 
+> >>>  - Add axp_regulator_only_cells rather than directly using axp806_cells
+> >>>    for cases that IRQ line isn't connected.
+> >>>
+> >>> Changes since v1:
+> >>>  - Nothing
+> >>>
+> >>> [1] https://lore.kernel.org/linux-sunxi/20230401001850.4988-1-andre.przywara@arm.com/
+> >>>
+> >>> Signed-off-by: Shengyu Qu <wiagn233@outlook.com>
+> >>> ---  
+> >>
+> >> Put change-logs here instead.
+> >>
+> >>>  drivers/mfd/axp20x-i2c.c   |   2 +
+> >>>  drivers/mfd/axp20x.c       | 107 +++++++++++++++++++++++++++++++++++++
+> >>>  include/linux/mfd/axp20x.h |  85 +++++++++++++++++++++++++++++
+> >>>  3 files changed, 194 insertions(+)  
+> >>
+> >> I manually added the missing tags for this and the DT patch and applied.
+> > 
+> > So this patch doesn't list any tags aside from Shengyu's
+> > Signed-off-by. The patch in Linus' tree list a Reviewed-by: from
+> > Krzysztof, which I don't see anywhere in the thread, he just reviewed the
+> > binding patch, AFAICT. 
+> 
+> Yep, I never reviewed this.
+> 
+> > I see your tentative R-b: on v2, but with the
+> > request to rebase and resend, which he did with v3. The applied patch
+> > looks like v3, but not on the base commit this was send against.
+> > 
+> > So I am slightly confused, and am also wondering what happened to the
+> > AXP313a patches? I see the binding patch merged, but not the MFD part,
+> > even though you replied saying so.
+> 
+> Because the patch #1 was broken, see:
+> https://lore.kernel.org/all/TY3P286MB261177CF7AA2959BD9517DA998609@TY3P286MB2611.JPNP286.PROD.OUTLOOK.COM/
+> 
+> The SoB and Reviewed-by were after --- and apparently b4 understood it
+> as cover letter and applied everywhere.
+> 
+> Lee,
+> Do you have the latest b4? If yes, this should be reported as b4 bug,
+> assuming you used it.
 
-On Mon, May 15, 2023 at 04:29:07PM +0800, Walker Chen wrote:
+I am using b4, although the version I'm using is quite old (0.9.0).
 
-> I have submitted new version of patch for TDM driver. Could you please he=
-lp to review and give your comments?=20
+Also, this was quite some time ago - I have slept since applying this
+and do not distinctly remember doing so.  Thus, the application of your
+R-b may well have been a mistake on my part.  I'll keep an eye for such
+things in the future and if I see (and remember) an issue, I'll report
+it.
 
-Please don't send content free pings and please allow a reasonable time
-for review.  People get busy, go on holiday, attend conferences and so=20
-on so unless there is some reason for urgency (like critical bug fixes)
-please allow at least a couple of weeks for review.  If there have been
-review comments then people may be waiting for those to be addressed.
-
-Sending content free pings adds to the mail volume (if they are seen at
-all) which is often the problem and since they can't be reviewed
-directly if something has gone wrong you'll have to resend the patches
-anyway, so sending again is generally a better approach though there are
-some other maintainers who like them - if in doubt look at how patches
-for the subsystem are normally handled.
-
---nLJs/sEpOhNQJzse
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmRiDpgACgkQJNaLcl1U
-h9CHJgf8DPHBxTaAmn9FNyXgqSV4aT0FqSJQ2RK6Jgls0b5SpIQuIRWFyk+OHUiw
-PlCg9J1Ohg+YDGsgvrzwqbvU0VcUmxl1IJjEcT4o2di/bm70vkqv5L/Kfm1Vfu35
-SBMzYSScyEW2tk/7A1VJK4ngJssreMyJgu0O1rePTl+fkwxJaFiEnMQCVvcltvfA
-H5lQp1qhqS2zz2jpBbjQJFu6vlvvDIscznZ4ItCfHPGaazC3rO9qbpLSz9jdk1aX
-36mhrJEWN2Q0YEZatiFIb5B2ItoUCW3gj+QLcfaf8dN6gwGDPk+zF2hFbyE0fweh
-k/dF9R3SXQCMhuxtL9ipJ9rVNjD5xQ==
-=WDUc
------END PGP SIGNATURE-----
-
---nLJs/sEpOhNQJzse--
+-- 
+Lee Jones [李琼斯]
