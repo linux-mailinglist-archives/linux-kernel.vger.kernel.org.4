@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD0087026F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:16:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 3325670270E
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:22:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231314AbjEOIQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 04:16:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44738 "EHLO
+        id S233743AbjEOIWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 04:22:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjEOIQL (ORCPT
+        with ESMTP id S230061AbjEOIUO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 04:16:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF59593;
-        Mon, 15 May 2023 01:16:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 53ADF611BB;
-        Mon, 15 May 2023 08:16:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41258C433EF;
-        Mon, 15 May 2023 08:16:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684138569;
-        bh=gSL2tuOqWpZ0taEm46ptIuXp6+GiMkpZNYVxUrwODIU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GiDz6NH8jUbxkuD9+PfRQ/QYzm6NUnKBzmSBCiQGutfXjoCLsAG7OkKDiQHvfmT/S
-         97LZugsZmrFK2YEik54Iofh0vht55UfSWrIlmZjMjugdmgTYGqddgC9L5yis5/sLdm
-         XOJCiqQNLX3zT7pfJ5Gk81KPQ+KM+IQRTRAoe7I+v/qH6LXHjAkNkYHcRjuFJHMS1i
-         7SukXF1g6oX9uat9R50IKJFCaJDtZ6SsRjdpwiYqNvLvyYijoo7iK0d4FaO6XG2dGM
-         IJE1AfAYj0IGC5qvem7XPycnodYyhz3SHWZgO95GLFFW1s4JR06U7tEUJewbFSDI96
-         7yCBRU7dwQlDA==
-Date:   Mon, 15 May 2023 10:16:03 +0200
-From:   Christian Brauner <brauner@kernel.org>
-To:     Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-Cc:     nhorman@tuxdriver.com, davem@davemloft.net,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Stanislav Fomichev <sdf@google.com>,
-        Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>,
-        Xin Long <lucien.xin@gmail.com>, linux-sctp@vger.kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v3] sctp: add bpf_bypass_getsockopt proto
- callback
-Message-ID: <20230515-unberechenbar-ergoss-4a2fc34870a0@brauner>
-References: <20230511132506.379102-1-aleksandr.mikhalitsyn@canonical.com>
+        Mon, 15 May 2023 04:20:14 -0400
+Received: from out0-207.mail.aliyun.com (out0-207.mail.aliyun.com [140.205.0.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9173E6E
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 01:20:12 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018047212;MF=houwenlong.hwl@antgroup.com;NM=1;PH=DS;RN=28;SR=0;TI=SMTPD_---.T2DpdLD_1684138803;
+Received: from localhost(mailfrom:houwenlong.hwl@antgroup.com fp:SMTPD_---.T2DpdLD_1684138803)
+          by smtp.aliyun-inc.com;
+          Mon, 15 May 2023 16:20:04 +0800
+From:   "Hou Wenlong" <houwenlong.hwl@antgroup.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     "Lai Jiangshan" <jiangshan.ljs@antgroup.com>,
+        "Hou Wenlong" <houwenlong.hwl@antgroup.com>,
+        "Alexey Makhalov" <amakhalov@vmware.com>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Andy Lutomirski" <luto@kernel.org>,
+        "Anshuman Khandual" <anshuman.khandual@arm.com>,
+        "Borislav Petkov" <bp@alien8.de>,
+        "Boris Ostrovsky" <boris.ostrovsky@oracle.com>,
+        "Brian Gerst" <brgerst@gmail.com>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "David Woodhouse" <dwmw@amazon.co.uk>,
+        "H. Peter Anvin" <hpa@zytor.com>, "Ingo Molnar" <mingo@redhat.com>,
+        "Josh Poimboeuf" <jpoimboe@kernel.org>,
+        "Juergen Gross" <jgross@suse.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        "=?UTF-8?B?TWlrZSBSYXBvcG9ydCAoSUJNKQ==?=" <rppt@kernel.org>,
+        "Pasha Tatashin" <pasha.tatashin@soleen.com>,
+        "Peter Zijlstra" <peterz@infradead.org>,
+        "=?UTF-8?B?U3JpdmF0c2EgUy4gQmhhdCAoVk13YXJlKQ==?=" 
+        <srivatsa@csail.mit.edu>, "Suren Baghdasaryan" <surenb@google.com>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Usama Arif" <usama.arif@bytedance.com>,
+        <virtualization@lists.linux-foundation.org>,
+        "VMware PV-Drivers Reviewers" <pv-drivers@vmware.com>,
+        <x86@kernel.org>, <xen-devel@lists.xenproject.org>
+Subject: [PATCH RFC 0/4] x86/fixmap: Unify FIXADDR_TOP
+Date:   Mon, 15 May 2023 16:19:31 +0800
+Message-Id: <cover.1684137557.git.houwenlong.hwl@antgroup.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230511132506.379102-1-aleksandr.mikhalitsyn@canonical.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,38 +61,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 03:25:06PM +0200, Alexander Mikhalitsyn wrote:
-> Implement ->bpf_bypass_getsockopt proto callback and filter out
-> SCTP_SOCKOPT_PEELOFF, SCTP_SOCKOPT_PEELOFF_FLAGS and SCTP_SOCKOPT_CONNECTX3
-> socket options from running eBPF hook on them.
-> 
-> SCTP_SOCKOPT_PEELOFF and SCTP_SOCKOPT_PEELOFF_FLAGS options do fd_install(),
-> and if BPF_CGROUP_RUN_PROG_GETSOCKOPT hook returns an error after success of
-> the original handler sctp_getsockopt(...), userspace will receive an error
-> from getsockopt syscall and will be not aware that fd was successfully
-> installed into a fdtable.
-> 
-> As pointed by Marcelo Ricardo Leitner it seems reasonable to skip
-> bpf getsockopt hook for SCTP_SOCKOPT_CONNECTX3 sockopt too.
-> Because internaly, it triggers connect() and if error is masked
-> then userspace will be confused.
-> 
-> This patch was born as a result of discussion around a new SCM_PIDFD interface:
-> https://lore.kernel.org/all/20230413133355.350571-3-aleksandr.mikhalitsyn@canonical.com/
-> 
-> Fixes: 0d01da6afc54 ("bpf: implement getsockopt and setsockopt hooks")
-> Cc: Daniel Borkmann <daniel@iogearbox.net>
-> Cc: Christian Brauner <brauner@kernel.org>
-> Cc: Stanislav Fomichev <sdf@google.com>
-> Cc: Neil Horman <nhorman@tuxdriver.com>
-> Cc: Marcelo Ricardo Leitner <marcelo.leitner@gmail.com>
-> Cc: Xin Long <lucien.xin@gmail.com>
-> Cc: linux-sctp@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: netdev@vger.kernel.org
-> Suggested-by: Stanislav Fomichev <sdf@google.com>
-> Acked-by: Stanislav Fomichev <sdf@google.com>
-> Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
-> ---
+This patchset unifies FIXADDR_TOP as a variable for x86, allowing the
+fixmap area to be movable and relocated with the kernel image in the
+x86/PIE patchset [0]. This enables the kernel image to be relocated in
+the top 512G of the address space.
 
-Reviewed-by: Christian Brauner <brauner@kernel.org>
+[0] https://lore.kernel.org/lkml/cover.1682673542.git.houwenlong.hwl@antgroup.com
+
+Hou Wenlong (4):
+  x86/vsyscall: Don't use set_fixmap() to map vsyscall page
+  x86/xen: Pin up to VSYSCALL_ADDR when vsyscall page is out of fixmap
+    area
+  x86/fixmap: Move vsyscall page out of fixmap area
+  x86/fixmap: Unify FIXADDR_TOP
+
+ arch/x86/entry/vsyscall/vsyscall_64.c |  7 +-----
+ arch/x86/include/asm/fixmap.h         | 28 ++++-------------------
+ arch/x86/include/asm/paravirt.h       |  7 ++++++
+ arch/x86/include/asm/paravirt_types.h |  4 ++++
+ arch/x86/include/asm/vsyscall.h       | 13 +++++++++++
+ arch/x86/kernel/head64.c              |  1 -
+ arch/x86/kernel/head_64.S             |  6 ++---
+ arch/x86/kernel/paravirt.c            |  4 ++++
+ arch/x86/mm/dump_pagetables.c         |  3 ++-
+ arch/x86/mm/fault.c                   |  1 -
+ arch/x86/mm/init_64.c                 |  2 +-
+ arch/x86/mm/ioremap.c                 |  5 ++---
+ arch/x86/mm/pgtable.c                 | 13 +++++++++++
+ arch/x86/mm/pgtable_32.c              |  3 ---
+ arch/x86/xen/mmu_pv.c                 | 32 +++++++++++++++++++--------
+ 15 files changed, 77 insertions(+), 52 deletions(-)
+
+
+base-commit: f585d5177e1aad174fd6da0e3936b682ed58ced0
+--
+2.31.1
+
