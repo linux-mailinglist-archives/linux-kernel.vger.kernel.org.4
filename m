@@ -2,39 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78C95702AEB
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:53:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E9C31702AED
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:55:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240823AbjEOKxo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:53:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42826 "EHLO
+        id S240957AbjEOKzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 06:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S235490AbjEOKxm (ORCPT
+        with ESMTP id S240013AbjEOKzf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:53:42 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 912BC10CA
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:53:41 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C59242F4;
-        Mon, 15 May 2023 03:54:25 -0700 (PDT)
-Received: from a077893.arm.com (unknown [10.163.70.57])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 256023F7BD;
-        Mon, 15 May 2023 03:53:37 -0700 (PDT)
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-To:     linux-arm-kernel@lists.infradead.org
-Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH V2] arm64: Disable EL2 traps for BRBE instructions executed in EL1
-Date:   Mon, 15 May 2023 16:23:28 +0530
-Message-Id: <20230515105328.239204-1-anshuman.khandual@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 15 May 2023 06:55:35 -0400
+Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C2C710FF
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:55:33 -0700 (PDT)
+Received: by mail-vs1-xe2c.google.com with SMTP id ada2fe7eead31-434706ea450so3967016137.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:55:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684148132; x=1686740132;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=zl70zTEBArfF6eM/itV88/Ihv7L5dJb+Bq1w/eYn/JY=;
+        b=ByQbNXpRcxoI1h14hMmzXNeum2EXAhJwRQbnuqx4gGgO8ioteDx3+Ww6YNcDfQ5XqG
+         7pQc/qmsjGKxVdySTRwNEF6CZXV0ZiaPVy2w8aiYdmW7DZT+C7GbUJVhPn+6YsuM5M+F
+         +HCPYhTFVhHSvkjpA3eh92zGAQ5R9qst6oELNUWsfc1v5+ErLH/RECy3SEWm+BOoi7DO
+         370C5Rh8WP/CNvQx1CAvq4bcQyLV4DkRKGtiUrysLu40NeWLRwOQokvdcLdZFYnOc60i
+         JzYyzpPJJ92GvNaFdpVKOttGEeQ951NV/Mhw9SWMpOg9E8iYHfMghajcKRpNXi08iVSI
+         eYkQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684148132; x=1686740132;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zl70zTEBArfF6eM/itV88/Ihv7L5dJb+Bq1w/eYn/JY=;
+        b=jWv2BxuHjgoVO4f1iRZVWEDGQQCSOmecyD9u4Eg33x/qexZZmXFxh7SeHi+4Yjq11Z
+         qF52XiNkaCEAT2CxpqByXQTcUioqHZTP7Ad5OvLkUeTUCcb5hTlsWUr74TUYHc3YzXFU
+         hkHeBRe/9omUIP/AMeadcjDXCTsjqTZajYZ+vxvXb4+wIIRgOz813J//zvoZCpEQifNG
+         eYMC4N3XbP/iAWI/dU0Q9Ms+JNsNl0nlTYFf9LIAEFTapEq2lU2QblvoA4drN9K6lTBO
+         WD2NRGq51TWEJ4yD2/nfXQtdkCoXaLRxxU7UMUAFop+BpiqrMwbotXHBvtw5X5d2X8JE
+         rE/g==
+X-Gm-Message-State: AC+VfDzSs2LqYzqvnwjWw2Sf/zz4d1gNTRoc9azCq6bNjee2BQJOsjb6
+        OW+x3RVGzLtw4iwWBetonx15OGQchIkX2UqrqFq5zDjNiIOxejPP9VXB5Q==
+X-Google-Smtp-Source: ACHHUZ5Z43/jj5a+Wf14scaZq+2/R6j34GZRFRvk2a/6q0K+1bDEBMgS7mKwQa68VPhh7h4gpLlwNXJosQmtjXnjYL4=
+X-Received: by 2002:a67:f946:0:b0:436:4dda:ee63 with SMTP id
+ u6-20020a67f946000000b004364ddaee63mr2369734vsq.0.1684148131970; Mon, 15 May
+ 2023 03:55:31 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 15 May 2023 16:25:20 +0530
+Message-ID: <CA+G9fYvcXKxGrMLDSS=BV=k+SN7h78+hVOxG5De47tbbXr1WYQ@mail.gmail.com>
+Subject: selftests: x86: mov_ss_trap_64 numbering_64 amx_64 lam_64 failed
+To:     open list <linux-kernel@vger.kernel.org>,
+        "open list:KERNEL SELFTEST FRAMEWORK" 
+        <linux-kselftest@vger.kernel.org>, lkft-triage@lists.linaro.org
+Cc:     Andy Lutomirski <luto@kernel.org>,
+        Andy Lutomirski <luto@amacapital.net>,
+        Borislav Petkov <bp@alien8.de>,
+        Brian Gerst <brgerst@gmail.com>,
+        Denys Vlasenko <dvlasenk@redhat.com>,
+        Denys Vlasenko <vda.linux@googlemail.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Dan Carpenter <dan.carpenter@linaro.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -42,72 +79,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This disables EL2 traps for BRBE instructions executed in EL1. This would
-enable BRBE to be configured and used successfully in the guest kernel.
-While here, this updates Documentation/arm64/booting.rst as well.
+Following selftests x86 test cases failing
+Unsupported feature can be marked as skipped instead of fail ?
 
-Cc: Catalin Marinas <catalin.marinas@arm.com>
-Cc: Will Deacon <will@kernel.org>
-Cc: Mark Brown <broonie@kernel.org>
-Cc: Marc Zyngier <maz@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
----
-This patch applies on v6.4-rc2
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Changes in V2:
+ - x86_mov_ss_trap_64 fail
+ - x86_syscall_numbering_64 fail
+ - x86_amx_64 fail
+ - x86_lam_64 fail
 
-- Updated Documentation/arm64/booting.rst
+# selftests: x86: mov_ss_trap_64
+# SS = 0x2b, &SS = 0x0x404188
+# Set up a watchpoint
+# DR0 = 404188, DR1 = 401368, DR7 = 7000a
+# Segmentation fault
+not ok 10 selftests: x86: mov_ss_trap_64 # exit=139
 
-Changes in V1:
+# selftests: x86: syscall_numbering_64
+...
+not ok 16 selftests: x86: syscall_numbering_64 # TIMEOUT 45 seconds
 
-https://lore.kernel.org/all/20230324055127.2228330-1-anshuman.khandual@arm.com/
+## The default timeout after 45 seconds occurred due to slow qemu-x86_64
+## pass on x86 device and other fast qemu_x86_64.
 
- Documentation/arm64/booting.rst    |  8 ++++++++
- arch/arm64/include/asm/el2_setup.h | 10 ++++++++++
- 2 files changed, 18 insertions(+)
+# selftests: x86: amx_64
+# amx_64: [FAIL] cpuid: no CPU xsave support: Success
+not ok 18 selftests: x86: amx_64 # exit=1
 
-diff --git a/Documentation/arm64/booting.rst b/Documentation/arm64/booting.rst
-index ffeccdd6bdac..cb9e151f6928 100644
---- a/Documentation/arm64/booting.rst
-+++ b/Documentation/arm64/booting.rst
-@@ -379,6 +379,14 @@ Before jumping into the kernel, the following conditions must be met:
- 
-     - SMCR_EL2.EZT0 (bit 30) must be initialised to 0b1.
- 
-+  For CPUs with the Branch Record Buffer Extension (FEAT_BRBE):
-+
-+ - If the kernel is entered at EL1 and EL2 is present:
-+
-+    - HFGITR_EL2.nBRBINJ (bit 55) must be initialised to 0b1.
-+
-+    - HFGITR_EL2.nBRBIALL (bit 56) must be initialised to 0b1.
-+
- The requirements described above for CPU mode, caches, MMUs, architected
- timers, coherency and system registers apply to all CPUs.  All CPUs must
- enter the kernel in the same exception level.  Where the values documented
-diff --git a/arch/arm64/include/asm/el2_setup.h b/arch/arm64/include/asm/el2_setup.h
-index 037724b19c5c..06bf321a17be 100644
---- a/arch/arm64/include/asm/el2_setup.h
-+++ b/arch/arm64/include/asm/el2_setup.h
-@@ -161,6 +161,16 @@
- 	msr_s	SYS_HFGWTR_EL2, x0
- 	msr_s	SYS_HFGITR_EL2, xzr
- 
-+	mrs	x1, id_aa64dfr0_el1
-+	ubfx	x1, x1, #ID_AA64DFR0_EL1_BRBE_SHIFT, #4
-+	cbz	x1, .Lskip_brbe_\@
-+
-+	mov	x0, xzr
-+	orr	x0, x0, #HFGITR_EL2_nBRBIALL
-+	orr	x0, x0, #HFGITR_EL2_nBRBINJ
-+	msr_s	SYS_HFGITR_EL2, x0
-+
-+.Lskip_brbe_\@:
- 	mrs	x1, id_aa64pfr0_el1		// AMU traps UNDEF without AMU
- 	ubfx	x1, x1, #ID_AA64PFR0_EL1_AMU_SHIFT, #4
- 	cbz	x1, .Lskip_fgt_\@
--- 
-2.25.1
+# selftests: x86: lam_64
+# # Unsupported LAM feature!
+not ok 19 selftests: x86: lam_64 # exit=255
 
+
+links,
+ - https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.4-rc2/testrun/16949493/suite/kselftest-x86/tests/
+ - https://qa-reports.linaro.org/lkft/linux-mainline-master/build/v6.4-rc2/testrun/16949493/suite/kselftest-x86/test/x86_syscall_numbering_64/history/?page=2
+
+
+Steps to reproduce:
+------------
+# To install tuxrun on your system globally:
+# sudo pip3 install -U tuxrun==0.42.0
+#
+# See https://tuxrun.org/ for complete documentation.
+
+tuxrun   \
+ --runtime podman   \
+ --device qemu-x86_64   \
+ --boot-args rw   \
+ --kernel https://storage.tuxsuite.com/public/linaro/lkft/builds/2PnaPptGlD8AJHQHUvVnCbca522/bzImage
+  \
+ --modules https://storage.tuxsuite.com/public/linaro/lkft/builds/2PnaPptGlD8AJHQHUvVnCbca522/modules.tar.xz
+  \
+ --rootfs https://storage.tuxboot.com/debian/bookworm/amd64/rootfs.ext4.xz   \
+ --parameters SKIPFILE=skipfile-lkft.yaml   \
+ --parameters KSELFTEST=https://storage.tuxsuite.com/public/linaro/lkft/builds/2PnaPptGlD8AJHQHUvVnCbca522/kselftest.tar.xz
+  \
+ --image docker.io/lavasoftware/lava-dispatcher:2023.01.0020.gc1598238f   \
+ --tests kselftest-x86   \
+ --timeouts boot=15
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
