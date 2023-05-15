@@ -2,118 +2,500 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1BD0702CBB
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:30:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C1309702C94
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:23:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241835AbjEOMap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 08:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54866 "EHLO
+        id S241786AbjEOMXD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 08:23:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240917AbjEOMam (ORCPT
+        with ESMTP id S229679AbjEOMW7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 08:30:42 -0400
-X-Greylist: delayed 642 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 15 May 2023 05:30:40 PDT
-Received: from mail-m2836.qiye.163.com (mail-m2836.qiye.163.com [103.74.28.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8D0E19C
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:30:40 -0700 (PDT)
-Received: from ubuntu.localdomain (unknown [36.170.45.137])
-        by mail-m2836.qiye.163.com (Hmail) with ESMTPA id 796BFC0237;
-        Mon, 15 May 2023 20:19:54 +0800 (CST)
-From:   Yu Chen <chen.yu@easystack.cn>
-To:     minyard@acm.org
-Cc:     openipmi-developer@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, chen.yu@easystack.cn
-Subject: [PATCH] watchdog: Avoid 100% CPU usage during reading watchdog when a task get signal
-Date:   Mon, 15 May 2023 05:19:41 -0700
-Message-Id: <20230515121941.59859-1-chen.yu@easystack.cn>
-X-Mailer: git-send-email 2.25.1
+        Mon, 15 May 2023 08:22:59 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2475C1BD
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:22:57 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id E183866031DA;
+        Mon, 15 May 2023 13:22:54 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684153375;
+        bh=98B5mJTAUSmVKru8czA0oh+6LAGepM46W0mrjhZI4Oo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=PV3ty7dex/OyBcCnmX4b3QfFuoxppPLa+W6rlkQWbI9M9eB3rqPSiobVwSizmSln8
+         w23OlQA1JyeOMH5P8tubC4GPfgeXpTl3L8TLqeBV//iFPSmpvQodJ58AuW8hzuFLYC
+         Dptl97l32kis0bZI3CXCsTcnK7rbYv226L03/Q3seWNz4wOGtMcaeqMk0zoPVJQ/MG
+         lqtwjesOW813Jy3YEGSDlQwASoHJJo4r+FSpcmvQtv1XNtmHj326bfsEokYyAWidNX
+         yUFJy73AGMHAlu/gmWIu6oMp7naCB3W+1d+OkKGe+8grQV7ANylJ1gCGwJa/qpBq8b
+         COILUkevTd5bA==
+Message-ID: <cd6067b2-660a-8f2c-697d-26814a9dc131@collabora.com>
+Date:   Mon, 15 May 2023 14:22:52 +0200
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-        tZV1koWUFJQjdXWS1ZQUlXWQ8JGhUIEh9ZQVkZHRkeVhpIQk0YS0xNTU5KSlUZERMWGhIXJBQOD1
-        lXWRgSC1lBWUhNVUpMS1VPTlVKSExZV1kWGg8SFR0UWUFZT0tIVUpKS0hKQ1VKS0tVS1kG
-X-HM-Tid: 0a881f5a58b1841ekuqw796bfc0237
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MC46EBw6SzJPNxxIDz0MARYR
-        NRUaCi5VSlVKTUNPSk5ISkJOSU9LVTMWGhIXVRgTHhVVAg47HhoIAggPGhgQVRgVRVlXWRILWUFZ
-        SE1VSkxLVU9OVUpITFlXWQgBWUFIS0pKNwY+
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH v2 2/2] phy: mtk-mipi-csi: add driver for CSI phy
+Content-Language: en-US
+To:     Julien Stephan <jstephan@baylibre.com>
+Cc:     krzysztof.kozlowski@linaro.org, robh@kernel.org,
+        chunkuang.hu@kernel.org, linux-mediatek@lists.infradead.org,
+        Phi-bang Nguyen <pnguyen@baylibre.com>,
+        Louis Kuo <louis.kuo@mediatek.com>,
+        Chunfeng Yun <chunfeng.yun@mediatek.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Andy Hsieh <andy.hsieh@mediatek.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        open list <linux-kernel@vger.kernel.org>,
+        "moderated list:ARM/Mediatek USB3 PHY DRIVER" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
+        "open list:DRM DRIVERS FOR MEDIATEK" 
+        <dri-devel@lists.freedesktop.org>
+References: <20230515090551.1251389-1-jstephan@baylibre.com>
+ <20230515090551.1251389-3-jstephan@baylibre.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230515090551.1251389-3-jstephan@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A simple reproducer demonstrating the problem: (use ipmi_watchdog.ko)
+Il 15/05/23 11:05, Julien Stephan ha scritto:
+> From: Phi-bang Nguyen <pnguyen@baylibre.com>
+> 
+> This is a new driver that supports the MIPI CSI CD-PHY version 0.5
+> 
+> The number of PHYs depend on the soc.
+> 
+> Signed-off-by: Louis Kuo <louis.kuo@mediatek.com>
+> Signed-off-by: Phi-bang Nguyen <pnguyen@baylibre.com>
+> [Julien Stephan: use GENMASK]
+> [Julien Stephan: refactor code]
+> [Julien Stephan: update device tree support and probe function]
+> Co-developed-by: Julien Stephan <jstephan@baylibre.com>
+> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
+> ---
+>   MAINTAINERS                                   |   1 +
+>   drivers/phy/mediatek/Kconfig                  |   8 +
+>   drivers/phy/mediatek/Makefile                 |   2 +
+>   .../mediatek/phy-mtk-mipi-csi-0-5-rx-reg.h    |  58 ++++
+>   drivers/phy/mediatek/phy-mtk-mipi-csi-0-5.c   | 257 ++++++++++++++++++
+>   5 files changed, 326 insertions(+)
+>   create mode 100644 drivers/phy/mediatek/phy-mtk-mipi-csi-0-5-rx-reg.h
+>   create mode 100644 drivers/phy/mediatek/phy-mtk-mipi-csi-0-5.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 44f0ff11e984..fc2766cb50d3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -13103,6 +13103,7 @@ M:	Julien Stephan <jstephan@baylibre.com>
+>   M:	Andy Hsieh <andy.hsieh@mediatek.com>
+>   S:	Supported
+>   F:	Documentation/devicetree/bindings/phy/mediatek,phy-mipi-csi-0-5.yaml
+> +F:	drivers/phy/mediatek/phy-mtk-mipi-csi-0-5*
+>   
+>   MEDIATEK MMC/SD/SDIO DRIVER
+>   M:	Chaotian Jing <chaotian.jing@mediatek.com>
+> diff --git a/drivers/phy/mediatek/Kconfig b/drivers/phy/mediatek/Kconfig
+> index 3125ecb5d119..452bc7ac5ce5 100644
+> --- a/drivers/phy/mediatek/Kconfig
+> +++ b/drivers/phy/mediatek/Kconfig
+> @@ -74,3 +74,11 @@ config PHY_MTK_DP
+>   	select GENERIC_PHY
+>   	help
+>   	  Support DisplayPort PHY for MediaTek SoCs.
+> +
+> +config PHY_MTK_MIPI_CSI_0_5
+> +	tristate "MediaTek CSI CD-PHY v 0.5 Driver"
 
-In one terminal:
+"MediaTek CSI CD-PHY v0.5 Driver"
 
-$ cat /dev/watchdog
-...
+> +	depends on ARCH_MEDIATEK && OF
+> +	select GENERIC_PHY
+> +	help
+> +	  Enable this to support the MIPI CSI CD-PHY receiver version 0.5.
+> +	  The driver supports multiple CSI cdphy ports simultaneously.
+> diff --git a/drivers/phy/mediatek/Makefile b/drivers/phy/mediatek/Makefile
+> index fb1f8edaffa7..8eb7b8747c67 100644
+> --- a/drivers/phy/mediatek/Makefile
+> +++ b/drivers/phy/mediatek/Makefile
+> @@ -18,3 +18,5 @@ phy-mtk-mipi-dsi-drv-y			:= phy-mtk-mipi-dsi.o
+>   phy-mtk-mipi-dsi-drv-y			+= phy-mtk-mipi-dsi-mt8173.o
+>   phy-mtk-mipi-dsi-drv-y			+= phy-mtk-mipi-dsi-mt8183.o
+>   obj-$(CONFIG_PHY_MTK_MIPI_DSI)		+= phy-mtk-mipi-dsi-drv.o
+> +
+> +obj-$(CONFIG_PHY_MTK_MIPI_CSI_0_5)	+= phy-mtk-mipi-csi-0-5.o
+> diff --git a/drivers/phy/mediatek/phy-mtk-mipi-csi-0-5-rx-reg.h b/drivers/phy/mediatek/phy-mtk-mipi-csi-0-5-rx-reg.h
+> new file mode 100644
+> index 000000000000..e9a7f1ab3e2f
+> --- /dev/null
+> +++ b/drivers/phy/mediatek/phy-mtk-mipi-csi-0-5-rx-reg.h
+> @@ -0,0 +1,58 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#ifndef __PHY_MTK__MIPI_CSI__C_0_5_RX_REG_H__
+> +#define __PHY_MTK__MIPI_CSI__C_0_5_RX_REG_H__
 
-In another terminal:
+What about....
 
-$ ps -aux | grep cat
-14755 pts/1    R+    43:00 cat /dev/watchdog
-51943 pts/2    S+     0:00 grep --color=auto cat
+__PHY_MTK_MIPI_CSI_V_0_5_RX_REG_H ?
 
-$ kill -9 14755
-$
-$ cat /proc/14755/status | grep SigPnd
-SigPnd: 0000000000000100
-$
-$ top
+> +
+> +/*
+> + * CSI1 and CSI2 are identical, and similar to CSI0. All CSIx macros are
+> + * applicable to the three PHYs. Where differences exist, they are denoted by
+> + * macro names using CSI0 and CSI1, the latter being applicable to CSI1 and
+> + * CSI2 alike.
+> + */
+> +
+> +#define MIPI_RX_ANA00_CSIxA			0x0000
 
-Tasks: 1049 total,   2 running, 1047 sleeping,   0 stopped,   0 zombie
-%Cpu(s): 0.0 us, 1.0 sy, 0.0 ni, 98.9 id, 0.0 wa, 0.0 hi, 0.0 si, 0.0 st
-MiB Mem : 522594.8 total, 517241.4 free,  2922.1 used,   2431.2 buff/cache
-MiB Swap:      0.0 total,      0.0 free,     0.0 used. 516589.2 avail Mem
+I would rename all those from "CSIx" to "CSIX" (so, just toupper('x')).
 
-PID USER    PR  NI    VIRT    RES    SHR S  %CPU  %MEM  TIME+ COMMAND
-14755 root  20   0  215552   1024    576 R 100.0  0.0  0:15.12 cat
-53417 root  20   0  224960   7040   3648 R   0.7  0.0  0:00.10 top
-11 root     20   0       0      0      0 I   0.3  0.0  0:02.85 rcu_sched
-1772 root   20   0  512256 387776 380800 S   0.3  0.1  0:32.05 python
+> +#define RG_CSI0A_CPHY_EN			BIT(0)
 
-We can see that when the cat process gets the signal, the CPU usage
-is 100%, Since signal_pending is true, the pick_next_task function
-in schedule always returns itself, it retries schedule indefinitely.
-ipmi_read() will busyloop.
+..snip..
 
-Signed-off-by: Yu Chen <chen.yu@easystack.cn>
----
- drivers/char/ipmi/ipmi_watchdog.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+> +
+> +#endif
+> diff --git a/drivers/phy/mediatek/phy-mtk-mipi-csi-0-5.c b/drivers/phy/mediatek/phy-mtk-mipi-csi-0-5.c
+> new file mode 100644
+> index 000000000000..ae2d3dc9631d
+> --- /dev/null
+> +++ b/drivers/phy/mediatek/phy-mtk-mipi-csi-0-5.c
+> @@ -0,0 +1,257 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/delay.h>
+> +#include <linux/io.h>
+> +#include <linux/module.h>
+> +#include <linux/mutex.h>
+> +#include <linux/phy/phy.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/slab.h>
+> +
+> +#include "phy-mtk-io.h"
+> +#include "phy-mtk-mipi-csi-0-5-rx-reg.h"
+> +
+> +#define CSIxB_OFFSET		0x1000
 
-diff --git a/drivers/char/ipmi/ipmi_watchdog.c b/drivers/char/ipmi/ipmi_watchdog.c
-index 0d4a8dcac..173ed4266 100644
---- a/drivers/char/ipmi/ipmi_watchdog.c
-+++ b/drivers/char/ipmi/ipmi_watchdog.c
-@@ -803,6 +803,11 @@ static ssize_t ipmi_read(struct file *file,
- 		init_waitqueue_entry(&wait, current);
- 		add_wait_queue(&read_q, &wait);
- 		while (!data_to_read) {
-+			if (signal_pending(current)) {
-+				remove_wait_queue(&read_q, &wait);
-+				rv = -ERESTARTSYS;
-+				goto out;
-+			}
- 			set_current_state(TASK_INTERRUPTIBLE);
- 			spin_unlock_irq(&ipmi_read_lock);
- 			schedule();
-@@ -810,10 +815,6 @@ static ssize_t ipmi_read(struct file *file,
- 		}
- 		remove_wait_queue(&read_q, &wait);
- 
--		if (signal_pending(current)) {
--			rv = -ERESTARTSYS;
--			goto out;
--		}
- 	}
- 	data_to_read = 0;
- 
--- 
-2.27.0
+What if we grab two (or three?) iospaces from devicetree?
+
+- base (global)
+- csi_a
+- csi_b
+
+That would make it possible to maybe eventually extend this driver to more
+versions (older or newer) of the CSI PHY IP without putting fixes offsets
+inside of platform data structures and such.
+
+> +
+> +struct mtk_mipi_dphy;
+> +
+> +struct mtk_mipi_dphy_port {
+> +	struct device *dev;
+> +	void __iomem *base;
+> +	struct phy *phy;
+> +	bool is_cdphy;
+> +};
+> +
+> +static int mtk_mipi_phy_power_on(struct phy *phy)
+> +{
+> +	struct mtk_mipi_dphy_port *port = phy_get_drvdata(phy);
+> +	void __iomem *base = port->base;
+> +
+> +	/*
+> +	 * Only DPHY is supported for now,
+> +	 * so set analog phy mode to DPHY in CDPHY compatible PHYs
+> +	 */
+> +	if (port->is_cdphy) {
+> +		mtk_phy_update_field(base + MIPI_RX_ANA00_CSIxA,
+> +				     RG_CSI0A_CPHY_EN, 0);
+> +		mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA00_CSIxA,
+> +				     RG_CSI0A_CPHY_EN, 0);
+> +	}
+> +
+> +	/*
+> +	 * Lane configuration:
+> +	 *
+> +	 * Only 4 data + 1 clock is supported for now with the following mapping:
+> +	 *
+> +	 * CSIxA_LNR0 --> D2
+> +	 * CSIxA_LNR1 --> D0
+> +	 * CSIxA_LNR2 --> C
+> +	 * CSIxB_LNR0 --> D1
+> +	 * CSIxB_LNR1 --> D3
+> +	 */
+> +	mtk_phy_update_field(base + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_DPHY_L0_CKMODE_EN, 0);
+> +	mtk_phy_update_field(base + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_DPHY_L0_CKSEL, 1);
+> +	mtk_phy_update_field(base + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_DPHY_L1_CKMODE_EN, 0);
+> +	mtk_phy_update_field(base + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_DPHY_L1_CKSEL, 1);
+> +	mtk_phy_update_field(base + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_DPHY_L2_CKMODE_EN, 1);
+> +	mtk_phy_update_field(base + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_DPHY_L2_CKSEL, 1);
+> +
+> +	mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_DPHY_L0_CKMODE_EN, 0);
+> +	mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_DPHY_L0_CKSEL, 1);
+> +	mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_DPHY_L1_CKMODE_EN, 0);
+> +	mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_DPHY_L1_CKSEL, 1);
+> +	mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_DPHY_L2_CKMODE_EN, 0);
+> +	mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_DPHY_L2_CKSEL, 1);
+> +
+> +	/* Byte clock invert */
+> +	mtk_phy_update_field(base + MIPI_RX_ANAA8_CSIxA,
+> +			     RG_CSIxA_CDPHY_L0_T0_BYTECK_INVERT, 1);
+> +	mtk_phy_update_field(base + MIPI_RX_ANAA8_CSIxA,
+> +			     RG_CSIxA_DPHY_L1_BYTECK_INVERT, 1);
+> +	mtk_phy_update_field(base + MIPI_RX_ANAA8_CSIxA,
+> +			     RG_CSIxA_CDPHY_L2_T1_BYTECK_INVERT, 1);
+> +
+> +	mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANAA8_CSIxA,
+> +			     RG_CSIxA_CDPHY_L0_T0_BYTECK_INVERT, 1);
+> +	mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANAA8_CSIxA,
+> +			     RG_CSIxA_DPHY_L1_BYTECK_INVERT, 1);
+> +	mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANAA8_CSIxA,
+> +			     RG_CSIxA_CDPHY_L2_T1_BYTECK_INVERT, 1);
+> +
+> +	/* Start ANA EQ tuning */
+> +	if (port->is_cdphy) {
+
+statid void mtk_phy_csi_analog_eq_tune(struct mtk_mipi_dphy_port *port)
+{
+	if (port->is_cdphy)
+		mtk_phy_csi_dphy_ana_eq_tune(...)
+	else
+		mtk_phy_csi_cphy_ana_eq_tune(...)
+
+	/* CPHY/DPHY common "end of tuning" sequence below */
+	mtk_phy_update_field( ... stuff ...);
+}
+
+...then all those calls will also fit in one line due to the reduced
+indentation, improving readability and reducing line count.
+
+> +		mtk_phy_update_field(base + MIPI_RX_ANA18_CSIxA,
+> +				     RG_CSI0A_L0_T0AB_EQ_IS, 1);
+> +		mtk_phy_update_field(base + MIPI_RX_ANA18_CSIxA,
+> +				     RG_CSI0A_L0_T0AB_EQ_BW, 1);
+> +		mtk_phy_update_field(base + MIPI_RX_ANA1C_CSIxA,
+> +				     RG_CSI0A_L1_T1AB_EQ_IS, 1);
+> +		mtk_phy_update_field(base + MIPI_RX_ANA1C_CSIxA,
+> +				     RG_CSI0A_L1_T1AB_EQ_BW, 1);
+> +		mtk_phy_update_field(base + MIPI_RX_ANA20_CSI0A,
+> +				     RG_CSI0A_L2_T1BC_EQ_IS, 1);
+> +		mtk_phy_update_field(base + MIPI_RX_ANA20_CSI0A,
+> +				     RG_CSI0A_L2_T1BC_EQ_BW, 1);
+> +
+> +		mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA18_CSIxA,
+> +				     RG_CSI0A_L0_T0AB_EQ_IS, 1);
+> +		mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA18_CSIxA,
+> +				     RG_CSI0A_L0_T0AB_EQ_BW, 1);
+> +		mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA1C_CSIxA,
+> +				     RG_CSI0A_L1_T1AB_EQ_IS, 1);
+> +		mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA1C_CSIxA,
+> +				     RG_CSI0A_L1_T1AB_EQ_BW, 1);
+> +		mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA20_CSI0A,
+> +				     RG_CSI0A_L2_T1BC_EQ_IS, 1);
+> +		mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA20_CSI0A,
+> +				     RG_CSI0A_L2_T1BC_EQ_BW, 1);
+> +	} else {
+> +		mtk_phy_update_field(base + MIPI_RX_ANA18_CSIxA,
+> +				     RG_CSI1A_L0_EQ_IS, 1);
+> +		mtk_phy_update_field(base + MIPI_RX_ANA18_CSIxA,
+> +				     RG_CSI1A_L0_EQ_BW, 1);
+> +		mtk_phy_update_field(base + MIPI_RX_ANA18_CSIxA,
+> +				     RG_CSI1A_L1_EQ_IS, 1);
+> +		mtk_phy_update_field(base + MIPI_RX_ANA18_CSIxA,
+> +				     RG_CSI1A_L1_EQ_BW, 1);
+> +		mtk_phy_update_field(base + MIPI_RX_ANA1C_CSIxA,
+> +				     RG_CSI1A_L2_EQ_IS, 1);
+> +		mtk_phy_update_field(base + MIPI_RX_ANA1C_CSIxA,
+> +				     RG_CSI1A_L2_EQ_BW, 1);
+> +
+> +		mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA18_CSIxA,
+> +				     RG_CSI1A_L0_EQ_IS, 1);
+> +		mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA18_CSIxA,
+> +				     RG_CSI1A_L0_EQ_BW, 1);
+> +		mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA18_CSIxA,
+> +				     RG_CSI1A_L1_EQ_IS, 1);
+> +		mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA18_CSIxA,
+> +				     RG_CSI1A_L1_EQ_BW, 1);
+> +		mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA1C_CSIxA,
+> +				     RG_CSI1A_L2_EQ_IS, 1);
+> +		mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA1C_CSIxA,
+> +				     RG_CSI1A_L2_EQ_BW, 1);
+> +	}
+> +
+> +	/* End ANA EQ tuning */
+> +	mtk_phy_set_bits(base + MIPI_RX_ANA40_CSIxA, 0x90);
+> +
+> +	mtk_phy_update_field(base + MIPI_RX_ANA24_CSIxA,
+> +			     RG_CSIxA_RESERVE, 0x40);
+> +	mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA24_CSIxA,
+> +			     RG_CSIxA_RESERVE, 0x40);
+> +	mtk_phy_update_field(base + MIPI_RX_WRAPPER80_CSIxA,
+> +			     CSR_CSI_RST_MODE, 0);
+> +	mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_WRAPPER80_CSIxA,
+> +			     CSR_CSI_RST_MODE, 0);
+> +	/* ANA power on */
+> +	mtk_phy_update_field(base + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_BG_CORE_EN, 1);
+> +	mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_BG_CORE_EN, 1);
+> +	usleep_range(20, 40);
+> +	mtk_phy_update_field(base + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_BG_LPF_EN, 1);
+> +	mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_BG_LPF_EN, 1);
+> +
+> +	return 0;
+> +}
+> +
+> +static int mtk_mipi_phy_power_off(struct phy *phy)
+> +{
+> +	struct mtk_mipi_dphy_port *port = phy_get_drvdata(phy);
+> +	void __iomem *base = port->base;
+> +
+> +	/* Disable MIPI BG. */
+> +	mtk_phy_update_field(base + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_BG_CORE_EN, 0);
+> +	mtk_phy_update_field(base + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_BG_LPF_EN, 0);
+> +
+> +	mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_BG_CORE_EN, 0);
+> +	mtk_phy_update_field(base + CSIxB_OFFSET + MIPI_RX_ANA00_CSIxA,
+> +			     RG_CSIxA_BG_LPF_EN, 0);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct phy_ops mtk_dphy_ops = {
+> +	.power_on	= mtk_mipi_phy_power_on,
+> +	.power_off	= mtk_mipi_phy_power_off,
+> +	.owner		= THIS_MODULE,
+> +};
+> +
+> +static int mtk_mipi_dphy_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct phy_provider *phy_provider;
+> +	struct mtk_mipi_dphy_port *port;
+> +	struct phy *phy;
+> +
+> +	port = devm_kzalloc(dev, sizeof(*port), GFP_KERNEL);
+> +	if (!port)
+> +		return -ENOMEM;
+> +
+> +	dev_set_drvdata(dev, port);
+> +
+> +	port->dev = dev;
+> +
+> +	port->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(port->base))
+> +		return PTR_ERR(port->base);
+> +
+> +	port->is_cdphy = of_property_read_bool(dev->of_node, "mediatek,is_cdphy");
+
+This driver doesn't support C-PHY mode, so you either add support for that, or in
+my opinion you should simply refuse to probe it, as it is *dysfunctional* for the
+unsupported case (and might even introduce unstabilities).
+
+	/* At the moment, only D-PHY mode is supported */
+	if (!port->is_cdphy)
+		return -EINVAL;
+
+Also, please don't use underscores for devicetree properties: "mediatek,is-cdphy"
+is fine.
+
+> +
+> +	phy = devm_phy_create(dev, NULL, &mtk_dphy_ops);
+> +	if (IS_ERR(phy)) {
+> +		dev_err(dev, "Failed to create PHY: %ld\n", PTR_ERR(phy));
+> +		return PTR_ERR(phy);
+> +	}
+> +
+> +	port->phy = phy;
+> +	phy_set_drvdata(phy, port);
+> +
+> +	phy_provider = devm_of_phy_provider_register(dev, of_phy_simple_xlate);
+> +	if (IS_ERR(phy_provider)) {
+> +		dev_err(dev, "Failed to register PHY provider: %ld\n",
+> +			PTR_ERR(phy_provider));
+> +		return PTR_ERR(phy_provider);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id mtk_mipi_dphy_of_match[] = {
+> +	{.compatible = "mediatek,phy-mipi-csi-0-5"},
+
+leave spaces.
+
+	{ .comp... " },
+
+...and always end with
+
+	{ /* sentinel */ }
+
+
+Also, please follow what the other PHY drivers do and use a SoC model,
+example:
+
+"mediatek,mt7777-csi-phy", or "mediatek,mt8888-csi-rx"
+
+where the latter would make more sense imo.
+
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, mtk_mipi_dphy_of_match);
+> +
+> +static struct platform_driver mipi_dphy_pdrv = {
+> +	.probe = mtk_mipi_dphy_probe,
+> +	.driver	= {
+> +		.name	= "mtk-mipi-csi-0-5",
+> +		.of_match_table = mtk_mipi_dphy_of_match,
+> +	},
+> +};
+> +
+
+remove extra blank line here.
+
+> +module_platform_driver(mipi_dphy_pdrv);
+> +
+> +MODULE_DESCRIPTION("MTK mipi csi cdphy driver");
+
+"MediaTek MIPI CSI CDPHY Driver"
+
+> +MODULE_AUTHOR("Louis Kuo <louis.kuo@mediatek.com>");
+> +MODULE_LICENSE("GPL");
+
+Regards,
+Angelo
 
