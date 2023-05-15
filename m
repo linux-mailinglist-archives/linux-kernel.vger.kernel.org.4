@@ -2,268 +2,518 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67210704010
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:52:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DF10704019
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:55:28 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245322AbjEOVwi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 17:52:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41182 "EHLO
+        id S245604AbjEOVz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 17:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243395AbjEOVwg (ORCPT
+        with ESMTP id S245158AbjEOVzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 17:52:36 -0400
-Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [IPv6:2001:4b7a:2000:18::166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318B4A275;
-        Mon, 15 May 2023 14:52:33 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 7E5223F327;
-        Mon, 15 May 2023 23:52:31 +0200 (CEST)
-Date:   Mon, 15 May 2023 23:52:30 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, dmitry.baryshkov@linaro.org,
-        andersson@kernel.org, quic_abhinavk@quicinc.com,
-        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 6/8] drm/msm/dpu: separate DSC flush update out of
- interface
-Message-ID: <r5rbbaz5gms5d2wdheuvqoij4ld5qiyz2kxrjjqkpyzy4v2zdq@44q2zgkrxpgt>
-References: <1683914423-17612-1-git-send-email-quic_khsieh@quicinc.com>
- <1683914423-17612-7-git-send-email-quic_khsieh@quicinc.com>
+        Mon, 15 May 2023 17:55:22 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D34FCA5E1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 14:55:17 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id 4fb4d7f45d1cf-50bceaf07b8so24309650a12.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 14:55:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684187716; x=1686779716;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MBufFDPCgb8FzjQLH8nY1KMCUfOc5xDHFgBLnp3EL70=;
+        b=ULrctO43Pao4De+rNpLZXSKMgCwdoSmaAzqAZbXtO4HwOkwBcZjzSJ0AjyQQnujE/0
+         cj8scQpJ6mh7xFwrQRMi36tpIY1J87rDw4kapB6wgFjd/NZAyW86G9COEuRjOP7aW+VV
+         dyNV8LR0UBTa/hhyGyoZGWpxwK1dbGidfvG10=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684187716; x=1686779716;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MBufFDPCgb8FzjQLH8nY1KMCUfOc5xDHFgBLnp3EL70=;
+        b=XjqRmnSDScDz7GEGO7GAj+LnJEDbbtYMMGz3ONEVOp14RNzQUmZ2n9cnq5uISSrn97
+         FoHhE5jjHNrbqMnBaQsY3oQ+SefPa6FJPSorOV++HpVSxKjhf+Yu8uMEvwVaLXeCh2nI
+         HjAQqRAzKX3Z2+HUED6f7kwsKbDkbfVP4nfXv4CY8US7bQXUCJhcL2uplvK6VfYL8Jbm
+         yFHeWo4/h1kPm4eA15q0rXJOoF9rvbp3MiyYiIgYRceqrNevGQykNiIUzvJYyE1GgkgY
+         +sHwV3UoRPhzDlagjyqvXuaFX4Wb8sgEPcliRghBnzkN0NeuYd/Mbz3wK3o8ogrZdXqr
+         2J4g==
+X-Gm-Message-State: AC+VfDw3g1PQgEhQBM/liV8NcHQ7CNP/6FYTixR+dUvXA6eEwBV8VO55
+        3aah5VAodAe8sI+oXkddFwQ1z8WiI7W8d3zJ2pGXiQ==
+X-Google-Smtp-Source: ACHHUZ463PeFDmXcfMVew3EXs0kR201Z/7XoYxMODWyV+My+VRnmSJ8zQgzHBJ/GhsgwhmuCIrNB6QdfsiuJTHf3bk0=
+X-Received: by 2002:a17:907:9482:b0:968:4d51:800b with SMTP id
+ dm2-20020a170907948200b009684d51800bmr25417043ejc.1.1684187716125; Mon, 15
+ May 2023 14:55:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1683914423-17612-7-git-send-email-quic_khsieh@quicinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230420004850.297045-1-sarthakkukreti@chromium.org>
+ <20230506062909.74601-1-sarthakkukreti@chromium.org> <20230506062909.74601-3-sarthakkukreti@chromium.org>
+ <20230512183729.GE858791@frogsfrogsfrogs>
+In-Reply-To: <20230512183729.GE858791@frogsfrogsfrogs>
+From:   Sarthak Kukreti <sarthakkukreti@chromium.org>
+Date:   Mon, 15 May 2023 14:55:05 -0700
+Message-ID: <CAG9=OMPpNOrkwN07bdPS61Rg+osu72Ge_RLZJoPLRsAEAqNhFA@mail.gmail.com>
+Subject: Re: [PATCH v6 2/5] block: Introduce provisioning primitives
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     dm-devel@redhat.com, linux-block@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, Jens Axboe <axboe@kernel.dk>,
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>,
+        Stefan Hajnoczi <stefanha@redhat.com>,
+        Alasdair Kergon <agk@redhat.com>,
+        Mike Snitzer <snitzer@kernel.org>,
+        Christoph Hellwig <hch@infradead.org>,
+        Brian Foster <bfoster@redhat.com>,
+        "Theodore Ts'o" <tytso@mit.edu>,
+        Andreas Dilger <adilger.kernel@dilger.ca>,
+        Bart Van Assche <bvanassche@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-12 11:00:21, Kuogee Hsieh wrote:
-> 
-> Current DSC flush update is piggyback inside dpu_hw_ctl_intf_cfg_v1().
+On Fri, May 12, 2023 at 11:37=E2=80=AFAM Darrick J. Wong <djwong@kernel.org=
+> wrote:
+>
+> On Fri, May 05, 2023 at 11:29:06PM -0700, Sarthak Kukreti wrote:
+> > Introduce block request REQ_OP_PROVISION. The intent of this request
+> > is to request underlying storage to preallocate disk space for the give=
+n
+> > block range. Block devices that support this capability will export
+> > a provision limit within their request queues.
+> >
+> > This patch also adds the capability to call fallocate() in mode 0
+> > on block devices, which will send REQ_OP_PROVISION to the block
+> > device for the specified range,
+> >
+> > Signed-off-by: Sarthak Kukreti <sarthakkukreti@chromium.org>
+> > ---
+> >  block/blk-core.c          |  5 ++++
+> >  block/blk-lib.c           | 53 +++++++++++++++++++++++++++++++++++++++
+> >  block/blk-merge.c         | 18 +++++++++++++
+> >  block/blk-settings.c      | 19 ++++++++++++++
+> >  block/blk-sysfs.c         |  9 +++++++
+> >  block/bounce.c            |  1 +
+> >  block/fops.c              | 10 +++++++-
+> >  include/linux/bio.h       |  6 +++--
+> >  include/linux/blk_types.h |  5 +++-
+> >  include/linux/blkdev.h    | 16 ++++++++++++
+> >  10 files changed, 138 insertions(+), 4 deletions(-)
+> >
+> > diff --git a/block/blk-core.c b/block/blk-core.c
+> > index 42926e6cb83c..4a2342ba3a8b 100644
+> > --- a/block/blk-core.c
+> > +++ b/block/blk-core.c
+> > @@ -123,6 +123,7 @@ static const char *const blk_op_name[] =3D {
+> >       REQ_OP_NAME(WRITE_ZEROES),
+> >       REQ_OP_NAME(DRV_IN),
+> >       REQ_OP_NAME(DRV_OUT),
+> > +     REQ_OP_NAME(PROVISION)
+> >  };
+> >  #undef REQ_OP_NAME
+> >
+> > @@ -798,6 +799,10 @@ void submit_bio_noacct(struct bio *bio)
+> >               if (!q->limits.max_write_zeroes_sectors)
+> >                       goto not_supported;
+> >               break;
+> > +     case REQ_OP_PROVISION:
+> > +             if (!q->limits.max_provision_sectors)
+> > +                     goto not_supported;
+> > +             break;
+> >       default:
+> >               break;
+> >       }
+> > diff --git a/block/blk-lib.c b/block/blk-lib.c
+> > index e59c3069e835..647b6451660b 100644
+> > --- a/block/blk-lib.c
+> > +++ b/block/blk-lib.c
+> > @@ -343,3 +343,56 @@ int blkdev_issue_secure_erase(struct block_device =
+*bdev, sector_t sector,
+> >       return ret;
+> >  }
+> >  EXPORT_SYMBOL(blkdev_issue_secure_erase);
+> > +
+> > +/**
+> > + * blkdev_issue_provision - provision a block range
+> > + * @bdev:    blockdev to write
+> > + * @sector:  start sector
+> > + * @nr_sects:        number of sectors to provision
+> > + * @gfp_mask:        memory allocation flags (for bio_alloc)
+> > + *
+> > + * Description:
+> > + *  Issues a provision request to the block device for the range of se=
+ctors.
+> > + *  For thinly provisioned block devices, this acts as a signal for th=
+e
+> > + *  underlying storage pool to allocate space for this block range.
+> > + */
+> > +int blkdev_issue_provision(struct block_device *bdev, sector_t sector,
+> > +             sector_t nr_sects, gfp_t gfp)
+> > +{
+> > +     sector_t bs_mask =3D (bdev_logical_block_size(bdev) >> 9) - 1;
+> > +     unsigned int max_sectors =3D bdev_max_provision_sectors(bdev);
+> > +     struct bio *bio =3D NULL;
+> > +     struct blk_plug plug;
+> > +     int ret =3D 0;
+> > +
+> > +     if (max_sectors =3D=3D 0)
+> > +             return -EOPNOTSUPP;
+> > +     if ((sector | nr_sects) & bs_mask)
+> > +             return -EINVAL;
+> > +     if (bdev_read_only(bdev))
+> > +             return -EPERM;
+> > +
+> > +     blk_start_plug(&plug);
+> > +     for (;;) {
+> > +             unsigned int req_sects =3D min_t(sector_t, nr_sects, max_=
+sectors);
+> > +
+> > +             bio =3D blk_next_bio(bio, bdev, 0, REQ_OP_PROVISION, gfp)=
+;
+> > +             bio->bi_iter.bi_sector =3D sector;
+> > +             bio->bi_iter.bi_size =3D req_sects << SECTOR_SHIFT;
+> > +
+> > +             sector +=3D req_sects;
+> > +             nr_sects -=3D req_sects;
+> > +             if (!nr_sects) {
+> > +                     ret =3D submit_bio_wait(bio);
+> > +                     if (ret =3D=3D -EOPNOTSUPP)
+> > +                             ret =3D 0;
+>
+> Why do we convert EOPNOTSUPP to success here?  If the device suddenly
+> forgets how to provision space, wouldn't we want to pass that up to the
+> caller?
+>
+> (I'm not sure when this would happen -- perhaps the bdev has the general
+> provisioning capability but not for the specific range requested?)
+>
+Ah good catch, I initially wired it up to be less noisy in the kernel
+logs but left it behind accidentally. The error should definitely be
+passed through: one case where this can happen is if the device-mapper
+table comprises several underlying targets but only a few of them
+support provision. I'll fix this in v7.
 
-Can you rewrite "is piggyback"?  Something like "Currently DSC flushing
-happens during interface configuration".  And it's intf configuration
-**on the CTL**, which makes this extra confusing.
+Best
+Sarthak
 
-> This patch separates DSC flush away from dpu_hw_ctl_intf_cfg_v1() by
-
-Drop "This patch".  Then, separates -> Separate
-
-> adding dpu_hw_ctl_update_pending_flush_dsc_v1() to handle both per
-> DSC engine and DSC flush bits at same time to make it consistent with
-
-Make that per-DSC with a hyphen.
-
-> the location of flush programming of other dpu sub blocks.
-
-DPU sub-blocks.
-
-> 
-> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> ---
->  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 14 ++++++++++++--
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c  | 22 ++++++++++++++++------
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h  | 10 ++++++++++
->  3 files changed, 38 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> index ffa6f04..5cae70e 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
-> @@ -1834,12 +1834,18 @@ dpu_encoder_dsc_initial_line_calc(struct drm_dsc_config *dsc,
->  	return DIV_ROUND_UP(total_pixels, dsc->slice_width);
->  }
->  
-> -static void dpu_encoder_dsc_pipe_cfg(struct dpu_hw_dsc *hw_dsc,
-> +static void dpu_encoder_dsc_pipe_cfg(struct dpu_encoder_virt *dpu_enc,
-
-Why not pass hw_ctl directly?  The other blocks are directly passed as
-well, and the caller already has cur_master.  Otherwise we might as well
-inline the for loops.  Same question for the new _clr call added in
-patch 8/8.
-
-> +				     struct dpu_hw_dsc *hw_dsc,
->  				     struct dpu_hw_pingpong *hw_pp,
->  				     struct drm_dsc_config *dsc,
->  				     u32 common_mode,
->  				     u32 initial_lines)
->  {
-> +	struct dpu_encoder_phys *cur_master = dpu_enc->cur_master;
-> +	struct dpu_hw_ctl *ctl;
-> +
-> +	ctl = cur_master->hw_ctl;
-
-Assign this directly at declaration, just like cur_master (but
-irrelevant if you pass this directly instead).
-
-> +
->  	if (hw_dsc->ops.dsc_config)
->  		hw_dsc->ops.dsc_config(hw_dsc, dsc, common_mode, initial_lines);
->  
-> @@ -1854,6 +1860,9 @@ static void dpu_encoder_dsc_pipe_cfg(struct dpu_hw_dsc *hw_dsc,
->  
->  	if (hw_pp->ops.enable_dsc)
->  		hw_pp->ops.enable_dsc(hw_pp);
-> +
-> +	if (ctl->ops.update_pending_flush_dsc)
-> +		ctl->ops.update_pending_flush_dsc(ctl, hw_dsc->idx);
->  }
->  
->  static void dpu_encoder_prep_dsc(struct dpu_encoder_virt *dpu_enc,
-> @@ -1898,7 +1907,8 @@ static void dpu_encoder_prep_dsc(struct dpu_encoder_virt *dpu_enc,
->  	initial_lines = dpu_encoder_dsc_initial_line_calc(dsc, enc_ip_w);
->  
->  	for (i = 0; i < MAX_CHANNELS_PER_ENC; i++)
-> -		dpu_encoder_dsc_pipe_cfg(hw_dsc[i], hw_pp[i], dsc, dsc_common_mode, initial_lines);
-> +		dpu_encoder_dsc_pipe_cfg(dpu_enc, hw_dsc[i], hw_pp[i], dsc,
-> +					 dsc_common_mode, initial_lines);
->  }
->  
->  void dpu_encoder_prepare_for_kickoff(struct drm_encoder *drm_enc)
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> index 4f7cfa9..f3a50cc 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-> @@ -139,6 +139,11 @@ static inline void dpu_hw_ctl_trigger_flush_v1(struct dpu_hw_ctl *ctx)
->  				CTL_DSPP_n_FLUSH(dspp - DSPP_0),
->  				ctx->pending_dspp_flush_mask[dspp - DSPP_0]);
->  		}
-> +
-> +	if (ctx->pending_flush_mask & BIT(DSC_IDX))
-> +		DPU_REG_WRITE(&ctx->hw, CTL_DSC_FLUSH,
-> +			      ctx->pending_dsc_flush_mask);
-
-When are we setting this to zero again?
-
-Same question for the other masks, only the global pending_flush_mask
-and pending_dspp_flush_mask are reset in dpu_hw_ctl_clear_pending_flush.
-
-> +
->  	DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, ctx->pending_flush_mask);
->  }
->  
-> @@ -285,6 +290,13 @@ static void dpu_hw_ctl_update_pending_flush_merge_3d_v1(struct dpu_hw_ctl *ctx,
->  	ctx->pending_flush_mask |= BIT(MERGE_3D_IDX);
->  }
->  
-> +static void dpu_hw_ctl_update_pending_flush_dsc_v1(struct dpu_hw_ctl *ctx,
-> +						   enum dpu_dsc dsc_num)
-> +{
-> +	ctx->pending_dsc_flush_mask |= BIT(dsc_num - DSC_0);
-> +	ctx->pending_flush_mask |= BIT(DSC_IDX);
-> +}
-> +
->  static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl *ctx,
->  	enum dpu_dspp dspp, u32 dspp_sub_blk)
->  {
-> @@ -502,9 +514,6 @@ static void dpu_hw_ctl_intf_cfg_v1(struct dpu_hw_ctl *ctx,
->  	if ((test_bit(DPU_CTL_VM_CFG, &ctx->caps->features)))
->  		mode_sel = CTL_DEFAULT_GROUP_ID  << 28;
->  
-> -	if (cfg->dsc)
-> -		DPU_REG_WRITE(&ctx->hw, CTL_DSC_FLUSH, cfg->dsc);
-> -
->  	if (cfg->intf_mode_sel == DPU_CTL_MODE_SEL_CMD)
->  		mode_sel |= BIT(17);
->  
-> @@ -524,10 +533,8 @@ static void dpu_hw_ctl_intf_cfg_v1(struct dpu_hw_ctl *ctx,
->  	if (cfg->merge_3d)
->  		DPU_REG_WRITE(c, CTL_MERGE_3D_ACTIVE,
->  			      BIT(cfg->merge_3d - MERGE_3D_0));
-
-Can we have a newline here?
-
-> -	if (cfg->dsc) {
-> -		DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, DSC_IDX);
-
-Found the reason why this patch (as one of the few) is needed to get
-display working on my SM8150/SM8250 devices: the semantic change is that
-BIT() was missing around DSC_IDX here.
-(It wasn't hampering SDM845 because it doesn't have a configurable
- crossbar, i.e. DPU_CTL_ACTIVE_CFG)
-
-Manually reverting this patch and adding BIT() indeed also fixes the
-issue.
-
-This semantic change should be documented in the description and with a
-Fixes: (and Reported-by:?), or as a separate preliminary patch for
-clarity.
-
-> +	if (cfg->dsc)
->  		DPU_REG_WRITE(c, CTL_DSC_ACTIVE, cfg->dsc);
-> -	}
->  }
->  
->  static void dpu_hw_ctl_intf_cfg(struct dpu_hw_ctl *ctx,
-> @@ -630,6 +637,9 @@ static void _setup_ctl_ops(struct dpu_hw_ctl_ops *ops,
->  		ops->update_pending_flush_merge_3d =
->  			dpu_hw_ctl_update_pending_flush_merge_3d_v1;
->  		ops->update_pending_flush_wb = dpu_hw_ctl_update_pending_flush_wb_v1;
-> +
-
-And while adding a newline above, drop the one here.
-
-> +		ops->update_pending_flush_dsc =
-> +			dpu_hw_ctl_update_pending_flush_dsc_v1;
->  	} else {
->  		ops->trigger_flush = dpu_hw_ctl_trigger_flush;
->  		ops->setup_intf_cfg = dpu_hw_ctl_intf_cfg;
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-> index 6292002..d4869a0 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-> @@ -158,6 +158,15 @@ struct dpu_hw_ctl_ops {
->  		enum dpu_dspp blk, u32 dspp_sub_blk);
->  
->  	/**
-> +	 * OR in the given flushbits to the cached pending_(dsc_)flush_mask
-> +	 * No effect on hardware
-> +	 * @ctx       : ctl path ctx pointer
-> +	 * @blk       : interface block index
-
-Can you drop the spaces before the colon (:)?  That's wrong and will be
-fixed elsewhere later.
-
-> +	 */
-> +	void (*update_pending_flush_dsc)(struct dpu_hw_ctl *ctx,
-> +					 enum dpu_dsc blk);
-
-Indent with a single tab to match the rest.
-
-> +
-> +	/**
->  	 * Write the value of the pending_flush_mask to hardware
->  	 * @ctx       : ctl path ctx pointer
->  	 */
-> @@ -245,6 +254,7 @@ struct dpu_hw_ctl {
->  	u32 pending_wb_flush_mask;
->  	u32 pending_merge_3d_flush_mask;
->  	u32 pending_dspp_flush_mask[DSPP_MAX - DSPP_0];
-> +	u32 pending_dsc_flush_mask;
-
-Don't forget to add this to the doc-comment, or did you skip it by
-intention because pending_merge_3d_flush_mask and
-pending_dspp_flush_mask are missing as well?
-
-- Marijn
-
->  
->  	/* ops */
->  	struct dpu_hw_ctl_ops ops;
-> -- 
-> 2.7.4
-> 
+> The rest of the patch looks ok to me.
+>
+> --D
+>
+> > +                     bio_put(bio);
+> > +                     break;
+> > +             }
+> > +             cond_resched();
+> > +     }
+> > +     blk_finish_plug(&plug);
+> > +
+> > +     return ret;
+> > +}
+> > +EXPORT_SYMBOL(blkdev_issue_provision);
+> > diff --git a/block/blk-merge.c b/block/blk-merge.c
+> > index 6460abdb2426..a3ffebb97a1d 100644
+> > --- a/block/blk-merge.c
+> > +++ b/block/blk-merge.c
+> > @@ -158,6 +158,21 @@ static struct bio *bio_split_write_zeroes(struct b=
+io *bio,
+> >       return bio_split(bio, lim->max_write_zeroes_sectors, GFP_NOIO, bs=
+);
+> >  }
+> >
+> > +static struct bio *bio_split_provision(struct bio *bio,
+> > +                                     const struct queue_limits *lim,
+> > +                                     unsigned int *nsegs, struct bio_s=
+et *bs)
+> > +{
+> > +     *nsegs =3D 0;
+> > +
+> > +     if (!lim->max_provision_sectors)
+> > +             return NULL;
+> > +
+> > +     if (bio_sectors(bio) <=3D lim->max_provision_sectors)
+> > +             return NULL;
+> > +
+> > +     return bio_split(bio, lim->max_provision_sectors, GFP_NOIO, bs);
+> > +}
+> > +
+> >  /*
+> >   * Return the maximum number of sectors from the start of a bio that m=
+ay be
+> >   * submitted as a single request to a block device. If enough sectors =
+remain,
+> > @@ -366,6 +381,9 @@ struct bio *__bio_split_to_limits(struct bio *bio,
+> >       case REQ_OP_WRITE_ZEROES:
+> >               split =3D bio_split_write_zeroes(bio, lim, nr_segs, bs);
+> >               break;
+> > +     case REQ_OP_PROVISION:
+> > +             split =3D bio_split_provision(bio, lim, nr_segs, bs);
+> > +             break;
+> >       default:
+> >               split =3D bio_split_rw(bio, lim, nr_segs, bs,
+> >                               get_max_io_size(bio, lim) << SECTOR_SHIFT=
+);
+> > diff --git a/block/blk-settings.c b/block/blk-settings.c
+> > index 896b4654ab00..d303e6614c36 100644
+> > --- a/block/blk-settings.c
+> > +++ b/block/blk-settings.c
+> > @@ -59,6 +59,7 @@ void blk_set_default_limits(struct queue_limits *lim)
+> >       lim->zoned =3D BLK_ZONED_NONE;
+> >       lim->zone_write_granularity =3D 0;
+> >       lim->dma_alignment =3D 511;
+> > +     lim->max_provision_sectors =3D 0;
+> >  }
+> >
+> >  /**
+> > @@ -82,6 +83,7 @@ void blk_set_stacking_limits(struct queue_limits *lim=
+)
+> >       lim->max_dev_sectors =3D UINT_MAX;
+> >       lim->max_write_zeroes_sectors =3D UINT_MAX;
+> >       lim->max_zone_append_sectors =3D UINT_MAX;
+> > +     lim->max_provision_sectors =3D UINT_MAX;
+> >  }
+> >  EXPORT_SYMBOL(blk_set_stacking_limits);
+> >
+> > @@ -208,6 +210,20 @@ void blk_queue_max_write_zeroes_sectors(struct req=
+uest_queue *q,
+> >  }
+> >  EXPORT_SYMBOL(blk_queue_max_write_zeroes_sectors);
+> >
+> > +/**
+> > + * blk_queue_max_provision_sectors - set max sectors for a single prov=
+ision
+> > + *
+> > + * @q:  the request queue for the device
+> > + * @max_provision_sectors: maximum number of sectors to provision per =
+command
+> > + **/
+> > +
+> > +void blk_queue_max_provision_sectors(struct request_queue *q,
+> > +             unsigned int max_provision_sectors)
+> > +{
+> > +     q->limits.max_provision_sectors =3D max_provision_sectors;
+> > +}
+> > +EXPORT_SYMBOL(blk_queue_max_provision_sectors);
+> > +
+> >  /**
+> >   * blk_queue_max_zone_append_sectors - set max sectors for a single zo=
+ne append
+> >   * @q:  the request queue for the device
+> > @@ -578,6 +594,9 @@ int blk_stack_limits(struct queue_limits *t, struct=
+ queue_limits *b,
+> >       t->max_segment_size =3D min_not_zero(t->max_segment_size,
+> >                                          b->max_segment_size);
+> >
+> > +     t->max_provision_sectors =3D min_not_zero(t->max_provision_sector=
+s,
+> > +                                             b->max_provision_sectors)=
+;
+> > +
+> >       t->misaligned |=3D b->misaligned;
+> >
+> >       alignment =3D queue_limit_alignment_offset(b, start);
+> > diff --git a/block/blk-sysfs.c b/block/blk-sysfs.c
+> > index f1fce1c7fa44..0a3165211c66 100644
+> > --- a/block/blk-sysfs.c
+> > +++ b/block/blk-sysfs.c
+> > @@ -213,6 +213,13 @@ static ssize_t queue_discard_zeroes_data_show(stru=
+ct request_queue *q, char *pag
+> >       return queue_var_show(0, page);
+> >  }
+> >
+> > +static ssize_t queue_provision_max_show(struct request_queue *q,
+> > +             char *page)
+> > +{
+> > +     return sprintf(page, "%llu\n",
+> > +             (unsigned long long)q->limits.max_provision_sectors << 9)=
+;
+> > +}
+> > +
+> >  static ssize_t queue_write_same_max_show(struct request_queue *q, char=
+ *page)
+> >  {
+> >       return queue_var_show(0, page);
+> > @@ -604,6 +611,7 @@ QUEUE_RO_ENTRY(queue_discard_max_hw, "discard_max_h=
+w_bytes");
+> >  QUEUE_RW_ENTRY(queue_discard_max, "discard_max_bytes");
+> >  QUEUE_RO_ENTRY(queue_discard_zeroes_data, "discard_zeroes_data");
+> >
+> > +QUEUE_RO_ENTRY(queue_provision_max, "provision_max_bytes");
+> >  QUEUE_RO_ENTRY(queue_write_same_max, "write_same_max_bytes");
+> >  QUEUE_RO_ENTRY(queue_write_zeroes_max, "write_zeroes_max_bytes");
+> >  QUEUE_RO_ENTRY(queue_zone_append_max, "zone_append_max_bytes");
+> > @@ -661,6 +669,7 @@ static struct attribute *queue_attrs[] =3D {
+> >       &queue_discard_max_entry.attr,
+> >       &queue_discard_max_hw_entry.attr,
+> >       &queue_discard_zeroes_data_entry.attr,
+> > +     &queue_provision_max_entry.attr,
+> >       &queue_write_same_max_entry.attr,
+> >       &queue_write_zeroes_max_entry.attr,
+> >       &queue_zone_append_max_entry.attr,
+> > diff --git a/block/bounce.c b/block/bounce.c
+> > index 7cfcb242f9a1..ab9d8723ae64 100644
+> > --- a/block/bounce.c
+> > +++ b/block/bounce.c
+> > @@ -176,6 +176,7 @@ static struct bio *bounce_clone_bio(struct bio *bio=
+_src)
+> >       case REQ_OP_DISCARD:
+> >       case REQ_OP_SECURE_ERASE:
+> >       case REQ_OP_WRITE_ZEROES:
+> > +     case REQ_OP_PROVISION:
+> >               break;
+> >       default:
+> >               bio_for_each_segment(bv, bio_src, iter)
+> > diff --git a/block/fops.c b/block/fops.c
+> > index 4c70fdc546e7..be2e41f160bf 100644
+> > --- a/block/fops.c
+> > +++ b/block/fops.c
+> > @@ -613,7 +613,8 @@ static ssize_t blkdev_read_iter(struct kiocb *iocb,=
+ struct iov_iter *to)
+> >
+> >  #define      BLKDEV_FALLOC_FL_SUPPORTED                               =
+       \
+> >               (FALLOC_FL_KEEP_SIZE | FALLOC_FL_PUNCH_HOLE |           \
+> > -              FALLOC_FL_ZERO_RANGE | FALLOC_FL_NO_HIDE_STALE)
+> > +              FALLOC_FL_ZERO_RANGE | FALLOC_FL_NO_HIDE_STALE |       \
+> > +              FALLOC_FL_UNSHARE_RANGE)
+> >
+> >  static long blkdev_fallocate(struct file *file, int mode, loff_t start=
+,
+> >                            loff_t len)
+> > @@ -653,6 +654,13 @@ static long blkdev_fallocate(struct file *file, in=
+t mode, loff_t start,
+> >        * de-allocate mode calls to fallocate().
+> >        */
+> >       switch (mode) {
+> > +     case 0:
+> > +     case FALLOC_FL_UNSHARE_RANGE:
+> > +     case FALLOC_FL_KEEP_SIZE:
+> > +     case FALLOC_FL_UNSHARE_RANGE | FALLOC_FL_KEEP_SIZE:
+> > +             error =3D blkdev_issue_provision(bdev, start >> SECTOR_SH=
+IFT,
+> > +                                            len >> SECTOR_SHIFT, GFP_K=
+ERNEL);
+> > +             break;
+> >       case FALLOC_FL_ZERO_RANGE:
+> >       case FALLOC_FL_ZERO_RANGE | FALLOC_FL_KEEP_SIZE:
+> >               error =3D truncate_bdev_range(bdev, file->f_mode, start, =
+end);
+> > diff --git a/include/linux/bio.h b/include/linux/bio.h
+> > index d766be7152e1..9820b3b039f2 100644
+> > --- a/include/linux/bio.h
+> > +++ b/include/linux/bio.h
+> > @@ -57,7 +57,8 @@ static inline bool bio_has_data(struct bio *bio)
+> >           bio->bi_iter.bi_size &&
+> >           bio_op(bio) !=3D REQ_OP_DISCARD &&
+> >           bio_op(bio) !=3D REQ_OP_SECURE_ERASE &&
+> > -         bio_op(bio) !=3D REQ_OP_WRITE_ZEROES)
+> > +         bio_op(bio) !=3D REQ_OP_WRITE_ZEROES &&
+> > +         bio_op(bio) !=3D REQ_OP_PROVISION)
+> >               return true;
+> >
+> >       return false;
+> > @@ -67,7 +68,8 @@ static inline bool bio_no_advance_iter(const struct b=
+io *bio)
+> >  {
+> >       return bio_op(bio) =3D=3D REQ_OP_DISCARD ||
+> >              bio_op(bio) =3D=3D REQ_OP_SECURE_ERASE ||
+> > -            bio_op(bio) =3D=3D REQ_OP_WRITE_ZEROES;
+> > +            bio_op(bio) =3D=3D REQ_OP_WRITE_ZEROES ||
+> > +            bio_op(bio) =3D=3D REQ_OP_PROVISION;
+> >  }
+> >
+> >  static inline void *bio_data(struct bio *bio)
+> > diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
+> > index 99be590f952f..27bdf88f541c 100644
+> > --- a/include/linux/blk_types.h
+> > +++ b/include/linux/blk_types.h
+> > @@ -385,7 +385,10 @@ enum req_op {
+> >       REQ_OP_DRV_IN           =3D (__force blk_opf_t)34,
+> >       REQ_OP_DRV_OUT          =3D (__force blk_opf_t)35,
+> >
+> > -     REQ_OP_LAST             =3D (__force blk_opf_t)36,
+> > +     /* request device to provision block */
+> > +     REQ_OP_PROVISION        =3D (__force blk_opf_t)37,
+> > +
+> > +     REQ_OP_LAST             =3D (__force blk_opf_t)38,
+> >  };
+> >
+> >  enum req_flag_bits {
+> > diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+> > index 941304f17492..239e2f418b6e 100644
+> > --- a/include/linux/blkdev.h
+> > +++ b/include/linux/blkdev.h
+> > @@ -303,6 +303,7 @@ struct queue_limits {
+> >       unsigned int            discard_granularity;
+> >       unsigned int            discard_alignment;
+> >       unsigned int            zone_write_granularity;
+> > +     unsigned int            max_provision_sectors;
+> >
+> >       unsigned short          max_segments;
+> >       unsigned short          max_integrity_segments;
+> > @@ -921,6 +922,8 @@ extern void blk_queue_max_discard_sectors(struct re=
+quest_queue *q,
+> >               unsigned int max_discard_sectors);
+> >  extern void blk_queue_max_write_zeroes_sectors(struct request_queue *q=
+,
+> >               unsigned int max_write_same_sectors);
+> > +extern void blk_queue_max_provision_sectors(struct request_queue *q,
+> > +             unsigned int max_provision_sectors);
+> >  extern void blk_queue_logical_block_size(struct request_queue *, unsig=
+ned int);
+> >  extern void blk_queue_max_zone_append_sectors(struct request_queue *q,
+> >               unsigned int max_zone_append_sectors);
+> > @@ -1060,6 +1063,9 @@ int __blkdev_issue_discard(struct block_device *b=
+dev, sector_t sector,
+> >  int blkdev_issue_secure_erase(struct block_device *bdev, sector_t sect=
+or,
+> >               sector_t nr_sects, gfp_t gfp);
+> >
+> > +extern int blkdev_issue_provision(struct block_device *bdev, sector_t =
+sector,
+> > +             sector_t nr_sects, gfp_t gfp_mask);
+> > +
+> >  #define BLKDEV_ZERO_NOUNMAP  (1 << 0)  /* do not free blocks */
+> >  #define BLKDEV_ZERO_NOFALLBACK       (1 << 1)  /* don't write explicit=
+ zeroes */
+> >
+> > @@ -1139,6 +1145,11 @@ static inline unsigned short queue_max_discard_s=
+egments(const struct request_que
+> >       return q->limits.max_discard_segments;
+> >  }
+> >
+> > +static inline unsigned short queue_max_provision_sectors(const struct =
+request_queue *q)
+> > +{
+> > +     return q->limits.max_provision_sectors;
+> > +}
+> > +
+> >  static inline unsigned int queue_max_segment_size(const struct request=
+_queue *q)
+> >  {
+> >       return q->limits.max_segment_size;
+> > @@ -1281,6 +1292,11 @@ static inline bool bdev_nowait(struct block_devi=
+ce *bdev)
+> >       return test_bit(QUEUE_FLAG_NOWAIT, &bdev_get_queue(bdev)->queue_f=
+lags);
+> >  }
+> >
+> > +static inline unsigned int bdev_max_provision_sectors(struct block_dev=
+ice *bdev)
+> > +{
+> > +     return bdev_get_queue(bdev)->limits.max_provision_sectors;
+> > +}
+> > +
+> >  static inline enum blk_zoned_model bdev_zoned_model(struct block_devic=
+e *bdev)
+> >  {
+> >       return blk_queue_zoned_model(bdev_get_queue(bdev));
+> > --
+> > 2.40.1.521.gf1e218fcd8-goog
+> >
