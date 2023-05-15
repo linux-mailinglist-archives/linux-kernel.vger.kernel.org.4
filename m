@@ -2,95 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D91B7025C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 09:13:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 05F367025CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 09:14:08 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240436AbjEOHNV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 03:13:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37006 "EHLO
+        id S240230AbjEOHOF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 03:14:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240519AbjEOHNS (ORCPT
+        with ESMTP id S240399AbjEOHN5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 03:13:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 577FF10FB
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 00:12:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1684134755;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xwF3bMtKzTBdMVk3tiqEPsRCHZdEoAnjzKN67iE7ThU=;
-        b=huMcrnHTpcxOYc/brtNEhEIbtjGgW3YLGQQZacxvfJ6KZCrSb/KH2+RLSeK+kd3ZDMcrg7
-        5z2HvtsIa8RHKrhosxAxM+VJgOiswOS75p2LKziTkSjpe6RCpuhNbdZhFJhVRRmxocNWpI
-        uFF8bE3FGyX596yFMkhSv15zR4q11bI=
-Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
- [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-158-nlOqEHQBN8ixUxul6Gd9ZQ-1; Mon, 15 May 2023 03:12:33 -0400
-X-MC-Unique: nlOqEHQBN8ixUxul6Gd9ZQ-1
-Received: by mail-ed1-f71.google.com with SMTP id 4fb4d7f45d1cf-50d89279d95so22336378a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 00:12:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684134753; x=1686726753;
-        h=mime-version:references:in-reply-to:message-id:date:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xwF3bMtKzTBdMVk3tiqEPsRCHZdEoAnjzKN67iE7ThU=;
-        b=e9p3IR/W02HI7GAd7VUkRXEbs2uBsmP95nIU0finVHJzw7mgzz2jgGss5qwhIinFHw
-         C3Y7zc4tXMtkGo8Ki0XSkZIXmcE0GyYmDf76Z7ZH7R/z/GQUnCbDMta42CGJYqc8MAdx
-         H2WHyoynJ+zxLGENAY9+NyODL2FyfbpILzcBzUtsT+xHcprWD7wi0rVGQ1hZdcd9Za6R
-         fNNsdhcdQ/aIiSwQZ4EPzH2ZFRJn8NWg6VqCprXq9wMwqHhMIdojtNpgDjy5W8hVELHi
-         75FKnDNv5AMWlDhtkkOhRpbsYeH3wnS+lDL9fATjEQefRxIK00jV+Fgnms1X6DgNmyRe
-         Dk+Q==
-X-Gm-Message-State: AC+VfDxnDgPoPqvuPRMg0aBaeMs2VSXIGxVxTXND+v3+9Gbb/ozxzX1y
-        SpI2ReGQ8NeRFbSsD+/pytQGKSMVHh/O9Ziji2yfxpI/MjB8SXlv+REwXxYcYK09l6blHbNAeUu
-        kNuM1EzkLf1DsjLGsC6M34Nay
-X-Received: by 2002:a17:907:2d0e:b0:967:13a3:d82c with SMTP id gs14-20020a1709072d0e00b0096713a3d82cmr24677032ejc.26.1684134752850;
-        Mon, 15 May 2023 00:12:32 -0700 (PDT)
-X-Google-Smtp-Source: ACHHUZ6roqpg5jE0hXDmdOedggiZFhhlASXlWjExoRB/ZX0m8zeiDXY1K7sjvx8CPHbp5waK9vPFwQ==
-X-Received: by 2002:a17:907:2d0e:b0:967:13a3:d82c with SMTP id gs14-20020a1709072d0e00b0096713a3d82cmr24677011ejc.26.1684134752575;
-        Mon, 15 May 2023 00:12:32 -0700 (PDT)
-Received: from [10.39.192.162] (5920ab7b.static.cust.trined.nl. [89.32.171.123])
-        by smtp.gmail.com with ESMTPSA id f20-20020a17090660d400b00965ac8f8a3dsm9178766ejk.173.2023.05.15.00.12.31
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 15 May 2023 00:12:31 -0700 (PDT)
-From:   Eelco Chaudron <echaudro@redhat.com>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Pravin B Shelar <pshelar@ovn.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org,
-        dev@openvswitch.org
-Subject: Re: [RESEND PATCH net-next] net: openvswitch: Use struct_size()
-Date:   Mon, 15 May 2023 09:12:30 +0200
-X-Mailer: MailMate (1.14r5964)
-Message-ID: <7EFC8D77-C24C-433E-8E8B-FBCF4387A7CC@redhat.com>
-In-Reply-To: <e7746fbbd62371d286081d5266e88bbe8d3fe9f0.1683388991.git.christophe.jaillet@wanadoo.fr>
-References: <e7746fbbd62371d286081d5266e88bbe8d3fe9f0.1683388991.git.christophe.jaillet@wanadoo.fr>
+        Mon, 15 May 2023 03:13:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCBFA171E;
+        Mon, 15 May 2023 00:13:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E456F61048;
+        Mon, 15 May 2023 07:13:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 156D9C433D2;
+        Mon, 15 May 2023 07:13:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684134825;
+        bh=Blp9UTVwqWg3TA5Q/aNLyv7una68PusuriG4Cx6TJ1I=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cb1/nGDInJgxvoRAiPafNqmATmMoBlsuo3AOYZmbnMEWUu9D+/GzhbjwxdSL7KZgC
+         poCnKGNOC6I2NebFqG89wbQBuyFdlzYsHlmL0tIzbvDH/YvmHuXrgODI1SREFX9L4s
+         r7F8kHdWUCYiDtn8Nyxv3siipSh9+93pil61u1IpNHXbL8/N5Gb1dpQ/qb1Q17f1Jg
+         djZaDbecgKuQZqXSVhkqwtOU+4e75+6S1PLqVYW3fQJXh2V7wo33rBp4rungohG/fO
+         5SByQ8uiE1Y2wRDoEYxnSuhpjAwRnM9zuRuGbWbXRIG/uXpG2+FRauo0FtweydTfxZ
+         59Mbo2AG7dWbA==
+Date:   Mon, 15 May 2023 00:13:43 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Kent Overstreet <kent.overstreet@linux.dev>
+Cc:     Lorenzo Stoakes <lstoakes@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-bcachefs@vger.kernel.org,
+        Kent Overstreet <kent.overstreet@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Uladzislau Rezki <urezki@gmail.com>, linux-mm@kvack.org
+Subject: Re: [PATCH 07/32] mm: Bring back vmalloc_exec
+Message-ID: <20230515071343.GD15871@sol.localdomain>
+References: <ZFq3SdSBJ_LWsOgd@murray>
+ <ZFq7JhrhyrMTNfd/@moria.home.lan>
+ <20230510064849.GC1851@quark.localdomain>
+ <ZF6HHRDeUWLNtuL7@moria.home.lan>
+ <20230513015752.GC3033@quark.localdomain>
+ <ZGB1eevk/u2ssIBT@moria.home.lan>
+ <20230514184325.GB9528@sol.localdomain>
+ <ZGHFa4AprPSsEpeq@moria.home.lan>
+ <20230515061346.GB15871@sol.localdomain>
+ <ZGHOppBFcKEJkzCe@moria.home.lan>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZGHOppBFcKEJkzCe@moria.home.lan>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, May 15, 2023 at 02:18:14AM -0400, Kent Overstreet wrote:
+> On Sun, May 14, 2023 at 11:13:46PM -0700, Eric Biggers wrote:
+> > On Mon, May 15, 2023 at 01:38:51AM -0400, Kent Overstreet wrote:
+> > > On Sun, May 14, 2023 at 11:43:25AM -0700, Eric Biggers wrote:
+> > > > I think it would also help if the generated assembly had the handling of the
+> > > > fields interleaved.  To achieve that, it might be necessary to interleave the C
+> > > > code.
+> > > 
+> > > No, that has negligable effect on performance - as expected, for an out
+> > > of order processor. < 1% improvement.
+> > > 
+> > > It doesn't look like this approach is going to work here. Sadly.
+> > 
+> > I'd be glad to take a look at the code you actually tried.  It would be helpful
+> > if you actually provided it, instead of just this "I tried it, I'm giving up
+> > now" sort of thing.
+> 
+> https://evilpiepirate.org/git/bcachefs.git/log/?h=bkey_unpack
+> 
+> > I was also hoping you'd take the time to split this out into a userspace
+> > micro-benchmark program that we could quickly try different approaches on.
+> 
+> I don't need to, because I already have this:
+> https://evilpiepirate.org/git/ktest.git/tree/tests/bcachefs/perf.ktest
 
+Sure, given that this is an optimization problem with a very small scope
+(decoding 6 fields from a bitstream), I was hoping for something easier and
+faster to iterate on than setting up a full kernel + bcachefs test environment
+and reverse engineering 500 lines of shell script.  But sure, I can look into
+that when I have a chance.
 
-On 13 May 2023, at 9:25, Christophe JAILLET wrote:
+> Your approach wasn't any faster than the existing C version.
 
-> Use struct_size() instead of hand writing it.
-> This is less verbose and more informative.
->
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Well, it's your implementation of what you thought was "my approach".  It
+doesn't quite match what I had suggested.  As I mentioned in my last email, it's
+also unclear that your new code is ever actually executed, since you made it
+conditional on all fields being byte-aligned...
 
-Change looks good to me.
-
-Acked-by: Eelco Chaudron <echaudro@redhat.com>
-
+- Eric
