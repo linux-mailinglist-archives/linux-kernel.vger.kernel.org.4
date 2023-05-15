@@ -2,150 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9060702AF9
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:57:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8792E702AFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:00:02 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239630AbjEOK5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:57:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45334 "EHLO
+        id S240385AbjEOLAA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 07:00:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229963AbjEOK5i (ORCPT
+        with ESMTP id S229963AbjEOK75 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:57:38 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D374493;
-        Mon, 15 May 2023 03:57:36 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Btr6T0G/yC7QxBY32sjMYFXMS99v9MdLzBwxCwtSrYUTgal3j0uAgblGI/c6TlNMOcaOaemRh9xgCeyL3LvzQOp4rwYxOUPui7NFTiTRs/ObMhsVXXodz9PZ8vzDhTKe3kT+CrHw+uUo7KNFzIq4QTejyKZp6VKUiu3yFWGrfbaB/uRom1XlMEKKc37Iyf27LQwwP9rQQrUjh0dFpBeDDR04/KD6aIZlj+7ZP0aPfwJnFZ+EvqPaVpA+STrIrCpIfLRryGt33kfOQheVDWk+YspF0vKvXsIewk9GFiFyItHn5WTg8KA4fEVPMdEemhm9UvgziIJ5r2Lc2+bHOCQt6A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bJOw3ltf55yXRRRLkl6eJw2L8EdRoG2qgOJnBEGqafg=;
- b=Lck+/zsxxlp/ZjFGKFJirkG/nra/PjWEH3MZMhXLd9zddWEo4R16WoFg4vVOh0iB0gdV199oKcsCz9AZawx9RQkStlyiVlvPY0yJ0Mhty6o3EggUcPOOrUFVJNSJrmwQjaqtQA06RtjWQ5N121SdsUvMa+p63xjRAUx/ac4VGNgWOeUkXdBQEKbZu++4dx156MKoby9MzaoVbA1SGnZRrDcosvM1rXJYRStSbr2Mdf9eOaVWwEc+PAtIrn6BVBOAA0ks1lnLlqAqOzGXiBzNrrVzJ+0Axrkg3VsKvMsgnGC3PaOoHCBBTllup5S1IdN34RQPcWHEXTCNa99jj56rrw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linaro.org smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bJOw3ltf55yXRRRLkl6eJw2L8EdRoG2qgOJnBEGqafg=;
- b=ZP6rhHbRsf6FWwCcJI7U9YxQVSRlD5dgQJ8Fnq5HotWStU5bNWv16fIveHSGId9CMfNFLi6BFvwU5XOm/+ErwMXPyEYQZxjSwQjOwzknaA4fdQ63rtuisvH41nWGptiemAVH+Q37oZJXujKVObic8fBBfWlha9uUcAJZP1tx4sB3pGd43E/IrMva7ZPj1p8143QCOGRHvGEO52TaG/jWk20A4lVvpdgOAfTrhZosbFYGW1Z8WzE9t0rgrTID2rF1G4XIpCSK19MLqOGxgoCx4ODJp+AXIUV2BF5+Z7V5cna2V0YUDVYB8hANBcOTeigs3mNNy/kGliU2MWAQ4D39mw==
-Received: from MW4PR03CA0223.namprd03.prod.outlook.com (2603:10b6:303:b9::18)
- by MN2PR12MB4391.namprd12.prod.outlook.com (2603:10b6:208:269::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Mon, 15 May
- 2023 10:57:34 +0000
-Received: from CO1NAM11FT069.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:b9:cafe::3a) by MW4PR03CA0223.outlook.office365.com
- (2603:10b6:303:b9::18) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30 via Frontend
- Transport; Mon, 15 May 2023 10:57:34 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT069.mail.protection.outlook.com (10.13.174.129) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6411.14 via Frontend Transport; Mon, 15 May 2023 10:57:34 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 15 May 2023
- 03:57:23 -0700
-Received: from [10.41.21.79] (10.126.230.37) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 15 May
- 2023 03:57:17 -0700
-Message-ID: <6c8f0a58-ee37-8588-42fc-55697dd6dd37@nvidia.com>
-Date:   Mon, 15 May 2023 16:27:14 +0530
+        Mon, 15 May 2023 06:59:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A76F912E;
+        Mon, 15 May 2023 03:59:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3C9D86227C;
+        Mon, 15 May 2023 10:59:56 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C90AC433D2;
+        Mon, 15 May 2023 10:59:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684148395;
+        bh=aaXWGFW+W+Mx8ejKT43D62hQkzh/cnrA202CHaOIB0E=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=cinKTZS02ZdwiyFq5/nt+Upe7lCXbgUPqNR9AhZfckd5rzhO9QU90GgbLvZ4QWbko
+         vsg5v4oexO+PPAMxwfq+YTRH9+gxeOjz2FD09+GrTQRIVcwge7tqqcp00K7T8USMTV
+         0AWv6mjVF80KB8jSRtW2wRP19BRqKUIy4qg3hkrQdUaO5GSksoBRGT0NNG2+PJ8wLN
+         Mr1eZ1BSKharxEFkA84pNQFgURked16MwqWgvr52X83oh1qIeLEW8p4SWweB9qSMTQ
+         mWGT4tBfWfeEFn4gTzjum8kKPk57568J3O6mrFyS5UB3iOerxhYppqTLpr/gf/V3lp
+         zQ6XS1PjNeDUg==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Ping-Ke Shih <pkshih@realtek.com>
+Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        "linux-wireless\@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "linux-kernel\@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "tony0620emma\@gmail.com" <tony0620emma@gmail.com>,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Rudi Heitbaum <rudi@heitbaum.com>
+Subject: Re: [PATCH wireless v1] wifi: rtw88: sdio: Always use two consecutive bytes for word operations
+References: <20230514200345.502807-1-martin.blumenstingl@googlemail.com>
+        <a0bf69fdb10b42a989a9b14e490e2f07@realtek.com>
+Date:   Mon, 15 May 2023 13:59:50 +0300
+In-Reply-To: <a0bf69fdb10b42a989a9b14e490e2f07@realtek.com> (Ping-Ke Shih's
+        message of "Mon, 15 May 2023 00:36:27 +0000")
+Message-ID: <87mt25n9ll.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Subject: Re: [Patch v8 0/8] Tegra234 Memory interconnect support
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        <treding@nvidia.com>, <dmitry.osipenko@collabora.com>,
-        <viresh.kumar@linaro.org>, <rafael@kernel.org>,
-        <jonathanh@nvidia.com>, <robh+dt@kernel.org>,
-        <lpieralisi@kernel.org>, <helgaas@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-pci@vger.kernel.org>, <mmaddireddy@nvidia.com>,
-        <kw@linux.com>, <bhelgaas@google.com>, <vidyas@nvidia.com>,
-        <sanjayc@nvidia.com>, <ksitaraman@nvidia.com>, <ishah@nvidia.com>,
-        <bbasu@nvidia.com>, Sumit Gupta <sumitg@nvidia.com>
-References: <20230511173211.9127-1-sumitg@nvidia.com>
- <a032d9e6-6cb5-1856-9eda-28028bf05633@linaro.org>
-From:   Sumit Gupta <sumitg@nvidia.com>
-In-Reply-To: <a032d9e6-6cb5-1856-9eda-28028bf05633@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.126.230.37]
-X-ClientProxiedBy: rnnvmail203.nvidia.com (10.129.68.9) To
- rnnvmail201.nvidia.com (10.129.68.8)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT069:EE_|MN2PR12MB4391:EE_
-X-MS-Office365-Filtering-Correlation-Id: 13f27d27-ad9d-45f2-359d-08db5533303a
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: osKsD75lLZ/NBHfCXVEt/32xfH8LPBZ7pHWzR9akWNXR6APFAda+29YII4Y9RRfPMUyAf6ZOC3ifL2etgUTDdZaM+wB7lIyC43J0DMHp7opHnIeN/81LWU4tZu5SYROl9vQBzPhQYrOo4zQe8FTIBo0TRiFErGOVBibfpPjLuIgBnDNZC83LbPU3yGq8nixQHS1f4aee0yKeW31glwuUsgVZfsBqcnEIv29IC2ugVFp+VTk5OhbZujJOt5+HzPtL7kd82FW6Zt+Txv3YK4qrrC5Dw5OHs3bN4PsXd3JDDwQ90l0XIyGpLxGuaOFqXdmsrO+tJZb4eaDso3EBQlovDDQtar85gdauSPWVuse4DWxaQlsqifSUgxAVUJS8MS/Es48CGmDQA10YQklvrURbg8uCIjSn9JMMk6xCj2xDkXYizIUZmm4a127R9HeJew2oFougqMSkLKuNivgSxSv2AfadoeKvcBklcwO6hcpCJWZl+b0n+M51JAAMsxqAQDBtDMuu/hiv5s84NTnlvr1fUZMDTSSyFplaYn4KQsRsYkoow+VSKKNlFgg40uFhf7H79IYIUegsEBGcKuDoBk6287VlP6J2T8FUBTBfIaRodfKym+zVf3lka7UElOsB4cI6tBNc2e9KMUAqiLuPuDEZBzXf9r3XQbtiZyK8Vo6Pt+MoUSTcXq3EJfsgjETPAEmvbXqlN9SK+5/8VgOC72+LdujqKaw2zYlQ7lo/571wxcNu2ha5kjEZGD0Fcln6CCyp/cnv6YWtQPQUGD/RUYpnqPRpWOiFYY6mNAyDfejPBXkmrSgqLf78OqM+9fGL/rmV
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(136003)(346002)(451199021)(46966006)(36840700001)(40470700004)(36756003)(86362001)(16576012)(54906003)(110136005)(316002)(4326008)(70206006)(70586007)(966005)(478600001)(4744005)(82310400005)(40480700001)(5660300002)(8676002)(8936002)(6666004)(2906002)(7416002)(7636003)(31696002)(356005)(82740400003)(41300700001)(16526019)(2616005)(186003)(53546011)(107886003)(26005)(336012)(36860700001)(83380400001)(426003)(47076005)(31686004)(40460700003)(43740500002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2023 10:57:34.2933
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 13f27d27-ad9d-45f2-359d-08db5533303a
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT069.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN2PR12MB4391
-X-Spam-Status: No, score=-4.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Ping-Ke Shih <pkshih@realtek.com> writes:
 
+>> -----Original Message-----
+>> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+>> Sent: Monday, May 15, 2023 4:04 AM
+>> To: linux-wireless@vger.kernel.org
+>> Cc: linux-kernel@vger.kernel.org; Ping-Ke Shih <pkshih@realtek.com>; tony0620emma@gmail.com;
+>> kvalo@kernel.org; Martin Blumenstingl <martin.blumenstingl@googlemail.com>; Larry Finger
+>> <Larry.Finger@lwfinger.net>; Rudi Heitbaum <rudi@heitbaum.com>
+>> Subject: [PATCH wireless v1] wifi: rtw88: sdio: Always use two consecutive bytes for word operations
+>> 
+>> The Allwinner sunxi-mmc controller cannot handle word (16 bit)
+>> transfers. So and sdio_{read,write}w fails with messages like the
+>> following example using an RTL8822BS (but the same problems were also
+>> observed with RTL8822CS and RTL8723DS chips):
+>>   rtw_8822bs mmc1:0001:1: Firmware version 27.2.0, H2C version 13
+>>   sunxi-mmc 4021000.mmc: unaligned scatterlist: os f80 length 2
+>>   sunxi-mmc 4021000.mmc: map DMA failed
+>>   rtw_8822bs mmc1:0001:1: sdio read16 failed (0x10230): -22
+>> 
+>> Use two consecutive single byte accesses for word operations instead. It
+>> turns out that upon closer inspection this is also what the vendor
+>> driver does, even though it does have support for sdio_{read,write}w. So
+>> we can conclude that the rtw88 chips do support word access but only on
+>> SDIO controllers that also support it. Since there's no way to detect if
+>> the controller supports word access or not the rtw88 sdio driver
+>> switches to the easiest approach: avoiding word access.
+>> 
+>> Reported-by: Larry Finger <Larry.Finger@lwfinger.net>
+>> Closes: https://lore.kernel.org/linux-wireless/527585e5-9cdd-66ed-c3af-6da162f4b720@lwfinger.net/
+>
+> "Closes:" seems not a regular tag. Use "Link: " instead.
 
-On 14/05/23 16:11, Krzysztof Kozlowski wrote:
-> External email: Use caution opening links or attachments
-> 
-> 
-> On 11/05/2023 19:32, Sumit Gupta wrote:
->> Hi All,
->>
->> Have incorporated the suggestions in v7. Only changed 'patch 1' in v7
->> to fix possible race when setting 'mc->bpmp' as pointed by Krzysztof.
->> Requesting to merge the patch series.
->>
-> 
-> Can I apply it since you request it? 
+Actually the documentation now talks about Closes tag:
 
-Yes, the patch series can be applied in current sequence except that
-the 'patch 4' comes before 'patch 3' (just realized).
+https://docs.kernel.org/process/5.Posting.html#patch-formatting-and-changelogs
 
-Would you please swap 'patch 4' with 'patch 3' while applying
-(or) you want me to re-send?
+I guess this tag is a recent addition?
 
-I asked you long time ago to
-> clearly state dependencies or merging limitations. It's v8 and cover
-> letter still does not state it. Neither the patches do.
-> 
-I added the dependency list in previous versions [7] but removed
-thinking the patch series will now be applied altogether.
+-- 
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-[7] https://lore.kernel.org/lkml/20230424131337.20151-1-sumitg@nvidia.com/
-
-Thank you,
-Sumit Gupta
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
