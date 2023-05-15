@@ -2,64 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DAA87025A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 09:02:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 013EC7025A4
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 09:04:25 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240438AbjEOHCt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 03:02:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
+        id S229942AbjEOHEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 03:04:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240563AbjEOHCl (ORCPT
+        with ESMTP id S234828AbjEOHET (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 03:02:41 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC67219AB;
-        Mon, 15 May 2023 00:02:29 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34F72Kkh013964;
-        Mon, 15 May 2023 02:02:20 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1684134140;
-        bh=+UGCfRfOa+AFwijrMK7A4+tz9yRwLUTbdpKYoq2rPMQ=;
-        h=From:To:CC:Subject:Date;
-        b=au/mVJjwkkmGTkwxhC5UsyFVhgMLOc8vth1MncdBstDVeI7kYkD1bj57oMVKxDBJI
-         IOjGZeYzBKzw/SaWuJNiIvOfuU9ImchZ3nVRss6FQBmQgtNyS0RGM0ZU6cDXantwbg
-         SVE6TDlcdZzoRBcuSiXDVkhSqT/d0Swua3bJM0rU=
-Received: from DLEE112.ent.ti.com (dlee112.ent.ti.com [157.170.170.23])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34F72KH1095095
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 15 May 2023 02:02:20 -0500
-Received: from DLEE105.ent.ti.com (157.170.170.35) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 15
- May 2023 02:02:20 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Mon, 15 May 2023 02:02:20 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34F72JAI089287;
-        Mon, 15 May 2023 02:02:20 -0500
-From:   Achal Verma <a-verma1@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Achal Verma <a-verma1@ti.com>
-Subject: [PATCH] arm64: dts: ti: k3-j784s4: Add initial PCIe/SerDes support for J784S4
-Date:   Mon, 15 May 2023 12:32:19 +0530
-Message-ID: <20230515070219.2381457-1-a-verma1@ti.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 15 May 2023 03:04:19 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B033E4F
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 00:04:15 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id d2e1a72fcca58-643ac91c51fso7913465b3a.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 00:04:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1684134254; x=1686726254;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=uCD3xCkYfNGpqdz6rqz02ewnV2gLCfaLBzIL2dOb0BA=;
+        b=D1mpfMLp7iU8M3v125lHslePhrwXN2Nt+06xjigCCbJbL7mP0D+PJFTTNI1FYgUUnK
+         QfR/RWKA7uYUn+C43m2jOF6GoSJl0ykfcND/3ZN091cctME9K2XC/JNzB1753dN4T9Ey
+         OQ/E70uGGf4o0/+3IMxEk2A90Bb3asP4DRWoDhHoQj3S9WoYOC+cGjUZbhhDQGov+y67
+         +BReDFE2p3uqO+uou1s35DoJB5zjfdW/4L25mlP/NIClKgpvH5i0+UsCJVL2I3e28O/d
+         BWTzFROMVrCyDaOEKspvZN13aEQIjFp8KPDBy49bn9aBw4mGXN2RiRazZgKIomioxJs5
+         0rAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684134254; x=1686726254;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uCD3xCkYfNGpqdz6rqz02ewnV2gLCfaLBzIL2dOb0BA=;
+        b=PTszYlnnvSoUmgZ5T7yEqkQ6iyyOrPFi49Bpihsc+TApIDaTUBPgDriaE+j6CWgEBQ
+         QUIm8626UkbAxNTb9b0r/qS+JAqwrFuAaSZ0OEkajR3VeKQC0vR5zYoPRXCreqcHKHwB
+         rnzOExFyMs4NaM1eeTkBop2hlNlgUyK5kp0ZOKhE2l4wtQALtJ41OZfAY2bI+dw3LSm4
+         bih5CsXhH5MzC75wclGUR3SHUunl/hDXzo8BGsr1udGmMURTihzeeabCH2Gcj8fr9NEP
+         M0LoB5furkjZ4A1ukQlAh+ZY3I5JTw2jOZXlK4mmJbycDM6WBAi+OwvRB4IJ8KityGXl
+         xbIw==
+X-Gm-Message-State: AC+VfDwUF6MUq5VuoVO27dHQeHbcIRBwGpoAv+uFszd1dsQIc87vZyME
+        mj43kt3yyNGS4WBkL6nP+cJ8sMQaHcMHYngBDzs=
+X-Google-Smtp-Source: ACHHUZ7xQVY62gBHyh5WbfOru28n/sfK3aVYm1uQn10+hMHGXiNsfOtkuRIeJBKrPkF4xBG0ETof1A==
+X-Received: by 2002:a05:6a00:158b:b0:64a:f730:1552 with SMTP id u11-20020a056a00158b00b0064af7301552mr11703642pfk.19.1684134254696;
+        Mon, 15 May 2023 00:04:14 -0700 (PDT)
+Received: from [10.255.9.129] ([139.177.225.233])
+        by smtp.gmail.com with ESMTPSA id c13-20020aa78e0d000000b00646ebc77b1fsm2099965pfr.75.2023.05.15.00.04.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 00:04:14 -0700 (PDT)
+Message-ID: <6b355d57-30b4-748d-87f4-d79a50fe5487@bytedance.com>
+Date:   Mon, 15 May 2023 15:04:09 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.10.1
+Subject: Re: [PATCH] sock: Fix misuse of sk_under_memory_pressure()
+From:   Abel Wu <wuyun.abel@bytedance.com>
+To:     Paolo Abeni <pabeni@redhat.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230506085903.96133-1-wuyun.abel@bytedance.com>
+ <588689343dcd6c904e7fc142a001043015e5b14e.camel@redhat.com>
+ <d2abfe0c-0152-860c-60f7-2787973c95d0@bytedance.com>
+Content-Language: en-US
+In-Reply-To: <d2abfe0c-0152-860c-60f7-2787973c95d0@bytedance.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,243 +79,99 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Matt Ranostay <mranostay@ti.com>
+Gentle ping :)
 
-J784S4 SoC supports two PCIE instances as follows:
-* PCIE0 - 4x lanes
-* PCIE1 - 4x lanes
-
-J784S4 EVM board has the following PCIE connectors:
-* PCIE0 - 4x lanes
-* PCIE1 - 2x lanes
-
-Signed-off-by: Matt Ranostay <mranostay@ti.com>
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-Signed-off-by: Achal Verma <a-verma1@ti.com>
----
-
-This patch depends on:
-https://lore.kernel.org/all/20230310111630.743023-1-s-vadapalli@ti.com/
-https://lore.kernel.org/all/20230425131607.290707-1-j-choudhary@ti.com/
-https://lore.kernel.org/all/20230401112633.2406604-1-a-verma1@ti.com/
-
- arch/arm64/boot/dts/ti/k3-j784s4-evm.dts   |  65 +++++++++++
- arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi | 126 +++++++++++++++++++++
- 2 files changed, 191 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-index 75d635c9992b..27f5902f0bfb 100644
---- a/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j784s4-evm.dts
-@@ -261,6 +261,71 @@ &main_sdhci1 {
- 	vqmmc-supply = <&vdd_sd_dv>;
- };
- 
-+&serdes0 {
-+	status = "okay";
-+	serdes0_pcie_link: phy@0 {
-+		reg = <0>;
-+		cdns,num-lanes = <4>;
-+		#phy-cells = <0>;
-+		cdns,phy-type = <PHY_TYPE_PCIE>;
-+		resets = <&serdes_wiz0 1>, <&serdes_wiz0 2>,
-+			 <&serdes_wiz0 3>, <&serdes_wiz0 4>;
-+	};
-+};
-+
-+&serdes_wiz0 {
-+	status = "okay";
-+};
-+
-+&serdes1 {
-+	status = "okay";
-+	serdes1_pcie_link: phy@0 {
-+		reg = <0>;
-+		cdns,num-lanes = <2>;
-+		#phy-cells = <0>;
-+		cdns,phy-type = <PHY_TYPE_PCIE>;
-+		resets = <&serdes_wiz1 1>, <&serdes_wiz1 2>;
-+	};
-+};
-+
-+&serdes_wiz1 {
-+	status = "okay";
-+};
-+
-+&pcie0_rc {
-+	status = "okay";
-+	reset-gpios = <&exp1 6 GPIO_ACTIVE_HIGH>;
-+	phys = <&serdes1_pcie_link>;
-+	phy-names = "pcie-phy";
-+};
-+
-+&pcie0_ep {
-+	phys = <&serdes1_pcie_link>;
-+	phy-names = "pcie-phy";
-+};
-+
-+&pcie1_rc {
-+	status = "okay";
-+	num-lanes = <2>;
-+	reset-gpios = <&exp1 2 GPIO_ACTIVE_HIGH>;
-+	phys = <&serdes0_pcie_link>;
-+	phy-names = "pcie-phy";
-+};
-+
-+&pcie1_ep {
-+	num-lanes = <2>;
-+	phys = <&serdes0_pcie_link>;
-+	phy-names = "pcie-phy";
-+};
-+
-+&serdes_ln_ctrl {
-+	idle-states = <J784S4_SERDES0_LANE0_PCIE1_LANE0>, <J784S4_SERDES0_LANE1_PCIE1_LANE1>,
-+		<J784S4_SERDES0_LANE2_IP3_UNUSED>, <J784S4_SERDES0_LANE3_USB>,
-+		<J784S4_SERDES1_LANE0_PCIE0_LANE0>, <J784S4_SERDES1_LANE1_PCIE0_LANE1>,
-+		<J784S4_SERDES1_LANE2_PCIE0_LANE2>, <J784S4_SERDES1_LANE3_PCIE0_LANE3>,
-+		<J784S4_SERDES2_LANE2_QSGMII_LANE1>, <J784S4_SERDES2_LANE3_QSGMII_LANE2>;
-+};
-+
- &main_gpio0 {
- 	status = "okay";
- };
-diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-index 5fa31fe2311b..206f3d206c4c 100644
---- a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-@@ -949,6 +949,132 @@ cpts@310d0000 {
- 		};
- 	};
- 
-+	pcie0_rc: pcie@2900000 {
-+		compatible = "ti,j784s4-pcie-host";
-+		reg = <0x00 0x02900000 0x00 0x1000>,
-+		      <0x00 0x02907000 0x00 0x400>,
-+		      <0x00 0x0d000000 0x00 0x00800000>,
-+		      <0x00 0x10000000 0x00 0x00001000>;
-+		reg-names = "intd_cfg", "user_cfg", "reg", "cfg";
-+		interrupt-names = "link_state";
-+		interrupts = <GIC_SPI 318 IRQ_TYPE_EDGE_RISING>;
-+		device_type = "pci";
-+		ti,syscon-pcie-ctrl = <&scm_conf 0x4070>;
-+		max-link-speed = <3>;
-+		num-lanes = <4>;
-+		power-domains = <&k3_pds 332 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 332 0>;
-+		clock-names = "fck";
-+		#address-cells = <3>;
-+		#size-cells = <2>;
-+		bus-range = <0x0 0xff>;
-+		vendor-id = <0x104c>;
-+		device-id = <0xb00d>;
-+		msi-map = <0x0 &gic_its 0x0 0x10000>;
-+		dma-coherent;
-+		ranges = <0x01000000 0x0 0x10001000 0x0 0x10001000 0x0 0x0010000>,
-+			 <0x02000000 0x0 0x10011000 0x0 0x10011000 0x0 0x7fef000>;
-+		dma-ranges = <0x02000000 0x0 0x0 0x0 0x0 0x10000 0x0>;
-+		#interrupt-cells = <1>;
-+		interrupt-map-mask = <0 0 0 7>;
-+		interrupt-map = <0 0 0 1 &pcie0_intc 0>,
-+				<0 0 0 2 &pcie0_intc 0>,
-+				<0 0 0 3 &pcie0_intc 0>,
-+				<0 0 0 4 &pcie0_intc 0>;
-+		status = "disabled";
-+
-+		pcie0_intc: interrupt-controller {
-+			interrupt-controller;
-+			#interrupt-cells = <1>;
-+			interrupt-parent = <&gic500>;
-+			interrupts = <GIC_SPI 312 IRQ_TYPE_EDGE_RISING>;
-+		};
-+	};
-+
-+	pcie0_ep: pcie-ep@2900000 {
-+		compatible = "ti,j784s4-pcie-ep";
-+		reg = <0x00 0x02900000 0x00 0x1000>,
-+		      <0x00 0x02907000 0x00 0x400>,
-+		      <0x00 0x0d000000 0x00 0x00800000>,
-+		      <0x00 0x10000000 0x00 0x08000000>;
-+		reg-names = "intd_cfg", "user_cfg", "reg", "mem";
-+		interrupt-names = "link_state";
-+		interrupts = <GIC_SPI 318 IRQ_TYPE_EDGE_RISING>;
-+		ti,syscon-pcie-ctrl = <&scm_conf 0x4070>;
-+		max-link-speed = <3>;
-+		num-lanes = <4>;
-+		power-domains = <&k3_pds 332 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 332 0>;
-+		clock-names = "fck";
-+		max-functions = /bits/ 8 <6>;
-+		max-virtual-functions = /bits/ 8 <4 4 4 4 0 0>;
-+		dma-coherent;
-+		status = "disabled";
-+	};
-+
-+	pcie1_rc: pcie@2910000 {
-+		compatible = "ti,j784s4-pcie-host";
-+		reg = <0x00 0x02910000 0x00 0x1000>,
-+		      <0x00 0x02917000 0x00 0x400>,
-+		      <0x00 0x0d800000 0x00 0x00800000>,
-+		      <0x00 0x18000000 0x00 0x00001000>;
-+		reg-names = "intd_cfg", "user_cfg", "reg", "cfg";
-+		interrupt-names = "link_state";
-+		interrupts = <GIC_SPI 330 IRQ_TYPE_EDGE_RISING>;
-+		device_type = "pci";
-+		ti,syscon-pcie-ctrl = <&scm_conf 0x4074>;
-+		max-link-speed = <3>;
-+		num-lanes = <4>;
-+		power-domains = <&k3_pds 333 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 333 0>;
-+		clock-names = "fck";
-+		#address-cells = <3>;
-+		#size-cells = <2>;
-+		bus-range = <0x0 0xff>;
-+		vendor-id = <0x104c>;
-+		device-id = <0xb013>;
-+		msi-map = <0x0 &gic_its 0x10000 0x10000>;
-+		dma-coherent;
-+		ranges = <0x01000000 0x0 0x18001000  0x00 0x18001000  0x0 0x0010000>,
-+			 <0x02000000 0x0 0x18011000  0x00 0x18011000  0x0 0x7fef000>;
-+		dma-ranges = <0x02000000 0x0 0x0 0x0 0x0 0x10000 0x0>;
-+		#interrupt-cells = <1>;
-+		interrupt-map-mask = <0 0 0 7>;
-+		interrupt-map = <0 0 0 1 &pcie1_intc 0>,
-+				<0 0 0 2 &pcie1_intc 0>,
-+				<0 0 0 3 &pcie1_intc 0>,
-+				<0 0 0 4 &pcie1_intc 0>;
-+		status = "disabled";
-+
-+		pcie1_intc: interrupt-controller {
-+			interrupt-controller;
-+			#interrupt-cells = <1>;
-+			interrupt-parent = <&gic500>;
-+			interrupts = <GIC_SPI 324 IRQ_TYPE_EDGE_RISING>;
-+		};
-+	};
-+
-+	pcie1_ep: pcie-ep@2910000 {
-+		compatible = "ti,j784s4-pcie-ep";
-+		reg = <0x00 0x02910000 0x00 0x1000>,
-+		      <0x00 0x02917000 0x00 0x400>,
-+		      <0x00 0x0d800000 0x00 0x00800000>,
-+		      <0x00 0x18000000 0x00 0x08000000>;
-+		reg-names = "intd_cfg", "user_cfg", "reg", "mem";
-+		interrupt-names = "link_state";
-+		interrupts = <GIC_SPI 330 IRQ_TYPE_EDGE_RISING>;
-+		ti,syscon-pcie-ctrl = <&scm_conf 0x4074>;
-+		max-link-speed = <3>;
-+		num-lanes = <4>;
-+		power-domains = <&k3_pds 333 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 333 0>;
-+		clock-names = "fck";
-+		max-functions = /bits/ 8 <6>;
-+		max-virtual-functions = /bits/ 8 <4 4 4 4 0 0>;
-+		dma-coherent;
-+		status = "disabled";
-+	};
-+
- 	main_mcan0: can@2701000 {
- 		compatible = "bosch,m_can";
- 		reg = <0x00 0x02701000 0x00 0x200>,
--- 
-2.25.1
-
+On 5/10/23 10:35 PM, Abel Wu wrote:
+> Hi Paolo, thanks very much for comment!
+> 
+> On 5/9/23 3:52 PM, Paolo Abeni wrote:
+>> On Sat, 2023-05-06 at 16:59 +0800, Abel Wu wrote:
+>>> The commit 180d8cd942ce ("foundations of per-cgroup memory pressure
+>>> controlling") wrapped proto::memory_pressure status into an accessor
+>>> named sk_under_memory_pressure(), and in the next commit e1aab161e013
+>>> ("socket: initial cgroup code") added the consideration of net-memcg
+>>> pressure into this accessor.
+>>>
+>>> But with the former patch applied, not all of the call sites of
+>>> sk_under_memory_pressure() are interested in net-memcg's pressure.
+>>> The __sk_mem_{raise,reduce}_allocated() only focus on proto/netns
+>>> pressure rather than net-memcg's.
+>>
+>> Why do you state the above? The current behavior is established since
+>> ~12y, arguably we can state quite the opposite.
+>>
+>> I think this patch should at least target net-next, and I think we need
+>> a more detailed reasoning to introduce such behavior change.
+> 
+> Sorry for failed to provide a reasonable explanation... When @allocated
+> is no more than tcp_mem[0], the global tcp_mem pressure is gone even if
+> the socket's memcg is under pressure.
+> 
+> This reveals that prot::memory_pressure only considers the global tcp
+> memory pressure, and is irrelevant to the memcg's. IOW if we're updating
+> prot::memory_pressure or making desicions upon prot::memory_pressure,
+> the memcg stat should not be considered and sk_under_memory_pressure()
+> should not be called since it considers both.
+> 
+>>
+>>> IOW this accessor are generally
+>>> used for deciding whether should reclaim or not.
+>>>
+>>> Fixes: e1aab161e013 ("socket: initial cgroup code")
+>>> Signed-off-by: Abel Wu <wuyun.abel@bytedance.com>
+>>> ---
+>>>   include/net/sock.h |  5 -----
+>>>   net/core/sock.c    | 17 +++++++++--------
+>>>   2 files changed, 9 insertions(+), 13 deletions(-)
+>>>
+>>> diff --git a/include/net/sock.h b/include/net/sock.h
+>>> index 8b7ed7167243..752d51030c5a 100644
+>>> --- a/include/net/sock.h
+>>> +++ b/include/net/sock.h
+>>> @@ -1404,11 +1404,6 @@ static inline int 
+>>> sk_under_cgroup_hierarchy(struct sock *sk,
+>>>   #endif
+>>>   }
+>>> -static inline bool sk_has_memory_pressure(const struct sock *sk)
+>>> -{
+>>> -    return sk->sk_prot->memory_pressure != NULL;
+>>> -}
+>>> -
+>>>   static inline bool sk_under_memory_pressure(const struct sock *sk)
+>>>   {
+>>>       if (!sk->sk_prot->memory_pressure)
+>>> diff --git a/net/core/sock.c b/net/core/sock.c
+>>> index 5440e67bcfe3..8d215f821ea6 100644
+>>> --- a/net/core/sock.c
+>>> +++ b/net/core/sock.c
+>>> @@ -3017,13 +3017,14 @@ int __sk_mem_raise_allocated(struct sock *sk, 
+>>> int size, int amt, int kind)
+>>>           }
+>>>       }
+>>> -    if (sk_has_memory_pressure(sk)) {
+>>> -        u64 alloc;
+>>> -
+>>> -        if (!sk_under_memory_pressure(sk))
+>>> -            return 1;
+>>> -        alloc = sk_sockets_allocated_read_positive(sk);
+>>> -        if (sk_prot_mem_limits(sk, 2) > alloc *
+>>> +    if (prot->memory_pressure) {
+>>> +        /*
+>>> +         * If under global pressure, allow the sockets that are below
+>>> +         * average memory usage to raise, trying to be fair between all
+>>> +         * the sockets under global constrains.
+>>> +         */
+>>> +        if (!*prot->memory_pressure ||
+>>> +            sk_prot_mem_limits(sk, 2) > 
+>>> sk_sockets_allocated_read_positive(sk) *
+>>
+>> The above introduces unrelated changes that makes the code IMHO less
+>> readable - I don't see a good reason to drop the 'alloc' variable.
+> Besides drop the @alloc variable, this change also removes the condition
+> of memcg's pressure from sk_under_memory_pressure() due to the reason
+> aforementioned. I can re-introduce @alloc in the next version if you
+> think it makes code more readable.
+> 
+> Thanks & Best,
+>      Abel
+> 
