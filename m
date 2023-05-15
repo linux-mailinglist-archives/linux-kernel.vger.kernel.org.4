@@ -2,102 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 754477031F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:57:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C24A703203
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:58:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241798AbjEOP5p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 11:57:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
+        id S242460AbjEOP6B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 11:58:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234401AbjEOP5m (ORCPT
+        with ESMTP id S240334AbjEOP5z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 11:57:42 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB620C3;
-        Mon, 15 May 2023 08:57:40 -0700 (PDT)
-Received: from loongson.cn (unknown [10.20.42.43])
-        by gateway (Coremail) with SMTP id _____8AxV+lzVmJk_d0IAA--.15137S3;
-        Mon, 15 May 2023 23:57:39 +0800 (CST)
-Received: from openarena.loongson.cn (unknown [10.20.42.43])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxBMVuVmJkr6lgAA--.36828S4;
-        Mon, 15 May 2023 23:57:37 +0800 (CST)
-From:   Sui Jingfeng <suijingfeng@loongson.cn>
-To:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        suijingfeng <15330273260@189.cn>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian Koenig <christian.koenig@amd.com>,
-        Emil Velikov <emil.l.velikov@gmail.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        loongson-kernel@lists.loongnix.cn
-Subject: [PATCH v13 2/2] MAINTAINERS: add maintainers for DRM LOONGSON driver
-Date:   Mon, 15 May 2023 23:57:34 +0800
-Message-Id: <20230515155734.2954149-3-suijingfeng@loongson.cn>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230515155734.2954149-1-suijingfeng@loongson.cn>
-References: <20230515155734.2954149-1-suijingfeng@loongson.cn>
+        Mon, 15 May 2023 11:57:55 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA6D026B9
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 08:57:51 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id 4fb4d7f45d1cf-50bc040c7b8so19609279a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 08:57:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684166270; x=1686758270;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=N44qBs+/LT+cRlOP5z8nHjZf1DtaB9wj003fafSrmqs=;
+        b=EpTkWaQ1fCz5WVnLJRhuCVM58P3m2LJ9vsvcYlBxjHIoXkQDTbMD0+kPBFJcQmvOoL
+         O6WRsD6awQcp2u05901XRiRVTxd7oGtlaAPCRYP5Zj2RKd9wm+m9WLuFpO3VFtJ/8xgw
+         L5lWMK5UD6n7r4k9t/CkllKxqoyhdiCVgMTPiYnKCkx6nv3zWE+FAA0yRA7aQUQhyy5W
+         edXilxKMV8Flh/y+sik6OXxI8bic9gshFnxYgT/tSJSvan7xJXMHDgBDdhDfnIVKZ0d3
+         C7syKvkQEtfo5pbZXkLYKw1Rp/VPKxzLvpfN5wu9P1q4uYElM6uQW5WN6dILOvtp3SJa
+         1pew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684166270; x=1686758270;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=N44qBs+/LT+cRlOP5z8nHjZf1DtaB9wj003fafSrmqs=;
+        b=WEWgWZpE8Rfdyj9yoQ8oU4Or3qd6w6VA9cYjx4naypgcapNKe1wt4ROHn27QmuXnF2
+         fDFegkcHAlijYnyZK8nzupEvsVgfEMm22oYsY6sabyYfG/IruTmXSx/nXfCmP5eO+c5i
+         ttCuc8PEGLfFUcoHVL6+gjP15nvRicJZGjmf7UwtVvW5txgGKuOMmveZx9ztk0bRZci9
+         slF/2eT8Dhz/sbbuVKKWpbzP8mNH3NdmdjhAhDlPpp6zFQ4lYNNxjQQb+RS/AUqlICqt
+         qiYK3SYjEBLx7vtixeaauK4r9mcw7uEvJVmB6pppd+ejuyNWsCuX8c7po+7iAZ+v0e7o
+         VzNw==
+X-Gm-Message-State: AC+VfDxAaKqX2+www3jcMKtaW8PjZ2BD/g9a686cpJXz31GJJmrOC6N9
+        OD/5ruxz657EIMHnNP7G9e4TRw==
+X-Google-Smtp-Source: ACHHUZ7NT0Y5GoL/YpdcQtWvtqFV+rnrFZAUKYumGeb7FEoYpZ3FAe+d8ZwLsbJmsLDK47ObaroKbw==
+X-Received: by 2002:a05:6402:160e:b0:50b:ca4a:8451 with SMTP id f14-20020a056402160e00b0050bca4a8451mr26810793edv.14.1684166270112;
+        Mon, 15 May 2023 08:57:50 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:6470:25b8:7c2d:1992])
+        by smtp.gmail.com with ESMTPSA id r16-20020aa7cfd0000000b0050bd245d39esm7506574edy.6.2023.05.15.08.57.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 08:57:49 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andreas Kemnade <andreas@kemnade.info>
+Subject: [PATCH] dt-bindings: vendor-prefixes: document TeeJet
+Date:   Mon, 15 May 2023 17:57:47 +0200
+Message-Id: <20230515155747.499371-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8BxBMVuVmJkr6lgAA--.36828S4
-X-CM-SenderInfo: xvxlyxpqjiv03j6o00pqjv00gofq/
-X-Coremail-Antispam: 1Uk129KBjvdXoW7XF1rAFWDWF43urW3uF4UJwb_yoWfJrb_Ga
-        yUJ393Zr1UWF9FkaykZFsrGryayrW3tF4Sg3Zrtan5Aa4qyryDJrZrK347KFy5Ar1xK3Z8
-        tayrGrySkFs3WjkaLaAFLSUrUUUUOb8apTn2vfkv8UJUUUU8wcxFpf9Il3svdxBIdaVrn0
-        xqx4xG64xvF2IEw4CE5I8CrVC2j2Jv73VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUY
-        X7kC6x804xWl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3w
-        AFIxvE14AKwVWUAVWUZwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK
-        6xIIjxv20xvE14v26ryj6F1UM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7
-        xvwVC2z280aVAFwI0_Cr1j6rxdM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAaw2AF
-        wI0_Jw0_GFyle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2xF0cIa020Ex4CE44I27w
-        Aqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_Wrv_ZF1lYx0Ex4A2jsIE
-        14v26r4j6F4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7
-        AKxVWUtVW8ZwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
-        67AKxVWUtVW8ZwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
-        8E67AF67kF1VAFwI0_GFv_WrylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVW5JVW7
-        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
-        1xMIIF0xvEx4A2jsIE14v26r4j6F4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
-        daVFxhVjvjDU0xZFpf9x07jP_-9UUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch add Li Yi and Sui Jingfeng as maintainer to drm/loongson driver
+Document TeeJet vendor prefix (used in am3517_mt_ventoux.dts board).
 
-Signed-off-by: Sui Jingfeng <suijingfeng@loongson.cn>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 ---
- MAINTAINERS | 8 ++++++++
- 1 file changed, 8 insertions(+)
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 402e26d0cdbc..8cdb75f653bc 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -6945,6 +6945,14 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
- F:	drivers/gpu/drm/lima/
- F:	include/uapi/drm/lima_drm.h
- 
-+DRM DRIVERS FOR LOONGSON
-+M:	Li Yi <liyi@loongson.cn>
-+M:	Sui Jingfeng <suijingfeng@loongson.cn>
-+L:	dri-devel@lists.freedesktop.org
-+S:	Supported
-+T:	git git://anongit.freedesktop.org/drm/drm-misc
-+F:	drivers/gpu/drm/loongson/
-+
- DRM DRIVERS FOR MEDIATEK
- M:	Chun-Kuang Hu <chunkuang.hu@kernel.org>
- M:	Philipp Zabel <p.zabel@pengutronix.de>
+Cc: Andreas Kemnade <andreas@kemnade.info>
+---
+ Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+index c3d426509e7e..5258090e2e02 100644
+--- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
++++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
+@@ -1341,6 +1341,8 @@ patternProperties:
+     description: Technologic Systems
+   "^techstar,.*":
+     description: Shenzhen Techstar Electronics Co., Ltd.
++  "^teejet,.*":
++    description: TeeJet
+   "^teltonika,.*":
+     description: Teltonika Networks
+   "^tempo,.*":
 -- 
-2.25.1
+2.34.1
 
