@@ -2,380 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D17E67030DE
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:03:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6024B7030E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 17:03:47 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242071AbjEOPDO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 11:03:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46874 "EHLO
+        id S242122AbjEOPDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 11:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242005AbjEOPCr (ORCPT
+        with ESMTP id S242128AbjEOPDV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 11:02:47 -0400
-Received: from EUR04-DB3-obe.outbound.protection.outlook.com (mail-db3eur04on2046.outbound.protection.outlook.com [40.107.6.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18B12701;
-        Mon, 15 May 2023 08:02:24 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Dma6LYDVHYGJ2OPpk+vQ8kr+BH83axBXUhJtScDFgnZf3zzgmIslYDYO3jZPG8jxFU+8SM8k4mXGKvIZqUJMRIDgfdrdKhg34pBZCXHzBeLfGik8uMlNiliePulWw2GKuTl4xWoM/YZGJBx/N0JD1KrXGxJHTyniPnPnWb+6nHJgpGBLrFj8clEtdzXYiu6ROV3pOzSJXmzC8Z0ohYh0+TNXlGH+4ccnq50kFiQyzEDAF7wwJpDgV0vIEh8NOpYc6gVsI2ho2sp+29L+WHJX63TAqIplsjKFbLH1DPFfYHhIFyrI6tuTnoXKOWsvwfPplzD5JOnbmRB9iC10g5CDKg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=IxkVKHgf85H/BN3wEbmJPmZ872HDJ6SOkj1qjYztVe8=;
- b=TIlHkBOIXrXK1d/uBS9RitgsYI4xEgUT1cLwsQzYtTSQfUwKnRZ6bmtcU6v9LHI8I0V9Q1+iER15XN6Wo3v6P6N2he8s/KvyP+v/S99fHbfE7tZFdh/Y/Y22yn/wu7UslRyN2kCGaE/iaLPsMHTQhj43M6yU8NbQd1pcHRmslyPNGYJNXG3VrTw2xHkwxQWuUXqvfxNucUCqR0pva91kkGiAbDyU4H2cMST7WB1IYYHqoxFc10F9dHHDTrZi0EtUMNREZrKe7y2JoIEg02mBmVCMUEfdTpoLU+Cmeu3MX0Ofwf0d2QV1bAfoEpMPxCvI1g1kxUIHSgskZuJnh61Wow==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=IxkVKHgf85H/BN3wEbmJPmZ872HDJ6SOkj1qjYztVe8=;
- b=Vva+hp+EkBU/c63LXwjw6X9cuYDXRmN4lfjAt4FkRKKbkRLXsm7nwO7HilUXL4A4hMMKNX2xfWB9131HPAwDf69eeQc8aMgHRXzllsl6Dh94nYKyoHA/P+oD/bRyCYoq/CH3kVWtV+0iFqsYDp2gca5i6SPtD3aP2j+2iNcod/8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
- by AM0PR04MB7011.eurprd04.prod.outlook.com (2603:10a6:208:193::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Mon, 15 May
- 2023 15:02:07 +0000
-Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::25d3:de2:ef1:3884]) by AM6PR04MB4838.eurprd04.prod.outlook.com
- ([fe80::25d3:de2:ef1:3884%4]) with mapi id 15.20.6387.030; Mon, 15 May 2023
- 15:02:07 +0000
-From:   Frank Li <Frank.Li@nxp.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED
-        DEVICE TREE BINDINGS),
-        linux-arm-kernel@lists.infradead.org (moderated list:ARM/FREESCALE IMX
-        / MXC ARM ARCHITECTURE), linux-kernel@vger.kernel.org (open list)
-Cc:     imx@lists.linux.dev
-Subject: [PATCH v2 1/1] arm64: dts: imx8mp: Add coresight trace components
-Date:   Mon, 15 May 2023 11:01:49 -0400
-Message-Id: <20230515150149.2790189-1-Frank.Li@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: BYAPR05CA0075.namprd05.prod.outlook.com
- (2603:10b6:a03:e0::16) To AM6PR04MB4838.eurprd04.prod.outlook.com
- (2603:10a6:20b:4::16)
+        Mon, 15 May 2023 11:03:21 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236B72136
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 08:03:04 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id af79cd13be357-7576eb88a46so874101785a.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 08:03:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1684162982; x=1686754982;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CWRXE+phlaSRjBwP//6vD7S2kedBsIZjdIRbpXoQP68=;
+        b=Nvn4R2jHWMziTpxS1IqrsNiwkQ+0w6EUXm4rP0g2U4O351hUnOBD93Bdq4bi4xM31V
+         /N9rTHk7S73puejzbZrxUmMIYN5mW84SKBjv3CO6YrORsNo4CMl8Ujkj6ch/ZoEFk4pH
+         y20uw+6QHNcPwIU7rBavkvFy9KN9mX8C3Ppno=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684162982; x=1686754982;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CWRXE+phlaSRjBwP//6vD7S2kedBsIZjdIRbpXoQP68=;
+        b=agc4TSQfk20RR1dXkmKmYjHYBxVS7e6NdRvuBVRci+xTjYFHgfX1IPVStOa6EmQAKY
+         k+La0Xs8n/tY4hgPHCFiUPjIRoBCxDqwtnzHdVOOuEYs5MKAi1xybHJ1mULriGB41iGl
+         2NENjzgohMS2Lhvy3lNk2N5NPoNcTgA2EVqh8iYV323yVF9wO/SJCP4OKNDxN26HHDiK
+         gcaPPSEGoOP0rzwtn1d/F74Iu1ELEfuuc+1E+fLULEpgbMQc8bhQIEH2OATyptXlM52B
+         z5YaXSZzsjI4/iILgsXg5VHoJmNEO/sB0haHz1rCyUdce1OdIDFDz9VNVI2/msClhDnd
+         4UMw==
+X-Gm-Message-State: AC+VfDziDNfog7/2L72C9D6DZpS5pOwRUMYnICOe/Mu8y0UubbJmt/J2
+        YjvIWxfuytifMeNE3Mpn6PYXgs2N1zKrHK66mVs=
+X-Google-Smtp-Source: ACHHUZ4vEwfrQJmG2XwwsolKmtoH1r0bWCLaREQsXGkX2pnPg6A9wcg20jEDp2bXrInQU3LwuQ020g==
+X-Received: by 2002:ac8:4e4e:0:b0:3f5:2bba:5c2b with SMTP id e14-20020ac84e4e000000b003f52bba5c2bmr5859834qtw.32.1684162982422;
+        Mon, 15 May 2023 08:03:02 -0700 (PDT)
+Received: from mail-qt1-f177.google.com (mail-qt1-f177.google.com. [209.85.160.177])
+        by smtp.gmail.com with ESMTPSA id b8-20020ac812c8000000b003f17f39af49sm5400730qtj.18.2023.05.15.08.03.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 08:03:01 -0700 (PDT)
+Received: by mail-qt1-f177.google.com with SMTP id d75a77b69052e-3f396606ab0so1489641cf.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 08:03:01 -0700 (PDT)
+X-Received: by 2002:a05:622a:1313:b0:3ef:302c:319e with SMTP id
+ v19-20020a05622a131300b003ef302c319emr18569qtk.8.1684162980828; Mon, 15 May
+ 2023 08:03:00 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM6PR04MB4838:EE_|AM0PR04MB7011:EE_
-X-MS-Office365-Filtering-Correlation-Id: 30bb8369-55b5-4d4c-6ef2-08db555559d5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: h5l6wheQHzEzSN/j0t8Sq4YXWe+CIXRZ73ySWEB+bxKdDnxF+0xL8XuUfEV4ZLKIrLBtwLMr1x5/NTswS4xLCS7hKFdT6fTy2fvYWpyzeNFFQHmkxghnmTfTC/i0CtyhR0+y/FAHbeZAl7Gcz0bAYFqnxuWj7BSSo3Szo81Jl9DqcP4nY2cy4sfS5JxgokY0ovSBsLaEP3QZwzWySB/oRmiS8aWcrtX3iANxpVGrEbasCAV8gVTMn5S4HenafDG9q+2TJdPoCGi7CMNkH0SvUs5mj0jmQhPt0xWUPOnA7W1fuHTNEmCPD33skXcaJgibYvQc9DdHeB6Z3szeRAkTD9PktxNo/qvg0V9PBLrFCjVCCF6F+13GZymr8lpl02nYP19vCsSGhwPNNna/z7fnHo6mEZUvazC4hHI1lfJF+V17UujAN0Puw4R3QACLnuGroGu+tHFzwjHNjbJtVL963d4fJUrty1aLPvL00t3wZiG1HXhmD4XI8NSoHEM+2HOXwm/mSFUPN4jVdmSpjFipj9GaFagge3yYNG9N2yoJIaD+nHsq7gwvB4Jq/WpnQgvVLM2tO4yRNDaC4Oj2DKwpX8IA+DVo42j+onjBLhbucSnT6BQYv8B4euSC/nc/sEOFEChIxTFRm+zjDSx29u4r/TbH1LIdKFwOcqiPOkmDL1A=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(39860400002)(376002)(346002)(396003)(136003)(366004)(451199021)(66556008)(110136005)(478600001)(4326008)(66476007)(66946007)(6666004)(52116002)(316002)(6486002)(8936002)(2906002)(8676002)(41300700001)(7416002)(5660300002)(26005)(1076003)(921005)(86362001)(38100700002)(38350700002)(2616005)(83380400001)(6512007)(186003)(6506007)(36756003)(32563001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?M2tqbnkxZ3Nua2w3YVZ1VXBJYk04M0RiakViQzJUS3p5SlNhYi9OMUFJSmo1?=
- =?utf-8?B?TVBFOStZZi9OOFBNWnp1d1lSWks3RWpMdGQwT2ZMckJoa1J0NG0vNFVvaXJq?=
- =?utf-8?B?YjZzc0xCdFV6dVdrbUdyRTNMU2ptOURoWGcrU1dJV2piVkZqVnJIRmY0OHhB?=
- =?utf-8?B?S0FOTVRDTzQyMFR2cHpLdG9BUjNENW92azBZMkoyTVZFMWhoQUF1N0dZOUNT?=
- =?utf-8?B?WjdsaWpRVGNLSnRUUzIwVkdDRUQ2WkMzRkVpRzk1dGpCWFdoOTA5WXNlUUdq?=
- =?utf-8?B?WDFwV2Q2NFE1ZnVmaURXTEJ1ZVpXSUhaY3VmdmY1NndZdUtYYVR6NmhvUjZR?=
- =?utf-8?B?L1BHaGpmRWQvdStSVWJsOUVWYm5tMVA0QkVrWVJYVGNtSlo4emk2OWE2MWJq?=
- =?utf-8?B?alFDSzdwTGUvTnBEd3Vic0xYZUlPTGdOc1VQT3FMK2FGWkpFS2xFa3JGejl4?=
- =?utf-8?B?ZVRUZ0Evb0xKWUdzeEhJWDVVRW1zMFZWOHBhNndWakN0UlJseGJteDV5WUF6?=
- =?utf-8?B?bWJyM3pZQTZFMVR1R1pOSGFxSXVYSWlmWmo0ejlNdzJrWks2SjlWMmtjRDJD?=
- =?utf-8?B?czB6bzZ0NnQxdWFNeEd2YnJvSHNlZHE0b3NYMC9YNFNZU0Qwb0pzRmJzOWdW?=
- =?utf-8?B?aUk0amVyd0tZT2daNEpMSWVhWHVjMTdmcDR3L1paUVE2dXdtNmgzMHVzeTZV?=
- =?utf-8?B?ZTNmRE9NZ0hXSlRUdTl4aUtYUDFSOG5oYWliZjFYamFIS3ZqU2c2eUdSSFFr?=
- =?utf-8?B?SjVQQ1NOQWpvdjM0aTQ4eGVhUktZd3pYcnBtTlRUU3pLTEFLQ3doVnB3Mnhr?=
- =?utf-8?B?RWxXdVU4bzR3eElZdzNhL2hkRm0vbTVQRXhBL3l4OUNnaWV0TmM3eWFNdFB0?=
- =?utf-8?B?OGNmdjJBOFB5WUdFdDFrZnE4Tml6aFpnR2VjOHhCemwzVVlPNktiNHYzcXhJ?=
- =?utf-8?B?WEgwVWpmaGNBMGJOSUlSeEE5VlFkREIvSjRFVS9ZUDZGenNENHpKUkllTzZh?=
- =?utf-8?B?TFovMmNCRnllQU4zRkhtQ1BLL1NuR3ZwUnVPd2NJaDJmU0xuOVNZaUdhMGhU?=
- =?utf-8?B?TzNZU0djcFRGc0kwVHkyLzNtcUN3dHdVWFExR2YzZnVYWUF1ZmhMU2ZhTTkx?=
- =?utf-8?B?RFFwVWhWVGxhYkt6WE5CSDFvVGM4QTV1M1VuT2IyNGdSbm5ERHYwYVArSHBa?=
- =?utf-8?B?eCt2TzhLODNhU3orb1RjV0NUM3pDeW9NT08xbEp5UkFISVN1V3RHRVo5QVBR?=
- =?utf-8?B?YU9Wc0NzSXh1YnBKWTNkVWdNVlV0dGI4c3RLYWx4bXpwdTZ3U0xHeHZ1RGJx?=
- =?utf-8?B?cmM3cHZReURpRXl0N21wTW5obTMrNzdqRFVSejNuSE5LdXIwVlBwYmtHMjdJ?=
- =?utf-8?B?RUNXbUV2SThzU0RnSUhrR2tlNUxIYjhNU2s3Rks4c1dZNEpldEc4cWxzaVhR?=
- =?utf-8?B?ZjlzU3RmMXpXVFhzcDI1QmE4UUcwYzYyUnp1amJkNXBXWm56VU5RWVJ6RHZU?=
- =?utf-8?B?UmloRDE3R1hXK3grQ1orQjBac3krUEc4cGN5YmFmUElMaXVBaEhzT2s3NVZH?=
- =?utf-8?B?Z0JnRFZra2xaZDFEc1diMHF0TWx5YThDZUxlWCtxUnFUNFpzWFNoOUdOcmJM?=
- =?utf-8?B?TGxWT2lLWUZzS1d5YlFCUWFGR2QwOGppekVXTmtveUVsZkdsN29TS3NQRUMz?=
- =?utf-8?B?QW5wQ1pZT01ETGI4cUZCRzUvRExPZTJLR3dXWjR3YUhQMHJKT1FISDBMOXhH?=
- =?utf-8?B?bDFlUVpTNUtUZ3dYZFBIL3hIZ3IzK2lab0ZSTkQvVHNnNXBld1ZCeHZVY2V3?=
- =?utf-8?B?c0h2RkgrOXRaOFJFOUxLc25MRDJZQ21PYUhPUEVreDZ3ZXE3Z2JzWWl5MElj?=
- =?utf-8?B?dWVyZXNVMXBtMEdVbVJUMk5XVHMwTGdVV1BLT2dWOU4yeVVJaGgvbjR1YW1s?=
- =?utf-8?B?OVlDK3JVMk9zanZNL3d6aHc2N3RIbk1yZm1EdnptVGlnY1ZWTTlWamNhejVo?=
- =?utf-8?B?WFdITTJpSnZFQm1BRWE0dVRlY2lweEUzcFN3RlY3ZHlDT1FNZ2ZOQTBSYzNm?=
- =?utf-8?B?TUV2a2o3eDVMOUhLVkZ5S29jazZBaGM2a3hiQm1EYXpLZDJrWlMzVUN4eW4v?=
- =?utf-8?Q?nijwSYiQ8IN9iT1Wbs+1Y2jud?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 30bb8369-55b5-4d4c-6ef2-08db555559d5
-X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2023 15:02:07.2332
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: cULbR/ewSfr+aHrPkjqRegqTZywo3ud9i6vpp1VAJTVeX4mLAJkxpQ8oren/7rBuCpPYHHsjinSbmJgXu/9W2w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7011
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230324063357.1.Ifdf3625a3c5c9467bd87bfcdf726c884ad220a35@changeid>
+ <CAMi1Hd1avQDcDQf137m2auz2znov4XL8YGrLZsw5edb-NtRJRw@mail.gmail.com>
+ <552345c5-b1e9-41f6-f275-b6eeeb51df25@linaro.org> <CAMi1Hd05z8uBotO4vs7Ropmt7W2gSA__tTu_=X1t0mze7bXrhg@mail.gmail.com>
+In-Reply-To: <CAMi1Hd05z8uBotO4vs7Ropmt7W2gSA__tTu_=X1t0mze7bXrhg@mail.gmail.com>
+From:   Doug Anderson <dianders@chromium.org>
+Date:   Mon, 15 May 2023 08:02:49 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=VSFDe445WEVTHXxU1WS_HGUV5jR5E8_Vgd4eyhn3rHyA@mail.gmail.com>
+Message-ID: <CAD=FV=VSFDe445WEVTHXxU1WS_HGUV5jR5E8_Vgd4eyhn3rHyA@mail.gmail.com>
+Subject: Re: [PATCH] regulator: qcom-rpmh: Revert "regulator: qcom-rpmh: Use PROBE_FORCE_SYNCHRONOUS"
+To:     Amit Pundir <amit.pundir@linaro.org>
+Cc:     Caleb Connolly <caleb.connolly@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,URIBL_BLACK autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add coresight trace components (ETM, ETF, ETB and Funnel).
+Hi,
 
-┌───────┐  ┌───────┐  ┌───────┐
-│ CPU0  ├─►│ ETM0  ├─►│       │
-└───────┘  └───────┘  │       │
-                      │       │
-┌───────┐  ┌───────┐  │  ATP  │
-│ CPU1  ├─►│ ETM1  ├─►│       │
-└───────┘  └───────┘  │       │
-                      │ FUNNEL│
-┌───────┐  ┌───────┐  │       │
-│ CPU2  ├─►│ ETM2  ├─►│       │
-└───────┘  └───────┘  │       │   ┌─────┐  ┌─────┐
-                      │       │   │     │  │     │
-┌───────┐  ┌───────┐  │       │   │ M7  │  │ DSP │
-│ CPU3  ├─►│ ETM3  ├─►│       │   │     │  │     │
-└───────┘  └───────┘  └───┬───┘   └──┬──┘  └──┬──┘               AXI
-                          │          │        │                   ▲
-                          ▼          ▼        ▼                   │
-                      ┌───────────────────────────┐   ┌─────┐   ┌─┴──┐
-                      │          ATP FUNNEL       ├──►│ETF  ├─► │ETR │
-                      └───────────────────────────┘   └─────┘   └────┘
+On Mon, May 15, 2023 at 7:42=E2=80=AFAM Amit Pundir <amit.pundir@linaro.org=
+> wrote:
+>
+> On Sun, 14 May 2023 at 18:11, Caleb Connolly <caleb.connolly@linaro.org> =
+wrote:
+> >
+> >
+> >
+> > On 13/05/2023 18:08, Amit Pundir wrote:
+> > > On Fri, 24 Mar 2023 at 19:05, Douglas Anderson <dianders@chromium.org=
+> wrote:
+> > >>
+> > >> This reverts commit 58973046c1bf ("regulator: qcom-rpmh: Use
+> > >> PROBE_FORCE_SYNCHRONOUS"). Further digging into the problems that
+> > >> prompted the us to switch to synchronous probe showed that the root
+> > >> cause was a missing "rootwait" in the kernel command line
+> > >> arguments. Let's reinstate asynchronous probe.
+> > >
+> > > Hi, the asynchronous probe is broken on Dragonboard 845c (SDM845)
+> > > running AOSP (Android Open Source Project) with v6.4-rc1
+> > > https://bugs.linaro.org/show_bug.cgi?id=3D5975.
+> > > Can we please go back to synchronous probe.
+> > >
+> > > AOSP do not make use of rootwait, IIRC, but it is added by the
+> > > bootloader anyway. And the device fails to boot AOSP regardless of
+> > > "rootwait" bootarg being present or not.
+> >
+> > Could you try applying this diff to enable some log spam and let me kno=
+w
+> > what you get? I'm keen to try and figure this one out. My mail client
+> > might crunch this a bit so I have pasted it here too
+> > https://p.calebs.dev/ab74b7@raw
+>
+> These prints add just enough delay for the UFS probe to succeed that I
+> can't reproduce the failure anymore.
 
-Signed-off-by: Frank Li <Frank.Li@nxp.com>
----
-Change from v1 to v2
-- add new line between nodes
-- add new line between properties and child node
+I'd prefer doing at least a little debugging before jumping to a
+revert. From looking at your dmesg [1], it looks as if the async probe
+is allowing RPMH to probe at the same time as "qcom-vadc-common".
+That's something that talks on the SPMI bus and is (potentially)
+talking to the same PMICs that RPMH-regulator is, right? I'm by no
+means an expert on how Qualcomm's PMICs work, but it seems plausible
+that the "qcom-vadc-common" is somehow causing problems and screwing
+up RPMH. Does that seem plausible to you?
 
- arch/arm64/boot/dts/freescale/imx8mp.dtsi | 204 ++++++++++++++++++++++
- 1 file changed, 204 insertions(+)
+If so, one interesting way to track it down would be to move around
+delays. Put ~500ms sleep at the _end_ of vadc_probe(). Presumably that
+_won't_ fix the problem. Now put a ~500ms sleep at the beginning of
+vadc_probe(). Maybe that will fix the problem? If so, you can move the
+delay around to narrow down the conflict. My wild guess would be that
+vadc_reset() could be throwing things for a loop?
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp.dtsi b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-index a19224fe1a6a..1a25710c3a90 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp.dtsi
-@@ -304,6 +304,210 @@ soc: soc@0 {
- 		nvmem-cells = <&imx8mp_uid>;
- 		nvmem-cell-names = "soc_unique_id";
- 
-+		etm0: etm@28440000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0x28440000 0x10000>;
-+			arm,primecell-periphid = <0xbb95d>;
-+			cpu = <&A53_0>;
-+			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					etm0_out_port: endpoint {
-+						remote-endpoint = <&ca_funnel_in_port0>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm1: etm@28540000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0x28540000 0x10000>;
-+			arm,primecell-periphid = <0xbb95d>;
-+			cpu = <&A53_1>;
-+			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					etm1_out_port: endpoint {
-+						remote-endpoint = <&ca_funnel_in_port1>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm2: etm@28640000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0x28640000 0x10000>;
-+			arm,primecell-periphid = <0xbb95d>;
-+			cpu = <&A53_2>;
-+			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					etm2_out_port: endpoint {
-+						remote-endpoint = <&ca_funnel_in_port2>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etm3: etm@28740000 {
-+			compatible = "arm,coresight-etm4x", "arm,primecell";
-+			reg = <0x28740000 0x10000>;
-+			arm,primecell-periphid = <0xbb95d>;
-+			cpu = <&A53_3>;
-+			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					etm3_out_port: endpoint {
-+						remote-endpoint = <&ca_funnel_in_port3>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel {
-+			/*
-+			 * non-configurable funnel don't show up on the AMBA
-+			 * bus.  As such no need to add "arm,primecell".
-+			 */
-+			compatible = "arm,coresight-static-funnel";
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					ca_funnel_in_port0: endpoint {
-+						remote-endpoint = <&etm0_out_port>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					ca_funnel_in_port1: endpoint {
-+						remote-endpoint = <&etm1_out_port>;
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+
-+					ca_funnel_in_port2: endpoint {
-+						remote-endpoint = <&etm2_out_port>;
-+					};
-+				};
-+
-+				port@3 {
-+					reg = <3>;
-+
-+					ca_funnel_in_port3: endpoint {
-+						remote-endpoint = <&etm3_out_port>;
-+					};
-+				};
-+			};
-+
-+			out-ports {
-+				port {
-+					ca_funnel_out_port0: endpoint {
-+						remote-endpoint = <&hugo_funnel_in_port0>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel@28c03000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+			reg = <0x28c03000 0x1000>;
-+			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
-+			clock-names = "apb_pclk";
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					hugo_funnel_in_port0: endpoint {
-+						remote-endpoint = <&ca_funnel_out_port0>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					hugo_funnel_in_port1: endpoint {
-+					/* M7 input */
-+					};
-+				};
-+
-+				port@2 {
-+					reg = <2>;
-+
-+					hugo_funnel_in_port2: endpoint {
-+					/* DSP input */
-+					};
-+				};
-+				/* the other input ports are not connect to anything */
-+			};
-+
-+			out-ports {
-+				port {
-+					hugo_funnel_out_port0: endpoint {
-+						remote-endpoint = <&etf_in_port>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etf@28c04000 {
-+			compatible = "arm,coresight-tmc", "arm,primecell";
-+			reg = <0x28c04000 0x1000>;
-+			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
-+			clock-names = "apb_pclk";
-+
-+			in-ports {
-+				port {
-+					etf_in_port: endpoint {
-+						remote-endpoint = <&hugo_funnel_out_port0>;
-+					};
-+				};
-+			};
-+
-+			out-ports {
-+				port {
-+					etf_out_port: endpoint {
-+						remote-endpoint = <&etr_in_port>;
-+					};
-+				};
-+			};
-+		};
-+
-+		etr@28c06000 {
-+			compatible = "arm,coresight-tmc", "arm,primecell";
-+			reg = <0x28c06000 0x1000>;
-+			clocks = <&clk IMX8MP_CLK_MAIN_AXI>;
-+			clock-names = "apb_pclk";
-+
-+			in-ports {
-+				port {
-+					etr_in_port: endpoint {
-+						remote-endpoint = <&etf_out_port>;
-+					};
-+				};
-+			};
-+		};
-+
- 		aips1: bus@30000000 {
- 			compatible = "fsl,aips-bus", "simple-bus";
- 			reg = <0x30000000 0x400000>;
--- 
-2.34.1
+If the above doesn't work, maybe we could add more tracing / printouts
+to see what is probing at the same time as RPMH?
 
+
+[1] https://bugs.linaro.org/attachment.cgi?id=3D1135
