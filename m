@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 213737040AB
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 00:03:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id A33007040AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 00:04:06 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S1343562AbjEOWDq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 18:03:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45006 "EHLO
+        id S1343568AbjEOWED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 18:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245711AbjEOWCq (ORCPT
+        with ESMTP id S245738AbjEOWCs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 18:02:46 -0400
-Received: from mail-oi1-x234.google.com (mail-oi1-x234.google.com [IPv6:2607:f8b0:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0081640CE;
-        Mon, 15 May 2023 15:01:38 -0700 (PDT)
-Received: by mail-oi1-x234.google.com with SMTP id 5614622812f47-3942cd86697so3371917b6e.0;
-        Mon, 15 May 2023 15:01:38 -0700 (PDT)
+        Mon, 15 May 2023 18:02:48 -0400
+Received: from mail-oa1-x32.google.com (mail-oa1-x32.google.com [IPv6:2001:4860:4864:20::32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66941D84F;
+        Mon, 15 May 2023 15:01:41 -0700 (PDT)
+Received: by mail-oa1-x32.google.com with SMTP id 586e51a60fabf-19638b3a304so5683392fac.1;
+        Mon, 15 May 2023 15:01:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684188077; x=1686780077;
+        d=gmail.com; s=20221208; t=1684188078; x=1686780078;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wENMhZEUKQoXANDT/rq1tLQ+DSTMyGsBS/qf3ADAcCs=;
-        b=a/0V3f9WK+WxJkvHE/0DTeMYQx+uTrnb2dpz/cPsFEhKjWOGnN29JuTlt8MOwpBsi8
-         3s9kfra+oKjnQ2gUAUk4jiadJE3EUlpZWtrymhxLJ7YxEaU3xo5EcChaPAGU9j1UmQHG
-         nuTWNFlL35dYz9EPJxGhcxT5fuesBUtxlSHW5aHDyrQ9QjtGtmlIoZAm6uKCvYS96b8v
-         l7JSAqhmQpHb7oqJKvB+mtjdI1ZPyGGRycfyGJK0q2zALV8DVM6NdkmtAcp9ctBdgAnc
-         YVPFDFQvtbvtmPTVIOM7FrPFgj0gHxpBELfqptvZtZuG94XY+m6VNltXXRfjwEyheYFq
-         P46Q==
+        bh=gpWRid5cmCr0SjsRhGTnuvLDk1kP0ktA07Mc2yuVwzg=;
+        b=KX5Wwk39dk7wZPDt2tcIDMX9zGKkXhLZ1Coy+KoC9E5bKt616rANczIRC3fSnAPPWw
+         7oiJT+k9dXyXUj9HwcfLL8fhYt1j9HE6AtMzvgLWQ7qJ9btwqnDtpKZsL1bgJa3s9EQ7
+         F+XYtXq1kgSBzGFq+LryNe0eoLY/Jghyy6svaPQXICkZ5F1iM0Vr2mqdq7BBvRWwsFjR
+         hwcYCzPDz5TosHeaFlO8m/DEGsYWYgJql6ua0rtf+DVQ/Z471fc1mPys0ufBla6WM6o4
+         5F7JS8JNIMsbd3lF+JG6INiBxoq3hGQ9jvvt3EmMd4vaBR7qpW1L/aS8DbJdSTAl0KEd
+         w4eQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684188077; x=1686780077;
+        d=1e100.net; s=20221208; t=1684188078; x=1686780078;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=wENMhZEUKQoXANDT/rq1tLQ+DSTMyGsBS/qf3ADAcCs=;
-        b=aU+RiuKqCW3MUNfuOo4aIupRIudnBfdpqztDEZnN+0BM1p9HUk795UbvhX95DH3CHe
-         ECXCqF0D23kjbYF27W4xARzv9XYvrYVxqVD71Q3r0eP5Dyeo2y664Hu715Uk88WTrll0
-         tvSLoGhiKaawSy4eXNwknlvHlwX6MKRv4+wlhyApMcx7fxfhyHP+z23zz5hlmt5Fa5YT
-         /r+FVWBZYb99D1+4FiFTpJnz+CmPe3xxi9MMVEvLq6/zQu8b76WaCJlO4nEZIq1TxJYS
-         +zKZaIlPukucSIOHMRz3LgZOfNuoRiiwq4eoRwZarM2L6hBZInvhXeoK3+fZ6G5KZhOI
-         3PUg==
-X-Gm-Message-State: AC+VfDz1OPfruv6xQp09Km4Cuo1xy9auBuSIqO4hughMlurQ46Rf+4cI
-        9GC9DRcoNfuSoznQjpM9EVL0eFSceko=
-X-Google-Smtp-Source: ACHHUZ7IbjN4rfopNyVhrA7vaQLej8KAYGURbwE6nRMvFa7jRXolmsGgwDnC+BCSdTWpBCLeYkY4ow==
-X-Received: by 2002:a54:448b:0:b0:38e:54da:9173 with SMTP id v11-20020a54448b000000b0038e54da9173mr11881690oiv.29.1684188076796;
-        Mon, 15 May 2023 15:01:16 -0700 (PDT)
+        bh=gpWRid5cmCr0SjsRhGTnuvLDk1kP0ktA07Mc2yuVwzg=;
+        b=FOYenMReICu7W+8vf7gP1mo7WZwKDpI1P5Jl++PmqYYP+hOmD/pCIS8HLQ45QBdGrc
+         rMjCR7uNR494K6DJTI3cbjBObB1b+EHkyz5qTlPa+OmEGzmLz2X+c5dRvwsUUEYsvqnS
+         lzF2TWYBjiaX8dW3HuITQ+LQ0ZIzD0a4tMjFSClu1U9v2xMxdYkVVe7jBvhXsq8l48cc
+         RBQ25odvaOyE8jDT5t+7Wr+5nLFBP8+3/EOse4bOwo+2sUF3LfVfnIn/QSuWMo6Tt9d0
+         L9kK3tO30hVxwGalD1YepokgDMtmNTNXLIcXdm4vkL45V4prV8f0WWZxdlEF+W1D8XJ1
+         Cc5g==
+X-Gm-Message-State: AC+VfDyYv5XL5DCJo4+5vXkrc1hRFcKzv+ymEGpJ9HG1c5o7R/qREFfm
+        rQMp3gAg4pQY2qi7BQLTUUc=
+X-Google-Smtp-Source: ACHHUZ6dCtHHc/Tyis21EWcZyXyQoCgu522rbYdCPnOWa9D1Ua681uS0z4kwAWMg6r9qmvXywp2OpQ==
+X-Received: by 2002:aca:1e12:0:b0:38b:c4c3:b3ec with SMTP id m18-20020aca1e12000000b0038bc4c3b3ecmr9652841oic.3.1684188077836;
+        Mon, 15 May 2023 15:01:17 -0700 (PDT)
 Received: from grumpy-VECTOR.hsd1.tx.comcast.net ([2601:2c3:480:7390:5391:4539:59c2:4092])
-        by smtp.gmail.com with ESMTPSA id i1-20020aca0c41000000b0038e07fe2c97sm5265148oiy.42.2023.05.15.15.01.15
+        by smtp.gmail.com with ESMTPSA id i1-20020aca0c41000000b0038e07fe2c97sm5265148oiy.42.2023.05.15.15.01.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 15:01:16 -0700 (PDT)
+        Mon, 15 May 2023 15:01:17 -0700 (PDT)
 From:   Jorge Lopez <jorgealtxwork@gmail.com>
 X-Google-Original-From: Jorge Lopez <jorge.lopez2@hp.com>
 To:     hdegoede@redhat.com, platform-driver-x86@vger.kernel.org,
         linux-kernel@vger.kernel.org, thomas@t-8ch.de,
         ilpo.jarvinen@linux.intel.com
-Subject: [PATCH v13 12/13] hp-bioscfg: Makefile
-Date:   Mon, 15 May 2023 17:01:00 -0500
-Message-Id: <20230515220101.39794-13-jorge.lopez2@hp.com>
+Subject: [PATCH v13 13/13] hp-bioscfg: MAINTAINERS
+Date:   Mon, 15 May 2023 17:01:01 -0500
+Message-Id: <20230515220101.39794-14-jorge.lopez2@hp.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230515220101.39794-1-jorge.lopez2@hp.com>
 References: <20230515220101.39794-1-jorge.lopez2@hp.com>
@@ -117,63 +117,26 @@ Signed-off-by: Jorge Lopez <jorge.lopez2@hp.com>
 ---
 Based on the latest platform-drivers-x86.git/for-next
 ---
- drivers/platform/x86/hp/Kconfig             | 16 ++++++++++++++++
- drivers/platform/x86/hp/Makefile            |  1 +
- drivers/platform/x86/hp/hp-bioscfg/Makefile | 11 +++++++++++
- 3 files changed, 28 insertions(+)
- create mode 100644 drivers/platform/x86/hp/hp-bioscfg/Makefile
+ MAINTAINERS | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/drivers/platform/x86/hp/Kconfig b/drivers/platform/x86/hp/Kconfig
-index ae165955311c..7fef4f12e498 100644
---- a/drivers/platform/x86/hp/Kconfig
-+++ b/drivers/platform/x86/hp/Kconfig
-@@ -60,4 +60,20 @@ config TC1100_WMI
- 	  This is a driver for the WMI extensions (wireless and bluetooth power
- 	  control) of the HP Compaq TC1100 tablet.
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 0c9011f5fc17..7d1f261af539 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9367,6 +9367,12 @@ S:	Obsolete
+ W:	http://w1.fi/hostap-driver.html
+ F:	drivers/net/wireless/intersil/hostap/
  
-+config HP_BIOSCFG
-+	tristate "HP BIOS Configuration Driver"
-+	default m
-+	depends on ACPI_WMI
-+	select NLS
-+	select FW_ATTR_CLASS
-+	help
-+	  This driver enables administrators to securely manage BIOS settings
-+	  using digital certificates and public-key cryptography that eliminate
-+	  the need for passwords for both remote and local management. It supports
-+	  changing BIOS settings on many HP machines from 2018 and newer without
-+	  the use of any additional software.
++HP BIOSCFG DRIVER
++M:	Jorge Lopez <jorge.lopez2@hp.com>
++L:	platform-driver-x86@vger.kernel.org
++S:	Maintained
++F:	drivers/platform/x86/hp/hp-bioscfg/
 +
-+	  To compile this driver as a module, choose M here: the module will
-+	  be called hp-bioscfg.
-+
- endif # X86_PLATFORM_DRIVERS_HP
-diff --git a/drivers/platform/x86/hp/Makefile b/drivers/platform/x86/hp/Makefile
-index db1eed4cd7c7..e4f908a61acf 100644
---- a/drivers/platform/x86/hp/Makefile
-+++ b/drivers/platform/x86/hp/Makefile
-@@ -8,3 +8,4 @@
- obj-$(CONFIG_HP_ACCEL)		+= hp_accel.o
- obj-$(CONFIG_HP_WMI)		+= hp-wmi.o
- obj-$(CONFIG_TC1100_WMI)	+= tc1100-wmi.o
-+obj-$(CONFIG_HP_BIOSCFG)	+= hp-bioscfg/
-diff --git a/drivers/platform/x86/hp/hp-bioscfg/Makefile b/drivers/platform/x86/hp/hp-bioscfg/Makefile
-new file mode 100644
-index 000000000000..67be0d917753
---- /dev/null
-+++ b/drivers/platform/x86/hp/hp-bioscfg/Makefile
-@@ -0,0 +1,11 @@
-+obj-$(CONFIG_HP_BIOSCFG) := hp-bioscfg.o
-+
-+hp-bioscfg-objs := bioscfg.o	\
-+	biosattr-interface.o	\
-+	enum-attributes.o	\
-+	int-attributes.o	\
-+	order-list-attributes.o	\
-+	passwdobj-attributes.o	\
-+	spmobj-attributes.o	\
-+	string-attributes.o	\
-+	surestart-attributes.o
+ HP COMPAQ TC1100 TABLET WMI EXTRAS DRIVER
+ L:	platform-driver-x86@vger.kernel.org
+ S:	Orphan
 -- 
 2.34.1
 
