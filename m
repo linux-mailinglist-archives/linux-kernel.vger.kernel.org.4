@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA9A702FE0
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:31:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC1FB702FE6
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:32:09 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241445AbjEOObj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 10:31:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55592 "EHLO
+        id S241577AbjEOOcD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 10:32:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241648AbjEOObU (ORCPT
+        with ESMTP id S241813AbjEOObd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 10:31:20 -0400
-Received: from mail-pf1-x42c.google.com (mail-pf1-x42c.google.com [IPv6:2607:f8b0:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E20552D77;
-        Mon, 15 May 2023 07:31:04 -0700 (PDT)
-Received: by mail-pf1-x42c.google.com with SMTP id d2e1a72fcca58-6436e075166so9583747b3a.0;
-        Mon, 15 May 2023 07:31:04 -0700 (PDT)
+        Mon, 15 May 2023 10:31:33 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 555D426B0;
+        Mon, 15 May 2023 07:31:08 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id d9443c01a7336-1aaf91ae451so120213245ad.1;
+        Mon, 15 May 2023 07:31:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684161064; x=1686753064;
+        d=gmail.com; s=20221208; t=1684161067; x=1686753067;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=+ALq25/GYGH1zBk6Bxp4nZpXzMg5fERkeTFcF2Sc5VQ=;
-        b=rObvimGJrFK2A8lzFbnXDUzo+N+GHtHZxseJ0knzMtMqtfIou+p1+b/gJAnOQr7Tug
-         g14TqF12i3WogQ2yshrldLo4we4vKJv7pMlBBKn+h1RheZ2bvIeIFVRwmJoXh5iiiCc2
-         cfLRMefKYsBGfy+wY2jtzgJHkbms95Kk1PZyRXhwyJz8dKOS/Pm00fPPLR2PY9o6K7KF
-         UFXy1gWIuNJLFWLZaRGfUGOCJg1cjJWhflRUt2UBOkoIXDtTT6oAJfDKpmV2BVCyUtLZ
-         i73eCt+MQqGRfZDSOLBD77U1CRi8XUQrENwO9ex5Ku0PD0hAa5CESfb40DrLKGcRRsWg
-         MtFw==
+        bh=qqnNhChLNbHWp6ove8p/hsKGE1errQugomyUMPMw9ls=;
+        b=fH6QFLL+CYHRn+8pGwUhAoac0FbnvAZdJFesFc5r8vV/i196TOHCIInwyzzyYauNDq
+         acsj5AK5T1CZRbpHYwsfuCkTfEN+oIgpxQ8RdewnHOZUIJ+r3yHmsajrya34xy0OX06e
+         l+8w4DjDnnOBvWQSgYKhpLRTQYpaEd4eHayyR311Sc9vdPoexzdKBDGWXCtuJN6AlBCQ
+         HYGRx4Vjk94ROq8FDS5u5TiFpmmJtI84qYwe/0flN5XGuSKkPFyCXBQYGHQeSkYwRBj6
+         xfYGtyRQiZh9Ca/C1AWbjcK4HYqCbmkLZSUXqst/o1nRQJ6ji5MICuEQ0c6x3S3h/eQJ
+         5FaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684161064; x=1686753064;
+        d=1e100.net; s=20221208; t=1684161067; x=1686753067;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=+ALq25/GYGH1zBk6Bxp4nZpXzMg5fERkeTFcF2Sc5VQ=;
-        b=huVU5/6dhBI9J/Vst+YGVezscSXJ249IQJY7cZLrL0cJhZoEF63Kuj7WGLqN2CYdDk
-         Y8sN6S9nV4fNC/wxrIDLwBaW9pting1YYH0czxdhz/OodPum0tmT2xfo/wd5QGiy00WV
-         p24uDxPUH7W3pFuBa+gUOGiNK+hKZWxFMKnMmh9f47sv1Cailg5VqdxO0/iTDP8VZc+U
-         pkg3mrEe3m8WEh01EZdBneo8x+qzrNRY3gtc9Y1ZzZq9TG0hkp62TziMaXMhKAy0mjRx
-         lJSiaYG6RNQ4lSUrjY+A3aZJDOxzkguZAkIWLyxDZAqRetYierZ8kGoWgNCkpYRS+B3O
-         zWFA==
-X-Gm-Message-State: AC+VfDwa500sl9dMaK6vYuJtGcO/VPlooWMA8Z6VlGbeGjqb/sX6Ueet
-        RNdE2HcP/Y0Ey0KS4mkDbS0=
-X-Google-Smtp-Source: ACHHUZ4R3D/gaKOk7QkT8FMcc9BtENuYixxz4Hv1MjvFhVsW4kdm9Xr25qLw7//hiieQaz81R+IUPw==
-X-Received: by 2002:a05:6a00:218a:b0:640:defd:a6d5 with SMTP id h10-20020a056a00218a00b00640defda6d5mr40180183pfi.12.1684161063962;
-        Mon, 15 May 2023 07:31:03 -0700 (PDT)
+        bh=qqnNhChLNbHWp6ove8p/hsKGE1errQugomyUMPMw9ls=;
+        b=TBZNXhcgLWLHpOz0MsGauoRxu25RSy6oaA4WluyCAtPF/tWuJegLsildGWEowBpyuT
+         GqH8SUomurEIdOVLbjKam/DIzvHyHEkhn33ENJnP2RT8uEvZuEDx38AWEn5moHRdZzOb
+         rhZjkQlHOkI2yJ/OwzHguDkMsdnkiUFAKoMnEAu8puHg8dzB2oZg8CQreBOEQfAbhtOi
+         26m56u5XhHsj9lvr3lbULYjNxwk6q2JT7XIhnKOqmQn+9r5UeAho7duQktqNYSLRdgnM
+         ExEkh0ke0YBka9+FX6y/qe4g800PcLQBPeKpEuCoo+VT7MjR/rQCGa5j7sKAqeI1dcpI
+         vQvg==
+X-Gm-Message-State: AC+VfDw1pDccA007GNJOMWYyIB8Uzzo/pEVGoFpyzN1tkaskBxcoxZzs
+        IsXG5/sCbR0agE26cvD3/7k=
+X-Google-Smtp-Source: ACHHUZ45CjBOIkWOM6gt+Z5UDMQMYRnAACMza7WWCWB+vaTsz6VCtYycaRj+NUuppqX4mM9Nwmj5jA==
+X-Received: by 2002:a17:902:be03:b0:1ab:797:afbe with SMTP id r3-20020a170902be0300b001ab0797afbemr32952864pls.8.1684161066640;
+        Mon, 15 May 2023 07:31:06 -0700 (PDT)
 Received: from localhost ([2a00:79e1:abd:4a00:61b:48ed:72ab:435b])
-        by smtp.gmail.com with ESMTPSA id j18-20020aa78dd2000000b0064c9c80617csm2666690pfr.214.2023.05.15.07.31.03
+        by smtp.gmail.com with ESMTPSA id p10-20020a1709026b8a00b001acaf7e22bdsm11708482plk.14.2023.05.15.07.31.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 07:31:03 -0700 (PDT)
+        Mon, 15 May 2023 07:31:06 -0700 (PDT)
 From:   Rob Clark <robdclark@gmail.com>
 To:     dri-devel@lists.freedesktop.org
 Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
@@ -59,16 +59,20 @@ Cc:     freedreno@lists.freedesktop.org, Daniel Vetter <daniel@ffwll.ch>,
         Emil Velikov <emil.l.velikov@gmail.com>,
         =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
         Rob Clark <robdclark@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        linux-doc@vger.kernel.org (open list:DOCUMENTATION),
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        linux-arm-msm@vger.kernel.org (open list:DRM DRIVER FOR MSM ADRENO GPU),
         linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v4 8/9] drm/fdinfo: Add comm/cmdline override fields
-Date:   Mon, 15 May 2023 07:30:15 -0700
-Message-Id: <20230515143023.801167-9-robdclark@gmail.com>
+Subject: [PATCH v4 9/9] drm/msm: Wire up comm/cmdline override for fdinfo
+Date:   Mon, 15 May 2023 07:30:16 -0700
+Message-Id: <20230515143023.801167-10-robdclark@gmail.com>
 X-Mailer: git-send-email 2.40.1
 In-Reply-To: <20230515143023.801167-1-robdclark@gmail.com>
 References: <20230515143023.801167-1-robdclark@gmail.com>
@@ -86,180 +90,197 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Rob Clark <robdclark@chromium.org>
 
-These are useful in particular for VM scenarios where the process which
-has opened to drm device file is just a proxy for the real user in a VM
-guest.
-
-v2: doc cleanups
+Also store the override strings in drm_file so that fdinfo can display
+them.  We still need to keep our original copy as we could need these
+override strings after the device file has been closed and drm_file
+freed.
 
 Signed-off-by: Rob Clark <robdclark@chromium.org>
 ---
- Documentation/gpu/drm-usage-stats.rst | 10 ++++++++++
- drivers/gpu/drm/drm_file.c            | 15 +++++++++++++++
- include/drm/drm_file.h                | 19 +++++++++++++++++++
- 3 files changed, 44 insertions(+)
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c | 24 +++++++++++++++++++++++-
+ drivers/gpu/drm/msm/msm_drv.c           |  2 ++
+ drivers/gpu/drm/msm/msm_gpu.h           | 10 ++++++++++
+ 3 files changed, 35 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/gpu/drm-usage-stats.rst b/Documentation/gpu/drm-usage-stats.rst
-index fe35a291ff3e..03bd92b9125a 100644
---- a/Documentation/gpu/drm-usage-stats.rst
-+++ b/Documentation/gpu/drm-usage-stats.rst
-@@ -66,20 +66,30 @@ question.
- Unique value relating to the open DRM file descriptor used to distinguish
- duplicated and shared file descriptors. Conceptually the value should map 1:1
- to the in kernel representation of `struct drm_file` instances.
+diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+index bb38e728864d..a20c2622a61f 100644
+--- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
++++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+@@ -9,20 +9,21 @@
+ #include <linux/ascii85.h>
+ #include <linux/interconnect.h>
+ #include <linux/firmware/qcom/qcom_scm.h>
+ #include <linux/kernel.h>
+ #include <linux/of_address.h>
+ #include <linux/pm_opp.h>
+ #include <linux/slab.h>
+ #include <linux/soc/qcom/mdt_loader.h>
+ #include <linux/nvmem-consumer.h>
+ #include <soc/qcom/ocmem.h>
++#include <drm/drm_file.h>
+ #include "adreno_gpu.h"
+ #include "a6xx_gpu.h"
+ #include "msm_gem.h"
+ #include "msm_mmu.h"
  
- Uniqueness of the value shall be either globally unique, or unique within the
- scope of each device, in which case `drm-pdev` shall be present as well.
+ static u64 address_space_size = 0;
+ MODULE_PARM_DESC(address_space_size, "Override for size of processes private GPU address space");
+ module_param(address_space_size, ullong, 0600);
  
- Userspace should make sure to not double account any usage statistics by using
- the above described criteria in order to associate data to individual clients.
- 
-+- drm-comm-override: <valstr>
-+- drm-cmdline-override: <valstr>
-+
-+Returns the client comm (executable) or cmdline override strings.  Some drivers
-+support letting userspace override this in cases where the userspace is simply a
-+"proxy".  Such as is the case with virglrenderer drm native context, where the
-+host process is just forwarding command submission, etc, from guest userspace.
-+This allows the proxy to make visible the cmdline of the actual app in the VM
-+guest.
-+
- Utilization
- ^^^^^^^^^^^
- 
- - drm-engine-<keystr>: <uint> ns
- 
- GPUs usually contain multiple execution engines. Each shall be given a stable
- and unique name (keystr), with possible values documented in the driver specific
- documentation.
- 
- Value shall be in specified time units which the respective GPU engine spent
-diff --git a/drivers/gpu/drm/drm_file.c b/drivers/gpu/drm/drm_file.c
-index 739d9b7ab9ec..a0684c4a021d 100644
---- a/drivers/gpu/drm/drm_file.c
-+++ b/drivers/gpu/drm/drm_file.c
-@@ -171,20 +171,22 @@ struct drm_file *drm_file_alloc(struct drm_minor *minor)
- 	mutex_init(&file->fbs_lock);
- 	INIT_LIST_HEAD(&file->blobs);
- 	INIT_LIST_HEAD(&file->pending_event_list);
- 	INIT_LIST_HEAD(&file->event_list);
- 	init_waitqueue_head(&file->event_wait);
- 	file->event_space = 4096; /* set aside 4k for event buffer */
- 
- 	spin_lock_init(&file->master_lookup_lock);
- 	mutex_init(&file->event_read_lock);
- 
-+	mutex_init(&file->override_lock);
-+
- 	if (drm_core_check_feature(dev, DRIVER_GEM))
- 		drm_gem_open(dev, file);
- 
- 	if (drm_core_check_feature(dev, DRIVER_SYNCOBJ))
- 		drm_syncobj_open(file);
- 
- 	drm_prime_init_file_private(&file->prime);
- 
- 	if (dev->driver->open) {
- 		ret = dev->driver->open(dev, file);
-@@ -285,20 +287,22 @@ void drm_file_free(struct drm_file *file)
- 		drm_master_release(file);
- 
- 	if (dev->driver->postclose)
- 		dev->driver->postclose(dev, file);
- 
- 	drm_prime_destroy_file_private(&file->prime);
- 
- 	WARN_ON(!list_empty(&file->event_list));
- 
- 	put_pid(file->pid);
-+	kfree(file->override_comm);
-+	kfree(file->override_cmdline);
- 	kfree(file);
- }
- 
- static void drm_close_helper(struct file *filp)
- {
- 	struct drm_file *file_priv = filp->private_data;
- 	struct drm_device *dev = file_priv->minor->dev;
- 
- 	mutex_lock(&dev->filelist_mutex);
- 	list_del(&file_priv->lhead);
-@@ -988,20 +992,31 @@ void drm_show_fdinfo(struct seq_file *m, struct file *f)
- 	drm_printf(&p, "drm-client-id:\t%llu\n", file->client_id);
- 
- 	if (dev_is_pci(dev->dev)) {
- 		struct pci_dev *pdev = to_pci_dev(dev->dev);
- 
- 		drm_printf(&p, "drm-pdev:\t%04x:%02x:%02x.%d\n",
- 			   pci_domain_nr(pdev->bus), pdev->bus->number,
- 			   PCI_SLOT(pdev->devfn), PCI_FUNC(pdev->devfn));
+ static bool zap_available = true;
+@@ -391,47 +392,68 @@ int adreno_set_param(struct msm_gpu *gpu, struct msm_file_private *ctx,
+ 			return -EINVAL;
+ 		break;
+ 	default:
+ 		if (len != 0)
+ 			return -EINVAL;
  	}
  
-+	mutex_lock(&file->override_lock);
-+	if (file->override_comm) {
-+		drm_printf(&p, "drm-comm-override:\t%s\n",
-+			   file->override_comm);
-+	}
-+	if (file->override_cmdline) {
-+		drm_printf(&p, "drm-cmdline-override:\t%s\n",
-+			   file->override_cmdline);
-+	}
-+	mutex_unlock(&file->override_lock);
+ 	switch (param) {
+ 	case MSM_PARAM_COMM:
+ 	case MSM_PARAM_CMDLINE: {
+-		char *str, **paramp;
++		char *str, *str2, **paramp;
++		struct drm_file *file = ctx->file;
+ 
+ 		str = kmalloc(len + 1, GFP_KERNEL);
+ 		if (!str)
+ 			return -ENOMEM;
+ 
+ 		if (copy_from_user(str, u64_to_user_ptr(value), len)) {
+ 			kfree(str);
+ 			return -EFAULT;
+ 		}
+ 
+ 		/* Ensure string is null terminated: */
+ 		str[len] = '\0';
+ 
++		/*
++		 * We need a 2nd copy for drm_file.. this copy can't replace
++		 * our internal copy in the ctx, because we may need it for
++		 * recovery/devcoredump after the file is already closed.
++		 */
++		str2 = kstrdup(str, GFP_KERNEL);
 +
- 	if (dev->driver->show_fdinfo)
- 		dev->driver->show_fdinfo(&p, file);
+ 		mutex_lock(&gpu->lock);
+ 
+ 		if (param == MSM_PARAM_COMM) {
+ 			paramp = &ctx->comm;
+ 		} else {
+ 			paramp = &ctx->cmdline;
+ 		}
+ 
+ 		kfree(*paramp);
+ 		*paramp = str;
+ 
+ 		mutex_unlock(&gpu->lock);
+ 
++		mutex_lock(&file->override_lock);
++
++		if (param == MSM_PARAM_COMM) {
++			paramp = &file->override_comm;
++		} else {
++			paramp = &file->override_cmdline;
++		}
++
++		kfree(*paramp);
++		*paramp = str2;
++
++		mutex_unlock(&file->override_lock);
++
+ 		return 0;
+ 	}
+ 	case MSM_PARAM_SYSPROF:
+ 		if (!capable(CAP_SYS_ADMIN))
+ 			return -EPERM;
+ 		return msm_file_private_set_sysprof(ctx, gpu, value);
+ 	default:
+ 		DBG("%s: invalid param: %u", gpu->name, param);
+ 		return -EINVAL;
+ 	}
+diff --git a/drivers/gpu/drm/msm/msm_drv.c b/drivers/gpu/drm/msm/msm_drv.c
+index a403aebe7f5a..6dec1a3534f2 100644
+--- a/drivers/gpu/drm/msm/msm_drv.c
++++ b/drivers/gpu/drm/msm/msm_drv.c
+@@ -574,20 +574,21 @@ static int context_init(struct drm_device *dev, struct drm_file *file)
+ 	struct msm_file_private *ctx;
+ 
+ 	ctx = kzalloc(sizeof(*ctx), GFP_KERNEL);
+ 	if (!ctx)
+ 		return -ENOMEM;
+ 
+ 	INIT_LIST_HEAD(&ctx->submitqueues);
+ 	rwlock_init(&ctx->queuelock);
+ 
+ 	kref_init(&ctx->ref);
++	ctx->file = file;
+ 	msm_submitqueue_init(dev, ctx);
+ 
+ 	ctx->aspace = msm_gpu_create_private_address_space(priv->gpu, current);
+ 	file->driver_priv = ctx;
+ 
+ 	ctx->seqno = atomic_inc_return(&ident);
+ 
+ 	return 0;
  }
- EXPORT_SYMBOL(drm_show_fdinfo);
  
- /**
-  * mock_drm_getfile - Create a new struct file for the drm device
-  * @minor: drm minor to wrap (e.g. #drm_device.primary)
-  * @flags: file creation mode (O_RDWR etc)
-  *
-diff --git a/include/drm/drm_file.h b/include/drm/drm_file.h
-index 5f5c156903d2..25384edd1e91 100644
---- a/include/drm/drm_file.h
-+++ b/include/drm/drm_file.h
-@@ -363,20 +363,39 @@ struct drm_file {
- 	/** @event_read_lock: Serializes drm_read(). */
- 	struct mutex event_read_lock;
- 
- 	/**
- 	 * @prime:
- 	 *
- 	 * Per-file buffer caches used by the PRIME buffer sharing code.
+@@ -596,20 +597,21 @@ static int msm_open(struct drm_device *dev, struct drm_file *file)
+ 	/* For now, load gpu on open.. to avoid the requirement of having
+ 	 * firmware in the initrd.
  	 */
- 	struct drm_prime_file_private prime;
+ 	load_gpu(dev);
+ 
+ 	return context_init(dev, file);
+ }
+ 
+ static void context_close(struct msm_file_private *ctx)
+ {
++	ctx->file = NULL;
+ 	msm_submitqueue_close(ctx);
+ 	msm_file_private_put(ctx);
+ }
+ 
+ static void msm_postclose(struct drm_device *dev, struct drm_file *file)
+ {
+ 	struct msm_drm_private *priv = dev->dev_private;
+ 	struct msm_file_private *ctx = file->driver_priv;
+ 
+ 	/*
+diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
+index 7a4fa1b8655b..671ce89e61b0 100644
+--- a/drivers/gpu/drm/msm/msm_gpu.h
++++ b/drivers/gpu/drm/msm/msm_gpu.h
+@@ -352,20 +352,30 @@ struct msm_gpu_perfcntr {
+  * @seqno:        unique per process seqno
+  */
+ struct msm_file_private {
+ 	rwlock_t queuelock;
+ 	struct list_head submitqueues;
+ 	int queueid;
+ 	struct msm_gem_address_space *aspace;
+ 	struct kref ref;
+ 	int seqno;
  
 +	/**
-+	 * @comm: Overridden task comm
++	 * @file: link back to the associated drm_file
 +	 *
-+	 * Accessed under override_lock
++	 * Note that msm_file_private can outlive the drm_file, ie.
++	 * after the drm_file is closed but before jobs submitted have
++	 * been cleaned up.  After the drm_file is closed this will be
++	 * NULL.
 +	 */
-+	char *override_comm;
++	struct drm_file *file;
 +
-+	/**
-+	 * @cmdline: Overridden task cmdline
-+	 *
-+	 * Accessed under override_lock
-+	 */
-+	char *override_cmdline;
-+
-+	/**
-+	 * @override_lock: Serialize access to override_comm and override_cmdline
-+	 */
-+	struct mutex override_lock;
-+
- 	/* private: */
- #if IS_ENABLED(CONFIG_DRM_LEGACY)
- 	unsigned long lock_count; /* DRI1 legacy lock count */
- #endif
- };
- 
- /**
-  * drm_is_primary_client - is this an open file of the primary node
-  * @file_priv: DRM file
-  *
+ 	/**
+ 	 * sysprof:
+ 	 *
+ 	 * The value of MSM_PARAM_SYSPROF set by userspace.  This is
+ 	 * intended to be used by system profiling tools like Mesa's
+ 	 * pps-producer (perfetto), and restricted to CAP_SYS_ADMIN.
+ 	 *
+ 	 * Setting a value of 1 will preserve performance counters across
+ 	 * context switches.  Setting a value of 2 will in addition
+ 	 * suppress suspend.  (Performance counters lose state across
 -- 
 2.40.1
 
