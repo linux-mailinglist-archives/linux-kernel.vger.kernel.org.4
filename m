@@ -2,140 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D483702D6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:05:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F0917702D79
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:05:19 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242154AbjEONEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 09:04:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50308 "EHLO
+        id S242160AbjEONFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 09:05:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242102AbjEONEf (ORCPT
+        with ESMTP id S242118AbjEONEg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 09:04:35 -0400
-Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DC11FDE
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:04:33 -0700 (PDT)
-Received: by mail-lj1-x234.google.com with SMTP id 38308e7fff4ca-2ac826a1572so131268111fa.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:04:33 -0700 (PDT)
+        Mon, 15 May 2023 09:04:36 -0400
+Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2B231FC1;
+        Mon, 15 May 2023 06:04:33 -0700 (PDT)
+Received: by mail-yb1-xb2a.google.com with SMTP id 3f1490d57ef6-ba6fffc5524so5461476276.3;
+        Mon, 15 May 2023 06:04:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684155871; x=1686747871;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bHrRwJZNmR4vO/RyDtfQTesrckzCKnVFHgmO5Rc+8Yc=;
-        b=TULdDFG0A6XCg1kPrRqYeAen4Sup0En+HIRYQ5hbebwHu1yf8R7/rtfpcG4CAHErU3
-         aYl/HJQ/sMM8/wZhPoKAVm7bTzWOFfIOOalAlT5aFCYhwwzsrwQkuIw8NK5SAbdTpAWO
-         EaQFBIPZh9i580piap/E3+oZYEmDnXQq5wmfHASe8feZ8b7dQ9q12htNNYd9PzHt4AnC
-         g+JaEvIzthgz91G+JgGQt4tRSprLzbKO6x2vx699+lGSrb8hiDgnM2C8B8OsSpOAdv+E
-         4BJgb5yO4M1DnCUlx/T+OZMn1P95Nd+QrR4BS4TfiEo+XR3UbKq2xocXBkGxFdbXrOSd
-         VDEA==
+        d=gmail.com; s=20221208; t=1684155873; x=1686747873;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RmjgtR3FUUnPHLlHE3NyNv9G/eITqpjvj7rS/dG5ByE=;
+        b=iievZifvjljNx3cjrrpmWbU9HzSxb4BFi5Wy2YoKC6dIIE/gG3VJyQE9GfG8Ix4qDH
+         3k+33ttyIvhu7uSgwrLOZ5aMU3FNh8WjsllaT8uC5juPJhCAmrecbNBrFU05dyOQtKJW
+         ED4npY0DIWnwq75hBoS9c0hLdQHXroAOM0MHnLWDkHC5QyNC543bIprOo/T7xdhzNmrq
+         JGstKStUZKW9olEB/jLq4eHoyUQH+nC9pAYpVXmskv4R2ae3E7hKZcPObON2dRSjJNry
+         fsRcgZTNk5LAkZHyjb9POzgX7uAIfhBGWOPPcWq4qfLMzIxzWjzyEzhWGNoQZ6ScmC+0
+         vSyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684155871; x=1686747871;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20221208; t=1684155873; x=1686747873;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bHrRwJZNmR4vO/RyDtfQTesrckzCKnVFHgmO5Rc+8Yc=;
-        b=hpis/RzcOnT7CTfFLFk21PYGthKPcjagw8LcdovC2e7+xueEq0Fl398He89HwGHq3r
-         iA+lwqMTqLSaD9daBfYdY4TkeL15UHcbwK4yUUBSFun+miNigV51n62Bd4xz56DXqABy
-         J9z2A9hPXC6CTEvN/5ur3gVP5CrvwW7Hv3zSoptIMRRij5H2/4+1mGnWhnlZRloFhoAS
-         5peDCty+29uIGnX3QhIpifyjJM8r14z1xSgvU1nE4nXpn4TRLWPCrDnxY+qxEyrJM6kL
-         pnJUzLOhtbirAIik9SQkOQpkE3ysx6DLv/Ki3J8HlI4RWUCNj8jeVi7Sv9HlbIgBFB96
-         zufg==
-X-Gm-Message-State: AC+VfDze2bnWiNsQmObT92yXUMAvPAIuGU+hX3IPemdgnmmHSKnwMvHu
-        6Eb3hynp/4Stwnr3kta6CgcF1Q==
-X-Google-Smtp-Source: ACHHUZ4eI0PryuqQnmub3Yb1zlIRfC/ATwu3Y1K2XJZHSAPArQZmY4OyHkeO2muauqast5oLswYLbQ==
-X-Received: by 2002:a05:6512:507:b0:4f1:4fe6:56c8 with SMTP id o7-20020a056512050700b004f14fe656c8mr6621241lfb.34.1684155871779;
-        Mon, 15 May 2023 06:04:31 -0700 (PDT)
-Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
-        by smtp.gmail.com with ESMTPSA id x27-20020ac25ddb000000b004f37a64c90asm785823lfq.303.2023.05.15.06.04.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 06:04:31 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 15 May 2023 15:04:16 +0200
-Subject: [PATCH 5/5] arm64: dts: qcom: qrb4210-rb2: Enable CAN bus
- controller
+        bh=RmjgtR3FUUnPHLlHE3NyNv9G/eITqpjvj7rS/dG5ByE=;
+        b=h1VbWg8oseJcTh7NP06vnkTEaotwWvf0MAkVuUHxLcplJGNwhd/o27QHhXCUoZXfZR
+         tuClvsEYwb3E+8C9DNE7Hzc4s50YqXtgmjCIfl0GzyCGMX3BT2ox2jHBpwIUOKO62o9l
+         pWExhdPlI/ppsHtAOUDowLZNEEF5wz5wR7fMaN+FPRzQEGkY2YUL2o3S4uYTgoXuJzRg
+         9dBq8RUKXqsutcymiJ3k9H5s+ZomhMsIhznTGHXxPmCbh9lTlvMzvM7ubDQjTBOiQ4uG
+         25sSdsztBW9d8t1oyrtfocvXLsWOGxJK/aW4W48044rkwAxyC8VfWDqkM4rmyGaCikLK
+         0lPw==
+X-Gm-Message-State: AC+VfDyv/xXQiUA7JzjrM0chuCJpmX0w73jih2UVrZzjknNJM3DgvdvX
+        zfTbsrjP12/ga58ySQpfITZkcgTFEuM3R00YZ/I=
+X-Google-Smtp-Source: ACHHUZ4j0rfWlRf3B25cMrTmeLqU/GVDGA6NRJbdgBBYgLuSVLo3VaL7t47oFPK2ZArCu3u5WiUSpY5ldduBctNwBw8=
+X-Received: by 2002:a05:7500:5283:b0:105:6766:6d39 with SMTP id
+ x3-20020a057500528300b0010567666d39mr1166689gaa.40.1684155872830; Mon, 15 May
+ 2023 06:04:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230515-topic-rb2-bits-v1-5-a52d154a639d@linaro.org>
-References: <20230515-topic-rb2-bits-v1-0-a52d154a639d@linaro.org>
-In-Reply-To: <20230515-topic-rb2-bits-v1-0-a52d154a639d@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bhupesh Sharma <bhupesh.sharma@linaro.org>
-Cc:     Marijn Suijten <marijn.suijten@somainline.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1684155864; l=1168;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=AZ/Op7kTNY+Rd0mmluqshowmHdxgH+CEwOfMytzuYpc=;
- b=DEY+Mv6nuwLuNQ4u5dz5EePSZ+OYPbGN8uNJUATj+7/wFqrdDqLdjyIFL4gBsQyfocto3ryMk
- Zbl9P6UpJezD3Sps80bAaZF8kALbz3Njwpj6o1ocYvgbT4rPHNwngcM
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+References: <20230511150802.737477-1-cgzones@googlemail.com> <20230515-kopfgeld-umkurven-f27be4b68a26@brauner>
+In-Reply-To: <20230515-kopfgeld-umkurven-f27be4b68a26@brauner>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Mon, 15 May 2023 16:04:21 +0300
+Message-ID: <CAOQ4uxgtxLLfBuVUAT7+N7cox+03wJA3ACGEu76dZd5RqGWXTQ@mail.gmail.com>
+Subject: Re: [RFC PATCH v2] fs/xattr: add *at family syscalls
+To:     Christian Brauner <brauner@kernel.org>
+Cc:     =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
+        x86@kernel.org, linux-alpha@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, audit@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-security-module@vger.kernel.org, selinux@vger.kernel.org,
+        Jan Kara <jack@suse.cz>, jlayton@kernel.org, cyphar@cyphar.com,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the Microchip mcp2518fd hosted on the SPI5 bus.
+On Mon, May 15, 2023 at 1:33=E2=80=AFPM Christian Brauner <brauner@kernel.o=
+rg> wrote:
+>
+> On Thu, May 11, 2023 at 05:08:02PM +0200, Christian G=C3=B6ttsche wrote:
+> > Add the four syscalls setxattrat(), getxattrat(), listxattrat() and
+> > removexattrat().  Those can be used to operate on extended attributes,
+> > especially security related ones, either relative to a pinned directory
+> > or on a file descriptor without read access, avoiding a
+> > /proc/<pid>/fd/<fd> detour, requiring a mounted procfs.
+> >
+> > One use case will be setfiles(8) setting SELinux file contexts
+> > ("security.selinux") without race conditions.
+> >
+> > Add XATTR flags to the private namespace of AT_* flags.
+> >
+> > Use the do_{name}at() pattern from fs/open.c.
+> >
+> > Use a single flag parameter for extended attribute flags (currently
+> > XATTR_CREATE and XATTR_REPLACE) and *at() flags to not exceed six
+> > syscall arguments in setxattrat().
+> >
+> > Previous approach ("f*xattr: allow O_PATH descriptors"): https://lore.k=
+ernel.org/all/20220607153139.35588-1-cgzones@googlemail.com/
+> > v1 discussion: https://lore.kernel.org/all/20220830152858.14866-2-cgzon=
+es@googlemail.com/
+> >
+> > Signed-off-by: Christian G=C3=B6ttsche <cgzones@googlemail.com>
+> > CC: x86@kernel.org
+> > CC: linux-alpha@vger.kernel.org
+> > CC: linux-kernel@vger.kernel.org
+> > CC: linux-arm-kernel@lists.infradead.org
+> > CC: linux-ia64@vger.kernel.org
+> > CC: linux-m68k@lists.linux-m68k.org
+> > CC: linux-mips@vger.kernel.org
+> > CC: linux-parisc@vger.kernel.org
+> > CC: linuxppc-dev@lists.ozlabs.org
+> > CC: linux-s390@vger.kernel.org
+> > CC: linux-sh@vger.kernel.org
+> > CC: sparclinux@vger.kernel.org
+> > CC: linux-fsdevel@vger.kernel.org
+> > CC: audit@vger.kernel.org
+> > CC: linux-arch@vger.kernel.org
+> > CC: linux-api@vger.kernel.org
+> > CC: linux-security-module@vger.kernel.org
+> > CC: selinux@vger.kernel.org
+> > ---
+>
+> Fwiw, your header doesn't let me see who the mail was directly sent to
+> so I'm only able to reply to lists which is a bit pointless...
+>
+> > v2:
+> >   - squash syscall introduction and wire up commits
+> >   - add AT_XATTR_CREATE and AT_XATTR_REPLACE constants
+>
+> > +#define AT_XATTR_CREATE              0x1     /* setxattrat(2): set val=
+ue, fail if attr already exists */
+> > +#define AT_XATTR_REPLACE     0x2     /* setxattrat(2): set value, fail=
+ if attr does not exist */
+>
+> We really shouldn't waste any AT_* flags for this. Otherwise we'll run
+> out of them rather quickly. Two weeks ago we added another AT_* flag
+> which is up for merging for v6.5 iirc and I've glimpsed another AT_*
+> flag proposal in one of the talks at last weeks Vancouver conference
+> extravaganza.
+>
+> Even if we reuse 0x200 for AT_XATTR_CREATE (like we did for AT_EACCESS
+> and AT_REMOVEDIR) we still need another bit for AT_XATTR_REPLACE.
+>
+> Plus, this is really ugly since AT_XATTR_{CREATE,REPLACE} really isn't
+> in any way related to lookup and we're mixing it in with lookup
+> modifying flags.
+>
+> So my proposal for {g,s}etxattrat() would be:
+>
+> struct xattr_args {
+>         __aligned_u64 value;
+>         __u32 size;
+>         __u32 cmd;
+> };
+>
+> So everything's nicely 64bit aligned in the struct. Use the @cmd member
+> to set either XATTR_REPLACE or XATTR_CREATE and treat it as a proper
+> enum and not as a flag argument like the old calls did.
+>
+> So then we'd have:
+>
+> setxattrat(int dfd, const char *path, const char __user *name,
+>            struct xattr_args __user *args, size_t size, unsigned int flag=
+s)
+> getxattrat(int dfd, const char *path, const char __user *name,
+>            struct xattr_args __user *args, size_t size, unsigned int flag=
+s)
+>
+> The current in-kernel struct xattr_ctx would be renamed to struct
+> kernel_xattr_args and then we do the usual copy_struct_from_user()
+> dance:
+>
+> struct xattr_args args;
+> err =3D copy_struct_from_user(&args, sizeof(args), uargs, usize);
+>
+> and then go on to handle value/size for setxattrat()/getxattrat()
+> accordingly.
+>
+> getxattr()/setxattr() aren't meaningfully filterable by seccomp already
+> so there's not point in not using a struct.
+>
+> If that isn't very appealing then another option is to add a new flag
+> namespace just for setxattrat() similar to fspick() and move_mount()
+> duplicating the needed lookup modifying flags.
+> Thoughts?
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/qrb4210-rb2.dts | 22 ++++++++++++++++++++++
- 1 file changed, 22 insertions(+)
+Here is a thought: I am not sure if I am sorry we did not discuss this API
+issue in LSFMM or happy that we did not waste our time on this... :-/
 
-diff --git a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-index 224c96bba35f..e2e82dd83c55 100644
---- a/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-+++ b/arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-@@ -20,6 +20,14 @@ chosen {
- 		stdout-path = "serial0:115200n8";
- 	};
- 
-+	clocks {
-+		clk40M: can-clk {
-+			compatible = "fixed-clock";
-+			clock-frequency = <40000000>;
-+			#clock-cells = <0>;
-+		};
-+	};
-+
- 	hdmi-connector {
- 		compatible = "hdmi-connector";
- 		type = "a";
-@@ -415,6 +423,20 @@ &sdhc_2 {
- 	status = "okay";
- };
- 
-+&spi5 {
-+	status = "okay";
-+
-+	can@0 {
-+		compatible = "microchip,mcp2518fd";
-+		reg = <0>;
-+		interrupts-extended = <&tlmm 39 IRQ_TYPE_LEVEL_LOW>;
-+		clocks = <&clk40M>;
-+		spi-max-frequency = <10000000>;
-+		vdd-supply = <&vdc_5v>;
-+		xceiver-supply = <&vdc_5v>;
-+	};
-+};
-+
- &sleep_clk {
- 	clock-frequency = <32000>;
- };
+I must say that I dislike redefined flag namespace like FSPICK_*
+just as much as I dislike overloading the AT_* namespace and TBH,
+I am not crazy about avoiding this problem with xattr_args either.
 
--- 
-2.40.1
+A more sane solution IMO could have been:
+- Use lower word of flags for generic AT_ flags
+- Use the upper word of flags for syscall specific flags
 
+So if it were up to me, I would vote starting this practice:
+
++ /* Start of syscall specific range */
++ #define AT_XATTR_CREATE       0x10000     /* setxattrat(2): set
+value, fail if attr already exists */
++ #define AT_XATTR_REPLACE     0x20000     /* setxattrat(2): set
+value, fail if attr does not exist */
+
+Which coincidentally happens to be inline with my AT_HANDLE_FID patch...
+
+Sure, we will have some special cases like MOVE_MOUNT_* and
+legacy pollution to the lower AT_ flags word, but as a generic solution
+for syscalls that need the common AT_ lookup flags and just a few
+private flags, that seems like the lesser evil to me.
+
+Thanks,
+Amir.
