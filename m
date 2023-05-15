@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9A2B702258
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 05:31:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id DA71A70225C
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 05:31:24 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239230AbjEODbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 23:31:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37456 "EHLO
+        id S231948AbjEODbV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 23:31:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238669AbjEODam (ORCPT
+        with ESMTP id S238487AbjEODan (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 23:30:42 -0400
+        Sun, 14 May 2023 23:30:43 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A482D76;
-        Sun, 14 May 2023 20:29:19 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A297D2D55;
+        Sun, 14 May 2023 20:29:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id BC78261E2B;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id ABD436175C;
+        Mon, 15 May 2023 03:29:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62311C433D2;
         Mon, 15 May 2023 03:29:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73819C4339E;
-        Mon, 15 May 2023 03:29:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684121358;
-        bh=3U7Yu4lWHuHPvXJ3zXDd0svY1gpGXjwrJN0tg5aitHQ=;
+        s=k20201202; t=1684121359;
+        bh=D60Dvtwd6JBzVGgPkUcmwldqY7HeCNEK1rR8BxSCcas=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VQy8957c7TB7aIE5PMfS0VmwMhu9JxTxnG/Kfe09H4GD59ZyLfnYxkMY3pP8tnhpv
-         xNiaaUAtI5eskEpFPpuRZhgCjJTqNuQnRacLxyw0Q/ddHidsyAV1NaQzcMBba7RQbT
-         6TQH0Zzy174hHgpHtsRJwhyeY9Uw0Md75O7pX4Twl65A/CSzr/BE1qIljs0v0JnG5z
-         kumjEsm+0S6OT/hTq2qZeflzgCre5yoqn80tay7WmHb6w/sdrKoxck4KcyfmN/py0Q
-         OUiZ9GmeWeVR4LEACmXX8V3gd+HliWLnXIikHjXBJwvh0uH5SLg88iU9EBRjs82su7
-         ufRBKuHdM/QLA==
+        b=SceqkGC9YOo6UpPQfWeXb427B0Se6ScAuTaFmM20fUDXlx3rw8tqVgECaqTmBYc28
+         eYHdRp/1uFCvD00UkaGNOaXU30a7EwlQiBQf6viCfNoJazgMqJVri9+1IeZBx6YMEI
+         8HrB8M1oJFkf5La2lYfBshZq1zeAbHbUnbeegHW3X27Exg7VrJKiwVCMZhwC5dnqLP
+         ja3ybFVh3P5IH/5Phy4JBBsFLCaKgDYrw2gmt8RmG/HruwUUAC81E35U+iiIDo1qKG
+         YOU28kIBvC1ttYV5ky+a5O8ZpVhZ7lTn49vuojnt3Wx6Gg7g5ICuB5f6tIJsNVGj+/
+         hDxikxVy0b/Yg==
 From:   Bjorn Andersson <andersson@kernel.org>
 To:     Bartosz Golaszewski <brgl@bgdev.pl>,
         Andy Gross <agross@kernel.org>,
@@ -41,12 +41,12 @@ To:     Bartosz Golaszewski <brgl@bgdev.pl>,
 Cc:     linux-kernel@vger.kernel.org,
         Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
         devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org
-Subject: Re: (subset) [PATCH 1/2] dt-bindings: soc: qcom: aoss-qmp: add compatible for sa8775p
-Date:   Sun, 14 May 2023 20:32:57 -0700
-Message-Id: <168412158456.1260758.12394667213859910379.b4-ty@kernel.org>
+Subject: Re: [PATCH] arm64: dts: qcom: sa8775p: add the PMU node
+Date:   Sun, 14 May 2023 20:32:58 -0700
+Message-Id: <168412158454.1260758.7993153891695865472.b4-ty@kernel.org>
 X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230504161755.197417-1-brgl@bgdev.pl>
-References: <20230504161755.197417-1-brgl@bgdev.pl>
+In-Reply-To: <20230414123016.176457-1-brgl@bgdev.pl>
+References: <20230414123016.176457-1-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -60,17 +60,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 4 May 2023 18:17:54 +0200, Bartosz Golaszewski wrote:
+On Fri, 14 Apr 2023 14:30:16 +0200, Bartosz Golaszewski wrote:
 > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> Document the AOSS QMP compatible for SA8775P.
+> Add the PMU node for sa8775p platforms.
 > 
 > 
 
 Applied, thanks!
 
-[1/2] dt-bindings: soc: qcom: aoss-qmp: add compatible for sa8775p
-      commit: 0dc608855195c8f79e499e2a608b26e56e259810
+[1/1] arm64: dts: qcom: sa8775p: add the PMU node
+      commit: 86c96823d4b5f0403d0418b89c614682a01ce28e
 
 Best regards,
 -- 
