@@ -2,115 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40B317040C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 00:11:25 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 6ADC47040C4
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 00:11:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242888AbjEOWLW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 18:11:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56374 "EHLO
+        id S245680AbjEOWLd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 18:11:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245675AbjEOWLS (ORCPT
+        with ESMTP id S245554AbjEOWL1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 18:11:18 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0BBA8A7B
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 15:10:47 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id ffacd0b85a97d-3090d3e9c92so2758607f8f.2
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 15:10:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684188621; x=1686780621;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PcasEqjqVqeZD6iRt2acWNL10GV04xiY11Aorq1Q2nM=;
-        b=RCLXWcRIkUtTeSnsDneWy3ua5n1ZSO+btm22KJcVMSLPorWDPAGjqjqM70gptvZlXV
-         7NlfYafwS44YFcqoYLkJuHah4Z3z/Z7YNDC6mfLuYJgNu1g7PJCEUiUKqK6g2WF1LhJB
-         a+pkzyNmLDQJUNM5UGpQtkFlDBTd82RL6JEro8JOQajcBHgQSZTW/DOz77HYuLRhVBPl
-         /fKAohlTgCL9oVUDoGI8HsrYrP9o0y6z58X6XTb1kz0p66KfqlL7Pnf6mhDxJBkWmUQ3
-         xvYWUHmOMKsp/rhfKLwuu+/Vp2YdGiVlrD4AMiZqP2mexMEjRwlzHttsI99fmLWFbaC+
-         qJEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684188621; x=1686780621;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PcasEqjqVqeZD6iRt2acWNL10GV04xiY11Aorq1Q2nM=;
-        b=IJwhKMC7YbJSAtGY/K+YN2dPWeLpa0Pvm+e0pbToeoV275vEIO49yMjo0unF0cTPs0
-         QFkb3siaSQptjolhMNsrCCpBackl26gx+FfdZKCtKZjsH6GcSdz0KIe2dL7l/QF6itWh
-         8T9yBBGJvKyQ0UNJwIBpPyDHT1w4tfVtpw/h7DiWwRvyRU59Gi/XSanKPuYVkB0xVYPK
-         scO0aXbSfRqAYut4MfPt/rUvb1ZwkryXS4ZroVfMcIIBvbnPPf7lYyM/MxYaphE7Tog/
-         c8iaIsUyYzlRS/ibjDJv5ohx5XjN79b/v5XecOT/HIaXkC4ytRiN6zf4PxZ7Aj8hWPkH
-         v79w==
-X-Gm-Message-State: AC+VfDxBzGtrROG3CqPVqMPmeaKrjZxbihOasXwyjxPsfZ3SAm3TlVVA
-        FEoMei6Rfr3N/iepmWFa45Sy9Kf1LTN1Ag==
-X-Google-Smtp-Source: ACHHUZ7K/t3stitaVskNFjUzr78g28lE3oEjtjJswqzrJG4v2pFCXfbk72g7XJNHy/562eUNOSabnQ==
-X-Received: by 2002:adf:ee46:0:b0:2d2:f3e3:115d with SMTP id w6-20020adfee46000000b002d2f3e3115dmr27524669wro.59.1684188620429;
-        Mon, 15 May 2023 15:10:20 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id n11-20020a5d4c4b000000b002c70ce264bfsm393491wrt.76.2023.05.15.15.10.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 15:10:19 -0700 (PDT)
-Date:   Mon, 15 May 2023 23:10:18 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v2] mm: userfaultfd: avoid passing an invalid range to
- vma_merge()
-Message-ID: <a0ad836a-c837-47bb-9c04-cd89a11d6ffa@lucifer.local>
-References: <20230515193232.67552-1-lstoakes@gmail.com>
- <ZGKmjUL5etmvIouh@x1n>
+        Mon, 15 May 2023 18:11:27 -0400
+Received: from m-r2.th.seeweb.it (m-r2.th.seeweb.it [IPv6:2001:4b7a:2000:18::171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66B5810E7E;
+        Mon, 15 May 2023 15:10:55 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id B36403F360;
+        Tue, 16 May 2023 00:10:31 +0200 (CEST)
+Date:   Tue, 16 May 2023 00:10:30 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, dmitry.baryshkov@linaro.org,
+        andersson@kernel.org, Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 1/8] drm/msm/dpu: add dsc blocks to the catalog of
+ MSM8998 and SC8180X
+Message-ID: <mihoiwvnerusg2wkl3hpb42klopkcsom2g4lds5dwfay4zjkir@d6qz4dvl6m3u>
+References: <1684185928-24195-1-git-send-email-quic_khsieh@quicinc.com>
+ <1684185928-24195-2-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZGKmjUL5etmvIouh@x1n>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1684185928-24195-2-git-send-email-quic_khsieh@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 05:39:25PM -0400, Peter Xu wrote:
-> On Mon, May 15, 2023 at 08:32:32PM +0100, Lorenzo Stoakes wrote:
-> > As well as fixing the repro described in [1] this also continues to pass
-> > uffd unit tests.
->
-> Side note on testing, not directly relevant to the patch itself..
->
-> I'm wondering whether do we have tests somewhere to just test vma
-> operations on split and merge, then verify it using smap or whatever.
->
-> The uffd unit test in this case is probably not gonna trigger anything
-> because we always mostly register with a whole vma over the testing ranges,
-> so not immediately helpful.
->
-> The trick here is we have quite a few ops that will call vma merge/split in
-> different ways, but logically we can still category them into: (1) add/del
-> vmas, or (2) modify vma flags, so at least for case (2) we can have a
-> framework to cover all the cases (mbind, mprotect, uffd reg/unreg, mlock,
-> etc.), the difference will be the flags we'll be looking at for different
-> cases, however how vmas merge/split should be somehow in the same pattern.
->
+Once again, capitalize DSC in the title.
 
-I totally agree we need more testing on this. We do have some basic
-self-tests for various things but I don't think we test this specifically
-or certainly not in the way I'd prefer (somehow pull vma_merge() + friends
-into userland and instrument with heavy unit tests).
+On 2023-05-15 14:25:21, Kuogee Hsieh wrote:
+> 
+> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> 
+> There are some platforms has DSC blocks which have not been declared in
 
-I do intend to try to do something with this soon.
+There are some platforms has?
 
-Something with /proc/$pid/[s]maps could be a good straightforward thing, I
-will try to write some small test (we already have a little repro for the
-reported issue) for this anyway.
+How about (as suggested in earlier review): Some platforms have...
 
-> --
-> Peter Xu
->
+> the catalog. Complete DSC 1.1 support for all platforms by adding the
+> missing blocks to MSM8998 and SC8180X.
+> 
+> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+After fixing the grammar:
+
+Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+
+Thanks!
+
+> ---
+>  drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h |  7 +++++++
+>  drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h | 11 +++++++++++
+>  2 files changed, 18 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> index c0dd477..521cfd5 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h
+> @@ -126,6 +126,11 @@ static const struct dpu_pingpong_cfg msm8998_pp[] = {
+>  			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 15)),
+>  };
+>  
+> +static const struct dpu_dsc_cfg msm8998_dsc[] = {
+> +	DSC_BLK("dsc_0", DSC_0, 0x80000, 0),
+> +	DSC_BLK("dsc_1", DSC_1, 0x80400, 0),
+> +};
+> +
+>  static const struct dpu_dspp_cfg msm8998_dspp[] = {
+>  	DSPP_BLK("dspp_0", DSPP_0, 0x54000, DSPP_MSM8998_MASK,
+>  		 &msm8998_dspp_sblk),
+> @@ -199,6 +204,8 @@ const struct dpu_mdss_cfg dpu_msm8998_cfg = {
+>  	.dspp = msm8998_dspp,
+>  	.pingpong_count = ARRAY_SIZE(msm8998_pp),
+>  	.pingpong = msm8998_pp,
+> +	.dsc_count = ARRAY_SIZE(msm8998_dsc),
+> +	.dsc = msm8998_dsc,
+>  	.intf_count = ARRAY_SIZE(msm8998_intf),
+>  	.intf = msm8998_intf,
+>  	.vbif_count = ARRAY_SIZE(msm8998_vbif),
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+> index e8057a1..fec1665 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h
+> @@ -142,6 +142,15 @@ static const struct dpu_merge_3d_cfg sc8180x_merge_3d[] = {
+>  	MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x83200),
+>  };
+>  
+> +static const struct dpu_dsc_cfg sc8180x_dsc[] = {
+> +	DSC_BLK("dsc_0", DSC_0, 0x80000, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_1", DSC_1, 0x80400, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_2", DSC_2, 0x80800, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_3", DSC_3, 0x80c00, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_4", DSC_4, 0x81000, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +	DSC_BLK("dsc_5", DSC_5, 0x81400, BIT(DPU_DSC_OUTPUT_CTRL)),
+> +};
+> +
+>  static const struct dpu_intf_cfg sc8180x_intf[] = {
+>  	INTF_BLK("intf_0", INTF_0, 0x6a000, 0x280, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC7180_MASK,
+>  			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 24),
+> @@ -206,6 +215,8 @@ const struct dpu_mdss_cfg dpu_sc8180x_cfg = {
+>  	.mixer = sc8180x_lm,
+>  	.pingpong_count = ARRAY_SIZE(sc8180x_pp),
+>  	.pingpong = sc8180x_pp,
+> +	.dsc_count = ARRAY_SIZE(sc8180x_dsc),
+> +	.dsc = sc8180x_dsc,
+>  	.merge_3d_count = ARRAY_SIZE(sc8180x_merge_3d),
+>  	.merge_3d = sc8180x_merge_3d,
+>  	.intf_count = ARRAY_SIZE(sc8180x_intf),
+> -- 
+> 2.7.4
+> 
