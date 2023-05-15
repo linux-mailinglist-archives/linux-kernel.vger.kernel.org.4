@@ -2,178 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65B62702C9B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:25:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 03D11702CA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:26:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241809AbjEOMZm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 08:25:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51434 "EHLO
+        id S241818AbjEOM0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 08:26:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229679AbjEOMZj (ORCPT
+        with ESMTP id S241211AbjEOM00 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 08:25:39 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED0521BC;
-        Mon, 15 May 2023 05:25:38 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 830EB66031DA;
-        Mon, 15 May 2023 13:25:36 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684153537;
-        bh=Rl/jN3uyJpuesLYqs5+0/hmh5nAfzeWPHpb4ipmQ1nU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=kap+61MDpii8Ol4UUwUo3Es7XYvHv0eY8dkzOCI9GNudoOfzvnO0AvU7ohyHgS29d
-         3OHVSbifF1xrxx2Yg/gxUB0ovoCTqJ+eVAqsKvRIn7c2oqfaXewWH/gx63v9H86q2q
-         MEUkcpmstAk8tiDYtQlsPG3UGXKBzNgZ1FeS8B905iGklIVCZmrHsItqkxIyjiaaZn
-         slTD+ZY3rdZUqWHnw4ZUwhY7QIRPcpw3681xVe9KmV54uIvx3EmR/Iz8spk+NXSz8P
-         3FRX9MsaUH0Z05TLp/9GpnoaiBKWnQlxNhA9UkAwZaDqaNtWmuAv6FH57HPB8EIPfy
-         Q+7xbpmw+5RiQ==
-Message-ID: <f96c6809-d7d4-4030-5805-ca79f87715ce@collabora.com>
-Date:   Mon, 15 May 2023 14:25:34 +0200
+        Mon, 15 May 2023 08:26:26 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846CD10F3;
+        Mon, 15 May 2023 05:26:25 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id E40AA5C00EC;
+        Mon, 15 May 2023 08:26:24 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Mon, 15 May 2023 08:26:24 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1684153584; x=1684239984; bh=FS
+        hj9jhaCJscn4VhLGeY2HLL/OvONSHw3LtQ6873UHU=; b=bDn/R9R8UiUb1g96qU
+        s+BUMqi4w9X4MLqr/g66nNXkUHJb5Urp1qbIoZIC785Oye4Wnmb3At4gt6DQEvls
+        iPbBgS2vyJShq0orBrjZpdCLA77U3y2zBPQqTTFuH7VW40jCDOZic2FtVTVSMeC/
+        NMgvz2+Wwcq1+UbUWNenbsdUev+qHTLSsx+fHCKRlKEzDDqSHnqPR+lecFQqUlyW
+        Z1DNL5jAoSAnBaznrg9gSrLI+Zhg11uKMHPx3v6x6QN2CSqnCsTCe5WCyYvfsohT
+        JH/89wdHigdYyKAD+zi3fFiSYCnbezyBWLBWImJOU8/1BA4uNVxokvxNICxjCuGI
+        +Ulg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm1; t=1684153584; x=1684239984; bh=FShj9jhaCJscn
+        4VhLGeY2HLL/OvONSHw3LtQ6873UHU=; b=gBpqrQuF+8pxllcGPFkkD3GSCz2FO
+        EE3r2LuO4J9FF5K2optxIWEyx5d6X/xjJXrdyEGSObRu26TxH3bhmIjo4EUn8Vut
+        hTpZGnor3W/21sNv1fjfXIvQL6DHA9K9lsVLYNC+6aiKkR2U9M3v6EH6GTPf/hom
+        hH4uTbLc3sG4bVovoWiBxAWQB7Ori0a4yF98Ylo9xf1lc5aXiI1YNRdBaWfBbeuZ
+        x/VlRrsHhgcaNdi7x2oy03OvN7WoYKUK7gZhGQxXw7H8wYLug+FaSxrAHPmtJcL6
+        aZu1YClcYlBko77gQWgxVJcu+40QswikFkdjUYscgahiLUg5Cr2vLIyaA==
+X-ME-Sender: <xms:8CRiZFrfwhwajeZFioYSVAGnYub6dqDlmm-62eSXWs53CI4tOXS2nA>
+    <xme:8CRiZHoRko6houI2cfdSdLHQCaiVVb3HANDGtt_BqdU0Vv2qEGFA65pJ_Yl-ZWUuP
+    Zc1BiPzXM9lng>
+X-ME-Received: <xmr:8CRiZCNlvc9XxVVLnttcSWqxzwJyuJGTGivNjHawZ8kzjeb523F8q_T4tWxrIbVwDRzmQCC6AeHgvPxDs8seZ7YvORsPrICfhZT8Hw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrfeehjedgheefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomhepifhrvghg
+    ucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrfgrthhtvghrnhepgeehue
+    ehgfdtledutdelkeefgeejteegieekheefudeiffdvudeffeelvedttddvnecuffhomhgr
+    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehgrhgvgheskhhrohgrhhdrtghomh
+X-ME-Proxy: <xmx:8CRiZA7uqHeMKjthjza3RwkPFFhVppxNQImtfSey6HkV0b8u4GQHTQ>
+    <xmx:8CRiZE60-Y2lbAJTsCnqIxjuq5S7lmImGlDCkSNaRu-lTohSmoWXNQ>
+    <xmx:8CRiZIh1HihDM6eDV9i30eenngYlQasZz0VWY3MauP0NiFpYqjERng>
+    <xmx:8CRiZCZ5Ou2kkYhgzqRl7F09D5fGbR8bV9ENmqsf7t5w2xIzrvE6Yg>
+Feedback-ID: i787e41f1:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 15 May 2023 08:26:23 -0400 (EDT)
+Date:   Mon, 15 May 2023 14:26:16 +0200
+From:   Greg KH <greg@kroah.com>
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
+Cc:     Sasha Levin <sashal@kernel.org>,
+        Thorsten Leemhuis <linux@leemhuis.info>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
+        "Goswami, Sanket" <Sanket.Goswami@amd.com>,
+        "Gong, Richard" <Richard.Gong@amd.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        Borislav Petkov <bp@alien8.de>,
+        Guenter Roeck <linux@roeck-us.net>,
+        "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: [PATCH 1/2] amd_nb: Add PCI ID for family 19h model 78h
+Message-ID: <2023051505-bright-armrest-028e@gregkh>
+References: <20230427053338.16653-1-mario.limonciello@amd.com>
+ <20230427053338.16653-2-mario.limonciello@amd.com>
+ <7b74c389-97b7-4f56-851b-6ce17950a4d1@roeck-us.net>
+ <f2b81356-e702-3026-660f-d9a88edff632@amd.com>
+ <084837c4-72c8-be92-fd1c-5ccbd805c559@leemhuis.info>
+ <20230508112543.GBZFjcN2oxk4do31w4@fat_crate.local>
+ <a8b29619-f1da-4cb9-a5bd-a396b52e159f@roeck-us.net>
+ <20230508134414.GCZFj8rieNwF1AOerB@fat_crate.local>
+ <MN0PR12MB610132F2277B0F1DB1039A15E2749@MN0PR12MB6101.namprd12.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: phy: add mediatek mipi csi driver v
- 0.5
-Content-Language: en-US
-To:     Julien Stephan <jstephan@baylibre.com>
-Cc:     krzysztof.kozlowski@linaro.org, robh@kernel.org,
-        chunkuang.hu@kernel.org, linux-mediatek@lists.infradead.org,
-        Florian Sylvestre <fsylvestre@baylibre.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Andy Hsieh <andy.hsieh@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        "moderated list:ARM/Mediatek USB3 PHY DRIVER" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230515090551.1251389-1-jstephan@baylibre.com>
- <20230515090551.1251389-2-jstephan@baylibre.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20230515090551.1251389-2-jstephan@baylibre.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <MN0PR12MB610132F2277B0F1DB1039A15E2749@MN0PR12MB6101.namprd12.prod.outlook.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 15/05/23 11:05, Julien Stephan ha scritto:
-> From: Florian Sylvestre <fsylvestre@baylibre.com>
+On Thu, May 11, 2023 at 07:51:42PM +0000, Limonciello, Mario wrote:
+> [AMD Official Use Only - General]
 > 
-> This adds the bindings, for the MIPI CD-PHY module v 0.5 embedded in
-> some Mediatek soc, such as the mt8365
+> +stable, Sasha
 > 
-> Signed-off-by: Florian Sylvestre <fsylvestre@baylibre.com>
-> Signed-off-by: Julien Stephan <jstephan@baylibre.com>
-> ---
->   .../phy/mediatek,phy-mipi-csi-0-5.yaml        | 62 +++++++++++++++++++
->   MAINTAINERS                                   |  6 ++
->   2 files changed, 68 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/phy/mediatek,phy-mipi-csi-0-5.yaml
+> > > Together with this patch there are now at least two regressions if
+> > > -rc1 whch could have been avoided and may impact testability on
+> > > affected systems.
+> >
+> > Are you saying that this patch which fixes s2idle on some random box
+> > should've gone to Linus *immediately*?
+> >
+> > And read my mail again:
+> >
+> > "Some fixes need longer testing because there have been cases where
+> > a fix breaks something else."
+> >
+> > So yes, I disagree with rushing fixes immediately. If they're obvious
+> > - whatever that means - then sure but not all of them are such.
+> >
+> > --
 > 
-> diff --git a/Documentation/devicetree/bindings/phy/mediatek,phy-mipi-csi-0-5.yaml b/Documentation/devicetree/bindings/phy/mediatek,phy-mipi-csi-0-5.yaml
-> new file mode 100644
-> index 000000000000..5aa8c0b41cdf
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/phy/mediatek,phy-mipi-csi-0-5.yaml
-> @@ -0,0 +1,62 @@
-> +# SPDX-License-Identifier: (GPL-2.0-Only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/phy/mediatek,phy-mipi-csi-0-5.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Mediatek Sensor Interface MIPI CSI CD-PHY
-> +
-> +maintainers:
-> +  - Julien Stephan <jstephan@baylibre.com>
-> +  - Andy Hsieh <andy.hsieh@mediatek.com>
-> +
-> +description:
-> +  The SENINF CD-PHY is a set of CD-PHY connected to the SENINF CSI-2
-> +  receivers. The number of PHYs depends on the SoC model.
-> +  Depending on the soc model, each PHYs can support CDPHY or DPHY only
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - mediatek,phy-mipi-csi-0-5
+> Unfortunately, it looks like the broken commit got backported into 6.1.28,
+> but the fix still isn't in Linus' tree.
+> 
+> Sasha,
+> 
+> Can you please pick up
+> https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?h=x86/urgent&id=23a5b8bb022c1e071ca91b1a9c10f0ad6a0966e9
+> for 6.1.29 to fix the regression?
 
-mediatek,mtXXXX-csi-rx sounds great, doesn't it?
+Now that this is in Linus's tree, it's queued up, thanks.
 
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  '#phy-cells':
-> +    const: 0
-> +
-> +  mediatek,is_cdphy:
-
-No underscores please: mediatek,is-cdphy
-
-> +    description:
-> +      Specify if the current phy support CDPHY configuration
-
-Description fits in one line.
-
-     description: Specify if the current phy support CDPHY configuration
-
-> +    type: boolean
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#phy-cells'
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    soc {
-> +      #address-cells = <2>;
-> +      #size-cells = <2>;
-> +
-> +      mipi_rx_csi0: mipi_rx_csi0@11c10000 {
-
-csi0_rx: phy@11c10000
-
-> +        compatible = "mediatek,phy-mipi-csi-0-5";
-> +        reg = <0 0x11C10000 0 0x2000>;
-> +        status = "okay";
-> +        mediatek,is_cdphy;
-> +        #phy-cells = <0>;
-> +      };
-> +
-> +      mipi_rx_csi1: mipi-rx-csi1@11c12000 {
-
-csi1_rx: phy@11c20000
-
-> +        compatible = "mediatek,phy-mipi-csi-0-5";
-> +        reg = <0 0x11C12000 0 0x2000>;
-> +        status = "disabled";
-> +        #phy-cells = <0>;
-> +      };
-> +    };
-> +...
-
-Regards,
-Angelo
-
+greg k-h
