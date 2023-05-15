@@ -2,74 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B17F7702ABA
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:40:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AC9DC702ACC
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:41:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239751AbjEOKkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35198 "EHLO
+        id S240577AbjEOKlg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 06:41:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239746AbjEOKjr (ORCPT
+        with ESMTP id S239707AbjEOKld (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:39:47 -0400
-Received: from out30-101.freemail.mail.aliyun.com (out30-101.freemail.mail.aliyun.com [115.124.30.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B070619D
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:39:45 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R601e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0Vigv17V_1684147181;
-Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0Vigv17V_1684147181)
-          by smtp.aliyun-inc.com;
-          Mon, 15 May 2023 18:39:42 +0800
-From:   Jingbo Xu <jefflexu@linux.alibaba.com>
-To:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
-        linux-erofs@lists.ozlabs.org
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2] erofs: fix null-ptr-deref caused by erofs_xattr_prefixes_init
-Date:   Mon, 15 May 2023 18:39:41 +0800
-Message-Id: <20230515103941.129784-1-jefflexu@linux.alibaba.com>
-X-Mailer: git-send-email 2.19.1.6.gb485710b
+        Mon, 15 May 2023 06:41:33 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C30371A4;
+        Mon, 15 May 2023 03:41:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5A47561C22;
+        Mon, 15 May 2023 10:41:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B7FAC433EF;
+        Mon, 15 May 2023 10:41:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684147291;
+        bh=BJ3//YNN86O55AW9O6r4X6/rOjWNLuXo8AwIhYPjZqU=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=JRnOxIUvvFwmC5Bu41T2ARxym7dikCKzQjI94nHGGPpfDIAk34moHjrpal4IaeveG
+         Lp1vH/DLUfhQLvMOl3GQuQbAau1mF2HRQ54OM2gwdleJrlKUhU2sDIjPBiWIhgNlvr
+         zxODzLvZ41pR9XwGMBCGyXatI4AK0d3fNJCRTycW2S0Bb5EF+aZ/MfOS9hn42Nhmvp
+         hfBvd8yyZ+nqwQm6E4iEsTClDO/3Lu7ndRF9uP9gruUqkpXxECiLFdt1jzToWQb815
+         0XxKGEu+k0HthIx8kvSLp8cYIfoCKbfaonZMJxgk1c3HYHSVlM/JM386gW3UDZ8kiZ
+         FIVcFWU7FcO0Q==
+From:   Christian Brauner <brauner@kernel.org>
+To:     Anuradha Weeraman <anuradha@debian.org>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] fs/open.c: Fix W=1 kernel doc warnings
+Date:   Mon, 15 May 2023 12:41:11 +0200
+Message-Id: <20230515-ritzen-abpfiff-4782ae08368e@brauner>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230506182928.384105-1-anuradha@debian.org>
+References: <20230506182928.384105-1-anuradha@debian.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1076; i=brauner@kernel.org; h=from:subject:message-id; bh=BJ3//YNN86O55AW9O6r4X6/rOjWNLuXo8AwIhYPjZqU=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQk8Rh+9le5+Khn4jUR3QMsyoqnhNp1BZmXsvvWfZ3Ake98 Tjeio5SFQYyLQVZMkcWh3SRcbjlPxWajTA2YOaxMIEMYuDgF4CKcjAwPUgPNJk8NkHDYvXSDauWv87 /uXrmkGuwifyZvVr3YlSZXhr9S3bdPTPx2wF7D/riObZTBxdX/fP4mPb+Us/JzUfL8ojoOAA==
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fragments and dedupe share one feature bit, and thus packed inode may not
-exist when fragment feature bit (dedupe feature bit exactly) is set, e.g.
-when deduplication feature is in use while fragments feature is not.  In
-this case, sbi->packed_inode could be NULL while fragments feature bit
-is set.
+On Sat, 06 May 2023 23:59:27 +0530, Anuradha Weeraman wrote:
+> fs/open.c: In functions 'setattr_vfsuid' and 'setattr_vfsgid':
+>  warning: Function parameter or member 'attr' not described
+>  - Fix warning by removing kernel-doc for these as they are static
+>    inline functions and not required to be exposed via kernel-doc.
+> 
+> fs/open.c:
+>  warning: Excess function parameter 'opened' description in 'finish_open'
+>  warning: Excess function parameter 'cred' description in 'vfs_open'
+>  - Fix by removing the parameters from the kernel-doc as they are no
+>    longer required by the function.
+> 
+> [...]
 
-Fix this by accessing packed inode only when it exists.
+Applied to the vfs.misc branch of the vfs/vfs.git tree.
+Patches in the vfs.misc branch should appear in linux-next soon.
 
-Reported-by: syzbot+902d5a9373ae8f748a94@syzkaller.appspotmail.com
-Link: https://syzkaller.appspot.com/bug?extid=902d5a9373ae8f748a94
-Fixes: 9e382914617c ("erofs: add helpers to load long xattr name prefixes")
-Signed-off-by: Jingbo Xu <jefflexu@linux.alibaba.com>
----
-v2: polish the commit message (Gao Xiang)
----
- fs/erofs/xattr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-diff --git a/fs/erofs/xattr.c b/fs/erofs/xattr.c
-index cd80499351e0..bbfe7ce170d2 100644
---- a/fs/erofs/xattr.c
-+++ b/fs/erofs/xattr.c
-@@ -675,7 +675,7 @@ int erofs_xattr_prefixes_init(struct super_block *sb)
- 	if (!pfs)
- 		return -ENOMEM;
- 
--	if (erofs_sb_has_fragments(sbi))
-+	if (sbi->packed_inode)
- 		buf.inode = sbi->packed_inode;
- 	else
- 		erofs_init_metabuf(&buf, sb);
--- 
-2.19.1.6.gb485710b
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.misc
 
+[1/1] fs/open.c: Fix W=1 kernel doc warnings
+      https://git.kernel.org/vfs/vfs/c/1c4f10518c3a
