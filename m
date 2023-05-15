@@ -2,138 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1400E702B88
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:32:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BF1F702B8C
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:32:20 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241284AbjEOLcB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 07:32:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39604 "EHLO
+        id S241303AbjEOLcS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 07:32:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241241AbjEOLb7 (ORCPT
+        with ESMTP id S240104AbjEOLcM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 07:31:59 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0518138;
-        Mon, 15 May 2023 04:31:55 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id a640c23a62f3a-965f7bdab6bso2222322866b.3;
-        Mon, 15 May 2023 04:31:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684150314; x=1686742314;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vvfV0sEFtRCF/8ZbA1b9yt0/e64L7RJ3L0AI8zLMm9I=;
-        b=kPjpVmksuf9oAOejRIjWtY9929N374P+GeBpuGDe9iZWM2wPxC/p7NH6UEF5CISwH4
-         jbUJRuyomH2kG/yCIN+G9SheAr2hkP2YMdk0OxcEvVYwkJGttFgvtC7xpQGR6CB3GgKo
-         mBkuqwLXnswyAkUiZe3Pb6f9p2sS9PuFyWzDFq68Xo6/Ss+7ngAKnr/qYPzt18rawGCm
-         GHur/KAmxb8a/zFus0h5gVJmVgcTT5V16E7PmlkWqFq66Qnr4jGrFF3uKVuyXZJqDOfy
-         7MZ0mjag4BxFqnNTV1u51azqbFpO3Pe7MRPdRD7Vr+VDJWy2LDZGy7rNOKFtseSEylK2
-         da1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684150314; x=1686742314;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=vvfV0sEFtRCF/8ZbA1b9yt0/e64L7RJ3L0AI8zLMm9I=;
-        b=TIsyANi821eRhJysbtGmFa5LO20worihSRmxLwqJsfOgranq/DqoJ8ilW3dLatb2Bh
-         kfltPVnTkuRO78Pp4QPO0ZesXSklwuqD9PR39y/1QmonKWF6sdqgjbzPiTOQFBNKutvu
-         by1q1lMGy2lHFiEVXRAMuMUgV7U94DmVPtUD/UL5zMtLRRqZEz0tXAlRuOEk0TNusG6m
-         DvJTpT7corv/O/ypOJ32quYpYdATXIfvaedW07mTPiFVQFZnnsOy8pY3FEXW/7TT3wpN
-         QPoJ9Gz02c+HIfIj0N9UU++he/Q0LUszMy7fcLTWhzJxMcPy1+zwNBWOKEycErI4JM66
-         7S7A==
-X-Gm-Message-State: AC+VfDzmu4oZc84054NXLvQlvime83wQuRQNrxZH0uSs16q34ov5SB3R
-        dBFnJUOhbJWX2osj5IJLla8=
-X-Google-Smtp-Source: ACHHUZ4cvEaBYT8S0j4/i8jS1x5f8hGr+r0ucmaZDxWPOpxxOrBcBp7R6Ds7K5N4DMVSU/SZjBBVtQ==
-X-Received: by 2002:a17:906:58c5:b0:966:58ad:d934 with SMTP id e5-20020a17090658c500b0096658add934mr26454295ejs.0.1684150313896;
-        Mon, 15 May 2023 04:31:53 -0700 (PDT)
-Received: from localhost ([31.94.21.70])
-        by smtp.gmail.com with ESMTPSA id hz20-20020a1709072cf400b0094f4d2d81d9sm9303913ejc.94.2023.05.15.04.31.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 04:31:53 -0700 (PDT)
-Date:   Mon, 15 May 2023 12:31:51 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Christoph Hellwig <hch@infradead.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
-        Matthew Wilcox <willy@infradead.org>,
-        Dennis Dalessandro <dennis.dalessandro@cornelisnetworks.com>,
-        Leon Romanovsky <leon@kernel.org>,
-        Christian Benvenuti <benve@cisco.com>,
-        Nelson Escobar <neescoba@cisco.com>,
-        Bernard Metzler <bmt@zurich.ibm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Bjorn Topel <bjorn@kernel.org>,
-        Magnus Karlsson <magnus.karlsson@intel.com>,
-        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
-        Jonathan Lemon <jonathan.lemon@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Richard Cochran <richardcochran@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Jesper Dangaard Brouer <hawk@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        linux-fsdevel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        netdev@vger.kernel.org, bpf@vger.kernel.org,
-        Oleg Nesterov <oleg@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>, Jan Kara <jack@suse.cz>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Pavel Begunkov <asml.silence@gmail.com>,
-        Mika Penttila <mpenttil@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Dave Chinner <david@fromorbit.com>,
-        Theodore Ts'o <tytso@mit.edu>, Peter Xu <peterx@redhat.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>
-Subject: Re: [PATCH v9 0/3] mm/gup: disallow GUP writing to file-backed
- mappings by default
-Message-ID: <59c47ed5-a565-4220-823c-a278130092d5@lucifer.local>
-References: <cover.1683235180.git.lstoakes@gmail.com>
- <0eb31f6f-a122-4a5b-a959-03ed4dee1f3c@lucifer.local>
- <ZGG/xkIUYK2QMPSv@infradead.org>
+        Mon, 15 May 2023 07:32:12 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD41D19B3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 04:32:08 -0700 (PDT)
+Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A1A3366031D7;
+        Mon, 15 May 2023 12:32:06 +0100 (BST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1684150327;
+        bh=AfyjFdjKjOCsPrPBTSHo8RI+xoq5WDytfUyvMtnaIrI=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=PuyAgI2m2fSpbJePSFPJHVUqvlOk15FKOWfxYw03phWt40OAgmitzNTl05Z1lYs4i
+         AmDpJyWcCv9jeK5VVLA8L4B+YHKwKnP58T8SH4994nft0B8IVDFQl1jtccCPUPMZ4g
+         T9xVKHROuR8QtIyjcNjT4zqDEBURn1iPzbwaYs9A6lRZcJtPVl+JQSfhrQqCJklqCv
+         sKjlZkSRK5LiuZ/dfHRS2PAEwxvDUTqbWYyPUE1e3Uc8keL15pUpGTPvUFWYBB7Qqv
+         Rz0K1wP+NXKfaYR/Y4gyINKR03OU9YnQCHYmrVT5SuP5qyZq6KzCVIaVRZ2Qzxd63K
+         b2PqC9dmLd/pg==
+Message-ID: <c9f2a2d2-c7cd-4b46-0133-c6b44c69650d@collabora.com>
+Date:   Mon, 15 May 2023 13:32:03 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZGG/xkIUYK2QMPSv@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.1
+Subject: Re: [PATCH linux-next v4 1/4] time/sched_clock: Export
+ sched_clock_register()
+Content-Language: en-US
+To:     walter.chang@mediatek.com,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        "Maciej W . Rozycki" <macro@orcam.me.uk>,
+        John Stultz <jstultz@google.com>
+Cc:     wsd_upstream@mediatek.com, stanley.chu@mediatek.com,
+        Chun-hung.Wu@mediatek.com, Freddy.Hsin@mediatek.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230421034649.15247-1-walter.chang@mediatek.com>
+ <20230421034649.15247-2-walter.chang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230421034649.15247-2-walter.chang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 14, 2023 at 10:14:46PM -0700, Christoph Hellwig wrote:
-> On Sun, May 14, 2023 at 08:20:04PM +0100, Lorenzo Stoakes wrote:
-> > As discussed at LSF/MM, on the flight over I wrote a little repro [0] which
-> > reliably triggers the ext4 warning by recreating the scenario described
-> > above, using a small userland program and kernel module.
-> >
-> > This code is not perfect (plane code :) but does seem to do the job
-> > adequately, also obviously this should only be run in a VM environment
-> > where data loss is acceptable (in my case a small qemu instance).
->
-> It would be really awesome if you could wire it up with and submit it
-> to xfstests.
+Il 21/04/23 05:46, walter.chang@mediatek.com ha scritto:
+> From: Chun-Hung Wu <chun-hung.wu@mediatek.com>
+> 
+> clocksource driver may use sched_clock_register()
+> to resigter itself as a sched_clock source.
+> Export it to support building such driver
+> as module, like timer-mediatek.c
+> 
+> Signed-off-by: Chun-Hung Wu <chun-hung.wu@mediatek.com>
 
-Sure am happy to take a look at that! Also happy if David finds it useful in any
-way for this unit tests.
+You're the sender, so you shall sign off all of the patches. Please do.
 
-The kernel module interface is a bit sketchy (it takes a user address which it
-blindly pins for you) so it's not something that should be run in any unsafe
-environment but as long as we are ok with that :)
+I can't give you a Reviewed-by tag because of that.
+
+Regards,
+Angelo
+
+
