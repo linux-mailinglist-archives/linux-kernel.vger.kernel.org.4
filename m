@@ -2,119 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E38E702BD7
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:53:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C76FE702BDA
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:53:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241530AbjEOLxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 07:53:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51160 "EHLO
+        id S238637AbjEOLxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 07:53:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241491AbjEOLxW (ORCPT
+        with ESMTP id S241211AbjEOLx1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 07:53:22 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19FD55257;
-        Mon, 15 May 2023 04:40:33 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 34FBe30k9015761, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36505.realtek.com.tw[172.21.6.25])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 34FBe30k9015761
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Mon, 15 May 2023 19:40:03 +0800
-Received: from RTEXMBS03.realtek.com.tw (172.21.6.96) by
- RTEXH36505.realtek.com.tw (172.21.6.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.32; Mon, 15 May 2023 19:40:11 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS03.realtek.com.tw (172.21.6.96) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 15 May 2023 19:40:11 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d]) by
- RTEXMBS04.realtek.com.tw ([fe80::e138:e7f1:4709:ff4d%5]) with mapi id
- 15.01.2375.007; Mon, 15 May 2023 19:40:11 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     "kvalo@kernel.org" <kvalo@kernel.org>
-CC:     "martin.blumenstingl@googlemail.com" 
-        <martin.blumenstingl@googlemail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "Larry.Finger@lwfinger.net" <Larry.Finger@lwfinger.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "tony0620emma@gmail.com" <tony0620emma@gmail.com>,
-        "rudi@heitbaum.com" <rudi@heitbaum.com>
-Subject: Re: [PATCH wireless v1] wifi: rtw88: sdio: Always use two consecutive bytes for word operations
-Thread-Topic: [PATCH wireless v1] wifi: rtw88: sdio: Always use two
- consecutive bytes for word operations
-Thread-Index: AQHZhp8/d2Ix7H9Kp0Kc7VStDQy2qK9aesbQgACwxU3//4UPgA==
-Date:   Mon, 15 May 2023 11:40:11 +0000
-Message-ID: <4b19e201e33576bc83ab28c7c92771da64e7673e.camel@realtek.com>
-References: <20230514200345.502807-1-martin.blumenstingl@googlemail.com>
-         <a0bf69fdb10b42a989a9b14e490e2f07@realtek.com> <87mt25n9ll.fsf@kernel.org>
-In-Reply-To: <87mt25n9ll.fsf@kernel.org>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.36.1-2 
-x-originating-ip: [125.224.73.33]
-x-kse-serverinfo: RTEXMBS03.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <543963F18A1734489CF844553F6AD12E@realtek.com>
-Content-Transfer-Encoding: base64
+        Mon, 15 May 2023 07:53:27 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2113.outbound.protection.outlook.com [40.107.93.113])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6674C5255;
+        Mon, 15 May 2023 04:40:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=azP0/X0MDzTe7ampB2moVkFn0aeXRc3ZpSS/uxyWMISfqdIg0BPFhgPq8UOfJKHSmbpTTjQJ6RrsyLD7x9m4l5wy3NhX6bNFMaRLSAUKuoDvl3hDQh/RjC+WqWCFV5/kzESidweJKkkAQX0bEImJo7pviJ/yudfefpY7Z4ccXP+7vKWGpXBNVjV228HQjx57gP9gXzuvIqw0Hn3cU3OBA/GF7FG2H8FGfFucsSDyF2R5RubRDPgT97DcOKzrxJVCMqpzuKe1VxaJESVBCCwOmEL1ftxvHaMFw9Aq66rJHHFs1UsWuyNiH91J2r1iA24u/kmr6dSHAFREUsek1Ceumg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Cizbgrs3Zu+HwFgqYGUXUyi5nMAnBf0KxqdcyY5ztE4=;
+ b=Bw2DGWgXaVvyIl/qfehaU6aByJ0QtCevDCoSjPyXkwc0zZyR8ml2a64wGcQPBsoDZBb3Y2F0qnfQLYukWTDy3Pn41VitSkm36ykhuy0wTmAIBS6VYPlYHnxrKCYCnVDDF7IgtmcU5Y4WJG7oWQ131NPi1RWGodl/97H2J7gM1Buw3Ec7V/TtSgWKxy8aYbRm1DnOi+FrB2RttAAq7+LY5aDdipTVOj5eNkZw93vhoPr2to2sTpMTjdKJofCoRL+E7nSfFmlAJO0G5Xv+/gkGZYsJhXhqvXHxR38Nh/zEXBepRpeItqGVHi7Z4wmo/d5IlnEejog5Q0Rskj8j5phDpw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Cizbgrs3Zu+HwFgqYGUXUyi5nMAnBf0KxqdcyY5ztE4=;
+ b=OX1UhJiM/1N2OeWwPhMK4TXMlfCM1dkeV7MrUvKluiOzBU+NtihQMIxV3IM4BdISCv+DM6T0l6g3Qf14z9l431Wd+cZEW2xEJIhvVSM5ZEllbH60DoO43heyWl6m+ANT3dvy7cnC6NruB0dkCOFp9wwngUJx9SLCoVagC4KFaag=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by DM6PR13MB3804.namprd13.prod.outlook.com (2603:10b6:5:245::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Mon, 15 May
+ 2023 11:40:47 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::f416:544d:18b7:bb34%5]) with mapi id 15.20.6387.030; Mon, 15 May 2023
+ 11:40:47 +0000
+Date:   Mon, 15 May 2023 13:40:41 +0200
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Samuel Ortiz <sameo@linux.intel.com>,
+        Thierry Escande <thierry.escande@collabora.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] nfx: llcp: fix possible use of uninitialized variable in
+ nfc_llcp_send_connect()
+Message-ID: <ZGIaOYaSTDUqUrAB@corigine.com>
+References: <20230513114938.179085-1-krzysztof.kozlowski@linaro.org>
+ <06bba9db-25ff-a82b-803a-f9ae0519d293@linaro.org>
+ <ZGCb2CNcEDtDtPRR@corigine.com>
+ <4c163376-ce89-786d-3c76-4f10ae818e7a@linaro.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4c163376-ce89-786d-3c76-4f10ae818e7a@linaro.org>
+X-ClientProxiedBy: AS4P191CA0028.EURP191.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d9::20) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-ServerInfo: RTEXH36505.realtek.com.tw, 9
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-KSE-Antivirus-Interceptor-Info: fallback
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM6PR13MB3804:EE_
+X-MS-Office365-Filtering-Correlation-Id: eb2c3219-5979-41e8-9d8d-08db553939df
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: TJb4Q+VVRtfsyC99+WsKYGtFNGXxoNDbcmalIq5qGoAw+Krmr1PzxO3TlZ3fcUcaT8h3laJ97EnYRmJiXJ/QdOtmseAAssjIr/UJQ1Ioo6fTKr3SOpsGtmK/4VwVErvnpAc51TW644biZabTgBaDvJLVUq1xfOGH395/y5eEo8A1vtMB/PLFdl7OepTfDQfh54tsGpbmIlqXdyvJLKU8tU4eWixkdHrwW2tUn9bxMIuKwNJHBphDqfWkB5e2RUz7W9/fiNlaWUxYmzwh3UCVyHV/GIVsgDiWFn+WDpOqiXOmdUDxUOQXEPb10ulo4GeqNvRB85Qgk2MVl/MdTYlnJRhYE12300qqLB+UDhTJ81m6KmwoLI0DrhMufNIKYXH42L9kHj/+Vis+aRtY8gqoaJWkJgmQB1kWyC4FBgACP37r4Q2fl6IMvBDnOL1OIRkSIiBvKW1PYUZJb0u397lh0sEITgwxcejuFlwsj36V6+Cg006hpkNCvjaX5MVnmt27FLbJb2rpv+GOigxdocJuIoOhdnRjC/kkLSUvrnGuGBXi+xxSmM2dpF1YjCrrthBN
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(136003)(39840400004)(376002)(396003)(366004)(451199021)(83380400001)(66476007)(66556008)(66946007)(2616005)(6486002)(6512007)(6506007)(53546011)(478600001)(54906003)(6666004)(186003)(44832011)(86362001)(8676002)(8936002)(5660300002)(2906002)(36756003)(41300700001)(4326008)(6916009)(316002)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?qllE5D1JUIKjwKixOuD4TG+RCzxe4W/1k751lGbS8j7so4ivE4/iVN8lrQEf?=
+ =?us-ascii?Q?0uHt6S1vHWobV7n08Gt//VJM2nA/g6xwP0MnrkovkKJxFkoiIsY1lPIhaiAt?=
+ =?us-ascii?Q?pGO8aADByicd1ugIIvGcF7TVR3yWvUbP5mlCKnOVJhPZjiv47vO/+Bt6/dDN?=
+ =?us-ascii?Q?R/7ITIX94B25RmRhQ1yuBuoDSziTHEBAQEpwackG2qfY+A8Gs2nnoPSzwRJY?=
+ =?us-ascii?Q?SSURB2FNDd3eaETnouPdXCAH20K0aQW9bE+QVkPsYToFfoT69HBESqShsZm9?=
+ =?us-ascii?Q?N8zvUj0258WjpLrBHXd6u/vsm9B78OhcFWnAuaU+Gz7fATRklG9/WYtBNIHa?=
+ =?us-ascii?Q?92chMEPg1M/cOfjKFGtsyiKw7oKstrRiLJUBWtwqThMlgvy8ej7t4s1ZkFtG?=
+ =?us-ascii?Q?BcmDDIQCxScDms8VMsP6IvIe9cP/OeF2NItf2Zqweao+fP5piv8rRGn22onm?=
+ =?us-ascii?Q?pd7tUz0+ZDF2E2dIsWgb9yPq3OwjiKR2c+XxaqCdRj16rbWBDAkPewGGfLfk?=
+ =?us-ascii?Q?JOzN+98wpH68XS+r9FaRhYvWQbx0toBjmIaeDpKtxqFOsQcGHkaZgc0Of5Jw?=
+ =?us-ascii?Q?BzOAg1yKVxR4TiM3BqgE359+TgLnQZ9OhcMtc0khCZZwcBFGp+P95DdvKbau?=
+ =?us-ascii?Q?1Oa6WZUJLPFu/+SttaqoG7cOjzjC4rq1GEwA3BgEmZNoUl0h2Gi2JJSLPedC?=
+ =?us-ascii?Q?U0lCZIJQVZpZBhEeEqXKBgzskEv7mOK8e9bz/zugPuTfyE0rjL558IQJJztb?=
+ =?us-ascii?Q?0T3UHUoC7i/nIEUWp2ZirtAsOHOAY3WneVPdl+14DxzlLJm2mGT0+13RQh8I?=
+ =?us-ascii?Q?Ev/OzGaGwuCbwv6p1BUqPBQxFLDFLmZ5Ls7I+qd/c35QVMwQP3qt+Joxm3kk?=
+ =?us-ascii?Q?NUt6SDIlLX8UYRPV+HEod9tngfBOOwOzdewxZytI1+McY0Ugd+qhFUJ7RUx6?=
+ =?us-ascii?Q?6JfE20Xt7A6QXI59JV9+Hcm2zgU/0DVCL2x8x/RFI9vl9fnFsaGuqJBFE9vJ?=
+ =?us-ascii?Q?dx61n5BnvZ1AscrS1Uvt5GnExP9WKJoNLmsgb0GgH0DIcQpPuT3UGY7PVM9B?=
+ =?us-ascii?Q?v/+L5vj97QNXdu7rwRBhACyBWDUZ1sjQLnt07vsbgAUy2KTwrxWZNzfGbyQa?=
+ =?us-ascii?Q?ciQb+7yd0DsdlaLr1HdBpVrZDKM2Bca8H/HD9aJz0eGKU5zdyDRKOuZTmD1n?=
+ =?us-ascii?Q?d5fIhv7DyJO+BipvWtdRZwstJqca0IlyJG+VdsJk9TmXbWPvwUkhPvLMSaFt?=
+ =?us-ascii?Q?x7e7oTwDGPhY1IQuL+3yumqkNH5dD40x3lqwrpjllKiIxAqf+sByx+g+YP+r?=
+ =?us-ascii?Q?pgj86ERB+jsHPtNMtWP5Ptgw4z0GBU7krrsYW3SXwovhGwn/URPEzAyDKEDf?=
+ =?us-ascii?Q?gtR9YNsVVa+ElgYxYbnGnwO9aCezmLkBJeMSHZ/gyUOt9yY1STBHkVKfzMEW?=
+ =?us-ascii?Q?NhF/fCNlB2E83FN4xggUo4kyKHUirgLTifBpLmcUrgcxpCXWJUb1sZ1Ilrq7?=
+ =?us-ascii?Q?b6yK+vQOdCSBv/NMSu1EmH724d1IZyw8IDCke7Z0UFbvbpeOiTNhvhD7tDo2?=
+ =?us-ascii?Q?cZ3VsfR6QXyb+q/eS03gMYU7s1w+wpSq8ENGht/0nasfJDIke4/TXzEvl/bt?=
+ =?us-ascii?Q?N73gqgmbI6YzUfccXU3SjPLVI6vZdnZzECPFwNvA16NptTg9l4GsXeFGjDBU?=
+ =?us-ascii?Q?bHEKJA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eb2c3219-5979-41e8-9d8d-08db553939df
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2023 11:40:47.7496
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: lEN/fNGEqYzpAwvIAmg4KTOxl8ziobr+9VLnP699r79JvVeCkkB9hqUaEhD6Ouwepvc3/FJJ10EUxb8iXUIack/9ohTdeavTMd12Ir+LMnM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB3804
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIzLTA1LTE1IGF0IDEzOjU5ICswMzAwLCBLYWxsZSBWYWxvIHdyb3RlOg0KPiAN
-Cj4gUGluZy1LZSBTaGloIDxwa3NoaWhAcmVhbHRlay5jb20+IHdyaXRlczoNCj4gDQo+ID4gPiAt
-LS0tLU9yaWdpbmFsIE1lc3NhZ2UtLS0tLQ0KPiA+ID4gRnJvbTogTWFydGluIEJsdW1lbnN0aW5n
-bCA8bWFydGluLmJsdW1lbnN0aW5nbEBnb29nbGVtYWlsLmNvbT4NCj4gPiA+IFNlbnQ6IE1vbmRh
-eSwgTWF5IDE1LCAyMDIzIDQ6MDQgQU0NCj4gPiA+IFRvOiBsaW51eC13aXJlbGVzc0B2Z2VyLmtl
-cm5lbC5vcmcNCj4gPiA+IENjOiBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBQaW5nLUtl
-IFNoaWggPHBrc2hpaEByZWFsdGVrLmNvbT47IHRvbnkwNjIwZW1tYUBnbWFpbC5jb207DQo+ID4g
-PiBrdmFsb0BrZXJuZWwub3JnOyBNYXJ0aW4gQmx1bWVuc3RpbmdsIDxtYXJ0aW4uYmx1bWVuc3Rp
-bmdsQGdvb2dsZW1haWwuY29tPjsgTGFycnkgRmluZ2VyDQo+ID4gPiA8TGFycnkuRmluZ2VyQGx3
-ZmluZ2VyLm5ldD47IFJ1ZGkgSGVpdGJhdW0gPHJ1ZGlAaGVpdGJhdW0uY29tPg0KPiA+ID4gU3Vi
-amVjdDogW1BBVENIIHdpcmVsZXNzIHYxXSB3aWZpOiBydHc4ODogc2RpbzogQWx3YXlzIHVzZSB0
-d28gY29uc2VjdXRpdmUgYnl0ZXMgZm9yIHdvcmQNCj4gPiA+IG9wZXJhdGlvbnMNCj4gPiA+IA0K
-PiA+ID4gVGhlIEFsbHdpbm5lciBzdW54aS1tbWMgY29udHJvbGxlciBjYW5ub3QgaGFuZGxlIHdv
-cmQgKDE2IGJpdCkNCj4gPiA+IHRyYW5zZmVycy4gU28gYW5kIHNkaW9fe3JlYWQsd3JpdGV9dyBm
-YWlscyB3aXRoIG1lc3NhZ2VzIGxpa2UgdGhlDQo+ID4gPiBmb2xsb3dpbmcgZXhhbXBsZSB1c2lu
-ZyBhbiBSVEw4ODIyQlMgKGJ1dCB0aGUgc2FtZSBwcm9ibGVtcyB3ZXJlIGFsc28NCj4gPiA+IG9i
-c2VydmVkIHdpdGggUlRMODgyMkNTIGFuZCBSVEw4NzIzRFMgY2hpcHMpOg0KPiA+ID4gICBydHdf
-ODgyMmJzIG1tYzE6MDAwMToxOiBGaXJtd2FyZSB2ZXJzaW9uIDI3LjIuMCwgSDJDIHZlcnNpb24g
-MTMNCj4gPiA+ICAgc3VueGktbW1jIDQwMjEwMDAubW1jOiB1bmFsaWduZWQgc2NhdHRlcmxpc3Q6
-IG9zIGY4MCBsZW5ndGggMg0KPiA+ID4gICBzdW54aS1tbWMgNDAyMTAwMC5tbWM6IG1hcCBETUEg
-ZmFpbGVkDQo+ID4gPiAgIHJ0d184ODIyYnMgbW1jMTowMDAxOjE6IHNkaW8gcmVhZDE2IGZhaWxl
-ZCAoMHgxMDIzMCk6IC0yMg0KPiA+ID4gDQo+ID4gPiBVc2UgdHdvIGNvbnNlY3V0aXZlIHNpbmds
-ZSBieXRlIGFjY2Vzc2VzIGZvciB3b3JkIG9wZXJhdGlvbnMgaW5zdGVhZC4gSXQNCj4gPiA+IHR1
-cm5zIG91dCB0aGF0IHVwb24gY2xvc2VyIGluc3BlY3Rpb24gdGhpcyBpcyBhbHNvIHdoYXQgdGhl
-IHZlbmRvcg0KPiA+ID4gZHJpdmVyIGRvZXMsIGV2ZW4gdGhvdWdoIGl0IGRvZXMgaGF2ZSBzdXBw
-b3J0IGZvciBzZGlvX3tyZWFkLHdyaXRlfXcuIFNvDQo+ID4gPiB3ZSBjYW4gY29uY2x1ZGUgdGhh
-dCB0aGUgcnR3ODggY2hpcHMgZG8gc3VwcG9ydCB3b3JkIGFjY2VzcyBidXQgb25seSBvbg0KPiA+
-ID4gU0RJTyBjb250cm9sbGVycyB0aGF0IGFsc28gc3VwcG9ydCBpdC4gU2luY2UgdGhlcmUncyBu
-byB3YXkgdG8gZGV0ZWN0IGlmDQo+ID4gPiB0aGUgY29udHJvbGxlciBzdXBwb3J0cyB3b3JkIGFj
-Y2VzcyBvciBub3QgdGhlIHJ0dzg4IHNkaW8gZHJpdmVyDQo+ID4gPiBzd2l0Y2hlcyB0byB0aGUg
-ZWFzaWVzdCBhcHByb2FjaDogYXZvaWRpbmcgd29yZCBhY2Nlc3MuDQo+ID4gPiANCj4gPiA+IFJl
-cG9ydGVkLWJ5OiBMYXJyeSBGaW5nZXIgPExhcnJ5LkZpbmdlckBsd2Zpbmdlci5uZXQ+DQo+ID4g
-PiBDbG9zZXM6IA0KPiA+ID4gaHR0cHM6Ly9sb3JlLmtlcm5lbC5vcmcvbGludXgtd2lyZWxlc3Mv
-NTI3NTg1ZTUtOWNkZC02NmVkLWMzYWYtNmRhMTYyZjRiNzIwQGx3ZmluZ2VyLm5ldC8NCj4gPiAN
-Cj4gPiAiQ2xvc2VzOiIgc2VlbXMgbm90IGEgcmVndWxhciB0YWcuIFVzZSAiTGluazogIiBpbnN0
-ZWFkLg0KPiANCj4gQWN0dWFsbHkgdGhlIGRvY3VtZW50YXRpb24gbm93IHRhbGtzIGFib3V0IENs
-b3NlcyB0YWc6DQo+IA0KPiBodHRwczovL2RvY3Mua2VybmVsLm9yZy9wcm9jZXNzLzUuUG9zdGlu
-Zy5odG1sI3BhdGNoLWZvcm1hdHRpbmctYW5kLWNoYW5nZWxvZ3MNCj4gDQo+IEkgZ3Vlc3MgdGhp
-cyB0YWcgaXMgYSByZWNlbnQgYWRkaXRpb24/DQo+IA0KDQpUaGFua3MgZm9yIGluZm9ybWF0aW9u
-LiANCg0KVGhlbiwgdGhpcyBwYXRjaCBsb29rcyBnb29kIHRvIG1lLg0KDQpSZXZpZXdlZC1ieTog
-UGluZy1LZSBTaGloIDxwa3NoaWhAcmVhbHRlay5jb20+DQoNCg==
+On Sun, May 14, 2023 at 11:15:40AM +0200, Krzysztof Kozlowski wrote:
+> On 14/05/2023 10:29, Simon Horman wrote:
+> > On Sat, May 13, 2023 at 01:51:12PM +0200, Krzysztof Kozlowski wrote:
+> >> On 13/05/2023 13:49, Krzysztof Kozlowski wrote:
+> >>> If sock->service_name is NULL, the local variable
+> >>> service_name_tlv_length will not be assigned by nfc_llcp_build_tlv(),
+> >>> later leading to using value frmo the stack.  Smatch warning:
+> >>>
+> >>>   net/nfc/llcp_commands.c:442 nfc_llcp_send_connect() error: uninitialized symbol 'service_name_tlv_length'.
+> >>
+> >> Eh, typo in subject prefix. V2 in shortly...
+> > 
+> > Also, s/frmo/from/
+> > 
+> > And please consider moving local variables towards reverse xmas tree -
+> > longest line to shortest - order for networking code.
+> 
+> They were not ordered in the first place, so you prefer me to re-shuffle
+> all of them (a bit independent change)?
+
+My slight preference is to move them towards being ordered.
+Maybe that is not practical in this case.
+
+As you point out, they are currently out of order.
+And if you think re-shuffling can be done, without excess churn,
+I think that would be fine.
+
+Given the current state of the code, reverse xmas tree is much more of a
+suggestion than a requirement form my side.
