@@ -2,72 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB18E704106
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 00:38:10 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 49EF470410A
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 00:38:39 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245742AbjEOWiH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 18:38:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43458 "EHLO
+        id S245739AbjEOWig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 18:38:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231416AbjEOWiF (ORCPT
+        with ESMTP id S231416AbjEOWib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 18:38:05 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B946A5DA;
-        Mon, 15 May 2023 15:38:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=jnDRWuNSWsp6KYhPmlwWmea/YvyxX4wTa6fZnl4J24c=; b=EYbU0a3j0wQDP84sU0LLnS8jpc
-        1iKmZBD8ldErq0TIqmefbrbJX1Ady1G/gcNtqBPmoQGIP7LDcXk/kKywuZyEb7OczTerVF4+WTQ7G
-        WtbmEVw0JSD2pUaPJ/gpoLB10zwUZ5QXojqWRsBRdUrAFPCIE2f4J1ny78oy1COkOkog=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pygp8-00CwZS-89; Tue, 16 May 2023 00:37:46 +0200
-Date:   Tue, 16 May 2023 00:37:46 +0200
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Marco Migliore <m.migliore@tiesse.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Mon, 15 May 2023 18:38:31 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3DE4DDBC
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 15:38:22 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 770773F797;
+        Tue, 16 May 2023 00:38:20 +0200 (CEST)
+Date:   Tue, 16 May 2023 00:38:19 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, dmitry.baryshkov@linaro.org,
+        andersson@kernel.org, quic_abhinavk@quicinc.com,
+        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: dsa: mv88e6xxx: Fix mv88e6393x EPC write command
- offset
-Message-ID: <93b20305-72e2-4916-aa72-7595a776917f@lunn.ch>
-References: <20230515220918.80709-1-m.migliore@tiesse.com>
+Subject: Re: [PATCH v9 3/8] drm/msm/dpu: test DPU_PINGPONG_DSC bit before
+ assign DSC ops to PINGPONG
+Message-ID: <y37celsdtzqlyfvpg6ctkjv53keflykj36l7hd6gxsf7f4suzx@d6ywqy6fyutc>
+References: <1684185928-24195-1-git-send-email-quic_khsieh@quicinc.com>
+ <1684185928-24195-4-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230515220918.80709-1-m.migliore@tiesse.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1684185928-24195-4-git-send-email-quic_khsieh@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 16, 2023 at 12:09:18AM +0200, Marco Migliore wrote:
-> According to datasheet, the command opcode must be specified
-> into bits [14:12] of the Extended Port Control register (EPC).
+You forgot to address the title suggestion "before assign" isn't proper
+English.
+
+Copying from v8 review:
+
+    "Guard PINGPONG DSC ops behind DPU_PINGPONG_DSC bit"
+
+On 2023-05-15 14:25:23, Kuogee Hsieh wrote:
 > 
-> Signed-off-by: Marco Migliore <m.migliore@tiesse.com>
+> DPU < 7.0.0 has DPU_PINGPONG_DSC feature bit set to indicate it requires
+> both dpu_hw_pp_setup_dsc() and dpu_hw_pp_dsc_{enable,disable}() to be
+> executed to complete DSC configuration if DSC hardware block is present.
+> Hence test DPU_PINGPONG_DSC feature bit and assign DSC related functions
+> to the ops of PINGPONG block accordingly if DPU_PINGPONG_DSC bit is set.
+> 
+> changes in v6:
+> -- split patches, this patch has function handles DPU_PINGPONG_DSC bit
+> 
+> changes in v9:
+> -- remove un condition assign dsc related functions to pingpong ops
 
-Hi Marco
+Remember that in the DRM subsystem, these horrible changelogs are
+allowed as part of the commit message.  I already disagree with that,
+and as pointed out by Dmitry this particular one is unreadable.  I
+typically see them through as noise, but this one could use a rewrite.
+I won't bother suggesting the right wording yet again though.
 
-Please read the netdev FAQ:
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html#netdev-faq
+For the contents:
 
-Please add a Fixes: tag, to indicate the patch which introduced the
-problem and needs fixing. Also, set the subject to indicate this is
-for the net tree.
+Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
 
-Thanks
-	Andrew
+> ---
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c | 9 ++++++---
+>  1 file changed, 6 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+> index 79e4576..437d9e6 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_pingpong.c
+> @@ -291,9 +291,12 @@ static void _setup_pingpong_ops(struct dpu_hw_pingpong *c,
+>  		c->ops.get_line_count = dpu_hw_pp_get_line_count;
+>  		c->ops.disable_autorefresh = dpu_hw_pp_disable_autorefresh;
+>  	}
+> -	c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
+> -	c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
+> -	c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
+> +
+> +	if (test_bit(DPU_PINGPONG_DSC, &features)) {
+> +		c->ops.setup_dsc = dpu_hw_pp_setup_dsc;
+> +		c->ops.enable_dsc = dpu_hw_pp_dsc_enable;
+> +		c->ops.disable_dsc = dpu_hw_pp_dsc_disable;
+> +	}
+>  
+>  	if (test_bit(DPU_PINGPONG_DITHER, &features))
+>  		c->ops.setup_dither = dpu_hw_pp_setup_dither;
+> -- 
+> 2.7.4
+> 
