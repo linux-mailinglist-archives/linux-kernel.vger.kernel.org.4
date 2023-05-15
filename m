@@ -2,126 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68CEF703F93
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:24:02 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 439BF703F99
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:24:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245356AbjEOVYA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 17:24:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50410 "EHLO
+        id S245499AbjEOVYt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 17:24:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242402AbjEOVX6 (ORCPT
+        with ESMTP id S242402AbjEOVYo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 17:23:58 -0400
-Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DABDE93D9
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 14:23:57 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id EF0851F6B4;
-        Mon, 15 May 2023 23:23:55 +0200 (CEST)
-Date:   Mon, 15 May 2023 23:23:54 +0200
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        dri-devel@lists.freedesktop.org, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
-        agross@kernel.org, dmitry.baryshkov@linaro.org,
-        andersson@kernel.org, quic_jesszhan@quicinc.com,
-        quic_sbillaka@quicinc.com, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 1/8] drm/msm/dpu: add dsc blocks for remaining
- chipsets in catalog
-Message-ID: <zkvmqpcdgeg3qjkddopqx2yfipmqjjyva2cnk5bq4npxzxto4v@gfgvp5hkblkm>
-References: <1683914423-17612-1-git-send-email-quic_khsieh@quicinc.com>
- <1683914423-17612-2-git-send-email-quic_khsieh@quicinc.com>
- <4tmuqrz3du7pwwih3gzp6zveyfvwxj3meeksgxkbg2v5mdtyu3@e5xxuoe64rvv>
- <69538f77-ff08-c3ce-3d4a-9f7250ee2505@quicinc.com>
- <u47xthqfjxpbbzjbvnrz4qa2f2m3aip4iose7cwuhzg4raf7db@qxbos7u55wko>
- <d10da0ce-a22e-24e9-e895-fae4c3a35222@quicinc.com>
+        Mon, 15 May 2023 17:24:44 -0400
+Received: from sender3-of-o57.zoho.com (sender3-of-o57.zoho.com [136.143.184.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9E88213D
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 14:24:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; t=1684185838; cv=none; 
+        d=zohomail.com; s=zohoarc; 
+        b=ZIiZUK8CbsCjiTqifI36HGbNwdFEP03mJGK5C8Kha6tVgBHP7kTeDgac2+tm/3XKsbDwlkOFJ/4w8cRPeVL3VnzwjCti5eH0DCyA7nRLJ2JNfQf3waGrN8Im9OQOKRHiOK1HYANwB1hR+/nL++Mh9g4UH04TowwykuQggdzSLmU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+        t=1684185838; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
+        bh=J3jOAuTNmPzCg2cyhMylK3GtU6TzEwrGngq9Y/KQJiQ=; 
+        b=cnbHjhH3F53ydRLRJExkPQrkix1xEpSDV/QLM4ZhENvB8JWNC30Qi41n8QwfXr1lfHGN/YmMLLMNwyQsTv98sg/0V4f3O+tHQDqhjAIoHYJZ/thkTLADCVHMRTTvyki4fJ4V30mYXdS1uR0cpUEo47jhgIfqJnxd1do0v+cYM9w=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+        dkim=pass  header.i=apertussolutions.com;
+        spf=pass  smtp.mailfrom=dpsmith@apertussolutions.com;
+        dmarc=pass header.from=<dpsmith@apertussolutions.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1684185838;
+        s=zoho; d=apertussolutions.com; i=dpsmith@apertussolutions.com;
+        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+        bh=J3jOAuTNmPzCg2cyhMylK3GtU6TzEwrGngq9Y/KQJiQ=;
+        b=XF+jDcK+OfGZgLIcK5u+YeWep9XEHHVW3HEudShXbrPiGjD416u8N3ktwtum2gO8
+        xSPKV0oxzwGtK22V0BdbpwSgPx1tr1Qoh2O3kC8eLgIaZyoZg/aGR/nx+B+DzAORE+R
+        bVNcnaWzhPNJytg3mqqDi8s/XkcQS8WIaNwB+E+c=
+Received: from [10.10.1.128] (static-72-81-132-2.bltmmd.fios.verizon.net [72.81.132.2]) by mx.zohomail.com
+        with SMTPS id 1684185838046320.453113662738; Mon, 15 May 2023 14:23:58 -0700 (PDT)
+Message-ID: <9f0db589-e7b4-09c0-aed2-588b2a2e1bf5@apertussolutions.com>
+Date:   Mon, 15 May 2023 17:23:55 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d10da0ce-a22e-24e9-e895-fae4c3a35222@quicinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH v6 06/14] x86: Add early SHA support for Secure Launch
+ early measurements
+Content-Language: en-US
+To:     Eric Biggers <ebiggers@kernel.org>,
+        Ross Philipson <ross.philipson@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-integrity@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-crypto@vger.kernel.org, iommu@lists.linux-foundation.org,
+        kexec@lists.infradead.org, linux-efi@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, hpa@zytor.com,
+        ardb@kernel.org, mjg59@srcf.ucam.org,
+        James.Bottomley@hansenpartnership.com, luto@amacapital.net,
+        nivedita@alum.mit.edu, kanth.ghatraju@oracle.com,
+        trenchboot-devel@googlegroups.com
+References: <20230504145023.835096-1-ross.philipson@oracle.com>
+ <20230504145023.835096-7-ross.philipson@oracle.com>
+ <20230510012144.GA1851@quark.localdomain>
+From:   "Daniel P. Smith" <dpsmith@apertussolutions.com>
+In-Reply-To: <20230510012144.GA1851@quark.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ZohoMailClient: External
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-05-15 13:58:35, Abhinav Kumar wrote:
+On 5/9/23 21:21, Eric Biggers wrote:
+> On Thu, May 04, 2023 at 02:50:15PM +0000, Ross Philipson wrote:
+>> From: "Daniel P. Smith" <dpsmith@apertussolutions.com>
+>>
+>> The SHA algorithms are necessary to measure configuration information into
+>> the TPM as early as possible before using the values. This implementation
+>> uses the established approach of #including the SHA libraries directly in
+>> the code since the compressed kernel is not uncompressed at this point.
+>>
+>> The SHA code here has its origins in the code from the main kernel:
+>>
+>> commit c4d5b9ffa31f ("crypto: sha1 - implement base layer for SHA-1")
+>>
+>> That code could not be pulled directly into the setup portion of the
+>> compressed kernel because of other dependencies it pulls in. The result
+>> is this is a modified copy of that code that still leverages the core
+>> SHA algorithms.
+>>
+>> Signed-off-by: Daniel P. Smith <dpsmith@apertussolutions.com>
+>> Signed-off-by: Ross Philipson <ross.philipson@oracle.com>
 > 
-> 
-> 
-> On 5/15/2023 1:07 PM, Marijn Suijten wrote:
-> > On 2023-05-15 11:20:02, Abhinav Kumar wrote:
-> >>
-> >>
-> >>
-> >> On 5/14/2023 2:39 PM, Marijn Suijten wrote:
-> >>> DSC*, and mention 1.1 explicitly (since this skips the 1.2 blocks, while
-> >>> the series is clearly aimed at 1.1...).  This was done for the DSC 1.2
-> >>> HW block patch after all.
-> >>>
-> >>> in catalog -> to catalog
-> >>>
-> >>> But it's just two platforms, you can fit MSM8998 and SC8180X in the
-> >>> title.
-> >>>
-> >>> On 2023-05-12 11:00:16, Kuogee Hsieh wrote:
-> >>>>
-> >>>> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> >>>>
-> >>>> There are some platforms has DSC blocks but it is not declared at catalog.
-> >>>
-> >>> Some platforms have DSC blocks which have not yet been declared in the
-> >>> catalog.*
-> >>>
-> >>>> For completeness, this patch adds DSC blocks for platforms which missed
-> >>>> them.
-> >>>
-> >>> Drop "this patch":
-> >>>
-> >>>       Complete DSC 1.1 support for all platforms by adding the missing
-> >>>       blocks to MSM8998 and SC8180X.
-> >>>
-> >>>>
-> >>>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
-> >>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> >>>> ---
-> >>>>    drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h |  7 +++++++
-> >>>>    drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h | 11 +++++++++++
-> >>>
-> >>> How about SC7180, and any other DPU 6.x revision?
-> >>>
-> >>
-> >> Will let kuogee respond to the other nits. There is no DSC in sc7180 /
-> >> sm6115 / qcm2290. So this patch is complete.
-> > 
-> > Thank you for checking as I didn't have the DTS close (and it seems
-> > SC7180 would have supported this, but no).  I did check other SoCs in
-> > the DPU 6.x range that are currently floating in my tree and on the
-> > list, which do need their DSC 1.1 block added (both a single block at
-> > 0x81000 downstream, 0x80000 upstream), if you can in a resend Konrad:
-> > 
-> > DPU 6.4 in SM6350: https://lore.kernel.org/linux-arm-msm/20230411-topic-straitlagoon_mdss-v3-6-9837d6b3516d@linaro.org/
-> > DPU 6.9 in SM6375: https://lore.kernel.org/linux-arm-msm/20230411-topic-straitlagoon_mdss-v3-8-9837d6b3516d@linaro.org/
-> > 
-> 
-> If these are still on the list, can Konrad add them to his change as 
-> that way his catalog change will be complete? Otherwise I would prefer 
-> to add them in a follow up change because marking this change as 
-> dependent on a catalog change which adds a new chipset is not right.
+> SHA-1 is insecure.  Why are you still using SHA-1?  Don't TPMs support SHA-2
+> now?
 
-The question was for Konrad (and I addressed him by name, not you) as
-his series is not merged and the DSC blocks can be added to it directly
-without depending on this series.  DSC 1.1 is after all available for
-some time now.
+I think others have commented as to why SHA-1 is provided.
 
-- Marijn
+> And if you absolutely MUST use SHA-1 despite it being insecure, please at least
+> don't obfuscate it by calling it simply "SHA".
+
+Apologies that it appears that way to you. Typically when referring to 
+the family or a subset of the SHA algorithms, SHA-0, SHA-1, SHA-2, and 
+SHA-3, it is generally accepted to refer to them as the "SHA 
+algorithms". And this is contrasted to the SM algorithms which the TCG 
+spec provides for which we have no intentions to support ourselves, 
+though others are welcome to contribute.
+
+Again, apologies for misunderstanding and thank you for taking the time 
+to review the series.
+
+v/r,
+dps
+
