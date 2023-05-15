@@ -2,193 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E47D87021C1
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 04:36:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 653357021CB
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 04:40:57 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238374AbjEOCgo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 22:36:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43810 "EHLO
+        id S238141AbjEOCkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 22:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S234596AbjEOCgk (ORCPT
+        with ESMTP id S230147AbjEOCkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 22:36:40 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEFB110F3;
-        Sun, 14 May 2023 19:36:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 48A6460F57;
-        Mon, 15 May 2023 02:36:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 513FEC433EF;
-        Mon, 15 May 2023 02:36:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684118197;
-        bh=/3QYM4VEPV59xXf0yiNFF12gZIjhplj+fBoVniSTVlI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=SBbOMyIVfhwdlx2H4ZEXI5ZammVxYzyeWCXo9vJHdL44ZwgYRMuXEO2zvmLIOBpke
-         8sVvOHWKNTMWNTpC4Ei5FB4iJXMgfGV+N6llX85Lka3t5OEyftSz2ZaBZbMbynW8ey
-         7HG2GOl/WbgS8B22kf8aAf/uq5jpZ3jWpyOU67qU0lLFpd2lb9SBA5Abpwsyy9eCzB
-         TlQ/fFsMzLrQqWaR1dASY4mlYLreITVuUj/0PIdKLApDurV8r1OxKmAxbULqgD07P3
-         Y5i01Lbn5u/y3UkwZuK9iwLVbloFI9PaLrupQTbgzcRwL/1LGXgiVco0XByqbszlN7
-         yErzO/6OabAPA==
-Date:   Sun, 14 May 2023 19:40:29 -0700
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Felipe Balbi <balbi@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, quic_pkondeti@quicinc.com,
-        quic_ppratap@quicinc.com, quic_wcheng@quicinc.com,
-        quic_jackp@quicinc.com, quic_harshq@quicinc.com,
-        ahalaney@redhat.com
-Subject: Re: [PATCH v8 0/9] Add multiport support for DWC3 controllers
-Message-ID: <20230515024029.3s7bm5iiktzcfzy2@ripper>
-References: <20230514054917.21318-1-quic_kriskura@quicinc.com>
+        Sun, 14 May 2023 22:40:49 -0400
+Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CD2DB1;
+        Sun, 14 May 2023 19:40:48 -0700 (PDT)
+Received: by mail-io1-xd34.google.com with SMTP id ca18e2360f4ac-76c626eb5d1so164493339f.0;
+        Sun, 14 May 2023 19:40:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684118447; x=1686710447;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vRqArO1xlVO8y07C9Kq3Ze/xf8lx/06+pxjfGbghf1U=;
+        b=rlGEcm1rr9RT7uyn1BG8/fpiyYW9r173W7AsGyGqPM1m3jB7V5Ia+0DxAsGkKqhrP4
+         dOUh/PuNZtWVAhh9/cjR67zs2gqLfV0p/DIARdDQpNZok2aHGYPcEUEDbKcLT+V2NNOg
+         1vynJ1u7+/9s6gUG5PoRtb/XqU9/00zj5QeB6LT8DQ1UgNWUEV+Lkl3WlETSfxQn0R96
+         VV18qxs/Yr3OShMJHYz6htCQMuUxcXq0mtduE60epU7aaSVETNf6M4+L7LM+aQlJG2Yo
+         FkTLkU+WtexgKPNWJ+mH1Jx4a3F1Ojr7fLcT+zgfv3pQOYHTTy8yGWPjMf7pz+8vVFlQ
+         /llw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684118447; x=1686710447;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vRqArO1xlVO8y07C9Kq3Ze/xf8lx/06+pxjfGbghf1U=;
+        b=Uk+BhAKkJXV5ibdGjaCXiAPVtyKN/Gwiju9p7nPGnb/gOfH2JUBE/O2tcj9zoABdly
+         GR+CIjwl61iDhloMywBjwnwIWDV225rQruEPY212SEkWpQqXnT8NDAd/WQZXGZ7EEXia
+         DvHDJcdY/w23/af53kNWc4JQyHcCeu0eyYWrALTfznoix5ppruI+n0CpwStNSGoYBzgE
+         l2Rku5JJj9lXgohV6x7vulBPpKUI7S7Dj8oKd6FTyp/AQrJx0JTcDAT0zF6b9pSC/GUA
+         I3LYhnA/vXWEXsJQwziiuoKOjOHhQV9xgrXc50kOHuAo6LGLFczR4FVxbsMwRfO9dUbh
+         +5Kg==
+X-Gm-Message-State: AC+VfDz1hdOY9LG19zdiXgJ/YpSi7LhiE6fyx20EfPZZPlxi4cf24qcp
+        yjuA9pHj1HMnWI0RifwV0zzxQBlORtQ1fA==
+X-Google-Smtp-Source: ACHHUZ673EELvUM7wj+EIQ9aZ+8WRulhRkjG31VOPUwsuxk8yUAPBgiZrZQcuGc05IcaUkVupoKVDA==
+X-Received: by 2002:a5d:8513:0:b0:762:f8d4:6f9 with SMTP id q19-20020a5d8513000000b00762f8d406f9mr21178023ion.2.1684118447533;
+        Sun, 14 May 2023 19:40:47 -0700 (PDT)
+Received: from azeems-kspp.c.googlers.com.com (54.70.188.35.bc.googleusercontent.com. [35.188.70.54])
+        by smtp.gmail.com with ESMTPSA id m31-20020a056638271f00b00417a49f03absm4333478jav.64.2023.05.14.19.40.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 May 2023 19:40:47 -0700 (PDT)
+From:   Azeem Shaikh <azeemshaikh38@gmail.com>
+To:     Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>
+Cc:     linux-hardening@vger.kernel.org,
+        Azeem Shaikh <azeemshaikh38@gmail.com>,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] NFSD: Remove open coding of string copy
+Date:   Mon, 15 May 2023 02:40:44 +0000
+Message-ID: <20230515024044.2677124-1-azeemshaikh38@gmail.com>
+X-Mailer: git-send-email 2.40.1.606.ga4b1b128d6-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230514054917.21318-1-quic_kriskura@quicinc.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 14, 2023 at 11:19:08AM +0530, Krishna Kurapati wrote:
-> Currently the DWC3 driver supports only single port controller which
-> requires at most two PHYs ie HS and SS PHYs. There are SoCs that has
-> DWC3 controller with multiple ports that can operate in host mode.
-> Some of the port supports both SS+HS and other port supports only HS
-> mode.
-> 
-> This change primarily refactors the Phy logic in core driver to allow
-> multiport support with Generic Phy's.
-> 
-> Chananges have been tested on  QCOM SoC SA8295P which has 4 ports (2
-> are HS+SS capable and 2 are HS only capable).
-> 
+Instead of open coding a __dynamic_array(), use the __string() and
+__assign_str() helper macros that exist for this kind of use case.
 
-I'm able to detect my USB stick on all 4 ports on the sa8295p adp.
+Part of an effort to remove deprecated strlcpy() [1] completely from the
+kernel[2].
 
-Tested-by: Bjorn Andersson <andersson@kernel.org>
+[1] https://www.kernel.org/doc/html/latest/process/deprecated.html#strlcpy
+[2] https://github.com/KSPP/linux/issues/89
 
-Thanks,
-Bjorn
+Fixes: 3c92fba557c6 ("NFSD: Enhance the nfsd_cb_setup tracepoint")
+Signed-off-by: Azeem Shaikh <azeemshaikh38@gmail.com>
+---
+ fs/nfsd/trace.h |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-> Changes in v8:
-> Reorganised code in patch-5
-> Fixed nitpicks in code according to comments received on v7
-> Fixed indentation in DT patches
-> Added drive strength for pinctrl nodes in SA8295 DT
-> 
-> Changes in v7:
-> Added power event irq's for Multiport controller.
-> Udpated commit text for patch-9 (adding DT changes for enabling first
-> port of multiport controller on sa8540-ride).
-> Fixed check-patch warnings for driver code.
-> Fixed DT binding errors for changes in snps,dwc3.yaml
-> Reabsed code on top of usb-next
-> 
-> Changes in v6:
-> Updated comments in code after.
-> Updated variables names appropriately as per review comments.
-> Updated commit text in patch-2 and added additional info as per review
-> comments.
-> The patch header in v5 doesn't have "PATHCH v5" notation present. Corrected
-> it in this version.
-> 
-> Changes in v5:
-> Added DT support for first port of Teritiary USB controller on SA8540-Ride
-> Added support for reading port info from XHCI Extended Params registers.
-> 
-> Changes in RFC v4:
-> Added DT support for SA8295p.
-> 
-> Changes in RFC v3:
-> Incase any PHY init fails, then clear/exit the PHYs that
-> are already initialized.
-> 
-> Changes in RFC v2:
-> Changed dwc3_count_phys to return the number of PHY Phandles in the node.
-> This will be used now in dwc3_extract_num_phys to increment num_usb2_phy 
-> and num_usb3_phy.
-> 
-> Added new parameter "ss_idx" in dwc3_core_get_phy_ny_node and changed its
-> structure such that the first half is for HS-PHY and second half is for
-> SS-PHY.
-> 
-> In dwc3_core_get_phy, for multiport controller, only if SS-PHY phandle is
-> present, pass proper SS_IDX else pass -1.
-> 
-> Link to v7: https://lore.kernel.org/all/20230501143445.3851-1-quic_kriskura@quicinc.com/
-> Link to v6: https://lore.kernel.org/all/20230405125759.4201-1-quic_kriskura@quicinc.com/
-> Link to v5: https://lore.kernel.org/all/20230310163420.7582-1-quic_kriskura@quicinc.com/
-> Link to RFC v4: https://lore.kernel.org/all/20230115114146.12628-1-quic_kriskura@quicinc.com/
-> Link to RFC v3: https://lore.kernel.org/all/1654709787-23686-1-git-send-email-quic_harshq@quicinc.com/#r
-> Link to RFC v2: https://lore.kernel.org/all/1653560029-6937-1-git-send-email-quic_harshq@quicinc.com/#r
-> 
-> Test results:
-> 
-> Bus 3/4 represent multiport controller having 4 HS ports and 2 SS ports.
-> 
-> / # dmesg |grep hub
-> [    0.029029] usbcore: registered new interface driver hub
-> [    1.372812] hub 1-0:1.0: USB hub found
-> [    1.389142] hub 1-0:1.0: 1 port detected
-> [    1.414721] hub 2-0:1.0: USB hub found
-> [    1.427669] hub 2-0:1.0: 1 port detected
-> [    2.931465] hub 3-0:1.0: USB hub found
-> [    2.935340] hub 3-0:1.0: 4 ports detected
-> [    2.948721] hub 4-0:1.0: USB hub found
-> [    2.952604] hub 4-0:1.0: 2 ports detected
-> / #
-> / # lsusb
-> Bus 003 Device 001: ID 1d6b:0002
-> Bus 001 Device 001: ID 1d6b:0002
-> Bus 003 Device 005: ID 0b0e:0300
-> Bus 003 Device 002: ID 046d:c077
-> Bus 004 Device 001: ID 1d6b:0003
-> Bus 002 Device 001: ID 1d6b:0003
-> Bus 003 Device 004: ID 03f0:0024
-> Bus 003 Device 003: ID 046d:c016
-> 
-> Krishna Kurapati (9):
->   dt-bindings: usb: qcom,dwc3: Add bindings for SC8280 Multiport
->   dt-bindings: usb: Add bindings for multiport properties on DWC3
->     controller
->   usb: dwc3: core: Access XHCI address space temporarily to read port
->     info
->   usb: dwc3: core: Skip setting event buffers for host only controllers
->   usb: dwc3: core: Refactor PHY logic to support Multiport Controller
->   usb: dwc3: qcom: Add multiport controller support for qcom wrapper
->   arm64: dts: qcom: sc8280xp: Add multiport controller node for SC8280
->   arm64: dts: qcom: sa8295p: Enable tertiary controller and its 4 USB
->     ports
->   arm64: dts: qcom: sa8540-ride: Enable first port of tertiary usb
->     controller
-> 
->  .../devicetree/bindings/usb/qcom,dwc3.yaml    |  22 +
->  .../devicetree/bindings/usb/snps,dwc3.yaml    |  13 +-
->  arch/arm64/boot/dts/qcom/sa8295p-adp.dts      |  52 +++
->  arch/arm64/boot/dts/qcom/sa8540p-ride.dts     |  22 +
->  arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  66 +++
->  drivers/usb/dwc3/core.c                       | 389 +++++++++++++++---
->  drivers/usb/dwc3/core.h                       |  28 +-
->  drivers/usb/dwc3/drd.c                        |  13 +-
->  drivers/usb/dwc3/dwc3-qcom.c                  |  28 +-
->  9 files changed, 543 insertions(+), 90 deletions(-)
-> 
-> -- 
-> 2.40.0
-> 
+diff --git a/fs/nfsd/trace.h b/fs/nfsd/trace.h
+index 4183819ea082..72a906a053dc 100644
+--- a/fs/nfsd/trace.h
++++ b/fs/nfsd/trace.h
+@@ -1365,19 +1365,19 @@ TRACE_EVENT(nfsd_cb_setup,
+ 		__field(u32, cl_id)
+ 		__field(unsigned long, authflavor)
+ 		__sockaddr(addr, clp->cl_cb_conn.cb_addrlen)
+-		__array(unsigned char, netid, 8)
++		__string(netid, netid)
+ 	),
+ 	TP_fast_assign(
+ 		__entry->cl_boot = clp->cl_clientid.cl_boot;
+ 		__entry->cl_id = clp->cl_clientid.cl_id;
+-		strlcpy(__entry->netid, netid, sizeof(__entry->netid));
++		__assign_str(netid, netid);
+ 		__entry->authflavor = authflavor;
+ 		__assign_sockaddr(addr, &clp->cl_cb_conn.cb_addr,
+ 				  clp->cl_cb_conn.cb_addrlen)
+ 	),
+ 	TP_printk("addr=%pISpc client %08x:%08x proto=%s flavor=%s",
+ 		__get_sockaddr(addr), __entry->cl_boot, __entry->cl_id,
+-		__entry->netid, show_nfsd_authflavor(__entry->authflavor))
++		__get_str(netid), show_nfsd_authflavor(__entry->authflavor))
+ );
+ 
+ TRACE_EVENT(nfsd_cb_setup_err,
+-- 
+2.40.1.606.ga4b1b128d6-goog
+
+
