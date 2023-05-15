@@ -2,94 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE7F70240B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:05:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 655C770240E
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:06:30 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238571AbjEOGFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 02:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38984 "EHLO
+        id S238348AbjEOGG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 02:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238536AbjEOGFT (ORCPT
+        with ESMTP id S235175AbjEOGFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 02:05:19 -0400
-Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E578D49D9;
-        Sun, 14 May 2023 22:57:56 -0700 (PDT)
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pyRCi-0092NQ-2h; Mon, 15 May 2023 13:57:05 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 15 May 2023 13:57:04 +0800
-Date:   Mon, 15 May 2023 13:57:04 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     syzbot <syzbot+a6abcf08bad8b18fd198@syzkaller.appspotmail.com>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Taehee Yoo <ap420073@gmail.com>
-Cc:     bp@alien8.de, dave.hansen@linux.intel.com, davem@davemloft.net,
-        hpa@zytor.com, linux-crypto@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
-Subject: Re: [syzbot] [crypto?] general protection fault in
- __aria_aesni_avx_gfni_crypt_16way
-Message-ID: <ZGHJsNY4P7yoCPDg@gondor.apana.org.au>
-References: <0000000000007fa2d705fb29f046@google.com>
- <000000000000b2cbe305fbb2c9d9@google.com>
+        Mon, 15 May 2023 02:05:46 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A9349F2;
+        Sun, 14 May 2023 22:58:22 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id a640c23a62f3a-94a342f4c8eso311236766b.0;
+        Sun, 14 May 2023 22:58:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684130300; x=1686722300;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NPQtZOXsXDtCauwTHNXvzScss6wN7/6B+b24lKETaGY=;
+        b=VK/SJmfFZupbAd5/+2FwqSOo5GZXg1tMePpH0B9ihJg7i9s70UKRXN7pjr/rJ+Ccti
+         vDMxqrkXkt2ev2XIK4l2mpLHAHjNmU9K7T/uZxBGLj3v5x2XFtIGmbNf7p8ROYWbB70E
+         7bHRbQmqKhYQAAILyh20N/DkDwZBvCBmPJHG2xYwKzFmZEkrVWZm1jy8VlCvRafH6wEA
+         UUqUCKsFqg7uO5fHNlVnznb9KkCr54n0Yijsf0i+1SiIzMzy4Vmh/jl67rkwWBQLpiYk
+         Xu3s9GH1cMXUwp6himyLZGzdYFCgJ4839KyyRUI4p81baVKpY8KqzejeZkN+wCbhkKrx
+         AC0g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684130300; x=1686722300;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NPQtZOXsXDtCauwTHNXvzScss6wN7/6B+b24lKETaGY=;
+        b=eB0EsS5kDmGT9gw7rZredhyBE2IS2Dlx4sdQt7okdGX6D6ff/aMrL4ShCjfImqmZ4t
+         vAKhAnh6WEc5pkr5JmC9j6diATZXWknQIdEbOmO9n8YJZr32sEXrmPDKO5osEPxfui6g
+         K8IbW11ScMovktn2UEDMbNXQFHjg6SaL1Q9BqC+0SOHzsXs9JwhG2WMb6CapV/L6r5MC
+         9wdT2hDSTTBFsb564Z/DV+gQX4ewdOgilJaPAx16+UTdljqkMV83x/AepnLeYuFvTSs2
+         Lmh9lq1+khBVV8t/1Fh25QfI2otbaqznJsKJdXWZvCQTbfe1x9PA0h+yWXPFk2to0Mks
+         qF2g==
+X-Gm-Message-State: AC+VfDxQQJSx2uHGzgYXwFkunyLRxaLUpxbtRLs5xPxikCi5E9goK/1C
+        DMRwKwuV2OpRXqY60sq9A74=
+X-Google-Smtp-Source: ACHHUZ6nMW9a0P1Ql/uFkqv12DRTC4hSCe3KL6gtMdm1+0pa5miAPoRV2RKERnYzaZnI/EEomTYr/g==
+X-Received: by 2002:a17:906:1051:b0:966:1f60:fd32 with SMTP id j17-20020a170906105100b009661f60fd32mr5945505ejj.6.1684130300277;
+        Sun, 14 May 2023 22:58:20 -0700 (PDT)
+Received: from [192.168.10.10] ([37.252.94.55])
+        by smtp.gmail.com with ESMTPSA id de47-20020a1709069bef00b0096b20c968afsm1464579ejc.124.2023.05.14.22.58.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 14 May 2023 22:58:20 -0700 (PDT)
+Message-ID: <9a76e550-fd1e-851c-e322-4bf51ab11e97@gmail.com>
+Date:   Mon, 15 May 2023 09:58:18 +0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <000000000000b2cbe305fbb2c9d9@google.com>
-X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: **
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 3/3] selftests: ALSA: Add test for the 'valsa' driver
+To:     Mark Brown <broonie@kernel.org>
+Cc:     corbet@lwn.net, akpm@linux-foundation.org, perex@perex.cz,
+        tiwai@suse.com, skhan@linuxfoundation.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        alsa-devel@alsa-project.org, linux-kselftest@vger.kernel.org,
+        gregkh@linuxfoundation.org, himadrispandya@gmail.com,
+        linux-kernel-mentees@lists.linuxfoundation.org
+References: <20230513202037.158777-1-ivan.orlov0322@gmail.com>
+ <20230513202037.158777-3-ivan.orlov0322@gmail.com>
+ <ZGGKwA10shGGUr87@finisterre.sirena.org.uk>
+Content-Language: en-US
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+In-Reply-To: <ZGGKwA10shGGUr87@finisterre.sirena.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, May 14, 2023 at 08:09:50PM -0700, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
+On 5/15/23 05:28, Mark Brown wrote:
+> On Sun, May 14, 2023 at 12:20:37AM +0400, Ivan Orlov wrote:
 > 
-> HEAD commit:    31f4104e392a Merge tag 'locking_urgent_for_v6.4_rc2' of gi..
-> git tree:       upstream
-> console output: https://syzkaller.appspot.com/x/log.txt?x=11768616280000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=8bc832f563d8bf38
-> dashboard link: https://syzkaller.appspot.com/bug?extid=a6abcf08bad8b18fd198
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> userspace arch: i386
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1737e3be280000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=149d4c06280000
+>> +uid=$(id -u)
+>> +if [ $uid -ne 0 ]; then
+>> +	echo "$0: Must be run as root"
+>> +	exit 1
+>> +fi
+> 
+> It is not an error to run the selftest as a non-root user, the test
+> should be skipped.
 
-...
+Alright, thanks!
+>> +modprobe snd-valsa
+> 
+> We don't check if the module was already loaded.
+> 
+>> +if [ ! -e /sys/kernel/debug/valsa/pc_test ]; then
+>> +	mount -t debugfs none /sys/kernel/debug
+>> +
+>> +	if [ ! -e /sys/kernel/debug/valsa/pc_test ]; then
+>> +		echo "$0: Error mounting debugfs"
+>> +		exit 4
+>> +	fi
+>> +fi
+> 
+> This will unconditionally attempt to mount debugfs in a standard
+> location and won't clean up after itself, if the system didn't have
+> debugfs mounted for some reason then this will leave it sitting there.
 
-> ----------------
-> Code disassembly (best guess):
->    0:	d0 10                	rclb   (%rax)
->    2:	c4 e2 69 00 d7       	vpshufb %xmm7,%xmm2,%xmm2
->    7:	c5 11 ef ea          	vpxor  %xmm2,%xmm13,%xmm13
->    b:	c5 e9 72 d0 08       	vpsrld $0x8,%xmm0,%xmm2
->   10:	c4 e2 69 00 d7       	vpshufb %xmm7,%xmm2,%xmm2
->   15:	c5 09 ef f2          	vpxor  %xmm2,%xmm14,%xmm14
->   19:	c4 e2 79 00 d7       	vpshufb %xmm7,%xmm0,%xmm2
->   1e:	c5 01 ef fa          	vpxor  %xmm2,%xmm15,%xmm15
->   22:	c5 f9 6f 05 7a 15 c9 	vmovdqa 0xac9157a(%rip),%xmm0        # 0xac915a4
->   29:	0a
-> * 2a:	c5 f9 6f 0d 6a 15 c9 	vmovdqa 0xac9156a(%rip),%xmm1        # 0xac9159c <-- trapping instruction
->   31:	0a
->   32:	c5 f9 6f 15 7a 15 c9 	vmovdqa 0xac9157a(%rip),%xmm2        # 0xac915b4
->   39:	0a
->   3a:	c5                   	.byte 0xc5
->   3b:	f9                   	stc
->   3c:	6f                   	outsl  %ds:(%rsi),(%dx)
->   3d:	1d                   	.byte 0x1d
->   3e:	52                   	push   %rdx
->   3f:	15                   	.byte 0x15
+Yes, I agree... I'll remove this in the future versions, I think the 
+approach with skipping in case of missing debugfs would be better.
 
-Ard, this looks like something that you recently touched.  Any
-ideas what might be causing this?
+By the way, I used the 'fpa' test as an example, and it looks like it 
+should be fixed as well...
 
-Thanks,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+> Would it not be better to have a C program that actually calls the ioctl
+> rather than a custom debugfs thing that may or may not be wired up to do
+> the same thing as an ioctl would?  It seems like other than whatever
+> this ioctl test actually does this is all just a simplified version of
+> the existing pcm-test.
+
+Well, the idea was to test the playback buffer consistency - the driver 
+has the functionality of testing the playback buffer for containing the 
+looped pattern (and if the buffer doesn't contain the looped pattern the 
+test fails). So, firstly we get the capture buffer with this pattern 
+(via arecord), and then send it to the driver for the test (via aplay).
+
+The pcm-test (as I understand) performs only time checks, not the checks 
+of the data played/captured, and I think it is pointless to test the 
+time again. But I agree, that C test implementation would be better - 
+using this approach I can perform additional buffer checks and cover 
+more functionality of the driver.
+
+Thank you very much for the review!
+
+Kind regards,
+Ivan Orlov.
