@@ -2,55 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 163DF702D9F
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:09:41 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 19B39702D9C
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:09:36 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241267AbjEONJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 09:09:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54102 "EHLO
+        id S242148AbjEONJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 09:09:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242311AbjEONJQ (ORCPT
+        with ESMTP id S242235AbjEONJC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 09:09:16 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 811532D57;
-        Mon, 15 May 2023 06:08:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C941B2F4;
-        Mon, 15 May 2023 06:08:56 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C55EF3F67D;
-        Mon, 15 May 2023 06:08:09 -0700 (PDT)
-Date:   Mon, 15 May 2023 14:08:07 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     "lihuisong (C)" <lihuisong@huawei.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Shawn Guo <shawnguo@kernel.org>, linux-kernel@vger.kernel.org,
-        soc@kernel.org, wanghuiqiang@huawei.com, tanxiaofei@huawei.com,
-        liuyonglong@huawei.com, huangdaode@huawei.com,
-        linux-acpi@vger.kernel.org, Len Brown <lenb@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH] soc: hisilicon: Support HCCS driver on Kunpeng SoC
-Message-ID: <20230515130807.pdvx7bxwjkfdsmsr@bogus>
-References: <20230424073020.4039-1-lihuisong@huawei.com>
- <e0c4f4b5-8b34-4542-b676-f98ddb8ef586@app.fastmail.com>
- <20230425103040.znv66k364ant6klq@bogus>
- <c7d9c3c5-e400-c60a-52e0-0f267ec8c517@huawei.com>
- <20230425131918.5tf5vot4h7jf54xk@bogus>
- <db6c713c-f99c-fa3f-8d38-9a5d50889cc2@huawei.com>
+        Mon, 15 May 2023 09:09:02 -0400
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C1242702
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:08:30 -0700 (PDT)
+Received: by mail-lf1-x12e.google.com with SMTP id 2adb3069b0e04-4efe8991b8aso15182235e87.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:08:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684156107; x=1686748107;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=EMAqsaRGOuH7aYnu9nF76xwuBcyGBSccLe/oQdd/lGw=;
+        b=JQTXjdx1hCdZUu+TFRm45msNEhraalF81tGPSZhDWxwCQ3XyZOjheYW3t9bEd5Ssvd
+         kryCXE44qP98GV1rn3pCKweQ/7fZ8x6TDFwxsnmWkCwMZ8UxJ7Hn0Fy/pY3rkZmxa8q6
+         pa07hkSetrYv73pYjUdvCzjhToFezTMB7jiqLZE4qF7DX0xANEek8Zpdj5Vh5tcjbUL3
+         rn4jUo4TM9FsarFgiUYAJEmQZDMNrAfOT9R5Ap7CvoGJ/buqzuaY2roguD3v1TU5/oTL
+         IrHVRMfcopik32CZ4UZiydLqPdfuadn9RJ0GpZyaqrkcL6leSRoVyIhjraTrEIxabzs6
+         GYRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684156107; x=1686748107;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EMAqsaRGOuH7aYnu9nF76xwuBcyGBSccLe/oQdd/lGw=;
+        b=XOpg13N4jfHvh1lQiGo2kXeQ+AYqGNCGytOeT2TfLHVrp5s2a7PChPUAvLM8RlwBHi
+         PFdlL2lmoWcgb7ejCwJmHua02ZBAHBNAWGUoTgp7F0v16J84yCsvZ8izEck1anluHmp/
+         9g4Z88GM58eVozaHyGQWgXKpZ8dKfqfLNtQb3yd5L2+WMeZB71WojdWTITVtqUtdf3BH
+         hWBxHa/TKlsamPSHxjjWWz3Y/V5jbB0nCrcZOOh1Ke/yCoNahUQrc1a7XfCci08r/DRw
+         YhMbA5ZSjutPVJ1FXqdkfIO/fu4MQORBp4xyGYMUBbhezM7RD0cBzEM0gZLYFW0lO8NL
+         gXLQ==
+X-Gm-Message-State: AC+VfDx9p8HX46AZ73hKCuj7Pr/uprNOAZh8JLxHTE17+PQDuk7jPuRK
+        QErg4v6q0AjAvUJ34NidqoTW9Q==
+X-Google-Smtp-Source: ACHHUZ7zwalfNArzw+7IOQn064/xa9HFIy8HjiMQsWu/M/XrbnInS9+7HLAQOFdS6mksjTcLvTKBGA==
+X-Received: by 2002:a05:6512:11e7:b0:4ec:8e7e:46f1 with SMTP id p7-20020a05651211e700b004ec8e7e46f1mr5740935lfs.66.1684156106951;
+        Mon, 15 May 2023 06:08:26 -0700 (PDT)
+Received: from [192.168.1.101] (abxi58.neoplus.adsl.tpnet.pl. [83.9.2.58])
+        by smtp.gmail.com with ESMTPSA id g24-20020a19ee18000000b004ee85d1444esm2587628lfb.208.2023.05.15.06.08.25
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 06:08:26 -0700 (PDT)
+Message-ID: <68c3f24f-99a2-ad7c-9371-33ccaf5740dd@linaro.org>
+Date:   Mon, 15 May 2023 15:08:24 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <db6c713c-f99c-fa3f-8d38-9a5d50889cc2@huawei.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.11.0
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm8550: Add video clock controller
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230509161218.11979-1-quic_jkona@quicinc.com>
+ <20230509161218.11979-5-quic_jkona@quicinc.com>
+ <7faf4c16-98ff-f27d-d1fd-3058370c06f5@linaro.org>
+ <CAA8EJpo1iMj90BPc6gYngSrJqd8WWArRndgbcVg1fYBKBpVfAQ@mail.gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <CAA8EJpo1iMj90BPc6gYngSrJqd8WWArRndgbcVg1fYBKBpVfAQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,62 +86,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 09:16:16PM +0800, lihuisong (C) wrote:
->
-> I'm tring to use CRS with GAS to report PCC channel ID and get other
-> informations driver need by address.
 
-OK you had pcc-chan-id pcc-type and device-flags in the DSD style bindings
-to begin with. I haven't understood device-flags here so can't comment on
-that.
 
-> I found a way to obtain the generic register information according to
-> "Referencing the PCC address space" in ACPI spec.
-> And driver also get the PCC generic register information successfully.
->
+On 15.05.2023 14:57, Dmitry Baryshkov wrote:
+> On Mon, 15 May 2023 at 15:28, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>
+>>
+>>
+>> On 9.05.2023 18:12, Jagadeesh Kona wrote:
+>>> Add device node for video clock controller on Qualcomm SM8550 platform.
+>>>
+>>> Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+>>> Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+>>> ---
+>>>  arch/arm64/boot/dts/qcom/sm8550.dtsi | 12 ++++++++++++
+>>>  1 file changed, 12 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+>>> index 6e9bad8f6f33..e67e7c69dae6 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+>>> @@ -7,6 +7,7 @@
+>>>  #include <dt-bindings/clock/qcom,sm8550-gcc.h>
+>>>  #include <dt-bindings/clock/qcom,sm8550-tcsr.h>
+>>>  #include <dt-bindings/clock/qcom,sm8550-dispcc.h>
+>>> +#include <dt-bindings/clock/qcom,sm8550-videocc.h>
+>>>  #include <dt-bindings/dma/qcom-gpi.h>
+>>>  #include <dt-bindings/gpio/gpio.h>
+>>>  #include <dt-bindings/interrupt-controller/arm-gic.h>
+>>> @@ -759,6 +760,17 @@ gcc: clock-controller@100000 {
+>>>                                <&usb_dp_qmpphy QMP_USB43DP_USB3_PIPE_CLK>;
+>>>               };
+>>>
+>>> +             videocc: clock-controller@aaf0000 {
+>> This node should be moved down. Nodes with unit addresses
+>> should be sorted alphanumerically.
+>>
+>>> +                     compatible = "qcom,sm8550-videocc";
+>>> +                     reg = <0 0x0aaf0000 0 0x10000>;
+>>> +                     clocks = <&bi_tcxo_div2>, <&gcc GCC_VIDEO_AHB_CLK>;
+>> One per line, please
+>>
+>> Also, any reason the XO clock does not come from RPMhCC?
+> 
+> bi_tcxo_div_2 is an RPMhCC clock with the fixed divider.
+Hm, I don't see it neither on -next or in this patchset..
 
-Can you elaborate ? I assume by that you must be able to get pcc-chan-id
-right ? You must not need pcc-type as the pcc mailbox driver must handle
-the type for you. If not, we may need to fix or add any missing support.
-
-> But I don't know how to set and use the address in PCC register.
-
-It must be same as what you would have specified in you new bindings
-under "pcc-chan-id". I am confused as you say you were able to get the
-PCC generic register information successfully but you still claim you
-don't know how to set or use the address.
-
-> Where should this address come from?
-> It seems that ACPI spec is not very detailed about this.
-> Do you have any suggestions?
->
-
-I am afraid, I don't have any as I am failing to understand the exact issue
-you are facing. 
-
-Let me try to ask the question explicity here: 
-
-If you are just referring to just the <RegisterAddress,> in
-
-Register (PCC, RegisterBitWidth, RegisterBitOffset, RegisterAddress, AccessSize)
-
-then,
-
-RegisterAddress is usually the offset in the comms address associated with
-the PCC subspace ID specified in AccessSize. Yes the use of AccessSize for
-the PCC subspace ID is bit confusing though.
-
-You can either list all the registers with _CRS individually or the driver
-can just use the PCC subspace ID in AccessSize and keep RegisterAddress = 0
-but access individual offset based on its own knowledge. I haven't seen the
-full driver yet but I assuming that's how you would have used if you went with
-your DSD pcc-chan-id proposal.
-
-> On the other hand, we think that System Memory space + method can also
-> achieve above goal. What do you think of that?
-
-Again I don't understand what you mean by that.
-
--- 
-Regards,
-Sudeep
+Konrad
+> 
+>>
+>> Konrad
+>>> +                     power-domains = <&rpmhpd SM8550_MMCX>;
+>>> +                     required-opps = <&rpmhpd_opp_low_svs>;
+>>> +                     #clock-cells = <1>;
+>>> +                     #reset-cells = <1>;
+>>> +                     #power-domain-cells = <1>;
+>>> +             };
+>>> +
+>>>               ipcc: mailbox@408000 {
+>>>                       compatible = "qcom,sm8550-ipcc", "qcom,ipcc";
+>>>                       reg = <0 0x00408000 0 0x1000>;
+> 
+> 
+> 
