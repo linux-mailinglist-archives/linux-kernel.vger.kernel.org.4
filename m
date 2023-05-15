@@ -2,52 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2246702FFB
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:35:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E72F703000
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:36:23 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240629AbjEOOfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 10:35:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60628 "EHLO
+        id S241455AbjEOOgT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 10:36:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241846AbjEOOfo (ORCPT
+        with ESMTP id S229679AbjEOOgR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 10:35:44 -0400
-Received: from smtpout.efficios.com (smtpout.efficios.com [167.114.26.122])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFCCA11D
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 07:35:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1684161342;
-        bh=55UiL7049d5WwXoq8Ga1ETl0Xcqd3k/79bhP8jRai1I=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Ygbu0By2kzmJLHh1Fy4KXvfh+K9aNW5LbzhbEX5LeLatHUBNzOUEcNYDrcUw5Az5e
-         v3SH4smxTxOMBPYSXoGiQuPqbVFeQMfc02K4UtkVhJMeHCcKxxgL795dpfbwruTact
-         TdIrD0ixOzK3WpYzJKsh77uwmo9LwNOyNw2KZLr8q0TNVo0EGf8faPJezJsV3+JtuX
-         zZFsLOUVQYckfd3VO9KJkCXjOA4Ixt05jknCAgSUVrIgCecJycLf3JuVsqt7twXxav
-         9Ma1bfkisrmpyWi+8puxAJFgbKbBvMCrn5rzbym0yGp/GAAAZNzShPunQjAlsiohQ7
-         NxI3QqSkgR+ig==
-Received: from localhost.localdomain (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QKhk55lzxz12dV;
-        Mon, 15 May 2023 10:35:41 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        kernel test robot <yujie.liu@intel.com>,
-        Aaron Lu <aaron.lu@intel.com>,
-        Olivier Dion <odion@efficios.com>, michael.christie@oracle.com,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Feng Tang <feng.tang@intel.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>, Peter Xu <peterx@redhat.com>,
-        linux-mm@kvack.org
-Subject: [PATCH] mm: Move mm_count into its own cache line
-Date:   Mon, 15 May 2023 10:35:36 -0400
-Message-Id: <20230515143536.114960-1-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 15 May 2023 10:36:17 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557EE11D
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 07:36:12 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-528cdc9576cso8883191a12.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 07:36:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684161372; x=1686753372;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ntle7Mc0MN09Ld4JSB2zHnjwzKKJ2xLWcbwccUINeWM=;
+        b=nmpPkLbkHeWzrNUYIBgGFtDeWZrt9C1ULqbYHO7f3h/8Rozghdl8hEcHeNcKQkbTlG
+         zADuBhj4lbPnYGD8y9sfS2D+zwgCOyNhxCHNtW1op6PeVK3aiuq4zlzeYQvUA28CJK6A
+         3faxbTFV4s9D85ojUIQ+o+ptrFpllMArk8nNfCl3GnS2e3QJST0XWRxMHnW/0vpfgned
+         //KOYuh+4ZkNpexBLsdOZfUrPTcSn276Nmt3xBHXEGTsWs6VRzquyRJHGZvncJT0hSd4
+         qCNkxCZ3A9UIDtDzZJrZupk0r8lpurw1ZMdYnFvm5xR+qi/kyrRcfUe1UHTveEBeGVOl
+         zU3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684161372; x=1686753372;
+        h=content-transfer-encoding:subject:from:cc:to:content-language
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ntle7Mc0MN09Ld4JSB2zHnjwzKKJ2xLWcbwccUINeWM=;
+        b=EgdWkix23Y3EKKOVmBv4WS9W8ZIQ8NKoyxgy/SxxlfzH4Oyd0x7kSh5lZxeFgWZ1RC
+         3gGDoAzjCZCXqTxWvDU5D+RehQR0H20MZXKC2UE/rLoTSH+jTt+/BJf2OTEN1lk1+lCv
+         lT3cI0yp0OI81Z/67rJzFvfgsF7XuNjJKl7Q03KNr5+x/J/ldPdJYNtCs87toxB4MlgE
+         EoGK3A+ATZQMtfff3YucpSyVlKVrmmtOXWQgToTfBogfrgVkVvr/6sbH4GUZTSp3QrTo
+         26WxbBQA6GetW+LMGEVGq7X3ZvoKuahNkYK9CejbpJkk7LvkDpP1VJiWLnTV/0k3YbLU
+         jPQw==
+X-Gm-Message-State: AC+VfDwVddXTu+VfriGQomVy8aUG1+IGM1rtEmdSL8eJP4ocwFx52HZk
+        UHXis82wXvmROiC3/eAazF4Ux9Na7kuYfQ==
+X-Google-Smtp-Source: ACHHUZ5Y1IBpWDwTz6WkQ1oOqRQ0CqOq276XS/52HNucim7sFHfLFQo4MIjL/je6cCeGa2eTmGpHdw==
+X-Received: by 2002:a05:6a20:9146:b0:105:393b:5dff with SMTP id x6-20020a056a20914600b00105393b5dffmr9261541pzc.16.1684161371517;
+        Mon, 15 May 2023 07:36:11 -0700 (PDT)
+Received: from [192.168.0.115] ([113.173.119.15])
+        by smtp.gmail.com with ESMTPSA id a5-20020aa780c5000000b006439bc7d791sm11899633pfn.57.2023.05.15.07.36.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 07:36:10 -0700 (PDT)
+Message-ID: <e8a87c2b-a29a-ccf9-49c6-3cfceaa208bb@gmail.com>
+Date:   Mon, 15 May 2023 21:36:05 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Content-Language: en-US
+To:     Suravee Suthikulpanit <Suravee.Suthikulpanit@amd.com>,
+        Wan Zongshun <vincent.wan@amd.com>
+Cc:     Joerg Roedel <joro@8bytes.org>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, "Michael S. Tsirkin" <mst@redhat.com>
+From:   Bui Quang Minh <minhquangbui99@gmail.com>
+Subject: amd-iommu: get_highest_supported_ivhd_type question
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
         T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,112 +77,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The mm_struct mm_count field is frequently updated by mmgrab/mmdrop
-performed by context switch. This causes false-sharing for surrounding
-mm_struct fields which are read-mostly.
+Hello everyone,
 
-This has been observed on a 2sockets/112core/224cpu Intel Sapphire
-Rapids server running hackbench, and by the kernel test robot
-will-it-scale testcase.
+Since this commit 8c7142f56fedfc6824b5bca56fee1f443e01746b (iommu/amd: 
+Use the most comprehensive IVHD type that the driver can support), 
+amd_iommu driver can support IVHD type 0x11 and 0x40 beside old type 
+0x10. This commit introduces a new function to determine the appropriate 
+IVHD type
 
-Move the mm_count field into its own cache line to prevent false-sharing
-with other mm_struct fields.
+	/**
+	 * get_highest_supported_ivhd_type - Look up the appropriate IVHD type
+	 * @ivrs          Pointer to the IVRS header
+	 *
+	 * This function search through all IVDB of the maximum supported IVHD
+	 */
+	static u8 get_highest_supported_ivhd_type(struct acpi_table_header *ivrs)
+	{
+		u8 *base = (u8 *)ivrs;
+		struct ivhd_header *ivhd = (struct ivhd_header *)
+						(base + IVRS_HEADER_LENGTH);
+		u8 last_type = ivhd->type;
+		u16 devid = ivhd->devid;
 
-Move mm_count to the first field of mm_struct to minimize the amount of
-padding required: rather than adding padding before and after the
-mm_count field, padding is only added after mm_count.
+		while (((u8 *)ivhd - base < ivrs->length) &&
+		       (ivhd->type <= ACPI_IVHD_TYPE_MAX_SUPPORTED)) {
+			u8 *p = (u8 *) ivhd;
 
-Note that I noticed this odd comment in mm_struct:
+			if (ivhd->devid == devid)
+				last_type = ivhd->type;
+			ivhd = (struct ivhd_header *)(p + ivhd->length);
+		}
 
-commit 2e3025434a6b ("mm: relocate 'write_protect_seq' in struct mm_struct")
+		return last_type;
+	}
 
-                /*
-                 * With some kernel config, the current mmap_lock's offset
-                 * inside 'mm_struct' is at 0x120, which is very optimal, as
-                 * its two hot fields 'count' and 'owner' sit in 2 different
-                 * cachelines,  and when mmap_lock is highly contended, both
-                 * of the 2 fields will be accessed frequently, current layout
-                 * will help to reduce cache bouncing.
-                 *
-                 * So please be careful with adding new fields before
-                 * mmap_lock, which can easily push the 2 fields into one
-                 * cacheline.
-                 */
-                struct rw_semaphore mmap_lock;
+As the name and comment suggest, the driver is intended to use the 
+highest IVHD type provided in ACPI table. However, looking at the 
+implementation, I see that it chooses to use the last IVHD type of the 
+first devid appears in the ACPI table. Are there any reasons behind this 
+implementation?
 
-This comment is rather odd for a few reasons:
-
-- It requires addition/removal of mm_struct fields to carefully consider
-  field alignment of _other_ fields,
-- It expresses the wish to keep an "optimal" alignment for a specific
-  kernel config.
-
-I suspect that the author of this comment may want to revisit this topic
-and perhaps introduce a split-struct approach for struct rw_semaphore,
-if the need is to place various fields of this structure in different
-cache lines.
-
-Fixes: 223baf9d17f2 ("sched: Fix performance regression introduced by mm_cid")
-Fixes: af7f588d8f73 ("sched: Introduce per-memory-map concurrency ID")
-Link: https://lore.kernel.org/lkml/7a0c1db1-103d-d518-ed96-1584a28fbf32@efficios.com
-Reported-by: kernel test robot <yujie.liu@intel.com>
-Link: https://lore.kernel.org/oe-lkp/202305151017.27581d75-yujie.liu@intel.com
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Cc: Aaron Lu <aaron.lu@intel.com>
-Cc: Olivier Dion <odion@efficios.com>
-Cc: michael.christie@oracle.com
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Feng Tang <feng.tang@intel.com>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Peter Xu <peterx@redhat.com>
-Cc: linux-mm@kvack.org
----
- include/linux/mm_types.h | 23 +++++++++++++++--------
- 1 file changed, 15 insertions(+), 8 deletions(-)
-
-diff --git a/include/linux/mm_types.h b/include/linux/mm_types.h
-index 306a3d1a0fa6..de10fc797c8e 100644
---- a/include/linux/mm_types.h
-+++ b/include/linux/mm_types.h
-@@ -583,6 +583,21 @@ struct mm_cid {
- struct kioctx_table;
- struct mm_struct {
- 	struct {
-+		/*
-+		 * Fields which are often written to are placed in a separate
-+		 * cache line.
-+		 */
-+		struct {
-+			/**
-+			 * @mm_count: The number of references to &struct
-+			 * mm_struct (@mm_users count as 1).
-+			 *
-+			 * Use mmgrab()/mmdrop() to modify. When this drops to
-+			 * 0, the &struct mm_struct is freed.
-+			 */
-+			atomic_t mm_count;
-+		} ____cacheline_aligned_in_smp;
-+
- 		struct maple_tree mm_mt;
- #ifdef CONFIG_MMU
- 		unsigned long (*get_unmapped_area) (struct file *filp,
-@@ -620,14 +635,6 @@ struct mm_struct {
- 		 */
- 		atomic_t mm_users;
- 
--		/**
--		 * @mm_count: The number of references to &struct mm_struct
--		 * (@mm_users count as 1).
--		 *
--		 * Use mmgrab()/mmdrop() to modify. When this drops to 0, the
--		 * &struct mm_struct is freed.
--		 */
--		atomic_t mm_count;
- #ifdef CONFIG_SCHED_MM_CID
- 		/**
- 		 * @pcpu_cid: Per-cpu current cid.
--- 
-2.25.1
-
+Thank you,
+Quang Minh.
