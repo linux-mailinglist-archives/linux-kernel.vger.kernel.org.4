@@ -2,123 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D6C702A14
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:08:50 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id C7880702A1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:11:55 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240792AbjEOKIr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:08:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40056 "EHLO
+        id S239768AbjEOKLw convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 15 May 2023 06:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240413AbjEOKI0 (ORCPT
+        with ESMTP id S238353AbjEOKLu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:08:26 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3CD781FE2;
-        Mon, 15 May 2023 03:08:16 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 765DB2F4;
-        Mon, 15 May 2023 03:09:00 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CFD0E3F67D;
-        Mon, 15 May 2023 03:08:12 -0700 (PDT)
-Date:   Mon, 15 May 2023 11:08:10 +0100
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Ayan Kumar Halder <ayankuma@amd.com>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        geert+renesas@glider.be, magnus.damm@gmail.com,
-        konrad.dybcio@linaro.org, andersson@kernel.org,
-        mazziesaccount@gmail.com, conor.dooley@microchip.com, j@jannau.net,
-        mailingradian@gmail.com, me@iskren.info, lpieralisi@kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org, Julien Grall <julien@xen.org>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Michal Orzel <michal.orzel@amd.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Michal Simek <michal.simek@xilinx.com>
-Subject: Re: Need suggestions for smp related properties in cpus.yaml to
- support smpboot for cortex-r52 based platform
-Message-ID: <20230515100810.ctebdbqlienbcf7t@bogus>
-References: <c5ed90c7-7126-0757-a0e3-e3d1fcab2ecc@amd.com>
+        Mon, 15 May 2023 06:11:50 -0400
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8717B13A
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:11:49 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-ba7854ff5abso2635298276.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:11:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684145508; x=1686737508;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8RSc3ehTcfUtTwTGi8/DXlWstgHILWkp+xdTMczEuPw=;
+        b=ROlKWKsU7jw7wFBe5rkYyccyGWgKcnHgBRWPWTFCC3fPVkE6AeO0xEAfbROtRCpJfg
+         dhQv9VyVQDqacCRgRghA1hUh0kxh6u1rjySMFPuBLruIGp2wvRchwLe3CFTrOJ/QTpvw
+         Fxl+I5xGhxmHeIrwmNyoYudQxoe14KBF8D+s8rFgvqRoptS2DnDv9+1twNklQNm1s1mR
+         B6d99JqrIu5fZCX1BRw9sNhsCLQZ7zG1bJFU0Nw5DA9fYDE3ADyvfhQvlFkzcEr7B9Ga
+         pqCdjtspMug4AE6CHo0VYTxvPeZLTi0drGpeByTepOYEg+VR92f/ZDDTi/2fQIY8LEKl
+         8ixQ==
+X-Gm-Message-State: AC+VfDzt4x0NvaCWchb4/SpiJjeBWiSXFfefretcYVtKPnY0DFMWqm0k
+        h+zYDhYyMTLhgPAX+UoGq3EaNFPZdFhhkw==
+X-Google-Smtp-Source: ACHHUZ6eu3YZXJQ2FeGU/QDRPCK4ffJaDDr6mpIslYOpOt4krzYRP/1+n6oR23Zz4juW/xay2m0KRw==
+X-Received: by 2002:a81:8490:0:b0:560:e0ce:ac7c with SMTP id u138-20020a818490000000b00560e0ceac7cmr14043032ywf.43.1684145508511;
+        Mon, 15 May 2023 03:11:48 -0700 (PDT)
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com. [209.85.219.169])
+        by smtp.gmail.com with ESMTPSA id h123-20020a0df781000000b0055a382ae26fsm6807510ywf.49.2023.05.15.03.11.47
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 03:11:48 -0700 (PDT)
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-ba7bf25a010so1518507276.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:11:47 -0700 (PDT)
+X-Received: by 2002:a81:6689:0:b0:55a:8c02:bfea with SMTP id
+ a131-20020a816689000000b0055a8c02bfeamr32799250ywc.19.1684145507540; Mon, 15
+ May 2023 03:11:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <c5ed90c7-7126-0757-a0e3-e3d1fcab2ecc@amd.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1296c4d691bba057291246f067c191ef8a88531c.1680667933.git.fthain@linux-m68k.org>
+ <CAMuHMdXLsnfQ4XhJiuE54BjGaCMAxvzOR+GGB9iFD8pYXprfxQ@mail.gmail.com>
+In-Reply-To: <CAMuHMdXLsnfQ4XhJiuE54BjGaCMAxvzOR+GGB9iFD8pYXprfxQ@mail.gmail.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 15 May 2023 12:11:36 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdWSYDUOy0CSrRcv5-R8rg6EdXMaG5SHiTcYuaNa7K5e1Q@mail.gmail.com>
+Message-ID: <CAMuHMdWSYDUOy0CSrRcv5-R8rg6EdXMaG5SHiTcYuaNa7K5e1Q@mail.gmail.com>
+Subject: Re: [PATCH v4] nubus: Don't list slot resources by default
+To:     Finn Thain <fthain@linux-m68k.org>
+Cc:     Brad Boyer <flar@allandria.com>, linux-m68k@lists.linux-m68k.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 11, 2023 at 10:35:37AM +0100, Ayan Kumar Halder wrote:
-> Hi Device Tree engineers,
->
-> Recently I have ported Xen on Cortex-R52 (AArch32-V8R processor) for our AMD
-> platform.
->
+Hi Finn,
 
-I remember that there was some exploration on feasibility of using PSCI
-here. What happened to that ? Any summary why that was dropped ?
+On Mon, May 15, 2023 at 11:44 AM Geert Uytterhoeven
+<geert@linux-m68k.org> wrote:
+> On Wed, Apr 5, 2023 at 6:19 AM Finn Thain <fthain@linux-m68k.org> wrote:
+> > Some Nubus card ROMs contain many slot resources. A single Radius video
+> > card produced well over a thousand entries under /proc/bus/nubus/.
+> > Populating /proc/bus/nubus/ on a slow machine with several such cards
+> > installed takes long enough that the user may think that the system is
+> > wedged. All those procfs entries also consume significant RAM though
+> > they are not normally needed (except by developers).
+> > Omit these resources from /proc/bus/nubus/ by default and add a kernel
+> > parameter to enable them when needed.
+> > On the test machine, this saved 300 kB and 10 seconds.
+> >
+> > Cc: Brad Boyer <flar@allandria.com>
+> > Tested-by: Stan Johnson <userm57@yahoo.com>
+> > Signed-off-by: Finn Thain <fthain@linux-m68k.org>
+> > ---
+> > Changed since v3:
+> >  - Better commentary.
+> > Changed since v2:
+> >  - Added commentary.
+> >  - Moved declaration to nubus.h.
+> > Changed since v1:
+> >  - Expanded to cover all slot resources in procfs.
+>
+> Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+> i.e. will queue in the m68k for-v6.5 branch.
 
-> I was discussing with xen-devel community about how we can properly support
-> smpboot when I was suggested that this might be the correct forum for
-> discussion.
->
-> Please refer
-> https://lists.xenproject.org/archives/html/xen-devel/2023-05/msg00224.html
-> and the follow-ups for context.
->
->
-> The way smpboot works on our platform is as follows:-
->
-> 1. core0 writes to register (say regA) the address of the secondary core
-> initialization routine.
->
-> 2. core0 writes to another register (say regB) the value "0x1" to put the
-> secondary core in reset mode.
->
-> 3. core0 writes to regB the value "0x0" to pull the secondary core out of
-> reset mode.
->
-> regA, regB will differ for core1, core2, core3 and so on.
->
+Upon second look, "populate_procfs" is too generic for a global
+variable.  Please add a "nubus_"-prefix, and use module_param_named()
+instead.
 
-Sounds OK but will you ever need to support power management on these cores ?
-If so, just start with PSCI or provide reasons as why it doesn't fit well
-before exploring and extending the existing spin table bindings.
+Gr{oetje,eeting}s,
 
->
-> Currently, I am trying to bringup core1 only.
->
->
-> I am thinking to use "enable-method=spin-table" in the cpu node for core1.�
-> So that I can use "cpu-release-address" for regA.
->
-> For regB, I am thinking of introducing a new property "amd-cpu-reset-addr"
-> in the cpu node.
->
-> Please let me know your thoughts on this approach. I am also open to any
-> alternative suggestions.
->
->
-> Also I see that in https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/devicetree/bindings/arm/cpus.yaml#L87
-> , "arm,cortex-r52" is missing.
->
+                        Geert
 
-Yes that should be fine IMO.
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-> Can I submit a patch (a one line change) to add this ?
->
-
-Of course, it makes it easy to accept or reject rather than this question
-hidden as part of other discussion.
-
---
-Regards,
-Sudeep
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
