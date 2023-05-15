@@ -2,195 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2B327024E1
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:35:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id E75F87024F3
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:37:33 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239900AbjEOGfz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 02:35:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36824 "EHLO
+        id S239961AbjEOGha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 02:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232102AbjEOGfx (ORCPT
+        with ESMTP id S236330AbjEOGh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 02:35:53 -0400
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34DB186;
-        Sun, 14 May 2023 23:35:49 -0700 (PDT)
+        Mon, 15 May 2023 02:37:28 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2077.outbound.protection.outlook.com [40.107.94.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EAD8124;
+        Sun, 14 May 2023 23:37:26 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=R77cD1+HYpPSZ8PNvut+Ca2gRsPUAYCppyAzmWF+qNjgSRIsfJun4QJnx7g1wWVaii1+LDisQnC5TnaheEVjJwJMMggFaYAL4E52Sgc3RkK4rmAIiAsWZbY2hslRSRKmSJvJYa6KL1+tTomWnOE03px+fLN5b6m0TWAb2WEUaMkLrwdJ0b+/l6mu9pCT6rT2AEmKsidlipdWn0rbpKZRpVrV/uxLzFbUV9ld2x9Ek4nWggiqfVqqgJXyI9KnubqaEuMqgkKcBk5dHXC0mnkKZ2XStoSq2+SsCRegdTWYYJfNBSNrxAc1gNu3ZGpZxZixunc+lBpAUBIMRR9XTg+wCw==
+ b=EYabNXcJ+8pgvYl+OeWlFLsEsZImKDUO8VESvUlCul0prqX7oV+k9FqiyTfBqbK00LhSQasI2ub4wcB4ZcXHf3XlbIoDDkw7dnUNK7+/CWriyb93ZmbYYeemVgl+HqJAnHfDBnjhRZ2ykUe1MxleCjnMFcSK+0lk9D61ChRKTINSGqVwxBRT0ph+vrsmkUXmD0wuFHyOwTjG3kTxCZ7GSKJZXkK0r1+oCshzwJbKVHeiLh0NhXCJhoO/G6g5SYu4+aW/CIJOM28ONdCMyfBm9pGhnni7k4fUZvAOI8IN32jJQ88giSs1CzZzurfAJ/Ph25wu5mwgZzoVNrF7OpchFA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/7L/9kqfxDQrXtVZ6K4lDqyyYCmyKilVMvXCwGMGs3k=;
- b=bA8NNIGSczPOUvDTQFhyHyfgJwX0UNUxcS68XhslWWXCvsGIRjgDK5HyzzXNqg4blT+FPmJqnuLNHJRUMRk4FkcNL5rnpbBLMr12opqCdKvZ0dV9sz3KP3kUPVR/HvejnNhfCaiPdj1VEtXcArddnuQM7cLPwkAbon8Xjx8ZIyRu/ALZ3fgVlRjDbHIlWmYOofzf9m9UwP5Ndt5cynEmVARZFcdo/zRGHZB7mu8EXDlWKdH+uQUNdnERW5bkrW8ZO9+yj3coP4YgdVSv6KPZLWppV6CB18+xP5ErhKOZogW/9G0QJXr6pfxVpbL6FTHGkODFlMwt9xqHaBp39zN0eg==
+ bh=fY4DgpYdPUhZQWAbWds7pSpy4/MIz5IidpZSRpSIwSQ=;
+ b=J85YHJcEyIhHDEtmfBDnONPpG56+0oznr47IKSBGotWoit4HPnSsbeVMONMM7HpdCM0ThN1KVgETmhbmJb/5IOX/68H26aleAaVCt+3YL5/7pymexnvKEmB2NxTos00gNiyIZxNd+heqoaeMv9hXpN8wnCXkPZm1kJNz7PUmf+f8vYsTY4/gS8hrARmwUcfMfAa2M0nx9CIwrg9w8sYloDlsXNz7nXZ6K10Opb0ohmDdU4g/DZ1P0mCxE0f/KrtjA7dAPlQk8UsCbGzaPRd2tseuURzhOPc7LbKWNkRHZGHk4Hc8sJeW4ba7mfy/xD8JTOqN1Knx5Z4VQVSEsIMYNw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/7L/9kqfxDQrXtVZ6K4lDqyyYCmyKilVMvXCwGMGs3k=;
- b=wU1UndssZRnAfYYJoFtDZBX0LksHKJ/iZKbHcK62Ax2ckJ/pYOw7yQ4K0jAPPGbW3quMMPD637RMGlmDCbFEzA9CMUfrqJfAHHj4W0/xZn3t58CndEsvUgFjkgccov647kttN8RbL2QyIUWjwJsGQvh8dlTC1gDDgUr4CyN8WHg=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com (2603:10b6:a03:a5::28)
- by BL3PR12MB6641.namprd12.prod.outlook.com (2603:10b6:208:38d::8) with
+ bh=fY4DgpYdPUhZQWAbWds7pSpy4/MIz5IidpZSRpSIwSQ=;
+ b=QnP6FbydAW4Fsdzu1thY/knE83H7u3NbSuaiTEhqFWD3itonC+SWMOkCaUSWB3KqcxCxP04tI8wk1wiVuN6LAgK+4ohDu5+RiQcrl2RKepZ0NMUiQdSMfH29l6bZ3CAfWh4SocdTo82F56HZWA3jjgUtYsrR7nY8wLEqm3aW+wc=
+Received: from BN7PR12MB2802.namprd12.prod.outlook.com (2603:10b6:408:25::33)
+ by PH7PR12MB7453.namprd12.prod.outlook.com (2603:10b6:510:20a::10) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30; Mon, 15 May
- 2023 06:35:47 +0000
-Received: from BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::e78e:b7da:7b9a:a578]) by BYAPR12MB4758.namprd12.prod.outlook.com
- ([fe80::e78e:b7da:7b9a:a578%4]) with mapi id 15.20.6387.022; Mon, 15 May 2023
- 06:35:47 +0000
-Message-ID: <55da12c2-dd4f-ebfa-c747-f12df6f7887d@amd.com>
-Date:   Mon, 15 May 2023 08:35:05 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-To:     m.brock@vanmierlo.com,
-        "Guntupalli, Manikanta" <manikanta.guntupalli@amd.com>
-Cc:     gregkh@linuxfoundation.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, michal.simek@xilinx.com,
-        linux-serial@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jirislaby@kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        "git (AMD-Xilinx)" <git@amd.com>,
-        "Pandey, Radhey Shyam" <radhey.shyam.pandey@amd.com>,
-        "Datta, Shubhrajyoti" <shubhrajyoti.datta@amd.com>,
-        "Goud, Srinivas" <srinivas.goud@amd.com>, manion05gk@gmail.com
-References: <1682512187-8828-1-git-send-email-manikanta.guntupalli@amd.com>
- <6b72c56e79a44fec348de26d14d9dce0@vanmierlo.com>
- <DM4PR12MB61098014775DE9950A0E2E588C779@DM4PR12MB6109.namprd12.prod.outlook.com>
- <309c98bbe25b8493ac35c8da97f9bff1@vanmierlo.com>
+ 2023 06:37:23 +0000
+Received: from BN7PR12MB2802.namprd12.prod.outlook.com
+ ([fe80::4db:e158:60d:21e4]) by BN7PR12MB2802.namprd12.prod.outlook.com
+ ([fe80::4db:e158:60d:21e4%6]) with mapi id 15.20.6387.029; Mon, 15 May 2023
+ 06:37:22 +0000
+From:   "Mahapatra, Amit Kumar" <amit.kumar-mahapatra@amd.com>
+To:     Boerge Struempfel <boerge.struempfel@gmail.com>
+CC:     "bstruempfel@ultratronik.de" <bstruempfel@ultratronik.de>,
+        Mark Brown <broonie@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "linux-spi@vger.kernel.org" <linux-spi@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH] spi: Add option to keep the MOSI line low, when it is
+ idle.
+Thread-Topic: [PATCH] spi: Add option to keep the MOSI line low, when it is
+ idle.
+Thread-Index: AQHZhBDDhXn8cTXNck2E/Yw/97A/1K9a4lHA
+Date:   Mon, 15 May 2023 06:37:22 +0000
+Message-ID: <BN7PR12MB280217A4D088BE2D951B9A6DDC789@BN7PR12MB2802.namprd12.prod.outlook.com>
+References: <20230511135632.78344-1-bstruempfel@ultratronik.de>
+In-Reply-To: <20230511135632.78344-1-bstruempfel@ultratronik.de>
+Accept-Language: en-US
 Content-Language: en-US
-From:   Michal Simek <michal.simek@amd.com>
-Subject: Re: [PATCH 0/2] Add rs485 support to uartps driver
-In-Reply-To: <309c98bbe25b8493ac35c8da97f9bff1@vanmierlo.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR0P281CA0192.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:ab::11) To BYAPR12MB4758.namprd12.prod.outlook.com
- (2603:10b6:a03:a5::28)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN7PR12MB2802:EE_|PH7PR12MB7453:EE_
+x-ms-office365-filtering-correlation-id: eaafb76e-7b0b-46a4-3071-08db550ed69f
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: bYodXrBB1HN1aZ5p6cVEPq8FXy0lcweHYKoEEED9FiMW2SpNcJc0ApWwSbKgBpxy9ATN5MNrglVzpTHsPSsxi2yqeqdGSxfVRMmsJwwxk1sf0Y1FbnKBxrK8+QlMhn8q4fJhB6/3RCu+Zx7EiOeXCnScAmCWf726WV75ebitxi5Z5JX7meegdHQ4VOOYunlmmATAdchtVQcvQBmP4TQLLAt3xjAMZrxH4dHP/XVNT2VAkfzxlzXBygNSUmSXo8+MWf6ydj2ppVvVpeZnLAUEqAzl7aohqLadQ/vGK2+HfB3Cez2IDYdGoyNHMRO18PBSZCj+sKuFkHOEwPhMt2kmuU0+SJQxhTa3HClqFaE5tnOw1aeTzxR+0aiT0bGUpI9SLf8rZJSBwZDfraVgpDutT99EHU4muZQUJ5B921yuZuFU9/6z+5mI8AlLTLJ8B9AfhCjbqbAmEct6VQO1KO0H//BsByHuLLQHV25SAHVz3aCNjOGq6OnGGoBdezvl9/nOK2An5OYimJwAaTZewHqJLcdK4ywXBUh22TYPm2TOdDR1jSFyu5agexsX0jWSRNBHXbM3ZKCXkcwuI1KELVX+JBVJP/zR3xqqqx8cM/+dVwg=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN7PR12MB2802.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(396003)(346002)(376002)(366004)(136003)(39860400002)(451199021)(966005)(76116006)(66556008)(66446008)(64756008)(6916009)(66946007)(66476007)(4326008)(478600001)(7696005)(86362001)(316002)(54906003)(33656002)(71200400001)(83380400001)(26005)(186003)(9686003)(6506007)(41300700001)(52536014)(8936002)(8676002)(5660300002)(7416002)(2906002)(55016003)(122000001)(38100700002)(38070700005);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?AyrExMOMCx0yhlQ2rRoiyTNzh/vkPjxCPOhx6K4jgZw7G9wJBqLRUUrh6Hg7?=
+ =?us-ascii?Q?eiQuiilxgB4Nyo2H7OvQ3JTvXtkF8A76AbRd7EGql4KwzZaRug3DXvT/G+kr?=
+ =?us-ascii?Q?ptoUSUtOlo1yr/RLe0gGaOJGH7JpsMXj9K4BD5eX7OsIevHL8VfCWyAxwEWD?=
+ =?us-ascii?Q?V3Y75Pbbm7/JPfxTfX2jvw/ee5y4mE2XTMcVUY9TO3vgOlsDC24Wc6PKy4ms?=
+ =?us-ascii?Q?b/4qTJExAZthFlK6nc3CVAhePIe76pyBpWcgp9rkdr9C66xh6IwDOIwTg+gB?=
+ =?us-ascii?Q?fnAOyx5QcmyOypI8OLerjzTRSk0uyO0EJDR673AvjX3q9b4xXhGI2SB7ez0e?=
+ =?us-ascii?Q?WytcvhFeS9G1GSCoE8gZQKcQONncP6EXKRaLXXNaR0Z5sT2VkbbFQVxw/N9F?=
+ =?us-ascii?Q?fF5uyooo3Ek97Wvwyg6Fao//q48avVW0/Jyn3FWHbp/Y+7xwHZljdDC254R0?=
+ =?us-ascii?Q?7gsX9IHvItXaTMMu66i+ETFDTXTJcznGUkTkh2kFLaXeHbEXCwZsWtTsZLv6?=
+ =?us-ascii?Q?Ph1DP69VfviCzfKHOoVshnvaqqie/1VTXCRU5r2F6kcsVUYcgOVy05yjL/sD?=
+ =?us-ascii?Q?wxPWYi/GVE+dv3ZO2M45wdzep6SU7I3kCx3KczE4J9JpoSKbboVIg3UdymEa?=
+ =?us-ascii?Q?vYS9dzAE8CR6h9/Kob8KJIR5iTUiaOyq8djocY0XfTD1qdHCEAPHWs5tRBsl?=
+ =?us-ascii?Q?2bBdPmgnd+hJ3uLHntHObx56hFXxRvzSLraPsQh5C7M3yhqDVNDEgH7BtKV7?=
+ =?us-ascii?Q?mWZTCrwCirRr3NpBl6Rkj4l9jdI1MVHRfjib7U3LDqMSv2jcbKBJt7W3WyVz?=
+ =?us-ascii?Q?CpBnfPLFFgEyQ/eRqTaS022ByqOMTfPpRF3XCumLtvQ5ckIFOOVWMjrfO2MU?=
+ =?us-ascii?Q?UafJR2p4HFMr2cRc0Yl+RJfOfG55oFWYmzjgLpgHpFOV46v/lrvbXdPjUWiI?=
+ =?us-ascii?Q?l9n8WPv26xpsIoYRJCS8YppMpJXCgJN9d/3cje1HGgSg89FpazqriF4FCc+q?=
+ =?us-ascii?Q?ntUQwqJECB+n4nVUrlP9mx1JOB57diVAf5E3y0V9p95HLywUrmLXq2XAzuUr?=
+ =?us-ascii?Q?5ZrKdXfTP9ZRoEfFeEGdqIZg6pO9lxnqPFeTnkw+5o6NqEMUBBBGr2BI3yRh?=
+ =?us-ascii?Q?cVosuWueJ3h+aBQiBsz4H87hp45iXEDGsiIPCcEczxfHve2OQS7G9ttRIrqZ?=
+ =?us-ascii?Q?W+Ye3LsdtPUcFjsqmjJBaonSVkjtCnVuUQ6LI4qNI2p0W8FRmX4qz2OrN9ZB?=
+ =?us-ascii?Q?6Ygn8UEEN8FJjWtcgETLqvFI+OfZrX1q5+AhMt5vlcW/QDz3HVafgi+AUd1e?=
+ =?us-ascii?Q?vSbU2JyumACETtWXi4U1lyYZBWMqyqhJmRjOk+7CUIVeVCo6Lf4iw1OonzSG?=
+ =?us-ascii?Q?DP4gZSJhcP5XAoRu755KeSb++xGLd1CUKJ+a+VoDwHnCooP2yzJYzr9wbmwA?=
+ =?us-ascii?Q?u67fB79MVcX75dWnAUxgKjwhDjm35Jn3Bbofl4MwTIUf7NmTW23XoxpbAzrU?=
+ =?us-ascii?Q?1h8rOp+/0Drb7uDMTX6wY/NXA4KoknH2sDZYCTeh5EfxKyNOF4nz9d3UTG9+?=
+ =?us-ascii?Q?GVvzlvyzGhpZ+CYOBbU=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR12MB4758:EE_|BL3PR12MB6641:EE_
-X-MS-Office365-Filtering-Correlation-Id: 7bed44b4-3a5a-43e0-cba2-08db550e9daa
-X-LD-Processed: 3dd8961f-e488-4e60-8e11-a82d994e183d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tXwr8JEhonKe4cbRSG8rwg/GUEinFY1CRTxmGYc7PheJ7DTfgT7nKareyNGzO6rdXWEdCZ2tG/79tuv0G8vwo1qIXuH2tJHbHKPI4rF9C6G+KGWgzw4fLEcq6EtAG2zRkMmCUYqMLs1gLZWKgElhsPA8gg6NaUWYQKaAf4kibr3f0a4SU8yORVYqxNS3KopMBBzqZKqpnTkFgHtKXXfUUIfrTuQ4EzWqtPL4yCaDRCG92Z2cVS2y5fVdurx3UaEN17BDSMl2NOzTt0xpPYE2bL/1998DAPgTDPt+bJjJ7MrNphbN5qhq/HODgvJGwRG4tlmF0qrXqknAtDsiAZgcxuBoIaPQKoKzqR8+lD8/lE1xmn2UtjmdORblNEWd15J1uc95/n9z583+I6uuldK+5LMSZMFPFXpl7gBIPMLM09aw6qd8lIsfqJQTWI3VuVI8K2UQ2XFH5LHMJjbSG3jtBuPfWcZqkfSMz9OA3cPNpKEHVtToqOLx6bhBr07gqnAtOCJZnEgq+BymHflwCEI9rKJToxWJUWIiHKG0sweOaBzooZVWtfrLrggO9rKXe3gHm+fSdThs99a/5o/NzIwnX2/y4qbB3BWjqJAA3gi+6mTnu73dMz7d5yGNb17sjCeZcOfBIVIs1+2FCg6MMwVe0g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR12MB4758.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(396003)(366004)(39860400002)(136003)(376002)(451199021)(31686004)(83380400001)(4326008)(6636002)(316002)(41300700001)(36756003)(2906002)(38100700002)(53546011)(6512007)(6506007)(6486002)(26005)(478600001)(66946007)(66556008)(66476007)(2616005)(86362001)(31696002)(5660300002)(8936002)(6862004)(8676002)(37006003)(54906003)(44832011)(7416002)(186003)(6666004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?ZHowaGllZ3htV01ramVCbUhYbzRXRFU5SEp3M3RsOVpUZXJPN0dqNDgycENV?=
- =?utf-8?B?alRiVjdJcXhRV0NuT0h5SSt4Si9HYzV0NGJndmN1YlBqZzVUdE03b3VXYmNR?=
- =?utf-8?B?VUtDNjNpdkZHYXdNNVV6QzNGRzRuc0tOcGNkeERwa2EyUGhSbFpXOGgrazBT?=
- =?utf-8?B?RG5EeHJ2c25pamgrbTF5WElQT3ByWjkvRDhaMGthd0hBSmFMTThtb2RkRHJi?=
- =?utf-8?B?T0JjVVQ5eXFOWFR6V09MckkyaFE3V2FjUis0WlVzRWFDdExPL2huYWlFUW5a?=
- =?utf-8?B?eWVlbFc0dE50bTFYWW1VMGZrQlZXdGtiRUh5SUprZmttUTZkdTdoSE5GN2cw?=
- =?utf-8?B?cVRXWFJFNVF2RTVyVzZob1lvSkk3SjloMWxKbnBzWjJZWDUxVlVRR3M0bXBY?=
- =?utf-8?B?NTFQZEhTVldScGVqakxpS1U1MmZKK3pUT3hmaWdYRG04RHdpcSsyeEl4M0gz?=
- =?utf-8?B?QVM5SjJmYTNBZEwzZFFNay9kYU1XR21CaXY4WnQ4U21ydmlNNnVnVkwwcFN2?=
- =?utf-8?B?WVFpSUhTYjJUOUxXUjZsamlsRlFtZzJvTDgxMlp5RUVqSnNybnptZ0NscWtz?=
- =?utf-8?B?OFM4TzlqZjBUQVh2OWlTWm1lMDZ3T0dSdWszVTl1ZGJaUHNDbzlvbmVjWllD?=
- =?utf-8?B?TnZIUnFpUjZwUVZ6ZzRjVnJucWludVB3TDV0ZnQvYi94dXpUWVF2UVBKMm9i?=
- =?utf-8?B?YlRJNVorMDRQVERlcFRRRVhjQjhiMCtiZC8yZ1FIUitlUjhYSm10Y1NCazV6?=
- =?utf-8?B?eWlKVVVpeUp3aGJQVkNxQjkyNE5PMnJQeFlHMmlJemZJRmFnWk82QjM1YjE2?=
- =?utf-8?B?V2Y5U3JBZUpmTFI4WlprU1IxV09XQTQ3SDBPd1Nmam5tNHRIM3BIdy8xVW0x?=
- =?utf-8?B?bkVhNERWeXZYU3FRUVUvYTVsdlJKSVdjeGltVFZ3eTZTQmFnZ0d1NDc2TTJt?=
- =?utf-8?B?VlJYZTBDRVBrczQzbFlyNGpackpoRTJlTFp6RVJseUtDa28yalZhWlF4a1hX?=
- =?utf-8?B?Sk9mcmwvemJsR1pxTlVkcHpOSFlrYzIvWFNFOHdoZW5hSzlqV2JyeVBVcmlC?=
- =?utf-8?B?TU5QckJYZ3RJOXNrVVFKT1ZaL21FSmdNaU9Mb3lOcys3NnFzc2RPbDZ2M0p0?=
- =?utf-8?B?M25acEx0SUN5TU9HYVdmSTZLN0pGelNkcUN6RzhCcWFIaER0dWhWaEFJb3Fa?=
- =?utf-8?B?WXZHSWNId1dNREdWdi8wK05aTE13OXRtN3h1aCtldDNvQjlzL1R4elgzMEhS?=
- =?utf-8?B?ZVBrTCtJY3lKeDRqMHA5T2ZEc1JYVHMrWkwvTGJJNVJzRzJ3TnJXN1E3T3dN?=
- =?utf-8?B?eEl0MDh0V0t4dyt4bFJiMEhYNGZGNmZkWmJKeDVIWHpDREZReUNvZEMxayt1?=
- =?utf-8?B?SFp0TlU3dmZkdk85RUFBME1BVVU1dFUyVkoranNzVnVseGxNL2kxNWwwd0dX?=
- =?utf-8?B?SVFoMWhJazg2b3o1VWxwT0tTY3o2WllVQmUvNVgvQmlvNDBDL1FBSEF0TEZG?=
- =?utf-8?B?eHpXMGdGa2lyUFNXYklQY1RMNHNyWUJHdVVWYnY5QWJMU0FreVAyWTV5eHRn?=
- =?utf-8?B?OHBLTUZKcDliNzJRSU1YUGhjelpLOEUyTWlsRE5KRjE0NFZXMjVxdUdGZHBB?=
- =?utf-8?B?cFlVZGFjVmdFMW5FRkZMRWtxQmtTaGRheURkOUpkejhrM2VNNEJsQVNXcGhR?=
- =?utf-8?B?YnkzNEkwVlZ1QlBhRVpxZXFSZVJMRkx3NGJROXg0QkhVUkJVb1ZOVXFXZDMx?=
- =?utf-8?B?anlBcDNFeU1wcG4rUlNuejNPTG4ybm5NeE1QL1ZKRFFwdjBkY0NYQllhcjcz?=
- =?utf-8?B?d0drc0p3YUtQa1FkL1pUc0doVjVFTkZXUTJibDZUVk1hV1Q4UnFoTStJeFla?=
- =?utf-8?B?YTVwVXA5c1g1eHJpU20rK25UelFveTB2Z24xdTloVVMxNm1RdDUva3c5Wjgx?=
- =?utf-8?B?K28zamlBaUZtNWU1aWowWXVEWEg2eUN4RTRBK2EybGVnL1ZUWDJuRURkN2R2?=
- =?utf-8?B?VStUQmhsekJOekFqWEdQTy8yT29FTG1ZUVM5YStpWW5XKzVkQVRJZk9VK2ho?=
- =?utf-8?B?cHo1eit3Q3dhTzlHV0RLMXlZcGg4VGV1Nkh3L2ZtcXhJM3RRU0lJY1poRmgw?=
- =?utf-8?Q?8yHtfhvgv7Rc/VxE9aGeoC+wQ?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7bed44b4-3a5a-43e0-cba2-08db550e9daa
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR12MB4758.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2023 06:35:47.0104
+X-MS-Exchange-CrossTenant-AuthSource: BN7PR12MB2802.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: eaafb76e-7b0b-46a4-3071-08db550ed69f
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2023 06:37:22.1321
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 3CjU4K3MjeHxpTI9oRwhFyIiV92sAhSXMhAbysXhICijMbUPQo+gbowqJJ67qp61
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6641
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qtA4j22h9csX/18u4tziY2PnKXwiNE+PxfnlJIrzhhSc7LcDwe0BZKCXWxrAGZKuT3iNDMbgTnAqJPq6Ae3LwQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR12MB7453
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
+> -----Original Message-----
+> From: Boerge Struempfel <boerge.struempfel@gmail.com>
+> Sent: Thursday, May 11, 2023 7:27 PM
+> Cc: boerge.struempfel@gmail.com; bstruempfel@ultratronik.de; Mark
+> Brown <broonie@kernel.org>; Shawn Guo <shawnguo@kernel.org>; Sascha
+> Hauer <s.hauer@pengutronix.de>; Pengutronix Kernel Team
+> <kernel@pengutronix.de>; Fabio Estevam <festevam@gmail.com>; NXP
+> Linux Team <linux-imx@nxp.com>; linux-spi@vger.kernel.org; linux-arm-
+> kernel@lists.infradead.org; linux-kernel@vger.kernel.org
+> Subject: [PATCH] spi: Add option to keep the MOSI line low, when it is id=
+le.
+>=20
+> CAUTION: This message has originated from an External Source. Please use
+> proper judgment and caution when opening attachments, clicking links, or
+> responding to this email.
+>=20
+>=20
+> By default, the imx spi controller uses a high mosi line, whenever it is =
+idle.
+> This may not be desired in all use cases. For example neopixel leds can g=
+et
+> confused and flicker due to misinterpreting the idle state.
+> Therefore, we introduce a new spi-mode bit, with which the idle behaviour
+> can be overwritten on a per device basis.
+>=20
+> Signed-off-by: Boerge Struempfel <bstruempfel@ultratronik.de>
+> ---
+>  drivers/spi/spi-imx.c        | 9 ++++++++-
+>  drivers/spi/spi.c            | 2 ++
+>  include/uapi/linux/spi/spi.h | 3 ++-
+>  3 files changed, 12 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/spi/spi-imx.c b/drivers/spi/spi-imx.c index
+> 34e5f81ec431e..6acab2b4ffaa5 100644
+> --- a/drivers/spi/spi-imx.c
+> +++ b/drivers/spi/spi-imx.c
+> @@ -281,6 +281,7 @@ static bool spi_imx_can_dma(struct spi_controller
+> *controller, struct spi_device  #define MX51_ECSPI_CONFIG_SCLKPOL(cs)  (1
+> << ((cs & 3) +  4))  #define MX51_ECSPI_CONFIG_SBBCTRL(cs)  (1 << ((cs & =
+3) +
+> 8))
+>  #define MX51_ECSPI_CONFIG_SSBPOL(cs)   (1 << ((cs & 3) + 12))
+> +#define MX51_ECSPI_CONFIG_DATACTL(cs)  (1 << ((cs & 3) + 16))
+>  #define MX51_ECSPI_CONFIG_SCLKCTL(cs)  (1 << ((cs & 3) + 20))
+>=20
+>  #define MX51_ECSPI_INT         0x10
+> @@ -573,6 +574,11 @@ static int mx51_ecspi_prepare_message(struct
+> spi_imx_data *spi_imx,
+>                 cfg &=3D ~MX51_ECSPI_CONFIG_SCLKCTL(spi_get_chipselect(sp=
+i, 0));
+>         }
+>=20
+> +       if (spi->mode & SPI_MOSI_IDLE_LOW)
+> +               cfg |=3D MX51_ECSPI_CONFIG_DATACTL(spi->chip_select);
 
-On 5/14/23 13:01, m.brock@vanmierlo.com wrote:
-> Guntupalli, Manikanta schreef op 2023-05-10 18:26:
->> Hi Maarten,
->>
->>> -----Original Message-----
->>> From: m.brock@vanmierlo.com <m.brock@vanmierlo.com>
->>> Sent: Thursday, May 4, 2023 5:52 PM
->>> To: Guntupalli, Manikanta <manikanta.guntupalli@amd.com>
->>> Cc: gregkh@linuxfoundation.org; robh+dt@kernel.org;
->>> krzysztof.kozlowski+dt@linaro.org; michal.simek@xilinx.com; linux-
->>> serial@vger.kernel.org; devicetree@vger.kernel.org; linux-
->>> kernel@vger.kernel.org; jirislaby@kernel.org; linux-arm-
->>> kernel@lists.infradead.org; Simek, Michal <michal.simek@amd.com>; git
->>> (AMD-Xilinx) <git@amd.com>; Pandey, Radhey Shyam
->>> <radhey.shyam.pandey@amd.com>; Datta, Shubhrajyoti
->>> <shubhrajyoti.datta@amd.com>; Goud, Srinivas <srinivas.goud@amd.com>;
->>> manion05gk@gmail.com
->>> Subject: Re: [PATCH 0/2] Add rs485 support to uartps driver
->>>
->>> Manikanta Guntupalli wrote 2023-04-26 14:29:
->>> > Add optional gpio property to uartps node to support rs485 Add rs485
->>> > support to uartps driver
->>> >
->>> > Manikanta Guntupalli (2):
->>> >   dt-bindings: Add optional gpio property to uartps node to support
->>> >     rs485
->>> >   tty: serial: uartps: Add rs485 support to uartps driver
->>> >
->>> >  .../devicetree/bindings/serial/cdns,uart.yaml |  5 +
->>> >  drivers/tty/serial/xilinx_uartps.c            | 96 ++++++++++++++++++-
->>> >  2 files changed, 100 insertions(+), 1 deletion(-)
->>>
->>> Why would you want to use a GPIO and not RTS for choosing the direction as
->>> is more common in this case?
->> In ZynqMp platform Cadence UART Controller RTS signal routed to
->> external through the PL(Programmable Logic) design not through
->> Multiplexed IO.
-> 
-> Then why not route RXD & TXD to the PL as well and connect the module to a
-> PMOD connector connected to the PL? But I admit that a GPIO always works as
-> well.
+Kindly replace all occurrence of spi->chip_select with spi_get_chipselect(s=
+pi, 0)
+https://github.com/torvalds/linux/commit/9e264f3f85a56cc109cc2d6010a48aa89d=
+5c1ff1
 
-I will let Mani to comment other parts. Simply that's how PCB is wired now.
-I remember some discussions to enhance silicon with being able to route MIO pins 
-to PL but that capability has never been added.
-And the second part of it is on PL pin constrained system there doesn't need to 
-be free PL pin for this functionality.
-And third thing is that routing via PL means that PL has to be loaded to get 
-this functionality. Which also means much higher power consumption even if there 
-is single wire between EMIO and PL pin.
-It means GPIO routed via MIO through free existing pin is PCB design choice in 
-the context of project they are focusing on.
-And good that you see also GPIO as viable option for it.
+> +       else
+> +               cfg &=3D ~MX51_ECSPI_CONFIG_DATACTL(spi->chip_select);
 
-Thanks,
-Michal
+> +
+>         if (spi->mode & SPI_CS_HIGH)
+>                 cfg |=3D MX51_ECSPI_CONFIG_SSBPOL(spi_get_chipselect(spi,=
+ 0));
+>         else
+> @@ -1743,7 +1749,8 @@ static int spi_imx_probe(struct platform_device
+> *pdev)
+>         spi_imx->controller->prepare_message =3D spi_imx_prepare_message;
+>         spi_imx->controller->unprepare_message =3D
+> spi_imx_unprepare_message;
+>         spi_imx->controller->slave_abort =3D spi_imx_slave_abort;
+> -       spi_imx->controller->mode_bits =3D SPI_CPOL | SPI_CPHA | SPI_CS_H=
+IGH |
+> SPI_NO_CS;
+> +       spi_imx->controller->mode_bits =3D SPI_CPOL | SPI_CPHA | SPI_CS_H=
+IGH
+> | SPI_NO_CS |
+> +                                        SPI_MOSI_IDLE_LOW;
+>=20
+>         if (is_imx35_cspi(spi_imx) || is_imx51_ecspi(spi_imx) ||
+>             is_imx53_ecspi(spi_imx))
+> diff --git a/drivers/spi/spi.c b/drivers/spi/spi.c index
+> 9291b2a0e8871..3ad538b317a84 100644
+> --- a/drivers/spi/spi.c
+> +++ b/drivers/spi/spi.c
+> @@ -2260,6 +2260,8 @@ static int of_spi_parse_dt(struct spi_controller
+> *ctlr, struct spi_device *spi,
+>                 spi->mode |=3D SPI_LSB_FIRST;
+>         if (of_property_read_bool(nc, "spi-cs-high"))
+>                 spi->mode |=3D SPI_CS_HIGH;
+> +       if (of_property_read_bool(nc, "spi-mosi-idle-low"))
+> +               spi->mode |=3D SPI_MOSI_IDLE_LOW;
+>=20
+>         /* Device DUAL/QUAD mode */
+>         if (!of_property_read_u32(nc, "spi-tx-bus-width", &value)) { diff=
+ --git
+> a/include/uapi/linux/spi/spi.h b/include/uapi/linux/spi/spi.h index
+> 9d5f580597039..ca56e477d1619 100644
+> --- a/include/uapi/linux/spi/spi.h
+> +++ b/include/uapi/linux/spi/spi.h
+> @@ -28,6 +28,7 @@
+>  #define        SPI_RX_OCTAL            _BITUL(14)      /* receive with 8=
+ wires */
+>  #define        SPI_3WIRE_HIZ           _BITUL(15)      /* high impedance
+> turnaround */
+>  #define        SPI_RX_CPHA_FLIP        _BITUL(16)      /* flip CPHA on R=
+x only xfer
+> */
+> +#define SPI_MOSI_IDLE_LOW      _BITUL(17)      /* leave mosi line low wh=
+en
+> idle */
+>=20
+>  /*
+>   * All the bits defined above should be covered by SPI_MODE_USER_MASK.
+> @@ -37,6 +38,6 @@
+>   * These bits must not overlap. A static assert check should make sure o=
+f
+> that.
+>   * If adding extra bits, make sure to increase the bit index below as we=
+ll.
+>   */
+> -#define SPI_MODE_USER_MASK     (_BITUL(17) - 1)
+> +#define SPI_MODE_USER_MASK     (_BITUL(18) - 1)
+>=20
+>  #endif /* _UAPI_SPI_H */
+> --
+> 2.25.1
+
