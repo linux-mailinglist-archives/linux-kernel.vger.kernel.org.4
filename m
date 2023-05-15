@@ -2,196 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48FCB70262D
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 09:37:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 356D570262F
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 09:38:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239058AbjEOHh2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 03:37:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50668 "EHLO
+        id S238363AbjEOHiC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 03:38:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S239127AbjEOHhS (ORCPT
+        with ESMTP id S234967AbjEOHh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 03:37:18 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28CD010FF
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 00:37:11 -0700 (PDT)
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20230515073709euoutp0109c9709f0ce2af51735d30221f7c43e2~fQPpRIzFI1036110361euoutp012
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 07:37:09 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20230515073709euoutp0109c9709f0ce2af51735d30221f7c43e2~fQPpRIzFI1036110361euoutp012
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1684136229;
-        bh=4KVBCJXgjWN0Hfg1ujzfNt5lNWZZNCCIrttFNFjwUpU=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=sDhIqKcHoZLpgEqpjd/FuVq2fPTvW+2NrGAwVd4NfP3A2zGq8tu5dCIZJTdeGMWHs
-         J2LIRqootv8pROkXMsz7T4MFYFIMe3ngu27NcWF3RcJskL/lKEf10iarnsqeYXO5f8
-         3D9cTkLH/tukKRGdHpbiFi+RYElKhe660Pq1rrmo=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230515073709eucas1p29c564ba328648042a733701fdad05b27~fQPo_u1c21745717457eucas1p2d;
-        Mon, 15 May 2023 07:37:09 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id A5.D1.35386.521E1646; Mon, 15
-        May 2023 08:37:09 +0100 (BST)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230515073708eucas1p2b1fc755549303023853b9ff334d733ce~fQPomwoTU2607326073eucas1p2z;
-        Mon, 15 May 2023 07:37:08 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-        20230515073708eusmtrp17f21f8b7f5c7f6d5563b9dc8baa9ba0a~fQPomBB6o0468804688eusmtrp1A;
-        Mon, 15 May 2023 07:37:08 +0000 (GMT)
-X-AuditID: cbfec7f4-cc9ff70000028a3a-f2-6461e1255a4b
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 37.FD.14344.421E1646; Mon, 15
-        May 2023 08:37:08 +0100 (BST)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230515073707eusmtip2d024c237d4978bedb932fa0ffdd1bc55~fQPnpS9Cu3245332453eusmtip2C;
-        Mon, 15 May 2023 07:37:07 +0000 (GMT)
-Message-ID: <96150852-84ce-f750-2e2e-8cb53cde5719@samsung.com>
-Date:   Mon, 15 May 2023 09:37:06 +0200
+        Mon, 15 May 2023 03:37:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48C5D1A5;
+        Mon, 15 May 2023 00:37:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9D3E611C5;
+        Mon, 15 May 2023 07:37:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7763BC433EF;
+        Mon, 15 May 2023 07:37:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684136275;
+        bh=WjuJTRI0yDa5tJ0OvZ+Ic4uBPIR1vsm5WT5pCGM3Bwc=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=GS0ZdfqvzuRLDVaYXKytaGyFmq34hv6ZO0MVLxZrswStvtnsAunJEKkgfFMcta4SI
+         3rF1QMYsowzoTmpOJ1LBaLCyZLOLBQSC+jMIM8j0L3hus86l74auc93hhYDXub4PxQ
+         xHCqlHPfnDV4xIR4sej7gwR1fiUNGFrTomT7OiB/ddsNjsC69uKPfTcst48PhgMPaS
+         kqwuq50Zp5Sbzd8unmTD7xW0lT1Y4dGYbHxUBdMD6Awp5QAIW6PfISUrzrk9ymjdHd
+         /5IvxIy+EctF4Wan9h3PoKDk76cnUkw5UpkHRvj+eeD/pt0lOuyUS2NVUjvnea5zcu
+         LpAjDE7PreRzA==
+From:   Christian Brauner <brauner@kernel.org>
+To:     Min-Hua Chen <minhuadotchen@gmail.com>
+Cc:     Christian Brauner <brauner@kernel.org>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Alexander Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH] fs: use correct __poll_t type
+Date:   Mon, 15 May 2023 09:37:40 +0200
+Message-Id: <20230515-mengenlehre-reinreden-a4ca60c63d75@brauner>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230511164628.336586-1-minhuadotchen@gmail.com>
+References: <20230511164628.336586-1-minhuadotchen@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
-        Gecko/20100101 Thunderbird/102.10.1
-Subject: Re: [PATCH V5 5/6] drm: bridge: samsung-dsim: Dynamically configure
- DPHY timing
-Content-Language: en-US
-To:     Adam Ford <aford173@gmail.com>
-Cc:     Lucas Stach <l.stach@pengutronix.de>,
-        dri-devel@lists.freedesktop.org, Marek Vasut <marex@denx.de>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Robert Foss <rfoss@kernel.org>,
-        Jonas Karlman <jonas@kwiboo.se>, aford@beaconembedded.com,
-        Frieder Schrempf <frieder.schrempf@kontron.de>,
-        linux-kernel@vger.kernel.org, Michael Walle <michael@walle.cc>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Chen-Yu Tsai <wenst@chromium.org>,
-        Jagan Teki <jagan@amarulasolutions.com>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <CAHCN7xLZNvMx=U9=Fp=qrG9xaMhU1PS_nQO5FfC2S+XLO8YLXQ@mail.gmail.com>
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrDKsWRmVeSWpSXmKPExsWy7djPc7qqDxNTDO70s1rcuX2a2WL31W52
-        i/uLP7NYXPn6ns2id+k5VosvmyawWTyfv47R4uSbqywWD+beZLLonLiE3eLyrjlsFm/aGhkt
-        3p7ewG7xfuctRotJ826yWsxou8zqIOCx9uN9Vo+XyxuYPWY3XGTxmDfrBIvHzll32T1md8xk
-        9Vi85yWTx6ZVnWweR64uZvU4MeESk8eda3vYPO53H2fy6P9r4PF5k5zHgb0tbAH8UVw2Kak5
-        mWWpRfp2CVwZz59PZy/olqzoaOlmb2BcL9LFyMkhIWAiseLrYdYuRi4OIYEVjBK7lvxjA0kI
-        CXxhlLiwtwQi8ZlR4sTDTSwwHd83fWCESCxnlGg5sZkJouMjo8S2g4UgNq+AnUTz/QmsIDaL
-        gKrElKdTmCHighInZz4BGyQqkCqxavNFsLiwQJTEwY8rwTYzC4hL3HoyH2ymiICSxN0zf8GW
-        MQscZJHonXcOrIhNwFCi620XmM0pEChxc+d5RohmeYnmrbOZQRokBF5xSly+3gl1tovEsdUv
-        2CBsYYlXx7ewQ9gyEqcn97BANLQzSiz4fZ8JwpnAKNHw/BYjRJW1xJ1zv4C6OYBWaEqs36UP
-        EXaU2H2rCSwsIcAnceOtIMQRfBKTtk1nhgjzSnS0CUFUq0nMOr4Obu3BC5eYJzAqzUIKl1lI
-        /p+F5J1ZCHsXMLKsYhRPLS3OTU8tNspLLdcrTswtLs1L10vOz93ECEygp/8d/7KDcfmrj3qH
-        GJk4GA8xSnAwK4nwts+MTxHiTUmsrEotyo8vKs1JLT7EKM3BoiTOq217MllIID2xJDU7NbUg
-        tQgmy8TBKdXAtHS+YV3fp0/z3aMdGVV6A+V+yKTYvd5yXPEGR9a/QFZHo0s6Wi7T1JatS289
-        Oi/5QEbKI8FL6g++iXzp8XTS8HzBsK67ZPeS9O8+bf+LbrkLZxU0xImuPfxu5sfpM5JKovf7
-        vVxlwxjbsNEwTv+zudjiNB63T+sPzzw9s8xj0j0VJbvl+x64BVfJ/D+mdjFf4E/2J7d38/cE
-        G9g95P35R/F1sNK98p5U1nk2Dpula7apb7D8pG+itsiV/cHdI36C2QZfVUV+Vnu+WBDz9vvW
-        959jTdykp8/Lmf7Wdvbnx/HlP57OWHXYL/9Fqv/rPRYcLdfcGkLZndlD35gqX+th3lUQduqt
-        2E73qXPn2F+LUWIpzkg01GIuKk4EAJu9Pq8PBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFupnleLIzCtJLcpLzFFi42I5/e/4PV2Vh4kpBqc/aVjcuX2a2WL31W52
-        i/uLP7NYXPn6ns2id+k5VosvmyawWTyfv47R4uSbqywWD+beZLLonLiE3eLyrjlsFm/aGhkt
-        3p7ewG7xfuctRotJ826yWsxou8zqIOCx9uN9Vo+XyxuYPWY3XGTxmDfrBIvHzll32T1md8xk
-        9Vi85yWTx6ZVnWweR64uZvU4MeESk8eda3vYPO53H2fy6P9r4PF5k5zHgb0tbAH8UXo2Rfml
-        JakKGfnFJbZK0YYWRnqGlhZ6RiaWeobG5rFWRqZK+nY2Kak5mWWpRfp2CXoZz59PZy/olqzo
-        aOlmb2BcL9LFyMkhIWAi8X3TB8YuRi4OIYGljBLzO9+xQSRkJE5Oa2CFsIUl/lzrYoMoes8o
-        MeXJDrAEr4CdRPP9CWA2i4CqxJSnU5gh4oISJ2c+YQGxRQVSJU4uvQFmCwtESRz8uBJsAbOA
-        uMStJ/OZQGwRASWJu2f+gl3BLHCYRWL99eVgQ4UEDjBLzPinCmKzCRhKdL3tAmvmFAiUuLnz
-        PCPEIDOJrq1dULa8RPPW2cwTGIVmIbljFpJ9s5C0zELSsoCRZRWjSGppcW56brGRXnFibnFp
-        Xrpecn7uJkZgyth27OeWHYwrX33UO8TIxMF4iFGCg1lJhLd9ZnyKEG9KYmVValF+fFFpTmrx
-        IUZTYGBMZJYSTc4HJq28knhDMwNTQxMzSwNTSzNjJXFez4KORCGB9MSS1OzU1ILUIpg+Jg5O
-        qQamnWsmZCefLrn4aq3c7+9sdW5nFsUv97pxSackk32N5elNz6JezFM9HlhYvenPxWtb8n+v
-        X7V9Wef75XfYIi167yQGn5h7cPaupCCLeO9zJiarTsw7+FTkwFxDU6GWvW9c1ime33Dn8LmA
-        n0faN8lPrpgfVP3jYN5Z+yauD2bq67c37uU8Fs3C+bsprKlgtvyX01ftS28svDVb5svS2RPk
-        rjKGOr2b/t+eT22SasB85sz832WdT1ZqLzx33vSAEfNDC4WIw9z/lQq2XCn9tnLLj7zS199y
-        Llw0bfMuvO4rnLxMYJX33Zxt3xna+7g2Wj7L/KnMKl1nI/HM3yB24oWwSe8qtzPtWrZIyPPc
-        lg+S3J+UWIozEg21mIuKEwHxgbUWogMAAA==
-X-CMS-MailID: 20230515073708eucas1p2b1fc755549303023853b9ff334d733ce
-X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20230512200115eucas1p180198d430c17b044e34d66b7246d4a7b
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20230512200115eucas1p180198d430c17b044e34d66b7246d4a7b
-References: <20230506192453.725621-1-aford173@gmail.com>
-        <20230506192453.725621-6-aford173@gmail.com>
-        <275064c0e6c814d8e8fda6bcf70d6e8c3bdc3011.camel@pengutronix.de>
-        <CGME20230512200115eucas1p180198d430c17b044e34d66b7246d4a7b@eucas1p1.samsung.com>
-        <CAHCN7xKq_hZXWZVMG0xFK_zGfm18ag48a83BtL5OyE6VJ3FMTA@mail.gmail.com>
-        <7a83b8c1-88ff-0ae6-9c3b-d49fc08c7ac0@samsung.com>
-        <CAHCN7xLZNvMx=U9=Fp=qrG9xaMhU1PS_nQO5FfC2S+XLO8YLXQ@mail.gmail.com>
-X-Spam-Status: No, score=-10.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=769; i=brauner@kernel.org; h=from:subject:message-id; bh=WjuJTRI0yDa5tJ0OvZ+Ic4uBPIR1vsm5WT5pCGM3Bwc=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaQkPtR9nn03eNHaRY+evZou4rwo91vaKZXVy9rWRwg858t+ E8PH3VHKwiDGxSArpsji0G4SLrecp2KzUaYGzBxWJpAhDFycAjCRyCZGhvXhDhwrfp+3FtVda+TvfX /6duGF6awxiQ8lsrcqr1jsuoKR4aW12bK++DVHatts2WqnpM3Mi6iNea9ffnJFp6hq2cfnzAA=
+X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.05.2023 06:25, Adam Ford wrote:
-> On Fri, May 12, 2023 at 4:02 PM Marek Szyprowski
-> <m.szyprowski@samsung.com> wrote:
->> On 12.05.2023 22:00, Adam Ford wrote:
->>> On Fri, May 12, 2023 at 2:37 PM Lucas Stach <l.stach@pengutronix.de> wrote:
->>>> Am Samstag, dem 06.05.2023 um 14:24 -0500 schrieb Adam Ford:
->>>>> The DPHY timings are currently hard coded. Since the input
->>>>> clock can be variable, the phy timings need to be variable
->>>>> too.  Add an additional variable to the driver data to enable
->>>>> this feature to prevent breaking boards that don't support it.
->>>>>
->>>>> The phy_mipi_dphy_get_default_config function configures the
->>>>> DPHY timings in pico-seconds, and a small macro converts those
->>>>> timings into clock cycles based on the pixel clock rate.
->>>>>
->>>> This week I finally had some time to take a deeper look at this series
->>>> and test it on some of my systems.
->>> Thanks for testing this!
->>>> This patch causes issues when the burst clock rate is fixed by
->>>> supplying the DT entry. Instead of describing the issue below, I'm
->>>> attaching the patch that makes things work on my system.
->>> Oops, sorry about that.
->>>
->>>> I would appreciate if you could test this one on your side. Feel free
->>>> to squash it into yours if you find it working properly.
->>> I reviewed your patch, and it looks like it makes a lot of sense.
->>> If it works, I'll squash them together and add your name to the sign-off.
-> That worked really well, I'll add it to my WIP directory since Marek S
-> said he'd test the other proposal of dropping the dynamic phy flag and
-> corresponding check in favor of pushing everyone to the same code.
->
->>>> Also I would almost bet that dynamic_dphy is working on the Exynos
->>>> boards with that fix added. So if anyone with access to those boards
->>>> would like to give it a shot, we may be able to get rid of the
->>>> hardcoded PHY parameters altogether, which would be a nice cleanup.
->>> I wondered the same thing, but I didn't want to create more work for
->>> Marek S and since there was so much churn getting the original driver
->>> ported, I thought it would be the safest thing to try to give the
->>> imx8m m/n/p the features without breaking the Exynos.
->>>
->>> Marek S - Do you want me to post this file without the extra checks to
->>> see if it still works with Exynos?
->> Feel free to send me patches to test or just point to your
->> work-in-progress git repo.
-> Thanks for testing this, Marek S.  My work-in-progress branch is:
->
-> https://protect2.fireeye.com/v1/url?k=2eeb1ed9-4e098384-2eea9596-000babd9f1ba-9ad5c339e5ea6e4d&q=1&e=652be603-d622-4d0e-95d3-639656ab1af1&u=https%3A%2F%2Fgithub.com%2Faford173%2Flinux%2Ftree%2Fdsim-updates-wip
->
-> Depending on what you find will determine how I modify the next
-> revision of the code I push, so I very much appreciate your feedback.
-> Hopefully the suggestion from Lucas will work for your applications
-> and we can reduce some of the code complexity.
+On Fri, 12 May 2023 00:46:25 +0800, Min-Hua Chen wrote:
+> Fix the following sparse warnings by using __poll_t instead
+> of unsigned type.
+> 
+> fs/eventpoll.c:541:9: sparse: warning: restricted __poll_t degrades to integer
+> fs/eventfd.c:67:17: sparse: warning: restricted __poll_t degrades to integer
+> 
+> 
+> [...]
 
-The above mentioned 'dsim-updates-wip' branch works fine on all my 
-Exynos based boards.
+Applied to the vfs.misc branch of the vfs/vfs.git tree.
+Patches in the vfs.misc branch should appear in linux-next soon.
 
+Please report any outstanding bugs that were missed during review in a
+new review to the original patch series allowing us to drop it.
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/vfs/vfs.git
+branch: vfs.misc
 
+[1/1] fs: use correct __poll_t type
+      https://git.kernel.org/vfs/vfs/c/1454df87a544
