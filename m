@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03239703FD3
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:30:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 9756B703FD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:31:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245581AbjEOVa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 17:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57304 "EHLO
+        id S245588AbjEOVbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 17:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245587AbjEOVaX (ORCPT
+        with ESMTP id S244832AbjEOVbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 17:30:23 -0400
+        Mon, 15 May 2023 17:31:23 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B9D440E4;
-        Mon, 15 May 2023 14:30:21 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D10093;
+        Mon, 15 May 2023 14:31:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D793C614CB;
-        Mon, 15 May 2023 21:30:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 15FEEC433D2;
-        Mon, 15 May 2023 21:30:20 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B14960B59;
+        Mon, 15 May 2023 21:31:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4433C433D2;
+        Mon, 15 May 2023 21:31:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684186220;
-        bh=PrSt0VkkDgvVp93ERiJnCl7qNmkpl0JS4c8ZrbTuJgs=;
+        s=k20201202; t=1684186281;
+        bh=7050tPmQbarGoQdpQ0e4gbl5kxFwodp7M8tuIoTV/mk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZA6wtW41N2r0S4jWDxUdN0IXtwdlAHsPr/WFyKWb8y36ou9CxQ5DxNdo87wuZiAxy
-         18d4AYbPru/KwTULzBq8nEdMer0Iq/6sAPFoGFfeZaFuS/8vdwemNR04Gm+71h7w9l
-         M1nTzvOFw88hC7wgkOqp8V9Od4EgQgcIMGaMVGWfQp1I4EO7RGUgPIWCA+86zaxYkw
-         SBZMCv1ED+iVc5zRKEmjDwSS7zX6LYCmaP506FyPxKy246geO/m6lhrppVghokqtYO
-         jejKHj+BZ55TTFIkDBDbxMQDELXhNqvSvxZjeEBvi65EyktVRPPJ7HggHuLeTChmaq
-         KpNTTQ3/dOKnQ==
+        b=bZfXvsc7xyPy6AaVUubjLFwe1CmmpXvtiyb4l31GtNUGNeaQQ+1hbiJQK/+ugBcto
+         F8R2n9K7BwYE+I7mtyfFgJPcjBb/6nNsc2cpzSSn6dlGOVhXrYUC82nx/oiX5w3o2B
+         aTO8c6T88i5MwlYlY+vdrG2IJffGTfBedUCs6wM2bjSkEGp2dbTWAkrSmVAWv2i1Sb
+         9wcbrObyOe0GWXFzhoEDj9n7nNAhZyvEIczh/wLU8TVKI8ietxTBoqmfqK0GiFBroE
+         xiC6tlcOR5T7QX7JUcjYjw+mNRraSYw2vhzh/blKb4VZ3upPWvSiIKn/TH3e3dKip1
+         xTS5vjwbh6JwQ==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id B3D7A403B5; Mon, 15 May 2023 18:30:17 -0300 (-03)
-Date:   Mon, 15 May 2023 18:30:17 -0300
+        id 93451403B5; Mon, 15 May 2023 18:31:18 -0300 (-03)
+Date:   Mon, 15 May 2023 18:31:18 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Changbin Du <changbin.du@huawei.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] perf: ftrace: flush output after each writing
-Message-ID: <ZGKkaROtXT9Wq2ai@kernel.org>
-References: <20230513074000.733550-1-changbin.du@huawei.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Ravi Bangoria <ravi.bangoria@amd.com>, namhyung@kernel.org,
+        eranian@google.com, mark.rutland@arm.com, jolsa@kernel.org,
+        irogers@google.com, bp@alien8.de, kan.liang@linux.intel.com,
+        adrian.hunter@intel.com, maddy@linux.ibm.com, x86@kernel.org,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        sandipan.das@amd.com, ananth.narayan@amd.com,
+        santosh.shukla@amd.com
+Subject: Re: [PATCH v4 4/4] perf test: Add selftest to test IBS invocation
+ via core pmu events
+Message-ID: <ZGKkpq4ynrdH7ZeE@kernel.org>
+References: <20230504110003.2548-1-ravi.bangoria@amd.com>
+ <20230504110003.2548-5-ravi.bangoria@amd.com>
+ <20230505091648.GC1770668@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230513074000.733550-1-changbin.du@huawei.com>
+In-Reply-To: <20230505091648.GC1770668@hirez.programming.kicks-ass.net>
 X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -64,37 +65,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Sat, May 13, 2023 at 03:40:00PM +0800, Changbin Du escreveu:
-> The pager will result stdout in full buffering mode instead of line
-> buffering. We need to make the trace visible timely.
-
-Thanks, applied.
-
-- Arnaldo
-
- 
-> Signed-off-by: Changbin Du <changbin.du@huawei.com>
-> ---
->  tools/perf/builtin-ftrace.c | 2 ++
->  1 file changed, 2 insertions(+)
+Em Fri, May 05, 2023 at 11:16:48AM +0200, Peter Zijlstra escreveu:
+> On Thu, May 04, 2023 at 04:30:03PM +0530, Ravi Bangoria wrote:
+> > IBS pmu can be invoked via fixed set of core pmu events with 'precise_ip'
+> > set to 1. Add a simple event open test for all these events.
+> > 
+> > Without kernel fix:
+> >   $ sudo ./perf test -vv 76
+> >    76: AMD IBS via core pmu                                      :
+> >   --- start ---
+> >   test child forked, pid 6553
+> >   Using CPUID AuthenticAMD-25-1-1
+> >   type: 0x0, config: 0x0, fd: 3  -  Pass
+> >   type: 0x0, config: 0x1, fd: -1  -  Pass
+> >   type: 0x4, config: 0x76, fd: -1  -  Fail
+> >   type: 0x4, config: 0xc1, fd: -1  -  Fail
+> >   type: 0x4, config: 0x12, fd: -1  -  Pass
+> >   test child finished with -1
+> >   ---- end ----
+> >   AMD IBS via core pmu: FAILED!
+> > 
+> > With kernel fix:
+> >   $ sudo ./perf test -vv 76
+> >    76: AMD IBS via core pmu                                      :
+> >   --- start ---
+> >   test child forked, pid 7526
+> >   Using CPUID AuthenticAMD-25-1-1
+> >   type: 0x0, config: 0x0, fd: 3  -  Pass
+> >   type: 0x0, config: 0x1, fd: -1  -  Pass
+> >   type: 0x4, config: 0x76, fd: 3  -  Pass
+> >   type: 0x4, config: 0xc1, fd: 3  -  Pass
+> >   type: 0x4, config: 0x12, fd: -1  -  Pass
+> >   test child finished with 0
+> >   ---- end ----
+> >   AMD IBS via core pmu: Ok
+> > 
+> > Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+> > ---
+> >  tools/perf/arch/x86/include/arch-tests.h      |  1 +
+> >  tools/perf/arch/x86/tests/Build               |  1 +
+> >  .../arch/x86/tests/amd-ibs-via-core-pmu.c     | 71 +++++++++++++++++++
+> >  tools/perf/arch/x86/tests/arch-tests.c        |  2 +
+> >  4 files changed, 75 insertions(+)
+> >  create mode 100644 tools/perf/arch/x86/tests/amd-ibs-via-core-pmu.c
 > 
-> diff --git a/tools/perf/builtin-ftrace.c b/tools/perf/builtin-ftrace.c
-> index 810e3376c7d6..ad2a9ae041f6 100644
-> --- a/tools/perf/builtin-ftrace.c
-> +++ b/tools/perf/builtin-ftrace.c
-> @@ -650,6 +650,8 @@ static int __cmd_ftrace(struct perf_ftrace *ftrace)
->  				break;
->  			if (fwrite(buf, n, 1, stdout) != 1)
->  				break;
-> +			/* flush output since stdout is in full buffering mode due to pager */
-> +			fflush(stdout);
->  		}
->  	}
->  
-> -- 
-> 2.25.1
-> 
+> Arnaldo, ok if I merge this along with the other patches or would you
+> rather take it?
 
--- 
+That would be ok, checking if you merged already...
 
 - Arnaldo
