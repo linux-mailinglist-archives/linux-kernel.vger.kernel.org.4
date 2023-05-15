@@ -2,43 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCB10702B9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:38:16 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 47DBF702BA5
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:39:51 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241438AbjEOLiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 07:38:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41334 "EHLO
+        id S241486AbjEOLjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 07:39:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241362AbjEOLgK (ORCPT
+        with ESMTP id S241380AbjEOLhl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 07:36:10 -0400
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2087.outbound.protection.outlook.com [40.107.243.87])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6AE1BD8;
-        Mon, 15 May 2023 04:35:06 -0700 (PDT)
+        Mon, 15 May 2023 07:37:41 -0400
+Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2060.outbound.protection.outlook.com [40.107.95.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7AEE1FC6;
+        Mon, 15 May 2023 04:35:59 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=UgeWeAJb/WU4GjP22xUI4uv/G5X+yrzKLvz3+iatpj76URMG7r/Mgt4vt6hXmJCUQID9WpeN2Qr1CCEpL6zwMHNS/3vHf5WytcQwrxy9tjjfF3uzVVoRiEvf1T9+5Xh7q/hBcDVa1FML6qpSFvssiTywVB5oREkqnRY5KDUFpN/oqacSafkHT4uJ04mhwoCQmOXbCUl0MT07mwXp+qieVwcF8pS5yqKWd3US+0VIJt/dpXnbwrppFwRcsp9Sn5Kqi5C1qLFiENiaCpbwUwp28ofhZEBx42zDyli6EuN/YjpY1x89R4DXbRtgsCnnpJ3E+ZFrQEhMpcVu+zRLZP+0pw==
+ b=TT1agKCUUN0zIA7srugBfsYAP722x+2XD53CBBU6MFwbrb5pV25fcEgXIuqpvvengYZ7OTUzr54bOVIXNDg09X4Jf/SbhrEKOuOYNy3iJfTLUiwSUBLxTlUNZL+jB50vY6dCx6ShiE2nfDifMs/JVq0z0S+MLuVz8TNPmK0a34TOj3Len2vsqvcRepUmlwypt1eGj6JY7euWcN4QlqFRsKnKE3R0ZB7HLHqOzdAuAUPAOjqZTg4+P0hAXh4B7g499NeQ7vHhzJY5i+Rt+y2tPM1smlaQA5UfdYjoh8lsku5KDeDPAiOtHnsS3qn4JixipygxKHT6a1areiaBaBh6/A==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kxy456+bDyioAHl8rt+EmlAMD6U3zGwG379wUhNzEu0=;
- b=kFLpyksiIeuampFrY2O2Zvk13iC/jvfUbk8RRe2Vq/ocWsvHWJT0X0qrOjA7QZj06fpfM2t4yxKwn+p5logiCfpDHiGh82fl6ZisHEfmvsyZbUkw2JW4x+31oIP5TGSg9XR0jFFT5QhaPVo3sHDXDxv/zFs3YjX5JCwIYzSK32+6pOnvK/aZ5GKcZr7RJgu4uHaMwJOK7LnCUcthVmCVPfCVf2MpT15u/hIRZf6O47deTpNko2pucsavuMcWJcmbLBvgX6g99cQ0TmaNZZg9CjMkqBTt3kxjJ2agXdqlrGUMLWFRK5n4xtKwpP2Tw1NWdW58yBHSHXWfBAJgvwoYqw==
+ bh=jRXhIKRZ/2FXxPqmOfRoyv9iskERzUU5hGr9oe2SNqQ=;
+ b=Y39yXPOTu6V3tf9gaIIEwhKQXZRI9+CX7Bu3KMXuNpCPcLmTkjwXYt9VIjUvb9MxY6BiHqpg3Qih8PIm58/bxs9v2gr3ie1PXlbG3frPbsK7/HFq0uW1breKtrEklesIPVpF97wwqq+j+JHrMcBBE5slz3U2luQQQU7uCVjMd+XjA7+8BsRXs7tn8EvnpkWqbzrjHz45jA/ycBCletQYxpEbs87U3JiS1XauxSn3utIwPzbTjTCCMi+vlk7TbYzTDeODfhfTer9+6X3Kn4Ttfc1OawWN0eIaIS4mrHGy9LX5SEhEL6fL5sUUQWKREkHFTx8yX3g3v/95IKK+7oT5VQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
  165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
  (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kxy456+bDyioAHl8rt+EmlAMD6U3zGwG379wUhNzEu0=;
- b=5uDnffe/9PbVHs/KbceVfQ41k9xvV2CN4cnUgp6dDBrf3CWCsWlxdVZdXoAyM9IqV5s0PkZMiqh0VTxS9Hf+qZlki/wMtW2CmZ+D0O2wYRBKixnM+oFYXTTqMhaebeZpSO37VSAExJdU7RzzOFaOvwhRxy4WT1KCJmbad/0mxxM=
-Received: from DS7PR05CA0078.namprd05.prod.outlook.com (2603:10b6:8:57::24) by
- SA1PR12MB7269.namprd12.prod.outlook.com (2603:10b6:806:2be::5) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6387.30; Mon, 15 May 2023 11:35:03 +0000
-Received: from DM6NAM11FT020.eop-nam11.prod.protection.outlook.com
- (2603:10b6:8:57:cafe::a2) by DS7PR05CA0078.outlook.office365.com
- (2603:10b6:8:57::24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6411.15 via Frontend
- Transport; Mon, 15 May 2023 11:35:03 +0000
+ bh=jRXhIKRZ/2FXxPqmOfRoyv9iskERzUU5hGr9oe2SNqQ=;
+ b=YWKanpUEyXoJhr+eLcEuDzbYru4thswFUDXA4ieE1c+OdBGIRro1VYWjk6olNawFP357wHj5m9gFwylD0w0jlIf9cfIYN70bV03mray3l0kHfd/przu1mNdV3c0yhcrrSzP08XX/bMOGN6mP+oa/p3GgTw2g6aBpnISrxF5p1S0=
+Received: from DM6PR02CA0133.namprd02.prod.outlook.com (2603:10b6:5:1b4::35)
+ by SN7PR12MB6909.namprd12.prod.outlook.com (2603:10b6:806:263::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.22; Mon, 15 May
+ 2023 11:35:57 +0000
+Received: from DM6NAM11FT027.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:1b4:cafe::2b) by DM6PR02CA0133.outlook.office365.com
+ (2603:10b6:5:1b4::35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30 via Frontend
+ Transport; Mon, 15 May 2023 11:35:57 +0000
 X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
  smtp.mailfrom=amd.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=amd.com;
@@ -46,20 +47,20 @@ Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
  165.204.84.17 as permitted sender) receiver=protection.outlook.com;
  client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
 Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT020.mail.protection.outlook.com (10.13.172.224) with Microsoft SMTP
+ DM6NAM11FT027.mail.protection.outlook.com (10.13.172.205) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.14 via Frontend Transport; Mon, 15 May 2023 11:35:03 +0000
+ 15.20.6411.15 via Frontend Transport; Mon, 15 May 2023 11:35:57 +0000
 Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
  (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 15 May
- 2023 06:34:59 -0500
+ 2023 06:35:54 -0500
 From:   Wyes Karny <wyes.karny@amd.com>
 To:     <ray.huang@amd.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>
 CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <gautham.shenoy@amd.com>, Wyes Karny <wyes.karny@amd.com>
-Subject: [PATCH v3 1/2] amd_pstate: Add ->fast_switch() callback
-Date:   Mon, 15 May 2023 11:34:03 +0000
-Message-ID: <20230515113404.4259-2-wyes.karny@amd.com>
+Subject: [PATCH v3 2/2] cpufreq: Warn if fast_switch is not set
+Date:   Mon, 15 May 2023 11:34:04 +0000
+Message-ID: <20230515113404.4259-3-wyes.karny@amd.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230515113404.4259-1-wyes.karny@amd.com>
 References: <20230515113404.4259-1-wyes.karny@amd.com>
@@ -71,23 +72,23 @@ X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
  (10.181.40.145)
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT020:EE_|SA1PR12MB7269:EE_
-X-MS-Office365-Filtering-Correlation-Id: 55ed8674-d7d6-46a2-d7dc-08db55386c96
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT027:EE_|SN7PR12MB6909:EE_
+X-MS-Office365-Filtering-Correlation-Id: 11278f8e-7ab8-4b47-fa31-08db55388cfe
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 8UQw+BKGsCcFL8j7HWmbhPBKmtfGBWUq9m3QeKG3STAR3N+qtZGlfXb783RFdz6VbJHnCPsfKm4pmFbj8v/Vmp8x8YMchcgwde5vVKvWYjVu0s3G80dNOXpo59nbxfyaaWP8abibbNbZzybjyIb153XX3Ys8n0A2iigcC8wWeQPwS51PAFg4z9qVGCwsd+ecZo3/Xr1jCBWHBtGaU02IiKoBXgWuzhXzkLusCJG37rTxlUrhAPrC6lmJ1cmhsbiJqdoG/3rgJW7cD2WxuOKMXQHId4LqCB4SNse7y/wIEJt7a6mePWoCmfdTVVJagG2QdDacdNrYXMUVDvSniIDaEIbgcyii/zgQyjYYRXhGd0bCbufdrVGmLaUhwuE1NkfBNhdHDpYF0LV/SL0xu1zjwlQLKYXijV8cxHmcCfsWAMd2/6+88DAdDMf/daIRmz+9f3MwEOirbke6dxIeE6nYiXmCL6SKMMhIcRqiT1TaVYHXilUCcqv1HIlgwjj7N3e+bdx8fZQWZnd0AlZeX8G8ft4bLHMFzxf9biOFWaMxP+LbrLnRDJjuEpxIb4gJmvdN+sCjW1BwNE7R5bw8kj21IvKKhSM1McEQEzg3N7wuPmvX9zwLuCnPX4AMwxgIcF4aO011qGhF70CsbPSxUew1Qrs0fEEiIxQqb0pIC6yFvLHpvCRCGyy1kbAPa2pqMUK8V/FM8LaocnrA6uK8nRXjyddYO9ilB3UCRZlXb9K8Qbz/jipG7mZFSMPkX3zPRZ0eJ/Nq3khZEUQ5Kp5ePgCDZF1BpxSTbevTJcBaOFavX7Q=
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(136003)(376002)(396003)(346002)(39860400002)(451199021)(40470700004)(46966006)(36840700001)(36756003)(110136005)(54906003)(40460700003)(478600001)(8936002)(8676002)(356005)(316002)(82740400003)(70206006)(70586007)(40480700001)(41300700001)(4326008)(44832011)(81166007)(5660300002)(2906002)(26005)(1076003)(16526019)(186003)(86362001)(36860700001)(47076005)(83380400001)(2616005)(426003)(336012)(7696005)(82310400005)(6666004)(2101003)(36900700001);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: Hj8TMh6p7SkNGR+PDlFBS/ILqreUlau0lcZhtgaW4TSg3UK4IWNxl0lNaJacBbtE7W6GMBv7N003gYsW8YhUV9Yv3gyrqMVczq91ra+BoBjAj+xn84eUz/qdfFXpx07Vl5oLjHRYIfv7Q1W7lmV/8KBoCQUvBTF7m88qig6kjNF7pQJlK3S5RJ2Yu82XfVUoqnHE2NWExiTHR8EI9eOYfpc9ORHF5mzSYdA6OCZYf17WLSIPF3YYCAgE9bdpBVUDW47KK/YxkoptWijshGdLx3Kw3077F2X8GSRNAIyhfCfQTFZ8spvG/AQWGYc9E76XBCMDFHPBu4S7H8eYRtueWdRDp3lzAr53oobJ9udZn6Thu0VJ13WtuTPi/ZI+vd69POylM2I+Q5zzNLHTVa/BidYkY+xR58FUdDnHbCaAzoAEZWEqOMaXnEpCpyFtSYypfrHcHqBT9WLmC167OgT49N17LOcZgt42yPSU7uPkptTuRHOa26zXwk8Q30iQl/Hc5RgRIrXY0KJXaLZfGpBxC5ZPtAZ3bRqCXXvuWrr2MNdAYv4ewKkxS2lFfSXhsswAHLqpZ6rcWO170xM/sdZOGpUco1TAJn4RQPmcSvu38oGI2tVcnCR8Vyl4Drev40R0BgE2MXULua5hKgeF+GcLg+jZ+1fgZ2GHhrqedibdYzGdH9DT06nHnf6Fb/yOD09HZpX3XtIyArHix8X0BepeuDtaMivdw4KcTUiKoIR/N/CS3Czj9qxJVk26ziAwpJ5js+pBePY8ZLHRtpeH5EtstPscIql//hDwDyxmPS8njKFkHTGHAqhoSk7G2hJMuXhN
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(136003)(346002)(451199021)(36840700001)(46966006)(40470700004)(70206006)(36860700001)(426003)(4326008)(40460700003)(110136005)(47076005)(336012)(7696005)(2616005)(2906002)(83380400001)(6666004)(70586007)(316002)(478600001)(8676002)(5660300002)(8936002)(186003)(44832011)(16526019)(26005)(41300700001)(1076003)(40480700001)(54906003)(82310400005)(86362001)(82740400003)(356005)(36756003)(81166007)(36900700001)(2101003)(309714004);DIR:OUT;SFP:1101;
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2023 11:35:03.0630
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2023 11:35:57.4325
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 55ed8674-d7d6-46a2-d7dc-08db55386c96
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11278f8e-7ab8-4b47-fa31-08db55388cfe
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT020.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT027.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7269
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6909
 X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
@@ -98,88 +99,98 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+If fast_switch_possible flag is set by the scaling driver, the governor
+is free to select fast_switch function even if adjust_perf is set. When
+the frequency invariance is disabled due to some reason governor
+fallbacks to fast_switch if fast_switch_possible is set. This could
+crash the kernel if the driver didn't set the fast_switch function
+pointer.
 
-Schedutil normally calls the adjust_perf callback for drivers with
-adjust_perf callback available and fast_switch_possible flag set.
-However, when frequency invariance is disabled, schedutil tries to
-invoke fast_switch. So, there is a chance of kernel crash if this
-function pointer is not set. To protect against this scenario add
-fast_switch callback in amd_pstate driver.
+This issue becomes apparent when aperf/mperf overflow occurs with
+amd_pstate (passive) + schedutil.  When this happens, kernel disables
+frequency invariance calculation which causes schedutil to fallback to
+sugov_update_single_freq which currently relies on the fast_switch
+callback.
 
-Fixes: 1d215f0319c2 ("cpufreq: amd-pstate: Add fast switch function for AMD P-State")
+Normal flow:
+  sugov_update_single_perf
+    cpufreq_driver_adjust_perf
+      cpufreq_driver->adjust_perf
+
+Error case flow:
+  sugov_update_single_perf
+    sugov_update_single_freq  <-- This is chosen because the freq invariant is disabled due to aperf/mperf overflow
+      cpufreq_driver_fast_switch
+         cpufreq_driver->fast_switch <-- Here NULL pointer dereference is happening, because fast_switch is not set
+
+Put up a warning message if the driver sets fast_switch_possible flag
+but not fast_switch.
 
 Signed-off-by: Wyes Karny <wyes.karny@amd.com>
-Signed-off-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 ---
- drivers/cpufreq/amd-pstate.c | 35 +++++++++++++++++++++++++++++------
- 1 file changed, 29 insertions(+), 6 deletions(-)
+ drivers/cpufreq/cpufreq.c | 18 ++++++++++++++++++
+ include/linux/cpufreq.h   |  5 ++++-
+ 2 files changed, 22 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 5a3d4aa0f45a..6cf875d94c41 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -444,9 +444,8 @@ static int amd_pstate_verify(struct cpufreq_policy_data *policy)
- 	return 0;
- }
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 6b52ebe5a890..180be9235b08 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -501,6 +501,13 @@ void cpufreq_enable_fast_switch(struct cpufreq_policy *policy)
+ 	if (!policy->fast_switch_possible)
+ 		return;
  
--static int amd_pstate_target(struct cpufreq_policy *policy,
--			     unsigned int target_freq,
--			     unsigned int relation)
-+static int amd_pstate_update_freq(struct cpufreq_policy *policy,
-+				  unsigned int target_freq, bool fast_switch)
- {
- 	struct cpufreq_freqs freqs;
- 	struct amd_cpudata *cpudata = policy->driver_data;
-@@ -465,14 +464,37 @@ static int amd_pstate_target(struct cpufreq_policy *policy,
- 	des_perf = DIV_ROUND_CLOSEST(target_freq * cap_perf,
- 				     cpudata->max_freq);
- 
--	cpufreq_freq_transition_begin(policy, &freqs);
-+	WARN_ON(fast_switch && !policy->fast_switch_enabled);
-+	/*
-+	 * If fast_switch is desired, then there aren't any registered
-+	 * transition notifiers. See comment for
-+	 * cpufreq_enable_fast_switch().
++	/**
++	 * It's not expected driver's fast_switch callback is not set
++	 * even fast_switch_possible is true.
 +	 */
-+	if (!fast_switch)
-+		cpufreq_freq_transition_begin(policy, &freqs);
++	if (!cpufreq_driver_has_fast_switch())
++		pr_alert_once("fast_switch callback is not set\n");
 +
- 	amd_pstate_update(cpudata, min_perf, des_perf,
--			  max_perf, false, policy->governor->flags);
--	cpufreq_freq_transition_end(policy, &freqs, false);
-+			max_perf, fast_switch, policy->governor->flags);
-+
-+	if (!fast_switch)
-+		cpufreq_freq_transition_end(policy, &freqs, false);
- 
- 	return 0;
+ 	mutex_lock(&cpufreq_fast_switch_lock);
+ 	if (cpufreq_fast_switch_count >= 0) {
+ 		cpufreq_fast_switch_count++;
+@@ -2143,6 +2150,17 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
  }
+ EXPORT_SYMBOL_GPL(cpufreq_driver_fast_switch);
  
-+static int amd_pstate_target(struct cpufreq_policy *policy,
-+			     unsigned int target_freq,
-+			     unsigned int relation)
++/**
++ * cpufreq_driver_has_fast_switch - Check "fast switch" callback.
++ *
++ * Return 'true' if the ->fast_switch callback is present for the
++ * current driver or 'false' otherwise.
++ */
++bool cpufreq_driver_has_fast_switch(void)
 +{
-+	return amd_pstate_update_freq(policy, target_freq, false);
++	return !!cpufreq_driver->fast_switch;
 +}
 +
-+static unsigned int amd_pstate_fast_switch(struct cpufreq_policy *policy,
-+				  unsigned int target_freq)
-+{
-+	return amd_pstate_update_freq(policy, target_freq, true);
-+}
-+
- static void amd_pstate_adjust_perf(unsigned int cpu,
- 				   unsigned long _min_perf,
- 				   unsigned long target_perf,
-@@ -1309,6 +1331,7 @@ static struct cpufreq_driver amd_pstate_driver = {
- 	.flags		= CPUFREQ_CONST_LOOPS | CPUFREQ_NEED_UPDATE_LIMITS,
- 	.verify		= amd_pstate_verify,
- 	.target		= amd_pstate_target,
-+	.fast_switch    = amd_pstate_fast_switch,
- 	.init		= amd_pstate_cpu_init,
- 	.exit		= amd_pstate_cpu_exit,
- 	.suspend	= amd_pstate_cpu_suspend,
+ /**
+  * cpufreq_driver_adjust_perf - Adjust CPU performance level in one go.
+  * @cpu: Target CPU.
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index 26e2eb399484..4277d6f8e50c 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -340,7 +340,9 @@ struct cpufreq_driver {
+ 	/*
+ 	 * ->fast_switch() replacement for drivers that use an internal
+ 	 * representation of performance levels and can pass hints other than
+-	 * the target performance level to the hardware.
++	 * the target performance level to the hardware. If driver is setting this,
++	 * then it needs to set fast_switch also. Because in certain scenario scale
++	 * invariance could be disabled and governor can switch back to fast_switch.
+ 	 */
+ 	void		(*adjust_perf)(unsigned int cpu,
+ 				       unsigned long min_perf,
+@@ -604,6 +606,7 @@ struct cpufreq_governor {
+ /* Pass a target to the cpufreq driver */
+ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
+ 					unsigned int target_freq);
++bool cpufreq_driver_has_fast_switch(void);
+ void cpufreq_driver_adjust_perf(unsigned int cpu,
+ 				unsigned long min_perf,
+ 				unsigned long target_perf,
 -- 
 2.34.1
 
