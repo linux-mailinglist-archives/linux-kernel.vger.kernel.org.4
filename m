@@ -2,172 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB2C7034C5
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:52:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 7335C7034CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:52:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243151AbjEOQwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 12:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57478 "EHLO
+        id S243203AbjEOQwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 12:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243121AbjEOQvr (ORCPT
+        with ESMTP id S243159AbjEOQwG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 12:51:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F9CD18C;
-        Mon, 15 May 2023 09:51:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 248166298E;
-        Mon, 15 May 2023 16:51:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 490EBC433A1;
-        Mon, 15 May 2023 16:51:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684169504;
-        bh=bPE6tiox0+6DYFmbI4QGtsVQa2DaVX/N5GVaQuozKI4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=r5lYF9P9/n/gsCAddF//yyaqmOhUFn8yhkNNIKkC11P6EixEI2iKTyl03mCckUz6f
-         jhhxJh/c+fK44jKDuA9ifyIwidPJMmw4TQXNEwN8FC0WBQgEuUPWVbsuzhk8SglgV/
-         Sj9y/5rPK+nJz+ucIdXaBQyzO9WqPZal7B6UpO+iCh82qP0DXw9mlRwdqMKOKY4HD/
-         B3kh5/ZO+SUUpHz7s+xgMj0ngIwbYOtfh7ZcUefOZvd8IYoJBcWdOrY8gEUZa1qnfc
-         yHw+Z8PE4938YrTDfF7gGQp4ZGL/iiH9BlO5SCs1c4/m+01RARk4kxuICrjmFOxPEu
-         n479RmOkxMnUw==
-Date:   Mon, 15 May 2023 11:51:42 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Peter Geis <pgwipeout@gmail.com>
-Cc:     robh@kernel.org, heiko@sntech.de, Will Deacon <will@kernel.org>,
-        kw@linux.com, linux-pci@vger.kernel.org, shawn.lin@rock-chips.com,
-        linux-kernel@vger.kernel.org, lgirdwood@gmail.com,
-        linux-rockchip@lists.infradead.org, broonie@kernel.org,
-        Catalin Marinas <catalin.marinas@arm.com>, bhelgaas@google.com,
-        Robin Murphy <robin.murphy@arm.com>,
-        linux-kernel-mentees@lists.linuxfoundation.org,
-        lpieralisi@kernel.org, linux-arm-kernel@lists.infradead.org,
-        Dan Johansen <strit@manjaro.org>
-Subject: Re: [PATCH v1] drivers: pci: introduce configurable delay for
- Rockchip PCIe bus scan
-Message-ID: <ZGJjHnHNJPqvuqVC@bhelgaas>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMdYzYqV72=pQa-U3a2N7MZ2ChBNL74QrxHQLbMZJxiftTK9sA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 15 May 2023 12:52:06 -0400
+Received: from mail.hugovil.com (mail.hugovil.com [162.243.120.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C05518C;
+        Mon, 15 May 2023 09:52:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hugovil.com
+        ; s=x; h=Subject:Content-Transfer-Encoding:Content-Type:Mime-Version:
+        References:In-Reply-To:Message-Id:Cc:To:From:Date:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=b+W/F7yXZR7s3otsypsoipKP62aBFg8kZ9xQo9eyh/4=; b=InYa3CgIkshvdnMxAk5ao/bQ0I
+        yrBJ1N29URrJWujN6c3ZJ2gLjM0SqV+qzzlN0IalOB5ZQSpqmMBZpCLGJSKGsog38vOCaScX/3yZg
+        ZFaJbwZjrnoIMewuE9liNeb/uxQqPFSbQzjnbTXAb6Mq3MA6nymy2yPQdhzFaxPYQO2I=;
+Received: from modemcable061.19-161-184.mc.videotron.ca ([184.161.19.61]:48548 helo=debian-acer)
+        by mail.hugovil.com with esmtpa (Exim 4.92)
+        (envelope-from <hugo@hugovil.com>)
+        id 1pybQR-0003hf-Mu; Mon, 15 May 2023 12:51:56 -0400
+Date:   Mon, 15 May 2023 12:51:55 -0400
+From:   Hugo Villeneuve <hugo@hugovil.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Lech Perczak <l.perczak@camlintechnologies.com>,
+        Tomasz =?UTF-8?Q?Mo=C5=84?= <tomasz.mon@camlingroup.com>,
+        Hugo Villeneuve <hvilleneuve@dimonoff.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <20230515125155.bf6d64c292ba96f4f6971ac0@hugovil.com>
+In-Reply-To: <2023051551-quickstep-outshine-5526@gregkh>
+References: <20230515160206.2801991-1-hugo@hugovil.com>
+        <2023051551-quickstep-outshine-5526@gregkh>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 184.161.19.61
+X-SA-Exim-Mail-From: hugo@hugovil.com
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
+Subject: Re: [RFC PATCH] Revert
+ "sc16is7xx: Separate GPIOs from modem control lines"
+X-SA-Exim-Version: 4.2.1 (built Wed, 08 May 2019 21:11:16 +0000)
+X-SA-Exim-Scanned: Yes (on mail.hugovil.com)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, May 13, 2023 at 07:40:12AM -0400, Peter Geis wrote:
-> On Fri, May 12, 2023 at 9:24 PM Bjorn Helgaas <helgaas@kernel.org> wrote:
-> >
-> > [+cc ARM64 folks, in case you have abort handling tips; thread at:
-> > https://lore.kernel.org/r/20230509153912.515218-1-vincenzopalazzodev@gmail.com]
-> >
-> > Pine64 RockPro64 panics while enumerating some PCIe devices.  Adding a
-> > delay avoids the panic.  My theory is a PCIe Request Retry Status to a
-> > Vendor ID config read causes an abort that we don't handle.
-> >
-> > > On Tue, May 09, 2023 at 05:39:12PM +0200, Vincenzo Palazzo wrote:
-> > >> ...
-> > >> [    1.229856] SError Interrupt on CPU4, code 0xbf000002 -- SError
-> > >> [    1.229860] CPU: 4 PID: 1 Comm: swapper/0 Not tainted 5.9.9-2.0-MANJARO-ARM
-> > >> #1
-> > >> [    1.229862] Hardware name: Pine64 RockPro64 v2.1 (DT)
-> > >> [    1.229864] pstate: 60000085 (nZCv daIf -PAN -UAO BTYPE=--)
-> > >> [    1.229866] pc : rockchip_pcie_rd_conf+0xb4/0x270
-> > >> [    1.229868] lr : rockchip_pcie_rd_conf+0x1b4/0x270
-> > >> ...
-> > >> [    1.229939] Kernel panic - not syncing: Asynchronous SError Interrupt
-> > >> ...
-> > >> [    1.229955]  nmi_panic+0x8c/0x90
-> > >> [    1.229956]  arm64_serror_panic+0x78/0x84
-> > >> [    1.229958]  do_serror+0x15c/0x160
-> > >> [    1.229960]  el1_error+0x84/0x100
-> > >> [    1.229962]  rockchip_pcie_rd_conf+0xb4/0x270
-> > >> [    1.229964]  pci_bus_read_config_dword+0x6c/0xd0
-> > >> [    1.229966]  pci_bus_generic_read_dev_vendor_id+0x34/0x1b0
-> > >> [    1.229968]  pci_scan_single_device+0xa4/0x144
-> >
-> > On Fri, May 12, 2023 at 12:46:21PM +0200, Vincenzo Palazzo wrote:
-> > > ... Is there any way to tell the kernel "hey we need some more time
-> > > here"?
-> >
-> > We enumerate PCI devices by trying to read the Vendor ID of every
-> > possible device address (see pci_scan_slot()).  On PCIe, if a device
-> > doesn't exist at that address, the Vendor ID config read will be
-> > terminated with Unsupported Request (UR) status.  This is normal
-> > and happens every time we enumerate devices.
-> >
-> > The crash doesn't happen every time we enumerate, so I don't think
-> > this UR is the problem.  Also, if it *were* the problem, adding a
-> > delay would not make any difference.
-> 
-> Is this behavior different if there is a switch device forwarding on
-> the UR? On rk3399 switches are completely non-functional because of
-> the panic, which is observed in the output of the dmesg in [2] with
-> the hack patch enabled. Considering what you just described it looks
-> like the forwarded UR for each non-existent device behind the switch
-> is causing an serror.
+Hi Greg,
 
-I don't know exactly what the panic looks like, but I wouldn't expect
-UR handling to be different when there's a switch.
+On Mon, 15 May 2023 18:20:02 +0200
+Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 
-pcie-rockchip-host.c does handle devices on the root bus (00)
-differently than others because rockchip_pcie_valid_device() knows
-that device 00:00 is the only device on the root bus.  That part makes
-sense because 00:00 is built into the SoC.
+> On Mon, May 15, 2023 at 12:02:07PM -0400, Hugo Villeneuve wrote:
+> > From: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > 
+> > This reverts commit 679875d1d8802669590ef4d69b0e7d13207ebd61.
+> > 
+> > Because of this commit, it is no longer possible to use the 16 GPIO
+> > lines as dedicated GPIOs on the SC16IS752.
+> > 
+> > Reverting it makes it work again.
+> > 
+> > The log message of the original commit states:
+> >     "Export only the GPIOs that are not shared with hardware modem
+> >     control lines"
+> > 
+> > But there is no explanation as to why this decision was taken to
+> > permanently set the function of the GPIO lines as modem control
+> > lines. AFAIK, there is no problem with using these lines as GPIO or modem
+> > control lines.
+> > 
+> > Maybe after reverting this commit, we could define a new
+> > device-tree property named, for example,
+> > "use-modem-control-lines", so that both options can be supported.
+> > 
+> > Fixes: 679875d1d880 ("sc16is7xx: Separate GPIOs from modem control
+> > lines")
+> 
+> Please do not line-wrap these lines.
 
-I'm a little suspicious of the fact that rockchip_pcie_valid_device()
-also enforces that bus 01 can only have a single device on it.  No
-other *_pcie_valid_device() implementations enforce that.  It's true
-that traditional PCIe devices can only implement device 00, but ARI
-relaxes that by reusing the Device Number as extended Function Number
-bits.
+Ok.
 
-> > There *is* a way for a PCIe device to say "I need more time".  It does
-> > this by responding to that Vendor ID config read with Request Retry
-> > Status (RRS, aka CRS in older specs), which means "I'm not ready yet,
-> > but I will be ready in the future."  Adding a delay would definitely
-> > make a difference here, so my guess is this is what's happening.
-> >
-> > Most root complexes return ~0 data to the CPU when a config read
-> > terminates with UR or RRS.  It sounds like rockchip does this for UR
-> > but possibly not for RRS.
-> >
-> > There is a "RRS Software Visibility" feature, which is supposed to
-> > turn the RRS into a special value (Vendor ID == 0x0001), but per [1],
-> > rockchip doesn't support it (lspci calls it "CRSVisible").
-> >
-> > But the CPU load instruction corresponding to the config read has to
-> > complete by reading *something* or else be aborted.  It sounds like
-> > it's aborted in this case.  I don't know the arm64 details, but if we
-> > could catch that abort and determine that it was an RRS and not a UR,
-> > maybe we could fabricate the magic RRS 0x0001 value.
-> >
-> > imx6q_pcie_abort_handler() does something like that, although I think
-> > it's for arm32, not arm64.  But obviously we already catch the abort
-> > enough to dump the register state and panic, so maybe there's a way to
-> > extend that?
+> > 
 > 
-> Perhaps a hook mechanism that allows drivers to register with the
-> serror handler and offer to handle specific errors before the generic
-> code causes the system panic?
+> Nor is a blank line needed here.
+
+Ok.
+
+> > Signed-off-by: Hugo Villeneuve <hvilleneuve@dimonoff.com>
+> > ---
+> >  drivers/tty/serial/sc16is7xx.c | 14 ++++----------
+> >  1 file changed, 4 insertions(+), 10 deletions(-)
+> > 
+> > diff --git a/drivers/tty/serial/sc16is7xx.c b/drivers/tty/serial/sc16is7xx.c
+> > index 5bd98e4316f5..25f1b2f6ec51 100644
+> > --- a/drivers/tty/serial/sc16is7xx.c
+> > +++ b/drivers/tty/serial/sc16is7xx.c
+> > @@ -306,7 +306,6 @@ struct sc16is7xx_devtype {
+> >  	char	name[10];
+> >  	int	nr_gpio;
+> >  	int	nr_uart;
+> > -	int	has_mctrl;
+> >  };
+> >  
+> >  #define SC16IS7XX_RECONF_MD		(1 << 0)
+> > @@ -447,35 +446,30 @@ static const struct sc16is7xx_devtype sc16is74x_devtype = {
+> >  	.name		= "SC16IS74X",
+> >  	.nr_gpio	= 0,
+> >  	.nr_uart	= 1,
+> > -	.has_mctrl	= 0,
+> >  };
+> >  
+> >  static const struct sc16is7xx_devtype sc16is750_devtype = {
+> >  	.name		= "SC16IS750",
+> > -	.nr_gpio	= 4,
+> > +	.nr_gpio	= 8,
 > 
-> Very Respectfully,
-> Peter Geis
+> I think this one line change is all you really need here, right?  the
+> otner changes do nothing in this patch, so you should just create a new
+> one changing this value.  Oh, and this one:
 > 
-> [2] https://lore.kernel.org/linux-pci/CAMdYzYqn3L7x-vc+_K6jG0EVTiPGbz8pQ-N1Q1mRbcVXE822Yg@mail.gmail.com/
+> >  	.nr_uart	= 1,
+> > -	.has_mctrl	= 1,
+> >  };
+> >  
+> >  static const struct sc16is7xx_devtype sc16is752_devtype = {
+> >  	.name		= "SC16IS752",
+> > -	.nr_gpio	= 0,
+> > +	.nr_gpio	= 8,
 > 
-> >
-> > Bjorn
-> >
-> > [1] https://lore.kernel.org/linux-pci/CAMdYzYpOFAVq30N+O2gOxXiRtpoHpakFg3LKq3TEZq4S6Y0y0g@mail.gmail.com/
-> _______________________________________________
-> Linux-kernel-mentees mailing list
-> Linux-kernel-mentees@lists.linuxfoundation.org
-> https://lists.linuxfoundation.org/mailman/listinfo/linux-kernel-mentees
+> right?
+> 
+> Don't mess with the has_mctrl stuff, that's not relevant here.
+
+Sorry, I just noticed that simply reverting commit 679875d1d880 is not sufficient (and will not compile). We must also revert part of commit:
+21144bab4f11 ("sc16is7xx: Handle modem status lines").
+
+The problem is that the commit 679875d1d880 was incomplete, and it was (unfortunately) completed by integrating it in commit 21144bab4f11 ("sc16is7xx: Handle modem status lines"). The relevant change was only these 5 new lines, burried deeply into the second commit: 
+
+@@ -1353,9 +1452,17 @@ static int sc16is7xx_probe(struct device *dev,
+                sc16is7xx_port_write(&s->p[i].port, SC16IS7XX_EFCR_REG,
+                                     SC16IS7XX_EFCR_RXDISABLE_BIT |
+                                     SC16IS7XX_EFCR_TXDISABLE_BIT);
++
++               /* Use GPIO lines as modem status registers */
++               if (devtype->has_mctrl)
++                       sc16is7xx_port_write(&s->p[i].port,
++                                            SC16IS7XX_IOCONTROL_REG,
++                                            SC16IS7XX_IOCONTROL_MODEM_BIT);
++
+
+Therefore, I should also remove these lines if we go forward with a revert of the patch (should I add another tag "Fixes..." in that case?).
+
+And what do you think of my proposal to maybe replace has_mctrl with a device tree property so that both modes can be fully supported?
+
+Thank you,
+Hugo.
