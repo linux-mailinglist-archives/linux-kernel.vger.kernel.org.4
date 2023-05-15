@@ -2,232 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9B47022CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 06:15:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id F000B7022D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 06:17:15 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238839AbjEOEPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 00:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57338 "EHLO
+        id S238489AbjEOERN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 00:17:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbjEOEPt (ORCPT
+        with ESMTP id S238046AbjEOERL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 00:15:49 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3501E50
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 21:15:47 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id 41be03b00d2f7-51b4ef5378bso10958440a12.1
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 21:15:47 -0700 (PDT)
+        Mon, 15 May 2023 00:17:11 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCA2E10C1;
+        Sun, 14 May 2023 21:17:09 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id 4fb4d7f45d1cf-50b9ef67f35so21665219a12.2;
+        Sun, 14 May 2023 21:17:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1684124147; x=1686716147;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ImgMOJ5fOvAUMlV6ZzxkUA2Q272OAA5Sv3VmFeOvtRc=;
-        b=bQ2HyJEMwvu3FRhg9Uo1bs6fms9TRr3sMvVnO414yJr4uhLCiiQPr5OtJ+y7Igwaly
-         BltPr1pOWoDeJ5B2mPiL/ur6YKuWg2ZNxzia/KBdtA6AwXkALCtkpM/jfusYFNzHgGZQ
-         8L+fOhjPPJdMkJpMIbX3ZP7yrp8E3aR8nmoLA=
+        d=gmail.com; s=20221208; t=1684124227; x=1686716227;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iUag73btUuB8LmzKHUfEj0izB5dA8C+cF7zWWtW7WKM=;
+        b=ExyvUQYU1tuyY35h0jfdinlYAVsQKQxoEVzcLVTkK4o5Zr2rgAuMRES0ix8cEY06oJ
+         HLALJwcBmzrcI/1VOnC0G2tOk/l0jV+waE8IptWGDdzN6LZz5eMuZK9SdtCPDqO171YA
+         Cj+xNNu/CfvMWEzBfGc804G3CI/hGZFuTku5qx239SnRLdALTpHnG78O8el1baFK4h9L
+         goHqFSJMpceKqRsZZ/mC1dgsxWjCj+vOB9clOyfdDSLTTM2J3/UQq2Isw/tNXbqdb2Ud
+         Y5TMcR2FirW2d6kTUtlkBflktxxeLN0C8ovzv05mWkHIbFhBw+fUkD6Aau3blP/5z6Fz
+         Cb1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684124147; x=1686716147;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ImgMOJ5fOvAUMlV6ZzxkUA2Q272OAA5Sv3VmFeOvtRc=;
-        b=SdSUmSrpZ32KpYEcoN9EkOqdDX2H6Bm1c6eduS5abx1UiEZJIAdKuYOAn8ZK6eHHoH
-         qMG7hF20nzOivHycyl9/fo2Tj8Gw45b5NdgQlOqN9NqyEna9QOEqlIDBYI07WHn7tWS1
-         +t3okpvmjabDRs0CQBowNSvq/RLKnZobc8mRgz9flAG3SocLLjtU923PjvmCvGijkGAe
-         fdrd9jPCVmX9VRZNHxGuTUO9btQv58uQJ9uiFqwvdFOQNZi6QEbkg0C93fQX1/ztWEgN
-         VWY1rCtrvOX0ToZEg8zfgz84Q+1SUGUNr/wtUnyAFaEHk2KGMAWE5n78w8XiWF+44Ij/
-         8QrQ==
-X-Gm-Message-State: AC+VfDwcPvgBWYxN7jX20hGuGQmG8AYwD+7e143WRbYV03RsQm2APGKY
-        Qitf304g4RvQVgBOLY/c+WTeayHM908HrVno/JpH6A==
-X-Google-Smtp-Source: ACHHUZ4BgJeMWzpT9YTRxpzTzdF22KA9F+Bu9UGj53wyjaLjM+2xeBHr3ljZlEcgwZaxVdij+c9RTTj4DttM8ymMlWg=
-X-Received: by 2002:a17:902:d4c9:b0:1ac:637d:5888 with SMTP id
- o9-20020a170902d4c900b001ac637d5888mr33632360plg.43.1684124147124; Sun, 14
- May 2023 21:15:47 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684124227; x=1686716227;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iUag73btUuB8LmzKHUfEj0izB5dA8C+cF7zWWtW7WKM=;
+        b=AnsKhqaheVFWpc8WJN9jEL/jqsc7jxqi1aIqBfguL6eDv6BuflMStE5Yvok+dlzdeq
+         O9Xgi5QWT6H+eBbp54N2E5GbyEpz9I5jz3eieutnXLigFkiwL3txcYq2htC6LA7QurDk
+         pZNDJWgM4y99xlEktYAdK5IN0qhfJavvD5YIT/4lr8LD8QpqfXOR0ZPX/yZqwuwgTlpd
+         UNtarkG4fSEaF5To+6JSs9vnmdvsBljaUaFqjuNpS5tLJ4Y7HYKmz59i/svoQTXKAchG
+         zQ3TZ+Cif8F7ucTlRJi8HVHjmNlTj4XJD4Gn3lUeysyUVIgfwQRo/Z6fi+giaEbHE6Ij
+         Vxmw==
+X-Gm-Message-State: AC+VfDzA+KvGY9Do8RfN2Mp4USBWAwpO/0TMao88iyifeTucl4/wAakf
+        +Akg4uvk2KvI9qwj9NDlyDuuH/0vl//z/8gfXlI=
+X-Google-Smtp-Source: ACHHUZ6r2BzwpIgitKkdrxJvQRqzaXlHpTU+BnUZs8GvPdgtATRrC8nS67ISzTWLFCUxIM49EI9Yj2sxhXviVj/dx6I=
+X-Received: by 2002:a05:6402:886:b0:50d:b7e5:fde8 with SMTP id
+ e6-20020a056402088600b0050db7e5fde8mr14816027edy.26.1684124227281; Sun, 14
+ May 2023 21:17:07 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230515025608.2587012-1-f.fainelli@gmail.com>
-In-Reply-To: <20230515025608.2587012-1-f.fainelli@gmail.com>
-From:   Pavan Chebbi <pavan.chebbi@broadcom.com>
-Date:   Mon, 15 May 2023 09:45:31 +0530
-Message-ID: <CALs4sv1gTuuw1k9R8+6foBGVtuoq7_V-rKB6t3Ripd++=VFfRw@mail.gmail.com>
-Subject: Re: [PATCH net] net: bcmgenet: Restore phy_stop() depending upon suspend/close
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     netdev@vger.kernel.org, Doug Berger <opendmb@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
-        boundary="00000000000094c39b05fbb3b55f"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230507144753.192959-1-krzysztof.kozlowski@linaro.org> <CAAQKjZNx2xp-tzfpEhA4ET94bTtaV_P6P+P6bQiDTnR_4zG3Ew@mail.gmail.com>
+In-Reply-To: <CAAQKjZNx2xp-tzfpEhA4ET94bTtaV_P6P+P6bQiDTnR_4zG3Ew@mail.gmail.com>
+From:   Inki Dae <daeinki@gmail.com>
+Date:   Mon, 15 May 2023 13:16:30 +0900
+Message-ID: <CAAQKjZP7T6864R4V9GAGbL60-e-VFohPqONB7V=fTXVSX+=jWw@mail.gmail.com>
+Subject: Re: [PATCH] drm/exynos: g2d: staticize stubs in header
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Seung-Woo Kim <sw0312.kim@samsung.com>,
+        Kyungmin Park <kyungmin.park@samsung.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---00000000000094c39b05fbb3b55f
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+2023=EB=85=84 5=EC=9B=94 15=EC=9D=BC (=EC=9B=94) =EC=98=A4=ED=9B=84 1:13, I=
+nki Dae <daeinki@gmail.com>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+>
+> Hi Krzysztof,
+>
+> 2023=EB=85=84 5=EC=9B=94 7=EC=9D=BC (=EC=9D=BC) =EC=98=A4=ED=9B=84 11:48,=
+ Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org>=EB=8B=98=EC=9D=B4 =EC=9E=91=EC=84=B1:
+> >
+> > Stubs for !CONFIG_DRM_EXYNOS_G2D case in the header should be static
+> > inline:
+>
+> Same patch[1] was posted before so I picked up the previous one.
+>
+> [1] [PATCH] drm/exynos: fix g2d_open/close helper function definitions
+> (kernel.org)
 
-On Mon, May 15, 2023 at 8:26=E2=80=AFAM Florian Fainelli <f.fainelli@gmail.=
-com> wrote:
->
-> Removing the phy_stop() from bcmgenet_netif_stop() ended up causing
-> warnings from the PHY library that phy_start() is called from the
-> RUNNING state since we are no longer stopping the PHY state machine
-> during bcmgenet_suspend().
->
-> Restore the call to phy_stop() but make it conditional on being called
-> from the close or suspend path.
->
-> Fixes: c96e731c93ff ("net: bcmgenet: connect and disconnect from the PHY =
-state machine")
-> Fixes: 93e0401e0fc0 ("net: bcmgenet: Remove phy_stop() from bcmgenet_neti=
-f_stop()")
-> Signed-off-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
+[1] https://lore.kernel.org/lkml/20230425165618.2ztg4mecuvpkdg3a@intel.inte=
+l/T/
 
-Looks good to me.
-Reviewed-by: Pavan Chebbi <pavan.chebbi@broadcom.com>
+Just corrected the link.
 
-PS: I was only curious as to why is it not a v2 (I see only another
-Fixes got added though)
-
->  drivers/net/ethernet/broadcom/genet/bcmgenet.c | 8 +++++---
->  1 file changed, 5 insertions(+), 3 deletions(-)
 >
-> diff --git a/drivers/net/ethernet/broadcom/genet/bcmgenet.c b/drivers/net=
-/ethernet/broadcom/genet/bcmgenet.c
-> index f28ffc31df22..eca0c92c0c84 100644
-> --- a/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-> +++ b/drivers/net/ethernet/broadcom/genet/bcmgenet.c
-> @@ -3450,7 +3450,7 @@ static int bcmgenet_open(struct net_device *dev)
->         return ret;
->  }
+> Thanks,
+> Inki Dae
 >
-> -static void bcmgenet_netif_stop(struct net_device *dev)
-> +static void bcmgenet_netif_stop(struct net_device *dev, bool stop_phy)
->  {
->         struct bcmgenet_priv *priv =3D netdev_priv(dev);
->
-> @@ -3465,6 +3465,8 @@ static void bcmgenet_netif_stop(struct net_device *=
-dev)
->         /* Disable MAC transmit. TX DMA disabled must be done before this=
- */
->         umac_enable_set(priv, CMD_TX_EN, false);
->
-> +       if (stop_phy)
-> +               phy_stop(dev->phydev);
->         bcmgenet_disable_rx_napi(priv);
->         bcmgenet_intr_disable(priv);
->
-> @@ -3485,7 +3487,7 @@ static int bcmgenet_close(struct net_device *dev)
->
->         netif_dbg(priv, ifdown, dev, "bcmgenet_close\n");
->
-> -       bcmgenet_netif_stop(dev);
-> +       bcmgenet_netif_stop(dev, false);
->
->         /* Really kill the PHY state machine and disconnect from it */
->         phy_disconnect(dev->phydev);
-> @@ -4303,7 +4305,7 @@ static int bcmgenet_suspend(struct device *d)
->
->         netif_device_detach(dev);
->
-> -       bcmgenet_netif_stop(dev);
-> +       bcmgenet_netif_stop(dev, true);
->
->         if (!device_may_wakeup(d))
->                 phy_suspend(dev->phydev);
-> --
-> 2.34.1
->
->
-
---00000000000094c39b05fbb3b55f
-Content-Type: application/pkcs7-signature; name="smime.p7s"
-Content-Transfer-Encoding: base64
-Content-Disposition: attachment; filename="smime.p7s"
-Content-Description: S/MIME Cryptographic Signature
-
-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
-OltyqaGBuzv+bJTUL+bmV7E4QBLIqGt4jVr1R9hJdH6KxXwJdyfHZ9C6qXmoe2NQhiFUyBOJ0wgk
-dB9Z1IU7nCwvNKYg2JMoJs93tIgbhPJg/D7pqW8gabkCAwEAAaOCAdowggHWMA4GA1UdDwEB/wQE
-AwIFoDCBowYIKwYBBQUHAQEEgZYwgZMwTgYIKwYBBQUHMAKGQmh0dHA6Ly9zZWN1cmUuZ2xvYmFs
-c2lnbi5jb20vY2FjZXJ0L2dzZ2NjcjNwZXJzb25hbHNpZ24yY2EyMDIwLmNydDBBBggrBgEFBQcw
-AYY1aHR0cDovL29jc3AuZ2xvYmFsc2lnbi5jb20vZ3NnY2NyM3BlcnNvbmFsc2lnbjJjYTIwMjAw
-TQYDVR0gBEYwRDBCBgorBgEEAaAyASgKMDQwMgYIKwYBBQUHAgEWJmh0dHBzOi8vd3d3Lmdsb2Jh
-bHNpZ24uY29tL3JlcG9zaXRvcnkvMAkGA1UdEwQCMAAwSQYDVR0fBEIwQDA+oDygOoY4aHR0cDov
-L2NybC5nbG9iYWxzaWduLmNvbS9nc2djY3IzcGVyc29uYWxzaWduMmNhMjAyMC5jcmwwJAYDVR0R
-BB0wG4EZcGF2YW4uY2hlYmJpQGJyb2FkY29tLmNvbTATBgNVHSUEDDAKBggrBgEFBQcDBDAfBgNV
-HSMEGDAWgBSWM9HmWBdbNHWKgVZk1b5I3qGPzzAdBgNVHQ4EFgQUEV6y/89alKPoFbKUaJXsvWu5
-fdowDQYJKoZIhvcNAQELBQADggEBAEHSIB6g652wVb+r2YCmfHW47Jo+5TuCBD99Hla8PYhaWGkd
-9HIyD3NPhb6Vb6vtMWJW4MFGQF42xYRrAS4LZj072DuMotr79rI09pbOiWg0FlRRFt6R9vgUgebu
-pWSH7kmwVXcPtY94XSMMak4b7RSKig2mKbHDpD4bC7eGlwl5RxzYkgrHtMNRmHmQor5Nvqe52cFJ
-25Azqtwvjt5nbrEd81iBmboNTEnLaKuxbbCtLaMEP8xKeDjAKnNOqHUMps0AsQT8c0EGq39YHpjp
-Wn1l67VU0rMShbEFsiUf9WYgE677oinpdm0t2mdCjxr35tryxptoTZXKHDxr/Yy6l6ExggJtMIIC
-aQIBATBrMFsxCzAJBgNVBAYTAkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMTEwLwYDVQQD
-EyhHbG9iYWxTaWduIEdDQyBSMyBQZXJzb25hbFNpZ24gMiBDQSAyMDIwAgwV/XkICjVscn4SNZMw
-DQYJYIZIAWUDBAIBBQCggdQwLwYJKoZIhvcNAQkEMSIEIJNfTfHNQNYtfhHeHYiG9uM4EE5mcYdz
-ro5iLJgDSmaqMBgGCSqGSIb3DQEJAzELBgkqhkiG9w0BBwEwHAYJKoZIhvcNAQkFMQ8XDTIzMDUx
-NTA0MTU0N1owaQYJKoZIhvcNAQkPMVwwWjALBglghkgBZQMEASowCwYJYIZIAWUDBAEWMAsGCWCG
-SAFlAwQBAjAKBggqhkiG9w0DBzALBgkqhkiG9w0BAQowCwYJKoZIhvcNAQEHMAsGCWCGSAFlAwQC
-ATANBgkqhkiG9w0BAQEFAASCAQCdI0ycU9D4pcvLB2e6bLhNtaujEhjku+Nce87g5sqWOAMX0NmV
-0IApRlQfia/xGumMRNiNzliWkyPs9GTP+YnG3qCFlSa9193TygvOCyz0a/oUPF7U/beuf6xPAVty
-N2PmOg6LBlh5HeYeFyAn78sajD9H7Y1smIfJ67Xgn3Mr1txT1BCB1nIr9/Kiw8NjU44yImnsGeSn
-bMr3A3XPk1sAv+2DKa2fk7oT1PK8+vhyA9reAptk8pOl1JT5NNo2Igmc/k4R+5jzIzf9RRGSGQ6s
-ZCYPMn47B2YGVo0hFY3M5HNjWwBsiaIbsGK0Eo8cavdSmx07UzZm74R7ceXQiVo4
---00000000000094c39b05fbb3b55f--
+> >
+> >   drivers/gpu/drm/exynos/exynos_drm_g2d.h:37:5: warning: no previous pr=
+ototype for =E2=80=98g2d_open=E2=80=99 [-Wmissing-prototypes]
+> >   drivers/gpu/drm/exynos/exynos_drm_g2d.h:42:6: warning: no previous pr=
+ototype for =E2=80=98g2d_close=E2=80=99 [-Wmissing-prototypes]
+> >
+> > Fixes: eb4d9796fa34 ("drm/exynos: g2d: Convert to driver component API"=
+)
+> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > ---
+> >  drivers/gpu/drm/exynos/exynos_drm_g2d.h | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/exynos/exynos_drm_g2d.h b/drivers/gpu/drm/=
+exynos/exynos_drm_g2d.h
+> > index 74ea3c26dead..1a5ae781b56c 100644
+> > --- a/drivers/gpu/drm/exynos/exynos_drm_g2d.h
+> > +++ b/drivers/gpu/drm/exynos/exynos_drm_g2d.h
+> > @@ -34,11 +34,11 @@ static inline int exynos_g2d_exec_ioctl(struct drm_=
+device *dev, void *data,
+> >         return -ENODEV;
+> >  }
+> >
+> > -int g2d_open(struct drm_device *drm_dev, struct drm_file *file)
+> > +static inline int g2d_open(struct drm_device *drm_dev, struct drm_file=
+ *file)
+> >  {
+> >         return 0;
+> >  }
+> >
+> > -void g2d_close(struct drm_device *drm_dev, struct drm_file *file)
+> > +static inline void g2d_close(struct drm_device *drm_dev, struct drm_fi=
+le *file)
+> >  { }
+> >  #endif
+> > --
+> > 2.34.1
+> >
