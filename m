@@ -2,371 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C56770354A
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:57:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BB49703559
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:58:13 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S243293AbjEOQ53 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 12:57:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36972 "EHLO
+        id S243294AbjEOQ6J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 12:58:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S243275AbjEOQ5Y (ORCPT
+        with ESMTP id S243295AbjEOQ6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 12:57:24 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904C55278;
-        Mon, 15 May 2023 09:57:12 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d2e1a72fcca58-643bb9cdd6eso10846514b3a.1;
-        Mon, 15 May 2023 09:57:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684169831; x=1686761831;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KpreuUE6kTm23wGfHPgfYB6z110qkQQg2AooPPBZmJ0=;
-        b=eCWbBnZNtdqR/VtPd2wqhHlnTp7Jt/qYgvmJJpVtdanKicVKkLBEo1P4t57Yu6ww5d
-         RYa7LqQah34/dD8Syn+uFGO8LAYJvUZlK72wEZCEHVaEkGpiSOroboBW0ZEH714q2qFz
-         VR0RaA2YkuOzVjI+mVP0/Fdi53hFXKHAWJYCbdHDgzM1sVdXH90ZOPMMBkZiV5mKe3qW
-         XRCuVe5kZchJ4Bbb5b9dbJ7Dj/WAofURauywbsyWL/LnlCCFxhMmKF4dLZ1p310p3Tlp
-         CvVyjthxKMOvdcSoYX6rBX9ESAr4tO0GHvmc8+uy9kCEqYVWgGHM1aWHt1+c10oXWK4b
-         nlZg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684169831; x=1686761831;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KpreuUE6kTm23wGfHPgfYB6z110qkQQg2AooPPBZmJ0=;
-        b=eMNJ1CP2v/9Iffp9PrdF5Fb8evTQypmG0sYRyJGjoL4IW8FenpRNNCcpf0CoU3Hjdg
-         4C8SdTsnm5oL7NsnSQ6vZLCNlyL7iox6kHtFL48BdnP4oSMSzN4wJYE5HSIjW2/UCeDu
-         aO7MW9F9uCX4ZYKmF5WaSq7kXWFI/cRJrfprdDMV4yFf/1GFvWsoVIbgl2Vxz4pfpvjY
-         Ku9K2Z1L/8TbyM1G4vG9zVs2aCHsutluLR2Pm8HnaYdLugLaDNa9rQMKGeTdXRd1IeA5
-         qbXkMCHl3s/vpEx0QYhyR6r440fspb9k0ITsweyokW97vpJUlaPAi9x+n7J4J8702t47
-         VlwQ==
-X-Gm-Message-State: AC+VfDxsTkS7nvNI9HUpT9dyvkPig8q2fVWu14wdOeXlrwCS+4K1uF/t
-        hfxKm439tM4SRHy9SwfxCwg=
-X-Google-Smtp-Source: ACHHUZ4OziP+DjD7hnGJ5rL6rAmf3N2jBC7uhex4jOLxSi0KRN1nQr6lvfaMT5sJy4782ssC20PtbQ==
-X-Received: by 2002:a05:6a00:1951:b0:64b:256:204c with SMTP id s17-20020a056a00195100b0064b0256204cmr11381057pfk.20.1684169831136;
-        Mon, 15 May 2023 09:57:11 -0700 (PDT)
-Received: from MacBook-Pro-8.local ([2620:10d:c090:400::5:2d34])
-        by smtp.gmail.com with ESMTPSA id m14-20020aa7900e000000b006466d70a30esm12395959pfo.91.2023.05.15.09.57.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 09:57:10 -0700 (PDT)
-Date:   Mon, 15 May 2023 09:57:07 -0700
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Beau Belgrave <beaub@linux.microsoft.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-trace-kernel@vger.kernel.org,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>, bpf <bpf@vger.kernel.org>,
-        David Vernet <void@manifault.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        dthaler@microsoft.com, brauner@kernel.org, hch@infradead.org
-Subject: Re: [PATCH] tracing/user_events: Run BPF program if attached
-Message-ID: <20230515165707.hv65ekwp2djkjj5i@MacBook-Pro-8.local>
-References: <20230508163751.841-1-beaub@linux.microsoft.com>
- <CAADnVQLYL-ZaP_2vViaktw0G4UKkmpOK2q4ZXBa+f=M7cC25Rg@mail.gmail.com>
- <20230509130111.62d587f1@rorschach.local.home>
- <20230509163050.127d5123@rorschach.local.home>
+        Mon, 15 May 2023 12:58:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BEAE7AA9;
+        Mon, 15 May 2023 09:57:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E381F62A33;
+        Mon, 15 May 2023 16:57:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4EBBAC433EF;
+        Mon, 15 May 2023 16:57:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684169875;
+        bh=Jmopy33ZoS1la9R1avtjotbLsHWcwBpRSQv67QLaEP0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GUNA2ZCd3vS2KC5EHQUxiJ7DKlU1qI411RsEupq19AMctcTLmJce2hIaRXHVwxbDQ
+         UlAgtPA1xY2E2g27GQgQImrb4cHCa7lomnNbBuS9ZF9cCypkZje1ROc3PIQJdgjGH/
+         s7/F2YBz/sSicUWNwbXVcEz0J1EoTH/+9ev4F4XMM8MCIyeqiwjCW6cVd8UAZfxkiD
+         VebvJWVgXDAMsP/igFigPZJ74qdmDoGNDCDkvMimM9YSjt5cNODrsixTURbcH6jDnE
+         9XbGLfmlFEmBH7Qx7x96RsIwLNsdQc7a3Yji2gPt3s6k4UsWMMWaDADQxZIlVXpLJ1
+         zJStYGHX4X+vA==
+Date:   Mon, 15 May 2023 09:57:54 -0700
+From:   "Darrick J. Wong" <djwong@kernel.org>
+To:     Feng Tang <feng.tang@intel.com>
+Cc:     Dave Chinner <david@fromorbit.com>,
+        Oliver Sang <oliver.sang@intel.com>,
+        Dave Chinner <dchinner@redhat.com>, oe-lkp@lists.linux.dev,
+        lkp@intel.com, linux-kernel@vger.kernel.org,
+        linux-xfs@vger.kernel.org, ying.huang@intel.com,
+        fengwei.yin@intel.com
+Subject: Re: [linus:master] [xfs]  2edf06a50f:  fsmark.files_per_sec -5.7%
+ regression
+Message-ID: <20230515165754.GL858799@frogsfrogsfrogs>
+References: <202305090905.aff4e0e6-oliver.sang@intel.com>
+ <20230509065433.GT3223426@dread.disaster.area>
+ <20230509071053.GE2651828@dread.disaster.area>
+ <ZF3uXe+cjAsfCLic@xsang-OptiPlex-9020>
+ <20230512230504.GF3223426@dread.disaster.area>
+ <ZGDyAOewWqjY5xvJ@feng-clx>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230509163050.127d5123@rorschach.local.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZGDyAOewWqjY5xvJ@feng-clx>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, May 09, 2023 at 04:30:50PM -0400, Steven Rostedt wrote:
-> On Tue, 9 May 2023 13:01:11 -0400
-> Steven Rostedt <rostedt@goodmis.org> wrote:
+On Sun, May 14, 2023 at 10:36:48PM +0800, Feng Tang wrote:
+> Hi Dave,
 > 
-> > > I see no practical use case for bpf progs to be connected to user events.  
+> On Sat, May 13, 2023 at 09:05:04AM +1000, Dave Chinner wrote:
+> > On Fri, May 12, 2023 at 03:44:29PM +0800, Oliver Sang wrote:
+> [...]
+> > > Thanks a lot for guidance!
+> > > 
+> > > we plan to disable XFS_DEBUG (as well as XFS_WARN) in our performance tests.
+> > > want to consult with you if this is the correct thing to do?
 > > 
-> > That's not a technical reason. Obviously they have a use case.
+> > You can use XFS_WARN=y with performance tests - that elides all the
+> > debug specific code that changes behaviour but leaves all the
+> > ASSERT-based correctness checks in the code.
+> > 
+> > > and I guess we should still keep them in functional tests, am I right?
+> > 
+> > Yes.
+> > 
+> > > BTW, regarding this case, we tested again with disabling XFS_DEBUG (as well as
+> > > XFS_WARN), kconfig is attached, only diff with last time is:
+> > > -CONFIG_XFS_DEBUG=y
+> > > -CONFIG_XFS_ASSERT_FATAL=y
+> > > +# CONFIG_XFS_WARN is not set
+> > > +# CONFIG_XFS_DEBUG is not set
+> > > 
+> > > but we still observed similar regression:
+> > > 
+> > > ecd788a92460eef4 2edf06a50f5bbe664283f3c55c4
+> > > ---------------- ---------------------------
+> > >          %stddev     %change         %stddev
+> > >              \          |                \
+> > >    8176057 ± 15%      +4.7%    8558110        fsmark.app_overhead
+> > >      14484            -6.3%      13568        fsmark.files_per_sec
+> > 
+> > So the application spent 5% more CPU time in userspace, and the rate
+> > the kernel processed IO went down by 6%. Seems to me like
+> > everything is running slower, not just the kernel code....
+> > 
+> > >     100.50 ±  5%      +0.3%     100.83        turbostat.Avg_MHz
+> > >       5.54 ± 11%      +0.3        5.82        turbostat.Busy%
+> > >       1863 ± 19%      -6.9%       1733        turbostat.Bzy_MHz
+> > 
+> > Evidence that the CPU is running at a 7% lower clock rate when the
+> > results are 6% slower is a bit suspicious to me. Shouldn't the CPU
+> > clock rate be fixed to the same value for A-B performance regression
+> > testing?
 > 
-> Alexei,
+> For commit 2edf06a50f5, it seems to change the semantics a little
+> about handling of 'flags' for xfs_alloc_fix_freelist(). With the debug
+> below, the performance is restored.
 > 
-> It was great having a chat with you during lunch at LSFMM/BPF!
+> 
+> ecd788a92460eef4 2edf06a50f5bbe664283f3c55c4 68721405630744da1c07c9c1c3c 
+> ---------------- --------------------------- --------------------------- 
+> 
+>      14349            -5.7%      13527            +0.6%      14437        fsmark.files_per_sec
+>     486.29            +5.8%     514.28            -0.5%     483.70        fsmark.time.elapsed_time
+> 
+> Please help to review if the debug patch miss anything as I don't
+> know the internals of xfs, thanks.
+> 
+> ---
+> diff --git a/fs/xfs/libxfs/xfs_alloc.c b/fs/xfs/libxfs/xfs_alloc.c
+> index 98defd19e09e..8c85cc68c5f4 100644
+> --- a/fs/xfs/libxfs/xfs_alloc.c
+> +++ b/fs/xfs/libxfs/xfs_alloc.c
+> @@ -3246,12 +3246,12 @@ xfs_alloc_vextent_set_fsbno(
+>   */
+>  static int
+>  __xfs_alloc_vextent_this_ag(
 
-Yeah. It was great catching up!
+Patches against upstream head only, please.  This does not apply to
+6.4-rc2 without modification, and we cannot go backwards in time.  Do
+you mean to pass XFS_ALLOC_FLAG_TRYLOCK from
+xfs_alloc_vextent_iterate_ags into xfs_alloc_fix_freelist by way of
+adding an alloc_flags argument to xfs_alloc_vextent_prepare_ag?
 
-> Looking forward to your technical response that I believe are
-> legitimate requests. I'm replying here, as during our conversation, you
-> had the misperception that the user events had a system call when the
-> event was disabled. I told you I will point out the code that shows
-> that the kernel sets the bit, and that user space does not do a system
-> call when the event is disable.
+--D
 
-Thank you for these details. Answer below...
-
-> From the user space side, which does:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/samples/user_events/example.c#n60
-> 
-> 	/* Check if anyone is listening */
-> 	if (enabled) {
-> 		/* Yep, trace out our data */
-> 		writev(data_fd, (const struct iovec *)io, 2);
-> 
-> 		/* Increase the count */
-> 		count++;
-> 
-> 		printf("Something was attached, wrote data\n");
-> 	}
-> 
-> 
-> Where it told the kernel about that "enabled" variable:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/samples/user_events/example.c#n47
-> 
-> 	if (event_reg(data_fd, "test u32 count", &write, &enabled) == -1)
-> 		return errno;
-> 
-> static int event_reg(int fd, const char *command, int *write, int *enabled)
-> {
-> 	struct user_reg reg = {0};
-> 
-> 	reg.size = sizeof(reg);
-> 	reg.enable_bit = 31;
-> 	reg.enable_size = sizeof(*enabled);
-> 	reg.enable_addr = (__u64)enabled;
-> 	reg.name_args = (__u64)command;
-> 
-> 	if (ioctl(fd, DIAG_IOCSREG, &reg) == -1)
-> 		return -1;
-> 
-> 	*write = reg.write_index;
-> 
-> 	return 0;
-> }
-> 
-> The above will add a trace event into tracefs. When someone does:
-> 
->  # echo 1 > /sys/kernel/tracing/user_events/test/enable
-> 
-> The kernel will trigger the class->reg function, defined by:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/trace/trace_events_user.c#n1804
-> 
-> 	user->class.reg = user_event_reg;
-> 
-> Which calls: 
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/trace/trace_events_user.c#n1555
-> 
-> 	update_enable_bit_for(user);
-> 
-> Which does:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/trace/trace_events_user.c#n1465
-> 
-> update_enable_bit_for() { 
-> 	[..]
-> 	user_event_enabler_update(user);
+> -	struct xfs_alloc_arg	*args)
+> +	struct xfs_alloc_arg	*args, int flag)
+>  {
+>  	struct xfs_mount	*mp = args->mp;
+>  	int			error;
+>  
+> -	error = xfs_alloc_fix_freelist(args, 0);
+> +	error = xfs_alloc_fix_freelist(args, flag);
+>  	if (error) {
+>  		trace_xfs_alloc_vextent_nofix(args);
+>  		return error;
+> @@ -3289,7 +3289,7 @@ xfs_alloc_vextent_this_ag(
+>  	}
+>  
+>  	args->pag = xfs_perag_get(mp, args->agno);
+> -	error = __xfs_alloc_vextent_this_ag(args);
+> +	error = __xfs_alloc_vextent_this_ag(args, 0);
+>  
+>  	xfs_alloc_vextent_set_fsbno(args, minimum_agno);
+>  	xfs_perag_put(args->pag);
+> @@ -3329,7 +3329,7 @@ xfs_alloc_vextent_iterate_ags(
+>  	args->agno = start_agno;
+>  	for (;;) {
+>  		args->pag = xfs_perag_get(mp, args->agno);
+> -		error = __xfs_alloc_vextent_this_ag(args);
+> +		error = __xfs_alloc_vextent_this_ag(args, flags);
+>  		if (error) {
+>  			args->agbno = NULLAGBLOCK;
+>  			break;
 > 
 > 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/trace/trace_events_user.c#n451
+> Also for the turbostat.Bzy_MHz diff, IIUC, 0Day always uses
+> 'performance' cpufreq governor. And as the test case is running
+> 32 thread in a platform with 96 CPUs, there are many CPUs in idle
+> state in average, and I suspect the Bzy_MHz may be calculated 
+> considering those cpufreq and cpuidle factors.
 > 
-> user_event_enabler_update() {
-> 	[..]
-> 	user_event_enabler_write(mm, enabler, true, &attempt);
-
-Which will do
-rcu_read_lock()
-and then call user_event_enabler_write() under lock...
-
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/kernel/trace/trace_events_user.c#n385
+> Thanks,
+> Feng
 > 
-> static int user_event_enabler_write(struct user_event_mm *mm,
-> 				    struct user_event_enabler *enabler,
-> 				    bool fixup_fault, int *attempt)
-> {
-> 	unsigned long uaddr = enabler->addr;
-> 	unsigned long *ptr;
-> 	struct page *page;
-> 	void *kaddr;
-> 	int ret;
-> 
-> 	lockdep_assert_held(&event_mutex);
-> 	mmap_assert_locked(mm->mm);
-> 
-> 	*attempt += 1;
-> 
-> 	/* Ensure MM has tasks, cannot use after exit_mm() */
-> 	if (refcount_read(&mm->tasks) == 0)
-> 		return -ENOENT;
-> 
-> 	if (unlikely(test_bit(ENABLE_VAL_FAULTING_BIT, ENABLE_BITOPS(enabler)) ||
-> 		     test_bit(ENABLE_VAL_FREEING_BIT, ENABLE_BITOPS(enabler))))
-> 		return -EBUSY;
-> 
-> 	ret = pin_user_pages_remote(mm->mm, uaddr, 1, FOLL_WRITE | FOLL_NOFAULT,
-> 				    &page, NULL, NULL);
-
-... which will call pin_user_pages_remote() in RCU CS.
-This looks buggy, since pin_user_pages_remote() may schedule.
-
-> 	if (unlikely(ret <= 0)) {
-> 		if (!fixup_fault)
-> 			return -EFAULT;
-> 
-> 		if (!user_event_enabler_queue_fault(mm, enabler, *attempt))
-> 			pr_warn("user_events: Unable to queue fault handler\n");
-
-This part looks questionable.
-
-The only users of fixup_user_fault() were futex and KVM.
-Now user_events are calling it too from user_event_mm_fault_in() where
-"bool unlocked;" is uninitialized and state of this flag is not checked
-after fixup_user_fault() call.
-Not an MM expert, but this is suspicious.
-
-> 
-> 		return -EFAULT;
-> 	}
-> 
-> 	kaddr = kmap_local_page(page);
-> 	ptr = kaddr + (uaddr & ~PAGE_MASK);
-> 
-> 	/* Update bit atomically, user tracers must be atomic as well */
-> 	if (enabler->event && enabler->event->status)
-> 		set_bit(enabler->values & ENABLE_VAL_BIT_MASK, ptr);
-> 	else
-> 		clear_bit(enabler->values & ENABLE_VAL_BIT_MASK, ptr);
-
-Furthermore.
-Here the kernel writes bits in user pages.
-It's missing user_access_begin/end.
-Early on there was an access_ok() check during user_event registration,
-but it's not enough.
-I believe user_access_begin() has to be done before the actual access,
-since it does __uaccess_begin_nospec().
-
-Another issue is that the user space could have supplied any address as
-enabler->addr including addr in a huge page or a file backed mmaped address.
-I don't know whether above code can handle it.
-
-I'm not a GUP expert either, but direct use of pin_user_pages_remote() looks
-suspicious too.
-I think ptrace_may_access() is missing.
-I guess it has to be a root user to do 
-echo 1 > /sys/kernel/tracing/user_events/test/enable
-
-to trigger the kernel writes into various MM of user processes, but still.
-There are security/LSM checks in many paths that accesses user memory.
-These checks are bypassed here.
-
-> 	kunmap_local(kaddr);
-> 	unpin_user_pages_dirty_lock(&page, 1, true);
-> 
-> 	return 0;
-> }
-> 
-> The above maps the user space address and then sets the bit that was
-> registered.
-> 
-> That is, it changes "enabled" to true, and the if statement:
-> 
-> 	if (enabled) {
-
-and not just 'volatile' is missing, but this is buggy in general.
-The kernel only wrote one bit into 'enabled' variable.
-The user space should be checking that one bit only.
-Since samples/user_events/example.c registering with reg.enable_bit = 31;
-it probably should be
-  if (READ_ONCE(enabled) & (1u << 31))
-
-> 		/* Yep, trace out our data */
-> 		writev(data_fd, (const struct iovec *)io, 2);
-> 
-> 		/* Increase the count */
-> 		count++;
-> 
-> 		printf("Something was attached, wrote data\n");
-
-Another misleading example. The writev() could have failed,
-but the message will say "success".
-And it's easy to make mistake here.
-The iovec[0] should be write_index that was received by user space
-after registration via ioctl.
-
-If my understanding of user_events design is correct, various user
-process (all running as root) will open /sys/kernel/tracing/user_events_data
-then will do multiple ioctl(fd, DIAG_IOCSREG) for various events and
-remember write_index-es and enabled's addresses.
-Then in various places in the code they will do
-if (READ_ONCE(enabled_X) & (1u << correct_bit)) {
-    io[0].iov_base = &write_index_X;
-    io[1].iov_base = data_to_send_to_kernel;
-
-and write_index has to match with the format of data.
-During the writev() the kernel will validate user_event_validate(),
-but this is expensive.
-The design of user events looks fragile to me. One user process can write
-into user_event of another process by supplying wrong 'write_index' and the
-kernel won't catch it if data formats are compatible.
-
-All such processes have to be root to access /sys/kernel/tracing/user_events_data,
-so not a security issue, but use cases for user_events seems to be very limited.
-During LSFMMBPF, Steven, you've mentioned that you want to use user_event in chrome.
-I think you didn't imply that chrome browser will be running as root.
-You probably meant something else.
-
-Now as far as this particular patch.
-
-s/perf_trace_buf_submit/perf_trace_run_bpf_submit/
-
-may look trivial, but there is a lot to unpack here.
-
-How bpf prog was attached to user event?
-What is the life time of bpf prog?
-What happens when user process crashes?
-What happens when user event is unregistered ?
-What is bpf prog context? Like, what helpers are allowed to be called?
-Does libbpf need updating?
-etc etc
-
-No selftests were provided with this patch, so impossible to answer.
-
-In general we don't want bpf to be called in various parts of the kernel
-just because bpf was used in similar parts elsewhere.
-bpf needs to provide real value for a particular kernel subsystem.
-
-For user events it's still not clear to me what bpf can bring to the table.
-
-The commit log of this proposed patch says:
-"When BPF programs are attached to tracepoints created by user_events
-the BPF programs do not get run even though the attach succeeds."
-
-It looks to me that it's a bug in attaching.
-The kernel shouldn't have allowed attaching bpf prog to user events,
-since they cannot be run.
-
-Then the commit log says:
-"This keeps user_events consistent
-with how other kernel, modules, and probes expose tracepoint data to allow
-attachment of a BPF program."
-
-"keep consistent" is not a reason to use bpf with user_events.
-
-Beau,
-please provide a detailed explanation of your use case and how bpf helps.
-
-Also please explain why uprobe/USDT and bpf don't achieve your goals.
-Various user space applications have USDTs in them.
-This is an existing mechanism that was proven to be useful to many projects
-including glibc, python, mysql.
-
-Comparing to user_events the USDTs work fine in unprivileged applications
-and have zero overhead when not turned on. USDT is a single 'nop' instruction
-while user events need if(enabled & bit) check plus iov prep and write.
-
-When enabled the write() is probably faster than USDT trap, but all the extra
-overhead in tracepoint and user_event_validate() probably makes it the same speed.
-So why not USDT ?
+> > 
+> > Cheers,
+> > 
+> > Dave.
+> > -- 
+> > Dave Chinner
+> > david@fromorbit.com
