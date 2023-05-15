@@ -1,150 +1,196 @@
 Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
-Received: from vger.kernel.org (vger.kernel.org [23.128.96.18])
-	by mail.lfdr.de (Postfix) with ESMTP id 0FF0E70414D
-	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 01:09:39 +0200 (CEST)
+Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
+	by mail.lfdr.de (Postfix) with ESMTP id 58F44704152
+	for <lists+linux-kernel@lfdr.de>; Tue, 16 May 2023 01:13:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S245565AbjEOXHg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 19:07:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57248 "EHLO
+        id S245647AbjEOXNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 19:13:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230236AbjEOXHf (ORCPT
+        with ESMTP id S245527AbjEOXNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 19:07:35 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A0106E94
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 16:07:15 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id 5b1f17b1804b1-3f50020e0f8so5572515e9.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 16:07:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684192033; x=1686784033;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6j/nsOgHTR4HSwmATJ+gjDXbPDspqE4tDffur2pBUW8=;
-        b=kuHveEzNq4//+GGfS7POo3gtgBRRd++3cNEtMqG8NuA81QDSNRW4tUfJ7y4mBm2mp0
-         nITD5lFF5swL0tse+s7SsztgD3/pnMOCM8yANNmc0fYGOnP+gMD2m/uDJyvuhzHzVKlx
-         HaQeUS9pVMsPL0fcr9OXh86qsgI8SIbKumC4XUU5Qz0a8TSekVPIlnw7NWfpv0O+EqP0
-         tRQL5K2eusLdp0AUhkwUREta6hBmPPypEPYjfUtTTxJZUZ9lDth0Fny8DdtsDpM+R9Zo
-         98s7YgZGojwckrAMdYq6a9Evt9JnythOHCOdpx+YCHFYiuaSAHWcuAYSZ3d8/ukocali
-         tnIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684192033; x=1686784033;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6j/nsOgHTR4HSwmATJ+gjDXbPDspqE4tDffur2pBUW8=;
-        b=c7iHyPUta5rQsby8tsqzrCyd+s2e3Dv/j1TcMDbRKWTWeDPMYd2Zn/0QGRsX9/7MnA
-         dkqxRiqIDA668nPPRc5u0Ug2ezFwLHGXP4tw60Ce16y1NYMl52Tn1W5LPNw0ioVo4s0I
-         ai5ZYPIJWm8QFnymH/D9SjYBzEvIbaiE/pwG0UGa8TSsqZRv1bJKBMN+JW7itYXOkJaR
-         tdITJNdbu+zFthhFjsLsRXsB4ZOueMhVsfstxF1WEt/HR83E3hjoTRuulRV1HY0/QzH2
-         ljOqbnGHbj2WkmFR+9MniR+B1sOezln2jfdo/pA3DBGT2hEpLgZgb3cnb4vYCtCqZlP/
-         Uj6w==
-X-Gm-Message-State: AC+VfDyqJrJBztocq7mXo8VlCyumt5o2p8+sEZo3c6e55KiYz35/g4JD
-        lXs6wnvTUsl6WIP57/aqnQw=
-X-Google-Smtp-Source: ACHHUZ7e4XGwKLFeai3EYTdxhXJNrtTXJ3tfSWzkgKRlHyGnyxzT9D47ODs5gApWq4D66xu28G9ijA==
-X-Received: by 2002:adf:dfc7:0:b0:307:c0c4:1094 with SMTP id q7-20020adfdfc7000000b00307c0c41094mr14016148wrn.34.1684192033343;
-        Mon, 15 May 2023 16:07:13 -0700 (PDT)
-Received: from localhost ([2a00:23c5:dc8c:8701:1663:9a35:5a7b:1d76])
-        by smtp.gmail.com with ESMTPSA id q6-20020adfcd86000000b00307a83ea722sm505531wrj.58.2023.05.15.16.07.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 16:07:12 -0700 (PDT)
-Date:   Tue, 16 May 2023 00:07:11 +0100
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Rapoport <rppt@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>
-Subject: Re: [PATCH v2] mm: userfaultfd: avoid passing an invalid range to
- vma_merge()
-Message-ID: <20abea10-5307-498b-b9df-8f0b2fed1701@lucifer.local>
-References: <20230515193232.67552-1-lstoakes@gmail.com>
- <ZGKjvceDfpKMxtfb@x1n>
- <bcfb0376-ccf4-4467-9da5-8ae6f1c86876@lucifer.local>
+        Mon, 15 May 2023 19:13:50 -0400
+Received: from relay06.th.seeweb.it (relay06.th.seeweb.it [IPv6:2001:4b7a:2000:18::167])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D83C7D91;
+        Mon, 15 May 2023 16:13:49 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 8D3793F7AF;
+        Tue, 16 May 2023 01:07:33 +0200 (CEST)
+Date:   Tue, 16 May 2023 01:07:32 +0200
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     dri-devel@lists.freedesktop.org, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, dianders@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@gmail.com,
+        agross@kernel.org, dmitry.baryshkov@linaro.org,
+        andersson@kernel.org, quic_abhinavk@quicinc.com,
+        quic_jesszhan@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v9 8/8] drm/msm/dpu: tear down DSC data path when DSC
+ disabled
+Message-ID: <2kdnvgatumhjzycr574ilbounzus7z2chviemoai3ps7yip6s6@gg3mq7apxqna>
+References: <1684185928-24195-1-git-send-email-quic_khsieh@quicinc.com>
+ <1684185928-24195-9-git-send-email-quic_khsieh@quicinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <bcfb0376-ccf4-4467-9da5-8ae6f1c86876@lucifer.local>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <1684185928-24195-9-git-send-email-quic_khsieh@quicinc.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 11:04:27PM +0100, Lorenzo Stoakes wrote:
-[snip]
-> > Could you explain a bit why we don't need to merge in this case?
-> >
-> > I'm considering, for example, when we have:
-> >
-> >   vma1(range 0-9, with uffd), vma2(range 10-19, no uffd)
-> >
-> > Then someone unregisters uffd on range (5-9), iiuc it should become:
-> >
-> >   vma1(range 0-4, with uffd), vma2(range 5-19, no uffd)
-> >
-> > But if no merge here it's:
-> >
-> >   vma1(range 0-4, with uffd), vma3(range 5-9, no uffd), vma2(range 10-19, no uffd)
-> >
-> > Maybe I missed something?
-> >
->
-> There's something really, really wrong with this. It simply isn't valid to
-> invoke vma_merge() over an existing VMA that != prev where you're not
-> specifying addr = vma->vm_start, end == vma->vm_end.
->
-> This seems like you're relying on:-
->
->   ***
-> CCCCCNNNNN -> CCNNNNNNNN
->
-> By specifying parameters that are compatible with N even though you're only
-> partially spanning C?
->
-> This is crazy, and isn't how this should be used. vma_merge() is not
-> supposed to do partial merges. If it works (presumably it does) this is not
-> by design unless I've lost my mind and I (and others) have somehow not
-> noticed this??
->
-> I think you're right that now we'll end up with more fragmentation, but
-> what you're suggesting is not how vma_merge() is supposed to work.
->
-> As I said above, giving vma_merge() invalid parameters is very dangerous as
-> you could end up merging over empty ranges in theory (and could otherwise
-> have corruption).
->
-> I guess we should probably be passing 0 to the last parameter in
-> split_vma() here then to ensure we do a merge pass too. Will experiment
-> with this.
->
-> I'm confused as to how the remove from case 8 is not proceeding. I'll look
-> into this some more...
->
-> Happy to be corrected if I'm misconstruing this!
->
+Tear down DSC datapath* on encoder cleanup*
 
-OK, so I wrote a small program to do perform exactly this case [0] and it seems
-that the outcome is the same before and after this patch - vma_merge() is
-clearly rejecting the case 8 merge (phew!) and in both instances you end up with
-3 VMAs.
+On 2023-05-15 14:25:28, Kuogee Hsieh wrote:
+> 
+> Unset DSC_ACTIVE bit at dpu_hw_ctl_reset_intf_cfg_v1(),
+> dpu_encoder_unprep_dsc() and dpu_encoder_dsc_pipe_clr() functions
+> to tear down DSC data path if DSC data path was setup previous.
+> 
+> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> ---
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c | 43 +++++++++++++++++++++++++++++
+>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c  |  7 +++++
+>  2 files changed, 50 insertions(+)
+> 
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> index 5cae70e..ee999ce 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_encoder.c
+> @@ -1214,6 +1214,44 @@ static void dpu_encoder_virt_atomic_enable(struct drm_encoder *drm_enc,
+>  	mutex_unlock(&dpu_enc->enc_lock);
+>  }
+>  
+> +static void dpu_encoder_dsc_pipe_clr(struct dpu_encoder_virt *dpu_enc,
 
-So this patch doesn't change this behaviour and everything is as it was
-before. Ideally we'd let it go for another pass, so maybe we should change the
-split to add a new VMA _afterwards_. Will experiment with that, separately.
+I'd have passed hw_ctl directly.
 
-But looks like the patch is good as it is.
+> +				     struct dpu_hw_dsc *hw_dsc,
+> +				     struct dpu_hw_pingpong *hw_pp)
+> +{
+> +	struct dpu_encoder_phys *cur_master = dpu_enc->cur_master;
+> +	struct dpu_hw_ctl *ctl;
+> +
+> +	ctl = cur_master->hw_ctl;
+> +
+> +	if (hw_dsc->ops.dsc_disable)
+> +		hw_dsc->ops.dsc_disable(hw_dsc);
+> +
+> +	if (hw_pp->ops.disable_dsc)
+> +		hw_pp->ops.disable_dsc(hw_pp);
+> +
+> +	if (hw_dsc->ops.dsc_bind_pingpong_blk)
+> +		hw_dsc->ops.dsc_bind_pingpong_blk(hw_dsc, PINGPONG_NONE);
+> +
+> +	if (ctl->ops.update_pending_flush_dsc)
+> +		ctl->ops.update_pending_flush_dsc(ctl, hw_dsc->idx);
+> +}
+> +
+> +static void dpu_encoder_unprep_dsc(struct dpu_encoder_virt *dpu_enc)
+> +{
+> +	/* coding only for 2LM, 2enc, 1 dsc config */
+> +	struct dpu_hw_dsc *hw_dsc[MAX_CHANNELS_PER_ENC];
+> +	struct dpu_hw_pingpong *hw_pp[MAX_CHANNELS_PER_ENC];
+> +	int i;
+> +
+> +	for (i = 0; i < MAX_CHANNELS_PER_ENC; i++) {
+> +		hw_pp[i] = dpu_enc->hw_pp[i];
+> +		hw_dsc[i] = dpu_enc->hw_dsc[i];
+> +
+> +		if (hw_pp[i] && hw_dsc[i])
+> +			dpu_encoder_dsc_pipe_clr(dpu_enc, hw_dsc[i], hw_pp[i]);
+> +	}
+> +}
 
-(if you notice something wrong with the repro, etc. do let me know!)
+Define these two functions right above
+dpu_encoder_helper_phys_cleanup(), or right next to
+dpu_encoder_prep_dsc() and dpu_encoder_dsc_pipe_cfg(), intead of
+splitting dpu_encoder_virt_atomic_{en,dis}able() at a random point in
+this file.
 
-[0]: https://gist.github.com/lorenzo-stoakes/a11a10f5f479e7a977fc456331266e0e
+> +
+>  static void dpu_encoder_virt_atomic_disable(struct drm_encoder *drm_enc,
+>  					struct drm_atomic_state *state)
+>  {
+> @@ -2090,6 +2128,9 @@ void dpu_encoder_helper_phys_cleanup(struct dpu_encoder_phys *phys_enc)
+>  					phys_enc->hw_pp->merge_3d->idx);
+>  	}
+>  
+> +	if (dpu_enc->dsc)
+> +		dpu_encoder_unprep_dsc(dpu_enc);
+> +
+>  	intf_cfg.stream_sel = 0; /* Don't care value for video mode */
+>  	intf_cfg.mode_3d = dpu_encoder_helper_get_3d_blend_mode(phys_enc);
 
-[snip]
+Here.
+
+>  
+> @@ -2101,6 +2142,8 @@ void dpu_encoder_helper_phys_cleanup(struct dpu_encoder_phys *phys_enc)
+>  	if (phys_enc->hw_pp->merge_3d)
+>  		intf_cfg.merge_3d = phys_enc->hw_pp->merge_3d->idx;
+>  
+> +	intf_cfg.dsc = dpu_encoder_helper_get_dsc(phys_enc);
+
+Since this is assigned unconditionally, can you assign this right below
+where intf_cfg.mode_3d is assigned so that we have a static and a
+conditional part?
+
+> +
+>  	if (ctl->ops.reset_intf_cfg)
+>  		ctl->ops.reset_intf_cfg(ctl, &intf_cfg);
+>  
+> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+> index f3a50cc..aec3b08 100644
+> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+> @@ -577,6 +577,7 @@ static void dpu_hw_ctl_reset_intf_cfg_v1(struct dpu_hw_ctl *ctx,
+>  	u32 intf_active = 0;
+>  	u32 wb_active = 0;
+>  	u32 merge3d_active = 0;
+> +	u32 dsc_active;
+
+Any idea why the others are zero-assigned above for no reason (no need
+to clean that up in this patch)?
+
+>  
+>  	/*
+>  	 * This API resets each portion of the CTL path namely,
+> @@ -606,6 +607,12 @@ static void dpu_hw_ctl_reset_intf_cfg_v1(struct dpu_hw_ctl *ctx,
+>  		wb_active &= ~BIT(cfg->wb - WB_0);
+>  		DPU_REG_WRITE(c, CTL_WB_ACTIVE, wb_active);
+>  	}
+> +
+> +	if (cfg->dsc) {
+> +		dsc_active = DPU_REG_READ(c, CTL_DSC_ACTIVE);
+
+Do we really need to read it back?  dpu_hw_ctl_intf_cfg_v1() doesn't
+read it back either and plainly writes cfg->dsc.  If we always have a
+complete overview of what DSC's are enabled/active for this CTL (which
+we have), this could just be written to 0.
+
+But let's leave that now and discuss this separately, as the above does
+the same for merge_3d, intf and wb.
+
+- Marijn
+
+> +		dsc_active &= ~cfg->dsc;
+> +		DPU_REG_WRITE(c, CTL_DSC_ACTIVE, dsc_active);
+> +	}
+>  }
+>  
+>  static void dpu_hw_ctl_set_fetch_pipe_active(struct dpu_hw_ctl *ctx,
+> -- 
+> 2.7.4
+> 
