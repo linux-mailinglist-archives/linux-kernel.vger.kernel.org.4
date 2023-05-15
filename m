@@ -2,171 +2,337 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CD58703FCB
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:28:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D28A3703FCC
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 23:29:21 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242892AbjEOV2i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 17:28:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55474 "EHLO
+        id S245537AbjEOV3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 17:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S245351AbjEOV2e (ORCPT
+        with ESMTP id S245351AbjEOV3S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 17:28:34 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C889610E4D;
-        Mon, 15 May 2023 14:28:16 -0700 (PDT)
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34FKt00D029642;
-        Mon, 15 May 2023 21:27:35 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=TQJEHXi0TLCNkapeCGSQUpsNiWrxDk2PaOR8nncjWPs=;
- b=TbkDjPDFPz0inBneXz4yq4in8WhyfhbxVeaTiIl5+/w6e3OxII/dYpe1cDMKMRW/RsOY
- E48M4n6imyAZIIJFYQ1iYb2gU1IEUr/A/F8hM/iqhwz14ROEILCc8J61ln8ImwYTy/gK
- GsHdEELHn6kZe/Pyvx8LRcWXKMoAuiRu/5HqzwNp/aTvZQZFd72JCQbDwojcfZuI3nZ+
- fXzqcJe4C49d5eIvP4JnALgnvhngDsBXVqapxIW8dcViok6Mvl9hdthhgDVDzLYTGu7N
- cSDb+eMLx8WIT8OwvuagcKUKj3CiaXZo1Thl5v1BdA9GQYlIOqvD0t3WryhFJo+E7sgP 0Q== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3qkjr01n2g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 21:27:34 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 34FLRWIo016401
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 21:27:32 GMT
-Received: from [10.134.70.142] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.42; Mon, 15 May
- 2023 14:27:31 -0700
-Message-ID: <d7d7cc13-25e4-5a8e-e803-e8c3cfbe22a3@quicinc.com>
-Date:   Mon, 15 May 2023 14:26:59 -0700
+        Mon, 15 May 2023 17:29:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F05C76BF
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 14:28:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684186050;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wLAGWZc9r370dTDbuAW3pDpGBMgjfCMZQFVPRnk8LJs=;
+        b=CJiBsnpLUsiFxsyW/4z3l29eDVw5BrFzGMPhLhBbgzR2zP/9vt+RU0V9/2N8jpWOSMkuYJ
+        U5mFRbl0dSWGF09QH7rbWRSyRm39JqEEEzzUn3j/jYQ0JsmLRbWZiqVb5tcNKPcW/fVo7+
+        CMt3hdAL/r0VXiVkFuyaeWgFMyW1ISs=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-82-cF_H0g0IOHyMM7H1WkS-CQ-1; Mon, 15 May 2023 17:27:28 -0400
+X-MC-Unique: cF_H0g0IOHyMM7H1WkS-CQ-1
+Received: by mail-qv1-f69.google.com with SMTP id 6a1803df08f44-61b636b5f90so13680936d6.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 14:27:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684186048; x=1686778048;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wLAGWZc9r370dTDbuAW3pDpGBMgjfCMZQFVPRnk8LJs=;
+        b=ReEkiK6hrTzOflNCoA3rnzN4Z32TG5IbXjaLtXzLSs3js8CNZISs6/RlAa52ZA6Bbl
+         wIDpY4sKQ0y1XsijIQzuy6+kaQZQP55Ox+qP5qUgEg0XFFYH+UpTc/ljkTpWiv80a2ZM
+         36OetePQ2EnyvV9K4MKAwm6XvnlsNBYEnHaGuOcd+FfCLBhtMBc/cqmY9UQ150515rIe
+         DQSwguSlhZ975gpnPgz051qvWWUUDUbj3dKOjQiai6RKuyrX9RLzT+cYY3F8v58IogZj
+         GLgCTgvNnx07mDN36PaG3MhVozUpHd5ObEPvhjr6exXinjotN5nGGNYmPq4YwOsvdNtM
+         xZ1w==
+X-Gm-Message-State: AC+VfDwb4BqrbLAsHCR4Kh4th1FPyriRNKRTnRaaTKFTngujWjbJAOLj
+        3gi/DMnXu2Nd7FLlZdkBgKg1hyFG8zBeXEcvSUw/p47yM767U2rcTn5fhbYG2w0qZTeumhxUtlj
+        0/gkp9w12pKdFPlUyOW8ZpsLH
+X-Received: by 2002:a05:6214:4013:b0:623:5678:1285 with SMTP id kd19-20020a056214401300b0062356781285mr1064852qvb.2.1684186048369;
+        Mon, 15 May 2023 14:27:28 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7Y/sNMTjAwPK7uyFeaJyLlFymLHqHl/htDJX4fwerRRnvxfxCp9itMwnVX1HXpanMw2QvgQQ==
+X-Received: by 2002:a05:6214:4013:b0:623:5678:1285 with SMTP id kd19-20020a056214401300b0062356781285mr1064816qvb.2.1684186047972;
+        Mon, 15 May 2023 14:27:27 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-62-70-24-86-62.dsl.bell.ca. [70.24.86.62])
+        by smtp.gmail.com with ESMTPSA id o21-20020a05620a15d500b007579f89c0ccsm102432qkm.29.2023.05.15.14.27.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 14:27:27 -0700 (PDT)
+Date:   Mon, 15 May 2023 17:27:25 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Lorenzo Stoakes <lstoakes@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Rapoport <rppt@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>
+Subject: Re: [PATCH v2] mm: userfaultfd: avoid passing an invalid range to
+ vma_merge()
+Message-ID: <ZGKjvceDfpKMxtfb@x1n>
+References: <20230515193232.67552-1-lstoakes@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH v8 1/8] drm/msm/dpu: add dsc blocks for remaining chipsets
- in catalog
-Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-CC:     Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        <dri-devel@lists.freedesktop.org>, <robdclark@gmail.com>,
-        <sean@poorly.run>, <swboyd@chromium.org>, <dianders@chromium.org>,
-        <vkoul@kernel.org>, <daniel@ffwll.ch>, <airlied@gmail.com>,
-        <agross@kernel.org>, <dmitry.baryshkov@linaro.org>,
-        <andersson@kernel.org>, <quic_jesszhan@quicinc.com>,
-        <quic_sbillaka@quicinc.com>, <freedreno@lists.freedesktop.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <1683914423-17612-1-git-send-email-quic_khsieh@quicinc.com>
- <1683914423-17612-2-git-send-email-quic_khsieh@quicinc.com>
- <4tmuqrz3du7pwwih3gzp6zveyfvwxj3meeksgxkbg2v5mdtyu3@e5xxuoe64rvv>
- <69538f77-ff08-c3ce-3d4a-9f7250ee2505@quicinc.com>
- <u47xthqfjxpbbzjbvnrz4qa2f2m3aip4iose7cwuhzg4raf7db@qxbos7u55wko>
- <d10da0ce-a22e-24e9-e895-fae4c3a35222@quicinc.com>
- <zkvmqpcdgeg3qjkddopqx2yfipmqjjyva2cnk5bq4npxzxto4v@gfgvp5hkblkm>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <zkvmqpcdgeg3qjkddopqx2yfipmqjjyva2cnk5bq4npxzxto4v@gfgvp5hkblkm>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: umyaAh8G_r_m8I5NCpNocSuAqCkYu1IM
-X-Proofpoint-GUID: umyaAh8G_r_m8I5NCpNocSuAqCkYu1IM
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.957,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-15_19,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
- spamscore=0 malwarescore=0 phishscore=0 suspectscore=0 mlxscore=0
- priorityscore=1501 mlxlogscore=957 adultscore=0 bulkscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305150176
-X-Spam-Status: No, score=-6.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230515193232.67552-1-lstoakes@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 5/15/2023 2:23 PM, Marijn Suijten wrote:
-> On 2023-05-15 13:58:35, Abhinav Kumar wrote:
->>
->>
->>
->> On 5/15/2023 1:07 PM, Marijn Suijten wrote:
->>> On 2023-05-15 11:20:02, Abhinav Kumar wrote:
->>>>
->>>>
->>>>
->>>> On 5/14/2023 2:39 PM, Marijn Suijten wrote:
->>>>> DSC*, and mention 1.1 explicitly (since this skips the 1.2 blocks, while
->>>>> the series is clearly aimed at 1.1...).  This was done for the DSC 1.2
->>>>> HW block patch after all.
->>>>>
->>>>> in catalog -> to catalog
->>>>>
->>>>> But it's just two platforms, you can fit MSM8998 and SC8180X in the
->>>>> title.
->>>>>
->>>>> On 2023-05-12 11:00:16, Kuogee Hsieh wrote:
->>>>>>
->>>>>> From: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>>>>>
->>>>>> There are some platforms has DSC blocks but it is not declared at catalog.
->>>>>
->>>>> Some platforms have DSC blocks which have not yet been declared in the
->>>>> catalog.*
->>>>>
->>>>>> For completeness, this patch adds DSC blocks for platforms which missed
->>>>>> them.
->>>>>
->>>>> Drop "this patch":
->>>>>
->>>>>        Complete DSC 1.1 support for all platforms by adding the missing
->>>>>        blocks to MSM8998 and SC8180X.
->>>>>
->>>>>>
->>>>>> Signed-off-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
->>>>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->>>>>> ---
->>>>>>     drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_3_0_msm8998.h |  7 +++++++
->>>>>>     drivers/gpu/drm/msm/disp/dpu1/catalog/dpu_5_1_sc8180x.h | 11 +++++++++++
->>>>>
->>>>> How about SC7180, and any other DPU 6.x revision?
->>>>>
->>>>
->>>> Will let kuogee respond to the other nits. There is no DSC in sc7180 /
->>>> sm6115 / qcm2290. So this patch is complete.
->>>
->>> Thank you for checking as I didn't have the DTS close (and it seems
->>> SC7180 would have supported this, but no).  I did check other SoCs in
->>> the DPU 6.x range that are currently floating in my tree and on the
->>> list, which do need their DSC 1.1 block added (both a single block at
->>> 0x81000 downstream, 0x80000 upstream), if you can in a resend Konrad:
->>>
->>> DPU 6.4 in SM6350: https://lore.kernel.org/linux-arm-msm/20230411-topic-straitlagoon_mdss-v3-6-9837d6b3516d@linaro.org/
->>> DPU 6.9 in SM6375: https://lore.kernel.org/linux-arm-msm/20230411-topic-straitlagoon_mdss-v3-8-9837d6b3516d@linaro.org/
->>>
->>
->> If these are still on the list, can Konrad add them to his change as
->> that way his catalog change will be complete? Otherwise I would prefer
->> to add them in a follow up change because marking this change as
->> dependent on a catalog change which adds a new chipset is not right.
+On Mon, May 15, 2023 at 08:32:32PM +0100, Lorenzo Stoakes wrote:
+> The userfaultfd_[un]register() functions will knowingly pass an invalid
+> address range to vma_merge(), then rely on it failing to merge to indicate
+> that the VMA should be split into a valid one.
 > 
-> The question was for Konrad (and I addressed him by name, not you) as
-> his series is not merged and the DSC blocks can be added to it directly
-> without depending on this series.  DSC 1.1 is after all available for
-> some time now.
+> This is not something that should be relied upon,
+
+Is there any real issue pop up to show that it's something that we cannot
+rely upon before b0729ae0ae67?  Because normally if something broke with a
+commit I'll say "commit xxx breaks yyy" unless there's more valid reason.. :)
+
+> as vma_merge() implicitly assumes in cases 5-8 that curr->vm_start ==
+> addr. This is now enforced since commit b0729ae0ae67 ("mm/mmap/vma_merge:
+> explicitly assign res, vma, extend invariants") with an explicit
+> VM_WARN_ON() check.
+
+Doing vma_merge() before vma_split() makes some sense to me (and I noticed
+that mostly all vma_merge() paths are doing so), because if a merge
+happened, we 100% doesn't need a split (vma_merge took care of everything).
+It's not the other way round, since if we split, we could still need a
+merge.
+
+So it fundamentally avoids unnecessary calls to split, it seems, if we
+always call merge before splits.
+
+> 
+> Since commit 29417d292bd0 ("mm/mmap/vma_merge: always check invariants")
+> this check is performed unconditionally, which caused this assert to arise
+> in tests performed by Mark [1].
+> 
+> This patch fixes the issue by performing the split operations before
+> attempting to merge VMAs in both instances. The problematic operation is
+> splitting the start of the VMA since we were clamping to the end of the VMA
+> in any case, however it is useful to group both of the split operations
+> together to avoid egregious goto's and to abstract the code between the
+> functions.
+> 
+> As well as fixing the repro described in [1] this also continues to pass
+> uffd unit tests.
+> 
+> [1]:https://lore.kernel.org/all/ZFunF7DmMdK05MoF@FVFF77S0Q05N.cambridge.arm.com
+> 
+> Reported-by: Mark Rutland <mark.rutland@arm.com>
+> Closes: https://lore.kernel.org/all/ZFunF7DmMdK05MoF@FVFF77S0Q05N.cambridge.arm.com/
+> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+> ---
+>  fs/userfaultfd.c | 108 ++++++++++++++++++++++++++---------------------
+>  1 file changed, 60 insertions(+), 48 deletions(-)
+> 
+> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> index 0fd96d6e39ce..ef5d667ea804 100644
+> --- a/fs/userfaultfd.c
+> +++ b/fs/userfaultfd.c
+> @@ -1319,6 +1319,32 @@ static __always_inline int validate_range(struct mm_struct *mm,
+>  	return 0;
+>  }
+>  
+> +static int clamp_range(struct vma_iterator *vmi, struct vm_area_struct *vma,
+> +		       unsigned long start, unsigned long end, bool *can_merge)
+> +{
+> +	int ret;
+> +	bool merge = true;
+> +
+> +	/* The range must always be clamped to the start of a VMA. */
+> +	if (vma->vm_start < start) {
+> +		ret = split_vma(vmi, vma, start, 1);
+> +		if (ret)
+> +			return ret;
+> +
+> +		merge = false;
+
+Could you explain a bit why we don't need to merge in this case?
+
+I'm considering, for example, when we have:
+
+  vma1(range 0-9, with uffd), vma2(range 10-19, no uffd)
+
+Then someone unregisters uffd on range (5-9), iiuc it should become:
+
+  vma1(range 0-4, with uffd), vma2(range 5-19, no uffd)
+
+But if no merge here it's:
+
+  vma1(range 0-4, with uffd), vma3(range 5-9, no uffd), vma2(range 10-19, no uffd)
+
+Maybe I missed something?
+
+> +	}
+> +
+> +	/* It must also be clamped to the end of a VMA. */
+> +	if (vma->vm_end > end) {
+> +		ret = split_vma(vmi, vma, end, 0);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	*can_merge = merge;
+> +	return 0;
+> +}
+> +
+>  static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+>  				unsigned long arg)
+>  {
+> @@ -1330,7 +1356,7 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+>  	unsigned long vm_flags, new_flags;
+>  	bool found;
+>  	bool basic_ioctls;
+> -	unsigned long start, end, vma_end;
+> +	unsigned long start, end;
+>  	struct vma_iterator vmi;
+>  
+>  	user_uffdio_register = (struct uffdio_register __user *) arg;
+> @@ -1462,6 +1488,8 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+>  
+>  	ret = 0;
+>  	for_each_vma_range(vmi, vma, end) {
+> +		bool can_merge;
+> +
+>  		cond_resched();
+>  
+>  		BUG_ON(!vma_can_userfault(vma, vm_flags));
+> @@ -1477,32 +1505,22 @@ static int userfaultfd_register(struct userfaultfd_ctx *ctx,
+>  		    (vma->vm_flags & vm_flags) == vm_flags)
+>  			goto skip;
+>  
+> -		if (vma->vm_start > start)
+> -			start = vma->vm_start;
+> -		vma_end = min(end, vma->vm_end);
+> +		ret = clamp_range(&vmi, vma, start, end, &can_merge);
+> +		if (ret)
+> +			break;
+>  
+>  		new_flags = (vma->vm_flags & ~__VM_UFFD_FLAGS) | vm_flags;
+> -		prev = vma_merge(&vmi, mm, prev, start, vma_end, new_flags,
+> -				 vma->anon_vma, vma->vm_file, vma->vm_pgoff,
+> -				 vma_policy(vma),
+> -				 ((struct vm_userfaultfd_ctx){ ctx }),
+> -				 anon_vma_name(vma));
+> -		if (prev) {
+> +		if (can_merge) {
+> +			prev = vma_merge(&vmi, mm, prev, vma->vm_start, vma->vm_end, new_flags,
+> +					 vma->anon_vma, vma->vm_file, vma->vm_pgoff,
+> +					 vma_policy(vma),
+> +					 ((struct vm_userfaultfd_ctx){ ctx }),
+> +					 anon_vma_name(vma));
+> +
+>  			/* vma_merge() invalidated the mas */
+> -			vma = prev;
+> -			goto next;
+> -		}
+> -		if (vma->vm_start < start) {
+> -			ret = split_vma(&vmi, vma, start, 1);
+> -			if (ret)
+> -				break;
+> -		}
+> -		if (vma->vm_end > end) {
+> -			ret = split_vma(&vmi, vma, end, 0);
+> -			if (ret)
+> -				break;
+> +			if (prev)
+> +				vma = prev;
+>  		}
+> -	next:
+>  		/*
+>  		 * In the vma_merge() successful mprotect-like case 8:
+>  		 * the next vma was merged into the current one and
+> @@ -1560,7 +1578,7 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+>  	struct uffdio_range uffdio_unregister;
+>  	unsigned long new_flags;
+>  	bool found;
+> -	unsigned long start, end, vma_end;
+> +	unsigned long start, end;
+>  	const void __user *buf = (void __user *)arg;
+>  	struct vma_iterator vmi;
+>  
+> @@ -1627,6 +1645,8 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+>  	prev = vma_prev(&vmi);
+>  	ret = 0;
+>  	for_each_vma_range(vmi, vma, end) {
+> +		bool can_merge;
+> +
+>  		cond_resched();
+>  
+>  		BUG_ON(!vma_can_userfault(vma, vma->vm_flags));
+> @@ -1640,9 +1660,9 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+>  
+>  		WARN_ON(!(vma->vm_flags & VM_MAYWRITE));
+>  
+> -		if (vma->vm_start > start)
+> -			start = vma->vm_start;
+> -		vma_end = min(end, vma->vm_end);
+> +		ret = clamp_range(&vmi, vma, start, end, &can_merge);
+> +		if (ret)
+> +			break;
+>  
+>  		if (userfaultfd_missing(vma)) {
+>  			/*
+> @@ -1652,35 +1672,27 @@ static int userfaultfd_unregister(struct userfaultfd_ctx *ctx,
+>  			 * UFFDIO_WAKE explicitly.
+>  			 */
+>  			struct userfaultfd_wake_range range;
+> -			range.start = start;
+> -			range.len = vma_end - start;
+> +			range.start = vma->vm_start;
+> +			range.len = vma->vm_end - vma->vm_start;
+>  			wake_userfault(vma->vm_userfaultfd_ctx.ctx, &range);
+>  		}
+>  
+>  		/* Reset ptes for the whole vma range if wr-protected */
+>  		if (userfaultfd_wp(vma))
+> -			uffd_wp_range(vma, start, vma_end - start, false);
+> +			uffd_wp_range(vma, vma->vm_start,
+> +				      vma->vm_end - vma->vm_start, false);
+>  
+>  		new_flags = vma->vm_flags & ~__VM_UFFD_FLAGS;
+> -		prev = vma_merge(&vmi, mm, prev, start, vma_end, new_flags,
+> -				 vma->anon_vma, vma->vm_file, vma->vm_pgoff,
+> -				 vma_policy(vma),
+> -				 NULL_VM_UFFD_CTX, anon_vma_name(vma));
+> -		if (prev) {
+> -			vma = prev;
+> -			goto next;
+> -		}
+> -		if (vma->vm_start < start) {
+> -			ret = split_vma(&vmi, vma, start, 1);
+> -			if (ret)
+> -				break;
+> -		}
+> -		if (vma->vm_end > end) {
+> -			ret = split_vma(&vmi, vma, end, 0);
+> -			if (ret)
+> -				break;
+> +		if (can_merge) {
+> +			prev = vma_merge(&vmi, mm, prev, vma->vm_start,
+> +					 vma->vm_end, new_flags, vma->anon_vma,
+> +					 vma->vm_file, vma->vm_pgoff,
+> +					 vma_policy(vma),
+> +					 NULL_VM_UFFD_CTX, anon_vma_name(vma));
+> +			/* vma_merge() invalidated the mas */
+> +			if (prev)
+> +				vma = prev;
+>  		}
+> -	next:
+>  		/*
+>  		 * In the vma_merge() successful mprotect-like case 8:
+>  		 * the next vma was merged into the current one and
+> -- 
+> 2.40.1
 > 
 
-Thanks for clarifying. Your reply was cut-off "if you can in a resend 
-Konrad" so not sure what you were trying to tell.
+-- 
+Peter Xu
 
-> - Marijn
