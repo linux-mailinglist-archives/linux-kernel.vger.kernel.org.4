@@ -2,123 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D487032F8
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:31:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id AF108703305
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 18:32:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242729AbjEOQbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 12:31:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
+        id S242430AbjEOQcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 12:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242718AbjEOQb0 (ORCPT
+        with ESMTP id S242214AbjEOQcU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 12:31:26 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACA3C10F3;
-        Mon, 15 May 2023 09:31:17 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id ffacd0b85a97d-306281edf15so12324816f8f.1;
-        Mon, 15 May 2023 09:31:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684168276; x=1686760276;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=xj0LlUHkMs1f/PPwjZMnEi9vur/RUIxqtgTnxaH1HHs=;
-        b=Tej0A0SVFNljYQvApjPnFcxl/jMGuS4pY5Ha2t/wxklAj5BDMFqwnWeo4iWAqBlEBf
-         flToiFDTEQLXIJsENh8Gf373G1RY7yWUx5xsP4ZebDJjJkJT3BEbUrjeiC1EV1VHoTtF
-         /vKy/iZcG6d6Rdg3n+pmWu5HJm1lxcR3HU9LTMU2/KGJe7i608OmKmkfACFMxxMcmjkp
-         MLxFXOQdKOXqMH72A3hPIlD5zGkpGbmpK9X5IWL1MQsp+xmaGaPDP7CdJiAlfQTsn0Ow
-         lSIR0hJqBtxJLzIH4aQEGQxKRF78gqRo0lU4f6b6fXixUcI0UfN9u1hUykmqsiX4dQPe
-         dIrA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684168276; x=1686760276;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xj0LlUHkMs1f/PPwjZMnEi9vur/RUIxqtgTnxaH1HHs=;
-        b=iCUKK09LkbZ77epxwirx5UD4NLwh6QbwVBFu885VyO7T1ke40bbZFEdNxxe806ZzuD
-         7umEbc/IF3q6m+3V6V0Wlxuk/CDo6kKF2Mm66doulSBmzemxmIC/XuGjUd4sJV4uqf9f
-         7vpUaw8kUDCaAxHjAOQLItJsPEag42ZHU5iiyyrHdggLKK25WyDltJiBj+E9RneBv910
-         B6QPmin+NsMA0Jt+YC/2hgs7BKi2s2z0csBPQVdusMD8cSY5eB4vzQzgFkMgAN111RFo
-         SVI+ciyZOY6WS96eWwGSwKY8Z2FTbHq2f96emaMJRXZtM74gFU8sT+Ad4CD+1/Qmf8ns
-         s5zA==
-X-Gm-Message-State: AC+VfDxzKSrRT9Y4U2d8wh5q+GbSwhd3UQZ1glbhT9NfUgwoxJOJaOTb
-        Z9scVndsOJMWKRMDpktPfMc=
-X-Google-Smtp-Source: ACHHUZ4exiePmSzMSaub/V47LjNfg6KE9x175cxCNihSkCYAUDOuWxIYk+H2LH/BQb2PrKb5025TYQ==
-X-Received: by 2002:adf:e351:0:b0:306:2eab:fb8c with SMTP id n17-20020adfe351000000b003062eabfb8cmr26143380wrj.42.1684168275652;
-        Mon, 15 May 2023 09:31:15 -0700 (PDT)
-Received: from fedora ([94.73.33.248])
-        by smtp.gmail.com with ESMTPSA id 3-20020a05600c028300b003f4e4f51f64sm14756542wmk.7.2023.05.15.09.31.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 09:31:15 -0700 (PDT)
-Date:   Mon, 15 May 2023 18:31:13 +0200
-From:   =?iso-8859-1?Q?Jos=E9_Exp=F3sito?= <jose.exposito89@gmail.com>
-To:     David Gow <davidgow@google.com>
-Cc:     Geert Uytterhoeven <geert+renesas@glider.be>,
-        Jiri Kosina <jikos@kernel.org>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Daniel Latypov <dlatypov@google.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-input@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: uclogic: Modular KUnit tests should not depend on
- KUNIT=y
-Message-ID: <ZGJeUd76XaFqHhN0@fedora>
-References: <36ddf432f0f46530875fa15f002012c921a380a3.1683022021.git.geert+renesas@glider.be>
- <CABVgOSmYapFcpnrC60o4r5LznT92TpjteNb=1MQejvMDWC+2vw@mail.gmail.com>
+        Mon, 15 May 2023 12:32:20 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA4CC199
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 09:32:18 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34FGVmYO054911;
+        Mon, 15 May 2023 11:31:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1684168308;
+        bh=RFkJBq8JGAaW8auA8QkIsfGBdt7C6TJA6FPA/7/+Jcc=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=y2GjJX+6gCsilco40EyyumPC0syDjnhUs1oSHDX2c1AKANzfa/3Myxl+z/VFnb5nb
+         NMPAm0ZFnmT1J3kXs6UicacDew01clh6JjiuE/361avcoqfsL9aW5Zo0MZ3REHdAHP
+         8TEeyotTjOh/9wZ3IX9ZXbMNzAVf0541LT55tDLQ=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34FGVmKY008199
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 15 May 2023 11:31:48 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 15
+ May 2023 11:31:47 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 15 May 2023 11:31:47 -0500
+Received: from [10.250.35.77] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34FGVlj1088299;
+        Mon, 15 May 2023 11:31:47 -0500
+Message-ID: <bb8cc8b2-8b59-8d25-da58-36cd2df92a71@ti.com>
+Date:   Mon, 15 May 2023 11:31:47 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CABVgOSmYapFcpnrC60o4r5LznT92TpjteNb=1MQejvMDWC+2vw@mail.gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH 01/10] ARM: Kconfig: move platform selection into its own
+ Kconfig file
+Content-Language: en-US
+To:     Russell King <linux@armlinux.org.uk>,
+        Baruch Siach <baruch@tkos.co.il>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Linus Walleij <linus.walleij@linaro.org>
+CC:     <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230515160234.289631-1-afd@ti.com>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <20230515160234.289631-1-afd@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, May 04, 2023 at 02:04:18PM +0800, David Gow wrote:
-> On Tue, 2 May 2023 at 18:09, Geert Uytterhoeven <geert+renesas@glider.be> wrote:
-> >
-> > While KUnit tests that cannot be built as a loadable module must depend
-> > on "KUNIT=y", this is not true for modular tests, where it adds an
-> > unnecessary limitation.
-> >
-> > Fix this by relaxing the dependency to "KUNIT".
-> >
-> > Fixes: 08809e482a1c44d9 ("HID: uclogic: KUnit best practices and naming conventions")
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > ---
+On 5/15/23 9:02 AM, Andrew Davis wrote:
+> Mostly just for better organization for now. This matches what is done on
+> some other platforms including ARM64. This also lets us start to reduce
+> the number of mach- directories that only exist to store the platform
+> selection.
 > 
-> This works here, and I definitely agree we should get rid of these
-> unnecessary constraints.
+> Start with "Platform selection" and ARCH_VIRT.
 > 
-> Let me know if this should go in via the kselftest/kunit tree, or if
-> it makes sense to take this via input?
-> 
-> Reviewed-by: David Gow <davidgow@google.com>
-> 
-> Cheers,
-> -- David
-> 
-> >  drivers/hid/Kconfig | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/hid/Kconfig b/drivers/hid/Kconfig
-> > index 4ce012f83253ec9f..b977450cac75265d 100644
-> > --- a/drivers/hid/Kconfig
-> > +++ b/drivers/hid/Kconfig
-> > @@ -1285,7 +1285,7 @@ config HID_MCP2221
-> >
-> >  config HID_KUNIT_TEST
-> >         tristate "KUnit tests for HID" if !KUNIT_ALL_TESTS
-> > -       depends on KUNIT=y
-> > +       depends on KUNIT
+> Signed-off-by: Andrew Davis <afd@ti.com>
+> ---
 
-Tested here as well with different configurations for the UCLogic
-driver and it is working.
+Oh, forgot to tag it but this is v2 posting of this series. No changes
+from v1, just rebased on v6.4-rc2.
 
-Reviewed-by: José Expósito <jose.exposito89@gmail.com>
+Andrew
+
+>   arch/arm/Kconfig           | 67 +------------------------------------
+>   arch/arm/Kconfig.platforms | 68 ++++++++++++++++++++++++++++++++++++++
+>   2 files changed, 69 insertions(+), 66 deletions(-)
+>   create mode 100644 arch/arm/Kconfig.platforms
+> 
+> diff --git a/arch/arm/Kconfig b/arch/arm/Kconfig
+> index 0fb4b218f665..23e3e344f9c0 100644
+> --- a/arch/arm/Kconfig
+> +++ b/arch/arm/Kconfig
+> @@ -336,72 +336,7 @@ config ARCH_MULTIPLATFORM
+>   	  Selecting N here allows using those options, including
+>   	  DEBUG_UNCOMPRESS, XIP_KERNEL and ZBOOT_ROM. If unsure, say Y.
+>   
+> -menu "Platform selection"
+> -	depends on MMU
+> -
+> -comment "CPU Core family selection"
+> -
+> -config ARCH_MULTI_V4
+> -	bool "ARMv4 based platforms (FA526, StrongARM)"
+> -	depends on !ARCH_MULTI_V6_V7
+> -	# https://github.com/llvm/llvm-project/issues/50764
+> -	depends on !LD_IS_LLD || LLD_VERSION >= 160000
+> -	select ARCH_MULTI_V4_V5
+> -	select CPU_FA526 if !(CPU_SA110 || CPU_SA1100)
+> -
+> -config ARCH_MULTI_V4T
+> -	bool "ARMv4T based platforms (ARM720T, ARM920T, ...)"
+> -	depends on !ARCH_MULTI_V6_V7
+> -	# https://github.com/llvm/llvm-project/issues/50764
+> -	depends on !LD_IS_LLD || LLD_VERSION >= 160000
+> -	select ARCH_MULTI_V4_V5
+> -	select CPU_ARM920T if !(CPU_ARM7TDMI || CPU_ARM720T || \
+> -		CPU_ARM740T || CPU_ARM9TDMI || CPU_ARM922T || \
+> -		CPU_ARM925T || CPU_ARM940T)
+> -
+> -config ARCH_MULTI_V5
+> -	bool "ARMv5 based platforms (ARM926T, XSCALE, PJ1, ...)"
+> -	depends on !ARCH_MULTI_V6_V7
+> -	select ARCH_MULTI_V4_V5
+> -	select CPU_ARM926T if !(CPU_ARM946E || CPU_ARM1020 || \
+> -		CPU_ARM1020E || CPU_ARM1022 || CPU_ARM1026 || \
+> -		CPU_XSCALE || CPU_XSC3 || CPU_MOHAWK || CPU_FEROCEON)
+> -
+> -config ARCH_MULTI_V4_V5
+> -	bool
+> -
+> -config ARCH_MULTI_V6
+> -	bool "ARMv6 based platforms (ARM11)"
+> -	select ARCH_MULTI_V6_V7
+> -	select CPU_V6K
+> -
+> -config ARCH_MULTI_V7
+> -	bool "ARMv7 based platforms (Cortex-A, PJ4, Scorpion, Krait)"
+> -	default y
+> -	select ARCH_MULTI_V6_V7
+> -	select CPU_V7
+> -	select HAVE_SMP
+> -
+> -config ARCH_MULTI_V6_V7
+> -	bool
+> -	select MIGHT_HAVE_CACHE_L2X0
+> -
+> -config ARCH_MULTI_CPU_AUTO
+> -	def_bool !(ARCH_MULTI_V4 || ARCH_MULTI_V4T || ARCH_MULTI_V6_V7)
+> -	select ARCH_MULTI_V5
+> -
+> -endmenu
+> -
+> -config ARCH_VIRT
+> -	bool "Dummy Virtual Machine"
+> -	depends on ARCH_MULTI_V7
+> -	select ARM_AMBA
+> -	select ARM_GIC
+> -	select ARM_GIC_V2M if PCI
+> -	select ARM_GIC_V3
+> -	select ARM_GIC_V3_ITS if PCI
+> -	select ARM_PSCI
+> -	select HAVE_ARM_ARCH_TIMER
+> +source "arch/arm/Kconfig.platforms"
+>   
+>   config ARCH_AIROHA
+>   	bool "Airoha SoC Support"
+> diff --git a/arch/arm/Kconfig.platforms b/arch/arm/Kconfig.platforms
+> new file mode 100644
+> index 000000000000..ed1f6da11e24
+> --- /dev/null
+> +++ b/arch/arm/Kconfig.platforms
+> @@ -0,0 +1,68 @@
+> +# SPDX-License-Identifier: GPL-2.0-only
+> +
+> +menu "Platform selection"
+> +	depends on MMU
+> +
+> +comment "CPU Core family selection"
+> +
+> +config ARCH_MULTI_V4
+> +	bool "ARMv4 based platforms (FA526, StrongARM)"
+> +	depends on !ARCH_MULTI_V6_V7
+> +	# https://github.com/llvm/llvm-project/issues/50764
+> +	depends on !LD_IS_LLD || LLD_VERSION >= 160000
+> +	select ARCH_MULTI_V4_V5
+> +	select CPU_FA526 if !(CPU_SA110 || CPU_SA1100)
+> +
+> +config ARCH_MULTI_V4T
+> +	bool "ARMv4T based platforms (ARM720T, ARM920T, ...)"
+> +	depends on !ARCH_MULTI_V6_V7
+> +	# https://github.com/llvm/llvm-project/issues/50764
+> +	depends on !LD_IS_LLD || LLD_VERSION >= 160000
+> +	select ARCH_MULTI_V4_V5
+> +	select CPU_ARM920T if !(CPU_ARM7TDMI || CPU_ARM720T || \
+> +		CPU_ARM740T || CPU_ARM9TDMI || CPU_ARM922T || \
+> +		CPU_ARM925T || CPU_ARM940T)
+> +
+> +config ARCH_MULTI_V5
+> +	bool "ARMv5 based platforms (ARM926T, XSCALE, PJ1, ...)"
+> +	depends on !ARCH_MULTI_V6_V7
+> +	select ARCH_MULTI_V4_V5
+> +	select CPU_ARM926T if !(CPU_ARM946E || CPU_ARM1020 || \
+> +		CPU_ARM1020E || CPU_ARM1022 || CPU_ARM1026 || \
+> +		CPU_XSCALE || CPU_XSC3 || CPU_MOHAWK || CPU_FEROCEON)
+> +
+> +config ARCH_MULTI_V4_V5
+> +	bool
+> +
+> +config ARCH_MULTI_V6
+> +	bool "ARMv6 based platforms (ARM11)"
+> +	select ARCH_MULTI_V6_V7
+> +	select CPU_V6K
+> +
+> +config ARCH_MULTI_V7
+> +	bool "ARMv7 based platforms (Cortex-A, PJ4, Scorpion, Krait)"
+> +	default y
+> +	select ARCH_MULTI_V6_V7
+> +	select CPU_V7
+> +	select HAVE_SMP
+> +
+> +config ARCH_MULTI_V6_V7
+> +	bool
+> +	select MIGHT_HAVE_CACHE_L2X0
+> +
+> +config ARCH_MULTI_CPU_AUTO
+> +	def_bool !(ARCH_MULTI_V4 || ARCH_MULTI_V4T || ARCH_MULTI_V6_V7)
+> +	select ARCH_MULTI_V5
+> +
+> +endmenu
+> +
+> +config ARCH_VIRT
+> +	bool "Dummy Virtual Machine"
+> +	depends on ARCH_MULTI_V7
+> +	select ARM_AMBA
+> +	select ARM_GIC
+> +	select ARM_GIC_V2M if PCI
+> +	select ARM_GIC_V3
+> +	select ARM_GIC_V3_ITS if PCI
+> +	select ARM_PSCI
+> +	select HAVE_ARM_ARCH_TIMER
