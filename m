@@ -2,121 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB7F47021A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 04:24:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D0687021BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 04:35:38 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238682AbjEOCYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 14 May 2023 22:24:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59928 "EHLO
+        id S235533AbjEOCfe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 14 May 2023 22:35:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238944AbjEOCYJ (ORCPT
+        with ESMTP id S230281AbjEOCfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 14 May 2023 22:24:09 -0400
-Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979B61BE3;
-        Sun, 14 May 2023 19:23:21 -0700 (PDT)
-Received: by mail-pg1-x530.google.com with SMTP id 41be03b00d2f7-52c30fbccd4so11189252a12.0;
-        Sun, 14 May 2023 19:23:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684117315; x=1686709315;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=niU+K5V3bpGotdNKpKxWKa4Y6tYufU19KgTr2VkMAOs=;
-        b=TzK1q0I0oFDYjnlEeRsc/RoZzCBtJzngsvHVhHS26gVUo+WtNoR51Fq2J0eVQ7V9JY
-         XX0str2BASSFHiaTZa1p20RDKWbCbOTBcVuekLzpi+JmZ4hAQLVVVB90JscQ/O6LCq1m
-         33xxZQotsk6xDNqaz6r/SXYBOFjKiK34BEgRgIf3SE8nx/vpkktc1z5RUd4lzSW7sJB2
-         P3RGZxJ3dl0sty4J4Jtsg1bY3TLj3M9bGjC0VJ+RR/8NDFZFpuj/779GgmLIhRQ1UThQ
-         qCYHhUs9gdv2JpOwsO6mZQe93pMNthS3PcHmjjjp2VFKGesJhteE0NfOKhrUYUfNqBgH
-         +zsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684117315; x=1686709315;
-        h=content-transfer-encoding:subject:from:cc:to:content-language
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=niU+K5V3bpGotdNKpKxWKa4Y6tYufU19KgTr2VkMAOs=;
-        b=ZAdH1+YoAz9QQwVYthSx29MvakU3YSlXFmniNN5AzAtYvQN6W2SumJJtUgVY43x3wt
-         UojbrrnGfWcU0WxX1N8wApzZiZyc02BQYeJiI0mkaIcSJw+//eYvLT62i48kCm3bquJR
-         6uEjfIXE03HB10wNCoAo8yEJz2dyW0Z4jv/Q7TwFBNcdPBWMIq9ZebTAFXLIXNm48jjv
-         8r76ILE0o04y0p9HzjfJ24qLa3L+8djeVT8TAzV7POveTr1J2oZ+KnYS3CSnE8g+drY9
-         +dlFg29bstcIZrJEz+dlpIvS1mqJrsqClK5VEa+NsjJwsZXbODtwYf8ld+O1Fj/x0dOb
-         OWNg==
-X-Gm-Message-State: AC+VfDzFNXel8zdKgCYFAwBlpyfWkURMI61DeAfUY5yN/XsGWPkPJBjd
-        zbgnbb+CG6/Sd+OhQqvuWGqSqEPxB5A=
-X-Google-Smtp-Source: ACHHUZ6b0O29/SbNOOB1m/nfqjkm8TsYEwR4PWrH+ndWxFONqfoISHkRpOfAkfaFUYT1OsPN24E65Q==
-X-Received: by 2002:a17:902:f7c9:b0:1ad:eb62:f617 with SMTP id h9-20020a170902f7c900b001adeb62f617mr9893964plw.45.1684117314765;
-        Sun, 14 May 2023 19:21:54 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-25.three.co.id. [180.214.233.25])
-        by smtp.gmail.com with ESMTPSA id r4-20020a1709028bc400b001a95aef9728sm4568073plo.19.2023.05.14.19.21.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 14 May 2023 19:21:54 -0700 (PDT)
-Message-ID: <018f62d0-ee1d-9198-9c38-e45b10921e2e@gmail.com>
-Date:   Mon, 15 May 2023 09:21:38 +0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.0
-Content-Language: en-US
-To:     Linux Regressions <regressions@lists.linux.dev>,
+        Sun, 14 May 2023 22:35:31 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1431BB;
+        Sun, 14 May 2023 19:35:29 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4QKNl349svz4x1N;
+        Mon, 15 May 2023 12:35:27 +1000 (AEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1684118127;
+        bh=2u50IuYuFGQsWZ4R/Mr+7FE6MAZhgBZcHZaJvakXl4Q=;
+        h=Date:From:To:Cc:Subject:From;
+        b=UTqdV03E2pSxoCshskhNSlE2HtOLIZyCpqhR7+SCHqztkH9ce6RkwKzQ2XzIhdl8G
+         ZbvI2ehEIDjWMPoh8OZMA5GxqnOwS3Ojj02VXyHcSMiA+UvnVOSARKWlsVPNJvZ30x
+         KGYXAq6bmxgtbB3J5xkiVfP0/5JhQE/QouHabHN0MyHfotJ6jK6jDw+16tRt9lWmrv
+         jZG+6dfjpjyDdqfu4KGbF0l5esNMVqRG73eiZfkz2QJtZv4mAQ26+LQ3KgPYSXbEJk
+         uOzwDS4JHPALrb88dOA5d0REw4DQWYh0O+U2WZhEswz/3fOFISCnnBSuX9QAVKNWZv
+         diJZzYxHFgwYA==
+Date:   Mon, 15 May 2023 12:35:24 +1000
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Greg KH <greg@kroah.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krishna Kurapati <quic_kriskura@quicinc.com>,
         Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Wireless <linux-wireless@vger.kernel.org>,
-        Broadcom 80211 Devices <brcm80211-dev-list.pdl@broadcom.com>,
-        SHA cyfmac Subsystem <SHA-cyfmac-dev-list@infineon.com>,
-        Linux Kernel Network Developers <netdev@vger.kernel.org>
-Cc:     Hante Meuleman <hante.meuleman@broadcom.com>,
-        Pieter-Paul Giesberts <pieter-paul.giesberts@broadcom.com>,
-        Franky Lin <franky.lin@broadcom.com>,
-        Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>, julien.falque@gmail.com
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-Subject: Fwd: Freeze after resuming from hibernation (culprit is brcmfmac
- change?)
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=0.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Roger Quadros <rogerq@kernel.org>
+Subject: linux-next: manual merge of the usb tree with the usb.current tree
+Message-ID: <20230515123524.74e7bda3@canb.auug.org.au>
+MIME-Version: 1.0
+Content-Type: multipart/signed; boundary="Sig_/X4OBLMXhdWLp_/7nqeqQWoZ";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+--Sig_/X4OBLMXhdWLp_/7nqeqQWoZ
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I notice a regression report on bugzilla [1]. Quoting from it:
+Hi all,
 
->  julien.falque@gmail.com 2023-05-14 09:55:38 UTC
-> 
-> Since a Kernel update a few weeks ago, my laptop freezes when resuming from hibernation. It seems to handle the resume process normally but at the moment I should see Gnome login screen, I either get a black screen with just a white underscore instead, or nothing displayed at all (no backlight). I can't do anything at that point and I have to hard reboot.
-> 
-> Steps to reproduce:
-> - hibernate
-> - resume
-> - wait until the resuming process should finish: black screen instead of e.g. Gnome's login screen
-> 
-> journalctl gives nothing between the beginning of the resume and the crash, as if it never happened.
-> 
-> I have a Dell XPS 15 (9550) with Arch Linux. The issue happens on linux (since v6.2.0 I think) but linux-lts (currently v6.1.28) is fine.
-> 
-> A bisect on linux-git gave commit da6d9c8ecd00 as the cause of the problem.
+Today's linux-next merge of the usb tree got a conflict in:
 
-See bugzilla for the full thread.
+  drivers/usb/dwc3/gadget.c
 
-Julien: I asked you to also provide dmesg log as I don't know
-what exactly happened, but you mentioned the culprit was
-da6d9c8ecd00e2 ("wifi: brcmfmac: add firmware vendor info in driver info"),
-which implies that the crash involves your wifi device. From my experience
-though, GDM crashes are usually caused by xwayland.
+between commit:
 
-Anyway, I'm adding this to regzbot:
+  c8540870af4c ("usb: dwc3: gadget: Improve dwc3_gadget_suspend() and dwc3_=
+gadget_resume()")
 
-#regzbot introduced: da6d9c8ecd00e2 https://bugzilla.kernel.org/show_bug.cgi?id=217442
-#regzbot title: brcmfmac firmware vendor info addition triggers GDM crash on resuming from hibernation
+from the usb.current tree and commit:
 
-Thanks. 
+  813f44d57e19 ("usb: dwc3: gadget: Bail out in pullup if soft reset timeou=
+t happens")
 
-[1]: https://bugzilla.kernel.org/show_bug.cgi?id=217442
+from the usb tree.
 
--- 
-An old man doll... just what I always wanted! - Clara
+I fixed it up (I think - see below) and can carry the fix as
+necessary. This is now fixed as far as linux-next is concerned, but any
+non trivial conflicts should be mentioned to your upstream maintainer
+when your tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/usb/dwc3/gadget.c
+index d831f5acf7b5,5965796bc5d5..000000000000
+--- a/drivers/usb/dwc3/gadget.c
++++ b/drivers/usb/dwc3/gadget.c
+@@@ -2700,21 -2699,6 +2700,26 @@@ static int dwc3_gadget_soft_disconnect(
+  	return ret;
+  }
+ =20
+ +static int dwc3_gadget_soft_connect(struct dwc3 *dwc)
+ +{
+++	int	ret;
+++
+ +	/*
+ +	 * In the Synopsys DWC_usb31 1.90a programming guide section
+ +	 * 4.1.9, it specifies that for a reconnect after a
+ +	 * device-initiated disconnect requires a core soft reset
+ +	 * (DCTL.CSftRst) before enabling the run/stop bit.
+ +	 */
+ +	dwc3_core_soft_reset(dwc);
+++	ret =3D dwc3_core_soft_reset(dwc);
+++	if (ret)
+++		return ret;
+ +
+ +	dwc3_event_buffers_setup(dwc);
+ +	__dwc3_gadget_start(dwc);
+ +	return dwc3_gadget_run_stop(dwc, true);
+ +}
+ +
+  static int dwc3_gadget_pullup(struct usb_gadget *g, int is_on)
+  {
+  	struct dwc3		*dwc =3D gadget_to_dwc(g);
+
+--Sig_/X4OBLMXhdWLp_/7nqeqQWoZ
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmRhmmwACgkQAVBC80lX
+0Gw4Jwf+PAfCqjjWkX1KLNnY0k4raSlKkT5c2VdCEZXaE5w+zAf8vhal9XNl4m1v
+7tz2RiqWkWiw/4r4Q4k6NkXB85r4Am0wWsI+xEQ6LXHs+ZnI8IO1NsMloVPgo6HP
+RZZmKV7blAJrxNa5dGBhXSzKj5USLEnK4ZvbatEjRvZc+E9KXjBJTPuXSjBP4HyX
+ic25IZ8jhhtmJdqZ+V2841ll7qc2v3w6AurhPv6CctmEPq6AuSRe1eIx4OL6xc/J
+6cHNpxJvHXLL1ad2/l/5DbiGal4Ag7ccBAbw0jgt2WU8KRT2PqJcszg7q4Vx+VPw
+TrMz+EHNQRPpunHjDF9dsKgcDwHkwQ==
+=RzRF
+-----END PGP SIGNATURE-----
+
+--Sig_/X4OBLMXhdWLp_/7nqeqQWoZ--
