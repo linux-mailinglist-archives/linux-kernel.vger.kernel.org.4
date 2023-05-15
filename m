@@ -2,224 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB945702EED
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:58:31 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id EDA11702EF5
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:59:29 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238463AbjEON6X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 09:58:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
+        id S238648AbjEON7Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 09:59:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232866AbjEON6N (ORCPT
+        with ESMTP id S229765AbjEON7U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 09:58:13 -0400
-Received: from smtpout.efficios.com (unknown [IPv6:2607:5300:203:b2ee::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15AA10F3;
-        Mon, 15 May 2023 06:58:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1684159090;
-        bh=sUuJuaMEmAlyyRMOf/8VHfapTZrVaMFeI2CoS0ABZ7s=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=OLGh+GAmojuyW9nF5IZa1yyHZguiFtCo48Dr4T78gRkjmCD2LtK36gXCWFsgzVmqr
-         AigmiKda9NxWxPjvZQIHO2s6Xa8wUrjPNOdxsTUvGbku5uABfZMfpktJQx2Upe4jRz
-         OHv9qTlMt10FM3dGaLKsbhHMl2AOKp1bePfdXbB/YyDdwGsRgjakA1JgYV2HVvBFfV
-         tyGhRW2xQ+DM5lhFcqh5c7OoWQiSGrlHJoIB2R6YD7EiAR6xt5cuR+rcYJRaV8Zh4j
-         ryOdcPwN0AIUr8chVvN+t2UQ4oWKaOCD18vybGGblyj0RTYOEYjQb/hhFrz6BQJTR9
-         e1cHzV3jVuoFQ==
-Received: from localhost.localdomain (192-222-143-198.qc.cable.ebox.net [192.222.143.198])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4QKgtn6RPlz12dT;
-        Mon, 15 May 2023 09:58:09 -0400 (EDT)
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        "Paul E . McKenney" <paulmck@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
-        linux-api@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
-        linux-kselftest@vger.kernel.org,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Subject: [PATCH 4/4] selftests/rseq: Use rseq_unqual_scalar_typeof in macros
-Date:   Mon, 15 May 2023 09:58:01 -0400
-Message-Id: <20230515135801.15220-5-mathieu.desnoyers@efficios.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230515135801.15220-1-mathieu.desnoyers@efficios.com>
-References: <20230515135801.15220-1-mathieu.desnoyers@efficios.com>
+        Mon, 15 May 2023 09:59:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EC611FC8;
+        Mon, 15 May 2023 06:58:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9F3B161E19;
+        Mon, 15 May 2023 13:58:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92721C433D2;
+        Mon, 15 May 2023 13:58:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1684159132;
+        bh=dXmxxAtaeZy7XIFHWi51//o/kMZsvjSziHB1rUwZK+s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cOVXXfL3mmLPe7WVR/pHVkxTUErUbfwY9cDNcnrZT5mdYNX6mOx2tLBp6p2OmX1/P
+         Txi0+HpXm6SUX5wD3OQU4uy/MhbHkDbWQX4ozYSdhO1svJkRKKV/PKwrrgDNt6Yis3
+         Cn3MRmTVIanqiMjP+8vmza28IKvrFt+hpOhPG3Fml2Ip1qMCfXpY5cNrdL99VoQNPE
+         tAOQr/BcJlGDqf0hjycDhoqIpkknaLV1ktpDGU6tXveyww9RYeBzx1fmbwmDywf3+t
+         mcGNS64XCKQP89aQcDTaqHCT5k9JBZSr0AH3u+yWANSHzGHuwy0amZBVdkJN6npdUn
+         JvmG4f3xJgHCQ==
+Date:   Mon, 15 May 2023 15:58:42 +0200
+From:   Christian Brauner <brauner@kernel.org>
+To:     Zhihao Cheng <chengzhihao1@huawei.com>
+Cc:     miklos@szeredi.hu, amir73il@gmail.com,
+        linux-unionfs@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] ovl: ovl_permission: Fix null pointer dereference
+ at realinode in rcu-walk mode
+Message-ID: <20230515-sprachen-zeltlager-6925dfbe19c1@brauner>
+References: <20230515133629.1974610-1-chengzhihao1@huawei.com>
+ <20230515133629.1974610-2-chengzhihao1@huawei.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230515133629.1974610-2-chengzhihao1@huawei.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use rseq_unqual_scalar_typeof() rather than typeof() in macros to remove
-the volatile qualifier (if there is one in the input argument), thus
-generating better assembly code in those scenarios.
+On Mon, May 15, 2023 at 09:36:28PM +0800, Zhihao Cheng wrote:
+> Following process:
+>           P1                     P2
+>  path_lookupat
+>   link_path_walk
+>    inode_permission
+>     ovl_permission
+>       ovl_i_path_real(inode, &realpath)
+>         path->dentry = ovl_i_dentry_upper(inode)
+>                           drop_cache
+> 			   __dentry_kill(ovl_dentry)
+> 		            iput(ovl_inode)
+> 		             ovl_destroy_inode(ovl_inode)
+> 		              dput(oi->__upperdentry)
+> 		               dentry_kill(upperdentry)
+> 		                dentry_unlink_inode
+> 				 upperdentry->d_inode = NULL
+>       realinode = d_inode(realpath.dentry) // return NULL
+>       inode_permission(realinode)
+>        inode->i_sb  // NULL pointer dereference
+> , will trigger an null pointer dereference at realinode:
+>   [  335.664979] BUG: kernel NULL pointer dereference,
+>                  address: 0000000000000002
+>   [  335.668032] CPU: 0 PID: 2592 Comm: ls Not tainted 6.3.0
+>   [  335.669956] RIP: 0010:inode_permission+0x33/0x2c0
+>   [  335.678939] Call Trace:
+>   [  335.679165]  <TASK>
+>   [  335.679371]  ovl_permission+0xde/0x320
+>   [  335.679723]  inode_permission+0x15e/0x2c0
+>   [  335.680090]  link_path_walk+0x115/0x550
+>   [  335.680771]  path_lookupat.isra.0+0xb2/0x200
+>   [  335.681170]  filename_lookup+0xda/0x240
+>   [  335.681922]  vfs_statx+0xa6/0x1f0
+>   [  335.682233]  vfs_fstatat+0x7b/0xb0
+> 
+> Fetch a reproducer in [Link].
+> 
+> Add a new helper ovl_i_path_realinode() to get realpath and real inode
+> after non-nullptr checking, use the helper to replace the current realpath
+> getting logic.
+> 
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217405
+> Fixes: 4b7791b2e958 ("ovl: handle idmappings in ovl_permission()")
+> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+> Suggested-by: Christian Brauner <brauner@kernel.org>
+> ---
+>  fs/overlayfs/inode.c | 31 ++++++++++++++++++++++++-------
+>  1 file changed, 24 insertions(+), 7 deletions(-)
+> 
+> diff --git a/fs/overlayfs/inode.c b/fs/overlayfs/inode.c
+> index 541cf3717fc2..cc3ef5a6666a 100644
+> --- a/fs/overlayfs/inode.c
+> +++ b/fs/overlayfs/inode.c
+> @@ -278,6 +278,26 @@ int ovl_getattr(struct mnt_idmap *idmap, const struct path *path,
+>  	return err;
+>  }
+>  
+> +static inline int ovl_i_path_realinode(struct inode *inode,
+> +				       struct path *realpath,
+> +				       struct inode **realinode, int rcu)
+> +{
+> +	/* Careful in RCU walk mode */
+> +	ovl_i_path_real(inode, realpath);
+> +	if (!realpath->dentry) {
+> +		WARN_ON(!rcu);
+> +		return -ECHILD;
+> +	}
+> +
+> +	*realinode = d_inode(realpath->dentry);
+> +	if (!*realinode) {
+> +		WARN_ON(!rcu);
+> +		return -ECHILD;
+> +	}
+> +
+> +	return 0;
+> +}
 
-Also add extra brackets around the "p" parameter in RSEQ_READ_ONCE(),
-RSEQ_WRITE_ONCE(), and rseq_unqual_scalar_typeof() across architectures
-to preserve expectations of operator priority. Here is an example that
-shows how operator priority may be an issue with missing parentheses:
+If you want to return the inode wouldn't it possibly make more sense to
+return the inode from the function directly? But not fuzzed. Maybe Amir
+has a preference. As I said, I'm even fine with the original approach.
 
-    #define m(p) \
-    do { \
-            __typeof__(*p) v = 0; \
-    } while (0)
+static inline struct inode *ovl_i_path_realinode(struct inode *inode,
+						 struct path *realpath,
+						 int rcu)
+{
+	struct inode *realinode;
 
-    void fct(unsigned long long *p1)
-    {
-            m(p1 + 1);      /* works */
-            m(1 + p1);      /* broken */
-    }
+	/* Careful in RCU walk mode */
+	ovl_i_path_real(inode, realpath);
+	if (!realpath->dentry) {
+		WARN_ON(!rcu);
+		return ERR_PTR(-ECHILD);
+	}
 
-Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc: Peter Zijlstra <peterz@infradead.org>
----
- tools/testing/selftests/rseq/rseq-arm.h   | 4 ++--
- tools/testing/selftests/rseq/rseq-mips.h  | 4 ++--
- tools/testing/selftests/rseq/rseq-ppc.h   | 4 ++--
- tools/testing/selftests/rseq/rseq-riscv.h | 6 +++---
- tools/testing/selftests/rseq/rseq-s390.h  | 4 ++--
- tools/testing/selftests/rseq/rseq-x86.h   | 4 ++--
- 6 files changed, 13 insertions(+), 13 deletions(-)
+	realinode = d_inode(realpath->dentry);
+	if (!realinode) {
+		WARN_ON(!rcu);
+		return ERR_PTR(-ECHILD);
+	}
 
-diff --git a/tools/testing/selftests/rseq/rseq-arm.h b/tools/testing/selftests/rseq/rseq-arm.h
-index 8414fc3eac15..d887b3bbe257 100644
---- a/tools/testing/selftests/rseq/rseq-arm.h
-+++ b/tools/testing/selftests/rseq/rseq-arm.h
-@@ -66,7 +66,7 @@
- 
- #define rseq_smp_load_acquire(p)					\
- __extension__ ({							\
--	__typeof(*p) ____p1 = RSEQ_READ_ONCE(*p);			\
-+	rseq_unqual_scalar_typeof(*(p)) ____p1 = RSEQ_READ_ONCE(*(p));	\
- 	rseq_smp_mb();							\
- 	____p1;								\
- })
-@@ -76,7 +76,7 @@ __extension__ ({							\
- #define rseq_smp_store_release(p, v)					\
- do {									\
- 	rseq_smp_mb();							\
--	RSEQ_WRITE_ONCE(*p, v);						\
-+	RSEQ_WRITE_ONCE(*(p), v);					\
- } while (0)
- 
- #define __RSEQ_ASM_DEFINE_TABLE(label, version, flags, start_ip,	\
-diff --git a/tools/testing/selftests/rseq/rseq-mips.h b/tools/testing/selftests/rseq/rseq-mips.h
-index 50b950cf9585..42ef8e946693 100644
---- a/tools/testing/selftests/rseq/rseq-mips.h
-+++ b/tools/testing/selftests/rseq/rseq-mips.h
-@@ -45,7 +45,7 @@
- 
- #define rseq_smp_load_acquire(p)					\
- __extension__ ({							\
--	__typeof(*p) ____p1 = RSEQ_READ_ONCE(*p);			\
-+	rseq_unqual_scalar_typeof(*(p)) ____p1 = RSEQ_READ_ONCE(*(p));	\
- 	rseq_smp_mb();							\
- 	____p1;								\
- })
-@@ -55,7 +55,7 @@ __extension__ ({							\
- #define rseq_smp_store_release(p, v)					\
- do {									\
- 	rseq_smp_mb();							\
--	RSEQ_WRITE_ONCE(*p, v);						\
-+	RSEQ_WRITE_ONCE(*(p), v);					\
- } while (0)
- 
- #if _MIPS_SZLONG == 64
-diff --git a/tools/testing/selftests/rseq/rseq-ppc.h b/tools/testing/selftests/rseq/rseq-ppc.h
-index dc9190facee9..57b160597189 100644
---- a/tools/testing/selftests/rseq/rseq-ppc.h
-+++ b/tools/testing/selftests/rseq/rseq-ppc.h
-@@ -23,7 +23,7 @@
- 
- #define rseq_smp_load_acquire(p)					\
- __extension__ ({							\
--	__typeof(*p) ____p1 = RSEQ_READ_ONCE(*p);			\
-+	rseq_unqual_scalar_typeof(*(p)) ____p1 = RSEQ_READ_ONCE(*(p));	\
- 	rseq_smp_lwsync();						\
- 	____p1;								\
- })
-@@ -33,7 +33,7 @@ __extension__ ({							\
- #define rseq_smp_store_release(p, v)					\
- do {									\
- 	rseq_smp_lwsync();						\
--	RSEQ_WRITE_ONCE(*p, v);						\
-+	RSEQ_WRITE_ONCE(*(p), v);					\
- } while (0)
- 
- /*
-diff --git a/tools/testing/selftests/rseq/rseq-riscv.h b/tools/testing/selftests/rseq/rseq-riscv.h
-index 17932a79e066..37e598d0a365 100644
---- a/tools/testing/selftests/rseq/rseq-riscv.h
-+++ b/tools/testing/selftests/rseq/rseq-riscv.h
-@@ -36,8 +36,8 @@
- 
- #define rseq_smp_load_acquire(p)					\
- __extension__ ({							\
--	__typeof(*(p)) ____p1 = RSEQ_READ_ONCE(*(p));			\
--	RISCV_FENCE(r, rw)						\
-+	rseq_unqual_scalar_typeof(*(p)) ____p1 = RSEQ_READ_ONCE(*(p));	\
-+	RISCV_FENCE(r, rw);						\
- 	____p1;								\
- })
- 
-@@ -46,7 +46,7 @@ __extension__ ({							\
- #define rseq_smp_store_release(p, v)					\
- do {									\
- 	RISCV_FENCE(rw, w);						\
--	RSEQ_WRITE_ONCE(*(p), v);						\
-+	RSEQ_WRITE_ONCE(*(p), v);					\
- } while (0)
- 
- #define __RSEQ_ASM_DEFINE_TABLE(label, version, flags, start_ip,	\
-diff --git a/tools/testing/selftests/rseq/rseq-s390.h b/tools/testing/selftests/rseq/rseq-s390.h
-index 46c92598acc7..33baaa9f9997 100644
---- a/tools/testing/selftests/rseq/rseq-s390.h
-+++ b/tools/testing/selftests/rseq/rseq-s390.h
-@@ -15,7 +15,7 @@
- 
- #define rseq_smp_load_acquire(p)					\
- __extension__ ({							\
--	__typeof(*p) ____p1 = RSEQ_READ_ONCE(*p);			\
-+	rseq_unqual_scalar_typeof(*(p)) ____p1 = RSEQ_READ_ONCE(*(p));	\
- 	rseq_barrier();							\
- 	____p1;								\
- })
-@@ -25,7 +25,7 @@ __extension__ ({							\
- #define rseq_smp_store_release(p, v)					\
- do {									\
- 	rseq_barrier();							\
--	RSEQ_WRITE_ONCE(*p, v);						\
-+	RSEQ_WRITE_ONCE(*(p), v);					\
- } while (0)
- 
- #ifdef __s390x__
-diff --git a/tools/testing/selftests/rseq/rseq-x86.h b/tools/testing/selftests/rseq/rseq-x86.h
-index fb65ef54b0fb..a2aa428ba151 100644
---- a/tools/testing/selftests/rseq/rseq-x86.h
-+++ b/tools/testing/selftests/rseq/rseq-x86.h
-@@ -42,7 +42,7 @@
- 
- #define rseq_smp_load_acquire(p)					\
- __extension__ ({							\
--	__typeof(*p) ____p1 = RSEQ_READ_ONCE(*p);			\
-+	rseq_unqual_scalar_typeof(*(p)) ____p1 = RSEQ_READ_ONCE(*(p));	\
- 	rseq_barrier();							\
- 	____p1;								\
- })
-@@ -52,7 +52,7 @@ __extension__ ({							\
- #define rseq_smp_store_release(p, v)					\
- do {									\
- 	rseq_barrier();							\
--	RSEQ_WRITE_ONCE(*p, v);						\
-+	RSEQ_WRITE_ONCE(*(p), v);					\
- } while (0)
- 
- #define __RSEQ_ASM_DEFINE_TABLE(label, version, flags,			\
--- 
-2.25.1
+	return realinode;
+}
 
+> +
+>  int ovl_permission(struct mnt_idmap *idmap,
+>  		   struct inode *inode, int mask)
+>  {
+> @@ -287,12 +307,10 @@ int ovl_permission(struct mnt_idmap *idmap,
+>  	const struct cred *old_cred;
+>  	int err;
+>  
+> -	/* Careful in RCU walk mode */
+> -	ovl_i_path_real(inode, &realpath);
+> -	if (!realpath.dentry) {
+> -		WARN_ON(!(mask & MAY_NOT_BLOCK));
+> -		return -ECHILD;
+> -	}
+> +	err = ovl_i_path_realinode(inode, &realpath, &realinode,
+> +				   mask & MAY_NOT_BLOCK);
+> +	if (err)
+> +		return err;
+>  
+>  	/*
+>  	 * Check overlay inode with the creds of task and underlying inode
+> @@ -302,7 +320,6 @@ int ovl_permission(struct mnt_idmap *idmap,
+>  	if (err)
+>  		return err;
+>  
+> -	realinode = d_inode(realpath.dentry);
+>  	old_cred = ovl_override_creds(inode->i_sb);
+>  	if (!upperinode &&
+>  	    !special_file(realinode->i_mode) && mask & MAY_WRITE) {
+> -- 
+> 2.39.2
+> 
