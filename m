@@ -2,122 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46EAE70297C
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 11:50:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D69DB702971
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 11:46:10 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S239866AbjEOJuK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 05:50:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53910 "EHLO
+        id S237870AbjEOJqI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 15 May 2023 05:46:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S237900AbjEOJtt (ORCPT
+        with ESMTP id S241244AbjEOJpT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 05:49:49 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 418991AD
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:49:48 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id A1E125FD20;
-        Mon, 15 May 2023 12:49:46 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1684144186;
-        bh=Vz83jCy0spHA1ZRural7ddOQ1iT++4tUqhV7Ue23lk4=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=qcn0IQfHKcGxRJrBonclWUzFGa4XbN3UU6+FFP2AsksiDymQ6qNyJELtmB+wp36eq
-         PGVeFzgUnZww1VpOhjHQc58e5YFXfAN5i8YvvR4CIUctnyZ1aY4dVrn4aGRuy0NQfd
-         m12CbKfAW7nSCh8ufHe4Hct5q1juezSISYESH0Nbt8QI243gw1FewU8wrF5fZ+YVAi
-         lTjuvjuIfvhtsNSDqqR8z+GT+Qb4/2WO/sIIfYliAHUQ9QPFWwmd5Dz09Bm1II3kbW
-         nDBgUSxU1tD1iqMAjGKSpGg4GvssvSm0RyiHy2X3nvvkVeqZqUnoQSXqFXVO08SkuM
-         +nqn2DBNfqqKQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 15 May 2023 12:49:46 +0300 (MSK)
-From:   Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-To:     Liang Yang <liang.yang@amlogic.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Jianxin Pan <jianxin.pan@amlogic.com>,
-        Yixun Lan <yixun.lan@amlogic.com>
-CC:     <oxffffaa@gmail.com>, <kernel@sberdevices.ru>,
-        Arseniy Krasnov <AVKrasnov@sberdevices.ru>,
-        <linux-mtd@lists.infradead.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-amlogic@lists.infradead.org>, <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4 3/5] mtd: rawnand: meson: always read whole OOB bytes
-Date:   Mon, 15 May 2023 12:44:37 +0300
-Message-ID: <20230515094440.3552094-4-AVKrasnov@sberdevices.ru>
-X-Mailer: git-send-email 2.35.0
-In-Reply-To: <20230515094440.3552094-1-AVKrasnov@sberdevices.ru>
-References: <20230515094440.3552094-1-AVKrasnov@sberdevices.ru>
+        Mon, 15 May 2023 05:45:19 -0400
+Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BF37E79
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:44:50 -0700 (PDT)
+Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-b9dea9d0360so16584071276.1
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:44:50 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684143889; x=1686735889;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FfFE/qiRkN557/2I5XaanSNXOAZ3eFVDGQ65E3a+VhY=;
+        b=eOGFHz1BY67FKSOAw16kbFMRbsbm8dY5Izlh7ngGUIJ2MhmcpOavU6qfaE9VU/W36v
+         MV6mRRBlljqxEflu4pqI6F7xU0FRXNFWtBY/8XFqrvrUq5kLOv4Qvb+VrE5Ofqjppl4z
+         7jEL60rSnORm71LK4NuVmrJ4D/P9J+khOuyhxitdsu+iG+WHx4HHDq07QKkHgXAHuNj1
+         lnxfU8IJXnQ6Jlxmj1aRnA8MiqlUU3JgsqyS3Pk1/dQ8QkHTmLdpFXbLeEmSUD0Kdmyz
+         Awy5mnSdLpRwo/4WKC+wmP8EHO+kfhNn5stY3jM+aAq71YYzSiR4L0pDEwhMnsdNGANQ
+         AWvA==
+X-Gm-Message-State: AC+VfDzllWFzJvQ2wcR3ttJYC+eEFt2AthThV0cvgKyxI5uUDyt19YVV
+        ncvbPmAbgZSFaJ2o6ujzwA6M/fFx7u4ujg==
+X-Google-Smtp-Source: ACHHUZ42QFb5GpRA2P/oLJrUAZzZNpLdoaisSUJUWBDz8TmwrDvv155otu3wPr5pmJgHzA639RRLNA==
+X-Received: by 2002:a25:c7c3:0:b0:ba7:86c2:d95c with SMTP id w186-20020a25c7c3000000b00ba786c2d95cmr3869710ybe.64.1684143889180;
+        Mon, 15 May 2023 02:44:49 -0700 (PDT)
+Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com. [209.85.128.174])
+        by smtp.gmail.com with ESMTPSA id z14-20020a25bb0e000000b00b96a0d1a0a7sm6771287ybg.11.2023.05.15.02.44.48
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 02:44:48 -0700 (PDT)
+Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-559debdedb5so186439787b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 02:44:48 -0700 (PDT)
+X-Received: by 2002:a81:9c10:0:b0:559:e974:82 with SMTP id m16-20020a819c10000000b00559e9740082mr33480420ywa.20.1684143888518;
+ Mon, 15 May 2023 02:44:48 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/05/15 04:03:00 #21308474
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+References: <1296c4d691bba057291246f067c191ef8a88531c.1680667933.git.fthain@linux-m68k.org>
+In-Reply-To: <1296c4d691bba057291246f067c191ef8a88531c.1680667933.git.fthain@linux-m68k.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 15 May 2023 11:44:37 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdXLsnfQ4XhJiuE54BjGaCMAxvzOR+GGB9iFD8pYXprfxQ@mail.gmail.com>
+Message-ID: <CAMuHMdXLsnfQ4XhJiuE54BjGaCMAxvzOR+GGB9iFD8pYXprfxQ@mail.gmail.com>
+Subject: Re: [PATCH v4] nubus: Don't list slot resources by default
+To:     Finn Thain <fthain@linux-m68k.org>
+Cc:     Brad Boyer <flar@allandria.com>, linux-m68k@lists.linux-m68k.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This changes size of read access to OOB area by reading all bytes of
-OOB (free bytes + ECC engine bytes).
+On Wed, Apr 5, 2023 at 6:19 AM Finn Thain <fthain@linux-m68k.org> wrote:
+> Some Nubus card ROMs contain many slot resources. A single Radius video
+> card produced well over a thousand entries under /proc/bus/nubus/.
+> Populating /proc/bus/nubus/ on a slow machine with several such cards
+> installed takes long enough that the user may think that the system is
+> wedged. All those procfs entries also consume significant RAM though
+> they are not normally needed (except by developers).
+> Omit these resources from /proc/bus/nubus/ by default and add a kernel
+> parameter to enable them when needed.
+> On the test machine, this saved 300 kB and 10 seconds.
+>
+> Cc: Brad Boyer <flar@allandria.com>
+> Tested-by: Stan Johnson <userm57@yahoo.com>
+> Signed-off-by: Finn Thain <fthain@linux-m68k.org>
+> ---
+> Changed since v3:
+>  - Better commentary.
+> Changed since v2:
+>  - Added commentary.
+>  - Moved declaration to nubus.h.
+> Changed since v1:
+>  - Expanded to cover all slot resources in procfs.
 
-Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
----
- drivers/mtd/nand/raw/meson_nand.c | 24 ++++++++++++++++++++++++
- 1 file changed, 24 insertions(+)
+Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
+i.e. will queue in the m68k for-v6.5 branch.
 
-diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/meson_nand.c
-index 8526a6b87720..a31106c943d7 100644
---- a/drivers/mtd/nand/raw/meson_nand.c
-+++ b/drivers/mtd/nand/raw/meson_nand.c
-@@ -755,6 +755,30 @@ static int __meson_nfc_read_oob(struct nand_chip *nand, int page,
- 	u32 oob_bytes;
- 	u32 page_size;
- 	int ret;
-+	int i;
-+
-+	/* Read ECC codes and user bytes. */
-+	for (i = 0; i < nand->ecc.steps; i++) {
-+		u32 ecc_offs = nand->ecc.size * (i + 1) +
-+			       NFC_OOB_PER_ECC(nand) * i;
-+
-+		ret = nand_read_page_op(nand, page, 0, NULL, 0);
-+		if (ret)
-+			return ret;
-+
-+		/* Use temporary buffer, because 'nand_change_read_column_op()'
-+		 * seems work with some alignment, so we can't read data to
-+		 * 'oob_buf' directly.
-+		 */
-+		ret = nand_change_read_column_op(nand, ecc_offs, meson_chip->oob_buf,
-+						 NFC_OOB_PER_ECC(nand), false);
-+		if (ret)
-+			return ret;
-+
-+		memcpy(oob_buf + i * NFC_OOB_PER_ECC(nand),
-+		       meson_chip->oob_buf,
-+		       NFC_OOB_PER_ECC(nand));
-+	}
- 
- 	oob_bytes = meson_nfc_get_oob_bytes(nand);
- 
+Gr{oetje,eeting}s,
+
+                        Geert
+
 -- 
-2.35.0
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
