@@ -2,137 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D9F702FF6
+	by mail.lfdr.de (Postfix) with ESMTP id 99A6F702FF5
 	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 16:34:17 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240343AbjEOOeJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 10:34:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58572 "EHLO
+        id S240066AbjEOOeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 10:34:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241730AbjEOOdx (ORCPT
+        with ESMTP id S241849AbjEOOeA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 10:33:53 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FCE51FCE
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 07:33:23 -0700 (PDT)
-Received: from [IPV6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab] (unknown [IPv6:2001:b07:2ed:14ed:a962:cd4d:a84:1eab])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C3CEB66029DE;
-        Mon, 15 May 2023 15:32:45 +0100 (BST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1684161166;
-        bh=bWZThDJSU0iT2g+zjqNeZ3/ILxoEj05Ce5sSgcKUe/o=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=U+eR1vgoJXvDzgRfU2ak0AcHjYq5CcRxGoLBcC++VJhYWXDmJ4sZ746fZ7zXTBnbw
-         TBPemcV8v/KRvCQOroPb9vkpvNaWbXC0IJ0wztLD6RYdRJdGNcwuBX2QG5FBHa5cqe
-         VX0TJJvEXBIqAqA5NpXh1yHIXyMQpYSREE9i7K8Ik66ybXu7ivAk/y5Rz7pse5naP+
-         CUWiQQgXNZ6u0AAcyRsDSHEimkhbunfZOOvtKI1m4N3zaWGxw7vdT5DGLy+M/C5B81
-         sHWNVY4Q9Y50BPgQx7y1D+/M+sByFaC5GTQxv8Dx3wnatXCeG+jSDv4vVsHp2Q/a3K
-         kSL6TUU/EeGtg==
-Message-ID: <54e6923c-729a-49de-8395-fbd0b8443aa8@collabora.com>
-Date:   Mon, 15 May 2023 16:32:42 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.10.1
-Subject: Re: [PATCH v2 2/2] phy: mtk-mipi-csi: add driver for CSI phy
-Content-Language: en-US
-To:     Julien Stephan <jstephan@baylibre.com>
-Cc:     krzysztof.kozlowski@linaro.org, robh@kernel.org,
-        chunkuang.hu@kernel.org, linux-mediatek@lists.infradead.org,
-        Phi-bang Nguyen <pnguyen@baylibre.com>,
-        Louis Kuo <louis.kuo@mediatek.com>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Andy Hsieh <andy.hsieh@mediatek.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        open list <linux-kernel@vger.kernel.org>,
-        "moderated list:ARM/Mediatek USB3 PHY DRIVER" 
+        Mon, 15 May 2023 10:34:00 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3B0D268A;
+        Mon, 15 May 2023 07:33:30 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 34FEWpL6026951;
+        Mon, 15 May 2023 09:32:51 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1684161171;
+        bh=xouBqGJTe/JCoQCmMoRe3QLxsICzaUsthaIXw/SyHus=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=sHtubQSG0J4ZNrsvueP+naKaGOMIVFd25b9/OlwmsfEud4lnI+4wvBIToJty9sZjg
+         2KMToqmxv1D7Rlmj+9zxraSHaYCzO4vb5bWq7QIvqsQFjDM0tfUUn1/ur+rUk4acKu
+         0OtLDiUBE7jcxJGDXitwuB13aXS9mAzmLWCX+v5o=
+Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 34FEWoa8057487
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 15 May 2023 09:32:51 -0500
+Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE114.ent.ti.com
+ (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 15
+ May 2023 09:32:50 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 15 May 2023 09:32:50 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 34FEWoHo007535;
+        Mon, 15 May 2023 09:32:50 -0500
+Date:   Mon, 15 May 2023 09:32:50 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Nitin Yadav <n-yadav@ti.com>
+CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <conor+dt@kernel.org>,
         <linux-arm-kernel@lists.infradead.org>,
-        "open list:GENERIC PHY FRAMEWORK" <linux-phy@lists.infradead.org>,
-        "open list:DRM DRIVERS FOR MEDIATEK" 
-        <dri-devel@lists.freedesktop.org>
-References: <20230515090551.1251389-1-jstephan@baylibre.com>
- <20230515090551.1251389-3-jstephan@baylibre.com>
- <cd6067b2-660a-8f2c-697d-26814a9dc131@collabora.com>
- <b2nk4jw2hpy4ndoq4cojazkn6h3tra2zjffhiswb7aqryabf7q@mkbtzhzcbivv>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <b2nk4jw2hpy4ndoq4cojazkn6h3tra2zjffhiswb7aqryabf7q@mkbtzhzcbivv>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
-        version=3.4.6
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 2/2] arm64: dts: ti: k3-am62-main: add sa3_secproxy in
+ cbass_main
+Message-ID: <20230515143250.jxwwgse24lrcqouc@grunge>
+References: <20230510123216.3440019-1-n-yadav@ti.com>
+ <20230510123216.3440019-3-n-yadav@ti.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20230510123216.3440019-3-n-yadav@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 15/05/23 16:07, Julien Stephan ha scritto:
-> On Mon, May 15, 2023 at 02:22:52PM +0200, AngeloGioacchino Del Regno wrote:
->>> +#define CSIxB_OFFSET		0x1000
->>
->> What if we grab two (or three?) iospaces from devicetree?
->>
->> - base (global)
->> - csi_a
->> - csi_b
->>
->> That would make it possible to maybe eventually extend this driver to more
->> versions (older or newer) of the CSI PHY IP without putting fixes offsets
->> inside of platform data structures and such.
->>
-> Hi Angelo,
-> The register bank of the CSI port is divided into 2:
-> * from base address to base + 0x1000 (port A)
-> * from base + 0x1000 to base +0x2000 (port B)
-> Some CSI port can be configured in 4D1C mode (4 data + 1 clock) using
-> the whole register bank from base to base + 0x2000 or in 2D1C mode (2 data +
-> 1 clock) and use either port A or port B.
+On 18:02-20230510, Nitin Yadav wrote:
+> Add sa3_secproxy node in k3-am62-main.dtsi to keep device tree
+> nodes in sync with u-boot nodes.
 > 
-> For example  mt8365 has CSI0 that can be used either in 4D1C mode or in
-> 2 * 2D1C and CSI1 which can use only 4D1C mode
+> Signed-off-by: Nitin Yadav <n-yadav@ti.com>
+> ---
+>  arch/arm64/boot/dts/ti/k3-am62-main.dtsi | 9 +++++++++
+>  1 file changed, 9 insertions(+)
 > 
-> 2D1C mode can not be tested and is not implemented in the driver so
-> I guess adding csi_a and csi_b reg value may be confusing?
+> diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+> index b3e4857bbbe4..7c2af5b0e022 100644
+> --- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
+> @@ -42,6 +42,15 @@ gic_its: msi-controller@1820000 {
+>  		};
+>  	};
+>  
+> +	sa3_secproxy: secproxy@44880000 {
+> +		compatible = "ti,am654-secure-proxy";
+> +		#mbox-cells = <1>;
+> +		reg-names = "rt", "scfg", "target_data";
+> +		reg = <0x00 0x44880000 0x00 0x20000>,
+> +		      <0x0 0x44860000 0x0 0x20000>,
+> +		      <0x0 0x43600000 0x0 0x10000>;
+be consistent with 0x00 instead of 0x0
+
+You want this marked reserved and documented since it is to be used only by HSM
+processors and NOT general processors.
+
+> +	};
+> +
+>  	main_conf: syscon@100000 {
+>  		compatible = "syscon", "simple-mfd";
+>  		reg = <0x00 0x00100000 0x00 0x20000>;
+> -- 
+> 2.25.1
 > 
-> What do you think?
 
-Ok so we're talking about two data lanes per CSI port... it may still be
-beneficial to split the two register regions as
-
-reg-names = "csi-a", "csi-b"; (whoops, I actually used underscores before,
-                                and that was a mistake, sorry!)
-
-....but that would be actually good only if we are expecting to get a CSI
-PHY in the future with four data lanes per port.
-
-If you do *not* expect at all such a CSI PHY, or you do *not* expect such
-a PHY to ever be compatible with this driver (read as: if you expect such
-a PHY to be literally completely different from this one), then it would
-not change much to have the registers split in two.
-
-Another case in which it would make sense is if we were to get a PHY that
-provides more than two CSI ports: in that case, we'd avoid platform data
-machinery to check the number of actual ports in the IP, as we would be
-just checking how many register regions we were given from the devicetree,
-meaning that if we got "csi-a", "csi-b", "csi-c", "csi-d", we have four
-ports.
-
-Besides, another thing to think about is... yes you cannot test nor implement
-2D1C mode in your submission, but this doesn't mean that others won't ever be
-interested in this and that other people won't be actually implementing that;
-Providing them with the right initial driver structure will surely make things
-easier, encouraging other people from the community to spend their precious
-time on the topic.
-
+-- 
 Regards,
-Angelo
-
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
