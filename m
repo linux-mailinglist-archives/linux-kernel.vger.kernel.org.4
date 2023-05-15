@@ -2,52 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6177F702D40
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:58:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 39056702D4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:59:11 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241878AbjEOM5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 08:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45204 "EHLO
+        id S242042AbjEOM6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 08:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242031AbjEOM5K (ORCPT
+        with ESMTP id S242057AbjEOM6G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 08:57:10 -0400
-Received: from mail-il1-f205.google.com (mail-il1-f205.google.com [209.85.166.205])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03F51BC5
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:56:56 -0700 (PDT)
-Received: by mail-il1-f205.google.com with SMTP id e9e14a558f8ab-33117143894so83173695ab.3
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:56:56 -0700 (PDT)
+        Mon, 15 May 2023 08:58:06 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7686E5
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:58:03 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-ba6fffc5524so5446579276.3
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:58:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1684155483; x=1686747483;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HXqDQRh3lmw332MPRvHZucQcQJLpqaLIK4wu8oQfcgE=;
+        b=nW1I839PaX6h9dZPy+wPPlK9E5my1YR0mZqI+8SXWJ54ChnlV3NyrP7PDtv8FARxgv
+         N+KlKw1wbJROgv1WvJ1ahWUn0cMtxt3javmg9ag+Lj4akVdt6pRDaC+OTqhD/gzHFmrL
+         b7qEI0nqk1VxyYDYY1RZL2bF/O9OwqhtkvQ+ZUnXIg0qnZL4yn1miukLr2fMWWnF8z6I
+         wG9hwC30pN6HwkGGAfF6c5Sb8Dl0d15fcHKMQrnkoXsqOWHk2e5HFwrwAtINadH4IUOU
+         6bYrCPRaiiiy7TOk659Ql1aP6p55wlCi6ACZXlFBLkXSVyVvEfpz/9kdjDkOHfdy9tVx
+         HeRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684155416; x=1686747416;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lBrVM5vmUfrnVSMRAOraV9dR/Tsb1O86cQHaXY5501A=;
-        b=WJBRt1SexSVrW1IkLWeHzsi6Jf+jwQVcYowFmx8kTWtEWMdGBJg5q7y5rsL0+R4aNS
-         JxstbTynX/WYxirKkhnTGp2h6GvHW+rGyxlzvUXZ0mhuXZDWo7ZrdcQW62kmzpTyR3b0
-         mPgd254QPI45OP253oPfDfo+1oWCgTe4fjlw35REBYcdI7jJzE3YguWOk77gdaEFeoZP
-         jKcLjbhk7HR7FJlHAHzTNwaaOlSasYItKbs6/hk8zniiUiS4hIKeAjUzwGcYicvDJv5e
-         PfPEU8zhv8t78ht7GhNs32OdynluCyjs4oDx5Hp8Xwti13NGS+e0tDd53t9j3I9NGfgS
-         GssA==
-X-Gm-Message-State: AC+VfDxXSRUqDm72mYVOL99H6vGRIiolV0D7bhj0rRRi4Ge70eqS9tGM
-        xahx5nKPnKG6F5Ksnm7DcZ58fJ2BkNDkqRDWW3DJKjiCJKGy
-X-Google-Smtp-Source: ACHHUZ5m8IV6avZoGqCM2loZguQq890l0hao/iR49SVkW2gi4/0ebSMPMvV0n4FFcSr4odiz7um92fLYH0NITCXVyBHk61eeXhPn
+        d=1e100.net; s=20221208; t=1684155483; x=1686747483;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HXqDQRh3lmw332MPRvHZucQcQJLpqaLIK4wu8oQfcgE=;
+        b=OuZo/xu1wawUXa/TwfzsEv5YjIsQRpXGBIcuwZ3r318QwbFD7bBd5eo6/+EMqpa4NP
+         7HsE0TyRPzxwWd0cko2mSvDEzFZ1zzPGAZd31uiaKpsy2IK7e8fg+Pdnulq2mnjcCAde
+         CJmXLeKF4Z8/tWgI7uw7NS0hA67F1pMunCRSUzoTJmr8GVQu0SvvnvkseAmjHmmFuFQ3
+         On+EIHrf3dIeJxjKMWFmpHDxzFKlbqXfOI2SK3Jr7XpKQiKx8XRNApqsvTM0BGVAObGw
+         F0RjOZiWTk5ZZYocbo6lidFUYQ1MDLzScYHFldGr5qQ6Y3wt2+qGHqO02tj1eiSN4NGP
+         Zjug==
+X-Gm-Message-State: AC+VfDz741DNRVYYTPkreutq5aWFC/kzDMFfdirh7SoZZwAClT293/Xq
+        SGs+5eks5QYZ6+SWGa8Np8saYxy4QZGTfOhZNPF+jg==
+X-Google-Smtp-Source: ACHHUZ5HcaVgTLl9wGnyPOESD2iVVb16GOSG7yMh3VRdCQ/p+kSj3yrx3LaanFXqAed3eneQWizWHF6gPhbKR7UzPZo=
+X-Received: by 2002:a25:adc3:0:b0:ba6:ba75:2315 with SMTP id
+ d3-20020a25adc3000000b00ba6ba752315mr10259485ybe.47.1684155482912; Mon, 15
+ May 2023 05:58:02 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a92:d5cb:0:b0:337:41d3:4d9e with SMTP id
- d11-20020a92d5cb000000b0033741d34d9emr3477815ilq.6.1684155416194; Mon, 15 May
- 2023 05:56:56 -0700 (PDT)
-Date:   Mon, 15 May 2023 05:56:56 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000005434c405fbbafdc5@google.com>
-Subject: [syzbot] [nilfs?] WARNING in nilfs_segctor_do_construct (2)
-From:   syzbot <syzbot+33494cd0df2ec2931851@syzkaller.appspotmail.com>
-To:     konishi.ryusuke@gmail.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-nilfs@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
+References: <20230509161218.11979-1-quic_jkona@quicinc.com>
+ <20230509161218.11979-5-quic_jkona@quicinc.com> <7faf4c16-98ff-f27d-d1fd-3058370c06f5@linaro.org>
+In-Reply-To: <7faf4c16-98ff-f27d-d1fd-3058370c06f5@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Date:   Mon, 15 May 2023 15:57:52 +0300
+Message-ID: <CAA8EJpo1iMj90BPc6gYngSrJqd8WWArRndgbcVg1fYBKBpVfAQ@mail.gmail.com>
+Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm8550: Add video clock controller
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Jagadeesh Kona <quic_jkona@quicinc.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=no
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,83 +76,63 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, 15 May 2023 at 15:28, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>
+>
+>
+> On 9.05.2023 18:12, Jagadeesh Kona wrote:
+> > Add device node for video clock controller on Qualcomm SM8550 platform.
+> >
+> > Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
+> > Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
+> > ---
+> >  arch/arm64/boot/dts/qcom/sm8550.dtsi | 12 ++++++++++++
+> >  1 file changed, 12 insertions(+)
+> >
+> > diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> > index 6e9bad8f6f33..e67e7c69dae6 100644
+> > --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> > +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
+> > @@ -7,6 +7,7 @@
+> >  #include <dt-bindings/clock/qcom,sm8550-gcc.h>
+> >  #include <dt-bindings/clock/qcom,sm8550-tcsr.h>
+> >  #include <dt-bindings/clock/qcom,sm8550-dispcc.h>
+> > +#include <dt-bindings/clock/qcom,sm8550-videocc.h>
+> >  #include <dt-bindings/dma/qcom-gpi.h>
+> >  #include <dt-bindings/gpio/gpio.h>
+> >  #include <dt-bindings/interrupt-controller/arm-gic.h>
+> > @@ -759,6 +760,17 @@ gcc: clock-controller@100000 {
+> >                                <&usb_dp_qmpphy QMP_USB43DP_USB3_PIPE_CLK>;
+> >               };
+> >
+> > +             videocc: clock-controller@aaf0000 {
+> This node should be moved down. Nodes with unit addresses
+> should be sorted alphanumerically.
+>
+> > +                     compatible = "qcom,sm8550-videocc";
+> > +                     reg = <0 0x0aaf0000 0 0x10000>;
+> > +                     clocks = <&bi_tcxo_div2>, <&gcc GCC_VIDEO_AHB_CLK>;
+> One per line, please
+>
+> Also, any reason the XO clock does not come from RPMhCC?
 
-syzbot found the following issue on:
+bi_tcxo_div_2 is an RPMhCC clock with the fixed divider.
 
-HEAD commit:    9a48d6046722 x86/retbleed: Fix return thunk alignment
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=121a54ba280000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=38526bf24c8d961b
-dashboard link: https://syzkaller.appspot.com/bug?extid=33494cd0df2ec2931851
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1438dcc6280000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=124666a2280000
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/9151d600da35/disk-9a48d604.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/895748ad0a36/vmlinux-9a48d604.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/826ceb18c361/bzImage-9a48d604.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/32bae60be5eb/mount_0.gz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+33494cd0df2ec2931851@syzkaller.appspotmail.com
-
-NILFS (loop1): nilfs_sufile_update: invalid segment number: 52
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 5017 at fs/nilfs2/segment.c:1503 nilfs_segctor_collect fs/nilfs2/segment.c:1556 [inline]
-WARNING: CPU: 0 PID: 5017 at fs/nilfs2/segment.c:1503 nilfs_segctor_do_construct+0x31e7/0x6d30 fs/nilfs2/segment.c:2070
-Modules linked in:
-
-CPU: 0 PID: 5017 Comm: segctord Not tainted 6.4.0-rc1-syzkaller-00133-g9a48d6046722 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 04/28/2023
-RIP: 0010:nilfs_segctor_truncate_segments fs/nilfs2/segment.c:1503 [inline]
-RIP: 0010:nilfs_segctor_collect fs/nilfs2/segment.c:1556 [inline]
-RIP: 0010:nilfs_segctor_do_construct+0x31e7/0x6d30 fs/nilfs2/segment.c:2070
-Code: ff df 80 3c 08 00 74 08 4c 89 ef e8 03 fb 93 fe 4d 8b 6d 00 4c 3b 6c 24 50 74 31 e8 13 2d 3c fe e9 39 ff ff ff e8 09 2d 3c fe <0f> 0b eb c3 44 89 e1 80 e1 07 80 c1 03 38 c1 0f 8c 44 ff ff ff 4c
-RSP: 0018:ffffc90003b7f700 EFLAGS: 00010293
-
-RAX: ffffffff834f3a37 RBX: 00000000ffffffea RCX: ffff888027728000
-RDX: 0000000000000000 RSI: 00000000ffffffea RDI: 0000000000000000
-RBP: ffffc90003b7fc30 R08: ffffffff834f39f5 R09: fffff5200076fe51
-R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000010
-R13: ffff888076756dc8 R14: dffffc0000000000 R15: ffff8880765d4e38
-FS:  0000000000000000(0000) GS:ffff8880b9800000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000000020074000 CR3: 0000000029d7c000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- nilfs_segctor_construct+0x145/0x8c0 fs/nilfs2/segment.c:2404
- nilfs_segctor_thread_construct fs/nilfs2/segment.c:2512 [inline]
- nilfs_segctor_thread+0x53a/0x1140 fs/nilfs2/segment.c:2595
- kthread+0x2b8/0x350 kernel/kthread.c:379
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
- </TASK>
+>
+> Konrad
+> > +                     power-domains = <&rpmhpd SM8550_MMCX>;
+> > +                     required-opps = <&rpmhpd_opp_low_svs>;
+> > +                     #clock-cells = <1>;
+> > +                     #reset-cells = <1>;
+> > +                     #power-domain-cells = <1>;
+> > +             };
+> > +
+> >               ipcc: mailbox@408000 {
+> >                       compatible = "qcom,sm8550-ipcc", "qcom,ipcc";
+> >                       reg = <0 0x00408000 0 0x1000>;
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-
-If the bug is already fixed, let syzbot know by replying with:
-#syz fix: exact-commit-title
-
-If you want syzbot to run the reproducer, reply with:
-#syz test: git://repo/address.git branch-or-commit-hash
-If you attach or paste a git patch, syzbot will apply it before testing.
-
-If you want to change bug's subsystems, reply with:
-#syz set subsystems: new-subsystem
-(See the list of subsystem names on the web dashboard)
-
-If the bug is a duplicate of another bug, reply with:
-#syz dup: exact-subject-of-another-report
-
-If you want to undo deduplication, reply with:
-#syz undup
+-- 
+With best wishes
+Dmitry
