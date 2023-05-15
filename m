@@ -2,92 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7B6D70241D
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:08:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id D9AA0702428
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 08:10:01 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbjEOGII (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 02:08:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40914 "EHLO
+        id S239357AbjEOGJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 02:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238926AbjEOGHm (ORCPT
+        with ESMTP id S235813AbjEOGJj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 02:07:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CDC52123
-        for <linux-kernel@vger.kernel.org>; Sun, 14 May 2023 23:05:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 19C4F60FE4
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 06:05:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E20EC4339B;
-        Mon, 15 May 2023 06:05:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1684130717;
-        bh=f6bqMU+euOnxpPgqmR9h+2rAd+JPlhMh/M8elKFs1VE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=EPQ+1Cdaf+upl9IkJQltBUGaJM7a91WJKbJBF6Zwd2EkvCJ8r5imfCvCgkN4Z+n9p
-         3O2lyXPsvOtYvvruTpEyv2YXA9QmDWpTFcU6bfGjy6R2xmO4hMVDikh9smPCnPiL47
-         TcSl/eJ655OnhkDDbgP1IerZhUfrsreBgObcqGvrb+ciQ1E0tpGHjDFYF/H8fwQbaW
-         ty+W0ZuOqxZPaLb1ftnD7ZNWrO2QV5/KDz1Pkdv8gG+9kc6sAnE+HmEhTo+kmrsZUu
-         2CIkzU2gEWwxjcVGh4vTzqMefcvnQQKoeox3qyH1Q5KT3Xz77psRTkn8V0ljpazSY3
-         np4oSFILWhwWg==
-Date:   Mon, 15 May 2023 14:05:13 +0800
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     Tim Van Patten <timvp@chromium.org>
-Cc:     LKML <linux-kernel@vger.kernel.org>, lalithkraj@google.com,
-        robbarnes@google.com, rrangel@chromium.org,
-        Tim Van Patten <timvp@google.com>,
-        Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        chrome-platform@lists.linux.dev
-Subject: Re: [PATCH] platform/chrome: cros_ec_lpc: Move host command to
- prepare/complete
-Message-ID: <ZGHLmVZbpBC7pNS7@google.com>
-References: <20230512113556.1.I55189adfdb8d025fc991a0fa820ec09078619b15@changeid>
+        Mon, 15 May 2023 02:09:39 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861454212;
+        Sun, 14 May 2023 23:08:15 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id d2e1a72fcca58-643912bca6fso9626786b3a.0;
+        Sun, 14 May 2023 23:08:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684130895; x=1686722895;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JeFdDQPrLROSZ5WIsvj4avVuF11nhzCNhUc6QRBzVe8=;
+        b=Lsib/yBgUrVMY5FLMsRXSpNC0H28c0xuEP5GBjSnsZenB6FMDRp7D2dPEm9GlbeDXc
+         DdqUVzUKmQJbxaOBRCdzr3UCgk1wi0vfuGMqHX2BvbfE76PwfC9kwTnPi889uRey2V/Q
+         IKZ6g+PdoWzE44/4xDt0bsyCqHHFhRkXs1zaggeq3oHfOzzmKkdIz+HWu3lpLMOo99Hb
+         NUPVC05I+j72kgyT42Wx3ZKnxsYEEhl+IXxX3nF+SwsvUSz2YDrMfl/RF7naPnNP2WrY
+         yhKg0ZA9O8/CL2xMJe1nBmXg3lCupuqTU7RlHTiBvVQ1TPwoXc5/GLjd91V7J0tRlySC
+         TFXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684130895; x=1686722895;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JeFdDQPrLROSZ5WIsvj4avVuF11nhzCNhUc6QRBzVe8=;
+        b=D5D3oswfsgs47+/KhaSMgQTVVKkXsGgUykt4FCtN8rwX/wLaqKPQSl8+08Ath2X68x
+         BBGfA4xcgLUVXx0+dJeSD5/i/0yFI9DRtewddig4LKWSNHoRIrhs7oDiiwFle5w6edYC
+         0j0T9uujxjQMqixkbW5xuxNq8E1HSiX3vDM5JGwfEUuXW6zXosYr1uC9RffU5k8K+l7K
+         VEHx+dVAOf4NYofzVBpMG1zH2JJ91MVKigsjFwnIxdjktaDQrI2z1pF+D0XI4R5JChyV
+         N95kBzHYQu/LFMMz+ndQfImeqOrkuTgePwUDjZpJrm3RmmQAVkIlAG9IpQ371PClrwIp
+         ygbA==
+X-Gm-Message-State: AC+VfDwubjt+Bu1DOSP+YQNIzBdY5ohMMWOgt9d5T471wu4ndBg0gApC
+        c/+ezUvboZFwLhYPl5j7fgI=
+X-Google-Smtp-Source: ACHHUZ6cbKEdxeChvRyvaMXsxsfLk4HIadCOKO3T8CQx1IeTJ6osdgXXqDjteiRcZeoiyyoE6vFqpQ==
+X-Received: by 2002:a05:6a21:78a0:b0:100:5082:611d with SMTP id bf32-20020a056a2178a000b001005082611dmr33831184pzc.32.1684130894871;
+        Sun, 14 May 2023 23:08:14 -0700 (PDT)
+Received: from debian.me (subs02-180-214-232-77.three.co.id. [180.214.232.77])
+        by smtp.gmail.com with ESMTPSA id x22-20020aa79196000000b0063b7af71b61sm6205214pfa.212.2023.05.14.23.08.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 14 May 2023 23:08:13 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 95CEC1069B5; Mon, 15 May 2023 13:08:06 +0700 (WIB)
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Linux Networking <netdev@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Cc:     Jay Vosburgh <j.vosburgh@gmail.com>,
+        Andy Gospodarek <andy@greyhouse.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Sam Creasey <sammy@sammy.net>,
+        Bagas Sanjaya <bagasdotme@gmail.com>,
+        Greg Ungerer <gerg@linux-m68k.org>,
+        Simon Horman <simon.horman@corigine.com>,
+        Tom Rix <trix@redhat.com>,
+        Yang Yingliang <yangyingliang@huawei.com>
+Subject: [PATCH net 0/5] SPDX conversion for bonding, 8390, and i825xx drivers
+Date:   Mon, 15 May 2023 13:07:10 +0700
+Message-Id: <20230515060714.621952-1-bagasdotme@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230512113556.1.I55189adfdb8d025fc991a0fa820ec09078619b15@changeid>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2125; i=bagasdotme@gmail.com; h=from:subject; bh=JYVO2TN3RmdkhfV4jG9ubU254wo1pvyUKpc8DFTdpok=; b=owGbwMvMwCX2bWenZ2ig32LG02pJDCmJZ1i5VJiF0zj6hRfMWZp61OG40IdQC83bNtvWfmc7c bdl2kO2jlIWBjEuBlkxRZZJiXxNp3cZiVxoX+sIM4eVCWQIAxenAExEwZfhf+HWe8t3G//6Z902 fd5em3lSbtLazcKP4m6n7ePdnvt84kqGP3zP7xrdXffrS/cixXhFpWX7N3crb9SUNA3cU3LqR2f 6b3YA
+X-Developer-Key: i=bagasdotme@gmail.com; a=openpgp; fpr=701B806FDCA5D3A58FFB8F7D7C276C64A5E44A1D
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS,
+        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, May 12, 2023 at 11:35:57AM -0600, Tim Van Patten wrote:
-> Update cros_ec_lpc_pm_ops to call cros_ec_lpc_prepare() during PM
-> .prepare() and cros_ec_lpc_complete() during .complete(). This moves the
-> host command that the AP sends and allows the EC to log entry/exit of
-> AP's suspend/resume more accurately.
+This series is SPDX conversion for bonding, 8390, and i825xx driver
+subsystems. It is splitted from v2 of my SPDX conversion series in
+response to Didi's GPL full name fixes [1] to make it easily
+digestible.
 
-This is an old series.  It should preserve the version number and change logs
-(at least until v8[5]).
+The conversion in this series is divided by each subsystem and by
+license type.
 
-Went through the series again, and put all concerns together:
+Happy reviewing!
 
-* Should it print more logs during suspend/resume?  See v1[1].
-  * Which is more like local patches for debugging some specific issues.
+[1]: https://lore.kernel.org/linux-spdx/20230512100620.36807-1-bagasdotme@gmail.com/
 
-* Should it move the callbacks?  See v2[2].
-  * Is it appropriate to call cros_ec_suspend() when PM is still in prepare
-    phase and call cros_ec_resume() when PM is already in complete phase?
+Bagas Sanjaya (5):
+  net: bonding: Add SPDX identifier to remaining files
+  net: ethernet: 8390: Convert unversioned GPL notice to SPDX license
+    identifier
+  net: ethernet: 8390: Replace GPL 2.0 boilerplate with SPDX identifier
+  net: ethernet: i825xx: Replace unversioned GPL (GPL 1.0) notice with
+    SPDX identifier
+  net: ethernet: i825xx: sun3_8256: Add SPDX license identifier
 
-* Should it print return value of cros_ec_resume()?  See v3[3] and v7[4].
-  * By referencing other use cases, they just defer it to PM.
+ drivers/net/bonding/bond_main.c          | 3 ++-
+ drivers/net/bonding/bonding_priv.h       | 4 +---
+ drivers/net/ethernet/8390/8390.h         | 2 ++
+ drivers/net/ethernet/8390/apne.c         | 7 +------
+ drivers/net/ethernet/8390/axnet_cs.c     | 6 +++---
+ drivers/net/ethernet/8390/hydra.c        | 6 ++----
+ drivers/net/ethernet/8390/lib8390.c      | 5 ++---
+ drivers/net/ethernet/8390/mac8390.c      | 6 ++----
+ drivers/net/ethernet/8390/mcf8390.c      | 4 +---
+ drivers/net/ethernet/8390/ne.c           | 4 +---
+ drivers/net/ethernet/8390/ne2k-pci.c     | 1 +
+ drivers/net/ethernet/8390/pcnet_cs.c     | 5 ++---
+ drivers/net/ethernet/8390/smc-ultra.c    | 4 +---
+ drivers/net/ethernet/8390/stnic.c        | 5 +----
+ drivers/net/ethernet/8390/wd.c           | 4 +---
+ drivers/net/ethernet/8390/zorro8390.c    | 7 +------
+ drivers/net/ethernet/i825xx/82596.c      | 5 ++---
+ drivers/net/ethernet/i825xx/lasi_82596.c | 5 ++---
+ drivers/net/ethernet/i825xx/lib82596.c   | 5 ++---
+ drivers/net/ethernet/i825xx/sun3_82586.c | 1 +
+ drivers/net/ethernet/i825xx/sun3_82586.h | 1 +
+ include/net/bonding.h                    | 4 +---
+ 22 files changed, 33 insertions(+), 61 deletions(-)
 
-[1]: https://patchwork.kernel.org/project/chrome-platform/patch/20220701095421.1.I78ded92e416b55de31975686d34b2058d4761c07@changeid/
-[2]: https://patchwork.kernel.org/project/chrome-platform/patch/20220706205136.v2.1.Ic7a7c81f880ab31533652e0928aa6e687bb268b5@changeid/
-[3]: https://patchwork.kernel.org/project/chrome-platform/patch/20220802113957.v3.1.I2c8c550183162e7594309b66d19af696b8d84552@changeid/
-[4]: https://patchwork.kernel.org/project/chrome-platform/patch/20220823095915.v7.1.I55189adfdb8d025fc991a0fa820ec09078619b15@changeid/
-[5]: https://patchwork.kernel.org/project/chrome-platform/patch/20221028171820.v8.1.I55189adfdb8d025fc991a0fa820ec09078619b15@changeid/
 
-> Signed-off-by: Tim Van Patten <timvp@chromium.org>
-> Reviewed-by: Raul E Rangel <rrangel@chromium.org>
-> Signed-off-by: Tim Van Patten <timvp@google.com>
+base-commit: b41caaded077aa8e7617c15e87d0503df8e7739e
+-- 
+An old man doll... just what I always wanted! - Clara
 
-It shouldn't need duplicate S-o-b.
