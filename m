@@ -2,105 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 167467037EA
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:25:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C702703800
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 19:26:31 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S244135AbjEORZE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 13:25:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40964 "EHLO
+        id S244162AbjEOR00 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 13:26:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S244233AbjEORYq (ORCPT
+        with ESMTP id S244154AbjEOR0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 13:24:46 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692FA44B6
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:23:49 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id 4fb4d7f45d1cf-50bd37ca954so113867187a12.0
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:23:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1684171428; x=1686763428;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fd5dtKhNyHGq8Bf62oHV9wGTTQyA1cr8VVarKwpvWbY=;
-        b=LiB1RmWlVjbSC9updoKbDubFk2hRTMu5fWK9nFdGOC2bIV94IUONKiMs5YLbZ9oOcb
-         vwp464Cwlqlnxr109HBT4O00CW/DEpRI73sJShezDBXMWfudyF3CCIHxsOL5ivEN9/0E
-         iCmyjiogLziGaVjJ6Dkff7vCpSYvWySsTGX94=
+        Mon, 15 May 2023 13:26:07 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEB9213299
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:24:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684171451;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WA/oTDONq4SSLwtY9ScAiCK010QAeUOXJ2/R7swknQM=;
+        b=Wwx188gahr/xltq4PEW9oQMuIPcLRnLTzYv+uwcP8GMnivLoFDXF3y22GSG9y0OokCBm8B
+        4+ADHNvaJ5p4AjShI0H3GmCGNtKeb+D1jGj+BHfN+ebhnpFNJPNmmyC29sXJ8y1QZBkoB3
+        INyXavUZ7ptukRPdd5BB2/DGh+Agims=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-496-bG6seQ-3Pt67mCaL1Ras2Q-1; Mon, 15 May 2023 13:24:10 -0400
+X-MC-Unique: bG6seQ-3Pt67mCaL1Ras2Q-1
+Received: by mail-wm1-f69.google.com with SMTP id 5b1f17b1804b1-3f4231d7893so58050995e9.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:24:10 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684171428; x=1686763428;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fd5dtKhNyHGq8Bf62oHV9wGTTQyA1cr8VVarKwpvWbY=;
-        b=a8i2paNslBu2ve+VzJ7eAeTDJZXsLroE3urgidwwsuEWOrQiLZchb3zUN6r5cPtreV
-         2YCbeM2Ec8zrMzgsx3YxWFWZ2EUEDQHQc40AkTSAPIWLSLPRr/o1NNw4ettLWIPbB13f
-         OASLBpjWURJiFK4liSUgTsIr9TJ8EoVkKls/1oGvv4bAl3uskuNZW4nBD/diJnadTn5E
-         R5XI8QwjIG/VI/sEzZeWjdBDS0gzKG5t1sqRGzrigBA6r/g0HLTPYOgf5DJEnlq4X+Ae
-         1ioczdT9ZygME9tmyPTFQdSyJG8PwzKd0X9SDGCm2nsPMVATE057V54rKpsyv/fXvvUd
-         EGfg==
-X-Gm-Message-State: AC+VfDwDsQ72OH1LCMm4FTQQoQbF0cF3ptUwDpO+GhP8iABAVFQH1IVA
-        APHdORpOF6BVQA8mcEAQdrLybdiaeV7DFchKmf7B5zn1
-X-Google-Smtp-Source: ACHHUZ5Q22RPSe/CTlKN1cW9Lqn9EOwyIZk3BIlEHQax7fgTUicWztkqMoRfbxFBY4CWdvHMptEx4w==
-X-Received: by 2002:a17:907:da4:b0:966:4e4c:a36d with SMTP id go36-20020a1709070da400b009664e4ca36dmr22915127ejc.20.1684171427711;
-        Mon, 15 May 2023 10:23:47 -0700 (PDT)
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com. [209.85.208.50])
-        by smtp.gmail.com with ESMTPSA id n17-20020a170906725100b0096a6bf89259sm6387729ejk.167.2023.05.15.10.23.46
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20221208; t=1684171449; x=1686763449;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WA/oTDONq4SSLwtY9ScAiCK010QAeUOXJ2/R7swknQM=;
+        b=IvE4boyUFGZAAHxPWx/aaWG9k2YDlK6n7shjFamAkaE0p1Ox/7A5QSD0vnya8Lyl4s
+         718ypqcCGkjI4X1qGUMjdyDTYOc33/fk22ZKsYC+91P4+n0p3OGGHCjKooU7mBThTEtV
+         //o6mMBmzdEIUqD4dJae1gW5/LXLFeFK94ZYccBLYlpnQNOyrtvF6ULN2ovSAkm9w4lj
+         Z9dZ3Wg9VHr7f5CSW1Uhb4z/MGx6Fibbxb85lZoIdVIc1i7jA2VNY+a0NAvFQiVea8T3
+         99IauWJTnQ40ArFto2WJHGHN9XKEP6NM7OqAttTvSb8ty60H/TGYIhAj2YN+KJarC6MP
+         rZFg==
+X-Gm-Message-State: AC+VfDx0X+d6qXE/JhhPq8fxgaBTezKDtEgecyhVllxEJOrQ2hHYzNbv
+        tg076twjuMf6Lxj5ppG7FpNmOf7RimFyUwDW9f33UGe2YPi3KZx15qJtnF5yQzr1oUhztppNKRP
+        R6pX7geYlRZKMDP6H+nMFb3k=
+X-Received: by 2002:a05:600c:3658:b0:3f4:2374:3517 with SMTP id y24-20020a05600c365800b003f423743517mr18234014wmq.19.1684171449182;
+        Mon, 15 May 2023 10:24:09 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ7Qa+UfJ/+7G0UeAm3GAtIUkGXPqGB24MoELUZyiaHOKL2BgTHgJkW0o+U1cXnSTnpsxhynIA==
+X-Received: by 2002:a05:600c:3658:b0:3f4:2374:3517 with SMTP id y24-20020a05600c365800b003f423743517mr18233998wmq.19.1684171448794;
+        Mon, 15 May 2023 10:24:08 -0700 (PDT)
+Received: from [192.168.9.16] (net-2-34-28-169.cust.vodafonedsl.it. [2.34.28.169])
+        by smtp.gmail.com with ESMTPSA id 1-20020a05600c230100b003f423508c6bsm15373wmo.44.2023.05.15.10.24.08
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 10:23:46 -0700 (PDT)
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-50bd2d7ba74so113739351a12.1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 10:23:46 -0700 (PDT)
-X-Received: by 2002:a17:907:6e11:b0:96a:2210:7dd8 with SMTP id
- sd17-20020a1709076e1100b0096a22107dd8mr16414147ejc.38.1684171426288; Mon, 15
- May 2023 10:23:46 -0700 (PDT)
+        Mon, 15 May 2023 10:24:08 -0700 (PDT)
+Message-ID: <a50022a6-59e1-6b53-2c5b-c6eb44277876@redhat.com>
+Date:   Mon, 15 May 2023 19:24:07 +0200
 MIME-Version: 1.0
-References: <20230202232517.8695-1-michael.christie@oracle.com>
- <20230202232517.8695-9-michael.christie@oracle.com> <aba6cca4-e66c-768f-375c-b38c8ba5e8a8@6wind.com>
- <CAHk-=wgadfsCnKHLON7op=Qs5t3w3PVz5ZDbvbKsfb=yBg=yjQ@mail.gmail.com>
- <78c5e150-26cf-7724-74ee-4a0b16b944b1@oracle.com> <48842e92-835e-bc3f-7118-48b8f415f532@leemhuis.info>
- <CAHk-=wicXCNR1bBioaAiBqEDgv-CoQD9z2RsM2VOTPzkK0xr8g@mail.gmail.com>
- <20230515-vollrausch-liebgeworden-2765f3ca3540@brauner> <CAHk-=wgXJ5VS1iBkfsG=HDjsyhn5XYDKt5xhQcNuz-e7VKyg8A@mail.gmail.com>
- <33b84605-1d0c-1b0e-7927-7ffa96b3c308@kernel.dk> <CAHk-=wiDqe+H7UnhD0qLbL8K8hnWUEdsRqcM4QnY=gZ3GytBRQ@mail.gmail.com>
-In-Reply-To: <CAHk-=wiDqe+H7UnhD0qLbL8K8hnWUEdsRqcM4QnY=gZ3GytBRQ@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 15 May 2023 10:23:28 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjudDcq+TSaxOVX03iMTAhBDf6fup-tDhDpdQjGnKXgTw@mail.gmail.com>
-Message-ID: <CAHk-=wjudDcq+TSaxOVX03iMTAhBDf6fup-tDhDpdQjGnKXgTw@mail.gmail.com>
-Subject: Re: [PATCH v11 8/8] vhost: use vhost_tasks for worker threads
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     Christian Brauner <brauner@kernel.org>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Mike Christie <michael.christie@oracle.com>,
-        nicolas.dichtel@6wind.com,
-        Linux kernel regressions list <regressions@lists.linux.dev>,
-        hch@infradead.org, stefanha@redhat.com, jasowang@redhat.com,
-        mst@redhat.com, sgarzare@redhat.com,
-        virtualization@lists.linux-foundation.org, ebiederm@xmission.com,
-        konrad.wilk@oracle.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [RFC PATCH v5 4/4] fpga: add initial KUnit test suites
+To:     Xu Yilun <yilun.xu@intel.com>
+Cc:     Moritz Fischer <mdf@kernel.org>, Wu Hao <hao.wu@intel.com>,
+        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-fpga@vger.kernel.org
+References: <20230511141922.437328-1-marpagan@redhat.com>
+ <20230511141922.437328-5-marpagan@redhat.com>
+ <ZF/LpdlyBu2Z1uQE@yilunxu-OptiPlex-7050>
+Content-Language: en-US
+From:   Marco Pagani <marpagan@redhat.com>
+In-Reply-To: <ZF/LpdlyBu2Z1uQE@yilunxu-OptiPlex-7050>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 8:54=E2=80=AFAM Linus Torvalds
-<torvalds@linux-foundation.org> wrote:
->
-> Blush. I decided to build-test it, and then forgot to attach it. Here.
 
-Btw, if this tests out good and we end up doing this, I think we
-should also just rename that '.ignore_signals' bitfield to
-'.block_signals' to actually match what it does.
 
-But that's an entirely cosmetic thing just to clarify things. The
-patch would look almost identical, apart from the new name (and the
-small additional parts to rename the two existing users that weren't
-touched by that patch - the header file and the vhost use-case).
+On 2023-05-13 19:40, Xu Yilun wrote:
+> On 2023-05-11 at 16:19:22 +0200, Marco Pagani wrote:
+>> Introduce initial KUnit tests for the FPGA subsystem. Tests are organized
+>> into three test suites. The first suite tests the FPGA Manager.
+>> The second suite tests the FPGA Bridge. Finally, the last test suite
+>> models a complete FPGA platform and tests static and partial reconfiguration.
+>>
+>> Signed-off-by: Marco Pagani <marpagan@redhat.com>
 
-                   Linus
+[...]
+
+>> +static void fpga_bridge_test_get_put_list(struct kunit *test)
+>> +{
+>> +	struct list_head bridge_list;
+>> +	struct fake_fpga_bridge *bridge_0_ctx, *bridge_1_ctx;
+>> +	int ret;
+>> +
+>> +	bridge_0_ctx = test->priv;
+>> +
+>> +	/* Register another bridge for this test */
+>> +	bridge_1_ctx = fake_fpga_bridge_register(test, NULL);
+>> +	KUNIT_ASSERT_FALSE(test, IS_ERR(bridge_1_ctx));
+> 
+> I think bridge_1 could also be initialized in test_init together with
+> bridge_0
+
+I can do it, but it would remain unused in the previous test case.
+ 
+>> +
+>> +	INIT_LIST_HEAD(&bridge_list);
+>> +
+>> +	/* Get bridge_0 and add it to the list */
+>> +	ret = fpga_bridge_get_to_list(bridge_1_ctx->bridge->dev.parent, NULL,
+>> +				      &bridge_list);
+>> +	KUNIT_EXPECT_EQ(test, ret, 0);
+>> +
+>> +	KUNIT_EXPECT_PTR_EQ(test, bridge_1_ctx->bridge,
+>> +			    list_first_entry_or_null(&bridge_list, struct fpga_bridge, node));
+> 
+> Should operate on bridge_0_ctx?
+
+Yes, sorry. Code and comments are reversed. I'll fix it in the next version.
+
+>> +
+>> +	/* Get bridge_1 and add it to the list */
+>> +	ret = fpga_bridge_get_to_list(bridge_0_ctx->bridge->dev.parent, NULL,
+>> +				      &bridge_list);
+>> +	KUNIT_EXPECT_EQ(test, ret, 0);
+>> +
+>> +	KUNIT_EXPECT_PTR_EQ(test, bridge_0_ctx->bridge,
+>> +			    list_first_entry_or_null(&bridge_list, struct fpga_bridge, node));
+> 
+> Should operate on bridge_1_ctx?
+
+Same.
+
+>> +
+>> +	/* Disable an then enable both bridges from the list */
+>> +	KUNIT_EXPECT_TRUE(test, bridge_0_ctx->stats.enable);
+> 
+> Why expect enable without fpga_bridges_enable()?
+
+To check that the bridge is initialized in the correct (enabled) state.
+
+[...]
+
+>> +static void fpga_test_partial_rcfg(struct kunit *test)
+>> +{
+>> +	struct fpga_base_ctx *base_ctx;
+>> +	struct fake_fpga_region *sub_region_0_ctx, *sub_region_1_ctx;
+>> +	struct fake_fpga_bridge *sub_bridge_0_ctx, *sub_bridge_1_ctx;
+>> +	struct fpga_image_info *partial_img_info;
+>> +	int ret;
+>> +
+>> +	base_ctx = test->priv;
+>> +
+>> +	/*
+>> +	 * Add two reconfigurable sub-regions, each controlled by a bridge. The
+>> +	 * reconfigurable sub-region are children of their bridges which are,
+>> +	 * in turn, children of the base region. For simplicity, the same image
+>> +	 * is used to configure reconfigurable regions
+>> +	 */
+>> +	sub_bridge_0_ctx = fake_fpga_bridge_register(test,
+>> +						     &base_ctx->region_ctx->region->dev);
+>> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_bridge_0_ctx));
+>> +
+>> +	sub_region_0_ctx = fake_fpga_region_register(test, base_ctx->mgr_ctx->mgr,
+>> +						     &sub_bridge_0_ctx->bridge->dev);
+>> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_region_0_ctx));
+>> +
+>> +	ret = fake_fpga_region_add_bridge(sub_region_0_ctx, sub_bridge_0_ctx->bridge);
+>> +	KUNIT_ASSERT_EQ(test, ret, 0);
+>> +
+>> +	sub_bridge_1_ctx = fake_fpga_bridge_register(test,
+>> +						     &base_ctx->region_ctx->region->dev);
+>> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_bridge_1_ctx));
+>> +
+>> +	sub_region_1_ctx = fake_fpga_region_register(test, base_ctx->mgr_ctx->mgr,
+>> +						     &sub_bridge_1_ctx->bridge->dev);
+>> +	KUNIT_ASSERT_FALSE(test, IS_ERR(sub_region_1_ctx));
+>> +
+>> +	ret = fake_fpga_region_add_bridge(sub_region_1_ctx, sub_bridge_1_ctx->bridge);
+>> +	KUNIT_ASSERT_EQ(test, ret, 0);
+> 
+> I'm wondering if we need to construct the topology for partial
+> reconfiguration test. The FPGA core doesn't actually check the topology.
+> It is OK to do partial reconfiguration for a region without parents as
+> long as its associated FPGA manager device has the capability.
+> 
+> Thanks,
+> Yilun
+
+I agree with you. Creating a hierarchical layout is rather unnecessary.
+
+Initially, the idea was to test that all components behave as expected
+in a complete setup, e.g., only the bridge of the specific reconfigurable
+region gets disabled during programming and then re-enabled.
+
+However, after some iterations, I'm starting to think that it would be
+better to restructure the whole test code into a set of self-contained
+test modules, one for each core component. 
+
+In that way, each module would contain the implementation of the fake/mock
+low-level driver and the related tests. For instance, the manager module
+would contain the implementation of the fake manager and the test_img_load_buf
+and test_img_load_sgt test cases. Similarly, the bridge module would contain
+the fake/mock bridge implementation and the test_toggle and test_get_put_list
+cases.
+
+I think that in this way, the code would be simpler and more adherent to the
+unit testing methodology. The downside is that making tests that need multiple
+components would be more cumbersome and possibly lead to code duplication.
+For instance, testing the region's fpga_region_program_fpga() would require
+implementing additional local mock/fakes for the manager and bridge.
+
+What do you think?
+
+Thanks,
+Marco
+
+[...]
+
