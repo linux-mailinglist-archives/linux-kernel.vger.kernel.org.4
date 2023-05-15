@@ -2,118 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B594870279C
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:53:21 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8410D7027A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:53:44 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S238282AbjEOIxT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 04:53:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36762 "EHLO
+        id S238386AbjEOIxl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 04:53:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238258AbjEOIxF (ORCPT
+        with ESMTP id S238353AbjEOIxd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 04:53:05 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B2D571A4;
-        Mon, 15 May 2023 01:53:04 -0700 (PDT)
-Received: from pps.filterd (m0353726.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 34F8dWhE030931;
-        Mon, 15 May 2023 08:52:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pp1; bh=tL2Dh34WXBi3w0uOo/CEgFzRe9FVdf1V2DHXt3B1hzQ=;
- b=RgF2SLU/GSbIC43sewd93OJMJuQob/OvXp/h4GcpmDVvR3haOU9gtgWCmUKnHIJqaRGS
- zM/YtGmo0F8o8AehEEdxcNS5S0EutJWDp4JzJk07alCpgvPG+u+6OvcpgT1klbETGM7R
- B3vqZS3dTkEwbYIKYt4ZQsetvwQt11RWsnoYCa5Px4UUmeFelWObYB7JNRzhe/quKuJD
- vMFqFRrITU3nBkbW2ns34tBjo2HW/+MSDGQuEIVXyWuTB3BizyyzEZpEsC9781iymOJu
- Bb0Z15FQiZPDvAoBVmZu1rGvQpa8B5kCqVkHQuthmRbvDz+D5OTlICsTTU9UlTO916UP ag== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qkgnsskcr-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 08:52:52 +0000
-Received: from m0353726.ppops.net (m0353726.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 34F8g6jY012065;
-        Mon, 15 May 2023 08:52:52 GMT
-Received: from ppma01fra.de.ibm.com (46.49.7a9f.ip4.static.sl-reverse.com [159.122.73.70])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3qkgnsskbd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 08:52:52 +0000
-Received: from pps.filterd (ppma01fra.de.ibm.com [127.0.0.1])
-        by ppma01fra.de.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 34F4cDHw008930;
-        Mon, 15 May 2023 08:52:49 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-        by ppma01fra.de.ibm.com (PPS) with ESMTPS id 3qj264rt34-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 15 May 2023 08:52:49 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-        by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 34F8qlos22151814
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 15 May 2023 08:52:47 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id E464220043;
-        Mon, 15 May 2023 08:52:46 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 27F9620040;
-        Mon, 15 May 2023 08:52:45 +0000 (GMT)
-Received: from osiris (unknown [9.179.13.205])
-        by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-        Mon, 15 May 2023 08:52:45 +0000 (GMT)
-Date:   Mon, 15 May 2023 10:52:43 +0200
-From:   Heiko Carstens <hca@linux.ibm.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     torvalds@linux-foundation.org, corbet@lwn.net, will@kernel.org,
-        boqun.feng@gmail.com, mark.rutland@arm.com,
-        catalin.marinas@arm.com, dennis@kernel.org, tj@kernel.org,
-        cl@linux.com, gor@linux.ibm.com, agordeev@linux.ibm.com,
-        borntraeger@linux.ibm.com, svens@linux.ibm.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, joro@8bytes.org,
-        suravee.suthikulpanit@amd.com, robin.murphy@arm.com,
-        dwmw2@infradead.org, baolu.lu@linux.intel.com,
-        Arnd Bergmann <arnd@arndb.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>, davem@davemloft.net,
-        penberg@kernel.org, rientjes@google.com, iamjoonsoo.kim@lge.com,
-        Andrew Morton <akpm@linux-foundation.org>, vbabka@suse.cz,
-        roman.gushchin@linux.dev, 42.hyeyoo@gmail.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-s390@vger.kernel.org,
-        iommu@lists.linux.dev, linux-arch@vger.kernel.org,
-        linux-crypto@vger.kernel.org
-Subject: Re: [PATCH v3 10/11] arch: Remove cmpxchg_double
-Message-ID: <ZGHy21ZEK4Q6umhV@osiris>
-References: <20230515075659.118447996@infradead.org>
- <20230515080554.589824283@infradead.org>
+        Mon, 15 May 2023 04:53:33 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAB5D1999;
+        Mon, 15 May 2023 01:53:24 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id 98e67ed59e1d1-24e24b0193fso9164279a91.2;
+        Mon, 15 May 2023 01:53:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20221208; t=1684140804; x=1686732804;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=90pB5A/EQuvWbtw/9XpRxtR12GPJwYDdwY3t8pMrqK4=;
+        b=rrjJSu5dEN+5HyCOyI72T+Gvgn5XjTJ0mqt7hEQCkH4j5JM/zpR3yQIRDOTckAojYe
+         b1Mah5ub5/eI+Jrvzsc6BjDyGMqG4WheHyiy1AsKHuwrQjnefAHcDhA1pQyUbxxoQ4OR
+         7EnNI6u1vYdMk79npzgEDljrsbZ0OBqUr1RPSkagqVrbi6R6BHDpuMfnlBuvl2x1EgSb
+         YHm4ahgcOe459nrY7OUuXZ82APwIP51HAae3zuVzpJWVxlQ6Hm2bhNCA8DlRs6tI9UWx
+         LeC/rWcXd9vVtbDH/o+zAZ4NLeQ/xChbAkr/zIp6EsVyv1BXnoDpyPAf3c75Yxo6hI3K
+         VXaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20221208; t=1684140804; x=1686732804;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=90pB5A/EQuvWbtw/9XpRxtR12GPJwYDdwY3t8pMrqK4=;
+        b=GTbkhW/ttOQ0KjemRNotClc2rTD4rrXUyXYnvDjnUwZEduMyNHHytqDMSUSRRVX+6p
+         fmp7MfSKkIuiCK+FXBmgc30G0ta8Bui/ll62bjkHsshI7NhXYcP40SAuFBa99m4mOU7Y
+         mbbOkJbP1S41bfWYN53mRrExitrYLJkLest+snBPmRDFjchzbpMYCDKLLfC4kp3/1Enn
+         cQmwepPXhm7NBasSqWElm1pLpg4Q1Q0WTjdvZqKzhKeauxwOvmFsuR43nNds2UBhwUTo
+         BpgiJXMAvvHg77zV8RZ/S+0v+Uvf5TzP792MTWYONes4CEcVmboxYs4TeVP70BZfBn2S
+         S3CQ==
+X-Gm-Message-State: AC+VfDy3MIdi4T5BdMDWGgwqcklryI16BSEAtZ4SRVZ8DQWRd9SzvYsV
+        7qAo9um2LIFdRxWpCcXrT7A=
+X-Google-Smtp-Source: ACHHUZ67t9VbnVUKOhfMbNA+fprqTYg2pcVWFNpKNYW8x4+/JhVaWlSW4u4tEeQp+3L0nw6ccNDXhQ==
+X-Received: by 2002:a17:90b:3004:b0:246:b6f9:148a with SMTP id hg4-20020a17090b300400b00246b6f9148amr33835665pjb.21.1684140804210;
+        Mon, 15 May 2023 01:53:24 -0700 (PDT)
+Received: from localhost.localdomain ([103.194.71.110])
+        by smtp.gmail.com with ESMTPSA id t3-20020a17090a024300b0024499d4b72esm22078370pje.51.2023.05.15.01.53.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 15 May 2023 01:53:23 -0700 (PDT)
+From:   llyyr <llyyr.public@gmail.com>
+Cc:     llyyr.public@gmail.com, Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] hwmon: (nct6683) Add another chip ID for NCT6687D sensor chip found on some MSI boards.
+Date:   Mon, 15 May 2023 14:23:07 +0530
+Message-Id: <20230515085307.18868-1-llyyr.public@gmail.com>
+X-Mailer: git-send-email 2.40.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230515080554.589824283@infradead.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: t1yqOEs5O0QDxVKZWXKnAMcNMUkxJyzX
-X-Proofpoint-GUID: 01k30nTH3vJOdbRkPWfhMNqXAs4dbI1r
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-05-15_06,2023-05-05_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- spamscore=0 bulkscore=0 clxscore=1011 phishscore=0 adultscore=0
- mlxlogscore=660 priorityscore=1501 suspectscore=0 impostorscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2304280000 definitions=main-2305150073
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 09:57:09AM +0200, Peter Zijlstra wrote:
-> No moar users, remove the monster.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
-...
->  arch/s390/include/asm/cmpxchg.h            |   34 -----------------
->  arch/s390/include/asm/percpu.h             |   18 ---------
+This value was found on MSI Z690-A PRO DDR5, with a NCT6687D chip.
 
-FWIW, for s390:
-Acked-by: Heiko Carstens <hca@linux.ibm.com>
+Signed-off-by: llyyr <llyyr.public@gmail.com>
+---
+ drivers/hwmon/nct6683.c | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/drivers/hwmon/nct6683.c b/drivers/hwmon/nct6683.c
+index a872f783e..5df9b9ce7 100644
+--- a/drivers/hwmon/nct6683.c
++++ b/drivers/hwmon/nct6683.c
+@@ -14,6 +14,7 @@
+  * nct6683d     21(1)   16      8       32(1) 0xc730
+  * nct6686d     21(1)   16      8       32(1) 0xd440
+  * nct6687d     21(1)   16      8       32(1) 0xd590
++ *                                           (0xd592)
+  *
+  * Notes:
+  *	(1) Total number of vin and temp inputs is 32.
+@@ -71,6 +72,7 @@ static const char * const nct6683_chip_names[] = {
+ #define SIO_NCT6683_ID		0xc730
+ #define SIO_NCT6686_ID		0xd440
+ #define SIO_NCT6687_ID		0xd590
++#define SIO_NCT6687_ID2		0xd592
+ #define SIO_ID_MASK		0xFFF0
+ 
+ static inline void
+@@ -1362,6 +1364,7 @@ static int __init nct6683_find(int sioaddr, struct nct6683_sio_data *sio_data)
+ 		sio_data->kind = nct6686;
+ 		break;
+ 	case SIO_NCT6687_ID:
++	case SIO_NCT6687_ID2:
+ 		sio_data->kind = nct6687;
+ 		break;
+ 	default:
+-- 
+2.40.1
+
