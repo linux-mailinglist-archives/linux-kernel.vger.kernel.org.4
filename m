@@ -2,103 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1196702A06
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:06:36 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E31B702A0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:08:04 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229898AbjEOKGe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:06:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
+        id S239649AbjEOKIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 06:08:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240703AbjEOKF5 (ORCPT
+        with ESMTP id S240948AbjEOKHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:05:57 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B9B2721;
-        Mon, 15 May 2023 03:05:26 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id 5b1f17b1804b1-3f435658d23so62687175e9.3;
-        Mon, 15 May 2023 03:05:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20221208; t=1684145125; x=1686737125;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ewaqi8EQbJJwmrqafdsQZ7P3G1Ovd60Qj9jt1A0qxhA=;
-        b=YosMedXyQMPzA+CbFO6cqDNMYBdd4OaUcyTwsmCKEn7Eal6rNrk9btgTaSVm1MMYU5
-         AMWXROeoYQICJ8D3MUG/zPhYhxAodJzfodKp15gMBagSEgolHnKyzTQX+7PMZky+vfHS
-         hVzDttVWrp9ler9pu/axfUV5N9g0S4mjvWZiOv9x7J+x9u3H4PL0gSmUy0xNJEJbZsyk
-         zihiIOqvOrRT8JJeV34hBhNNGUPGgfosTFKtQnHshuXHEVXZGd/bGs6NIvyM0pBnkOJ7
-         SeI7bP2rtz4z38aqXlBcYdNlymBAPUTx27p2/Swmu2qFfSnTJMNeMfm2m1AwYjllD/jc
-         XqZA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684145125; x=1686737125;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ewaqi8EQbJJwmrqafdsQZ7P3G1Ovd60Qj9jt1A0qxhA=;
-        b=TqITuwxg4mKoEe/0y5WDEv7dI9vHQkhaw2hPuydfbE/983+N9uzooVi3zTZzACOJ14
-         d9DLzVQRJ9go4tw8PUpa/g9g303pTFp4Keh/4QU3MbhsVFzB+uKzkp++9w+ybAfLo/0s
-         CLjxEywQ8Dk2rD4cfcJwImPYNislQC+AZ03XdT80cKUPz4T6G+JS/jCnM5Qr9ELxtW+a
-         82G1R0MZ3PLr0h43j5fVHhhbuCXvIE69ETimjFeLmrxztvOivQNR6psbvEd3LGa1mMY/
-         umk9ZKCzthXRaCrwaaT/xUVznUErut/GXKwzCwLTDriec3TZ1VIfLoIaqEl1rnSWKbPt
-         W76A==
-X-Gm-Message-State: AC+VfDze0s6bGKiGIEiI0F73WgPuXP57nUVAFXRLxGggKB5QbYTbqlYJ
-        Q+Pd4n1bX8c11AlR7Ovmlp4=
-X-Google-Smtp-Source: ACHHUZ5p1gbJa8TRERxklmUArT0mviIvBpOLya2PI+ZwwrdvAeRRy6GaPW9BipsL3nx1TyQ70ACjxA==
-X-Received: by 2002:a1c:4c19:0:b0:3f4:27ff:7d52 with SMTP id z25-20020a1c4c19000000b003f427ff7d52mr17844803wmf.2.1684145124722;
-        Mon, 15 May 2023 03:05:24 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id a6-20020a1cf006000000b003f0aefcc457sm36511130wmb.45.2023.05.15.03.05.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 May 2023 03:05:24 -0700 (PDT)
-Date:   Mon, 15 May 2023 13:05:21 +0300
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Conor Dooley <conor@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] dt-bindings: net: nxp,sja1105: document spi-cpol/cpha
-Message-ID: <20230515100521.lvmsnoi2xw73jc2g@skbuf>
-References: <20230514115741.40423-1-krzysztof.kozlowski@linaro.org>
- <20230514-turf-phrase-10b6d87ff953@spud>
- <f38c8762-2aff-737e-a1a3-0e457f9d3810@linaro.org>
+        Mon, 15 May 2023 06:07:24 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7B81990
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:06:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1684145217; x=1715681217;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=+mJ7t99156w497CD3cjMQMymJsQ9wfsziSUFcKbZuzo=;
+  b=LyMOYWn6sc+ybPHni9lH5vmPSF8DWlD/fuRhJXwbOdEblWL8vHHdy5+g
+   88F+Uyu2as5vgPtN6BTjgRmwor03zZ4pdyrwXlWtPfqlIFJ0dP6x5E5XV
+   OHTPte1MK0J4xsfWX2O4YnR0N4NnfrUL4sGzMCB4+3Rp6vYrVDtcza95d
+   njWeETjoq241UkCQMD7P45fVKVeFG9+VX2BS9WWiTQSTtnceeBMmrsreO
+   mzhFSKh8HrqaQFbKK78nehwwRC0qF8+bCCsNKd2SMzMX06joKuMd4nxvj
+   Dkv5Tq8OPYbNDI+ZMFQL5/WRa92ThneCwExXQ2oayohVjD3k+oN49XXUE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="335702277"
+X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
+   d="scan'208";a="335702277"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 03:06:12 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="875128108"
+X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
+   d="scan'208";a="875128108"
+Received: from lkp-server01.sh.intel.com (HELO dea6d5a4f140) ([10.239.97.150])
+  by orsmga005.jf.intel.com with ESMTP; 15 May 2023 03:06:11 -0700
+Received: from kbuild by dea6d5a4f140 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pyV5m-0006J0-25;
+        Mon, 15 May 2023 10:06:10 +0000
+Date:   Mon, 15 May 2023 18:05:50 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: drivers/base/regmap/regcache-maple.c:114:23: warning: 'upper_index'
+ is used uninitialized
+Message-ID: <202305151728.Nm5tSU82-lkp@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <f38c8762-2aff-737e-a1a3-0e457f9d3810@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
+        SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, May 15, 2023 at 08:21:40AM +0200, Krzysztof Kozlowski wrote:
-> On 14/05/2023 20:32, Conor Dooley wrote:
-> > On Sun, May 14, 2023 at 01:57:41PM +0200, Krzysztof Kozlowski wrote:
-> > 
-> >> +allOf:
-> >> +  - $ref: dsa.yaml#/$defs/ethernet-ports
-> >> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> >> +  - if:
-> >> +      properties:
-> >> +        compatible:
-> >> +          enum:
-> >> +            - nxp,sja1105e
-> >> +            - nxp,sja1105t
-> > 
-> > Is there a particular reason you did not put the "t" variant after the
-> > "s" one?
-> 
-> Order is the same as in compatible list. I could sort them here, less
-> changes in the future.
+Hi Mark,
 
-They are sorted chronologically, by generation.
+FYI, the error/warning still remains.
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   f1fcbaa18b28dec10281551dfe6ed3a3ed80e3d6
+commit: f033c26de5a5734625d2dd1dc196745fae186f1b regmap: Add maple tree based register cache
+date:   6 weeks ago
+config: arc-randconfig-r022-20230515 (https://download.01.org/0day-ci/archive/20230515/202305151728.Nm5tSU82-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=f033c26de5a5734625d2dd1dc196745fae186f1b
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout f033c26de5a5734625d2dd1dc196745fae186f1b
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash drivers/base/regmap/
+
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202305151728.Nm5tSU82-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/base/regmap/regcache-maple.c: In function 'regcache_maple_drop':
+   drivers/base/regmap/regcache-maple.c:113:23: warning: 'lower_index' is used uninitialized [-Wuninitialized]
+     113 |         unsigned long lower_index, lower_last;
+         |                       ^~~~~~~~~~~
+   drivers/base/regmap/regcache-maple.c:113:36: warning: 'lower_last' is used uninitialized [-Wuninitialized]
+     113 |         unsigned long lower_index, lower_last;
+         |                                    ^~~~~~~~~~
+>> drivers/base/regmap/regcache-maple.c:114:23: warning: 'upper_index' is used uninitialized [-Wuninitialized]
+     114 |         unsigned long upper_index, upper_last;
+         |                       ^~~~~~~~~~~
+>> drivers/base/regmap/regcache-maple.c:114:36: warning: 'upper_last' is used uninitialized [-Wuninitialized]
+     114 |         unsigned long upper_index, upper_last;
+         |                                    ^~~~~~~~~~
+
+
+vim +/upper_index +114 drivers/base/regmap/regcache-maple.c
+
+   106	
+   107	static int regcache_maple_drop(struct regmap *map, unsigned int min,
+   108				       unsigned int max)
+   109	{
+   110		struct maple_tree *mt = map->cache;
+   111		MA_STATE(mas, mt, min, max);
+   112		unsigned long *entry, *lower, *upper;
+ > 113		unsigned long lower_index, lower_last;
+ > 114		unsigned long upper_index, upper_last;
+   115		int ret;
+   116	
+   117		lower = NULL;
+   118		upper = NULL;
+   119	
+   120		mas_lock(&mas);
+   121	
+   122		mas_for_each(&mas, entry, max) {
+   123			/*
+   124			 * This is safe because the regmap lock means the
+   125			 * Maple lock is redundant, but we need to take it due
+   126			 * to lockdep asserts in the maple tree code.
+   127			 */
+   128			mas_unlock(&mas);
+   129	
+   130			/* Do we need to save any of this entry? */
+   131			if (mas.index < min) {
+   132				lower_index = mas.index;
+   133				lower_last = min -1;
+   134	
+   135				lower = kmemdup(entry, ((min - mas.index) *
+   136							sizeof(unsigned long)),
+   137						GFP_KERNEL);
+   138				if (!lower) {
+   139					ret = -ENOMEM;
+   140					goto out;
+   141				}
+   142			}
+   143	
+   144			if (mas.last > max) {
+   145				upper_index = max + 1;
+   146				upper_last = mas.last;
+   147	
+   148				upper = kmemdup(&entry[max + 1],
+   149						((mas.last - max) *
+   150						 sizeof(unsigned long)),
+   151						GFP_KERNEL);
+   152				if (!upper) {
+   153					ret = -ENOMEM;
+   154					goto out;
+   155				}
+   156			}
+   157	
+   158			kfree(entry);
+   159			mas_lock(&mas);
+   160			mas_erase(&mas);
+   161	
+   162			/* Insert new nodes with the saved data */
+   163			if (lower) {
+   164				mas_set_range(&mas, lower_index, lower_last);
+   165				ret = mas_store_gfp(&mas, lower, GFP_KERNEL);
+   166				if (ret != 0)
+   167					goto out;
+   168				lower = NULL;
+   169			}
+   170	
+   171			if (upper) {
+   172				mas_set_range(&mas, upper_index, upper_last);
+   173				ret = mas_store_gfp(&mas, upper, GFP_KERNEL);
+   174				if (ret != 0)
+   175					goto out;
+   176				upper = NULL;
+   177			}
+   178		}
+   179	
+   180	out:
+   181		mas_unlock(&mas);
+   182		kfree(lower);
+   183		kfree(upper);
+   184	
+   185		return ret;
+   186	}
+   187	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
