@@ -2,195 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47DBF702BA5
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:39:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D348702BA2
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 13:39:27 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S241486AbjEOLjm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 07:39:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41226 "EHLO
+        id S241451AbjEOLjY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 07:39:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S241380AbjEOLhl (ORCPT
+        with ESMTP id S241172AbjEOLhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 07:37:41 -0400
-Received: from NAM02-DM3-obe.outbound.protection.outlook.com (mail-dm3nam02on2060.outbound.protection.outlook.com [40.107.95.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7AEE1FC6;
-        Mon, 15 May 2023 04:35:59 -0700 (PDT)
+        Mon, 15 May 2023 07:37:20 -0400
+Received: from DM4PR02CU001.outbound.protection.outlook.com (mail-centralusazon11012005.outbound.protection.outlook.com [52.101.63.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 178621BE4;
+        Mon, 15 May 2023 04:35:32 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TT1agKCUUN0zIA7srugBfsYAP722x+2XD53CBBU6MFwbrb5pV25fcEgXIuqpvvengYZ7OTUzr54bOVIXNDg09X4Jf/SbhrEKOuOYNy3iJfTLUiwSUBLxTlUNZL+jB50vY6dCx6ShiE2nfDifMs/JVq0z0S+MLuVz8TNPmK0a34TOj3Len2vsqvcRepUmlwypt1eGj6JY7euWcN4QlqFRsKnKE3R0ZB7HLHqOzdAuAUPAOjqZTg4+P0hAXh4B7g499NeQ7vHhzJY5i+Rt+y2tPM1smlaQA5UfdYjoh8lsku5KDeDPAiOtHnsS3qn4JixipygxKHT6a1areiaBaBh6/A==
+ b=cydSSSl/eVM734c9PmcOP6IjShpLKekmQ7ZfH5tphuvAyP6sFYeh7dHNEGlyCaeniuhKA8DOXQxIT0TlhVugcecXIUuwd7nIqoo0CY50exRUeqFVkhXGLipa/vhUxcgTXRINHKPa5/Hq5cDa+JeEc7Pux+2wLt00bRMwpL5uMjNpySZTypf7rcImYmHP6QaWeSZ5Ro14LWKohNHPV3QsOrJ6JT29sdcYePtuyIUAivvfPjymIcnM7WX1nxh3VP0bnO/B/B6DmZqE29rASloWdy7UZsJ17RS/sD54K8rDbgudDhjgkAYxXEm6CLBZsaD8w+YNxHj869CRQCVF/75c8g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jRXhIKRZ/2FXxPqmOfRoyv9iskERzUU5hGr9oe2SNqQ=;
- b=Y39yXPOTu6V3tf9gaIIEwhKQXZRI9+CX7Bu3KMXuNpCPcLmTkjwXYt9VIjUvb9MxY6BiHqpg3Qih8PIm58/bxs9v2gr3ie1PXlbG3frPbsK7/HFq0uW1breKtrEklesIPVpF97wwqq+j+JHrMcBBE5slz3U2luQQQU7uCVjMd+XjA7+8BsRXs7tn8EvnpkWqbzrjHz45jA/ycBCletQYxpEbs87U3JiS1XauxSn3utIwPzbTjTCCMi+vlk7TbYzTDeODfhfTer9+6X3Kn4Ttfc1OawWN0eIaIS4mrHGy9LX5SEhEL6fL5sUUQWKREkHFTx8yX3g3v/95IKK+7oT5VQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=oi7GTupPW2stxNxhyYR0GR887uYJ+TAImZC9lluFQUk=;
+ b=YkapL3+CKAeyAhb6s/9P9iMHF95QGCS4DRpREujEUYnz1IErejNd9j0v7r4j1lEgqa2EWn/TIieSEkJtcEK8Ld0ym/Ou/Vt88TMWNT8wbOQLnOzXevunAydSoQVvTMSem49rcSCAiCb0XkjzMi7YDR262OWohcx7Hsi7PqU0FmWXmZGFq4pcuFqxBnuSHwQDNM0i9dSB5RJndtsz237fa24w0M2C0JzUg9wUdjR/wG7soNQZsV2lj6Ox91RV31mkKmlkTst3Gq92axDbx/0xarIJornpdpA2OvNO9rZ0f3bF/0kAOrKXOwSyTk/IB8kRrnaG7JMBHRnFw0mxOFtZCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=vmware.com; dmarc=pass action=none header.from=vmware.com;
+ dkim=pass header.d=vmware.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=vmware.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=jRXhIKRZ/2FXxPqmOfRoyv9iskERzUU5hGr9oe2SNqQ=;
- b=YWKanpUEyXoJhr+eLcEuDzbYru4thswFUDXA4ieE1c+OdBGIRro1VYWjk6olNawFP357wHj5m9gFwylD0w0jlIf9cfIYN70bV03mray3l0kHfd/przu1mNdV3c0yhcrrSzP08XX/bMOGN6mP+oa/p3GgTw2g6aBpnISrxF5p1S0=
-Received: from DM6PR02CA0133.namprd02.prod.outlook.com (2603:10b6:5:1b4::35)
- by SN7PR12MB6909.namprd12.prod.outlook.com (2603:10b6:806:263::18) with
+ bh=oi7GTupPW2stxNxhyYR0GR887uYJ+TAImZC9lluFQUk=;
+ b=xMNuUY4kJHVoJjWCdAUEXVlQoMQW2WQO5vOwYvUpLunYA5KEcVnvyj7gcZAQAF6kYXB3U6DvkPZJddfvsxDRC7Q7HJVNnLKHbHx6EAHV+BkmbQBcnVv7QpfXoG6w8zNvbfjX2kVkoW2QzgywMs1dQMTA4gNPySCzToeN/aHJsy4=
+Received: from MW4PR05MB8699.namprd05.prod.outlook.com (2603:10b6:303:12a::12)
+ by CY4PR05MB3639.namprd05.prod.outlook.com (2603:10b6:910:59::25) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.22; Mon, 15 May
- 2023 11:35:57 +0000
-Received: from DM6NAM11FT027.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:1b4:cafe::2b) by DM6PR02CA0133.outlook.office365.com
- (2603:10b6:5:1b4::35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.30 via Frontend
- Transport; Mon, 15 May 2023 11:35:57 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT027.mail.protection.outlook.com (10.13.172.205) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.6411.15 via Frontend Transport; Mon, 15 May 2023 11:35:57 +0000
-Received: from beas.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Mon, 15 May
- 2023 06:35:54 -0500
-From:   Wyes Karny <wyes.karny@amd.com>
-To:     <ray.huang@amd.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC:     <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <gautham.shenoy@amd.com>, Wyes Karny <wyes.karny@amd.com>
-Subject: [PATCH v3 2/2] cpufreq: Warn if fast_switch is not set
-Date:   Mon, 15 May 2023 11:34:04 +0000
-Message-ID: <20230515113404.4259-3-wyes.karny@amd.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230515113404.4259-1-wyes.karny@amd.com>
-References: <20230515113404.4259-1-wyes.karny@amd.com>
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6387.28; Mon, 15 May
+ 2023 11:35:20 +0000
+Received: from MW4PR05MB8699.namprd05.prod.outlook.com
+ ([fe80::e109:9b20:9985:a286]) by MW4PR05MB8699.namprd05.prod.outlook.com
+ ([fe80::e109:9b20:9985:a286%5]) with mapi id 15.20.6387.028; Mon, 15 May 2023
+ 11:35:20 +0000
+From:   Ajay Kaher <akaher@vmware.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+CC:     kernel test robot <lkp@intel.com>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>,
+        "shuah@kernel.org" <shuah@kernel.org>,
+        "llvm@lists.linux.dev" <llvm@lists.linux.dev>,
+        "oe-kbuild-all@lists.linux.dev" <oe-kbuild-all@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>,
+        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
+        "chinglinyu@google.com" <chinglinyu@google.com>,
+        Nadav Amit <namit@vmware.com>,
+        "srivatsa@csail.mit.edu" <srivatsa@csail.mit.edu>,
+        Alexey Makhalov <amakhalov@vmware.com>,
+        Vasavi Sirnapalli <vsirnapalli@vmware.com>,
+        Tapas Kundu <tkundu@vmware.com>,
+        "er.ajay.kaher@gmail.com" <er.ajay.kaher@gmail.com>
+Subject: Re: [PATCH v2 8/9] eventfs: moving tracing/events to eventfs
+Thread-Topic: [PATCH v2 8/9] eventfs: moving tracing/events to eventfs
+Thread-Index: AQHZfOilHbAIv3gBO0Sfrm8lUvOVTK9HSCgAgAr9/YD//+uAgIABNMGAgAPqiQCAA/fagA==
+Date:   Mon, 15 May 2023 11:35:20 +0000
+Message-ID: <BD75F325-8347-4334-A62B-C38864933504@vmware.com>
+References: <1683026600-13485-9-git-send-email-akaher@vmware.com>
+ <202305030116.Gu6yyvKj-lkp@intel.com>
+ <1CAC8265-A4F3-4AF6-80E4-8F264ED670A9@vmware.com>
+ <20230509124559.0d5557ad@rorschach.local.home>
+ <400E4466-629C-4306-86B1-E8BA0CB5EF66@vmware.com>
+ <20230512185916.22bda1a5@rorschach.local.home>
+In-Reply-To: <20230512185916.22bda1a5@rorschach.local.home>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3731.500.231)
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=vmware.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: MW4PR05MB8699:EE_|CY4PR05MB3639:EE_
+x-ms-office365-filtering-correlation-id: 023ee593-ddd6-4a13-5e77-08db553876f3
+x-ld-processed: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 7EVNwC6uV18XF8cC0Ob+e5IC9Z10qMVO3HFmsUQJJGmqiwV2LQRChyXWksbbqOyQmJhTAvmdjgQLY2cFs5NupF+3pHaozOSOJEAKdGixNYaCA0cJrDDyUbp9GCfqKKCHvjhH9DxWYgcwOHH85zsPzFNRRA9T3zq2kVJcUY+F7iy6w39L7Bm8MhJDZ8CSjSXt+PTFJGeEjQPeKFR9t2WHHIBfu19ACUa8+oNINlaFxoYd8fu1ovex+3lfHsoWKMUvVMQULOldAHFm5FfADz41n/uuj5Er232apVYSrkHg7YZedw1hLvCXYQHdX7MBsmopmgIkRnEKaoMjBHYfKKDsdxZkWBucNtaK5P8qnwQkqhGeUbgi4j5gnS0YaHTXqLakzIBxoNtwtSZPSMvG8RppdQROreMXYu7H/S7J/etIJ6n+97lFggsk8otRLbMRDaJi9TyGQmszWnMxjeSDPSkvWrXtMRGTC2X9dbv82GpE9hzX21Kh36Ld4OhOzXvKbR9f7yfallpYFnZ8822/HNnex6UPgl20PEejOFLwh/+PaScV3Kenu3H3f3ht34gS+b1EtmMS4BvUrtflH2lVAC45jmIhXUuQbQm6hQlBjmj8lFm488N6BIBOl1S2gnFvrPHFiHUHYYGDJW3u1YTONtON6Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MW4PR05MB8699.namprd05.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230028)(4636009)(346002)(39860400002)(136003)(396003)(376002)(366004)(451199021)(4326008)(316002)(6916009)(41300700001)(36756003)(38070700005)(2906002)(38100700002)(122000001)(53546011)(6506007)(6486002)(26005)(6512007)(478600001)(66446008)(66946007)(66476007)(64756008)(66556008)(76116006)(2616005)(91956017)(5660300002)(4744005)(33656002)(8936002)(8676002)(54906003)(86362001)(186003)(71200400001)(7416002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?OPCQw4sovzO790OuHAhkYWhSmWWenw0HtT5/fwCQ1PcObq8z9pxHJaUTbcST?=
+ =?us-ascii?Q?QRQ3kamtciq+eIKfJBBOT4/6BI1JJ72RfBeevAtHv08LvDdfBHUJ/aEWlDm1?=
+ =?us-ascii?Q?ABYdjAum/RoKQWYTl+J0WMNfgTqeyx5nBWdyn2NA2nMmZPDEVjdoVLAZTVsG?=
+ =?us-ascii?Q?4WuWvZ2wuKzsZOg8OTp/N9wcvzISqowYFzjTrRf4ltK8RtJnOHR42fe+jW+7?=
+ =?us-ascii?Q?fJbM9utMEycFk56fFLBcG+TiCWdQK7iDOkTO0j98kx3S6c6Wd53J2yREMXO7?=
+ =?us-ascii?Q?z+v/mH/fQIfutYt7dCpNX6t12T/S3NrIJKuSoyl61FJWHkGAGAuhmLs+O2Rt?=
+ =?us-ascii?Q?HMSrjgHW0xQ3NBAsq9EtlTumgS7A2xLNem3eT7N9N5R8aMNmEyJYMTUaRecU?=
+ =?us-ascii?Q?2K22CBUCvUJlq2TOXR8ASQ20TIFEDItjBzuDybqTewIiU5Fs7X4Mc0PmLkHl?=
+ =?us-ascii?Q?LDhCvfuxFIgvZLEGDVDG436494YNmFHzHvzOC6NVXzC2wZgMEPEbnDfybYX9?=
+ =?us-ascii?Q?a1EOXbf1TYygTmmYcHEKBX1HlQRq0rM5rf3+L0kn9Yb7fv5p6X5A6aDg62pK?=
+ =?us-ascii?Q?MAV/JYaVwkWv6+ki2FZwdSNJsOtvmJNQZLVjy4MZBVmcvXS7rFG11Cmb1YbP?=
+ =?us-ascii?Q?hyxbPMfo/niPGyKAiQWvOZbg9VyTfemflR8xprEaJhEBLqOb76tpinRY3/zB?=
+ =?us-ascii?Q?dKMeTaboj+q6Q0HlIa5l0BOzqheI+zjGaynGuRbYuSyOfPHx+q8y6v4iXfG5?=
+ =?us-ascii?Q?R0Kajimf+V9QYidyxoQXil+PuHr0INiSlEMrTxxugkUeCE4ZH/0DOiGjqspz?=
+ =?us-ascii?Q?KJkrmDfTmGrIwUjXrIH9cpdtToCGsUgSX9nk3UfY1m7d0P759Lvljlkzp80W?=
+ =?us-ascii?Q?fmDGfnrS5AfsUSUenvc3J4kfzkDHkLDdT9QemQns0QhsDPHmuVkm/RdqYAYP?=
+ =?us-ascii?Q?DmOQy3/KPp+AQJIP6pf3OtYOV/NADVUyyLjphPXlfSWfwWQqPr+6ylDMHdiL?=
+ =?us-ascii?Q?41vvJmtqn9Lci7bu6K9F2q+8vO63AT0cSqvkaiTzMB56MtgViLzypecDeRFn?=
+ =?us-ascii?Q?BVbqsWtIqKii9lBdCP9+9ICaT4/8C+BnyNnh7jSzlcpjIyXc2NfX/ZBAEC8B?=
+ =?us-ascii?Q?Ee9QKq7s8k1V9EHWs36xoCCc986fLckSySpkdMM8689h5jmd4/cGMV08Hz/I?=
+ =?us-ascii?Q?T6JiADCqsLRISXUuVptatqiIxQLaIwen6mo+m7d+aGVNntQhlgSHRBCyPD9+?=
+ =?us-ascii?Q?ldNvUJZTgO+rz6J8iVJUETOmdg4RWOo3gRSt5sRPPf6Px7BCgEkH9BVZ5Ygk?=
+ =?us-ascii?Q?PWcFjZCqsevOjEKTNZIiGvDIPYnFNcpeIV+vAHJyS2msh+SH42rTSNRMIRWJ?=
+ =?us-ascii?Q?td5hZPgDMvJxcKVKh87sjbwAkoeNKGf/LWeG330SccenbEXfIYMplw52TgxF?=
+ =?us-ascii?Q?365SANHMoj/IqEDyBWdKjz1jYQmL9ni1j00Wfeso3ddPcd7UKLq7pgyuQDk5?=
+ =?us-ascii?Q?lKNQrxD4ZEpBpQxL/rJiYolrGl9vJBpF0viG9Nbg8i7u2CfRt+ncz3sFsdzl?=
+ =?us-ascii?Q?hExouSPvSB6HI9A/IVl2Q4gnnE6DZlYYG50J8eQz?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <098E2006ADA42E48898AB43F88B025AE@namprd05.prod.outlook.com>
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT027:EE_|SN7PR12MB6909:EE_
-X-MS-Office365-Filtering-Correlation-Id: 11278f8e-7ab8-4b47-fa31-08db55388cfe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Hj8TMh6p7SkNGR+PDlFBS/ILqreUlau0lcZhtgaW4TSg3UK4IWNxl0lNaJacBbtE7W6GMBv7N003gYsW8YhUV9Yv3gyrqMVczq91ra+BoBjAj+xn84eUz/qdfFXpx07Vl5oLjHRYIfv7Q1W7lmV/8KBoCQUvBTF7m88qig6kjNF7pQJlK3S5RJ2Yu82XfVUoqnHE2NWExiTHR8EI9eOYfpc9ORHF5mzSYdA6OCZYf17WLSIPF3YYCAgE9bdpBVUDW47KK/YxkoptWijshGdLx3Kw3077F2X8GSRNAIyhfCfQTFZ8spvG/AQWGYc9E76XBCMDFHPBu4S7H8eYRtueWdRDp3lzAr53oobJ9udZn6Thu0VJ13WtuTPi/ZI+vd69POylM2I+Q5zzNLHTVa/BidYkY+xR58FUdDnHbCaAzoAEZWEqOMaXnEpCpyFtSYypfrHcHqBT9WLmC167OgT49N17LOcZgt42yPSU7uPkptTuRHOa26zXwk8Q30iQl/Hc5RgRIrXY0KJXaLZfGpBxC5ZPtAZ3bRqCXXvuWrr2MNdAYv4ewKkxS2lFfSXhsswAHLqpZ6rcWO170xM/sdZOGpUco1TAJn4RQPmcSvu38oGI2tVcnCR8Vyl4Drev40R0BgE2MXULua5hKgeF+GcLg+jZ+1fgZ2GHhrqedibdYzGdH9DT06nHnf6Fb/yOD09HZpX3XtIyArHix8X0BepeuDtaMivdw4KcTUiKoIR/N/CS3Czj9qxJVk26ziAwpJ5js+pBePY8ZLHRtpeH5EtstPscIql//hDwDyxmPS8njKFkHTGHAqhoSk7G2hJMuXhN
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230028)(4636009)(396003)(376002)(39860400002)(136003)(346002)(451199021)(36840700001)(46966006)(40470700004)(70206006)(36860700001)(426003)(4326008)(40460700003)(110136005)(47076005)(336012)(7696005)(2616005)(2906002)(83380400001)(6666004)(70586007)(316002)(478600001)(8676002)(5660300002)(8936002)(186003)(44832011)(16526019)(26005)(41300700001)(1076003)(40480700001)(54906003)(82310400005)(86362001)(82740400003)(356005)(36756003)(81166007)(36900700001)(2101003)(309714004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 15 May 2023 11:35:57.4325
+X-OriginatorOrg: vmware.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: MW4PR05MB8699.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 023ee593-ddd6-4a13-5e77-08db553876f3
+X-MS-Exchange-CrossTenant-originalarrivaltime: 15 May 2023 11:35:20.4907
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 11278f8e-7ab8-4b47-fa31-08db55388cfe
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT027.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6909
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=no autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: b39138ca-3cee-4b4a-a4d6-cd83d9dd62f0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 5AkLwpPuRfZ9f5pQ2vq5BGNQylYNOeW+RhPnOFG3eHWCTAkmfukgEWAgP2ZO17SM24aT/X9zBikcJiWOiDZhZw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY4PR05MB3639
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If fast_switch_possible flag is set by the scaling driver, the governor
-is free to select fast_switch function even if adjust_perf is set. When
-the frequency invariance is disabled due to some reason governor
-fallbacks to fast_switch if fast_switch_possible is set. This could
-crash the kernel if the driver didn't set the fast_switch function
-pointer.
 
-This issue becomes apparent when aperf/mperf overflow occurs with
-amd_pstate (passive) + schedutil.  When this happens, kernel disables
-frequency invariance calculation which causes schedutil to fallback to
-sugov_update_single_freq which currently relies on the fast_switch
-callback.
 
-Normal flow:
-  sugov_update_single_perf
-    cpufreq_driver_adjust_perf
-      cpufreq_driver->adjust_perf
+> On 13-May-2023, at 4:29 AM, Steven Rostedt <rostedt@goodmis.org> wrote:
+>=20
+> !! External Email
+>=20
+> On Wed, 10 May 2023 11:11:15 +0000
+> Ajay Kaher <akaher@vmware.com> wrote:
+>=20
+>> Sounds good. Thanks Steve :)
+>> Once you will merge below patch, I will rebase this patch in v3.
+>=20
+> Feel free to just add it at the start of your queue. You just need to
+> keep the "From" line and it will be added as my patch.
 
-Error case flow:
-  sugov_update_single_perf
-    sugov_update_single_freq  <-- This is chosen because the freq invariant is disabled due to aperf/mperf overflow
-      cpufreq_driver_fast_switch
-         cpufreq_driver->fast_switch <-- Here NULL pointer dereference is happening, because fast_switch is not set
+Ok, I will include in v3.
 
-Put up a warning message if the driver sets fast_switch_possible flag
-but not fast_switch.
-
-Signed-off-by: Wyes Karny <wyes.karny@amd.com>
----
- drivers/cpufreq/cpufreq.c | 18 ++++++++++++++++++
- include/linux/cpufreq.h   |  5 ++++-
- 2 files changed, 22 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 6b52ebe5a890..180be9235b08 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -501,6 +501,13 @@ void cpufreq_enable_fast_switch(struct cpufreq_policy *policy)
- 	if (!policy->fast_switch_possible)
- 		return;
- 
-+	/**
-+	 * It's not expected driver's fast_switch callback is not set
-+	 * even fast_switch_possible is true.
-+	 */
-+	if (!cpufreq_driver_has_fast_switch())
-+		pr_alert_once("fast_switch callback is not set\n");
-+
- 	mutex_lock(&cpufreq_fast_switch_lock);
- 	if (cpufreq_fast_switch_count >= 0) {
- 		cpufreq_fast_switch_count++;
-@@ -2143,6 +2150,17 @@ unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
- }
- EXPORT_SYMBOL_GPL(cpufreq_driver_fast_switch);
- 
-+/**
-+ * cpufreq_driver_has_fast_switch - Check "fast switch" callback.
-+ *
-+ * Return 'true' if the ->fast_switch callback is present for the
-+ * current driver or 'false' otherwise.
-+ */
-+bool cpufreq_driver_has_fast_switch(void)
-+{
-+	return !!cpufreq_driver->fast_switch;
-+}
-+
- /**
-  * cpufreq_driver_adjust_perf - Adjust CPU performance level in one go.
-  * @cpu: Target CPU.
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index 26e2eb399484..4277d6f8e50c 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -340,7 +340,9 @@ struct cpufreq_driver {
- 	/*
- 	 * ->fast_switch() replacement for drivers that use an internal
- 	 * representation of performance levels and can pass hints other than
--	 * the target performance level to the hardware.
-+	 * the target performance level to the hardware. If driver is setting this,
-+	 * then it needs to set fast_switch also. Because in certain scenario scale
-+	 * invariance could be disabled and governor can switch back to fast_switch.
- 	 */
- 	void		(*adjust_perf)(unsigned int cpu,
- 				       unsigned long min_perf,
-@@ -604,6 +606,7 @@ struct cpufreq_governor {
- /* Pass a target to the cpufreq driver */
- unsigned int cpufreq_driver_fast_switch(struct cpufreq_policy *policy,
- 					unsigned int target_freq);
-+bool cpufreq_driver_has_fast_switch(void);
- void cpufreq_driver_adjust_perf(unsigned int cpu,
- 				unsigned long min_perf,
- 				unsigned long target_perf,
--- 
-2.34.1
-
+-Ajay
