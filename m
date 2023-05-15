@@ -2,137 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39056702D4B
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 14:59:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FBDB702D50
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 15:00:48 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S242042AbjEOM6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 08:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46180 "EHLO
+        id S242038AbjEONAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 09:00:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S242057AbjEOM6G (ORCPT
+        with ESMTP id S242067AbjEOM7q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 08:58:06 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7686E5
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:58:03 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id 3f1490d57ef6-ba6fffc5524so5446579276.3
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:58:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684155483; x=1686747483;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=HXqDQRh3lmw332MPRvHZucQcQJLpqaLIK4wu8oQfcgE=;
-        b=nW1I839PaX6h9dZPy+wPPlK9E5my1YR0mZqI+8SXWJ54ChnlV3NyrP7PDtv8FARxgv
-         N+KlKw1wbJROgv1WvJ1ahWUn0cMtxt3javmg9ag+Lj4akVdt6pRDaC+OTqhD/gzHFmrL
-         b7qEI0nqk1VxyYDYY1RZL2bF/O9OwqhtkvQ+ZUnXIg0qnZL4yn1miukLr2fMWWnF8z6I
-         wG9hwC30pN6HwkGGAfF6c5Sb8Dl0d15fcHKMQrnkoXsqOWHk2e5HFwrwAtINadH4IUOU
-         6bYrCPRaiiiy7TOk659Ql1aP6p55wlCi6ACZXlFBLkXSVyVvEfpz/9kdjDkOHfdy9tVx
-         HeRg==
+        Mon, 15 May 2023 08:59:46 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08E7E19BA
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:58:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684155531;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=FWCSgHKgkfiwsZPIbDFMuCcNPnF6WGYEGag89qGrc3E=;
+        b=INbALebSyeFPuehk6FrrTKDeHsFn/UJXk4Dn0LlWpazMTjJl9748n+16rgFm5/FKhzw539
+        ODqC7qdBg7tOYZaCRBNERp4LPmVI/XoH2+WiM3Hhe2mF+PBGOVAKQlg87QuA0ZqyDAZ/AQ
+        DuESjuPk5w1HyQ1ITsnHlFSibi5J+cs=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-266-Bv4l8o1fNlK59ITGeSWcdg-1; Mon, 15 May 2023 08:58:49 -0400
+X-MC-Unique: Bv4l8o1fNlK59ITGeSWcdg-1
+Received: by mail-ed1-f69.google.com with SMTP id 4fb4d7f45d1cf-50bcc3ee913so11269478a12.2
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 05:58:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684155483; x=1686747483;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=HXqDQRh3lmw332MPRvHZucQcQJLpqaLIK4wu8oQfcgE=;
-        b=OuZo/xu1wawUXa/TwfzsEv5YjIsQRpXGBIcuwZ3r318QwbFD7bBd5eo6/+EMqpa4NP
-         7HsE0TyRPzxwWd0cko2mSvDEzFZ1zzPGAZd31uiaKpsy2IK7e8fg+Pdnulq2mnjcCAde
-         CJmXLeKF4Z8/tWgI7uw7NS0hA67F1pMunCRSUzoTJmr8GVQu0SvvnvkseAmjHmmFuFQ3
-         On+EIHrf3dIeJxjKMWFmpHDxzFKlbqXfOI2SK3Jr7XpKQiKx8XRNApqsvTM0BGVAObGw
-         F0RjOZiWTk5ZZYocbo6lidFUYQ1MDLzScYHFldGr5qQ6Y3wt2+qGHqO02tj1eiSN4NGP
-         Zjug==
-X-Gm-Message-State: AC+VfDz741DNRVYYTPkreutq5aWFC/kzDMFfdirh7SoZZwAClT293/Xq
-        SGs+5eks5QYZ6+SWGa8Np8saYxy4QZGTfOhZNPF+jg==
-X-Google-Smtp-Source: ACHHUZ5HcaVgTLl9wGnyPOESD2iVVb16GOSG7yMh3VRdCQ/p+kSj3yrx3LaanFXqAed3eneQWizWHF6gPhbKR7UzPZo=
-X-Received: by 2002:a25:adc3:0:b0:ba6:ba75:2315 with SMTP id
- d3-20020a25adc3000000b00ba6ba752315mr10259485ybe.47.1684155482912; Mon, 15
- May 2023 05:58:02 -0700 (PDT)
+        d=1e100.net; s=20221208; t=1684155528; x=1686747528;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FWCSgHKgkfiwsZPIbDFMuCcNPnF6WGYEGag89qGrc3E=;
+        b=BSrsLwBzXtzNw6cudhfnZF1zsTJAynxLVl3pfWeDcf0Bgyat8tD0Oe7jDEuZrds+GU
+         z6j1twSqASszdJ23Bi+G9qt2ZLGMlMTE2RVHXdryM9lpXfFox+J8+tSDKajrjxjyQL4X
+         tE185BAbAwoHlX02hiwOwLQVrkEBvTj959n9o7PStD5Dd/sWNxaqENwz7EwF9aBD82Dc
+         p3KGJRwpZMu9BjQsoIbWrI0VdTFugXKksz8Je3WYvjLsHFdclcP0718HA6Q1GM6t5dSW
+         LrvxLwBxoZ7cExB9Z/50dvrr3aRzcj4fgYP8g3sWf4SSGvS0pJAnO8EyNvxjHAiVjB8p
+         PkDQ==
+X-Gm-Message-State: AC+VfDzEhGgBSM+4vzVXJZylIRx0QWghboDG7/NSHDxUD5+AzbhJL3fN
+        AdvniS/lyHlhfdv9RS48IldgntFHarLWjshCIE4P3c/z1YuScpNSXUp+Ig6Op3OuTymNysw9Vsh
+        wJyMJ5F/aZA90nY74eg1u0QIy
+X-Received: by 2002:a17:907:31ca:b0:960:d28d:3368 with SMTP id xf10-20020a17090731ca00b00960d28d3368mr29751364ejb.60.1684155528690;
+        Mon, 15 May 2023 05:58:48 -0700 (PDT)
+X-Google-Smtp-Source: ACHHUZ6xkL6WGxU1o9yYr/28OLbSJCo+7UtLQGQNg33hogDZC56D+3LydUsY1jPyQc5CP9a5ic0ZGw==
+X-Received: by 2002:a17:907:31ca:b0:960:d28d:3368 with SMTP id xf10-20020a17090731ca00b00960d28d3368mr29751349ejb.60.1684155528335;
+        Mon, 15 May 2023 05:58:48 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id l19-20020a170906939300b0094e7d196aa4sm9298799ejx.160.2023.05.15.05.58.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 15 May 2023 05:58:47 -0700 (PDT)
+Message-ID: <ffe8f013-b666-0e8b-af19-4eda14fbe928@redhat.com>
+Date:   Mon, 15 May 2023 14:58:46 +0200
 MIME-Version: 1.0
-References: <20230509161218.11979-1-quic_jkona@quicinc.com>
- <20230509161218.11979-5-quic_jkona@quicinc.com> <7faf4c16-98ff-f27d-d1fd-3058370c06f5@linaro.org>
-In-Reply-To: <7faf4c16-98ff-f27d-d1fd-3058370c06f5@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Mon, 15 May 2023 15:57:52 +0300
-Message-ID: <CAA8EJpo1iMj90BPc6gYngSrJqd8WWArRndgbcVg1fYBKBpVfAQ@mail.gmail.com>
-Subject: Re: [PATCH 4/4] arm64: dts: qcom: sm8550: Add video clock controller
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Jagadeesh Kona <quic_jkona@quicinc.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+Subject: Re: [PATCH] platform/x86: asus-wmi: Ignore WMI events with codes
+ 0x7B, 0xC0
+Content-Language: en-US
+To:     Alexandru Sorodoc <ealex95@gmail.com>,
+        Corentin Chary <corentin.chary@gmail.com>,
+        Mark Gross <markgross@kernel.org>
+Cc:     acpi4asus-user@lists.sourceforge.net,
+        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230512101517.47416-1-ealex95@gmail.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230512101517.47416-1-ealex95@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,
+        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 15 May 2023 at 15:28, Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
->
->
->
-> On 9.05.2023 18:12, Jagadeesh Kona wrote:
-> > Add device node for video clock controller on Qualcomm SM8550 platform.
-> >
-> > Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
-> > Signed-off-by: Taniya Das <quic_tdas@quicinc.com>
-> > ---
-> >  arch/arm64/boot/dts/qcom/sm8550.dtsi | 12 ++++++++++++
-> >  1 file changed, 12 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> > index 6e9bad8f6f33..e67e7c69dae6 100644
-> > --- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> > +++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-> > @@ -7,6 +7,7 @@
-> >  #include <dt-bindings/clock/qcom,sm8550-gcc.h>
-> >  #include <dt-bindings/clock/qcom,sm8550-tcsr.h>
-> >  #include <dt-bindings/clock/qcom,sm8550-dispcc.h>
-> > +#include <dt-bindings/clock/qcom,sm8550-videocc.h>
-> >  #include <dt-bindings/dma/qcom-gpi.h>
-> >  #include <dt-bindings/gpio/gpio.h>
-> >  #include <dt-bindings/interrupt-controller/arm-gic.h>
-> > @@ -759,6 +760,17 @@ gcc: clock-controller@100000 {
-> >                                <&usb_dp_qmpphy QMP_USB43DP_USB3_PIPE_CLK>;
-> >               };
-> >
-> > +             videocc: clock-controller@aaf0000 {
-> This node should be moved down. Nodes with unit addresses
-> should be sorted alphanumerically.
->
-> > +                     compatible = "qcom,sm8550-videocc";
-> > +                     reg = <0 0x0aaf0000 0 0x10000>;
-> > +                     clocks = <&bi_tcxo_div2>, <&gcc GCC_VIDEO_AHB_CLK>;
-> One per line, please
->
-> Also, any reason the XO clock does not come from RPMhCC?
+Hi,
 
-bi_tcxo_div_2 is an RPMhCC clock with the fixed divider.
+On 5/12/23 12:15, Alexandru Sorodoc wrote:
+> On ASUS GU604V the key 0x7B is issued when the charger is connected or
+> disconnected, and key 0xC0 is issued when an external display is
+> connected or disconnected.
+> 
+> This commit maps them to KE_IGNORE to slience kernel messages about
+> unknown keys, such as:
+> 
+>     kernel: asus_wmi: Unknown key code 0x7b
+> 
+> Signed-off-by: Alexandru Sorodoc <ealex95@gmail.com>
 
->
-> Konrad
-> > +                     power-domains = <&rpmhpd SM8550_MMCX>;
-> > +                     required-opps = <&rpmhpd_opp_low_svs>;
-> > +                     #clock-cells = <1>;
-> > +                     #reset-cells = <1>;
-> > +                     #power-domain-cells = <1>;
-> > +             };
-> > +
-> >               ipcc: mailbox@408000 {
-> >                       compatible = "qcom,sm8550-ipcc", "qcom,ipcc";
-> >                       reg = <0 0x00408000 0 0x1000>;
+Thank you for your patch, I've applied this patch to my fixes
+branch:
+https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=fixes
+
+Note it will show up in my fixes branch once I've pushed my
+local branch there, which might take a while.
+
+I will include this patch in my next fixes pull-req to Linus
+for the current kernel development cycle.
+
+Regards,
+
+Hans
 
 
+> ---
+> I'm not sure what those keys events actually mean. I assume they are
+> some redundant notifications because no laptop functionality seems to
+> depend on them.
+> 
+> If there is anything I can check or investigate please let me know.
+> 
+> Thanks,
+> Alex
+> 
+>  drivers/platform/x86/asus-nb-wmi.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/platform/x86/asus-nb-wmi.c b/drivers/platform/x86/asus-nb-wmi.c
+> index e2c9a68d12df..fdf7da06af30 100644
+> --- a/drivers/platform/x86/asus-nb-wmi.c
+> +++ b/drivers/platform/x86/asus-nb-wmi.c
+> @@ -555,6 +555,7 @@ static const struct key_entry asus_nb_wmi_keymap[] = {
+>  	{ KE_KEY, 0x71, { KEY_F13 } }, /* General-purpose button */
+>  	{ KE_IGNORE, 0x79, },  /* Charger type dectection notification */
+>  	{ KE_KEY, 0x7a, { KEY_ALS_TOGGLE } }, /* Ambient Light Sensor Toggle */
+> +	{ KE_IGNORE, 0x7B, }, /* Charger connect/disconnect notification */
+>  	{ KE_KEY, 0x7c, { KEY_MICMUTE } },
+>  	{ KE_KEY, 0x7D, { KEY_BLUETOOTH } }, /* Bluetooth Enable */
+>  	{ KE_KEY, 0x7E, { KEY_BLUETOOTH } }, /* Bluetooth Disable */
+> @@ -584,6 +585,7 @@ static const struct key_entry asus_nb_wmi_keymap[] = {
+>  	{ KE_KEY, 0xAE, { KEY_FN_F5 } }, /* Fn+F5 fan mode on 2020+ */
+>  	{ KE_KEY, 0xB3, { KEY_PROG4 } }, /* AURA */
+>  	{ KE_KEY, 0xB5, { KEY_CALC } },
+> +	{ KE_IGNORE, 0xC0, }, /* External display connect/disconnect notification */
+>  	{ KE_KEY, 0xC4, { KEY_KBDILLUMUP } },
+>  	{ KE_KEY, 0xC5, { KEY_KBDILLUMDOWN } },
+>  	{ KE_IGNORE, 0xC6, },  /* Ambient Light Sensor notification */
 
--- 
-With best wishes
-Dmitry
