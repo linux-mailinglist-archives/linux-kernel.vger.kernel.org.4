@@ -2,177 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 946B070278A
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:49:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id 02645702783
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 10:47:58 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S237665AbjEOItP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 04:49:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33828 "EHLO
+        id S233485AbjEOIr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 04:47:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S238433AbjEOIsn (ORCPT
+        with ESMTP id S237581AbjEOIrx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 04:48:43 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C901BDD
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 01:48:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1684140513; x=1715676513;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=NP9grGktDYmSW/y0bEvt2e7TpvQ9W2Et0cmTgeeaOa8=;
-  b=noL66pbr4bYDXddk7Y3UG8CGKmf5WYSDiILIIiYKK0mYJt1EgZnzD4kB
-   h1JbHN+NdETPmqIz27b05yh/jFE/QZzZqLHP3CjbypwxucG3zXVogbT5T
-   Zc0/LVk+S3Ju2ZZzsibWdmsD6eDGhbejGbcdctBNrr4lJWk2ThqUn7d+D
-   lX+kDdDHQQR5bzj2gdD3T7X8XYXZKb//S8P9PIBMLflp+MJz2iQRKaY4m
-   NTnyV7khhrzJ9kP7ShH7m9YWYPVrluUT246rQjGvofXMtohSEL3tjisHk
-   +h2ZP8DGURh8OeXQlaEsy6ItFqcF+x3yQ75hqS76re1OoCYVE9312v2JI
-   w==;
-X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="379307406"
-X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
-   d="scan'208";a="379307406"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 01:48:32 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6600,9927,10710"; a="845163661"
-X-IronPort-AV: E=Sophos;i="5.99,276,1677571200"; 
-   d="scan'208";a="845163661"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 May 2023 01:48:27 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Khalid Aziz <khalid.aziz@oracle.com>
-Cc:     akpm@linux-foundation.org, willy@infradead.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org,
-        Steve Sistare <steven.sistare@oracle.com>,
-        Khalid Aziz <khalid@kernel.org>,
-        Mel Gorman <mgorman@techsingularity.net>
-Subject: Re: [PATCH v2] mm, compaction: Skip all non-migratable pages during
- scan
-References: <20230512190000.103737-1-khalid.aziz@oracle.com>
-Date:   Mon, 15 May 2023 16:47:17 +0800
-In-Reply-To: <20230512190000.103737-1-khalid.aziz@oracle.com> (Khalid Aziz's
-        message of "Fri, 12 May 2023 13:00:00 -0600")
-Message-ID: <871qji7zhm.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Mon, 15 May 2023 04:47:53 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DE8BE49;
+        Mon, 15 May 2023 01:47:52 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9BC402F4;
+        Mon, 15 May 2023 01:48:36 -0700 (PDT)
+Received: from [192.168.1.12] (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 89EBE3F67D;
+        Mon, 15 May 2023 01:47:48 -0700 (PDT)
+Message-ID: <9a69f5ae-86a1-5bd4-4564-e257fe64c826@arm.com>
+Date:   Mon, 15 May 2023 10:47:42 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        T_SCC_BODY_TEXT_LINE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.10.0
+From:   Pierre Gondois <pierre.gondois@arm.com>
+Subject: Re: [PATCH 02/17] PM: EM: Find first CPU online while updating OPP
+ efficiency
+To:     Lukasz Luba <lukasz.luba@arm.com>
+Cc:     dietmar.eggemann@arm.com, rui.zhang@intel.com, rafael@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        amit.kucheria@verdurent.com, amit.kachhap@gmail.com,
+        daniel.lezcano@linaro.org, viresh.kumar@linaro.org,
+        len.brown@intel.com, pavel@ucw.cz, ionela.voinescu@arm.com,
+        rostedt@goodmis.org, mhiramat@kernel.org
+References: <20230314103357.26010-1-lukasz.luba@arm.com>
+ <20230314103357.26010-3-lukasz.luba@arm.com>
+ <c35741e3-f0c9-bec4-7e9a-c96e5949839f@arm.com>
+ <0cda1fc9-2e99-66a2-b833-fe5be676d815@arm.com>
+Content-Language: en-US
+In-Reply-To: <0cda1fc9-2e99-66a2-b833-fe5be676d815@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Khalid,
+Hi Lukasz,
 
-Cced Mel.
+On 5/10/23 09:08, Lukasz Luba wrote:
+> 
+> 
+> On 4/11/23 16:40, Pierre Gondois wrote:
+>> Hello Lukasz,
+>>
+>> On 3/14/23 11:33, Lukasz Luba wrote:
+>>> The Energy Model might be updated at runtime and the energy efficiency
+>>> for each OPP may change. Thus, there is a need to update also the
+>>> cpufreq framework and make it aligned to the new values. In order to
+>>> do that, use a first online CPU from the Performance Domain.
+>>>
+>>> Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+>>> ---
+>>>    kernel/power/energy_model.c | 11 +++++++++--
+>>>    1 file changed, 9 insertions(+), 2 deletions(-)
+>>>
+>>> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+>>> index 265d51a948d4..3d8d1fad00ac 100644
+>>> --- a/kernel/power/energy_model.c
+>>> +++ b/kernel/power/energy_model.c
+>>> @@ -246,12 +246,19 @@ em_cpufreq_update_efficiencies(struct device
+>>> *dev, struct em_perf_state *table)
+>>>        struct em_perf_domain *pd = dev->em_pd;
+>>>        struct cpufreq_policy *policy;
+>>>        int found = 0;
+>>> -    int i;
+>>> +    int i, cpu;
+>>>        if (!_is_cpu_device(dev) || !pd)
+>>>            return;
+>>
+>> Since dev is a CPU, I think it shouldn be possible to get the cpu id via
+>> 'dev->id'.
+>> If so the code below should not be necessary anymore.
+> 
+> When you look at the code it does two things.
+> It tries to get the CPU id - this might be similar to what you
+> have proposed with the 'dev->id' but it's also looking at CPUs
+> which are 'active'. The 'dev' that we have might come from
+> some place, e.g. thermal cooling, which had a first CPU in
+> the domain stored somewhere. That CPU might be sometimes
+> not active, but the rest of the CPUs in the domain might be
+> running. We have to find an active CPU id and then we get the
+> 'policy'.
 
-Khalid Aziz <khalid.aziz@oracle.com> writes:
+It seems that all the call chains look like (the first argument is important):
+em_dev_register_perf_domain(get_cpu_device(policy->cpu), ...)
+\-em_cpufreq_update_efficiencies()
 
-> Pages pinned in memory through extra refcounts can not be migrated.
-> Currently as isolate_migratepages_block() scans pages for
-> compaction, it skips any pinned anonymous pages. All non-migratable
-> pages should be skipped and not just the anonymous pinned pages.
-> This patch adds a check for extra refcounts on a page to determine
-> if the page can be migrated.  This was seen as a real issue on a
-> customer workload where a large number of pages were pinned by vfio
-> on the host and any attempts to allocate hugepages resulted in
-> significant amount of cpu time spent in either direct compaction or
-> in kcompatd scanning vfio pinned pages over and over again that can
+Whenever a CPU is unplugged in cpufreq, a new CPU is put in charge of
+the policy (cf. __cpufreq_offline(), policy->cpu is updated). So the
+'dev' that em_cpufreq_update_efficiencies() receives should be an active
+device, with no need to check that the device is active.
 
-s/kcompatd/kcompactd/
+This would be just an optimization, the present code seems also valid
+to me.
 
-> not be migrated.
+Another NIT, I saw a cpumask_copy() in energy_model.c, but no
+free_cpumask_var(). This could be done separately from this patchset
+(if relevant).
 
-With the patch below, the cycles for kcompactd disappeared?
+Regards,
+Pierre
 
-> Signed-off-by: Khalid Aziz <khalid.aziz@oracle.com>
-> Suggested-by: Steve Sistare <steven.sistare@oracle.com>
-> Cc: Khalid Aziz <khalid@kernel.org>
-> ---
-> v2:
-> 	- Update comments in the code (Suggested by Andrew)
-> 	- Use PagePrivate() instead of page_has_private() (Suggested
-> 	  by Matthew)
-> 	- Pass mapping to page_has_extrarefs() (Suggested by Matthew)
-> 	- Use page_ref_count() (Suggested by Matthew)
-> 	- Rename is_pinned_page() to reflect its function more
-> 	  accurately (Suggested by Matthew)
->
->  mm/compaction.c | 36 ++++++++++++++++++++++++++++++++----
->  1 file changed, 32 insertions(+), 4 deletions(-)
->
-> diff --git a/mm/compaction.c b/mm/compaction.c
-> index 5a9501e0ae01..837f20df2bbb 100644
-> --- a/mm/compaction.c
-> +++ b/mm/compaction.c
-> @@ -764,6 +764,34 @@ static bool too_many_isolated(pg_data_t *pgdat)
->  	return too_many;
->  }
->  
-> +/*
-> + * Check if this base page should be skipped from isolation because
-> + * it has extra refcounts that will prevent it from being migrated.
-> + * This function is called for regular pages only, and not
-> + * for THP or hugetlbfs pages. This code is inspired by similar code
-> + * in migrate_vma_check_page(), can_split_folio() and
-> + * folio_migrate_mapping()
-> + */
-> +static inline bool page_has_extrarefs(struct page *page,
 
-Better to be named as page_has_extra_refs()?
-
-> +					struct address_space *mapping)
-> +{
-> +	unsigned long extra_refs;
-> +
-> +	/* anonymous page can have extra ref from swap cache */
-> +	if (mapping)
-> +		extra_refs = 1 + PagePrivate(page);
-> +	else
-> +		extra_refs = PageSwapCache(page) ? 1 : 0;
-
-IIUC, mapping != NULL if PageSwapCache(page) is true.  Please check the
-implementation of page_mapping().
-
-And even if mapping == NULL, the extra_refs should be 1, because we have
-elevated the page refcount in isolate_migratepages_block() before
-checking whether the page is pinned.  IIUC, this is the original
-behavior.  Or, we can add "- 1" in the following checking.
-
-> +
-> +	/*
-> +	 * This is an admittedly racy check but good enough to determine
-> +	 * if a page is pinned and can not be migrated
-> +	 */
-> +	if ((page_ref_count(page) - extra_refs) > page_mapcount(page))
-> +		return true;
-> +	return false;
-> +}
-> +
->  /**
->   * isolate_migratepages_block() - isolate all migrate-able pages within
->   *				  a single pageblock
-> @@ -992,12 +1020,12 @@ isolate_migratepages_block(struct compact_control *cc, unsigned long low_pfn,
->  			goto isolate_fail;
->  
->  		/*
-> -		 * Migration will fail if an anonymous page is pinned in memory,
-> -		 * so avoid taking lru_lock and isolating it unnecessarily in an
-> -		 * admittedly racy check.
-> +		 * Migration will fail if a page has extra refcounts
-> +		 * preventing it from migrating, so avoid taking
-> +		 * lru_lock and isolating it unnecessarily
->  		 */
->  		mapping = page_mapping(page);
-> -		if (!mapping && (page_count(page) - 1) > total_mapcount(page))
-> +		if (page_has_extrarefs(page, mapping))
->  			goto isolate_fail_put;
->  
->  		/*
-
-Best Regards,
-Huang, Ying
+> 
+>>
+>>> -    policy = cpufreq_cpu_get(cpumask_first(em_span_cpus(pd)));
+>>> +    /* Try to get a CPU which is online and in this PD */
+>>> +    cpu = cpumask_first_and(em_span_cpus(pd), cpu_active_mask);
+>>> +    if (cpu >= nr_cpu_ids) {
+>>> +        dev_warn(dev, "EM: No online CPU for CPUFreq policy\n");
+>>> +        return;
+>>> +    }
+>>> +
+>>> +    policy = cpufreq_cpu_get(cpu);
+>>>        if (!policy) {
+>>>            dev_warn(dev, "EM: Access to CPUFreq policy failed");
+>>>            return;
+>>
+>> Regards,
+>> Pierre
