@@ -2,87 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3B6A702A0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:07:37 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTP id BE89A702A15
+	for <lists+linux-kernel@lfdr.de>; Mon, 15 May 2023 12:08:54 +0200 (CEST)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S240596AbjEOKHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 15 May 2023 06:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42904 "EHLO
+        id S240844AbjEOKIu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 15 May 2023 06:08:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S240539AbjEOKHG (ORCPT
+        with ESMTP id S240422AbjEOKIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 15 May 2023 06:07:06 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 269C826A8
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:06:24 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id a640c23a62f3a-96adcb66f37so428480466b.1
-        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:06:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1684145182; x=1686737182;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B2hjpXzaWeM8OT7/yysLcClGVQFFFKoxwvBr9CBiXm0=;
-        b=BGiDtiloaV0WzQ3uHy4knefdHmJU85un1qrGqD9miGs79g3shQ31A8PRnGtjJ6S4cL
-         KhzcPGZoA7ABjuSOuh5At7Q39EfK63v7WaL++PrV7t59z5yHPvB/ZklYzLDFfJGnlR+R
-         bpslU+v3kPne8rbftHd71wrEEOeGyDp7z+3vIvcERHc6JNQudKVKNxGA3777Fzt0J0Gg
-         z3mli3vXAubfR6w8aoQyJwYRJcF3XLOuTAoe0a/piJxJttHpAJNRKj2x2wcaLpNoBAHz
-         LuUQSD09m3VF9wON+XX31yp20oiqJV6ypuzQ9BxuonDZnTaOr6nqkuYqT0rmFBFQlWw7
-         bLIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20221208; t=1684145182; x=1686737182;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B2hjpXzaWeM8OT7/yysLcClGVQFFFKoxwvBr9CBiXm0=;
-        b=ZKDkrzlmtGCc4MluhbdJoXZJIM0Sk78dLisoZSScmkYj71/Rv1ZIwCsS6X0DdMCMmZ
-         pJ+iLJP6B2MwLTgdwXgqBfu4X+fv0S0ak4bw9tTuyIW2PhMMgTRdQaquJ9MqyHh5oZGf
-         LWSgPz8OQ2ilzAVwT1QOrKmR6778DyRQXCW2bng/nwZmc/PQNaZkSsEhzJ2OhIT413vl
-         JlfhliBLVlGmdxxNJTPd5AbO/9p8FRzxAeMl5PJCDBgz9GWVPe3Hat1aAQcQFSILj1Ax
-         ueq0Zxv77K7KX3TGk5wHejpbTQXmI5Xu32dp6aH3TQhriqH05yrPhvkVp98aFDKJDeaA
-         kITA==
-X-Gm-Message-State: AC+VfDwAbt2PwiuFi7gl4k+8FW1rwKBP8d2jh2o/eetC+Mbxf9dHBfff
-        24gRcEt0V/DOfctRgMQ5WkeFRg==
-X-Google-Smtp-Source: ACHHUZ4sgPSj3/bY/sz0i8Il1c6eLwrf8kl8HHpsjyXJB0xJi8Gxcu96OyGJ+tDfG3La5Lgd6wWFZA==
-X-Received: by 2002:a17:906:4784:b0:94f:7486:85a7 with SMTP id cw4-20020a170906478400b0094f748685a7mr34326781ejc.31.1684145182522;
-        Mon, 15 May 2023 03:06:22 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:6470:25b8:7c2d:1992? ([2a02:810d:15c0:828:6470:25b8:7c2d:1992])
-        by smtp.gmail.com with ESMTPSA id kz23-20020a17090777d700b009659fed3612sm9193781ejc.24.2023.05.15.03.06.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 15 May 2023 03:06:21 -0700 (PDT)
-Message-ID: <4a04ef11-d87d-4464-a907-badc920d595d@linaro.org>
-Date:   Mon, 15 May 2023 12:06:20 +0200
+        Mon, 15 May 2023 06:08:32 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987811FD0
+        for <linux-kernel@vger.kernel.org>; Mon, 15 May 2023 03:07:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1684145236;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=G8znqVw87JzE/GiUPHNFG+C6yuIz096Ng+G8V1HRe2s=;
+        b=Zp5laAS+YKm5zfkxIeyXzETcG1CxIMJFF0YMutuRY8Uv1PloJAA+MVorO3oZUB0moPxQGz
+        zfEj/fz8soXsbm/fr2QjBrkK3i/9IJuVk3iqkt2ooXDI74RkcjcX6GtzjGqgPSpabXJcsM
+        NJZgmW5z9+Kqej6dpHhE7dOFssokgM8=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-639-wcpg3rWqOrmEqBjfNuUdxw-1; Mon, 15 May 2023 06:07:13 -0400
+X-MC-Unique: wcpg3rWqOrmEqBjfNuUdxw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 22CE43C0F22F;
+        Mon, 15 May 2023 10:07:13 +0000 (UTC)
+Received: from localhost (ovpn-12-32.pek2.redhat.com [10.72.12.32])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6B7FF63ABB;
+        Mon, 15 May 2023 10:07:12 +0000 (UTC)
+Date:   Mon, 15 May 2023 18:07:09 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     catalin.marinas@arm.com, will@kernel.org, horms@kernel.org,
+        thunder.leizhen@huawei.com, John.p.donnelly@oracle.com,
+        kexec@lists.infradead.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v6 1/2] arm64: kdump: simplify the reservation behaviour
+ of crashkernel=,high
+Message-ID: <ZGIETQZWp3scdS/m@MiWiFi-R3L-srv>
+References: <20230515060259.830662-1-bhe@redhat.com>
+ <20230515060259.830662-2-bhe@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.11.0
-Subject: Re: [PATCH V8 1/4] dt-bindings: clock: document Amlogic S4 SoC PLL
- clock controller
-Content-Language: en-US
-To:     Yu Tu <yu.tu@amlogic.com>, linux-clk@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Cc:     kelvin.zhang@amlogic.com, qi.duan@amlogic.com
-References: <20230515031557.31143-1-yu.tu@amlogic.com>
- <20230515031557.31143-2-yu.tu@amlogic.com>
- <590560c9-4da6-bbd4-6aac-de57ab5403ba@linaro.org>
- <8c6ad0a9-7820-c7a2-bd3b-1eee87d96728@amlogic.com>
- <33f5ff59-db7b-7576-64cb-972c0dfb0f7b@amlogic.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <33f5ff59-db7b-7576-64cb-972c0dfb0f7b@amlogic.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,T_SCC_BODY_TEXT_LINE autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230515060259.830662-2-bhe@redhat.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE,T_SCC_BODY_TEXT_LINE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,43 +63,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 15/05/2023 09:57, Yu Tu wrote:
+On 05/15/23 at 02:02pm, Baoquan He wrote:
+> On arm64, reservation for 'crashkernel=xM,high' is taken by searching for
+> suitable memory region top down. If the 'xM' of crashkernel high memory
+> is reserved from high memory successfully, it will try to reserve
+> crashkernel low memory later accoringly. Otherwise, it will try to search
+> low memory area for the 'xM' suitable region. Please see the details in
+> Documentation/admin-guide/kernel-parameters.txt.
 > 
+> While we observed an unexpected case where a reserved region crosses the
+> high and low meomry boundary. E.g on a system with 4G as low memory end,
+> user added the kernel parameters like: 'crashkernel=512M,high', it could
+> finally have [4G-126M, 4G+386M], [1G, 1G+128M] regions in running kernel.
+> The crashkernel high region crossing low and high memory boudary will bring
+> issues:
 > 
-> On 2023/5/15 15:35, Yu Tu wrote:
->> Hi Krzysztof,
->>      Thank you for your prompt reply.
->>
->> On 2023/5/15 14:32, Krzysztof Kozlowski wrote:
->>> On 15/05/2023 05:15, Yu Tu wrote:
->>>> Add the S4 PLL clock controller dt-bindings in the s4 SoC family.
->>>>
->>>> Signed-off-by: Yu Tu <yu.tu@amlogic.com>
->>>
->>> This is a friendly reminder during the review process.
->>>
->>> It looks like you received a tag and forgot to add it.
->>>
->>> If you do not know the process, here is a short explanation:
->>> Please add Acked-by/Reviewed-by/Tested-by tags when posting new
->>> versions. However, there's no need to repost patches *only* to add the
->>> tags. The upstream maintainer will do that for acks received on the
->>> version they apply.
->>>
->>> https://elixir.bootlin.com/linux/v5.17/source/Documentation/process/submitting-patches.rst#L540
->>>
->>> If a tag was not added on purpose, please state why and what changed.
->>
->> Yes. I don't know the process. So I need to add Reviewed-by: Rob Herring 
->> <robh@kernel.org>. And resend V8?
->>
+> 1) For crashkernel=x,high, if getting crashkernel high region across
+> low and high memory boundary, then user will see two memory regions in
+> low memory, and one memory region in high memory. The two crashkernel
+> low memory regions are confusing as shown in above example.
 > 
-> I would like to ask you again by the way. I'm not sure if I can just add 
-> the TAG. Because I actually changed the V8.
+> 2) If people explicityly specify "crashkernel=x,high crashkernel=y,low"
+> and y <= 128M, when crashkernel high region crosses low and high memory
+> boundary and the part of crashkernel high reservation below boundary is
+> bigger than y, the expected crahskernel low reservation will be skipped.
+> But the expected crashkernel high reservation is shrank and could not
+> satisfy user space requirement.
+> 
+> 3) The crossing boundary behaviour of crahskernel high reservation is
+> different than x86 arch. On x86_64, the low memory end is 4G fixedly,
+> and the memory near 4G is reserved by system, e.g for mapping firmware,
+> pci mapping, so the crashkernel reservation crossing boundary never happens.
+> From distros point of view, this brings inconsistency and confusion. Users
+> need to dig into x86 and arm64 system details to find out why.
+> 
+> For kernel itself, the impact of issue 3) could be slight. While issue
+> 1) and 2) cause actual impact because it brings obscure semantics and
+> behaviour to crashkernel=,high reservation.
+> 
+> Here, for crashkernel=xM,high, search the high memory for the suitable
+> region only in high memory. If failed, try reserving the suitable
+> region only in low memory. Like this, the crashkernel high region will
+> only exist in high memory, and crashkernel low region only exists in low
+> memory. The reservation behaviour for crashkernel=,high is clearer and
+> simpler.
+> 
+> Note: RPi4 has different zone ranges than normal memory. Its DMA zone is
+> 0~1G, and DMA32 zone is 1G~4G if CONFIG_ZONE_DMA|DMA32 are enabled by
+> default. The low memory end is 1G in order to validate all devices, high
+> memory starts at 1G memory. However, for being consistent with normla
+> arm64 system, its low memory end is still 1G, while reserving crashkernel
+> high memory from 4G if crashkernel=size,high specified. This will remove
+> confusion.
+> 
+> With above change applied, summary of arm64 crashkernel reservation range:
+> 1)
+> RPi4(zone DMA:0~1G; DMA32:1G~4G):
+>  crashkernel=size
+>   0~1G: low memory | 1G~top: high memory
+> 
+>  crashkernel=size,high
+>   0~1G: low memory | 4G~top: high memory
+> 
+> 2)
+> Other normal system:
+>  crashkernel=size
+>  crashkernel=size,high
+>   0~4G: low memory | 4G~top: high memory
+> 
+> 3)
+> Systems w/o zone DMA|DMA32
+>  crashkernel=size
+>  crashkernel=size,high
+>   0~top: low memory
+> 
+> Signed-off-by: Baoquan He <bhe@redhat.com>
+> 
+> arm64: kdump: fix warning reported by static checker
+> Signed-off-by: Baoquan He <bhe@redhat.com>
 
-Your changelog in cover letter does not describe it. It only mentions
-vaguely "change patch series". Describe exactly what changed.
+Sorry, forgot cleaning up this relic of local patch merging, have resent
+one to remove it, and add Catalin's Reviewed-by tag.
 
-Best regards,
-Krzysztof
+Thanks
+Baoquan
 
